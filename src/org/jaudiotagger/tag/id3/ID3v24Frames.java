@@ -114,7 +114,6 @@ public class ID3v24Frames extends ID3Frames
     public static final String FRAME_ID_URL_SOURCE_WEB = "WOAS";
     public static final String FRAME_ID_USER_DEFINED_INFO = "TXXX";
     public static final String FRAME_ID_USER_DEFINED_URL = "WXXX";
-    //Note different to ID_V3_YEAR
     public static final String FRAME_ID_YEAR = "TDRC";
 
     private static ID3v24Frames id3v24Frames;
@@ -187,6 +186,7 @@ public class ID3v24Frames extends ID3Frames
         idToValue.put(FRAME_ID_URL_COPYRIGHT, "URL: Copyright/Legal information");
         idToValue.put(FRAME_ID_URL_PUBLISHERS, "URL: Publishers official webpage");
         idToValue.put(FRAME_ID_USER_DEFINED_URL, "User defined URL link frame");
+        idToValue.put(FRAME_ID_PRIVATE,"Private frame");
         createMaps();
 
         multipleFrames = new TreeSet();

@@ -33,7 +33,7 @@ import org.jaudiotagger.tag.InvalidTagException;
 import java.io.IOException;
 
 
-public class FrameBodyETCO extends AbstractID3v2FrameBody implements ID3v24FrameBody
+public class FrameBodyETCO extends AbstractID3v2FrameBody implements ID3v24FrameBody,ID3v23FrameBody
 {
     /**
      * Creates a new FrameBodyETCO datatype.

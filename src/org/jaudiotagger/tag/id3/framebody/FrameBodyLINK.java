@@ -29,7 +29,7 @@ import org.jaudiotagger.tag.InvalidTagException;
 import java.io.IOException;
 
 
-public class FrameBodyLINK extends AbstractID3v2FrameBody implements ID3v24FrameBody
+public class FrameBodyLINK extends AbstractID3v2FrameBody implements ID3v24FrameBody,ID3v23FrameBody
 {
     /**
      * Creates a new FrameBodyLINK datatype.

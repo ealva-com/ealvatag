@@ -30,7 +30,7 @@ import org.jaudiotagger.tag.id3.ID3v24Frames;
 import org.jaudiotagger.tag.id3.ID3v24Frames;
 
 
-public class FrameBodyWPAY extends AbstractFrameBodyUrlLink implements ID3v24FrameBody
+public class FrameBodyWPAY extends AbstractFrameBodyUrlLink  implements ID3v24FrameBody,ID3v23FrameBody
 {
     /**
      * Creates a new FrameBodyWPAY datatype.

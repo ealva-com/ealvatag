@@ -33,7 +33,7 @@ import org.jaudiotagger.tag.id3.ID3v24Frames;
 import java.io.IOException;
 
 public class FrameBodyWXXX
-    extends AbstractFrameBodyUrlLink implements ID3v24FrameBody
+    extends AbstractFrameBodyUrlLink  implements ID3v24FrameBody,ID3v23FrameBody
 {
 
     /**

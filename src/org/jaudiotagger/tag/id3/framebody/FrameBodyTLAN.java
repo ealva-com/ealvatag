@@ -25,9 +25,10 @@ package org.jaudiotagger.tag.id3.framebody;
 
 import org.jaudiotagger.tag.datatype.*;
 import org.jaudiotagger.tag.InvalidTagException;
+import org.jaudiotagger.tag.id3.ID3v24Frames;
 
 
-public class FrameBodyTLAN extends AbstractFrameBodyTextInfo
+public class FrameBodyTLAN extends AbstractFrameBodyTextInfo implements ID3v24FrameBody,ID3v23FrameBody
 {
 
     /**
@@ -74,7 +75,7 @@ public class FrameBodyTLAN extends AbstractFrameBodyTextInfo
      */
     public String getIdentifier()
     {
-        return "TLAN";
+        return ID3v24Frames.FRAME_ID_LANGUAGE;
     }
 
     /**

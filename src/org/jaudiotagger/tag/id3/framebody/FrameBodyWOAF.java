@@ -26,7 +26,7 @@ package org.jaudiotagger.tag.id3.framebody;
 import org.jaudiotagger.tag.InvalidTagException;
 
 
-public class FrameBodyWOAF extends AbstractFrameBodyUrlLink implements ID3v24FrameBody
+public class FrameBodyWOAF extends AbstractFrameBodyUrlLink  implements ID3v24FrameBody,ID3v23FrameBody
 {
     /**
      * Creates a new FrameBodyWOAF datatype.

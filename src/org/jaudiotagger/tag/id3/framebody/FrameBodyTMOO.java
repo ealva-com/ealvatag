@@ -26,7 +26,7 @@ package org.jaudiotagger.tag.id3.framebody;
 import org.jaudiotagger.tag.InvalidTagException;
 
 
-public class FrameBodyTMOO extends AbstractFrameBodyTextInfo
+public class FrameBodyTMOO extends AbstractFrameBodyTextInfo  implements ID3v24FrameBody
 {
     /**
      * Creates a new FrameBodyTMOO datatype.

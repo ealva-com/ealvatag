@@ -33,7 +33,7 @@ import java.io.IOException;
 
 
 public class FrameBodyTXXX
-    extends AbstractFrameBodyTextInfo implements ID3v24FrameBody
+    extends AbstractFrameBodyTextInfo  implements ID3v24FrameBody,ID3v23FrameBody
 {
     /**
      * Creates a new FrameBodyTXXX datatype.

@@ -27,7 +27,7 @@ import org.jaudiotagger.tag.InvalidTagException;
 import org.jaudiotagger.tag.id3.ID3v24Frames;
 
 
-public class FrameBodyTPE1 extends AbstractFrameBodyTextInfo
+public class FrameBodyTPE1 extends AbstractFrameBodyTextInfo  implements ID3v24FrameBody,ID3v23FrameBody
 {
     /**
      * Creates a new FrameBodyTPE1 datatype.

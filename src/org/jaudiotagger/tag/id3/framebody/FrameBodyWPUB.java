@@ -29,7 +29,7 @@ import org.jaudiotagger.tag.id3.ID3v24Frames;
 import org.jaudiotagger.tag.id3.ID3v24Frames;
 
 
-public class FrameBodyWPUB extends AbstractFrameBodyUrlLink  implements ID3v24FrameBody
+public class FrameBodyWPUB extends AbstractFrameBodyUrlLink   implements ID3v24FrameBody,ID3v23FrameBody
 {
     /**
      * Creates a new FrameBodyWPUB datatype.

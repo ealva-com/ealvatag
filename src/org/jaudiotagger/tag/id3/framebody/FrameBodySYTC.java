@@ -24,7 +24,7 @@
 package org.jaudiotagger.tag.id3.framebody;
 
 
-public class FrameBodySYTC extends AbstractID3v2FrameBody implements ID3v24FrameBody
+public class FrameBodySYTC extends AbstractID3v2FrameBody implements ID3v24FrameBody,ID3v23FrameBody
 {
     /**
      * Creates a new FrameBodySYTC datatype.

@@ -34,7 +34,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 
 
-public class FrameBodySYLT extends AbstractID3v2FrameBody implements ID3v24FrameBody
+public class FrameBodySYLT extends AbstractID3v2FrameBody implements ID3v24FrameBody,ID3v23FrameBody
 {
     /**
      * DOCUMENT ME!

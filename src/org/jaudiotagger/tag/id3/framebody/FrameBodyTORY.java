@@ -24,9 +24,10 @@
 package org.jaudiotagger.tag.id3.framebody;
 
 import org.jaudiotagger.tag.InvalidTagException;
+import org.jaudiotagger.tag.id3.ID3v23Frames;
 
 
-public class FrameBodyTORY extends AbstractFrameBodyTextInfo
+public class FrameBodyTORY extends AbstractFrameBodyTextInfo implements ID3v23FrameBody
 {
     /**
      * Creates a new FrameBodyTORY datatype.
@@ -71,6 +72,6 @@ public class FrameBodyTORY extends AbstractFrameBodyTextInfo
      */
     public String getIdentifier()
     {
-        return "TORY";
+        return ID3v23Frames.FRAME_ID_V3_TORY;
     }
 }

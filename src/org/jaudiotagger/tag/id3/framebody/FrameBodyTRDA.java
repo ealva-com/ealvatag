@@ -29,7 +29,7 @@ import org.jaudiotagger.tag.id3.valuepair.*;
 import org.jaudiotagger.tag.id3.ID3v23Frames;
 
 
-public class FrameBodyTRDA extends AbstractFrameBodyTextInfo implements ID3v24FrameBody
+public class FrameBodyTRDA extends AbstractFrameBodyTextInfo implements ID3v23FrameBody
 {
     /**
      * Creates a new FrameBodyTRDA datatype.

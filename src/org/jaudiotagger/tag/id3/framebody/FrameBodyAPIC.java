@@ -34,7 +34,7 @@ import org.jaudiotagger.audio.mp3.*;
 
 import java.io.IOException;
 
-public class FrameBodyAPIC extends AbstractID3v2FrameBody implements ID3v24FrameBody
+public class FrameBodyAPIC extends AbstractID3v2FrameBody implements ID3v24FrameBody,ID3v23FrameBody
 {
 
     /**

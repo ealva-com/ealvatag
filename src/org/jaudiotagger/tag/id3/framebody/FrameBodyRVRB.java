@@ -30,7 +30,7 @@ import org.jaudiotagger.tag.InvalidTagException;
 import java.io.IOException;
 
 
-public class FrameBodyRVRB extends AbstractID3v2FrameBody implements ID3v24FrameBody
+public class FrameBodyRVRB extends AbstractID3v2FrameBody implements ID3v24FrameBody,ID3v23FrameBody
 {
     /**
      * Creates a new FrameBodyRVRB datatype.

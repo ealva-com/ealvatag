@@ -24,9 +24,10 @@
 package org.jaudiotagger.tag.id3.framebody;
 
 import org.jaudiotagger.tag.InvalidTagException;
+import org.jaudiotagger.tag.id3.ID3v23Frames;
 
 
-public class FrameBodyTDAT extends AbstractFrameBodyTextInfo implements ID3v24FrameBody
+public class FrameBodyTDAT extends AbstractFrameBodyTextInfo implements ID3v23FrameBody
 {
     /**
      * Creates a new FrameBodyTDAT datatype.
@@ -71,6 +72,6 @@ public class FrameBodyTDAT extends AbstractFrameBodyTextInfo implements ID3v24Fr
      */
     public String getIdentifier()
     {
-        return "TDAT";
+        return ID3v23Frames.FRAME_ID_V3_TDAT;
     }
 }

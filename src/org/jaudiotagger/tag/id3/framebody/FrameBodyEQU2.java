@@ -123,7 +123,7 @@ public class FrameBodyEQU2 extends AbstractID3v2FrameBody  implements ID3v24Fram
         AbstractDataType volume = new NumberFixedLength(DataTypes.OBJ_VOLUME_ADJUSTMENT, this, 2);
         group.addObject(freq);
         group.addObject(volume);
-        this.setObjectValue("Data", group);
+        this.setObjectValue(DataTypes.OBJ_DATA, group);
     }
 
     /**

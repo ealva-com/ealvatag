@@ -243,8 +243,7 @@ public class ID3v23Frame
         encodingFlags = new EncodingFlags(file.readByte());
         String id;
         /** If this identifier a valid v24 identifier or easily converted to v24 */
-        id = (String) ID3Tags.
-            convertFrameID23To24(identifier);
+        id = (String) ID3Tags.convertFrameID23To24(identifier);
         /** Cant easily be converted to v23 but is it a valid v24 identifier */
         if (id == null)
         {

@@ -27,6 +27,8 @@ package org.jaudiotagger.tag.id3.framebody;
 import org.jaudiotagger.audio.mp3.*;
 import org.jaudiotagger.tag.datatype.*;
 import org.jaudiotagger.tag.InvalidTagException;
+import org.jaudiotagger.tag.id3.ID3Frames;
+import org.jaudiotagger.tag.id3.ID3v23Frames;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
@@ -70,7 +72,7 @@ public class FrameBodyRVAD extends AbstractID3v2FrameBody implements ID3v23Frame
      */
     public String getIdentifier()
     {
-        return "RVAD";
+        return ID3v23Frames.FRAME_ID_V3_RELATIVE_VOLUME_ADJUSTMENT;
     }
 
     /**

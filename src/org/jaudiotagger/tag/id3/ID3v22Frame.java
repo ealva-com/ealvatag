@@ -78,7 +78,7 @@ public class ID3v22Frame
             (identifier == ID3v22Frames.FRAME_ID_V2_TIME)
         )
         {
-            identifier = ID3v23Frames.FRAME_ID_V3_YEAR;
+            identifier = ID3v24Frames.FRAME_ID_YEAR;
         }
         //Have to check for 2.2 because few have a corresponding body have to use 2.3 or 2.4
         else if (ID3Tags.isID3v22FrameIdentifier(identifier))
