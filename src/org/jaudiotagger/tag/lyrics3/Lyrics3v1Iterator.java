@@ -1,0 +1,108 @@
+/**
+ *  Amended @author : Paul Taylor
+ *  Initial @author : Eric Farng
+ *
+ *  Version @version:$Id$
+ *
+ *  MusicTag Copyright (C)2003,2004
+ *
+ *  This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser
+ *  General Public  License as published by the Free Software Foundation; either version 2.1 of the License,
+ *  or (at your option) any later version.
+ *
+ *  This library is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even
+ *  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ *  See the GNU Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public License along with this library; if not,
+ *  you can get a copy from http://www.opensource.org/licenses/lgpl-license.php or write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ *
+ * Description:
+ */
+package org.jaudiotagger.tag.lyrics3;
+
+import java.util.Iterator;
+import java.util.NoSuchElementException;
+
+public class Lyrics3v1Iterator implements Iterator
+{
+    /**
+     * DOCUMENT ME!
+     */
+    private Lyrics3v1 tag = null;
+
+    /**
+     * DOCUMENT ME!
+     */
+    private int lastIndex = 0;
+
+    /**
+     * DOCUMENT ME!
+     */
+    private int removeIndex = 0;
+
+    /**
+     * Creates a new Lyrics3v1Iterator datatype.
+     *
+     * @param lyrics3v1Tag DOCUMENT ME!
+     */
+    public Lyrics3v1Iterator(Lyrics3v1 lyrics3v1Tag)
+    {
+        tag = lyrics3v1Tag;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return DOCUMENT ME!
+     */
+    public boolean hasNext()
+    {
+        return !((tag.getLyric().indexOf('\n', lastIndex) < 0) && (lastIndex > tag.getLyric().length()));
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return DOCUMENT ME!
+     * @throws NoSuchElementException DOCUMENT ME!
+     */
+    public Object next()
+    {
+        int nextIndex = tag.getLyric().indexOf('\n', lastIndex);
+
+        removeIndex = lastIndex;
+
+        String line = null;
+
+        if (lastIndex >= 0)
+        {
+            if (nextIndex >= 0)
+            {
+                line = tag.getLyric().substring(lastIndex, nextIndex);
+            }
+            else
+            {
+                line = tag.getLyric().substring(lastIndex);
+            }
+
+            lastIndex = nextIndex;
+        }
+        else
+        {
+            throw new NoSuchElementException("Iteration has no more elements.");
+        }
+
+        return line;
+    }
+
+    /**
+     * DOCUMENT ME!
+     */
+    public void remove()
+    {
+        String lyric = tag.getLyric().substring(0, removeIndex) + tag.getLyric().substring(lastIndex);
+        tag.setLyric(lyric);
+    }
+}
