@@ -1,0 +1,11 @@
+org.jaudiotagger
+org.jaudiotagger.audio
+org.jaudiotagger.audio.mp3
+org.jaudiotagger.logging
+org.jaudiotagger.tag
+org.jaudiotagger.tag.datatype
+org.jaudiotagger.tag.id3
+org.jaudiotagger.tag.id3.framebody
+org.jaudiotagger.tag.id3.valuepair
+org.jaudiotagger.tag.lyrics3
+org.jaudiotagger.test
