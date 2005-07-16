@@ -67,6 +67,9 @@ public abstract class AbstractID3v2Tag
 
     protected static final int TAG_SIZE_INCREMENT = 100;
 
+    //The initial size of the buffer to be used when creating the tag
+    private static final int INITIAL_TAG_BODY_SIZE = 1000000;
+
     /**
      * Map of all frames for this tag
      */
@@ -864,6 +867,54 @@ public abstract class AbstractID3v2Tag
             }
         }
         return size;
+    }
+
+    /**
+     * Write all the frames to the buffer, we do not know the size of the buffer required until we call the framebodies
+     * write method because the size required depends on the data and what encoding is required,
+     * and the buffer cannot be resized so how do we solve this problem.
+     * <p/>
+     * We could do a psuedo write first to correctly calculate the size before writing to the buffer but performance
+     * would be poor, or we could allocate a large Buffer to start with. Unfortunately there is no guaranteed upper limit
+     * for example if a user add alots of APIC Picture frames with very large pictures the tags could run to several
+     * megabytes but most tags will be much smaller.
+     * <p/>
+     * We take a pragmatic approach, we allocate a reasonably large buffer which willl be ok for most cases, but we catch
+     * the exception that could occur and if so we increase the size of the buffer and retry.
+     *
+     * @return ByteBuffer Contains all the frames written within the tag ready for writing to file
+     * @throws IOException
+     */
+    protected ByteBuffer writeFramesToBuffer() throws IOException
+    {
+        ByteBuffer bodyBuffer = null;
+
+        int bufferSize = getSize();
+        logger.finer("Estimated Tag Buffer Size Required is "+bufferSize);
+        if( bufferSize<INITIAL_TAG_BODY_SIZE )
+        {
+            bufferSize=INITIAL_TAG_BODY_SIZE;
+        }
+
+
+        while (true)
+        {
+            try
+            {
+                bodyBuffer = ByteBuffer.allocate(bufferSize);
+                this.write(bodyBuffer);
+                break;
+            }
+            catch (java.nio.BufferOverflowException boe)
+            {
+                //Double Size and try again.
+                bufferSize = bufferSize * 2;
+                logger.finer("Estimated Tag Buffer Size Increased To "+bufferSize);
+                bodyBuffer = ByteBuffer.allocate(bufferSize);
+                continue;
+            }
+        }
+        return bodyBuffer;
     }
 
     /**

@@ -588,9 +588,10 @@ public class ID3v23Tag
         throws IOException
     {
         logger.info("Writing tag to file");
-        //Writing frames
-        ByteBuffer bodyBuffer = ByteBuffer.allocate(1000000);
-        super.write(bodyBuffer);
+
+        /** Write Body Buffer */
+        ByteBuffer bodyBuffer = writeFramesToBuffer();
+
         /** @todo Calculate the CYC Data Check */
         /** @todo Calculate UnSynchronisation */
         /** @todo Reintroduce Extended Header */

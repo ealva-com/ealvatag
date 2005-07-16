@@ -463,16 +463,19 @@ public class ID3v22Tag
         throws IOException
     {
         logger.info("Writing tag to file");
-        //Writing frames
-        ByteBuffer bodyBuffer = ByteBuffer.allocate(1000000);
-        super.write(bodyBuffer);
+
+        /** Write Body Buffer */
+        ByteBuffer bodyBuffer = writeFramesToBuffer();
+
         /** @todo Unsynchronisation support required.
          * We never compress tags as was never defined,
          * currently we do not support Unsyncronisation so should not be set.
          */
         unsynchronization = false;
         compression = false;
-        /** Create Header Buffer */ByteBuffer headerBuffer = ByteBuffer.allocate(this.TAG_HEADER_LENGTH);
+
+        /** Create Header Buffer */
+        ByteBuffer headerBuffer = ByteBuffer.allocate(this.TAG_HEADER_LENGTH);
         //TAGID
         headerBuffer.put(TAG_ID);
         //Major Version

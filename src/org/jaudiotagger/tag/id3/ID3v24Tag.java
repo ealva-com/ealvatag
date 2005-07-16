@@ -610,7 +610,7 @@ public class ID3v24Tag
      * Read Tag from Specified file.
      * Read tag header, delegate reading of frames to readFrames()
      *
-     * @param file DOCUMENT ME!
+     * @param file to read the tag from
      * @throws TagException         DOCUMENT ME!
      * @throws IOException          DOCUMENT ME!
      * @throws TagNotFoundException DOCUMENT ME!
@@ -739,9 +739,9 @@ public class ID3v24Tag
 
 
     /**
-     * DOCUMENT ME!
+     * Update this Tag with the COntents of another Tag
      *
-     * @param tag DOCUMENT ME!
+     * @param tag The tag to copy the contents of.
      */
     public void write(AbstractTag tag)
     {
@@ -759,6 +759,7 @@ public class ID3v24Tag
         super.write(tag);
     }
 
+
     /**
      * Write this tag to file.
      *
@@ -769,12 +770,14 @@ public class ID3v24Tag
         throws IOException
     {
         logger.info("Writing tag to file");
-        //Writing frames
-        ByteBuffer bodyBuffer = ByteBuffer.allocate(1000000);
-        super.write(bodyBuffer);
+
+        /** Write Body Buffer */
+        ByteBuffer bodyBuffer = writeFramesToBuffer();
+
         /** @todo Calculate UnSynchronisation */
         /** @todo Calculate the CYC Data Check */
         /** @todo Reintroduce Extended Header */
+
         /** Flags,currently we never do unsynchronisation or calculate the CRC
          *  and if we dont calculate them cant keep orig values. Tags are not
          *  experimental and we never create extended header to keep things simple.
@@ -896,9 +899,8 @@ public class ID3v24Tag
     }
 
     /**
-     * DOCUMENT ME!
+     * Display the tag in an XMLFormat
      *
-     * @return DOCUMENT ME!
      */
     public void createStructure()
     {
