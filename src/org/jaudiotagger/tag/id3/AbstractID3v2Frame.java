@@ -42,9 +42,6 @@ public abstract class AbstractID3v2Frame
 
     protected static final String TYPE_FRAME_SIZE = "frameSize";
 
-    //If a frame reports a size larger than this it must be corrupt
-    protected static final int MAX_FRAME_SIZE = 1000000;
-
     protected static final String UNSUPPORTED_ID = "Unsupported";
 
     //Frame identifier

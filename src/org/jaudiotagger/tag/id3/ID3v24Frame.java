@@ -333,13 +333,7 @@ public class ID3v24Frame
             logger.warning("Empty Frame:" + identifier);
             throw new EmptyFrameException(identifier + " is empty frame");
         }
-        if (frameSize > MAX_FRAME_SIZE)
-        {
-            logger.warning("Invalid frame Size Reported :" + identifier + "Reported as" + frameSize +
-                " Must be frame misread");
-            throw new InvalidFrameException("Frame Size Reported :" + identifier + "Reported as" + frameSize +
-                " Must be frame misread");
-        }
+        
         //Read the flag bytes
         statusFlags = new StatusFlags(file.readByte());
         encodingFlags = new EncodingFlags(file.readByte());
