@@ -629,8 +629,22 @@ public class ID3v23Tag
         headerBuffer.put(flagsByte);
         /** Calculate Tag Size including Padding */
         int sizeIncPadding = calculateTagSize(getSize(), (int) audioStartLocation);
-        /** Add padding as necessary */
+
+        /** Add padding as neccessary, if for example we have removed a number of
+         *  frames from a tag we will have to add extra padding. We need to ensure
+         *  there is enough room in the bodyBuffer to add the padding, if not we will
+         *  have to create a new Buffer and copy the contents. This problem occur if we
+         *  have deleted very large frames (such as APIC frames) from the tag meaning
+         *  the buffer is not big enough to cope with the original size of the tag */
         int padding = sizeIncPadding - getSize();
+        if((bodyBuffer.capacity() - bodyBuffer.position())<padding)
+        {
+            ByteBuffer newBodyBuffer = ByteBuffer.allocate(sizeIncPadding);
+            bodyBuffer.flip();
+            newBodyBuffer.put(bodyBuffer);
+            bodyBuffer = newBodyBuffer;
+        }
+
         bodyBuffer.put(new byte[padding]);
         //Size As Recorded in Header, don't include the main header length
         headerBuffer.put(sizeToByteArray((int) sizeIncPadding - TAG_HEADER_LENGTH));
