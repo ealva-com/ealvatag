@@ -515,7 +515,7 @@ public class ID3v22Tag
 
         //Size
         headerBuffer.put(sizeToByteArray((int) sizeIncPadding - TAG_HEADER_LENGTH));
-        rge 
+        
         /** We need to adjust location of audio File */
         if (sizeIncPadding > audioStartLocation)
         {
