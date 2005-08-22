@@ -747,8 +747,11 @@ public abstract class AbstractID3v2Tag
          */
         if (frameMap.containsKey(newFrame.getIdentifier()))
         {
+            //Retrieve the frame with the same id we have already loaded into the map
             AbstractID3v2Frame firstFrame = (AbstractID3v2Frame) frameMap.get(newFrame.getIdentifier());
-            if (newFrame.getIdentifier().equals(ID3v24Frames.FRAME_ID_YEAR))
+
+            //Two different frames both converted to TDRCFrames
+            if(newFrame.getBody() instanceof FrameBodyTDRC)
             {
                 FrameBodyTDRC body = (FrameBodyTDRC) firstFrame.getBody();
                 FrameBodyTDRC newBody = (FrameBodyTDRC) newFrame.getBody();
