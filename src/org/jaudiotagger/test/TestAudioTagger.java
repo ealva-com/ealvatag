@@ -30,7 +30,8 @@ public class TestAudioTagger
     public static void main(final String[] args) throws Exception
     {
         MP3File mp3File = new MP3File(new File(args[0]), MP3File.LOAD_IDV1TAG | MP3File.LOAD_IDV2TAG | MP3File.LOAD_MP3TAG);
-        mp3File.displayStructureAsXML();
+        
+        System.out.println(mp3File.displayStructureAsXML());
     }
 
 

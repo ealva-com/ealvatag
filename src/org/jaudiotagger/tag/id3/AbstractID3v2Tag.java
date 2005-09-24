@@ -73,7 +73,7 @@ public abstract class AbstractID3v2Tag
     /**
      * Map of all frames for this tag
      */
-    protected HashMap frameMap = null;
+    public HashMap frameMap = null;
 
     /**
      * Holds the ids of invalid duplicate frames

@@ -30,6 +30,7 @@ import org.jaudiotagger.tag.id3.ID3Tags;
 import org.jaudiotagger.tag.AbstractTagItem;
 import org.jaudiotagger.tag.id3.ID3Tags;
 
+/* A frame contains meta-information of a particular type. A frame contains a herader and a body */
 public abstract class AbstractTagFrame extends AbstractTagItem
 {
 

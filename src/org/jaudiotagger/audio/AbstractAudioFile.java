@@ -20,29 +20,73 @@
  */
 package org.jaudiotagger.audio;
 
+import org.jaudiotagger.tag.id3.AbstractID3v2Tag;
+import org.jaudiotagger.tag.virtual.VirtualMetaDataContainer;
+import org.jaudiotagger.audio.mp3.MP3AudioHeader;
+
+import java.io.File;
+
 /**
  * The abstract superclass that represents an actual audio file.
  */ 
 public abstract class AbstractAudioFile
 {
     /**
-     * MP3 save mode lowest numbered index
+     * the Virtual Meta Container Representation of metaData
      */
-    public static final int MP3_FILE_SAVE_FIRST = 1;
+    protected VirtualMetaDataContainer metaData = null;
+
     /**
-     * MP3 save mode matching <code>write</code> method
+     * The physical file that this instance represents.
      */
-    public static final int MP3_FILE_SAVE_WRITE = 1;
+    protected File file;
     /**
-     * MP3 save mode matching <code>overwrite</code> method
+     * The Audio Header
      */
-    public static final int MP3_FILE_SAVE_OVERWRITE = 2;
+    protected AbstractAudioHeader audioHeader = null;
+
+    protected  AbstractAudioFile()
+    {
+
+    }
+
     /**
-     * MP3 save mode matching <code>append</code> method
+     * Set the file to store the info in
+     *
+     * @param file DOCUMENT ME!
      */
-    public static final int MP3_FILE_SAVE_APPEND = 3;
+    public void setFile(File file)
+    {
+        this.file = file;
+    }
+
     /**
-     * MP3 save mode highest numbered index
+     * Retrieve the physical file
+     *
+     * @return DOCUMENT ME!
      */
-    public static final int MP3_FILE_SAVE_LAST = 3;
+    public File getFile()
+    {
+        return file;
+    }
+
+    /**
+     * Return audio header
+     */
+    public AbstractAudioHeader getAudioHeader()
+    {
+        return audioHeader;
+    }
+
+    public VirtualMetaDataContainer getMetaData()
+    {
+        return metaData;
+    }
+
+
+    public abstract String displayStructureAsXML();
+
+    public abstract String displayStructureAsPlainText();
+
+
 }

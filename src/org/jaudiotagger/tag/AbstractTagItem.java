@@ -35,6 +35,9 @@ import java.io.RandomAccessFile;
 import java.util.logging.*;
 
 
+/** This specifies a series of methods that have to be implemented by all structural subclasses,
+ * required to support all copy constructors,iterative methods and so on.
+ */
 public abstract class AbstractTagItem
 {
 

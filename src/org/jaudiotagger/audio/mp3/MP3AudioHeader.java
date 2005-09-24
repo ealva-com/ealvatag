@@ -36,21 +36,21 @@ import java.text.SimpleDateFormat;
  * bits set. For example 0xFB (11111011) is a common occurence of the second match. The 2nd byte
  * defines flags to indicate various mp3 values.
 */
-public class MP3AudioHeader extends AbstractAudioHeader
+public final class MP3AudioHeader extends AbstractAudioHeader
 {
     /**
      * Sync Value
      */
-    public static int SYNC_BYTE1 = 0xFF;
-    public static int SYNC_BYTE2 = 0xE0;
+    private static final int SYNC_BYTE1 = 0xFF;
+    private static final int SYNC_BYTE2 = 0xE0;
 
     /**
      * Constants for MPEG Version
      */
-    private static HashMap mpegVersionMap = new HashMap();
-    public final static int VERSION_2_5 = 0;
-    public final static int VERSION_2 = 2;
-    public final static int VERSION_1 = 3;
+    private static final HashMap mpegVersionMap = new HashMap();
+    private final static int VERSION_2_5 = 0;
+    private final static int VERSION_2 = 2;
+    private final static int VERSION_1 = 3;
 
     static
     {
@@ -62,10 +62,10 @@ public class MP3AudioHeader extends AbstractAudioHeader
     /**
      * Constants for MPEG Layer
      */
-    private static HashMap mpegLayerMap = new HashMap();
-    public final static int LAYER_I = 3;
-    public final static int LAYER_II = 2;
-    public final static int LAYER_III = 1;
+    private static final HashMap mpegLayerMap = new HashMap();
+    private final static int LAYER_I = 3;
+    private final static int LAYER_II = 2;
+    private final static int LAYER_III = 1;
 
 
     static
@@ -78,14 +78,14 @@ public class MP3AudioHeader extends AbstractAudioHeader
     /**
      * Slot Size is dependent on Layer
      */
-    public final static int LAYER_I_SLOT_SIZE = 4;
+    private final static int LAYER_I_SLOT_SIZE = 4;
     public final static int LAYER_II_SLOT_SIZE = 1;
     public final static int LAYER_III_SLOT_SIZE = 1;
 
     /**
      * Bit Rates
      */
-    private static HashMap bitrateMap = new HashMap();
+    private static final HashMap bitrateMap = new HashMap();
 
     static
     {
@@ -184,11 +184,11 @@ public class MP3AudioHeader extends AbstractAudioHeader
     /**
      * Constants for Channel mode
      */
-    public static HashMap modeMap = new HashMap();
-    public final static int MODE_STEREO = 0;
-    public final static int MODE_JOINT_STEREO = 1;
-    public final static int MODE_DUAL_CHANNEL = 2;
-    public final static int MODE_MONO = 3;
+    private static final HashMap modeMap = new HashMap();
+    private final static int MODE_STEREO = 0;
+    private final static int MODE_JOINT_STEREO = 1;
+    private final static int MODE_DUAL_CHANNEL = 2;
+    private final static int MODE_MONO = 3;
 
     static
     {
@@ -202,11 +202,11 @@ public class MP3AudioHeader extends AbstractAudioHeader
     /**
      * Constants for emphasis
      */
-    public static HashMap emphasisMap = new HashMap();
-    public final static int EMPHASIS_NONE = 0;
-    public final static int EMPHASIS_5015MS = 1;
-    public final static int EMPHASIS_RESERVED = 2;
-    public final static int EMPHASIS_CCITT = 3;
+    private static final HashMap emphasisMap = new HashMap();
+    private final static int EMPHASIS_NONE = 0;
+    private final static int EMPHASIS_5015MS = 1;
+    private final static int EMPHASIS_RESERVED = 2;
+    private final static int EMPHASIS_CCITT = 3;
 
     static
     {
@@ -219,10 +219,10 @@ public class MP3AudioHeader extends AbstractAudioHeader
     /**
      * Constant for frequency
      */
-    public static HashMap frequencyMap = new HashMap();
-    public static HashMap frequencyV1Map = new HashMap();
-    public static HashMap frequencyV2Map = new HashMap();
-    public static HashMap frequencyV25Map = new HashMap();
+    private static final HashMap frequencyMap = new HashMap();
+    private static final HashMap frequencyV1Map = new HashMap();
+    private static final HashMap frequencyV2Map = new HashMap();
+    private static final HashMap frequencyV25Map = new HashMap();
 
     static
     {
@@ -253,74 +253,74 @@ public class MP3AudioHeader extends AbstractAudioHeader
     private static final int BYTE_4 = 3;
     private static final int HEADER_SIZE = 4;
 
-    private static SimpleDateFormat timeInFormat = new SimpleDateFormat("ss");
-    private static SimpleDateFormat timeOutFormat = new SimpleDateFormat("mm:ss");
+    private static final SimpleDateFormat timeInFormat = new SimpleDateFormat("ss");
+    private static final SimpleDateFormat timeOutFormat = new SimpleDateFormat("mm:ss");
 
     /**
      * MP3 Frame Header bit mask
      */
-    public static final int MASK_MP3_ID = FileConstants.BIT3;
+    private static final int MASK_MP3_ID = FileConstants.BIT3;
 
     /**
      * MP3 version, confusingly for MP3s the version is 1.
      */
-    public static final int MASK_MP3_VERSION = FileConstants.BIT4 | FileConstants.BIT3;
+    private static final int MASK_MP3_VERSION = FileConstants.BIT4 | FileConstants.BIT3;
 
     /**
      * MP3 Layer, for MP3s the Layer is 3
      */
-    public static final int MASK_MP3_LAYER = FileConstants.BIT2 | FileConstants.BIT1;
+    private static final int MASK_MP3_LAYER = FileConstants.BIT2 | FileConstants.BIT1;
 
     /**
      * Does it include a CRC Checksum at end of header, this can be used to check the header.
      */
-    public static final int MASK_MP3_PROTECTION = FileConstants.BIT0;
+    private static final int MASK_MP3_PROTECTION = FileConstants.BIT0;
 
     /**
      * The bitrate of this MP3
      */
-    public static final int MASK_MP3_BITRATE = FileConstants.BIT7 | FileConstants.BIT6 | FileConstants.BIT5 |
+    private static final int MASK_MP3_BITRATE = FileConstants.BIT7 | FileConstants.BIT6 | FileConstants.BIT5 |
         FileConstants.BIT4;
 
     /**
      * The sampling/frequency rate
      */
-    public static final int MASK_MP3_FREQUENCY = FileConstants.BIT3 + FileConstants.BIT2;
+    private static final int MASK_MP3_FREQUENCY = FileConstants.BIT3 + FileConstants.BIT2;
 
     /**
      * An extra padding bit is sometimes used to make sure frames are exactly the right length
      */
-    public static final int MASK_MP3_PADDING = FileConstants.BIT1;
+    private static final int MASK_MP3_PADDING = FileConstants.BIT1;
 
     /**
      * Private bit set, for application specific
      */
-    public static final int MASK_MP3_PRIVACY = FileConstants.BIT0;
+    private static final int MASK_MP3_PRIVACY = FileConstants.BIT0;
 
     /**
      * Channel Mode, Stero/Mono/Dual Channel
      */
-    public static final int MASK_MP3_MODE = FileConstants.BIT7 | FileConstants.BIT6;
+    private static final int MASK_MP3_MODE = FileConstants.BIT7 | FileConstants.BIT6;
 
     /**
      * MP3 Frame Header bit mask
      */
-    public static final int MASK_MP3_MODE_EXTENSION = FileConstants.BIT5 | FileConstants.BIT4;
+    private static final int MASK_MP3_MODE_EXTENSION = FileConstants.BIT5 | FileConstants.BIT4;
 
     /**
      * MP3 Frame Header bit mask
      */
-    public static final int MASK_MP3_COPY = FileConstants.BIT3;
+    private static final int MASK_MP3_COPY = FileConstants.BIT3;
 
     /**
      * MP3 Frame Header bit mask
      */
-    public static final int MASK_MP3_HOME = FileConstants.BIT2;
+    private static final int MASK_MP3_HOME = FileConstants.BIT2;
 
     /**
      * Emphasis
      */
-    public static final int MASK_MP3_EMPHASIS = FileConstants.BIT1 | FileConstants.BIT0;
+    private static final int MASK_MP3_EMPHASIS = FileConstants.BIT1 | FileConstants.BIT0;
 
     private long fileSize;
     private long startByte;
@@ -394,7 +394,7 @@ public class MP3AudioHeader extends AbstractAudioHeader
      * allow more accurate calculation of Varaible Bit Rates.
      */
     private int bitRate;
-    private ArrayList bitRateList = new ArrayList();
+    private final ArrayList bitRateList = new ArrayList();
 
     /**
      * Create Audioheader from another AudioHeader
@@ -431,7 +431,7 @@ public class MP3AudioHeader extends AbstractAudioHeader
      *
      * @param variableBitRate DOCUMENT ME!
      */
-    public void setVariableBitRate(boolean variableBitRate)
+    public final void setVariableBitRate(boolean variableBitRate)
     {
         this.variableBitRate = variableBitRate;
     }
@@ -441,7 +441,7 @@ public class MP3AudioHeader extends AbstractAudioHeader
      *
      * @return DOCUMENT ME!
      */
-    public boolean isVariableBitRate()
+    public final boolean isVariableBitRate()
     {
         return variableBitRate;
     }
@@ -451,7 +451,7 @@ public class MP3AudioHeader extends AbstractAudioHeader
      *
      * @return DOCUMENT ME!
      */
-    public int getBitRate()
+    private int getBitRate()
     {
         return bitRate;
     }
@@ -459,7 +459,7 @@ public class MP3AudioHeader extends AbstractAudioHeader
     /**
      * For non VBR return bit rate, for VBR return range because not sampling enough headers
      */
-    public String getBitRateAsString()
+    public final String getBitRateAsString()
     {
         if (isVariableBitRate() == false)
         {
@@ -477,7 +477,7 @@ public class MP3AudioHeader extends AbstractAudioHeader
      *
      * @return
      */
-    public int getAverageBitRate()
+    public final int getAverageBitRate()
     {
         if (isVariableBitRate() == false)
         {
@@ -499,7 +499,7 @@ public class MP3AudioHeader extends AbstractAudioHeader
      *
      * @return DOCUMENT ME!
      */
-    public boolean isCopyProtected()
+    public final boolean isCopyProtected()
     {
         return copyProtected;
     }
@@ -509,7 +509,7 @@ public class MP3AudioHeader extends AbstractAudioHeader
      *
      * @return DOCUMENT ME!
      */
-    public byte getEmphasis()
+    public final byte getEmphasis()
     {
         return emphasis;
     }
@@ -519,7 +519,7 @@ public class MP3AudioHeader extends AbstractAudioHeader
      *
      * @return DOCUMENT ME!
      */
-    public double getFrequency()
+    public final double getFrequency()
     {
         return frequency;
     }
@@ -530,7 +530,7 @@ public class MP3AudioHeader extends AbstractAudioHeader
      *
      * @return DOCUMENT ME!
      */
-    public boolean isHome()
+    public final boolean isHome()
     {
         return home;
     }
@@ -540,7 +540,7 @@ public class MP3AudioHeader extends AbstractAudioHeader
      *
      * @return DOCUMENT ME!
      */
-    public byte getLayer()
+    public final byte getLayer()
     {
         return layer;
     }
@@ -550,7 +550,7 @@ public class MP3AudioHeader extends AbstractAudioHeader
      *
      * @return DOCUMENT ME!
      */
-    public byte getMode()
+    public final byte getMode()
     {
         return mode;
     }
@@ -560,7 +560,7 @@ public class MP3AudioHeader extends AbstractAudioHeader
      *
      * @return DOCUMENT ME!
      */
-    public byte getModeExtension()
+    public final byte getModeExtension()
     {
         return modeExtension;
     }
@@ -570,7 +570,7 @@ public class MP3AudioHeader extends AbstractAudioHeader
      *
      * @return DOCUMENT ME!
      */
-    public byte getMpegVersion()
+    public final byte getMpegVersion()
     {
         return mpegVersion;
     }
@@ -580,7 +580,7 @@ public class MP3AudioHeader extends AbstractAudioHeader
      *
      * @return DOCUMENT ME!
      */
-    public boolean isPadding()
+    public final boolean isPadding()
     {
         return padding;
     }
@@ -590,7 +590,7 @@ public class MP3AudioHeader extends AbstractAudioHeader
      *
      * @return DOCUMENT ME!
      */
-    public boolean isPrivacy()
+    public final boolean isPrivacy()
     {
         return privacy;
     }
@@ -600,7 +600,7 @@ public class MP3AudioHeader extends AbstractAudioHeader
      *
      * @return DOCUMENT ME!
      */
-    public boolean isProtection()
+    public final boolean isProtection()
     {
         return protection;
     }
@@ -615,7 +615,7 @@ public class MP3AudioHeader extends AbstractAudioHeader
      * @return true if the first MP3 frame can be found
      * @throws IOException on any I/O error
      */
-    public boolean seek(RandomAccessFile seekFile)
+    public final boolean seek(RandomAccessFile seekFile)
         throws IOException
     {
         boolean syncFound = false;
@@ -677,7 +677,7 @@ public class MP3AudioHeader extends AbstractAudioHeader
      *                               rather than a regular file or cannot be opened for any other
      *                               reason
      */
-    public long getMp3StartByte()
+    public final long getMp3StartByte()
 
     {
         return startByte;
@@ -826,7 +826,7 @@ public class MP3AudioHeader extends AbstractAudioHeader
     /**
      * Return the mode, stero options
      */
-    public String getModeAsString()
+    public final String getModeAsString()
     {
         return (String) modeMap.get(new Integer(mode));
     }
@@ -834,7 +834,7 @@ public class MP3AudioHeader extends AbstractAudioHeader
     /**
      * Return the MPEG Layer
      */
-    public String getMpegLayerAsString()
+    public final String getMpegLayerAsString()
     {
         return mpegLayerAsString;
     }
@@ -842,7 +842,7 @@ public class MP3AudioHeader extends AbstractAudioHeader
     /**
      * Return the MPEG Version
      */
-    public String getMpegVersionAsString()
+    public final String getMpegVersionAsString()
     {
         return mpegVersionAsString;
     }
@@ -850,7 +850,7 @@ public class MP3AudioHeader extends AbstractAudioHeader
     /**
      * Return the Frequency
      */
-    public String getFrequencyAsString()
+    public final String getFrequencyAsString()
     {
         return String.valueOf(frequency);
     }
@@ -860,7 +860,7 @@ public class MP3AudioHeader extends AbstractAudioHeader
      * value just assume bit rate of 180.
      * TODO dont understand scaling that gives us 0.008
      */
-    public long getTrackLength()
+    private long getTrackLength()
     {
         if (isVariableBitRate() == false)
         {
@@ -875,7 +875,7 @@ public class MP3AudioHeader extends AbstractAudioHeader
     /**
      * Return the length in user friendly format
      */
-    public String getTrackLengthAsString()
+    public final String getTrackLengthAsString()
     {
         try
         {
@@ -893,7 +893,7 @@ public class MP3AudioHeader extends AbstractAudioHeader
     /**
      * Return the emphasis settings
      */
-    public String getEmphasisAsString()
+    public final String getEmphasisAsString()
     {
         return (String) emphasisMap.get(new Integer(emphasis));
     }

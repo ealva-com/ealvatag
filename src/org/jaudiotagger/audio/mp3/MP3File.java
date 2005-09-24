@@ -26,9 +26,9 @@ import org.jaudiotagger.tag.lyrics3.AbstractLyrics3;
 import org.jaudiotagger.tag.lyrics3.Lyrics3v1;
 import org.jaudiotagger.tag.lyrics3.Lyrics3v2;
 import org.jaudiotagger.tag.*;
+import org.jaudiotagger.tag.virtual.VirtualMetaDataContainer;
 import org.jaudiotagger.logging.*;
 import org.jaudiotagger.audio.ReadOnlyFileException;
-import org.jaudiotagger.audio.AbstractAudioFile;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -43,19 +43,35 @@ import java.util.logging.*;
 /*
  * This class represets a physical MP3 File
 */
-public class MP3File extends AbstractAudioFile
+public class MP3File extends org.jaudiotagger.audio.AbstractAudioFile
 {
+    /**
+     * MP3 save mode lowest numbered index
+     */
+    public static final int MP3_FILE_SAVE_FIRST = 1;
+    /**
+     * MP3 save mode matching <code>write</code> method
+     */
+    public static final int MP3_FILE_SAVE_WRITE = 1;
+    /**
+     * MP3 save mode matching <code>overwrite</code> method
+     */
+    public static final int MP3_FILE_SAVE_OVERWRITE = 2;
+    /**
+     * MP3 save mode matching <code>append</code> method
+     */
+    public static final int MP3_FILE_SAVE_APPEND = 3;
+    /**
+     * MP3 save mode highest numbered index
+     */
+    public static final int MP3_FILE_SAVE_LAST = 3;
+
     protected static AbstractTagDisplayFormatter tagFormatter;
 
     /**
      * Logger Object
      */
     public static Logger logger = LogFormatter.getLogger();
-
-    /**
-     * The Audio Header
-     */
-    private MP3AudioHeader mp3AudioHeader = null;
 
     /**
      * the ID3v2 tag that this file contains.
@@ -71,13 +87,6 @@ public class MP3File extends AbstractAudioFile
      * The Lyrics3 tag that this file contains.
      */
     private AbstractLyrics3 lyrics3tag = null;
-
-    /**
-     * The mp3 file that this instance represents. This value can be null. This
-     * value is also used for any methods that are called without a file
-     * argument
-     */
-    private File mp3file;
 
 
     /**
@@ -98,8 +107,8 @@ public class MP3File extends AbstractAudioFile
      */
     public MP3File(MP3File copyObject)
     {
-        this.mp3file = new File(copyObject.mp3file.getAbsolutePath());
-        this.mp3AudioHeader = new MP3AudioHeader(copyObject.mp3AudioHeader);
+        this.file = new File(copyObject.file.getAbsolutePath());
+        this.audioHeader = new MP3AudioHeader((MP3AudioHeader)copyObject.audioHeader);
         this.id3v2tag = (AbstractID3v2Tag) ID3Tags.copyObject(copyObject.id3v2tag);
         this.lyrics3tag = (AbstractLyrics3) ID3Tags.copyObject(copyObject.lyrics3tag);
         this.id3v1tag = (ID3v1Tag) ID3Tags.copyObject(copyObject.id3v1tag);
@@ -139,11 +148,18 @@ public class MP3File extends AbstractAudioFile
     public MP3File(File file, int loadOptions)
         throws IOException, TagException, ReadOnlyFileException
     {
-        this.mp3file = file;
-        logger.info("Reading file:" + file.getPath());
+        this.file = file;
+        logger.info("Reading file:" + "path"+ file.getPath() + ":abs:" + file.getAbsolutePath());
+        if(file.exists()==false)
+        {
+            logger.severe("Unable to find:"+file.getPath());
+            throw new FileNotFoundException("Unable to find:"+file.getPath());
+        }
+
         if (file.canWrite() == false)
         {
-            throw new ReadOnlyFileException("");
+            logger.severe("Unable to write:"+file.getPath());
+            throw new ReadOnlyFileException("Unable to write to:"+file.getPath());
         }
 
         RandomAccessFile newFile = new RandomAccessFile(file, "rw");
@@ -151,7 +167,7 @@ public class MP3File extends AbstractAudioFile
         {
             try
             {
-                mp3AudioHeader = new MP3AudioHeader(newFile);
+                audioHeader = new MP3AudioHeader(newFile);
             }
             catch (Exception ex)
             {
@@ -228,6 +244,10 @@ public class MP3File extends AbstractAudioFile
             {
             }
         }
+
+        //Create Virtual tag from the ID3v24tag
+        this.metaData = new VirtualMetaDataContainer((ID3v24Tag)this.getID3v2TagAsv24());
+
         newFile.close();
 
 
@@ -295,14 +315,6 @@ public class MP3File extends AbstractAudioFile
         this(file, LOAD_ALL);
     }
 
-
-    /**
-     * Return audio header
-     */
-    public MP3AudioHeader getAudioHeader()
-    {
-        return mp3AudioHeader;
-    }
 
     /**
      * Sets all four (id3v1, lyrics3, filename, id3v2) tags in this instance to
@@ -526,25 +538,7 @@ public class MP3File extends AbstractAudioFile
         return lyrics3tag;
     }
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @param mp3file DOCUMENT ME!
-     */
-    public void setMp3file(File mp3file)
-    {
-        this.mp3file = mp3file;
-    }
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @return DOCUMENT ME!
-     */
-    public File getMp3file()
-    {
-        return mp3file;
-    }
 
     /**
      * Returns true if there are any unsynchronized tags in this datatype. A
@@ -643,7 +637,7 @@ public class MP3File extends AbstractAudioFile
     public void delete(AbstractTag mp3tag)
         throws FileNotFoundException, IOException
     {
-        mp3tag.delete(new RandomAccessFile(this.mp3file, "rw"));
+        mp3tag.delete(new RandomAccessFile(this.file, "rw"));
     }
 
     /**
@@ -656,7 +650,7 @@ public class MP3File extends AbstractAudioFile
     public void save()
         throws IOException, TagException
     {
-        save(this.mp3file, TagOptionSingleton.getInstance().getDefaultSaveMode());
+        save(this.file, TagOptionSingleton.getInstance().getDefaultSaveMode());
     }
 
     /**
@@ -673,7 +667,7 @@ public class MP3File extends AbstractAudioFile
     public void save(int saveMode)
         throws IOException, TagException
     {
-        save(this.mp3file, saveMode);
+        save(this.file, saveMode);
     }
 
     /**
@@ -745,7 +739,7 @@ public class MP3File extends AbstractAudioFile
                 {
                     if (saveMode == MP3_FILE_SAVE_WRITE)
                     {
-                        id3v2tag.write(file, this.getAudioHeader().getMp3StartByte());
+                        id3v2tag.write(file, ((MP3AudioHeader)this.getAudioHeader()).getMp3StartByte());
                     }
                     else if (saveMode == MP3_FILE_SAVE_APPEND)
                     {
@@ -841,7 +835,7 @@ public class MP3File extends AbstractAudioFile
     public String displayStructureAsXML()
     {
         createXMLStructureFormatter();
-        this.tagFormatter.openHeadingElement("file", this.getMp3file().getAbsolutePath());
+        this.tagFormatter.openHeadingElement("file", this.getFile().getAbsolutePath());
         if (this.getID3v1Tag() != null)
         {
             this.getID3v1Tag().createStructure();
@@ -860,7 +854,7 @@ public class MP3File extends AbstractAudioFile
     public String displayStructureAsPlainText()
     {
         createPlainTextStructureFormatter();
-        this.tagFormatter.openHeadingElement("file", this.getMp3file().getAbsolutePath());
+        this.tagFormatter.openHeadingElement("file", this.getFile().getAbsolutePath());
         if (this.getID3v1Tag() != null)
         {
             this.getID3v1Tag().createStructure();
