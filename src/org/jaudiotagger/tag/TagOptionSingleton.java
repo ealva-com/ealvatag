@@ -33,6 +33,7 @@ import org.jaudiotagger.tag.id3.valuepair.GenreTypes;
 import org.jaudiotagger.tag.TagException;
 import org.jaudiotagger.tag.lyrics3.Lyrics3v2Fields;
 import org.jaudiotagger.audio.AbstractAudioFile;
+import org.jaudiotagger.audio.mp3.MP3File;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -250,7 +251,7 @@ public class TagOptionSingleton
     /**
      * DOCUMENT ME!
      */
-    private int defaultSaveMode = AbstractAudioFile.MP3_FILE_SAVE_WRITE;
+    private int defaultSaveMode = MP3File.MP3_FILE_SAVE_WRITE;
 
     /**
      * padding length of the ID3v2 tag.
@@ -1110,7 +1111,7 @@ public class TagOptionSingleton
         keywordMap = new HashMap();
 
         compositeMatchOverwrite = false;
-        defaultSaveMode = AbstractAudioFile.MP3_FILE_SAVE_WRITE;
+        defaultSaveMode = MP3File.MP3_FILE_SAVE_WRITE;
         endWordDelimiterList = new LinkedList();
         filenameDelimiterList = new LinkedList();
         filenameTagSave = false;
