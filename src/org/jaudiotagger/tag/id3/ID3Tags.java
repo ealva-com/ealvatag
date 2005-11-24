@@ -68,25 +68,19 @@ public class ID3Tags
      */
     public static boolean isID3v22FrameIdentifier(String identifier)
     {
+        //If less than 3 cant be an identifier
         if (identifier.length() < 3)
         {
             return false;
         }
+        //If 3 is it a known identifier
         else if (identifier.length() == 3)
         {
             return ID3v22Frames.getInstanceOf().getIdToValueMap().containsKey(identifier);
         }
         else
         {
-            identifier = identifier.toUpperCase();
-            if ((identifier.charAt(3) >= 'A') && (identifier.charAt(3) <= 'Z'))
-            {
-                return ID3v22Frames.getInstanceOf().getIdToValueMap().containsKey(identifier.substring(0, 4));
-            }
-            else
-            {
-                return ID3v22Frames.getInstanceOf().getIdToValueMap().containsKey(identifier.subSequence(0, 3));
-            }
+            return false;
         }
     }
 
@@ -186,7 +180,7 @@ public class ID3Tags
         String id = (String) ID3Frames.convertv22Tov23.get(identifier.substring(0, 3));
         if (id != null)
         {
-            //has v2.3 been mapped to v2.4
+             //has v2.3 been mapped to v2.4
             String v23id = (String) ID3Frames.convertv23Tov24.get(id);
             if (v23id == null)
             {
@@ -203,7 +197,7 @@ public class ID3Tags
             }
             else
             {
-                return v23id;
+                 return v23id;
             }
         }
         else

@@ -70,28 +70,32 @@ public class ID3v22Frame
     public ID3v22Frame(String identifier)
     {
         logger.info("Creating empty frame of type" + identifier);
-        this.identifier = identifier;
+        String bodyIdentifier = identifier;
+        this.identifier       = identifier;
         //Messy fix for datetime
         if (
-            (identifier == ID3v22Frames.FRAME_ID_V2_TYER)
+            (bodyIdentifier == ID3v22Frames.FRAME_ID_V2_TYER)
             ||
-            (identifier == ID3v22Frames.FRAME_ID_V2_TIME)
+            (bodyIdentifier == ID3v22Frames.FRAME_ID_V2_TIME)
         )
         {
-            identifier = ID3v24Frames.FRAME_ID_YEAR;
+            bodyIdentifier = ID3v24Frames.FRAME_ID_YEAR;
         }
-        //Have to check for 2.2 because few have a corresponding body have to use 2.3 or 2.4
-        else if (ID3Tags.isID3v22FrameIdentifier(identifier))
+        /* Have to check for 2.2 because most dont have own bodythey use 2.3 or 2.4
+         * body to hold the data, the frame is identified by its identifier, the body identifier
+         * is just to create a body suitable for writing the data to
+         */
+        else if (ID3Tags.isID3v22FrameIdentifier(bodyIdentifier))
         {
-            identifier = (String) ID3Tags.convertFrameID22To24(identifier);
+             bodyIdentifier = (String) ID3Tags.convertFrameID22To24(bodyIdentifier);
         }
-        logger.info("Creating empty frame of type" + this.identifier + "with frame body of" + identifier);
+  
         /* Use reflection to map id to frame body, which makes things much easier
          * to keep things up to date.
          */
         try
         {
-            Class c = Class.forName("org.jaudiotagger.tag.id3.framebody.FrameBody" + identifier);
+            Class c = Class.forName("org.jaudiotagger.tag.id3.framebody.FrameBody" + bodyIdentifier);
             frameBody = (AbstractID3v2FrameBody) c.newInstance();
         }
         catch (ClassNotFoundException cnfe)
@@ -109,7 +113,7 @@ public class ID3v22Frame
         {
             throw new RuntimeException(iae.getMessage());
         }
-        logger.info("Created empty frame of type" + this.identifier + "with frame body of" + identifier);
+        logger.info("Created empty frame of type" + this.identifier + "with frame body of" + bodyIdentifier);
 
     }
 
