@@ -417,6 +417,45 @@ public final class MP3AudioHeader extends AbstractAudioHeader
     }
 
     /**
+     *
+     * @return
+     */
+    public String getType()
+    {
+        return "mp3";
+    }
+
+
+    /**
+     *
+     * @return
+     */
+    public  String getSampleRate()
+    {
+        return getFrequencyAsString();
+    }
+
+    /**
+     *
+     * @return
+     */
+    public  String getFormat()
+    {
+        return mpegVersionAsString + " " + mpegLayerAsString;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public String getChannels()
+    {
+        return getModeAsString();
+    }
+
+
+
+    /**
      * Read Audio Header from File
      */
     public MP3AudioHeader(RandomAccessFile seekFile)
@@ -424,6 +463,8 @@ public final class MP3AudioHeader extends AbstractAudioHeader
     {
         fileSize = seekFile.length();
         this.seek(seekFile);
+
+
     }
 
     /**
@@ -431,7 +472,7 @@ public final class MP3AudioHeader extends AbstractAudioHeader
      *
      * @param variableBitRate DOCUMENT ME!
      */
-    public final void setVariableBitRate(boolean variableBitRate)
+    private final void setVariableBitRate(boolean variableBitRate)
     {
         this.variableBitRate = variableBitRate;
     }
@@ -439,27 +480,18 @@ public final class MP3AudioHeader extends AbstractAudioHeader
     /**
      * Does this use a variable bit rate
      *
-     * @return DOCUMENT ME!
+     * @return
      */
     public final boolean isVariableBitRate()
     {
         return variableBitRate;
     }
 
-    /**
-     * What is the bitrate for the frame
-     *
-     * @return DOCUMENT ME!
-     */
-    private int getBitRate()
-    {
-        return bitRate;
-    }
 
     /**
      * For non VBR return bit rate, for VBR return range because not sampling enough headers
      */
-    public final String getBitRateAsString()
+    public final String getBitRate()
     {
         if (isVariableBitRate() == false)
         {
@@ -481,7 +513,7 @@ public final class MP3AudioHeader extends AbstractAudioHeader
     {
         if (isVariableBitRate() == false)
         {
-            return getBitRate();
+            return bitRate;
         }
         else
         {

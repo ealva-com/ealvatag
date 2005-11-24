@@ -22,6 +22,9 @@
 package org.jaudiotagger.test;
 
 import org.jaudiotagger.audio.mp3.MP3File;
+import org.jaudiotagger.tag.AbstractTagFrameBody;
+import org.jaudiotagger.tag.id3.ID3v24Frame;
+import org.jaudiotagger.tag.id3.framebody.FrameBodyTPE1;
 
 import java.io.File;
 
@@ -29,8 +32,11 @@ public class TestAudioTagger
 {
     public static void main(final String[] args) throws Exception
     {
+        ID3v24Frame newFrame = new ID3v24Frame("TPE1");
+        AbstractTagFrameBody tmpFrameBody = newFrame.getBody();
+        FrameBodyTPE1 body = (FrameBodyTPE1)tmpFrameBody ;
+
         MP3File mp3File = new MP3File(new File(args[0]), MP3File.LOAD_IDV1TAG | MP3File.LOAD_IDV2TAG | MP3File.LOAD_MP3TAG);
-        
         System.out.println(mp3File.displayStructureAsXML());
     }
 

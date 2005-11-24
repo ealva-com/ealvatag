@@ -29,6 +29,7 @@ import org.jaudiotagger.tag.*;
 import org.jaudiotagger.tag.virtual.VirtualMetaDataContainer;
 import org.jaudiotagger.logging.*;
 import org.jaudiotagger.audio.ReadOnlyFileException;
+import org.jaudiotagger.audio.AbstractAudioHeader;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -270,6 +271,13 @@ public class MP3File extends org.jaudiotagger.audio.AbstractAudioFile
         return 0;
     }
 
+    /**
+     * Return audio header
+     */
+    public MP3AudioHeader getMP3AudioHeader()
+    {
+        return (MP3AudioHeader)getAudioHeader();
+    }
 
     /**
      * Returns true if this datatype contains an <code>Id3v1</code> tag

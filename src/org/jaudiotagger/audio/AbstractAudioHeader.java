@@ -25,9 +25,51 @@ import java.io.IOException;
 
 /**
  * The abstract superclass that provides a way to establish where the actual audio begins
- * within an Audio File.
+ * within an Audio File, and returns additional data about the audio file itself.
  */
-public abstract class AbstractAudioHeader
+public abstract class  AbstractAudioHeader                    
 {
+    /**
+     *
+     * @param seekFile
+     * @return
+     * @throws IOException
+     */
     public abstract boolean seek(RandomAccessFile seekFile) throws IOException;
+
+    /**
+     *
+     * @return the audio file type
+     */
+    public abstract String getType();
+
+    /**
+     *
+     * @return the BitRate of the Audio
+     */
+    public abstract String getBitRate();
+
+    /**
+
+     * @return  the sampling rate
+     */
+    public abstract String getSampleRate();
+
+    /**
+     *
+     * @return the format
+     */
+    public abstract String getFormat();
+
+    /**
+     *
+     * @return the Channel Mode such as Stero or Mono
+     */
+    public abstract String getChannels();
+
+    /**
+     *
+     * @return if the bitrate is variable
+     */
+    public abstract boolean isVariableBitRate();
 }
