@@ -20,6 +20,11 @@ public class AbstractText extends VirtualMetaDataItem
     /** This is the text displayed to the user */
     private String text;
 
+    protected AbstractText()
+    {
+       ;
+    }
+
     public AbstractText(ID3v24Frame id3v24Frame)
     {
         setText(((AbstractFrameBodyTextInfo)id3v24Frame.getBody()).getText());

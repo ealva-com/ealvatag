@@ -12,7 +12,7 @@ import org.jaudiotagger.tag.id3.ID3v24Frame;
 
 /**
  * Represents the Music Brainz TrmID, this the acoustic fingerprint of
- * the audio file on the recording
+ * the audio file on a recording as calculated by the MusicBrainz TrmServer
  */
 public class MbTrmId  extends AbstractText
 {

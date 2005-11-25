@@ -19,5 +19,4 @@ public class MbTrackId  extends AbstractText
     {
          super(id3v24Frame);
     }
-
 }

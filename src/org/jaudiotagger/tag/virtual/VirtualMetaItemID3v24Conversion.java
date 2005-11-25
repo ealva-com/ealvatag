@@ -14,8 +14,10 @@ import org.jaudiotagger.tag.id3.ID3v24Frames;
 import org.jaudiotagger.tag.virtual.metadataitemfactory.ConvertID3v24ArtistFactory;
 import org.jaudiotagger.tag.virtual.metadataitemfactory.ConvertID3v24UserDefinedInfoFactory;
 import org.jaudiotagger.tag.virtual.metadataitem.Unknown;
+import org.jaudiotagger.logging.LogFormatter;
 
 import java.util.HashMap;
+import java.util.logging.Logger;
 
 /**
  * Handles the mapping from ID3v24 to VirtualmetaDataItem(s)
@@ -27,6 +29,8 @@ import java.util.HashMap;
  */
 public class VirtualMetaItemID3v24Conversion
 {
+    public static Logger logger = LogFormatter.getLogger();
+
     private static HashMap conversionMap = new HashMap();
 
     static
@@ -42,9 +46,11 @@ public class VirtualMetaItemID3v24Conversion
      */
     public static VirtualMetaDataItem convertToVirtualMetaItems(ID3v24Frame id3v24Frame)
     {
+        logger.fine("VirtualMetaItem:Identifier is"+id3v24Frame.getIdentifier());
         VirtualMetaDataItemFactory mdif = ( VirtualMetaDataItemFactory )conversionMap.get(id3v24Frame.getIdentifier());
         if(mdif!=null)
         {
+            logger.fine("Converting "+id3v24Frame.getIdentifier());
             VirtualMetaDataItem mdi = mdif.convertID3v24FrameToVirtual(id3v24Frame);
             return mdi;
         }

@@ -14,7 +14,7 @@ import org.jaudiotagger.tag.virtual.VirtualMetaDataItemFactory;
 import org.jaudiotagger.tag.virtual.VirtualMetaDataItem;
 
 /**
- * Convert to Artist
+ * Convert ID3v24 Artist Frame into a VirtualMetaDataItem
  */
 public class ConvertID3v24ArtistFactory extends VirtualMetaDataItemFactory
 {

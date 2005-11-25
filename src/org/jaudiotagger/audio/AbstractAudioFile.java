@@ -40,6 +40,7 @@ public abstract class AbstractAudioFile
      * The physical file that this instance represents.
      */
     protected File file;
+    
     /**
      * The Audio Header
      */
