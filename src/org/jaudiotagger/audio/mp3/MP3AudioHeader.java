@@ -495,7 +495,7 @@ public final class MP3AudioHeader extends AbstractAudioHeader
     {
         if (isVariableBitRate() == false)
         {
-            return String.valueOf(getBitRate());
+            return String.valueOf(bitRate);
         }
         else
         {
