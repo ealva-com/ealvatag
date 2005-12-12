@@ -247,8 +247,11 @@ public class MP3File extends org.jaudiotagger.audio.AbstractAudioFile
         }
 
         //Create Virtual tag from the ID3v24tag
-        this.metaData = new VirtualMetaDataContainer((ID3v24Tag)this.getID3v2TagAsv24());
-
+        if(this.getID3v2TagAsv24()!=null)
+        {
+            this.metaData = new VirtualMetaDataContainer((ID3v24Tag)this.getID3v2TagAsv24());
+        }
+        
         newFile.close();
 
 
