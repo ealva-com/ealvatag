@@ -151,6 +151,7 @@ public class ID3v24Frames extends ID3Frames
         idToValue.put(FRAME_ID_BPM, "Text: BPM (Beats Per Minute)");
         idToValue.put(FRAME_ID_COMPOSER, "Text: Composer");
         idToValue.put(FRAME_ID_GENRE, "Text: Content type");
+        idToValue.put(FRAME_ID_GROUP_ID_REG,"Group ID Registration");
         idToValue.put(FRAME_ID_COPYRIGHTINFO, "Text: Copyright message");
         idToValue.put(FRAME_ID_PLAYLIST_DELAY, "Text: Playlist delay");
         idToValue.put(FRAME_ID_ENCODEDBY, "Text: Encoded by");

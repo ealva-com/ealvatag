@@ -94,11 +94,11 @@ public class FrameBodyGRID extends AbstractID3v2FrameBody implements ID3v24Frame
     {
         if (getObjectValue(DataTypes.OBJ_GROUP_SYMBOL) != null)
         {
-            return ((Byte) getObjectValue(DataTypes.OBJ_GROUP_SYMBOL)).byteValue();
+            return ((Long) getObjectValue(DataTypes.OBJ_GROUP_SYMBOL)).byteValue();
         }
         else
         {
-            return 0;
+            return (byte)0;
         }
     }
 
