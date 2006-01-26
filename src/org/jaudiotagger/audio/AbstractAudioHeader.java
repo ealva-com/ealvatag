@@ -22,12 +22,13 @@ package org.jaudiotagger.audio;
 
 import java.io.RandomAccessFile;
 import java.io.IOException;
+import java.io.File;
 
 /**
  * The abstract superclass that provides a way to establish where the actual audio begins
  * within an Audio File, and returns additional data about the audio file itself.
  */
-public abstract class  AbstractAudioHeader                    
+public abstract class AbstractAudioHeader
 {
     /**
      *
@@ -35,7 +36,7 @@ public abstract class  AbstractAudioHeader
      * @return
      * @throws IOException
      */
-    public abstract boolean seek(RandomAccessFile seekFile) throws IOException;
+    public abstract boolean seek(File seekFile) throws IOException;
 
     /**
      *
@@ -51,7 +52,7 @@ public abstract class  AbstractAudioHeader
 
     /**
 
-     * @return  the sampling rate
+     * @return  the Sampling rate
      */
     public abstract String getSampleRate();
 
