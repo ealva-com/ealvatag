@@ -141,7 +141,7 @@ public final class MP3AudioHeader extends AbstractAudioHeader
                     {
                         if(MP3File.logger.isLoggable(Level.FINEST))
                         {
-                            MP3File.logger.finest("Found Possible header at:"+fc.position());
+                            MP3File.logger.finest("Found Possible header at:"+filePointerCount);
                         }
                         mp3FrameHeader = MPEGFrameHeader.parseMPEGHeader(bb);
                         syncFound = true;
@@ -187,7 +187,10 @@ public final class MP3AudioHeader extends AbstractAudioHeader
             throw iox;
         }
         //Return to start of audio header
-        MP3File.logger.finer("Return found matching mp3 header starting at" + fc.position());
+        if(MP3File.logger.isLoggable(Level.FINEST))
+        {
+            MP3File.logger.finer("Return found matching mp3 header starting at" + filePointerCount);
+        }
         setFileSize(seekFile.length());
         setMp3StartByte(filePointerCount);
         setTimePerFrame();
