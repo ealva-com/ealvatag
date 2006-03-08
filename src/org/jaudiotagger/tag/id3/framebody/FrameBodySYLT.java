@@ -32,6 +32,7 @@ import java.io.RandomAccessFile;
 
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.nio.ByteBuffer;
 
 
 public class FrameBodySYLT extends AbstractID3v2FrameBody implements ID3v24FrameBody,ID3v23FrameBody
@@ -121,10 +122,10 @@ public class FrameBodySYLT extends AbstractID3v2FrameBody implements ID3v24Frame
      * @throws IOException         DOCUMENT ME!
      * @throws InvalidTagException DOCUMENT ME!
      */
-    public FrameBodySYLT(java.io.RandomAccessFile file, int frameSize)
+    public FrameBodySYLT(ByteBuffer byteBuffer, int frameSize)
         throws IOException, InvalidTagException
     {
-        super(file, frameSize);
+        super(byteBuffer, frameSize);
     }
 
     /**

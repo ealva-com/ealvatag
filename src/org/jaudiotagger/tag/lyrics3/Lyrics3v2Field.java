@@ -37,6 +37,7 @@ import org.jaudiotagger.tag.*;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.nio.ByteBuffer;
 
 
 public class Lyrics3v2Field
@@ -137,10 +138,10 @@ public class Lyrics3v2Field
      * @throws InvalidTagException DOCUMENT ME!
      * @throws IOException         DOCUMENT ME!
      */
-    public Lyrics3v2Field(RandomAccessFile file)
+    public Lyrics3v2Field(ByteBuffer byteBuffer)
         throws InvalidTagException, IOException
     {
-        this.read(file);
+        this.read(byteBuffer);
     }
 
     /**
@@ -170,11 +171,11 @@ public class Lyrics3v2Field
     /**
      * DOCUMENT ME!
      *
-     * @param file DOCUMENT ME!
+     * @param byteBuffer DOCUMENT ME!
      * @throws InvalidTagException DOCUMENT ME!
      * @throws IOException         DOCUMENT ME!
      */
-    public void read(RandomAccessFile file)
+    public void read(ByteBuffer byteBuffer)
         throws InvalidTagException, IOException
     {
         byte[] buffer = new byte[6];
@@ -183,20 +184,19 @@ public class Lyrics3v2Field
         byte b;
         do
         {
-            filePointer = file.getFilePointer();
-            b = file.readByte();
+            b = byteBuffer.get();
         }
         while (b == 0);
-        file.seek(filePointer);
+        byteBuffer.position(byteBuffer.position()-1);
         // read the 3 character ID
-        file.read(buffer, 0, 3);
+        byteBuffer.get(buffer, 0, 3);
         String identifier = new String(buffer, 0, 3);
         // is this a valid identifier?
         if (Lyrics3v2Fields.isLyrics3v2FieldIdentifier(identifier) == false)
         {
             throw new InvalidTagException(identifier + " is not a valid ID3v2.4 frame");
         }
-        frameBody = readBody(identifier, file);
+        frameBody = readBody(identifier, byteBuffer);
     }
 
     /**
@@ -252,45 +252,45 @@ public class Lyrics3v2Field
      * @throws InvalidTagException DOCUMENT ME!
      * @throws IOException         DOCUMENT ME!
      */
-    private AbstractLyrics3v2FieldFrameBody readBody(String identifier, RandomAccessFile file)
+    private AbstractLyrics3v2FieldFrameBody readBody(String identifier, ByteBuffer byteBuffer)
         throws InvalidTagException, IOException
     {
         AbstractLyrics3v2FieldFrameBody newBody = null;
         if (identifier.equals(Lyrics3v2Fields.FIELD_V2_AUTHOR))
         {
-            newBody = new FieldFrameBodyAUT(file);
+            newBody = new FieldFrameBodyAUT(byteBuffer);
         }
         else if (identifier.equals(Lyrics3v2Fields.FIELD_V2_ALBUM))
         {
-            newBody = new FieldFrameBodyEAL(file);
+            newBody = new FieldFrameBodyEAL(byteBuffer);
         }
         else if (identifier.equals(Lyrics3v2Fields.FIELD_V2_ARTIST))
         {
-            newBody = new FieldFrameBodyEAR(file);
+            newBody = new FieldFrameBodyEAR(byteBuffer);
         }
         else if (identifier.equals(Lyrics3v2Fields.FIELD_V2_TRACK))
         {
-            newBody = new FieldFrameBodyETT(file);
+            newBody = new FieldFrameBodyETT(byteBuffer);
         }
         else if (identifier.equals(Lyrics3v2Fields.FIELD_V2_IMAGE))
         {
-            newBody = new FieldFrameBodyIMG(file);
+            newBody = new FieldFrameBodyIMG(byteBuffer);
         }
         else if (identifier.equals(Lyrics3v2Fields.FIELD_V2_INDICATIONS))
         {
-            newBody = new FieldFrameBodyIND(file);
+            newBody = new FieldFrameBodyIND(byteBuffer);
         }
         else if (identifier.equals(Lyrics3v2Fields.FIELD_V2_ADDITIONAL_MULTI_LINE_TEXT))
         {
-            newBody = new FieldFrameBodyINF(file);
+            newBody = new FieldFrameBodyINF(byteBuffer);
         }
         else if (identifier.equals(Lyrics3v2Fields.FIELD_V2_LYRICS_MULTI_LINE_TEXT))
         {
-            newBody = new FieldFrameBodyLYR(file);
+            newBody = new FieldFrameBodyLYR(byteBuffer);
         }
         else
         {
-            newBody = new FieldFrameBodyUnsupported(file);
+            newBody = new FieldFrameBodyUnsupported(byteBuffer);
         }
         return newBody;
     }

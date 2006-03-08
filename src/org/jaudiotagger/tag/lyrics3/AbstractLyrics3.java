@@ -47,39 +47,6 @@ public abstract class AbstractLyrics3 extends AbstractTag
      * DOCUMENT ME!
      *
      * @param file DOCUMENT ME!
-     * @throws IOException  DOCUMENT ME!
-     * @throws TagException DOCUMENT ME!
-     */
-    public void append(RandomAccessFile file)
-        throws IOException, TagException
-    {
-        AbstractLyrics3 oldTag;
-
-        try
-        {
-            oldTag = new Lyrics3v2(file);
-            oldTag.append(this);
-            oldTag.write(file);
-        }
-        catch (TagNotFoundException ex)
-        {
-            try
-            {
-                oldTag = new Lyrics3v1(file);
-                oldTag.append(this);
-                oldTag.write(file);
-            }
-            catch (TagNotFoundException ex2)
-            {
-                this.write(file);
-            }
-        }
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param file DOCUMENT ME!
      * @throws IOException DOCUMENT ME!
      */
     public void delete(RandomAccessFile file)
@@ -88,57 +55,6 @@ public abstract class AbstractLyrics3 extends AbstractTag
         long filePointer;
         ID3v1Tag id3v1tag = new ID3v1Tag();
 
-        if (seek(file))
-        {
-            id3v1tag = id3v1tag.getID3tag(file);
-
-            seek(file);
-            filePointer = file.getFilePointer();
-
-            // cut off the "LYRICSBEGIN"
-            filePointer -= 11;
-            file.setLength(filePointer);
-            file.seek(file.length());
-
-            if (id3v1tag != null)
-            {
-                id3v1tag.write(file);
-            }
-        }
+       
     }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param file DOCUMENT ME!
-     * @throws IOException  DOCUMENT ME!
-     * @throws TagException DOCUMENT ME!
-     */
-    public void overwrite(RandomAccessFile file)
-        throws IOException, TagException
-    {
-        AbstractLyrics3 oldTag;
-
-        try
-        {
-            oldTag = new Lyrics3v2(file);
-            oldTag.overwrite(this);
-            oldTag.write(file);
-        }
-        catch (TagNotFoundException ex)
-        {
-            try
-            {
-                oldTag = new Lyrics3v1(file);
-                oldTag.overwrite(this);
-                oldTag.write(file);
-            }
-            catch (TagNotFoundException ex2)
-            {
-                this.write(file);
-            }
-        }
-    }
-
-
 }

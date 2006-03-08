@@ -37,6 +37,7 @@ import java.io.RandomAccessFile;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.nio.ByteBuffer;
 
 
 public class FieldFrameBodyLYR extends AbstractLyrics3v2FieldFrameBody
@@ -103,10 +104,10 @@ public class FieldFrameBodyLYR extends AbstractLyrics3v2FieldFrameBody
      * @throws InvalidTagException DOCUMENT ME!
      * @throws java.io.IOException DOCUMENT ME!
      */
-    public FieldFrameBodyLYR(RandomAccessFile file)
+    public FieldFrameBodyLYR(ByteBuffer byteBuffer)
         throws InvalidTagException, java.io.IOException
     {
-        this.read(file);
+        this.read(byteBuffer);
     }
 
     /**
@@ -294,11 +295,11 @@ public class FieldFrameBodyLYR extends AbstractLyrics3v2FieldFrameBody
     /**
      * DOCUMENT ME!
      *
-     * @param file DOCUMENT ME!
+     * @param byteBuffer DOCUMENT ME!
      * @throws InvalidTagException DOCUMENT ME!
      * @throws java.io.IOException DOCUMENT ME!
      */
-    public void read(RandomAccessFile file)
+    public void read(ByteBuffer byteBuffer)
         throws InvalidTagException, java.io.IOException
     {
         String lineString;
@@ -306,7 +307,7 @@ public class FieldFrameBodyLYR extends AbstractLyrics3v2FieldFrameBody
         byte[] buffer = new byte[5];
 
         // read the 5 character size
-        file.read(buffer, 0, 5);
+        byteBuffer.get(buffer, 0, 5);
 
         int size = Integer.parseInt(new String(buffer, 0, 5));
 
@@ -318,7 +319,7 @@ public class FieldFrameBodyLYR extends AbstractLyrics3v2FieldFrameBody
         buffer = new byte[size];
 
         // read the SIZE length description
-        file.read(buffer);
+        byteBuffer.get(buffer);
         lineString = new String(buffer);
         readString(lineString);
     }

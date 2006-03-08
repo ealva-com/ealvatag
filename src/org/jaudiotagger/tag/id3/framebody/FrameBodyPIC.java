@@ -31,6 +31,7 @@ import org.jaudiotagger.tag.id3.valuepair.ImageFormats;
 import org.jaudiotagger.audio.mp3.*;
 
 import java.io.IOException;
+import java.nio.ByteBuffer;
 
 public class FrameBodyPIC extends AbstractID3v2FrameBody implements ID3v22FrameBody
 {
@@ -87,10 +88,10 @@ public class FrameBodyPIC extends AbstractID3v2FrameBody implements ID3v22FrameB
      * @throws IOException         DOCUMENT ME!
      * @throws InvalidTagException DOCUMENT ME!
      */
-    public FrameBodyPIC(java.io.RandomAccessFile file, int frameSize)
+    public FrameBodyPIC(ByteBuffer byteBuffer, int frameSize)
         throws IOException, InvalidTagException
     {
-        super(file, frameSize);
+        super(byteBuffer, frameSize);
     }
 
     /**

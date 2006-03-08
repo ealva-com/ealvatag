@@ -85,11 +85,11 @@ public abstract class AbstractFrameBodyTextInfo
      * @throws java.io.IOException DOCUMENT ME!
      * @throws InvalidTagException DOCUMENT ME!
      */
-    protected AbstractFrameBodyTextInfo(java.io.RandomAccessFile file,
+    protected AbstractFrameBodyTextInfo(ByteBuffer byteBuffer,
                                         int frameSize)
         throws java.io.IOException, InvalidTagException
     {
-        super(file, frameSize);
+        super(byteBuffer, frameSize);
     }
 
     /**
@@ -138,7 +138,7 @@ public abstract class AbstractFrameBodyTextInfo
      * current encoding before we write data. If there are change the
      * encoding.
      */
-    public void write(ByteBuffer tagBuffer)
+    public void write(ByteArrayOutputStream tagBuffer)
         throws IOException
     {
         if (((AbstractString) getObject(DataTypes.OBJ_TEXT)).canBeEncoded() == false)

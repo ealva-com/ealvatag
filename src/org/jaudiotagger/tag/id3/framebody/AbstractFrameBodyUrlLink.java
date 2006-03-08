@@ -27,6 +27,8 @@ import org.jaudiotagger.tag.datatype.StringSizeTerminated;
 import org.jaudiotagger.tag.datatype.DataTypes;
 import org.jaudiotagger.tag.InvalidTagException;
 
+import java.nio.ByteBuffer;
+
 /**
  *  Abstract superclass of all URL Frames
 */
@@ -66,10 +68,10 @@ public abstract class AbstractFrameBodyUrlLink extends AbstractID3v2FrameBody
      * @throws java.io.IOException DOCUMENT ME!
      * @throws InvalidTagException DOCUMENT ME!
      */
-    protected AbstractFrameBodyUrlLink(java.io.RandomAccessFile file, int frameSize)
+    protected AbstractFrameBodyUrlLink(ByteBuffer byteBuffer, int frameSize)
         throws java.io.IOException, InvalidTagException
     {
-        super(file, frameSize);
+        super(byteBuffer, frameSize);
     }
 
     /**

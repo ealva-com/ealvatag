@@ -32,6 +32,7 @@ import org.jaudiotagger.tag.InvalidTagException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.*;
+import java.nio.ByteBuffer;
 
 public abstract class AbstractLyrics3v2FieldFrameBody extends AbstractTagFrameBody
 {
@@ -110,17 +111,16 @@ public abstract class AbstractLyrics3v2FieldFrameBody extends AbstractTagFrameBo
      * have its file pointer in the correct location. The size as indicated in the
      * header is passed to the frame constructor when reading from file.
      *
-     * @param file file to read
-     * @param size size of the body as defined in header.
+     * @param byteBuffer file to read
      * @throws IOException         on any I/O error
      * @throws InvalidTagException if there is any error in the data format.
      */
-    public void read(RandomAccessFile file) throws IOException, InvalidTagException
+    public void read(ByteBuffer byteBuffer) throws IOException, InvalidTagException
     {
         int size = getSize();
         //Allocate a buffer to the size of the Frame Body and read from file
         byte[] buffer = new byte[size];
-        file.read(buffer);
+        byteBuffer.get(buffer);
         //Offset into buffer, incremented by length of previous MP3Object
         int offset = 0;
 

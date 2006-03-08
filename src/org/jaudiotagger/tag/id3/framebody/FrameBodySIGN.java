@@ -29,6 +29,7 @@ import org.jaudiotagger.tag.datatype.DataTypes;
 import org.jaudiotagger.tag.InvalidTagException;
 
 import java.io.IOException;
+import java.nio.ByteBuffer;
 
 
 public class FrameBodySIGN extends AbstractID3v2FrameBody implements ID3v24FrameBody
@@ -66,10 +67,10 @@ public class FrameBodySIGN extends AbstractID3v2FrameBody implements ID3v24Frame
      * @throws IOException         DOCUMENT ME!
      * @throws InvalidTagException DOCUMENT ME!
      */
-    public FrameBodySIGN(java.io.RandomAccessFile file, int frameSize)
+    public FrameBodySIGN(ByteBuffer byteBuffer, int frameSize)
         throws IOException, InvalidTagException
     {
-        super(file, frameSize);
+        super(byteBuffer, frameSize);
     }
 
     /**

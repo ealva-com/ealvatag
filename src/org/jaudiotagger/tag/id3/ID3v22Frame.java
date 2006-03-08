@@ -199,18 +199,18 @@ public class ID3v22Frame
     }
 
     /**
-     * Creates a new ID3v2_2Frame datatype from file.
+     * Creates a new ID3v2_2Frame datatype from byteBuffer.
      *
-     * @param file DOCUMENT ME!
-     * @throws IOException         DOCUMENT ME!
-     * @throws InvalidTagException DOCUMENT ME!
+     * @param byteBuffer
+     * @throws IOException
+
      */
-    public ID3v22Frame(RandomAccessFile file)
+    public ID3v22Frame(ByteBuffer byteBuffer)
         throws IOException, InvalidFrameException
     {
-        logger.info("Reading frame from file");
-        this.read(file);
-        logger.info("Read frame from file");
+        logger.info("Reading frame from byteBuffer");
+        this.read(byteBuffer);
+        logger.info("Read frame from byteBuffer");
     }
 
     /**
@@ -227,17 +227,17 @@ public class ID3v22Frame
      * Read frame from file.
      * Read the frame header then delegate reading of data to frame body.
      *
-     * @param file DOCUMENT ME!
-     * @throws IOException         DOCUMENT ME!
-     * @throws InvalidTagException DOCUMENT ME!
+     * @param byteBuffer
+     * @throws IOException
+
      */
-    public void read(RandomAccessFile file)
+    public void read(ByteBuffer byteBuffer)
         throws IOException, InvalidFrameException
     {
         byte[] buffer = new byte[FRAME_ID_SIZE];
 
         // Read the FrameID Identifier
-        file.read(buffer, 0, FRAME_ID_SIZE);
+        byteBuffer.get(buffer, 0, FRAME_ID_SIZE);
         identifier = new String(buffer);
         logger.info("Read Frame from file identifier is:"+identifier);
 
@@ -245,11 +245,11 @@ public class ID3v22Frame
         if (isValidID3v2FrameIdentifier(identifier) == false)
         {
             logger.info("Invalid identifier:" + identifier);
-            file.seek(file.getFilePointer() - (FRAME_ID_SIZE - 1));
+            byteBuffer.position(byteBuffer.position() - (FRAME_ID_SIZE - 1));
             throw new InvalidFrameException(identifier + " is not a valid ID3v2.20 frame");
         }
         //Read Frame Size (same size as Frame ID so reuse buffer)
-        file.read(buffer, 0, FRAME_SIZE_SIZE);
+        byteBuffer.get(buffer, 0, FRAME_SIZE_SIZE);
         frameSize=decodeSize(buffer);
         if (frameSize < 0)
         {
@@ -287,7 +287,7 @@ public class ID3v22Frame
                 }
             }
             logger.fine("Identifier was:" + identifier + " reading using:" + id);
-            frameBody = readBody(id, file, frameSize);
+            frameBody = readBody(id, byteBuffer, frameSize);
         }
     }
 
@@ -307,23 +307,30 @@ public class ID3v22Frame
     /**
      * Write Frame to file
      *
-     * @param file The file to write to
-     * @throws IOException DOCUMENT ME!
+     * @throws IOException
      */
-    public void write(ByteBuffer tagBuffer)
+    public void write(ByteArrayOutputStream tagBuffer)
         throws IOException
     {
         logger.info("Write Frame to Buffer" + getIdentifier());
         //This is where we will write header, move position to where we can
         //write body
-        ByteBuffer headerBuffer = tagBuffer.slice();
-        tagBuffer.position(tagBuffer.position() + this.FRAME_HEADER_SIZE);
+        ByteBuffer headerBuffer = ByteBuffer.allocate(FRAME_HEADER_SIZE);
+
         //Write Frame Body Data
-        ((AbstractID3v2FrameBody) frameBody).write(tagBuffer);
+        ByteArrayOutputStream bodyOutputStream = new ByteArrayOutputStream();
+        ((AbstractID3v2FrameBody) frameBody).write(bodyOutputStream);
+
         //Write Frame Header
         //Write Frame ID must adjust can only be 3 bytes long
         headerBuffer.put(getIdentifier().substring(0, FRAME_ID_SIZE).getBytes(), 0, FRAME_ID_SIZE);
         encodeSize(headerBuffer,frameBody.getSize());
+
+         //Add header to the Byte Array Output Stream
+        tagBuffer.write(headerBuffer.array());
+
+        //Add body to the Byte Array Output Stream
+        tagBuffer.write(bodyOutputStream.toByteArray());
 
     }
 
@@ -358,8 +365,7 @@ public class ID3v22Frame
 
     /**
      * Return String Representation of body
-     *
-     * @return DOCUMENT ME!
+     *                     
      */
     public void createStructure()
     {

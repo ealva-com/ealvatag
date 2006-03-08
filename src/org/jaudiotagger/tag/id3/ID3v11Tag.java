@@ -37,6 +37,8 @@ import java.io.RandomAccessFile;
 import java.util.Iterator;
 import java.util.regex.*;
 import java.util.*;
+import java.nio.ByteBuffer;
+import java.nio.channels.FileChannel;
 
 public class ID3v11Tag
     extends ID3v1Tag
@@ -196,13 +198,19 @@ public class ID3v11Tag
         release = 1;
         majorVersion = 1;
         revision = 0;
-        this.read(file);
+        //Read into Byte Buffer
+        final FileChannel fc = file.getChannel();
+        fc.position(file.length() - TAG_LENGTH);
+        ByteBuffer  byteBuffer = ByteBuffer.allocate(TAG_LENGTH);
+        fc.read(byteBuffer);
+        byteBuffer.flip();
+        this.read(byteBuffer);
     }
 
     /**
-     * DOCUMENT ME!
+     * Set Comment
      *
-     * @param comment DOCUMENT ME!
+     * @param comment
      */
     public void setComment(String comment)
     {
@@ -210,9 +218,9 @@ public class ID3v11Tag
     }
 
     /**
-     * DOCUMENT ME!
+     * Get Comment
      *
-     * @return DOCUMENT ME!
+     * @return comment
      */
     public String getComment()
     {
@@ -223,7 +231,7 @@ public class ID3v11Tag
      * Set the track, v1_1 stores track numbers in a single byte value so can only
      * handle a simple number in the range 0-255.
      *
-     * @param track DOCUMENT ME!
+     * @param track
      */
     public void setTrack(String trackValue)
     {
@@ -253,65 +261,12 @@ public class ID3v11Tag
     /**
      * Return the track number as a String.
      *
-     * @return DOCUMENT ME!
+     * @return track
      */
     public String getTrack()
     {
         return String.valueOf(track & BYTE_TO_UNSIGNED);
     }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param tag DOCUMENT ME!
-     */
-    public void append(AbstractTag tag)
-    {
-        ID3v11Tag oldTag = this;
-        ID3v11Tag newTag = null;
-        if (tag != null)
-        {
-            if (tag instanceof ID3v11Tag)
-            {
-                newTag = (ID3v11Tag) tag;
-            }
-            else
-            {
-                newTag = new ID3v11Tag(tag);
-            }
-            if (tag instanceof org.jaudiotagger.tag.lyrics3.AbstractLyrics3)
-            {
-                TagOptionSingleton.getInstance().setId3v1SaveTrack(false);
-            }
-            oldTag.track = (TagOptionSingleton.getInstance().isId3v1SaveTrack() && (oldTag.track <= 0)) ?
-                newTag.track : oldTag.track;
-            // we don't need to reset the tag options because
-            // we want to save all fields (default)
-        }
-        // we can't send newTag here because we need to keep the lyrics3
-        // class type ... check super.append and you'll see what i mean.
-        super.append(tag);
-    }
-    /**
-     * DOCUMENT ME!
-     *
-     * @param obj DOCUMENT ME!
-     *
-     * @return DOCUMENT ME!
-     */
-
-//    public void append(RandomAccessFile file)
-//                throws IOException, TagException {
-//        ID3v1_1 oldTag;
-//
-//        try {
-//            oldTag = new ID3v1_1(file);
-//            oldTag.append(this);
-//            oldTag.write(file);
-//        } catch (TagNotFoundException ex) {
-//            oldTag = null;
-//        }
-//    }
 
     /**
      * Compares Object with this only returns true if both v1_1 tags with all
@@ -334,68 +289,45 @@ public class ID3v11Tag
         return super.equals(obj);
     }
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @param tag DOCUMENT ME!
-     */
-    public void overwrite(AbstractTag tag)
+
+    public boolean seek(ByteBuffer byteBuffer)
+            throws IOException
     {
-        ID3v11Tag oldTag = this;
-        ID3v11Tag newTag = null;
-        if (tag != null)
+        byte[] buffer = new byte[FIELD_TAGID_LENGTH];
+        // read the TAG value
+        byteBuffer.get(buffer, 0, FIELD_TAGID_LENGTH);
+        if (!(Arrays.equals(buffer, TAG_ID)))
         {
-            if (tag instanceof ID3v11Tag)
-            {
-                newTag = (ID3v11Tag) tag;
-            }
-            else
-            {
-                newTag = new ID3v11Tag(tag);
-            }
-            if (tag instanceof org.jaudiotagger.tag.lyrics3.AbstractLyrics3)
-            {
-                TagOptionSingleton.getInstance().setId3v1SaveTrack(false);
-            }
-            oldTag.track = TagOptionSingleton.getInstance().isId3v1SaveTrack() ? newTag.track : oldTag.track;
-            // we don't need to reset the tag options because
-            // we want to save all fields (default)
+            return false;
         }
-        super.overwrite(newTag);
+
+        // Check for the empty byte before the TRACK
+        byteBuffer.position(this.FIELD_TRACK_INDICATOR_POS);
+        if (byteBuffer.get() != END_OF_FIELD)
+        {
+            return false;
+        }
+        //Now check for TRACK if the next byte is also null byte then not v1.1
+        //tag,however this means cannot have v1_1 tag with track set to zero/undefined
+        //because on next read will be v1 tag.
+        if (byteBuffer.get() == END_OF_FIELD)
+        {
+            return false;
+        }
+        return true;
     }
-    /**
-     * DOCUMENT ME!
-     *
-     * @param file DOCUMENT ME!
-     *
-     * @throws IOException DOCUMENT ME!
-     * @throws IOException DOCUMENT ME!
-     */
-
-//    public void overwrite(RandomAccessFile file)
-//                   throws IOException, TagException {
-//        ID3v1_1 oldTag;
-//
-//        try {
-//            oldTag = new ID3v1_1(file);
-//            oldTag.overwrite(this);
-//            oldTag.write(file);
-//        } catch (TagNotFoundException ex) {
-//            super.overwrite(file);
-//        }
-//    }
 
     /**
      * DOCUMENT ME!
      *
-     * @param file DOCUMENT ME!
+     * @param byteBuffer DOCUMENT ME!
      * @throws TagNotFoundException DOCUMENT ME!
      * @throws IOException          DOCUMENT ME!
      */
-    public void read(RandomAccessFile file)
+    public void read(ByteBuffer byteBuffer)
         throws TagNotFoundException, IOException
     {
-        if (seek(file) == false)
+        if (seek(byteBuffer) == false)
         {
             throw new TagNotFoundException("ID3v1 tag not found");
         }
@@ -403,8 +335,8 @@ public class ID3v11Tag
 
         //Do single file read of data to cut down on file reads
         byte[] dataBuffer = new byte[TAG_LENGTH];
-        file.seek(file.length() - TAG_LENGTH);
-        file.read(dataBuffer, 0, TAG_LENGTH);
+        byteBuffer.position(0);
+        byteBuffer.get(dataBuffer, 0, TAG_LENGTH);
         title = new String(dataBuffer, FIELD_TITLE_POS, this.FIELD_TITLE_LENGTH).trim();
         Matcher m = endofStringPattern.matcher(title);
         if (m.find() == true)
@@ -439,69 +371,6 @@ public class ID3v11Tag
         genre = dataBuffer[FIELD_GENRE_POS];
     }
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @param file DOCUMENT ME!
-     * @return DOCUMENT ME!
-     * @throws IOException DOCUMENT ME!
-     */
-    public boolean seek(RandomAccessFile file)
-        throws IOException
-    {
-        if (file.length() < TAG_LENGTH)
-        {
-            return false;
-        }
-        byte[] buffer = new byte[FIELD_TAGID_LENGTH];
-        // Tag should be at end of file
-        file.seek(file.length() - TAG_LENGTH);
-        // read the TAG value
-        file.read(buffer, 0, FIELD_TAGID_LENGTH);
-        if (!(Arrays.equals(buffer, TAG_ID)))
-        {
-            return false;
-        }
-        // Check for the empty byte before the TRACK
-        file.seek((file.length() - TAG_LENGTH) + this.FIELD_TRACK_INDICATOR_POS);
-        if (file.readByte() != END_OF_FIELD)
-        {
-            return false;
-        }
-        //Now check for TRACK if the next byte is also null byte then not v1.1
-        //tag,however this means cannot have v1_1 tag with track set to zero/undefined
-        //because on next read will be v1 tag.
-        if (file.readByte() == END_OF_FIELD)
-        {
-            return false;
-        }
-        return true;
-    }
-
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param tag DOCUMENT ME!
-     */
-    public void write(AbstractTag tag)
-    {
-        ID3v11Tag oldTag = this;
-        ID3v11Tag newTag = null;
-        if (tag != null)
-        {
-            if (tag instanceof ID3v11Tag)
-            {
-                newTag = (ID3v11Tag) tag;
-            }
-            else
-            {
-                newTag = new ID3v11Tag(tag);
-            }
-            oldTag.track = newTag.track;
-        }
-        super.write(newTag);
-    }
 
     /**
      * DOCUMENT ME!
@@ -574,21 +443,7 @@ public class ID3v11Tag
         file.write(buffer);
     }
 
-    public void overwrite(RandomAccessFile file)
-        throws IOException, TagException
-    {
-        AbstractID3v1Tag oldTag;
-        try
-        {
-            oldTag = new ID3v11Tag(file);
-            oldTag.overwrite(this);
-            oldTag.write(file);
-        }
-        catch (TagNotFoundException ex)
-        {
-            this.write(file);
-        }
-    }
+
 
     /**
      * DOCUMENT ME!

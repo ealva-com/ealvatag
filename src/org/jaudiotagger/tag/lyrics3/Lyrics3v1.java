@@ -35,6 +35,8 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 
 import java.util.Iterator;
+import java.util.Arrays;
+import java.nio.ByteBuffer;
 
 public class Lyrics3v1 extends AbstractLyrics3
 {
@@ -88,10 +90,10 @@ public class Lyrics3v1 extends AbstractLyrics3
      * @throws TagNotFoundException DOCUMENT ME!
      * @throws java.io.IOException  DOCUMENT ME!
      */
-    public Lyrics3v1(RandomAccessFile file)
+    public Lyrics3v1(ByteBuffer byteBuffer)
         throws TagNotFoundException, java.io.IOException
     {
-        this.read(file);
+        this.read(byteBuffer);
     }
 
     /**
@@ -153,55 +155,6 @@ public class Lyrics3v1 extends AbstractLyrics3
     /**
      * DOCUMENT ME!
      *
-     * @param tag DOCUMENT ME!
-     */
-    public void append(AbstractTag tag)
-    {
-        Lyrics3v1 oldTag = this;
-        Lyrics3v1 newTag = null;
-
-        if (tag != null)
-        {
-            if (tag instanceof Lyrics3v1)
-            {
-                newTag = (Lyrics3v1) tag;
-            }
-            else
-            {
-                newTag = new Lyrics3v1();
-            }
-
-            lyric = oldTag.lyric + "\n" + newTag.lyric;
-        }
-
-        //super.append(newTag);
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param obj DOCUMENT ME!
-     *
-     * @return DOCUMENT ME!
-     */
-
-//    public void append(RandomAccessFile file)
-//                throws IOException, TagException {
-//        Lyrics3v1 oldTag;
-//
-//        try {
-//            oldTag = new Lyrics3v1(file);
-//        } catch (TagNotFoundException ex) {
-//            oldTag = null;
-//        }
-//
-//        oldTag.append(this);
-//        oldTag.write(file);
-//    }
-
-    /**
-     * DOCUMENT ME!
-     *
      * @param obj DOCUMENT ME!
      * @return DOCUMENT ME!
      */
@@ -238,74 +191,37 @@ public class Lyrics3v1 extends AbstractLyrics3
     }
 
     /**
-     * DOCUMENT ME!
+     * TODO implement
      *
-     * @param tag DOCUMENT ME!
+     * @param byteBuffer
+     * @return
+     * @throws IOException
      */
-    public void overwrite(AbstractTag tag)
+    public boolean seek(ByteBuffer byteBuffer)
+        throws IOException
     {
-        Lyrics3v1 oldTag = this;
-        Lyrics3v1 newTag = null;
-
-        if (tag != null)
-        {
-            if (tag instanceof Lyrics3v1)
-            {
-                newTag = (Lyrics3v1) tag;
-            }
-            else
-            {
-                newTag = new Lyrics3v1();
-            }
-
-            lyric = TagOptionSingleton.getInstance().isLyrics3Save() ? newTag.lyric : oldTag.lyric;
-        }
-
-        //super.overwrite(newTag);
+        return false;
     }
 
     /**
      * DOCUMENT ME!
      *
-     * @param file DOCUMENT ME!
-     *
-     * @throws IOException DOCUMENT ME!
-     * @throws IOException DOCUMENT ME!
-     */
-
-//    public void overwrite(RandomAccessFile file)
-//                   throws IOException, TagException {
-//        Lyrics3v1 oldTag;
-//
-//        try {
-//            oldTag = new Lyrics3v1(file);
-//        } catch (TagNotFoundException ex) {
-//            oldTag = null;
-//        }
-//
-//        oldTag.overwrite(this);
-//        oldTag.write(file);
-//    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param file DOCUMENT ME!
+     * @param byteBuffer DOCUMENT ME!
      * @throws TagNotFoundException DOCUMENT ME!
      * @throws IOException          DOCUMENT ME!
      */
-    public void read(RandomAccessFile file)
+    public void read(ByteBuffer byteBuffer)
         throws TagNotFoundException, IOException
     {
         byte[] buffer = new byte[5100 + 9 + 11];
         String lyricBuffer;
 
-        if (seek(file) == false)
+        if (seek(byteBuffer) == false)
         {
             throw new TagNotFoundException("ID3v1 tag not found");
         }
 
-        file.read(buffer);
+        byteBuffer.get(buffer);
         lyricBuffer = new String(buffer);
 
         lyric = lyricBuffer.substring(0, lyricBuffer.indexOf("LYRICSEND"));
@@ -387,32 +303,6 @@ public class Lyrics3v1 extends AbstractLyrics3
     /**
      * DOCUMENT ME!
      *
-     * @param tag DOCUMENT ME!
-     */
-    public void write(AbstractTag tag)
-    {
-        Lyrics3v1 newTag = null;
-
-        if (tag != null)
-        {
-            if (tag instanceof Lyrics3v1)
-            {
-                newTag = (Lyrics3v1) tag;
-            }
-            else
-            {
-                newTag = new Lyrics3v1();
-            }
-
-            lyric = newTag.lyric;
-        }
-
-        //super.write(newTag);
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
      * @param file DOCUMENT ME!
      * @throws IOException DOCUMENT ME!
      */
@@ -424,7 +314,7 @@ public class Lyrics3v1 extends AbstractLyrics3
         byte[] buffer;
         ID3v1Tag id3v1tag = null;
 
-        id3v1tag = id3v1tag.getID3tag(file);
+        id3v1tag = null;
 
         delete(file);
         file.seek(file.length());
@@ -465,4 +355,5 @@ public class Lyrics3v1 extends AbstractLyrics3
             id3v1tag.write(file);
         }
     }
+
 }

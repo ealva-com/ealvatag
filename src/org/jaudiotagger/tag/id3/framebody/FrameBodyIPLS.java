@@ -30,6 +30,7 @@ import org.jaudiotagger.tag.datatype.StringNullTerminated;
 import org.jaudiotagger.tag.InvalidTagException;
 
 import java.io.IOException;
+import java.nio.ByteBuffer;
 
 public class FrameBodyIPLS  extends AbstractFrameBodyTextInfo implements ID3v23FrameBody
 {
@@ -40,10 +41,10 @@ public class FrameBodyIPLS  extends AbstractFrameBodyTextInfo implements ID3v23F
     {
     }
 
-    public FrameBodyIPLS(java.io.RandomAccessFile file, int frameSize)
+    public FrameBodyIPLS(ByteBuffer byteBuffer, int frameSize)
         throws IOException, InvalidTagException
     {
-        super(file, frameSize);
+        super(byteBuffer, frameSize);
     }
 
 

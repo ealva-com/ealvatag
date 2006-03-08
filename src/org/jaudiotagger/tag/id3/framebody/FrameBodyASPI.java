@@ -32,6 +32,7 @@ import org.jaudiotagger.tag.id3.ID3v24Frames;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.nio.ByteBuffer;
 
 
 public class FrameBodyASPI extends AbstractID3v2FrameBody implements ID3v24FrameBody
@@ -108,10 +109,10 @@ public class FrameBodyASPI extends AbstractID3v2FrameBody implements ID3v24Frame
      * @throws IOException         DOCUMENT ME!
      * @throws InvalidTagException DOCUMENT ME!
      */
-    public FrameBodyASPI(java.io.RandomAccessFile file, int frameSize)
+    public FrameBodyASPI(ByteBuffer byteBuffer, int frameSize)
         throws IOException, InvalidTagException
     {
-        super(file, frameSize);
+        super(byteBuffer, frameSize);
     }
 
     /**
@@ -152,11 +153,11 @@ public class FrameBodyASPI extends AbstractID3v2FrameBody implements ID3v24Frame
     /**
      * DOCUMENT ME!
      *
-     * @param file DOCUMENT ME!
+     * @param byteBuffer DOCUMENT ME!
      * @throws IOException         DOCUMENT ME!
      * @throws InvalidTagException DOCUMENT ME!
      */
-    public void read(RandomAccessFile file)
+    public void read(ByteBuffer byteBuffer)
         throws IOException, InvalidFrameException
     {
         int size = getSize();
@@ -166,10 +167,10 @@ public class FrameBodyASPI extends AbstractID3v2FrameBody implements ID3v24Frame
             throw new EmptyFrameException("Empty Frame");
         }
 
-        this.dataStart = file.readInt();
-        this.dataLength = file.readInt();
-        this.indexPoints = file.readShort();
-        this.bitsPerPoint = file.readByte();
+        this.dataStart = byteBuffer.getInt();
+        this.dataLength = byteBuffer.getInt();
+        this.indexPoints = byteBuffer.getShort();
+        this.bitsPerPoint = byteBuffer.get();
 
         fraction = new short[indexPoints];
 
@@ -177,11 +178,11 @@ public class FrameBodyASPI extends AbstractID3v2FrameBody implements ID3v24Frame
         {
             if (bitsPerPoint == 8)
             {
-                fraction[i] = file.readByte();
+                fraction[i] = byteBuffer.get();
             }
             else if (bitsPerPoint == 16)
             {
-                fraction[i] = file.readShort();
+                fraction[i] = byteBuffer.getShort();
             }
             else
             {

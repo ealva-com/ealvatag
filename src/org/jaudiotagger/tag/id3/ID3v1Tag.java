@@ -29,10 +29,13 @@ import org.jaudiotagger.tag.id3.valuepair.GenreTypes;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.io.FileInputStream;
 import java.util.regex.*;
 import java.util.*;
 
 import java.util.Iterator;
+import java.nio.ByteBuffer;
+import java.nio.channels.FileChannel;
 
 public class ID3v1Tag
     extends AbstractID3v1Tag
@@ -145,13 +148,20 @@ public class ID3v1Tag
         release = 1;
         majorVersion = 0;
         revision = 0;
-        this.read(file);
+
+        //Read into Byte Buffer
+        final FileChannel fc = file.getChannel();
+        fc.position(file.length() - TAG_LENGTH);
+        ByteBuffer  byteBuffer = ByteBuffer.allocate(TAG_LENGTH);
+        fc.read(byteBuffer);
+        byteBuffer.flip();
+        this.read(byteBuffer);
     }
 
     /**
-     * DOCUMENT ME!
+     * Set Album
      *
-     * @param album DOCUMENT ME!
+     * @param album
      */
     public void setAlbum(String album)
     {
@@ -159,9 +169,9 @@ public class ID3v1Tag
     }
 
     /**
-     * DOCUMENT ME!
+     * Get Album
      *
-     * @return DOCUMENT ME!
+     * @return album
      */
     public String getAlbum()
     {
@@ -169,9 +179,9 @@ public class ID3v1Tag
     }
 
     /**
-     * DOCUMENT ME!
+     * Set Artist
      *
-     * @param artist DOCUMENT ME!
+     * @param artist
      */
     public void setArtist(String artist)
     {
@@ -179,9 +189,9 @@ public class ID3v1Tag
     }
 
     /**
-     * DOCUMENT ME!
+     * Get Artist
      *
-     * @return DOCUMENT ME!
+     * @return artist
      */
     public String getArtist()
     {
@@ -189,9 +199,9 @@ public class ID3v1Tag
     }
 
     /**
-     * DOCUMENT ME!
+     * Set Comment
      *
-     * @param comment DOCUMENT ME!
+     * @param comment
      */
     public void setComment(String comment)
     {
@@ -199,9 +209,9 @@ public class ID3v1Tag
     }
 
     /**
-     * DOCUMENT ME!
+     * Get Comment
      *
-     * @return DOCUMENT ME!
+     * @return comment
      */
     public String getComment()
     {
@@ -213,7 +223,7 @@ public class ID3v1Tag
      * so if unable to find value in list set 255, which seems to be the value
      * winamp uses for undefined.
      *
-     * @param genre DOCUMENT ME!
+     * @param genre
      */
     public void setGenre(String genreVal)
     {
@@ -229,74 +239,21 @@ public class ID3v1Tag
     }
 
     /**
-     * DOCUMENT ME!
+     * Get Genre
      *
-     * @return DOCUMENT ME!
+     * @return genre
      */
     public String getGenre()
     {
         Integer genreId = new Integer(genre & this.BYTE_TO_UNSIGNED);
         return GenreTypes.getInstanceOf().getValueForId(genreId.intValue());
-
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param file DOCUMENT ME!
-     * @return DOCUMENT ME!
-     * @throws IOException DOCUMENT ME!
-     */
-    public ID3v1Tag getID3tag(RandomAccessFile file)
-        throws IOException
-    {
-        ID3v1Tag id3v1tag = new ID3v11Tag();
-        // look for id3v1_1 tag
-        if (id3v1tag.seek(file) == true)
-        {
-            try
-            {
-                id3v1tag.read(file);
-                id3v1tag.delete(file);
-            }
-            catch (TagNotFoundException ex)
-            {
-                id3v1tag = null;
-            }
-        }
-        else
-        {
-            id3v1tag = null;
-        }
-        if (id3v1tag == null)
-        {
-            // look for id3v1 tag
-            id3v1tag = new ID3v1Tag();
-            if (id3v1tag.seek(file) == true)
-            {
-                try
-                {
-                    id3v1tag.read(file);
-                    id3v1tag.delete(file);
-                }
-                catch (TagNotFoundException ex)
-                {
-                    id3v1tag = null;
-                }
-            }
-            else
-            {
-                id3v1tag = null;
-            }
-        }
-        return id3v1tag;
     }
 
 
     /**
-     * DOCUMENT ME!
+     * Set Title
      *
-     * @param title DOCUMENT ME!
+     * @param title
      */
     public void setTitle(String title)
     {
@@ -304,9 +261,9 @@ public class ID3v1Tag
     }
 
     /**
-     * DOCUMENT ME!
+     * Get title
      *
-     * @return DOCUMENT ME!
+     * @return Title
      */
     public String getTitle()
     {
@@ -314,9 +271,9 @@ public class ID3v1Tag
     }
 
     /**
-     * DOCUMENT ME!
+     * Set year
      *
-     * @param year DOCUMENT ME!
+     * @param year
      */
     public void setYear(String year)
     {
@@ -324,78 +281,14 @@ public class ID3v1Tag
     }
 
     /**
-     * DOCUMENT ME!
+     * Get year
      *
-     * @return DOCUMENT ME!
+     * @return year
      */
     public String getYear()
     {
         return year;
     }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param tag DOCUMENT ME!
-     */
-    public void append(AbstractTag tag)
-    {
-        ID3v1Tag oldTag = this;
-        ID3v1Tag newTag = null;
-        if (tag != null)
-        {
-            if (tag instanceof ID3v1Tag)
-            {
-                newTag = (ID3v1Tag) tag;
-            }
-            else
-            {
-                newTag = new ID3v1Tag();
-            }
-            if (tag instanceof org.jaudiotagger.tag.lyrics3.AbstractLyrics3)
-            {
-                TagOptionSingleton.getInstance().setId3v1SaveYear(false);
-                TagOptionSingleton.getInstance().setId3v1SaveComment(false);
-            }
-            oldTag.title = (TagOptionSingleton.getInstance().isId3v1SaveTitle() && (oldTag.title.length() == 0)) ?
-                newTag.title : oldTag.title;
-            oldTag.artist = (TagOptionSingleton.getInstance().isId3v1SaveArtist() && (oldTag.artist.length() == 0)) ?
-                newTag.artist : oldTag.artist;
-            oldTag.album = (TagOptionSingleton.getInstance().isId3v1SaveAlbum() && (oldTag.album.length() == 0)) ?
-                newTag.album : oldTag.album;
-            oldTag.year = (TagOptionSingleton.getInstance().isId3v1SaveYear() && (oldTag.year.length() == 0)) ?
-                newTag.year : oldTag.year;
-            oldTag.comment = (TagOptionSingleton.getInstance().isId3v1SaveComment() && (oldTag.comment.length() == 0)) ?
-                newTag.comment : oldTag.comment;
-            oldTag.genre = (TagOptionSingleton.getInstance().isId3v1SaveGenre() && (oldTag.genre < 0)) ? newTag.genre :
-                oldTag.genre;
-            // we don't need to reset the tag options because
-            // we want to save all fields (default)
-        }
-        //super.append(newTag);
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param file DOCUMENT ME!
-     *
-     * @throws IOException DOCUMENT ME!
-     */
-
-//    public void append(RandomAccessFile file)
-//                throws IOException, TagException {
-//        ID3v1 oldTag;
-//
-//        try {
-//            oldTag = new ID3v1(file);
-//            oldTag.append(this);
-//            oldTag.write(file);
-//        } catch (TagNotFoundException ex) {
-//            oldTag = null;
-//        }
-//    }
-
 
 
     /**
@@ -448,82 +341,28 @@ public class ID3v1Tag
         return new ID3v1Iterator(this);
     }
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @param tag DOCUMENT ME!
-     */
-    public void overwrite(AbstractTag tag)
-    {
-        ID3v1Tag oldTag = this;
-        ID3v1Tag newTag = null;
-        if (tag != null)
-        {
-            if (tag instanceof ID3v1Tag)
-            {
-                newTag = (ID3v1Tag) tag;
-            }
-            else
-            {
-                newTag = new ID3v1Tag();
-            }
-            if (tag instanceof org.jaudiotagger.tag.lyrics3.AbstractLyrics3)
-            {
-                TagOptionSingleton.getInstance().setId3v1SaveYear(false);
-                TagOptionSingleton.getInstance().setId3v1SaveComment(false);
-            }
-            oldTag.title = TagOptionSingleton.getInstance().isId3v1SaveTitle() ? newTag.title : oldTag.artist;
-            oldTag.artist = TagOptionSingleton.getInstance().isId3v1SaveArtist() ? newTag.artist : oldTag.artist;
-            oldTag.album = TagOptionSingleton.getInstance().isId3v1SaveAlbum() ? newTag.album : oldTag.album;
-            oldTag.year = TagOptionSingleton.getInstance().isId3v1SaveYear() ? newTag.year : oldTag.year;
-            oldTag.comment = TagOptionSingleton.getInstance().isId3v1SaveComment() ? newTag.comment : oldTag.comment;
-            oldTag.genre = TagOptionSingleton.getInstance().isId3v1SaveGenre() ? newTag.genre : oldTag.genre;
-            // we don't need to reset the tag options because
-            // we want to save all fields (default)
-        }
-        //super.overwrite(newTag);
-    }
+
+
 
     /**
      * DOCUMENT ME!
      *
-     * @param tag DOCUMENT ME!
-     */
-    public void overwrite(RandomAccessFile file)
-        throws IOException, TagException
-    {
-        AbstractID3v1Tag oldTag;
-        try
-        {
-            oldTag = new ID3v1Tag(file);
-            oldTag.overwrite(this);
-            oldTag.write(file);
-        }
-        catch (TagNotFoundException ex)
-        {
-            this.write(file);
-        }
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param file DOCUMENT ME!
+     * @param byteBuffer DOCUMENT ME!
      * @throws TagNotFoundException DOCUMENT ME!
      * @throws IOException          DOCUMENT ME!
      */
-    public void read(RandomAccessFile file)
+    public void read(ByteBuffer byteBuffer)
         throws TagNotFoundException, IOException
     {
-        if (seek(file) == false)
+        if (seek(byteBuffer) == false)
         {
             throw new TagNotFoundException("ID3v1 tag not found");
         }
         logger.finer("Reading v1 tag");
         //Do single file read of data to cut down on file reads
         byte[] dataBuffer = new byte[TAG_LENGTH];
-        file.seek(file.length() - TAG_LENGTH);
-        file.read(dataBuffer, 0, TAG_LENGTH);
+        byteBuffer.position(0);
+        byteBuffer.get(dataBuffer, 0, TAG_LENGTH);
         title = new String(dataBuffer, FIELD_TITLE_POS, this.FIELD_TITLE_LENGTH).trim();
         Matcher m = endofStringPattern.matcher(title);
         if (m.find() == true)
@@ -569,48 +408,13 @@ public class ID3v1Tag
      * @return DOCUMENT ME!
      * @throws IOException DOCUMENT ME!
      */
-    public boolean seek(RandomAccessFile file)
+    public boolean seek(ByteBuffer byteBuffer)
         throws IOException
     {
         byte[] buffer = new byte[FIELD_TAGID_LENGTH];
-        if (file.length() < TAG_LENGTH)
-        {
-            return false;
-        }
-        // Tag should be at end of file
-        file.seek(file.length() - TAG_LENGTH);
         // read the TAG value
-        file.read(buffer, 0, FIELD_TAGID_LENGTH);
+        byteBuffer.get(buffer, 0, FIELD_TAGID_LENGTH);        
         return (Arrays.equals(buffer, TAG_ID));
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param tag DOCUMENT ME!
-     */
-    public void write(AbstractTag tag)
-    {
-        ID3v1Tag oldTag = this;
-        ID3v1Tag newTag = null;
-        if (tag != null)
-        {
-            if (tag instanceof ID3v1Tag)
-            {
-                newTag = (ID3v1Tag) tag;
-            }
-            else
-            {
-                newTag = new ID3v11Tag(tag);
-            }
-            oldTag.title = newTag.title;
-            oldTag.artist = newTag.artist;
-            oldTag.album = newTag.album;
-            oldTag.year = newTag.year;
-            oldTag.comment = newTag.comment;
-            oldTag.genre = newTag.genre;
-        }
-        //super.write(newTag);
     }
 
     /**

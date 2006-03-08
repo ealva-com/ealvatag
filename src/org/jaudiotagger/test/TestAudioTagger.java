@@ -36,7 +36,7 @@ public class TestAudioTagger
         AbstractTagFrameBody tmpFrameBody = newFrame.getBody();
         FrameBodyTPE1 body = (FrameBodyTPE1)tmpFrameBody ;
 
-        MP3File mp3File = new MP3File(new File(args[0]), MP3File.LOAD_IDV1TAG | MP3File.LOAD_IDV2TAG | MP3File.LOAD_MP3TAG);
+        MP3File mp3File = new MP3File(new File(args[0]), MP3File.LOAD_IDV1TAG | MP3File.LOAD_IDV2TAG );
         System.out.println(mp3File.displayStructureAsXML());
     }
 

@@ -284,81 +284,6 @@ public abstract class AbstractID3v2Tag
         return invalidFrameBytes;
     }
 
-    /**
-     * Add any frames that this tag doesnt already have.
-     *
-     * @param tag The tag containing extra frames to be added to this tag
-     * @todo doesnt handles differences in identifiers between versions
-     */
-    public void append(AbstractTag tag)
-    {
-        AbstractID3v2Tag oldTag = this;
-        AbstractID3v2Tag newTag = null;
-        if (tag != null)
-        {
-            if (tag instanceof AbstractID3v2Tag)
-            {
-                newTag = (AbstractID3v2Tag) tag;
-            }
-            else
-            {
-                newTag = new ID3v24Tag(tag);
-            }
-            Iterator iterator = newTag.frameMap.values().iterator();
-            AbstractID3v2Frame frame;
-            while (iterator.hasNext())
-            {
-                frame = (AbstractID3v2Frame) iterator.next();
-                if (oldTag.hasFrame(frame.getIdentifier()) == false)
-                {
-                    oldTag.setFrame(frame);
-                }
-            }
-        }
-    }
-
-    /**
-     * Read existing tag from file and write
-     * back to file with any extra frames
-     * that this tag has.
-     *
-     * @param file The file to write to.
-     * @throws IOException  DOCUMENT ME!
-     * @throws TagException DOCUMENT ME!
-     */
-    public void append(RandomAccessFile file)
-        throws IOException, TagException
-    {
-        AbstractID3v2Tag oldTag;
-        try
-        {
-            oldTag = new ID3v24Tag(file);
-            oldTag.append(this);
-            oldTag.write(file);
-        }
-        catch (TagNotFoundException ex)
-        {
-            try
-            {
-                oldTag = new ID3v23Tag(file);
-                oldTag.append(this);
-                oldTag.write(file);
-            }
-            catch (TagNotFoundException ex2)
-            {
-                try
-                {
-                    oldTag = new ID3v22Tag(file);
-                    oldTag.append(this);
-                    oldTag.write(file);
-                }
-                catch (TagNotFoundException ex3)
-                {
-                    this.write(file);
-                }
-            }
-        }
-    }
 
     /**
      * Delete Tag
@@ -373,7 +298,13 @@ public abstract class AbstractID3v2Tag
         // this works by just erasing the "TAG" tag at the beginning
         // of the file
         byte[] buffer = new byte[FIELD_TAGID_LENGTH];
-        if (seek(file))
+        //Read into Byte Buffer
+        final FileChannel fc = file.getChannel();
+        fc.position();
+        ByteBuffer  byteBuffer = ByteBuffer.allocate(FIELD_TAGID_LENGTH);
+        fc.read(byteBuffer,0);
+        byteBuffer.flip();
+        if(seek(byteBuffer))
         {
             file.seek(0);
             file.write(buffer);
@@ -445,80 +376,6 @@ public abstract class AbstractID3v2Tag
     }
 
     /**
-     * Add all frames to this tag overwriting the frames if they
-     * already exist.
-     *
-     * @param tag The tag containing extra frames to be added to this tag
-     * @todo doesnt handles differences in identifiers between versions
-     */
-    public void overwrite(AbstractTag tag)
-    {
-        AbstractID3v2Tag oldTag = this;
-        AbstractID3v2Tag newTag = null;
-        if (tag != null)
-        {
-            if (tag instanceof AbstractID3v2Tag)
-            {
-                newTag = (AbstractID3v2Tag) tag;
-            }
-            else
-            {
-                newTag = new ID3v24Tag(tag);
-            }
-            Iterator iterator = newTag.frameMap.values().iterator();
-            AbstractID3v2Frame frame;
-            while (iterator.hasNext())
-            {
-                frame = (AbstractID3v2Frame) iterator.next();
-                oldTag.setFrame(frame);
-            }
-        }
-        //super.overwrite(newTag);
-    }
-
-    /**
-     * Overwrite the tag in this file with this
-     * tag.
-     *
-     * @param file DOCUMENT ME!
-     * @throws IOException  DOCUMENT ME!
-     * @throws TagException DOCUMENT ME!
-     */
-    public void overwrite(RandomAccessFile file)
-        throws IOException, TagException
-    {
-        AbstractID3v2Tag oldTag;
-        try
-        {
-            oldTag = new ID3v24Tag(file);
-            oldTag.overwrite(this);
-            oldTag.write(file);
-        }
-        catch (TagNotFoundException ex)
-        {
-            try
-            {
-                oldTag = new ID3v23Tag(file);
-                oldTag.overwrite(this);
-                oldTag.write(file);
-            }
-            catch (TagNotFoundException ex2)
-            {
-                try
-                {
-                    oldTag = new ID3v22Tag(file);
-                    oldTag.overwrite(this);
-                    oldTag.write(file);
-                }
-                catch (TagNotFoundException ex3)
-                {
-                    this.write(file);
-                }
-            }
-        }
-    }
-
-    /**
      * Remove frame with this identifier from tag
      *
      * @param identifier DOCUMENT ME!
@@ -552,42 +409,6 @@ public abstract class AbstractID3v2Tag
     public java.util.Collection values()
     {
         return frameMap.values();
-    }
-
-    /**
-     * Remove all frame from this tag and replace
-     * with frames in the parameter tag.
-     *
-     * @param tag DOCUMENT ME!
-     * @todo doesnt handles differences in identifiers between versions
-     * @todo doesnt make much sense because nothing
-     * will exist of original tag apart from a now
-     * defunct header.
-     */
-    public void write(AbstractTag tag)
-    {
-        AbstractID3v2Tag oldTag = this;
-        AbstractID3v2Tag newTag = null;
-        if (tag != null)
-        {
-            if (tag instanceof AbstractID3v2Tag)
-            {
-                newTag = (AbstractID3v2Tag) tag;
-            }
-            else
-            {
-                newTag = new ID3v24Tag(tag);
-            }
-            Iterator iterator = newTag.frameMap.values().iterator();
-            oldTag.frameMap.clear();
-            AbstractID3v2Frame frame;
-            while (iterator.hasNext())
-            {
-                frame = (AbstractID3v2Frame) iterator.next();
-                oldTag.setFrame(frame);
-            }
-        }
-        //super.write(newTag);
     }
 
     public void write(File file, long audioStartByte)
@@ -634,28 +455,33 @@ public abstract class AbstractID3v2Tag
     /**
      * Does a ID3v2_40 tag exist in this file.
      *
-     * @param file file to search for
+     * @param byteBuffer to search through
      * @return true if tag exists.
      * @throws IOException DOCUMENT ME!
      */
-    public boolean seek(RandomAccessFile file)
+    public boolean seek(ByteBuffer byteBuffer)
         throws IOException
     {
-        byte[] buffer = new byte[FIELD_TAGID_LENGTH];
-        file.seek(0);
-        // read the TAG value
-        file.read(buffer, 0, FIELD_TAGID_LENGTH);
-        if (!(Arrays.equals(buffer, TAG_ID)))
+        byteBuffer.rewind();
+        logger.info("ByteBuffer pos:"
+            +byteBuffer.position()
+            +":limit"+byteBuffer.limit()
+            +":cap"+byteBuffer.capacity());
+
+
+        byte[] tagIdentifier = new byte[FIELD_TAGID_LENGTH];
+        byteBuffer.get(tagIdentifier, 0, FIELD_TAGID_LENGTH);
+        if (!(Arrays.equals(tagIdentifier,TAG_ID)))
         {
             return false;
         }
         //Major Version
-        if (file.readByte() != this.getMajorVersion())
+        if (byteBuffer.get() != this.getMajorVersion())
         {
             return false;
         }
         //Minor Version
-        if (file.readByte() != this.getRevision())
+        if (byteBuffer.get() != this.getRevision())
         {
             return false;
         }
@@ -888,42 +714,18 @@ public abstract class AbstractID3v2Tag
      * @return ByteBuffer Contains all the frames written within the tag ready for writing to file
      * @throws IOException
      */
-    protected ByteBuffer writeFramesToBuffer() throws IOException
+    protected ByteArrayOutputStream writeFramesToBuffer() throws IOException
     {
-        ByteBuffer bodyBuffer = null;
-
-        int bufferSize = getSize();
-        logger.finer("Estimated Tag Buffer Size Required is "+bufferSize);
-        if( bufferSize<INITIAL_TAG_BODY_SIZE )
-        {
-            bufferSize=INITIAL_TAG_BODY_SIZE;
-        }
-
-
-        while (true)
-        {
-            try
-            {
-                bodyBuffer = ByteBuffer.allocate(bufferSize);
-                this.write(bodyBuffer);
-                break;
-            }
-            catch (java.nio.BufferOverflowException boe)
-            {
-                //Double Size and try again.
-                bufferSize = bufferSize * 2;
-                logger.finer("Estimated Tag Buffer Size Increased To "+bufferSize);
-                bodyBuffer = ByteBuffer.allocate(bufferSize);
-                continue;
-            }
-        }
+        //Increases as is required
+        ByteArrayOutputStream bodyBuffer = new ByteArrayOutputStream();
+        this.write(bodyBuffer);
         return bodyBuffer;
     }
 
     /**
      * Write tag frames to buffer, must be overidden by superclasses
      */
-    public void write(ByteBuffer bodyBuffer)
+    public void write(ByteArrayOutputStream bodyBuffer)
         throws IOException
     {
         //Write all frames, defaults to the order in which they were loaded, newly

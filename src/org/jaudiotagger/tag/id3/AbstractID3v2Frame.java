@@ -31,6 +31,7 @@ import org.jaudiotagger.tag.id3.framebody.AbstractID3v2FrameBody;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.io.ByteArrayOutputStream;
 import java.lang.reflect.*;
 import java.nio.*;
 
@@ -135,12 +136,12 @@ public abstract class AbstractID3v2Frame
      * Read the frame body from the specified file.
      *
      * @param identifier DOCUMENT ME!
-     * @param file       DOCUMENT ME!
+     * @param byteBuffer       DOCUMENT ME!
      * @return DOCUMENT ME!
      * @throws IOException         DOCUMENT ME!
      * @throws InvalidTagException DOCUMENT ME!
      */
-    protected AbstractID3v2FrameBody readBody(String identifier, RandomAccessFile file, int frameSize)
+    protected AbstractID3v2FrameBody readBody(String identifier, ByteBuffer byteBuffer, int frameSize)
         throws InvalidFrameException, IOException
     {
         /* Use reflection to map id to frame body, which makes things much easier
@@ -153,10 +154,10 @@ public abstract class AbstractID3v2Frame
         {
             Class c = Class.forName("org.jaudiotagger.tag.id3.framebody.FrameBody" + identifier);
             Class[] constructorParameterTypes =
-                {((Class) Class.forName("java.io.RandomAccessFile")), Integer.TYPE
+                {((Class) Class.forName("java.nio.ByteBuffer")), Integer.TYPE
                 };
             Object[] constructorParameterValues =
-                {file, new Integer(frameSize)
+                {byteBuffer, new Integer(frameSize)
                 };
             Constructor construct = c.getConstructor(constructorParameterTypes);
             frameBody = (AbstractID3v2FrameBody) (construct.newInstance(constructorParameterValues));
@@ -165,7 +166,7 @@ public abstract class AbstractID3v2Frame
         catch (ClassNotFoundException cex)
         {
             logger.info("Identifier not recognised:" + identifier + " using FrameBodyUnsupported");
-            frameBody = new FrameBodyUnsupported(file, frameSize);
+            frameBody = new FrameBodyUnsupported(byteBuffer, frameSize);
         }
         //An error has occurred during frame  instantiation find out real exception and then throw frame away if invalid
         catch (InvocationTargetException ite)
@@ -236,7 +237,7 @@ public abstract class AbstractID3v2Frame
         return frameBody;
     }
 
-    public abstract void write(ByteBuffer tagBuffer)
+    public abstract void write(ByteArrayOutputStream tagBuffer)
         throws IOException;
 
     protected StatusFlags getStatusFlags()

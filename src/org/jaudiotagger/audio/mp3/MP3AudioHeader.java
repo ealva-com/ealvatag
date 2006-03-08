@@ -106,7 +106,7 @@ public final class MP3AudioHeader extends AbstractAudioHeader
     public boolean seek(final File seekFile)
         throws IOException
     {
-        //This is substantially faster than updtaing the filechannels position
+        //This is substantially faster than updating the filechannels position
         int filePointerCount = 0;
 
         final FileInputStream     fis = new FileInputStream(seekFile);

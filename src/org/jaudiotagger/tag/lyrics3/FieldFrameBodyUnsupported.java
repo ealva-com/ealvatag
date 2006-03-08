@@ -24,6 +24,7 @@ package org.jaudiotagger.tag.lyrics3;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.nio.ByteBuffer;
 
 
 public class FieldFrameBodyUnsupported extends AbstractLyrics3v2FieldFrameBody
@@ -63,10 +64,10 @@ public class FieldFrameBodyUnsupported extends AbstractLyrics3v2FieldFrameBody
      * @param file DOCUMENT ME!
      * @throws java.io.IOException DOCUMENT ME!
      */
-    public FieldFrameBodyUnsupported(RandomAccessFile file)
+    public FieldFrameBodyUnsupported(ByteBuffer byteBuffer)
         throws java.io.IOException
     {
-        this.read(file);
+        this.read(byteBuffer);
     }
 
     /**
@@ -131,23 +132,23 @@ public class FieldFrameBodyUnsupported extends AbstractLyrics3v2FieldFrameBody
     /**
      * DOCUMENT ME!
      *
-     * @param file DOCUMENT ME!
+     * @param byteBuffer DOCUMENT ME!
      * @throws IOException DOCUMENT ME!
      */
-    public void read(RandomAccessFile file)
+    public void read(ByteBuffer byteBuffer)
         throws IOException
     {
         int size;
         byte[] buffer = new byte[5];
 
         // read the 5 character size
-        file.read(buffer, 0, 5);
+        byteBuffer.get(buffer, 0, 5);
         size = Integer.parseInt(new String(buffer, 0, 5));
 
         value = new byte[size];
 
         // read the SIZE length description
-        file.read(value);
+        byteBuffer.get(value);
     }
 
     /**

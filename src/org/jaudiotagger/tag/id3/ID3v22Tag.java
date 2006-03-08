@@ -199,22 +199,22 @@ public class ID3v22Tag
     /**
      * Creates a new ID3v2_2 datatype by reading it from file.
      *
-     * @param file DOCUMENT ME!
+     * @param byteBuffer DOCUMENT ME!
      * @throws TagException DOCUMENT ME!
      * @throws IOException  DOCUMENT ME!
      */
-    public ID3v22Tag(RandomAccessFile file)
+    public ID3v22Tag(ByteBuffer byteBuffer)
         throws TagException, IOException
     {
         this.majorVersion = 2;
         this.revision = 0;
-        this.read(file);
+        this.read(byteBuffer);
     }
 
     /**
-     * DOCUMENT ME!
      *
-     * @return DOCUMENT ME!
+     *
+     * @return an indentifier of the tag type
      */
     public String getIdentifier()
     {
@@ -234,41 +234,6 @@ public class ID3v22Tag
         return size;
     }
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @param tag DOCUMENT ME!
-     */
-    public void append(AbstractTag tag)
-    {
-        if (tag instanceof ID3v22Tag)
-        {
-            this.unsynchronization = ((ID3v22Tag) tag).unsynchronization;
-            this.compression = ((ID3v22Tag) tag).compression;
-        }
-        super.append(tag);
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param obj DOCUMENT ME!
-     *
-     * @return DOCUMENT ME!
-     */
-
-//    public void append(RandomAccessFile file)
-//                throws IOException, TagException {
-//        ID3v2_2 oldTag;
-//
-//        try {
-//            oldTag = new ID3v2_2(file);
-//            oldTag.append(this);
-//            oldTag.write(file);
-//        } catch (TagNotFoundException ex) {
-//            oldTag = null;
-//        }
-//    }
 
     /**
      * DOCUMENT ME!
@@ -294,66 +259,27 @@ public class ID3v22Tag
         return super.equals(obj);
     }
 
-    /**
-     * Add all frames to this tag overwriting the frames even if they
-     * already exist.
-     *
-     * @param tag DOCUMENT ME!
-     */
-    public void overwrite(AbstractTag tag)
-    {
-        if (tag instanceof ID3v22Tag)
-        {
-            this.unsynchronization = ((ID3v22Tag) tag).unsynchronization;
-            this.compression = ((ID3v22Tag) tag).compression;
-        }
-        super.overwrite(tag);
-    }
 
     /**
-     * DOCUMENT ME!
+     * Read tag from the ByteBuffer
      *
-     * @param file DOCUMENT ME!
-     *
-     * @throws TagException DOCUMENT ME!
-     * @throws IOException DOCUMENT ME!
-     * @throws TagNotFoundException DOCUMENT ME!
-     */
-
-//    public void overwrite(RandomAccessFile file)
-//                   throws IOException, TagException {
-//        ID3v2_2 oldTag;
-//
-//        try {
-//            oldTag = new ID3v2_2(file);
-//            oldTag.overwrite(this);
-//            oldTag.write(file);
-//        } catch (TagNotFoundException ex) {
-//	    // no more super classes
-//	    //super.overwrite(file);
-//        }
-//    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param file DOCUMENT ME!
+     * @param byteBuffer to read the tag from
      * @throws TagException         DOCUMENT ME!
      * @throws IOException          DOCUMENT ME!
      * @throws TagNotFoundException DOCUMENT ME!
      */
-    public void read(RandomAccessFile file)
+    public void read(ByteBuffer byteBuffer)
         throws TagException, IOException
     {
         int size;
         ID3v22Frame next;
-        if (seek(file) == false)
+        if (seek(byteBuffer) == false)
         {
             throw new TagNotFoundException("ID3v2.20 tag not found");
         }
         logger.info("Reading tag from file");
         //Read the flags
-        byte flags = file.readByte();
+        byte flags = byteBuffer.get();
         unsynchronization = (flags & MASK_V22_UNSYNCHRONIZATION) != 0;
         compression = (flags & MASK_V22_COMPRESSION) != 0;
         //@todo if unsynchronization bit set what do we do
@@ -362,16 +288,16 @@ public class ID3v22Tag
 
         // Read the size
         byte[] buffer = new byte[FIELD_TAG_SIZE_LENGTH];
-        file.read(buffer, 0, FIELD_TAG_SIZE_LENGTH);
+        byteBuffer.get(buffer, 0, FIELD_TAG_SIZE_LENGTH);
         size = byteArrayToSize(buffer);
-        long filePointer = file.getFilePointer();
-        readFrames(file, filePointer, size);
+
+        readFrames(byteBuffer.slice(),size);
     }
 
     /**
      * Read frames from tag
      */
-    protected void readFrames(RandomAccessFile file, long filePointer, int size)
+    protected void readFrames(ByteBuffer byteBuffer, int size)
         throws IOException
     {
         //Now start looking for frames
@@ -379,20 +305,20 @@ public class ID3v22Tag
         frameMap = new LinkedHashMap();
         //Read the size from the Tag Header
         this.fileReadSize = size;
-        logger.finest("Start of frame body at:" + file.getFilePointer() + ",frames sizes and padding is:" + size);
+        logger.finest("Start of frame body at:" + byteBuffer.position() + ",frames sizes and padding is:" + size);
         /* @todo not done yet. Read the first Frame, there seems to be quite a
          ** common case of extra data being between the tag header and the first
          ** frame so should we allow for this when reading first frame, but not subsequent frames
          */
         // Read the frames until got to upto the size as specified in header
-        while ((file.getFilePointer() - filePointer) < size)
+        while (byteBuffer.position()<size)
         {
             String id = null;
             try
             {
                 //Read Frame
-                logger.finest("looking for next frame at:" + file.getFilePointer());
-                next = new ID3v22Frame(file);
+                logger.finest("looking for next frame at:" + byteBuffer.position());
+                next = new ID3v22Frame(byteBuffer);
                 id = next.getIdentifier();
                 loadFrameIntoMap(id, next);
             }
@@ -439,25 +365,10 @@ public class ID3v22Tag
 
 
     /**
-     * DOCUMENT ME!
-     *
-     * @param tag DOCUMENT ME!
-     */
-    public void write(AbstractTag tag)
-    {
-        if (tag instanceof ID3v22Tag)
-        {
-            this.unsynchronization = ((ID3v22Tag) tag).unsynchronization;
-            this.compression = ((ID3v22Tag) tag).compression;
-        }
-        super.write(tag);
-    }
-
-    /**
      * Write tag to file
      *
      * @param file The file to write to
-     * @throws IOException DOCUMENT ME!
+     * @throws IOException
      */
     public void write(File file, long audioStartLocation)
         throws IOException
@@ -465,7 +376,7 @@ public class ID3v22Tag
         logger.info("Writing tag to file");
 
         /** Write Body Buffer */
-        ByteBuffer bodyBuffer = writeFramesToBuffer();
+        byte[] bodyByteBuffer = writeFramesToBuffer().toByteArray();
 
         /** @todo Unsynchronisation support required.
          * We never compress tags as was never defined,
@@ -495,25 +406,7 @@ public class ID3v22Tag
         headerBuffer.put(flags);
         /** Calculate Tag Size including Padding */
         int sizeIncPadding = calculateTagSize(getSize(),(int) audioStartLocation);
-
-          /** Add padding as neccessary, if for example we have removed a number of
-         *  frames from a tag we will have to add extra padding. We need to ensure
-         *  there is enough room in the bodyBuffer to add the padding, if not we will
-         *  have to create a new Buffer and copy the contents. This problem occur if we
-         *  have deleted very large frames (such as APIC frames) from the tag meaning
-         *  the buffer is not big enough to cope with the original size of the tag */
         int padding = sizeIncPadding - getSize();
-        logger.finer("Add padding of length" + padding);
-        if((bodyBuffer.capacity() - bodyBuffer.position())<padding)
-        {
-            ByteBuffer newBodyBuffer = ByteBuffer.allocate(sizeIncPadding);
-            bodyBuffer.flip();
-            newBodyBuffer.put(bodyBuffer);
-            bodyBuffer = newBodyBuffer;
-        }
-        bodyBuffer.put(new byte[sizeIncPadding - getSize()]);
-
-        //Size
         headerBuffer.put(sizeToByteArray((int) sizeIncPadding - TAG_HEADER_LENGTH));
         
         /** We need to adjust location of audio File */
@@ -522,13 +415,15 @@ public class ID3v22Tag
             logger.finest("Adjusting Pattern");
             adjustPadding(file, sizeIncPadding, audioStartLocation);
         }
+
         //Write changes to file
         FileChannel fc = new RandomAccessFile(file, "rw").getChannel();
         headerBuffer.flip();
         fc.write(headerBuffer);
-        bodyBuffer.flip();
-        fc.write(bodyBuffer);
+        fc.write(ByteBuffer.wrap(bodyByteBuffer));
+        fc.write(ByteBuffer.wrap(new byte[padding]));
         fc.close();
+
     }
 
     public void createStructure()

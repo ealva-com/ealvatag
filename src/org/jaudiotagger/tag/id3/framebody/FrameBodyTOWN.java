@@ -24,6 +24,8 @@ package org.jaudiotagger.tag.id3.framebody;
 
 import org.jaudiotagger.tag.InvalidTagException;
 
+import java.nio.ByteBuffer;
+
 
 public class FrameBodyTOWN extends AbstractFrameBodyTextInfo
 {
@@ -57,10 +59,10 @@ public class FrameBodyTOWN extends AbstractFrameBodyTextInfo
      * @throws java.io.IOException DOCUMENT ME!
      * @throws InvalidTagException DOCUMENT ME!
      */
-    public FrameBodyTOWN(java.io.RandomAccessFile file, int frameSize)
+    public FrameBodyTOWN(ByteBuffer byteBuffer, int frameSize)
         throws java.io.IOException, InvalidTagException
     {
-        super(file, frameSize);
+        super(byteBuffer, frameSize);
     }
 
     /**

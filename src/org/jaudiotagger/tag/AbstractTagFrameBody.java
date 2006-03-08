@@ -44,7 +44,9 @@ import java.io.RandomAccessFile;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-/** A frame body is a placeholder that provides the field specific data */
+/**
+ * A frame body is a placeholder that provides the field specific data
+ */
 public abstract class AbstractTagFrameBody
     extends AbstractTagItem
 {

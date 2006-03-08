@@ -30,6 +30,7 @@ import org.jaudiotagger.tag.id3.ID3v24Frames;
 import org.jaudiotagger.tag.id3.ID3v24Frames;
 
 import java.io.IOException;
+import java.nio.ByteBuffer;
 
 
 public class FrameBodyTXXX
@@ -72,10 +73,10 @@ public class FrameBodyTXXX
      * @throws IOException         DOCUMENT ME!
      * @throws InvalidTagException DOCUMENT ME!
      */
-    public FrameBodyTXXX(java.io.RandomAccessFile file, int frameSize)
+    public FrameBodyTXXX(ByteBuffer byteBuffer, int frameSize)
         throws IOException, InvalidTagException
     {
-        super(file, frameSize);
+        super(byteBuffer, frameSize);
     }
 
     /**

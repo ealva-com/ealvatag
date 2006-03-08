@@ -28,7 +28,7 @@ import java.nio.ByteBuffer;
  * Represents a MPEGFrameHeader, an MP3 is made up of a number of frames each frame starts witha four
  * byte frame header.
  */
-class MPEGFrameHeader
+public class MPEGFrameHeader
 {
      /**
      * Constants for MP3 Frame header, each frame has a basic header of
@@ -45,8 +45,8 @@ class MPEGFrameHeader
      */
     public static final int SYNC_SIZE = 2;
 
-    private static final int SYNC_BYTE1 = 0xFF;
-    private static final int SYNC_BYTE2 = 0xE0;
+    public static final int SYNC_BYTE1 = 0xFF;
+    public static final int SYNC_BYTE2 = 0xE0;
 
     private static int position     = 0;
     private static final byte[] header = new byte[HEADER_SIZE];
@@ -838,8 +838,11 @@ class MPEGFrameHeader
     public static boolean isMPEGFrame(ByteBuffer  bb)
     {
         position = bb.position();
-        return    (bb.get(position) & SYNC_BYTE1) == SYNC_BYTE1
-                   && (bb.get(position + 1) & SYNC_BYTE2) == SYNC_BYTE2;
+        return    (
+                   ((bb.get(position) & SYNC_BYTE1) == SYNC_BYTE1)
+                    &&
+                   ((bb.get(position + 1) & SYNC_BYTE2) == SYNC_BYTE2)
+                  );
 
     }
 

@@ -27,6 +27,7 @@ import org.jaudiotagger.tag.datatype.*;
 import org.jaudiotagger.tag.InvalidTagException;
 
 import java.io.IOException;
+import java.nio.ByteBuffer;
 
 
 public class FrameBodyPOPM extends AbstractID3v2FrameBody implements ID3v24FrameBody,ID3v23FrameBody
@@ -67,10 +68,10 @@ public class FrameBodyPOPM extends AbstractID3v2FrameBody implements ID3v24Frame
      * @throws IOException         DOCUMENT ME!
      * @throws InvalidTagException DOCUMENT ME!
      */
-    public FrameBodyPOPM(java.io.RandomAccessFile file, int frameSize)
+    public FrameBodyPOPM(ByteBuffer byteBuffer, int frameSize)
         throws IOException, InvalidTagException
     {
-        super(file, frameSize);
+        super(byteBuffer, frameSize);
     }
 
     /**

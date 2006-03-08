@@ -248,10 +248,6 @@ public class TagOptionSingleton
      */
     private float id3v2PaddingMultiplier = 2;
 
-    /**
-     * DOCUMENT ME!
-     */
-    private int defaultSaveMode = MP3File.MP3_FILE_SAVE_WRITE;
 
     /**
      * padding length of the ID3v2 tag.
@@ -343,26 +339,6 @@ public class TagOptionSingleton
     public boolean isCompositeMatchOverwrite()
     {
         return compositeMatchOverwrite;
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param defaultSaveMode DOCUMENT ME!
-     */
-    public void setDefaultSaveMode(int defaultSaveMode)
-    {
-        this.defaultSaveMode = defaultSaveMode;
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @return DOCUMENT ME!
-     */
-    public int getDefaultSaveMode()
-    {
-        return defaultSaveMode;
     }
 
     /**
@@ -1111,7 +1087,6 @@ public class TagOptionSingleton
         keywordMap = new HashMap();
 
         compositeMatchOverwrite = false;
-        defaultSaveMode = MP3File.MP3_FILE_SAVE_WRITE;
         endWordDelimiterList = new LinkedList();
         filenameDelimiterList = new LinkedList();
         filenameTagSave = false;

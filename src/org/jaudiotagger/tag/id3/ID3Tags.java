@@ -372,12 +372,12 @@ public class ID3Tags
 
     /**
      * Unable to instantiate abstract classes, so can't call the copy
-     * constructor. So find out the instianted class name and call the copy
+     * constructor. So find out the instatiated class name and call the copy
      * constructor through reflection.
      *
      * @param copyObject
      * @return
-     * @throws IllegalArgumentException DOCUMENT ME!
+     * @throws IllegalArgumentException if no suitable constructor exists
      */
     public static Object copyObject(Object copyObject)
     {

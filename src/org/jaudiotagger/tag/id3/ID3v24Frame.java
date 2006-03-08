@@ -30,6 +30,7 @@ import org.jaudiotagger.FileConstants;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.io.ByteArrayOutputStream;
 
 import java.util.Iterator;
 import java.nio.*;
@@ -62,7 +63,7 @@ public class ID3v24Frame
      * This constructor should be used when wish to create a new
      * frame from scratch using user input
      *
-     * @param body DOCUMENT ME!
+     * @param identifier defines the type of body to be created
      */
     public ID3v24Frame(String identifier)
     {
@@ -266,16 +267,16 @@ public class ID3v24Frame
     }
 
     /**
-     * Creates a new ID3v2_4Frame datatype from specified file.
+     * Creates a new ID3v2_4Frame datatype from specified byteBuffer.
      *
-     * @param file DOCUMENT ME!
+     * @param byteBuffer DOCUMENT ME!
      * @throws IOException         DOCUMENT ME!
      * @throws InvalidTagException DOCUMENT ME!
      */
-    public ID3v24Frame(RandomAccessFile file)
+    public ID3v24Frame(ByteBuffer byteBuffer)
         throws IOException, InvalidFrameException
     {
-        this.read(file);
+        this.read(byteBuffer);
     }
 
     /**
@@ -297,11 +298,11 @@ public class ID3v24Frame
      * Read the frame from the specified file.
      * Read the frame header then delegate reading of data to frame body.
      *
-     * @param file DOCUMENT ME!
+     * @param byteBuffer DOCUMENT ME!
      * @throws IOException         DOCUMENT ME!
      * @throws InvalidTagException DOCUMENT ME!
      */
-    public void read(RandomAccessFile file)
+    public void read(ByteBuffer byteBuffer)
         throws IOException, InvalidFrameException
     {
         long filePointer;
@@ -309,7 +310,7 @@ public class ID3v24Frame
         byte b;
 
         // Read the Frame ID Identifier
-        file.read(buffer, 0, FRAME_ID_SIZE);
+        byteBuffer.get(buffer, 0, FRAME_ID_SIZE);
         identifier = new String(buffer);
         logger.fine("Identifier is" + identifier);
         // Is this a valid identifier?
@@ -318,11 +319,11 @@ public class ID3v24Frame
             //If not valid move file pointer back to one byte after
             //the original check so can try again.
             logger.info("Invalid identifier:" + identifier);
-            file.seek(file.getFilePointer() - (FRAME_ID_SIZE - 1));
+            byteBuffer.position(byteBuffer.position() - (FRAME_ID_SIZE - 1));
             throw new InvalidFrameException(identifier + " is not a valid ID3v2.40 frame");
         }
         //Read the size field
-        frameSize = file.readInt();
+        frameSize = byteBuffer.getInt();
         if (frameSize < 0)
         {
             logger.warning("Invalid Frame size:" + identifier);
@@ -335,29 +336,30 @@ public class ID3v24Frame
         }
         
         //Read the flag bytes
-        statusFlags = new StatusFlags(file.readByte());
-        encodingFlags = new EncodingFlags(file.readByte());
+        statusFlags = new StatusFlags(byteBuffer.get());
+        encodingFlags = new EncodingFlags(byteBuffer.get());
         //Read the body data
-        frameBody = readBody(identifier, file, frameSize);
+        frameBody = readBody(identifier, byteBuffer, frameSize);
     }
 
     /**
      * Write the frame. Writes the frame header but writing the data is delegated to the
      * frame body.
      *
-     * @param file DOCUMENT ME!
      * @throws IOException DOCUMENT ME!
      */
-    public void write(ByteBuffer tagBuffer)
+    public void write(ByteArrayOutputStream tagBuffer)
         throws IOException
     {
         logger.info("Writing frame to file:" + getIdentifier());
         //This is where we will write header, move position to where we can
         //write body
-        ByteBuffer headerBuffer = tagBuffer.slice();
-        tagBuffer.position(tagBuffer.position() + this.FRAME_HEADER_SIZE);
+
+       ByteBuffer headerBuffer = ByteBuffer.allocate(FRAME_HEADER_SIZE);
+
         //Write Frame Body Data
-        ((AbstractID3v2FrameBody) frameBody).write(tagBuffer);
+        ByteArrayOutputStream bodyOutputStream = new ByteArrayOutputStream();
+        ((AbstractID3v2FrameBody) frameBody).write(bodyOutputStream);
         //Write Frame Header
         //Write Frame ID, the identifier must be 4 bytes bytes long it may not be
         //because converted an unknown v2.2 id (only 3 bytes long)
@@ -374,6 +376,12 @@ public class ID3v24Frame
         //@todo What about adjustments to header based on encoding flag
         headerBuffer.put(statusFlags.getWriteFlags());
         headerBuffer.put(encodingFlags.getFlags());
+
+        //Add header to the Byte Array Output Stream
+        tagBuffer.write(headerBuffer.array());
+
+        //Add body to the Byte Array Output Stream
+        tagBuffer.write(bodyOutputStream.toByteArray());
     }
 
     /**
@@ -567,7 +575,6 @@ public class ID3v24Frame
     /**
      * Return String Representation of body
      *
-     * @return DOCUMENT ME!
      */
     public void createStructure()
     {

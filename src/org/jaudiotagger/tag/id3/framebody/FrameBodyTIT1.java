@@ -26,6 +26,8 @@ package org.jaudiotagger.tag.id3.framebody;
 import org.jaudiotagger.tag.InvalidTagException;
 import org.jaudiotagger.tag.id3.ID3v24Frames;
 
+import java.nio.ByteBuffer;
+
 
 public class FrameBodyTIT1 extends AbstractFrameBodyTextInfo implements ID3v24FrameBody,ID3v23FrameBody
 {
@@ -59,10 +61,10 @@ public class FrameBodyTIT1 extends AbstractFrameBodyTextInfo implements ID3v24Fr
      * @throws java.io.IOException DOCUMENT ME!
      * @throws InvalidTagException DOCUMENT ME!
      */
-    public FrameBodyTIT1(java.io.RandomAccessFile file, int frameSize)
+    public FrameBodyTIT1(ByteBuffer byteBuffer, int frameSize)
         throws java.io.IOException, InvalidTagException
     {
-        super(file, frameSize);
+        super(byteBuffer, frameSize);
     }
 
     /**

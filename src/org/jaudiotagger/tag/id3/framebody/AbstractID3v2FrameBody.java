@@ -64,16 +64,16 @@ public abstract class AbstractID3v2FrameBody
      * Creates a new FrameBody datatype from file. The super
      * Constructor sets up the Object list for the frame.
      *
-     * @param file The MP3File to read the frame from.
+     * @param byteBuffer The MP3File to read the frame from.
      * @throws java.io.IOException DOCUMENT ME!
      * @throws InvalidTagException DOCUMENT ME!
      */
-    protected AbstractID3v2FrameBody(java.io.RandomAccessFile file, int frameSize)
+    protected AbstractID3v2FrameBody(ByteBuffer byteBuffer, int frameSize)
         throws java.io.IOException, InvalidFrameException
     {
         super();
         setSize(frameSize);
-        this.read(file);
+        this.read(byteBuffer);
     }
 
     /**
@@ -145,19 +145,18 @@ public abstract class AbstractID3v2FrameBody
      * have its file pointer in the correct location. The size as indicated in the
      * header is passed to the frame constructor when reading from file.
      *
-     * @param file file to read
-     * @param size size of the body as defined in header.
+     * @param byteBuffer file to read
      * @throws IOException         on any I/O error
      * @throws InvalidTagException if there is any error in the data format.
      */
-    public void read(RandomAccessFile file)
+    public void read(ByteBuffer byteBuffer)
         throws IOException, InvalidFrameException
     {
         int size = getSize();
         logger.info("Reading body for" + this.getIdentifier() + ":" + size);
         //Allocate a buffer to the size of the Frame Body and read from file
         byte[] buffer = new byte[size];
-        file.read(buffer);
+        byteBuffer.get(buffer);
         //Offset into buffer, incremented by length of previous MP3Object
         int offset = 0;
         //Go through the ObjectList of the Frame reading the data into the
@@ -182,13 +181,11 @@ public abstract class AbstractID3v2FrameBody
     }
 
     /**
-     * Write the contents of this datatype to the file at the position it is
-     * currently at.
+     * Write the contents of this datatype to the byte array
      *
-     * @param file destination file
      * @throws IOException on any I/O error
      */
-    public void write(ByteBuffer tagBuffer)
+    public void write(ByteArrayOutputStream tagBuffer)
         throws IOException
     {
         logger.info("Writing frame body for" + this.getIdentifier() + ":Est Size:" + size);
@@ -201,7 +198,7 @@ public abstract class AbstractID3v2FrameBody
             byte[] objectData = object.writeByteArray();
             if (objectData != null)
             {
-                tagBuffer.put(objectData);
+                tagBuffer.write(objectData);
             }
         }
         setSize();

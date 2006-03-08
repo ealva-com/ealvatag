@@ -34,6 +34,7 @@ import org.jaudiotagger.tag.id3.ID3v24Frames;
 import java.text.*;
 import java.util.ArrayList;
 import java.util.Date;
+import java.nio.ByteBuffer;
 
 
 public class FrameBodyTDRC extends AbstractFrameBodyTextInfo implements ID3v24FrameBody
@@ -259,10 +260,10 @@ public class FrameBodyTDRC extends AbstractFrameBodyTextInfo implements ID3v24Fr
      * @throws java.io.IOException DOCUMENT ME!
      * @throws InvalidTagException DOCUMENT ME!
      */
-    public FrameBodyTDRC(java.io.RandomAccessFile file, int frameSize)
+    public FrameBodyTDRC(ByteBuffer byteBuffer, int frameSize)
         throws java.io.IOException, InvalidTagException
     {
-        super(file, frameSize);
+        super(byteBuffer, frameSize);
         //Store the equivalent ID3v23 values in case convert
 
         //Find the date format of the v24Frame

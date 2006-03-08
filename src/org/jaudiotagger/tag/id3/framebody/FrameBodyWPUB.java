@@ -28,6 +28,8 @@ import org.jaudiotagger.tag.id3.ID3Frames;
 import org.jaudiotagger.tag.id3.ID3v24Frames;
 import org.jaudiotagger.tag.id3.ID3v24Frames;
 
+import java.nio.ByteBuffer;
+
 
 public class FrameBodyWPUB extends AbstractFrameBodyUrlLink   implements ID3v24FrameBody,ID3v23FrameBody
 {
@@ -60,10 +62,10 @@ public class FrameBodyWPUB extends AbstractFrameBodyUrlLink   implements ID3v24F
      * @throws java.io.IOException DOCUMENT ME!
      * @throws InvalidTagException DOCUMENT ME!
      */
-    public FrameBodyWPUB(java.io.RandomAccessFile file, int frameSize)
+    public FrameBodyWPUB(ByteBuffer byteBuffer, int frameSize)
         throws java.io.IOException, InvalidTagException
     {
-        super(file, frameSize);
+        super(byteBuffer, frameSize);
     }
 
     /**

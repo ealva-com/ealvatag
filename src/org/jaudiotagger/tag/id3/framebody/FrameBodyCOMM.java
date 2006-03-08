@@ -81,10 +81,10 @@ public class FrameBodyCOMM  extends AbstractID3v2FrameBody  implements ID3v24Fra
      * @throws IOException         DOCUMENT ME!
      * @throws InvalidTagException DOCUMENT ME!
      */
-    public FrameBodyCOMM(java.io.RandomAccessFile file, int frameSize)
+    public FrameBodyCOMM(ByteBuffer byteBuffer, int frameSize)
         throws IOException, InvalidTagException
     {
-        super(file, frameSize);
+        super(byteBuffer, frameSize);
     }
 
     /**
@@ -193,7 +193,7 @@ public class FrameBodyCOMM  extends AbstractID3v2FrameBody  implements ID3v24Fra
      * not contain characters that cannot be encoded in current encoding before
      * we write data. If there are we change the encoding.
      */
-    public void write(ByteBuffer tagBuffer)
+    public void write(ByteArrayOutputStream tagBuffer)
         throws IOException
     {
         //@todo use defined constant, Encoding of (1) doesnt seem to work properly

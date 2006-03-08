@@ -4,7 +4,7 @@
  *
  *  Version @version:$Id$
  *
- *  MusicTag Copyright (C)2003,2004
+  *  MusicTag Copyright (C)2003,2004
  *
  *  This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser
  *  General Public  License as published by the Free Software Foundation; either version 2.1 of the License,
@@ -30,7 +30,9 @@ import org.jaudiotagger.tag.id3.ID3Tags;
 import org.jaudiotagger.tag.AbstractTagItem;
 import org.jaudiotagger.tag.id3.ID3Tags;
 
-/* A frame contains meta-information of a particular type. A frame contains a herader and a body */
+/**
+ * A frame contains meta-information of a particular type. A frame contains a header and a body
+*/
 public abstract class AbstractTagFrame extends AbstractTagItem
 {
 

@@ -32,6 +32,8 @@ import org.jaudiotagger.tag.TagNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.regex.*;
+import java.nio.channels.FileChannel;
+import java.nio.ByteBuffer;
 
 abstract public class AbstractID3v1Tag
     extends AbstractID3Tag
@@ -100,73 +102,15 @@ abstract public class AbstractID3v1Tag
     public void delete(RandomAccessFile file)
         throws IOException
     {
-        if (seek(file))
+        //Read into Byte Buffer
+        final FileChannel fc = file.getChannel();
+        fc.position(file.length() - TAG_LENGTH);
+        ByteBuffer  byteBuffer = ByteBuffer.allocate(TAG_LENGTH);
+        fc.read(byteBuffer,0);
+        byteBuffer.rewind();           
+        if (seek(byteBuffer))
         {
             file.setLength(file.length() - TAG_LENGTH);
-        }
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param file DOCUMENT ME!
-     * @throws IOException  DOCUMENT ME!
-     * @throws TagException DOCUMENT ME!
-     */
-    public void append(RandomAccessFile file)
-        throws IOException, TagException
-    {
-        AbstractID3v1Tag oldTag;
-        try
-        {
-            oldTag = new ID3v11Tag(file);
-            oldTag.append(this);
-            oldTag.write(file);
-        }
-        catch (TagNotFoundException ex)
-        {
-            try
-            {
-                oldTag = new ID3v1Tag(file);
-                oldTag.append(this);
-                oldTag.write(file);
-            }
-            catch (TagNotFoundException ex2)
-            {
-                this.write(file);
-            }
-        }
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param file DOCUMENT ME!
-     * @throws IOException  DOCUMENT ME!
-     * @throws TagException DOCUMENT ME!
-     */
-    public void overwrite(RandomAccessFile file)
-        throws IOException, TagException
-    {
-        AbstractID3v1Tag oldTag;
-        try
-        {
-            oldTag = new ID3v11Tag(file);
-            oldTag.overwrite(this);
-            oldTag.write(file);
-        }
-        catch (TagNotFoundException ex)
-        {
-            try
-            {
-                oldTag = new ID3v1Tag(file);
-                oldTag.overwrite(this);
-                oldTag.write(file);
-            }
-            catch (TagNotFoundException ex2)
-            {
-                this.write(file);
-            }
         }
     }
 }

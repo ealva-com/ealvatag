@@ -32,6 +32,7 @@ import org.jaudiotagger.tag.InvalidTagException;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.nio.ByteBuffer;
 
 public class FrameBodyUnsupported extends AbstractID3v2FrameBody
 {
@@ -74,10 +75,10 @@ public class FrameBodyUnsupported extends AbstractID3v2FrameBody
      * @throws IOException         DOCUMENT ME!
      * @throws InvalidTagException DOCUMENT ME!
      */
-    public FrameBodyUnsupported(RandomAccessFile file, int frameSize)
+    public FrameBodyUnsupported(ByteBuffer byteBuffer, int frameSize)
         throws IOException, InvalidFrameException
     {
-        super(file, frameSize);
+        super(byteBuffer, frameSize);
     }
 
     /**

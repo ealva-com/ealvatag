@@ -415,18 +415,18 @@ public class ID3v24Tag
     }
 
     /**
-     * Creates a new ID3v2_4 datatype.
+     * Creates a new ID3v2_4 datatype from buffer
      *
-     * @param file DOCUMENT ME!
-     * @throws TagException DOCUMENT ME!
-     * @throws IOException  DOCUMENT ME!
+     * @param buffer
+     * @throws TagException
+     * @throws IOException
      */
-    public ID3v24Tag(RandomAccessFile file)
+    public ID3v24Tag(ByteBuffer buffer)
         throws TagException, IOException
     {
         this.majorVersion = 4;
         this.revision = 0;
-        this.read(file);
+        this.read(buffer);
 
     }
 
@@ -469,48 +469,6 @@ public class ID3v24Tag
         logger.finer("Tag Size is" + size);
         return size;
     }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param tag DOCUMENT ME!
-     */
-    public void append(AbstractTag tag)
-    {
-        if (tag instanceof ID3v24Tag)
-        {
-            this.updateTag = ((ID3v24Tag) tag).updateTag;
-            this.footer = ((ID3v24Tag) tag).footer;
-            this.tagRestriction = ((ID3v24Tag) tag).tagRestriction;
-            this.tagSizeRestriction = ((ID3v24Tag) tag).tagSizeRestriction;
-            this.textEncodingRestriction = ((ID3v24Tag) tag).textEncodingRestriction;
-            this.textFieldSizeRestriction = ((ID3v24Tag) tag).textFieldSizeRestriction;
-            this.imageEncodingRestriction = ((ID3v24Tag) tag).imageEncodingRestriction;
-            this.imageSizeRestriction = ((ID3v24Tag) tag).imageSizeRestriction;
-        }
-        super.append(tag);
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param obj DOCUMENT ME!
-     *
-     * @return DOCUMENT ME!
-     */
-
-//    public void append(RandomAccessFile file)
-//                throws IOException, TagException {
-//        ID3v2_4 oldTag;
-//
-//        try {
-//            oldTag = new ID3v2_4(file);
-//            oldTag.append(this);
-//            oldTag.write(file);
-//        } catch (TagNotFoundException ex) {
-//            oldTag = null;
-//        }
-//    }
 
     /**
      * DOCUMENT ME!
@@ -561,73 +519,26 @@ public class ID3v24Tag
     }
 
     /**
-     * Add all frames to this tag overwriting the frames even if they
-     * already exist.
-     *
-     * @param tag DOCUMENT ME!
-     */
-    public void overwrite(AbstractTag tag)
-    {
-        if (tag instanceof ID3v24Tag)
-        {
-            this.updateTag = ((ID3v24Tag) tag).updateTag;
-            this.footer = ((ID3v24Tag) tag).footer;
-            this.tagRestriction = ((ID3v24Tag) tag).tagRestriction;
-            this.tagSizeRestriction = ((ID3v24Tag) tag).tagSizeRestriction;
-            this.textEncodingRestriction = ((ID3v24Tag) tag).textEncodingRestriction;
-            this.textFieldSizeRestriction = ((ID3v24Tag) tag).textFieldSizeRestriction;
-            this.imageEncodingRestriction = ((ID3v24Tag) tag).imageEncodingRestriction;
-            this.imageSizeRestriction = ((ID3v24Tag) tag).imageSizeRestriction;
-        }
-        super.overwrite(tag);
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param file DOCUMENT ME!
-     *
-     * @throws TagException DOCUMENT ME!
-     * @throws IOException DOCUMENT ME!
-     * @throws TagNotFoundException DOCUMENT ME!
-     * @throws InvalidTagException DOCUMENT ME!
-     */
-
-//    public void overwrite(RandomAccessFile file)
-//                   throws IOException, TagException {
-//        ID3v2_4 oldTag;
-//
-//        try {
-//            oldTag = new ID3v2_4(file);
-//            oldTag.overwrite(this);
-//            oldTag.write(file);
-//        } catch (TagNotFoundException ex) {
-//            super.overwrite(file);
-//        }
-//    }
-
-    /**
      * Read Tag from Specified file.
      * Read tag header, delegate reading of frames to readFrames()
      *
-     * @param file to read the tag from
+     * @param byteBuffer to read the tag from
      * @throws TagException         DOCUMENT ME!
      * @throws IOException          DOCUMENT ME!
      * @throws TagNotFoundException DOCUMENT ME!
      * @throws InvalidTagException  DOCUMENT ME!
      */
-    public void read(RandomAccessFile file)
+    public void read(ByteBuffer byteBuffer)
         throws TagException, IOException
     {
         int size;
         byte[] buffer;
-        file.seek(0);
-        if (seek(file) == false)
+        if (seek(byteBuffer) == false)
         {
             throw new TagNotFoundException(getIdentifier() + " tag not found");
         }
         //Flags
-        byte flags = file.readByte();
+        byte flags = byteBuffer.get();
         unsynchronization = (flags & MASK_V24_UNSYNCHRONIZATION) != 0;
         extended = (flags & MASK_V24_EXTENDED_HEADER) != 0;
         experimental = (flags & MASK_V24_EXPERIMENTAL) != 0;
@@ -638,22 +549,22 @@ public class ID3v24Tag
         }
         // Read the size, this is size of tag apart from tag header
         byte[] sizeBuffer = new byte[FIELD_TAG_SIZE_LENGTH];
-        file.read(sizeBuffer, 0, FIELD_TAG_SIZE_LENGTH);
+        byteBuffer.get(sizeBuffer, 0, FIELD_TAG_SIZE_LENGTH);
         size = byteArrayToSize(sizeBuffer);
         logger.info("Reading tag from file size set in header is" + size);
         if (extended == true)
         {
             // int is 4 bytes.
-            int extendedHeaderSize = file.readInt();
+            int extendedHeaderSize = byteBuffer.getInt();
             // the extended header must be atleast 6 bytes
             if (extendedHeaderSize <= TAG_EXT_HEADER_LENGTH)
             {
                 throw new InvalidTagException("Invalid Extended Header Size.");
             }
             //Number of bytes
-            file.readByte();
+            byteBuffer.get();
             // Read the extended flag bytes
-            byte extFlag = file.readByte();
+            byte extFlag = byteBuffer.get();
             updateTag = (extFlag & MASK_V24_TAG_UPDATE) != 0;
             crcDataFlag = (extFlag & MASK_V24_CRC_DATA_PRESENT) != 0;
             tagRestriction = (extFlag & MASK_V24_TAG_RESTRICTIONS) != 0;
@@ -662,14 +573,14 @@ public class ID3v24Tag
             // read this information.
             if (updateTag == true)
             {
-                file.readByte();
+                byteBuffer.get();
             }
             if (crcDataFlag == true)
             {
                 // the CRC has a variable length
-                file.readByte();
+                byteBuffer.get();
                 buffer = new byte[TAG_EXT_HEADER_CRC_DATA_LENGTH];
-                file.read(buffer, 0, TAG_EXT_HEADER_CRC_DATA_LENGTH);
+                byteBuffer.get(buffer, 0, TAG_EXT_HEADER_CRC_DATA_LENGTH);
                 crcData = 0;
                 for (int i = 0; i < TAG_EXT_HEADER_CRC_DATA_LENGTH; i++)
                 {
@@ -679,9 +590,9 @@ public class ID3v24Tag
             }
             if (tagRestriction == true)
             {
-                file.readByte();
+                byteBuffer.get();
                 buffer = new byte[1];
-                file.read(buffer, 0, 1);
+                byteBuffer.get(buffer, 0, 1);
                 tagSizeRestriction = (byte) ((buffer[0] & MASK_V24_TAG_SIZE_RESTRICTIONS) >> 6);
                 textEncodingRestriction = (byte) ((buffer[0] & MASK_V24_TEXT_ENCODING_RESTRICTIONS) >> 5);
                 textFieldSizeRestriction = (byte) ((buffer[0] & MASK_V24_TEXT_FIELD_SIZE_RESTRICTIONS) >> 3);
@@ -689,35 +600,34 @@ public class ID3v24Tag
                 imageSizeRestriction = (byte) (buffer[0] & MASK_V24_IMAGE_SIZE_RESTRICTIONS);
             }
         }
-        long filePointer = file.getFilePointer();
         //Note if there was an extended header the size value has padding taken
         //off so we dont search it.
-        readFrames(file, filePointer, size);
+        readFrames(byteBuffer, size);
 
     }
 
     /**
      * Read frames from tag
      */
-    protected void readFrames(RandomAccessFile file, long endOfMainHeaderFilePointer, int size)
+    protected void readFrames(ByteBuffer byteBuffer, int size)
         throws IOException
     {
-        logger.finest("Start of frame body at" + file.getFilePointer());
+        logger.finest("Start of frame body at" + byteBuffer.position());
         //Now start looking for frames
         ID3v24Frame next;
         frameMap = new LinkedHashMap();
         //Read the size from the Tag Header
         this.fileReadSize = size;
         // Read the frames until got to upto the size as specified in header
-        logger.finest("Start of frame body at:" + file.getFilePointer() + ",frames data size is:" + size);
-        while ((file.getFilePointer() - endOfMainHeaderFilePointer) <= size)
+        logger.finest("Start of frame body at:" + byteBuffer.position() + ",frames data size is:" + size);
+        while (byteBuffer.position() <= size)
         {
             String id = null;
             try
             {
                 //Read Frame
-                logger.finest("looking for next frame at:" + file.getFilePointer());
-                next = new ID3v24Frame(file);
+                logger.finest("looking for next frame at:" + byteBuffer.position());
+                next = new ID3v24Frame(byteBuffer);
                 id = next.getIdentifier();
                 loadFrameIntoMap(id, next);
             }
@@ -739,28 +649,6 @@ public class ID3v24Tag
 
 
     /**
-     * Update this Tag with the COntents of another Tag
-     *
-     * @param tag The tag to copy the contents of.
-     */
-    public void write(AbstractTag tag)
-    {
-        if (tag instanceof ID3v24Tag)
-        {
-            this.updateTag = ((ID3v24Tag) tag).updateTag;
-            this.footer = ((ID3v24Tag) tag).footer;
-            this.tagRestriction = ((ID3v24Tag) tag).tagRestriction;
-            this.tagSizeRestriction = ((ID3v24Tag) tag).tagSizeRestriction;
-            this.textEncodingRestriction = ((ID3v24Tag) tag).textEncodingRestriction;
-            this.textFieldSizeRestriction = ((ID3v24Tag) tag).textFieldSizeRestriction;
-            this.imageEncodingRestriction = ((ID3v24Tag) tag).imageEncodingRestriction;
-            this.imageSizeRestriction = ((ID3v24Tag) tag).imageSizeRestriction;
-        }
-        super.write(tag);
-    }
-
-
-    /**
      * Write this tag to file.
      *
      * @param file DOCUMENT ME!
@@ -772,7 +660,7 @@ public class ID3v24Tag
         logger.info("Writing tag to file");
 
         /** Write Body Buffer */
-        ByteBuffer bodyBuffer = writeFramesToBuffer();
+        byte[] bodyByteBuffer = writeFramesToBuffer().toByteArray();
 
         /** @todo Calculate UnSynchronisation */
         /** @todo Calculate the CYC Data Check */
@@ -817,25 +705,12 @@ public class ID3v24Tag
         /** Calculate Tag Size including Padding */
         int sizeIncPadding = calculateTagSize(getSize(), (int) audioStartLocation);
 
-         /** Add padding as neccessary, if for example we have removed a number of
-         *  frames from a tag we will have to add extra padding. We need to ensure
-         *  there is enough room in the bodyBuffer to add the padding, if not we will
-         *  have to create a new Buffer and copy the contents. This problem occur if we
-         *  have deleted very large frames (such as APIC frames) from the tag meaning
-         *  the buffer is not big enough to cope with the original size of the tag */
+        //Calculate padding bytes required
         int padding = sizeIncPadding - getSize();
-        logger.finer("Add padding of length" + padding);
-        if((bodyBuffer.capacity() - bodyBuffer.position())<padding)
-        {
-            ByteBuffer newBodyBuffer = ByteBuffer.allocate(sizeIncPadding);
-            bodyBuffer.flip();
-            newBodyBuffer.put(bodyBuffer);
-            bodyBuffer = newBodyBuffer;
-        }
 
-        bodyBuffer.put(new byte[padding]);
         //Size As Recorded in Header, don't include the main header length
         headerBuffer.put(sizeToByteArray((int) sizeIncPadding - TAG_HEADER_LENGTH));
+
         //Write Extended Header
         ByteBuffer extHeaderBuffer = null;
         if (extended == true)
@@ -889,7 +764,7 @@ public class ID3v24Tag
             if (tagRestriction == true)
             {
                 extHeaderBuffer.put((byte) TAG_EXT_HEADER_RESTRICTION_DATA_LENGTH);
-                /** @todo not currenly setting restrictions */
+                /** @todo not currently setting restrictions */
                 extHeaderBuffer.put((byte) 0);
             }
         }
@@ -899,6 +774,7 @@ public class ID3v24Tag
             logger.finest("Adjusting Padding");
             adjustPadding(file, sizeIncPadding, audioStartLocation);
         }
+
         //Write changes to file
         FileChannel fc = new RandomAccessFile(file, "rw").getChannel();
         headerBuffer.flip();
@@ -908,8 +784,8 @@ public class ID3v24Tag
             extHeaderBuffer.flip();
             fc.write(extHeaderBuffer);
         }
-        bodyBuffer.flip();
-        fc.write(bodyBuffer);
+        fc.write(ByteBuffer.wrap(bodyByteBuffer));
+        fc.write(ByteBuffer.wrap(new byte[padding]));
         fc.close();
     }
 
