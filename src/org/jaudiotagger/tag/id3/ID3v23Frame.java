@@ -32,6 +32,7 @@ import org.jaudiotagger.FileConstants;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.io.ByteArrayOutputStream;
 import java.util.regex.*;
 
 import java.nio.*;
@@ -59,7 +60,6 @@ public class ID3v23Frame
      * This constructor should be used when wish to create a new
      * frame from scratch using user data.
      *
-     * @param body DOCUMENT ME!
      */
     public ID3v23Frame(String identifier)
     {
@@ -82,7 +82,7 @@ public class ID3v23Frame
     /**
      * Creates a new ID3v2_3Frame datatype based on another frame.
      *
-     * @param frame DOCUMENT ME!
+     * @param frame
      */
     public ID3v23Frame(AbstractID3v2Frame frame)
     {
@@ -146,16 +146,16 @@ public class ID3v23Frame
     }
 
     /**
-     * Creates a new ID3v2_3Frame datatype by reading from file.
+     * Creates a new ID3v2_3Frame datatype by reading from byteBuffer.
      *
-     * @param file The mp3File to read from
-     * @throws IOException         DOCUMENT ME!
-     * @throws InvalidTagException DOCUMENT ME!
+     * @param byteBuffer to read from
+     * @throws IOException
+
      */
-    public ID3v23Frame(RandomAccessFile file)
+    public ID3v23Frame(ByteBuffer byteBuffer)
         throws IOException, InvalidFrameException
     {
-        this.read(file);
+        this.read(byteBuffer);
     }
 
     /**
@@ -175,8 +175,8 @@ public class ID3v23Frame
      * containing the same body,datatype list ectera.
      * equals() method is made up from all the various components
      *
-     * @param obj DOCUMENT ME!
-     * @return DOCUMENT ME!
+     * @param obj
+     * @return 
      */
     public boolean equals(Object obj)
     {
@@ -197,30 +197,30 @@ public class ID3v23Frame
     }
 
     /**
-     * Read the frame from file
+     * Read the frame from a bytebuffer
      *
-     * @param file DOCUMENT ME!
+     * @param byteBuffer buffer to read from
      * @throws IOException         DOCUMENT ME!
-     * @throws InvalidTagException DOCUMENT ME!
      */
-    public void read(RandomAccessFile file)
+    public void read(ByteBuffer byteBuffer)
         throws IOException, InvalidFrameException
     {
-        logger.info("Read Frame from file");
+        logger.info("Read Frame from byteBuffer");
         byte[] buffer = new byte[FRAME_ID_SIZE];
 
         // Read the Frame ID Identifier
-        file.read(buffer, 0, FRAME_ID_SIZE);
+        byteBuffer.get(buffer, 0, FRAME_ID_SIZE);
         identifier = new String(buffer);
+
         // Is this a valid identifier?
         if (isValidID3v2FrameIdentifier(identifier) == false)
         {
             logger.info("Invalid identifier:" + identifier);
-            file.seek(file.getFilePointer() - (FRAME_ID_SIZE - 1));
+            byteBuffer.position(byteBuffer.position() - (FRAME_ID_SIZE - 1));
             throw new InvalidFrameException(identifier + " is not a valid ID3v2.30 frame");
         }
         //Read the size field
-        frameSize = file.readInt();
+        frameSize = byteBuffer.getInt();
         if (frameSize < 0)
         {
             logger.warning("Invalid Frame Size:" + identifier);
@@ -233,8 +233,8 @@ public class ID3v23Frame
         }
        
         //Read the flag bytes
-        statusFlags = new StatusFlags(file.readByte());
-        encodingFlags = new EncodingFlags(file.readByte());
+        statusFlags = new StatusFlags(byteBuffer.get());
+        encodingFlags = new EncodingFlags(byteBuffer.get());
         String id;
         /** If this identifier a valid v24 identifier or easily converted to v24 */
         id = (String) ID3Tags.convertFrameID23To24(identifier);
@@ -258,27 +258,26 @@ public class ID3v23Frame
         }
         logger.fine("Identifier was:" + identifier + " reading using:" + id);
         //Read the body data
-        frameBody = readBody(id, file, frameSize);
+        frameBody = readBody(id, byteBuffer, frameSize);
     }
 
     /**
-     * Write the frame to file
+     * Write the frame to bufferOutputStream
      *
-     * @param file DOCUMENT ME!
      * @throws IOException DOCUMENT ME!
      */
-    public void write(ByteBuffer tagBuffer)
+    public void write(ByteArrayOutputStream tagBuffer)
         throws IOException
     {
-        logger.info("Writing frame to file:" + getIdentifier());
+        logger.info("Writing frame to buffer:" + getIdentifier());
         //This is where we will write header, move position to where we can
         //write body
-        ByteBuffer headerBuffer = tagBuffer.slice();
-        tagBuffer.position(tagBuffer.position() + this.FRAME_HEADER_SIZE);
+        ByteBuffer headerBuffer = ByteBuffer.allocate(FRAME_HEADER_SIZE);
+
         //Write Frame Body Data
-        ((AbstractID3v2FrameBody) frameBody).write(tagBuffer);
-        //Write Frame Header
-        //Write Frame ID
+        ByteArrayOutputStream bodyOutputStream = new ByteArrayOutputStream();
+        ((AbstractID3v2FrameBody) frameBody).write(bodyOutputStream);
+        //Write Frame Header write Frame ID
         if (getIdentifier().length() == 3)
         {
             identifier = identifier + ' ';
@@ -292,6 +291,14 @@ public class ID3v23Frame
         //@todo What about adjustments to header based on encoding flag
         headerBuffer.put(statusFlags.getWriteFlags());
         headerBuffer.put(encodingFlags.getFlags());
+
+        //Add header to the Byte Array Output Stream
+        tagBuffer.write(headerBuffer.array());
+
+        //Add body to the Byte Array Output Stream
+        tagBuffer.write(bodyOutputStream.toByteArray());
+
+
     }
 
     protected AbstractID3v2Frame.StatusFlags getStatusFlags()
@@ -442,8 +449,8 @@ public class ID3v23Frame
      * Does the frame identifier meet the syntax for a idv3v2 frame identifier.
      * must start with a capital letter and only contain capital letters and numbers
      *
-     * @param identifier DOCUMENT ME!
-     * @return DOCUMENT ME!
+     * @param identifier to be checked
+     * @return whether the identifier is valid
      */
     public boolean isValidID3v2FrameIdentifier(String identifier)
     {
@@ -454,7 +461,6 @@ public class ID3v23Frame
     /**
      * Return String Representation of body
      *
-     * @return DOCUMENT ME!
      */
     public void createStructure()
     {

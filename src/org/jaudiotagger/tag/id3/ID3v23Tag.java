@@ -44,15 +44,15 @@ import java.nio.channels.*;
 public class ID3v23Tag
     extends ID3v22Tag
 {
-    protected static final String TYPE_CRCDATA = "crcdata";
+    protected static final String TYPE_CRCDATA      = "crcdata";
     protected static final String TYPE_EXPERIMENTAL = "experimental";
-    protected static final String TYPE_EXTENDED = "extended";
-    protected static final String TYPE_PADDINGSIZE = "paddingsize";
+    protected static final String TYPE_EXTENDED     = "extended";
+    protected static final String TYPE_PADDINGSIZE  = "paddingsize";
 
 
-    protected static int TAG_EXT_HEADER_LENGTH = 10;
-    protected static int TAG_EXT_HEADER_CRC_LENGTH = 4;
-    protected static int FIELD_TAG_EXT_SIZE_LENGTH = 4;
+    protected static int TAG_EXT_HEADER_LENGTH      = 10;
+    protected static int TAG_EXT_HEADER_CRC_LENGTH  = 4;
+    protected static int FIELD_TAG_EXT_SIZE_LENGTH  = 4;
     protected static int TAG_EXT_HEADER_DATA_LENGTH = TAG_EXT_HEADER_LENGTH - FIELD_TAG_EXT_SIZE_LENGTH;
 
     /**
@@ -275,16 +275,16 @@ public class ID3v23Tag
     /**
      * Creates a new ID3v2_3 datatype.
      *
-     * @param file DOCUMENT ME!
+     * @param buffer DOCUMENT ME!
      * @throws TagException DOCUMENT ME!
      * @throws IOException  DOCUMENT ME!
      */
-    public ID3v23Tag(RandomAccessFile file)
+    public ID3v23Tag(ByteBuffer buffer)
         throws TagException, IOException
     {
         this.majorVersion = 3;
         this.revision = 0;
-        this.read(file);
+        this.read(buffer);
     }
 
     /**
@@ -317,45 +317,6 @@ public class ID3v23Tag
         size += super.getSize();
         return size;
     }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param tag DOCUMENT ME!
-     */
-    public void append(AbstractTag tag)
-    {
-        if (tag instanceof ID3v23Tag)
-        {
-            this.experimental = ((ID3v23Tag) tag).experimental;
-            this.extended = ((ID3v23Tag) tag).extended;
-            this.crcDataFlag = ((ID3v23Tag) tag).crcDataFlag;
-            this.paddingSize = ((ID3v23Tag) tag).paddingSize;
-            this.crcData = ((ID3v23Tag) tag).crcData;
-        }
-        super.append(tag);
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param obj DOCUMENT ME!
-     *
-     * @return DOCUMENT ME!
-     */
-
-//    public void append(RandomAccessFile file)
-//                throws IOException, TagException {
-//        ID3v2_3 oldTag;
-//
-//        try {
-//            oldTag = new ID3v2_3(file);
-//            oldTag.append(this);
-//            oldTag.write(file);
-//        } catch (TagNotFoundException ex) {
-//            oldTag = null;
-//        }
-//    }
 
     /**
      * Is Tag Equivalent to another tag
@@ -393,161 +354,127 @@ public class ID3v23Tag
         return super.equals(obj);
     }
 
-    /**
-     * Add all frames to this tag overwriting the frames even if they
-     * already exist.
-     *
-     * @param tag DOCUMENT ME!
-     */
-    public void overwrite(AbstractTag tag)
-    {
-        if (tag instanceof ID3v23Tag)
-        {
-            this.experimental = ((ID3v23Tag) tag).experimental;
-            this.extended = ((ID3v23Tag) tag).extended;
-            this.crcDataFlag = ((ID3v23Tag) tag).crcDataFlag;
-            this.paddingSize = ((ID3v23Tag) tag).paddingSize;
-            this.crcData = ((ID3v23Tag) tag).crcData;
-        }
-        super.overwrite(tag);
-    }
 
     /**
-     * DOCUMENT ME!
+     * Read tag from File
      *
-     * @param file DOCUMENT ME!
+     * @param buffer The buffer to read the ID3v23 Tag from
      *
-     * @throws TagException DOCUMENT ME!
-     * @throws IOException DOCUMENT ME!
-     * @throws TagNotFoundException DOCUMENT ME!
-     * @throws InvalidTagException DOCUMENT ME!
      */
-
-//    public void overwrite(RandomAccessFile file)
-//                   throws IOException, TagException {
-//        ID3v2_3 oldTag;
-//
-//        try {
-//            oldTag = new ID3v2_3(file);
-//            oldTag.overwrite(this);
-//            oldTag.write(file);
-//        } catch (TagNotFoundException ex) {
-//	    super.overwrite(file);
-//        }
-//    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param file DOCUMENT ME!
-     * @throws TagException         DOCUMENT ME!
-     * @throws IOException          DOCUMENT ME!
-     * @throws TagNotFoundException DOCUMENT ME!
-     * @throws InvalidTagException  DOCUMENT ME!
-     */
-    public void read(RandomAccessFile file)
+    public void read(ByteBuffer buffer)
         throws TagException, IOException
     {
         int size;
-        if (seek(file) == false)
+        if (seek(buffer) == false)
         {
             throw new TagNotFoundException(getIdentifier() + " tag not found");
         }
-        logger.info("Reading tag from file");
+        logger.info("Reading tag");
+
         //Flags
-        byte flags = file.readByte();
+        byte flags = buffer.get();
         unsynchronization = (flags & MASK_V23_UNSYNCHRONIZATION) != 0;
-        extended = (flags & MASK_V23_EXTENDED_HEADER) != 0;
-        experimental = (flags & MASK_V23_EXPERIMENTAL) != 0;
+        extended          = (flags & MASK_V23_EXTENDED_HEADER) != 0;
+        experimental      = (flags & MASK_V23_EXPERIMENTAL) != 0;
         if (unsynchronization == true)
         {
-            logger.warning("this tag is unsynchronised");
+            logger.warning("Tag is unsynchronised");
         }
-        // Read the size, this is size of tag apart from tag header
+
+        // Read the size, this is size of tag not including  the tag header
         byte[] sizeBuffer = new byte[FIELD_TAG_SIZE_LENGTH];
-        file.read(sizeBuffer, 0, FIELD_TAG_SIZE_LENGTH);
+        buffer.get(sizeBuffer, 0, FIELD_TAG_SIZE_LENGTH);
         size = byteArrayToSize(sizeBuffer);
+
         //Extended Header
         if (extended == true)
         {
             // Int is 4 bytes.
-            int extendedHeaderSize = file.readInt();
+            int extendedHeaderSize = buffer.getInt();
             // Extended header without CRC Data
             if (extendedHeaderSize == TAG_EXT_HEADER_DATA_LENGTH)
             {
                 //Flag
-                byte extFlag = file.readByte();
+                byte extFlag = buffer.get();
                 crcDataFlag = (extFlag & MASK_V23_CRC_DATA_PRESENT) != 0;
                 if (crcDataFlag == true)
                 {
                     throw new InvalidTagException("CRC Data flag not set correctly.");
                 }
                 //Flag Byte (not used)
-                file.readByte();
+                buffer.get();
                 //Take padding and ext header size off size to be read
-                size = size - (file.readInt() + TAG_EXT_HEADER_LENGTH);
+                size = size - (buffer.getInt() + TAG_EXT_HEADER_LENGTH);
             }
             else if (extendedHeaderSize == TAG_EXT_HEADER_DATA_LENGTH + TAG_EXT_HEADER_CRC_LENGTH)
             {
                 //Flag
-                byte extFlag = file.readByte();
+                byte extFlag = buffer.get();
                 crcDataFlag = (extFlag & MASK_V23_CRC_DATA_PRESENT) != 0;
                 if (crcDataFlag == false)
                 {
                     throw new InvalidTagException("CRC Data flag not set correctly.");
                 }
                 //Flag Byte (not used)
-                file.readByte();
+                buffer.get();
                 //Take padding size of size to be read
-                size = size - (file.readInt() + TAG_EXT_HEADER_LENGTH + TAG_EXT_HEADER_CRC_LENGTH);
+                size = size - (buffer.getInt() + TAG_EXT_HEADER_LENGTH + TAG_EXT_HEADER_CRC_LENGTH);
                 //CRC Data
-                crcData = file.readInt();
+                crcData = buffer.getInt();
             }
             else
             {
                 throw new InvalidTagException("Invalid Extended Header Size.");
             }
         }
-        long filePointer = file.getFilePointer();
-        //Note if there was an extended header the size value has padding taken
-        //off so we dont search it.
-        readFrames(file, filePointer, size);
+
+        //Slice Buffer, so position markers tally with size (i.e do not include tagheader)
+        ByteBuffer bufferWithoutHeader = buffer.slice();
+        //We need to synchronize the buffer
+        if(unsynchronization==true)
+        {
+             bufferWithoutHeader=synchronize(bufferWithoutHeader);
+        }
+
+        readFrames(bufferWithoutHeader,size);
         logger.info("Loaded Frames,there are:" + frameMap.keySet().size());
 
     }
 
     /**
-     * Read frames from tag
+     * Read frames from byteBuffer
      */
-    protected void readFrames(RandomAccessFile file, long filePointer, int size)
+    protected void readFrames(ByteBuffer byteBuffer, int size)
         throws IOException
     {
         //Now start looking for frames
         ID3v23Frame next;
         frameMap = new LinkedHashMap();
+
         //Read the size from the Tag Header
         this.fileReadSize = size;
-        logger.finest("Start of frame body at:" + file.getFilePointer() + ",frames data size is:" + size);
+        logger.finest("Start of frame body at:" + byteBuffer.position() + ",frames data size is:" + size);
+
         // Read the frames until got to upto the size as specified in header or until
         // we hit an invalid frame identifier
-        while ((file.getFilePointer() - filePointer) < size)
+        while (byteBuffer.position()<size)
         {
             String id = null;
             try
             {
                 //Read Frame
-                logger.finest("looking for next frame at:" + file.getFilePointer());
-                next = new ID3v23Frame(file);
+                logger.finest("looking for next frame at:" + byteBuffer.position());
+                next = new ID3v23Frame(byteBuffer);
                 id = next.getIdentifier();
                 loadFrameIntoMap(id, next);
             }
-                //Found Empty Frame
+            //Found Empty Frame
             catch (EmptyFrameException ex)
             {
                 logger.warning("Empty Frame" + id);
                 this.emptyFrameBytes += ID3v23Frame.FRAME_HEADER_SIZE;
             }
-                //Problem trying to find frame
+            //Problem trying to find frame
             catch (InvalidFrameException ex)
             {
                 logger.warning("Invalid Frame" + id);
@@ -560,23 +487,116 @@ public class ID3v23Tag
     }
 
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @param tag DOCUMENT ME!
-     */
-    public void write(AbstractTag tag)
-    {
-        if (tag instanceof ID3v23Tag)
-        {
-            this.experimental = ((ID3v23Tag) tag).experimental;
-            this.extended = ((ID3v23Tag) tag).extended;
-            this.crcDataFlag = ((ID3v23Tag) tag).crcDataFlag;
-            this.paddingSize = ((ID3v23Tag) tag).paddingSize;
-            this.crcData = ((ID3v23Tag) tag).crcData;
-        }
-        super.write(tag);
-    }
+    /** Check if a byte array will require unsynchronization before being written as a tag.
+        * If the byte array contains any $FF bytes, then it will require unsynchronization.
+        *
+        * @param abySource the byte array to be examined
+        * @return true if unsynchronization is required, false otherwise
+        */
+       public static boolean requiresUnsynchronization(byte[] abySource)
+       {
+           for (int i=0; i < abySource.length-1; i++)
+           {
+               if (
+                  ((abySource[i] & MPEGFrameHeader.SYNC_BYTE1)   == MPEGFrameHeader.SYNC_BYTE1)
+               && ((abySource[i+1] & MPEGFrameHeader.SYNC_BYTE2) == MPEGFrameHeader.SYNC_BYTE2))
+               {
+                   logger.finest("Unsynchronisation required found bit at:"+i);
+                   return true;
+               }
+           }
+
+           return false;
+       }
+
+       /**
+        * Unsynchronize an array of bytes, this should only be called if the decision has already been made to
+        * unsynchronize the byte array
+        *
+        * In order to prevent a media player from incorrectly interpreting the contents of a tag, all $FF bytes
+        * followed by a byte with value >=224 must be followed by a $00 byte (thus, $FF $F0 sequences become $FF $00 $F0).
+        * Additionally because unsynchronisation is being applied any existing $FF $00 have to be converted to
+        * $FF $00 $00
+        *
+        * @param abySource a byte array to be unsynchronized
+        * @return a unsynchronized representation of the source
+        */
+       public static byte[] unsynchronize(byte[] abySource)
+       {
+           ByteArrayInputStream oBAIS = new ByteArrayInputStream(abySource);
+           ByteArrayOutputStream oBAOS = new ByteArrayOutputStream();
+
+           int count =0;
+           while (oBAIS.available() > 0)
+           {
+               int iVal = oBAIS.read();
+               count++;
+               oBAOS.write(iVal);
+               if ((iVal & MPEGFrameHeader.SYNC_BYTE1)== MPEGFrameHeader.SYNC_BYTE1)
+               {
+                   // if byte is $FF, we must check the following byte if there is one
+                   if (oBAIS.available() > 0)
+                   {
+                       oBAIS.mark(1);  // remember where we were, if we don't need to unsynchronize
+                       int iNextVal = oBAIS.read();
+                       if ((iNextVal & MPEGFrameHeader.SYNC_BYTE2) == MPEGFrameHeader.SYNC_BYTE2)
+                       {
+                           // we need to unsynchronize here
+                           logger.finest("Writing unsynchronisation bit at:"+count);
+                           oBAOS.write(0);
+                           oBAOS.write(iNextVal);
+                      }
+                      else if (iNextVal==0)
+                      {
+                           // we need to unsynchronize here
+                           logger.finest("Inserting zero unsynchronisation bit at:"+count);
+                           oBAOS.write(0);
+                           oBAOS.write(iNextVal);
+                       }
+                       else
+                       {
+                           oBAIS.reset();
+                       }
+                   }
+               }
+           }
+           // if we needed to unsynchronize anything, and this tag ends with 0xff, we have to append a zero byte,
+           // which will be removed on de-unsynchronization later
+           if ((abySource[abySource.length-1]& MPEGFrameHeader.SYNC_BYTE1) == MPEGFrameHeader.SYNC_BYTE1)
+           {
+               oBAOS.write(0);
+           }
+           return oBAOS.toByteArray();
+       }
+
+
+       /**
+        * Synchronize an array of bytes, this should only be called if it has been determined the tag is unsynchronised
+        *
+        * Any poattern sof the form $FF $00 should be replaced by $FF
+        *
+        * @param source a ByteBuffer to be unsynchronized
+        * @return a synchronized representation of the source
+        */
+       public static ByteBuffer synchronize(ByteBuffer source)
+       {
+           ByteArrayOutputStream oBAOS = new ByteArrayOutputStream();
+            while (source.hasRemaining())
+            {
+                int byteValue = source.get();
+                oBAOS.write(byteValue);
+                if ((byteValue & MPEGFrameHeader.SYNC_BYTE1)== MPEGFrameHeader.SYNC_BYTE1)
+                {
+                    // we are skipping if $00 byte
+                    int unsyncByteValue = source.get();
+                    if (unsyncByteValue != 0)
+                    {
+                        oBAOS.write(unsyncByteValue);
+                    }
+                }
+            }
+            return ByteBuffer.wrap(oBAOS.toByteArray());
+       }
 
     /**
      * Write tag to file
@@ -589,20 +609,32 @@ public class ID3v23Tag
     {
         logger.info("Writing tag to file");
 
-        /** Write Body Buffer */
-        ByteBuffer bodyBuffer = writeFramesToBuffer();
+        //Write Body Buffer
+        byte[] bodyByteBuffer = writeFramesToBuffer().toByteArray();
+        logger.info("bodybytebuffer:sizebeforeunsynchronisation:"+bodyByteBuffer.length);
 
-        /** @todo Calculate the CYC Data Check */
-        /** @todo Calculate UnSynchronisation */
-        /** @todo Reintroduce Extended Header */
-        /** Flags,currently we never do unsynchronisation or calculate the CRC
+        // Unsynchronize if required
+        if(requiresUnsynchronization(bodyByteBuffer))
+        {
+            unsynchronization = true;
+            bodyByteBuffer=unsynchronize(bodyByteBuffer);
+            logger.info("bodybytebuffer:sizeafterunsynchronisation:"+bodyByteBuffer.length);
+        }
+        else
+        {
+            unsynchronization = false;
+        }
+
+        /** @TODO Calculate the CYC Data Check */
+        /** @TODO Reintroduce Extended Header */
+        /** Flags,currently we never calculate the CRC
          *  and if we dont calculate them cant keep orig values. Tags are not
          *  experimental and we never create extended header to keep things simple.
          */
-        unsynchronization = false;
-        extended = false;
+
+        extended     = false;
         experimental = false;
-        crcDataFlag = false;
+        crcDataFlag  = false;
         /** Create Header Buffer,allocate maximum possible size for the header*/
         ByteBuffer headerBuffer = ByteBuffer.
             allocate(TAG_HEADER_LENGTH + TAG_EXT_HEADER_LENGTH + TAG_EXT_HEADER_CRC_LENGTH);
@@ -627,25 +659,10 @@ public class ID3v23Tag
             flagsByte |= MASK_V23_EXPERIMENTAL;
         }
         headerBuffer.put(flagsByte);
-        /** Calculate Tag Size including Padding */
+
         int sizeIncPadding = calculateTagSize(getSize(), (int) audioStartLocation);
-
-        /** Add padding as neccessary, if for example we have removed a number of
-         *  frames from a tag we will have to add extra padding. We need to ensure
-         *  there is enough room in the bodyBuffer to add the padding, if not we will
-         *  have to create a new Buffer and copy the contents. This problem occur if we
-         *  have deleted very large frames (such as APIC frames) from the tag meaning
-         *  the buffer is not big enough to cope with the original size of the tag */
         int padding = sizeIncPadding - getSize();
-        if((bodyBuffer.capacity() - bodyBuffer.position())<padding)
-        {
-            ByteBuffer newBodyBuffer = ByteBuffer.allocate(sizeIncPadding);
-            bodyBuffer.flip();
-            newBodyBuffer.put(bodyBuffer);
-            bodyBuffer = newBodyBuffer;
-        }
 
-        bodyBuffer.put(new byte[padding]);
         //Size As Recorded in Header, don't include the main header length
         headerBuffer.put(sizeToByteArray((int) sizeIncPadding - TAG_HEADER_LENGTH));
         /** Write Extended Header */
@@ -679,19 +696,19 @@ public class ID3v23Tag
             logger.finest("Adjusting Padding");
             adjustPadding(file, sizeIncPadding, audioStartLocation);
         }
+
         //Write changes to file
         FileChannel fc = new RandomAccessFile(file, "rw").getChannel();
         headerBuffer.flip();
         fc.write(headerBuffer);
-        bodyBuffer.flip();
-        fc.write(bodyBuffer);
+        fc.write(ByteBuffer.wrap(bodyByteBuffer));
+        fc.write(ByteBuffer.wrap(new byte[padding]));
         fc.close();
     }
 
     /**
-     * DOCUMENT ME!
+     * For representing the MP3File in an XML Format
      *
-     * @return DOCUMENT ME!
      */
     public void createStructure()
     {
@@ -706,9 +723,7 @@ public class ID3v23Tag
         MP3File.getStructureFormatter().addElement(TYPE_EXTENDED, this.extended);
         MP3File.getStructureFormatter().addElement(TYPE_EXPERIMENTAL, this.experimental);
         MP3File.getStructureFormatter().addElement(TYPE_COMPRESSION, this.compression);
-
         MP3File.getStructureFormatter().addElement(TYPE_CRCDATA, this.crcData);
-
         MP3File.getStructureFormatter().addElement(TYPE_PADDINGSIZE, this.paddingSize);
         MP3File.getStructureFormatter().closeHeadingElement(TYPE_HEADER);
         //Body
