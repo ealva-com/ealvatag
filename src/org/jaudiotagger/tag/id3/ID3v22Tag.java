@@ -116,9 +116,13 @@ public class ID3v22Tag
             {
                 frame = (AbstractID3v2Frame) o;
                 //Special case v24 TDRC (FRAME_ID_YEAR) may need converting to multiple frames
-                if (frame.getIdentifier().equals(ID3v24Frames.FRAME_ID_YEAR))
+                if (
+                    (frame.getIdentifier().equals(ID3v24Frames.FRAME_ID_YEAR))
+                    &&
+                    (frame.getBody() instanceof FrameBodyTDRC)
+                   )
                 {
-                    translateFrame(frame);
+                    translateFrame(frame);                    
                 }
                 else
                 {

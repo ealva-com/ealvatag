@@ -25,17 +25,14 @@
  */
 package org.jaudiotagger.tag.id3;
 
-import org.jaudiotagger.tag.AbstractTag;
-
 import java.io.*;
 import java.io.RandomAccessFile;
 
 import org.jaudiotagger.audio.mp3.*;
-import org.jaudiotagger.tag.TagException;
-import org.jaudiotagger.tag.TagNotFoundException;
-import org.jaudiotagger.tag.*;
+
 import org.jaudiotagger.tag.id3.framebody.FrameBodyTDRC;
-import org.jaudiotagger.tag.id3.valuepair.*;
+import org.jaudiotagger.tag.id3.framebody.FrameBodyUnsupported;
+
 
 import java.util.*;
 import java.nio.*;
@@ -67,9 +64,6 @@ public abstract class AbstractID3v2Tag
 
     protected static final int TAG_SIZE_INCREMENT = 100;
 
-    //The initial size of the buffer to be used when creating the tag
-    private static final int INITIAL_TAG_BODY_SIZE = 1000000;
-
     /**
      * Map of all frames for this tag
      */
@@ -94,7 +88,7 @@ public abstract class AbstractID3v2Tag
     protected int emptyFrameBytes = 0;
 
     /**
-     * DOCUMENT ME!
+     * Holds the size of the tag as reported by the tag header
      */
     protected static final String TYPE_FILEREADSIZE = "fileReadSize";
     protected int fileReadSize = 0;
@@ -113,11 +107,20 @@ public abstract class AbstractID3v2Tag
     }
 
     /**
+     * This constructor is used when a tag is created as a duplicate of another
+     * tag of the same type and version.
+     *
+     */
+    protected AbstractID3v2Tag(AbstractID3v2Tag copyObject)
+    {
+    }
+
+    /**
      * Copy primitives apply to all tags
      */
     protected void copyPrimitives(AbstractID3v2Tag copyObject)
     {
-        logger.info("copying Primitives");
+        logger.info("Copying Primitives");
         //Primitives type variables common to all IDv2 Tags
         this.duplicateFrameId = new String(copyObject.duplicateFrameId);
         this.duplicateBytes = copyObject.duplicateBytes;
@@ -127,43 +130,17 @@ public abstract class AbstractID3v2Tag
     }
 
     /**
-     * Copy frames from objects of same type
+     * Copy frames from another tag, needs implemanting by subclasses
      */
-    protected void copyFrames(AbstractID3v2Tag copyObject)
-    {
-        logger.info("Copying Frames,ther are:" + copyObject.frameMap.keySet().size());
-        /* Go through the tags frameset and create a new Frame based on the frame by
-         * calling the frames copy constructor v1.1 create a v2.2 frame from another v2.2 frame
-         * or create a v2.3 frame from another v2.3 frame.
-         */
-        Iterator iterator = copyObject.frameMap.keySet().iterator();
-        String identifier;
-        AbstractID3v2Frame newFrame;
-        while (iterator.hasNext())
-        {
-            identifier = (String) iterator.next();
-            newFrame = (AbstractID3v2Frame) ID3Tags.copyObject(copyObject.frameMap.get(identifier));
-            if (newFrame.getBody() != null)
-            {
-                this.frameMap.put(newFrame.getIdentifier(), newFrame);
-            }
-        }
-    }
+    protected  abstract void copyFrames(AbstractID3v2Tag copyObject);
 
-    /**
-     * This constructor is used when a tag is created as a duplicate of another
-     * tag of the same type and version.
-     *
-     * @todo have i understood this.
-     */
-    public AbstractID3v2Tag(AbstractID3v2Tag copyObject)
-    {
-    }
+
+
 
     /**
      * Returns the number of bytes which come from duplicate frames
      *
-     * @return DOCUMENT ME!
+     * @return the number of bytes which come from duplicate frames
      */
     public int getDuplicateBytes()
     {
@@ -174,7 +151,7 @@ public abstract class AbstractID3v2Tag
      * Return the string which holds the ids of all
      * duplicate frames.
      *
-     * @return DOCUMENT ME!
+     * @return  the string which holds the ids of all duplicate frames.
      */
     public String getDuplicateFrameId()
     {
@@ -182,9 +159,9 @@ public abstract class AbstractID3v2Tag
     }
 
     /**
-     * Returns the number of bytes which come from duplicate frames
+     * Returns the number of bytes which come from empty frames
      *
-     * @return DOCUMENT ME!
+     * @return the number of bytes which come from empty frames
      */
     public int getEmptyFrameBytes()
     {
@@ -192,9 +169,19 @@ public abstract class AbstractID3v2Tag
     }
 
     /**
-     * DOCUMENT ME!
+     * Return  byte count of invalid frames
      *
-     * @return DOCUMENT ME!
+     * @return byte count of invalid frames
+     */
+    public int getInvalidFrameBytes()
+    {
+        return invalidFrameBytes;
+    }
+
+    /**
+     * Returns the tag size as reported by the tag header
+     *
+     * @return the tag size as reported by the tag header
      */
     public int getFileReadBytes()
     {
@@ -202,11 +189,101 @@ public abstract class AbstractID3v2Tag
     }
 
     /**
+     * Return whether tag has frame with this identifier
+     *
+     * Warning the match is only done against the identifier so if a tag contains a frame with an unsuported body
+     * but happens to have an identifier that is valid for another version of the tag it will return true
+     *
+     * @param identifier frameId to lookup
+     * @return true if tag has frame with this identifier
+     */
+    public boolean hasFrame(String identifier)
+    {
+        return frameMap.containsKey(identifier);
+    }
+
+
+    /**
+     * Return whether tag has frame with this identifier and a related body. This is required to protect
+     * against circumstances whereby a tag contains a frame with an unsuported body
+     * but happens to have an identifier that is valid for another version of the tag which it has been converted to
+     *
+     * e.g TDRC is an invalid frame in a v23 tag but if somehow a v23tag has been created by another application
+     * with a TDRC frame we construct an UnsupportedFrameBody to hold it, then this library constructs a
+     * v24 tag, it will contain a frame with id TDRC but it will not have the expected frame body it is not really a
+     * TDRC frame.
+     *
+     * @param identifier frameId to lookup
+     * @return true if tag has frame with this identifier
+     */
+    public boolean hasFrameAndBody(String identifier)
+    {
+        if(hasFrame(identifier))
+        {
+            Object o = getFrame(identifier);
+            if(o instanceof AbstractID3v2Frame)
+            {
+                if(((AbstractID3v2Frame)o).getBody() instanceof FrameBodyUnsupported)
+                {
+                    return false;
+                }
+                return true;
+            }
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Return whether tag has frame starting
+     * with this identifier
+     *
+     * Warning the match is only done against the identifier so if a tag contains a frame with an unsuported body
+     * but happens to have an identifier that is valid for another version of the tag it will return true
+
+     * @param identifier start of frameId to lookup
+     * @return tag has frame starting with this identifier
+     */
+    public boolean hasFrameOfType(String identifier)
+    {
+        Iterator iterator = frameMap.keySet().iterator();
+        String key;
+        boolean found = false;
+        while (iterator.hasNext() && !found)
+        {
+            key = (String) iterator.next();
+            if (key.startsWith(identifier))
+            {
+                found = true;
+            }
+        }
+        return found;
+    }
+
+
+    /**
+     * For single frames return the frame in this tag with given identifier if it exists, if multiple frames
+     * exist with the same identifier it will return a list containing all the frames with this identifier
+     *
+     * Warning the match is only done against the identifier so if a tag contains a frame with an unsuported body
+     * but happens to have an identifier that is valid for another version of the tag it will be returned.
+     *
+     * @param identifier is a ID3Frame identifier
+     * @return matching frame, or list of matching frames
+     */
+    public Object getFrame(String identifier)
+    {
+        return frameMap.get(identifier);
+    }
+
+     /**
      * Add a frame to this tag
      *
-     * @param frame DOCUMENT ME!
-     * @todo needs to be overridden, shouldn't be able to add a frame of
-     * one version to a tag of another version.
+     * @param frame the frame to add
+     *
+     * Warning if frame(s) already exists for this identifier thay are overwritten
+      *
+     * @TODO needs to ensure do not add an invalid frame for this tag
      */
     public void setFrame(AbstractID3v2Frame frame)
     {
@@ -214,7 +291,11 @@ public abstract class AbstractID3v2Tag
     }
 
     /**
-     * Used for setting multiple frames
+     * Used for setting multiple frames for a single frame Identifier
+     *
+     * Warning if frame(s) already exists for this identifier thay are overwritten
+     *
+     * @TODO needs to ensure do not add an invalid frame for this tag
      */
     public void setFrame(String identifier, ArrayList multiFrame)
     {
@@ -222,20 +303,10 @@ public abstract class AbstractID3v2Tag
     }
 
     /**
-     * Return frame in this tag with given identifier if it exists.
+     * Return the number of frames in this tag of a particular type, multiple frames
+     * of the same time will only be counted once
      *
-     * @param identifier DOCUMENT ME!
-     * @return DOCUMENT ME!
-     */
-    public Object getFrame(String identifier)
-    {
-        return frameMap.get(identifier);
-    }
-
-    /**
-     * Return the number of frames in this tag
-     *
-     * @return DOCUMENT ME!
+     * @return a count of different frames
      */
     public int getFrameCount()
     {
@@ -254,6 +325,9 @@ public abstract class AbstractID3v2Tag
      * can be more than one which is useful if trying to retrieve
      * similar frames e.g TIT1,TIT2,TIT3 ... and dont know exaclty
      * which ones there are.
+     *
+     * Warning the match is only done against the identifier so if a tag contains a frame with an unsuported body
+     * but happens to have an identifier that is valid for another version of the tag it will be returned.
      *
      * @param identifier DOCUMENT ME!
      * @return DOCUMENT ME!
@@ -274,22 +348,15 @@ public abstract class AbstractID3v2Tag
         return result.iterator();
     }
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @return DOCUMENT ME!
-     */
-    public int getInvalidFrameBytes()
-    {
-        return invalidFrameBytes;
-    }
+
 
 
     /**
      * Delete Tag
      *
-     * @param file DOCUMENT ME!
-     * @throws IOException DOCUMENT ME!
+     * @param file to delete the tag from
+     * @throws IOException if problem accessing the file
+     *
      * @todo should clear all data and preferably recover lost space.
      */
     public void delete(RandomAccessFile file)
@@ -314,8 +381,8 @@ public abstract class AbstractID3v2Tag
     /**
      * Is this tag equivalent to another
      *
-     * @param obj DOCUMENT ME!
-     * @return DOCUMENT ME!
+     * @param obj to test for equivalence
+     * @return true if they are equivalent
      */
     public boolean equals(Object obj)
     {
@@ -331,44 +398,11 @@ public abstract class AbstractID3v2Tag
         return super.equals(obj);
     }
 
-    /**
-     * Return whether tag has frame with this identifier
-     *
-     * @param identifier DOCUMENT ME!
-     * @return DOCUMENT ME!
-     */
-    public boolean hasFrame(String identifier)
-    {
-        return frameMap.containsKey(identifier);
-    }
-
-    /**
-     * Return whether tag has frame starting
-     * with this identifier
-     *
-     * @param identifier DOCUMENT ME!
-     * @return DOCUMENT ME!
-     */
-    public boolean hasFrameOfType(String identifier)
-    {
-        Iterator iterator = frameMap.keySet().iterator();
-        String key;
-        boolean found = false;
-        while (iterator.hasNext() && !found)
-        {
-            key = (String) iterator.next();
-            if (key.startsWith(identifier))
-            {
-                found = true;
-            }
-        }
-        return found;
-    }
 
     /**
      * Return the frames in the order they were added
      *
-     * @return DOCUMENT ME!
+     * @return and iterator of the frmaes/list of multi value frames
      */
     public Iterator iterator()
     {
@@ -376,9 +410,9 @@ public abstract class AbstractID3v2Tag
     }
 
     /**
-     * Remove frame with this identifier from tag
+     * Remove frame(s) with this identifier from tag
      *
-     * @param identifier DOCUMENT ME!
+     * @param identifier frameId to look for
      */
     public void removeFrame(String identifier)
     {
@@ -386,10 +420,31 @@ public abstract class AbstractID3v2Tag
     }
 
     /**
+     * Remove all frame(s) which have an unsupported body, in other words
+     * remove all frames that are not part of the standard frameset for
+     * this tag
+     */
+    public void removeUnsupportedFrames()
+    {
+        for(Iterator i =iterator();i.hasNext();)
+        {
+            Object o = i.next();
+            if(o instanceof AbstractID3v2Frame)
+            {
+                if(((AbstractID3v2Frame)o).getBody() instanceof FrameBodyUnsupported)
+                {
+                    logger.finest("Removing frame"+((AbstractID3v2Frame)o).getIdentifier());
+                    i.remove();
+                }
+            }
+        }
+    }
+
+    /**
      * Remove any frames starting with this
      * identifier from tag
      *
-     * @param identifier DOCUMENT ME!
+     * @param identifier start of frameId to look for
      */
     public void removeFrameOfType(String identifier)
     {
@@ -401,21 +456,29 @@ public abstract class AbstractID3v2Tag
         }
     }
 
-    /**
-     * Return frames as a collection
-     *
-     * @return DOCUMENT ME!
-     */
-    public java.util.Collection values()
-    {
-        return frameMap.values();
-    }
 
+    /**
+     *
+     * @param file
+     * @param audioStartByte
+     * @throws IOException
+     *
+     * @TODO should be abstract
+     *
+     */
     public void write(File file, long audioStartByte)
         throws IOException
     {
     }
 
+    /**
+     *
+     * @param file
+     * @throws IOException
+     *
+     * @TODO should be abstract
+     *
+     */
     public void write(RandomAccessFile file)
         throws IOException
     {
@@ -424,8 +487,8 @@ public abstract class AbstractID3v2Tag
     /**
      * Read Tag Size from byteArray in format specified in spec and convert to int.
      *
-     * @param buffer DOCUMENT ME!
-     * @return DOCUMENT ME!
+     * @param buffer converted into ID3 Format
+     * @return size as int
      */
     protected int byteArrayToSize(byte[] buffer)
     {
@@ -439,8 +502,8 @@ public abstract class AbstractID3v2Tag
     /**
      * Write Tag Size to Byte array to format as required in Tag Header.
      *
-     * @param size DOCUMENT ME!
-     * @return DOCUMENT ME!
+     * @param size to convert into ID3 Format
+     * @return size in ID3 Format
      */
     protected byte[] sizeToByteArray(int size)
     {
@@ -515,12 +578,11 @@ public abstract class AbstractID3v2Tag
      *                    ID3v2 tag will fit. A paddingSize of zero will create a padding
      *                    length exactly equal to the tag size.
      * @param file        The file to adjust the padding length of
-     * @return DOCUMENT ME!
+
      * @throws FileNotFoundException if the file exists but is a directory
      *                               rather than a regular file or cannot be opened for any other
      *                               reason
      * @throws IOException           on any I/O error
-     * @throws TagException          on any exception generated by this library.
      */
     public void adjustPadding(File file, int paddingSize, long audioStart)
         throws FileNotFoundException, IOException
@@ -579,6 +641,7 @@ public abstract class AbstractID3v2Tag
             //Two different frames both converted to TDRCFrames
             if(newFrame.getBody() instanceof FrameBodyTDRC)
             {
+                logger.finest("Modifying frame in map:"+newFrame.getIdentifier());
                 FrameBodyTDRC body = (FrameBodyTDRC) firstFrame.getBody();
                 FrameBodyTDRC newBody = (FrameBodyTDRC) newFrame.getBody();
                 //Just add the data to the frame
@@ -607,6 +670,7 @@ public abstract class AbstractID3v2Tag
         else
         //Just add frame to map
         {
+            logger.finest("Adding frame to map:"+newFrame.getIdentifier());
             frameMap.put(newFrame.getIdentifier(), newFrame);
         }
     }
@@ -614,63 +678,62 @@ public abstract class AbstractID3v2Tag
     /**
      * Decides what to with the frame that has just be read from file.
      * If the frame is an allowable duplicate frame and is a duplicate we add all
-     * frames into an ArrayList and add the Arraylist to the hashmap. if not allowed
+     * frames into an ArrayList and add the Arraylist to the hashMap. if not allowed
      * to be duplictae we store bytes in the duplicateBytes variable.
      */
-    protected void loadFrameIntoMap(String id, AbstractID3v2Frame next)
+    protected void loadFrameIntoMap(String frameId, AbstractID3v2Frame next)
     {
         if (
-            (ID3v24Frames.getInstanceOf().isMultipleAllowed(id)) ||
-            (ID3v23Frames.getInstanceOf().isMultipleAllowed(id)) ||
-            (ID3v22Frames.getInstanceOf().isMultipleAllowed(id))
+            (ID3v24Frames.getInstanceOf().isMultipleAllowed(frameId)) ||
+            (ID3v23Frames.getInstanceOf().isMultipleAllowed(frameId)) ||
+            (ID3v22Frames.getInstanceOf().isMultipleAllowed(frameId))
         )
         {
             //If a frame already exists of this type
-            if (frameMap.containsKey(id))
+            if (frameMap.containsKey(frameId))
             {
-                Object o = frameMap.get(id);
+                Object o = frameMap.get(frameId);
                 if (o instanceof ArrayList)
                 {
                     ArrayList multiValues = (ArrayList) o;
                     multiValues.add(next);
-                    logger.finer("Adding Multi Frame(1)" + id);
+                    logger.finer("Adding Multi Frame(1)" + frameId);
                 }
                 else
                 {
                     ArrayList multiValues = new ArrayList();
                     multiValues.add(o);
                     multiValues.add(next);
-                    frameMap.put(id, multiValues);
-                    logger.finer("Adding Multi Frame(2)" + id);
+                    frameMap.put(frameId, multiValues);
+                    logger.finer("Adding Multi Frame(2)" + frameId);
                 }
             }
             else
             {
-                logger.finer("Adding Multi FrameList(3)" + id);
-                frameMap.put(id, next);
+                logger.finer("Adding Multi FrameList(3)" + frameId);
+                frameMap.put(frameId, next);
             }
         }
-        //If duplicate frame just stores it somewhere else @todo ?
-        else if (frameMap.containsKey(id))
+        //If duplicate frame just stores it somewhere else
+        else if (frameMap.containsKey(frameId))
         {
-            logger.warning("Duplicate Frame" + id);
-            this.duplicateFrameId += (id + "; ");
-            this.duplicateBytes += ((AbstractID3v2Frame) frameMap.get(id)).getSize();
+            logger.warning("Duplicate Frame" + frameId);
+            this.duplicateFrameId += (frameId + "; ");
+            this.duplicateBytes += ((AbstractID3v2Frame) frameMap.get(frameId)).getSize();
         }
         else
         {
-            logger.finer("Adding Frame" + id);
-            frameMap.put(id, next);
+            logger.finer("Adding Frame" + frameId);
+            frameMap.put(frameId, next);
         }
-
     }
 
     /**
-     * Return frame size based upon the sizes of the tags rather than the physical
+     * Return tag size based upon the sizes of the tags rather than the physical
      * no of bytes between start of ID3Tag and start of Audio Data.Should be extended
      * by subclasses to incude header.
      *
-     * @return DOCUMENT ME!
+     * @return size of the tag
      */
     public int getSize()
     {
@@ -699,17 +762,7 @@ public abstract class AbstractID3v2Tag
     }
 
     /**
-     * Write all the frames to the buffer, we do not know the size of the buffer required until we call the framebodies
-     * write method because the size required depends on the data and what encoding is required,
-     * and the buffer cannot be resized so how do we solve this problem.
-     * <p/>
-     * We could do a psuedo write first to correctly calculate the size before writing to the buffer but performance
-     * would be poor, or we could allocate a large Buffer to start with. Unfortunately there is no guaranteed upper limit
-     * for example if a user add alots of APIC Picture frames with very large pictures the tags could run to several
-     * megabytes but most tags will be much smaller.
-     * <p/>
-     * We take a pragmatic approach, we allocate a reasonably large buffer which willl be ok for most cases, but we catch
-     * the exception that could occur and if so we increase the size of the buffer and retry.
+     * Write all the frames to the byteArrayOutputStream
      *
      * @return ByteBuffer Contains all the frames written within the tag ready for writing to file
      * @throws IOException
@@ -718,16 +771,7 @@ public abstract class AbstractID3v2Tag
     {
         //Increases as is required
         ByteArrayOutputStream bodyBuffer = new ByteArrayOutputStream();
-        this.write(bodyBuffer);
-        return bodyBuffer;
-    }
 
-    /**
-     * Write tag frames to buffer, must be overidden by superclasses
-     */
-    public void write(ByteArrayOutputStream bodyBuffer)
-        throws IOException
-    {
         //Write all frames, defaults to the order in which they were loaded, newly
         //created frames will be at end of tag.
         AbstractID3v2Frame frame;
@@ -751,7 +795,11 @@ public abstract class AbstractID3v2Tag
                 }
             }
         }
+
+        return bodyBuffer;
     }
+
+
 
     public void createStructure()
     {
@@ -793,6 +841,5 @@ public abstract class AbstractID3v2Tag
             }
         }
         MP3File.getStructureFormatter().closeHeadingElement(TYPE_BODY);
-
     }
 }

@@ -137,13 +137,16 @@ public class ID3v23Tag
         }
     }
 
-    /**
-     * Copy frames from one tag into a v2.3 tag
-     */
+   /**
+    * Copy frames from one tag into a v2.3 tag
+    *
+    * @param copyObject
+    */
     protected void copyFrames(AbstractID3v2Tag copyObject)
     {
-        logger.info("Copying Frames,there are:" + copyObject.frameMap.keySet().size());
+        logger.info("Copying Frames,there are:" + copyObject.frameMap.keySet().size() + " different types");
         frameMap = new LinkedHashMap();
+
         //Copy Frames that are a valid 2.3 type
         Iterator iterator = copyObject.frameMap.keySet().iterator();
         AbstractID3v2Frame frame;
@@ -156,10 +159,17 @@ public class ID3v23Tag
             {
                 frame = (AbstractID3v2Frame) o;
                 logger.info("Frame is:"+frame.getIdentifier());
-                //Special case v24 tdrc may need converting to multiple frames
-                if (frame.getIdentifier().equals(ID3v24Frames.FRAME_ID_YEAR))
+
+                //Special case v24 tdrc may need converting to multiple frames, only convert when
+                //it is a valid tdrc to cope with tdrc being added illegally to a v23 tag which is then
+                //converted to v24 tag and back again.
+                if (
+                    (frame.getIdentifier().equals(ID3v24Frames.FRAME_ID_YEAR))
+                    &&
+                    (frame.getBody() instanceof FrameBodyTDRC)
+                   )
                 {
-                    translateFrame(frame);
+                    translateFrame(frame);                    
                 }
                 //Usual Case
                 else
@@ -573,7 +583,7 @@ public class ID3v23Tag
        /**
         * Synchronize an array of bytes, this should only be called if it has been determined the tag is unsynchronised
         *
-        * Any poattern sof the form $FF $00 should be replaced by $FF
+        * Any pattern sof the form $FF $00 should be replaced by $FF
         *
         * @param source a ByteBuffer to be unsynchronized
         * @return a synchronized representation of the source
