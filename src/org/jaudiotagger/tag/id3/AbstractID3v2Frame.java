@@ -133,13 +133,12 @@ public abstract class AbstractID3v2Frame
 
 
     /**
-     * Read the frame body from the specified file.
+     * Read the frame body from the specified file via the buffer
      *
      * @param identifier DOCUMENT ME!
      * @param byteBuffer       DOCUMENT ME!
      * @return DOCUMENT ME!
      * @throws IOException         DOCUMENT ME!
-     * @throws InvalidTagException DOCUMENT ME!
      */
     protected AbstractID3v2FrameBody readBody(String identifier, ByteBuffer byteBuffer, int frameSize)
         throws InvalidFrameException, IOException

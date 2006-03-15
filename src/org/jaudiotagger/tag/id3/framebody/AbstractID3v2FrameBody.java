@@ -147,7 +147,6 @@ public abstract class AbstractID3v2FrameBody
      *
      * @param byteBuffer file to read
      * @throws IOException         on any I/O error
-     * @throws InvalidTagException if there is any error in the data format.
      */
     public void read(ByteBuffer byteBuffer)
         throws IOException, InvalidFrameException

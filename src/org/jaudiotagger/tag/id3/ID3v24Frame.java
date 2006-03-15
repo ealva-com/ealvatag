@@ -271,7 +271,6 @@ public class ID3v24Frame
      *
      * @param byteBuffer DOCUMENT ME!
      * @throws IOException         DOCUMENT ME!
-     * @throws InvalidTagException DOCUMENT ME!
      */
     public ID3v24Frame(ByteBuffer byteBuffer)
         throws IOException, InvalidFrameException
@@ -300,7 +299,6 @@ public class ID3v24Frame
      *
      * @param byteBuffer DOCUMENT ME!
      * @throws IOException         DOCUMENT ME!
-     * @throws InvalidTagException DOCUMENT ME!
      */
     public void read(ByteBuffer byteBuffer)
         throws IOException, InvalidFrameException

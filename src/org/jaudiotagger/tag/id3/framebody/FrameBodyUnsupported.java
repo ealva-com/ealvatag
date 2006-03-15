@@ -38,7 +38,7 @@ public class FrameBodyUnsupported extends AbstractID3v2FrameBody
 {
 
     /**
-     * Becuase used by any unknown frame identifier varies
+     * Because used by any unknown frame identifier varies
      */
     private String identifier = "";
 

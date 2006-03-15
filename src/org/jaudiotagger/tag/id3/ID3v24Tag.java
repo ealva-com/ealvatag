@@ -249,7 +249,7 @@ public class ID3v24Tag
      */
     protected void copyFrames(AbstractID3v2Tag copyObject)
     {
-        logger.info("Copying Frames,there are:" + copyObject.frameMap.keySet().size());
+        logger.info("Copying Frames,there are:" + copyObject.frameMap.keySet().size() + " different types");
         frameMap = new LinkedHashMap();
         //Copy Frames that are a valid 2.4 type
         Iterator iterator = copyObject.frameMap.keySet().iterator();
@@ -279,11 +279,13 @@ public class ID3v24Tag
                     newFrame = new ID3v24Frame(frame);
                     if (newFrame.getBody() != null)
                     {
+                        logger.finest("Adding frame to list:"+newFrame.getIdentifier());
                         multiFrame.add(newFrame);
                     }
                 }
                 if (newFrame != null)
                 {
+                    logger.finest("Adding multi frame list to map:"+newFrame.getIdentifier());
                     frameMap.put(newFrame.getIdentifier(), multiFrame);
                 }
             }

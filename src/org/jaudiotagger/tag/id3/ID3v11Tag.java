@@ -122,44 +122,45 @@ public class ID3v11Tag
                 id3tag = new ID3v24Tag(mp3tag);
                 ID3v24Frame frame;
                 String text;
-                if (id3tag.hasFrame("TIT2"))
+                if (id3tag.hasFrame(ID3v24Frames.FRAME_ID_TITLE))
                 {
-                    frame = (ID3v24Frame) id3tag.getFrame("TIT2");
+                    frame = (ID3v24Frame) id3tag.getFrame(ID3v24Frames.FRAME_ID_TITLE);
                     text = (String) ((FrameBodyTIT2) frame.getBody()).getText();
-                    this.title = ID3Tags.truncate(text, 30);
+                    this.title = ID3Tags.truncate(text, FIELD_TITLE_LENGTH);
                 }
-                if (id3tag.hasFrame("TPE1"))
+                if (id3tag.hasFrame(ID3v24Frames.FRAME_ID_ARTIST))
                 {
-                    frame = (ID3v24Frame) id3tag.getFrame("TPE1");
+                    frame = (ID3v24Frame) id3tag.getFrame(ID3v24Frames.FRAME_ID_ARTIST);
                     text = (String) ((FrameBodyTPE1) frame.getBody()).getText();
-                    this.artist = ID3Tags.truncate(text, 30);
+                    this.artist = ID3Tags.truncate(text, FIELD_ARTIST_LENGTH);
                 }
-                if (id3tag.hasFrame("TALB"))
+                if (id3tag.hasFrame(ID3v24Frames.FRAME_ID_ALBUM))
                 {
-                    frame = (ID3v24Frame) id3tag.getFrame("TALB");
+                    frame = (ID3v24Frame) id3tag.getFrame(ID3v24Frames.FRAME_ID_ALBUM);
                     text = (String) ((FrameBodyTALB) frame.getBody()).getText();
-                    this.album = ID3Tags.truncate(text, 30);
+                    this.album = ID3Tags.truncate(text, FIELD_ALBUM_LENGTH);
                 }
-                if (id3tag.hasFrame("TDRC"))
+                if (id3tag.hasFrame(ID3v24Frames.FRAME_ID_YEAR))
                 {
-                    frame = (ID3v24Frame) id3tag.getFrame("TDRC");
+                    frame = (ID3v24Frame) id3tag.getFrame(ID3v24Frames.FRAME_ID_YEAR);
                     text = (String) ((FrameBodyTDRC) frame.getBody()).getText();
-                    this.year = ID3Tags.truncate(text, 4);
+                    this.year = ID3Tags.truncate(text, FIELD_YEAR_LENGTH);
                 }
-                if (id3tag.hasFrameOfType("COMM"))
+
+                if (id3tag.hasFrame(ID3v24Frames.FRAME_ID_COMMENT))
                 {
-                    Iterator iterator = id3tag.getFrameOfType("COMM");
+                    Iterator iterator = id3tag.getFrameOfType(ID3v24Frames.FRAME_ID_COMMENT);
                     text = "";
                     while (iterator.hasNext())
                     {
                         frame = (ID3v24Frame) iterator.next();
                         text += (((FrameBodyCOMM) frame.getBody()).getText() + " ");
                     }
-                    this.comment = ID3Tags.truncate(text, 28);
+                    this.comment = ID3Tags.truncate(text, FIELD_COMMENT_LENGTH);
                 }
-                if (id3tag.hasFrame("TCON"))
+                if (id3tag.hasFrame(ID3v24Frames.FRAME_ID_GENRE))
                 {
-                    frame = (ID3v24Frame) id3tag.getFrame("TCON");
+                    frame = (ID3v24Frame) id3tag.getFrame(ID3v24Frames.FRAME_ID_GENRE);
                     text = (String) ((FrameBodyTCON) frame.getBody()).getText();
                     try
                     {
@@ -169,9 +170,9 @@ public class ID3v11Tag
                     {
                     }
                 }
-                if (id3tag.hasFrame("TRCK"))
+                if (id3tag.hasFrame(ID3v24Frames.FRAME_ID_TRACK))
                 {
-                    frame = (ID3v24Frame) id3tag.getFrame("TRCK");
+                    frame = (ID3v24Frame) id3tag.getFrame(ID3v24Frames.FRAME_ID_TRACK);
                     text = (String) ((FrameBodyTRCK) frame.getBody()).getText();
                     try
                     {
