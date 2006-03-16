@@ -825,8 +825,9 @@ public class MPEGFrameHeader
     {
         int position =  bb.position();
         bb.get(header,0,HEADER_SIZE);
-        MPEGFrameHeader frameHeader = new MPEGFrameHeader(header);
         bb.position(position);
+        MPEGFrameHeader frameHeader = new MPEGFrameHeader(header);
+
         return frameHeader;
     }
 
