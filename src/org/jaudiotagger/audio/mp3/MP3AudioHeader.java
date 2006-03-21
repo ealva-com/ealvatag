@@ -186,6 +186,19 @@ public final class MP3AudioHeader extends AbstractAudioHeader
             syncFound = false;
             throw iox;
         }
+        finally
+        {
+            if (fc != null)
+            {
+                fc.close();
+            }
+
+            if (fis != null)
+            {
+                fis.close();
+            } 
+        }
+
         //Return to start of audio header
         if(MP3File.logger.isLoggable(Level.FINEST))
         {

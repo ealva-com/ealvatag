@@ -174,11 +174,30 @@ public class MP3File extends org.jaudiotagger.audio.AbstractAudioFile
         int MINIMUM_SIZE_OF_ID3TAG = 100;
         if(startByte >= MINIMUM_SIZE_OF_ID3TAG)
         {
-            final FileInputStream     fis = new FileInputStream(file);
-            final FileChannel fc = fis.getChannel();
-            //Read into Byte Buffer
-            ByteBuffer  bb = ByteBuffer.allocate(startByte);
-            fc.read(bb);
+            FileInputStream     fis = null;
+            FileChannel         fc  = null;
+            ByteBuffer  bb          = null;
+            try
+            {
+                fis = new FileInputStream(file);
+                fc  = fis.getChannel();
+                //Read into Byte Buffer
+                bb = ByteBuffer.allocate(startByte);
+                fc.read(bb);
+            }
+            finally
+            {
+                if (fc != null)
+                {
+                    fc.close();
+                }
+
+                if (fis != null)
+                {
+                    fis.close();
+                }
+            }
+
             bb.rewind();
 
             if ((loadOptions & LOAD_IDV2TAG) != 0)
