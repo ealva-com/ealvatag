@@ -17,7 +17,7 @@ JAudiotagger project will eventually become a Java API for as many audio tagging
  build.bat            :wrapper to run build script on Windows
  
  jaudiotagger.iml     :Intellij Jetbrains Module
- jaudiotagger.iml     :Intellij Jetbrains Project
+ jaudiotagger.ipr     :Intellij Jetbrains Project
  
  jaudiotagger.LICENSE :license file
  
