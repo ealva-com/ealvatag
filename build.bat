@@ -1,0 +1,1 @@
+ant -propertyfile build.properties %1

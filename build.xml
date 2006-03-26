@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project name="jaudiotagger" default="dist" basedir=".">
+  
+  	<!-- Compiler options -->
+	<property name="compiler.debug" value="on"/>
+	<property name="compiler.generate.no.warnings" value="off"/>
+	<property name="compiler.args" value=""/>
+	<property name="compiler.max.memory" value="128m"/>
+	<property name="compiler.verbose" value="true"/>
+	
+	<!-- Ignore these always -->
+	<patternset id="ignored.files">
+	<exclude name="**/CVS/**"/>
+	<exclude name="**/SCCS/**"/>
+	<exclude name="**/RCS/**"/>
+	<exclude name="**/rcs/**"/>
+	<exclude name="**/.DS_Store/**"/>
+	<exclude name="**/.svn/**"/>
+	</patternset>
+	
+	<!-- Any non java files that we need to deploy -->
+	<patternset id="compiler.resources">
+	<include name="**/?*.properties"/>
+	<include name="**/?*.xml"/>
+	<include name="**/?*.html"/>
+	<include name="**/?*.dtd"/>
+	<include name="**/?*.tld"/>
+	<include name="**/?*.gif"/>
+	<include name="**/?*.png"/>
+	<include name="**/?*.jpeg"/>
+	<include name="**/?*.jpg"/>
+	</patternset>
+	
+
+	<!-- Have been using this version of java for compilation,could use to force javac compilation -->
+	<property name="jdk.home" value="${jdk.home.java_version_1.4.2_03}"/>	
+	<property name="jdk.classpath" value="jdk.classpath.java_version_1.4.2_03"/>	
+	
+	<!-- Output dirs -->
+	<property name="output.dir"     value="${basedir}/classes"/>
+	<property name="testoutput.dir" value="${basedir}/classes"/>
+	<property name="dist.dir"       value="${basedir}/dist"/>
+	<property name="javadoc.dir"    value="${basedir}/www/javadoc"/>
+	
+	<property name="jar.file"    value="${dist.dir}/jaudiotagger.jar"/>
+	<property name="jarsrc.file" value="${dist.dir}/jaudiotaggersrc.jar"/>
+	
+	<!-- Paths to be included in compilation bootclasspath -->	
+	<path id="bootclasspath">
+	</path>
+	
+	<!-- Additional classpath required in compilation  -->		
+	<path id="classpath">		
+	</path>	
+	
+	<!-- Ignore these in all compilations -->
+	<patternset id="excluded.from.compilation">
+		<patternset refid="ignored.files"/>
+	</patternset>	
+	
+	<!-- src directory relative to base -->
+	<path id="sourcepath">
+		<dirset dir="${basedir}">
+			<include name="src"/>
+		</dirset>
+	</path>
+		
+	<target name="share" depends="dist" description="Copy the distribution to be used by another project">
+		<echo message="Copying to share dir" />
+		<copy file="${jar.file}" todir="${release.dir}"/>	
+		<copy file="${jarsrc.file}" todir="${release.dir}"/>	 	 
+	</target>
+	
+	<target name="dist" depends="build.jar,build.jarsrc" description="Create distribution"/>
+	
+	<target name="buildjavadoc" description="Build Java API Documentation" depends="compile">  
+		<javadoc 
+		packagenames="org.jaudiotagger.*"
+		maxmemory="128m" 
+		classpath="${classpath}" 		
+		sourcepath="${basedir}/src" 
+		destdir="${javadoc.dir}" 
+		use="true" 	 
+		Version="true" >
+		<doctitle><![CDATA[<h1>Jaudiotagger api</h1>]]></doctitle>
+		</javadoc>	
+	</target>
+
+	<target name="build.jar" depends="compile" description="Jar up the compiled production code jaudiotagger">
+		<echo message="Creating jaudiotagger.jar" />
+		<jar jarfile="${jar.file}" update="false" basedir="${output.dir}"> </jar>      	  
+	</target>
+
+	<target name="build.jarsrc" depends="compile" description="Jar up the jaudiotagger source code">
+		<echo message="Creating jaudiotaggersrc.jar" />
+		<jar jarfile="${jarsrc.file}" update="false" basedir="${basedir}/src" includes="org/jaudiotagger/**/*.java"></jar>      	  
+	</target>
+	
+	<target name="compile" depends="compile.production,compile.tests" description="Compile all jaudiotagger code"/>
+
+	<target name="compile.production" description="Compile production classes">
+	
+		<!-- Recreate destination dir if missing -->
+		<mkdir dir="${output.dir}"/>
+		
+		<!-- Compile the source to be compatible with 1.4 ( no 1.5 features used)-->
+		<javac destdir="${output.dir}"
+			verbose="${compiler.verbose}"
+			debug="${compiler.debug}"
+			nowarn="${compiler.generate.no.warnings}"
+			memoryMaximumSize="${compiler.max.memory}"
+			source="1.4"
+			fork="true">
+			<compilerarg line="${compiler.args}"/>
+			<bootclasspath refid="bootclasspath"/>
+			<classpath refid="classpath"/>
+			<src refid="sourcepath"/>
+		</javac>
+	
+		<!-- Copy over any non java resources -->
+		<copy todir="${output.dir}">
+			<fileset dir="${basedir}/src">
+			<patternset refid="compiler.resources"/>
+			<type type="file"/>
+			</fileset>
+		</copy>
+	</target>
+	
+	<!-- Junit tests:for when we write some !-->
+	<target name="compile.tests" depends="compile.production" description="Compile test classes" unless="skip.tests"/>
+	
+	<!-- Clean -->
+	<target name="clean" description="Cleanup module">
+		<delete dir="${output.dir}"/>
+		<delete dir="${testoutput.dir}"/>
+	</target>
+</project>
