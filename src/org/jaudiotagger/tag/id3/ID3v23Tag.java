@@ -597,11 +597,15 @@ public class ID3v23Tag
                 oBAOS.write(byteValue);
                 if ((byteValue & MPEGFrameHeader.SYNC_BYTE1)== MPEGFrameHeader.SYNC_BYTE1)
                 {
-                    // we are skipping if $00 byte
-                    int unsyncByteValue = source.get();
-                    if (unsyncByteValue != 0)
+                    // we are skipping if $00 byte but check not an end of stream
+                    if(source.hasRemaining())
                     {
-                        oBAOS.write(unsyncByteValue);
+                        int unsyncByteValue = source.get();
+                        //If its the null byte we just ignore it
+                        if (unsyncByteValue != 0)
+                        {
+                            oBAOS.write(unsyncByteValue);
+                        }
                     }
                 }
             }
