@@ -246,10 +246,11 @@ class XingFrame
      */
     public String toString()
     {
-        return "vbr:" + vbr
-            +  "frameCountEnabled" + isFrameCountEnabled
-            +  "frameCount" + frameCount
-            +  "audioFileEnabled" + isAudioSizeEnabled
-            +  "audioFile"  + audioSize;
+        return "xingheader"
+            +  " vbr:" + vbr
+            +  " frameCountEnabled:" + isFrameCountEnabled
+            +  " frameCount:" + frameCount
+            +  " audioSizeEnabled:" + isAudioSizeEnabled
+            +  " audioFileSize:"  + audioSize;
     }
 }
