@@ -286,7 +286,7 @@ public class MPEGFrameHeader
         samplesPerFrameV1Map.put(new Integer(LAYER_II)  , new Integer(1152));
         samplesPerFrameV1Map.put(new Integer(LAYER_III) , new Integer(1152));
 
-        samplesPerFrameV1Map.put(new Integer(LAYER_I)   , new Integer(384));
+        samplesPerFrameV2Map.put(new Integer(LAYER_I)   , new Integer(384));
         samplesPerFrameV2Map.put(new Integer(LAYER_II)  , new Integer(1152));
         samplesPerFrameV2Map.put(new Integer(LAYER_III) , new Integer(1152));
 
@@ -697,7 +697,7 @@ public class MPEGFrameHeader
     }
 
     /*
-     * Gets this frame length in bytes
+     * Gets this frame length in bytes, value should always be rounded down to the nearest byte (not rounded up)
      *
      * Calculation is Bitrate (scaled to bps) divided by sampling frequency (in Hz), The larger the bitrate the larger
      * the frame but the more samples per second the smaller the value, also have to take into account frame padding
@@ -706,22 +706,41 @@ public class MPEGFrameHeader
      */
     public int getFrameLength()
     {
-        switch (layer)
+        switch( version)
         {
-            case LAYER_I:
-                return (LAYER_I_FRAME_SIZE_COEFFICIENT * (getBitRate().intValue() * SCALE_BY_THOUSAND) / getSamplingRate().intValue() + getPaddingLength()) * LAYER_I_SLOT_SIZE;
+            case VERSION_2:
+            case VERSION_2_5:
+                switch (layer)
+                {
+                    case LAYER_I:
+                        return (LAYER_I_FRAME_SIZE_COEFFICIENT * (getBitRate().intValue() * SCALE_BY_THOUSAND) / getSamplingRate().intValue() + getPaddingLength()) * LAYER_I_SLOT_SIZE;
 
-            case LAYER_II:
-                return LAYER_II_FRAME_SIZE_COEFFICIENT * (getBitRate().intValue() * SCALE_BY_THOUSAND) / getSamplingRate().intValue() + getPaddingLength() * LAYER_II_SLOT_SIZE;
+                    case LAYER_II:
+                        return (LAYER_II_FRAME_SIZE_COEFFICIENT/2)  * (getBitRate().intValue() * SCALE_BY_THOUSAND) / getSamplingRate().intValue() + getPaddingLength() * LAYER_II_SLOT_SIZE;
 
-            case LAYER_III:
-                return LAYER_III_FRAME_SIZE_COEFFICIENT * (getBitRate().intValue() * SCALE_BY_THOUSAND) / getSamplingRate().intValue() + getPaddingLength()* LAYER_III_SLOT_SIZE;
+                    case LAYER_III:
+                        return (LAYER_III_FRAME_SIZE_COEFFICIENT/2) * (getBitRate().intValue() * SCALE_BY_THOUSAND) / getSamplingRate().intValue() + getPaddingLength()* LAYER_III_SLOT_SIZE;
+
+                }
+
 
             default:
-                //Shouldnt happen
-                return LAYER_III_FRAME_SIZE_COEFFICIENT * (getBitRate().intValue() * SCALE_BY_THOUSAND) / getSamplingRate().intValue() + getPaddingLength()* LAYER_III_SLOT_SIZE;
+
+                switch (layer)
+                {
+                    case LAYER_I:
+                        return (LAYER_I_FRAME_SIZE_COEFFICIENT * (getBitRate().intValue() * SCALE_BY_THOUSAND) / getSamplingRate().intValue() + getPaddingLength()) * LAYER_I_SLOT_SIZE;
+
+                    case LAYER_II:
+                        return LAYER_II_FRAME_SIZE_COEFFICIENT * (getBitRate().intValue() * SCALE_BY_THOUSAND) / getSamplingRate().intValue() + getPaddingLength() * LAYER_II_SLOT_SIZE;
+
+                    case LAYER_III:
+                        return LAYER_III_FRAME_SIZE_COEFFICIENT * (getBitRate().intValue() * SCALE_BY_THOUSAND) / getSamplingRate().intValue() + getPaddingLength()* LAYER_III_SLOT_SIZE;
+
+                }
 
         }
+        return 1;
     }
 
     /**
@@ -854,6 +873,18 @@ public class MPEGFrameHeader
     public String toString()
     {
         return
+            " mpeg frameheader:" +
+            " version:"   + versionAsString +
+            " layer:"     + layerAsString   +
+            " noOfSamples:"+ getNoOfSamples()    +
+            " samplingRate:"+ samplingRate    +
+            " isPadding:"+ isPadding    +
+            " isProtected:"+ isProtected    +
+            " isPrivate:"+ isPrivate    +
+            " isCopyrighted:"+ isCopyrighted    +
+            " isOriginal:"+ isCopyrighted    +
+            " isVbr" + this.isVariableBitRate() +
+            " header as binary:" +
             AbstractTagDisplayFormatter.displayAsBinary(mpegBytes[BYTE_1]) +
             AbstractTagDisplayFormatter.displayAsBinary(mpegBytes[BYTE_2]) +
             AbstractTagDisplayFormatter.displayAsBinary(mpegBytes[BYTE_3]) +
