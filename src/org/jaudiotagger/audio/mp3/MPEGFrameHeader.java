@@ -721,6 +721,9 @@ public class MPEGFrameHeader
                     case LAYER_III:
                         return (LAYER_III_FRAME_SIZE_COEFFICIENT/2) * (getBitRate().intValue() * SCALE_BY_THOUSAND) / getSamplingRate().intValue() + getPaddingLength()* LAYER_III_SLOT_SIZE;
 
+                    default:
+                        return (LAYER_III_FRAME_SIZE_COEFFICIENT/2) * (getBitRate().intValue() * SCALE_BY_THOUSAND) / getSamplingRate().intValue() + getPaddingLength()* LAYER_III_SLOT_SIZE;
+
                 }
 
 
@@ -737,10 +740,11 @@ public class MPEGFrameHeader
                     case LAYER_III:
                         return LAYER_III_FRAME_SIZE_COEFFICIENT * (getBitRate().intValue() * SCALE_BY_THOUSAND) / getSamplingRate().intValue() + getPaddingLength()* LAYER_III_SLOT_SIZE;
 
-                }
+                    default:
+                        return LAYER_III_FRAME_SIZE_COEFFICIENT * (getBitRate().intValue() * SCALE_BY_THOUSAND) / getSamplingRate().intValue() + getPaddingLength()* LAYER_III_SLOT_SIZE;
 
+                }
         }
-        return 1;
     }
 
     /**
