@@ -26,19 +26,177 @@ import org.jaudiotagger.tag.AbstractTagFrameBody;
 import org.jaudiotagger.tag.id3.ID3v24Frame;
 import org.jaudiotagger.tag.id3.framebody.FrameBodyTPE1;
 
+import javax.swing.*;
 import java.io.File;
+import java.util.Date;
+import java.text.DateFormat;
 
+/**
+ * Simple class that will attempt to recusively read all files within a directory, flags
+ * errors that occur.
+ */
 public class TestAudioTagger
 {
-    public static void main(final String[] args) throws Exception
-    {
-        ID3v24Frame newFrame = new ID3v24Frame("TPE1");
-        AbstractTagFrameBody tmpFrameBody = newFrame.getBody();
-        FrameBodyTPE1 body = (FrameBodyTPE1)tmpFrameBody ;
 
-        MP3File mp3File = new MP3File(new File(args[0]), MP3File.LOAD_IDV1TAG | MP3File.LOAD_IDV2TAG );
-        System.out.println(mp3File.displayStructureAsXML());
+    public static void main(final String[] args) throws Throwable
+    {
+        TestAudioTagger test = new TestAudioTagger();
+
+        if(args.length==0)
+        {
+            System.err.println("usage TestAudioTagger Dirname");
+            System.err.println("      You must enter the root directory");
+            System.exit(1);
+        }
+        else if(args.length>1)
+        {
+            System.err.println("usage TestAudioTagger Dirname");
+            System.err.println("      Only one parameter accepted");
+            System.exit(1);
+        }
+        File rootDir = new File(args[0]);
+        if(!rootDir.isDirectory())
+        {
+            System.err.println("usage TestAudioTagger Dirname");
+            System.err.println("      Directory "+args[0] +" could not be found");
+            System.exit(1);
+        }
+        Date start = new Date();
+        System.out.println("Started to read from:"+rootDir.getPath()+" at "
+            + DateFormat.getTimeInstance().format(start));
+        test.scanSingleDir(rootDir);
+        Date finish = new Date();
+        System.out.println("Started to read from:"+rootDir.getPath()+" at "
+                    + DateFormat.getTimeInstance().format(start));
+        System.out.println("Finished to read from:"+rootDir.getPath()
+             + DateFormat.getTimeInstance().format(finish));
+        System.out.println("Attempted  to read:"+count);
+        System.out.println("Successful to read:"+(count-failed));
+        System.out.println("Failed     to read:"+failed);
+
     }
 
 
+    private static int count =0;
+    private static int failed=0;
+    /**
+     * Recursive function to scan directory
+     */
+    private void scanSingleDir(final File dir)
+    {
+
+        final File[] audioFiles = dir.listFiles(new MP3FileFilter());
+        if (audioFiles.length > 0)
+        {
+            for (int i = 0; i < audioFiles.length; i++)
+            {
+                count++;
+                final File mp3File = audioFiles[i];
+                try
+                {
+                     //System.out.println("About to read record:"+count+":"+mp3File.getPath());
+                     final MP3File tmpMP3 = new MP3File(mp3File);
+
+                }
+                catch (Throwable t)
+                {
+                    System.err.println("Unable to read record:"+count+":"+mp3File.getPath());
+                    failed++;
+                    t.printStackTrace();
+                }
+            }
+        }
+
+        final File[] audioFileDirs = dir.listFiles(new DirFilter());
+        if (audioFileDirs.length > 0)
+        {
+            for (int i = 0; i < audioFileDirs.length; i++)
+            {
+                scanSingleDir(audioFileDirs[i]);
+            }
+        }
+    }
+
+    final class MP3FileFilter
+        extends javax.swing.filechooser.FileFilter
+        implements java.io.FileFilter
+    {
+
+        /**
+         * allows Directories
+         */
+        private final boolean allowDirectories;
+
+        /**
+         * Create a default MP3FileFilter.  The allowDirectories field will
+         * default to false.
+         */
+        public MP3FileFilter()
+        {
+            this(false);
+        }
+
+        /**
+         * Create an MP3FileFilter.  If allowDirectories is true, then this filter
+         * will accept directories as well as mp3 files.  If it is false then
+         * only mp3 files will be accepted.
+         *
+         * @param allowDirectories whether or not to accept directories
+         */
+        private MP3FileFilter(final boolean allowDirectories)
+        {
+            this.allowDirectories = allowDirectories;
+        }
+
+        /**
+         * Determines whether or not the file is an mp3 file.  If the file is
+         * a directory, whether or not is accepted depends upon the
+         * allowDirectories flag passed to the constructor.
+         *
+         * @param file the file to test
+         * @return true if this file or directory should be accepted
+         */
+        public final boolean accept(final java.io.File file)
+        {
+            return (
+                ((file.getName()).toLowerCase().endsWith(".mp3"))
+                    ||
+                    (file.isDirectory() && (this.allowDirectories == true))
+            );
+        }
+
+        /**
+         * Returns the Name of the Filter for use in the Chooser Dialog
+         *
+         * @return The Description of the Filter
+         */
+        public final String getDescription()
+        {
+            return new String(".mp3 Files");
+        }
+    }
+
+    public final class DirFilter implements java.io.FileFilter
+    {
+        public DirFilter()
+        {
+
+        }
+
+
+        /**
+         * Determines whether or not the file is an mp3 file.  If the file is
+         * a directory, whether or not is accepted depends upon the
+         * allowDirectories flag passed to the constructor.
+         *
+         * @param file the file to test
+         * @return true if this file or directory should be accepted
+         */
+        public final boolean accept(final java.io.File file)
+        {
+            return file.isDirectory();
+        }
+
+        public static final String IDENT = "$Id$";
+    }
 }
