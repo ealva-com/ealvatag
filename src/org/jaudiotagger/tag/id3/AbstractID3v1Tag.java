@@ -45,7 +45,7 @@ abstract public class AbstractID3v1Tag
     public AbstractID3v1Tag(AbstractID3v1Tag copyObject)
     {
         super(copyObject);
-    }
+    }                            
 
     //If field is less than maximum field length this is how it is terminated
     protected static final byte END_OF_FIELD = 0;

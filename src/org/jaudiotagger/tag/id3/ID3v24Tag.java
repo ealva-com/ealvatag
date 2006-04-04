@@ -532,7 +532,8 @@ public class ID3v24Tag
      */
     public void read(ByteBuffer byteBuffer)
         throws TagException, IOException
-    {
+    {         
+
         int size;
         byte[] buffer;
         if (seek(byteBuffer) == false)
