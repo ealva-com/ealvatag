@@ -206,6 +206,13 @@ public class ID3v23Frame
         throws IOException, InvalidFrameException
     {
         logger.info("Read Frame from byteBuffer");
+
+        if(byteBuffer.position()+ FRAME_HEADER_SIZE >= byteBuffer.limit())
+        {
+            logger.warning("No space to find another frame:");
+            throw new InvalidFrameException(" No space to find another frame");    
+        }
+
         byte[] buffer = new byte[FRAME_ID_SIZE];
 
         // Read the Frame ID Identifier

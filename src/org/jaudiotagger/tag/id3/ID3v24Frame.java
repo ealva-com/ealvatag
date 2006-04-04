@@ -307,6 +307,12 @@ public class ID3v24Frame
         byte[] buffer = new byte[FRAME_ID_SIZE];
         byte b;
 
+        if(byteBuffer.position()+ FRAME_HEADER_SIZE >= byteBuffer.limit())
+        {
+            logger.warning("No space to find another frame:");
+            throw new InvalidFrameException(" No space to find another frame");
+        }
+
         // Read the Frame ID Identifier
         byteBuffer.get(buffer, 0, FRAME_ID_SIZE);
         identifier = new String(buffer);
