@@ -169,9 +169,8 @@ public abstract class AbstractID3v2Frame
         }
         //An error has occurred during frame  instantiation find out real exception and then throw frame away if invalid
         catch (InvocationTargetException ite)
-        {
-            ite.getCause().printStackTrace();
-            logger.severe("invocation target exception:"+ite.getCause().getMessage());
+        {                 
+            logger.severe("Invocation target exception:"+ite.getCause().getMessage());
             throw new InvalidFrameException(ite.getCause().getMessage());
         }
         //No Method should not happen
