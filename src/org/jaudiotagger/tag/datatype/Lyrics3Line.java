@@ -26,8 +26,8 @@ package org.jaudiotagger.tag.datatype;
 import java.util.Iterator;
 import java.util.LinkedList;
 
-import org.jaudiotagger.audio.mp3.*;
 import org.jaudiotagger.tag.AbstractTagFrameBody;
+import org.jaudiotagger.tag.InvalidDataTypeException;
 
 public class Lyrics3Line
     extends AbstractDataType
@@ -244,7 +244,7 @@ public class Lyrics3Line
         return str + lyric;
     }
 
-    public void readByteArray(byte[] arr, int offset)
+    public void readByteArray(byte[] arr, int offset) throws InvalidDataTypeException
     {
         readString(arr.toString(), offset);
     }

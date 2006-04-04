@@ -23,14 +23,12 @@
  */
 package org.jaudiotagger.tag.datatype;
 
-import org.jaudiotagger.audio.mp3.*;
-
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.TreeSet;
 
-import org.jaudiotagger.audio.mp3.*;
 import org.jaudiotagger.tag.AbstractTagFrameBody;
+import org.jaudiotagger.tag.InvalidDataTypeException;
 import org.jaudiotagger.tag.id3.valuepair.Languages;
 import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
 
@@ -38,6 +36,9 @@ import java.nio.charset.*;
 import java.nio.*;
 
 
+/**
+ * Represents a String thats acts as a key into an enumeration of values
+ */
 public class StringHashMap extends StringFixedLength implements HashMapInterface
 {
 
@@ -228,12 +229,11 @@ public class StringHashMap extends StringFixedLength implements HashMapInterface
      * The hashmap types alwys use the default encoding. For example COMM encodes it
      * texts and description but not the language.
      *
-     * @param str    DOCUMENT ME!
      * @param offset DOCUMENT ME!
      * @throws NullPointerException      DOCUMENT ME!
      * @throws IndexOutOfBoundsException DOCUMENT ME!
      */
-    public void readByteArray(byte[] arr, int offset)
+    public void readByteArray(byte[] arr, int offset) throws InvalidDataTypeException
     {
         try
         {

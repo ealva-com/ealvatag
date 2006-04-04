@@ -27,14 +27,16 @@
  */
 package org.jaudiotagger.tag.datatype;
 
-import org.jaudiotagger.audio.mp3.*;
 import org.jaudiotagger.tag.AbstractTagFrameBody;
+import org.jaudiotagger.tag.InvalidDataTypeException;
 import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
 
 import java.nio.charset.*;
 import java.nio.*;
 
-
+/**
+ * Represensts a String of a defined size
+ */
 public class StringSizeTerminated
     extends AbstractString
 {
@@ -76,7 +78,7 @@ public class StringSizeTerminated
      * @throws NullPointerException      DOCUMENT ME!
      * @throws IndexOutOfBoundsException DOCUMENT ME!
      */
-    public void readByteArray(byte[] arr, int offset)
+    public void readByteArray(byte[] arr, int offset) throws InvalidDataTypeException
     {
         try
         {

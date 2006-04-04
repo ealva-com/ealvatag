@@ -28,7 +28,7 @@ import org.jaudiotagger.audio.mp3.*;
 import org.jaudiotagger.tag.datatype.*;
 import org.jaudiotagger.tag.AbstractTagFrameBody;
 import org.jaudiotagger.tag.InvalidFrameException;
-import org.jaudiotagger.tag.InvalidTagException;
+import org.jaudiotagger.tag.InvalidDataTypeException;
 
 import java.util.*;
 import java.io.*;
@@ -65,8 +65,7 @@ public abstract class AbstractID3v2FrameBody
      * Constructor sets up the Object list for the frame.
      *
      * @param byteBuffer The MP3File to read the frame from.
-     * @throws java.io.IOException DOCUMENT ME!
-     * @throws InvalidTagException DOCUMENT ME!
+     * @throws java.io.IOException
      */
     protected AbstractID3v2FrameBody(ByteBuffer byteBuffer, int frameSize)
         throws java.io.IOException, InvalidFrameException
@@ -127,8 +126,7 @@ public abstract class AbstractID3v2FrameBody
     /**
      * Are two bodies equal
      *
-     * @param obj DOCUMENT ME!
-     * @return DOCUMENT ME!
+     * @param obj
      */
     public boolean equals(Object obj)
     {
@@ -156,6 +154,7 @@ public abstract class AbstractID3v2FrameBody
         //Allocate a buffer to the size of the Frame Body and read from file
         byte[] buffer = new byte[size];
         byteBuffer.get(buffer);
+
         //Offset into buffer, incremented by length of previous MP3Object
         int offset = 0;
         //Go through the ObjectList of the Frame reading the data into the
@@ -164,6 +163,7 @@ public abstract class AbstractID3v2FrameBody
         Iterator iterator = objectList.listIterator();
         while (iterator.hasNext())
         {
+            logger.finest("offset:"+offset);
             //The read has extended further than the defined frame size ok to extend upto
             //because the next datatype may be of length 0.
             if (offset > (size))
@@ -171,9 +171,19 @@ public abstract class AbstractID3v2FrameBody
                 logger.warning("Invalid Size for FrameBody");
                 throw new InvalidFrameException("Invalid size for Frame Body");
             }
-            //Get next Object and load it with data from the Buffer
+            //Get next Object
             object = (AbstractDataType) iterator.next();
-            object.readByteArray(buffer, offset);
+
+            //Try and load it with data from the Buffer
+            //if it fails frame is invalid
+            try
+            {
+                object.readByteArray(buffer, offset);
+            }
+            catch (InvalidDataTypeException e)
+            {
+                 throw new InvalidFrameException("Invalid data for Frame Body");
+            }
             //Increment Offset to start of next datatype.
             offset += object.getSize();
         }
@@ -214,7 +224,5 @@ public abstract class AbstractID3v2FrameBody
             nextObject.createStructure();
         }
         MP3File.getStructureFormatter().closeHeadingElement(TYPE_BODY);
-
     }
-
 }

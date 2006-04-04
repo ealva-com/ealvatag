@@ -23,16 +23,15 @@
  */
 package org.jaudiotagger.tag.datatype;
 
-import org.jaudiotagger.tag.id3.ID3Tags;
 import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
 import org.jaudiotagger.tag.AbstractTagFrameBody;
-
-import org.jaudiotagger.audio.mp3.*;
+import org.jaudiotagger.tag.InvalidDataTypeException;
 
 import java.nio.charset.*;
 import java.nio.*;
 
 
+/** Represents a fixed length String */
 public class StringFixedLength
     extends AbstractString
 {
@@ -82,12 +81,11 @@ public class StringFixedLength
     /**
      * Read a string from buffer of fixed size(size has already been set in constructor)
      *
-     * @param str    DOCUMENT ME!
      * @param offset DOCUMENT ME!
      * @throws NullPointerException      DOCUMENT ME!
      * @throws IndexOutOfBoundsException DOCUMENT ME!
      */
-    public void readByteArray(byte[] arr, int offset)
+    public void readByteArray(byte[] arr, int offset) throws InvalidDataTypeException
     {
         try
         {

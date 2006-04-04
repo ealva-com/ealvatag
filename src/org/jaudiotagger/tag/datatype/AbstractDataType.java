@@ -27,10 +27,13 @@ import java.util.Arrays;
 import org.jaudiotagger.audio.mp3.*;
 import org.jaudiotagger.logging.LogFormatter;
 import org.jaudiotagger.tag.AbstractTagFrameBody;
+import org.jaudiotagger.tag.InvalidDataTypeException;
 
 import java.util.logging.*;
 
-
+/**
+ * Represents a data item that can be held within a frames body
+ */
 public abstract class AbstractDataType
     extends java.lang.Object
 {
@@ -74,14 +77,14 @@ public abstract class AbstractDataType
     }
 
 
-    public AbstractDataType(AbstractTagFrameBody frameBody)
+    protected AbstractDataType(AbstractTagFrameBody frameBody)
     {
         this.value = null;
         this.identifier = "";
         this.frameBody = frameBody;
     }
 
-    public AbstractDataType(String identifier, AbstractTagFrameBody frameBody)
+    protected AbstractDataType(String identifier, AbstractTagFrameBody frameBody)
     {
         this.value = null;
         this.identifier = identifier;
@@ -217,7 +220,13 @@ public abstract class AbstractDataType
      */
     final public void readByteArray(byte[] arr)
     {
-        readByteArray(arr, 0);
+        try {
+            readByteArray(arr, 0);
+        }
+        catch (InvalidDataTypeException e)
+        {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -345,7 +354,7 @@ public abstract class AbstractDataType
      * @param arr    DOCUMENT ME!
      * @param offset DOCUMENT ME!
      */
-    public abstract void readByteArray(byte[] arr, int offset);
+    public abstract void readByteArray(byte[] arr, int offset) throws InvalidDataTypeException;
 
 
     /**

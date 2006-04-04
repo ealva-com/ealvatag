@@ -23,13 +23,16 @@
  */
 package org.jaudiotagger.tag.datatype;
 
-import org.jaudiotagger.audio.mp3.*;
 import org.jaudiotagger.tag.AbstractTagFrameBody;
+import org.jaudiotagger.tag.InvalidDataTypeException;
 import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
 
 import java.nio.charset.*;
 import java.nio.*;
 
+/**
+ * Represents a String whose size is determined by finding of a null character
+ */
 public class StringNullTerminated
     extends AbstractString
 {
@@ -58,18 +61,16 @@ public class StringNullTerminated
     }
 
     /**
-     * Read a string from buffer upto null character (if exists) or buffer size whichever
-     * comes first.
+     * Read a string from buffer upto null character (if exists)
+     *
      * Must take into account the text encoding defined in the Encoding Object
      * ID3 Text Frames often allow multiple strings seperated by the null char
      * appropriate for the encoding.
      *
      * @param arr    this is the buffer for the frame
      * @param offset this is where to start reading in the buffer for this field
-     * @throws NullPointerException      DOCUMENT ME!
-     * @throws IndexOutOfBoundsException DOCUMENT ME!
      */
-    public void readByteArray(byte[] arr, int offset)
+    public void readByteArray(byte[] arr, int offset) throws InvalidDataTypeException
     {
         try
         {
@@ -78,24 +79,29 @@ public class StringNullTerminated
             //Get the Specified Decoder
             byte textEncoding = this.getFrameBody().getTextEncoding();
             String charSetName = TextEncoding.getInstanceOf().getValueForId(textEncoding);
+            logger.finest("text encoding:"+textEncoding + " charset:"+charSetName);
             CharsetDecoder decoder = Charset.forName(charSetName).newDecoder();
+
             /* We only want to load up to null terminator, data after this is part of different
              * fields and it may not be possible to decode it so do the check before we do
              * do the decoding,encoding dependent. */
-            ByteBuffer buffer = ByteBuffer.wrap(arr, offset,
-                arr.length - offset);
+            ByteBuffer buffer = ByteBuffer.wrap(arr, offset, arr.length - offset);
             int endPosition = 0;
+            boolean isNullTerminatorFound=false;
             while (buffer.hasRemaining())
             {
+
                 byte nextByte = buffer.get();
+
                 if (nextByte == 0x00)
                 {
                     if (textEncoding == 0)
                     {
-                        //Indicates where to readupto
+                        logger.finest("null terminator found at:"+buffer.position());
                         buffer.mark();
                         buffer.reset();
                         endPosition = buffer.position() - 1;
+                        isNullTerminatorFound=true;
                         break;
                     }
                     //UTF16
@@ -104,13 +110,20 @@ public class StringNullTerminated
                         nextByte = buffer.get();
                         if (nextByte == 0x00)
                         {
+                            logger.finest("UTf16:null terminator found at:"+buffer.position());
                             buffer.mark();
                             buffer.reset();
                             endPosition = buffer.position() - 2;
+                            isNullTerminatorFound=true;
                             break;
                         }
                     }
                 }
+            }
+
+            if(isNullTerminatorFound==false)
+            {
+                 throw new InvalidDataTypeException("Unable to find null termiated string");
             }
 
             //Set Size so offset is ready for next field (includes the null terminator)
@@ -158,7 +171,7 @@ public class StringNullTerminated
      * the encoding to be done using one of the UTF-16 variants. And null terminate
      * the String.
      *
-     * @return DOCUMENT ME!
+     * @return the dat as a byte array in format to write to file
      */
     public byte[] writeByteArray()
     {

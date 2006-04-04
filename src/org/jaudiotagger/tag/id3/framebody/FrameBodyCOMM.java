@@ -74,12 +74,13 @@ public class FrameBodyCOMM  extends AbstractID3v2FrameBody  implements ID3v24Fra
         setObjectValue(DataTypes.OBJ_TEXT, text);
     }
 
-    /**
-     * Creates a new FrameBodyCOMM datatype.
-     *
-     * @param file DOCUMENT ME!
-     * @throws IOException         DOCUMENT ME!
-     * @throws InvalidTagException DOCUMENT ME!
+     /**
+     * Construct a Comment frame body from the buffer
+      *
+     * @param byteBuffer
+     * @param frameSize
+     * @throws IOException
+     * @throws InvalidTagException
      */
     public FrameBodyCOMM(ByteBuffer byteBuffer, int frameSize)
         throws IOException, InvalidTagException

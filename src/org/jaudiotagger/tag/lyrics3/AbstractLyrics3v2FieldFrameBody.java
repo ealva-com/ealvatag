@@ -22,12 +22,10 @@
  */
 package org.jaudiotagger.tag.lyrics3;
 
-import org.jaudiotagger.audio.mp3.*;
 import org.jaudiotagger.tag.datatype.*;
 import org.jaudiotagger.tag.InvalidTagException;
 import org.jaudiotagger.tag.TagOptionSingleton;
 import org.jaudiotagger.tag.AbstractTagFrameBody;
-import org.jaudiotagger.tag.InvalidTagException;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;

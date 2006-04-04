@@ -25,9 +25,10 @@ package org.jaudiotagger.tag.datatype;
 
 import org.jaudiotagger.tag.id3.ID3Tags;
 import org.jaudiotagger.tag.AbstractTagFrameBody;
-import org.jaudiotagger.audio.mp3.*;
+import org.jaudiotagger.tag.InvalidDataTypeException;
 
 
+/** Represents a number held as a fixed number of digits */
 public class NumberFixedLength
     extends AbstractDataType
 {
@@ -100,14 +101,14 @@ public class NumberFixedLength
     }
 
     /**
-     * Read the number from file.
+     * Read the number from the byte array
      *
      * @param arr    DOCUMENT ME!
      * @param offset DOCUMENT ME!
      * @throws NullPointerException      DOCUMENT ME!
      * @throws IndexOutOfBoundsException DOCUMENT ME!
      */
-    public void readByteArray(byte[] arr, int offset)
+    public void readByteArray(byte[] arr, int offset) throws InvalidDataTypeException
     {
         if (arr == null)
         {

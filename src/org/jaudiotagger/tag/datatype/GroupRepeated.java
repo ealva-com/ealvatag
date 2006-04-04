@@ -28,9 +28,8 @@ import org.jaudiotagger.tag.id3.ID3Tags;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import org.jaudiotagger.audio.mp3.*;
-import org.jaudiotagger.tag.id3.ID3Tags;
 import org.jaudiotagger.tag.AbstractTagFrameBody;
+import org.jaudiotagger.tag.InvalidDataTypeException;
 
 public class GroupRepeated
     extends AbstractDataType
@@ -163,7 +162,7 @@ public class GroupRepeated
      * @throws NullPointerException      DOCUMENT ME!
      * @throws IndexOutOfBoundsException DOCUMENT ME!
      */
-    public void readByteArray(byte[] arr, int offset)
+    public void readByteArray(byte[] arr, int offset) throws InvalidDataTypeException
     {
         if (arr == null)
         {
