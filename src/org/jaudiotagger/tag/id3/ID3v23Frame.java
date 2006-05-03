@@ -37,6 +37,8 @@ import java.util.regex.*;
 
 import java.nio.*;
 
+
+/** Represents an ID3v2.3 frame */
 public class ID3v23Frame
     extends ID3v22Frame
 {

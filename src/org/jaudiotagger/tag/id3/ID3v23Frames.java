@@ -24,7 +24,7 @@ package org.jaudiotagger.tag.id3;
 import java.util.*;
 
 /**
- * Defines ID3 frames and collections that categorise frames
+ * Defines ID3 frames and collections that categorise frames within an ID3v23 tag
  */
 public class ID3v23Frames extends ID3Frames
 {

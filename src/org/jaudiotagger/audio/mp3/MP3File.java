@@ -41,7 +41,7 @@ import java.util.logging.*;
 import java.nio.channels.FileChannel;
 import java.nio.ByteBuffer;
 
-/*
+/**
  * This class represets a physical MP3 File
 */
 public class MP3File extends org.jaudiotagger.audio.AbstractAudioFile

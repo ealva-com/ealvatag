@@ -41,7 +41,7 @@ import java.nio.channels.*;
 import java.io.*;
 
 /**
- * This class represents an ID3v2.40 tag
+ * This class represents an ID3v2.4 tag
  */ 
 public class ID3v24Tag
     extends ID3v23Tag

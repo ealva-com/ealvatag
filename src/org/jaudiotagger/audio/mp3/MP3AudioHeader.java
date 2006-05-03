@@ -30,7 +30,7 @@ import java.text.ParseException;
 import java.nio.channels.FileChannel;
 import java.nio.ByteBuffer;
 
-/* Represents the audio header of an MP3 File, the audio header consists of a number of
+/** Represents the audio header of an MP3 File, the audio header consists of a number of
  * audio frames. Because we are not trying to play the audio but only extract some information
  * regarding the audio we only need to read the first  audio frames to ensure that we have correctly
  * identified them as audio frames and extracted the metadata we reuire.

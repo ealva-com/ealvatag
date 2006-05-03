@@ -40,6 +40,7 @@ import java.nio.channels.*;
 import java.io.*;
 import java.util.*;
 
+/** Represents an ID3v2.2 tag */
 public class ID3v22Tag
     extends AbstractID3v2Tag
 {

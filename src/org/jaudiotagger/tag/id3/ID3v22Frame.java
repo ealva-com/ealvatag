@@ -35,6 +35,7 @@ import org.jaudiotagger.tag.*;
 import org.jaudiotagger.tag.id3.framebody.FrameBodyUnsupported;
 import org.jaudiotagger.tag.id3.framebody.AbstractID3v2FrameBody;
 
+/** Represents an ID3v2.2 frame */
 public class ID3v22Frame
     extends AbstractID3v2Frame
 {

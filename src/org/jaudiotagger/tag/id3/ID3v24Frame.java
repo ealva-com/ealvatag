@@ -35,9 +35,8 @@ import java.io.ByteArrayOutputStream;
 import java.util.Iterator;
 import java.nio.*;
 
-/**
- * This class is the tag frame header used for ID3v2.40 tags
-*/
+
+/** Represents an ID3v2.4 frame */
 public class ID3v24Frame
     extends ID3v23Frame
 {

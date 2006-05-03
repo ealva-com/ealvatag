@@ -20,7 +20,7 @@ import java.util.Arrays;
  *    100 bytes for entry (NUMTOCENTRIES)
  *    4 bytes for VBR SCALE. a VBR quality indicator: 0=best 100=worst
  */
-class XingFrame
+public class XingFrame
 {
 
     //The offset into first frame varies based on the MPEG frame properties
