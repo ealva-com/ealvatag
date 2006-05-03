@@ -43,7 +43,7 @@ package org.jaudiotagger;
  * <p/>
  * Description:Useful Constants used by Audio and Tag Classes when writing to/reading from  files.
  */
-public interface FileConstants
+public interface FileConstants              
 {
     /**
      * defined for convenience

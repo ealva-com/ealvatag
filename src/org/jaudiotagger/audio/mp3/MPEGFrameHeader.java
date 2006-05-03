@@ -55,7 +55,7 @@ public class MPEGFrameHeader
     /**
      * Constants for MPEG Version
      */
-    private static final Map mpegVersionMap = new HashMap();
+    public static final Map mpegVersionMap = new HashMap();
     public final static int VERSION_2_5 = 0;
     public final static int VERSION_2 = 2;
     public final static int VERSION_1 = 3;
@@ -70,7 +70,7 @@ public class MPEGFrameHeader
     /**
      * Constants for MPEG Layer
      */
-    private static final Map mpegLayerMap = new HashMap();
+    public static final Map mpegLayerMap = new HashMap();
     public final static int LAYER_I   = 3;
     public final static int LAYER_II  = 2;
     public final static int LAYER_III = 1;
@@ -191,7 +191,7 @@ public class MPEGFrameHeader
     /**
      * Constants for Channel mode
      */
-    private static final Map modeMap = new HashMap();
+    protected static final Map modeMap = new HashMap();
     public final static int MODE_STEREO = 0;
     public final static int MODE_JOINT_STEREO = 1;
     public final static int MODE_DUAL_CHANNEL = 2;

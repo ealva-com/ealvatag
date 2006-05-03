@@ -38,12 +38,21 @@
 	
 	<!-- Output dirs -->
 	<property name="output.dir"     value="${basedir}/classes"/>
-	<property name="testoutput.dir" value="${basedir}/classes"/>
+	<property name="testoutput.dir" value="${basedir}/testclasses"/>
 	<property name="dist.dir"       value="${basedir}/dist"/>
 	<property name="javadoc.dir"    value="${basedir}/www/javadoc"/>
+	<property name="lib.dir"       value="${basedir}/lib"/>
 	
 	<property name="jar.file"    value="${dist.dir}/jaudiotagger.jar"/>
 	<property name="jarsrc.file" value="${dist.dir}/jaudiotaggersrc.jar"/>
+	
+	<property name="junit.file"       value="${lib.dir}/junit.jar"/>
+	<property name="junitreport.dir"  value="${basedir}/junitreport"/>
+	<property name="junitreport.testdata.dir"     value="${basedir}/testdata"/>
+	<property name="junitreport.testdatatmp.dir"  value="${basedir}/testdatatmp"/>
+	
+	<property name="src.dir"     value="${basedir}/src"/>
+	<property name="srctest.dir"     value="${basedir}/srctest"/>
 	
 	<!-- Paths to be included in compilation bootclasspath -->	
 	<path id="bootclasspath">
@@ -61,10 +70,32 @@
 	<!-- src directory relative to base -->
 	<path id="sourcepath">
 		<dirset dir="${basedir}">
-			<include name="src"/>
+ 			<include name="src"/>			
 		</dirset>
 	</path>
-		
+	
+	<!-- Additional classpath required in compilation  -->		
+	<path id="testclasspath">	
+		<dirset dir="${output.dir}">			
+		</dirset>		
+		<pathelement location="${junit.file}"/>		
+	</path>	
+	
+	<!-- Additional classpath required in compilation  -->		
+	<path id="runtestclasspath">	
+		<dirset dir="${testoutput.dir}">			
+		</dirset>
+		<dirset dir="${output.dir}">			
+		</dirset>			
+	</path>	
+	
+	<!-- src directory relative to base -->
+	<path id="testsourcepath">
+		<dirset dir="${basedir}">
+ 			<include name="srctest"/>			
+		</dirset>
+	</path>
+	
 	<target name="share" depends="dist" description="Copy the distribution to be used by another project">
 		<echo message="Copying to share dir" />
 		<copy file="${jar.file}" todir="${release.dir}"/>	
@@ -96,10 +127,10 @@
 		<jar jarfile="${jarsrc.file}" update="false" basedir="${basedir}/src" includes="org/jaudiotagger/**/*.java"></jar>      	  
 	</target>
 	
-	<target name="compile" depends="compile.production,compile.tests" description="Compile all jaudiotagger code"/>
+	<target name="compile" depends="compile.production,compile.tests,run.tests" description="Compile all jaudiotagger code"/>
 
 	<target name="compile.production" description="Compile production classes">
-	
+	  
 		<!-- Recreate destination dir if missing -->
 		<mkdir dir="${output.dir}"/>
 		
@@ -113,13 +144,13 @@
 			fork="true">
 			<compilerarg line="${compiler.args}"/>
 			<bootclasspath refid="bootclasspath"/>
-			<classpath refid="classpath"/>
+			<classpath refid="classpath"/>			
 			<src refid="sourcepath"/>
 		</javac>
 	
 		<!-- Copy over any non java resources -->
 		<copy todir="${output.dir}">
-			<fileset dir="${basedir}/src">
+			<fileset dir="${src.dir}">
 			<patternset refid="compiler.resources"/>
 			<type type="file"/>
 			</fileset>
@@ -127,8 +158,55 @@
 	</target>
 	
 	<!-- Junit tests:for when we write some !-->
-	<target name="compile.tests" depends="compile.production" description="Compile test classes" unless="skip.tests"/>
+	<target name="compile.tests" depends="compile.production" description="Compile test classes" unless="skip.tests">
 	
+	
+		<!-- Recreate destination dir if missing -->
+		<mkdir dir="${testoutput.dir}"/>
+		
+		<!-- Compile the source to be compatible with 1.4 ( no 1.5 features used)-->
+		<javac destdir="${testoutput.dir}"
+			verbose="${compiler.verbose}"
+			debug="${compiler.debug}"
+			nowarn="${compiler.generate.no.warnings}"
+			memoryMaximumSize="${compiler.max.memory}"
+			source="1.4"
+			fork="true">
+			<compilerarg line="${compiler.args}"/>
+			<bootclasspath refid="bootclasspath"/>
+			<classpath refid="testclasspath"/>
+			<src refid="testsourcepath"/>
+		</javac>
+	
+		<!-- Copy over any non java resources -->
+		<copy todir="${testoutput.dir}">
+			<fileset dir="${srctest.dir}">
+			<patternset refid="compiler.resources"/>
+			<type type="file"/>
+			</fileset>
+		</copy>
+	</target>
+	
+	<target name="run.tests" depends="compile.tests" description="Run test cases" unless="skip.tests">
+		<mkdir dir="${junitreport.dir}"/>
+		<mkdir dir="${junitreport.testdatatmp.dir}"/>
+		<junit printsummary="true" showoutput="true">			
+			<classpath refid="runtestclasspath"/>		
+			<batchtest fork="yes" todir="${junitreport.dir}">
+				<formatter type="xml"/>				
+    				<fileset dir="${testoutput.dir}">
+    					<include name="**/*Test.class"/>      			
+    				</fileset>
+  			</batchtest>
+		</junit>
+		
+		<junitreport todir="${junitreport.dir}">
+  			<fileset dir="${junitreport.dir}">
+    				<include name="TEST-*.xml"/>
+			</fileset>
+  			<report format="frames" todir="${junitreport.dir}"/>
+		</junitreport>
+	</target>
 	<!-- Clean -->
 	<target name="clean" description="Cleanup module">
 		<delete dir="${output.dir}"/>
