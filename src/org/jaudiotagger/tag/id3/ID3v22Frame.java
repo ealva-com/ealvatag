@@ -267,6 +267,11 @@ public class ID3v22Frame
             logger.warning("Empty Frame:" + identifier);
             throw new EmptyFrameException(identifier + " is empty frame");
         }
+        else if (frameSize > byteBuffer.remaining())
+        {
+            logger.warning("Invalid Frame size larger than size before mp3 audio:" + identifier);
+            throw new InvalidFrameException(identifier + " is invalid frame");
+        }
         else
         {
             logger.fine("Frame Size Is:" + frameSize);

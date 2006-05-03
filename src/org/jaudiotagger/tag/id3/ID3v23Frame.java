@@ -235,10 +235,15 @@ public class ID3v23Frame
             logger.warning("Invalid Frame Size:" + identifier);
             throw new InvalidFrameException(identifier + " is invalid frame");
         }
-        if (frameSize == 0)
+        else if (frameSize == 0)
         {
             logger.warning("Empty Frame Size:" + identifier);
             throw new EmptyFrameException(identifier + " is empty frame");
+        }
+        else if (frameSize > byteBuffer.remaining())
+        {
+            logger.warning("Invalid Frame size larger than size before mp3 audio:" + identifier);
+            throw new InvalidFrameException(identifier + " is invalid frame");
         }
        
         //Read the flag bytes
