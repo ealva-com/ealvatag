@@ -28,16 +28,23 @@ import org.jaudiotagger.tag.TagException;
 import org.jaudiotagger.tag.TagNotFoundException;
 import org.jaudiotagger.tag.TagException;
 import org.jaudiotagger.tag.TagNotFoundException;
+import org.jaudiotagger.logging.LogFormatter;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.regex.*;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 import java.nio.channels.FileChannel;
 import java.nio.ByteBuffer;
+import java.nio.CharBuffer;
 
 abstract public class AbstractID3v1Tag
     extends AbstractID3Tag
 {
+
+    protected static Logger logger = LogFormatter.getLogger();
+
     public AbstractID3v1Tag()
     {
     }
@@ -45,7 +52,7 @@ abstract public class AbstractID3v1Tag
     public AbstractID3v1Tag(AbstractID3v1Tag copyObject)
     {
         super(copyObject);
-    }                            
+    }
 
     //If field is less than maximum field length this is how it is terminated
     protected static final byte END_OF_FIELD = 0;
@@ -103,14 +110,21 @@ abstract public class AbstractID3v1Tag
         throws IOException
     {
         //Read into Byte Buffer
+        logger.info("deleting tag from file if exists");
         final FileChannel fc = file.getChannel();
         fc.position(file.length() - TAG_LENGTH);
         ByteBuffer  byteBuffer = ByteBuffer.allocate(TAG_LENGTH);
-        fc.read(byteBuffer,0);
-        byteBuffer.rewind();           
+        fc.read(byteBuffer);
+        byteBuffer.rewind();
+
         if (seek(byteBuffer))
         {
+            logger.info("deleting v1 tag ");
             file.setLength(file.length() - TAG_LENGTH);
+        }
+        else
+        {
+             logger.info("unable to find v1 tag to delete");
         }
     }
 }

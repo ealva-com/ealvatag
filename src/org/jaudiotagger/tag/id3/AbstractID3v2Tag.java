@@ -368,7 +368,7 @@ public abstract class AbstractID3v2Tag
         //Read into Byte Buffer
         final FileChannel fc = file.getChannel();
         fc.position();
-        ByteBuffer  byteBuffer = ByteBuffer.allocate(FIELD_TAGID_LENGTH);
+        ByteBuffer  byteBuffer = ByteBuffer.allocate(TAG_HEADER_LENGTH);
         fc.read(byteBuffer,0);
         byteBuffer.flip();
         if(seek(byteBuffer))
@@ -533,7 +533,7 @@ public abstract class AbstractID3v2Tag
 
 
         byte[] tagIdentifier = new byte[FIELD_TAGID_LENGTH];
-        byteBuffer.get(tagIdentifier, 0, FIELD_TAGID_LENGTH);
+        byteBuffer.get(tagIdentifier, 0, FIELD_TAGID_LENGTH);             
         if (!(Arrays.equals(tagIdentifier,TAG_ID)))
         {
             return false;
