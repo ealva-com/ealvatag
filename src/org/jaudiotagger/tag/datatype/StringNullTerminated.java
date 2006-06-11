@@ -87,6 +87,13 @@ public class StringNullTerminated
              * do the decoding,encoding dependent. */
             ByteBuffer buffer = ByteBuffer.wrap(arr, offset, arr.length - offset);
             int endPosition = 0;
+
+            /* Latin-1 and UTF-8 strings are terminated by a single-byte null,
+             * while UTF-16 and its variants need two bytes for the null terminator.
+             */
+            final boolean nullIsOneByte
+            = (textEncoding == TextEncoding.ISO_8859_1 || textEncoding == TextEncoding.UTF_8);
+
             boolean isNullTerminatorFound=false;
             while (buffer.hasRemaining())
             {
@@ -95,7 +102,7 @@ public class StringNullTerminated
 
                 if (nextByte == 0x00)
                 {
-                    if (textEncoding == 0)
+                    if (nullIsOneByte)
                     {
                         logger.finest("null terminator found at:"+buffer.position());
                         buffer.mark();
@@ -104,9 +111,9 @@ public class StringNullTerminated
                         isNullTerminatorFound=true;
                         break;
                     }
-                    //UTF16
                     else
                     {
+                        // Looking for two-byte null
                         nextByte = buffer.get();
                         if (nextByte == 0x00)
                         {
@@ -130,8 +137,8 @@ public class StringNullTerminated
             logger.finest("End Position is:" + endPosition + "Offset:" + offset);
             size = endPosition - offset;
             size++;
-            //UTF-16 needs two bytes for null terminator
-            if (textEncoding != 0)
+
+            if (!nullIsOneByte)
             {
                 size++;
             }

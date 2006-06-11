@@ -38,6 +38,7 @@ import org.jaudiotagger.tag.InvalidTagException;
 import org.jaudiotagger.tag.id3.ID3Frames;
 import org.jaudiotagger.tag.id3.ID3v23Frames;
 import org.jaudiotagger.tag.id3.ID3v24Frames;
+import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
 
 public class FrameBodyCOMM  extends AbstractID3v2FrameBody  implements ID3v24FrameBody,ID3v23FrameBody
 {
@@ -200,11 +201,11 @@ public class FrameBodyCOMM  extends AbstractID3v2FrameBody  implements ID3v24Fra
         //@todo use defined constant, Encoding of (1) doesnt seem to work properly
         if (((AbstractString) getObject(DataTypes.OBJ_TEXT)).canBeEncoded() == false)
         {
-            this.setTextEncoding((byte) 2);
+            this.setTextEncoding((byte) TextEncoding.UTF_16BE);
         }
         if (((AbstractString) getObject(DataTypes.OBJ_DESCRIPTION)).canBeEncoded() == false)
         {
-            this.setTextEncoding((byte) 2);
+            this.setTextEncoding((byte) TextEncoding.UTF_16BE);
         }
         super.write(tagBuffer);
     }
