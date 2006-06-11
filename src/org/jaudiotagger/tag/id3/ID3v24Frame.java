@@ -46,12 +46,9 @@ public class ID3v24Frame
     }
 
     /**
-     * Creates a new ID3v2_4Frame datatype based on body.
-     *
-     * @param body DOCUMENT ME!
-     * @todo incomplete
+     * Creates a new ID3v2_4Frame datatype based on body.      
      */
-    public ID3v24Frame(AbstractID3v2FrameBody body)
+    private ID3v24Frame(AbstractID3v2FrameBody body)
     {
         this.frameBody = body;
     }
