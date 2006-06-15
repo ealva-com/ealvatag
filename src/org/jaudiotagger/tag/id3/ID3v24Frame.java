@@ -46,14 +46,6 @@ public class ID3v24Frame
     }
 
     /**
-     * Creates a new ID3v2_4Frame datatype based on body.      
-     */
-    private ID3v24Frame(AbstractID3v2FrameBody body)
-    {
-        this.frameBody = body;
-    }
-
-    /**
      * Creates a new ID3v2_4Frame of type identifier. An empty
      * body of the correct type will be automatically created.
      * This constructor should be used when wish to create a new

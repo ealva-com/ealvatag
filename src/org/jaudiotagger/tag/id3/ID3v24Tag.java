@@ -336,31 +336,36 @@ public class ID3v24Tag
                 if (id3tag.title.length() > 0)
                 {
                     newBody = new FrameBodyTIT2((byte) 0, id3tag.title);
-                    newFrame = new ID3v24Frame(newBody);
+                    newFrame = new ID3v24Frame(ID3v24Frames.FRAME_ID_TITLE);
+                    newFrame.setBody(newBody);
                     frameMap.put(newFrame.getIdentifier(), newFrame);
                 }
                 if (id3tag.artist.length() > 0)
                 {
                     newBody = new FrameBodyTPE1((byte) 0, id3tag.artist);
-                    newFrame = new ID3v24Frame(newBody);
+                    newFrame = new ID3v24Frame(ID3v24Frames.FRAME_ID_ARTIST);
+                    newFrame.setBody(newBody);
                     frameMap.put(newFrame.getIdentifier(), newFrame);
                 }
                 if (id3tag.album.length() > 0)
                 {
                     newBody = new FrameBodyTALB((byte) 0, id3tag.album);
-                    newFrame = new ID3v24Frame(newBody);
+                    newFrame = new ID3v24Frame(ID3v24Frames.FRAME_ID_ALBUM);
+                    newFrame.setBody(newBody);
                     frameMap.put(newFrame.getIdentifier(), newFrame);
                 }
                 if (id3tag.year.length() > 0)
                 {
-                    newBody = new FrameBodyTDRC((byte) 0, id3tag.year);
-                    newFrame = new ID3v24Frame(newBody);
+                    newBody  = new FrameBodyTDRC((byte) 0, id3tag.year);
+                    newFrame = new ID3v24Frame(ID3v24Frames.FRAME_ID_YEAR);
+                    newFrame.setBody(newBody);
                     frameMap.put(newFrame.getIdentifier(), newFrame);
                 }
                 if (id3tag.comment.length() > 0)
                 {
                     newBody = new FrameBodyCOMM((byte) 0, "ENG", "", id3tag.comment);
-                    newFrame = new ID3v24Frame(newBody);
+                    newFrame = new ID3v24Frame(ID3v24Frames.FRAME_ID_COMMENT);
+                    newFrame.setBody(newBody);
                     frameMap.put(newFrame.getIdentifier(), newFrame);
                 }
                 if (id3tag.genre >= 0)
@@ -369,7 +374,8 @@ public class ID3v24Tag
                         GenreTypes.getInstanceOf().getValueForId(id3tag.genre);
 
                     newBody = new FrameBodyTCON((byte) 0, genre);
-                    newFrame = new ID3v24Frame(newBody);
+                    newFrame = new ID3v24Frame(ID3v24Frames.FRAME_ID_GENRE);
+                    newFrame.setBody(newBody);
                     frameMap.put(newFrame.getIdentifier(), newFrame);
                 }
                 if (mp3tag instanceof ID3v11Tag)
@@ -378,7 +384,8 @@ public class ID3v24Tag
                     if (id3tag2.track > 0)
                     {
                         newBody = new FrameBodyTRCK((byte) 0, Byte.toString(id3tag2.track));
-                        newFrame = new ID3v24Frame(newBody);
+                        newFrame = new ID3v24Frame(ID3v24Frames.FRAME_ID_TRACK);
+                        newFrame.setBody(newBody);
                         frameMap.put(newFrame.getIdentifier(), newFrame);
                     }
                 }
