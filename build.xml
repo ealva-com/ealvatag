@@ -211,5 +211,7 @@
 	<target name="clean" description="Cleanup module">
 		<delete dir="${output.dir}"/>
 		<delete dir="${testoutput.dir}"/>
+		<delete dir="${junitreport.testdatatmp.dir}"/>
+		<delete dir="${junitreport.dir}"/>
 	</target>
 </project>
