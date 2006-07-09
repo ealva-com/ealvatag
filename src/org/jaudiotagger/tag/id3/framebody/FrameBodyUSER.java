@@ -27,8 +27,11 @@ import org.jaudiotagger.tag.datatype.*;
 import org.jaudiotagger.tag.InvalidTagException;
 import org.jaudiotagger.tag.id3.ID3Frames;
 import org.jaudiotagger.tag.id3.ID3v24Frames;
+import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
+import org.jaudiotagger.tag.id3.valuepair.Languages;
 
 import java.io.IOException;
+import java.io.ByteArrayOutputStream;
 import java.nio.ByteBuffer;
 
 
@@ -66,7 +69,6 @@ public class FrameBodyUSER extends AbstractID3v2FrameBody implements ID3v24Frame
     /**
      * Creates a new FrameBodyUSER datatype.
      *
-     * @param file DOCUMENT ME!
      * @throws IOException         DOCUMENT ME!
      * @throws InvalidTagException DOCUMENT ME!
      */
@@ -106,13 +108,24 @@ public class FrameBodyUSER extends AbstractID3v2FrameBody implements ID3v24Frame
         setObjectValue(DataTypes.OBJ_LANGUAGE, language);
     }
 
+    /** If the text cannot be encoded using current encoder, change the encoder */
+    public void write(ByteArrayOutputStream tagBuffer)
+        throws IOException
+    {
+        if (((AbstractString) getObject(DataTypes.OBJ_TEXT)).canBeEncoded() == false)
+        {
+            this.setTextEncoding(TextEncoding.UTF_16BE);
+        }
+        super.write(tagBuffer);
+    }
+
     /**
      * DOCUMENT ME!
      */
     protected void setupObjectList()
     {
-        objectList.add(new NumberHashMap(DataTypes.OBJ_TEXT_ENCODING, this, 1));
-        objectList.add(new StringHashMap(DataTypes.OBJ_LANGUAGE, this, 3));
+        objectList.add(new NumberHashMap(DataTypes.OBJ_TEXT_ENCODING, this, TextEncoding.TEXT_ENCODING_FIELD_SIZE));
+        objectList.add(new StringHashMap(DataTypes.OBJ_LANGUAGE, this, Languages.LANGUAGE_FIELD_SIZE));
         objectList.add(new StringSizeTerminated(DataTypes.OBJ_TEXT, this));
     }
 }

@@ -28,6 +28,7 @@ import org.jaudiotagger.tag.InvalidTagException;
 import org.jaudiotagger.tag.id3.ID3Frames;
 import org.jaudiotagger.tag.id3.ID3v24Frames;
 import org.jaudiotagger.tag.id3.ID3v24Frames;
+import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -41,7 +42,7 @@ public class FrameBodyTXXX
      */
     public FrameBodyTXXX()
     {
-        this.setObjectValue(DataTypes.OBJ_TEXT_ENCODING, new Byte((byte) 0));
+        this.setObjectValue(DataTypes.OBJ_TEXT_ENCODING, new Byte(TextEncoding.ISO_8859_1));
         this.setObjectValue(DataTypes.OBJ_DESCRIPTION, "");
         this.setObjectValue(DataTypes.OBJ_TEXT, "");
 
@@ -69,7 +70,6 @@ public class FrameBodyTXXX
     /**
      * Creates a new FrameBodyTXXX datatype.
      *
-     * @param file DOCUMENT ME!
      * @throws IOException         DOCUMENT ME!
      * @throws InvalidTagException DOCUMENT ME!
      */
@@ -114,9 +114,9 @@ public class FrameBodyTXXX
      */
     protected void setupObjectList()
     {
-        objectList.add(new NumberHashMap(DataTypes.OBJ_TEXT_ENCODING, this, 1));
-        objectList.add(new StringNullTerminated(DataTypes.OBJ_DESCRIPTION, this));
-        objectList.add(new StringSizeTerminated(DataTypes.OBJ_TEXT, this));
+        objectList.add(new NumberHashMap(DataTypes.OBJ_TEXT_ENCODING, this, TextEncoding.TEXT_ENCODING_FIELD_SIZE));
+        objectList.add(new TextEncodedStringNullTerminated(DataTypes.OBJ_DESCRIPTION, this));
+        objectList.add(new TextEncodedStringSizeTerminated(DataTypes.OBJ_TEXT, this));
     }
 
 }

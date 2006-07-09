@@ -57,7 +57,6 @@ public class FrameBodyWOAR extends AbstractFrameBodyUrlLink   implements ID3v24F
     /**
      * Creates a new FrameBodyWOAR datatype.
      *
-     * @param file DOCUMENT ME!
      * @throws java.io.IOException DOCUMENT ME!
      * @throws InvalidTagException DOCUMENT ME!
      */

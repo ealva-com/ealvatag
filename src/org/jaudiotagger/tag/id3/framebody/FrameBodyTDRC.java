@@ -204,7 +204,7 @@ public class FrameBodyTDRC extends AbstractFrameBodyTextInfo implements ID3v24Fr
     {
         originalID = ID3v23Frames.FRAME_ID_V3_TYER;
         year = body.getText();
-        setObjectValue(DataTypes.OBJ_TEXT_ENCODING, new Byte((byte) 0));
+        setObjectValue(DataTypes.OBJ_TEXT_ENCODING,  new Byte(TextEncoding.ISO_8859_1));
         setObjectValue(DataTypes.OBJ_TEXT, body.getText());
     }
 
@@ -215,7 +215,7 @@ public class FrameBodyTDRC extends AbstractFrameBodyTextInfo implements ID3v24Fr
     {
         originalID = ID3v23Frames.FRAME_ID_V3_TIME;
         time = body.getText();
-        setObjectValue(DataTypes.OBJ_TEXT_ENCODING, new Byte((byte) 0));
+        setObjectValue(DataTypes.OBJ_TEXT_ENCODING,  new Byte(TextEncoding.ISO_8859_1));
         setObjectValue(DataTypes.OBJ_TEXT, body.getText());
     }
 
@@ -226,7 +226,7 @@ public class FrameBodyTDRC extends AbstractFrameBodyTextInfo implements ID3v24Fr
     {
         originalID = ID3v23Frames.FRAME_ID_V3_TDAT;
         date = body.getText();
-        setObjectValue(DataTypes.OBJ_TEXT_ENCODING, new Byte((byte) 0));
+        setObjectValue(DataTypes.OBJ_TEXT_ENCODING,  new Byte(TextEncoding.ISO_8859_1));
         setObjectValue(DataTypes.OBJ_TEXT, body.getText());
     }
 
@@ -237,7 +237,7 @@ public class FrameBodyTDRC extends AbstractFrameBodyTextInfo implements ID3v24Fr
     {
         originalID = ID3v23Frames.FRAME_ID_V3_TRDA;
         reco = body.getText();
-        setObjectValue(DataTypes.OBJ_TEXT_ENCODING, new Byte((byte) 0));
+        setObjectValue(DataTypes.OBJ_TEXT_ENCODING,  new Byte(TextEncoding.ISO_8859_1));
         setObjectValue(DataTypes.OBJ_TEXT, body.getText());
     }
 
@@ -256,7 +256,6 @@ public class FrameBodyTDRC extends AbstractFrameBodyTextInfo implements ID3v24Fr
     /**
      * Creates a new FrameBodyTDRC datatype from File
      *
-     * @param file DOCUMENT ME!
      * @throws java.io.IOException DOCUMENT ME!
      * @throws InvalidTagException DOCUMENT ME!
      */

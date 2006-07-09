@@ -25,8 +25,11 @@ package org.jaudiotagger.tag.id3.framebody;
 
 import org.jaudiotagger.tag.datatype.*;
 import org.jaudiotagger.tag.InvalidTagException;
+import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
+import org.jaudiotagger.tag.id3.ID3v24Frames;
 
 import java.io.IOException;
+import java.io.ByteArrayOutputStream;
 import java.nio.ByteBuffer;
 
 
@@ -67,7 +70,6 @@ public class FrameBodyOWNE extends AbstractID3v2FrameBody implements ID3v24Frame
     /**
      * Creates a new FrameBodyOWNE datatype.
      *
-     * @param file DOCUMENT ME!
      * @throws IOException         DOCUMENT ME!
      * @throws InvalidTagException DOCUMENT ME!
      */
@@ -84,7 +86,18 @@ public class FrameBodyOWNE extends AbstractID3v2FrameBody implements ID3v24Frame
      */
     public String getIdentifier()
     {
-        return "OWNE";
+        return ID3v24Frames.FRAME_ID_OWNERSHIP;
+    }
+
+      /** If the seller name cannot be encoded using current encoder, change the encoder */
+    public void write(ByteArrayOutputStream tagBuffer)
+        throws IOException
+    {
+        if (((AbstractString) getObject(DataTypes.OBJ_SELLER_NAME)).canBeEncoded() == false)
+        {
+            this.setTextEncoding(TextEncoding.UTF_16BE);
+        }
+        super.write(tagBuffer);
     }
 
     /**
@@ -92,9 +105,9 @@ public class FrameBodyOWNE extends AbstractID3v2FrameBody implements ID3v24Frame
      */
     protected void setupObjectList()
     {
-        objectList.add(new NumberHashMap(DataTypes.OBJ_TEXT_ENCODING, this, 1));
+        objectList.add(new NumberHashMap(DataTypes.OBJ_TEXT_ENCODING, this, TextEncoding.TEXT_ENCODING_FIELD_SIZE));
         objectList.add(new StringNullTerminated(DataTypes.OBJ_PRICE_PAID, this));
         objectList.add(new StringDate(DataTypes.OBJ_PURCHASE_DATE, this));
-        objectList.add(new StringSizeTerminated(DataTypes.OBJ_SELLER_NAME, this));
+        objectList.add(new TextEncodedStringSizeTerminated(DataTypes.OBJ_SELLER_NAME, this));
     }
 }

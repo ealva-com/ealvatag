@@ -30,19 +30,20 @@ import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
 import java.nio.charset.*;
 import java.nio.*;
 
+/** A partial implementation for String based ID3 fields */
 public abstract class AbstractString
     extends AbstractDataType
 {
-    public AbstractString()
+    protected AbstractString()
     {
     }
 
-    public AbstractString(String identifier, AbstractTagFrameBody frameBody)
+    protected AbstractString(String identifier, AbstractTagFrameBody frameBody)
     {
         super(identifier, frameBody);
     }
 
-    public AbstractString(AbstractString object)
+    protected AbstractString(AbstractString object)
     {
         super(object);
     }
@@ -51,7 +52,7 @@ public abstract class AbstractString
      * Return the size in bytes of this datatype as it was/is held in file this
      * will be effected by the encoding type.
      *
-     * @return DOCUMENT ME!
+     * @return the size
      */
     public int getSize()
     {
@@ -63,7 +64,6 @@ public abstract class AbstractString
      * This is set after writing the data to allow us to recalculate the size for
      * frame header.
      *
-     * @return DOCUMENT ME!
      */
     protected void setSize(int size)
     {
@@ -73,7 +73,7 @@ public abstract class AbstractString
     /**
      * Return String representation of datatype
      *
-     * @return DOCUMENT ME!
+     * @return a string representation of the value
      */
     public String toString()
     {

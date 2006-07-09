@@ -29,10 +29,15 @@ import org.jaudiotagger.tag.InvalidTagException;
 import org.jaudiotagger.tag.id3.ID3Frames;
 import org.jaudiotagger.tag.id3.ID3Frames;
 import org.jaudiotagger.tag.id3.ID3v24Frames;
+import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
 
 import java.io.IOException;
+import java.io.ByteArrayOutputStream;
 import java.nio.ByteBuffer;
 
+/** Represents a user defined url
+ *
+ */
 public class FrameBodyWXXX
     extends AbstractFrameBodyUrlLink  implements ID3v24FrameBody,ID3v23FrameBody
 {
@@ -42,7 +47,7 @@ public class FrameBodyWXXX
      */
     public FrameBodyWXXX()
     {
-        this.setObjectValue(DataTypes.OBJ_TEXT_ENCODING, new Byte((byte) 0));
+        this.setObjectValue(DataTypes.OBJ_TEXT_ENCODING, new Byte(TextEncoding.ISO_8859_1));
         this.setObjectValue(DataTypes.OBJ_DESCRIPTION, "");
         this.setObjectValue(DataTypes.OBJ_URLLINK, "");
     }
@@ -69,7 +74,6 @@ public class FrameBodyWXXX
     /**
      * Creates a new FrameBodyWXXX datatype by reading from file.
      *
-     * @param file DOCUMENT ME!
      * @throws IOException         DOCUMENT ME!
      * @throws InvalidTagException DOCUMENT ME!
      */
@@ -109,13 +113,26 @@ public class FrameBodyWXXX
         return ID3v24Frames.FRAME_ID_USER_DEFINED_URL;
     }
 
+     /**
+     * If the description cannot be encoded using the current encoding change the encoder
+     */
+    public void write(ByteArrayOutputStream tagBuffer)
+        throws IOException
+    {
+        if (((AbstractString) getObject(DataTypes.OBJ_DESCRIPTION)).canBeEncoded() == false)
+        {
+            this.setTextEncoding(TextEncoding.UTF_16BE);
+        }
+        super.write(tagBuffer);
+    }
+
     /**
      * THis is different ot other URL Links
      */
     protected void setupObjectList()
     {
-        objectList.add(new NumberHashMap(DataTypes.OBJ_TEXT_ENCODING, this, 1));
-        objectList.add(new StringNullTerminated(DataTypes.OBJ_DESCRIPTION, this));
+        objectList.add(new NumberHashMap(DataTypes.OBJ_TEXT_ENCODING, this, TextEncoding.TEXT_ENCODING_FIELD_SIZE));
+        objectList.add(new TextEncodedStringNullTerminated(DataTypes.OBJ_DESCRIPTION, this));
         objectList.add(new StringSizeTerminated(DataTypes.OBJ_URLLINK, this));
     }
 }

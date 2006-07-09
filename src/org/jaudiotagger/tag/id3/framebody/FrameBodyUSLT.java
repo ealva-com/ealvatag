@@ -27,8 +27,11 @@ import org.jaudiotagger.tag.datatype.*;
 import org.jaudiotagger.tag.InvalidTagException;
 import org.jaudiotagger.tag.id3.ID3Frames;
 import org.jaudiotagger.tag.id3.ID3v24Frames;
+import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
+import org.jaudiotagger.tag.id3.valuepair.Languages;
 
 import java.io.IOException;
+import java.io.ByteArrayOutputStream;
 import java.nio.ByteBuffer;
 
 
@@ -170,13 +173,14 @@ public class FrameBodyUSLT extends AbstractID3v2FrameBody implements ID3v24Frame
         setLyric(getLyric() + line.writeString());
     }
 
+
     /**
      * DOCUMENT ME!
      */
     protected void setupObjectList()
     {
-        objectList.add(new NumberHashMap(DataTypes.OBJ_TEXT_ENCODING, this, 1));
-        objectList.add(new StringHashMap(DataTypes.OBJ_LANGUAGE, this, 3));
+        objectList.add(new NumberHashMap(DataTypes.OBJ_TEXT_ENCODING, this, TextEncoding.TEXT_ENCODING_FIELD_SIZE));
+        objectList.add(new StringHashMap(DataTypes.OBJ_LANGUAGE, this, Languages.LANGUAGE_FIELD_SIZE));
         objectList.add(new StringNullTerminated(DataTypes.OBJ_DESCRIPTION, this));
         objectList.add(new StringSizeTerminated(DataTypes.OBJ_LYRICS, this));
     }

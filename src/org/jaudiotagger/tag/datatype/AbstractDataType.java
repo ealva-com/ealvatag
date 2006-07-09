@@ -32,7 +32,8 @@ import org.jaudiotagger.tag.InvalidDataTypeException;
 import java.util.logging.*;
 
 /**
- * Represents a data item that can be held within a frames body
+ * Represents a field/data type that can be held within a frames body, these map loosely onto
+ * Section 4. ID3v2 frame overview at http://www.id3.org/id3v2.4.0-structure.txt
  */
 public abstract class AbstractDataType
     extends java.lang.Object
@@ -47,13 +48,14 @@ public abstract class AbstractDataType
     protected Object value = null;
 
     /**
-     * Holds the key such as "Text" or "PictureType"
+     * Holds the key such as "Text" or "PictureType", the naming of keys are fairly arbitary but are intended
+     * to make it easier to for the developer, the keys themseleves are not written to the tag.
      */
     protected String identifier = "";
 
     /**
      * Holds the calling body,allows an datatype to query other objects in the
-     * body such as OBJ_TEXT_ENCODING
+     * body such as the Text Encoding of the frame
      */
     private AbstractTagFrameBody frameBody = null;
 
@@ -62,19 +64,11 @@ public abstract class AbstractDataType
      */
     protected int size;
 
-    public AbstractDataType()
+    protected AbstractDataType()
     {
     }
 
-    public void setBody(AbstractTagFrameBody frameBody)
-    {
-        this.frameBody = frameBody;
-    }
 
-    public AbstractTagFrameBody getBody()
-    {
-        return frameBody;
-    }
 
 
     protected AbstractDataType(AbstractTagFrameBody frameBody)
@@ -178,6 +172,16 @@ public abstract class AbstractDataType
         {
             throw new UnsupportedOperationException("Unable to create copy of class " + copyObject.getClass());
         }
+    }
+
+    public void setBody(AbstractTagFrameBody frameBody)
+    {
+        this.frameBody = frameBody;
+    }
+
+    public AbstractTagFrameBody getBody()
+    {
+        return frameBody;
     }
 
     /**
@@ -347,7 +351,7 @@ public abstract class AbstractDataType
     }
 
     /**
-     * This is the starting point for reading bytes from the file into the Object.
+     * This is the starting point for reading bytes from the file into the id3 datatype
      * starting at offset.
      * This class must be overridden
      *
@@ -358,7 +362,7 @@ public abstract class AbstractDataType
 
 
     /**
-     * Starting point write Object back to array of bytes.
+     * Starting point write ID3 Datatype back to array of bytes.
      * This class must be overridden.
      *
      * @return DOCUMENT ME!

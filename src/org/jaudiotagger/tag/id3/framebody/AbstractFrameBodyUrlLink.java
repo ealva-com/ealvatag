@@ -64,7 +64,6 @@ public abstract class AbstractFrameBodyUrlLink extends AbstractID3v2FrameBody
     /**
      * Creates a new FrameBodyUrlLink datatype.
      *
-     * @param file DOCUMENT ME!
      * @throws java.io.IOException DOCUMENT ME!
      * @throws InvalidTagException DOCUMENT ME!
      */

@@ -37,6 +37,7 @@ import org.jaudiotagger.tag.datatype.DataTypes;
 import org.jaudiotagger.tag.id3.ID3Tags;
 import org.jaudiotagger.tag.AbstractTagItem;
 import org.jaudiotagger.tag.id3.ID3Tags;
+import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
@@ -75,7 +76,7 @@ public abstract class AbstractTagFrameBody
         }
         else
         {
-            return 0;
+            return TextEncoding.ISO_8859_1;
         }
     }
 

@@ -47,8 +47,7 @@ public abstract class AbstractFrameBodyTextInfo
     protected AbstractFrameBodyTextInfo()
     {
         super();
-        //Initilise default text encoding
-        setObjectValue(DataTypes.OBJ_TEXT_ENCODING, new Byte((byte) 0));
+        setObjectValue(DataTypes.OBJ_TEXT_ENCODING, new Byte(TextEncoding.ISO_8859_1));
         setObjectValue(DataTypes.OBJ_TEXT, "");
     }
 
@@ -81,7 +80,6 @@ public abstract class AbstractFrameBodyTextInfo
      * Creates a new FrameBodyTextInformation datatype from file. The super.super
      * Constructor sets up the Object list for the frame.
      *
-     * @param file The MP3File to read the frame from.
      * @throws java.io.IOException DOCUMENT ME!
      * @throws InvalidTagException DOCUMENT ME!
      */
@@ -93,9 +91,9 @@ public abstract class AbstractFrameBodyTextInfo
     }
 
     /**
-     * Retrieve the next String @todo why is this needed.
+     * Retrieve the next String
      *
-     * @return DOCUMENT ME!
+     * @return the text
      */
     public String getBriefDescription()
     {
@@ -105,7 +103,7 @@ public abstract class AbstractFrameBodyTextInfo
     /**
      * Set the Text String, used to replace the value within the frame
      *
-     * @param text DOCUMENT ME!
+     * @param text to set
      */
     public void setText(String text)
     {
@@ -115,21 +113,11 @@ public abstract class AbstractFrameBodyTextInfo
     /**
      * Retrieve the Text String.
      *
-     * @return DOCUMENT ME!
+     * @return the text string
      */
     public String getText()
     {
         return (String) getObjectValue(DataTypes.OBJ_TEXT);
-    }
-
-    /**
-     * Set the Text Encoding
-     *
-     * @param textEncoding DOCUMENT ME!
-     */
-    public void setTextEncoding(byte textEncoding)
-    {
-        setObjectValue(DataTypes.OBJ_TEXT_ENCODING, new Byte(textEncoding));
     }
 
     /**
@@ -143,7 +131,7 @@ public abstract class AbstractFrameBodyTextInfo
     {
         if (((AbstractString) getObject(DataTypes.OBJ_TEXT)).canBeEncoded() == false)
         {
-            this.setTextEncoding(TextEncoding.UTF_16);
+            this.setTextEncoding(TextEncoding.UTF_16BE);
         }
         super.write(tagBuffer);
     }
@@ -154,7 +142,7 @@ public abstract class AbstractFrameBodyTextInfo
      */
     protected void setupObjectList()
     {
-        objectList.add(new NumberHashMap(DataTypes.OBJ_TEXT_ENCODING, this, 1));
+        objectList.add(new NumberHashMap(DataTypes.OBJ_TEXT_ENCODING, this, TextEncoding.TEXT_ENCODING_FIELD_SIZE ));
         objectList.add(new StringSizeTerminated(DataTypes.OBJ_TEXT, this));
     }
 

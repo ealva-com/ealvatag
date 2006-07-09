@@ -24,6 +24,7 @@
 package org.jaudiotagger.tag.id3.framebody;
 
 import org.jaudiotagger.tag.InvalidTagException;
+import org.jaudiotagger.tag.id3.ID3v24Frames;
 
 import java.nio.ByteBuffer;
 
@@ -57,7 +58,6 @@ public class FrameBodyTDTG extends AbstractFrameBodyTextInfo implements ID3v24Fr
     /**
      * Creates a new FrameBodyTDTG datatype.
      *
-     * @param file DOCUMENT ME!
      * @throws java.io.IOException DOCUMENT ME!
      * @throws InvalidTagException DOCUMENT ME!
      */
@@ -68,13 +68,12 @@ public class FrameBodyTDTG extends AbstractFrameBodyTextInfo implements ID3v24Fr
     }
 
     /**
-     * DOCUMENT ME!
      *
-     * @return DOCUMENT ME!
+     * @return the frmae identifier
      */
     public String getIdentifier()
     {
-        return "TDTG";
+        return ID3v24Frames.FRAME_ID_TAGGING_TIME;
     }
 
 

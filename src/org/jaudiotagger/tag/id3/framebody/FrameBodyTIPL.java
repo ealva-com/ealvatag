@@ -28,6 +28,7 @@ import org.jaudiotagger.tag.datatype.*;
 import org.jaudiotagger.tag.InvalidTagException;
 import org.jaudiotagger.tag.id3.framebody.FrameBodyIPLS;
 import org.jaudiotagger.tag.id3.ID3v24Frames;
+import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
 
 import java.nio.ByteBuffer;
 
@@ -52,7 +53,7 @@ public class FrameBodyTIPL
      */
     public FrameBodyTIPL(FrameBodyIPLS body)
     {
-        setObjectValue(DataTypes.OBJ_TEXT_ENCODING, new Byte((byte) 0));
+        setObjectValue(DataTypes.OBJ_TEXT_ENCODING,  new Byte(TextEncoding.ISO_8859_1));
         setObjectValue(DataTypes.OBJ_TEXT, body.getObjectValue(DataTypes.OBJ_TEXT));
     }
 
@@ -70,7 +71,6 @@ public class FrameBodyTIPL
     /**
      * Creates a new FrameBodyTIPL datatype.
      *
-     * @param file DOCUMENT ME!
      * @throws java.io.IOException DOCUMENT ME!
      * @throws InvalidTagException DOCUMENT ME!
      */

@@ -39,6 +39,7 @@ import org.jaudiotagger.tag.id3.ID3Frames;
 import org.jaudiotagger.tag.id3.ID3v23Frames;
 import org.jaudiotagger.tag.id3.ID3v24Frames;
 import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
+import org.jaudiotagger.tag.id3.valuepair.Languages;
 
 public class FrameBodyCOMM  extends AbstractID3v2FrameBody  implements ID3v24FrameBody,ID3v23FrameBody
 {
@@ -47,9 +48,8 @@ public class FrameBodyCOMM  extends AbstractID3v2FrameBody  implements ID3v24Fra
      */
     public FrameBodyCOMM()
     {
-        setObjectValue(DataTypes.OBJ_TEXT_ENCODING, new Byte((byte) 0));
-        //@todo use a defined constant
-        setObjectValue(DataTypes.OBJ_LANGUAGE, "eng");
+        setObjectValue(DataTypes.OBJ_TEXT_ENCODING, new Byte(TextEncoding.ISO_8859_1));             
+        setObjectValue(DataTypes.OBJ_LANGUAGE, Languages.DEFAULT_ID);
         setObjectValue(DataTypes.OBJ_DESCRIPTION, "");
         setObjectValue(DataTypes.OBJ_TEXT, "");
     }
@@ -171,23 +171,13 @@ public class FrameBodyCOMM  extends AbstractID3v2FrameBody  implements ID3v24Fra
 
     /**
      * DOCUMENT ME!
-     *
-     * @param textEncoding DOCUMENT ME!
-     */
-    public void setTextEncoding(byte textEncoding)
-    {
-        setObjectValue(DataTypes.OBJ_TEXT_ENCODING, new Byte(textEncoding));
-    }
-
-    /**
-     * DOCUMENT ME!
      */
     protected void setupObjectList()
     {
-        objectList.add(new NumberHashMap(DataTypes.OBJ_TEXT_ENCODING, this, 1));
-        objectList.add(new StringHashMap(DataTypes.OBJ_LANGUAGE, this, 3));
-        objectList.add(new StringNullTerminated(DataTypes.OBJ_DESCRIPTION, this));
-        objectList.add(new StringSizeTerminated(DataTypes.OBJ_TEXT, this));
+        objectList.add(new NumberHashMap(DataTypes.OBJ_TEXT_ENCODING, this, TextEncoding.TEXT_ENCODING_FIELD_SIZE));
+        objectList.add(new StringHashMap(DataTypes.OBJ_LANGUAGE, this, Languages.LANGUAGE_FIELD_SIZE));
+        objectList.add(new TextEncodedStringNullTerminated(DataTypes.OBJ_DESCRIPTION, this));
+        objectList.add(new TextEncodedStringSizeTerminated(DataTypes.OBJ_TEXT, this));
     }
 
     /**
@@ -198,7 +188,6 @@ public class FrameBodyCOMM  extends AbstractID3v2FrameBody  implements ID3v24Fra
     public void write(ByteArrayOutputStream tagBuffer)
         throws IOException
     {
-        //@todo use defined constant, Encoding of (1) doesnt seem to work properly
         if (((AbstractString) getObject(DataTypes.OBJ_TEXT)).canBeEncoded() == false)
         {
             this.setTextEncoding((byte) TextEncoding.UTF_16BE);

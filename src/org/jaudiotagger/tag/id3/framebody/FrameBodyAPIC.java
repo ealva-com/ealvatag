@@ -33,6 +33,7 @@ import org.jaudiotagger.tag.id3.valuepair.*;
 import org.jaudiotagger.audio.mp3.*;
 
 import java.io.IOException;
+import java.io.ByteArrayOutputStream;
 import java.nio.ByteBuffer;
 
 public class FrameBodyAPIC extends AbstractID3v2FrameBody implements ID3v24FrameBody,ID3v23FrameBody
@@ -44,7 +45,7 @@ public class FrameBodyAPIC extends AbstractID3v2FrameBody implements ID3v24Frame
     public FrameBodyAPIC()
     {
         //Initilise default text encoding
-        setObjectValue(DataTypes.OBJ_TEXT_ENCODING, new Byte((byte) 0));
+        setObjectValue(DataTypes.OBJ_TEXT_ENCODING, new Byte(TextEncoding.ISO_8859_1));
     }
 
     public FrameBodyAPIC(FrameBodyAPIC body)
@@ -91,7 +92,6 @@ public class FrameBodyAPIC extends AbstractID3v2FrameBody implements ID3v24Frame
     /**
      * Creates a new FrameBodyAPIC datatype.
      *
-     * @param file DOCUMENT ME!
      * @throws IOException         DOCUMENT ME!
      * @throws InvalidTagException DOCUMENT ME!
      */
@@ -131,15 +131,27 @@ public class FrameBodyAPIC extends AbstractID3v2FrameBody implements ID3v24Frame
         return ID3v24Frames.FRAME_ID_ATTACHED_PICTURE + ((char) 0) + getDescription();
     }
 
+
+    /** If the description cannot be encoded using current encoder, change the encoder */
+    public void write(ByteArrayOutputStream tagBuffer)
+        throws IOException
+    {
+        if (((AbstractString) getObject(DataTypes.OBJ_DESCRIPTION)).canBeEncoded() == false)
+        {
+            this.setTextEncoding(TextEncoding.UTF_16BE);
+        }
+        super.write(tagBuffer);
+    }
+
     /**
      * DOCUMENT ME!
      */
     protected void setupObjectList()
     {
-        objectList.add(new NumberHashMap(DataTypes.OBJ_TEXT_ENCODING, this, 1));
+        objectList.add(new NumberHashMap(DataTypes.OBJ_TEXT_ENCODING, this, TextEncoding.TEXT_ENCODING_FIELD_SIZE));
         objectList.add(new StringNullTerminated(DataTypes.OBJ_MIME_TYPE, this));
-        objectList.add(new NumberHashMap(DataTypes.OBJ_PICTURE_TYPE, this, 1));
-        objectList.add(new StringNullTerminated(DataTypes.OBJ_DESCRIPTION, this));
+        objectList.add(new NumberHashMap(DataTypes.OBJ_PICTURE_TYPE, this, PictureTypes.PICTURE_TYPE_FIELD_SIZE));
+        objectList.add(new TextEncodedStringNullTerminated(DataTypes.OBJ_DESCRIPTION, this));
         objectList.add(new ByteArraySizeTerminated(DataTypes.OBJ_PICTURE_DATA, this));
     }
 }

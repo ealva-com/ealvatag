@@ -26,6 +26,8 @@ package org.jaudiotagger.tag.id3.framebody;
 import org.jaudiotagger.tag.datatype.*;
 import org.jaudiotagger.tag.InvalidTagException;
 import org.jaudiotagger.tag.id3.ID3v24Frames;
+import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
+import org.jaudiotagger.tag.id3.valuepair.Languages;
 
 import java.nio.ByteBuffer;
 
@@ -60,7 +62,6 @@ public class FrameBodyTLAN extends AbstractFrameBodyTextInfo implements ID3v24Fr
     /**
      * Creates a new FrameBodyTLAN datatype.
      *
-     * @param file DOCUMENT ME!
      * @throws java.io.IOException DOCUMENT ME!
      * @throws InvalidTagException DOCUMENT ME!
      */
@@ -85,7 +86,7 @@ public class FrameBodyTLAN extends AbstractFrameBodyTextInfo implements ID3v24Fr
      */
     protected void setupObjectList()
     {
-        objectList.add(new NumberHashMap(DataTypes.OBJ_TEXT_ENCODING, this, 1));
-        objectList.add(new StringFixedLength(DataTypes.OBJ_TEXT, this, 3));
+        objectList.add(new NumberHashMap(DataTypes.OBJ_TEXT_ENCODING, this, TextEncoding.TEXT_ENCODING_FIELD_SIZE));
+        objectList.add(new StringFixedLength(DataTypes.OBJ_TEXT, this, Languages.LANGUAGE_FIELD_SIZE));
     }
 }

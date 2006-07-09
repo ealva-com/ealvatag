@@ -30,6 +30,7 @@ import org.jaudiotagger.tag.id3.framebody.FrameBodyTDRC;
 import org.jaudiotagger.tag.id3.ID3Frames;
 import org.jaudiotagger.tag.id3.ID3v24Frames;
 import org.jaudiotagger.tag.id3.ID3v23Frames;
+import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
 
 import java.nio.ByteBuffer;
 
@@ -53,7 +54,7 @@ public class FrameBodyTYER extends AbstractFrameBodyTextInfo implements ID3v23Fr
      */
     public FrameBodyTYER(FrameBodyTDRC body)
     {
-        setObjectValue(DataTypes.OBJ_TEXT_ENCODING, new Byte((byte) 0));
+        setObjectValue(DataTypes.OBJ_TEXT_ENCODING, new Byte(TextEncoding.ISO_8859_1));
         setObjectValue(DataTypes.OBJ_TEXT, body.getText());
     }
 

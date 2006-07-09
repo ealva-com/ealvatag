@@ -28,9 +28,11 @@ import org.jaudiotagger.tag.InvalidTagException;
 import org.jaudiotagger.tag.id3.framebody.FrameBodyAPIC;
 import org.jaudiotagger.tag.id3.valuepair.ImageFormats;
 import org.jaudiotagger.tag.id3.valuepair.ImageFormats;
+import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
 import org.jaudiotagger.audio.mp3.*;
 
 import java.io.IOException;
+import java.io.ByteArrayOutputStream;
 import java.nio.ByteBuffer;
 
 public class FrameBodyPIC extends AbstractID3v2FrameBody implements ID3v22FrameBody
@@ -42,7 +44,7 @@ public class FrameBodyPIC extends AbstractID3v2FrameBody implements ID3v22FrameB
      */
     public FrameBodyPIC()
     {
-        setObjectValue(DataTypes.OBJ_TEXT_ENCODING, new Byte((byte) 0));
+        setObjectValue(DataTypes.OBJ_TEXT_ENCODING, new Byte(TextEncoding.ISO_8859_1));
     }
 
     public FrameBodyPIC(FrameBodyPIC body)
@@ -84,7 +86,6 @@ public class FrameBodyPIC extends AbstractID3v2FrameBody implements ID3v22FrameB
     /**
      * Creates a new FrameBodyPIC datatype.
      *
-     * @param file DOCUMENT ME!
      * @throws IOException         DOCUMENT ME!
      * @throws InvalidTagException DOCUMENT ME!
      */
@@ -124,12 +125,23 @@ public class FrameBodyPIC extends AbstractID3v2FrameBody implements ID3v22FrameB
         return "PIC" + ((char) 0) + getDescription();
     }
 
+    /** If the description cannot be encoded using current encoder, change the encoder */
+    public void write(ByteArrayOutputStream tagBuffer)
+        throws IOException
+    {
+        if (((AbstractString) getObject(DataTypes.OBJ_DESCRIPTION)).canBeEncoded() == false)
+        {
+            this.setTextEncoding(TextEncoding.UTF_16BE);
+        }
+        super.write(tagBuffer);
+    }
+
     /**
      * DOCUMENT ME!
      */
     protected void setupObjectList()
     {
-        objectList.add(new NumberHashMap(DataTypes.OBJ_TEXT_ENCODING, this, 1));
+        objectList.add(new NumberHashMap(DataTypes.OBJ_TEXT_ENCODING, this, TextEncoding.TEXT_ENCODING_FIELD_SIZE));
         objectList.add(new StringFixedLength(DataTypes.OBJ_IMAGE_FORMAT, this, 3));
         objectList.add(new NumberHashMap(DataTypes.OBJ_PICTURE_TYPE, this, 1));
         objectList.add(new StringNullTerminated(DataTypes.OBJ_DESCRIPTION, this));
