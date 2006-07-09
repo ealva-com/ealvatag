@@ -39,7 +39,9 @@ public class PictureTypes extends AbstractIntStringValuePair
         return pictureTypes;
     }
 
-    public static final String DEFAULT_VALUE = "Cover (front)";
+    public static final int     PICTURE_TYPE_FIELD_SIZE = 1;
+    public static final String  DEFAULT_VALUE = "Cover (front)";
+    public static final Integer DEFAULT_ID    = new Integer(3);
 
     private PictureTypes()
     {

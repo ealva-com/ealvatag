@@ -28,9 +28,17 @@ import java.util.*;
 
 public class Languages extends AbstractStringStringValuePair
 {
+    public static final String DEFAULT_ID   =  "eng";
     public static final String DEFAULT_VALUE = "English";
 
+    //The number of bytes used to hold the language field size
+    public static final int  LANGUAGE_FIELD_SIZE = 3;
+
     private static Languages languageTypes;
+
+
+
+
 
     public static Languages getInstanceOf()
     {
