@@ -177,6 +177,8 @@ public class ID3v22Frames extends ID3Frames
 
         multipleFrames = new TreeSet();
         multipleFrames.add(FRAME_ID_V2_ATTACHED_PICTURE);
+        multipleFrames.add(FRAME_ID_V2_UNIQUE_FILE_ID);
+
 
         discardIfFileAlteredFrames = new TreeSet();
     }

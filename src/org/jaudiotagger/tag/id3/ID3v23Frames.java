@@ -204,6 +204,8 @@ public class ID3v23Frames extends ID3Frames
         multipleFrames.add(FRAME_ID_V3_ATTACHED_PICTURE);
         multipleFrames.add(FRAME_ID_V3_PRIVATE);
         multipleFrames.add(FRAME_ID_V3_COMMENT);
+        multipleFrames.add(FRAME_ID_V3_UNIQUE_FILE_ID);
+
 
         discardIfFileAlteredFrames = new TreeSet();
         discardIfFileAlteredFrames.add(FRAME_ID_V3_EVENT_TIMING_CODES);
