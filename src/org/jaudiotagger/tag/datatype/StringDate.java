@@ -29,6 +29,9 @@ import org.jaudiotagger.tag.id3.ID3Tags;
 import org.jaudiotagger.tag.AbstractTagFrameBody;
 import org.jaudiotagger.tag.id3.ID3Tags;
 
+/**
+ * Represents a timestamp field
+ */
 public class StringDate extends StringFixedLength
 {
     /**

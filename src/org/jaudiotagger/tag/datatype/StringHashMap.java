@@ -37,7 +37,8 @@ import java.nio.*;
 
 
 /**
- * Represents a String thats acts as a key into an enumeration of values
+ * Represents a String thats acts as a key into an enumeration of values. The String will be encoded
+ * using the default encoding regardless of what encoding may be specified in the framebody
  */
 public class StringHashMap extends StringFixedLength implements HashMapInterface
 {
@@ -226,7 +227,7 @@ public class StringHashMap extends StringFixedLength implements HashMapInterface
 
     /**
      * Read a string from buffer of fixed size, ignoring the frames charset encoding
-     * The hashmap types alwys use the default encoding. For example COMM encodes it
+     * The hashMap types alwys use the default encoding. For example COMM encodes it
      * texts and description but not the language.
      *
      * @param offset DOCUMENT ME!
@@ -237,7 +238,7 @@ public class StringHashMap extends StringFixedLength implements HashMapInterface
     {
         try
         {
-            String charSetName = TextEncoding.getInstanceOf().getValueForId(0);
+            String charSetName = TextEncoding.getInstanceOf().getValueForId(TextEncoding.ISO_8859_1);
             CharsetDecoder decoder = Charset.forName(charSetName).newDecoder();
             //Decode buffer if runs into problems should through exception which we
             //catch and then set value to empty string.
@@ -263,7 +264,7 @@ public class StringHashMap extends StringFixedLength implements HashMapInterface
 
     /**
      * Write string from buffer of fixed size, ignoring the frames charset encoding
-     * The hashmap types alwys use the default encoding. For example COMM encodes it
+     * The hashmap types always use the default encoding. For example COMM encodes it
      * texts and description but not the language.
      *
      * @return DOCUMENT ME!
@@ -274,7 +275,7 @@ public class StringHashMap extends StringFixedLength implements HashMapInterface
         //Write to buffer using the standard encoding
         try
         {
-            String charSetName = TextEncoding.getInstanceOf().getValueForId(0);
+            String charSetName = TextEncoding.getInstanceOf().getValueForId(TextEncoding.ISO_8859_1);
             CharsetEncoder encoder = Charset.forName(charSetName).newEncoder();
             dataBuffer = encoder.encode(CharBuffer.wrap((String) value));
         }
@@ -313,5 +314,4 @@ public class StringHashMap extends StringFixedLength implements HashMapInterface
             return data;
         }
     }
-
 }

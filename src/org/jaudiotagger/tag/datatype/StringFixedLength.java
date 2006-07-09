@@ -31,7 +31,9 @@ import java.nio.charset.*;
 import java.nio.*;
 
 
-/** Represents a fixed length String */
+/** Represents a fixed length String, whereby the length of the String is known
+ *
+ */
 public class StringFixedLength
     extends AbstractString
 {

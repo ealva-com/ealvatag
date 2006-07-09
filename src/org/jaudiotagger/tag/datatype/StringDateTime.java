@@ -26,6 +26,10 @@ package org.jaudiotagger.tag.datatype;
 import org.jaudiotagger.audio.mp3.*;
 import org.jaudiotagger.tag.AbstractTagFrameBody;
 
+
+/**
+ * Represents a timestamp field
+ */
 public class StringDateTime extends StringSizeTerminated
 {
     /**

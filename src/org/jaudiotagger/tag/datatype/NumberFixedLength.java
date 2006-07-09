@@ -36,7 +36,7 @@ public class NumberFixedLength
      * Creates a new ObjectNumberFixedLength datatype.
      *
      * @param identifier DOCUMENT ME!
-     * @param size       DOCUMENT ME!
+     * @param size       the number of significant places that the number is held to
      * @throws IllegalArgumentException DOCUMENT ME!
      */
     public NumberFixedLength(String identifier, AbstractTagFrameBody frameBody, int size)
@@ -60,7 +60,7 @@ public class NumberFixedLength
     /**
      * Set Size in Bytes of this Object
      *
-     * @param length DOCUMENT ME!
+     * @param size in bytes that this number will be held as
      */
     public void setSize(int size)
     {
@@ -73,7 +73,7 @@ public class NumberFixedLength
     /**
      * Return size
      *
-     * @return DOCUMENT ME!
+     * @return the size of this number
      */
     public int getSize()
     {
