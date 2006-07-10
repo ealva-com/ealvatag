@@ -83,12 +83,10 @@ public class TextEncodedStringSizeTerminated
     }
 
     /**
-     * Write String into Buffer.
-     * We need to take into account whether there are characters that require
-     * the encoding to be done using one of the UTF variants.
+     * Write String into byte array
      *
-     * @return the byte array to be written to the file
-     */
+     * @return the dat as a byte array in format to write to file
+    */
     public byte[] writeByteArray()
     {
         byte[] data = null;

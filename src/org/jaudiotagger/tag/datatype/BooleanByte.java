@@ -26,6 +26,7 @@ package org.jaudiotagger.tag.datatype;
 import org.jaudiotagger.tag.AbstractTagFrameBody;
 import org.jaudiotagger.tag.InvalidDataTypeException;
 
+/** Represents a bit flag within a byte */
 public class BooleanByte extends AbstractDataType
 {
     /**

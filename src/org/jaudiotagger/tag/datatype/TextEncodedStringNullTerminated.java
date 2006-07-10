@@ -150,10 +150,7 @@ public class TextEncodedStringNullTerminated
     }
 
     /**
-     * Write String into Buffer.
-     * We need to take into account whether there are characters that require
-     * the encoding to be done using one of the UTF-16 variants. And null terminate
-     * the String.
+     * Write String into byte array, adding a null character to the end of the String
      *
      * @return the dat as a byte array in format to write to file
      */
