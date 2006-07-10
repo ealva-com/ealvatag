@@ -31,8 +31,9 @@ import java.nio.charset.*;
 import java.nio.*;
 
 
-/** Represents a fixed length String, whereby the length of the String is known
- *
+/**
+ * Represents a fixed length String, whereby the length of the String is known. The String
+ * will be encoded based upon the text encoding of the frame that it belongs to.
  */
 public class StringFixedLength
     extends AbstractString
@@ -83,17 +84,14 @@ public class StringFixedLength
     /**
      * Read a string from buffer of fixed size(size has already been set in constructor)
      *
-     * @param offset DOCUMENT ME!
-     * @throws NullPointerException      DOCUMENT ME!
-     * @throws IndexOutOfBoundsException DOCUMENT ME!
+     * @param arr    this is the buffer for the frame
+     * @param offset this is where to start reading in the buffer for this field
      */
     public void readByteArray(byte[] arr, int offset) throws InvalidDataTypeException
     {
         try
         {
-            //Get the Specified Decoder
-            byte textEncoding = this.getFrameBody().getTextEncoding();
-            String charSetName = TextEncoding.getInstanceOf().getValueForId(textEncoding);
+            String charSetName = getTextEncodingCharSet();
             CharsetDecoder decoder = Charset.forName(charSetName).newDecoder();
             //Decode buffer if runs into problems should through exception which we
             //catch and then set value to empty string.
@@ -114,21 +112,18 @@ public class StringFixedLength
     }
 
     /**
-     * Write String into Buffer.
-     * We need to take into account whether there are characters that require
-     * the encoding to be done using one of the UTF-16 variants.
+     * Write String into byte array
      *
-     * @return DOCUMENT ME!
+     * @return the byte array to be written to the file
      */
     public byte[] writeByteArray()
     {
         ByteBuffer dataBuffer = null;
         byte[] data = null;
-        //Try and write to buffer using the CharSet defined by the textEncoding field.
+
         try
         {
-            byte textEncoding = this.getFrameBody().getTextEncoding();
-            String charSetName = TextEncoding.getInstanceOf().getValueForId(textEncoding);
+            String charSetName = getTextEncodingCharSet();
             CharsetEncoder encoder = Charset.forName(charSetName).newEncoder();
             dataBuffer = encoder.encode(CharBuffer.wrap((String) value));
 
@@ -165,5 +160,17 @@ public class StringFixedLength
         data = new byte[size];
         setSize(data.length);
         return data;
+    }
+
+    /**
+     *
+     * @return the encoding of the frame body this datatype belongs to
+     */
+    protected String  getTextEncodingCharSet()
+    {
+         byte textEncoding = this.getFrameBody().getTextEncoding();
+         String charSetName = TextEncoding.getInstanceOf().getValueForId(textEncoding);
+         logger.finest("text encoding:"+textEncoding + " charset:"+charSetName);
+        return charSetName;
     }
 }

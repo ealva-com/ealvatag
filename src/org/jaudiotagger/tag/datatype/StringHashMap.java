@@ -226,92 +226,11 @@ public class StringHashMap extends StringFixedLength implements HashMapInterface
     }
 
     /**
-     * Read a string from buffer of fixed size, ignoring the frames charset encoding
-     * The hashMap types alwys use the default encoding. For example COMM encodes it
-     * texts and description but not the language.
      *
-     * @param offset DOCUMENT ME!
-     * @throws NullPointerException      DOCUMENT ME!
-     * @throws IndexOutOfBoundsException DOCUMENT ME!
+     * @return the ISO_8859 encoding for Datatypes of this type
      */
-    public void readByteArray(byte[] arr, int offset) throws InvalidDataTypeException
+     protected String  getTextEncodingCharSet()
     {
-        try
-        {
-            String charSetName = TextEncoding.getInstanceOf().getValueForId(TextEncoding.ISO_8859_1);
-            CharsetDecoder decoder = Charset.forName(charSetName).newDecoder();
-            //Decode buffer if runs into problems should through exception which we
-            //catch and then set value to empty string.
-            logger.finest("Array length is:" + arr.length + "offset is:" + offset + "Size is:" + size);
-            String str = decoder.decode(ByteBuffer.wrap(arr, offset, size)).toString();
-            if (str == null)
-            {
-                throw new NullPointerException("String is null");
-            }
-            value = str;
-        }
-        catch (IndexOutOfBoundsException e)
-        {
-            logger.warning(e.getMessage());
-            value = "";
-        }
-        catch (CharacterCodingException ce)
-        {
-            logger.severe(ce.getMessage());
-            value = "";
-        }
-    }
-
-    /**
-     * Write string from buffer of fixed size, ignoring the frames charset encoding
-     * The hashmap types always use the default encoding. For example COMM encodes it
-     * texts and description but not the language.
-     *
-     * @return DOCUMENT ME!
-     */
-    public byte[] writeByteArray()
-    {
-        ByteBuffer dataBuffer = null;
-        //Write to buffer using the standard encoding
-        try
-        {
-            String charSetName = TextEncoding.getInstanceOf().getValueForId(TextEncoding.ISO_8859_1);
-            CharsetEncoder encoder = Charset.forName(charSetName).newEncoder();
-            dataBuffer = encoder.encode(CharBuffer.wrap((String) value));
-        }
-        catch (CharacterCodingException ce)
-        {
-            logger.severe(ce.getMessage());
-        }
-
-
-        /* We must return the defined size.
-         * To check now because size is in bytes not chars
-         */
-        if (dataBuffer != null)
-        {
-            if (dataBuffer.capacity() == size)
-            {
-                return dataBuffer.array();
-            }
-            else if (dataBuffer.capacity() > size)
-            {
-                byte[] data = new byte[size];
-                dataBuffer.get(data, 0, size);
-                return data;
-            }
-            else
-            {
-                byte[] data = new byte[size];
-                dataBuffer.get(data, 0, dataBuffer.capacity());
-                return data;
-            }
-        }
-        else
-        {
-            byte[] data = new byte[size];
-            setSize(data.length);
-            return data;
-        }
+        return TextEncoding.CHARSET_ISO_8859_1;
     }
 }
