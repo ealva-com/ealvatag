@@ -28,6 +28,7 @@ import org.jaudiotagger.tag.datatype.ByteArraySizeTerminated;
 import org.jaudiotagger.tag.datatype.NumberHashMap;
 import org.jaudiotagger.tag.datatype.StringNullTerminated;
 import org.jaudiotagger.tag.InvalidTagException;
+import org.jaudiotagger.tag.id3.ID3v23Frames;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -47,14 +48,20 @@ public class FrameBodyIPLS  extends AbstractFrameBodyTextInfo implements ID3v23F
         super(byteBuffer, frameSize);
     }
 
-
-    /**
-     * Retrieve the next String @todo why is this needed.
-     *
-     * @return DOCUMENT ME!
+     /**
+      * The ID3v2 frame identifier
+      *
+      * @return the ID3v2 frame identifier  for this frame type
      */
-    public String getBriefDescription()
+    public String getIdentifier()
     {
-        return this.getIdentifier();
+        return ID3v23Frames.FRAME_ID_V3_IPLS;
+    }
+
+
+    /** TODO */
+    protected void setupObjectList()
+    {
+
     }
 }

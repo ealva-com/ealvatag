@@ -24,6 +24,7 @@
 package org.jaudiotagger.tag.id3.framebody;
 
 import org.jaudiotagger.tag.id3.ID3Tags;
+import org.jaudiotagger.tag.id3.ID3v24Frames;
 import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
 import org.jaudiotagger.tag.id3.valuepair.Languages;
 import org.jaudiotagger.tag.InvalidTagException;
@@ -120,7 +121,6 @@ public class FrameBodySYLT extends AbstractID3v2FrameBody implements ID3v24Frame
     /**
      * Creates a new FrameBodySYLT datatype.
      *
-     * @param file DOCUMENT ME!
      * @throws IOException         DOCUMENT ME!
      * @throws InvalidTagException DOCUMENT ME!
      */
@@ -157,7 +157,7 @@ public class FrameBodySYLT extends AbstractID3v2FrameBody implements ID3v24Frame
      */
     public String getIdentifier()
     {
-        return "SYLT";
+        return ID3v24Frames.FRAME_ID_SYNC_LYRIC ;
     }
 
     /**

@@ -81,14 +81,14 @@ public class FrameBodyEQU2 extends AbstractID3v2FrameBody  implements ID3v24Fram
         super(byteBuffer, frameSize);
     }
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @return DOCUMENT ME!
+      /**
+      * The ID3v2 frame identifier
+      *
+      * @return the ID3v2 frame identifier  for this frame type
      */
     public String getIdentifier()
     {
-        return ID3v24Frames.FRAME_ID_EQUALISATION2 + ((char) 0) + getOwner();
+        return ID3v24Frames.FRAME_ID_EQUALISATION2;
     }
 
     /**

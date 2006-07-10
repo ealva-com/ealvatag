@@ -29,6 +29,7 @@ import org.jaudiotagger.tag.datatype.NumberFixedLength;
 import org.jaudiotagger.tag.datatype.NumberHashMap;
 import org.jaudiotagger.tag.datatype.DataTypes;
 import org.jaudiotagger.tag.InvalidTagException;
+import org.jaudiotagger.tag.id3.ID3v24Frames;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -66,7 +67,6 @@ public class FrameBodyETCO extends AbstractID3v2FrameBody implements ID3v24Frame
     /**
      * Creates a new FrameBodyETCO datatype.
      *
-     * @param file DOCUMENT ME!
      * @throws IOException         DOCUMENT ME!
      * @throws InvalidTagException DOCUMENT ME!
      */
@@ -75,15 +75,14 @@ public class FrameBodyETCO extends AbstractID3v2FrameBody implements ID3v24Frame
     {
         super(byteBuffer, frameSize);
     }
-
-    /**
+  /**
      * DOCUMENT ME!
      *
      * @return DOCUMENT ME!
      */
     public String getIdentifier()
     {
-        return "ETCO" + ((char) 0) + getOwner();
+        return ID3v24Frames.FRAME_ID_EVENT_TIMING_CODES  ;
     }
 
     /**

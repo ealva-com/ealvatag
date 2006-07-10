@@ -24,6 +24,7 @@
 package org.jaudiotagger.tag.id3.framebody;
 
 import org.jaudiotagger.tag.InvalidTagException;
+import org.jaudiotagger.tag.id3.ID3v24Frames;
 
 import java.nio.ByteBuffer;
 
@@ -56,7 +57,6 @@ public class FrameBodyTFLT extends AbstractFrameBodyTextInfo implements ID3v24Fr
     /**
      * Creates a new FrameBodyTFLT datatype.
      *
-     * @param file DOCUMENT ME!
      * @throws java.io.IOException DOCUMENT ME!
      * @throws InvalidTagException DOCUMENT ME!
      */
@@ -66,13 +66,13 @@ public class FrameBodyTFLT extends AbstractFrameBodyTextInfo implements ID3v24Fr
         super(byteBuffer, frameSize);
     }
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @return DOCUMENT ME!
+     /**
+      * The ID3v2 frame identifier
+      *
+      * @return the ID3v2 frame identifier  for this frame type
      */
     public String getIdentifier()
     {
-        return "TFLT";
+        return ID3v24Frames.FRAME_ID_FILE_TYPE;
     }
 }

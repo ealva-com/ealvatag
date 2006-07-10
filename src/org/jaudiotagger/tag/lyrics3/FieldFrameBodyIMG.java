@@ -27,6 +27,8 @@ import org.jaudiotagger.tag.InvalidTagException;
 import org.jaudiotagger.tag.TagOptionSingleton;
 import org.jaudiotagger.tag.*;
 import org.jaudiotagger.tag.datatype.Lyrics3Image;
+import org.jaudiotagger.tag.datatype.ByteArraySizeTerminated;
+import org.jaudiotagger.tag.datatype.DataTypes;
 
 import java.io.RandomAccessFile;
 
@@ -364,4 +366,13 @@ public class FieldFrameBodyIMG extends AbstractLyrics3v2FieldFrameBody
 
         return str;
     }
+
+
+    /**
+      * TODO
+      */
+     protected void setupObjectList()
+     {
+
+     }
 }

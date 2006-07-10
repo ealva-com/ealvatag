@@ -46,7 +46,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 /**
- * A frame body is a placeholder that provides the field specific data
+ * A frame body contains the data content for a frame
  */
 public abstract class AbstractTagFrameBody
     extends AbstractTagItem
@@ -56,14 +56,14 @@ public abstract class AbstractTagFrameBody
     }
 
     /**
-     * List of <code>MP3Object</code>
+     * List of data types that mnake up this particular frame body.
      */
     protected ArrayList objectList = new ArrayList();
 
     /**
      * Return the Text Encoding
      *
-     * @return DOCUMENT ME!
+     * @return the text encoding used by this framebody
      */
     public byte getTextEncoding()
     {
@@ -81,9 +81,9 @@ public abstract class AbstractTagFrameBody
     }
 
     /**
-     * Set the Text Encoding
+     * Set the Text Encoding to use for this frame body
      *
-     * @param textEncoding DOCUMENT ME!
+     * @param textEncoding to use for this frame body
      */
     public void setTextEncoding(byte textEncoding)
     {
@@ -93,10 +93,10 @@ public abstract class AbstractTagFrameBody
 
 
     /**
-     * Creates a new MP3FragmentBody datatype. It is at this point the bodys
+     * Creates a new framebody, at this point the bodys
      * ObjectList is setup which defines what datatypes are expected in body
      */
-    public AbstractTagFrameBody()
+    protected AbstractTagFrameBody()
     {
         setupObjectList();
     }
@@ -105,7 +105,7 @@ public abstract class AbstractTagFrameBody
      * Copy Constructor for fragment body. Copies all objects in the
      * Object Iterator with data.
      */
-    public AbstractTagFrameBody(AbstractTagFrameBody copyObject)
+    protected AbstractTagFrameBody(AbstractTagFrameBody copyObject)
     {
         AbstractDataType newObject;
         for (int i = 0; i < copyObject.objectList.size(); i++)
@@ -164,7 +164,7 @@ public abstract class AbstractTagFrameBody
      * Sets all objects of identifier type to value defined by <code>obj</code> argument.
      *
      * @param identifier <code>MP3Object</code> identifier
-     * @param obj        new datatype value
+     * @param value        new datatype value
      */
     public void setObjectValue(String identifier, Object value)
     {
@@ -235,7 +235,7 @@ public abstract class AbstractTagFrameBody
     }
 
     /**
-     * Returns true if this instance and its entire <code>MP3Object</code>
+     * Returns true if this instance and its entire DataType
      * array list is a subset of the argument. This class is a subset if it is
      * the same class as the argument.
      *
@@ -264,7 +264,7 @@ public abstract class AbstractTagFrameBody
     }
 
     /**
-     * Returns true if this datatype and its entire <code>MP3Object</code> array
+     * Returns true if this datatype and its entire DataType array
      * list equals the argument. This datatype is equal to the argument if they
      * are the same class.
      *
@@ -287,9 +287,9 @@ public abstract class AbstractTagFrameBody
     }
 
     /**
-     * Returns an iterator of the <code>MP3Object</code> datatype list.
+     * Returns an iterator of the DataType list.
      *
-     * @return iterator of the <code>MP3Object</code> datatype list.
+     * @return iterator of the DataType list.
      */
     public Iterator iterator()
     {
@@ -298,7 +298,7 @@ public abstract class AbstractTagFrameBody
 
 
     /**
-     * Calls <code>toString</code> for all <code>MP3Object</code> objects and
+     * Calls <code>toString</code> for all DataType objects and
      * creates a string with a new line character.
      *
      * @return description string
@@ -318,15 +318,10 @@ public abstract class AbstractTagFrameBody
 
 
     /**
-     * Create the order of <code>MP3Object</code> objects that this body
-     * expects. This method needs to be overwritten.
+     * Create the list of Datatypes that this body
+     * expects in the correct order This method needs to be implemented by concrete subclasses
      *
-     * @todo Make this abstract. Can't do that yet because not all
-     * implementations of the datatype have been finished.
      */
-    protected void setupObjectList()
-    {
-    }
-
+    protected abstract void setupObjectList();
 
 }

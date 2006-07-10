@@ -80,9 +80,9 @@ public class FrameBodyOWNE extends AbstractID3v2FrameBody implements ID3v24Frame
     }
 
     /**
-     * DOCUMENT ME!
-     *
-     * @return DOCUMENT ME!
+      * The ID3v2 frame identifier
+      *
+      * @return the ID3v2 frame identifier  for this frame type
      */
     public String getIdentifier()
     {

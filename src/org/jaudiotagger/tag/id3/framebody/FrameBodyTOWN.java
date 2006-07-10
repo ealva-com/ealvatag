@@ -23,6 +23,7 @@
 package org.jaudiotagger.tag.id3.framebody;
 
 import org.jaudiotagger.tag.InvalidTagException;
+import org.jaudiotagger.tag.id3.ID3v24Frames;
 
 import java.nio.ByteBuffer;
 
@@ -55,7 +56,6 @@ public class FrameBodyTOWN extends AbstractFrameBodyTextInfo
     /**
      * Creates a new FrameBodyTOWN datatype.
      *
-     * @param file DOCUMENT ME!
      * @throws java.io.IOException DOCUMENT ME!
      * @throws InvalidTagException DOCUMENT ME!
      */
@@ -65,13 +65,13 @@ public class FrameBodyTOWN extends AbstractFrameBodyTextInfo
         super(byteBuffer, frameSize);
     }
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @return DOCUMENT ME!
+     /**
+      * The ID3v2 frame identifier
+      *
+      * @return the ID3v2 frame identifier  for this frame type
      */
     public String getIdentifier()
     {
-        return "TOWN";
+        return ID3v24Frames.FRAME_ID_FILE_OWNER;
     }
 }

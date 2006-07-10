@@ -26,6 +26,7 @@ package org.jaudiotagger.tag.id3.framebody;
 import org.jaudiotagger.tag.datatype.NumberFixedLength;
 import org.jaudiotagger.tag.datatype.DataTypes;
 import org.jaudiotagger.tag.InvalidTagException;
+import org.jaudiotagger.tag.id3.ID3v24Frames;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -59,8 +60,7 @@ public class FrameBodySEEK extends AbstractID3v2FrameBody implements ID3v24Frame
     /**
      * Creates a new FrameBodySEEK datatype.
      *
-     * @param file DOCUMENT ME!
-     * @throws IOException         DOCUMENT ME!
+      * @throws IOException         DOCUMENT ME!
      * @throws InvalidTagException DOCUMENT ME!
      */
     public FrameBodySEEK(ByteBuffer byteBuffer, int frameSize)
@@ -69,14 +69,14 @@ public class FrameBodySEEK extends AbstractID3v2FrameBody implements ID3v24Frame
         super(byteBuffer, frameSize);
     }
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @return DOCUMENT ME!
+     /**
+      * The ID3v2 frame identifier
+      *
+      * @return the ID3v2 frame identifier  for this frame type
      */
     public String getIdentifier()
     {
-        return "SEEK";
+        return ID3v24Frames.FRAME_ID_AUDIO_SEEK_POINT_INDEX;
     }
 
     /**

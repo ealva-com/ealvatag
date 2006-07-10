@@ -42,12 +42,18 @@ public class FrameBodyEQUA extends AbstractID3v2FrameBody implements ID3v23Frame
     }
 
      /**
-     * DOCUMENT ME!
-     *
-     * @return DOCUMENT ME!
+      * The ID3v2 frame identifier
+      *
+      * @return the ID3v2 frame identifier  for this frame type
      */
     public String getIdentifier()
     {
         return ID3v23Frames.FRAME_ID_V3_EQUALISATION;
+    }
+
+    /** TODO */
+    protected void setupObjectList()
+    {
+
     }
 }

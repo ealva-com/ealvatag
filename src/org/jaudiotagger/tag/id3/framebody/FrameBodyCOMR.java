@@ -95,21 +95,13 @@ public class FrameBodyCOMR extends AbstractID3v2FrameBody implements ID3v24Frame
     }
 
     /**
-     * DOCUMENT ME!
-     *
-     * @return DOCUMENT ME!
+      * The ID3v2 frame identifier
+      *
+      * @return the ID3v2 frame identifier  for this frame type
      */
     public String getIdentifier()
     {
-        String str = ID3v24Frames.FRAME_ID_COMMERCIAL_FRAME;
-        java.util.Iterator iterator = objectList.listIterator();
-
-        while (iterator.hasNext())
-        {
-            str += (((char) 0) + getOwner());
-        }
-
-        return str;
+        return ID3v24Frames.FRAME_ID_COMMERCIAL_FRAME;               
     }
 
     /**

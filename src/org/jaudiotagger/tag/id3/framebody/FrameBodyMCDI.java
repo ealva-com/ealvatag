@@ -27,6 +27,7 @@ package org.jaudiotagger.tag.id3.framebody;
 import org.jaudiotagger.tag.datatype.ByteArraySizeTerminated;
 import org.jaudiotagger.tag.datatype.DataTypes;
 import org.jaudiotagger.tag.InvalidTagException;
+import org.jaudiotagger.tag.id3.ID3v24Frames;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -59,7 +60,6 @@ public class FrameBodyMCDI extends AbstractID3v2FrameBody implements ID3v24Frame
     /**
      * Creates a new FrameBodyMCDI datatype.
      *
-     * @param file DOCUMENT ME!
      * @throws IOException         DOCUMENT ME!
      * @throws InvalidTagException DOCUMENT ME!
      */
@@ -70,13 +70,13 @@ public class FrameBodyMCDI extends AbstractID3v2FrameBody implements ID3v24Frame
     }
 
     /**
-     * DOCUMENT ME!
-     *
-     * @return DOCUMENT ME!
+      * The ID3v2 frame identifier
+      *
+      * @return the ID3v2 frame identifier  for this frame type
      */
     public String getIdentifier()
     {
-        return "MCDI";
+        return ID3v24Frames.FRAME_ID_MUSIC_CD_ID;
     }
 
     /**

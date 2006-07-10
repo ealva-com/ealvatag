@@ -27,6 +27,8 @@ package org.jaudiotagger.tag.id3.framebody;
 import org.jaudiotagger.audio.mp3.*;
 import org.jaudiotagger.tag.datatype.*;
 import org.jaudiotagger.tag.InvalidTagException;
+import org.jaudiotagger.tag.id3.ID3v23Frames;
+import org.jaudiotagger.tag.id3.ID3v24Frames;
 
 import java.io.*;
 import java.nio.ByteBuffer;
@@ -58,7 +60,6 @@ public class FrameBodyRVA2 extends AbstractID3v2FrameBody implements ID3v24Frame
     /**
      * Creates a new FrameBodyRVAD datatype.
      *
-     * @param file DOCUMENT ME!
      * @throws IOException         DOCUMENT ME!
      * @throws InvalidTagException DOCUMENT ME!
      */
@@ -68,14 +69,14 @@ public class FrameBodyRVA2 extends AbstractID3v2FrameBody implements ID3v24Frame
         super(byteBuffer, frameSize);
     }
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @return DOCUMENT ME!
+        /**
+      * The ID3v2 frame identifier
+      *
+      * @return the ID3v2 frame identifier  for this frame type
      */
     public String getIdentifier()
     {
-        return "RVA2";
+        return ID3v24Frames.FRAME_ID_RELATIVE_VOLUME_ADJUSTMENT2;
     }
 
     /**

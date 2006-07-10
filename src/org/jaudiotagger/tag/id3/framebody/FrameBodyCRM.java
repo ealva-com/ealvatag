@@ -68,7 +68,6 @@ public class FrameBodyCRM extends AbstractID3v2FrameBody implements ID3v22FrameB
     /**
      * Creates a new FrameBodyCRM datatype.
      *
-     * @param file DOCUMENT ME!
      * @throws IOException         DOCUMENT ME!
      * @throws InvalidTagException DOCUMENT ME!
      */
@@ -78,14 +77,14 @@ public class FrameBodyCRM extends AbstractID3v2FrameBody implements ID3v22FrameB
         super(byteBuffer, frameSize);
     }
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @return DOCUMENT ME!
+     /**
+      * The ID3v2 frame identifier
+      *
+      * @return the ID3v2 frame identifier  for this frame type
      */
     public String getIdentifier()
     {
-        return ID3v22Frames.FRAME_ID_V2_ENCRYPTED_FRAME + ((char) 0) + getOwner();
+        return ID3v22Frames.FRAME_ID_V2_ENCRYPTED_FRAME;
     }
 
     /**

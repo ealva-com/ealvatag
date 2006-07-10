@@ -76,16 +76,11 @@ public abstract class AbstractID3v2FrameBody
     }
 
     /**
-     * Return identifier
+     * Return the ID3v2 Frame Identifier, must be implemented by concrete subclasses
      *
-     * @return DOCUMENT ME!
-     * @todo Make this abstract. Can't do that yet because not all frame bodies
-     * have been finished.
      */
-    public String getIdentifier()
-    {
-        return "";
-    }
+    public abstract String getIdentifier();
+
 
     /**
      * Return size of frame body
@@ -108,7 +103,7 @@ public abstract class AbstractID3v2FrameBody
     }
 
     /**
-     * Set size based on size of the MP3Objects,done after write
+     * Set size based on size of the DataTypes making up the body,done after write
      */
     public void setSize()
     {

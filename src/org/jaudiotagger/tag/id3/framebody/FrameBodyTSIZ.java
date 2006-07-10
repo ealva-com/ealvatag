@@ -59,8 +59,7 @@ public class FrameBodyTSIZ extends AbstractFrameBodyTextInfo  implements ID3v23F
     /**
      * Creates a new FrameBodyTSIZ datatype.
      *
-     * @param file DOCUMENT ME!
-     * @throws java.io.IOException DOCUMENT ME!
+      * @throws java.io.IOException DOCUMENT ME!
      * @throws InvalidTagException DOCUMENT ME!
      */
     public FrameBodyTSIZ(ByteBuffer byteBuffer, int frameSize)
@@ -69,10 +68,10 @@ public class FrameBodyTSIZ extends AbstractFrameBodyTextInfo  implements ID3v23F
         super(byteBuffer, frameSize);
     }
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @return DOCUMENT ME!
+     /**
+      * The ID3v2 frame identifier
+      *
+      * @return the ID3v2 frame identifier  for this frame type
      */
     public String getIdentifier()
     {

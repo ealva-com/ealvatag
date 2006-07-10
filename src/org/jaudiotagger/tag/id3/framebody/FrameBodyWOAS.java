@@ -67,10 +67,10 @@ public class FrameBodyWOAS extends AbstractFrameBodyUrlLink  implements ID3v24Fr
         super(byteBuffer, frameSize);
     }
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @return DOCUMENT ME!
+   /**
+      * The ID3v2 frame identifier
+      *
+      * @return the ID3v2 frame identifier  for this frame type
      */
     public String getIdentifier()
     {

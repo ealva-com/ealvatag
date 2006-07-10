@@ -71,7 +71,6 @@ public class FrameBodyAENC extends AbstractID3v2FrameBody  implements ID3v24Fram
     /**
      * Creates a new FrameBodyAENC datatype.
      *
-     * @param file DOCUMENT ME!
      * @throws IOException         DOCUMENT ME!
      * @throws InvalidTagException DOCUMENT ME!
      */
@@ -82,13 +81,13 @@ public class FrameBodyAENC extends AbstractID3v2FrameBody  implements ID3v24Fram
     }
 
     /**
-     * DOCUMENT ME!
-     *
-     * @return DOCUMENT ME!
+      * The ID3v2 frame identifier
+      *
+      * @return the ID3v2 frame identifier  for this frame type
      */
     public String getIdentifier()
     {
-        return ID3v24Frames.FRAME_ID_AUDIO_ENCRYPTION + ((char) 0) + getOwner();
+        return ID3v24Frames.FRAME_ID_AUDIO_ENCRYPTION;
     }
 
     /**

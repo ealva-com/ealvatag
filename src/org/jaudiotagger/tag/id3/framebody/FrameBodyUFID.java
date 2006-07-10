@@ -85,8 +85,9 @@ public class FrameBodyUFID extends AbstractID3v2FrameBody implements ID3v24Frame
     }
 
     /**
-     *
-     * @return the ID3 Frame identifier
+      * The ID3v2 frame identifier
+      *
+      * @return the ID3v2 frame identifier  for this frame type
      */
     public String getIdentifier()
     {

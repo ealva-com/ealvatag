@@ -192,4 +192,12 @@ public class FieldFrameBodyUnsupported extends AbstractLyrics3v2FieldFrameBody
 
         file.write(value);
     }
+
+     /**
+      * TODO
+      */
+     protected void setupObjectList()
+     {
+
+     }
 }

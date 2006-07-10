@@ -58,7 +58,6 @@ public class FrameBodyWPUB extends AbstractFrameBodyUrlLink   implements ID3v24F
     /**
      * Creates a new FrameBodyWPUB datatype.
      *
-     * @param file DOCUMENT ME!
      * @throws java.io.IOException DOCUMENT ME!
      * @throws InvalidTagException DOCUMENT ME!
      */
@@ -69,9 +68,9 @@ public class FrameBodyWPUB extends AbstractFrameBodyUrlLink   implements ID3v24F
     }
 
     /**
-     * DOCUMENT ME!
-     *
-     * @return DOCUMENT ME!
+      * The ID3v2 frame identifier
+      *
+      * @return the ID3v2 frame identifier  for this frame type
      */
     public String getIdentifier()
     {

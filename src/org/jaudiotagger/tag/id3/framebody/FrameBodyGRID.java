@@ -28,6 +28,7 @@ import org.jaudiotagger.tag.datatype.NumberFixedLength;
 import org.jaudiotagger.tag.datatype.StringNullTerminated;
 import org.jaudiotagger.tag.datatype.DataTypes;
 import org.jaudiotagger.tag.InvalidTagException;
+import org.jaudiotagger.tag.id3.ID3v24Frames;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -103,15 +104,17 @@ public class FrameBodyGRID extends AbstractID3v2FrameBody implements ID3v24Frame
         }
     }
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @return DOCUMENT ME!
+     /**
+      * The ID3v2 frame identifier
+      *
+      * @return the ID3v2 frame identifier  for this frame type
      */
     public String getIdentifier()
     {
-        return "GRID" + ((char) 0) + getOwner() + ((char) 0) + getGroupSymbol();
+        return ID3v24Frames.FRAME_ID_GROUP_ID_REG ;
     }
+
+    
 
     /**
      * DOCUMENT ME!

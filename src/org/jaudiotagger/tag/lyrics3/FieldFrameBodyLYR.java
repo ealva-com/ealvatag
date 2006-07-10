@@ -441,4 +441,12 @@ public class FieldFrameBodyLYR extends AbstractLyrics3v2FieldFrameBody
 
         //return str.substring(0,str.length()-2); // cut off the last CRLF pair
     }
+
+     /**
+      * TODO
+      */
+     protected void setupObjectList()
+     {
+
+     }
 }

@@ -68,8 +68,7 @@ public class FrameBodyENCR extends AbstractID3v2FrameBody implements ID3v24Frame
     /**
      * Creates a new FrameBodyENCR datatype.
      *
-     * @param file DOCUMENT ME!
-     * @throws IOException         DOCUMENT ME!
+      * @throws IOException         DOCUMENT ME!
      * @throws InvalidTagException DOCUMENT ME!
      */
     public FrameBodyENCR(ByteBuffer byteBuffer, int frameSize)
@@ -78,14 +77,14 @@ public class FrameBodyENCR extends AbstractID3v2FrameBody implements ID3v24Frame
         super(byteBuffer, frameSize);
     }
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @return DOCUMENT ME!
+      /**
+      * The ID3v2 frame identifier
+      *
+      * @return the ID3v2 frame identifier  for this frame type
      */
     public String getIdentifier()
     {
-        return  ID3v24Frames.FRAME_ID_ENCRYPTION + ((char) 0) + getOwner();
+        return  ID3v24Frames.FRAME_ID_ENCRYPTION;
     }
 
     /**

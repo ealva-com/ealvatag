@@ -45,7 +45,6 @@ public class FrameBodyUnsupported extends AbstractID3v2FrameBody
     /**
      * Creates a new FrameBodyUnsupported
      *
-     * @param value DOCUMENT ME!
      */
     public FrameBodyUnsupported()
     {
@@ -71,9 +70,8 @@ public class FrameBodyUnsupported extends AbstractID3v2FrameBody
     /**
      * Creates a new FrameBodyUnsupported datatype.
      *
-     * @param file DOCUMENT ME!
-     * @throws IOException         DOCUMENT ME!
-     * @throws InvalidTagException DOCUMENT ME!
+     * @throws IOException           DOCUMENT ME!
+     * @throws InvalidFrameException DOCUMENT ME!
      */
     public FrameBodyUnsupported(ByteBuffer byteBuffer, int frameSize)
         throws IOException, InvalidFrameException

@@ -25,6 +25,7 @@ package org.jaudiotagger.tag.id3.framebody;
 
 import org.jaudiotagger.tag.datatype.*;
 import org.jaudiotagger.tag.InvalidTagException;
+import org.jaudiotagger.tag.id3.ID3v24Frames;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -64,7 +65,6 @@ public class FrameBodyPOPM extends AbstractID3v2FrameBody implements ID3v24Frame
     /**
      * Creates a new FrameBodyPOPM datatype.
      *
-     * @param file DOCUMENT ME!
      * @throws IOException         DOCUMENT ME!
      * @throws InvalidTagException DOCUMENT ME!
      */
@@ -94,15 +94,17 @@ public class FrameBodyPOPM extends AbstractID3v2FrameBody implements ID3v24Frame
         return (String) getObjectValue(DataTypes.OBJ_EMAIL);
     }
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @return DOCUMENT ME!
+     /**
+      * The ID3v2 frame identifier
+      *
+      * @return the ID3v2 frame identifier  for this frame type
      */
     public String getIdentifier()
     {
-        return "POPM" + ((char) 0) + getEmailToUser();
+        return ID3v24Frames.FRAME_ID_POPULARIMETER;
     }
+
+
 
     /**
      * DOCUMENT ME!

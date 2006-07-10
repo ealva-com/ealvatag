@@ -29,6 +29,9 @@ import org.jaudiotagger.tag.id3.framebody.FrameBodyAPIC;
 import org.jaudiotagger.tag.id3.valuepair.ImageFormats;
 import org.jaudiotagger.tag.id3.valuepair.ImageFormats;
 import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
+import org.jaudiotagger.tag.id3.ID3v24Frames;
+import org.jaudiotagger.tag.id3.ID3v23Frames;
+import org.jaudiotagger.tag.id3.ID3v22Frames;
 import org.jaudiotagger.audio.mp3.*;
 
 import java.io.IOException;
@@ -115,15 +118,16 @@ public class FrameBodyPIC extends AbstractID3v2FrameBody implements ID3v22FrameB
         return (String) getObjectValue(DataTypes.OBJ_DESCRIPTION);
     }
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @return DOCUMENT ME!
+     /**
+      * The ID3v2 frame identifier
+      *
+      * @return the ID3v2 frame identifier  for this frame type
      */
     public String getIdentifier()
     {
-        return "PIC" + ((char) 0) + getDescription();
+        return ID3v22Frames.FRAME_ID_V2_ATTACHED_PICTURE;
     }
+   
 
     /** If the description cannot be encoded using current encoder, change the encoder */
     public void write(ByteArrayOutputStream tagBuffer)

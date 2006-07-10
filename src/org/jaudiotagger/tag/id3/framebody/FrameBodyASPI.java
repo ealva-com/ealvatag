@@ -24,11 +24,12 @@
  */
 package org.jaudiotagger.tag.id3.framebody;
 
-import org.jaudiotagger.audio.mp3.*;
 import org.jaudiotagger.tag.InvalidFrameException;
 import org.jaudiotagger.tag.InvalidTagException;
 import org.jaudiotagger.tag.EmptyFrameException;
+
 import org.jaudiotagger.tag.id3.ID3v24Frames;
+
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
@@ -103,9 +104,8 @@ public class FrameBodyASPI extends AbstractID3v2FrameBody implements ID3v24Frame
     }
 
     /**
-     * Creates a new FrameBodyASPI datatype.
-     *
-     * @param file DOCUMENT ME!
+     * Creates a new FrameBodyASPI datatype.          *
+
      * @throws IOException         DOCUMENT ME!
      * @throws InvalidTagException DOCUMENT ME!
      */
@@ -115,10 +115,10 @@ public class FrameBodyASPI extends AbstractID3v2FrameBody implements ID3v24Frame
         super(byteBuffer, frameSize);
     }
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @return DOCUMENT ME!
+      /**
+      * The ID3v2 frame identifier
+      *
+      * @return the ID3v2 frame identifier  for this frame type
      */
     public String getIdentifier()
     {
@@ -219,5 +219,11 @@ public class FrameBodyASPI extends AbstractID3v2FrameBody implements ID3v24Frame
         {
             file.writeShort(this.fraction[i]);
         }
+    }
+
+    /** TODO */
+    protected void setupObjectList()
+    {
+
     }
 }

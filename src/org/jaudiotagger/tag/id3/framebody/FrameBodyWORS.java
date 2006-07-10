@@ -68,9 +68,9 @@ public class FrameBodyWORS extends AbstractFrameBodyUrlLink  implements ID3v24Fr
     }
 
     /**
-     * DOCUMENT ME!
-     *
-     * @return DOCUMENT ME!
+      * The ID3v2 frame identifier
+      *
+      * @return the ID3v2 frame identifier  for this frame type
      */
     public String getIdentifier()
     {

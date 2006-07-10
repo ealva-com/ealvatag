@@ -56,7 +56,6 @@ public class FrameBodyRVAD extends AbstractID3v2FrameBody implements ID3v23Frame
     /**
      * Creates a new FrameBodyRVAD datatype.
      *
-     * @param file DOCUMENT ME!
      * @throws IOException         DOCUMENT ME!
      * @throws InvalidTagException DOCUMENT ME!
      */
@@ -66,10 +65,10 @@ public class FrameBodyRVAD extends AbstractID3v2FrameBody implements ID3v23Frame
         super(byteBuffer, frameSize);
     }
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @return DOCUMENT ME!
+        /**
+      * The ID3v2 frame identifier
+      *
+      * @return the ID3v2 frame identifier  for this frame type
      */
     public String getIdentifier()
     {

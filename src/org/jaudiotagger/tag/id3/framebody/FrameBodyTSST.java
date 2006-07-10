@@ -60,7 +60,6 @@ public class FrameBodyTSST extends AbstractFrameBodyTextInfo  implements ID3v24F
     /**
      * Creates a new FrameBodyTSST datatype.
      *
-     * @param file DOCUMENT ME!
      * @throws java.io.IOException DOCUMENT ME!
      * @throws InvalidTagException DOCUMENT ME!
      */
@@ -70,10 +69,10 @@ public class FrameBodyTSST extends AbstractFrameBodyTextInfo  implements ID3v24F
         super(byteBuffer, frameSize);
     }
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @return DOCUMENT ME!
+     /**
+      * The ID3v2 frame identifier
+      *
+      * @return the ID3v2 frame identifier  for this frame type
      */
     public String getIdentifier()
     {

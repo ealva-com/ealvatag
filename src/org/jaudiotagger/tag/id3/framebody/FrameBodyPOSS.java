@@ -27,6 +27,7 @@ import org.jaudiotagger.tag.datatype.NumberHashMap;
 import org.jaudiotagger.tag.datatype.NumberVariableLength;
 import org.jaudiotagger.tag.datatype.DataTypes;
 import org.jaudiotagger.tag.InvalidTagException;
+import org.jaudiotagger.tag.id3.ID3v24Frames;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -63,7 +64,6 @@ public class FrameBodyPOSS extends AbstractID3v2FrameBody implements ID3v24Frame
     /**
      * Creates a new FrameBodyPOSS datatype.
      *
-     * @param file DOCUMENT ME!
      * @throws IOException         DOCUMENT ME!
      * @throws InvalidTagException DOCUMENT ME!
      */
@@ -73,15 +73,16 @@ public class FrameBodyPOSS extends AbstractID3v2FrameBody implements ID3v24Frame
         super(byteBuffer, frameSize);
     }
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @return DOCUMENT ME!
+      /**
+      * The ID3v2 frame identifier
+      *
+      * @return the ID3v2 frame identifier  for this frame type
      */
     public String getIdentifier()
     {
-        return "POSS";
+        return ID3v24Frames.FRAME_ID_POSITION_SYNC;
     }
+
 
     /**
      * DOCUMENT ME!

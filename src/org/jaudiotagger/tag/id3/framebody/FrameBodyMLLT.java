@@ -23,6 +23,9 @@
  */
 package org.jaudiotagger.tag.id3.framebody;
 
+import org.jaudiotagger.tag.id3.ID3v23Frames;
+import org.jaudiotagger.tag.id3.ID3v24Frames;
+
 
 public class FrameBodyMLLT extends AbstractID3v2FrameBody implements ID3v24FrameBody,ID3v23FrameBody
 {
@@ -37,4 +40,22 @@ public class FrameBodyMLLT extends AbstractID3v2FrameBody implements ID3v24Frame
     {
         super(body);
     }
+
+     /**
+      * The ID3v2 frame identifier
+      *
+      * @return the ID3v2 frame identifier  for this frame type
+     */
+    public String getIdentifier()
+    {
+        return ID3v24Frames.FRAME_ID_MPEG_LOCATION_LOOKUP_TABLE;
+    }
+
+
+    /** TODO */
+    protected void setupObjectList()
+    {
+
+    }
+
 }
