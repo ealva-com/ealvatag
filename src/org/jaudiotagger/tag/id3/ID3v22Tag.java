@@ -361,14 +361,14 @@ public class ID3v22Tag
     {
         FrameBodyTDRC tmpBody = (FrameBodyTDRC) frame.getBody();
         ID3v22Frame newFrame;
-        if (!tmpBody.getYear().equals(""))
+        if (tmpBody.getYear().length() != 0)
         {
             //Create Year frame (v2.2 id,but uses v2.3 body)
             newFrame = new ID3v22Frame(ID3v22Frames.FRAME_ID_V2_TYER);
             ((AbstractFrameBodyTextInfo) newFrame.getBody()).setText(tmpBody.getYear());
             frameMap.put(newFrame.getIdentifier(), newFrame);
         }
-        if (!tmpBody.getTime().equals(""))
+        if (tmpBody.getTime().length() != 0)
         {
             //Create Time frame (v2.2 id,but uses v2.3 body)
             newFrame = new ID3v22Frame(ID3v22Frames.FRAME_ID_V2_TIME);

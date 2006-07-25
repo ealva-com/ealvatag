@@ -111,7 +111,7 @@ public class XMLTagDisplayFormatter extends AbstractTagDisplayFormatter
 
     public void openHeadingElement(String type, String value)
     {
-        if (value.equals(""))
+        if (value.length() == 0)
         {
             sb.append(xmlOpen(type));
         }

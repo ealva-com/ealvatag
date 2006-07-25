@@ -176,7 +176,7 @@ public class GroupRepeated
         AbstractDataType object;
         Class className;
         Iterator iterator;
-        if (propertyList.size() > 0)
+        if (!propertyList.isEmpty())
         {
             while (offset < arr.length)
             {
