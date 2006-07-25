@@ -106,21 +106,14 @@ abstract public class AbstractID3v1Tag
         //Read into Byte Buffer
         logger.info("deleting tag from file if exists");
 
-        FileChannel fc = null;
-        ByteBuffer  byteBuffer = ByteBuffer.allocate(TAG_LENGTH);
+        FileChannel fc;
+        ByteBuffer  byteBuffer;
 
-        try
-        {
-            fc = file.getChannel();
-            fc.position(file.length() - (long) TAG_LENGTH);
-            byteBuffer = ByteBuffer.allocate(TAG_LENGTH);
-            fc.read(byteBuffer);
-        }
-        finally
-        {
-            fc.close();
-        }
 
+        fc = file.getChannel();
+        fc.position(file.length() - (long) TAG_LENGTH);
+        byteBuffer = ByteBuffer.allocate(TAG_LENGTH);
+        fc.read(byteBuffer);
         byteBuffer.rewind();
         if (seek(byteBuffer))
         {

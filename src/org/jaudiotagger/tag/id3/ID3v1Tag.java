@@ -150,19 +150,13 @@ public class ID3v1Tag
         FileChannel fc = null;
         ByteBuffer  byteBuffer = ByteBuffer.allocate(TAG_LENGTH);
 
-        try
-        {
-            fc = file.getChannel();
-            fc.position(file.length() - TAG_LENGTH);
-            byteBuffer = ByteBuffer.allocate(TAG_LENGTH);
-            fc.read(byteBuffer);
-            byteBuffer.flip();
-            read(byteBuffer);
-        }
-        finally
-        {
-            fc.close();
-        }
+        fc = file.getChannel();
+        fc.position(file.length() - TAG_LENGTH);
+        byteBuffer = ByteBuffer.allocate(TAG_LENGTH);
+        fc.read(byteBuffer);
+        byteBuffer.flip();
+        read(byteBuffer);
+
     }
 
     /**
