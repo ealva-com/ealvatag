@@ -117,7 +117,7 @@ public class FrameBodyAPIC extends AbstractID3v2FrameBody implements ID3v24Frame
      */
     public String getDescription()
     {
-        return getDescription();
+        return (String) getObjectValue(DataTypes.OBJ_DESCRIPTION);
     }
 
       /**
