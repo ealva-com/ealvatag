@@ -268,19 +268,24 @@ public class MP3File extends org.jaudiotagger.audio.AbstractAudioFile
 
     /**
      * Used by tags when writing to calculate the location of the music file
+     *
+     * @return the location within the file that the audio starts
      */
-    public long getMP3StartByte(File file)
+    public long getMP3StartByte(File file)throws InvalidAudioFrameException,IOException
     {
         try
         {
             MP3AudioHeader audioHeader = new MP3AudioHeader(file);
             return audioHeader.getMp3StartByte();
         }
-        catch (Exception e)
+        catch(InvalidAudioFrameException iafe)
         {
-            e.printStackTrace();
+            throw iafe;
         }
-        return 0;
+        catch(IOException ioe)
+        {
+            throw ioe;    
+        }
     }
 
     /**

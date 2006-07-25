@@ -187,7 +187,7 @@ public abstract class AbstractDataType
     /**
      * Return the key as declared by the frame bodies datatype list
      *
-     * @return 
+     * @return  the key used to reference this datatype from a framebody
      */
     public String getIdentifier()
     {
@@ -208,7 +208,7 @@ public abstract class AbstractDataType
     /**
      * Get value held by this Object
      *
-     * @return 
+     * @return value held by this Object
      */
     public Object getValue()
     {
@@ -220,24 +220,18 @@ public abstract class AbstractDataType
      * Used for reading Strings, this class should be overridden
      * for non String Objects
      *
-     * @param arr 
+     * @param arr
      */
-    final public void readByteArray(byte[] arr)
+    final public void readByteArray(byte[] arr) throws InvalidDataTypeException
     {
-        try {
-            readByteArray(arr, 0);
-        }
-        catch (InvalidDataTypeException e)
-        {
-            e.printStackTrace();
-        }
+        readByteArray(arr, 0);       
     }
 
     /**
      * This defines the size in bytes of the datatype being
      * held when read/written to file.
      *
-     * @return 
+     * @return the size in bytes of the datatype
      */
     abstract public int getSize();
 
@@ -250,7 +244,7 @@ public abstract class AbstractDataType
      * 
      *
      * @param obj 
-     * @return 
+     * @return whether this and obj are deemed equivalent
      */
     public boolean equals(Object obj)
     {

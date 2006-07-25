@@ -1180,8 +1180,8 @@ public class TagOptionSingleton
         }
         catch (TagException ex)
         {
-            // this shouldn't happen. if it does, we should fix it right away.
-            ex.printStackTrace();
+            // this shouldn't happen, indicates coding error
+            throw new RuntimeException(ex);              
         }
 
         addUpperLowerCaseWord("a");
