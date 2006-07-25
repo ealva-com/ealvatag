@@ -99,10 +99,11 @@ public class TextEncodedStringSizeTerminated
             data = new byte[bb.limit()];
             bb.get(data, 0, bb.limit());
         }
-        //Should never happen
+        //Should never happen so if does throw a RuntimeException
         catch (CharacterCodingException ce)
         {
             logger.severe(ce.getMessage());
+            throw new RuntimeException(ce);
         }
         setSize(data.length);
         return data;

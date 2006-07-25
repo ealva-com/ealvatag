@@ -608,12 +608,12 @@ public class MP3File extends org.jaudiotagger.audio.AbstractAudioFile
 
     private static void createXMLStructureFormatter()
     {
-        tagFormatter = new XMLTagDisplayFormatter();
+        tagFormatter = XMLTagDisplayFormatter.getInstanceOf();
     }
 
     private static void createPlainTextStructureFormatter()
     {
-        tagFormatter = new PlainTextTagDisplayFormatter();
+        tagFormatter = PlainTextTagDisplayFormatter.getInstanceOf();
     }
 
     public static AbstractTagDisplayFormatter getStructureFormatter()

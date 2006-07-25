@@ -152,7 +152,7 @@ public class TextEncodedStringNullTerminated
     /**
      * Write String into byte array, adding a null character to the end of the String
      *
-     * @return the dat as a byte array in format to write to file
+     * @return the data as a byte array in format to write to file
      */
     public byte[] writeByteArray()
     {
@@ -168,20 +168,22 @@ public class TextEncodedStringNullTerminated
             data = new byte[bb.limit()];
             bb.get(data, 0, bb.limit());
         }
-        //Should never happen
+        //Should never happen so if does throw a RuntimeException
         catch (CharacterCodingException ce)
         {
             logger.severe(ce.getMessage());
+            throw new RuntimeException(ce);
         }
+        assert data != null;
         setSize(data.length);
         return data;
     }
 
     protected String  getTextEncodingCharSet()
     {
-         byte textEncoding = this.getFrameBody().getTextEncoding();
-         String charSetName = TextEncoding.getInstanceOf().getValueForId(textEncoding);
-         logger.finest("text encoding:"+textEncoding + " charset:"+charSetName);
+        byte textEncoding = this.getFrameBody().getTextEncoding();
+        String charSetName = TextEncoding.getInstanceOf().getValueForId(textEncoding);
+        logger.finest("text encoding:"+textEncoding + " charset:"+charSetName);
         return charSetName;
     }
 }

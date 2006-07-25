@@ -40,6 +40,11 @@ public class XMLTagDisplayFormatter extends AbstractTagDisplayFormatter
     protected static final String xmlCDataTagClose = "]]>";
 
 
+    private XMLTagDisplayFormatter()
+    {
+
+    }
+
     /**
      * Return xml open tag round a string e.g <tag>
      */
@@ -151,7 +156,7 @@ public class XMLTagDisplayFormatter extends AbstractTagDisplayFormatter
         return sb.toString();
     }
 
-    public AbstractTagDisplayFormatter getInstanceOf()
+    public static AbstractTagDisplayFormatter getInstanceOf()
     {
         if (formatter == null)
         {

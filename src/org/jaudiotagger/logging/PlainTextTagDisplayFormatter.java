@@ -30,6 +30,11 @@ public class PlainTextTagDisplayFormatter extends AbstractTagDisplayFormatter
     StringBuffer sb = new StringBuffer();
     StringBuffer indent = new StringBuffer();
 
+    private PlainTextTagDisplayFormatter()
+    {
+
+    }
+    
     public void openHeadingElement(String type, String value)
     {
         addElement(type, value);
@@ -83,7 +88,7 @@ public class PlainTextTagDisplayFormatter extends AbstractTagDisplayFormatter
         return sb.toString();
     }
 
-    public AbstractTagDisplayFormatter getInstanceOf()
+    public static AbstractTagDisplayFormatter getInstanceOf()
     {
         if (formatter == null)
         {
