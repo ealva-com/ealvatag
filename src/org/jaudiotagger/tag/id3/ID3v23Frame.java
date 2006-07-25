@@ -85,7 +85,7 @@ public class ID3v23Frame
      *
      * @param frame
      */
-    public ID3v23Frame(AbstractID3v2Frame frame)
+    public ID3v23Frame(AbstractID3v2Frame frame) throws InvalidFrameException
     {
         logger.info("Creating frame from a frame of a different version");
         if ((frame instanceof ID3v23Frame == true) && (frame instanceof ID3v24Frame == false))
@@ -97,52 +97,61 @@ public class ID3v23Frame
             statusFlags = new StatusFlags((ID3v24Frame.StatusFlags) ((ID3v24Frame) frame).getStatusFlags());
             encodingFlags = new EncodingFlags(((ID3v23Frame) frame).getEncodingFlags().getFlags());
         }
-        try
+
+        if (frame instanceof ID3v24Frame)
         {
-            if (frame instanceof ID3v24Frame)
+            /** Version between v4 and v3 */
+            identifier = ID3Tags.convertFrameID24To23(frame.getIdentifier());
+            if (identifier != null)
             {
-                /** Version between v4 and v3 */
-                identifier = ID3Tags.convertFrameID24To23(frame.getIdentifier());
-                if (identifier != null)
+                logger.info("V3:Orig id is:" + frame.getIdentifier() + ":New id is:" + identifier);
+                this.frameBody = (AbstractID3v2FrameBody) ID3Tags.copyObject(frame.getBody());
+                return;
+            }
+            /** Is it a known v4 frame which needs forcing to v3 frame e.g. TDRC - TYER,TDAT */
+            else if (ID3Tags.isID3v24FrameIdentifier(frame.getIdentifier()) == true)
+            {
+                identifier = ID3Tags.forceFrameID24To23(frame.getIdentifier());
+                if(identifier!=null)
                 {
-                    logger.info("V3:Orig id is:" + frame.getIdentifier() + ":New id is:" + identifier);
-                    this.frameBody = (AbstractID3v2FrameBody) ID3Tags.copyObject(frame.getBody());
-                    return;
-                }
-                /** Is it a known v4 frame which needs forcing to v3 frame e.g. TDRC - TYER,TDAT */
-                else if (ID3Tags.isID3v24FrameIdentifier(frame.getIdentifier()) == true)
-                {
-                    identifier = ID3Tags.forceFrameID24To23(frame.getIdentifier());
                     logger.info("V3:Orig id is:" + frame.getIdentifier() + ":New id is:" + identifier);
                     this.frameBody = this.readBody(identifier, (AbstractID3v2FrameBody) frame.getBody());
                     return;
                 }
-                /** Unknown Frame e.g NCON */
-                this.frameBody = new FrameBodyUnsupported((FrameBodyUnsupported) frame.getBody());
-                identifier = frame.getIdentifier();
-                logger.info("UNKNOWN:Orig id is:" + frame.getIdentifier() + ":New id is:" + identifier);
-                return;
-            }
-            else if (frame instanceof ID3v22Frame)
-            {
-                identifier = ID3Tags.convertFrameID22To23(frame.getIdentifier());
-                if (identifier != null)
+                /* No mechanism exists to convert it to a v22 frame */
+                else
                 {
-                    logger.info("V3:Orig id is:" + frame.getIdentifier() + ":New id is:" + identifier);
-                    this.frameBody = (AbstractID3v2FrameBody) ID3Tags.copyObject(frame.getBody());
-                    return;
+                    throw new InvalidFrameException("Unable to convert v24 frame:"+frame.getIdentifier()+" to a v23 frame");
                 }
-                /** Unknown Frame e.g NCON */
+            }
+            /** Unknown Frame e.g NCON */
+            else
+            {
                 this.frameBody = new FrameBodyUnsupported((FrameBodyUnsupported) frame.getBody());
                 identifier = frame.getIdentifier();
                 logger.info("UNKNOWN:Orig id is:" + frame.getIdentifier() + ":New id is:" + identifier);
                 return;
             }
         }
-        catch (Exception e)
+        else if (frame instanceof ID3v22Frame)
         {
-            logger.warning("Unable to convert to v23 Frame:Frame Identifier" + frame.getIdentifier());
+            identifier = ID3Tags.convertFrameID22To23(frame.getIdentifier());
+            if (identifier != null)
+            {
+                logger.info("V3:Orig id is:" + frame.getIdentifier() + ":New id is:" + identifier);
+                this.frameBody = (AbstractID3v2FrameBody) ID3Tags.copyObject(frame.getBody());
+                return;
+            }
+            /** Unknown Frame e.g NCON */
+            else
+            {
+                this.frameBody = new FrameBodyUnsupported((FrameBodyUnsupported) frame.getBody());
+                identifier = frame.getIdentifier();
+                logger.info("UNKNOWN:Orig id is:" + frame.getIdentifier() + ":New id is:" + identifier);
+                return;
+            }
         }
+
         logger.info("Created frame from a frame of a different version");
     }
 
@@ -199,7 +208,6 @@ public class ID3v23Frame
      * Read the frame from a bytebuffer
      *
      * @param byteBuffer buffer to read from
-     * @throws IOException         DOCUMENT ME!
      */
     public void read(ByteBuffer byteBuffer)
         throws InvalidFrameException
@@ -275,7 +283,7 @@ public class ID3v23Frame
     /**
      * Write the frame to bufferOutputStream
      *
-     * @throws IOException DOCUMENT ME!
+     * @throws IOException
      */
     public void write(ByteArrayOutputStream tagBuffer)
         throws IOException

@@ -36,6 +36,7 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 
 import java.util.*;
+import java.util.logging.Level;
 import java.nio.*;
 import java.nio.channels.*;
 import java.io.*;
@@ -263,10 +264,15 @@ public class ID3v24Tag
             if (o instanceof AbstractID3v2Frame)
             {
                 frame = (AbstractID3v2Frame) o;
-                newFrame = new ID3v24Frame(frame);
-                if (newFrame.getBody() != null)
+                try
                 {
+                    logger.info("Adding Frame:"+newFrame.getIdentifier());
+                    newFrame = new ID3v24Frame(frame);
                     copyFrameIntoMap(newFrame.getIdentifier(), newFrame);
+                }
+                catch(InvalidFrameException ife)
+                {
+                     logger.log(Level.SEVERE,"Unable to convert frame:"+frame.getIdentifier(),ife);
                 }
             }
             //MultiFrames
@@ -276,12 +282,15 @@ public class ID3v24Tag
                 for (ListIterator li = ((ArrayList) o).listIterator(); li.hasNext();)
                 {
                     frame = (AbstractID3v2Frame) li.next();
-                    newFrame = new ID3v24Frame(frame);
-                    if (newFrame.getBody() != null)
+                    try
                     {
-                        logger.finest("Adding frame to list:"+newFrame.getIdentifier());
+                        newFrame = new ID3v24Frame(frame);
                         multiFrame.add(newFrame);
                     }
+                    catch(InvalidFrameException ife)
+                    {
+                         logger.log(Level.SEVERE,"Unable to convert frame:"+frame.getIdentifier(),ife);
+                    }                             
                 }
                 if (newFrame != null)
                 {

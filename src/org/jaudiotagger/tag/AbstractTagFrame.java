@@ -90,11 +90,6 @@ public abstract class AbstractTagFrame extends AbstractTagItem
             return false;
         }
 
-        if (obj == null)
-        {
-            return false;
-        }
-
         if ((frameBody == null) && (((AbstractTagFrame) obj).frameBody == null))
         {
             return true;

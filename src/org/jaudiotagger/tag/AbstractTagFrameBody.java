@@ -122,7 +122,7 @@ public abstract class AbstractTagFrameBody
      * them without any newline characters.
      *
      * @return brief description string
-     */
+    */
     public String getBriefDescription()
     {
         String str = "";

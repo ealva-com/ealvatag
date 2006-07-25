@@ -76,9 +76,9 @@ public class ID3v24Frame
      * Converts the framebody to the equivalent v24 framebody or to UnsupportedFrameBody if identifier
      * is unknown.
      *
-     * @param frame DOCUMENT ME!
+     * @param frame to construct a new frame from
      */
-    public ID3v24Frame(AbstractID3v2Frame frame)
+    public ID3v24Frame(AbstractID3v2Frame frame)  throws InvalidFrameException
     {
         //Should not be called
         if ((frame instanceof ID3v24Frame == true))
@@ -96,85 +96,103 @@ public class ID3v24Frame
             statusFlags = new StatusFlags();
             encodingFlags = new EncodingFlags();
         }
-        try
+
+        /** Convert Identifier. If the id was a known id for the original
+         *  version we should be able to convert it to an v24 frame, although it may mean minor
+         *  modification to the data. If it was not recognised originally it should remain
+         *  unknown.
+         */
+        if (frame instanceof ID3v23Frame)
         {
-            /** Convert Identifier. If the id was a known id for the original
-             *  version we should be able to convert it to an v24 frame, although it may mean minor
-             *  modification to the data. If it was not recognised originally it should remain
-             *  unknown.
-             */
-            if (frame instanceof ID3v23Frame)
+            /** Is it a straight conversion e.g TALB - TALB */
+            identifier = ID3Tags.convertFrameID23To24(frame.getIdentifier());
+            if (identifier != null)
             {
-                /** Is it a straight conversion e.g TALB - TALB */
-                identifier = ID3Tags.convertFrameID23To24(frame.getIdentifier());
-                if (identifier != null)
+                logger.info("V4:Orig id is:" + frame.getIdentifier() + ":New id is:" + identifier);
+                this.frameBody = (AbstractID3v2FrameBody) ID3Tags.copyObject(frame.getBody());
+                return;
+            }
+            /** Is it a known v3 frame which needs forcing to v4 frame e.g. TYER - TDRC */
+            else if (ID3Tags.isID3v23FrameIdentifier(frame.getIdentifier()) == true)
+            {
+                identifier = ID3Tags.forceFrameID23To24(frame.getIdentifier());
+                if(identifier!=null)
                 {
-                    logger.info("V4:Orig id is:" + frame.getIdentifier() + ":New id is:" + identifier);
-                    this.frameBody = (AbstractID3v2FrameBody) ID3Tags.copyObject(frame.getBody());
-                    return;
-                }
-                /** Is it a known v3 frame which needs forcing to v4 frame e.g. TYER - TDRC */
-                if (ID3Tags.isID3v23FrameIdentifier(frame.getIdentifier()) == true)
-                {
-                    identifier = ID3Tags.forceFrameID23To24(frame.getIdentifier());
                     logger.info("V3:Orig id is:" + frame.getIdentifier() + ":New id is:" + identifier);
                     this.frameBody = this.readBody(identifier, (AbstractID3v2FrameBody) frame.getBody());
                     return;
                 }
-                /** Unknown Frame e.g NCON */
+                /* No mechanism exists to convert it to a v24 frame */
+                else
+                {
+                    throw new InvalidFrameException("Unable to convert v23 frame:"+frame.getIdentifier()+" to a v24 frame");
+                }
+
+            }
+            /** Unknown Frame e.g NCON */
+            else
+            {
                 this.frameBody = new FrameBodyUnsupported((FrameBodyUnsupported) frame.getBody());
                 identifier = frame.getIdentifier();
                 logger.info("UNKNOWN:Orig id is:" + frame.getIdentifier() + ":New id is:" + identifier);
                 return;
             }
-            else if (frame instanceof ID3v22Frame)
+        }
+        else if (frame instanceof ID3v22Frame)
+        {
+            /** Is it a straight conversion from v2 to v4 (e.g TAl - TALB) */
+            identifier = ID3Tags.convertFrameID22To24(frame.getIdentifier());
+            if (identifier != null)
             {
-                /** Is it a straight conversion from v2 to v4 (e.g TAl - TALB) */
-                identifier = ID3Tags.convertFrameID22To24(frame.getIdentifier());
-                if (identifier != null)
+                logger.info("Orig id is:" + frame.getIdentifier() + "New id is:" + identifier);
+                this.frameBody = (AbstractID3v2FrameBody) ID3Tags.copyObject(frame.getBody());
+                return;
+            }
+            /** Can we convert from v2 to v3 easily (e.g TYE - TYER) */
+            identifier = ID3Tags.convertFrameID22To23(frame.getIdentifier());
+            if (identifier != null)
+            {
+                //Convert from v2 to v3
+                logger.info("Orig id is:" + frame.getIdentifier() + "New id is:" + identifier);
+                this.frameBody = (AbstractID3v2FrameBody) ID3Tags.copyObject(frame.getBody());
+                //Force v3 to v4
+                identifier = ID3Tags.forceFrameID23To24(identifier);
+                this.frameBody = this.readBody(identifier, (AbstractID3v2FrameBody) this.getBody());
+                return;
+            }
+            /** Is it a known v2 frame which needs forcing to v4 frame e.g PIC - APIC */
+            else if (ID3Tags.isID3v22FrameIdentifier(frame.getIdentifier()) == true)
+            {
+                //Force v2 to v3
+                identifier = ID3Tags.forceFrameID22To23(frame.getIdentifier());
+                if(identifier!=null)
                 {
-                    logger.info("Orig id is:" + frame.getIdentifier() + "New id is:" + identifier);
-                    this.frameBody = (AbstractID3v2FrameBody) ID3Tags.copyObject(frame.getBody());
-                    return;
-                }
-                /** Can we convert from v2 to v3 easily (e.g TYE - TYER) */
-                identifier = ID3Tags.convertFrameID22To23(frame.getIdentifier());
-                if (identifier != null)
-                {
-                    //Convert from v2 to v3
-                    logger.info("Orig id is:" + frame.getIdentifier() + "New id is:" + identifier);
-                    this.frameBody = (AbstractID3v2FrameBody) ID3Tags.copyObject(frame.getBody());
-                    //Force v3 to v4
-                    identifier = ID3Tags.forceFrameID23To24(identifier);
-                    this.frameBody = this.readBody(identifier, (AbstractID3v2FrameBody) this.getBody());
-                    return;
-                }
-                /** Is it a known v2 frame which needs forcing to v4 frame e.g PIC - APIC */
-                if (ID3Tags.isID3v22FrameIdentifier(frame.getIdentifier()) == true)
-                {
-                    //Force v2 to v3
-                    identifier = ID3Tags.forceFrameID22To23(frame.getIdentifier());
                     logger.info("Orig id is:" + frame.getIdentifier() + "New id is:" + identifier);
                     this.frameBody = this.readBody(identifier, (AbstractID3v2FrameBody) frame.getBody());
                     return;
                 }
-                /** Unknown Frame */
+                /* No mechanism exists to convert it to a v24 frame */
+                else
+                {
+                    throw new InvalidFrameException("Unable to convert v22 frame:"+frame.getIdentifier()+" to a v24 frame");
+                }
+            }
+            /** Unknown Frame */
+            else
+            {
                 this.frameBody = new FrameBodyUnsupported((FrameBodyUnsupported) frame.getBody());
                 identifier = frame.getIdentifier();
                 return;
             }
         }
-        catch (Exception e)
-        {
-            logger.warning("Unable to convert to v24 Frame:Frame Identifier" + frame.getIdentifier());
-        }
+
     }
 
     /**
      * Creates a new ID3v2_4Frame datatype based on Lyrics3.
      *
-     * @param field DOCUMENT ME!
-     * @throws InvalidTagException DOCUMENT ME!
+     * @param field
+     * @throws InvalidTagException
      */
     public ID3v24Frame(Lyrics3v2Field field)
         throws InvalidTagException
@@ -256,7 +274,7 @@ public class ID3v24Frame
     /**
      * Creates a new ID3v2_4Frame datatype from specified byteBuffer.
      *
-     * @param byteBuffer DOCUMENT ME!
+     * @param byteBuffer
      */
     public ID3v24Frame(ByteBuffer byteBuffer)
         throws InvalidFrameException
@@ -267,8 +285,8 @@ public class ID3v24Frame
     /**
      * DOCUMENT ME!
      *
-     * @param obj DOCUMENT ME!
-     * @return DOCUMENT ME!
+     * @param obj
+     * @return
      */
     public boolean equals(Object obj)
     {
@@ -283,8 +301,7 @@ public class ID3v24Frame
      * Read the frame from the specified file.
      * Read the frame header then delegate reading of data to frame body.
      *
-     * @param byteBuffer DOCUMENT ME!
-     * @throws IOException         DOCUMENT ME!
+     * @param byteBuffer to read the frame from
      */
     public void read(ByteBuffer byteBuffer)
         throws InvalidFrameException
@@ -341,7 +358,7 @@ public class ID3v24Frame
      * Write the frame. Writes the frame header but writing the data is delegated to the
      * frame body.
      *
-     * @throws IOException DOCUMENT ME!
+     * @throws IOException
      */
     public void write(ByteArrayOutputStream tagBuffer)
         throws IOException

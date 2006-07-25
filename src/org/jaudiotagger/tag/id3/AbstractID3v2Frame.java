@@ -233,13 +233,19 @@ public abstract class AbstractID3v2Frame
      * in the body. This is a different type to the body being created which is why
      * TagUtility.copyObject() can't be used. This is used when converting between
      * different versions of a tag for frames that have a non-trivial mapping such
-     * as TYER in v3 to TDRC in v4.
+     * as TYER in v3 to TDRC in v4. This will only work where appropriate constructors
+     * exist in the frame body to be created, for example a FrameBodyTYER requires a constructor
+     * consisting of a FrameBodyTDRC.
+     *
+     * If this method is called and a suitable constructor does not exist then an InvalidFrameException
+     * will be thrown
      *
      * @param identifier to determine type of the frame
+     * @throws InvalidFrameException if unable to construct a framebody for the identifier and body provided.
      * @return newly created framebody for this type
       */
     protected AbstractID3v2FrameBody readBody(String identifier, AbstractID3v2FrameBody body)
-
+    throws InvalidFrameException
     {
         /* Use reflection to map id to frame body, which makes things much easier
          * to keep things up to date, although slight performance hit.
@@ -255,12 +261,46 @@ public abstract class AbstractID3v2Frame
         }
         catch (ClassNotFoundException cex)
         {
-            logger.info("Identifier not recognised:" + identifier + " using FrameBodyUnsupported");
+            logger.info("Identifier not recognised:" + identifier + " unable to create framebody");
+            throw new InvalidFrameException("FrameBody"+identifier + " does not exist");
         }
-        catch (Exception e)
+        //If suitable constructor does not exist
+        catch (NoSuchMethodException sme)
         {
-            logger.info("Problem Initialising class" + identifier + " using FrameBodyUnsupported");
+            logger.log(Level.SEVERE,"No such method:"+sme.getMessage(),sme);
+            throw new InvalidFrameException("FrameBody"+identifier + " does not have a constructor that takes:"+body.getClass().getName());
         }
+        catch (InvocationTargetException ite)
+        {
+            logger.severe("An error occurred within abstractID3v2FrameBody");
+            logger.log(Level.SEVERE,"Invocation target exception:"+ite.getCause().getMessage(),ite.getCause());
+            if(ite.getCause() instanceof Error)
+            {
+                throw (Error)ite.getCause();
+            }
+            else if(ite.getCause() instanceof RuntimeException)
+            {
+                throw (RuntimeException)ite.getCause();
+            }
+            else
+            {
+                throw new InvalidFrameException(ite.getCause().getMessage());
+            }
+        }
+
+        //Instantiate Interface/Abstract should not happen
+        catch (InstantiationException ie)
+        {
+            logger.log(Level.SEVERE,"Instantiation exception:"+ie.getMessage(),ie);
+            throw new RuntimeException(ie.getMessage());
+        }
+        //Private Constructor shouild not happen
+        catch (IllegalAccessException iae)
+        {
+            logger.log(Level.SEVERE,"Illegal access exception :"+iae.getMessage(),iae);
+            throw new RuntimeException(iae.getMessage());
+        }
+
         logger.finer("frame Body created" + frameBody.getIdentifier());
         return frameBody;
     }

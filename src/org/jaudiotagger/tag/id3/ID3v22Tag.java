@@ -39,6 +39,7 @@ import java.nio.*;
 import java.nio.channels.*;
 import java.io.*;
 import java.util.*;
+import java.util.logging.Level;
 
 /** Represents an ID3v2.2 tag */
 public class ID3v22Tag
@@ -123,15 +124,20 @@ public class ID3v22Tag
                     (frame.getBody() instanceof FrameBodyTDRC)
                    )
                 {
-                    translateFrame(frame);                    
+                    translateFrame(frame);
                 }
                 else
                 {
-                    newFrame = new ID3v22Frame(frame);
-                    if (newFrame.getBody() != null)
+                    try
                     {
+                        newFrame = new ID3v22Frame(frame);
                         frameMap.put(newFrame.getIdentifier(), newFrame);
                     }
+                    catch(InvalidFrameException ife)
+                    {
+                         logger.log(Level.SEVERE,"Unable to convert frame:"+frame.getIdentifier(),ife);
+                    }
+
                 }
             }
             else if (o instanceof ArrayList)
@@ -140,9 +146,16 @@ public class ID3v22Tag
                 for (ListIterator li = ((ArrayList) o).listIterator(); li.hasNext();)
                 {
                     frame = (AbstractID3v2Frame) li.next();
-                    newFrame = new ID3v22Frame(frame);
-                    multiFrame.add(newFrame);
-                }
+                    try
+                    {
+                        newFrame = new ID3v22Frame(frame);
+                        multiFrame.add(newFrame);
+                    }
+                    catch(InvalidFrameException ife)
+                    {
+                         logger.log(Level.SEVERE,"Unable to convert frame:"+frame.getIdentifier(),ife);
+                    }
+                                                             }
                 if (newFrame != null)
                 {
                     frameMap.put(newFrame.getIdentifier(), multiFrame);
@@ -412,7 +425,7 @@ public class ID3v22Tag
         int sizeIncPadding = calculateTagSize(getSize(),(int) audioStartLocation);
         int padding = sizeIncPadding - getSize();
         headerBuffer.put(sizeToByteArray((int) sizeIncPadding - TAG_HEADER_LENGTH));
-        
+
         /** We need to adjust location of audio File */
         if (sizeIncPadding > audioStartLocation)
         {

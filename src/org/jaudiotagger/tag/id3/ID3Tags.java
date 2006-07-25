@@ -372,7 +372,7 @@ public class ID3Tags
 
     /**
      * Unable to instantiate abstract classes, so can't call the copy
-     * constructor. So find out the instatiated class name and call the copy
+     * constructor. So find out the instantiated class name and call the copy
      * constructor through reflection.
      *
      * @param copyObject
