@@ -28,11 +28,7 @@
 package org.jaudiotagger.tag.datatype;
 
 import org.jaudiotagger.tag.AbstractTagFrameBody;
-import org.jaudiotagger.tag.InvalidDataTypeException;
 import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
-
-import java.nio.charset.*;
-import java.nio.*;
 
 /**
  * Represents a String which is not delimted by null pointer, this type of String will usually
@@ -40,7 +36,7 @@ import java.nio.*;
  * be read, when writing the frame will be accomodate the required size for the String. |The String will be encoded
  * using the default encoding regardless of what encoding may be specified in the framebody
  */
-public class StringSizeTerminated extends TextEncodedStringSizeTerminated      
+public class StringSizeTerminated extends TextEncodedStringSizeTerminated
 {
 
     /**

@@ -24,7 +24,6 @@ import java.io.*;
 import java.text.*;
 import java.util.*;
 import java.util.logging.*;
-import java.util.logging.Formatter;
 
 /*
  * For Formatting log output

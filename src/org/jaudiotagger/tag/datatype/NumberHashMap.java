@@ -29,7 +29,6 @@ import java.util.TreeSet;
 
 import org.jaudiotagger.tag.AbstractTagFrameBody;
 import org.jaudiotagger.tag.id3.valuepair.*;
-import org.jaudiotagger.tag.id3.ID3Frames;
 
 /**
  * Represents a number thats acts as a key into an enumeration of values

@@ -20,7 +20,6 @@
  */
 package org.jaudiotagger.audio;
 
-import java.io.RandomAccessFile;
 import java.io.IOException;
 import java.io.File;
 

@@ -27,12 +27,8 @@ import org.jaudiotagger.tag.datatype.*;
 import org.jaudiotagger.tag.InvalidTagException;
 import org.jaudiotagger.tag.id3.framebody.FrameBodyAPIC;
 import org.jaudiotagger.tag.id3.valuepair.ImageFormats;
-import org.jaudiotagger.tag.id3.valuepair.ImageFormats;
 import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
-import org.jaudiotagger.tag.id3.ID3v24Frames;
-import org.jaudiotagger.tag.id3.ID3v23Frames;
 import org.jaudiotagger.tag.id3.ID3v22Frames;
-import org.jaudiotagger.audio.mp3.*;
 
 import java.io.IOException;
 import java.io.ByteArrayOutputStream;

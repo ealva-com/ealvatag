@@ -22,10 +22,6 @@
 package org.jaudiotagger.tag.lyrics3;
 
 import org.jaudiotagger.tag.datatype.AbstractStringStringValuePair;
-import org.jaudiotagger.tag.id3.valuepair.Languages;
-import org.jaudiotagger.tag.datatype.AbstractStringStringValuePair;
-
-import java.util.*;
 
 public class Lyrics3v2Fields extends AbstractStringStringValuePair
 {

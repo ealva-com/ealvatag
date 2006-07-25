@@ -24,8 +24,6 @@ package org.jaudiotagger.tag.id3.valuepair;
 
 import org.jaudiotagger.tag.datatype.AbstractIntStringValuePair;
 
-import java.util.*;
-
 public class PictureTypes extends AbstractIntStringValuePair
 {
     private static PictureTypes pictureTypes;

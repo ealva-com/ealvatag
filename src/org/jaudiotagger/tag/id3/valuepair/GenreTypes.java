@@ -23,9 +23,6 @@ package org.jaudiotagger.tag.id3.valuepair;
 
 import org.jaudiotagger.tag.datatype.AbstractIntStringValuePair;
 
-import java.util.Iterator;
-import java.util.Collections;
-
 public class GenreTypes extends AbstractIntStringValuePair
 {
     private static GenreTypes genreTypes;

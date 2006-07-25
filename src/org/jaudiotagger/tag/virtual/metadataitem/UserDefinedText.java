@@ -9,8 +9,6 @@
 package org.jaudiotagger.tag.virtual.metadataitem;
 
 import org.jaudiotagger.tag.id3.ID3v24Frame;
-import org.jaudiotagger.tag.id3.framebody.AbstractID3v2FrameBody;
-import org.jaudiotagger.tag.id3.framebody.AbstractFrameBodyTextInfo;
 import org.jaudiotagger.tag.id3.framebody.FrameBodyTXXX;
 
 /**

@@ -23,10 +23,6 @@
  */
 package org.jaudiotagger.tag;
 
-import org.jaudiotagger.tag.id3.AbstractID3v2Frame;
-import org.jaudiotagger.tag.id3.AbstractID3v2Tag;
-import org.jaudiotagger.tag.id3.ID3v24Tag;
-
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.Iterator;

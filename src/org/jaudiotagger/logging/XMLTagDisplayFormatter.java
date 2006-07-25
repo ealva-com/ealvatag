@@ -22,7 +22,6 @@ package org.jaudiotagger.logging;
 
 import java.text.CharacterIterator;
 import java.text.StringCharacterIterator;
-import java.util.ListIterator;
 
 /*
  * For Formatting log output in XML Format

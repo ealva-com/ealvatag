@@ -40,9 +40,9 @@ public class ID3v22Frame
 {
     Pattern validFrameIdentifier = Pattern.compile("[A-Z][0-9A-Z]{2}");
 
-    protected static int FRAME_ID_SIZE = 3;
-    protected static int FRAME_SIZE_SIZE = 3;
-    protected static int FRAME_HEADER_SIZE = FRAME_ID_SIZE + FRAME_SIZE_SIZE;
+    protected static final int FRAME_ID_SIZE = 3;
+    protected static final int FRAME_SIZE_SIZE = 3;
+    protected static final int FRAME_HEADER_SIZE = FRAME_ID_SIZE + FRAME_SIZE_SIZE;
 
     public ID3v22Frame()
     {

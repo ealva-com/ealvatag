@@ -127,13 +127,13 @@ public class ID3v1Iterator implements Iterator
                 id3v1tag.year = "";
 
             case GENRE:
-                id3v1tag.genre = -1;
+                id3v1tag.genre = (byte) -1;
 
             case TRACK:
 
                 if (id3v1tag instanceof ID3v11Tag)
                 {
-                    ((ID3v11Tag) id3v1tag).track = -1;
+                    ((ID3v11Tag) id3v1tag).track = (byte) -1;
                 }
         }
     }
@@ -164,13 +164,13 @@ public class ID3v1Iterator implements Iterator
                 return (id3v1tag.year.length() > 0) || hasNext(index + 1);
 
             case GENRE:
-                return (id3v1tag.genre >= 0) || hasNext(index + 1);
+                return (id3v1tag.genre >= (byte) 0) || hasNext(index + 1);
 
             case TRACK:
 
                 if (id3v1tag instanceof ID3v11Tag)
                 {
-                    return (((ID3v11Tag) id3v1tag).track >= 0) || hasNext(index + 1);
+                    return (((ID3v11Tag) id3v1tag).track >= (byte) 0) || hasNext(index + 1);
                 }
 
             default:
@@ -205,10 +205,10 @@ public class ID3v1Iterator implements Iterator
                 return (id3v1tag.year.length() > 0) ? id3v1tag.year : next(index + 1);
 
             case YEAR:
-                return (id3v1tag.genre >= 0) ? new Byte(id3v1tag.genre) : next(index + 1);
+                return (id3v1tag.genre >= (byte) 0) ? new Byte(id3v1tag.genre) : next(index + 1);
 
             case GENRE:
-                return (id3v1tag instanceof ID3v11Tag && (((ID3v11Tag) id3v1tag).track >= 0)) ? new Byte(((ID3v11Tag) id3v1tag).track) : null;
+                return (id3v1tag instanceof ID3v11Tag && (((ID3v11Tag) id3v1tag).track >= (byte) 0)) ? new Byte(((ID3v11Tag) id3v1tag).track) : null;
 
             default:
                 throw new NoSuchElementException("Iteration has no more elements.");

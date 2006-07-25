@@ -9,12 +9,7 @@
 package org.jaudiotagger.tag.virtual;
 
 import org.jaudiotagger.tag.id3.*;
-import org.jaudiotagger.tag.AbstractTagItem;
-import org.jaudiotagger.tag.TagException;
-import org.jaudiotagger.tag.AbstractTag;
 
-import java.io.IOException;
-import java.io.RandomAccessFile;
 import java.util.*;
 
 /** A VirtualMetaDataContainer can  hold data from any tag type and can be used to convert between tags

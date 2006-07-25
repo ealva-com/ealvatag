@@ -29,7 +29,6 @@ import org.jaudiotagger.tag.datatype.DataTypes;
 import org.jaudiotagger.tag.InvalidTagException;
 import org.jaudiotagger.tag.id3.ID3v24Frames;
 
-import java.io.IOException;
 import java.nio.ByteBuffer;
 
 
@@ -97,7 +96,7 @@ public class FrameBodyRBUF extends AbstractID3v2FrameBody implements ID3v24Frame
     protected void setupObjectList()
     {
         objectList.add(new NumberFixedLength(DataTypes.OBJ_BUFFER_SIZE, this, BUFFER_FIELD_SIZE));
-        objectList.add(new BooleanByte(DataTypes.OBJ_EMBED_FLAG, this, (byte) EMBED_FLAG_BIT_POSITION ));
+        objectList.add(new BooleanByte(DataTypes.OBJ_EMBED_FLAG, this, (int) (byte) EMBED_FLAG_BIT_POSITION ));
         objectList.add(new NumberFixedLength(DataTypes.OBJ_OFFSET, this, OFFSET_FIELD_SIZE));
     }
 }

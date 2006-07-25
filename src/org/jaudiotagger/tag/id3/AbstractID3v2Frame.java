@@ -30,7 +30,6 @@ import org.jaudiotagger.tag.id3.framebody.FrameBodyUnsupported;
 import org.jaudiotagger.tag.id3.framebody.AbstractID3v2FrameBody;
 
 import java.io.IOException;
-import java.io.RandomAccessFile;
 import java.io.ByteArrayOutputStream;
 import java.lang.reflect.*;
 import java.nio.*;

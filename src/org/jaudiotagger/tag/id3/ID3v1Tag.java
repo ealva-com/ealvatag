@@ -32,7 +32,6 @@ import java.io.RandomAccessFile;
 import java.util.regex.*;
 import java.util.*;
 
-import java.util.Iterator;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 
@@ -77,7 +76,7 @@ public class ID3v1Tag
     /**
      * DOCUMENT ME!
      */
-    protected byte genre = -1;
+    protected byte genre = (byte) -1;
 
 
     /**
@@ -85,18 +84,18 @@ public class ID3v1Tag
      */
     public ID3v1Tag()
     {
-        release = 1;
-        majorVersion = 0;
-        revision = 0;
+        release = (byte) 1;
+        majorVersion = (byte) 0;
+        revision = (byte) 0;
 
     }
 
     public ID3v1Tag(ID3v1Tag copyObject)
     {
         super(copyObject);
-        release = 1;
-        majorVersion = 0;
-        revision = 0;
+        release = (byte) 1;
+        majorVersion = (byte) 0;
+        revision = (byte) 0;
         this.album = new String(copyObject.album);
         this.artist = new String(copyObject.artist);
         this.comment = new String(copyObject.comment);
@@ -107,9 +106,9 @@ public class ID3v1Tag
 
     public ID3v1Tag(AbstractTag mp3tag)
     {
-        release = 1;
-        majorVersion = 0;
-        revision = 0;
+        release = (byte) 1;
+        majorVersion = (byte) 0;
+        revision = (byte) 0;
         if (mp3tag != null)
         {
             ID3v11Tag convertedTag;
@@ -144,9 +143,9 @@ public class ID3v1Tag
     public ID3v1Tag(RandomAccessFile file)
         throws TagNotFoundException, IOException
     {
-        release = 1;
-        majorVersion = 0;
-        revision = 0;
+        release = (byte) 1;
+        majorVersion = (byte) 0;
+        revision = (byte) 0;
 
         FileChannel fc = null;
         ByteBuffer  byteBuffer = ByteBuffer.allocate(TAG_LENGTH);
@@ -507,7 +506,7 @@ public class ID3v1Tag
         MP3File.getStructureFormatter().addElement(TYPE_ALBUM, this.album);
         MP3File.getStructureFormatter().addElement(TYPE_YEAR, this.year);
         MP3File.getStructureFormatter().addElement(TYPE_COMMENT, this.comment);
-        MP3File.getStructureFormatter().addElement(TYPE_GENRE, this.genre);
+        MP3File.getStructureFormatter().addElement(TYPE_GENRE, (int) this.genre);
         MP3File.getStructureFormatter().closeHeadingElement(TYPE_TAG);
     }
 }

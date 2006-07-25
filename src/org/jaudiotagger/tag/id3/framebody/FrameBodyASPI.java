@@ -166,8 +166,8 @@ public class FrameBodyASPI extends AbstractID3v2FrameBody implements ID3v24Frame
 
         this.dataStart = byteBuffer.getInt();
         this.dataLength = byteBuffer.getInt();
-        this.indexPoints = byteBuffer.getShort();
-        this.bitsPerPoint = byteBuffer.get();
+        this.indexPoints = (int) byteBuffer.getShort();
+        this.bitsPerPoint = (int) byteBuffer.get();
 
         fraction = new short[indexPoints];
 
@@ -175,7 +175,7 @@ public class FrameBodyASPI extends AbstractID3v2FrameBody implements ID3v24Frame
         {
             if (bitsPerPoint == 8)
             {
-                fraction[i] = byteBuffer.get();
+                fraction[i] = (short) byteBuffer.get();
             }
             else if (bitsPerPoint == 16)
             {

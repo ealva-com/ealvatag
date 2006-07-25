@@ -24,8 +24,6 @@ package org.jaudiotagger.tag.id3.valuepair;
 
 import org.jaudiotagger.tag.datatype.AbstractStringStringValuePair;
 
-import java.util.*;
-
 public class Languages extends AbstractStringStringValuePair
 {
     public static final String DEFAULT_ID   =  "eng";

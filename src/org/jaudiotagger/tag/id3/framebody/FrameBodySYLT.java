@@ -23,15 +23,11 @@
  */
 package org.jaudiotagger.tag.id3.framebody;
 
-import org.jaudiotagger.tag.id3.ID3Tags;
 import org.jaudiotagger.tag.id3.ID3v24Frames;
 import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
 import org.jaudiotagger.tag.id3.valuepair.Languages;
 import org.jaudiotagger.tag.InvalidTagException;
 import org.jaudiotagger.tag.datatype.*;
-
-import java.io.IOException;
-import java.io.RandomAccessFile;
 
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -58,17 +54,17 @@ public class FrameBodySYLT extends AbstractID3v2FrameBody implements ID3v24Frame
     /**
      * DOCUMENT ME!
      */
-    byte contentType = 0;
+    byte contentType = (byte) 0;
 
     /**
      * DOCUMENT ME!
      */
-    byte textEncoding = 0;
+    byte textEncoding = (byte) 0;
 
     /**
      * DOCUMENT ME!
      */
-    byte timeStampFormat = 0;
+    byte timeStampFormat = (byte) 0;
 
     /**
      * Creates a new FrameBodySYLT datatype.
@@ -234,7 +230,7 @@ public class FrameBodySYLT extends AbstractID3v2FrameBody implements ID3v24Frame
     public void addLyric(int timeStamp, String text)
     {
         ID3v2LyricLine line = new ID3v2LyricLine("Lyric Line", this);
-        line.setTimeStamp(timeStamp);
+        line.setTimeStamp((long) timeStamp);
         line.setText(text);
         lines.add(line);
     }
@@ -256,7 +252,7 @@ public class FrameBodySYLT extends AbstractID3v2FrameBody implements ID3v24Frame
         if (iterator.hasNext() == false)
         {
             // no time stamp, give it 0
-            time = 0;
+            time = 0L;
             id3Line.setTimeStamp(time);
             id3Line.setText(lyric);
             lines.add(id3Line);
@@ -266,8 +262,8 @@ public class FrameBodySYLT extends AbstractID3v2FrameBody implements ID3v24Frame
             while (iterator.hasNext())
             {
                 timeStamp = (Lyrics3TimeStamp) iterator.next();
-                time = (timeStamp.getMinute() * 60) + timeStamp.getSecond(); // seconds
-                time *= 1000; // milliseconds
+                time = (timeStamp.getMinute() * 60L) + timeStamp.getSecond(); // seconds
+                time *= 1000L; // milliseconds
                 id3Line.setTimeStamp(time);
                 id3Line.setText(lyric);
                 lines.add(id3Line);

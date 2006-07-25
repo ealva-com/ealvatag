@@ -30,21 +30,21 @@ public abstract class AbstractID3Tag extends org.jaudiotagger.tag.AbstractTag
     {
     }
 
-    protected final String TAG_RELEASE = "ID3v";
+    protected static final String TAG_RELEASE = "ID3v";
     /**
      * Release of Tag
      */
-    protected byte release = 0;
+    protected byte release = (byte) 0;
 
     /**
      * Major Version of tag
      */
-    protected byte majorVersion = 0;
+    protected byte majorVersion = (byte) 0;
 
     /**
      * Revision of tag
      */
-    protected byte revision = 0;
+    protected byte revision = (byte) 0;
 
     /**
      * Get full version

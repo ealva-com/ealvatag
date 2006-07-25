@@ -2,8 +2,6 @@ package org.jaudiotagger.audio.mp3;
 
 import org.jaudiotagger.audio.InvalidAudioFrameException;
 
-import java.io.IOException;
-import java.nio.channels.FileChannel;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
 

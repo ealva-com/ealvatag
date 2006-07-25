@@ -23,12 +23,10 @@
  */
 package org.jaudiotagger.tag.datatype;
 
-import org.jaudiotagger.audio.mp3.*;
 import org.jaudiotagger.tag.AbstractTagFrameBody;
 import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
 
 import java.nio.charset.*;
-import java.nio.*;
 
 /** A partial implementation for String based ID3 fields */
 public abstract class AbstractString

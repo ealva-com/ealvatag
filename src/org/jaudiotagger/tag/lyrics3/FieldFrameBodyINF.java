@@ -23,7 +23,6 @@
 package org.jaudiotagger.tag.lyrics3;
 
 import org.jaudiotagger.tag.InvalidTagException;
-import org.jaudiotagger.tag.TagException;
 import org.jaudiotagger.tag.datatype.StringSizeTerminated;
 
 import java.nio.ByteBuffer;

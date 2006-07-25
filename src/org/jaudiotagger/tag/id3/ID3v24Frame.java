@@ -307,7 +307,7 @@ public class ID3v24Frame
         throws InvalidFrameException
     {
         byte[] buffer = new byte[FRAME_ID_SIZE];
-   
+
         if(byteBuffer.position()+ FRAME_HEADER_SIZE >= byteBuffer.limit())
         {
             logger.warning("No space to find another frame:");
@@ -466,14 +466,14 @@ public class ID3v24Frame
          */
         private byte convertV3ToV4Flags(byte v3Flag)
         {
-            byte v4Flag = 0;
+            byte v4Flag = (byte) 0;
             if ((v3Flag & ID3v23Frame.StatusFlags.MASK_FILE_ALTER_PRESERVATION) != 0)
             {
-                v4Flag |= MASK_FILE_ALTER_PRESERVATION;
+                v4Flag |= (byte) MASK_FILE_ALTER_PRESERVATION;
             }
             if ((v3Flag & ID3v23Frame.StatusFlags.MASK_TAG_ALTER_PRESERVATION) != 0)
             {
-                v4Flag |= MASK_TAG_ALTER_PRESERVATION;
+                v4Flag |= (byte) MASK_TAG_ALTER_PRESERVATION;
             }
             return v4Flag;
         }
@@ -486,13 +486,13 @@ public class ID3v24Frame
             String str = getIdentifier();
             if (ID3v24Frames.getInstanceOf().isDiscardIfFileAltered(str) == true)
             {
-                writeFlags |= MASK_FILE_ALTER_PRESERVATION;
-                writeFlags &= ~MASK_TAG_ALTER_PRESERVATION;
+                writeFlags |= (byte) MASK_FILE_ALTER_PRESERVATION;
+                writeFlags &= (byte) ~MASK_TAG_ALTER_PRESERVATION;
             }
             else
             {
-                writeFlags &= ~MASK_FILE_ALTER_PRESERVATION;
-                writeFlags &= ~MASK_TAG_ALTER_PRESERVATION;
+                writeFlags &= (byte) ~MASK_FILE_ALTER_PRESERVATION;
+                writeFlags &= (byte) ~MASK_TAG_ALTER_PRESERVATION;
             }
         }
 

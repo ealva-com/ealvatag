@@ -25,13 +25,10 @@
  */
 package org.jaudiotagger.tag.id3.framebody;
 
-import org.jaudiotagger.audio.mp3.*;
 import org.jaudiotagger.tag.datatype.*;
 import org.jaudiotagger.tag.InvalidFrameException;
 import org.jaudiotagger.tag.InvalidTagException;
 
-import java.io.IOException;
-import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
 
 public class FrameBodyUnsupported extends AbstractID3v2FrameBody

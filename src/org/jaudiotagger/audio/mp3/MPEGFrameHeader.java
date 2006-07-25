@@ -11,16 +11,10 @@ package org.jaudiotagger.audio.mp3;
 import org.jaudiotagger.FileConstants;
 import org.jaudiotagger.audio.InvalidAudioFrameException;
 import org.jaudiotagger.logging.AbstractTagDisplayFormatter;
-import org.jaudiotagger.tag.InvalidTagException;
-import org.jaudiotagger.tag.TagNotFoundException;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.text.SimpleDateFormat;
-import java.io.File;
-import java.io.RandomAccessFile;
 import java.io.IOException;
-import java.nio.channels.FileChannel;
 import java.nio.ByteBuffer;
 
 

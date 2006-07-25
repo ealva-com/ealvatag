@@ -29,7 +29,6 @@
 package org.jaudiotagger.tag;
 
 import org.jaudiotagger.tag.TagException;
-import org.jaudiotagger.tag.TagException;
 
 public class InvalidTagException extends TagException
 {

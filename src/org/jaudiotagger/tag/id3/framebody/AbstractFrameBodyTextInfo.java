@@ -28,10 +28,8 @@ import org.jaudiotagger.tag.datatype.StringSizeTerminated;
 import java.io.*;
 import java.nio.*;
 
-import org.jaudiotagger.audio.mp3.*;
 import org.jaudiotagger.tag.datatype.*;
 import org.jaudiotagger.tag.InvalidTagException;
-import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
 import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
 
 /* Abstract representation of a Text Frame

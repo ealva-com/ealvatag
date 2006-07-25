@@ -26,7 +26,6 @@ package org.jaudiotagger.tag.id3.framebody;
 import org.jaudiotagger.tag.datatype.DataTypes;
 import org.jaudiotagger.tag.InvalidTagException;
 import org.jaudiotagger.tag.id3.framebody.FrameBodyTDAT;
-import org.jaudiotagger.tag.id3.ID3Frames;
 import org.jaudiotagger.tag.id3.valuepair.*;
 import org.jaudiotagger.tag.id3.ID3v23Frames;
 import org.jaudiotagger.tag.id3.ID3v24Frames;

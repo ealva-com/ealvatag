@@ -32,8 +32,6 @@ import org.jaudiotagger.tag.id3.valuepair.Languages;
 import org.jaudiotagger.tag.id3.valuepair.GenreTypes;
 import org.jaudiotagger.tag.TagException;
 import org.jaudiotagger.tag.lyrics3.Lyrics3v2Fields;
-import org.jaudiotagger.audio.AbstractAudioFile;
-import org.jaudiotagger.audio.mp3.MP3File;
 
 import java.util.HashMap;
 import java.util.Iterator;

@@ -21,7 +21,6 @@
 package org.jaudiotagger.tag.id3;
 
 import org.jaudiotagger.tag.datatype.AbstractStringStringValuePair;
-import org.jaudiotagger.tag.datatype.AbstractStringStringValuePair;
 
 import java.util.*;
 
@@ -71,7 +70,7 @@ public abstract class ID3Frames extends AbstractStringStringValuePair
 
     private static void loadID3v23ID3v24Mapping()
     {
-       
+
 
         /**Define the mapping from v23 to v24 only maps values where
          *  the v23 ID is not a v24 ID and where the translation from v23 to v24

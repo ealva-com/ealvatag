@@ -24,28 +24,13 @@ package org.jaudiotagger.tag.id3;
 
 import org.jaudiotagger.logging.LogFormatter;
 import org.jaudiotagger.tag.TagException;
-import org.jaudiotagger.tag.TagOptionSingleton;
-import org.jaudiotagger.tag.lyrics3.Lyrics3v2Fields;
-import org.jaudiotagger.tag.id3.valuepair.*;
 import org.jaudiotagger.tag.id3.ID3v22Frames;
 import org.jaudiotagger.tag.id3.ID3v23Frames;
 import org.jaudiotagger.tag.id3.ID3v24Frames;
 import org.jaudiotagger.audio.mp3.MP3File;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-
 import java.lang.reflect.Constructor;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Stack;
-import java.util.StringTokenizer;
 import java.util.logging.*;
 
 
@@ -133,15 +118,15 @@ public class ID3Tags
         }
         else if (value instanceof Byte)
         {
-            number = ((Byte) value).byteValue();
+            number = (long) ((Byte) value).byteValue();
         }
         else if (value instanceof Short)
         {
-            number = ((Short) value).shortValue();
+            number = (long) ((Short) value).shortValue();
         }
         else if (value instanceof Integer)
         {
-            number = ((Integer) value).intValue();
+            number = (long) ((Integer) value).intValue();
         }
         else if (value instanceof Long)
         {

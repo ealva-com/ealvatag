@@ -36,11 +36,7 @@ import org.jaudiotagger.tag.datatype.AbstractDataType;
 import org.jaudiotagger.tag.datatype.DataTypes;
 import org.jaudiotagger.tag.id3.ID3Tags;
 import org.jaudiotagger.tag.AbstractTagItem;
-import org.jaudiotagger.tag.id3.ID3Tags;
 import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
-
-import java.io.IOException;
-import java.io.RandomAccessFile;
 
 import java.util.ArrayList;
 import java.util.Iterator;

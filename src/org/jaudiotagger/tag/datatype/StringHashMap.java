@@ -28,12 +28,8 @@ import java.util.Iterator;
 import java.util.TreeSet;
 
 import org.jaudiotagger.tag.AbstractTagFrameBody;
-import org.jaudiotagger.tag.InvalidDataTypeException;
 import org.jaudiotagger.tag.id3.valuepair.Languages;
 import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
-
-import java.nio.charset.*;
-import java.nio.*;
 
 
 /**

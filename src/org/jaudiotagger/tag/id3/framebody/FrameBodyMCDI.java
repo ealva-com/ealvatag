@@ -29,7 +29,6 @@ import org.jaudiotagger.tag.datatype.DataTypes;
 import org.jaudiotagger.tag.InvalidTagException;
 import org.jaudiotagger.tag.id3.ID3v24Frames;
 
-import java.io.IOException;
 import java.nio.ByteBuffer;
 
 public class FrameBodyMCDI extends AbstractID3v2FrameBody implements ID3v24FrameBody,ID3v23FrameBody

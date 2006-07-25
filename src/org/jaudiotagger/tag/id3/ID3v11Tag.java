@@ -51,9 +51,9 @@ public class ID3v11Tag
     /**
      * Track is held as a single byte in v1.1
      */
-    protected byte track = 0;
-    protected int TRACK_MAX_VALUE = 255;
-    protected int TRACK_MIN_VALUE = 1;
+    protected byte track = (byte) 0;
+    protected static final int TRACK_MAX_VALUE = 255;
+    protected static final int TRACK_MIN_VALUE = 1;
 
     protected static final int FIELD_COMMENT_LENGTH = 28;
     protected static final int FIELD_COMMENT_POS = 97;
@@ -69,17 +69,17 @@ public class ID3v11Tag
      */
     public ID3v11Tag()
     {
-        release = 1;
-        majorVersion = 1;
-        revision = 0;
+        release = (byte) 1;
+        majorVersion = (byte) 1;
+        revision = (byte) 0;
     }
 
     public ID3v11Tag(ID3v11Tag copyObject)
     {
         super(copyObject);
-        release = 1;
-        majorVersion = 1;
-        revision = 0;
+        release = (byte) 1;
+        majorVersion = (byte) 1;
+        revision = (byte) 0;
         this.track = copyObject.track;
     }
 
@@ -91,9 +91,9 @@ public class ID3v11Tag
      */
     public ID3v11Tag(AbstractTag mp3tag)
     {
-        release = 1;
-        majorVersion = 1;
-        revision = 0;
+        release = (byte) 1;
+        majorVersion = (byte) 1;
+        revision = (byte) 0;
         if (mp3tag != null)
         {
             if (mp3tag instanceof ID3v1Tag)
@@ -196,9 +196,9 @@ public class ID3v11Tag
     public ID3v11Tag(RandomAccessFile file)
         throws TagNotFoundException, IOException
     {
-        release = 1;
-        majorVersion = 1;
-        revision = 0;
+        release = (byte) 1;
+        majorVersion = (byte) 1;
+        revision = (byte) 0;
 
         FileChannel fc = null;
         ByteBuffer  byteBuffer = ByteBuffer.allocate(TAG_LENGTH);
@@ -261,7 +261,7 @@ public class ID3v11Tag
         //This value cannot be held in v1_1
         if ((trackAsInt > TRACK_MAX_VALUE) || (trackAsInt < TRACK_MIN_VALUE))
         {
-            this.track = 0x00;
+            this.track = (byte) 0x00;
         }
         else
         {
@@ -467,8 +467,8 @@ public class ID3v11Tag
         MP3File.getStructureFormatter().addElement(TYPE_ALBUM, this.album);
         MP3File.getStructureFormatter().addElement(TYPE_YEAR, this.year);
         MP3File.getStructureFormatter().addElement(TYPE_COMMENT, this.comment);
-        MP3File.getStructureFormatter().addElement(TYPE_TRACK, this.track);
-        MP3File.getStructureFormatter().addElement(TYPE_GENRE, this.genre);
+        MP3File.getStructureFormatter().addElement(TYPE_TRACK, (int) this.track);
+        MP3File.getStructureFormatter().addElement(TYPE_GENRE, (int) this.genre);
         MP3File.getStructureFormatter().closeHeadingElement(TYPE_TAG);
 
     }

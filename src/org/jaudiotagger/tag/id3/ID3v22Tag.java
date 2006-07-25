@@ -75,9 +75,9 @@ public class ID3v22Tag
     public ID3v22Tag()
     {
         frameMap = new HashMap();
-        release = 2;
-        majorVersion = 2;
-        revision = 0;
+        release = (byte) 2;
+        majorVersion = (byte) 2;
+        revision = (byte) 0;
     }
 
     /**
@@ -88,9 +88,9 @@ public class ID3v22Tag
         logger.info("Copying primitives");
         super.copyPrimitives(copyObj);
         ID3v22Tag copyObject = (ID3v22Tag) copyObj;
-        release = 2;
-        majorVersion = 2;
-        revision = 0;
+        release = (byte) 2;
+        majorVersion = (byte) 2;
+        revision = (byte) 0;
         //Set the primitive types specific to v2_2.
         if (copyObj instanceof ID3v22Tag)
         {
@@ -223,8 +223,8 @@ public class ID3v22Tag
     public ID3v22Tag(ByteBuffer byteBuffer)
         throws TagException
     {
-        this.majorVersion = 2;
-        this.revision = 0;
+        this.majorVersion = (byte) 2;
+        this.revision = (byte) 0;
         this.read(byteBuffer);
     }
 
@@ -332,7 +332,7 @@ public class ID3v22Tag
                 //Read Frame
                 logger.finest("looking for next frame at:" + byteBuffer.position());
                 next = new ID3v22Frame(byteBuffer);
-                id = next.getIdentifier();
+                String id = next.getIdentifier();
                 loadFrameIntoMap(id, next);
             }
                 //Found Empty Frame
@@ -411,11 +411,11 @@ public class ID3v22Tag
         byte flags = (byte) 0;
         if (unsynchronization == true)
         {
-            flags |= MASK_V22_UNSYNCHRONIZATION;
+            flags |= (byte) MASK_V22_UNSYNCHRONIZATION;
         }
         if (compression == true)
         {
-            flags |= MASK_V22_COMPRESSION;
+            flags |= (byte) MASK_V22_COMPRESSION;
         }
         headerBuffer.put(flags);
         /** Calculate Tag Size including Padding */
@@ -424,7 +424,7 @@ public class ID3v22Tag
         headerBuffer.put(sizeToByteArray((int) sizeIncPadding - TAG_HEADER_LENGTH));
 
         /** We need to adjust location of audio File */
-        if (sizeIncPadding > audioStartLocation)
+        if (sizeIncPadding > (int) audioStartLocation)
         {
             logger.finest("Adjusting Pattern");
             adjustPadding(file, sizeIncPadding, audioStartLocation);

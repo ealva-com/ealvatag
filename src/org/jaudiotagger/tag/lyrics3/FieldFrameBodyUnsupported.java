@@ -22,7 +22,6 @@
  */
 package org.jaudiotagger.tag.lyrics3;
 
-import org.jaudiotagger.tag.TagException;
 import org.jaudiotagger.tag.InvalidTagException;
 
 import java.io.IOException;

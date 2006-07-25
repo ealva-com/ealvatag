@@ -24,8 +24,6 @@
 package org.jaudiotagger.tag.id3.framebody;
 
 import org.jaudiotagger.tag.InvalidTagException;
-import org.jaudiotagger.tag.id3.ID3Frames;
-import org.jaudiotagger.tag.id3.ID3Frames;
 import org.jaudiotagger.tag.id3.ID3v24Frames;
 
 import java.nio.ByteBuffer;

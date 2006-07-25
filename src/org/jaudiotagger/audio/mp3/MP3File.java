@@ -23,20 +23,15 @@ package org.jaudiotagger.audio.mp3;
 
 import org.jaudiotagger.tag.id3.*;
 import org.jaudiotagger.tag.lyrics3.AbstractLyrics3;
-import org.jaudiotagger.tag.lyrics3.Lyrics3v1;
 import org.jaudiotagger.tag.lyrics3.Lyrics3v2;
 import org.jaudiotagger.tag.*;
 import org.jaudiotagger.tag.virtual.VirtualMetaDataContainer;
 import org.jaudiotagger.logging.*;
 import org.jaudiotagger.audio.ReadOnlyFileException;
-import org.jaudiotagger.audio.AbstractAudioHeader;
 import org.jaudiotagger.audio.InvalidAudioFrameException;
 
 import java.io.*;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.logging.*;
 import java.nio.channels.FileChannel;
 import java.nio.ByteBuffer;

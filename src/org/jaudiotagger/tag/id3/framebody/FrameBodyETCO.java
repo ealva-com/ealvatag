@@ -31,7 +31,6 @@ import org.jaudiotagger.tag.datatype.DataTypes;
 import org.jaudiotagger.tag.InvalidTagException;
 import org.jaudiotagger.tag.id3.ID3v24Frames;
 
-import java.io.IOException;
 import java.nio.ByteBuffer;
 
 
@@ -60,7 +59,7 @@ public class FrameBodyETCO extends AbstractID3v2FrameBody implements ID3v24Frame
      */
     public FrameBodyETCO(byte timeStampFormat, byte event, int timeStamp)
     {
-        this.setObjectValue(DataTypes.OBJ_TIME_STAMP_FORMAT, new Long(timeStampFormat));
+        this.setObjectValue(DataTypes.OBJ_TIME_STAMP_FORMAT, new Long((long) timeStampFormat));
         this.addGroup(event, timeStamp);
     }
 

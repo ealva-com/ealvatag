@@ -23,7 +23,6 @@
  */
 package org.jaudiotagger.tag.datatype;
 
-import org.jaudiotagger.audio.mp3.*;
 import org.jaudiotagger.tag.AbstractTagFrameBody;
 
 

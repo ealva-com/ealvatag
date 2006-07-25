@@ -373,7 +373,7 @@ public abstract class AbstractID3v2Tag
         byteBuffer.flip();
         if(seek(byteBuffer))
         {
-            file.seek(0);
+            file.seek(0L);
             file.write(buffer);
         }
     }
@@ -496,7 +496,7 @@ public abstract class AbstractID3v2Tag
          * the decided not to use the top bit of the 4 bytes so we need to
          * convert the size back and forth
          */
-        return (int) (buffer[0] << 21) + (buffer[1] << 14) + (buffer[2] << 7) + (buffer[3]);
+        return (int) (buffer[0] << 21) + (buffer[1] << 14) + (buffer[2] << 7) + (int) (buffer[3]);
     }
 
     /**
@@ -598,7 +598,7 @@ public abstract class AbstractID3v2Tag
         //Create read channel from original file
         fcIn = new FileInputStream(file).getChannel();
         //Write padding
-        long written = fcOut.write(paddingBuffer);
+        long written = (long) fcOut.write(paddingBuffer);
         //Write rest of file starting from audio
         logger.finer("Copying:" + (file.length() - audioStart) + "bytes");
         long written2 = fcIn.transferTo(audioStart, file.length() - audioStart, fcOut);

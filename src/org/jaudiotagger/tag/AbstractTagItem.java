@@ -29,9 +29,6 @@ package org.jaudiotagger.tag;
 import org.jaudiotagger.logging.LogFormatter;
 import org.jaudiotagger.tag.TagException;
 
-import java.io.IOException;
-import java.io.RandomAccessFile;
-
 import java.util.logging.*;
 import java.nio.ByteBuffer;
 

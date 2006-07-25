@@ -8,7 +8,6 @@
  */
 package org.jaudiotagger.tag.virtual;
 
-import org.jaudiotagger.tag.id3.framebody.FrameBodyTIT1;
 import org.jaudiotagger.tag.id3.ID3v24Frame;
 import org.jaudiotagger.tag.id3.ID3v24Frames;
 import org.jaudiotagger.tag.virtual.metadataitemfactory.ConvertID3v24ArtistFactory;

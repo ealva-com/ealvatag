@@ -20,9 +20,7 @@
  */
 package org.jaudiotagger.audio;
 
-import org.jaudiotagger.tag.id3.AbstractID3v2Tag;
 import org.jaudiotagger.tag.virtual.VirtualMetaDataContainer;
-import org.jaudiotagger.audio.mp3.MP3AudioHeader;
 
 import java.io.File;
 

@@ -22,11 +22,7 @@
 package org.jaudiotagger.test;
 
 import org.jaudiotagger.audio.mp3.MP3File;
-import org.jaudiotagger.tag.AbstractTagFrameBody;
-import org.jaudiotagger.tag.id3.ID3v24Frame;
-import org.jaudiotagger.tag.id3.framebody.FrameBodyTPE1;
 
-import javax.swing.*;
 import java.io.File;
 import java.util.Date;
 import java.text.DateFormat;
