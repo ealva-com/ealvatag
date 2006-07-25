@@ -178,8 +178,9 @@ public class ID3v23Tag
                 {
                     try
                     {
-                        logger.info("Adding Frame:"+newFrame.getIdentifier());
+
                         newFrame = new ID3v23Frame(frame);
+                        logger.info("Adding Frame:"+newFrame.getIdentifier());
                         frameMap.put(newFrame.getIdentifier(), newFrame);
                     }
                     catch(InvalidFrameException ife)
