@@ -91,7 +91,7 @@ public class FrameBodyRVAD extends AbstractID3v2FrameBody implements ID3v23Frame
      *          This method is not yet
      *          supported
      */
-    public void equals()
+    public boolean equals(Object obj)
     {
         /**
          * @todo Implement this java.lang.Object method

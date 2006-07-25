@@ -140,7 +140,7 @@ public class FrameBodyASPI extends AbstractID3v2FrameBody implements ID3v24Frame
      *          This method is not yet
      *          supported
      */
-    public void equals()
+    public boolean equals(Object obj)
     {
         /**
          * @todo Implement this java.lang.Object method
@@ -151,9 +151,8 @@ public class FrameBodyASPI extends AbstractID3v2FrameBody implements ID3v24Frame
     /**
      * DOCUMENT ME!
      *
-     * @param byteBuffer DOCUMENT ME!
-     * @throws IOException         DOCUMENT ME!
-     * @throws InvalidTagException DOCUMENT ME!
+     * @param byteBuffer
+     * @throws InvalidTagException
      */
     public void read(ByteBuffer byteBuffer)
         throws InvalidTagException
