@@ -43,7 +43,7 @@ import java.io.*;
 
 /**
  * This class represents an ID3v2.4 tag
- */ 
+ */
 public class ID3v24Tag
     extends ID3v23Tag
 {
@@ -547,7 +547,7 @@ public class ID3v24Tag
      */
     public void read(ByteBuffer byteBuffer)
         throws TagException
-    {         
+    {
 
         int size;
         byte[] buffer;
@@ -792,19 +792,30 @@ public class ID3v24Tag
             logger.finest("Adjusting Padding");
             adjustPadding(file, sizeIncPadding, audioStartLocation);
         }
-
+        
         //Write changes to file
-        FileChannel fc = new RandomAccessFile(file, "rw").getChannel();
-        headerBuffer.flip();
-        fc.write(headerBuffer);
-        if (extHeaderBuffer != null)
+        FileChannel fc = null;
+        try
         {
-            extHeaderBuffer.flip();
-            fc.write(extHeaderBuffer);
+            fc = new RandomAccessFile(file, "rw").getChannel();
+            headerBuffer.flip();
+            fc.write(headerBuffer);
+            if (extHeaderBuffer != null)
+            {
+                extHeaderBuffer.flip();
+                fc.write(extHeaderBuffer);
+            }
+            fc.write(ByteBuffer.wrap(bodyByteBuffer));
+            fc.write(ByteBuffer.wrap(new byte[padding]));
         }
-        fc.write(ByteBuffer.wrap(bodyByteBuffer));
-        fc.write(ByteBuffer.wrap(new byte[padding]));
-        fc.close();
+        finally
+        {
+            if(fc!=null)
+            {
+                fc.close();
+            }
+        }
+
     }
 
     /**

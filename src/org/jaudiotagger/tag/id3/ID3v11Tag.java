@@ -199,13 +199,23 @@ public class ID3v11Tag
         release = 1;
         majorVersion = 1;
         revision = 0;
-        //Read into Byte Buffer
-        final FileChannel fc = file.getChannel();
-        fc.position(file.length() - TAG_LENGTH);
+
+        FileChannel fc = null;
         ByteBuffer  byteBuffer = ByteBuffer.allocate(TAG_LENGTH);
-        fc.read(byteBuffer);
-        byteBuffer.flip();
-        read(byteBuffer);
+
+        try
+        {
+            fc = file.getChannel();
+            fc.position(file.length() - TAG_LENGTH);
+            byteBuffer = ByteBuffer.allocate(TAG_LENGTH);
+            fc.read(byteBuffer);
+            byteBuffer.flip();
+            read(byteBuffer);
+        }
+        finally
+        {
+            fc.close();
+        }
     }
 
     /**

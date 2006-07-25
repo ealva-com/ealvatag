@@ -137,9 +137,9 @@ public class ID3v1Tag
     /**
      * Creates a new ID3v1 datatype.
      *
-     * @param file DOCUMENT ME!
-     * @throws TagNotFoundException DOCUMENT ME!
-     * @throws IOException          DOCUMENT ME!
+     * @param file
+     * @throws TagNotFoundException
+     * @throws IOException
      */
     public ID3v1Tag(RandomAccessFile file)
         throws TagNotFoundException, IOException
@@ -148,14 +148,22 @@ public class ID3v1Tag
         majorVersion = 0;
         revision = 0;
 
-        //Read into Byte Buffer
-        final FileChannel fc = file.getChannel();
-        fc.position(file.length() - TAG_LENGTH);
+        FileChannel fc = null;
         ByteBuffer  byteBuffer = ByteBuffer.allocate(TAG_LENGTH);
-        fc.read(byteBuffer);
-        byteBuffer.flip();
-        this.read(byteBuffer);
 
+        try
+        {
+            fc = file.getChannel();
+            fc.position(file.length() - TAG_LENGTH);
+            byteBuffer = ByteBuffer.allocate(TAG_LENGTH);
+            fc.read(byteBuffer);
+            byteBuffer.flip();
+            read(byteBuffer);
+        }
+        finally
+        {
+            fc.close();
+        }
     }
 
     /**

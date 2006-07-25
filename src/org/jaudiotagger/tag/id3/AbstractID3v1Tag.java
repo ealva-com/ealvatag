@@ -84,9 +84,9 @@ abstract public class AbstractID3v1Tag
     protected static final String TYPE_GENRE = "genre";
 
     /**
-     * DOCUMENT ME!
+     * Return the size of this tag, the size is fixed for tags of this type
      *
-     * @return DOCUMENT ME!
+     * @return size of this tag in bytes
      */
     public int getSize()
     {
@@ -94,23 +94,34 @@ abstract public class AbstractID3v1Tag
     }
 
     /**
-     * Delete tag
+     * Delete tag from file
      * Looks for tag and if found lops it off the file.
      *
-     * @param file DOCUMENT ME!
-     * @throws IOException DOCUMENT ME!
+     * @param file to delete the tag from
+     * @throws IOException if there was a problem accessing the file
      */
     public void delete(RandomAccessFile file)
         throws IOException
     {
         //Read into Byte Buffer
         logger.info("deleting tag from file if exists");
-        final FileChannel fc = file.getChannel();
-        fc.position(file.length() - TAG_LENGTH);
-        ByteBuffer  byteBuffer = ByteBuffer.allocate(TAG_LENGTH);
-        fc.read(byteBuffer);
-        byteBuffer.rewind();
 
+        FileChannel fc = null;
+        ByteBuffer  byteBuffer = ByteBuffer.allocate(TAG_LENGTH);
+
+        try
+        {
+            fc = file.getChannel();
+            fc.position(file.length() - TAG_LENGTH);
+            byteBuffer = ByteBuffer.allocate(TAG_LENGTH);
+            fc.read(byteBuffer);
+        }
+        finally
+        {
+            fc.close();
+        }
+
+        byteBuffer.rewind();
         if (seek(byteBuffer))
         {
             logger.info("deleting v1 tag ");

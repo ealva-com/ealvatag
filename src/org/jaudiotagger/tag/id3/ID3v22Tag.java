@@ -431,13 +431,22 @@ public class ID3v22Tag
         }
 
         //Write changes to file
-        FileChannel fc = new RandomAccessFile(file, "rw").getChannel();
-        headerBuffer.flip();
-        fc.write(headerBuffer);
-        fc.write(ByteBuffer.wrap(bodyByteBuffer));
-        fc.write(ByteBuffer.wrap(new byte[padding]));
-        fc.close();
-
+        FileChannel fc = null;
+        try
+        {
+            fc = new RandomAccessFile(file, "rw").getChannel();
+            headerBuffer.flip();
+            fc.write(headerBuffer);
+            fc.write(ByteBuffer.wrap(bodyByteBuffer));
+            fc.write(ByteBuffer.wrap(new byte[padding]));
+        }
+        finally
+        {
+            if(fc!=null)
+            {
+                fc.close();
+            }
+        }
     }
 
     public void createStructure()

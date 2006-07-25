@@ -171,7 +171,7 @@ public class ID3v23Tag
                     (frame.getBody() instanceof FrameBodyTDRC)
                    )
                 {
-                    translateFrame(frame);                    
+                    translateFrame(frame);
                 }
                 //Usual Case
                 else
@@ -723,12 +723,22 @@ public class ID3v23Tag
         }
 
         //Write changes to file
-        FileChannel fc = new RandomAccessFile(file, "rw").getChannel();
-        headerBuffer.flip();
-        fc.write(headerBuffer);
-        fc.write(ByteBuffer.wrap(bodyByteBuffer));
-        fc.write(ByteBuffer.wrap(new byte[padding]));
-        fc.close();
+        FileChannel fc = null;
+        try
+        {
+            fc = new RandomAccessFile(file, "rw").getChannel();
+            headerBuffer.flip();
+            fc.write(headerBuffer);
+            fc.write(ByteBuffer.wrap(bodyByteBuffer));
+            fc.write(ByteBuffer.wrap(new byte[padding]));
+        }
+        finally
+        {
+            if(fc!=null)
+            {
+                fc.close();
+            }
+        }
     }
 
     /**
