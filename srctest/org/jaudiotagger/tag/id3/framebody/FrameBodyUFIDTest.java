@@ -4,9 +4,6 @@ import org.jaudiotagger.AbstractTestCase;
 import org.jaudiotagger.tag.datatype.DataTypes;
 import org.jaudiotagger.tag.id3.ID3v24Frames;
 import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
-import org.jaudiotagger.audio.mp3.MP3File;
-
-import java.io.File;
 
 /**
  * Test Unique File Identifier FrameBody

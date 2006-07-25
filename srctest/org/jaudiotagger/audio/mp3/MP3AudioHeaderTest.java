@@ -1,7 +1,5 @@
 package org.jaudiotagger.audio.mp3;
 
-import junit.framework.TestCase;
-
 import java.io.*;
 
 import org.jaudiotagger.AbstractTestCase;

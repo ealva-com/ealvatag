@@ -1,7 +1,5 @@
 package org.jaudiotagger.tag;
 
-import org.jaudiotagger.audio.mp3.MP3AudioHeader;
-import org.jaudiotagger.audio.mp3.MPEGFrameHeader;
 import org.jaudiotagger.audio.mp3.MP3File;
 import org.jaudiotagger.AbstractTestCase;
 
@@ -26,6 +24,7 @@ public class ID3v23TagTest  extends AbstractTestCase
         }
         catch (Exception e)
         {
+            e.printStackTrace();
             exceptionCaught = e;
         }
 
@@ -49,6 +48,7 @@ public class ID3v23TagTest  extends AbstractTestCase
         }
         catch (Exception e)
         {
+            e.printStackTrace();
             exceptionCaught = e;
         }
 

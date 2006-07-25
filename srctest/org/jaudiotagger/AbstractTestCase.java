@@ -4,8 +4,6 @@ import junit.framework.TestCase;
 
 import java.io.*;
 
-import org.jaudiotagger.audio.mp3.MP3AudioHeaderTest;
-
 /**
  */
 public class AbstractTestCase    extends TestCase
@@ -30,7 +28,7 @@ public class AbstractTestCase    extends TestCase
             BufferedOutputStream outBuffer = new
                 BufferedOutputStream(out);
 
-            int theByte = 0;
+            int theByte;
 
             while ((theByte = inBuffer.read()) > -1)
             {
@@ -57,6 +55,7 @@ public class AbstractTestCase    extends TestCase
             e.printStackTrace();
             return false;
         }
+
     }
 
     protected static File copyAudioToTmp(String fileName)
