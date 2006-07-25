@@ -95,7 +95,7 @@ public class FrameBodySIGN extends AbstractID3v2FrameBody implements ID3v24Frame
         }
         else
         {
-            return 0;
+            return (byte) 0;
         }
     }
 

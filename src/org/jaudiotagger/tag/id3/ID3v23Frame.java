@@ -381,14 +381,14 @@ public class ID3v23Frame
 
         private byte convertV4ToV3Flags(byte v4Flag)
         {
-            byte v3Flag = 0;
+            byte v3Flag = (byte) 0;
             if ((v4Flag & ID3v24Frame.StatusFlags.MASK_FILE_ALTER_PRESERVATION) != 0)
             {
-                v3Flag |= MASK_FILE_ALTER_PRESERVATION;
+                v3Flag |= (byte) MASK_FILE_ALTER_PRESERVATION;
             }
             if ((v4Flag & ID3v24Frame.StatusFlags.MASK_TAG_ALTER_PRESERVATION) != 0)
             {
-                v3Flag |= MASK_TAG_ALTER_PRESERVATION;
+                v3Flag |= (byte) MASK_TAG_ALTER_PRESERVATION;
             }
             return v3Flag;
         }
@@ -398,13 +398,13 @@ public class ID3v23Frame
             String str = getIdentifier();
             if (ID3v23Frames.getInstanceOf().isDiscardIfFileAltered(str) == true)
             {
-                writeFlags |= MASK_FILE_ALTER_PRESERVATION;
-                writeFlags &= ~MASK_TAG_ALTER_PRESERVATION;
+                writeFlags |= (byte) MASK_FILE_ALTER_PRESERVATION;
+                writeFlags &= (byte) ~MASK_TAG_ALTER_PRESERVATION;
             }
             else
             {
-                writeFlags &= ~MASK_FILE_ALTER_PRESERVATION;
-                writeFlags &= ~MASK_TAG_ALTER_PRESERVATION;
+                writeFlags &= (byte) ~MASK_FILE_ALTER_PRESERVATION;
+                writeFlags &= (byte) ~MASK_TAG_ALTER_PRESERVATION;
             }
         }
 

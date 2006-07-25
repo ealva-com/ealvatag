@@ -792,7 +792,7 @@ public class ID3v24Tag
             logger.finest("Adjusting Padding");
             adjustPadding(file, sizeIncPadding, audioStartLocation);
         }
-        
+
         //Write changes to file
         FileChannel fc = null;
         try
@@ -838,11 +838,11 @@ public class ID3v24Tag
         MP3File.getStructureFormatter().addElement(TYPE_PADDINGSIZE, this.paddingSize);
         MP3File.getStructureFormatter().addElement(TYPE_FOOTER, this.footer);
         MP3File.getStructureFormatter().addElement(TYPE_IMAGEENCODINGRESTRICTION, this.paddingSize);
-        MP3File.getStructureFormatter().addElement(TYPE_IMAGESIZERESTRICTION, this.imageSizeRestriction);
+        MP3File.getStructureFormatter().addElement(TYPE_IMAGESIZERESTRICTION, (int) this.imageSizeRestriction);
         MP3File.getStructureFormatter().addElement(TYPE_TAGRESTRICTION, this.tagRestriction);
-        MP3File.getStructureFormatter().addElement(TYPE_TAGSIZERESTRICTION, this.tagSizeRestriction);
-        MP3File.getStructureFormatter().addElement(TYPE_TEXTFIELDSIZERESTRICTION, this.textFieldSizeRestriction);
-        MP3File.getStructureFormatter().addElement(TYPE_TEXTENCODINGRESTRICTION, this.textEncodingRestriction);
+        MP3File.getStructureFormatter().addElement(TYPE_TAGSIZERESTRICTION, (int) this.tagSizeRestriction);
+        MP3File.getStructureFormatter().addElement(TYPE_TEXTFIELDSIZERESTRICTION, (int) this.textFieldSizeRestriction);
+        MP3File.getStructureFormatter().addElement(TYPE_TEXTENCODINGRESTRICTION, (int) this.textEncodingRestriction);
         MP3File.getStructureFormatter().addElement(TYPE_UPDATETAG, this.updateTag);
         MP3File.getStructureFormatter().closeHeadingElement(TYPE_HEADER);
 

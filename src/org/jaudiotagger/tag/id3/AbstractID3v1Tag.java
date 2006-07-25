@@ -49,14 +49,14 @@ abstract public class AbstractID3v1Tag
     }
 
     //If field is less than maximum field length this is how it is terminated
-    protected static final byte END_OF_FIELD = 0;
+    protected static final byte END_OF_FIELD = (byte) 0;
 
     //Used to detect end of field in String constructed from Data
     protected Pattern endofStringPattern = Pattern.compile("\\x00");
 
     //Tag ID as held in file
     protected static final byte[] TAG_ID =
-        {'T', 'A', 'G'};
+        {(byte) 'T', (byte) 'A', (byte) 'G'};
 
     //Fields Lengths common to v1 and v1.1 tags
     protected static final int TAG_LENGTH = 128;
@@ -112,7 +112,7 @@ abstract public class AbstractID3v1Tag
         try
         {
             fc = file.getChannel();
-            fc.position(file.length() - TAG_LENGTH);
+            fc.position(file.length() - (long) TAG_LENGTH);
             byteBuffer = ByteBuffer.allocate(TAG_LENGTH);
             fc.read(byteBuffer);
         }
@@ -125,7 +125,7 @@ abstract public class AbstractID3v1Tag
         if (seek(byteBuffer))
         {
             logger.info("deleting v1 tag ");
-            file.setLength(file.length() - TAG_LENGTH);
+            file.setLength(file.length() - (long) TAG_LENGTH);
         }
         else
         {
