@@ -51,8 +51,8 @@ public class FrameBodySIGN extends AbstractID3v2FrameBody implements ID3v24Frame
     /**
      * Creates a new FrameBodySIGN datatype.
      *
-     * @param groupSymbol DOCUMENT ME!
-     * @param signature   DOCUMENT ME!
+     * @param groupSymbol 
+     * @param signature   
      */
     public FrameBodySIGN(byte groupSymbol, byte[] signature)
     {
@@ -72,9 +72,9 @@ public class FrameBodySIGN extends AbstractID3v2FrameBody implements ID3v24Frame
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @param groupSymbol DOCUMENT ME!
+     * @param groupSymbol 
      */
     public void setGroupSymbol(byte groupSymbol)
     {
@@ -82,9 +82,9 @@ public class FrameBodySIGN extends AbstractID3v2FrameBody implements ID3v24Frame
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public byte getGroupSymbol()
     {
@@ -110,9 +110,9 @@ public class FrameBodySIGN extends AbstractID3v2FrameBody implements ID3v24Frame
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @param signature DOCUMENT ME!
+     * @param signature 
      */
     public void setSignature(byte[] signature)
     {
@@ -120,9 +120,9 @@ public class FrameBodySIGN extends AbstractID3v2FrameBody implements ID3v24Frame
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public byte[] getSignature()
     {
@@ -130,7 +130,7 @@ public class FrameBodySIGN extends AbstractID3v2FrameBody implements ID3v24Frame
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      */
     protected void setupObjectList()
     {

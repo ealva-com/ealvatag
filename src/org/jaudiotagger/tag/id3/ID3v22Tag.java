@@ -217,8 +217,8 @@ public class ID3v22Tag
     /**
      * Creates a new ID3v2_2 datatype by reading it from file.
      *
-     * @param byteBuffer DOCUMENT ME!
-     * @throws TagException DOCUMENT ME!
+     * @param byteBuffer 
+     * @throws TagException 
      */
     public ID3v22Tag(ByteBuffer byteBuffer)
         throws TagException
@@ -242,7 +242,7 @@ public class ID3v22Tag
      * Return frame size based upon the sizes of the frames rather than the size
      * including paddign recorded in the tag header
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public int getSize()
     {
@@ -253,10 +253,10 @@ public class ID3v22Tag
 
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @param obj DOCUMENT ME!
-     * @return DOCUMENT ME!
+     * @param obj 
+     * @return 
      */
     public boolean equals(Object obj)
     {

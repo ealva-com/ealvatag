@@ -46,8 +46,8 @@ public class FrameBodyTALB extends AbstractFrameBodyTextInfo implements ID3v24Fr
     /**
      * Creates a new FrameBodyTALB datatype.
      *
-     * @param textEncoding DOCUMENT ME!
-     * @param text         DOCUMENT ME!
+     * @param textEncoding 
+     * @param text         
      */
     public FrameBodyTALB(byte textEncoding, String text)
     {

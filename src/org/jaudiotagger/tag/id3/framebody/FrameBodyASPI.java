@@ -37,27 +37,27 @@ import java.nio.ByteBuffer;
 public class FrameBodyASPI extends AbstractID3v2FrameBody implements ID3v24FrameBody
 {
     /**
-     * DOCUMENT ME!
+     * 
      */
     short[] fraction = null;
 
     /**
-     * DOCUMENT ME!
+     * 
      */
     int bitsPerPoint = 0;
 
     /**
-     * DOCUMENT ME!
+     * 
      */
     int dataLength = 0;
 
     /**
-     * DOCUMENT ME!
+     * 
      */
     int dataStart = 0;
 
     /**
-     * DOCUMENT ME!
+     * 
      */
     int indexPoints = 0;
 
@@ -86,11 +86,11 @@ public class FrameBodyASPI extends AbstractID3v2FrameBody implements ID3v24Frame
     /**
      * Creates a new FrameBodyASPI datatype.
      *
-     * @param dataStart    DOCUMENT ME!
-     * @param dataLength   DOCUMENT ME!
-     * @param indexPoints  DOCUMENT ME!
-     * @param bitsPerPoint DOCUMENT ME!
-     * @param fraction     DOCUMENT ME!
+     * @param dataStart    
+     * @param dataLength   
+     * @param indexPoints  
+     * @param bitsPerPoint 
+     * @param fraction     
      */
     public FrameBodyASPI(int dataStart, int dataLength, int indexPoints, int bitsPerPoint, short[] fraction)
     {
@@ -104,8 +104,8 @@ public class FrameBodyASPI extends AbstractID3v2FrameBody implements ID3v24Frame
     /**
      * Creates a new FrameBodyASPI datatype.          *
 
-     * @throws IOException         DOCUMENT ME!
-     * @throws InvalidTagException DOCUMENT ME!
+     * @throws IOException         
+     * @throws InvalidTagException 
      */
     public FrameBodyASPI(ByteBuffer byteBuffer, int frameSize)
         throws InvalidTagException
@@ -124,9 +124,9 @@ public class FrameBodyASPI extends AbstractID3v2FrameBody implements ID3v24Frame
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public int getSize()
     {
@@ -149,7 +149,7 @@ public class FrameBodyASPI extends AbstractID3v2FrameBody implements ID3v24Frame
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
      * @param byteBuffer
      * @throws InvalidTagException
@@ -189,9 +189,9 @@ public class FrameBodyASPI extends AbstractID3v2FrameBody implements ID3v24Frame
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public String toString()
     {
@@ -199,10 +199,10 @@ public class FrameBodyASPI extends AbstractID3v2FrameBody implements ID3v24Frame
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @param file DOCUMENT ME!
-     * @throws IOException DOCUMENT ME!
+     * @param file 
+     * @throws IOException 
      */
     public void write(RandomAccessFile file)
         throws IOException

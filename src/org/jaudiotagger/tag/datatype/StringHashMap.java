@@ -40,26 +40,26 @@ public class StringHashMap extends StringFixedLength implements HashMapInterface
 {
 
     /**
-     * DOCUMENT ME!
+     * 
      */
     HashMap keyToValue = null;
 
     /**
-     * DOCUMENT ME!
+     * 
      */
     HashMap valueToKey = null;
 
     /**
-     * DOCUMENT ME!
+     * 
      */
     boolean hasEmptyValue = false;
 
     /**
      * Creates a new ObjectStringHashMap datatype.
      *
-     * @param identifier DOCUMENT ME!
-     * @param size       DOCUMENT ME!
-     * @throws IllegalArgumentException DOCUMENT ME!
+     * @param identifier 
+     * @param size       
+     * @throws IllegalArgumentException 
      */
     public StringHashMap(String identifier, AbstractTagFrameBody frameBody, int size)
     {
@@ -86,9 +86,9 @@ public class StringHashMap extends StringFixedLength implements HashMapInterface
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public HashMap getKeyToValue()
     {
@@ -96,9 +96,9 @@ public class StringHashMap extends StringFixedLength implements HashMapInterface
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public HashMap getValueToKey()
     {
@@ -106,9 +106,9 @@ public class StringHashMap extends StringFixedLength implements HashMapInterface
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @param value DOCUMENT ME!
+     * @param value 
      */
     public void setValue(Object value)
     {
@@ -123,10 +123,10 @@ public class StringHashMap extends StringFixedLength implements HashMapInterface
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @param obj DOCUMENT ME!
-     * @return DOCUMENT ME!
+     * @param obj 
+     * @return 
      */
     public boolean equals(Object obj)
     {
@@ -176,9 +176,9 @@ public class StringHashMap extends StringFixedLength implements HashMapInterface
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public Iterator iterator()
     {
@@ -201,9 +201,9 @@ public class StringHashMap extends StringFixedLength implements HashMapInterface
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public String toString()
     {

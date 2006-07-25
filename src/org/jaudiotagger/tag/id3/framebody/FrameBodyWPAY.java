@@ -41,7 +41,7 @@ public class FrameBodyWPAY extends AbstractFrameBodyUrlLink  implements ID3v24Fr
     /**
      * Creates a new FrameBodyWPAY datatype.
      *
-     * @param urlLink DOCUMENT ME!
+     * @param urlLink 
      */
     public FrameBodyWPAY(String urlLink)
     {
@@ -56,8 +56,8 @@ public class FrameBodyWPAY extends AbstractFrameBodyUrlLink  implements ID3v24Fr
     /**
      * Creates a new FrameBodyWPAY datatype.
      *
-     * @throws java.io.IOException DOCUMENT ME!
-     * @throws InvalidTagException DOCUMENT ME!
+     * @throws java.io.IOException 
+     * @throws InvalidTagException 
      */
     public FrameBodyWPAY(ByteBuffer byteBuffer, int frameSize)
         throws InvalidTagException

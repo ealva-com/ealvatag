@@ -31,7 +31,7 @@ public class BooleanString extends AbstractDataType
     /**
      * Creates a new ObjectBooleanString datatype.
      *
-     * @param identifier DOCUMENT ME!
+     * @param identifier 
      */
     public BooleanString(String identifier, AbstractTagFrameBody frameBody)
     {
@@ -44,9 +44,9 @@ public class BooleanString extends AbstractDataType
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public int getSize()
     {
@@ -64,11 +64,11 @@ public class BooleanString extends AbstractDataType
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @param offset DOCUMENT ME!
-     * @throws NullPointerException      DOCUMENT ME!
-     * @throws IndexOutOfBoundsException DOCUMENT ME!
+     * @param offset 
+     * @throws NullPointerException      
+     * @throws IndexOutOfBoundsException 
      */
     public void readByteArray(byte[] arr, int offset) throws InvalidDataTypeException
     {
@@ -77,9 +77,9 @@ public class BooleanString extends AbstractDataType
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public String toString()
     {
@@ -87,9 +87,9 @@ public class BooleanString extends AbstractDataType
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public byte[] writeByteArray()
     {

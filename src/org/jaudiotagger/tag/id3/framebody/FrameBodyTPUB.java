@@ -46,8 +46,8 @@ public class FrameBodyTPUB extends AbstractFrameBodyTextInfo implements ID3v24Fr
     /**
      * Creates a new FrameBodyTPUB datatype.
      *
-     * @param textEncoding DOCUMENT ME!
-     * @param text         DOCUMENT ME!
+     * @param textEncoding 
+     * @param text         
      */
     public FrameBodyTPUB(byte textEncoding, String text)
     {
@@ -57,8 +57,8 @@ public class FrameBodyTPUB extends AbstractFrameBodyTextInfo implements ID3v24Fr
     /**
      * Creates a new FrameBodyTPUB datatype.
      *
-     * @throws java.io.IOException DOCUMENT ME!
-     * @throws InvalidTagException DOCUMENT ME!
+     * @throws java.io.IOException 
+     * @throws InvalidTagException 
      */
     public FrameBodyTPUB(ByteBuffer byteBuffer, int frameSize)
         throws InvalidTagException

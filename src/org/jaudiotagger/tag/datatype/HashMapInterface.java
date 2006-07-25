@@ -30,23 +30,23 @@ import java.util.Iterator;
 public interface HashMapInterface
 {
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public HashMap getKeyToValue();
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public HashMap getValueToKey();
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public Iterator iterator();
 }

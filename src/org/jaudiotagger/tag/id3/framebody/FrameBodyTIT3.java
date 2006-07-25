@@ -46,8 +46,8 @@ public class FrameBodyTIT3 extends AbstractFrameBodyTextInfo implements ID3v24Fr
     /**
      * Creates a new FrameBodyTIT3 datatype.
      *
-     * @param textEncoding DOCUMENT ME!
-     * @param text         DOCUMENT ME!
+     * @param textEncoding 
+     * @param text         
      */
     public FrameBodyTIT3(byte textEncoding, String text)
     {
@@ -57,9 +57,9 @@ public class FrameBodyTIT3 extends AbstractFrameBodyTextInfo implements ID3v24Fr
     /**
      * Creates a new FrameBodyTIT3 datatype.
      *
-     * @param file DOCUMENT ME!
-     * @throws java.io.IOException DOCUMENT ME!
-     * @throws InvalidTagException DOCUMENT ME!
+     * @param file 
+     * @throws java.io.IOException 
+     * @throws InvalidTagException 
      */
     public FrameBodyTIT3(ByteBuffer byteBuffer, int frameSize)
         throws InvalidTagException

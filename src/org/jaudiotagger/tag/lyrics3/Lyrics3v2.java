@@ -39,7 +39,7 @@ import java.nio.ByteBuffer;
 public class Lyrics3v2 extends AbstractLyrics3
 {
     /**
-     * DOCUMENT ME!
+     * 
      */
     private HashMap fieldMap = new HashMap();
 
@@ -71,8 +71,8 @@ public class Lyrics3v2 extends AbstractLyrics3
     /**
      * Creates a new Lyrics3v2 datatype.
      *
-     * @param mp3tag DOCUMENT ME!
-     * @throws UnsupportedOperationException DOCUMENT ME!
+     * @param mp3tag 
+     * @throws UnsupportedOperationException 
      */
     public Lyrics3v2(AbstractTag mp3tag)
     {
@@ -119,9 +119,9 @@ public class Lyrics3v2 extends AbstractLyrics3
     /**
      * Creates a new Lyrics3v2 datatype.
      *
-     * @param file DOCUMENT ME!
-     * @throws TagNotFoundException DOCUMENT ME!
-     * @throws IOException          DOCUMENT ME!
+     * @param file 
+     * @throws TagNotFoundException 
+     * @throws IOException          
      */
     public Lyrics3v2(ByteBuffer byteBuffer)
         throws TagNotFoundException, IOException
@@ -136,9 +136,9 @@ public class Lyrics3v2 extends AbstractLyrics3
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @param field DOCUMENT ME!
+     * @param field 
      */
     public void setField(Lyrics3v2Field field)
     {
@@ -157,9 +157,9 @@ public class Lyrics3v2 extends AbstractLyrics3
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public int getFieldCount()
     {
@@ -167,9 +167,9 @@ public class Lyrics3v2 extends AbstractLyrics3
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public String getIdentifier()
     {
@@ -177,9 +177,9 @@ public class Lyrics3v2 extends AbstractLyrics3
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public int getSize()
     {
@@ -199,10 +199,10 @@ public class Lyrics3v2 extends AbstractLyrics3
 
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @param obj DOCUMENT ME!
-     * @return DOCUMENT ME!
+     * @param obj 
+     * @return 
      */
     public boolean equals(Object obj)
     {
@@ -222,10 +222,10 @@ public class Lyrics3v2 extends AbstractLyrics3
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @param identifier DOCUMENT ME!
-     * @return DOCUMENT ME!
+     * @param identifier 
+     * @return 
      */
     public boolean hasField(String identifier)
     {
@@ -233,9 +233,9 @@ public class Lyrics3v2 extends AbstractLyrics3
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public Iterator iterator()
     {
@@ -295,9 +295,9 @@ public class Lyrics3v2 extends AbstractLyrics3
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @param identifier DOCUMENT ME!
+     * @param identifier 
      */
     public void removeField(String identifier)
     {
@@ -305,11 +305,11 @@ public class Lyrics3v2 extends AbstractLyrics3
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @param file DOCUMENT ME!
-     * @return DOCUMENT ME!
-     * @throws IOException DOCUMENT ME!
+     * @param file 
+     * @return 
+     * @throws IOException 
      */
     public boolean seek(RandomAccessFile file)
         throws IOException
@@ -363,9 +363,9 @@ public class Lyrics3v2 extends AbstractLyrics3
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public String toString()
     {
@@ -383,9 +383,9 @@ public class Lyrics3v2 extends AbstractLyrics3
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @param identifier DOCUMENT ME!
+     * @param identifier 
      */
     public void updateField(String identifier)
     {
@@ -410,10 +410,10 @@ public class Lyrics3v2 extends AbstractLyrics3
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @param file DOCUMENT ME!
-     * @throws IOException DOCUMENT ME!
+     * @param file 
+     * @throws IOException 
      */
     public void write(RandomAccessFile file)
         throws IOException

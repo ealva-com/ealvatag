@@ -44,7 +44,7 @@ public class FrameBodySEEK extends AbstractID3v2FrameBody implements ID3v24Frame
     /**
      * Creates a new FrameBodySEEK datatype.
      *
-     * @param minOffsetToNextTag DOCUMENT ME!
+     * @param minOffsetToNextTag 
      */
     public FrameBodySEEK(int minOffsetToNextTag)
     {
@@ -78,7 +78,7 @@ public class FrameBodySEEK extends AbstractID3v2FrameBody implements ID3v24Frame
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      */
     protected void setupObjectList()
     {

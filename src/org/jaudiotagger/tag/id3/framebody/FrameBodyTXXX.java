@@ -54,9 +54,9 @@ public class FrameBodyTXXX
     /**
      * Creates a new FrameBodyTXXX datatype.
      *
-     * @param textEncoding DOCUMENT ME!
-     * @param description  DOCUMENT ME!
-     * @param text         DOCUMENT ME!
+     * @param textEncoding 
+     * @param description  
+     * @param text         
      */
     public FrameBodyTXXX(byte textEncoding, String description, String text)
     {
@@ -68,8 +68,8 @@ public class FrameBodyTXXX
     /**
      * Creates a new FrameBodyTXXX datatype.
      *
-     * @throws IOException         DOCUMENT ME!
-     * @throws InvalidTagException DOCUMENT ME!
+     * @throws IOException         
+     * @throws InvalidTagException 
      */
     public FrameBodyTXXX(ByteBuffer byteBuffer, int frameSize)
         throws InvalidTagException
@@ -78,9 +78,9 @@ public class FrameBodyTXXX
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @param description DOCUMENT ME!
+     * @param description 
      */
     public void setDescription(String description)
     {
@@ -88,9 +88,9 @@ public class FrameBodyTXXX
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public String getDescription()
     {

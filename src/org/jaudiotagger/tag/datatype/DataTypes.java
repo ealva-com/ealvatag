@@ -51,27 +51,27 @@ public class DataTypes
     //Reference to timestamps
     public static final String OBJ_DATETIME = "DateTime";
     /**
-     * DOCUMENT ME!
+     * 
      */
     public static final String OBJ_GENRE = "Genre";
     /**
-     * DOCUMENT ME!
+     * 
      */
     public static final String OBJ_ID3V2_FRAME_DESCRIPTION = "ID3v2FrameDescription";
     /**
-     * DOCUMENT ME!
+     * 
      */
     public static final String OBJ_TYPE_OF_EVENT = "TypeOfEvent";
     /**
-     * DOCUMENT ME!
+     * 
      */
     public static final String OBJ_TIME_STAMP_FORMAT = "TimeStampFormat";
     /**
-     * DOCUMENT ME!
+     * 
      */
     public static final String OBJ_TYPE_OF_CHANNEL = "TypeOfChannel";
     /**
-     * DOCUMENT ME!
+     * 
      */
     public static final String OBJ_RECIEVED_AS = "RecievedAs";
 

@@ -39,9 +39,9 @@ public class ByteArraySizeTerminated extends AbstractDataType
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public int getSize()
     {
@@ -66,12 +66,12 @@ public class ByteArraySizeTerminated extends AbstractDataType
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @param arr    DOCUMENT ME!
-     * @param offset DOCUMENT ME!
-     * @throws NullPointerException      DOCUMENT ME!
-     * @throws IndexOutOfBoundsException DOCUMENT ME!
+     * @param arr    
+     * @param offset 
+     * @throws NullPointerException      
+     * @throws IndexOutOfBoundsException 
      */
     public void readByteArray(byte[] arr, int offset) throws InvalidDataTypeException
     {
@@ -98,9 +98,9 @@ public class ByteArraySizeTerminated extends AbstractDataType
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public String toString()
     {
@@ -108,9 +108,9 @@ public class ByteArraySizeTerminated extends AbstractDataType
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public byte[] writeByteArray()
     {

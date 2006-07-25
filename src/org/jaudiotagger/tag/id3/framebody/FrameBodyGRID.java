@@ -52,9 +52,9 @@ public class FrameBodyGRID extends AbstractID3v2FrameBody implements ID3v24Frame
     /**
      * Creates a new FrameBodyGRID datatype.
      *
-     * @param owner       DOCUMENT ME!
-     * @param groupSymbol DOCUMENT ME!
-     * @param data        DOCUMENT ME!
+     * @param owner       
+     * @param groupSymbol 
+     * @param data        
      */
     public FrameBodyGRID(String owner, byte groupSymbol, byte[] data)
     {
@@ -75,9 +75,9 @@ public class FrameBodyGRID extends AbstractID3v2FrameBody implements ID3v24Frame
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @param textEncoding DOCUMENT ME!
+     * @param textEncoding 
      */
     public void setGroupSymbol(byte textEncoding)
     {
@@ -85,9 +85,9 @@ public class FrameBodyGRID extends AbstractID3v2FrameBody implements ID3v24Frame
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public byte getGroupSymbol()
     {
@@ -114,9 +114,9 @@ public class FrameBodyGRID extends AbstractID3v2FrameBody implements ID3v24Frame
     
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @param owner DOCUMENT ME!
+     * @param owner 
      */
     public void setOwner(String owner)
     {
@@ -124,9 +124,9 @@ public class FrameBodyGRID extends AbstractID3v2FrameBody implements ID3v24Frame
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public String getOwner()
     {
@@ -134,7 +134,7 @@ public class FrameBodyGRID extends AbstractID3v2FrameBody implements ID3v24Frame
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      */
     protected void setupObjectList()
     {

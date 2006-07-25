@@ -46,7 +46,7 @@ public class FieldFrameBodyEAL extends AbstractLyrics3v2FieldFrameBody
     /**
      * Creates a new FieldBodyEAL datatype.
      *
-     * @param album DOCUMENT ME!
+     * @param album 
      */
     public FieldFrameBodyEAL(String album)
     {
@@ -56,7 +56,7 @@ public class FieldFrameBodyEAL extends AbstractLyrics3v2FieldFrameBody
     /**
      * Creates a new FieldBodyEAL datatype.
      *
-     * @throws InvalidTagException DOCUMENT ME!
+     * @throws InvalidTagException 
      */
     public FieldFrameBodyEAL(ByteBuffer byteBuffer)
         throws InvalidTagException
@@ -72,9 +72,9 @@ public class FieldFrameBodyEAL extends AbstractLyrics3v2FieldFrameBody
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @param album DOCUMENT ME!
+     * @param album 
      */
     public void setAlbum(String album)
     {
@@ -82,9 +82,9 @@ public class FieldFrameBodyEAL extends AbstractLyrics3v2FieldFrameBody
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public String getAlbum()
     {
@@ -92,9 +92,9 @@ public class FieldFrameBodyEAL extends AbstractLyrics3v2FieldFrameBody
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public String getIdentifier()
     {
@@ -102,7 +102,7 @@ public class FieldFrameBodyEAL extends AbstractLyrics3v2FieldFrameBody
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      */
     protected void setupObjectList()
     {

@@ -32,7 +32,7 @@ import java.nio.ByteBuffer;
 public class FieldFrameBodyUnsupported extends AbstractLyrics3v2FieldFrameBody
 {
     /**
-     * DOCUMENT ME!
+     * 
      */
     private byte[] value = null;
 
@@ -53,7 +53,7 @@ public class FieldFrameBodyUnsupported extends AbstractLyrics3v2FieldFrameBody
     /**
      * Creates a new FieldBodyUnsupported datatype.
      *
-     * @param value DOCUMENT ME!
+     * @param value 
      */
     public FieldFrameBodyUnsupported(byte[] value)
     {
@@ -74,9 +74,9 @@ public class FieldFrameBodyUnsupported extends AbstractLyrics3v2FieldFrameBody
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public String getIdentifier()
     {
@@ -84,10 +84,10 @@ public class FieldFrameBodyUnsupported extends AbstractLyrics3v2FieldFrameBody
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @param obj DOCUMENT ME!
-     * @return DOCUMENT ME!
+     * @param obj 
+     * @return 
      */
     public boolean isSubsetOf(Object obj)
     {
@@ -110,10 +110,10 @@ public class FieldFrameBodyUnsupported extends AbstractLyrics3v2FieldFrameBody
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @param obj DOCUMENT ME!
-     * @return DOCUMENT ME!
+     * @param obj 
+     * @return 
      */
     public boolean equals(Object obj)
     {
@@ -133,10 +133,10 @@ public class FieldFrameBodyUnsupported extends AbstractLyrics3v2FieldFrameBody
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @param byteBuffer DOCUMENT ME!
-     * @throws IOException DOCUMENT ME!
+     * @param byteBuffer 
+     * @throws IOException 
      */
     public void read(ByteBuffer byteBuffer)
         throws InvalidTagException
@@ -155,9 +155,9 @@ public class FieldFrameBodyUnsupported extends AbstractLyrics3v2FieldFrameBody
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public String toString()
     {
@@ -165,10 +165,10 @@ public class FieldFrameBodyUnsupported extends AbstractLyrics3v2FieldFrameBody
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @param file DOCUMENT ME!
-     * @throws IOException DOCUMENT ME!
+     * @param file 
+     * @throws IOException 
      */
     public void write(RandomAccessFile file)
         throws IOException

@@ -30,54 +30,54 @@ import java.util.NoSuchElementException;
 public class ID3v1Iterator implements Iterator
 {
     /**
-     * DOCUMENT ME!
+     * 
      */
     private static final int TITLE = 1;
 
     /**
-     * DOCUMENT ME!
+     * 
      */
     private static final int ARTIST = 2;
 
     /**
-     * DOCUMENT ME!
+     * 
      */
     private static final int ALBUM = 3;
 
     /**
-     * DOCUMENT ME!
+     * 
      */
     private static final int COMMENT = 4;
 
     /**
-     * DOCUMENT ME!
+     * 
      */
     private static final int YEAR = 5;
 
     /**
-     * DOCUMENT ME!
+     * 
      */
     private static final int GENRE = 6;
 
     /**
-     * DOCUMENT ME!
+     * 
      */
     private static final int TRACK = 7;
 
     /**
-     * DOCUMENT ME!
+     * 
      */
     private ID3v1Tag id3v1tag;
 
     /**
-     * DOCUMENT ME!
+     * 
      */
     private int lastIndex = 0;
 
     /**
      * Creates a new ID3v1Iterator datatype.
      *
-     * @param id3v1tag DOCUMENT ME!
+     * @param id3v1tag 
      */
     public ID3v1Iterator(ID3v1Tag id3v1tag)
     {
@@ -85,9 +85,9 @@ public class ID3v1Iterator implements Iterator
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public boolean hasNext()
     {
@@ -95,9 +95,9 @@ public class ID3v1Iterator implements Iterator
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public Object next()
     {
@@ -105,7 +105,7 @@ public class ID3v1Iterator implements Iterator
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      */
     public void remove()
     {
@@ -139,10 +139,10 @@ public class ID3v1Iterator implements Iterator
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @param index DOCUMENT ME!
-     * @return DOCUMENT ME!
+     * @param index 
+     * @return 
      */
     private boolean hasNext(int index)
     {
@@ -179,11 +179,11 @@ public class ID3v1Iterator implements Iterator
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @param index DOCUMENT ME!
-     * @return DOCUMENT ME!
-     * @throws NoSuchElementException DOCUMENT ME!
+     * @param index 
+     * @return 
+     * @throws NoSuchElementException 
      */
     private Object next(int index)
     {

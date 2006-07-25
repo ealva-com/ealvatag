@@ -45,7 +45,7 @@ public class FieldFrameBodyINF extends AbstractLyrics3v2FieldFrameBody
     /**
      * Creates a new FieldBodyINF datatype.
      *
-     * @param additionalInformation DOCUMENT ME!
+     * @param additionalInformation 
      */
     public FieldFrameBodyINF(String additionalInformation)
     {
@@ -65,9 +65,9 @@ public class FieldFrameBodyINF extends AbstractLyrics3v2FieldFrameBody
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @param additionalInformation DOCUMENT ME!
+     * @param additionalInformation 
      */
     public void setAdditionalInformation(String additionalInformation)
     {
@@ -75,9 +75,9 @@ public class FieldFrameBodyINF extends AbstractLyrics3v2FieldFrameBody
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public String getAdditionalInformation()
     {
@@ -85,9 +85,9 @@ public class FieldFrameBodyINF extends AbstractLyrics3v2FieldFrameBody
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public String getIdentifier()
     {
@@ -95,7 +95,7 @@ public class FieldFrameBodyINF extends AbstractLyrics3v2FieldFrameBody
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      */
     protected void setupObjectList()
     {

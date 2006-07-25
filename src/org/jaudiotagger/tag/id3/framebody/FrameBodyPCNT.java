@@ -49,7 +49,7 @@ public class FrameBodyPCNT extends AbstractID3v2FrameBody implements ID3v24Frame
     /**
      * Creates a new FrameBodyPCNT datatype.
      *
-     * @param counter DOCUMENT ME!
+     * @param counter 
      */
     public FrameBodyPCNT(long counter)
     {
@@ -78,7 +78,7 @@ public class FrameBodyPCNT extends AbstractID3v2FrameBody implements ID3v24Frame
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      */
     protected void setupObjectList()
     {

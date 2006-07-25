@@ -78,7 +78,7 @@ public class FrameBodyRVA2 extends AbstractID3v2FrameBody implements ID3v24Frame
     /**
      * Retrieve the next String @todo why is this needed.
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public String getBriefDescription()
     {

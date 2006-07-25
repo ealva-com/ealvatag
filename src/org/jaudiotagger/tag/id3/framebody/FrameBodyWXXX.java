@@ -58,9 +58,9 @@ public class FrameBodyWXXX
     /**
      * Creates a new FrameBodyWXXX datatype.
      *
-     * @param textEncoding DOCUMENT ME!
-     * @param description  DOCUMENT ME!
-     * @param urlLink      DOCUMENT ME!
+     * @param textEncoding 
+     * @param description  
+     * @param urlLink      
      */
     public FrameBodyWXXX(byte textEncoding, String description, String urlLink)
     {
@@ -72,8 +72,8 @@ public class FrameBodyWXXX
     /**
      * Creates a new FrameBodyWXXX datatype by reading from file.
      *
-     * @throws IOException         DOCUMENT ME!
-     * @throws InvalidTagException DOCUMENT ME!
+     * @throws IOException         
+     * @throws InvalidTagException 
      */
     public FrameBodyWXXX(ByteBuffer byteBuffer, int frameSize)
         throws InvalidTagException
@@ -82,9 +82,9 @@ public class FrameBodyWXXX
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @param description DOCUMENT ME!
+     * @param description 
      */
     public void setDescription(String description)
     {
@@ -92,9 +92,9 @@ public class FrameBodyWXXX
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public String getDescription()
     {

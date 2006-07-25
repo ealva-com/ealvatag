@@ -41,7 +41,7 @@ public class FrameBodyWCOM extends AbstractFrameBodyUrlLink   implements ID3v24F
     /**
      * Creates a new FrameBodyWCOM datatype.
      *
-     * @param urlLink DOCUMENT ME!
+     * @param urlLink 
      */
     public FrameBodyWCOM(String urlLink)
     {
@@ -56,8 +56,8 @@ public class FrameBodyWCOM extends AbstractFrameBodyUrlLink   implements ID3v24F
     /**
      * Creates a new FrameBodyWCOM datatype.
      *
-     * @throws java.io.IOException DOCUMENT ME!
-     * @throws InvalidTagException DOCUMENT ME!
+     * @throws java.io.IOException 
+     * @throws InvalidTagException 
      */
     public FrameBodyWCOM(ByteBuffer byteBuffer, int frameSize)
         throws InvalidTagException

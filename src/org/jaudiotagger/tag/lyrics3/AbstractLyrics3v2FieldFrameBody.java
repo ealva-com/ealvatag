@@ -44,10 +44,10 @@ public abstract class AbstractLyrics3v2FieldFrameBody extends AbstractTagFrameBo
     /**
      * This is called by superclass when attempt to read data from file.
      *
-     * @param file DOCUMENT ME!
-     * @return DOCUMENT ME!
-     * @throws InvalidTagException DOCUMENT ME!
-     * @throws IOException         DOCUMENT ME!
+     * @param file 
+     * @return 
+     * @throws InvalidTagException 
+     * @throws IOException         
      */
     protected int readHeader(RandomAccessFile file)
         throws InvalidTagException, IOException
@@ -70,9 +70,9 @@ public abstract class AbstractLyrics3v2FieldFrameBody extends AbstractTagFrameBo
     /**
      * This is called by superclass when attempt to write data from file.
      *
-     * @param file DOCUMENT ME!
-     * @param size DOCUMENT ME!
-     * @throws IOException DOCUMENT ME!
+     * @param file 
+     * @param size 
+     * @throws IOException 
      */
     protected void writeHeader(RandomAccessFile file, int size)
         throws IOException

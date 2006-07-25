@@ -41,7 +41,7 @@ public class FrameBodyWORS extends AbstractFrameBodyUrlLink  implements ID3v24Fr
     /**
      * Creates a new FrameBodyWORS datatype.
      *
-     * @param urlLink DOCUMENT ME!
+     * @param urlLink 
      */
     public FrameBodyWORS(String urlLink)
     {
@@ -56,8 +56,8 @@ public class FrameBodyWORS extends AbstractFrameBodyUrlLink  implements ID3v24Fr
     /**
      * Creates a new FrameBodyWORS datatype.
      *
-     * @throws java.io.IOException DOCUMENT ME!
-     * @throws InvalidTagException DOCUMENT ME!
+     * @throws java.io.IOException 
+     * @throws InvalidTagException 
      */
     public FrameBodyWORS(ByteBuffer byteBuffer, int frameSize)
         throws InvalidTagException

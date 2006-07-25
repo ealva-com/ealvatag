@@ -46,8 +46,8 @@ public class FrameBodyTSIZ extends AbstractFrameBodyTextInfo  implements ID3v23F
     /**
      * Creates a new FrameBodyTSIZ datatype.
      *
-     * @param textEncoding DOCUMENT ME!
-     * @param text         DOCUMENT ME!
+     * @param textEncoding 
+     * @param text         
      */
     public FrameBodyTSIZ(byte textEncoding, String text)
     {
@@ -57,8 +57,8 @@ public class FrameBodyTSIZ extends AbstractFrameBodyTextInfo  implements ID3v23F
     /**
      * Creates a new FrameBodyTSIZ datatype.
      *
-      * @throws java.io.IOException DOCUMENT ME!
-     * @throws InvalidTagException DOCUMENT ME!
+      * @throws java.io.IOException 
+     * @throws InvalidTagException 
      */
     public FrameBodyTSIZ(ByteBuffer byteBuffer, int frameSize)
         throws InvalidTagException

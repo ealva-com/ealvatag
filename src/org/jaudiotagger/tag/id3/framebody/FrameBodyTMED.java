@@ -46,8 +46,8 @@ public class FrameBodyTMED extends AbstractFrameBodyTextInfo
     /**
      * Creates a new FrameBodyTMED datatype.
      *
-     * @param textEncoding DOCUMENT ME!
-     * @param text         DOCUMENT ME!
+     * @param textEncoding 
+     * @param text         
      */
     public FrameBodyTMED(byte textEncoding, String text)
     {
@@ -57,8 +57,8 @@ public class FrameBodyTMED extends AbstractFrameBodyTextInfo
     /**
      * Creates a new FrameBodyTMED datatype.
      *
-    * @throws java.io.IOException DOCUMENT ME!
-     * @throws InvalidTagException DOCUMENT ME!
+    * @throws java.io.IOException 
+     * @throws InvalidTagException 
      */
     public FrameBodyTMED(ByteBuffer byteBuffer, int frameSize)
         throws InvalidTagException

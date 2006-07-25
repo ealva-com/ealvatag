@@ -46,7 +46,7 @@ public class FieldFrameBodyETT extends AbstractLyrics3v2FieldFrameBody
     /**
      * Creates a new FieldBodyETT datatype.
      *
-     * @param title DOCUMENT ME!
+     * @param title 
      */
     public FieldFrameBodyETT(String title)
     {
@@ -56,7 +56,7 @@ public class FieldFrameBodyETT extends AbstractLyrics3v2FieldFrameBody
     /**
      * Creates a new FieldBodyETT datatype.
      *
-     * @throws InvalidTagException DOCUMENT ME!
+     * @throws InvalidTagException 
      */
     public FieldFrameBodyETT(ByteBuffer byteBuffer)
         throws InvalidTagException
@@ -72,9 +72,9 @@ public class FieldFrameBodyETT extends AbstractLyrics3v2FieldFrameBody
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public String getIdentifier()
     {
@@ -82,9 +82,9 @@ public class FieldFrameBodyETT extends AbstractLyrics3v2FieldFrameBody
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @param title DOCUMENT ME!
+     * @param title 
      */
     public void setTitle(String title)
     {
@@ -92,9 +92,9 @@ public class FieldFrameBodyETT extends AbstractLyrics3v2FieldFrameBody
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public String getTitle()
     {
@@ -102,7 +102,7 @@ public class FieldFrameBodyETT extends AbstractLyrics3v2FieldFrameBody
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      */
     protected void setupObjectList()
     {

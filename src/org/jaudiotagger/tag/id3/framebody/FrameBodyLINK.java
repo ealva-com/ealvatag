@@ -50,9 +50,9 @@ public class FrameBodyLINK extends AbstractID3v2FrameBody implements ID3v24Frame
     /**
      * Creates a new FrameBodyLINK datatype.
      *
-     * @param frameIdentifier DOCUMENT ME!
-     * @param url             DOCUMENT ME!
-     * @param additionalData  DOCUMENT ME!
+     * @param frameIdentifier 
+     * @param url             
+     * @param additionalData  
      */
     public FrameBodyLINK(String frameIdentifier, String url, String additionalData)
     {
@@ -73,9 +73,9 @@ public class FrameBodyLINK extends AbstractID3v2FrameBody implements ID3v24Frame
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public String getAdditionalData()
     {
@@ -83,9 +83,9 @@ public class FrameBodyLINK extends AbstractID3v2FrameBody implements ID3v24Frame
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @param additionalData DOCUMENT ME!
+     * @param additionalData 
      */
     public void getAdditionalData(String additionalData)
     {
@@ -93,9 +93,9 @@ public class FrameBodyLINK extends AbstractID3v2FrameBody implements ID3v24Frame
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public String getFrameIdentifier()
     {
@@ -103,9 +103,9 @@ public class FrameBodyLINK extends AbstractID3v2FrameBody implements ID3v24Frame
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @param frameIdentifier DOCUMENT ME!
+     * @param frameIdentifier 
      */
     public void getFrameIdentifier(String frameIdentifier)
     {
@@ -124,7 +124,7 @@ public class FrameBodyLINK extends AbstractID3v2FrameBody implements ID3v24Frame
     
 
     /**
-     * DOCUMENT ME!
+     * 
      */
     protected void setupObjectList()
     {

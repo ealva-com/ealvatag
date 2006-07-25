@@ -46,8 +46,8 @@ public class FrameBodyTIME extends AbstractFrameBodyTextInfo implements ID3v23Fr
     /**
      * Creates a new FrameBodyTIME datatype.
      *
-     * @param textEncoding DOCUMENT ME!
-     * @param text         DOCUMENT ME!
+     * @param textEncoding 
+     * @param text         
      */
     public FrameBodyTIME(byte textEncoding, String text)
     {
@@ -57,8 +57,8 @@ public class FrameBodyTIME extends AbstractFrameBodyTextInfo implements ID3v23Fr
     /**
      * Creates a new FrameBodyTIME datatype.
      *
-     * @throws java.io.IOException DOCUMENT ME!
-     * @throws InvalidTagException DOCUMENT ME!
+     * @throws java.io.IOException 
+     * @throws InvalidTagException 
      */
     public FrameBodyTIME(ByteBuffer byteBuffer, int frameSize)
         throws InvalidTagException

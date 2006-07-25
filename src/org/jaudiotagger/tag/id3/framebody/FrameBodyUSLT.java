@@ -54,10 +54,10 @@ public class FrameBodyUSLT extends AbstractID3v2FrameBody implements ID3v24Frame
     /**
      * Creates a new FrameBodyUSLT datatype.
      *
-     * @param textEncoding DOCUMENT ME!
-     * @param language     DOCUMENT ME!
-     * @param description  DOCUMENT ME!
-     * @param text         DOCUMENT ME!
+     * @param textEncoding 
+     * @param language     
+     * @param description  
+     * @param text         
      */
     public FrameBodyUSLT(byte textEncoding, String language, String description, String text)
     {
@@ -70,9 +70,9 @@ public class FrameBodyUSLT extends AbstractID3v2FrameBody implements ID3v24Frame
     /**
      * Creates a new FrameBodyUSLT datatype.
      *
-     * @param file DOCUMENT ME!
-     * @throws IOException         DOCUMENT ME!
-     * @throws InvalidTagException DOCUMENT ME!
+     * @param file 
+     * @throws IOException         
+     * @throws InvalidTagException 
      */
     public FrameBodyUSLT(ByteBuffer byteBuffer, int frameSize)
         throws InvalidTagException
@@ -81,9 +81,9 @@ public class FrameBodyUSLT extends AbstractID3v2FrameBody implements ID3v24Frame
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @param description DOCUMENT ME!
+     * @param description 
      */
     public void setDescription(String description)
     {
@@ -91,9 +91,9 @@ public class FrameBodyUSLT extends AbstractID3v2FrameBody implements ID3v24Frame
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public String getDescription()
     {
@@ -111,9 +111,9 @@ public class FrameBodyUSLT extends AbstractID3v2FrameBody implements ID3v24Frame
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @param language DOCUMENT ME!
+     * @param language 
      */
     public void setLanguage(String language)
     {
@@ -121,9 +121,9 @@ public class FrameBodyUSLT extends AbstractID3v2FrameBody implements ID3v24Frame
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public String getLanguage()
     {
@@ -131,9 +131,9 @@ public class FrameBodyUSLT extends AbstractID3v2FrameBody implements ID3v24Frame
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @param lyric DOCUMENT ME!
+     * @param lyric 
      */
     public void setLyric(String lyric)
     {
@@ -141,9 +141,9 @@ public class FrameBodyUSLT extends AbstractID3v2FrameBody implements ID3v24Frame
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public String getLyric()
     {
@@ -151,9 +151,9 @@ public class FrameBodyUSLT extends AbstractID3v2FrameBody implements ID3v24Frame
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @param text DOCUMENT ME!
+     * @param text 
      */
     public void addLyric(String text)
     {
@@ -162,9 +162,9 @@ public class FrameBodyUSLT extends AbstractID3v2FrameBody implements ID3v24Frame
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @param line DOCUMENT ME!
+     * @param line 
      */
     public void addLyric(Lyrics3Line line)
     {
@@ -173,7 +173,7 @@ public class FrameBodyUSLT extends AbstractID3v2FrameBody implements ID3v24Frame
 
 
     /**
-     * DOCUMENT ME!
+     * 
      */
     protected void setupObjectList()
     {

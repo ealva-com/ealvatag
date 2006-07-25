@@ -54,9 +54,9 @@ public class FrameBodyUSER extends AbstractID3v2FrameBody implements ID3v24Frame
     /**
      * Creates a new FrameBodyUSER datatype.
      *
-     * @param textEncoding DOCUMENT ME!
-     * @param language     DOCUMENT ME!
-     * @param text         DOCUMENT ME!
+     * @param textEncoding 
+     * @param language     
+     * @param text         
      */
     public FrameBodyUSER(byte textEncoding, String language, String text)
     {
@@ -68,8 +68,8 @@ public class FrameBodyUSER extends AbstractID3v2FrameBody implements ID3v24Frame
     /**
      * Creates a new FrameBodyUSER datatype.
      *
-     * @throws IOException         DOCUMENT ME!
-     * @throws InvalidTagException DOCUMENT ME!
+     * @throws IOException         
+     * @throws InvalidTagException 
      */
     public FrameBodyUSER(ByteBuffer byteBuffer, int frameSize)
         throws InvalidTagException
@@ -88,9 +88,9 @@ public class FrameBodyUSER extends AbstractID3v2FrameBody implements ID3v24Frame
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public String getLanguage()
     {
@@ -98,9 +98,9 @@ public class FrameBodyUSER extends AbstractID3v2FrameBody implements ID3v24Frame
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @param language DOCUMENT ME!
+     * @param language 
      */
     public void setOwner(String language)
     {
@@ -119,7 +119,7 @@ public class FrameBodyUSER extends AbstractID3v2FrameBody implements ID3v24Frame
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      */
     protected void setupObjectList()
     {

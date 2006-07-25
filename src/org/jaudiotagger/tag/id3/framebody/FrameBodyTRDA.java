@@ -46,8 +46,8 @@ public class FrameBodyTRDA extends AbstractFrameBodyTextInfo implements ID3v23Fr
     /**
      * Creates a new FrameBodyTRDA datatype.
      *
-     * @param textEncoding DOCUMENT ME!
-     * @param text         DOCUMENT ME!
+     * @param textEncoding 
+     * @param text         
      */
     public FrameBodyTRDA(byte textEncoding, String text)
     {
@@ -57,8 +57,8 @@ public class FrameBodyTRDA extends AbstractFrameBodyTextInfo implements ID3v23Fr
     /**
      * Creates a new FrameBodyTRDA datatype.
      *
-     * @throws java.io.IOException DOCUMENT ME!
-     * @throws InvalidTagException DOCUMENT ME!
+     * @throws java.io.IOException 
+     * @throws InvalidTagException 
      */
     public FrameBodyTRDA(ByteBuffer byteBuffer, int frameSize)
         throws InvalidTagException

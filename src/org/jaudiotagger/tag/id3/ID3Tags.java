@@ -107,7 +107,7 @@ public class ID3Tags
      *
      * @param value datatype to find long from.
      * @return <code>long</code> value
-     * @throws IllegalArgumentException DOCUMENT ME!
+     * @throws IllegalArgumentException 
      */
     static public long getWholeNumber(Object value)
     {
@@ -405,7 +405,7 @@ public class ID3Tags
      *
      * @param str string to search
      * @return first whole number that can be parsed from the string
-     * @throws TagException DOCUMENT ME!
+     * @throws TagException 
      */
     public static long findNumber(String str)
         throws TagException
@@ -419,9 +419,9 @@ public class ID3Tags
      * @param str    string to search
      * @param offset start seaching from this index
      * @return first whole number that can be parsed from the string
-     * @throws TagException              DOCUMENT ME!
-     * @throws NullPointerException      DOCUMENT ME!
-     * @throws IndexOutOfBoundsException DOCUMENT ME!
+     * @throws TagException              
+     * @throws NullPointerException      
+     * @throws IndexOutOfBoundsException 
      */
     public static long findNumber(String str, int offset)
         throws TagException
@@ -500,7 +500,7 @@ public class ID3Tags
      *
      * @param str String to truncate
      * @param len maximum desired length of new string
-     * @return DOCUMENT ME!
+     * @return 
      */
     public static String truncate(String str, int len)
     {

@@ -50,7 +50,7 @@ public class FrameBodyUnsupported extends AbstractID3v2FrameBody
     /**
      * Creates a new FrameBodyUnsupported datatype.
      *
-     * @param value DOCUMENT ME!
+     * @param value 
      */
     public FrameBodyUnsupported(byte[] value)
     {
@@ -76,9 +76,9 @@ public class FrameBodyUnsupported extends AbstractID3v2FrameBody
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public String getIdentifier()
     {
@@ -86,10 +86,10 @@ public class FrameBodyUnsupported extends AbstractID3v2FrameBody
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @param obj DOCUMENT ME!
-     * @return DOCUMENT ME!
+     * @param obj 
+     * @return 
      */
     public boolean equals(Object obj)
     {
@@ -108,9 +108,9 @@ public class FrameBodyUnsupported extends AbstractID3v2FrameBody
 
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public String toString()
     {

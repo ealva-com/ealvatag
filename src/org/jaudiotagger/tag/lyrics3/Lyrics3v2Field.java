@@ -55,7 +55,7 @@ public class Lyrics3v2Field
     /**
      * Creates a new Lyrics3v2Field datatype.
      *
-     * @param body DOCUMENT ME!
+     * @param body 
      */
     public Lyrics3v2Field(AbstractLyrics3v2FieldFrameBody body)
     {
@@ -65,8 +65,8 @@ public class Lyrics3v2Field
     /**
      * Creates a new Lyrics3v2Field datatype.
      *
-     * @param frame DOCUMENT ME!
-     * @throws TagException DOCUMENT ME!
+     * @param frame 
+     * @throws TagException 
      */
     public Lyrics3v2Field(AbstractID3v2Frame frame)
         throws TagException
@@ -131,8 +131,8 @@ public class Lyrics3v2Field
     /**
      * Creates a new Lyrics3v2Field datatype.
      *
-     * @param file DOCUMENT ME!
-     * @throws InvalidTagException DOCUMENT ME!
+     * @param file 
+     * @throws InvalidTagException 
 
      */
     public Lyrics3v2Field(ByteBuffer byteBuffer)
@@ -142,9 +142,9 @@ public class Lyrics3v2Field
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public String getIdentifier()
     {
@@ -156,9 +156,9 @@ public class Lyrics3v2Field
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public int getSize()
     {
@@ -166,11 +166,11 @@ public class Lyrics3v2Field
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @param byteBuffer DOCUMENT ME!
-     * @throws InvalidTagException DOCUMENT ME!
-     * @throws IOException         DOCUMENT ME!
+     * @param byteBuffer 
+     * @throws InvalidTagException 
+     * @throws IOException         
      */
     public void read(ByteBuffer byteBuffer)
         throws InvalidTagException
@@ -197,9 +197,9 @@ public class Lyrics3v2Field
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public String toString()
     {
@@ -211,10 +211,10 @@ public class Lyrics3v2Field
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @param file DOCUMENT ME!
-     * @throws IOException DOCUMENT ME!
+     * @param file 
+     * @throws IOException 
      */
     public void write(RandomAccessFile file)
 
@@ -243,11 +243,11 @@ public class Lyrics3v2Field
     /**
      * Read a Lyrics3 Field from a file.
      *
-     * @param identifier DOCUMENT ME!
-     * @param file       DOCUMENT ME!
-     * @return DOCUMENT ME!
-     * @throws InvalidTagException DOCUMENT ME!
-     * @throws IOException         DOCUMENT ME!
+     * @param identifier 
+     * @param file       
+     * @return 
+     * @throws InvalidTagException 
+     * @throws IOException         
      */
     private AbstractLyrics3v2FieldFrameBody readBody(String identifier, ByteBuffer byteBuffer)
         throws InvalidTagException

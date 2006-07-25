@@ -58,9 +58,9 @@ public class FrameBodyRBUF extends AbstractID3v2FrameBody implements ID3v24Frame
     /**
      * Creates a new FrameBodyRBUF datatype.
      *
-     * @param bufferSize       DOCUMENT ME!
-     * @param embeddedInfoFlag DOCUMENT ME!
-     * @param offsetToNextTag  DOCUMENT ME!
+     * @param bufferSize       
+     * @param embeddedInfoFlag 
+     * @param offsetToNextTag  
      */
     public FrameBodyRBUF(byte bufferSize, boolean embeddedInfoFlag, byte offsetToNextTag)
     {
@@ -91,7 +91,7 @@ public class FrameBodyRBUF extends AbstractID3v2FrameBody implements ID3v24Frame
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      */
     protected void setupObjectList()
     {

@@ -86,8 +86,8 @@ public class ID3v11Tag
     /**
      * Creates a new ID3v1_1 datatype.
      *
-     * @param mp3tag DOCUMENT ME!
-     * @throws UnsupportedOperationException DOCUMENT ME!
+     * @param mp3tag 
+     * @throws UnsupportedOperationException 
      */
     public ID3v11Tag(AbstractTag mp3tag)
     {
@@ -189,9 +189,9 @@ public class ID3v11Tag
     /**
      * Creates a new ID3v1_1 datatype.
      *
-     * @param file DOCUMENT ME!
-     * @throws TagNotFoundException DOCUMENT ME!
-     * @throws IOException          DOCUMENT ME!
+     * @param file 
+     * @throws TagNotFoundException 
+     * @throws IOException          
      */
     public ID3v11Tag(RandomAccessFile file)
         throws TagNotFoundException, IOException
@@ -278,7 +278,7 @@ public class ID3v11Tag
      * fields set to same value
      *
      * @param obj Comparing Object
-     * @return DOCUMENT ME!
+     * @return 
      */
     public boolean equals(Object obj)
     {

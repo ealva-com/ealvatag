@@ -54,10 +54,10 @@ public class FrameBodyOWNE extends AbstractID3v2FrameBody implements ID3v24Frame
     /**
      * Creates a new FrameBodyOWNE datatype.
      *
-     * @param textEncoding   DOCUMENT ME!
-     * @param pricePaid      DOCUMENT ME!
-     * @param dateOfPurchase DOCUMENT ME!
-     * @param seller         DOCUMENT ME!
+     * @param textEncoding   
+     * @param pricePaid      
+     * @param dateOfPurchase 
+     * @param seller         
      */
     public FrameBodyOWNE(byte textEncoding, String pricePaid, String dateOfPurchase, String seller)
     {
@@ -100,7 +100,7 @@ public class FrameBodyOWNE extends AbstractID3v2FrameBody implements ID3v24Frame
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      */
     protected void setupObjectList()
     {

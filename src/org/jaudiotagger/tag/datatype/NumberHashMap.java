@@ -37,26 +37,26 @@ public class NumberHashMap extends NumberFixedLength implements HashMapInterface
 {
 
     /**
-     * DOCUMENT ME!
+     * 
      */
     private HashMap keyToValue = null;
 
     /**
-     * DOCUMENT ME!
+     * 
      */
     private HashMap valueToKey = null;
 
     /**
-     * DOCUMENT ME!
+     * 
      */
     private boolean hasEmptyValue = false;
 
     /**
      * Creates a new ObjectNumberHashMap datatype.
      *
-     * @param identifier DOCUMENT ME!
-     * @param size       DOCUMENT ME!
-     * @throws IllegalArgumentException DOCUMENT ME!
+     * @param identifier 
+     * @param size       
+     * @throws IllegalArgumentException 
      */
     public NumberHashMap(String identifier, AbstractTagFrameBody frameBody, int size)
     {
@@ -121,9 +121,9 @@ public class NumberHashMap extends NumberFixedLength implements HashMapInterface
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public HashMap getKeyToValue()
     {
@@ -131,9 +131,9 @@ public class NumberHashMap extends NumberFixedLength implements HashMapInterface
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public HashMap getValueToKey()
     {
@@ -141,9 +141,9 @@ public class NumberHashMap extends NumberFixedLength implements HashMapInterface
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @param value DOCUMENT ME!
+     * @param value 
      */
     public void setValue(Object value)
     {
@@ -166,10 +166,10 @@ public class NumberHashMap extends NumberFixedLength implements HashMapInterface
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @param obj DOCUMENT ME!
-     * @return DOCUMENT ME!
+     * @param obj 
+     * @return 
      */
     public boolean equals(Object obj)
     {
@@ -219,9 +219,9 @@ public class NumberHashMap extends NumberFixedLength implements HashMapInterface
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public Iterator iterator()
     {
@@ -244,9 +244,9 @@ public class NumberHashMap extends NumberFixedLength implements HashMapInterface
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public String toString()
     {

@@ -46,8 +46,8 @@ public class FrameBodyTOLY extends AbstractFrameBodyTextInfo
     /**
      * Creates a new FrameBodyTOLY datatype.
      *
-     * @param textEncoding DOCUMENT ME!
-     * @param text         DOCUMENT ME!
+     * @param textEncoding 
+     * @param text         
      */
     public FrameBodyTOLY(byte textEncoding, String text)
     {
@@ -57,8 +57,8 @@ public class FrameBodyTOLY extends AbstractFrameBodyTextInfo
     /**
      * Creates a new FrameBodyTOLY datatype.
      *
-     * @throws java.io.IOException DOCUMENT ME!
-     * @throws InvalidTagException DOCUMENT ME!
+     * @throws java.io.IOException 
+     * @throws InvalidTagException 
      */
     public FrameBodyTOLY(ByteBuffer byteBuffer, int frameSize)
         throws InvalidTagException

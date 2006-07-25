@@ -173,8 +173,7 @@ public class TextEncodedStringNullTerminated
         {
             logger.severe(ce.getMessage());
             throw new RuntimeException(ce);
-        }
-        assert data != null;
+        }                          
         setSize(data.length);
         return data;
     }

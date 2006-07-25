@@ -40,22 +40,22 @@ import java.util.LinkedList;
 public class TagOptionSingleton
 {
     /**
-     * DOCUMENT ME!
+     * 
      */
     private static HashMap tagOptionTable = new HashMap();
 
     /**
-     * DOCUMENT ME!
+     * 
      */
     private static String DEFAULT = "default";
 
     /**
-     * DOCUMENT ME!
+     * 
      */
     private static Object defaultOptions = DEFAULT;
 
     /**
-     * DOCUMENT ME!
+     * 
      */
     private HashMap keywordMap = new HashMap();
 
@@ -76,7 +76,7 @@ public class TagOptionSingleton
     private HashMap replaceWordMap = new HashMap();
 
     /**
-     * DOCUMENT ME!
+     * 
      */
     private LinkedList endWordDelimiterList = new LinkedList();
 
@@ -86,7 +86,7 @@ public class TagOptionSingleton
     private LinkedList filenameDelimiterList = new LinkedList();
 
     /**
-     * DOCUMENT ME!
+     * 
      */
     private LinkedList startWordDelimiterList = new LinkedList();
 
@@ -102,12 +102,12 @@ public class TagOptionSingleton
     private String language = "eng";
 
     /**
-     * DOCUMENT ME!
+     * 
      */
     private boolean compositeMatchOverwrite = false;
 
     /**
-     * DOCUMENT ME!
+     * 
      */
     private boolean filenameTagSave = false;
 
@@ -217,7 +217,7 @@ public class TagOptionSingleton
     private boolean lyrics3SaveEmptyField = false;
 
     /**
-     * DOCUMENT ME!
+     * 
      */
     private boolean originalSavedAfterAdjustingID3v2Padding = true;
 
@@ -269,9 +269,9 @@ public class TagOptionSingleton
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public static TagOptionSingleton getInstance()
     {
@@ -279,10 +279,10 @@ public class TagOptionSingleton
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @param instanceKey DOCUMENT ME!
-     * @return DOCUMENT ME!
+     * @param instanceKey 
+     * @return 
      */
     public static TagOptionSingleton getInstance(Object instanceKey)
     {
@@ -298,10 +298,10 @@ public class TagOptionSingleton
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @param open DOCUMENT ME!
-     * @return DOCUMENT ME!
+     * @param open 
+     * @return 
      */
     public String getCloseParenthesis(String open)
     {
@@ -309,10 +309,10 @@ public class TagOptionSingleton
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @param close DOCUMENT ME!
-     * @return DOCUMENT ME!
+     * @param close 
+     * @return 
      */
     public boolean isCloseParenthesis(String close)
     {
@@ -320,9 +320,9 @@ public class TagOptionSingleton
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @param compositeMatchOverwrite DOCUMENT ME!
+     * @param compositeMatchOverwrite 
      */
     public void setCompositeMatchOverwrite(boolean compositeMatchOverwrite)
     {
@@ -330,9 +330,9 @@ public class TagOptionSingleton
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public boolean isCompositeMatchOverwrite()
     {
@@ -340,9 +340,9 @@ public class TagOptionSingleton
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @param filenameTagSave DOCUMENT ME!
+     * @param filenameTagSave 
      */
     public void setFilenameTagSave(boolean filenameTagSave)
     {
@@ -350,9 +350,9 @@ public class TagOptionSingleton
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public boolean isFilenameTagSave()
     {
@@ -360,9 +360,9 @@ public class TagOptionSingleton
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public boolean isId3v2SaveExtendedHeader()
     {
@@ -370,9 +370,9 @@ public class TagOptionSingleton
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @param instanceKey DOCUMENT ME!
+     * @param instanceKey 
      */
     public void setInstanceKey(Object instanceKey)
     {
@@ -380,9 +380,9 @@ public class TagOptionSingleton
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public static Object getInstanceKey()
     {
@@ -390,9 +390,9 @@ public class TagOptionSingleton
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public Iterator getEndWordDelimiterIterator()
     {
@@ -400,9 +400,9 @@ public class TagOptionSingleton
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public Iterator getFilenameDelimiterIterator()
     {
@@ -410,9 +410,9 @@ public class TagOptionSingleton
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @param id3v1Save DOCUMENT ME!
+     * @param id3v1Save 
      */
     public void setId3v1Save(boolean id3v1Save)
     {
@@ -420,9 +420,9 @@ public class TagOptionSingleton
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public boolean isId3v1Save()
     {
@@ -430,9 +430,9 @@ public class TagOptionSingleton
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @param id3v1SaveAlbum DOCUMENT ME!
+     * @param id3v1SaveAlbum 
      */
     public void setId3v1SaveAlbum(boolean id3v1SaveAlbum)
     {
@@ -440,9 +440,9 @@ public class TagOptionSingleton
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public boolean isId3v1SaveAlbum()
     {
@@ -450,9 +450,9 @@ public class TagOptionSingleton
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @param id3v1SaveArtist DOCUMENT ME!
+     * @param id3v1SaveArtist 
      */
     public void setId3v1SaveArtist(boolean id3v1SaveArtist)
     {
@@ -460,9 +460,9 @@ public class TagOptionSingleton
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public boolean isId3v1SaveArtist()
     {
@@ -470,9 +470,9 @@ public class TagOptionSingleton
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @param id3v1SaveComment DOCUMENT ME!
+     * @param id3v1SaveComment 
      */
     public void setId3v1SaveComment(boolean id3v1SaveComment)
     {
@@ -480,9 +480,9 @@ public class TagOptionSingleton
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public boolean isId3v1SaveComment()
     {
@@ -490,9 +490,9 @@ public class TagOptionSingleton
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @param id3v1SaveGenre DOCUMENT ME!
+     * @param id3v1SaveGenre 
      */
     public void setId3v1SaveGenre(boolean id3v1SaveGenre)
     {
@@ -500,9 +500,9 @@ public class TagOptionSingleton
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public boolean isId3v1SaveGenre()
     {
@@ -510,9 +510,9 @@ public class TagOptionSingleton
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @param id3v1SaveTitle DOCUMENT ME!
+     * @param id3v1SaveTitle 
      */
     public void setId3v1SaveTitle(boolean id3v1SaveTitle)
     {
@@ -520,9 +520,9 @@ public class TagOptionSingleton
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public boolean isId3v1SaveTitle()
     {
@@ -530,9 +530,9 @@ public class TagOptionSingleton
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @param id3v1SaveTrack DOCUMENT ME!
+     * @param id3v1SaveTrack 
      */
     public void setId3v1SaveTrack(boolean id3v1SaveTrack)
     {
@@ -540,9 +540,9 @@ public class TagOptionSingleton
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public boolean isId3v1SaveTrack()
     {
@@ -550,9 +550,9 @@ public class TagOptionSingleton
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @param id3v1SaveYear DOCUMENT ME!
+     * @param id3v1SaveYear 
      */
     public void setId3v1SaveYear(boolean id3v1SaveYear)
     {
@@ -560,9 +560,9 @@ public class TagOptionSingleton
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public boolean isId3v1SaveYear()
     {
@@ -570,9 +570,9 @@ public class TagOptionSingleton
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @param id3v2KeepEmptyFrameIfRead DOCUMENT ME!
+     * @param id3v2KeepEmptyFrameIfRead 
      */
     public void setId3v2KeepEmptyFrameIfRead(boolean id3v2KeepEmptyFrameIfRead)
     {
@@ -580,9 +580,9 @@ public class TagOptionSingleton
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public boolean isId3v2KeepEmptyFrameIfRead()
     {
@@ -590,9 +590,9 @@ public class TagOptionSingleton
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @param id3v2PaddingCopyTag DOCUMENT ME!
+     * @param id3v2PaddingCopyTag 
      */
     public void setId3v2PaddingCopyTag(boolean id3v2PaddingCopyTag)
     {
@@ -600,9 +600,9 @@ public class TagOptionSingleton
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public boolean isId3v2PaddingCopyTag()
     {
@@ -666,9 +666,9 @@ public class TagOptionSingleton
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @param id3v2PaddingWillShorten DOCUMENT ME!
+     * @param id3v2PaddingWillShorten 
      */
     public void setId3v2PaddingWillShorten(boolean id3v2PaddingWillShorten)
     {
@@ -676,9 +676,9 @@ public class TagOptionSingleton
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public boolean isId3v2PaddingWillShorten()
     {
@@ -686,9 +686,9 @@ public class TagOptionSingleton
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @param id3v2Save DOCUMENT ME!
+     * @param id3v2Save 
      */
     public void setId3v2Save(boolean id3v2Save)
     {
@@ -696,9 +696,9 @@ public class TagOptionSingleton
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public boolean isId3v2Save()
     {
@@ -706,9 +706,9 @@ public class TagOptionSingleton
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @param id3v2SaveEmptyFrame DOCUMENT ME!
+     * @param id3v2SaveEmptyFrame 
      */
     public void setId3v2SaveEmptyFrame(boolean id3v2SaveEmptyFrame)
     {
@@ -716,9 +716,9 @@ public class TagOptionSingleton
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public boolean isId3v2SaveEmptyFrame()
     {
@@ -726,9 +726,9 @@ public class TagOptionSingleton
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @param id3v2SaveExtendedHeader DOCUMENT ME!
+     * @param id3v2SaveExtendedHeader 
      */
     public void setId3v2SaveExtendedHeader(boolean id3v2SaveExtendedHeader)
     {
@@ -736,9 +736,9 @@ public class TagOptionSingleton
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public Iterator getKeywordIterator()
     {
@@ -746,10 +746,10 @@ public class TagOptionSingleton
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @param id3v2_4FrameBody DOCUMENT ME!
-     * @return DOCUMENT ME!
+     * @param id3v2_4FrameBody 
+     * @return 
      */
     public Iterator getKeywordListIterator(Class id3v2_4FrameBody)
     {
@@ -782,9 +782,9 @@ public class TagOptionSingleton
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @param lyrics3KeepEmptyFieldIfRead DOCUMENT ME!
+     * @param lyrics3KeepEmptyFieldIfRead 
      */
     public void setLyrics3KeepEmptyFieldIfRead(boolean lyrics3KeepEmptyFieldIfRead)
     {
@@ -792,9 +792,9 @@ public class TagOptionSingleton
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public boolean isLyrics3KeepEmptyFieldIfRead()
     {
@@ -802,9 +802,9 @@ public class TagOptionSingleton
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @param lyrics3Save DOCUMENT ME!
+     * @param lyrics3Save 
      */
     public void setLyrics3Save(boolean lyrics3Save)
     {
@@ -812,9 +812,9 @@ public class TagOptionSingleton
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public boolean isLyrics3Save()
     {
@@ -822,9 +822,9 @@ public class TagOptionSingleton
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @param lyrics3SaveEmptyField DOCUMENT ME!
+     * @param lyrics3SaveEmptyField 
      */
     public void setLyrics3SaveEmptyField(boolean lyrics3SaveEmptyField)
     {
@@ -832,9 +832,9 @@ public class TagOptionSingleton
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public boolean isLyrics3SaveEmptyField()
     {
@@ -865,9 +865,9 @@ public class TagOptionSingleton
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public HashMap getLyrics3SaveFieldMap()
     {
@@ -875,10 +875,10 @@ public class TagOptionSingleton
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @param oldWord DOCUMENT ME!
-     * @return DOCUMENT ME!
+     * @param oldWord 
+     * @return 
      */
     public String getNewReplaceWord(String oldWord)
     {
@@ -912,9 +912,9 @@ public class TagOptionSingleton
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public Iterator getOldReplaceWordIterator()
     {
@@ -922,10 +922,10 @@ public class TagOptionSingleton
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @param open DOCUMENT ME!
-     * @return DOCUMENT ME!
+     * @param open 
+     * @return 
      */
     public boolean isOpenParenthesis(String open)
     {
@@ -933,9 +933,9 @@ public class TagOptionSingleton
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public Iterator getOpenParenthesisIterator()
     {
@@ -943,10 +943,10 @@ public class TagOptionSingleton
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
      * @param originalSavedAfterAdjustingID3v2Padding
-     *         DOCUMENT ME!
+     *         
      */
     public void setOriginalSavedAfterAdjustingID3v2Padding(boolean originalSavedAfterAdjustingID3v2Padding)
     {
@@ -954,9 +954,9 @@ public class TagOptionSingleton
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public boolean isOriginalSavedAfterAdjustingID3v2Padding()
     {
@@ -989,9 +989,9 @@ public class TagOptionSingleton
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public Iterator getStartWordDelimiterIterator()
     {
@@ -1078,7 +1078,7 @@ public class TagOptionSingleton
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      */
     public void setToDefault()
     {
@@ -1247,9 +1247,9 @@ public class TagOptionSingleton
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public Iterator getUpperLowerCaseWordListIterator()
     {
@@ -1257,9 +1257,9 @@ public class TagOptionSingleton
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @param wordDelimiter DOCUMENT ME!
+     * @param wordDelimiter 
      */
     public void addEndWordDelimiter(String wordDelimiter)
     {
@@ -1267,9 +1267,9 @@ public class TagOptionSingleton
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @param delimiter DOCUMENT ME!
+     * @param delimiter 
      */
     public void addFilenameDelimiter(String delimiter)
     {
@@ -1277,11 +1277,11 @@ public class TagOptionSingleton
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @param id3v2FrameBodyClass DOCUMENT ME!
-     * @param keyword             DOCUMENT ME!
-     * @throws TagException DOCUMENT ME!
+     * @param id3v2FrameBodyClass 
+     * @param keyword             
+     * @throws TagException 
      */
     public void addKeyword(Class id3v2FrameBodyClass, String keyword)
         throws TagException
@@ -1310,10 +1310,10 @@ public class TagOptionSingleton
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @param open  DOCUMENT ME!
-     * @param close DOCUMENT ME!
+     * @param open  
+     * @param close 
      */
     public void addParenthesis(String open, String close)
     {
@@ -1321,10 +1321,10 @@ public class TagOptionSingleton
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @param oldWord DOCUMENT ME!
-     * @param newWord DOCUMENT ME!
+     * @param oldWord 
+     * @param newWord 
      */
     public void addReplaceWord(String oldWord, String newWord)
     {
@@ -1332,9 +1332,9 @@ public class TagOptionSingleton
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @param wordDelimiter DOCUMENT ME!
+     * @param wordDelimiter 
      */
     public void addStartWordDelimiter(String wordDelimiter)
     {
@@ -1342,9 +1342,9 @@ public class TagOptionSingleton
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @param word DOCUMENT ME!
+     * @param word 
      */
     public void addUpperLowerCaseWord(String word)
     {

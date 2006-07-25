@@ -60,8 +60,8 @@ public class FrameBodyTIPL
     /**
      * Creates a new FrameBodyTIPL datatype.
      *
-     * @param textEncoding DOCUMENT ME!
-     * @param text         DOCUMENT ME!
+     * @param textEncoding 
+     * @param text         
      */
     public FrameBodyTIPL(byte textEncoding, String text)
     {
@@ -71,8 +71,8 @@ public class FrameBodyTIPL
     /**
      * Creates a new FrameBodyTIPL datatype.
      *
-     * @throws java.io.IOException DOCUMENT ME!
-     * @throws InvalidTagException DOCUMENT ME!
+     * @throws java.io.IOException 
+     * @throws InvalidTagException 
      */
     public FrameBodyTIPL(ByteBuffer byteBuffer, int frameSize)
         throws InvalidTagException

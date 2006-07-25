@@ -53,9 +53,9 @@ public class FrameBodyENCR extends AbstractID3v2FrameBody implements ID3v24Frame
     /**
      * Creates a new FrameBodyENCR datatype.
      *
-     * @param owner        DOCUMENT ME!
-     * @param methodSymbol DOCUMENT ME!
-     * @param data         DOCUMENT ME!
+     * @param owner        
+     * @param methodSymbol 
+     * @param data         
      */
     public FrameBodyENCR(String owner, byte methodSymbol, byte[] data)
     {
@@ -86,9 +86,9 @@ public class FrameBodyENCR extends AbstractID3v2FrameBody implements ID3v24Frame
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @param owner DOCUMENT ME!
+     * @param owner 
      */
     public void setOwner(String owner)
     {
@@ -96,9 +96,9 @@ public class FrameBodyENCR extends AbstractID3v2FrameBody implements ID3v24Frame
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public String getOwner()
     {
@@ -106,7 +106,7 @@ public class FrameBodyENCR extends AbstractID3v2FrameBody implements ID3v24Frame
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      */
     protected void setupObjectList()
     {

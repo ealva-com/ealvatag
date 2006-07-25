@@ -37,32 +37,32 @@ import java.nio.ByteBuffer;
 public class FrameBodySYLT extends AbstractID3v2FrameBody implements ID3v24FrameBody,ID3v23FrameBody
 {
     /**
-     * DOCUMENT ME!
+     * 
      */
     LinkedList lines = new LinkedList();
 
     /**
-     * DOCUMENT ME!
+     * 
      */
     String description = "";
 
     /**
-     * DOCUMENT ME!
+     * 
      */
     String language = "";
 
     /**
-     * DOCUMENT ME!
+     * 
      */
     byte contentType = (byte) 0;
 
     /**
-     * DOCUMENT ME!
+     * 
      */
     byte textEncoding = (byte) 0;
 
     /**
-     * DOCUMENT ME!
+     * 
      */
     byte timeStampFormat = (byte) 0;
 
@@ -99,11 +99,11 @@ public class FrameBodySYLT extends AbstractID3v2FrameBody implements ID3v24Frame
     /**
      * Creates a new FrameBodySYLT datatype.
      *
-     * @param textEncoding    DOCUMENT ME!
-     * @param language        DOCUMENT ME!
-     * @param timeStampFormat DOCUMENT ME!
-     * @param contentType     DOCUMENT ME!
-     * @param description     DOCUMENT ME!
+     * @param textEncoding    
+     * @param language        
+     * @param timeStampFormat 
+     * @param contentType     
+     * @param description     
      */
     public FrameBodySYLT(byte textEncoding, String language, byte timeStampFormat, byte contentType, String description)
     {
@@ -126,9 +126,9 @@ public class FrameBodySYLT extends AbstractID3v2FrameBody implements ID3v24Frame
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public byte getContentType()
     {
@@ -136,9 +136,9 @@ public class FrameBodySYLT extends AbstractID3v2FrameBody implements ID3v24Frame
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public String getDescription()
     {
@@ -146,9 +146,9 @@ public class FrameBodySYLT extends AbstractID3v2FrameBody implements ID3v24Frame
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public String getIdentifier()
     {
@@ -156,9 +156,9 @@ public class FrameBodySYLT extends AbstractID3v2FrameBody implements ID3v24Frame
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public String getLanguage()
     {
@@ -166,9 +166,9 @@ public class FrameBodySYLT extends AbstractID3v2FrameBody implements ID3v24Frame
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public String getLyric()
     {
@@ -183,9 +183,9 @@ public class FrameBodySYLT extends AbstractID3v2FrameBody implements ID3v24Frame
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public int getSize()
     {
@@ -202,9 +202,9 @@ public class FrameBodySYLT extends AbstractID3v2FrameBody implements ID3v24Frame
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public byte getTextEncoding()
     {
@@ -212,9 +212,9 @@ public class FrameBodySYLT extends AbstractID3v2FrameBody implements ID3v24Frame
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public byte getTimeStampFormat()
     {
@@ -222,10 +222,10 @@ public class FrameBodySYLT extends AbstractID3v2FrameBody implements ID3v24Frame
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @param timeStamp DOCUMENT ME!
-     * @param text      DOCUMENT ME!
+     * @param timeStamp 
+     * @param text      
      */
     public void addLyric(int timeStamp, String text)
     {
@@ -236,9 +236,9 @@ public class FrameBodySYLT extends AbstractID3v2FrameBody implements ID3v24Frame
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @param line DOCUMENT ME!
+     * @param line 
      */
     public void addLyric(Lyrics3Line line)
     {
@@ -287,9 +287,9 @@ public class FrameBodySYLT extends AbstractID3v2FrameBody implements ID3v24Frame
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public Iterator iterator()
     {
@@ -298,9 +298,9 @@ public class FrameBodySYLT extends AbstractID3v2FrameBody implements ID3v24Frame
 
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public String toString()
     {

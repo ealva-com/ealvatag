@@ -54,7 +54,7 @@ public abstract class AbstractFrameBodyUrlLink extends AbstractID3v2FrameBody
     /**
      * Creates a new FrameBodyUrlLink datatype., set up with data.
      *
-     * @param urlLink DOCUMENT ME!
+     * @param urlLink 
      */
     public AbstractFrameBodyUrlLink(String urlLink)
     {
@@ -73,9 +73,9 @@ public abstract class AbstractFrameBodyUrlLink extends AbstractID3v2FrameBody
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public String getBriefDescription()
     {
@@ -85,7 +85,7 @@ public abstract class AbstractFrameBodyUrlLink extends AbstractID3v2FrameBody
     /**
      * Set URL Link
      *
-     * @param urlLink DOCUMENT ME!
+     * @param urlLink 
      */
     public void setUrlLink(String urlLink)
     {
@@ -95,7 +95,7 @@ public abstract class AbstractFrameBodyUrlLink extends AbstractID3v2FrameBody
     /**
      * Get URL Link
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public String getUrlLink()
     {
@@ -103,7 +103,7 @@ public abstract class AbstractFrameBodyUrlLink extends AbstractID3v2FrameBody
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      */
     protected void setupObjectList()
     {

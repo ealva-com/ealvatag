@@ -41,7 +41,7 @@ public class FrameBodyWCOP extends AbstractFrameBodyUrlLink  implements ID3v24Fr
     /**
      * Creates a new FrameBodyWCOP datatype.
      *
-     * @param urlLink DOCUMENT ME!
+     * @param urlLink 
      */
     public FrameBodyWCOP(String urlLink)
     {
@@ -56,8 +56,8 @@ public class FrameBodyWCOP extends AbstractFrameBodyUrlLink  implements ID3v24Fr
     /**
      * Creates a new FrameBodyWCOP datatype.
      *
-     * @throws java.io.IOException DOCUMENT ME!
-     * @throws InvalidTagException DOCUMENT ME!
+     * @throws java.io.IOException 
+     * @throws InvalidTagException 
      */
     public FrameBodyWCOP(ByteBuffer byteBuffer, int frameSize)
         throws InvalidTagException

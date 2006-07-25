@@ -34,7 +34,7 @@ public class StringDateTime extends StringSizeTerminated
     /**
      * Creates a new ObjectStringDateTime datatype.
      *
-     * @param identifier DOCUMENT ME!
+     * @param identifier 
      */
     public StringDateTime(String identifier, AbstractTagFrameBody frameBody)
     {
@@ -47,9 +47,9 @@ public class StringDateTime extends StringSizeTerminated
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @param value DOCUMENT ME!
+     * @param value 
      */
     public void setValue(Object value)
     {
@@ -60,9 +60,9 @@ public class StringDateTime extends StringSizeTerminated
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public Object getValue()
     {

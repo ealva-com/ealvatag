@@ -58,16 +58,16 @@ public class FrameBodyRVRB extends AbstractID3v2FrameBody implements ID3v24Frame
     /**
      * Creates a new FrameBodyRVRB datatype.
      *
-     * @param reverbLeft                 DOCUMENT ME!
-     * @param reverbRight                DOCUMENT ME!
-     * @param reverbBouncesLeft          DOCUMENT ME!
-     * @param reverbBouncesRight         DOCUMENT ME!
-     * @param reverbFeedbackLeftToLeft   DOCUMENT ME!
-     * @param reverbFeedbackLeftToRight  DOCUMENT ME!
-     * @param reverbFeedbackRightToRight DOCUMENT ME!
-     * @param reverbFeedbackRightToLeft  DOCUMENT ME!
-     * @param premixLeftToRight          DOCUMENT ME!
-     * @param premixRightToLeft          DOCUMENT ME!
+     * @param reverbLeft                 
+     * @param reverbRight                
+     * @param reverbBouncesLeft          
+     * @param reverbBouncesRight         
+     * @param reverbFeedbackLeftToLeft   
+     * @param reverbFeedbackLeftToRight  
+     * @param reverbFeedbackRightToRight 
+     * @param reverbFeedbackRightToLeft  
+     * @param premixLeftToRight          
+     * @param premixRightToLeft          
      */
     public FrameBodyRVRB(short reverbLeft, short reverbRight, byte reverbBouncesLeft, byte reverbBouncesRight, byte reverbFeedbackLeftToLeft, byte reverbFeedbackLeftToRight, byte reverbFeedbackRightToRight, byte reverbFeedbackRightToLeft, byte premixLeftToRight, byte premixRightToLeft)
     {
@@ -106,7 +106,7 @@ public class FrameBodyRVRB extends AbstractID3v2FrameBody implements ID3v24Frame
 
 
     /**
-     * DOCUMENT ME!
+     * 
      */
     protected void setupObjectList()
     {

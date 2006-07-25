@@ -185,27 +185,27 @@ public class ID3v24Tag
     protected boolean tagRestriction = false;
 
     /**
-     * DOCUMENT ME!
+     * 
      */
     protected byte imageEncodingRestriction = 0;
 
     /**
-     * DOCUMENT ME!
+     * 
      */
     protected byte imageSizeRestriction = 0;
 
     /**
-     * DOCUMENT ME!
+     * 
      */
     protected byte tagSizeRestriction = 0;
 
     /**
-     * DOCUMENT ME!
+     * 
      */
     protected byte textEncodingRestriction = 0;
 
     /**
-     * DOCUMENT ME!
+     * 
      */
     protected byte textFieldSizeRestriction = 0;
 
@@ -314,7 +314,7 @@ public class ID3v24Tag
     /**
      * Creates a new ID3v2_4 datatype based on another (non 2.4) tag
      *
-     * @param mp3tag DOCUMENT ME!
+     * @param mp3tag 
      */
     public ID3v24Tag(AbstractTag mp3tag)
     {
@@ -448,9 +448,9 @@ public class ID3v24Tag
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public String getIdentifier()
     {
@@ -461,7 +461,7 @@ public class ID3v24Tag
      * Return tag size based upon the sizes of the frames rather than the physical
      * no of bytes between start of ID3Tag and start of Audio Data.
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public int getSize()
     {
@@ -488,10 +488,10 @@ public class ID3v24Tag
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @param obj DOCUMENT ME!
-     * @return DOCUMENT ME!
+     * @param obj 
+     * @return 
      */
     public boolean equals(Object obj)
     {
@@ -540,10 +540,10 @@ public class ID3v24Tag
      * Read tag header, delegate reading of frames to readFrames()
      *
      * @param byteBuffer to read the tag from
-     * @throws TagException         DOCUMENT ME!
-     * @throws IOException          DOCUMENT ME!
-     * @throws TagNotFoundException DOCUMENT ME!
-     * @throws InvalidTagException  DOCUMENT ME!
+     * @throws TagException         
+     * @throws IOException          
+     * @throws TagNotFoundException 
+     * @throws InvalidTagException  
      */
     public void read(ByteBuffer byteBuffer)
         throws TagException
@@ -669,8 +669,8 @@ public class ID3v24Tag
     /**
      * Write this tag to file.
      *
-     * @param file DOCUMENT ME!
-     * @throws IOException DOCUMENT ME!
+     * @param file 
+     * @throws IOException 
      */
     public void write(File file, long audioStartLocation)
         throws IOException

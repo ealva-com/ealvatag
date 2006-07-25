@@ -29,24 +29,24 @@ import org.jaudiotagger.tag.InvalidDataTypeException;
 public class Lyrics3Image extends AbstractDataType
 {
     /**
-     * DOCUMENT ME!
+     * 
      */
     private Lyrics3TimeStamp time = null;
 
     /**
-     * DOCUMENT ME!
+     * 
      */
     private String description = "";
 
     /**
-     * DOCUMENT ME!
+     * 
      */
     private String filename = "";
 
     /**
      * Creates a new ObjectLyrics3Image datatype.
      *
-     * @param identifier DOCUMENT ME!
+     * @param identifier 
      */
     public Lyrics3Image(String identifier, AbstractTagFrameBody frameBody)
     {
@@ -62,9 +62,9 @@ public class Lyrics3Image extends AbstractDataType
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @param description DOCUMENT ME!
+     * @param description 
      */
     public void setDescription(String description)
     {
@@ -72,9 +72,9 @@ public class Lyrics3Image extends AbstractDataType
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public String getDescription()
     {
@@ -82,9 +82,9 @@ public class Lyrics3Image extends AbstractDataType
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @param filename DOCUMENT ME!
+     * @param filename 
      */
     public void setFilename(String filename)
     {
@@ -92,9 +92,9 @@ public class Lyrics3Image extends AbstractDataType
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public String getFilename()
     {
@@ -102,9 +102,9 @@ public class Lyrics3Image extends AbstractDataType
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public int getSize()
     {
@@ -121,9 +121,9 @@ public class Lyrics3Image extends AbstractDataType
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @param time DOCUMENT ME!
+     * @param time 
      */
     public void setTimeStamp(Lyrics3TimeStamp time)
     {
@@ -131,9 +131,9 @@ public class Lyrics3Image extends AbstractDataType
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public Lyrics3TimeStamp getTimeStamp()
     {
@@ -141,10 +141,10 @@ public class Lyrics3Image extends AbstractDataType
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @param obj DOCUMENT ME!
-     * @return DOCUMENT ME!
+     * @param obj 
+     * @return 
      */
     public boolean equals(Object obj)
     {
@@ -184,12 +184,12 @@ public class Lyrics3Image extends AbstractDataType
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @param imageString DOCUMENT ME!
-     * @param offset      DOCUMENT ME!
-     * @throws NullPointerException      DOCUMENT ME!
-     * @throws IndexOutOfBoundsException DOCUMENT ME!
+     * @param imageString 
+     * @param offset      
+     * @throws NullPointerException      
+     * @throws IndexOutOfBoundsException 
      */
     public void readString(String imageString, int offset)
     {
@@ -227,9 +227,9 @@ public class Lyrics3Image extends AbstractDataType
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public String toString()
     {
@@ -245,9 +245,9 @@ public class Lyrics3Image extends AbstractDataType
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public String writeString()
     {

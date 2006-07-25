@@ -30,16 +30,16 @@ import org.jaudiotagger.tag.InvalidDataTypeException;
 public class BooleanByte extends AbstractDataType
 {
     /**
-     * DOCUMENT ME!
+     * 
      */
     int bitPosition = -1;
 
     /**
      * Creates a new ObjectBooleanByte datatype.
      *
-     * @param identifier  DOCUMENT ME!
-     * @param bitPosition DOCUMENT ME!
-     * @throws IndexOutOfBoundsException DOCUMENT ME!
+     * @param identifier  
+     * @param bitPosition 
+     * @throws IndexOutOfBoundsException 
      */
     public BooleanByte(String identifier, AbstractTagFrameBody frameBody, int bitPosition)
     {
@@ -59,9 +59,9 @@ public class BooleanByte extends AbstractDataType
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public int getBitPosition()
     {
@@ -69,9 +69,9 @@ public class BooleanByte extends AbstractDataType
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public int getSize()
     {
@@ -79,10 +79,10 @@ public class BooleanByte extends AbstractDataType
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @param obj DOCUMENT ME!
-     * @return DOCUMENT ME!
+     * @param obj 
+     * @return 
      */
     public boolean equals(Object obj)
     {
@@ -102,12 +102,12 @@ public class BooleanByte extends AbstractDataType
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @param arr    DOCUMENT ME!
-     * @param offset DOCUMENT ME!
-     * @throws NullPointerException      DOCUMENT ME!
-     * @throws IndexOutOfBoundsException DOCUMENT ME!
+     * @param arr    
+     * @param offset 
+     * @throws NullPointerException      
+     * @throws IndexOutOfBoundsException 
      */
     public void readByteArray(byte[] arr, int offset) throws InvalidDataTypeException
     {
@@ -129,9 +129,9 @@ public class BooleanByte extends AbstractDataType
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public String toString()
     {
@@ -139,9 +139,9 @@ public class BooleanByte extends AbstractDataType
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public byte[] writeByteArray()
     {

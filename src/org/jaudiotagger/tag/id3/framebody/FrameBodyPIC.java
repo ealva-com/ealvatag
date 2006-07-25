@@ -54,11 +54,11 @@ public class FrameBodyPIC extends AbstractID3v2FrameBody implements ID3v22FrameB
     /**
      * Creates a new FrameBodyPIC datatype.
      *
-     * @param textEncoding DOCUMENT ME!
-     * @param imageFormat  DOCUMENT ME!
-     * @param pictureType  DOCUMENT ME!
-     * @param description  DOCUMENT ME!
-     * @param data         DOCUMENT ME!
+     * @param textEncoding 
+     * @param imageFormat  
+     * @param pictureType  
+     * @param description  
+     * @param data         
      */
     public FrameBodyPIC(byte textEncoding, String imageFormat, byte pictureType, String description, byte[] data)
     {
@@ -94,9 +94,9 @@ public class FrameBodyPIC extends AbstractID3v2FrameBody implements ID3v22FrameB
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @param description DOCUMENT ME!
+     * @param description 
      */
     public void setDescription(String description)
     {
@@ -104,9 +104,9 @@ public class FrameBodyPIC extends AbstractID3v2FrameBody implements ID3v22FrameB
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public String getDescription()
     {
@@ -136,7 +136,7 @@ public class FrameBodyPIC extends AbstractID3v2FrameBody implements ID3v22FrameB
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      */
     protected void setupObjectList()
     {

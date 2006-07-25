@@ -56,11 +56,11 @@ public class FrameBodyGEOB extends AbstractID3v2FrameBody implements ID3v24Frame
     /**
      * Creates a new FrameBodyGEOB datatype.
      *
-     * @param textEncoding DOCUMENT ME!
-     * @param mimeType     DOCUMENT ME!
-     * @param filename     DOCUMENT ME!
-     * @param description  DOCUMENT ME!
-     * @param object       DOCUMENT ME!
+     * @param textEncoding 
+     * @param mimeType     
+     * @param filename     
+     * @param description  
+     * @param object       
      */
     public FrameBodyGEOB(byte textEncoding, String mimeType, String filename, String description, byte[] object)
     {
@@ -83,9 +83,9 @@ public class FrameBodyGEOB extends AbstractID3v2FrameBody implements ID3v24Frame
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @param description DOCUMENT ME!
+     * @param description 
      */
     public void setDescription(String description)
     {
@@ -93,9 +93,9 @@ public class FrameBodyGEOB extends AbstractID3v2FrameBody implements ID3v24Frame
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public String getDescription()
     {
@@ -103,9 +103,9 @@ public class FrameBodyGEOB extends AbstractID3v2FrameBody implements ID3v24Frame
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public String getIdentifier()
     {
@@ -129,7 +129,7 @@ public class FrameBodyGEOB extends AbstractID3v2FrameBody implements ID3v24Frame
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      */
     protected void setupObjectList()
     {

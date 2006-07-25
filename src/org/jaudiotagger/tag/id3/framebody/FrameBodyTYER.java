@@ -59,8 +59,8 @@ public class FrameBodyTYER extends AbstractFrameBodyTextInfo implements ID3v23Fr
     /**
      * Creates a new FrameBodyTYER datatype.
      *
-     * @param textEncoding DOCUMENT ME!
-     * @param text         DOCUMENT ME!
+     * @param textEncoding 
+     * @param text         
      */
     public FrameBodyTYER(byte textEncoding, String text)
     {
@@ -70,7 +70,7 @@ public class FrameBodyTYER extends AbstractFrameBodyTextInfo implements ID3v23Fr
     /**
      * Creates a new FrameBodyTYER datatype.
      *
-     * @throws InvalidTagException DOCUMENT ME!
+     * @throws InvalidTagException 
      */
     public FrameBodyTYER(ByteBuffer byteBuffer, int frameSize)
         throws InvalidTagException

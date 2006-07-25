@@ -49,7 +49,7 @@ public class FrameBodyMCDI extends AbstractID3v2FrameBody implements ID3v24Frame
     /**
      * Creates a new FrameBodyMCDI datatype.
      *
-     * @param cdTOC DOCUMENT ME!
+     * @param cdTOC 
      */
     public FrameBodyMCDI(byte[] cdTOC)
     {
@@ -78,7 +78,7 @@ public class FrameBodyMCDI extends AbstractID3v2FrameBody implements ID3v24Frame
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      */
     protected void setupObjectList()
     {

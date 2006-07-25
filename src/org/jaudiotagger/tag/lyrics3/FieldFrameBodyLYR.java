@@ -41,7 +41,7 @@ import java.nio.ByteBuffer;
 public class FieldFrameBodyLYR extends AbstractLyrics3v2FieldFrameBody
 {
     /**
-     * DOCUMENT ME!
+     * 
      */
     private ArrayList lines = new ArrayList();
 
@@ -68,7 +68,7 @@ public class FieldFrameBodyLYR extends AbstractLyrics3v2FieldFrameBody
     /**
      * Creates a new FieldBodyLYR datatype.
      *
-     * @param line DOCUMENT ME!
+     * @param line 
      */
     public FieldFrameBodyLYR(String line)
     {
@@ -78,7 +78,7 @@ public class FieldFrameBodyLYR extends AbstractLyrics3v2FieldFrameBody
     /**
      * Creates a new FieldBodyLYR datatype.
      *
-     * @param sync DOCUMENT ME!
+     * @param sync 
      */
     public FieldFrameBodyLYR(FrameBodySYLT sync)
     {
@@ -88,7 +88,7 @@ public class FieldFrameBodyLYR extends AbstractLyrics3v2FieldFrameBody
     /**
      * Creates a new FieldBodyLYR datatype.
      *
-     * @param unsync DOCUMENT ME!
+     * @param unsync 
      */
     public FieldFrameBodyLYR(FrameBodyUSLT unsync)
     {
@@ -109,9 +109,9 @@ public class FieldFrameBodyLYR extends AbstractLyrics3v2FieldFrameBody
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public String getIdentifier()
     {
@@ -119,9 +119,9 @@ public class FieldFrameBodyLYR extends AbstractLyrics3v2FieldFrameBody
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @param str DOCUMENT ME!
+     * @param str 
      */
     public void setLyric(String str)
     {
@@ -129,9 +129,9 @@ public class FieldFrameBodyLYR extends AbstractLyrics3v2FieldFrameBody
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public String getLyric()
     {
@@ -139,9 +139,9 @@ public class FieldFrameBodyLYR extends AbstractLyrics3v2FieldFrameBody
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public int getSize()
     {
@@ -160,10 +160,10 @@ public class FieldFrameBodyLYR extends AbstractLyrics3v2FieldFrameBody
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @param obj DOCUMENT ME!
-     * @return DOCUMENT ME!
+     * @param obj 
+     * @return 
      */
     public boolean isSubsetOf(Object obj)
     {
@@ -186,9 +186,9 @@ public class FieldFrameBodyLYR extends AbstractLyrics3v2FieldFrameBody
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @param sync DOCUMENT ME!
+     * @param sync 
      */
     public void addLyric(FrameBodySYLT sync)
     {
@@ -225,9 +225,9 @@ public class FieldFrameBodyLYR extends AbstractLyrics3v2FieldFrameBody
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @param unsync DOCUMENT ME!
+     * @param unsync 
      */
     public void addLyric(FrameBodyUSLT unsync)
     {
@@ -238,10 +238,10 @@ public class FieldFrameBodyLYR extends AbstractLyrics3v2FieldFrameBody
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @param obj DOCUMENT ME!
-     * @return DOCUMENT ME!
+     * @param obj 
+     * @return 
      */
     public boolean equals(Object obj)
     {
@@ -261,9 +261,9 @@ public class FieldFrameBodyLYR extends AbstractLyrics3v2FieldFrameBody
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public boolean hasTimeStamp()
     {
@@ -281,9 +281,9 @@ public class FieldFrameBodyLYR extends AbstractLyrics3v2FieldFrameBody
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public Iterator iterator()
     {
@@ -291,7 +291,7 @@ public class FieldFrameBodyLYR extends AbstractLyrics3v2FieldFrameBody
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
      *
      */
@@ -321,9 +321,9 @@ public class FieldFrameBodyLYR extends AbstractLyrics3v2FieldFrameBody
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public String toString()
     {
@@ -338,10 +338,10 @@ public class FieldFrameBodyLYR extends AbstractLyrics3v2FieldFrameBody
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @param file DOCUMENT ME!
-     * @throws java.io.IOException DOCUMENT ME!
+     * @param file 
+     * @throws java.io.IOException 
      */
     public void write(RandomAccessFile file)
         throws java.io.IOException
@@ -384,9 +384,9 @@ public class FieldFrameBodyLYR extends AbstractLyrics3v2FieldFrameBody
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @param lineString DOCUMENT ME!
+     * @param lineString 
      */
     private void readString(String lineString)
     {
@@ -418,9 +418,9 @@ public class FieldFrameBodyLYR extends AbstractLyrics3v2FieldFrameBody
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     private String writeString()
     {

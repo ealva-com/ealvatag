@@ -89,9 +89,9 @@ public abstract class AbstractTag extends AbstractTagItem
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     abstract public Iterator iterator();
 }

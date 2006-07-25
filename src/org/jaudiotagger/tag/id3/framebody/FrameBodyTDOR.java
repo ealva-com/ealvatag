@@ -57,8 +57,8 @@ public class FrameBodyTDOR extends AbstractFrameBodyTextInfo implements ID3v24Fr
     /**
      * Creates a new FrameBodyTDOR datatype.
      *
-     * @param textEncoding DOCUMENT ME!
-     * @param text         DOCUMENT ME!
+     * @param textEncoding 
+     * @param text         
      */
     public FrameBodyTDOR(byte textEncoding, String text)
     {
@@ -68,8 +68,8 @@ public class FrameBodyTDOR extends AbstractFrameBodyTextInfo implements ID3v24Fr
     /**
      * Creates a new FrameBodyTDOR datatype.
      *
-     * @throws java.io.IOException DOCUMENT ME!
-     * @throws InvalidTagException DOCUMENT ME!
+     * @throws java.io.IOException 
+     * @throws InvalidTagException 
      */
     public FrameBodyTDOR(ByteBuffer byteBuffer, int frameSize)
         throws InvalidTagException

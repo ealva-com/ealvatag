@@ -34,7 +34,7 @@ public class StringDate extends StringFixedLength
     /**
      * Creates a new ObjectStringDate datatype.
      *
-     * @param identifier DOCUMENT ME!
+     * @param identifier 
      */
     public StringDate(String identifier, AbstractTagFrameBody frameBody)
     {
@@ -47,9 +47,9 @@ public class StringDate extends StringFixedLength
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @param value DOCUMENT ME!
+     * @param value 
      */
     public void setValue(Object value)
     {
@@ -60,9 +60,9 @@ public class StringDate extends StringFixedLength
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public Object getValue()
     {

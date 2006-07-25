@@ -41,7 +41,7 @@ public class FrameBodyWPUB extends AbstractFrameBodyUrlLink   implements ID3v24F
     /**
      * Creates a new FrameBodyWPUB datatype.
      *
-     * @param urlLink DOCUMENT ME!
+     * @param urlLink 
      */
     public FrameBodyWPUB(String urlLink)
     {
@@ -56,8 +56,8 @@ public class FrameBodyWPUB extends AbstractFrameBodyUrlLink   implements ID3v24F
     /**
      * Creates a new FrameBodyWPUB datatype.
      *
-     * @throws java.io.IOException DOCUMENT ME!
-     * @throws InvalidTagException DOCUMENT ME!
+     * @throws java.io.IOException 
+     * @throws InvalidTagException 
      */
     public FrameBodyWPUB(ByteBuffer byteBuffer, int frameSize)
         throws InvalidTagException

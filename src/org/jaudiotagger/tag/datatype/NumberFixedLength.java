@@ -35,9 +35,9 @@ public class NumberFixedLength
     /**
      * Creates a new ObjectNumberFixedLength datatype.
      *
-     * @param identifier DOCUMENT ME!
+     * @param identifier 
      * @param size       the number of significant places that the number is held to
-     * @throws IllegalArgumentException DOCUMENT ME!
+     * @throws IllegalArgumentException 
      */
     public NumberFixedLength(String identifier, AbstractTagFrameBody frameBody, int size)
     {
@@ -81,10 +81,10 @@ public class NumberFixedLength
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @param obj DOCUMENT ME!
-     * @return DOCUMENT ME!
+     * @param obj 
+     * @return 
      */
     public boolean equals(Object obj)
     {
@@ -103,10 +103,10 @@ public class NumberFixedLength
     /**
      * Read the number from the byte array
      *
-     * @param arr    DOCUMENT ME!
-     * @param offset DOCUMENT ME!
-     * @throws NullPointerException      DOCUMENT ME!
-     * @throws IndexOutOfBoundsException DOCUMENT ME!
+     * @param arr    
+     * @param offset 
+     * @throws NullPointerException      
+     * @throws IndexOutOfBoundsException 
      */
     public void readByteArray(byte[] arr, int offset) throws InvalidDataTypeException
     {
@@ -130,9 +130,9 @@ public class NumberFixedLength
 
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public String toString()
     {
@@ -149,7 +149,7 @@ public class NumberFixedLength
     /**
      * Write data to byte array
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public byte[] writeByteArray()
     {

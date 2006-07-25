@@ -31,15 +31,15 @@ import org.jaudiotagger.tag.InvalidDataTypeException;
 public class NumberVariableLength extends AbstractDataType
 {
     /**
-     * DOCUMENT ME!
+     * 
      */
     int minLength = 1;
 
     /**
      * Creates a new ObjectNumberVariableLength datatype.
      *
-     * @param identifier  DOCUMENT ME!
-     * @param minimumSize DOCUMENT ME!
+     * @param identifier  
+     * @param minimumSize 
      */
     public NumberVariableLength(String identifier, AbstractTagFrameBody frameBody, int minimumSize)
     {
@@ -58,9 +58,9 @@ public class NumberVariableLength extends AbstractDataType
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public int getMaximumLenth()
     {
@@ -68,9 +68,9 @@ public class NumberVariableLength extends AbstractDataType
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public int getMinimumLength()
     {
@@ -78,9 +78,9 @@ public class NumberVariableLength extends AbstractDataType
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @param minimumSize DOCUMENT ME!
+     * @param minimumSize 
      */
     public void setMinimumSize(int minimumSize)
     {
@@ -91,9 +91,9 @@ public class NumberVariableLength extends AbstractDataType
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public int getSize()
     {
@@ -124,10 +124,10 @@ public class NumberVariableLength extends AbstractDataType
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @param obj DOCUMENT ME!
-     * @return DOCUMENT ME!
+     * @param obj 
+     * @return 
      */
     public boolean equals(Object obj)
     {
@@ -149,10 +149,10 @@ public class NumberVariableLength extends AbstractDataType
     /**
      * Read from Byte Array
      *
-     * @param arr    DOCUMENT ME!
-     * @param offset DOCUMENT ME!
-     * @throws NullPointerException      DOCUMENT ME!
-     * @throws IndexOutOfBoundsException DOCUMENT ME!
+     * @param arr    
+     * @param offset 
+     * @throws NullPointerException      
+     * @throws IndexOutOfBoundsException 
      */
     public void readByteArray(byte[] arr, int offset) throws InvalidDataTypeException
     {
@@ -179,9 +179,9 @@ public class NumberVariableLength extends AbstractDataType
 
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public String toString()
     {
@@ -198,7 +198,7 @@ public class NumberVariableLength extends AbstractDataType
     /**
      * Write to Byte Array
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public byte[] writeByteArray()
     {

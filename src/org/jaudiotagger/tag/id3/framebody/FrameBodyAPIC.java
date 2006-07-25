@@ -69,11 +69,11 @@ public class FrameBodyAPIC extends AbstractID3v2FrameBody implements ID3v24Frame
     /**
      * Creates a new FrameBodyAPIC datatype.
      *
-     * @param textEncoding DOCUMENT ME!
-     * @param mimeType     DOCUMENT ME!
-     * @param pictureType  DOCUMENT ME!
-     * @param description  DOCUMENT ME!
-     * @param data         DOCUMENT ME!
+     * @param textEncoding 
+     * @param mimeType     
+     * @param pictureType  
+     * @param description  
+     * @param data         
      */
     public FrameBodyAPIC(byte textEncoding,
                          String mimeType,
@@ -101,9 +101,9 @@ public class FrameBodyAPIC extends AbstractID3v2FrameBody implements ID3v24Frame
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @param description DOCUMENT ME!
+     * @param description 
      */
     public void setDescription(String description)
     {
@@ -111,9 +111,9 @@ public class FrameBodyAPIC extends AbstractID3v2FrameBody implements ID3v24Frame
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public String getDescription()
     {
@@ -143,7 +143,7 @@ public class FrameBodyAPIC extends AbstractID3v2FrameBody implements ID3v24Frame
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      */
     protected void setupObjectList()
     {

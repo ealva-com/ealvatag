@@ -52,9 +52,9 @@ public class FrameBodyCRM extends AbstractID3v2FrameBody implements ID3v22FrameB
     /**
      * Creates a new FrameBodyCRM datatype.
      *
-     * @param owner       DOCUMENT ME!
-     * @param description DOCUMENT ME!
-     * @param data        DOCUMENT ME!
+     * @param owner       
+     * @param description 
+     * @param data        
      */
     public FrameBodyCRM(String owner, String description, byte[] data)
     {
@@ -85,9 +85,9 @@ public class FrameBodyCRM extends AbstractID3v2FrameBody implements ID3v22FrameB
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public String getOwner()
     {
@@ -95,9 +95,9 @@ public class FrameBodyCRM extends AbstractID3v2FrameBody implements ID3v22FrameB
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @param description DOCUMENT ME!
+     * @param description 
      */
     public void getOwner(String description)
     {
@@ -105,7 +105,7 @@ public class FrameBodyCRM extends AbstractID3v2FrameBody implements ID3v22FrameB
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      */
     protected void setupObjectList()
     {

@@ -187,7 +187,7 @@ public abstract class AbstractDataType
     /**
      * Return the key as declared by the frame bodies datatype list
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public String getIdentifier()
     {
@@ -198,7 +198,7 @@ public abstract class AbstractDataType
      * Set the value held by this datatype, this is used typically used when the
      * user wants to modify the value in an existing frame.
      *
-     * @param value DOCUMENT ME!
+     * @param value 
      */
     public void setValue(Object value)
     {
@@ -208,7 +208,7 @@ public abstract class AbstractDataType
     /**
      * Get value held by this Object
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public Object getValue()
     {
@@ -220,7 +220,7 @@ public abstract class AbstractDataType
      * Used for reading Strings, this class should be overridden
      * for non String Objects
      *
-     * @param arr DOCUMENT ME!
+     * @param arr 
      */
     final public void readByteArray(byte[] arr)
     {
@@ -237,7 +237,7 @@ public abstract class AbstractDataType
      * This defines the size in bytes of the datatype being
      * held when read/written to file.
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     abstract public int getSize();
 
@@ -247,10 +247,10 @@ public abstract class AbstractDataType
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @param obj DOCUMENT ME!
-     * @return DOCUMENT ME!
+     * @param obj 
+     * @return 
      */
     public boolean equals(Object obj)
     {
@@ -355,8 +355,8 @@ public abstract class AbstractDataType
      * starting at offset.
      * This class must be overridden
      *
-     * @param arr    DOCUMENT ME!
-     * @param offset DOCUMENT ME!
+     * @param arr    
+     * @param offset 
      */
     public abstract void readByteArray(byte[] arr, int offset) throws InvalidDataTypeException;
 
@@ -365,7 +365,7 @@ public abstract class AbstractDataType
      * Starting point write ID3 Datatype back to array of bytes.
      * This class must be overridden.
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
 
     public abstract byte[] writeByteArray();

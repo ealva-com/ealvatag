@@ -283,7 +283,7 @@ public class ID3v24Frame
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
      * @param obj
      * @return

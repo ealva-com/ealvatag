@@ -338,7 +338,7 @@ public class MP3File extends org.jaudiotagger.audio.AbstractAudioFile
     /**
      * Sets the v1(_1)tag to the tag provided as an argument.
      *
-     * @param id3v1tag DOCUMENT ME!
+     * @param id3v1tag 
      */
     public void setID3v1Tag(ID3v1Tag id3v1tag)
     {
@@ -389,7 +389,7 @@ public class MP3File extends org.jaudiotagger.audio.AbstractAudioFile
      * Also store a v24 version of tag as v24 is the interface to be used
      * when talking with client applications.
      *
-     * @param id3v2tag DOCUMENT ME!
+     * @param id3v2tag 
      */
     public void setID3v2Tag(AbstractID3v2Tag id3v2tag)
     {
@@ -447,9 +447,9 @@ public class MP3File extends org.jaudiotagger.audio.AbstractAudioFile
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @param lyrics3tag DOCUMENT ME!
+     * @param lyrics3tag 
      */
     public void setLyrics3Tag(AbstractLyrics3 lyrics3tag)
     {
@@ -470,9 +470,9 @@ public class MP3File extends org.jaudiotagger.audio.AbstractAudioFile
     /**
      * Remove tag from file
      *
-     * @param mp3tag DOCUMENT ME!
-     * @throws FileNotFoundException DOCUMENT ME!
-     * @throws IOException           DOCUMENT ME!
+     * @param mp3tag 
+     * @throws FileNotFoundException 
+     * @throws IOException           
      */
     public void delete(AbstractTag mp3tag)
         throws FileNotFoundException, IOException

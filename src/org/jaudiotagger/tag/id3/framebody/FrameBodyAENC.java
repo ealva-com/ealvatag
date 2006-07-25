@@ -51,10 +51,10 @@ public class FrameBodyAENC extends AbstractID3v2FrameBody  implements ID3v24Fram
     /**
      * Creates a new FrameBodyAENC datatype.
      *
-     * @param owner         DOCUMENT ME!
-     * @param previewStart  DOCUMENT ME!
-     * @param previewLength DOCUMENT ME!
-     * @param data          DOCUMENT ME!
+     * @param owner         
+     * @param previewStart  
+     * @param previewLength 
+     * @param data          
      */
     public FrameBodyAENC(String owner,
                          short previewStart,
@@ -89,9 +89,9 @@ public class FrameBodyAENC extends AbstractID3v2FrameBody  implements ID3v24Fram
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public String getOwner()
     {
@@ -99,9 +99,9 @@ public class FrameBodyAENC extends AbstractID3v2FrameBody  implements ID3v24Fram
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @param description DOCUMENT ME!
+     * @param description 
      */
     public void getOwner(String description)
     {
@@ -109,7 +109,7 @@ public class FrameBodyAENC extends AbstractID3v2FrameBody  implements ID3v24Fram
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      */
     protected void setupObjectList()
     {

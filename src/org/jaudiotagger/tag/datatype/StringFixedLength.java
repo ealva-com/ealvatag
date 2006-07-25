@@ -41,9 +41,9 @@ public class StringFixedLength
     /**
      * Creates a new ObjectStringFixedsize datatype.
      *
-     * @param identifier DOCUMENT ME!
-     * @param size       DOCUMENT ME!
-     * @throws IllegalArgumentException DOCUMENT ME!
+     * @param identifier 
+     * @param size       
+     * @throws IllegalArgumentException 
      */
     public StringFixedLength(String identifier, AbstractTagFrameBody frameBody, int size)
     {
@@ -62,10 +62,10 @@ public class StringFixedLength
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @param obj DOCUMENT ME!
-     * @return DOCUMENT ME!
+     * @param obj 
+     * @return 
      */
     public boolean equals(Object obj)
     {

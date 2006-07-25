@@ -55,10 +55,10 @@ public class FrameBodyEQU2 extends AbstractID3v2FrameBody  implements ID3v24Fram
     /**
      * Creates a new FrameBodyEQU2 datatype.
      *
-     * @param interpolationMethod DOCUMENT ME!
-     * @param owner               DOCUMENT ME!
-     * @param frequency           DOCUMENT ME!
-     * @param volumeAdjustment    DOCUMENT ME!
+     * @param interpolationMethod 
+     * @param owner               
+     * @param frequency           
+     * @param volumeAdjustment    
      */
     public FrameBodyEQU2(byte interpolationMethod, String owner, short frequency, short volumeAdjustment)
     {
@@ -89,9 +89,9 @@ public class FrameBodyEQU2 extends AbstractID3v2FrameBody  implements ID3v24Fram
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public String getOwner()
     {
@@ -99,9 +99,9 @@ public class FrameBodyEQU2 extends AbstractID3v2FrameBody  implements ID3v24Fram
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @param description DOCUMENT ME!
+     * @param description 
      */
     public void getOwner(String description)
     {
@@ -109,10 +109,10 @@ public class FrameBodyEQU2 extends AbstractID3v2FrameBody  implements ID3v24Fram
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @param frequency        DOCUMENT ME!
-     * @param volumeAdjustment DOCUMENT ME!
+     * @param frequency        
+     * @param volumeAdjustment 
      */
     public void addGroup(short frequency, short volumeAdjustment)
     {
@@ -125,7 +125,7 @@ public class FrameBodyEQU2 extends AbstractID3v2FrameBody  implements ID3v24Fram
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      */
     protected void setupObjectList()
     {

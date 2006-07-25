@@ -49,32 +49,32 @@ public class ID3v1Tag
     protected static final int GENRE_UNDEFINED = 0xff;
 
     /**
-     * DOCUMENT ME!
+     * 
      */
     protected String album = "";
 
     /**
-     * DOCUMENT ME!
+     * 
      */
     protected String artist = "";
 
     /**
-     * DOCUMENT ME!
+     * 
      */
     protected String comment = "";
 
     /**
-     * DOCUMENT ME!
+     * 
      */
     protected String title = "";
 
     /**
-     * DOCUMENT ME!
+     * 
      */
     protected String year = "";
 
     /**
-     * DOCUMENT ME!
+     * 
      */
     protected byte genre = (byte) -1;
 
@@ -293,10 +293,10 @@ public class ID3v1Tag
 
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @param obj DOCUMENT ME!
-     * @return DOCUMENT ME!
+     * @param obj 
+     * @return 
      */
     public boolean equals(Object obj)
     {
@@ -333,9 +333,9 @@ public class ID3v1Tag
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public Iterator iterator()
     {
@@ -346,11 +346,11 @@ public class ID3v1Tag
 
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @param byteBuffer DOCUMENT ME!
-     * @throws TagNotFoundException DOCUMENT ME!
-     * @throws IOException          DOCUMENT ME!
+     * @param byteBuffer 
+     * @throws TagNotFoundException 
+     * @throws IOException          
      */
     public void read(ByteBuffer byteBuffer)
         throws TagNotFoundException
@@ -403,10 +403,10 @@ public class ID3v1Tag
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
-     * @throws IOException DOCUMENT ME!
+     * @return 
+     * @throws IOException 
      */
     public boolean seek(ByteBuffer byteBuffer)
     {
@@ -419,8 +419,8 @@ public class ID3v1Tag
     /**
      * Write this tag to the file, replacing any tag previously existing
      *
-     * @param file DOCUMENT ME!
-     * @throws IOException DOCUMENT ME!
+     * @param file 
+     * @throws IOException 
      */
     public void write(RandomAccessFile file)
         throws IOException
@@ -487,9 +487,9 @@ public class ID3v1Tag
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public void createStructure()
     {

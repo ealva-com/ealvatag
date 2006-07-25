@@ -59,15 +59,15 @@ public class FrameBodyCOMR extends AbstractID3v2FrameBody implements ID3v24Frame
     /**
      * Creates a new FrameBodyCOMR datatype.
      *
-     * @param textEncoding DOCUMENT ME!
-     * @param priceString  DOCUMENT ME!
-     * @param validUntil   DOCUMENT ME!
-     * @param contactUrl   DOCUMENT ME!
-     * @param recievedAs   DOCUMENT ME!
-     * @param nameOfSeller DOCUMENT ME!
-     * @param description  DOCUMENT ME!
-     * @param mimeType     DOCUMENT ME!
-     * @param sellerLogo   DOCUMENT ME!
+     * @param textEncoding 
+     * @param priceString  
+     * @param validUntil   
+     * @param contactUrl   
+     * @param recievedAs   
+     * @param nameOfSeller 
+     * @param description  
+     * @param mimeType     
+     * @param sellerLogo   
      */
     public FrameBodyCOMR(byte textEncoding, String priceString, String validUntil, String contactUrl, byte recievedAs, String nameOfSeller, String description, String mimeType, byte[] sellerLogo)
     {
@@ -104,9 +104,9 @@ public class FrameBodyCOMR extends AbstractID3v2FrameBody implements ID3v24Frame
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public String getOwner()
     {
@@ -114,9 +114,9 @@ public class FrameBodyCOMR extends AbstractID3v2FrameBody implements ID3v24Frame
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @param description DOCUMENT ME!
+     * @param description 
      */
     public void getOwner(String description)
     {
@@ -139,7 +139,7 @@ public class FrameBodyCOMR extends AbstractID3v2FrameBody implements ID3v24Frame
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      */
     protected void setupObjectList()
     {

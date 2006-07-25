@@ -46,8 +46,8 @@ public class FrameBodyTOPE extends AbstractFrameBodyTextInfo
     /**
      * Creates a new FrameBodyTOPE datatype.
      *
-     * @param textEncoding DOCUMENT ME!
-     * @param text         DOCUMENT ME!
+     * @param textEncoding 
+     * @param text         
      */
     public FrameBodyTOPE(byte textEncoding, String text)
     {
@@ -57,8 +57,8 @@ public class FrameBodyTOPE extends AbstractFrameBodyTextInfo
     /**
      * Creates a new FrameBodyTOPE datatype.
      *
-     * @throws java.io.IOException DOCUMENT ME!
-     * @throws InvalidTagException DOCUMENT ME!
+     * @throws java.io.IOException 
+     * @throws InvalidTagException 
      */
     public FrameBodyTOPE(ByteBuffer byteBuffer, int frameSize)
         throws InvalidTagException

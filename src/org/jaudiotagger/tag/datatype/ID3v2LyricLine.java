@@ -29,12 +29,12 @@ import org.jaudiotagger.tag.InvalidDataTypeException;
 public class ID3v2LyricLine extends AbstractDataType
 {
     /**
-     * DOCUMENT ME!
+     * 
      */
     String text = "";
 
     /**
-     * DOCUMENT ME!
+     * 
      */
     long timeStamp = 0;
 
@@ -51,9 +51,9 @@ public class ID3v2LyricLine extends AbstractDataType
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public int getSize()
     {
@@ -66,9 +66,9 @@ public class ID3v2LyricLine extends AbstractDataType
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public String getText()
     {
@@ -81,9 +81,9 @@ public class ID3v2LyricLine extends AbstractDataType
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public long getTimeStamp()
     {
@@ -91,10 +91,10 @@ public class ID3v2LyricLine extends AbstractDataType
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @param obj DOCUMENT ME!
-     * @return DOCUMENT ME!
+     * @param obj 
+     * @return 
      */
     public boolean equals(Object obj)
     {
@@ -119,12 +119,12 @@ public class ID3v2LyricLine extends AbstractDataType
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @param arr    DOCUMENT ME!
-     * @param offset DOCUMENT ME!
-     * @throws NullPointerException      DOCUMENT ME!
-     * @throws IndexOutOfBoundsException DOCUMENT ME!
+     * @param arr    
+     * @param offset 
+     * @throws NullPointerException      
+     * @throws IndexOutOfBoundsException 
      */
     public void readByteArray(byte[] arr, int offset) throws InvalidDataTypeException
     {
@@ -152,9 +152,9 @@ public class ID3v2LyricLine extends AbstractDataType
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public String toString()
     {
@@ -162,9 +162,9 @@ public class ID3v2LyricLine extends AbstractDataType
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public byte[] writeByteArray()
     {

@@ -51,8 +51,8 @@ public class FrameBodyPOSS extends AbstractID3v2FrameBody implements ID3v24Frame
     /**
      * Creates a new FrameBodyPOSS datatype.
      *
-     * @param timeStampFormat DOCUMENT ME!
-     * @param position        DOCUMENT ME!
+     * @param timeStampFormat 
+     * @param position        
      */
     public FrameBodyPOSS(byte timeStampFormat, long position)
     {
@@ -83,7 +83,7 @@ public class FrameBodyPOSS extends AbstractID3v2FrameBody implements ID3v24Frame
 
 
     /**
-     * DOCUMENT ME!
+     * 
      */
     protected void setupObjectList()
     {

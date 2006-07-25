@@ -29,12 +29,12 @@ import org.jaudiotagger.tag.InvalidDataTypeException;
 public class Lyrics3TimeStamp extends AbstractDataType
 {
     /**
-     * DOCUMENT ME!
+     * 
      */
     private long minute = 0;
 
     /**
-     * DOCUMENT ME!
+     * 
      */
     private long second = 0;
 
@@ -48,7 +48,7 @@ public class Lyrics3TimeStamp extends AbstractDataType
     /**
      * Creates a new ObjectLyrics3TimeStamp datatype.
      *
-     * @param identifier DOCUMENT ME!
+     * @param identifier 
      */
     public Lyrics3TimeStamp(String identifier, AbstractTagFrameBody frameBody)
     {
@@ -73,9 +73,9 @@ public class Lyrics3TimeStamp extends AbstractDataType
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public long getMinute()
     {
@@ -88,9 +88,9 @@ public class Lyrics3TimeStamp extends AbstractDataType
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public long getSecond()
     {
@@ -98,9 +98,9 @@ public class Lyrics3TimeStamp extends AbstractDataType
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public int getSize()
     {
@@ -110,8 +110,8 @@ public class Lyrics3TimeStamp extends AbstractDataType
     /**
      * Creates a new ObjectLyrics3TimeStamp datatype.
      *
-     * @param timeStamp       DOCUMENT ME!
-     * @param timeStampFormat DOCUMENT ME!
+     * @param timeStamp       
+     * @param timeStampFormat 
      */
     public void setTimeStamp(long timeStamp, byte timeStampFormat)
     {
@@ -124,10 +124,10 @@ public class Lyrics3TimeStamp extends AbstractDataType
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @param obj DOCUMENT ME!
-     * @return DOCUMENT ME!
+     * @param obj 
+     * @return 
      */
     public boolean equals(Object obj)
     {
@@ -152,12 +152,12 @@ public class Lyrics3TimeStamp extends AbstractDataType
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @param timeStamp DOCUMENT ME!
-     * @param offset    DOCUMENT ME!
-     * @throws NullPointerException      DOCUMENT ME!
-     * @throws IndexOutOfBoundsException DOCUMENT ME!
+     * @param timeStamp 
+     * @param offset    
+     * @throws NullPointerException      
+     * @throws IndexOutOfBoundsException 
      */
     public void readString(String timeStamp, int offset)
     {
@@ -186,9 +186,9 @@ public class Lyrics3TimeStamp extends AbstractDataType
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public String toString()
     {
@@ -196,9 +196,9 @@ public class Lyrics3TimeStamp extends AbstractDataType
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public String writeString()
     {

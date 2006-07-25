@@ -38,7 +38,7 @@ import java.nio.ByteBuffer;
 public class Lyrics3v1 extends AbstractLyrics3
 {
     /**
-     * DOCUMENT ME!
+     * 
      */
     private String lyric = "";
 
@@ -83,9 +83,9 @@ public class Lyrics3v1 extends AbstractLyrics3
     /**
      * Creates a new Lyrics3v1 datatype.
      *
-     * @param file DOCUMENT ME!
-     * @throws TagNotFoundException DOCUMENT ME!
-     * @throws java.io.IOException  DOCUMENT ME!
+     * @param file 
+     * @throws TagNotFoundException 
+     * @throws java.io.IOException  
      */
     public Lyrics3v1(ByteBuffer byteBuffer)
         throws TagNotFoundException, java.io.IOException
@@ -100,9 +100,9 @@ public class Lyrics3v1 extends AbstractLyrics3
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public String getIdentifier()
     {
@@ -110,9 +110,9 @@ public class Lyrics3v1 extends AbstractLyrics3
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @param lyric DOCUMENT ME!
+     * @param lyric 
      */
     public void setLyric(String lyric)
     {
@@ -120,9 +120,9 @@ public class Lyrics3v1 extends AbstractLyrics3
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public String getLyric()
     {
@@ -130,9 +130,9 @@ public class Lyrics3v1 extends AbstractLyrics3
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public int getSize()
     {
@@ -140,10 +140,10 @@ public class Lyrics3v1 extends AbstractLyrics3
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @param obj DOCUMENT ME!
-     * @return DOCUMENT ME!
+     * @param obj 
+     * @return 
      */
     public boolean isSubsetOf(Object obj)
     {
@@ -156,10 +156,10 @@ public class Lyrics3v1 extends AbstractLyrics3
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @param obj DOCUMENT ME!
-     * @return DOCUMENT ME!
+     * @param obj 
+     * @return 
      */
     public boolean equals(Object obj)
     {
@@ -179,11 +179,11 @@ public class Lyrics3v1 extends AbstractLyrics3
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      * @throws java.lang.UnsupportedOperationException
-     *          DOCUMENT ME!
+     *          
      */
     public Iterator iterator()
     {
@@ -206,11 +206,11 @@ public class Lyrics3v1 extends AbstractLyrics3
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @param byteBuffer DOCUMENT ME!
-     * @throws TagNotFoundException DOCUMENT ME!
-     * @throws IOException          DOCUMENT ME!
+     * @param byteBuffer 
+     * @throws TagNotFoundException 
+     * @throws IOException          
      */
     public void read(ByteBuffer byteBuffer)
         throws TagException
@@ -230,11 +230,11 @@ public class Lyrics3v1 extends AbstractLyrics3
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @param file DOCUMENT ME!
-     * @return DOCUMENT ME!
-     * @throws IOException DOCUMENT ME!
+     * @param file 
+     * @return 
+     * @throws IOException 
      */
     public boolean seek(RandomAccessFile file)
         throws IOException
@@ -291,9 +291,9 @@ public class Lyrics3v1 extends AbstractLyrics3
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public String toString()
     {
@@ -303,10 +303,10 @@ public class Lyrics3v1 extends AbstractLyrics3
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @param file DOCUMENT ME!
-     * @throws IOException DOCUMENT ME!
+     * @param file 
+     * @throws IOException 
      */
     public void write(RandomAccessFile file)
         throws IOException

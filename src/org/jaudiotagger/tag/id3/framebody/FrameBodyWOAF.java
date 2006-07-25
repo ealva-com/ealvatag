@@ -41,7 +41,7 @@ public class FrameBodyWOAF extends AbstractFrameBodyUrlLink  implements ID3v24Fr
     /**
      * Creates a new FrameBodyWOAF datatype.
      *
-     * @param urlLink DOCUMENT ME!
+     * @param urlLink 
      */
     public FrameBodyWOAF(String urlLink)
     {
@@ -56,8 +56,8 @@ public class FrameBodyWOAF extends AbstractFrameBodyUrlLink  implements ID3v24Fr
     /**
      * Creates a new FrameBodyWOAF datatype.
      *
-     * @throws java.io.IOException DOCUMENT ME!
-     * @throws InvalidTagException DOCUMENT ME!
+     * @throws java.io.IOException 
+     * @throws InvalidTagException 
      */
     public FrameBodyWOAF(ByteBuffer byteBuffer, int frameSize)
         throws InvalidTagException

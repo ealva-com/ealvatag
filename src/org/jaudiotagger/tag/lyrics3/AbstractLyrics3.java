@@ -41,10 +41,10 @@ public abstract class AbstractLyrics3 extends AbstractTag
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @param file DOCUMENT ME!
-     * @throws IOException DOCUMENT ME!
+     * @param file 
+     * @throws IOException 
      */
     public void delete(RandomAccessFile file)
         throws IOException

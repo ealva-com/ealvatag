@@ -50,9 +50,9 @@ public class FrameBodyPOPM extends AbstractID3v2FrameBody implements ID3v24Frame
     /**
      * Creates a new FrameBodyPOPM datatype.
      *
-     * @param emailToUser DOCUMENT ME!
-     * @param rating      DOCUMENT ME!
-     * @param counter     DOCUMENT ME!
+     * @param emailToUser 
+     * @param rating      
+     * @param counter     
      */
     public FrameBodyPOPM(String emailToUser, byte rating, long counter)
     {
@@ -73,9 +73,9 @@ public class FrameBodyPOPM extends AbstractID3v2FrameBody implements ID3v24Frame
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @param description DOCUMENT ME!
+     * @param description 
      */
     public void setEmailToUser(String description)
     {
@@ -83,9 +83,9 @@ public class FrameBodyPOPM extends AbstractID3v2FrameBody implements ID3v24Frame
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public String getEmailToUser()
     {
@@ -105,7 +105,7 @@ public class FrameBodyPOPM extends AbstractID3v2FrameBody implements ID3v24Frame
 
 
     /**
-     * DOCUMENT ME!
+     * 
      */
     protected void setupObjectList()
     {

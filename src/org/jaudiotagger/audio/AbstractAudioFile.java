@@ -52,7 +52,7 @@ public abstract class AbstractAudioFile
     /**
      * Set the file to store the info in
      *
-     * @param file DOCUMENT ME!
+     * @param file 
      */
     public void setFile(File file)
     {
@@ -62,7 +62,7 @@ public abstract class AbstractAudioFile
     /**
      * Retrieve the physical file
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public File getFile()
     {

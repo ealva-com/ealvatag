@@ -53,8 +53,8 @@ public class TextEncodedStringSizeTerminated
      *
      * @param arr    this is the buffer for the frame
      * @param offset this is where to start reading in the buffer for this field
-     * @throws NullPointerException      DOCUMENT ME!
-     * @throws IndexOutOfBoundsException DOCUMENT ME!
+     * @throws NullPointerException      
+     * @throws IndexOutOfBoundsException 
      */
     public void readByteArray(byte[] arr, int offset) throws InvalidDataTypeException
     {

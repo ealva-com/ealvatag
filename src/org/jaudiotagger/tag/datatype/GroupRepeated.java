@@ -35,19 +35,19 @@ public class GroupRepeated
     extends AbstractDataType
 {
     /**
-     * DOCUMENT ME!
+     * 
      */
     private ArrayList objectList;
 
     /**
-     * DOCUMENT ME!
+     * 
      */
     private ArrayList propertyList;
 
     /**
      * Creates a new ObjectGroupRepeated datatype.
      *
-     * @param identifier DOCUMENT ME!
+     * @param identifier 
      */
     public GroupRepeated(String identifier, AbstractTagFrameBody frameBody)
     {
@@ -73,9 +73,9 @@ public class GroupRepeated
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public ArrayList getObjectList()
     {
@@ -83,9 +83,9 @@ public class GroupRepeated
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public ArrayList getPropertyList()
     {
@@ -93,9 +93,9 @@ public class GroupRepeated
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public int getSize()
     {
@@ -111,9 +111,9 @@ public class GroupRepeated
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @param obj DOCUMENT ME!
+     * @param obj 
      */
     public void addObject(AbstractDataType obj)
     {
@@ -121,9 +121,9 @@ public class GroupRepeated
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @param obj DOCUMENT ME!
+     * @param obj 
      */
     public void addProperty(AbstractDataType obj)
     {
@@ -131,10 +131,10 @@ public class GroupRepeated
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @param obj DOCUMENT ME!
-     * @return DOCUMENT ME!
+     * @param obj 
+     * @return 
      */
     public boolean equals(Object obj)
     {
@@ -155,12 +155,12 @@ public class GroupRepeated
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @param arr    DOCUMENT ME!
-     * @param offset DOCUMENT ME!
-     * @throws NullPointerException      DOCUMENT ME!
-     * @throws IndexOutOfBoundsException DOCUMENT ME!
+     * @param arr    
+     * @param offset 
+     * @throws NullPointerException      
+     * @throws IndexOutOfBoundsException 
      */
     public void readByteArray(byte[] arr, int offset) throws InvalidDataTypeException
     {
@@ -207,9 +207,9 @@ public class GroupRepeated
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public String toString()
     {
@@ -225,9 +225,9 @@ public class GroupRepeated
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public byte[] writeByteArray()
     {

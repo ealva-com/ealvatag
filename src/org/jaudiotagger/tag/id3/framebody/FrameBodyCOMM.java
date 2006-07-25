@@ -58,10 +58,10 @@ public class FrameBodyCOMM  extends AbstractID3v2FrameBody  implements ID3v24Fra
     /**
      * Creates a new FrameBodyCOMM datatype.
      *
-     * @param textEncoding DOCUMENT ME!
-     * @param language     DOCUMENT ME!
-     * @param description  DOCUMENT ME!
-     * @param text         DOCUMENT ME!
+     * @param textEncoding 
+     * @param language     
+     * @param description  
+     * @param text         
      */
     public FrameBodyCOMM(byte textEncoding, String language, String description, String text)
     {
@@ -85,9 +85,9 @@ public class FrameBodyCOMM  extends AbstractID3v2FrameBody  implements ID3v24Fra
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public String getBriefDescription()
     {
@@ -95,9 +95,9 @@ public class FrameBodyCOMM  extends AbstractID3v2FrameBody  implements ID3v24Fra
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @param description DOCUMENT ME!
+     * @param description 
      */
     public void setDescription(String description)
     {
@@ -105,9 +105,9 @@ public class FrameBodyCOMM  extends AbstractID3v2FrameBody  implements ID3v24Fra
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public String getDescription()
     {
@@ -125,9 +125,9 @@ public class FrameBodyCOMM  extends AbstractID3v2FrameBody  implements ID3v24Fra
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @param language DOCUMENT ME!
+     * @param language 
      */
     public void setLanguage(String language)
     {
@@ -135,9 +135,9 @@ public class FrameBodyCOMM  extends AbstractID3v2FrameBody  implements ID3v24Fra
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public String getLanguage()
     {
@@ -145,9 +145,9 @@ public class FrameBodyCOMM  extends AbstractID3v2FrameBody  implements ID3v24Fra
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @param text DOCUMENT ME!
+     * @param text 
      */
     public void setText(String text)
     {
@@ -155,9 +155,9 @@ public class FrameBodyCOMM  extends AbstractID3v2FrameBody  implements ID3v24Fra
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public String getText()
     {
@@ -165,7 +165,7 @@ public class FrameBodyCOMM  extends AbstractID3v2FrameBody  implements ID3v24Fra
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      */
     protected void setupObjectList()
     {

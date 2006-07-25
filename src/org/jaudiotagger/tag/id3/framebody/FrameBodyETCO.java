@@ -53,9 +53,9 @@ public class FrameBodyETCO extends AbstractID3v2FrameBody implements ID3v24Frame
     /**
      * Creates a new FrameBodyETCO datatype.
      *
-     * @param timeStampFormat DOCUMENT ME!
-     * @param event           DOCUMENT ME!
-     * @param timeStamp       DOCUMENT ME!
+     * @param timeStampFormat 
+     * @param event           
+     * @param timeStamp       
      */
     public FrameBodyETCO(byte timeStampFormat, byte event, int timeStamp)
     {
@@ -74,9 +74,9 @@ public class FrameBodyETCO extends AbstractID3v2FrameBody implements ID3v24Frame
         super(byteBuffer, frameSize);
     }
   /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public String getIdentifier()
     {
@@ -84,9 +84,9 @@ public class FrameBodyETCO extends AbstractID3v2FrameBody implements ID3v24Frame
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public String getOwner()
     {
@@ -94,9 +94,9 @@ public class FrameBodyETCO extends AbstractID3v2FrameBody implements ID3v24Frame
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @param description DOCUMENT ME!
+     * @param description 
      */
     public void getOwner(String description)
     {
@@ -104,10 +104,10 @@ public class FrameBodyETCO extends AbstractID3v2FrameBody implements ID3v24Frame
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @param event     DOCUMENT ME!
-     * @param timeStamp DOCUMENT ME!
+     * @param event     
+     * @param timeStamp 
      */
     public void addGroup(byte event, int timeStamp)
     {
@@ -120,7 +120,7 @@ public class FrameBodyETCO extends AbstractID3v2FrameBody implements ID3v24Frame
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      */
     protected void setupObjectList()
     {

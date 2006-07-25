@@ -299,8 +299,8 @@ public class ID3v23Tag
     /**
      * Creates a new ID3v2_3 datatype.
      *
-     * @param buffer DOCUMENT ME!
-     * @throws TagException DOCUMENT ME!
+     * @param buffer 
+     * @throws TagException 
      */
     public ID3v23Tag(ByteBuffer buffer)
         throws TagException
@@ -311,9 +311,9 @@ public class ID3v23Tag
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public String getIdentifier()
     {
@@ -324,7 +324,7 @@ public class ID3v23Tag
      * Return frame size based upon the sizes of the tags rather than the physical
      * no of bytes between start of ID3Tag and start of Audio Data.
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public int getSize()
     {
@@ -344,8 +344,8 @@ public class ID3v23Tag
     /**
      * Is Tag Equivalent to another tag
      *
-     * @param obj DOCUMENT ME!
-     * @return DOCUMENT ME!
+     * @param obj 
+     * @return 
      */
     public boolean equals(Object obj)
     {
@@ -628,7 +628,7 @@ public class ID3v23Tag
      * Write tag to file
      *
      * @param file The file to write to
-     * @throws IOException DOCUMENT ME!
+     * @throws IOException 
      */
     public void write(File file, long audioStartLocation)
         throws IOException

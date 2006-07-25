@@ -51,8 +51,8 @@ public class FrameBodyPRIV extends AbstractID3v2FrameBody implements ID3v24Frame
     /**
      * Creates a new FrameBodyPRIV datatype.
      *
-     * @param owner DOCUMENT ME!
-     * @param data  DOCUMENT ME!
+     * @param owner 
+     * @param data  
      */
     public FrameBodyPRIV(String owner, byte[] data)
     {
@@ -72,9 +72,9 @@ public class FrameBodyPRIV extends AbstractID3v2FrameBody implements ID3v24Frame
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public String getBriefDescription()
     {
@@ -82,9 +82,9 @@ public class FrameBodyPRIV extends AbstractID3v2FrameBody implements ID3v24Frame
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @param data DOCUMENT ME!
+     * @param data 
      */
     public void setData(byte[] data)
     {
@@ -92,9 +92,9 @@ public class FrameBodyPRIV extends AbstractID3v2FrameBody implements ID3v24Frame
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public byte[] getData()
     {
@@ -112,9 +112,9 @@ public class FrameBodyPRIV extends AbstractID3v2FrameBody implements ID3v24Frame
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @param owner DOCUMENT ME!
+     * @param owner 
      */
     public void setOwner(String owner)
     {
@@ -122,9 +122,9 @@ public class FrameBodyPRIV extends AbstractID3v2FrameBody implements ID3v24Frame
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public String getOwner()
     {
@@ -132,7 +132,7 @@ public class FrameBodyPRIV extends AbstractID3v2FrameBody implements ID3v24Frame
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      */
     protected void setupObjectList()
     {

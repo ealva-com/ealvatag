@@ -48,8 +48,8 @@ public class FieldFrameBodyIND extends AbstractLyrics3v2FieldFrameBody
     /**
      * Creates a new FieldBodyIND datatype.
      *
-     * @param lyricsPresent    DOCUMENT ME!
-     * @param timeStampPresent DOCUMENT ME!
+     * @param lyricsPresent    
+     * @param timeStampPresent 
      */
     public FieldFrameBodyIND(boolean lyricsPresent, boolean timeStampPresent)
     {
@@ -60,7 +60,7 @@ public class FieldFrameBodyIND extends AbstractLyrics3v2FieldFrameBody
     /**
      * Creates a new FieldBodyIND datatype.
      *
-     * @throws InvalidTagException DOCUMENT ME!
+     * @throws InvalidTagException 
      */
     public FieldFrameBodyIND(ByteBuffer byteBuffer)
         throws InvalidTagException
@@ -76,9 +76,9 @@ public class FieldFrameBodyIND extends AbstractLyrics3v2FieldFrameBody
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @param author DOCUMENT ME!
+     * @param author 
      */
     public void setAuthor(String author)
     {
@@ -86,9 +86,9 @@ public class FieldFrameBodyIND extends AbstractLyrics3v2FieldFrameBody
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public String getAuthor()
     {
@@ -96,9 +96,9 @@ public class FieldFrameBodyIND extends AbstractLyrics3v2FieldFrameBody
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public String getIdentifier()
     {
@@ -106,7 +106,7 @@ public class FieldFrameBodyIND extends AbstractLyrics3v2FieldFrameBody
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      */
     protected void setupObjectList()
     {

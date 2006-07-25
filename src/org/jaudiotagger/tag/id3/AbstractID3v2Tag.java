@@ -329,8 +329,8 @@ public abstract class AbstractID3v2Tag
      * Warning the match is only done against the identifier so if a tag contains a frame with an unsuported body
      * but happens to have an identifier that is valid for another version of the tag it will be returned.
      *
-     * @param identifier DOCUMENT ME!
-     * @return DOCUMENT ME!
+     * @param identifier 
+     * @return 
      */
     public Iterator getFrameOfType(String identifier)
     {
@@ -520,7 +520,7 @@ public abstract class AbstractID3v2Tag
      *
      * @param byteBuffer to search through
      * @return true if tag exists.
-     * @throws IOException DOCUMENT ME!
+     * @throws IOException 
      */
     public boolean seek(ByteBuffer byteBuffer)
     {

@@ -46,7 +46,7 @@ public class FieldFrameBodyEAR extends AbstractLyrics3v2FieldFrameBody
     /**
      * Creates a new FieldBodyEAR datatype.
      *
-     * @param artist DOCUMENT ME!
+     * @param artist 
      */
     public FieldFrameBodyEAR(String artist)
     {
@@ -56,7 +56,7 @@ public class FieldFrameBodyEAR extends AbstractLyrics3v2FieldFrameBody
     /**
      * Creates a new FieldBodyEAR datatype.
      *
-     * @throws InvalidTagException DOCUMENT ME!
+     * @throws InvalidTagException 
      */
     public FieldFrameBodyEAR(ByteBuffer byteBuffer)
         throws InvalidTagException
@@ -72,9 +72,9 @@ public class FieldFrameBodyEAR extends AbstractLyrics3v2FieldFrameBody
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @param artist DOCUMENT ME!
+     * @param artist 
      */
     public void setArtist(String artist)
     {
@@ -82,9 +82,9 @@ public class FieldFrameBodyEAR extends AbstractLyrics3v2FieldFrameBody
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public String getArtist()
     {
@@ -92,9 +92,9 @@ public class FieldFrameBodyEAR extends AbstractLyrics3v2FieldFrameBody
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public String getIdentifier()
     {
@@ -102,7 +102,7 @@ public class FieldFrameBodyEAR extends AbstractLyrics3v2FieldFrameBody
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      */
     protected void setupObjectList()
     {

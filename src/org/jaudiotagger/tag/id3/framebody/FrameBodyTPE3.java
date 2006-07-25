@@ -46,8 +46,8 @@ public class FrameBodyTPE3 extends AbstractFrameBodyTextInfo  implements ID3v24F
     /**
      * Creates a new FrameBodyTPE3 datatype.
      *
-     * @param textEncoding DOCUMENT ME!
-     * @param text         DOCUMENT ME!
+     * @param textEncoding 
+     * @param text         
      */
     public FrameBodyTPE3(byte textEncoding, String text)
     {
@@ -57,8 +57,8 @@ public class FrameBodyTPE3 extends AbstractFrameBodyTextInfo  implements ID3v24F
     /**
      * Creates a new FrameBodyTPE3 datatype.
      *
-      * @throws java.io.IOException DOCUMENT ME!
-     * @throws InvalidTagException DOCUMENT ME!
+      * @throws java.io.IOException 
+     * @throws InvalidTagException 
      */
     public FrameBodyTPE3(ByteBuffer byteBuffer, int frameSize)
         throws InvalidTagException

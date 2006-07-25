@@ -371,8 +371,8 @@ public class ID3v22Frame
      * Does the frame identifier meet the syntax for a idv3v2 frame identifier.
      * must start with a capital letter and only contain capital letters and numbers
      *
-     * @param identifier DOCUMENT ME!
-     * @return DOCUMENT ME!
+     * @param identifier 
+     * @return 
      */
     public boolean isValidID3v2FrameIdentifier(String identifier)
     {

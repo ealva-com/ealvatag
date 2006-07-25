@@ -33,19 +33,19 @@ public class Lyrics3Line
     extends AbstractDataType
 {
     /**
-     * DOCUMENT ME!
+     * 
      */
     private LinkedList timeStamp = new LinkedList();
 
     /**
-     * DOCUMENT ME!
+     * 
      */
     private String lyric = "";
 
     /**
      * Creates a new ObjectLyrics3Line datatype.
      *
-     * @param identifier DOCUMENT ME!
+     * @param identifier 
      */
     public Lyrics3Line(String identifier, AbstractTagFrameBody frameBody)
     {
@@ -75,9 +75,9 @@ public class Lyrics3Line
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public String getLyric()
     {
@@ -85,9 +85,9 @@ public class Lyrics3Line
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public int getSize()
     {
@@ -100,9 +100,9 @@ public class Lyrics3Line
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @param time DOCUMENT ME!
+     * @param time 
      */
     public void setTimeStamp(Lyrics3TimeStamp time)
     {
@@ -111,9 +111,9 @@ public class Lyrics3Line
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public Iterator getTimeStamp()
     {
@@ -131,9 +131,9 @@ public class Lyrics3Line
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @param time DOCUMENT ME!
+     * @param time 
      */
     public void addTimeStamp(Lyrics3TimeStamp time)
     {
@@ -141,10 +141,10 @@ public class Lyrics3Line
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @param obj DOCUMENT ME!
-     * @return DOCUMENT ME!
+     * @param obj 
+     * @return 
      */
     public boolean equals(Object obj)
     {
@@ -165,9 +165,9 @@ public class Lyrics3Line
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public boolean hasTimeStamp()
     {
@@ -179,12 +179,12 @@ public class Lyrics3Line
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @param lineString DOCUMENT ME!
-     * @param offset     DOCUMENT ME!
-     * @throws NullPointerException      DOCUMENT ME!
-     * @throws IndexOutOfBoundsException DOCUMENT ME!
+     * @param lineString 
+     * @param offset     
+     * @throws NullPointerException      
+     * @throws IndexOutOfBoundsException 
      */
     public void readString(String lineString, int offset)
     {
@@ -213,9 +213,9 @@ public class Lyrics3Line
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public String toString()
     {
@@ -228,9 +228,9 @@ public class Lyrics3Line
     }
 
     /**
-     * DOCUMENT ME!
+     * 
      *
-     * @return DOCUMENT ME!
+     * @return 
      */
     public String writeString()
     {
