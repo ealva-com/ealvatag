@@ -265,9 +265,9 @@ public class ID3v24Tag
             {
                 frame = (AbstractID3v2Frame) o;
                 try
-                {
-                    logger.info("Adding Frame:"+newFrame.getIdentifier());
+                {                     
                     newFrame = new ID3v24Frame(frame);
+                    logger.info("Adding Frame:"+newFrame.getIdentifier());
                     copyFrameIntoMap(newFrame.getIdentifier(), newFrame);
                 }
                 catch(InvalidFrameException ife)
