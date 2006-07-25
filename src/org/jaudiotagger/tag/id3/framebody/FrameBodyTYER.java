@@ -71,8 +71,7 @@ public class FrameBodyTYER extends AbstractFrameBodyTextInfo implements ID3v23Fr
 
     /**
      * Creates a new FrameBodyTYER datatype.
-     *
-     * @throws java.io.IOException DOCUMENT ME!
+     *                                     
      * @throws InvalidTagException DOCUMENT ME!
      */
     public FrameBodyTYER(ByteBuffer byteBuffer, int frameSize)
