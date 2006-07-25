@@ -281,15 +281,13 @@ public class ID3v22Tag
      * Read tag from the ByteBuffer
      *
      * @param byteBuffer to read the tag from
-     * @throws TagException         DOCUMENT ME!
-     * @throws IOException          DOCUMENT ME!
-     * @throws TagNotFoundException DOCUMENT ME!
+     * @throws TagException
+     * @throws TagNotFoundException
      */
     public void read(ByteBuffer byteBuffer)
         throws TagException
     {
         int size;
-        ID3v22Frame next;
         if (seek(byteBuffer) == false)
         {
             throw new TagNotFoundException("ID3v2.20 tag not found");
@@ -329,7 +327,6 @@ public class ID3v22Tag
         // Read the frames until got to upto the size as specified in header
         while (byteBuffer.position()<size)
         {
-            String id = null;
             try
             {
                 //Read Frame
@@ -363,7 +360,7 @@ public class ID3v22Tag
     protected void translateFrame(AbstractID3v2Frame frame)
     {
         FrameBodyTDRC tmpBody = (FrameBodyTDRC) frame.getBody();
-        ID3v22Frame newFrame = null;
+        ID3v22Frame newFrame;
         if (!tmpBody.getYear().equals(""))
         {
             //Create Year frame (v2.2 id,but uses v2.3 body)

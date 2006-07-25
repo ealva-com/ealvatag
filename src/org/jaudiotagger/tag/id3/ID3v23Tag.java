@@ -204,7 +204,7 @@ public class ID3v23Tag
                     catch(InvalidFrameException ife)
                     {
                          logger.log(Level.SEVERE,"Unable to convert frame:"+frame.getIdentifier(),ife);
-                    }                               
+                    }
                 }
                 if (newFrame != null)
                 {
@@ -223,7 +223,7 @@ public class ID3v23Tag
     protected void translateFrame(AbstractID3v2Frame frame)
     {
         FrameBodyTDRC tmpBody = (FrameBodyTDRC) frame.getBody();
-        ID3v23Frame newFrame = null;
+        ID3v23Frame newFrame;
         if (!tmpBody.getYear().equals(""))
         {
             newFrame = new ID3v23Frame(ID3v23Frames.FRAME_ID_V3_TYER);
@@ -480,7 +480,7 @@ public class ID3v23Tag
         // we hit an invalid frame identifier
         while (byteBuffer.position()<size)
         {
-            String id = null;
+            String id;
             try
             {
                 //Read Frame

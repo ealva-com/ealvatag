@@ -281,7 +281,7 @@ public class ID3Tags
      */
     public static String forceFrameID24To22(String identifier)
     {
-        String v3id = "";
+        String v3id;
         String v2id = "";
         if (identifier.length() < 4)
         {

@@ -152,7 +152,7 @@ public abstract class AbstractID3v2Frame
          */
         logger.finest("Creating framebody:start");
 
-        AbstractID3v2FrameBody frameBody = null;
+        AbstractID3v2FrameBody frameBody;
         try
         {
             Class c = Class.forName("org.jaudiotagger.tag.id3.framebody.FrameBody" + identifier);

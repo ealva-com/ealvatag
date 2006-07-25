@@ -73,9 +73,9 @@ public class ID3v22Frame
         this.identifier       = identifier;
         //Messy fix for datetime
         if (
-            (bodyIdentifier == ID3v22Frames.FRAME_ID_V2_TYER)
+            (bodyIdentifier.equals(ID3v22Frames.FRAME_ID_V2_TYER))
             ||
-            (bodyIdentifier == ID3v22Frames.FRAME_ID_V2_TIME)
+            (bodyIdentifier.equals(ID3v22Frames.FRAME_ID_V2_TIME))
         )
         {
             bodyIdentifier = ID3v24Frames.FRAME_ID_YEAR;

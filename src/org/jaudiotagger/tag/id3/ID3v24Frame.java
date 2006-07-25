@@ -306,10 +306,8 @@ public class ID3v24Frame
     public void read(ByteBuffer byteBuffer)
         throws InvalidFrameException
     {
-        long filePointer;
         byte[] buffer = new byte[FRAME_ID_SIZE];
-        byte b;
-
+   
         if(byteBuffer.position()+ FRAME_HEADER_SIZE >= byteBuffer.limit())
         {
             logger.warning("No space to find another frame:");

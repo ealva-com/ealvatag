@@ -42,8 +42,8 @@ public class ImageFormats
         imageFormatsToMimeType.put("GIF", "image/gif");
         imageFormatsToMimeType.put("BMP", "image/bmp");
         Iterator iterator = imageFormatsToMimeType.keySet().iterator();
-        Object key = null;
-        Object value = null;
+        Object key;
+        Object value;
         while (iterator.hasNext())
         {
             key = iterator.next();

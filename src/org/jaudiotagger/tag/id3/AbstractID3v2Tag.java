@@ -587,8 +587,8 @@ public abstract class AbstractID3v2Tag
         throws FileNotFoundException, IOException
     {
         logger.finer("Need to move audio file to accomodate tag");
-        FileChannel fcIn = null;
-        FileChannel fcOut = null;
+        FileChannel fcIn;
+        FileChannel fcOut;
         /** Create buffer holds the neccessary padding */
         ByteBuffer paddingBuffer = ByteBuffer.wrap(new byte[paddingSize]);
         /** Create Temporary File and write channel*/

@@ -290,7 +290,7 @@ public class ID3v24Tag
                     catch(InvalidFrameException ife)
                     {
                          logger.log(Level.SEVERE,"Unable to convert frame:"+frame.getIdentifier(),ife);
-                    }                             
+                    }
                 }
                 if (newFrame != null)
                 {
@@ -639,7 +639,7 @@ public class ID3v24Tag
         logger.finest("Start of frame body at:" + byteBuffer.position() + ",frames data size is:" + size);
         while (byteBuffer.position() <= size)
         {
-            String id = null;
+            String id;
             try
             {
                 //Read Frame

@@ -194,7 +194,7 @@ public abstract class AbstractTagFrameBody
     }
 
     /**
-     * Returns the datatype of the <code>MP3Object</code> with the specified
+     * Returns the datatype with the specified
      * <code>identifier</code>
      *
      * @param identifier <code>MP3Object</code> identifier

@@ -119,7 +119,7 @@ public class FrameBodyTDRC extends AbstractFrameBodyTextInfo implements ID3v24Fr
         }
         else
         {
-            if (year != null && year != "")
+            if (year != null && !(year.equals("")))
             {
                 try
                 {
@@ -129,7 +129,7 @@ public class FrameBodyTDRC extends AbstractFrameBodyTextInfo implements ID3v24Fr
                 {
                 }
             }
-            if (date != "")
+            if (!date.equals(""))
             {
                 try
                 {
@@ -139,7 +139,7 @@ public class FrameBodyTDRC extends AbstractFrameBodyTextInfo implements ID3v24Fr
                 {
                 }
             }
-            if (time != "")
+            if (!time.equals(""))
             {
                 try
                 {
@@ -172,7 +172,7 @@ public class FrameBodyTDRC extends AbstractFrameBodyTextInfo implements ID3v24Fr
         this.date = date;
     }
 
-    public void setReco(String recno)
+    public void setReco(String reco)
     {
         this.reco = reco;
     }
