@@ -34,6 +34,7 @@ import java.io.RandomAccessFile;
 import java.io.ByteArrayOutputStream;
 import java.lang.reflect.*;
 import java.nio.*;
+import java.util.logging.Level;
 
 public abstract class AbstractID3v2Frame
     extends AbstractTagFrame
@@ -65,7 +66,7 @@ public abstract class AbstractID3v2Frame
     StatusFlags statusFlags = null;
 
     /**
-     * This holds the Encoding flags (not supported in v2.2)
+     * This holds the Encoding flags (not supported in v2.20)
      */
     EncodingFlags encodingFlags = null;
 
@@ -86,9 +87,9 @@ public abstract class AbstractID3v2Frame
     }
 
     /**
-     * Create a frame with empty body based on identifier
+     * Create a new frame with empty body based on identifier
      *
-     * @todo the identifier checks should be done in the relevent subclasses
+     * @TODO the identifier checks should be done in the relevent subclasses
      */
     public AbstractID3v2Frame(String identifier)
     {
@@ -108,14 +109,16 @@ public abstract class AbstractID3v2Frame
             logger.severe(cnfe.getMessage());
             frameBody = new FrameBodyUnsupported();
         }
-            //Instantiate Interfrace/Abstract should not happen
+        //Instantiate Interface/Abstract should not happen
         catch (InstantiationException ie)
         {
+            logger.log(Level.SEVERE,"InstantiationException:" + identifier,ie);
             throw new RuntimeException(ie.getMessage());
         }
-            //Private Constructor shouild not happen
+        //Private Constructor shouild not happen
         catch (IllegalAccessException iae)
         {
+            logger.log(Level.SEVERE,"IllegalAccessException:" + identifier,iae);
             throw new RuntimeException(iae.getMessage());
         }
         logger.info("Created empty frame of type" + identifier);
@@ -124,7 +127,7 @@ public abstract class AbstractID3v2Frame
     /**
      * Return the frame identifier
      *
-     * @return DOCUMENT ME!
+     * @return the frame identifier
      */
     public String getIdentifier()
     {
@@ -135,13 +138,14 @@ public abstract class AbstractID3v2Frame
     /**
      * Read the frame body from the specified file via the buffer
      *
-     * @param identifier DOCUMENT ME!
-     * @param byteBuffer       DOCUMENT ME!
-     * @return DOCUMENT ME!
-     * @throws IOException         DOCUMENT ME!
+     * @param identifier the frame identifier
+     * @param byteBuffer to read the frabe body from
+     * @return a newly created FrameBody
+     * @throws InvalidFrameException  unable to construct a framebody from the data
+     *
      */
     protected AbstractID3v2FrameBody readBody(String identifier, ByteBuffer byteBuffer, int frameSize)
-        throws InvalidFrameException, IOException
+        throws InvalidFrameException
     {
         /* Use reflection to map id to frame body, which makes things much easier
          * to keep things up to date,although slight performance hit.
@@ -165,30 +169,59 @@ public abstract class AbstractID3v2Frame
         catch (ClassNotFoundException cex)
         {
             logger.info("Identifier not recognised:" + identifier + " using FrameBodyUnsupported");
-            frameBody = new FrameBodyUnsupported(byteBuffer, frameSize);
+            try
+            {
+                frameBody = new FrameBodyUnsupported(byteBuffer, frameSize);
+            }
+            //Should only throw InvalidFrameException but unfortunately legacy hierachy forces
+            //read method to declare it can throw InvalidtagException
+            catch(InvalidTagException te)
+            {
+                if(te instanceof InvalidFrameException)
+                {
+                    throw (InvalidFrameException)te;
+                }
+                else
+                {
+                      throw new InvalidFrameException(te.getMessage());
+                }
+            }
         }
-        //An error has occurred during frame  instantiation find out real exception and then throw frame away if invalid
+        //An error has occurred during frame instantiation, if underlying cause is an unchecked exception or error
+        //propagate it up otherwise mark this frame as invalid
         catch (InvocationTargetException ite)
-        {                 
-            logger.severe("Invocation target exception:"+ite.getCause());
-            throw new InvalidFrameException(ite.getCause().getMessage());
+        {
+            logger.severe("An error occurred within abstractID3v2FrameBody");
+            logger.log(Level.SEVERE,"Invocation target exception:"+ite.getCause().getMessage(),ite.getCause());
+            if(ite.getCause() instanceof Error)
+            {
+                throw (Error)ite.getCause();
+            }
+            else if(ite.getCause() instanceof RuntimeException)
+            {
+                throw (RuntimeException)ite.getCause();
+            }
+            else
+            {
+                throw new InvalidFrameException(ite.getCause().getMessage());
+            }
         }
         //No Method should not happen
         catch (NoSuchMethodException sme)
         {
-            logger.severe("no such method:"+sme.getMessage());
+            logger.log(Level.SEVERE,"No such method:"+sme.getMessage(),sme);
             throw new RuntimeException(sme.getMessage());
         }
-        //Instantiate Interfrace/Abstract should not happen
+        //Instantiate Interface/Abstract should not happen
         catch (InstantiationException ie)
         {
-            logger.severe("instantiation exception:"+ie.getMessage());
+            logger.log(Level.SEVERE,"Instantiation exception:"+ie.getMessage(),ie);
             throw new RuntimeException(ie.getMessage());
         }
         //Private Constructor shouild not happen
         catch (IllegalAccessException iae)
         {
-            logger.severe("illegal access exception :"+iae.getMessage());
+            logger.log(Level.SEVERE,"Illegal access exception :"+iae.getMessage(),iae);
             throw new RuntimeException(iae.getMessage());
         }
         logger.finest("Created framebody:end" + frameBody.getIdentifier());
@@ -202,17 +235,14 @@ public abstract class AbstractID3v2Frame
      * different versions of a tag for frames that have a non-trivial mapping such
      * as TYER in v3 to TDRC in v4.
      *
-     * @param identifier DOCUMENT ME!
-     * @param file       DOCUMENT ME!
-     * @return DOCUMENT ME!
-     * @throws IOException         DOCUMENT ME!
-     * @throws InvalidTagException DOCUMENT ME!
-     */
+     * @param identifier to determine type of the frame
+     * @return newly created framebody for this type
+      */
     protected AbstractID3v2FrameBody readBody(String identifier, AbstractID3v2FrameBody body)
 
     {
         /* Use reflection to map id to frame body, which makes things much easier
-         * to keep things up to date,although slight performance hit.
+         * to keep things up to date, although slight performance hit.
          */
         AbstractID3v2FrameBody frameBody = null;
         try
@@ -305,9 +335,7 @@ public abstract class AbstractID3v2Frame
     }
 
     /**
-     * Return String Representation of body
-     *
-     * @return DOCUMENT ME!
+     * Return String Representation of frame
      */
     public void createStructure()
     {
