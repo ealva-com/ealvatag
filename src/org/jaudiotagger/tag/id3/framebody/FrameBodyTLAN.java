@@ -66,7 +66,7 @@ public class FrameBodyTLAN extends AbstractFrameBodyTextInfo implements ID3v24Fr
      * @throws InvalidTagException DOCUMENT ME!
      */
     public FrameBodyTLAN(ByteBuffer byteBuffer, int frameSize)
-        throws java.io.IOException, InvalidTagException
+        throws InvalidTagException
     {
         super(byteBuffer, frameSize);
     }

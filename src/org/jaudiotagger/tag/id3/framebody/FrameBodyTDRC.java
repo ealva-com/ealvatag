@@ -260,7 +260,7 @@ public class FrameBodyTDRC extends AbstractFrameBodyTextInfo implements ID3v24Fr
      * @throws InvalidTagException DOCUMENT ME!
      */
     public FrameBodyTDRC(ByteBuffer byteBuffer, int frameSize)
-        throws java.io.IOException, InvalidTagException
+        throws InvalidTagException
     {
         super(byteBuffer, frameSize);
         //Store the equivalent ID3v23 values in case convert

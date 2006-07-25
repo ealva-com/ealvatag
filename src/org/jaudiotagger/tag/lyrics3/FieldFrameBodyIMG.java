@@ -27,8 +27,6 @@ import org.jaudiotagger.tag.InvalidTagException;
 import org.jaudiotagger.tag.TagOptionSingleton;
 import org.jaudiotagger.tag.*;
 import org.jaudiotagger.tag.datatype.Lyrics3Image;
-import org.jaudiotagger.tag.datatype.ByteArraySizeTerminated;
-import org.jaudiotagger.tag.datatype.DataTypes;
 
 import java.io.RandomAccessFile;
 
@@ -86,14 +84,19 @@ public class FieldFrameBodyIMG extends AbstractLyrics3v2FieldFrameBody
     /**
      * Creates a new FieldBodyIMG datatype.
      *
-     * @param file DOCUMENT ME!
      * @throws InvalidTagException DOCUMENT ME!
-     * @throws java.io.IOException DOCUMENT ME!
      */
     public FieldFrameBodyIMG(ByteBuffer byteBuffer)
-        throws InvalidTagException, java.io.IOException
+        throws InvalidTagException
     {
-        this.read(byteBuffer);
+        try
+        {
+            this.read(byteBuffer);
+        }
+        catch (TagException e)
+        {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -214,15 +217,9 @@ public class FieldFrameBodyIMG extends AbstractLyrics3v2FieldFrameBody
         return images.iterator();
     }
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @param byteBuffer DOCUMENT ME!
-     * @throws InvalidTagException DOCUMENT ME!
-     * @throws java.io.IOException DOCUMENT ME!
-     */
+
     public void read(ByteBuffer byteBuffer)
-        throws InvalidTagException, java.io.IOException
+        throws InvalidTagException
     {
         String imageString;
 

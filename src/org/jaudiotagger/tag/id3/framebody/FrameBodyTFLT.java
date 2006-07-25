@@ -61,7 +61,7 @@ public class FrameBodyTFLT extends AbstractFrameBodyTextInfo implements ID3v24Fr
      * @throws InvalidTagException DOCUMENT ME!
      */
     public FrameBodyTFLT(ByteBuffer byteBuffer, int frameSize)
-        throws java.io.IOException, InvalidTagException
+        throws InvalidTagException
     {
         super(byteBuffer, frameSize);
     }

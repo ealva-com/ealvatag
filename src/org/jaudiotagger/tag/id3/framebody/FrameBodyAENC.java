@@ -71,11 +71,10 @@ public class FrameBodyAENC extends AbstractID3v2FrameBody  implements ID3v24Fram
     /**
      * Creates a new FrameBodyAENC datatype.
      *
-     * @throws IOException         DOCUMENT ME!
-     * @throws InvalidTagException DOCUMENT ME!
+     * @throws InvalidTagException if unable to create framebody from buffer
      */
     public FrameBodyAENC(ByteBuffer byteBuffer, int frameSize)
-        throws IOException, InvalidTagException
+        throws InvalidTagException
     {
         super(byteBuffer, frameSize);
     }

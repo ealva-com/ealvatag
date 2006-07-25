@@ -523,7 +523,6 @@ public abstract class AbstractID3v2Tag
      * @throws IOException DOCUMENT ME!
      */
     public boolean seek(ByteBuffer byteBuffer)
-        throws IOException
     {
         byteBuffer.rewind();
         logger.info("ByteBuffer pos:"

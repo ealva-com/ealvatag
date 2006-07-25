@@ -25,7 +25,6 @@ package org.jaudiotagger.tag.lyrics3;
 import org.jaudiotagger.tag.InvalidTagException;
 import org.jaudiotagger.tag.datatype.StringSizeTerminated;
 
-import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
 
 
@@ -57,14 +56,19 @@ public class FieldFrameBodyEAR extends AbstractLyrics3v2FieldFrameBody
     /**
      * Creates a new FieldBodyEAR datatype.
      *
-     * @param file DOCUMENT ME!
      * @throws InvalidTagException DOCUMENT ME!
-     * @throws java.io.IOException DOCUMENT ME!
      */
     public FieldFrameBodyEAR(ByteBuffer byteBuffer)
-        throws InvalidTagException, java.io.IOException
+        throws InvalidTagException
     {
-        this.read(byteBuffer);
+        try
+        {
+            this.read(byteBuffer);
+        }
+        catch (org.jaudiotagger.tag.TagException e)
+        {
+            e.printStackTrace();
+        }
     }
 
     /**

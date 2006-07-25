@@ -25,6 +25,7 @@ package org.jaudiotagger.tag.id3.framebody;
 
 import org.jaudiotagger.tag.datatype.*;
 import org.jaudiotagger.tag.InvalidTagException;
+import org.jaudiotagger.tag.TagException;
 import org.jaudiotagger.tag.id3.ID3v24Frames;
 
 import java.io.IOException;
@@ -65,11 +66,10 @@ public class FrameBodyPOPM extends AbstractID3v2FrameBody implements ID3v24Frame
     /**
      * Creates a new FrameBodyPOPM datatype.
      *
-     * @throws IOException         DOCUMENT ME!
-     * @throws InvalidTagException DOCUMENT ME!
+     * @throws InvalidTagException if unable to create framebody from buffer
      */
     public FrameBodyPOPM(ByteBuffer byteBuffer, int frameSize)
-        throws IOException, InvalidTagException
+        throws  InvalidTagException
     {
         super(byteBuffer, frameSize);
     }

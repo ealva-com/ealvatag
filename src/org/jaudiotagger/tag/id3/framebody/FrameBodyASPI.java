@@ -24,9 +24,7 @@
  */
 package org.jaudiotagger.tag.id3.framebody;
 
-import org.jaudiotagger.tag.InvalidFrameException;
-import org.jaudiotagger.tag.InvalidTagException;
-import org.jaudiotagger.tag.EmptyFrameException;
+import org.jaudiotagger.tag.*;
 
 import org.jaudiotagger.tag.id3.ID3v24Frames;
 
@@ -110,7 +108,7 @@ public class FrameBodyASPI extends AbstractID3v2FrameBody implements ID3v24Frame
      * @throws InvalidTagException DOCUMENT ME!
      */
     public FrameBodyASPI(ByteBuffer byteBuffer, int frameSize)
-        throws IOException, InvalidTagException
+        throws InvalidTagException
     {
         super(byteBuffer, frameSize);
     }
@@ -158,7 +156,7 @@ public class FrameBodyASPI extends AbstractID3v2FrameBody implements ID3v24Frame
      * @throws InvalidTagException DOCUMENT ME!
      */
     public void read(ByteBuffer byteBuffer)
-        throws IOException, InvalidFrameException
+        throws InvalidTagException
     {
         int size = getSize();
 

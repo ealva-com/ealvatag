@@ -23,9 +23,7 @@
 package org.jaudiotagger.tag.lyrics3;
 
 import org.jaudiotagger.tag.datatype.*;
-import org.jaudiotagger.tag.InvalidTagException;
-import org.jaudiotagger.tag.TagOptionSingleton;
-import org.jaudiotagger.tag.AbstractTagFrameBody;
+import org.jaudiotagger.tag.*;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
@@ -113,7 +111,7 @@ public abstract class AbstractLyrics3v2FieldFrameBody extends AbstractTagFrameBo
      * @throws IOException         on any I/O error
      * @throws InvalidTagException if there is any error in the data format.
      */
-    public void read(ByteBuffer byteBuffer) throws IOException, InvalidTagException
+    public void read(ByteBuffer byteBuffer) throws InvalidTagException
     {
         int size = getSize();
         //Allocate a buffer to the size of the Frame Body and read from file

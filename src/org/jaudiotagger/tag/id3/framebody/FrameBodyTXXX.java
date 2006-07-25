@@ -74,7 +74,7 @@ public class FrameBodyTXXX
      * @throws InvalidTagException DOCUMENT ME!
      */
     public FrameBodyTXXX(ByteBuffer byteBuffer, int frameSize)
-        throws IOException, InvalidTagException
+        throws InvalidTagException
     {
         super(byteBuffer, frameSize);
     }

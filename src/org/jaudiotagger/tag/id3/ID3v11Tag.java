@@ -205,7 +205,7 @@ public class ID3v11Tag
         ByteBuffer  byteBuffer = ByteBuffer.allocate(TAG_LENGTH);
         fc.read(byteBuffer);
         byteBuffer.flip();
-        this.read(byteBuffer);
+        read(byteBuffer);
     }
 
     /**
@@ -232,7 +232,7 @@ public class ID3v11Tag
      * Set the track, v1_1 stores track numbers in a single byte value so can only
      * handle a simple number in the range 0-255.
      *
-     * @param track
+     * @param trackValue
      */
     public void setTrack(String trackValue)
     {
@@ -291,8 +291,12 @@ public class ID3v11Tag
     }
 
 
+    /**
+     * Find identifer within byteBuffer to indicate that a v11 tag exists within the buffer
+     * @param byteBuffer
+     * @return true if find header for v11 tag within buffer
+     */
     public boolean seek(ByteBuffer byteBuffer)
-            throws IOException
     {
         byte[] buffer = new byte[FIELD_TAGID_LENGTH];
         // read the TAG value
@@ -319,14 +323,13 @@ public class ID3v11Tag
     }
 
     /**
-     * DOCUMENT ME!
+     * Read in a tag from the ByteBuffer
      *
-     * @param byteBuffer DOCUMENT ME!
-     * @throws TagNotFoundException DOCUMENT ME!
-     * @throws IOException          DOCUMENT ME!
+     * @param byteBuffer from where to read in a tag
+     * @throws TagNotFoundException if unable to read a tag in the byteBuffer
      */
     public void read(ByteBuffer byteBuffer)
-        throws TagNotFoundException, IOException
+        throws TagNotFoundException
     {
         if (seek(byteBuffer) == false)
         {
@@ -374,10 +377,10 @@ public class ID3v11Tag
 
 
     /**
-     * DOCUMENT ME!
+     * Write this representation of tag to the file indicated
      *
-     * @param file DOCUMENT ME!
-     * @throws IOException DOCUMENT ME!
+     * @param file that this tag should be written to
+     * @throws IOException thrown if there were problems writing to the file
      */
     public void write(RandomAccessFile file)
         throws IOException
@@ -445,12 +448,6 @@ public class ID3v11Tag
     }
 
 
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @return DOCUMENT ME!
-     */
     public void createStructure()
     {
         MP3File.getStructureFormatter().openHeadingElement(TYPE_TAG, getIdentifier());

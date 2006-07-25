@@ -63,7 +63,7 @@ public class FrameBodyTRDA extends AbstractFrameBodyTextInfo implements ID3v23Fr
      * @throws InvalidTagException DOCUMENT ME!
      */
     public FrameBodyTRDA(ByteBuffer byteBuffer, int frameSize)
-        throws java.io.IOException, InvalidTagException
+        throws InvalidTagException
     {
         super(byteBuffer, frameSize);
     }

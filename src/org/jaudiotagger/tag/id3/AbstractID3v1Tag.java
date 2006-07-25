@@ -24,20 +24,14 @@
  */
 package org.jaudiotagger.tag.id3;
 
-import org.jaudiotagger.tag.TagException;
-import org.jaudiotagger.tag.TagNotFoundException;
-import org.jaudiotagger.tag.TagException;
-import org.jaudiotagger.tag.TagNotFoundException;
 import org.jaudiotagger.logging.LogFormatter;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.regex.*;
 import java.util.logging.Logger;
-import java.util.logging.Level;
 import java.nio.channels.FileChannel;
 import java.nio.ByteBuffer;
-import java.nio.CharBuffer;
 
 abstract public class AbstractID3v1Tag
     extends AbstractID3Tag

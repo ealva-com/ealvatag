@@ -57,11 +57,10 @@ public class FrameBodyTALB extends AbstractFrameBodyTextInfo implements ID3v24Fr
     /**
      * Creates a new FrameBodyTALB datatype.
      *
-     * @throws java.io.IOException DOCUMENT ME!
-     * @throws InvalidTagException DOCUMENT ME!
+     * @throws InvalidTagException if unable to create framebody from buffer
      */
     public FrameBodyTALB(ByteBuffer byteBuffer, int frameSize)
-        throws java.io.IOException, InvalidTagException
+        throws InvalidTagException
     {
         super(byteBuffer, frameSize);
     }

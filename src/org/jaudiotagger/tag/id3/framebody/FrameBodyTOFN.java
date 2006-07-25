@@ -61,7 +61,7 @@ public class FrameBodyTOFN extends AbstractFrameBodyTextInfo
      * @throws InvalidTagException DOCUMENT ME!
      */
     public FrameBodyTOFN(ByteBuffer byteBuffer, int frameSize)
-        throws java.io.IOException, InvalidTagException
+        throws InvalidTagException
     {
         super(byteBuffer, frameSize);
     }

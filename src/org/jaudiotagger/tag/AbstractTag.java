@@ -53,10 +53,9 @@ public abstract class AbstractTag extends AbstractTagItem
      * Looks for this tag in the buffer
      *
      * @param byteBuffer
-     * @return returns true if found, false otherwise.
-     * @throws IOException on any I/O error
+      * @return returns true if found, false otherwise.
      */
-    abstract public boolean seek(ByteBuffer byteBuffer) throws IOException;
+    abstract public boolean seek(ByteBuffer byteBuffer);
 
     /**
      * Writes the tag to the file

@@ -31,7 +31,6 @@ import org.jaudiotagger.tag.id3.framebody.AbstractID3v2FrameBody;
 import org.jaudiotagger.FileConstants;
 
 import java.io.IOException;
-import java.io.RandomAccessFile;
 import java.io.ByteArrayOutputStream;
 import java.util.regex.*;
 
@@ -151,13 +150,11 @@ public class ID3v23Frame
      * Creates a new ID3v2_3Frame datatype by reading from byteBuffer.
      *
      * @param byteBuffer to read from
-     * @throws IOException
-
      */
     public ID3v23Frame(ByteBuffer byteBuffer)
-        throws IOException, InvalidFrameException
+        throws InvalidFrameException
     {
-        this.read(byteBuffer);
+       this.read(byteBuffer);
     }
 
     /**
@@ -205,7 +202,7 @@ public class ID3v23Frame
      * @throws IOException         DOCUMENT ME!
      */
     public void read(ByteBuffer byteBuffer)
-        throws IOException, InvalidFrameException
+        throws InvalidFrameException
     {
         logger.info("Read Frame from byteBuffer");
 

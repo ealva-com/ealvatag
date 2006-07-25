@@ -61,7 +61,7 @@ public class FrameBodyTKEY extends AbstractFrameBodyTextInfo implements ID3v24Fr
      * @throws InvalidTagException DOCUMENT ME!
      */
     public FrameBodyTKEY(ByteBuffer byteBuffer, int frameSize)
-        throws java.io.IOException, InvalidTagException
+        throws InvalidTagException
     {
         super(byteBuffer, frameSize);
     }

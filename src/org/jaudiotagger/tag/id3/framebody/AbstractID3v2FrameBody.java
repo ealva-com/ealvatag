@@ -26,14 +26,15 @@ package org.jaudiotagger.tag.id3.framebody;
 
 import org.jaudiotagger.audio.mp3.*;
 import org.jaudiotagger.tag.datatype.*;
-import org.jaudiotagger.tag.AbstractTagFrameBody;
-import org.jaudiotagger.tag.InvalidFrameException;
-import org.jaudiotagger.tag.InvalidDataTypeException;
+import org.jaudiotagger.tag.*;
 
 import java.util.*;
 import java.io.*;
 import java.nio.*;
 
+/**
+ * Contains the content for an ID3v2 frame, (the header is held directly within the frame
+ */
 public abstract class AbstractID3v2FrameBody
     extends AbstractTagFrameBody
 {
@@ -64,29 +65,30 @@ public abstract class AbstractID3v2FrameBody
      * Creates a new FrameBody datatype from file. The super
      * Constructor sets up the Object list for the frame.
      *
-     * @param byteBuffer The MP3File to read the frame from.
-     * @throws java.io.IOException
+     * @param byteBuffer from where to read the frame body from
      */
     protected AbstractID3v2FrameBody(ByteBuffer byteBuffer, int frameSize)
-        throws java.io.IOException, InvalidFrameException
+        throws InvalidTagException
     {
         super();
         setSize(frameSize);
         this.read(byteBuffer);
+
     }
 
     /**
      * Return the ID3v2 Frame Identifier, must be implemented by concrete subclasses
      *
+     * @return the frame identifier
      */
     public abstract String getIdentifier();
 
 
     /**
-     * Return size of frame body
+     * Return size of frame body,if framebody already exist will take this value from the frame header
+     * but it is always recalculated before writing any changes back to disk.
      *
-     * @return estimated size in bytes of this datatype
-     * @todo get this working 100% of the time
+     * @return  size in bytes of this frame body
      */
     public int getSize()
     {
@@ -133,16 +135,15 @@ public abstract class AbstractID3v2FrameBody
     }
 
     /**
-     * This reads a frame body from its file into the appropriate FrameBody class
-     * Read the data from the given file into this datatype. The file needs to
-     * have its file pointer in the correct location. The size as indicated in the
-     * header is passed to the frame constructor when reading from file.
+     * This reads a frame body from a ByteBuffer into the appropriate FrameBody class, the ByteBuffer represents
+     * filedata and should be at the start of the framebody. The size as indicated in the header is passed to the frame
+     * constructor when reading from file.
      *
      * @param byteBuffer file to read
-     * @throws IOException         on any I/O error
+     * @throws InvalidFrameException if unable to construct a framebody from the ByteBuffer
      */
     public void read(ByteBuffer byteBuffer)
-        throws IOException, InvalidFrameException
+        throws InvalidTagException
     {
         int size = getSize();
         logger.info("Reading body for" + this.getIdentifier() + ":" + size);
@@ -159,8 +160,8 @@ public abstract class AbstractID3v2FrameBody
         while (iterator.hasNext())
         {
             logger.finest("offset:"+offset);
-            //The read has extended further than the defined frame size ok to extend upto
-            //because the next datatype may be of length 0.
+            //The read has extended further than the defined frame size (ok to extend upto
+            //size because the next datatype may be of length 0.)
             if (offset > (size))
             {
                 logger.warning("Invalid Size for FrameBody");

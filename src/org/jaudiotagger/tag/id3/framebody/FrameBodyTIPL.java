@@ -75,7 +75,7 @@ public class FrameBodyTIPL
      * @throws InvalidTagException DOCUMENT ME!
      */
     public FrameBodyTIPL(ByteBuffer byteBuffer, int frameSize)
-        throws java.io.IOException, InvalidTagException
+        throws InvalidTagException
     {
         super(byteBuffer, frameSize);
     }

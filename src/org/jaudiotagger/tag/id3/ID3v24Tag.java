@@ -428,10 +428,9 @@ public class ID3v24Tag
      *
      * @param buffer
      * @throws TagException
-     * @throws IOException
      */
     public ID3v24Tag(ByteBuffer buffer)
-        throws TagException, IOException
+        throws TagException
     {
         this.majorVersion = 4;
         this.revision = 0;
@@ -538,7 +537,7 @@ public class ID3v24Tag
      * @throws InvalidTagException  DOCUMENT ME!
      */
     public void read(ByteBuffer byteBuffer)
-        throws TagException, IOException
+        throws TagException
     {         
 
         int size;
@@ -620,7 +619,6 @@ public class ID3v24Tag
      * Read frames from tag
      */
     protected void readFrames(ByteBuffer byteBuffer, int size)
-        throws IOException
     {
         logger.finest("Start of frame body at" + byteBuffer.position());
         //Now start looking for frames
@@ -641,13 +639,13 @@ public class ID3v24Tag
                 id = next.getIdentifier();
                 loadFrameIntoMap(id, next);
             }
-                //Found Empty Frame
+            //Found Empty Frame
             catch (EmptyFrameException ex)
             {
                 logger.warning("Empty Frame");
                 this.emptyFrameBytes += TAG_HEADER_LENGTH;
             }
-                //Problem trying to find frame
+            //Problem trying to find frame
             catch (InvalidFrameException ex)
             {
                 logger.warning("Invalid Frame");

@@ -60,11 +60,10 @@ public class FrameBodyRVA2 extends AbstractID3v2FrameBody implements ID3v24Frame
     /**
      * Creates a new FrameBodyRVAD datatype.
      *
-     * @throws IOException         DOCUMENT ME!
-     * @throws InvalidTagException DOCUMENT ME!
+     * @throws InvalidTagException if unable to create framebody from buffer
      */
     public FrameBodyRVA2(ByteBuffer byteBuffer, int frameSize)
-        throws IOException, InvalidTagException
+        throws InvalidTagException
     {
         super(byteBuffer, frameSize);
     }

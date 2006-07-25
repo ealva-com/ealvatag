@@ -27,7 +27,6 @@ package org.jaudiotagger.tag.id3;
 import java.io.*;
 import java.nio.*;
 import java.util.regex.*;
-import java.util.Arrays;
 import java.math.BigInteger;
 
 import org.jaudiotagger.audio.mp3.*;
@@ -207,11 +206,9 @@ public class ID3v22Frame
 
      */
     public ID3v22Frame(ByteBuffer byteBuffer)
-        throws IOException, InvalidFrameException
+        throws InvalidFrameException
     {
-        logger.info("Reading frame from byteBuffer");
         this.read(byteBuffer);
-        logger.info("Read frame from byteBuffer");
     }
 
     /**
@@ -233,7 +230,7 @@ public class ID3v22Frame
 
      */
     public void read(ByteBuffer byteBuffer)
-        throws IOException, InvalidFrameException
+        throws InvalidFrameException
     {
         byte[] buffer = new byte[FRAME_ID_SIZE];
 

@@ -64,11 +64,10 @@ public abstract class AbstractFrameBodyUrlLink extends AbstractID3v2FrameBody
     /**
      * Creates a new FrameBodyUrlLink datatype.
      *
-     * @throws java.io.IOException DOCUMENT ME!
-     * @throws InvalidTagException DOCUMENT ME!
+     * @throws InvalidTagException if unable to create framebody from buffer
      */
     protected AbstractFrameBodyUrlLink(ByteBuffer byteBuffer, int frameSize)
-        throws java.io.IOException, InvalidTagException
+        throws InvalidTagException
     {
         super(byteBuffer, frameSize);
     }

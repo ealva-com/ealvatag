@@ -61,7 +61,7 @@ public class FrameBodyTBPM extends AbstractFrameBodyTextInfo implements ID3v24Fr
      * @throws InvalidTagException DOCUMENT ME!
      */
     public FrameBodyTBPM(ByteBuffer byteBuffer, int frameSize)
-        throws java.io.IOException, InvalidTagException
+        throws InvalidTagException
     {
         super(byteBuffer, frameSize);
     }

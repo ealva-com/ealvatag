@@ -26,8 +26,6 @@ package org.jaudiotagger.tag.lyrics3;
 import org.jaudiotagger.tag.AbstractTag;
 import org.jaudiotagger.tag.id3.ID3Tags;
 import org.jaudiotagger.tag.id3.ID3v1Tag;
-import org.jaudiotagger.tag.id3.ID3Tags;
-import org.jaudiotagger.tag.TagOptionSingleton;
 import org.jaudiotagger.tag.TagNotFoundException;
 import org.jaudiotagger.tag.*;
 
@@ -35,7 +33,6 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 
 import java.util.Iterator;
-import java.util.Arrays;
 import java.nio.ByteBuffer;
 
 public class Lyrics3v1 extends AbstractLyrics3
@@ -93,7 +90,13 @@ public class Lyrics3v1 extends AbstractLyrics3
     public Lyrics3v1(ByteBuffer byteBuffer)
         throws TagNotFoundException, java.io.IOException
     {
-        this.read(byteBuffer);
+        try {
+            this.read(byteBuffer);
+        }
+        catch (TagException e)
+        {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -198,7 +201,6 @@ public class Lyrics3v1 extends AbstractLyrics3
      * @throws IOException
      */
     public boolean seek(ByteBuffer byteBuffer)
-        throws IOException
     {
         return false;
     }
@@ -211,7 +213,7 @@ public class Lyrics3v1 extends AbstractLyrics3
      * @throws IOException          DOCUMENT ME!
      */
     public void read(ByteBuffer byteBuffer)
-        throws TagNotFoundException, IOException
+        throws TagException
     {
         byte[] buffer = new byte[5100 + 9 + 11];
         String lyricBuffer;

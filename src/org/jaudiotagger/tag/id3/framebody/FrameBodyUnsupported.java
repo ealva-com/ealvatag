@@ -70,11 +70,10 @@ public class FrameBodyUnsupported extends AbstractID3v2FrameBody
     /**
      * Creates a new FrameBodyUnsupported datatype.
      *
-     * @throws IOException           DOCUMENT ME!
-     * @throws InvalidFrameException DOCUMENT ME!
+     * @throws InvalidFrameException if unable to create framebody from buffer
      */
     public FrameBodyUnsupported(ByteBuffer byteBuffer, int frameSize)
-        throws IOException, InvalidFrameException
+    throws InvalidTagException
     {
         super(byteBuffer, frameSize);
     }

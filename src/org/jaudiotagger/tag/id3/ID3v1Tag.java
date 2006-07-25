@@ -29,7 +29,6 @@ import org.jaudiotagger.tag.id3.valuepair.GenreTypes;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
-import java.io.FileInputStream;
 import java.util.regex.*;
 import java.util.*;
 
@@ -156,6 +155,7 @@ public class ID3v1Tag
         fc.read(byteBuffer);
         byteBuffer.flip();
         this.read(byteBuffer);
+
     }
 
     /**
@@ -352,7 +352,7 @@ public class ID3v1Tag
      * @throws IOException          DOCUMENT ME!
      */
     public void read(ByteBuffer byteBuffer)
-        throws TagNotFoundException, IOException
+        throws TagNotFoundException
     {
         if (seek(byteBuffer) == false)
         {
@@ -404,12 +404,10 @@ public class ID3v1Tag
     /**
      * DOCUMENT ME!
      *
-     * @param file DOCUMENT ME!
      * @return DOCUMENT ME!
      * @throws IOException DOCUMENT ME!
      */
     public boolean seek(ByteBuffer byteBuffer)
-        throws IOException
     {
         byte[] buffer = new byte[FIELD_TAGID_LENGTH];
         // read the TAG value

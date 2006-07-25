@@ -80,12 +80,11 @@ public abstract class AbstractFrameBodyTextInfo
      * Creates a new FrameBodyTextInformation datatype from file. The super.super
      * Constructor sets up the Object list for the frame.
      *
-     * @throws java.io.IOException DOCUMENT ME!
-     * @throws InvalidTagException DOCUMENT ME!
+     * @throws InvalidTagException if unable to create framebody from buffer
      */
     protected AbstractFrameBodyTextInfo(ByteBuffer byteBuffer,
                                         int frameSize)
-        throws java.io.IOException, InvalidTagException
+        throws InvalidTagException
     {
         super(byteBuffer, frameSize);
     }

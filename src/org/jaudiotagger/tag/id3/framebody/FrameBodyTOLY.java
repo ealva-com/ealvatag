@@ -61,7 +61,7 @@ public class FrameBodyTOLY extends AbstractFrameBodyTextInfo
      * @throws InvalidTagException DOCUMENT ME!
      */
     public FrameBodyTOLY(ByteBuffer byteBuffer, int frameSize)
-        throws java.io.IOException, InvalidTagException
+        throws InvalidTagException
     {
         super(byteBuffer, frameSize);
     }

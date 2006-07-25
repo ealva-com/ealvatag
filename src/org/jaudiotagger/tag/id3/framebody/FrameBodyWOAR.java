@@ -61,7 +61,7 @@ public class FrameBodyWOAR extends AbstractFrameBodyUrlLink   implements ID3v24F
      * @throws InvalidTagException DOCUMENT ME!
      */
     public FrameBodyWOAR(ByteBuffer byteBuffer, int frameSize)
-        throws java.io.IOException, InvalidTagException
+        throws InvalidTagException
     {
         super(byteBuffer, frameSize);
     }

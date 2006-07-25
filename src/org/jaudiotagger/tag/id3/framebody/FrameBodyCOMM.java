@@ -80,11 +80,10 @@ public class FrameBodyCOMM  extends AbstractID3v2FrameBody  implements ID3v24Fra
       *
      * @param byteBuffer
      * @param frameSize
-     * @throws IOException
-     * @throws InvalidTagException
+     * @throws InvalidTagException if unable to create framebody from buffer
      */
     public FrameBodyCOMM(ByteBuffer byteBuffer, int frameSize)
-        throws IOException, InvalidTagException
+        throws InvalidTagException
     {
         super(byteBuffer, frameSize);
     }

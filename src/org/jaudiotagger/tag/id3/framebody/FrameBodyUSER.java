@@ -73,7 +73,7 @@ public class FrameBodyUSER extends AbstractID3v2FrameBody implements ID3v24Frame
      * @throws InvalidTagException DOCUMENT ME!
      */
     public FrameBodyUSER(ByteBuffer byteBuffer, int frameSize)
-        throws IOException, InvalidTagException
+        throws InvalidTagException
     {
         super(byteBuffer, frameSize);
     }

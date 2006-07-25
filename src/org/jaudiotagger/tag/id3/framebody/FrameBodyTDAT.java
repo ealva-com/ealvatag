@@ -61,7 +61,7 @@ public class FrameBodyTDAT extends AbstractFrameBodyTextInfo implements ID3v23Fr
      * @throws InvalidTagException DOCUMENT ME!
      */
     public FrameBodyTDAT(ByteBuffer byteBuffer, int frameSize)
-        throws java.io.IOException, InvalidTagException
+        throws InvalidTagException
     {
         super(byteBuffer, frameSize);
     }

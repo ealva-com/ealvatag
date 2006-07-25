@@ -28,7 +28,6 @@ import org.jaudiotagger.tag.TagNotFoundException;
 import org.jaudiotagger.tag.id3.*;
 import org.jaudiotagger.tag.TagException;
 import org.jaudiotagger.tag.TagOptionSingleton;
-import org.jaudiotagger.tag.*;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
@@ -127,7 +126,13 @@ public class Lyrics3v2 extends AbstractLyrics3
     public Lyrics3v2(ByteBuffer byteBuffer)
         throws TagNotFoundException, IOException
     {
-        this.read(byteBuffer);
+        try {
+            this.read(byteBuffer);
+        }
+        catch (TagException e)
+        {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -246,20 +251,13 @@ public class Lyrics3v2 extends AbstractLyrics3
      * @throws IOException
      */
     public boolean seek(ByteBuffer byteBuffer)
-        throws IOException
     {
         return false;
     }
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @param byteBuffer DOCUMENT ME!
-     * @throws TagNotFoundException DOCUMENT ME!
-     * @throws IOException          DOCUMENT ME!
-     */
+
     public void read(ByteBuffer byteBuffer)
-        throws TagNotFoundException, IOException
+        throws TagException
     {
         long filePointer;
         int lyricSize;
@@ -513,12 +511,8 @@ public class Lyrics3v2 extends AbstractLyrics3
     /**
      * TODO
      *
-     * @param file DOCUMENT ME!
-     * @return DOCUMENT ME!
-     * @throws IOException DOCUMENT ME!
      */
-    private int seekSize(ByteBuffer byteBuffer)
-        throws IOException
+    private int seekSize(ByteBuffer byteBuffer)          
     {
         /*
         byte[] buffer = new byte[11];

@@ -288,10 +288,9 @@ public class ID3v23Tag
      *
      * @param buffer DOCUMENT ME!
      * @throws TagException DOCUMENT ME!
-     * @throws IOException  DOCUMENT ME!
      */
     public ID3v23Tag(ByteBuffer buffer)
-        throws TagException, IOException
+        throws TagException
     {
         this.majorVersion = 3;
         this.revision = 0;
@@ -373,7 +372,7 @@ public class ID3v23Tag
      *
      */
     public void read(ByteBuffer buffer)
-        throws TagException, IOException
+        throws TagException
     {
         int size;
         if (seek(buffer) == false)
@@ -456,7 +455,6 @@ public class ID3v23Tag
      * Read frames from byteBuffer
      */
     protected void readFrames(ByteBuffer byteBuffer, int size)
-        throws IOException
     {
         //Now start looking for frames
         ID3v23Frame next;

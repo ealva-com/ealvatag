@@ -64,11 +64,10 @@ public class FrameBodyPRIV extends AbstractID3v2FrameBody implements ID3v24Frame
     /**
      * Creates a new FrameBodyPRIV datatype.
      *
-     * @throws IOException         DOCUMENT ME!
-     * @throws InvalidTagException DOCUMENT ME!
+     * @throws InvalidTagException if unable to create framebody from buffer
      */
     public FrameBodyPRIV(ByteBuffer byteBuffer, int frameSize)
-        throws IOException, InvalidTagException
+        throws InvalidTagException
     {
         super(byteBuffer, frameSize);
     }

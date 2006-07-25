@@ -25,15 +25,12 @@ package org.jaudiotagger.tag.lyrics3;
 
 import org.jaudiotagger.tag.AbstractTagFrame;
 import org.jaudiotagger.tag.InvalidTagException;
-import org.jaudiotagger.tag.id3.ID3Tags;
 import org.jaudiotagger.tag.id3.framebody.AbstractFrameBodyTextInfo;
 import org.jaudiotagger.tag.id3.AbstractID3v2Frame;
-import org.jaudiotagger.tag.id3.ID3Tags;
 import org.jaudiotagger.tag.id3.framebody.FrameBodyCOMM;
 import org.jaudiotagger.tag.id3.framebody.*;
 import org.jaudiotagger.tag.TagException;
 import org.jaudiotagger.tag.TagOptionSingleton;
-import org.jaudiotagger.tag.*;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
@@ -136,10 +133,10 @@ public class Lyrics3v2Field
      *
      * @param file DOCUMENT ME!
      * @throws InvalidTagException DOCUMENT ME!
-     * @throws IOException         DOCUMENT ME!
+
      */
     public Lyrics3v2Field(ByteBuffer byteBuffer)
-        throws InvalidTagException, IOException
+        throws InvalidTagException
     {
         this.read(byteBuffer);
     }
@@ -176,7 +173,7 @@ public class Lyrics3v2Field
      * @throws IOException         DOCUMENT ME!
      */
     public void read(ByteBuffer byteBuffer)
-        throws InvalidTagException, IOException
+        throws InvalidTagException
     {
         byte[] buffer = new byte[6];
         // lets scan for a non-zero byte;
@@ -253,7 +250,7 @@ public class Lyrics3v2Field
      * @throws IOException         DOCUMENT ME!
      */
     private AbstractLyrics3v2FieldFrameBody readBody(String identifier, ByteBuffer byteBuffer)
-        throws InvalidTagException, IOException
+        throws InvalidTagException
     {
         AbstractLyrics3v2FieldFrameBody newBody = null;
         if (identifier.equals(Lyrics3v2Fields.FIELD_V2_AUTHOR))

@@ -26,8 +26,6 @@ import org.jaudiotagger.tag.InvalidTagException;
 import org.jaudiotagger.tag.*;
 import org.jaudiotagger.tag.id3.framebody.FrameBodySYLT;
 import org.jaudiotagger.tag.id3.framebody.FrameBodyUSLT;
-import org.jaudiotagger.tag.id3.framebody.FrameBodySYLT;
-import org.jaudiotagger.tag.InvalidTagException;
 import org.jaudiotagger.tag.datatype.ID3v2LyricLine;
 import org.jaudiotagger.tag.datatype.Lyrics3Line;
 import org.jaudiotagger.tag.datatype.Lyrics3TimeStamp;
@@ -100,14 +98,14 @@ public class FieldFrameBodyLYR extends AbstractLyrics3v2FieldFrameBody
     /**
      * Creates a new FieldBodyLYR datatype.
      *
-     * @param file DOCUMENT ME!
-     * @throws InvalidTagException DOCUMENT ME!
-     * @throws java.io.IOException DOCUMENT ME!
+
      */
     public FieldFrameBodyLYR(ByteBuffer byteBuffer)
-        throws InvalidTagException, java.io.IOException
+        throws InvalidTagException
     {
+
         this.read(byteBuffer);
+
     }
 
     /**
@@ -295,12 +293,10 @@ public class FieldFrameBodyLYR extends AbstractLyrics3v2FieldFrameBody
     /**
      * DOCUMENT ME!
      *
-     * @param byteBuffer DOCUMENT ME!
-     * @throws InvalidTagException DOCUMENT ME!
-     * @throws java.io.IOException DOCUMENT ME!
+     *
      */
     public void read(ByteBuffer byteBuffer)
-        throws InvalidTagException, java.io.IOException
+        throws InvalidTagException
     {
         String lineString;
 

@@ -61,7 +61,7 @@ public class FrameBodyTPE2 extends AbstractFrameBodyTextInfo  implements ID3v24F
      * @throws InvalidTagException DOCUMENT ME!
      */
     public FrameBodyTPE2(ByteBuffer byteBuffer, int frameSize)
-        throws java.io.IOException, InvalidTagException
+        throws InvalidTagException
     {
         super(byteBuffer,frameSize);
     }

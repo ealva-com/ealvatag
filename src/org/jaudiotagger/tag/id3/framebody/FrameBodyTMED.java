@@ -61,7 +61,7 @@ public class FrameBodyTMED extends AbstractFrameBodyTextInfo
      * @throws InvalidTagException DOCUMENT ME!
      */
     public FrameBodyTMED(ByteBuffer byteBuffer, int frameSize)
-        throws java.io.IOException, InvalidTagException
+        throws InvalidTagException
     {
         super(byteBuffer, frameSize);
     }

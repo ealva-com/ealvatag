@@ -29,7 +29,6 @@ import org.jaudiotagger.tag.id3.framebody.*;
 import org.jaudiotagger.FileConstants;
 
 import java.io.IOException;
-import java.io.RandomAccessFile;
 import java.io.ByteArrayOutputStream;
 
 import java.util.Iterator;
@@ -258,10 +257,9 @@ public class ID3v24Frame
      * Creates a new ID3v2_4Frame datatype from specified byteBuffer.
      *
      * @param byteBuffer DOCUMENT ME!
-     * @throws IOException         DOCUMENT ME!
      */
     public ID3v24Frame(ByteBuffer byteBuffer)
-        throws IOException, InvalidFrameException
+        throws InvalidFrameException
     {
         this.read(byteBuffer);
     }
@@ -289,7 +287,7 @@ public class ID3v24Frame
      * @throws IOException         DOCUMENT ME!
      */
     public void read(ByteBuffer byteBuffer)
-        throws IOException, InvalidFrameException
+        throws InvalidFrameException
     {
         long filePointer;
         byte[] buffer = new byte[FRAME_ID_SIZE];

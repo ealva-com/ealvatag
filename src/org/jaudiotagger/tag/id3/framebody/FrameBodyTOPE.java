@@ -61,7 +61,7 @@ public class FrameBodyTOPE extends AbstractFrameBodyTextInfo
      * @throws InvalidTagException DOCUMENT ME!
      */
     public FrameBodyTOPE(ByteBuffer byteBuffer, int frameSize)
-        throws java.io.IOException, InvalidTagException
+        throws InvalidTagException
     {
         super(byteBuffer, frameSize);
     }

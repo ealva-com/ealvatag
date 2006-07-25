@@ -43,7 +43,7 @@ public class FrameBodyIPLS  extends AbstractFrameBodyTextInfo implements ID3v23F
     }
 
     public FrameBodyIPLS(ByteBuffer byteBuffer, int frameSize)
-        throws IOException, InvalidTagException
+        throws InvalidTagException
     {
         super(byteBuffer, frameSize);
     }

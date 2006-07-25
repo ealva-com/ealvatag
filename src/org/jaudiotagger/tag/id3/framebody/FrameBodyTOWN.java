@@ -60,7 +60,7 @@ public class FrameBodyTOWN extends AbstractFrameBodyTextInfo
      * @throws InvalidTagException DOCUMENT ME!
      */
     public FrameBodyTOWN(ByteBuffer byteBuffer, int frameSize)
-        throws java.io.IOException, InvalidTagException
+        throws InvalidTagException
     {
         super(byteBuffer, frameSize);
     }
