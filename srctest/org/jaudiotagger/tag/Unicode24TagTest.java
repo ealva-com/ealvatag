@@ -15,12 +15,10 @@ import org.jaudiotagger.tag.id3.framebody.FrameBodyCOMM;
 public class Unicode24TagTest extends AbstractTestCase {
 
     public void testUTF8WithNullTerminator () throws IOException, TagException, ReadOnlyFileException, InvalidAudioFrameException, RuntimeException {
-        MP3File mp3File
-            = new MP3File (copyAudioToTmp("testV24-comments-utf8.mp3"));
+        MP3File mp3File  = new MP3File (copyAudioToTmp("testV24-comments-utf8.mp3"));
         AbstractID3v2Tag id3v2Tag = mp3File.getID3v2Tag();
         assertNotNull (id3v2Tag);
-        AbstractID3v2Frame frame
-        = (AbstractID3v2Frame) id3v2Tag.getFrame("COMM");
+        AbstractID3v2Frame frame  = (AbstractID3v2Frame) id3v2Tag.getFrame("COMM");
         assertNotNull (frame);
         AbstractTagFrameBody frameBody = frame.getBody();
         assertTrue (frameBody instanceof FrameBodyCOMM);

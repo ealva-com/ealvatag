@@ -134,59 +134,46 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="ID3v22Frame.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/tag/id3/ID3v22Frame.java">
+      <file leaf-file-name="ID3v1Tag.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/tag/id3/ID3v1Tag.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="159" column="42" selection-start="5967" selection-end="5967" vertical-scroll-proportion="0.030303031">
+            <state line="157" column="25" selection-start="4228" selection-end="4436" vertical-scroll-proportion="0.020094562">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ID3v23Frame.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/tag/id3/ID3v23Frame.java">
+      <file leaf-file-name="ID3v11Tag.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/tag/id3/ID3v11Tag.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="229" column="13" selection-start="8340" selection-end="8340" vertical-scroll-proportion="0.030303031">
+            <state line="204" column="71" selection-start="7541" selection-end="7541" vertical-scroll-proportion="0.020094562">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="TestAudioTagger.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/test/TestAudioTagger.java">
+      <file leaf-file-name="ID3v23Tag.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/tag/id3/ID3v23Tag.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="37" column="13" selection-start="1490" selection-end="1490" vertical-scroll-proportion="0.030303031">
+            <state line="182" column="23" selection-start="5731" selection-end="5731" vertical-scroll-proportion="0.020094562">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ID3v24TagTest.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/srctest/org/jaudiotagger/tag/ID3v24TagTest.java">
+      <file leaf-file-name="ID3v22Tag.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/tag/id3/ID3v22Tag.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="7" column="13" selection-start="129" selection-end="129" vertical-scroll-proportion="0.20588236">
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
+            <state line="161" column="60" selection-start="5543" selection-end="5543" vertical-scroll-proportion="0.020094562">
+              <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="MP3AudioHeaderTest.java" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/srctest/org/jaudiotagger/audio/mp3/MP3AudioHeaderTest.java">
+      <file leaf-file-name="TextEncodedStringNullTerminated.java" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/tag/datatype/TextEncodedStringNullTerminated.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="8" column="13" selection-start="111" selection-end="111" vertical-scroll-proportion="0.030303031">
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="MPEGFrameHeader.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/audio/mp3/MPEGFrameHeader.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="193" column="13" selection-start="8172" selection-end="8172" vertical-scroll-proportion="0.030303031">
+            <state line="152" column="83" selection-start="5608" selection-end="5608" vertical-scroll-proportion="0.15602838">
               <folding />
             </state>
           </provider>
@@ -195,25 +182,25 @@
       <file leaf-file-name="MP3File.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/audio/mp3/MP3File.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="46" column="13" selection-start="1789" selection-end="1789" vertical-scroll-proportion="0.030303031">
+            <state line="124" column="25" selection-start="4037" selection-end="4037" vertical-scroll-proportion="0.020094562">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="MP3AudioHeader.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/audio/mp3/MP3AudioHeader.java">
+      <file leaf-file-name="AbstractID3v1Tag.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/tag/id3/AbstractID3v1Tag.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="463" column="39" selection-start="16806" selection-end="16807" vertical-scroll-proportion="0.030303031">
+            <state line="108" column="22" selection-start="3821" selection-end="3821" vertical-scroll-proportion="0.47754136">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="File.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="jar://C:/Apps/java/sun/j2sdk1.4.2_03/src.zip!/java/io/File.java">
+      <file leaf-file-name="ID3v23TagTest.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/srctest/org/jaudiotagger/tag/ID3v23TagTest.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="241" column="86" selection-start="9810" selection-end="9810" vertical-scroll-proportion="0.030303031">
+            <state line="50" column="32" selection-start="1054" selection-end="1054" vertical-scroll-proportion="0.020094562">
               <folding />
             </state>
           </provider>
@@ -222,7 +209,16 @@
       <file leaf-file-name="ID3v24Tag.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/tag/id3/ID3v24Tag.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="213" column="11" selection-start="6371" selection-end="6371" vertical-scroll-proportion="0.030303031">
+            <state line="267" column="19" selection-start="8327" selection-end="8327" vertical-scroll-proportion="0.020094562">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ID3v24TagTest.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/srctest/org/jaudiotagger/tag/ID3v24TagTest.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="7" column="13" selection-start="129" selection-end="129" vertical-scroll-proportion="0.120567374">
               <folding />
             </state>
           </provider>
@@ -246,8 +242,8 @@
     <option name="GROUP_BY_SEVERITY" value="false" />
     <option name="ANALYZE_TEST_SOURCES" value="true" />
     <option name="SCOPE_TYPE" value="1" />
-    <option name="CUSTOM_SCOPE_NAME" value="" />
-    <profile name="Default" />
+    <option name="CUSTOM_SCOPE_NAME" value="Project Files" />
+    <profile name="EditorHightlightingSettings" />
   </component>
   <component name="J2EEProjectPane">
     <PATH>
@@ -260,7 +256,7 @@
   </component>
   <component name="ModuleEditorState">
     <option name="LAST_EDITED_MODULE_NAME" value="jaudiotagger" />
-    <option name="LAST_EDITED_TAB_NAME" value="Libraries (Classpath)" />
+    <option name="LAST_EDITED_TAB_NAME" value="Paths" />
   </component>
   <component name="NamedScopeManager" />
   <component name="PackagesPane">
@@ -272,24 +268,6 @@
       <PATH_ELEMENT>
         <option name="myItemId" value="jaudiotagger" />
         <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewModuleNode" />
-      </PATH_ELEMENT>
-    </PATH>
-    <PATH>
-      <PATH_ELEMENT>
-        <option name="myItemId" value="jaudiotagger.ipr" />
-        <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewProjectNode" />
-      </PATH_ELEMENT>
-      <PATH_ELEMENT>
-        <option name="myItemId" value="jaudiotagger" />
-        <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewModuleNode" />
-      </PATH_ELEMENT>
-      <PATH_ELEMENT>
-        <option name="myItemId" value="org" />
-        <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageElementNode" />
-      </PATH_ELEMENT>
-      <PATH_ELEMENT>
-        <option name="myItemId" value="jaudiotagger" />
-        <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageElementNode" />
       </PATH_ELEMENT>
     </PATH>
   </component>
@@ -376,58 +354,6 @@
         <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
       </PATH_ELEMENT>
       <PATH_ELEMENT>
-        <option name="myItemId" value="PsiDirectory:D:\Code\jthink\opensrc\jaudiotagger\srctest" />
-        <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-      </PATH_ELEMENT>
-      <PATH_ELEMENT>
-        <option name="myItemId" value="PsiDirectory:D:\Code\jthink\opensrc\jaudiotagger\srctest\org\jaudiotagger" />
-        <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-      </PATH_ELEMENT>
-      <PATH_ELEMENT>
-        <option name="myItemId" value="PsiDirectory:D:\Code\jthink\opensrc\jaudiotagger\srctest\org\jaudiotagger\tag" />
-        <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-      </PATH_ELEMENT>
-    </PATH>
-    <PATH>
-      <PATH_ELEMENT>
-        <option name="myItemId" value="jaudiotagger.ipr" />
-        <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-      </PATH_ELEMENT>
-      <PATH_ELEMENT>
-        <option name="myItemId" value="jaudiotagger" />
-        <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode" />
-      </PATH_ELEMENT>
-      <PATH_ELEMENT>
-        <option name="myItemId" value="PsiDirectory:D:\Code\jthink\opensrc\jaudiotagger" />
-        <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-      </PATH_ELEMENT>
-      <PATH_ELEMENT>
-        <option name="myItemId" value="PsiDirectory:D:\Code\jthink\opensrc\jaudiotagger\srctest" />
-        <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-      </PATH_ELEMENT>
-      <PATH_ELEMENT>
-        <option name="myItemId" value="PsiDirectory:D:\Code\jthink\opensrc\jaudiotagger\srctest\org\jaudiotagger" />
-        <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-      </PATH_ELEMENT>
-      <PATH_ELEMENT>
-        <option name="myItemId" value="PsiDirectory:D:\Code\jthink\opensrc\jaudiotagger\srctest\org\jaudiotagger\audio\mp3" />
-        <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-      </PATH_ELEMENT>
-    </PATH>
-    <PATH>
-      <PATH_ELEMENT>
-        <option name="myItemId" value="jaudiotagger.ipr" />
-        <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-      </PATH_ELEMENT>
-      <PATH_ELEMENT>
-        <option name="myItemId" value="jaudiotagger" />
-        <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode" />
-      </PATH_ELEMENT>
-      <PATH_ELEMENT>
-        <option name="myItemId" value="PsiDirectory:D:\Code\jthink\opensrc\jaudiotagger" />
-        <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-      </PATH_ELEMENT>
-      <PATH_ELEMENT>
         <option name="myItemId" value="PsiDirectory:D:\Code\jthink\opensrc\jaudiotagger\src" />
         <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
       </PATH_ELEMENT>
@@ -458,7 +384,7 @@
         <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
       </PATH_ELEMENT>
       <PATH_ELEMENT>
-        <option name="myItemId" value="PsiDirectory:D:\Code\jthink\opensrc\jaudiotagger\src\org\jaudiotagger\audio" />
+        <option name="myItemId" value="PsiDirectory:D:\Code\jthink\opensrc\jaudiotagger\src\org\jaudiotagger\tag" />
         <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
       </PATH_ELEMENT>
     </PATH>
@@ -484,11 +410,11 @@
         <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
       </PATH_ELEMENT>
       <PATH_ELEMENT>
-        <option name="myItemId" value="PsiDirectory:D:\Code\jthink\opensrc\jaudiotagger\src\org\jaudiotagger\audio" />
+        <option name="myItemId" value="PsiDirectory:D:\Code\jthink\opensrc\jaudiotagger\src\org\jaudiotagger\tag" />
         <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
       </PATH_ELEMENT>
       <PATH_ELEMENT>
-        <option name="myItemId" value="PsiDirectory:D:\Code\jthink\opensrc\jaudiotagger\src\org\jaudiotagger\audio\mp3" />
+        <option name="myItemId" value="PsiDirectory:D:\Code\jthink\opensrc\jaudiotagger\src\org\jaudiotagger\tag\datatype" />
         <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
       </PATH_ELEMENT>
     </PATH>
@@ -543,6 +469,31 @@
       <RunnerSettings RunnerId="Run" />
       <ConfigurationWrapper RunnerId="Run" />
     </tempConfiguration>
+    <configuration selected="false" default="true" type="JUnit" factoryName="JUnit">
+      <module name="" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PACKAGE_NAME" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="METHOD_NAME" />
+      <option name="TEST_OBJECT" value="class" />
+      <option name="VM_PARAMETERS" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="ADDITIONAL_CLASS_PATH" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="wholeProject" />
+      </option>
+    </configuration>
+    <configuration selected="false" default="true" type="Application" factoryName="Application">
+      <option name="MAIN_CLASS_NAME" />
+      <option name="VM_PARAMETERS" />
+      <option name="PROGRAM_PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <module name="" />
+    </configuration>
     <configuration selected="false" default="true" type="WebLogic Instance" factoryName="Local">
       <option name="WORKING_DIRECTORY" />
       <option name="HOST" value="localhost" />
@@ -568,31 +519,6 @@
       <option name="VM_PARAMETERS" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
       <option name="ALTERNATIVE_JRE_PATH" />
-    </configuration>
-    <configuration selected="false" default="true" type="Application" factoryName="Application">
-      <option name="MAIN_CLASS_NAME" />
-      <option name="VM_PARAMETERS" />
-      <option name="PROGRAM_PARAMETERS" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <module name="" />
-    </configuration>
-    <configuration selected="false" default="true" type="JUnit" factoryName="JUnit">
-      <module name="" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="PACKAGE_NAME" />
-      <option name="MAIN_CLASS_NAME" />
-      <option name="METHOD_NAME" />
-      <option name="TEST_OBJECT" value="class" />
-      <option name="VM_PARAMETERS" />
-      <option name="PARAMETERS" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="ADDITIONAL_CLASS_PATH" />
-      <option name="TEST_SEARCH_SCOPE">
-        <value defaultName="wholeProject" />
-      </option>
     </configuration>
     <configuration selected="false" default="true" type="Remote" factoryName="Remote">
       <option name="USE_SOCKET_TRANSPORT" value="true" />
@@ -645,16 +571,16 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-4" y="-4" width="1036" height="780" extended-state="0" />
+    <frame x="-4" y="-4" width="1688" height="1028" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="CVS" active="false" anchor="bottom" auto_hide="false" internal_type="docked" type="docked" visible="false" weight="0.33" order="8" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="docked" type="docked" visible="false" weight="0.33" order="7" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="docked" type="docked" visible="true" weight="0.33333334" order="0" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="docked" type="docked" visible="false" weight="0.3264095" order="1" />
-      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="docked" type="docked" visible="false" weight="0.25" order="1" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="docked" type="docked" visible="false" weight="0.32668713" order="8" />
-      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="docked" type="docked" visible="false" weight="0.4" order="6" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="docked" type="docked" visible="true" weight="0.25733498" order="0" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="docked" type="docked" visible="false" weight="0.27222222" order="1" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="docked" type="docked" visible="false" weight="0.2550813" order="1" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="docked" type="docked" visible="false" weight="0.32666665" order="8" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="docked" type="docked" visible="false" weight="0.45" order="6" />
       <window_info id="Module Dependencies" active="false" anchor="right" auto_hide="false" internal_type="docked" type="docked" visible="false" weight="0.33" order="3" />
       <window_info id="Dependency Viewer" active="false" anchor="bottom" auto_hide="false" internal_type="docked" type="docked" visible="false" weight="0.33" order="8" />
       <window_info id="Favorites" active="false" anchor="right" auto_hide="false" internal_type="docked" type="docked" visible="false" weight="0.33" order="3" />
@@ -754,112 +680,112 @@
     </buildFile>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/tag/id3/AbstractID3v2Frame.java">
+    <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/logging/LogFormatter.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="51" column="18" selection-start="1855" selection-end="1855" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://C:/Apps/java/sun/j2sdk1.4.2_03/src.zip!/java/nio/ByteBuffer.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="1475" column="24" selection-start="41645" selection-end="41645" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/tag/id3/framebody/FrameBodyCOMM.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="187" column="38" selection-start="5034" selection-end="5034" vertical-scroll-proportion="0.1657754">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/tag/datatype/StringNullTerminated.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="43" column="11" selection-start="1581" selection-end="1581" vertical-scroll-proportion="0.030303031">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/tag/id3/framebody/AbstractID3v2FrameBody.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="73" column="8" selection-start="2442" selection-end="2442" vertical-scroll-proportion="0.049853373">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/tag/id3/ID3v22Frame.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="159" column="42" selection-start="5967" selection-end="5967" vertical-scroll-proportion="0.030303031">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/tag/id3/ID3v23Frame.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="229" column="13" selection-start="8340" selection-end="8340" vertical-scroll-proportion="0.030303031">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/test/TestAudioTagger.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="37" column="13" selection-start="1490" selection-end="1490" vertical-scroll-proportion="0.030303031">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/srctest/org/jaudiotagger/tag/ID3v24TagTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="7" column="13" selection-start="129" selection-end="129" vertical-scroll-proportion="0.20588236">
+        <state line="25" column="27" selection-start="1113" selection-end="1113" vertical-scroll-proportion="0.020094562">
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/audio/mp3/MPEGFrameHeader.java">
+    <entry file="file://$PROJECT_DIR$/srctest/org/jaudiotagger/AbstractTestCase.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="193" column="13" selection-start="8172" selection-end="8172" vertical-scroll-proportion="0.030303031">
-          <folding />
+        <state line="69" column="0" selection-start="1703" selection-end="1703" vertical-scroll-proportion="0.90543735">
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/audio/mp3/MP3File.java">
+    <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/test/TestAudioTagger.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="46" column="13" selection-start="1789" selection-end="1789" vertical-scroll-proportion="0.030303031">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/audio/mp3/MP3AudioHeader.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="463" column="39" selection-start="16806" selection-end="16807" vertical-scroll-proportion="0.030303031">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://C:/Apps/java/sun/j2sdk1.4.2_03/src.zip!/java/io/File.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="241" column="86" selection-start="9810" selection-end="9810" vertical-scroll-proportion="0.030303031">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/tag/id3/ID3v24Tag.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="213" column="11" selection-start="6371" selection-end="6371" vertical-scroll-proportion="0.030303031">
+        <state line="33" column="13" selection-start="1316" selection-end="1316" vertical-scroll-proportion="0.020094562">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/srctest/org/jaudiotagger/audio/mp3/MP3AudioHeaderTest.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="8" column="13" selection-start="111" selection-end="111" vertical-scroll-proportion="0.030303031">
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
+        <state line="8" column="13" selection-start="120" selection-end="120" vertical-scroll-proportion="0.020094562">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/srctest/org/jaudiotagger/tag/Unicode24TagTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="14" column="13" selection-start="451" selection-end="451" vertical-scroll-proportion="0.063510396">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/tag/id3/ID3v1Tag.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="157" column="25" selection-start="4228" selection-end="4436" vertical-scroll-proportion="0.020094562">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/tag/id3/ID3v11Tag.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="204" column="71" selection-start="7541" selection-end="7541" vertical-scroll-proportion="0.020094562">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/tag/id3/ID3v23Tag.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="182" column="23" selection-start="5731" selection-end="5731" vertical-scroll-proportion="0.020094562">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/tag/id3/ID3v22Tag.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="161" column="60" selection-start="5543" selection-end="5543" vertical-scroll-proportion="0.020094562">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/audio/mp3/MP3File.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="124" column="25" selection-start="4037" selection-end="4037" vertical-scroll-proportion="0.020094562">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/tag/id3/AbstractID3v1Tag.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="108" column="22" selection-start="3821" selection-end="3821" vertical-scroll-proportion="0.47754136">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/srctest/org/jaudiotagger/tag/ID3v23TagTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="50" column="32" selection-start="1054" selection-end="1054" vertical-scroll-proportion="0.020094562">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/tag/id3/ID3v24Tag.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="267" column="19" selection-start="8327" selection-end="8327" vertical-scroll-proportion="0.020094562">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/srctest/org/jaudiotagger/tag/ID3v24TagTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="7" column="13" selection-start="129" selection-end="129" vertical-scroll-proportion="0.120567374">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/tag/datatype/TextEncodedStringNullTerminated.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="152" column="83" selection-start="5608" selection-end="5608" vertical-scroll-proportion="0.15602838">
+          <folding />
         </state>
       </provider>
     </entry>
