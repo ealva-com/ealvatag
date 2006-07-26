@@ -396,11 +396,7 @@ public class ID3v22Frame
     {
         MP3File.getStructureFormatter().openHeadingElement(TYPE_FRAME, getIdentifier());
         MP3File.getStructureFormatter().addElement(TYPE_FRAME_SIZE, frameSize);
-        statusFlags.createStructure();
-        encodingFlags.createStructure();
+        frameBody.createStructure();
         MP3File.getStructureFormatter().closeHeadingElement(TYPE_FRAME);
-
     }
-
-
 }
