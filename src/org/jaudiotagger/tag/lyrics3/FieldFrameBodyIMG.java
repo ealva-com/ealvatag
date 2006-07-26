@@ -89,14 +89,7 @@ public class FieldFrameBodyIMG extends AbstractLyrics3v2FieldFrameBody
     public FieldFrameBodyIMG(ByteBuffer byteBuffer)
         throws InvalidTagException
     {
-        try
-        {
-            this.read(byteBuffer);
-        }
-        catch (TagException e)
-        {
-            e.printStackTrace();
-        }
+        this.read(byteBuffer);        
     }
 
     /**

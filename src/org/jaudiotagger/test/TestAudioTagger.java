@@ -34,7 +34,7 @@ import java.text.DateFormat;
 public class TestAudioTagger
 {
 
-    public static void main(final String[] args) throws Throwable
+    public static void main(final String[] args) 
     {
         TestAudioTagger test = new TestAudioTagger();
 

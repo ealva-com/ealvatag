@@ -37,6 +37,7 @@ import java.io.RandomAccessFile;
 import java.util.Iterator;
 import java.util.regex.*;
 import java.util.*;
+import java.util.logging.Level;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 
@@ -47,11 +48,7 @@ public class ID3v11Tag
     //For writing output
     protected static final String TYPE_TRACK = "track";
 
-
-    /**
-     * Track is held as a single byte in v1.1
-     */
-    protected byte track = (byte) 0;
+    protected static final int TRACK_UNDEFINED = 0;
     protected static final int TRACK_MAX_VALUE = 255;
     protected static final int TRACK_MIN_VALUE = 1;
 
@@ -64,6 +61,10 @@ public class ID3v11Tag
     protected static final int FIELD_TRACK_LENGTH = 1;
     protected static final int FIELD_TRACK_POS = 126;
 
+    /**
+     * Track is held as a single byte in v1.1
+     */
+    protected byte track = (byte) TRACK_UNDEFINED;
     /**
      * Creates a new ID3v1_1 datatype.
      */
@@ -84,7 +85,7 @@ public class ID3v11Tag
     }
 
     /**
-     * Creates a new ID3v1_1 datatype.
+     * Creates a new ID3v1_1 datatype from a non v11 tag
      *
      * @param mp3tag 
      * @throws UnsupportedOperationException 
@@ -117,7 +118,6 @@ public class ID3v11Tag
             else
             {
                 // first change the tag to ID3v2_4 tag.
-                // id3v2_4 can take any tag.
                 ID3v24Tag id3tag;
                 id3tag = new ID3v24Tag(mp3tag);
                 ID3v24Frame frame;
@@ -161,25 +161,29 @@ public class ID3v11Tag
                 if (id3tag.hasFrame(ID3v24Frames.FRAME_ID_GENRE))
                 {
                     frame = (ID3v24Frame) id3tag.getFrame(ID3v24Frames.FRAME_ID_GENRE);
-                    text = (String) ((FrameBodyTCON) frame.getBody()).getText();
+                    text =  ((FrameBodyTCON) frame.getBody()).getText();
                     try
                     {
                         this.genre = (byte) ID3Tags.findNumber(text);
                     }
                     catch (TagException ex)
                     {
+                        logger.log(Level.WARNING,"Unable to convert TCON frame to format suitable for v11 tag",ex);
+                        this.genre = (byte) ID3v1Tag.GENRE_UNDEFINED;
                     }
                 }
                 if (id3tag.hasFrame(ID3v24Frames.FRAME_ID_TRACK))
                 {
                     frame = (ID3v24Frame) id3tag.getFrame(ID3v24Frames.FRAME_ID_TRACK);
-                    text = (String) ((FrameBodyTRCK) frame.getBody()).getText();
+                    text =  ((FrameBodyTRCK) frame.getBody()).getText();
                     try
                     {
                         this.track = (byte) ID3Tags.findNumber(text);
                     }
                     catch (TagException ex)
                     {
+                        logger.log(Level.WARNING,"Unable to convert TRCK frame to format suitable for v11 tag",ex);
+                        this.track = (byte) TRACK_UNDEFINED;
                     }
                 }
             }
@@ -246,7 +250,7 @@ public class ID3v11Tag
         {
             trackAsInt = Integer.parseInt(trackValue);
         }
-        catch (Exception e)
+        catch (NumberFormatException e)
         {
             trackAsInt = 0;
         }

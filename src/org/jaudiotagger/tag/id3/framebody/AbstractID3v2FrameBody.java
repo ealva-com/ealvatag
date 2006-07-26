@@ -178,6 +178,7 @@ public abstract class AbstractID3v2FrameBody
             }
             catch (InvalidDataTypeException e)
             {
+                 logger.warning("Invalid DataType for Frame Body"+e.getMessage());
                  throw new InvalidFrameException("Invalid data for Frame Body");
             }
             //Increment Offset to start of next datatype.

@@ -24,6 +24,7 @@ package org.jaudiotagger.tag.id3;
 
 import org.jaudiotagger.logging.LogFormatter;
 import org.jaudiotagger.tag.TagException;
+import org.jaudiotagger.tag.InvalidFrameException;
 import org.jaudiotagger.tag.id3.ID3v22Frames;
 import org.jaudiotagger.tag.id3.ID3v23Frames;
 import org.jaudiotagger.tag.id3.ID3v24Frames;
@@ -396,7 +397,18 @@ public class ID3Tags
         }
         catch (java.lang.reflect.InvocationTargetException ex)
         {
-            throw new IllegalArgumentException("InvocationTargetException: Unable to invoke constructor to create copy");
+            if(ex.getCause() instanceof Error)
+            {
+                throw (Error)ex.getCause();
+            }
+            else if(ex.getCause() instanceof RuntimeException)
+            {
+                throw (RuntimeException)ex.getCause();
+            }
+            else
+            {
+                throw new IllegalArgumentException("InvocationTargetException: Unable to invoke constructor to create copy");
+            }
         }
     }
 

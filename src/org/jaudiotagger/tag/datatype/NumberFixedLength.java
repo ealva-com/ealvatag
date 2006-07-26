@@ -84,7 +84,7 @@ public class NumberFixedLength
      * 
      *
      * @param obj 
-     * @return 
+     * @return true if obj equivalent to this
      */
     public boolean equals(Object obj)
     {
@@ -132,7 +132,7 @@ public class NumberFixedLength
     /**
      * 
      *
-     * @return 
+     * @return String representation of this datatype
      */
     public String toString()
     {
@@ -149,7 +149,7 @@ public class NumberFixedLength
     /**
      * Write data to byte array
      *
-     * @return 
+     * @return the datatype converted to a byte array
      */
     public byte[] writeByteArray()
     {

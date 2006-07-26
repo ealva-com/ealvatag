@@ -99,6 +99,7 @@ public final class MP3AudioHeader extends AbstractAudioHeader
      * @param seekFile MP3 file to seek
      * @return true if the first MP3 frame can be found
      * @throws IOException on any I/O error
+     * @noinspection NestedTryStatement
      */
     public boolean seek(final File seekFile)
         throws IOException

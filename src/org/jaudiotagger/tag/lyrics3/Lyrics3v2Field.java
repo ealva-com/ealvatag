@@ -217,26 +217,19 @@ public class Lyrics3v2Field
      * @throws IOException 
      */
     public void write(RandomAccessFile file)
-
+    throws IOException
     {
-        try
+        if ((((AbstractLyrics3v2FieldFrameBody) frameBody).getSize() > 0) ||
+            TagOptionSingleton.getInstance().isLyrics3SaveEmptyField())
         {
-            if ((((AbstractLyrics3v2FieldFrameBody) frameBody).getSize() > 0) ||
-                TagOptionSingleton.getInstance().isLyrics3SaveEmptyField())
+            byte[] buffer = new byte[3];
+            String str = getIdentifier();
+            for (int i = 0; i < str.length(); i++)
             {
-                byte[] buffer = new byte[3];
-                String str = getIdentifier();
-                for (int i = 0; i < str.length(); i++)
-                {
-                    buffer[i] = (byte) str.charAt(i);
-                }
-                file.write(buffer, 0, str.length());
-                //body.write(file);
+                buffer[i] = (byte) str.charAt(i);
             }
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
+            file.write(buffer, 0, str.length());
+            //body.write(file);
         }
     }
 
@@ -244,10 +237,8 @@ public class Lyrics3v2Field
      * Read a Lyrics3 Field from a file.
      *
      * @param identifier 
-     * @param file       
-     * @return 
+     * @return
      * @throws InvalidTagException 
-     * @throws IOException         
      */
     private AbstractLyrics3v2FieldFrameBody readBody(String identifier, ByteBuffer byteBuffer)
         throws InvalidTagException

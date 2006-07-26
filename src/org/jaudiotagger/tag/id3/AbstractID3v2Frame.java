@@ -112,13 +112,13 @@ public abstract class AbstractID3v2Frame
         catch (InstantiationException ie)
         {
             logger.log(Level.SEVERE,"InstantiationException:" + identifier,ie);
-            throw new RuntimeException(ie.getMessage());
+            throw new RuntimeException(ie);
         }
         //Private Constructor shouild not happen
         catch (IllegalAccessException iae)
         {
             logger.log(Level.SEVERE,"IllegalAccessException:" + identifier,iae);
-            throw new RuntimeException(iae.getMessage());
+            throw new RuntimeException(iae);
         }
         logger.info("Created empty frame of type" + identifier);
     }
@@ -174,16 +174,13 @@ public abstract class AbstractID3v2Frame
             }
             //Should only throw InvalidFrameException but unfortunately legacy hierachy forces
             //read method to declare it can throw InvalidtagException
+            catch(InvalidFrameException ife)
+            {
+                throw ife;
+            }
             catch(InvalidTagException te)
             {
-                if(te instanceof InvalidFrameException)
-                {
-                    throw (InvalidFrameException)te;
-                }
-                else
-                {
-                      throw new InvalidFrameException(te.getMessage());
-                }
+                throw new InvalidFrameException(te.getMessage());
             }
         }
         //An error has occurred during frame instantiation, if underlying cause is an unchecked exception or error

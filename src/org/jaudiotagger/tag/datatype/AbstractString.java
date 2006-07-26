@@ -84,25 +84,19 @@ public abstract class AbstractString
     public boolean canBeEncoded()
     {
         //Try and write to buffer using the CharSet defined by the textEncoding field.
-        try
-        {
-            byte textEncoding = this.getFrameBody().getTextEncoding();
-            String charSetName = TextEncoding.getInstanceOf().getValueForId(textEncoding);
-            CharsetEncoder encoder = Charset.forName(charSetName).newEncoder();
 
-            if (encoder.canEncode((String) value) == true)
-            {
-                return true;
-            }
-            else
-            {
-                logger.finest("Failed Trying to decode" + (String) value + "with" + encoder.toString());
-                return false;
-            }
-        }
-        catch (Exception e)
+        byte textEncoding = this.getFrameBody().getTextEncoding();
+        String charSetName = TextEncoding.getInstanceOf().getValueForId(textEncoding);
+        CharsetEncoder encoder = Charset.forName(charSetName).newEncoder();
+
+        if (encoder.canEncode((String) value) == true)
         {
-            return false;
+            return true;
         }
+        else
+        {
+            logger.finest("Failed Trying to decode" + (String) value + "with" + encoder.toString());
+            return false;
+        }           
     }
 }

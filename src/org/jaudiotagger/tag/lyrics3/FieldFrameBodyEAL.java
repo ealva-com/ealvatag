@@ -61,14 +61,8 @@ public class FieldFrameBodyEAL extends AbstractLyrics3v2FieldFrameBody
     public FieldFrameBodyEAL(ByteBuffer byteBuffer)
         throws InvalidTagException
     {
-        try
-        {
-            this.read(byteBuffer);
-        }
-        catch (org.jaudiotagger.tag.TagException e)
-        {
-            e.printStackTrace();
-        }
+        read(byteBuffer);
+        
     }
 
     /**

@@ -27,6 +27,7 @@ package org.jaudiotagger.tag.id3;
 import java.io.*;
 import java.nio.*;
 import java.util.regex.*;
+import java.util.logging.Level;
 import java.math.BigInteger;
 
 import org.jaudiotagger.audio.mp3.*;
@@ -99,18 +100,20 @@ public class ID3v22Frame
         }
         catch (ClassNotFoundException cnfe)
         {
-            logger.severe(cnfe.getMessage());
+            logger.log(Level.SEVERE,cnfe.getMessage(),cnfe);
             frameBody = new FrameBodyUnsupported();
         }
-            //Instantiate Interface/Abstract should not happen
+        //Instantiate Interface/Abstract should not happen
         catch (InstantiationException ie)
         {
-            throw new RuntimeException(ie.getMessage());
+            logger.log(Level.SEVERE,ie.getMessage(),ie);
+            throw new RuntimeException(ie);
         }
-            //Private Constructor shouild not happen
+        //Private Constructor shouild not happen
         catch (IllegalAccessException iae)
         {
-            throw new RuntimeException(iae.getMessage());
+            logger.log(Level.SEVERE,iae.getMessage(),iae);
+            throw new RuntimeException(iae);
         }
         logger.info("Created empty frame of type" + this.identifier + "with frame body of" + bodyIdentifier);
 

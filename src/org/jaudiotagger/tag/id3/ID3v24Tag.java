@@ -541,8 +541,7 @@ public class ID3v24Tag
      *
      * @param byteBuffer to read the tag from
      * @throws TagException         
-     * @throws IOException          
-     * @throws TagNotFoundException 
+     * @throws TagNotFoundException
      * @throws InvalidTagException  
      */
     public void read(ByteBuffer byteBuffer)

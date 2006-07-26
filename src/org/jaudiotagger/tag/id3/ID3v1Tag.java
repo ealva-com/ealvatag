@@ -147,8 +147,8 @@ public class ID3v1Tag
         majorVersion = (byte) 0;
         revision = (byte) 0;
 
-        FileChannel fc = null;
-        ByteBuffer  byteBuffer = ByteBuffer.allocate(TAG_LENGTH);
+        FileChannel fc;
+        ByteBuffer  byteBuffer;
 
         fc = file.getChannel();
         fc.position(file.length() - TAG_LENGTH);
@@ -224,7 +224,7 @@ public class ID3v1Tag
      * so if unable to find value in list set 255, which seems to be the value
      * winamp uses for undefined.
      *
-     * @param genre
+     * @param genreVal
      */
     public void setGenre(String genreVal)
     {
@@ -296,7 +296,7 @@ public class ID3v1Tag
      * 
      *
      * @param obj 
-     * @return 
+     * @return true if this and obj are equivalent
      */
     public boolean equals(Object obj)
     {
@@ -335,7 +335,7 @@ public class ID3v1Tag
     /**
      * 
      *
-     * @return 
+     * @return  an iterator to iterate through the fields of the tag
      */
     public Iterator iterator()
     {
@@ -346,11 +346,9 @@ public class ID3v1Tag
 
 
     /**
-     * 
      *
      * @param byteBuffer 
-     * @throws TagNotFoundException 
-     * @throws IOException          
+     * @throws TagNotFoundException
      */
     public void read(ByteBuffer byteBuffer)
         throws TagNotFoundException
@@ -403,10 +401,9 @@ public class ID3v1Tag
     }
 
     /**
-     * 
+     * Does a tag of this version exist within the byteBuffer
      *
-     * @return 
-     * @throws IOException 
+     * @return whether tag exists within the byteBuffer
      */
     public boolean seek(ByteBuffer byteBuffer)
     {
@@ -489,7 +486,7 @@ public class ID3v1Tag
     /**
      * 
      *
-     * @return 
+     * Create strcutured representation of this item.
      */
     public void createStructure()
     {

@@ -61,14 +61,7 @@ public class FieldFrameBodyETT extends AbstractLyrics3v2FieldFrameBody
     public FieldFrameBodyETT(ByteBuffer byteBuffer)
         throws InvalidTagException
     {
-        try
-        {
-            this.read(byteBuffer);
-        }
-        catch (org.jaudiotagger.tag.TagException e)
-        {
-            e.printStackTrace();
-        }
+        this.read(byteBuffer);       
     }
 
     /**
