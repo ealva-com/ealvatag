@@ -6,22 +6,56 @@
 <body>
 
 <h3>The following release are available</h3>
+
 <h4>v1.0.1</h4>
 <p>This is an interim release, various bugs have been fixed and the api made more robust</p>
 <p>The following issues have been fixed in this release</p>
 <ul>
-<li><a href="https://jaudiotagger.dev.java.net/issues/show_bug.cgi?id=1">Issue 1:test</a></li>
-<li><a href="https://jaudiotagger.dev.java.net/issues/show_bug.cgi?id=2">Issue 2:test</a></li>
+<li><a href="https://jaudiotagger.dev.java.net/issues/show_bug.cgi?id=8">Issue 8:Require some junit tests to test reading of tags</a></li>
+<li><a href="https://jaudiotagger.dev.java.net/issues/show_bug.cgi?id=17">Issue 17:NullPointerException in ID3v22Frame</a></li>
+<li><a href="https://jaudiotagger.dev.java.net/issues/show_bug.cgi?id=26">Issue 26:Need to add in proper build environment</a></li>
+
+<li><a href="https://jaudiotagger.dev.java.net/issues/show_bug.cgi?id=34">Issue 34:Not reading COMMFrames correctly if UTF8 encoded</a></li>
+<li><a href="https://jaudiotagger.dev.java.net/issues/show_bug.cgi?id=35">Issue 35:ID3v24Frame body constructor should be private</a></li>
+<li><a href="https://jaudiotagger.dev.java.net/issues/show_bug.cgi?id=37">Issue 37:Some frames not checking text encoding when write</a></li>
+<li><a href="https://jaudiotagger.dev.java.net/issues/show_bug.cgi?id=38">Issue 38:UFID frame can be multiple within tag</a></li>
+<li><a href="https://jaudiotagger.dev.java.net/issues/show_bug.cgi?id=40">Issue 40:NullTerminatedString datatype should not always use encoding</a></li>
+<li><a href="https://jaudiotagger.dev.java.net/issues/show_bug.cgi?id=41">Issue 41:getIdentifier() on frame bodies should only return Frame Id</a></li>
+<li><a href="https://jaudiotagger.dev.java.net/issues/show_bug.cgi?id=43">Issue 43:read methods uneccessarily throws IOException</a></li>
+<li><a href="https://jaudiotagger.dev.java.net/issues/show_bug.cgi?id=44">Issue 44:AbstractID3v2Frame hides errors</a></li>
+<li><a href="https://jaudiotagger.dev.java.net/issues/show_bug.cgi?id=45">Issue 45:FrameBodyAPIC getDescription() is recursive</a></li>
+<li><a href="https://jaudiotagger.dev.java.net/issues/show_bug.cgi?id=46">Issue 46:getDescription() used inconsisistently in some bodies</a></li>
+<li><a href="https://jaudiotagger.dev.java.net/issues/show_bug.cgi?id=47">Issue 47:AbstractID3v2FrameBody readBody should fail if no constructor</a></li>
+<li><a href="https://jaudiotagger.dev.java.net/issues/show_bug.cgi?id=48">Issue 48:Formatters havent been created as singletons correctly</a></li>
 </ul>
 <ul>
 <li>Source <a href="http://jaudiotagger.dev.java.net/source/browse/*checkout*/jaudiotagger/releases/jaudiotaggersrc1_0_1.jar">jaudiotaggersrc1_0_1.jar</a></li>
 <li>Binary <a href="http://jaudiotagger.dev.java.net/source/browse/*checkout*/jaudiotagger/releases/jaudiotagger1_0_1.jar">jaudiotagger1_0_1.jar</a><li>
 </ul>
+
 <h4>v1.0.0</h4>
 <p>This was the first offical release, created once a proper build and distribution environment had been setup</p>
 <p>The following issues raised since this project was added to java.net were fixed in that release</p>
 <ul>
-<li></li>
+<li><a href="https://jaudiotagger.dev.java.net/issues/show_bug.cgi?id=2">Issue 2:Unable to save tag larger than 1mb</a></li>
+<li><a href="https://jaudiotagger.dev.java.net/issues/show_bug.cgi?id=3">Issue 3:Jaikoz unable to read indivdiual frames within a tag larger</a></li>
+<li><a href="https://jaudiotagger.dev.java.net/issues/show_bug.cgi?id=4">Issue 4:If you delete a large image (>1mb) from a tag and save the t</a></li>
+<li><a href="https://jaudiotagger.dev.java.net/issues/show_bug.cgi?id=6">Issue 6:Unable to read ID3v23 tag containing TYER and TDRC</a></li>
+<li><a href="https://jaudiotagger.dev.java.net/issues/show_bug.cgi?id=9">Issue 9:Create Test that could be run by users</a></li>
+<li><a href="https://jaudiotagger.dev.java.net/issues/show_bug.cgi?id=12">Issue 12:TPE1 created with TPE3 Body</a></li>
+<li><a href="https://jaudiotagger.dev.java.net/issues/show_bug.cgi?id=14">Issue 14:GRIDFrame throwing class cast exception Long</a></li>
+<li><a href="https://jaudiotagger.dev.java.net/issues/show_bug.cgi?id=15">Issue 15:Throwing exception reading files with no tag</a></li>
+<li><a href="https://jaudiotagger.dev.java.net/issues/show_bug.cgi?id=16">Issue 16:VBR and audio length is not calculated properly</a></li>
+<li><a href="https://jaudiotagger.dev.java.net/issues/show_bug.cgi?id=18">Issue 18:Perfomance improvements to reading tags required</a></li>
+<li><a href="https://jaudiotagger.dev.java.net/issues/show_bug.cgi?id=19">Issue 19:Performance Improvements required when writing tags to file</a></li>
+<li><a href="https://jaudiotagger.dev.java.net/issues/show_bug.cgi?id=24">Issue 24:Fiel Readjava.lang.IndexOutOfBoundsException: 5000</a></li>
+<li><a href="https://jaudiotagger.dev.java.net/issues/show_bug.cgi?id=25">Issue 25:JAudioTagger causing file locks</a></li>
+<li><a href="https://jaudiotagger.dev.java.net/issues/show_bug.cgi?id=27">Issue 27:Occasionally can identify a non mp3 frame as an mp3frame</a></li>
+<li><a href="https://jaudiotagger.dev.java.net/issues/show_bug.cgi?id=29">Issue 29:ID3v23 synchronizing an unsyncronised tag problem</a></li>
+<li><a href="https://jaudiotagger.dev.java.net/issues/show_bug.cgi?id=30">Issue 30:Unable to calculate exact lenght of frame in MPEG</a></li>
+<li><a href="https://jaudiotagger.dev.java.net/issues/show_bug.cgi?id=31">Issue 31:Cope with Tag size as reported in tag being wrong</a></li>
+<li><a href="https://jaudiotagger.dev.java.net/issues/show_bug.cgi?id=32">Issue 32:problem reading COMM frame, giving buffer underlow</a></li>
+<li><a href="https://jaudiotagger.dev.java.net/issues/show_bug.cgi?id=33">Issue 33:Removing Tag Error</a></li>
 </ul>
 <ul>Initial release
 <li>Source <a href="http://jaudiotagger.dev.java.net/source/browse/*checkout*/jaudiotagger/releases/jaudiotaggersrc1_0_0.jar">jaudiotaggersrc1_0_0.jar</a></li>
