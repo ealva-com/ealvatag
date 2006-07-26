@@ -77,7 +77,7 @@ public class FrameBodyPIC extends AbstractID3v2FrameBody implements ID3v22FrameB
         this.setObjectValue(DataTypes.OBJ_TEXT_ENCODING, new Byte(body.getTextEncoding()));
         this.setObjectValue(DataTypes.OBJ_IMAGE_FORMAT, ImageFormats.getFormatForMimeType((String) body.getObjectValue(DataTypes.OBJ_MIME_TYPE)));
         this.setObjectValue(DataTypes.OBJ_PICTURE_TYPE, body.getObjectValue(DataTypes.OBJ_PICTURE_TYPE));
-        this.setObjectValue(DataTypes.OBJ_DESCRIPTION, body.getDescription());
+        this.setObjectValue(DataTypes.OBJ_DESCRIPTION, body.getLongDescription());
         this.setObjectValue(DataTypes.OBJ_PICTURE_DATA, body.getObjectValue(DataTypes.OBJ_PICTURE_DATA));
 
     }
@@ -94,9 +94,9 @@ public class FrameBodyPIC extends AbstractID3v2FrameBody implements ID3v22FrameB
     }
 
     /**
-     * 
+     * Set a description of the image
      *
-     * @param description 
+     * @param description  of the image
      */
     public void setDescription(String description)
     {
@@ -104,9 +104,9 @@ public class FrameBodyPIC extends AbstractID3v2FrameBody implements ID3v22FrameB
     }
 
     /**
-     * 
+     *  Get a description of the image
      *
-     * @return 
+     * @return  a description of the image
      */
     public String getDescription()
     {

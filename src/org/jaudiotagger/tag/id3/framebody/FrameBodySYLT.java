@@ -56,10 +56,7 @@ public class FrameBodySYLT extends AbstractID3v2FrameBody implements ID3v24Frame
      */
     byte contentType = (byte) 0;
 
-    /**
-     * 
-     */
-    byte textEncoding = (byte) 0;
+
 
     /**
      * 
@@ -84,7 +81,7 @@ public class FrameBodySYLT extends AbstractID3v2FrameBody implements ID3v24Frame
         this.description = new String(copyObject.description);
         this.language = new String(copyObject.language);
         this.contentType = copyObject.contentType;
-        this.textEncoding = copyObject.textEncoding;
+        this.setObjectValue(DataTypes.OBJ_TEXT_ENCODING, new Byte(copyObject.getTextEncoding()));
         this.timeStampFormat = copyObject.timeStampFormat;
 
         ID3v2LyricLine newLine;
@@ -107,7 +104,7 @@ public class FrameBodySYLT extends AbstractID3v2FrameBody implements ID3v24Frame
      */
     public FrameBodySYLT(byte textEncoding, String language, byte timeStampFormat, byte contentType, String description)
     {
-        this.textEncoding = textEncoding;
+        this.setObjectValue(DataTypes.OBJ_TEXT_ENCODING, new Byte(textEncoding));
         this.language = language;
         this.timeStampFormat = timeStampFormat;
         this.contentType = contentType;
@@ -206,16 +203,6 @@ public class FrameBodySYLT extends AbstractID3v2FrameBody implements ID3v24Frame
      *
      * @return 
      */
-    public byte getTextEncoding()
-    {
-        return textEncoding;
-    }
-
-    /**
-     * 
-     *
-     * @return 
-     */
     public byte getTimeStampFormat()
     {
         return timeStampFormat;
@@ -305,7 +292,7 @@ public class FrameBodySYLT extends AbstractID3v2FrameBody implements ID3v24Frame
     public String toString()
     {
         String str;
-        str = getIdentifier() + " " + textEncoding + " " + language + " " + timeStampFormat + " " + contentType + " " + description;
+        str = getIdentifier() + " " + getTextEncoding() + " " + language + " " + timeStampFormat + " " + contentType + " " + description;
 
         for (int i = 0; i < lines.size(); i++)
         {

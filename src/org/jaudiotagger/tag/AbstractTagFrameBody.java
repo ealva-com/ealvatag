@@ -61,7 +61,7 @@ public abstract class AbstractTagFrameBody
      *
      * @return the text encoding used by this framebody
      */
-    public byte getTextEncoding()
+    public final byte getTextEncoding()
     {
         AbstractDataType o = getObject(DataTypes.OBJ_TEXT_ENCODING);
 
@@ -81,7 +81,7 @@ public abstract class AbstractTagFrameBody
      *
      * @param textEncoding to use for this frame body
      */
-    public void setTextEncoding(byte textEncoding)
+    public final void setTextEncoding(byte textEncoding)
     {
         //Number HashMap actually converts this byte to a long
         setObjectValue(DataTypes.OBJ_TEXT_ENCODING, new Byte(textEncoding));
@@ -119,7 +119,7 @@ public abstract class AbstractTagFrameBody
      *
      * @return brief description string
     */
-    public String getBriefDescription()
+    public final String getBriefDescription()
     {
         String str = "";
         AbstractDataType object;
@@ -143,7 +143,7 @@ public abstract class AbstractTagFrameBody
      *
      * @return formatted description string
      */
-    public String getDescription()
+    public final String getLongDescription()
     {
         String str = "";
         AbstractDataType object;
@@ -151,9 +151,12 @@ public abstract class AbstractTagFrameBody
         while (iterator.hasNext())
         {
             object = (AbstractDataType) iterator.next();
-            str += (object.getIdentifier() + " = " + object.toString() + "\n");
+            if ((object.toString() != null) && (object.toString().length() > 0))
+            {
+               str += (object.getIdentifier() + " = " + object.toString() + "\n");
+            }
         }
-        return str.trim();
+        return str;
     }
 
     /**
@@ -162,7 +165,7 @@ public abstract class AbstractTagFrameBody
      * @param identifier <code>MP3Object</code> identifier
      * @param value        new datatype value
      */
-    public void setObjectValue(String identifier, Object value)
+    public final void setObjectValue(String identifier, Object value)
     {
         AbstractDataType object;
         Iterator iterator = objectList.listIterator();
@@ -177,14 +180,14 @@ public abstract class AbstractTagFrameBody
     }
 
     /**
-     * Returns the value of the Object of the <code>MP3Object</code> with the specified
+     * Returns the value of the datatype with the specified
      * <code>identifier</code>
      *
-     * @param identifier <code>MP3Object</code> identifier
-     * @return the value of the <code>MP3Object</code> with the specified
+     * @param identifier
+     * @return the value of the dattype with the specified
      *         <code>identifier</code>
      */
-    public Object getObjectValue(String identifier)
+    public final Object getObjectValue(String identifier)
     {
         return getObject(identifier).getValue();
     }
@@ -193,11 +196,11 @@ public abstract class AbstractTagFrameBody
      * Returns the datatype with the specified
      * <code>identifier</code>
      *
-     * @param identifier <code>MP3Object</code> identifier
-     * @return the datatype of the <code>MP3Object</code> with the specified
+     * @param identifier
+     * @return the datatype with the specified
      *         <code>identifier</code>
      */
-    public AbstractDataType getObject(String identifier)
+    public final AbstractDataType getObject(String identifier)
     {
         AbstractDataType object = null;
         Iterator iterator = objectList.listIterator();
@@ -294,22 +297,13 @@ public abstract class AbstractTagFrameBody
 
 
     /**
-     * Calls <code>toString</code> for all DataType objects and
-     * creates a string with a new line character.
+     * Return brief description of FrameBody
      *
-     * @return description string
+     * @return brief description of FrameBody
      */
     public String toString()
     {
-        String str = getIdentifier() + "\n";
-        AbstractDataType object;
-        Iterator iterator = objectList.listIterator();
-        while (iterator.hasNext())
-        {
-            object = (AbstractDataType) iterator.next();
-            str += (object.getIdentifier() + " = " + object.toString() + "\n");
-        }
-        return str;
+        return getBriefDescription();
     }
 
 

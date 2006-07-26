@@ -71,16 +71,6 @@ public class FrameBodyRVAD extends AbstractID3v2FrameBody implements ID3v23Frame
     }
 
     /**
-     * Retrieve the next String @todo why is this needed.
-     *
-     * @return 
-     */
-    public String getBriefDescription()
-    {
-        return this.getIdentifier();
-    }
-
-    /**
      * This method is not yet supported.
      *
      * @throws java.lang.UnsupportedOperationException

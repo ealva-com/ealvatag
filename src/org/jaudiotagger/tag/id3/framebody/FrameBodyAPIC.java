@@ -27,10 +27,8 @@ package org.jaudiotagger.tag.id3.framebody;
 import org.jaudiotagger.tag.datatype.*;
 import org.jaudiotagger.tag.InvalidTagException;
 import org.jaudiotagger.tag.id3.valuepair.ImageFormats;
-import org.jaudiotagger.tag.id3.ID3Frames;
 import org.jaudiotagger.tag.id3.ID3v24Frames;
 import org.jaudiotagger.tag.id3.valuepair.*;
-import org.jaudiotagger.audio.mp3.*;
 
 import java.io.IOException;
 import java.io.ByteArrayOutputStream;
@@ -61,7 +59,7 @@ public class FrameBodyAPIC extends AbstractID3v2FrameBody implements ID3v24Frame
         this.setObjectValue(DataTypes.OBJ_TEXT_ENCODING, new Byte(body.getTextEncoding()));
         this.setObjectValue(DataTypes.OBJ_MIME_TYPE, ImageFormats.getMimeTypeForFormat((String) body.getObjectValue(DataTypes.OBJ_IMAGE_FORMAT)));
         this.setObjectValue(DataTypes.OBJ_PICTURE_TYPE, body.getObjectValue(DataTypes.OBJ_PICTURE_TYPE));
-        this.setObjectValue(DataTypes.OBJ_DESCRIPTION, body.getDescription());
+        this.setObjectValue(DataTypes.OBJ_DESCRIPTION, body.getLongDescription());
         this.setObjectValue(DataTypes.OBJ_PICTURE_DATA, body.getObjectValue(DataTypes.OBJ_PICTURE_DATA));
 
     }
@@ -101,7 +99,7 @@ public class FrameBodyAPIC extends AbstractID3v2FrameBody implements ID3v24Frame
     }
 
     /**
-     * 
+     * Set a description of the image
      *
      * @param description 
      */
@@ -111,9 +109,9 @@ public class FrameBodyAPIC extends AbstractID3v2FrameBody implements ID3v24Frame
     }
 
     /**
-     * 
+     * Get a description of the image
      *
-     * @return 
+     * @return a description of the image
      */
     public String getDescription()
     {

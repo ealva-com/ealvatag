@@ -255,7 +255,7 @@ public class ID3v23Frame
         statusFlags = new StatusFlags(byteBuffer.get());
         encodingFlags = new EncodingFlags(byteBuffer.get());
         String id;
-        /** If this identifier a valid v24 identifier or easily converted to v24 */
+        /** If this identifier is a valid v24 identifier or easily converted to v24 */
         id = (String) ID3Tags.convertFrameID23To24(identifier);
         /** Cant easily be converted to v23 but is it a valid v24 identifier */
         if (id == null)

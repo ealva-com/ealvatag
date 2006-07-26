@@ -81,7 +81,7 @@ public class FrameBodyUSLT extends AbstractID3v2FrameBody implements ID3v24Frame
     }
 
     /**
-     * 
+     * Set a description of the image
      *
      * @param description 
      */
@@ -91,9 +91,9 @@ public class FrameBodyUSLT extends AbstractID3v2FrameBody implements ID3v24Frame
     }
 
     /**
-     * 
+     * Get a description of the image
      *
-     * @return 
+     * @return description of the image
      */
     public String getDescription()
     {

@@ -79,7 +79,7 @@ public class TextEncodedStringSizeTerminated
             value = "";
         }
         setSize(arr.length - offset);
-        logger.finest("read value:" + value);
+        logger.info("Read SizeTerminatedString:" + value+" size:"+size);          
     }
 
     /**

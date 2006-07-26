@@ -145,8 +145,7 @@ public class TextEncodedStringNullTerminated
             value = "";
         }
         //Set Size so offset is ready for next field (includes the null terminator)
-        logger.info("Null Terminator size is:" + size);
-        logger.info("Read NullTerminatedString:" + value);
+        logger.info("Read NullTerminatedString:" + value+" size:"+size);
     }
 
     /**

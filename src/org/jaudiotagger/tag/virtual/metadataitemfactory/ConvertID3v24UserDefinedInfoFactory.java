@@ -25,11 +25,11 @@ public class ConvertID3v24UserDefinedInfoFactory extends VirtualMetaDataItemFact
     {
         FrameBodyTXXX fb = (FrameBodyTXXX)id3v24Frame.getBody();
 
-        if(fb.getBriefDescription().equals("TRMID"))
+        if(fb.getDescription().equals("TRMID"))
         {
             return new MbTrmId(id3v24Frame);
         }
-        else if(fb.getBriefDescription().equals("TRACKID"))
+        else if(fb.getDescription().equals("TRACKID"))
         {
             return new MbTrackId(id3v24Frame);
         }

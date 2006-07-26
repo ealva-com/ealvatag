@@ -73,16 +73,6 @@ public abstract class AbstractFrameBodyUrlLink extends AbstractID3v2FrameBody
     }
 
     /**
-     * 
-     *
-     * @return 
-     */
-    public String getBriefDescription()
-    {
-        return this.getUrlLink();
-    }
-
-    /**
      * Set URL Link
      *
      * @param urlLink 
@@ -95,7 +85,7 @@ public abstract class AbstractFrameBodyUrlLink extends AbstractID3v2FrameBody
     /**
      * Get URL Link
      *
-     * @return 
+     * @return the urllink
      */
     public String getUrlLink()
     {

@@ -74,16 +74,6 @@ public class FrameBodyPRIV extends AbstractID3v2FrameBody implements ID3v24Frame
     /**
      * 
      *
-     * @return 
-     */
-    public String getBriefDescription()
-    {
-        return this.getOwner();
-    }
-
-    /**
-     * 
-     *
      * @param data 
      */
     public void setData(byte[] data)

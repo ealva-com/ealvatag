@@ -76,16 +76,6 @@ public class FrameBodyRVA2 extends AbstractID3v2FrameBody implements ID3v24Frame
     }
 
     /**
-     * Retrieve the next String @todo why is this needed.
-     *
-     * @return 
-     */
-    public String getBriefDescription()
-    {
-        return this.getIdentifier();
-    }
-
-    /**
      * Setup the Object List. A byte Array which will be read upto frame size
      * bytes.
      */

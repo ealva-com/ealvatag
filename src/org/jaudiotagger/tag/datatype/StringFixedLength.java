@@ -108,7 +108,7 @@ public class StringFixedLength
             logger.severe(ce.getMessage());
             value = "";
         }
-
+        logger.info("Read StringFixedLength:" + value);
     }
 
     /**

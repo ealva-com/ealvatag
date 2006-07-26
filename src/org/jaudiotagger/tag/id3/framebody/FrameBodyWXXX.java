@@ -82,7 +82,7 @@ public class FrameBodyWXXX
     }
 
     /**
-     * 
+     *  Set a description of the hyperlink
      *
      * @param description 
      */
@@ -94,7 +94,7 @@ public class FrameBodyWXXX
     /**
      * 
      *
-     * @return 
+     * @return a description of the hyperlink
      */
     public String getDescription()
     {

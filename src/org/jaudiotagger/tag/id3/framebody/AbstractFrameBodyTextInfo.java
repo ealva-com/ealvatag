@@ -88,16 +88,6 @@ public abstract class AbstractFrameBodyTextInfo
     }
 
     /**
-     * Retrieve the next String
-     *
-     * @return the text
-     */
-    public String getBriefDescription()
-    {
-        return this.getText();
-    }
-
-    /**
      * Set the Text String, used to replace the value within the frame
      *
      * @param text to set

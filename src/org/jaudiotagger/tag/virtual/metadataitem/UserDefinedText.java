@@ -22,7 +22,7 @@ public class UserDefinedText  extends AbstractText
     public UserDefinedText(ID3v24Frame id3v24Frame)
     {
         setText(((FrameBodyTXXX)id3v24Frame.getBody()).getText());
-        setType(((FrameBodyTXXX)id3v24Frame.getBody()).getBriefDescription());
+        setType(((FrameBodyTXXX)id3v24Frame.getBody()).getDescription());
     }
 
     public String getType()

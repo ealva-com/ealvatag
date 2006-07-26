@@ -126,6 +126,7 @@ public class NumberFixedLength
             lvalue += arr[i];
         }
         value = new Long(lvalue);
+        logger.info("Read NumberFixedlength:" + value);
     }
 
 

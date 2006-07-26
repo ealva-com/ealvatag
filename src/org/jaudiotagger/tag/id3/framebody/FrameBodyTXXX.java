@@ -68,7 +68,6 @@ public class FrameBodyTXXX
     /**
      * Creates a new FrameBodyTXXX datatype.
      *
-     * @throws IOException         
      * @throws InvalidTagException 
      */
     public FrameBodyTXXX(ByteBuffer byteBuffer, int frameSize)
@@ -78,7 +77,7 @@ public class FrameBodyTXXX
     }
 
     /**
-     * 
+     *  Set the desciption field
      *
      * @param description 
      */
@@ -90,7 +89,7 @@ public class FrameBodyTXXX
     /**
      * 
      *
-     * @return 
+     * @return the description field
      */
     public String getDescription()
     {

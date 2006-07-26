@@ -84,18 +84,10 @@ public class FrameBodyCOMM  extends AbstractID3v2FrameBody  implements ID3v24Fra
         super(byteBuffer, frameSize);
     }
 
-    /**
-     * 
-     *
-     * @return 
-     */
-    public String getBriefDescription()
-    {
-        return this.getText();
-    }
+
 
     /**
-     * 
+     * Set the description field, which describes the type of comment
      *
      * @param description 
      */
@@ -105,9 +97,9 @@ public class FrameBodyCOMM  extends AbstractID3v2FrameBody  implements ID3v24Fra
     }
 
     /**
-     * 
+     *  Get the description field, which describes the type of comment
      *
-     * @return 
+     * @return description field
      */
     public String getDescription()
     {
@@ -125,7 +117,7 @@ public class FrameBodyCOMM  extends AbstractID3v2FrameBody  implements ID3v24Fra
     }
 
     /**
-     * 
+     *  Sets the language the comment is written in
      *
      * @param language 
      */
@@ -135,9 +127,9 @@ public class FrameBodyCOMM  extends AbstractID3v2FrameBody  implements ID3v24Fra
     }
 
     /**
-     * 
+     * Get the language the comment is written in
      *
-     * @return 
+     * @return the language
      */
     public String getLanguage()
     {
@@ -155,9 +147,9 @@ public class FrameBodyCOMM  extends AbstractID3v2FrameBody  implements ID3v24Fra
     }
 
     /**
-     * 
+     * Returns the the text field which holds the comment
      *
-     * @return 
+     * @return the text field
      */
     public String getText()
     {

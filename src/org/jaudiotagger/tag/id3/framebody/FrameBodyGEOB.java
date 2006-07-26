@@ -95,7 +95,7 @@ public class FrameBodyGEOB extends AbstractID3v2FrameBody implements ID3v24Frame
     /**
      * 
      *
-     * @return 
+     * @return  the description field
      */
     public String getDescription()
     {
