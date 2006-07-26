@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <project name="jaudiotagger" default="dist" basedir=".">
   
+  	<!--property file, values in this file are used first -->
+  	<property file="./build.properties"/>
+  	
   	<!-- Compiler options -->
 	<property name="compiler.debug" value="on"/>
 	<property name="compiler.generate.no.warnings" value="off"/>
@@ -37,11 +40,13 @@
 	<property name="jdk.classpath" value="jdk.classpath.java_version_1.4.2_03"/>	
 	
 	<!-- Output dirs -->
-	<property name="output.dir"     value="${basedir}/classes"/>
-	<property name="testoutput.dir" value="${basedir}/testclasses"/>
-	<property name="dist.dir"       value="${basedir}/dist"/>
-	<property name="javadoc.dir"    value="${basedir}/www/javadoc"/>
-	<property name="lib.dir"       value="${basedir}/lib"/>
+	<property name="output.dir"         value="${basedir}/classes"/>
+	<property name="testoutput.dir"     value="${basedir}/testclasses"/>
+	<property name="dist.dir"           value="${basedir}/dist"/>
+	<property name="web.dir"            value="${basedir}/www"/>
+	<property name="userjavadoc.dir"    value="${basedir}/www/javadoc"/>
+	<property name="devjavadoc.dir"     value="${basedir}/www/devjavadoc"/>	
+	<property name="lib.dir"            value="${basedir}/lib"/>
 	
 	<property name="jar.file"    value="${dist.dir}/jaudiotagger.jar"/>
 	<property name="jarsrc.file" value="${dist.dir}/jaudiotaggersrc.jar"/>
@@ -104,18 +109,7 @@
 	
 	<target name="dist" depends="build.jar,build.jarsrc" description="Create distribution"/>
 	
-	<target name="buildjavadoc" description="Build Java API Documentation" depends="compile">  
-		<javadoc 
-		packagenames="org.jaudiotagger.*"
-		maxmemory="128m" 
-		classpath="${classpath}" 		
-		sourcepath="${basedir}/src" 
-		destdir="${javadoc.dir}" 
-		use="true" 	 
-		Version="true" >
-		<doctitle><![CDATA[<h1>Jaudiotagger api</h1>]]></doctitle>
-		</javadoc>	
-	</target>
+	
 
 	<target name="build.jar" depends="compile" description="Jar up the compiled production code jaudiotagger">
 		<echo message="Creating jaudiotagger.jar" />
@@ -207,11 +201,48 @@
   			<report format="frames" todir="${junitreport.dir}"/>
 		</junitreport>
 	</target>
+	
 	<!-- Clean -->
 	<target name="clean" description="Cleanup module">
 		<delete dir="${output.dir}"/>
 		<delete dir="${testoutput.dir}"/>
 		<delete dir="${junitreport.testdatatmp.dir}"/>
 		<delete dir="${junitreport.dir}"/>
+	</target>
+	
+	<!-- Build User Javadoc, public only -->
+	<target name="build.user.javadoc" description="Build Java User API Documentation, only public members are shown">  
+		<javadoc 
+		WindowTitle="Jaudiotagger User API ${build.release}"
+		Public="true"
+		packagenames="org.jaudiotagger.*"
+		maxmemory="128m" 
+		classpath="${classpath}" 		
+		sourcepath="${basedir}/src" 
+		destdir="${userjavadoc.dir}" 
+		use="true" 	 
+		Version="true">
+		<doctitle><![CDATA[<h1>Jaudiotagger User API ${build.release}</h1>]]></doctitle>
+		</javadoc>	
+	</target>
+	
+	<!-- Build complete Javadoc -->
+	<target name="build.dev.javadoc" description="Build Java Dev API Documentation, includes private package and protected members">  
+		<javadoc 
+		WindowTitle="Jaudiotagger Developer API ${build.release}"
+		Private="true"
+		packagenames="org.jaudiotagger.*"
+		maxmemory="128m" 
+		classpath="${classpath}" 		
+		sourcepath="${basedir}/src" 
+		destdir="${devjavadoc.dir}" 
+		use="true" 	 
+		Version="true">
+		<doctitle><![CDATA[<h1>Jaudiotagger Developer API ${build.release}</h1>]]></doctitle>
+		</javadoc>	
+	</target>
+	
+	<!-- Build all Javadoc -->
+	<target name="build.javadoc" depends="build.user.javadoc,build.dev.javadoc">
 	</target>
 </project>
