@@ -31,8 +31,21 @@ import org.jaudiotagger.tag.id3.ID3v24Frames;
 import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
 
 import java.nio.ByteBuffer;
+import java.util.List;
+import java.util.ArrayList;
 
 
+/**
+ * The 'Involved people list' is intended as a mapping between functions like producer and names. Every odd field is a
+ * function and every even is an name or a comma delimited list of name.
+ *
+ *  @TODO currently just reads the first String when directly from file, this will be fixed when we add support for
+ *  multiple Strings for all ID3v24Frames
+ *
+ *  @TODO currently just reads all the values when converted from the corresponding ID3v23 Frame IPLS as a single value
+ *  (the individual fields from the IPLS frame will be seperated by commas)
+ *
+ */
 public class FrameBodyTIPL
     extends AbstractFrameBodyTextInfo implements ID3v24FrameBody
 {
@@ -53,15 +66,18 @@ public class FrameBodyTIPL
      */
     public FrameBodyTIPL(FrameBodyIPLS body)
     {
-        setObjectValue(DataTypes.OBJ_TEXT_ENCODING,  new Byte(TextEncoding.ISO_8859_1));
-        setObjectValue(DataTypes.OBJ_TEXT, body.getObjectValue(DataTypes.OBJ_TEXT));
+        setObjectValue(DataTypes.OBJ_TEXT_ENCODING,  new Byte(body.getTextEncoding()));
+
+        PairedTextEncodedStringNullTerminated.ValuePairs  value
+            = (PairedTextEncodedStringNullTerminated.ValuePairs)body.getObjectValue(DataTypes.OBJ_TEXT);
+        setObjectValue(DataTypes.OBJ_TEXT, value.toString());
     }
 
     /**
      * Creates a new FrameBodyTIPL datatype.
      *
-     * @param textEncoding 
-     * @param text         
+     * @param textEncoding
+     * @param text
      */
     public FrameBodyTIPL(byte textEncoding, String text)
     {
@@ -71,8 +87,7 @@ public class FrameBodyTIPL
     /**
      * Creates a new FrameBodyTIPL datatype.
      *
-     * @throws java.io.IOException 
-     * @throws InvalidTagException 
+     * @throws InvalidTagException
      */
     public FrameBodyTIPL(ByteBuffer byteBuffer, int frameSize)
         throws InvalidTagException
@@ -89,5 +104,4 @@ public class FrameBodyTIPL
     {
         return ID3v24Frames.FRAME_ID_INVOLVED_PEOPLE;
     }
-
 }
