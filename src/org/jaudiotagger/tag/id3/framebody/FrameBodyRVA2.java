@@ -50,7 +50,7 @@ public class FrameBodyRVA2 extends AbstractID3v2FrameBody implements ID3v24Frame
      */
     public FrameBodyRVA2(FrameBodyRVAD body)
     {
-        setObjectValue(DataTypes.OBJ_DATA, body.getObject(DataTypes.OBJ_DATA));
+        setObjectValue(DataTypes.OBJ_DATA, body.getObjectValue(DataTypes.OBJ_DATA));
     }
 
 

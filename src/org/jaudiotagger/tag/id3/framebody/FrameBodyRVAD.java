@@ -76,12 +76,11 @@ public class FrameBodyRVAD extends AbstractID3v2FrameBody implements ID3v23Frame
      * @throws java.lang.UnsupportedOperationException
      *          This method is not yet
      *          supported
+     *
+     * @todo Implement this java.lang.Object method
      */
     public boolean equals(Object obj)
-    {
-        /**
-         * @todo Implement this java.lang.Object method
-         */
+    {        
         throw new java.lang.UnsupportedOperationException("Method equals() not yet implemented.");
     }
 
