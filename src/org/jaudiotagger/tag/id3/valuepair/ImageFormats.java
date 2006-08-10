@@ -25,22 +25,30 @@ package org.jaudiotagger.tag.id3.valuepair;
 
 import java.util.*;
 
+/** Represents the image formats support by ID3, provides a mapping between the format field supported in ID3v22 and the
+ *  mimetype field supported by ID3v23/ID3v24.
+ */
 public class ImageFormats
 {
-    public static final String JPG = "jpg";
-    public static final String PNP = "pnp";
-    public static final String GIF = "gif";
-    public static final String BMP = "bmp";
+    public static final String V22_JPG_FORMAT = "JPG";
+    public static final String V22_PNG_FORMAT = "PNG";
+    public static final String V22_GIF_FORMAT = "GIF";
+    public static final String V22_BMP_FORMAT = "BMP";
+
+    public static final String MIME_TYPE_JPG = "image/jpg";
+    public static final String MIME_TYPE_PNG = "image/png";
+    public static final String MIME_TYPE_GIF = "image/gif";
+    public static final String MIME_TYPE_BMP = "image/bmp";
 
     private static HashMap imageFormatsToMimeType = new HashMap();
     private static HashMap imageMimeTypeToFormat = new HashMap();
 
     static
     {
-        imageFormatsToMimeType.put("JPG", "image/jpg");
-        imageFormatsToMimeType.put("PNP", "image/pnp");
-        imageFormatsToMimeType.put("GIF", "image/gif");
-        imageFormatsToMimeType.put("BMP", "image/bmp");
+        imageFormatsToMimeType.put(V22_JPG_FORMAT, MIME_TYPE_JPG);
+        imageFormatsToMimeType.put(V22_PNG_FORMAT, MIME_TYPE_PNG);
+        imageFormatsToMimeType.put(V22_GIF_FORMAT, MIME_TYPE_GIF);
+        imageFormatsToMimeType.put(V22_BMP_FORMAT, MIME_TYPE_BMP);
         Iterator iterator = imageFormatsToMimeType.keySet().iterator();
         Object key;
         Object value;

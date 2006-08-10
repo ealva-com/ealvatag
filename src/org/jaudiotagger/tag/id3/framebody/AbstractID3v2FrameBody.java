@@ -140,6 +140,7 @@ public abstract class AbstractID3v2FrameBody
      * constructor when reading from file.
      *
      * @param byteBuffer file to read
+     *
      * @throws InvalidFrameException if unable to construct a framebody from the ByteBuffer
      */
     public void read(ByteBuffer byteBuffer)
@@ -212,6 +213,9 @@ public abstract class AbstractID3v2FrameBody
 
     }
 
+    /**
+     * Return String Representation of Datatype     *
+     */
     public void createStructure()
     {
         MP3File.getStructureFormatter().openHeadingElement(TYPE_BODY, "");

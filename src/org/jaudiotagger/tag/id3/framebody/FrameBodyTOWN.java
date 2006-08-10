@@ -55,8 +55,7 @@ public class FrameBodyTOWN extends AbstractFrameBodyTextInfo
 
     /**
      * Creates a new FrameBodyTOWN datatype.
-     *
-     * @throws java.io.IOException 
+     *                                    
      * @throws InvalidTagException 
      */
     public FrameBodyTOWN(ByteBuffer byteBuffer, int frameSize)

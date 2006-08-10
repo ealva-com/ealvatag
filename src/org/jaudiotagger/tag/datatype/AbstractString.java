@@ -32,13 +32,26 @@ import java.nio.charset.*;
 public abstract class AbstractString
     extends AbstractDataType
 {
-    protected AbstractString()
-    {
-    }
-
+     /**
+     * Creates a new  datatype
+     *
+     * @param identifier
+     * @param frameBody
+     */
     protected AbstractString(String identifier, AbstractTagFrameBody frameBody)
     {
         super(identifier, frameBody);
+    }
+
+    /**
+     * Creates a new  datatype, with value
+     *
+     * @param identifier
+     * @param frameBody
+     */
+    public AbstractString(String identifier, AbstractTagFrameBody frameBody,String value)
+    {
+        super(identifier, frameBody,value);
     }
 
     protected AbstractString(AbstractString object)
@@ -85,7 +98,7 @@ public abstract class AbstractString
     {
         //Try and write to buffer using the CharSet defined by the textEncoding field.
 
-        byte textEncoding = this.getFrameBody().getTextEncoding();
+        byte textEncoding = this.getBody().getTextEncoding();
         String charSetName = TextEncoding.getInstanceOf().getValueForId(textEncoding);
         CharsetEncoder encoder = Charset.forName(charSetName).newEncoder();
 

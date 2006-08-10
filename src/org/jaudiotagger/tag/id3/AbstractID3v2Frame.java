@@ -106,7 +106,7 @@ public abstract class AbstractID3v2Frame
         catch (ClassNotFoundException cnfe)
         {
             logger.severe(cnfe.getMessage());
-            frameBody = new FrameBodyUnsupported();
+            frameBody = new FrameBodyUnsupported(identifier);
         }
         //Instantiate Interface/Abstract should not happen
         catch (InstantiationException ie)

@@ -56,8 +56,7 @@ public class FrameBodyTOAL extends AbstractFrameBodyTextInfo
 
     /**
      * Creates a new FrameBodyTOAL datatype.
-     *
-     * @throws java.io.IOException 
+     *                                    
      * @throws InvalidTagException 
      */
     public FrameBodyTOAL(ByteBuffer byteBuffer, int frameSize)

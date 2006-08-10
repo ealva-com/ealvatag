@@ -57,36 +57,44 @@ public abstract class AbstractDataType
      * Holds the calling body,allows an datatype to query other objects in the
      * body such as the Text Encoding of the frame
      */
-    private AbstractTagFrameBody frameBody = null;
+    protected AbstractTagFrameBody frameBody = null;
 
     /**
      * Holds the size of the data in file when read/written
      */
     protected int size;
 
-    protected AbstractDataType()
-    {
-    }
-
-
-
-
-    protected AbstractDataType(AbstractTagFrameBody frameBody)
-    {
-        this.value = null;
-        this.identifier = "";
-        this.frameBody = frameBody;
-    }
-
+    /** Construct an abstratc datatype identified by identifier and linked to a framebody
+     *
+     * @param identifier to allow retrieval of this datatype by name from framebody
+     * @param frameBody that the dataype is associated with
+     */
     protected AbstractDataType(String identifier, AbstractTagFrameBody frameBody)
     {
-        this.value = null;
         this.identifier = identifier;
         this.frameBody = frameBody;
+        this.value = null;
+    }
+
+    /**
+     * Construct an abstract datatype identified by identifier and linked to a framebody initilised with a value
+     *
+     * @param identifier  to allow retrieval of this datatype by name from framebody
+     * @param frameBody that the dataype is associated with
+     * @param value of this DataType
+     */
+    protected AbstractDataType(String identifier, AbstractTagFrameBody frameBody,Object value)
+    {
+        this.identifier = identifier;
+        this.frameBody = frameBody;
+        this.value = value;
     }
 
     /**
      * This is used by subclasses, to clone the data within the copyObject
+     *
+     * TODO:if this functionality is actually required it seems to be missing some
+     * of the more complex value types.
      */
     public AbstractDataType(AbstractDataType copyObject)
     {
@@ -174,11 +182,21 @@ public abstract class AbstractDataType
         }
     }
 
+    /**
+     * Set the framebody that this datatype is associated with
+     *
+     * @param frameBody
+     */
     public void setBody(AbstractTagFrameBody frameBody)
     {
         this.frameBody = frameBody;
     }
 
+    /**
+     * Get the framebody associated with this datatype
+     *
+     * @return the framebody that this datatype is associated with
+     */
     public AbstractTagFrameBody getBody()
     {
         return frameBody;
@@ -234,11 +252,6 @@ public abstract class AbstractDataType
      * @return the size in bytes of the datatype
      */
     abstract public int getSize();
-
-    protected AbstractTagFrameBody getFrameBody()
-    {
-        return frameBody;
-    }
 
     /**
      * 
@@ -345,7 +358,7 @@ public abstract class AbstractDataType
     }
 
     /**
-     * This is the starting point for reading bytes from the file into the id3 datatype
+     * This is the starting point for reading bytes from the file into the ID3 datatype
      * starting at offset.
      * This class must be overridden
      *
@@ -359,11 +372,13 @@ public abstract class AbstractDataType
      * Starting point write ID3 Datatype back to array of bytes.
      * This class must be overridden.
      *
-     * @return 
+     * @return the array of bytes representing this datatype that should be written to file
      */
-
     public abstract byte[] writeByteArray();
 
+    /**
+     * Return String Representation of Datatype     *
+     */
     public void createStructure()
     {
         MP3File.getStructureFormatter().addElement(identifier, getValue().toString());

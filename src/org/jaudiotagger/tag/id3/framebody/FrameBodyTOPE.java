@@ -56,8 +56,7 @@ public class FrameBodyTOPE extends AbstractFrameBodyTextInfo
 
     /**
      * Creates a new FrameBodyTOPE datatype.
-     *
-     * @throws java.io.IOException 
+     *                               
      * @throws InvalidTagException 
      */
     public FrameBodyTOPE(ByteBuffer byteBuffer, int frameSize)

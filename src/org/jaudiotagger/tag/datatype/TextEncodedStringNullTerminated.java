@@ -25,6 +25,18 @@ public class TextEncodedStringNullTerminated
         super(identifier, frameBody);
     }
 
+    /**
+     * Creates a new TextEncodedStringNullTerminated datatype, with value
+     *
+     * @param identifier
+     * @param frameBody
+     * @param value
+     */
+    public TextEncodedStringNullTerminated(String identifier, AbstractTagFrameBody frameBody,String value)
+    {
+        super(identifier, frameBody,value);
+    }
+
     public TextEncodedStringNullTerminated(TextEncodedStringNullTerminated object)
     {
         super(object);
@@ -81,7 +93,7 @@ public class TextEncodedStringNullTerminated
                 {
                     if (nullIsOneByte)
                     {
-                        logger.finest("null terminator found at:"+buffer.position());
+                        logger.finest("Null terminator found at:"+buffer.position());
                         buffer.mark();
                         buffer.reset();
                         endPosition = buffer.position() - 1;
@@ -94,7 +106,7 @@ public class TextEncodedStringNullTerminated
                         nextByte = buffer.get();
                         if (nextByte == 0x00)
                         {
-                            logger.finest("UTf16:null terminator found at:"+buffer.position());
+                            logger.finest("UTf16:Null terminator found at:"+buffer.position());
                             buffer.mark();
                             buffer.reset();
                             endPosition = buffer.position() - 2;
@@ -179,7 +191,7 @@ public class TextEncodedStringNullTerminated
 
     protected String  getTextEncodingCharSet()
     {
-        byte textEncoding = this.getFrameBody().getTextEncoding();
+        byte textEncoding = this.getBody().getTextEncoding();
         String charSetName = TextEncoding.getInstanceOf().getValueForId(textEncoding);
         logger.finest("text encoding:"+textEncoding + " charset:"+charSetName);
         return charSetName;

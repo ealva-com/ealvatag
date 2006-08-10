@@ -28,7 +28,9 @@ import org.jaudiotagger.tag.id3.ID3v24Frames;
 
 import java.nio.ByteBuffer;
 
-
+/**
+ * The 'Official Internet radio station homepage' contains a URL pointing at the homepage of the internet radio station.
+ */
 public class FrameBodyWORS extends AbstractFrameBodyUrlLink  implements ID3v24FrameBody,ID3v23FrameBody
 {
     /**
@@ -56,7 +58,6 @@ public class FrameBodyWORS extends AbstractFrameBodyUrlLink  implements ID3v24Fr
     /**
      * Creates a new FrameBodyWORS datatype.
      *
-     * @throws java.io.IOException 
      * @throws InvalidTagException 
      */
     public FrameBodyWORS(ByteBuffer byteBuffer, int frameSize)

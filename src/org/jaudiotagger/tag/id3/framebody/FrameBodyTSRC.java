@@ -56,8 +56,7 @@ public class FrameBodyTSRC extends AbstractFrameBodyTextInfo implements ID3v24Fr
 
     /**
      * Creates a new FrameBodyTSRC datatype.
-     *
-     * @throws java.io.IOException 
+     *                           
      * @throws InvalidTagException 
      */
     public FrameBodyTSRC(ByteBuffer byteBuffer, int frameSize)

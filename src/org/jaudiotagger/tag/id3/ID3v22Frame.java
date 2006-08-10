@@ -34,6 +34,7 @@ import org.jaudiotagger.audio.mp3.*;
 import org.jaudiotagger.tag.*;
 import org.jaudiotagger.tag.id3.framebody.FrameBodyUnsupported;
 import org.jaudiotagger.tag.id3.framebody.AbstractID3v2FrameBody;
+import org.jaudiotagger.tag.id3.framebody.FrameBodyDeprecated;
 
 /** Represents an ID3v2.2 frame */
 public class ID3v22Frame
@@ -89,10 +90,10 @@ public class ID3v22Frame
         {
              bodyIdentifier = (String) ID3Tags.convertFrameID22To24(bodyIdentifier);
         }
-  
+
         /* Use reflection to map id to frame body, which makes things much easier
-         * to keep things up to date.
-         */
+        * to keep things up to date.
+        */
         try
         {
             Class c = Class.forName("org.jaudiotagger.tag.id3.framebody.FrameBody" + bodyIdentifier);
@@ -101,7 +102,7 @@ public class ID3v22Frame
         catch (ClassNotFoundException cnfe)
         {
             logger.log(Level.SEVERE,cnfe.getMessage(),cnfe);
-            frameBody = new FrameBodyUnsupported();
+            frameBody = new FrameBodyUnsupported(identifier);
         }
         //Instantiate Interface/Abstract should not happen
         catch (InstantiationException ie)
@@ -170,6 +171,25 @@ public class ID3v22Frame
                     throw new InvalidFrameException("Unable to convert v24 frame:"+frame.getIdentifier()+" to a v22 frame");
                 }
             }
+             /** Deprecated frame for v24 */
+            else if(frame.getBody() instanceof FrameBodyDeprecated)
+            {
+                //Was it valid for this tag version, if so try and reconstruct
+                if(ID3Tags.isID3v22FrameIdentifier(frame.getIdentifier()))
+                {
+                      this.frameBody = ((FrameBodyDeprecated)frame.getBody());
+                      identifier = frame.getIdentifier();
+                      logger.info("DEPRECATED:Orig id is:" + frame.getIdentifier() + ":New id is:" + identifier);
+                }
+                //or was it still deprecated, if so leave as is
+                else
+                {
+                    this.frameBody = new FrameBodyDeprecated((FrameBodyDeprecated) frame.getBody());
+                    identifier = frame.getIdentifier();
+                    logger.info("DEPRECATED:Orig id is:" + frame.getIdentifier() + ":New id is:" + identifier);
+                    return;
+                }
+            }
             /* Unknown Frame e.g NCON */
             else
             {
@@ -203,6 +223,25 @@ public class ID3v22Frame
                 else
                 {
                     throw new InvalidFrameException("Unable to convert v23 frame:"+frame.getIdentifier()+" to a v22 frame");
+                }
+            }
+             /** Deprecated frame for v23 */
+            else if(frame.getBody() instanceof FrameBodyDeprecated)
+            {
+                //Was it valid for this tag version, if so try and reconstruct
+                if(ID3Tags.isID3v22FrameIdentifier(frame.getIdentifier()))
+                {
+                      this.frameBody = ((FrameBodyDeprecated)frame.getBody());
+                      identifier = frame.getIdentifier();
+                      logger.info("DEPRECATED:Orig id is:" + frame.getIdentifier() + ":New id is:" + identifier);
+                }
+                //or was it still deprecated, if so leave as is
+                else
+                {
+                    this.frameBody = new FrameBodyDeprecated((FrameBodyDeprecated) frame.getBody());
+                    identifier = frame.getIdentifier();
+                    logger.info("DEPRECATED:Orig id is:" + frame.getIdentifier() + ":New id is:" + identifier);
+                    return;
                 }
             }
             /** Unknown Frame e.g NCON */
@@ -374,8 +413,8 @@ public class ID3v22Frame
      * Does the frame identifier meet the syntax for a idv3v2 frame identifier.
      * must start with a capital letter and only contain capital letters and numbers
      *
-     * @param identifier 
-     * @return 
+     * @param identifier
+     * @return
      */
     public boolean isValidID3v2FrameIdentifier(String identifier)
     {

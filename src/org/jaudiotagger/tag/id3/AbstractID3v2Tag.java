@@ -41,20 +41,20 @@ import java.nio.channels.*;
 public abstract class AbstractID3v2Tag
     extends AbstractID3Tag
 {
-    protected static final String TYPE_HEADER = "header";
-    protected static final String TYPE_BODY = "body";
+    protected static final String TYPE_HEADER   = "header";
+    protected static final String TYPE_BODY     = "body";
 
     //Tag ID as held in file
     protected static final byte[] TAG_ID =
         {'I', 'D', '3'};
 
     //The tag header is the same for ID3v2 versions
-    protected static int TAG_HEADER_LENGTH = 10;
-    protected static int FIELD_TAGID_LENGTH = 3;
-    protected static int FIELD_TAG_MAJOR_VERSION_LENGTH = 1;
-    protected static int FIELD_TAG_MINOR_VERSION_LENGTH = 1;
-    protected static int FIELD_TAG_FLAG_LENGTH = 1;
-    protected static int FIELD_TAG_SIZE_LENGTH = 4;
+    protected static final int TAG_HEADER_LENGTH = 10;
+    protected static final int FIELD_TAGID_LENGTH = 3;
+    protected static final int FIELD_TAG_MAJOR_VERSION_LENGTH = 1;
+    protected static final int FIELD_TAG_MINOR_VERSION_LENGTH = 1;
+    protected static final int FIELD_TAG_FLAG_LENGTH = 1;
+    protected static final int FIELD_TAG_SIZE_LENGTH = 4;
 
     protected static final int FIELD_TAGID_POS = 0;
     protected static final int FIELD_TAG_MAJOR_VERSION_POS = 3;
@@ -205,7 +205,7 @@ public abstract class AbstractID3v2Tag
 
     /**
      * Return whether tag has frame with this identifier and a related body. This is required to protect
-     * against circumstances whereby a tag contains a frame with an unsuported body
+     * against circumstances whereby a tag contains a frame with an unsupported body
      * but happens to have an identifier that is valid for another version of the tag which it has been converted to
      *
      * e.g TDRC is an invalid frame in a v23 tag but if somehow a v23tag has been created by another application
@@ -330,7 +330,7 @@ public abstract class AbstractID3v2Tag
      * but happens to have an identifier that is valid for another version of the tag it will be returned.
      *
      * @param identifier 
-     * @return 
+     * @return an iterator of all the frames starting with a particular identifier
      */
     public Iterator getFrameOfType(String identifier)
     {
@@ -357,7 +357,7 @@ public abstract class AbstractID3v2Tag
      * @param file to delete the tag from
      * @throws IOException if problem accessing the file
      *
-     * @todo should clear all data and preferably recover lost space.
+     * @TODO should clear all data and preferably recover lost space.
      */
     public void delete(RandomAccessFile file)
         throws IOException
@@ -520,7 +520,6 @@ public abstract class AbstractID3v2Tag
      *
      * @param byteBuffer to search through
      * @return true if tag exists.
-     * @throws IOException 
      */
     public boolean seek(ByteBuffer byteBuffer)
     {
@@ -678,7 +677,7 @@ public abstract class AbstractID3v2Tag
      * Decides what to with the frame that has just be read from file.
      * If the frame is an allowable duplicate frame and is a duplicate we add all
      * frames into an ArrayList and add the Arraylist to the hashMap. if not allowed
-     * to be duplictae we store bytes in the duplicateBytes variable.
+     * to be duplicate we store bytes in the duplicateBytes variable.
      */
     protected void loadFrameIntoMap(String frameId, AbstractID3v2Frame next)
     {

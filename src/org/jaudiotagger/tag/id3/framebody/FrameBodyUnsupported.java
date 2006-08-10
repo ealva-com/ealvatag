@@ -31,25 +31,49 @@ import org.jaudiotagger.tag.InvalidTagException;
 
 import java.nio.ByteBuffer;
 
+/** Represents a framebody for a frame identifier that is not defined for the tag version. It is possible that
+ * the identifier is valid for a later version but not the version that this frame belongs to. If the identifier is
+ * valid for an earlier tag version but not this version then this class should not be used instead use
+ * FrameBodyDeprecated. The body consists  of an array of bytes representing all the bytes in the body.
+ */
 public class FrameBodyUnsupported extends AbstractID3v2FrameBody
 {
-
     /**
      * Because used by any unknown frame identifier varies
      */
     private String identifier = "";
 
     /**
-     * Creates a new FrameBodyUnsupported
-     *
+     * @deprecated  because no identifier set
      */
     public FrameBodyUnsupported()
     {
+
+    }
+
+    /**
+     * Creates a new FrameBodyUnsupported
+     *
+     */
+    public FrameBodyUnsupported(String identifier)
+    {
+        this.identifier = identifier;
+    }
+
+    /**
+     * Create a new FrameBodyUnsupported
+     * @param identifier
+     * @param value
+     */
+    public FrameBodyUnsupported(String identifier,byte[] value)
+    {
+        this.identifier = identifier;
+        setObjectValue(DataTypes.OBJ_DATA, value);
     }
 
     /**
      * Creates a new FrameBodyUnsupported datatype.
-     *
+     * @deprecated because no identifier set
      * @param value 
      */
     public FrameBodyUnsupported(byte[] value)
@@ -57,6 +81,11 @@ public class FrameBodyUnsupported extends AbstractID3v2FrameBody
         setObjectValue(DataTypes.OBJ_DATA, value);
     }
 
+    /**
+     * Copy constructor
+     *
+     * @param copyObject a copy is made of this
+     */
     public FrameBodyUnsupported(FrameBodyUnsupported copyObject)
     {
         super(copyObject);
@@ -76,9 +105,9 @@ public class FrameBodyUnsupported extends AbstractID3v2FrameBody
     }
 
     /**
-     * 
+     * Return the frame identifier
      *
-     * @return 
+     * @return the identifier
      */
     public String getIdentifier()
     {
@@ -89,7 +118,7 @@ public class FrameBodyUnsupported extends AbstractID3v2FrameBody
      * 
      *
      * @param obj 
-     * @return 
+     * @return whether obj is equivalent to this object
      */
     public boolean equals(Object obj)
     {
@@ -109,8 +138,10 @@ public class FrameBodyUnsupported extends AbstractID3v2FrameBody
 
     /**
      * 
+     * Because the contents of this frame are an array of bytes and could be large we just
+     * return the identifier.
      *
-     * @return 
+     * @return  a string representation of this frame
      */
     public String toString()
     {

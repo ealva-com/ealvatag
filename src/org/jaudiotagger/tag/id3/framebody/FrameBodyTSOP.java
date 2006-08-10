@@ -56,8 +56,7 @@ public class FrameBodyTSOP extends AbstractFrameBodyTextInfo implements ID3v24Fr
 
     /**
      * Creates a new FrameBodyTSOP datatype.
-     *
-     * @throws java.io.IOException 
+     *                                    
      * @throws InvalidTagException 
      */
     public FrameBodyTSOP(ByteBuffer byteBuffer, int frameSize)

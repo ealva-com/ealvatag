@@ -91,7 +91,9 @@ public abstract class ID3Frames extends AbstractStringStringValuePair
         forcev23Tov24.put(ID3v23Frames.FRAME_ID_V3_TYER, ID3v24Frames.FRAME_ID_YEAR);
 
         /** Force v24 to v23, TDRC is a 1M relationship handled specially.
-        /** TODO RELATIVE_VOLUME,EQUALISATION & IPLS */
+        /** @todo RELATIVE_VOLUME,EQUALISATION  */
+        forcev24Tov23.put(ID3v24Frames.FRAME_ID_INVOLVED_PEOPLE,ID3v23Frames.FRAME_ID_V3_IPLS);
+
     }
 
     private static void loadID3v22ID3v23Mapping()

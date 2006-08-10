@@ -56,8 +56,7 @@ public class FrameBodyTOFN extends AbstractFrameBodyTextInfo
 
     /**
      * Creates a new FrameBodyTOFN datatype.
-     *
-     * @throws java.io.IOException 
+     *                                   
      * @throws InvalidTagException 
      */
     public FrameBodyTOFN(ByteBuffer byteBuffer, int frameSize)

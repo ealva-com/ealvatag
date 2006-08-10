@@ -201,7 +201,14 @@ public class ID3Tags
         {
             return null;
         }
-        return (String) ID3Frames.convertv23Tov22.get(identifier.substring(0, 4));
+
+        //If it is a v2.3 identifier
+        if(ID3v23Frames.getInstanceOf().getIdToValueMap().containsKey(identifier))
+        {
+            //If only name has changed  v2.2 and modified in v2.3 return result of.
+            return (String) ID3Frames.convertv23Tov22.get(identifier.substring(0, 4));
+        }
+        return null;
     }
 
     /**
@@ -213,16 +220,22 @@ public class ID3Tags
         {
             return null;
         }
-        //if no change between 2.3 and 2.4 should be in 2.4 list.
-        if(ID3v24Frames.getInstanceOf().getIdToValueMap().containsKey(identifier)==true)
+
+        //If it is a v2.3 identifier
+        if(ID3v23Frames.getInstanceOf().getIdToValueMap().containsKey(identifier))
         {
-            return identifier;
+            //if no change between 2.3 and 2.4 should be in 2.4 list.
+            if(ID3v24Frames.getInstanceOf().getIdToValueMap().containsKey(identifier)==true)
+            {
+                return identifier;
+            }
+            //If only name has changed  v2.3 and modified in v2.4 return result of.
+            else
+            {
+                return (String) ID3Frames.convertv23Tov24.get(identifier.substring(0, 4));
+            }
         }
-        else
-        {
-        }
-        //If v2.3 and modified in v2.4 return result of.
-        return (String) ID3Frames.convertv23Tov24.get(identifier.substring(0, 4));
+        return null;
     }
 
     /**

@@ -26,6 +26,9 @@ package org.jaudiotagger.tag.datatype;
 import org.jaudiotagger.tag.AbstractTagFrameBody;
 import org.jaudiotagger.tag.InvalidDataTypeException;
 
+/** Represents a stream of bytes, continuing until the end of the buffer. Usually used for binary data or where
+ *  we havent yet mapped the data to a better fitting type.
+ */
 public class ByteArraySizeTerminated extends AbstractDataType
 {
     public ByteArraySizeTerminated(String identifier, AbstractTagFrameBody frameBody)
@@ -39,9 +42,9 @@ public class ByteArraySizeTerminated extends AbstractDataType
     }
 
     /**
-     * 
+     * Return the size in byte of this datatype
      *
-     * @return 
+     * @return the size in bytes
      */
     public int getSize()
     {
@@ -98,9 +101,10 @@ public class ByteArraySizeTerminated extends AbstractDataType
     }
 
     /**
-     * 
+     * Because this is usually binary data and could be very long we just return
+     * the number of bytes held
      *
-     * @return 
+     * @return  the number of bytes
      */
     public String toString()
     {
@@ -108,9 +112,9 @@ public class ByteArraySizeTerminated extends AbstractDataType
     }
 
     /**
-     * 
+     * Write contents to a byte array
      *
-     * @return 
+     * @return a byte array that that contians the data that should be perisisted to file
      */
     public byte[] writeByteArray()
     {

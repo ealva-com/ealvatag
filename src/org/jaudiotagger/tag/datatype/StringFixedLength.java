@@ -89,6 +89,7 @@ public class StringFixedLength
      */
     public void readByteArray(byte[] arr, int offset) throws InvalidDataTypeException
     {
+        logger.info("Reading from array from offset:" + offset);
         try
         {
             String charSetName = getTextEncodingCharSet();
@@ -96,6 +97,12 @@ public class StringFixedLength
             //Decode buffer if runs into problems should through exception which we
             //catch and then set value to empty string.
             logger.finest("Array length is:" + arr.length + "offset is:" + offset + "Size is:" + size);
+
+
+            if(arr.length - offset < size)
+            {
+                throw new InvalidDataTypeException("byte array is to small to retrieve string of declared length:"+size);
+            }
             String str = decoder.decode(ByteBuffer.wrap(arr, offset, size)).toString();
             if (str == null)
             {
@@ -168,7 +175,7 @@ public class StringFixedLength
      */
     protected String  getTextEncodingCharSet()
     {
-         byte textEncoding = this.getFrameBody().getTextEncoding();
+         byte textEncoding = this.getBody().getTextEncoding();
          String charSetName = TextEncoding.getInstanceOf().getValueForId(textEncoding);
          logger.finest("text encoding:"+textEncoding + " charset:"+charSetName);
         return charSetName;

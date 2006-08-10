@@ -56,8 +56,7 @@ public class FrameBodyTSSE extends AbstractFrameBodyTextInfo implements ID3v24Fr
 
     /**
      * Creates a new FrameBodyTSSE datatype.
-     *
-     * @throws java.io.IOException 
+     *                                        
      * @throws InvalidTagException 
      */
     public FrameBodyTSSE(ByteBuffer byteBuffer, int frameSize)

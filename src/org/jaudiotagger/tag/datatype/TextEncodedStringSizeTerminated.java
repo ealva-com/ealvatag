@@ -9,7 +9,7 @@ import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 
 /**
- * Represents a String which is not delimted by null pointer, this type of String will usually
+ * Represents a String which is not delimited by null character, this type of String will usually
  * only be used when it is the last field within a frame, when reading the remainder of the byte array will
  * be read, when writing the frame will be accomodate the required size for the String. The String
  * will be encoded based upon the text encoding of the frame that it belongs to.
@@ -111,7 +111,7 @@ public class TextEncodedStringSizeTerminated
 
     protected String  getTextEncodingCharSet()
     {
-         byte textEncoding = this.getFrameBody().getTextEncoding();
+         byte textEncoding = this.getBody().getTextEncoding();
          String charSetName = TextEncoding.getInstanceOf().getValueForId(textEncoding);
          logger.finest("text encoding:"+textEncoding + " charset:"+charSetName);
         return charSetName;
