@@ -26,9 +26,6 @@ package org.jaudiotagger.tag.id3;
 
 import org.jaudiotagger.tag.AbstractTag;
 import org.jaudiotagger.audio.mp3.*;
-import org.jaudiotagger.audio.mp3.MP3File;
-import org.jaudiotagger.tag.TagException;
-import org.jaudiotagger.tag.TagNotFoundException;
 import org.jaudiotagger.tag.*;
 import org.jaudiotagger.tag.id3.framebody.*;
 import org.jaudiotagger.FileConstants;
@@ -625,39 +622,19 @@ public class ID3v23Tag
        }
 
     /**
-     * Write tag to file
+     * Write the ID3 header to the ByteBuffer.
      *
-     * @param file The file to write to
-     * @throws IOException 
+     * @return ByteBuffer 
+     * @throws IOException
      */
-    public void write(File file, long audioStartLocation)
-        throws IOException
+    protected ByteBuffer writeHeaderToBuffer(int padding) throws IOException
     {
-        logger.info("Writing tag to file");
-
-        //Write Body Buffer
-        byte[] bodyByteBuffer = writeFramesToBuffer().toByteArray();
-        logger.info("bodybytebuffer:sizebeforeunsynchronisation:"+bodyByteBuffer.length);
-
-        // Unsynchronize if required
-        if(requiresUnsynchronization(bodyByteBuffer))
-        {
-            unsynchronization = true;
-            bodyByteBuffer=unsynchronize(bodyByteBuffer);
-            logger.info("bodybytebuffer:sizeafterunsynchronisation:"+bodyByteBuffer.length);
-        }
-        else
-        {
-            unsynchronization = false;
-        }
-
         /** @TODO Calculate the CYC Data Check */
         /** @TODO Reintroduce Extended Header */
         /** Flags,currently we never calculate the CRC
          *  and if we dont calculate them cant keep orig values. Tags are not
          *  experimental and we never create extended header to keep things simple.
          */
-
         extended     = false;
         experimental = false;
         crcDataFlag  = false;
@@ -685,12 +662,10 @@ public class ID3v23Tag
             flagsByte |= MASK_V23_EXPERIMENTAL;
         }
         headerBuffer.put(flagsByte);
-
-        int sizeIncPadding = calculateTagSize(getSize(), (int) audioStartLocation);
-        int padding = sizeIncPadding - getSize();
-
+  
         //Size As Recorded in Header, don't include the main header length
-        headerBuffer.put(sizeToByteArray((int) sizeIncPadding - TAG_HEADER_LENGTH));
+        headerBuffer.put(sizeToByteArray(padding + getSize() - TAG_HEADER_LENGTH));
+        
         /** Write Extended Header */
         if (extended == true)
         {
@@ -716,6 +691,39 @@ public class ID3v23Tag
                 headerBuffer.putInt(padding);
             }
         }
+
+        headerBuffer.flip();
+        return headerBuffer;
+    }
+
+    /**
+     * Write tag to file
+     *
+     * @param file The file to write to
+     * @throws IOException 
+     */
+    public void write(File file, long audioStartLocation)
+        throws IOException
+    {
+        logger.info("Writing tag to file");
+
+        //Write Body Buffer
+        byte[] bodyByteBuffer = writeFramesToBuffer().toByteArray();
+        logger.info("bodybytebuffer:sizebeforeunsynchronisation:"+bodyByteBuffer.length);
+
+        // Unsynchronize if required
+        unsynchronization = requiresUnsynchronization(bodyByteBuffer);
+        if(unsynchronization)
+        {
+            bodyByteBuffer=unsynchronize(bodyByteBuffer);
+            logger.info("bodybytebuffer:sizeafterunsynchronisation:"+bodyByteBuffer.length);
+        }
+
+        int sizeIncPadding = calculateTagSize(getSize(), (int) audioStartLocation);
+        int padding = sizeIncPadding - getSize();
+
+        ByteBuffer headerBuffer = writeHeaderToBuffer(padding);
+
         /** We need to adjust location of audio File */
         if (sizeIncPadding > audioStartLocation)
         {
@@ -728,7 +736,6 @@ public class ID3v23Tag
         try
         {
             fc = new RandomAccessFile(file, "rw").getChannel();
-            headerBuffer.flip();
             fc.write(headerBuffer);
             fc.write(ByteBuffer.wrap(bodyByteBuffer));
             fc.write(ByteBuffer.wrap(new byte[padding]));
@@ -740,6 +747,33 @@ public class ID3v23Tag
                 fc.close();
             }
         }
+    }
+
+    /**
+     * Write tag to channel
+     * 
+     * @param channel
+     * @throws IOException
+     */
+    public void write(WritableByteChannel channel)
+        throws IOException
+    {
+        logger.info("Writing tag to channel");
+  
+        byte[] bodyByteBuffer = writeFramesToBuffer().toByteArray();
+        logger.info("bodybytebuffer:sizebeforeunsynchronisation:"+bodyByteBuffer.length);
+
+        // Unsynchronize if required
+        unsynchronization = requiresUnsynchronization(bodyByteBuffer);
+        if(unsynchronization)
+        {
+            bodyByteBuffer=unsynchronize(bodyByteBuffer);
+            logger.info("bodybytebuffer:sizeafterunsynchronisation:"+bodyByteBuffer.length);
+        }
+        ByteBuffer headerBuffer = writeHeaderToBuffer(0);
+    
+        channel.write(headerBuffer);
+        channel.write(ByteBuffer.wrap(bodyByteBuffer));
     }
 
     /**

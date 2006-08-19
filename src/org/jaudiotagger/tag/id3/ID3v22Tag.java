@@ -27,12 +27,12 @@ package org.jaudiotagger.tag.id3;
 import org.jaudiotagger.tag.AbstractTag;
 import org.jaudiotagger.audio.mp3.*;
 
-import org.jaudiotagger.tag.TagNotFoundException;
 import org.jaudiotagger.tag.*;
 import org.jaudiotagger.tag.id3.framebody.FrameBodyTDRC;
 import org.jaudiotagger.tag.id3.framebody.AbstractFrameBodyTextInfo;
 import org.jaudiotagger.FileConstants;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.*;
@@ -379,6 +379,48 @@ public class ID3v22Tag
 
 
     /**
+     * Write the ID3 header to the ByteBuffer.
+     *
+     * @return ByteBuffer 
+     * @throws IOException
+     */
+    protected ByteBuffer writeHeaderToBuffer(int padding) throws IOException
+    {
+        /** @todo Unsynchronisation support required.
+         * We never compress tags as was never defined,
+         * currently we do not support Unsyncronisation so should not be set.
+         */
+        unsynchronization = false;
+        compression = false;
+  
+        /** Create Header Buffer */
+        ByteBuffer headerBuffer = ByteBuffer.allocate(TAG_HEADER_LENGTH);
+        //TAGID
+        headerBuffer.put(TAG_ID);
+        //Major Version
+        headerBuffer.put(majorVersion);
+        //Minor Version
+        headerBuffer.put(revision);
+  
+        //Flags
+        byte flags = (byte) 0;
+        if (unsynchronization == true)
+        {
+            flags |= (byte) MASK_V22_UNSYNCHRONIZATION;
+        }
+        if (compression == true)
+        {
+            flags |= (byte) MASK_V22_COMPRESSION;
+        }
+        headerBuffer.put(flags);
+
+        headerBuffer.put(sizeToByteArray(padding + getSize() - TAG_HEADER_LENGTH));
+        
+        headerBuffer.flip();
+        return headerBuffer;
+    }
+
+    /**
      * Write tag to file
      *
      * @param file The file to write to
@@ -392,36 +434,11 @@ public class ID3v22Tag
         /** Write Body Buffer */
         byte[] bodyByteBuffer = writeFramesToBuffer().toByteArray();
 
-        /** @todo Unsynchronisation support required.
-         * We never compress tags as was never defined,
-         * currently we do not support Unsyncronisation so should not be set.
-         */
-        unsynchronization = false;
-        compression = false;
-
-        /** Create Header Buffer */
-        ByteBuffer headerBuffer = ByteBuffer.allocate(this.TAG_HEADER_LENGTH);
-        //TAGID
-        headerBuffer.put(TAG_ID);
-        //Major Version
-        headerBuffer.put(majorVersion);
-        //Minor Version
-        headerBuffer.put(revision);
-        //Flags
-        byte flags = (byte) 0;
-        if (unsynchronization == true)
-        {
-            flags |= (byte) MASK_V22_UNSYNCHRONIZATION;
-        }
-        if (compression == true)
-        {
-            flags |= (byte) MASK_V22_COMPRESSION;
-        }
-        headerBuffer.put(flags);
         /** Calculate Tag Size including Padding */
         int sizeIncPadding = calculateTagSize(getSize(),(int) audioStartLocation);
         int padding = sizeIncPadding - getSize();
-        headerBuffer.put(sizeToByteArray((int) sizeIncPadding - TAG_HEADER_LENGTH));
+
+        ByteBuffer headerBuffer = writeHeaderToBuffer(padding);
 
         /** We need to adjust location of audio File */
         if (sizeIncPadding > (int) audioStartLocation)
@@ -435,7 +452,6 @@ public class ID3v22Tag
         try
         {
             fc = new RandomAccessFile(file, "rw").getChannel();
-            headerBuffer.flip();
             fc.write(headerBuffer);
             fc.write(ByteBuffer.wrap(bodyByteBuffer));
             fc.write(ByteBuffer.wrap(new byte[padding]));
@@ -447,6 +463,24 @@ public class ID3v22Tag
                 fc.close();
             }
         }
+    }
+
+    /**
+     * Write tag to channel
+     * 
+     * @param channel
+     * @throws IOException
+     */
+    public void write(WritableByteChannel channel)
+        throws IOException
+    {
+        logger.info("Writing tag to channel");
+  
+        byte[] bodyByteBuffer = writeFramesToBuffer().toByteArray();
+        ByteBuffer headerBuffer = writeHeaderToBuffer(0);
+    
+        channel.write(headerBuffer);
+        channel.write(ByteBuffer.wrap(bodyByteBuffer));
     }
 
     public void createStructure()

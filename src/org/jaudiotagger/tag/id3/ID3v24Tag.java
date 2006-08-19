@@ -664,6 +664,124 @@ public class ID3v24Tag
         }
     }
 
+    /**
+     * Write the ID3 header to the ByteBuffer.
+     *
+     * @return ByteBuffer 
+     * @throws IOException
+     */
+    protected ByteBuffer writeHeaderToBuffer(int padding) throws IOException
+    {
+      /** @todo Calculate UnSynchronisation */
+      /** @todo Calculate the CYC Data Check */
+      /** @todo Reintroduce Extended Header */
+
+      /** Flags,currently we never do unsynchronisation or calculate the CRC
+       *  and if we dont calculate them cant keep orig values. Tags are not
+       *  experimental and we never create extended header to keep things simple.
+       */
+      unsynchronization = false;
+      extended = false;
+      experimental = false;
+      footer = false;
+      /** Create Header Buffer,allocate maximum possible size for the header*/
+      ByteBuffer headerBuffer = ByteBuffer.allocate(TAG_HEADER_LENGTH);
+      //TAGID
+      headerBuffer.put(TAG_ID);
+      //Major Version
+      headerBuffer.put(majorVersion);
+      //Minor Version
+      headerBuffer.put(revision);
+      //Flags
+      byte flagsByte = 0;
+      if (unsynchronization == true)
+      {
+          flagsByte |= MASK_V24_UNSYNCHRONIZATION;
+      }
+      if (extended == true)
+      {
+          flagsByte |= MASK_V24_EXTENDED_HEADER;
+      }
+      if (experimental == true)
+      {
+          flagsByte |= MASK_V24_EXPERIMENTAL;
+      }
+      if (footer == true)
+      {
+          flagsByte |= MASK_V24_FOOTER_PRESENT;
+      }
+      headerBuffer.put(flagsByte);
+      
+      //Size As Recorded in Header, don't include the main header length
+      headerBuffer.put(sizeToByteArray(padding + getSize() - TAG_HEADER_LENGTH));
+
+      //Write Extended Header
+      ByteBuffer extHeaderBuffer = null;
+      if (extended == true)
+      {
+          //Write Extended Header Size
+          int size = TAG_EXT_HEADER_LENGTH;
+          if (updateTag == true)
+          {
+              size += TAG_EXT_HEADER_UPDATE_LENGTH;
+          }
+          if (crcDataFlag == true)
+          {
+              size += TAG_EXT_HEADER_CRC_LENGTH;
+          }
+          if (tagRestriction == true)
+          {
+              size += TAG_EXT_HEADER_RESTRICTION_LENGTH;
+          }
+          extHeaderBuffer = ByteBuffer.allocate(size);
+          extHeaderBuffer.putInt(size);
+          //Write Number of flags Byte
+          extHeaderBuffer.put((byte) TAG_EXT_NUMBER_BYTES_DATA_LENGTH);
+          //Write Extended Flags
+          byte extFlag = 0;
+          if (updateTag == true)
+          {
+              extFlag |= MASK_V24_TAG_UPDATE;
+          }
+          if (crcDataFlag == true)
+          {
+              extFlag |= MASK_V24_CRC_DATA_PRESENT;
+          }
+          if (tagRestriction == true)
+          {
+              extFlag |= MASK_V24_TAG_RESTRICTIONS;
+          }
+          extHeaderBuffer.put(extFlag);
+          //Write Update Data
+          if (updateTag == true)
+          {
+              extHeaderBuffer.put((byte) 0);
+          }
+          //Write CRC Data
+          if (crcDataFlag == true)
+          {
+              extHeaderBuffer.put((byte) TAG_EXT_HEADER_CRC_DATA_LENGTH);
+              extHeaderBuffer.put((byte) 0);
+              extHeaderBuffer.putInt(crcData);
+          }
+          //Write Tag Restriction
+          if (tagRestriction == true)
+          {
+              extHeaderBuffer.put((byte) TAG_EXT_HEADER_RESTRICTION_DATA_LENGTH);
+              /** @todo not currently setting restrictions */
+              extHeaderBuffer.put((byte) 0);
+          }
+      }
+
+      if (extHeaderBuffer != null)
+      {
+          extHeaderBuffer.flip();
+          headerBuffer.put(extHeaderBuffer);
+      }
+
+      headerBuffer.flip();
+      return headerBuffer;
+    }
 
     /**
      * Write this tag to file.
@@ -679,112 +797,14 @@ public class ID3v24Tag
         /** Write Body Buffer */
         byte[] bodyByteBuffer = writeFramesToBuffer().toByteArray();
 
-        /** @todo Calculate UnSynchronisation */
-        /** @todo Calculate the CYC Data Check */
-        /** @todo Reintroduce Extended Header */
-
-        /** Flags,currently we never do unsynchronisation or calculate the CRC
-         *  and if we dont calculate them cant keep orig values. Tags are not
-         *  experimental and we never create extended header to keep things simple.
-         */
-        unsynchronization = false;
-        extended = false;
-        experimental = false;
-        footer = false;
-        /** Create Header Buffer,allocate maximum possible size for the header*/
-        ByteBuffer headerBuffer = ByteBuffer.allocate(TAG_HEADER_LENGTH);
-        //TAGID
-        headerBuffer.put(TAG_ID);
-        //Major Version
-        headerBuffer.put(majorVersion);
-        //Minor Version
-        headerBuffer.put(revision);
-        //Flags
-        byte flagsByte = 0;
-        if (unsynchronization == true)
-        {
-            flagsByte |= MASK_V24_UNSYNCHRONIZATION;
-        }
-        if (extended == true)
-        {
-            flagsByte |= MASK_V24_EXTENDED_HEADER;
-        }
-        if (experimental == true)
-        {
-            flagsByte |= MASK_V24_EXPERIMENTAL;
-        }
-        if (footer == true)
-        {
-            flagsByte |= MASK_V24_FOOTER_PRESENT;
-        }
-        headerBuffer.put(flagsByte);
-
         /** Calculate Tag Size including Padding */
         int sizeIncPadding = calculateTagSize(getSize(), (int) audioStartLocation);
 
         //Calculate padding bytes required
         int padding = sizeIncPadding - getSize();
 
-        //Size As Recorded in Header, don't include the main header length
-        headerBuffer.put(sizeToByteArray((int) sizeIncPadding - TAG_HEADER_LENGTH));
+        ByteBuffer headerBuffer = writeHeaderToBuffer(padding);
 
-        //Write Extended Header
-        ByteBuffer extHeaderBuffer = null;
-        if (extended == true)
-        {
-            //Write Extended Header Size
-            int size = TAG_EXT_HEADER_LENGTH;
-            if (updateTag == true)
-            {
-                size += TAG_EXT_HEADER_UPDATE_LENGTH;
-            }
-            if (crcDataFlag == true)
-            {
-                size += TAG_EXT_HEADER_CRC_LENGTH;
-            }
-            if (tagRestriction == true)
-            {
-                size += TAG_EXT_HEADER_RESTRICTION_LENGTH;
-            }
-            extHeaderBuffer = ByteBuffer.allocate(size);
-            extHeaderBuffer.putInt(size);
-            //Write Number of flags Byte
-            extHeaderBuffer.put((byte) TAG_EXT_NUMBER_BYTES_DATA_LENGTH);
-            //Write Extended Flags
-            byte extFlag = 0;
-            if (updateTag == true)
-            {
-                extFlag |= MASK_V24_TAG_UPDATE;
-            }
-            if (crcDataFlag == true)
-            {
-                extFlag |= MASK_V24_CRC_DATA_PRESENT;
-            }
-            if (tagRestriction == true)
-            {
-                extFlag |= MASK_V24_TAG_RESTRICTIONS;
-            }
-            extHeaderBuffer.put(extFlag);
-            //Write Update Data
-            if (updateTag == true)
-            {
-                extHeaderBuffer.put((byte) 0);
-            }
-            //Write CRC Data
-            if (crcDataFlag == true)
-            {
-                extHeaderBuffer.put((byte) TAG_EXT_HEADER_CRC_DATA_LENGTH);
-                extHeaderBuffer.put((byte) 0);
-                extHeaderBuffer.putInt(crcData);
-            }
-            //Write Tag Restriction
-            if (tagRestriction == true)
-            {
-                extHeaderBuffer.put((byte) TAG_EXT_HEADER_RESTRICTION_DATA_LENGTH);
-                /** @todo not currently setting restrictions */
-                extHeaderBuffer.put((byte) 0);
-            }
-        }
         /** We need to adjust location of audio File */
         if (sizeIncPadding > audioStartLocation)
         {
@@ -797,13 +817,7 @@ public class ID3v24Tag
         try
         {
             fc = new RandomAccessFile(file, "rw").getChannel();
-            headerBuffer.flip();
             fc.write(headerBuffer);
-            if (extHeaderBuffer != null)
-            {
-                extHeaderBuffer.flip();
-                fc.write(extHeaderBuffer);
-            }
             fc.write(ByteBuffer.wrap(bodyByteBuffer));
             fc.write(ByteBuffer.wrap(new byte[padding]));
         }
@@ -814,7 +828,24 @@ public class ID3v24Tag
                 fc.close();
             }
         }
+    }
 
+    /**
+     * Write tag to channel
+     * 
+     * @param channel
+     * @throws IOException
+     */
+    public void write(WritableByteChannel channel)
+        throws IOException
+    {
+        logger.info("Writing tag to channel");
+  
+        byte[] bodyByteBuffer = writeFramesToBuffer().toByteArray();
+        ByteBuffer headerBuffer = writeHeaderToBuffer(0);
+    
+        channel.write(headerBuffer);
+        channel.write(ByteBuffer.wrap(bodyByteBuffer));
     }
 
     /**
