@@ -1,9 +1,4 @@
-/**
- *  Amended @author : Paul Taylor
- *  Initial @author : Eric Farng
- *
- *  Version @version:$Id$
- *
+/*
  *  MusicTag Copyright (C)2003,2004
  *
  *  This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser
@@ -18,7 +13,6 @@
  *  you can get a copy from http://www.opensource.org/licenses/lgpl-license.php or write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  *
- *
  */
 package org.jaudiotagger.tag.id3.framebody;
 
@@ -28,7 +22,45 @@ import org.jaudiotagger.tag.id3.ID3v24Frames;
 
 import java.nio.ByteBuffer;
 
-
+/**
+ * Audio encryption Frame.
+ * 
+ * <p>
+ * This frame indicates if the actual audio stream is encrypted, and by
+ * whom. Since standardisation of such encrypion scheme is beyond this
+ * document, all "AENC" frames begin with a terminated string with a
+ * URL containing an email address, or a link to a location where an
+ * email address can be found, that belongs to the organisation
+ * responsible for this specific encrypted audio file. Questions
+ * regarding the encrypted audio should be sent to the email address
+ * specified. If a $00 is found directly after the 'Frame size' and the
+ * audiofile indeed is encrypted, the whole file may be considered
+ * useless.
+ * </p><p>
+ * After the 'Owner identifier', a pointer to an unencrypted part of the
+ * audio can be specified. The 'Preview start' and 'Preview length' is
+ * described in frames. If no part is unencrypted, these fields should
+ * be left zeroed. After the 'preview length' field follows optionally a
+ * datablock required for decryption of the audio. There may be more
+ * than one "AENC" frames in a tag, but only one with the same 'Owner
+ * identifier'.
+ * </p><p><table border=0 width="70%">
+ * <tr><td colspan=2>&lt;Header for 'Audio encryption', ID: "AENC"&gt;</td></tr>
+ * <tr><td>Owner identifier  </td><td>&lt;text string&gt; $00    </td></tr>
+ * <tr><td>Preview start     </td><td>$xx xx                     </td></tr>
+ * <tr><td>Preview length    </td><td>$xx xx                     </td></tr>
+ * <tr><td>Encryption info   </td><td>&lt;binary data&gt;        </td></tr>
+ * </table></p>
+ * 
+ * <p>For more details, please refer to the ID3 specifications:
+ * <ul>
+ * <li>http://www.id3.org/id3v2.3.0.txt
+ * </ul>
+ * 
+ * Amended @author : Paul Taylor
+ * Initial @author : Eric Farng
+ * Version @version:$Id$
+ */
 public class FrameBodyAENC extends AbstractID3v2FrameBody  implements ID3v24FrameBody,ID3v23FrameBody
 {
 

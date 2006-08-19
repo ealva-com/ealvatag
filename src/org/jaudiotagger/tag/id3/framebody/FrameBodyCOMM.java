@@ -1,9 +1,4 @@
-/**
- *  Amended @author : Paul Taylor
- *  Initial @author : Eric Farng
- *
- *  Version @version:$Id$
- *
+/*
  *  MusicTag Copyright (C)2003,2004
  *
  *  This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser
@@ -17,9 +12,6 @@
  *  You should have received a copy of the GNU Lesser General Public License along with this library; if not,
  *  you can get a copy from http://www.opensource.org/licenses/lgpl-license.php or write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
- *
- * Description:
- *
  *
  */
 package org.jaudiotagger.tag.id3.framebody;
@@ -37,6 +29,34 @@ import org.jaudiotagger.tag.id3.ID3v24Frames;
 import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
 import org.jaudiotagger.tag.id3.valuepair.Languages;
 
+/**
+ * Comments frame.
+ * 
+ * <p>
+ * This frame is indended for any kind of full text information that
+ * does not fit in any other frame. It consists of a frame header
+ * followed by encoding, language and content descriptors and is ended
+ * with the actual comment as a text string. Newline characters are
+ * allowed in the comment text string. There may be more than one
+ * comment frame in each tag, but only one with the same language and
+ * content descriptor.
+ * </p><p><table border=0 width="70%">
+ * <tr><td colspan=2>&lt;Header for 'Comment', ID: "COMM"&gt;</td></tr>
+ * <tr><td>Text encoding   </td><td width="80%">$xx          </td></tr>
+ * <tr><td>Language        </td><td>$xx xx xx                </td></tr>
+ * <tr><td>Short content descrip.</td><td>&lt;text string according to encoding&gt; $00 (00)</td></tr>
+ * <tr><td>The actual text </td><td>&lt;full text string according to encoding&gt;</td></tr>
+ * </table></p>
+ * 
+ * <p>For more details, please refer to the ID3 specifications:
+ * <ul>
+ * <li>http://www.id3.org/id3v2.3.0.txt
+ * </ul>
+ * 
+ * Amended @author : Paul Taylor
+ * Initial @author : Eric Farng
+ * Version @version:$Id$
+ */
 public class FrameBodyCOMM  extends AbstractID3v2FrameBody  implements ID3v24FrameBody,ID3v23FrameBody
 {
     /**

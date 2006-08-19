@@ -1,9 +1,4 @@
 /**
- *  Amended @author : Paul Taylor
- *  Initial @author : Eric Farng
- *
- *  Version @version:$Id$
- *
  *  MusicTag Copyright (C)2003,2004
  *
  *  This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser
@@ -18,8 +13,6 @@
  *  you can get a copy from http://www.opensource.org/licenses/lgpl-license.php or write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  *
- * Description:
- *
  */
 package org.jaudiotagger.tag.id3.framebody;
 
@@ -32,7 +25,40 @@ import org.jaudiotagger.tag.id3.ID3v24Frames;
 
 import java.nio.ByteBuffer;
 
-
+/**
+ * Encryption method registration frame.
+ * 
+ * <p>
+ * To identify with which method a frame has been encrypted the
+ * encryption method must be registered in the tag with this frame. The
+ * 'Owner identifier' is a null-terminated string with a URL
+ * containing an email address, or a link to a location where an email
+ * address can be found, that belongs to the organisation responsible
+ * for this specific encryption method. Questions regarding the
+ * encryption method should be sent to the indicated email address. The
+ * 'Method symbol' contains a value that is associated with this method
+ * throughout the whole tag. Values below $80 are reserved. The 'Method
+ * symbol' may optionally be followed by encryption specific data. There
+ * may be several "ENCR" frames in a tag but only one containing the
+ * same symbol and only one containing the same owner identifier. The
+ * method must be used somewhere in the tag. See section 3.3.1, flag j
+ * for more information.
+ * </p><p><table border=0 width="70%">
+ * <tr><td colspan=2>&lt;Header for 'Encryption method registration', ID: "ENCR"&gt;</td></tr>
+ * <tr><td>Owner identifier</td><td width="80%">&lt;text string&gt; $00</td></tr>
+ * <tr><td>Method symbol   </td><td>$xx                           </td></tr>
+ * <tr><td>Encryption data </td><td>&lt;binary data&gt;           </td></tr>
+ * </table></p>
+ * 
+ * <p>For more details, please refer to the ID3 specifications:
+ * <ul>
+ * <li>http://www.id3.org/id3v2.3.0.txt
+ * </ul>
+ * 
+ * Amended @author : Paul Taylor
+ * Initial @author : Eric Farng
+ * Version @version:$Id$
+ */
 public class FrameBodyENCR extends AbstractID3v2FrameBody implements ID3v24FrameBody,ID3v23FrameBody
 {
     /**

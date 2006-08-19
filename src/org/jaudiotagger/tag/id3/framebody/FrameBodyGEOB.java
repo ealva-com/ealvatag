@@ -1,9 +1,4 @@
-/**
- *  Amended @author : Paul Taylor
- *  Initial @author : Eric Farng
- *
- *  Version @version:$Id$
- *
+/*
  *  MusicTag Copyright (C)2003,2004
  *
  *  This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser
@@ -18,8 +13,6 @@
  *  you can get a copy from http://www.opensource.org/licenses/lgpl-license.php or write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  *
- * Description:
- *
  */
 package org.jaudiotagger.tag.id3.framebody;
 
@@ -32,7 +25,36 @@ import java.io.IOException;
 import java.io.ByteArrayOutputStream;
 import java.nio.ByteBuffer;
 
-
+/**
+ * General encapsulated object frame.
+ * 
+ * <p>
+ * In this frame any type of file can be encapsulated. After the header,
+ * 'Frame size' and 'Encoding' follows 'MIME type' represented as
+ * as a terminated string encoded with ISO-8859-1. The
+ * filename is case sensitive and is encoded as 'Encoding'. Then follows
+ * a content description as terminated string, encoded as 'Encoding'.
+ * The last thing in the frame is the actual object. The first two
+ * strings may be omitted, leaving only their terminations. There may be more than one "GEOB"
+ * frame in each tag, but only one with the same content descriptor.
+ * </p><p><table border=0 width="70%">
+ * <tr><td colspan=2> &lt;Header for 'General encapsulated object', ID: "GEOB"&gt;</td></tr>
+ * <tr><td>Text encoding       </td><td>$xx                     </td></tr>
+ * <tr><td>MIME type           </td><td>&lt;text string&gt; $00 </td></tr>
+ * <tr><td>Filename            </td><td>&lt;text string according to encoding&gt; $00 (00)</td></tr>
+ * <tr><td>Content description </td><td><text string according to encóding> $00 (00)</td></tr>
+ * <tr><td>Encapsulated object </td><td>&lt;binary data&gt;     </td></tr>
+ * </table></p>
+ * 
+ * <p>For more details, please refer to the ID3 specifications:
+ * <ul>
+ * <li>http://www.id3.org/id3v2.3.0.txt
+ * </ul>
+ * 
+ * Amended @author : Paul Taylor
+ * Initial @author : Eric Farng
+ * Version @version:$Id$
+ */
 public class FrameBodyGEOB extends AbstractID3v2FrameBody implements ID3v24FrameBody,ID3v23FrameBody
 {
 

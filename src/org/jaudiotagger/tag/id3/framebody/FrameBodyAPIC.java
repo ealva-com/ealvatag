@@ -1,9 +1,4 @@
-/**
- *  Amended @author : Paul Taylor
- *  Initial @author : Eric Farng
- *
- *  Version @version:$Id$
- *
+/*
  *  MusicTag Copyright (C)2003,2004
  *
  *  This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser
@@ -18,9 +13,6 @@
  *  you can get a copy from http://www.opensource.org/licenses/lgpl-license.php or write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  *
- * Description:
- *
- *
  */
 package org.jaudiotagger.tag.id3.framebody;
 
@@ -34,6 +26,67 @@ import java.io.IOException;
 import java.io.ByteArrayOutputStream;
 import java.nio.ByteBuffer;
 
+/**
+ * Attached picture frame.
+ * 
+ * <p>
+ * This frame contains a picture directly related to the audio file.
+ * Image format is the MIME type and subtype for the image. In
+ * the event that the MIME media type name is omitted, "image/" will be
+ * implied. The "image/png" or "image/jpeg" picture format
+ * should be used when interoperability is wanted. Description is a
+ * short description of the picture, represented as a terminated
+ * textstring. The description has a maximum length of 64 characters,
+ * but may be empty. There may be several pictures attached to one file,
+ * each in their individual "APIC" frame, but only one with the same
+ * content descriptor. There may only be one picture with the picture
+ * type declared as picture type $01 and $02 respectively. There is the
+ * possibility to put only a link to the image file by using the 'MIME
+ * type' "-->" and having a complete URL instead of picture data.
+ * The use of linked files should however be used sparingly since there
+ * is the risk of separation of files.
+ * </p><p><table border=0 width="70%">
+ * <tr><td colspan=2> &lt;Header for 'Attached picture', ID: "APIC"&gt;</td></tr>
+ * <tr><td>Text encoding  </td><td>$xx                            </td></tr>
+ * <tr><td>MIME type      </td><td>&lt;text string&gt; $00        </td></tr>
+ * <tr><td>Picture type   </td><td>$xx                            </td></tr>
+ * <tr><td>Description    </td><td>&lt;text string according to encoding&gt; $00 (00)</td></tr>
+ * <tr><td>Picture data   </td><td>&lt;binary data&gt;            </td></tr>
+ * </table></p>
+ * <p><table border=0 width="70%">
+ * <tr><td rowspan=21 valign=top>Picture type:</td>
+ *     <td>$00 </td><td>Other                                </td></tr>
+ * <tr><td>$01 </td><td>32x32 pixels 'file icon' (PNG only)  </td></tr>
+ * <tr><td>$02 </td><td>Other file icon                      </td></tr>
+ * <tr><td>$03 </td><td>Cover (front)                        </td></tr>
+ * <tr><td>$04 </td><td>Cover (back)                         </td></tr>
+ * <tr><td>$05 </td><td>Leaflet page                         </td></tr>
+ * <tr><td>$06 </td><td>Media (e.g. lable side of CD)        </td></tr>
+ * <tr><td>$07 </td><td>Lead artist/lead performer/soloist   </td></tr>
+ * <tr><td>$08 </td><td>Artist/performer                     </td></tr>
+ * <tr><td>$09 </td><td>Conductor                            </td></tr>
+ * <tr><td>$0A </td><td>Band/Orchestra                       </td></tr>
+ * <tr><td>$0B </td><td>Composer                             </td></tr>
+ * <tr><td>$0C </td><td>Lyricist/text writer                 </td></tr>
+ * <tr><td>$0D </td><td>Recording Location                   </td></tr>
+ * <tr><td>$0E </td><td>During recording                     </td></tr>
+ * <tr><td>$0F </td><td>During performance                   </td></tr>
+ * <tr><td>$10 </td><td>Movie/video screen capture           </td></tr>
+ * <tr><td>$11 </td><td>A bright coloured fish               </td></tr>
+ * <tr><td>$12 </td><td>Illustration                         </td></tr>
+ * <tr><td>$13 </td><td>Band/artist logotype                 </td></tr>
+ * <tr><td>$14 </td><td>Publisher/Studio logotype            </td></tr>
+ * </table></p>
+ * 
+ * <p>For more details, please refer to the ID3 specifications:
+ * <ul>
+ * <li>http://www.id3.org/id3v2.3.0.txt
+ * </ul>
+ * 
+ * Amended @author : Paul Taylor
+ * Initial @author : Eric Farng
+ * Version @version:$Id$
+ */
 public class FrameBodyAPIC extends AbstractID3v2FrameBody implements ID3v24FrameBody,ID3v23FrameBody
 {
 

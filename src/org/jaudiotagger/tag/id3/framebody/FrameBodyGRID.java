@@ -1,9 +1,4 @@
-/**
- *  Amended @author : Paul Taylor
- *  Initial @author : Eric Farng
- *
- *  Version @version:$Id$
- *
+/*
  *  MusicTag Copyright (C)2003,2004
  *
  *  This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser
@@ -18,8 +13,6 @@
  *  you can get a copy from http://www.opensource.org/licenses/lgpl-license.php or write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  *
- * Description:
- *
  */
 package org.jaudiotagger.tag.id3.framebody;
 
@@ -32,6 +25,41 @@ import org.jaudiotagger.tag.id3.ID3v24Frames;
 
 import java.nio.ByteBuffer;
 
+/**
+ * Group identification registration frame.
+ * 
+ * <p>
+ * This frame enables grouping of otherwise unrelated frames. This can
+ * be used when some frames are to be signed. To identify which frames
+ * belongs to a set of frames a group identifier must be registered in
+ * the tag with this frame. The 'Owner identifier' is a null-terminated
+ * string with a URL containing an email address, or a link to a
+ * location where an email address can be found, that belongs to the
+ * organisation responsible for this grouping. Questions regarding the
+ * grouping should be sent to the indicated email address. The 'Group
+ * symbol' contains a value that associates the frame with this group
+ * throughout the whole tag. Values below $80 are reserved. The 'Group
+ * symbol' may optionally be followed by some group specific data, e.g.
+ * a digital signature. There may be several "GRID" frames in a tag but
+ * only one containing the same symbol and only one containing the same
+ * owner identifier. The group symbol must be used somewhere in the tag.
+ * See section 3.3.1, flag j for more information.
+ * </p><p><table border=0 width="70%">
+ * <tr><td colspan=2>&lt;Header for 'Group ID registration', ID: "GRID"&gt;</td></tr>
+ * <tr><td>Owner identifier     </td><td>&lt;text string&gt; $00</td></tr>
+ * <tr><td>Group symbol         </td><td width="80%">$xx        </td></tr>
+ * <tr><td>Group dependent data </td><td>&lt;binary data&gt;    </td></tr>
+ * </table></p>
+ * 
+ * <p>For more details, please refer to the ID3 specifications:
+ * <ul>
+ * <li>http://www.id3.org/id3v2.3.0.txt
+ * </ul>
+ * 
+ * Amended @author : Paul Taylor
+ * Initial @author : Eric Farng
+ * Version @version:$Id$
+ */
 public class FrameBodyGRID extends AbstractID3v2FrameBody implements ID3v24FrameBody,ID3v23FrameBody
 {
     /**

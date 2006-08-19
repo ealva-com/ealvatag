@@ -1,9 +1,4 @@
-/**
- *  Amended @author : Paul Taylor
- *  Initial @author : Eric Farng
- *
- *  Version @version:$Id$
- *
+/*
  *  MusicTag Copyright (C)2003,2004
  *
  *  This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser
@@ -17,8 +12,6 @@
  *  You should have received a copy of the GNU Lesser General Public License along with this library; if not,
  *  you can get a copy from http://www.opensource.org/licenses/lgpl-license.php or write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
- *
- * Description:
  *
  */
 package org.jaudiotagger.tag.id3.framebody;
@@ -45,6 +38,10 @@ import java.util.StringTokenizer;
  * <Header for 'Involved people list', ID: "IPLS">
  * Text encoding	$xx
  * People list strings	<text strings according to encoding>
+ * 
+ * Amended @author : Paul Taylor
+ * Initial @author : Eric Farng
+ * Version @version:$Id$
  *
  * @TODO currently just allows any number of values, should only really support pairs of values
  */
