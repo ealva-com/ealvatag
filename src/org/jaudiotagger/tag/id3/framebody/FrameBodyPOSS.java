@@ -1,9 +1,4 @@
-/**
- *  Amended @author : Paul Taylor
- *  Initial @author : Eric Farng
- *
- *  Version @version:$Id$
- *
+/*
  *  MusicTag Copyright (C)2003,2004
  *
  *  This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser
@@ -18,8 +13,6 @@
  *  you can get a copy from http://www.opensource.org/licenses/lgpl-license.php or write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  *
- * Description:
- *
  */
 package org.jaudiotagger.tag.id3.framebody;
 
@@ -31,7 +24,39 @@ import org.jaudiotagger.tag.id3.ID3v24Frames;
 
 import java.nio.ByteBuffer;
 
-
+/**
+ * Position synchronisation frame.
+ * 
+ * <p>
+ * This frame delivers information to the listener of how far into the
+ * audio stream he picked up; in effect, it states the time offset of
+ * the first frame in the stream. The frame layout is:
+ * </p><p><center><table border=0 width="70%">
+ * <tr><td colspan=2>&lt;Head for 'Position synchronisation', ID: "POSS"&gt;</td></tr>
+ * <tr><td>Time stamp format </td><td>$xx          </td></tr>
+ * <tr><td>Position          </td><td>$xx (xx ...) </td></tr>
+ * </table></center></p>
+ * <p>
+ * Where time stamp format is:
+ * </p><p>
+ * $01 Absolute time, 32 bit sized, using MPEG frames as unit<br>
+ * $02 Absolute time, 32 bit sized, using milliseconds as unit
+ * </p><p>
+ * and position is where in the audio the listener starts to receive,
+ * i.e. the beginning of the next frame. If this frame is used in the
+ * beginning of a file the value is always 0. There may only be one
+ * "POSS" frame in each tag.
+ * </p>
+ * 
+ * <p>For more details, please refer to the ID3 specifications:
+ * <ul>
+ * <li>http://www.id3.org/id3v2.3.0.txt
+ * </ul>
+ * 
+ * Amended @author : Paul Taylor
+ * Initial @author : Eric Farng
+ * Version @version:$Id$
+ */
 public class FrameBodyPOSS extends AbstractID3v2FrameBody implements ID3v24FrameBody,ID3v23FrameBody
 {
     /**

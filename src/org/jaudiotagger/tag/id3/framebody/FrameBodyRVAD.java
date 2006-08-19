@@ -1,9 +1,4 @@
-/**
- *  Amended @author : Paul Taylor
- *  Initial @author : Eric Farng
- *
- *  Version @version:$Id$
- *
+/*
  *  MusicTag Copyright (C)2003,2004
  *
  *  This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser
@@ -18,9 +13,6 @@
  *  you can get a copy from http://www.opensource.org/licenses/lgpl-license.php or write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  *
- * Description:
- * Represents Relative Volume Adjustment,only partially implemented
- *
  */
 package org.jaudiotagger.tag.id3.framebody;
 
@@ -30,7 +22,15 @@ import org.jaudiotagger.tag.id3.ID3v23Frames;
 
 import java.nio.ByteBuffer;
 
-
+/**
+ * Relative volume adjustment frame.
+ * 
+ * Only partially implemented.
+ * 
+ * Amended @author : Paul Taylor
+ * Initial @author : Eric Farng
+ * Version @version:$Id$
+ */
 public class FrameBodyRVAD extends AbstractID3v2FrameBody implements ID3v23FrameBody
 {
 

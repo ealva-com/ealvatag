@@ -1,9 +1,4 @@
-/**
- *  Amended @author : Paul Taylor
- *  Initial @author : Eric Farng
- *
- *  Version @version:$Id$
- *
+/*
  *  MusicTag Copyright (C)2003,2004
  *
  *  This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser
@@ -18,14 +13,55 @@
  *  you can get a copy from http://www.opensource.org/licenses/lgpl-license.php or write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  *
- * Description:
- *
  */
 package org.jaudiotagger.tag.id3.framebody;
 
 import org.jaudiotagger.tag.id3.ID3v24Frames;
 
-
+/**
+ * Synchronised tempo codes frame.
+ * 
+ * <p>
+ * For a more accurate description of the tempo of a musical piece this
+ * frame might be used. After the header follows one byte describing
+ * which time stamp format should be used. Then follows one or more
+ * tempo codes. Each tempo code consists of one tempo part and one time
+ * part. The tempo is in BPM described with one or two bytes. If the
+ * first byte has the value $FF, one more byte follows, which is added
+ * to the first giving a range from 2 - 510 BPM, since $00 and $01 is
+ * reserved. $00 is used to describe a beat-free time period, which is
+ * not the same as a music-free time period. $01 is used to indicate one
+ * single beat-stroke followed by a beat-free period.
+ * </p><p>
+ * The tempo descriptor is followed by a time stamp. Every time the
+ * tempo in the music changes, a tempo descriptor may indicate this for
+ * the player. All tempo descriptors should be sorted in chronological
+ * order. The first beat-stroke in a time-period is at the same time as
+ * the beat description occurs. There may only be one "SYTC" frame in
+ * each tag.
+ * </p><p><table border=0 width="70%">
+ * <tr><td colspan=2> &lt;Header for 'Synchronised tempo codes', ID: "SYTC"&gt;</td></tr>
+ * <tr><td>Time stamp format</td><td width="80%">$xx</td></tr>
+ * <tr><td>Tempo data </td><td>&lt;binary data&gt;</td></tr>
+ * </table></p><p>
+ * Where time stamp format is:
+ * </p><p>
+ *  $01 Absolute time, 32 bit sized, using MPEG frames as unit<br>
+ *  $02 Absolute time, 32 bit sized, using milliseconds as unit
+ * </p><p>
+ * Abolute time means that every stamp contains the time from the
+ * beginning of the file.
+ * </p>
+ * 
+ * <p>For more details, please refer to the ID3 specifications:
+ * <ul>
+ * <li>http://www.id3.org/id3v2.3.0.txt
+ * </ul>
+ * 
+ * Amended @author : Paul Taylor
+ * Initial @author : Eric Farng
+ * Version @version:$Id$
+ */
 public class FrameBodySYTC extends AbstractID3v2FrameBody implements ID3v24FrameBody,ID3v23FrameBody
 {
     /**

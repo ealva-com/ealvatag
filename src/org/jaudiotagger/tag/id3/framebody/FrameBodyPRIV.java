@@ -1,9 +1,4 @@
-/**
- *  Amended @author : Paul Taylor
- *  Initial @author : Eric Farng
- *
- *  Version @version:$Id$
- *
+/*
  *  MusicTag Copyright (C)2003,2004
  *
  *  This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser
@@ -18,8 +13,6 @@
  *  you can get a copy from http://www.opensource.org/licenses/lgpl-license.php or write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  *
- * Description:
- *
  */
 package org.jaudiotagger.tag.id3.framebody;
 
@@ -31,7 +24,35 @@ import org.jaudiotagger.tag.id3.ID3v24Frames;
 
 import java.nio.ByteBuffer;
 
-
+/**
+ * Private frame.
+ * 
+ * <p>
+ * This frame is used to contain information from a software producer
+ * that its program uses and does not fit into the other frames. The
+ * frame consists of an 'Owner identifier' string and the binary data.
+ * The 'Owner identifier' is a null-terminated string with a URL
+ * containing an email address, or a link to a location where an email
+ * address can be found, that belongs to the organisation responsible
+ * for the frame. Questions regarding the frame should be sent to the
+ * indicated email address. The tag may contain more than one "PRIV"
+ * frame but only with different contents. It is recommended to keep the
+ * number of "PRIV" frames as low as possible.
+ * </p><p><table border=0 width="70%">
+ * <tr><td colspan=2>&lt;Header for 'Private frame', ID: "PRIV"&gt;</td></tr>
+ * <tr><td>Owner identifier</td><td width="80%">&lt;text string&gt; $00</td></tr>
+ * <tr><td>The private data</td><td>&lt;binary data&gt;</td></tr>
+ * </table></p>
+ * 
+ * <p>For more details, please refer to the ID3 specifications:
+ * <ul>
+ * <li>http://www.id3.org/id3v2.3.0.txt
+ * </ul>
+ * 
+ * Amended @author : Paul Taylor
+ * Initial @author : Eric Farng
+ * Version @version:$Id$
+ */
 public class FrameBodyPRIV extends AbstractID3v2FrameBody implements ID3v24FrameBody,ID3v23FrameBody
 {
     /**

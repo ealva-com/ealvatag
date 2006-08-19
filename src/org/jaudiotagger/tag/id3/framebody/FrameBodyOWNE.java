@@ -1,9 +1,4 @@
-/**
- *  Amended @author : Paul Taylor
- *  Initial @author : Eric Farng
- *
- *  Version @version:$Id$
- *
+/*
  *  MusicTag Copyright (C)2003,2004
  *
  *  This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser
@@ -18,8 +13,6 @@
  *  you can get a copy from http://www.opensource.org/licenses/lgpl-license.php or write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  *
- * Description:
- *
  */
 package org.jaudiotagger.tag.id3.framebody;
 
@@ -32,7 +25,38 @@ import java.io.IOException;
 import java.io.ByteArrayOutputStream;
 import java.nio.ByteBuffer;
 
-
+/**
+ * Ownership frame.
+ * 
+ * <p>
+ * The ownership frame might be used as a reminder of a made transaction
+ * or, if signed, as proof. Note that the "USER" and "TOWN" frames are
+ * good to use in conjunction with this one. The frame begins, after the
+ * frame ID, size and encoding fields, with a 'price payed' field. The
+ * first three characters of this field contains the currency used for
+ * the transaction, encoded according to ISO-4217 alphabetic
+ * currency code. Concatenated to this is the actual price payed, as a
+ * numerical string using "." as the decimal separator. Next is an 8
+ * character date string (YYYYMMDD) followed by a string with the name
+ * of the seller as the last field in the frame. There may only be one
+ * "OWNE" frame in a tag.
+ * </p><p><table border=0 width="70%">
+ * <tr><td>&lt;Header for 'Ownership frame', ID: "OWNE"&gt;</td></tr>
+ * <tr><td>Text encoding  </td><td>$xx                     </td></tr>
+ * <tr><td>Price payed    </td><td>&lt;text string&gt; $00 </td></tr>
+ * <tr><td>Date of purch. </td><td>&lt;text string&gt;     </td></tr>
+ * <tr><td>Seller</td><td>&lt;text string according to encoding&gt;</td></tr>
+ * </table></p>
+ * 
+ * <p>For more details, please refer to the ID3 specifications:
+ * <ul>
+ * <li>http://www.id3.org/id3v2.3.0.txt
+ * </ul>
+ * 
+ * Amended @author : Paul Taylor
+ * Initial @author : Eric Farng
+ * Version @version:$Id$
+ */
 public class FrameBodyOWNE extends AbstractID3v2FrameBody implements ID3v24FrameBody,ID3v23FrameBody
 {
     /**

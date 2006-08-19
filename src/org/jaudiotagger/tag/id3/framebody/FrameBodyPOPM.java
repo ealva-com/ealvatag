@@ -1,9 +1,4 @@
-/**
- *  Amended @author : Paul Taylor
- *  Initial @author : Eric Farng
- *
- *  Version @version:$Id$
- *
+/*
  *  MusicTag Copyright (C)2003,2004
  *
  *  This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser
@@ -18,8 +13,6 @@
  *  you can get a copy from http://www.opensource.org/licenses/lgpl-license.php or write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  *
- * Description:
- *
  */
 package org.jaudiotagger.tag.id3.framebody;
 
@@ -29,7 +22,40 @@ import org.jaudiotagger.tag.id3.ID3v24Frames;
 
 import java.nio.ByteBuffer;
 
-
+/**
+ * Popularimeter frame.
+ * 
+ * <p>
+ * The purpose of this frame is to specify how good an audio file is.
+ * Many interesting applications could be found to this frame such as a
+ * playlist that features better audiofiles more often than others or it
+ * could be used to profile a person's taste and find other 'good' files
+ * by comparing people's profiles. The frame is very simple. It contains
+ * the email address to the user, one rating byte and a four byte play
+ * counter, intended to be increased with one for every time the file is
+ * played. The email is a terminated string. The rating is 1-255 where
+ * 1 is worst and 255 is best. 0 is unknown. If no personal counter is
+ * wanted it may be omitted. When the counter reaches all one's, one
+ * byte is inserted in front of the counter thus making the counter
+ * eight bits bigger in the same away as the play counter ("PCNT").
+ * There may be more than one "POPM" frame in each tag, but only one
+ * with the same email address.
+ * </p><p><table border=0 width="70%">
+ * <tr><td colspan=2> &lt;Header for 'Popularimeter', ID: "POPM"&gt;</td></tr>
+ * <tr><td>Email to user</td><td>&lt;text string&gt; $00</td></tr>
+ * <tr><td>Rating       </td><td>$xx                    </td></tr>
+ * <tr><td>Counter      </td><td>$xx xx xx xx (xx ...)  </td></tr>
+ * </table></p>
+ * 
+ * <p>For more details, please refer to the ID3 specifications:
+ * <ul>
+ * <li>http://www.id3.org/id3v2.3.0.txt
+ * </ul>
+ * Amended @author : Paul Taylor
+ * 
+ * Initial @author : Eric Farng
+ * Version @version:$Id$
+ */
 public class FrameBodyPOPM extends AbstractID3v2FrameBody implements ID3v24FrameBody,ID3v23FrameBody
 {
     /**
