@@ -29,7 +29,7 @@ import org.jaudiotagger.tag.id3.ID3v24Frames;
 import java.nio.ByteBuffer;
 
 
-public class FrameBodyTMCL extends AbstractFrameBodyTextInfo  implements ID3v24FrameBody
+public class FrameBodyTMCL extends AbstractFrameBodyTextInfo implements ID3v24FrameBody
 {
     /**
      * Creates a new FrameBodyTMCL datatype.
