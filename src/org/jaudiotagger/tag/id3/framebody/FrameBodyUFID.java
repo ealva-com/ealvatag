@@ -31,7 +31,6 @@ import org.jaudiotagger.tag.datatype.DataTypes;
 import org.jaudiotagger.tag.InvalidTagException;
 import org.jaudiotagger.tag.id3.ID3v24Frames;
 
-import java.io.IOException;
 import java.nio.ByteBuffer;
 
 
@@ -138,4 +137,3 @@ public class FrameBodyUFID extends AbstractID3v2FrameBody implements ID3v24Frame
         objectList.add(new ByteArraySizeTerminated(DataTypes.OBJ_DATA, this));
     }
 }
-

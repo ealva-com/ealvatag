@@ -37,7 +37,7 @@
   <url>https://jaudiotagger.dev.java.net/</url>
   <inceptionYear>2005</inceptionYear>
   <scm>
-    <connection>scm:cvs:pserver:guest@cvs.dev.java.net:/cvs/jaudiotagger</connection>
+    <connection>scm:cvs:pserver:guest@cvs.dev.java.net:/cvs:jaudiotagger</connection>
   </scm>
   <issueManagement>
     <url>https://jaudiotagger.dev.java.net/issues</url>
@@ -46,6 +46,23 @@
     <name>java.net</name>
     <url>http://www.java.net/</url>
   </organization>
+  <mailingLists>
+    <mailingList>
+      <name>Development mailing list</name>
+      <post>dev@jaudiotagger.dev.java.net</post>
+      <archive>https://jaudiotagger.dev.java.net/servlets/SummarizeList?listName=dev</archive>
+    </mailingList>
+    <mailingList>
+      <name>CVS mailing list</name>
+      <post>cvs@jaudiotagger.dev.java.net</post>
+      <archive>https://jaudiotagger.dev.java.net/servlets/SummarizeList?listName=cvs</archive>
+    </mailingList>
+    <mailingList>
+      <name>Issues mailing list</name>
+      <post>issues@jaudiotagger.dev.java.net</post>
+      <archive>https://jaudiotagger.dev.java.net/servlets/SummarizeList?listName=issues</archive>
+    </mailingList>
+  </mailingLists>
   <developers>
     <developer>
       <id>paultaylor</id>

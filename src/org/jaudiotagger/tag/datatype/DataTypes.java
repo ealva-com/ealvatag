@@ -75,13 +75,11 @@ public class DataTypes
      */
     public static final String OBJ_RECIEVED_AS = "RecievedAs";
 
-
     //APIC Frame
     public static final String OBJ_PICTURE_TYPE = "PictureType";
     public static final String OBJ_PICTURE_DATA = "PictureData";
     public static final String OBJ_MIME_TYPE = "MIMEType";
     public static final String OBJ_IMAGE_FORMAT = "ImageType";
-
 
     //AENC Frame
     public static final String OBJ_PREVIEW_START = "PreviewStart";
@@ -107,7 +105,6 @@ public class DataTypes
     public static final String OBJ_INTERPOLATION_METHOD = "InterpolationMethod";
 
     public static final String OBJ_FILENAME = "Filename";
-
 
     //GRID Frame
     public static final String OBJ_GROUP_SYMBOL = "GroupSymbol";
@@ -149,9 +146,17 @@ public class DataTypes
     //SIGN Frame
     public static final String OBJ_SIGNATURE = "Signature";
 
-
     //ULST Frame
     public static final String OBJ_LANGUAGE = "Language";
     public static final String OBJ_LYRICS = "Lyrics";
     public static final String OBJ_URLLINK = "URLLink";
+
+    //CHAP Frame
+    public static final String OBJ_ELEMENT_ID   = "ElementID";
+    public static final String OBJ_START_TIME   = "StartTime";
+    public static final String OBJ_END_TIME     = "EndTime";
+    public static final String OBJ_START_OFFSET = "StartOffset";
+    public static final String OBJ_END_OFFSET   = "EndOffset";
+    
+    //CTOC Frame
 }

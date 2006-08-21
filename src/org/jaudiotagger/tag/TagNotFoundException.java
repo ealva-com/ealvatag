@@ -1,4 +1,4 @@
-/**
+/*
  *  Amended @author : Paul Taylor
  *  Initial @author : Eric Farng
  *
@@ -18,18 +18,8 @@
  *  you can get a copy from http://www.opensource.org/licenses/lgpl-license.php or write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  *
- * Description:
- * * Thrown if the tag or MP3 Frame Header isn't found. This is different from
- * the <code>InvalidTagException</code>. Each tag (or MP3 Frame Header) has an
- * ID string or some way saying that it simply exists. If this string is
- * missing, <code>TagNotFoundException</code> is thrown. If the ID string
- * exists, then any other error while reading throws an
- * <code>InvalidTagException</code>.
- *
  */
 package org.jaudiotagger.tag;
-
-import org.jaudiotagger.tag.TagException;
 
 /**
  * Thrown if the tag o isn't found. This is different from
@@ -51,6 +41,11 @@ public class TagNotFoundException extends TagException
     {
     }
 
+    /**
+     * Creates a new TagNotFoundException datatype.
+     *
+     * @param ex the cause.
+     */
     public TagNotFoundException(Throwable ex)
     {
         super(ex);
@@ -66,6 +61,12 @@ public class TagNotFoundException extends TagException
         super(msg);
     }
 
+    /**
+     * Creates a new TagNotFoundException datatype.
+     *
+     * @param msg the detail message.
+     * @param ex the cause.
+     */
     public TagNotFoundException(String msg, Throwable ex)
     {
         super(msg, ex);

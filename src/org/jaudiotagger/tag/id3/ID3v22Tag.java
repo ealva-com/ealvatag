@@ -32,12 +32,11 @@ import org.jaudiotagger.tag.id3.framebody.FrameBodyTDRC;
 import org.jaudiotagger.tag.id3.framebody.AbstractFrameBodyTextInfo;
 import org.jaudiotagger.FileConstants;
 
-import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.*;
 import java.nio.channels.*;
-import java.io.*;
 import java.util.*;
 import java.util.logging.Level;
 

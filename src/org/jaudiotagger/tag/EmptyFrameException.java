@@ -1,4 +1,4 @@
-/**
+/*
  *  Amended @author : Paul Taylor
  *  Initial @author : Eric Farng
  *
@@ -18,13 +18,14 @@
  *  you can get a copy from http://www.opensource.org/licenses/lgpl-license.php or write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  *
- * Description:
- * Thrown when find a Frame but it contains no data
  */
 package org.jaudiotagger.tag;
 
-import org.jaudiotagger.tag.InvalidFrameException;
-
+/**
+ * Thrown when find a Frame but it contains no data.
+ * 
+ * @version $Revision$
+ */
 public class EmptyFrameException extends InvalidFrameException
 {
     /**
@@ -34,13 +35,18 @@ public class EmptyFrameException extends InvalidFrameException
     {
     }
 
+    /**
+     * Creates a new EmptyFrameException datatype.
+     * 
+     * @param ex the cause.
+     */
     public EmptyFrameException(Throwable ex)
     {
         super(ex);
     }
 
     /**
-     * Creates a new InvalidTagException datatype.
+     * Creates a new EmptyFrameException datatype.
      *
      * @param msg the detail message.
      */
@@ -49,6 +55,12 @@ public class EmptyFrameException extends InvalidFrameException
         super(msg);
     }
 
+    /**
+     * Creates a new EmptyFrameException datatype.
+     * 
+     * @param msg the detail message.
+     * @param ex the cause.
+     */
     public EmptyFrameException(String msg, Throwable ex)
     {
         super(msg, ex);

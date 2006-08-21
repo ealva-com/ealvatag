@@ -28,7 +28,7 @@ import org.jaudiotagger.tag.AbstractTag;
 import org.jaudiotagger.audio.mp3.MP3File;
 import org.jaudiotagger.tag.TagException;
 import org.jaudiotagger.tag.TagOptionSingleton;
-import org.jaudiotagger.tag.*;
+import org.jaudiotagger.tag.TagNotFoundException;
 import org.jaudiotagger.tag.id3.framebody.*;
 
 import java.io.IOException;

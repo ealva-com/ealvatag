@@ -27,10 +27,8 @@ package org.jaudiotagger.tag;
 import org.jaudiotagger.tag.id3.framebody.AbstractID3v2FrameBody;
 import org.jaudiotagger.tag.id3.framebody.FrameBodyCOMM;
 import org.jaudiotagger.tag.id3.framebody.FrameBodyTIPL;
-import org.jaudiotagger.tag.id3.framebody.*;
 import org.jaudiotagger.tag.id3.valuepair.Languages;
 import org.jaudiotagger.tag.id3.valuepair.GenreTypes;
-import org.jaudiotagger.tag.TagException;
 import org.jaudiotagger.tag.lyrics3.Lyrics3v2Fields;
 
 import java.util.HashMap;

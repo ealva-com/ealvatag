@@ -24,10 +24,6 @@ package org.jaudiotagger.tag.id3;
 
 import org.jaudiotagger.logging.LogFormatter;
 import org.jaudiotagger.tag.TagException;
-import org.jaudiotagger.tag.InvalidFrameException;
-import org.jaudiotagger.tag.id3.ID3v22Frames;
-import org.jaudiotagger.tag.id3.ID3v23Frames;
-import org.jaudiotagger.tag.id3.ID3v24Frames;
 import org.jaudiotagger.audio.mp3.MP3File;
 
 import java.lang.reflect.Constructor;

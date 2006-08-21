@@ -1,4 +1,4 @@
-/**
+/*
  *  Amended @author : Paul Taylor
  *  Initial @author : Eric Farng
  *
@@ -18,18 +18,19 @@
  *  you can get a copy from http://www.opensource.org/licenses/lgpl-license.php or write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  *
- * Description:
+ */
+package org.jaudiotagger.tag;
+
+/**
  * An <code>InvalidTagException</code> is thrown if a parse error occurs while
  * a tag is being read from a file. This is different from a
  * <code>TagNotFoundException</code>. Each tag (or MP3 Frame Header) has an ID
  * string or some way saying that it simply exists. If this string is missing,
  * <code>TagNotFoundException</code> is thrown. If the ID string exists, then
  * any other error while reading throws an <code>InvalidTagException</code>.
+ * 
+ * @version $Revision$
  */
-package org.jaudiotagger.tag;
-
-import org.jaudiotagger.tag.TagException;
-
 public class InvalidTagException extends TagException
 {
     /**
@@ -39,6 +40,11 @@ public class InvalidTagException extends TagException
     {
     }
 
+    /**
+     * Creates a new InvalidTagException datatype.
+     *
+     * @param ex the cause.
+     */
     public InvalidTagException(Throwable ex)
     {
         super(ex);
@@ -54,6 +60,12 @@ public class InvalidTagException extends TagException
         super(msg);
     }
 
+    /**
+     * Creates a new InvalidTagException datatype.
+     *
+     * @param msg the detail message.
+     * @param ex the cause.
+     */
     public InvalidTagException(String msg, Throwable ex)
     {
         super(msg, ex);

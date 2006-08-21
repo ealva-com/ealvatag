@@ -15,6 +15,9 @@
  */
 package org.jaudiotagger.tag.id3.framebody;
 
+import java.nio.ByteBuffer;
+
+import org.jaudiotagger.tag.InvalidTagException;
 import org.jaudiotagger.tag.id3.ID3v2ChapterFrames;
 
 /**
@@ -92,6 +95,34 @@ import org.jaudiotagger.tag.id3.ID3v2ChapterFrames;
 public class FrameBodyCTOC extends AbstractID3v2FrameBody implements ID3v2ChapterFrameBody
 {
     /**
+     * Creates a new FrameBodyCTOC datatype.
+     */
+    public FrameBodyCTOC()
+    {
+    }
+
+    /**
+     * Creates a new FrameBodyCTOC datatype.
+     * 
+     * @param body
+     */
+    public FrameBodyCTOC(FrameBodyCTOC body)
+    {
+        super(body);
+    }
+
+    /**
+     * Creates a new FrameBodyCTOC datatype.
+     *
+     * @throws InvalidTagException if unable to create framebody from buffer
+     */
+    public FrameBodyCTOC(ByteBuffer byteBuffer, int frameSize)
+        throws InvalidTagException
+    {
+        super(byteBuffer, frameSize);
+    }
+
+    /**
      * The ID3v2 frame identifier
      *
      * @return the ID3v2 frame identifier  for this frame type
@@ -100,7 +131,7 @@ public class FrameBodyCTOC extends AbstractID3v2FrameBody implements ID3v2Chapte
     {
         return ID3v2ChapterFrames.FRAME_ID_TABLE_OF_CONTENT;
     }
-  
+
     /**
      * 
      */

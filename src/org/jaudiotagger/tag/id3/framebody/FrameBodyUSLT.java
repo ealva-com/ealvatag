@@ -21,7 +21,6 @@ import org.jaudiotagger.tag.id3.ID3v24Frames;
 import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
 import org.jaudiotagger.tag.id3.valuepair.Languages;
 
-import java.io.IOException;
 import java.nio.ByteBuffer;
 
 /**

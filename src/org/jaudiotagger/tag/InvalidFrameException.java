@@ -1,4 +1,4 @@
-/**
+/*
  *  Amended @author : Paul Taylor
  *  Initial @author : Eric Farng
  *
@@ -18,28 +18,36 @@
  *  you can get a copy from http://www.opensource.org/licenses/lgpl-license.php or write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  *
- * Description:
- * Thrown if frame cannot be read correcly.
  */
 package org.jaudiotagger.tag;
 
-
+/**
+ * Thrown if frame cannot be read correcly.
+ * 
+ * @author Eric Farng
+ * @version $Revision$
+ */
 public class InvalidFrameException extends InvalidTagException
 {
     /**
-     * Creates a new InvalidTagException datatype.
+     * Creates a new InvalidFrameException datatype.
      */
     public InvalidFrameException()
     {
     }
 
+    /**
+     * Creates a new InvalidFrameException datatype.
+     *
+     * @param ex the cause.
+     */
     public InvalidFrameException(Throwable ex)
     {
         super(ex);
     }
 
     /**
-     * Creates a new InvalidTagException datatype.
+     * Creates a new InvalidFrameException datatype.
      *
      * @param msg the detail message.
      */
@@ -48,6 +56,12 @@ public class InvalidFrameException extends InvalidTagException
         super(msg);
     }
 
+    /**
+     * Creates a new InvalidFrameException datatype.
+     *
+     * @param msg the detail message.
+     * @param ex the cause.
+     */
     public InvalidFrameException(String msg, Throwable ex)
     {
         super(msg, ex);
