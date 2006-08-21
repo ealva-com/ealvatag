@@ -1,9 +1,4 @@
-/**
- *  Amended @author : Paul Taylor
- *  Initial @author : Eric Farng
- *
- *  Version @version:$Id$
- *
+/*
  *  MusicTag Copyright (C)2003,2004
  *
  *  This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser
@@ -17,9 +12,6 @@
  *  You should have received a copy of the GNU Lesser General Public License along with this library; if not,
  *  you can get a copy from http://www.opensource.org/licenses/lgpl-license.php or write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
- *
- * Description:
- *
  */
 package org.jaudiotagger.tag.id3.framebody;
 
@@ -29,7 +21,17 @@ import org.jaudiotagger.tag.id3.ID3v24Frames;
 import java.nio.ByteBuffer;
 
 /**
- * The 'Official Internet radio station homepage' contains a URL pointing at the homepage of the internet radio station.
+ * Official internet radio station homepage URL link frames.
+ * <p>The 'Official internet radio station homepage' contains a URL pointing at the homepage of the internet radio station.
+ * 
+ * <p>For more details, please refer to the ID3 specifications:
+ * <ul>
+ * <li><a href="http://www.id3.org/id3v2.3.0.txt">ID3 v2.3.0 Spec</a>
+ * </ul>
+ * 
+ * Amended @author : Paul Taylor
+ * Initial @author : Eric Farng
+ * @version $Id$
  */
 public class FrameBodyWORS extends AbstractFrameBodyUrlLink  implements ID3v24FrameBody,ID3v23FrameBody
 {

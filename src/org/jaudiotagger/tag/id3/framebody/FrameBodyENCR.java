@@ -1,4 +1,4 @@
-/**
+/*
  *  MusicTag Copyright (C)2003,2004
  *
  *  This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser
@@ -12,7 +12,6 @@
  *  You should have received a copy of the GNU Lesser General Public License along with this library; if not,
  *  you can get a copy from http://www.opensource.org/licenses/lgpl-license.php or write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
- *
  */
 package org.jaudiotagger.tag.id3.framebody;
 
@@ -52,12 +51,12 @@ import java.nio.ByteBuffer;
  * 
  * <p>For more details, please refer to the ID3 specifications:
  * <ul>
- * <li>http://www.id3.org/id3v2.3.0.txt
+ * <li><a href="http://www.id3.org/id3v2.3.0.txt">ID3 v2.3.0 Spec</a>
  * </ul>
  * 
  * Amended @author : Paul Taylor
  * Initial @author : Eric Farng
- * Version @version:$Id$
+ * @version $Id$
  */
 public class FrameBodyENCR extends AbstractID3v2FrameBody implements ID3v24FrameBody,ID3v23FrameBody
 {

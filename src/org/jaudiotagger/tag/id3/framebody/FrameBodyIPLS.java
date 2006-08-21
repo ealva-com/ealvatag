@@ -12,7 +12,6 @@
  *  You should have received a copy of the GNU Lesser General Public License along with this library; if not,
  *  you can get a copy from http://www.opensource.org/licenses/lgpl-license.php or write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
- *
  */
 package org.jaudiotagger.tag.id3.framebody;
 
@@ -39,9 +38,14 @@ import java.util.StringTokenizer;
  * Text encoding	$xx
  * People list strings	<text strings according to encoding>
  * 
+ * <p>For more details, please refer to the ID3 specifications:
+ * <ul>
+ * <li><a href="http://www.id3.org/id3v2.3.0.txt">ID3 v2.3.0 Spec</a>
+ * </ul>
+ * 
  * Amended @author : Paul Taylor
  * Initial @author : Eric Farng
- * Version @version:$Id$
+ * @version $Id$
  *
  * @TODO currently just allows any number of values, should only really support pairs of values
  */

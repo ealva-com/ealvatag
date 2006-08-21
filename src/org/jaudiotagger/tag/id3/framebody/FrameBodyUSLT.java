@@ -1,9 +1,4 @@
-/**
- *  Amended @author : Paul Taylor
- *  Initial @author : Eric Farng
- *
- *  Version @version:$Id$
- *
+/*
  *  MusicTag Copyright (C)2003,2004
  *
  *  This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser
@@ -17,9 +12,6 @@
  *  You should have received a copy of the GNU Lesser General Public License along with this library; if not,
  *  you can get a copy from http://www.opensource.org/licenses/lgpl-license.php or write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
- *
- * Description:
- *
  */
 package org.jaudiotagger.tag.id3.framebody;
 
@@ -32,7 +24,35 @@ import org.jaudiotagger.tag.id3.valuepair.Languages;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 
-
+/**
+ * Unsychronised lyrics/text transcription frame.
+ * 
+ * <p>
+ * This frame contains the lyrics of the song or a text transcription of
+ * other vocal activities. The head includes an encoding descriptor and
+ * a content descriptor. The body consists of the actual text. The
+ * 'Content descriptor' is a terminated string. If no descriptor is
+ * entered, 'Content descriptor' is $00 (00) only. Newline characters
+ * are allowed in the text. There may be more than one 'Unsynchronised
+ * lyrics/text transcription' frame in each tag, but only one with the
+ * same language and content descriptor.
+ * </p><p><table border=0 width="70%">
+ * <tr><td colspan=2>&lt;Header for 'Unsynchronised lyrics/text transcription', ID: "USLT"&gt;</td></tr>
+ * <tr><td>Text encoding     </td><td width="80%">$xx</td></tr>
+ * <tr><td>Language          </td><td>$xx xx xx</td></tr>
+ * <tr><td>Content descriptor</td><td>&lt;text string according to encoding&gt; $00 (00)</td></tr>
+ * <tr><td>Lyrics/text       </td><td>&lt;full text string according to encoding&gt;</td></tr>
+ * </table></p>
+ * 
+ * <p>For more details, please refer to the ID3 specifications:
+ * <ul>
+ * <li><a href="http://www.id3.org/id3v2.3.0.txt">ID3 v2.3.0 Spec</a>
+ * </ul>
+ * 
+ * Amended @author : Paul Taylor
+ * Initial @author : Eric Farng
+ * @version $Id$
+ */
 public class FrameBodyUSLT extends AbstractID3v2FrameBody implements ID3v24FrameBody
 {
     /**

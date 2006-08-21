@@ -12,7 +12,6 @@
  *  You should have received a copy of the GNU Lesser General Public License along with this library; if not,
  *  you can get a copy from http://www.opensource.org/licenses/lgpl-license.php or write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
- *
  */
 package org.jaudiotagger.tag.id3.framebody;
 
@@ -29,7 +28,7 @@ import java.nio.ByteBuffer;
  * 
  * Amended @author : Paul Taylor
  * Initial @author : Eric Farng
- * Version @version:$Id$
+ * @version $Id$
  */
 public class FrameBodyRVAD extends AbstractID3v2FrameBody implements ID3v23FrameBody
 {

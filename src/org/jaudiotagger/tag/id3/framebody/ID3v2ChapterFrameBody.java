@@ -1,5 +1,5 @@
 /*
- * Jaudiotagger Copyright (C)2004,2005
+ * Horizon Wimba Copyright (C)2006
  *
  * This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser
  * General Public  License as published by the Free Software Foundation; either version 2.1 of the License,
@@ -16,12 +16,12 @@
 package org.jaudiotagger.tag.id3.framebody;
 
 /**
- * Indicates that this is a frame used in ID3v23Tags.
+ * Indicates that this is a frame used in ID3v2 Chapter Tags.
  *
- * @author Paul Taylor
+ * @author Marc Gimpel, Horizon Wimba S.A.
  * @version $Id$
  */
-public interface ID3v23FrameBody
+public interface ID3v2ChapterFrameBody
 {
-    
+
 }

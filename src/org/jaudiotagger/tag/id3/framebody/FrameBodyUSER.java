@@ -1,9 +1,4 @@
-/**
- *  Amended @author : Paul Taylor
- *  Initial @author : Eric Farng
- *
- *  Version @version:$Id$
- *
+/*
  *  MusicTag Copyright (C)2003,2004
  *
  *  This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser
@@ -17,9 +12,6 @@
  *  You should have received a copy of the GNU Lesser General Public License along with this library; if not,
  *  you can get a copy from http://www.opensource.org/licenses/lgpl-license.php or write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
- *
- * Description:
- *
  */
 package org.jaudiotagger.tag.id3.framebody;
 
@@ -33,7 +25,30 @@ import java.io.IOException;
 import java.io.ByteArrayOutputStream;
 import java.nio.ByteBuffer;
 
-
+/**
+ * Terms of use frame.
+ * 
+ * <p>
+ * This frame contains a brief description of the terms of use and
+ * ownership of the file. More detailed information concerning the legal
+ * terms might be available through the "WCOP" frame. Newlines are
+ * allowed in the text. There may only be one "USER" frame in a tag.
+ * </p><p><table border=0 width="70%">
+ * <tr><td colspan=2>&lt;Header for 'Terms of use frame', ID: "USER"&gt;</td></tr>
+ * <tr><td>Text encoding  </td><td>$xx</td></tr>
+ * <tr><td>Language       </td><td>$xx xx xx</td></tr>
+ * <tr><td>The actual text</td><td>&lt;text string according to encoding&gt;</td></tr>
+ * </table></p>
+ *
+ * <p>For more details, please refer to the ID3 specifications:
+ * <ul>
+ * <li><a href="http://www.id3.org/id3v2.3.0.txt">ID3 v2.3.0 Spec</a>
+ * </ul>
+ * 
+ * Amended @author : Paul Taylor
+ * Initial @author : Eric Farng
+ * @version $Id$
+ */
 public class FrameBodyUSER extends AbstractID3v2FrameBody implements ID3v24FrameBody
 {
     /**
