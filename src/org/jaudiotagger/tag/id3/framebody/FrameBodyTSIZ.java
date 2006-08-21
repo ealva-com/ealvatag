@@ -1,9 +1,4 @@
-/**
- *  Amended @author : Paul Taylor
- *  Initial @author : Eric Farng
- *
- *  Version @version:$Id$
- *
+/*
  *  MusicTag Copyright (C)2003,2004
  *
  *  This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser
@@ -18,8 +13,6 @@
  *  you can get a copy from http://www.opensource.org/licenses/lgpl-license.php or write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  *
- * Description:
- *
  */
 package org.jaudiotagger.tag.id3.framebody;
 
@@ -28,8 +21,20 @@ import org.jaudiotagger.tag.id3.ID3v23Frames;
 
 import java.nio.ByteBuffer;
 
-
-public class FrameBodyTSIZ extends AbstractFrameBodyTextInfo  implements ID3v23FrameBody
+/**
+ * Size Text information frame.
+ * <p>The 'Size' frame contains the size of the audiofile in bytes, excluding the ID3v2 tag, represented as a numeric string.
+ * 
+ * <p>For more details, please refer to the ID3 specifications:
+ * <ul>
+ * <li>http://www.id3.org/id3v2.3.0.txt
+ * </ul>
+ * 
+ * Amended @author : Paul Taylor
+ * Initial @author : Eric Farng
+ * Version @version:$Id$
+ */
+public class FrameBodyTSIZ extends AbstractFrameBodyTextInfo implements ID3v23FrameBody
 {
     /**
      * Creates a new FrameBodyTSIZ datatype.
