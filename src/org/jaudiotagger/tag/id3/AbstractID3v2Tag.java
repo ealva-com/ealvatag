@@ -1,9 +1,4 @@
-/**
- *  Amended @author : Paul Taylor
- *  Initial @author : Eric Farng
- *
- *  Version @version:$Id$
- *
+/*
  *  MusicTag Copyright (C)2003,2004
  *
  *  This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser
@@ -17,27 +12,25 @@
  *  You should have received a copy of the GNU Lesser General Public License along with this library; if not,
  *  you can get a copy from http://www.opensource.org/licenses/lgpl-license.php or write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
- *
- * Description:
- * ID3v2 Description: This is the abstract base class for all
- * ID3v2 tags
- *
  */
 package org.jaudiotagger.tag.id3;
 
 import java.io.*;
-import java.io.RandomAccessFile;
+import java.nio.*;
+import java.nio.channels.*;
+import java.util.*;
 
 import org.jaudiotagger.audio.mp3.*;
-
 import org.jaudiotagger.tag.id3.framebody.FrameBodyTDRC;
 import org.jaudiotagger.tag.id3.framebody.FrameBodyUnsupported;
 
-
-import java.util.*;
-import java.nio.*;
-import java.nio.channels.*;
-
+/**
+ * This is the abstract base class for all ID3v2 tags.
+ *
+ * Amended @author : Paul Taylor
+ * Initial @author : Eric Farng
+ * @version $Id$
+ */
 public abstract class AbstractID3v2Tag
     extends AbstractID3Tag
 {
@@ -458,13 +451,13 @@ public abstract class AbstractID3v2Tag
 
 
     /**
+     * Write tag to file.
      *
      * @param file
      * @param audioStartByte
      * @throws IOException
      *
      * @TODO should be abstract
-     *
      */
     public void write(File file, long audioStartByte)
         throws IOException
@@ -472,14 +465,27 @@ public abstract class AbstractID3v2Tag
     }
 
     /**
+     * Write tag to file.
      *
      * @param file
      * @throws IOException
      *
      * @TODO should be abstract
-     *
      */
     public void write(RandomAccessFile file)
+        throws IOException
+    {
+    }
+
+    /**
+     * Write tag to channel.
+     * 
+     * @param channel
+     * @throws IOException
+     * 
+     * @TODO should be abstract
+     */
+    public void write(WritableByteChannel channel)
         throws IOException
     {
     }

@@ -1,9 +1,4 @@
-/**
- *  Amended @author : Paul Taylor
- *  Initial @author : Eric Farng
- *
- *  Version @version:$Id$
- *
+/*
  *  MusicTag Copyright (C)2003,2004
  *
  *  This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser
@@ -17,10 +12,6 @@
  *  You should have received a copy of the GNU Lesser General Public License along with this library; if not,
  *  you can get a copy from http://www.opensource.org/licenses/lgpl-license.php or write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
- *
- * Description:
- * This class is the frame header used in ID3v2.2 tags
- *
  */
 package org.jaudiotagger.tag.id3;
 
@@ -36,7 +27,13 @@ import org.jaudiotagger.tag.id3.framebody.FrameBodyUnsupported;
 import org.jaudiotagger.tag.id3.framebody.AbstractID3v2FrameBody;
 import org.jaudiotagger.tag.id3.framebody.FrameBodyDeprecated;
 
-/** Represents an ID3v2.2 frame */
+/**
+ * Represents an ID3v2.2 frame.
+ * 
+ * Amended @author : Paul Taylor
+ * Initial @author : Eric Farng
+ * @version $Id$
+ */
 public class ID3v22Frame
     extends AbstractID3v2Frame
 {

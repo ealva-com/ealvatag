@@ -1,9 +1,4 @@
-/**
- *  Amended @author : Paul Taylor
- *  Initial @author : Eric Farng
- *
- *  Version @version:$Id$
- *
+/*
  *  MusicTag Copyright (C)2003,2004
  *
  *  This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser
@@ -17,7 +12,6 @@
  *  You should have received a copy of the GNU Lesser General Public License along with this library; if not,
  *  you can get a copy from http://www.opensource.org/licenses/lgpl-license.php or write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
- *
  */
 package org.jaudiotagger.tag.id3;
 
@@ -34,8 +28,13 @@ import java.io.ByteArrayOutputStream;
 import java.util.Iterator;
 import java.nio.*;
 
-
-/** Represents an ID3v2.4 frame */
+/**
+ * Represents an ID3v2.4 frame.
+ * 
+ * Amended @author : Paul Taylor
+ * Initial @author : Eric Farng
+ * @version $Id$
+ */
 public class ID3v24Frame
     extends ID3v23Frame
 {
@@ -373,7 +372,7 @@ public class ID3v24Frame
         //This is where we will write header, move position to where we can
         //write body
 
-       ByteBuffer headerBuffer = ByteBuffer.allocate(FRAME_HEADER_SIZE);
+        ByteBuffer headerBuffer = ByteBuffer.allocate(FRAME_HEADER_SIZE);
 
         //Write Frame Body Data
         ByteArrayOutputStream bodyOutputStream = new ByteArrayOutputStream();

@@ -1,9 +1,4 @@
-/**
- *  Amended @author : Paul Taylor
- *  Initial @author : Eric Farng
- *
- *  Version @version:$Id$
- *
+/*
  *  MusicTag Copyright (C)2003,2004
  *
  *  This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser
@@ -17,10 +12,6 @@
  *  You should have received a copy of the GNU Lesser General Public License along with this library; if not,
  *  you can get a copy from http://www.opensource.org/licenses/lgpl-license.php or write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
- *
- * Description:
- * This abstract class is each frame header inside a ID3v2 tag
- *
  */
 package org.jaudiotagger.tag.id3;
 
@@ -35,6 +26,13 @@ import java.lang.reflect.*;
 import java.nio.*;
 import java.util.logging.Level;
 
+/**
+ * This abstract class is each frame header inside a ID3v2 tag.
+ *
+ * Amended @author : Paul Taylor
+ * Initial @author : Eric Farng
+ * @version $Id$
+ */
 public abstract class AbstractID3v2Frame
     extends AbstractTagFrame
 {

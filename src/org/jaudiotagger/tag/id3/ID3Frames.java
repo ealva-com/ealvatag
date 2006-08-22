@@ -1,8 +1,4 @@
-/**
- *  Initial @author : Paul Taylor
- *
- *  Version @version:$Id$
- *
+/*
  *  MusicTag Copyright (C)2003,2004
  *
  *  This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser
@@ -16,7 +12,6 @@
  *  You should have received a copy of the GNU Lesser General Public License along with this library; if not,
  *  you can get a copy from http://www.opensource.org/licenses/lgpl-license.php or write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
- *
  */
 package org.jaudiotagger.tag.id3;
 
@@ -25,7 +20,10 @@ import org.jaudiotagger.tag.datatype.AbstractStringStringValuePair;
 import java.util.*;
 
 /**
- * Defines ID3 frames and collections that categorise frames
+ * Defines ID3 frames and collections that categorise frames.
+ * 
+ * @author Paul Taylor
+ * @version $Id$
  */
 public abstract class ID3Frames extends AbstractStringStringValuePair
 {

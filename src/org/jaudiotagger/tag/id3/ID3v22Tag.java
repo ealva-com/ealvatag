@@ -1,9 +1,4 @@
-/**
- *  Amended @author : Paul Taylor
- *  Initial @author : Eric Farng
- *
- *  Version @version:$Id$
- *
+/*
  *  MusicTag Copyright (C)2003,2004
  *
  *  This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser
@@ -17,10 +12,6 @@
  *  You should have received a copy of the GNU Lesser General Public License along with this library; if not,
  *  you can get a copy from http://www.opensource.org/licenses/lgpl-license.php or write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
- *
- * Description:
- *  Class that represents an ID3v2.20 tag
- *
  */
 package org.jaudiotagger.tag.id3;
 
@@ -40,7 +31,13 @@ import java.nio.channels.*;
 import java.util.*;
 import java.util.logging.Level;
 
-/** Represents an ID3v2.2 tag */
+/**
+ * Represents an ID3v2.2 tag.
+ * 
+ * Amended @author : Paul Taylor
+ * Initial @author : Eric Farng
+ * @version $Id$
+ */
 public class ID3v22Tag
     extends AbstractID3v2Tag
 {
