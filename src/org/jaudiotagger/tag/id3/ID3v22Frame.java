@@ -30,8 +30,8 @@ import org.jaudiotagger.tag.id3.framebody.FrameBodyDeprecated;
 /**
  * Represents an ID3v2.2 frame.
  * 
- * Amended @author : Paul Taylor
- * Initial @author : Eric Farng
+ * @author : Paul Taylor
+ * @author : Eric Farng
  * @version $Id$
  */
 public class ID3v22Frame

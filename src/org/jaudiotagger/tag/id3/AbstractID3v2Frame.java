@@ -29,8 +29,8 @@ import java.util.logging.Level;
 /**
  * This abstract class is each frame header inside a ID3v2 tag.
  *
- * Amended @author : Paul Taylor
- * Initial @author : Eric Farng
+ * @author : Paul Taylor
+ * @author : Eric Farng
  * @version $Id$
  */
 public abstract class AbstractID3v2Frame

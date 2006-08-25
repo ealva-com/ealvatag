@@ -26,8 +26,8 @@ import java.nio.ByteBuffer;
  * 
  * Only partially implemented.
  * 
- * Amended @author : Paul Taylor
- * Initial @author : Eric Farng
+ * @author : Paul Taylor
+ * @author : Eric Farng
  * @version $Id$
  */
 public class FrameBodyRVAD extends AbstractID3v2FrameBody implements ID3v23FrameBody

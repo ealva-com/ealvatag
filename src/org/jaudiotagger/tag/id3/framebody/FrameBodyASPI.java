@@ -25,8 +25,8 @@ import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
 
 /**
- * Amended @author : Paul Taylor
- * Initial @author : Eric Farng
+ * @author : Paul Taylor
+ * @author : Eric Farng
  * @version $Id$
  */
 public class FrameBodyASPI extends AbstractID3v2FrameBody implements ID3v24FrameBody

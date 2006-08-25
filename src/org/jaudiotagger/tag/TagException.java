@@ -1,6 +1,6 @@
 /*
- *  Amended @author : Paul Taylor
- *  Initial @author : Eric Farng
+ *  @author : Paul Taylor
+ *  @author : Eric Farng
  *
  *  Version @version:$Id$
  *

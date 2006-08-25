@@ -54,8 +54,8 @@ import java.nio.ByteBuffer;
  * <li><a href="http://www.id3.org/id3v2.3.0.txt">ID3 v2.3.0 Spec</a>
  * </ul>
  * 
- * Amended @author : Paul Taylor
- * Initial @author : Eric Farng
+ * @author : Paul Taylor
+ * @author : Eric Farng
  * @version $Id$
  */
 public class FrameBodyENCR extends AbstractID3v2FrameBody implements ID3v24FrameBody,ID3v23FrameBody

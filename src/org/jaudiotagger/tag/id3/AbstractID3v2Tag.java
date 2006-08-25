@@ -27,8 +27,8 @@ import org.jaudiotagger.tag.id3.framebody.FrameBodyUnsupported;
 /**
  * This is the abstract base class for all ID3v2 tags.
  *
- * Amended @author : Paul Taylor
- * Initial @author : Eric Farng
+ * @author : Paul Taylor
+ * @author : Eric Farng
  * @version $Id$
  */
 public abstract class AbstractID3v2Tag

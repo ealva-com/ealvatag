@@ -31,8 +31,8 @@ import java.nio.*;
 /**
  * Represents an ID3v2.3 frame.
  * 
- * Amended @author : Paul Taylor
- * Initial @author : Eric Farng
+ * @author : Paul Taylor
+ * @author : Eric Farng
  * @version $Id$
  */public class ID3v23Frame
     extends ID3v22Frame

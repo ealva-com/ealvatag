@@ -37,8 +37,8 @@ import java.io.*;
 /**
  * This class represents an ID3v2.4 tag.
  * 
- * Amended @author : Paul Taylor
- * Initial @author : Eric Farng
+ * @author : Paul Taylor
+ * @author : Eric Farng
  * @version $Id$
  */
 public class ID3v24Tag

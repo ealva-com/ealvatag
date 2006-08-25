@@ -1,5 +1,5 @@
 /**
- * Initial @author : Paul Taylor
+ * @author : Paul Taylor
  * <p/>
  * Version @version:$Id$
  * Date :${DATE}

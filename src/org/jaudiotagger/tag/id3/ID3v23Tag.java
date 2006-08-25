@@ -33,8 +33,8 @@ import java.nio.channels.*;
 /**
  * Represents an ID3v2.3 tag.
  * 
- * Amended @author : Paul Taylor
- * Initial @author : Eric Farng
+ * @author : Paul Taylor
+ * @author : Eric Farng
  * @version $Id$
  */
 public class ID3v23Tag

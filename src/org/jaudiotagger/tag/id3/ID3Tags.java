@@ -27,8 +27,8 @@ import java.util.logging.*;
  * This contains static methods that can be performed on tags
  * and to convert between tags.
  * 
- * Amended @author : Paul Taylor
- * Initial @author : Eric Farng
+ * @author : Paul Taylor
+ * @author : Eric Farng
  * @version $Id$
  */
 public class ID3Tags

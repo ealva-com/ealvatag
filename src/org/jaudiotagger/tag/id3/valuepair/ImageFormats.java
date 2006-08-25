@@ -1,5 +1,5 @@
 /**
- *  Initial @author : Paul Taylor
+ *  @author : Paul Taylor
  *
  *  Version @version:$Id$
  *
