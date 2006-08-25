@@ -41,6 +41,13 @@ import java.util.logging.Level;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 
+/**
+ * Represents an ID3v11 tag.
+ *  
+ * @author : Eric Farng
+ * @author : Paul Taylor
+ *
+ */
 public class ID3v11Tag
     extends ID3v1Tag
 {

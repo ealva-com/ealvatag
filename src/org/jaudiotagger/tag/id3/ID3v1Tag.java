@@ -35,6 +35,13 @@ import java.util.*;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 
+/**
+ * Represents an ID3v1 tag.
+ *  
+ * @author : Eric Farng
+ * @author : Paul Taylor
+ *
+ */
 public class ID3v1Tag
     extends AbstractID3v1Tag
 {

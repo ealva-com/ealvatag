@@ -9,8 +9,9 @@ import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 
 /**
- * Represents a String which is not delimited by null character, this type of String will usually
- * only be used when it is the last field within a frame, when reading the remainder of the byte array will
+ * Represents a String which is not delimited by null character. 
+ * 
+ * This type of String will usually only be used when it is the last field within a frame, when reading the remainder of the byte array will
  * be read, when writing the frame will be accomodate the required size for the String. The String
  * will be encoded based upon the text encoding of the frame that it belongs to.
  */

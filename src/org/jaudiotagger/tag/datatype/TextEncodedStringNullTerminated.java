@@ -9,8 +9,9 @@ import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 
 /**
- * Represents a String whose size is determined by finding of a null character at the end of the String, the String
- * will be encoded based upon the text encoding of the frame that it belongs to.
+ * Represents a String whose size is determined by finding of a null character at the end of the String. 
+ * 
+ * The String will be encoded based upon the text encoding of the frame that it belongs to.
  */
 public class TextEncodedStringNullTerminated
     extends AbstractString

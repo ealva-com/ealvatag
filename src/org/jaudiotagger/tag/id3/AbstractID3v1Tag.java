@@ -33,6 +33,13 @@ import java.util.logging.Logger;
 import java.nio.channels.FileChannel;
 import java.nio.ByteBuffer;
 
+/**
+ * This is the abstract base class for all ID3v1 tags.
+ *  
+ * @author : Eric Farng
+ * @author : Paul Taylor
+ *
+ */
 abstract public class AbstractID3v1Tag
     extends AbstractID3Tag
 {

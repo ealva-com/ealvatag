@@ -24,6 +24,13 @@
  */
 package org.jaudiotagger.tag.id3;
 
+/**
+ * This is the abstract base class for all ID3 tags.
+ *  
+ * @author : Eric Farng
+ * @author : Paul Taylor
+ *
+ */
 public abstract class AbstractID3Tag extends org.jaudiotagger.tag.AbstractTag
 {
     public AbstractID3Tag()
