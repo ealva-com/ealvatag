@@ -40,24 +40,28 @@
 	<property name="jdk.classpath" value="jdk.classpath.java_version_1.4.2_03"/>	
 	
 	<!-- Output dirs -->
-	<property name="output.dir"         value="${basedir}/classes"/>
-	<property name="testoutput.dir"     value="${basedir}/testclasses"/>
-	<property name="dist.dir"           value="${basedir}/dist"/>
-	<property name="web.dir"            value="${basedir}/www"/>
-	<property name="userjavadoc.dir"    value="${basedir}/www/javadoc"/>
-	<property name="devjavadoc.dir"     value="${basedir}/www/devjavadoc"/>	
-	<property name="lib.dir"            value="${basedir}/lib"/>
+	<property name="output.dir"         value="classes"/>
+	<property name="testoutput.dir"     value="testclasses"/>
+	<property name="dist.dir"           value="dist"/>
+	<property name="web.dir"            value="www"/>
+	<property name="userjavadoc.dir"    value="www/javadoc"/>
+	<property name="devjavadoc.dir"     value="www/devjavadoc"/>	
+	<property name="lib.dir"            value="lib"/>
 	
 	<property name="jar.file"    value="${dist.dir}/jaudiotagger.jar"/>
 	<property name="jarsrc.file" value="${dist.dir}/jaudiotaggersrc.jar"/>
 	
 	<property name="junit.file"       value="${lib.dir}/junit.jar"/>
-	<property name="junitreport.dir"  value="${basedir}/junitreport"/>
-	<property name="junitreport.testdata.dir"     value="${basedir}/testdata"/>
-	<property name="junitreport.testdatatmp.dir"  value="${basedir}/testdatatmp"/>
+	<property name="junitreport.dir"  value="junitreport"/>
+	<property name="junitreport.testdata.dir"     value="testdata"/>
+	<property name="junitreport.testdatatmp.dir"  value="testdatatmp"/>
 	
-	<property name="src.dir"     value="${basedir}/src"/>
-	<property name="srctest.dir"     value="${basedir}/srctest"/>
+	<property name="src.dir"         value="src"/>
+	<property name="srctest.dir"     value="srctest"/>
+	
+	<property name="zip.file"                  value="jaudiotagger.zip"/>
+	<property name="release.zipprefix.file"    value="jaudiotagger${build.release}"/>	
+	<property name="release.file"              value="${release.zipprefix.file}.zip"/>
 	
 	<!-- Paths to be included in compilation bootclasspath -->	
 	<path id="bootclasspath">
@@ -101,15 +105,38 @@
 		</dirset>
 	</path>
 	
+		<!-- Clean -->
+	<target name="clean" description="Cleanup module">
+		<delete dir="${output.dir}"/>
+		<delete dir="${testoutput.dir}"/>
+		<delete dir="${junitreport.testdatatmp.dir}"/>
+		<delete dir="${junitreport.dir}"/>
+	</target>
+	
 	<target name="share" depends="dist" description="Copy the distribution to be used by another project">
 		<echo message="Copying to share dir" />
 		<copy file="${jar.file}" todir="${release.dir}"/>	
 		<copy file="${jarsrc.file}" todir="${release.dir}"/>	 	 
 	</target>
 	
-	<target name="dist" depends="build.jar,build.jarsrc" description="Create distribution"/>
+	<target name="build.release" depends="build.zip" description="Build new official release of the JAudiotagger Project">
+	  <zip destfile="../${release.file}">    
+	       <zipfileset src="../${zip.file}"  prefix="${release.zipprefix.file}"/>  
+	  </zip>		
+	</target>
+	
+	<target name="build.zip" depends="dist,build.javadoc" description="Create simple zipfile of the JAudiotagger Project">	  
+		<zip destfile="../${zip.file}">
+    <zipfileset dir="${basedir}" excludes="releases/**,${output.dir}/**,${testoutput.dir}/**,${junitreport.testdatatmp.dir}/**,${junitreport.dir}/**"/>    
+  </zip>
+	</target>	
 	
 	
+
+
+	  
+	<target name="dist" depends="build.jar,build.jarsrc" description="Create distribution for use in another project"/>
+		
 
 	<target name="build.jar" depends="compile" description="Jar up the compiled production code jaudiotagger">
 		<echo message="Creating jaudiotagger.jar" />
@@ -202,13 +229,7 @@
 		</junitreport>
 	</target>
 	
-	<!-- Clean -->
-	<target name="clean" description="Cleanup module">
-		<delete dir="${output.dir}"/>
-		<delete dir="${testoutput.dir}"/>
-		<delete dir="${junitreport.testdatatmp.dir}"/>
-		<delete dir="${junitreport.dir}"/>
-	</target>
+
 	
 	<!-- Build User Javadoc, public only -->
 	<target name="build.user.javadoc" description="Build Java User API Documentation, only public members are shown">  
@@ -243,6 +264,6 @@
 	</target>
 	
 	<!-- Build all Javadoc -->
-	<target name="build.javadoc" depends="build.user.javadoc,build.dev.javadoc">
+	<target name="build.javadoc" depends="build.user.javadoc,build.dev.javadoc" description="Build user and Developer javaDoc">
 	</target>
 </project>
