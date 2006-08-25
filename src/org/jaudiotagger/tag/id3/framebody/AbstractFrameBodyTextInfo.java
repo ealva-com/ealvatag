@@ -130,7 +130,7 @@ public abstract class AbstractFrameBodyTextInfo
     protected void setupObjectList()
     {
         objectList.add(new NumberHashMap(DataTypes.OBJ_TEXT_ENCODING, this, TextEncoding.TEXT_ENCODING_FIELD_SIZE ));
-        objectList.add(new StringSizeTerminated(DataTypes.OBJ_TEXT, this));
+        objectList.add(new TextEncodedStringSizeTerminated(DataTypes.OBJ_TEXT, this));                
     }
 
 }
