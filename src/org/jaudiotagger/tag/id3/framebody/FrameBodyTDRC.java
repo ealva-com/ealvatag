@@ -252,7 +252,24 @@ public class FrameBodyTDRC extends AbstractFrameBodyTextInfo implements ID3v24Fr
     public FrameBodyTDRC(byte textEncoding, String text)
     {
         super(textEncoding, text);
-        this.setYear("2010");
+        //Find the date format of the text
+        for (int i = 0; i < formatters.size(); i++)
+        {
+            try
+            {
+                final Date d = ((SimpleDateFormat) formatters.get(i)).parse(getText());
+                if (d != null)
+                {
+                    extractID3v23Formats(d, i);
+                    break;
+                }
+            }
+                //Dont display will occur for each failed format
+            catch (ParseException e)
+            {
+                //Do nothing;
+            }
+        }
     }
 
     /**

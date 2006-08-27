@@ -86,23 +86,46 @@ public class ID3v1Tag
     protected byte genre = (byte) -1;
 
 
+    private static final byte REVISION = 1;
+    private static final byte MAJOR_VERSION = 0;
+    private static final byte RELEASE  = 0;
+
+    /**
+     * Retrieve the Release
+     */
+    public byte getRelease()
+    {
+        return RELEASE;
+    }
+
+    /**
+     * Retrieve the Major Version
+     */
+    public byte getMajorVersion()
+    {
+        return MAJOR_VERSION;
+    }
+
+    /**
+     * Retrieve the Revision
+     */
+    public byte getRevision()
+    {
+        return REVISION;
+    }
+
     /**
      * Creates a new ID3v1 datatype.
      */
     public ID3v1Tag()
     {
-        release = (byte) 1;
-        majorVersion = (byte) 0;
-        revision = (byte) 0;
 
     }
 
     public ID3v1Tag(ID3v1Tag copyObject)
     {
         super(copyObject);
-        release = (byte) 1;
-        majorVersion = (byte) 0;
-        revision = (byte) 0;
+
         this.album = new String(copyObject.album);
         this.artist = new String(copyObject.artist);
         this.comment = new String(copyObject.comment);
@@ -113,9 +136,7 @@ public class ID3v1Tag
 
     public ID3v1Tag(AbstractTag mp3tag)
     {
-        release = (byte) 1;
-        majorVersion = (byte) 0;
-        revision = (byte) 0;
+
         if (mp3tag != null)
         {
             ID3v11Tag convertedTag;
@@ -150,9 +171,6 @@ public class ID3v1Tag
     public ID3v1Tag(RandomAccessFile file)
         throws TagNotFoundException, IOException
     {
-        release = (byte) 1;
-        majorVersion = (byte) 0;
-        revision = (byte) 0;
 
         FileChannel fc;
         ByteBuffer  byteBuffer;

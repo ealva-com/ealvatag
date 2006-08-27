@@ -65,15 +65,39 @@ public class ID3v22Tag
      */
     protected boolean unsynchronization = false;
 
+    private static final byte RELEASE  = 2;
+    private static final byte MAJOR_VERSION = 2;
+    private static final byte REVISION = 0;
+
+    /**
+     * Retrieve the Release
+     */
+    public byte getRelease()
+    {
+        return RELEASE;
+    }
+
+    /**
+     * Retrieve the Major Version
+     */
+    public byte getMajorVersion()
+    {
+        return MAJOR_VERSION;
+    }
+
+    /**
+     * Retrieve the Revision
+     */
+    public byte getRevision()
+    {
+        return REVISION;
+    }
     /**
      * Creates a new empty ID3v2_2 tag.
      */
     public ID3v22Tag()
     {
         frameMap = new HashMap();
-        release = (byte) 2;
-        majorVersion = (byte) 2;
-        revision = (byte) 0;
     }
 
     /**
@@ -84,9 +108,7 @@ public class ID3v22Tag
         logger.info("Copying primitives");
         super.copyPrimitives(copyObj);
         ID3v22Tag copyObject = (ID3v22Tag) copyObj;
-        release = (byte) 2;
-        majorVersion = (byte) 2;
-        revision = (byte) 0;
+
         //Set the primitive types specific to v2_2.
         if (copyObj instanceof ID3v22Tag)
         {
@@ -219,8 +241,6 @@ public class ID3v22Tag
     public ID3v22Tag(ByteBuffer byteBuffer)
         throws TagException
     {
-        this.majorVersion = (byte) 2;
-        this.revision = (byte) 0;
         this.read(byteBuffer);
     }
 
@@ -394,9 +414,9 @@ public class ID3v22Tag
         //TAGID
         headerBuffer.put(TAG_ID);
         //Major Version
-        headerBuffer.put(majorVersion);
+        headerBuffer.put(getMajorVersion());
         //Minor Version
-        headerBuffer.put(revision);
+        headerBuffer.put(getRevision());
   
         //Flags
         byte flags = (byte) 0;

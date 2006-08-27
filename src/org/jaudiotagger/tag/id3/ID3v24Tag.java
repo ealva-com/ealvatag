@@ -206,14 +206,41 @@ public class ID3v24Tag
      */
     protected byte textFieldSizeRestriction = 0;
 
+    private static final byte RELEASE  = 2;
+    private static final byte MAJOR_VERSION = 4;
+    private static final byte REVISION = 0;
+
+    /**
+     * Retrieve the Release
+     */
+    public byte getRelease()
+    {
+        return RELEASE;
+    }
+
+    /**
+     * Retrieve the Major Version
+     */
+    public byte getMajorVersion()
+    {
+        return MAJOR_VERSION;
+    }
+
+    /**
+     * Retrieve the Revision
+     */
+    public byte getRevision()
+    {
+        return REVISION;
+    }
+
+
+    
     /**
      * Creates a new empty ID3v2_4 datatype.
      */
     public ID3v24Tag()
     {
-        release = 2;
-        majorVersion = 4;
-        revision = 0;
     }
 
     /**
@@ -224,10 +251,7 @@ public class ID3v24Tag
     {
         logger.info("Copying primitives");
         super.copyPrimitives(copyObj);
-        //Set the primitive types specific to v2_4.
-        release = 2;
-        majorVersion = 4;
-        revision = 0;
+
         if (copyObj instanceof ID3v24Tag)
         {
             ID3v24Tag copyObject = (ID3v24Tag) copyObj;
@@ -316,6 +340,7 @@ public class ID3v24Tag
     public ID3v24Tag(AbstractTag mp3tag)
     {
         logger.info("Creating tag from a tag of a different version");
+
         if (mp3tag != null)
         {
             //Should use simpler copy constructor
@@ -438,8 +463,6 @@ public class ID3v24Tag
     public ID3v24Tag(ByteBuffer buffer)
         throws TagException
     {
-        this.majorVersion = 4;
-        this.revision = 0;
         this.read(buffer);
 
     }
@@ -686,9 +709,9 @@ public class ID3v24Tag
       //TAGID
       headerBuffer.put(TAG_ID);
       //Major Version
-      headerBuffer.put(majorVersion);
+      headerBuffer.put(getMajorVersion());
       //Minor Version
-      headerBuffer.put(revision);
+      headerBuffer.put(getRevision());
       //Flags
       byte flagsByte = 0;
       if (unsynchronization == true)

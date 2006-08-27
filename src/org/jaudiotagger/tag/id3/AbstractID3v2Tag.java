@@ -543,12 +543,12 @@ public abstract class AbstractID3v2Tag
             return false;
         }
         //Major Version
-        if (byteBuffer.get() != this.getMajorVersion())
+        if (byteBuffer.get() != getMajorVersion())
         {
             return false;
         }
         //Minor Version
-        if (byteBuffer.get() != this.getRevision())
+        if (byteBuffer.get() != getRevision())
         {
             return false;
         }

@@ -19,7 +19,12 @@ import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
-import org.jaudiotagger.tag.id3.ID3v24Tag;
+import org.jaudiotagger.tag.id3.*;
+import org.jaudiotagger.tag.id3.framebody.*;
+import org.jaudiotagger.AbstractTestCase;
+import org.jaudiotagger.audio.mp3.MP3File;
+
+import java.io.File;
 
 /**
  * 
@@ -87,9 +92,80 @@ public class ID3v24TagTest extends TestCase
         assertNotNull(tag);
     }
 
-    public void testCreateTag2()
+
+    public void testCreateID3v24FromID3v11AndSave()
     {
-        ID3v24Tag tag = new ID3v24Tag();
-        assertNotNull(tag);
+        Exception exceptionCaught = null;
+        File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3");
+
+        MP3File mp3File = null;
+
+        try
+        {
+            mp3File = new MP3File(testFile);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            exceptionCaught = e;
+        }
+
+        assertNull(exceptionCaught);
+
+        ID3v11Tag v1Tag = ID3v11TagTest.getInitialisedTag();
+
+
+        assertFalse(mp3File.hasID3v1Tag());
+        assertFalse(mp3File.hasID3v2Tag());
+        mp3File.setID3v1Tag(v1Tag);
+        mp3File.setID3v2Tag(mp3File.getID3v1Tag());
+        assertTrue(mp3File.hasID3v1Tag());
+        assertTrue(mp3File.hasID3v2Tag());
+        try
+        {
+            mp3File.save();
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            exceptionCaught = e;
+        }
+        assertNull(exceptionCaught);
+        assertTrue(mp3File.hasID3v1Tag());
+        assertTrue(mp3File.hasID3v2Tag());
+        assertTrue(mp3File.getID3v2Tag() instanceof ID3v24Tag);
+
+        //Reload
+        try
+        {
+            mp3File = new MP3File(testFile);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            exceptionCaught = e;
+        }
+        assertTrue(mp3File.hasID3v1Tag());
+        assertTrue(mp3File.hasID3v2Tag());
+        assertTrue(mp3File.getID3v2Tag() instanceof ID3v24Tag);
+    }
+
+    public void testCreateID3v24FromID3v11()
+    {
+
+        ID3v11Tag v1Tag = ID3v11TagTest.getInitialisedTag();
+
+
+        ID3v24Tag v2Tag = new ID3v24Tag(v1Tag);
+        assertNotNull(v2Tag);
+        assertEquals(ID3v11TagTest.ARTIST,((FrameBodyTPE1)((ID3v24Frame)v2Tag.getFrame(ID3v24Frames.FRAME_ID_ARTIST)).getBody()).getText());
+        assertEquals(ID3v11TagTest.ALBUM,((FrameBodyTALB)((ID3v24Frame)v2Tag.getFrame(ID3v24Frames.FRAME_ID_ALBUM)).getBody()).getText());
+        assertEquals(ID3v11TagTest.COMMENT,((FrameBodyCOMM)((ID3v24Frame)v2Tag.getFrame(ID3v24Frames.FRAME_ID_COMMENT)).getBody()).getText());
+        assertEquals(ID3v11TagTest.TITLE,((FrameBodyTIT2)((ID3v24Frame)v2Tag.getFrame(ID3v24Frames.FRAME_ID_TITLE)).getBody()).getText());
+        assertEquals(ID3v11TagTest.TRACK_VALUE,((FrameBodyTRCK)((ID3v24Frame)v2Tag.getFrame(ID3v24Frames.FRAME_ID_TRACK)).getBody()).getText());
+        assertTrue(((FrameBodyTCON)((ID3v24Frame)v2Tag.getFrame(ID3v24Frames.FRAME_ID_GENRE)).getBody()).getText().endsWith(ID3v11TagTest.GENRE_VAL));
+        assertEquals(ID3v11TagTest.YEAR,((FrameBodyTDRC)((ID3v24Frame)v2Tag.getFrame(ID3v24Frames.FRAME_ID_YEAR)).getBody()).getText());
+
+
     }
 }

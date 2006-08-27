@@ -17,6 +17,8 @@ package org.jaudiotagger.tag;
 
 import org.jaudiotagger.audio.mp3.MP3File;
 import org.jaudiotagger.AbstractTestCase;
+import org.jaudiotagger.tag.id3.*;
+import org.jaudiotagger.tag.id3.framebody.*;
 
 import java.io.File;
 
@@ -105,7 +107,7 @@ public class ID3v23TagTest extends TestCase
 
         assertNull(exceptionCaught);
         assertNotNull(mp3File.getID3v1Tag());
-        assertNotNull(mp3File.getID3v1Tag());
+        assertNotNull(mp3File.getID3v2Tag());
     }
 
     public void testReadID3v23Tag()
@@ -191,4 +193,20 @@ public class ID3v23TagTest extends TestCase
         assertNull(mp3File.getID3v1Tag());
         assertNull(mp3File.getID3v2Tag());
     }
+
+    public void testCreateID3v23FromID3v11()
+    {
+           ID3v11Tag v11Tag = ID3v11TagTest.getInitialisedTag();
+           ID3v23Tag v2Tag = new ID3v23Tag(v11Tag);
+           assertNotNull(v2Tag);
+           assertNotNull(v2Tag);
+           assertEquals(ID3v11TagTest.ARTIST,((FrameBodyTPE1)((ID3v23Frame)v2Tag.getFrame(ID3v23Frames.FRAME_ID_V3_ARTIST)).getBody()).getText());
+           assertEquals(ID3v11TagTest.ALBUM,((FrameBodyTALB)((ID3v23Frame)v2Tag.getFrame(ID3v23Frames.FRAME_ID_V3_ALBUM)).getBody()).getText());
+           assertEquals(ID3v11TagTest.COMMENT,((FrameBodyCOMM)((ID3v23Frame)v2Tag.getFrame(ID3v23Frames.FRAME_ID_V3_COMMENT)).getBody()).getText());
+           assertEquals(ID3v11TagTest.TITLE,((FrameBodyTIT2)((ID3v23Frame)v2Tag.getFrame(ID3v23Frames.FRAME_ID_V3_TITLE)).getBody()).getText());
+           assertEquals(ID3v11TagTest.TRACK_VALUE,((FrameBodyTRCK)((ID3v23Frame)v2Tag.getFrame(ID3v23Frames.FRAME_ID_V3_TRACK)).getBody()).getText());
+           assertTrue(((FrameBodyTCON)((ID3v23Frame)v2Tag.getFrame(ID3v23Frames.FRAME_ID_V3_GENRE)).getBody()).getText().endsWith(ID3v11TagTest.GENRE_VAL));
+           assertEquals(ID3v11TagTest.YEAR,((FrameBodyTYER)((ID3v23Frame)v2Tag.getFrame(ID3v23Frames.FRAME_ID_V3_TYER)).getBody()).getText());
+    }
+
 }
