@@ -60,8 +60,7 @@ public class FrameBodyTBPM extends AbstractFrameBodyTextInfo implements ID3v24Fr
 
     /**
      * Creates a new FrameBodyTBPM datatype.
-     *
-     * @throws java.io.IOException 
+     *                               
      * @throws InvalidTagException 
      */
     public FrameBodyTBPM(ByteBuffer byteBuffer, int frameSize)

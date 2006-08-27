@@ -80,7 +80,6 @@ public class FrameBodyTCON extends AbstractFrameBodyTextInfo implements ID3v24Fr
     /**
      * Creates a new FrameBodyTCON datatype.
      *
-     * @throws java.io.IOException 
      * @throws InvalidTagException 
      */
     public FrameBodyTCON(ByteBuffer byteBuffer, int frameSize)
