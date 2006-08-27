@@ -72,22 +72,45 @@ public class ID3v11Tag
      * Track is held as a single byte in v1.1
      */
     protected byte track = (byte) TRACK_UNDEFINED;
+
+    private static final byte REVISION = 1;
+    private static final byte MAJOR_VERSION = 1;
+    private static final byte RELEASE  = 0;
+
+    /**
+     * Retrieve the Release
+     */
+    public byte getRelease()
+    {
+        return RELEASE;
+    }
+
+    /**
+     * Retrieve the Major Version
+     */
+    public byte getMajorVersion()
+    {
+        return MAJOR_VERSION;
+    }
+
+    /**
+     * Retrieve the Revision
+     */
+    public byte getRevision()
+    {
+        return REVISION;
+    }
     /**
      * Creates a new ID3v1_1 datatype.
      */
     public ID3v11Tag()
     {
-        release = (byte) 1;
-        majorVersion = (byte) 1;
-        revision = (byte) 0;
+
     }
 
     public ID3v11Tag(ID3v11Tag copyObject)
     {
         super(copyObject);
-        release = (byte) 1;
-        majorVersion = (byte) 1;
-        revision = (byte) 0;
         this.track = copyObject.track;
     }
 
@@ -99,9 +122,6 @@ public class ID3v11Tag
      */
     public ID3v11Tag(AbstractTag mp3tag)
     {
-        release = (byte) 1;
-        majorVersion = (byte) 1;
-        revision = (byte) 0;
         if (mp3tag != null)
         {
             if (mp3tag instanceof ID3v1Tag)
@@ -124,9 +144,16 @@ public class ID3v11Tag
             }
             else
             {
-                // first change the tag to ID3v2_4 tag.
                 ID3v24Tag id3tag;
-                id3tag = new ID3v24Tag(mp3tag);
+                // first change the tag to ID3v2_4 tag if not one already
+                if(!(mp3tag instanceof ID3v24Tag))
+                {
+                    id3tag = new ID3v24Tag(mp3tag);
+                }
+                else
+                {
+                    id3tag = (ID3v24Tag)mp3tag;
+                }
                 ID3v24Frame frame;
                 String text;
                 if (id3tag.hasFrame(ID3v24Frames.FRAME_ID_TITLE))
@@ -207,10 +234,6 @@ public class ID3v11Tag
     public ID3v11Tag(RandomAccessFile file)
         throws TagNotFoundException, IOException
     {
-        release = (byte) 1;
-        majorVersion = (byte) 1;
-        revision = (byte) 0;
-
         FileChannel fc = null;
         ByteBuffer  byteBuffer = ByteBuffer.allocate(TAG_LENGTH);
                                                                           
