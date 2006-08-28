@@ -96,7 +96,7 @@ public class ID3Tags
     /**
      * Given an datatype, try to return it as a <code>long</code>. This tries to
      * parse a string, and takes <code>Long, Short, Byte, Integer</code>
-     * objects and gets their value. An exception is not explicityly thrown
+     * objects and gets their value. An exception is not explicitly thrown
      * here because it would causes too many other methods to also throw it.
      *
      * @param value datatype to find long from.
