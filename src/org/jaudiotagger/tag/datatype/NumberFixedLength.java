@@ -28,7 +28,13 @@ import org.jaudiotagger.tag.AbstractTagFrameBody;
 import org.jaudiotagger.tag.InvalidDataTypeException;
 
 
-/** Represents a number held as a fixed number of digits */
+/** Represents a number held as a fixed number of digits.
+ *
+ * The bitorder in ID3v2 is most significant bit first (MSB). The byteorder in multibyte numbers is most significant
+ * byte first (e.g. $12345678 would be encoded $12 34 56 78), also known as big endian and network byte order.
+ *
+ * In ID3Specification would be denoted as $xx xx this denotes exactly two bytes required
+ */
 public class NumberFixedLength
     extends AbstractDataType
 {
@@ -80,6 +86,16 @@ public class NumberFixedLength
         return size;
     }
 
+    public void setValue(Object value)
+    {
+        if(!(value instanceof Number))
+        {
+           throw new IllegalArgumentException("Invalid value type for NumberFixedLength:"+value.getClass());
+        }
+        super.setValue(value);
+    }
+
+
     /**
      * 
      *
@@ -116,14 +132,14 @@ public class NumberFixedLength
         }
         if ((offset < 0) || (offset >= arr.length))
         {
-            throw new IndexOutOfBoundsException("Offset to byte array is out of bounds: offset = " + offset +
+            throw new  InvalidDataTypeException("Offset to byte array is out of bounds: offset = " + offset +
                 ", array.length = " + arr.length);
         }
         long lvalue = 0;
         for (int i = offset; i < (offset + size); i++)
         {
             lvalue <<= 8;
-            lvalue += arr[i];
+            lvalue += (arr[i] & 0xff);
         }
         value = new Long(lvalue);
         logger.info("Read NumberFixedlength:" + value);
@@ -158,7 +174,9 @@ public class NumberFixedLength
         arr = new byte[size];
         if (value != null)
         {
+            //Convert value to long
             long temp = ID3Tags.getWholeNumber(value);
+
             for (int i = size - 1; i >= 0; i--)
             {
                 arr[i] = (byte) (temp & 0xFF);

@@ -28,23 +28,34 @@ import org.jaudiotagger.tag.id3.ID3Tags;
 import org.jaudiotagger.tag.AbstractTagFrameBody;
 import org.jaudiotagger.tag.InvalidDataTypeException;
 
+/**
+ * Represents a number which may span a number of bytes when written to file depending what size is to be represented.
+ *
+ * The bitorder in ID3v2 is most significant bit first (MSB). The byteorder in multibyte numbers is most significant
+ * byte first (e.g. $12345678 would be encoded $12 34 56 78), also known as big endian and network byte order.
+ *
+ * In ID3Specification would be denoted as $xx xx xx xx (xx ...) , this denotes at least four bytes but may be more.
+ * Sometimes may be completely optional (zero bytes)
+ */
 public class NumberVariableLength extends AbstractDataType
 {
-    /**
-     * 
-     */
-    int minLength = 1;
+    private static final int MINIMUM_NO_OF_DIGITS = 1;
+    private static final int MAXIMUM_NO_OF_DIGITS = 8;
+
+    int minLength = MINIMUM_NO_OF_DIGITS;
+
 
     /**
      * Creates a new ObjectNumberVariableLength datatype.
      *
-     * @param identifier  
-     * @param minimumSize 
+     * @param identifier
+     * @param minimumSize
      */
     public NumberVariableLength(String identifier, AbstractTagFrameBody frameBody, int minimumSize)
     {
         super(identifier, frameBody);
 
+        //Set minimum length, which can be zero if optional
         if (minimumSize > 0)
         {
             this.minLength = minimumSize;
@@ -58,19 +69,19 @@ public class NumberVariableLength extends AbstractDataType
     }
 
     /**
-     * 
+     * Return the maximum number of digits that can be used to express the number
      *
-     * @return 
+     * @return  the maximum number of digits that can be used to express the number
      */
     public int getMaximumLenth()
     {
-        return 8;
+        return MAXIMUM_NO_OF_DIGITS;
     }
 
     /**
-     * 
+     * Return the  minimum  number of digits that can be used to express the number
      *
-     * @return 
+     * @return the minimum number of digits that can be used to express the number
      */
     public int getMinimumLength()
     {
@@ -93,7 +104,7 @@ public class NumberVariableLength extends AbstractDataType
     /**
      * 
      *
-     * @return 
+     * @return the number of bytes reuired to write this to a file
      */
     public int getSize()
     {
@@ -107,7 +118,7 @@ public class NumberVariableLength extends AbstractDataType
             long temp = ID3Tags.getWholeNumber(value);
             int size = 0;
 
-            for (int i = 1; i <= 8; i++)
+            for (int i = MINIMUM_NO_OF_DIGITS; i <= MAXIMUM_NO_OF_DIGITS; i++)
             {
                 current = (byte) temp & 0xFF;
 
@@ -116,7 +127,7 @@ public class NumberVariableLength extends AbstractDataType
                     size = i;
                 }
 
-                temp >>= 8;
+                temp >>= MAXIMUM_NO_OF_DIGITS;
             }
 
             return (minLength > size) ? minLength : size;
@@ -156,22 +167,26 @@ public class NumberVariableLength extends AbstractDataType
      */
     public void readByteArray(byte[] arr, int offset) throws InvalidDataTypeException
     {
+        //Coding error, should never happen
         if (arr == null)
         {
             throw new NullPointerException("Byte array is null");
         }
 
+        //Invalid data, unable to read this datatype
         if ((offset < 0) || (offset >= arr.length))
         {
-            throw new IndexOutOfBoundsException("Offset to byte array is out of bounds: offset = " + offset + ", array.length = " + arr.length);
+            throw new InvalidDataTypeException("Offset to byte array is out of bounds: offset = " + offset + ", array.length = " + arr.length);
         }
 
         long lvalue = 0;
 
+        //Read the bytes (starting from offset), the most significant byte of the number being constructed is read first,
+        //we then shift the resulting long one byte over to make room for the next byte
         for (int i = offset; i < arr.length; i++)
         {
             lvalue <<= 8;
-            lvalue += arr[i];
+            lvalue += (arr[i] & 0xff);
         }
 
         value = new Long(lvalue);
@@ -181,7 +196,7 @@ public class NumberVariableLength extends AbstractDataType
     /**
      * 
      *
-     * @return 
+     * @return String representation of the number
      */
     public String toString()
     {
@@ -198,7 +213,7 @@ public class NumberVariableLength extends AbstractDataType
     /**
      * Write to Byte Array
      *
-     * @return 
+     * @return the datatype converted to a byte array
      */
     public byte[] writeByteArray()
     {
@@ -214,6 +229,8 @@ public class NumberVariableLength extends AbstractDataType
             long temp = ID3Tags.getWholeNumber(value);
             arr = new byte[size];
 
+            //keeps shifting the number downwards and masking the last 8 bist to get the value for the next byte
+            //to be written
             for (int i = size - 1; i >= 0; i--)
             {
                 arr[i] = (byte) (temp & 0xFF);
