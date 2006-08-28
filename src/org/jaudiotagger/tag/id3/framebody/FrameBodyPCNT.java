@@ -48,6 +48,8 @@ import java.nio.ByteBuffer;
  */
 public class FrameBodyPCNT extends AbstractID3v2FrameBody implements ID3v24FrameBody,ID3v23FrameBody
 {
+     private static final int COUNTER_MINIMUM_FIELD_SIZE=4;
+
     /**
      * Creates a new FrameBodyPCNT datatype.
      */
@@ -83,6 +85,25 @@ public class FrameBodyPCNT extends AbstractID3v2FrameBody implements ID3v24Frame
     }
 
     /**
+     *
+     *
+     * @return the play count of this file
+     */
+    public long getCounter()
+    {
+        return ((Number) getObjectValue(DataTypes.OBJ_NUMBER)).longValue();
+    }
+
+    /**
+     * Set the play counter of this file
+     *
+     * @param counter
+     */
+    public void setCounter(long counter)
+    {
+        setObjectValue(DataTypes.OBJ_NUMBER,new Long(counter));
+    }
+    /**
       * The ID3v2 frame identifier
       *
       * @return the ID3v2 frame identifier  for this frame type
@@ -97,6 +118,6 @@ public class FrameBodyPCNT extends AbstractID3v2FrameBody implements ID3v24Frame
      */
     protected void setupObjectList()
     {
-        objectList.add(new NumberVariableLength(DataTypes.OBJ_NUMBER, this, 4));
+        objectList.add(new NumberVariableLength(DataTypes.OBJ_NUMBER, this,COUNTER_MINIMUM_FIELD_SIZE));
     }
 }

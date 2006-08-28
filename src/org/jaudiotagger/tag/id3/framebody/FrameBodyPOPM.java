@@ -54,17 +54,23 @@ import java.nio.ByteBuffer;
  * @author : Paul Taylor
  * @author : Eric Farng
  * @version $Id$
+ *
+ * @todo : Counter should be optional, whereas we always expect it although allow a size of zero
+ * needs testing.
  */
 public class FrameBodyPOPM extends AbstractID3v2FrameBody implements ID3v24FrameBody,ID3v23FrameBody
 {
+    private static final int RATING_FIELD_SIZE=1;
+    private static final int COUNTER_MINIMUM_FIELD_SIZE=0;
+
     /**
      * Creates a new FrameBodyPOPM datatype.
      */
     public FrameBodyPOPM()
     {
-        //        this.setObject("Email to User", "");
-        //        this.setObject("Rating", new Byte((byte) 0));
-        //        this.setObject("Counter", new Long(0));
+        this.setObjectValue(DataTypes.OBJ_EMAIL,"");
+        this.setObjectValue(DataTypes.OBJ_RATING, new Byte((byte)0));
+        this.setObjectValue(DataTypes.OBJ_COUNTER, new Long(0));
     }
 
     public FrameBodyPOPM(FrameBodyPOPM body)
@@ -108,13 +114,53 @@ public class FrameBodyPOPM extends AbstractID3v2FrameBody implements ID3v24Frame
     }
 
     /**
+         *
+         *
+         * @return the memail of the user who rated this
+         */
+        public String getEmailToUser()
+        {
+            return (String) getObjectValue(DataTypes.OBJ_EMAIL);
+        }
+
+    /**
      * 
      *
-     * @return 
+     * @return the rating given to this file
      */
-    public String getEmailToUser()
+    public byte getRating()
     {
-        return (String) getObjectValue(DataTypes.OBJ_EMAIL);
+        return ((Number) getObjectValue(DataTypes.OBJ_RATING)).byteValue();
+    }
+
+    /**
+     * Set the rating given to this file
+     *
+     * @param rating
+     */
+    public void setRating(byte rating)
+    {
+        setObjectValue(DataTypes.OBJ_RATING,new Byte(rating));
+    }
+
+     /**
+     *
+     *
+     * @return the play count of this file
+     */
+    public long getCounter()
+    {
+        return ((Number) getObjectValue(DataTypes.OBJ_COUNTER)).longValue();
+    }
+
+    /**
+     * Set the play counter of this file
+     *
+     * @param counter
+     */
+    public void setCounter(long counter)
+    {
+        setObjectValue(DataTypes.OBJ_COUNTER,new Long(counter));
     }
 
      /**
@@ -135,7 +181,7 @@ public class FrameBodyPOPM extends AbstractID3v2FrameBody implements ID3v24Frame
     protected void setupObjectList()
     {
         objectList.add(new StringNullTerminated(DataTypes.OBJ_EMAIL, this));
-        objectList.add(new NumberFixedLength(DataTypes.OBJ_RATING, this, 1));
-        objectList.add(new NumberVariableLength(DataTypes.OBJ_COUNTER, this, 1));
+        objectList.add(new NumberFixedLength(DataTypes.OBJ_RATING, this, RATING_FIELD_SIZE));
+        objectList.add(new NumberVariableLength(DataTypes.OBJ_COUNTER, this, COUNTER_MINIMUM_FIELD_SIZE));
     }
 }
