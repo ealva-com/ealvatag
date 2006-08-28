@@ -1,10 +1,8 @@
-package org.jaudiotagger.tag;
+package org.jaudiotagger.tag.id3;
 
 import junit.framework.TestCase;
 import junit.framework.Test;
 import junit.framework.TestSuite;
-
-import org.jaudiotagger.tag.id3.*;
 
 /**
  *

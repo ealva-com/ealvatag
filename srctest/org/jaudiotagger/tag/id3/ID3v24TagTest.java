@@ -13,13 +13,12 @@
  * you can get a copy from http://www.opensource.org/licenses/lgpl-license.php or write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
-package org.jaudiotagger.tag;
+package org.jaudiotagger.tag.id3;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
-import org.jaudiotagger.tag.id3.*;
 import org.jaudiotagger.tag.id3.framebody.*;
 import org.jaudiotagger.AbstractTestCase;
 import org.jaudiotagger.audio.mp3.MP3File;
@@ -165,7 +164,5 @@ public class ID3v24TagTest extends TestCase
         assertEquals(ID3v11TagTest.TRACK_VALUE,((FrameBodyTRCK)((ID3v24Frame)v2Tag.getFrame(ID3v24Frames.FRAME_ID_TRACK)).getBody()).getText());
         assertTrue(((FrameBodyTCON)((ID3v24Frame)v2Tag.getFrame(ID3v24Frames.FRAME_ID_GENRE)).getBody()).getText().endsWith(ID3v11TagTest.GENRE_VAL));
         assertEquals(ID3v11TagTest.YEAR,((FrameBodyTDRC)((ID3v24Frame)v2Tag.getFrame(ID3v24Frames.FRAME_ID_YEAR)).getBody()).getText());
-
-
     }
 }

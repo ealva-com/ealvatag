@@ -13,7 +13,7 @@
  * you can get a copy from http://www.opensource.org/licenses/lgpl-license.php or write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
-package org.jaudiotagger.tag;
+package org.jaudiotagger.tag.id3;
 
 import java.io.IOException;
 
@@ -25,9 +25,10 @@ import org.jaudiotagger.AbstractTestCase;
 import org.jaudiotagger.audio.InvalidAudioFrameException;
 import org.jaudiotagger.audio.ReadOnlyFileException;
 import org.jaudiotagger.audio.mp3.MP3File;
-import org.jaudiotagger.tag.id3.*;
 import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
 import org.jaudiotagger.tag.id3.framebody.FrameBodyCOMM;
+import org.jaudiotagger.tag.TagException;
+import org.jaudiotagger.tag.AbstractTagFrameBody;
 
 /**
  * 
