@@ -122,7 +122,7 @@ public class ID3v24Frame
                     return;
                 }
                 /* No mechanism exists to convert it to a v24 frame, e.g deprecated frame e.g TSIZ, so hold
-                  as a deprecated frame consisiting of an array of bytes*/
+                  as a deprecated frame consisting of an array of bytes*/
                 else
                 {
                     this.frameBody = new FrameBodyDeprecated((AbstractID3v2FrameBody)frame.getBody());

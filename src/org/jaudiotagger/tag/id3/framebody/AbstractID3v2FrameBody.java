@@ -136,7 +136,7 @@ public abstract class AbstractID3v2FrameBody
 
     /**
      * This reads a frame body from a ByteBuffer into the appropriate FrameBody class, the ByteBuffer represents
-     * filedata and should be at the start of the framebody. The size as indicated in the header is passed to the frame
+     * file data and should be at the start of the framebody. The size as indicated in the header is passed to the frame
      * constructor when reading from file.
      *
      * @param byteBuffer file to read
@@ -152,7 +152,7 @@ public abstract class AbstractID3v2FrameBody
         byte[] buffer = new byte[size];
         byteBuffer.get(buffer);
 
-        //Offset into buffer, incremented by length of previous MP3Object
+        //Offset into buffer, incremented by length of previous Datatype
         int offset = 0;
         //Go through the ObjectList of the Frame reading the data into the
         //correct datatype.
