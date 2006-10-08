@@ -69,7 +69,7 @@ public class FrameBodyPOPM extends AbstractID3v2FrameBody implements ID3v24Frame
     public FrameBodyPOPM()
     {
         this.setObjectValue(DataTypes.OBJ_EMAIL,"");
-        this.setObjectValue(DataTypes.OBJ_RATING, new Byte((byte)0));
+        this.setObjectValue(DataTypes.OBJ_RATING, new Long(0));
         this.setObjectValue(DataTypes.OBJ_COUNTER, new Long(0));
     }
 
@@ -85,10 +85,10 @@ public class FrameBodyPOPM extends AbstractID3v2FrameBody implements ID3v24Frame
      * @param rating      
      * @param counter     
      */
-    public FrameBodyPOPM(String emailToUser, byte rating, long counter)
+    public FrameBodyPOPM(String emailToUser, long rating, long counter)
     {
         this.setObjectValue(DataTypes.OBJ_EMAIL, emailToUser);
-        this.setObjectValue(DataTypes.OBJ_RATING, new Byte(rating));
+        this.setObjectValue(DataTypes.OBJ_RATING, new Long(rating));
         this.setObjectValue(DataTypes.OBJ_COUNTER, new Long(counter));
     }
 
@@ -128,9 +128,9 @@ public class FrameBodyPOPM extends AbstractID3v2FrameBody implements ID3v24Frame
      *
      * @return the rating given to this file
      */
-    public byte getRating()
+    public long getRating()
     {
-        return ((Number) getObjectValue(DataTypes.OBJ_RATING)).byteValue();
+        return ((Number) getObjectValue(DataTypes.OBJ_RATING)).longValue();
     }
 
     /**
@@ -138,9 +138,9 @@ public class FrameBodyPOPM extends AbstractID3v2FrameBody implements ID3v24Frame
      *
      * @param rating
      */
-    public void setRating(byte rating)
+    public void setRating(long rating)
     {
-        setObjectValue(DataTypes.OBJ_RATING,new Byte(rating));
+        setObjectValue(DataTypes.OBJ_RATING,new Long(rating));
     }
 
      /**
