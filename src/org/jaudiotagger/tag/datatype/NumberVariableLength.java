@@ -46,7 +46,8 @@ public class NumberVariableLength extends AbstractDataType
 
 
     /**
-     * Creates a new ObjectNumberVariableLength datatype.
+     * Creates a new ObjectNumberVariableLength datatype, set minimum length to zero
+     * if this datatype is optional.
      *
      * @param identifier
      * @param minimumSize
@@ -56,10 +57,8 @@ public class NumberVariableLength extends AbstractDataType
         super(identifier, frameBody);
 
         //Set minimum length, which can be zero if optional
-        if (minimumSize > 0)
-        {
-            this.minLength = minimumSize;
-        }
+        this.minLength = minimumSize;
+
     }
 
     public NumberVariableLength(NumberVariableLength copy)
@@ -104,7 +103,7 @@ public class NumberVariableLength extends AbstractDataType
     /**
      * 
      *
-     * @return the number of bytes reuired to write this to a file
+     * @return the number of bytes required to write this to a file
      */
     public int getSize()
     {
@@ -173,10 +172,27 @@ public class NumberVariableLength extends AbstractDataType
             throw new NullPointerException("Byte array is null");
         }
 
-        //Invalid data, unable to read this datatype
-        if ((offset < 0) || (offset >= arr.length))
+        //Coding error, should never happen as far as I can see
+        if (offset < 0 )
         {
-            throw new InvalidDataTypeException("Offset to byte array is out of bounds: offset = " + offset + ", array.length = " + arr.length);
+            throw new IllegalArgumentException("negativer offset into an array offset:"+offset);
+        }
+
+        //If optional then set value to zero, this will mean that if this frame is written back to file it will be created
+        //with this additional datatype wheras it didnt exist but I think this is probably an advantage the frame is
+        //more likely to be parsed by other applications if it contains optional fields.
+        //if not optional problem with this frame
+        if (offset >= arr.length)
+        {
+            if(minLength==0)
+            {
+                value = new Long(0);
+                return;
+            }
+            else
+            {
+                throw new InvalidDataTypeException("Offset to byte array is out of bounds: offset = " + offset + ", array.length = " + arr.length);
+            }
         }
 
         long lvalue = 0;
