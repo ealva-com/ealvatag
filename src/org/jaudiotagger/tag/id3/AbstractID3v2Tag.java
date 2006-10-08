@@ -228,10 +228,9 @@ public abstract class AbstractID3v2Tag
     }
 
     /**
-     * Return whether tag has frame starting
-     * with this identifier
+     * Return whether tag has frame starting with this identifier
      *
-     * Warning the match is only done against the identifier so if a tag contains a frame with an unsuported body
+     * Warning the match is only done against the identifier so if a tag contains a frame with an unsupported body
      * but happens to have an identifier that is valid for another version of the tag it will return true
 
      * @param identifier start of frameId to lookup
@@ -625,13 +624,22 @@ public abstract class AbstractID3v2Tag
      * Add frame to HashMap used when converting between tag versions, take into account
      * occurences when two frame may both map to a single frame when converting between
      * versions
+     *
+     * TODO the logic here is messy and seems to be specific to date fields only when it
+     * was intended to be generic.
      */
     protected void copyFrameIntoMap(String id, AbstractID3v2Frame newFrame)
     {
         /* The frame already exists this shouldnt normally happen because frames
          * that are allowed to be multiple don't call this method. Frames that
-         * arent allowed to be multiple arent added to hashmap in first place when
+         * arent allowed to be multiple aren't added to hashmap in first place when
          * originally added.
+         *
+         * We only want to allow one of the frames going forward but we try and merge
+         * all the information into the one frame. However there is a problem here that
+         * if we then take this, modify it and try to write back the original values
+         * we could lose some information although this info is probably invalid anyway.
+         *
          * However converting some frames from tag of one version to another may
          * mean that two different frames both get converted to one frame, this
          * particulary applies to DateTime fields which were originally two fields
@@ -642,33 +650,53 @@ public abstract class AbstractID3v2Tag
             //Retrieve the frame with the same id we have already loaded into the map
             AbstractID3v2Frame firstFrame = (AbstractID3v2Frame) frameMap.get(newFrame.getIdentifier());
 
-            //Two different frames both converted to TDRCFrames
+            /* Two different frames both converted to TDRCFrames, now if this is the case one of them
+             * may have actually have been created as a FrameUnsupportedBody because TDRC is only
+             * supported in ID3v24, but is often created in v23 tags as well together with the valid TYER
+             * frame
+             */
             if(newFrame.getBody() instanceof FrameBodyTDRC)
             {
-                logger.finest("Modifying frame in map:"+newFrame.getIdentifier());
-                FrameBodyTDRC body = (FrameBodyTDRC) firstFrame.getBody();
-                FrameBodyTDRC newBody = (FrameBodyTDRC) newFrame.getBody();
-                //Just add the data to the frame
-                if (newBody.getOriginalID().equals(ID3v23Frames.FRAME_ID_V3_TYER))
+                if(firstFrame.getBody() instanceof FrameBodyTDRC)
                 {
-                    body.setYear(newBody.getText());
+                    logger.finest("Modifying frame in map:"+newFrame.getIdentifier());
+                    FrameBodyTDRC body    = (FrameBodyTDRC) firstFrame.getBody();
+                    FrameBodyTDRC newBody = (FrameBodyTDRC) newFrame.getBody();
+                    //Just add the data to the frame
+                    if (newBody.getOriginalID().equals(ID3v23Frames.FRAME_ID_V3_TYER))
+                    {
+                        body.setYear(newBody.getText());
+                    }
+                    else if (newBody.getOriginalID().equals(ID3v23Frames.FRAME_ID_V3_TDAT))
+                    {
+                        body.setDate(newBody.getText());
+                    }
+                    else if (newBody.getOriginalID().equals(ID3v23Frames.FRAME_ID_V3_TIME))
+                    {
+                        body.setTime(newBody.getText());
+                    }
+                    else if (newBody.getOriginalID().equals(ID3v23Frames.FRAME_ID_V3_TRDA))
+                    {
+                        body.setReco(newBody.getText());
+                    }
                 }
-                else if (newBody.getOriginalID().equals(ID3v23Frames.FRAME_ID_V3_TDAT))
+                /* The first frame was a TDRC frame that was not really allowed, this new frame was probably a
+                 * valid frame such as TYER which has been converted to TDRC, replace the firstframe with this frame
+                 */
+                else if(firstFrame.getBody() instanceof FrameBodyUnsupported)
                 {
-                    body.setDate(newBody.getText());
+                    frameMap.put(newFrame.getIdentifier(),newFrame);
                 }
-                else if (newBody.getOriginalID().equals(ID3v23Frames.FRAME_ID_V3_TIME))
+                else
                 {
-                    body.setTime(newBody.getText());
-                }
-                else if (newBody.getOriginalID().equals(ID3v23Frames.FRAME_ID_V3_TRDA))
-                {
-                    body.setReco(newBody.getText());
+                    //we just lose this frame, weve already got one with the correct id.
+                    //TODO may want to store this somewhere
+                    logger.warning("Found duplicate TDRC frame in invalid situation,discarding:" + newFrame.getIdentifier());
                 }
             }
             else
             {
-                logger.warning("Found duplicate frame in invalid situation:" + newFrame.getIdentifier());
+                logger.warning("Found duplicate frame in invalid situation,discarding:" + newFrame.getIdentifier());
             }
         }
         else
