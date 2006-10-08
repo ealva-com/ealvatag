@@ -1,7 +1,8 @@
-package org.jaudiotagger.tag.id3.framebody;
+package org.jaudiotagger.tag.id3;
 
 import org.jaudiotagger.AbstractTestCase;
 import org.jaudiotagger.tag.id3.ID3v24Frames;
+import org.jaudiotagger.tag.id3.framebody.FrameBodyPOPM;
 import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
 
 /**
@@ -10,7 +11,7 @@ import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
 public class FrameBodyPOPMTest extends AbstractTestCase
 {
     public static final String  POPM_EMAIL      = "paul@jaudiotagger.dev.net";
-    public static final byte    POPM_RATING     =  (byte)167;
+    public static final long    POPM_RATING     =  167;
     public static final long    POPM_COUNTER    =  1000;
 
     public static FrameBodyPOPM getInitialisedBody()
@@ -64,5 +65,27 @@ public class FrameBodyPOPMTest extends AbstractTestCase
         assertEquals(FrameBodyPOPMTest.POPM_COUNTER ,fb.getCounter());
     }
 
+    public void testCreateFrameBodyEmptyConstructorWithoutCounter()
+    {
+        Exception exceptionCaught = null;
+        FrameBodyPOPM fb = null;
+        try
+        {
+            fb = new FrameBodyPOPM();
+            fb.setEmailToUser(FrameBodyPOPMTest.POPM_EMAIL);
+            fb.setRating(FrameBodyPOPMTest.POPM_RATING);
+        }
+        catch (Exception e)
+        {
+            exceptionCaught = e;
+        }
+
+        assertNull(exceptionCaught);
+        assertEquals(ID3v24Frames.FRAME_ID_POPULARIMETER,fb.getIdentifier());
+        assertEquals(TextEncoding.ISO_8859_1,fb.getTextEncoding());
+        assertEquals(FrameBodyPOPMTest.POPM_EMAIL,  fb.getEmailToUser());
+        assertEquals(FrameBodyPOPMTest.POPM_RATING  ,fb.getRating());
+        assertEquals(0 ,fb.getCounter());
+    }
     
 }
