@@ -74,11 +74,68 @@ public class AbstractTestCase extends TestCase
 
     }
 
+     private static boolean append(File fromFile1,File fromFile2, File toFile)
+    {
+        try
+        {
+            FileInputStream in = new FileInputStream(fromFile1);
+            FileInputStream in2 = new FileInputStream(fromFile2);
+            FileOutputStream out = new FileOutputStream(toFile);
+            BufferedInputStream inBuffer = new BufferedInputStream   (in);
+            BufferedInputStream inBuffer2 = new BufferedInputStream   (in2);
+            BufferedOutputStream outBuffer = new BufferedOutputStream(out);
+
+            int theByte;
+
+            while ((theByte = inBuffer.read()) > -1)
+            {
+                outBuffer.write(theByte);
+            }
+
+              while ((theByte = inBuffer2.read()) > -1)
+            {
+                outBuffer.write(theByte);
+            }
+
+            outBuffer.close();
+            inBuffer.close();
+            inBuffer2.close();
+            out.close();
+            in.close();
+            in2.close();
+
+            // cleanupif files are not the same length
+            if ((fromFile1.length() + fromFile2.length())!= toFile.length())
+            {
+                toFile.delete();
+
+                return false;
+            }
+
+            return true;
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
     public static File copyAudioToTmp(String fileName)
     {
         File inputFile = new File("testdata", fileName);
         File outputFile = new File("testdatatmp", fileName);
         boolean result = copy(inputFile, outputFile);
+        assertTrue(result);
+        return outputFile;
+    }
+
+     public static File copyAudioToTmp(String tagfile,String fileName)
+    {
+        File inputTagFile = new File("testtagdata", tagfile);
+        File inputFile = new File("testdata", fileName);
+        File outputFile = new File("testdatatmp", fileName);
+        boolean result = append(inputTagFile,inputFile, outputFile);
         assertTrue(result);
         return outputFile;
     }
