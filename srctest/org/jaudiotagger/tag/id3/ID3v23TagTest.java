@@ -193,11 +193,19 @@ public class ID3v23TagTest extends TestCase
         assertNull(mp3File.getID3v2Tag());
     }
 
+    public void testCreateIDv23Tag()
+    {
+        ID3v23Tag v2Tag = new ID3v23Tag();
+        assertEquals((byte)2,v2Tag.getRelease());
+        assertEquals((byte)3,v2Tag.getMajorVersion());
+        assertEquals((byte)0,v2Tag.getRevision());
+    }
+
     public void testCreateID3v23FromID3v11()
     {
            ID3v11Tag v11Tag = ID3v11TagTest.getInitialisedTag();
            ID3v23Tag v2Tag = new ID3v23Tag(v11Tag);
-           assertNotNull(v2Tag);
+           assertNotNull(v11Tag);
            assertNotNull(v2Tag);
            assertEquals(ID3v11TagTest.ARTIST,((FrameBodyTPE1)((ID3v23Frame)v2Tag.getFrame(ID3v23Frames.FRAME_ID_V3_ARTIST)).getBody()).getText());
            assertEquals(ID3v11TagTest.ALBUM,((FrameBodyTALB)((ID3v23Frame)v2Tag.getFrame(ID3v23Frames.FRAME_ID_V3_ALBUM)).getBody()).getText());
@@ -206,6 +214,11 @@ public class ID3v23TagTest extends TestCase
            assertEquals(ID3v11TagTest.TRACK_VALUE,((FrameBodyTRCK)((ID3v23Frame)v2Tag.getFrame(ID3v23Frames.FRAME_ID_V3_TRACK)).getBody()).getText());
            assertTrue(((FrameBodyTCON)((ID3v23Frame)v2Tag.getFrame(ID3v23Frames.FRAME_ID_V3_GENRE)).getBody()).getText().endsWith(ID3v11TagTest.GENRE_VAL));
            assertEquals(ID3v11TagTest.YEAR,((FrameBodyTYER)((ID3v23Frame)v2Tag.getFrame(ID3v23Frames.FRAME_ID_V3_TYER)).getBody()).getText());
+
+            assertEquals((byte)2,v2Tag.getRelease());
+            assertEquals((byte)3,v2Tag.getMajorVersion());
+            assertEquals((byte)0,v2Tag.getRevision());
+
     }
 
 }

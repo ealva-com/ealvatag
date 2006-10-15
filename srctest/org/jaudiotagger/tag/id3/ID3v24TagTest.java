@@ -149,6 +149,15 @@ public class ID3v24TagTest extends TestCase
         assertTrue(mp3File.getID3v2Tag() instanceof ID3v24Tag);
     }
 
+    public void testCreateIDv24Tag()
+    {
+        ID3v24Tag v2Tag = new ID3v24Tag();
+        assertEquals((byte)2,v2Tag.getRelease());
+        assertEquals((byte)4,v2Tag.getMajorVersion());
+        assertEquals((byte)0,v2Tag.getRevision());
+
+    }
+
     public void testCreateID3v24FromID3v11()
     {
 
@@ -164,5 +173,8 @@ public class ID3v24TagTest extends TestCase
         assertEquals(ID3v11TagTest.TRACK_VALUE,((FrameBodyTRCK)((ID3v24Frame)v2Tag.getFrame(ID3v24Frames.FRAME_ID_TRACK)).getBody()).getText());
         assertTrue(((FrameBodyTCON)((ID3v24Frame)v2Tag.getFrame(ID3v24Frames.FRAME_ID_GENRE)).getBody()).getText().endsWith(ID3v11TagTest.GENRE_VAL));
         assertEquals(ID3v11TagTest.YEAR,((FrameBodyTDRC)((ID3v24Frame)v2Tag.getFrame(ID3v24Frames.FRAME_ID_YEAR)).getBody()).getText());
+        assertEquals((byte)2,v2Tag.getRelease());
+        assertEquals((byte)4,v2Tag.getMajorVersion());
+        assertEquals((byte)0,v2Tag.getRevision());
     }
 }

@@ -73,10 +73,9 @@ public class ID3v11Tag
      */
     protected byte track = (byte) TRACK_UNDEFINED;
 
-    private static final byte REVISION = 1;
+    private static final byte RELEASE  = 1;
     private static final byte MAJOR_VERSION = 1;
-    private static final byte RELEASE  = 0;
-
+    private static final byte REVISION = 0;
     /**
      * Retrieve the Release
      */

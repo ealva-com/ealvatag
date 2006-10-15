@@ -7,7 +7,7 @@ import junit.framework.TestSuite;
 /**
  *
  */
-public class ID3v11TagTest extends TestCase
+public class ID3v1TagTest extends TestCase
 {
     public  static final String ARTIST = "artist";
     public  static final String ALBUM = "album";
@@ -20,25 +20,24 @@ public class ID3v11TagTest extends TestCase
     /** Provides an initilised object to be used in other tests
      *  to prevent code duplication
      *
-     * @return  ID3v11Tag
+     * @return  ID3v1Tag
      */
-    public static ID3v11Tag getInitialisedTag()
+    public static ID3v1Tag getInitialisedTag()
     {
-        ID3v11Tag v11Tag = new ID3v11Tag();
-        v11Tag.setArtist(ARTIST);
-        v11Tag.setAlbum(ALBUM);
-        v11Tag.setComment(COMMENT);
-        v11Tag.setTitle(TITLE);
-        v11Tag.setTrack(TRACK_VALUE);
-        v11Tag.setGenre(GENRE_VAL);
-        v11Tag.setYear(YEAR);
-        return v11Tag;
+        ID3v1Tag v1Tag = new ID3v1Tag();
+        v1Tag.setArtist(ID3v1TagTest.ARTIST);
+        v1Tag.setAlbum(ID3v1TagTest.ALBUM);
+        v1Tag.setComment(ID3v1TagTest.COMMENT);
+        v1Tag.setTitle(ID3v1TagTest.TITLE);
+        v1Tag.setGenre(ID3v1TagTest.GENRE_VAL);
+        v1Tag.setYear(ID3v1TagTest.YEAR);
+        return v1Tag;
     }
     /**
      * Constructor
      * @param arg0
      */
-    public ID3v11TagTest(String arg0) {
+    public ID3v1TagTest(String arg0) {
         super(arg0);
     }
 
@@ -48,7 +47,7 @@ public class ID3v11TagTest extends TestCase
      */
     public static void main(String[] args)
     {
-        junit.textui.TestRunner.run(ID3v11TagTest.suite());
+        junit.textui.TestRunner.run(ID3v1TagTest.suite());
     }
 
     /////////////////////////////////////////////////////////////////////////
@@ -82,7 +81,7 @@ public class ID3v11TagTest extends TestCase
      */
     public static Test suite()
     {
-        return new TestSuite(ID3v11TagTest.class);
+        return new TestSuite(ID3v1TagTest.class);
     }
 
     /////////////////////////////////////////////////////////////////////////
@@ -91,60 +90,58 @@ public class ID3v11TagTest extends TestCase
 
     public void testCreatteID3v11Tag()
     {
-        ID3v11Tag v11Tag = new ID3v11Tag();
-        v11Tag.setArtist(ARTIST);
-        v11Tag.setAlbum(ALBUM);
-        v11Tag.setComment(COMMENT);
-        v11Tag.setTitle(TITLE);
-        v11Tag.setTrack(TRACK_VALUE);
-        v11Tag.setGenre(GENRE_VAL);
-        v11Tag.setYear(YEAR);
+        ID3v1Tag v1Tag = new ID3v1Tag();
+        v1Tag.setArtist(ID3v1TagTest.ARTIST);
+        v1Tag.setAlbum(ID3v1TagTest.ALBUM);
+        v1Tag.setComment(ID3v1TagTest.COMMENT);
+        v1Tag.setTitle(ID3v1TagTest.TITLE);
+        v1Tag.setGenre(ID3v1TagTest.GENRE_VAL);
+        v1Tag.setYear(ID3v1TagTest.YEAR);
 
-        assertEquals((byte)1,v11Tag.getRelease());
-        assertEquals((byte)1,v11Tag.getMajorVersion());
-        assertEquals((byte)0,v11Tag.getRevision());
+        assertEquals((byte)1,v1Tag.getRelease());
+        assertEquals((byte)0,v1Tag.getMajorVersion());
+        assertEquals((byte)0,v1Tag.getRevision());
 
-        assertEquals(ARTIST,v11Tag.getArtist());
-        assertEquals(ALBUM,v11Tag.getAlbum());
-        assertEquals(COMMENT,v11Tag.getComment());
-        assertEquals(TITLE,v11Tag.getTitle());
-        assertEquals(TRACK_VALUE,v11Tag.getTrack());
-        assertEquals(GENRE_VAL,v11Tag.getGenre());
-        assertEquals(YEAR,v11Tag.getYear());
+        assertEquals(ID3v1TagTest.ARTIST,v1Tag.getArtist());
+        assertEquals(ID3v1TagTest.ALBUM,v1Tag.getAlbum());
+        assertEquals(ID3v1TagTest.COMMENT,v1Tag.getComment());
+        assertEquals(ID3v1TagTest.TITLE,v1Tag.getTitle());
+        assertEquals(ID3v1TagTest.GENRE_VAL,v1Tag.getGenre());
+        assertEquals(ID3v1TagTest.YEAR,v1Tag.getYear());
 
 
     }
 
-    public void testCreateID3v11FromID3v24()
+    public void testCreateID3v1FromID3v24()
     {
         ID3v24Tag v2Tag = new ID3v24Tag();
-        ID3v11Tag v1Tag = new ID3v11Tag(v2Tag);
-         assertNotNull(v1Tag);
+        ID3v1Tag v1Tag = new ID3v1Tag(v2Tag);
+        assertNotNull(v1Tag);
         assertEquals((byte)1,v1Tag.getRelease());
-        assertEquals((byte)1,v1Tag.getMajorVersion());
+        assertEquals((byte)0,v1Tag.getMajorVersion());
         assertEquals((byte)0,v1Tag.getRevision());
 
 
     }
 
-    public void testCreateID3v11FromID3v23()
+    public void testCreateID3v1FromID3v23()
     {
         ID3v23Tag v2Tag = new ID3v23Tag();
-        ID3v11Tag v1Tag = new ID3v11Tag(v2Tag);
+        ID3v1Tag v1Tag = new ID3v1Tag(v2Tag);
         assertNotNull(v1Tag);
-         assertEquals((byte)1,v1Tag.getRelease());
-        assertEquals((byte)1,v1Tag.getMajorVersion());
+        assertEquals((byte)1,v1Tag.getRelease());
+        assertEquals((byte)0,v1Tag.getMajorVersion());
         assertEquals((byte)0,v1Tag.getRevision());
 
     }
 
-    public void testCreateID3v11FromID3v22()
+    public void testCreateID3v1FromID3v22()
     {
         ID3v22Tag v2Tag = new ID3v22Tag();
-        ID3v11Tag v1Tag = new ID3v11Tag(v2Tag);
+        ID3v1Tag v1Tag = new ID3v1Tag(v2Tag);
         assertNotNull(v1Tag);
-         assertEquals((byte)1,v1Tag.getRelease());
-        assertEquals((byte)1,v1Tag.getMajorVersion());
+       assertEquals((byte)1,v1Tag.getRelease());
+        assertEquals((byte)0,v1Tag.getMajorVersion());
         assertEquals((byte)0,v1Tag.getRevision());
     }
 }

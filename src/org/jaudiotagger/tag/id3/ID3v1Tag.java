@@ -86,9 +86,9 @@ public class ID3v1Tag
     protected byte genre = (byte) -1;
 
 
-    private static final byte REVISION = 1;
+    private static final byte RELEASE  = 1;
     private static final byte MAJOR_VERSION = 0;
-    private static final byte RELEASE  = 0;
+    private static final byte REVISION = 0;
 
     /**
      * Retrieve the Release
