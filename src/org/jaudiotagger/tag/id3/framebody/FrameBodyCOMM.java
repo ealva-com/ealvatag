@@ -196,11 +196,11 @@ public class FrameBodyCOMM  extends AbstractID3v2FrameBody  implements ID3v24Fra
     {
         if (((AbstractString) getObject(DataTypes.OBJ_TEXT)).canBeEncoded() == false)
         {
-            this.setTextEncoding((byte) TextEncoding.UTF_16BE);
+            this.setTextEncoding((byte) TextEncoding.UTF_16);
         }
         if (((AbstractString) getObject(DataTypes.OBJ_DESCRIPTION)).canBeEncoded() == false)
         {
-            this.setTextEncoding((byte) TextEncoding.UTF_16BE);
+            this.setTextEncoding((byte) TextEncoding.UTF_16);
         }
         super.write(tagBuffer);
     }

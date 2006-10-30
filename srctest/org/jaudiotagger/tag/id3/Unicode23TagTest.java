@@ -1,47 +1,27 @@
-/*
- * Jaudiotagger Copyright (C)2004,2005
- *
- * This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser
- * General Public  License as published by the Free Software Foundation; either version 2.1 of the License,
- * or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even
- * the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
- * See the GNU Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public License along with this library; if not,
- * you can get a copy from http://www.opensource.org/licenses/lgpl-license.php or write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
- */
 package org.jaudiotagger.tag.id3;
 
-import java.io.IOException;
+import junit.framework.TestCase;
+import junit.framework.Test;
+import junit.framework.TestSuite;
+import org.jaudiotagger.tag.id3.framebody.FrameBodyTPE1;
+import org.jaudiotagger.tag.id3.framebody.FrameBodyTPE1Test;
+import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
+import org.jaudiotagger.AbstractTestCase;
+import org.jaudiotagger.audio.mp3.MP3File;
+
 import java.io.File;
 
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
-
-import org.jaudiotagger.AbstractTestCase;
-import org.jaudiotagger.audio.InvalidAudioFrameException;
-import org.jaudiotagger.audio.ReadOnlyFileException;
-import org.jaudiotagger.audio.mp3.MP3File;
-import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
-import org.jaudiotagger.tag.id3.framebody.*;
-import org.jaudiotagger.tag.TagException;
-import org.jaudiotagger.tag.AbstractTagFrameBody;
-
 /**
- * 
+ *
  */
-public class Unicode24TagTest extends TestCase
+public class Unicode23TagTest extends TestCase
 {
     /**
      * Constructor
      *
      * @param arg0
      */
-    public Unicode24TagTest(String arg0)
+    public Unicode23TagTest(String arg0)
     {
         super(arg0);
     }
@@ -53,7 +33,7 @@ public class Unicode24TagTest extends TestCase
      */
     public static void main(String[] args)
     {
-        junit.textui.TestRunner.run(suite());
+        junit.textui.TestRunner.run(Unicode23TagTest.suite());
     }
 
     /////////////////////////////////////////////////////////////////////////
@@ -88,7 +68,7 @@ public class Unicode24TagTest extends TestCase
      */
     public static Test suite()
     {
-        return new TestSuite(Unicode24TagTest.class);
+        return new TestSuite(Unicode23TagTest.class);
     }
 
 
@@ -104,7 +84,7 @@ public class Unicode24TagTest extends TestCase
         File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3");
         MP3File mp3File = new MP3File(testFile);
 
-        ID3v24Frame frame = new ID3v24Frame(ID3v24Frames.FRAME_ID_ARTIST);
+        ID3v23Frame frame = new ID3v23Frame(ID3v23Frames.FRAME_ID_V3_ARTIST);
         Exception exceptionCaught = null;
         FrameBodyTPE1 fb = null;
         try
@@ -118,23 +98,23 @@ public class Unicode24TagTest extends TestCase
         }
 
         assertNull(exceptionCaught);
-        assertEquals(ID3v24Frames.FRAME_ID_ARTIST, fb.getIdentifier());
+        assertEquals(ID3v23Frames.FRAME_ID_V3_ARTIST, fb.getIdentifier());
         assertEquals(TextEncoding.ISO_8859_1, fb.getTextEncoding());
         assertEquals(FrameBodyTPE1Test.TPE1_TEST_STRING, fb.getText());
 
         //Create and Save
-        ID3v24Tag tag = new ID3v24Tag();
+        ID3v23Tag tag = new ID3v23Tag();
         tag.setFrame(frame);
         mp3File.setID3v2Tag(tag);
         mp3File.save();
 
         //Reload, should be written as UTF16 because of the text
         mp3File = new MP3File(testFile);
-        frame = (ID3v24Frame) mp3File.getID3v2Tag().getFrame(ID3v24Frames.FRAME_ID_ARTIST);
+        frame = (ID3v23Frame) mp3File.getID3v2Tag().getFrame(ID3v23Frames.FRAME_ID_V3_ARTIST);
         FrameBodyTPE1 body = (FrameBodyTPE1) frame.getBody();
-        assertEquals(ID3v24Frames.FRAME_ID_ARTIST, fb.getIdentifier());
-        assertEquals(TextEncoding.ISO_8859_1, fb.getTextEncoding());
-        assertEquals(FrameBodyTPE1Test.TPE1_TEST_STRING, fb.getText());
+        assertEquals(ID3v23Frames.FRAME_ID_V3_ARTIST, body.getIdentifier());
+        assertEquals(TextEncoding.ISO_8859_1, body.getTextEncoding());
+        assertEquals(FrameBodyTPE1Test.TPE1_TEST_STRING, body.getText());
     }
 
     /**
@@ -148,7 +128,7 @@ public class Unicode24TagTest extends TestCase
         File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3");
         MP3File mp3File = new MP3File(testFile);
 
-        ID3v24Frame frame = new ID3v24Frame(ID3v24Frames.FRAME_ID_ARTIST);
+        ID3v23Frame frame = new ID3v23Frame(ID3v23Frames.FRAME_ID_V3_ARTIST);
         Exception exceptionCaught = null;
         FrameBodyTPE1 fb = null;
         try
@@ -163,21 +143,21 @@ public class Unicode24TagTest extends TestCase
         }
 
         assertNull(exceptionCaught);
-        assertEquals(ID3v24Frames.FRAME_ID_ARTIST, fb.getIdentifier());
+        assertEquals(ID3v23Frames.FRAME_ID_V3_ARTIST, fb.getIdentifier());
         assertEquals(TextEncoding.UTF_16, fb.getTextEncoding());
         assertEquals(FrameBodyTPE1Test.TPE1_TEST_STRING, fb.getText());
 
         //Create and Save
-        ID3v24Tag tag = new ID3v24Tag();
+        ID3v23Tag tag = new ID3v23Tag();
         tag.setFrame(frame);
         mp3File.setID3v2Tag(tag);
         mp3File.save();
 
         //Reload, should be written as UTF16 because of the text
         mp3File = new MP3File(testFile);
-        frame = (ID3v24Frame) mp3File.getID3v2Tag().getFrame(ID3v24Frames.FRAME_ID_ARTIST);
+        frame = (ID3v23Frame) mp3File.getID3v2Tag().getFrame(ID3v23Frames.FRAME_ID_V3_ARTIST);
         FrameBodyTPE1 body = (FrameBodyTPE1) frame.getBody();
-        assertEquals(ID3v24Frames.FRAME_ID_ARTIST, body.getIdentifier());
+        assertEquals(ID3v23Frames.FRAME_ID_V3_ARTIST, body.getIdentifier());
         assertEquals(TextEncoding.UTF_16, body.getTextEncoding());
         assertEquals(FrameBodyTPE1Test.TPE1_TEST_STRING, body.getText());
     }
@@ -194,7 +174,7 @@ public class Unicode24TagTest extends TestCase
         File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3");
         MP3File mp3File = new MP3File(testFile);
 
-        ID3v24Frame frame = new ID3v24Frame(ID3v24Frames.FRAME_ID_ARTIST);
+        ID3v23Frame frame = new ID3v23Frame(ID3v23Frames.FRAME_ID_V3_ARTIST);
         Exception exceptionCaught = null;
         FrameBodyTPE1 fb = null;
         try
@@ -208,24 +188,22 @@ public class Unicode24TagTest extends TestCase
         }
 
         assertNull(exceptionCaught);
-        assertEquals(ID3v24Frames.FRAME_ID_ARTIST, fb.getIdentifier());
+        assertEquals(ID3v23Frames.FRAME_ID_V3_ARTIST, fb.getIdentifier());
         assertEquals(TextEncoding.ISO_8859_1, fb.getTextEncoding());
         assertEquals(FrameBodyTPE1Test.TPE1_UNICODE_REQUIRED_TEST_STRING, fb.getText());
 
-
-
         //Create and Save
-        ID3v24Tag tag = new ID3v24Tag();
+        ID3v23Tag tag = new ID3v23Tag();
         tag.setFrame(frame);
         mp3File.setID3v2Tag(tag);
         mp3File.save();
 
         //Reload, should be written as UTF16 because of the text
         mp3File = new MP3File(testFile);
-        frame = (ID3v24Frame) mp3File.getID3v2Tag().getFrame(ID3v24Frames.FRAME_ID_ARTIST);
+        frame = (ID3v23Frame) mp3File.getID3v2Tag().getFrame(ID3v23Frames.FRAME_ID_V3_ARTIST);
         FrameBodyTPE1 body = (FrameBodyTPE1) frame.getBody();
-        assertEquals(ID3v24Frames.FRAME_ID_ARTIST, body.getIdentifier());
-        assertEquals(TextEncoding.UTF_16, body.getTextEncoding());
+        assertEquals(ID3v23Frames.FRAME_ID_V3_ARTIST, body.getIdentifier());
+        assertEquals(TextEncoding.UTF_16,body.getTextEncoding());
         assertEquals(FrameBodyTPE1Test.TPE1_UNICODE_REQUIRED_TEST_STRING, body.getText());
     }
 
@@ -239,7 +217,7 @@ public class Unicode24TagTest extends TestCase
         File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3");
         MP3File mp3File = new MP3File(testFile);
 
-        ID3v24Frame frame = new ID3v24Frame(ID3v24Frames.FRAME_ID_ARTIST);
+        ID3v23Frame frame = new ID3v23Frame(ID3v23Frames.FRAME_ID_V3_ARTIST);
         Exception exceptionCaught = null;
         FrameBodyTPE1 fb = null;
         try
@@ -254,21 +232,21 @@ public class Unicode24TagTest extends TestCase
         }
 
         assertNull(exceptionCaught);
-        assertEquals(ID3v24Frames.FRAME_ID_ARTIST, fb.getIdentifier());
+        assertEquals(ID3v23Frames.FRAME_ID_V3_ARTIST, fb.getIdentifier());
         assertEquals(TextEncoding.UTF_16BE, fb.getTextEncoding());
         assertEquals(FrameBodyTPE1Test.TPE1_UNICODE_REQUIRED_TEST_STRING, fb.getText());
 
         //Create and Save
-        ID3v24Tag tag = new ID3v24Tag();
+        ID3v23Tag tag = new ID3v23Tag();
         tag.setFrame(frame);
         mp3File.setID3v2Tag(tag);
         mp3File.save();
 
         //Reload, should be written as UTF16BE
         mp3File = new MP3File(testFile);
-        frame = (ID3v24Frame) mp3File.getID3v2Tag().getFrame(ID3v24Frames.FRAME_ID_ARTIST);
+        frame = (ID3v23Frame) mp3File.getID3v2Tag().getFrame(ID3v23Frames.FRAME_ID_V3_ARTIST);
         FrameBodyTPE1 body = (FrameBodyTPE1) frame.getBody();
-        assertEquals(ID3v24Frames.FRAME_ID_ARTIST, body.getIdentifier());
+        assertEquals(ID3v23Frames.FRAME_ID_V3_ARTIST, body.getIdentifier());
         assertEquals(TextEncoding.UTF_16BE, body.getTextEncoding());
         assertEquals(FrameBodyTPE1Test.TPE1_UNICODE_REQUIRED_TEST_STRING, body.getText());
     }
@@ -283,7 +261,7 @@ public class Unicode24TagTest extends TestCase
         File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3");
         MP3File mp3File = new MP3File(testFile);
 
-        ID3v24Frame frame = new ID3v24Frame(ID3v24Frames.FRAME_ID_ARTIST);
+        ID3v23Frame frame = new ID3v23Frame(ID3v23Frames.FRAME_ID_V3_ARTIST);
         Exception exceptionCaught = null;
         FrameBodyTPE1 fb = null;
         try
@@ -298,21 +276,21 @@ public class Unicode24TagTest extends TestCase
         }
 
         assertNull(exceptionCaught);
-        assertEquals(ID3v24Frames.FRAME_ID_ARTIST, fb.getIdentifier());
+        assertEquals(ID3v23Frames.FRAME_ID_V3_ARTIST, fb.getIdentifier());
         assertEquals(TextEncoding.UTF_8, fb.getTextEncoding());
         assertEquals(FrameBodyTPE1Test.TPE1_UNICODE_REQUIRED_TEST_STRING, fb.getText());
 
         //Create and Save
-        ID3v24Tag tag = new ID3v24Tag();
+        ID3v23Tag tag = new ID3v23Tag();
         tag.setFrame(frame);
         mp3File.setID3v2Tag(tag);
         mp3File.save();
 
         //Reload, should be written as UTF8
         mp3File = new MP3File(testFile);
-        frame = (ID3v24Frame) mp3File.getID3v2Tag().getFrame(ID3v24Frames.FRAME_ID_ARTIST);
+        frame = (ID3v23Frame) mp3File.getID3v2Tag().getFrame(ID3v23Frames.FRAME_ID_V3_ARTIST);
         FrameBodyTPE1 body = (FrameBodyTPE1) frame.getBody();
-        assertEquals(ID3v24Frames.FRAME_ID_ARTIST, body.getIdentifier());
+        assertEquals(ID3v23Frames.FRAME_ID_V3_ARTIST, body.getIdentifier());
         assertEquals(TextEncoding.UTF_8, body.getTextEncoding());
         assertEquals(FrameBodyTPE1Test.TPE1_UNICODE_REQUIRED_TEST_STRING, body.getText());
     }

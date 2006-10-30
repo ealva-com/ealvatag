@@ -60,8 +60,7 @@ public class FrameBodyTPE1 extends AbstractFrameBodyTextInfo implements ID3v24Fr
 
     /**
      * Creates a new FrameBodyTPE1 datatype.
-     *
-     * @throws java.io.IOException 
+     *                                 
      * @throws InvalidTagException 
      */
     public FrameBodyTPE1(ByteBuffer byteBuffer, int frameSize)

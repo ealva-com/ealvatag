@@ -72,7 +72,6 @@ public class FrameBodyWXXX
     /**
      * Creates a new FrameBodyWXXX datatype by reading from file.
      *
-     * @throws IOException         
      * @throws InvalidTagException 
      */
     public FrameBodyWXXX(ByteBuffer byteBuffer, int frameSize)
@@ -119,13 +118,13 @@ public class FrameBodyWXXX
     {
         if (((AbstractString) getObject(DataTypes.OBJ_DESCRIPTION)).canBeEncoded() == false)
         {
-            this.setTextEncoding(TextEncoding.UTF_16BE);
+            this.setTextEncoding(TextEncoding.UTF_16);
         }
         super.write(tagBuffer);
     }
 
     /**
-     * THis is different ot other URL Links
+     * This is different ot other URL Links
      */
     protected void setupObjectList()
     {

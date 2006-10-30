@@ -61,8 +61,7 @@ public class FrameBodyTIME extends AbstractFrameBodyTextInfo implements ID3v23Fr
 
     /**
      * Creates a new FrameBodyTIME datatype.
-     *
-     * @throws java.io.IOException 
+     *                               
      * @throws InvalidTagException 
      */
     public FrameBodyTIME(ByteBuffer byteBuffer, int frameSize)

@@ -104,7 +104,7 @@ public class FrameBodyIPLS  extends AbstractID3v2FrameBody implements ID3v23Fram
     {
         if (((PairedTextEncodedStringNullTerminated) getObject(DataTypes.OBJ_TEXT)).canBeEncoded() == false)
         {
-            this.setTextEncoding(TextEncoding.UTF_16BE);
+            this.setTextEncoding(TextEncoding.UTF_16);
         }
         super.write(tagBuffer);
     }

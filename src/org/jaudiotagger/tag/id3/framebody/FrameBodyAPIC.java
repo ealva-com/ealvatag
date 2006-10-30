@@ -187,7 +187,7 @@ public class FrameBodyAPIC extends AbstractID3v2FrameBody implements ID3v24Frame
     {
         if (((AbstractString) getObject(DataTypes.OBJ_DESCRIPTION)).canBeEncoded() == false)
         {
-            this.setTextEncoding(TextEncoding.UTF_16BE);
+            this.setTextEncoding(TextEncoding.UTF_16);
         }
         super.write(tagBuffer);
     }
