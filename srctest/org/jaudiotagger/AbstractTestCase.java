@@ -22,7 +22,7 @@ import java.io.*;
 /**
  * 
  */
-public class AbstractTestCase extends TestCase
+public abstract class AbstractTestCase extends TestCase
 {
     /**
      * Copy a File
@@ -121,20 +121,41 @@ public class AbstractTestCase extends TestCase
         }
     }
 
+    /**
+     * Copy mp3 to processing dir ready for use in test
+     * @param fileName
+     * @return
+     */
     public static File copyAudioToTmp(String fileName)
     {
         File inputFile = new File("testdata", fileName);
         File outputFile = new File("testdatatmp", fileName);
+        if (!outputFile.getParentFile().exists())
+        {
+            outputFile.getParentFile().mkdirs();
+        }
         boolean result = copy(inputFile, outputFile);
         assertTrue(result);
         return outputFile;
     }
 
+    /**
+     * Prepends file with tag file in order to create an mp3 with a valid
+     * id3
+     *
+     * @param tagfile
+     * @param fileName
+     * @return
+     */
      public static File copyAudioToTmp(String tagfile,String fileName)
     {
         File inputTagFile = new File("testtagdata", tagfile);
         File inputFile = new File("testdata", fileName);
         File outputFile = new File("testdatatmp", fileName);
+        if (!outputFile.getParentFile().exists())
+        {
+            outputFile.getParentFile().mkdirs();
+        }
         boolean result = append(inputTagFile,inputFile, outputFile);
         assertTrue(result);
         return outputFile;
