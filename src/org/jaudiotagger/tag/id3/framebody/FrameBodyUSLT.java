@@ -22,6 +22,8 @@ import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
 import org.jaudiotagger.tag.id3.valuepair.Languages;
 
 import java.nio.ByteBuffer;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 
 /**
  * Unsychronised lyrics/text transcription frame.
@@ -73,10 +75,10 @@ public class FrameBodyUSLT extends AbstractID3v2FrameBody implements ID3v24Frame
     /**
      * Creates a new FrameBodyUSLT datatype.
      *
-     * @param textEncoding 
-     * @param language     
-     * @param description  
-     * @param text         
+     * @param textEncoding
+     * @param language
+     * @param description
+     * @param text
      */
     public FrameBodyUSLT(byte textEncoding, String language, String description, String text)
     {
@@ -89,9 +91,9 @@ public class FrameBodyUSLT extends AbstractID3v2FrameBody implements ID3v24Frame
     /**
      * Creates a new FrameBodyUSLT datatype.
      *
-     * @param file 
-     * @throws IOException         
-     * @throws InvalidTagException 
+     * @param  byteBuffer
+     * @throws  InvalidTagException
+     * @throws InvalidTagException
      */
     public FrameBodyUSLT(ByteBuffer byteBuffer, int frameSize)
         throws InvalidTagException
@@ -102,7 +104,7 @@ public class FrameBodyUSLT extends AbstractID3v2FrameBody implements ID3v24Frame
     /**
      * Set a description of the image
      *
-     * @param description 
+     * @param description
      */
     public void setDescription(String description)
     {
@@ -132,7 +134,7 @@ public class FrameBodyUSLT extends AbstractID3v2FrameBody implements ID3v24Frame
     /**
      * 
      *
-     * @param language 
+     * @param language
      */
     public void setLanguage(String language)
     {
@@ -142,7 +144,7 @@ public class FrameBodyUSLT extends AbstractID3v2FrameBody implements ID3v24Frame
     /**
      * 
      *
-     * @return 
+     * @return
      */
     public String getLanguage()
     {
@@ -152,7 +154,7 @@ public class FrameBodyUSLT extends AbstractID3v2FrameBody implements ID3v24Frame
     /**
      * 
      *
-     * @param lyric 
+     * @param lyric
      */
     public void setLyric(String lyric)
     {
@@ -162,7 +164,7 @@ public class FrameBodyUSLT extends AbstractID3v2FrameBody implements ID3v24Frame
     /**
      * 
      *
-     * @return 
+     * @return
      */
     public String getLyric()
     {
@@ -172,7 +174,7 @@ public class FrameBodyUSLT extends AbstractID3v2FrameBody implements ID3v24Frame
     /**
      * 
      *
-     * @param text 
+     * @param text
      */
     public void addLyric(String text)
     {
@@ -183,7 +185,7 @@ public class FrameBodyUSLT extends AbstractID3v2FrameBody implements ID3v24Frame
     /**
      * 
      *
-     * @param line 
+     * @param line
      */
     public void addLyric(Lyrics3Line line)
     {
@@ -191,6 +193,21 @@ public class FrameBodyUSLT extends AbstractID3v2FrameBody implements ID3v24Frame
     }
 
 
+    public void write(ByteArrayOutputStream tagBuffer)
+        throws IOException
+    {
+        if (((AbstractString) getObject(DataTypes.OBJ_DESCRIPTION)).canBeEncoded() == false)
+        {
+            this.setTextEncoding(TextEncoding.UTF_16);
+        }
+        if (((AbstractString) getObject(DataTypes.OBJ_LYRICS)).canBeEncoded() == false)
+        {
+            this.setTextEncoding(TextEncoding.UTF_16);
+        }
+        super.write(tagBuffer);
+    }
+
+    /**
     /**
      * 
      */
@@ -198,7 +215,7 @@ public class FrameBodyUSLT extends AbstractID3v2FrameBody implements ID3v24Frame
     {
         objectList.add(new NumberHashMap(DataTypes.OBJ_TEXT_ENCODING, this, TextEncoding.TEXT_ENCODING_FIELD_SIZE));
         objectList.add(new StringHashMap(DataTypes.OBJ_LANGUAGE, this, Languages.LANGUAGE_FIELD_SIZE));
-        objectList.add(new StringNullTerminated(DataTypes.OBJ_DESCRIPTION, this));
-        objectList.add(new StringSizeTerminated(DataTypes.OBJ_LYRICS, this));
+        objectList.add(new TextEncodedStringNullTerminated(DataTypes.OBJ_DESCRIPTION, this));
+        objectList.add(new TextEncodedStringSizeTerminated(DataTypes.OBJ_LYRICS, this));
     }
 }
