@@ -833,9 +833,9 @@ public class MPEGFrameHeader
     /**
      * Parse the MPEGFrameHeader of an MP3File, file pointer returns at end of the frame header
      *
-     * @param file
+     * @param bb the byte buffer containing the header
      * @return
-     * @throws IOException
+     * @throws InvalidAudioFrameException if there is no header at this point
      */
     public static MPEGFrameHeader parseMPEGHeader(ByteBuffer bb)
         throws InvalidAudioFrameException

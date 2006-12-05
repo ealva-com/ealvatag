@@ -73,8 +73,7 @@ public class FrameBodyUFID extends AbstractID3v2FrameBody implements ID3v24Frame
 
     /**
      * Creates FrameBodyUFID datatype from buffer
-     *
-     * @throws IOException         
+     *                     
      * @throws InvalidTagException 
      */
     public FrameBodyUFID(ByteBuffer byteBuffer, int frameSize)
