@@ -73,7 +73,7 @@ public class TextEncodedStringNullTerminated
             CharsetDecoder decoder = Charset.forName(charSetName).newDecoder();
 
             /* We only want to load up to null terminator, data after this is part of different
-             * fields and it may not be possible to decode it so do the check before we do
+             * field and it may not be possible to decode it so do the check before we do
              * do the decoding,encoding dependent. */
             ByteBuffer buffer = ByteBuffer.wrap(arr, offset, arr.length - offset);
             int endPosition = 0;
@@ -104,13 +104,25 @@ public class TextEncodedStringNullTerminated
                     else
                     {
                         // Looking for two-byte null
-                        nextByte = buffer.get();
-                        if (nextByte == 0x00)
+                        if(buffer.hasRemaining())
                         {
-                            logger.finest("UTf16:Null terminator found at:"+buffer.position());
+                            nextByte = buffer.get();
+                            if (nextByte == 0x00)
+                            {
+                                logger.finest("UTf16:Null terminator found at:"+buffer.position());
+                                buffer.mark();
+                                buffer.reset();
+                                endPosition = buffer.position() - 2;
+                                isNullTerminatorFound=true;
+                                break;
+                            }
+                        }
+                        else
+                        {
+                            logger.finest("UTf16:SHould be two null terminator marks but only found one:"+buffer.position());
                             buffer.mark();
                             buffer.reset();
-                            endPosition = buffer.position() - 2;
+                            endPosition = buffer.position() - 1;
                             isNullTerminatorFound=true;
                             break;
                         }
