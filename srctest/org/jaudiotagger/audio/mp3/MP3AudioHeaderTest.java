@@ -20,6 +20,7 @@ import java.io.*;
 import junit.framework.TestCase;
 
 import org.jaudiotagger.AbstractTestCase;
+import org.jaudiotagger.audio.InvalidAudioFrameException;
 
 /**
  */
@@ -258,5 +259,25 @@ public class MP3AudioHeaderTest extends TestCase
         assertFalse(mp3AudioHeader.isProtected());
         assertEquals("~128",mp3AudioHeader.getBitRate());
         assertEquals("mp3",mp3AudioHeader.getType());
+    }
+
+    /** test trying to parse an mp3 file which is not a valid MP3 fails gracefully with expected exception
+     *
+     */
+    public void testIssue79()
+    {
+        Exception exceptionCaught = null;
+        File testFile = AbstractTestCase.copyAudioToTmp("Issue79.mp3");
+        MP3AudioHeader mp3AudioHeader = null;
+        try
+        {
+            mp3AudioHeader = new MP3AudioHeader(testFile);
+
+        }
+        catch (Exception e)
+        {
+            exceptionCaught = e;
+        }
+        assertTrue(exceptionCaught instanceof InvalidAudioFrameException );        
     }
 }

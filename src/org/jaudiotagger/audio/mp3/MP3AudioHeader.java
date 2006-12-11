@@ -32,7 +32,8 @@ import java.text.ParseException;
 import java.nio.channels.FileChannel;
 import java.nio.ByteBuffer;
 
-/** Represents the audio header of an MP3 File, the audio header consists of a number of
+/**
+ * Represents the audio header of an MP3 File, the audio header consists of a number of
  * audio frames. Because we are not trying to play the audio but only extract some information
  * regarding the audio we only need to read the first  audio frames to ensure that we have correctly
  * identified them as audio frames and extracted the metadata we reuire.
@@ -162,15 +163,13 @@ public final class MP3AudioHeader extends AbstractAudioHeader
                             }
                             break;
                         }
-                        /* There is a small but real chance that an unsynchronised
-                         * ID3 Frame could fool the MPEG Parser into thinking it was
-                         * an MPEG Header. If this happens the chances of the next bytes
-                         * forming a Xing frame header are very remote. On the basis that
-                         * most files these days have Xing headers we do an additional check
-                         * for when an apparent frame header has been found but is not followed
-                         * by a Xing Header:We check the next header this wont impose a large overhead
-                         * because will apply to most MPEGS anyway ( Most likely to occur if audio
-                         * has an  APIC frame which should have been unsynchronised but hasnt been) */
+                        /* There is a small but real chance that an unsynchronised ID3 Frame could fool the MPEG
+                         * Parser into thinking it was an MPEG Header. If this happens the chances of the next bytes
+                         * forming a Xing frame header are very remote. On the basis that  most files these days have
+                         * Xing headers we do an additional check for when an apparent frame header has been found
+                         * but is not followed by a Xing Header:We check the next header this wont impose a large
+                         * overhead because wont apply to most Mpegs anyway ( Most likely to occur if audio
+                         * has an  APIC frame which should have been unsynchronised but has not been) */
                          else
                          {
                              syncFound=isNextFrameValid(seekFile,filePointerCount,bb,fc);
@@ -232,16 +231,18 @@ public final class MP3AudioHeader extends AbstractAudioHeader
 
     /** Called in some circumstances to check the next frame to ensure we have the correct audio header
      *
-     * @return
+     * @return  true if frame is valid
      */
     private boolean isNextFrameValid(File seekFile,int filePointerCount,ByteBuffer  bb,FileChannel fc)
     throws IOException
     {
         if(MP3AudioHeader.logger.isLoggable(Level.FINEST))
         {
-             MP3AudioHeader.logger.finer("Checking next frame"+seekFile.getName()+ ":fpc:"+filePointerCount+"skipping to:"+ (filePointerCount + mp3FrameHeader.getFrameLength()));
+             MP3AudioHeader.logger.finer("Checking next frame"+seekFile.getName()+ ":fpc:"
+                 +filePointerCount+"skipping to:"+ (filePointerCount + mp3FrameHeader.getFrameLength()));
         }
         boolean result=false;
+
         int currentPosition = bb.position();
 
         //Our buffer is not large enough to fit in the whole of this frame, something must
@@ -256,14 +257,17 @@ public final class MP3AudioHeader extends AbstractAudioHeader
         //Check for end of buffer if not enough room get some more
         if(bb.remaining()<=MIN_BUFFER_REMAINING_REQUIRED + mp3FrameHeader.getFrameLength())
         {
+            MP3AudioHeader.logger.finer("Buffer too small, need to reload, buffer size:"+bb.remaining());
             bb.clear();
             fc.position(filePointerCount);
             fc.read(bb,fc.position());
             bb.flip();
+            //So now original buffer has been replaced, so set current position to start of buffer
+            currentPosition = 0;
             if(bb.limit()<=MIN_BUFFER_REMAINING_REQUIRED)
             {
                 //No mp3 exists
-                MP3AudioHeader.logger.finer("Nearly at end of file:");
+                MP3AudioHeader.logger.finer("Nearly at end of file, no header found:");
                 return false;
             }
         }
@@ -280,11 +284,10 @@ public final class MP3AudioHeader extends AbstractAudioHeader
             }
             catch (InvalidAudioFrameException ex)
             {
-                MP3AudioHeader.logger.finer("Check next frame confirms is an audio header ");
+                MP3AudioHeader.logger.finer("Check next frame has identified this is not an audio header");
                 result=false;
             }
-        }
-
+        }                         
         //Set back to the start of the previous frame
         bb.position(currentPosition);
         return result;
