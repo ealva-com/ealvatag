@@ -185,8 +185,8 @@ public abstract class AbstractID3v2Frame
         //propagate it up otherwise mark this frame as invalid
         catch (InvocationTargetException ite)
         {
-            logger.severe("An error occurred within abstractID3v2FrameBody");
-            logger.log(Level.SEVERE,"Invocation target exception:"+ite.getCause().getMessage(),ite.getCause());
+            logger.severe("An error occurred within abstractID3v2FrameBody for identifier:"
+                +identifier+":"+ite.getCause().getMessage());  
             if(ite.getCause() instanceof Error)
             {
                 throw (Error)ite.getCause();

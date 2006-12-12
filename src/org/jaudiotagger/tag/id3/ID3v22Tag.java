@@ -354,13 +354,13 @@ public class ID3v22Tag
                 //Found Empty Frame
             catch (EmptyFrameException ex)
             {
-                logger.warning("Empty Frame");
+                 logger.warning("Empty Frame:"+ex.getMessage());
                 this.emptyFrameBytes += ID3v22Frame.FRAME_HEADER_SIZE;
             }
                 //Problem trying to find frame
-            catch (InvalidFrameException ex)
+            catch (InvalidFrameException ife)
             {
-                logger.warning("Invalid Frame");
+                logger.warning("Invalid Frame:"+ife.getMessage());
                 this.invalidFrameBytes++;
                 //Dont try and find any more frames
                 break;

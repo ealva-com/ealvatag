@@ -503,7 +503,7 @@ public class ID3v23Tag
             try
             {
                 //Read Frame
-                logger.finest("looking for next frame at:" + byteBuffer.position());
+                logger.finest("Looking for next frame at:" + byteBuffer.position());
                 next = new ID3v23Frame(byteBuffer);
                 id = next.getIdentifier();
                 loadFrameIntoMap(id, next);
@@ -511,13 +511,14 @@ public class ID3v23Tag
             //Found Empty Frame
             catch (EmptyFrameException ex)
             {
-                logger.warning("Empty Frame");
+                logger.warning("Empty Frame:"+ex.getMessage());
                 this.emptyFrameBytes += ID3v23Frame.FRAME_HEADER_SIZE;
             }
-            //Problem trying to find frame
-            catch (InvalidFrameException ex)
+            //Problem trying to find frame, oftern just occurs because frameheader includes padding
+            //and we have reached padding
+            catch (InvalidFrameException ife)
             {
-                logger.warning("Invalid Frame");
+                logger.warning("Invalid Frame:"+ife.getMessage());
                 this.invalidFrameBytes++;
                 //Dont try and find any more frames
                 break;
