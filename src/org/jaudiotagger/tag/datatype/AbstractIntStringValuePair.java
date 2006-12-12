@@ -21,8 +21,13 @@
  */
 package org.jaudiotagger.tag.datatype;
 
+import org.jaudiotagger.tag.InvalidDataTypeException;
+
 import java.util.Collections;
 
+/**
+ * A two way mapping between an Integral Id and a String value
+ */
 public class AbstractIntStringValuePair extends AbstractValuePair
 {
     protected Integer key = null;
@@ -40,7 +45,7 @@ public class AbstractIntStringValuePair extends AbstractValuePair
      */
     public String getValueForId(int id)
     {
-        return (String) idToValue.get(new Integer(id));
+        return  (String) idToValue.get(new Integer(id));              
     }
 
     protected void createMaps()

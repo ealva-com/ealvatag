@@ -27,26 +27,29 @@ package org.jaudiotagger.tag.datatype;
 import java.util.HashMap;
 import java.util.Iterator;
 
+/**
+ * Represents an interface allowing maping from key to value and value to key
+ */
 public interface HashMapInterface
 {
     /**
      * 
      *
-     * @return 
+     * @return a mapping between the key within the frame and the value
      */
     public HashMap getKeyToValue();
 
     /**
      * 
      *
-     * @return 
+     * @return a mapping between the value to the key within the frame
      */
     public HashMap getValueToKey();
 
     /**
      * 
      *
-     * @return 
+     * @return an interator of the values within the map
      */
     public Iterator iterator();
 }

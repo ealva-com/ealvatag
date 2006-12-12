@@ -23,6 +23,9 @@ package org.jaudiotagger.tag.datatype;
 
 import java.util.*;
 
+/**
+ * A two way mapping between an id and a value
+ */
 public abstract class AbstractValuePair
 {
     protected final HashMap idToValue = new LinkedHashMap();
