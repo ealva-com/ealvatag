@@ -28,6 +28,7 @@ import java.util.Iterator;
 import java.util.TreeSet;
 
 import org.jaudiotagger.tag.AbstractTagFrameBody;
+import org.jaudiotagger.tag.InvalidDataTypeException;
 import org.jaudiotagger.tag.id3.valuepair.*;
 
 /**
@@ -243,6 +244,27 @@ public class NumberHashMap extends NumberFixedLength implements HashMapInterface
         }
     }
 
+    /**
+     * Read the key from the buffer.
+     * @param arr
+     * @param offset
+     * @throws InvalidDataTypeException if emptyValues are not allowed and the eky was invalid.
+     */
+    public void readByteArray(byte[] arr, int offset) throws InvalidDataTypeException
+    {
+        super.readByteArray(arr,offset);
+
+        if(hasEmptyValue==false)
+        {
+            //Mismatch:Superclass uses Long, but maps expect Integer
+            Integer intValue = new Integer(((Long)value).intValue());
+            if(!keyToValue.containsKey(intValue))
+            {
+                throw new InvalidDataTypeException(this.getClass().getName()
+                    +":No key could be found with the value of:"+intValue);
+            }
+        }
+    }
     /**
      * 
      *
