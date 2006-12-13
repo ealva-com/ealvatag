@@ -261,7 +261,7 @@ public class MP3AudioHeaderTest extends TestCase
         assertEquals("mp3",mp3AudioHeader.getType());
     }
 
-    /** test trying to parse an mp3 file which is not a valid MP3 fails gracefully with expected exception
+    /** Test trying to parse an mp3 file which is not a valid MP3 fails gracefully with expected exception
      *
      */
     public void testIssue79()
@@ -279,5 +279,26 @@ public class MP3AudioHeaderTest extends TestCase
             exceptionCaught = e;
         }
         assertTrue(exceptionCaught instanceof InvalidAudioFrameException );        
+    }
+
+
+    /** Test trying to parse an mp3 file which is not a valid MP3 and is extremely small
+     *  Should fail gracefully
+     */
+     public void testIssue81()
+    {
+        Exception exceptionCaught = null;
+        File testFile = AbstractTestCase.copyAudioToTmp("Issue81.mp3");
+        MP3AudioHeader mp3AudioHeader = null;
+        try
+        {
+            mp3AudioHeader = new MP3AudioHeader(testFile);
+
+        }
+        catch (Exception e)
+        {
+            exceptionCaught = e;
+        }
+        assertTrue(exceptionCaught instanceof InvalidAudioFrameException );
     }
 }

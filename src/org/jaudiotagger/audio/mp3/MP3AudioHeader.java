@@ -121,7 +121,7 @@ public final class MP3AudioHeader extends AbstractAudioHeader
         {
             do
             {
-                if(bb.remaining()==MIN_BUFFER_REMAINING_REQUIRED)
+                if(bb.remaining()<=MIN_BUFFER_REMAINING_REQUIRED)
                 {
                     bb.clear();
                     fc.position(filePointerCount);
