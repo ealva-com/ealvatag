@@ -111,7 +111,7 @@ public class FrameBodyAPIC extends AbstractID3v2FrameBody implements ID3v24Frame
         this.setObjectValue(DataTypes.OBJ_TEXT_ENCODING, new Byte(body.getTextEncoding()));
         this.setObjectValue(DataTypes.OBJ_MIME_TYPE, ImageFormats.getMimeTypeForFormat((String) body.getObjectValue(DataTypes.OBJ_IMAGE_FORMAT)));
         this.setObjectValue(DataTypes.OBJ_PICTURE_TYPE, body.getObjectValue(DataTypes.OBJ_PICTURE_TYPE));
-        this.setObjectValue(DataTypes.OBJ_DESCRIPTION, body.getLongDescription());
+        this.setObjectValue(DataTypes.OBJ_DESCRIPTION, body.getDescription());
         this.setObjectValue(DataTypes.OBJ_PICTURE_DATA, body.getObjectValue(DataTypes.OBJ_PICTURE_DATA));
 
     }
