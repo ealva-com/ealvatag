@@ -331,7 +331,7 @@ public class ID3v23Tag
     /**
      * 
      *
-     * @return 
+     * @return textual tag identifier
      */
     public String getIdentifier()
     {
@@ -342,7 +342,7 @@ public class ID3v23Tag
      * Return frame size based upon the sizes of the tags rather than the physical
      * no of bytes between start of ID3Tag and start of Audio Data.
      *
-     * @return 
+     * @return size of tag
      */
     public int getSize()
     {
@@ -363,7 +363,7 @@ public class ID3v23Tag
      * Is Tag Equivalent to another tag
      *
      * @param obj 
-     * @return 
+     * @return true if tag is equivalent to another
      */
     public boolean equals(Object obj)
     {
@@ -426,6 +426,7 @@ public class ID3v23Tag
         byte[] sizeBuffer = new byte[FIELD_TAG_SIZE_LENGTH];
         buffer.get(sizeBuffer, 0, FIELD_TAG_SIZE_LENGTH);
         size = byteArrayToSize(sizeBuffer);
+        logger.info("Tag size is:"+size+" according to header (does not include header size, add 10)");
 
         //Extended Header
         if (extended == true)
@@ -467,6 +468,8 @@ public class ID3v23Tag
             {
                 throw new InvalidTagException("Invalid Extended Header Size.");
             }
+            logger.info("has Extended Header so ajusted Tag size is:"+size);
+
         }
 
         //Slice Buffer, so position markers tally with size (i.e do not include tagheader)
@@ -733,8 +736,15 @@ public class ID3v23Tag
         byte[] bodyByteBuffer = writeFramesToBuffer().toByteArray();
         logger.info("bodybytebuffer:sizebeforeunsynchronisation:"+bodyByteBuffer.length);
 
-        // Unsynchronize if required
-        unsynchronization = requiresUnsynchronization(bodyByteBuffer);
+        // Unsynchronize if option enabled and unsync required
+        if(TagOptionSingleton.getInstance().isUnsyncTags())
+        {
+            unsynchronization = requiresUnsynchronization(bodyByteBuffer);
+        }
+        else
+        {
+            unsynchronization=false;
+        }
         if(unsynchronization)
         {
             bodyByteBuffer=unsynchronize(bodyByteBuffer);
@@ -785,8 +795,15 @@ public class ID3v23Tag
         byte[] bodyByteBuffer = writeFramesToBuffer().toByteArray();
         logger.info("bodybytebuffer:sizebeforeunsynchronisation:"+bodyByteBuffer.length);
 
-        // Unsynchronize if required
-        unsynchronization = requiresUnsynchronization(bodyByteBuffer);
+        // Unsynchronize if option enabled and unsync required
+        if(TagOptionSingleton.getInstance().isUnsyncTags())
+        {
+            unsynchronization = requiresUnsynchronization(bodyByteBuffer);
+        }
+        else
+        {
+            unsynchronization=false;
+        }
         if(unsynchronization)
         {
             bodyByteBuffer=unsynchronize(bodyByteBuffer);

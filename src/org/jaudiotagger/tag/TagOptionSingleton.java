@@ -257,6 +257,8 @@ public class TagOptionSingleton
      */
     private int numberMP3SyncFrame = 3;
 
+    private boolean unsyncTags = false;
+
     /**
      * Creates a new TagOptions datatype. All Options are set to their default
      * values
@@ -265,6 +267,8 @@ public class TagOptionSingleton
     {
         setToDefault();
     }
+
+
 
     /**
      * 
@@ -1347,5 +1351,25 @@ public class TagOptionSingleton
     public void addUpperLowerCaseWord(String word)
     {
         upperLowerCaseWordList.add(word);
+    }
+
+    /**
+     *
+     * @return are tags unsynchronized when written if contain bit pattern that could be mistaken for audio marker
+     */
+    public boolean isUnsyncTags()
+    {
+        return unsyncTags;
+    }
+
+    /**
+     * Unsync tag where neccessary, currently only applies to IDv23
+     *
+     * @param unsyncTags set whether tags are  unsynchronized when written if contain bit pattern that could
+     * be mistaken for audio marker
+     */
+    public void setUnsyncTags(boolean unsyncTags)
+    {
+        this.unsyncTags = unsyncTags;
     }
 }
