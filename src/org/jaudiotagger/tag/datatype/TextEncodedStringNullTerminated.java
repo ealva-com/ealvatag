@@ -119,7 +119,7 @@ public class TextEncodedStringNullTerminated
                         }
                         else
                         {
-                            logger.finest("UTf16:SHould be two null terminator marks but only found one:"+buffer.position());
+                            logger.finest("UTf16:Should be two null terminator marks but only found one:"+buffer.position());
                             buffer.mark();
                             buffer.reset();
                             endPosition = buffer.position() - 1;

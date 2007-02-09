@@ -147,7 +147,7 @@ public class ID3v24Frame
             identifier = ID3Tags.convertFrameID22To24(frame.getIdentifier());
             if (identifier != null)
             {
-                logger.info("V2:Orig id is:" + frame.getIdentifier() + "New id is:" + identifier);
+                logger.info("(1)V2:Orig id is:" + frame.getIdentifier() + "New id is:" + identifier);
                 this.frameBody = (AbstractID3v2FrameBody) ID3Tags.copyObject(frame.getBody());
                 return;
             }
@@ -156,7 +156,7 @@ public class ID3v24Frame
             if (identifier != null)
             {
                 //Convert from v2 to v3
-                logger.info("V2:Orig id is:" + frame.getIdentifier() + "New id is:" + identifier);
+                logger.info("(2)V2:Orig id is:" + frame.getIdentifier() + "New id is:" + identifier);
                 this.frameBody = (AbstractID3v2FrameBody) ID3Tags.copyObject(frame.getBody());
                 //Force v3 to v4
                 identifier = ID3Tags.forceFrameID23To24(identifier);
@@ -170,7 +170,7 @@ public class ID3v24Frame
                 identifier = ID3Tags.forceFrameID22To23(frame.getIdentifier());
                 if(identifier!=null)
                 {
-                    logger.info("V2:Orig id is:" + frame.getIdentifier() + "New id is:" + identifier);
+                    logger.info("(3)V2:Orig id is:" + frame.getIdentifier() + "New id is:" + identifier);
                     this.frameBody = this.readBody(identifier, (AbstractID3v2FrameBody) frame.getBody());
                     return;
                 }
@@ -179,7 +179,7 @@ public class ID3v24Frame
                 {
                     this.frameBody = new FrameBodyDeprecated((AbstractID3v2FrameBody)frame.getBody());
                     identifier = frame.getIdentifier();
-                    logger.info("V2:Deprecated Orig id id is:" + frame.getIdentifier() + ":New id is:" + identifier);
+                    logger.info("(4)V2:Deprecated Orig id id is:" + frame.getIdentifier() + ":New id is:" + identifier);
                     return;
                 }
             }
@@ -188,7 +188,7 @@ public class ID3v24Frame
             {
                 this.frameBody = new FrameBodyUnsupported((FrameBodyUnsupported) frame.getBody());
                 identifier = frame.getIdentifier();
-                logger.info("V2:Unknown:Orig id is:" + frame.getIdentifier() + ":New id is:" + identifier);
+                logger.info("(5)V2:Unknown:Orig id is:" + frame.getIdentifier() + ":New id is:" + identifier);
                 return;
             }
         }
