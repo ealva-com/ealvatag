@@ -170,7 +170,7 @@ public class MP3File extends org.jaudiotagger.audio.AbstractAudioFile
 
         if ((loadOptions & LOAD_IDV1TAG) != 0)
         {
-            logger.info("Attempting to read id3v1tags");
+            logger.finer("Attempting to read id3v1tags");
             try
             {
                 id3v1tag = new ID3v11Tag(newFile);
@@ -196,9 +196,9 @@ public class MP3File extends org.jaudiotagger.audio.AbstractAudioFile
         //We know where the Actual Audio starts so load all the file from start to that point into
         //a buffer then we can read the IDv2 information without needing any more file I/O
         int startByte = (int) ((MP3AudioHeader) audioHeader).getMp3StartByte();
-        int MINIMUM_SIZE_OF_ID3TAG = 100;
-        if (startByte >= MINIMUM_SIZE_OF_ID3TAG)
+        if (startByte >= AbstractID3v2Tag.TAG_HEADER_LENGTH)
         {
+            logger.finer("Attempting to read id3v2tags");
             FileInputStream fis = null;
             FileChannel fc = null;
             ByteBuffer bb = null;
@@ -261,6 +261,10 @@ public class MP3File extends org.jaudiotagger.audio.AbstractAudioFile
                     logger.info("No id3v22 tag found");
                 }
             }
+        }
+        else
+        {
+              logger.info("Not enough room for valid id3v2 tag:"+startByte);
         }
         /* TODO
         if ((loadOptions & LOAD_LYRICS3) != 0)
