@@ -1119,6 +1119,7 @@ public class TagOptionSingleton
         textEncoding = 0;
         timeStampFormat = 2;
         upperLowerCaseWordList = new LinkedList();
+        unsyncTags = false;
 
         /**
          * default all lyrics3 fields to save. id3v1 fields are individual
