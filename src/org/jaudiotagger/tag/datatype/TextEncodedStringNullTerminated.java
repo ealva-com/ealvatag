@@ -64,6 +64,7 @@ public class TextEncodedStringNullTerminated
      */
     public void readByteArray(byte[] arr, int offset) throws InvalidDataTypeException
     {
+        int bufferSize =0;
         try
         {
             logger.finer("Reading from array from offset:" + offset);
@@ -75,6 +76,7 @@ public class TextEncodedStringNullTerminated
             /* We only want to load up to null terminator, data after this is part of different
              * field and it may not be possible to decode it so do the check before we do
              * do the decoding,encoding dependent. */
+
             ByteBuffer buffer = ByteBuffer.wrap(arr, offset, arr.length - offset);
             int endPosition = 0;
 
@@ -87,7 +89,6 @@ public class TextEncodedStringNullTerminated
             boolean isNullTerminatorFound=false;
             while (buffer.hasRemaining())
             {
-
                 byte nextByte = buffer.get();
 
                 if (nextByte == 0x00)
@@ -109,7 +110,7 @@ public class TextEncodedStringNullTerminated
                             nextByte = buffer.get();
                             if (nextByte == 0x00)
                             {
-                                logger.finest("UTf16:Null terminator found at:"+buffer.position());
+                                logger.finest("UTF16:Null terminator found at:"+buffer.position());
                                 buffer.mark();
                                 buffer.reset();
                                 endPosition = buffer.position() - 2;
@@ -119,12 +120,23 @@ public class TextEncodedStringNullTerminated
                         }
                         else
                         {
-                            logger.finest("UTf16:Should be two null terminator marks but only found one:"+buffer.position());
+                            logger.finest("UTF16:Should be two null terminator marks but only found one:"+buffer.position());
                             buffer.mark();
                             buffer.reset();
                             endPosition = buffer.position() - 1;
                             isNullTerminatorFound=true;
                             break;
+                        }
+                    }
+                }
+                else
+                {
+                    //If UTF16, we should only be looking on 2 byte boundaries
+                    if (!nullIsOneByte)
+                    {
+                        if(buffer.hasRemaining())
+                        {
+                            buffer.get();
                         }
                     }
                 }
@@ -135,20 +147,22 @@ public class TextEncodedStringNullTerminated
                  throw new InvalidDataTypeException("Unable to find null terminated string");
             }
 
-            //Set Size so offset is ready for next field (includes the null terminator)
+
             logger.finest("End Position is:" + endPosition + "Offset:" + offset);
+
+            //Set Size so offset is ready for next field (includes the null terminator)
             size = endPosition - offset;
             size++;
-
             if (!nullIsOneByte)
             {
                 size++;
             }
             setSize(size);
+
             /* Decode buffer if runs into problems should throw exception which we
              * catch and then set value to empty string. (We dont read the null terminator
              * because we dont want to display this */
-            int bufferSize = endPosition - offset;
+            bufferSize = endPosition - offset;
             logger.finest("Buffer size is:" + bufferSize);
             if (bufferSize == 0)
             {
@@ -166,7 +180,7 @@ public class TextEncodedStringNullTerminated
         }
         catch (CharacterCodingException ce)
         {
-            logger.severe(ce.getMessage());
+            logger.warning("Problem decoding text encoded string"+ce.getMessage());
             value = "";
         }
         //Set Size so offset is ready for next field (includes the null terminator)
