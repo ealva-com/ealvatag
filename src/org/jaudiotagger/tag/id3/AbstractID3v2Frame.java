@@ -144,9 +144,8 @@ public abstract class AbstractID3v2Frame
     protected AbstractID3v2FrameBody readBody(String identifier, ByteBuffer byteBuffer, int frameSize)
         throws InvalidFrameException
     {
-        /* Use reflection to map id to frame body, which makes things much easier
-         * to keep things up to date,although slight performance hit.
-         */
+        //Use reflection to map id to frame body, which makes things much easier
+        //to keep things up to date,although slight performance hit.
         logger.finest("Creating framebody:start");
 
         AbstractID3v2FrameBody frameBody;
@@ -200,7 +199,7 @@ public abstract class AbstractID3v2Frame
                 throw new InvalidFrameException(ite.getCause().getMessage());
             }
         }
-        //No Method should not happen
+        //No Such Method should not happen
         catch (NoSuchMethodException sme)
         {
             logger.log(Level.SEVERE,"No such method:"+sme.getMessage(),sme);

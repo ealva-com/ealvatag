@@ -310,7 +310,7 @@ public class ID3v24Tag
                     }
                     catch(InvalidFrameException ife)
                     {
-                         logger.log(Level.SEVERE,"Unable to convert frame:"+frame.getIdentifier(),ife);
+                         logger.log(Level.SEVERE,"Unable to convert frame:"+frame.getIdentifier());
                     }
                 }
                 if (newFrame != null)
@@ -567,7 +567,6 @@ public class ID3v24Tag
     public void read(ByteBuffer byteBuffer)
         throws TagException
     {
-
         int size;
         byte[] buffer;
         if (seek(byteBuffer) == false)

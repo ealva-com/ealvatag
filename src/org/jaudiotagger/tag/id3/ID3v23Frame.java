@@ -17,9 +17,7 @@ package org.jaudiotagger.tag.id3;
 
 import org.jaudiotagger.audio.mp3.*;
 import org.jaudiotagger.tag.*;
-import org.jaudiotagger.tag.id3.framebody.FrameBodyUnsupported;
-import org.jaudiotagger.tag.id3.framebody.AbstractID3v2FrameBody;
-import org.jaudiotagger.tag.id3.framebody.FrameBodyDeprecated;
+import org.jaudiotagger.tag.id3.framebody.*;
 import org.jaudiotagger.FileConstants;
 
 import java.io.IOException;
@@ -97,7 +95,7 @@ import java.nio.*;
         {
             if(ID3Tags.isID3v24FrameIdentifier(frame.getIdentifier()))
             {
-                /** Version between v4 and v3 */
+                //Version between v4 and v3
                 identifier = ID3Tags.convertFrameID24To23(frame.getIdentifier());
                 if (identifier != null)
                 {
@@ -105,7 +103,7 @@ import java.nio.*;
                     this.frameBody = (AbstractID3v2FrameBody) ID3Tags.copyObject(frame.getBody());
                     return;
                 }
-                /** Is it a known v4 frame which needs forcing to v3 frame e.g. TDRC - TYER,TDAT */
+                //Is it a known v4 frame which needs forcing to v3 frame e.g. TDRC - TYER,TDAT
                 else if (ID3Tags.isID3v24FrameIdentifier(frame.getIdentifier()) == true)
                 {
                     identifier = ID3Tags.forceFrameID24To23(frame.getIdentifier());
@@ -115,14 +113,14 @@ import java.nio.*;
                         this.frameBody = this.readBody(identifier, (AbstractID3v2FrameBody) frame.getBody());
                         return;
                     }
-                    /* No mechanism exists to convert it to a v23 frame */
+                    //No mechanism exists to convert it to a v23 frame
                     else
                     {
                         throw new InvalidFrameException("Unable to convert v24 frame:"+frame.getIdentifier()+" to a v23 frame");
                     }
                 }
             }
-            /** Unknown Frame e.g NCON */
+            //Unknown Frame e.g NCON
             else if(frame.getBody() instanceof FrameBodyUnsupported)
             {
                 this.frameBody = new FrameBodyUnsupported((FrameBodyUnsupported) frame.getBody());
@@ -130,7 +128,7 @@ import java.nio.*;
                 logger.info("UNKNOWN:Orig id is:" + frame.getIdentifier() + ":New id is:" + identifier);
                 return;
             }
-            /** Deprecated frame for v24 */
+            // Deprecated frame for v24
             else if(frame.getBody() instanceof FrameBodyDeprecated)
             {
                 //Was it valid for this tag version, if so try and reconstruct
@@ -148,6 +146,12 @@ import java.nio.*;
                     logger.info("DEPRECATED:Orig id is:" + frame.getIdentifier() + ":New id is:" + identifier);
                     return;
                 }
+            }
+            // Unable to find a suitable framebody, this shold not happen
+            else
+            {
+                logger.severe("Orig id is:" + frame.getIdentifier() + "Unable to create Frame Body");
+                throw new InvalidFrameException("Orig id is:" + frame.getIdentifier() + "Unable to create Frame Body");
             }
         }
         else if (frame instanceof ID3v22Frame)
@@ -318,6 +322,12 @@ import java.nio.*;
         logger.fine("Identifier was:" + identifier + " reading using:" + id);
         //Read the body data
         frameBody = readBody(id, byteBuffer, frameSize);
+
+        if(!(frameBody instanceof ID3v23FrameBody))
+        {
+            logger.info("Converted frame body with:"+identifier+" to deprecated framebody");
+            frameBody = new FrameBodyDeprecated((AbstractID3v2FrameBody)frameBody);
+        }
     }
 
     /**

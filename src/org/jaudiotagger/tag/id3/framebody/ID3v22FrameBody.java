@@ -16,7 +16,7 @@
 package org.jaudiotagger.tag.id3.framebody;
 
 /**
- * Indicates that this is a frame used in ID3v22Tags.
+ * Indicates that this is a framebody used in ID3v22Tags.
  *
  * @author Paul Taylor
  * @version $Id$

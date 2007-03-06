@@ -31,12 +31,13 @@ import org.jaudiotagger.tag.InvalidTagException;
 
 import java.nio.ByteBuffer;
 
-/** Represents a framebody for a frame identifier that is not defined for the tag version. It is possible that
+/**
+ * Represents a framebody for a frame identifier that is not defined for the tag version. It is possible that
  * the identifier is valid for a later version but not the version that this frame belongs to. If the identifier is
  * valid for an earlier tag version but not this version then this class should not be used instead use
  * FrameBodyDeprecated. The body consists  of an array of bytes representing all the bytes in the body.
  */
-public class FrameBodyUnsupported extends AbstractID3v2FrameBody
+public class FrameBodyUnsupported extends AbstractID3v2FrameBody implements ID3v24FrameBody,ID3v23FrameBody,ID3v22FrameBody
 {
     /**
      * Because used by any unknown frame identifier varies

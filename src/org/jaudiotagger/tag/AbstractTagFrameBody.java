@@ -119,7 +119,7 @@ public abstract class AbstractTagFrameBody
      *
      * @return brief description string
     */
-    public final String getBriefDescription()
+    public String getBriefDescription()
     {
         String str = "";
         AbstractDataType object;

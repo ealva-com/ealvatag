@@ -192,7 +192,6 @@ public class ID3v24Frame
                 return;
             }
         }
-
     }
 
     /**
@@ -355,8 +354,14 @@ public class ID3v24Frame
         //Read the flag bytes
         statusFlags = new StatusFlags(byteBuffer.get());
         encodingFlags = new EncodingFlags(byteBuffer.get());
+
         //Read the body data
         frameBody = readBody(identifier, byteBuffer, frameSize);
+        if(!(frameBody instanceof ID3v24FrameBody))
+        {
+            logger.info("Converted frame body with:"+identifier+" to deprecated framebody");              
+            frameBody = new FrameBodyDeprecated((AbstractID3v2FrameBody)frameBody);
+        }
     }
 
     /**

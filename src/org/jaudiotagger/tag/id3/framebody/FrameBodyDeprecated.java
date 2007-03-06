@@ -9,11 +9,12 @@ import org.jaudiotagger.tag.InvalidTagException;
 import java.nio.ByteBuffer;
 import java.util.Iterator;
 
-/** Represents a framebody for a frame identifier that is not defined for the tag version but was valid for a for an
- *  earlier tag version.
+/**
+ * Represents a framebody for a frame identifier that is not defined for the tag version but was valid for a for an
+ * earlier tag version.
  * The body consists  of an array of bytes representing all the bytes in the body.
  */
-public class FrameBodyDeprecated extends AbstractID3v2FrameBody
+public class FrameBodyDeprecated extends AbstractID3v2FrameBody implements ID3v24FrameBody,ID3v23FrameBody
 {
     /* The original framebody is held so can be retrieved
      * when converting a DeprecatedFrameBody back to a normal Framebody */
@@ -105,11 +106,17 @@ public class FrameBodyDeprecated extends AbstractID3v2FrameBody
     }
 
     /**
-     * Setup the Object List. A byte Array which will be read upto frame size
-     * bytes.
+     * Setup the Object List.
+     *
+     * This is handled by the wrapped class
      */
     protected void setupObjectList()
     {
-        //objectList.add(new ByteArraySizeTerminated(DataTypes.OBJ_DATA, this));
+
+    }
+
+    public String getBriefDescription()
+    {
+        return originalFrameBody.getBriefDescription();
     }
 }

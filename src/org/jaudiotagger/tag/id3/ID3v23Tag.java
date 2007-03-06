@@ -203,7 +203,7 @@ public class ID3v23Tag
                     }
                     catch(InvalidFrameException ife)
                     {
-                         logger.log(Level.SEVERE,"Unable to convert frame:"+frame.getIdentifier(),ife);
+                         logger.log(Level.SEVERE,"Unable to convert frame:"+frame.getIdentifier());
                     }
                 }
             }
