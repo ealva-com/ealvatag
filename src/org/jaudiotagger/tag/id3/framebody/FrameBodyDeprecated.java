@@ -117,6 +117,11 @@ public class FrameBodyDeprecated extends AbstractID3v2FrameBody implements ID3v2
 
     public String getBriefDescription()
     {
-        return originalFrameBody.getBriefDescription();
+        //TODO When is this null, it seems it can be but Im not sure why
+        if(originalFrameBody!=null)
+        {
+            return originalFrameBody.getBriefDescription();
+        }
+        return "";
     }
 }
