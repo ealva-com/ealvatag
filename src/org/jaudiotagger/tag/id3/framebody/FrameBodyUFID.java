@@ -40,7 +40,7 @@ import java.nio.ByteBuffer;
    * unique identifier database, and the unique identifier itself which can be up to 64
    * bytes in length.
  */
-public class FrameBodyUFID extends AbstractID3v2FrameBody implements ID3v24FrameBody
+public class FrameBodyUFID extends AbstractID3v2FrameBody implements ID3v24FrameBody,ID3v23FrameBody
 {
     public static final String UFID_MUSICBRAINZ = "http://musicbrainz.org";
     public static final String UFID_ID3TEST     = "http://www.id3.org/dummy/ufid.html";
