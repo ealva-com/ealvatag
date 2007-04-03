@@ -30,7 +30,7 @@ import java.nio.*;
 
 /**
  * Represents an ID3v2.4 frame.
- * 
+ *
  * @author : Paul Taylor
  * @author : Eric Farng
  * @version $Id$
@@ -77,7 +77,7 @@ public class ID3v24Frame
      *
      * @param frame to construct a new frame from
      */
-    public ID3v24Frame(AbstractID3v2Frame frame)  throws InvalidFrameException
+    public ID3v24Frame(AbstractID3v2Frame frame) throws InvalidFrameException
     {
         //Should not be called
         if ((frame instanceof ID3v24Frame == true))
@@ -115,7 +115,7 @@ public class ID3v24Frame
             else if (ID3Tags.isID3v23FrameIdentifier(frame.getIdentifier()) == true)
             {
                 identifier = ID3Tags.forceFrameID23To24(frame.getIdentifier());
-                if(identifier!=null)
+                if (identifier != null)
                 {
                     logger.info("V3:Orig id is:" + frame.getIdentifier() + ":New id is:" + identifier);
                     this.frameBody = this.readBody(identifier, (AbstractID3v2FrameBody) frame.getBody());
@@ -125,7 +125,7 @@ public class ID3v24Frame
                   as a deprecated frame consisting of an array of bytes*/
                 else
                 {
-                    this.frameBody = new FrameBodyDeprecated((AbstractID3v2FrameBody)frame.getBody());
+                    this.frameBody = new FrameBodyDeprecated((AbstractID3v2FrameBody) frame.getBody());
                     identifier = frame.getIdentifier();
                     logger.info("V3:Deprecated:Orig id is:" + frame.getIdentifier() + ":New id is:" + identifier);
                     return;
@@ -168,7 +168,7 @@ public class ID3v24Frame
             {
                 //Force v2 to v3
                 identifier = ID3Tags.forceFrameID22To23(frame.getIdentifier());
-                if(identifier!=null)
+                if (identifier != null)
                 {
                     logger.info("(3)V2:Orig id is:" + frame.getIdentifier() + "New id is:" + identifier);
                     this.frameBody = this.readBody(identifier, (AbstractID3v2FrameBody) frame.getBody());
@@ -177,7 +177,7 @@ public class ID3v24Frame
                 /* No mechanism exists to convert it to a v24 frame */
                 else
                 {
-                    this.frameBody = new FrameBodyDeprecated((AbstractID3v2FrameBody)frame.getBody());
+                    this.frameBody = new FrameBodyDeprecated((AbstractID3v2FrameBody) frame.getBody());
                     identifier = frame.getIdentifier();
                     logger.info("(4)V2:Deprecated Orig id id is:" + frame.getIdentifier() + ":New id is:" + identifier);
                     return;
@@ -289,10 +289,8 @@ public class ID3v24Frame
     }
 
     /**
-     * 
-     *
      * @param obj
-     * @return  if obj is equivalent to this frame
+     * @return if obj is equivalent to this frame
      */
     public boolean equals(Object obj)
     {
@@ -301,6 +299,69 @@ public class ID3v24Frame
             return false;
         }
         return super.equals(obj);
+    }
+
+    /**
+     * Synchronize an array of bytes, this should only be called if it has been determined the tag is unsynchronised
+     * <p/>
+     * Any patterns of the form $FF $00 should be replaced by $FF
+     *
+     * @param source a ByteBuffer to be unsynchronized
+     * @return a synchronized representation of the source
+     */
+    public static ByteBuffer synchronize(ByteBuffer source)
+    {
+        ByteArrayOutputStream oBAOS = new ByteArrayOutputStream();
+        while (source.hasRemaining())
+        {
+            int byteValue = source.get();
+            oBAOS.write(byteValue);
+            if ((byteValue & MPEGFrameHeader.SYNC_BYTE1) == MPEGFrameHeader.SYNC_BYTE1)
+            {
+                // we are skipping if $00 byte but check not an end of stream
+                if (source.hasRemaining())
+                {
+                    int unsyncByteValue = source.get();
+                    //If its the null byte we just ignore it
+                    if (unsyncByteValue != 0)
+                    {
+                        oBAOS.write(unsyncByteValue);
+                    }
+                }
+            }
+        }
+        return ByteBuffer.wrap(oBAOS.toByteArray());
+    }
+
+    /**
+     * Read Frame Size from byteArray in format specified in spec and convert to int.
+     *
+     * @param buffer converted into ID3 Format
+     * @return size as int
+     */
+    protected int byteArrayToSize(byte[] buffer)
+    {
+        /**
+         * the decided not to use the top bit of the 4 bytes so we need to
+         * convert the size back and forth
+         */
+        return (int) (buffer[0] << 21) + (buffer[1] << 14) + (buffer[2] << 7) + (int) (buffer[3]);
+    }
+
+    /**
+     * Write Tag Size to Byte array to format as required in Frame Header.
+     *
+     * @param size to convert into ID3 Format
+     * @return size in ID3 Format
+     */
+    protected byte[] sizeToByteArray(int size)
+    {
+        byte[] buffer = new byte[FRAME_SIZE_SIZE];
+        buffer[0] = (byte) ((size & 0x0FE00000) >> 21);
+        buffer[1] = (byte) ((size & 0x001FC000) >> 14);
+        buffer[2] = (byte) ((size & 0x00003F80) >> 7);
+        buffer[3] = (byte) (size & 0x0000007F);
+        return buffer;
     }
 
     /**
@@ -314,7 +375,7 @@ public class ID3v24Frame
     {
         byte[] buffer = new byte[FRAME_ID_SIZE];
 
-        if(byteBuffer.position()+ FRAME_HEADER_SIZE >= byteBuffer.limit())
+        if (byteBuffer.position() + FRAME_HEADER_SIZE >= byteBuffer.limit())
         {
             logger.warning("No space to find another frame:");
             throw new InvalidFrameException(" No space to find another frame");
@@ -324,6 +385,7 @@ public class ID3v24Frame
         byteBuffer.get(buffer, 0, FRAME_ID_SIZE);
         identifier = new String(buffer);
         logger.fine("Identifier is" + identifier);
+
         // Is this a valid identifier?
         if (isValidID3v2FrameIdentifier(identifier) == false)
         {
@@ -333,8 +395,12 @@ public class ID3v24Frame
             byteBuffer.position(byteBuffer.position() - (FRAME_ID_SIZE - 1));
             throw new InvalidFrameException(identifier + " is not a valid ID3v2.40 frame");
         }
-        //Read the size field
-        frameSize = byteBuffer.getInt();
+
+        //Read the sync safe size field
+        byte[] sizeBuffer = new byte[FRAME_SIZE_SIZE ];
+        byteBuffer.get(sizeBuffer, 0, FRAME_SIZE_SIZE);
+        frameSize = byteArrayToSize(sizeBuffer);
+
         if (frameSize < 0)
         {
             logger.warning("Invalid Frame size:" + identifier);
@@ -350,17 +416,17 @@ public class ID3v24Frame
             logger.warning("Invalid Frame size larger than size before mp3 audio:" + identifier);
             throw new InvalidFrameException(identifier + " is invalid frame");
         }
-        
+
         //Read the flag bytes
         statusFlags = new StatusFlags(byteBuffer.get());
         encodingFlags = new EncodingFlags(byteBuffer.get());
 
         //Read the body data
         frameBody = readBody(identifier, byteBuffer, frameSize);
-        if(!(frameBody instanceof ID3v24FrameBody))
+        if (!(frameBody instanceof ID3v24FrameBody))
         {
-            logger.info("Converted frame body with:"+identifier+" to deprecated framebody");              
-            frameBody = new FrameBodyDeprecated((AbstractID3v2FrameBody)frameBody);
+            logger.info("Converted frame body with:" + identifier + " to deprecated framebody");
+            frameBody = new FrameBodyDeprecated((AbstractID3v2FrameBody) frameBody);
         }
     }
 
@@ -376,12 +442,12 @@ public class ID3v24Frame
         logger.info("Writing frame to file:" + getIdentifier());
         //This is where we will write header, move position to where we can
         //write body
-
         ByteBuffer headerBuffer = ByteBuffer.allocate(FRAME_HEADER_SIZE);
 
         //Write Frame Body Data
         ByteArrayOutputStream bodyOutputStream = new ByteArrayOutputStream();
         ((AbstractID3v2FrameBody) frameBody).write(bodyOutputStream);
+
         //Write Frame Header
         //Write Frame ID, the identifier must be 4 bytes bytes long it may not be
         //because converted an unknown v2.2 id (only 3 bytes long)
@@ -390,10 +456,12 @@ public class ID3v24Frame
             identifier = identifier + ' ';
         }
         headerBuffer.put(getIdentifier().getBytes(), 0, FRAME_ID_SIZE);
+
         //Write Frame Size
         int size = frameBody.getSize();
         logger.fine("Frame Size Is:" + size);
-        headerBuffer.putInt(frameBody.getSize());
+        headerBuffer.put(sizeToByteArray(frameBody.getSize()));
+ 
         //Write the Flags
         //@todo What about adjustments to header based on encoding flag
         headerBuffer.put(statusFlags.getWriteFlags());
@@ -545,7 +613,7 @@ public class ID3v24Frame
         public static final int MASK_GROUPING_IDENTITY = FileConstants.BIT6;
 
         /**
-         * Unsyncronisation
+         * Unsynchronisation
          */
         public static final int MASK_FRAME_UNSYNCHRONIZATION = FileConstants.BIT2;
 
@@ -596,7 +664,6 @@ public class ID3v24Frame
 
     /**
      * Return String Representation of body
-     *
      */
     public void createStructure()
     {
