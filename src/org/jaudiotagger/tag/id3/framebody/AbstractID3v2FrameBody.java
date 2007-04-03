@@ -142,18 +142,25 @@ public abstract class AbstractID3v2FrameBody
      * @param byteBuffer file to read
      *
      * @throws InvalidFrameException if unable to construct a framebody from the ByteBuffer
+     *
+     * TODO:Return size, so can adjust if header size is actaully woong to give us a chance to find the next frame
+     * even though this one is wrong ?
      */
     public void read(ByteBuffer byteBuffer)
         throws InvalidTagException
     {
         int size = getSize();
         logger.info("Reading body for" + this.getIdentifier() + ":" + size);
+
         //Allocate a buffer to the size of the Frame Body and read from file
         byte[] buffer = new byte[size];
         byteBuffer.get(buffer);
 
         //Offset into buffer, incremented by length of previous Datatype
+        //this offset is only used internally to decide where to look for the next
+        //datatype within a framebody, it does not decide where to look for the next frame body
         int offset = 0;
+
         //Go through the ObjectList of the Frame reading the data into the
         //correct datatype.
         AbstractDataType object;
@@ -161,6 +168,7 @@ public abstract class AbstractID3v2FrameBody
         while (iterator.hasNext())
         {
             logger.finest("offset:"+offset);
+
             //The read has extended further than the defined frame size (ok to extend upto
             //size because the next datatype may be of length 0.)
             if (offset > (size))
@@ -168,6 +176,7 @@ public abstract class AbstractID3v2FrameBody
                 logger.warning("Invalid Size for FrameBody");
                 throw new InvalidFrameException("Invalid size for Frame Body");
             }
+
             //Get next Object
             object = (AbstractDataType) iterator.next();
 

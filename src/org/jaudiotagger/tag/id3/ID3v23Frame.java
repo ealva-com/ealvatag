@@ -32,7 +32,8 @@ import java.nio.*;
  * @author : Paul Taylor
  * @author : Eric Farng
  * @version $Id$
- */public class ID3v23Frame
+ */
+public class ID3v23Frame
     extends ID3v22Frame
 {
     Pattern validFrameIdentifier = Pattern.compile("[A-Z][0-9A-Z]{3}");

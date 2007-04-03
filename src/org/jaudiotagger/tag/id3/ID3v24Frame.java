@@ -301,68 +301,7 @@ public class ID3v24Frame
         return super.equals(obj);
     }
 
-    /**
-     * Synchronize an array of bytes, this should only be called if it has been determined the tag is unsynchronised
-     * <p/>
-     * Any patterns of the form $FF $00 should be replaced by $FF
-     *
-     * @param source a ByteBuffer to be unsynchronized
-     * @return a synchronized representation of the source
-     */
-    public static ByteBuffer synchronize(ByteBuffer source)
-    {
-        ByteArrayOutputStream oBAOS = new ByteArrayOutputStream();
-        while (source.hasRemaining())
-        {
-            int byteValue = source.get();
-            oBAOS.write(byteValue);
-            if ((byteValue & MPEGFrameHeader.SYNC_BYTE1) == MPEGFrameHeader.SYNC_BYTE1)
-            {
-                // we are skipping if $00 byte but check not an end of stream
-                if (source.hasRemaining())
-                {
-                    int unsyncByteValue = source.get();
-                    //If its the null byte we just ignore it
-                    if (unsyncByteValue != 0)
-                    {
-                        oBAOS.write(unsyncByteValue);
-                    }
-                }
-            }
-        }
-        return ByteBuffer.wrap(oBAOS.toByteArray());
-    }
 
-    /**
-     * Read Frame Size from byteArray in format specified in spec and convert to int.
-     *
-     * @param buffer converted into ID3 Format
-     * @return size as int
-     */
-    protected int byteArrayToSize(byte[] buffer)
-    {
-        /**
-         * the decided not to use the top bit of the 4 bytes so we need to
-         * convert the size back and forth
-         */
-        return (int) (buffer[0] << 21) + (buffer[1] << 14) + (buffer[2] << 7) + (int) (buffer[3]);
-    }
-
-    /**
-     * Write Tag Size to Byte array to format as required in Frame Header.
-     *
-     * @param size to convert into ID3 Format
-     * @return size in ID3 Format
-     */
-    protected byte[] sizeToByteArray(int size)
-    {
-        byte[] buffer = new byte[FRAME_SIZE_SIZE];
-        buffer[0] = (byte) ((size & 0x0FE00000) >> 21);
-        buffer[1] = (byte) ((size & 0x001FC000) >> 14);
-        buffer[2] = (byte) ((size & 0x00003F80) >> 7);
-        buffer[3] = (byte) (size & 0x0000007F);
-        return buffer;
-    }
 
     /**
      * Read the frame from the specified file.
@@ -381,12 +320,12 @@ public class ID3v24Frame
             throw new InvalidFrameException(" No space to find another frame");
         }
 
-        // Read the Frame ID Identifier
+        //Read the Frame Identifier
         byteBuffer.get(buffer, 0, FRAME_ID_SIZE);
         identifier = new String(buffer);
         logger.fine("Identifier is" + identifier);
 
-        // Is this a valid identifier?
+        //Is this a valid identifier?
         if (isValidID3v2FrameIdentifier(identifier) == false)
         {
             //If not valid move file pointer back to one byte after
@@ -397,9 +336,7 @@ public class ID3v24Frame
         }
 
         //Read the sync safe size field
-        byte[] sizeBuffer = new byte[FRAME_SIZE_SIZE ];
-        byteBuffer.get(sizeBuffer, 0, FRAME_SIZE_SIZE);
-        frameSize = byteArrayToSize(sizeBuffer);
+        frameSize = ID3SyncSafeInteger.bufferToValue(byteBuffer);
 
         if (frameSize < 0)
         {
@@ -421,8 +358,32 @@ public class ID3v24Frame
         statusFlags = new StatusFlags(byteBuffer.get());
         encodingFlags = new EncodingFlags(byteBuffer.get());
 
+        //Has a data length indicator been inserted inbetween the header and body
+        //if so read its value, the side effect being that it is skipped over
+        if(((EncodingFlags)encodingFlags).isDataLengthIndicator())
+        {
+            //Read the sync safe size field
+            int vanillaSize = ID3SyncSafeInteger.bufferToValue(byteBuffer);
+            logger.info("Frame Size Is:"+ frameSize + "Vanilla Size:"+vanillaSize);
+        }
+        else
+        {
+            logger.info("Frame Size Is:"+ frameSize);
+        }
+
+        //TODO Body shouldn't need to know about header,but just slicing seems to cause
+        //a problem so we pass the whole buffer to be synced, but because we are nto at the start
+        //of the buffer only the body will be modified.
+        ByteBuffer byteBufferWithoutHeader=byteBuffer;
+
+        //Do we need to synchronize the frame body
+        if(((EncodingFlags)encodingFlags).isUnsynchronised())
+        {
+            byteBufferWithoutHeader=ID3Unsynchronization.synchronize(byteBufferWithoutHeader);
+        }
+
         //Read the body data
-        frameBody = readBody(identifier, byteBuffer, frameSize);
+        frameBody = readBody(identifier,  byteBufferWithoutHeader, frameSize);
         if (!(frameBody instanceof ID3v24FrameBody))
         {
             logger.info("Converted frame body with:" + identifier + " to deprecated framebody");
@@ -460,10 +421,10 @@ public class ID3v24Frame
         //Write Frame Size
         int size = frameBody.getSize();
         logger.fine("Frame Size Is:" + size);
-        headerBuffer.put(sizeToByteArray(frameBody.getSize()));
- 
+        headerBuffer.put(ID3SyncSafeInteger.valueToBuffer(frameBody.getSize()));
+
         //Write the Flags
-        //@todo What about adjustments to header based on encoding flag
+        //TODO What about adjustments to header based on encoding flag
         headerBuffer.put(statusFlags.getWriteFlags());
         headerBuffer.put(encodingFlags.getFlags());
 
@@ -597,32 +558,30 @@ public class ID3v24Frame
 
         /** Note these are in a different location to v2.3*/
 
-        /**
-         * Frame is compressed
-         */
-        public static final int MASK_COMPRESSION = FileConstants.BIT2;
-
-        /**
-         * Frame is encrypted
-         */
-        public static final int MASK_ENCRYPTION = FileConstants.BIT3;
-
-        /**
+       /**
          * Frame is part of a group
-         */
-        public static final int MASK_GROUPING_IDENTITY = FileConstants.BIT6;
+        */
+       public static final int MASK_GROUPING_IDENTITY = FileConstants.BIT6;
+
+       /**
+        * Frame is compressed
+        */
+       public static final int MASK_COMPRESSION = FileConstants.BIT3;
+
+       /**
+        * Frame is encrypted
+        */
+       public static final int MASK_ENCRYPTION = FileConstants.BIT2;
 
         /**
          * Unsynchronisation
          */
-        public static final int MASK_FRAME_UNSYNCHRONIZATION = FileConstants.BIT2;
+        public static final int MASK_FRAME_UNSYNCHRONIZATION = FileConstants.BIT1;
 
         /**
          * Length
          */
-        public static final int MASK_DATA_LENGTH_INDICATOR = FileConstants.BIT1;
-
-        private byte flags;
+        public static final int MASK_DATA_LENGTH_INDICATOR = FileConstants.BIT0;
 
         /**
          * Use this when creating a frame from scratch
@@ -638,17 +597,68 @@ public class ID3v24Frame
         EncodingFlags(byte flags)
         {
             super(flags);
-            if ((flags & MASK_FRAME_UNSYNCHRONIZATION) != 0)
+            logEnabledFlags();
+        }
+
+        public void logEnabledFlags()
+        {
+            logger.warning("checking flags:"+flags);
+            if (isCompression())
+            {
+                logger.warning("this frame is compressed");
+            }
+
+            if (isEncryption())
+            {
+                logger.warning("this frame is encrypted");
+            }
+
+            if (isGrouping())
+            {
+                logger.warning("this frame is grouped");
+            }
+
+            if (isUnsynchronised())
             {
                 logger.warning("this frame is unsynchronised");
             }
 
+             if (isDataLengthIndicator())
+            {
+                logger.warning("this frame has a data length indicator");
+            }
         }
 
         public byte getFlags()
         {
             return flags;
         }
+
+        public boolean isCompression()
+        {
+            return (flags & MASK_COMPRESSION) >0;
+        }
+
+        public boolean isEncryption()
+        {
+            return (flags & MASK_ENCRYPTION) >0;
+        }
+
+        public boolean isGrouping()
+        {
+            return (flags & MASK_GROUPING_IDENTITY) >0;
+        }
+
+        public boolean isUnsynchronised()
+        {
+            return (flags & MASK_FRAME_UNSYNCHRONIZATION) >0;
+        }
+
+        public boolean isDataLengthIndicator()
+        {
+            return (flags & MASK_DATA_LENGTH_INDICATOR) >0;
+        }
+
 
         public void createStructure()
         {

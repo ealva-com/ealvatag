@@ -470,7 +470,7 @@ public class ID3v24Tag
     /**
      * 
      *
-     * @return 
+     * @return identifier
      */
     public String getIdentifier()
     {
@@ -481,7 +481,7 @@ public class ID3v24Tag
      * Return tag size based upon the sizes of the frames rather than the physical
      * no of bytes between start of ID3Tag and start of Audio Data.
      *
-     * @return 
+     * @return size
      */
     public int getSize()
     {
@@ -511,7 +511,7 @@ public class ID3v24Tag
      * 
      *
      * @param obj 
-     * @return 
+     * @return equality
      */
     public boolean equals(Object obj)
     {
@@ -583,10 +583,9 @@ public class ID3v24Tag
         {
             logger.warning("this tag is unsynchronised");
         }
+
         // Read the size, this is size of tag apart from tag header
-        byte[] sizeBuffer = new byte[FIELD_TAG_SIZE_LENGTH];
-        byteBuffer.get(sizeBuffer, 0, FIELD_TAG_SIZE_LENGTH);
-        size = byteArrayToSize(sizeBuffer);
+        size = ID3SyncSafeInteger.bufferToValue(byteBuffer);
         logger.info("Reading tag from file size set in header is" + size);
         if (extended == true)
         {
@@ -691,14 +690,13 @@ public class ID3v24Tag
      */
     protected ByteBuffer writeHeaderToBuffer(int padding) throws IOException
     {
-      /** @todo Calculate UnSynchronisation */
-      /** @todo Calculate the CYC Data Check */
-      /** @todo Reintroduce Extended Header */
+      //todo Calculate UnSynchronisation
+      //todo Calculate the CYC Data Check
+      //todo Reintroduce Extended Header
 
-      /** Flags,currently we never do unsynchronisation or calculate the CRC
-       *  and if we dont calculate them cant keep orig values. Tags are not
-       *  experimental and we never create extended header to keep things simple.
-       */
+      // Flags,currently we never do unsynchronisation or calculate the CRC
+      // and if we dont calculate them cant keep orig values. Tags are not
+      // experimental and we never create extended header to keep things simple.
       unsynchronization = false;
       extended = false;
       experimental = false;
@@ -707,10 +705,13 @@ public class ID3v24Tag
       ByteBuffer headerBuffer = ByteBuffer.allocate(TAG_HEADER_LENGTH);
       //TAGID
       headerBuffer.put(TAG_ID);
+
       //Major Version
       headerBuffer.put(getMajorVersion());
+
       //Minor Version
       headerBuffer.put(getRevision());
+
       //Flags
       byte flagsByte = 0;
       if (unsynchronization == true)
@@ -732,7 +733,7 @@ public class ID3v24Tag
       headerBuffer.put(flagsByte);
       
       //Size As Recorded in Header, don't include the main header length
-      headerBuffer.put(sizeToByteArray(padding + getSize() - TAG_HEADER_LENGTH));
+      headerBuffer.put(ID3SyncSafeInteger.valueToBuffer(padding + getSize() - TAG_HEADER_LENGTH));
 
       //Write Extended Header
       ByteBuffer extHeaderBuffer = null;
@@ -787,7 +788,7 @@ public class ID3v24Tag
           if (tagRestriction == true)
           {
               extHeaderBuffer.put((byte) TAG_EXT_HEADER_RESTRICTION_DATA_LENGTH);
-              /** @todo not currently setting restrictions */
+              //todo not currently setting restrictions
               extHeaderBuffer.put((byte) 0);
           }
       }

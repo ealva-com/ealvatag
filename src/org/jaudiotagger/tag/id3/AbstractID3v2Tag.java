@@ -275,7 +275,7 @@ public abstract class AbstractID3v2Tag
      *
      * Warning if frame(s) already exists for this identifier thay are overwritten
       *
-     * @TODO needs to ensure do not add an invalid frame for this tag
+     * TODO needs to ensure do not add an invalid frame for this tag
      */
     public void setFrame(AbstractID3v2Frame frame)
     {
@@ -287,7 +287,7 @@ public abstract class AbstractID3v2Tag
      *
      * Warning if frame(s) already exists for this identifier thay are overwritten
      *
-     * @TODO needs to ensure do not add an invalid frame for this tag
+     * TODO needs to ensure do not add an invalid frame for this tag
      */
     public void setFrame(String identifier, ArrayList multiFrame)
     {
@@ -349,7 +349,7 @@ public abstract class AbstractID3v2Tag
      * @param file to delete the tag from
      * @throws IOException if problem accessing the file
      *
-     * @TODO should clear all data and preferably recover lost space.
+     * TODO should clear all data and preferably recover lost space.
      */
     public void delete(RandomAccessFile file)
         throws IOException
@@ -456,7 +456,7 @@ public abstract class AbstractID3v2Tag
      * @param audioStartByte
      * @throws IOException
      *
-     * @TODO should be abstract
+     * TODO should be abstract
      */
     public void write(File file, long audioStartByte)
         throws IOException
@@ -469,7 +469,7 @@ public abstract class AbstractID3v2Tag
      * @param file
      * @throws IOException
      *
-     * @TODO should be abstract
+     * TODO should be abstract
      */
     public void write(RandomAccessFile file)
         throws IOException
@@ -482,43 +482,14 @@ public abstract class AbstractID3v2Tag
      * @param channel
      * @throws IOException
      * 
-     * @TODO should be abstract
+     * TODO should be abstract
      */
     public void write(WritableByteChannel channel)
         throws IOException
     {
     }
 
-    /**
-     * Read Tag Size from byteArray in format specified in spec and convert to int.
-     *
-     * @param buffer converted into ID3 Format
-     * @return size as int
-     */
-    protected int byteArrayToSize(byte[] buffer)
-    {
-        /**
-         * the decided not to use the top bit of the 4 bytes so we need to
-         * convert the size back and forth
-         */
-        return (int) (buffer[0] << 21) + (buffer[1] << 14) + (buffer[2] << 7) + (int) (buffer[3]);
-    }
 
-    /**
-     * Write Tag Size to Byte array to format as required in Tag Header.
-     *
-     * @param size to convert into ID3 Format
-     * @return size in ID3 Format
-     */
-    protected byte[] sizeToByteArray(int size)
-    {
-        byte[] buffer = new byte[FIELD_TAG_SIZE_LENGTH];
-        buffer[0] = (byte) ((size & 0x0FE00000) >> 21);
-        buffer[1] = (byte) ((size & 0x001FC000) >> 14);
-        buffer[2] = (byte) ((size & 0x00003F80) >> 7);
-        buffer[3] = (byte) (size & 0x0000007F);
-        return buffer;
-    }
 
     /**
      * Does a ID3v2_40 tag exist in this file.

@@ -256,9 +256,9 @@ public class ID3v22Tag
 
     /**
      * Return frame size based upon the sizes of the frames rather than the size
-     * including paddign recorded in the tag header
+     * including padding recorded in the tag header
      *
-     * @return 
+     * @return size
      */
     public int getSize()
     {
@@ -272,7 +272,7 @@ public class ID3v22Tag
      * 
      *
      * @param obj 
-     * @return 
+     * @return equality
      */
     public boolean equals(Object obj)
     {
@@ -309,19 +309,17 @@ public class ID3v22Tag
             throw new TagNotFoundException("ID3v2.20 tag not found");
         }
         logger.info("Reading tag from file");
+
         //Read the flags
         byte flags = byteBuffer.get();
         unsynchronization = (flags & MASK_V22_UNSYNCHRONIZATION) != 0;
-        compression = (flags & MASK_V22_COMPRESSION) != 0;
-        //@todo if unsynchronization bit set what do we do
+        compression       = (flags & MASK_V22_COMPRESSION) != 0;
 
-        //@todo if compression bit set should we ignore
+        //todo if unsynchronization bit set what do we do
+        //todo if compression bit set should we ignore
 
         // Read the size
-        byte[] buffer = new byte[FIELD_TAG_SIZE_LENGTH];
-        byteBuffer.get(buffer, 0, FIELD_TAG_SIZE_LENGTH);
-        size = byteArrayToSize(buffer);
-
+        size = ID3SyncSafeInteger.bufferToValue(byteBuffer);        
         readFrames(byteBuffer.slice(),size);
     }
 
@@ -402,10 +400,9 @@ public class ID3v22Tag
      */
     protected ByteBuffer writeHeaderToBuffer(int padding) throws IOException
     {
-        /** @todo Unsynchronisation support required.
-         * We never compress tags as was never defined,
-         * currently we do not support Unsyncronisation so should not be set.
-         */
+        // todo Unsynchronisation support required.
+        // We never compress tags as was never defined,
+        // currently we do not support Unsyncronisation so should not be set.
         unsynchronization = false;
         compression = false;
   
@@ -429,8 +426,7 @@ public class ID3v22Tag
             flags |= (byte) MASK_V22_COMPRESSION;
         }
         headerBuffer.put(flags);
-
-        headerBuffer.put(sizeToByteArray(padding + getSize() - TAG_HEADER_LENGTH));
+        headerBuffer.put(ID3SyncSafeInteger.valueToBuffer(padding + getSize() - TAG_HEADER_LENGTH));
         
         headerBuffer.flip();
         return headerBuffer;

@@ -423,9 +423,7 @@ public class ID3v23Tag
         }
 
         // Read the size, this is size of tag not including  the tag header
-        byte[] sizeBuffer = new byte[FIELD_TAG_SIZE_LENGTH];
-        buffer.get(sizeBuffer, 0, FIELD_TAG_SIZE_LENGTH);
-        size = byteArrayToSize(sizeBuffer);
+        size = ID3SyncSafeInteger.bufferToValue(buffer);
         logger.info("Tag size is:"+size+" according to header (does not include header size, add 10)");
 
         //Extended Header
@@ -477,7 +475,7 @@ public class ID3v23Tag
         //We need to synchronize the buffer
         if(unsynchronization==true)
         {
-             bufferWithoutHeader=synchronize(bufferWithoutHeader);
+             bufferWithoutHeader=ID3Unsynchronization.synchronize(bufferWithoutHeader);
         }
 
         readFrames(bufferWithoutHeader,size);
@@ -531,120 +529,6 @@ public class ID3v23Tag
     }
 
 
-    /** Check if a byte array will require unsynchronization before being written as a tag.
-        * If the byte array contains any $FF bytes, then it will require unsynchronization.
-        *
-        * @param abySource the byte array to be examined
-        * @return true if unsynchronization is required, false otherwise
-        */
-       public static boolean requiresUnsynchronization(byte[] abySource)
-       {
-           for (int i=0; i < abySource.length-1; i++)
-           {
-               if (
-                  ((abySource[i] & MPEGFrameHeader.SYNC_BYTE1)   == MPEGFrameHeader.SYNC_BYTE1)
-               && ((abySource[i+1] & MPEGFrameHeader.SYNC_BYTE2) == MPEGFrameHeader.SYNC_BYTE2))
-               {
-                   logger.finest("Unsynchronisation required found bit at:"+i);
-                   return true;
-               }
-           }
-
-           return false;
-       }
-
-       /**
-        * Unsynchronize an array of bytes, this should only be called if the decision has already been made to
-        * unsynchronize the byte array
-        *
-        * In order to prevent a media player from incorrectly interpreting the contents of a tag, all $FF bytes
-        * followed by a byte with value >=224 must be followed by a $00 byte (thus, $FF $F0 sequences become $FF $00 $F0).
-        * Additionally because unsynchronisation is being applied any existing $FF $00 have to be converted to
-        * $FF $00 $00
-        *
-        * @param abySource a byte array to be unsynchronized
-        * @return a unsynchronized representation of the source
-        */
-       public static byte[] unsynchronize(byte[] abySource)
-       {
-           ByteArrayInputStream oBAIS = new ByteArrayInputStream(abySource);
-           ByteArrayOutputStream oBAOS = new ByteArrayOutputStream();
-
-           int count =0;
-           while (oBAIS.available() > 0)
-           {
-               int iVal = oBAIS.read();
-               count++;
-               oBAOS.write(iVal);
-               if ((iVal & MPEGFrameHeader.SYNC_BYTE1)== MPEGFrameHeader.SYNC_BYTE1)
-               {
-                   // if byte is $FF, we must check the following byte if there is one
-                   if (oBAIS.available() > 0)
-                   {
-                       oBAIS.mark(1);  // remember where we were, if we don't need to unsynchronize
-                       int iNextVal = oBAIS.read();
-                       if ((iNextVal & MPEGFrameHeader.SYNC_BYTE2) == MPEGFrameHeader.SYNC_BYTE2)
-                       {
-                           // we need to unsynchronize here
-                           logger.finest("Writing unsynchronisation bit at:"+count);
-                           oBAOS.write(0);
-                           oBAOS.write(iNextVal);
-                      }
-                      else if (iNextVal==0)
-                      {
-                           // we need to unsynchronize here
-                           logger.finest("Inserting zero unsynchronisation bit at:"+count);
-                           oBAOS.write(0);
-                           oBAOS.write(iNextVal);
-                       }
-                       else
-                       {
-                           oBAIS.reset();
-                       }
-                   }
-               }
-           }
-           // if we needed to unsynchronize anything, and this tag ends with 0xff, we have to append a zero byte,
-           // which will be removed on de-unsynchronization later
-           if ((abySource[abySource.length-1]& MPEGFrameHeader.SYNC_BYTE1) == MPEGFrameHeader.SYNC_BYTE1)
-           {
-               oBAOS.write(0);
-           }
-           return oBAOS.toByteArray();
-       }
-
-
-       /**
-        * Synchronize an array of bytes, this should only be called if it has been determined the tag is unsynchronised
-        *
-        * Any pattern sof the form $FF $00 should be replaced by $FF
-        *
-        * @param source a ByteBuffer to be unsynchronized
-        * @return a synchronized representation of the source
-        */
-       public static ByteBuffer synchronize(ByteBuffer source)
-       {
-           ByteArrayOutputStream oBAOS = new ByteArrayOutputStream();
-            while (source.hasRemaining())
-            {
-                int byteValue = source.get();
-                oBAOS.write(byteValue);
-                if ((byteValue & MPEGFrameHeader.SYNC_BYTE1)== MPEGFrameHeader.SYNC_BYTE1)
-                {
-                    // we are skipping if $00 byte but check not an end of stream
-                    if(source.hasRemaining())
-                    {
-                        int unsyncByteValue = source.get();
-                        //If its the null byte we just ignore it
-                        if (unsyncByteValue != 0)
-                        {
-                            oBAOS.write(unsyncByteValue);
-                        }
-                    }
-                }
-            }
-            return ByteBuffer.wrap(oBAOS.toByteArray());
-       }
 
     /**
      * Write the ID3 header to the ByteBuffer.
@@ -654,24 +538,29 @@ public class ID3v23Tag
      */
     protected ByteBuffer writeHeaderToBuffer(int padding) throws IOException
     {
-        /** @TODO Calculate the CYC Data Check */
-        /** @TODO Reintroduce Extended Header */
-        /** Flags,currently we never calculate the CRC
-         *  and if we dont calculate them cant keep orig values. Tags are not
-         *  experimental and we never create extended header to keep things simple.
-         */
+        //TODO Calculate the CYC Data Check
+        //TODO Reintroduce Extended Header */
+
+        // Flags,currently we never calculate the CRC
+        // and if we dont calculate them cant keep orig values. Tags are not
+        // experimental and we never create extended header to keep things simple.
         extended     = false;
         experimental = false;
         crcDataFlag  = false;
-        /** Create Header Buffer,allocate maximum possible size for the header*/
+
+        // Create Header Buffer,allocate maximum possible size for the header
         ByteBuffer headerBuffer = ByteBuffer.
             allocate(TAG_HEADER_LENGTH + TAG_EXT_HEADER_LENGTH + TAG_EXT_HEADER_CRC_LENGTH);
+
         //TAGID
         headerBuffer.put(TAG_ID);
+
         //Major Version
         headerBuffer.put(getMajorVersion());
+
         //Minor Version
         headerBuffer.put(getRevision());
+
         //Flags
         byte flagsByte = 0;
         if (unsynchronization == true)
@@ -689,7 +578,7 @@ public class ID3v23Tag
         headerBuffer.put(flagsByte);
   
         //Size As Recorded in Header, don't include the main header length
-        headerBuffer.put(sizeToByteArray(padding + getSize() - TAG_HEADER_LENGTH));
+        headerBuffer.put(ID3SyncSafeInteger.valueToBuffer(padding + getSize() - TAG_HEADER_LENGTH));
         
         /** Write Extended Header */
         if (extended == true)
@@ -739,7 +628,7 @@ public class ID3v23Tag
         // Unsynchronize if option enabled and unsync required
         if(TagOptionSingleton.getInstance().isUnsyncTags())
         {
-            unsynchronization = requiresUnsynchronization(bodyByteBuffer);
+            unsynchronization = ID3Unsynchronization.requiresUnsynchronization(bodyByteBuffer);
         }
         else
         {
@@ -747,7 +636,7 @@ public class ID3v23Tag
         }
         if(unsynchronization)
         {
-            bodyByteBuffer=unsynchronize(bodyByteBuffer);
+            bodyByteBuffer=ID3Unsynchronization.unsynchronize(bodyByteBuffer);
             logger.info("bodybytebuffer:sizeafterunsynchronisation:"+bodyByteBuffer.length);
         }
 
@@ -798,7 +687,7 @@ public class ID3v23Tag
         // Unsynchronize if option enabled and unsync required
         if(TagOptionSingleton.getInstance().isUnsyncTags())
         {
-            unsynchronization = requiresUnsynchronization(bodyByteBuffer);
+            unsynchronization = ID3Unsynchronization.requiresUnsynchronization(bodyByteBuffer);
         }
         else
         {
@@ -806,7 +695,7 @@ public class ID3v23Tag
         }
         if(unsynchronization)
         {
-            bodyByteBuffer=unsynchronize(bodyByteBuffer);
+            bodyByteBuffer=ID3Unsynchronization.unsynchronize(bodyByteBuffer);
             logger.info("bodybytebuffer:sizeafterunsynchronisation:"+bodyByteBuffer.length);
         }
         ByteBuffer headerBuffer = writeHeaderToBuffer(0);
