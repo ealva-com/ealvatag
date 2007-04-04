@@ -399,10 +399,15 @@ public class ID3v24Tag
                     newFrame.setBody(newBody);
                     frameMap.put(newFrame.getIdentifier(), newFrame);
                 }
-               if ((id3tag.genre & 0xff) >= 0)
+                if (
+                    ((id3tag.genre & ID3v1Tag.BYTE_TO_UNSIGNED) >= 0)
+                    &&
+                    ((id3tag.genre & ID3v1Tag.BYTE_TO_UNSIGNED) != ID3v1Tag.BYTE_TO_UNSIGNED)
+                    )
                 {
-                    String genre = "(" + Byte.toString(id3tag.genre) + ") " +
-                        GenreTypes.getInstanceOf().getValueForId(id3tag.genre);
+                    Integer genreId = new Integer(id3tag.genre & ID3v1Tag.BYTE_TO_UNSIGNED);
+                    String genre = "(" + genreId + ") " +
+                        GenreTypes.getInstanceOf().getValueForId(genreId.intValue());
 
                     newBody = new FrameBodyTCON((byte) 0, genre);
                     newFrame = new ID3v24Frame(ID3v24Frames.FRAME_ID_GENRE);
