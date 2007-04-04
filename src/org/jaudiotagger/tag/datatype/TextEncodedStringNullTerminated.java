@@ -9,7 +9,8 @@ import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 
 /**
- * Represents a String whose size is determined by finding of a null character at the end of the String. 
+ * Represents a String whose size is determined by finding of a null character at the end of the String. The String
+ * itself might be of lenght zero (i.e just consist of the null character)
  * 
  * The String will be encoded based upon the text encoding of the frame that it belongs to.
  */
@@ -67,22 +68,21 @@ public class TextEncodedStringNullTerminated
         int bufferSize =0;
         try
         {
-            logger.finer("Reading from array from offset:" + offset);
+            logger.finer("Reading from array starting from offset:" + offset);
             int size = 0;
+
             //Get the Specified Decoder
             String charSetName = getTextEncodingCharSet();
             CharsetDecoder decoder = Charset.forName(charSetName).newDecoder();
 
-            /* We only want to load up to null terminator, data after this is part of different
-             * field and it may not be possible to decode it so do the check before we do
-             * do the decoding,encoding dependent. */
-
+            //We only want to load up to null terminator, data after this is part of different
+            //field and it may not be possible to decode it so do the check before we do
+            //do the decoding,encoding dependent.
             ByteBuffer buffer = ByteBuffer.wrap(arr, offset, arr.length - offset);
             int endPosition = 0;
 
-            /* Latin-1 and UTF-8 strings are terminated by a single-byte null,
-             * while UTF-16 and its variants need two bytes for the null terminator.
-             */
+            //Latin-1 and UTF-8 strings are terminated by a single-byte null,
+            //while UTF-16 and its variants need two bytes for the null terminator.
             final boolean nullIsOneByte
             = (charSetName.equals(TextEncoding.CHARSET_ISO_8859_1)|| charSetName.equals(TextEncoding.CHARSET_UTF_8));
 
@@ -90,15 +90,15 @@ public class TextEncodedStringNullTerminated
             while (buffer.hasRemaining())
             {
                 byte nextByte = buffer.get();
-
                 if (nextByte == 0x00)
                 {
                     if (nullIsOneByte)
                     {
-                        logger.finest("Null terminator found at:"+buffer.position());
                         buffer.mark();
                         buffer.reset();
                         endPosition = buffer.position() - 1;
+                        logger.finest("Null terminator found starting at:"+endPosition );
+
                         isNullTerminatorFound=true;
                         break;
                     }
@@ -110,20 +110,27 @@ public class TextEncodedStringNullTerminated
                             nextByte = buffer.get();
                             if (nextByte == 0x00)
                             {
-                                logger.finest("UTF16:Null terminator found at:"+buffer.position());
-                                buffer.mark();
+                               buffer.mark();
                                 buffer.reset();
                                 endPosition = buffer.position() - 2;
+                                logger.finest("UTF16:Null terminator found starting  at:"+endPosition);
                                 isNullTerminatorFound=true;
                                 break;
+                            }
+                            else
+                            {
+                                //Nothing to do, we have checked 2nd value of pair it was not a null terminator
+                                //so will just start looking again in next invocation of loop
                             }
                         }
                         else
                         {
-                            logger.finest("UTF16:Should be two null terminator marks but only found one:"+buffer.position());
                             buffer.mark();
                             buffer.reset();
                             endPosition = buffer.position() - 1;
+                            logger.warning("UTF16:Should be two null terminator marks but only found one starting at:"
+                                +endPosition);
+
                             isNullTerminatorFound=true;
                             break;
                         }
@@ -159,11 +166,11 @@ public class TextEncodedStringNullTerminated
             }
             setSize(size);
 
-            /* Decode buffer if runs into problems should throw exception which we
-             * catch and then set value to empty string. (We dont read the null terminator
-             * because we dont want to display this */
+            //Decode buffer if runs into problems should throw exception which we
+            //catch and then set value to empty string. (We don't read the null terminator
+            //because we dont want to display this */
             bufferSize = endPosition - offset;
-            logger.finest("Buffer size is:" + bufferSize);
+            logger.finest("Text size is:" + bufferSize);
             if (bufferSize == 0)
             {
                 value = "";
@@ -184,7 +191,7 @@ public class TextEncodedStringNullTerminated
             value = "";
         }
         //Set Size so offset is ready for next field (includes the null terminator)
-        logger.info("Read NullTerminatedString:" + value+" size:"+size);
+        logger.info("Read NullTerminatedString:" + value+" size inc terminator:"+size);
     }
 
     /**
