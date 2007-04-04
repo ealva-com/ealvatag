@@ -515,6 +515,13 @@ public class ID3v23Tag
                 logger.warning("Empty Frame:"+ex.getMessage());
                 this.emptyFrameBytes += ID3v23Frame.FRAME_HEADER_SIZE;
             }
+            catch ( InvalidFrameIdentifierException ifie)
+            {
+                logger.info("Invalid Frame Identifier:"+ifie.getMessage());
+                this.invalidFrameBytes++;
+                //Dont try and find any more frames
+                break;
+            }
             //Problem trying to find frame, often just occurs because frameheader includes padding
             //and we have reached padding
             catch (InvalidFrameException ife)

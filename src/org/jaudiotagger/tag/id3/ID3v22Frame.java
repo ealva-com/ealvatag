@@ -302,7 +302,7 @@ public class ID3v22Frame
         {
             logger.info("Invalid identifier:" + identifier);
             byteBuffer.position(byteBuffer.position() - (FRAME_ID_SIZE - 1));
-            throw new InvalidFrameException(identifier + " is not a valid ID3v2.20 frame");
+            throw new InvalidFrameIdentifierException(identifier + " is not a valid ID3v2.20 frame");
         }
         //Read Frame Size (same size as Frame ID so reuse buffer)
         byteBuffer.get(buffer, 0, FRAME_SIZE_SIZE);

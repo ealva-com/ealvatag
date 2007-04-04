@@ -671,6 +671,13 @@ public class ID3v24Tag
                 logger.warning("Empty Frame:"+ex.getMessage());
                 this.emptyFrameBytes += TAG_HEADER_LENGTH;
             }
+            catch ( InvalidFrameIdentifierException ifie)
+            {
+                logger.info("Invalid Frame Identifier:"+ifie.getMessage());
+                this.invalidFrameBytes++;
+                //Dont try and find any more frames
+                break;
+            }
             //Problem trying to find frame
             catch (InvalidFrameException ife)
             {

@@ -315,12 +315,20 @@ public class ID3v22Tag
         unsynchronization = (flags & MASK_V22_UNSYNCHRONIZATION) != 0;
         compression       = (flags & MASK_V22_COMPRESSION) != 0;
 
-        //todo if unsynchronization bit set what do we do
         //todo if compression bit set should we ignore
 
         // Read the size
-        size = ID3SyncSafeInteger.bufferToValue(byteBuffer);        
-        readFrames(byteBuffer.slice(),size);
+        size = ID3SyncSafeInteger.bufferToValue(byteBuffer);
+
+         //Slice Buffer, so position markers tally with size (i.e do not include tagheader)
+        ByteBuffer bufferWithoutHeader = byteBuffer.slice();
+        //We need to synchronize the buffer
+        if(unsynchronization==true)
+        {
+             bufferWithoutHeader=ID3Unsynchronization.synchronize(bufferWithoutHeader);
+        }
+        readFrames(bufferWithoutHeader,size);
+        logger.info("Loaded Frames,there are:" + frameMap.keySet().size());
     }
 
     /**
@@ -355,7 +363,14 @@ public class ID3v22Tag
                  logger.warning("Empty Frame:"+ex.getMessage());
                 this.emptyFrameBytes += ID3v22Frame.FRAME_HEADER_SIZE;
             }
-                //Problem trying to find frame
+            catch ( InvalidFrameIdentifierException ifie)
+            {
+                logger.info("Invalid Frame Identifier:"+ifie.getMessage());
+                this.invalidFrameBytes++;
+                //Dont try and find any more frames
+                break;
+            }
+            //Problem trying to find frame
             catch (InvalidFrameException ife)
             {
                 logger.warning("Invalid Frame:"+ife.getMessage());

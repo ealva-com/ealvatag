@@ -332,7 +332,7 @@ public class ID3v24Frame
             //the original check so can try again.
             logger.info("Invalid identifier:" + identifier);
             byteBuffer.position(byteBuffer.position() - (FRAME_ID_SIZE - 1));
-            throw new InvalidFrameException(identifier + " is not a valid ID3v2.40 frame");
+            throw new InvalidFrameIdentifierException(identifier + " is not a valid ID3v2.40 frame");
         }
 
         //Read the sync safe size field

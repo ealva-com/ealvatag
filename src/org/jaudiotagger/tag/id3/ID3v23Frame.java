@@ -276,7 +276,7 @@ public class ID3v23Frame
         {
             logger.info("Invalid identifier:" + identifier);
             byteBuffer.position(byteBuffer.position() - (FRAME_ID_SIZE - 1));
-            throw new InvalidFrameException(identifier + " is not a valid ID3v2.30 frame");
+            throw new InvalidFrameIdentifierException(identifier + " is not a valid ID3v2.30 frame");
         }
         //Read the size field
         frameSize = byteBuffer.getInt();
