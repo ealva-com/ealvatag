@@ -348,7 +348,20 @@ public class ID3v22Frame
                 }
             }
             logger.fine("Identifier was:" + identifier + " reading using:" + id);
-            frameBody = readBody(id, byteBuffer, frameSize);
+
+            //Create Buffer that only contains the body of this frame rather than the remainder of tag
+            ByteBuffer frameBodyBuffer = byteBuffer.slice();
+            frameBodyBuffer.limit(frameSize);
+
+            try
+            {
+                frameBody = readBody(id, frameBodyBuffer, frameSize);
+            }
+            finally
+            {
+                //Update position of main buffer, so no attempt is made to reread these bytes
+                byteBuffer.position(byteBuffer.position()+frameSize);
+            }
         }
     }
 

@@ -701,7 +701,8 @@ public class ID3v24Tag
       extended = false;
       experimental = false;
       footer = false;
-      /** Create Header Buffer,allocate maximum possible size for the header*/
+
+      // Create Header Buffer,allocate maximum possible size for the header*/
       ByteBuffer headerBuffer = ByteBuffer.allocate(TAG_HEADER_LENGTH);
       //TAGID
       headerBuffer.put(TAG_ID);

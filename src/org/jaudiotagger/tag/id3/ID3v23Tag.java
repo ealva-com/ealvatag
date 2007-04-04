@@ -515,7 +515,7 @@ public class ID3v23Tag
                 logger.warning("Empty Frame:"+ex.getMessage());
                 this.emptyFrameBytes += ID3v23Frame.FRAME_HEADER_SIZE;
             }
-            //Problem trying to find frame, oftern just occurs because frameheader includes padding
+            //Problem trying to find frame, often just occurs because frameheader includes padding
             //and we have reached padding
             catch (InvalidFrameException ife)
             {

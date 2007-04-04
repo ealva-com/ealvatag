@@ -371,23 +371,38 @@ public class ID3v24Frame
             logger.info("Frame Size Is:"+ frameSize);
         }
 
-        //TODO Body shouldn't need to know about header,but just slicing seems to cause
-        //a problem so we pass the whole buffer to be synced, but because we are nto at the start
-        //of the buffer only the body will be modified.
-        ByteBuffer byteBufferWithoutHeader=byteBuffer;
+        //Create Buffer that only contains the body of this frame rather than the remainder of tag
+        ByteBuffer frameBodyBuffer = byteBuffer.slice();
+        frameBodyBuffer.limit(frameSize);
 
         //Do we need to synchronize the frame body
+        int syncSize=frameSize;
         if(((EncodingFlags)encodingFlags).isUnsynchronised())
         {
-            byteBufferWithoutHeader=ID3Unsynchronization.synchronize(byteBufferWithoutHeader);
+            //We only want to synchronize the buffer upto the end of this frame (remember this
+            //buffer contains the remainder of this tag not just this frame), and we cant just
+            //create a new buffer because when this method returns the position of the buffer is used
+            //to look for the next frame, so we need to modify the buffer. The action of synchronizing causes
+            //bytes to be dropped so the existing buffer is large enough to hold the modifications
+            frameBodyBuffer=ID3Unsynchronization.synchronize(frameBodyBuffer);
+            syncSize = frameBodyBuffer.limit();
+            logger.info("Frame Size After Syncing is:"+ syncSize);
         }
 
         //Read the body data
-        frameBody = readBody(identifier,  byteBufferWithoutHeader, frameSize);
-        if (!(frameBody instanceof ID3v24FrameBody))
+        try
         {
-            logger.info("Converted frame body with:" + identifier + " to deprecated framebody");
-            frameBody = new FrameBodyDeprecated((AbstractID3v2FrameBody) frameBody);
+            frameBody = readBody(identifier,  frameBodyBuffer, syncSize);
+            if (!(frameBody instanceof ID3v24FrameBody))
+            {
+                logger.info("Converted frame body with:" + identifier + " to deprecated framebody");
+                frameBody = new FrameBodyDeprecated((AbstractID3v2FrameBody) frameBody);
+            }
+        }
+        finally
+        {
+            //Update position of main buffer, so no attempt is made to reread  these bytes
+            byteBuffer.position(byteBuffer.position()+frameSize);
         }
     }
 
@@ -401,6 +416,7 @@ public class ID3v24Frame
         throws IOException
     {
         logger.info("Writing frame to file:" + getIdentifier());
+
         //This is where we will write header, move position to where we can
         //write body
         ByteBuffer headerBuffer = ByteBuffer.allocate(FRAME_HEADER_SIZE);
@@ -602,30 +618,29 @@ public class ID3v24Frame
 
         public void logEnabledFlags()
         {
-            logger.warning("checking flags:"+flags);
             if (isCompression())
             {
-                logger.warning("this frame is compressed");
+                logger.warning(identifier+" is compressed");
             }
 
             if (isEncryption())
             {
-                logger.warning("this frame is encrypted");
+                logger.warning(identifier+" is encrypted");
             }
 
             if (isGrouping())
             {
-                logger.warning("this frame is grouped");
+                logger.warning(identifier+" is grouped");
             }
 
             if (isUnsynchronised())
             {
-                logger.warning("this frame is unsynchronised");
+                logger.warning(identifier+" is unsynchronised");
             }
 
              if (isDataLengthIndicator())
             {
-                logger.warning("this frame has a data length indicator");
+                logger.warning(identifier+" has a data length indicator");
             }
         }
 

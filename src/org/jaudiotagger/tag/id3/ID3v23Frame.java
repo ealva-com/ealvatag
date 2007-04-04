@@ -267,7 +267,7 @@ public class ID3v23Frame
 
         byte[] buffer = new byte[FRAME_ID_SIZE];
 
-        // Read the Frame ID Identifier
+        // Read the Frame Identifier
         byteBuffer.get(buffer, 0, FRAME_ID_SIZE);
         identifier = new String(buffer);
 
@@ -300,34 +300,45 @@ public class ID3v23Frame
         statusFlags = new StatusFlags(byteBuffer.get());
         encodingFlags = new EncodingFlags(byteBuffer.get());
         String id;
-        /** If this identifier is a valid v24 identifier or easily converted to v24 */
+
+        //If this identifier is a valid v24 identifier or easily converted to v24
         id = (String) ID3Tags.convertFrameID23To24(identifier);
-        /** Cant easily be converted to v23 but is it a valid v24 identifier */
+
+        // Cant easily be converted to v23 but is it a valid v24 identifier
         if (id == null)
         {
-            /** It is a valid v23 identifier so should be able to find a
-             *  frame body for it.
-             */
+            // It is a valid v23 identifier so should be able to find a
+            //  frame body for it.
             if (ID3Tags.isID3v23FrameIdentifier(identifier) == true)
             {
                 id = identifier;
             }
-            /** Unknown so will be created as FrameBodyUnsupported
-             *
-             */
+            // Unknown so will be created as FrameBodyUnsupported
             else
             {
                 id = UNSUPPORTED_ID;
             }
         }
         logger.fine("Identifier was:" + identifier + " reading using:" + id);
-        //Read the body data
-        frameBody = readBody(id, byteBuffer, frameSize);
 
-        if(!(frameBody instanceof ID3v23FrameBody))
+        //Create Buffer that only contains the body of this frame rather than the remainder of tag
+        ByteBuffer frameBodyBuffer = byteBuffer.slice();
+        frameBodyBuffer.limit(frameSize);
+
+        //Read the body data
+        try
         {
-            logger.info("Converted frame body with:"+identifier+" to deprecated framebody");
-            frameBody = new FrameBodyDeprecated((AbstractID3v2FrameBody)frameBody);
+            frameBody = readBody(id,frameBodyBuffer, frameSize);
+            if(!(frameBody instanceof ID3v23FrameBody))
+            {
+                logger.info("Converted frame body with:"+identifier+" to deprecated framebody");
+                frameBody = new FrameBodyDeprecated((AbstractID3v2FrameBody)frameBody);
+            }
+        }
+        finally
+        {
+            //Update position of main buffer, so no attempt is made to reread these bytes
+            byteBuffer.position(byteBuffer.position()+frameSize);
         }
     }
 

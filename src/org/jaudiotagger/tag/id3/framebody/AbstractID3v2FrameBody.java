@@ -135,16 +135,24 @@ public abstract class AbstractID3v2FrameBody
     }
 
     /**
-     * This reads a frame body from a ByteBuffer into the appropriate FrameBody class, the ByteBuffer represents
-     * file data and should be at the start of the framebody. The size as indicated in the header is passed to the frame
+     * This reads a frame body from a ByteBuffer into the appropriate FrameBody class and update the position of the
+     * buffer to be just after the end of this framebody
+     *
+     * The ByteBuffer represents the tag and its position should be at the start of this framebody, this method must
+     * ensure the buffer is positioned at the end of the data read because the next frame wil be looked for from this
+     * point, rather than based on the size read in the frame header.
+     *
+     * Note:This is true for v22 and v23 but not v24 now that we have introduced support for reading unsynced frames     *
+     * TODO:Which Is this more accurate anyway
+     *
+     * The size as indicated in the header is passed to the frame
      * constructor when reading from file.
      *
      * @param byteBuffer file to read
      *
      * @throws InvalidFrameException if unable to construct a framebody from the ByteBuffer
      *
-     * TODO:Return size, so can adjust if header size is actaully woong to give us a chance to find the next frame
-     * even though this one is wrong ?
+     *
      */
     public void read(ByteBuffer byteBuffer)
         throws InvalidTagException
