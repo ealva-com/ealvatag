@@ -399,7 +399,7 @@ public class ID3v24Tag
                     newFrame.setBody(newBody);
                     frameMap.put(newFrame.getIdentifier(), newFrame);
                 }
-                if (id3tag.genre >= 0)
+               if ((id3tag.genre & 0xff) >= 0)
                 {
                     String genre = "(" + Byte.toString(id3tag.genre) + ") " +
                         GenreTypes.getInstanceOf().getValueForId(id3tag.genre);
