@@ -201,7 +201,7 @@ public class ID3v11Tag
                     }
                     catch (TagException ex)
                     {
-                        logger.log(Level.WARNING,"Unable to convert TCON frame to format suitable for v11 tag",ex);
+                        logger.log(Level.WARNING,getLoggingFilename()+":"+"Unable to convert TCON frame to format suitable for v11 tag",ex);
                         this.genre = (byte) ID3v1Tag.GENRE_UNDEFINED;
                     }
                 }
@@ -215,7 +215,7 @@ public class ID3v11Tag
                     }
                     catch (TagException ex)
                     {
-                        logger.log(Level.WARNING,"Unable to convert TRCK frame to format suitable for v11 tag",ex);
+                        logger.log(Level.WARNING,getLoggingFilename()+":"+"Unable to convert TRCK frame to format suitable for v11 tag",ex);
                         this.track = (byte) TRACK_UNDEFINED;
                     }
                 }
@@ -226,22 +226,40 @@ public class ID3v11Tag
     /**
      * Creates a new ID3v1_1 datatype.
      *
-     * @param file 
-     * @throws TagNotFoundException 
-     * @throws IOException          
+     * @param file
+     * @param loggingFilename
+     * @throws TagNotFoundException
+     * @throws IOException
      */
-    public ID3v11Tag(RandomAccessFile file)
+    public ID3v11Tag(RandomAccessFile file,String loggingFilename)
         throws TagNotFoundException, IOException
     {
+        setLoggingFilename(loggingFilename);
         FileChannel fc = null;
         ByteBuffer  byteBuffer = ByteBuffer.allocate(TAG_LENGTH);
-                                                                          
+
         fc = file.getChannel();
         fc.position(file.length() - TAG_LENGTH);
         byteBuffer = ByteBuffer.allocate(TAG_LENGTH);
         fc.read(byteBuffer);
         byteBuffer.flip();
         read(byteBuffer);
+
+    }
+
+    /**
+     * Creates a new ID3v1_1 datatype.
+     *
+     * @param file 
+     * @throws TagNotFoundException 
+     * @throws IOException
+     *
+     * @deprecated use {@link #ID3v11Tag(RandomAccessFile,String)} instead
+     */
+    public ID3v11Tag(RandomAccessFile file)
+        throws TagNotFoundException, IOException
+    {
+        this(file,"");
 
     }
 

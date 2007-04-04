@@ -319,13 +319,30 @@ public class ID3v23Tag
     /**
      * Creates a new ID3v2_3 datatype.
      *
-     * @param buffer 
-     * @throws TagException 
+     * @param buffer
+     * @param loggingFilename
+     * @throws TagException
+     */
+    public ID3v23Tag(ByteBuffer buffer,String loggingFilename)
+        throws TagException
+    {
+        setLoggingFilename(loggingFilename);
+        this.read(buffer);
+    }
+
+
+    /**
+     * Creates a new ID3v2_3 datatype.
+     *
+     * @param buffer
+     * @throws TagException
+     *
+     * @deprecated use {@link #ID3v23Tag(ByteBuffer,String)} instead
      */
     public ID3v23Tag(ByteBuffer buffer)
         throws TagException
     {
-        this.read(buffer);
+        this(buffer,"");
     }
 
     /**
@@ -410,7 +427,7 @@ public class ID3v23Tag
         {
             throw new TagNotFoundException(getIdentifier() + " tag not found");
         }
-        logger.info("Reading tag");
+        logger.info(getLoggingFilename()+":"+"Reading tag");
 
         //Flags
         byte flags = buffer.get();
@@ -419,12 +436,12 @@ public class ID3v23Tag
         experimental      = (flags & MASK_V23_EXPERIMENTAL) != 0;
         if (unsynchronization == true)
         {
-            logger.warning("Tag is unsynchronised");
+            logger.warning(getLoggingFilename()+":Tag is unsynchronised");
         }
 
         // Read the size, this is size of tag not including  the tag header
         size = ID3SyncSafeInteger.bufferToValue(buffer);
-        logger.info("Tag size is:"+size+" according to header (does not include header size, add 10)");
+        logger.info(getLoggingFilename()+":Tag size is:"+size+" according to header (does not include header size, add 10)");
 
         //Extended Header
         if (extended == true)
@@ -439,7 +456,7 @@ public class ID3v23Tag
                 crcDataFlag = (extFlag & MASK_V23_CRC_DATA_PRESENT) != 0;
                 if (crcDataFlag == true)
                 {
-                    throw new InvalidTagException("CRC Data flag not set correctly.");
+                    throw new InvalidTagException(getLoggingFilename()+":CRC Data flag not set correctly.");
                 }
                 //Flag Byte (not used)
                 buffer.get();
@@ -453,7 +470,7 @@ public class ID3v23Tag
                 crcDataFlag = (extFlag & MASK_V23_CRC_DATA_PRESENT) != 0;
                 if (crcDataFlag == false)
                 {
-                    throw new InvalidTagException("CRC Data flag not set correctly.");
+                    throw new InvalidTagException(getLoggingFilename()+":CRC Data flag not set correctly.");
                 }
                 //Flag Byte (not used)
                 buffer.get();
@@ -466,7 +483,7 @@ public class ID3v23Tag
             {
                 throw new InvalidTagException("Invalid Extended Header Size.");
             }
-            logger.info("has Extended Header so ajusted Tag size is:"+size);
+            logger.info(getLoggingFilename()+":has Extended Header so adjusted Tag size is:"+size);
 
         }
 
@@ -479,7 +496,7 @@ public class ID3v23Tag
         }
 
         readFrames(bufferWithoutHeader,size);
-        logger.info("Loaded Frames,there are:" + frameMap.keySet().size());
+        logger.info(getLoggingFilename()+":Loaded Frames,there are:" + frameMap.keySet().size());
 
     }
 
@@ -494,7 +511,7 @@ public class ID3v23Tag
 
         //Read the size from the Tag Header
         this.fileReadSize = size;
-        logger.finest("Start of frame body at:" + byteBuffer.position() + ",frames data size is:" + size);
+        logger.finest(getLoggingFilename()+":Start of frame body at:" + byteBuffer.position() + ",frames data size is:" + size);
 
         // Read the frames until got to upto the size as specified in header or until
         // we hit an invalid frame identifier
@@ -504,20 +521,20 @@ public class ID3v23Tag
             try
             {
                 //Read Frame
-                logger.finest("Looking for next frame at:" + byteBuffer.position());
-                next = new ID3v23Frame(byteBuffer);
+                logger.finest(getLoggingFilename()+":Looking for next frame at:" + byteBuffer.position());
+                next = new ID3v23Frame(byteBuffer,getLoggingFilename());
                 id = next.getIdentifier();
                 loadFrameIntoMap(id, next);
             }
             //Found Empty Frame
             catch (EmptyFrameException ex)
             {
-                logger.warning("Empty Frame:"+ex.getMessage());
+                logger.warning(getLoggingFilename()+":Empty Frame:"+ex.getMessage());
                 this.emptyFrameBytes += ID3v23Frame.FRAME_HEADER_SIZE;
             }
             catch ( InvalidFrameIdentifierException ifie)
             {
-                logger.info("Invalid Frame Identifier:"+ifie.getMessage());
+                logger.info(getLoggingFilename()+":Invalid Frame Identifier:"+ifie.getMessage());
                 this.invalidFrameBytes++;
                 //Dont try and find any more frames
                 break;
@@ -526,7 +543,7 @@ public class ID3v23Tag
             //and we have reached padding
             catch (InvalidFrameException ife)
             {
-                logger.warning("Invalid Frame:"+ife.getMessage());
+                logger.warning(getLoggingFilename()+":Invalid Frame:"+ife.getMessage());
                 this.invalidFrameBytes++;
                 //Dont try and find any more frames
                 break;

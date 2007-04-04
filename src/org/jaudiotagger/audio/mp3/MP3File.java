@@ -173,7 +173,7 @@ public class MP3File extends org.jaudiotagger.audio.AbstractAudioFile
             logger.finer("Attempting to read id3v1tags");
             try
             {
-                id3v1tag = new ID3v11Tag(newFile);
+                id3v1tag = new ID3v11Tag(newFile,file.getName());
             }
             catch (TagNotFoundException ex)
             {
@@ -184,7 +184,7 @@ public class MP3File extends org.jaudiotagger.audio.AbstractAudioFile
             {
                 if (id3v1tag == null)
                 {
-                    id3v1tag = new ID3v1Tag(newFile);
+                    id3v1tag = new ID3v1Tag(newFile,file.getName());
                 }
             }
             catch (TagNotFoundException ex)
@@ -230,7 +230,7 @@ public class MP3File extends org.jaudiotagger.audio.AbstractAudioFile
                 logger.info("Attempting to read id3v2tags");
                 try
                 {
-                    this.setID3v2Tag(new ID3v24Tag(bb));
+                    this.setID3v2Tag(new ID3v24Tag(bb,file.getName()));
                 }
                 catch (TagNotFoundException ex)
                 {
@@ -241,7 +241,7 @@ public class MP3File extends org.jaudiotagger.audio.AbstractAudioFile
                 {
                     if (id3v2tag == null)
                     {
-                        this.setID3v2Tag(new ID3v23Tag(bb));
+                        this.setID3v2Tag(new ID3v23Tag(bb,file.getName()));
                     }
                 }
                 catch (TagNotFoundException ex)
@@ -253,7 +253,7 @@ public class MP3File extends org.jaudiotagger.audio.AbstractAudioFile
                 {
                     if (id3v2tag == null)
                     {
-                        this.setID3v2Tag(new ID3v22Tag(bb));
+                        this.setID3v2Tag(new ID3v22Tag(bb,file.getName()));
                     }
                 }
                 catch (TagNotFoundException ex)
@@ -327,7 +327,7 @@ public class MP3File extends org.jaudiotagger.audio.AbstractAudioFile
      *
      * This provides access to the raw data before manipulation, the data is written from the start of the file
      * to the start of the Audio Data. This is primarily useful for manipulating corrupted tags that are not
-     * (fully) loaded using the standard methods. 
+     * (fully) loaded using the standard methods.
      *
      * @param outputFile to write the data to
      * @return
@@ -495,7 +495,7 @@ public class MP3File extends org.jaudiotagger.audio.AbstractAudioFile
     /**
      * Set v2 tag ,dont need to set v24 tag because saving
      *
-     * @TODO temp its rather messy
+     * TODO temp its rather messy
      */
     public void setID3v2TagOnly
         (AbstractID3v2Tag

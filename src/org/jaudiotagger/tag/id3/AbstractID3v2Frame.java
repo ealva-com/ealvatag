@@ -49,6 +49,11 @@ public abstract class AbstractID3v2Frame
     //Frame Size
     protected int frameSize;
 
+    //The purpose of this is to provide the filename that should be used when writing debug messages
+    //when problems occur reading or writing to file, otherwise it is difficult to track down the error
+    //when processing many files
+    private String loggingFilename = "";
+
     /**
      * Create an empty frame
      */
@@ -121,6 +126,26 @@ public abstract class AbstractID3v2Frame
         logger.info("Created empty frame of type" + identifier);
     }
 
+     /**
+     * Retrieve the logging filename to be used in debugging
+     *
+     * @return logging filename to be used in debugging
+     */
+    protected String getLoggingFilename()
+    {
+        return loggingFilename;
+    }
+
+    /**
+     * Set logging filename when construct tag for read from file
+     *
+     * @param loggingFilename
+     */
+    protected void setLoggingFilename(String loggingFilename)
+    {
+        this.loggingFilename = loggingFilename;
+    }
+
     /**
      * Return the frame identifier
      *
@@ -164,7 +189,7 @@ public abstract class AbstractID3v2Frame
         //No class defind for this frame type,use FrameUnsupported
         catch (ClassNotFoundException cex)
         {
-            logger.info("Identifier not recognised:" + identifier + " using FrameBodyUnsupported");
+            logger.info(getLoggingFilename()+":"+"Identifier not recognised:" + identifier + " using FrameBodyUnsupported");
             try
             {
                 frameBody = new FrameBodyUnsupported(byteBuffer, frameSize);
@@ -184,7 +209,7 @@ public abstract class AbstractID3v2Frame
         //propagate it up otherwise mark this frame as invalid
         catch (InvocationTargetException ite)
         {
-            logger.severe("An error occurred within abstractID3v2FrameBody for identifier:"
+            logger.severe(getLoggingFilename()+":"+"An error occurred within abstractID3v2FrameBody for identifier:"
                 +identifier+":"+ite.getCause().getMessage());  
             if(ite.getCause() instanceof Error)
             {
@@ -202,22 +227,22 @@ public abstract class AbstractID3v2Frame
         //No Such Method should not happen
         catch (NoSuchMethodException sme)
         {
-            logger.log(Level.SEVERE,"No such method:"+sme.getMessage(),sme);
+            logger.log(Level.SEVERE,getLoggingFilename()+":"+"No such method:"+sme.getMessage(),sme);
             throw new RuntimeException(sme.getMessage());
         }
         //Instantiate Interface/Abstract should not happen
         catch (InstantiationException ie)
         {
-            logger.log(Level.SEVERE,"Instantiation exception:"+ie.getMessage(),ie);
+            logger.log(Level.SEVERE,getLoggingFilename()+":"+"Instantiation exception:"+ie.getMessage(),ie);
             throw new RuntimeException(ie.getMessage());
         }
         //Private Constructor shouild not happen
         catch (IllegalAccessException iae)
         {
-            logger.log(Level.SEVERE,"Illegal access exception :"+iae.getMessage(),iae);
+            logger.log(Level.SEVERE,getLoggingFilename()+":"+"Illegal access exception :"+iae.getMessage(),iae);
             throw new RuntimeException(iae.getMessage());
         }
-        logger.finest("Created framebody:end" + frameBody.getIdentifier());
+        logger.finest(getLoggingFilename()+":"+"Created framebody:end" + frameBody.getIdentifier());
         return frameBody;
     }
 

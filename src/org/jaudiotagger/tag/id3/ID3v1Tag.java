@@ -161,17 +161,18 @@ public class ID3v1Tag
         }
     }
 
-    /**
+     /**
      * Creates a new ID3v1 datatype.
      *
      * @param file
+     * @param loggingFilename
      * @throws TagNotFoundException
      * @throws IOException
      */
-    public ID3v1Tag(RandomAccessFile file)
+    public ID3v1Tag(RandomAccessFile file,String loggingFilename)
         throws TagNotFoundException, IOException
     {
-
+        setLoggingFilename(loggingFilename);
         FileChannel fc;
         ByteBuffer  byteBuffer;
 
@@ -181,7 +182,21 @@ public class ID3v1Tag
         fc.read(byteBuffer);
         byteBuffer.flip();
         read(byteBuffer);
+    }
 
+    /**
+     * Creates a new ID3v1 datatype.
+     *
+     * @param file
+     * @throws TagNotFoundException
+     * @throws IOException
+     *
+     * @deprecated use {@link #ID3v1Tag(RandomAccessFile,String)} instead
+     */
+    public ID3v1Tag(RandomAccessFile file)
+        throws TagNotFoundException, IOException
+    {
+        this(file,"");
     }
 
     /**
@@ -380,9 +395,9 @@ public class ID3v1Tag
     {
         if (seek(byteBuffer) == false)
         {
-            throw new TagNotFoundException("ID3v1 tag not found");
+            throw new TagNotFoundException(getLoggingFilename()+":"+"ID3v1 tag not found");
         }
-        logger.finer("Reading v1 tag");
+        logger.finer(getLoggingFilename()+":"+"Reading v1 tag");
         //Do single file read of data to cut down on file reads
         byte[] dataBuffer = new byte[TAG_LENGTH];
         byteBuffer.position(0);
@@ -401,11 +416,11 @@ public class ID3v1Tag
         }
         album = new String(dataBuffer, FIELD_ALBUM_POS, this.FIELD_ALBUM_LENGTH).trim();
         m = endofStringPattern.matcher(album);
-        logger.finest("Orig Album is:" + comment + ":");
+        logger.finest(getLoggingFilename()+":"+"Orig Album is:" + comment + ":");
         if (m.find() == true)
         {
             album = album.substring(0, m.start());
-            logger.finest("Album is:" + album + ":");
+            logger.finest(getLoggingFilename()+":"+"Album is:" + album + ":");
         }
         year = new String(dataBuffer, FIELD_YEAR_POS, this.FIELD_YEAR_LENGTH).trim();
         m = endofStringPattern.matcher(year);
@@ -415,11 +430,11 @@ public class ID3v1Tag
         }
         comment = new String(dataBuffer, FIELD_COMMENT_POS, FIELD_COMMENT_LENGTH).trim();
         m = endofStringPattern.matcher(comment);
-        logger.finest("Orig Comment is:" + comment + ":");
+        logger.finest(getLoggingFilename()+":"+"Orig Comment is:" + comment + ":");
         if (m.find() == true)
         {
             comment = comment.substring(0, m.start());
-            logger.finest("Comment is:" + comment + ":");
+            logger.finest(getLoggingFilename()+":"+"Comment is:" + comment + ":");
         }
         genre = dataBuffer[this.FIELD_GENRE_POS];
 

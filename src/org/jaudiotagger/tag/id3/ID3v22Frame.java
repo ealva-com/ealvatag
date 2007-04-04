@@ -255,16 +255,29 @@ public class ID3v22Frame
     }
 
     /**
-     * Creates a new ID3v2_2Frame datatype from byteBuffer.
+     * Creates a new ID3v22Frame datatype by reading from byteBuffer.
      *
-     * @param byteBuffer
+     * @param byteBuffer to read from
+     */
+    public ID3v22Frame(ByteBuffer byteBuffer,String loggingFilename)
+        throws InvalidFrameException
+    {
+       setLoggingFilename(loggingFilename);
+       read(byteBuffer);
+    }
+
+    /**
+     * Creates a new ID3v23Frame datatype by reading from byteBuffer.
+     *
+     * @param byteBuffer to read from
+     *
+     * @deprecated use {@link #ID3v22Frame(ByteBuffer,String)} instead
      */
     public ID3v22Frame(ByteBuffer byteBuffer)
         throws InvalidFrameException
     {
-        this.read(byteBuffer);
+       this(byteBuffer,"");
     }
-
     /**
      * Return size of frame
      *

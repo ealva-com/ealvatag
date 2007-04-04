@@ -233,15 +233,32 @@ public class ID3v22Tag
     }
 
     /**
-     * Creates a new ID3v2_2 datatype by reading it from file.
+     * Creates a new ID3v2_2 datatype.
      *
-     * @param byteBuffer 
-     * @throws TagException 
+     * @param buffer
+     * @param loggingFilename
+     * @throws TagException
      */
-    public ID3v22Tag(ByteBuffer byteBuffer)
+    public ID3v22Tag(ByteBuffer buffer,String loggingFilename)
         throws TagException
     {
-        this.read(byteBuffer);
+        setLoggingFilename(loggingFilename);
+        this.read(buffer);
+    }
+
+
+    /**
+     * Creates a new ID3v2_2 datatype.
+     *
+     * @param buffer
+     * @throws TagException
+     *
+     * @deprecated use {@link #ID3v22Tag(ByteBuffer,String)} instead
+     */
+    public ID3v22Tag(ByteBuffer buffer)
+        throws TagException
+    {
+        this(buffer,"");
     }
 
     /**
@@ -308,7 +325,7 @@ public class ID3v22Tag
         {
             throw new TagNotFoundException("ID3v2.20 tag not found");
         }
-        logger.info("Reading tag from file");
+        logger.info(getLoggingFilename()+":"+"Reading tag from file");
 
         //Read the flags
         byte flags = byteBuffer.get();
@@ -328,7 +345,7 @@ public class ID3v22Tag
              bufferWithoutHeader=ID3Unsynchronization.synchronize(bufferWithoutHeader);
         }
         readFrames(bufferWithoutHeader,size);
-        logger.info("Loaded Frames,there are:" + frameMap.keySet().size());
+        logger.info(getLoggingFilename()+":"+"Loaded Frames,there are:" + frameMap.keySet().size());
     }
 
     /**
@@ -341,8 +358,8 @@ public class ID3v22Tag
         frameMap = new LinkedHashMap();
         //Read the size from the Tag Header
         this.fileReadSize = size;
-        logger.finest("Start of frame body at:" + byteBuffer.position() + ",frames sizes and padding is:" + size);
-        /* @todo not done yet. Read the first Frame, there seems to be quite a
+        logger.finest(getLoggingFilename()+":"+"Start of frame body at:" + byteBuffer.position() + ",frames sizes and padding is:" + size);
+        /* todo not done yet. Read the first Frame, there seems to be quite a
          ** common case of extra data being between the tag header and the first
          ** frame so should we allow for this when reading first frame, but not subsequent frames
          */
@@ -352,20 +369,20 @@ public class ID3v22Tag
             try
             {
                 //Read Frame
-                logger.finest("looking for next frame at:" + byteBuffer.position());
-                next = new ID3v22Frame(byteBuffer);
+                logger.finest(getLoggingFilename()+":"+"looking for next frame at:" + byteBuffer.position());
+                next = new ID3v22Frame(byteBuffer,getLoggingFilename());
                 String id = next.getIdentifier();
                 loadFrameIntoMap(id, next);
             }
                 //Found Empty Frame
             catch (EmptyFrameException ex)
             {
-                 logger.warning("Empty Frame:"+ex.getMessage());
+                 logger.warning(getLoggingFilename()+":"+"Empty Frame:"+ex.getMessage());
                 this.emptyFrameBytes += ID3v22Frame.FRAME_HEADER_SIZE;
             }
             catch ( InvalidFrameIdentifierException ifie)
             {
-                logger.info("Invalid Frame Identifier:"+ifie.getMessage());
+                logger.info(getLoggingFilename()+":"+"Invalid Frame Identifier:"+ifie.getMessage());
                 this.invalidFrameBytes++;
                 //Dont try and find any more frames
                 break;
@@ -373,7 +390,7 @@ public class ID3v22Tag
             //Problem trying to find frame
             catch (InvalidFrameException ife)
             {
-                logger.warning("Invalid Frame:"+ife.getMessage());
+                logger.warning(getLoggingFilename()+":"+"Invalid Frame:"+ife.getMessage());
                 this.invalidFrameBytes++;
                 //Dont try and find any more frames
                 break;

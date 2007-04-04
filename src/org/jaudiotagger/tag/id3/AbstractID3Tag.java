@@ -26,7 +26,7 @@ package org.jaudiotagger.tag.id3;
 
 /**
  * This is the abstract base class for all ID3 tags.
- *  
+ *
  * @author : Eric Farng
  * @author : Paul Taylor
  *
@@ -38,6 +38,11 @@ public abstract class AbstractID3Tag extends org.jaudiotagger.tag.AbstractTag
     }
 
     protected static final String TAG_RELEASE = "ID3v";
+
+    //The purpose of this is to provide the filename that should be used when writing debug messages
+    //when problems occur reading or writing to file, otherwise it is difficult to track down the error
+    //when processing many files
+    private String loggingFilename = "";
 
     /**
      * Get full version
@@ -74,4 +79,23 @@ public abstract class AbstractID3Tag extends org.jaudiotagger.tag.AbstractTag
         return "";
     }
 
+    /**
+     * Retrieve the logging filename to be used in debugging
+     *
+     * @return logging filename to be used in debugging
+     */
+    protected String getLoggingFilename()
+    {
+        return loggingFilename;
+    }
+
+    /**
+     * Set logging filename when construct tag for read from file
+     *
+     * @param loggingFilename
+     */
+    protected void setLoggingFilename(String loggingFilename)
+    {
+        this.loggingFilename = loggingFilename;
+    }
 }

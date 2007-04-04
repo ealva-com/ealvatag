@@ -455,18 +455,33 @@ public class ID3v24Tag
     }
 
     /**
-     * Creates a new ID3v2_4 datatype from buffer
+     * Creates a new ID3v2_4 datatype.
+     *
+     * @param buffer
+     * @param loggingFilename
+     * @throws TagException
+     */
+    public ID3v24Tag(ByteBuffer buffer,String loggingFilename)
+        throws TagException
+    {
+        setLoggingFilename(loggingFilename);
+        this.read(buffer);
+    }
+
+
+    /**
+     * Creates a new ID3v2_4 datatype.
      *
      * @param buffer
      * @throws TagException
+     *
+     * @deprecated use {@link #ID3v24Tag(ByteBuffer,String)} instead
      */
     public ID3v24Tag(ByteBuffer buffer)
         throws TagException
     {
-        this.read(buffer);
-
+        this(buffer,"");
     }
-
     /**
      * 
      *
@@ -571,7 +586,7 @@ public class ID3v24Tag
         byte[] buffer;
         if (seek(byteBuffer) == false)
         {
-            throw new TagNotFoundException(getIdentifier() + " tag not found");
+            throw new TagNotFoundException(getLoggingFilename()+":"+getIdentifier() + " tag not found");
         }
         //Flags
         byte flags = byteBuffer.get();
@@ -581,12 +596,12 @@ public class ID3v24Tag
         footer = (flags & MASK_V24_FOOTER_PRESENT) != 0;
         if (unsynchronization == true)
         {
-            logger.warning("this tag is unsynchronised");
+            logger.warning(getLoggingFilename()+":"+"unsynchronised");
         }
 
         // Read the size, this is size of tag apart from tag header
         size = ID3SyncSafeInteger.bufferToValue(byteBuffer);
-        logger.info("Reading tag from file size set in header is" + size);
+        logger.info(getLoggingFilename()+":"+"Reading tag from file size set in header is" + size);
         if (extended == true)
         {
             // int is 4 bytes.
@@ -594,7 +609,7 @@ public class ID3v24Tag
             // the extended header must be atleast 6 bytes
             if (extendedHeaderSize <= TAG_EXT_HEADER_LENGTH)
             {
-                throw new InvalidTagException("Invalid Extended Header Size.");
+                throw new InvalidTagException(getLoggingFilename()+":"+"Invalid Extended Header Size.");
             }
             //Number of bytes
             byteBuffer.get();
@@ -646,34 +661,34 @@ public class ID3v24Tag
      */
     protected void readFrames(ByteBuffer byteBuffer, int size)
     {
-        logger.finest("Start of frame body at" + byteBuffer.position());
+        logger.finest(getLoggingFilename()+":"+"Start of frame body at" + byteBuffer.position());
         //Now start looking for frames
         ID3v24Frame next;
         frameMap = new LinkedHashMap();
         //Read the size from the Tag Header
         this.fileReadSize = size;
         // Read the frames until got to upto the size as specified in header
-        logger.finest("Start of frame body at:" + byteBuffer.position() + ",frames data size is:" + size);
+        logger.finest(getLoggingFilename()+":"+"Start of frame body at:" + byteBuffer.position() + ",frames data size is:" + size);
         while (byteBuffer.position() <= size)
         {
             String id;
             try
             {
                 //Read Frame
-                logger.finest("looking for next frame at:" + byteBuffer.position());
-                next = new ID3v24Frame(byteBuffer);
+                logger.finest(getLoggingFilename()+":"+"looking for next frame at:" + byteBuffer.position());
+                next = new ID3v24Frame(byteBuffer,getLoggingFilename());
                 id = next.getIdentifier();
                 loadFrameIntoMap(id, next);
             }
             //Found Empty Frame
             catch (EmptyFrameException ex)
             {
-                logger.warning("Empty Frame:"+ex.getMessage());
+                logger.warning(getLoggingFilename()+":"+"Empty Frame:"+ex.getMessage());
                 this.emptyFrameBytes += TAG_HEADER_LENGTH;
             }
             catch ( InvalidFrameIdentifierException ifie)
             {
-                logger.info("Invalid Frame Identifier:"+ifie.getMessage());
+                logger.info(getLoggingFilename()+":"+"Invalid Frame Identifier:"+ifie.getMessage());
                 this.invalidFrameBytes++;
                 //Dont try and find any more frames
                 break;
@@ -681,7 +696,7 @@ public class ID3v24Tag
             //Problem trying to find frame
             catch (InvalidFrameException ife)
             {
-                logger.warning("Invalid Frame:"+ife.getMessage());
+                logger.warning(getLoggingFilename()+":"+"Invalid Frame:"+ife.getMessage());
                 this.invalidFrameBytes++;
                 //Dont try and find any more frames
                 break;
