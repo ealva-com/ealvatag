@@ -309,6 +309,7 @@ public class ID3v23Frame
             logger.warning(getLoggingFilename()+":Invalid Frame size larger than size before mp3 audio:" + identifier);
             throw new InvalidFrameException(identifier + " is invalid frame");
         }
+        
        
         //Read the flag bytes
         statusFlags = new StatusFlags(byteBuffer.get());

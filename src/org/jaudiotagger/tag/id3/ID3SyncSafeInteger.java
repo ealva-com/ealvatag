@@ -5,7 +5,7 @@ import java.nio.ByteBuffer;
 /**
  *  Peforms encoding/decoding of an syncsafe integer
  *
- *  Syncsafe inetgers are used for the size in the tag header of v23 and v24 tags, and in the frame size in
+ *  Syncsafe integers are used for the size in the tag header of v23 and v24 tags, and in the frame size in
  *  the frame header of v24 frames.
  *
  *  In some parts of the tag it is inconvenient to use the
@@ -25,6 +25,11 @@ import java.nio.ByteBuffer;
 public class ID3SyncSafeInteger
 {
     public static final int INTEGRAL_SIZE = 4;
+
+    /** Sizes equal or smaller than this are the same whether held as sync safe integer or normal integer so
+     *  it doesnt matter.
+     */
+    public static final int MAX_SAFE_SIZE  = 127;
 
     /**
      * Read syncsafe value from byteArray in format specified in spec and convert to int.
@@ -50,6 +55,56 @@ public class ID3SyncSafeInteger
         byte byteBuffer [] = new byte[INTEGRAL_SIZE];
         buffer.get(byteBuffer,0,INTEGRAL_SIZE);
         return bufferToValue(byteBuffer);
+    }
+
+    /**
+     * Is buffer holding a value that is definently not sysncsafe
+     *
+     * We cannot guarantee a buffer is holding a syncsafe integer but there are some checks
+     * we can do to show that it definently is not.
+     *
+     * The buffer is NOT moved after reading.
+     *
+     * This function is useful for reading ID3v24 frames created in iTunes because iTunes does not use syncsafe
+     * integers in  its frames.
+     *
+     * @param buffer
+     * @return true if this buffer is definently not holding a syncsafe integer
+     */
+    protected static boolean isBufferNotSyncSafe(ByteBuffer buffer)
+    {
+        int position = buffer.position();
+
+        //Check Bit7 not set
+        for(int i=0;i<INTEGRAL_SIZE;i++)
+        {
+            byte nextByte = buffer.get(position+i);
+            if((nextByte & 0x80)>0)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Checks if the buffer just contains zeros
+     *
+     * This can be used to identify when accessing padding of a tag
+     *
+     * @param buffer
+     * @return true if buffer only contains zeros
+     */
+    protected static boolean isBufferEmpty(byte[] buffer)
+    {
+        for(int i=0;i<buffer.length;i++)
+        {
+            if(buffer[i]!=0)
+            {
+                return false;
+            }
+        }
+        return true;
     }
 
     /**
