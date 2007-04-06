@@ -35,17 +35,20 @@ public class ImageFormats
     public static final String V22_GIF_FORMAT = "GIF";
     public static final String V22_BMP_FORMAT = "BMP";
 
-    public static final String MIME_TYPE_JPG = "image/jpg";
-    public static final String MIME_TYPE_PNG = "image/png";
-    public static final String MIME_TYPE_GIF = "image/gif";
-    public static final String MIME_TYPE_BMP = "image/bmp";
+    public static final String MIME_TYPE_JPEG = "image/jpeg";
+    public static final String MIME_TYPE_PNG  = "image/png";
+    public static final String MIME_TYPE_GIF  = "image/gif";
+    public static final String MIME_TYPE_BMP  = "image/bmp";
+
+    /** Sometimes this is used for jpg instead :or have I made this up */
+    public static final String MIME_TYPE_JPG  = "image/jpg";
 
     private static HashMap imageFormatsToMimeType = new HashMap();
     private static HashMap imageMimeTypeToFormat = new HashMap();
 
     static
     {
-        imageFormatsToMimeType.put(V22_JPG_FORMAT, MIME_TYPE_JPG);
+        imageFormatsToMimeType.put(V22_JPG_FORMAT, MIME_TYPE_JPEG);
         imageFormatsToMimeType.put(V22_PNG_FORMAT, MIME_TYPE_PNG);
         imageFormatsToMimeType.put(V22_GIF_FORMAT, MIME_TYPE_GIF);
         imageFormatsToMimeType.put(V22_BMP_FORMAT, MIME_TYPE_BMP);
@@ -58,6 +61,9 @@ public class ImageFormats
             value = imageFormatsToMimeType.get(key);
             imageMimeTypeToFormat.put(value, key);
         }
+
+        //The mapping isnt one-one lets add other mimetypes
+        imageMimeTypeToFormat.put(MIME_TYPE_JPG,V22_JPG_FORMAT);
     }
 
     /**
