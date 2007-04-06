@@ -378,7 +378,7 @@ public class ID3v24Frame
         {
             //Read the sync safe size field
             int vanillaSize = ID3SyncSafeInteger.bufferToValue(byteBuffer);
-            logger.info(getLoggingFilename()+":"+"Frame Size Is:"+ frameSize + "Vanilla Size:"+vanillaSize);
+            logger.info(getLoggingFilename()+":"+"Frame Size Is:"+ frameSize + "Data Length Size:"+vanillaSize);
         }
         else
         {
@@ -454,8 +454,12 @@ public class ID3v24Frame
         headerBuffer.put(ID3SyncSafeInteger.valueToBuffer(frameBody.getSize()));
 
         //Write the Flags
-        //TODO What about adjustments to header based on encoding flag
+        //Status Flags:leave as they were when we read
         headerBuffer.put(statusFlags.getWriteFlags());
+
+        //Enclosing Flags, first reset
+        encodingFlags.resetFlags();
+        //Encoding we dont support any of flags so don't set
         headerBuffer.put(encodingFlags.getFlags());
 
         //Add header to the Byte Array Output Stream
@@ -581,12 +585,13 @@ public class ID3v24Frame
      * This represents a frame headers Encoding Flags
      */
     class EncodingFlags
-        extends ID3v23Frame.EncodingFlags
+        extends AbstractID3v2Frame.EncodingFlags
     {
-        public static final String TYPE_FRAMEUNSYNCHRONIZATION = "frameUnsynchronisation";
-        public static final String TYPE_DATALENGTHINDICATOR = "dataLengthIndicator";
-
-        /** Note these are in a different location to v2.3*/
+        public static final String TYPE_COMPRESSION             = "compression";
+        public static final String TYPE_ENCRYPTION              = "encryption";
+        public static final String TYPE_GROUPIDENTITY           = "groupidentity";
+        public static final String TYPE_FRAMEUNSYNCHRONIZATION  = "frameUnsynchronisation";
+        public static final String TYPE_DATALENGTHINDICATOR     = "dataLengthIndicator";
 
        /**
          * Frame is part of a group
@@ -618,7 +623,7 @@ public class ID3v24Frame
          */
         EncodingFlags()
         {
-            this((byte) 0);
+            super();
         }
 
         /**
@@ -714,5 +719,6 @@ public class ID3v24Frame
         MP3File.getStructureFormatter().closeHeadingElement(TYPE_FRAME);
 
     }
+
 
 }

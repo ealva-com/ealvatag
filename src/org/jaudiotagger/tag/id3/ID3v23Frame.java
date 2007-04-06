@@ -382,9 +382,14 @@ public class ID3v23Frame
         int size = frameBody.getSize();
         logger.fine("Frame Size Is:" + size);
         headerBuffer.putInt(frameBody.getSize());
+
         //Write the Flags
-        //@todo What about adjustments to header based on encoding flag
+        //Status Flags:leave as they were when we read
         headerBuffer.put(statusFlags.getWriteFlags());
+
+        //Enclosing Flags, first reset
+        encodingFlags.resetFlags();
+        //Encoding we dont support any of flags so don't set any
         headerBuffer.put(encodingFlags.getFlags());
 
         //Add header to the Byte Array Output Stream
@@ -504,7 +509,6 @@ public class ID3v23Frame
         public static final String TYPE_ENCRYPTION = "encryption";
         public static final String TYPE_GROUPIDENTITY = "groupidentity";
 
-
         /**
          * Frame is compressed
          */
@@ -522,13 +526,49 @@ public class ID3v23Frame
 
         public EncodingFlags()
         {
-            this((byte) 0);
+            super();
         }
 
         public EncodingFlags(byte flags)
         {
-            this.flags = flags;
+            super(flags);
+            logEnabledFlags();
         }
+
+        public void logEnabledFlags()
+       {
+           if (isCompression())
+           {
+               logger.warning(getLoggingFilename()+":"+identifier+" is compressed");
+           }
+
+           if (isEncryption())
+           {
+               logger.warning(getLoggingFilename()+":"+identifier+" is encrypted");
+           }
+
+           if (isGrouping())
+           {
+               logger.warning(getLoggingFilename()+":"+identifier+" is grouped");
+           }
+       }
+
+        public boolean isCompression()
+        {
+            return (flags & MASK_COMPRESSION) >0;
+        }
+
+        public boolean isEncryption()
+        {
+            return (flags & MASK_ENCRYPTION) >0;
+        }
+
+        public boolean isGrouping()
+        {
+            return (flags & MASK_GROUPING_IDENTITY) >0;
+        }
+
+
 
         public void createStructure()
         {

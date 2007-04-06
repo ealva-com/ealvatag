@@ -379,12 +379,27 @@ public abstract class AbstractID3v2Frame
 
         protected EncodingFlags()
         {
+            resetFlags();
+        }
 
+        protected EncodingFlags(byte flags)
+        {
+           setFlags(flags);
         }
 
         public byte getFlags()
         {
             return flags;
+        }
+
+        public void setFlags(byte flags)
+        {
+            this.flags=flags;
+        }
+
+        public void resetFlags()
+        {
+            setFlags((byte) 0);
         }
 
         public void createStructure()

@@ -434,9 +434,20 @@ public class ID3v23Tag
         unsynchronization = (flags & MASK_V23_UNSYNCHRONIZATION) != 0;
         extended          = (flags & MASK_V23_EXTENDED_HEADER) != 0;
         experimental      = (flags & MASK_V23_EXPERIMENTAL) != 0;
-        if (unsynchronization == true)
+
+        if(unsynchronization)
         {
-            logger.warning(getLoggingFilename()+":Tag is unsynchronised");
+            logger.warning(getLoggingFilename()+":"+"ID3v23 Tag is unsynchronized");
+        }
+
+        if(extended)
+        {
+            logger.warning(getLoggingFilename()+":"+"ID3v23 Tag is extended");
+        }
+
+        if(experimental)
+        {
+            logger.warning(getLoggingFilename()+":"+"ID3v23 Tag is experimental");
         }
 
         // Read the size, this is size of tag not including  the tag header

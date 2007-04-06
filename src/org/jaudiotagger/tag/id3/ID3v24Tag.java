@@ -599,15 +599,31 @@ public class ID3v24Tag
         extended = (flags & MASK_V24_EXTENDED_HEADER) != 0;
         experimental = (flags & MASK_V24_EXPERIMENTAL) != 0;
         footer = (flags & MASK_V24_FOOTER_PRESENT) != 0;
-        if (unsynchronization == true)
+
+        if(unsynchronization)
         {
-            logger.warning(getLoggingFilename()+":"+"unsynchronised");
+            logger.warning(getLoggingFilename()+":"+"ID3v24 Tag is unsynchronized");
+        }
+
+        if(extended)
+        {
+            logger.warning(getLoggingFilename()+":"+"ID3v24 Tag is extended");
+        }
+
+        if(experimental)
+        {
+            logger.warning(getLoggingFilename()+":"+"ID3v24 Tag is experimental");
+        }
+
+        if(footer)
+        {
+            logger.warning(getLoggingFilename()+":"+"ID3v24 Tag has footer");
         }
 
         // Read the size, this is size of tag apart from tag header
         size = ID3SyncSafeInteger.bufferToValue(byteBuffer);
         logger.info(getLoggingFilename()+":"+"Reading tag from file size set in header is" + size);
-        if (extended == true)
+        if (extended)
         {
             // int is 4 bytes.
             int extendedHeaderSize = byteBuffer.getInt();
@@ -717,14 +733,16 @@ public class ID3v24Tag
      */
     protected ByteBuffer writeHeaderToBuffer(int padding) throws IOException
     {
-      //todo Calculate UnSynchronisation
       //todo Calculate the CYC Data Check
       //todo Reintroduce Extended Header
+
+      //todo in v24 unsync just means that all frames are unsynced, until we support unsysncing frames
+      //set to false
+      unsynchronization = false;
 
       // Flags,currently we never do unsynchronisation or calculate the CRC
       // and if we dont calculate them cant keep orig values. Tags are not
       // experimental and we never create extended header to keep things simple.
-      unsynchronization = false;
       extended = false;
       experimental = false;
       footer = false;

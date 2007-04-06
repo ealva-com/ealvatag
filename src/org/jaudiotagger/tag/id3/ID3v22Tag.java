@@ -332,7 +332,17 @@ public class ID3v22Tag
         unsynchronization = (flags & MASK_V22_UNSYNCHRONIZATION) != 0;
         compression       = (flags & MASK_V22_COMPRESSION) != 0;
 
-        //todo if compression bit set should we ignore
+        if(unsynchronization)
+        {
+            logger.warning(getLoggingFilename()+":"+"ID3v22 Tag is unsynchronized");
+        }
+
+        if(compression)
+        {
+            logger.warning(getLoggingFilename()+":"+"ID3v22 Tag is compressed");
+        }
+
+        //TODO if compression bit set should we ignore
 
         // Read the size
         size = ID3SyncSafeInteger.bufferToValue(byteBuffer);
@@ -432,14 +442,12 @@ public class ID3v22Tag
      */
     protected ByteBuffer writeHeaderToBuffer(int padding) throws IOException
     {
-        // todo Unsynchronisation support required.
-        // We never compress tags as was never defined,
-        // currently we do not support Unsyncronisation so should not be set.
-        unsynchronization = false;
+        //TODO compression support required.
         compression = false;
-  
-        /** Create Header Buffer */
+
+        //Create Header Buffer
         ByteBuffer headerBuffer = ByteBuffer.allocate(TAG_HEADER_LENGTH);
+
         //TAGID
         headerBuffer.put(TAG_ID);
         //Major Version
@@ -475,16 +483,31 @@ public class ID3v22Tag
     {
         logger.info("Writing tag to file");
 
-        /** Write Body Buffer */
+        // Write Body Buffer */
         byte[] bodyByteBuffer = writeFramesToBuffer().toByteArray();
 
-        /** Calculate Tag Size including Padding */
+        //Unsynchronize if option enabled and unsync required
+        if(TagOptionSingleton.getInstance().isUnsyncTags())
+        {
+            unsynchronization = ID3Unsynchronization.requiresUnsynchronization(bodyByteBuffer);
+        }
+        else
+        {
+            unsynchronization=false;
+        }
+        if(unsynchronization)
+        {
+            bodyByteBuffer=ID3Unsynchronization.unsynchronize(bodyByteBuffer);
+            logger.info("bodybytebuffer:sizeafterunsynchronisation:"+bodyByteBuffer.length);
+        }
+
+        //Calculate Tag Size including Padding
         int sizeIncPadding = calculateTagSize(getSize(),(int) audioStartLocation);
         int padding = sizeIncPadding - getSize();
 
         ByteBuffer headerBuffer = writeHeaderToBuffer(padding);
 
-        /** We need to adjust location of audio File */
+        //We need to adjust location of audio File
         if (sizeIncPadding > (int) audioStartLocation)
         {
             logger.finest("Adjusting Pattern");
