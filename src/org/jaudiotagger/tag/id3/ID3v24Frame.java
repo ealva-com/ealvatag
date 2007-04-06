@@ -451,7 +451,7 @@ public class ID3v24Frame
                             //or we wouldnt have got to this point. So assume syncsafe ineteger ended within
                             //the frame data whereas this has reached end of frames.
                             frameSize =  nonSyncSafeFrameSize;
-                            logger.warning(getLoggingFilename()+":"+"Assuming frame size is NOT stored as a sync safe integer:" + identifier);         
+                            logger.warning(getLoggingFilename()+":"+"Assuming frame size is NOT stored as a sync safe integer:" + identifier);
                         }
                         else
                         {
@@ -523,15 +523,33 @@ public class ID3v24Frame
     public void write(ByteArrayOutputStream tagBuffer)
         throws IOException
     {
+        boolean unsynchronization;
+
         logger.info("Writing frame to file:" + getIdentifier());
 
         //This is where we will write header, move position to where we can
-        //write body
+        //write bodybuffer
         ByteBuffer headerBuffer = ByteBuffer.allocate(FRAME_HEADER_SIZE);
 
-        //Write Frame Body Data
+        //Write Frame Body Data to a new stream
         ByteArrayOutputStream bodyOutputStream = new ByteArrayOutputStream();
         ((AbstractID3v2FrameBody) frameBody).write(bodyOutputStream);
+
+        //Does it need unsynchronizing, and are we allowing unsychronizing
+        byte[] bodyBuffer = bodyOutputStream.toByteArray();
+        if(TagOptionSingleton.getInstance().isUnsyncTags())
+        {
+            unsynchronization = ID3Unsynchronization.requiresUnsynchronization(bodyBuffer);
+        }
+        else
+        {
+            unsynchronization=false;
+        }
+        if(unsynchronization)
+        {
+            bodyBuffer=ID3Unsynchronization.unsynchronize(bodyBuffer);
+            logger.info("bodybytebuffer:sizeafterunsynchronisation:"+bodyBuffer.length);
+        }
 
         //Write Frame Header
         //Write Frame ID, the identifier must be 4 bytes bytes long it may not be
@@ -542,10 +560,11 @@ public class ID3v24Frame
         }
         headerBuffer.put(getIdentifier().getBytes(), 0, FRAME_ID_SIZE);
 
-        //Write Frame Size
-        int size = frameBody.getSize();
+        //Write Frame Size based on size of body buffer (if it has been unsynced then it size
+        //will have increased accordingly
+        int size = bodyBuffer.length;
         logger.fine("Frame Size Is:" + size);
-        headerBuffer.put(ID3SyncSafeInteger.valueToBuffer(frameBody.getSize()));
+        headerBuffer.put(ID3SyncSafeInteger.valueToBuffer(size));
 
         //Write the Flags
         //Status Flags:leave as they were when we read
@@ -553,14 +572,18 @@ public class ID3v24Frame
 
         //Enclosing Flags, first reset
         encodingFlags.resetFlags();
-        //Encoding we dont support any of flags so don't set
+        //Encoding we only support unsynchrnization
+        if(unsynchronization)
+        {
+            ((ID3v24Frame.EncodingFlags)encodingFlags).setUnsynchronised();
+        }
         headerBuffer.put(encodingFlags.getFlags());
 
         //Add header to the Byte Array Output Stream
         tagBuffer.write(headerBuffer.array());
 
-        //Add body to the Byte Array Output Stream
-        tagBuffer.write(bodyOutputStream.toByteArray());
+        //Add bodybuffer to the Byte Array Output Stream
+        tagBuffer.write(bodyBuffer);
     }
 
     /**
@@ -787,6 +810,10 @@ public class ID3v24Frame
             return (flags & MASK_DATA_LENGTH_INDICATOR) >0;
         }
 
+        public void setUnsynchronised()
+        {
+            flags |= MASK_FRAME_UNSYNCHRONIZATION;
+        }
 
         public void createStructure()
         {

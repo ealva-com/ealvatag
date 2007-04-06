@@ -736,11 +736,17 @@ public class ID3v24Tag
       //todo Calculate the CYC Data Check
       //todo Reintroduce Extended Header
 
-      //todo in v24 unsync just means that all frames are unsynced, until we support unsysncing frames
-      //set to false
-      unsynchronization = false;
+     //todo unclear exacly what this flag means.
+     if(TagOptionSingleton.getInstance().isUnsyncTags())
+     {
+        unsynchronization = true;
+     }
+     else
+     {
+        unsynchronization =false;
+     }
 
-      // Flags,currently we never do unsynchronisation or calculate the CRC
+      // Flags,currently we never calculate the CRC
       // and if we dont calculate them cant keep orig values. Tags are not
       // experimental and we never create extended header to keep things simple.
       extended = false;
