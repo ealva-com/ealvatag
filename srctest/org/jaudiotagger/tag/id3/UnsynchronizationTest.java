@@ -58,7 +58,7 @@ public class UnsynchronizationTest extends AbstractTestCase
         TagOptionSingleton.getInstance().setUnsyncTags(true);
         mp3File.save();
         v24tag = (ID3v24Tag) mp3File.getID3v2Tag();
-        assertTrue(v24tag.isUnsynchronization());
+        assertFalse(v24tag.isUnsynchronization());
 
         //this does not need unsynchronizing, even though now enabled
         v24TitleFrame = (ID3v24Frame) v24tag.getFrame(ID3v24Frames.FRAME_ID_TITLE);

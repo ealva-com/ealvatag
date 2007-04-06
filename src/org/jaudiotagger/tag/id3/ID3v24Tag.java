@@ -736,15 +736,10 @@ public class ID3v24Tag
       //todo Calculate the CYC Data Check
       //todo Reintroduce Extended Header
 
-     //todo unclear exacly what this flag means.
-     if(TagOptionSingleton.getInstance().isUnsyncTags())
-     {
-        unsynchronization = true;
-     }
-     else
-     {
-        unsynchronization =false;
-     }
+     //This would only be set if every frame in tag has been unsynchronized, I only unsychronize frames
+     //that need it, in any case I have been advised not to set it even then.   
+     unsynchronization =false;
+
 
       // Flags,currently we never calculate the CRC
       // and if we dont calculate them cant keep orig values. Tags are not
