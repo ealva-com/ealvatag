@@ -435,7 +435,7 @@ public class ID3v23Tag
         extended          = (flags & MASK_V23_EXTENDED_HEADER) != 0;
         experimental      = (flags & MASK_V23_EXPERIMENTAL) != 0;
 
-        if(unsynchronization)
+        if(isUnsynchronization())
         {
             logger.warning(getLoggingFilename()+":"+"ID3v23 Tag is unsynchronized");
         }
@@ -501,7 +501,7 @@ public class ID3v23Tag
         //Slice Buffer, so position markers tally with size (i.e do not include tagheader)
         ByteBuffer bufferWithoutHeader = buffer.slice();
         //We need to synchronize the buffer
-        if(unsynchronization==true)
+        if(isUnsynchronization() ==true)
         {
              bufferWithoutHeader=ID3Unsynchronization.synchronize(bufferWithoutHeader);
         }
@@ -598,7 +598,7 @@ public class ID3v23Tag
 
         //Flags
         byte flagsByte = 0;
-        if (unsynchronization == true)
+        if (isUnsynchronization() == true)
         {
             flagsByte |= MASK_V23_UNSYNCHRONIZATION;
         }
@@ -669,7 +669,7 @@ public class ID3v23Tag
         {
             unsynchronization=false;
         }
-        if(unsynchronization)
+        if(isUnsynchronization())
         {
             bodyByteBuffer=ID3Unsynchronization.unsynchronize(bodyByteBuffer);
             logger.info("bodybytebuffer:sizeafterunsynchronisation:"+bodyByteBuffer.length);
@@ -728,7 +728,7 @@ public class ID3v23Tag
         {
             unsynchronization=false;
         }
-        if(unsynchronization)
+        if(isUnsynchronization())
         {
             bodyByteBuffer=ID3Unsynchronization.unsynchronize(bodyByteBuffer);
             logger.info("bodybytebuffer:sizeafterunsynchronisation:"+bodyByteBuffer.length);
@@ -752,10 +752,10 @@ public class ID3v23Tag
 
         //Header
         MP3File.getStructureFormatter().openHeadingElement(TYPE_HEADER, "");
-        MP3File.getStructureFormatter().addElement(TYPE_UNSYNCHRONISATION, this.unsynchronization);
+        MP3File.getStructureFormatter().addElement(TYPE_UNSYNCHRONISATION, this.isUnsynchronization());
         MP3File.getStructureFormatter().addElement(TYPE_EXTENDED, this.extended);
         MP3File.getStructureFormatter().addElement(TYPE_EXPERIMENTAL, this.experimental);
-        MP3File.getStructureFormatter().addElement(TYPE_COMPRESSION, this.compression);
+        MP3File.getStructureFormatter().addElement(TYPE_COMPRESSION, this.isCompression());
         MP3File.getStructureFormatter().addElement(TYPE_CRCDATA, this.crcData);
         MP3File.getStructureFormatter().addElement(TYPE_PADDINGSIZE, this.paddingSize);
         MP3File.getStructureFormatter().closeHeadingElement(TYPE_HEADER);

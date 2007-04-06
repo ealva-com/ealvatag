@@ -63,7 +63,7 @@ public class ID3v22Tag
     /**
      * All frames in the tag uses unsynchronisation
      */
-    protected boolean unsynchronization = false;
+    protected  boolean unsynchronization = false;
 
     private static final byte RELEASE  = 2;
     private static final byte MAJOR_VERSION = 2;
@@ -565,5 +565,23 @@ public class ID3v22Tag
         super.createStructureBody();
 
         MP3File.getStructureFormatter().closeHeadingElement(TYPE_TAG);
+    }
+
+    /**
+     *
+     * @return is tag unsynchronized
+     */
+    public boolean isUnsynchronization()
+    {
+        return unsynchronization;
+    }
+
+    /**
+     *
+     * @return is tag compressed
+     */
+    public boolean isCompression()
+    {
+        return compression;
     }
 }

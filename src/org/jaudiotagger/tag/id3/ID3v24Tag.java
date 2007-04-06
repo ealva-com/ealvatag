@@ -600,7 +600,7 @@ public class ID3v24Tag
         experimental = (flags & MASK_V24_EXPERIMENTAL) != 0;
         footer = (flags & MASK_V24_FOOTER_PRESENT) != 0;
 
-        if(unsynchronization)
+        if(isUnsynchronization())
         {
             logger.warning(getLoggingFilename()+":"+"ID3v24 Tag is unsynchronized");
         }
@@ -766,7 +766,7 @@ public class ID3v24Tag
 
       //Flags
       byte flagsByte = 0;
-      if (unsynchronization == true)
+      if (isUnsynchronization() == true)
       {
           flagsByte |= MASK_V24_UNSYNCHRONIZATION;
       }
@@ -932,8 +932,8 @@ public class ID3v24Tag
 
         //Header
         MP3File.getStructureFormatter().openHeadingElement(TYPE_HEADER, "");
-        MP3File.getStructureFormatter().addElement(TYPE_COMPRESSION, this.compression);
-        MP3File.getStructureFormatter().addElement(TYPE_UNSYNCHRONISATION, this.unsynchronization);
+        MP3File.getStructureFormatter().addElement(TYPE_COMPRESSION, this.isCompression());
+        MP3File.getStructureFormatter().addElement(TYPE_UNSYNCHRONISATION, this.isUnsynchronization());
         MP3File.getStructureFormatter().addElement(TYPE_CRCDATA, this.crcData);
         MP3File.getStructureFormatter().addElement(TYPE_EXPERIMENTAL, this.experimental);
         MP3File.getStructureFormatter().addElement(TYPE_EXTENDED, this.extended);
