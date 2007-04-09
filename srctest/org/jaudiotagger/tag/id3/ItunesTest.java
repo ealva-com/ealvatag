@@ -1,8 +1,7 @@
 package org.jaudiotagger.tag.id3;
 
 import org.jaudiotagger.AbstractTestCase;
-import org.jaudiotagger.tag.id3.framebody.FrameBodyAPIC;
-import org.jaudiotagger.tag.id3.framebody.FrameBodyTPE1;
+import org.jaudiotagger.tag.id3.framebody.*;
 import org.jaudiotagger.tag.TagOptionSingleton;
 import org.jaudiotagger.audio.mp3.MP3File;
 
@@ -19,6 +18,8 @@ public class ItunesTest extends AbstractTestCase
     private static final int STRING_LENGTH_WITHOUT_NULL = 11;
     private static final int TERMINATOR_LENGTH = 1;
     private static final String SECOND_VALUE = "test";
+    private static final String EMPTY_VALUE = "";
+
     /** This tests that we work out that the frame is not unsynced and read the frame size as a normal integer
      *  using an integral algorithm
      * @throws Exception
@@ -100,5 +101,18 @@ public class ItunesTest extends AbstractTestCase
         assertEquals(STRING_LENGTH_WITHOUT_NULL + TERMINATOR_LENGTH + SECOND_VALUE.length(),fb.getText().length());
         assertEquals(STRING_LENGTH_WITHOUT_NULL,fb.getFirstTextValue().length());
         assertEquals(SECOND_VALUE,fb.getValueAtIndex(1));
+    }
+
+    /** Check can handle empty value when splitting strings into a list */
+    public void testCanReadEmptyString() throws Exception
+    {
+        File testFile = AbstractTestCase.copyAudioToTmp("Issue92-2.id3","testV1.mp3");
+        MP3File mp3File = new MP3File(testFile);
+
+
+        ID3v23Frame v23frame = (ID3v23Frame) mp3File.getID3v2Tag().getFrame(ID3v23Frames.FRAME_ID_V3_COMMENT);
+        assertNotNull(v23frame);
+        FrameBodyCOMM fb = (FrameBodyCOMM) v23frame.getBody();
+        assertEquals(EMPTY_VALUE,fb.getText());       
     }
 }
