@@ -16,8 +16,7 @@
 package org.jaudiotagger.tag.id3.framebody;
 
 import org.jaudiotagger.tag.id3.ID3v24Frames;
-import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
-import org.jaudiotagger.tag.id3.valuepair.Languages;
+import org.jaudiotagger.tag.id3.valuepair.*;
 import org.jaudiotagger.tag.InvalidTagException;
 import org.jaudiotagger.tag.datatype.*;
 
@@ -116,61 +115,21 @@ import java.nio.ByteBuffer;
 public class FrameBodySYLT extends AbstractID3v2FrameBody implements ID3v24FrameBody,ID3v23FrameBody
 {
     /**
-     * 
-     */
-    LinkedList lines = new LinkedList();
-
-    /**
-     * 
-     */
-    String description = "";
-
-    /**
-     * 
-     */
-    String language = "";
-
-    /**
-     * 
-     */
-    byte contentType = (byte) 0;
-
-
-
-    /**
-     * 
-     */
-    byte timeStampFormat = (byte) 0;
-
-    /**
      * Creates a new FrameBodySYLT datatype.
      */
     public FrameBodySYLT()
     {
-        //        this.textEncoding = 0;
-        //        this.language = "";
-        //        this.timeStampFormat = 0;
-        //        this.contentType = 0;
-        //        this.description = "";
+
     }
 
-    public FrameBodySYLT(FrameBodySYLT copyObject)
-    {
-        super(copyObject);
-        this.description = new String(copyObject.description);
-        this.language = new String(copyObject.language);
-        this.contentType = copyObject.contentType;
-        this.setObjectValue(DataTypes.OBJ_TEXT_ENCODING, new Byte(copyObject.getTextEncoding()));
-        this.timeStampFormat = copyObject.timeStampFormat;
-
-        ID3v2LyricLine newLine;
-
-        for (int i = 0; i < copyObject.lines.size(); i++)
-        {
-            newLine = new ID3v2LyricLine((ID3v2LyricLine) copyObject.lines.get(i));
-            this.lines.add(newLine);
-        }
-    }
+    /**
+     * Copy Constructor
+     * @param body
+     */
+    public FrameBodySYLT(FrameBodySYLT body)
+   {
+       super(body);
+   }
 
     /**
      * Creates a new FrameBodySYLT datatype.
@@ -181,13 +140,19 @@ public class FrameBodySYLT extends AbstractID3v2FrameBody implements ID3v24Frame
      * @param contentType     
      * @param description     
      */
-    public FrameBodySYLT(byte textEncoding, String language, byte timeStampFormat, byte contentType, String description)
+    public FrameBodySYLT(int textEncoding,
+                         String language,
+                         int timeStampFormat,
+                         int contentType,
+                         String description,
+                         byte[] lyrics)
     {
-        this.setObjectValue(DataTypes.OBJ_TEXT_ENCODING, new Byte(textEncoding));
-        this.language = language;
-        this.timeStampFormat = timeStampFormat;
-        this.contentType = contentType;
-        this.description = description;
+        setObjectValue(DataTypes.OBJ_TEXT_ENCODING, new Integer(textEncoding));
+        setObjectValue(DataTypes.OBJ_LANGUAGE, language);
+        setObjectValue(DataTypes.OBJ_TIME_STAMP_FORMAT,new Integer(timeStampFormat));
+        setObjectValue(DataTypes.OBJ_CONTENT_TYPE, new Integer(contentType));
+        setObjectValue(DataTypes.OBJ_DESCRIPTION, description);
+        setObjectValue(DataTypes.OBJ_DATA,lyrics);
     }
 
     /**
@@ -202,185 +167,78 @@ public class FrameBodySYLT extends AbstractID3v2FrameBody implements ID3v24Frame
     }
 
     /**
-     * 
      *
-     * @return 
+     *
+     * @return language code
      */
-    public byte getContentType()
+    public String getLanguage()
     {
-        return contentType;
+        return (String) getObjectValue(DataTypes.OBJ_LANGUAGE);
     }
 
     /**
-     * 
      *
-     * @return 
+     * @return timestamp format key
+     */
+    public int getTimeStampFormat()
+    {
+         return ((Number) getObjectValue(DataTypes.OBJ_TIME_STAMP_FORMAT)).intValue();
+    }
+
+     /**
+     *
+     *
+     * @return  content type key
+     */
+    public int getContentType()
+    {
+        return ((Number) getObjectValue(DataTypes.OBJ_CONTENT_TYPE)).intValue();
+    }
+
+    /**
+     *
+     *
+     * @return description
      */
     public String getDescription()
     {
-        return description;
+        return (String) getObjectValue(DataTypes.OBJ_DESCRIPTION);
     }
 
     /**
      * 
      *
-     * @return 
+     * @return frame identifier
      */
     public String getIdentifier()
     {
         return ID3v24Frames.FRAME_ID_SYNC_LYRIC ;
     }
 
+
     /**
-     * 
+     * Set lyrics
      *
-     * @return 
+     * TODO:provide a more user friendly way of adding lyrics
+     *
+     * @param data
      */
-    public String getLanguage()
+    public void setLyrics( byte[] data)
     {
-        return language;
+         this.setObjectValue(DataTypes.OBJ_DATA, data);
     }
 
     /**
-     * 
+     * Get lyrics
      *
-     * @return 
-     */
-    public String getLyric()
-    {
-        String lyrics = "";
-
-        for (int i = 0; i < lines.size(); i++)
-        {
-            lyrics += lines.get(i);
-        }
-
-        return lyrics;
-    }
-
-    /**
-     * 
+     * TODO:better format
      *
-     * @return 
+     * @return lyrics
      */
-    public int getSize()
+    public byte[] getLyrics()
     {
-        int size;
-
-        size = 1 + 3 + 1 + 1 + description.length();
-
-        for (int i = 0; i < lines.size(); i++)
-        {
-            size += ((ID3v2LyricLine) lines.get(i)).getSize();
-        }
-
-        return size;
+        return (byte[])this.getObjectValue(DataTypes.OBJ_DATA);
     }
-
-    /**
-     * 
-     *
-     * @return 
-     */
-    public byte getTimeStampFormat()
-    {
-        return timeStampFormat;
-    }
-
-    /**
-     * 
-     *
-     * @param timeStamp 
-     * @param text      
-     */
-    public void addLyric(int timeStamp, String text)
-    {
-        ID3v2LyricLine line = new ID3v2LyricLine("Lyric Line", this);
-        line.setTimeStamp((long) timeStamp);
-        line.setText(text);
-        lines.add(line);
-    }
-
-    /**
-     * 
-     *
-     * @param line 
-     */
-    public void addLyric(Lyrics3Line line)
-    {
-        Iterator iterator = line.getTimeStamp();
-        Lyrics3TimeStamp timeStamp;
-        String lyric = line.getLyric();
-        long time;
-        ID3v2LyricLine id3Line;
-        id3Line = new ID3v2LyricLine("Lyric Line", this);
-
-        if (iterator.hasNext() == false)
-        {
-            // no time stamp, give it 0
-            time = 0L;
-            id3Line.setTimeStamp(time);
-            id3Line.setText(lyric);
-            lines.add(id3Line);
-        }
-        else
-        {
-            while (iterator.hasNext())
-            {
-                timeStamp = (Lyrics3TimeStamp) iterator.next();
-                time = (timeStamp.getMinute() * 60L) + timeStamp.getSecond(); // seconds
-                time *= 1000L; // milliseconds
-                id3Line.setTimeStamp(time);
-                id3Line.setText(lyric);
-                lines.add(id3Line);
-            }
-        }
-    }
-
-    /**
-     * This method is not yet supported.
-     *
-     * @throws java.lang.UnsupportedOperationException
-     *          This method is not yet
-     *          supported
-     */
-    public boolean equals(Object obj)
-    {
-        /**
-         * @todo Implement this java.lang.Object method
-         */
-        throw new java.lang.UnsupportedOperationException("Method equals() not yet implemented.");
-    }
-
-    /**
-     * 
-     *
-     * @return 
-     */
-    public Iterator iterator()
-    {
-        return lines.iterator();
-    }
-
-
-    /**
-     * 
-     *
-     * @return 
-     */
-    public String toString()
-    {
-        String str;
-        str = getIdentifier() + " " + getTextEncoding() + " " + language + " " + timeStampFormat + " " + contentType + " " + description;
-
-        for (int i = 0; i < lines.size(); i++)
-        {
-            str += ((ID3v2LyricLine) lines.get(i)).toString();
-        }
-
-        return str;
-    }
-
 
     /**
      * Setup Object List
@@ -389,8 +247,11 @@ public class FrameBodySYLT extends AbstractID3v2FrameBody implements ID3v24Frame
     {
         objectList.add(new NumberHashMap(DataTypes.OBJ_TEXT_ENCODING, this, TextEncoding.TEXT_ENCODING_FIELD_SIZE));
         objectList.add(new StringHashMap(DataTypes.OBJ_LANGUAGE, this, Languages.LANGUAGE_FIELD_SIZE));
-        objectList.add(new StringFixedLength(DataTypes.OBJ_DESCRIPTION, this, 1));
-        objectList.add(new StringFixedLength(DataTypes.OBJ_TEXT, this, 1));
-        objectList.add(new StringNullTerminated(DataTypes.OBJ_TEXT, this));
+        objectList.add(new NumberHashMap(DataTypes.OBJ_TIME_STAMP_FORMAT, this, EventTimingTimestampTypes.TIMESTAMP_KEY_FIELD_SIZE));
+        objectList.add(new NumberHashMap(DataTypes.OBJ_CONTENT_TYPE, this, SynchronisedLyricsContentType.CONTENT_KEY_FIELD_SIZE));
+        objectList.add(new StringNullTerminated(DataTypes.OBJ_DESCRIPTION, this));
+
+        //TODO:This hold the actual lyrics
+        objectList.add(new ByteArraySizeTerminated(DataTypes.OBJ_DATA, this));
     }
 }

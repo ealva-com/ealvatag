@@ -36,6 +36,8 @@ public class EventTimingTimestampTypes extends AbstractIntStringValuePair
         return eventTimingTimestampTypes;
     }
 
+    public static final int  TIMESTAMP_KEY_FIELD_SIZE = 1;
+
     private EventTimingTimestampTypes()
     {
         idToValue.put(new Integer(1), "Absolute time using MPEG [MPEG] frames as unit");

@@ -38,12 +38,12 @@ public class NumberHashMap extends NumberFixedLength implements HashMapInterface
 {
 
     /**
-     * 
+     * key to value map
      */
     private HashMap keyToValue = null;
 
     /**
-     * 
+     * value to key map
      */
     private HashMap valueToKey = null;
 
@@ -104,6 +104,11 @@ public class NumberHashMap extends NumberFixedLength implements HashMapInterface
             valueToKey = ReceivedAsTypes.getInstanceOf().getValueToIdMap();
             keyToValue = ReceivedAsTypes.getInstanceOf().getIdToValueMap();
         }
+        else if(identifier.equals(DataTypes.OBJ_CONTENT_TYPE))
+        {
+            valueToKey = SynchronisedLyricsContentType.getInstanceOf().getValueToIdMap();
+            keyToValue = SynchronisedLyricsContentType.getInstanceOf().getIdToValueMap();
+        }
         else
         {
             throw new IllegalArgumentException("Hashmap identifier not defined in this class: " + identifier);
@@ -116,7 +121,7 @@ public class NumberHashMap extends NumberFixedLength implements HashMapInterface
 
         this.hasEmptyValue = copyObject.hasEmptyValue;
 
-        // we dont' need to clone/copy the maps here because they are static
+        // we don't need to clone/copy the maps here because they are static
         this.keyToValue = copyObject.keyToValue;
         this.valueToKey = copyObject.valueToKey;
     }
@@ -124,7 +129,7 @@ public class NumberHashMap extends NumberFixedLength implements HashMapInterface
     /**
      * 
      *
-     * @return 
+     * @return the key to value map
      */
     public HashMap getKeyToValue()
     {
@@ -134,7 +139,7 @@ public class NumberHashMap extends NumberFixedLength implements HashMapInterface
     /**
      * 
      *
-     * @return 
+     * @return the value to key map
      */
     public HashMap getValueToKey()
     {

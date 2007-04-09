@@ -52,7 +52,7 @@ public abstract class AbstractTagFrameBody
     }
 
     /**
-     * List of data types that mnake up this particular frame body.
+     * List of data types that make up this particular frame body.
      */
     protected ArrayList objectList = new ArrayList();
 

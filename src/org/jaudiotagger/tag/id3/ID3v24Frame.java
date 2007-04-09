@@ -219,14 +219,14 @@ public class ID3v24Frame
             boolean hasTimeStamp = lyric.hasTimeStamp();
             // we'll create only one frame here.
             // if there is any timestamp at all, we will create a sync'ed frame.
-            sync = new FrameBodySYLT((byte) 0, "ENG", (byte) 2, (byte) 1, "");
+            sync = new FrameBodySYLT((byte) 0, "ENG", (byte) 2, (byte) 1, "",new byte[0]);
             unsync = new FrameBodyUSLT((byte) 0, "ENG", "", "");
             while (iterator.hasNext())
             {
                 line = (Lyrics3Line) iterator.next();
                 if (hasTimeStamp)
                 {
-                    sync.addLyric(line);
+                   // sync.addLyric(line);
                 }
                 else
                 {

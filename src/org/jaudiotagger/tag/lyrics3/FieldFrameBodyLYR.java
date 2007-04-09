@@ -206,7 +206,7 @@ public class FieldFrameBodyLYR extends AbstractLyrics3v2FieldFrameBody
             // create copy to use in new tag
             currentLine = new ID3v2LyricLine(currentLine);
             timeStamp = new Lyrics3TimeStamp("Time Stamp", this);
-            timeStamp.setTimeStamp(currentLine.getTimeStamp(), sync.getTimeStampFormat());
+            timeStamp.setTimeStamp(currentLine.getTimeStamp(), (byte)sync.getTimeStampFormat());
 
             if (lineMap.containsKey(currentLine.getText()))
             {

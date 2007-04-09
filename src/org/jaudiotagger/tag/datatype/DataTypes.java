@@ -146,6 +146,9 @@ public class DataTypes
     //SIGN Frame
     public static final String OBJ_SIGNATURE = "Signature";
 
+    //SYLT Frame
+    public static final String OBJ_CONTENT_TYPE = "contentType";
+
     //ULST Frame
     public static final String OBJ_LANGUAGE = "Language";
     public static final String OBJ_LYRICS = "Lyrics";
