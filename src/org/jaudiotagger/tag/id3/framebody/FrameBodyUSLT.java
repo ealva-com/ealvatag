@@ -67,6 +67,11 @@ public class FrameBodyUSLT extends AbstractID3v2FrameBody implements ID3v24Frame
         //        setObject("Lyrics/Text", "");
     }
 
+    /**
+     * Copy constructor
+     *
+     * @param body
+     */
     public FrameBodyUSLT(FrameBodyUSLT body)
     {
         super(body);
@@ -89,7 +94,7 @@ public class FrameBodyUSLT extends AbstractID3v2FrameBody implements ID3v24Frame
     }
 
     /**
-     * Creates a new FrameBodyUSLT datatype.
+     * Creates a new FrameBodyUSLT datatype, populated from buffer
      *
      * @param  byteBuffer
      * @throws  InvalidTagException
@@ -102,7 +107,7 @@ public class FrameBodyUSLT extends AbstractID3v2FrameBody implements ID3v24Frame
     }
 
     /**
-     * Set a description of the image
+     * Set a description field
      *
      * @param description
      */
@@ -112,9 +117,9 @@ public class FrameBodyUSLT extends AbstractID3v2FrameBody implements ID3v24Frame
     }
 
     /**
-     * Get a description of the image
+     * Get a description field
      *
-     * @return description of the image
+     * @return description
      */
     public String getDescription()
     {
@@ -132,7 +137,7 @@ public class FrameBodyUSLT extends AbstractID3v2FrameBody implements ID3v24Frame
     }
 
     /**
-     * 
+     * Set the language field
      *
      * @param language
      */
@@ -142,9 +147,9 @@ public class FrameBodyUSLT extends AbstractID3v2FrameBody implements ID3v24Frame
     }
 
     /**
-     * 
+     * Get the language field
      *
-     * @return
+     * @return language
      */
     public String getLanguage()
     {
@@ -152,7 +157,7 @@ public class FrameBodyUSLT extends AbstractID3v2FrameBody implements ID3v24Frame
     }
 
     /**
-     * 
+     * Set the lyric field
      *
      * @param lyric
      */
@@ -162,9 +167,9 @@ public class FrameBodyUSLT extends AbstractID3v2FrameBody implements ID3v24Frame
     }
 
     /**
-     * 
+     * Get the lyric field
      *
-     * @return
+     * @return lyrics
      */
     public String getLyric()
     {
@@ -172,7 +177,7 @@ public class FrameBodyUSLT extends AbstractID3v2FrameBody implements ID3v24Frame
     }
 
     /**
-     * 
+     * Add additional lyric to the lyric field
      *
      * @param text
      */
@@ -207,7 +212,6 @@ public class FrameBodyUSLT extends AbstractID3v2FrameBody implements ID3v24Frame
         super.write(tagBuffer);
     }
 
-    /**
     /**
      * 
      */
