@@ -28,12 +28,25 @@ import org.jaudiotagger.tag.InvalidTagException;
 import org.jaudiotagger.tag.id3.ID3v24Frames;
 import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
 
-import java.io.IOException;
 import java.nio.ByteBuffer;
 
 
+/**
+ * User defined text information frame
+ * <p/>
+ * This frame is intended for one-string text information concerning the
+ * audio file in a similar way to the other "T"-frames. The frame body
+ * consists of a description of the string, represented as a terminated
+ * string, followed by the actual string. There may be more than one
+ * "TXXX" frame in each tag, but only one with the same description.
+ * <p/>
+ * <Header for 'User defined text information frame', ID: "TXXX">
+ * Text encoding     $xx
+ * Description       <text string according to encoding> $00 (00)
+ * Value             <text string according to encoding>
+ */
 public class FrameBodyTXXX
-    extends AbstractFrameBodyTextInfo  implements ID3v24FrameBody,ID3v23FrameBody
+    extends AbstractFrameBodyTextInfo implements ID3v24FrameBody, ID3v23FrameBody
 {
     /**
      * Creates a new FrameBodyTXXX datatype.
@@ -54,9 +67,9 @@ public class FrameBodyTXXX
     /**
      * Creates a new FrameBodyTXXX datatype.
      *
-     * @param textEncoding 
-     * @param description  
-     * @param text         
+     * @param textEncoding
+     * @param description
+     * @param text
      */
     public FrameBodyTXXX(byte textEncoding, String description, String text)
     {
@@ -68,7 +81,7 @@ public class FrameBodyTXXX
     /**
      * Creates a new FrameBodyTXXX datatype.
      *
-     * @throws InvalidTagException 
+     * @throws InvalidTagException
      */
     public FrameBodyTXXX(ByteBuffer byteBuffer, int frameSize)
         throws InvalidTagException
@@ -77,9 +90,9 @@ public class FrameBodyTXXX
     }
 
     /**
-     *  Set the desciption field
+     * Set the desciption field
      *
-     * @param description 
+     * @param description
      */
     public void setDescription(String description)
     {
@@ -87,8 +100,6 @@ public class FrameBodyTXXX
     }
 
     /**
-     * 
-     *
      * @return the description field
      */
     public String getDescription()
@@ -96,10 +107,10 @@ public class FrameBodyTXXX
         return (String) getObjectValue(DataTypes.OBJ_DESCRIPTION);
     }
 
-     /**
-      * The ID3v2 frame identifier
-      *
-      * @return the ID3v2 frame identifier  for this frame type
+    /**
+     * The ID3v2 frame identifier
+     *
+     * @return the ID3v2 frame identifier  for this frame type
      */
     public String getIdentifier()
     {

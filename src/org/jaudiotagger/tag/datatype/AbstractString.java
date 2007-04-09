@@ -54,6 +54,11 @@ public abstract class AbstractString
         super(identifier, frameBody,value);
     }
 
+    /**
+     * Copy constructor
+     * 
+     * @param object
+     */
     protected AbstractString(AbstractString object)
     {
         super(object);
@@ -97,7 +102,6 @@ public abstract class AbstractString
     public boolean canBeEncoded()
     {
         //Try and write to buffer using the CharSet defined by the textEncoding field.
-
         byte textEncoding = this.getBody().getTextEncoding();
         String charSetName = TextEncoding.getInstanceOf().getValueForId(textEncoding);
         CharsetEncoder encoder = Charset.forName(charSetName).newEncoder();

@@ -32,7 +32,20 @@ import org.jaudiotagger.tag.datatype.*;
 import org.jaudiotagger.tag.InvalidTagException;
 import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
 
-/* Abstract representation of a Text Frame
+/** Abstract representation of a Text Frame
+*
+*  The text information frames are often the most important frames, *  containing information like artist, album and
+* more. There may only be  one text information frame of its kind in an tag. All text information frames
+* supports multiple strings, stored as a null separated list, where null is reperesented by the termination code
+* for the charater encoding. All text frame identifiers begin with "T". Only text frame identifiers begin with "T",
+* with the exception of the "TXXX" frame. All the text information frames have the following  format:
+*  <Header for 'Text information frame', ID: "T000" - "TZZZ",
+*     excluding "TXXX" described in 4.2.6.>
+*     Text encoding                $xx
+*     Information                  <text string(s) according to encoding>
+*
+*  iTunes incorrectly writes null terminators at the end of every string, even though it only writes one String.
+*  You can retrieve the first value without the null terminator using {@link #getFirstTextValue}
 */
 public abstract class AbstractFrameBodyTextInfo
     extends AbstractID3v2FrameBody
@@ -88,7 +101,9 @@ public abstract class AbstractFrameBodyTextInfo
     }
 
     /**
-     * Set the Text String, used to replace the value within the frame
+     * Set the Full Text String, if this String contains null terminator characters these are parsed as value
+     * seperators, allowing you to hold multiple strings within one text frame. This functionality is only
+     * officilally support in ID3v24.
      *
      * @param text to set
      */
@@ -97,8 +112,9 @@ public abstract class AbstractFrameBodyTextInfo
         setObjectValue(DataTypes.OBJ_TEXT, text);
     }
 
+
     /**
-     * Retrieve the Text String.
+     * Retrieve the complete Text String.
      *
      * @return the text string
      */
@@ -108,9 +124,53 @@ public abstract class AbstractFrameBodyTextInfo
     }
 
     /**
+     * Get first value
+     *
+     * @return value at index 0
+     */
+    public String getFirstTextValue()
+    {
+        TextEncodedStringSizeTerminated text = (TextEncodedStringSizeTerminated)getObject(DataTypes.OBJ_TEXT);
+        return text.getValueAtIndex(0);
+    }
+
+    /**
+     * Get value at index
+     *
+     * @param index
+     * @return value at index
+     */
+     public String getValueAtIndex(int index)
+    {
+        TextEncodedStringSizeTerminated text = (TextEncodedStringSizeTerminated)getObject(DataTypes.OBJ_TEXT);
+        return text.getValueAtIndex(index);
+    }
+
+    /**
+     * Add additional value to value
+     *
+     * @param value at index
+     */
+    public void addTextValue(String value)
+    {
+        TextEncodedStringSizeTerminated text = (TextEncodedStringSizeTerminated)getObject(DataTypes.OBJ_TEXT);
+        text.addValue(value);
+    }
+
+    /**
+     *
+     * @return number of text values, usually one
+     */
+    public int getNumberOfValues()
+    {
+        TextEncodedStringSizeTerminated text = (TextEncodedStringSizeTerminated)getObject(DataTypes.OBJ_TEXT);
+        return text.getNumberOfValues();
+    }
+
+    /**
      * Because Text frames have a text encoding we need to check the text
      * String does not contain characters that cannot be encoded in
-     * current encoding before we write data. If there are change the
+     * current encoding before we write data. If there are change the text
      * encoding.
      */
     public void write(ByteArrayOutputStream tagBuffer)

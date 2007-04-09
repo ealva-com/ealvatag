@@ -166,13 +166,15 @@ public class FrameBodyCOMM  extends AbstractID3v2FrameBody  implements ID3v24Fra
     }
 
     /**
-     * Returns the the text field which holds the comment
+     * Returns the the text field which holds the comment, adjusted to ensure does not return trailing null
+     * which due to a iTunes bug.
      *
      * @return the text field
      */
     public String getText()
     {
-        return (String) getObjectValue(DataTypes.OBJ_TEXT);
+        TextEncodedStringSizeTerminated text = (TextEncodedStringSizeTerminated)getObject(DataTypes.OBJ_TEXT);
+        return text.getValueAtIndex(0);
     }
 
     /**

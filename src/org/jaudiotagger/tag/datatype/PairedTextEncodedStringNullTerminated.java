@@ -6,7 +6,7 @@ import org.jaudiotagger.tag.InvalidDataTypeException;
 /**
  * Represents a datatype that allow multiple Strings but they should be paired, i.e should be 2,4,6.. Strings
  *
- * @TODO Pair restriction not currently implemented
+ * TODO Pair restriction not currently implemented
  *
  */
 public class PairedTextEncodedStringNullTerminated  extends MultipleTextEncodedStringNullTerminated

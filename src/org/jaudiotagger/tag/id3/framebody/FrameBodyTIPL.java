@@ -37,12 +37,12 @@ import java.util.ArrayList;
 
 /**
  * The 'Involved people list' is intended as a mapping between functions like producer and names. Every odd field is a
- * function and every even is an name or a comma delimited list of name.
+ * function and every even is an name or a comma delimited list of names.
  *
- *  @TODO currently just reads the first String when directly from file, this will be fixed when we add support for
+ *  TODO currently just reads the first String when directly from file, this will be fixed when we add support for
  *  multiple Strings for all ID3v24Frames
  *
- *  @TODO currently just reads all the values when converted from the corresponding ID3v23 Frame IPLS as a single value
+ *  TODO currently just reads all the values when converted from the corresponding ID3v23 Frame IPLS as a single value
  *  (the individual fields from the IPLS frame will be seperated by commas)
  *
  */

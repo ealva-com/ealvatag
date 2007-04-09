@@ -227,7 +227,7 @@ public class Unicode23NullTerminatedTagTest extends TestCase
     }
 
     /**
-     * Strings can bbe written to UTF16BE if text encoding explicitly set
+     * Strings can be written to UTF16BE if text encoding explicitly set
      *
      * @throws Exception
      */
@@ -275,7 +275,7 @@ public class Unicode23NullTerminatedTagTest extends TestCase
     }
 
     /**
-     * Strings can bbe written to UTF8 if text encoding explicitly set
+     * Strings can be written to UTF8 if text encoding explicitly set
      *
      * @throws Exception
      */

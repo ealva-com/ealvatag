@@ -2,11 +2,13 @@ package org.jaudiotagger.tag.datatype;
 
 import org.jaudiotagger.tag.AbstractTagFrameBody;
 import org.jaudiotagger.tag.InvalidDataTypeException;
+import org.jaudiotagger.tag.TagOptionSingleton;
 import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
 
 import java.nio.charset.*;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
+import java.util.*;
 
 /**
  * Represents a String which is not delimited by null character.
@@ -14,13 +16,17 @@ import java.nio.CharBuffer;
  * This type of String will usually only be used when it is the last field within a frame, when reading the remainder of
  * the byte array will be read, when writing the frame will be accomodate the required size for the String. The String
  * will be encoded based upon the text encoding of the frame that it belongs to.
+ *
+ * All TextInformation frames support multiple strings, stored as a null separated list, where null is represented by
+ * the termination code for the character encoding. This functionality is only officially support in ID3v24.  Itunes
+ * write null terminators characters even though only writes a single value.
  */
 public class TextEncodedStringSizeTerminated
     extends AbstractString
 {
 
     /**
-     * Creates a new ObjectStringSizeTerminated datatype.
+     * Creates a new empty TextEncodedStringSizeTerminated datatype.
      *
      * @param identifier identifies the frame type
      */
@@ -29,6 +35,11 @@ public class TextEncodedStringSizeTerminated
         super(identifier, frameBody);
     }
 
+    /**
+     * Copy constructor
+     *
+     * @param object
+     */
     public TextEncodedStringSizeTerminated(TextEncodedStringSizeTerminated object)
     {
         super(object);
@@ -44,7 +55,7 @@ public class TextEncodedStringSizeTerminated
     }
 
     /**
-     * Read a 'n' bytes from buffer into a string where n is the framesize - offset
+     * Read a 'n' bytes from buffer into a String where n is the framesize - offset
      * so thefore cannot use this if there are other objects after it because it has no
      * delimiter.
      * <p/>
@@ -76,10 +87,12 @@ public class TextEncodedStringSizeTerminated
         }
         decoder.flush(outBuffer);
         outBuffer.flip();
-        value = outBuffer.toString();
 
-        //IF SIZE NOT WHAT WAS EXPECTED , CHECK FOR NULL TERMINATORS ?
-        //TODO Size
+        //Store value
+        value=outBuffer.toString();
+
+
+        //SetSize, important this is correct for finding the next datatype
         setSize(arr.length - offset);
         logger.info("Read SizeTerminatedString:" + value + " size:" + size);
     }
@@ -87,7 +100,7 @@ public class TextEncodedStringSizeTerminated
     /**
      * Write String into byte array
      *
-     * @return the dat as a byte array in format to write to file
+     * @return the data as a byte array in format to write to file
      */
     public byte[] writeByteArray()
     {
@@ -97,6 +110,19 @@ public class TextEncodedStringSizeTerminated
         {
             String charSetName = getTextEncodingCharSet();
             CharsetEncoder encoder = Charset.forName(charSetName).newEncoder();
+
+            if(TagOptionSingleton.getInstance().isRemoveTrailingTerminatorOnWrite())
+            {
+                String stringValue = (String)value;
+                if(stringValue.length()>0)
+                {
+                    if(stringValue.charAt(stringValue.length()-1)=='\0')
+                    {
+                       stringValue=(stringValue).substring(0,stringValue.length()-1);
+                       value=stringValue;
+                    }
+                }
+            }
             ByteBuffer bb = encoder.encode(CharBuffer.wrap((String) value));
             data = new byte[bb.limit()];
             bb.get(data, 0, bb.limit());
@@ -111,11 +137,71 @@ public class TextEncodedStringSizeTerminated
         return data;
     }
 
+    /**
+     * Get the text encoding being used.
+     *
+     * The text encoding is defined by the frame body that the text field belongs to.
+     *
+     * @return the text encoding charset
+     */
     protected String getTextEncodingCharSet()
     {
         byte textEncoding = this.getBody().getTextEncoding();
         String charSetName = TextEncoding.getInstanceOf().getValueForId(textEncoding);
         logger.finest("text encoding:" + textEncoding + " charset:" + charSetName);
         return charSetName;
+    }
+
+    /**
+     * Split the values seperated by null character
+     *
+     * @param value the raw value
+     * @return list of values, guaranteed to be at least one value
+     */
+    private static List splitByNullSeperator(String value)
+    {
+        String[]valuesarray = value.split("\\u0000");
+        List values = Arrays.asList(valuesarray);
+        if(values.size()==0)
+        {
+            values.add("");
+        }
+        return values;
+    }
+
+    /**
+     * Add an additional String to the current String value
+     *
+     * @param value
+     */
+    public void addValue(String value)
+    {
+        setValue(this.value + "\u0000" + value);
+    }
+
+    /**
+     * How many values are held, each value is seperated by a null terminator
+     *
+     * @return number of values held, usually this will be one.
+     */
+    public int getNumberOfValues()
+    {
+        return splitByNullSeperator(((String)value)).size();
+    }
+
+    /**
+     * Get the nth value
+     *
+     * @param index
+     *
+     * @throws IndexOutOfBoundsException if value does not exist
+     *
+     * @return the nth value
+     */
+    public String getValueAtIndex(int index)
+    {
+       //Split String into seperate components
+       List values = splitByNullSeperator((String)value);
+       return (String)values.get(index);
     }
 }

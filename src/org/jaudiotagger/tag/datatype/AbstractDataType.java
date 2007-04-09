@@ -54,7 +54,7 @@ public abstract class AbstractDataType
     protected String identifier = "";
 
     /**
-     * Holds the calling body,allows an datatype to query other objects in the
+     * Holds the calling body, allows an datatype to query other objects in the
      * body such as the Text Encoding of the frame
      */
     protected AbstractTagFrameBody frameBody = null;
@@ -64,7 +64,9 @@ public abstract class AbstractDataType
      */
     protected int size;
 
-    /** Construct an abstratc datatype identified by identifier and linked to a framebody
+    /**
+     * Construct an abstract datatype identified by identifier and linked to a framebody without setting
+     * an initial value.
      *
      * @param identifier to allow retrieval of this datatype by name from framebody
      * @param frameBody that the dataype is associated with
@@ -73,7 +75,6 @@ public abstract class AbstractDataType
     {
         this.identifier = identifier;
         this.frameBody = frameBody;
-        this.value = null;
     }
 
     /**
@@ -87,14 +88,13 @@ public abstract class AbstractDataType
     {
         this.identifier = identifier;
         this.frameBody = frameBody;
-        this.value = value;
+        setValue(value);
     }
 
     /**
      * This is used by subclasses, to clone the data within the copyObject
      *
-     * TODO:if this functionality is actually required it seems to be missing some
-     * of the more complex value types.
+     * TODO:It seems to be missing some of the more complex value types.
      */
     public AbstractDataType(AbstractDataType copyObject)
     {

@@ -184,14 +184,14 @@ public class TagOptionSingleton
     /**
      * if we should save empty ID3v2 frames or not. Defaults to false.
      *
-     * @todo I don't think this is implemented yet.
+     * todo I don't think this is implemented yet.
      */
     private boolean id3v2SaveEmptyFrame = false;
 
     /**
      * if we should save the ID3v2 extended header or not. Defaults to false.
      *
-     * @todo Not implemented yet
+     * todo Not implemented yet
      */
     private boolean id3v2SaveExtendedHeader = false;
 
@@ -210,7 +210,7 @@ public class TagOptionSingleton
     /**
      * if we should save empty Lyrics3 field or not. Defaults to false.
      *
-     * @todo I don't think this is implemented yet.
+     * todo I don't think this is implemented yet.
      */
     private boolean lyrics3SaveEmptyField = false;
 
@@ -220,9 +220,9 @@ public class TagOptionSingleton
     private boolean originalSavedAfterAdjustingID3v2Padding = true;
 
     /**
-     * default play counter size in bytes for the ID3v2 Tag.
+     * Default play counter size in bytes for the ID3v2 Tag.
      *
-     * @todo implement this.
+     * todo implement this.
      */
     private byte playCounterSize = 4;
 
@@ -257,7 +257,16 @@ public class TagOptionSingleton
      */
     private int numberMP3SyncFrame = 3;
 
+    /** Do not unsysnchronize tags/frames this is rarely required these days and can cause more
+     * problems than it solves
+     */
     private boolean unsyncTags = false;
+
+    /**
+     * Itunes needlessly writes null terminators at the end for TextEncodedStringSizeTerminated values,
+     * if this option is enabled these characters are removed
+     */
+    private boolean removeTrailingTerminatorOnWrite=true;
 
     /**
      * Creates a new TagOptions datatype. All Options are set to their default
@@ -1120,11 +1129,10 @@ public class TagOptionSingleton
         timeStampFormat = 2;
         upperLowerCaseWordList = new LinkedList();
         unsyncTags = false;
+        removeTrailingTerminatorOnWrite = true;
 
-        /**
-         * default all lyrics3 fields to save. id3v1 fields are individual
-         * settings. id3v2 fields are always looked at to save.
-         */
+        //default all lyrics3 fields to save. id3v1 fields are individual
+        // settings. id3v2 fields are always looked at to save.
         Iterator iterator = Lyrics3v2Fields.getInstanceOf().getIdToValueMap().keySet().iterator();
         String fieldId;
 
@@ -1372,5 +1380,25 @@ public class TagOptionSingleton
     public void setUnsyncTags(boolean unsyncTags)
     {
         this.unsyncTags = unsyncTags;
+    }
+
+    /**
+     * Do we remove unneccessary trailing null characters on write
+     *
+     * @return true if we remove unneccessary trailing null characters on write
+     */
+    public boolean isRemoveTrailingTerminatorOnWrite()
+    {
+        return removeTrailingTerminatorOnWrite;
+    }
+
+    /**
+     * Remove unneccessary trailing null characters on write
+     *
+     * @param removeTrailingTerminatorOnWrite
+     */
+    public void setRemoveTrailingTerminatorOnWrite(boolean removeTrailingTerminatorOnWrite)
+    {
+        this.removeTrailingTerminatorOnWrite = removeTrailingTerminatorOnWrite;
     }
 }

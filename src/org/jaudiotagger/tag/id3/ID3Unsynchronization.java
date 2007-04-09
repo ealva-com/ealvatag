@@ -19,7 +19,7 @@ public class ID3Unsynchronization
 
     /**
      * Check if a byte array will require unsynchronization before being written as a tag.
-     * If the byte array contains any $FF bytes, then it will require unsynchronization.
+     * If the byte array contains any $FF $E0 bytes, then it will require unsynchronization.
      *
      * @param abySource the byte array to be examined
      * @return true if unsynchronization is required, false otherwise
