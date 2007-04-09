@@ -16,6 +16,12 @@
 package org.jaudiotagger.tag.id3.framebody;
 
 import org.jaudiotagger.tag.id3.ID3v24Frames;
+import org.jaudiotagger.tag.id3.valuepair.EventTimingTimestampTypes;
+import org.jaudiotagger.tag.id3.valuepair.SynchronisedLyricsContentType;
+import org.jaudiotagger.tag.datatype.*;
+import org.jaudiotagger.tag.InvalidTagException;
+
+import java.nio.ByteBuffer;
 
 /**
  * Synchronised tempo codes frame.
@@ -70,6 +76,34 @@ public class FrameBodySYTC extends AbstractID3v2FrameBody implements ID3v24Frame
     {
     }
 
+    /**
+     *
+     * @param timeStampFormat
+     * @param tempo
+     */
+    public FrameBodySYTC(int timeStampFormat,
+                         byte[] tempo)
+    {
+        setObjectValue(DataTypes.OBJ_TIME_STAMP_FORMAT,new Integer(timeStampFormat));
+        setObjectValue(DataTypes.OBJ_DATA,tempo);
+    }
+
+    /**
+     * Creates a new FrameBody from buffer
+     *
+     * @throws InvalidTagException
+     */
+    public FrameBodySYTC(ByteBuffer byteBuffer, int frameSize)
+        throws InvalidTagException
+    {
+        super(byteBuffer, frameSize);
+    }
+
+    /**
+     * Copy constructor
+     *
+     * @param body
+     */
     public FrameBodySYTC(FrameBodySYTC body)
     {
         super(body);
@@ -85,11 +119,10 @@ public class FrameBodySYTC extends AbstractID3v2FrameBody implements ID3v24Frame
         return ID3v24Frames.FRAME_ID_SYNC_TEMPO ;
     }
 
-     /**
-      * TODO
-      */
+
      protected void setupObjectList()
      {
-
+        objectList.add(new NumberHashMap(DataTypes.OBJ_TIME_STAMP_FORMAT, this, EventTimingTimestampTypes.TIMESTAMP_KEY_FIELD_SIZE));
+        objectList.add(new ByteArraySizeTerminated(DataTypes.OBJ_DATA, this));
      }
 }
