@@ -29,7 +29,7 @@ import java.nio.ByteBuffer;
  * category list would be impossible to maintain with accurate and up to
  * date categories, define your own.
  * </p><p>
- * References to the ID3v1 genres can be made by, as first byte, enter
+ * ID3V23:References to the ID3v1 genres can be made by, as first byte, enter
  * "(" followed by a number from the genres list (appendix A) and
  * ended with a ")" character. This is optionally followed by a
  * refinement, e.g. "(21)" or "(4)Eurodisco". Several references can be
@@ -47,7 +47,19 @@ import java.nio.ByteBuffer;
  * <ul>
  * <li><a href="http://www.id3.org/id3v2.3.0.txt">ID3 v2.3.0 Spec</a>
  * </ul>
- * 
+ *
+ * ID3V24:The 'Content type', which ID3v1 was stored as a one byte numeric
+ * value only, is now a string. You may use one or several of the ID3v1
+ * types as numerical strings, or, since the category list would be
+ * impossible to maintain with accurate and up to date categories,
+ * define your own. Example: "21" $00 "Eurodisco" $00
+ *
+ * You may also use any of the following keywords:
+  </p><p><table border=0 width="70%">
+ * <tr><td>RX</td><td width="100%">Remix</td></tr>
+ * <tr><td>CR</td><td>Cover</td></tr>
+ * </table></p>
+ *
  * @author : Paul Taylor
  * @author : Eric Farng
  * @version $Id$

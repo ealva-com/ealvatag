@@ -163,21 +163,22 @@ public final class MP3AudioHeader extends AbstractAudioHeader
                             }
                             break;
                         }
-                        /* There is a small but real chance that an unsynchronised ID3 Frame could fool the MPEG
-                         * Parser into thinking it was an MPEG Header. If this happens the chances of the next bytes
-                         * forming a Xing frame header are very remote. On the basis that  most files these days have
-                         * Xing headers we do an additional check for when an apparent frame header has been found
-                         * but is not followed by a Xing Header:We check the next header this wont impose a large
-                         * overhead because wont apply to most Mpegs anyway ( Most likely to occur if audio
-                         * has an  APIC frame which should have been unsynchronised but has not been) */
-                         else
-                         {
-                             syncFound=isNextFrameValid(seekFile,filePointerCount,bb,fc);
-                             if(syncFound==true)
-                             {
+                        // There is a small but real chance that an unsynchronised ID3 Frame could fool the MPEG
+                        // Parser into thinking it was an MPEG Header. If this happens the chances of the next bytes
+                        // forming a Xing frame header are very remote. On the basis that  most files these days have
+                        // Xing headers we do an additional check for when an apparent frame header has been found
+                        // but is not followed by a Xing Header:We check the next header this wont impose a large
+                        // overhead because wont apply to most Mpegs anyway ( Most likely to occur if audio
+                        // has an  APIC frame which should have been unsynchronised but has not been) , or if the frame
+                        // has been encoded with as Unicode LE because these have a BOM of 0xFF 0xFE
+                        else
+                        {
+                            syncFound=isNextFrameValid(seekFile,filePointerCount,bb,fc);
+                            if(syncFound==true)
+                            {
                                 break;
-                             }
-                         }
+                            }
+                        }
 
                     }
                     catch (InvalidAudioFrameException ex)
