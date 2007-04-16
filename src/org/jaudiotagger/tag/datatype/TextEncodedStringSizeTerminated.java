@@ -100,6 +100,9 @@ public class TextEncodedStringSizeTerminated
     /**
      * Write String into byte array
      *
+     * It will remove a trailing null terminator if exists if the option
+     * RemoveTrailingTerminatorOnWrite has been set.
+     *
      * @return the data as a byte array in format to write to file
      */
     public byte[] writeByteArray()
@@ -162,8 +165,10 @@ public class TextEncodedStringSizeTerminated
     {
         String[]valuesarray = value.split("\\u0000");
         List values = Arrays.asList(valuesarray);
+        //Read only list so if empty have to create new list
         if(values.size()==0)
         {
+            values = new ArrayList(1);
             values.add("");
         }
         return values;
