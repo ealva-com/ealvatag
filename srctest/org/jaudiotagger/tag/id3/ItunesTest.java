@@ -4,6 +4,7 @@ import org.jaudiotagger.AbstractTestCase;
 import org.jaudiotagger.tag.id3.framebody.*;
 import org.jaudiotagger.tag.TagOptionSingleton;
 import org.jaudiotagger.audio.mp3.MP3File;
+import org.jaudiotagger.audio.mp3.MP3AudioHeader;
 
 import java.io.File;
 
@@ -114,5 +115,18 @@ public class ItunesTest extends AbstractTestCase
         assertNotNull(v23frame);
         FrameBodyCOMM fb = (FrameBodyCOMM) v23frame.getBody();
         assertEquals(EMPTY_VALUE,fb.getText());       
+    }
+
+    /** Check skips over tag to read mp3 audio */
+    public void testCanFindStartOfMp3AudioWithinUTF16LETag() throws Exception
+    {
+        long START_OF_AUDIO_LOCATION = 2048;
+        int  FRAME_COUNT = 10;
+        File testFile = AbstractTestCase.copyAudioToTmp("Issue104-1.id3","testV1.mp3");
+        MP3File mp3File = new MP3File(testFile);
+
+        //Should find mp3 in same location whether start search from start or after ID3tag
+        assertEquals(START_OF_AUDIO_LOCATION,mp3File.getMP3AudioHeader().getMp3StartByte());
+        assertEquals(FRAME_COUNT,mp3File.getID3v2Tag().getFrameCount());
     }
 }

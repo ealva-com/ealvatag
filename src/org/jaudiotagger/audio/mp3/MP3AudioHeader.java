@@ -46,8 +46,8 @@ import java.nio.ByteBuffer;
  * Having found these two values we then read the header which comprises these two bytes plus a further
  * two to ensure this really is a MP3Header, sometimes the first frame is actually a dummy frame with summary information
  * held within about the whole file, typically using a Xing Header or LAme Header. This is most useful when the file
- * is variable bit rate, if the file is variable bit rate but does not use a summary header it will not be correclty identified
- * as a VBR frame and the track length will be incorreclty calculated.
+ * is variable bit rate, if the file is variable bit rate but does not use a summary header it will not be correctly
+ * identified as a VBR frame and the track length will be incorreclty calculated.
  *
  * Strictly speaking MP3 means an MPEG-1, Layer III file but MP2 (MPEG-1,Layer II), MP1 (MPEG-1,Layer I) and MPEG-2 files are
  * sometimes used and named with the .mp3 suffix so this library attempts to supports all these formats.
@@ -84,9 +84,44 @@ public final class MP3AudioHeader extends AbstractAudioHeader
     private final static int MIN_BUFFER_REMAINING_REQUIRED =
         MPEGFrameHeader.HEADER_SIZE + XingFrame.MAX_BUFFER_SIZE_NEEDED_TO_READ_XING;
 
+    /**
+     * Search for the first MP3Header in the file
+     *
+     * The search starts from the start of the file, it is usually safer to use the alternative constructor that
+     * allows you to provide the length of the tag header as a parameter so the tag can be skipped over.
+     *
+     * @param seekFile
+     * @throws IOException
+     * @throws InvalidAudioFrameException
+     */
     public MP3AudioHeader(final File seekFile)throws IOException,InvalidAudioFrameException
     {
-         if(seek(seekFile)==false)
+         if(seek(seekFile, 0)==false)
+         {
+             throw new InvalidAudioFrameException("No audio header found within"+seekFile.getName());
+         }
+    }
+
+    /**
+     * Search for the first MP3Header in the file
+     *
+     * Starts searching from location startByte, this is because there is likely to be an ID3TagHeader
+     * before the start of the audio. If this tagHeader contains unsynchronized information there is a
+     * possibility that it might be inaccurately identified as the start of the Audio data. Various checks
+     * are done in this code to prevent this happening but it cannot be guaranteed.
+     *
+     * Of course if the startByte provided overstates the length og the tag header, this could mean the
+     * start of the MP3AudioHeader is missed, further checks are done within the MP3 class to recognize
+     * if this has occurred and take appropriate action.
+     *
+     * @param seekFile
+     * @param startByte
+     * @throws IOException
+     * @throws InvalidAudioFrameException
+     */
+    public MP3AudioHeader(final File seekFile,long startByte)throws IOException,InvalidAudioFrameException
+    {
+         if(seek(seekFile, startByte)==false)
          {
              throw new InvalidAudioFrameException("No audio header found within"+seekFile.getName());
          }
@@ -94,26 +129,35 @@ public final class MP3AudioHeader extends AbstractAudioHeader
 
     /**
      * Returns true if the first MP3 frame can be found for the MP3 file
-     * argument. This is the first byte of  music data and not the ID3 Tag Frame.
      *
+     * This is the first byte of  music data and not the ID3 Tag Frame.     *
      *
      * @param seekFile MP3 file to seek
+     * @param startByte if there is an ID3v2tag we dont want to start reading from the start of the tag
      * @return true if the first MP3 frame can be found
      * @throws IOException on any I/O error
      * @noinspection NestedTryStatement
      */
-    public boolean seek(final File seekFile)
+    public boolean seek(final File seekFile, long startByte)
         throws IOException
     {
         //This is substantially faster than updating the filechannels position
-        int filePointerCount = 0;
+        long filePointerCount = 0;
 
         final FileInputStream     fis = new FileInputStream(seekFile);
         final FileChannel fc = fis.getChannel();
 
         //Read into Byte Buffer in Chunks
         ByteBuffer  bb = ByteBuffer.allocateDirect(FILE_BUFFER_SIZE);
-        fc.read(bb,0);
+
+        //Move FileChannel to the starting position (skipping over tag if any)
+        fc.position(startByte);
+
+        //Update filePointerCount
+        filePointerCount=startByte;
+
+        //Read from here into the byte buffer , doesnt move location of filepointer
+        fc.read(bb,startByte);
         bb.flip();
 
         boolean syncFound  = false;
@@ -234,7 +278,7 @@ public final class MP3AudioHeader extends AbstractAudioHeader
      *
      * @return  true if frame is valid
      */
-    private boolean isNextFrameValid(File seekFile,int filePointerCount,ByteBuffer  bb,FileChannel fc)
+    private boolean isNextFrameValid(File seekFile,long filePointerCount,ByteBuffer  bb,FileChannel fc)
     throws IOException
     {
         if(MP3AudioHeader.logger.isLoggable(Level.FINEST))

@@ -313,6 +313,41 @@ public class MP3File extends org.jaudiotagger.audio.AbstractAudioFile
         */
     }
 
+    /**
+     * Regets the auddio header starting from start of file, and write appropriate logging to indicate
+     * potential problem to user.
+     *
+     * @param startByte
+     * @param currentHeader
+     * @return
+     * @throws IOException
+     * @throws InvalidAudioFrameException
+     */
+    private MP3AudioHeader checkAudioStart(long startByte,MP3AudioHeader currentHeader)throws IOException,InvalidAudioFrameException
+    {
+        MP3AudioHeader newAudioHeader;
+
+        logger.warning(file.getPath()+"ID3Tag ends at:"+startByte
+            +":but mp3audio doesnt start until:"+currentHeader.getMp3StartByte());
+
+        //because we cant agree on start location we reread the audioheader from the start of the file, at least
+        //this way we cant overwrite the audio although we might overwrtite part of the tag if we write this file
+        //back later
+        newAudioHeader = new MP3AudioHeader(file,0);
+        if(currentHeader.getMp3StartByte()==newAudioHeader.getMp3StartByte())
+        {
+            //Although the tag size appears to be incorrect at least we have found the same location for the start
+            //of audio whether we start searching from start of file or at the end of the alleged of file
+            logger.warning(file.getPath()+"Using mp3audio start:"+newAudioHeader.getMp3StartByte());
+        }
+        else
+        {
+            //We get a different value if read from start, can't gurantee 100% correct
+            logger.warning(file.getPath()+"Recalculated using mp3audio start:"+newAudioHeader.getMp3StartByte());
+        }
+
+        return newAudioHeader;
+    }
 
     /**
      * Creates a new MP3File datatype and parse the tag from the given file
@@ -331,8 +366,16 @@ public class MP3File extends org.jaudiotagger.audio.AbstractAudioFile
         //Check File accessibility
         RandomAccessFile newFile = checkFilePermissions(file, readOnly);
 
-        //If exception reading MPEG then we should give up no point continuing
-        audioHeader = new MP3AudioHeader(file);
+        //Read ID3v2 tag size (if tag exists) to allow audioheader parsing to skip over tag
+        long startByte = AbstractID3v2Tag.getV2TagSizeIfExists(file);
+
+        //If exception reading Mpeg then we should give up no point continuing
+        audioHeader = new MP3AudioHeader(file,startByte);
+
+        if(startByte!=((MP3AudioHeader)audioHeader).getMp3StartByte())
+        {
+            audioHeader=checkAudioStart(startByte,(MP3AudioHeader)audioHeader);
+        }
 
         //Read v1 tags (if any)
         readV1Tag(file, newFile, loadOptions);
@@ -363,7 +406,14 @@ public class MP3File extends org.jaudiotagger.audio.AbstractAudioFile
     {
         try
         {
-            MP3AudioHeader audioHeader = new MP3AudioHeader(file);
+            //Read ID3v2 tag size (if tag exists) to allow audioheader parsing to skip over tag
+            long startByte = AbstractID3v2Tag.getV2TagSizeIfExists(file);
+
+            MP3AudioHeader audioHeader = new MP3AudioHeader(file,startByte);
+            if(startByte!=audioHeader.getMp3StartByte())
+            {
+                audioHeader=checkAudioStart(startByte,audioHeader);
+            }
             return audioHeader.getMp3StartByte();
         }
         catch (InvalidAudioFrameException iafe)

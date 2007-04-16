@@ -30,10 +30,11 @@ public abstract class AbstractAudioHeader
     /**
      *
      * @param seekFile
+     * @param startByte
      * @return
      * @throws IOException
      */
-    public abstract boolean seek(File seekFile) throws IOException;
+    public abstract boolean seek(File seekFile, long startByte) throws IOException;
 
     /**
      *

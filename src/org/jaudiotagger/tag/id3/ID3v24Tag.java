@@ -206,9 +206,9 @@ public class ID3v24Tag
      */
     protected byte textFieldSizeRestriction = 0;
 
-    private static final byte RELEASE  = 2;
-    private static final byte MAJOR_VERSION = 4;
-    private static final byte REVISION = 0;
+    public static final byte RELEASE  = 2;
+    public static final byte MAJOR_VERSION = 4;
+    public static final byte REVISION = 0;
 
     /**
      * Retrieve the Release

@@ -65,9 +65,9 @@ public class ID3v22Tag
      */
     protected  boolean unsynchronization = false;
 
-    private static final byte RELEASE  = 2;
-    private static final byte MAJOR_VERSION = 2;
-    private static final byte REVISION = 0;
+    public static final byte RELEASE  = 2;
+    public static final byte MAJOR_VERSION = 2;
+    public static final byte REVISION = 0;
 
     /**
      * Retrieve the Release
