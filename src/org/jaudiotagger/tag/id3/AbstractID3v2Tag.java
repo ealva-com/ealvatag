@@ -474,8 +474,8 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag
 
 
     /**
-     * Checks to see if the file contains an ID3tag and if so calculate its size
-     * and return the size of the tag (including header), if no such tag exists return
+     * Checks to see if the file contains an ID3tag and if so return its size as reported in
+     * the tag header  and return the size of the tag (including header), if no such tag exists return
      * zero.
      *
      * @param file

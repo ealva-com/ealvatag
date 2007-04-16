@@ -437,12 +437,13 @@ public class ID3v22Tag
     /**
      * Write the ID3 header to the ByteBuffer.
      *
+     * TODO compression support required.
+     *
      * @return ByteBuffer 
      * @throws IOException
      */
-    protected ByteBuffer writeHeaderToBuffer(int padding) throws IOException
+    private ByteBuffer writeHeaderToBuffer(int padding,int size) throws IOException
     {
-        //TODO compression support required.
         compression = false;
 
         //Create Header Buffer
@@ -465,9 +466,11 @@ public class ID3v22Tag
         {
             flags |= (byte) MASK_V22_COMPRESSION;
         }
+
         headerBuffer.put(flags);
-        headerBuffer.put(ID3SyncSafeInteger.valueToBuffer(padding + getSize() - TAG_HEADER_LENGTH));
-        
+
+        //Size As Recorded in Header, don't include the main header length
+        headerBuffer.put(ID3SyncSafeInteger.valueToBuffer(padding + size));      
         headerBuffer.flip();
         return headerBuffer;
     }
@@ -486,7 +489,7 @@ public class ID3v22Tag
         // Write Body Buffer */
         byte[] bodyByteBuffer = writeFramesToBuffer().toByteArray();
 
-        //Unsynchronize if option enabled and unsync required
+        // Unsynchronize if option enabled and unsync required
         if(TagOptionSingleton.getInstance().isUnsyncTags())
         {
             unsynchronization = ID3Unsynchronization.requiresUnsynchronization(bodyByteBuffer);
@@ -495,22 +498,24 @@ public class ID3v22Tag
         {
             unsynchronization=false;
         }
-        if(unsynchronization)
+        if(isUnsynchronization())
         {
             bodyByteBuffer=ID3Unsynchronization.unsynchronize(bodyByteBuffer);
-            logger.info("bodybytebuffer:sizeafterunsynchronisation:"+bodyByteBuffer.length);
+            logger.info(getLoggingFilename()+":bodybytebuffer:sizeafterunsynchronisation:"+bodyByteBuffer.length);
         }
 
-        //Calculate Tag Size including Padding
-        int sizeIncPadding = calculateTagSize(getSize(),(int) audioStartLocation);
-        int padding = sizeIncPadding - getSize();
+        int sizeIncPadding = calculateTagSize(bodyByteBuffer.length + TAG_HEADER_LENGTH, (int) audioStartLocation);
+        int padding = sizeIncPadding - (bodyByteBuffer.length + TAG_HEADER_LENGTH) ;
+        logger.info(getLoggingFilename()+":Current audiostart:"+audioStartLocation);
+        logger.info(getLoggingFilename()+":Size including padding:"+sizeIncPadding);
+        logger.info(getLoggingFilename()+":Padding:"+padding);
 
-        ByteBuffer headerBuffer = writeHeaderToBuffer(padding);
+        ByteBuffer headerBuffer = writeHeaderToBuffer(padding,bodyByteBuffer.length);
 
         //We need to adjust location of audio File
-        if (sizeIncPadding > (int) audioStartLocation)
+        if (sizeIncPadding > audioStartLocation)
         {
-            logger.finest("Adjusting Pattern");
+            logger.info(getLoggingFilename()+":Adjusting Padding");
             adjustPadding(file, sizeIncPadding, audioStartLocation);
         }
 
@@ -541,11 +546,27 @@ public class ID3v22Tag
     public void write(WritableByteChannel channel)
         throws IOException
     {
-        logger.info("Writing tag to channel");
-  
+        logger.info(getLoggingFilename()+":Writing tag to channel");
+
         byte[] bodyByteBuffer = writeFramesToBuffer().toByteArray();
-        ByteBuffer headerBuffer = writeHeaderToBuffer(0);
-    
+        logger.info(getLoggingFilename()+":bodybytebuffer:sizebeforeunsynchronisation:"+bodyByteBuffer.length);
+
+        //Unsynchronize if option enabled and unsync required
+        if(TagOptionSingleton.getInstance().isUnsyncTags())
+        {
+            unsynchronization = ID3Unsynchronization.requiresUnsynchronization(bodyByteBuffer);
+        }
+        else
+        {
+            unsynchronization=false;
+        }
+        if(isUnsynchronization())
+        {
+            bodyByteBuffer=ID3Unsynchronization.unsynchronize(bodyByteBuffer);
+            logger.info(getLoggingFilename()+":bodybytebuffer:sizeafterunsynchronisation:"+bodyByteBuffer.length);
+        }
+        ByteBuffer headerBuffer = writeHeaderToBuffer(0,bodyByteBuffer.length);
+
         channel.write(headerBuffer);
         channel.write(ByteBuffer.wrap(bodyByteBuffer));
     }

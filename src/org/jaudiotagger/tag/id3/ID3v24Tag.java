@@ -36,13 +36,12 @@ import java.io.*;
 
 /**
  * This class represents an ID3v2.4 tag.
- * 
+ *
  * @author : Paul Taylor
  * @author : Eric Farng
  * @version $Id$
  */
-public class ID3v24Tag
-    extends ID3v23Tag
+public class ID3v24Tag extends ID3v23Tag
 {
     protected static final String TYPE_FOOTER = "footer";
     protected static final String TYPE_IMAGEENCODINGRESTRICTION = "imageEncodingRestriction";
@@ -206,7 +205,7 @@ public class ID3v24Tag
      */
     protected byte textFieldSizeRestriction = 0;
 
-    public static final byte RELEASE  = 2;
+    public static final byte RELEASE = 2;
     public static final byte MAJOR_VERSION = 4;
     public static final byte REVISION = 0;
 
@@ -235,7 +234,6 @@ public class ID3v24Tag
     }
 
 
-    
     /**
      * Creates a new empty ID3v2_4 datatype.
      */
@@ -286,14 +284,14 @@ public class ID3v24Tag
             {
                 frame = (AbstractID3v2Frame) o;
                 try
-                {                     
+                {
                     newFrame = new ID3v24Frame(frame);
-                    logger.info("Adding Frame:"+newFrame.getIdentifier());
+                    logger.info("Adding Frame:" + newFrame.getIdentifier());
                     copyFrameIntoMap(newFrame.getIdentifier(), newFrame);
                 }
-                catch(InvalidFrameException ife)
+                catch (InvalidFrameException ife)
                 {
-                     logger.log(Level.SEVERE,"Unable to convert frame:"+frame.getIdentifier(),ife);
+                    logger.log(Level.SEVERE, "Unable to convert frame:" + frame.getIdentifier(), ife);
                 }
             }
             //MultiFrames
@@ -308,14 +306,14 @@ public class ID3v24Tag
                         newFrame = new ID3v24Frame(frame);
                         multiFrame.add(newFrame);
                     }
-                    catch(InvalidFrameException ife)
+                    catch (InvalidFrameException ife)
                     {
-                         logger.log(Level.SEVERE,"Unable to convert frame:"+frame.getIdentifier());
+                        logger.log(Level.SEVERE, "Unable to convert frame:" + frame.getIdentifier());
                     }
                 }
                 if (newFrame != null)
                 {
-                    logger.finest("Adding multi frame list to map:"+newFrame.getIdentifier());
+                    logger.finest("Adding multi frame list to map:" + newFrame.getIdentifier());
                     frameMap.put(newFrame.getIdentifier(), multiFrame);
                 }
             }
@@ -335,7 +333,7 @@ public class ID3v24Tag
     /**
      * Creates a new ID3v2_4 datatype based on another (non 2.4) tag
      *
-     * @param mp3tag 
+     * @param mp3tag
      */
     public ID3v24Tag(AbstractTag mp3tag)
     {
@@ -387,7 +385,7 @@ public class ID3v24Tag
                 }
                 if (id3tag.year.length() > 0)
                 {
-                    newBody  = new FrameBodyTDRC((byte) 0, id3tag.year);
+                    newBody = new FrameBodyTDRC((byte) 0, id3tag.year);
                     newFrame = new ID3v24Frame(ID3v24Frames.FRAME_ID_YEAR);
                     newFrame.setBody(newBody);
                     frameMap.put(newFrame.getIdentifier(), newFrame);
@@ -399,15 +397,10 @@ public class ID3v24Tag
                     newFrame.setBody(newBody);
                     frameMap.put(newFrame.getIdentifier(), newFrame);
                 }
-                if (
-                    ((id3tag.genre & ID3v1Tag.BYTE_TO_UNSIGNED) >= 0)
-                    &&
-                    ((id3tag.genre & ID3v1Tag.BYTE_TO_UNSIGNED) != ID3v1Tag.BYTE_TO_UNSIGNED)
-                    )
+                if (((id3tag.genre & ID3v1Tag.BYTE_TO_UNSIGNED) >= 0) && ((id3tag.genre & ID3v1Tag.BYTE_TO_UNSIGNED) != ID3v1Tag.BYTE_TO_UNSIGNED))
                 {
                     Integer genreId = new Integer(id3tag.genre & ID3v1Tag.BYTE_TO_UNSIGNED);
-                    String genre = "(" + genreId + ") " +
-                        GenreTypes.getInstanceOf().getValueForId(genreId.intValue());
+                    String genre = "(" + genreId + ") " + GenreTypes.getInstanceOf().getValueForId(genreId.intValue());
 
                     newBody = new FrameBodyTCON((byte) 0, genre);
                     newFrame = new ID3v24Frame(ID3v24Frames.FRAME_ID_GENRE);
@@ -466,8 +459,7 @@ public class ID3v24Tag
      * @param loggingFilename
      * @throws TagException
      */
-    public ID3v24Tag(ByteBuffer buffer,String loggingFilename)
-        throws TagException
+    public ID3v24Tag(ByteBuffer buffer, String loggingFilename) throws TagException
     {
         setLoggingFilename(loggingFilename);
         this.read(buffer);
@@ -479,17 +471,14 @@ public class ID3v24Tag
      *
      * @param buffer
      * @throws TagException
-     *
      * @deprecated use {@link #ID3v24Tag(ByteBuffer,String)} instead
      */
-    public ID3v24Tag(ByteBuffer buffer)
-        throws TagException
+    public ID3v24Tag(ByteBuffer buffer) throws TagException
     {
-        this(buffer,"");
+        this(buffer, "");
     }
+
     /**
-     * 
-     *
      * @return identifier
      */
     public String getIdentifier()
@@ -528,9 +517,7 @@ public class ID3v24Tag
     }
 
     /**
-     * 
-     *
-     * @param obj 
+     * @param obj
      * @return equality
      */
     public boolean equals(Object obj)
@@ -580,18 +567,17 @@ public class ID3v24Tag
      * Read tag header, delegate reading of frames to readFrames()
      *
      * @param byteBuffer to read the tag from
-     * @throws TagException         
+     * @throws TagException
      * @throws TagNotFoundException
-     * @throws InvalidTagException  
+     * @throws InvalidTagException
      */
-    public void read(ByteBuffer byteBuffer)
-        throws TagException
+    public void read(ByteBuffer byteBuffer) throws TagException
     {
         int size;
         byte[] buffer;
         if (seek(byteBuffer) == false)
         {
-            throw new TagNotFoundException(getLoggingFilename()+":"+getIdentifier() + " tag not found");
+            throw new TagNotFoundException(getLoggingFilename() + ":" + getIdentifier() + " tag not found");
         }
         //Flags
         byte flags = byteBuffer.get();
@@ -600,29 +586,29 @@ public class ID3v24Tag
         experimental = (flags & MASK_V24_EXPERIMENTAL) != 0;
         footer = (flags & MASK_V24_FOOTER_PRESENT) != 0;
 
-        if(isUnsynchronization())
+        if (isUnsynchronization())
         {
-            logger.warning(getLoggingFilename()+":"+"ID3v24 Tag is unsynchronized");
+            logger.warning(getLoggingFilename() + ":" + "ID3v24 Tag is unsynchronized");
         }
 
-        if(extended)
+        if (extended)
         {
-            logger.warning(getLoggingFilename()+":"+"ID3v24 Tag is extended");
+            logger.warning(getLoggingFilename() + ":" + "ID3v24 Tag is extended");
         }
 
-        if(experimental)
+        if (experimental)
         {
-            logger.warning(getLoggingFilename()+":"+"ID3v24 Tag is experimental");
+            logger.warning(getLoggingFilename() + ":" + "ID3v24 Tag is experimental");
         }
 
-        if(footer)
+        if (footer)
         {
-            logger.warning(getLoggingFilename()+":"+"ID3v24 Tag has footer");
+            logger.warning(getLoggingFilename() + ":" + "ID3v24 Tag has footer");
         }
 
         // Read the size, this is size of tag apart from tag header
         size = ID3SyncSafeInteger.bufferToValue(byteBuffer);
-        logger.info(getLoggingFilename()+":"+"Reading tag from file size set in header is" + size);
+        logger.info(getLoggingFilename() + ":" + "Reading tag from file size set in header is" + size);
         if (extended)
         {
             // int is 4 bytes.
@@ -630,7 +616,7 @@ public class ID3v24Tag
             // the extended header must be atleast 6 bytes
             if (extendedHeaderSize <= TAG_EXT_HEADER_LENGTH)
             {
-                throw new InvalidTagException(getLoggingFilename()+":"+"Invalid Extended Header Size.");
+                throw new InvalidTagException(getLoggingFilename() + ":" + "Invalid Extended Header Size.");
             }
             //Number of bytes
             byteBuffer.get();
@@ -682,34 +668,34 @@ public class ID3v24Tag
      */
     protected void readFrames(ByteBuffer byteBuffer, int size)
     {
-        logger.finest(getLoggingFilename()+":"+"Start of frame body at" + byteBuffer.position());
+        logger.finest(getLoggingFilename() + ":" + "Start of frame body at" + byteBuffer.position());
         //Now start looking for frames
         ID3v24Frame next;
         frameMap = new LinkedHashMap();
         //Read the size from the Tag Header
         this.fileReadSize = size;
         // Read the frames until got to upto the size as specified in header
-        logger.finest(getLoggingFilename()+":"+"Start of frame body at:" + byteBuffer.position() + ",frames data size is:" + size);
+        logger.finest(getLoggingFilename() + ":" + "Start of frame body at:" + byteBuffer.position() + ",frames data size is:" + size);
         while (byteBuffer.position() <= size)
         {
             String id;
             try
             {
                 //Read Frame
-                logger.finest(getLoggingFilename()+":"+"looking for next frame at:" + byteBuffer.position());
-                next = new ID3v24Frame(byteBuffer,getLoggingFilename());
+                logger.finest(getLoggingFilename() + ":" + "looking for next frame at:" + byteBuffer.position());
+                next = new ID3v24Frame(byteBuffer, getLoggingFilename());
                 id = next.getIdentifier();
                 loadFrameIntoMap(id, next);
             }
             //Found Empty Frame
             catch (EmptyFrameException ex)
             {
-                logger.warning(getLoggingFilename()+":"+"Empty Frame:"+ex.getMessage());
+                logger.warning(getLoggingFilename() + ":" + "Empty Frame:" + ex.getMessage());
                 this.emptyFrameBytes += TAG_HEADER_LENGTH;
             }
-            catch ( InvalidFrameIdentifierException ifie)
+            catch (InvalidFrameIdentifierException ifie)
             {
-                logger.info(getLoggingFilename()+":"+"Invalid Frame Identifier:"+ifie.getMessage());
+                logger.info(getLoggingFilename() + ":" + "Invalid Frame Identifier:" + ifie.getMessage());
                 this.invalidFrameBytes++;
                 //Dont try and find any more frames
                 break;
@@ -717,7 +703,7 @@ public class ID3v24Tag
             //Problem trying to find frame
             catch (InvalidFrameException ife)
             {
-                logger.warning(getLoggingFilename()+":"+"Invalid Frame:"+ife.getMessage());
+                logger.warning(getLoggingFilename() + ":" + "Invalid Frame:" + ife.getMessage());
                 this.invalidFrameBytes++;
                 //Dont try and find any more frames
                 break;
@@ -727,152 +713,172 @@ public class ID3v24Tag
 
     /**
      * Write the ID3 header to the ByteBuffer.
+     * <p/>
+     * TODO Calculate the CYC Data Check
+     * TODO Reintroduce Extended Header
      *
-     * @return ByteBuffer 
+     * @param padding is the size of the padding
+     * @param size    is the size of the body data
+     * @return ByteBuffer
      * @throws IOException
      */
-    protected ByteBuffer writeHeaderToBuffer(int padding) throws IOException
+    private ByteBuffer writeHeaderToBuffer(int padding, int size) throws IOException
     {
-      //todo Calculate the CYC Data Check
-      //todo Reintroduce Extended Header
+        //This would only be set if every frame in tag has been unsynchronized, I only unsychronize frames
+        //that need it, in any case I have been advised not to set it even then.
+        unsynchronization = false;
 
-     //This would only be set if every frame in tag has been unsynchronized, I only unsychronize frames
-     //that need it, in any case I have been advised not to set it even then.   
-     unsynchronization =false;
+        // Flags,currently we never calculate the CRC
+        // and if we dont calculate them cant keep orig values. Tags are not
+        // experimental and we never create extended header to keep things simple.
+        extended = false;
+        experimental = false;
+        footer = false;
 
+        // Create Header Buffer,allocate maximum possible size for the header*/
+        ByteBuffer headerBuffer = ByteBuffer.allocate(TAG_HEADER_LENGTH);
+        //TAGID
+        headerBuffer.put(TAG_ID);
 
-      // Flags,currently we never calculate the CRC
-      // and if we dont calculate them cant keep orig values. Tags are not
-      // experimental and we never create extended header to keep things simple.
-      extended = false;
-      experimental = false;
-      footer = false;
+        //Major Version
+        headerBuffer.put(getMajorVersion());
 
-      // Create Header Buffer,allocate maximum possible size for the header*/
-      ByteBuffer headerBuffer = ByteBuffer.allocate(TAG_HEADER_LENGTH);
-      //TAGID
-      headerBuffer.put(TAG_ID);
+        //Minor Version
+        headerBuffer.put(getRevision());
 
-      //Major Version
-      headerBuffer.put(getMajorVersion());
+        //Flags
+        byte flagsByte = 0;
+        if (isUnsynchronization() == true)
+        {
+            flagsByte |= MASK_V24_UNSYNCHRONIZATION;
+        }
+        if (extended == true)
+        {
+            flagsByte |= MASK_V24_EXTENDED_HEADER;
+        }
+        if (experimental == true)
+        {
+            flagsByte |= MASK_V24_EXPERIMENTAL;
+        }
+        if (footer == true)
+        {
+            flagsByte |= MASK_V24_FOOTER_PRESENT;
+        }
+        headerBuffer.put(flagsByte);
 
-      //Minor Version
-      headerBuffer.put(getRevision());
+        //Size As Recorded in Header, don't include the main header length
+        //Additional Header Size,(for completeness we never actually write the extended header, or footer)
+        int additionalHeaderSize = 0;
+        if (extended)
+        {
+            additionalHeaderSize += this.TAG_EXT_HEADER_LENGTH;
+            if (updateTag)
+            {
+                additionalHeaderSize += this.TAG_EXT_HEADER_UPDATE_LENGTH;
+            }
+            if (crcDataFlag)
+            {
+                additionalHeaderSize += this.TAG_EXT_HEADER_CRC_LENGTH;
+            }
+            if (tagRestriction)
+            {
+                additionalHeaderSize += this.TAG_EXT_HEADER_RESTRICTION_LENGTH;
+            }
+        }
 
-      //Flags
-      byte flagsByte = 0;
-      if (isUnsynchronization() == true)
-      {
-          flagsByte |= MASK_V24_UNSYNCHRONIZATION;
-      }
-      if (extended == true)
-      {
-          flagsByte |= MASK_V24_EXTENDED_HEADER;
-      }
-      if (experimental == true)
-      {
-          flagsByte |= MASK_V24_EXPERIMENTAL;
-      }
-      if (footer == true)
-      {
-          flagsByte |= MASK_V24_FOOTER_PRESENT;
-      }
-      headerBuffer.put(flagsByte);
-      
-      //Size As Recorded in Header, don't include the main header length
-      headerBuffer.put(ID3SyncSafeInteger.valueToBuffer(padding + getSize() - TAG_HEADER_LENGTH));
+        //Size As Recorded in Header, don't include the main header length
+        headerBuffer.put(ID3SyncSafeInteger.valueToBuffer(padding + size + additionalHeaderSize));
 
-      //Write Extended Header
-      ByteBuffer extHeaderBuffer = null;
-      if (extended == true)
-      {
-          //Write Extended Header Size
-          int size = TAG_EXT_HEADER_LENGTH;
-          if (updateTag == true)
-          {
-              size += TAG_EXT_HEADER_UPDATE_LENGTH;
-          }
-          if (crcDataFlag == true)
-          {
-              size += TAG_EXT_HEADER_CRC_LENGTH;
-          }
-          if (tagRestriction == true)
-          {
-              size += TAG_EXT_HEADER_RESTRICTION_LENGTH;
-          }
-          extHeaderBuffer = ByteBuffer.allocate(size);
-          extHeaderBuffer.putInt(size);
-          //Write Number of flags Byte
-          extHeaderBuffer.put((byte) TAG_EXT_NUMBER_BYTES_DATA_LENGTH);
-          //Write Extended Flags
-          byte extFlag = 0;
-          if (updateTag == true)
-          {
-              extFlag |= MASK_V24_TAG_UPDATE;
-          }
-          if (crcDataFlag == true)
-          {
-              extFlag |= MASK_V24_CRC_DATA_PRESENT;
-          }
-          if (tagRestriction == true)
-          {
-              extFlag |= MASK_V24_TAG_RESTRICTIONS;
-          }
-          extHeaderBuffer.put(extFlag);
-          //Write Update Data
-          if (updateTag == true)
-          {
-              extHeaderBuffer.put((byte) 0);
-          }
-          //Write CRC Data
-          if (crcDataFlag == true)
-          {
-              extHeaderBuffer.put((byte) TAG_EXT_HEADER_CRC_DATA_LENGTH);
-              extHeaderBuffer.put((byte) 0);
-              extHeaderBuffer.putInt(crcData);
-          }
-          //Write Tag Restriction
-          if (tagRestriction == true)
-          {
-              extHeaderBuffer.put((byte) TAG_EXT_HEADER_RESTRICTION_DATA_LENGTH);
-              //todo not currently setting restrictions
-              extHeaderBuffer.put((byte) 0);
-          }
-      }
+        //Write Extended Header
+        ByteBuffer extHeaderBuffer = null;
+        if (extended == true)
+        {
+            //Write Extended Header Size
+            int extendedSize = TAG_EXT_HEADER_LENGTH;
+            if (updateTag == true)
+            {
+                extendedSize += TAG_EXT_HEADER_UPDATE_LENGTH;
+            }
+            if (crcDataFlag == true)
+            {
+                extendedSize += TAG_EXT_HEADER_CRC_LENGTH;
+            }
+            if (tagRestriction == true)
+            {
+                extendedSize += TAG_EXT_HEADER_RESTRICTION_LENGTH;
+            }
+            extHeaderBuffer = ByteBuffer.allocate(extendedSize);
+            extHeaderBuffer.putInt(extendedSize);
+            //Write Number of flags Byte
+            extHeaderBuffer.put((byte) TAG_EXT_NUMBER_BYTES_DATA_LENGTH);
+            //Write Extended Flags
+            byte extFlag = 0;
+            if (updateTag == true)
+            {
+                extFlag |= MASK_V24_TAG_UPDATE;
+            }
+            if (crcDataFlag == true)
+            {
+                extFlag |= MASK_V24_CRC_DATA_PRESENT;
+            }
+            if (tagRestriction == true)
+            {
+                extFlag |= MASK_V24_TAG_RESTRICTIONS;
+            }
+            extHeaderBuffer.put(extFlag);
+            //Write Update Data
+            if (updateTag == true)
+            {
+                extHeaderBuffer.put((byte) 0);
+            }
+            //Write CRC Data
+            if (crcDataFlag == true)
+            {
+                extHeaderBuffer.put((byte) TAG_EXT_HEADER_CRC_DATA_LENGTH);
+                extHeaderBuffer.put((byte) 0);
+                extHeaderBuffer.putInt(crcData);
+            }
+            //Write Tag Restriction
+            if (tagRestriction == true)
+            {
+                extHeaderBuffer.put((byte) TAG_EXT_HEADER_RESTRICTION_DATA_LENGTH);
+                //todo not currently setting restrictions
+                extHeaderBuffer.put((byte) 0);
+            }
+        }
 
-      if (extHeaderBuffer != null)
-      {
-          extHeaderBuffer.flip();
-          headerBuffer.put(extHeaderBuffer);
-      }
+        if (extHeaderBuffer != null)
+        {
+            extHeaderBuffer.flip();
+            headerBuffer.put(extHeaderBuffer);
+        }
 
-      headerBuffer.flip();
-      return headerBuffer;
+        headerBuffer.flip();
+        return headerBuffer;
     }
 
     /**
      * Write this tag to file.
      *
-     * @param file 
-     * @throws IOException 
+     * @param file
+     * @throws IOException
      */
-    public void write(File file, long audioStartLocation)
-        throws IOException
+    public void write(File file, long audioStartLocation) throws IOException
     {
         logger.info("Writing tag to file");
 
-        /** Write Body Buffer */
+        //Write Body Buffer
         byte[] bodyByteBuffer = writeFramesToBuffer().toByteArray();
 
-        /** Calculate Tag Size including Padding */
-        int sizeIncPadding = calculateTagSize(getSize(), (int) audioStartLocation);
+        //Calculate Tag Size including Padding
+        int sizeIncPadding = calculateTagSize(bodyByteBuffer.length + TAG_HEADER_LENGTH, (int) audioStartLocation);
 
         //Calculate padding bytes required
-        int padding = sizeIncPadding - getSize();
+        int padding = sizeIncPadding - (bodyByteBuffer.length + TAG_HEADER_LENGTH);
 
-        ByteBuffer headerBuffer = writeHeaderToBuffer(padding);
+        ByteBuffer headerBuffer = writeHeaderToBuffer(padding, bodyByteBuffer.length);
 
-        /** We need to adjust location of audio File */
+        //We need to adjust location of audio File
         if (sizeIncPadding > audioStartLocation)
         {
             logger.finest("Adjusting Padding");
@@ -890,7 +896,7 @@ public class ID3v24Tag
         }
         finally
         {
-            if(fc!=null)
+            if (fc != null)
             {
                 fc.close();
             }
@@ -899,25 +905,23 @@ public class ID3v24Tag
 
     /**
      * Write tag to channel
-     * 
+     *
      * @param channel
      * @throws IOException
      */
-    public void write(WritableByteChannel channel)
-        throws IOException
+    public void write(WritableByteChannel channel) throws IOException
     {
         logger.info("Writing tag to channel");
-  
+
         byte[] bodyByteBuffer = writeFramesToBuffer().toByteArray();
-        ByteBuffer headerBuffer = writeHeaderToBuffer(0);
-    
+        ByteBuffer headerBuffer = writeHeaderToBuffer(0,bodyByteBuffer.length);
+
         channel.write(headerBuffer);
         channel.write(ByteBuffer.wrap(bodyByteBuffer));
     }
 
     /**
      * Display the tag in an XMLFormat
-     *
      */
     public void createStructure()
     {
