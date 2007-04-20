@@ -14,7 +14,7 @@ import java.io.File;
 public class ItunesTest extends AbstractTestCase
 {
     private static final int FRAME_SIZE = 2049;
-
+    private static final int FRAME_SIZE2 = 765450;
     private static final int STRING_LENGTH_WITH_NULL = 12;
     private static final int STRING_LENGTH_WITHOUT_NULL = 11;
     private static final int TERMINATOR_LENGTH = 1;
@@ -37,6 +37,21 @@ public class ItunesTest extends AbstractTestCase
         assertEquals(FRAME_SIZE,fb.getSize());
     }
 
+    /** This tests that we work out that the frame is not unsynced because its hihest order bit size is set
+     *  and read the frame size as a normal integer using an integral algorithm
+     * @throws Exception
+     */
+    public void testv24TagWithNonSyncSafeFrame2() throws Exception
+    {
+        File testFile = AbstractTestCase.copyAudioToTmp("Issue96-3.id3","testV1.mp3");
+
+        MP3File mp3File = new MP3File(testFile);
+
+        ID3v24Frame v24frame = (ID3v24Frame) mp3File.getID3v2Tag().getFrame(ID3v24Frames.FRAME_ID_ATTACHED_PICTURE);
+        assertNotNull(v24frame);
+        FrameBodyAPIC fb = (FrameBodyAPIC) v24frame.getBody();
+        assertEquals(FRAME_SIZE2,fb.getSize());
+    }
     /** This tests that we work out that the frame is unsynced and read the frame size correctly  and convert to intger
      * this is what most (non-itunes applications do)
      * @throws Exception

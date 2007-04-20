@@ -371,13 +371,22 @@ public class ID3v24Frame
 
         if(frameSize>ID3SyncSafeInteger.MAX_SAFE_SIZE)
         {
-            //Read as nonsysnc safe integer
-            byteBuffer.position(byteBuffer.position() - FRAME_ID_SIZE);
+            //Set Just after size field this is where we want to be when we leave this if statement
+            int currentPosition     = byteBuffer.position();
+
+            //Read as nonsync safe integer
+            byteBuffer.position(currentPosition  - FRAME_ID_SIZE);
             int nonSyncSafeFrameSize = byteBuffer.getInt();
 
-             //Is the frame size syncsafe, should always be BUT some encoders such as Itunes do not do it properly
+            //Is the frame size syncsafe, should always be BUT some encoders such as Itunes do not do it properly
             //so do an easy check now.
-            if(ID3SyncSafeInteger.isBufferNotSyncSafe(byteBuffer))
+            byteBuffer.position(currentPosition  - FRAME_ID_SIZE);
+            boolean isNotSyncSafe = ID3SyncSafeInteger.isBufferNotSyncSafe(byteBuffer);
+                        
+            //not relative so need to move position
+            byteBuffer.position(currentPosition);
+
+            if(isNotSyncSafe)
             {
                 logger.warning(getLoggingFilename()+":"+"Frame size is NOT stored as a sync safe integer:" + identifier);
 
@@ -399,7 +408,6 @@ public class ID3v24Frame
                 //frame to see if find a valid frame header
 
                 //Read the Frame Identifier
-                int currentPosition     = byteBuffer.position(); //just after size field
                 byte[] readAheadbuffer  = new byte[FRAME_ID_SIZE];
                 byteBuffer.position(currentPosition + frameSize + FRAME_FLAGS_SIZE);
                 byteBuffer.get(readAheadbuffer, 0, FRAME_ID_SIZE);
@@ -432,30 +440,53 @@ public class ID3v24Frame
                     {
                         readAheadbuffer  = new byte[FRAME_ID_SIZE];
                         byteBuffer.position(currentPosition + nonSyncSafeFrameSize + FRAME_FLAGS_SIZE);
-                        byteBuffer.get(readAheadbuffer, 0, FRAME_ID_SIZE);
 
-                        //reset position to just after framesize
-                        byteBuffer.position(currentPosition);
-
-                        if(isValidID3v2FrameIdentifier(readAheadIdentifier))
+                        if(byteBuffer.remaining() >= FRAME_ID_SIZE)
                         {
-                            //ok found a valid identifier using non0-syncsafe so assume non-sysncsafe size
+                            byteBuffer.get(readAheadbuffer, 0, FRAME_ID_SIZE);
+
+                            //reset position to just after framesize
+                            byteBuffer.position(currentPosition);
+
+                            //ok found a valid identifier using non-syncsafe so assume non-syncsafe size
                             //and continue
-                            frameSize =  nonSyncSafeFrameSize;
-                            logger.warning(getLoggingFilename()+":"+"Assuming frame size is NOT stored as a sync safe integer:" + identifier);
-                        }
-                        else if(ID3SyncSafeInteger.isBufferEmpty(readAheadbuffer))
-                        {
+                            if(isValidID3v2FrameIdentifier(readAheadIdentifier))
+                            {
+                                frameSize =  nonSyncSafeFrameSize;
+                                logger.warning(getLoggingFilename()+":"+"Assuming frame size is NOT stored as a sync safe integer:" + identifier);
+                            }
                             //no data found so assume entered padding in which case assume it is last
                             //frame and we are ok whereas we didnt hit padding when using syncsafe integer
                             //or we wouldnt have got to this point. So assume syncsafe ineteger ended within
                             //the frame data whereas this has reached end of frames.
-                            frameSize =  nonSyncSafeFrameSize;
-                            logger.warning(getLoggingFilename()+":"+"Assuming frame size is NOT stored as a sync safe integer:" + identifier);
+                            else if(ID3SyncSafeInteger.isBufferEmpty(readAheadbuffer))
+                            {
+                                frameSize =  nonSyncSafeFrameSize;
+                                logger.warning(getLoggingFilename()+":"+"Assuming frame size is NOT stored as a sync safe integer:" + identifier);
+                            }
+                            //invalid so assume syncsafe as that is is the standard
+                            else
+                            {
+                                ;
+                            }
                         }
                         else
                         {
-                            //invalid so assume syncsafe as that is is the standard
+                            //reset position to just after framesize
+                            byteBuffer.position(currentPosition);
+
+                            //If the unsync framesize matches exactly the remaining bytes then assume it has the
+                            //correct size for the last frame
+                            if(byteBuffer.remaining() == 0)
+                            {
+                                frameSize =  nonSyncSafeFrameSize;
+                            }
+                            //Inconclusive stick with syncsafe
+                            else
+                            {
+                                ;
+                            }
+
                         }
                     }
                 }
