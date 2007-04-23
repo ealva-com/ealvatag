@@ -16,6 +16,8 @@
 package org.jaudiotagger.tag.id3.framebody;
 
 import org.jaudiotagger.tag.id3.ID3v24Frames;
+import org.jaudiotagger.tag.datatype.ByteArraySizeTerminated;
+import org.jaudiotagger.tag.datatype.DataTypes;
 
 /**
  * MPEG location lookup table frame.
@@ -89,10 +91,12 @@ public class FrameBodyMLLT extends AbstractID3v2FrameBody implements ID3v24Frame
     }
 
 
-    /** TODO */
+    /**
+     * TODO:proper mapping
+     */
     protected void setupObjectList()
     {
-
+         objectList.add(new ByteArraySizeTerminated(DataTypes.OBJ_DATA, this));
     }
 
 }

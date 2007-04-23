@@ -80,11 +80,13 @@ public class FrameBodyUSER extends AbstractID3v2FrameBody implements ID3v24Frame
         setObjectValue(DataTypes.OBJ_TEXT, text);
     }
 
+
     /**
-     * Creates a new FrameBodyUSER datatype.
+     * Create a new FrameBodyUser by reading from byte buffer
      *
-     * @throws IOException         
-     * @throws InvalidTagException 
+     * @param byteBuffer
+     * @param frameSize
+     * @throws InvalidTagException
      */
     public FrameBodyUSER(ByteBuffer byteBuffer, int frameSize)
         throws InvalidTagException

@@ -68,10 +68,10 @@ public class FrameBodyAENC extends AbstractID3v2FrameBody implements ID3v24Frame
      */
     public FrameBodyAENC()
     {
-        //        this.setObject(ObjectTypes.OBJ_OWNER, "");
-        //        this.setObject("Preview Start", new Short((short) 0));
-        //        this.setObject("Preview Length", new Short((short) 0));
-        //        this.setObject("Encryption Info", new byte[0]);
+        this.setObjectValue(DataTypes.OBJ_OWNER, "");
+        this.setObjectValue(DataTypes.OBJ_PREVIEW_START, new Short((short)0));
+        this.setObjectValue(DataTypes.OBJ_PREVIEW_LENGTH, new Short((short)0));
+        this.setObjectValue(DataTypes.OBJ_ENCRYPTION_INFO, new byte[0]);
     }
 
     public FrameBodyAENC(FrameBodyAENC body)
@@ -122,7 +122,7 @@ public class FrameBodyAENC extends AbstractID3v2FrameBody implements ID3v24Frame
     /**
      * 
      *
-     * @return 
+     * @return owner
      */
     public String getOwner()
     {

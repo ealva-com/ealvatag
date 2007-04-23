@@ -16,6 +16,8 @@
 package org.jaudiotagger.tag.id3.framebody;
 
 import org.jaudiotagger.tag.id3.ID3v23Frames;
+import org.jaudiotagger.tag.datatype.ByteArraySizeTerminated;
+import org.jaudiotagger.tag.datatype.DataTypes;
 
 /**
  * Equalisation frame.
@@ -83,9 +85,11 @@ public class FrameBodyEQUA extends AbstractID3v2FrameBody implements ID3v23Frame
         return ID3v23Frames.FRAME_ID_V3_EQUALISATION;
     }
 
-    /** TODO */
+    /**
+     * TODO:proper mapping
+     */
     protected void setupObjectList()
     {
-
+          objectList.add(new ByteArraySizeTerminated(DataTypes.OBJ_DATA, this));
     }
 }

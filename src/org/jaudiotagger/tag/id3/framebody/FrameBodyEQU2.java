@@ -42,9 +42,7 @@ public class FrameBodyEQU2 extends AbstractID3v2FrameBody  implements ID3v24Fram
      */
     public FrameBodyEQU2()
     {
-        //        this.setObject("Interpolation Method", new Byte((byte) 0));
-        //        this.setObject(ObjectTypes.OBJ_OWNER, "");
-        //        this.addGroup((short) 0, (short) 0);
+
     }
 
     public FrameBodyEQU2(FrameBodyEQU2 body)
