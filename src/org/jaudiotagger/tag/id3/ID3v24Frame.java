@@ -39,6 +39,10 @@ public class ID3v24Frame
     extends ID3v23Frame
 {
 
+    protected static final int FRAME_DATA_LENGTH_SIZE =4;
+    protected static final int FRAME_ENCRYPTION_INDICATOR_SIZE =1;
+    protected static final int FRAME_GROUPING_INDICATOR_SIZE =1;
+
     public ID3v24Frame()
     {
     }
@@ -497,25 +501,56 @@ public class ID3v24Frame
         statusFlags = new StatusFlags(byteBuffer.get());
         encodingFlags = new EncodingFlags(byteBuffer.get());
 
-        //Has a data length indicator been inserted inbetween the header and body
-        //if so read its value, the side effect being that it is skipped over
-        if(((EncodingFlags)encodingFlags).isDataLengthIndicator())
+        //Read extra bits appended to frame header for various encodings
+        //These are not included in header size but are included in frame size but wont be read when we actually
+        //try to read the frame body data
+        int extraHeaderBytesCount = 0;
+        boolean isDataLengthindicatorRead = false;
+        if(((EncodingFlags)encodingFlags).isGrouping())
+        {
+            extraHeaderBytesCount = ID3v24Frame.FRAME_GROUPING_INDICATOR_SIZE;
+            byteBuffer.get();
+        }
+
+        if(((EncodingFlags)encodingFlags).isCompression())
         {
             //Read the sync safe size field
             int datalengthSize = ID3SyncSafeInteger.bufferToValue(byteBuffer);
             logger.info(getLoggingFilename()+":"+"Frame Size Is:"+ frameSize + "Data Length Size:"+datalengthSize);
+            extraHeaderBytesCount += ID3v24Frame.FRAME_DATA_LENGTH_SIZE;
+            isDataLengthindicatorRead=true;
         }
-        else
+
+        if(((EncodingFlags)encodingFlags).isEncryption())
         {
-            logger.info(getLoggingFilename()+":"+"Frame Size Is:"+ frameSize);
+            //Read the Encryption byte, but do nothing with it
+            extraHeaderBytesCount += ID3v24Frame.FRAME_ENCRYPTION_INDICATOR_SIZE;
+            byteBuffer.get();
         }
+
+        if(((EncodingFlags)encodingFlags).isDataLengthIndicator())
+        {
+            //There is only data length indicator it may have already been read depending on what flags
+            //are set
+            if(!isDataLengthindicatorRead)
+            {
+                //Read the sync safe size field
+                int datalengthSize = ID3SyncSafeInteger.bufferToValue(byteBuffer);
+                //Read the Grouping byte, but do nothing with it
+                extraHeaderBytesCount += FRAME_DATA_LENGTH_SIZE;
+                logger.info(getLoggingFilename()+":"+"Frame Size Is:"+ frameSize + "Data Length Size:"+datalengthSize);
+            }
+        }
+
+        //Work out the real size of the framebody data
+        int realFrameSize = frameSize - extraHeaderBytesCount;
 
         //Create Buffer that only contains the body of this frame rather than the remainder of tag
         ByteBuffer frameBodyBuffer = byteBuffer.slice();
-        frameBodyBuffer.limit(frameSize);
+        frameBodyBuffer.limit(realFrameSize);
 
         //Do we need to synchronize the frame body
-        int syncSize=frameSize;
+        int syncSize=realFrameSize;
         if(((EncodingFlags)encodingFlags).isUnsynchronised())
         {
             //We only want to synchronize the buffer upto the end of this frame (remember this
@@ -541,7 +576,7 @@ public class ID3v24Frame
         finally
         {
             //Update position of main buffer, so no attempt is made to reread  these bytes
-            byteBuffer.position(byteBuffer.position()+frameSize);
+            byteBuffer.position(byteBuffer.position()+realFrameSize);
         }
     }
 
