@@ -23,6 +23,8 @@ import org.jaudiotagger.FileConstants;
 import java.io.IOException;
 import java.io.ByteArrayOutputStream;
 import java.util.regex.*;
+import java.util.zip.Inflater;
+import java.util.zip.DataFormatException;
 
 import java.nio.*;
 
@@ -41,6 +43,10 @@ public class ID3v23Frame
     protected static final int FRAME_ID_SIZE = 4;
     protected static final int FRAME_FLAGS_SIZE = 2;
     protected static final int FRAME_SIZE_SIZE = 4;
+    protected static final int FRAME_COMPRESSION_UNCOMPRESSED_SIZE =4;
+    protected static final int FRAME_ENCRYPTION_INDICATOR_SIZE =1;
+    protected static final int FRAME_GROUPING_INDICATOR_SIZE =1;
+
     protected static final int FRAME_HEADER_SIZE = FRAME_ID_SIZE + FRAME_SIZE_SIZE + FRAME_FLAGS_SIZE;
 
     /**
@@ -334,16 +340,84 @@ public class ID3v23Frame
                 id = UNSUPPORTED_ID;
             }
         }
-        logger.fine(getLoggingFilename()+":Identifier was:" + identifier + " reading using:" + id);
+        logger.fine(getLoggingFilename()+":Identifier was:" + identifier + " reading using:" + id + "with frame size:"+frameSize);
 
-        //Create Buffer that only contains the body of this frame rather than the remainder of tag
-        ByteBuffer frameBodyBuffer = byteBuffer.slice();
-        frameBodyBuffer.limit(frameSize);
+        //Read extra bits appended to frame header for various encodings
+        //These are not included in header size but are included in frame size but wont be read when we actually
+        //try to read the frame body data
+        int extraHeaderBytesCount = 0;
+        int decompressedFrameSize = -1;
+        if(((EncodingFlags)encodingFlags).isCompression())
+        {
+            //Read the Decompressed Size
+            decompressedFrameSize = byteBuffer.getInt();
+            extraHeaderBytesCount = FRAME_COMPRESSION_UNCOMPRESSED_SIZE;
+            logger.fine(getLoggingFilename()+":Decompressed frame size is:"+decompressedFrameSize);
+        }
+
+        if(((EncodingFlags)encodingFlags).isEncryption())
+        {
+            //Read the Encryption byte, but do nothing with it
+            extraHeaderBytesCount += FRAME_ENCRYPTION_INDICATOR_SIZE;
+            byteBuffer.get();
+        }
+
+        if(((EncodingFlags)encodingFlags).isGrouping())
+        {
+            //Read the Grouping byte, but do nothing with it
+            extraHeaderBytesCount += FRAME_GROUPING_INDICATOR_SIZE;
+            byteBuffer.get();
+        }
+
+        //Work out the real size of the framebody data
+        int realFrameSize = frameSize - extraHeaderBytesCount;
+
+        ByteBuffer frameBodyBuffer=null;
+
+        //Uncompress the frame
+        if(((EncodingFlags)encodingFlags).isCompression())
+        {
+            // Decompress the bytes into this buffer, size initialized from header field
+            byte[] result = new byte[decompressedFrameSize];
+            byte[] input = new byte[realFrameSize];
+
+            //Store position ( just after frame header and any extra bits)
+            //Read frame data into array, and then put buffer back to where it was
+            int position = byteBuffer.position();
+            byteBuffer.get(input,0,realFrameSize);
+            byteBuffer.position(position);
+
+            Inflater decompresser = new Inflater();
+            decompresser.setInput(input);
+            try
+            {
+                decompresser.inflate(result);
+            }
+            catch(DataFormatException dfe)
+            {
+                dfe.printStackTrace();
+                //Update position of main buffer, so no attempt is made to reread these bytes
+                byteBuffer.position(byteBuffer.position()+realFrameSize);
+                throw new InvalidFrameException(getLoggingFilename()+"Unable to decompress this frame:"+identifier+":"+dfe.getMessage());
+            }
+            decompresser.end();
+            frameBodyBuffer = ByteBuffer.wrap(result);
+        }
 
         //Read the body data
         try
         {
-            frameBody = readBody(id,frameBodyBuffer, frameSize);
+            if(((EncodingFlags)encodingFlags).isCompression())
+            {
+               frameBody = readBody(id,frameBodyBuffer, decompressedFrameSize);
+            }
+            else
+            {
+                //Create Buffer that only contains the body of this frame rather than the remainder of tag
+                frameBodyBuffer = byteBuffer.slice();
+                frameBodyBuffer.limit(realFrameSize);
+                frameBody = readBody(id,frameBodyBuffer, realFrameSize);
+            }
             if(!(frameBody instanceof ID3v23FrameBody))
             {
                 logger.info(getLoggingFilename()+":Converted frame body with:"+identifier+" to deprecated framebody");
@@ -353,7 +427,7 @@ public class ID3v23Frame
         finally
         {
             //Update position of main buffer, so no attempt is made to reread these bytes
-            byteBuffer.position(byteBuffer.position()+frameSize);
+            byteBuffer.position(byteBuffer.position()+realFrameSize);
         }
     }
 
