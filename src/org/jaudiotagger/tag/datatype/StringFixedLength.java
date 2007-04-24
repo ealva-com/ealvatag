@@ -65,7 +65,7 @@ public class StringFixedLength
      * 
      *
      * @param obj 
-     * @return 
+     * @return if obj is equivalent to this
      */
     public boolean equals(Object obj)
     {
@@ -94,6 +94,7 @@ public class StringFixedLength
         {
             String charSetName = getTextEncodingCharSet();
             CharsetDecoder decoder = Charset.forName(charSetName).newDecoder();
+
             //Decode buffer if runs into problems should through exception which we
             //catch and then set value to empty string.
             logger.finest("Array length is:" + arr.length + "offset is:" + offset + "Size is:" + size);
@@ -121,52 +122,98 @@ public class StringFixedLength
     /**
      * Write String into byte array
      *
+     * The string will be adjusted to ensure the correct number of bytes are written, If the current value is null
+     * or to short the written value will have the 'space' character appended to ensure this. We write this instead of
+     * the null character because the null character is likely to confuse the parser into misreading the next field.
+     *
      * @return the byte array to be written to the file
      */
     public byte[] writeByteArray()
     {
         ByteBuffer dataBuffer = null;
-        byte[] data = null;
+        byte[] data;
+
+        //Create with a series of empty of spaces to try and ensure integrity of field
+        if(value==null)
+        {
+            logger.warning("Value of StringFixedlength Field is null using default value instead");
+            data = new byte[size];
+            for(int i=0;i<size;i++)
+            {
+                data[i]=' ';
+            }
+            return data;
+        }
 
         try
         {
             String charSetName = getTextEncodingCharSet();
             CharsetEncoder encoder = Charset.forName(charSetName).newEncoder();
             dataBuffer = encoder.encode(CharBuffer.wrap((String) value));
-
         }
         catch (CharacterCodingException ce)
         {
-            logger.severe(ce.getMessage());
-            value = "";
+            logger.warning("There was a problem writing the following StringFixedlength Field:"+value+":"+ce.getMessage()+"using default value instead");
+            data = new byte[size];
+            for(int i=0;i<size;i++)
+            {
+                data[i]=' ';
+            }
+            return data;
         }
-        /* We must return the defined size.
-         * To check now because size is in bytes not chars
-         */
+
+        // We must return the defined size.
+        // To check now because size is in bytes not chars
         if (dataBuffer != null)
         {
+            //Everything ok
             if (dataBuffer.limit() == size)
             {
                 data = new byte[dataBuffer.limit()];
                 dataBuffer.get(data, 0, dataBuffer.limit());
                 return data;
             }
+            //There is more data available than allowed for this field strip
             else if (dataBuffer.limit() > size)
             {
+                logger.warning("There was a problem writing the following StringFixedlength Field:"
+                    +value
+                    +" when converted to bytes has length of:"+dataBuffer.limit()
+                    +" but field was defined with length of:"+size
+                    +" too long so stripping extra length");
                 data = new byte[size];
                 dataBuffer.get(data, 0, size);
                 return data;
             }
+            //There is not enough data
             else
             {
+                logger.warning("There was a problem writing the following StringFixedlength Field:"
+                    +value
+                    +" when converted to bytes has length of:"+dataBuffer.limit()
+                    +" but field was defined with length of:"+size
+                    +" too short so padding with spaces to make up extra length");
+
                 data = new byte[size];
                 dataBuffer.get(data, 0, dataBuffer.limit());
+
+                for(int i=dataBuffer.limit();i<size;i++)
+                {
+                    data[i]=' ';
+                }
                 return data;
             }
         }
-        data = new byte[size];
-        setSize(data.length);
-        return data;
+        else
+        {
+            logger.warning("There was a serious problem writing the following StringFixedlength Field:"+value+":"+"using default value instead");
+            data = new byte[size];
+            for(int i=0;i<size;i++)
+            {
+                data[i]=' ';
+            }
+            return data;
+        }
     }
 
     /**
@@ -178,6 +225,6 @@ public class StringFixedLength
          byte textEncoding = this.getBody().getTextEncoding();
          String charSetName = TextEncoding.getInstanceOf().getValueForId(textEncoding);
          logger.finest("text encoding:"+textEncoding + " charset:"+charSetName);
-        return charSetName;
+         return charSetName;
     }
 }
