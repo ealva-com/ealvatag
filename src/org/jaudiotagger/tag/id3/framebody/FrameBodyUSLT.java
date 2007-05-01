@@ -54,7 +54,7 @@ import java.io.IOException;
  * @author : Eric Farng
  * @version $Id$
  */
-public class FrameBodyUSLT extends AbstractID3v2FrameBody implements ID3v24FrameBody
+public class FrameBodyUSLT extends AbstractID3v2FrameBody implements ID3v23FrameBody,ID3v24FrameBody
 {
     /**
      * Creates a new FrameBodyUSLT datatype.
