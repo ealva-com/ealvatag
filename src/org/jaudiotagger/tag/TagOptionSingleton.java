@@ -29,6 +29,7 @@ import org.jaudiotagger.tag.id3.framebody.FrameBodyCOMM;
 import org.jaudiotagger.tag.id3.framebody.FrameBodyTIPL;
 import org.jaudiotagger.tag.id3.valuepair.Languages;
 import org.jaudiotagger.tag.id3.valuepair.GenreTypes;
+import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
 import org.jaudiotagger.tag.lyrics3.Lyrics3v2Fields;
 
 import java.util.HashMap;
@@ -73,25 +74,6 @@ public class TagOptionSingleton
      */
     private HashMap replaceWordMap = new HashMap();
 
-    /**
-     * 
-     */
-    private LinkedList endWordDelimiterList = new LinkedList();
-
-    /**
-     * delimiters within a file name
-     */
-    private LinkedList filenameDelimiterList = new LinkedList();
-
-    /**
-     * 
-     */
-    private LinkedList startWordDelimiterList = new LinkedList();
-
-    /**
-     * words to always set the case as upper or lower case
-     */
-    private LinkedList upperLowerCaseWordList = new LinkedList();
 
     /**
      * default language for any ID3v2 tags frameswhich require it. This string
@@ -99,10 +81,6 @@ public class TagOptionSingleton
      */
     private String language = "eng";
 
-    /**
-     * 
-     */
-    private boolean compositeMatchOverwrite = false;
 
     /**
      * 
@@ -156,13 +134,6 @@ public class TagOptionSingleton
      */
     private boolean id3v1SaveYear = true;
 
-    /**
-     * if we should keep an empty ID3v2 frame while we're reading. This is
-     * different from a string of white space. Defaults to false.
-     *
-     * @todo I don't think I'm checking this right now
-     */
-    private boolean id3v2KeepEmptyFrameIfRead = false;
 
     /**
      * When adjusting the ID3v2 padding, if should we copy the current ID3v2
@@ -181,19 +152,7 @@ public class TagOptionSingleton
      */
     private boolean id3v2Save = true;
 
-    /**
-     * if we should save empty ID3v2 frames or not. Defaults to false.
-     *
-     * todo I don't think this is implemented yet.
-     */
-    private boolean id3v2SaveEmptyFrame = false;
 
-    /**
-     * if we should save the ID3v2 extended header or not. Defaults to false.
-     *
-     * todo Not implemented yet
-     */
-    private boolean id3v2SaveExtendedHeader = false;
 
     /**
      * if we should keep an empty Lyrics3 field while we're reading. This is
@@ -219,36 +178,12 @@ public class TagOptionSingleton
      */
     private boolean originalSavedAfterAdjustingID3v2Padding = true;
 
-    /**
-     * Default play counter size in bytes for the ID3v2 Tag.
-     *
-     * todo implement this.
-     */
-    private byte playCounterSize = 4;
 
-    /**
-     * default text encoding for any ID3v2 tag frames which require it.
-     */
-    private byte textEncoding = 0;
 
     /**
      * default time stamp format for any ID3v2 tag frames which require it.
      */
     private byte timeStampFormat = 2;
-
-    /**
-     * factor to increase the id3v2 padding size. When the ID3v2 tag padding
-     * length is calculated and is not large enough to fit the current ID3v2
-     * tag, the padding length will be multiplied by this number until it is
-     * large enough.
-     */
-    private float id3v2PaddingMultiplier = 2;
-
-
-    /**
-     * padding length of the ID3v2 tag.
-     */
-    private int id3v2PaddingSize = 2048;
 
     /**
      * number of frames to sync when trying to find the start of the MP3 frame
@@ -257,16 +192,42 @@ public class TagOptionSingleton
      */
     private int numberMP3SyncFrame = 3;
 
-    /** Do not unsysnchronize tags/frames this is rarely required these days and can cause more
+    /** Unsynchronize tags/frames this is rarely required these days and can cause more
      * problems than it solves
      */
     private boolean unsyncTags = false;
 
     /**
-     * Itunes needlessly writes null terminators at the end for TextEncodedStringSizeTerminated values,
+     * iTunes needlessly writes null terminators at the end for TextEncodedStringSizeTerminated values,
      * if this option is enabled these characters are removed
      */
     private boolean removeTrailingTerminatorOnWrite=true;
+
+    /**
+     * This is the default text encoding to use for new v23 frames, when unicode is required
+     * UTF16 will always be used because that is the only valid option for v23.
+     */
+    private byte id3v23DefaultTextEncoding = TextEncoding.ISO_8859_1;
+
+    /**
+     * This is the default text encoding to use for new v24 frames, it defaults to simple ISO8859
+     * but by changing this value you could always used UTF8 for example whether you needed to or not
+     */
+    private byte id3v24DefaultTextEncoding = TextEncoding.ISO_8859_1;
+
+    /**
+     * This is text encoding to use for new v24 frames when unicode is required, it defaults to UTF16 just
+     * because this encoding is understand by all ID3 versions
+     */
+    private byte id3v24UnicodeTextEncoding = TextEncoding.UTF_16;
+
+
+    /**
+     * When writing frames if this is set to true then the frame will be written
+     * using the defaults disregarding the text e ncoding originally used to create
+     * the frame.
+     */
+    private boolean resetTextEncodingForExistingFrames = false;
 
     /**
      * Creates a new TagOptions datatype. All Options are set to their default
@@ -311,48 +272,6 @@ public class TagOptionSingleton
     /**
      * 
      *
-     * @param open 
-     * @return 
-     */
-    public String getCloseParenthesis(String open)
-    {
-        return (String) parenthesisMap.get(open);
-    }
-
-    /**
-     * 
-     *
-     * @param close 
-     * @return 
-     */
-    public boolean isCloseParenthesis(String close)
-    {
-        return parenthesisMap.containsValue(close);
-    }
-
-    /**
-     * 
-     *
-     * @param compositeMatchOverwrite 
-     */
-    public void setCompositeMatchOverwrite(boolean compositeMatchOverwrite)
-    {
-        this.compositeMatchOverwrite = compositeMatchOverwrite;
-    }
-
-    /**
-     * 
-     *
-     * @return 
-     */
-    public boolean isCompositeMatchOverwrite()
-    {
-        return compositeMatchOverwrite;
-    }
-
-    /**
-     * 
-     *
      * @param filenameTagSave 
      */
     public void setFilenameTagSave(boolean filenameTagSave)
@@ -370,15 +289,7 @@ public class TagOptionSingleton
         return filenameTagSave;
     }
 
-    /**
-     * 
-     *
-     * @return 
-     */
-    public boolean isId3v2SaveExtendedHeader()
-    {
-        return id3v2SaveExtendedHeader;
-    }
+
 
     /**
      * 
@@ -400,25 +311,7 @@ public class TagOptionSingleton
         return defaultOptions;
     }
 
-    /**
-     * 
-     *
-     * @return 
-     */
-    public Iterator getEndWordDelimiterIterator()
-    {
-        return endWordDelimiterList.iterator();
-    }
 
-    /**
-     * 
-     *
-     * @return 
-     */
-    public Iterator getFilenameDelimiterIterator()
-    {
-        return filenameDelimiterList.iterator();
-    }
 
     /**
      * 
@@ -580,25 +473,7 @@ public class TagOptionSingleton
         return id3v1SaveYear;
     }
 
-    /**
-     * 
-     *
-     * @param id3v2KeepEmptyFrameIfRead 
-     */
-    public void setId3v2KeepEmptyFrameIfRead(boolean id3v2KeepEmptyFrameIfRead)
-    {
-        this.id3v2KeepEmptyFrameIfRead = id3v2KeepEmptyFrameIfRead;
-    }
 
-    /**
-     * 
-     *
-     * @return 
-     */
-    public boolean isId3v2KeepEmptyFrameIfRead()
-    {
-        return id3v2KeepEmptyFrameIfRead;
-    }
 
     /**
      * 
@@ -620,61 +495,7 @@ public class TagOptionSingleton
         return id3v2PaddingCopyTag;
     }
 
-    /**
-     * Sets the factor to increase the id3v2 padding size. When the ID3v2 tag
-     * padding length is calculated and is not large enough to fit the current
-     * ID3v2 tag, the padding length will be multiplied by this number until
-     * it is large enough.
-     *
-     * @param mult new factor to increase the id3v2 padding size.
-     */
-    public void setId3v2PaddingMultiplier(float mult)
-    {
-        if (mult > 1)
-        {
-            id3v2PaddingMultiplier = mult;
-        }
-    }
 
-    /**
-     * Returns the factor to increase the id3v2 padding size. When the ID3v2
-     * tag padding length is calculated and is not large enough to fit the
-     * current ID3v2 tag, the padding length will be multiplied by this number
-     * until it is large enough.
-     *
-     * @return the factor to increase the id3v2 padding size
-     */
-    public float getId3v2PaddingMultiplier()
-    {
-        return id3v2PaddingMultiplier;
-    }
-
-    /**
-     * Sets the initial ID3v2 padding length. This will be the minimum padding
-     * length of the ID3v2 tag. The <code>willShorten</code> setting will not
-     * make the length shorter than this value.
-     *
-     * @param size the new initial ID3v2 padding length
-     */
-    public void setId3v2PaddingSize(int size)
-    {
-        if (size >= 0)
-        {
-            id3v2PaddingSize = size;
-        }
-    }
-
-    /**
-     * Returns the initial ID3v2 padding length. This will be the minimum
-     * padding length of the ID3v2 tag. The <code>willShorten</code> setting
-     * will not make the length shorter than this value.
-     *
-     * @return the initial ID3v2 padding length
-     */
-    public int getId3v2PaddingSize()
-    {
-        return id3v2PaddingSize;
-    }
 
     /**
      * 
@@ -716,35 +537,7 @@ public class TagOptionSingleton
         return id3v2Save;
     }
 
-    /**
-     * 
-     *
-     * @param id3v2SaveEmptyFrame 
-     */
-    public void setId3v2SaveEmptyFrame(boolean id3v2SaveEmptyFrame)
-    {
-        this.id3v2SaveEmptyFrame = id3v2SaveEmptyFrame;
-    }
 
-    /**
-     * 
-     *
-     * @return 
-     */
-    public boolean isId3v2SaveEmptyFrame()
-    {
-        return id3v2SaveEmptyFrame;
-    }
-
-    /**
-     * 
-     *
-     * @param id3v2SaveExtendedHeader 
-     */
-    public void setId3v2SaveExtendedHeader(boolean id3v2SaveExtendedHeader)
-    {
-        this.id3v2SaveExtendedHeader = id3v2SaveExtendedHeader;
-    }
 
     /**
      * 
@@ -974,84 +767,6 @@ public class TagOptionSingleton
         return originalSavedAfterAdjustingID3v2Padding;
     }
 
-    /**
-     * Sets the default play counter size for the PCNT ID3v2 frame. While the
-     * value will already exist when reading from a file, this value will be
-     * used when a new ID3v2 Frame is created from scratch.
-     *
-     * @param size the default play counter size for the PCNT ID3v2 frame
-     */
-    public void setPlayCounterSize(byte size)
-    {
-        if (size > 0)
-        {
-            playCounterSize = size;
-        }
-    }
-
-    /**
-     * Returns the default play counter size for the PCNT ID3v2 frame.
-     *
-     * @return the default play counter size for the PCNT ID3v2 frame
-     */
-    public byte getPlayCounterSize()
-    {
-        return playCounterSize;
-    }
-
-    /**
-     * 
-     *
-     * @return 
-     */
-    public Iterator getStartWordDelimiterIterator()
-    {
-        return startWordDelimiterList.iterator();
-    }
-
-    /**
-     * Sets the default text encoding for any ID3v2 tag frames which require
-     * it. While the value will already exist when reading from a file, this
-     * value will be used when a new ID3v2 Frame is created from scratch.
-     * <p/>
-     * <P>
-     * $00   ISO-8859-1 [ISO-8859-1]. Terminated with $00.<BR> $01   UTF-16
-     * [UTF-16] encoded Unicode [UNICODE] with BOM. All strings in the same
-     * frame SHALL have the same byteorder. Terminated with $00 00.<BR> $02
-     * UTF-16BE [UTF-16] encoded Unicode [UNICODE] without BOM. Terminated
-     * with $00 00.<BR> $03   UTF-8 [UTF-8] encoded Unicode [UNICODE].
-     * Terminated with $00.<BR>
-     * </p>
-     *
-     * @param enc new default text encoding
-     */
-    public void setTextEncoding(byte enc)
-    {
-        if ((enc >= 0) && (enc <= 3))
-        {
-            textEncoding = enc;
-        }
-    }
-
-    /**
-     * Returns the default text encoding format for ID3v2 tags which require
-     * it.
-     * <p/>
-     * <P>
-     * $00   ISO-8859-1 [ISO-8859-1]. Terminated with $00.<BR> $01   UTF-16
-     * [UTF-16] encoded Unicode [UNICODE] with BOM. All strings in the same
-     * frame SHALL have the same byteorder. Terminated with $00 00.<BR> $02
-     * UTF-16BE [UTF-16] encoded Unicode [UNICODE] without BOM. Terminated
-     * with $00 00.<BR> $03   UTF-8 [UTF-8] encoded Unicode [UNICODE].
-     * Terminated with $00.<BR>
-     * </p>
-     *
-     * @return the default text encoding
-     */
-    public byte getTextEncoding()
-    {
-        return textEncoding;
-    }
 
     /**
      * Sets the default time stamp format for ID3v2 tags which require it.
@@ -1094,10 +809,6 @@ public class TagOptionSingleton
     public void setToDefault()
     {
         keywordMap = new HashMap();
-
-        compositeMatchOverwrite = false;
-        endWordDelimiterList = new LinkedList();
-        filenameDelimiterList = new LinkedList();
         filenameTagSave = false;
         id3v1Save = true;
         id3v1SaveAlbum = true;
@@ -1107,14 +818,9 @@ public class TagOptionSingleton
         id3v1SaveTitle = true;
         id3v1SaveTrack = true;
         id3v1SaveYear = true;
-        id3v2KeepEmptyFrameIfRead = false;
         id3v2PaddingCopyTag = true;
         id3v2PaddingWillShorten = false;
         id3v2Save = true;
-        id3v2SaveEmptyFrame = false;
-        id3v2SaveExtendedHeader = false;
-        id3v2PaddingMultiplier = 2;
-        id3v2PaddingSize = 2048;
         language = "eng";
         lyrics3KeepEmptyFieldIfRead = false;
         lyrics3Save = true;
@@ -1122,14 +828,14 @@ public class TagOptionSingleton
         lyrics3SaveFieldMap = new HashMap();
         numberMP3SyncFrame = 3;
         parenthesisMap = new HashMap();
-        playCounterSize = 4;
         replaceWordMap = new HashMap();
-        startWordDelimiterList = new LinkedList();
-        textEncoding = 0;
         timeStampFormat = 2;
-        upperLowerCaseWordList = new LinkedList();
         unsyncTags = false;
         removeTrailingTerminatorOnWrite = true;
+        id3v23DefaultTextEncoding = TextEncoding.ISO_8859_1;
+        id3v24DefaultTextEncoding = TextEncoding.ISO_8859_1;
+        id3v24UnicodeTextEncoding = TextEncoding.UTF_16;
+        resetTextEncodingForExistingFrames = false;
 
         //default all lyrics3 fields to save. id3v1 fields are individual
         // settings. id3v2 fields are always looked at to save.
@@ -1195,36 +901,7 @@ public class TagOptionSingleton
             throw new RuntimeException(ex);              
         }
 
-        addUpperLowerCaseWord("a");
-        addUpperLowerCaseWord("in");
-        addUpperLowerCaseWord("of");
-        addUpperLowerCaseWord("the");
-        addUpperLowerCaseWord("on");
-        addUpperLowerCaseWord("is");
-        addUpperLowerCaseWord("it");
-        addUpperLowerCaseWord("to");
-        addUpperLowerCaseWord("at");
-        addUpperLowerCaseWord("an");
-        addUpperLowerCaseWord("and");
-        addUpperLowerCaseWord("but");
-        addUpperLowerCaseWord("or");
-        addUpperLowerCaseWord("for");
-        addUpperLowerCaseWord("nor");
-        addUpperLowerCaseWord("not");
-        addUpperLowerCaseWord("so");
-        addUpperLowerCaseWord("yet");
-        addUpperLowerCaseWord("with");
-        addUpperLowerCaseWord("into");
-        addUpperLowerCaseWord("by");
-        addUpperLowerCaseWord("up");
-        addUpperLowerCaseWord("as");
-        addUpperLowerCaseWord("if");
-        addUpperLowerCaseWord("feat.");
-        addUpperLowerCaseWord("vs.");
-        addUpperLowerCaseWord("I'm");
-        addUpperLowerCaseWord("I");
-        addUpperLowerCaseWord("I've");
-        addUpperLowerCaseWord("I'll");
+
 
         addReplaceWord("v.", "vs.");
         addReplaceWord("vs.", "vs.");
@@ -1237,19 +914,11 @@ public class TagOptionSingleton
         addReplaceWord("ft.", "feat.");
         addReplaceWord("ft", "feat.");
 
-        addFilenameDelimiter("/");
-        addFilenameDelimiter("\\");
-        addFilenameDelimiter(" -");
-        addFilenameDelimiter(";");
-        addFilenameDelimiter("|");
-        addFilenameDelimiter(":");
+
 
         iterator = this.getKeywordListIterator(FrameBodyTIPL.class);
 
-        while (iterator.hasNext())
-        {
-            addStartWordDelimiter((String) iterator.next());
-        }
+
 
         addParenthesis("(", ")");
         addParenthesis("[", "]");
@@ -1257,35 +926,7 @@ public class TagOptionSingleton
         addParenthesis("<", ">");
     }
 
-    /**
-     * 
-     *
-     * @return 
-     */
-    public Iterator getUpperLowerCaseWordListIterator()
-    {
-        return upperLowerCaseWordList.iterator();
-    }
 
-    /**
-     * 
-     *
-     * @param wordDelimiter 
-     */
-    public void addEndWordDelimiter(String wordDelimiter)
-    {
-        endWordDelimiterList.add(wordDelimiter);
-    }
-
-    /**
-     * 
-     *
-     * @param delimiter 
-     */
-    public void addFilenameDelimiter(String delimiter)
-    {
-        filenameDelimiterList.add(delimiter);
-    }
 
     /**
      * 
@@ -1343,26 +984,6 @@ public class TagOptionSingleton
     }
 
     /**
-     * 
-     *
-     * @param wordDelimiter 
-     */
-    public void addStartWordDelimiter(String wordDelimiter)
-    {
-        startWordDelimiterList.add(wordDelimiter);
-    }
-
-    /**
-     * 
-     *
-     * @param word 
-     */
-    public void addUpperLowerCaseWord(String word)
-    {
-        upperLowerCaseWordList.add(word);
-    }
-
-    /**
      *
      * @return are tags unsynchronized when written if contain bit pattern that could be mistaken for audio marker
      */
@@ -1400,5 +1021,118 @@ public class TagOptionSingleton
     public void setRemoveTrailingTerminatorOnWrite(boolean removeTrailingTerminatorOnWrite)
     {
         this.removeTrailingTerminatorOnWrite = removeTrailingTerminatorOnWrite;
+    }
+
+    /**
+     * Get the default text encoding to use for new v23 frames, when unicode is required
+     * UTF16 will always be used because that is the only valid option for v23/v22
+     *
+     * @return
+     */
+    public byte getId3v23DefaultTextEncoding()
+    {
+        return id3v23DefaultTextEncoding;
+    }
+
+    /**
+     * Set the default text encoding to use for new v23 frames, when unicode is required
+     * UTF16 will always be used because that is the only valid option for v23/v22
+     *
+     * @param id3v23DefaultTextEncoding
+     */
+    public void setId3v23DefaultTextEncoding(byte id3v23DefaultTextEncoding)
+    {
+        if(
+            (id3v23DefaultTextEncoding==TextEncoding.ISO_8859_1) ||
+            (id3v23DefaultTextEncoding==TextEncoding.UTF_16)
+           )
+        {
+            this.id3v23DefaultTextEncoding = id3v23DefaultTextEncoding;
+        }
+    }
+
+    /**
+     * Get the default text encoding to use for new v24 frames, it defaults to simple ISO8859
+     * but by changing this value you could always used UTF8 for example whether you needed to or not
+     *
+     * @return
+     */
+    public byte getId3v24DefaultTextEncoding()
+    {
+        return id3v24DefaultTextEncoding;
+    }
+
+    /**
+     * Set the default text encoding to use for new v24 frames, it defaults to simple ISO8859
+     * but by changing this value you could always used UTF8 for example whether you needed to or not
+     *
+     * @param id3v24DefaultTextEncoding
+     */
+    public void setId3v24DefaultTextEncoding(byte id3v24DefaultTextEncoding)
+    {
+         if(
+            (id3v24DefaultTextEncoding==TextEncoding.ISO_8859_1) ||
+            (id3v24DefaultTextEncoding==TextEncoding.UTF_16)||
+            (id3v24DefaultTextEncoding==TextEncoding.UTF_16BE)||
+            (id3v24DefaultTextEncoding==TextEncoding.UTF_8)
+           )
+        {
+            this.id3v24DefaultTextEncoding = id3v24DefaultTextEncoding;
+        }
+
+    }
+
+    /**
+     * Get the text encoding to use for new v24 frames when unicode is required, it defaults to UTF16 just
+     * because this encoding is understand by all ID3 versions
+     *
+     * @return
+     */
+    public byte getId3v24UnicodeTextEncoding()
+    {
+        return id3v24UnicodeTextEncoding;
+    }
+
+    /**
+     * Set the text encoding to use for new v24 frames when unicode is required, it defaults to UTF16 just
+     * because this encoding is understand by all ID3 versions
+     *
+     * @param id3v24UnicodeTextEncoding
+     */
+    public void setId3v24UnicodeTextEncoding(byte id3v24UnicodeTextEncoding)
+    {
+         if(
+            (id3v24UnicodeTextEncoding==TextEncoding.UTF_16)||
+            (id3v24UnicodeTextEncoding==TextEncoding.UTF_16BE)||
+            (id3v24UnicodeTextEncoding==TextEncoding.UTF_8)
+           )
+        {
+            this.id3v24UnicodeTextEncoding = id3v24UnicodeTextEncoding;
+        }
+    }
+
+    /**
+     * When writing frames if this is set to true then the frame will be written
+     * using the defaults disregarding the text encoding originally used to create
+     * the frame.
+     *
+     * @return
+     */
+    public boolean isResetTextEncodingForExistingFrames()
+    {
+        return resetTextEncodingForExistingFrames;
+    }
+
+    /**
+     *
+     * When writing frames if this is set to true then the frame will be written
+     * using the defaults disregarding the text encoding originally used to create
+     * the frame.
+     *
+     * @param resetTextEncodingForExistingFrames
+     */
+    public void setResetTextEncodingForExistingFrames(boolean resetTextEncodingForExistingFrames)
+    {
+        this.resetTextEncodingForExistingFrames = resetTextEncodingForExistingFrames;
     }
 }

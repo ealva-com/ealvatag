@@ -1,6 +1,7 @@
 package org.jaudiotagger.tag.id3;
 
 import org.jaudiotagger.tag.AbstractTagFrame;
+import org.jaudiotagger.tag.TagOptionSingleton;
 import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
 import org.jaudiotagger.logging.LogFormatter;
 
@@ -11,6 +12,7 @@ import java.util.logging.Logger;
 public class ID3TextEncodingConversion
 {
      protected static Logger logger = LogFormatter.getLogger();
+
     /**
      * Check the text encoding is valid for this header type and is appropriate for
      * user text encoding options.                                             *
@@ -23,22 +25,46 @@ public class ID3TextEncodingConversion
      */
     public static byte getTextEncoding(AbstractTagFrame header,byte textEncoding)
     {
+
         //Should not happen, assume v23 and provide a warning
         if(header==null)
         {
             logger.warning("Header has not yet been set for this framebody");
-            return convertV24textEncodingToV23textEncoding(textEncoding);
+
+            if(TagOptionSingleton.getInstance().isResetTextEncodingForExistingFrames())
+            {
+                return TagOptionSingleton.getInstance().getId3v23DefaultTextEncoding();
+            }
+            else
+            {
+                return convertV24textEncodingToV23textEncoding(textEncoding);
+            }
         }
         else if(header instanceof ID3v24Frame)
         {
-            //All text encodings supported nothing to do
-            return textEncoding;
+            if(TagOptionSingleton.getInstance().isResetTextEncodingForExistingFrames())
+            {
+                //Replace with default
+                return TagOptionSingleton.getInstance().getId3v24DefaultTextEncoding();
+            }
+            else
+            {
+                //All text encodings supported nothing to do
+                return textEncoding;
+            }
         }
         else
-        {
-             //If text encoding is an unsupported v24 one we use unicode v23 equivalent
-             return convertV24textEncodingToV23textEncoding(textEncoding);
-
+        { 
+            if(TagOptionSingleton.getInstance().isResetTextEncodingForExistingFrames())
+            {
+                //Replace with default
+                return TagOptionSingleton.getInstance().getId3v23DefaultTextEncoding();
+            }
+            else
+            {
+                //If text encoding is an unsupported v24 one we use unicode v23 equivalent
+                return convertV24textEncodingToV23textEncoding(textEncoding);
+            }
         }
     }
 
@@ -56,7 +82,7 @@ public class ID3TextEncodingConversion
         }
         else if(header instanceof ID3v24Frame)
         {
-            return TextEncoding.UTF_16;
+            return TagOptionSingleton.getInstance().getId3v24UnicodeTextEncoding();
         }
         else
         {
