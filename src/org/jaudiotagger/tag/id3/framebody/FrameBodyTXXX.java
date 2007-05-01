@@ -26,9 +26,12 @@ package org.jaudiotagger.tag.id3.framebody;
 import org.jaudiotagger.tag.datatype.*;
 import org.jaudiotagger.tag.InvalidTagException;
 import org.jaudiotagger.tag.id3.ID3v24Frames;
+import org.jaudiotagger.tag.id3.ID3TextEncodingConversion;
 import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
 
 import java.nio.ByteBuffer;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 
 
 /**
@@ -115,6 +118,23 @@ public class FrameBodyTXXX
     public String getIdentifier()
     {
         return ID3v24Frames.FRAME_ID_USER_DEFINED_INFO;
+    }
+
+    /**
+     * Because TXXX frames also have a text encoded description we need to check this as well.     *
+     */
+    public void write(ByteArrayOutputStream tagBuffer)
+        throws IOException
+    {
+        //Ensure valid for type
+        setTextEncoding( ID3TextEncodingConversion.getTextEncoding(getHeader(),getTextEncoding()));
+
+        //Ensure valid for description
+        if (((TextEncodedStringNullTerminated) getObject(DataTypes.OBJ_DESCRIPTION)).canBeEncoded() == false)
+        {
+            this.setTextEncoding(ID3TextEncodingConversion.getUnicodeTextEncoding(getHeader()));
+        }
+        super.write(tagBuffer);
     }
 
     /**

@@ -18,6 +18,7 @@ package org.jaudiotagger.tag.id3.framebody;
 import org.jaudiotagger.tag.datatype.*;
 import org.jaudiotagger.tag.InvalidTagException;
 import org.jaudiotagger.tag.id3.ID3v24Frames;
+import org.jaudiotagger.tag.id3.ID3TextEncodingConversion;
 import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
 import org.jaudiotagger.tag.id3.valuepair.Languages;
 
@@ -201,13 +202,17 @@ public class FrameBodyUSLT extends AbstractID3v2FrameBody implements ID3v23Frame
     public void write(ByteArrayOutputStream tagBuffer)
         throws IOException
     {
+        //Ensure valid for type
+        this.setTextEncoding(ID3TextEncodingConversion.getUnicodeTextEncoding(getHeader()));
+
+        //Ensure valid for data                    
         if (((AbstractString) getObject(DataTypes.OBJ_DESCRIPTION)).canBeEncoded() == false)
         {
-            this.setTextEncoding(TextEncoding.UTF_16);
+            this.setTextEncoding(ID3TextEncodingConversion.getUnicodeTextEncoding(getHeader()));
         }
         if (((AbstractString) getObject(DataTypes.OBJ_LYRICS)).canBeEncoded() == false)
         {
-            this.setTextEncoding(TextEncoding.UTF_16);
+             this.setTextEncoding(ID3TextEncodingConversion.getUnicodeTextEncoding(getHeader()));
         }
         super.write(tagBuffer);
     }

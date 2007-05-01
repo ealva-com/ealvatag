@@ -86,6 +86,7 @@ public abstract class AbstractID3v2Frame
     public AbstractID3v2Frame(AbstractID3v2FrameBody body)
     {
         this.frameBody = body;
+        this.frameBody.setHeader(this);
     }
 
     /**
@@ -123,6 +124,7 @@ public abstract class AbstractID3v2Frame
             logger.log(Level.SEVERE,"IllegalAccessException:" + identifier,iae);
             throw new RuntimeException(iae);
         }
+        frameBody.setHeader(this);
         logger.info("Created empty frame of type" + identifier);
     }
 
@@ -243,6 +245,7 @@ public abstract class AbstractID3v2Frame
             throw new RuntimeException(iae.getMessage());
         }
         logger.finest(getLoggingFilename()+":"+"Created framebody:end" + frameBody.getIdentifier());
+        frameBody.setHeader(this);
         return frameBody;
     }
 
@@ -320,6 +323,7 @@ public abstract class AbstractID3v2Frame
         }
 
         logger.finer("frame Body created" + frameBody.getIdentifier());
+        frameBody.setHeader(this);
         return frameBody;
     }
 

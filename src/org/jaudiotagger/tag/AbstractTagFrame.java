@@ -51,6 +51,7 @@ public abstract class AbstractTagFrame extends AbstractTagItem
     public AbstractTagFrame(AbstractTagFrame copyObject)
     {
         this.frameBody = (AbstractTagFrameBody) ID3Tags.copyObject(copyObject.frameBody);
+        this.frameBody.setHeader(this);
     }
 
     /**
@@ -62,6 +63,7 @@ public abstract class AbstractTagFrame extends AbstractTagItem
     public void setBody(AbstractTagFrameBody frameBody)
     {
         this.frameBody = frameBody;
+        this.frameBody.setHeader(this);
     }
 
     /**

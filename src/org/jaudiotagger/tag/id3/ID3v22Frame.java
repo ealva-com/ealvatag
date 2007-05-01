@@ -113,6 +113,7 @@ public class ID3v22Frame
             logger.log(Level.SEVERE,iae.getMessage(),iae);
             throw new RuntimeException(iae);
         }
+        frameBody.setHeader(this);
         logger.info("Created empty frame of type" + this.identifier + "with frame body of" + bodyIdentifier);
 
     }
@@ -250,7 +251,7 @@ public class ID3v22Frame
                 return;
             }
         }
-
+        this.frameBody.setHeader(this);
         logger.info("Created frame from a frame of a different version");
     }
 

@@ -202,7 +202,7 @@ public class ID3v23Frame
                 return;
             }
         }
-
+        this.frameBody.setHeader(this);
         logger.info("Created frame from a frame of a different version");
     }
 

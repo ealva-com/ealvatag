@@ -316,4 +316,35 @@ public class Unicode24TagTest extends TestCase
         assertEquals(TextEncoding.UTF_8, body.getTextEncoding());
         assertEquals(FrameBodyTPE1Test.TPE1_UNICODE_REQUIRED_TEST_STRING, body.getText());
     }
+
+     public void testv24TagsWithUTF8EncodingMaintainedOnSave()  throws Exception
+    {
+        File testFile = AbstractTestCase.copyAudioToTmp("Issue109-2.id3", "testV1.mp3");
+
+        //Read file as currently stands
+        MP3File mp3File = new MP3File(testFile);
+        ID3v24Tag v24tag = (ID3v24Tag) mp3File.getID3v2Tag();
+
+        //Currently contains tags with invalid textencodings
+        ID3v24Frame artistFrame = (ID3v24Frame)v24tag.getFrame(ID3v24Frames.FRAME_ID_ARTIST);
+        FrameBodyTPE1 body = (FrameBodyTPE1)artistFrame.getBody();
+        assertEquals(ID3v23Frames.FRAME_ID_V3_ARTIST, body.getIdentifier());
+        assertEquals(TextEncoding.UTF_8, body.getTextEncoding());
+
+        //Save
+        mp3File.save();
+
+        //Read file after save
+        mp3File = new MP3File(testFile);
+        v24tag = (ID3v24Tag) mp3File.getID3v2Tag();
+
+        //Currently contains tags with invalid textencodings
+        artistFrame = (ID3v24Frame)v24tag.getFrame(ID3v24Frames.FRAME_ID_ARTIST);
+        body = (FrameBodyTPE1)artistFrame.getBody();
+        assertEquals(ID3v24Frames.FRAME_ID_ARTIST, body.getIdentifier());
+
+        //Text Encoding has been corrected ( note the text could use ISO_8859 but because the user has selected
+        //a Unicode text encoding the default behaviour is to just conver to a valid text encoding for this id3 version
+        assertEquals(TextEncoding.UTF_8, body.getTextEncoding());
+    }
 }

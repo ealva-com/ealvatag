@@ -113,6 +113,7 @@ public class ID3v24Frame
             {
                 logger.info("V3:Orig id is:" + frame.getIdentifier() + ":New id is:" + identifier);
                 this.frameBody = (AbstractID3v2FrameBody) ID3Tags.copyObject(frame.getBody());
+                this.frameBody.setHeader(this);
                 return;
             }
             /** Is it a known v3 frame which needs forcing to v4 frame e.g. TYER - TDRC */
@@ -123,6 +124,7 @@ public class ID3v24Frame
                 {
                     logger.info("V3:Orig id is:" + frame.getIdentifier() + ":New id is:" + identifier);
                     this.frameBody = this.readBody(identifier, (AbstractID3v2FrameBody) frame.getBody());
+                    this.frameBody.setHeader(this);
                     return;
                 }
                 /* No mechanism exists to convert it to a v24 frame, e.g deprecated frame e.g TSIZ, so hold
@@ -130,6 +132,7 @@ public class ID3v24Frame
                 else
                 {
                     this.frameBody = new FrameBodyDeprecated((AbstractID3v2FrameBody) frame.getBody());
+                    this.frameBody.setHeader(this);
                     identifier = frame.getIdentifier();
                     logger.info("V3:Deprecated:Orig id is:" + frame.getIdentifier() + ":New id is:" + identifier);
                     return;
@@ -140,6 +143,7 @@ public class ID3v24Frame
             else
             {
                 this.frameBody = new FrameBodyUnsupported((FrameBodyUnsupported) frame.getBody());
+                this.frameBody.setHeader(this);
                 identifier = frame.getIdentifier();
                 logger.info("V3:Unknown:Orig id is:" + frame.getIdentifier() + ":New id is:" + identifier);
                 return;
@@ -153,6 +157,7 @@ public class ID3v24Frame
             {
                 logger.info("(1)V2:Orig id is:" + frame.getIdentifier() + "New id is:" + identifier);
                 this.frameBody = (AbstractID3v2FrameBody) ID3Tags.copyObject(frame.getBody());
+                this.frameBody.setHeader(this);
                 return;
             }
             /** Can we convert from v2 to v3 easily (e.g TYE - TYER) */
@@ -162,9 +167,11 @@ public class ID3v24Frame
                 //Convert from v2 to v3
                 logger.info("(2)V2:Orig id is:" + frame.getIdentifier() + "New id is:" + identifier);
                 this.frameBody = (AbstractID3v2FrameBody) ID3Tags.copyObject(frame.getBody());
+                this.frameBody.setHeader(this);
                 //Force v3 to v4
                 identifier = ID3Tags.forceFrameID23To24(identifier);
                 this.frameBody = this.readBody(identifier, (AbstractID3v2FrameBody) this.getBody());
+                this.frameBody.setHeader(this);
                 return;
             }
             /** Is it a known v2 frame which needs forcing to v4 frame e.g PIC - APIC */
@@ -176,12 +183,14 @@ public class ID3v24Frame
                 {
                     logger.info("(3)V2:Orig id is:" + frame.getIdentifier() + "New id is:" + identifier);
                     this.frameBody = this.readBody(identifier, (AbstractID3v2FrameBody) frame.getBody());
+                    this.frameBody.setHeader(this);
                     return;
                 }
                 /* No mechanism exists to convert it to a v24 frame */
                 else
                 {
                     this.frameBody = new FrameBodyDeprecated((AbstractID3v2FrameBody) frame.getBody());
+                    this.frameBody.setHeader(this);
                     identifier = frame.getIdentifier();
                     logger.info("(4)V2:Deprecated Orig id id is:" + frame.getIdentifier() + ":New id is:" + identifier);
                     return;
@@ -191,6 +200,7 @@ public class ID3v24Frame
             else
             {
                 this.frameBody = new FrameBodyUnsupported((FrameBodyUnsupported) frame.getBody());
+                this.frameBody.setHeader(this);
                 identifier = frame.getIdentifier();
                 logger.info("(5)V2:Unknown:Orig id is:" + frame.getIdentifier() + ":New id is:" + identifier);
                 return;
@@ -240,36 +250,43 @@ public class ID3v24Frame
             if (hasTimeStamp)
             {
                 this.frameBody = sync;
+                this.frameBody.setHeader(this);
             }
             else
             {
                 this.frameBody = unsync;
+                this.frameBody.setHeader(this);
             }
         }
         else if (id.equals("INF"))
         {
             value = ((FieldFrameBodyINF) field.getBody()).getAdditionalInformation();
             this.frameBody = new FrameBodyCOMM((byte) 0, "ENG", "", value);
+            this.frameBody.setHeader(this);
         }
         else if (id.equals("AUT"))
         {
             value = ((FieldFrameBodyAUT) field.getBody()).getAuthor();
             this.frameBody = new FrameBodyTCOM((byte) 0, value);
+            this.frameBody.setHeader(this);
         }
         else if (id.equals("EAL"))
         {
             value = ((FieldFrameBodyEAL) field.getBody()).getAlbum();
             this.frameBody = new FrameBodyTALB((byte) 0, value);
+            this.frameBody.setHeader(this);
         }
         else if (id.equals("EAR"))
         {
             value = ((FieldFrameBodyEAR) field.getBody()).getArtist();
             this.frameBody = new FrameBodyTPE1((byte) 0, value);
+            this.frameBody.setHeader(this);
         }
         else if (id.equals("ETT"))
         {
             value = ((FieldFrameBodyETT) field.getBody()).getTitle();
             this.frameBody = new FrameBodyTIT2((byte) 0, value);
+            this.frameBody.setHeader(this);
         }
         else if (id.equals("IMG"))
         {

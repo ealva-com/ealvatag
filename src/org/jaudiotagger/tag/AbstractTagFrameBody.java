@@ -51,6 +51,13 @@ public abstract class AbstractTagFrameBody
     {
     }
 
+    /** Reference to the header associated with this frame body, a framebody can be created without a header
+     *  but one it is associated with a header this should be set. It is principally useful for the framebody to know
+     *  its header, because this will specify its tag version and some framebodies behave slighly different
+     *  between tag versions.
+     */
+    private AbstractTagFrame header;
+
     /**
      * List of data types that make up this particular frame body.
      */
@@ -314,4 +321,21 @@ public abstract class AbstractTagFrameBody
      */
     protected abstract void setupObjectList();
 
+    /** Get Reference to header
+     *
+     * @return
+     */
+    public AbstractTagFrame getHeader()
+    {
+        return header;
+    }
+
+    /** Set header
+     *
+     * @param header
+     */
+    public void setHeader(AbstractTagFrame header)
+    {
+        this.header = header;
+    }
 }

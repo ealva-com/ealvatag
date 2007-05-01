@@ -31,20 +31,25 @@ import java.nio.*;
 import org.jaudiotagger.tag.datatype.*;
 import org.jaudiotagger.tag.InvalidTagException;
 import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
+import org.jaudiotagger.tag.id3.ID3v24Frame;
+import org.jaudiotagger.tag.id3.ID3TextEncodingConversion;
 
 /** Abstract representation of a Text Frame
 *
-*  The text information frames are often the most important frames, *  containing information like artist, album and
-* more. There may only be  one text information frame of its kind in an tag. All text information frames
-* supports multiple strings, stored as a null separated list, where null is reperesented by the termination code
-* for the charater encoding. All text frame identifiers begin with "T". Only text frame identifiers begin with "T",
+* The text information frames are often the most important frames, containing information like artist, album and
+* more. There may only be  one text information frame of its kind in an tag. In ID3v24 All text information frames
+* supports multiple strings, stored as a null separated list, where null is represented by the termination code
+* for the character encoding. All text frame identifiers begin with "T". Only text frame identifiers begin with "T",
 * with the exception of the "TXXX" frame. All the text information frames have the following  format:
 *  <Header for 'Text information frame', ID: "T000" - "TZZZ",
 *     excluding "TXXX" described in 4.2.6.>
 *     Text encoding                $xx
 *     Information                  <text string(s) according to encoding>
 *
-*  iTunes incorrectly writes null terminators at the end of every string, even though it only writes one String.
+*  The list of valid text encodings increaded from two in ID3v23 to four in ID3v24
+ *
+*  iTunes incorrectly writes null terminators at the end of every String, even though it only writes one String.
+*
 *  You can retrieve the first value without the null terminator using {@link #getFirstTextValue}
 */
 public abstract class AbstractFrameBodyTextInfo
@@ -176,9 +181,13 @@ public abstract class AbstractFrameBodyTextInfo
     public void write(ByteArrayOutputStream tagBuffer)
         throws IOException
     {
-        if (((AbstractString) getObject(DataTypes.OBJ_TEXT)).canBeEncoded() == false)
+        //Ensure valid for type
+        setTextEncoding( ID3TextEncodingConversion.getTextEncoding(getHeader(),getTextEncoding()));
+
+        //Ensure valid for data
+        if (((TextEncodedStringSizeTerminated) getObject(DataTypes.OBJ_TEXT)).canBeEncoded() == false)
         {
-            this.setTextEncoding(TextEncoding.UTF_16);
+            this.setTextEncoding(ID3TextEncodingConversion.getUnicodeTextEncoding(getHeader()));
         }
         super.write(tagBuffer);
     }
@@ -190,7 +199,7 @@ public abstract class AbstractFrameBodyTextInfo
     protected void setupObjectList()
     {
         objectList.add(new NumberHashMap(DataTypes.OBJ_TEXT_ENCODING, this, TextEncoding.TEXT_ENCODING_FIELD_SIZE ));
-        objectList.add(new TextEncodedStringSizeTerminated(DataTypes.OBJ_TEXT, this));                
+        objectList.add(new TextEncodedStringSizeTerminated(DataTypes.OBJ_TEXT, this));
     }
 
 }

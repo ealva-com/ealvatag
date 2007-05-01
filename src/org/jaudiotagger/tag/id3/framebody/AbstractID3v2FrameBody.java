@@ -40,11 +40,14 @@ public abstract class AbstractID3v2FrameBody
 {
     protected static final String TYPE_BODY = "body";
 
+
     /**
      * Frame Body Size, originally this is size as indicated in frame header
      * when we come to writing data we recalculate it.
      */
     private int size;
+
+
 
     /**
      * Create Empty Body. Super Constructor sets up Object list
