@@ -810,6 +810,10 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag
     /**
      * Write all the frames to the byteArrayOutputStream
      *
+     * TODO there is a preferred tag order mentioned in spec, e.g ufid first
+     * Currently Write all frames, defaults to the order in which they were loaded, newly
+     * created frames will be at end of tag.
+     *
      * @return ByteBuffer Contains all the frames written within the tag ready for writing to file
      * @throws IOException
      */
@@ -818,9 +822,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag
         //Increases as is required
         ByteArrayOutputStream bodyBuffer = new ByteArrayOutputStream();
 
-        //Write all frames, defaults to the order in which they were loaded, newly
-        //created frames will be at end of tag.
-        //TODO there is a preferred tag order mentioned in spec, e.g ufid first
+
         AbstractID3v2Frame frame;
         Iterator iterator;
         iterator = frameMap.values().iterator();
