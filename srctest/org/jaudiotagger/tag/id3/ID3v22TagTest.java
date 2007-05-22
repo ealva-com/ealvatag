@@ -91,7 +91,9 @@ public class ID3v22TagTest extends TestCase
            assertEquals(ID3v11TagTest.TITLE,((FrameBodyTIT2)((ID3v22Frame)v2Tag.getFrame(ID3v22Frames.FRAME_ID_V2_TITLE)).getBody()).getText());
            assertEquals(ID3v11TagTest.TRACK_VALUE,((FrameBodyTRCK)((ID3v22Frame)v2Tag.getFrame(ID3v22Frames.FRAME_ID_V2_TRACK)).getBody()).getText());
            assertTrue(((FrameBodyTCON)((ID3v22Frame)v2Tag.getFrame(ID3v22Frames.FRAME_ID_V2_GENRE)).getBody()).getText().endsWith(ID3v11TagTest.GENRE_VAL));
-           //TODO Check why this fails:assertEquals(ID3v11TagTest.YEAR,((FrameBodyTYER)((ID3v22Frame)v2Tag.getFrame(ID3v22Frames.FRAME_ID_V2_TYER)).getBody()).getText());
+
+            //TODO:Note confusingly V22 YEAR Frame shave v2 identifier but use TDRC behind the scenes, is confusing
+            assertEquals(ID3v11TagTest.YEAR,((FrameBodyTDRC)((ID3v22Frame)v2Tag.getFrame(ID3v22Frames.FRAME_ID_V2_TYER)).getBody()).getText());
 
             assertEquals((byte)2,v2Tag.getRelease());
             assertEquals((byte)2,v2Tag.getMajorVersion());
