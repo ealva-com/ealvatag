@@ -54,7 +54,6 @@ public class FrameBodyUnsupported extends AbstractID3v2FrameBody implements ID3v
 
     /**
      * Creates a new FrameBodyUnsupported
-     *
      */
     public FrameBodyUnsupported(String identifier)
     {
@@ -63,6 +62,7 @@ public class FrameBodyUnsupported extends AbstractID3v2FrameBody implements ID3v
 
     /**
      * Create a new FrameBodyUnsupported
+     *
      * @param identifier
      * @param value
      */
@@ -74,6 +74,7 @@ public class FrameBodyUnsupported extends AbstractID3v2FrameBody implements ID3v
 
     /**
      * Creates a new FrameBodyUnsupported datatype.
+     * 
      * @deprecated because no identifier set
      * @param value 
      */

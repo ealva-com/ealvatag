@@ -107,7 +107,7 @@ public class ID3v24Frame
          */
         if (frame instanceof ID3v23Frame)
         {
-            /** Is it a straight conversion e.g TALB - TALB */
+            // Is it a straight conversion e.g TALB - TALB
             identifier = ID3Tags.convertFrameID23To24(frame.getIdentifier());
             if (identifier != null)
             {
@@ -116,7 +116,7 @@ public class ID3v24Frame
                 this.frameBody.setHeader(this);
                 return;
             }
-            /** Is it a known v3 frame which needs forcing to v4 frame e.g. TYER - TDRC */
+            // Is it a known v3 frame which needs forcing to v4 frame e.g. TYER - TDRC
             else if (ID3Tags.isID3v23FrameIdentifier(frame.getIdentifier()) == true)
             {
                 identifier = ID3Tags.forceFrameID23To24(frame.getIdentifier());
@@ -127,8 +127,8 @@ public class ID3v24Frame
                     this.frameBody.setHeader(this);
                     return;
                 }
-                /* No mechanism exists to convert it to a v24 frame, e.g deprecated frame e.g TSIZ, so hold
-                  as a deprecated frame consisting of an array of bytes*/
+                // No mechanism exists to convert it to a v24 frame, e.g deprecated frame e.g TSIZ, so hold
+                //  as a deprecated frame consisting of an array of bytes*/
                 else
                 {
                     this.frameBody = new FrameBodyDeprecated((AbstractID3v2FrameBody) frame.getBody());
@@ -139,7 +139,7 @@ public class ID3v24Frame
                 }
 
             }
-            /** Unknown Frame e.g NCON */
+            // Unknown Frame e.g NCON or TDRL (because TDRL unknown to V23)
             else
             {
                 this.frameBody = new FrameBodyUnsupported((FrameBodyUnsupported) frame.getBody());

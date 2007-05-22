@@ -110,9 +110,9 @@ public class ID3v23Frame
                     this.frameBody = (AbstractID3v2FrameBody) ID3Tags.copyObject(frame.getBody());
                     return;
                 }
-                //Is it a known v4 frame which needs forcing to v3 frame e.g. TDRC - TYER,TDAT
-                else if (ID3Tags.isID3v24FrameIdentifier(frame.getIdentifier()) == true)
+                else
                 {
+                    //Is it a known v4 frame which needs forcing to v3 frame e.g. TDRC - TYER,TDAT
                     identifier = ID3Tags.forceFrameID24To23(frame.getIdentifier());
                     if(identifier!=null)
                     {
@@ -120,10 +120,26 @@ public class ID3v23Frame
                         this.frameBody = this.readBody(identifier, (AbstractID3v2FrameBody) frame.getBody());
                         return;
                     }
-                    //No mechanism exists to convert it to a v23 frame
+                    //It is a v24 frame that is not known and cannot be forced in v23 e.g TDRL,in which case
+                    //we convert to a framebody unsupported by writing contents as a byte array and feeding
+                    //it into FrameBodyUnsupported
                     else
                     {
-                        throw new InvalidFrameException("Unable to convert v24 frame:"+frame.getIdentifier()+" to a v23 frame");
+                        ByteArrayOutputStream baos = new  ByteArrayOutputStream();
+                        try
+                        {
+                            ((AbstractID3v2FrameBody)frame.getBody()).write(baos);
+                        }
+                        catch(IOException ioe)
+                        {
+                            //Should not happen as not actually writing to file
+                            throw new RuntimeException("Problem writing frame out to bytearraystream",ioe);
+                        }
+                        identifier = frame.getIdentifier();
+                        this.frameBody = new FrameBodyUnsupported(identifier,baos.toByteArray());
+
+                        logger.info("V4:Orig id is:" + frame.getIdentifier() + ":New Id Unsupported is:" + identifier);
+                        return;
                     }
                 }
             }
@@ -172,7 +188,7 @@ public class ID3v23Frame
                     this.frameBody = (AbstractID3v2FrameBody) ID3Tags.copyObject(frame.getBody());
                     return;
                 }
-                /** Is it a known v2 frame which needs forcing to v4 frame e.g PIC - APIC */
+                //Is it a known v2 frame which needs forcing to v4 frame e.g PIC - APIC
                 else if (ID3Tags.isID3v22FrameIdentifier(frame.getIdentifier()) == true)
                 {
                     //Force v2 to v3
@@ -183,7 +199,7 @@ public class ID3v23Frame
                         this.frameBody = this.readBody(identifier, (AbstractID3v2FrameBody) frame.getBody());
                         return;
                     }
-                    /* No mechanism exists to convert it to a v23 frame */
+                    //No mechanism exists to convert it to a v23 frame
                     else
                     {
                         this.frameBody = new FrameBodyDeprecated((AbstractID3v2FrameBody)frame.getBody());
@@ -193,7 +209,7 @@ public class ID3v23Frame
                     }
                 }
             }
-            /** Unknown Frame e.g NCON */
+            // Unknown Frame e.g NCON
             else
             {
                 this.frameBody = new FrameBodyUnsupported((FrameBodyUnsupported) frame.getBody());

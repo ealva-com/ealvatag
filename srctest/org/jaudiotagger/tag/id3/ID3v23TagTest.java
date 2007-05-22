@@ -18,6 +18,7 @@ package org.jaudiotagger.tag.id3;
 import org.jaudiotagger.audio.mp3.MP3File;
 import org.jaudiotagger.AbstractTestCase;
 import org.jaudiotagger.tag.id3.framebody.*;
+import org.jaudiotagger.tag.datatype.DataTypes;
 
 import java.io.File;
 
@@ -203,22 +204,224 @@ public class ID3v23TagTest extends TestCase
 
     public void testCreateID3v23FromID3v11()
     {
-           ID3v11Tag v11Tag = ID3v11TagTest.getInitialisedTag();
-           ID3v23Tag v2Tag = new ID3v23Tag(v11Tag);
-           assertNotNull(v11Tag);
-           assertNotNull(v2Tag);
-           assertEquals(ID3v11TagTest.ARTIST,((FrameBodyTPE1)((ID3v23Frame)v2Tag.getFrame(ID3v23Frames.FRAME_ID_V3_ARTIST)).getBody()).getText());
-           assertEquals(ID3v11TagTest.ALBUM,((FrameBodyTALB)((ID3v23Frame)v2Tag.getFrame(ID3v23Frames.FRAME_ID_V3_ALBUM)).getBody()).getText());
-           assertEquals(ID3v11TagTest.COMMENT,((FrameBodyCOMM)((ID3v23Frame)v2Tag.getFrame(ID3v23Frames.FRAME_ID_V3_COMMENT)).getBody()).getText());
-           assertEquals(ID3v11TagTest.TITLE,((FrameBodyTIT2)((ID3v23Frame)v2Tag.getFrame(ID3v23Frames.FRAME_ID_V3_TITLE)).getBody()).getText());
-           assertEquals(ID3v11TagTest.TRACK_VALUE,((FrameBodyTRCK)((ID3v23Frame)v2Tag.getFrame(ID3v23Frames.FRAME_ID_V3_TRACK)).getBody()).getText());
-           assertTrue(((FrameBodyTCON)((ID3v23Frame)v2Tag.getFrame(ID3v23Frames.FRAME_ID_V3_GENRE)).getBody()).getText().endsWith(ID3v11TagTest.GENRE_VAL));
-           assertEquals(ID3v11TagTest.YEAR,((FrameBodyTYER)((ID3v23Frame)v2Tag.getFrame(ID3v23Frames.FRAME_ID_V3_TYER)).getBody()).getText());
+       ID3v11Tag v11Tag = ID3v11TagTest.getInitialisedTag();
+       ID3v23Tag v2Tag = new ID3v23Tag(v11Tag);
+       assertNotNull(v11Tag);
+       assertNotNull(v2Tag);
+       assertEquals(ID3v11TagTest.ARTIST,((FrameBodyTPE1)((ID3v23Frame)v2Tag.getFrame(ID3v23Frames.FRAME_ID_V3_ARTIST)).getBody()).getText());
+       assertEquals(ID3v11TagTest.ALBUM,((FrameBodyTALB)((ID3v23Frame)v2Tag.getFrame(ID3v23Frames.FRAME_ID_V3_ALBUM)).getBody()).getText());
+       assertEquals(ID3v11TagTest.COMMENT,((FrameBodyCOMM)((ID3v23Frame)v2Tag.getFrame(ID3v23Frames.FRAME_ID_V3_COMMENT)).getBody()).getText());
+       assertEquals(ID3v11TagTest.TITLE,((FrameBodyTIT2)((ID3v23Frame)v2Tag.getFrame(ID3v23Frames.FRAME_ID_V3_TITLE)).getBody()).getText());
+       assertEquals(ID3v11TagTest.TRACK_VALUE,((FrameBodyTRCK)((ID3v23Frame)v2Tag.getFrame(ID3v23Frames.FRAME_ID_V3_TRACK)).getBody()).getText());
+       assertTrue(((FrameBodyTCON)((ID3v23Frame)v2Tag.getFrame(ID3v23Frames.FRAME_ID_V3_GENRE)).getBody()).getText().endsWith(ID3v11TagTest.GENRE_VAL));
+       assertEquals(ID3v11TagTest.YEAR,((FrameBodyTYER)((ID3v23Frame)v2Tag.getFrame(ID3v23Frames.FRAME_ID_V3_TYER)).getBody()).getText());
 
-            assertEquals((byte)2,v2Tag.getRelease());
-            assertEquals((byte)3,v2Tag.getMajorVersion());
-            assertEquals((byte)0,v2Tag.getRevision());
+        assertEquals((byte)2,v2Tag.getRelease());
+        assertEquals((byte)3,v2Tag.getMajorVersion());
+        assertEquals((byte)0,v2Tag.getRevision());
 
     }
 
+    /**
+     * Test converting a v24 tag to a v23 tag, the v24 tag contains:
+     *
+     * A frame which is known in v24 and v23
+     *
+     * @throws Exception
+     */
+     public void testCreateID3v23FromID3v24knownInV3()throws Exception
+     {
+            File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3");
+            MP3File mp3File = null;
+            mp3File = new MP3File(testFile);
+
+            //Add v24 tag to mp3 with single tdrl frame (which is only supported in v24)
+            ID3v24Tag tag = new ID3v24Tag();
+            FrameBodyTIT2 framebodyTdrl = new  FrameBodyTIT2();
+            framebodyTdrl.setText("title");
+            ID3v24Frame tdrlFrame = new ID3v24Frame("TIT2");
+            tdrlFrame.setBody(framebodyTdrl);
+            tag.setFrame(tdrlFrame);
+            mp3File.setID3v2Tag(tag);
+            mp3File.save();
+
+            //Reread from File
+            mp3File = new MP3File(testFile);
+
+            //Convert to v23 ,frame converted and marked as unsupported
+            ID3v23Tag v23tag = new ID3v23Tag(mp3File.getID3v2TagAsv24());
+            ID3v23Frame v23frame = (ID3v23Frame)v23tag.getFrame("TIT2");
+            assertNotNull(v23frame);
+            assertTrue(v23frame.getBody() instanceof FrameBodyTIT2);
+
+            //Save as v23 tag (side effect convert v23 to v24 tag as well)
+            mp3File.setID3v2Tag(v23tag);
+            mp3File.save();
+
+            //Reread from File
+            mp3File = new MP3File(testFile);
+
+            //Convert to v23 ,frame should still exist
+            v23tag = (ID3v23Tag) mp3File.getID3v2Tag();
+            v23frame = (ID3v23Frame)v23tag.getFrame("TIT2");
+            assertNotNull(v23frame);
+            assertTrue(v23frame.getBody() instanceof FrameBodyTIT2);
+
+            //Save as v23 tag (side effect convert v23 to v24 tag as well)
+            mp3File.setID3v2Tag(v23tag);
+            mp3File.save();
+
+            //Check when converted to v24 has value been maintained
+            assertEquals("title",((FrameBodyTIT2)((ID3v24Frame)mp3File.getID3v2TagAsv24().getFrame("TIT2")).getBody()).getText());
+        }
+
+    /**
+     * Test converting a v24 tag to a v23 tag, the v24 tag contains:
+     *
+     * A frame which is known in v24 but not v23
+     *
+     * @throws Exception
+     */
+    public void testCreateID3v23FromID3v24UnknownInV3()throws Exception
+    {
+        File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3");
+        MP3File mp3File = null;
+        mp3File = new MP3File(testFile);
+
+        //Add v24 tag to mp3 with single tdrl frame (which is only supported in v24)
+        ID3v24Tag tag = new ID3v24Tag();
+        FrameBodyTDRL framebodyTdrl = new  FrameBodyTDRL();
+        framebodyTdrl.setText("2008");
+        ID3v24Frame tdrlFrame = new ID3v24Frame("TDRL");
+        tdrlFrame.setBody(framebodyTdrl);
+        tag.setFrame(tdrlFrame);
+        mp3File.setID3v2Tag(tag);
+        mp3File.save();
+
+        //Reread from File
+        mp3File = new MP3File(testFile);
+
+        //Convert to v23 ,frame converted and marked as unsupported
+        ID3v23Tag v23tag = new ID3v23Tag(mp3File.getID3v2TagAsv24());
+        ID3v23Frame v23frame = (ID3v23Frame)v23tag.getFrame("TDRL");
+        assertNotNull(v23frame);
+        assertTrue(v23frame.getBody() instanceof FrameBodyUnsupported);
+
+        //Save as v23 tag (side effect convert v23 to v24 tag as well)
+        mp3File.setID3v2Tag(v23tag);
+        mp3File.save();
+
+        //Reread from File
+        mp3File = new MP3File(testFile);
+
+        //Convert to v23 ,frame should still exist
+        v23tag = (ID3v23Tag) mp3File.getID3v2Tag();
+        v23frame = (ID3v23Frame)v23tag.getFrame("TDRL");
+        assertNotNull(v23frame);
+        assertTrue(v23frame.getBody() instanceof FrameBodyUnsupported);
+
+        //Save as v23 tag (side effect convert v23 to v24 tag as well)
+        mp3File.setID3v2Tag(v23tag);
+        mp3File.save();
+
+        //Check value maintained, can only see as bytes
+        FrameBodyUnsupported v23FrameBody = (FrameBodyUnsupported)v23frame.getBody();
+        assertEquals((byte)'2',((byte[])v23FrameBody.getObjectValue(DataTypes.OBJ_DATA))[1]);
+        assertEquals((byte)'0',((byte[])v23FrameBody.getObjectValue(DataTypes.OBJ_DATA))[2]);
+        assertEquals((byte)'0',((byte[])v23FrameBody.getObjectValue(DataTypes.OBJ_DATA))[3]);
+        assertEquals((byte)'8',((byte[])v23FrameBody.getObjectValue(DataTypes.OBJ_DATA))[4]);
+
+        //Reread from File
+        mp3File = new MP3File(testFile);
+        v23tag = (ID3v23Tag) mp3File.getID3v2Tag();
+        v23frame = (ID3v23Frame)v23tag.getFrame("TDRL");
+        assertNotNull(v23frame);
+        assertTrue(v23frame.getBody() instanceof FrameBodyUnsupported);
+
+        //Check value maintained, can only see as bytes
+        v23FrameBody = (FrameBodyUnsupported)v23frame.getBody();
+        assertEquals((byte)'2',((byte[])v23FrameBody.getObjectValue(DataTypes.OBJ_DATA))[1]);
+        assertEquals((byte)'0',((byte[])v23FrameBody.getObjectValue(DataTypes.OBJ_DATA))[2]);
+        assertEquals((byte)'0',((byte[])v23FrameBody.getObjectValue(DataTypes.OBJ_DATA))[3]);
+        assertEquals((byte)'8',((byte[])v23FrameBody.getObjectValue(DataTypes.OBJ_DATA))[4]);
+
+        //Convert V24 representation to V23, and then save this
+        v23tag = new ID3v23Tag(mp3File.getID3v2TagAsv24());
+        mp3File.setID3v2TagOnly(v23tag);
+        mp3File.setID3v2Tag(v23tag);
+        mp3File.save();
+
+        //Reread from File
+        mp3File = new MP3File(testFile);
+        v23tag = (ID3v23Tag) mp3File.getID3v2Tag();
+        v23frame = (ID3v23Frame)v23tag.getFrame("TDRL");
+        assertNotNull(v23frame);
+        assertTrue(v23frame.getBody() instanceof FrameBodyUnsupported);
+
+        //Check value maintained, can only see as bytes
+        v23FrameBody = (FrameBodyUnsupported)v23frame.getBody();
+        assertEquals((byte)'2',((byte[])v23FrameBody.getObjectValue(DataTypes.OBJ_DATA))[1]);
+        assertEquals((byte)'0',((byte[])v23FrameBody.getObjectValue(DataTypes.OBJ_DATA))[2]);
+        assertEquals((byte)'0',((byte[])v23FrameBody.getObjectValue(DataTypes.OBJ_DATA))[3]);
+        assertEquals((byte)'8',((byte[])v23FrameBody.getObjectValue(DataTypes.OBJ_DATA))[4]);
+
+    }
+
+    /**
+     * Test converting a v24 tag to a v23 tag, the v24 tag contains:
+     *
+     * A frame which is unknown in v24 and v23
+     *
+     * @throws Exception
+     */
+    /*
+    public void testCreateID3v23FromID3v24UnknownInV3AndV4()throws Exception
+    {
+        File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3");
+        MP3File mp3File = null;
+        mp3File = new MP3File(testFile);
+
+        //Add v24 tag to mp3 with single user defined frame
+        byte[] byteData = new byte[1];
+        byteData[0] = 'X';
+
+        ID3v24Tag tag = new ID3v24Tag();
+        FrameBodyUnsupported framebodyUnsupported = new  FrameBodyUnsupported("FREW",byteData);
+        ID3v24Frame frame = new ID3v24Frame();
+        frame.setBody(framebodyUnsupported);
+        tag.setFrame(frame);
+        mp3File.setID3v2Tag(tag);
+        mp3File.save();
+
+        //Reread from File
+        mp3File = new MP3File(testFile);
+
+        //Convert to v23 ,frame converted and marked as unsupported
+        ID3v23Tag v23tag = new ID3v23Tag(mp3File.getID3v2TagAsv24());
+        ID3v23Frame v23frame = (ID3v23Frame)v23tag.getFrame("FREW");
+        assertNotNull(v23frame);
+        assertTrue(v23frame.getBody() instanceof FrameBodyUnsupported);
+
+        //Save as v23 tag (side effect convert v23 to v24 tag as well)
+        mp3File.setID3v2Tag(v23tag);
+        mp3File.save();
+
+        //Reread from File
+        mp3File = new MP3File(testFile);
+
+        //Convert to v23 ,frame should still exist
+        v23tag = (ID3v23Tag) mp3File.getID3v2Tag();
+        v23frame = (ID3v23Frame)v23tag.getFrame("FREW");
+        assertNotNull(v23frame);
+        assertTrue(v23frame.getBody() instanceof FrameBodyUnsupported);
+
+        //Save as v23 tag (side effect convert v23 to v24 tag as well)
+        mp3File.setID3v2Tag(v23tag);
+        mp3File.save();
+
+        //Check value maintained, can only see as bytes
+        FrameBodyUnsupported v23FrameBody = (FrameBodyUnsupported)v23frame.getBody();
+        assertEquals((byte)'X',((byte[])v23FrameBody.getObjectValue(DataTypes.OBJ_DATA))[0]);
+    }
+    */
 }

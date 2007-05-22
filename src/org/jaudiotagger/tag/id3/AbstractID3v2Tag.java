@@ -400,6 +400,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag
      */
     public void removeFrame(String identifier)
     {
+        logger.finest("Removing frame with identifier:"+identifier);
         frameMap.remove(identifier);
     }
 
@@ -436,7 +437,9 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag
         while (iterator.hasNext())
         {
             AbstractID3v2Frame frame = (AbstractID3v2Frame) iterator.next();
+            logger.finest("Removing frame with identifier:"+frame.getIdentifier() + "because starts with:"+identifier);
             frameMap.remove(frame.getIdentifier());
+
         }
     }
 
