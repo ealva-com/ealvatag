@@ -7,6 +7,7 @@ import org.jaudiotagger.audio.mp3.MP3File;
 import org.jaudiotagger.audio.mp3.MP3AudioHeader;
 
 import java.io.File;
+import java.util.List;
 
 /**
  * Test Itunes problems
@@ -129,7 +130,7 @@ public class ItunesTest extends AbstractTestCase
         ID3v23Frame v23frame = (ID3v23Frame) mp3File.getID3v2Tag().getFrame(ID3v23Frames.FRAME_ID_V3_COMMENT);
         assertNotNull(v23frame);
         FrameBodyCOMM fb = (FrameBodyCOMM) v23frame.getBody();
-        assertEquals(EMPTY_VALUE,fb.getText());       
+        assertEquals(EMPTY_VALUE,fb.getText());
     }
 
     /** Check skips over tag to read mp3 audio */
@@ -144,4 +145,25 @@ public class ItunesTest extends AbstractTestCase
         assertEquals(START_OF_AUDIO_LOCATION,mp3File.getMP3AudioHeader().getMp3StartByte());
         assertEquals(FRAME_COUNT,mp3File.getID3v2Tag().getFrameCount());
     }
+
+    /** Because last frame is large it has to check that size is unsynced, because no padding
+     *  code have to be careful not to have buffer underlow exception
+      * @throws Exception
+     */
+    public void testv24TagWithlargeSyncSafeFrameAndNoPadding() throws Exception
+   {
+       File testFile = AbstractTestCase.copyAudioToTmp("Issue115.id3","testV1.mp3");
+
+       MP3File mp3File = new MP3File(testFile);
+
+       List apicFrames = (List) mp3File.getID3v2Tag().getFrame(ID3v24Frames.FRAME_ID_ATTACHED_PICTURE);
+
+       ID3v24Frame v24frame = (ID3v24Frame)apicFrames.get(0);
+       assertNotNull(v24frame);
+
+       v24frame = (ID3v24Frame)apicFrames.get(1);
+       assertNotNull(v24frame);
+
+   }
+
 }
