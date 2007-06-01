@@ -31,7 +31,9 @@ import java.nio.ByteBuffer;
  * <ul>
  * <li><a href="http://www.id3.org/id3v2.3.0.txt">ID3 v2.3.0 Spec</a>
  * </ul>
- * 
+ *
+ * TODO:Although rare TLAN can actually return multiple language codes, at the moment they are all returned as a single
+ * string via getText(), any additional parsrsing has to be done externally. 
  * @author : Paul Taylor
  * @author : Eric Farng
  * @version $Id$
@@ -82,14 +84,5 @@ public class FrameBodyTLAN extends AbstractFrameBodyTextInfo implements ID3v24Fr
     public String getIdentifier()
     {
         return ID3v24Frames.FRAME_ID_LANGUAGE;
-    }
-
-    /**
-     * Overide Text Frame because language is fixed length string
-     */
-    protected void setupObjectList()
-    {
-        objectList.add(new NumberHashMap(DataTypes.OBJ_TEXT_ENCODING, this, TextEncoding.TEXT_ENCODING_FIELD_SIZE));
-        objectList.add(new StringFixedLength(DataTypes.OBJ_TEXT, this, Languages.LANGUAGE_FIELD_SIZE));
     }
 }

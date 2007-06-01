@@ -195,11 +195,12 @@ public abstract class AbstractFrameBodyTextInfo
     /**
      * Setup the Object List. All text frames contain a text encoding
      * and then a text string.
+     *
+     * TODO:would like to make final but cannnot because overriden by FrameBodyTXXX
      */
     protected void setupObjectList()
     {
         objectList.add(new NumberHashMap(DataTypes.OBJ_TEXT_ENCODING, this, TextEncoding.TEXT_ENCODING_FIELD_SIZE ));
         objectList.add(new TextEncodedStringSizeTerminated(DataTypes.OBJ_TEXT, this));
     }
-
 }
