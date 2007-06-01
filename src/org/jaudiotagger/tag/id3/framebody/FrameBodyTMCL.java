@@ -56,8 +56,7 @@ public class FrameBodyTMCL extends AbstractFrameBodyTextInfo implements ID3v24Fr
 
     /**
      * Creates a new FrameBodyTMCL datatype.
-     *
-     * @throws java.io.IOException 
+     *     
      * @throws InvalidTagException 
      */
     public FrameBodyTMCL(ByteBuffer byteBuffer, int frameSize)
