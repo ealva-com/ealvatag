@@ -361,40 +361,47 @@ public class MP3File extends org.jaudiotagger.audio.AbstractAudioFile
      */
     public MP3File(File file, int loadOptions, boolean readOnly) throws IOException, TagException, ReadOnlyFileException, InvalidAudioFrameException
     {
-        this.file = file;
-
-        //Check File accessibility
-        RandomAccessFile newFile = checkFilePermissions(file, readOnly);
-
-        //Read ID3v2 tag size (if tag exists) to allow audioheader parsing to skip over tag
-        long startByte = AbstractID3v2Tag.getV2TagSizeIfExists(file);
-
-        //If exception reading Mpeg then we should give up no point continuing
-        audioHeader = new MP3AudioHeader(file,startByte);
-
-        if(startByte!=((MP3AudioHeader)audioHeader).getMp3StartByte())
+        RandomAccessFile newFile = null;
+        try
         {
-            audioHeader=checkAudioStart(startByte,(MP3AudioHeader)audioHeader);
+            this.file = file;
+
+            //Check File accessibility
+            newFile = checkFilePermissions(file, readOnly);
+
+            //Read ID3v2 tag size (if tag exists) to allow audioheader parsing to skip over tag
+            long startByte = AbstractID3v2Tag.getV2TagSizeIfExists(file);
+
+            //If exception reading Mpeg then we should give up no point continuing
+            audioHeader = new MP3AudioHeader(file,startByte);
+
+            if(startByte!=((MP3AudioHeader)audioHeader).getMp3StartByte())
+            {
+                audioHeader=checkAudioStart(startByte,(MP3AudioHeader)audioHeader);
+            }
+
+            //Read v1 tags (if any)
+            readV1Tag(file, newFile, loadOptions);
+
+            //Read v2 tags (if any)
+            readV2Tag(file, loadOptions);
+
+            //Read Lyrics 3
+            //readLyrics3Tag(File file,RandomAccessFile  newFile,int loadOptions)
+
+            //Create Virtual tag from the ID3v24tag
+            if (this.getID3v2TagAsv24() != null)
+            {
+                this.metaData = new VirtualMetaDataContainer((ID3v24Tag) this.getID3v2TagAsv24());
+            }
         }
-
-        //Read v1 tags (if any)
-        readV1Tag(file, newFile, loadOptions);
-
-        //Read v2 tags (if any)
-        readV2Tag(file, loadOptions);
-
-        //Read Lyrics 3
-        //readLyrics3Tag(File file,RandomAccessFile  newFile,int loadOptions)
-
-        //Create Virtual tag from the ID3v24tag
-        if (this.getID3v2TagAsv24() != null)
+        finally
         {
-            this.metaData = new VirtualMetaDataContainer((ID3v24Tag) this.getID3v2TagAsv24());
+            if(newFile!=null)
+            {
+                newFile.close();
+            }
         }
-
-        newFile.close();
-
-
     }
 
     /**
