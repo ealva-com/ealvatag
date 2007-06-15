@@ -474,6 +474,7 @@ public class ID3v24Frame
                             if(byteBuffer.remaining() >= FRAME_ID_SIZE)
                             {
                                 byteBuffer.get(readAheadbuffer, 0, FRAME_ID_SIZE);
+                                readAheadIdentifier = new String(readAheadbuffer);                                                                  
 
                                 //reset position to just after framesize
                                 byteBuffer.position(currentPosition);
