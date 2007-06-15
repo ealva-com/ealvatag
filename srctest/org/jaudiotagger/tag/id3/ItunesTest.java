@@ -38,7 +38,7 @@ public class ItunesTest extends AbstractTestCase
         assertEquals(FRAME_SIZE,fb.getSize());
     }
 
-    /** This tests that we work out that the frame is not unsynced because its hihest order bit size is set
+    /** This tests that we work out that the frame is not unsynced because its highest order bit size is set
      *  and read the frame size as a normal integer using an integral algorithm
      * @throws Exception
      */
@@ -53,6 +53,23 @@ public class ItunesTest extends AbstractTestCase
         FrameBodyAPIC fb = (FrameBodyAPIC) v24frame.getBody();
         assertEquals(FRAME_SIZE2,fb.getSize());
     }
+
+    /** This tests that we work out that the frame is not unsynced because frame only matches to next frame identifier
+     *  when not unsynced ( it is the USLT frame that is bering tested in this case, we only get to APIC if read
+     *  USLT frame ok)
+     * @throws Exception
+     */
+    public void testv24TagWithNonSyncSafeFrame3() throws Exception
+    {
+        File testFile = AbstractTestCase.copyAudioToTmp("Issue96-4.id3","testV1.mp3");
+
+        MP3File mp3File = new MP3File(testFile);
+
+        ID3v24Frame v24frame = (ID3v24Frame) mp3File.getID3v2Tag().getFrame(ID3v24Frames.FRAME_ID_ATTACHED_PICTURE);
+        assertNotNull(v24frame);
+        FrameBodyAPIC fb = (FrameBodyAPIC) v24frame.getBody();
+    }
+
     /** This tests that we work out that the frame is unsynced and read the frame size correctly  and convert to intger
      * this is what most (non-itunes applications do)
      * @throws Exception
@@ -147,7 +164,7 @@ public class ItunesTest extends AbstractTestCase
     }
 
     /** Because last frame is large it has to check that size is unsynced, because no padding
-     *  code have to be careful not to have buffer underlow exception
+     *  code have to be careful not to have buffer underflow exception
       * @throws Exception
      */
     public void testv24TagWithlargeSyncSafeFrameAndNoPadding() throws Exception
