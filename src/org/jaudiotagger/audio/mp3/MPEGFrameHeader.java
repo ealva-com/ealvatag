@@ -56,9 +56,9 @@ public class MPEGFrameHeader
 
     static
     {
-        mpegVersionMap.put(new Integer(VERSION_2_5), "Version 2.5");
-        mpegVersionMap.put(new Integer(VERSION_2)  , "Version 2");
-        mpegVersionMap.put(new Integer(VERSION_1)  , "Version 1");
+        mpegVersionMap.put(new Integer(VERSION_2_5), "MPEG-2.5");
+        mpegVersionMap.put(new Integer(VERSION_2)  , "MPEG-2");
+        mpegVersionMap.put(new Integer(VERSION_1)  , "MPEG-1");
     }
 
     /**
@@ -71,9 +71,9 @@ public class MPEGFrameHeader
 
     static
     {
-        mpegLayerMap.put(new Integer(LAYER_I), "Layer I");
-        mpegLayerMap.put(new Integer(LAYER_II), "Layer II");
-        mpegLayerMap.put(new Integer(LAYER_III), "Layer III");
+        mpegLayerMap.put(new Integer(LAYER_I), "Layer 1");
+        mpegLayerMap.put(new Integer(LAYER_II), "Layer 2");
+        mpegLayerMap.put(new Integer(LAYER_III), "Layer 3");
     }
 
     /**
