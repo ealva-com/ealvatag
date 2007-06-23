@@ -505,6 +505,15 @@ public final class MP3AudioHeader extends AbstractAudioHeader
 
     /**
      *
+     * @return bitrate in kbps, no indicator is provided as to whether or not it is vbr
+     */
+    public long getBitRateAsNumber()
+    {
+        return bitrate;
+    }
+
+    /**
+     *
      * @return the BitRate of the Audio, to distinguish cbr from vbr we add a '~'
      * for vbr.
      */
@@ -520,20 +529,39 @@ public final class MP3AudioHeader extends AbstractAudioHeader
         }
     }
 
+
+
+    /**
+     *
+     * @return the sampling rate in Hz
+     */
+     public int getSampleRateAsNumber()
+    {
+        return mp3FrameHeader.getSamplingRate().intValue();
+    }
+
     /**
 
-     * @return  the sampling rate
+     * @return  the sampling rate as string
      */
     public String getSampleRate()
     {
          return  String.valueOf(mp3FrameHeader.getSamplingRate());
     }
 
+    /**
+     *
+     * @return MPEG Version (1-3)
+     */
     public String getMpegVersion()
     {
         return mp3FrameHeader.getVersionAsString();
     }
 
+    /**
+     *
+     * @return  MPEG Layer (1-3)
+     */
     public String getMpegLayer()
     {
         return mp3FrameHeader.getLayerAsString();
@@ -541,11 +569,11 @@ public final class MP3AudioHeader extends AbstractAudioHeader
 
     /**
      *
-     * @return the format
+     * @return the format of the audio (i.e. MPEG-1 Layer3)
      */
     public String getFormat()
     {
-        return mp3FrameHeader.getVersionAsString()+ mp3FrameHeader.getLayerAsString();
+        return mp3FrameHeader.getVersionAsString() + " " + mp3FrameHeader.getLayerAsString();
     }
 
     /**
@@ -557,6 +585,10 @@ public final class MP3AudioHeader extends AbstractAudioHeader
          return mp3FrameHeader.getChannelModeAsString();
     }
 
+    /**
+     *
+     * @return Emphasis
+     */
     public String getEmphasis()
     {
          return mp3FrameHeader.getEmphasisAsString();
