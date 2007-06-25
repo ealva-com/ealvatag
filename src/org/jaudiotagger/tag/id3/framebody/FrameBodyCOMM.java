@@ -168,7 +168,7 @@ public class FrameBodyCOMM  extends AbstractID3v2FrameBody  implements ID3v24Fra
 
     /**
      * Returns the the text field which holds the comment, adjusted to ensure does not return trailing null
-     * which due to a iTunes bug.
+     * which is due to a iTunes bug.
      *
      * @return the text field
      */
