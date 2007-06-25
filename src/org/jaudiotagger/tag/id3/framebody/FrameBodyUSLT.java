@@ -45,7 +45,9 @@ import java.io.IOException;
  * <tr><td>Content descriptor</td><td>&lt;text string according to encoding&gt; $00 (00)</td></tr>
  * <tr><td>Lyrics/text       </td><td>&lt;full text string according to encoding&gt;</td></tr>
  * </table></p>
- * 
+ *
+ * You can retrieve the first value without the null terminator using {@link #getFirstTextValue}
+ *
  * <p>For more details, please refer to the ID3 specifications:
  * <ul>
  * <li><a href="http://www.id3.org/id3v2.3.0.txt">ID3 v2.3.0 Spec</a>
@@ -175,6 +177,17 @@ public class FrameBodyUSLT extends AbstractID3v2FrameBody implements ID3v23Frame
     public String getLyric()
     {
         return (String) getObjectValue(DataTypes.OBJ_LYRICS);
+    }
+
+    /**
+     * Get first value
+     *
+     * @return value at index 0
+     */
+    public String getFirstTextValue()
+    {
+        TextEncodedStringSizeTerminated text = (TextEncodedStringSizeTerminated)getObject(DataTypes.OBJ_LYRICS);
+        return text.getValueAtIndex(0);
     }
 
     /**
