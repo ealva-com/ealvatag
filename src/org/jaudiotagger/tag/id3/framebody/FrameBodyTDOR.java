@@ -67,8 +67,7 @@ public class FrameBodyTDOR extends AbstractFrameBodyTextInfo implements ID3v24Fr
 
     /**
      * Creates a new FrameBodyTDOR datatype.
-     *
-     * @throws java.io.IOException 
+     *   
      * @throws InvalidTagException 
      */
     public FrameBodyTDOR(ByteBuffer byteBuffer, int frameSize)
