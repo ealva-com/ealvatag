@@ -109,7 +109,7 @@ import java.nio.ByteBuffer;
  * @author : Eric Farng
  * @version $Id$
  */
-public class FrameBodyTMED extends AbstractFrameBodyTextInfo implements ID3v23FrameBody
+public class FrameBodyTMED extends AbstractFrameBodyTextInfo implements ID3v23FrameBody,ID3v24FrameBody
 {
     /**
      * Creates a new FrameBodyTMED datatype.
@@ -136,8 +136,7 @@ public class FrameBodyTMED extends AbstractFrameBodyTextInfo implements ID3v23Fr
 
     /**
      * Creates a new FrameBodyTMED datatype.
-     *
-    * @throws java.io.IOException 
+     *    
      * @throws InvalidTagException 
      */
     public FrameBodyTMED(ByteBuffer byteBuffer, int frameSize)
