@@ -220,6 +220,7 @@ public class ID3v24Frames extends ID3Frames
         multipleFrames.add(FRAME_ID_PRIVATE);
         multipleFrames.add(FRAME_ID_COMMENT);
         multipleFrames.add(FRAME_ID_UNIQUE_FILE_ID);
+        multipleFrames.add(FRAME_ID_UNSYNC_LYRICS);
 
         discardIfFileAlteredFrames = new TreeSet();
         discardIfFileAlteredFrames.add(FRAME_ID_EVENT_TIMING_CODES);
