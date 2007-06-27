@@ -18,7 +18,7 @@ package org.jaudiotagger.tag.id3;
 import java.util.TreeSet;
 
 /**
- * Defines ID3 frames and collections that categorise frames.
+ * Defines ID3 Chapter frames and collections that categorise frames.
  * 
  * <p>For more details, please refer to the ID3 Chapter Frame specifications:
  * <ul>

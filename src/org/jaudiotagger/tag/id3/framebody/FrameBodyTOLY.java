@@ -60,8 +60,7 @@ public class FrameBodyTOLY extends AbstractFrameBodyTextInfo implements ID3v23Fr
 
     /**
      * Creates a new FrameBodyTOLY datatype.
-     *
-     * @throws java.io.IOException 
+     *    
      * @throws InvalidTagException 
      */
     public FrameBodyTOLY(ByteBuffer byteBuffer, int frameSize)

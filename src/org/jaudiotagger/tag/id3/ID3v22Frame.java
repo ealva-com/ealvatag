@@ -79,18 +79,16 @@ public class ID3v22Frame
         {
             bodyIdentifier = ID3v24Frames.FRAME_ID_YEAR;
         }
-        /* Have to check for 2.2 because most dont have own bodythey use 2.3 or 2.4
-         * body to hold the data, the frame is identified by its identifier, the body identifier
-         * is just to create a body suitable for writing the data to
-         */
+        // Have to check for 2.2 because most dont have own bodythey use 2.3 or 2.4
+        // body to hold the data, the frame is identified by its identifier, the body identifier
+        // is just to create a body suitable for writing the data to
         else if (ID3Tags.isID3v22FrameIdentifier(bodyIdentifier))
         {
              bodyIdentifier = (String) ID3Tags.convertFrameID22To24(bodyIdentifier);
         }
 
-        /* Use reflection to map id to frame body, which makes things much easier
-        * to keep things up to date.
-        */
+        // Use reflection to map id to frame body, which makes things much easier
+        // to keep things up to date.
         try
         {
             Class c = Class.forName("org.jaudiotagger.tag.id3.framebody.FrameBody" + bodyIdentifier);
@@ -144,7 +142,7 @@ public class ID3v22Frame
         /** If it is a v2.4 frame is it possible to convert it into a v2.2 frame*/
         if (frame instanceof ID3v24Frame)
         {
-            /* Version between v4 and v2 */
+            // Version between v4 and v2
             identifier = ID3Tags.convertFrameID24To22(frame.getIdentifier());
             if (identifier != null)
             {
@@ -152,10 +150,10 @@ public class ID3v22Frame
                 this.frameBody = (AbstractID3v2FrameBody) ID3Tags.copyObject(frame.getBody());
                 return;
             }
-            /* Is it a known v4 frame*/
+            // Is it a known v4 frame
             else if (ID3Tags.isID3v24FrameIdentifier(frame.getIdentifier()) == true)
             {
-                /* which needs forcing to v2 frame e.g. APIC - PIC */
+                // which needs forcing to v2 frame e.g. APIC - PIC
                 identifier = ID3Tags.forceFrameID24To22(frame.getIdentifier());
                 if(identifier!=null)
                 {
@@ -163,13 +161,13 @@ public class ID3v22Frame
                     this.frameBody = this.readBody(identifier, (AbstractID3v2FrameBody) frame.getBody());
                     return;
                 }
-                /* No mechanism exists to convert it to a v22 frame */
+                // No mechanism exists to convert it to a v22 frame
                 else
                 {
                     throw new InvalidFrameException("Unable to convert v24 frame:"+frame.getIdentifier()+" to a v22 frame");
                 }
             }
-             /** Deprecated frame for v24 */
+            //Deprecated frame for v24
             else if(frame.getBody() instanceof FrameBodyDeprecated)
             {
                 //Was it valid for this tag version, if so try and reconstruct
@@ -188,7 +186,7 @@ public class ID3v22Frame
                     return;
                 }
             }
-            /* Unknown Frame e.g NCON */
+            //Unknown Frame e.g NCON
             else
             {
                 this.frameBody = new FrameBodyUnsupported((FrameBodyUnsupported) frame.getBody());
@@ -197,7 +195,7 @@ public class ID3v22Frame
                 return;
             }
         }
-        /** If it is a v2.3 frame is it possible to convert it into a v2.2 frame*/
+        //If it is a v2.3 frame is it possible to convert it into a v2.2 frame
         else if (frame instanceof ID3v23Frame)
         {
             identifier = ID3Tags.convertFrameID23To22(frame.getIdentifier());
@@ -207,7 +205,7 @@ public class ID3v22Frame
                 this.frameBody = (AbstractID3v2FrameBody) ID3Tags.copyObject(frame.getBody());
                 return;
             }
-            /** Is it a known v3 frame which needs forcing to v2 frame e.g. APIC - PIC */
+            // Is it a known v3 frame which needs forcing to v2 frame e.g. APIC - PIC
             else if (ID3Tags.isID3v23FrameIdentifier(frame.getIdentifier()) == true)
             {
                 identifier = ID3Tags.forceFrameID23To22(frame.getIdentifier());
@@ -217,13 +215,13 @@ public class ID3v22Frame
                     this.frameBody = this.readBody(identifier, (AbstractID3v2FrameBody) frame.getBody());
                     return;
                 }
-                /* No mechanism exists to convert it to a v22 frame */
+                // No mechanism exists to convert it to a v22 frame
                 else
                 {
                     throw new InvalidFrameException("Unable to convert v23 frame:"+frame.getIdentifier()+" to a v22 frame");
                 }
             }
-             /** Deprecated frame for v23 */
+            //Deprecated frame for v23
             else if(frame.getBody() instanceof FrameBodyDeprecated)
             {
                 //Was it valid for this tag version, if so try and reconstruct
@@ -242,7 +240,7 @@ public class ID3v22Frame
                     return;
                 }
             }
-            /** Unknown Frame e.g NCON */
+            // Unknown Frame e.g NCON
             else
             {
                 this.frameBody = new FrameBodyUnsupported((FrameBodyUnsupported) frame.getBody());

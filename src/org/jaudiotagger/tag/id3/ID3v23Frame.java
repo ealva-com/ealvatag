@@ -434,6 +434,9 @@ public class ID3v23Frame
                 frameBodyBuffer.limit(realFrameSize);
                 frameBody = readBody(id,frameBodyBuffer, realFrameSize);
             }
+            //TODO code seems to assume that if the frame created is not a v23FrameBody
+            //it should be deprecated, but what about if somehow a V24Frame has been put into a V23 Tag, shouldnt
+            //it then be created as FrameBodyUnsupported
             if(!(frameBody instanceof ID3v23FrameBody))
             {
                 logger.info(getLoggingFilename()+":Converted frame body with:"+identifier+" to deprecated framebody");

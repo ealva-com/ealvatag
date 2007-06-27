@@ -60,9 +60,7 @@ public class FrameBodyTIT3 extends AbstractFrameBodyTextInfo implements ID3v24Fr
 
     /**
      * Creates a new FrameBodyTIT3 datatype.
-     *
-     * @param file 
-     * @throws java.io.IOException 
+     *    
      * @throws InvalidTagException 
      */
     public FrameBodyTIT3(ByteBuffer byteBuffer, int frameSize)

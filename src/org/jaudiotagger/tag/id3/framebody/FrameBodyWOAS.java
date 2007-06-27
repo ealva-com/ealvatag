@@ -59,8 +59,7 @@ public class FrameBodyWOAS extends AbstractFrameBodyUrlLink  implements ID3v24Fr
 
     /**
      * Creates a new FrameBodyWOAS datatype.
-     *
-     * @throws java.io.IOException 
+     * 
      * @throws InvalidTagException 
      */
     public FrameBodyWOAS(ByteBuffer byteBuffer, int frameSize)

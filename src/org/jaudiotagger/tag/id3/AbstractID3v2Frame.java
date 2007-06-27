@@ -188,7 +188,7 @@ public abstract class AbstractID3v2Frame
             Constructor construct = c.getConstructor(constructorParameterTypes);
             frameBody = (AbstractID3v2FrameBody) (construct.newInstance(constructorParameterValues));
         }
-        //No class defind for this frame type,use FrameUnsupported
+        //No class defined for this frame type,use FrameUnsupported
         catch (ClassNotFoundException cex)
         {
             logger.info(getLoggingFilename()+":"+"Identifier not recognised:" + identifier + " using FrameBodyUnsupported");

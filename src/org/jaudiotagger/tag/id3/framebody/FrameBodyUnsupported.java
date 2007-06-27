@@ -32,10 +32,12 @@ import org.jaudiotagger.tag.InvalidTagException;
 import java.nio.ByteBuffer;
 
 /**
- * Represents a framebody for a frame identifier that is not defined for the tag version. It is possible that
- * the identifier is valid for a later version but not the version that this frame belongs to. If the identifier is
- * valid for an earlier tag version but not this version then this class should not be used instead use
- * FrameBodyDeprecated. The body consists  of an array of bytes representing all the bytes in the body.
+ * Represents a framebody for a frame identifier jaudiotagger has not implemented a framebody for.
+ *
+ * This is likley to be because the FrameBody is not specified in the Specification but it may just be because the code
+ * has yet to be written, the library uses this framebody when it cant find an alternative. This is different to the
+ * ID3v2ExtensionFrameBody Interface which should be implemented by frame bodies that are non standard such as
+ * iTunes compilation frame (TCMP) but are commonly used.
  */
 public class FrameBodyUnsupported extends AbstractID3v2FrameBody implements ID3v24FrameBody,ID3v23FrameBody,ID3v22FrameBody
 {

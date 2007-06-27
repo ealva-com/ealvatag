@@ -18,8 +18,11 @@ package org.jaudiotagger.tag.id3;
 import java.util.*;
 
 /**
- * Defines ID3 frames and collections that categorise frames within an ID3v23 tag.
- * 
+ * Defines ID3v23 frames and collections that categorise frames within an ID3v23 tag.
+ *
+ * You can include frames here that are not officially supported as long as they can be used within an
+ * ID3v23Tag
+ *
  * @author Paul Taylor
  * @version $Id$
  */
@@ -103,7 +106,7 @@ public class ID3v23Frames extends ID3Frames
     public static final String FRAME_ID_V3_URL_SOURCE_WEB = "WOAS";
     public static final String FRAME_ID_V3_USER_DEFINED_INFO = "TXXX";
     public static final String FRAME_ID_V3_USER_DEFINED_URL = "WXXX";
-
+    public static final String FRAME_ID_V3_IS_COMPILATION = "TCMP";
 
     private static ID3v23Frames id3v23Frames;
 
@@ -118,7 +121,86 @@ public class ID3v23Frames extends ID3Frames
 
     private ID3v23Frames()
     {
-        /** The defined v23 frames, every one define above must have a description */
+        // The defined v23 frames,
+        supportedFrames.add(FRAME_ID_V3_ACCOMPANIMENT);
+        supportedFrames.add(FRAME_ID_V3_ALBUM);
+        supportedFrames.add(FRAME_ID_V3_ARTIST);
+        supportedFrames.add(FRAME_ID_V3_ATTACHED_PICTURE);
+        supportedFrames.add(FRAME_ID_V3_AUDIO_ENCRYPTION);
+        supportedFrames.add(FRAME_ID_V3_BPM);
+        supportedFrames.add(FRAME_ID_V3_COMMENT);
+        supportedFrames.add(FRAME_ID_V3_COMMERCIAL_FRAME);
+        supportedFrames.add(FRAME_ID_V3_COMPOSER);
+        supportedFrames.add(FRAME_ID_V3_CONDUCTOR);
+        supportedFrames.add(FRAME_ID_V3_CONTENT_GROUP_DESC);
+        supportedFrames.add(FRAME_ID_V3_COPYRIGHTINFO);
+        supportedFrames.add(FRAME_ID_V3_ENCODEDBY);
+        supportedFrames.add(FRAME_ID_V3_ENCRYPTION);
+        supportedFrames.add(FRAME_ID_V3_EQUALISATION);
+        supportedFrames.add(FRAME_ID_V3_EVENT_TIMING_CODES);
+        supportedFrames.add(FRAME_ID_V3_FILE_OWNER);
+        supportedFrames.add(FRAME_ID_V3_FILE_TYPE);
+        supportedFrames.add(FRAME_ID_V3_GENERAL_ENCAPS_OBJECT);
+        supportedFrames.add(FRAME_ID_V3_GENRE);
+        supportedFrames.add(FRAME_ID_V3_GROUP_ID_REG );
+        supportedFrames.add(FRAME_ID_V3_HW_SW_SETTINGS);
+        supportedFrames.add(FRAME_ID_V3_INITIAL_KEY);
+        supportedFrames.add(FRAME_ID_V3_IPLS);
+        supportedFrames.add(FRAME_ID_V3_ISRC);
+        supportedFrames.add(FRAME_ID_V3_LANGUAGE);
+        supportedFrames.add(FRAME_ID_V3_LENGTH);
+        supportedFrames.add(FRAME_ID_V3_LINKED_INFO);
+        supportedFrames.add(FRAME_ID_V3_LYRICIST);
+        supportedFrames.add(FRAME_ID_V3_MEDIA_TYPE);
+        supportedFrames.add(FRAME_ID_V3_MPEG_LOCATION_LOOKUP_TABLE);
+        supportedFrames.add(FRAME_ID_V3_MUSIC_CD_ID);
+        supportedFrames.add(FRAME_ID_V3_ORIGARTIST);
+        supportedFrames.add(FRAME_ID_V3_ORIG_FILENAME);
+        supportedFrames.add(FRAME_ID_V3_ORIG_LYRICIST);
+        supportedFrames.add(FRAME_ID_V3_ORIG_TITLE);
+        supportedFrames.add(FRAME_ID_V3_OWNERSHIP);
+        supportedFrames.add(FRAME_ID_V3_PLAYLIST_DELAY);
+        supportedFrames.add(FRAME_ID_V3_PLAY_COUNTER);
+        supportedFrames.add(FRAME_ID_V3_POPULARIMETER);
+        supportedFrames.add(FRAME_ID_V3_POSITION_SYNC);
+        supportedFrames.add(FRAME_ID_V3_PRIVATE);
+        supportedFrames.add(FRAME_ID_V3_PUBLISHER);
+        supportedFrames.add(FRAME_ID_V3_RADIO_NAME);
+        supportedFrames.add(FRAME_ID_V3_RADIO_OWNER );
+        supportedFrames.add(FRAME_ID_V3_RECOMMENDED_BUFFER_SIZE);
+        supportedFrames.add(FRAME_ID_V3_RELATIVE_VOLUME_ADJUSTMENT);
+        supportedFrames.add(FRAME_ID_V3_REMIXED);
+        supportedFrames.add(FRAME_ID_V3_REVERB);
+        supportedFrames.add(FRAME_ID_V3_SET);
+        supportedFrames.add(FRAME_ID_V3_SYNC_LYRIC);
+        supportedFrames.add(FRAME_ID_V3_SYNC_TEMPO);
+        supportedFrames.add(FRAME_ID_V3_TDAT);
+        supportedFrames.add(FRAME_ID_V3_TERMS_OF_USE);
+        supportedFrames.add(FRAME_ID_V3_TIME);
+        supportedFrames.add(FRAME_ID_V3_TITLE);
+        supportedFrames.add(FRAME_ID_V3_TITLE_REFINEMENT);
+        supportedFrames.add(FRAME_ID_V3_TORY);
+        supportedFrames.add(FRAME_ID_V3_TRACK);
+        supportedFrames.add(FRAME_ID_V3_TRDA);
+        supportedFrames.add(FRAME_ID_V3_TSIZ);
+        supportedFrames.add(FRAME_ID_V3_TYER);
+        supportedFrames.add(FRAME_ID_V3_UNIQUE_FILE_ID);
+        supportedFrames.add(FRAME_ID_V3_UNSYNC_LYRICS);
+        supportedFrames.add(FRAME_ID_V3_URL_ARTIST_WEB);
+        supportedFrames.add(FRAME_ID_V3_URL_COMMERCIAL);
+        supportedFrames.add(FRAME_ID_V3_URL_COPYRIGHT);
+        supportedFrames.add(FRAME_ID_V3_URL_FILE_WEB);
+        supportedFrames.add(FRAME_ID_V3_URL_OFFICIAL_RADIO);
+        supportedFrames.add(FRAME_ID_V3_URL_PAYMENT);
+        supportedFrames.add(FRAME_ID_V3_URL_PUBLISHERS);
+        supportedFrames.add(FRAME_ID_V3_URL_SOURCE_WEB);
+        supportedFrames.add(FRAME_ID_V3_USER_DEFINED_INFO);
+        supportedFrames.add(FRAME_ID_V3_USER_DEFINED_URL);
+
+        //Extension
+        extensionFrames.add(FRAME_ID_V3_IS_COMPILATION);
+
+        // Map frameid to a name
         idToValue.put(FRAME_ID_V3_ACCOMPANIMENT, "Text: Band/Orchestra/Accompaniment");
         idToValue.put(FRAME_ID_V3_ALBUM, "Text: Album/Movie/Show title");
         idToValue.put(FRAME_ID_V3_ARTIST, "Text: Lead artist(s)/Lead performer(s)/Soloist(s)/Performing group");
@@ -193,9 +275,10 @@ public class ID3v23Frames extends ID3Frames
         idToValue.put(FRAME_ID_V3_URL_SOURCE_WEB, "URL: Official audio source webpage");
         idToValue.put(FRAME_ID_V3_USER_DEFINED_INFO, "User defined text information frame");
         idToValue.put(FRAME_ID_V3_USER_DEFINED_URL, "User defined URL link frame");
+        idToValue.put(FRAME_ID_V3_IS_COMPILATION,"Is Compilation");
 
         createMaps();
-        multipleFrames = new TreeSet();
+
         multipleFrames.add(FRAME_ID_V3_USER_DEFINED_INFO);
         multipleFrames.add(FRAME_ID_V3_USER_DEFINED_URL);
         multipleFrames.add(FRAME_ID_V3_ATTACHED_PICTURE);
@@ -204,7 +287,7 @@ public class ID3v23Frames extends ID3Frames
         multipleFrames.add(FRAME_ID_V3_UNIQUE_FILE_ID);
         multipleFrames.add(FRAME_ID_V3_UNSYNC_LYRICS);
 
-        discardIfFileAlteredFrames = new TreeSet();
+        
         discardIfFileAlteredFrames.add(FRAME_ID_V3_EVENT_TIMING_CODES);
         discardIfFileAlteredFrames.add(FRAME_ID_V3_EQUALISATION);
         discardIfFileAlteredFrames.add(FRAME_ID_V3_MPEG_LOCATION_LOOKUP_TABLE);

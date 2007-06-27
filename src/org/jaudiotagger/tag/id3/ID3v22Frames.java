@@ -18,8 +18,11 @@ package org.jaudiotagger.tag.id3;
 import java.util.*;
 
 /**
- * Defines ID3 frames and collections that categorise frames.
- * 
+ * Defines ID3v22 frames and collections that categorise frames within an ID3v22 tag.
+ * <p/>
+ * You can include frames here that are not officially supported as long as they can be used within an
+ * ID3v22Tag
+ *
  * @author Paul Taylor
  * @version $Id$
  */
@@ -92,6 +95,7 @@ public class ID3v22Frames extends ID3Frames
     public static final String FRAME_ID_V2_USER_DEFINED_INFO = "TXX";
     public static final String FRAME_ID_V2_USER_DEFINED_URL = "WXX";
 
+    public static final String FRAME_ID_V2_IS_COMPILATION = "TCP";
 
 
     private static ID3v22Frames id3v22Frames;
@@ -107,7 +111,77 @@ public class ID3v22Frames extends ID3Frames
 
     private ID3v22Frames()
     {
-        /** The defined v22 frames */
+        // The defined v22 frames
+        supportedFrames.add(FRAME_ID_V2_ACCOMPANIMENT);
+        supportedFrames.add(FRAME_ID_V2_ALBUM);
+        supportedFrames.add(FRAME_ID_V2_ARTIST);
+        supportedFrames.add(FRAME_ID_V2_ATTACHED_PICTURE);
+        supportedFrames.add(FRAME_ID_V2_AUDIO_ENCRYPTION);
+        supportedFrames.add(FRAME_ID_V2_BPM);
+        supportedFrames.add(FRAME_ID_V2_COMMENT);
+        supportedFrames.add(FRAME_ID_V2_COMPOSER);
+        supportedFrames.add(FRAME_ID_V2_CONDUCTOR);
+        supportedFrames.add(FRAME_ID_V2_CONTENT_GROUP_DESC);
+        supportedFrames.add(FRAME_ID_V2_COPYRIGHTINFO);
+        supportedFrames.add(FRAME_ID_V2_ENCODEDBY);
+        supportedFrames.add(FRAME_ID_V2_ENCRYPTED_FRAME);
+        supportedFrames.add(FRAME_ID_V2_EQUALISATION);
+        supportedFrames.add(FRAME_ID_V2_EVENT_TIMING_CODES);
+        supportedFrames.add(FRAME_ID_V2_FILE_TYPE);
+        supportedFrames.add(FRAME_ID_V2_GENERAL_ENCAPS_OBJECT);
+        supportedFrames.add(FRAME_ID_V2_GENRE);
+        supportedFrames.add(FRAME_ID_V2_HW_SW_SETTINGS);
+        supportedFrames.add(FRAME_ID_V2_INITIAL_KEY);
+        supportedFrames.add(FRAME_ID_V2_IPLS);
+        supportedFrames.add(FRAME_ID_V2_ISRC);
+        supportedFrames.add(FRAME_ID_V2_LANGUAGE);
+        supportedFrames.add(FRAME_ID_V2_LENGTH);
+        supportedFrames.add(FRAME_ID_V2_LINKED_INFO);
+        supportedFrames.add(FRAME_ID_V2_LYRICIST);
+        supportedFrames.add(FRAME_ID_V2_MEDIA_TYPE);
+        supportedFrames.add(FRAME_ID_V2_MPEG_LOCATION_LOOKUP_TABLE);
+        supportedFrames.add(FRAME_ID_V2_MUSIC_CD_ID);
+        supportedFrames.add(FRAME_ID_V2_ORIGARTIST);
+        supportedFrames.add(FRAME_ID_V2_ORIG_FILENAME);
+        supportedFrames.add(FRAME_ID_V2_ORIG_LYRICIST);
+        supportedFrames.add(FRAME_ID_V2_ORIG_TITLE);
+        supportedFrames.add(FRAME_ID_V2_PLAYLIST_DELAY);
+        supportedFrames.add(FRAME_ID_V2_PLAY_COUNTER);
+        supportedFrames.add(FRAME_ID_V2_POPULARIMETER);
+        supportedFrames.add(FRAME_ID_V2_PUBLISHER);
+        supportedFrames.add(FRAME_ID_V2_RECOMMENDED_BUFFER_SIZE);
+        supportedFrames.add(FRAME_ID_V2_RELATIVE_VOLUME_ADJUSTMENT);
+        supportedFrames.add(FRAME_ID_V2_REMIXED);
+        supportedFrames.add(FRAME_ID_V2_REVERB);
+        supportedFrames.add(FRAME_ID_V2_SET);
+        supportedFrames.add(FRAME_ID_V2_SYNC_LYRIC);
+        supportedFrames.add(FRAME_ID_V2_SYNC_TEMPO);
+        supportedFrames.add(FRAME_ID_V2_TDAT);
+        supportedFrames.add(FRAME_ID_V2_TIME);
+        supportedFrames.add(FRAME_ID_V2_TITLE);
+        supportedFrames.add(FRAME_ID_V2_TITLE_REFINEMENT);
+        supportedFrames.add(FRAME_ID_V2_TORY);
+        supportedFrames.add(FRAME_ID_V2_TRACK);
+        supportedFrames.add(FRAME_ID_V2_TRDA);
+        supportedFrames.add(FRAME_ID_V2_TSIZ);
+        supportedFrames.add(FRAME_ID_V2_TYER);
+        supportedFrames.add(FRAME_ID_V2_UNIQUE_FILE_ID);
+        supportedFrames.add(FRAME_ID_V2_UNSYNC_LYRICS);
+        supportedFrames.add(FRAME_ID_V2_URL_ARTIST_WEB);
+        supportedFrames.add(FRAME_ID_V2_URL_COMMERCIAL);
+        supportedFrames.add(FRAME_ID_V2_URL_COPYRIGHT);
+        supportedFrames.add(FRAME_ID_V2_URL_FILE_WEB);
+        supportedFrames.add(FRAME_ID_V2_URL_OFFICIAL_RADIO);
+        supportedFrames.add(FRAME_ID_V2_URL_PAYMENT);
+        supportedFrames.add(FRAME_ID_V2_URL_PUBLISHERS);
+        supportedFrames.add(FRAME_ID_V2_URL_SOURCE_WEB);
+        supportedFrames.add(FRAME_ID_V2_USER_DEFINED_INFO);
+        supportedFrames.add(FRAME_ID_V2_USER_DEFINED_URL);
+
+        //Extension
+        extensionFrames.add(FRAME_ID_V2_IS_COMPILATION);
+
+        // Map frameid to a name
         idToValue.put(FRAME_ID_V2_ACCOMPANIMENT, "Text: Band/Orchestra/Accompaniment");
         idToValue.put(FRAME_ID_V2_ALBUM, "Text: Album/Movie/Show title");
         idToValue.put(FRAME_ID_V2_ARTIST, "Text: Lead artist(s)/Lead performer(s)/Soloist(s)/Performing group");
@@ -173,14 +247,12 @@ public class ID3v22Frames extends ID3Frames
         idToValue.put(FRAME_ID_V2_URL_SOURCE_WEB, "URL: Official audio source webpage");
         idToValue.put(FRAME_ID_V2_USER_DEFINED_INFO, "User defined text information frame");
         idToValue.put(FRAME_ID_V2_USER_DEFINED_URL, "User defined URL link frame");
-      
+        idToValue.put(FRAME_ID_V2_IS_COMPILATION,"Is Compilation");
+
         createMaps();
 
-        multipleFrames = new TreeSet();
         multipleFrames.add(FRAME_ID_V2_ATTACHED_PICTURE);
         multipleFrames.add(FRAME_ID_V2_UNIQUE_FILE_ID);
 
-
-        discardIfFileAlteredFrames = new TreeSet();
     }
 }

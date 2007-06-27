@@ -20,7 +20,9 @@ import org.jaudiotagger.tag.datatype.AbstractStringStringValuePair;
 import java.util.*;
 
 /**
- * Defines ID3 frames and collections that categorise frames.
+ * Subclasses Defines ID3 frames for their Tag Version
+ *
+ * Here we specify how frames are mapped between different Tag Versions
  * 
  * @author Paul Taylor
  * @version $Id$
@@ -30,12 +32,22 @@ public abstract class ID3Frames extends AbstractStringStringValuePair
     /**
      * Holds frames whereby multiple occurences are allowed
      */
-    protected TreeSet multipleFrames;
+    protected TreeSet multipleFrames = new TreeSet();
 
     /**
      * These frames should be lost if file changes
      */
-    protected TreeSet discardIfFileAlteredFrames;
+    protected TreeSet discardIfFileAlteredFrames= new TreeSet();
+
+    /**
+     * These frames are part of the Official Specification for that Tag Version
+     */
+    protected TreeSet supportedFrames = new TreeSet();
+
+    /**
+     * These frames are extensions to the  Specification for that Tag Version
+     */
+    protected TreeSet extensionFrames = new TreeSet();
 
     /**
      * If file changes discard these frames
@@ -54,6 +66,27 @@ public abstract class ID3Frames extends AbstractStringStringValuePair
     }
 
     /**
+     *
+     * @param frameID
+     * @return true if frames with this id are part of the specification
+     */
+    public boolean isSupportedFrames(String frameID)
+    {
+        return supportedFrames.contains(frameID);
+    }
+
+    /**
+     *
+     * @param frameID
+     *
+     * @return true if frame is a known extension
+     */
+    public boolean isExtensionFrames(String frameID)
+    {
+        return extensionFrames.contains(frameID);
+    }
+
+    /**
      * Mapping from v22 to v23
      */
     public static final HashMap convertv22Tov23 = new LinkedHashMap();
@@ -68,17 +101,14 @@ public abstract class ID3Frames extends AbstractStringStringValuePair
 
     private static void loadID3v23ID3v24Mapping()
     {
+        // Define the mapping from v23 to v24 only maps values where
+        // the v23 ID is not a v24 ID and where the translation from v23 to v24
+        // ID does not affect the framebody.None exist because most v23 mappings
+        // are identical to v24 therefore no mapping required and the ones that
+        // are different need to be forced.
+        //@TODO none exist.
 
-
-        /**Define the mapping from v23 to v24 only maps values where
-         *  the v23 ID is not a v24 ID and where the translation from v23 to v24
-         *  ID does not affect the framebody.None exist because most v23 mappings
-         *  are identical to v24 therefore no mapping required and the ones that
-         *  are different need to be forced.
-         *  @todo none exist.
-         */
-
-        /** Force v23 to v24 These are deprecated and need to do a forced mapping */
+        // Force v23 to v24 These are deprecated and need to do a forced mapping
         forcev23Tov24.put(ID3v23Frames.FRAME_ID_V3_RELATIVE_VOLUME_ADJUSTMENT, ID3v24Frames.FRAME_ID_RELATIVE_VOLUME_ADJUSTMENT2);
         forcev23Tov24.put(ID3v23Frames.FRAME_ID_V3_EQUALISATION, ID3v24Frames.FRAME_ID_EQUALISATION2);
         forcev23Tov24.put(ID3v23Frames.FRAME_ID_V3_IPLS, ID3v24Frames.FRAME_ID_INVOLVED_PEOPLE);
@@ -88,8 +118,9 @@ public abstract class ID3Frames extends AbstractStringStringValuePair
         forcev23Tov24.put(ID3v23Frames.FRAME_ID_V3_TRDA, ID3v24Frames.FRAME_ID_YEAR);
         forcev23Tov24.put(ID3v23Frames.FRAME_ID_V3_TYER, ID3v24Frames.FRAME_ID_YEAR);
 
-        /** Force v24 to v23, TDRC is a 1M relationship handled specially.
-        /** @todo RELATIVE_VOLUME,EQUALISATION  */
+        // Note Force v24 to v23, TDRC is a 1M relationship handled specially.
+        // @TODO RELATIVE_VOLUME,EQUALISATION
+        // Used to be a special frame now a text frame
         forcev24Tov23.put(ID3v24Frames.FRAME_ID_INVOLVED_PEOPLE,ID3v23Frames.FRAME_ID_V3_IPLS);
 
     }
@@ -168,8 +199,9 @@ public abstract class ID3Frames extends AbstractStringStringValuePair
         convertv22Tov23.put(ID3v22Frames.FRAME_ID_V2_USER_DEFINED_INFO, ID3v23Frames.FRAME_ID_V3_USER_DEFINED_INFO);
         convertv22Tov23.put(ID3v22Frames.FRAME_ID_V2_USER_DEFINED_URL, ID3v23Frames.FRAME_ID_V3_USER_DEFINED_URL);
         convertv22Tov23.put(ID3v22Frames.FRAME_ID_V2_TITLE, ID3v23Frames.FRAME_ID_V3_TITLE);
+        convertv22Tov23.put(ID3v22Frames.FRAME_ID_V2_IS_COMPILATION, ID3v23Frames.FRAME_ID_V3_IS_COMPILATION);
 
-        /** v23 to v22 The translation is both way */
+        // v23 to v22 The translation is both way
         iterator = convertv22Tov23.keySet().iterator();
         while (iterator.hasNext())
         {
@@ -178,10 +210,10 @@ public abstract class ID3Frames extends AbstractStringStringValuePair
             convertv23Tov22.put(value, key);
         }
 
-        /** Force v22 to v23,  Extra fields in v23 version */
+        // Force v22 to v23,  Extra fields in v23 version
         forcev22Tov23.put(ID3v22Frames.FRAME_ID_V2_ATTACHED_PICTURE, ID3v23Frames.FRAME_ID_V3_ATTACHED_PICTURE);
 
-        /** Force v23 to v22 */
+        // Force v23 to v22
         forcev23Tov22.put(ID3v23Frames.FRAME_ID_V3_ATTACHED_PICTURE, ID3v22Frames.FRAME_ID_V2_ATTACHED_PICTURE);
     }
 
@@ -190,4 +222,6 @@ public abstract class ID3Frames extends AbstractStringStringValuePair
         loadID3v22ID3v23Mapping();
         loadID3v23ID3v24Mapping();
     }
+
+
 }

@@ -59,8 +59,7 @@ public class FrameBodyWPAY extends AbstractFrameBodyUrlLink  implements ID3v24Fr
 
     /**
      * Creates a new FrameBodyWPAY datatype.
-     *
-     * @throws java.io.IOException 
+     *   
      * @throws InvalidTagException 
      */
     public FrameBodyWPAY(ByteBuffer byteBuffer, int frameSize)

@@ -100,11 +100,10 @@ public class ID3v24Frame
             encodingFlags = new EncodingFlags();
         }
 
-        /** Convert Identifier. If the id was a known id for the original
-         *  version we should be able to convert it to an v24 frame, although it may mean minor
-         *  modification to the data. If it was not recognised originally it should remain
-         *  unknown.
-         */
+        // Convert Identifier. If the id was a known id for the original
+        // version we should be able to convert it to an v24 frame, although it may mean minor
+        // modification to the data. If it was not recognised originally it should remain
+        // unknown.
         if (frame instanceof ID3v23Frame)
         {
             // Is it a straight conversion e.g TALB - TALB
@@ -128,7 +127,7 @@ public class ID3v24Frame
                     return;
                 }
                 // No mechanism exists to convert it to a v24 frame, e.g deprecated frame e.g TSIZ, so hold
-                //  as a deprecated frame consisting of an array of bytes*/
+                // as a deprecated frame consisting of an array of bytes*/
                 else
                 {
                     this.frameBody = new FrameBodyDeprecated((AbstractID3v2FrameBody) frame.getBody());
@@ -151,7 +150,7 @@ public class ID3v24Frame
         }
         else if (frame instanceof ID3v22Frame)
         {
-            /** Is it a straight conversion from v2 to v4 (e.g TAl - TALB) */
+            //Is it a straight conversion from v2 to v4 (e.g TAl - TALB)
             identifier = ID3Tags.convertFrameID22To24(frame.getIdentifier());
             if (identifier != null)
             {
@@ -160,7 +159,7 @@ public class ID3v24Frame
                 this.frameBody.setHeader(this);
                 return;
             }
-            /** Can we convert from v2 to v3 easily (e.g TYE - TYER) */
+            // Can we convert from v2 to v3 easily (e.g TYE - TYER)
             identifier = ID3Tags.convertFrameID22To23(frame.getIdentifier());
             if (identifier != null)
             {
@@ -174,7 +173,7 @@ public class ID3v24Frame
                 this.frameBody.setHeader(this);
                 return;
             }
-            /** Is it a known v2 frame which needs forcing to v4 frame e.g PIC - APIC */
+            // Is it a known v2 frame which needs forcing to v4 frame e.g PIC - APIC
             else if (ID3Tags.isID3v22FrameIdentifier(frame.getIdentifier()) == true)
             {
                 //Force v2 to v3
@@ -186,7 +185,7 @@ public class ID3v24Frame
                     this.frameBody.setHeader(this);
                     return;
                 }
-                /* No mechanism exists to convert it to a v24 frame */
+                // No mechanism exists to convert it to a v24 frame
                 else
                 {
                     this.frameBody = new FrameBodyDeprecated((AbstractID3v2FrameBody) frame.getBody());
@@ -196,7 +195,7 @@ public class ID3v24Frame
                     return;
                 }
             }
-            /** Unknown Frame */
+            // Unknown Frame
             else
             {
                 this.frameBody = new FrameBodyUnsupported((FrameBodyUnsupported) frame.getBody());
@@ -595,7 +594,7 @@ public class ID3v24Frame
         try
         {
             frameBody = readBody(identifier,  frameBodyBuffer, syncSize);
-            if (!(frameBody instanceof ID3v24FrameBody))
+            if ((!(frameBody instanceof ID3v24FrameBody))&&(!(frameBody instanceof ID3v2ExtensionFrameBody)))
             {
                 logger.info(getLoggingFilename()+":"+"Converted frame body with:" + identifier + " to deprecated framebody");
                 frameBody = new FrameBodyDeprecated((AbstractID3v2FrameBody) frameBody);
@@ -932,8 +931,5 @@ public class ID3v24Frame
         encodingFlags.createStructure();
         frameBody.createStructure();
         MP3File.getStructureFormatter().closeHeadingElement(TYPE_FRAME);
-
     }
-
-
 }
