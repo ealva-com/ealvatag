@@ -48,6 +48,14 @@ public class FrameBodyRVAD extends AbstractID3v2FrameBody implements ID3v23Frame
     }
 
 
+     /**
+     * Convert from V4 to V3 Frame
+     */
+    public FrameBodyRVAD(FrameBodyRVA2 body)
+    {
+        setObjectValue(DataTypes.OBJ_DATA, body.getObjectValue(DataTypes.OBJ_DATA));
+    }
+
     /**
      * Creates a new FrameBodyRVAD datatype.
      *

@@ -74,6 +74,51 @@ public class ID3v24Frame
         encodingFlags = new EncodingFlags(((ID3v23Frame) frame).getEncodingFlags().getFlags());
     }
 
+     private void createV24FrameFromV23Frame(ID3v23Frame frame)throws InvalidFrameException
+     {
+        // Is it a straight conversion e.g TALB - TALB
+        identifier = ID3Tags.convertFrameID23To24(frame.getIdentifier());
+        if (identifier != null)
+        {
+            logger.info("V3:Orig id is:" + frame.getIdentifier() + ":New id is:" + identifier);
+            this.frameBody = (AbstractID3v2FrameBody) ID3Tags.copyObject(frame.getBody());
+            this.frameBody.setHeader(this);
+            return;
+        }
+        // Is it a known v3 frame which needs forcing to v4 frame e.g. TYER - TDRC
+        else if (ID3Tags.isID3v23FrameIdentifier(frame.getIdentifier()) == true)
+        {
+            identifier = ID3Tags.forceFrameID23To24(frame.getIdentifier());
+            if (identifier != null)
+            {
+                logger.info("V3:Orig id is:" + frame.getIdentifier() + ":New id is:" + identifier);
+                this.frameBody = this.readBody(identifier, (AbstractID3v2FrameBody) frame.getBody());
+                this.frameBody.setHeader(this);
+                return;
+            }
+            // No mechanism exists to convert it to a v24 frame, e.g deprecated frame e.g TSIZ, so hold
+            // as a deprecated frame consisting of an array of bytes*/
+            else
+            {
+                this.frameBody = new FrameBodyDeprecated((AbstractID3v2FrameBody) frame.getBody());
+                this.frameBody.setHeader(this);
+                identifier = frame.getIdentifier();
+                logger.info("V3:Deprecated:Orig id is:" + frame.getIdentifier() + ":New id is:" + identifier);
+                return;
+            }
+
+        }
+        // Unknown Frame e.g NCON or TDRL (because TDRL unknown to V23)
+        else
+        {
+            this.frameBody = new FrameBodyUnsupported((FrameBodyUnsupported) frame.getBody());
+            this.frameBody.setHeader(this);
+            identifier = frame.getIdentifier();
+            logger.info("V3:Unknown:Orig id is:" + frame.getIdentifier() + ":New id is:" + identifier);
+            return;
+        }
+     }
+
     /**
      * Creates a new ID3v2_4Frame datatype based on another frame of different version
      * Converts the framebody to the equivalent v24 framebody or to UnsupportedFrameBody if identifier
@@ -82,7 +127,7 @@ public class ID3v24Frame
      * @param frame to construct a new frame from
      */
     public ID3v24Frame(AbstractID3v2Frame frame) throws InvalidFrameException
-    {
+    {           
         //Should not be called
         if ((frame instanceof ID3v24Frame == true))
         {
@@ -106,105 +151,15 @@ public class ID3v24Frame
         // unknown.
         if (frame instanceof ID3v23Frame)
         {
-            // Is it a straight conversion e.g TALB - TALB
-            identifier = ID3Tags.convertFrameID23To24(frame.getIdentifier());
-            if (identifier != null)
-            {
-                logger.info("V3:Orig id is:" + frame.getIdentifier() + ":New id is:" + identifier);
-                this.frameBody = (AbstractID3v2FrameBody) ID3Tags.copyObject(frame.getBody());
-                this.frameBody.setHeader(this);
-                return;
-            }
-            // Is it a known v3 frame which needs forcing to v4 frame e.g. TYER - TDRC
-            else if (ID3Tags.isID3v23FrameIdentifier(frame.getIdentifier()) == true)
-            {
-                identifier = ID3Tags.forceFrameID23To24(frame.getIdentifier());
-                if (identifier != null)
-                {
-                    logger.info("V3:Orig id is:" + frame.getIdentifier() + ":New id is:" + identifier);
-                    this.frameBody = this.readBody(identifier, (AbstractID3v2FrameBody) frame.getBody());
-                    this.frameBody.setHeader(this);
-                    return;
-                }
-                // No mechanism exists to convert it to a v24 frame, e.g deprecated frame e.g TSIZ, so hold
-                // as a deprecated frame consisting of an array of bytes*/
-                else
-                {
-                    this.frameBody = new FrameBodyDeprecated((AbstractID3v2FrameBody) frame.getBody());
-                    this.frameBody.setHeader(this);
-                    identifier = frame.getIdentifier();
-                    logger.info("V3:Deprecated:Orig id is:" + frame.getIdentifier() + ":New id is:" + identifier);
-                    return;
-                }
-
-            }
-            // Unknown Frame e.g NCON or TDRL (because TDRL unknown to V23)
-            else
-            {
-                this.frameBody = new FrameBodyUnsupported((FrameBodyUnsupported) frame.getBody());
-                this.frameBody.setHeader(this);
-                identifier = frame.getIdentifier();
-                logger.info("V3:Unknown:Orig id is:" + frame.getIdentifier() + ":New id is:" + identifier);
-                return;
-            }
+            createV24FrameFromV23Frame((ID3v23Frame)frame);
         }
         else if (frame instanceof ID3v22Frame)
         {
-            //Is it a straight conversion from v2 to v4 (e.g TAl - TALB)
-            identifier = ID3Tags.convertFrameID22To24(frame.getIdentifier());
-            if (identifier != null)
-            {
-                logger.info("(1)V2:Orig id is:" + frame.getIdentifier() + "New id is:" + identifier);
-                this.frameBody = (AbstractID3v2FrameBody) ID3Tags.copyObject(frame.getBody());
-                this.frameBody.setHeader(this);
-                return;
-            }
-            // Can we convert from v2 to v3 easily (e.g TYE - TYER)
-            identifier = ID3Tags.convertFrameID22To23(frame.getIdentifier());
-            if (identifier != null)
-            {
-                //Convert from v2 to v3
-                logger.info("(2)V2:Orig id is:" + frame.getIdentifier() + "New id is:" + identifier);
-                this.frameBody = (AbstractID3v2FrameBody) ID3Tags.copyObject(frame.getBody());
-                this.frameBody.setHeader(this);
-                //Force v3 to v4
-                identifier = ID3Tags.forceFrameID23To24(identifier);
-                this.frameBody = this.readBody(identifier, (AbstractID3v2FrameBody) this.getBody());
-                this.frameBody.setHeader(this);
-                return;
-            }
-            // Is it a known v2 frame which needs forcing to v4 frame e.g PIC - APIC
-            else if (ID3Tags.isID3v22FrameIdentifier(frame.getIdentifier()) == true)
-            {
-                //Force v2 to v3
-                identifier = ID3Tags.forceFrameID22To23(frame.getIdentifier());
-                if (identifier != null)
-                {
-                    logger.info("(3)V2:Orig id is:" + frame.getIdentifier() + "New id is:" + identifier);
-                    this.frameBody = this.readBody(identifier, (AbstractID3v2FrameBody) frame.getBody());
-                    this.frameBody.setHeader(this);
-                    return;
-                }
-                // No mechanism exists to convert it to a v24 frame
-                else
-                {
-                    this.frameBody = new FrameBodyDeprecated((AbstractID3v2FrameBody) frame.getBody());
-                    this.frameBody.setHeader(this);
-                    identifier = frame.getIdentifier();
-                    logger.info("(4)V2:Deprecated Orig id id is:" + frame.getIdentifier() + ":New id is:" + identifier);
-                    return;
-                }
-            }
-            // Unknown Frame
-            else
-            {
-                this.frameBody = new FrameBodyUnsupported((FrameBodyUnsupported) frame.getBody());
-                this.frameBody.setHeader(this);
-                identifier = frame.getIdentifier();
-                logger.info("(5)V2:Unknown:Orig id is:" + frame.getIdentifier() + ":New id is:" + identifier);
-                return;
-            }
+
+            ID3v23Frame v23Frame = new ID3v23Frame(frame);
+            createV24FrameFromV23Frame(v23Frame);
         }
+        this.frameBody.setHeader(this);
     }
 
     /**

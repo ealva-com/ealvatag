@@ -50,15 +50,16 @@ public class ID3v23Frame
     protected static final int FRAME_HEADER_SIZE = FRAME_ID_SIZE + FRAME_SIZE_SIZE + FRAME_FLAGS_SIZE;
 
     /**
-     * Creates a new ID3v2_3Frame datatype.
+     * Creates a new ID3v23 Frame
      */
     public ID3v23Frame()
     {
     }
 
     /**
-     * Creates a new ID3v2_3Frame of type identifier. An empty
-     * body of the correct type will be automatically created.
+     * Creates a new ID3v23 Frame of type identifier.
+     *
+     * An empty body of the correct type will be automatically created.
      * This constructor should be used when wish to create a new
      * frame from scratch using user data.
      */
@@ -70,8 +71,9 @@ public class ID3v23Frame
     }
 
     /**
-     * Copy Constructor:
-     * Creates a new v2.3 frame datatype based on another v2.3 frame
+     * Copy Constructor
+     *
+     * Creates a new v23 frame  based on another v23 frame
      */
     public ID3v23Frame(ID3v23Frame frame)
     {
@@ -81,7 +83,7 @@ public class ID3v23Frame
     }
 
     /**
-     * Creates a new ID3v23Frame datatype based on another frame.
+     * Creates a new ID3v23Frame  based on another frame.
      *
      * @param frame
      */

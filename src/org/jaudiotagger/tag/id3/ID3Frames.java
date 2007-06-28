@@ -112,8 +112,6 @@ public abstract class ID3Frames extends AbstractStringStringValuePair
         // No others exist because most v23 mappings are identical to v24 therefore no mapping required and the ones that
         // are different need to be forced.
 
-
-
         // Force v23 to v24 These are deprecated and need to do a forced mapping
         forcev23Tov24.put(ID3v23Frames.FRAME_ID_V3_RELATIVE_VOLUME_ADJUSTMENT, ID3v24Frames.FRAME_ID_RELATIVE_VOLUME_ADJUSTMENT2);
         forcev23Tov24.put(ID3v23Frames.FRAME_ID_V3_EQUALISATION, ID3v24Frames.FRAME_ID_EQUALISATION2);
@@ -125,7 +123,9 @@ public abstract class ID3Frames extends AbstractStringStringValuePair
         forcev23Tov24.put(ID3v23Frames.FRAME_ID_V3_TYER, ID3v24Frames.FRAME_ID_YEAR);
 
         // Note Force v24 to v23, TDRC is a 1M relationship handled specially.
-        // @TODO RELATIVE_VOLUME,EQUALISATION
+        // @TODO EQUALISATION
+        forcev24Tov23.put(ID3v24Frames.FRAME_ID_RELATIVE_VOLUME_ADJUSTMENT2,ID3v23Frames.FRAME_ID_V3_RELATIVE_VOLUME_ADJUSTMENT);
+
         // Used to be a special frame now a text frame
         forcev24Tov23.put(ID3v24Frames.FRAME_ID_INVOLVED_PEOPLE,ID3v23Frames.FRAME_ID_V3_IPLS);
 
@@ -224,6 +224,7 @@ public abstract class ID3Frames extends AbstractStringStringValuePair
         convertv23Tov22.put(ID3v23Frames.FRAME_ID_V3_ARTIST_SORT_ORDER_MUSICBRAINZ, ID3v22Frames.FRAME_ID_V2_ARTIST_SORT_ORDER_ITUNES);
         convertv23Tov22.put(ID3v23Frames.FRAME_ID_V3_ALBUM_SORT_ORDER_MUSICBRAINZ, ID3v22Frames.FRAME_ID_V2_ALBUM_SORT_ORDER_ITUNES);
 
+        //TODO What does CRM Map to ?
         // Force v22 to v23,  Extra fields in v23 version
         forcev22Tov23.put(ID3v22Frames.FRAME_ID_V2_ATTACHED_PICTURE, ID3v23Frames.FRAME_ID_V3_ATTACHED_PICTURE);
 

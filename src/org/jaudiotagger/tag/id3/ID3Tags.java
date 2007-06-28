@@ -134,7 +134,7 @@ public class ID3Tags
     }
 
     /**
-     * Convert from ID3v2.20 FrameIdentifier to ID3v2.30
+     * Convert from ID3v22 FrameIdentifier to ID3v23
      */
     public static String convertFrameID22To23(String identifier)
     {
@@ -146,16 +146,16 @@ public class ID3Tags
     }
 
     /**
-     * Convert from ID3v2.20 FrameIdentifier to ID3v2.40
+     * Convert from ID3v22 FrameIdentifier to ID3v24
      */
     public static String convertFrameID22To24(String identifier)
     {
-        //Idv2.2 identifiers are only of length 3 times
+        //Idv22 identifiers are only of length 3 times
         if (identifier.length() < 3)
         {
             return null;
         }
-        //Has idv2.2 been mapped to v2.3
+        //Has idv22 been mapped to v23
         String id = (String) ID3Frames.convertv22Tov23.get(identifier.substring(0, 3));
         if (id != null)
         {
@@ -186,7 +186,7 @@ public class ID3Tags
     }
 
     /**
-     * Convert from ID3v2.30 FrameIdentifier to ID3v2.20
+     * Convert from ID3v23 FrameIdentifier to ID3v22
      */
     public static String convertFrameID23To22(String identifier)
     {
@@ -195,17 +195,17 @@ public class ID3Tags
             return null;
         }
 
-        //If it is a v2.3 identifier
+        //If it is a v23 identifier
         if(ID3v23Frames.getInstanceOf().getIdToValueMap().containsKey(identifier))
         {
-            //If only name has changed  v2.2 and modified in v2.3 return result of.
+            //If only name has changed  v22 and modified in v23 return result of.
             return (String) ID3Frames.convertv23Tov22.get(identifier.substring(0, 4));
         }
         return null;
     }
 
     /**
-     * Convert from ID3v2.30 FrameIdentifier to ID3v2.40
+     * Convert from ID3v23 FrameIdentifier to ID3v24
      */
     public static String convertFrameID23To24(String identifier)
     {
@@ -214,15 +214,15 @@ public class ID3Tags
             return null;
         }
 
-        //If it is a v2.3 identifier
+        //If it is a ID3v23 identifier
         if(ID3v23Frames.getInstanceOf().getIdToValueMap().containsKey(identifier))
         {
-            //if no change between 2.3 and 2.4 should be in 2.4 list.
+            //If no change between ID3v23 and ID3v24 should be in ID3v24 list.
             if(ID3v24Frames.getInstanceOf().getIdToValueMap().containsKey(identifier)==true)
             {
                 return identifier;
             }
-            //If only name has changed  v2.3 and modified in v2.4 return result of.
+            //If only name has changed  ID3v23 and modified in ID3v24 return result of.
             else
             {
                 return (String) ID3Frames.convertv23Tov24.get(identifier.substring(0, 4));
@@ -232,7 +232,7 @@ public class ID3Tags
     }
 
     /**
-     * Force from ID3v2.20 FrameIdentifier to ID3v2.30, this is where the frame and structure
+     * Force from ID3v22 FrameIdentifier to ID3v23, this is where the frame and structure
      * has changed from v2 to v3 but we can still do some kind of conversion.
      */
     public static String forceFrameID22To23(String identifier)
@@ -241,7 +241,7 @@ public class ID3Tags
     }
 
     /**
-     * Force from ID3v2.20 FrameIdentifier to ID3v2.30, this is where the frame and structure
+     * Force from ID3v22 FrameIdentifier to ID3v23, this is where the frame and structure
      * has changed from v2 to v3 but we can still do some kind of conversion.
      */
     public static String forceFrameID23To22(String identifier)
@@ -268,81 +268,7 @@ public class ID3Tags
     }
 
     /**
-     * Force from ID3v2.40 FrameIdentifier to ID3v2.20, this is where the frame and structure
-     * has changed between v4 to v2 but we can still do some kind of conversion.
-     */
-    public static String forceFrameID24To22(String identifier)
-    {
-        String v3id;
-        String v2id = "";
-        if (identifier.length() < 4)
-        {
-            return null;
-        }
-        v3id = (String) ID3Frames.convertv24Tov23.get(identifier.substring(0, 4));
-        if (v3id != null)
-        {
-            MP3File.logger.finer("Found v4id to v3id");
-            v2id = (String) ID3Frames.convertv23Tov22.get(v3id);
-            if (v2id == null)
-            {
-                v2id = (String) ID3Frames.convertv23Tov22.get(v3id);
-            }
-        }
-        //v2.3 and v2.4 may be the same
-        else
-        {
-            //if its valid v2.3 see if mapping from 2.3 to v22
-            if (ID3v23Frames.getInstanceOf().getIdToValueMap().containsKey(identifier)==true)
-            {
-                MP3File.logger.finer("Found v3id");
-                v2id = (String) ID3Frames.convertv24Tov23.get(identifier);
-                if (v2id == null)
-                {
-                    v2id = (String) ID3Frames.forcev23Tov22.get(identifier);
-                    if (v2id != null)
-                    {
-                        MP3File.logger.finer("Found v2idforced");
-                    }
-                }
-                else
-                {
-                    MP3File.logger.finer("Found v2idconvert");
-                }
-            }
-        }
-        return v2id;
-
-    }
-
-    /**
-     * Convert from ID3v2.40 FrameIdentifier to ID3v2.20
-     */
-    public static String convertFrameID24To22(String identifier)
-    {
-        if (identifier.length() < 4)
-        {
-            return null;
-        }
-        String id = (String) ID3Frames.convertv24Tov23.get(identifier.substring(0, 4));
-        if (id != null)
-        {
-            id = (String) ID3Frames.convertv23Tov22.get(id);
-        }
-        //v2.3 and v2.4 may be the same
-        else
-        {
-            //if its valid v2.3 see if mapping from 2.3 to v22
-            if (ID3v23Frames.getInstanceOf().getIdToValueMap().containsKey(identifier)==true)
-            {
-                id = (String) ID3Frames.convertv23Tov22.get(identifier);
-            }
-        }
-        return id;
-    }
-
-    /**
-     * Convert from ID3v2.40 FrameIdentifier to ID3v2.30
+     * Convert from ID3v24 FrameIdentifier to ID3v23
      */
     public static String convertFrameID24To23(String identifier)
     {

@@ -29,13 +29,12 @@ import org.jaudiotagger.tag.id3.framebody.FrameBodyDeprecated;
 
 /**
  * Represents an ID3v2.2 frame.
- * 
+ *
  * @author : Paul Taylor
  * @author : Eric Farng
  * @version $Id$
  */
-public class ID3v22Frame
-    extends AbstractID3v2Frame
+public class ID3v22Frame extends AbstractID3v2Frame
 {
     Pattern validFrameIdentifier = Pattern.compile("[A-Z][0-9A-Z]{2}");
 
@@ -49,7 +48,7 @@ public class ID3v22Frame
     }
 
     /**
-     * Creates a new ID3v2_2Frame datatype with given body
+     * Creates a new ID3v22 Frame with given body
      *
      * @param body New body and frame is based on this
      */
@@ -59,32 +58,40 @@ public class ID3v22Frame
     }
 
     /**
-     * Creates a new ID3v2_2Frame of type identifier. An empty
-     * body of the correct type will be automatically created.
-     * This constructor should be used when wish to create a new
-     * frame from scratch using user values
+     * Creates a new ID3v22 Frame of type identifier.
      *
+     * An empty body of the correct type will be automatically created. This constructor should be used when wish to
+     * create a new frame from scratch using user values
      */
     public ID3v22Frame(String identifier)
     {
+
+
         logger.info("Creating empty frame of type" + identifier);
         String bodyIdentifier = identifier;
-        this.identifier       = identifier;
-        //Messy fix for datetime
-        if (
-            (bodyIdentifier.equals(ID3v22Frames.FRAME_ID_V2_TYER))
-            ||
-            (bodyIdentifier.equals(ID3v22Frames.FRAME_ID_V2_TIME))
-        )
+        this.identifier = identifier;
+
+        //If dealing with v22 identifier (Note this constructor is used by all three tag versions)
+        if(ID3Tags.isID3v22FrameIdentifier(bodyIdentifier))
         {
-            bodyIdentifier = ID3v24Frames.FRAME_ID_YEAR;
-        }
-        // Have to check for 2.2 because most dont have own bodythey use 2.3 or 2.4
-        // body to hold the data, the frame is identified by its identifier, the body identifier
-        // is just to create a body suitable for writing the data to
-        else if (ID3Tags.isID3v22FrameIdentifier(bodyIdentifier))
-        {
-             bodyIdentifier = (String) ID3Tags.convertFrameID22To24(bodyIdentifier);
+            //Does it have its own framebody (PIC,CRM) or are we using v23/v24 body (the normal case)
+            if(ID3Tags.forceFrameID22To23(bodyIdentifier)!=null)
+            {
+                 //Do not convert
+            }
+            //TODO Improve messy fix for datetime
+            //TODO ned to check in case v22 body does exist before using V23 body(e.g PIC)
+            else if ((bodyIdentifier.equals(ID3v22Frames.FRAME_ID_V2_TYER)) || (bodyIdentifier.equals(ID3v22Frames.FRAME_ID_V2_TIME)))
+            {
+                bodyIdentifier = ID3v24Frames.FRAME_ID_YEAR;
+            }
+            // Have to check for v22 because most don't have own body they use v23 or v24
+            // body to hold the data, the frame is identified by its identifier, the body identifier
+            // is just to create a body suitable for writing the data to
+            else if (ID3Tags.isID3v22FrameIdentifier(bodyIdentifier))
+            {
+                bodyIdentifier = (String) ID3Tags.convertFrameID22To23(bodyIdentifier);
+            }
         }
 
         // Use reflection to map id to frame body, which makes things much easier
@@ -96,19 +103,19 @@ public class ID3v22Frame
         }
         catch (ClassNotFoundException cnfe)
         {
-            logger.log(Level.SEVERE,cnfe.getMessage(),cnfe);
+            logger.log(Level.SEVERE, cnfe.getMessage(), cnfe);
             frameBody = new FrameBodyUnsupported(identifier);
         }
         //Instantiate Interface/Abstract should not happen
         catch (InstantiationException ie)
         {
-            logger.log(Level.SEVERE,ie.getMessage(),ie);
+            logger.log(Level.SEVERE, ie.getMessage(), ie);
             throw new RuntimeException(ie);
         }
         //Private Constructor shouild not happen
         catch (IllegalAccessException iae)
         {
-            logger.log(Level.SEVERE,iae.getMessage(),iae);
+            logger.log(Level.SEVERE, iae.getMessage(), iae);
             throw new RuntimeException(iae);
         }
         frameBody.setHeader(this);
@@ -117,8 +124,9 @@ public class ID3v22Frame
     }
 
     /**
-     * Copy Constructor:
-     * Creates a new v2.2 frame datatype based on another v2.2 frame
+     * Copy Constructor
+     *
+     * Creates a new v22 frame based on another v22 frame
      */
     public ID3v22Frame(ID3v22Frame frame)
     {
@@ -126,8 +134,62 @@ public class ID3v22Frame
         logger.info("Creating frame from a frame of same version");
     }
 
+    private void createV22FrameFromV23Frame(ID3v23Frame frame)throws InvalidFrameException
+    {
+        identifier = ID3Tags.convertFrameID23To22(frame.getIdentifier());
+        if (identifier != null)
+        {
+            logger.info("V2:Orig id is:" + frame.getIdentifier() + ":New id is:" + identifier);
+            this.frameBody = (AbstractID3v2FrameBody) ID3Tags.copyObject(frame.getBody());
+            return;
+        }
+        // Is it a known v3 frame which needs forcing to v2 frame e.g. APIC - PIC
+        else if (ID3Tags.isID3v23FrameIdentifier(frame.getIdentifier()) == true)
+        {
+            identifier = ID3Tags.forceFrameID23To22(frame.getIdentifier());
+            if (identifier != null)
+            {
+                logger.info("V2:Force:Orig id is:" + frame.getIdentifier() + ":New id is:" + identifier);
+                this.frameBody = this.readBody(identifier, (AbstractID3v2FrameBody) frame.getBody());
+                return;
+            }
+            // No mechanism exists to convert it to a v22 frame
+            else
+            {
+                throw new InvalidFrameException("Unable to convert v23 frame:" + frame.getIdentifier() + " to a v22 frame");
+            }
+        }
+        //Deprecated frame for v23
+        else if (frame.getBody() instanceof FrameBodyDeprecated)
+        {
+            //Was it valid for this tag version, if so try and reconstruct
+            if (ID3Tags.isID3v22FrameIdentifier(frame.getIdentifier()))
+            {
+                this.frameBody = ((FrameBodyDeprecated) frame.getBody());
+                identifier = frame.getIdentifier();
+                logger.info("DEPRECATED:Orig id is:" + frame.getIdentifier() + ":New id is:" + identifier);
+            }
+            //or was it still deprecated, if so leave as is
+            else
+            {
+                this.frameBody = new FrameBodyDeprecated((FrameBodyDeprecated) frame.getBody());
+                identifier = frame.getIdentifier();
+                logger.info("DEPRECATED:Orig id is:" + frame.getIdentifier() + ":New id is:" + identifier);
+                return;
+            }
+        }
+        // Unknown Frame e.g NCON
+        else
+        {
+            this.frameBody = new FrameBodyUnsupported((FrameBodyUnsupported) frame.getBody());
+            identifier = frame.getIdentifier();
+            logger.info("v2:UNKNOWN:Orig id is:" + frame.getIdentifier() + ":New id is:" + identifier);
+            return;
+        }
+    }
+
     /**
-     * Creates a new ID3v2_2Frame datatype from another frame of a different tag version
+     * Creates a new ID3v22 Frame from another frame of a different tag version
      *
      * @param frame to construct the new frame from
      */
@@ -139,115 +201,16 @@ public class ID3v22Frame
             throw new UnsupportedOperationException("Copy Constructor not called. Please type cast the argument");
         }
 
-        /** If it is a v2.4 frame is it possible to convert it into a v2.2 frame*/
+        // If it is a v24 frame is it possible to convert it into a v23 frame, anmd then convert from that
         if (frame instanceof ID3v24Frame)
         {
-            // Version between v4 and v2
-            identifier = ID3Tags.convertFrameID24To22(frame.getIdentifier());
-            if (identifier != null)
-            {
-                logger.info("V2:Convert:Orig id is:" + frame.getIdentifier() + ":New id is:" + identifier);
-                this.frameBody = (AbstractID3v2FrameBody) ID3Tags.copyObject(frame.getBody());
-                return;
-            }
-            // Is it a known v4 frame
-            else if (ID3Tags.isID3v24FrameIdentifier(frame.getIdentifier()) == true)
-            {
-                // which needs forcing to v2 frame e.g. APIC - PIC
-                identifier = ID3Tags.forceFrameID24To22(frame.getIdentifier());
-                if(identifier!=null)
-                {
-                    logger.info("V2:Force:Orig id is:" + frame.getIdentifier() + ":New id is:" + identifier);
-                    this.frameBody = this.readBody(identifier, (AbstractID3v2FrameBody) frame.getBody());
-                    return;
-                }
-                // No mechanism exists to convert it to a v22 frame
-                else
-                {
-                    throw new InvalidFrameException("Unable to convert v24 frame:"+frame.getIdentifier()+" to a v22 frame");
-                }
-            }
-            //Deprecated frame for v24
-            else if(frame.getBody() instanceof FrameBodyDeprecated)
-            {
-                //Was it valid for this tag version, if so try and reconstruct
-                if(ID3Tags.isID3v22FrameIdentifier(frame.getIdentifier()))
-                {
-                      this.frameBody = ((FrameBodyDeprecated)frame.getBody());
-                      identifier = frame.getIdentifier();
-                      logger.info("DEPRECATED:Orig id is:" + frame.getIdentifier() + ":New id is:" + identifier);
-                }
-                //or was it still deprecated, if so leave as is
-                else
-                {
-                    this.frameBody = new FrameBodyDeprecated((FrameBodyDeprecated) frame.getBody());
-                    identifier = frame.getIdentifier();
-                    logger.info("DEPRECATED:Orig id is:" + frame.getIdentifier() + ":New id is:" + identifier);
-                    return;
-                }
-            }
-            //Unknown Frame e.g NCON
-            else
-            {
-                this.frameBody = new FrameBodyUnsupported((FrameBodyUnsupported) frame.getBody());
-                identifier = frame.getIdentifier();
-                logger.info("V2:Unknown:Orig id is:" + frame.getIdentifier() + ":New id is:" + identifier);
-                return;
-            }
+            ID3v23Frame v23Frame = new ID3v23Frame(frame);
+            createV22FrameFromV23Frame(v23Frame);
         }
-        //If it is a v2.3 frame is it possible to convert it into a v2.2 frame
+        //If it is a v23 frame is it possible to convert it into a v22 frame
         else if (frame instanceof ID3v23Frame)
         {
-            identifier = ID3Tags.convertFrameID23To22(frame.getIdentifier());
-            if (identifier != null)
-            {
-                logger.info("V2:Orig id is:" + frame.getIdentifier() + ":New id is:" + identifier);
-                this.frameBody = (AbstractID3v2FrameBody) ID3Tags.copyObject(frame.getBody());
-                return;
-            }
-            // Is it a known v3 frame which needs forcing to v2 frame e.g. APIC - PIC
-            else if (ID3Tags.isID3v23FrameIdentifier(frame.getIdentifier()) == true)
-            {
-                identifier = ID3Tags.forceFrameID23To22(frame.getIdentifier());
-                if(identifier!=null)
-                {
-                    logger.info("V2:Force:Orig id is:" + frame.getIdentifier() + ":New id is:" + identifier);
-                    this.frameBody = this.readBody(identifier, (AbstractID3v2FrameBody) frame.getBody());
-                    return;
-                }
-                // No mechanism exists to convert it to a v22 frame
-                else
-                {
-                    throw new InvalidFrameException("Unable to convert v23 frame:"+frame.getIdentifier()+" to a v22 frame");
-                }
-            }
-            //Deprecated frame for v23
-            else if(frame.getBody() instanceof FrameBodyDeprecated)
-            {
-                //Was it valid for this tag version, if so try and reconstruct
-                if(ID3Tags.isID3v22FrameIdentifier(frame.getIdentifier()))
-                {
-                      this.frameBody = ((FrameBodyDeprecated)frame.getBody());
-                      identifier = frame.getIdentifier();
-                      logger.info("DEPRECATED:Orig id is:" + frame.getIdentifier() + ":New id is:" + identifier);
-                }
-                //or was it still deprecated, if so leave as is
-                else
-                {
-                    this.frameBody = new FrameBodyDeprecated((FrameBodyDeprecated) frame.getBody());
-                    identifier = frame.getIdentifier();
-                    logger.info("DEPRECATED:Orig id is:" + frame.getIdentifier() + ":New id is:" + identifier);
-                    return;
-                }
-            }
-            // Unknown Frame e.g NCON
-            else
-            {
-                this.frameBody = new FrameBodyUnsupported((FrameBodyUnsupported) frame.getBody());
-                identifier = frame.getIdentifier();
-                logger.info("v2:UNKNOWN:Orig id is:" + frame.getIdentifier() + ":New id is:" + identifier);
-                return;
-            }
+            createV22FrameFromV23Frame((ID3v23Frame)frame);
         }
         this.frameBody.setHeader(this);
         logger.info("Created frame from a frame of a different version");
@@ -258,25 +221,23 @@ public class ID3v22Frame
      *
      * @param byteBuffer to read from
      */
-    public ID3v22Frame(ByteBuffer byteBuffer,String loggingFilename)
-        throws InvalidFrameException
+    public ID3v22Frame(ByteBuffer byteBuffer, String loggingFilename) throws InvalidFrameException
     {
-       setLoggingFilename(loggingFilename);
-       read(byteBuffer);
+        setLoggingFilename(loggingFilename);
+        read(byteBuffer);
     }
 
     /**
      * Creates a new ID3v23Frame datatype by reading from byteBuffer.
      *
      * @param byteBuffer to read from
-     *
      * @deprecated use {@link #ID3v22Frame(ByteBuffer,String)} instead
      */
-    public ID3v22Frame(ByteBuffer byteBuffer)
-        throws InvalidFrameException
+    public ID3v22Frame(ByteBuffer byteBuffer) throws InvalidFrameException
     {
-       this(byteBuffer,"");
+        this(byteBuffer, "");
     }
+
     /**
      * Return size of frame
      *
@@ -293,12 +254,11 @@ public class ID3v22Frame
      *
      * @param byteBuffer
      */
-    public void read(ByteBuffer byteBuffer)
-        throws InvalidFrameException
+    public void read(ByteBuffer byteBuffer) throws InvalidFrameException
     {
         byte[] buffer = new byte[FRAME_ID_SIZE];
 
-        if(byteBuffer.position()+ FRAME_HEADER_SIZE >= byteBuffer.limit())
+        if (byteBuffer.position() + FRAME_HEADER_SIZE >= byteBuffer.limit())
         {
             logger.warning("No space to find another frame:");
             throw new InvalidFrameException(" No space to find another frame");
@@ -307,7 +267,7 @@ public class ID3v22Frame
         // Read the FrameID Identifier
         byteBuffer.get(buffer, 0, FRAME_ID_SIZE);
         identifier = new String(buffer);
-        logger.info("Read Frame from file identifier is:"+identifier);
+        logger.info("Read Frame from file identifier is:" + identifier);
 
         // Is this a valid identifier?
         if (isValidID3v2FrameIdentifier(identifier) == false)
@@ -316,9 +276,9 @@ public class ID3v22Frame
             byteBuffer.position(byteBuffer.position() - (FRAME_ID_SIZE - 1));
             throw new InvalidFrameIdentifierException(identifier + " is not a valid ID3v2.20 frame");
         }
-        //Read Frame Size (same size as Frame ID so reuse buffer)
+        //Read Frame Size (same size as Frame Id so reuse buffer)
         byteBuffer.get(buffer, 0, FRAME_SIZE_SIZE);
-        frameSize=decodeSize(buffer);
+        frameSize = decodeSize(buffer);
         if (frameSize < 0)
         {
             throw new InvalidFrameException(identifier + " has invalid size of:" + frameSize);
@@ -344,15 +304,13 @@ public class ID3v22Frame
                 id = (String) ID3Tags.convertFrameID22To23(identifier);
                 if (id == null)
                 {
-                    /** Is it a valid v22 identifier so should be able to find a
-                     *  frame body for it.
-                     */
+                    // Is it a valid v22 identifier so should be able to find a
+                    // frame body for it.
                     if (ID3Tags.isID3v22FrameIdentifier(identifier) == true)
                     {
                         id = identifier;
                     }
-                    /** Unknown so will be created as FrameBodyUnsupported
-                     */
+                    // Unknown so will be created as FrameBodyUnsupported
                     else
                     {
                         id = UNSUPPORTED_ID;
@@ -372,20 +330,21 @@ public class ID3v22Frame
             finally
             {
                 //Update position of main buffer, so no attempt is made to reread these bytes
-                byteBuffer.position(byteBuffer.position()+frameSize);
+                byteBuffer.position(byteBuffer.position() + frameSize);
             }
         }
     }
 
-    /** Read Frame Size, which has to be decoded
+    /**
+     * Read Frame Size, which has to be decoded
      */
     private int decodeSize(byte[] buffer)
     {
-        BigInteger  bi = new BigInteger(buffer);
+        BigInteger bi = new BigInteger(buffer);
         int tmpSize = bi.intValue();
-        if(tmpSize<0)
+        if (tmpSize < 0)
         {
-            logger.warning("Invalid Frame Size of:" + tmpSize + "Decoded from bin:"+Integer.toBinaryString(tmpSize)+"Decoded from hex:"+Integer.toHexString(tmpSize));
+            logger.warning("Invalid Frame Size of:" + tmpSize + "Decoded from bin:" + Integer.toBinaryString(tmpSize) + "Decoded from hex:" + Integer.toHexString(tmpSize));
         }
         return tmpSize;
     }
@@ -395,8 +354,7 @@ public class ID3v22Frame
      *
      * @throws IOException
      */
-    public void write(ByteArrayOutputStream tagBuffer)
-        throws IOException
+    public void write(ByteArrayOutputStream tagBuffer) throws IOException
     {
         logger.info("Write Frame to Buffer" + getIdentifier());
         //This is where we will write header, move position to where we can
@@ -410,9 +368,9 @@ public class ID3v22Frame
         //Write Frame Header
         //Write Frame ID must adjust can only be 3 bytes long
         headerBuffer.put(getIdentifier().substring(0, FRAME_ID_SIZE).getBytes(), 0, FRAME_ID_SIZE);
-        encodeSize(headerBuffer,frameBody.getSize());
+        encodeSize(headerBuffer, frameBody.getSize());
 
-         //Add header to the Byte Array Output Stream
+        //Add header to the Byte Array Output Stream
         tagBuffer.write(headerBuffer.array());
 
         //Add body to the Byte Array Output Stream
@@ -420,15 +378,16 @@ public class ID3v22Frame
 
     }
 
-    /** Write Frame Size (can now be accurately calculated, have to convert 4 byte int
-      * to 3 byte format.
+    /**
+     * Write Frame Size (can now be accurately calculated, have to convert 4 byte int
+     * to 3 byte format.
      */
-    private void encodeSize(ByteBuffer headerBuffer,int size)
+    private void encodeSize(ByteBuffer headerBuffer, int size)
     {
         headerBuffer.put((byte) ((size & 0x00FF0000) >> 16));
         headerBuffer.put((byte) ((size & 0x0000FF00) >> 8));
         headerBuffer.put((byte) (size & 0x000000FF));
-        logger.fine("Frame Size Is Actual:" + size + ":Encoded bin:"+Integer.toBinaryString(size)+":Encoded Hex"+Integer.toHexString(size));
+        logger.fine("Frame Size Is Actual:" + size + ":Encoded bin:" + Integer.toBinaryString(size) + ":Encoded Hex" + Integer.toHexString(size));
     }
 
     /**
@@ -451,7 +410,6 @@ public class ID3v22Frame
 
     /**
      * Return String Representation of body
-     *                     
      */
     public void createStructure()
     {
