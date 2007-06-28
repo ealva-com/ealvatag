@@ -112,6 +112,8 @@ public class ID3v23Frames extends ID3Frames
     public static final String FRAME_ID_V3_TITLE_SORT_ORDER_MUSICBRAINZ = "XSOT";
     public static final String FRAME_ID_V3_ARTIST_SORT_ORDER_MUSICBRAINZ = "XSOP";
     public static final String FRAME_ID_V3_ALBUM_SORT_ORDER_MUSICBRAINZ = "XSOA";
+    public static final String FRAME_ID_V3_ALBUM_ARTIST_SORT_ORDER_ITUNES = "TSO2";
+    public static final String FRAME_ID_V3_COMPOSER_SORT_ORDER_ITUNES = "TSOC";
 
     private static ID3v23Frames id3v23Frames;
 
@@ -210,6 +212,8 @@ public class ID3v23Frames extends ID3Frames
         extensionFrames.add(FRAME_ID_V3_TITLE_SORT_ORDER_MUSICBRAINZ);
         extensionFrames.add(FRAME_ID_V3_ARTIST_SORT_ORDER_MUSICBRAINZ);
         extensionFrames.add(FRAME_ID_V3_ALBUM_SORT_ORDER_MUSICBRAINZ);
+        extensionFrames.add(FRAME_ID_V3_ALBUM_ARTIST_SORT_ORDER_ITUNES);
+        extensionFrames.add(FRAME_ID_V3_COMPOSER_SORT_ORDER_ITUNES);
 
         // Map frameid to a name
         idToValue.put(FRAME_ID_V3_ACCOMPANIMENT, "Text: Band/Orchestra/Accompaniment");
@@ -293,6 +297,8 @@ public class ID3v23Frames extends ID3Frames
         idToValue.put(FRAME_ID_V3_TITLE_SORT_ORDER_MUSICBRAINZ,"Text: title sort order");
         idToValue.put(FRAME_ID_V3_ARTIST_SORT_ORDER_MUSICBRAINZ,"Text: artist sort order");
         idToValue.put(FRAME_ID_V3_ALBUM_SORT_ORDER_MUSICBRAINZ,"Text: album sort order");
+        idToValue.put(FRAME_ID_V3_ALBUM_ARTIST_SORT_ORDER_ITUNES,"Text:Album Artist Sort Order Frame");
+        idToValue.put(FRAME_ID_V3_COMPOSER_SORT_ORDER_ITUNES,"Text:Composer Sort Order Frame");
 
         createMaps();
 

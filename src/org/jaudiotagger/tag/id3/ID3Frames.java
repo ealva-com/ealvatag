@@ -209,6 +209,8 @@ public abstract class ID3Frames extends AbstractStringStringValuePair
         convertv22Tov23.put(ID3v22Frames.FRAME_ID_V2_TITLE_SORT_ORDER_ITUNES, ID3v23Frames.FRAME_ID_V3_TITLE_SORT_ORDER_ITUNES);
         convertv22Tov23.put(ID3v22Frames.FRAME_ID_V2_ARTIST_SORT_ORDER_ITUNES, ID3v23Frames.FRAME_ID_V3_ARTIST_SORT_ORDER_ITUNES);
         convertv22Tov23.put(ID3v22Frames.FRAME_ID_V2_ALBUM_SORT_ORDER_ITUNES, ID3v23Frames.FRAME_ID_V3_ALBUM_SORT_ORDER_ITUNES);
+        convertv22Tov23.put(ID3v22Frames.FRAME_ID_V2_ALBUM_ARTIST_SORT_ORDER_ITUNES, ID3v23Frames.FRAME_ID_V3_ALBUM_ARTIST_SORT_ORDER_ITUNES);
+        convertv22Tov23.put(ID3v22Frames.FRAME_ID_V2_COMPOSER_SORT_ORDER_ITUNES, ID3v23Frames.FRAME_ID_V3_COMPOSER_SORT_ORDER_ITUNES);
 
         // v23 to v22 The translation is both way
         iterator = convertv22Tov23.keySet().iterator();

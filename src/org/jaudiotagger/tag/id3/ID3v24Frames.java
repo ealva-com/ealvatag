@@ -115,6 +115,9 @@ public class ID3v24Frames extends ID3Frames
     public static final String FRAME_ID_USER_DEFINED_INFO = "TXXX";
     public static final String FRAME_ID_USER_DEFINED_URL = "WXXX";
     public static final String FRAME_ID_YEAR = "TDRC";
+
+    public static final String FRAME_ID_ALBUM_ARTIST_SORT_ORDER_ITUNES = "TSO2";
+    public static final String FRAME_ID_COMPOSER_SORT_ORDER_ITUNES = "TSOC";
     public static final String FRAME_ID_IS_COMPILATION = "TCMP";
 
     //TODO this is temporary to provide backwards comptability
@@ -216,10 +219,12 @@ public class ID3v24Frames extends ID3Frames
         supportedFrames.add(FRAME_ID_URL_SOURCE_WEB);
         supportedFrames.add(FRAME_ID_USER_DEFINED_INFO);
         supportedFrames.add(FRAME_ID_USER_DEFINED_URL);
-         supportedFrames.add(FRAME_ID_YEAR);
+        supportedFrames.add(FRAME_ID_YEAR);
 
         //Extension
         extensionFrames.add(FRAME_ID_IS_COMPILATION);
+        extensionFrames.add(FRAME_ID_ALBUM_ARTIST_SORT_ORDER_ITUNES);
+        extensionFrames.add(FRAME_ID_COMPOSER_SORT_ORDER_ITUNES);
 
         // Map frameid to a name
         idToValue.put(FRAME_ID_ACCOMPANIMENT, "Text: Band/Orchestra/Accompaniment");
@@ -303,8 +308,11 @@ public class ID3v24Frames extends ID3Frames
         idToValue.put(FRAME_ID_URL_SOURCE_WEB, "URL: Official audio source webpage");
         idToValue.put(FRAME_ID_USER_DEFINED_INFO, "User defined text information frame");
         idToValue.put(FRAME_ID_USER_DEFINED_URL, "User defined URL link frame");
-         idToValue.put(FRAME_ID_YEAR, "Text:Year");
+        idToValue.put(FRAME_ID_YEAR, "Text:Year");
         idToValue.put(FRAME_ID_IS_COMPILATION,"Is Compilation");
+        idToValue.put(FRAME_ID_ALBUM_ARTIST_SORT_ORDER_ITUNES,"Text:Album Artist Sort Order Frame");
+        idToValue.put(FRAME_ID_COMPOSER_SORT_ORDER_ITUNES,"Text:Composer Sort Order Frame");
+
 
         createMaps();
 
