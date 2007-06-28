@@ -29,7 +29,7 @@ import org.jaudiotagger.tag.id3.ID3v24Frames;
 import java.nio.ByteBuffer;
 
 
-public class FrameBodyTSOP extends AbstractFrameBodyTextInfo implements ID3v24FrameBody
+public class FrameBodyTSOP extends AbstractFrameBodyTextInfo implements ID3v24FrameBody,ID3v23FrameBody
 {
     /**
      * Creates a new FrameBodyTSOP datatype.
@@ -72,6 +72,6 @@ public class FrameBodyTSOP extends AbstractFrameBodyTextInfo implements ID3v24Fr
      */
     public String getIdentifier()
     {
-        return ID3v24Frames.FRAME_ID_PERFORMER_SORT_OWNER;
+        return ID3v24Frames.FRAME_ID_ARTIST_SORT_ORDER;
     }
 }

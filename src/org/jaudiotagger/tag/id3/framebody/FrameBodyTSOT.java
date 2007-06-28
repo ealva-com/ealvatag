@@ -29,7 +29,10 @@ import org.jaudiotagger.tag.id3.ID3v24Frames;
 import java.nio.ByteBuffer;
 
 
-public class FrameBodyTSOT extends AbstractFrameBodyTextInfo implements ID3v24FrameBody
+/**
+ * Title Sort name
+ */
+public class FrameBodyTSOT extends AbstractFrameBodyTextInfo implements ID3v24FrameBody,ID3v23FrameBody
 {
     /**
      * Creates a new FrameBodyTSOT datatype.
@@ -57,7 +60,6 @@ public class FrameBodyTSOT extends AbstractFrameBodyTextInfo implements ID3v24Fr
     /**
      * Creates a new FrameBodyTSOT datatype.
      *
-     * @throws java.io.IOException 
      * @throws InvalidTagException 
      */
     public FrameBodyTSOT(ByteBuffer byteBuffer, int frameSize)
@@ -73,6 +75,6 @@ public class FrameBodyTSOT extends AbstractFrameBodyTextInfo implements ID3v24Fr
      */
     public String getIdentifier()
     {
-        return ID3v24Frames.FRAME_ID_TITLE_SORT_OWNER;
+        return ID3v24Frames.FRAME_ID_TITLE_SORT_ORDER;
     }
 }

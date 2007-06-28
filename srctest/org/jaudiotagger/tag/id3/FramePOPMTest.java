@@ -48,6 +48,8 @@ public class FramePOPMTest extends AbstractTestCase
         assertEquals(FrameBodyPOPMTest.POPM_EMAIL, ((FrameBodyPOPM) frame.getBody()).getEmailToUser());
         assertEquals(FrameBodyPOPMTest.POPM_RATING, ((FrameBodyPOPM) frame.getBody()).getRating());
         assertEquals(FrameBodyPOPMTest.POPM_COUNTER, ((FrameBodyPOPM) frame.getBody()).getCounter());
+        assertFalse(ID3v24Frames.getInstanceOf().isExtensionFrames(frame.getIdentifier()));
+        assertTrue(ID3v24Frames.getInstanceOf().isSupportedFrames(frame.getIdentifier()));
     }
 
 

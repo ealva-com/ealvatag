@@ -41,6 +41,8 @@ public class FramePCNTTest extends AbstractTestCase
         assertEquals(ID3v24Frames.FRAME_ID_PLAY_COUNTER,frame.getIdentifier());
         assertEquals(TextEncoding.ISO_8859_1,fb.getTextEncoding());
         assertEquals(FrameBodyPCNTTest.PCNT_COUNTER ,((FrameBodyPCNT)frame.getBody()).getCounter());
+        assertFalse(ID3v24Frames.getInstanceOf().isExtensionFrames(frame.getIdentifier()));
+        assertTrue(ID3v24Frames.getInstanceOf().isSupportedFrames(frame.getIdentifier()));
     }
 
 

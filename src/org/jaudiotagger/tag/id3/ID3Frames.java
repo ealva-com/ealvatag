@@ -103,10 +103,16 @@ public abstract class ID3Frames extends AbstractStringStringValuePair
     {
         // Define the mapping from v23 to v24 only maps values where
         // the v23 ID is not a v24 ID and where the translation from v23 to v24
-        // ID does not affect the framebody.None exist because most v23 mappings
-        // are identical to v24 therefore no mapping required and the ones that
+        // ID does not affect the framebody.
+        //This one way allows us to convert XSOT to TSOT,XSOP to TSOP and XSOA - TSOA but in the other direction gets converted to TSOT,TSOP,TSOA
+        convertv23Tov24.put(ID3v23Frames.FRAME_ID_V3_TITLE_SORT_ORDER_MUSICBRAINZ, ID3v24Frames.FRAME_ID_TITLE_SORT_ORDER);
+        convertv23Tov24.put(ID3v23Frames.FRAME_ID_V3_ARTIST_SORT_ORDER_MUSICBRAINZ, ID3v24Frames.FRAME_ID_ARTIST_SORT_ORDER);
+        convertv23Tov24.put(ID3v23Frames.FRAME_ID_V3_ALBUM_SORT_ORDER_MUSICBRAINZ, ID3v24Frames.FRAME_ID_ALBUM_SORT_ORDER);
+
+        // No others exist because most v23 mappings are identical to v24 therefore no mapping required and the ones that
         // are different need to be forced.
-        //@TODO none exist.
+
+
 
         // Force v23 to v24 These are deprecated and need to do a forced mapping
         forcev23Tov24.put(ID3v23Frames.FRAME_ID_V3_RELATIVE_VOLUME_ADJUSTMENT, ID3v24Frames.FRAME_ID_RELATIVE_VOLUME_ADJUSTMENT2);
@@ -131,7 +137,7 @@ public abstract class ID3Frames extends AbstractStringStringValuePair
         String key;
         String value;
 
-        /** All v22 ids were renamed in v23, but are essentially the same */
+        // All v22 ids were renamed in v23, but are essentially the same
         convertv22Tov23.put(ID3v22Frames.FRAME_ID_V2_ACCOMPANIMENT, ID3v23Frames.FRAME_ID_V3_ACCOMPANIMENT);
         convertv22Tov23.put(ID3v22Frames.FRAME_ID_V2_ALBUM, ID3v23Frames.FRAME_ID_V3_ALBUM);
         convertv22Tov23.put(ID3v22Frames.FRAME_ID_V2_ARTIST, ID3v23Frames.FRAME_ID_V3_ARTIST);
@@ -200,6 +206,9 @@ public abstract class ID3Frames extends AbstractStringStringValuePair
         convertv22Tov23.put(ID3v22Frames.FRAME_ID_V2_USER_DEFINED_URL, ID3v23Frames.FRAME_ID_V3_USER_DEFINED_URL);
         convertv22Tov23.put(ID3v22Frames.FRAME_ID_V2_TITLE, ID3v23Frames.FRAME_ID_V3_TITLE);
         convertv22Tov23.put(ID3v22Frames.FRAME_ID_V2_IS_COMPILATION, ID3v23Frames.FRAME_ID_V3_IS_COMPILATION);
+        convertv22Tov23.put(ID3v22Frames.FRAME_ID_V2_TITLE_SORT_ORDER_ITUNES, ID3v23Frames.FRAME_ID_V3_TITLE_SORT_ORDER_ITUNES);
+        convertv22Tov23.put(ID3v22Frames.FRAME_ID_V2_ARTIST_SORT_ORDER_ITUNES, ID3v23Frames.FRAME_ID_V3_ARTIST_SORT_ORDER_ITUNES);
+        convertv22Tov23.put(ID3v22Frames.FRAME_ID_V2_ALBUM_SORT_ORDER_ITUNES, ID3v23Frames.FRAME_ID_V3_ALBUM_SORT_ORDER_ITUNES);
 
         // v23 to v22 The translation is both way
         iterator = convertv22Tov23.keySet().iterator();
@@ -209,6 +218,11 @@ public abstract class ID3Frames extends AbstractStringStringValuePair
             value = (String) convertv22Tov23.get(key);
             convertv23Tov22.put(value, key);
         }
+
+        //This one way translation allows us to convert XSOT to TST, but in the other direction gets converted to TSOT
+        convertv23Tov22.put(ID3v23Frames.FRAME_ID_V3_TITLE_SORT_ORDER_MUSICBRAINZ, ID3v22Frames.FRAME_ID_V2_TITLE_SORT_ORDER_ITUNES);
+        convertv23Tov22.put(ID3v23Frames.FRAME_ID_V3_ARTIST_SORT_ORDER_MUSICBRAINZ, ID3v22Frames.FRAME_ID_V2_ARTIST_SORT_ORDER_ITUNES);
+        convertv23Tov22.put(ID3v23Frames.FRAME_ID_V3_ALBUM_SORT_ORDER_MUSICBRAINZ, ID3v22Frames.FRAME_ID_V2_ALBUM_SORT_ORDER_ITUNES);
 
         // Force v22 to v23,  Extra fields in v23 version
         forcev22Tov23.put(ID3v22Frames.FRAME_ID_V2_ATTACHED_PICTURE, ID3v23Frames.FRAME_ID_V3_ATTACHED_PICTURE);
