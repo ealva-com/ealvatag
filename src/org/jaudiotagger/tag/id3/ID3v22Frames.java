@@ -15,8 +15,6 @@
  */
 package org.jaudiotagger.tag.id3;
 
-import java.util.*;
-
 /**
  * Defines ID3v22 frames and collections that categorise frames within an ID3v22 tag.
  * <p/>
@@ -96,6 +94,9 @@ public class ID3v22Frames extends ID3Frames
     public static final String FRAME_ID_V2_USER_DEFINED_URL = "WXX";
 
     public static final String FRAME_ID_V2_IS_COMPILATION = "TCP";
+    public static final String FRAME_ID_V2_TITLE_SORT_ORDER_ITUNES = "TST";
+    public static final String FRAME_ID_V2_ARTIST_SORT_ORDER_ITUNES = "TSP";
+    public static final String FRAME_ID_V2_ALBUM_SORT_ORDER_ITUNES = "TSA";
 
 
     private static ID3v22Frames id3v22Frames;
@@ -180,6 +181,9 @@ public class ID3v22Frames extends ID3Frames
 
         //Extension
         extensionFrames.add(FRAME_ID_V2_IS_COMPILATION);
+        extensionFrames.add(FRAME_ID_V2_TITLE_SORT_ORDER_ITUNES);
+        extensionFrames.add(FRAME_ID_V2_ARTIST_SORT_ORDER_ITUNES);
+        extensionFrames.add(FRAME_ID_V2_ALBUM_SORT_ORDER_ITUNES);
 
         // Map frameid to a name
         idToValue.put(FRAME_ID_V2_ACCOMPANIMENT, "Text: Band/Orchestra/Accompaniment");
@@ -247,12 +251,18 @@ public class ID3v22Frames extends ID3Frames
         idToValue.put(FRAME_ID_V2_URL_SOURCE_WEB, "URL: Official audio source webpage");
         idToValue.put(FRAME_ID_V2_USER_DEFINED_INFO, "User defined text information frame");
         idToValue.put(FRAME_ID_V2_USER_DEFINED_URL, "User defined URL link frame");
+
         idToValue.put(FRAME_ID_V2_IS_COMPILATION,"Is Compilation");
+        idToValue.put(FRAME_ID_V2_TITLE_SORT_ORDER_ITUNES,"Text: title sort order");
+        idToValue.put(FRAME_ID_V2_ARTIST_SORT_ORDER_ITUNES,"Text: artist sort order");
+        idToValue.put(FRAME_ID_V2_ALBUM_SORT_ORDER_ITUNES,"Text: album sort order");
+
 
         createMaps();
 
         multipleFrames.add(FRAME_ID_V2_ATTACHED_PICTURE);
         multipleFrames.add(FRAME_ID_V2_UNIQUE_FILE_ID);
+        multipleFrames.add(FRAME_ID_V2_POPULARIMETER);
 
     }
 }

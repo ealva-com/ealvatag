@@ -15,8 +15,6 @@
  */
 package org.jaudiotagger.tag.id3;
 
-import java.util.*;
-
 /**
  * Defines ID3v23 frames and collections that categorise frames within an ID3v23 tag.
  *
@@ -106,7 +104,14 @@ public class ID3v23Frames extends ID3Frames
     public static final String FRAME_ID_V3_URL_SOURCE_WEB = "WOAS";
     public static final String FRAME_ID_V3_USER_DEFINED_INFO = "TXXX";
     public static final String FRAME_ID_V3_USER_DEFINED_URL = "WXXX";
+
     public static final String FRAME_ID_V3_IS_COMPILATION = "TCMP";
+    public static final String FRAME_ID_V3_TITLE_SORT_ORDER_ITUNES = "TSOT";
+    public static final String FRAME_ID_V3_ARTIST_SORT_ORDER_ITUNES = "TSOP";
+    public static final String FRAME_ID_V3_ALBUM_SORT_ORDER_ITUNES = "TSOA";
+    public static final String FRAME_ID_V3_TITLE_SORT_ORDER_MUSICBRAINZ = "XSOT";
+    public static final String FRAME_ID_V3_ARTIST_SORT_ORDER_MUSICBRAINZ = "XSOP";
+    public static final String FRAME_ID_V3_ALBUM_SORT_ORDER_MUSICBRAINZ = "XSOA";
 
     private static ID3v23Frames id3v23Frames;
 
@@ -199,6 +204,12 @@ public class ID3v23Frames extends ID3Frames
 
         //Extension
         extensionFrames.add(FRAME_ID_V3_IS_COMPILATION);
+        extensionFrames.add(FRAME_ID_V3_TITLE_SORT_ORDER_ITUNES);
+        extensionFrames.add(FRAME_ID_V3_ARTIST_SORT_ORDER_ITUNES);
+        extensionFrames.add(FRAME_ID_V3_ALBUM_SORT_ORDER_ITUNES);
+        extensionFrames.add(FRAME_ID_V3_TITLE_SORT_ORDER_MUSICBRAINZ);
+        extensionFrames.add(FRAME_ID_V3_ARTIST_SORT_ORDER_MUSICBRAINZ);
+        extensionFrames.add(FRAME_ID_V3_ALBUM_SORT_ORDER_MUSICBRAINZ);
 
         // Map frameid to a name
         idToValue.put(FRAME_ID_V3_ACCOMPANIMENT, "Text: Band/Orchestra/Accompaniment");
@@ -276,6 +287,12 @@ public class ID3v23Frames extends ID3Frames
         idToValue.put(FRAME_ID_V3_USER_DEFINED_INFO, "User defined text information frame");
         idToValue.put(FRAME_ID_V3_USER_DEFINED_URL, "User defined URL link frame");
         idToValue.put(FRAME_ID_V3_IS_COMPILATION,"Is Compilation");
+        idToValue.put(FRAME_ID_V3_TITLE_SORT_ORDER_ITUNES,"Text: title sort order");
+        idToValue.put(FRAME_ID_V3_ARTIST_SORT_ORDER_ITUNES,"Text: artist sort order");
+        idToValue.put(FRAME_ID_V3_ALBUM_SORT_ORDER_ITUNES,"Text: album sort order");
+        idToValue.put(FRAME_ID_V3_TITLE_SORT_ORDER_MUSICBRAINZ,"Text: title sort order");
+        idToValue.put(FRAME_ID_V3_ARTIST_SORT_ORDER_MUSICBRAINZ,"Text: artist sort order");
+        idToValue.put(FRAME_ID_V3_ALBUM_SORT_ORDER_MUSICBRAINZ,"Text: album sort order");
 
         createMaps();
 
@@ -286,8 +303,8 @@ public class ID3v23Frames extends ID3Frames
         multipleFrames.add(FRAME_ID_V3_COMMENT);
         multipleFrames.add(FRAME_ID_V3_UNIQUE_FILE_ID);
         multipleFrames.add(FRAME_ID_V3_UNSYNC_LYRICS);
+        multipleFrames.add(FRAME_ID_V3_POPULARIMETER);
 
-        
         discardIfFileAlteredFrames.add(FRAME_ID_V3_EVENT_TIMING_CODES);
         discardIfFileAlteredFrames.add(FRAME_ID_V3_EQUALISATION);
         discardIfFileAlteredFrames.add(FRAME_ID_V3_MPEG_LOCATION_LOOKUP_TABLE);

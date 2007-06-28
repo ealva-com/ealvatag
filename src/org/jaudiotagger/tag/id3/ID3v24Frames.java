@@ -17,8 +17,6 @@ package org.jaudiotagger.tag.id3;
 
 import org.jaudiotagger.tag.id3.ID3Frames;
 
-import java.util.*;
-
 /**
  * Defines ID3v24 frames and collections that categorise frames.
  *
@@ -30,6 +28,7 @@ import java.util.*;
  */
 public class ID3v24Frames extends ID3Frames
 {
+
     /**
      * Frame IDs begining with T are text frames, & with W are url frames
      */
@@ -76,7 +75,7 @@ public class ID3v24Frames extends ID3Frames
     public static final String FRAME_ID_ORIG_LYRICIST = "TOLY";
     public static final String FRAME_ID_ORIG_TITLE = "TOAL";
     public static final String FRAME_ID_OWNERSHIP = "OWNE";
-    public static final String FRAME_ID_PERFORMER_SORT_OWNER = "TSOP";
+    public static final String FRAME_ID_ARTIST_SORT_ORDER = "TSOP";
     public static final String FRAME_ID_PLAYLIST_DELAY = "TDLY";
     public static final String FRAME_ID_PLAY_COUNTER = "PCNT";
     public static final String FRAME_ID_POPULARIMETER = "POPM";
@@ -101,7 +100,7 @@ public class ID3v24Frames extends ID3Frames
     public static final String FRAME_ID_TERMS_OF_USE = "USER";
     public static final String FRAME_ID_TITLE = "TIT2";
     public static final String FRAME_ID_TITLE_REFINEMENT = "TIT3";
-    public static final String FRAME_ID_TITLE_SORT_OWNER = "TSOT";
+    public static final String FRAME_ID_TITLE_SORT_ORDER = "TSOT";
     public static final String FRAME_ID_TRACK = "TRCK";
     public static final String FRAME_ID_UNIQUE_FILE_ID = "UFID";
     public static final String FRAME_ID_UNSYNC_LYRICS = "USLT";
@@ -117,6 +116,10 @@ public class ID3v24Frames extends ID3Frames
     public static final String FRAME_ID_USER_DEFINED_URL = "WXXX";
     public static final String FRAME_ID_YEAR = "TDRC";
     public static final String FRAME_ID_IS_COMPILATION = "TCMP";
+
+    //TODO this is temporary to provide backwards comptability
+    public static final String FRAME_ID_PERFORMER_SORT_OWNER =  FRAME_ID_ARTIST_SORT_ORDER;
+    public static final String FRAME_ID_TITLE_SORT_OWNER = FRAME_ID_TITLE_SORT_ORDER;
 
 
     private static ID3v24Frames id3v24Frames;
@@ -174,7 +177,7 @@ public class ID3v24Frames extends ID3Frames
         supportedFrames.add(FRAME_ID_ORIG_LYRICIST);
         supportedFrames.add(FRAME_ID_ORIG_TITLE);
         supportedFrames.add(FRAME_ID_OWNERSHIP);
-        supportedFrames.add(FRAME_ID_PERFORMER_SORT_OWNER);
+        supportedFrames.add(FRAME_ID_ARTIST_SORT_ORDER);
         supportedFrames.add(FRAME_ID_PLAYLIST_DELAY);
         supportedFrames.add(FRAME_ID_PLAY_COUNTER);
         supportedFrames.add(FRAME_ID_POPULARIMETER);
@@ -199,7 +202,7 @@ public class ID3v24Frames extends ID3Frames
         supportedFrames.add(FRAME_ID_TERMS_OF_USE);
         supportedFrames.add(FRAME_ID_TITLE);
         supportedFrames.add(FRAME_ID_TITLE_REFINEMENT);
-        supportedFrames.add(FRAME_ID_TITLE_SORT_OWNER);
+        supportedFrames.add(FRAME_ID_TITLE_SORT_ORDER);
         supportedFrames.add(FRAME_ID_TRACK);
         supportedFrames.add(FRAME_ID_UNIQUE_FILE_ID);
         supportedFrames.add(FRAME_ID_UNSYNC_LYRICS);
@@ -213,7 +216,7 @@ public class ID3v24Frames extends ID3Frames
         supportedFrames.add(FRAME_ID_URL_SOURCE_WEB);
         supportedFrames.add(FRAME_ID_USER_DEFINED_INFO);
         supportedFrames.add(FRAME_ID_USER_DEFINED_URL);
- 	    supportedFrames.add(FRAME_ID_YEAR);
+         supportedFrames.add(FRAME_ID_YEAR);
 
         //Extension
         extensionFrames.add(FRAME_ID_IS_COMPILATION);
@@ -261,7 +264,7 @@ public class ID3v24Frames extends ID3Frames
         idToValue.put(FRAME_ID_ORIG_LYRICIST, "Text: Original Lyricist(s)/text writer(s)");
         idToValue.put(FRAME_ID_ORIG_TITLE, "Text: Original album/Movie/Show title");
         idToValue.put(FRAME_ID_OWNERSHIP, "Ownership");
-        idToValue.put(FRAME_ID_PERFORMER_SORT_OWNER, "Performance Sort Order");
+        idToValue.put(FRAME_ID_ARTIST_SORT_ORDER, "Performance Sort Order");
         idToValue.put(FRAME_ID_PLAYLIST_DELAY, "Text: Playlist delay");
         idToValue.put(FRAME_ID_PLAY_COUNTER, "Play counter");
         idToValue.put(FRAME_ID_POPULARIMETER, "Popularimeter");
@@ -286,7 +289,7 @@ public class ID3v24Frames extends ID3Frames
         idToValue.put(FRAME_ID_TERMS_OF_USE, "Terms of Use");
         idToValue.put(FRAME_ID_TITLE, "Text: title");
         idToValue.put(FRAME_ID_TITLE_REFINEMENT, "Text: Subtitle/Description refinement");
-        idToValue.put(FRAME_ID_TITLE_SORT_OWNER, "Text: title sort order");
+        idToValue.put(FRAME_ID_TITLE_SORT_ORDER, "Text: title sort order");
         idToValue.put(FRAME_ID_TRACK, "Text: Track number/Position in set");
         idToValue.put(FRAME_ID_UNIQUE_FILE_ID, "Unique file identifier");
         idToValue.put(FRAME_ID_UNSYNC_LYRICS, "Unsychronized lyric/text transcription");
@@ -300,7 +303,7 @@ public class ID3v24Frames extends ID3Frames
         idToValue.put(FRAME_ID_URL_SOURCE_WEB, "URL: Official audio source webpage");
         idToValue.put(FRAME_ID_USER_DEFINED_INFO, "User defined text information frame");
         idToValue.put(FRAME_ID_USER_DEFINED_URL, "User defined URL link frame");
- 	    idToValue.put(FRAME_ID_YEAR, "Text:Year");
+         idToValue.put(FRAME_ID_YEAR, "Text:Year");
         idToValue.put(FRAME_ID_IS_COMPILATION,"Is Compilation");
 
         createMaps();
@@ -312,6 +315,7 @@ public class ID3v24Frames extends ID3Frames
         multipleFrames.add(FRAME_ID_COMMENT);
         multipleFrames.add(FRAME_ID_UNIQUE_FILE_ID);
         multipleFrames.add(FRAME_ID_UNSYNC_LYRICS);
+        multipleFrames.add(FRAME_ID_POPULARIMETER);
 
         discardIfFileAlteredFrames.add(FRAME_ID_EVENT_TIMING_CODES);
         discardIfFileAlteredFrames.add(FRAME_ID_MPEG_LOCATION_LOOKUP_TABLE);
