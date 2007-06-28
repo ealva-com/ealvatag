@@ -49,7 +49,7 @@ import java.nio.ByteBuffer;
  * @author : Eric Farng
  * @version $Id$
  */
-public class FrameBodyUSER extends AbstractID3v2FrameBody implements ID3v24FrameBody
+public class FrameBodyUSER extends AbstractID3v2FrameBody implements ID3v24FrameBody,ID3v23FrameBody
 {
     /**
      * Creates a new FrameBodyUSER datatype.
@@ -107,7 +107,7 @@ public class FrameBodyUSER extends AbstractID3v2FrameBody implements ID3v24Frame
     /**
      * 
      *
-     * @return 
+     * @return  lanaguage
      */
     public String getLanguage()
     {
@@ -124,7 +124,11 @@ public class FrameBodyUSER extends AbstractID3v2FrameBody implements ID3v24Frame
         setObjectValue(DataTypes.OBJ_LANGUAGE, language);
     }
 
-    /** If the text cannot be encoded using current encoder, change the encoder */
+    /**
+     * If the text cannot be encoded using current encoder, change the encoder
+     * @param tagBuffer
+     * @throws IOException
+     */
     public void write(ByteArrayOutputStream tagBuffer)
         throws IOException
     {
