@@ -15,19 +15,18 @@
  */
 package org.jaudiotagger.tag.id3;
 
-import org.jaudiotagger.tag.AbstractTag;
-import org.jaudiotagger.audio.mp3.*;
-
-import org.jaudiotagger.tag.*;
-import org.jaudiotagger.tag.id3.framebody.FrameBodyTDRC;
-import org.jaudiotagger.tag.id3.framebody.AbstractFrameBodyTextInfo;
 import org.jaudiotagger.FileConstants;
+import org.jaudiotagger.audio.mp3.MP3File;
+import org.jaudiotagger.tag.*;
+import org.jaudiotagger.tag.id3.framebody.AbstractFrameBodyTextInfo;
+import org.jaudiotagger.tag.id3.framebody.FrameBodyTDRC;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
-import java.nio.*;
-import java.nio.channels.*;
+import java.nio.ByteBuffer;
+import java.nio.channels.FileChannel;
+import java.nio.channels.WritableByteChannel;
 import java.util.*;
 import java.util.logging.Level;
 

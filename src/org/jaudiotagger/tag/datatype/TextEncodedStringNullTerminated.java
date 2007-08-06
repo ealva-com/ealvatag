@@ -4,9 +4,9 @@ import org.jaudiotagger.tag.AbstractTagFrameBody;
 import org.jaudiotagger.tag.InvalidDataTypeException;
 import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
 
-import java.nio.charset.*;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
+import java.nio.charset.*;
 
 /**
  * Represents a String whose size is determined by finding of a null character at the end of the String.

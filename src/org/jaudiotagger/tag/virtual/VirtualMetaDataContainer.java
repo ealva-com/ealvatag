@@ -8,7 +8,8 @@
  */
 package org.jaudiotagger.tag.virtual;
 
-import org.jaudiotagger.tag.id3.*;
+import org.jaudiotagger.tag.id3.ID3v24Frame;
+import org.jaudiotagger.tag.id3.ID3v24Tag;
 
 import java.util.*;
 

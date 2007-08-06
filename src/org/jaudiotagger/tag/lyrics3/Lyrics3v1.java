@@ -24,16 +24,15 @@
 package org.jaudiotagger.tag.lyrics3;
 
 import org.jaudiotagger.tag.AbstractTag;
+import org.jaudiotagger.tag.TagException;
+import org.jaudiotagger.tag.TagNotFoundException;
 import org.jaudiotagger.tag.id3.ID3Tags;
 import org.jaudiotagger.tag.id3.ID3v1Tag;
-import org.jaudiotagger.tag.TagNotFoundException;
-import org.jaudiotagger.tag.*;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
-
-import java.util.Iterator;
 import java.nio.ByteBuffer;
+import java.util.Iterator;
 
 public class Lyrics3v1 extends AbstractLyrics3
 {
@@ -152,7 +151,7 @@ public class Lyrics3v1 extends AbstractLyrics3
             return false;
         }
 
-        return (((Lyrics3v1) obj).lyric.indexOf(this.lyric) >= 0);
+        return (((Lyrics3v1) obj).lyric.contains(this.lyric));
     }
 
     /**

@@ -22,19 +22,16 @@
  */
 package org.jaudiotagger.tag.lyrics3;
 
-import org.jaudiotagger.tag.AbstractTag;
-import org.jaudiotagger.tag.InvalidTagException;
-import org.jaudiotagger.tag.TagNotFoundException;
-import org.jaudiotagger.tag.id3.*;
-import org.jaudiotagger.tag.TagException;
-import org.jaudiotagger.tag.TagOptionSingleton;
+import org.jaudiotagger.tag.*;
+import org.jaudiotagger.tag.id3.AbstractID3v2Frame;
+import org.jaudiotagger.tag.id3.ID3v1Tag;
+import org.jaudiotagger.tag.id3.ID3v24Tag;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
-
+import java.nio.ByteBuffer;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.nio.ByteBuffer;
 
 public class Lyrics3v2 extends AbstractLyrics3
 {

@@ -24,15 +24,12 @@
  */
 package org.jaudiotagger.tag.id3.framebody;
 
-import org.jaudiotagger.tag.datatype.*;
 import org.jaudiotagger.tag.InvalidTagException;
-import org.jaudiotagger.tag.id3.framebody.FrameBodyIPLS;
+import org.jaudiotagger.tag.datatype.DataTypes;
+import org.jaudiotagger.tag.datatype.PairedTextEncodedStringNullTerminated;
 import org.jaudiotagger.tag.id3.ID3v24Frames;
-import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
 
 import java.nio.ByteBuffer;
-import java.util.List;
-import java.util.ArrayList;
 
 
 /**
@@ -66,7 +63,7 @@ public class FrameBodyTIPL
      */
     public FrameBodyTIPL(FrameBodyIPLS body)
     {
-        setObjectValue(DataTypes.OBJ_TEXT_ENCODING,  new Byte(body.getTextEncoding()));
+        setObjectValue(DataTypes.OBJ_TEXT_ENCODING, body.getTextEncoding());
 
         PairedTextEncodedStringNullTerminated.ValuePairs  value
             = (PairedTextEncodedStringNullTerminated.ValuePairs)body.getObjectValue(DataTypes.OBJ_TEXT);

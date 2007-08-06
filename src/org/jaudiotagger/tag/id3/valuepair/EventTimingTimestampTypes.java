@@ -40,8 +40,8 @@ public class EventTimingTimestampTypes extends AbstractIntStringValuePair
 
     private EventTimingTimestampTypes()
     {
-        idToValue.put(new Integer(1), "Absolute time using MPEG [MPEG] frames as unit");
-        idToValue.put(new Integer(2), "Absolute time using milliseconds as unit");
+        idToValue.put(1, "Absolute time using MPEG [MPEG] frames as unit");
+        idToValue.put(2, "Absolute time using milliseconds as unit");
 
         createMaps();
     }

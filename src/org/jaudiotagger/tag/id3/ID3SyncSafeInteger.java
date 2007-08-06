@@ -97,9 +97,9 @@ public class ID3SyncSafeInteger
      */
     protected static boolean isBufferEmpty(byte[] buffer)
     {
-        for(int i=0;i<buffer.length;i++)
+        for (byte aBuffer : buffer)
         {
-            if(buffer[i]!=0)
+            if (aBuffer != 0)
             {
                 return false;
             }

@@ -24,8 +24,8 @@ package org.jaudiotagger.test;
 import org.jaudiotagger.audio.mp3.MP3File;
 
 import java.io.File;
-import java.util.Date;
 import java.text.DateFormat;
+import java.util.Date;
 
 /**
  * Simple class that will attempt to recusively read all files within a directory, flags
@@ -84,19 +84,19 @@ public class TestAudioTagger
         final File[] audioFiles = dir.listFiles(new MP3FileFilter());
         if (audioFiles.length > 0)
         {
-            for (int i = 0; i < audioFiles.length; i++)
+            for (File audioFile : audioFiles)
             {
                 count++;
-                final File mp3File = audioFiles[i];
+                final File mp3File = audioFile;
                 try
                 {
-                     //System.out.println("About to read record:"+count+":"+mp3File.getPath());
-                     final MP3File tmpMP3 = new MP3File(mp3File);
+                    //System.out.println("About to read record:"+count+":"+mp3File.getPath());
+                    final MP3File tmpMP3 = new MP3File(mp3File);
 
                 }
                 catch (Throwable t)
                 {
-                    System.err.println("Unable to read record:"+count+":"+mp3File.getPath());
+                    System.err.println("Unable to read record:" + count + ":" + mp3File.getPath());
                     failed++;
                     t.printStackTrace();
                 }
@@ -106,9 +106,9 @@ public class TestAudioTagger
         final File[] audioFileDirs = dir.listFiles(new DirFilter());
         if (audioFileDirs.length > 0)
         {
-            for (int i = 0; i < audioFileDirs.length; i++)
+            for (File audioFileDir : audioFileDirs)
             {
-                scanSingleDir(audioFileDirs[i]);
+                scanSingleDir(audioFileDir);
             }
         }
     }

@@ -15,12 +15,12 @@
  */
 package org.jaudiotagger.tag.id3.framebody;
 
-import java.nio.ByteBuffer;
-
 import org.jaudiotagger.tag.InvalidTagException;
 import org.jaudiotagger.tag.datatype.ByteArraySizeTerminated;
 import org.jaudiotagger.tag.datatype.DataTypes;
 import org.jaudiotagger.tag.id3.ID3v2ChapterFrames;
+
+import java.nio.ByteBuffer;
 
 /**
  * Table of content frame.

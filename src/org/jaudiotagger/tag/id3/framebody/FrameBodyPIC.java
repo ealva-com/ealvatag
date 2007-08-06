@@ -23,15 +23,14 @@
  */
 package org.jaudiotagger.tag.id3.framebody;
 
-import org.jaudiotagger.tag.datatype.*;
 import org.jaudiotagger.tag.InvalidTagException;
-import org.jaudiotagger.tag.id3.framebody.FrameBodyAPIC;
+import org.jaudiotagger.tag.datatype.*;
+import org.jaudiotagger.tag.id3.ID3v22Frames;
 import org.jaudiotagger.tag.id3.valuepair.ImageFormats;
 import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
-import org.jaudiotagger.tag.id3.ID3v22Frames;
 
-import java.io.IOException;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.nio.ByteBuffer;
 
 public class FrameBodyPIC extends AbstractID3v2FrameBody implements ID3v22FrameBody
@@ -43,7 +42,7 @@ public class FrameBodyPIC extends AbstractID3v2FrameBody implements ID3v22FrameB
      */
     public FrameBodyPIC()
     {
-        setObjectValue(DataTypes.OBJ_TEXT_ENCODING, new Byte(TextEncoding.ISO_8859_1));
+        setObjectValue(DataTypes.OBJ_TEXT_ENCODING, TextEncoding.ISO_8859_1);
     }
 
     public FrameBodyPIC(FrameBodyPIC body)
@@ -62,9 +61,9 @@ public class FrameBodyPIC extends AbstractID3v2FrameBody implements ID3v22FrameB
      */
     public FrameBodyPIC(byte textEncoding, String imageFormat, byte pictureType, String description, byte[] data)
     {
-        this.setObjectValue(DataTypes.OBJ_TEXT_ENCODING, new Byte(textEncoding));
+        this.setObjectValue(DataTypes.OBJ_TEXT_ENCODING, textEncoding);
         this.setObjectValue(DataTypes.OBJ_IMAGE_FORMAT, imageFormat);
-        this.setObjectValue(DataTypes.OBJ_PICTURE_TYPE, new Byte(pictureType));
+        this.setObjectValue(DataTypes.OBJ_PICTURE_TYPE, pictureType);
         this.setObjectValue(DataTypes.OBJ_DESCRIPTION, description);
         this.setObjectValue(DataTypes.OBJ_PICTURE_DATA, data);
     }
@@ -74,7 +73,7 @@ public class FrameBodyPIC extends AbstractID3v2FrameBody implements ID3v22FrameB
      */
     public FrameBodyPIC(FrameBodyAPIC body)
     {
-        this.setObjectValue(DataTypes.OBJ_TEXT_ENCODING, new Byte(body.getTextEncoding()));
+        this.setObjectValue(DataTypes.OBJ_TEXT_ENCODING, body.getTextEncoding());
         this.setObjectValue(DataTypes.OBJ_IMAGE_FORMAT, ImageFormats.getFormatForMimeType((String) body.getObjectValue(DataTypes.OBJ_MIME_TYPE)));
         this.setObjectValue(DataTypes.OBJ_PICTURE_TYPE, body.getObjectValue(DataTypes.OBJ_PICTURE_TYPE));
         this.setObjectValue(DataTypes.OBJ_DESCRIPTION, body.getDescription());

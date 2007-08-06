@@ -16,13 +16,15 @@
 package org.jaudiotagger.tag.id3.framebody;
 
 import org.jaudiotagger.tag.InvalidTagException;
-import org.jaudiotagger.tag.datatype.*;
+import org.jaudiotagger.tag.datatype.DataTypes;
+import org.jaudiotagger.tag.datatype.NumberHashMap;
+import org.jaudiotagger.tag.datatype.PairedTextEncodedStringNullTerminated;
 import org.jaudiotagger.tag.id3.ID3v23Frames;
 import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
 
-import java.nio.ByteBuffer;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.nio.ByteBuffer;
 import java.util.StringTokenizer;
 
 /**
@@ -57,7 +59,7 @@ public class FrameBodyIPLS  extends AbstractID3v2FrameBody implements ID3v23Fram
     public FrameBodyIPLS()
     {
         super();
-        setObjectValue(DataTypes.OBJ_TEXT_ENCODING, new Byte(TextEncoding.ISO_8859_1));
+        setObjectValue(DataTypes.OBJ_TEXT_ENCODING, TextEncoding.ISO_8859_1);
     }
 
     public FrameBodyIPLS(ByteBuffer byteBuffer, int frameSize)
@@ -81,7 +83,7 @@ public class FrameBodyIPLS  extends AbstractID3v2FrameBody implements ID3v23Fram
      */
     public FrameBodyIPLS(FrameBodyTIPL body)
     {
-        setObjectValue(DataTypes.OBJ_TEXT_ENCODING,  new Byte(body.getTextEncoding()));
+        setObjectValue(DataTypes.OBJ_TEXT_ENCODING, body.getTextEncoding());
 
         String valueAsCommaSeperatedString = (String)body.getObjectValue(DataTypes.OBJ_TEXT);
 

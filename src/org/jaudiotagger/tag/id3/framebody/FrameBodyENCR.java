@@ -15,11 +15,8 @@
  */
 package org.jaudiotagger.tag.id3.framebody;
 
-import org.jaudiotagger.tag.datatype.ByteArraySizeTerminated;
-import org.jaudiotagger.tag.datatype.NumberFixedLength;
-import org.jaudiotagger.tag.datatype.StringNullTerminated;
-import org.jaudiotagger.tag.datatype.DataTypes;
 import org.jaudiotagger.tag.InvalidTagException;
+import org.jaudiotagger.tag.datatype.*;
 import org.jaudiotagger.tag.id3.ID3v24Frames;
 
 import java.nio.ByteBuffer;
@@ -66,7 +63,7 @@ public class FrameBodyENCR extends AbstractID3v2FrameBody implements ID3v24Frame
     public FrameBodyENCR()
     {
         this.setObjectValue(DataTypes.OBJ_OWNER, "");
-        this.setObjectValue(DataTypes.OBJ_METHOD_SYMBOL, new Byte((byte) 0));
+        this.setObjectValue(DataTypes.OBJ_METHOD_SYMBOL, (byte) 0);
         this.setObjectValue(DataTypes.OBJ_METHOD_SYMBOL, new byte[0]);
     }
 
@@ -85,7 +82,7 @@ public class FrameBodyENCR extends AbstractID3v2FrameBody implements ID3v24Frame
     public FrameBodyENCR(String owner, byte methodSymbol, byte[] data)
     {
         this.setObjectValue(DataTypes.OBJ_OWNER, owner);
-        this.setObjectValue(DataTypes.OBJ_METHOD_SYMBOL, new Byte(methodSymbol));
+        this.setObjectValue(DataTypes.OBJ_METHOD_SYMBOL, methodSymbol);
         this.setObjectValue(DataTypes.OBJ_METHOD_SYMBOL, data);
     }
 

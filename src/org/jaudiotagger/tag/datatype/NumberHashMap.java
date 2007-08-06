@@ -23,13 +23,11 @@
  */
 package org.jaudiotagger.tag.datatype;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.TreeSet;
-
 import org.jaudiotagger.tag.AbstractTagFrameBody;
 import org.jaudiotagger.tag.InvalidDataTypeException;
 import org.jaudiotagger.tag.id3.valuepair.*;
+
+import java.util.*;
 
 /**
  * Represents a number thats acts as a key into an enumeration of values
@@ -40,12 +38,12 @@ public class NumberHashMap extends NumberFixedLength implements HashMapInterface
     /**
      * key to value map
      */
-    private HashMap keyToValue = null;
+    private Map keyToValue = null;
 
     /**
      * value to key map
      */
-    private HashMap valueToKey = null;
+    private Map valueToKey = null;
 
     /**
      * 
@@ -55,9 +53,9 @@ public class NumberHashMap extends NumberFixedLength implements HashMapInterface
     /**
      * Creates a new ObjectNumberHashMap datatype.
      *
-     * @param identifier 
-     * @param size       
-     * @throws IllegalArgumentException 
+     * @param identifier
+     * @param size
+     * @throws IllegalArgumentException
      */
     public NumberHashMap(String identifier, AbstractTagFrameBody frameBody, int size)
     {
@@ -131,7 +129,7 @@ public class NumberHashMap extends NumberFixedLength implements HashMapInterface
      *
      * @return the key to value map
      */
-    public HashMap getKeyToValue()
+    public Map getKeyToValue()
     {
         return keyToValue;
     }
@@ -141,7 +139,7 @@ public class NumberHashMap extends NumberFixedLength implements HashMapInterface
      *
      * @return the value to key map
      */
-    public HashMap getValueToKey()
+    public Map getValueToKey()
     {
         return valueToKey;
     }
@@ -149,21 +147,21 @@ public class NumberHashMap extends NumberFixedLength implements HashMapInterface
     /**
      * 
      *
-     * @param value 
+     * @param value
      */
     public void setValue(Object value)
     {
         if (value instanceof Byte)
         {
-            this.value = new Long(((Byte) value).byteValue());
+            this.value = (long) ((Byte) value).byteValue();
         }
         else if (value instanceof Short)
         {
-            this.value = new Long(((Short) value).shortValue());
+            this.value = (long) ((Short) value).shortValue();
         }
         else if (value instanceof Integer)
         {
-            this.value = new Long(((Integer) value).intValue());
+            this.value = (long) ((Integer) value).intValue();
         }
         else
         {
@@ -174,8 +172,8 @@ public class NumberHashMap extends NumberFixedLength implements HashMapInterface
     /**
      * 
      *
-     * @param obj 
-     * @return 
+     * @param obj
+     * @return
      */
     public boolean equals(Object obj)
     {
@@ -227,7 +225,7 @@ public class NumberHashMap extends NumberFixedLength implements HashMapInterface
     /**
      * 
      *
-     * @return 
+     * @return
      */
     public Iterator iterator()
     {
@@ -262,7 +260,7 @@ public class NumberHashMap extends NumberFixedLength implements HashMapInterface
         if(hasEmptyValue==false)
         {
             //Mismatch:Superclass uses Long, but maps expect Integer
-            Integer intValue = new Integer(((Long)value).intValue());
+            Integer intValue = ((Long) value).intValue();
             if(!keyToValue.containsKey(intValue))
             {
                 throw new InvalidDataTypeException(this.getClass().getName()
@@ -273,7 +271,7 @@ public class NumberHashMap extends NumberFixedLength implements HashMapInterface
     /**
      * 
      *
-     * @return 
+     * @return
      */
     public String toString()
     {

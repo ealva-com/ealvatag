@@ -15,14 +15,14 @@
  */
 package org.jaudiotagger.tag.id3.framebody;
 
-import org.jaudiotagger.tag.datatype.*;
 import org.jaudiotagger.tag.InvalidTagException;
+import org.jaudiotagger.tag.datatype.*;
 import org.jaudiotagger.tag.id3.ID3v24Frames;
-import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
 import org.jaudiotagger.tag.id3.valuepair.Languages;
+import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
 
-import java.io.IOException;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.nio.ByteBuffer;
 
 /**
@@ -75,7 +75,7 @@ public class FrameBodyUSER extends AbstractID3v2FrameBody implements ID3v24Frame
      */
     public FrameBodyUSER(byte textEncoding, String language, String text)
     {
-        setObjectValue(DataTypes.OBJ_TEXT_ENCODING, new Byte(textEncoding));
+        setObjectValue(DataTypes.OBJ_TEXT_ENCODING, textEncoding);
         setObjectValue(DataTypes.OBJ_LANGUAGE, language);
         setObjectValue(DataTypes.OBJ_TEXT, text);
     }

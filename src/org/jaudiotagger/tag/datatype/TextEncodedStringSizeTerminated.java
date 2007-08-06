@@ -5,10 +5,12 @@ import org.jaudiotagger.tag.InvalidDataTypeException;
 import org.jaudiotagger.tag.TagOptionSingleton;
 import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
 
-import java.nio.charset.*;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
-import java.util.*;
+import java.nio.charset.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Represents a String which is not delimited by null character.

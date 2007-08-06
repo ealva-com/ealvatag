@@ -101,7 +101,7 @@ public class FieldFrameBodyUnsupported extends AbstractLyrics3v2FieldFrameBody
         String subset = new String((byte[]) this.value);
         String superset = new String((byte[]) object.value);
 
-        if (superset.indexOf(subset) < 0)
+        if (!superset.contains(subset))
         {
             return false;
         }

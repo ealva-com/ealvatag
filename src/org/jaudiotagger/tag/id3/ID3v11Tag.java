@@ -24,22 +24,18 @@
  */
 package org.jaudiotagger.tag.id3;
 
-import org.jaudiotagger.tag.AbstractTag;
 import org.jaudiotagger.audio.mp3.MP3File;
-import org.jaudiotagger.tag.TagException;
-import org.jaudiotagger.tag.TagOptionSingleton;
-import org.jaudiotagger.tag.TagNotFoundException;
+import org.jaudiotagger.tag.*;
 import org.jaudiotagger.tag.id3.framebody.*;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
-
-import java.util.Iterator;
-import java.util.regex.*;
-import java.util.*;
-import java.util.logging.Level;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.logging.Level;
+import java.util.regex.Matcher;
 
 /**
  * Represents an ID3v11 tag.
@@ -100,7 +96,7 @@ public class ID3v11Tag
         return REVISION;
     }
     /**
-     * Creates a new ID3v1_1 datatype.
+     * Creates a new ID3v11 datatype.
      */
     public ID3v11Tag()
     {
@@ -114,7 +110,7 @@ public class ID3v11Tag
     }
 
     /**
-     * Creates a new ID3v1_1 datatype from a non v11 tag
+     * Creates a new ID3v11 datatype from a non v11 tag
      *
      * @param mp3tag 
      * @throws UnsupportedOperationException 
@@ -235,7 +231,7 @@ public class ID3v11Tag
         throws TagNotFoundException, IOException
     {
         setLoggingFilename(loggingFilename);
-        FileChannel fc = null;
+        FileChannel fc;
         ByteBuffer  byteBuffer = ByteBuffer.allocate(TAG_LENGTH);
 
         fc = file.getChannel();
@@ -284,7 +280,7 @@ public class ID3v11Tag
     }
 
     /**
-     * Set the track, v1_1 stores track numbers in a single byte value so can only
+     * Set the track, v11 stores track numbers in a single byte value so can only
      * handle a simple number in the range 0-255.
      *
      * @param trackValue
@@ -292,7 +288,7 @@ public class ID3v11Tag
     public void setTrack(String trackValue)
     {
         int trackAsInt;
-        //Try and convert String representaion of track into an integer
+        //Try and convert String representation of track into an integer
         try
         {
             trackAsInt = Integer.parseInt(trackValue);
@@ -301,12 +297,12 @@ public class ID3v11Tag
         {
             trackAsInt = 0;
         }
-        //@todo also deal with 3/10 format and take first value.
+
 
         //This value cannot be held in v1_1
         if ((trackAsInt > TRACK_MAX_VALUE) || (trackAsInt < TRACK_MIN_VALUE))
         {
-            this.track = (byte) 0x00;
+            this.track = (byte) TRACK_UNDEFINED;
         }
         else
         {
@@ -368,7 +364,7 @@ public class ID3v11Tag
             return false;
         }
         //Now check for TRACK if the next byte is also null byte then not v1.1
-        //tag,however this means cannot have v1_1 tag with track set to zero/undefined
+        //tag, however this means cannot have v1_1 tag with track set to zero/undefined
         //because on next read will be v1 tag.
         if (byteBuffer.get() == END_OF_FIELD)
         {

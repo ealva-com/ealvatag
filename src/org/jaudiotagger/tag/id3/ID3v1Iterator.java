@@ -205,10 +205,10 @@ public class ID3v1Iterator implements Iterator
                 return (id3v1tag.year.length() > 0) ? id3v1tag.year : next(index + 1);
 
             case YEAR:
-                return (id3v1tag.genre >= (byte) 0) ? new Byte(id3v1tag.genre) : next(index + 1);
+                return (id3v1tag.genre >= (byte) 0) ? id3v1tag.genre : next(index + 1);
 
             case GENRE:
-                return (id3v1tag instanceof ID3v11Tag && (((ID3v11Tag) id3v1tag).track >= (byte) 0)) ? new Byte(((ID3v11Tag) id3v1tag).track) : null;
+                return (id3v1tag instanceof ID3v11Tag && (((ID3v11Tag) id3v1tag).track >= (byte) 0)) ? ((ID3v11Tag) id3v1tag).track : null;
 
             default:
                 throw new NoSuchElementException("Iteration has no more elements.");

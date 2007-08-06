@@ -15,8 +15,8 @@
  */
 package org.jaudiotagger.tag.id3.framebody;
 
-import org.jaudiotagger.tag.datatype.*;
 import org.jaudiotagger.tag.InvalidTagException;
+import org.jaudiotagger.tag.datatype.*;
 import org.jaudiotagger.tag.id3.ID3v24Frames;
 
 import java.nio.ByteBuffer;
@@ -69,8 +69,8 @@ public class FrameBodyAENC extends AbstractID3v2FrameBody implements ID3v24Frame
     public FrameBodyAENC()
     {
         this.setObjectValue(DataTypes.OBJ_OWNER, "");
-        this.setObjectValue(DataTypes.OBJ_PREVIEW_START, new Short((short)0));
-        this.setObjectValue(DataTypes.OBJ_PREVIEW_LENGTH, new Short((short)0));
+        this.setObjectValue(DataTypes.OBJ_PREVIEW_START, (short) 0);
+        this.setObjectValue(DataTypes.OBJ_PREVIEW_LENGTH, (short) 0);
         this.setObjectValue(DataTypes.OBJ_ENCRYPTION_INFO, new byte[0]);
     }
 
@@ -93,8 +93,8 @@ public class FrameBodyAENC extends AbstractID3v2FrameBody implements ID3v24Frame
                          byte[] data)
     {
         this.setObjectValue(DataTypes.OBJ_OWNER, owner);
-        this.setObjectValue(DataTypes.OBJ_PREVIEW_START, new Short(previewStart));
-        this.setObjectValue(DataTypes.OBJ_PREVIEW_LENGTH, new Short(previewLength));
+        this.setObjectValue(DataTypes.OBJ_PREVIEW_START, previewStart);
+        this.setObjectValue(DataTypes.OBJ_PREVIEW_LENGTH, previewLength);
         this.setObjectValue(DataTypes.OBJ_ENCRYPTION_INFO, data);
     }
 

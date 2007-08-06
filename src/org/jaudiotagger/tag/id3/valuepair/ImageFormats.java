@@ -23,7 +23,9 @@
  */
 package org.jaudiotagger.tag.id3.valuepair;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 /** Represents the image formats support by ID3, provides a mapping between the format field supported in ID3v22 and the
  *  mimetype field supported by ID3v23/ID3v24.
@@ -43,8 +45,8 @@ public class ImageFormats
     /** Sometimes this is used for jpg instead :or have I made this up */
     public static final String MIME_TYPE_JPG  = "image/jpg";
 
-    private static HashMap imageFormatsToMimeType = new HashMap();
-    private static HashMap imageMimeTypeToFormat = new HashMap();
+    private static Map<String,String> imageFormatsToMimeType = new HashMap <String,String>();
+    private static Map<String,String> imageMimeTypeToFormat  = new HashMap<String,String>();
 
     static
     {
@@ -52,12 +54,9 @@ public class ImageFormats
         imageFormatsToMimeType.put(V22_PNG_FORMAT, MIME_TYPE_PNG);
         imageFormatsToMimeType.put(V22_GIF_FORMAT, MIME_TYPE_GIF);
         imageFormatsToMimeType.put(V22_BMP_FORMAT, MIME_TYPE_BMP);
-        Iterator iterator = imageFormatsToMimeType.keySet().iterator();
-        Object key;
-        Object value;
-        while (iterator.hasNext())
+        String value;
+        for (String key :imageFormatsToMimeType.keySet())
         {
-            key = iterator.next();
             value = imageFormatsToMimeType.get(key);
             imageMimeTypeToFormat.put(value, key);
         }
@@ -71,7 +70,7 @@ public class ImageFormats
      */
     public static String getMimeTypeForFormat(String format)
     {
-        return (String) imageFormatsToMimeType.get(format);
+        return imageFormatsToMimeType.get(format);
     }
 
     /**
@@ -79,7 +78,7 @@ public class ImageFormats
      */
     public static String getFormatForMimeType(String mimeType)
     {
-        return (String) imageMimeTypeToFormat.get(mimeType);
+        return imageMimeTypeToFormat.get(mimeType);
     }
 
 }

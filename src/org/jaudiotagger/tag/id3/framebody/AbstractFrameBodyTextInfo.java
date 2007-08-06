@@ -22,17 +22,16 @@
  */
 package org.jaudiotagger.tag.id3.framebody;
 
-import org.jaudiotagger.tag.datatype.NumberHashMap;
-import org.jaudiotagger.tag.datatype.StringSizeTerminated;
-
-import java.io.*;
-import java.nio.*;
-
-import org.jaudiotagger.tag.datatype.*;
 import org.jaudiotagger.tag.InvalidTagException;
-import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
-import org.jaudiotagger.tag.id3.ID3v24Frame;
+import org.jaudiotagger.tag.datatype.DataTypes;
+import org.jaudiotagger.tag.datatype.NumberHashMap;
+import org.jaudiotagger.tag.datatype.TextEncodedStringSizeTerminated;
 import org.jaudiotagger.tag.id3.ID3TextEncodingConversion;
+import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.nio.ByteBuffer;
 
 /** Abstract representation of a Text Frame
 *
@@ -63,7 +62,7 @@ public abstract class AbstractFrameBodyTextInfo
     protected AbstractFrameBodyTextInfo()
     {
         super();
-        setObjectValue(DataTypes.OBJ_TEXT_ENCODING, new Byte(TextEncoding.ISO_8859_1));
+        setObjectValue(DataTypes.OBJ_TEXT_ENCODING, TextEncoding.ISO_8859_1);
         setObjectValue(DataTypes.OBJ_TEXT, "");
     }
 
@@ -88,7 +87,7 @@ public abstract class AbstractFrameBodyTextInfo
     protected AbstractFrameBodyTextInfo(byte textEncoding, String text)
     {
         super();
-        setObjectValue(DataTypes.OBJ_TEXT_ENCODING, new Byte(textEncoding));
+        setObjectValue(DataTypes.OBJ_TEXT_ENCODING, textEncoding);
         setObjectValue(DataTypes.OBJ_TEXT, text);
     }
 

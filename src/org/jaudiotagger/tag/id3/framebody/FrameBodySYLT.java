@@ -15,13 +15,11 @@
  */
 package org.jaudiotagger.tag.id3.framebody;
 
-import org.jaudiotagger.tag.id3.ID3v24Frames;
-import org.jaudiotagger.tag.id3.valuepair.*;
 import org.jaudiotagger.tag.InvalidTagException;
 import org.jaudiotagger.tag.datatype.*;
+import org.jaudiotagger.tag.id3.ID3v24Frames;
+import org.jaudiotagger.tag.id3.valuepair.*;
 
-import java.util.Iterator;
-import java.util.LinkedList;
 import java.nio.ByteBuffer;
 
 /**
@@ -147,10 +145,10 @@ public class FrameBodySYLT extends AbstractID3v2FrameBody implements ID3v24Frame
                          String description,
                          byte[] lyrics)
     {
-        setObjectValue(DataTypes.OBJ_TEXT_ENCODING, new Integer(textEncoding));
+        setObjectValue(DataTypes.OBJ_TEXT_ENCODING, textEncoding);
         setObjectValue(DataTypes.OBJ_LANGUAGE, language);
-        setObjectValue(DataTypes.OBJ_TIME_STAMP_FORMAT,new Integer(timeStampFormat));
-        setObjectValue(DataTypes.OBJ_CONTENT_TYPE, new Integer(contentType));
+        setObjectValue(DataTypes.OBJ_TIME_STAMP_FORMAT, timeStampFormat);
+        setObjectValue(DataTypes.OBJ_CONTENT_TYPE, contentType);
         setObjectValue(DataTypes.OBJ_DESCRIPTION, description);
         setObjectValue(DataTypes.OBJ_DATA,lyrics);
     }

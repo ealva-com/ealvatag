@@ -15,15 +15,18 @@
  */
 package org.jaudiotagger.tag.id3;
 
-import org.jaudiotagger.audio.mp3.*;
-import org.jaudiotagger.tag.*;
-import org.jaudiotagger.tag.id3.framebody.FrameBodyUnsupported;
+import org.jaudiotagger.audio.mp3.MP3File;
+import org.jaudiotagger.tag.AbstractTagFrame;
+import org.jaudiotagger.tag.InvalidFrameException;
+import org.jaudiotagger.tag.InvalidTagException;
 import org.jaudiotagger.tag.id3.framebody.AbstractID3v2FrameBody;
+import org.jaudiotagger.tag.id3.framebody.FrameBodyUnsupported;
 
-import java.io.IOException;
 import java.io.ByteArrayOutputStream;
-import java.lang.reflect.*;
-import java.nio.*;
+import java.io.IOException;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.nio.ByteBuffer;
 import java.util.logging.Level;
 
 /**
@@ -99,9 +102,8 @@ public abstract class AbstractID3v2Frame
         logger.info("Creating empty frame of type" + identifier);
         this.identifier = identifier;
 
-        /* Use reflection to map id to frame body, which makes things much easier
-         * to keep things up to date.
-         */
+        // Use reflection to map id to frame body, which makes things much easier
+        // to keep things up to date.
         try
         {
             Class c = Class.forName("org.jaudiotagger.tag.id3.framebody.FrameBody" + identifier);
@@ -183,7 +185,7 @@ public abstract class AbstractID3v2Frame
                 {((Class) Class.forName("java.nio.ByteBuffer")), Integer.TYPE
                 };
             Object[] constructorParameterValues =
-                {byteBuffer, new Integer(frameSize)
+                {byteBuffer, frameSize
                 };
             Constructor construct = c.getConstructor(constructorParameterTypes);
             frameBody = (AbstractID3v2FrameBody) (construct.newInstance(constructorParameterValues));
@@ -271,7 +273,7 @@ public abstract class AbstractID3v2Frame
         /* Use reflection to map id to frame body, which makes things much easier
          * to keep things up to date, although slight performance hit.
          */
-        AbstractID3v2FrameBody frameBody = null;
+        AbstractID3v2FrameBody frameBody;
         try
         {
             Class c = Class.forName("org.jaudiotagger.tag.id3.framebody.FrameBody" + identifier);

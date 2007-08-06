@@ -23,17 +23,18 @@
  */
 package org.jaudiotagger.tag.id3.framebody;
 
-import org.jaudiotagger.tag.datatype.DataTypes;
 import org.jaudiotagger.tag.InvalidTagException;
-import org.jaudiotagger.tag.id3.framebody.FrameBodyTDAT;
-import org.jaudiotagger.tag.id3.valuepair.*;
+import org.jaudiotagger.tag.datatype.DataTypes;
 import org.jaudiotagger.tag.id3.ID3v23Frames;
 import org.jaudiotagger.tag.id3.ID3v24Frames;
+import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
 
-import java.text.*;
+import java.nio.ByteBuffer;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.nio.ByteBuffer;
+import java.util.List;
 
 
 public class FrameBodyTDRC extends AbstractFrameBodyTextInfo implements ID3v24FrameBody
@@ -51,7 +52,7 @@ public class FrameBodyTDRC extends AbstractFrameBodyTextInfo implements ID3v24Fr
     private static SimpleDateFormat formatDateIn, formatDateOut;
     private static SimpleDateFormat formatTimeIn, formatTimeOut;
 
-    private static final ArrayList formatters = new ArrayList();
+    private static final List<SimpleDateFormat> formatters = new ArrayList<SimpleDateFormat>();
 
     private static final int PRECISION_SECOND = 0;
     private static final int PRECISION_MINUTE = 1;
@@ -206,7 +207,7 @@ public class FrameBodyTDRC extends AbstractFrameBodyTextInfo implements ID3v24Fr
     {
         originalID = ID3v23Frames.FRAME_ID_V3_TYER;
         year = body.getText();
-        setObjectValue(DataTypes.OBJ_TEXT_ENCODING,  new Byte(TextEncoding.ISO_8859_1));
+        setObjectValue(DataTypes.OBJ_TEXT_ENCODING, TextEncoding.ISO_8859_1);
         setObjectValue(DataTypes.OBJ_TEXT, body.getText());
     }
 
@@ -217,7 +218,7 @@ public class FrameBodyTDRC extends AbstractFrameBodyTextInfo implements ID3v24Fr
     {
         originalID = ID3v23Frames.FRAME_ID_V3_TIME;
         time = body.getText();
-        setObjectValue(DataTypes.OBJ_TEXT_ENCODING,  new Byte(TextEncoding.ISO_8859_1));
+        setObjectValue(DataTypes.OBJ_TEXT_ENCODING, TextEncoding.ISO_8859_1);
         setObjectValue(DataTypes.OBJ_TEXT, body.getText());
     }
 
@@ -228,7 +229,7 @@ public class FrameBodyTDRC extends AbstractFrameBodyTextInfo implements ID3v24Fr
     {
         originalID = ID3v23Frames.FRAME_ID_V3_TDAT;
         date = body.getText();
-        setObjectValue(DataTypes.OBJ_TEXT_ENCODING,  new Byte(TextEncoding.ISO_8859_1));
+        setObjectValue(DataTypes.OBJ_TEXT_ENCODING, TextEncoding.ISO_8859_1);
         setObjectValue(DataTypes.OBJ_TEXT, body.getText());
     }
 
@@ -239,15 +240,15 @@ public class FrameBodyTDRC extends AbstractFrameBodyTextInfo implements ID3v24Fr
     {
         originalID = ID3v23Frames.FRAME_ID_V3_TRDA;
         reco = body.getText();
-        setObjectValue(DataTypes.OBJ_TEXT_ENCODING,  new Byte(TextEncoding.ISO_8859_1));
+        setObjectValue(DataTypes.OBJ_TEXT_ENCODING, TextEncoding.ISO_8859_1);
         setObjectValue(DataTypes.OBJ_TEXT, body.getText());
     }
 
     /**
      * Creates a new FrameBodyTDRC datatype.
      *
-     * @param textEncoding 
-     * @param text         
+     * @param textEncoding
+     * @param text
      */
     public FrameBodyTDRC(byte textEncoding, String text)
     {
@@ -275,7 +276,7 @@ public class FrameBodyTDRC extends AbstractFrameBodyTextInfo implements ID3v24Fr
     /**
      * Creates a new FrameBodyTDRC datatype from File
      *
-     * @throws InvalidTagException 
+     * @throws InvalidTagException
      */
     public FrameBodyTDRC(ByteBuffer byteBuffer, int frameSize)
         throws InvalidTagException

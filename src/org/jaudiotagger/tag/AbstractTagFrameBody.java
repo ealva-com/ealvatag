@@ -35,7 +35,6 @@ package org.jaudiotagger.tag;
 import org.jaudiotagger.tag.datatype.AbstractDataType;
 import org.jaudiotagger.tag.datatype.DataTypes;
 import org.jaudiotagger.tag.id3.ID3Tags;
-import org.jaudiotagger.tag.AbstractTagItem;
 import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
 
 import java.util.ArrayList;
@@ -61,7 +60,7 @@ public abstract class AbstractTagFrameBody
     /**
      * List of data types that make up this particular frame body.
      */
-    protected ArrayList objectList = new ArrayList();
+    protected ArrayList <AbstractDataType> objectList = new ArrayList<AbstractDataType>();
 
     /**
      * Return the Text Encoding
@@ -91,7 +90,7 @@ public abstract class AbstractTagFrameBody
     public final void setTextEncoding(byte textEncoding)
     {
         //Number HashMap actually converts this byte to a long
-        setObjectValue(DataTypes.OBJ_TEXT_ENCODING, new Byte(textEncoding));
+        setObjectValue(DataTypes.OBJ_TEXT_ENCODING, textEncoding);
     }
 
 
@@ -129,11 +128,8 @@ public abstract class AbstractTagFrameBody
     public String getBriefDescription()
     {
         String str = "";
-        AbstractDataType object;
-        Iterator iterator = objectList.listIterator();
-        while (iterator.hasNext())
+        for(AbstractDataType object:objectList)
         {
-            object = (AbstractDataType) iterator.next();
             if ((object.toString() != null) && (object.toString().length() > 0))
             {
                 str += (object.getIdentifier() + "=\"" + object.toString() + "\"; ");
@@ -153,11 +149,8 @@ public abstract class AbstractTagFrameBody
     public final String getLongDescription()
     {
         String str = "";
-        AbstractDataType object;
-        Iterator iterator = objectList.listIterator();
-        while (iterator.hasNext())
-        {
-            object = (AbstractDataType) iterator.next();
+        for(AbstractDataType object:objectList)
+        {       
             if ((object.toString() != null) && (object.toString().length() > 0))
             {
                str += (object.getIdentifier() + " = " + object.toString() + "\n");
@@ -256,11 +249,11 @@ public abstract class AbstractTagFrameBody
             return false;
         }
         ArrayList superset = ((AbstractTagFrameBody) obj).objectList;
-        for (int i = 0; i < objectList.size(); i++)
+        for (Object anObjectList : objectList)
         {
-            if (((AbstractDataType) objectList.get(i)).getValue() != null)
+            if (((AbstractDataType) anObjectList).getValue() != null)
             {
-                if (superset.contains(objectList.get(i)) == false)
+                if (superset.contains(anObjectList) == false)
                 {
                     return false;
                 }

@@ -15,8 +15,6 @@
  */
 package org.jaudiotagger.tag.id3;
 
-import org.jaudiotagger.tag.id3.ID3Frames;
-
 /**
  * Defines ID3v24 frames and collections that categorise frames.
  *

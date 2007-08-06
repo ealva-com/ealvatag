@@ -27,10 +27,9 @@
 package org.jaudiotagger.tag;
 
 import org.jaudiotagger.logging.LogFormatter;
-import org.jaudiotagger.tag.TagException;
 
-import java.util.logging.*;
 import java.nio.ByteBuffer;
+import java.util.logging.Logger;
 
 
 /** This specifies a series of methods that have to be implemented by all structural subclasses,

@@ -27,7 +27,7 @@ public class FrameBodyTCMP extends AbstractFrameBodyTextInfo implements ID3v24Fr
      */
     public FrameBodyTCMP()
     {
-        setObjectValue(DataTypes.OBJ_TEXT_ENCODING, new Byte(TextEncoding.ISO_8859_1));
+        setObjectValue(DataTypes.OBJ_TEXT_ENCODING, TextEncoding.ISO_8859_1);
         setObjectValue(DataTypes.OBJ_TEXT, IS_COMPILATION);
     }
 

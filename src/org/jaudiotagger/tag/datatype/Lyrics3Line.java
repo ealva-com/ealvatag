@@ -23,11 +23,11 @@
  */
 package org.jaudiotagger.tag.datatype;
 
-import java.util.Iterator;
-import java.util.LinkedList;
-
 import org.jaudiotagger.tag.AbstractTagFrameBody;
 import org.jaudiotagger.tag.InvalidDataTypeException;
+
+import java.util.Iterator;
+import java.util.LinkedList;
 
 public class Lyrics3Line
     extends AbstractDataType
@@ -92,9 +92,9 @@ public class Lyrics3Line
     public int getSize()
     {
         int size = 0;
-        for (int i = 0; i < timeStamp.size(); i++)
+        for (Object aTimeStamp : timeStamp)
         {
-            size += ((Lyrics3TimeStamp) timeStamp.get(i)).getSize();
+            size += ((Lyrics3TimeStamp) aTimeStamp).getSize();
         }
         return size + lyric.length();
     }
@@ -220,9 +220,9 @@ public class Lyrics3Line
     public String toString()
     {
         String str = "";
-        for (int i = 0; i < timeStamp.size(); i++)
+        for (Object aTimeStamp : timeStamp)
         {
-            str += timeStamp.get(i).toString();
+            str += aTimeStamp.toString();
         }
         return "timeStamp = " + str + ", lyric = " + lyric + "\n";
     }
@@ -236,9 +236,9 @@ public class Lyrics3Line
     {
         String str = "";
         Lyrics3TimeStamp time;
-        for (int i = 0; i < timeStamp.size(); i++)
+        for (Object aTimeStamp : timeStamp)
         {
-            time = (Lyrics3TimeStamp) timeStamp.get(i);
+            time = (Lyrics3TimeStamp) aTimeStamp;
             str += time.writeString();
         }
         return str + lyric;

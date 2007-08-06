@@ -22,14 +22,13 @@
  */
 package org.jaudiotagger.tag.datatype;
 
-import java.util.Arrays;
-
-import org.jaudiotagger.audio.mp3.*;
+import org.jaudiotagger.audio.mp3.MP3File;
 import org.jaudiotagger.logging.LogFormatter;
 import org.jaudiotagger.tag.AbstractTagFrameBody;
 import org.jaudiotagger.tag.InvalidDataTypeException;
 
-import java.util.logging.*;
+import java.util.Arrays;
+import java.util.logging.Logger;
 
 /**
  * Represents a field/data type that can be held within a frames body, these map loosely onto
@@ -110,35 +109,35 @@ public abstract class AbstractDataType
         }
         else if (copyObject.value instanceof Boolean)
         {
-            this.value = new Boolean(((Boolean) copyObject.value).booleanValue());
+            this.value = (Boolean) copyObject.value;
         }
         else if (copyObject.value instanceof Byte)
         {
-            this.value = new Byte(((Byte) copyObject.value).byteValue());
+            this.value = (Byte) copyObject.value;
         }
         else if (copyObject.value instanceof Character)
         {
-            this.value = new Character(((Character) copyObject.value).charValue());
+            this.value = (Character) copyObject.value;
         }
         else if (copyObject.value instanceof Double)
         {
-            this.value = new Double(((Double) copyObject.value).doubleValue());
+            this.value = (Double) copyObject.value;
         }
         else if (copyObject.value instanceof Float)
         {
-            this.value = new Float(((Float) copyObject.value).floatValue());
+            this.value = (Float) copyObject.value;
         }
         else if (copyObject.value instanceof Integer)
         {
-            this.value = new Integer(((Integer) copyObject.value).intValue());
+            this.value = (Integer) copyObject.value;
         }
         else if (copyObject.value instanceof Long)
         {
-            this.value = new Long(((Long) copyObject.value).longValue());
+            this.value = (Long) copyObject.value;
         }
         else if (copyObject.value instanceof Short)
         {
-            this.value = new Short(((Short) copyObject.value).shortValue());
+            this.value = (Short) copyObject.value;
         }
         else if (copyObject.value instanceof boolean[])
         {

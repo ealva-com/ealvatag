@@ -22,13 +22,15 @@
  */
 package org.jaudiotagger.tag.lyrics3;
 
-import org.jaudiotagger.tag.datatype.*;
-import org.jaudiotagger.tag.*;
+import org.jaudiotagger.tag.AbstractTagFrameBody;
+import org.jaudiotagger.tag.InvalidTagException;
+import org.jaudiotagger.tag.TagOptionSingleton;
+import org.jaudiotagger.tag.datatype.AbstractDataType;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
-import java.util.*;
 import java.nio.ByteBuffer;
+import java.util.Iterator;
 
 public abstract class AbstractLyrics3v2FieldFrameBody extends AbstractTagFrameBody
 {

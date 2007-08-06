@@ -3,8 +3,6 @@ package org.jaudiotagger.test;
 import org.jaudiotagger.audio.mp3.MP3File;
 
 import java.io.File;
-import java.util.Date;
-import java.text.DateFormat;
 
 /**
  * Simple class that will attempt to recusively read all files within a directory, flags

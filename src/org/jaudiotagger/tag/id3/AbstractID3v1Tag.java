@@ -28,10 +28,10 @@ import org.jaudiotagger.logging.LogFormatter;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
-import java.util.regex.*;
-import java.util.logging.Logger;
-import java.nio.channels.FileChannel;
 import java.nio.ByteBuffer;
+import java.nio.channels.FileChannel;
+import java.util.logging.Logger;
+import java.util.regex.Pattern;
 
 /**
  * This is the abstract base class for all ID3v1 tags.

@@ -27,7 +27,6 @@
 package org.jaudiotagger.tag;
 
 import org.jaudiotagger.tag.id3.ID3Tags;
-import org.jaudiotagger.tag.AbstractTagItem;
 
 /**
  * A frame contains meta-information of a particular type. A frame contains a header and a body

@@ -28,9 +28,9 @@ import java.util.*;
  */
 public abstract class AbstractValuePair
 {
-    protected final HashMap idToValue = new LinkedHashMap();
-    protected final HashMap valueToId = new LinkedHashMap();
-    protected final ArrayList valueList = new ArrayList();
+    protected final Map idToValue = new LinkedHashMap();
+    protected final Map valueToId = new LinkedHashMap();
+    protected final List valueList = new ArrayList();
 
     protected Iterator iterator = idToValue.keySet().iterator();
 
@@ -39,17 +39,17 @@ public abstract class AbstractValuePair
     /**
      * Get list in alphabetical order
      */
-    public ArrayList getAlphabeticalValueList()
+    public List getAlphabeticalValueList()
     {
         return valueList;
     }
 
-    public HashMap getIdToValueMap()
+    public Map getIdToValueMap()
     {
         return idToValue;
     }
 
-    public HashMap getValueToIdMap()
+    public Map getValueToIdMap()
     {
         return valueToId;
     }

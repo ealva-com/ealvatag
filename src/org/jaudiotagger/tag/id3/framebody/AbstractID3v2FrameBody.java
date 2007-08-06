@@ -24,13 +24,15 @@
  */
 package org.jaudiotagger.tag.id3.framebody;
 
-import org.jaudiotagger.audio.mp3.*;
-import org.jaudiotagger.tag.datatype.*;
+import org.jaudiotagger.audio.mp3.MP3File;
 import org.jaudiotagger.tag.*;
+import org.jaudiotagger.tag.datatype.AbstractDataType;
 
-import java.util.*;
-import java.io.*;
-import java.nio.*;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.util.Iterator;
+import java.util.ListIterator;
 
 /**
  * Contains the content for an ID3v2 frame, (the header is held directly within the frame
@@ -113,11 +115,8 @@ public abstract class AbstractID3v2FrameBody
     public void setSize()
     {
         size = 0;
-        AbstractDataType object;
-        Iterator iterator = objectList.listIterator();
-        while (iterator.hasNext())
+        for (AbstractDataType object:objectList)
         {
-            object = (AbstractDataType) iterator.next();
             size += object.getSize();
         }
         ;
@@ -167,9 +166,7 @@ public abstract class AbstractID3v2FrameBody
 
         //Go through the ObjectList of the Frame reading the data into the
         //correct datatype.
-        AbstractDataType object;
-        Iterator iterator = objectList.listIterator();
-        while (iterator.hasNext())
+        for (AbstractDataType object: objectList)
         {
             logger.finest("offset:"+offset);
 
@@ -180,9 +177,6 @@ public abstract class AbstractID3v2FrameBody
                 logger.warning("Invalid Size for FrameBody");
                 throw new InvalidFrameException("Invalid size for Frame Body");
             }
-
-            //Get next Object
-            object = (AbstractDataType) iterator.next();
 
             //Try and load it with data from the Buffer
             //if it fails frame is invalid
@@ -210,11 +204,8 @@ public abstract class AbstractID3v2FrameBody
     {
         logger.info("Writing frame body for" + this.getIdentifier() + ":Est Size:" + size);
         //Write the various fields to file in order
-        AbstractDataType object;
-        Iterator iterator = objectList.listIterator();
-        while (iterator.hasNext())
+        for (AbstractDataType object:objectList)
         {
-            object = (AbstractDataType) iterator.next();
             byte[] objectData = object.writeByteArray();
             if (objectData != null)
             {
@@ -232,9 +223,8 @@ public abstract class AbstractID3v2FrameBody
     public void createStructure()
     {
         MP3File.getStructureFormatter().openHeadingElement(TYPE_BODY, "");
-        for (ListIterator li = objectList.listIterator(); li.hasNext();)
+        for (AbstractDataType nextObject:objectList)
         {
-            AbstractDataType nextObject = (AbstractDataType) li.next();
             nextObject.createStructure();
         }
         MP3File.getStructureFormatter().closeHeadingElement(TYPE_BODY);

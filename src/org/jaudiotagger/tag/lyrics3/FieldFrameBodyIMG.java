@@ -25,14 +25,12 @@ package org.jaudiotagger.tag.lyrics3;
 
 import org.jaudiotagger.tag.InvalidTagException;
 import org.jaudiotagger.tag.TagOptionSingleton;
-import org.jaudiotagger.tag.*;
 import org.jaudiotagger.tag.datatype.Lyrics3Image;
 
 import java.io.RandomAccessFile;
-
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.nio.ByteBuffer;
 
 public class FieldFrameBodyIMG extends AbstractLyrics3v2FieldFrameBody
 {
@@ -112,9 +110,9 @@ public class FieldFrameBodyIMG extends AbstractLyrics3v2FieldFrameBody
         int size = 0;
         Lyrics3Image image;
 
-        for (int i = 0; i < images.size(); i++)
+        for (Object image1 : images)
         {
-            image = (Lyrics3Image) images.get(i);
+            image = (Lyrics3Image) image1;
             size += (image.getSize() + 2); // add CRLF pair
         }
 
@@ -136,9 +134,9 @@ public class FieldFrameBodyIMG extends AbstractLyrics3v2FieldFrameBody
 
         ArrayList superset = ((FieldFrameBodyIMG) obj).images;
 
-        for (int i = 0; i < images.size(); i++)
+        for (Object image : images)
         {
-            if (superset.contains(images.get(i)) == false)
+            if (superset.contains(image) == false)
             {
                 return false;
             }
@@ -245,9 +243,9 @@ public class FieldFrameBodyIMG extends AbstractLyrics3v2FieldFrameBody
     {
         String str = getIdentifier() + " : ";
 
-        for (int i = 0; i < images.size(); i++)
+        for (Object image : images)
         {
-            str += (images.get(i).toString() + " ; ");
+            str += (image.toString() + " ; ");
         }
 
         return str;
@@ -343,9 +341,9 @@ public class FieldFrameBodyIMG extends AbstractLyrics3v2FieldFrameBody
         String str = "";
         Lyrics3Image image;
 
-        for (int i = 0; i < images.size(); i++)
+        for (Object image1 : images)
         {
-            image = (Lyrics3Image) images.get(i);
+            image = (Lyrics3Image) image1;
             str += (image.writeString() + Lyrics3v2Fields.CRLF);
         }
 

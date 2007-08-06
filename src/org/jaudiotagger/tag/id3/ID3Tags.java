@@ -17,11 +17,9 @@ package org.jaudiotagger.tag.id3;
 
 import org.jaudiotagger.logging.LogFormatter;
 import org.jaudiotagger.tag.TagException;
-import org.jaudiotagger.audio.mp3.MP3File;
 
 import java.lang.reflect.Constructor;
-
-import java.util.logging.*;
+import java.util.logging.Logger;
 
 /**
  * This contains static methods that can be performed on tags
@@ -124,7 +122,7 @@ public class ID3Tags
         }
         else if (value instanceof Long)
         {
-            number = ((Long) value).longValue();
+            number = (Long) value;
         }
         else
         {

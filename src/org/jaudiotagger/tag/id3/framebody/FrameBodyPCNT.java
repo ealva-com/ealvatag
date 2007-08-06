@@ -15,9 +15,9 @@
  */
 package org.jaudiotagger.tag.id3.framebody;
 
-import org.jaudiotagger.tag.datatype.NumberVariableLength;
-import org.jaudiotagger.tag.datatype.DataTypes;
 import org.jaudiotagger.tag.InvalidTagException;
+import org.jaudiotagger.tag.datatype.DataTypes;
+import org.jaudiotagger.tag.datatype.NumberVariableLength;
 import org.jaudiotagger.tag.id3.ID3v24Frames;
 
 import java.nio.ByteBuffer;
@@ -55,7 +55,7 @@ public class FrameBodyPCNT extends AbstractID3v2FrameBody implements ID3v24Frame
      */
     public FrameBodyPCNT()
     {
-        this.setObjectValue(DataTypes.OBJ_NUMBER, new Long(0L));
+        this.setObjectValue(DataTypes.OBJ_NUMBER, 0L);
     }
 
     public FrameBodyPCNT(FrameBodyPCNT body)
@@ -70,7 +70,7 @@ public class FrameBodyPCNT extends AbstractID3v2FrameBody implements ID3v24Frame
      */
     public FrameBodyPCNT(long counter)
     {
-        this.setObjectValue(DataTypes.OBJ_NUMBER, new Long(counter));
+        this.setObjectValue(DataTypes.OBJ_NUMBER, counter);
     }
 
     /**
@@ -101,7 +101,7 @@ public class FrameBodyPCNT extends AbstractID3v2FrameBody implements ID3v24Frame
      */
     public void setCounter(long counter)
     {
-        setObjectValue(DataTypes.OBJ_NUMBER,new Long(counter));
+        setObjectValue(DataTypes.OBJ_NUMBER, counter);
     }
     /**
       * The ID3v2 frame identifier

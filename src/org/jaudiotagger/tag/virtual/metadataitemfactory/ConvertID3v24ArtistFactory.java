@@ -9,9 +9,9 @@
 package org.jaudiotagger.tag.virtual.metadataitemfactory;
 
 import org.jaudiotagger.tag.id3.ID3v24Frame;
-import org.jaudiotagger.tag.virtual.metadataitem.ArtistText;
-import org.jaudiotagger.tag.virtual.VirtualMetaDataItemFactory;
 import org.jaudiotagger.tag.virtual.VirtualMetaDataItem;
+import org.jaudiotagger.tag.virtual.VirtualMetaDataItemFactory;
+import org.jaudiotagger.tag.virtual.metadataitem.ArtistText;
 
 /**
  * Convert ID3v24 Artist Frame into a VirtualMetaDataItem

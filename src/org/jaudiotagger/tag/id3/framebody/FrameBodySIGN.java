@@ -23,10 +23,10 @@
  */
 package org.jaudiotagger.tag.id3.framebody;
 
-import org.jaudiotagger.tag.datatype.ByteArraySizeTerminated;
-import org.jaudiotagger.tag.datatype.NumberFixedLength;
-import org.jaudiotagger.tag.datatype.DataTypes;
 import org.jaudiotagger.tag.InvalidTagException;
+import org.jaudiotagger.tag.datatype.ByteArraySizeTerminated;
+import org.jaudiotagger.tag.datatype.DataTypes;
+import org.jaudiotagger.tag.datatype.NumberFixedLength;
 import org.jaudiotagger.tag.id3.ID3v24Frames;
 
 import java.nio.ByteBuffer;
@@ -56,7 +56,7 @@ public class FrameBodySIGN extends AbstractID3v2FrameBody implements ID3v24Frame
      */
     public FrameBodySIGN(byte groupSymbol, byte[] signature)
     {
-        this.setObjectValue(DataTypes.OBJ_GROUP_SYMBOL, new Byte(groupSymbol));
+        this.setObjectValue(DataTypes.OBJ_GROUP_SYMBOL, groupSymbol);
         this.setObjectValue(DataTypes.OBJ_SIGNATURE, signature);
     }
 
@@ -78,7 +78,7 @@ public class FrameBodySIGN extends AbstractID3v2FrameBody implements ID3v24Frame
      */
     public void setGroupSymbol(byte groupSymbol)
     {
-        setObjectValue(DataTypes.OBJ_GROUP_SYMBOL, new Byte(groupSymbol));
+        setObjectValue(DataTypes.OBJ_GROUP_SYMBOL, groupSymbol);
     }
 
     /**
@@ -90,7 +90,7 @@ public class FrameBodySIGN extends AbstractID3v2FrameBody implements ID3v24Frame
     {
         if (getObjectValue(DataTypes.OBJ_GROUP_SYMBOL) != null)
         {
-            return ((Byte) getObjectValue(DataTypes.OBJ_GROUP_SYMBOL)).byteValue();
+            return (Byte) getObjectValue(DataTypes.OBJ_GROUP_SYMBOL);
         }
         else
         {

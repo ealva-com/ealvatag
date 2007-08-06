@@ -15,14 +15,14 @@
  */
 package org.jaudiotagger.tag.id3.framebody;
 
-import org.jaudiotagger.tag.datatype.*;
 import org.jaudiotagger.tag.InvalidTagException;
-import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
-import org.jaudiotagger.tag.id3.ID3v24Frames;
+import org.jaudiotagger.tag.datatype.*;
 import org.jaudiotagger.tag.id3.ID3TextEncodingConversion;
+import org.jaudiotagger.tag.id3.ID3v24Frames;
+import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
 
-import java.io.IOException;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.nio.ByteBuffer;
 
 /**
@@ -85,7 +85,7 @@ public class FrameBodyOWNE extends AbstractID3v2FrameBody implements ID3v24Frame
      */
     public FrameBodyOWNE(byte textEncoding, String pricePaid, String dateOfPurchase, String seller)
     {
-        this.setObjectValue(DataTypes.OBJ_TEXT_ENCODING, new Byte(textEncoding));
+        this.setObjectValue(DataTypes.OBJ_TEXT_ENCODING, textEncoding);
         this.setObjectValue(DataTypes.OBJ_PRICE_PAID, pricePaid);
         this.setObjectValue(DataTypes.OBJ_PURCHASE_DATE, dateOfPurchase);
         this.setObjectValue(DataTypes.OBJ_SELLER_NAME, seller);

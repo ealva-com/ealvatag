@@ -23,19 +23,18 @@
 package org.jaudiotagger.tag.lyrics3;
 
 import org.jaudiotagger.tag.InvalidTagException;
-import org.jaudiotagger.tag.*;
-import org.jaudiotagger.tag.id3.framebody.FrameBodySYLT;
-import org.jaudiotagger.tag.id3.framebody.FrameBodyUSLT;
+import org.jaudiotagger.tag.TagOptionSingleton;
 import org.jaudiotagger.tag.datatype.ID3v2LyricLine;
 import org.jaudiotagger.tag.datatype.Lyrics3Line;
 import org.jaudiotagger.tag.datatype.Lyrics3TimeStamp;
+import org.jaudiotagger.tag.id3.framebody.FrameBodySYLT;
+import org.jaudiotagger.tag.id3.framebody.FrameBodyUSLT;
 
 import java.io.RandomAccessFile;
-
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.nio.ByteBuffer;
 
 
 public class FieldFrameBodyLYR extends AbstractLyrics3v2FieldFrameBody
@@ -148,9 +147,9 @@ public class FieldFrameBodyLYR extends AbstractLyrics3v2FieldFrameBody
         int size = 0;
         Lyrics3Line line;
 
-        for (int i = 0; i < lines.size(); i++)
+        for (Object line1 : lines)
         {
-            line = (Lyrics3Line) lines.get(i);
+            line = (Lyrics3Line) line1;
             size += (line.getSize() + 2);
         }
 
@@ -174,9 +173,9 @@ public class FieldFrameBodyLYR extends AbstractLyrics3v2FieldFrameBody
 
         ArrayList superset = ((FieldFrameBodyLYR) obj).lines;
 
-        for (int i = 0; i < lines.size(); i++)
+        for (Object line : lines)
         {
-            if (superset.contains(lines.get(i)) == false)
+            if (superset.contains(line) == false)
             {
                 return false;
             }
@@ -269,9 +268,9 @@ public class FieldFrameBodyLYR extends AbstractLyrics3v2FieldFrameBody
     {
         boolean present = false;
 
-        for (int i = 0; i < lines.size(); i++)
+        for (Object line : lines)
         {
-            if (((Lyrics3Line) lines.get(i)).hasTimeStamp())
+            if (((Lyrics3Line) line).hasTimeStamp())
             {
                 present = true;
             }
@@ -329,9 +328,9 @@ public class FieldFrameBodyLYR extends AbstractLyrics3v2FieldFrameBody
     {
         String str = getIdentifier() + " : ";
 
-        for (int i = 0; i < lines.size(); i++)
+        for (Object line : lines)
         {
-            str += lines.get(i).toString();
+            str += line.toString();
         }
 
         return str;
@@ -427,9 +426,9 @@ public class FieldFrameBodyLYR extends AbstractLyrics3v2FieldFrameBody
         Lyrics3Line line;
         String str = "";
 
-        for (int i = 0; i < lines.size(); i++)
+        for (Object line1 : lines)
         {
-            line = (Lyrics3Line) lines.get(i);
+            line = (Lyrics3Line) line1;
             str += (line.writeString() + Lyrics3v2Fields.CRLF);
         }
 

@@ -10,11 +10,11 @@ package org.jaudiotagger.tag.virtual.metadataitemfactory;
 
 import org.jaudiotagger.tag.id3.ID3v24Frame;
 import org.jaudiotagger.tag.id3.framebody.FrameBodyTXXX;
-import org.jaudiotagger.tag.virtual.metadataitem.MbTrmId;
-import org.jaudiotagger.tag.virtual.metadataitem.MbTrackId;
-import org.jaudiotagger.tag.virtual.metadataitem.UserDefinedText;
-import org.jaudiotagger.tag.virtual.VirtualMetaDataItemFactory;
 import org.jaudiotagger.tag.virtual.VirtualMetaDataItem;
+import org.jaudiotagger.tag.virtual.VirtualMetaDataItemFactory;
+import org.jaudiotagger.tag.virtual.metadataitem.MbTrackId;
+import org.jaudiotagger.tag.virtual.metadataitem.MbTrmId;
+import org.jaudiotagger.tag.virtual.metadataitem.UserDefinedText;
 
 /**
  * Convert ID3v24 UserDefinedInfo Frame into a VirtualMetaDataItem

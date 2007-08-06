@@ -73,7 +73,7 @@ public class BooleanString extends AbstractDataType
     public void readByteArray(byte[] arr, int offset) throws InvalidDataTypeException
     {
         byte b = arr[offset];
-        value = new Boolean(b != '0');
+        value = b != '0';
     }
 
     /**
@@ -100,7 +100,7 @@ public class BooleanString extends AbstractDataType
         }
         else
         {
-            if (((Boolean) value).booleanValue() == true)
+            if ((Boolean) value == true)
             {
                 booleanValue[0] = '0';
             }

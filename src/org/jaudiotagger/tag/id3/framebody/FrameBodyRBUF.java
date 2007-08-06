@@ -23,10 +23,10 @@
  */
 package org.jaudiotagger.tag.id3.framebody;
 
-import org.jaudiotagger.tag.datatype.BooleanByte;
-import org.jaudiotagger.tag.datatype.NumberFixedLength;
-import org.jaudiotagger.tag.datatype.DataTypes;
 import org.jaudiotagger.tag.InvalidTagException;
+import org.jaudiotagger.tag.datatype.BooleanByte;
+import org.jaudiotagger.tag.datatype.DataTypes;
+import org.jaudiotagger.tag.datatype.NumberFixedLength;
 import org.jaudiotagger.tag.id3.ID3v24Frames;
 
 import java.nio.ByteBuffer;
@@ -45,9 +45,9 @@ public class FrameBodyRBUF extends AbstractID3v2FrameBody implements ID3v24Frame
      */
     public FrameBodyRBUF()
     {
-        this.setObjectValue(DataTypes.OBJ_BUFFER_SIZE, new Byte((byte)0));
+        this.setObjectValue(DataTypes.OBJ_BUFFER_SIZE, (byte) 0);
         this.setObjectValue(DataTypes.OBJ_EMBED_FLAG, Boolean.FALSE);
-        this.setObjectValue(DataTypes.OBJ_OFFSET, new Byte((byte)0));
+        this.setObjectValue(DataTypes.OBJ_OFFSET, (byte) 0);
     }
 
     public FrameBodyRBUF(FrameBodyRBUF body)
@@ -64,9 +64,9 @@ public class FrameBodyRBUF extends AbstractID3v2FrameBody implements ID3v24Frame
      */
     public FrameBodyRBUF(byte bufferSize, boolean embeddedInfoFlag, byte offsetToNextTag)
     {
-        this.setObjectValue(DataTypes.OBJ_BUFFER_SIZE, new Byte(bufferSize));
-        this.setObjectValue(DataTypes.OBJ_EMBED_FLAG, new Boolean(embeddedInfoFlag));
-        this.setObjectValue(DataTypes.OBJ_OFFSET, new Byte(offsetToNextTag));
+        this.setObjectValue(DataTypes.OBJ_BUFFER_SIZE, bufferSize);
+        this.setObjectValue(DataTypes.OBJ_EMBED_FLAG, embeddedInfoFlag);
+        this.setObjectValue(DataTypes.OBJ_OFFSET, offsetToNextTag);
     }
 
     /**

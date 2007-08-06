@@ -39,15 +39,15 @@ public class ReceivedAsTypes extends AbstractIntStringValuePair
 
     private ReceivedAsTypes()
     {
-        idToValue.put(new Integer(0x00), "Other");
-        idToValue.put(new Integer(0x01), "Standard CD album with other songs");
-        idToValue.put(new Integer(0x02), "Compressed audio on CD");
-        idToValue.put(new Integer(0x03), "File over the Internet");
-        idToValue.put(new Integer(0x04), "Stream over the Internet");
-        idToValue.put(new Integer(0x05), "As note sheets");
-        idToValue.put(new Integer(0x06), "As note sheets in a book with other sheets");
-        idToValue.put(new Integer(0x07), "Music on other media");
-        idToValue.put(new Integer(0x08), "Non-musical merchandise");
+        idToValue.put(0x00, "Other");
+        idToValue.put(0x01, "Standard CD album with other songs");
+        idToValue.put(0x02, "Compressed audio on CD");
+        idToValue.put(0x03, "File over the Internet");
+        idToValue.put(0x04, "Stream over the Internet");
+        idToValue.put(0x05, "As note sheets");
+        idToValue.put(0x06, "As note sheets in a book with other sheets");
+        idToValue.put(0x07, "Music on other media");
+        idToValue.put(0x08, "Non-musical merchandise");
         createMaps();
     }
 }

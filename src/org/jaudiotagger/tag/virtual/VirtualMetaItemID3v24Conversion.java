@@ -8,12 +8,12 @@
  */
 package org.jaudiotagger.tag.virtual;
 
+import org.jaudiotagger.logging.LogFormatter;
 import org.jaudiotagger.tag.id3.ID3v24Frame;
 import org.jaudiotagger.tag.id3.ID3v24Frames;
+import org.jaudiotagger.tag.virtual.metadataitem.Unknown;
 import org.jaudiotagger.tag.virtual.metadataitemfactory.ConvertID3v24ArtistFactory;
 import org.jaudiotagger.tag.virtual.metadataitemfactory.ConvertID3v24UserDefinedInfoFactory;
-import org.jaudiotagger.tag.virtual.metadataitem.Unknown;
-import org.jaudiotagger.logging.LogFormatter;
 
 import java.util.HashMap;
 import java.util.logging.Logger;

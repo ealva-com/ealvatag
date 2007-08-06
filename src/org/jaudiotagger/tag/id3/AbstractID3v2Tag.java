@@ -15,14 +15,15 @@
  */
 package org.jaudiotagger.tag.id3;
 
-import java.io.*;
-import java.nio.*;
-import java.nio.channels.*;
-import java.util.*;
-
-import org.jaudiotagger.audio.mp3.*;
+import org.jaudiotagger.audio.mp3.MP3File;
 import org.jaudiotagger.tag.id3.framebody.FrameBodyTDRC;
 import org.jaudiotagger.tag.id3.framebody.FrameBodyUnsupported;
+
+import java.io.*;
+import java.nio.ByteBuffer;
+import java.nio.channels.FileChannel;
+import java.nio.channels.WritableByteChannel;
+import java.util.*;
 
 /**
  * This is the abstract base class for all ID3v2 tags.
@@ -872,10 +873,8 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag
         MP3File.getStructureFormatter().openHeadingElement(TYPE_BODY, "");
 
         AbstractID3v2Frame frame;
-        Iterator iterator = frameMap.values().iterator();
-        while (iterator.hasNext())
+        for (Object o : frameMap.values())
         {
-            Object o = iterator.next();
             if (o instanceof AbstractID3v2Frame)
             {
                 frame = (AbstractID3v2Frame) o;

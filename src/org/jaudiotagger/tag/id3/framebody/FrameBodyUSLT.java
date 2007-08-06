@@ -15,16 +15,16 @@
  */
 package org.jaudiotagger.tag.id3.framebody;
 
-import org.jaudiotagger.tag.datatype.*;
 import org.jaudiotagger.tag.InvalidTagException;
-import org.jaudiotagger.tag.id3.ID3v24Frames;
+import org.jaudiotagger.tag.datatype.*;
 import org.jaudiotagger.tag.id3.ID3TextEncodingConversion;
-import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
+import org.jaudiotagger.tag.id3.ID3v24Frames;
 import org.jaudiotagger.tag.id3.valuepair.Languages;
+import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
 
-import java.nio.ByteBuffer;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.nio.ByteBuffer;
 
 /**
  * Unsychronised lyrics/text transcription frame.
@@ -90,7 +90,7 @@ public class FrameBodyUSLT extends AbstractID3v2FrameBody implements ID3v23Frame
      */
     public FrameBodyUSLT(byte textEncoding, String language, String description, String text)
     {
-        setObjectValue(DataTypes.OBJ_TEXT_ENCODING, new Byte(textEncoding));
+        setObjectValue(DataTypes.OBJ_TEXT_ENCODING, textEncoding);
         setObjectValue(DataTypes.OBJ_LANGUAGE, language);
         setObjectValue(DataTypes.OBJ_DESCRIPTION, description);
         setObjectValue(DataTypes.OBJ_LYRICS, text);

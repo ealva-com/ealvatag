@@ -23,17 +23,19 @@
  */
 package org.jaudiotagger.tag.id3;
 
-import org.jaudiotagger.audio.mp3.*;
-import org.jaudiotagger.tag.*;
+import org.jaudiotagger.audio.mp3.MP3File;
+import org.jaudiotagger.tag.AbstractTag;
+import org.jaudiotagger.tag.TagNotFoundException;
+import org.jaudiotagger.tag.TagOptionSingleton;
 import org.jaudiotagger.tag.id3.valuepair.GenreTypes;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
-import java.util.regex.*;
-import java.util.*;
-
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.regex.Matcher;
 
 /**
  * Represents an ID3v1 tag.
@@ -286,8 +288,8 @@ public class ID3v1Tag
      */
     public String getGenre()
     {
-        Integer genreId = new Integer(genre & this.BYTE_TO_UNSIGNED);
-        return GenreTypes.getInstanceOf().getValueForId(genreId.intValue());
+        Integer genreId = genre & this.BYTE_TO_UNSIGNED;
+        return GenreTypes.getInstanceOf().getValueForId(genreId);
     }
 
 

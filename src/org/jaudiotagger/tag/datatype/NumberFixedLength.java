@@ -23,9 +23,9 @@
  */
 package org.jaudiotagger.tag.datatype;
 
-import org.jaudiotagger.tag.id3.ID3Tags;
 import org.jaudiotagger.tag.AbstractTagFrameBody;
 import org.jaudiotagger.tag.InvalidDataTypeException;
+import org.jaudiotagger.tag.id3.ID3Tags;
 
 
 /** Represents a number held as a fixed number of digits.
@@ -141,7 +141,7 @@ public class NumberFixedLength
             lvalue <<= 8;
             lvalue += (arr[i] & 0xff);
         }
-        value = new Long(lvalue);
+        value = lvalue;
         logger.info("Read NumberFixedlength:" + value);
     }
 

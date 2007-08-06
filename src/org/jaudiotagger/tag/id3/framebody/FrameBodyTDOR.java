@@ -23,10 +23,10 @@
  */
 package org.jaudiotagger.tag.id3.framebody;
 
-import org.jaudiotagger.tag.datatype.DataTypes;
 import org.jaudiotagger.tag.InvalidTagException;
-import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
+import org.jaudiotagger.tag.datatype.DataTypes;
 import org.jaudiotagger.tag.id3.ID3v24Frames;
+import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
 
 import java.nio.ByteBuffer;
 
@@ -50,7 +50,7 @@ public class FrameBodyTDOR extends AbstractFrameBodyTextInfo implements ID3v24Fr
      */
     public FrameBodyTDOR(FrameBodyTORY body)
     {
-        setObjectValue(DataTypes.OBJ_TEXT_ENCODING,  new Byte(TextEncoding.ISO_8859_1));
+        setObjectValue(DataTypes.OBJ_TEXT_ENCODING, TextEncoding.ISO_8859_1);
         setObjectValue(DataTypes.OBJ_TEXT, body.getText());
     }
 

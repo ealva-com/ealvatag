@@ -22,15 +22,15 @@ public class SynchronisedLyricsContentType extends AbstractIntStringValuePair
     
     private SynchronisedLyricsContentType()
     {
-        idToValue.put(new Integer(0x00), "other");
-        idToValue.put(new Integer(0x01), "lyrics");
-        idToValue.put(new Integer(0x02), "text transcription");
-        idToValue.put(new Integer(0x03), "movement/part name");
-        idToValue.put(new Integer(0x04), "events");
-        idToValue.put(new Integer(0x05), "chord");
-        idToValue.put(new Integer(0x06), "trivia");
-        idToValue.put(new Integer(0x07), "URLs to webpages");
-        idToValue.put(new Integer(0x08), "URLs to images");
+        idToValue.put(0x00, "other");
+        idToValue.put(0x01, "lyrics");
+        idToValue.put(0x02, "text transcription");
+        idToValue.put(0x03, "movement/part name");
+        idToValue.put(0x04, "events");
+        idToValue.put(0x05, "chord");
+        idToValue.put(0x06, "trivia");
+        idToValue.put(0x07, "URLs to webpages");
+        idToValue.put(0x08, "URLs to images");
            createMaps();
     }
 }

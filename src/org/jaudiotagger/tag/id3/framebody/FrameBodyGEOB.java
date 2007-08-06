@@ -15,13 +15,13 @@
  */
 package org.jaudiotagger.tag.id3.framebody;
 
-import org.jaudiotagger.tag.datatype.*;
 import org.jaudiotagger.tag.InvalidTagException;
-import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
+import org.jaudiotagger.tag.datatype.*;
 import org.jaudiotagger.tag.id3.ID3v24Frames;
+import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
 
-import java.io.IOException;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.nio.ByteBuffer;
 
 /**
@@ -62,7 +62,7 @@ public class FrameBodyGEOB extends AbstractID3v2FrameBody implements ID3v24Frame
      */
     public FrameBodyGEOB()
     {
-        this.setObjectValue(DataTypes.OBJ_TEXT_ENCODING,  new Byte(TextEncoding.ISO_8859_1));
+        this.setObjectValue(DataTypes.OBJ_TEXT_ENCODING, TextEncoding.ISO_8859_1);
         this.setObjectValue(DataTypes.OBJ_MIME_TYPE, "");
         this.setObjectValue(DataTypes.OBJ_FILENAME, "");
         this.setObjectValue(DataTypes.OBJ_DESCRIPTION, "");
@@ -85,7 +85,7 @@ public class FrameBodyGEOB extends AbstractID3v2FrameBody implements ID3v24Frame
      */
     public FrameBodyGEOB(byte textEncoding, String mimeType, String filename, String description, byte[] object)
     {
-        this.setObjectValue(DataTypes.OBJ_TEXT_ENCODING, new Byte(textEncoding));
+        this.setObjectValue(DataTypes.OBJ_TEXT_ENCODING, textEncoding);
         this.setObjectValue(DataTypes.OBJ_MIME_TYPE, mimeType);
         this.setObjectValue(DataTypes.OBJ_FILENAME, filename);
         this.setObjectValue(DataTypes.OBJ_DESCRIPTION, description);

@@ -15,18 +15,17 @@
  */
 package org.jaudiotagger.tag.id3;
 
-import org.jaudiotagger.audio.mp3.*;
-import org.jaudiotagger.tag.datatype.*;
-import org.jaudiotagger.tag.lyrics3.*;
-import org.jaudiotagger.tag.*;
-import org.jaudiotagger.tag.id3.framebody.*;
 import org.jaudiotagger.FileConstants;
+import org.jaudiotagger.audio.mp3.MP3File;
+import org.jaudiotagger.tag.*;
+import org.jaudiotagger.tag.datatype.Lyrics3Line;
+import org.jaudiotagger.tag.id3.framebody.*;
+import org.jaudiotagger.tag.lyrics3.*;
 
-import java.io.IOException;
 import java.io.ByteArrayOutputStream;
-
+import java.io.IOException;
+import java.nio.ByteBuffer;
 import java.util.Iterator;
-import java.nio.*;
 
 /**
  * Represents an ID3v2.4 frame.
@@ -549,7 +548,7 @@ public class ID3v24Frame
         try
         {
             frameBody = readBody(identifier,  frameBodyBuffer, syncSize);
-            if ((!(frameBody instanceof ID3v24FrameBody))&&(!(frameBody instanceof ID3v2ExtensionFrameBody)))
+            if (!(frameBody instanceof ID3v24FrameBody))
             {
                 logger.info(getLoggingFilename()+":"+"Converted frame body with:" + identifier + " to deprecated framebody");
                 frameBody = new FrameBodyDeprecated((AbstractID3v2FrameBody) frameBody);

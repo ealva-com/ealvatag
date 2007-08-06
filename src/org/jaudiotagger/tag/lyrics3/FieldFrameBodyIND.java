@@ -53,8 +53,8 @@ public class FieldFrameBodyIND extends AbstractLyrics3v2FieldFrameBody
      */
     public FieldFrameBodyIND(boolean lyricsPresent, boolean timeStampPresent)
     {
-        this.setObjectValue("Lyrics Present", new Boolean(lyricsPresent));
-        this.setObjectValue("Timestamp Present", new Boolean(timeStampPresent));
+        this.setObjectValue("Lyrics Present", lyricsPresent);
+        this.setObjectValue("Timestamp Present", timeStampPresent);
     }
 
     /**

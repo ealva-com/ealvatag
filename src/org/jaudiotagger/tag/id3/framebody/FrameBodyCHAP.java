@@ -15,13 +15,13 @@
  */
 package org.jaudiotagger.tag.id3.framebody;
 
-import java.nio.ByteBuffer;
-
 import org.jaudiotagger.tag.InvalidTagException;
 import org.jaudiotagger.tag.datatype.DataTypes;
 import org.jaudiotagger.tag.datatype.NumberFixedLength;
 import org.jaudiotagger.tag.datatype.StringNullTerminated;
 import org.jaudiotagger.tag.id3.ID3v2ChapterFrames;
+
+import java.nio.ByteBuffer;
 
 /**
  * Chapter frame.
@@ -113,10 +113,10 @@ public class FrameBodyCHAP extends AbstractID3v2FrameBody implements ID3v2Chapte
                          int endOffset)
     {
         this.setObjectValue(DataTypes.OBJ_ELEMENT_ID, elementId);
-        this.setObjectValue(DataTypes.OBJ_START_TIME, new Integer(startTime));
-        this.setObjectValue(DataTypes.OBJ_END_TIME, new Integer(endTime));
-        this.setObjectValue(DataTypes.OBJ_START_OFFSET, new Integer(startOffset));
-        this.setObjectValue(DataTypes.OBJ_END_OFFSET, new Integer(endOffset));
+        this.setObjectValue(DataTypes.OBJ_START_TIME, startTime);
+        this.setObjectValue(DataTypes.OBJ_END_TIME, endTime);
+        this.setObjectValue(DataTypes.OBJ_START_OFFSET, startOffset);
+        this.setObjectValue(DataTypes.OBJ_END_OFFSET, endOffset);
     }
 
     /**

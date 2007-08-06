@@ -15,11 +15,12 @@
  */
 package org.jaudiotagger.tag.id3.framebody;
 
+import org.jaudiotagger.tag.InvalidTagException;
+import org.jaudiotagger.tag.datatype.ByteArraySizeTerminated;
+import org.jaudiotagger.tag.datatype.DataTypes;
+import org.jaudiotagger.tag.datatype.NumberHashMap;
 import org.jaudiotagger.tag.id3.ID3v24Frames;
 import org.jaudiotagger.tag.id3.valuepair.EventTimingTimestampTypes;
-import org.jaudiotagger.tag.id3.valuepair.SynchronisedLyricsContentType;
-import org.jaudiotagger.tag.datatype.*;
-import org.jaudiotagger.tag.InvalidTagException;
 
 import java.nio.ByteBuffer;
 
@@ -84,7 +85,7 @@ public class FrameBodySYTC extends AbstractID3v2FrameBody implements ID3v24Frame
     public FrameBodySYTC(int timeStampFormat,
                          byte[] tempo)
     {
-        setObjectValue(DataTypes.OBJ_TIME_STAMP_FORMAT,new Integer(timeStampFormat));
+        setObjectValue(DataTypes.OBJ_TIME_STAMP_FORMAT, timeStampFormat);
         setObjectValue(DataTypes.OBJ_DATA,tempo);
     }
 

@@ -1,14 +1,5 @@
 package org.jaudiotagger.tag.id3.framebody;
 
-import org.jaudiotagger.tag.datatype.DataTypes;
-import org.jaudiotagger.tag.datatype.ByteArraySizeTerminated;
-import org.jaudiotagger.tag.datatype.AbstractDataType;
-import org.jaudiotagger.tag.InvalidFrameException;
-import org.jaudiotagger.tag.InvalidTagException;
-
-import java.nio.ByteBuffer;
-import java.util.Iterator;
-
 /**
  * Represents a framebody for a frame identifier that is not defined for the tag version but was valid for a for an
  * earlier tag version.

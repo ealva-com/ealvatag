@@ -63,10 +63,10 @@ public class TextEncoding extends AbstractIntStringValuePair
 
     private TextEncoding()
     {
-        idToValue.put(new Integer(ISO_8859_1)   , CHARSET_ISO_8859_1 );
-        idToValue.put(new Integer(UTF_16)       , CHARSET_UTF_16);
-        idToValue.put(new Integer(UTF_16BE)     , CHARSET_UTF_16BE);
-        idToValue.put(new Integer(UTF_8)        , CHARSET_UTF_8);
+        idToValue.put((int) ISO_8859_1   , CHARSET_ISO_8859_1 );
+        idToValue.put((int) UTF_16       , CHARSET_UTF_16);
+        idToValue.put((int) UTF_16BE     , CHARSET_UTF_16BE);
+        idToValue.put((int) UTF_8        , CHARSET_UTF_8);
 
         createMaps();
     }

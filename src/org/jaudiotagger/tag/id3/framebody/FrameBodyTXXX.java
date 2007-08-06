@@ -23,15 +23,15 @@
  */
 package org.jaudiotagger.tag.id3.framebody;
 
-import org.jaudiotagger.tag.datatype.*;
 import org.jaudiotagger.tag.InvalidTagException;
-import org.jaudiotagger.tag.id3.ID3v24Frames;
+import org.jaudiotagger.tag.datatype.*;
 import org.jaudiotagger.tag.id3.ID3TextEncodingConversion;
+import org.jaudiotagger.tag.id3.ID3v24Frames;
 import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
 
-import java.nio.ByteBuffer;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.nio.ByteBuffer;
 
 
 /**
@@ -56,7 +56,7 @@ public class FrameBodyTXXX
      */
     public FrameBodyTXXX()
     {
-        this.setObjectValue(DataTypes.OBJ_TEXT_ENCODING, new Byte(TextEncoding.ISO_8859_1));
+        this.setObjectValue(DataTypes.OBJ_TEXT_ENCODING, TextEncoding.ISO_8859_1);
         this.setObjectValue(DataTypes.OBJ_DESCRIPTION, "");
         this.setObjectValue(DataTypes.OBJ_TEXT, "");
 
@@ -76,7 +76,7 @@ public class FrameBodyTXXX
      */
     public FrameBodyTXXX(byte textEncoding, String description, String text)
     {
-        this.setObjectValue(DataTypes.OBJ_TEXT_ENCODING, new Byte(textEncoding));
+        this.setObjectValue(DataTypes.OBJ_TEXT_ENCODING, textEncoding);
         this.setObjectValue(DataTypes.OBJ_DESCRIPTION, description);
         this.setObjectValue(DataTypes.OBJ_TEXT, text);
     }

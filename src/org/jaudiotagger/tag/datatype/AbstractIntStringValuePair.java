@@ -21,8 +21,6 @@
  */
 package org.jaudiotagger.tag.datatype;
 
-import org.jaudiotagger.tag.InvalidDataTypeException;
-
 import java.util.Collections;
 
 /**

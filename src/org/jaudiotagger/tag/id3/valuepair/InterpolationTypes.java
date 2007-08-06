@@ -38,8 +38,8 @@ public class InterpolationTypes extends AbstractIntStringValuePair
 
     private InterpolationTypes()
     {
-        idToValue.put(new Integer(0), "Band");
-        idToValue.put(new Integer(1), "Linear");
+        idToValue.put(0, "Band");
+        idToValue.put(1, "Linear");
         createMaps();
     }
 }

@@ -23,13 +23,12 @@
  */
 package org.jaudiotagger.tag.datatype;
 
+import org.jaudiotagger.tag.AbstractTagFrameBody;
+import org.jaudiotagger.tag.InvalidDataTypeException;
 import org.jaudiotagger.tag.id3.ID3Tags;
 
 import java.util.ArrayList;
 import java.util.Iterator;
-
-import org.jaudiotagger.tag.AbstractTagFrameBody;
-import org.jaudiotagger.tag.InvalidDataTypeException;
 
 public class GroupRepeated
     extends AbstractDataType

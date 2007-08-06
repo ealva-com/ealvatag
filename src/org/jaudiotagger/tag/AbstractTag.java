@@ -25,8 +25,8 @@ package org.jaudiotagger.tag;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
-import java.util.Iterator;
 import java.nio.ByteBuffer;
+import java.util.Iterator;
 
 /**
  * A tag is term given to a container that holds audio metadata

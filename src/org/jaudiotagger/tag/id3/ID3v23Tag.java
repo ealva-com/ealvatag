@@ -15,20 +15,19 @@
  */
 package org.jaudiotagger.tag.id3;
 
-import org.jaudiotagger.tag.AbstractTag;
-import org.jaudiotagger.audio.mp3.*;
+import org.jaudiotagger.FileConstants;
+import org.jaudiotagger.audio.mp3.MP3File;
 import org.jaudiotagger.tag.*;
 import org.jaudiotagger.tag.id3.framebody.*;
-import org.jaudiotagger.FileConstants;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
-
+import java.nio.ByteBuffer;
+import java.nio.channels.FileChannel;
+import java.nio.channels.WritableByteChannel;
 import java.util.*;
 import java.util.logging.Level;
-import java.nio.*;
-import java.io.*;
-import java.nio.channels.*;
 
 /**
  * Represents an ID3v2.3 tag.

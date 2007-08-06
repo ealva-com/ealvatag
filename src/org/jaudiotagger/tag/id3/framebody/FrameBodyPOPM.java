@@ -15,8 +15,8 @@
  */
 package org.jaudiotagger.tag.id3.framebody;
 
-import org.jaudiotagger.tag.datatype.*;
 import org.jaudiotagger.tag.InvalidTagException;
+import org.jaudiotagger.tag.datatype.*;
 import org.jaudiotagger.tag.id3.ID3v24Frames;
 
 import java.nio.ByteBuffer;
@@ -69,8 +69,8 @@ public class FrameBodyPOPM extends AbstractID3v2FrameBody implements ID3v24Frame
     public FrameBodyPOPM()
     {
         this.setObjectValue(DataTypes.OBJ_EMAIL,"");
-        this.setObjectValue(DataTypes.OBJ_RATING, new Long(0));
-        this.setObjectValue(DataTypes.OBJ_COUNTER, new Long(0));
+        this.setObjectValue(DataTypes.OBJ_RATING, (long) 0);
+        this.setObjectValue(DataTypes.OBJ_COUNTER, (long) 0);
     }
 
     public FrameBodyPOPM(FrameBodyPOPM body)
@@ -88,8 +88,8 @@ public class FrameBodyPOPM extends AbstractID3v2FrameBody implements ID3v24Frame
     public FrameBodyPOPM(String emailToUser, long rating, long counter)
     {
         this.setObjectValue(DataTypes.OBJ_EMAIL, emailToUser);
-        this.setObjectValue(DataTypes.OBJ_RATING, new Long(rating));
-        this.setObjectValue(DataTypes.OBJ_COUNTER, new Long(counter));
+        this.setObjectValue(DataTypes.OBJ_RATING, rating);
+        this.setObjectValue(DataTypes.OBJ_COUNTER, counter);
     }
 
     /**
@@ -140,7 +140,7 @@ public class FrameBodyPOPM extends AbstractID3v2FrameBody implements ID3v24Frame
      */
     public void setRating(long rating)
     {
-        setObjectValue(DataTypes.OBJ_RATING,new Long(rating));
+        setObjectValue(DataTypes.OBJ_RATING, rating);
     }
 
      /**
@@ -160,7 +160,7 @@ public class FrameBodyPOPM extends AbstractID3v2FrameBody implements ID3v24Frame
      */
     public void setCounter(long counter)
     {
-        setObjectValue(DataTypes.OBJ_COUNTER,new Long(counter));
+        setObjectValue(DataTypes.OBJ_COUNTER, counter);
     }
 
      /**

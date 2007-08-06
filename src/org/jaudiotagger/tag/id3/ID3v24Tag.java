@@ -15,24 +15,23 @@
  */
 package org.jaudiotagger.tag.id3;
 
-import org.jaudiotagger.tag.AbstractTag;
-import org.jaudiotagger.audio.mp3.*;
-import org.jaudiotagger.tag.lyrics3.AbstractLyrics3;
-import org.jaudiotagger.tag.lyrics3.Lyrics3v2;
-import org.jaudiotagger.tag.lyrics3.Lyrics3v2Field;
+import org.jaudiotagger.FileConstants;
+import org.jaudiotagger.audio.mp3.MP3File;
 import org.jaudiotagger.tag.*;
 import org.jaudiotagger.tag.id3.framebody.*;
 import org.jaudiotagger.tag.id3.valuepair.GenreTypes;
-import org.jaudiotagger.FileConstants;
+import org.jaudiotagger.tag.lyrics3.AbstractLyrics3;
+import org.jaudiotagger.tag.lyrics3.Lyrics3v2;
+import org.jaudiotagger.tag.lyrics3.Lyrics3v2Field;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
-
+import java.nio.ByteBuffer;
+import java.nio.channels.FileChannel;
+import java.nio.channels.WritableByteChannel;
 import java.util.*;
 import java.util.logging.Level;
-import java.nio.*;
-import java.nio.channels.*;
-import java.io.*;
 
 /**
  * This class represents an ID3v2.4 tag.
@@ -399,8 +398,8 @@ public class ID3v24Tag extends ID3v23Tag
                 }
                 if (((id3tag.genre & ID3v1Tag.BYTE_TO_UNSIGNED) >= 0) && ((id3tag.genre & ID3v1Tag.BYTE_TO_UNSIGNED) != ID3v1Tag.BYTE_TO_UNSIGNED))
                 {
-                    Integer genreId = new Integer(id3tag.genre & ID3v1Tag.BYTE_TO_UNSIGNED);
-                    String genre = "(" + genreId + ") " + GenreTypes.getInstanceOf().getValueForId(genreId.intValue());
+                    Integer genreId = id3tag.genre & ID3v1Tag.BYTE_TO_UNSIGNED;
+                    String genre = "(" + genreId + ") " + GenreTypes.getInstanceOf().getValueForId(genreId);
 
                     newBody = new FrameBodyTCON((byte) 0, genre);
                     newFrame = new ID3v24Frame(ID3v24Frames.FRAME_ID_GENRE);

@@ -125,7 +125,7 @@ public class BooleanByte extends AbstractDataType
 
         newValue >>= bitPosition;
         newValue &= 0x1;
-        this.value = new Boolean(newValue == 1);
+        this.value = newValue == 1;
     }
 
     /**

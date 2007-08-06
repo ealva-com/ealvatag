@@ -23,10 +23,10 @@
  */
 package org.jaudiotagger.tag.id3.framebody;
 
-import org.jaudiotagger.tag.datatype.ByteArraySizeTerminated;
-import org.jaudiotagger.tag.datatype.StringNullTerminated;
-import org.jaudiotagger.tag.datatype.DataTypes;
 import org.jaudiotagger.tag.InvalidTagException;
+import org.jaudiotagger.tag.datatype.ByteArraySizeTerminated;
+import org.jaudiotagger.tag.datatype.DataTypes;
+import org.jaudiotagger.tag.datatype.StringNullTerminated;
 import org.jaudiotagger.tag.id3.ID3v22Frames;
 
 import java.nio.ByteBuffer;

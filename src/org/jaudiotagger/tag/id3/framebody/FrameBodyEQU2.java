@@ -23,13 +23,8 @@
  */
 package org.jaudiotagger.tag.id3.framebody;
 
-import org.jaudiotagger.tag.datatype.AbstractDataType;
-import org.jaudiotagger.tag.datatype.GroupRepeated;
-import org.jaudiotagger.tag.datatype.NumberFixedLength;
-import org.jaudiotagger.tag.datatype.NumberHashMap;
-import org.jaudiotagger.tag.datatype.StringNullTerminated;
-import org.jaudiotagger.tag.datatype.DataTypes;
 import org.jaudiotagger.tag.InvalidTagException;
+import org.jaudiotagger.tag.datatype.*;
 import org.jaudiotagger.tag.id3.ID3v24Frames;
 
 import java.nio.ByteBuffer;
@@ -100,7 +95,7 @@ public class FrameBodyEQU2 extends AbstractID3v2FrameBody  implements ID3v24Fram
      */
     public FrameBodyEQU2(byte interpolationMethod, String owner, short frequency, short volumeAdjustment)
     {
-        this.setObjectValue(DataTypes.OBJ_INTERPOLATION_METHOD, new Byte(interpolationMethod));
+        this.setObjectValue(DataTypes.OBJ_INTERPOLATION_METHOD, interpolationMethod);
         this.setObjectValue(DataTypes.OBJ_OWNER, owner);
         this.addGroup(frequency, volumeAdjustment);
     }

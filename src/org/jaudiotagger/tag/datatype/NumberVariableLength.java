@@ -23,10 +23,9 @@
  */
 package org.jaudiotagger.tag.datatype;
 
-import org.jaudiotagger.tag.id3.ID3Tags;
-
 import org.jaudiotagger.tag.AbstractTagFrameBody;
 import org.jaudiotagger.tag.InvalidDataTypeException;
+import org.jaudiotagger.tag.id3.ID3Tags;
 
 /**
  * Represents a number which may span a number of bytes when written to file depending what size is to be represented.
@@ -186,7 +185,7 @@ public class NumberVariableLength extends AbstractDataType
         {
             if(minLength==0)
             {
-                value = new Long(0);
+                value = (long) 0;
                 return;
             }
             else
@@ -205,7 +204,7 @@ public class NumberVariableLength extends AbstractDataType
             lvalue += (arr[i] & 0xff);
         }
 
-        value = new Long(lvalue);
+        value = lvalue;
     }
 
 

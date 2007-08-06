@@ -15,11 +15,8 @@
  */
 package org.jaudiotagger.tag.id3.framebody;
 
-import org.jaudiotagger.tag.datatype.ByteArraySizeTerminated;
-import org.jaudiotagger.tag.datatype.NumberFixedLength;
-import org.jaudiotagger.tag.datatype.StringNullTerminated;
-import org.jaudiotagger.tag.datatype.DataTypes;
 import org.jaudiotagger.tag.InvalidTagException;
+import org.jaudiotagger.tag.datatype.*;
 import org.jaudiotagger.tag.id3.ID3v24Frames;
 
 import java.nio.ByteBuffer;
@@ -86,7 +83,7 @@ public class FrameBodyGRID extends AbstractID3v2FrameBody implements ID3v24Frame
     public FrameBodyGRID(String owner, byte groupSymbol, byte[] data)
     {
         this.setObjectValue(DataTypes.OBJ_OWNER, owner);
-        this.setObjectValue(DataTypes.OBJ_GROUP_SYMBOL, new Byte(groupSymbol));
+        this.setObjectValue(DataTypes.OBJ_GROUP_SYMBOL, groupSymbol);
         this.setObjectValue(DataTypes.OBJ_GROUP_DATA, data);
     }
 
@@ -108,7 +105,7 @@ public class FrameBodyGRID extends AbstractID3v2FrameBody implements ID3v24Frame
      */
     public void setGroupSymbol(byte textEncoding)
     {
-        setObjectValue(DataTypes.OBJ_GROUP_SYMBOL, new Byte(textEncoding));
+        setObjectValue(DataTypes.OBJ_GROUP_SYMBOL, textEncoding);
     }
 
     /**

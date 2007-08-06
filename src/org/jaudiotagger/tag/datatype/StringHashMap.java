@@ -23,13 +23,11 @@
  */
 package org.jaudiotagger.tag.datatype;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.TreeSet;
-
 import org.jaudiotagger.tag.AbstractTagFrameBody;
 import org.jaudiotagger.tag.id3.valuepair.Languages;
 import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
+
+import java.util.*;
 
 
 /**
@@ -42,12 +40,12 @@ public class StringHashMap extends StringFixedLength implements HashMapInterface
     /**
      * 
      */
-    HashMap keyToValue = null;
+    Map keyToValue = null;
 
     /**
      * 
      */
-    HashMap valueToKey = null;
+    Map valueToKey = null;
 
     /**
      * 
@@ -57,9 +55,9 @@ public class StringHashMap extends StringFixedLength implements HashMapInterface
     /**
      * Creates a new ObjectStringHashMap datatype.
      *
-     * @param identifier 
-     * @param size       
-     * @throws IllegalArgumentException 
+     * @param identifier
+     * @param size
+     * @throws IllegalArgumentException
      */
     public StringHashMap(String identifier, AbstractTagFrameBody frameBody, int size)
     {
@@ -88,9 +86,9 @@ public class StringHashMap extends StringFixedLength implements HashMapInterface
     /**
      * 
      *
-     * @return 
+     * @return
      */
-    public HashMap getKeyToValue()
+    public Map getKeyToValue()
     {
         return keyToValue;
     }
@@ -98,9 +96,9 @@ public class StringHashMap extends StringFixedLength implements HashMapInterface
     /**
      * 
      *
-     * @return 
+     * @return
      */
-    public HashMap getValueToKey()
+    public Map getValueToKey()
     {
         return valueToKey;
     }
@@ -108,7 +106,7 @@ public class StringHashMap extends StringFixedLength implements HashMapInterface
     /**
      * 
      *
-     * @param value 
+     * @param value
      */
     public void setValue(Object value)
     {
@@ -125,8 +123,8 @@ public class StringHashMap extends StringFixedLength implements HashMapInterface
     /**
      * 
      *
-     * @param obj 
-     * @return 
+     * @param obj
+     * @return
      */
     public boolean equals(Object obj)
     {
@@ -178,7 +176,7 @@ public class StringHashMap extends StringFixedLength implements HashMapInterface
     /**
      * 
      *
-     * @return 
+     * @return
      */
     public Iterator iterator()
     {
@@ -203,7 +201,7 @@ public class StringHashMap extends StringFixedLength implements HashMapInterface
     /**
      * 
      *
-     * @return 
+     * @return
      */
     public String toString()
     {

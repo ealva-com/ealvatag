@@ -12,10 +12,9 @@ import org.jaudiotagger.FileConstants;
 import org.jaudiotagger.audio.InvalidAudioFrameException;
 import org.jaudiotagger.logging.AbstractTagDisplayFormatter;
 
+import java.nio.ByteBuffer;
 import java.util.HashMap;
 import java.util.Map;
-import java.io.IOException;
-import java.nio.ByteBuffer;
 
 
 /**
@@ -56,9 +55,9 @@ public class MPEGFrameHeader
 
     static
     {
-        mpegVersionMap.put(new Integer(VERSION_2_5), "MPEG-2.5");
-        mpegVersionMap.put(new Integer(VERSION_2)  , "MPEG-2");
-        mpegVersionMap.put(new Integer(VERSION_1)  , "MPEG-1");
+        mpegVersionMap.put(VERSION_2_5, "MPEG-2.5");
+        mpegVersionMap.put(VERSION_2  , "MPEG-2");
+        mpegVersionMap.put(VERSION_1  , "MPEG-1");
     }
 
     /**
@@ -71,9 +70,9 @@ public class MPEGFrameHeader
 
     static
     {
-        mpegLayerMap.put(new Integer(LAYER_I), "Layer 1");
-        mpegLayerMap.put(new Integer(LAYER_II), "Layer 2");
-        mpegLayerMap.put(new Integer(LAYER_III), "Layer 3");
+        mpegLayerMap.put(LAYER_I, "Layer 1");
+        mpegLayerMap.put(LAYER_II, "Layer 2");
+        mpegLayerMap.put(LAYER_III, "Layer 3");
     }
 
     /**
@@ -91,95 +90,95 @@ public class MPEGFrameHeader
     static
     {
         // MPEG-1, Layer I (E)
-        bitrateMap.put(new Integer(0x1E), new Integer(32));
-        bitrateMap.put(new Integer(0x2E), new Integer(64));
-        bitrateMap.put(new Integer(0x3E), new Integer(96));
-        bitrateMap.put(new Integer(0x4E), new Integer(128));
-        bitrateMap.put(new Integer(0x5E), new Integer(160));
-        bitrateMap.put(new Integer(0x6E), new Integer(192));
-        bitrateMap.put(new Integer(0x7E), new Integer(224));
-        bitrateMap.put(new Integer(0x8E), new Integer(256));
-        bitrateMap.put(new Integer(0x9E), new Integer(288));
-        bitrateMap.put(new Integer(0xAE), new Integer(320));
-        bitrateMap.put(new Integer(0xBE), new Integer(352));
-        bitrateMap.put(new Integer(0xCE), new Integer(384));
-        bitrateMap.put(new Integer(0xDE), new Integer(416));
-        bitrateMap.put(new Integer(0xEE), new Integer(448));
+        bitrateMap.put(0x1E, 32);
+        bitrateMap.put(0x2E, 64);
+        bitrateMap.put(0x3E, 96);
+        bitrateMap.put(0x4E, 128);
+        bitrateMap.put(0x5E, 160);
+        bitrateMap.put(0x6E, 192);
+        bitrateMap.put(0x7E, 224);
+        bitrateMap.put(0x8E, 256);
+        bitrateMap.put(0x9E, 288);
+        bitrateMap.put(0xAE, 320);
+        bitrateMap.put(0xBE, 352);
+        bitrateMap.put(0xCE, 384);
+        bitrateMap.put(0xDE, 416);
+        bitrateMap.put(0xEE, 448);
         // MPEG-1, Layer II (C)
-        bitrateMap.put(new Integer(0x1C), new Integer(32));
-        bitrateMap.put(new Integer(0x2C), new Integer(48));
-        bitrateMap.put(new Integer(0x3C), new Integer(56));
-        bitrateMap.put(new Integer(0x4C), new Integer(64));
-        bitrateMap.put(new Integer(0x5C), new Integer(80));
-        bitrateMap.put(new Integer(0x6C), new Integer(96));
-        bitrateMap.put(new Integer(0x7C), new Integer(112));
-        bitrateMap.put(new Integer(0x8C), new Integer(128));
-        bitrateMap.put(new Integer(0x9C), new Integer(160));
-        bitrateMap.put(new Integer(0xAC), new Integer(192));
-        bitrateMap.put(new Integer(0xBC), new Integer(224));
-        bitrateMap.put(new Integer(0xCC), new Integer(256));
-        bitrateMap.put(new Integer(0xDC), new Integer(320));
-        bitrateMap.put(new Integer(0xEC), new Integer(384));
+        bitrateMap.put(0x1C, 32);
+        bitrateMap.put(0x2C, 48);
+        bitrateMap.put(0x3C, 56);
+        bitrateMap.put(0x4C, 64);
+        bitrateMap.put(0x5C, 80);
+        bitrateMap.put(0x6C, 96);
+        bitrateMap.put(0x7C, 112);
+        bitrateMap.put(0x8C, 128);
+        bitrateMap.put(0x9C, 160);
+        bitrateMap.put(0xAC, 192);
+        bitrateMap.put(0xBC, 224);
+        bitrateMap.put(0xCC, 256);
+        bitrateMap.put(0xDC, 320);
+        bitrateMap.put(0xEC, 384);
         // MPEG-1, Layer III (A)
-        bitrateMap.put(new Integer(0x1A), new Integer(32));
-        bitrateMap.put(new Integer(0x2A), new Integer(40));
-        bitrateMap.put(new Integer(0x3A), new Integer(48));
-        bitrateMap.put(new Integer(0x4A), new Integer(56));
-        bitrateMap.put(new Integer(0x5A), new Integer(64));
-        bitrateMap.put(new Integer(0x6A), new Integer(80));
-        bitrateMap.put(new Integer(0x7A), new Integer(96));
-        bitrateMap.put(new Integer(0x8A), new Integer(112));
-        bitrateMap.put(new Integer(0x9A), new Integer(128));
-        bitrateMap.put(new Integer(0xAA), new Integer(160));
-        bitrateMap.put(new Integer(0xBA), new Integer(192));
-        bitrateMap.put(new Integer(0xCA), new Integer(224));
-        bitrateMap.put(new Integer(0xDA), new Integer(256));
-        bitrateMap.put(new Integer(0xEA), new Integer(320));
+        bitrateMap.put(0x1A, 32);
+        bitrateMap.put(0x2A, 40);
+        bitrateMap.put(0x3A, 48);
+        bitrateMap.put(0x4A, 56);
+        bitrateMap.put(0x5A, 64);
+        bitrateMap.put(0x6A, 80);
+        bitrateMap.put(0x7A, 96);
+        bitrateMap.put(0x8A, 112);
+        bitrateMap.put(0x9A, 128);
+        bitrateMap.put(0xAA, 160);
+        bitrateMap.put(0xBA, 192);
+        bitrateMap.put(0xCA, 224);
+        bitrateMap.put(0xDA, 256);
+        bitrateMap.put(0xEA, 320);
         // MPEG-2, Layer I (6)
-        bitrateMap.put(new Integer(0x16), new Integer(32));
-        bitrateMap.put(new Integer(0x26), new Integer(48));
-        bitrateMap.put(new Integer(0x36), new Integer(56));
-        bitrateMap.put(new Integer(0x46), new Integer(64));
-        bitrateMap.put(new Integer(0x56), new Integer(80));
-        bitrateMap.put(new Integer(0x66), new Integer(96));
-        bitrateMap.put(new Integer(0x76), new Integer(112));
-        bitrateMap.put(new Integer(0x86), new Integer(128));
-        bitrateMap.put(new Integer(0x96), new Integer(144));
-        bitrateMap.put(new Integer(0xA6), new Integer(160));
-        bitrateMap.put(new Integer(0xB6), new Integer(176));
-        bitrateMap.put(new Integer(0xC6), new Integer(192));
-        bitrateMap.put(new Integer(0xD6), new Integer(224));
-        bitrateMap.put(new Integer(0xE6), new Integer(256));
+        bitrateMap.put(0x16, 32);
+        bitrateMap.put(0x26, 48);
+        bitrateMap.put(0x36, 56);
+        bitrateMap.put(0x46, 64);
+        bitrateMap.put(0x56, 80);
+        bitrateMap.put(0x66, 96);
+        bitrateMap.put(0x76, 112);
+        bitrateMap.put(0x86, 128);
+        bitrateMap.put(0x96, 144);
+        bitrateMap.put(0xA6, 160);
+        bitrateMap.put(0xB6, 176);
+        bitrateMap.put(0xC6, 192);
+        bitrateMap.put(0xD6, 224);
+        bitrateMap.put(0xE6, 256);
         // MPEG-2, Layer II (4)
-        bitrateMap.put(new Integer(0x14), new Integer(8));
-        bitrateMap.put(new Integer(0x24), new Integer(16));
-        bitrateMap.put(new Integer(0x34), new Integer(24));
-        bitrateMap.put(new Integer(0x44), new Integer(32));
-        bitrateMap.put(new Integer(0x54), new Integer(40));
-        bitrateMap.put(new Integer(0x64), new Integer(48));
-        bitrateMap.put(new Integer(0x74), new Integer(56));
-        bitrateMap.put(new Integer(0x84), new Integer(64));
-        bitrateMap.put(new Integer(0x94), new Integer(80));
-        bitrateMap.put(new Integer(0xA4), new Integer(96));
-        bitrateMap.put(new Integer(0xB4), new Integer(112));
-        bitrateMap.put(new Integer(0xC4), new Integer(128));
-        bitrateMap.put(new Integer(0xD4), new Integer(144));
-        bitrateMap.put(new Integer(0xE4), new Integer(160));
+        bitrateMap.put(0x14, 8);
+        bitrateMap.put(0x24, 16);
+        bitrateMap.put(0x34, 24);
+        bitrateMap.put(0x44, 32);
+        bitrateMap.put(0x54, 40);
+        bitrateMap.put(0x64, 48);
+        bitrateMap.put(0x74, 56);
+        bitrateMap.put(0x84, 64);
+        bitrateMap.put(0x94, 80);
+        bitrateMap.put(0xA4, 96);
+        bitrateMap.put(0xB4, 112);
+        bitrateMap.put(0xC4, 128);
+        bitrateMap.put(0xD4, 144);
+        bitrateMap.put(0xE4, 160);
         // MPEG-2, Layer III (2)
-        bitrateMap.put(new Integer(0x12), new Integer(8));
-        bitrateMap.put(new Integer(0x22), new Integer(16));
-        bitrateMap.put(new Integer(0x32), new Integer(24));
-        bitrateMap.put(new Integer(0x42), new Integer(32));
-        bitrateMap.put(new Integer(0x52), new Integer(40));
-        bitrateMap.put(new Integer(0x62), new Integer(48));
-        bitrateMap.put(new Integer(0x72), new Integer(56));
-        bitrateMap.put(new Integer(0x82), new Integer(64));
-        bitrateMap.put(new Integer(0x92), new Integer(80));
-        bitrateMap.put(new Integer(0xA2), new Integer(96));
-        bitrateMap.put(new Integer(0xB2), new Integer(112));
-        bitrateMap.put(new Integer(0xC2), new Integer(128));
-        bitrateMap.put(new Integer(0xD2), new Integer(144));
-        bitrateMap.put(new Integer(0xE2), new Integer(160));
+        bitrateMap.put(0x12, 8);
+        bitrateMap.put(0x22, 16);
+        bitrateMap.put(0x32, 24);
+        bitrateMap.put(0x42, 32);
+        bitrateMap.put(0x52, 40);
+        bitrateMap.put(0x62, 48);
+        bitrateMap.put(0x72, 56);
+        bitrateMap.put(0x82, 64);
+        bitrateMap.put(0x92, 80);
+        bitrateMap.put(0xA2, 96);
+        bitrateMap.put(0xB2, 112);
+        bitrateMap.put(0xC2, 128);
+        bitrateMap.put(0xD2, 144);
+        bitrateMap.put(0xE2, 160);
     }
 
     /**
@@ -193,10 +192,10 @@ public class MPEGFrameHeader
 
     static
     {
-        modeMap.put(new Integer(MODE_STEREO), "Stereo");
-        modeMap.put(new Integer(MODE_JOINT_STEREO), "Joint Stereo");
-        modeMap.put(new Integer(MODE_DUAL_CHANNEL), "Dual");
-        modeMap.put(new Integer(MODE_MONO), "Mono");
+        modeMap.put(MODE_STEREO, "Stereo");
+        modeMap.put(MODE_JOINT_STEREO, "Joint Stereo");
+        modeMap.put(MODE_DUAL_CHANNEL, "Dual");
+        modeMap.put(MODE_MONO, "Mono");
     }
 
     /**
@@ -210,10 +209,10 @@ public class MPEGFrameHeader
 
     static
     {
-        emphasisMap.put(new Integer(EMPHASIS_NONE), "None");
-        emphasisMap.put(new Integer(EMPHASIS_5015MS), "5015MS");
-        emphasisMap.put(new Integer(EMPHASIS_RESERVED), "Reserved");
-        emphasisMap.put(new Integer(EMPHASIS_CCITT), "CCITT");
+        emphasisMap.put(EMPHASIS_NONE, "None");
+        emphasisMap.put(EMPHASIS_5015MS, "5015MS");
+        emphasisMap.put(EMPHASIS_RESERVED, "Reserved");
+        emphasisMap.put(EMPHASIS_CCITT, "CCITT");
     }
 
 
@@ -231,15 +230,15 @@ public class MPEGFrameHeader
 
     static
     {
-        modeExtensionMap.put(new Integer(MODE_EXTENSION_NONE), "4-31");
-        modeExtensionMap.put(new Integer(MODE_EXTENSION_ONE), "8-31");
-        modeExtensionMap.put(new Integer(MODE_EXTENSION_TWO), "12-31");
-        modeExtensionMap.put(new Integer(MODE_EXTENSION_THREE), "16-31");
+        modeExtensionMap.put(MODE_EXTENSION_NONE, "4-31");
+        modeExtensionMap.put(MODE_EXTENSION_ONE, "8-31");
+        modeExtensionMap.put(MODE_EXTENSION_TWO, "12-31");
+        modeExtensionMap.put(MODE_EXTENSION_THREE, "16-31");
 
-        modeExtensionLayerIIIMap.put(new Integer(MODE_EXTENSION_OFF_OFF), "off-off");
-        modeExtensionLayerIIIMap.put(new Integer(MODE_EXTENSION_ON_OFF), "on-off");
-        modeExtensionLayerIIIMap.put(new Integer(MODE_EXTENSION_OFF_ON), "off-on");
-        modeExtensionLayerIIIMap.put(new Integer(MODE_EXTENSION_ON_ON), "on-on");
+        modeExtensionLayerIIIMap.put(MODE_EXTENSION_OFF_OFF, "off-off");
+        modeExtensionLayerIIIMap.put(MODE_EXTENSION_ON_OFF, "on-off");
+        modeExtensionLayerIIIMap.put(MODE_EXTENSION_OFF_ON, "off-on");
+        modeExtensionLayerIIIMap.put(MODE_EXTENSION_ON_ON, "on-on");
     }
 
     /**
@@ -252,21 +251,21 @@ public class MPEGFrameHeader
 
     static
     {
-        samplingV1Map.put(new Integer(0), new Integer(44100));
-        samplingV1Map.put(new Integer(1), new Integer(48000));
-        samplingV1Map.put(new Integer(2), new Integer(32000));
+        samplingV1Map.put(0, 44100);
+        samplingV1Map.put(1, 48000);
+        samplingV1Map.put(2, 32000);
 
-        samplingV2Map.put(new Integer(0), new Integer(22050));
-        samplingV2Map.put(new Integer(1), new Integer(24000));
-        samplingV2Map.put(new Integer(2), new Integer(16000));
+        samplingV2Map.put(0, 22050);
+        samplingV2Map.put(1, 24000);
+        samplingV2Map.put(2, 16000);
 
-        samplingV25Map.put(new Integer(0), new Integer(11025));
-        samplingV25Map.put(new Integer(1), new Integer(12000));
-        samplingV25Map.put(new Integer(2), new Integer(8000));
+        samplingV25Map.put(0, 11025);
+        samplingV25Map.put(1, 12000);
+        samplingV25Map.put(2, 8000);
 
-        samplingRateMap.put(new Integer(VERSION_1), samplingV1Map);
-        samplingRateMap.put(new Integer(VERSION_2), samplingV2Map);
-        samplingRateMap.put(new Integer(VERSION_2_5), samplingV25Map);
+        samplingRateMap.put(VERSION_1, samplingV1Map);
+        samplingRateMap.put(VERSION_2, samplingV2Map);
+        samplingRateMap.put(VERSION_2_5, samplingV25Map);
     }
 
     /* Samples Per Frame */
@@ -276,21 +275,21 @@ public class MPEGFrameHeader
     private static final Map samplesPerFrameV25Map = new HashMap();
     static
     {
-        samplesPerFrameV1Map.put(new Integer(LAYER_I)   , new Integer(384));
-        samplesPerFrameV1Map.put(new Integer(LAYER_II)  , new Integer(1152));
-        samplesPerFrameV1Map.put(new Integer(LAYER_III) , new Integer(1152));
+        samplesPerFrameV1Map.put(LAYER_I   , 384);
+        samplesPerFrameV1Map.put(LAYER_II  , 1152);
+        samplesPerFrameV1Map.put(LAYER_III , 1152);
 
-        samplesPerFrameV2Map.put(new Integer(LAYER_I)   , new Integer(384));
-        samplesPerFrameV2Map.put(new Integer(LAYER_II)  , new Integer(1152));
-        samplesPerFrameV2Map.put(new Integer(LAYER_III) , new Integer(1152));
+        samplesPerFrameV2Map.put(LAYER_I   , 384);
+        samplesPerFrameV2Map.put(LAYER_II  , 1152);
+        samplesPerFrameV2Map.put(LAYER_III , 1152);
 
-        samplesPerFrameV25Map.put(new Integer(LAYER_I)  , new Integer(384));
-        samplesPerFrameV25Map.put(new Integer(LAYER_II) , new Integer(1152));
-        samplesPerFrameV25Map.put(new Integer(LAYER_III), new Integer(1152));
+        samplesPerFrameV25Map.put(LAYER_I  , 384);
+        samplesPerFrameV25Map.put(LAYER_II , 1152);
+        samplesPerFrameV25Map.put(LAYER_III, 1152);
 
-        samplesPerFrameMap.put(new Integer(VERSION_1)  , samplesPerFrameV1Map);
-        samplesPerFrameMap.put(new Integer(VERSION_2)  , samplesPerFrameV2Map);
-        samplesPerFrameMap.put(new Integer(VERSION_2_5), samplesPerFrameV25Map);
+        samplesPerFrameMap.put(VERSION_1  , samplesPerFrameV1Map);
+        samplesPerFrameMap.put(VERSION_2  , samplesPerFrameV2Map);
+        samplesPerFrameMap.put(VERSION_2_5, samplesPerFrameV25Map);
 
     }
 
@@ -475,7 +474,7 @@ public class MPEGFrameHeader
     {
         //MPEG Version
         version = (byte) ((mpegBytes[BYTE_2] & MASK_MP3_VERSION) >> 3);
-        versionAsString = (String)mpegVersionMap.get(new Integer(version));
+        versionAsString = (String)mpegVersionMap.get(version);
         if ( versionAsString == null)
         {
             throw new InvalidAudioFrameException("Invalid mpeg version");
@@ -515,7 +514,7 @@ public class MPEGFrameHeader
         int bitRateIndex = mpegBytes[BYTE_3] & MASK_MP3_BITRATE |
             mpegBytes[BYTE_2] & MASK_MP3_ID | mpegBytes[BYTE_2] & MASK_MP3_LAYER;
 
-        bitRate = (Integer) bitrateMap.get(new Integer(bitRateIndex));
+        bitRate = (Integer) bitrateMap.get(bitRateIndex);
         if (bitRate == null)
         {
             throw new InvalidAudioFrameException("Invalid bitrate");
@@ -530,7 +529,7 @@ public class MPEGFrameHeader
     private void setChannelMode() throws InvalidAudioFrameException
     {
         channelMode = (mpegBytes[BYTE_4] & MASK_MP3_MODE) >>> 6;
-        channelModeAsString = (String)modeMap.get(new Integer(channelMode));
+        channelModeAsString = (String)modeMap.get(channelMode);
         if ( channelModeAsString == null)
         {
             throw new InvalidAudioFrameException("Invalid channel mode");
@@ -543,7 +542,7 @@ public class MPEGFrameHeader
     private void setEmphasis() throws InvalidAudioFrameException
     {
         emphasis = mpegBytes[BYTE_4] & MASK_MP3_EMPHASIS;
-        emphasisAsString = (String) emphasisMap.get(new Integer(emphasis));
+        emphasisAsString = (String) emphasisMap.get(emphasis);
         if (getEmphasisAsString() == null)
         {
             throw new InvalidAudioFrameException("Invalid emphasis");
@@ -566,7 +565,7 @@ public class MPEGFrameHeader
     private void setLayer() throws InvalidAudioFrameException
     {
         layer = (mpegBytes[BYTE_2] & MASK_MP3_LAYER) >>> 1;
-        layerAsString = (String)mpegLayerMap.get(new Integer(layer));
+        layerAsString = (String)mpegLayerMap.get(layer);
         if ( layerAsString== null)
         {
             throw new InvalidAudioFrameException("Invalid Layer");
@@ -582,7 +581,7 @@ public class MPEGFrameHeader
         int index = (mpegBytes[BYTE_4] & MASK_MP3_MODE_EXTENSION) >> 4;
         if (layer == LAYER_III)
         {
-            modeExtension = (String) modeExtensionLayerIIIMap.get(new Integer(index));
+            modeExtension = (String) modeExtensionLayerIIIMap.get(index);
             if (getModeExtension() == null)
             {
                 throw new InvalidAudioFrameException("Invalid Mode Extension");
@@ -590,7 +589,7 @@ public class MPEGFrameHeader
         }
         else
         {
-            modeExtension = (String) modeExtensionMap.get(new Integer(index));
+            modeExtension = (String) modeExtensionMap.get(index);
             if (getModeExtension() == null)
             {
                 throw new InvalidAudioFrameException("Invalid Mode Extension");
@@ -605,7 +604,7 @@ public class MPEGFrameHeader
     {
         //Frequency
         int index = (mpegBytes[BYTE_3] & MASK_MP3_FREQUENCY) >>> 2;
-        HashMap samplingRateMapForVersion = (HashMap) samplingRateMap.get(new Integer(version));
+        HashMap samplingRateMapForVersion = (HashMap) samplingRateMap.get(version);
         if (samplingRateMapForVersion == null)
         {
             throw new InvalidAudioFrameException("Invalid version");
@@ -707,16 +706,16 @@ public class MPEGFrameHeader
                 switch (layer)
                 {
                     case LAYER_I:
-                        return (LAYER_I_FRAME_SIZE_COEFFICIENT * (getBitRate().intValue() * SCALE_BY_THOUSAND) / getSamplingRate().intValue() + getPaddingLength()) * LAYER_I_SLOT_SIZE;
+                        return (LAYER_I_FRAME_SIZE_COEFFICIENT * (getBitRate() * SCALE_BY_THOUSAND) / getSamplingRate() + getPaddingLength()) * LAYER_I_SLOT_SIZE;
 
                     case LAYER_II:
-                        return (LAYER_II_FRAME_SIZE_COEFFICIENT/2)  * (getBitRate().intValue() * SCALE_BY_THOUSAND) / getSamplingRate().intValue() + getPaddingLength() * LAYER_II_SLOT_SIZE;
+                        return (LAYER_II_FRAME_SIZE_COEFFICIENT/2)  * (getBitRate() * SCALE_BY_THOUSAND) / getSamplingRate() + getPaddingLength() * LAYER_II_SLOT_SIZE;
 
                     case LAYER_III:
-                        return (LAYER_III_FRAME_SIZE_COEFFICIENT/2) * (getBitRate().intValue() * SCALE_BY_THOUSAND) / getSamplingRate().intValue() + getPaddingLength()* LAYER_III_SLOT_SIZE;
+                        return (LAYER_III_FRAME_SIZE_COEFFICIENT/2) * (getBitRate() * SCALE_BY_THOUSAND) / getSamplingRate() + getPaddingLength()* LAYER_III_SLOT_SIZE;
 
                     default:
-                        return (LAYER_III_FRAME_SIZE_COEFFICIENT/2) * (getBitRate().intValue() * SCALE_BY_THOUSAND) / getSamplingRate().intValue() + getPaddingLength()* LAYER_III_SLOT_SIZE;
+                        return (LAYER_III_FRAME_SIZE_COEFFICIENT/2) * (getBitRate() * SCALE_BY_THOUSAND) / getSamplingRate() + getPaddingLength()* LAYER_III_SLOT_SIZE;
 
                 }
 
@@ -726,16 +725,16 @@ public class MPEGFrameHeader
                 switch (layer)
                 {
                     case LAYER_I:
-                        return (LAYER_I_FRAME_SIZE_COEFFICIENT * (getBitRate().intValue() * SCALE_BY_THOUSAND) / getSamplingRate().intValue() + getPaddingLength()) * LAYER_I_SLOT_SIZE;
+                        return (LAYER_I_FRAME_SIZE_COEFFICIENT * (getBitRate() * SCALE_BY_THOUSAND) / getSamplingRate() + getPaddingLength()) * LAYER_I_SLOT_SIZE;
 
                     case LAYER_II:
-                        return LAYER_II_FRAME_SIZE_COEFFICIENT * (getBitRate().intValue() * SCALE_BY_THOUSAND) / getSamplingRate().intValue() + getPaddingLength() * LAYER_II_SLOT_SIZE;
+                        return LAYER_II_FRAME_SIZE_COEFFICIENT * (getBitRate() * SCALE_BY_THOUSAND) / getSamplingRate() + getPaddingLength() * LAYER_II_SLOT_SIZE;
 
                     case LAYER_III:
-                        return LAYER_III_FRAME_SIZE_COEFFICIENT * (getBitRate().intValue() * SCALE_BY_THOUSAND) / getSamplingRate().intValue() + getPaddingLength()* LAYER_III_SLOT_SIZE;
+                        return LAYER_III_FRAME_SIZE_COEFFICIENT * (getBitRate() * SCALE_BY_THOUSAND) / getSamplingRate() + getPaddingLength()* LAYER_III_SLOT_SIZE;
 
                     default:
-                        return LAYER_III_FRAME_SIZE_COEFFICIENT * (getBitRate().intValue() * SCALE_BY_THOUSAND) / getSamplingRate().intValue() + getPaddingLength()* LAYER_III_SLOT_SIZE;
+                        return LAYER_III_FRAME_SIZE_COEFFICIENT * (getBitRate() * SCALE_BY_THOUSAND) / getSamplingRate() + getPaddingLength()* LAYER_III_SLOT_SIZE;
 
                 }
         }
@@ -747,8 +746,8 @@ public class MPEGFrameHeader
     */
     public int getNoOfSamples()
     {
-        Integer noOfSamples = (Integer) ((HashMap)  samplesPerFrameMap.get(new Integer(version))).get(new Integer(layer));
-        return noOfSamples.intValue();
+        Integer noOfSamples = (Integer) ((HashMap)  samplesPerFrameMap.get(version)).get(new Integer(layer));
+        return noOfSamples;
     }
 
 

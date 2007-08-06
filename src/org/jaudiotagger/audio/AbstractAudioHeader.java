@@ -15,8 +15,8 @@
  */
 package org.jaudiotagger.audio;
 
-import java.io.IOException;
 import java.io.File;
+import java.io.IOException;
 
 /**
  * The abstract superclass that provides a way to establish where the actual audio begins

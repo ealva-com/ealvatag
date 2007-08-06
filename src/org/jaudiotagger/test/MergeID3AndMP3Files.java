@@ -1,10 +1,8 @@
 package org.jaudiotagger.test;
 
-import org.jaudiotagger.audio.mp3.MP3File;
-
 import java.io.*;
-import java.util.Date;
 import java.text.DateFormat;
+import java.util.Date;
 
 /**
  * Simple class that will attempt to recusively read all files within a directory ending in .mp3 (but
@@ -81,17 +79,17 @@ public class MergeID3AndMP3Files
         final File[] audioFiles = fromDir.listFiles(new MergeID3AndMP3Files.MP3FileFilter());
         if (audioFiles.length > 0)
         {
-            for (int i = 0; i < audioFiles.length; i++)
+            for (File audioFile : audioFiles)
             {
                 MergeID3AndMP3Files.count++;
 
                 try
                 {
-                    copyAudioToTmp(toDir,audioFiles[i],mp3File);
+                    copyAudioToTmp(toDir, audioFile, mp3File);
                 }
                 catch (Throwable t)
                 {
-                    System.err.println("Unable to merge record:"+ MergeID3AndMP3Files.count +":"+mp3File.getPath());
+                    System.err.println("Unable to merge record:" + MergeID3AndMP3Files.count + ":" + mp3File.getPath());
                     MergeID3AndMP3Files.failed++;
                     t.printStackTrace();
                 }
@@ -101,9 +99,9 @@ public class MergeID3AndMP3Files
         final File[] audioFileDirs = fromDir.listFiles(new MergeID3AndMP3Files.DirFilter());
         if (audioFileDirs.length > 0)
         {
-            for (int i = 0; i < audioFileDirs.length; i++)
+            for (File audioFileDir : audioFileDirs)
             {
-                scanSingleDir(audioFileDirs[i],new File(toDir,audioFileDirs[i].getName()),mp3File);
+                scanSingleDir(audioFileDir, new File(toDir, audioFileDir.getName()), mp3File);
             }
         }
     }

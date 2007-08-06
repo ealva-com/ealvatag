@@ -15,18 +15,20 @@
  */
 package org.jaudiotagger.tag.id3;
 
-import org.jaudiotagger.audio.mp3.*;
-import org.jaudiotagger.tag.*;
-import org.jaudiotagger.tag.id3.framebody.*;
 import org.jaudiotagger.FileConstants;
+import org.jaudiotagger.audio.mp3.MP3File;
+import org.jaudiotagger.tag.EmptyFrameException;
+import org.jaudiotagger.tag.InvalidFrameException;
+import org.jaudiotagger.tag.InvalidFrameIdentifierException;
+import org.jaudiotagger.tag.id3.framebody.*;
 
-import java.io.IOException;
 import java.io.ByteArrayOutputStream;
-import java.util.regex.*;
-import java.util.zip.Inflater;
+import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.zip.DataFormatException;
-
-import java.nio.*;
+import java.util.zip.Inflater;
 
 /**
  * Represents an ID3v2.3 frame.

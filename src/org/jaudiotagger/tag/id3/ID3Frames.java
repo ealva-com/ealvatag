@@ -32,22 +32,22 @@ public abstract class ID3Frames extends AbstractStringStringValuePair
     /**
      * Holds frames whereby multiple occurences are allowed
      */
-    protected TreeSet multipleFrames = new TreeSet();
+    protected TreeSet<String>  multipleFrames = new TreeSet<String> ();
 
     /**
      * These frames should be lost if file changes
      */
-    protected TreeSet discardIfFileAlteredFrames= new TreeSet();
+    protected TreeSet<String>  discardIfFileAlteredFrames= new TreeSet<String> ();
 
     /**
      * These frames are part of the Official Specification for that Tag Version
      */
-    protected TreeSet supportedFrames = new TreeSet();
+    protected TreeSet<String>  supportedFrames = new TreeSet<String> ();
 
     /**
      * These frames are extensions to the  Specification for that Tag Version
      */
-    protected TreeSet extensionFrames = new TreeSet();
+    protected TreeSet<String> extensionFrames = new TreeSet<String> ();
 
     /**
      * If file changes discard these frames
@@ -89,15 +89,15 @@ public abstract class ID3Frames extends AbstractStringStringValuePair
     /**
      * Mapping from v22 to v23
      */
-    public static final HashMap convertv22Tov23 = new LinkedHashMap();
-    public static final HashMap convertv23Tov22 = new LinkedHashMap();
-    public static final HashMap forcev22Tov23 = new LinkedHashMap();
-    public static final HashMap forcev23Tov22 = new LinkedHashMap();
+    public static final Map<String,String> convertv22Tov23 = new LinkedHashMap<String,String>();
+    public static final Map<String,String> convertv23Tov22 = new LinkedHashMap<String,String>();
+    public static final Map<String,String> forcev22Tov23   = new LinkedHashMap<String,String>();
+    public static final Map<String,String> forcev23Tov22    = new LinkedHashMap<String,String>();
 
-    public static final HashMap convertv23Tov24 = new LinkedHashMap();
-    public static final HashMap convertv24Tov23 = new LinkedHashMap();
-    public static final HashMap forcev23Tov24 = new LinkedHashMap();
-    public static final HashMap forcev24Tov23 = new LinkedHashMap();
+    public static final Map<String,String> convertv23Tov24 = new LinkedHashMap<String,String>();
+    public static final Map<String,String> convertv24Tov23 = new LinkedHashMap<String,String>();
+    public static final Map<String,String> forcev23Tov24   = new LinkedHashMap<String,String>();
+    public static final Map<String,String> forcev24Tov23   = new LinkedHashMap<String,String>();
 
     private static void loadID3v23ID3v24Mapping()
     {

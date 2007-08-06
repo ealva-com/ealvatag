@@ -1,9 +1,9 @@
 package org.jaudiotagger.tag.id3;
 
+import org.jaudiotagger.logging.LogFormatter;
 import org.jaudiotagger.tag.AbstractTagFrame;
 import org.jaudiotagger.tag.TagOptionSingleton;
 import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
-import org.jaudiotagger.logging.LogFormatter;
 
 import java.util.logging.Logger;
 

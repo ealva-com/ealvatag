@@ -27,8 +27,8 @@ package org.jaudiotagger.tag;
 import org.jaudiotagger.tag.id3.framebody.AbstractID3v2FrameBody;
 import org.jaudiotagger.tag.id3.framebody.FrameBodyCOMM;
 import org.jaudiotagger.tag.id3.framebody.FrameBodyTIPL;
-import org.jaudiotagger.tag.id3.valuepair.Languages;
 import org.jaudiotagger.tag.id3.valuepair.GenreTypes;
+import org.jaudiotagger.tag.id3.valuepair.Languages;
 import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
 import org.jaudiotagger.tag.lyrics3.Lyrics3v2Fields;
 
@@ -653,7 +653,7 @@ public class TagOptionSingleton
      */
     public void setLyrics3SaveField(String id, boolean save)
     {
-        this.lyrics3SaveFieldMap.put(id, new Boolean(save));
+        this.lyrics3SaveFieldMap.put(id, save);
     }
 
     /**
@@ -665,7 +665,7 @@ public class TagOptionSingleton
      */
     public boolean getLyrics3SaveField(String id)
     {
-        return ((Boolean) lyrics3SaveFieldMap.get(id)).booleanValue();
+        return (Boolean) lyrics3SaveFieldMap.get(id);
     }
 
     /**
@@ -845,7 +845,7 @@ public class TagOptionSingleton
         while (iterator.hasNext())
         {
             fieldId = (String) iterator.next();
-            lyrics3SaveFieldMap.put(fieldId, new Boolean(true));
+            lyrics3SaveFieldMap.put(fieldId, true);
         }
 
         try

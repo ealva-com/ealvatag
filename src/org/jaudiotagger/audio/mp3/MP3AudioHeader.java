@@ -23,14 +23,14 @@ import org.jaudiotagger.audio.AbstractAudioHeader;
 import org.jaudiotagger.audio.InvalidAudioFrameException;
 import org.jaudiotagger.logging.LogFormatter;
 
-import java.util.*;
+import java.io.*;
+import java.nio.ByteBuffer;
+import java.nio.channels.FileChannel;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.io.*;
-import java.text.SimpleDateFormat;
-import java.text.ParseException;
-import java.nio.channels.FileChannel;
-import java.nio.ByteBuffer;
 
 /**
  * Represents the audio header of an MP3 File, the audio header consists of a number of
@@ -142,7 +142,7 @@ public final class MP3AudioHeader extends AbstractAudioHeader
         throws IOException
     {
         //This is substantially faster than updating the filechannels position
-        long filePointerCount = 0;
+        long filePointerCount;
 
         final FileInputStream     fis = new FileInputStream(seekFile);
         final FileChannel fc = fis.getChannel();
@@ -499,7 +499,7 @@ public final class MP3AudioHeader extends AbstractAudioHeader
         }
         else
         {
-            bitrate = mp3FrameHeader.getBitRate().intValue();
+            bitrate = mp3FrameHeader.getBitRate();
         }
     }
 
@@ -537,7 +537,7 @@ public final class MP3AudioHeader extends AbstractAudioHeader
      */
      public int getSampleRateAsNumber()
     {
-        return mp3FrameHeader.getSamplingRate().intValue();
+        return mp3FrameHeader.getSamplingRate();
     }
 
     /**

@@ -15,19 +15,16 @@
  */
 package org.jaudiotagger.tag.id3.framebody;
 
-import org.jaudiotagger.tag.datatype.NumberHashMap;
-import org.jaudiotagger.tag.datatype.StringHashMap;
-
-import java.io.IOException;
-import java.io.*;
-import java.nio.*;
-
-import org.jaudiotagger.tag.datatype.*;
 import org.jaudiotagger.tag.InvalidTagException;
-import org.jaudiotagger.tag.id3.ID3v24Frames;
+import org.jaudiotagger.tag.datatype.*;
 import org.jaudiotagger.tag.id3.ID3TextEncodingConversion;
-import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
+import org.jaudiotagger.tag.id3.ID3v24Frames;
 import org.jaudiotagger.tag.id3.valuepair.Languages;
+import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.nio.ByteBuffer;
 
 /**
  * Comments frame.
@@ -64,7 +61,7 @@ public class FrameBodyCOMM  extends AbstractID3v2FrameBody  implements ID3v24Fra
      */
     public FrameBodyCOMM()
     {
-        setObjectValue(DataTypes.OBJ_TEXT_ENCODING, new Byte(TextEncoding.ISO_8859_1));             
+        setObjectValue(DataTypes.OBJ_TEXT_ENCODING, TextEncoding.ISO_8859_1);
         setObjectValue(DataTypes.OBJ_LANGUAGE, Languages.DEFAULT_ID);
         setObjectValue(DataTypes.OBJ_DESCRIPTION, "");
         setObjectValue(DataTypes.OBJ_TEXT, "");
@@ -85,7 +82,7 @@ public class FrameBodyCOMM  extends AbstractID3v2FrameBody  implements ID3v24Fra
      */
     public FrameBodyCOMM(byte textEncoding, String language, String description, String text)
     {
-        setObjectValue(DataTypes.OBJ_TEXT_ENCODING, new Byte(textEncoding));
+        setObjectValue(DataTypes.OBJ_TEXT_ENCODING, textEncoding);
         setObjectValue(DataTypes.OBJ_LANGUAGE, language);
         setObjectValue(DataTypes.OBJ_DESCRIPTION, description);
         setObjectValue(DataTypes.OBJ_TEXT, text);

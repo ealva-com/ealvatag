@@ -8,9 +8,9 @@
  */
 package org.jaudiotagger.tag.virtual.metadataitem;
 
-import org.jaudiotagger.tag.virtual.VirtualMetaDataItem;
-import org.jaudiotagger.tag.id3.framebody.AbstractFrameBodyTextInfo;
 import org.jaudiotagger.tag.id3.ID3v24Frame;
+import org.jaudiotagger.tag.id3.framebody.AbstractFrameBodyTextInfo;
+import org.jaudiotagger.tag.virtual.VirtualMetaDataItem;
 
 /**
  * The simplest type of Data item, a single text field

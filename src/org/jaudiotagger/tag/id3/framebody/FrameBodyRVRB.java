@@ -15,9 +15,9 @@
  */
 package org.jaudiotagger.tag.id3.framebody;
 
-import org.jaudiotagger.tag.datatype.NumberFixedLength;
-import org.jaudiotagger.tag.datatype.DataTypes;
 import org.jaudiotagger.tag.InvalidTagException;
+import org.jaudiotagger.tag.datatype.DataTypes;
+import org.jaudiotagger.tag.datatype.NumberFixedLength;
 import org.jaudiotagger.tag.id3.ID3v24Frames;
 
 import java.nio.ByteBuffer;
@@ -106,16 +106,16 @@ public class FrameBodyRVRB extends AbstractID3v2FrameBody implements ID3v24Frame
      */
     public FrameBodyRVRB(short reverbLeft, short reverbRight, byte reverbBouncesLeft, byte reverbBouncesRight, byte reverbFeedbackLeftToLeft, byte reverbFeedbackLeftToRight, byte reverbFeedbackRightToRight, byte reverbFeedbackRightToLeft, byte premixLeftToRight, byte premixRightToLeft)
     {
-        this.setObjectValue(DataTypes.OBJ_REVERB_LEFT, new Short(reverbLeft));
-        this.setObjectValue(DataTypes.OBJ_REVERB_RIGHT, new Short(reverbRight));
-        this.setObjectValue(DataTypes.OBJ_REVERB_BOUNCE_LEFT, new Byte(reverbBouncesLeft));
-        this.setObjectValue(DataTypes.OBJ_REVERB_BOUNCE_RIGHT, new Byte(reverbBouncesRight));
-        this.setObjectValue(DataTypes.OBJ_REVERB_FEEDBACK_LEFT_TO_LEFT, new Byte(reverbFeedbackLeftToLeft));
-        this.setObjectValue(DataTypes.OBJ_REVERB_FEEDBACK_LEFT_TO_RIGHT, new Byte(reverbFeedbackLeftToRight));
-        this.setObjectValue(DataTypes.OBJ_REVERB_FEEDBACK_RIGHT_TO_RIGHT, new Byte(reverbFeedbackRightToRight));
-        this.setObjectValue(DataTypes.OBJ_REVERB_FEEDBACK_RIGHT_TO_LEFT, new Byte(reverbFeedbackRightToLeft));
-        this.setObjectValue(DataTypes.OBJ_PREMIX_LEFT_TO_RIGHT, new Byte(premixLeftToRight));
-        this.setObjectValue(DataTypes.OBJ_PREMIX_RIGHT_TO_LEFT, new Byte(premixRightToLeft));
+        this.setObjectValue(DataTypes.OBJ_REVERB_LEFT, reverbLeft);
+        this.setObjectValue(DataTypes.OBJ_REVERB_RIGHT, reverbRight);
+        this.setObjectValue(DataTypes.OBJ_REVERB_BOUNCE_LEFT, reverbBouncesLeft);
+        this.setObjectValue(DataTypes.OBJ_REVERB_BOUNCE_RIGHT, reverbBouncesRight);
+        this.setObjectValue(DataTypes.OBJ_REVERB_FEEDBACK_LEFT_TO_LEFT, reverbFeedbackLeftToLeft);
+        this.setObjectValue(DataTypes.OBJ_REVERB_FEEDBACK_LEFT_TO_RIGHT, reverbFeedbackLeftToRight);
+        this.setObjectValue(DataTypes.OBJ_REVERB_FEEDBACK_RIGHT_TO_RIGHT, reverbFeedbackRightToRight);
+        this.setObjectValue(DataTypes.OBJ_REVERB_FEEDBACK_RIGHT_TO_LEFT, reverbFeedbackRightToLeft);
+        this.setObjectValue(DataTypes.OBJ_PREMIX_LEFT_TO_RIGHT, premixLeftToRight);
+        this.setObjectValue(DataTypes.OBJ_PREMIX_RIGHT_TO_LEFT, premixRightToLeft);
     }
 
     /**

@@ -23,14 +23,9 @@
 
 package org.jaudiotagger.tag.lyrics3;
 
-import org.jaudiotagger.tag.AbstractTagFrame;
-import org.jaudiotagger.tag.InvalidTagException;
-import org.jaudiotagger.tag.id3.framebody.AbstractFrameBodyTextInfo;
+import org.jaudiotagger.tag.*;
 import org.jaudiotagger.tag.id3.AbstractID3v2Frame;
-import org.jaudiotagger.tag.id3.framebody.FrameBodyCOMM;
 import org.jaudiotagger.tag.id3.framebody.*;
-import org.jaudiotagger.tag.TagException;
-import org.jaudiotagger.tag.TagOptionSingleton;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;

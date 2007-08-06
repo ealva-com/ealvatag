@@ -15,10 +15,10 @@
  */
 package org.jaudiotagger.tag.id3.framebody;
 
+import org.jaudiotagger.tag.InvalidTagException;
+import org.jaudiotagger.tag.datatype.DataTypes;
 import org.jaudiotagger.tag.datatype.NumberHashMap;
 import org.jaudiotagger.tag.datatype.NumberVariableLength;
-import org.jaudiotagger.tag.datatype.DataTypes;
-import org.jaudiotagger.tag.InvalidTagException;
 import org.jaudiotagger.tag.id3.ID3v24Frames;
 
 import java.nio.ByteBuffer;
@@ -80,8 +80,8 @@ public class FrameBodyPOSS extends AbstractID3v2FrameBody implements ID3v24Frame
      */
     public FrameBodyPOSS(byte timeStampFormat, long position)
     {
-        this.setObjectValue(DataTypes.OBJ_TIME_STAMP_FORMAT, new Byte(timeStampFormat));
-        this.setObjectValue(DataTypes.OBJ_POSITION, new Long(position));
+        this.setObjectValue(DataTypes.OBJ_TIME_STAMP_FORMAT, timeStampFormat);
+        this.setObjectValue(DataTypes.OBJ_POSITION, position);
     }
 
     /**
