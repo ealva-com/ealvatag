@@ -36,9 +36,7 @@
 	
 
 	<!-- Have been using this version of java for compilation,could use to force javac compilation -->
-	<property name="jdk.home" value="${jdk.home.java_version_1.4.2_03}"/>	
-	<property name="jdk.classpath" value="jdk.classpath.java_version_1.4.2_03"/>	
-	
+		
 	<!-- Output dirs -->
 	<property name="output.dir"         value="classes"/>
 	<property name="testoutput.dir"     value="testclasses"/>
@@ -155,13 +153,13 @@
 		<!-- Recreate destination dir if missing -->
 		<mkdir dir="${output.dir}"/>
 		
-		<!-- Compile the source to be compatible with 1.4 ( no 1.5 features used)-->
+		<!-- Compile the source to be as 1.5-->
 		<javac destdir="${output.dir}"
 			verbose="${compiler.verbose}"
 			debug="${compiler.debug}"
 			nowarn="${compiler.generate.no.warnings}"
 			memoryMaximumSize="${compiler.max.memory}"
-			source="1.4"
+			source="1.5"
 			fork="true">
 			<compilerarg line="${compiler.args}"/>
 			<bootclasspath refid="bootclasspath"/>
@@ -185,13 +183,13 @@
 		<!-- Recreate destination dir if missing -->
 		<mkdir dir="${testoutput.dir}"/>
 		
-		<!-- Compile the source to be compatible with 1.4 ( no 1.5 features used)-->
+		<!-- Compile the source as 1.5 )-->
 		<javac destdir="${testoutput.dir}"
 			verbose="${compiler.verbose}"
 			debug="${compiler.debug}"
 			nowarn="${compiler.generate.no.warnings}"
 			memoryMaximumSize="${compiler.max.memory}"
-			source="1.4"
+			source="1.5"
 			fork="true">
 			<compilerarg line="${compiler.args}"/>
 			<bootclasspath refid="bootclasspath"/>
