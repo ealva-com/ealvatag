@@ -22,7 +22,7 @@
  */
 package org.jaudiotagger.tag.lyrics3;
 
-import org.jaudiotagger.tag.AbstractTag;
+import org.jaudiotagger.tag.id3.AbstractTag;
 import org.jaudiotagger.tag.id3.ID3v1Tag;
 
 import java.io.IOException;

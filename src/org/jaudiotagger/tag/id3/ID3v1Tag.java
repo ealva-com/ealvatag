@@ -24,9 +24,9 @@
 package org.jaudiotagger.tag.id3;
 
 import org.jaudiotagger.audio.mp3.MP3File;
-import org.jaudiotagger.tag.AbstractTag;
 import org.jaudiotagger.tag.TagNotFoundException;
 import org.jaudiotagger.tag.TagOptionSingleton;
+import org.jaudiotagger.tag.Tag;
 import org.jaudiotagger.tag.id3.valuepair.GenreTypes;
 
 import java.io.IOException;
@@ -44,8 +44,7 @@ import java.util.regex.Matcher;
  * @author : Paul Taylor
  *
  */
-public class ID3v1Tag
-    extends AbstractID3v1Tag
+public class ID3v1Tag extends AbstractID3v1Tag 
 {
     //For writing output
     protected static final String TYPE_COMMENT = "comment";

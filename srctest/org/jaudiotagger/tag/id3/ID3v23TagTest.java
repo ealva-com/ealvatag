@@ -15,16 +15,15 @@
  */
 package org.jaudiotagger.tag.id3;
 
-import org.jaudiotagger.audio.mp3.MP3File;
-import org.jaudiotagger.AbstractTestCase;
-import org.jaudiotagger.tag.id3.framebody.*;
-import org.jaudiotagger.tag.datatype.DataTypes;
-
-import java.io.File;
-
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
+import org.jaudiotagger.AbstractTestCase;
+import org.jaudiotagger.audio.mp3.MP3File;
+import org.jaudiotagger.tag.datatype.DataTypes;
+import org.jaudiotagger.tag.id3.framebody.*;
+
+import java.io.File;
 
 /**
  * 

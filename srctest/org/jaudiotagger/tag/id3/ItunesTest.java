@@ -1,10 +1,11 @@
 package org.jaudiotagger.tag.id3;
 
 import org.jaudiotagger.AbstractTestCase;
-import org.jaudiotagger.tag.id3.framebody.*;
-import org.jaudiotagger.tag.TagOptionSingleton;
 import org.jaudiotagger.audio.mp3.MP3File;
-import org.jaudiotagger.audio.mp3.MP3AudioHeader;
+import org.jaudiotagger.tag.TagOptionSingleton;
+import org.jaudiotagger.tag.id3.framebody.FrameBodyAPIC;
+import org.jaudiotagger.tag.id3.framebody.FrameBodyCOMM;
+import org.jaudiotagger.tag.id3.framebody.FrameBodyTPE1;
 
 import java.io.File;
 import java.util.List;

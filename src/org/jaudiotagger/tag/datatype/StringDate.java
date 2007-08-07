@@ -23,7 +23,7 @@
  */
 package org.jaudiotagger.tag.datatype;
 
-import org.jaudiotagger.tag.AbstractTagFrameBody;
+import org.jaudiotagger.tag.id3.AbstractTagFrameBody;
 import org.jaudiotagger.tag.id3.ID3Tags;
 
 /**
@@ -34,7 +34,7 @@ public class StringDate extends StringFixedLength
     /**
      * Creates a new ObjectStringDate datatype.
      *
-     * @param identifier 
+     * @param identifier
      */
     public StringDate(String identifier, AbstractTagFrameBody frameBody)
     {
@@ -49,7 +49,7 @@ public class StringDate extends StringFixedLength
     /**
      * 
      *
-     * @param value 
+     * @param value
      */
     public void setValue(Object value)
     {
@@ -62,7 +62,7 @@ public class StringDate extends StringFixedLength
     /**
      * 
      *
-     * @return 
+     * @return
      */
     public Object getValue()
     {

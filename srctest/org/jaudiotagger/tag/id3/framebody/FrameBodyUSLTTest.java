@@ -3,9 +3,9 @@ package org.jaudiotagger.tag.id3.framebody;
 import org.jaudiotagger.AbstractTestCase;
 import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
 
-import java.io.IOException;
 import java.io.ByteArrayOutputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
 
 /**
  */

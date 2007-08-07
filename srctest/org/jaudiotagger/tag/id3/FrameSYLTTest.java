@@ -1,12 +1,9 @@
 package org.jaudiotagger.tag.id3;
 
+import org.jaudiotagger.AbstractTestCase;
 import org.jaudiotagger.audio.mp3.MP3File;
-import org.jaudiotagger.tag.id3.ID3v24Frame;
-import org.jaudiotagger.tag.id3.ID3v24Tag;
-import org.jaudiotagger.tag.id3.ID3v24Frames;
 import org.jaudiotagger.tag.id3.framebody.FrameBodySYLT;
 import org.jaudiotagger.tag.id3.framebody.FrameBodyTPE1;
-import org.jaudiotagger.AbstractTestCase;
 
 import java.io.File;
 import java.util.Arrays;

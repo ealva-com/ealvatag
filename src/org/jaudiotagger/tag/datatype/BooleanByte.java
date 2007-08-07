@@ -23,7 +23,7 @@
  */
 package org.jaudiotagger.tag.datatype;
 
-import org.jaudiotagger.tag.AbstractTagFrameBody;
+import org.jaudiotagger.tag.id3.AbstractTagFrameBody;
 import org.jaudiotagger.tag.InvalidDataTypeException;
 
 /** Represents a bit flag within a byte */
@@ -37,9 +37,9 @@ public class BooleanByte extends AbstractDataType
     /**
      * Creates a new ObjectBooleanByte datatype.
      *
-     * @param identifier  
-     * @param bitPosition 
-     * @throws IndexOutOfBoundsException 
+     * @param identifier
+     * @param bitPosition
+     * @throws IndexOutOfBoundsException
      */
     public BooleanByte(String identifier, AbstractTagFrameBody frameBody, int bitPosition)
     {
@@ -61,7 +61,7 @@ public class BooleanByte extends AbstractDataType
     /**
      * 
      *
-     * @return 
+     * @return
      */
     public int getBitPosition()
     {
@@ -71,7 +71,7 @@ public class BooleanByte extends AbstractDataType
     /**
      * 
      *
-     * @return 
+     * @return
      */
     public int getSize()
     {
@@ -81,8 +81,8 @@ public class BooleanByte extends AbstractDataType
     /**
      * 
      *
-     * @param obj 
-     * @return 
+     * @param obj
+     * @return
      */
     public boolean equals(Object obj)
     {
@@ -104,10 +104,10 @@ public class BooleanByte extends AbstractDataType
     /**
      * 
      *
-     * @param arr    
-     * @param offset 
-     * @throws NullPointerException      
-     * @throws IndexOutOfBoundsException 
+     * @param arr
+     * @param offset
+     * @throws NullPointerException
+     * @throws IndexOutOfBoundsException
      */
     public void readByteArray(byte[] arr, int offset) throws InvalidDataTypeException
     {
@@ -131,7 +131,7 @@ public class BooleanByte extends AbstractDataType
     /**
      * 
      *
-     * @return 
+     * @return
      */
     public String toString()
     {
@@ -141,7 +141,7 @@ public class BooleanByte extends AbstractDataType
     /**
      * 
      *
-     * @return 
+     * @return
      */
     public byte[] writeByteArray()
     {

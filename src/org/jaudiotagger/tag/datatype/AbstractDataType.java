@@ -24,7 +24,7 @@ package org.jaudiotagger.tag.datatype;
 
 import org.jaudiotagger.audio.mp3.MP3File;
 import org.jaudiotagger.logging.LogFormatter;
-import org.jaudiotagger.tag.AbstractTagFrameBody;
+import org.jaudiotagger.tag.id3.AbstractTagFrameBody;
 import org.jaudiotagger.tag.InvalidDataTypeException;
 
 import java.util.Arrays;

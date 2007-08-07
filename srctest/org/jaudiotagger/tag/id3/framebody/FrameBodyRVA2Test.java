@@ -1,9 +1,8 @@
 package org.jaudiotagger.tag.id3.framebody;
 
 import org.jaudiotagger.AbstractTestCase;
-import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
-import org.jaudiotagger.tag.id3.ID3v24Frames;
 import org.jaudiotagger.tag.datatype.DataTypes;
+import org.jaudiotagger.tag.id3.ID3v24Frames;
 
 /**
  * Test RVA2FrameBody

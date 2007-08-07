@@ -9,7 +9,7 @@
 package org.jaudiotagger.audio.mp3;
 
 import org.jaudiotagger.FileConstants;
-import org.jaudiotagger.audio.InvalidAudioFrameException;
+import org.jaudiotagger.audio.exceptions.InvalidAudioFrameException;
 import org.jaudiotagger.logging.AbstractTagDisplayFormatter;
 
 import java.nio.ByteBuffer;
@@ -880,7 +880,7 @@ public class MPEGFrameHeader
             " isPrivate:"+ isPrivate    +
             " isCopyrighted:"+ isCopyrighted    +
             " isOriginal:"+ isCopyrighted    +
-            " isVbr" + this.isVariableBitRate() +
+            " isVariableBitRate" + this.isVariableBitRate() +
             " header as binary:" +
             AbstractTagDisplayFormatter.displayAsBinary(mpegBytes[BYTE_1]) +
             AbstractTagDisplayFormatter.displayAsBinary(mpegBytes[BYTE_2]) +

@@ -22,7 +22,7 @@
  */
 package org.jaudiotagger.tag.lyrics3;
 
-import org.jaudiotagger.tag.AbstractTagFrameBody;
+import org.jaudiotagger.tag.id3.AbstractTagFrameBody;
 import org.jaudiotagger.tag.InvalidTagException;
 import org.jaudiotagger.tag.TagOptionSingleton;
 import org.jaudiotagger.tag.datatype.AbstractDataType;

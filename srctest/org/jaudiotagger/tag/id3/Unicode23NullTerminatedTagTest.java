@@ -1,22 +1,15 @@
 package org.jaudiotagger.tag.id3;
 
-import junit.framework.TestCase;
 import junit.framework.Test;
+import junit.framework.TestCase;
 import junit.framework.TestSuite;
-
-import java.io.IOException;
-import java.io.File;
-
-import org.jaudiotagger.tag.TagException;
-import org.jaudiotagger.tag.AbstractTagFrameBody;
-import org.jaudiotagger.tag.id3.framebody.FrameBodyCOMM;
+import org.jaudiotagger.AbstractTestCase;
+import org.jaudiotagger.audio.mp3.MP3File;
 import org.jaudiotagger.tag.id3.framebody.FrameBodyWXXX;
 import org.jaudiotagger.tag.id3.framebody.FrameBodyWXXXTest;
 import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
-import org.jaudiotagger.audio.ReadOnlyFileException;
-import org.jaudiotagger.audio.InvalidAudioFrameException;
-import org.jaudiotagger.audio.mp3.MP3File;
-import org.jaudiotagger.AbstractTestCase;
+
+import java.io.File;
 
 /**
  *

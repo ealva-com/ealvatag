@@ -18,10 +18,9 @@ package org.jaudiotagger.tag.id3;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
-
-import org.jaudiotagger.tag.id3.framebody.*;
 import org.jaudiotagger.AbstractTestCase;
 import org.jaudiotagger.audio.mp3.MP3File;
+import org.jaudiotagger.tag.id3.framebody.*;
 
 import java.io.File;
 

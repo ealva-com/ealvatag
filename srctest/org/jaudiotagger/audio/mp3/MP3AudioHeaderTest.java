@@ -15,12 +15,11 @@
  */
 package org.jaudiotagger.audio.mp3;
 
-import java.io.*;
-
 import junit.framework.TestCase;
-
 import org.jaudiotagger.AbstractTestCase;
-import org.jaudiotagger.audio.InvalidAudioFrameException;
+import org.jaudiotagger.audio.exceptions.InvalidAudioFrameException;
+
+import java.io.File;
 
 /**
  */
@@ -53,7 +52,7 @@ public class MP3AudioHeaderTest extends TestCase
         assertFalse(mp3AudioHeader.isPrivate());
         assertFalse(mp3AudioHeader.isProtected());
         assertEquals("~127",mp3AudioHeader.getBitRate());
-         assertEquals("mp3",mp3AudioHeader.getType());
+         assertEquals("mp3",mp3AudioHeader.getEncodingType());
     }
 
     public void testReadV1VbrNew()
@@ -82,7 +81,7 @@ public class MP3AudioHeaderTest extends TestCase
         assertFalse(mp3AudioHeader.isPrivate());
         assertFalse(mp3AudioHeader.isProtected());
         assertEquals("~127",mp3AudioHeader.getBitRate());
-         assertEquals("mp3",mp3AudioHeader.getType());
+         assertEquals("mp3",mp3AudioHeader.getEncodingType());
     }
 
     public void testReadV1Cbr128()
@@ -111,7 +110,7 @@ public class MP3AudioHeaderTest extends TestCase
         assertFalse(mp3AudioHeader.isPrivate());
         assertFalse(mp3AudioHeader.isProtected());
         assertEquals("128",mp3AudioHeader.getBitRate());
-        assertEquals("mp3",mp3AudioHeader.getType());
+        assertEquals("mp3",mp3AudioHeader.getEncodingType());
     }
 
     public void testReadV1Cbr192()
@@ -140,7 +139,7 @@ public class MP3AudioHeaderTest extends TestCase
             assertFalse(mp3AudioHeader.isPrivate());
             assertFalse(mp3AudioHeader.isProtected());
             assertEquals("192",mp3AudioHeader.getBitRate());
-             assertEquals("mp3",mp3AudioHeader.getType());
+             assertEquals("mp3",mp3AudioHeader.getEncodingType());
         }
 
 
@@ -170,7 +169,7 @@ public class MP3AudioHeaderTest extends TestCase
         assertFalse(mp3AudioHeader.isPrivate());
         assertFalse(mp3AudioHeader.isProtected());
         assertEquals("~127",mp3AudioHeader.getBitRate());
-         assertEquals("mp3",mp3AudioHeader.getType());
+         assertEquals("mp3",mp3AudioHeader.getEncodingType());
     }
 
     public void testReadV2VbrNew()
@@ -199,7 +198,7 @@ public class MP3AudioHeaderTest extends TestCase
         assertFalse(mp3AudioHeader.isPrivate());
         assertFalse(mp3AudioHeader.isProtected());
         assertEquals("~127",mp3AudioHeader.getBitRate());
-        assertEquals("mp3",mp3AudioHeader.getType());
+        assertEquals("mp3",mp3AudioHeader.getEncodingType());
     }
 
     public void testReadV25VbrOld()
@@ -228,7 +227,7 @@ public class MP3AudioHeaderTest extends TestCase
         assertFalse(mp3AudioHeader.isPrivate());
         assertFalse(mp3AudioHeader.isProtected());
         assertEquals("~128",mp3AudioHeader.getBitRate());
-        assertEquals("mp3",mp3AudioHeader.getType());
+        assertEquals("mp3",mp3AudioHeader.getEncodingType());
     }
 
 
@@ -258,7 +257,7 @@ public class MP3AudioHeaderTest extends TestCase
         assertFalse(mp3AudioHeader.isPrivate());
         assertFalse(mp3AudioHeader.isProtected());
         assertEquals("~128",mp3AudioHeader.getBitRate());
-        assertEquals("mp3",mp3AudioHeader.getType());
+        assertEquals("mp3",mp3AudioHeader.getEncodingType());
     }
 
     /** Test trying to parse an mp3 file which is not a valid MP3 fails gracefully with expected exception

@@ -25,6 +25,7 @@ package org.jaudiotagger.tag.lyrics3;
 
 import org.jaudiotagger.tag.*;
 import org.jaudiotagger.tag.id3.AbstractID3v2Frame;
+import org.jaudiotagger.tag.id3.AbstractTagFrame;
 import org.jaudiotagger.tag.id3.framebody.*;
 
 import java.io.IOException;

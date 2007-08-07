@@ -24,6 +24,11 @@
  */
 package org.jaudiotagger.tag.id3;
 
+import org.jaudiotagger.tag.Tag;
+import org.jaudiotagger.logging.LogFormatter;
+
+import java.util.logging.Logger;
+
 /**
  * This is the abstract base class for all ID3 tags.
  *
@@ -31,8 +36,13 @@ package org.jaudiotagger.tag.id3;
  * @author : Paul Taylor
  *
  */
-public abstract class AbstractID3Tag extends org.jaudiotagger.tag.AbstractTag
+public abstract class AbstractID3Tag extends AbstractTag
 {
+      /**
+     * Logger Object
+    */
+    public static Logger logger = LogFormatter.getLogger();
+
     public AbstractID3Tag()
     {
     }

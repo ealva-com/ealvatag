@@ -23,7 +23,7 @@
  */
 package org.jaudiotagger.tag.datatype;
 
-import org.jaudiotagger.tag.AbstractTagFrameBody;
+import org.jaudiotagger.tag.id3.AbstractTagFrameBody;
 import org.jaudiotagger.tag.InvalidDataTypeException;
 
 public class Lyrics3TimeStamp extends AbstractDataType
@@ -48,7 +48,7 @@ public class Lyrics3TimeStamp extends AbstractDataType
     /**
      * Creates a new ObjectLyrics3TimeStamp datatype.
      *
-     * @param identifier 
+     * @param identifier
      */
     public Lyrics3TimeStamp(String identifier, AbstractTagFrameBody frameBody)
     {
@@ -75,7 +75,7 @@ public class Lyrics3TimeStamp extends AbstractDataType
     /**
      * 
      *
-     * @return 
+     * @return
      */
     public long getMinute()
     {
@@ -90,7 +90,7 @@ public class Lyrics3TimeStamp extends AbstractDataType
     /**
      * 
      *
-     * @return 
+     * @return
      */
     public long getSecond()
     {
@@ -100,7 +100,7 @@ public class Lyrics3TimeStamp extends AbstractDataType
     /**
      * 
      *
-     * @return 
+     * @return
      */
     public int getSize()
     {
@@ -110,8 +110,8 @@ public class Lyrics3TimeStamp extends AbstractDataType
     /**
      * Creates a new ObjectLyrics3TimeStamp datatype.
      *
-     * @param timeStamp       
-     * @param timeStampFormat 
+     * @param timeStamp
+     * @param timeStampFormat
      */
     public void setTimeStamp(long timeStamp, byte timeStampFormat)
     {
@@ -126,8 +126,8 @@ public class Lyrics3TimeStamp extends AbstractDataType
     /**
      * 
      *
-     * @param obj 
-     * @return 
+     * @param obj
+     * @return
      */
     public boolean equals(Object obj)
     {
@@ -154,10 +154,10 @@ public class Lyrics3TimeStamp extends AbstractDataType
     /**
      * 
      *
-     * @param timeStamp 
-     * @param offset    
-     * @throws NullPointerException      
-     * @throws IndexOutOfBoundsException 
+     * @param timeStamp
+     * @param offset
+     * @throws NullPointerException
+     * @throws IndexOutOfBoundsException
      */
     public void readString(String timeStamp, int offset)
     {
@@ -188,7 +188,7 @@ public class Lyrics3TimeStamp extends AbstractDataType
     /**
      * 
      *
-     * @return 
+     * @return
      */
     public String toString()
     {
@@ -198,7 +198,7 @@ public class Lyrics3TimeStamp extends AbstractDataType
     /**
      * 
      *
-     * @return 
+     * @return
      */
     public String writeString()
     {

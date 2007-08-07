@@ -26,13 +26,12 @@ package org.jaudiotagger.tag.id3.framebody;
 
 import org.jaudiotagger.audio.mp3.MP3File;
 import org.jaudiotagger.tag.*;
+import org.jaudiotagger.tag.id3.AbstractTagFrameBody;
 import org.jaudiotagger.tag.datatype.AbstractDataType;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
-import java.util.Iterator;
-import java.util.ListIterator;
 
 /**
  * Contains the content for an ID3v2 frame, (the header is held directly within the frame

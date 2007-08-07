@@ -23,9 +23,7 @@
 package org.jaudiotagger.tag.lyrics3;
 
 import org.jaudiotagger.tag.*;
-import org.jaudiotagger.tag.id3.AbstractID3v2Frame;
-import org.jaudiotagger.tag.id3.ID3v1Tag;
-import org.jaudiotagger.tag.id3.ID3v24Tag;
+import org.jaudiotagger.tag.id3.*;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;

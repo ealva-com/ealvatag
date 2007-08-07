@@ -3,7 +3,6 @@ package org.jaudiotagger.tag.id3;
 import org.jaudiotagger.AbstractTestCase;
 import org.jaudiotagger.audio.mp3.MP3File;
 
-
 import java.io.File;
 
 /**

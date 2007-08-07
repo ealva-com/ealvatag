@@ -23,7 +23,7 @@
  */
 package org.jaudiotagger.tag.datatype;
 
-import org.jaudiotagger.tag.AbstractTagFrameBody;
+import org.jaudiotagger.tag.id3.AbstractTagFrameBody;
 import org.jaudiotagger.tag.InvalidDataTypeException;
 import org.jaudiotagger.tag.id3.ID3Tags;
 
@@ -89,7 +89,7 @@ public class NumberVariableLength extends AbstractDataType
     /**
      * 
      *
-     * @param minimumSize 
+     * @param minimumSize
      */
     public void setMinimumSize(int minimumSize)
     {
@@ -135,8 +135,8 @@ public class NumberVariableLength extends AbstractDataType
     /**
      * 
      *
-     * @param obj 
-     * @return 
+     * @param obj
+     * @return
      */
     public boolean equals(Object obj)
     {
@@ -158,10 +158,10 @@ public class NumberVariableLength extends AbstractDataType
     /**
      * Read from Byte Array
      *
-     * @param arr    
-     * @param offset 
-     * @throws NullPointerException      
-     * @throws IndexOutOfBoundsException 
+     * @param arr
+     * @param offset
+     * @throws NullPointerException
+     * @throws IndexOutOfBoundsException
      */
     public void readByteArray(byte[] arr, int offset) throws InvalidDataTypeException
     {

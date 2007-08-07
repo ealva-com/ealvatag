@@ -19,8 +19,8 @@
  */
 package org.jaudiotagger.audio.mp3;
 
-import org.jaudiotagger.audio.AbstractAudioHeader;
-import org.jaudiotagger.audio.InvalidAudioFrameException;
+import org.jaudiotagger.audio.AudioHeader;
+import org.jaudiotagger.audio.exceptions.InvalidAudioFrameException;
 import org.jaudiotagger.logging.LogFormatter;
 
 import java.io.*;
@@ -52,7 +52,7 @@ import java.util.logging.Logger;
  * Strictly speaking MP3 means an MPEG-1, Layer III file but MP2 (MPEG-1,Layer II), MP1 (MPEG-1,Layer I) and MPEG-2 files are
  * sometimes used and named with the .mp3 suffix so this library attempts to supports all these formats.
 */
-public final class MP3AudioHeader extends AbstractAudioHeader
+public final class MP3AudioHeader implements AudioHeader
 {
     private MPEGFrameHeader mp3FrameHeader;
     private XingFrame       mp3XingFrame;
@@ -449,10 +449,14 @@ public final class MP3AudioHeader extends AbstractAudioHeader
      *
      * @return Track Length in seconds
      */
-    public double getTrackLength()
+    public double getPreciseTrackLength()
     {
         return trackLength;
     }
+
+    public int getTrackLength() {
+		return (int) getPreciseTrackLength();
+	}
 
     /**
      * Return the length in user friendly format
@@ -475,7 +479,7 @@ public final class MP3AudioHeader extends AbstractAudioHeader
      *
      * @return the audio file type
      */
-    public String getType()
+    public String getEncodingType()
     {
         return TYPE_MP3;
     }

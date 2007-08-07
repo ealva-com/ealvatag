@@ -1,13 +1,10 @@
 package org.jaudiotagger.tag.id3;
 
 import org.jaudiotagger.AbstractTestCase;
-import org.jaudiotagger.tag.id3.framebody.FrameBodyCOMM;
-import org.jaudiotagger.tag.id3.framebody.FrameBodyTIT2;
-import org.jaudiotagger.tag.id3.valuepair.Languages;
 import org.jaudiotagger.audio.mp3.MP3File;
+import org.jaudiotagger.tag.id3.framebody.FrameBodyCOMM;
 
 import java.io.File;
-import java.util.List;
 
 /**
  * Test POPMFrameBody
