@@ -60,27 +60,28 @@ public class VorbisCommentTagField implements TagTextField {
      *                    If the data doesn't conform "UTF-8" specification.
      */
     public VorbisCommentTagField(byte[] raw) throws UnsupportedEncodingException {
-        String field = new String(raw, "UTF-8");
+        String field = new String(raw, "ISO-8859-1");
 
-        String[] splitField = field.split("=");
-        if (splitField.length > 1) {
-            this.id = splitField[0].toUpperCase();
-            this.content = splitField[1];
-        } else {
-            //Either we have "XXXXXXX" without "="
-            //Or we have "XXXXXX=" with nothing after the "="
-            int i = field.indexOf("="); 
-            if(i != -1) {
-                this.id = field.substring(0, i+1);
+        int i = field.indexOf("=");
+        if (i== -1)
+        {
+            //Beware that ogg ID, must be capitalized and contain no space..
+            this.id = "ERRONEOUS";
+            this.content = field;
+        }
+        else
+        {
+            this.id=field.substring(0, i).toUpperCase();
+            if(field.length()>i)
+            {
+                this.content = field.substring(i+1);
+            }
+            else
+            {
+                //We have "XXXXXX=" with nothing after the "="
                 this.content = "";
             }
-            else {
-	            //Beware that ogg ID, must be capitalized and contain no space..
-	            this.id = "ERRONEOUS";
-	            this.content = field;
-            }
         }
-
         checkCommon();
     }
 

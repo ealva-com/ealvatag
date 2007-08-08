@@ -44,8 +44,8 @@ public class VorbisCommentReader {
 		for ( int i = 0; i < userComments; i++ ) {
 			b = new byte[4];
 			raf.read( b );
-			int commentLength = Utils.getNumber( b, 0, 3);
-			b = new byte[commentLength];
+			int commentLength = Utils.getNumber( b, 0, 3);            
+            b = new byte[commentLength];
 			raf.read( b );
 			
 			VorbisCommentTagField fieldComment = new VorbisCommentTagField(b);

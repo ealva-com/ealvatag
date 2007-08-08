@@ -21,6 +21,7 @@ public enum TagFieldKey
     COMPOSER,
     GROUPING,
     DISC_NO,
+    COVER_ART,
     BPM,
     MUSICBRAINZ_ARTISTID,
     MUSICBRAINZ_RELEASEID,

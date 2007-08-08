@@ -38,5 +38,7 @@ public enum VorbisCommentFieldKey
     ALBUMARTISTSORT,
     ALBUMSORT,
     TITLESORT,
-    COMPOSERSORT;
+    COMPOSERSORT,
+    COVERARTMIME,
+    COVERART
 }

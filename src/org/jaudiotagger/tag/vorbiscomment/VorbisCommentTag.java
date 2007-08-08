@@ -186,7 +186,12 @@ public class VorbisCommentTag extends AbstractTag {
     @Override
     public List get(TagFieldKey genericKey)
     {
-        return super.get(tagFieldToOggField.get(genericKey).name());
+        VorbisCommentFieldKey vorbisCommentFieldKey = tagFieldToOggField.get(genericKey);
+        if(vorbisCommentFieldKey==null)
+        {
+            return null;
+        }
+        return super.get(vorbisCommentFieldKey.name());
     }
 
     /**
@@ -197,6 +202,10 @@ public class VorbisCommentTag extends AbstractTag {
     public List get(String oggKeyId)
     {
         VorbisCommentFieldKey vorbisCommentFieldKey = VorbisCommentFieldKey.valueOf(oggKeyId);
+        if(vorbisCommentFieldKey==null)
+        {
+            return null;
+        }
         return super.get(vorbisCommentFieldKey.name());
     }
 
@@ -208,7 +217,27 @@ public class VorbisCommentTag extends AbstractTag {
      */
     public String getFirst(TagFieldKey genericKey)
     {
-        return super.getFirst(tagFieldToOggField.get(genericKey).name());
+        VorbisCommentFieldKey vorbisCommentFieldKey = tagFieldToOggField.get(genericKey);
+        if(vorbisCommentFieldKey==null)
+        {
+            return null;
+        }
+        return super.getFirst(vorbisCommentFieldKey.name());
+    }
+
+    /**
+     * Retrieve the first value that exists for this vorbis comment key
+     *
+     * @param vorbisCommentKey
+     * @return
+     */
+    public String getFirst(VorbisCommentFieldKey vorbisCommentKey)
+    {
+         if(vorbisCommentKey==null)
+        {
+            return null;
+        }
+        return super.getFirst(vorbisCommentKey.name());
     }
 
     /**
@@ -218,7 +247,12 @@ public class VorbisCommentTag extends AbstractTag {
      */
     public void deleteTagField(TagFieldKey genericKey)
     {
-        super.deleteField(tagFieldToOggField.get(genericKey).name());    
+        VorbisCommentFieldKey vorbisCommentFieldKey = tagFieldToOggField.get(genericKey);
+        if(vorbisCommentFieldKey==null)
+        {
+            return;
+        }
+        super.deleteField(vorbisCommentFieldKey.name());
     }
 }
 
