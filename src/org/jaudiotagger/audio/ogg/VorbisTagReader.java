@@ -39,7 +39,7 @@ public class VorbisTagReader
 
     public Tag read(RandomAccessFile raf) throws CannotReadException, IOException
     {
-        System.out.println("Startedreadtag");
+        //System.err.println("Startedreadtag");
         long oldPos = 0;
         //----------------------------------------------------------
 
@@ -85,9 +85,9 @@ public class VorbisTagReader
         b = new byte[27 + pageSegments];
         raf.read(b);
 
-        System.out.println("Gettingpageheader");
+        //System.err.println("Gettingpageheader");
         pageHeader = new OggPageHeader(b);
-        System.out.println("Gotpageheader");
+        //System.err.println("Gotpageheader");
         b = new byte[7];
         raf.read(b);
 
@@ -97,15 +97,15 @@ public class VorbisTagReader
             throw new CannotReadException("Cannot find comment block (no vorbiscomment header)");
         }
         //Begin tag reading
-        System.out.println("Stratedreadingcomment");
+        //System.err.println("Stratedreadingcomment");
         VorbisCommentTag tag = vorbisCommentReader.read(raf);
-        System.out.println("Endedreadingcomment");
+        //System.err.println("Endedreadingcomment");
         byte isValid = raf.readByte();
         if (isValid == 0)
         {
             throw new CannotReadException("Error: The OGG Stream isn't valid, could not extract the tag");
         }
-        System.out.println("Finishedreadtag");
+        //System.err.println("Finishedreadtag");
         return tag;
     }
 }

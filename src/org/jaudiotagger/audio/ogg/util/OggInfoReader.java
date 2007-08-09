@@ -32,7 +32,7 @@ public class OggInfoReader
     public GenericAudioHeader read(RandomAccessFile raf) throws CannotReadException, IOException
     {
         GenericAudioHeader info = new GenericAudioHeader();
-        System.out.println("Started");
+        //System.err.println("Started");
         long oldPos = 0;
 
         //Reads the file encoding infos -----------------------------------
@@ -120,7 +120,7 @@ public class OggInfoReader
             info.setBitrate(computeBitrate(info.getTrackLength(), raf.length()));
             info.setVariableBitRate(true);
         }
-        System.out.println("Finished");
+        //System.err.println("Finished");
         return info;
     }
 

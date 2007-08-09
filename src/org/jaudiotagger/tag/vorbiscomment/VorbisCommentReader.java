@@ -29,7 +29,7 @@ public class VorbisCommentReader
 
     public VorbisCommentTag read(RandomAccessFile raf) throws IOException
     {
-        System.out.println("StartedReadCommentTag");
+        //System.err.println("StartedReadCommentTag");
         VorbisCommentTag tag = new VorbisCommentTag();
 
         byte[] b = new byte[4];
@@ -43,20 +43,20 @@ public class VorbisCommentReader
         b = new byte[4];
         raf.read(b);
         int userComments = Utils.getNumber(b, 0, 3);
-        System.out.println("userComments:" + userComments);
+        //System.err.println("userComments:" + userComments);
         for (int i = 0; i < userComments; i++)
         {
             b = new byte[4];
             raf.read(b);
             int commentLength = Utils.getNumber(b, 0, 3);
-            System.out.println("Commentlength:" + commentLength);
+            //System.err.println("Commentlength:" + commentLength);
             b = new byte[commentLength];
             raf.read(b);
 
             VorbisCommentTagField fieldComment = new VorbisCommentTagField(b);
             tag.add(fieldComment);
         }
-        System.out.println("CompletedReadCommentTag");
+        //System.err.println("CompletedReadCommentTag");
         return tag;
     }
 }
