@@ -24,35 +24,40 @@ import org.jaudiotagger.tag.vorbiscomment.VorbisCommentTagField;
 
 import java.io.*;
 
-public class VorbisCommentReader {
+public class VorbisCommentReader
+{
 
-	public VorbisCommentTag read( RandomAccessFile raf ) throws IOException {
-		VorbisCommentTag tag = new VorbisCommentTag();
-		
-		byte[] b = new byte[4];
-		raf.read( b );
-		int vendorStringLength = Utils.getNumber( b, 0, 3);
-		b = new byte[vendorStringLength];
-		raf.read( b );
+    public VorbisCommentTag read(RandomAccessFile raf) throws IOException
+    {
+        System.out.println("StartedReadCommentTag");
+        VorbisCommentTag tag = new VorbisCommentTag();
 
-		tag.setVendor( new String( b, "UTF-8" ) );
-		
-		b = new byte[4];
-		raf.read( b );
-		int userComments = Utils.getNumber( b, 0, 3);
+        byte[] b = new byte[4];
+        raf.read(b);
+        int vendorStringLength = Utils.getNumber(b, 0, 3);
+        b = new byte[vendorStringLength];
+        raf.read(b);
 
-		for ( int i = 0; i < userComments; i++ ) {
-			b = new byte[4];
-			raf.read( b );
-			int commentLength = Utils.getNumber( b, 0, 3);            
+        tag.setVendor(new String(b, "UTF-8"));
+
+        b = new byte[4];
+        raf.read(b);
+        int userComments = Utils.getNumber(b, 0, 3);
+        System.out.println("userComments:" + userComments);
+        for (int i = 0; i < userComments; i++)
+        {
+            b = new byte[4];
+            raf.read(b);
+            int commentLength = Utils.getNumber(b, 0, 3);
+            System.out.println("Commentlength:" + commentLength);
             b = new byte[commentLength];
-			raf.read( b );
-			
-			VorbisCommentTagField fieldComment = new VorbisCommentTagField(b);
-			tag.add(fieldComment);
-		}
-		
-		return tag;
-	}
+            raf.read(b);
+
+            VorbisCommentTagField fieldComment = new VorbisCommentTagField(b);
+            tag.add(fieldComment);
+        }
+        System.out.println("CompletedReadCommentTag");
+        return tag;
+    }
 }
 

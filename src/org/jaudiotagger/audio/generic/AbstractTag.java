@@ -26,10 +26,11 @@ import org.jaudiotagger.tag.*;
  * This class is the default implementation for
  * {@link entagged.audioformats.Tag} and introduces some more useful
  * functionality to be implemented.<br>
- * 
+ *
  * @author Raphaël Slinckx
  */
-public abstract class AbstractTag implements Tag {
+public abstract class AbstractTag implements Tag
+{
 
     /**
      * Stores the amount of {@link TagField} with {@link TagField#isCommon()}
@@ -53,23 +54,31 @@ public abstract class AbstractTag implements Tag {
      * (overridden)
      *
      * @see entagged.audioformats.Tag#add(entagged.audioformats.generic.TagField)
-     *
-     * Changed so add empty fields
+     *      <p/>
+     *      Changed so add empty fields
      */
-    public void add(TagField field) {
-        if (field == null )
+    public void add(TagField field)
+    {
+        if (field == null)
+        {
             return;
+        }
 
         List list = (List) fields.get(field.getId());
 
         // There was no previous item
-        if (list == null) {
+        if (list == null)
+        {
             list = new ArrayList();
             list.add(field);
             fields.put(field.getId(), list);
             if (field.isCommon())
+            {
                 commonNumber++;
-        } else {
+            }
+        }
+        else
+        {
             // We append to existing list
             list.add(field);
         }
@@ -80,7 +89,8 @@ public abstract class AbstractTag implements Tag {
      *
      * @see entagged.audioformats.Tag#addAlbum(java.lang.String)
      */
-    public void addAlbum(String s) {
+    public void addAlbum(String s)
+    {
         add(createAlbumField(s));
     }
 
@@ -89,7 +99,8 @@ public abstract class AbstractTag implements Tag {
      *
      * @see entagged.audioformats.Tag#addArtist(java.lang.String)
      */
-    public void addArtist(String s) {
+    public void addArtist(String s)
+    {
         add(createArtistField(s));
     }
 
@@ -98,7 +109,8 @@ public abstract class AbstractTag implements Tag {
      *
      * @see entagged.audioformats.Tag#addComment(java.lang.String)
      */
-    public void addComment(String s) {
+    public void addComment(String s)
+    {
         add(createCommentField(s));
     }
 
@@ -107,7 +119,8 @@ public abstract class AbstractTag implements Tag {
      *
      * @see entagged.audioformats.Tag#addGenre(java.lang.String)
      */
-    public void addGenre(String s) {
+    public void addGenre(String s)
+    {
         add(createGenreField(s));
     }
 
@@ -116,7 +129,8 @@ public abstract class AbstractTag implements Tag {
      *
      * @see entagged.audioformats.Tag#addTitle(java.lang.String)
      */
-    public void addTitle(String s) {
+    public void addTitle(String s)
+    {
         add(createTitleField(s));
     }
 
@@ -125,7 +139,8 @@ public abstract class AbstractTag implements Tag {
      *
      * @see entagged.audioformats.Tag#addTrack(java.lang.String)
      */
-    public void addTrack(String s) {
+    public void addTrack(String s)
+    {
         add(createTrackField(s));
     }
 
@@ -134,7 +149,8 @@ public abstract class AbstractTag implements Tag {
      *
      * @see entagged.audioformats.Tag#addYear(java.lang.String)
      */
-    public void addYear(String s) {
+    public void addYear(String s)
+    {
         add(createYearField(s));
     }
 
@@ -142,8 +158,7 @@ public abstract class AbstractTag implements Tag {
      * Creates a field which represents the &quot;album&quot;.<br>
      * The field will already contain the given content.
      *
-     * @param content
-     *            The content of the created field.
+     * @param content The content of the created field.
      * @return tagfield representing the &quot;album&quot;
      */
     protected abstract TagField createAlbumField(String content);
@@ -152,8 +167,7 @@ public abstract class AbstractTag implements Tag {
      * Creates a field which represents the &quot;artist&quot;.<br>
      * The field will already contain the given content.
      *
-     * @param content
-     *            The content of the created field.
+     * @param content The content of the created field.
      * @return tagfield representing the &quot;artist&quot;
      */
     protected abstract TagField createArtistField(String content);
@@ -162,8 +176,7 @@ public abstract class AbstractTag implements Tag {
      * Creates a field which represents the &quot;comment&quot;.<br>
      * The field will already contain the given content.
      *
-     * @param content
-     *            The content of the created field.
+     * @param content The content of the created field.
      * @return tagfield representing the &quot;comment&quot;
      */
     protected abstract TagField createCommentField(String content);
@@ -172,8 +185,7 @@ public abstract class AbstractTag implements Tag {
      * Creates a field which represents the &quot;genre&quot;.<br>
      * The field will already contain the given content.
      *
-     * @param content
-     *            The content of the created field.
+     * @param content The content of the created field.
      * @return tagfield representing the &quot;genre&quot;
      */
     protected abstract TagField createGenreField(String content);
@@ -182,8 +194,7 @@ public abstract class AbstractTag implements Tag {
      * Creates a field which represents the &quot;title&quot;.<br>
      * The field will already contain the given content.
      *
-     * @param content
-     *            The content of the created field.
+     * @param content The content of the created field.
      * @return tagfield representing the &quot;title&quot;
      */
     protected abstract TagField createTitleField(String content);
@@ -192,8 +203,7 @@ public abstract class AbstractTag implements Tag {
      * Creates a field which represents the &quot;track&quot;.<br>
      * The field will already contain the given content.
      *
-     * @param content
-     *            The content of the created field.
+     * @param content The content of the created field.
      * @return tagfield representing the &quot;track&quot;
      */
     protected abstract TagField createTrackField(String content);
@@ -202,8 +212,7 @@ public abstract class AbstractTag implements Tag {
      * Creates a field which represents the &quot;year&quot;.<br>
      * The field will already contain the given content.
      *
-     * @param content
-     *            The content of the created field.
+     * @param content The content of the created field.
      * @return tagfield representing the &quot;year&quot;
      */
     protected abstract TagField createYearField(String content);
@@ -213,17 +222,19 @@ public abstract class AbstractTag implements Tag {
      *
      * @see entagged.audioformats.Tag#get(java.lang.String)
      */
-    public List get(String id) {
+    public List get(String id)
+    {
         List list = (List) fields.get(id);
 
         if (list == null)
+        {
             return new ArrayList();
+        }
 
         return list;
     }
 
     /**
-     *
      * @param id
      * @return
      */
@@ -235,7 +246,9 @@ public abstract class AbstractTag implements Tag {
         List list = (List) fields.get(id.name());
 
         if (list == null)
+        {
             return new ArrayList();
+        }
 
         return list;
     }
@@ -252,15 +265,16 @@ public abstract class AbstractTag implements Tag {
      *
      * @see entagged.audioformats.Tag#getAlbum()
      */
-    public List getAlbum() {
+    public List getAlbum()
+    {
         return get(getAlbumId());
     }
 
     /**
      * Returns the identifier for a field representing the &quot;album&quot;<br>
      *
-     * @see TagField#getId()
      * @return identifier for the &quot;album&quot; field.
+     * @see TagField#getId()
      */
     protected abstract String getAlbumId();
 
@@ -269,15 +283,16 @@ public abstract class AbstractTag implements Tag {
      *
      * @see entagged.audioformats.Tag#getArtist()
      */
-    public List getArtist() {
+    public List getArtist()
+    {
         return get(getArtistId());
     }
 
     /**
      * Returns the identifier for a field representing the &quot;artist&quot;<br>
      *
-     * @see TagField#getId()
      * @return identifier for the &quot;artist&quot; field.
+     * @see TagField#getId()
      */
     protected abstract String getArtistId();
 
@@ -286,15 +301,16 @@ public abstract class AbstractTag implements Tag {
      *
      * @see entagged.audioformats.Tag#getComment()
      */
-    public List getComment() {
+    public List getComment()
+    {
         return get(getCommentId());
     }
 
     /**
      * Returns the identifier for a field representing the &quot;comment&quot;<br>
      *
-     * @see TagField#getId()
      * @return identifier for the &quot;comment&quot; field.
+     * @see TagField#getId()
      */
     protected abstract String getCommentId();
 
@@ -303,34 +319,45 @@ public abstract class AbstractTag implements Tag {
      *
      * @see entagged.audioformats.Tag#getFields()
      */
-    public Iterator getFields() {
+    public Iterator getFields()
+    {
         final Iterator it = this.fields.entrySet().iterator();
-        return new Iterator() {
+        return new Iterator()
+        {
             private Iterator fieldsIt;
 
-            private void changeIt() {
+            private void changeIt()
+            {
                 if (!it.hasNext())
+                {
                     return;
+                }
 
                 List l = (List) ((Map.Entry) it.next()).getValue();
                 fieldsIt = l.iterator();
             }
 
-            public boolean hasNext() {
-                if (fieldsIt == null) {
+            public boolean hasNext()
+            {
+                if (fieldsIt == null)
+                {
                     changeIt();
                 }
                 return it.hasNext() || (fieldsIt != null && fieldsIt.hasNext());
             }
 
-            public Object next() {
+            public Object next()
+            {
                 if (!fieldsIt.hasNext())
+                {
                     changeIt();
+                }
 
                 return fieldsIt.next();
             }
 
-            public void remove() {
+            public void remove()
+            {
                 fieldsIt.remove();
             }
         };
@@ -341,7 +368,8 @@ public abstract class AbstractTag implements Tag {
      *
      * @see entagged.audioformats.Tag#getFirstAlbum()
      */
-    public String getFirstAlbum() {
+    public String getFirstAlbum()
+    {
         List l = get(getAlbumId());
         return (l.size() != 0) ? ((TagTextField) l.get(0)).getContent() : "";
     }
@@ -351,7 +379,8 @@ public abstract class AbstractTag implements Tag {
      *
      * @see entagged.audioformats.Tag#getFirstArtist()
      */
-    public String getFirstArtist() {
+    public String getFirstArtist()
+    {
         List l = get(getArtistId());
         return (l.size() != 0) ? ((TagTextField) l.get(0)).getContent() : "";
     }
@@ -361,7 +390,8 @@ public abstract class AbstractTag implements Tag {
      *
      * @see entagged.audioformats.Tag#getFirstComment()
      */
-    public String getFirstComment() {
+    public String getFirstComment()
+    {
         List l = get(getCommentId());
         return (l.size() != 0) ? ((TagTextField) l.get(0)).getContent() : "";
     }
@@ -371,7 +401,8 @@ public abstract class AbstractTag implements Tag {
      *
      * @see entagged.audioformats.Tag#getFirstGenre()
      */
-    public String getFirstGenre() {
+    public String getFirstGenre()
+    {
         List l = get(getGenreId());
         return (l.size() != 0) ? ((TagTextField) l.get(0)).getContent() : "";
     }
@@ -381,7 +412,8 @@ public abstract class AbstractTag implements Tag {
      *
      * @see entagged.audioformats.Tag#getFirstTitle()
      */
-    public String getFirstTitle() {
+    public String getFirstTitle()
+    {
         List l = get(getTitleId());
         return (l.size() != 0) ? ((TagTextField) l.get(0)).getContent() : "";
     }
@@ -391,7 +423,8 @@ public abstract class AbstractTag implements Tag {
      *
      * @see entagged.audioformats.Tag#getFirstTrack()
      */
-    public String getFirstTrack() {
+    public String getFirstTrack()
+    {
         List l = get(getTrackId());
         return (l.size() != 0) ? ((TagTextField) l.get(0)).getContent() : "";
     }
@@ -401,7 +434,8 @@ public abstract class AbstractTag implements Tag {
      *
      * @see entagged.audioformats.Tag#getFirstYear()
      */
-    public String getFirstYear() {
+    public String getFirstYear()
+    {
         List l = get(getYearId());
         return (l.size() != 0) ? ((TagTextField) l.get(0)).getContent() : "";
     }
@@ -411,15 +445,16 @@ public abstract class AbstractTag implements Tag {
      *
      * @see entagged.audioformats.Tag#getGenre()
      */
-    public List getGenre() {
+    public List getGenre()
+    {
         return get(getGenreId());
     }
 
     /**
      * Returns the identifier for a field representing the &quot;genre&quot;<br>
      *
-     * @see TagField#getId()
      * @return identifier for the &quot;genre&quot; field.
+     * @see TagField#getId()
      */
     protected abstract String getGenreId();
 
@@ -428,15 +463,16 @@ public abstract class AbstractTag implements Tag {
      *
      * @see entagged.audioformats.Tag#getTitle()
      */
-    public List getTitle() {
+    public List getTitle()
+    {
         return get(getTitleId());
     }
 
     /**
      * Returns the identifier for a field representing the &quot;title&quot;<br>
      *
-     * @see TagField#getId()
      * @return identifier for the &quot;title&quot; field.
+     * @see TagField#getId()
      */
     protected abstract String getTitleId();
 
@@ -445,15 +481,16 @@ public abstract class AbstractTag implements Tag {
      *
      * @see entagged.audioformats.Tag#getTrack()
      */
-    public List getTrack() {
+    public List getTrack()
+    {
         return get(getTrackId());
     }
 
     /**
      * Returns the identifier for a field representing the &quot;track&quot;<br>
      *
-     * @see TagField#getId()
      * @return identifier for the &quot;track&quot; field.
+     * @see TagField#getId()
      */
     protected abstract String getTrackId();
 
@@ -462,15 +499,16 @@ public abstract class AbstractTag implements Tag {
      *
      * @see entagged.audioformats.Tag#getYear()
      */
-    public List getYear() {
+    public List getYear()
+    {
         return get(getYearId());
     }
 
     /**
      * Returns the identifier for a field representing the &quot;year&quot;<br>
      *
-     * @see TagField#getId()
      * @return identifier for the &quot;year&quot; field.
+     * @see TagField#getId()
      */
     protected abstract String getYearId();
 
@@ -479,7 +517,8 @@ public abstract class AbstractTag implements Tag {
      *
      * @see entagged.audioformats.Tag#hasCommonFields()
      */
-    public boolean hasCommonFields() {
+    public boolean hasCommonFields()
+    {
         return commonNumber != 0;
     }
 
@@ -488,7 +527,8 @@ public abstract class AbstractTag implements Tag {
      *
      * @see entagged.audioformats.Tag#hasField(java.lang.String)
      */
-    public boolean hasField(String id) {
+    public boolean hasField(String id)
+    {
         return get(id).size() != 0;
     }
 
@@ -496,8 +536,7 @@ public abstract class AbstractTag implements Tag {
      * Determines whether the given charset encoding may be used for the
      * represented tagging system.
      *
-     * @param enc
-     *            charset encoding.
+     * @param enc charset encoding.
      * @return <code>true</code> if the given encoding can be used.
      */
     protected abstract boolean isAllowedEncoding(String enc);
@@ -507,7 +546,8 @@ public abstract class AbstractTag implements Tag {
      *
      * @see entagged.audioformats.Tag#isEmpty()
      */
-    public boolean isEmpty() {
+    public boolean isEmpty()
+    {
         return fields.size() == 0;
     }
 
@@ -516,26 +556,41 @@ public abstract class AbstractTag implements Tag {
      *
      * @see entagged.audioformats.Tag#merge(entagged.audioformats.Tag)
      */
-    public void merge(Tag tag) {
+    public void merge(Tag tag)
+    {
         // FIXME: Improve me, for the moment,
         // it overwrites this tag with other values
         // FIXME: TODO: an abstract method that merges particular things for
         // each
         // format
         if (getTitle().size() == 0)
+        {
             setTitle(tag.getFirstTitle());
+        }
         if (getArtist().size() == 0)
+        {
             setArtist(tag.getFirstArtist());
+        }
         if (getAlbum().size() == 0)
+        {
             setAlbum(tag.getFirstAlbum());
+        }
         if (getYear().size() == 0)
+        {
             setYear(tag.getFirstYear());
+        }
         if (getComment().size() == 0)
+        {
             setComment(tag.getFirstComment());
+        }
         if (getTrack().size() == 0)
+        {
             setTrack(tag.getFirstTrack());
+        }
         if (getGenre().size() == 0)
+        {
             setGenre(tag.getFirstGenre());
+        }
     }
 
     /**
@@ -545,14 +600,18 @@ public abstract class AbstractTag implements Tag {
      *
      * @see entagged.audioformats.Tag#set(entagged.audioformats.generic.TagField)
      */
-    public void set(TagField field) {
+    public void set(TagField field)
+    {
         if (field == null)
+        {
             return;
+        }
 
         // If there is already an existing field with same id
         // and both are TextFields, we update the first element
         List l = (List) fields.get(field.getId());
-        if (l != null) {
+        if (l != null)
+        {
             TagField f = (TagField) l.get(0);
             f.copyContent(field);
             return;
@@ -563,7 +622,9 @@ public abstract class AbstractTag implements Tag {
         l.add(field);
         fields.put(field.getId(), l);
         if (field.isCommon())
+        {
             commonNumber++;
+        }
     }
 
     /**
@@ -571,7 +632,8 @@ public abstract class AbstractTag implements Tag {
      *
      * @see entagged.audioformats.Tag#setAlbum(java.lang.String)
      */
-    public void setAlbum(String s) {
+    public void setAlbum(String s)
+    {
         set(createAlbumField(s));
     }
 
@@ -580,7 +642,8 @@ public abstract class AbstractTag implements Tag {
      *
      * @see entagged.audioformats.Tag#setArtist(java.lang.String)
      */
-    public void setArtist(String s) {
+    public void setArtist(String s)
+    {
         set(createArtistField(s));
     }
 
@@ -589,7 +652,8 @@ public abstract class AbstractTag implements Tag {
      *
      * @see entagged.audioformats.Tag#setComment(java.lang.String)
      */
-    public void setComment(String s) {
+    public void setComment(String s)
+    {
         set(createCommentField(s));
     }
 
@@ -598,15 +662,19 @@ public abstract class AbstractTag implements Tag {
      *
      * @see entagged.audioformats.Tag#setEncoding(java.lang.String)
      */
-    public boolean setEncoding(String enc) {
-        if (!isAllowedEncoding(enc)) {
+    public boolean setEncoding(String enc)
+    {
+        if (!isAllowedEncoding(enc))
+        {
             return false;
         }
 
         Iterator it = getFields();
-        while (it.hasNext()) {
+        while (it.hasNext())
+        {
             TagField field = (TagField) it.next();
-            if (field instanceof TagTextField) {
+            if (field instanceof TagTextField)
+            {
                 ((TagTextField) field).setEncoding(enc);
             }
         }
@@ -619,7 +687,8 @@ public abstract class AbstractTag implements Tag {
      *
      * @see entagged.audioformats.Tag#setGenre(java.lang.String)
      */
-    public void setGenre(String s) {
+    public void setGenre(String s)
+    {
         set(createGenreField(s));
     }
 
@@ -628,7 +697,8 @@ public abstract class AbstractTag implements Tag {
      *
      * @see entagged.audioformats.Tag#setTitle(java.lang.String)
      */
-    public void setTitle(String s) {
+    public void setTitle(String s)
+    {
         set(createTitleField(s));
     }
 
@@ -637,7 +707,8 @@ public abstract class AbstractTag implements Tag {
      *
      * @see entagged.audioformats.Tag#setTrack(java.lang.String)
      */
-    public void setTrack(String s) {
+    public void setTrack(String s)
+    {
         set(createTrackField(s));
     }
 
@@ -646,7 +717,8 @@ public abstract class AbstractTag implements Tag {
      *
      * @see entagged.audioformats.Tag#setYear(java.lang.String)
      */
-    public void setYear(String s) {
+    public void setYear(String s)
+    {
         set(createYearField(s));
     }
 
@@ -655,11 +727,13 @@ public abstract class AbstractTag implements Tag {
      *
      * @see java.lang.Object#toString()
      */
-    public String toString() {
+    public String toString()
+    {
         StringBuffer out = new StringBuffer();
         out.append("Tag content:\n");
         Iterator it = getFields();
-        while (it.hasNext()) {
+        while (it.hasNext())
+        {
             TagField field = (TagField) it.next();
             out.append("\t");
             out.append(field.getId());
@@ -673,9 +747,9 @@ public abstract class AbstractTag implements Tag {
     //Should be overridden by all subclasses but provided empty impl
     //as working one format at a time
     //TODO remove
-    public TagField createTagField(TagFieldKey genericKey,String value)
+    public TagField createTagField(TagFieldKey genericKey, String value)
     {
-         return null;
+        return null;
     }
 
     //Should be overridden by all subclasses but provided empty impl
@@ -683,7 +757,7 @@ public abstract class AbstractTag implements Tag {
     //TODO remove
     public String getFirst(TagFieldKey genericKey)
     {
-       return null;
+        return null;
     }
 
     //Should be overridden by all subclasses but provided empty impl

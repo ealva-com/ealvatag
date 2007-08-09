@@ -25,13 +25,16 @@ import org.jaudiotagger.tag.Tag;
 import org.jaudiotagger.audio.exceptions.CannotWriteException;
 
 
-public class Mp4TagWriter { 
-    public void write(Tag tag, RandomAccessFile raf, RandomAccessFile rafTemp) throws CannotWriteException, IOException {
-        
+public class Mp4TagWriter
+{
+    public void write(Tag tag, RandomAccessFile raf, RandomAccessFile rafTemp) throws CannotWriteException, IOException
+    {
+
     }
 
-    public void delete(RandomAccessFile raf, RandomAccessFile rafTemp) throws IOException {
-        
+    public void delete(RandomAccessFile raf, RandomAccessFile rafTemp) throws IOException
+    {
+
     }
 
 }

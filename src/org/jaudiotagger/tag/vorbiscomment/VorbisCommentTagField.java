@@ -23,14 +23,17 @@ import java.io.UnsupportedEncodingException;
 import org.jaudiotagger.tag.TagField;
 import org.jaudiotagger.tag.TagTextField;
 
+import static org.jaudiotagger.tag.vorbiscomment.VorbisCommentFieldKey.*;
+
 /**
  * This class encapsulates the name and content of a tag entry in ogg-files.
  * <br>
- * 
+ *
  * @author @author Raphael Slinckx (KiKiDonK)
  * @author Christian Laireiter (liree)
  */
-public class VorbisCommentTagField implements TagTextField {
+public class VorbisCommentTagField implements TagTextField
+{
 
     /**
      * If <code>true</code>, the id of the current encapsulated tag field is
@@ -53,17 +56,16 @@ public class VorbisCommentTagField implements TagTextField {
 
     /**
      * Creates an instance.
-     * 
-     * @param raw
-     *                   Raw byte data of the tagfield.
-     * @throws UnsupportedEncodingException
-     *                    If the data doesn't conform "UTF-8" specification.
+     *
+     * @param raw Raw byte data of the tagfield.
+     * @throws UnsupportedEncodingException If the data doesn't conform "UTF-8" specification.
      */
-    public VorbisCommentTagField(byte[] raw) throws UnsupportedEncodingException {
-        String field = new String(raw, "ISO-8859-1");
+    public VorbisCommentTagField(byte[] raw) throws UnsupportedEncodingException
+    {
+        String field = new String(raw, "UTF-8");
 
         int i = field.indexOf("=");
-        if (i== -1)
+        if (i == -1)
         {
             //Beware that ogg ID, must be capitalized and contain no space..
             this.id = "ERRONEOUS";
@@ -71,10 +73,10 @@ public class VorbisCommentTagField implements TagTextField {
         }
         else
         {
-            this.id=field.substring(0, i).toUpperCase();
-            if(field.length()>i)
+            this.id = field.substring(0, i).toUpperCase();
+            if (field.length() > i)
             {
-                this.content = field.substring(i+1);
+                this.content = field.substring(i + 1);
             }
             else
             {
@@ -87,13 +89,12 @@ public class VorbisCommentTagField implements TagTextField {
 
     /**
      * Creates an instance.
-     * 
-     * @param fieldId
-     *                   ID (name) of the field.
-     * @param fieldContent
-     *                   Content of the field.
+     *
+     * @param fieldId      ID (name) of the field.
+     * @param fieldContent Content of the field.
      */
-    public VorbisCommentTagField(String fieldId, String fieldContent) {
+    public VorbisCommentTagField(String fieldId, String fieldContent)
+    {
         this.id = fieldId.toUpperCase();
         this.content = fieldContent;
         checkCommon();
@@ -104,27 +105,22 @@ public class VorbisCommentTagField implements TagTextField {
      * {@link #common}in order to reflect if the tag id is a commonly used one.
      * <br>
      */
-    private void checkCommon() {
-        this.common = id.equals("TITLE") || id.equals("ALBUM")
-                || id.equals("ARTIST") || id.equals("GENRE")
-                || id.equals("TRACKNUMBER") || id.equals("DATE")
-                || id.equals("DESCRIPTION") || id.equals("COMMENT")
-                || id.equals("TRACK");
+    private void checkCommon()
+    {
+        this.common = id.equals(TITLE.name()) || id.equals(ALBUM.name()) || id.equals(ARTIST.name()) || id.equals(GENRE.name()) || id.equals(TRACKNUMBER.name()) || id.equals(DATE.name()) || id.equals(DESCRIPTION.name()) || id.equals(COMMENT.name()) || id.equals(TRACK.name());
     }
 
     /**
      * This method will copy all bytes of <code>src</code> to <code>dst</code>
      * at the specified location.
-     * 
-     * @param src
-     *                   bytes to copy.
-     * @param dst
-     *                   where to copy to.
-     * @param dstOffset
-     *                   at which position of <code>dst</code> the data should be
-     *                   copied.
+     *
+     * @param src       bytes to copy.
+     * @param dst       where to copy to.
+     * @param dstOffset at which position of <code>dst</code> the data should be
+     *                  copied.
      */
-    protected void copy(byte[] src, byte[] dst, int dstOffset) {
+    protected void copy(byte[] src, byte[] dst, int dstOffset)
+    {
         //        for (int i = 0; i < src.length; i++)
         //            dst[i + dstOffset] = src[i];
         /*
@@ -135,66 +131,60 @@ public class VorbisCommentTagField implements TagTextField {
     }
 
     /**
-     * (overridden)
-     * 
-     * @see entagged.audioformats.generic.TagField#copyContent(entagged.audioformats.generic.TagField)
+     * @see TagField#copyContent(TagField)
      */
-    public void copyContent(TagField field) {
+    public void copyContent(TagField field)
+    {
         if (field instanceof TagTextField)
+        {
             this.content = ((TagTextField) field).getContent();
+        }
     }
 
     /**
      * This method will try to return the byte representation of the given
      * string after it has been converted to the given encoding. <br>
-     * 
-     * @param s
-     *                   The string whose converted bytes should be returned.
-     * @param encoding
-     *                   The encoding type to which the string should be converted.
+     *
+     * @param s        The string whose converted bytes should be returned.
+     * @param encoding The encoding type to which the string should be converted.
      * @return If <code>encoding</code> is supported the byte data of the
-     *               given string is returned in that encoding.
-     * @throws UnsupportedEncodingException
-     *                    If the requested encoding is not available.
+     *         given string is returned in that encoding.
+     * @throws UnsupportedEncodingException If the requested encoding is not available.
      */
-    protected byte[] getBytes(String s, String encoding)
-            throws UnsupportedEncodingException {
+    protected byte[] getBytes(String s, String encoding) throws UnsupportedEncodingException
+    {
         return s.getBytes(encoding);
     }
 
     /**
-     * (overridden)
-     * 
-     * @see entagged.audioformats.generic.TagTextField#getContent()
+     * @see TagTextField#getContent()
      */
-    public String getContent() {
+    public String getContent()
+    {
         return content;
     }
 
     /**
-     * (overridden)
-     * 
-     * @see entagged.audioformats.generic.TagTextField#getEncoding()
+     * @see TagTextField#getEncoding()
      */
-    public String getEncoding() {
+    public String getEncoding()
+    {
         return "UTF-8";
     }
 
     /**
-     * (overridden)
-     * 
-     * @see entagged.audioformats.generic.TagField#getId()
+     * @see TagField#getId()
      */
-    public String getId() {
+    public String getId()
+    {
         return this.id;
     }
 
     /**
-     * (overridden)
-     * 
-     * @see entagged.audioformats.generic.TagField#getRawContent()
+     * @see TagField#getRawContent()
      */
-    public byte[] getRawContent() throws UnsupportedEncodingException {
+    public byte[] getRawContent() throws UnsupportedEncodingException
+    {
         byte[] size = new byte[4];
         byte[] idBytes = this.id.getBytes();
         byte[] contentBytes = getBytes(this.content, "UTF-8");
@@ -219,69 +209,62 @@ public class VorbisCommentTagField implements TagTextField {
     }
 
     /**
-     * (overridden)
-     * 
-     * @see entagged.audioformats.generic.TagField#isBinary()
+     * @see TagField#isBinary()
      */
-    public boolean isBinary() {
+    public boolean isBinary()
+    {
         return false;
     }
 
     /**
-     * (overridden)
-     * 
-     * @see entagged.audioformats.generic.TagField#isBinary(boolean)
+     * @see TagField#isBinary(boolean)
      */
-    public void isBinary(boolean b) {
-        if (b) {
+    public void isBinary(boolean b)
+    {
+        if (b)
+        {
             // Only throw if binary = true requested.
-            throw new UnsupportedOperationException(
-                    "OggTagFields cannot be changed to binary.\n"
-                            + "binary data should be stored elsewhere"
-                            + " according to Vorbis_I_spec.");
+            throw new UnsupportedOperationException("OggTagFields cannot be changed to binary.\n" + "binary data should be stored elsewhere" + " according to Vorbis_I_spec.");
         }
     }
 
     /**
-     * (overridden)
-     * 
-     * @see entagged.audioformats.generic.TagField#isCommon()
+     * @see TagField#isCommon()
      */
-    public boolean isCommon() {
+    public boolean isCommon()
+    {
         return common;
     }
 
     /**
-     * (overridden)
-     * 
-     * @see entagged.audioformats.generic.TagField#isEmpty()
+     * @see TagField#isEmpty()
      */
-    public boolean isEmpty() {
+    public boolean isEmpty()
+    {
         return this.content.equals("");
     }
 
     /**
-     * (overridden)
-     * 
-     * @see entagged.audioformats.generic.TagTextField#setContent(java.lang.String)
+     * @see TagTextField#setContent(String)
      */
-    public void setContent(String s) {
+    public void setContent(String s)
+    {
         this.content = s;
     }
 
     /**
-     * (overridden)
-     * 
-     * @see entagged.audioformats.generic.TagTextField#setEncoding(java.lang.String)
+     * @see TagTextField#setEncoding(String)
      */
-    public void setEncoding(String s) {
+    public void setEncoding(String s)
+    {
         if (s == null || !s.equalsIgnoreCase("UTF-8"))
-            throw new UnsupportedOperationException(
-                    "The encoding of OggTagFields cannot be "
-                            + "changed.(specified to be UTF-8)");
+        {
+            throw new UnsupportedOperationException("The encoding of OggTagFields cannot be " + "changed.(specified to be UTF-8)");
+        }
     }
-    
-    public String toString() {
+
+    public String toString()
+    {
         return getContent();
     }
 }

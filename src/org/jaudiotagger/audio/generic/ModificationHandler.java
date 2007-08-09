@@ -28,111 +28,124 @@ import org.jaudiotagger.audio.exceptions.ModifyVetoException;
 /**
  * This class multicasts the events to multiple listener instances.<br>
  * Additionally the Vetos are handled. (other listeners are notified).
- * 
+ *
  * @author Christian Laireiter
  */
-public class ModificationHandler implements AudioFileModificationListener {
+public class ModificationHandler implements AudioFileModificationListener
+{
 
-	/**
-	 * The listeners to wich events are broadcasted are stored here.
-	 */
-	private Vector listeners = new Vector();
+    /**
+     * The listeners to wich events are broadcasted are stored here.
+     */
+    private Vector listeners = new Vector();
 
-	/**
-	 * This method adds an {@link AudioFileModificationListener}
-	 * 
-	 * @param l
-	 *            Listener to add.
-	 */
-	public void addAudioFileModificationListener(AudioFileModificationListener l) {
-		if (!this.listeners.contains(l)) {
-			this.listeners.add(l);
-		}
-	}
+    /**
+     * This method adds an {@link AudioFileModificationListener}
+     *
+     * @param l Listener to add.
+     */
+    public void addAudioFileModificationListener(AudioFileModificationListener l)
+    {
+        if (!this.listeners.contains(l))
+        {
+            this.listeners.add(l);
+        }
+    }
 
-	/**
-	 * (overridden)
-	 * 
-	 * @see entagged.audioformats.generic.AudioFileModificationListener#fileModified(entagged.audioformats.AudioFile,
-	 *      java.io.File)
-	 */
-	public void fileModified(AudioFile original, File temporary)
-			throws ModifyVetoException {
-		Enumeration enumer = this.listeners.elements();
-		while (enumer.hasMoreElements()) {
-			AudioFileModificationListener current = (AudioFileModificationListener) enumer
-					.nextElement();
-			try {
-				current.fileModified(original, temporary);
-			} catch (ModifyVetoException e) {
-				vetoThrown(current, original, e);
-				throw e;
-			}
-		}
-	}
+    /**
+     * (overridden)
+     *
+     * @see entagged.audioformats.generic.AudioFileModificationListener#fileModified(entagged.audioformats.AudioFile,
+     *      File)
+     */
+    public void fileModified(AudioFile original, File temporary) throws ModifyVetoException
+    {
+        Enumeration enumer = this.listeners.elements();
+        while (enumer.hasMoreElements())
+        {
+            AudioFileModificationListener current = (AudioFileModificationListener) enumer
+                .nextElement();
+            try
+            {
+                current.fileModified(original, temporary);
+            }
+            catch (ModifyVetoException e)
+            {
+                vetoThrown(current, original, e);
+                throw e;
+            }
+        }
+    }
 
-	/**
-	 * (overridden)
-	 * 
-	 * @see entagged.audioformats.generic.AudioFileModificationListener#fileOperationFinished(java.io.File)
-	 */
-	public void fileOperationFinished(File result) {
-		Enumeration enumer = this.listeners.elements();
-		while (enumer.hasMoreElements()) {
-			AudioFileModificationListener current = (AudioFileModificationListener) enumer
-					.nextElement();
-			current.fileOperationFinished(result);
-		}
-	}
+    /**
+     * (overridden)
+     *
+     * @see entagged.audioformats.generic.AudioFileModificationListener#fileOperationFinished(File)
+     */
+    public void fileOperationFinished(File result)
+    {
+        Enumeration enumer = this.listeners.elements();
+        while (enumer.hasMoreElements())
+        {
+            AudioFileModificationListener current = (AudioFileModificationListener) enumer
+                .nextElement();
+            current.fileOperationFinished(result);
+        }
+    }
 
-	/**
-	 * (overridden)
-	 * 
-	 * @see entagged.audioformats.generic.AudioFileModificationListener#fileWillBeModified(entagged.audioformats.AudioFile,
-	 *      boolean)
-	 */
-	public void fileWillBeModified(AudioFile file, boolean delete)
-			throws ModifyVetoException {
-		Enumeration enumer = this.listeners.elements();
-		while (enumer.hasMoreElements()) {
-			AudioFileModificationListener current = (AudioFileModificationListener) enumer
-					.nextElement();
-			try {
-				current.fileWillBeModified(file, delete);
-			} catch (ModifyVetoException e) {
-				vetoThrown(current, file, e);
-				throw e;
-			}
-		}
-	}
+    /**
+     * (overridden)
+     *
+     * @see entagged.audioformats.generic.AudioFileModificationListener#fileWillBeModified(entagged.audioformats.AudioFile,
+     *      boolean)
+     */
+    public void fileWillBeModified(AudioFile file, boolean delete) throws ModifyVetoException
+    {
+        Enumeration enumer = this.listeners.elements();
+        while (enumer.hasMoreElements())
+        {
+            AudioFileModificationListener current = (AudioFileModificationListener) enumer
+                .nextElement();
+            try
+            {
+                current.fileWillBeModified(file, delete);
+            }
+            catch (ModifyVetoException e)
+            {
+                vetoThrown(current, file, e);
+                throw e;
+            }
+        }
+    }
 
-	/**
-	 * This method removes an {@link AudioFileModificationListener}
-	 * 
-	 * @param l
-	 *            Listener to remove.
-	 */
-	public void removeAudioFileModificationListener(
-			AudioFileModificationListener l) {
-		if (this.listeners.contains(l)) {
-			this.listeners.remove(l);
-		}
-	}
+    /**
+     * This method removes an {@link AudioFileModificationListener}
+     *
+     * @param l Listener to remove.
+     */
+    public void removeAudioFileModificationListener(AudioFileModificationListener l)
+    {
+        if (this.listeners.contains(l))
+        {
+            this.listeners.remove(l);
+        }
+    }
 
-	/**
-	 * (overridden)
-	 * 
-	 * @see entagged.audioformats.generic.AudioFileModificationListener#vetoThrown(entagged.audioformats.generic.AudioFileModificationListener,
-	 *      entagged.audioformats.AudioFile,
-	 *      entagged.audioformats.exceptions.ModifyVetoException)
-	 */
-	public void vetoThrown(AudioFileModificationListener cause,
-			AudioFile original, ModifyVetoException veto) {
-		Enumeration enumer = this.listeners.elements();
-		while (enumer.hasMoreElements()) {
-			AudioFileModificationListener current = (AudioFileModificationListener) enumer
-					.nextElement();
-			current.vetoThrown(cause, original, veto);
+    /**
+     * (overridden)
+     *
+     * @see entagged.audioformats.generic.AudioFileModificationListener#vetoThrown(entagged.audioformats.generic.AudioFileModificationListener,
+     *      entagged.audioformats.AudioFile,
+     *      entagged.audioformats.exceptions.ModifyVetoException)
+     */
+    public void vetoThrown(AudioFileModificationListener cause, AudioFile original, ModifyVetoException veto)
+    {
+        Enumeration enumer = this.listeners.elements();
+        while (enumer.hasMoreElements())
+        {
+            AudioFileModificationListener current = (AudioFileModificationListener) enumer
+                .nextElement();
+            current.vetoThrown(cause, original, veto);
 		}
 	}
 }

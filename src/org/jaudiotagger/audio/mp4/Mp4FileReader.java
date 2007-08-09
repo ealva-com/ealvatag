@@ -28,15 +28,18 @@ import org.jaudiotagger.audio.exceptions.CannotReadException;
 import org.jaudiotagger.audio.generic.AudioFileReader;
 import org.jaudiotagger.audio.mp4.util.Mp4InfoReader;
 
-public class Mp4FileReader extends AudioFileReader {
+public class Mp4FileReader extends AudioFileReader
+{
     private Mp4InfoReader ir = new Mp4InfoReader();
     private Mp4TagReader tr = new Mp4TagReader();
 
-    protected GenericAudioHeader getEncodingInfo( RandomAccessFile raf )  throws CannotReadException, IOException {
+    protected GenericAudioHeader getEncodingInfo(RandomAccessFile raf) throws CannotReadException, IOException
+    {
         return ir.read(raf);
     }
 
-    protected Tag getTag( RandomAccessFile raf )  throws CannotReadException, IOException {
+    protected Tag getTag(RandomAccessFile raf) throws CannotReadException, IOException
+    {
         return tr.read(raf);
     }
 }

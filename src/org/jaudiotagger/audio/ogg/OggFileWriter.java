@@ -26,18 +26,21 @@ import java.io.*;
 
 /**
  * Write tag data to Ogg File
- *
+ * <p/>
  * Only works for Ogg files contianing a vorbis stream with a vorbis comment
  */
-public class OggFileWriter extends AudioFileWriter {
-	
-	private VorbisTagWriter otw = new VorbisTagWriter();
+public class OggFileWriter extends AudioFileWriter
+{
 
-	protected void writeTag(Tag tag, RandomAccessFile raf, RandomAccessFile rafTemp) throws CannotWriteException, IOException {
-		otw.write(tag, raf, rafTemp);
-	}
-	
-	protected void deleteTag(RandomAccessFile raf, RandomAccessFile tempRaf) throws CannotWriteException, IOException {
-		otw.delete(raf, tempRaf);
-	}
+    private VorbisTagWriter otw = new VorbisTagWriter();
+
+    protected void writeTag(Tag tag, RandomAccessFile raf, RandomAccessFile rafTemp) throws CannotWriteException, IOException
+    {
+        otw.write(tag, raf, rafTemp);
+    }
+
+    protected void deleteTag(RandomAccessFile raf, RandomAccessFile tempRaf) throws CannotWriteException, IOException
+    {
+        otw.delete(raf, tempRaf);
+    }
 }

@@ -23,26 +23,28 @@ import org.jaudiotagger.tag.Tag;
 import java.io.UnsupportedEncodingException;
 import java.nio.*;
 
-public class VorbisCommentTagCreator {
-	private VorbisCommentCreator creator = new VorbisCommentCreator();
-	
-	//Creates the ByteBuffer for the ogg tag
-	public ByteBuffer convert(Tag tag) throws UnsupportedEncodingException {
-		ByteBuffer ogg = creator.convert(tag);
-		int tagLength = ogg.capacity() + 8;
-		
-		ByteBuffer buf = ByteBuffer.allocate( tagLength );
-		
-		//[packet type=comment0x03]['vorbiscomment']
-		buf.put( new byte[]{(byte) 0x03, (byte) 0x76, (byte) 0x6f, (byte) 0x72, (byte) 0x62, (byte) 0x69, (byte) 0x73} );
-		
-		//The actual tag
-		buf.put(ogg);
+public class VorbisCommentTagCreator
+{
+    private VorbisCommentCreator creator = new VorbisCommentCreator();
 
-		//Framing bit = 1
-		buf.put( (byte) 0x01 );
+    //Creates the ByteBuffer for the ogg tag
+    public ByteBuffer convert(Tag tag) throws UnsupportedEncodingException
+    {
+        ByteBuffer ogg = creator.convert(tag);
+        int tagLength = ogg.capacity() + 8;
 
-		buf.rewind();
-		return buf;
-	}
+        ByteBuffer buf = ByteBuffer.allocate(tagLength);
+
+        //[packet type=comment0x03]['vorbiscomment']
+        buf.put(new byte[]{(byte) 0x03, (byte) 0x76, (byte) 0x6f, (byte) 0x72, (byte) 0x62, (byte) 0x69, (byte) 0x73});
+
+        //The actual tag
+        buf.put(ogg);
+
+        //Framing bit = 1
+        buf.put((byte) 0x01);
+
+        buf.rewind();
+        return buf;
+    }
 }

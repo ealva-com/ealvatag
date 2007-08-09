@@ -25,41 +25,46 @@ import java.io.RandomAccessFile;
 import org.jaudiotagger.audio.generic.GenericAudioHeader;
 import org.jaudiotagger.audio.exceptions.CannotReadException;
 
-public class Mp4InfoReader {
-    public GenericAudioHeader read( RandomAccessFile raf ) throws CannotReadException, IOException {
+public class Mp4InfoReader
+{
+    public GenericAudioHeader read(RandomAccessFile raf) throws CannotReadException, IOException
+    {
         GenericAudioHeader info = new GenericAudioHeader();
-        
+
         Mp4Box box = new Mp4Box();
-        
+
         //Get to the facts
         //1-Searching for "moov"
         seek(raf, box, "moov");
-        
+
         //2-Searching for "udta"
         seek(raf, box, "mvhd");
-        
-        byte[] b = new byte[box.getOffset()-8];
+
+        byte[] b = new byte[box.getOffset() - 8];
         raf.read(b);
-        
+
         Mp4MvhdBox mvhd = new Mp4MvhdBox(b);
         info.setLength(mvhd.getLength());
-        
+
         System.out.println(info);
         return info;
     }
-    
-    private void seek(RandomAccessFile raf, Mp4Box box, String id) throws IOException {
+
+    private void seek(RandomAccessFile raf, Mp4Box box, String id) throws IOException
+    {
         byte[] b = new byte[8];
         raf.read(b);
         box.update(b);
-        while(!box.getId().equals(id)) {
-            raf.skipBytes(box.getOffset()-8);
+        while (!box.getId().equals(id))
+        {
+            raf.skipBytes(box.getOffset() - 8);
             raf.read(b);
             box.update(b);
         }
     }
-    
-    public static void main(String[] args) throws Exception {
+
+    public static void main(String[] args) throws Exception
+    {
         new Mp4InfoReader().read(new RandomAccessFile(new File("/home/kikidonk/test.mp4"), "r"));
     }
 }

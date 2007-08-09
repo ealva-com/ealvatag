@@ -2,7 +2,7 @@ package org.jaudiotagger.audio.ogg;
 
 /**
  * Vorbis Version
- *
+ * <p/>
  * Ordinal is used to map from internal representation
  */
 public enum VorbisVersion
@@ -15,7 +15,7 @@ public enum VorbisVersion
 
     VorbisVersion(String displayName)
     {
-        this.displayName=displayName;
+        this.displayName = displayName;
     }
 
     public String toString()

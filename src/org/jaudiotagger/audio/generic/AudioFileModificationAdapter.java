@@ -26,53 +26,54 @@ import org.jaudiotagger.audio.exceptions.ModifyVetoException;
 /**
  * Adapter for
  * {@link entagged.audioformats.generic.AudioFileModificationListener}.
- * 
+ *
  * @author Christian Laireiter
  */
-public class AudioFileModificationAdapter implements
-		AudioFileModificationListener {
+public class AudioFileModificationAdapter implements AudioFileModificationListener
+{
 
-	/**
-	 * (overridden)
-	 * 
-	 * @see entagged.audioformats.generic.AudioFileModificationListener#fileModified(entagged.audioformats.AudioFile,
-	 *      java.io.File)
-	 */
-	public void fileModified(AudioFile original, File temporary)
-			throws ModifyVetoException {
-		// Nothing to do
-	}
+    /**
+     * (overridden)
+     *
+     * @see entagged.audioformats.generic.AudioFileModificationListener#fileModified(entagged.audioformats.AudioFile,
+     *      File)
+     */
+    public void fileModified(AudioFile original, File temporary) throws ModifyVetoException
+    {
+        // Nothing to do
+    }
 
-	/**
-	 * (overridden)
-	 * 
-	 * @see entagged.audioformats.generic.AudioFileModificationListener#fileOperationFinished(java.io.File)
-	 */
-	public void fileOperationFinished(File result) {
-		// Nothing to do
-	}
+    /**
+     * (overridden)
+     *
+     * @see entagged.audioformats.generic.AudioFileModificationListener#fileOperationFinished(File)
+     */
+    public void fileOperationFinished(File result)
+    {
+        // Nothing to do
+    }
 
-	/**
-	 * (overridden)
-	 * 
-	 * @see entagged.audioformats.generic.AudioFileModificationListener#fileWillBeModified(entagged.audioformats.AudioFile,
-	 *      boolean)
-	 */
-	public void fileWillBeModified(AudioFile file, boolean delete)
-			throws ModifyVetoException {
-		// Nothing to do
-	}
+    /**
+     * (overridden)
+     *
+     * @see entagged.audioformats.generic.AudioFileModificationListener#fileWillBeModified(entagged.audioformats.AudioFile,
+     *      boolean)
+     */
+    public void fileWillBeModified(AudioFile file, boolean delete) throws ModifyVetoException
+    {
+        // Nothing to do
+    }
 
-	/**
-	 * (overridden)
-	 * 
-	 * @see entagged.audioformats.generic.AudioFileModificationListener#vetoThrown(entagged.audioformats.generic.AudioFileModificationListener,
-	 *      entagged.audioformats.AudioFile,
-	 *      entagged.audioformats.exceptions.ModifyVetoException)
-	 */
-	public void vetoThrown(AudioFileModificationListener cause,
-			AudioFile original, ModifyVetoException veto) {
-		// Nothing to do
+    /**
+     * (overridden)
+     *
+     * @see entagged.audioformats.generic.AudioFileModificationListener#vetoThrown(entagged.audioformats.generic.AudioFileModificationListener,
+     *      entagged.audioformats.AudioFile,
+     *      entagged.audioformats.exceptions.ModifyVetoException)
+     */
+    public void vetoThrown(AudioFileModificationListener cause, AudioFile original, ModifyVetoException veto)
+    {
+        // Nothing to do
 	}
 
 }

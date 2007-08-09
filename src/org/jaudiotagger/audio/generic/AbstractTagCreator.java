@@ -27,30 +27,35 @@ import java.util.List;
 import org.jaudiotagger.tag.Tag;
 import org.jaudiotagger.tag.TagField;
 
-public abstract class AbstractTagCreator {
+public abstract class AbstractTagCreator
+{
 
-    public ByteBuffer convert(Tag tag) throws UnsupportedEncodingException {
+    public ByteBuffer convert(Tag tag) throws UnsupportedEncodingException
+    {
         return convert(tag, 0);
     }
 
-    public ByteBuffer convert(Tag tag, int padding) throws UnsupportedEncodingException {
+    public ByteBuffer convert(Tag tag, int padding) throws UnsupportedEncodingException
+    {
         Tag compatibleTag = getCompatibleTag(tag);
 
         List fields = createFields(compatibleTag);
         int tagSize = computeTagLength(compatibleTag, fields);
 
-        ByteBuffer buf = ByteBuffer.allocate( tagSize + padding );
+        ByteBuffer buf = ByteBuffer.allocate(tagSize + padding);
         create(compatibleTag, buf, fields, tagSize, padding);
 
         buf.rewind();
         return buf;
     }
 
-    protected List createFields(Tag tag) throws UnsupportedEncodingException {
+    protected List createFields(Tag tag) throws UnsupportedEncodingException
+    {
         List fields = new LinkedList();
 
         Iterator it = tag.getFields();
-        while(it.hasNext()) {
+        while (it.hasNext())
+        {
             TagField frame = (TagField) it.next();
             fields.add(frame.getRawContent());
         }
@@ -59,17 +64,21 @@ public abstract class AbstractTagCreator {
     }
 
     //Compute the number of bytes the tag will be.
-    protected int computeTagLength(Tag tag, List l) throws UnsupportedEncodingException {
+    protected int computeTagLength(Tag tag, List l) throws UnsupportedEncodingException
+    {
         int length = getFixedTagLength(tag);
 
         Iterator it = l.iterator();
-        while(it.hasNext())
-            length += ((byte[])it.next()).length;
+        while (it.hasNext())
+        {
+            length += ((byte[]) it.next()).length;
+        }
 
         return length;
     }
 
-    public int getTagLength(Tag tag) throws UnsupportedEncodingException {
+    public int getTagLength(Tag tag) throws UnsupportedEncodingException
+    {
         Tag compatibleTag = getCompatibleTag(tag);
         List fields = createFields(compatibleTag);
         return computeTagLength(compatibleTag, fields);

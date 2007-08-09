@@ -25,18 +25,22 @@ import java.util.List;
 import org.jaudiotagger.tag.Tag;
 import org.jaudiotagger.audio.generic.AbstractTagCreator;
 
-public class Mp4TagCreator extends AbstractTagCreator {
+public class Mp4TagCreator extends AbstractTagCreator
+{
 
-    protected int getFixedTagLength(Tag tag) throws UnsupportedEncodingException {
+    protected int getFixedTagLength(Tag tag) throws UnsupportedEncodingException
+    {
         throw new RuntimeException("Not implemented");
     }
 
-    protected Tag getCompatibleTag(Tag tag) {
+    protected Tag getCompatibleTag(Tag tag)
+    {
         throw new RuntimeException("Not implemented");
     }
 
     //This method is always called with a compatible tag, as returned from getCompatibleTag()
-    protected void create(Tag tag, ByteBuffer buf, List fields, int tagSize, int padding) throws UnsupportedEncodingException {
+    protected void create(Tag tag, ByteBuffer buf, List fields, int tagSize, int padding) throws UnsupportedEncodingException
+    {
         throw new RuntimeException("Not implemented");
     }
 

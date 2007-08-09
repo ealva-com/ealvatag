@@ -28,20 +28,22 @@ import java.io.*;
 
 /**
  * Read Ogg File tag information
- *
+ * <p/>
  * Only implemented for ogg files containing a vorbis stream with vorbis comments
- *
  */
-public class OggFileReader extends AudioFileReader {
-	private OggInfoReader ir = new OggInfoReader();
-	private VorbisTagReader otr = new VorbisTagReader();
-	
-	protected GenericAudioHeader getEncodingInfo( RandomAccessFile raf )  throws CannotReadException, IOException {
-		return ir.read(raf);
-	}
-	
-	protected Tag getTag( RandomAccessFile raf )  throws CannotReadException, IOException {
-		return otr.read(raf);
-	}
+public class OggFileReader extends AudioFileReader
+{
+    private OggInfoReader ir = new OggInfoReader();
+    private VorbisTagReader otr = new VorbisTagReader();
+
+    protected GenericAudioHeader getEncodingInfo(RandomAccessFile raf) throws CannotReadException, IOException
+    {
+        return ir.read(raf);
+    }
+
+    protected Tag getTag(RandomAccessFile raf) throws CannotReadException, IOException
+    {
+        return otr.read(raf);
+    }
 }
 

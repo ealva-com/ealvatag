@@ -71,8 +71,7 @@ public abstract class AudioFileReader
       * @param f The file to read
       * @exception CannotReadException If anything went bad during the read of this file
       */
-    public AudioFile read(File f)
-        throws CannotReadException, IOException, TagException, ReadOnlyFileException, InvalidAudioFrameException
+    public AudioFile read(File f) throws CannotReadException, IOException, TagException, ReadOnlyFileException, InvalidAudioFrameException
     {
         if (!f.canRead())
         {

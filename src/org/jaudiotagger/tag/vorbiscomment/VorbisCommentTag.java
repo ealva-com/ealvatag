@@ -33,127 +33,150 @@ import java.util.List;
 
 /**
  * This partial list is derived fom the following sources:
- *
- *      http://xiph.org/vorbiscomment/doc/v-comment.html
- *      http://wiki.musicbrainz.org/PicardQt/TagMapping
- *      http://reactor-core.org/ogg-tagging.html
+ * <p/>
+ * http://xiph.org/vorbiscomment/doc/v-comment.html
+ * http://wiki.musicbrainz.org/PicardQt/TagMapping
+ * http://reactor-core.org/ogg-tagging.html
  */
-public class VorbisCommentTag extends AbstractTag {
+public class VorbisCommentTag extends AbstractTag
+{
 
-    static EnumMap<TagFieldKey,VorbisCommentFieldKey> tagFieldToOggField = new EnumMap<TagFieldKey,VorbisCommentFieldKey>(TagFieldKey.class);
+    static EnumMap<TagFieldKey, VorbisCommentFieldKey> tagFieldToOggField = new EnumMap<TagFieldKey, VorbisCommentFieldKey>(TagFieldKey.class);
 
     static
     {
-        tagFieldToOggField.put(TagFieldKey.ARTIST,VorbisCommentFieldKey.ARTIST);
-        tagFieldToOggField.put(TagFieldKey.ALBUM,VorbisCommentFieldKey.ALBUM);
-        tagFieldToOggField.put(TagFieldKey.TITLE,VorbisCommentFieldKey.TITLE);
-        tagFieldToOggField.put(TagFieldKey.TRACK,VorbisCommentFieldKey.TRACKNUMBER);
-        tagFieldToOggField.put(TagFieldKey.YEAR,VorbisCommentFieldKey.DATE);
-        tagFieldToOggField.put(TagFieldKey.GENRE,VorbisCommentFieldKey.GENRE);
-        tagFieldToOggField.put(TagFieldKey.COMMENT,VorbisCommentFieldKey.COMMENT);
-        tagFieldToOggField.put(TagFieldKey.ALBUM_ARTIST,VorbisCommentFieldKey.ALBUMARTIST);
-        tagFieldToOggField.put(TagFieldKey.COMPOSER,VorbisCommentFieldKey.COMPOSER);
-        tagFieldToOggField.put(TagFieldKey.GROUPING,VorbisCommentFieldKey.GROUPING);
-        tagFieldToOggField.put(TagFieldKey.DISC_NO,VorbisCommentFieldKey.DISCNUMBER);
-        tagFieldToOggField.put(TagFieldKey.BPM,VorbisCommentFieldKey.BPM);
-        tagFieldToOggField.put(TagFieldKey.MUSICBRAINZ_ARTISTID,VorbisCommentFieldKey.MUSICBRAINZ_ARTISTID);
-        tagFieldToOggField.put(TagFieldKey.MUSICBRAINZ_RELEASEID,VorbisCommentFieldKey.MUSICBRAINZ_ALBUMEID);
-        tagFieldToOggField.put(TagFieldKey.MUSICBRAINZ_RELEASEARTISTID,VorbisCommentFieldKey.MUSICBRAINZ_ALBUMARTISTID);
-        tagFieldToOggField.put(TagFieldKey.MUSICBRAINZ_TRACK_ID,VorbisCommentFieldKey.MUSICBRAINZ_TRACKID);
-        tagFieldToOggField.put(TagFieldKey.MUSICBRAINZ_DISC_ID,VorbisCommentFieldKey.MUSICBRAINZ_DISCID);
-        tagFieldToOggField.put(TagFieldKey.MUSICIP_ID,VorbisCommentFieldKey.MUSICIP_PUID);
-        tagFieldToOggField.put(TagFieldKey.AMAZON_ID,VorbisCommentFieldKey.ASIN);
-        tagFieldToOggField.put(TagFieldKey.MUSICBRAINZ_RELEASE_STATUS,VorbisCommentFieldKey.MUSICBRAINZ_ALBUMSTATUS);
-        tagFieldToOggField.put(TagFieldKey.MUSICBRAINZ_RELEASE_TYPE,VorbisCommentFieldKey.MUSICBRAINZ_ALBUMTYPE);
-        tagFieldToOggField.put(TagFieldKey.MUSICBRAINZ_RELEASE_COUNTRY,VorbisCommentFieldKey.RELEASECOUNTRY);
-        tagFieldToOggField.put(TagFieldKey.LYRICS,VorbisCommentFieldKey.LYRICS);
-        tagFieldToOggField.put(TagFieldKey.IS_COMPILATION,VorbisCommentFieldKey.COMPILATION);
-        tagFieldToOggField.put(TagFieldKey.ARTIST_SORT,VorbisCommentFieldKey.ARTISTSORT);
-        tagFieldToOggField.put(TagFieldKey.ALBUM_ARTIST_SORT,VorbisCommentFieldKey.ALBUMARTISTSORT);
-        tagFieldToOggField.put(TagFieldKey.ALBUM_SORT,VorbisCommentFieldKey.ALBUMSORT);
-        tagFieldToOggField.put(TagFieldKey.TITLE_SORT,VorbisCommentFieldKey.TITLESORT);
-        tagFieldToOggField.put(TagFieldKey.COMPOSER_SORT,VorbisCommentFieldKey.COMPOSERSORT);
+        tagFieldToOggField.put(TagFieldKey.ARTIST, VorbisCommentFieldKey.ARTIST);
+        tagFieldToOggField.put(TagFieldKey.ALBUM, VorbisCommentFieldKey.ALBUM);
+        tagFieldToOggField.put(TagFieldKey.TITLE, VorbisCommentFieldKey.TITLE);
+        tagFieldToOggField.put(TagFieldKey.TRACK, VorbisCommentFieldKey.TRACKNUMBER);
+        tagFieldToOggField.put(TagFieldKey.YEAR, VorbisCommentFieldKey.DATE);
+        tagFieldToOggField.put(TagFieldKey.GENRE, VorbisCommentFieldKey.GENRE);
+        tagFieldToOggField.put(TagFieldKey.COMMENT, VorbisCommentFieldKey.COMMENT);
+        tagFieldToOggField.put(TagFieldKey.ALBUM_ARTIST, VorbisCommentFieldKey.ALBUMARTIST);
+        tagFieldToOggField.put(TagFieldKey.COMPOSER, VorbisCommentFieldKey.COMPOSER);
+        tagFieldToOggField.put(TagFieldKey.GROUPING, VorbisCommentFieldKey.GROUPING);
+        tagFieldToOggField.put(TagFieldKey.DISC_NO, VorbisCommentFieldKey.DISCNUMBER);
+        tagFieldToOggField.put(TagFieldKey.BPM, VorbisCommentFieldKey.BPM);
+        tagFieldToOggField.put(TagFieldKey.MUSICBRAINZ_ARTISTID, VorbisCommentFieldKey.MUSICBRAINZ_ARTISTID);
+        tagFieldToOggField.put(TagFieldKey.MUSICBRAINZ_RELEASEID, VorbisCommentFieldKey.MUSICBRAINZ_ALBUMEID);
+        tagFieldToOggField.put(TagFieldKey.MUSICBRAINZ_RELEASEARTISTID, VorbisCommentFieldKey.MUSICBRAINZ_ALBUMARTISTID);
+        tagFieldToOggField.put(TagFieldKey.MUSICBRAINZ_TRACK_ID, VorbisCommentFieldKey.MUSICBRAINZ_TRACKID);
+        tagFieldToOggField.put(TagFieldKey.MUSICBRAINZ_DISC_ID, VorbisCommentFieldKey.MUSICBRAINZ_DISCID);
+        tagFieldToOggField.put(TagFieldKey.MUSICIP_ID, VorbisCommentFieldKey.MUSICIP_PUID);
+        tagFieldToOggField.put(TagFieldKey.AMAZON_ID, VorbisCommentFieldKey.ASIN);
+        tagFieldToOggField.put(TagFieldKey.MUSICBRAINZ_RELEASE_STATUS, VorbisCommentFieldKey.MUSICBRAINZ_ALBUMSTATUS);
+        tagFieldToOggField.put(TagFieldKey.MUSICBRAINZ_RELEASE_TYPE, VorbisCommentFieldKey.MUSICBRAINZ_ALBUMTYPE);
+        tagFieldToOggField.put(TagFieldKey.MUSICBRAINZ_RELEASE_COUNTRY, VorbisCommentFieldKey.RELEASECOUNTRY);
+        tagFieldToOggField.put(TagFieldKey.LYRICS, VorbisCommentFieldKey.LYRICS);
+        tagFieldToOggField.put(TagFieldKey.IS_COMPILATION, VorbisCommentFieldKey.COMPILATION);
+        tagFieldToOggField.put(TagFieldKey.ARTIST_SORT, VorbisCommentFieldKey.ARTISTSORT);
+        tagFieldToOggField.put(TagFieldKey.ALBUM_ARTIST_SORT, VorbisCommentFieldKey.ALBUMARTISTSORT);
+        tagFieldToOggField.put(TagFieldKey.ALBUM_SORT, VorbisCommentFieldKey.ALBUMSORT);
+        tagFieldToOggField.put(TagFieldKey.TITLE_SORT, VorbisCommentFieldKey.TITLESORT);
+        tagFieldToOggField.put(TagFieldKey.COMPOSER_SORT, VorbisCommentFieldKey.COMPOSERSORT);
     }
+
     private String vendor = "";
     //This is the vendor string that will be written if no other is supplied
-	public static final String DEFAULT_VENDOR = "jaudiotagger";
+    public static final String DEFAULT_VENDOR = "jaudiotagger";
 
-    protected TagField createAlbumField(String content) {
+    protected TagField createAlbumField(String content)
+    {
         return new VorbisCommentTagField(getAlbumId(), content);
     }
 
-    protected TagField createArtistField(String content) {
+    protected TagField createArtistField(String content)
+    {
         return new VorbisCommentTagField(getArtistId(), content);
     }
 
-    protected TagField createCommentField(String content) {
+    protected TagField createCommentField(String content)
+    {
         return new VorbisCommentTagField(getCommentId(), content);
     }
 
-    protected TagField createGenreField(String content) {
-        return new VorbisCommentTagField(getGenreId() , content);
+    protected TagField createGenreField(String content)
+    {
+        return new VorbisCommentTagField(getGenreId(), content);
     }
 
-    protected TagField createTitleField(String content) {
+    protected TagField createTitleField(String content)
+    {
         return new VorbisCommentTagField(getTitleId(), content);
     }
 
-    protected TagField createTrackField(String content) {
+    protected TagField createTrackField(String content)
+    {
         return new VorbisCommentTagField(getTrackId(), content);
     }
 
-    protected TagField createYearField(String content) {
+    protected TagField createYearField(String content)
+    {
         return new VorbisCommentTagField(getYearId(), content);
     }
 
-    protected String getAlbumId() {
+    protected String getAlbumId()
+    {
         return ALBUM.name();
     }
 
-    protected String getArtistId() {
+    protected String getArtistId()
+    {
         return ARTIST.name();
     }
 
-    protected String getCommentId() {
+    protected String getCommentId()
+    {
         return DESCRIPTION.name();
     }
 
-    protected String getGenreId() {
+    protected String getGenreId()
+    {
         return GENRE.name();
     }
 
-    protected String getTitleId() {
+    protected String getTitleId()
+    {
         return TITLE.name();
     }
 
-    protected String getTrackId() {
+    protected String getTrackId()
+    {
         return TRACKNUMBER.name();
     }
 
-    public String getVendor() {
-		if( !this.vendor.trim().equals("") )
-		    return vendor;
-    
-		return DEFAULT_VENDOR;
+    public String getVendor()
+    {
+        if (!this.vendor.trim().equals(""))
+        {
+            return vendor;
+        }
+
+        return DEFAULT_VENDOR;
     }
 
-    protected String getYearId() {
+    protected String getYearId()
+    {
         return DATE.toString();
     }
 
-    public void setVendor(String vendor) {
-        if(vendor == null) {
+    public void setVendor(String vendor)
+    {
+        if (vendor == null)
+        {
             this.vendor = "";
             return;
         }
         this.vendor = vendor;
     }
-    
-    protected boolean isAllowedEncoding(String enc) {
+
+    protected boolean isAllowedEncoding(String enc)
+    {
         return enc.equals("UTF-8");
     }
-	
-    public String toString() {
+
+    public String toString()
+    {
         return "OGG " + super.toString();
     }
 
@@ -161,9 +184,9 @@ public class VorbisCommentTag extends AbstractTag {
      * Create Tag Field using generic key
      */
     @Override
-    public TagField createTagField(TagFieldKey genericKey,String value)
+    public TagField createTagField(TagFieldKey genericKey, String value)
     {
-        return new VorbisCommentTagField(tagFieldToOggField.get(genericKey).name(),value);
+        return new VorbisCommentTagField(tagFieldToOggField.get(genericKey).name(), value);
     }
 
     /**
@@ -173,12 +196,12 @@ public class VorbisCommentTag extends AbstractTag {
      * @param value
      * @return
      */
-    public TagField createTagField(VorbisCommentFieldKey vorbisCommentFieldKey,String value)
+    public TagField createTagField(VorbisCommentFieldKey vorbisCommentFieldKey, String value)
     {
-        return new VorbisCommentTagField(vorbisCommentFieldKey.name(),value);
+        return new VorbisCommentTagField(vorbisCommentFieldKey.name(), value);
     }
 
-     /**
+    /**
      * Maps the generic key to the ogg key and return the list of values for this field
      *
      * @param genericKey
@@ -187,7 +210,7 @@ public class VorbisCommentTag extends AbstractTag {
     public List get(TagFieldKey genericKey)
     {
         VorbisCommentFieldKey vorbisCommentFieldKey = tagFieldToOggField.get(genericKey);
-        if(vorbisCommentFieldKey==null)
+        if (vorbisCommentFieldKey == null)
         {
             return null;
         }
@@ -196,13 +219,14 @@ public class VorbisCommentTag extends AbstractTag {
 
     /**
      * Retrieve the first value that exists for this ogg key Id
+     *
      * @param oggKeyId
      */
     @Override
     public List get(String oggKeyId)
     {
         VorbisCommentFieldKey vorbisCommentFieldKey = VorbisCommentFieldKey.valueOf(oggKeyId);
-        if(vorbisCommentFieldKey==null)
+        if (vorbisCommentFieldKey == null)
         {
             return null;
         }
@@ -218,7 +242,7 @@ public class VorbisCommentTag extends AbstractTag {
     public String getFirst(TagFieldKey genericKey)
     {
         VorbisCommentFieldKey vorbisCommentFieldKey = tagFieldToOggField.get(genericKey);
-        if(vorbisCommentFieldKey==null)
+        if (vorbisCommentFieldKey == null)
         {
             return null;
         }
@@ -233,7 +257,7 @@ public class VorbisCommentTag extends AbstractTag {
      */
     public String getFirst(VorbisCommentFieldKey vorbisCommentKey)
     {
-         if(vorbisCommentKey==null)
+        if (vorbisCommentKey == null)
         {
             return null;
         }
@@ -248,7 +272,7 @@ public class VorbisCommentTag extends AbstractTag {
     public void deleteTagField(TagFieldKey genericKey)
     {
         VorbisCommentFieldKey vorbisCommentFieldKey = tagFieldToOggField.get(genericKey);
-        if(vorbisCommentFieldKey==null)
+        if (vorbisCommentFieldKey == null)
         {
             return;
         }

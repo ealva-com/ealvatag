@@ -26,7 +26,8 @@ import java.io.UnsupportedEncodingException;
 import org.jaudiotagger.audio.exceptions.CannotReadException;
 import org.jaudiotagger.audio.mp4.util.Mp4Box;
 
-public class Mp4TagReader {
+public class Mp4TagReader
+{
     /*
      * Tree a descendre:
      * moov
@@ -38,7 +39,8 @@ public class Mp4TagReader {
      *       data
      *      ]
      */
-    public Mp4Tag read( RandomAccessFile raf ) throws CannotReadException, IOException {
+    public Mp4Tag read(RandomAccessFile raf) throws CannotReadException, IOException
+    {
         Mp4Tag tag = new Mp4Tag();
 
         Mp4Box box = new Mp4Box();
@@ -56,15 +58,18 @@ public class Mp4TagReader {
 
         //4-skip the meta flags
         raf.read(b);
-        if(b[0] != 0)
+        if (b[0] != 0)
+        {
             throw new CannotReadException();
+        }
 
         //5-Seek the "ilst"
         seek(raf, box, "ilst");
         int length = box.getOffset() - 8;
 
         int read = 0;
-        while(read < length) {
+        while (read < length)
+        {
             b = new byte[8];
             raf.read(b);
             box.update(b);
@@ -74,45 +79,49 @@ public class Mp4TagReader {
             raf.read(b);
 
             tag.add(createMp4Field(box.getId(), b));
-            read += 8+fieldLength;
+            read += 8 + fieldLength;
         }
 
         System.out.println(tag);
         return tag;
     }
 
-    private Mp4TagField createMp4Field(String id, byte[] raw) throws UnsupportedEncodingException {
-        if(id.equals("trkn") || id.equals("tmpo") )
+    private Mp4TagField createMp4Field(String id, byte[] raw) throws UnsupportedEncodingException
+    {
+        if (id.equals("trkn") || id.equals("tmpo"))
+        {
             return new Mp4TagTextNumberField(id, raw);
+        }
 
-        else if(id.equals("\u00A9ART")  ||
-                id.equals("\u00A9alb")  ||
-                id.equals("\u00A9nam")  ||
-                id.equals("\u00A9day")  ||
-                id.equals("\u00A9cmt")  ||
-                id.equals("\u00A9gen")  ||
-                id.equals("\u00A9too")  ||
-                id.equals("\u00A9wrt")    )
+        else
+        if (id.equals("\u00A9ART") || id.equals("\u00A9alb") || id.equals("\u00A9nam") || id.equals("\u00A9day") || id.equals("\u00A9cmt") || id.equals("\u00A9gen") || id.equals("\u00A9too") || id.equals("\u00A9wrt"))
+        {
             return new Mp4TagTextField(id, raw);
+        }
 
-        else if(id.equals("covr"))
+        else if (id.equals("covr"))
+        {
             return new Mp4TagCoverField(raw);
+        }
 
         return new Mp4TagBinaryField(id, raw);
     }
 
-    private void seek(RandomAccessFile raf, Mp4Box box, String id) throws IOException {
+    private void seek(RandomAccessFile raf, Mp4Box box, String id) throws IOException
+    {
         byte[] b = new byte[8];
         raf.read(b);
         box.update(b);
-        while(!box.getId().equals(id)) {
-            raf.skipBytes(box.getOffset()-8);
+        while (!box.getId().equals(id))
+        {
+            raf.skipBytes(box.getOffset() - 8);
             raf.read(b);
             box.update(b);
         }
     }
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) throws Exception
+    {
         new Mp4TagReader().read(new RandomAccessFile(new File("/home/kikidonk/test.mp4"), "r"));
     }
 }

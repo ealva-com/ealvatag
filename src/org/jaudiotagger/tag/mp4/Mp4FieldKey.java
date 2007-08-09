@@ -5,8 +5,8 @@ package org.jaudiotagger.tag.mp4;
  * From:
  * http://www.hydrogenaudio.org/forums/index.php?showtopic=29120&st=0&p=251686&#entry251686
  * http://wiki.musicbrainz.org/PicardQt/TagMapping
- *
- *
+ * <p/>
+ * <p/>
  * TODO:Are these field names correct or should some have an @ sign at front
  * TODO:musicbrainz fields (marked as ---- in PicardtMapping
  */
@@ -33,11 +33,12 @@ public enum Mp4FieldKey
 
     Mp4FieldKey(String fieldName)
     {
-        this.fieldName=fieldName;
+        this.fieldName = fieldName;
     }
 
     /**
      * This is the value of the fieldname that is actually used to write mp4
+     *
      * @return
      */
     public String getFieldName()
