@@ -18,15 +18,47 @@
  */
 package org.jaudiotagger.audio.ogg.util;
 
+import org.jaudiotagger.audio.exceptions.CannotReadException;
+
+import java.io.RandomAccessFile;
+import java.io.IOException;
+import java.util.Arrays;
+
 
 /**
  * $Id$
+ *
+ * reference:http://xiph.org/ogg/doc/framing.html
  *
  * @author Raphael Slinckx (KiKiDonK)
  * @version 16 décembre 2003
  */
 public class OggPageHeader
 {
+    //Capture pattern at start of header
+    public static final byte[] CAPTURE_PATTERN = {'O', 'g', 'g','S'};
+
+    //Ogg Page header is always 27 bytes plus the size of the segment table which is variable
+    public static final int OGG_PAGE_HEADER_FIXED_LENGTH = 27;
+    public static final int FIELD_CAPTURE_PATTERN_POS  = 0;
+    public static final int FIELD_STREAM_STRUCTURE_VERSION_POS  = 4;
+    public static final int FIELD_HEADER_TYPE_FLAG_POS  = 5;
+    public static final int FIELD_ABSOLUTE_GRANULE_POS  = 6;
+    public static final int FIELD_STREAM_SERIAL_NO_POS  = 14;
+    public static final int FIELD_PAGE_SEQUENCE_NO_POS  = 18;
+    public static final int FIELD_PAGE_CHECKSUM_POS     = 22;
+    public static final int FIELD_PAGE_SEGMENTS_POS     = 26;
+    public static final int FIELD_SEGMENT_TABLE_POS     = 27;
+
+    public static final int FIELD_CAPTURE_PATTERN_LENGTH  = 4;
+    public static final int FIELD_STREAM_STRUCTURE_VERSION_LENGTH  = 1;
+    public static final int FIELD_HEADER_TYPE_FLAG_LENGTH  = 1;
+    public static final int FIELD_ABSOLUTE_GRANULE_LENGTH  = 8;
+    public static final int FIELD_STREAM_SERIAL_NO_LENGTH  = 4;
+    public static final int FIELD_PAGE_SEQUENCE_NO_LENGTH  = 4;
+    public static final int FIELD_PAGE_CHECKSUM_LENGTH     = 4;
+    public static final int FIELD_PAGE_SEGMENTS_LENGTH     = 1;
+
     private double absoluteGranulePosition;
     private byte[] checksum;
     private byte headerTypeFlag;
@@ -36,12 +68,36 @@ public class OggPageHeader
     private int pageSequenceNumber, streamSerialNumber;
     private byte[] segmentTable;
 
+    public static OggPageHeader read (RandomAccessFile raf) throws IOException,CannotReadException
+    {
+        long start = raf.getFilePointer();
+
+        byte[] b = new byte[OggPageHeader.CAPTURE_PATTERN.length];
+        raf.read(b);
+        if (!(Arrays.equals(b, OggPageHeader.CAPTURE_PATTERN)))
+        {
+            throw new CannotReadException("OggS Header could not be found, not an ogg stream");
+        }
+
+        raf.seek(start + OggPageHeader.FIELD_PAGE_SEGMENTS_POS);
+        int pageSegments = raf.readByte() & 0xFF; //unsigned
+        raf.seek(start);
+
+        b = new byte[OggPageHeader.OGG_PAGE_HEADER_FIXED_LENGTH + pageSegments];
+        raf.read(b);
+
+        OggPageHeader pageHeader = new OggPageHeader(b);
+
+        //Now just after PageHeader, ready for Packet Data
+        return pageHeader;
+    }
+
     public OggPageHeader(byte[] b)
     {
         //System.err.println(new String(b, 0 , 4));
-        int streamStructureRevision = b[4];
+        int streamStructureRevision = b[FIELD_STREAM_STRUCTURE_VERSION_POS];
         //System.err.println("streamStructureRevision: " + streamStructureRevision);
-        headerTypeFlag = b[5];
+        headerTypeFlag = b[FIELD_HEADER_TYPE_FLAG_POS];
         //System.err.println("headerTypeFlag: " + headerTypeFlag);
         if (streamStructureRevision == 0)
         {
@@ -60,12 +116,12 @@ public class OggPageHeader
             //int pageSegments = u( b[26] );
             //System.err.println("pageSegments: " + pageSegments);
 
-            this.segmentTable = new byte[b.length - 27];
+            this.segmentTable = new byte[b.length - OGG_PAGE_HEADER_FIXED_LENGTH];
             //System.err.println("pagesegment length; "+ (b.length-27));
             for (int i = 0; i < segmentTable.length; i++)
             {
-                segmentTable[i] = b[27 + i];
-                this.pageLength += u(b[27 + i]);
+                segmentTable[i] = b[OGG_PAGE_HEADER_FIXED_LENGTH + i];
+                this.pageLength += u(segmentTable[i]);
                 //System.err.println("acc page length: "+this.pageLength);
                 //System.err.println(segmentTable[i]);
             }
@@ -132,6 +188,13 @@ public class OggPageHeader
         out += "Is valid?: " + isValid + " | page length: " + pageLength + "\n";
         out += "Header type: " + headerTypeFlag;
         return out;
+    }
+
+    enum HeaderTypeFlag
+    {
+        CONTINUED,
+        FIRST_PAGE,
+        LAST_PAGE,
     }
 }
 

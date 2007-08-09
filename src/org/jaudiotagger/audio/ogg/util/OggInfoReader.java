@@ -55,7 +55,7 @@ public class OggInfoReader
                     int pageSegments = raf.readByte() & 0xFF; //Unsigned
                     raf.seek(oldPos);
 
-                    byte[] b = new byte[27 + pageSegments];
+                    byte[] b = new byte[OggPageHeader.OGG_PAGE_HEADER_FIXED_LENGTH + pageSegments];
                     raf.readFully(b);
 
                     OggPageHeader pageHeader = new OggPageHeader(b);
@@ -83,7 +83,7 @@ public class OggInfoReader
         int pageSegments = raf.read() & 0xFF; //Unsigned
         raf.seek(oldPos);
 
-        b = new byte[27 + pageSegments];
+        b = new byte[OggPageHeader.OGG_PAGE_HEADER_FIXED_LENGTH + pageSegments];
         raf.read(b);
 
         OggPageHeader pageHeader = new OggPageHeader(b);
@@ -97,7 +97,6 @@ public class OggInfoReader
         //Populates encodingInfo----------------------------------------------------
         info.setPreciseLength((float) (PCMSamplesNumber / vorbisCodecHeader.getSamplingRate()));
         info.setChannelNumber(vorbisCodecHeader.getChannelNumber());
-        System.out.println("Channel Number is:" + vorbisCodecHeader.getChannelNumber());
         info.setSamplingRate(vorbisCodecHeader.getSamplingRate());
         info.setEncodingType(vorbisCodecHeader.getEncodingType());
         info.setExtraEncodingInfos("");

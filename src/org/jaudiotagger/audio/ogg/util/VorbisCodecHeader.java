@@ -27,8 +27,13 @@ import org.jaudiotagger.audio.ogg.VorbisVersion;
  * @author Raphael Slinckx (KiKiDonK)
  * @version 16 d�cembre 2003
  */
-public class VorbisCodecHeader
+public class VorbisCodecHeader implements VorbisHeader
 {
+    //Ogg Page header is always 27 bytes plus the size of the segment table which is variable
+    public static final int OGG_PAGE_HEADER_FIXED_LENGTH = 27;
+    public static final int FIELD_CAPTURE_PATTERN_POS  = 0;
+    public static final int FIELD_STREAM_STRUCTURE_VERSION_POS  = 4;
+
     private int audioChannels;
     private boolean isValid = false;
 
@@ -85,7 +90,8 @@ public class VorbisCodecHeader
         //System.err.println("packetType" + packetType);
         String vorbis = new String(b, 1, 6);
         //System.err.println("vorbiscomment" + vorbiscomment);
-        if (packetType == 1 && vorbis.equals("vorbis"))
+
+        if (packetType == VorbisPacketType.IDENTIFICATION_HEADER.getType() && vorbis.equals(CAPTURE_PATTERN ))
         {
             this.vorbisVersion = b[7] + (b[8] << 8) + (b[9] << 16) + (b[10] << 24);
             //System.err.println("vorbisVersion" +vorbisVersion );

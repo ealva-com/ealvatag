@@ -24,6 +24,9 @@ import org.jaudiotagger.tag.vorbiscomment.VorbisCommentTagField;
 
 import java.io.*;
 
+/**
+ * Firstly reads the commentheader and then the real data
+ */
 public class VorbisCommentReader
 {
 
