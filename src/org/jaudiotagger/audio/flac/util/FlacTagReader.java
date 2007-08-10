@@ -76,14 +76,15 @@ public class FlacTagReader {
 	private VorbisCommentTag handleVorbisComment(MetadataBlockHeader mbh, RandomAccessFile raf) throws IOException, CannotReadException {
 		long oldPos = raf.getFilePointer();
 		
-		VorbisCommentTag tag = vorbisCommentReader.read(raf);
+		//VorbisCommentTag tag = vorbisCommentReader.read(raf);
 		
 		long newPos = raf.getFilePointer();
 		
 		if(newPos - oldPos != mbh.getDataLength())
 			throw new CannotReadException("Tag length do not match with flac comment data length");
 		
-		return tag;
-	}
+		//return tag;
+        return null;
+    }
 }
 

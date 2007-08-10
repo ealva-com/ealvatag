@@ -74,26 +74,15 @@ public class Utils
         return name.substring(i + 1);
     }
 
-    /*
-      * Returns the extension of the given file. The extension is empty if there
-      * is no extension The extension is the string after the last "."
-      *
-      * @param f The file whose extension is requested @return The extension of
-      * the given file&&
-      *
-      * public static String getExtension(File f) { String name =
-      * f.getName().toLowerCase(); int i = name.lastIndexOf("."); if (i == -1)
-      * return "";
-      *
-      * return name.substring(i + 1); }
-      *  /* Computes a number composed of (end-start) bytes in the b array.
+
+     /* Computes a number composed of (end-start) bytes in the b array.
       *
       * @param b The byte array @param start The starting offset in b
       * (b[offset]). The less significant byte @param end The end index
       * (included) in b (b[end]). The most significant byte @return a long number
       * represented by the byte sequence.
       */
-    public static long getLongNumber(byte[] b, int start, int end)
+    public static long getLongNumberLittleEndian(byte[] b, int start, int end)
     {
         long number = 0;
         for (int i = 0; i < (end - start + 1); i++)
@@ -115,6 +104,11 @@ public class Utils
         return number;
     }
 
+    public static int getNumberLittleEndian(byte[] b)
+    {
+        return (int) getLongNumberLittleEndian(b, 0, b.length -1);
+    }
+
     /*
       * same as above, but returns an int instead of a long @param b The byte
       * array @param start The starting offset in b (b[offset]). The less
@@ -122,9 +116,9 @@ public class Utils
       * most significant byte @return a int number represented by the byte
       * sequence.
       */
-    public static int getNumber(byte[] b, int start, int end)
+    public static int getNumberLittleEndian(byte[] b, int start, int end)
     {
-        return (int) getLongNumber(b, start, end);
+        return (int) getLongNumberLittleEndian(b, start, end);
     }
 
     public static int getNumberBigEndian(byte[] b, int start, int end)

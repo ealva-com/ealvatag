@@ -22,6 +22,24 @@ import org.jaudiotagger.audio.ogg.VorbisVersion;
 
 
 /**
+ * Vorbis Header , also known the indentification header
+ *
+ * From http://xiph.org/vorbis/doc/Vorbis_I_spec.html#id326710
+ *
+ * The identification header is a short header of only a few fields used to declare the stream definitively as Vorbis,
+ * and provide a few externally relevant pieces of information about the audio stream. The identification header is
+ * coded as follows:
+ *
+ * 1) [vorbis_version] = read 32 bits as unsigned integer
+ * 2) [audio_channels] = read 8 bit integer as unsigned
+ * 3) [audio_sample_rate] = read 32 bits as unsigned integer
+ * 4) [bitrate_maximum] = read 32 bits as signed integer
+ * 5) [bitrate_nominal] = read 32 bits as signed integer
+ * 6) [bitrate_minimum] = read 32 bits as signed integer
+ * 7) [blocksize_0] = 2 exponent (read 4 bits as unsigned integer)
+ * 8) [blocksize_1] = 2 exponent (read 4 bits as unsigned integer)
+ * 9) [framing_flag] = read one bit
+ *
  * $Id$
  *
  * @author Raphael Slinckx (KiKiDonK)
@@ -29,11 +47,6 @@ import org.jaudiotagger.audio.ogg.VorbisVersion;
  */
 public class VorbisCodecHeader implements VorbisHeader
 {
-    //Ogg Page header is always 27 bytes plus the size of the segment table which is variable
-    public static final int OGG_PAGE_HEADER_FIXED_LENGTH = 27;
-    public static final int FIELD_CAPTURE_PATTERN_POS  = 0;
-    public static final int FIELD_STREAM_STRUCTURE_VERSION_POS  = 4;
-
     private int audioChannels;
     private boolean isValid = false;
 
@@ -86,9 +99,9 @@ public class VorbisCodecHeader implements VorbisHeader
 
     public void generateCodecHeader(byte[] b)
     {
-        int packetType = b[0];
+        int packetType = b[FIELD_PACKET_TYPE_POS ];
         //System.err.println("packetType" + packetType);
-        String vorbis = new String(b, 1, 6);
+        String vorbis = new String(b, FIELD_CAPTURE_PATTERN_POS, FIELD_CAPTURE_PATTERN_LENGTH);
         //System.err.println("vorbiscomment" + vorbiscomment);
 
         if (packetType == VorbisPacketType.IDENTIFICATION_HEADER.getType() && vorbis.equals(CAPTURE_PATTERN ))

@@ -26,7 +26,7 @@ import java.io.*;
 
 /**
  * Write tag data to Ogg File
- * <p/>
+ * 
  * Only works for Ogg files contianing a vorbis stream with a vorbis comment
  */
 public class OggFileWriter extends AudioFileWriter

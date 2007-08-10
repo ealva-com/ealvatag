@@ -19,6 +19,7 @@
 package org.jaudiotagger.tag.vorbiscomment;
 
 import org.jaudiotagger.audio.generic.AbstractTag;
+import org.jaudiotagger.audio.ogg.util.VorbisHeader;
 import org.jaudiotagger.tag.TagField;
 import org.jaudiotagger.tag.vorbiscomment.VorbisCommentTagField;
 import org.jaudiotagger.tag.vorbiscomment.VorbisCommentFieldKey;
@@ -32,6 +33,8 @@ import java.util.List;
 //FIXME: Handle previously handled DESCRIPTION|COMMENT and TRACK|TRACKNUMBER
 
 /**
+ * This is the logical representation of  Vorbis Comment Data 
+ *
  * This partial list is derived fom the following sources:
  * <p/>
  * http://xiph.org/vorbiscomment/doc/v-comment.html
@@ -172,7 +175,7 @@ public class VorbisCommentTag extends AbstractTag
 
     protected boolean isAllowedEncoding(String enc)
     {
-        return enc.equals("UTF-8");
+        return enc.equals(VorbisHeader.CHARSET_UTF_8);
     }
 
     public String toString()

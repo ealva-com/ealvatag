@@ -20,6 +20,8 @@ package org.jaudiotagger.audio.ogg.util;
 
 
 /**
+ * OffCRC Calculations
+ *
  * $Id$
  *
  * @author Raphael Slinckx (KiKiDonK)

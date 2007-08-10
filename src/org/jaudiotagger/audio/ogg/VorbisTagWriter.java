@@ -101,21 +101,21 @@ public class VorbisTagWriter
 
         b = new byte[4];
         raf.read(b);
-        int vendorStringLength = Utils.getNumber(b, 0, 3);
+        int vendorStringLength = Utils.getNumberLittleEndian(b, 0, 3);
         oldCommentLength += 4 + vendorStringLength;
 
         raf.seek(raf.getFilePointer() + vendorStringLength);
 
         b = new byte[4];
         raf.read(b);
-        int userComments = Utils.getNumber(b, 0, 3);
+        int userComments = Utils.getNumberLittleEndian(b, 0, 3);
         oldCommentLength += 4;
 
         for (int i = 0; i < userComments; i++)
         {
             b = new byte[4];
             raf.read(b);
-            int commentLength = Utils.getNumber(b, 0, 3);
+            int commentLength = Utils.getNumberLittleEndian(b, 0, 3);
             oldCommentLength += 4 + commentLength;
 
             raf.seek(raf.getFilePointer() + commentLength);

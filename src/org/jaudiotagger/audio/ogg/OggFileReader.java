@@ -27,14 +27,14 @@ import org.jaudiotagger.tag.Tag;
 import java.io.*;
 
 /**
- * Read Ogg File tag information
+ * Read Ogg File Tag and Encoding information
  * <p/>
  * Only implemented for ogg files containing a vorbis stream with vorbis comments
  */
 public class OggFileReader extends AudioFileReader
 {
     private OggInfoReader ir = new OggInfoReader();
-    private VorbisTagReader otr = new VorbisTagReader();
+    private VorbisTagReader vtr = new VorbisTagReader();
 
     protected GenericAudioHeader getEncodingInfo(RandomAccessFile raf) throws CannotReadException, IOException
     {
@@ -43,7 +43,7 @@ public class OggFileReader extends AudioFileReader
 
     protected Tag getTag(RandomAccessFile raf) throws CannotReadException, IOException
     {
-        return otr.read(raf);
+        return vtr.read(raf);
     }
 }
 
