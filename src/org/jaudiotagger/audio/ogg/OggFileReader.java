@@ -45,5 +45,30 @@ public class OggFileReader extends AudioFileReader
     {
         return vtr.read(raf);
     }
+
+     /**
+     * Return count Ogg Page header, count starts from zero
+     *
+     * count=0; should return PageHeader that contains Vorbis Identification Header
+     * count=1; should return Pageheader that contains VorbisComment and possibly SetupHeader
+     * count>=2; shoudl return PageHeader containng remaining VorbisComment,SetupHeader and/or Audio
+     *
+     * @param raf
+     * @param count
+     * @return
+     * @throws CannotReadException
+     * @throws IOException
+     */
+    public OggPageHeader readOggPageHeader(RandomAccessFile raf,int count) throws CannotReadException, IOException
+    {
+        OggPageHeader pageHeader = OggPageHeader.read (raf);
+        while(count >0)
+        {
+            raf.seek(raf.getFilePointer() + pageHeader.getPageLength());
+            pageHeader = OggPageHeader.read (raf);
+            count--;
+        }
+        return pageHeader;
+    }
 }
 

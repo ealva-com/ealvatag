@@ -26,6 +26,7 @@ import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.tag.Tag;
 import org.jaudiotagger.audio.exceptions.CannotWriteException;
 import org.jaudiotagger.audio.exceptions.ModifyVetoException;
+import org.jaudiotagger.audio.exceptions.CannotReadException;
 
 /**
  * This abstract class is the skeleton for tag writers. It handles the
@@ -52,7 +53,7 @@ public abstract class AudioFileWriter
      * @param f The file to process
      * @throws CannotWriteException if anything went wrong
      */
-    public synchronized void delete(AudioFile f) throws CannotWriteException
+    public synchronized void delete(AudioFile f) throws CannotReadException,CannotWriteException
     {
         if (!f.getFile().canWrite())
         {
@@ -149,7 +150,7 @@ public abstract class AudioFileWriter
      * @param tempRaf The temporary file opened in r-write mode
      * @throws CannotWriteException if anything went wrong
      */
-    public synchronized void delete(RandomAccessFile raf, RandomAccessFile tempRaf) throws CannotWriteException, IOException
+    public synchronized void delete(RandomAccessFile raf, RandomAccessFile tempRaf) throws CannotReadException,CannotWriteException, IOException
     {
         raf.seek(0);
         tempRaf.seek(0);
@@ -163,7 +164,7 @@ public abstract class AudioFileWriter
      *                              (you should never throw them manually)
      * @throws CannotWriteException when an error occured during the deletion of the tag
      */
-    protected abstract void deleteTag(RandomAccessFile raf, RandomAccessFile tempRaf) throws CannotWriteException, IOException;
+    protected abstract void deleteTag(RandomAccessFile raf, RandomAccessFile tempRaf) throws CannotReadException,CannotWriteException, IOException;
 
     /**
      * This method sets the {@link AudioFileModificationListener}.<br>
@@ -187,10 +188,17 @@ public abstract class AudioFileWriter
     public synchronized void write(AudioFile af) throws CannotWriteException
     {
         // Preliminary checks
-        if (af.getTag().isEmpty())
+        try
         {
-            delete(af);
-            return;
+            if (af.getTag().isEmpty())
+            {
+                delete(af);
+                return;
+            }
+        }
+        catch(CannotReadException re)
+        {
+             throw new CannotWriteException("Can't write to file \"" + af.getFile().getAbsolutePath() + "\"");
         }
 
         if (!af.getFile().canWrite())
@@ -235,6 +243,7 @@ public abstract class AudioFileWriter
         }
         catch (Exception e)
         {
+            e.printStackTrace();
             cannotWrite = true;
             throw new CannotWriteException("\"" + af.getFile().getAbsolutePath() + "\" :" + e);
         }
@@ -296,6 +305,6 @@ public abstract class AudioFileWriter
      *                              (you should never throw them manually)
      * @throws CannotWriteException when an error occured during the generation of the tag
      */
-    protected abstract void writeTag(Tag tag, RandomAccessFile raf, RandomAccessFile rafTemp) throws CannotWriteException, IOException;
+    protected abstract void writeTag(Tag tag, RandomAccessFile raf, RandomAccessFile rafTemp) throws CannotReadException,CannotWriteException, IOException;
 
 }

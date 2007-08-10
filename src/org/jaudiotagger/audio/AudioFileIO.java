@@ -99,7 +99,7 @@ public class AudioFileIO {
      *                If the file could not be written/accessed, the extension
      *                wasn't recognized, or other IO error occured.
      */
-    public static void delete(AudioFile f) throws CannotWriteException {
+    public static void delete(AudioFile f) throws CannotReadException,CannotWriteException {
         getDefaultAudioFileIO().deleteTag(f);
     }
 
@@ -191,7 +191,7 @@ public class AudioFileIO {
      *                If the file could not be written/accessed, the extension
      *                wasn't recognized, or other IO error occured.
      */
-    public void deleteTag(AudioFile f) throws CannotWriteException {
+    public void deleteTag(AudioFile f) throws CannotReadException,CannotWriteException {
         String ext = Utils.getExtension(f.getFile());
 
         Object afw = writers.get(ext);

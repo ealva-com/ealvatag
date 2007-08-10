@@ -27,6 +27,9 @@ import java.io.UnsupportedEncodingException;
 import java.nio.*;
 import java.util.*;
 
+/**
+ * Create the raw packet data for a Vorbis Comment Tag
+ */
 public class VorbisCommentCreator extends AbstractTagCreator
 {
 

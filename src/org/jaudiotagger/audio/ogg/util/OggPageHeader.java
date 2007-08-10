@@ -65,8 +65,9 @@ public class OggPageHeader
     public static final int FIELD_PAGE_CHECKSUM_LENGTH     = 4;
     public static final int FIELD_PAGE_SEGMENTS_LENGTH     = 1;
 
+    private byte[] rawHeaderData;
     private double absoluteGranulePosition;
-    private byte[] checksum;
+    private int checksum;
     private byte headerTypeFlag;
 
     private boolean isValid = false;
@@ -104,6 +105,7 @@ public class OggPageHeader
 
     public OggPageHeader(byte[] b)
     {
+        this.rawHeaderData = b;
         //System.err.println(new String(b, 0 , 4));
         int streamStructureRevision = b[FIELD_STREAM_STRUCTURE_VERSION_POS];
         //System.err.println("streamStructureRevision: " + streamStructureRevision);
@@ -122,9 +124,9 @@ public class OggPageHeader
             //System.err.println("streamSerialNumber: " + streamSerialNumber);
             pageSequenceNumber = u(b[18]) + (u(b[19]) << 8) + (u(b[20]) << 16) + (u(b[21]) << 24);
             //System.err.println("pageSequenceNumber: " + pageSequenceNumber);
-            checksum = new byte[]{b[22], b[23], b[24], b[25]};
+            checksum = u(b[22]) + (u(b[23]) << 8) + (u(b[24]) << 16) + (u(b[25]) << 24);
 
-            //int pageSegments = u( b[26] );
+            int pageSegments = u( b[26] );
             //System.err.println("pageSegments: " + pageSegments);
 
             this.segmentTable = new byte[b.length - OGG_PAGE_HEADER_FIXED_LENGTH];
@@ -180,7 +182,7 @@ public class OggPageHeader
     }
 
 
-    public byte[] getCheckSum()
+    public int getCheckSum()
     {
         return checksum;
     }
@@ -218,9 +220,22 @@ public class OggPageHeader
         return isValid;
     }
 
+    /**
+     *
+     * @return a list of packet start position and size within this page.
+     */
     public List<PacketStartAndLength> getPacketList()
     {
         return packetList;
+    }
+
+    /**
+     *
+     * @return the raw header daata that this pageheader is derived from
+     */
+    public byte[] getRawHeaderData()
+    {
+        return rawHeaderData;
     }
 
     public String toString()

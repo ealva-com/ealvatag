@@ -36,10 +36,49 @@ import java.io.*;
  */
 public class VorbisTagReader
 {
-
     private VorbisCommentReader vorbisCommentReader = new VorbisCommentReader();
 
+    /**
+     * Read the Logical VorbisComment Tag from the file
+     *
+     * @param raf
+     * @return
+     * @throws CannotReadException
+     * @throws IOException
+     */
     public Tag read(RandomAccessFile raf) throws CannotReadException, IOException
+    {
+        byte[] rawVorbisCommentData = readRawPacketData(raf);
+        //Begin tag reading
+        VorbisCommentTag tag = vorbisCommentReader.read(rawVorbisCommentData);
+        return tag;
+    }
+
+    /**
+     * Retrieve the Size of the VorbisComment packet including the oggvorbis header
+     *
+     * @param raf
+     * @return
+     * @throws CannotReadException
+     * @throws IOException
+     */
+    public int readOggVorbisRawSize(RandomAccessFile raf) throws CannotReadException, IOException
+    {
+         byte[] rawVorbisCommentData = readRawPacketData(raf);
+         return rawVorbisCommentData.length
+             + VorbisHeader.FIELD_PACKET_TYPE_LENGTH
+             + VorbisHeader.FIELD_CAPTURE_PATTERN_LENGTH;
+    }
+
+    /**
+     * Retrieve the raw VorbisComment packet data, does not include the OggVrobis header
+     *
+     * @param raf
+     * @return
+     * @throws CannotReadException
+     * @throws IOException
+     */
+    public byte[] readRawPacketData(RandomAccessFile raf) throws CannotReadException, IOException
     {
         //1st page = codec infos
         OggPageHeader pageHeader = OggPageHeader.read (raf);
@@ -50,7 +89,7 @@ public class VorbisTagReader
         pageHeader = OggPageHeader.read (raf);
 
         //Now at start of packets on page 2 , check this is the vorbis comment header 
-        byte [] b = new byte[7];
+        byte [] b = new byte[VorbisHeader.FIELD_PACKET_TYPE_LENGTH + VorbisHeader.FIELD_CAPTURE_PATTERN_LENGTH];
         raf.read(b);
         if(!isVorbisCommentHeader (b))
         {
@@ -58,18 +97,17 @@ public class VorbisTagReader
         }
 
 
-        //Convert the coment raw data which maybe over many pages back into raw packet
+        //Convert the comment raw data which maybe over many pages back into raw packet
         byte[] rawVorbisCommentData = convertToVorbisCommentPacket(pageHeader,raf);
-
-        //Begin tag reading
-        VorbisCommentTag tag = vorbisCommentReader.read(rawVorbisCommentData);
-        return tag;
+        return rawVorbisCommentData;
     }
+
+   
 
     /**
      * is this a Vorbis Comment header, check
      *
-     * Note this check only applies to Vorbis Comments embedded within an OggVorbis File which is why within here      
+     * Note this check only applies to Vorbis Comments embedded within an OggVorbis File which is why within here
      *
      * @param headerData
      *

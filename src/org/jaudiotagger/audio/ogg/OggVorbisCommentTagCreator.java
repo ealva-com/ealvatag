@@ -16,14 +16,18 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.jaudiotagger.tag.vorbiscomment;
+package org.jaudiotagger.audio.ogg;
 
 import org.jaudiotagger.tag.Tag;
+import org.jaudiotagger.tag.vorbiscomment.VorbisCommentCreator;
 
 import java.io.UnsupportedEncodingException;
 import java.nio.*;
 
-public class VorbisCommentTagCreator
+/**
+ * Creates an OggVorbis Comment Tag from a VorbisComment for use within an OggVorbis Container
+ */
+public class OggVorbisCommentTagCreator
 {
     private VorbisCommentCreator creator = new VorbisCommentCreator();
 

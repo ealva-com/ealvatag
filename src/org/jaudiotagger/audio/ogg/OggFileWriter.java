@@ -27,20 +27,20 @@ import java.io.*;
 /**
  * Write tag data to Ogg File
  * 
- * Only works for Ogg files contianing a vorbis stream with a vorbis comment
+ * Only works for Ogg files containing a vorbis stream
  */
 public class OggFileWriter extends AudioFileWriter
 {
 
-    private VorbisTagWriter otw = new VorbisTagWriter();
+    private VorbisTagWriter vtw = new VorbisTagWriter();
 
-    protected void writeTag(Tag tag, RandomAccessFile raf, RandomAccessFile rafTemp) throws CannotWriteException, IOException
+    protected void writeTag(Tag tag, RandomAccessFile raf, RandomAccessFile rafTemp) throws CannotReadException,CannotWriteException, IOException
     {
-        otw.write(tag, raf, rafTemp);
+        vtw.write(tag, raf, rafTemp);
     }
 
-    protected void deleteTag(RandomAccessFile raf, RandomAccessFile tempRaf) throws CannotWriteException, IOException
+    protected void deleteTag(RandomAccessFile raf, RandomAccessFile tempRaf) throws CannotReadException,CannotWriteException, IOException
     {
-        otw.delete(raf, tempRaf);
+        vtw.delete(raf, tempRaf);
     }
 }

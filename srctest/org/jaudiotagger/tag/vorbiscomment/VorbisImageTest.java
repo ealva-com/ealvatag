@@ -11,7 +11,7 @@ import java.io.File;
 public class VorbisImageTest extends AbstractTestCase
 {
     /**
-     * Test can read file with base64 encoded image
+     * Test can read file with base64 encoded image from ogg
      *
      * Works
      */
