@@ -34,7 +34,7 @@ import java.io.*;
 public class OggFileReader extends AudioFileReader
 {
     private OggInfoReader ir = new OggInfoReader();
-    private VorbisTagReader vtr = new VorbisTagReader();
+    private OggVorbisTagReader vtr = new OggVorbisTagReader();
 
     protected GenericAudioHeader getEncodingInfo(RandomAccessFile raf) throws CannotReadException, IOException
     {

@@ -32,7 +32,7 @@ import java.io.*;
 public class OggFileWriter extends AudioFileWriter
 {
 
-    private VorbisTagWriter vtw = new VorbisTagWriter();
+    private OggVorbisTagWriter vtw = new OggVorbisTagWriter();
 
     protected void writeTag(Tag tag, RandomAccessFile raf, RandomAccessFile rafTemp) throws CannotReadException,CannotWriteException, IOException
     {

@@ -20,9 +20,8 @@
 package org.jaudiotagger.audio.ogg;
 
 import org.jaudiotagger.audio.exceptions.*;
-import org.jaudiotagger.audio.generic.Utils;
 import org.jaudiotagger.tag.vorbiscomment.VorbisCommentTag;
-import org.jaudiotagger.audio.ogg.VorbisTagReader;
+import org.jaudiotagger.audio.ogg.OggVorbisTagReader;
 import org.jaudiotagger.audio.ogg.util.OggPageHeader;
 import org.jaudiotagger.audio.ogg.util.OggCRCFactory;
 import org.jaudiotagger.tag.Tag;
@@ -35,11 +34,11 @@ import java.nio.*;
  * <p/>
  * VorbisComment holds the tag information within an ogg file
  */
-public class VorbisTagWriter
+public class OggVorbisTagWriter
 {
 
     private OggVorbisCommentTagCreator tc = new OggVorbisCommentTagCreator();
-    private VorbisTagReader reader = new VorbisTagReader();
+    private OggVorbisTagReader reader = new OggVorbisTagReader();
 
     public void delete(RandomAccessFile raf, RandomAccessFile tempRaf) throws IOException, CannotReadException,CannotWriteException
     {
