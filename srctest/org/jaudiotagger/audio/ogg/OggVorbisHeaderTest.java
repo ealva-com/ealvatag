@@ -12,7 +12,7 @@ import org.jaudiotagger.audio.AudioFileIO;
 import org.jaudiotagger.audio.ogg.util.OggPageHeader;
 
 /**
- * basic Flac tests
+ * Basic Vorbis tests
  */
 public class OggVorbisHeaderTest extends TestCase
 {
