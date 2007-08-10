@@ -27,18 +27,21 @@ import java.io.*;
 
 
 /**
- * Writ/delete tag info for Flac file (opensource lossless encoding)    
+ * Writ/delete tag info for Flac file (opensource lossless encoding)
  */
-public class FlacFileWriter extends AudioFileWriter {
-		
-	private FlacTagWriter tw = new FlacTagWriter();
-	
-	protected void writeTag(Tag tag, RandomAccessFile raf, RandomAccessFile rafTemp) throws CannotWriteException, IOException {
-		tw.write(tag, raf, rafTemp);
-	}
-	
-	protected void deleteTag(RandomAccessFile raf, RandomAccessFile tempRaf) throws CannotWriteException, IOException {
-		tw.delete(raf, tempRaf);
-	}
+public class FlacFileWriter extends AudioFileWriter
+{
+
+    private FlacTagWriter tw = new FlacTagWriter();
+
+    protected void writeTag(Tag tag, RandomAccessFile raf, RandomAccessFile rafTemp) throws CannotWriteException, IOException
+    {
+        tw.write(tag, raf, rafTemp);
+    }
+
+    protected void deleteTag(RandomAccessFile raf, RandomAccessFile tempRaf) throws CannotWriteException, IOException
+    {
+        tw.delete(raf, tempRaf);
+    }
 }
 

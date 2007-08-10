@@ -31,16 +31,19 @@ import org.jaudiotagger.tag.Tag;
 /**
  * Read encoding and tag info for Flac file (opensource lossless encoding)
  */
-public class FlacFileReader extends AudioFileReader {
+public class FlacFileReader extends AudioFileReader
+{
 
     private FlacInfoReader ir = new FlacInfoReader();
     private FlacTagReader tr = new FlacTagReader();
 
-    protected GenericAudioHeader getEncodingInfo( RandomAccessFile raf )  throws CannotReadException, IOException {
+    protected GenericAudioHeader getEncodingInfo(RandomAccessFile raf) throws CannotReadException, IOException
+    {
         return ir.read(raf);
     }
 
-    protected Tag getTag( RandomAccessFile raf )  throws CannotReadException, IOException {
+    protected Tag getTag(RandomAccessFile raf) throws CannotReadException, IOException
+    {
         return tr.read(raf);
     }
 }

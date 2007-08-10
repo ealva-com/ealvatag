@@ -27,64 +27,66 @@ import java.io.*;
 /**
  * Read Flac Tag, uses VorbisComment
  */
-public class FlacTagReader {
-	
-	private VorbisCommentReader vorbisCommentReader = new VorbisCommentReader();
-	
-	public VorbisCommentTag read( RandomAccessFile raf ) throws CannotReadException, IOException {
-		//Begins tag parsing-------------------------------------
-		if ( raf.length()==0 ) {
-			//Empty File
-			throw new CannotReadException("Error: File empty");
-		}
-		raf.seek( 0 );
+public class FlacTagReader
+{
 
-		//FLAC Header string
-		byte[] b = new byte[4];
-		raf.read(b);
-		String flac = new String(b);
-		if(!flac.equals("fLaC"))
-			throw new CannotReadException("fLaC Header not found, not a flac file");
-		
-		VorbisCommentTag tag = null;
-		
-		//Seems like we hava a valid stream
-		boolean isLastBlock = false;
-		while(!isLastBlock) {
-			b = new byte[4];
-			raf.read(b);
-			MetadataBlockHeader mbh = new MetadataBlockHeader(b);
-		
-			switch(mbh.getBlockType()) {
-				//We got a vorbiscomment comment block, parse it
-				case MetadataBlockHeader.VORBIS_COMMENT : 	tag = handleVorbisComment(mbh, raf);
-															mbh = null;
-															return tag; //We have it, so no need to go further
-				
-				//This is not a vorbiscomment comment block, we skip to next block
-				default : 	raf.seek(raf.getFilePointer()+mbh.getDataLength());
-							break;
-			}
+    private VorbisCommentReader vorbisCommentReader = new VorbisCommentReader();
 
-			isLastBlock = mbh.isLastBlock();
-			mbh = null;
-		}
-		//FLAC not found...
-		throw new CannotReadException("FLAC Tag could not be found or read..");
-	}
-	
-	private VorbisCommentTag handleVorbisComment(MetadataBlockHeader mbh, RandomAccessFile raf) throws IOException, CannotReadException {
-		long oldPos = raf.getFilePointer();
-		
-		//VorbisCommentTag tag = vorbisCommentReader.read(raf);
-		
-		long newPos = raf.getFilePointer();
-		
-		if(newPos - oldPos != mbh.getDataLength())
-			throw new CannotReadException("Tag length do not match with flac comment data length");
-		
-		//return tag;
-        return null;
+    public VorbisCommentTag read(RandomAccessFile raf) throws CannotReadException, IOException
+    {
+        //Begins tag parsing
+        if (raf.length() == 0)
+        {
+            //Empty File
+            throw new CannotReadException("Error: File empty");
+        }
+        raf.seek(0);
+
+        //FLAC Header string
+        byte[] b = new byte[4];
+        raf.read(b);
+        String flac = new String(b);
+        if (!flac.equals("fLaC"))
+        {
+            throw new CannotReadException("fLaC Header not found, not a flac file");
+        }
+
+        VorbisCommentTag tag = null;
+
+        //Seems like we hava a valid stream
+        boolean isLastBlock = false;
+        while (!isLastBlock)
+        {
+            b = new byte[4];
+            raf.read(b);
+            MetadataBlockHeader mbh = new MetadataBlockHeader(b);
+
+            switch (mbh.getBlockType())
+            {
+                //We got a vorbiscomment comment block, parse it
+                case MetadataBlockHeader.VORBIS_COMMENT :
+                    tag = handleVorbisComment(mbh, raf);
+                    mbh = null;
+                    return tag; //We have it, so no need to go further
+
+                    //This is not a vorbiscomment comment block, we skip to next block
+                default :
+                    raf.seek(raf.getFilePointer() + mbh.getDataLength());
+                    break;
+            }
+
+            isLastBlock = mbh.isLastBlock();
+            mbh = null;
+        }
+        //FLAC not found...
+        throw new CannotReadException("FLAC Tag could not be found or read..");
+    }
+
+    private VorbisCommentTag handleVorbisComment(MetadataBlockHeader mbh, RandomAccessFile raf) throws IOException, CannotReadException
+    {
+        byte[] commentHeaderRawPacket = new byte[mbh.getDataLength()];
+        VorbisCommentTag tag = vorbisCommentReader.read(commentHeaderRawPacket);
+        return tag;                                                                     
     }
 }
 

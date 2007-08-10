@@ -24,44 +24,50 @@ import org.jaudiotagger.tag.Tag;
 import java.io.UnsupportedEncodingException;
 import java.nio.*;
 
-public class FlacTagCreator {
-	
-	public static final int DEFAULT_PADDING = 4000;
-	private static final VorbisCommentCreator creator = new VorbisCommentCreator();
-	
-	//Creates the ByteBuffer for the ogg tag
-	public ByteBuffer convert(Tag tag, int paddingSize) throws UnsupportedEncodingException {
-		ByteBuffer ogg = creator.convert(tag);
-		int tagLength = ogg.capacity() + 4;
-		
-		ByteBuffer buf = ByteBuffer.allocate( tagLength + paddingSize );
+public class FlacTagCreator
+{
 
-		//CREATION OF CVORBIS COMMENT METADATA BLOCK HEADER
-		//If we have padding, the comment is not the last block (bit[0] = 0)
-		//If there is no padding, the comment is the last block (bit[0] = 1)
-		byte type =  (paddingSize > 0) ? (byte)0x04 : (byte) 0x84;
-		buf.put(type);
-		int commentLength = tagLength - 4; //Comment length
-		buf.put( new byte[] { (byte)((commentLength & 0xFF0000) >>> 16), (byte)((commentLength & 0xFF00) >>> 8) , (byte)(commentLength&0xFF)  } );
+    public static final int DEFAULT_PADDING = 4000;
+    private static final VorbisCommentCreator creator = new VorbisCommentCreator();
 
-		//The actual tag
-		buf.put(ogg);
-		
-		//PADDING
-		if(paddingSize >=4) {
-			int paddingDataSize = paddingSize - 4;
-			buf.put((byte)0x81); //Last frame, padding 0x81
-			buf.put(new byte[]{ (byte)((paddingDataSize&0xFF0000)>>>16),(byte)((paddingDataSize&0xFF00)>>>8),(byte)(paddingDataSize&0xFF) });
-			for(int i = 0; i< paddingDataSize; i++)
-				buf.put((byte)0);
-		}
-		buf.rewind();
-		
-		return buf;
-	}
-	
-	public int getTagLength(Tag tag) throws UnsupportedEncodingException {
-		ByteBuffer ogg = creator.convert(tag);
-		return ogg.capacity() + 4;
-	}
+    //Creates the ByteBuffer for the ogg tag
+    public ByteBuffer convert(Tag tag, int paddingSize) throws UnsupportedEncodingException
+    {
+        ByteBuffer ogg = creator.convert(tag);
+        int tagLength = ogg.capacity() + 4;
+
+        ByteBuffer buf = ByteBuffer.allocate(tagLength + paddingSize);
+
+        //CREATION OF CVORBIS COMMENT METADATA BLOCK HEADER
+        //If we have padding, the comment is not the last block (bit[0] = 0)
+        //If there is no padding, the comment is the last block (bit[0] = 1)
+        byte type = (paddingSize > 0) ? (byte) 0x04 : (byte) 0x84;
+        buf.put(type);
+        int commentLength = tagLength - 4; //Comment length
+        buf.put(new byte[]{(byte) ((commentLength & 0xFF0000) >>> 16), (byte) ((commentLength & 0xFF00) >>> 8), (byte) (commentLength & 0xFF)});
+
+        //The actual tag
+        buf.put(ogg);
+
+        //PADDING
+        if (paddingSize >= 4)
+        {
+            int paddingDataSize = paddingSize - 4;
+            buf.put((byte) 0x81); //Last frame, padding 0x81
+            buf.put(new byte[]{(byte) ((paddingDataSize & 0xFF0000) >>> 16), (byte) ((paddingDataSize & 0xFF00) >>> 8), (byte) (paddingDataSize & 0xFF)});
+            for (int i = 0; i < paddingDataSize; i++)
+            {
+                buf.put((byte) 0);
+            }
+        }
+        buf.rewind();
+
+        return buf;
+    }
+
+    public int getTagLength(Tag tag) throws UnsupportedEncodingException
+    {
+        ByteBuffer ogg = creator.convert(tag);
+        return ogg.capacity() + 4;
+    }
 }
