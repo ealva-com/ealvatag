@@ -237,6 +237,14 @@ public interface Tag
     public List get(TagFieldKey id);
 
     /**
+     * Retrieve the first value that exists for this key id
+     *
+     * @param id
+     * @return
+     */
+    public String getFirst(String id);
+
+    /**
      * Retrieve the first value that exists for this generic key
      *
      * @param id

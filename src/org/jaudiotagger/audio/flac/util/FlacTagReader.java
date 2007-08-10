@@ -85,6 +85,7 @@ public class FlacTagReader
     private VorbisCommentTag handleVorbisComment(MetadataBlockHeader mbh, RandomAccessFile raf) throws IOException, CannotReadException
     {
         byte[] commentHeaderRawPacket = new byte[mbh.getDataLength()];
+        raf.read(commentHeaderRawPacket);
         VorbisCommentTag tag = vorbisCommentReader.read(commentHeaderRawPacket);
         return tag;                                                                     
     }

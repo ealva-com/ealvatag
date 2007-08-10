@@ -220,21 +220,7 @@ public class VorbisCommentTag extends AbstractTag
         return super.get(vorbisCommentFieldKey.name());
     }
 
-    /**
-     * Retrieve the first value that exists for this ogg key Id
-     *
-     * @param oggKeyId
-     */
-    @Override
-    public List get(String oggKeyId)
-    {
-        VorbisCommentFieldKey vorbisCommentFieldKey = VorbisCommentFieldKey.valueOf(oggKeyId);
-        if (vorbisCommentFieldKey == null)
-        {
-            return null;
-        }
-        return super.get(vorbisCommentFieldKey.name());
-    }
+    
 
     /**
      * Retrieve the first value that exists for this generic key

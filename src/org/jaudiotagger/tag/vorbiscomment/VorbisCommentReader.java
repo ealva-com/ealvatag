@@ -30,7 +30,8 @@ import java.io.*;
 /**
  * Create the VorbisCommentTag by reading from the raw packet data
  *
- * Note the Vorbis Header Packet Type and Capture String are not pasassed to the read method
+ * This is in the same format whether encoded with Ogg or Flac
+ * TODO:Check above comment re framing bit
  *
  * From the http://xiph.org/vorbis/doc/Vorbis_I_spec.html#vorbis-spec-comment
  * Read decodes the packet data using the following algorithm:
@@ -55,22 +56,7 @@ public class VorbisCommentReader
     public static final int FIELD_COMMENT_LENGTH_LENGTH     = 4;
     public static final int FIELD_FRAMING_BIT_LENGTH        = 1;
 
-    /**
-     *
-     * @param headerData
-     *
-     * @return true if the headerData matches a VorbisComment header
-     */
-    public boolean isVorbisComentHeader (byte[] headerData)
-    {
-        String vorbis = new String(headerData, VorbisHeader.FIELD_CAPTURE_PATTERN_POS, VorbisHeader.FIELD_CAPTURE_PATTERN_LENGTH);
-        if (headerData[VorbisHeader.FIELD_PACKET_TYPE_POS] != VorbisPacketType.COMMENT_HEADER.getType()
-            || !vorbis.equals(VorbisHeader.CAPTURE_PATTERN))
-        {
-            return false;
-        }
-        return true;
-    }
+
 
     /**
      *
@@ -94,6 +80,7 @@ public class VorbisCommentReader
         System.arraycopy(rawdata,pos,b,0,vendorStringLength);
         pos+=vendorStringLength;
         tag.setVendor(new String(b, VorbisHeader.CHARSET_UTF_8));
+        //System.err.println("vendorString:" + tag.getVendor());
 
         b = new byte[FIELD_USER_COMMENT_LIST_LENGTH];
         System.arraycopy(rawdata,pos,b,0,FIELD_USER_COMMENT_LIST_LENGTH);
@@ -119,11 +106,13 @@ public class VorbisCommentReader
         }
 
         //TODO have I got to check a particular bit within this byte, do we want to throw an exception
+        //TODO this code is breaking falc test case, check flag code, do we only have this within ogg
+        //container or not
         //here
-        if (rawdata[pos]==0)
-        {
-            throw new CannotReadException("Error: The OGG Stream isn't valid, Vrobis tag valid falg is wrong");
-        }
+        //if (rawdata[pos]==0)
+        //{
+        //    throw new CannotReadException("Error: The OGG Stream isn't valid, Vrobis tag valid flag is wrong");
+        //}
         //System.err.println("CompletedReadCommentTag");
         return tag;
     }

@@ -52,7 +52,7 @@ public class VorbisTagReader
         //Now at start of packets on page 2 , check this is the vorbis comment header 
         byte [] b = new byte[7];
         raf.read(b);
-        if(!vorbisCommentReader.isVorbisComentHeader (b))
+        if(!isVorbisCommentHeader (b))
         {
             throw new CannotReadException("Cannot find comment block (no vorbiscomment header)");
         }
@@ -64,6 +64,26 @@ public class VorbisTagReader
         //Begin tag reading
         VorbisCommentTag tag = vorbisCommentReader.read(rawVorbisCommentData);
         return tag;
+    }
+
+    /**
+     * is this a Vorbis Comment header, check
+     *
+     * Note this check only applies to Vorbis Comments embedded within an OggVorbis File which is why within here      
+     *
+     * @param headerData
+     *
+     * @return true if the headerData matches a VorbisComment header i.e is a Vorbis header of type COMMENT_HEADER
+     */
+    public boolean isVorbisCommentHeader (byte[] headerData)
+    {
+        String vorbis = new String(headerData, VorbisHeader.FIELD_CAPTURE_PATTERN_POS, VorbisHeader.FIELD_CAPTURE_PATTERN_LENGTH);
+        if (headerData[VorbisHeader.FIELD_PACKET_TYPE_POS] != VorbisPacketType.COMMENT_HEADER.getType()
+            || !vorbis.equals(VorbisHeader.CAPTURE_PATTERN))
+        {
+            return false;
+        }
+        return true;
     }
 
     /**
