@@ -35,23 +35,27 @@ public class OggInfoReader
         //System.err.println("Started");
         long oldPos = 0;
 
-        //Reads the file encoding infos -----------------------------------
+        //TODO this code appears to work backwards from file looking for the last ogg page, it reads
+        //the granule position for this last page which must be set. I dont really understand
+        //why it does this check. But I think it is an arbitary check to make sure weve read the file correctly
         raf.seek(0);
-        double PCMSamplesNumber = -1;
+        double pcmSamplesNumber = -1;
         raf.seek(raf.length() - 2);
         while (raf.getFilePointer() >= 4)
         {
-            if (raf.read() == 0x53)
+            if (raf.read() == OggPageHeader.CAPTURE_PATTERN[3])
             {
-                raf.seek(raf.getFilePointer() - 4);
+                raf.seek(raf.getFilePointer() - OggPageHeader.FIELD_CAPTURE_PATTERN_LENGTH );
                 byte[] ogg = new byte[3];
                 raf.readFully(ogg);
-                if (ogg[0] == 0x4F && ogg[1] == 0x67 && ogg[2] == 0x67)
+                if (ogg[0] == OggPageHeader.CAPTURE_PATTERN[0]
+                    && ogg[1] == OggPageHeader.CAPTURE_PATTERN[1]
+                    && ogg[2] == OggPageHeader.CAPTURE_PATTERN[2])
                 {
                     raf.seek(raf.getFilePointer() - 3);
 
                     oldPos = raf.getFilePointer();
-                    raf.seek(raf.getFilePointer() + 26);
+                    raf.seek(raf.getFilePointer() + OggPageHeader.FIELD_PAGE_SEGMENTS_POS);
                     int pageSegments = raf.readByte() & 0xFF; //Unsigned
                     raf.seek(oldPos);
 
@@ -60,58 +64,46 @@ public class OggInfoReader
 
                     OggPageHeader pageHeader = new OggPageHeader(b);
                     raf.seek(0);
-                    PCMSamplesNumber = pageHeader.getAbsoluteGranulePosition();
+                    pcmSamplesNumber = pageHeader.getAbsoluteGranulePosition();
                     break;
                 }
             }
             raf.seek(raf.getFilePointer() - 2);
         }
 
-        if (PCMSamplesNumber == -1)
+        if (pcmSamplesNumber == -1)
         {
-
+            //According to spec a value of -1 indicates no packet finished on this page, this should not occurt
             throw new CannotReadException("Error: Could not find the Ogg Setup block");
         }
 
-        //Supposing 1st page = codec infos
-        //			2nd page = comment+decode info
-        //...Extracting 1st page
-        byte[] b = new byte[4];
-
-        oldPos = raf.getFilePointer();
-        raf.seek(26);
-        int pageSegments = raf.read() & 0xFF; //Unsigned
-        raf.seek(oldPos);
-
-        b = new byte[OggPageHeader.OGG_PAGE_HEADER_FIXED_LENGTH + pageSegments];
-        raf.read(b);
-
-        OggPageHeader pageHeader = new OggPageHeader(b);
-
+        //1st page = Identifaction Header
+        OggPageHeader pageHeader = OggPageHeader.read (raf);
         byte[] vorbisData = new byte[pageHeader.getPageLength()];
-
         raf.read(vorbisData);
+        VorbisIdentificationHeader vorbisIdentificationHeader = new VorbisIdentificationHeader(vorbisData);
 
-        VorbisCodecHeader vorbisCodecHeader = new VorbisCodecHeader(vorbisData);
-
-        //Populates encodingInfo----------------------------------------------------
-        info.setPreciseLength((float) (PCMSamplesNumber / vorbisCodecHeader.getSamplingRate()));
-        info.setChannelNumber(vorbisCodecHeader.getChannelNumber());
-        info.setSamplingRate(vorbisCodecHeader.getSamplingRate());
-        info.setEncodingType(vorbisCodecHeader.getEncodingType());
+        //Map to generic encodingInfo
+        info.setPreciseLength((float) (pcmSamplesNumber / vorbisIdentificationHeader.getSamplingRate()));
+        info.setChannelNumber(vorbisIdentificationHeader.getChannelNumber());
+        info.setSamplingRate(vorbisIdentificationHeader.getSamplingRate());
+        info.setEncodingType(vorbisIdentificationHeader.getEncodingType());
         info.setExtraEncodingInfos("");
 
-        if (vorbisCodecHeader.getNominalBitrate() != 0 && vorbisCodecHeader.getMaxBitrate() == vorbisCodecHeader.getNominalBitrate() && vorbisCodecHeader.getMinBitrate() == vorbisCodecHeader.getNominalBitrate())
+        //TODO this calculation should be done within identification header
+        if (vorbisIdentificationHeader.getNominalBitrate() != 0
+            && vorbisIdentificationHeader.getMaxBitrate() == vorbisIdentificationHeader.getNominalBitrate()
+            && vorbisIdentificationHeader.getMinBitrate() == vorbisIdentificationHeader.getNominalBitrate())
         {
             //CBR (in kbps)
-            info.setBitrate(vorbisCodecHeader.getNominalBitrate() / 1000);
+            info.setBitrate(vorbisIdentificationHeader.getNominalBitrate() / 1000);
             info.setVariableBitRate(false);
         }
-        else
-        if (vorbisCodecHeader.getNominalBitrate() != 0 && vorbisCodecHeader.getMaxBitrate() == 0 && vorbisCodecHeader.getMinBitrate() == 0)
+        else if (vorbisIdentificationHeader.getNominalBitrate() != 0 && vorbisIdentificationHeader.getMaxBitrate() == 0
+            && vorbisIdentificationHeader.getMinBitrate() == 0)
         {
             //Average vbr (in kpbs)
-            info.setBitrate(vorbisCodecHeader.getNominalBitrate() / 1000);
+            info.setBitrate(vorbisIdentificationHeader.getNominalBitrate() / 1000);
             info.setVariableBitRate(true);
         }
         else

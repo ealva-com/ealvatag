@@ -122,7 +122,7 @@ public abstract class AbstractTestCase extends TestCase
     }
 
     /**
-     * Copy mp3 to processing dir ready for use in test
+     * Copy audiofile to processing dir ready for use in test
      * @param fileName
      * @return
      */
@@ -130,6 +130,25 @@ public abstract class AbstractTestCase extends TestCase
     {
         File inputFile = new File("testdata", fileName);
         File outputFile = new File("testdatatmp", fileName);
+        if (!outputFile.getParentFile().exists())
+        {
+            outputFile.getParentFile().mkdirs();
+        }
+        boolean result = copy(inputFile, outputFile);
+        assertTrue(result);
+        return outputFile;
+    }
+
+    /**
+     * Copy audiofile to processing dir ready for use in test, use this if using samre file
+     * in multiple tests because with junit multithreading can have problemsa otherwise
+     * @param fileName
+     * @return
+     */
+    public static File copyAudioToTmp(String fileName,File newFileName)
+    {
+        File inputFile = new File("testdata", fileName);
+        File outputFile = new File("testdatatmp", newFileName.getName());
         if (!outputFile.getParentFile().exists())
         {
             outputFile.getParentFile().mkdirs();

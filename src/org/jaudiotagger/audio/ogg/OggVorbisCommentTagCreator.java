@@ -29,9 +29,14 @@ import java.nio.*;
 
 /**
  * Creates an OggVorbis Comment Tag from a VorbisComment for use within an OggVorbis Container
+ *
+ * When a Vorbis Comment is used within OggVrobis it additionally has a vorbis header and a framing
+ * bit.
  */
 public class OggVorbisCommentTagCreator
 {
+    public static final int FIELD_FRAMING_BIT_LENGTH        = 1;
+    public static final byte FRAMING_BIT_VALID_VALUE         = (byte)0x01;
     private VorbisCommentCreator creator = new VorbisCommentCreator();
 
     //Creates the ByteBuffer for the ogg tag
@@ -41,7 +46,7 @@ public class OggVorbisCommentTagCreator
         int tagLength = ogg.capacity()
             + VorbisHeader.FIELD_PACKET_TYPE_LENGTH
             + VorbisHeader.FIELD_CAPTURE_PATTERN_LENGTH
-            + VorbisCommentReader.FIELD_FRAMING_BIT_LENGTH;
+            + OggVorbisCommentTagCreator.FIELD_FRAMING_BIT_LENGTH;
 
         ByteBuffer buf = ByteBuffer.allocate(tagLength);
 
@@ -53,7 +58,7 @@ public class OggVorbisCommentTagCreator
         buf.put(ogg);
 
         //Framing bit = 1
-        buf.put((byte) 0x01);
+        buf.put(FRAMING_BIT_VALID_VALUE);
 
         buf.rewind();
         return buf;

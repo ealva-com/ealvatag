@@ -38,7 +38,11 @@ public class VorbisCommentCreator extends AbstractTagCreator
     {
         String vendorString = ((VorbisCommentTag) tag).getVendor();
         int vendorLength = Utils.getUTF8Bytes(vendorString).length;
-        buf.put(new byte[]{(byte) (vendorLength & 0xFF), (byte) ((vendorLength & 0xFF00) >> 8), (byte) ((vendorLength & 0xFF0000) >> 16), (byte) ((vendorLength & 0xFF000000) >> 24)});
+        buf.put(new byte[]{
+            (byte) (vendorLength & 0xFF), 
+            (byte) ((vendorLength & 0xFF00) >> 8),
+            (byte) ((vendorLength & 0xFF0000) >> 16),
+            (byte) ((vendorLength & 0xFF000000) >> 24)});
         buf.put(Utils.getUTF8Bytes(vendorString));
 
         //[user comment list length]

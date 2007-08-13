@@ -31,7 +31,7 @@ import java.io.*;
  * Create the VorbisCommentTag by reading from the raw packet data
  *
  * This is in the same format whether encoded with Ogg or Flac
- * TODO:Check above comment re framing bit
+ * except the framing bit is only present when used within Ogg Vorbis, so dont check framing bit here
  *
  * From the http://xiph.org/vorbis/doc/Vorbis_I_spec.html#vorbis-spec-comment
  * Read decodes the packet data using the following algorithm:
@@ -54,8 +54,7 @@ public class VorbisCommentReader
     public static final int FIELD_VENDOR_LENGTH_LENGTH      = 4;
     public static final int FIELD_USER_COMMENT_LIST_LENGTH  = 4;
     public static final int FIELD_COMMENT_LENGTH_LENGTH     = 4;
-    public static final int FIELD_FRAMING_BIT_LENGTH        = 1;
-
+    
 
 
     /**
@@ -105,15 +104,7 @@ public class VorbisCommentReader
             tag.add(fieldComment);
         }
 
-        //TODO have I got to check a particular bit within this byte, do we want to throw an exception
-        //TODO this code is breaking falc test case, check flag code, do we only have this within ogg
-        //container or not
-        //here
-        //if (rawdata[pos]==0)
-        //{
-        //    throw new CannotReadException("Error: The OGG Stream isn't valid, Vrobis tag valid flag is wrong");
-        //}
-        //System.err.println("CompletedReadCommentTag");
+
         return tag;
     }
 }

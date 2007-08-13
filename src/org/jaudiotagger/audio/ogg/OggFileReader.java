@@ -70,5 +70,29 @@ public class OggFileReader extends AudioFileReader
         }
         return pageHeader;
     }
+
+    /**
+     * Summarize all the ogg headers in a file
+     *
+     * A useful utility function
+     *
+     * @param oggFile
+     * @throws CannotReadException
+     * @throws IOException
+     */
+    public void summarizeOggPageHeaders(File oggFile)throws CannotReadException, IOException
+    {
+        RandomAccessFile raf = new RandomAccessFile(oggFile,"r");
+
+        while(raf.getFilePointer()<raf.length())
+        {
+            System.out.println("pageHeader starts at:"+raf.getFilePointer());
+            OggPageHeader pageHeader = OggPageHeader.read (raf);
+            System.out.println("pageHeader finishes at:"+raf.getFilePointer());
+            System.out.println(pageHeader+"\n");
+            raf.seek(raf.getFilePointer() + pageHeader.getPageLength());
+        }
+        System.out.println("Raf File Pointer at:"+raf.getFilePointer() +"File Size is:"+raf.length());
+    }
 }
 

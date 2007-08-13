@@ -22,7 +22,7 @@ import org.jaudiotagger.audio.ogg.VorbisVersion;
 
 
 /**
- * Vorbis Header , also known the indentification header
+ * Vorbis Identification header
  *
  * From http://xiph.org/vorbis/doc/Vorbis_I_spec.html#id326710
  *
@@ -45,7 +45,7 @@ import org.jaudiotagger.audio.ogg.VorbisVersion;
  * @author Raphael Slinckx (KiKiDonK)
  * @version 16 d�cembre 2003
  */
-public class VorbisCodecHeader implements VorbisHeader
+public class VorbisIdentificationHeader implements VorbisHeader
 {
     private int audioChannels;
     private boolean isValid = false;
@@ -53,9 +53,28 @@ public class VorbisCodecHeader implements VorbisHeader
     private int vorbisVersion, audioSampleRate;
     private int bitrateMinimal, bitrateNominal, bitrateMaximal;
 
-    public VorbisCodecHeader(byte[] vorbisData)
+    public static final int FIELD_VORBIS_VERSION_POS        = 7;
+    public static final int FIELD_AUDIO_CHANNELS_POS        = 11;
+    public static final int FIELD_AUDIO_SAMPLE_RATE_POS     = 12;
+    public static final int FIELD_BITRATE_MAX_POS           = 16;
+    public static final int FIELD_BITRATE_NOMAIML_POS       = 20;
+    public static final int FIELD_BITRATE_MIN_POS           = 24;
+    public static final int FIELD_BLOCKSIZE_POS             = 28;
+    public static final int FIELD_FRAMING_FLAG_POS          = 29;
+
+    public static final int FIELD_VORBIS_VERSION_LENGTH     = 4;
+    public static final int FIELD_AUDIO_CHANNELS_LENGTH     = 1;
+    public static final int FIELD_AUDIO_SAMPLE_RATE_LENGTH  = 4;
+    public static final int FIELD_BITRATE_MAX_LENGTH        = 4;
+    public static final int FIELD_BITRATE_NOMAIML_LENGTH    = 4;
+    public static final int FIELD_BITRATE_MIN_LENGTH        = 4;
+    public static final int FIELD_BLOCKSIZE_LENGTH          = 1;
+    public static final int FIELD_FRAMING_FLAG_LENGTH       = 1;
+
+
+    public VorbisIdentificationHeader(byte[] vorbisData)
     {
-        generateCodecHeader(vorbisData);
+        decodeHeader(vorbisData);
     }
 
 
@@ -97,7 +116,7 @@ public class VorbisCodecHeader implements VorbisHeader
     }
 
 
-    public void generateCodecHeader(byte[] b)
+    public void decodeHeader(byte[] b)
     {
         int packetType = b[FIELD_PACKET_TYPE_POS ];
         //System.err.println("packetType" + packetType);
@@ -108,7 +127,7 @@ public class VorbisCodecHeader implements VorbisHeader
         {
             this.vorbisVersion = b[7] + (b[8] << 8) + (b[9] << 16) + (b[10] << 24);
             //System.err.println("vorbisVersion" +vorbisVersion );
-            this.audioChannels = u(b[11]);
+            this.audioChannels = u(b[FIELD_AUDIO_CHANNELS_POS]);
             //System.err.println("audioChannels" +audioChannels );
             this.audioSampleRate = u(b[12]) + (u(b[13]) << 8) + (u(b[14]) << 16) + (u(b[15]) << 24);
             //System.err.println("audioSampleRate" + audioSampleRate);
@@ -120,7 +139,7 @@ public class VorbisCodecHeader implements VorbisHeader
             //byte blockSize0 = (byte) ( b[28] & 240 );
             //byte blockSize1 = (byte) ( b[28] & 15 );
 
-            int framingFlag = b[29];
+            int framingFlag = b[FIELD_FRAMING_FLAG_POS];
             //System.err.println("framingFlag" +framingFlag );
             if (framingFlag != 0)
             {

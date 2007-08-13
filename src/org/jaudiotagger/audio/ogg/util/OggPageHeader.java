@@ -43,7 +43,21 @@ public class OggPageHeader
     //Ogg Page header is always 27 bytes plus the size of the segment table which is variable
     public static final int OGG_PAGE_HEADER_FIXED_LENGTH = 27;
 
+    //Can have upto 255 segments in a page
+    public static final int MAXIMUM_NO_OF_SEGMENT_SIZE = 255;
+
+    //Each segmets can be upto 255 bytes
     public static final int MAXIMUM_SEGMENT_SIZE = 255;
+
+    //Maximum size of pageheader (27 + 255 = 282)
+    public static final int MAXIMUM_PAGE_HEADER_SIZE = OGG_PAGE_HEADER_FIXED_LENGTH + MAXIMUM_NO_OF_SEGMENT_SIZE;
+
+    //Maximum size of page data following the page header (255 * 255 = 65025)
+    public static final int MAXIMUM_PAGE_DATA_SIZE = MAXIMUM_NO_OF_SEGMENT_SIZE * MAXIMUM_SEGMENT_SIZE;
+
+    //Maximum size of page includes header and data (282 + 65025 = 65307 bytes)
+    public static final int MAXIMUM_PAGE_SIZE = MAXIMUM_PAGE_HEADER_SIZE + MAXIMUM_PAGE_DATA_SIZE;
+
     //Starting positions of the various attributes
     public static final int FIELD_CAPTURE_PATTERN_POS  = 0;
     public static final int FIELD_STREAM_STRUCTURE_VERSION_POS  = 4;
@@ -240,10 +254,16 @@ public class OggPageHeader
 
     public String toString()
     {
-        String out = "Ogg Page Header:\n";
+        String out = "Ogg Page Header:isvalid:"+isValid
+            +":type:"+headerTypeFlag
+            +":length:"+pageLength
+            +":seqno:"+getPageSequence()
+            +":sernum:"+this.getSerialNumber();
 
-        out += "Is valid?: " + isValid + " | page length: " + pageLength + "\n";
-        out += "Header type: " + headerTypeFlag;
+        for(PacketStartAndLength packet:getPacketList())
+        {
+            out+=packet.toString();
+        }             
         return out;
     }
 
@@ -280,6 +300,11 @@ public class OggPageHeader
         public void setLength(int length)
         {
             this.length = length;
+        }
+
+        public String toString()
+        {
+            return "start:"+startPosition+":length:"+length;
         }
     }
 }

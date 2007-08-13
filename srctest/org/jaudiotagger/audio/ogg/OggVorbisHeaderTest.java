@@ -16,12 +16,17 @@ import org.jaudiotagger.audio.ogg.util.OggPageHeader;
  */
 public class OggVorbisHeaderTest extends TestCase
 {
-     public void testReadFile()
+
+
+    /**
+     * Testing reading of vorbis audio header info
+     */
+    public void testReadFile()
     {
         Exception exceptionCaught = null;
         try
         {
-            File testFile = AbstractTestCase.copyAudioToTmp("test.ogg");
+            File testFile = AbstractTestCase.copyAudioToTmp("test.ogg",new File("testReadFile.ogg"));
             AudioFile f = AudioFileIO.read(testFile);
 
             assertEquals("192",f.getAudioHeader().getBitRate());
@@ -42,12 +47,58 @@ public class OggVorbisHeaderTest extends TestCase
         assertNull(exceptionCaught);
     }
 
+    /** Test simple write to file
+     *
+     */
     public void testWriteFile()
     {
         Exception exceptionCaught = null;
         try
         {
-            File testFile = AbstractTestCase.copyAudioToTmp("test.ogg");
+            File testFile = AbstractTestCase.copyAudioToTmp("test.ogg",new File("testWriteFile.ogg"));
+            AudioFile f = AudioFileIO.read(testFile);
+
+            //Size of VorbisComment should increase
+            assertTrue(f.getTag() instanceof VorbisCommentTag);
+            f.getTag().setAlbum("bbbbbbb");
+            f.commit();
+
+            f = AudioFileIO.read(testFile);
+            assertTrue(f.getTag() instanceof VorbisCommentTag);
+            assertEquals("bbbbbbb",f.getTag().getFirstAlbum());
+
+            OggFileReader ofr = new OggFileReader();
+            OggPageHeader oph = ofr.readOggPageHeader(new RandomAccessFile(testFile,"r"),0);
+            assertEquals(30,oph.getPageLength());
+            assertEquals(0,oph.getPageSequence());
+            assertEquals(559748870,oph.getSerialNumber());
+            assertEquals(-2111591604,oph.getCheckSum());
+
+            oph = ofr.readOggPageHeader(new RandomAccessFile(testFile,"r"),1);
+            assertEquals(3745,oph.getPageLength());
+            assertEquals(1,oph.getPageSequence());
+            assertEquals(559748870,oph.getSerialNumber());
+            assertEquals(-2010062366,oph.getCheckSum());
+
+
+        }
+        catch(Exception e)
+        {
+             e.printStackTrace();
+             exceptionCaught = e;
+        }
+        assertNull(exceptionCaught);
+    }
+
+    /**
+     * testing writeing multi comment header
+     */
+    public void testLargeWriteFile()
+    {
+        Exception exceptionCaught = null;
+        try
+        {
+            File testFile = AbstractTestCase.copyAudioToTmp("testlargeimage.ogg", new File("testLargeWriteFile"));
             AudioFile f = AudioFileIO.read(testFile);
 
             //Size of VorbisComment should increase

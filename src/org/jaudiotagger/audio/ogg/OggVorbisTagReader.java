@@ -51,6 +51,14 @@ public class OggVorbisTagReader
         byte[] rawVorbisCommentData = readRawPacketData(raf);
         //Begin tag reading
         VorbisCommentTag tag = vorbisCommentReader.read(rawVorbisCommentData);
+
+        //Check framing bit, only exists when vorbisComment used within OggVorbis
+        //TODO, do we need to check first bit of byte rather than just byte generally
+        if (rawVorbisCommentData[rawVorbisCommentData.length-1]==0)
+        {
+            throw new CannotReadException("Error: The OGG Stream isn't valid, Vorbis tag valid flag is wrong");
+        }
+        //System.err.println("CompletedReadCommentTag");
         return tag;
     }
 
