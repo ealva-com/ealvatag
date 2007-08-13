@@ -19,12 +19,15 @@
 package org.jaudiotagger.audio.ogg.util;
 
 import org.jaudiotagger.audio.exceptions.CannotReadException;
+import org.jaudiotagger.audio.generic.Utils;
 
 import java.io.RandomAccessFile;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.ArrayList;
+
+
 
 
 /**
@@ -134,18 +137,11 @@ public class OggPageHeader
                 this.absoluteGranulePosition += u(b[i + 6]) * Math.pow(2, 8 * i);
             }
 
-            streamSerialNumber = u(b[14]) + (u(b[15]) << 8) + (u(b[16]) << 16) + (u(b[17]) << 24);
-            //System.err.println("streamSerialNumber: " + streamSerialNumber);
-            pageSequenceNumber = u(b[18]) + (u(b[19]) << 8) + (u(b[20]) << 16) + (u(b[21]) << 24);
-            //System.err.println("pageSequenceNumber: " + pageSequenceNumber);
-            checksum = u(b[22]) + (u(b[23]) << 8) + (u(b[24]) << 16) + (u(b[25]) << 24);
-
-            int pageSegments = u( b[26] );
-            //System.err.println("pageSegments: " + pageSegments);
-
+            streamSerialNumber = Utils.getNumberLittleEndian(b,FIELD_STREAM_SERIAL_NO_POS,17);
+            pageSequenceNumber = Utils.getNumberLittleEndian(b,FIELD_PAGE_SEQUENCE_NO_POS,21);
+            checksum =Utils.getNumberLittleEndian(b,FIELD_PAGE_CHECKSUM_POS,25);
+            int pageSegments = u( b[FIELD_PAGE_SEGMENTS_POS  ] );
             this.segmentTable = new byte[b.length - OGG_PAGE_HEADER_FIXED_LENGTH];
-            //System.err.println("pagesegment length; "+ (b.length-27));
-            int lastPacketLength    = 0;
             int packetLength        = 0;
             Integer segmentLength   = null;
             for (int i = 0; i < segmentTable.length; i++)
@@ -159,8 +155,8 @@ public class OggPageHeader
 
                 if(segmentLength<MAXIMUM_SEGMENT_SIZE)
                 {
-                    packetList.add(new PacketStartAndLength(lastPacketLength,packetLength));
-                    lastPacketLength=packetLength;
+                    packetList.add(new PacketStartAndLength(pageLength-packetLength,packetLength));
+                    packetLength=0;
                 }
             }
 
@@ -168,7 +164,7 @@ public class OggPageHeader
             //and wont have been added to the packetStartAndEnd list yet
             if(segmentLength== MAXIMUM_SEGMENT_SIZE)
             {
-                packetList.add(new PacketStartAndLength(lastPacketLength,packetLength));
+                packetList.add(new PacketStartAndLength(pageLength-packetLength,packetLength));
                 lastPacketIncomplete=true;
             }
             isValid = true;
@@ -245,7 +241,7 @@ public class OggPageHeader
 
     /**
      *
-     * @return the raw header daata that this pageheader is derived from
+     * @return the raw header data that this pageheader is derived from
      */
     public byte[] getRawHeaderData()
     {
@@ -263,7 +259,7 @@ public class OggPageHeader
         for(PacketStartAndLength packet:getPacketList())
         {
             out+=packet.toString();
-        }             
+        }
         return out;
     }
 

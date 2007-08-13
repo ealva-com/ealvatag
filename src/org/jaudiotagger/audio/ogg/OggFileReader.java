@@ -51,7 +51,7 @@ public class OggFileReader extends AudioFileReader
      *
      * count=0; should return PageHeader that contains Vorbis Identification Header
      * count=1; should return Pageheader that contains VorbisComment and possibly SetupHeader
-     * count>=2; shoudl return PageHeader containng remaining VorbisComment,SetupHeader and/or Audio
+     * count>=2; should return PageHeader containng remaining VorbisComment,SetupHeader and/or Audio
      *
      * @param raf
      * @param count

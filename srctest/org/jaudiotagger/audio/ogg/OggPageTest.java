@@ -31,9 +31,14 @@ public class OggPageTest extends TestCase
             OggPageHeader lastPageHeader = null;
             while(raf.getFilePointer()<raf.length())
             {
-
                 System.out.println("pageHeader starts at:"+raf.getFilePointer());
                 OggPageHeader pageHeader = OggPageHeader.read (raf);
+                int packetLengthTotal =0;
+                for(OggPageHeader.PacketStartAndLength packetAndStartLength : pageHeader.getPacketList())
+                {
+                    packetLengthTotal+=packetAndStartLength.getLength();
+                }
+                assertEquals(pageHeader.getPageLength(),packetLengthTotal);
                 if(lastPageHeader!=null)
                 {
                     assertEquals(lastPageHeader.getPageSequence()+1,pageHeader.getPageSequence());

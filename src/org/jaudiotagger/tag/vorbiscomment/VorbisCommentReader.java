@@ -26,6 +26,7 @@ import org.jaudiotagger.audio.ogg.util.VorbisPacketType;
 import org.jaudiotagger.tag.vorbiscomment.VorbisCommentTagField;
 
 import java.io.*;
+import java.nio.IntBuffer;
 
 /**
  * Create the VorbisCommentTag by reading from the raw packet data
@@ -54,7 +55,7 @@ public class VorbisCommentReader
     public static final int FIELD_VENDOR_LENGTH_LENGTH      = 4;
     public static final int FIELD_USER_COMMENT_LIST_LENGTH  = 4;
     public static final int FIELD_COMMENT_LENGTH_LENGTH     = 4;
-    
+
 
 
     /**

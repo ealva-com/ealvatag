@@ -126,6 +126,12 @@ public class Utils
         return (int) getLongNumberBigEndian(b, start, end);
     }
 
+    /**
+     * Convert int to byte representation - Big Endian (as used by mp4)
+     *
+     * @param size
+     * @return byte represenetation
+     */
     public static byte[] getSizeBigEndian(int size)
     {
         byte[] b = new byte[4];
@@ -133,6 +139,22 @@ public class Utils
         b[1] = (byte) ((size >> 16) & 0xFF);
         b[2] = (byte) ((size >> 8) & 0xFF);
         b[3] = (byte) (size & 0xFF);
+        return b;
+    }
+
+     /**
+     * Convert int to byte representation - Little Endian (as used by ogg vorbis)
+     *
+     * @param size
+     * @return byte represenetation
+     */
+    public static byte[] getSizeLittleEndian(int size)
+    {
+        byte[] b = new byte[4];
+        b[0] = (byte) (size & 0xff);
+        b[1] = (byte) ((size >>> 8) & 0xffL);
+        b[2] = (byte) ((size >>> 16) & 0xffL);
+        b[3] = (byte) ((size >>> 24) & 0xffL);
         return b;
     }
 
