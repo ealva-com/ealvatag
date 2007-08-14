@@ -114,6 +114,7 @@ public class OggPageHeader
         b = new byte[OggPageHeader.OGG_PAGE_HEADER_FIXED_LENGTH + pageSegments];
         raf.read(b);
 
+
         OggPageHeader pageHeader = new OggPageHeader(b);
 
         //Now just after PageHeader, ready for Packet Data
@@ -127,20 +128,21 @@ public class OggPageHeader
         int streamStructureRevision = b[FIELD_STREAM_STRUCTURE_VERSION_POS];
         //System.err.println("streamStructureRevision: " + streamStructureRevision);
         headerTypeFlag = b[FIELD_HEADER_TYPE_FLAG_POS];
-        //System.err.println("Page is type:"+getHeaderType());
+        ///System.err.println("Page is type:"+getHeaderType());
         //System.err.println("headerTypeFlag: " + headerTypeFlag);
         if (streamStructureRevision == 0)
         {
-            this.absoluteGranulePosition = 0;  //b[6] + (b[7]<<8) + (b[8]<<16) + (b[9]<<24) + (b[10]<<32) + (b[11]<<40) + (b[12]<<48) + (b[13]<<56);
-            for (int i = 0; i < 8; i++)
+            this.absoluteGranulePosition = 0;
+            for (int i = 0; i < FIELD_ABSOLUTE_GRANULE_LENGTH; i++)
             {
-                this.absoluteGranulePosition += u(b[i + 6]) * Math.pow(2, 8 * i);
+                this.absoluteGranulePosition += u(b[i + FIELD_ABSOLUTE_GRANULE_POS]) * Math.pow(2, 8 * i);
             }
 
             streamSerialNumber = Utils.getNumberLittleEndian(b,FIELD_STREAM_SERIAL_NO_POS,17);
             pageSequenceNumber = Utils.getNumberLittleEndian(b,FIELD_PAGE_SEQUENCE_NO_POS,21);
             checksum =Utils.getNumberLittleEndian(b,FIELD_PAGE_CHECKSUM_POS,25);
             int pageSegments = u( b[FIELD_PAGE_SEGMENTS_POS  ] );
+            //System.err.println("No of pageSegments:"+ pageSegments);
             this.segmentTable = new byte[b.length - OGG_PAGE_HEADER_FIXED_LENGTH];
             int packetLength        = 0;
             Integer segmentLength   = null;
@@ -301,6 +303,34 @@ public class OggPageHeader
         public String toString()
         {
             return "start:"+startPosition+":length:"+length;
+        }
+    }
+
+    /** This represents all the flags that can be set in the headerType field.
+     *  Note these values can be ORED together. For example the last packet in
+     *  a file would normally have a value of 0x5 because both the CONTINUED_PACKET
+     *  bit and the END_OF_BITSTREAM bit would be set.
+     */
+    public static enum HeaderTypeFlag
+    {
+        FRESH_PACKET((byte)0x0),
+        CONTINUED_PACKET((byte)0x1),
+        START_OF_BITSTREAM((byte)0x2),
+        END_OF_BITSTREAM((byte)0x4);
+
+        byte fileValue;
+        HeaderTypeFlag(byte fileValue)
+        {
+            this.fileValue=fileValue;
+        }
+
+        /**
+         *
+         * @return the value that should be written to file to enable this flag
+         */
+        public byte getFileValue()
+        {
+            return fileValue;
         }
     }
 }

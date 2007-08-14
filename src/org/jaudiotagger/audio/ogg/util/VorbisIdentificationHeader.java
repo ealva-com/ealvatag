@@ -133,6 +133,7 @@ public class VorbisIdentificationHeader implements VorbisHeader
             //System.err.println("audioSampleRate" + audioSampleRate);
             //System.err.println("audioSampleRate" + b[12] + " "+b[13] +" "+ b[14]);
 
+            //TODO is this right spec says signed
             this.bitrateMinimal = u(b[16]) + (u(b[17]) << 8) + (u(b[18]) << 16) + (u(b[19]) << 24);
             this.bitrateNominal = u(b[20]) + (u(b[21]) << 8) + (u(b[22]) << 16) + (u(b[23]) << 24);
             this.bitrateMaximal = u(b[24]) + (u(b[25]) << 8) + (u(b[26]) << 16) + (u(b[27]) << 24);
