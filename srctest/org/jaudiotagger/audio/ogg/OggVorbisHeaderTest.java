@@ -48,7 +48,7 @@ public class OggVorbisHeaderTest extends TestCase
         assertNull(exceptionCaught);
     }
 
-    /** Test simple write to file
+    /** Test simple write to file, comment and setup header just spread over one page before and afterwards
      *
      */
     public void testWriteFile()
@@ -143,7 +143,7 @@ public class OggVorbisHeaderTest extends TestCase
     }
 
     /**
-     * testing writeing multi comment header
+     * Testing writing multi page comment header (existing header is multipage)
      */
     public void testLargeWriteFile()
     {
@@ -170,13 +170,10 @@ public class OggVorbisHeaderTest extends TestCase
             assertEquals(-2111591604,oph.getCheckSum());
 
             oph = ofr.readOggPageHeader(new RandomAccessFile(testFile,"r"),1);
-            assertEquals(3745,oph.getPageLength());
+            assertEquals(65025,oph.getPageLength());
             assertEquals(1,oph.getPageSequence());
             assertEquals(559748870,oph.getSerialNumber());
-            assertEquals(-2010062366,oph.getCheckSum());
-
-
-
+            assertEquals(1351777268,oph.getCheckSum());
         }
         catch(Exception e)
         {
