@@ -23,7 +23,6 @@
 package org.jaudiotagger.tag.datatype;
 
 import org.jaudiotagger.audio.mp3.MP3File;
-import org.jaudiotagger.logging.LogFormatter;
 import org.jaudiotagger.tag.id3.AbstractTagFrameBody;
 import org.jaudiotagger.tag.InvalidDataTypeException;
 
@@ -39,7 +38,8 @@ public abstract class AbstractDataType
 {
     protected static final String TYPE_ELEMENT = "element";
 
-    protected Logger logger = LogFormatter.getLogger();
+    //Logger
+     public static Logger logger = Logger.getLogger("org.jaudiotagger.tag.datatype");
 
     /**
      * Holds the data
