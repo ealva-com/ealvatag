@@ -26,6 +26,7 @@ import org.jaudiotagger.audio.ogg.util.VorbisHeader;
 
 import java.io.UnsupportedEncodingException;
 import java.nio.*;
+import java.util.logging.Logger;
 
 /**
  * Creates an OggVorbis Comment Tag from a VorbisComment for use within an OggVorbis Container
@@ -35,6 +36,9 @@ import java.nio.*;
  */
 public class OggVorbisCommentTagCreator
 {
+    // Logger Object
+    public static Logger logger = Logger.getLogger("org.jaudiotagger.audio.ogg");
+
     public static final int FIELD_FRAMING_BIT_LENGTH        = 1;
     public static final byte FRAMING_BIT_VALID_VALUE         = (byte)0x01;
     private VorbisCommentCreator creator = new VorbisCommentCreator();

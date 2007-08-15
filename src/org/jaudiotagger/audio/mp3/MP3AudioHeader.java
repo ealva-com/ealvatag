@@ -21,7 +21,6 @@ package org.jaudiotagger.audio.mp3;
 
 import org.jaudiotagger.audio.AudioHeader;
 import org.jaudiotagger.audio.exceptions.InvalidAudioFrameException;
-import org.jaudiotagger.logging.LogFormatter;
 
 import java.io.*;
 import java.nio.ByteBuffer;
@@ -72,10 +71,8 @@ public final class MP3AudioHeader implements AudioHeader
     private static final String           TYPE_MP3 = "mp3";
     private static final int              CONVERTS_BYTE_TO_BITS = 8;
 
-    /**
-      * Logger Object
-      */
-    public static Logger logger = LogFormatter.getLogger();
+     //Logger
+     public static Logger logger = Logger.getLogger("org.jaudiotagger.audio.mp3");
 
     /** After testing the average location of the first MP3Header bit was at 5000 bytes so this is
      *  why chosen as a default.

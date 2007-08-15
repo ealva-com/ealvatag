@@ -21,7 +21,7 @@ package org.jaudiotagger.logging;
 
 
 /*
- * For Formatting log output as plain text
+ * For Formatting metadata contents of a file as simple text
 */
 public class PlainTextTagDisplayFormatter extends AbstractTagDisplayFormatter
 {

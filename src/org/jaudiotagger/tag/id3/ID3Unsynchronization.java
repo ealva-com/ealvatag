@@ -1,7 +1,6 @@
 package org.jaudiotagger.tag.id3;
 
 import org.jaudiotagger.audio.mp3.MPEGFrameHeader;
-import org.jaudiotagger.logging.LogFormatter;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -15,7 +14,9 @@ import java.util.logging.Logger;
  */
 public class ID3Unsynchronization
 {
-    protected static Logger logger = LogFormatter.getLogger();
+    //Logger
+    public static Logger logger = Logger.getLogger("org.jaudiotagger.tag.id3");
+
 
     /**
      * Check if a byte array will require unsynchronization before being written as a tag.

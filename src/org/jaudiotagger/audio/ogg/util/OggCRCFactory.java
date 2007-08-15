@@ -18,6 +18,8 @@
  */
 package org.jaudiotagger.audio.ogg.util;
 
+import java.util.logging.Logger;
+
 
 /**
  * OffCRC Calculations
@@ -29,6 +31,8 @@ package org.jaudiotagger.audio.ogg.util;
  */
 public class OggCRCFactory
 {
+    // Logger Object
+    public static Logger logger = Logger.getLogger("org.jaudiotagger.audio.ogg");
 
     private static long[] crc_lookup = new long[256];
     private static boolean init = false;
@@ -65,8 +69,7 @@ public class OggCRCFactory
 
     public static byte[] computeCRC(byte[] data)
     {
-        //System.err.println(data.length);
-
+        
         if (!init)
         {
             init();

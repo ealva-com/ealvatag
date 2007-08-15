@@ -25,6 +25,7 @@ import org.jaudiotagger.audio.generic.GenericAudioHeader;
 import org.jaudiotagger.tag.Tag;
 
 import java.io.*;
+import java.util.logging.Logger;
 
 /**
  * Read Ogg File Tag and Encoding information
@@ -33,6 +34,9 @@ import java.io.*;
  */
 public class OggFileReader extends AudioFileReader
 {
+    // Logger Object
+    public static Logger logger = Logger.getLogger("org.jaudiotagger.audio.ogg");
+
     private OggInfoReader ir = new OggInfoReader();
     private OggVorbisTagReader vtr = new OggVorbisTagReader();
 

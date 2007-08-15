@@ -23,16 +23,20 @@ import org.jaudiotagger.audio.generic.GenericAudioHeader;
 import org.jaudiotagger.audio.exceptions.*;
 
 import java.io.*;
+import java.util.logging.Logger;
 
 /**
  * Read encoding info, only implemented for vorbis streams
  */
 public class OggInfoReader
 {
+    // Logger Object
+    public static Logger logger = Logger.getLogger("org.jaudiotagger.audio.ogg.util");
+
     public GenericAudioHeader read(RandomAccessFile raf) throws CannotReadException, IOException
     {
         GenericAudioHeader info = new GenericAudioHeader();
-        //System.err.println("Started");
+        logger.fine("Started");
         long oldPos = 0;
 
         //TODO this code appears to work backwards from file looking for the last ogg page, it reads
@@ -111,7 +115,7 @@ public class OggInfoReader
             info.setBitrate(computeBitrate(info.getTrackLength(), raf.length()));
             info.setVariableBitRate(true);
         }
-        //System.err.println("Finished");
+        logger.fine("Finished");
         return info;
     }
 

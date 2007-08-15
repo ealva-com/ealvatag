@@ -1,5 +1,7 @@
 package org.jaudiotagger.audio.ogg.util;
 
+import java.util.logging.Logger;
+
 /**
  * Vorbis Setup header
  *
@@ -11,6 +13,9 @@ package org.jaudiotagger.audio.ogg.util;
  */
 public class VorbisSetupHeader implements VorbisHeader
 {
+    // Logger Object
+    public static Logger logger = Logger.getLogger("org.jaudiotagger.audio.ogg.util");
+
     private boolean isValid = false;
 
     public VorbisSetupHeader(byte[] vorbisData)
@@ -26,10 +31,9 @@ public class VorbisSetupHeader implements VorbisHeader
     public void decodeHeader(byte[] b)
     {
         int packetType = b[FIELD_PACKET_TYPE_POS ];
-        //System.err.println("packetType" + packetType);
+        logger.fine("packetType" + packetType);
         String vorbis = new String(b, FIELD_CAPTURE_PATTERN_POS, FIELD_CAPTURE_PATTERN_LENGTH);
-        //System.err.println("vorbiscomment" + vorbiscomment);
-
+      
         if (packetType == VorbisPacketType.SETUP_HEADER.getType() && vorbis.equals(CAPTURE_PATTERN ))
         {
             isValid = true;

@@ -27,7 +27,6 @@ import org.jaudiotagger.audio.exceptions.CannotWriteException;
 import org.jaudiotagger.audio.exceptions.ReadOnlyFileException;
 import org.jaudiotagger.audio.generic.GenericTag;
 import org.jaudiotagger.tag.Tag;
-import org.jaudiotagger.logging.LogFormatter;
 
 /**
  * <p>This is the main object manipulated by the user representing an audiofile, its properties and its tag.</p>
@@ -43,10 +42,8 @@ import org.jaudiotagger.logging.LogFormatter;
  */
 public class AudioFile
 {
-     /**
-     * Logger Object
-    */
-    public static Logger logger = LogFormatter.getLogger();
+    //Logger
+    public static Logger logger = Logger.getLogger("org.jaudiotagger.audio");
 
     /**
      * The physical file that this instance represents.

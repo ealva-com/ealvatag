@@ -24,7 +24,10 @@ import java.text.CharacterIterator;
 import java.text.StringCharacterIterator;
 
 /*
- * For Formatting log output in XML Format
+ * For Formatting the metadata contents of a file in an XML format
+ *
+ * This could provide the basis of a representation of a files metadata, which can then be manipulated to
+* to create technical reports.
 */
 public class XMLTagDisplayFormatter extends AbstractTagDisplayFormatter
 {

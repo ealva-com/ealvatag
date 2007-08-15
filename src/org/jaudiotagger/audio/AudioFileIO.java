@@ -21,6 +21,7 @@ package org.jaudiotagger.audio;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
+import java.util.logging.Logger;
 
 import org.jaudiotagger.audio.asf.AsfFileReader;
 import org.jaudiotagger.audio.asf.AsfFileWriter;
@@ -80,6 +81,11 @@ import org.jaudiotagger.tag.TagException;
  * @see Tag
  */
 public class AudioFileIO {
+
+//Logger
+    public static Logger logger = Logger.getLogger("org.jaudiotagger.audio");
+    
+
     // !! Do not forget to also add new supported extensions to AudioFileFilter
     // !!
 

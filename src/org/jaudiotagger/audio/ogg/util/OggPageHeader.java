@@ -26,8 +26,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.ArrayList;
-
-
+import java.util.logging.Logger;
 
 
 /**
@@ -40,6 +39,9 @@ import java.util.ArrayList;
  */
 public class OggPageHeader
 {
+    // Logger Object
+       public static Logger logger = Logger.getLogger("org.jaudiotagger.audio.ogg.util");
+
     //Capture pattern at start of header
     public static final byte[] CAPTURE_PATTERN = {'O', 'g', 'g','S'};
 
@@ -99,6 +101,7 @@ public class OggPageHeader
     public static OggPageHeader read (RandomAccessFile raf) throws IOException,CannotReadException
     {
         long start = raf.getFilePointer();
+        logger.info("Trying to read OggPage at:"+start);
 
         byte[] b = new byte[OggPageHeader.CAPTURE_PATTERN.length];
         raf.read(b);
@@ -124,12 +127,8 @@ public class OggPageHeader
     public OggPageHeader(byte[] b)
     {
         this.rawHeaderData = b;
-        //System.err.println(new String(b, 0 , 4));
         int streamStructureRevision = b[FIELD_STREAM_STRUCTURE_VERSION_POS];
-        //System.err.println("streamStructureRevision: " + streamStructureRevision);
         headerTypeFlag = b[FIELD_HEADER_TYPE_FLAG_POS];
-        ///System.err.println("Page is type:"+getHeaderType());
-        //System.err.println("headerTypeFlag: " + headerTypeFlag);
         if (streamStructureRevision == 0)
         {
             this.absoluteGranulePosition = 0;
@@ -142,7 +141,7 @@ public class OggPageHeader
             pageSequenceNumber = Utils.getNumberLittleEndian(b,FIELD_PAGE_SEQUENCE_NO_POS,21);
             checksum =Utils.getNumberLittleEndian(b,FIELD_PAGE_CHECKSUM_POS,25);
             int pageSegments = u( b[FIELD_PAGE_SEGMENTS_POS  ] );
-            //System.err.println("No of pageSegments:"+ pageSegments);
+
             this.segmentTable = new byte[b.length - OGG_PAGE_HEADER_FIXED_LENGTH];
             int packetLength        = 0;
             Integer segmentLength   = null;
@@ -152,8 +151,6 @@ public class OggPageHeader
                 segmentLength = u(segmentTable[i]);
                 this.pageLength += segmentLength;
                 packetLength+=segmentLength;
-                //System.err.println("acc page length: "+this.pageLength);
-                //System.err.println(u(segmentTable[i]));
 
                 if(segmentLength<MAXIMUM_SEGMENT_SIZE)
                 {
@@ -171,6 +168,8 @@ public class OggPageHeader
             }
             isValid = true;
         }
+
+        logger.info("Constructed OggPage:"+this.toString());
     }
 
     private int u(int i)
@@ -189,7 +188,7 @@ public class OggPageHeader
 
     public double getAbsoluteGranulePosition()
     {
-        //System.err.println("Number Of Samples: "+absoluteGranulePosition);
+        logger.fine("Number Of Samples: "+absoluteGranulePosition);
         return this.absoluteGranulePosition;
     }
 
@@ -208,7 +207,7 @@ public class OggPageHeader
 
     public int getPageLength()
     {
-        //System.err.println("This page length: "+pageLength);
+        logger.fine("This page length: "+pageLength);
         return this.pageLength;
     }
 
@@ -256,6 +255,7 @@ public class OggPageHeader
             +":type:"+headerTypeFlag
             +":length:"+pageLength
             +":seqno:"+getPageSequence()
+            +":packetincomplete:"+isLastPacketIncomplete()
             +":sernum:"+this.getSerialNumber();
 
         for(PacketStartAndLength packet:getPacketList())

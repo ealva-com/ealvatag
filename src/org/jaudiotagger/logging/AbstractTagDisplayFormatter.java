@@ -27,6 +27,9 @@ package org.jaudiotagger.logging;
 
 import java.util.HashMap;
 
+/**
+ * Abstract class that provides structure to use for displaying a files metadata content
+ */
 public abstract class AbstractTagDisplayFormatter
 {
     protected int level;

@@ -24,8 +24,6 @@
  */
 package org.jaudiotagger.tag.id3;
 
-import org.jaudiotagger.logging.LogFormatter;
-
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
@@ -44,7 +42,9 @@ abstract public class AbstractID3v1Tag
     extends AbstractID3Tag
 {
 
-    protected static Logger logger = LogFormatter.getLogger();
+    //Logger
+    public static Logger logger = Logger.getLogger("org.jaudiotagger.tag.id3");
+
 
     public AbstractID3v1Tag()
     {

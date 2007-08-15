@@ -7,6 +7,7 @@ package org.jaudiotagger.audio;
  */
 public interface AudioHeader
 {
+
     /**
      *
      * @return the audio file type
