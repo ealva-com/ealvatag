@@ -220,7 +220,20 @@ public class VorbisCommentTag extends AbstractTag
         return super.get(vorbisCommentFieldKey.name());
     }
 
-    
+    /**
+     * Retrieve the first value that exists for this vorbis comment key
+     *
+     * @param vorbisCommentKey
+     * @return
+     */
+    public List get(VorbisCommentFieldKey vorbisCommentKey)
+    {
+        if (vorbisCommentKey == null)
+        {
+            return null;
+        }
+        return super.get(vorbisCommentKey.name());
+    }
 
     /**
      * Retrieve the first value that exists for this generic key

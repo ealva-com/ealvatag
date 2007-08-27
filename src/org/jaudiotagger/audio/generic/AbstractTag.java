@@ -1,7 +1,6 @@
 /*
- * Entagged Audio Tag library
- * Copyright (c) 2003-2005 Raphaël Slinckx <raphael@slinckx.net>
- * 
+ * jaudiotagger library
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
@@ -24,7 +23,7 @@ import org.jaudiotagger.tag.*;
 
 /**
  * This class is the default implementation for
- * {@link entagged.audioformats.Tag} and introduces some more useful
+ * {@link org.jaudiotagger.tag.Tag} and introduces some more useful
  * functionality to be implemented.<br>
  *
  * @author Raphaël Slinckx
@@ -48,12 +47,12 @@ public abstract class AbstractTag implements Tag
      * (overridden) The use of this method is not recommended. One must know the
      * underlying audio files implementation.
      *
-     * @see entagged.audioformats.Tag#add(entagged.audioformats.generic.TagField)
+     * @see org.jaudiotagger.tag.Tag#add(org.jaudiotagger.tag.TagField)
      */
     /**
      * (overridden)
      *
-     * @see entagged.audioformats.Tag#add(entagged.audioformats.generic.TagField)
+     * @see org.jaudiotagger.tag.Tag#add(org.jaudiotagger.tag.TagField)
      *      <p/>
      *      Changed so add empty fields
      */
@@ -87,7 +86,7 @@ public abstract class AbstractTag implements Tag
     /**
      * (overridden)
      *
-     * @see entagged.audioformats.Tag#addAlbum(java.lang.String)
+     * @see org.jaudiotagger.tag.Tag#addAlbum(java.lang.String)
      */
     public void addAlbum(String s)
     {
@@ -97,7 +96,7 @@ public abstract class AbstractTag implements Tag
     /**
      * (overridden)
      *
-     * @see entagged.audioformats.Tag#addArtist(java.lang.String)
+     * @see org.jaudiotagger.tag.Tag#addArtist(java.lang.String)
      */
     public void addArtist(String s)
     {
@@ -107,7 +106,7 @@ public abstract class AbstractTag implements Tag
     /**
      * (overridden)
      *
-     * @see entagged.audioformats.Tag#addComment(java.lang.String)
+     * @see org.jaudiotagger.tag.Tag#addComment(java.lang.String)
      */
     public void addComment(String s)
     {
@@ -117,7 +116,7 @@ public abstract class AbstractTag implements Tag
     /**
      * (overridden)
      *
-     * @see entagged.audioformats.Tag#addGenre(java.lang.String)
+     * @see org.jaudiotagger.tag.Tag#addGenre(java.lang.String)
      */
     public void addGenre(String s)
     {
@@ -127,7 +126,7 @@ public abstract class AbstractTag implements Tag
     /**
      * (overridden)
      *
-     * @see entagged.audioformats.Tag#addTitle(java.lang.String)
+     * @see org.jaudiotagger.tag.Tag#addTitle(java.lang.String)
      */
     public void addTitle(String s)
     {
@@ -137,7 +136,7 @@ public abstract class AbstractTag implements Tag
     /**
      * (overridden)
      *
-     * @see entagged.audioformats.Tag#addTrack(java.lang.String)
+     * @see org.jaudiotagger.tag.Tag#addTrack(java.lang.String)
      */
     public void addTrack(String s)
     {
@@ -147,7 +146,7 @@ public abstract class AbstractTag implements Tag
     /**
      * (overridden)
      *
-     * @see entagged.audioformats.Tag#addYear(java.lang.String)
+     * @see org.jaudiotagger.tag.Tag#addYear(java.lang.String)
      */
     public void addYear(String s)
     {
@@ -220,7 +219,7 @@ public abstract class AbstractTag implements Tag
     /**
      * (overridden)
      *
-     * @see entagged.audioformats.Tag#get(java.lang.String)
+     * @see org.jaudiotagger.tag.Tag#get(java.lang.String)
      */
     public List get(String id)
     {
@@ -263,7 +262,7 @@ public abstract class AbstractTag implements Tag
     /**
      * (overridden)
      *
-     * @see entagged.audioformats.Tag#getAlbum()
+     * @see org.jaudiotagger.tag.Tag#getAlbum()
      */
     public List getAlbum()
     {
@@ -281,7 +280,7 @@ public abstract class AbstractTag implements Tag
     /**
      * (overridden)
      *
-     * @see entagged.audioformats.Tag#getArtist()
+     * @see org.jaudiotagger.tag.Tag#getArtist()
      */
     public List getArtist()
     {
@@ -299,7 +298,7 @@ public abstract class AbstractTag implements Tag
     /**
      * (overridden)
      *
-     * @see entagged.audioformats.Tag#getComment()
+     * @see org.jaudiotagger.tag.Tag#getComment()
      */
     public List getComment()
     {
@@ -317,7 +316,7 @@ public abstract class AbstractTag implements Tag
     /**
      * (overridden)
      *
-     * @see entagged.audioformats.Tag#getFields()
+     * @see org.jaudiotagger.tag.Tag#getFields()
      */
     public Iterator getFields()
     {
@@ -366,7 +365,7 @@ public abstract class AbstractTag implements Tag
     /**
      * (overridden)
      *
-     * @see entagged.audioformats.Tag#getFirstAlbum()
+     * @see org.jaudiotagger.tag.Tag#getFirstAlbum()
      */
     public String getFirstAlbum()
     {
@@ -377,7 +376,7 @@ public abstract class AbstractTag implements Tag
     /**
      * (overridden)
      *
-     * @see entagged.audioformats.Tag#getFirstArtist()
+     * @see org.jaudiotagger.tag.Tag#getFirstArtist()
      */
     public String getFirstArtist()
     {
@@ -388,7 +387,7 @@ public abstract class AbstractTag implements Tag
     /**
      * (overridden)
      *
-     * @see entagged.audioformats.Tag#getFirstComment()
+     * @see org.jaudiotagger.tag.Tag#getFirstComment()
      */
     public String getFirstComment()
     {
@@ -399,7 +398,7 @@ public abstract class AbstractTag implements Tag
     /**
      * (overridden)
      *
-     * @see entagged.audioformats.Tag#getFirstGenre()
+     * @see org.jaudiotagger.tag.Tag#getFirstGenre()
      */
     public String getFirstGenre()
     {
@@ -410,7 +409,7 @@ public abstract class AbstractTag implements Tag
     /**
      * (overridden)
      *
-     * @see entagged.audioformats.Tag#getFirstTitle()
+     * @see org.jaudiotagger.tag.Tag#getFirstTitle()
      */
     public String getFirstTitle()
     {
@@ -421,7 +420,7 @@ public abstract class AbstractTag implements Tag
     /**
      * (overridden)
      *
-     * @see entagged.audioformats.Tag#getFirstTrack()
+     * @see org.jaudiotagger.tag.Tag#getFirstTrack()
      */
     public String getFirstTrack()
     {
@@ -432,7 +431,7 @@ public abstract class AbstractTag implements Tag
     /**
      * (overridden)
      *
-     * @see entagged.audioformats.Tag#getFirstYear()
+     * @see org.jaudiotagger.tag.Tag#getFirstYear()
      */
     public String getFirstYear()
     {
@@ -443,7 +442,7 @@ public abstract class AbstractTag implements Tag
     /**
      * (overridden)
      *
-     * @see entagged.audioformats.Tag#getGenre()
+     * @see org.jaudiotagger.tag.Tag#getGenre()
      */
     public List getGenre()
     {
@@ -461,7 +460,7 @@ public abstract class AbstractTag implements Tag
     /**
      * (overridden)
      *
-     * @see entagged.audioformats.Tag#getTitle()
+     * @see org.jaudiotagger.tag.Tag#getTitle()
      */
     public List getTitle()
     {
@@ -479,7 +478,7 @@ public abstract class AbstractTag implements Tag
     /**
      * (overridden)
      *
-     * @see entagged.audioformats.Tag#getTrack()
+     * @see org.jaudiotagger.tag.Tag#getTrack()
      */
     public List getTrack()
     {
@@ -497,7 +496,7 @@ public abstract class AbstractTag implements Tag
     /**
      * (overridden)
      *
-     * @see entagged.audioformats.Tag#getYear()
+     * @see org.jaudiotagger.tag.Tag#getYear()
      */
     public List getYear()
     {
@@ -515,7 +514,7 @@ public abstract class AbstractTag implements Tag
     /**
      * (overridden)
      *
-     * @see entagged.audioformats.Tag#hasCommonFields()
+     * @see org.jaudiotagger.tag.Tag#hasCommonFields()
      */
     public boolean hasCommonFields()
     {
@@ -525,7 +524,7 @@ public abstract class AbstractTag implements Tag
     /**
      * (overridden)
      *
-     * @see entagged.audioformats.Tag#hasField(java.lang.String)
+     * @see org.jaudiotagger.tag.Tag#hasField(java.lang.String)
      */
     public boolean hasField(String id)
     {
@@ -544,7 +543,7 @@ public abstract class AbstractTag implements Tag
     /**
      * (overridden)
      *
-     * @see entagged.audioformats.Tag#isEmpty()
+     * @see org.jaudiotagger.tag.Tag#isEmpty()
      */
     public boolean isEmpty()
     {
@@ -554,7 +553,7 @@ public abstract class AbstractTag implements Tag
     /**
      * (overridden)
      *
-     * @see entagged.audioformats.Tag#merge(entagged.audioformats.Tag)
+     * @see org.jaudiotagger.tag.Tag#merge(org.jaudiotagger.tag.Tag)
      */
     public void merge(Tag tag)
     {
@@ -598,7 +597,7 @@ public abstract class AbstractTag implements Tag
      * Changed:Just because field is empty it doesnt mesn it should be deleted. That should be the choice
      * of the developer. (Or does this break things)
      *
-     * @see entagged.audioformats.Tag#set(entagged.audioformats.generic.TagField)
+     * @see org.jaudiotagger.tag.Tag#set(org.jaudiotagger.tag.TagField)
      */
     public void set(TagField field)
     {
@@ -630,7 +629,7 @@ public abstract class AbstractTag implements Tag
     /**
      * (overridden)
      *
-     * @see entagged.audioformats.Tag#setAlbum(java.lang.String)
+     * @see org.jaudiotagger.tag.Tag#setAlbum(java.lang.String)
      */
     public void setAlbum(String s)
     {
@@ -640,7 +639,7 @@ public abstract class AbstractTag implements Tag
     /**
      * (overridden)
      *
-     * @see entagged.audioformats.Tag#setArtist(java.lang.String)
+     * @see org.jaudiotagger.tag.Tag#setArtist(java.lang.String)
      */
     public void setArtist(String s)
     {
@@ -650,7 +649,7 @@ public abstract class AbstractTag implements Tag
     /**
      * (overridden)
      *
-     * @see entagged.audioformats.Tag#setComment(java.lang.String)
+     * @see org.jaudiotagger.tag.Tag#setComment(java.lang.String)
      */
     public void setComment(String s)
     {
@@ -660,7 +659,7 @@ public abstract class AbstractTag implements Tag
     /**
      * (overridden)
      *
-     * @see entagged.audioformats.Tag#setEncoding(java.lang.String)
+     * @see org.jaudiotagger.tag.Tag#setEncoding(java.lang.String)
      */
     public boolean setEncoding(String enc)
     {
@@ -685,7 +684,7 @@ public abstract class AbstractTag implements Tag
     /**
      * (overridden)
      *
-     * @see entagged.audioformats.Tag#setGenre(java.lang.String)
+     * @see org.jaudiotagger.tag.Tag#setGenre(java.lang.String)
      */
     public void setGenre(String s)
     {
@@ -695,7 +694,7 @@ public abstract class AbstractTag implements Tag
     /**
      * (overridden)
      *
-     * @see entagged.audioformats.Tag#setTitle(java.lang.String)
+     * @see org.jaudiotagger.tag.Tag#setTitle(java.lang.String)
      */
     public void setTitle(String s)
     {
@@ -705,7 +704,7 @@ public abstract class AbstractTag implements Tag
     /**
      * (overridden)
      *
-     * @see entagged.audioformats.Tag#setTrack(java.lang.String)
+     * @see org.jaudiotagger.tag.Tag#setTrack(java.lang.String)
      */
     public void setTrack(String s)
     {
@@ -715,7 +714,7 @@ public abstract class AbstractTag implements Tag
     /**
      * (overridden)
      *
-     * @see entagged.audioformats.Tag#setYear(java.lang.String)
+     * @see org.jaudiotagger.tag.Tag#setYear(java.lang.String)
      */
     public void setYear(String s)
     {
