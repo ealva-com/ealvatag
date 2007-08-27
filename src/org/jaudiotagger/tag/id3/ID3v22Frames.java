@@ -269,6 +269,9 @@ public class ID3v22Frames extends ID3Frames
         multipleFrames.add(FRAME_ID_V2_ATTACHED_PICTURE);
         multipleFrames.add(FRAME_ID_V2_UNIQUE_FILE_ID);
         multipleFrames.add(FRAME_ID_V2_POPULARIMETER);
-
+        multipleFrames.add(FRAME_ID_V2_USER_DEFINED_INFO);
+        multipleFrames.add(FRAME_ID_V2_USER_DEFINED_URL);
+        multipleFrames.add(FRAME_ID_V2_COMMENT);
+        multipleFrames.add(FRAME_ID_V2_UNSYNC_LYRICS);
     }
 }
