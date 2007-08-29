@@ -32,7 +32,6 @@ public class MP3FileReader extends AudioFileReader
      *
      * @param f
      * @return
-     * @throws CannotReadException
      */
     //Override because we read mp3s differently to the entagged code
     public AudioFile read(File f)

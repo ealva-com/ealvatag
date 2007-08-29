@@ -23,14 +23,14 @@ import java.io.UnsupportedEncodingException;
 /**
  * Implementing classes represent a tag field for the entagged audio library.<br>
  * Very basic functionality is defined for use with
- * {@link entagged.audioformats.Tag}.
+ * {@link org.jaudiotagger.tag.Tag}.
  * 
  * @author Raphaël Slinckx
  */
 public interface TagField {
 
 	/**
-	 * This method copies the data of the given filed to the current data.<br>
+	 * This method copies the data of the given field to the current data.<br>
 	 * 
 	 * @param field
 	 *            The field containing the data to be taken.

@@ -3,6 +3,7 @@ package org.jaudiotagger.tag.id3;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
+import org.jaudiotagger.tag.TagTextField;
 
 /**
  *
@@ -89,7 +90,7 @@ public class ID3v11TagTest extends TestCase
     // Tests
     /////////////////////////////////////////////////////////////////////////
 
-    public void testCreatteID3v11Tag()
+    public void testCreateID3v11Tag()
     {
         ID3v11Tag v11Tag = new ID3v11Tag();
         v11Tag.setArtist(ARTIST);
@@ -104,13 +105,22 @@ public class ID3v11TagTest extends TestCase
         assertEquals((byte)1,v11Tag.getMajorVersion());
         assertEquals((byte)0,v11Tag.getRevision());
 
-        assertEquals(ARTIST,v11Tag.getArtist());
-        assertEquals(ALBUM,v11Tag.getAlbum());
-        assertEquals(COMMENT,v11Tag.getComment());
-        assertEquals(TITLE,v11Tag.getTitle());
-        assertEquals(TRACK_VALUE,v11Tag.getTrack());
-        assertEquals(GENRE_VAL,v11Tag.getGenre());
-        assertEquals(YEAR,v11Tag.getYear());
+        assertEquals(ARTIST,v11Tag.getFirstArtist());
+        assertEquals(ALBUM,v11Tag.getFirstAlbum());
+        assertEquals(COMMENT,v11Tag.getFirstComment());
+        assertEquals(TITLE,v11Tag.getFirstTitle());
+        assertEquals(TRACK_VALUE,v11Tag.getFirstTrack());
+        assertEquals(GENRE_VAL,v11Tag.getFirstGenre());
+        assertEquals(YEAR,v11Tag.getFirstYear());
+
+         //Check with entagged interface
+        assertEquals(ID3v1TagTest.ARTIST,((TagTextField)v11Tag.getArtist().get(0)).getContent());
+        assertEquals(ID3v1TagTest.ALBUM,((TagTextField)v11Tag.getAlbum().get(0)).getContent());
+        assertEquals(ID3v1TagTest.COMMENT,((TagTextField)v11Tag.getComment().get(0)).getContent());
+        assertEquals(ID3v1TagTest.TITLE,((TagTextField)v11Tag.getTitle().get(0)).getContent());
+        assertEquals(ID3v1TagTest.GENRE_VAL,((TagTextField)v11Tag.getGenre().get(0)).getContent());
+        assertEquals(ID3v1TagTest.TRACK_VALUE,((TagTextField)v11Tag.getTrack().get(0)).getContent());
+        assertEquals(ID3v1TagTest.YEAR,((TagTextField)v11Tag.getYear().get(0)).getContent());
 
 
     }
@@ -119,7 +129,7 @@ public class ID3v11TagTest extends TestCase
     {
         ID3v24Tag v2Tag = new ID3v24Tag();
         ID3v11Tag v1Tag = new ID3v11Tag(v2Tag);
-         assertNotNull(v1Tag);
+        assertNotNull(v1Tag);
         assertEquals((byte)1,v1Tag.getRelease());
         assertEquals((byte)1,v1Tag.getMajorVersion());
         assertEquals((byte)0,v1Tag.getRevision());
@@ -132,7 +142,7 @@ public class ID3v11TagTest extends TestCase
         ID3v23Tag v2Tag = new ID3v23Tag();
         ID3v11Tag v1Tag = new ID3v11Tag(v2Tag);
         assertNotNull(v1Tag);
-         assertEquals((byte)1,v1Tag.getRelease());
+        assertEquals((byte)1,v1Tag.getRelease());
         assertEquals((byte)1,v1Tag.getMajorVersion());
         assertEquals((byte)0,v1Tag.getRevision());
 
@@ -143,7 +153,7 @@ public class ID3v11TagTest extends TestCase
         ID3v22Tag v2Tag = new ID3v22Tag();
         ID3v11Tag v1Tag = new ID3v11Tag(v2Tag);
         assertNotNull(v1Tag);
-         assertEquals((byte)1,v1Tag.getRelease());
+        assertEquals((byte)1,v1Tag.getRelease());
         assertEquals((byte)1,v1Tag.getMajorVersion());
         assertEquals((byte)0,v1Tag.getRevision());
     }

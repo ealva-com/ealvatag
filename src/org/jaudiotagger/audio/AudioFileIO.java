@@ -23,8 +23,6 @@ import java.io.IOException;
 import java.util.*;
 import java.util.logging.Logger;
 
-import org.jaudiotagger.audio.asf.AsfFileReader;
-import org.jaudiotagger.audio.asf.AsfFileWriter;
 import org.jaudiotagger.audio.exceptions.*;
 import org.jaudiotagger.audio.flac.FlacFileReader;
 import org.jaudiotagger.audio.flac.FlacFileWriter;
@@ -56,7 +54,7 @@ import org.jaudiotagger.tag.TagException;
  * <code>
  *		AudioFile audioFile = AudioFileIO.read(new File("audiofile.mp3")); //Reads the given file.<br/>
  *		int bitrate = audioFile.getBitrate(); //Retreives the bitrate of the file.<br/>
- *		String artist = audioFile.getTag().getArtist(); //Retreive the artist name.<br/>
+ *		String artist = audioFile.getTag().getFirstArtist(); //Retreive the artist name.<br/>
  *		audioFile.getTag().setGenre("Progressive Rock"); //Sets the genre to Prog. Rock, note the file on disk is still unmodified.<br/>
  *		AudioFileIO.write(audioFile); //Write the modifications in the file on disk.
  *	</code>

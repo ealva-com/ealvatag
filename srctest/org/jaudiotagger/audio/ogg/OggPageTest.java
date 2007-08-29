@@ -17,7 +17,7 @@ import org.jaudiotagger.audio.AudioFileIO;
 public class OggPageTest extends TestCase
 {
     /**
-     * test Read Ogg Pages ok
+     * Test Read Ogg Pages ok
      */
     public void testReadAllOggPages()
     {

@@ -215,7 +215,7 @@ public interface Tag
     /**
      * Create a new TagField
      *
-     * Only textual data supported at the moment. The genreicKey will be mapped
+     * Only textual data supported at the moment. The genericKey will be mapped
      * to the correct implementation key and reurn and a TagField.
      *
      * TODO:What happens if cant map to implementation key

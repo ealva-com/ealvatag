@@ -27,13 +27,13 @@ package org.jaudiotagger.tag.id3;
 import org.jaudiotagger.audio.mp3.MP3File;
 import org.jaudiotagger.tag.*;
 import org.jaudiotagger.tag.id3.framebody.*;
+import org.jaudiotagger.tag.id3.valuepair.GenreTypes;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
-import java.util.Arrays;
-import java.util.Iterator;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.regex.Matcher;
 
@@ -274,7 +274,7 @@ public class ID3v11Tag
      *
      * @return comment
      */
-    public String getComment()
+    public String getFirstComment()
     {
         return comment;
     }
@@ -298,7 +298,6 @@ public class ID3v11Tag
             trackAsInt = 0;
         }
 
-
         //This value cannot be held in v1_1
         if ((trackAsInt > TRACK_MAX_VALUE) || (trackAsInt < TRACK_MIN_VALUE))
         {
@@ -315,9 +314,27 @@ public class ID3v11Tag
      *
      * @return track
      */
-    public String getTrack()
+    public String getFirstTrack()
     {
         return String.valueOf(track & BYTE_TO_UNSIGNED);
+    }
+
+    public void addTrack(String track)
+    {
+       setTrack(track);
+    }
+
+    public List getTrack()
+    {
+        if(getFirstTrack().length()>0)
+        {
+            ID3TagField field = new ID3TagField(ID3FieldKey.TRACK.name(),getFirstTrack());
+            return returnFieldToList(field);
+        }
+        else
+        {
+            return new ArrayList();
+        }
     }
 
     /**

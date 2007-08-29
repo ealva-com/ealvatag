@@ -25,6 +25,7 @@ import org.jaudiotagger.audio.exceptions.InvalidAudioFrameException;
 import org.jaudiotagger.audio.exceptions.ReadOnlyFileException;
 import org.jaudiotagger.audio.exceptions.CannotWriteException;
 import org.jaudiotagger.audio.AudioFile;
+import org.jaudiotagger.audio.generic.GenericTag;
 import org.jaudiotagger.logging.*;
 import org.jaudiotagger.tag.*;
 import org.jaudiotagger.tag.id3.*;
@@ -339,6 +340,15 @@ public class MP3File extends AudioFile
             //Read v1 tags (if any)
             readV1Tag(file, newFile, loadOptions);
 
+            //We set the Common Interface tag to the v1 tag
+            //TODO the v2tag doesnt not support the tag interface yet
+            //TODO how does the interface handle having both a v1 and a v2 tag, in original entagged code
+            //the contents of v1 would be merged with v2 , and then v2 returned
+            if(id3v1tag!=null)
+            {
+                tag=id3v1tag;
+            }
+
             //Read v2 tags (if any)
             readV2Tag(file, loadOptions);
 
@@ -480,6 +490,12 @@ public class MP3File extends AudioFile
     {
         logger.info("setting tagv1:v1 tag");
         this.id3v1tag = id3v1tag;
+    }
+
+    public void setID3v1Tag(Tag id3v1tag)
+    {
+        logger.info("setting tagv1:v1 tag");
+        this.id3v1tag = (ID3v1Tag)id3v1tag;
     }
 
     /**
@@ -782,8 +798,30 @@ public class MP3File extends AudioFile
     {
         return tagFormatter;
     }
+
+
+    /**
+     *
+     * @return the tag, or create a v11 tag if one does nto exist
+     */
     //For writing tag to screen
+    //TODO do we want to give the impression it has a tag when it doesnt
+    public Tag getTag()
+    {
+        return (tag == null) ? new ID3v11Tag() : tag;
+    }
 
-
+    /**
+     * Set the Tag
+     *
+     * Currently using the TagInterface sets the v1tag only
+     *
+     * @param tag
+     */
+    public void setTag(Tag tag)
+    {
+        this.tag = tag;
+        this.id3v1tag  = (ID3v1Tag)tag;
+    }
 }
 

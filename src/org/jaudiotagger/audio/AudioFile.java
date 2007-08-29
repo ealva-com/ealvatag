@@ -153,6 +153,10 @@ public class AudioFile
         return file;
     }
 
+    public void setTag(Tag tag)
+    {
+        this.tag = tag;
+    }
 
     /**
      * Return audio header
@@ -168,6 +172,8 @@ public class AudioFile
      *
      * @return Returns the tag contained in this AudioFile, or a new one if file hasn't any tag.
      */
+    //TODO gives impression tag exists when it may not
+    //TODO generic tag is tied to closely to ID3v1 tags 
     public Tag getTag()
     {
         return (tag == null) ? new GenericTag() : tag;
