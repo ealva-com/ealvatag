@@ -75,12 +75,17 @@ public class Utils
     }
 
 
-     /* Computes a number composed of (end-start) bytes in the b array.
+     /*
+      * Computes a number whereby the 1st byte is the least signifcant and the last
+      * byte is the most significant.
       *
       * @param b The byte array @param start The starting offset in b
       * (b[offset]). The less significant byte @param end The end index
       * (included) in b (b[end]). The most significant byte @return a long number
       * represented by the byte sequence.
+      *
+      * So if storing a number which only requires one byte it will be stored in the first
+      * byte.
       */
     public static long getLongNumberLittleEndian(byte[] b, int start, int end)
     {
@@ -93,6 +98,13 @@ public class Utils
         return number;
     }
 
+    /*
+     * Computes a number whereby the 1st byte is the most signifcant and the last
+     * byte is the least significant.
+     *
+     * So if storing a number which only requires one byte it will be stored in the last
+     * byte.
+     */
     public static long getLongNumberBigEndian(byte[] b, int start, int end)
     {
         int number = 0;
@@ -163,6 +175,16 @@ public class Utils
         return new String(b, offset, length);
     }
 
+    /**
+     * Create String startinf from offset upto length using encoding
+     *
+     * @param b
+     * @param offset
+     * @param length
+     * @param encoding
+     * @return
+     * @throws UnsupportedEncodingException
+     */
     public static String getString(byte[] b, int offset, int length, String encoding) throws UnsupportedEncodingException
     {
         return new String(b, offset, length, encoding);

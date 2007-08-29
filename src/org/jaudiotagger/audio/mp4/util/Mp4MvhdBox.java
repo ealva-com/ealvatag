@@ -20,6 +20,10 @@ package org.jaudiotagger.audio.mp4.util;
 
 import org.jaudiotagger.audio.generic.Utils;
 
+/**
+ * This MP4Box contains important audio information we need
+ *
+ */
 public class Mp4MvhdBox
 {
 

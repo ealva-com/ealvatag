@@ -7,8 +7,9 @@ public enum SupportedFileFormat
 {
     OGG("ogg"),
     MP3("mp3"),
-    FLAC("flac");
-
+    FLAC("flac"),
+    MP4("mp4"),
+    M4A("m4a");
 
     private String filesuffix;
 

@@ -23,6 +23,9 @@ import java.io.UnsupportedEncodingException;
 import org.jaudiotagger.audio.generic.Utils;
 import org.jaudiotagger.tag.mp4.Mp4TagTextField;
 
+/**
+ * Represents simple text field, but reads the data content as a number
+ */
 public class Mp4TagTextNumberField extends Mp4TagTextField
 {
 
@@ -43,6 +46,9 @@ public class Mp4TagTextNumberField extends Mp4TagTextField
 
     protected void build(byte[] raw) throws UnsupportedEncodingException
     {
-        this.content = Utils.getNumberBigEndian(raw, 16, 19) + "";
+        this.content = Utils.getNumberBigEndian(raw,
+            DATA_HEADER_LENGTH ,
+            raw.length - 1) + "";
+
     }
 }

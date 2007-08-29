@@ -24,10 +24,21 @@ import org.jaudiotagger.tag.TagField;
 import org.jaudiotagger.tag.TagTextField;
 import org.jaudiotagger.tag.mp4.Mp4TagField;
 import org.jaudiotagger.audio.generic.Utils;
+import org.jaudiotagger.audio.mp4.util.Mp4Box;
 
+/**
+ * Represents simple text field, reads the data contnet as text.
+ */
 public class Mp4TagTextField extends Mp4TagField implements TagTextField
 {
+    public static final int VERSION_LENGTH = 1;
+    public static final int TYPE_LENGTH = 3;
+    public static final int NULL_LENGTH = 4;
+    public static final int DATA_HEADER_LENGTH = Mp4Box.HEADER_LENGTH + VERSION_LENGTH + TYPE_LENGTH + NULL_LENGTH;
 
+    public static final int TYPE_POS = Mp4Box.HEADER_LENGTH + VERSION_LENGTH;
+
+    protected int    dataSize;
     protected String content;
 
     public Mp4TagTextField(String id, byte[] raw) throws UnsupportedEncodingException
@@ -43,9 +54,8 @@ public class Mp4TagTextField extends Mp4TagField implements TagTextField
 
     protected void build(byte[] raw) throws UnsupportedEncodingException
     {
-        int dataSize = Utils.getNumberBigEndian(raw, 0, 3);
-        this.content = Utils
-            .getString(raw, 16, dataSize - 8 - 8, getEncoding());
+        dataSize = Utils.getNumberBigEndian(raw, Mp4Box.OFFSET_POS, Mp4Box.OFFSET_LENGTH - 1);
+        content  = Utils.getString(raw, DATA_HEADER_LENGTH,dataSize - DATA_HEADER_LENGTH, getEncoding());
     }
 
 

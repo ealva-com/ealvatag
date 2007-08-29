@@ -22,41 +22,43 @@ import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.io.UnsupportedEncodingException;
+import java.util.logging.Logger;
 
 import org.jaudiotagger.audio.exceptions.CannotReadException;
 import org.jaudiotagger.audio.mp4.util.Mp4Box;
+import org.jaudiotagger.audio.mp4.Mp4NotMetaFieldKey;
+import org.jaudiotagger.audio.generic.Utils;
 
 public class Mp4TagReader
 {
+    // Logger Object
+    public static Logger logger = Logger.getLogger("org.jaudiotagger.tag.mp4");
+
     /*
-     * Tree a descendre:
-     * moov
-     *  udta
-     *   meta
-     *    ilst
-     *     [
-     *      xxxx <-  id de l'info
-     *       data
-     *      ]
+     * The metadata is stored in the box under the hierachy moov.udta.meta.ilst
+     *
+     * There are gaps between these boxes
+
      */
     public Mp4Tag read(RandomAccessFile raf) throws CannotReadException, IOException
     {
         Mp4Tag tag = new Mp4Tag();
 
         Mp4Box box = new Mp4Box();
-        byte[] b = new byte[4];
+
 
         //Get to the facts
         //1-Searching for "moov"
-        seek(raf, box, "moov");
+        seek(raf, box, Mp4NotMetaFieldKey.MOOV.getFieldName());
 
         //2-Searching for "udta"
-        seek(raf, box, "udta");
+        seek(raf, box, Mp4NotMetaFieldKey.UDTA.getFieldName());
 
         //3-Searching for "meta"
-        seek(raf, box, "meta");
+        seek(raf, box, Mp4NotMetaFieldKey.META.getFieldName());
 
         //4-skip the meta flags
+        byte[] b = new byte[4];
         raf.read(b);
         if (b[0] != 0)
         {
@@ -64,64 +66,78 @@ public class Mp4TagReader
         }
 
         //5-Seek the "ilst"
-        seek(raf, box, "ilst");
-        int length = box.getOffset() - 8;
+        seek(raf, box, Mp4NotMetaFieldKey.ILST.getFieldName());
+
+        //Size of metadata (exclude the size of the ilst header)
+        int length = box.getLength() - Mp4Box.HEADER_LENGTH;
 
         int read = 0;
         while (read < length)
         {
-            b = new byte[8];
+            //Read the box
+            b = new byte[Mp4Box.HEADER_LENGTH];
             raf.read(b);
             box.update(b);
 
-            int fieldLength = box.getOffset() - 8;
+            //Now read the complete child databox into a byte array , we remove the length of the parents identifier,
+            //and the length of the length field of the child
+            int fieldLength = box.getLength() - Mp4Box.HEADER_LENGTH;
             b = new byte[fieldLength];
             raf.read(b);
 
+            //Create the corresponding datafield from the id
             tag.add(createMp4Field(box.getId(), b));
-            read += 8 + fieldLength;
+            read += box.getLength();
         }
 
-        System.out.println(tag);
         return tag;
     }
 
     private Mp4TagField createMp4Field(String id, byte[] raw) throws UnsupportedEncodingException
     {
-        if (id.equals("trkn") || id.equals("tmpo"))
-        {
-            return new Mp4TagTextNumberField(id, raw);
-        }
+        //Need this to decide what type of Field to create
+        int type     = Utils.getNumberBigEndian(raw,
+                                                Mp4TagTextField.TYPE_POS ,
+                                                Mp4TagTextField.TYPE_POS + Mp4TagTextField.TYPE_LENGTH - 1);
 
-        else
-        if (id.equals("\u00A9ART") || id.equals("\u00A9alb") || id.equals("\u00A9nam") || id.equals("\u00A9day") || id.equals("\u00A9cmt") || id.equals("\u00A9gen") || id.equals("\u00A9too") || id.equals("\u00A9wrt"))
+        logger.fine("Box Type is:"+type);
+
+        if(type==Mp4FieldType.TEXT.getFileClassId())
         {
             return new Mp4TagTextField(id, raw);
         }
-
-        else if (id.equals("covr"))
+        else if(type==Mp4FieldType.NUMERIC.getFileClassId())
         {
-            return new Mp4TagCoverField(raw);
+            return new Mp4TagTextNumberField(id, raw);
         }
-
-        return new Mp4TagBinaryField(id, raw);
+        else if(type==Mp4FieldType.BYTE.getFileClassId())
+        {
+            //TODO Byte subclass
+            return new Mp4TagTextNumberField(id, raw);
+        }
+        else if(type==Mp4FieldType.COVERART.getFileClassId())
+        {
+            return new  Mp4TagCoverField(raw);
+        }
+        else
+        {
+            //Try binary
+            return new Mp4TagBinaryField(id, raw);
+        }
     }
 
     private void seek(RandomAccessFile raf, Mp4Box box, String id) throws IOException
     {
-        byte[] b = new byte[8];
+        byte[] b = new byte[Mp4Box.HEADER_LENGTH];
         raf.read(b);
         box.update(b);
+
+        //Unable to find id immediately after offset so goes round loop why is this
         while (!box.getId().equals(id))
         {
-            raf.skipBytes(box.getOffset() - 8);
+            raf.skipBytes(box.getLength() -Mp4Box.HEADER_LENGTH);
             raf.read(b);
             box.update(b);
         }
-    }
-
-    public static void main(String[] args) throws Exception
-    {
-        new Mp4TagReader().read(new RandomAccessFile(new File("/home/kikidonk/test.mp4"), "r"));
     }
 }

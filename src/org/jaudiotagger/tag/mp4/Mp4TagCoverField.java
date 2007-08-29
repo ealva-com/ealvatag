@@ -22,6 +22,9 @@ import org.jaudiotagger.tag.mp4.Mp4TagBinaryField;
 
 import java.io.UnsupportedEncodingException;
 
+/**
+ * For storing coverart, mutliple allowed
+ */
 public class Mp4TagCoverField extends Mp4TagBinaryField
 {
     public Mp4TagCoverField()

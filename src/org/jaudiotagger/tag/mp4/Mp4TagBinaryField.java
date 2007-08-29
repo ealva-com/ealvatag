@@ -23,6 +23,11 @@ import java.io.UnsupportedEncodingException;
 import org.jaudiotagger.tag.TagField;
 import org.jaudiotagger.audio.generic.Utils;
 
+/**
+ * Represents binary data
+ *
+ * This is denoted with an identifier of '----' ?
+ */
 public class Mp4TagBinaryField extends Mp4TagField
 {
 

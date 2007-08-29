@@ -18,15 +18,19 @@
  */
 package org.jaudiotagger.audio.mp4.util;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.util.logging.Logger;
 
 import org.jaudiotagger.audio.generic.GenericAudioHeader;
 import org.jaudiotagger.audio.exceptions.CannotReadException;
+import org.jaudiotagger.audio.mp4.Mp4NotMetaFieldKey;
 
 public class Mp4InfoReader
 {
+    // Logger Object
+    public static Logger logger = Logger.getLogger(" org.jaudiotagger.audio.mp4.uti");
+
     public GenericAudioHeader read(RandomAccessFile raf) throws CannotReadException, IOException
     {
         GenericAudioHeader info = new GenericAudioHeader();
@@ -35,36 +39,31 @@ public class Mp4InfoReader
 
         //Get to the facts
         //1-Searching for "moov"
-        seek(raf, box, "moov");
+        seek(raf, box, Mp4NotMetaFieldKey.MOOV.getFieldName());
 
-        //2-Searching for "udta"
-        seek(raf, box, "mvhd");
+        //2-Searching for "mvhd"
+        seek(raf, box, Mp4NotMetaFieldKey.MVHD.getFieldName());
 
-        byte[] b = new byte[box.getOffset() - 8];
+        byte[] b = new byte[box.getLength() - Mp4Box.HEADER_LENGTH];
         raf.read(b);
 
         Mp4MvhdBox mvhd = new Mp4MvhdBox(b);
         info.setLength(mvhd.getLength());
 
-        System.out.println(info);
+        logger.info(info.toString());
         return info;
     }
 
     private void seek(RandomAccessFile raf, Mp4Box box, String id) throws IOException
     {
-        byte[] b = new byte[8];
+        byte[] b = new byte[Mp4Box.HEADER_LENGTH];
         raf.read(b);
         box.update(b);
         while (!box.getId().equals(id))
         {
-            raf.skipBytes(box.getOffset() - 8);
+            raf.skipBytes(box.getLength() - Mp4Box.HEADER_LENGTH);
             raf.read(b);
             box.update(b);
         }
-    }
-
-    public static void main(String[] args) throws Exception
-    {
-        new Mp4InfoReader().read(new RandomAccessFile(new File("/home/kikidonk/test.mp4"), "r"));
     }
 }

@@ -23,6 +23,11 @@ import java.io.UnsupportedEncodingException;
 import org.jaudiotagger.tag.TagField;
 import org.jaudiotagger.audio.generic.Utils;
 
+/**
+ * This abstract class represents the data contents of an MP4Box.
+ *
+ * There are various subclasses that represnet different types of fields  
+ */
 public abstract class Mp4TagField implements TagField
 {
 

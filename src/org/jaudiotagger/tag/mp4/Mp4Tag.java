@@ -37,15 +37,15 @@ public class Mp4Tag extends AbstractTag
         tagFieldToMp4Field.put(TagFieldKey.ARTIST, Mp4FieldKey.ARTIST);
         tagFieldToMp4Field.put(TagFieldKey.ALBUM, Mp4FieldKey.ALBUM);
         tagFieldToMp4Field.put(TagFieldKey.TITLE, Mp4FieldKey.TITLE);
-        tagFieldToMp4Field.put(TagFieldKey.TRACK, Mp4FieldKey.TRACKNUMBER);
+        tagFieldToMp4Field.put(TagFieldKey.TRACK, Mp4FieldKey.TRACK);
         tagFieldToMp4Field.put(TagFieldKey.YEAR, Mp4FieldKey.DAY);
         tagFieldToMp4Field.put(TagFieldKey.GENRE, Mp4FieldKey.GENRE);
         tagFieldToMp4Field.put(TagFieldKey.COMMENT, Mp4FieldKey.COMMENT);
-        //tagFieldToMp4Field.put(TagFieldKey.ALBUM_ARTIST,Mp4FieldKey.ALBUMARTIST);
+        tagFieldToMp4Field.put(TagFieldKey.ALBUM_ARTIST,Mp4FieldKey.ALBUM_ARTIST);
         tagFieldToMp4Field.put(TagFieldKey.COMPOSER, Mp4FieldKey.COMPOSER);
         tagFieldToMp4Field.put(TagFieldKey.GROUPING, Mp4FieldKey.GROUPING);
         tagFieldToMp4Field.put(TagFieldKey.DISC_NO, Mp4FieldKey.DISCNUMBER);
-        //tagFieldToMp4Field.put(TagFieldKey.BPM,Mp4FieldKey.BPM);
+        tagFieldToMp4Field.put(TagFieldKey.BPM,Mp4FieldKey.BPM);
         //tagFieldToMp4Field.put(TagFieldKey.MUSICBRAINZ_ARTISTID,Mp4FieldKey.MUSICBRAINZ_ARTISTID);
         //tagFieldToMp4Field.put(TagFieldKey.MUSICBRAINZ_RELEASEID,Mp4FieldKey.MUSICBRAINZ_ALBUMEID);
         //tagFieldToMp4Field.put(TagFieldKey.MUSICBRAINZ_RELEASEARTISTID,Mp4FieldKey.MUSICBRAINZ_ALBUMARTISTID);
@@ -58,11 +58,11 @@ public class Mp4Tag extends AbstractTag
         //tagFieldToMp4Field.put(TagFieldKey.MUSICBRAINZ_RELEASE_COUNTRY,Mp4FieldKey.RELEASECOUNTRY);
         tagFieldToMp4Field.put(TagFieldKey.LYRICS, Mp4FieldKey.LYRICS);
         tagFieldToMp4Field.put(TagFieldKey.IS_COMPILATION, Mp4FieldKey.COMPILATION);
-        //tagFieldToMp4Field.put(TagFieldKey.ARTIST_SORT,Mp4FieldKey.ARTISTSORT);
-        //tagFieldToMp4Field.put(TagFieldKey.ALBUM_ARTIST_SORT,Mp4FieldKey.ALBUMARTISTSORT);
-        //tagFieldToMp4Field.put(TagFieldKey.ALBUM_SORT,Mp4FieldKey.ALBUMSORT);
-        //tagFieldToMp4Field.put(TagFieldKey.TITLE_SORT,Mp4FieldKey.TITLESORT);
-        //tagFieldToMp4Field.put(TagFieldKey.COMPOSER_SORT,Mp4FieldKey.COMPOSERSORT);
+        tagFieldToMp4Field.put(TagFieldKey.ARTIST_SORT,Mp4FieldKey.ARTISTSORT);
+        tagFieldToMp4Field.put(TagFieldKey.ALBUM_ARTIST_SORT,Mp4FieldKey.ALBUMARTISTSORT);
+        tagFieldToMp4Field.put(TagFieldKey.ALBUM_SORT,Mp4FieldKey.ALBUMSORT);
+        tagFieldToMp4Field.put(TagFieldKey.TITLE_SORT,Mp4FieldKey.TITLESORT);
+        tagFieldToMp4Field.put(TagFieldKey.COMPOSER_SORT,Mp4FieldKey.COMPOSERSORT);
     }
 
     protected String getArtistId()
@@ -180,7 +180,7 @@ public class Mp4Tag extends AbstractTag
     /**
      * Retrieve the  values that exists for this mp4keyId (this is the internalid actually used)
      *
-     * @param mp4KeyId TODO:this is wrong if we storing the actual internal field e.g ART the valueOF() wont give a match
+     * @param mp4KeyId TODO:this is wrong if we storing the actual internal field e.g ART the valueOf() wont give a match
      *                 but are these field names correct anyway or should some have an @ sign at front
      */
     @Override

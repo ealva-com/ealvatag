@@ -108,6 +108,7 @@ public abstract class AudioFileReader
         }
         catch (Exception e)
         {
+            e.printStackTrace();
             throw new CannotReadException("\"" + f + "\" :" + e, e);
         }
         finally

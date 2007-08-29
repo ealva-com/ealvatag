@@ -35,6 +35,7 @@ import org.jaudiotagger.audio.ogg.OggFileReader;
 import org.jaudiotagger.audio.ogg.OggFileWriter;
 import org.jaudiotagger.audio.mp3.MP3FileReader;
 import org.jaudiotagger.audio.mp3.MP3FileWriter;
+import org.jaudiotagger.audio.mp4.Mp4FileReader;
 import org.jaudiotagger.tag.Tag;
 import org.jaudiotagger.tag.TagException;
 
@@ -215,6 +216,8 @@ public class AudioFileIO {
         readers.put(SupportedFileFormat.OGG.getFilesuffix(), new OggFileReader());
         readers.put(SupportedFileFormat.FLAC.getFilesuffix(), new FlacFileReader());
         readers.put(SupportedFileFormat.MP3.getFilesuffix(), new MP3FileReader());
+        readers.put(SupportedFileFormat.MP4.getFilesuffix(), new Mp4FileReader());
+        readers.put(SupportedFileFormat.M4A.getFilesuffix(), new Mp4FileReader());
 
         // Tag Writers
         writers.put(SupportedFileFormat.OGG.getFilesuffix(), new OggFileWriter());
