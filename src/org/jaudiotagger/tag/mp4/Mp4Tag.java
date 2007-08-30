@@ -25,6 +25,7 @@ import static org.jaudiotagger.tag.mp4.Mp4FieldKey.*;
 
 import java.util.EnumMap;
 import java.util.List;
+import java.util.ArrayList;
 
 
 public class Mp4Tag extends AbstractTag
@@ -58,11 +59,11 @@ public class Mp4Tag extends AbstractTag
         //tagFieldToMp4Field.put(TagFieldKey.MUSICBRAINZ_RELEASE_COUNTRY,Mp4FieldKey.RELEASECOUNTRY);
         tagFieldToMp4Field.put(TagFieldKey.LYRICS, Mp4FieldKey.LYRICS);
         tagFieldToMp4Field.put(TagFieldKey.IS_COMPILATION, Mp4FieldKey.COMPILATION);
-        tagFieldToMp4Field.put(TagFieldKey.ARTIST_SORT,Mp4FieldKey.ARTISTSORT);
-        tagFieldToMp4Field.put(TagFieldKey.ALBUM_ARTIST_SORT,Mp4FieldKey.ALBUMARTISTSORT);
-        tagFieldToMp4Field.put(TagFieldKey.ALBUM_SORT,Mp4FieldKey.ALBUMSORT);
-        tagFieldToMp4Field.put(TagFieldKey.TITLE_SORT,Mp4FieldKey.TITLESORT);
-        tagFieldToMp4Field.put(TagFieldKey.COMPOSER_SORT,Mp4FieldKey.COMPOSERSORT);
+        tagFieldToMp4Field.put(TagFieldKey.ARTIST_SORT,Mp4FieldKey.ARTIST_SORT);
+        tagFieldToMp4Field.put(TagFieldKey.ALBUM_ARTIST_SORT,Mp4FieldKey.ALBUM_ARTIST_SORT);
+        tagFieldToMp4Field.put(TagFieldKey.ALBUM_SORT,Mp4FieldKey.ALBUM_SORT);
+        tagFieldToMp4Field.put(TagFieldKey.TITLE_SORT,Mp4FieldKey.TITLE_SORT);
+        tagFieldToMp4Field.put(TagFieldKey.COMPOSER_SORT,Mp4FieldKey.COMPOSER_SORT);
     }
 
     protected String getArtistId()
@@ -180,13 +181,30 @@ public class Mp4Tag extends AbstractTag
     /**
      * Retrieve the  values that exists for this mp4keyId (this is the internalid actually used)
      *
-     * @param mp4KeyId TODO:this is wrong if we storing the actual internal field e.g ART the valueOf() wont give a match
-     *                 but are these field names correct anyway or should some have an @ sign at front
+     * @param mp4KeyId TODO:this is inefficient we need to chnage calling code to use the enumes directly
      */
     @Override
     public List get(String mp4KeyId)
     {
-        Mp4FieldKey mp4FieldKey = Mp4FieldKey.valueOf(mp4KeyId);
+        for(Mp4FieldKey mp4FieldKey:Mp4FieldKey.values())
+        {
+            if(mp4FieldKey.getFieldName().equals( mp4KeyId))
+            {
+                return super.get(mp4FieldKey.getFieldName());
+            }
+        }
+        return new ArrayList();
+    }
+
+    /**
+     * Retrieve the  values that exists for this mp4keyId (this is the internalid actually used)
+     *
+     * TODO we want AbstractTag to use this method rather than the String equivalent
+     *
+     * @param mp4FieldKey
+     */
+    public List get(Mp4FieldKey mp4FieldKey)
+    {
         return super.get(mp4FieldKey.getFieldName());
     }
 
@@ -199,6 +217,17 @@ public class Mp4Tag extends AbstractTag
     public String getFirst(TagFieldKey genericKey)
     {
         return super.getFirst(tagFieldToMp4Field.get(genericKey).getFieldName());
+    }
+
+   /**
+     * Retrieve the first value that exists for this mp4key
+     *
+     * @param mp4Key
+     * @return
+     */
+    public String getFirst(Mp4FieldKey mp4Key)
+    {
+        return super.getFirst(mp4Key.getFieldName());
     }
 
     /**

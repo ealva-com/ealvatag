@@ -46,9 +46,12 @@ public class Mp4TagTextNumberField extends Mp4TagTextField
 
     protected void build(byte[] raw) throws UnsupportedEncodingException
     {
-        this.content = Utils.getNumberBigEndian(raw,
-            DATA_HEADER_LENGTH ,
-            raw.length - 1) + "";
+        //System.out.println("rawlength:"+(raw.length - 1));
+        //TODO if I read to the end of the raw data I get incorrect results, if I only read 4 bytes
+        //regardless of the data length I get correct results, why is this ?
+        this.content = Utils.getNumberBigEndian(raw, DATA_HEADER_LENGTH ,
+            DATA_HEADER_LENGTH + 4 - 1)+ "";
+
 
     }
 }

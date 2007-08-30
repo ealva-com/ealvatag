@@ -34,11 +34,13 @@ public enum Mp4FieldKey
     CATEGORY("catg",TEXT),
     KEYWORD("keyw",TEXT),
     DESCRIPTION("desc",TEXT),
-    ARTISTSORT("soar",TEXT),
-    ALBUMARTISTSORT("soaa",TEXT),
-    ALBUMSORT("soal",TEXT),
-    TITLESORT("sonm",TEXT),
-    COMPOSERSORT("soco",TEXT),
+    ARTIST_SORT("soar",TEXT),
+    ALBUM_ARTIST_SORT("soaa",TEXT),
+    ALBUM_SORT("soal",TEXT),
+    TITLE_SORT("sonm",TEXT),
+    COMPOSER_SORT("soco",TEXT),
+    SHOW_SORT("sosn",TEXT),
+    SHOW("tvsh",TEXT),
     ARTWORK("covr",COVERART);
 
     private String fieldName;

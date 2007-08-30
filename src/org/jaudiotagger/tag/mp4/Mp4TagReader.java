@@ -112,8 +112,7 @@ public class Mp4TagReader
         }
         else if(type==Mp4FieldType.BYTE.getFileClassId())
         {
-            //TODO Byte subclass
-            return new Mp4TagTextNumberField(id, raw);
+            return new Mp4TagByteField(id, raw);
         }
         else if(type==Mp4FieldType.COVERART.getFileClassId())
         {
