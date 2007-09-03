@@ -27,6 +27,7 @@ import org.jaudiotagger.tag.vorbiscomment.VorbisCommentTagField;
 
 import java.io.*;
 import java.nio.IntBuffer;
+import java.util.logging.Logger;
 
 /**
  * Create the VorbisCommentTag by reading from the raw packet data
@@ -49,6 +50,9 @@ import java.nio.IntBuffer;
  */
 public class VorbisCommentReader
 {
+      // Logger Object
+    public static Logger logger = Logger.getLogger("org.jaudiotagger.tag.vorbiscomment.VorbisCommentReader");
+
     public static final int FIELD_VENDOR_LENGTH_POS = 0;
     public static final int FIELD_VENDOR_STRING_POS = 4;
 
@@ -67,8 +71,9 @@ public class VorbisCommentReader
      * @throws IOException
      * @throws CannotReadException
      */
-    public VorbisCommentTag read(byte[] rawdata) throws IOException, CannotReadException
+    public VorbisCommentTag read(byte[] rawdata,boolean isFramingBit) throws IOException, CannotReadException
     {
+
         VorbisCommentTag tag = new VorbisCommentTag();
 
         byte[] b = new byte[FIELD_VENDOR_LENGTH_LENGTH];
@@ -102,10 +107,19 @@ public class VorbisCommentReader
             pos+=commentLength;
 
             VorbisCommentTagField fieldComment = new VorbisCommentTagField(b);
+            logger.info("Adding:"+fieldComment.getId());
             tag.add(fieldComment);
         }
 
-
+         //Check framing bit, only exists when vorbisComment used within OggVorbis
+        //TODO, do we need to check first bit of byte rather than just byte generally
+        if(isFramingBit)
+        {
+            if (rawdata[pos]==0)
+            {
+                throw new CannotReadException("Error: The OGG Stream isn't valid, Vorbis tag valid flag is wrong");
+            }
+        }
         return tag;
     }
 }

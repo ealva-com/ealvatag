@@ -30,16 +30,15 @@ import org.jaudiotagger.tag.TagFieldKey;
 import java.util.EnumMap;
 import java.util.List;
 
-//FIXME: Handle previously handled DESCRIPTION|COMMENT and TRACK|TRACKNUMBER
-
 /**
  * This is the logical representation of  Vorbis Comment Data 
  *
  * This partial list is derived fom the following sources:
- * <p/>
+ * <p>
  * http://xiph.org/vorbiscomment/doc/v-comment.html
  * http://wiki.musicbrainz.org/PicardQt/TagMapping
  * http://reactor-core.org/ogg-tagging.html
+ * </p>
  */
 public class VorbisCommentTag extends AbstractTag
 {

@@ -163,7 +163,7 @@ public class OggVorbisTagWriter
     }
 
     /**
-     * Usually can use this method, previously comment and setup header all fir on page 2
+     * Usually can use this method, previously comment and setup header all fit on page 2
      * and they still do, so just replace this page. And copy further pages as is.
      *
      * @param setupHeaderLength
@@ -226,8 +226,8 @@ public class OggVorbisTagWriter
     }
 
     /**
-     * Previously comment and setup header on a number of pages
-     * now just replace this page., and renumber subsequent sequence pages
+     * Previously comment and/or setup header on a number of pages
+     * now can just replace this page fitting al on 2nd page, and renumber subsequent sequence pages
      *
      * @param originalHeaderSizes
      * @param newCommentLength
@@ -266,29 +266,15 @@ public class OggVorbisTagWriter
         //Add New VorbisComment
         secondPageBuffer.put(newComment);
 
-        //Now find the setupheader which is on a different page
-        raf.seek(originalHeaderSizes.getSetupHeaderStartPosition());
-        OggPageHeader setupPageHeader;
+
 
         int pageSequence = secondPageHeader.getPageSequence();
 
-        setupPageHeader = OggPageHeader.read (raf);
-        if(setupPageHeader.getPacketList().size()>1)
-        {
-            raf.skipBytes(setupPageHeader.getPacketList().get(0).getLength());
-            //Now should be at start of next packet , check this is the vorbis setup header
-            byte[]b = new byte[VorbisHeader.FIELD_PACKET_TYPE_LENGTH + VorbisHeader.FIELD_CAPTURE_PATTERN_LENGTH];
-            raf.read(b);
-            if(!reader.isVorbisSetupHeader(b))
-            {
-                throw new CannotWriteException("Unable to find setup header(2), unable to write ogg file");
-            }
-            raf.seek(raf.getFilePointer()
-                -(VorbisHeader.FIELD_PACKET_TYPE_LENGTH + VorbisHeader.FIELD_CAPTURE_PATTERN_LENGTH));
-        }
-
-        //Add setup Header
-        raf.getChannel().read(secondPageBuffer);
+        //Now find the setupheader which is on a different page (or extends over pages) and get it with
+        //page header stripped out (it has already been worked it will all fir in so should be no buffer overflow)
+        byte[] setupHeaderData = reader.convertToVorbisSetupHeaderPacket(originalHeaderSizes.getSetupHeaderStartPosition(),raf);
+        logger.finest(setupHeaderData.length + ":"+ secondPageBuffer.position() + ":"+ secondPageBuffer.capacity() );
+        secondPageBuffer.put(setupHeaderData);
 
         //CRC should be zero before calculating it
         secondPageBuffer.putInt(OggPageHeader.FIELD_PAGE_CHECKSUM_POS, 0);
@@ -308,7 +294,9 @@ public class OggVorbisTagWriter
 
         //Now the Page Sequence Number for all the subsequent pages (containing audio frames) are out because there are
         //less pages before then there used to be, so need to adjust
+
         long startAudio = raf.getFilePointer();
+        logger.finest("About to read Audio starting from:"+startAudio);
         long startAudioWritten = rafTemp.getFilePointer();
         while(raf.getFilePointer()<raf.length())
         {
@@ -426,7 +414,7 @@ public class OggVorbisTagWriter
             logger.fine("Spread over two pages");
             //We need to spread over two pages
 
-            //This page contains last bit of comment header and part of setup header-----------------------------
+            //This page contains last bit of comment header and part of setup header
             byte[] commentSegmentTable = createSegments(lastPageCommentPacketSize, true);
 
             //Cant just add minus the packet data from the max packet size because space available to header affected
@@ -458,26 +446,17 @@ public class OggVorbisTagWriter
             //Add last bit of Comment
             lastCommentHeaderBuffer.put(newComment.array(),newCommentOffset,lastPageCommentPacketSize);
 
-            //Now find the setupheader which is on a different page
-            raf.seek(originalHeaderSizes.getSetupHeaderStartPosition());
-            OggPageHeader setupPageHeader;
-
-            setupPageHeader = OggPageHeader.read (raf);
-            if(setupPageHeader.getPacketList().size()>1)
+            //Now find the setupheader which is on a different page (or extends over pages) and get it with
+            //page header stripped out
+            byte[] setupHeaderData = reader.convertToVorbisSetupHeaderPacket(originalHeaderSizes.getSetupHeaderStartPosition(),raf);
+            logger.finest(setupHeaderData.length + ":"+ lastCommentHeaderBuffer.position() + ":"+ lastCommentHeaderBuffer.capacity() );
+            int copyAmount = setupHeaderData.length;
+            if( setupHeaderData.length>lastCommentHeaderBuffer.remaining())
             {
-                raf.skipBytes(setupPageHeader.getPacketList().get(0).getLength());
-                //Now should be at start of next packet , check this is the vorbis setup header
-                byte[]b = new byte[VorbisHeader.FIELD_PACKET_TYPE_LENGTH + VorbisHeader.FIELD_CAPTURE_PATTERN_LENGTH];
-                raf.read(b);
-                if(!reader.isVorbisSetupHeader(b))
-                {
-                    throw new CannotWriteException("Unable to find setup header(2), unable to write ogg file");
-                }
-                raf.seek(raf.getFilePointer()
-                    -(VorbisHeader.FIELD_PACKET_TYPE_LENGTH + VorbisHeader.FIELD_CAPTURE_PATTERN_LENGTH));
+                copyAmount = lastCommentHeaderBuffer.remaining();
+                logger.finest("Copying :"+ copyAmount);
             }
-            //Add part of the setup Header that we can fit into buffer
-            raf.getChannel().read(lastCommentHeaderBuffer);
+            lastCommentHeaderBuffer.put(setupHeaderData,0,copyAmount);
 
             //Page Sequence No
             lastCommentHeaderBuffer.putInt(OggPageHeader.FIELD_PAGE_SEQUENCE_NO_POS,pageSequence);
@@ -523,7 +502,10 @@ public class OggVorbisTagWriter
             }
 
             //Add last bit of Setup header should match remaining buffer size
-            raf.getChannel().read(lastSetupHeaderBuffer);
+            logger.finest(setupHeaderData.length - copyAmount + ":"+ lastSetupHeaderBuffer.position() + ":"+ lastSetupHeaderBuffer.capacity() );
+
+            //Copy remainder of setupheader
+            lastSetupHeaderBuffer.put(setupHeaderData,copyAmount,setupHeaderData.length - copyAmount);
 
             //Page Sequence No
             lastSetupHeaderBuffer.putInt(OggPageHeader.FIELD_PAGE_SEQUENCE_NO_POS,pageSequence);
@@ -576,23 +558,13 @@ public class OggVorbisTagWriter
             raf.seek(originalHeaderSizes.getSetupHeaderStartPosition());
             OggPageHeader setupPageHeader;
 
-            setupPageHeader = OggPageHeader.read (raf);
-            if(setupPageHeader.getPacketList().size()>1)
-            {
-                raf.skipBytes(setupPageHeader.getPacketList().get(0).getLength());
-                //Now should be at start of next packet , check this is the vorbis setup header
-                byte[]b = new byte[VorbisHeader.FIELD_PACKET_TYPE_LENGTH + VorbisHeader.FIELD_CAPTURE_PATTERN_LENGTH];
-                raf.read(b);
-                if(!reader.isVorbisSetupHeader(b))
-                {
-                    throw new CannotWriteException("Unable to find setup header(2), unable to write ogg file");
-                }
-                raf.seek(raf.getFilePointer()
-                    -(VorbisHeader.FIELD_PACKET_TYPE_LENGTH + VorbisHeader.FIELD_CAPTURE_PATTERN_LENGTH));
-            }
 
-            //Add setup Header
-            raf.getChannel().read(lastCommentHeaderBuffer);
+
+
+            //Add setup Header (although it will fit in this page, it may be over multiple pages in its original form
+            //so need to use this function to convert to raw data 
+            byte[] setupHeaderData = reader.convertToVorbisSetupHeaderPacket(originalHeaderSizes.getSetupHeaderStartPosition(),raf);
+            lastCommentHeaderBuffer.put(setupHeaderData);
 
             //Page Sequence No
             lastCommentHeaderBuffer.putInt(OggPageHeader.FIELD_PAGE_SEQUENCE_NO_POS,pageSequence);

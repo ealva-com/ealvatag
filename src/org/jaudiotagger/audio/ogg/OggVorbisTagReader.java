@@ -56,14 +56,9 @@ public class OggVorbisTagReader
         logger.info("Starting to read ogg vorbis tag from file:");
         byte[] rawVorbisCommentData = readRawPacketData(raf);
         //Begin tag reading
-        VorbisCommentTag tag = vorbisCommentReader.read(rawVorbisCommentData);
+        VorbisCommentTag tag = vorbisCommentReader.read(rawVorbisCommentData,true);
 
-        //Check framing bit, only exists when vorbisComment used within OggVorbis
-        //TODO, do we need to check first bit of byte rather than just byte generally
-        if (rawVorbisCommentData[rawVorbisCommentData.length-1]==0)
-        {
-            throw new CannotReadException("Error: The OGG Stream isn't valid, Vorbis tag valid flag is wrong");
-        }
+
         logger.fine("CompletedReadCommentTag");
         return tag;
     }
@@ -140,7 +135,13 @@ public class OggVorbisTagReader
         return true;
     }
 
-     public boolean isVorbisSetupHeader (byte[] headerData)
+    /**
+     * Is this a Vorbis SetupHeader check
+     *
+     * @param headerData
+     * @return true if matches vorbis setupheader
+     */
+    public boolean isVorbisSetupHeader (byte[] headerData)
     {
         String vorbis = new String(headerData, VorbisHeader.FIELD_CAPTURE_PATTERN_POS, VorbisHeader.FIELD_CAPTURE_PATTERN_LENGTH);
         if (headerData[VorbisHeader.FIELD_PACKET_TYPE_POS] != VorbisPacketType.SETUP_HEADER.getType()
@@ -206,7 +207,92 @@ public class OggVorbisTagReader
         }
     }
 
-    /** Calculate the size of the pacvket data for the comment and setup headers
+       /**
+         * The Vorbis Seup Header may span multiple(2) pages, athough it doesnt normally. We pass the start of the
+         * file offset of the OggPage it belongs on, it probably wont be first packet.
+         */
+        public byte[] convertToVorbisSetupHeaderPacket(long fileOffsetOfStartingOggPage,RandomAccessFile raf)
+            throws IOException,CannotReadException
+        {
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+
+            //Seek to specified offset
+            raf.seek(fileOffsetOfStartingOggPage);
+
+            //Read Page
+            OggPageHeader setupPageHeader = OggPageHeader.read (raf);
+
+            //Assume that if multiple packets first packet is VorbisComment and second packet
+            //is setupheader
+            if(setupPageHeader.getPacketList().size()>1)
+            {
+                raf.skipBytes(setupPageHeader.getPacketList().get(0).getLength());
+            }
+
+            //Now should be at start of next packet, check this is the vorbis setup header
+            byte[]b = new byte[VorbisHeader.FIELD_PACKET_TYPE_LENGTH + VorbisHeader.FIELD_CAPTURE_PATTERN_LENGTH];
+            raf.read(b);
+            if(!isVorbisSetupHeader(b))
+            {
+                throw new CannotReadException("Unable to find setup header(2), unable to write ogg file");
+            }
+
+            //Go back to start of setupheader data
+            raf.seek(raf.getFilePointer()
+                -(VorbisHeader.FIELD_PACKET_TYPE_LENGTH + VorbisHeader.FIELD_CAPTURE_PATTERN_LENGTH));
+
+
+            //Read data
+            if(setupPageHeader.getPacketList().size()>1)
+            {
+                b = new byte[ setupPageHeader.getPacketList().get(1).getLength()];
+                raf.read(b);
+                baos.write(b);
+            }
+            else
+            {
+                b = new byte[ setupPageHeader.getPacketList().get(0).getLength()];
+                raf.read(b);
+                baos.write(b);
+            }
+
+
+            //Return Data
+             if(!setupPageHeader.isLastPacketIncomplete())
+            {
+                logger.info("Setupheader finishes on this page");
+                return baos.toByteArray();
+            }
+
+            //The Setupheader extends to the next page, so should be at end of page already
+            //so carry on reading pages until we get to the end of comment
+            while(true)
+            {
+                logger.info("Reading another page");
+                OggPageHeader nextPageHeader = OggPageHeader.read (raf);
+                b = new byte[ nextPageHeader.getPacketList().get(0).getLength()];
+                raf.read(b);
+                baos.write(b);
+
+                //Because there is at least one other packet this means the Setupheader Packet has finished
+                //on this page so thats all we need and we can return
+                if(nextPageHeader.getPacketList().size()>1)
+                {
+                    logger.info("Setupheader finishes on this page");
+                    return baos.toByteArray();
+                }
+
+                //There is only the Setupheader packet on page if it has completed on this page we can return
+                if(!nextPageHeader.isLastPacketIncomplete())
+                {
+                    logger.info("Setupheader finish on Page because this packet is complete");
+                    return baos.toByteArray();
+                }
+            }
+        }
+
+
+    /** Calculate the size of the packet data for the comment and setup headers
      *
      * @param raf
      * @return
@@ -281,7 +367,7 @@ public class OggVorbisTagReader
 
         //Add packet data to size to the setup header size
         setupHeaderSize=packetList.get(1).getLength();
-
+        logger.fine("Adding:"+packetList.get(1).getLength() + " to setup header size");
         //Skip over the packet data
         raf.skipBytes(packetList.get(1).getLength());
 
@@ -293,9 +379,11 @@ public class OggVorbisTagReader
         else
         {
             pageHeader = OggPageHeader.read (raf);
+            packetList = pageHeader.getPacketList();
             while(true)
             {
                 setupHeaderSize+=packetList.get(0).getLength();
+                logger.fine("Adding:"+packetList.get(0).getLength() + " to setup header size");
                 raf.skipBytes(packetList.get(0).getLength());
                 if(!pageHeader.isLastPacketIncomplete())
                 {

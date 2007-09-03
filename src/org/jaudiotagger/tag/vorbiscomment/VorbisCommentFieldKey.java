@@ -3,7 +3,7 @@ package org.jaudiotagger.tag.vorbiscomment;
 /**
  * Common Vorbis Comment Field Names
  * 
- * Note:The enumname is the the actual name of the field in the VorbisCommentTag, but you could introduce a level
+ * Note:The enumname is also the the actual name of the field in the VorbisCommentTag, but you could introduce a level
  * of indirection here if required.
  */
 public enum VorbisCommentFieldKey

@@ -86,7 +86,7 @@ public class FlacTagReader
     {
         byte[] commentHeaderRawPacket = new byte[mbh.getDataLength()];
         raf.read(commentHeaderRawPacket);
-        VorbisCommentTag tag = vorbisCommentReader.read(commentHeaderRawPacket);
+        VorbisCommentTag tag = vorbisCommentReader.read(commentHeaderRawPacket,false);
         return tag;                                                                     
     }
 }

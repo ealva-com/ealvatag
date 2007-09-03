@@ -253,6 +253,7 @@ public class OggPageHeader
     {
         String out = "Ogg Page Header:isvalid:"+isValid
             +":type:"+headerTypeFlag
+            +":oggpageheaderlength:"+rawHeaderData.length
             +":length:"+pageLength
             +":seqno:"+getPageSequence()
             +":packetincomplete:"+isLastPacketIncomplete()
