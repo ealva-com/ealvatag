@@ -56,6 +56,9 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag
 
     protected static final int TAG_SIZE_INCREMENT = 100;
 
+    //The max size we try to write in one go to avoid out of memory errors (10mb)
+    private  static final long MAXIMUM_WRITABLE_CHUNK_SIZE = 10000000;
+
     /**
      * Map of all frames for this tag
      */
@@ -598,13 +601,13 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag
     }
 
     /**
-     * Adjust the length of the ID3v2 padding at the beginning of the MP3 file
-     * this datatype refers to. A new file will be created with enough size to fit
-     * the <code>ID3v2</code> tag. The old file will be deleted, and the new file renamed.
+     * Adjust the length of the  padding at the beginning of the MP3 file, this is only called when there is currently
+     * not enough space before the start of the audio to write the tag.
      *
-     * @param paddingSize Initial padding size. This size is doubled until the
-     *                    ID3v2 tag will fit. A paddingSize of zero will create a padding
-     *                    length exactly equal to the tag size.
+     * A new file will be created with enough size to fit the <code>ID3v2</code> tag.
+     * The old file will be deleted, and the new file renamed.
+     *
+     * @param paddingSize This is total size required to store tag before audio
      * @param file        The file to adjust the padding length of
      * @throws FileNotFoundException if the file exists but is a directory
      *                               rather than a regular file or cannot be opened for any other
@@ -616,26 +619,64 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag
         logger.finer("Need to move audio file to accomodate tag");
         FileChannel fcIn;
         FileChannel fcOut;
-        /** Create buffer holds the neccessary padding */
+
+        // Create buffer holds the neccessary padding
         ByteBuffer paddingBuffer = ByteBuffer.wrap(new byte[paddingSize]);
-        /** Create Temporary File and write channel*/
+
+        // Create Temporary File and write channel
         File paddedFile = File.createTempFile("temp", ".mp3", file.getParentFile());
         fcOut = new FileOutputStream(paddedFile).getChannel();
+
         //Create read channel from original file
         fcIn = new FileInputStream(file).getChannel();
-        //Write padding
+
+        //Write padding to new file (this is where the tag will be written to later)
         long written = (long) fcOut.write(paddingBuffer);
+
         //Write rest of file starting from audio
         logger.finer("Copying:" + (file.length() - audioStart) + "bytes");
-        long written2 = fcIn.transferTo(audioStart, file.length() - audioStart, fcOut);
-        logger.finer("Written padding:" + written + " Data:" + written2);
+
+        //if the amount to be copied is very large we split into 10MB lumps to try and avoid
+        //out of memory errors
+        long audiolength =  file.length() - audioStart;
+        if(audiolength <= MAXIMUM_WRITABLE_CHUNK_SIZE)
+        {
+            long written2 = fcIn.transferTo(audioStart,audiolength, fcOut);
+            logger.finer("Written padding:" + written + " Data:" + written2);
+            if(written2!=audiolength)
+            {
+                throw new RuntimeException("Problem adjusting padding, expecting to write:"+audiolength+":only wrote:"+written2);
+            }
+        }
+        else
+        {
+            long noOfChunks    = audiolength / MAXIMUM_WRITABLE_CHUNK_SIZE;
+            long lastChunkSize = audiolength % MAXIMUM_WRITABLE_CHUNK_SIZE;
+            long written2 = 0;
+            for(int i=0;i<noOfChunks;i++)
+            {
+               written2 += fcIn.transferTo(audioStart + (i* MAXIMUM_WRITABLE_CHUNK_SIZE),MAXIMUM_WRITABLE_CHUNK_SIZE, fcOut);
+            }
+            written2 += fcIn.transferTo(audioStart + (noOfChunks * MAXIMUM_WRITABLE_CHUNK_SIZE),lastChunkSize, fcOut);
+            logger.finer("Written padding:" + written + " Data:" + written2);
+            if(written2!=audiolength)
+            {
+                throw new RuntimeException("Problem adjusting padding in large file, expecting to write:"+audiolength+":only wrote:"+written2);
+            }
+        }
+
+
+
         //Store original modification time
         long lastModified = file.lastModified();
+
         //Close Channels
         fcIn.close();
         fcOut.close();
+
         //Delete original File
         file.delete();
+
         //Rename temporary file and set modification time to original time.
         paddedFile.renameTo(file);
         paddedFile.setLastModified(lastModified);
