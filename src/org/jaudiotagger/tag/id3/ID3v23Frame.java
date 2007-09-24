@@ -112,6 +112,7 @@ public class ID3v23Frame
                 {
                     logger.info("V4:Orig id is:" + frame.getIdentifier() + ":New id is:" + identifier);
                     this.frameBody = (AbstractID3v2FrameBody) ID3Tags.copyObject(frame.getBody());
+                    this.frameBody.setHeader(this);
                     return;
                 }
                 else
@@ -122,6 +123,7 @@ public class ID3v23Frame
                     {
                         logger.info("V4:Orig id is:" + frame.getIdentifier() + ":New id is:" + identifier);
                         this.frameBody = this.readBody(identifier, (AbstractID3v2FrameBody) frame.getBody());
+                        this.frameBody.setHeader(this);
                         return;
                     }
                     //It is a v24 frame that is not known and cannot be forced in v23 e.g TDRL,in which case
@@ -141,7 +143,7 @@ public class ID3v23Frame
                         }
                         identifier = frame.getIdentifier();
                         this.frameBody = new FrameBodyUnsupported(identifier,baos.toByteArray());
-
+                        this.frameBody.setHeader(this);
                         logger.info("V4:Orig id is:" + frame.getIdentifier() + ":New Id Unsupported is:" + identifier);
                         return;
                     }
@@ -151,6 +153,7 @@ public class ID3v23Frame
             else if(frame.getBody() instanceof FrameBodyUnsupported)
             {
                 this.frameBody = new FrameBodyUnsupported((FrameBodyUnsupported) frame.getBody());
+                this.frameBody.setHeader(this);
                 identifier = frame.getIdentifier();
                 logger.info("UNKNOWN:Orig id is:" + frame.getIdentifier() + ":New id is:" + identifier);
                 return;
@@ -162,6 +165,7 @@ public class ID3v23Frame
                 if(ID3Tags.isID3v23FrameIdentifier(frame.getIdentifier()))
                 {
                       this.frameBody = ((FrameBodyDeprecated)frame.getBody()).getOriginalFrameBody();
+                      this.frameBody.setHeader(this);
                       identifier = frame.getIdentifier();
                       logger.info("DEPRECATED:Orig id is:" + frame.getIdentifier() + ":New id is:" + identifier);
                 }
@@ -169,6 +173,7 @@ public class ID3v23Frame
                 else
                 {
                     this.frameBody = new FrameBodyDeprecated((FrameBodyDeprecated) frame.getBody());
+                    this.frameBody.setHeader(this);
                     identifier = frame.getIdentifier();
                     logger.info("DEPRECATED:Orig id is:" + frame.getIdentifier() + ":New id is:" + identifier);
                     return;
@@ -190,6 +195,7 @@ public class ID3v23Frame
                 {
                     logger.info("V3:Orig id is:" + frame.getIdentifier() + ":New id is:" + identifier);
                     this.frameBody = (AbstractID3v2FrameBody) ID3Tags.copyObject(frame.getBody());
+                    this.frameBody.setHeader(this);
                     return;
                 }
                 //Is it a known v2 frame which needs forcing to v4 frame e.g PIC - APIC
@@ -201,12 +207,14 @@ public class ID3v23Frame
                     {
                         logger.info("V22Orig id is:" + frame.getIdentifier() + "New id is:" + identifier);
                         this.frameBody = this.readBody(identifier, (AbstractID3v2FrameBody) frame.getBody());
+                        this.frameBody.setHeader(this);
                         return;
                     }
                     //No mechanism exists to convert it to a v23 frame
                     else
                     {
                         this.frameBody = new FrameBodyDeprecated((AbstractID3v2FrameBody)frame.getBody());
+                        this.frameBody.setHeader(this);
                         identifier = frame.getIdentifier();
                         logger.info("Deprecated:V22:orig id id is:" + frame.getIdentifier() + ":New id is:" + identifier);
                         return;
@@ -217,13 +225,14 @@ public class ID3v23Frame
             else
             {
                 this.frameBody = new FrameBodyUnsupported((FrameBodyUnsupported) frame.getBody());
+                this.frameBody.setHeader(this);
                 identifier = frame.getIdentifier();
                 logger.info("UNKNOWN:Orig id is:" + frame.getIdentifier() + ":New id is:" + identifier);
                 return;
             }
         }
-        this.frameBody.setHeader(this);
-        logger.info("Created frame from a frame of a different version");
+
+        logger.warning("Frame is unknown version");
     }
 
     /**
