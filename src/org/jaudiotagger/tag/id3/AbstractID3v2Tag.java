@@ -656,6 +656,8 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag
             for(int i=0;i<noOfChunks;i++)
             {
                written2 += fcIn.transferTo(audioStart + (i* MAXIMUM_WRITABLE_CHUNK_SIZE),MAXIMUM_WRITABLE_CHUNK_SIZE, fcOut);
+               //Try and recover memory as quick as possible 
+               Runtime.getRuntime().gc();
             }
             written2 += fcIn.transferTo(audioStart + (noOfChunks * MAXIMUM_WRITABLE_CHUNK_SIZE),lastChunkSize, fcOut);
             logger.finer("Written padding:" + written + " Data:" + written2);
