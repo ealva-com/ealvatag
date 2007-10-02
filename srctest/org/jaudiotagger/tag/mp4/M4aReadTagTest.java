@@ -34,7 +34,7 @@ public class M4aReadTagTest  extends TestCase
             assertEquals("title",tag.getFirstTitle());
             assertEquals("comments",tag.getFirstComment());
             assertEquals("1971",tag.getFirstYear());
-            assertEquals("1",tag.getFirstTrack());
+            assertEquals("0/1/10/0",tag.getFirstTrack());
 
             //Lookup by generickey
             assertEquals("Artist",tag.getFirst(TagFieldKey.ARTIST));
@@ -42,8 +42,8 @@ public class M4aReadTagTest  extends TestCase
             assertEquals("title",tag.getFirst(TagFieldKey.TITLE));
             assertEquals("comments",tag.getFirst(TagFieldKey.COMMENT));
             assertEquals("1971",tag.getFirst(TagFieldKey.YEAR));
-            assertEquals("1",tag.getFirst(TagFieldKey.TRACK));
-            assertEquals("1",tag.getFirst(TagFieldKey.DISC_NO));
+            assertEquals("0/1/10/0",tag.getFirst(TagFieldKey.TRACK));
+            assertEquals("0/1/10",tag.getFirst(TagFieldKey.DISC_NO));
             assertEquals("composer",tag.getFirst(TagFieldKey.COMPOSER));
             assertEquals("Sortartist",tag.getFirst(TagFieldKey.ARTIST_SORT));
             assertEquals("lyrics",tag.getFirst(TagFieldKey.LYRICS));
@@ -66,8 +66,21 @@ public class M4aReadTagTest  extends TestCase
             assertEquals("title",mp4tag.getFirst(Mp4FieldKey.TITLE));
             assertEquals("comments",mp4tag.getFirst(Mp4FieldKey.COMMENT));
             assertEquals("1971",mp4tag.getFirst(Mp4FieldKey.DAY));
-            assertEquals("1",mp4tag.getFirst(Mp4FieldKey.TRACK));
-            assertEquals("1",mp4tag.getFirst(Mp4FieldKey.DISCNUMBER));
+            //Not sure why there are 4 values, only understand 2nd and third
+            assertEquals("0/1/10/0",mp4tag.getFirst(Mp4FieldKey.TRACK));
+            assertEquals("0/1/10/0",((Mp4TagTextNumberField)mp4tag.get(Mp4FieldKey.TRACK).get(0)).getContent());
+            assertEquals(new Integer(0),((Mp4TagTextNumberField)mp4tag.get(Mp4FieldKey.TRACK).get(0)).getNumbers().get(0));
+            assertEquals(new Integer(1),((Mp4TagTextNumberField)mp4tag.get(Mp4FieldKey.TRACK).get(0)).getNumbers().get(1));
+            assertEquals(new Integer(10),((Mp4TagTextNumberField)mp4tag.get(Mp4FieldKey.TRACK).get(0)).getNumbers().get(2));
+            assertEquals(new Integer(0),((Mp4TagTextNumberField)mp4tag.get(Mp4FieldKey.TRACK).get(0)).getNumbers().get(3));
+
+            //Not sure why there are 4 values, only understand 2nd and third
+            assertEquals("0/1/10",mp4tag.getFirst(Mp4FieldKey.DISCNUMBER));
+            assertEquals("0/1/10",((Mp4TagTextNumberField)mp4tag.get(Mp4FieldKey.DISCNUMBER).get(0)).getContent());
+            assertEquals(new Integer(0),((Mp4TagTextNumberField)mp4tag.get(Mp4FieldKey.DISCNUMBER).get(0)).getNumbers().get(0));
+            assertEquals(new Integer(1),((Mp4TagTextNumberField)mp4tag.get(Mp4FieldKey.DISCNUMBER).get(0)).getNumbers().get(1));
+            assertEquals(new Integer(10),((Mp4TagTextNumberField)mp4tag.get(Mp4FieldKey.DISCNUMBER).get(0)).getNumbers().get(2));
+
             assertEquals("composer",mp4tag.getFirst(Mp4FieldKey.COMPOSER));
             assertEquals("Sortartist",mp4tag.getFirst(Mp4FieldKey.ARTIST_SORT));
             assertEquals("lyrics",mp4tag.getFirst(Mp4FieldKey.LYRICS));
@@ -81,7 +94,7 @@ public class M4aReadTagTest  extends TestCase
             assertEquals("1",mp4tag.getFirst(Mp4FieldKey.COMPILATION));
 
             //Lookup by mp4key (no generic key mapping for these yet)
-            assertEquals("iTunes v7.1.0.59, QuickTime 7.1.5",mp4tag.getFirst(Mp4FieldKey.ENCODER));
+            assertEquals("iTunes v7.4.3.1, QuickTime 7.2",mp4tag.getFirst(Mp4FieldKey.ENCODER));
             assertEquals("sortshow",mp4tag.getFirst(Mp4FieldKey.SHOW_SORT));
             assertEquals("show",mp4tag.getFirst(Mp4FieldKey.SHOW));
             assertEquals("Genre",mp4tag.getFirst(Mp4FieldKey.GENRE_CUSTOM));
