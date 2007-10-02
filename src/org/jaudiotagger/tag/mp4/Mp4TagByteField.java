@@ -27,6 +27,7 @@ public class Mp4TagByteField extends Mp4TagTextField
 
     protected void build(byte[] raw) throws UnsupportedEncodingException
     {
+        //System.out.println("Byte size is:"+(raw.length - DATA_HEADER_LENGTH)  );
         this.content = Utils.getNumberBigEndian(raw,
             DATA_HEADER_LENGTH ,
             raw.length - 1) + "";

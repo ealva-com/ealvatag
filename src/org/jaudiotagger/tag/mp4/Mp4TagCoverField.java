@@ -29,12 +29,12 @@ public class Mp4TagCoverField extends Mp4TagBinaryField
 {
     public Mp4TagCoverField()
     {
-        super("covr");
+        super(Mp4FieldKey.ARTWORK.getFieldName());
     }
 
     public Mp4TagCoverField(byte[] raw) throws UnsupportedEncodingException
     {
-        super("covr", raw);
+        super(Mp4FieldKey.ARTWORK.getFieldName(), raw);
     }
 
     public boolean isBinary()
