@@ -4,7 +4,7 @@ import org.jaudiotagger.tag.mp4.Mp4FieldType;
 import org.jaudiotagger.audio.exceptions.CannotReadException;
 
 /**
- * This a list mp4boxes identifier, that are not part of the metadata info.
+ * This a list of mp4boxes identifiers, that are not part of the metadata info.
  *
  * These are of limited interest to JAudiotagger
  */

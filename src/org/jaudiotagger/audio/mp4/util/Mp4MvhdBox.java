@@ -23,6 +23,7 @@ import org.jaudiotagger.audio.generic.Utils;
 /**
  * This MP4Box contains important audio information we need
  *
+ * Can be used to calculate track length
  */
 public class Mp4MvhdBox
 {

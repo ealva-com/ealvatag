@@ -19,15 +19,22 @@
 package org.jaudiotagger.tag.mp4;
 
 import java.io.UnsupportedEncodingException;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.ListIterator;
 
 import org.jaudiotagger.audio.generic.Utils;
 import org.jaudiotagger.tag.mp4.Mp4TagTextField;
 
 /**
- * Represents simple text field, but reads the data content as a number
+ * Represents simple text field, but reads the data content as an arry of 15 bit unsigned numbers
  */
 public class Mp4TagTextNumberField extends Mp4TagTextField
 {
+    public static final int NUMBER_LENGTH = 2;
+
+    //Holds the numbers decoded
+    private List <Integer> numbers;
 
     public Mp4TagTextNumberField(String id, String n)
     {
@@ -46,12 +53,36 @@ public class Mp4TagTextNumberField extends Mp4TagTextField
 
     protected void build(byte[] raw) throws UnsupportedEncodingException
     {
-        //System.out.println("rawlength:"+(raw.length - 1));
-        //TODO if I read to the end of the raw data I get incorrect results, if I only read 4 bytes
-        //regardless of the data length I get correct results, why is this ?
-        this.content = Utils.getNumberBigEndian(raw, DATA_HEADER_LENGTH ,
-            DATA_HEADER_LENGTH + 4 - 1)+ "";
+        numbers = new ArrayList<Integer>();
+        int dataSize = raw.length - DATA_HEADER_LENGTH;
+        for(int i =0;i<(dataSize/ NUMBER_LENGTH);i++)
+        {
+            int number = Utils.getNumberBigEndian(raw,
+                    DATA_HEADER_LENGTH + (i *  NUMBER_LENGTH),
+                    DATA_HEADER_LENGTH + (i *  NUMBER_LENGTH) + (NUMBER_LENGTH - 1));
+            numbers.add(number);
+        }
 
+        //Make String representation  (separate values with slash)
+        StringBuffer sb = new StringBuffer();
+        ListIterator iterator =  numbers.listIterator();
+        while(iterator.hasNext())
+        {
+            sb.append(iterator.next());
+            if(iterator.hasNext())
+            {
+                sb.append("/");
+            }
+        }
+        content=sb.toString();
+    }
 
+    /**
+     *
+     * @return the individual numbers making up this field
+     */
+    public List<Integer> getNumbers()
+    {
+        return numbers;
     }
 }

@@ -109,7 +109,7 @@ public class Utils
     {
         int number = 0;
         for (int i = 0; i < (end - start + 1); i++)
-        {
+        {               
             number += ((b[end - i] & 0xFF) << i * 8);
         }
 

@@ -74,7 +74,7 @@ public interface TagField {
 	/**
 	 * This method will set the field to represent binary data.<br>
 	 * Some implementations may support conversions.<br>
-	 * As of now (Octobre 2005) there is no implemenation really using this
+	 * As of now (Octobre 2005) there is no implementation really using this
 	 * method to perform useful operations.
 	 * 
 	 * @param b
@@ -88,7 +88,7 @@ public interface TagField {
 	 * Identifies a field to be of common use.<br>
 	 * Some software may differ between common and not common fields. A common
 	 * one is for sure the title field. A web link may not be of common use for
-	 * tagging. However some file formats, or future developement of users
+	 * tagging. However some file formats, or future development of users
 	 * expectations will make more fields common than now can be known.
 	 * 
 	 * @return <code>true</code> if the field is of common use.
