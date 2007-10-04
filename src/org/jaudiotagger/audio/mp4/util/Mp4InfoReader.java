@@ -21,49 +21,52 @@ package org.jaudiotagger.audio.mp4.util;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.logging.Logger;
+import java.nio.ByteBuffer;
+import java.nio.channels.ByteChannel;
 
 import org.jaudiotagger.audio.generic.GenericAudioHeader;
 import org.jaudiotagger.audio.exceptions.CannotReadException;
 import org.jaudiotagger.audio.mp4.Mp4NotMetaFieldKey;
 
+/**
+ * Read audio info from file.
+ *
+ * The info is held in the mvdh field as shown below
+ *
+ * |--- ftyp
+ * |--- moov
+ * |......|
+ * |......|----- mvdh
+ * |......|----- trak
+ * |......|----- udta 
+ * |
+ * |--- mdat
+ */
 public class Mp4InfoReader
 {
     // Logger Object
-    public static Logger logger = Logger.getLogger(" org.jaudiotagger.audio.mp4.uti");
+    public static Logger logger = Logger.getLogger(" org.jaudiotagger.audio.mp4.util");
 
     public GenericAudioHeader read(RandomAccessFile raf) throws CannotReadException, IOException
     {
         GenericAudioHeader info = new GenericAudioHeader();
 
-        Mp4Box box = new Mp4Box();
+        //Get to the facts everything we are interested in is within the moov box, so just load data from file
+        //once so no more file I/O needed
+        Mp4BoxHeader moovHeader = Mp4BoxHeader.seekWithinLevel(raf,Mp4NotMetaFieldKey.MOOV.getFieldName());
 
-        //Get to the facts
-        //1-Searching for "moov"
-        seek(raf, box, Mp4NotMetaFieldKey.MOOV.getFieldName());
+        ByteBuffer   moovBuffer = ByteBuffer.allocate(moovHeader.getLength() - Mp4BoxHeader.HEADER_LENGTH);
+        raf.getChannel().read(moovBuffer);
+        moovBuffer.rewind();
 
-        //2-Searching for "mvhd"
-        seek(raf, box, Mp4NotMetaFieldKey.MVHD.getFieldName());
-
-        byte[] b = new byte[box.getLength() - Mp4Box.HEADER_LENGTH];
-        raf.read(b);
-
-        Mp4MvhdBox mvhd = new Mp4MvhdBox(b);
+        //Level 2-Searching for "mvhd" within "moov"
+        Mp4BoxHeader boxHeader = Mp4BoxHeader.seekWithinLevel(moovBuffer,Mp4NotMetaFieldKey.MVHD.getFieldName());
+        Mp4MvhdBox mvhd = new Mp4MvhdBox(boxHeader,moovBuffer.slice());
         info.setLength(mvhd.getLength());
 
         logger.info(info.toString());
         return info;
     }
 
-    private void seek(RandomAccessFile raf, Mp4Box box, String id) throws IOException
-    {
-        byte[] b = new byte[Mp4Box.HEADER_LENGTH];
-        raf.read(b);
-        box.update(b);
-        while (!box.getId().equals(id))
-        {
-            raf.skipBytes(box.getLength() - Mp4Box.HEADER_LENGTH);
-            raf.read(b);
-            box.update(b);
-        }
-    }
+
 }

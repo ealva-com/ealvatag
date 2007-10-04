@@ -19,12 +19,18 @@
 package org.jaudiotagger.tag.mp4;
 
 import java.io.UnsupportedEncodingException;
+import java.nio.ByteBuffer;
 
 import org.jaudiotagger.tag.TagField;
 import org.jaudiotagger.audio.generic.Utils;
 
 /**
- * This abstract class represents the data contents of an MP4Box.
+ * This abstract class represents the data contents of an MP4Box
+ *
+ * Note there isnt a one to one correspondance between a tag field and a box because some fields are represented
+ * by multiple boxes, for example many of the MusicBrainz fields use the '----' box, which in turn uses one of mean,
+ * name and data box. So an instance of a tag field maps to one item of data such as 'Title', but it may have to read
+ * multiple boxes to do this.
  *
  * There are various subclasses that represent different types of fields
  */
@@ -38,10 +44,10 @@ public abstract class Mp4TagField implements TagField
         this.id = id;
     }
 
-    public Mp4TagField(String id, byte[] raw) throws UnsupportedEncodingException
+    public Mp4TagField(String id, ByteBuffer data) throws UnsupportedEncodingException
     {
         this(id);
-        build(raw);
+        build(data);
     }
 
     public String getId()
@@ -64,5 +70,5 @@ public abstract class Mp4TagField implements TagField
         return Utils.getDefaultBytes(getId());
     }
 
-    protected abstract void build(byte[] raw) throws UnsupportedEncodingException;
+    protected abstract void build(ByteBuffer data) throws UnsupportedEncodingException;
 }

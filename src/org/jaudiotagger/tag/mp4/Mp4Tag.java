@@ -27,12 +27,15 @@ import java.util.EnumMap;
 import java.util.List;
 import java.util.ArrayList;
 
-
+/**
+ * Mp4 Tag
+ */
 public class Mp4Tag extends AbstractTag
 {
 
     static EnumMap<TagFieldKey, Mp4FieldKey> tagFieldToMp4Field = new EnumMap<TagFieldKey, Mp4FieldKey>(TagFieldKey.class);
 
+    //Mapping from gerneric key to mp4 key
     static
     {
         tagFieldToMp4Field.put(TagFieldKey.ARTIST, Mp4FieldKey.ARTIST);
@@ -47,16 +50,16 @@ public class Mp4Tag extends AbstractTag
         tagFieldToMp4Field.put(TagFieldKey.GROUPING, Mp4FieldKey.GROUPING);
         tagFieldToMp4Field.put(TagFieldKey.DISC_NO, Mp4FieldKey.DISCNUMBER);
         tagFieldToMp4Field.put(TagFieldKey.BPM,Mp4FieldKey.BPM);
-        //tagFieldToMp4Field.put(TagFieldKey.MUSICBRAINZ_ARTISTID,Mp4FieldKey.MUSICBRAINZ_ARTISTID);
-        //tagFieldToMp4Field.put(TagFieldKey.MUSICBRAINZ_RELEASEID,Mp4FieldKey.MUSICBRAINZ_ALBUMEID);
-        //tagFieldToMp4Field.put(TagFieldKey.MUSICBRAINZ_RELEASEARTISTID,Mp4FieldKey.MUSICBRAINZ_ALBUMARTISTID);
-        //tagFieldToMp4Field.put(TagFieldKey.MUSICBRAINZ_TRACK_ID,Mp4FieldKey.MUSICBRAINZ_TRACKID);
-        //tagFieldToMp4Field.put(TagFieldKey.MUSICBRAINZ_DISC_ID,Mp4FieldKey.MUSICBRAINZ_DISCID);
-        //tagFieldToMp4Field.put(TagFieldKey.MUSICIP_ID,Mp4FieldKey.MUSICIP_PUID);
-        //tagFieldToMp4Field.put(TagFieldKey.AMAZON_ID,Mp4FieldKey.ASIN);
-        //tagFieldToMp4Field.put(TagFieldKey.MUSICBRAINZ_RELEASE_STATUS,Mp4FieldKey.MUSICBRAINZ_ALBUMSTATUS);
-        //tagFieldToMp4Field.put(TagFieldKey.MUSICBRAINZ_RELEASE_TYPE,Mp4FieldKey.MUSICBRAINZ_ALBUMTYPE);
-        //tagFieldToMp4Field.put(TagFieldKey.MUSICBRAINZ_RELEASE_COUNTRY,Mp4FieldKey.RELEASECOUNTRY);
+        tagFieldToMp4Field.put(TagFieldKey.MUSICBRAINZ_ARTISTID,Mp4FieldKey.MUSICBRAINZ_ARTISTID);
+        tagFieldToMp4Field.put(TagFieldKey.MUSICBRAINZ_RELEASEID,Mp4FieldKey.MUSICBRAINZ_ALBUMID);
+        tagFieldToMp4Field.put(TagFieldKey.MUSICBRAINZ_RELEASEARTISTID,Mp4FieldKey.MUSICBRAINZ_ALBUMARTISTID);
+        tagFieldToMp4Field.put(TagFieldKey.MUSICBRAINZ_TRACK_ID,Mp4FieldKey.MUSICBRAINZ_TRACKID);
+        tagFieldToMp4Field.put(TagFieldKey.MUSICBRAINZ_DISC_ID,Mp4FieldKey.MUSICBRAINZ_DISCID);
+        tagFieldToMp4Field.put(TagFieldKey.MUSICIP_ID,Mp4FieldKey.MUSICIP_PUID);
+        tagFieldToMp4Field.put(TagFieldKey.AMAZON_ID,Mp4FieldKey.ASIN);
+        tagFieldToMp4Field.put(TagFieldKey.MUSICBRAINZ_RELEASE_STATUS,Mp4FieldKey.MUSICBRAINZ_ALBUM_STATUS);
+        tagFieldToMp4Field.put(TagFieldKey.MUSICBRAINZ_RELEASE_TYPE,Mp4FieldKey.MUSICBRAINZ_ALBUM_TYPE);
+        tagFieldToMp4Field.put(TagFieldKey.MUSICBRAINZ_RELEASE_COUNTRY,Mp4FieldKey.RELEASECOUNTRY);
         tagFieldToMp4Field.put(TagFieldKey.LYRICS, Mp4FieldKey.LYRICS);
         tagFieldToMp4Field.put(TagFieldKey.IS_COMPILATION, Mp4FieldKey.COMPILATION);
         tagFieldToMp4Field.put(TagFieldKey.ARTIST_SORT,Mp4FieldKey.ARTIST_SORT);
@@ -181,7 +184,9 @@ public class Mp4Tag extends AbstractTag
     /**
      * Retrieve the  values that exists for this mp4keyId (this is the internalid actually used)
      *
-     * @param mp4KeyId TODO:this is inefficient we need to chnage calling code to use the enumes directly
+     * @param mp4KeyId
+     *
+     * TODO:this is inefficient we need to change calling code to use the enums directly
      */
     @Override
     public List get(String mp4KeyId)

@@ -19,45 +19,68 @@
 package org.jaudiotagger.tag.mp4;
 
 import java.io.UnsupportedEncodingException;
+import java.nio.ByteBuffer;
 
 import org.jaudiotagger.tag.TagField;
 import org.jaudiotagger.tag.TagTextField;
 import org.jaudiotagger.tag.mp4.Mp4TagField;
 import org.jaudiotagger.audio.generic.Utils;
-import org.jaudiotagger.audio.mp4.util.Mp4Box;
+import org.jaudiotagger.audio.mp4.util.Mp4BoxHeader;
 
 /**
- * Represents simple text field, reads the data contnet as text.
+ * Represents a single text field
+ *
+ * Mp4 metadata normally held as follows:
+ * MP4Box Parent contains
+ *      :length (includes length of data child)  (4 bytes)
+ *      :name         (4 bytes)
+ *      :child with
+ *          :length          (4 bytes)
+ *          :name 'Data'     (4 bytes)
+ *          :atom version    (1 byte)
+ *          :atom type flags (3 bytes)
+ *          :null field      (4 bytes)
+ *          :data
+ *
+ * Note:This class is initilized with the child data atom only, the parent data has already been processed, this may
+ * change as it seems that code should probably be enscapulated into this.
+ *
  */
 public class Mp4TagTextField extends Mp4TagField implements TagTextField
 {
-    public static final int VERSION_LENGTH = 1;
-    public static final int TYPE_LENGTH = 3;
-    public static final int NULL_LENGTH = 4;
-    public static final int DATA_HEADER_LENGTH = Mp4Box.HEADER_LENGTH + VERSION_LENGTH + TYPE_LENGTH + NULL_LENGTH;
-
-    public static final int TYPE_POS = Mp4Box.HEADER_LENGTH + VERSION_LENGTH;
-
     protected int    dataSize;
     protected String content;
 
-    public Mp4TagTextField(String id, byte[] raw) throws UnsupportedEncodingException
+    /**
+     *
+     * @param id  parent id
+     * @param data atom data
+     * @throws UnsupportedEncodingException
+     */
+    public Mp4TagTextField(String id, ByteBuffer data) throws UnsupportedEncodingException
     {
-        super(id, raw);
+        super(id, data);
     }
 
+    /**
+     *
+     * @param id  parent id
+     * @param content data atom data
+     */
     public Mp4TagTextField(String id, String content)
     {
         super(id);
         this.content = content;
     }
 
-    protected void build(byte[] raw) throws UnsupportedEncodingException
+    protected void build(ByteBuffer data) throws UnsupportedEncodingException
     {
-        dataSize = Utils.getNumberBigEndian(raw, Mp4Box.OFFSET_POS, Mp4Box.OFFSET_LENGTH - 1);
-        content  = Utils.getString(raw, DATA_HEADER_LENGTH,dataSize - DATA_HEADER_LENGTH, getEncoding());
+        //Data actually contains a 'Data' Box so process data using this
+        Mp4BoxHeader header  = new Mp4BoxHeader(data);
+        Mp4DataBox   databox = new Mp4DataBox(header,data);
+        dataSize = header.getDataLength();
+        content  = databox.getContent();
     }
-
 
     public void copyContent(TagField field)
     {
@@ -83,29 +106,38 @@ public class Mp4TagTextField extends Mp4TagField implements TagTextField
         return "ISO-8859-1";
     }
 
+    /** Convert back to raw content, includes parent and data atom as views as one thing externally
+     *
+     * @return
+     * @throws UnsupportedEncodingException
+     */
     public byte[] getRawContent() throws UnsupportedEncodingException
     {
         byte[] data = getDataBytes();
-        byte[] b = new byte[4 + 4 + 4 + 4 + 4 + 4 + data.length];
+        byte[] b = new byte[Mp4BoxHeader.HEADER_LENGTH + Mp4DataBox.DATA_HEADER_LENGTH + data.length];
 
-        int offset = 0;
+        int offset = Mp4BoxHeader.OFFSET_POS;
         Utils.copy(Utils.getSizeBigEndian(b.length), b, offset);
-        offset += 4;
+        offset += Mp4BoxHeader.OFFSET_LENGTH;
 
         Utils.copy(Utils.getDefaultBytes(getId()), b, offset);
-        offset += 4;
+        offset += Mp4BoxHeader.IDENTIFIER_LENGTH;
 
-        Utils.copy(Utils.getSizeBigEndian(4 + 4 + 4 + 4 + data.length), b, offset);
-        offset += 4;
+        Utils.copy(Utils.getSizeBigEndian(Mp4DataBox.DATA_HEADER_LENGTH + data.length), b, offset);
+        offset += Mp4BoxHeader.OFFSET_LENGTH;
 
-        Utils.copy(Utils.getDefaultBytes("data"), b, offset);
-        offset += 4;
+        Utils.copy(Utils.getDefaultBytes(Mp4DataBox.IDENTIFIER), b, offset);
+        offset += Mp4BoxHeader.IDENTIFIER_LENGTH;
 
-        Utils.copy(new byte[]{0, 0, 0, (byte) (isBinary() ? 0 : 1)}, b, offset);
-        offset += 4;
+        Utils.copy(new byte[]{0, 0, 0}, b, offset);
+        offset += Mp4DataBox.VERSION_LENGTH;
+
+        //TODO this is wrong have to set the correct class
+        Utils.copy(new byte[]{(byte) (isBinary() ? 0 : 1)}, b, offset);
+        offset += Mp4DataBox.TYPE_LENGTH;
 
         Utils.copy(new byte[]{0, 0, 0, 0}, b, offset);
-        offset += 4;
+        offset += Mp4DataBox.NULL_LENGTH;
 
         Utils.copy(data, b, offset);
         offset += data.length;

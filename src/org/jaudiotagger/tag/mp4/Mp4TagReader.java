@@ -18,19 +18,47 @@
  */
 package org.jaudiotagger.tag.mp4;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.io.UnsupportedEncodingException;
 import java.util.logging.Logger;
+import java.nio.ByteBuffer;
 
 import org.jaudiotagger.audio.exceptions.CannotReadException;
-import org.jaudiotagger.audio.mp4.util.Mp4Box;
+import org.jaudiotagger.audio.mp4.util.Mp4BoxHeader;
+import org.jaudiotagger.audio.mp4.util.Mp4MetaBox;
 import org.jaudiotagger.audio.mp4.Mp4NotMetaFieldKey;
 import org.jaudiotagger.audio.generic.Utils;
 
+/**
+ * Reads metadata from mp4, the metadata tags are held under the ilst atom as shown below
+ * 
+ * |--- ftyp
+ * |--- moov
+ * |......|
+ * |......|----- mvdh
+ * |......|----- trak
+ * |......|----- udta
+ * |..............|
+ * |..............|-- meta
+ * |....................|
+ * |....................|-- hdlr
+ * |....................|-- ilst
+ * |.........................|
+ * |.........................|---- @nam (Optional for each metadatafield)
+ * |.................................|---- name
+ * |................................. ecetera
+ * |.........................|---- ---- (Optional for reverse dns field)
+ * |.................................|-- mean
+ * |.................................|-- name
+ * |.................................|-- data
+ * |.................................... ecetere
+ * |
+ * |--- mdat
+ */
 public class Mp4TagReader
 {
+    
     // Logger Object
     public static Logger logger = Logger.getLogger("org.jaudiotagger.tag.mp4");
 
@@ -44,99 +72,84 @@ public class Mp4TagReader
     {
         Mp4Tag tag = new Mp4Tag();
 
-        Mp4Box box = new Mp4Box();
+        //Get to the facts everything we are interested in is within the moov box, so just load data from file
+        //once so no more file I/O needed
+        Mp4BoxHeader moovHeader = Mp4BoxHeader.seekWithinLevel(raf,Mp4NotMetaFieldKey.MOOV.getFieldName());
+        ByteBuffer moovBuffer = ByteBuffer.allocate(moovHeader.getLength() - Mp4BoxHeader.HEADER_LENGTH);
+        raf.getChannel().read(moovBuffer);
+        moovBuffer.rewind();
+        
+        //Level 2-Searching for "udta" within "moov"
+        Mp4BoxHeader.seekWithinLevel(moovBuffer,Mp4NotMetaFieldKey.UDTA.getFieldName());
 
+        //Level 3-Searching for "meta" within udta
+        Mp4BoxHeader boxHeader  = Mp4BoxHeader.seekWithinLevel(moovBuffer,Mp4NotMetaFieldKey.META.getFieldName());
+        Mp4MetaBox meta = new Mp4MetaBox(boxHeader,moovBuffer);
+        meta.processData();
 
-        //Get to the facts
-        //1-Searching for "moov"
-        seek(raf, box, Mp4NotMetaFieldKey.MOOV.getFieldName());
+        //Level 4- Search for "ilst" within meta
+        boxHeader = Mp4BoxHeader.seekWithinLevel(moovBuffer,Mp4NotMetaFieldKey.ILST.getFieldName());
 
-        //2-Searching for "udta"
-        seek(raf, box, Mp4NotMetaFieldKey.UDTA.getFieldName());
-
-        //3-Searching for "meta"
-        seek(raf, box, Mp4NotMetaFieldKey.META.getFieldName());
-
-        //4-skip the meta flags
-        byte[] b = new byte[4];
-        raf.read(b);
-        if (b[0] != 0)
-        {
-            throw new CannotReadException();
-        }
-
-        //5-Seek the "ilst"
-        seek(raf, box, Mp4NotMetaFieldKey.ILST.getFieldName());
-
-        //Size of metadata (exclude the size of the ilst header)
-        int length = box.getLength() - Mp4Box.HEADER_LENGTH;
-
+        //Size of metadata (exclude the size of the ilst header), take a slice starting at
+        //metadata children to make things safer
+        int length = boxHeader.getLength() - Mp4BoxHeader.HEADER_LENGTH;
+        ByteBuffer metadataBuffer = moovBuffer.slice();
+        //Datalength is longer are there boxes after ilst at this level?
+        logger.info("headerlengthsays:"+length+"datalength:"+metadataBuffer.limit());
         int read = 0;
+        logger.info("Started to read metadata fields at position is in metadata buffer:"+metadataBuffer.position());
         while (read < length)
         {
-            //Read the box
-            b = new byte[Mp4Box.HEADER_LENGTH];
-            raf.read(b);
-            box.update(b);
+            //Read the boxHeader
+            boxHeader.update(metadataBuffer);
 
-            //Now read the complete child databox into a byte array , we remove the length of the parents identifier,
-            //and the length of the length field of the child
-            int fieldLength = box.getLength() - Mp4Box.HEADER_LENGTH;
-            b = new byte[fieldLength];
-            raf.read(b);
+            //Create the corresponding datafield from the id, and slice the buffer so position of main buffer
+            //wont get affected
+            logger.info("Next position is at:"+metadataBuffer.position());
+            tag.add(createMp4Field(boxHeader, metadataBuffer.slice()));
 
-            //Create the corresponding datafield from the id
-            tag.add(createMp4Field(box.getId(), b));
-            read += box.getLength();
+            //Move position in buffer to the start of the next header
+            metadataBuffer.position(metadataBuffer.position() + boxHeader.getDataLength());
+            read += boxHeader.getLength();
         }
-
         return tag;
     }
 
-    private Mp4TagField createMp4Field(String id, byte[] raw) throws UnsupportedEncodingException
+    private Mp4TagField createMp4Field(Mp4BoxHeader header, ByteBuffer raw) throws UnsupportedEncodingException
     {
-        //Need this to decide what type of Field to create
-        int type     = Utils.getNumberBigEndian(raw,
-                                                Mp4TagTextField.TYPE_POS ,
-                                                Mp4TagTextField.TYPE_POS + Mp4TagTextField.TYPE_LENGTH - 1);
-
-        logger.fine("Box Type is:"+type);
-
-        if(type==Mp4FieldType.TEXT.getFileClassId())
+        if(header.getId().equals(Mp4TagReverseDnsField.IDENTIFIER))
         {
-            return new Mp4TagTextField(id, raw);
-        }
-        else if(type==Mp4FieldType.NUMERIC.getFileClassId())
-        {
-            return new Mp4TagTextNumberField(id, raw);
-        }
-        else if(type==Mp4FieldType.BYTE.getFileClassId())
-        {
-            return new Mp4TagByteField(id, raw);
-        }
-        else if(type==Mp4FieldType.COVERART.getFileClassId())
-        {
-            return new  Mp4TagCoverField(raw);
+            return new Mp4TagReverseDnsField(header.getId(),raw);
         }
         else
         {
-            //Try binary
-            return new Mp4TagBinaryField(id, raw);
-        }
-    }
+            //Need this to decide what type of Field to create
+            int type     = Utils.getNumberBigEndian(raw,
+                                                   Mp4DataBox.TYPE_POS_INCLUDING_HEADER,
+                                                   Mp4DataBox.TYPE_POS_INCLUDING_HEADER + Mp4DataBox.TYPE_LENGTH - 1);
 
-    private void seek(RandomAccessFile raf, Mp4Box box, String id) throws IOException
-    {
-        byte[] b = new byte[Mp4Box.HEADER_LENGTH];
-        raf.read(b);
-        box.update(b);
-
-        //Unable to find id immediately after offset so goes round loop why is this
-        while (!box.getId().equals(id))
-        {
-            raf.skipBytes(box.getLength() -Mp4Box.HEADER_LENGTH);
-            raf.read(b);
-            box.update(b);
+            logger.info("Box Type id:"+header.getId()+":type:"+type);
+            if(type==Mp4FieldType.TEXT.getFileClassId())
+            {
+                return new Mp4TagTextField(header.getId(), raw);
+            }
+            else if(type==Mp4FieldType.NUMERIC.getFileClassId())
+            {
+                return new Mp4TagTextNumberField(header.getId(), raw);
+            }
+            else if(type==Mp4FieldType.BYTE.getFileClassId())
+            {
+                return new Mp4TagByteField(header.getId(), raw); 
+            }
+            else if(type==Mp4FieldType.COVERART.getFileClassId())
+            {
+                return new  Mp4TagCoverField(raw);
+            }
+            else
+            {
+                //Try binary
+                return new Mp4TagBinaryField(header.getId(), raw);
+            }
         }
     }
 }

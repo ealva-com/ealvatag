@@ -20,31 +20,38 @@ package org.jaudiotagger.audio.mp4.util;
 
 import org.jaudiotagger.audio.generic.Utils;
 
+import java.nio.ByteBuffer;
+
 /**
  * This MP4Box contains important audio information we need
  *
  * Can be used to calculate track length
  */
-public class Mp4MvhdBox
+public class Mp4MvhdBox extends AbstractMp4Box
 {
-
     private int timeScale;
     private long timeLength;
     private byte version;
 
-    public Mp4MvhdBox(byte[] raw)
+    /**
+     *
+     * @param header header info
+     * @param dataBuffer data of box (doesnt include header data)
+     */
+    public Mp4MvhdBox(Mp4BoxHeader header, ByteBuffer dataBuffer)
     {
-        this.version = raw[0];
+        this.header  = header;
+        this.version = dataBuffer.get(0);
 
         if (version == 1)
         {
-            this.timeScale = Utils.getNumberBigEndian(raw, 20, 23);
-            this.timeLength = Utils.getLongNumberBigEndian(raw, 24, 31);
+            this.timeScale  = Utils.getNumberBigEndian(dataBuffer, 20, 23);
+            this.timeLength = Utils.getLongNumberBigEndian(dataBuffer, 24, 31);
         }
         else
         {
-            this.timeScale = Utils.getNumberBigEndian(raw, 12, 15);
-            this.timeLength = Utils.getNumberBigEndian(raw, 16, 19);
+            this.timeScale = Utils.getNumberBigEndian(dataBuffer, 12, 15);
+            this.timeLength = Utils.getNumberBigEndian(dataBuffer, 16, 19);
         }
     }
 

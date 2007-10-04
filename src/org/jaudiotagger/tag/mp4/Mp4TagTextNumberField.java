@@ -22,12 +22,14 @@ import java.io.UnsupportedEncodingException;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.ListIterator;
+import java.nio.ByteBuffer;
 
 import org.jaudiotagger.audio.generic.Utils;
+import org.jaudiotagger.audio.mp4.util.Mp4BoxHeader;
 import org.jaudiotagger.tag.mp4.Mp4TagTextField;
 
 /**
- * Represents simple text field, but reads the data content as an arry of 15 bit unsigned numbers
+ * Represents simple text field, but reads the data content as an arry of 16 bit unsigned numbers
  */
 public class Mp4TagTextNumberField extends Mp4TagTextField
 {
@@ -41,9 +43,9 @@ public class Mp4TagTextNumberField extends Mp4TagTextField
         super(id, n);
     }
 
-    public Mp4TagTextNumberField(String id, byte[] raw) throws UnsupportedEncodingException
+    public Mp4TagTextNumberField(String id, ByteBuffer data) throws UnsupportedEncodingException
     {
-        super(id, raw);
+        super(id, data);
     }
 
     protected byte[] getDataBytes()
@@ -51,30 +53,14 @@ public class Mp4TagTextNumberField extends Mp4TagTextField
         return Utils.getSizeBigEndian(Integer.parseInt(content));
     }
 
-    protected void build(byte[] raw) throws UnsupportedEncodingException
+    protected void build(ByteBuffer data) throws UnsupportedEncodingException
     {
-        numbers = new ArrayList<Integer>();
-        int dataSize = raw.length - DATA_HEADER_LENGTH;
-        for(int i =0;i<(dataSize/ NUMBER_LENGTH);i++)
-        {
-            int number = Utils.getNumberBigEndian(raw,
-                    DATA_HEADER_LENGTH + (i *  NUMBER_LENGTH),
-                    DATA_HEADER_LENGTH + (i *  NUMBER_LENGTH) + (NUMBER_LENGTH - 1));
-            numbers.add(number);
-        }
-
-        //Make String representation  (separate values with slash)
-        StringBuffer sb = new StringBuffer();
-        ListIterator iterator =  numbers.listIterator();
-        while(iterator.hasNext())
-        {
-            sb.append(iterator.next());
-            if(iterator.hasNext())
-            {
-                sb.append("/");
-            }
-        }
-        content=sb.toString();
+        //Data actually contains a 'Data' Box so process data using this
+        Mp4BoxHeader header  = new Mp4BoxHeader(data);
+        Mp4DataBox   databox = new Mp4DataBox(header,data);
+        dataSize = header.getDataLength();
+        content  = databox.getContent();
+        numbers  = databox.getNumbers();
     }
 
     /**

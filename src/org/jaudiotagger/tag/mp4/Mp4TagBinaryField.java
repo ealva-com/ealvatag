@@ -19,6 +19,7 @@
 package org.jaudiotagger.tag.mp4;
 
 import java.io.UnsupportedEncodingException;
+import java.nio.ByteBuffer;
 
 import org.jaudiotagger.tag.TagField;
 import org.jaudiotagger.audio.generic.Utils;
@@ -39,7 +40,7 @@ public class Mp4TagBinaryField extends Mp4TagField
         super(id);
     }
 
-    public Mp4TagBinaryField(String id, byte[] raw) throws UnsupportedEncodingException
+    public Mp4TagBinaryField(String id, ByteBuffer raw) throws UnsupportedEncodingException
     {
         super(id, raw);
     }
@@ -74,17 +75,17 @@ public class Mp4TagBinaryField extends Mp4TagField
         return b;
     }
 
-    protected void build(byte[] raw)
+    protected void build(ByteBuffer raw)
     {
         int dataSize = Utils.getNumberBigEndian(raw, 0, 3);
 
         this.dataBytes = new byte[dataSize - 16];
         for (int i = 16; i < dataSize; i++)
         {
-            this.dataBytes[i - 16] = raw[i];
+            this.dataBytes[i - 16] = raw.get(i);
         }
 
-        this.isBinary = ((raw[11] & 0x01) == 0);
+        this.isBinary = ((raw.get(11) & 0x01) == 0);
     }
 
     public boolean isBinary()

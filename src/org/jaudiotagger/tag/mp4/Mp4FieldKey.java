@@ -1,15 +1,16 @@
 package org.jaudiotagger.tag.mp4;
 
 import static org.jaudiotagger.tag.mp4.Mp4FieldType.*;
+
 /**
- * Starting list
+ * Starting list of known mp4 metadata fields
+ *
  * From:
  * http://www.hydrogenaudio.org/forums/index.php?showtopic=29120&st=0&p=251686&#entry251686
  * http://wiki.musicbrainz.org/PicardQt/TagMapping
  * http://atomicparsley.sourceforge.net/mpeg-4files.html
  * <p/>
  * <p/>
- * TODO:musicbrainz fields (marked as ---- in PicardtMapping)
  */
 public enum Mp4FieldKey
 {
@@ -41,14 +42,49 @@ public enum Mp4FieldKey
     COMPOSER_SORT("soco",TEXT),
     SHOW_SORT("sosn",TEXT),
     SHOW("tvsh",TEXT),
-    ARTWORK("covr",COVERART);
+    ARTWORK("covr",COVERART),
+    MUSICBRAINZ_ARTISTID("com.apple.iTunes","MusicBrainz Artist Id",TEXT),
+    MUSICBRAINZ_ALBUMID("com.apple.iTunes","MusicBrainz Album Id",TEXT),
+    MUSICBRAINZ_ALBUMARTISTID("com.apple.iTunes","MusicBrainz Album Artist Id",TEXT),
+    MUSICBRAINZ_TRACKID("com.apple.iTunes","MusicBrainz Track Id",TEXT),
+    MUSICBRAINZ_DISCID("com.apple.iTunes","MusicBrainz Disc Id",TEXT),
+    MUSICIP_PUID("com.apple.iTunes","MusicIP PUID",TEXT),
+    ASIN("com.apple.iTunes","ASIN",TEXT),
+    MUSICBRAINZ_ALBUM_STATUS("com.apple.iTunes","MusicBrainz Album Status",TEXT),
+    MUSICBRAINZ_ALBUM_TYPE("com.apple.iTunes","MusicBrainz Album Type",TEXT),
+    RELEASECOUNTRY("com.apple.iTunes","MusicBrainz Album Release Country",TEXT)
+    ;
 
     private String fieldName;
+    private String issuer;
+    private String identifier;
     private Mp4FieldType fieldType;
 
+    /**
+     * For usual metadata fields that use a data field
+     * @param fieldName
+     * @param fieldType of data atom
+     */
     Mp4FieldKey(String fieldName,Mp4FieldType fieldType)
     {
         this.fieldName = fieldName;
+        this.fieldType = fieldType;
+    }
+
+    /**
+     * For reverse dns fields that use an internal fieldname of '----' and have  additional issuer
+     * and identifier fields, we use all three seperated by a ':' ) to give us a unique key
+     *
+     * @param identifier
+     * @param fieldType of data atom
+     */
+    Mp4FieldKey(String issuer,String identifier,Mp4FieldType fieldType)
+    {
+
+        this.issuer=issuer;
+        this.identifier= identifier;
+        this.fieldName = Mp4TagReverseDnsField.IDENTIFIER+":"+issuer+":"+identifier;
+
         this.fieldType = fieldType;
     }
 
@@ -69,5 +105,10 @@ public enum Mp4FieldKey
     public Mp4FieldType getFieldType()
     {
         return fieldType;
+    }
+
+    public boolean isReverseDnsType()
+    {
+        return identifier.startsWith(Mp4TagReverseDnsField.IDENTIFIER);
     }
 }

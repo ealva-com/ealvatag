@@ -55,6 +55,11 @@ public class M4aReadTagTest  extends TestCase
             assertEquals("Sortcomposer",tag.getFirst(TagFieldKey.COMPOSER_SORT));
             assertEquals("sorttitle",tag.getFirst(TagFieldKey.TITLE_SORT));
             assertEquals("1",tag.getFirst(TagFieldKey.IS_COMPILATION));
+            assertEquals("66027994-edcf-9d89-bec8-0d30077d888c",tag.getFirst(TagFieldKey.MUSICIP_ID));
+            assertEquals("e785f700-c1aa-4943-bcee-87dd316a2c30",tag.getFirst(TagFieldKey.MUSICBRAINZ_TRACK_ID));
+            assertEquals("989a13f6-b58c-4559-b09e-76ae0adb94ed",tag.getFirst(TagFieldKey.MUSICBRAINZ_ARTISTID));
+            assertEquals("989a13f6-b58c-4559-b09e-76ae0adb94ed",tag.getFirst(TagFieldKey.MUSICBRAINZ_RELEASEARTISTID));
+            assertEquals("19c6f0f6-3d6d-4b02-88c7-ffb559d52be6",tag.getFirst(TagFieldKey.MUSICBRAINZ_RELEASEID));
 
 
             //Cast to format specific tag
@@ -92,6 +97,12 @@ public class M4aReadTagTest  extends TestCase
             assertEquals("Sortcomposer",mp4tag.getFirst(Mp4FieldKey.COMPOSER_SORT));
             assertEquals("sorttitle",mp4tag.getFirst(Mp4FieldKey.TITLE_SORT));
             assertEquals("1",mp4tag.getFirst(Mp4FieldKey.COMPILATION));
+            assertEquals("66027994-edcf-9d89-bec8-0d30077d888c",mp4tag.getFirst(Mp4FieldKey.MUSICIP_PUID));
+            assertEquals("e785f700-c1aa-4943-bcee-87dd316a2c30",mp4tag.getFirst(Mp4FieldKey.MUSICBRAINZ_TRACKID));
+            assertEquals("989a13f6-b58c-4559-b09e-76ae0adb94ed",mp4tag.getFirst(Mp4FieldKey.MUSICBRAINZ_ARTISTID));
+            assertEquals("989a13f6-b58c-4559-b09e-76ae0adb94ed",mp4tag.getFirst(Mp4FieldKey.MUSICBRAINZ_ALBUMARTISTID));
+            assertEquals("19c6f0f6-3d6d-4b02-88c7-ffb559d52be6",mp4tag.getFirst(Mp4FieldKey.MUSICBRAINZ_ALBUMID));
+
 
             //Lookup by mp4key (no generic key mapping for these yet)
             assertEquals("iTunes v7.4.3.1, QuickTime 7.2",mp4tag.getFirst(Mp4FieldKey.ENCODER));

@@ -1,8 +1,10 @@
 package org.jaudiotagger.tag.mp4;
 
 import org.jaudiotagger.audio.generic.Utils;
+import org.jaudiotagger.audio.mp4.util.Mp4BoxHeader;
 
 import java.io.UnsupportedEncodingException;
+import java.nio.ByteBuffer;
 
 /**
  * Reads a single byte as a number
@@ -15,7 +17,7 @@ public class Mp4TagByteField extends Mp4TagTextField
         super(id, n);
     }
 
-    public Mp4TagByteField(String id, byte[] raw) throws UnsupportedEncodingException
+    public Mp4TagByteField(String id, ByteBuffer raw) throws UnsupportedEncodingException
     {
         super(id, raw);
     }
@@ -25,11 +27,12 @@ public class Mp4TagByteField extends Mp4TagTextField
         return Utils.getSizeBigEndian(Integer.parseInt(content));
     }
 
-    protected void build(byte[] raw) throws UnsupportedEncodingException
+    protected void build(ByteBuffer data) throws UnsupportedEncodingException
     {
-        //System.out.println("Byte size is:"+(raw.length - DATA_HEADER_LENGTH)  );
-        this.content = Utils.getNumberBigEndian(raw,
-            DATA_HEADER_LENGTH ,
-            raw.length - 1) + "";
+         //Data actually contains a 'Data' Box so process data using this
+        Mp4BoxHeader header  = new Mp4BoxHeader(data);
+        Mp4DataBox   databox = new Mp4DataBox(header,data);
+        dataSize = header.getDataLength();
+        content  = databox.getContent();
     }
 }

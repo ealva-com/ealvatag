@@ -255,7 +255,7 @@ public abstract class AbstractTag implements Tag
 
     public String getFirst(String id)
     {
-        List l = get(id);
+        List l = get(id);       
         return (l.size() != 0) ? ((TagTextField) l.get(0)).getContent() : "";
     }
 
@@ -736,7 +736,7 @@ public abstract class AbstractTag implements Tag
             TagField field = (TagField) it.next();
             out.append("\t");
             out.append(field.getId());
-            out.append(" : ");
+            out.append(":");
             out.append(field.toString());
             out.append("\n");
         }
