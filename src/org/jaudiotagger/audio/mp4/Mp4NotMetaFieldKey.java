@@ -15,7 +15,11 @@ public enum Mp4NotMetaFieldKey
     UDTA("udta"),
     META("meta"),
     ILST("ilst"),
-    MDAT("mdat");
+    MDAT("mdat"),
+    MDIA("mdia"),
+    MDHD("mdhd"),
+    TKHD("tkhd"),
+    TRAK("trak");
 
     private String fieldName;
 

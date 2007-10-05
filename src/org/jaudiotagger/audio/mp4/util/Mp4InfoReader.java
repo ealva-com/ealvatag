@@ -38,6 +38,8 @@ import org.jaudiotagger.audio.mp4.Mp4NotMetaFieldKey;
  * |......|
  * |......|----- mvdh
  * |......|----- trak
+ * |...............|----- mdia
+ * |.......................|---- mdhd
  * |......|----- udta 
  * |
  * |--- mdat
@@ -59,11 +61,30 @@ public class Mp4InfoReader
         raf.getChannel().read(moovBuffer);
         moovBuffer.rewind();
 
-        //Level 2-Searching for "mvhd" within "moov"
+        //Level 2-Searching for "mvhd" somewhere within "moov", we make a slice after finding header
+        //so all get() methods will be relative to mvdh positions
         Mp4BoxHeader boxHeader = Mp4BoxHeader.seekWithinLevel(moovBuffer,Mp4NotMetaFieldKey.MVHD.getFieldName());
-        Mp4MvhdBox mvhd = new Mp4MvhdBox(boxHeader,moovBuffer.slice());
+        ByteBuffer mvhdBuffer = moovBuffer.slice();
+        Mp4MvhdBox mvhd = new Mp4MvhdBox(boxHeader,mvhdBuffer);
         info.setLength(mvhd.getLength());
+        //Advance position, TODO should we put this in box code ?
+        mvhdBuffer.position(mvhdBuffer.position()+boxHeader.getDataLength());
 
+        //Level 2-Searching for "trak" within "moov"
+        boxHeader = Mp4BoxHeader.seekWithinLevel(mvhdBuffer,Mp4NotMetaFieldKey.TRAK.getFieldName());
+
+        //Level 3-Searching for "mdia" within "trak"
+        boxHeader = Mp4BoxHeader.seekWithinLevel(mvhdBuffer,Mp4NotMetaFieldKey.MDIA.getFieldName());
+
+        //Level 4-Searching for "mdhd" within "mdia"
+        boxHeader = Mp4BoxHeader.seekWithinLevel(mvhdBuffer,Mp4NotMetaFieldKey.MDHD.getFieldName());
+        Mp4MdhdBox mdhd = new Mp4MdhdBox(boxHeader,mvhdBuffer.slice());
+        info.setSamplingRate(mdhd.getSampleRate());
+
+        //TODO: These are just defaults as dont know how to calculate them at the moment
+        info.setChannelNumber(2);
+        info.setEncodingType("AAC");
+        info.setBitrate(128);
         logger.info(info.toString());
         return info;
     }

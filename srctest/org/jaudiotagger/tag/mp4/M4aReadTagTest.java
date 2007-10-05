@@ -27,8 +27,15 @@ public class M4aReadTagTest  extends TestCase
             File testFile = AbstractTestCase.copyAudioToTmp("test.m4a");
             AudioFile f = AudioFileIO.read(testFile);
             Tag tag = f.getTag();
+
+            System.out.println(f.getAudioHeader());
             System.out.println(tag);
 
+            //AudioInfo
+            //Time in seconds
+            assertEquals(241,f.getAudioHeader().getTrackLength());
+            assertEquals(44100,f.getAudioHeader().getSampleRateAsNumber());
+            
             //Ease of use methods for common fields
             assertEquals("Artist",tag.getFirstArtist());
             assertEquals("Album",tag.getFirstAlbum());
