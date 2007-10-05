@@ -128,7 +128,7 @@ public class Mp4TagReverseDnsField extends Mp4TagField implements TagTextField
 
     public String toString()
     {
-        return "Issuer:"+issuer+":Descriptor:"+descriptor+":Data:"+content;
+        return content;
     }
 
     /**

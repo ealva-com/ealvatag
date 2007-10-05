@@ -72,8 +72,7 @@ public class Mp4DataBox extends AbstractMp4Box
         else if (type == Mp4FieldType.NUMERIC.getFileClassId())
         {
             numbers = new ArrayList<Integer>();
-
-            System.out.println("Numbers:"+(header.getDataLength() - PRE_DATA_LENGTH) / NUMBER_LENGTH);
+                        
             for (int i = 0; i < ((header.getDataLength() - PRE_DATA_LENGTH) / NUMBER_LENGTH); i++)
             {
                 int number = Utils.getNumberBigEndian(this.dataBuffer,

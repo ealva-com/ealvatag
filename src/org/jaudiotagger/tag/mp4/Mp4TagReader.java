@@ -124,12 +124,22 @@ public class Mp4TagReader
         else
         {
             //Need this to decide what type of Field to create
-            int type     = Utils.getNumberBigEndian(raw,
-                                                   Mp4DataBox.TYPE_POS_INCLUDING_HEADER,
-                                                   Mp4DataBox.TYPE_POS_INCLUDING_HEADER + Mp4DataBox.TYPE_LENGTH - 1);
+            int type = Utils.getNumberBigEndian(raw,
+                                                Mp4DataBox.TYPE_POS_INCLUDING_HEADER,
+                                                Mp4DataBox.TYPE_POS_INCLUDING_HEADER + Mp4DataBox.TYPE_LENGTH - 1);
 
             logger.info("Box Type id:"+header.getId()+":type:"+type);
-            if(type==Mp4FieldType.TEXT.getFileClassId())
+
+            //Special handling for dsome specific identifiers otherwise just base on class id
+            if(header.getId().equals(Mp4FieldKey.TRACK.getFieldName()))
+            {
+                 return new Mp4TrackField(header.getId(), raw);
+            }
+            else if(header.getId().equals(Mp4FieldKey.DISCNUMBER.getFieldName()))
+            {
+                 return new Mp4TrackField(header.getId(), raw);
+            }
+            else if(type==Mp4FieldType.TEXT.getFileClassId())
             {
                 return new Mp4TagTextField(header.getId(), raw);
             }

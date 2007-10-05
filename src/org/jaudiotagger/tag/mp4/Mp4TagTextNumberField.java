@@ -36,7 +36,7 @@ public class Mp4TagTextNumberField extends Mp4TagTextField
     public static final int NUMBER_LENGTH = 2;
 
     //Holds the numbers decoded
-    private List <Integer> numbers;
+    protected List <Integer> numbers;
 
     public Mp4TagTextNumberField(String id, String n)
     {

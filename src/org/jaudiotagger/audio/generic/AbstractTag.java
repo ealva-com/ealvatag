@@ -369,7 +369,7 @@ public abstract class AbstractTag implements Tag
      */
     public String getFirstAlbum()
     {
-        List l = get(getAlbumId());
+        List l = getAlbum();
         return (l.size() != 0) ? ((TagTextField) l.get(0)).getContent() : "";
     }
 
@@ -380,7 +380,7 @@ public abstract class AbstractTag implements Tag
      */
     public String getFirstArtist()
     {
-        List l = get(getArtistId());
+        List l = getArtist();
         return (l.size() != 0) ? ((TagTextField) l.get(0)).getContent() : "";
     }
 
@@ -391,7 +391,7 @@ public abstract class AbstractTag implements Tag
      */
     public String getFirstComment()
     {
-        List l = get(getCommentId());
+        List l = getComment();
         return (l.size() != 0) ? ((TagTextField) l.get(0)).getContent() : "";
     }
 
@@ -402,7 +402,7 @@ public abstract class AbstractTag implements Tag
      */
     public String getFirstGenre()
     {
-        List l = get(getGenreId());
+        List l = getGenre();
         return (l.size() != 0) ? ((TagTextField) l.get(0)).getContent() : "";
     }
 
@@ -413,7 +413,7 @@ public abstract class AbstractTag implements Tag
      */
     public String getFirstTitle()
     {
-        List l = get(getTitleId());
+        List l = getTitle();
         return (l.size() != 0) ? ((TagTextField) l.get(0)).getContent() : "";
     }
 
@@ -424,7 +424,7 @@ public abstract class AbstractTag implements Tag
      */
     public String getFirstTrack()
     {
-        List l = get(getTrackId());
+        List l = getTrack();
         return (l.size() != 0) ? ((TagTextField) l.get(0)).getContent() : "";
     }
 
@@ -435,7 +435,7 @@ public abstract class AbstractTag implements Tag
      */
     public String getFirstYear()
     {
-        List l = get(getYearId());
+        List l = getYear();
         return (l.size() != 0) ? ((TagTextField) l.get(0)).getContent() : "";
     }
 

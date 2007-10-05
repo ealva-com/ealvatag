@@ -104,6 +104,21 @@ public class Mp4Tag extends AbstractTag
         return GENRE.getFieldName();
     }
 
+     /**
+     * There are two genres fields in mp4 files, but only one can be used at a time, so this method tries to make
+     * things easier by checking both and retruning the populated one (if any)
+     */
+    @Override
+    public List getGenre()
+    {
+        List genres = get(GENRE.getFieldName());
+        if(genres.size()==0)
+        {
+             genres = get(GENRE_CUSTOM.getFieldName());
+        }
+        return genres;
+    }
+    
     protected TagField createArtistField(String content)
     {
         return new Mp4TagTextField(getArtistId(), content);
