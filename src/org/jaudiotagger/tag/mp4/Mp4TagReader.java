@@ -137,7 +137,7 @@ public class Mp4TagReader
             }
             else if(header.getId().equals(Mp4FieldKey.DISCNUMBER.getFieldName()))
             {
-                 return new Mp4TrackField(header.getId(), raw);
+                 return new Mp4DiscNoField(header.getId(), raw);
             }
             else if(type==Mp4FieldType.TEXT.getFileClassId())
             {
@@ -157,7 +157,7 @@ public class Mp4TagReader
             }
             else
             {
-                //Try binary
+                //TODO Try binary is this right?
                 return new Mp4TagBinaryField(header.getId(), raw);
             }
         }

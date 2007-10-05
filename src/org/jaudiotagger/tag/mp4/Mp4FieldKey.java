@@ -21,7 +21,7 @@ public enum Mp4FieldKey
     GENRE("gnre",NUMERIC),
     TITLE("©nam",TEXT),
     TRACK("trkn",NUMERIC),
-    BPM("tmpo",NUMERIC),
+    BPM("tmpo",BYTE),
     DAY("©day",TEXT),
     COMMENT("©cmt",TEXT),
     COMPOSER("©wrt",TEXT),

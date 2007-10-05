@@ -23,6 +23,7 @@ import java.nio.ByteBuffer;
 
 import org.jaudiotagger.tag.TagField;
 import org.jaudiotagger.audio.generic.Utils;
+import org.jaudiotagger.audio.mp4.util.Mp4BoxHeader;
 
 /**
  * Represents binary data
@@ -31,7 +32,7 @@ import org.jaudiotagger.audio.generic.Utils;
  */
 public class Mp4TagBinaryField extends Mp4TagField
 {
-
+    protected int    dataSize;
     protected byte[] dataBytes;
     protected boolean isBinary = false;
 
@@ -77,15 +78,24 @@ public class Mp4TagBinaryField extends Mp4TagField
 
     protected void build(ByteBuffer raw)
     {
-        int dataSize = Utils.getNumberBigEndian(raw, 0, 3);
+        Mp4BoxHeader header  = new Mp4BoxHeader(raw);
+        dataSize = header.getDataLength();
 
-        this.dataBytes = new byte[dataSize - 16];
-        for (int i = 16; i < dataSize; i++)
+        //Read the raw data into byte array
+        this.dataBytes = new byte[dataSize - Mp4DataBox.DATA_HEADER_LENGTH];
+        for (int i = Mp4DataBox.DATA_HEADER_LENGTH ; i < dataSize; i++)
         {
-            this.dataBytes[i - 16] = raw.get(i);
+            this.dataBytes[i - Mp4DataBox.DATA_HEADER_LENGTH] = raw.get(i);
         }
-
-        this.isBinary = ((raw.get(11) & 0x01) == 0);
+        for(int i=0;i<20;i++)
+        {
+            System.out.println( raw.get(i));
+        }
+        System.out.println("In buffer");
+        for(int i=0;i<10;i++)
+        {
+            System.out.println( this.dataBytes[i]);
+        }
     }
 
     public boolean isBinary()

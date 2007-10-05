@@ -8,6 +8,7 @@ import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.AudioFileIO;
 
 import java.io.File;
+import java.util.List;
 
 import junit.framework.TestCase;
 
@@ -113,7 +114,16 @@ public class M4aReadTagTest  extends TestCase
             assertEquals("show",mp4tag.getFirst(Mp4FieldKey.SHOW));
             assertEquals("Genre",mp4tag.getFirst(Mp4FieldKey.GENRE_CUSTOM));
 
-            //TODO Artwork field, mapping two generic field to single generic field
+            List coverart = mp4tag.get(Mp4FieldKey.ARTWORK);
+            //Should be one image
+            assertEquals(1,coverart.size());
+            //Just check jpeg signature
+            Mp4TagCoverField coverArtField = (Mp4TagCoverField)coverart.get(0);
+            assertEquals(0xff,coverArtField.getData()[0] & 0xff);
+            assertEquals(0xd8,coverArtField.getData()[1] & 0xff);
+            assertEquals(0xff,coverArtField.getData()[2] & 0xff);
+            assertEquals(0xe0,coverArtField.getData()[3] & 0xff);
+           
         }
         catch(Exception e)
         {
