@@ -42,7 +42,7 @@ public enum Mp4FieldKey
     COMPOSER_SORT("soco",TEXT),
     SHOW_SORT("sosn",TEXT),
     SHOW("tvsh",TEXT),
-    ARTWORK("covr",COVERART),
+    ARTWORK("covr", COVERART_JPEG),
     MUSICBRAINZ_ARTISTID("com.apple.iTunes","MusicBrainz Artist Id",TEXT),
     MUSICBRAINZ_ALBUMID("com.apple.iTunes","MusicBrainz Album Id",TEXT),
     MUSICBRAINZ_ALBUMARTISTID("com.apple.iTunes","MusicBrainz Album Artist Id",TEXT),
@@ -52,7 +52,11 @@ public enum Mp4FieldKey
     ASIN("com.apple.iTunes","ASIN",TEXT),
     MUSICBRAINZ_ALBUM_STATUS("com.apple.iTunes","MusicBrainz Album Status",TEXT),
     MUSICBRAINZ_ALBUM_TYPE("com.apple.iTunes","MusicBrainz Album Type",TEXT),
-    RELEASECOUNTRY("com.apple.iTunes","MusicBrainz Album Release Country",TEXT)
+    RELEASECOUNTRY("com.apple.iTunes","MusicBrainz Album Release Country",TEXT),
+    PART_OF_GAPLESS_ALBUM("pgap",BYTE),
+    ITUNES_SMPB("com.apple.iTunes","iTunSMPB",TEXT),
+    ITUNES_NORM("com.apple.iTunes","iTunNORM",TEXT),
+
     ;
 
     private String fieldName;

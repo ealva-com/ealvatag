@@ -130,7 +130,7 @@ public class Mp4TagReader
 
             logger.info("Box Type id:"+header.getId()+":type:"+type);
 
-            //Special handling for dsome specific identifiers otherwise just base on class id
+            //Special handling for some specific identifiers otherwise just base on class id
             if(header.getId().equals(Mp4FieldKey.TRACK.getFieldName()))
             {
                  return new Mp4TrackField(header.getId(), raw);
@@ -151,9 +151,10 @@ public class Mp4TagReader
             {
                 return new Mp4TagByteField(header.getId(), raw); 
             }
-            else if(type==Mp4FieldType.COVERART.getFileClassId())
+            else if(type==Mp4FieldType.COVERART_JPEG.getFileClassId()||
+                    type==Mp4FieldType.COVERART_PNG.getFileClassId())
             {
-                return new  Mp4TagCoverField(raw);
+                return new  Mp4TagCoverField(raw,type);
             }
             else
             {

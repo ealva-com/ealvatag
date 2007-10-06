@@ -100,7 +100,7 @@ public class Mp4DataBox extends AbstractMp4Box
                     PRE_DATA_LENGTH,
                     header.getDataLength() - 1) + "";
         }
-        else if (type == Mp4FieldType.COVERART.getFileClassId())
+        else if (type == Mp4FieldType.COVERART_JPEG.getFileClassId())
         {
             content = Utils.getString(this.dataBuffer,
                     PRE_DATA_LENGTH,

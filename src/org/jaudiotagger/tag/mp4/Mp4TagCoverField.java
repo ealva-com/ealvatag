@@ -24,22 +24,36 @@ import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 
 /**
- * For storing coverart, multiple allowed
+ * For storing coverart
+ *
+ * TODO:In Spec Multiple Images allowed
  */
 public class Mp4TagCoverField extends Mp4TagBinaryField
 {
+    private int type;
     public Mp4TagCoverField()
     {
         super(Mp4FieldKey.ARTWORK.getFieldName());
     }
 
-    public Mp4TagCoverField(ByteBuffer raw) throws UnsupportedEncodingException
+    public Mp4TagCoverField(ByteBuffer raw,int type) throws UnsupportedEncodingException
     {
         super(Mp4FieldKey.ARTWORK.getFieldName(), raw);
+        this.type=type;
     }
 
     public boolean isBinary()
     {
         return true;
+    }
+
+    /**
+     * Identifies the image type, only jpg and png are supported.
+     *
+     * @return
+     */
+    public int getType()
+    {
+        return type;
     }
 }
