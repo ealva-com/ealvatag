@@ -12,6 +12,8 @@ import java.nio.ByteBuffer;
  */
 public class Mp4MetaBox extends AbstractMp4Box
 {
+    public static final int FLAGS_LENGTH = 4;
+
     /**
      *
      * @param header header info
@@ -26,7 +28,7 @@ public class Mp4MetaBox extends AbstractMp4Box
     public void processData() throws CannotReadException
     {
         //4-skip the meta flags and check they are the meta flags
-        byte[] b = new byte[4];
+        byte[] b = new byte[FLAGS_LENGTH];
         dataBuffer.get(b);
         if (b[0] != 0)
         {

@@ -1,7 +1,7 @@
 package org.jaudiotagger.tag.mp4;
 
 /**
- * The classes that MP4Data boxes can be part of.
+ * Describes the type of data held within a Databox
  */
 public enum Mp4FieldType
 {
