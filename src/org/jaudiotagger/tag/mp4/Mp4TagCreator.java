@@ -21,8 +21,10 @@ package org.jaudiotagger.tag.mp4;
 import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 import java.util.List;
+import java.util.Iterator;
 
 import org.jaudiotagger.tag.Tag;
+import org.jaudiotagger.tag.vorbiscomment.VorbisCommentTag;
 import org.jaudiotagger.audio.generic.AbstractTagCreator;
 
 public class Mp4TagCreator extends AbstractTagCreator
@@ -30,18 +32,29 @@ public class Mp4TagCreator extends AbstractTagCreator
 
     protected int getFixedTagLength(Tag tag) throws UnsupportedEncodingException
     {
-        throw new RuntimeException("Not implemented");
+        return 0;
     }
 
     protected Tag getCompatibleTag(Tag tag)
     {
-        throw new RuntimeException("Not implemented");
+        if (! (tag instanceof VorbisCommentTag))
+        {
+            Mp4Tag mp4Tag = new Mp4Tag();
+            mp4Tag.merge(tag);
+            return mp4Tag;
+        }
+        return tag;
     }
 
     //This method is always called with a compatible tag, as returned from getCompatibleTag()
-    protected void create(Tag tag, ByteBuffer buf, List fields, int tagSize, int padding) throws UnsupportedEncodingException
+    protected void create(Tag tag, ByteBuffer buf, List<byte[]> rawDataFields, int tagSize, int padding)
+            throws UnsupportedEncodingException
     {
-        throw new RuntimeException("Not implemented");
+        Iterator<byte[]> it = rawDataFields.iterator();
+        while (it.hasNext())
+        {
+            buf.put(it.next());
+        }
     }
 
 }

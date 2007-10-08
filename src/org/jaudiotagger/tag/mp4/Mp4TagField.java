@@ -25,7 +25,7 @@ import org.jaudiotagger.tag.TagField;
 import org.jaudiotagger.audio.generic.Utils;
 
 /**
- * This abstract class represents the data contents of an MP4Box
+ * This abstract class represents a link between piece of data, and how it is stored as an mp4 atom
  *
  * Note there isnt a one to one correspondance between a tag field and a box because some fields are represented
  * by multiple boxes, for example many of the MusicBrainz fields use the '----' box, which in turn uses one of mean,
@@ -62,7 +62,13 @@ public abstract class Mp4TagField implements TagField
 
     public boolean isCommon()
     {
-        return id.equals("ART") || id.equals("alb") || id.equals("nam") || id.equals("trkn") || id.equals("day") || id.equals("cmt") || id.equals("gen");
+        return id.equals(Mp4FieldKey.ARTIST.getFieldName()) 
+                || id.equals(Mp4FieldKey.ALBUM.getFieldName())
+                || id.equals(Mp4FieldKey.TITLE.getFieldName())
+                || id.equals(Mp4FieldKey.TRACK.getFieldName())
+                || id.equals(Mp4FieldKey.DAY.getFieldName())
+                || id.equals(Mp4FieldKey.COMMENT.getFieldName())
+                || id.equals(Mp4FieldKey.GENRE.getFieldName());
     }
 
     protected byte[] getIdBytes()

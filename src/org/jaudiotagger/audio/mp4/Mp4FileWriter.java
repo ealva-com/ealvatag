@@ -24,7 +24,7 @@ import java.io.RandomAccessFile;
 import org.jaudiotagger.tag.Tag;
 import org.jaudiotagger.audio.exceptions.CannotWriteException;
 import org.jaudiotagger.audio.generic.AudioFileWriter;
-import org.jaudiotagger.audio.mp4.util.Mp4TagWriter;
+import org.jaudiotagger.tag.mp4.Mp4TagWriter;
 
 public class Mp4FileWriter extends AudioFileWriter
 {
