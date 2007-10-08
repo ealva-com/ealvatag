@@ -104,7 +104,7 @@ public class Mp4TagTextField extends Mp4TagField implements TagTextField
 
     public String getEncoding()
     {
-        return "UTF8";
+        return Mp4BoxHeader.CHARSET_UTF_8;
     }
 
     /** Convert back to raw content, includes parent and data atom as views as one thing externally

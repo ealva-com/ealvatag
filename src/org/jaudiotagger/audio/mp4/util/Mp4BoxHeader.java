@@ -64,6 +64,9 @@ public static Logger logger = Logger.getLogger("org.jaudiotagger.audio.mp4.util"
     //Raw Data includes header and body
     private byte[] rawdata;
 
+    //Mp4 uses UTF-8 for all text
+    public static final String CHARSET_UTF_8      = "UTF-8";
+
     /**
      * Construct empty header
      *
@@ -150,7 +153,7 @@ public static Logger logger = Logger.getLogger("org.jaudiotagger.audio.mp4.util"
 
     public String getEncoding()
     {
-        return "UTF8";
+        return CHARSET_UTF_8;
     }
 
 

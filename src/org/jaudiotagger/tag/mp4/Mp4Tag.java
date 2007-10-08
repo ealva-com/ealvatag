@@ -19,6 +19,7 @@
 package org.jaudiotagger.tag.mp4;
 
 import org.jaudiotagger.audio.generic.AbstractTag;
+import org.jaudiotagger.audio.mp4.util.Mp4BoxHeader;
 import org.jaudiotagger.tag.TagField;
 import org.jaudiotagger.tag.TagFieldKey;
 import static org.jaudiotagger.tag.mp4.Mp4FieldKey.*;
@@ -156,7 +157,7 @@ public class Mp4Tag extends AbstractTag
 
     protected boolean isAllowedEncoding(String enc)
     {
-        return enc.equals("UTF8");
+        return enc.equals(Mp4BoxHeader.CHARSET_UTF_8);
     }
 
     public String toString()
