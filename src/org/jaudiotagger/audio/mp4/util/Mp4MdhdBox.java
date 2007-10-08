@@ -7,7 +7,7 @@ import java.nio.ByteBuffer;
 /**
  * MdhdBox ( media (stream) header)
  * 
- * This MP4Box needs to be processed in order to gain access to children
+ * Holds the Sampling Rate used
  */
 public class Mp4MdhdBox extends AbstractMp4Box
 {

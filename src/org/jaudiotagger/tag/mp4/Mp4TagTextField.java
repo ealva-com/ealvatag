@@ -20,6 +20,7 @@ package org.jaudiotagger.tag.mp4;
 
 import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
+import java.nio.charset.Charset;
 
 import org.jaudiotagger.tag.TagField;
 import org.jaudiotagger.tag.TagTextField;
@@ -103,7 +104,7 @@ public class Mp4TagTextField extends Mp4TagField implements TagTextField
 
     public String getEncoding()
     {
-        return "ISO-8859-1";
+        return "UTF8";
     }
 
     /** Convert back to raw content, includes parent and data atom as views as one thing externally

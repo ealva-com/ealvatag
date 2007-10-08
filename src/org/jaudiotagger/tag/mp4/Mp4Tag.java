@@ -156,7 +156,7 @@ public class Mp4Tag extends AbstractTag
 
     protected boolean isAllowedEncoding(String enc)
     {
-        return enc.equals("ISO-8859-1");
+        return enc.equals("UTF8");
     }
 
     public String toString()

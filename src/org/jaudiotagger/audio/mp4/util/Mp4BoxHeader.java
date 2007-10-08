@@ -150,7 +150,7 @@ public static Logger logger = Logger.getLogger("org.jaudiotagger.audio.mp4.util"
 
     public String getEncoding()
     {
-        return "ISO-8859-1";
+        return "UTF8";
     }
 
 

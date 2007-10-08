@@ -210,7 +210,7 @@ public class Utils
         }
         catch (UnsupportedEncodingException uee)
         {
-            //TODO, wil we ever use unsupport edncodings
+            //TODO, will we ever use unsupported encodings
             throw new RuntimeException(uee);
         }
     }
