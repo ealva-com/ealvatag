@@ -32,9 +32,18 @@ import java.util.*;
  */
 public class VorbisCommentCreator extends AbstractTagCreator
 {
-
-    //Creates the ByteBuffer for the ogg tag
-    public void create(Tag tag, ByteBuffer buf, List fields, int tagSize, int padding) throws UnsupportedEncodingException
+    /**
+     * Populate the buffer with the raw contents of the tag
+     *
+     * @param tag
+     * @param buf
+     * @param rawDataFields
+     * @param tagSize
+     * @param padding
+     * @throws UnsupportedEncodingException
+     */
+    public void create(Tag tag, ByteBuffer buf, List <byte[]>rawDataFields, int tagSize, int padding)
+            throws UnsupportedEncodingException
     {
         String vendorString = ((VorbisCommentTag) tag).getVendor();
         int vendorLength = Utils.getUTF8Bytes(vendorString).length;
@@ -46,15 +55,15 @@ public class VorbisCommentCreator extends AbstractTagCreator
         buf.put(Utils.getUTF8Bytes(vendorString));
 
         //[user comment list length]
-        int listLength = fields.size();
-        byte[] b = new byte[4];
+        int listLength = rawDataFields.size();
+        byte[] b = new byte[VorbisCommentReader.FIELD_USER_COMMENT_LIST_LENGTH];
         b[3] = (byte) ((listLength & 0xFF000000) >> 24);
         b[2] = (byte) ((listLength & 0x00FF0000) >> 16);
         b[1] = (byte) ((listLength & 0x0000FF00) >> 8);
         b[0] = (byte) (listLength & 0x000000FF);
         buf.put(b);
 
-        Iterator it = fields.iterator();
+        Iterator it = rawDataFields.iterator();
         while (it.hasNext())
         {
             buf.put((byte[]) it.next());
@@ -74,6 +83,8 @@ public class VorbisCommentCreator extends AbstractTagCreator
 
     protected int getFixedTagLength(Tag tag) throws UnsupportedEncodingException
     {
-        return 8 + Utils.getUTF8Bytes(((VorbisCommentTag) tag).getVendor()).length;
+        return  VorbisCommentReader.FIELD_VENDOR_LENGTH_LENGTH
+                + Utils.getUTF8Bytes(((VorbisCommentTag) tag).getVendor()).length
+                + VorbisCommentReader.FIELD_USER_COMMENT_LIST_LENGTH;
     }
 }

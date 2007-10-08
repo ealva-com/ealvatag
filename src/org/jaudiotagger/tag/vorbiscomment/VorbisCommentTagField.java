@@ -185,7 +185,7 @@ public class VorbisCommentTagField implements TagTextField
      */
     public byte[] getRawContent() throws UnsupportedEncodingException
     {
-        byte[] size = new byte[4];
+        byte[] size = new byte[VorbisCommentReader.FIELD_COMMENT_LENGTH_LENGTH];
         byte[] idBytes = this.id.getBytes();
         byte[] contentBytes = getBytes(this.content, "UTF-8");
         byte[] b = new byte[4 + idBytes.length + 1 + contentBytes.length];
