@@ -261,10 +261,9 @@ public class M4aReadTagTest  extends TestCase
 
             List coverart = mp4tag.get(Mp4FieldKey.ARTWORK);
             //Should be one image
-            assertEquals(1,coverart.size());
+            assertEquals(3,coverart.size());
 
-
-
+            //Check 1st field
             Mp4TagCoverField coverArtField = (Mp4TagCoverField)coverart.get(0);
             //Check type png
             assertEquals(Mp4FieldType.COVERART_PNG.getFileClassId(),coverArtField.getType());
@@ -273,6 +272,26 @@ public class M4aReadTagTest  extends TestCase
             assertEquals(0x50,coverArtField.getData()[1] & 0xff);
             assertEquals(0x4E,coverArtField.getData()[2] & 0xff);
             assertEquals(0x47,coverArtField.getData()[3] & 0xff);
+
+            //Check 2nd field
+            coverArtField = (Mp4TagCoverField)coverart.get(1);
+            //Check type png
+            assertEquals(Mp4FieldType.COVERART_PNG.getFileClassId(),coverArtField.getType());
+            //Just check png signature
+            assertEquals(0x89,coverArtField.getData()[0] & 0xff);
+            assertEquals(0x50,coverArtField.getData()[1] & 0xff);
+            assertEquals(0x4E,coverArtField.getData()[2] & 0xff);
+            assertEquals(0x47,coverArtField.getData()[3] & 0xff);
+
+            //Check 3rd Field
+            coverArtField = (Mp4TagCoverField)coverart.get(2);
+            //Check type jpeg
+            assertEquals(Mp4FieldType.COVERART_JPEG.getFileClassId(),coverArtField.getType());
+            //Just check jpeg signature
+            assertEquals(0xff,coverArtField.getData()[0] & 0xff);
+            assertEquals(0xd8,coverArtField.getData()[1] & 0xff);
+            assertEquals(0xff,coverArtField.getData()[2] & 0xff);
+            assertEquals(0xe0,coverArtField.getData()[3] & 0xff);
 
         }
         catch(Exception e)

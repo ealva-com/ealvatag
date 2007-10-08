@@ -64,7 +64,7 @@ public interface TagField {
 	 * Determines whether the represented field contains (is made up of) binary
 	 * data, instead of text data.<br>
 	 * Software can identify fields to be displayed because they are human
-	 * readable if this mehtod returns <code>false</code>.
+	 * readable if this method returns <code>false</code>.
 	 * 
 	 * @return <code>true</code> if field represents binary data (not human
 	 *         readable).

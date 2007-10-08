@@ -29,6 +29,7 @@ import org.jaudiotagger.audio.mp4.util.Mp4BoxHeader;
 import org.jaudiotagger.audio.mp4.util.Mp4MetaBox;
 import org.jaudiotagger.audio.mp4.Mp4NotMetaFieldKey;
 import org.jaudiotagger.audio.generic.Utils;
+import org.jaudiotagger.tag.TagField;
 
 /**
  * Reads metadata from mp4, the metadata tags are held under the ilst atom as shown below
@@ -46,8 +47,8 @@ import org.jaudiotagger.audio.generic.Utils;
  * |....................|-- ilst
  * |.........................|
  * |.........................|---- @nam (Optional for each metadatafield)
- * |.................................|---- name
- * |................................. ecetera
+ * |.........................|.......|-- data
+ * |.........................|....... ecetera
  * |.........................|---- ---- (Optional for reverse dns field)
  * |.................................|-- mean
  * |.................................|-- name
@@ -106,7 +107,7 @@ public class Mp4TagReader
             //Create the corresponding datafield from the id, and slice the buffer so position of main buffer
             //wont get affected
             logger.info("Next position is at:"+metadataBuffer.position());
-            tag.add(createMp4Field(boxHeader, metadataBuffer.slice()));
+            createMp4Field(tag,boxHeader, metadataBuffer.slice());
 
             //Move position in buffer to the start of the next header
             metadataBuffer.position(metadataBuffer.position() + boxHeader.getDataLength());
@@ -115,11 +116,24 @@ public class Mp4TagReader
         return tag;
     }
 
-    private Mp4TagField createMp4Field(Mp4BoxHeader header, ByteBuffer raw) throws UnsupportedEncodingException
+    /**
+     * Process the field and add to the tag
+     *
+     * Note:In the case of coverart MP4 holds all the coverart within individual dataitems all within
+     * a single covr atom, we will add seperate mp4field for eaxh image.
+     *
+     * @param tag
+     * @param header
+     * @param raw
+     * @return
+     * @throws UnsupportedEncodingException
+     */
+    private void createMp4Field(Mp4Tag tag,Mp4BoxHeader header, ByteBuffer raw) throws UnsupportedEncodingException
     {
         if(header.getId().equals(Mp4TagReverseDnsField.IDENTIFIER))
         {
-            return new Mp4TagReverseDnsField(header.getId(),raw);
+            TagField field =  new Mp4TagReverseDnsField(header.getId(),raw);
+            tag.add(field);
         }
         else
         {
@@ -133,33 +147,55 @@ public class Mp4TagReader
             //Special handling for some specific identifiers otherwise just base on class id
             if(header.getId().equals(Mp4FieldKey.TRACK.getFieldName()))
             {
-                 return new Mp4TrackField(header.getId(), raw);
+                 TagField field =  new Mp4TrackField(header.getId(), raw);
+                 tag.add(field);
             }
             else if(header.getId().equals(Mp4FieldKey.DISCNUMBER.getFieldName()))
             {
-                 return new Mp4DiscNoField(header.getId(), raw);
+                 TagField field =   new Mp4DiscNoField(header.getId(), raw);
+                 tag.add(field);
             }
             else if(type==Mp4FieldType.TEXT.getFileClassId())
             {
-                return new Mp4TagTextField(header.getId(), raw);
+                TagField field =   new Mp4TagTextField(header.getId(), raw);
+                tag.add(field);
             }
             else if(type==Mp4FieldType.NUMERIC.getFileClassId())
             {
-                return new Mp4TagTextNumberField(header.getId(), raw);
+                TagField field =  new Mp4TagTextNumberField(header.getId(), raw);
+                tag.add(field);
             }
             else if(type==Mp4FieldType.BYTE.getFileClassId())
             {
-                return new Mp4TagByteField(header.getId(), raw); 
+                TagField field =  new Mp4TagByteField(header.getId(), raw);
+                tag.add(field);
             }
             else if(type==Mp4FieldType.COVERART_JPEG.getFileClassId()||
                     type==Mp4FieldType.COVERART_PNG.getFileClassId())
             {
-                return new  Mp4TagCoverField(raw,type);
+                int processedDataSize = 0;
+                int imageCount =0;
+                while(processedDataSize  < header.getDataLength())
+                {
+                    //There maybe a mixture of PNG and JPEG images so have to check type
+                    //for each subimage (if there are more than one image)
+                    if(imageCount>0)
+                    {                           
+                        type = Utils.getNumberBigEndian(raw,
+                                            processedDataSize + Mp4DataBox.TYPE_POS_INCLUDING_HEADER,
+                                            processedDataSize + Mp4DataBox.TYPE_POS_INCLUDING_HEADER + Mp4DataBox.TYPE_LENGTH - 1);
+                    }
+                    Mp4TagCoverField field = new Mp4TagCoverField(raw,type);
+                    tag.add(field);
+                    processedDataSize+=field.dataSize + Mp4BoxHeader.HEADER_LENGTH ;
+                    imageCount++;
+                }
             }
             else
             {
                 //TODO Try binary is this right?
-                return new Mp4TagBinaryField(header.getId(), raw);
+                TagField field =  new Mp4TagBinaryField(header.getId(), raw);
+                tag.add(field);
             }
         }
     }

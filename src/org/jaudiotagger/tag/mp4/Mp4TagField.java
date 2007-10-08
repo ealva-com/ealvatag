@@ -70,5 +70,12 @@ public abstract class Mp4TagField implements TagField
         return Utils.getDefaultBytes(getId());
     }
 
+    /**
+     * Processes the data and sets the position of the data buffer to just after the end of this fields data
+     * ready for processing next field.
+     *
+     * @param data
+     * @throws UnsupportedEncodingException
+     */
     protected abstract void build(ByteBuffer data) throws UnsupportedEncodingException;
 }

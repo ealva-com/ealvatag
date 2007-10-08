@@ -25,8 +25,7 @@ import java.nio.ByteBuffer;
 
 /**
  * For storing coverart
- *
- * TODO:In Spec Multiple Images allowed
+ *  
  */
 public class Mp4TagCoverField extends Mp4TagBinaryField
 {
