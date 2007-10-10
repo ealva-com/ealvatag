@@ -5,24 +5,47 @@ import org.jaudiotagger.audio.mp4.util.Mp4BoxHeader;
 
 import java.nio.ByteBuffer;
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 
 /**
  * Represents the Disc No field
  *
- * For some reason uses an array of four numbers, but only the middle two are of use for display purposes
+ * For some reason uses an array of three numbers, but only the last two are of use for display purposes
  */
 public class Mp4DiscNoField extends Mp4TagTextNumberField
 {
     private static final int NONE_VALUE_INDEX   = 0;
     private static final int DISC_NO_INDEX = 1;
     private static final int DISC_TOTAL_INDEX = 2;
-    private static final int NONE_END_VALUE_INDEX   = 3;
-
-    public Mp4DiscNoField(String id, String n)
+  
+    /**
+     * Create new Disc no  Field with only discNo
+     *
+     * @param discNo
+     */
+    public Mp4DiscNoField(int discNo)
     {
-        super(id, n);
+        super(Mp4FieldKey.DISCNUMBER.getFieldName(), String.valueOf(discNo));
+        numbers = new ArrayList<Short>();
+        numbers.add(new Short("0"));
+        numbers.add((short)discNo);
+        numbers.add(new Short("0"));
     }
 
+     /**
+     * Create new Disc No Field with disc No and total tracks
+     *
+     * @param discNo
+     * @param total
+     */
+    public Mp4DiscNoField(int discNo,int total)
+    {
+        super(Mp4FieldKey.DISCNUMBER.getFieldName(), String.valueOf(discNo));
+        numbers = new ArrayList<Short>();
+        numbers.add(new Short("0"));
+        numbers.add((short)discNo);
+        numbers.add((short)total);
+    }
     public Mp4DiscNoField(String id, ByteBuffer data) throws UnsupportedEncodingException
     {
         super(id, data);

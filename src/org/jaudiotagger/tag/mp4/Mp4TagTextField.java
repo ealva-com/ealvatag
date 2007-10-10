@@ -54,6 +54,7 @@ public class Mp4TagTextField extends Mp4TagField implements TagTextField
     protected String content;
 
     /**
+     * Construct from File
      *
      * @param id  parent id
      * @param data atom data
@@ -65,6 +66,7 @@ public class Mp4TagTextField extends Mp4TagField implements TagTextField
     }
 
     /**
+     * Construct new Field
      *
      * @param id  parent id
      * @param content data atom data

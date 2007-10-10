@@ -29,6 +29,7 @@ import java.nio.ByteBuffer;
 import org.jaudiotagger.audio.generic.Utils;
 import org.jaudiotagger.audio.mp4.util.Mp4BoxHeader;
 import org.jaudiotagger.tag.mp4.Mp4TagTextField;
+import org.jaudiotagger.tag.TagField;
 
 /**
  * Represents simple text field that contains an array of number,
@@ -42,9 +43,15 @@ public class Mp4TagTextNumberField extends Mp4TagTextField
     //Holds the numbers decoded
     protected List <Short> numbers;
 
-    public Mp4TagTextNumberField(String id, String n)
+    /**
+     * Create a new number, already parsed in subclasses
+     *
+     * @param id
+     * @param numberArray
+     */
+    public Mp4TagTextNumberField(String id, String numberArray)
     {
-        super(id, n);
+        super(id, numberArray);
     }
 
     public Mp4TagTextNumberField(String id, ByteBuffer data) throws UnsupportedEncodingException
@@ -73,6 +80,15 @@ public class Mp4TagTextNumberField extends Mp4TagTextField
             }
         }
         return baos.toByteArray();
+    }
+
+    public void copyContent(TagField field)
+    {
+        if (field instanceof Mp4TagTextNumberField)
+        {
+            this.content = ((Mp4TagTextNumberField) field).getContent();
+            this.numbers = ((Mp4TagTextNumberField) field).getNumbers();
+        }
     }
 
     /**

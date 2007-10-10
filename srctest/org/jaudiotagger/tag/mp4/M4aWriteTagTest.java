@@ -33,8 +33,9 @@ public class M4aWriteTagTest extends TestCase
             //Change album to different value (but same no of characters, this is the easiest mod to make
             tag.setArtist("ARTIST");
             tag.setAlbum("ALBUM");
-            //tag.setTrack("2/9"); TODO this doesnt work
-            
+            //tag.setTrack("2/9") Doesnt work
+            tag.set(new Mp4TrackField(2,12));
+            tag.set(new Mp4DiscNoField(4,15));
             //Save changes and reread from disk
             f.commit();
             f = AudioFileIO.read(testFile);
@@ -53,15 +54,15 @@ public class M4aWriteTagTest extends TestCase
             assertEquals("title",tag.getFirstTitle());
             assertEquals("comments",tag.getFirstComment());
             assertEquals("1971",tag.getFirstYear());
-            assertEquals("1/10",tag.getFirstTrack());
+            assertEquals("2/12",tag.getFirstTrack());
             assertEquals("Genre",tag.getFirstGenre());
             assertEquals("ARTIST",tag.getFirst(TagFieldKey.ARTIST));
             assertEquals("ALBUM",tag.getFirst(TagFieldKey.ALBUM));
             assertEquals("title",tag.getFirst(TagFieldKey.TITLE));
             assertEquals("comments",tag.getFirst(TagFieldKey.COMMENT));
             assertEquals("1971",tag.getFirst(TagFieldKey.YEAR));
-            assertEquals("1/10",tag.getFirst(TagFieldKey.TRACK));
-            assertEquals("1/10",tag.getFirst(TagFieldKey.DISC_NO));
+            assertEquals("2/12",tag.getFirst(TagFieldKey.TRACK));
+            assertEquals("4/15",tag.getFirst(TagFieldKey.DISC_NO));
             assertEquals("composer",tag.getFirst(TagFieldKey.COMPOSER));
             assertEquals("Sortartist",tag.getFirst(TagFieldKey.ARTIST_SORT));
             assertEquals("lyrics",tag.getFirst(TagFieldKey.LYRICS));
@@ -88,20 +89,20 @@ public class M4aWriteTagTest extends TestCase
             assertEquals("comments",mp4tag.getFirst(Mp4FieldKey.COMMENT));
             assertEquals("1971",mp4tag.getFirst(Mp4FieldKey.DAY));
             //Not sure why there are 4 values, only understand 2nd and third
-            assertEquals("1/10",mp4tag.getFirst(Mp4FieldKey.TRACK));
-            assertEquals("1/10",((Mp4TagTextNumberField)mp4tag.get(Mp4FieldKey.TRACK).get(0)).getContent());
+            assertEquals("2/12",mp4tag.getFirst(Mp4FieldKey.TRACK));
+            assertEquals("2/12",((Mp4TagTextNumberField)mp4tag.get(Mp4FieldKey.TRACK).get(0)).getContent());
             assertEquals(new Short("0"),((Mp4TagTextNumberField)mp4tag.get(Mp4FieldKey.TRACK).get(0)).getNumbers().get(0));
-            assertEquals(new Short("1"),((Mp4TagTextNumberField)mp4tag.get(Mp4FieldKey.TRACK).get(0)).getNumbers().get(1));
-            assertEquals(new Short("10"),((Mp4TagTextNumberField)mp4tag.get(Mp4FieldKey.TRACK).get(0)).getNumbers().get(2));
+            assertEquals(new Short("2"),((Mp4TagTextNumberField)mp4tag.get(Mp4FieldKey.TRACK).get(0)).getNumbers().get(1));
+            assertEquals(new Short("12"),((Mp4TagTextNumberField)mp4tag.get(Mp4FieldKey.TRACK).get(0)).getNumbers().get(2));
             assertEquals(new Short("0"),((Mp4TagTextNumberField)mp4tag.get(Mp4FieldKey.TRACK).get(0)).getNumbers().get(3));
 
             //Not sure why there are 4 values, only understand 2nd and third
-            assertEquals("1/10",mp4tag.getFirst(Mp4FieldKey.DISCNUMBER));
-            assertEquals("1/10",((Mp4TagTextNumberField)mp4tag.get(Mp4FieldKey.DISCNUMBER).get(0)).getContent());
+            assertEquals("4/15",mp4tag.getFirst(Mp4FieldKey.DISCNUMBER));
+            assertEquals("4/15",((Mp4TagTextNumberField)mp4tag.get(Mp4FieldKey.DISCNUMBER).get(0)).getContent());
             assertEquals(new Short("0"),((Mp4TagTextNumberField)mp4tag.get(Mp4FieldKey.DISCNUMBER).get(0)).getNumbers().get(0));
-            assertEquals(new Short("1"),((Mp4TagTextNumberField)mp4tag.get(Mp4FieldKey.DISCNUMBER).get(0)).getNumbers().get(1));
-            assertEquals(new Short("10"),((Mp4TagTextNumberField)mp4tag.get(Mp4FieldKey.DISCNUMBER).get(0)).getNumbers().get(2));
-
+            assertEquals(new Short("4"),((Mp4TagTextNumberField)mp4tag.get(Mp4FieldKey.DISCNUMBER).get(0)).getNumbers().get(1));
+            assertEquals(new Short("15"),((Mp4TagTextNumberField)mp4tag.get(Mp4FieldKey.DISCNUMBER).get(0)).getNumbers().get(2));
+           
             assertEquals("composer",mp4tag.getFirst(Mp4FieldKey.COMPOSER));
             assertEquals("Sortartist",mp4tag.getFirst(Mp4FieldKey.ARTIST_SORT));
             assertEquals("lyrics",mp4tag.getFirst(Mp4FieldKey.LYRICS));
