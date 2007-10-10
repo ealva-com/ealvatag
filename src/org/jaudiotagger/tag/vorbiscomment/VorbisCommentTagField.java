@@ -24,6 +24,7 @@ import org.jaudiotagger.tag.TagField;
 import org.jaudiotagger.tag.TagTextField;
 
 import static org.jaudiotagger.tag.vorbiscomment.VorbisCommentFieldKey.*;
+import org.jaudiotagger.audio.ogg.util.VorbisHeader;
 
 /**
  * This class encapsulates the name and content of a tag entry in ogg-files.
@@ -107,7 +108,15 @@ public class VorbisCommentTagField implements TagTextField
      */
     private void checkCommon()
     {
-        this.common = id.equals(TITLE.name()) || id.equals(ALBUM.name()) || id.equals(ARTIST.name()) || id.equals(GENRE.name()) || id.equals(TRACKNUMBER.name()) || id.equals(DATE.name()) || id.equals(DESCRIPTION.name()) || id.equals(COMMENT.name()) || id.equals(TRACK.name());
+        this.common = id.equals(TITLE.name())
+                || id.equals(ALBUM.name())
+                || id.equals(ARTIST.name())
+                || id.equals(GENRE.name())
+                || id.equals(TRACKNUMBER.name())
+                || id.equals(DATE.name())
+                || id.equals(DESCRIPTION.name())
+                || id.equals(COMMENT.name())
+                || id.equals(TRACK.name());
     }
 
     /**
@@ -169,7 +178,7 @@ public class VorbisCommentTagField implements TagTextField
      */
     public String getEncoding()
     {
-        return "UTF-8";
+        return VorbisHeader.CHARSET_UTF_8;
     }
 
     /**

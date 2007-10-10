@@ -14,9 +14,9 @@ public class Mp4MeanBox extends AbstractMp4Box
 {
     public static final String IDENTIFIER = "mean";
 
-
     private String       issuer;
 
+    //TODO Are these misnamed, are these version flag bytes or just null bytes
     public static final int VERSION_LENGTH = 1;
     public static final int FLAGS_LENGTH = 3;
     public static final int PRE_DATA_LENGTH = VERSION_LENGTH + FLAGS_LENGTH;
@@ -33,7 +33,7 @@ public class Mp4MeanBox extends AbstractMp4Box
         //Double check
         if(!header.getId().equals(IDENTIFIER))
         {
-            throw new RuntimeException("Unabel to process data");
+            throw new RuntimeException("Unable to process data box because identifier is:"+header.getId());
         }
 
         //Make slice so operations here don't effect position of main buffer
@@ -43,8 +43,6 @@ public class Mp4MeanBox extends AbstractMp4Box
         this.issuer=Utils.getString(this.dataBuffer, PRE_DATA_LENGTH, header.getDataLength() - PRE_DATA_LENGTH, header.getEncoding());
 
     }
-
-
 
     public String getIssuer()
     {

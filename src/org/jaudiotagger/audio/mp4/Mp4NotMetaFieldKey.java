@@ -19,6 +19,7 @@ public enum Mp4NotMetaFieldKey
     MDIA("mdia"),
     MDHD("mdhd"),
     TKHD("tkhd"),
+    FREE("free"),
     TRAK("trak");
 
     private String fieldName;

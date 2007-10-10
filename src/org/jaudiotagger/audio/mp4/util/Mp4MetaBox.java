@@ -21,7 +21,7 @@ public class Mp4MetaBox extends AbstractMp4Box
      */
     public Mp4MetaBox(Mp4BoxHeader header, ByteBuffer dataBuffer)
     {
-        this.header  = header;
+        this.header     = header;
         this.dataBuffer = dataBuffer;
     }
 

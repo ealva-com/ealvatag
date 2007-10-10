@@ -24,21 +24,57 @@ import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 
 /**
- * For storing coverart
- *  
+ * Represents Cover Art
+ *
+ * Note:Within this library we have a seperate TagCoverField for every image stored, however this does not map
+ * very directly to how they are physically stored within a file, because all are stored under a single covr atom, so
+ * a more complex conversion has to be done then for other fields when writing multiple images back to file.
  */
 public class Mp4TagCoverField extends Mp4TagBinaryField
 {
     private int type;
+
+    /**
+     * Empty CoverArt Field
+     */
     public Mp4TagCoverField()
     {
         super(Mp4FieldKey.ARTWORK.getFieldName());
     }
 
+    /**
+     * Construct CoverField by reading data from audio file
+     *
+     * @param raw
+     * @param type
+     * @throws UnsupportedEncodingException
+     */
     public Mp4TagCoverField(ByteBuffer raw,int type) throws UnsupportedEncodingException
     {
         super(Mp4FieldKey.ARTWORK.getFieldName(), raw);
         this.type=type;
+    }
+
+
+
+    /**
+     * Construct new binary field with binarydata provided
+     *
+     * @param data
+     * @throws UnsupportedEncodingException
+     */
+    public Mp4TagCoverField(byte[] data) throws UnsupportedEncodingException
+    {
+        super(Mp4FieldKey.ARTWORK.getFieldName(),data);
+        //TODO hardcoded
+        this.type=Mp4FieldType.COVERART_JPEG.getFileClassId();
+
+    }
+
+    protected Mp4FieldType getFieldType()
+    {
+        //TODO this is wrong needs to match type field
+        return Mp4FieldType.COVERART_JPEG;
     }
 
     public boolean isBinary()

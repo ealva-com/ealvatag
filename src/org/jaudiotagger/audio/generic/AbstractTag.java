@@ -52,7 +52,7 @@ public abstract class AbstractTag implements Tag
      *      Changed so add empty fields
      */
     public void add(TagField field)
-    {
+    {           
         if (field == null)
         {
             return;
@@ -311,7 +311,7 @@ public abstract class AbstractTag implements Tag
      */
     public Iterator getFields()
     {
-        final Iterator it = this.fields.entrySet().iterator();
+        final Iterator<Map.Entry<String,List<TagField>>> it = this.fields.entrySet().iterator();
         return new Iterator()
         {
             private Iterator fieldsIt;
@@ -323,7 +323,8 @@ public abstract class AbstractTag implements Tag
                     return;
                 }
 
-                List<TagField>  l = (List) ((Map.Entry) it.next()).getValue();
+                Map.Entry<String,List<TagField>> e = it.next();
+                List<TagField>  l = e.getValue();
                 fieldsIt = l.iterator();
             }
 
@@ -542,7 +543,9 @@ public abstract class AbstractTag implements Tag
     }
 
     /**
-     * (overridden)
+     * Create a tag of the correct type using the information in the tag provided
+     *
+     * TODO:This is a half hearted attempt that only merges the basic fields, all the others would get lost
      *
      * @see org.jaudiotagger.tag.Tag#merge(org.jaudiotagger.tag.Tag)
      */

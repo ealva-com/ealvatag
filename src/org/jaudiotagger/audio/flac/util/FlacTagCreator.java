@@ -24,6 +24,9 @@ import org.jaudiotagger.tag.Tag;
 import java.io.UnsupportedEncodingException;
 import java.nio.*;
 
+/**
+ * Create the tag data ready for writing to flac file
+ */
 public class FlacTagCreator
 {
 

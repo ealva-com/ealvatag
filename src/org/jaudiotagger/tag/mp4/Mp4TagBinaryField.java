@@ -28,7 +28,8 @@ import org.jaudiotagger.audio.mp4.util.Mp4BoxHeader;
 /**
  * Represents binary data
  *
- * This is denoted with an identifier of '----' ?
+ * Subclassed by cover art field, TODO unaware of any other binary fields at the moment
+ *
  */
 public class Mp4TagBinaryField extends Mp4TagField
 {
@@ -36,44 +37,57 @@ public class Mp4TagBinaryField extends Mp4TagField
     protected byte[] dataBytes;
     protected boolean isBinary = false;
 
+    /**
+     * Construct an empty Binary Field
+     *
+     * @param id
+     */
     public Mp4TagBinaryField(String id)
     {
         super(id);
     }
 
+    /**
+     * Construct new binary field with binarydata provided
+     *
+     * @param id
+     * @param data
+     * @throws UnsupportedEncodingException
+     */
+    public Mp4TagBinaryField(String id, byte[] data) throws UnsupportedEncodingException
+    {
+        super(id);
+        this.dataBytes = data;
+    }
+
+    /**
+     * Construct binary field from rawdata of audio file
+     *
+     * @param id
+     * @param raw
+     * @throws UnsupportedEncodingException
+     */
     public Mp4TagBinaryField(String id, ByteBuffer raw) throws UnsupportedEncodingException
     {
         super(id, raw);
     }
 
-    public byte[] getRawContent()
+    protected Mp4FieldType getFieldType()
     {
-        byte[] data = dataBytes;
-        byte[] b = new byte[4 + 4 + 4 + 4 + 4 + 4 + data.length];
+        //TODO dont know what value this should be do we actually have any binary fields other
+        //than cover art
+        return Mp4FieldType.NUMERIC;
+    }
 
-        int offset = 0;
-        Utils.copy(Utils.getSizeBigEndian(b.length), b, offset);
-        offset += 4;
-
-        Utils.copy(Utils.getDefaultBytes(getId()), b, offset);
-        offset += 4;
-
-        Utils.copy(Utils.getSizeBigEndian(4 + 4 + 4 + 4 + data.length), b, offset);
-        offset += 4;
-
-        Utils.copy(Utils.getDefaultBytes("data"), b, offset);
-        offset += 4;
-
-        Utils.copy(new byte[]{0, 0, 0, (byte) (isBinary() ? 0 : 1)}, b, offset);
-        offset += 4;
-
-        Utils.copy(new byte[]{0, 0, 0, 0}, b, offset);
-        offset += 4;
-
-        Utils.copy(data, b, offset);
-        offset += data.length;
-
-        return b;
+    /**
+     * Used when creating raw content
+     *
+     * @return
+     * @throws UnsupportedEncodingException
+     */
+    protected byte[] getDataBytes() throws UnsupportedEncodingException
+    {
+        return dataBytes;
     }
 
     protected void build(ByteBuffer raw)

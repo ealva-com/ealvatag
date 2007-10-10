@@ -10,7 +10,8 @@ import java.util.ListIterator;
 import java.util.List;
 
 /**
- * This box is used within both normal metadat boxes and ---- boxes to hold the actual data
+ * This box is used within both normal metadat boxes and ---- boxes to hold the actual data.
+ *
  * Format is as follows:
  * :length          (4 bytes)
  * :name 'Data'     (4 bytes)
@@ -40,7 +41,7 @@ public class Mp4DataBox extends AbstractMp4Box
     public static final int NUMBER_LENGTH = 2;
 
     //Holds the numbers decoded
-    private List<Integer> numbers;
+    private List<Short> numbers;
     /**
      * @param header     header info
      * @param dataBuffer data of box (doesnt include header data)
@@ -51,7 +52,7 @@ public class Mp4DataBox extends AbstractMp4Box
         //Double check
         if (!header.getId().equals(IDENTIFIER))
         {
-            throw new RuntimeException("Unabel to process data");
+            throw new RuntimeException("Unable to process data");
         }
 
         //Make slice so operations here don't effect position of main buffer
@@ -71,11 +72,11 @@ public class Mp4DataBox extends AbstractMp4Box
         }
         else if (type == Mp4FieldType.NUMERIC.getFileClassId())
         {
-            numbers = new ArrayList<Integer>();
+            numbers = new ArrayList<Short>();
                         
             for (int i = 0; i < ((header.getDataLength() - PRE_DATA_LENGTH) / NUMBER_LENGTH); i++)
             {
-                int number = Utils.getNumberBigEndian(this.dataBuffer,
+                short number = Utils.getShortNumberBigEndian(this.dataBuffer,
                         PRE_DATA_LENGTH + (i * NUMBER_LENGTH),
                         PRE_DATA_LENGTH + (i * NUMBER_LENGTH) + (NUMBER_LENGTH - 1));
                 numbers.add(number);
@@ -96,6 +97,7 @@ public class Mp4DataBox extends AbstractMp4Box
         }
         else if (type == Mp4FieldType.BYTE.getFileClassId())
         {
+            //TODO byte data length seems to be 1 for pgap and cpil but 2 for tmpo ?           
             content = Utils.getNumberBigEndian(this.dataBuffer,
                     PRE_DATA_LENGTH,
                     header.getDataLength() - 1) + "";
@@ -122,7 +124,7 @@ public class Mp4DataBox extends AbstractMp4Box
 
     //TODO this is only applicable for numeric databoxes, should we subclass dont know type until start
     //constructing and we also have Mp4tagTextNumericField class as well
-    public List<Integer> getNumbers()
+    public List<Short> getNumbers()
     {
         return numbers;
     }

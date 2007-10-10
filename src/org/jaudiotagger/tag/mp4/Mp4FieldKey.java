@@ -5,6 +5,9 @@ import static org.jaudiotagger.tag.mp4.Mp4FieldType.*;
 /**
  * Starting list of known mp4 metadata fields
  *
+ * Simple metaitems use the parent atom id as their identifier whereas reverse dns (----) atoms use
+ * the reversedns,issuer and name fields as their identifier.
+ * 
  * From:
  * http://www.hydrogenaudio.org/forums/index.php?showtopic=29120&st=0&p=251686&#entry251686
  * http://wiki.musicbrainz.org/PicardQt/TagMapping

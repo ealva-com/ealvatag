@@ -30,6 +30,9 @@ import java.util.ArrayList;
 
 /**
  * Mp4 Tag
+ *
+ * Logical representation of Mp4Tag, i.e the meta information stored in an Mp4 file underneath the
+ * moov.udt.meta.ilst atom.
  */
 public class Mp4Tag extends AbstractTag
 {

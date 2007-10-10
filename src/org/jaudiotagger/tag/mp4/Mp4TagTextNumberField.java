@@ -19,6 +19,8 @@
 package org.jaudiotagger.tag.mp4;
 
 import java.io.UnsupportedEncodingException;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.ListIterator;
@@ -29,14 +31,16 @@ import org.jaudiotagger.audio.mp4.util.Mp4BoxHeader;
 import org.jaudiotagger.tag.mp4.Mp4TagTextField;
 
 /**
- * Represents simple text field, but reads the data content as an arry of 16 bit unsigned numbers
+ * Represents simple text field that contains an array of number,
+ *
+ * But reads the data content as an arry of 16 bit unsigned numbers
  */
 public class Mp4TagTextNumberField extends Mp4TagTextField
 {
     public static final int NUMBER_LENGTH = 2;
 
     //Holds the numbers decoded
-    protected List <Integer> numbers;
+    protected List <Short> numbers;
 
     public Mp4TagTextNumberField(String id, String n)
     {
@@ -48,9 +52,36 @@ public class Mp4TagTextNumberField extends Mp4TagTextField
         super(id, data);
     }
 
+    /**
+     * Recreate the raw data content from the list of numbers
+     *
+     * @return
+     */
     protected byte[] getDataBytes()
     {
-        return Utils.getSizeBigEndian(Integer.parseInt(content));
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        for(Short number:numbers)
+        {
+            try
+            {
+                baos.write(Utils.getShortSizeBigEndian(number));
+            }
+            catch(IOException e)
+            {
+                //This should never happen because we are not writing to file at this point.
+                throw new RuntimeException(e);
+            }
+        }
+        return baos.toByteArray();
+    }
+
+    /**
+     *
+     * @return type numeric
+     */
+    protected Mp4FieldType getFieldType()
+    {
+        return Mp4FieldType.NUMERIC;
     }
 
     protected void build(ByteBuffer data) throws UnsupportedEncodingException
@@ -67,7 +98,7 @@ public class Mp4TagTextNumberField extends Mp4TagTextField
      *
      * @return the individual numbers making up this field
      */
-    public List<Integer> getNumbers()
+    public List<Short> getNumbers()
     {
         return numbers;
     }

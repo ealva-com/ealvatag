@@ -19,37 +19,59 @@
 package org.jaudiotagger.tag.mp4;
 
 import java.io.UnsupportedEncodingException;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.util.logging.Logger;
 
 import org.jaudiotagger.tag.TagField;
 import org.jaudiotagger.audio.generic.Utils;
+import org.jaudiotagger.audio.mp4.util.Mp4BoxHeader;
 
 /**
  * This abstract class represents a link between piece of data, and how it is stored as an mp4 atom
- *
+ * <p/>
  * Note there isnt a one to one correspondance between a tag field and a box because some fields are represented
  * by multiple boxes, for example many of the MusicBrainz fields use the '----' box, which in turn uses one of mean,
  * name and data box. So an instance of a tag field maps to one item of data such as 'Title', but it may have to read
  * multiple boxes to do this.
- *
+ * <p/>
  * There are various subclasses that represent different types of fields
  */
 public abstract class Mp4TagField implements TagField
 {
+    // Logger Object
+       public static Logger logger = Logger.getLogger("org.jaudiotagger.tag.mp4");
+    
 
     protected String id;
 
-    public Mp4TagField(String id)
+    protected Mp4TagField(String id)
     {
         this.id = id;
     }
 
-    public Mp4TagField(String id, ByteBuffer data) throws UnsupportedEncodingException
+    /**
+     * Used by subclasses that canot identify their id until after they have been built such as ReverseDnsField
+     *
+     * @param data
+     * @throws UnsupportedEncodingException
+     */
+    protected Mp4TagField(ByteBuffer data) throws UnsupportedEncodingException
+    {
+        build(data);
+    }
+
+
+    protected Mp4TagField(String id, ByteBuffer data) throws UnsupportedEncodingException
     {
         this(id);
         build(data);
     }
 
+    /**
+     * @return field identifier
+     */
     public String getId()
     {
         return id;
@@ -62,7 +84,7 @@ public abstract class Mp4TagField implements TagField
 
     public boolean isCommon()
     {
-        return id.equals(Mp4FieldKey.ARTIST.getFieldName()) 
+        return id.equals(Mp4FieldKey.ARTIST.getFieldName())
                 || id.equals(Mp4FieldKey.ALBUM.getFieldName())
                 || id.equals(Mp4FieldKey.TITLE.getFieldName())
                 || id.equals(Mp4FieldKey.TRACK.getFieldName())
@@ -71,10 +93,25 @@ public abstract class Mp4TagField implements TagField
                 || id.equals(Mp4FieldKey.GENRE.getFieldName());
     }
 
+    /**
+     * @return field identifier as it will be held within the file
+     */
     protected byte[] getIdBytes()
     {
         return Utils.getDefaultBytes(getId());
     }
+
+    /**
+     * @return the data as it is held on file
+     * @throws UnsupportedEncodingException
+     */
+    protected abstract byte[] getDataBytes() throws UnsupportedEncodingException;
+
+
+    /**
+     * @return the field type of this field
+     */
+    protected abstract Mp4FieldType getFieldType();
 
     /**
      * Processes the data and sets the position of the data buffer to just after the end of this fields data
@@ -84,4 +121,40 @@ public abstract class Mp4TagField implements TagField
      * @throws UnsupportedEncodingException
      */
     protected abstract void build(ByteBuffer data) throws UnsupportedEncodingException;
+
+    /**
+     * Convert back to raw content, includes parent and data atom as views as one thing externally
+     *
+     * @return
+     * @throws UnsupportedEncodingException
+     */
+    public byte[] getRawContent() throws UnsupportedEncodingException
+    {
+        logger.fine("Getting Raw data for:"+getId());
+        try
+        {
+            //Create Data Box
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            byte[] data = getDataBytes();
+            baos.write(Utils.getSizeBigEndian(Mp4DataBox.DATA_HEADER_LENGTH + data.length));
+            baos.write(Utils.getDefaultBytes(Mp4DataBox.IDENTIFIER));
+            baos.write(new byte[]{0});
+            baos.write(new byte[]{0, 0, (byte) getFieldType().getFileClassId()});
+            baos.write(new byte[]{0, 0, 0, 0});
+            baos.write(data);
+
+            //Wrap in Parent box
+            ByteArrayOutputStream outerbaos = new ByteArrayOutputStream();
+            outerbaos.write(Utils.getSizeBigEndian(Mp4BoxHeader.HEADER_LENGTH + baos.size()));
+            outerbaos.write(Utils.getDefaultBytes(getId()));
+            outerbaos.write(baos.toByteArray());
+            return outerbaos.toByteArray();
+        }
+        catch (IOException ioe)
+        {
+            //This should never happen as were not actually writing to/from a file
+            throw new RuntimeException(ioe);
+        }
+    }
+
 }

@@ -33,8 +33,8 @@ import org.jaudiotagger.tag.TagField;
  */
 public abstract class AbstractTagCreator
 {
-
     /**
+     * Convert tagdata to rawdata ready for writing to file
      *
      * @param tag
      * @return
@@ -46,6 +46,7 @@ public abstract class AbstractTagCreator
     }
 
     /**
+     * Convert tagdata to rawdata ready for writing to file
      *
      * @param tag
      * @param padding
@@ -110,7 +111,7 @@ public abstract class AbstractTagCreator
     /**
      *
      * @param tag
-     * @return
+     * @return total length of tag
      * @throws UnsupportedEncodingException
      */
     public int getTagLength(Tag tag) throws UnsupportedEncodingException
@@ -122,6 +123,7 @@ public abstract class AbstractTagCreator
 
     /**
      * Calculate the minimum tag size or fixed size
+     *
      * @param tag
      * @return
      * @throws UnsupportedEncodingException
@@ -138,6 +140,10 @@ public abstract class AbstractTagCreator
 
     /**
      * Populate the buffer with the raw tag data
+     *
+     * TODO:Should use ByteArrayoutputstream instead of ByteBuffer then we dont need to precalculate
+     * the size required, this would simplify code and improve performance.
+     *
      * @param tag
      * @param buf
      * @param rawFieldData
@@ -145,5 +151,6 @@ public abstract class AbstractTagCreator
      * @param padding
      * @throws UnsupportedEncodingException
      */
-    protected abstract void create(Tag tag, ByteBuffer buf, List<byte[]> rawFieldData, int tagSize, int padding) throws UnsupportedEncodingException;
+    protected abstract void create(Tag tag, ByteBuffer buf, List<byte[]> rawFieldData, int tagSize, int padding)
+            throws UnsupportedEncodingException;
 }

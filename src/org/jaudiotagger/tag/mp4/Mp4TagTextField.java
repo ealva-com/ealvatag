@@ -44,7 +44,8 @@ import org.jaudiotagger.audio.mp4.util.Mp4BoxHeader;
  *          :data
  *
  * Note:This class is initilized with the child data atom only, the parent data has already been processed, this may
- * change as it seems that code should probably be enscapulated into this.
+ * change as it seems that code should probably be enscapulated into this. Whereas the raw content returned by the
+ * getRawContent() contais the byte data for parent and child.
  *
  */
 public class Mp4TagTextField extends Mp4TagField implements TagTextField
@@ -96,10 +97,14 @@ public class Mp4TagTextField extends Mp4TagField implements TagTextField
         return content;
     }
 
-    // This is overriden in the number data box
     protected byte[] getDataBytes() throws UnsupportedEncodingException
     {
         return content.getBytes(getEncoding());
+    }
+
+    protected Mp4FieldType getFieldType()
+    {
+        return Mp4FieldType.TEXT;
     }
 
     public String getEncoding()
@@ -107,44 +112,6 @@ public class Mp4TagTextField extends Mp4TagField implements TagTextField
         return Mp4BoxHeader.CHARSET_UTF_8;
     }
 
-    /** Convert back to raw content, includes parent and data atom as views as one thing externally
-     *
-     * @return
-     * @throws UnsupportedEncodingException
-     */
-    public byte[] getRawContent() throws UnsupportedEncodingException
-    {
-        byte[] data = getDataBytes();
-        byte[] b = new byte[Mp4BoxHeader.HEADER_LENGTH + Mp4DataBox.DATA_HEADER_LENGTH + data.length];
-
-        int offset = Mp4BoxHeader.OFFSET_POS;
-        Utils.copy(Utils.getSizeBigEndian(b.length), b, offset);
-        offset += Mp4BoxHeader.OFFSET_LENGTH;
-
-        Utils.copy(Utils.getDefaultBytes(getId()), b, offset);
-        offset += Mp4BoxHeader.IDENTIFIER_LENGTH;
-
-        Utils.copy(Utils.getSizeBigEndian(Mp4DataBox.DATA_HEADER_LENGTH + data.length), b, offset);
-        offset += Mp4BoxHeader.OFFSET_LENGTH;
-
-        Utils.copy(Utils.getDefaultBytes(Mp4DataBox.IDENTIFIER), b, offset);
-        offset += Mp4BoxHeader.IDENTIFIER_LENGTH;
-
-        Utils.copy(new byte[]{0, 0, 0}, b, offset);
-        offset += Mp4DataBox.VERSION_LENGTH;
-
-        //TODO this is wrong have to set the correct class
-        Utils.copy(new byte[]{(byte) (isBinary() ? 0 : 1)}, b, offset);
-        offset += Mp4DataBox.TYPE_LENGTH;
-
-        Utils.copy(new byte[]{0, 0, 0, 0}, b, offset);
-        offset += Mp4DataBox.NULL_LENGTH;
-
-        Utils.copy(data, b, offset);
-        offset += data.length;
-
-        return b;
-    }
 
     public boolean isBinary()
     {

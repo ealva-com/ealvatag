@@ -132,7 +132,7 @@ public class Mp4TagReader
     {
         if(header.getId().equals(Mp4TagReverseDnsField.IDENTIFIER))
         {
-            TagField field =  new Mp4TagReverseDnsField(header.getId(),raw);
+            TagField field =  new Mp4TagReverseDnsField(raw);
             tag.add(field);
         }
         else

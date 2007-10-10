@@ -8,7 +8,9 @@ import java.nio.ByteBuffer;
 import java.io.UnsupportedEncodingException;
 
 /**
- * Represents simple text field, but reads the data content as an arry of 16 bit unsigned numbers
+ * Represents the Track No field
+ *
+ * For some reason uses an array of three numbers, but only the last two are of use for display purposes
  */
 public class Mp4TrackField extends Mp4TagTextNumberField
 {
@@ -26,10 +28,6 @@ public class Mp4TrackField extends Mp4TagTextNumberField
         super(id, data);
     }
 
-    protected byte[] getDataBytes()
-    {
-        return Utils.getSizeBigEndian(Integer.parseInt(content));
-    }
 
     protected void build(ByteBuffer data) throws UnsupportedEncodingException
     {

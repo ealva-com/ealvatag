@@ -6,15 +6,20 @@ import org.jaudiotagger.audio.mp4.util.Mp4BoxHeader;
 import org.jaudiotagger.audio.generic.Utils;
 
 import java.io.UnsupportedEncodingException;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.nio.ByteBuffer;
 
 /**
  * Represents reverse dns field, used for custom information
  *
+ * Originally only used by Itunes for information that was iTunes specific but now used in a wide range of uses,
+ * for example Musicbrainz uses it for many of its fields.
+ *
  * These fields have a more complex setup
  *      Box ----  shows this is a reverse dns metadata field
  *      Box mean  the issuer in the form of reverse DNS domain (e.g com.apple.iTunes)
- *      Box name  descriptor identying the type of contents
+ *      Box name  descriptor identifying the type of contents
  *      Box data  contents
  *
  * The raw data passed starts from the mean box
@@ -31,18 +36,37 @@ public class Mp4TagReverseDnsField extends Mp4TagField implements TagTextField
     //Descriptor
     private String descriptor;
 
-    //Data Content
+    //Data Content, TODO assuming always text at the moment
     protected String content;
 
-    public Mp4TagReverseDnsField(String id, ByteBuffer data) throws UnsupportedEncodingException
+    /**
+     * Construct from existing file data
+     *
+     * @param data
+     * @throws UnsupportedEncodingException
+     */
+    public Mp4TagReverseDnsField(ByteBuffer data) throws UnsupportedEncodingException
     {
-        super(id, data);
+        super(data);
     }
 
+    /**
+     * Newly created field
+     *
+     * @param id
+     * @param content
+     */
     public Mp4TagReverseDnsField(String id, String content)
     {
         super(id);
         this.content = content;
+    }
+
+    protected Mp4FieldType getFieldType()
+    {
+        //TODO always assuming text at moment but may not always be the case (though dont have any concrete
+        //examples)
+        return Mp4FieldType.TEXT;
     }
 
     protected void build(ByteBuffer data) throws UnsupportedEncodingException
@@ -65,9 +89,8 @@ public class Mp4TagReverseDnsField extends Mp4TagField implements TagTextField
         setContent(dataBox.getContent());
         data.position(data.position()+dataBoxHeader.getDataLength());
 
-        //TODO We need to do this so the id to uniquely reference this field however probably need another field
-        //because we are overloading the meaning of id now
-        id=id+":"+issuer+":"+descriptor;
+        //Now calculate the id which in order to be unique needs to use all htree values
+        id=IDENTIFIER+":"+issuer+":"+descriptor;
 
     }
 
@@ -76,7 +99,9 @@ public class Mp4TagReverseDnsField extends Mp4TagField implements TagTextField
     {
         if (field instanceof Mp4TagReverseDnsField)
         {
-            this.content = ((Mp4TagReverseDnsField) field).getContent();
+            this.issuer     = ((Mp4TagReverseDnsField) field).getIssuer();
+            this.descriptor = ((Mp4TagReverseDnsField) field).getDescriptor();
+            this.content    = ((Mp4TagReverseDnsField) field).getContent();
         }
     }
 
@@ -89,7 +114,7 @@ public class Mp4TagReverseDnsField extends Mp4TagField implements TagTextField
         return content;
     }
 
-    // This is overriden in the number data box
+
     protected byte[] getDataBytes() throws UnsupportedEncodingException
     {
         return content.getBytes(getEncoding());
@@ -97,13 +122,62 @@ public class Mp4TagReverseDnsField extends Mp4TagField implements TagTextField
 
     public String getEncoding()
     {
-        return "ISO-8859-1";
+        return Mp4BoxHeader.CHARSET_UTF_8;
     }
 
-    //TODO
+    /**
+     * Convert back to raw content, includes ----,mean,name and data atom as views as one thing externally
+     *
+     * @return
+     * @throws UnsupportedEncodingException
+     */
     public byte[] getRawContent() throws UnsupportedEncodingException
     {
-        return null;
+        try
+        {
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+
+            //Create Meanbox data
+            byte [] issuerRawData = issuer.getBytes(getEncoding());
+            baos.write(Utils.getSizeBigEndian(Mp4BoxHeader.HEADER_LENGTH
+                                            + Mp4MeanBox.PRE_DATA_LENGTH
+                                            + issuerRawData.length));
+            baos.write(Utils.getDefaultBytes(Mp4MeanBox.IDENTIFIER));
+            baos.write(new byte[]{0, 0, 0, 0});
+            baos.write(issuerRawData);
+
+            //Create Namebox data
+            byte [] nameRawData = descriptor.getBytes(getEncoding());
+            baos.write(Utils.getSizeBigEndian(Mp4BoxHeader.HEADER_LENGTH
+                                            + Mp4NameBox.PRE_DATA_LENGTH
+                                            + nameRawData.length));
+            baos.write(Utils.getDefaultBytes(Mp4NameBox.IDENTIFIER));
+            baos.write(new byte[]{0, 0, 0, 0});
+            baos.write(nameRawData);
+
+            //Create DataBox data
+            byte [] dataRawData = content.getBytes(getEncoding());
+            baos.write(Utils.getSizeBigEndian(Mp4BoxHeader.HEADER_LENGTH
+                                            + Mp4DataBox.PRE_DATA_LENGTH
+                                            + dataRawData.length));
+            baos.write(Utils.getDefaultBytes(Mp4DataBox.IDENTIFIER));
+            baos.write(new byte[]{0});
+            baos.write(new byte[]{0, 0, (byte) getFieldType().getFileClassId()});
+            baos.write(new byte[]{0, 0, 0, 0});
+            baos.write(dataRawData);
+
+            //Now wrap with reversedns box
+            ByteArrayOutputStream outerbaos = new ByteArrayOutputStream();
+            outerbaos.write(Utils.getSizeBigEndian(Mp4BoxHeader.HEADER_LENGTH + baos.size()));
+            outerbaos.write(Utils.getDefaultBytes(IDENTIFIER));
+            outerbaos.write(baos.toByteArray());
+            return outerbaos.toByteArray();
+        }
+        catch(IOException ioe)
+        {
+            //This should never happen as were not actually writing to/from a file
+            throw new RuntimeException(ioe);
+        }
     }
 
     public boolean isBinary()
@@ -168,6 +242,4 @@ public class Mp4TagReverseDnsField extends Mp4TagField implements TagTextField
     {
         this.descriptor = descriptor;
     }
-
-    
 }

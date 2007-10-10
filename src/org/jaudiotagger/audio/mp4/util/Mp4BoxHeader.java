@@ -19,9 +19,11 @@
 package org.jaudiotagger.audio.mp4.util;
 
 import org.jaudiotagger.audio.generic.Utils;
+import org.jaudiotagger.tag.mp4.Mp4DataBox;
 
 import java.io.RandomAccessFile;
 import java.io.IOException;
+import java.io.ByteArrayOutputStream;
 import java.nio.ByteBuffer;
 import java.nio.channels.ReadableByteChannel;
 import java.util.logging.Logger;
@@ -46,8 +48,8 @@ import java.util.logging.Logger;
  */
 public class Mp4BoxHeader
 {
-// Logger Object
-public static Logger logger = Logger.getLogger("org.jaudiotagger.audio.mp4.util");
+    // Logger Object
+    public static Logger logger = Logger.getLogger("org.jaudiotagger.audio.mp4.util");
 
     public static final int OFFSET_POS = 0;
     public static final int IDENTIFIER_POS = 4;
@@ -61,8 +63,8 @@ public static Logger logger = Logger.getLogger("org.jaudiotagger.audio.mp4.util"
     //Box length
     private int length;
 
-    //Raw Data includes header and body
-    private byte[] rawdata;
+    //Raw Header data
+    protected ByteBuffer dataBuffer;
 
     //Mp4 uses UTF-8 for all text
     public static final String CHARSET_UTF_8      = "UTF-8";
@@ -103,7 +105,9 @@ public static Logger logger = Logger.getLogger("org.jaudiotagger.audio.mp4.util"
         //Read header data into byte array
         byte[] b = new byte[HEADER_LENGTH];
         headerData.get(b);
-
+        //Keep reference to copy of RawData
+        dataBuffer=ByteBuffer.wrap(b);
+        
         //Calculate box size
         this.length = Utils.getNumberBigEndian(b, OFFSET_POS, OFFSET_LENGTH - 1);
 
@@ -125,7 +129,7 @@ public static Logger logger = Logger.getLogger("org.jaudiotagger.audio.mp4.util"
 
     /**
      *
-     * @return the length of the boxs data (ncludes the header size)
+     * @return the length of the boxes data (includes the header size)
      */
     public int getLength()
     {
@@ -133,8 +137,33 @@ public static Logger logger = Logger.getLogger("org.jaudiotagger.audio.mp4.util"
     }
 
     /**
+     * Set the length.
      *
-     * @return the length of the data
+     * This will modify the databuffer accordingly
+     *
+     * @param length
+     */
+    public void setLength(int length)
+    {
+        byte[] headerSize = Utils.getSizeBigEndian(length);
+        dataBuffer.put(0,headerSize[0]);
+        dataBuffer.put(1,headerSize[1]);
+        dataBuffer.put(2,headerSize[2]);
+        dataBuffer.put(3,headerSize[3]);
+
+    }
+    /**
+     * @return the 8 byte header buffer
+     */
+    public ByteBuffer getHeaderData()
+    {
+        dataBuffer.rewind();
+        return dataBuffer;
+    }
+
+    /**
+     *
+     * @return the length of the data only (does not include the header size)
      */
     public int getDataLength()
     {
@@ -146,11 +175,10 @@ public static Logger logger = Logger.getLogger("org.jaudiotagger.audio.mp4.util"
         return "Box " + id + ":" + length;
     }
 
-    public byte[] getRawdata()
-    {
-        return rawdata;
-    }
-
+    /**
+     *
+     * @return UTF_8 (always used by Mp4)
+     */
     public String getEncoding()
     {
         return CHARSET_UTF_8;
@@ -163,7 +191,7 @@ public static Logger logger = Logger.getLogger("org.jaudiotagger.audio.mp4.util"
      * Note it wont find the box if it is contained with a level below the current level, nor if we are
      * at a parent atom that also contains data and we havent yet processed the data. It will work
      * if we are at the start of a child box even if it not the required box as long as the box we are
-     * looking for is the same level.
+     * looking for is the same level (or the level above in some cases).
      *
      * @param raf
      * @param id
@@ -193,7 +221,7 @@ public static Logger logger = Logger.getLogger("org.jaudiotagger.audio.mp4.util"
      * Note it wont find the box if it is contained with a level below the current level, nor if we are
      * at a parent atom that also contains data and we havent yet processed the data. It will work
      * if we are at the start of a child box even if it not the required box as long as the box we are
-     * looking for is the same level.
+     * looking for is the same level (or the level above in some cases).
      *
      * @param data
      * @param id

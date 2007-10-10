@@ -31,7 +31,7 @@ import java.util.logging.Logger;
 /**
  * Creates an OggVorbis Comment Tag from a VorbisComment for use within an OggVorbis Container
  *
- * When a Vorbis Comment is used within OggVrobis it additionally has a vorbis header and a framing
+ * When a Vorbis Comment is used within OggVorbis it additionally has a vorbis header and a framing
  * bit.
  */
 public class OggVorbisCommentTagCreator
