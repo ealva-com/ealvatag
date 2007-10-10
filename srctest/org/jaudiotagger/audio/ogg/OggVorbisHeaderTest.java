@@ -113,7 +113,7 @@ public class OggVorbisHeaderTest extends TestCase
             assertEquals(3745,oph.getPageLength());
             assertEquals(1,oph.getPageSequence());
             assertEquals(559748870,oph.getSerialNumber());
-            assertEquals(-2010062366,oph.getCheckSum());
+            assertEquals(233133993,oph.getCheckSum());
 
 
         }
@@ -158,7 +158,7 @@ public class OggVorbisHeaderTest extends TestCase
             assertEquals(3783,oph.getPageLength());
             assertEquals(1,oph.getPageSequence());
             assertEquals(559748870,oph.getSerialNumber());
-            assertEquals(1520710193,oph.getCheckSum());
+            assertEquals(1677220898,oph.getCheckSum());
             assertEquals(0,oph.getHeaderType());
 
             //First Audio Frames
@@ -211,7 +211,7 @@ public class OggVorbisHeaderTest extends TestCase
             assertEquals(65025,oph.getPageLength());
             assertEquals(1,oph.getPageSequence());
             assertEquals(559748870,oph.getSerialNumber());
-            assertEquals(1351777268,oph.getCheckSum());
+            assertEquals(-1172108515,oph.getCheckSum());
             assertEquals(0,oph.getHeaderType());
         }
         catch(Exception e)
@@ -266,7 +266,7 @@ public class OggVorbisHeaderTest extends TestCase
             assertEquals(65025,oph.getPageLength());
             assertEquals(1,oph.getPageSequence());
             assertEquals(559748870,oph.getSerialNumber());
-            assertEquals(286111455,oph.getCheckSum());
+            assertEquals(2037809131,oph.getCheckSum());
             assertEquals(0,oph.getHeaderType());
 
             //Continuing Comment Header, ogg Flag = 1
