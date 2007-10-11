@@ -158,15 +158,7 @@ public class Mp4TagReverseDnsField extends Mp4TagField implements TagTextField
             baos.write(nameRawData);
 
             //Create DataBox data
-            byte [] dataRawData = content.getBytes(getEncoding());
-            baos.write(Utils.getSizeBigEndian(Mp4BoxHeader.HEADER_LENGTH
-                                            + Mp4DataBox.PRE_DATA_LENGTH
-                                            + dataRawData.length));
-            baos.write(Utils.getDefaultBytes(Mp4DataBox.IDENTIFIER));
-            baos.write(new byte[]{0});
-            baos.write(new byte[]{0, 0, (byte) getFieldType().getFileClassId()});
-            baos.write(new byte[]{0, 0, 0, 0});
-            baos.write(dataRawData);
+            baos.write(getRawContentDataOnly());            
 
             //Now wrap with reversedns box
             ByteArrayOutputStream outerbaos = new ByteArrayOutputStream();
@@ -176,6 +168,31 @@ public class Mp4TagReverseDnsField extends Mp4TagField implements TagTextField
             return outerbaos.toByteArray();
         }
         catch(IOException ioe)
+        {
+            //This should never happen as were not actually writing to/from a file
+            throw new RuntimeException(ioe);
+        }
+    }
+
+    public byte[] getRawContentDataOnly() throws UnsupportedEncodingException
+    {
+        logger.fine("Getting Raw data for:"+getId());
+        try
+        {
+            //Create DataBox data
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            byte [] dataRawData = content.getBytes(getEncoding());
+            baos.write(Utils.getSizeBigEndian(Mp4BoxHeader.HEADER_LENGTH
+                                            + Mp4DataBox.PRE_DATA_LENGTH
+                                            + dataRawData.length));
+            baos.write(Utils.getDefaultBytes(Mp4DataBox.IDENTIFIER));
+            baos.write(new byte[]{0});
+            baos.write(new byte[]{0, 0, (byte) getFieldType().getFileClassId()});
+            baos.write(new byte[]{0, 0, 0, 0});
+            baos.write(dataRawData);
+            return baos.toByteArray();
+        }
+        catch (IOException ioe)
         {
             //This should never happen as were not actually writing to/from a file
             throw new RuntimeException(ioe);

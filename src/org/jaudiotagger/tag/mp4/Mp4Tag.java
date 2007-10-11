@@ -71,6 +71,7 @@ public class Mp4Tag extends AbstractTag
         tagFieldToMp4Field.put(TagFieldKey.ALBUM_SORT, Mp4FieldKey.ALBUM_SORT);
         tagFieldToMp4Field.put(TagFieldKey.TITLE_SORT, Mp4FieldKey.TITLE_SORT);
         tagFieldToMp4Field.put(TagFieldKey.COMPOSER_SORT, Mp4FieldKey.COMPOSER_SORT);
+        tagFieldToMp4Field.put(TagFieldKey.COVER_ART,Mp4FieldKey.ARTWORK);
     }
 
     protected String getArtistId()

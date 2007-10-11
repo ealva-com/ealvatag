@@ -32,6 +32,7 @@ import org.jaudiotagger.audio.mp4.util.Mp4BoxHeader;
  * Represents a single text field
  *
  * <p>Mp4 metadata normally held as follows:
+ * <pre>
  * MP4Box Parent contains
  *      :length (includes length of data child)  (4 bytes)
  *      :name         (4 bytes)
@@ -42,8 +43,9 @@ import org.jaudiotagger.audio.mp4.util.Mp4BoxHeader;
  *          :atom type flags (3 bytes)
  *          :null field      (4 bytes)
  *          :data
+ * </pre>
  *
- * Note:This class is initilized with the child data atom only, the parent data has already been processed, this may
+ * <p>Note:This class is initilized with the child data atom only, the parent data has already been processed, this may
  * change as it seems that code should probably be enscapulated into this. Whereas the raw content returned by the
  * getRawContent() contais the byte data for parent and child.
  *

@@ -292,6 +292,25 @@ public abstract class AbstractTag implements Tag
     }
 
     /**
+     * Return field count
+     *
+     * TODO:Ther emust be a more efficient way to do this.
+     * 
+     * @return field count
+     */
+    public int getFieldCount()
+    {
+        Iterator it = getFields();
+        int count = 0;
+        while(it.hasNext())
+        {
+            count ++;
+            it.next();
+        }
+        return count;
+    }
+
+    /**
      * Get the first album or empty string if doesnt exist
      *
      * @see org.jaudiotagger.tag.Tag#getFirstAlbum()
@@ -477,50 +496,6 @@ public abstract class AbstractTag implements Tag
     public boolean isEmpty()
     {
         return fields.size() == 0;
-    }
-
-    /**
-     * Create a tag of the correct type using the information in the tag provided
-     *
-     * TODO:This is a half hearted attempt that only merges the basic fields, all the others would get lost
-     *
-     * @see org.jaudiotagger.tag.Tag#merge(org.jaudiotagger.tag.Tag)
-     */
-    public void merge(Tag tag)
-    {
-        // FIXME: Improve me, for the moment,
-        // it overwrites this tag with other values
-        // FIXME: TODO: an abstract method that merges particular things for
-        // each
-        // format
-        if (getTitle().size() == 0)
-        {
-            setTitle(tag.getFirstTitle());
-        }
-        if (getArtist().size() == 0)
-        {
-            setArtist(tag.getFirstArtist());
-        }
-        if (getAlbum().size() == 0)
-        {
-            setAlbum(tag.getFirstAlbum());
-        }
-        if (getYear().size() == 0)
-        {
-            setYear(tag.getFirstYear());
-        }
-        if (getComment().size() == 0)
-        {
-            setComment(tag.getFirstComment());
-        }
-        if (getTrack().size() == 0)
-        {
-            setTrack(tag.getFirstTrack());
-        }
-        if (getGenre().size() == 0)
-        {
-            setGenre(tag.getFirstGenre());
-        }
     }
 
     /**

@@ -134,20 +134,14 @@ public abstract class Mp4TagField implements TagField
         try
         {
             //Create Data Box
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            byte[] data = getDataBytes();
-            baos.write(Utils.getSizeBigEndian(Mp4DataBox.DATA_HEADER_LENGTH + data.length));
-            baos.write(Utils.getDefaultBytes(Mp4DataBox.IDENTIFIER));
-            baos.write(new byte[]{0});
-            baos.write(new byte[]{0, 0, (byte) getFieldType().getFileClassId()});
-            baos.write(new byte[]{0, 0, 0, 0});
-            baos.write(data);
+            byte[] databox = getRawContentDataOnly();
+
 
             //Wrap in Parent box
             ByteArrayOutputStream outerbaos = new ByteArrayOutputStream();
-            outerbaos.write(Utils.getSizeBigEndian(Mp4BoxHeader.HEADER_LENGTH + baos.size()));
+            outerbaos.write(Utils.getSizeBigEndian(Mp4BoxHeader.HEADER_LENGTH + databox.length));
             outerbaos.write(Utils.getDefaultBytes(getId()));
-            outerbaos.write(baos.toByteArray());
+            outerbaos.write(databox);
             return outerbaos.toByteArray();
         }
         catch (IOException ioe)
@@ -157,4 +151,32 @@ public abstract class Mp4TagField implements TagField
         }
     }
 
+    /**
+     * Get raw content for the data component only
+     *
+     * @return
+     * @throws UnsupportedEncodingException
+     */
+    public byte[] getRawContentDataOnly() throws UnsupportedEncodingException
+    {
+        logger.fine("Getting Raw data for:"+getId());
+        try
+        {
+            //Create Data Box
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            byte[] data = getDataBytes();
+            baos.write(Utils.getSizeBigEndian(Mp4DataBox.DATA_HEADER_LENGTH + data.length));
+            baos.write(Utils.getDefaultBytes(Mp4DataBox.IDENTIFIER));
+            baos.write(new byte[]{0});
+            baos.write(new byte[]{0, 0, (byte) getFieldType().getFileClassId()});
+            baos.write(new byte[]{0, 0, 0, 0});
+            baos.write(data);
+            return baos.toByteArray();
+        }
+        catch (IOException ioe)
+        {
+            //This should never happen as were not actually writing to/from a file
+            throw new RuntimeException(ioe);
+        }
+    }
 }

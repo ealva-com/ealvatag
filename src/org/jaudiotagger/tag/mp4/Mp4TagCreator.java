@@ -28,6 +28,7 @@ import java.util.LinkedList;
 
 import org.jaudiotagger.tag.Tag;
 import org.jaudiotagger.tag.TagField;
+import org.jaudiotagger.tag.TagFieldKey;
 import org.jaudiotagger.tag.vorbiscomment.VorbisCommentTag;
 import org.jaudiotagger.audio.generic.AbstractTagCreator;
 import org.jaudiotagger.audio.generic.Utils;
@@ -83,10 +84,42 @@ public class Mp4TagCreator extends AbstractTagCreator
             //Add metadata raw content
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             Iterator it = tag.getFields();
+            boolean processedArtwork=false;
             while (it.hasNext())
             {
                 TagField frame = (TagField) it.next();
-                baos.write(frame.getRawContent());
+                //To ensure order is maintained dont process artwork until iterator hits it.
+                if(frame instanceof Mp4TagCoverField)
+                {
+                    if(processedArtwork)
+                    {
+                        //ignore
+                    }
+                    else
+                    {
+                        processedArtwork=true;
+
+                        //Because each artwork image is held within the tag as a seperate field, but when
+                        //they are written they are all held under a single covr box we need to do some checks
+                        //and special processing here if we have any artwork image (this code only neccessary
+                        //if we have more than 1 but do it anyway even if only have 1 image)
+                        ByteArrayOutputStream covrDataBaos= new ByteArrayOutputStream();
+                        for(TagField artwork:tag.get(TagFieldKey.COVER_ART))
+                        {
+                            covrDataBaos.write(((Mp4TagField)artwork).getRawContentDataOnly());
+                        }
+
+                        //Now create the parent Data
+                        byte[] data = covrDataBaos.toByteArray();
+                        baos.write(Utils.getSizeBigEndian(Mp4BoxHeader.HEADER_LENGTH + data.length));
+                        baos.write(Utils.getDefaultBytes(Mp4FieldKey.ARTWORK.getFieldName()));
+                        baos.write(data);
+                    }
+                }
+                else
+                {
+                    baos.write(frame.getRawContent());
+                }
             }
            
             //Wrap into ilst box

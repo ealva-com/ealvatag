@@ -242,7 +242,7 @@ public interface Tag
      *            The field id.
      * @return A list of {@link TagField} objects with the given &quot;id&quot;.
      */
-    public List get(TagFieldKey id);
+    public List<TagField> get(TagFieldKey id);
 
     /**
      * Retrieve the first value that exists for this key id

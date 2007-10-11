@@ -428,20 +428,16 @@ public class M4aWriteTagTest extends TestCase
      /**
      *  Test to write tag data, new tagdata is a larger size than existing data, and too
      *  large to into the space already allocated to meta (ilst + free atom)
-     *
-     *  Note:Using test3 instead of test beause code doesnt work if add image to an file wihcih
-     * already has an image, and I want to add image as its the easiest way to increase filesize
-     * by alot.
      */
     public void testWriteFileMuchLargerSize()
     {
         Exception exceptionCaught = null;
         try
         {
-            File testFile = AbstractTestCase.copyAudioToTmp("test3.m4a",new File("testWriteFileMuchLargerSize.m4a"));
+            File testFile = AbstractTestCase.copyAudioToTmp("test.m4a",new File("testWriteFileMuchLargerSize.m4a"));
 
             //Starting filesize
-            assertEquals(3876468,testFile.length());
+            assertEquals(3881956,testFile.length());
 
             AudioFile f = AudioFileIO.read(testFile);
             Mp4Tag tag = (Mp4Tag)f.getTag();
@@ -450,7 +446,7 @@ public class M4aWriteTagTest extends TestCase
             RandomAccessFile imageFile = new RandomAccessFile(new File("testdata", "coverart.png"),"r");
             byte[] imagedata = new byte[(int)imageFile.length()];
             imageFile.read(imagedata);
-            tag.set(((Mp4Tag)tag).createArtworkField(imagedata));
+            tag.add(((Mp4Tag)tag).createArtworkField(imagedata));
 
             //Save changes and reread from disk
             f.commit();
@@ -458,7 +454,7 @@ public class M4aWriteTagTest extends TestCase
             tag = (Mp4Tag)f.getTag();
 
              //Total FileSize should now be larger
-            assertEquals(3890941,testFile.length());
+            assertEquals(3899402,testFile.length());
 
             //AudioInfo
             //Time in seconds
@@ -549,10 +545,18 @@ public class M4aWriteTagTest extends TestCase
 
             List coverart = mp4tag.get(Mp4FieldKey.ARTWORK);
             //Should be one image
-            assertEquals(1,coverart.size());
-
+            assertEquals(2,coverart.size());
 
             Mp4TagCoverField coverArtField = (Mp4TagCoverField)coverart.get(0);
+            //Check type png
+            assertEquals(Mp4FieldType.COVERART_JPEG,coverArtField.getFieldType());
+            //Just check png signature
+            assertEquals(0xff,coverArtField.getData()[0] & 0xff);
+            assertEquals(0xd8,coverArtField.getData()[1] & 0xff);
+            assertEquals(0xff,coverArtField.getData()[2] & 0xff);
+            assertEquals(0xe0,coverArtField.getData()[3] & 0xff);
+
+            coverArtField = (Mp4TagCoverField)coverart.get(1);
             //Check type png
             assertEquals(Mp4FieldType.COVERART_PNG,coverArtField.getFieldType());
             //Just check png signature

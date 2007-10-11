@@ -19,8 +19,12 @@
 package org.jaudiotagger.tag.mp4;
 
 import org.jaudiotagger.tag.mp4.Mp4TagBinaryField;
+import org.jaudiotagger.audio.generic.Utils;
+import org.jaudiotagger.audio.mp4.util.Mp4BoxHeader;
 
 import java.io.UnsupportedEncodingException;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.nio.ByteBuffer;
 
 /**
@@ -106,4 +110,6 @@ public class Mp4TagCoverField extends Mp4TagBinaryField
     {
         return true;
     }
+
+
 }
