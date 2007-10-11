@@ -90,7 +90,7 @@ public class OggVorbisHeaderTest extends TestCase
         Exception exceptionCaught = null;
         try
         {
-            File testFile = AbstractTestCase.copyAudioToTmp("test.ogg",new File("testWriteFile.ogg"));
+            File testFile = AbstractTestCase.copyAudioToTmp("test.ogg",new File("testWriteTagToFile.ogg"));
             AudioFile f = AudioFileIO.read(testFile);
 
             //Size of VorbisComment should increase

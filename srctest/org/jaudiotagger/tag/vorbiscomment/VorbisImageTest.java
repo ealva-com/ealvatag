@@ -115,7 +115,7 @@ public class VorbisImageTest extends AbstractTestCase
     {
         try
         {
-            File testFile = AbstractTestCase.copyAudioToTmp("test.ogg", new File("testWriteImage1.ogg"));
+            File testFile = AbstractTestCase.copyAudioToTmp("test.ogg", new File("testWriteImage2.ogg"));
             AudioFile f = AudioFileIO.read(testFile);
             VorbisCommentTag tag = (VorbisCommentTag)f.getTag();
 
@@ -153,7 +153,7 @@ public class VorbisImageTest extends AbstractTestCase
     {
         try
         {
-            File testFile = AbstractTestCase.copyAudioToTmp("test.ogg", new File("testWriteImage1.ogg"));
+            File testFile = AbstractTestCase.copyAudioToTmp("test.ogg", new File("testWriteImage3.ogg"));
             AudioFile f = AudioFileIO.read(testFile);
             VorbisCommentTag tag = (VorbisCommentTag)f.getTag();
 

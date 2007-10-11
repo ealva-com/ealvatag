@@ -3,22 +3,16 @@ package org.jaudiotagger.tag.vorbiscomment;
 import org.jaudiotagger.AbstractTestCase;
 import org.jaudiotagger.tag.TagFieldKey;
 import org.jaudiotagger.tag.Tag;
-import org.jaudiotagger.tag.id3.valuepair.PictureTypes;
 import org.jaudiotagger.tag.vorbiscomment.util.Base64Coder;
-import org.jaudiotagger.tag.mp4.Mp4FieldKey;
-import org.jaudiotagger.tag.mp4.Mp4Tag;
 import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.AudioFileIO;
 import org.jaudiotagger.audio.ogg.OggFileReader;
 import org.jaudiotagger.audio.ogg.util.OggPageHeader;
 
-import javax.imageio.stream.ImageInputStream;
 import javax.imageio.ImageIO;
-import javax.imageio.ImageReader;
 import java.io.File;
 import java.io.RandomAccessFile;
 import java.io.ByteArrayInputStream;
-import java.util.Iterator;
 import java.awt.image.BufferedImage;
 
 /**
@@ -29,12 +23,12 @@ public class VorbisWriteTagTest extends AbstractTestCase
     /**
      * Testing of writing various fields
      */
-    public void testWriteFile()
+    public void testWriteTagToFile()
     {
         Exception exceptionCaught = null;
         try
         {
-            File testFile = AbstractTestCase.copyAudioToTmp("test.ogg", new File("testWriteFile.ogg"));
+            File testFile = AbstractTestCase.copyAudioToTmp("test.ogg", new File("testWriteTagToFile.ogg"));
             AudioFile f = AudioFileIO.read(testFile);
 
             assertTrue(f.getTag() instanceof VorbisCommentTag);
