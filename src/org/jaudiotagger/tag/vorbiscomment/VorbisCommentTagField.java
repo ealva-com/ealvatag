@@ -27,7 +27,7 @@ import static org.jaudiotagger.tag.vorbiscomment.VorbisCommentFieldKey.*;
 import org.jaudiotagger.audio.ogg.util.VorbisHeader;
 
 /**
- * This class encapsulates the name and content of a tag entry in ogg-files.
+ * This class represents the name and content of a tag entry in ogg-files.
  * <br>
  *
  * @author @author Raphael Slinckx (KiKiDonK)
@@ -115,8 +115,8 @@ public class VorbisCommentTagField implements TagTextField
                 || id.equals(TRACKNUMBER.name())
                 || id.equals(DATE.name())
                 || id.equals(DESCRIPTION.name())
-                || id.equals(COMMENT.name())
-                || id.equals(TRACK.name());
+                || id.equals(COMMENT.name());
+
     }
 
     /**

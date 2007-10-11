@@ -143,6 +143,16 @@ public interface Tag
 
     public Iterator getFields();
 
+    /**
+     * Return the number of fields
+     *
+     * <p>Fields with the same identnifiers are counted seperately
+     * i.e two title fields would contribute two to the count
+     *
+     * @return total number of fields
+     */
+    public int getFieldCount();
+
     public String getFirstAlbum();
 
     public String getFirstArtist();
@@ -191,8 +201,6 @@ public interface Tag
      * @return <code>true</code> if tag contains no field.
      */
     public boolean isEmpty();
-
-    public void merge(Tag tag);
 
     public void set(TagField field);
 

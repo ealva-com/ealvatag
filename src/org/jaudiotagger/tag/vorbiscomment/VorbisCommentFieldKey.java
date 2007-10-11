@@ -3,7 +3,7 @@ package org.jaudiotagger.tag.vorbiscomment;
 /**
  * Common Vorbis Comment Field Names
  * 
- * Note:The enumname is also the the actual name of the field in the VorbisCommentTag, but you could introduce a level
+ * <p>Note:The enumname is also the the actual name of the field in the VorbisCommentTag, but you could introduce a level
  * of indirection here if required.
  */
 public enum VorbisCommentFieldKey
@@ -14,8 +14,7 @@ public enum VorbisCommentFieldKey
     GENRE,
     TITLE,
     TRACKNUMBER,
-    DATE,
-    TRACK,
+    DATE,    
     COMMENT,
     ALBUMARTIST,
     COMPOSER,
@@ -23,7 +22,7 @@ public enum VorbisCommentFieldKey
     DISCNUMBER,
     BPM,
     MUSICBRAINZ_ARTISTID,
-    MUSICBRAINZ_ALBUMEID,
+    MUSICBRAINZ_ALBUMID,
     MUSICBRAINZ_ALBUMARTISTID,
     MUSICBRAINZ_TRACKID,
     MUSICBRAINZ_DISCID,

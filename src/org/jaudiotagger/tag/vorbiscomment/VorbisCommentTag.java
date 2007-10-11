@@ -23,9 +23,11 @@ import org.jaudiotagger.audio.ogg.util.VorbisHeader;
 import org.jaudiotagger.tag.TagField;
 import org.jaudiotagger.tag.vorbiscomment.VorbisCommentTagField;
 import org.jaudiotagger.tag.vorbiscomment.VorbisCommentFieldKey;
+import org.jaudiotagger.tag.vorbiscomment.util.Base64Coder;
 
 import static org.jaudiotagger.tag.vorbiscomment.VorbisCommentFieldKey.*;
 import org.jaudiotagger.tag.TagFieldKey;
+import org.jaudiotagger.tag.mp4.Mp4TagCoverField;
 
 import java.util.EnumMap;
 import java.util.List;
@@ -33,12 +35,14 @@ import java.util.List;
 /**
  * This is the logical representation of  Vorbis Comment Data 
  *
- * This partial list is derived fom the following sources:
  * <p>
- * http://xiph.org/vorbiscomment/doc/v-comment.html
- * http://wiki.musicbrainz.org/PicardQt/TagMapping
- * http://reactor-core.org/ogg-tagging.html
- * </p>
+ * This partial list is derived fom the following sources:
+ * <ul> 
+ * <li>http://xiph.org/vorbis/doc/v-comment.html</li>
+ * <li>http://wiki.musicbrainz.org/PicardQt/TagMapping</li>
+ * <li>http://reactor-core.org/ogg-tagging.html</li>
+ * </ul>
+ *
  */
 public class VorbisCommentTag extends AbstractTag
 {
@@ -60,7 +64,7 @@ public class VorbisCommentTag extends AbstractTag
         tagFieldToOggField.put(TagFieldKey.DISC_NO, VorbisCommentFieldKey.DISCNUMBER);
         tagFieldToOggField.put(TagFieldKey.BPM, VorbisCommentFieldKey.BPM);
         tagFieldToOggField.put(TagFieldKey.MUSICBRAINZ_ARTISTID, VorbisCommentFieldKey.MUSICBRAINZ_ARTISTID);
-        tagFieldToOggField.put(TagFieldKey.MUSICBRAINZ_RELEASEID, VorbisCommentFieldKey.MUSICBRAINZ_ALBUMEID);
+        tagFieldToOggField.put(TagFieldKey.MUSICBRAINZ_RELEASEID, VorbisCommentFieldKey.MUSICBRAINZ_ALBUMID);
         tagFieldToOggField.put(TagFieldKey.MUSICBRAINZ_RELEASEARTISTID, VorbisCommentFieldKey.MUSICBRAINZ_ALBUMARTISTID);
         tagFieldToOggField.put(TagFieldKey.MUSICBRAINZ_TRACK_ID, VorbisCommentFieldKey.MUSICBRAINZ_TRACKID);
         tagFieldToOggField.put(TagFieldKey.MUSICBRAINZ_DISC_ID, VorbisCommentFieldKey.MUSICBRAINZ_DISCID);
@@ -76,6 +80,8 @@ public class VorbisCommentTag extends AbstractTag
         tagFieldToOggField.put(TagFieldKey.ALBUM_SORT, VorbisCommentFieldKey.ALBUMSORT);
         tagFieldToOggField.put(TagFieldKey.TITLE_SORT, VorbisCommentFieldKey.TITLESORT);
         tagFieldToOggField.put(TagFieldKey.COMPOSER_SORT, VorbisCommentFieldKey.COMPOSERSORT);
+
+        
     }
 
     private String vendor = "";
@@ -129,7 +135,7 @@ public class VorbisCommentTag extends AbstractTag
 
     protected String getCommentId()
     {
-        return DESCRIPTION.name();
+        return COMMENT.name();
     }
 
     protected String getGenreId()
@@ -278,6 +284,54 @@ public class VorbisCommentTag extends AbstractTag
             return;
         }
         super.deleteField(vorbisCommentFieldKey.name());
+    }
+
+    /**
+     * Create artwork field
+     * <p>
+     * Actually create two fields , the dat field and the mimetype
+     *
+     * @param data raw image data
+     * @param mimeType mimeType of data
+     *
+     * TODO could possibly work out mimetype from data, but unlike mp4 there is nothing to restrict to only png
+     * or jpeg images
+     * 
+     * @return
+     */
+    public void setArtworkField(byte[] data,String mimeType)
+    {
+        char[] testdata = Base64Coder.encode(data);
+        String base64image = new String(testdata);
+        VorbisCommentTagField dataField =
+                new VorbisCommentTagField(VorbisCommentFieldKey.COVERART.name(),base64image);
+        VorbisCommentTagField mimeField =
+                new VorbisCommentTagField(VorbisCommentFieldKey.COVERARTMIME.name(),mimeType);
+
+        set(dataField);
+        set(mimeField);
+
+    }
+
+    /**
+     * Retrieve artwork raw data
+     *
+     * @return
+     */
+    public byte[] getArtworkBinaryData()
+    {
+        String base64data = this.getFirst(VorbisCommentFieldKey.COVERART);
+        byte [] rawdata   = Base64Coder.decode(base64data.toCharArray());
+        return rawdata;
+    }
+
+    /**
+     *
+     * @return mimetype
+     */
+    public String getArtworkMimeType()
+    {
+        return this.getFirst(VorbisCommentFieldKey.COVERARTMIME);
     }
 }
 
