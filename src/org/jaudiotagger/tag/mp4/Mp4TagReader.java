@@ -32,8 +32,11 @@ import org.jaudiotagger.audio.generic.Utils;
 import org.jaudiotagger.tag.TagField;
 
 /**
- * Reads metadata from mp4, the metadata tags are held under the ilst atom as shown below
- * 
+ * Reads metadata from mp4,
+ *
+ * <p>The metadata tags are held under the ilst atom as shown below
+ *
+ * <pre>
  * |--- ftyp
  * |--- moov
  * |......|
@@ -56,6 +59,7 @@ import org.jaudiotagger.tag.TagField;
  * |.................................... ecetere
  * |
  * |--- mdat
+ * </pre
  */
 public class Mp4TagReader
 {

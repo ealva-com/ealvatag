@@ -31,7 +31,7 @@ import org.jaudiotagger.audio.mp4.util.Mp4BoxHeader;
 /**
  * Represents a single text field
  *
- * Mp4 metadata normally held as follows:
+ * <p>Mp4 metadata normally held as follows:
  * MP4Box Parent contains
  *      :length (includes length of data child)  (4 bytes)
  *      :name         (4 bytes)

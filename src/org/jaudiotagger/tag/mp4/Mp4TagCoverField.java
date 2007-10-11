@@ -26,13 +26,14 @@ import java.nio.ByteBuffer;
 /**
  * Represents Cover Art
  *
- * Note:Within this library we have a seperate TagCoverField for every image stored, however this does not map
+ * <p>Note:Within this library we have a seperate TagCoverField for every image stored, however this does not map
  * very directly to how they are physically stored within a file, because all are stored under a single covr atom, so
  * a more complex conversion has to be done then for other fields when writing multiple images back to file.
  */
 public class Mp4TagCoverField extends Mp4TagBinaryField
 {
-    private int type;
+    //Type
+    private Mp4FieldType imageType;
 
     /**
      * Empty CoverArt Field
@@ -52,43 +53,57 @@ public class Mp4TagCoverField extends Mp4TagBinaryField
     public Mp4TagCoverField(ByteBuffer raw,int type) throws UnsupportedEncodingException
     {
         super(Mp4FieldKey.ARTWORK.getFieldName(), raw);
-        this.type=type;
+        if(type==Mp4FieldType.COVERART_JPEG.getFileClassId())
+        {
+            imageType=Mp4FieldType.COVERART_JPEG;
+        }
+        else
+        {
+            imageType=Mp4FieldType.COVERART_PNG;
+        }
     }
 
-
-
     /**
-     * Construct new binary field with binarydata provided
+     * Construct new cover art with binarydata provided
      *
+     * <p>
+     * Identifies the imagetype by looking at the data, if doesnt match PNG assumes it is JPEG
+     * TODO:Check how accurate is my method will it work for any PNG
+     * TODO:What about if they try to add data that is corrupt or not PNG or JPG
      * @param data
      * @throws UnsupportedEncodingException
      */
-    public Mp4TagCoverField(byte[] data) throws UnsupportedEncodingException
+    public Mp4TagCoverField(byte[] data) 
     {
         super(Mp4FieldKey.ARTWORK.getFieldName(),data);
-        //TODO hardcoded
-        this.type=Mp4FieldType.COVERART_JPEG.getFileClassId();
 
+        //Read signature
+        if(
+                (0x89==(data[0] & 0xff))||
+                (0x50==(data[0] & 0xff))||
+                (0x4E==(data[0] & 0xff))||
+                (0x47==(data[0] & 0xff))
+        )
+        {
+            imageType =Mp4FieldType.COVERART_PNG;
+        }
+        else
+        {
+            imageType =Mp4FieldType.COVERART_JPEG;
+        }
     }
 
+    /**
+     * Return field type, for artwork this also identifies the imagetype
+     * @return field type
+     */
     protected Mp4FieldType getFieldType()
     {
-        //TODO this is wrong needs to match type field
-        return Mp4FieldType.COVERART_JPEG;
+        return imageType;
     }
 
     public boolean isBinary()
     {
         return true;
-    }
-
-    /**
-     * Identifies the image type, only jpg and png are supported.
-     *
-     * @return
-     */
-    public int getType()
-    {
-        return type;
     }
 }

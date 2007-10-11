@@ -132,7 +132,7 @@ public class M4aReadTagTest  extends TestCase
 
             Mp4TagCoverField coverArtField = (Mp4TagCoverField)coverart.get(0);
             //Check type jpeg
-            assertEquals(Mp4FieldType.COVERART_JPEG.getFileClassId(),coverArtField.getType());
+            assertEquals(Mp4FieldType.COVERART_JPEG,coverArtField.getFieldType());
             //Just check jpeg signature
             assertEquals(0xff,coverArtField.getData()[0] & 0xff);
             assertEquals(0xd8,coverArtField.getData()[1] & 0xff);
@@ -266,7 +266,7 @@ public class M4aReadTagTest  extends TestCase
             //Check 1st field
             Mp4TagCoverField coverArtField = (Mp4TagCoverField)coverart.get(0);
             //Check type png
-            assertEquals(Mp4FieldType.COVERART_PNG.getFileClassId(),coverArtField.getType());
+            assertEquals(Mp4FieldType.COVERART_PNG,coverArtField.getFieldType());
             //Just check png signature
             assertEquals(0x89,coverArtField.getData()[0] & 0xff);
             assertEquals(0x50,coverArtField.getData()[1] & 0xff);
@@ -276,7 +276,7 @@ public class M4aReadTagTest  extends TestCase
             //Check 2nd field
             coverArtField = (Mp4TagCoverField)coverart.get(1);
             //Check type png
-            assertEquals(Mp4FieldType.COVERART_PNG.getFileClassId(),coverArtField.getType());
+            assertEquals(Mp4FieldType.COVERART_PNG,coverArtField.getFieldType());
             //Just check png signature
             assertEquals(0x89,coverArtField.getData()[0] & 0xff);
             assertEquals(0x50,coverArtField.getData()[1] & 0xff);
@@ -286,7 +286,7 @@ public class M4aReadTagTest  extends TestCase
             //Check 3rd Field
             coverArtField = (Mp4TagCoverField)coverart.get(2);
             //Check type jpeg
-            assertEquals(Mp4FieldType.COVERART_JPEG.getFileClassId(),coverArtField.getType());
+            assertEquals(Mp4FieldType.COVERART_JPEG,coverArtField.getFieldType());
             //Just check jpeg signature
             assertEquals(0xff,coverArtField.getData()[0] & 0xff);
             assertEquals(0xd8,coverArtField.getData()[1] & 0xff);

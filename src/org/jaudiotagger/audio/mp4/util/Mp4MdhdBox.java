@@ -5,9 +5,7 @@ import org.jaudiotagger.audio.generic.Utils;
 import java.nio.ByteBuffer;
 
 /**
- * MdhdBox ( media (stream) header)
- * 
- * Holds the Sampling Rate used
+ * MdhdBox ( media (stream) header), holds the Sampling Rate used.
  */
 public class Mp4MdhdBox extends AbstractMp4Box
 {

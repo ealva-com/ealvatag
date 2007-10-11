@@ -149,69 +149,6 @@ public abstract class AbstractTag implements Tag
     }
 
     /**
-     * Creates a field which represents the &quot;album&quot;.<br>
-     * The field will already contain the given content.
-     *
-     * @param content The content of the created field.
-     * @return tagfield representing the &quot;album&quot;
-     */
-    protected abstract TagField createAlbumField(String content);
-
-    /**
-     * Creates a field which represents the &quot;artist&quot;.<br>
-     * The field will already contain the given content.
-     *
-     * @param content The content of the created field.
-     * @return tagfield representing the &quot;artist&quot;
-     */
-    protected abstract TagField createArtistField(String content);
-
-    /**
-     * Creates a field which represents the &quot;comment&quot;.<br>
-     * The field will already contain the given content.
-     *
-     * @param content The content of the created field.
-     * @return tagfield representing the &quot;comment&quot;
-     */
-    protected abstract TagField createCommentField(String content);
-
-    /**
-     * Creates a field which represents the &quot;genre&quot;.<br>
-     * The field will already contain the given content.
-     *
-     * @param content The content of the created field.
-     * @return tagfield representing the &quot;genre&quot;
-     */
-    protected abstract TagField createGenreField(String content);
-
-    /**
-     * Creates a field which represents the &quot;title&quot;.<br>
-     * The field will already contain the given content.
-     *
-     * @param content The content of the created field.
-     * @return tagfield representing the &quot;title&quot;
-     */
-    protected abstract TagField createTitleField(String content);
-
-    /**
-     * Creates a field which represents the &quot;track&quot;.<br>
-     * The field will already contain the given content.
-     *
-     * @param content The content of the created field.
-     * @return tagfield representing the &quot;track&quot;
-     */
-    protected abstract TagField createTrackField(String content);
-
-    /**
-     * Creates a field which represents the &quot;year&quot;.<br>
-     * The field will already contain the given content.
-     *
-     * @param content The content of the created field.
-     * @return tagfield representing the &quot;year&quot;
-     */
-    protected abstract TagField createYearField(String content);
-
-    /**
      * Get list of fields within this tag with the specified id
      *
      * @see org.jaudiotagger.tag.Tag#get(java.lang.String)
@@ -602,19 +539,18 @@ public abstract class AbstractTag implements Tag
         }
 
         // If there is already an existing field with same id
-        // and both are TextFields, we update the first element
-        List l =  fields.get(field.getId());
-        if (l != null)
+        // and both are TextFields, we replace the first element
+        List<TagField> list = fields.get(field.getId());
+        if (list != null)
         {
-            TagField f = (TagField) l.get(0);
-            f.copyContent(field);
+            list.set(0,field);
             return;
         }
 
         // Else we put the new field in the fields.
-        l = new ArrayList<TagField> ();
-        l.add(field);
-        fields.put(field.getId(), l);
+        list = new ArrayList<TagField> ();
+        list.add(field);
+        fields.put(field.getId(), list);
         if (field.isCommon())
         {
             commonNumber++;
@@ -775,4 +711,67 @@ public abstract class AbstractTag implements Tag
         //    commonNumber--;
         return;
     }
+
+     /**
+     * Creates a field which represents the &quot;album&quot;.<br>
+     * The field will already contain the given content.
+     *
+     * @param content The content of the created field.
+     * @return tagfield representing the &quot;album&quot;
+     */
+    public abstract TagField createAlbumField(String content);
+
+    /**
+     * Creates a field which represents the &quot;artist&quot;.<br>
+     * The field will already contain the given content.
+     *
+     * @param content The content of the created field.
+     * @return tagfield representing the &quot;artist&quot;
+     */
+    public abstract TagField createArtistField(String content);
+
+    /**
+     * Creates a field which represents the &quot;comment&quot;.<br>
+     * The field will already contain the given content.
+     *
+     * @param content The content of the created field.
+     * @return tagfield representing the &quot;comment&quot;
+     */
+    public abstract TagField createCommentField(String content);
+
+    /**
+     * Creates a field which represents the &quot;genre&quot;.<br>
+     * The field will already contain the given content.
+     *
+     * @param content The content of the created field.
+     * @return tagfield representing the &quot;genre&quot;
+     */
+    public abstract TagField createGenreField(String content);
+
+    /**
+     * Creates a field which represents the &quot;title&quot;.<br>
+     * The field will already contain the given content.
+     *
+     * @param content The content of the created field.
+     * @return tagfield representing the &quot;title&quot;
+     */
+    public abstract TagField createTitleField(String content);
+
+    /**
+     * Creates a field which represents the &quot;track&quot;.<br>
+     * The field will already contain the given content.
+     *
+     * @param content The content of the created field.
+     * @return tagfield representing the &quot;track&quot;
+     */
+    public abstract TagField createTrackField(String content);
+
+    /**
+     * Creates a field which represents the &quot;year&quot;.<br>
+     * The field will already contain the given content.
+     *
+     * @param content The content of the created field.
+     * @return tagfield representing the &quot;year&quot;
+     */
+    public abstract TagField createYearField(String content);
 }

@@ -26,6 +26,11 @@ import org.jaudiotagger.audio.exceptions.CannotWriteException;
 import org.jaudiotagger.audio.generic.AudioFileWriter;
 import org.jaudiotagger.tag.mp4.Mp4TagWriter;
 
+/**
+ * Mp4 File Writer
+ *
+ * <p>This can write files containing either the .mp4 or .m4a suffixes
+ */
 public class Mp4FileWriter extends AudioFileWriter
 {
 

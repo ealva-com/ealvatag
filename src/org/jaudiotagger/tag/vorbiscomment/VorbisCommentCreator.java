@@ -21,6 +21,7 @@ package org.jaudiotagger.tag.vorbiscomment;
 import org.jaudiotagger.audio.generic.AbstractTagCreator;
 import org.jaudiotagger.audio.generic.Utils;
 import org.jaudiotagger.tag.Tag;
+import org.jaudiotagger.tag.TagField;
 import org.jaudiotagger.tag.vorbiscomment.VorbisCommentTag;
 
 import java.io.UnsupportedEncodingException;
@@ -33,6 +34,63 @@ import java.util.*;
 public class VorbisCommentCreator extends AbstractTagCreator
 {
     /**
+     * Convert tagdata to rawdata ready for writing to file
+     *
+     * @param tag
+     * @param padding
+     * @return
+     * @throws UnsupportedEncodingException
+     */
+    public ByteBuffer convert(Tag tag, int padding) throws UnsupportedEncodingException
+    {
+        List <byte[]> fields = new LinkedList<byte[]>();
+        Iterator it = tag.getFields();
+        while (it.hasNext())
+        {
+            TagField frame = (TagField) it.next();
+            fields.add(frame.getRawContent());
+        }
+
+        int length = getFixedTagLength(tag);
+        it = fields.iterator();
+        while (it.hasNext())
+        {
+            length += ((byte[]) it.next()).length;
+        }
+
+
+        int tagSize = computeTagLength(tag, fields);
+
+        ByteBuffer buf = ByteBuffer.allocate(tagSize + padding);
+        create(tag, buf, fields, tagSize, padding);
+
+        buf.rewind();
+        return buf;
+    }
+
+    /**
+     * Compute the number of bytes the tag will be.
+     *
+     * @param tag
+     * @param rawFieldData
+     * @return
+     * @throws UnsupportedEncodingException
+     */
+    private int computeTagLength(Tag tag, List<byte[]> rawFieldData) throws UnsupportedEncodingException
+    {
+        int length = getFixedTagLength(tag);
+
+        Iterator it = rawFieldData.iterator();
+        while (it.hasNext())
+        {
+            length += ((byte[]) it.next()).length;
+        }
+
+        return length;
+    }
+
+
+    /**
      * Populate the buffer with the raw contents of the tag
      *
      * @param tag
@@ -42,7 +100,7 @@ public class VorbisCommentCreator extends AbstractTagCreator
      * @param padding
      * @throws UnsupportedEncodingException
      */
-    public void create(Tag tag, ByteBuffer buf, List <byte[]>rawDataFields, int tagSize, int padding)
+    private void create(Tag tag, ByteBuffer buf, List <byte[]>rawDataFields, int tagSize, int padding)
             throws UnsupportedEncodingException
     {
         String vendorString = ((VorbisCommentTag) tag).getVendor();
@@ -70,18 +128,8 @@ public class VorbisCommentCreator extends AbstractTagCreator
         }
     }
 
-    protected Tag getCompatibleTag(Tag tag)
-    {
-        if (! (tag instanceof VorbisCommentTag))
-        {
-            VorbisCommentTag vorbisCommentTag = new VorbisCommentTag();
-            vorbisCommentTag.merge(tag);
-            return vorbisCommentTag;
-        }
-        return tag;
-    }
-
-    protected int getFixedTagLength(Tag tag) throws UnsupportedEncodingException
+   
+    private int getFixedTagLength(Tag tag) throws UnsupportedEncodingException
     {
         return  VorbisCommentReader.FIELD_VENDOR_LENGTH_LENGTH
                 + Utils.getUTF8Bytes(((VorbisCommentTag) tag).getVendor()).length

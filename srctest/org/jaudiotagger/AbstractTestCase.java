@@ -140,7 +140,7 @@ public abstract class AbstractTestCase extends TestCase
     }
 
     /**
-     * Copy audiofile to processing dir ready for use in test, use this if using samre file
+     * Copy audiofile to processing dir ready for use in test, use this if using same file
      * in multiple tests because with junit multithreading can have problemsa otherwise
      * @param fileName
      * @return

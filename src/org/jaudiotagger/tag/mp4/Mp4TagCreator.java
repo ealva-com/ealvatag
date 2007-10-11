@@ -24,8 +24,10 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.List;
 import java.util.Iterator;
+import java.util.LinkedList;
 
 import org.jaudiotagger.tag.Tag;
+import org.jaudiotagger.tag.TagField;
 import org.jaudiotagger.tag.vorbiscomment.VorbisCommentTag;
 import org.jaudiotagger.audio.generic.AbstractTagCreator;
 import org.jaudiotagger.audio.generic.Utils;
@@ -34,10 +36,11 @@ import org.jaudiotagger.audio.mp4.Mp4NotMetaFieldKey;
 
 /**
  * Create raw content of mp4 tag data, concerns itself with atoms upto the ilst atom
- *
- * This is because the ilst atom canbe recreated without reference to existing mp4 fields, but fields
- * above this level are dependent upon other information that is not held in the tag
- *
+ * <p/>
+ * <p>This level is was selected because the ilst atom canbe recreated without reference to existing mp4 fields
+ * but fields above this level are dependent upon other information that is not held in the tag.
+ * <p/>
+ * <pre>
  * |--- ftyp
  * |--- moov
  * |......|
@@ -61,50 +64,31 @@ import org.jaudiotagger.audio.mp4.Mp4NotMetaFieldKey;
  * |....................|-- free
  * |--- free
  * |--- mdat
+ * </pre>
  */
 public class Mp4TagCreator extends AbstractTagCreator
 {
-
-    protected int getFixedTagLength(Tag tag) throws UnsupportedEncodingException
-    {
-        //Fixed size of ilst atom
-        return Mp4BoxHeader.HEADER_LENGTH;
-    }
-
-    protected Tag getCompatibleTag(Tag tag)
-    {
-        if (! (tag instanceof Mp4Tag))
-        {
-            Mp4Tag mp4Tag = new Mp4Tag();
-            //TODO this method doesnt really work
-            mp4Tag.merge(tag);
-            return mp4Tag;
-        }
-        return tag;
-    }
-
     /**
+     * Convert tagdata to rawdata ready for writing to file
      *
      * @param tag
-     * @param buf
-     * @param rawDataFields
-     * @param tagSize
-     * @param padding
+     * @param padding TODO padding parameter currently ignored
+     * @return
      * @throws UnsupportedEncodingException
      */
-    protected void create(Tag tag, ByteBuffer buf, List<byte[]> rawDataFields, int tagSize, int padding)
-            throws UnsupportedEncodingException
+    public ByteBuffer convert(Tag tag, int padding) throws UnsupportedEncodingException
     {
         try
         {
-            //Put metadata into baos
+            //Add metadata raw content
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            Iterator<byte[]> it = rawDataFields.iterator();
+            Iterator it = tag.getFields();
             while (it.hasNext())
             {
-                baos.write(it.next());
+                TagField frame = (TagField) it.next();
+                baos.write(frame.getRawContent());
             }
-
+           
             //Wrap into ilst box
             ByteArrayOutputStream ilst = new ByteArrayOutputStream();
             ilst.write(Utils.getSizeBigEndian(Mp4BoxHeader.HEADER_LENGTH + baos.size()));
@@ -112,13 +96,14 @@ public class Mp4TagCreator extends AbstractTagCreator
             ilst.write(baos.toByteArray());
 
             //Put into ByteBuffer
-            buf.put(ilst.toByteArray());
+            ByteBuffer buf = ByteBuffer.wrap(ilst.toByteArray());
+            buf.rewind();
+            return buf;
         }
-        catch(IOException ioe)
+        catch (IOException ioe)
         {
-            //Should never happen as not writng to file at the moment
+            //Should never happen as not writing to file at this point
             throw new RuntimeException(ioe);
         }
     }
-
 }

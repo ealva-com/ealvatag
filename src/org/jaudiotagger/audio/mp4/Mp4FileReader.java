@@ -28,6 +28,11 @@ import org.jaudiotagger.audio.exceptions.CannotReadException;
 import org.jaudiotagger.audio.generic.AudioFileReader;
 import org.jaudiotagger.audio.mp4.util.Mp4InfoReader;
 
+/**
+ * Mp4 File Reader
+ *
+ * <p>This can read files containing either the .mp4 or .m4a suffixes
+ */
 public class Mp4FileReader extends AudioFileReader
 {
     private Mp4InfoReader ir = new Mp4InfoReader();

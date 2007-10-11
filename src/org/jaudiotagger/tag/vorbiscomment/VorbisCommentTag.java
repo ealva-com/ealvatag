@@ -82,37 +82,37 @@ public class VorbisCommentTag extends AbstractTag
     //This is the vendor string that will be written if no other is supplied
     public static final String DEFAULT_VENDOR = "jaudiotagger";
 
-    protected TagField createAlbumField(String content)
+    public TagField createAlbumField(String content)
     {
         return new VorbisCommentTagField(getAlbumId(), content);
     }
 
-    protected TagField createArtistField(String content)
+    public TagField createArtistField(String content)
     {
         return new VorbisCommentTagField(getArtistId(), content);
     }
 
-    protected TagField createCommentField(String content)
+    public TagField createCommentField(String content)
     {
         return new VorbisCommentTagField(getCommentId(), content);
     }
 
-    protected TagField createGenreField(String content)
+    public TagField createGenreField(String content)
     {
         return new VorbisCommentTagField(getGenreId(), content);
     }
 
-    protected TagField createTitleField(String content)
+    public TagField createTitleField(String content)
     {
         return new VorbisCommentTagField(getTitleId(), content);
     }
 
-    protected TagField createTrackField(String content)
+    public TagField createTrackField(String content)
     {
         return new VorbisCommentTagField(getTrackId(), content);
     }
 
-    protected TagField createYearField(String content)
+    public TagField createYearField(String content)
     {
         return new VorbisCommentTagField(getYearId(), content);
     }

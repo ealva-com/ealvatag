@@ -28,7 +28,8 @@ import org.jaudiotagger.audio.mp4.util.Mp4BoxHeader;
 /**
  * Represents binary data
  *
- * Subclassed by cover art field, TODO unaware of any other binary fields at the moment
+ * <p>Subclassed by cover art field,
+ * TODO unaware of any other binary fields at the moment
  *
  */
 public class Mp4TagBinaryField extends Mp4TagField
@@ -54,7 +55,7 @@ public class Mp4TagBinaryField extends Mp4TagField
      * @param data
      * @throws UnsupportedEncodingException
      */
-    public Mp4TagBinaryField(String id, byte[] data) throws UnsupportedEncodingException
+    public Mp4TagBinaryField(String id, byte[] data) 
     {
         super(id);
         this.dataBytes = data;

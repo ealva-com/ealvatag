@@ -35,12 +35,15 @@ import org.jaudiotagger.audio.generic.Utils;
 
 /**
  * Writes metadata from mp4, the metadata tags are held under the ilst atom as shown below
- * <p/>
+ *
+ * <p>
  * When writing changes the size of all the atoms upto ilst has to be recalculated, then if the size of
  * the metadata is increased the size of the free atom (below meta) should be reduced accordingly or vice versa.
  * If the size of the metadata has increased by more than the size of the free atom then the size of meta, udta
  * and moov should be recalculated and the top level free atom reduced accordingly
  * <p/>
+ *
+ * <pre>
  * |--- ftyp
  * |--- moov
  * |......|
@@ -64,6 +67,7 @@ import org.jaudiotagger.audio.generic.Utils;
  * |....................|-- free
  * |--- free
  * |--- mdat
+ * </pre>
  */
 public class Mp4TagWriter
 {

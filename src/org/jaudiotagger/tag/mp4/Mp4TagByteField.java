@@ -9,7 +9,7 @@ import java.nio.ByteBuffer;
 /**
  * Represents a single byte as a number
  *
- * Usually single byte fields are used as a boolean field, but not always so we dont do this conversion
+ * <p>Usually single byte fields are used as a boolean field, but not always so we dont do this conversion
  */
 public class Mp4TagByteField extends Mp4TagTextField
 {
@@ -20,11 +20,38 @@ public class Mp4TagByteField extends Mp4TagTextField
     //when we loaded the value so if greater than 1 we pad the value
     private int realDataLength;
 
-    public Mp4TagByteField(String id, String n)
+    /**
+     * Create new field
+     *
+     * Assume length of 1 which is correct for most but not all byte fields
+     * 
+     * @param id
+     * @param value
+     */
+    public Mp4TagByteField(Mp4FieldKey id, String value)
     {
-        super(id, n);
+        this(id,value,1);
     }
 
+    /**
+     * Create new field with known length
+     *
+     * @param id
+     * @param value
+     */
+    public Mp4TagByteField(Mp4FieldKey id, String value,int realDataLength)
+    {
+        super(id.getFieldName(), value);
+        this.realDataLength=realDataLength;
+    }
+
+    /**
+     * Construct from rawdata from audio file
+     *
+     * @param id
+     * @param raw
+     * @throws UnsupportedEncodingException
+     */
     public Mp4TagByteField(String id, ByteBuffer raw) throws UnsupportedEncodingException
     {
         super(id, raw);
@@ -37,7 +64,7 @@ public class Mp4TagByteField extends Mp4TagTextField
 
     protected byte[] getDataBytes()throws UnsupportedEncodingException
     {
-         //Only a byte, but of course byte is signed we need unsigned
+         //Only a byte, but of course byte is signed we need unsigned         
          Short shortValue = new Short(content);
          byte rawData [] = new byte[realDataLength];
          rawData[rawData.length-1] = shortValue.byteValue();

@@ -31,8 +31,9 @@ import org.jaudiotagger.audio.mp4.Mp4NotMetaFieldKey;
 /**
  * Read audio info from file.
  *
+ * <p>
  * The info is held in the mvdh and mdhd fields as shown below
- *
+ * <pre>
  * |--- ftyp
  * |--- moov
  * |......|
@@ -43,6 +44,7 @@ import org.jaudiotagger.audio.mp4.Mp4NotMetaFieldKey;
  * |......|----- udta 
  * |
  * |--- mdat
+ * </pre>
  */
 public class Mp4InfoReader
 {

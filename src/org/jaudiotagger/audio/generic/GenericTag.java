@@ -23,7 +23,7 @@ import org.jaudiotagger.tag.TagTextField;
 
 /**
  * This is a complete impelementation of
- * {@link entagged.audioformats.generic.AbstractTag}.<br>
+ * {@link AbstractTag}.<br>
  * The identifiers of commonly used fields is defined by {@link #keys}.<br>
  *
  * @author Raphaël Slinckx
@@ -230,9 +230,9 @@ public class GenericTag extends AbstractTag
     /**
      * (overridden)
      *
-     * @see entagged.audioformats.generic.AbstractTag#createAlbumField(java.lang.String)
+     * @see AbstractTag#createAlbumField(java.lang.String)
      */
-    protected TagField createAlbumField(String content)
+    public TagField createAlbumField(String content)
     {
         return new GenericTagTextField(keys[ALBUM], content);
     }
@@ -240,9 +240,9 @@ public class GenericTag extends AbstractTag
     /**
      * (overridden)
      *
-     * @see entagged.audioformats.generic.AbstractTag#createArtistField(java.lang.String)
+     * @see AbstractTag#createArtistField(java.lang.String)
      */
-    protected TagField createArtistField(String content)
+    public TagField createArtistField(String content)
     {
         return new GenericTagTextField(keys[ARTIST], content);
     }
@@ -250,9 +250,9 @@ public class GenericTag extends AbstractTag
     /**
      * (overridden)
      *
-     * @see entagged.audioformats.generic.AbstractTag#createCommentField(java.lang.String)
+     * @see AbstractTag#createCommentField(java.lang.String)
      */
-    protected TagField createCommentField(String content)
+    public TagField createCommentField(String content)
     {
         return new GenericTagTextField(keys[COMMENT], content);
     }
@@ -260,9 +260,9 @@ public class GenericTag extends AbstractTag
     /**
      * (overridden)
      *
-     * @see entagged.audioformats.generic.AbstractTag#createGenreField(java.lang.String)
+     * @see AbstractTag#createGenreField(java.lang.String)
      */
-    protected TagField createGenreField(String content)
+    public TagField createGenreField(String content)
     {
         return new GenericTagTextField(keys[GENRE], content);
     }
@@ -270,9 +270,9 @@ public class GenericTag extends AbstractTag
     /**
      * (overridden)
      *
-     * @see entagged.audioformats.generic.AbstractTag#createTitleField(java.lang.String)
+     * @see AbstractTag#createTitleField(java.lang.String)
      */
-    protected TagField createTitleField(String content)
+    public TagField createTitleField(String content)
     {
         return new GenericTagTextField(keys[TITLE], content);
     }
@@ -280,9 +280,9 @@ public class GenericTag extends AbstractTag
     /**
      * (overridden)
      *
-     * @see entagged.audioformats.generic.AbstractTag#createTrackField(java.lang.String)
+     * @see AbstractTag#createTrackField(java.lang.String)
      */
-    protected TagField createTrackField(String content)
+    public TagField createTrackField(String content)
     {
         return new GenericTagTextField(keys[TRACK], content);
     }
@@ -290,9 +290,9 @@ public class GenericTag extends AbstractTag
     /**
      * (overridden)
      *
-     * @see entagged.audioformats.generic.AbstractTag#createYearField(java.lang.String)
+     * @see AbstractTag#createYearField(java.lang.String)
      */
-    protected TagField createYearField(String content)
+    public TagField createYearField(String content)
     {
         return new GenericTagTextField(keys[YEAR], content);
     }
@@ -300,7 +300,7 @@ public class GenericTag extends AbstractTag
     /**
      * (overridden)
      *
-     * @see entagged.audioformats.generic.AbstractTag#getAlbumId()
+     * @see AbstractTag#getAlbumId()
      */
     protected String getAlbumId()
     {
@@ -310,7 +310,7 @@ public class GenericTag extends AbstractTag
     /**
      * (overridden)
      *
-     * @see entagged.audioformats.generic.AbstractTag#getArtistId()
+     * @see AbstractTag#getArtistId()
      */
     protected String getArtistId()
     {

@@ -5,8 +5,6 @@ import junit.framework.TestCase;
 import java.io.File;
 import java.io.RandomAccessFile;
 import java.util.List;
-import java.util.Iterator;
-import java.nio.ByteBuffer;
 
 import org.jaudiotagger.AbstractTestCase;
 import org.jaudiotagger.tag.Tag;
@@ -26,16 +24,17 @@ public class M4aWriteTagTest extends TestCase
         Exception exceptionCaught = null;
         try
         {
-            File testFile = AbstractTestCase.copyAudioToTmp("test.m4a");
+            File testFile = AbstractTestCase.copyAudioToTmp("test.m4a",new File("testWriteFileSameSize.m4a"));
             AudioFile f = AudioFileIO.read(testFile);
             Tag tag = f.getTag();
 
-            //Change album to different value (but same no of characters, this is the easiest mod to make
+            //Change values to different value (but same no of characters, this is the easiest mod to make
             tag.setArtist("ARTIST");
             tag.setAlbum("ALBUM");
-            //tag.setTrack("2/9") Doesnt work
-            tag.set(new Mp4TrackField(2,12));
-            tag.set(new Mp4DiscNoField(4,15));
+            tag.setTrack("2/12");
+            tag.set(tag.createTagField(TagFieldKey.DISC_NO,"4/15"));
+            tag.set(tag.createTagField(TagFieldKey.MUSICBRAINZ_TRACK_ID,"e785f700-c1aa-4943-bcee-87dd316a2c31"));
+            tag.set(tag.createTagField(TagFieldKey.BPM,"200"));
             //Save changes and reread from disk
             f.commit();
             f = AudioFileIO.read(testFile);
@@ -66,7 +65,7 @@ public class M4aWriteTagTest extends TestCase
             assertEquals("composer",tag.getFirst(TagFieldKey.COMPOSER));
             assertEquals("Sortartist",tag.getFirst(TagFieldKey.ARTIST_SORT));
             assertEquals("lyrics",tag.getFirst(TagFieldKey.LYRICS));
-            assertEquals("199",tag.getFirst(TagFieldKey.BPM));
+            assertEquals("200",tag.getFirst(TagFieldKey.BPM));
             assertEquals("Albumartist",tag.getFirst(TagFieldKey.ALBUM_ARTIST));
             assertEquals("Sortalbumartist",tag.getFirst(TagFieldKey.ALBUM_ARTIST_SORT));
             assertEquals("Sortalbum",tag.getFirst(TagFieldKey.ALBUM_SORT));
@@ -75,7 +74,7 @@ public class M4aWriteTagTest extends TestCase
             assertEquals("sorttitle",tag.getFirst(TagFieldKey.TITLE_SORT));
             assertEquals("1",tag.getFirst(TagFieldKey.IS_COMPILATION));
             assertEquals("66027994-edcf-9d89-bec8-0d30077d888c",tag.getFirst(TagFieldKey.MUSICIP_ID));
-            assertEquals("e785f700-c1aa-4943-bcee-87dd316a2c30",tag.getFirst(TagFieldKey.MUSICBRAINZ_TRACK_ID));
+            assertEquals("e785f700-c1aa-4943-bcee-87dd316a2c31",tag.getFirst(TagFieldKey.MUSICBRAINZ_TRACK_ID));
             assertEquals("989a13f6-b58c-4559-b09e-76ae0adb94ed",tag.getFirst(TagFieldKey.MUSICBRAINZ_ARTISTID));
             assertEquals("989a13f6-b58c-4559-b09e-76ae0adb94ed",tag.getFirst(TagFieldKey.MUSICBRAINZ_RELEASEARTISTID));
             assertEquals("19c6f0f6-3d6d-4b02-88c7-ffb559d52be6",tag.getFirst(TagFieldKey.MUSICBRAINZ_RELEASEID));
@@ -106,7 +105,7 @@ public class M4aWriteTagTest extends TestCase
             assertEquals("composer",mp4tag.getFirst(Mp4FieldKey.COMPOSER));
             assertEquals("Sortartist",mp4tag.getFirst(Mp4FieldKey.ARTIST_SORT));
             assertEquals("lyrics",mp4tag.getFirst(Mp4FieldKey.LYRICS));
-            assertEquals("199",mp4tag.getFirst(Mp4FieldKey.BPM));
+            assertEquals("200",mp4tag.getFirst(Mp4FieldKey.BPM));
             assertEquals("Albumartist",mp4tag.getFirst(Mp4FieldKey.ALBUM_ARTIST));
             assertEquals("Sortalbumartist",mp4tag.getFirst(Mp4FieldKey.ALBUM_ARTIST_SORT));
             assertEquals("Sortalbum",mp4tag.getFirst(Mp4FieldKey.ALBUM_SORT));
@@ -115,7 +114,7 @@ public class M4aWriteTagTest extends TestCase
             assertEquals("sorttitle",mp4tag.getFirst(Mp4FieldKey.TITLE_SORT));
             assertEquals("1",mp4tag.getFirst(Mp4FieldKey.COMPILATION));
             assertEquals("66027994-edcf-9d89-bec8-0d30077d888c",mp4tag.getFirst(Mp4FieldKey.MUSICIP_PUID));
-            assertEquals("e785f700-c1aa-4943-bcee-87dd316a2c30",mp4tag.getFirst(Mp4FieldKey.MUSICBRAINZ_TRACKID));
+            assertEquals("e785f700-c1aa-4943-bcee-87dd316a2c31",mp4tag.getFirst(Mp4FieldKey.MUSICBRAINZ_TRACKID));
             assertEquals("989a13f6-b58c-4559-b09e-76ae0adb94ed",mp4tag.getFirst(Mp4FieldKey.MUSICBRAINZ_ARTISTID));
             assertEquals("989a13f6-b58c-4559-b09e-76ae0adb94ed",mp4tag.getFirst(Mp4FieldKey.MUSICBRAINZ_ALBUMARTISTID));
             assertEquals("19c6f0f6-3d6d-4b02-88c7-ffb559d52be6",mp4tag.getFirst(Mp4FieldKey.MUSICBRAINZ_ALBUMID));
@@ -138,7 +137,7 @@ public class M4aWriteTagTest extends TestCase
 
             Mp4TagCoverField coverArtField = (Mp4TagCoverField)coverart.get(0);
             //Check type jpeg
-            assertEquals(Mp4FieldType.COVERART_JPEG.getFileClassId(),coverArtField.getType());
+            assertEquals(Mp4FieldType.COVERART_JPEG,coverArtField.getFieldType());
             //Just check jpeg signature
             assertEquals(0xff,coverArtField.getData()[0] & 0xff);
             assertEquals(0xd8,coverArtField.getData()[1] & 0xff);
@@ -163,7 +162,7 @@ public class M4aWriteTagTest extends TestCase
         Exception exceptionCaught = null;
         try
         {
-            File testFile = AbstractTestCase.copyAudioToTmp("test.m4a");
+            File testFile = AbstractTestCase.copyAudioToTmp("test.m4a",new File("testWriteFileSmallerSize.m4a"));
             AudioFile f = AudioFileIO.read(testFile);
             Tag tag = f.getTag();
 
@@ -273,7 +272,7 @@ public class M4aWriteTagTest extends TestCase
 
             Mp4TagCoverField coverArtField = (Mp4TagCoverField)coverart.get(0);
             //Check type jpeg
-            assertEquals(Mp4FieldType.COVERART_JPEG.getFileClassId(),coverArtField.getType());
+            assertEquals(Mp4FieldType.COVERART_JPEG,coverArtField.getFieldType());
             //Just check jpeg signature
             assertEquals(0xff,coverArtField.getData()[0] & 0xff);
             assertEquals(0xd8,coverArtField.getData()[1] & 0xff);
@@ -299,7 +298,7 @@ public class M4aWriteTagTest extends TestCase
         Exception exceptionCaught = null;
         try
         {
-            File testFile = AbstractTestCase.copyAudioToTmp("test.m4a");
+            File testFile = AbstractTestCase.copyAudioToTmp("test.m4a",new File("testWriteFileLargerSize.m4a"));
             AudioFile f = AudioFileIO.read(testFile);
             Tag tag = f.getTag();
 
@@ -409,7 +408,7 @@ public class M4aWriteTagTest extends TestCase
 
             Mp4TagCoverField coverArtField = (Mp4TagCoverField)coverart.get(0);
             //Check type jpeg
-            assertEquals(Mp4FieldType.COVERART_JPEG.getFileClassId(),coverArtField.getType());
+            assertEquals(Mp4FieldType.COVERART_JPEG,coverArtField.getFieldType());
             //Just check jpeg signature
             assertEquals(0xff,coverArtField.getData()[0] & 0xff);
             assertEquals(0xd8,coverArtField.getData()[1] & 0xff);
@@ -439,7 +438,7 @@ public class M4aWriteTagTest extends TestCase
         Exception exceptionCaught = null;
         try
         {
-            File testFile = AbstractTestCase.copyAudioToTmp("test3.m4a");
+            File testFile = AbstractTestCase.copyAudioToTmp("test3.m4a",new File("testWriteFileMuchLargerSize.m4a"));
 
             //Starting filesize
             assertEquals(3876468,testFile.length());
@@ -451,7 +450,7 @@ public class M4aWriteTagTest extends TestCase
             RandomAccessFile imageFile = new RandomAccessFile(new File("testdata", "coverart.png"),"r");
             byte[] imagedata = new byte[(int)imageFile.length()];
             imageFile.read(imagedata);
-            tag.set(new Mp4TagCoverField(imagedata));
+            tag.set(((Mp4Tag)tag).createArtworkField(imagedata));
 
             //Save changes and reread from disk
             f.commit();
@@ -552,17 +551,15 @@ public class M4aWriteTagTest extends TestCase
             //Should be one image
             assertEquals(1,coverart.size());
 
-          /*
 
             Mp4TagCoverField coverArtField = (Mp4TagCoverField)coverart.get(0);
-            //Check type jpeg
-            assertEquals(Mp4FieldType.COVERART_PNG.getFileClassId(),coverArtField.getType());
-            //Just check jpeg signature
-            assertEquals(0xff,coverArtField.getData()[0] & 0xff);
-            assertEquals(0xd8,coverArtField.getData()[1] & 0xff);
-            assertEquals(0xff,coverArtField.getData()[2] & 0xff);
-            assertEquals(0xe0,coverArtField.getData()[3] & 0xff);        
-              */
+            //Check type png
+            assertEquals(Mp4FieldType.COVERART_PNG,coverArtField.getFieldType());
+            //Just check png signature
+            assertEquals(0x89,coverArtField.getData()[0] & 0xff);
+            assertEquals(0x50,coverArtField.getData()[1] & 0xff);
+            assertEquals(0x4e,coverArtField.getData()[2] & 0xff);
+            assertEquals(0x47,coverArtField.getData()[3] & 0xff);
 
         }
         catch(Exception e)

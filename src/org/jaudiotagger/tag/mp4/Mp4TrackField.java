@@ -11,7 +11,7 @@ import java.io.UnsupportedEncodingException;
 /**
  * Represents the Track No field
  *
- * For some reason uses an array of four numbers, but only the middle two are of use for display purposes
+ * <p>For some reason uses an array of four numbers, but only the middle two are of use for display purposes
  */
 public class Mp4TrackField extends Mp4TagTextNumberField
 {
@@ -19,6 +19,41 @@ public class Mp4TrackField extends Mp4TagTextNumberField
     private static final int TRACK_NO_INDEX     = 1;
     private static final int TRACK_TOTAL_INDEX  = 2;
     private static final int NONE_END_VALUE_INDEX   = 3;
+
+    /**
+     * Create new Track Field parsing the String for the trackno/total
+     *
+     * TODO what should we do if trackValue is invalid
+     * 
+     * @param trackValue
+     */
+    public Mp4TrackField(String trackValue)
+    {
+        super(Mp4FieldKey.TRACK.getFieldName(), trackValue);
+
+        numbers = new ArrayList<Short>();
+        numbers.add(new Short("0"));
+
+        String values[] = trackValue.split("/");
+        switch(values.length)
+        {
+            case 1:
+                numbers.add(Short.parseShort(values[0]));
+                numbers.add(new Short("0"));
+                numbers.add(new Short("0"));
+
+            case 2:
+                numbers.add(Short.parseShort(values[0]));
+                numbers.add(Short.parseShort(values[1]));
+                numbers.add(new Short("0"));
+
+            default:
+                numbers.add(new Short("0"));
+                numbers.add(new Short("0"));
+                numbers.add(new Short("0"));
+        }
+    }
+
 
     /**
      * Create new Track Field with only track No

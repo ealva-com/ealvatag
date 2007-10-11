@@ -26,7 +26,7 @@ import java.nio.ByteBuffer;
  *
  * MvhdBox (movie (presentation) header box)
  *
- * This MP4Box contains important audio information we need can be used to calculate track length,
+ * <p>This MP4Box contains important audio information we need can be used to calculate track length,
  * depending on the version field this can be in either
  * short or long format
  */

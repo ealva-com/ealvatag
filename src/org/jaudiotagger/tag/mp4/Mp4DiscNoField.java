@@ -1,6 +1,5 @@
 package org.jaudiotagger.tag.mp4;
 
-import org.jaudiotagger.audio.generic.Utils;
 import org.jaudiotagger.audio.mp4.util.Mp4BoxHeader;
 
 import java.nio.ByteBuffer;
@@ -10,14 +9,46 @@ import java.util.ArrayList;
 /**
  * Represents the Disc No field
  *
- * For some reason uses an array of three numbers, but only the last two are of use for display purposes
+ * <p>For some reason uses an array of three numbers, but only the last two are of use for display purposes
  */
 public class Mp4DiscNoField extends Mp4TagTextNumberField
 {
     private static final int NONE_VALUE_INDEX   = 0;
     private static final int DISC_NO_INDEX = 1;
     private static final int DISC_TOTAL_INDEX = 2;
-  
+
+    /**
+         * Create new Track Field parsing the String for the trackno/total
+         *
+         * TODO what should we do if discValue is invalid
+         *
+         * @param discValue
+         */
+        public Mp4DiscNoField(String discValue)
+        {
+            super(Mp4FieldKey.DISCNUMBER.getFieldName(), discValue);
+
+            numbers = new ArrayList<Short>();
+            numbers.add(new Short("0"));
+
+            String values[] = discValue.split("/");
+            switch(values.length)
+            {
+                case 1:
+                    numbers.add(Short.parseShort(values[0]));
+                    numbers.add(new Short("0"));
+
+                case 2:
+                    numbers.add(Short.parseShort(values[0]));
+                    numbers.add(Short.parseShort(values[1]));
+
+                default:
+                    numbers.add(new Short("0"));
+                    numbers.add(new Short("0"));
+            }
+        }
+
+
     /**
      * Create new Disc no  Field with only discNo
      *

@@ -13,7 +13,7 @@ import java.nio.ByteBuffer;
 /**
  * Represents reverse dns field, used for custom information
  *
- * Originally only used by Itunes for information that was iTunes specific but now used in a wide range of uses,
+ * <p>Originally only used by Itunes for information that was iTunes specific but now used in a wide range of uses,
  * for example Musicbrainz uses it for many of its fields.
  *
  * These fields have a more complex setup
@@ -51,15 +51,17 @@ public class Mp4TagReverseDnsField extends Mp4TagField implements TagTextField
     }
 
     /**
-     * Newly created field
+     * Newly created Reverse Dns field
      *
      * @param id
      * @param content
      */
-    public Mp4TagReverseDnsField(String id, String content)
+    public Mp4TagReverseDnsField(Mp4FieldKey id, String content)
     {
-        super(id);
-        this.content = content;
+        super(id.getFieldName());
+        this.issuer     = id.getIssuer();
+        this.descriptor = id.getIdentifier();
+        this.content    = content;
     }
 
     protected Mp4FieldType getFieldType()

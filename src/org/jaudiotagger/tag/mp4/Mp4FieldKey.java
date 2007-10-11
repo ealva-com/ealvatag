@@ -5,7 +5,7 @@ import static org.jaudiotagger.tag.mp4.Mp4FieldType.*;
 /**
  * Starting list of known mp4 metadata fields
  *
- * Simple metaitems use the parent atom id as their identifier whereas reverse dns (----) atoms use
+ * <p>Simple metaitems use the parent atom id as their identifier whereas reverse dns (----) atoms use
  * the reversedns,issuer and name fields as their identifier.
  * 
  * From:
@@ -24,7 +24,7 @@ public enum Mp4FieldKey
     GENRE("gnre",NUMERIC),
     TITLE("©nam",TEXT),
     TRACK("trkn",NUMERIC),
-    BPM("tmpo",BYTE),
+    BPM("tmpo",BYTE,2),
     DAY("©day",TEXT),
     COMMENT("©cmt",TEXT),
     COMPOSER("©wrt",TEXT),
@@ -33,7 +33,7 @@ public enum Mp4FieldKey
     LYRICS("©lyr",TEXT),
     RATING("rtng",BYTE),
     ENCODER("©too",TEXT),
-    COMPILATION("cpil",BYTE),
+    COMPILATION("cpil",BYTE,1),
     COPYRIGHT("cprt",TEXT),
     CATEGORY("catg",TEXT),
     KEYWORD("keyw",TEXT),
@@ -66,9 +66,11 @@ public enum Mp4FieldKey
     private String issuer;
     private String identifier;
     private Mp4FieldType fieldType;
+    private int fieldLength;
 
     /**
      * For usual metadata fields that use a data field
+     *
      * @param fieldName
      * @param fieldType of data atom
      */
@@ -76,6 +78,21 @@ public enum Mp4FieldKey
     {
         this.fieldName = fieldName;
         this.fieldType = fieldType;
+    }
+
+    /**
+     * For usual metadata fields that use a data field where the field length is fixed
+     * such as Byte fields
+     *
+     * @param fieldName
+     * @param fieldType
+     * @param fieldLength
+     */
+    Mp4FieldKey(String fieldName,Mp4FieldType fieldType,int fieldLength)
+    {
+        this.fieldName   = fieldName;
+        this.fieldType   = fieldType;
+        this.fieldLength = fieldLength;
     }
 
     /**
@@ -114,8 +131,39 @@ public enum Mp4FieldKey
         return fieldType;
     }
 
+    /**
+     *
+     * @return true if this is a reverse dns key
+     */
     public boolean isReverseDnsType()
     {
         return identifier.startsWith(Mp4TagReverseDnsField.IDENTIFIER);
+    }
+
+    /**
+     *
+     * @return issuer (Reverse Dns Fields Only)
+     */
+    public String getIssuer()
+    {
+        return issuer;
+    }
+
+    /**
+     *
+     * @return identifier (Reverse Dns Fields Only)
+     */
+    public String getIdentifier()
+    {
+        return identifier;
+    }
+
+    /**
+     *
+     * @return field length (currently only used by byte fields)
+     */
+    public int getFieldLength()
+    {
+        return fieldLength;
     }
 }
