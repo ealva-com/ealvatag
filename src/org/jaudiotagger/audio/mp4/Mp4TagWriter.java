@@ -16,7 +16,7 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.jaudiotagger.tag.mp4;
+package org.jaudiotagger.audio.mp4;
 
 import java.io.*;
 import java.util.logging.Logger;
@@ -24,13 +24,13 @@ import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 
 import org.jaudiotagger.tag.Tag;
+import org.jaudiotagger.tag.mp4.Mp4TagCreator;
 import org.jaudiotagger.audio.exceptions.CannotWriteException;
 import org.jaudiotagger.audio.exceptions.CannotReadException;
-import org.jaudiotagger.audio.mp4.util.Mp4BoxHeader;
-import org.jaudiotagger.audio.mp4.util.Mp4MetaBox;
-import org.jaudiotagger.audio.mp4.util.Mp4FreeBox;
+import org.jaudiotagger.audio.mp4.atom.Mp4BoxHeader;
+import org.jaudiotagger.audio.mp4.atom.Mp4MetaBox;
+import org.jaudiotagger.audio.mp4.atom.Mp4FreeBox;
 import org.jaudiotagger.audio.mp4.Mp4NotMetaFieldKey;
-import org.jaudiotagger.audio.generic.Utils;
 
 
 /**
@@ -87,8 +87,7 @@ public class Mp4TagWriter
      */
     public void write(Tag tag, RandomAccessFile raf, RandomAccessFile rafTemp) throws CannotWriteException, IOException
     {
-        System.out.println("Writing mp4 tag to file");
-        //Go through every field constructing the data that will appear starting from ilst box
+         //Go through every field constructing the data that will appear starting from ilst box
         ByteBuffer rawData = tc.convert(tag);
         rawData.rewind();
 
@@ -118,8 +117,7 @@ public class Mp4TagWriter
 
         //Level 4- Search for "ilst" within meta
         boxHeader = Mp4BoxHeader.seekWithinLevel(moovBuffer, Mp4NotMetaFieldKey.ILST.getFieldName());
-        System.out.println("ILST:Old size" + boxHeader.getLength() + ":New size:" + rawData.limit());
-        int oldIlstSize = boxHeader.getLength();
+         int oldIlstSize = boxHeader.getLength();
         int newIlstSize = rawData.limit();
         int relativeIlstposition = moovBuffer.position() - Mp4BoxHeader.HEADER_LENGTH;
 
@@ -127,7 +125,6 @@ public class Mp4TagWriter
         //Level 4 - Search for "free" within meta
         boxHeader = Mp4BoxHeader.seekWithinLevel(moovBuffer, Mp4NotMetaFieldKey.FREE.getFieldName());
         int oldFreeSize = boxHeader.getLength();
-        System.out.println("FREE:Old size" + boxHeader.getLength());
 
         //The easiest option since no difference in the size of the metadata so all we have to do is
         //create a new file identical to first file but with replaced metadata
@@ -220,13 +217,10 @@ public class Mp4TagWriter
                 int additionalMetaSize
                         = additionalSpaceRequiredForMetadata - (oldFreeSize);
 
-                System.out.println("Additional size required:"+additionalMetaSize);
-
                 //Calculate absolute position in file of ilst atom
                 long startIstWithinFile = positionWithinFileAfterFindingMoovHeader + relativeIlstposition;
 
                 //Write stuff before Moov (ftyp)
-                System.out.println("Writing 1:");
                 FileChannel fileWriteChannel = rafTemp.getChannel();
                 fileReadChannel.position(0);
                 fileWriteChannel.transferFrom(fileReadChannel,
@@ -236,7 +230,6 @@ public class Mp4TagWriter
 
                 //Edit and rewrite the Moov header
                 moovHeader.setLength(moovHeader.getLength() + additionalMetaSize);
-                System.out.println("Writing 2:"+fileWriteChannel.position());
                 fileWriteChannel.write(moovHeader.getHeaderData());
 
 
@@ -258,11 +251,9 @@ public class Mp4TagWriter
                 //Now write from this edited buffer up until ilst atom
                 moovBuffer.rewind();
                 moovBuffer.limit(relativeIlstposition);
-                System.out.println("Writing 3:"+fileWriteChannel.position());
                 fileWriteChannel.write(moovBuffer);
 
                 //Now write ilst data
-                System.out.println("Writing 4:"+fileWriteChannel.position());
                 fileWriteChannel.write(rawData);
 
                 //Skip over the read channel old free atom
@@ -270,10 +261,8 @@ public class Mp4TagWriter
                 fileReadChannel.position(fileReadChannel.position() + oldFreeSize);
 
                 //Now write toplevel free and mdat
-                System.out.println("Writing 5:"+fileWriteChannel.position());
                 fileWriteChannel.transferFrom(fileReadChannel, fileWriteChannel.position(),
                     fileReadChannel.size() - fileReadChannel.position());
-                System.out.println("Writing 6:"+fileWriteChannel.position());     
             }
         }
     }

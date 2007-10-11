@@ -1,8 +1,5 @@
 package org.jaudiotagger.audio.mp4;
 
-import org.jaudiotagger.tag.mp4.Mp4FieldType;
-import org.jaudiotagger.audio.exceptions.CannotReadException;
-
 /**
  * This a list of mp4boxes identifiers, that are not part of the metadata info.
  *

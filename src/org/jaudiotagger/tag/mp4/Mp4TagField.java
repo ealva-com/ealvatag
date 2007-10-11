@@ -25,8 +25,10 @@ import java.nio.ByteBuffer;
 import java.util.logging.Logger;
 
 import org.jaudiotagger.tag.TagField;
+import org.jaudiotagger.tag.mp4.atom.Mp4DataBox;
+import org.jaudiotagger.tag.mp4.field.Mp4FieldType;
 import org.jaudiotagger.audio.generic.Utils;
-import org.jaudiotagger.audio.mp4.util.Mp4BoxHeader;
+import org.jaudiotagger.audio.mp4.atom.Mp4BoxHeader;
 
 /**
  * This abstract class represents a link between piece of data, and how it is stored as an mp4 atom
@@ -111,7 +113,7 @@ public abstract class Mp4TagField implements TagField
     /**
      * @return the field type of this field
      */
-    protected abstract Mp4FieldType getFieldType();
+    public abstract Mp4FieldType getFieldType();
 
     /**
      * Processes the data and sets the position of the data buffer to just after the end of this fields data

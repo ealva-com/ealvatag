@@ -16,7 +16,7 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.jaudiotagger.tag.mp4;
+package org.jaudiotagger.audio.mp4;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
@@ -25,11 +25,15 @@ import java.util.logging.Logger;
 import java.nio.ByteBuffer;
 
 import org.jaudiotagger.audio.exceptions.CannotReadException;
-import org.jaudiotagger.audio.mp4.util.Mp4BoxHeader;
-import org.jaudiotagger.audio.mp4.util.Mp4MetaBox;
+import org.jaudiotagger.audio.mp4.atom.Mp4BoxHeader;
+import org.jaudiotagger.audio.mp4.atom.Mp4MetaBox;
 import org.jaudiotagger.audio.mp4.Mp4NotMetaFieldKey;
 import org.jaudiotagger.audio.generic.Utils;
 import org.jaudiotagger.tag.TagField;
+import org.jaudiotagger.tag.mp4.atom.Mp4DataBox;
+import org.jaudiotagger.tag.mp4.field.*;
+import org.jaudiotagger.tag.mp4.Mp4Tag;
+import org.jaudiotagger.tag.mp4.Mp4FieldKey;
 
 /**
  * Reads metadata from mp4,
@@ -175,7 +179,7 @@ public class Mp4TagReader
                 tag.add(field);
             }
             else if(type==Mp4FieldType.COVERART_JPEG.getFileClassId()||
-                    type==Mp4FieldType.COVERART_PNG.getFileClassId())
+                    type== Mp4FieldType.COVERART_PNG.getFileClassId())
             {
                 int processedDataSize = 0;
                 int imageCount =0;
@@ -191,7 +195,7 @@ public class Mp4TagReader
                     }
                     Mp4TagCoverField field = new Mp4TagCoverField(raw,type);
                     tag.add(field);
-                    processedDataSize+=field.dataSize + Mp4BoxHeader.HEADER_LENGTH ;
+                    processedDataSize+=field.getDataSize() + Mp4BoxHeader.HEADER_LENGTH ;
                     imageCount++;
                 }
             }

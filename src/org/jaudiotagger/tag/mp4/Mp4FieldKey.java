@@ -1,6 +1,8 @@
 package org.jaudiotagger.tag.mp4;
 
-import static org.jaudiotagger.tag.mp4.Mp4FieldType.*;
+import static org.jaudiotagger.tag.mp4.field.Mp4FieldType.*;
+import org.jaudiotagger.tag.mp4.field.Mp4FieldType;
+import org.jaudiotagger.tag.mp4.field.Mp4TagReverseDnsField;
 
 /**
  * Starting list of known mp4 metadata fields

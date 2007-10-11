@@ -16,17 +16,16 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.jaudiotagger.tag.mp4;
+package org.jaudiotagger.tag.mp4.field;
 
 import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
-import java.nio.charset.Charset;
 
 import org.jaudiotagger.tag.TagField;
 import org.jaudiotagger.tag.TagTextField;
 import org.jaudiotagger.tag.mp4.Mp4TagField;
-import org.jaudiotagger.audio.generic.Utils;
-import org.jaudiotagger.audio.mp4.util.Mp4BoxHeader;
+import org.jaudiotagger.tag.mp4.atom.Mp4DataBox;
+import org.jaudiotagger.audio.mp4.atom.Mp4BoxHeader;
 
 /**
  * Represents a single text field
@@ -106,7 +105,7 @@ public class Mp4TagTextField extends Mp4TagField implements TagTextField
         return content.getBytes(getEncoding());
     }
 
-    protected Mp4FieldType getFieldType()
+    public Mp4FieldType getFieldType()
     {
         return Mp4FieldType.TEXT;
     }

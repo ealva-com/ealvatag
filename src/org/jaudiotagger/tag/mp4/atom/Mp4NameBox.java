@@ -1,20 +1,19 @@
-package org.jaudiotagger.tag.mp4;
+package org.jaudiotagger.tag.mp4.atom;
 
-import org.jaudiotagger.audio.mp4.util.Mp4BoxHeader;
-import org.jaudiotagger.audio.mp4.util.AbstractMp4Box;
+import org.jaudiotagger.audio.mp4.atom.Mp4BoxHeader;
+import org.jaudiotagger.audio.mp4.atom.AbstractMp4Box;
 import org.jaudiotagger.audio.generic.Utils;
 
 import java.nio.ByteBuffer;
 
 /**
- * This box is used within ---- boxes to hold the issuer 
- *
+ * This box is used within ---- boxes to hold the data name/descriptor
  */
-public class Mp4MeanBox extends AbstractMp4Box
+public class Mp4NameBox extends AbstractMp4Box
 {
-    public static final String IDENTIFIER = "mean";
+    public static final String IDENTIFIER = "name";
 
-    private String       issuer;
+    private String          name;
 
     //TODO Are these misnamed, are these version flag bytes or just null bytes
     public static final int VERSION_LENGTH = 1;
@@ -26,7 +25,7 @@ public class Mp4MeanBox extends AbstractMp4Box
      * @param header header info
      * @param dataBuffer data of box (doesnt include header data)
      */
-    public Mp4MeanBox(Mp4BoxHeader header, ByteBuffer dataBuffer)
+    public Mp4NameBox(Mp4BoxHeader header, ByteBuffer dataBuffer)
     {
         this.header     = header;
 
@@ -40,12 +39,11 @@ public class Mp4MeanBox extends AbstractMp4Box
         this.dataBuffer = dataBuffer.slice();
 
         //issuer
-        this.issuer=Utils.getString(this.dataBuffer, PRE_DATA_LENGTH, header.getDataLength() - PRE_DATA_LENGTH, header.getEncoding());
-
+        this.name= Utils.getString(this.dataBuffer, PRE_DATA_LENGTH, header.getDataLength() - PRE_DATA_LENGTH, header.getEncoding());
     }
 
-    public String getIssuer()
+    public String getName()
     {
-        return issuer;
+        return name;
     }
 }

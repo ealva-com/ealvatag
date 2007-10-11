@@ -1,7 +1,8 @@
-package org.jaudiotagger.tag.mp4;
+package org.jaudiotagger.tag.mp4.field;
 
-import org.jaudiotagger.audio.generic.Utils;
-import org.jaudiotagger.audio.mp4.util.Mp4BoxHeader;
+import org.jaudiotagger.audio.mp4.atom.Mp4BoxHeader;
+import org.jaudiotagger.tag.mp4.atom.Mp4DataBox;
+import org.jaudiotagger.tag.mp4.Mp4FieldKey;
 
 import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
@@ -57,7 +58,7 @@ public class Mp4TagByteField extends Mp4TagTextField
         super(id, raw);
     }
 
-    protected Mp4FieldType getFieldType()
+    public Mp4FieldType getFieldType()
     {
         return Mp4FieldType.BYTE;
     }

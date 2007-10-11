@@ -16,14 +16,15 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.jaudiotagger.tag.mp4;
+package org.jaudiotagger.tag.mp4.field;
 
 import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 
 import org.jaudiotagger.tag.TagField;
-import org.jaudiotagger.audio.generic.Utils;
-import org.jaudiotagger.audio.mp4.util.Mp4BoxHeader;
+import org.jaudiotagger.tag.mp4.atom.Mp4DataBox;
+import org.jaudiotagger.tag.mp4.Mp4TagField;
+import org.jaudiotagger.audio.mp4.atom.Mp4BoxHeader;
 
 /**
  * Represents binary data
@@ -73,7 +74,7 @@ public class Mp4TagBinaryField extends Mp4TagField
         super(id, raw);
     }
 
-    protected Mp4FieldType getFieldType()
+    public Mp4FieldType getFieldType()
     {
         //TODO dont know what value this should be do we actually have any binary fields other
         //than cover art
@@ -119,6 +120,11 @@ public class Mp4TagBinaryField extends Mp4TagField
         return this.dataBytes.length == 0;
     }
 
+    public int getDataSize()
+    {
+        return dataSize;
+
+    }
     public byte[] getData()
     {
         return this.dataBytes;

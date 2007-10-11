@@ -16,17 +16,19 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.jaudiotagger.audio.mp4.util;
+package org.jaudiotagger.audio.mp4;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.logging.Logger;
 import java.nio.ByteBuffer;
-import java.nio.channels.ByteChannel;
 
 import org.jaudiotagger.audio.generic.GenericAudioHeader;
 import org.jaudiotagger.audio.exceptions.CannotReadException;
 import org.jaudiotagger.audio.mp4.Mp4NotMetaFieldKey;
+import org.jaudiotagger.audio.mp4.atom.Mp4BoxHeader;
+import org.jaudiotagger.audio.mp4.atom.Mp4MvhdBox;
+import org.jaudiotagger.audio.mp4.atom.Mp4MdhdBox;
 
 /**
  * Read audio info from file.
@@ -49,7 +51,7 @@ import org.jaudiotagger.audio.mp4.Mp4NotMetaFieldKey;
 public class Mp4InfoReader
 {
     // Logger Object
-    public static Logger logger = Logger.getLogger(" org.jaudiotagger.audio.mp4.util");
+    public static Logger logger = Logger.getLogger(" org.jaudiotagger.audio.mp4.atom");
 
     public GenericAudioHeader read(RandomAccessFile raf) throws CannotReadException, IOException
     {

@@ -19,12 +19,11 @@
 package org.jaudiotagger.tag.mp4;
 
 import org.jaudiotagger.audio.generic.AbstractTag;
-import org.jaudiotagger.audio.mp4.util.Mp4BoxHeader;
+import org.jaudiotagger.audio.mp4.atom.Mp4BoxHeader;
 import org.jaudiotagger.tag.TagField;
 import org.jaudiotagger.tag.TagFieldKey;
 import static org.jaudiotagger.tag.mp4.Mp4FieldKey.*;
-import static org.jaudiotagger.tag.mp4.Mp4FieldType.TEXT;
-import static org.jaudiotagger.tag.mp4.Mp4FieldType.BYTE;
+import org.jaudiotagger.tag.mp4.field.*;
 
 import java.util.EnumMap;
 import java.util.List;

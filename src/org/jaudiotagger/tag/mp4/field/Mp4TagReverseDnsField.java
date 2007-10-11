@@ -1,8 +1,13 @@
-package org.jaudiotagger.tag.mp4;
+package org.jaudiotagger.tag.mp4.field;
 
 import org.jaudiotagger.tag.TagTextField;
 import org.jaudiotagger.tag.TagField;
-import org.jaudiotagger.audio.mp4.util.Mp4BoxHeader;
+import org.jaudiotagger.tag.mp4.atom.Mp4MeanBox;
+import org.jaudiotagger.tag.mp4.atom.Mp4NameBox;
+import org.jaudiotagger.tag.mp4.atom.Mp4DataBox;
+import org.jaudiotagger.tag.mp4.Mp4TagField;
+import org.jaudiotagger.tag.mp4.Mp4FieldKey;
+import org.jaudiotagger.audio.mp4.atom.Mp4BoxHeader;
 import org.jaudiotagger.audio.generic.Utils;
 
 import java.io.UnsupportedEncodingException;
@@ -64,7 +69,7 @@ public class Mp4TagReverseDnsField extends Mp4TagField implements TagTextField
         this.content    = content;
     }
 
-    protected Mp4FieldType getFieldType()
+    public Mp4FieldType getFieldType()
     {
         //TODO always assuming text at moment but may not always be the case (though dont have any concrete
         //examples)
@@ -81,7 +86,7 @@ public class Mp4TagReverseDnsField extends Mp4TagField implements TagTextField
 
         //Read name box, identify what type of field it is
         Mp4BoxHeader nameBoxHeader = new Mp4BoxHeader(data);
-        Mp4NameBox   nameBox       = new Mp4NameBox(nameBoxHeader,data);
+        Mp4NameBox nameBox       = new Mp4NameBox(nameBoxHeader,data);
         setDescriptor(nameBox.getName());
         data.position(data.position()+nameBoxHeader.getDataLength());
 

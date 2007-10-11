@@ -23,10 +23,10 @@ import java.io.RandomAccessFile;
 
 import org.jaudiotagger.audio.generic.GenericAudioHeader;
 import org.jaudiotagger.tag.Tag;
-import org.jaudiotagger.tag.mp4.Mp4TagReader;
+import org.jaudiotagger.audio.mp4.Mp4TagReader;
 import org.jaudiotagger.audio.exceptions.CannotReadException;
 import org.jaudiotagger.audio.generic.AudioFileReader;
-import org.jaudiotagger.audio.mp4.util.Mp4InfoReader;
+import org.jaudiotagger.audio.mp4.Mp4InfoReader;
 
 /**
  * Mp4 File Reader

@@ -16,16 +16,13 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.jaudiotagger.audio.mp4.util;
+package org.jaudiotagger.audio.mp4.atom;
 
 import org.jaudiotagger.audio.generic.Utils;
-import org.jaudiotagger.tag.mp4.Mp4DataBox;
 
 import java.io.RandomAccessFile;
 import java.io.IOException;
-import java.io.ByteArrayOutputStream;
 import java.nio.ByteBuffer;
-import java.nio.channels.ReadableByteChannel;
 import java.util.logging.Logger;
 
 /**
@@ -49,7 +46,7 @@ import java.util.logging.Logger;
 public class Mp4BoxHeader
 {
     // Logger Object
-    public static Logger logger = Logger.getLogger("org.jaudiotagger.audio.mp4.util");
+    public static Logger logger = Logger.getLogger("org.jaudiotagger.audio.mp4.atom");
 
     public static final int OFFSET_POS = 0;
     public static final int IDENTIFIER_POS = 4;

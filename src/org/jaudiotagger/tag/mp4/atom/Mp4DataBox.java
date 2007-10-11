@@ -1,8 +1,9 @@
-package org.jaudiotagger.tag.mp4;
+package org.jaudiotagger.tag.mp4.atom;
 
-import org.jaudiotagger.audio.mp4.util.Mp4BoxHeader;
-import org.jaudiotagger.audio.mp4.util.AbstractMp4Box;
+import org.jaudiotagger.audio.mp4.atom.Mp4BoxHeader;
+import org.jaudiotagger.audio.mp4.atom.AbstractMp4Box;
 import org.jaudiotagger.audio.generic.Utils;
+import org.jaudiotagger.tag.mp4.field.Mp4FieldType;
 
 import java.nio.ByteBuffer;
 import java.util.ArrayList;

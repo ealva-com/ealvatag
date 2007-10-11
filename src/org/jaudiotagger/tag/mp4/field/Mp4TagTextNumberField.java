@@ -16,19 +16,18 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.jaudiotagger.tag.mp4;
+package org.jaudiotagger.tag.mp4.field;
 
 import java.io.UnsupportedEncodingException;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.List;
-import java.util.ArrayList;
-import java.util.ListIterator;
 import java.nio.ByteBuffer;
 
 import org.jaudiotagger.audio.generic.Utils;
-import org.jaudiotagger.audio.mp4.util.Mp4BoxHeader;
-import org.jaudiotagger.tag.mp4.Mp4TagTextField;
+import org.jaudiotagger.audio.mp4.atom.Mp4BoxHeader;
+import org.jaudiotagger.tag.mp4.field.Mp4TagTextField;
+import org.jaudiotagger.tag.mp4.atom.Mp4DataBox;
 import org.jaudiotagger.tag.TagField;
 
 /**
@@ -95,7 +94,7 @@ public class Mp4TagTextNumberField extends Mp4TagTextField
      *
      * @return type numeric
      */
-    protected Mp4FieldType getFieldType()
+    public Mp4FieldType getFieldType()
     {
         return Mp4FieldType.NUMERIC;
     }
@@ -104,7 +103,7 @@ public class Mp4TagTextNumberField extends Mp4TagTextField
     {
         //Data actually contains a 'Data' Box so process data using this
         Mp4BoxHeader header  = new Mp4BoxHeader(data);
-        Mp4DataBox   databox = new Mp4DataBox(header,data);
+        Mp4DataBox databox = new Mp4DataBox(header,data);
         dataSize = header.getDataLength();
         content  = databox.getContent();
         numbers  = databox.getNumbers();

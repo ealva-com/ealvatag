@@ -16,15 +16,12 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.jaudiotagger.tag.mp4;
+package org.jaudiotagger.tag.mp4.field;
 
-import org.jaudiotagger.tag.mp4.Mp4TagBinaryField;
-import org.jaudiotagger.audio.generic.Utils;
-import org.jaudiotagger.audio.mp4.util.Mp4BoxHeader;
+import org.jaudiotagger.tag.mp4.field.Mp4TagBinaryField;
+import org.jaudiotagger.tag.mp4.Mp4FieldKey;
 
 import java.io.UnsupportedEncodingException;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.nio.ByteBuffer;
 
 /**
@@ -101,7 +98,7 @@ public class Mp4TagCoverField extends Mp4TagBinaryField
      * Return field type, for artwork this also identifies the imagetype
      * @return field type
      */
-    protected Mp4FieldType getFieldType()
+    public Mp4FieldType getFieldType()
     {
         return imageType;
     }

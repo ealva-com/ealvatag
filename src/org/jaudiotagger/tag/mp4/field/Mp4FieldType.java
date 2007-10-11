@@ -1,4 +1,4 @@
-package org.jaudiotagger.tag.mp4;
+package org.jaudiotagger.tag.mp4.field;
 
 /**
  * Describes the possible types of data held within a Databox

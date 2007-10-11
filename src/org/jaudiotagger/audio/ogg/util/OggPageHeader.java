@@ -40,7 +40,7 @@ import java.util.logging.Logger;
 public class OggPageHeader
 {
     // Logger Object
-       public static Logger logger = Logger.getLogger("org.jaudiotagger.audio.ogg.util");
+       public static Logger logger = Logger.getLogger("org.jaudiotagger.audio.ogg.atom");
 
     //Capture pattern at start of header
     public static final byte[] CAPTURE_PATTERN = {'O', 'g', 'g','S'};

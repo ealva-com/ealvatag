@@ -27,7 +27,6 @@ import org.jaudiotagger.tag.vorbiscomment.util.Base64Coder;
 
 import static org.jaudiotagger.tag.vorbiscomment.VorbisCommentFieldKey.*;
 import org.jaudiotagger.tag.TagFieldKey;
-import org.jaudiotagger.tag.mp4.Mp4TagCoverField;
 
 import java.util.EnumMap;
 import java.util.List;

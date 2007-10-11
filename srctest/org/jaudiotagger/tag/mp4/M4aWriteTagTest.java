@@ -9,6 +9,9 @@ import java.util.List;
 import org.jaudiotagger.AbstractTestCase;
 import org.jaudiotagger.tag.Tag;
 import org.jaudiotagger.tag.TagFieldKey;
+import org.jaudiotagger.tag.mp4.field.Mp4TagTextNumberField;
+import org.jaudiotagger.tag.mp4.field.Mp4FieldType;
+import org.jaudiotagger.tag.mp4.field.Mp4TagCoverField;
 import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.AudioFileIO;
 

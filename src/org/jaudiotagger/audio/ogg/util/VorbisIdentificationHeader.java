@@ -50,7 +50,7 @@ import java.util.logging.Logger;
 public class VorbisIdentificationHeader implements VorbisHeader
 {
     // Logger Object
-    public static Logger logger = Logger.getLogger("org.jaudiotagger.audio.ogg.util");
+    public static Logger logger = Logger.getLogger("org.jaudiotagger.audio.ogg.atom");
 
     private int audioChannels;
     private boolean isValid = false;

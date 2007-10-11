@@ -1,13 +1,36 @@
-package org.jaudiotagger.audio.mp4.util;
+/*
+ * Entagged Audio Tag library
+ * Copyright (c) 2003-2005 Raphaël Slinckx <raphael@slinckx.net>
+ * 
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ *  
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+ */
+package org.jaudiotagger.audio.mp4.atom;
 
 import org.jaudiotagger.audio.generic.Utils;
 
 import java.nio.ByteBuffer;
 
 /**
- * MdhdBox ( media (stream) header), holds the Sampling Rate used.
+ *
+ * MvhdBox (movie (presentation) header box)
+ *
+ * <p>This MP4Box contains important audio information we need can be used to calculate track length,
+ * depending on the version field this can be in either
+ * short or long format
  */
-public class Mp4MdhdBox extends AbstractMp4Box
+public class Mp4MvhdBox extends AbstractMp4Box
 {
     public static final int VERSION_FLAG_POS         = 0;
     public static final int OTHER_FLAG_POS           = 1;
@@ -33,23 +56,23 @@ public class Mp4MdhdBox extends AbstractMp4Box
 
     private static final int LONG_FORMAT = 1;
 
-    private byte version;
-    private int  samplingRate;
+    private int timeScale;
     private long timeLength;
+    private byte version;
+
     /**
      *
      * @param header header info
      * @param dataBuffer data of box (doesnt include header data)
      */
-    public Mp4MdhdBox(Mp4BoxHeader header, ByteBuffer dataBuffer)
+    public Mp4MvhdBox(Mp4BoxHeader header, ByteBuffer dataBuffer)
     {
         this.header  = header;
-
         this.version = dataBuffer.get(VERSION_FLAG_POS);
 
         if (version == LONG_FORMAT )
         {
-            this.samplingRate = Utils.getNumberBigEndian(dataBuffer,
+            this.timeScale  = Utils.getNumberBigEndian(dataBuffer,
                     TIMESCALE_LONG_POS,
                     (TIMESCALE_LONG_POS + TIMESCALE_LENGTH - 1));
             this.timeLength = Utils.getLongNumberBigEndian(dataBuffer,
@@ -58,7 +81,7 @@ public class Mp4MdhdBox extends AbstractMp4Box
         }
         else
         {
-            this.samplingRate = Utils.getNumberBigEndian(dataBuffer,
+            this.timeScale = Utils.getNumberBigEndian(dataBuffer,
                     TIMESCALE_SHORT_POS,
                     (TIMESCALE_SHORT_POS + TIMESCALE_LENGTH - 1));
             this.timeLength = Utils.getNumberBigEndian(dataBuffer,
@@ -67,9 +90,8 @@ public class Mp4MdhdBox extends AbstractMp4Box
         }
     }
 
-    public int getSampleRate()
+    public int getLength()
     {
-        return samplingRate;
+        return (int) (this.timeLength / this.timeScale);
     }
-
 }

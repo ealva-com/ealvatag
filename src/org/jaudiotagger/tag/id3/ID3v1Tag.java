@@ -223,6 +223,11 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag
         return null;
     }
 
+    public int getFieldCount()
+    {
+        return 7;
+    }
+
     protected List returnFieldToList(ID3TagField field )
     {
         List fields = new ArrayList();

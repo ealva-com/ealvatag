@@ -1,9 +1,9 @@
-package org.jaudiotagger.tag.mp4;
+package org.jaudiotagger.tag.mp4.field;
 
-import org.jaudiotagger.audio.generic.Utils;
-import org.jaudiotagger.audio.mp4.util.Mp4BoxHeader;
+import org.jaudiotagger.audio.mp4.atom.Mp4BoxHeader;
+import org.jaudiotagger.tag.mp4.atom.Mp4DataBox;
+import org.jaudiotagger.tag.mp4.Mp4FieldKey;
 
-import java.util.List;
 import java.util.ArrayList;
 import java.nio.ByteBuffer;
 import java.io.UnsupportedEncodingException;
@@ -103,7 +103,7 @@ public class Mp4TrackField extends Mp4TagTextNumberField
     {
         //Data actually contains a 'Data' Box so process data using this
         Mp4BoxHeader header  = new Mp4BoxHeader(data);
-        Mp4DataBox   databox = new Mp4DataBox(header,data);
+        Mp4DataBox databox = new Mp4DataBox(header,data);
         dataSize = header.getDataLength();
         numbers  = databox.getNumbers();
 

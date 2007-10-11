@@ -1,4 +1,4 @@
-package org.jaudiotagger.audio.mp4.util;
+package org.jaudiotagger.audio.mp4.atom;
 
 import org.jaudiotagger.audio.generic.Utils;
 import org.jaudiotagger.audio.mp4.Mp4NotMetaFieldKey;
