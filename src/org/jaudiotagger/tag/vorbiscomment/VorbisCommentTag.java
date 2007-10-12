@@ -209,6 +209,21 @@ public class VorbisCommentTag extends AbstractTag
     }
 
     /**
+     * Create Tag Field using ogg key
+     *
+     * This method is provided to allow you to create key of any value because VorbisComment allows
+     * arbitary keys.
+     *
+     * @param vorbisCommentFieldKey
+     * @param value
+     * @return
+     */
+    public TagField createTagField(String vorbisCommentFieldKey,String value)
+    {
+        return new VorbisCommentTagField(vorbisCommentFieldKey, value);
+    }
+
+    /**
      * Maps the generic key to the ogg key and return the list of values for this field
      *
      * @param genericKey

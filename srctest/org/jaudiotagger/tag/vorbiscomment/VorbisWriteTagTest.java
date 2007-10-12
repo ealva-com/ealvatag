@@ -74,6 +74,8 @@ public class VorbisWriteTagTest extends AbstractTestCase
             tag.set(((VorbisCommentTag)tag).createTagField(VorbisCommentFieldKey.COVERART,base64image));
             tag.set(((VorbisCommentTag)tag).createTagField(VorbisCommentFieldKey.COVERARTMIME,"image/png"));
 
+            //key not known to jaudiotagger
+            tag.set(((VorbisCommentTag)tag).createTagField("VOLINIST","Sarah Curtis"));
 
             f.commit();
 
@@ -110,7 +112,6 @@ public class VorbisWriteTagTest extends AbstractTestCase
             assertEquals("989a13f6-b58c-4559-b09e-76ae0adb94ed",tag.getFirst(TagFieldKey.MUSICBRAINZ_ARTISTID));
             assertEquals("989a13f6-b58c-4559-b09e-76ae0adb94ed",tag.getFirst(TagFieldKey.MUSICBRAINZ_RELEASEARTISTID));
             assertEquals("19c6f0f6-3d6d-4b02-88c7-ffb559d52be6",tag.getFirst(TagFieldKey.MUSICBRAINZ_RELEASEID));
-
             //Cast to format specific tag
             VorbisCommentTag vorbisTag = (VorbisCommentTag)tag;
             //Lookup by vorbis comment key
@@ -137,6 +138,9 @@ public class VorbisWriteTagTest extends AbstractTestCase
             assertEquals("989a13f6-b58c-4559-b09e-76ae0adb94ed",vorbisTag.getFirst(VorbisCommentFieldKey.MUSICBRAINZ_ARTISTID));
             assertEquals("989a13f6-b58c-4559-b09e-76ae0adb94ed",vorbisTag.getFirst(VorbisCommentFieldKey.MUSICBRAINZ_ALBUMARTISTID));
             assertEquals("19c6f0f6-3d6d-4b02-88c7-ffb559d52be6",vorbisTag.getFirst(VorbisCommentFieldKey.MUSICBRAINZ_ALBUMID));            
+
+            assertEquals("Sarah Curtis",vorbisTag.getFirst("VOLINIST"));
+
 
             //List methods
             List<TagField> list = tag.get(TagFieldKey.ARTIST);
