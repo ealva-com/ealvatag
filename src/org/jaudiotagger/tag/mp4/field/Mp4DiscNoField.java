@@ -37,12 +37,36 @@ public class Mp4DiscNoField extends Mp4TagTextNumberField
             switch(values.length)
             {
                 case 1:
-                    numbers.add(Short.parseShort(values[0]));
+
+                    try
+                    {
+                        numbers.add(Short.parseShort(values[0]));
+                    }
+                    catch(NumberFormatException nfe)
+                    {
+                         numbers.add(new Short("0"));
+                    }
                     numbers.add(new Short("0"));
+                    break;
 
                 case 2:
-                    numbers.add(Short.parseShort(values[0]));
-                    numbers.add(Short.parseShort(values[1]));
+                     try
+                    {
+                        numbers.add(Short.parseShort(values[0]));
+                    }
+                    catch(NumberFormatException nfe)
+                    {
+                         numbers.add(new Short("0"));
+                    }
+                     try
+                    {
+                        numbers.add(Short.parseShort(values[1]));
+                    }
+                    catch(NumberFormatException nfe)
+                    {
+                         numbers.add(new Short("0"));
+                    }
+                    break;
 
                 default:
                     numbers.add(new Short("0"));
