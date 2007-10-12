@@ -3,6 +3,7 @@ package org.jaudiotagger.tag.vorbiscomment;
 import org.jaudiotagger.AbstractTestCase;
 import org.jaudiotagger.tag.TagFieldKey;
 import org.jaudiotagger.tag.Tag;
+import org.jaudiotagger.tag.TagField;
 import org.jaudiotagger.tag.vorbiscomment.util.Base64Coder;
 import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.AudioFileIO;
@@ -14,6 +15,7 @@ import java.io.File;
 import java.io.RandomAccessFile;
 import java.io.ByteArrayInputStream;
 import java.awt.image.BufferedImage;
+import java.util.List;
 
 /**
  * Vorbis Write tsgs
@@ -135,6 +137,14 @@ public class VorbisWriteTagTest extends AbstractTestCase
             assertEquals("989a13f6-b58c-4559-b09e-76ae0adb94ed",vorbisTag.getFirst(VorbisCommentFieldKey.MUSICBRAINZ_ARTISTID));
             assertEquals("989a13f6-b58c-4559-b09e-76ae0adb94ed",vorbisTag.getFirst(VorbisCommentFieldKey.MUSICBRAINZ_ALBUMARTISTID));
             assertEquals("19c6f0f6-3d6d-4b02-88c7-ffb559d52be6",vorbisTag.getFirst(VorbisCommentFieldKey.MUSICBRAINZ_ALBUMID));            
+
+            //List methods
+            List<TagField> list = tag.get(TagFieldKey.ARTIST);
+            assertEquals(1,list.size());
+            for(TagField field:list)
+            {
+                assertEquals("ARTIST",field.toString());                
+            }
 
             //Vorbis keys that have no mapping to generic key
             assertEquals("description",vorbisTag.getFirst(VorbisCommentFieldKey.DESCRIPTION));

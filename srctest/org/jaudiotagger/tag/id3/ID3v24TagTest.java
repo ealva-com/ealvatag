@@ -175,5 +175,16 @@ public class ID3v24TagTest extends TestCase
         assertEquals((byte)2,v2Tag.getRelease());
         assertEquals((byte)4,v2Tag.getMajorVersion());
         assertEquals((byte)0,v2Tag.getRevision());
+
+        //Newer methods
+        assertEquals(ID3v11TagTest.ARTIST,v2Tag.getFirst(ID3v24Frames.FRAME_ID_ARTIST));
+        assertEquals(ID3v11TagTest.ALBUM,v2Tag.getFirst(ID3v24Frames.FRAME_ID_ALBUM));      
+        assertEquals(ID3v11TagTest.TITLE,v2Tag.getFirst(ID3v24Frames.FRAME_ID_TITLE));
+        assertEquals(ID3v11TagTest.YEAR,v2Tag.getFirst(ID3v24Frames.FRAME_ID_YEAR));
+        assertEquals(ID3v11TagTest.ARTIST,
+                ((AbstractFrameBodyTextInfo)v2Tag.getFirstField(ID3v24Frames.FRAME_ID_ARTIST).getBody()).getFirstTextValue());
+        
+
+
     }
 }

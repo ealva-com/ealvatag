@@ -189,6 +189,12 @@ public abstract class AbstractTag implements Tag
         return (l.size() != 0) ? ((TagTextField) l.get(0)).getContent() : "";
     }
 
+    public TagField getFirstField(String id)
+    {
+        List<TagField>l = get(id);
+        return (l.size() != 0) ? ((TagField) l.get(0)):null;
+    }
+
     /**
      * (overridden)
      *

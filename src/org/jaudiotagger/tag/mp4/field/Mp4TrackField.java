@@ -117,4 +117,22 @@ public class Mp4TrackField extends Mp4TagTextNumberField
         }
         content  = sb.toString();
     }
+
+     /**
+     *
+     * @return
+     */
+    public Short getTrackNo()
+    {
+        return numbers.get(TRACK_NO_INDEX);
+    }
+
+    /**
+     *
+     * @return
+     */
+    public Short getTrackTotal()
+    {
+          return numbers.get(TRACK_TOTAL_INDEX);
+    }
 }

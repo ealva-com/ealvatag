@@ -579,6 +579,9 @@ public class MP3File extends AudioFile
 
     /**
      * Returns a representation of tag as v24
+     *
+     * TODO:would like to return ID3v24Tag but cant because ID3v24Tag subclasses ID3v23 and this causes a problem
+     * with copy constructors 
      */
     public AbstractID3v2Tag getID3v2TagAsv24()
     {

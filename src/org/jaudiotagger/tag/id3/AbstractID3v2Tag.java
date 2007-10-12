@@ -18,6 +18,9 @@ package org.jaudiotagger.tag.id3;
 import org.jaudiotagger.audio.mp3.MP3File;
 import org.jaudiotagger.tag.id3.framebody.FrameBodyTDRC;
 import org.jaudiotagger.tag.id3.framebody.FrameBodyUnsupported;
+import org.jaudiotagger.tag.id3.framebody.AbstractFrameBodyTextInfo;
+import org.jaudiotagger.tag.id3.framebody.AbstractFrameBodyUrlLink;
+import org.jaudiotagger.tag.TagField;
 
 import java.io.*;
 import java.nio.ByteBuffer;
@@ -259,6 +262,9 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag
      * Warning the match is only done against the identifier so if a tag contains a frame with an unsuported body
      * but happens to have an identifier that is valid for another version of the tag it will be returned.
      *
+     * TODO:This method is problematic because sometimes it returns a list and sometimes a frame, we need to
+     * replace with two seperate methods as in the tag interface.
+     *
      * @param identifier is a ID3Frame identifier
      * @return matching frame, or list of matching frames
      */
@@ -268,13 +274,67 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag
     }
 
     /**
+     * Retrieve the first value that exists for this identifier
+     *
+     * If the value is a String it returns that, otherwise returns a summary of the fields information
+     *
+     * TODO:we should be just be using the bodies toString() method so we dont have if statement in this method
+     * but this is being used by something else at the moment
+     * @param identifier
+     * @return
+     */
+     public String getFirst(String identifier)
+     {
+        AbstractID3v2Frame frame = getFirstField(identifier);
+        if(frame==null)
+        {
+            return "";
+        }
+        if(frame.getBody() instanceof AbstractFrameBodyTextInfo)
+        {
+            return ((AbstractFrameBodyTextInfo)frame.getBody()).getFirstTextValue();
+        }
+        else if(frame.getBody() instanceof AbstractFrameBodyUrlLink)
+        {
+            return ((AbstractFrameBodyUrlLink)frame.getBody()).getUrlLink();
+        }
+        else
+        {
+            return frame.getBody().toString();
+        }
+    }
+
+    /**
+     * Retrieve the first tagfield that exists for this identifier
+     *
+     * @param identifier
+     * @return tag field or null if doesnt exist
+     */
+     public AbstractID3v2Frame getFirstField(String identifier)
+     {
+        Object object = getFrame(identifier);
+        if(object==null)
+        {
+            return null;
+        }
+        if(object instanceof List)
+        {
+            return (AbstractID3v2Frame)((List)object).get(0);
+        }
+        else
+        {
+             return (AbstractID3v2Frame)object;
+        }
+     }
+
+    /**
      * Add a frame to this tag
      *
      * @param frame the frame to add
      *              <p/>
      *              Warning if frame(s) already exists for this identifier thay are overwritten
      *              <p/>
-     *              TODO needs to ensure do not add an invalid frame for this tag
+     * TODO needs to ensure do not add an invalid frame for this tag
      */
     public void setFrame(AbstractID3v2Frame frame)
     {
@@ -346,7 +406,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag
      * @param file to delete the tag from
      * @throws IOException if problem accessing the file
      *                     <p/>
-     *                     TODO should clear all data and preferably recover lost space.
+     * TODO should clear all data and preferably recover lost space.
      */
     public void delete(RandomAccessFile file) throws IOException
     {

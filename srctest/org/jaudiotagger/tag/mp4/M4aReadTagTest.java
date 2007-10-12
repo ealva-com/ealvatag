@@ -4,16 +4,19 @@ import org.jaudiotagger.AbstractTestCase;
 import org.jaudiotagger.tag.*;
 import org.jaudiotagger.tag.mp4.Mp4FieldKey;
 import org.jaudiotagger.tag.mp4.Mp4Tag;
-import org.jaudiotagger.tag.mp4.field.Mp4TagTextNumberField;
-import org.jaudiotagger.tag.mp4.field.Mp4FieldType;
-import org.jaudiotagger.tag.mp4.field.Mp4TagCoverField;
+import org.jaudiotagger.tag.mp4.field.*;
 import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.AudioFileIO;
 
 import java.io.File;
+import java.io.ByteArrayInputStream;
 import java.util.List;
+import java.util.Iterator;
+import java.awt.image.BufferedImage;
 
 import junit.framework.TestCase;
+
+import javax.imageio.ImageIO;
 
 /**
  */
@@ -92,13 +95,17 @@ public class M4aReadTagTest  extends TestCase
             assertEquals(new Short("1"),((Mp4TagTextNumberField)mp4tag.get(Mp4FieldKey.TRACK).get(0)).getNumbers().get(1));
             assertEquals(new Short("10"),((Mp4TagTextNumberField)mp4tag.get(Mp4FieldKey.TRACK).get(0)).getNumbers().get(2));
             assertEquals(new Short("0"),((Mp4TagTextNumberField)mp4tag.get(Mp4FieldKey.TRACK).get(0)).getNumbers().get(3));
-
+            assertEquals(new Short("1"),((Mp4TrackField)mp4tag.getFirstField(Mp4FieldKey.TRACK)).getTrackNo());
+            assertEquals(new Short("10"),((Mp4TrackField)mp4tag.getFirstField(Mp4FieldKey.TRACK)).getTrackTotal());
+            
             //Not sure why there are 4 values, only understand 2nd and third
             assertEquals("1/10",mp4tag.getFirst(Mp4FieldKey.DISCNUMBER));
             assertEquals("1/10",((Mp4TagTextNumberField)mp4tag.get(Mp4FieldKey.DISCNUMBER).get(0)).getContent());
-            assertEquals(new Short("0"),((Mp4TagTextNumberField)mp4tag.get(Mp4FieldKey.DISCNUMBER).get(0)).getNumbers().get(0));
-            assertEquals(new Short("1"),((Mp4TagTextNumberField)mp4tag.get(Mp4FieldKey.DISCNUMBER).get(0)).getNumbers().get(1));
-            assertEquals(new Short("10"),((Mp4TagTextNumberField)mp4tag.get(Mp4FieldKey.DISCNUMBER).get(0)).getNumbers().get(2));
+            assertEquals(new Short("0"),((Mp4TagTextNumberField)mp4tag.getFirstField(Mp4FieldKey.DISCNUMBER)).getNumbers().get(0));
+            assertEquals(new Short("1"),((Mp4TagTextNumberField)mp4tag.getFirstField(Mp4FieldKey.DISCNUMBER)).getNumbers().get(1));
+            assertEquals(new Short("10"),((Mp4TagTextNumberField)mp4tag.getFirstField(Mp4FieldKey.DISCNUMBER)).getNumbers().get(2));
+            assertEquals(new Short("1"),((Mp4DiscNoField)mp4tag.getFirstField(Mp4FieldKey.DISCNUMBER)).getDiscNo());
+            assertEquals(new Short("10"),((Mp4DiscNoField)mp4tag.getFirstField(Mp4FieldKey.DISCNUMBER)).getDiscTotal());
 
             assertEquals("composer",mp4tag.getFirst(Mp4FieldKey.COMPOSER));
             assertEquals("Sortartist",mp4tag.getFirst(Mp4FieldKey.ARTIST_SORT));
@@ -117,6 +124,10 @@ public class M4aReadTagTest  extends TestCase
             assertEquals("989a13f6-b58c-4559-b09e-76ae0adb94ed",mp4tag.getFirst(Mp4FieldKey.MUSICBRAINZ_ALBUMARTISTID));
             assertEquals("19c6f0f6-3d6d-4b02-88c7-ffb559d52be6",mp4tag.getFirst(Mp4FieldKey.MUSICBRAINZ_ALBUMID));
 
+            Mp4TagReverseDnsField rvs = (Mp4TagReverseDnsField)mp4tag.getFirstField(Mp4FieldKey.MUSICBRAINZ_ALBUMID);
+            assertEquals("com.apple.iTunes",rvs.getIssuer());
+            assertEquals("MusicBrainz Album Id",rvs.getDescriptor());
+            assertEquals("19c6f0f6-3d6d-4b02-88c7-ffb559d52be6",rvs.getContent());
 
             //Lookup by mp4key (no generic key mapping for these yet)
             assertEquals(" 000002C0 00000298 00004210 00002FD5 0001CB31 0001CB48 0000750D 00007C4A 000291A8 00029191",mp4tag.getFirst(Mp4FieldKey.ITUNES_NORM));
@@ -141,6 +152,10 @@ public class M4aReadTagTest  extends TestCase
             assertEquals(0xd8,coverArtField.getData()[1] & 0xff);
             assertEquals(0xff,coverArtField.getData()[2] & 0xff);
             assertEquals(0xe0,coverArtField.getData()[3] & 0xff);
+            //Recreate the image
+            BufferedImage bi = ImageIO.read(ImageIO
+                        .createImageInputStream(new ByteArrayInputStream(coverArtField.getData())));
+            assertNotNull(bi);
            
         }
         catch(Exception e)
@@ -261,7 +276,7 @@ public class M4aReadTagTest  extends TestCase
             assertEquals("1",mp4tag.getFirst(Mp4FieldKey.PART_OF_GAPLESS_ALBUM));
             assertEquals(" 000002C0 00000298 00004210 00002FD5 0001CB31 0001CB48 0000750D 00007C4A 000291A8 00029191",mp4tag.getFirst(Mp4FieldKey.ITUNES_NORM));
             assertEquals(" 00000000 00000840 000000E4 0000000000A29EDC 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000",mp4tag.getFirst(Mp4FieldKey.ITUNES_SMPB));
-
+                        
             List coverart = mp4tag.get(Mp4FieldKey.ARTWORK);
             //Should be one image
             assertEquals(3,coverart.size());
@@ -276,6 +291,11 @@ public class M4aReadTagTest  extends TestCase
             assertEquals(0x4E,coverArtField.getData()[2] & 0xff);
             assertEquals(0x47,coverArtField.getData()[3] & 0xff);
 
+            //Recreate the image
+            BufferedImage bi = ImageIO.read(ImageIO
+                        .createImageInputStream(new ByteArrayInputStream(coverArtField.getData())));
+            assertNotNull(bi);
+
             //Check 2nd field
             coverArtField = (Mp4TagCoverField)coverart.get(1);
             //Check type png
@@ -286,6 +306,11 @@ public class M4aReadTagTest  extends TestCase
             assertEquals(0x4E,coverArtField.getData()[2] & 0xff);
             assertEquals(0x47,coverArtField.getData()[3] & 0xff);
 
+            //Recreate the image
+            bi = ImageIO.read(ImageIO
+                        .createImageInputStream(new ByteArrayInputStream(coverArtField.getData())));
+            assertNotNull(bi);
+
             //Check 3rd Field
             coverArtField = (Mp4TagCoverField)coverart.get(2);
             //Check type jpeg
@@ -295,6 +320,10 @@ public class M4aReadTagTest  extends TestCase
             assertEquals(0xd8,coverArtField.getData()[1] & 0xff);
             assertEquals(0xff,coverArtField.getData()[2] & 0xff);
             assertEquals(0xe0,coverArtField.getData()[3] & 0xff);
+            //Recreate the image
+            bi = ImageIO.read(ImageIO
+                        .createImageInputStream(new ByteArrayInputStream(coverArtField.getData())));
+            assertNotNull(bi);
 
         }
         catch(Exception e)

@@ -16,7 +16,7 @@ public class Mp4TagByteField extends Mp4TagTextField
 {
     //TODO:Holds the actual size of the data content as held in the databoxitem, this is required because
     //we cant accurately work out the size by looking at the content because we only actually ever use a single byte
-    //in calcultaing the content value
+    //in calculating the content value
     //e.g byte data length seems to be 1 for pgap and cpil but 2 for tmpo, so we stored the dataSize
     //when we loaded the value so if greater than 1 we pad the value
     private int realDataLength;

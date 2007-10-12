@@ -9,9 +9,7 @@ import java.util.List;
 import org.jaudiotagger.AbstractTestCase;
 import org.jaudiotagger.tag.Tag;
 import org.jaudiotagger.tag.TagFieldKey;
-import org.jaudiotagger.tag.mp4.field.Mp4TagTextNumberField;
-import org.jaudiotagger.tag.mp4.field.Mp4FieldType;
-import org.jaudiotagger.tag.mp4.field.Mp4TagCoverField;
+import org.jaudiotagger.tag.mp4.field.*;
 import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.AudioFileIO;
 
@@ -35,7 +33,8 @@ public class M4aWriteTagTest extends TestCase
             tag.setArtist("ARTIST");
             tag.setAlbum("ALBUM");
             tag.setTrack("2/12");
-            tag.set(tag.createTagField(TagFieldKey.DISC_NO,"4/15"));
+            //tag.set(tag.createTagField(TagFieldKey.DISC_NO,"4/15"));
+            tag.set(new Mp4DiscNoField(4,15));
             tag.set(tag.createTagField(TagFieldKey.MUSICBRAINZ_TRACK_ID,"e785f700-c1aa-4943-bcee-87dd316a2c31"));
             tag.set(tag.createTagField(TagFieldKey.BPM,"200"));
             //Save changes and reread from disk
@@ -121,7 +120,10 @@ public class M4aWriteTagTest extends TestCase
             assertEquals("989a13f6-b58c-4559-b09e-76ae0adb94ed",mp4tag.getFirst(Mp4FieldKey.MUSICBRAINZ_ARTISTID));
             assertEquals("989a13f6-b58c-4559-b09e-76ae0adb94ed",mp4tag.getFirst(Mp4FieldKey.MUSICBRAINZ_ALBUMARTISTID));
             assertEquals("19c6f0f6-3d6d-4b02-88c7-ffb559d52be6",mp4tag.getFirst(Mp4FieldKey.MUSICBRAINZ_ALBUMID));
-
+            Mp4TagReverseDnsField rvs = (Mp4TagReverseDnsField)mp4tag.getFirstField(Mp4FieldKey.MUSICBRAINZ_ALBUMID);
+            assertEquals("com.apple.iTunes",rvs.getIssuer());
+            assertEquals("MusicBrainz Album Id",rvs.getDescriptor());
+            assertEquals("19c6f0f6-3d6d-4b02-88c7-ffb559d52be6",rvs.getContent());
 
             //Lookup by mp4key (no generic key mapping for these yet)
             assertEquals(" 000002C0 00000298 00004210 00002FD5 0001CB31 0001CB48 0000750D 00007C4A 000291A8 00029191",mp4tag.getFirst(Mp4FieldKey.ITUNES_NORM));
@@ -173,9 +175,10 @@ public class M4aWriteTagTest extends TestCase
             tag.setArtist("AR");
             tag.setAlbum("AL");
             //Save changes and reread from disk
-            f.commit();
+            AudioFileIO.write(f);
             f = AudioFileIO.read(testFile);
             tag = f.getTag();
+
 
              //Total FileSize should not have changed
             assertEquals(3881956,testFile.length());
@@ -256,7 +259,10 @@ public class M4aWriteTagTest extends TestCase
             assertEquals("989a13f6-b58c-4559-b09e-76ae0adb94ed",mp4tag.getFirst(Mp4FieldKey.MUSICBRAINZ_ARTISTID));
             assertEquals("989a13f6-b58c-4559-b09e-76ae0adb94ed",mp4tag.getFirst(Mp4FieldKey.MUSICBRAINZ_ALBUMARTISTID));
             assertEquals("19c6f0f6-3d6d-4b02-88c7-ffb559d52be6",mp4tag.getFirst(Mp4FieldKey.MUSICBRAINZ_ALBUMID));
-
+            Mp4TagReverseDnsField rvs = (Mp4TagReverseDnsField)mp4tag.getFirstField(Mp4FieldKey.MUSICBRAINZ_ALBUMID);
+            assertEquals("com.apple.iTunes",rvs.getIssuer());
+            assertEquals("MusicBrainz Album Id",rvs.getDescriptor());
+            assertEquals("19c6f0f6-3d6d-4b02-88c7-ffb559d52be6",rvs.getContent());
 
             //Lookup by mp4key (no generic key mapping for these yet)
             assertEquals(" 000002C0 00000298 00004210 00002FD5 0001CB31 0001CB48 0000750D 00007C4A 000291A8 00029191",mp4tag.getFirst(Mp4FieldKey.ITUNES_NORM));
@@ -392,7 +398,10 @@ public class M4aWriteTagTest extends TestCase
             assertEquals("989a13f6-b58c-4559-b09e-76ae0adb94ed",mp4tag.getFirst(Mp4FieldKey.MUSICBRAINZ_ARTISTID));
             assertEquals("989a13f6-b58c-4559-b09e-76ae0adb94ed",mp4tag.getFirst(Mp4FieldKey.MUSICBRAINZ_ALBUMARTISTID));
             assertEquals("19c6f0f6-3d6d-4b02-88c7-ffb559d52be6",mp4tag.getFirst(Mp4FieldKey.MUSICBRAINZ_ALBUMID));
-
+            Mp4TagReverseDnsField rvs = (Mp4TagReverseDnsField)mp4tag.getFirstField(Mp4FieldKey.MUSICBRAINZ_ALBUMID);
+            assertEquals("com.apple.iTunes",rvs.getIssuer());
+            assertEquals("MusicBrainz Album Id",rvs.getDescriptor());
+            assertEquals("19c6f0f6-3d6d-4b02-88c7-ffb559d52be6",rvs.getContent());
 
             //Lookup by mp4key (no generic key mapping for these yet)
             assertEquals(" 000002C0 00000298 00004210 00002FD5 0001CB31 0001CB48 0000750D 00007C4A 000291A8 00029191",mp4tag.getFirst(Mp4FieldKey.ITUNES_NORM));
@@ -535,7 +544,10 @@ public class M4aWriteTagTest extends TestCase
             assertEquals("989a13f6-b58c-4559-b09e-76ae0adb94ed",mp4tag.getFirst(Mp4FieldKey.MUSICBRAINZ_ARTISTID));
             assertEquals("989a13f6-b58c-4559-b09e-76ae0adb94ed",mp4tag.getFirst(Mp4FieldKey.MUSICBRAINZ_ALBUMARTISTID));
             assertEquals("19c6f0f6-3d6d-4b02-88c7-ffb559d52be6",mp4tag.getFirst(Mp4FieldKey.MUSICBRAINZ_ALBUMID));
-
+            Mp4TagReverseDnsField rvs = (Mp4TagReverseDnsField)mp4tag.getFirstField(Mp4FieldKey.MUSICBRAINZ_ALBUMID);
+            assertEquals("com.apple.iTunes",rvs.getIssuer());
+            assertEquals("MusicBrainz Album Id",rvs.getDescriptor());
+            assertEquals("19c6f0f6-3d6d-4b02-88c7-ffb559d52be6",rvs.getContent());
 
             //Lookup by mp4key (no generic key mapping for these yet)
             assertEquals(" 000002C0 00000298 00004210 00002FD5 0001CB31 0001CB48 0000750D 00007C4A 000291A8 00029191",mp4tag.getFirst(Mp4FieldKey.ITUNES_NORM));

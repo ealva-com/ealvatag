@@ -538,6 +538,11 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag
         return true;
     }
 
+    public TagField getFirstField(String id)
+    {
+        //TODO
+        throw new UnsupportedOperationException("TODO:Not done yet");    
+    }
 
     /**
      * Create Tag Field using generic key

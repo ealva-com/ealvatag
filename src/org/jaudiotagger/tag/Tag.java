@@ -253,12 +253,19 @@ public interface Tag
     public String getFirst(String id);
 
     /**
-     * Retrieve the first value that exists for this generic key
+     * Retrieve String value of first tagfield  that exists for this generic key 
      *
      * @param id
-     * @return
+     * @return String value or empty string
      */
     public String getFirst(TagFieldKey id);
+
+    /**
+     * Retrieve the first tagfield that exists for this generic key
+     * @param id
+     * @return tag field or null if doesnt exist
+     */
+    public TagField getFirstField(String id);
 
     public String toString();
 

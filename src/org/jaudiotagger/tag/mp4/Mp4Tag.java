@@ -232,6 +232,11 @@ public class Mp4Tag extends AbstractTag
         return super.getFirst(mp4Key.getFieldName());
     }
 
+    public Mp4TagField getFirstField(Mp4FieldKey mp4Key)
+    {
+        return (Mp4TagField)super.getFirstField(mp4Key.getFieldName());
+    }
+
     /**
      * Delete fields with this generic key
      *

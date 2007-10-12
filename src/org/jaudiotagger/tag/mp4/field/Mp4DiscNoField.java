@@ -102,4 +102,22 @@ public class Mp4DiscNoField extends Mp4TagTextNumberField
         }
         content  = sb.toString();
     }
+
+    /**
+     *
+     * @return
+     */
+    public Short getDiscNo()
+    {
+        return numbers.get(DISC_NO_INDEX);
+    }
+
+    /**
+     * 
+     * @return
+     */
+    public Short getDiscTotal()
+    {
+          return numbers.get(DISC_TOTAL_INDEX);
+    }
 }
