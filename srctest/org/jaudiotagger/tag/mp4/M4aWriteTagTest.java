@@ -36,7 +36,7 @@ public class M4aWriteTagTest extends TestCase
             //tag.set(tag.createTagField(TagFieldKey.DISC_NO,"4/15"));
             tag.set(new Mp4DiscNoField(4,15));
             tag.set(tag.createTagField(TagFieldKey.MUSICBRAINZ_TRACK_ID,"e785f700-c1aa-4943-bcee-87dd316a2c31"));
-            tag.set(tag.createTagField(TagFieldKey.BPM,"200"));
+            tag.set(tag.createTagField(TagFieldKey.BPM,"300"));
             //Save changes and reread from disk
             f.commit();
             f = AudioFileIO.read(testFile);
@@ -67,7 +67,7 @@ public class M4aWriteTagTest extends TestCase
             assertEquals("composer",tag.getFirst(TagFieldKey.COMPOSER));
             assertEquals("Sortartist",tag.getFirst(TagFieldKey.ARTIST_SORT));
             assertEquals("lyrics",tag.getFirst(TagFieldKey.LYRICS));
-            assertEquals("200",tag.getFirst(TagFieldKey.BPM));
+            assertEquals("300",tag.getFirst(TagFieldKey.BPM));
             assertEquals("Albumartist",tag.getFirst(TagFieldKey.ALBUM_ARTIST));
             assertEquals("Sortalbumartist",tag.getFirst(TagFieldKey.ALBUM_ARTIST_SORT));
             assertEquals("Sortalbum",tag.getFirst(TagFieldKey.ALBUM_SORT));
@@ -107,7 +107,7 @@ public class M4aWriteTagTest extends TestCase
             assertEquals("composer",mp4tag.getFirst(Mp4FieldKey.COMPOSER));
             assertEquals("Sortartist",mp4tag.getFirst(Mp4FieldKey.ARTIST_SORT));
             assertEquals("lyrics",mp4tag.getFirst(Mp4FieldKey.LYRICS));
-            assertEquals("200",mp4tag.getFirst(Mp4FieldKey.BPM));
+            assertEquals("300",mp4tag.getFirst(Mp4FieldKey.BPM));
             assertEquals("Albumartist",mp4tag.getFirst(Mp4FieldKey.ALBUM_ARTIST));
             assertEquals("Sortalbumartist",mp4tag.getFirst(Mp4FieldKey.ALBUM_ARTIST_SORT));
             assertEquals("Sortalbum",mp4tag.getFirst(Mp4FieldKey.ALBUM_SORT));

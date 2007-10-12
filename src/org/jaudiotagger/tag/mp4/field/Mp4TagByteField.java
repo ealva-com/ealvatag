@@ -1,6 +1,7 @@
 package org.jaudiotagger.tag.mp4.field;
 
 import org.jaudiotagger.audio.mp4.atom.Mp4BoxHeader;
+import org.jaudiotagger.audio.generic.Utils;
 import org.jaudiotagger.tag.mp4.atom.Mp4DataBox;
 import org.jaudiotagger.tag.mp4.Mp4FieldKey;
 
@@ -63,13 +64,36 @@ public class Mp4TagByteField extends Mp4TagTextField
         return Mp4FieldType.BYTE;
     }
 
+    /**
+     * Return raw data bytes
+     *
+     * TODO this code should be done better so genralised to any length
+     *
+     * @return
+     * @throws UnsupportedEncodingException
+     */
     protected byte[] getDataBytes()throws UnsupportedEncodingException
     {
-         //Only a byte, but of course byte is signed we need unsigned         
-         Short shortValue = new Short(content);
-         byte rawData [] = new byte[realDataLength];
-         rawData[rawData.length-1] = shortValue.byteValue();
-         return rawData;
+        switch(realDataLength)
+        {
+            case 2:
+            {
+                 //Save as two bytes
+                 Short shortValue = new Short(content);
+                 byte rawData [] = Utils.getShortSizeBigEndian(shortValue);                   
+                 return rawData;
+            }
+            case 1:
+            default:
+            {
+                 //Save as 1 bytes
+                 Short shortValue = new Short(content);
+                 byte rawData [] = new byte[1];
+                 rawData[0] = shortValue.byteValue();
+                 return rawData;
+            }
+        }
+
     }
 
     protected void build(ByteBuffer data) throws UnsupportedEncodingException
