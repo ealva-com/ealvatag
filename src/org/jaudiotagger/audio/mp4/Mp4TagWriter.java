@@ -41,6 +41,8 @@ import org.jaudiotagger.audio.mp4.Mp4NotMetaFieldKey;
  * the metadata is increased the size of the free atom (below meta) should be reduced accordingly or vice versa.
  * If the size of the metadata has increased by more than the size of the free atom then the size of meta, udta
  * and moov should be recalculated and the top level free atom reduced accordingly
+ * If there is not enough space even if using both of the free atoms, then the mdat atom has to be shifted down
+ * accordingly to make space, and the stco atom has to have its offsets to mdat chunks table adjusted accordingly.
  * <p/>
  *
  * <pre>
@@ -121,7 +123,7 @@ public class Mp4TagWriter
         int newIlstSize = rawData.limit();
         int relativeIlstposition = moovBuffer.position() - Mp4BoxHeader.HEADER_LENGTH;
 
-        //TODO maynot be a free atom?
+        //TODO may not be a free atom?
         //Level 4 - Search for "free" within meta
         boxHeader = Mp4BoxHeader.seekWithinLevel(moovBuffer, Mp4NotMetaFieldKey.FREE.getFieldName());
         int oldFreeSize = boxHeader.getLength();
@@ -260,9 +262,35 @@ public class Mp4TagWriter
                 fileReadChannel.position(startIstWithinFile + oldIlstSize);
                 fileReadChannel.position(fileReadChannel.position() + oldFreeSize);
 
-                //Now write toplevel free and mdat
-                fileWriteChannel.transferFrom(fileReadChannel, fileWriteChannel.position(),
+                //TODO there might not be a free atom
+                //What is size of top level free atom
+                Mp4BoxHeader freeHeader = Mp4BoxHeader.seekWithinLevel(raf, Mp4NotMetaFieldKey.FREE.getFieldName());
+                fileReadChannel.position(fileReadChannel.position() - Mp4BoxHeader.HEADER_LENGTH);
+
+                //If the shift is less than the space available in this second free atom daat size we should
+                //minimize the free atom accordingly (then we don't have to update stco atom)
+                //note could be a doble negative as additionalMetaSize could be -1 to -8 but thats ok stills works
+                //ok
+                if(freeHeader.getDataLength() >=additionalMetaSize)
+                {
+                    Mp4FreeBox freeBox = new Mp4FreeBox(freeHeader.getDataLength() - additionalMetaSize);
+                    fileWriteChannel.write(freeBox.getHeader().getHeaderData());
+                    fileWriteChannel.write(freeBox.getData());
+
+                     //Skip over the read channel old free atom
+                    fileReadChannel.position(fileReadChannel.position() + freeHeader.getLength());
+
+                    //Write Mdat
+                    fileWriteChannel.transferFrom(fileReadChannel, fileWriteChannel.position(),
                     fileReadChannel.size() - fileReadChannel.position());
+                }
+                //Mdat is going to have to move anyway, so keep free atom as is and write it and mdat
+                //TODO STCO
+                else
+                {
+                    fileWriteChannel.transferFrom(fileReadChannel, fileWriteChannel.position(),
+                    fileReadChannel.size() - fileReadChannel.position());
+                }                 
             }
         }
     }

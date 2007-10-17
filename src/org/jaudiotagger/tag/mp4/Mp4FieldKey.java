@@ -33,7 +33,7 @@ public enum Mp4FieldKey
     GROUPING("©grp",TEXT),
     DISCNUMBER("disk",NUMERIC),
     LYRICS("©lyr",TEXT),
-    RATING("rtng",BYTE),
+    RATING("rtng",BYTE),   //AFAIK Cant be set in itunes, but ifd set to explicit itunes will show as explicit
     ENCODER("©too",TEXT),
     COMPILATION("cpil",BYTE,1),
     COPYRIGHT("cprt",TEXT),
@@ -46,8 +46,9 @@ public enum Mp4FieldKey
     TITLE_SORT("sonm",TEXT),
     COMPOSER_SORT("soco",TEXT),
     SHOW_SORT("sosn",TEXT),
-    SHOW("tvsh",TEXT),
+    SHOW("tvsh",TEXT),      //tv show but also used just as show
     ARTWORK("covr", COVERART_JPEG),
+    PURCHASE_DATE("purd",TEXT),
     MUSICBRAINZ_ARTISTID("com.apple.iTunes","MusicBrainz Artist Id",TEXT),
     MUSICBRAINZ_ALBUMID("com.apple.iTunes","MusicBrainz Album Id",TEXT),
     MUSICBRAINZ_ALBUMARTISTID("com.apple.iTunes","MusicBrainz Album Artist Id",TEXT),
@@ -62,6 +63,15 @@ public enum Mp4FieldKey
     ITUNES_SMPB("com.apple.iTunes","iTunSMPB",TEXT),
     ITUNES_NORM("com.apple.iTunes","iTunNORM",TEXT),
 
+    //AFAIK These arent actually used by Audio Only files, but there is nothing to prevent them being used
+    CONTENT_TYPE("stik",BYTE,1),
+    PODCAST_KEYWORD("keyw",TEXT),
+    PODCAST_URL("purl",NUMERIC),   //TODO Actually seems to store text but is marked as numeric !
+    EPISODE_GLOBAL_ID("egid",NUMERIC),
+    TV_NETWORK("tvnn",TEXT),
+    TV_EPISODE_NUMBER("tven",TEXT),
+    TV_SEASON("tvsn",BYTE,1),
+    TV_EPISODE("tves",BYTE,1),
     ;
 
     private String fieldName;

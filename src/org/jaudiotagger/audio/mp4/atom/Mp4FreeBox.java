@@ -15,7 +15,7 @@ import java.io.IOException;
 public class Mp4FreeBox extends AbstractMp4Box
 {
     /**
-     * Construct a new FreeBox containing datasize padding
+     * Construct a new FreeBox containing datasize padding (i.e doesnt include header size)
      *
      * @param datasize padding size
      */

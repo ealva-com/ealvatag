@@ -28,7 +28,7 @@ public class Mp4TagByteField extends Mp4TagTextField
      * Assume length of 1 which is correct for most but not all byte fields
      * 
      * @param id
-     * @param value
+     * @param value is a String representation of a number
      */
     public Mp4TagByteField(Mp4FieldKey id, String value)
     {
@@ -39,7 +39,7 @@ public class Mp4TagByteField extends Mp4TagTextField
      * Create new field with known length
      *
      * @param id
-     * @param value
+     * @param value is a String representation of a number
      */
     public Mp4TagByteField(Mp4FieldKey id, String value,int realDataLength)
     {
@@ -67,7 +67,7 @@ public class Mp4TagByteField extends Mp4TagTextField
     /**
      * Return raw data bytes
      *
-     * TODO this code should be done better so genralised to any length
+     * TODO this code should be done better so generalised to any length
      *
      * @return
      * @throws UnsupportedEncodingException

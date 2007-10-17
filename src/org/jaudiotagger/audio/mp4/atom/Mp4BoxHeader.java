@@ -23,6 +23,7 @@ import org.jaudiotagger.audio.generic.Utils;
 import java.io.RandomAccessFile;
 import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.nio.channels.FileChannel;
 import java.util.logging.Logger;
 
 /**
@@ -211,6 +212,8 @@ public class Mp4BoxHeader
         }
         return boxHeader;
     }
+
+
 
      /**
      * Seek for box with the specified id starting from the current location of filepointer,
