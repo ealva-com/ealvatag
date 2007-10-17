@@ -208,7 +208,15 @@ public class Mp4BoxHeader
             headerBuffer.rewind();
             raf.getChannel().read(headerBuffer);
             headerBuffer.rewind();
-            boxHeader.update(headerBuffer);
+            //TODO is this right ?
+            if(headerBuffer.remaining()>=Mp4BoxHeader.HEADER_LENGTH)
+            {
+                boxHeader.update(headerBuffer);
+            }
+            else
+            {
+                return null;
+            }
         }
         return boxHeader;
     }
@@ -230,11 +238,22 @@ public class Mp4BoxHeader
     public static Mp4BoxHeader seekWithinLevel(ByteBuffer data, String id) throws IOException
     {
         Mp4BoxHeader boxHeader = new Mp4BoxHeader();
-        boxHeader.update(data);
+        if(data.remaining()>=Mp4BoxHeader.HEADER_LENGTH)
+        {
+            boxHeader.update(data);
+        }
         while (!boxHeader.getId().equals(id))
         {
+
             data.position(data.position() + (boxHeader.getLength() - HEADER_LENGTH));
-            boxHeader.update(data);
+            if(data.remaining()>=Mp4BoxHeader.HEADER_LENGTH)
+            {
+                boxHeader.update(data);
+            }
+            else
+            {
+                return null;
+            }
         }
         return boxHeader;
     }

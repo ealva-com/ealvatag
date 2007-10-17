@@ -756,4 +756,29 @@ public class M4aWriteTagTest extends TestCase
         }
         assertNull(exceptionCaught);
     }
+
+    /**
+     * Test removing the tag from the file
+     */
+     public void testDeleteTag()
+    {
+        Exception exceptionCaught = null;
+        try
+        {
+            File testFile = AbstractTestCase.copyAudioToTmp("test.m4a",new File("testDeleteMeta.m4a"));
+            AudioFile f = AudioFileIO.read(testFile);
+            AudioFileIO.delete(f);
+
+            //Check all Tags Deleted
+            f = AudioFileIO.read(testFile);
+            System.out.println(f.getTag());
+            assertEquals(0,f.getTag().getFieldCount());
+        }
+        catch(Exception e)
+        {
+             e.printStackTrace();
+             exceptionCaught = e;
+        }
+        assertNull(exceptionCaught);
+    }
 }

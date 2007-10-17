@@ -99,6 +99,11 @@ public class Mp4TagReader
         //Level 4- Search for "ilst" within meta
         boxHeader = Mp4BoxHeader.seekWithinLevel(moovBuffer,Mp4NotMetaFieldKey.ILST.getFieldName());
 
+        //This file does not actually contain a tag
+        if(boxHeader==null)
+        {
+            return tag;    
+        }
         //Size of metadata (exclude the size of the ilst header), take a slice starting at
         //metadata children to make things safer
         int length = boxHeader.getLength() - Mp4BoxHeader.HEADER_LENGTH;
