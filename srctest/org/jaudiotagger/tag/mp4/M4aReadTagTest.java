@@ -4,6 +4,8 @@ import org.jaudiotagger.AbstractTestCase;
 import org.jaudiotagger.tag.*;
 import org.jaudiotagger.tag.mp4.Mp4FieldKey;
 import org.jaudiotagger.tag.mp4.Mp4Tag;
+import org.jaudiotagger.tag.mp4.atom.Mp4ContentTypeValue;
+import org.jaudiotagger.tag.mp4.atom.Mp4RatingValue;
 import org.jaudiotagger.tag.mp4.field.*;
 import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.AudioFileIO;
@@ -137,7 +139,8 @@ public class M4aReadTagTest  extends TestCase
             assertEquals("sortshow",mp4tag.getFirst(Mp4FieldKey.SHOW_SORT));
             assertEquals("show",mp4tag.getFirst(Mp4FieldKey.SHOW));
             assertEquals("Genre",mp4tag.getFirst(Mp4FieldKey.GENRE_CUSTOM));
-
+            assertEquals(String.valueOf(Mp4RatingValue.EXPLICIT.getId()),mp4tag.getFirst(Mp4FieldKey.RATING));
+            assertEquals(String.valueOf(Mp4ContentTypeValue.BOOKLET.getId()),mp4tag.getFirst(Mp4FieldKey.CONTENT_TYPE));
             List coverart = mp4tag.get(Mp4FieldKey.ARTWORK);
             //Should be one image
             assertEquals(1,coverart.size());
@@ -168,7 +171,7 @@ public class M4aReadTagTest  extends TestCase
 
      /**
      * Test to read all metadata from an Apple iTunes encoded m4a file , this tests a few items that could not
-      * bets tested with first test. Namely genre picked from list, and png itewm instead of jpg
+      * be tested with first test. Namely genre picked from list, and png item instead of jpg
       *
       * TODO:Although selected genre from a list still seems to be using a custom genre
      */
@@ -190,7 +193,7 @@ public class M4aReadTagTest  extends TestCase
             assertEquals(44100,f.getAudioHeader().getSampleRateAsNumber());
 
             //Ease of use methods for common fields
-            assertEquals("Artist\u01fft",tag.getFirstArtist());
+             assertEquals("Artist\u01fft",tag.getFirstArtist());
             assertEquals("Album",tag.getFirstAlbum());
             assertEquals("title",tag.getFirstTitle());
             assertEquals("comments",tag.getFirstComment());
