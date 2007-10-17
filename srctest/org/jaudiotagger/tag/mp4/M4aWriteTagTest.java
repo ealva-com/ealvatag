@@ -19,7 +19,7 @@ import org.jaudiotagger.audio.AudioFileIO;
  */
 public class M4aWriteTagTest extends TestCase
 {
-    private static int TEST_FILE1_SIZE = 3883503;
+    private static int TEST_FILE1_SIZE = 3883555;
 
     /**
      * Test to write tagt data, new tagdata identical size to existing data
@@ -477,7 +477,7 @@ public class M4aWriteTagTest extends TestCase
             tag = (Mp4Tag)f.getTag();
 
              //Total FileSize should not be be any larger because we used the free atoms
-            assertEquals(3883503,testFile.length());
+            assertEquals(3883555,testFile.length());
 
             //AudioInfo
             //Time in seconds
@@ -632,7 +632,7 @@ public class M4aWriteTagTest extends TestCase
             tag = (Mp4Tag)f.getTag();
 
              //Total FileSize should now be larger
-            assertEquals(3900949,testFile.length());
+            assertEquals(3901001,testFile.length());
 
             //AudioInfo
             //Time in seconds

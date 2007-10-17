@@ -226,7 +226,7 @@ public class Mp4BoxHeader
      /**
      * Seek for box with the specified id starting from the current location of filepointer,
      * <p/>
-     * Note it wont find the box if it is contained with a level below the current level, nor if we are
+     * Note it won't find the box if it is contained with a level below the current level, nor if we are
      * at a parent atom that also contains data and we havent yet processed the data. It will work
      * if we are at the start of a child box even if it not the required box as long as the box we are
      * looking for is the same level (or the level above in some cases).
