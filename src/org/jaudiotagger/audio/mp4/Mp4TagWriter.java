@@ -180,14 +180,36 @@ public class Mp4TagWriter
             fileWriteChannel.write(rawData);
             fileReadChannel.position(startIstWithinFile + oldIlstSize);
 
-            //Create an amended freeBaos atom and write it.
-            int newFreeSize = oldFreeSize + (oldIlstSize - newIlstSize);
-            Mp4FreeBox newFreeBox = new Mp4FreeBox(newFreeSize - Mp4BoxHeader.HEADER_LENGTH);
-            fileWriteChannel.write(newFreeBox.getHeader().getHeaderData());
-            fileWriteChannel.write(newFreeBox.getData());
+            //Create an amended freeBaos atom and write it if it previously existed
+            if(oldFreeSize>0)
+            {
+                int newFreeSize = oldFreeSize + (oldIlstSize - newIlstSize);
+                Mp4FreeBox newFreeBox = new Mp4FreeBox(newFreeSize - Mp4BoxHeader.HEADER_LENGTH);
+                fileWriteChannel.write(newFreeBox.getHeader().getHeaderData());
+                fileWriteChannel.write(newFreeBox.getData());
 
-            //Skip over the read channel old free atom
-            fileReadChannel.position(fileReadChannel.position() + oldFreeSize);
+                //Skip over the read channel old free atom
+                fileReadChannel.position(fileReadChannel.position() + oldFreeSize);
+            }
+            //TODO:We need to create a new one, so dont have to adjust all the headers but only works if the size
+            //of tags has decreased by more 8 characters so there is enough room for the free boxes header we take
+            //into account size of new header in calculating size of box
+            else
+            {
+                int newFreeSize = (oldIlstSize - newIlstSize ) - Mp4BoxHeader.HEADER_LENGTH ;
+                if(newFreeSize > Mp4BoxHeader.HEADER_LENGTH)
+                {
+                    Mp4FreeBox newFreeBox = new Mp4FreeBox(newFreeSize);
+                    fileWriteChannel.write(newFreeBox.getHeader().getHeaderData());
+                    fileWriteChannel.write(newFreeBox.getData());
+                }
+                else
+                {
+                    //TODO
+                }
+
+            }
+
 
             //Now write the rest of the file which wont have changed
             fileWriteChannel.transferFrom(fileReadChannel,
