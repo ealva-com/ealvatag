@@ -936,7 +936,7 @@ public class M4aWriteTagTest extends TestCase
         Exception exceptionCaught = null;
         try
         {
-            File testFile = AbstractTestCase.copyAudioToTmp("test3.m4a",new File("testWriteFileSmallerSizeNoMetaFree.m4a"));
+            File testFile = AbstractTestCase.copyAudioToTmp("test3.m4a",new File("testWriteFileSmallerSizeNoMetaFreeMoreThanEight.m4a"));
             AudioFile f = AudioFileIO.read(testFile);
             Tag tag = f.getTag();
 
@@ -1081,11 +1081,11 @@ public class M4aWriteTagTest extends TestCase
            Exception exceptionCaught = null;
            try
            {
-               File testFile = AbstractTestCase.copyAudioToTmp("test3.m4a",new File("testWriteFileSmallerSizeNoMetaFree.m4a"));
+               File testFile = AbstractTestCase.copyAudioToTmp("test3.m4a",new File("testWriteFileSmallerSizeNoMetaFreeLessThanEight.m4a"));
                AudioFile f = AudioFileIO.read(testFile);
                Tag tag = f.getTag();
 
-               //Change album to different value (but same no of characters, this is the easiest mod to make
+               //Change values to slightly smaller than values (but less than 8 chras diff in total)
                tag.setArtist("AR");
                tag.setAlbum("AL");
 
