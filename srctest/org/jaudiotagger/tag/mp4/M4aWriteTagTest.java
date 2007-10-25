@@ -459,7 +459,7 @@ public class M4aWriteTagTest extends TestCase
         Exception exceptionCaught = null;
         try
         {
-            File testFile = AbstractTestCase.copyAudioToTmp("test.m4a",new File("testWriteFileAlotLargerSize.m4a"));
+            File testFile = AbstractTestCase.copyAudioToTmp("test.m4a",new File("testWriteFileAlot.m4a"));
 
             //Starting filesize
             assertEquals( TEST_FILE1_SIZE,testFile.length());
@@ -1073,15 +1073,15 @@ public class M4aWriteTagTest extends TestCase
     }
 
     /**
-        * * Test to write tag data, new tagdata is smaller size than existing data
-     * TODO:Code broken, which is why test fails
-        */
+      *Test to write tag data, new tagdata is smaller size than existing data, and this is no metadata atom to alow
+      * adjustments
+      */
        public void testWriteFileSmallerSizeLessThanEightBytesNoMetaFreeAtom()
        {
            Exception exceptionCaught = null;
            try
            {
-               File testFile = AbstractTestCase.copyAudioToTmp("test3.m4a",new File("testWriteFileSmallerSizeNoMetaFreeLessThanEight.m4a"));
+               File testFile = AbstractTestCase.copyAudioToTmp("test3.m4a",new File("testWriteFileLessThanEight2.m4a"));
                AudioFile f = AudioFileIO.read(testFile);
                Tag tag = f.getTag();
 

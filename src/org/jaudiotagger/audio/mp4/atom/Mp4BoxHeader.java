@@ -149,6 +149,8 @@ public class Mp4BoxHeader
         dataBuffer.put(2,headerSize[2]);
         dataBuffer.put(3,headerSize[3]);
 
+        this.length =length;
+
     }
     /**
      * @return the 8 byte header buffer
