@@ -557,7 +557,7 @@ public class Mp4TagWriter
     /**
      * Delete the tag
      * <p/>
-     * <p>Thisd is achieved by deleting the ilst atom and the subsequent free atom.
+     * <p>This is achieved by writing an empty ilst atom
      *
      * @param raf
      * @param rafTemp
@@ -567,84 +567,14 @@ public class Mp4TagWriter
     {
         Mp4Tag tag = new Mp4Tag();
 
-        //Read the various boxes that we may have to adjust
-        Mp4BoxHeader moovHeader = Mp4BoxHeader.seekWithinLevel(raf, Mp4NotMetaFieldKey.MOOV.getFieldName());
-        ByteBuffer moovBuffer = ByteBuffer.allocate(moovHeader.getLength() - Mp4BoxHeader.HEADER_LENGTH);
-        FileChannel fileReadChannel = raf.getChannel();
-        long positionWithinFileAfterFindingMoovHeader = fileReadChannel.position();
-        fileReadChannel.read(moovBuffer);
-        moovBuffer.rewind();
-
-        //Level 2-Searching for "udta" within "moov"
-        Mp4BoxHeader.seekWithinLevel(moovBuffer, Mp4NotMetaFieldKey.UDTA.getFieldName());
-
-        //Level 3-Searching for "meta" within udta
-        Mp4BoxHeader boxHeader;
         try
         {
-            boxHeader = Mp4BoxHeader.seekWithinLevel(moovBuffer, Mp4NotMetaFieldKey.META.getFieldName());
-            Mp4MetaBox meta = new Mp4MetaBox(boxHeader, moovBuffer);
-            meta.processData();
+            write(tag,raf,rafTemp);
         }
-        catch (CannotReadException cre)
+        catch(CannotWriteException cwe)
         {
-            throw new IOException("problem finding meta field");
+            throw new IOException(cwe.getMessage());
         }
 
-        //Level 4- Search for "ilst" within meta
-        boxHeader = Mp4BoxHeader.seekWithinLevel(moovBuffer, Mp4NotMetaFieldKey.ILST.getFieldName());
-        int ilstSize = boxHeader.getLength();
-
-        //Calculate absolute position in file of start of ilst atom header
-        int relativeIlstposition = moovBuffer.position() - Mp4BoxHeader.HEADER_LENGTH;
-        long startIstWithinFile = positionWithinFileAfterFindingMoovHeader + relativeIlstposition;
-
-        //TODO may not be a free atom?
-        //Level 4 - Search for "free" within meta
-        boxHeader = Mp4BoxHeader.seekWithinLevel(moovBuffer, Mp4NotMetaFieldKey.FREE.getFieldName());
-        int freeSize = boxHeader.getLength();
-
-        //Need to minimize the modify the size of meta,udta and moov
-        int totalMetaSize =  ilstSize  + freeSize;
-
-        //Write stuff before Moov (ftyp)
-        FileChannel fileWriteChannel = rafTemp.getChannel();
-        fileReadChannel.position(0);
-        fileWriteChannel.transferFrom(fileReadChannel,
-                0,
-                positionWithinFileAfterFindingMoovHeader - Mp4BoxHeader.HEADER_LENGTH);
-        fileWriteChannel.position(positionWithinFileAfterFindingMoovHeader - Mp4BoxHeader.HEADER_LENGTH);
-
-        //Edit and rewrite the Moov header
-        moovHeader.setLength(moovHeader.getLength() - totalMetaSize);
-        fileWriteChannel.write(moovHeader.getHeaderData());
-
-        //Edit the fields in moovBuffer (note moovbuffer doesnt include header), then write moovbuffer
-        //upto ilst header
-        //Level 2-Searching for "udta" within "moov"
-        moovBuffer.rewind();
-        Mp4BoxHeader udtaHdr = Mp4BoxHeader.seekWithinLevel(moovBuffer, Mp4NotMetaFieldKey.UDTA.getFieldName());
-        udtaHdr.setLength(udtaHdr.getLength() - totalMetaSize);
-        moovBuffer.position(moovBuffer.position() - Mp4BoxHeader.HEADER_LENGTH);
-        moovBuffer.put(udtaHdr.getHeaderData());
-
-        //Level 3-Searching for "meta" within udta
-        Mp4BoxHeader metaHdr = Mp4BoxHeader.seekWithinLevel(moovBuffer, Mp4NotMetaFieldKey.META.getFieldName());
-        metaHdr.setLength(metaHdr.getLength() - totalMetaSize);
-        moovBuffer.position(moovBuffer.position() - Mp4BoxHeader.HEADER_LENGTH);
-        moovBuffer.put(metaHdr.getHeaderData());
-
-        //Now write from this edited buffer up until ilst atom
-        moovBuffer.rewind();
-        moovBuffer.limit(relativeIlstposition);
-        fileWriteChannel.write(moovBuffer);
-
-        //Skip over the read channel old free atom
-        fileReadChannel.position(startIstWithinFile + ilstSize);
-        fileReadChannel.position(fileReadChannel.position() + freeSize);
-
-        //TODO STCO
-        fileWriteChannel.transferFrom(fileReadChannel, fileWriteChannel.position(),
-        fileReadChannel.size() - fileReadChannel.position());
     }
 }

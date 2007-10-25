@@ -784,6 +784,31 @@ public class M4aWriteTagTest extends TestCase
         assertNull(exceptionCaught);
     }
 
+       /**
+         * Test removing the tag from the file which does not have a free atom
+         */
+         public void testDeleteTag2()
+        {
+            Exception exceptionCaught = null;
+            try
+            {
+                File testFile = AbstractTestCase.copyAudioToTmp("test3.m4a",new File("testDeleteMeta2.m4a"));
+                AudioFile f = AudioFileIO.read(testFile);
+                AudioFileIO.delete(f);
+
+                //Check all Tags Deleted
+                f = AudioFileIO.read(testFile);
+                System.out.println(f.getTag());
+                assertEquals(0,f.getTag().getFieldCount());
+            }
+            catch(Exception e)
+            {
+                 e.printStackTrace();
+                 exceptionCaught = e;
+            }
+            assertNull(exceptionCaught);
+        }
+
     /**
          * Test to write tagt data, new tagdata identical size to existing data, but no meta free atom
          */
