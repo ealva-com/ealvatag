@@ -24,6 +24,9 @@ import org.jaudiotagger.tag.TagField;
 import org.jaudiotagger.tag.TagFieldKey;
 import static org.jaudiotagger.tag.mp4.Mp4FieldKey.*;
 import org.jaudiotagger.tag.mp4.field.*;
+import static org.jaudiotagger.tag.mp4.field.Mp4FieldType.BYTE;
+import static org.jaudiotagger.tag.mp4.field.Mp4FieldType.TEXT;
+import static org.jaudiotagger.tag.mp4.field.Mp4FieldType.NUMERIC;
 
 import java.util.EnumMap;
 import java.util.List;
@@ -297,11 +300,17 @@ public class Mp4Tag extends AbstractTag
         switch (mp4FieldKey)
         {
             case BPM:
-                COMPILATION:
-                RATING:
+            case COMPILATION:
+            case RATING:
+            case CONTENT_TYPE:
+            case TV_SEASON:
+            case TV_EPISODE:
+
                 return new Mp4TagByteField(mp4FieldKey, value, mp4FieldKey.getFieldLength());
 
             case GENRE:
+            case PODCAST_URL:
+            case EPISODE_GLOBAL_ID:
                 //TODO this doesnt work
                 return new Mp4TagTextNumberField(mp4FieldKey.getFieldName(),value);
 
@@ -328,6 +337,8 @@ public class Mp4Tag extends AbstractTag
 
             default:
                 return new Mp4TagTextField(mp4FieldKey.getFieldName(), value);
+
+
         }
     }
 }
