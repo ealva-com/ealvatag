@@ -68,13 +68,7 @@ public class Mp4Mp4aBox extends AbstractMp4Box
                     CHANNELS_POS,
                     (CHANNELS_POS + CHANNELS_LENGTH  - 1));
 
-        System.out.println(Utils.getNumberBigEndian(dataBuffer,
-                    AUDIO_SAMPLE_RATE_POS,
-                    (AUDIO_SAMPLE_RATE_POS + AUDIO_SAMPLE_RATE_LENGTH   - 1)));
-
-         System.out.println(Utils.getNumberBigEndian(dataBuffer,
-                    AUDIO_SAMPLE_SIZE_POS,
-                    (AUDIO_SAMPLE_SIZE_POS + AUDIO_SAMPLE_SIZE_LENGTH   - 1)));
+       
     }
 
     public int getNumberOfChannels()
