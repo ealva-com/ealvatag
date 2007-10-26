@@ -179,13 +179,28 @@ public class Mp4TagWriter
             throw new CannotWriteException("Problem finding meta field");
         }
 
-        //Level 4- Search for "ilst" within meta within moovBuffer
+        //Level 4- Search for "ilst" within meta within moovBuffer, may not exist (for example AP --metaenema)
+        int startPositionInMoovBufferForSearchingIlst = moovBuffer.position();
         boxHeader = Mp4BoxHeader.seekWithinLevel(moovBuffer, Mp4NotMetaFieldKey.ILST.getFieldName());
-        int oldIlstSize = boxHeader.getLength();
+        int oldIlstSize = 0;
+        int relativeIlstposition ;
+        int relativeIlstEndPosition ;
+        if(boxHeader!=null)
+        {
+            oldIlstSize = boxHeader.getLength();
+            relativeIlstposition = moovBuffer.position() - Mp4BoxHeader.HEADER_LENGTH;
+            moovBuffer.position(moovBuffer.position() + boxHeader.getDataLength());
+            relativeIlstEndPosition = moovBuffer.position();
+        }
+        else
+        {
+            //Go back to where started looking for ilst
+            moovBuffer.position(startPositionInMoovBufferForSearchingIlst);
+            relativeIlstposition = startPositionInMoovBufferForSearchingIlst;
+            relativeIlstEndPosition = startPositionInMoovBufferForSearchingIlst;
+        }
+
         int newIlstSize = rawIlstData.limit();
-        int relativeIlstposition = moovBuffer.position() - Mp4BoxHeader.HEADER_LENGTH;
-        moovBuffer.position(moovBuffer.position() + boxHeader.getDataLength());
-        int relativeIlstEndPosition = moovBuffer.position();
 
         //Level 4 - Search for "free" within moovBuffer, (it may not exist)
         boxHeader = Mp4BoxHeader.seekWithinLevel(moovBuffer, Mp4NotMetaFieldKey.FREE.getFieldName());
