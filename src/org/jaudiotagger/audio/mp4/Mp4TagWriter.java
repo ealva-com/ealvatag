@@ -109,7 +109,7 @@ public class Mp4TagWriter
                 fileReadChannel.size() - fileReadChannel.position());
     }
 
-    /** When the size of the metadat has changed and it cant be componesated for by free atom
+    /** When the size of the metadat has changed and it cant be compensated for by free atom
      *  we have to adjust the size of the size field upto the moovheader level
      *
      * @param moovBuffer
@@ -148,6 +148,7 @@ public class Mp4TagWriter
      */
     public void write(Tag tag, RandomAccessFile raf, RandomAccessFile rafTemp) throws CannotWriteException, IOException
     {
+        logger.info("Started writing tag data");
         //Go through every field constructing the data that will appear starting from ilst box
         ByteBuffer rawIlstData = tc.convert(tag);
         rawIlstData.rewind();
@@ -237,18 +238,20 @@ public class Mp4TagWriter
              topLevelFreePosition = fileReadChannel.position() - Mp4BoxHeader.HEADER_LENGTH;
              fileReadChannel.position(topLevelFreePosition+topLevelFreeHeader.getLength());
         }
-
-        //Search for Level-1 Mdat atom
+         //Search for Level-1 Mdat atom
         Mp4BoxHeader mdatHeader = Mp4BoxHeader.seekWithinLevel(raf, Mp4NotMetaFieldKey.MDAT.getFieldName());
         if(mdatHeader==null)
         {
              throw new CannotWriteException("Unable to safetly find audio data");
         }
 
+        logger.info("Read header successfully ready for writing");
+
         //The easiest option since no difference in the size of the metadata so all we have to do is
         //create a new file identical to first file but with replaced metadata
         if (oldIlstSize == newIlstSize)
         {
+            logger.info("Writing:Option 1:Same Size");
             writeMetadataSameSize(rawIlstData,
                                   oldIlstSize,
                                   startIstWithinFile,
@@ -262,6 +265,7 @@ public class Mp4TagWriter
             //Create an amended freeBaos atom and write it if it previously existed
             if(oldFreeSize>0)
             {
+                logger.info("Writing:Option 2:Smaller Size have free atom");
                 fileReadChannel.position(0);
                 fileWriteChannel.transferFrom(fileReadChannel, 0, startIstWithinFile);
                 fileWriteChannel.position(startIstWithinFile);
@@ -290,6 +294,7 @@ public class Mp4TagWriter
                 //into account size of new header in calculating size of box
                 if(newFreeSize > Mp4BoxHeader.HEADER_LENGTH)
                 {
+                    logger.info("Writing:Option 3:Smaller Size can create free atom");
                     fileReadChannel.position(0);
                     fileWriteChannel.transferFrom(fileReadChannel, 0, startIstWithinFile);
                     fileWriteChannel.position(startIstWithinFile);
@@ -343,7 +348,7 @@ public class Mp4TagWriter
                     //Adjust size of free box, make it larger to take up the space lost by the metadata
                     if (topLevelFreeHeader!=null)
                     {
-
+                        logger.info("Writing:Option 4:Smaller Size cannot create free atom but have top level free atom");
                         Mp4FreeBox freeBox = new Mp4FreeBox((topLevelFreeHeader.getLength()
                                             - Mp4BoxHeader.HEADER_LENGTH) + sizeReducedBy);
                         fileWriteChannel.write(freeBox.getHeader().getHeaderData());
@@ -361,6 +366,7 @@ public class Mp4TagWriter
                         //Ok, so create a free box to take up slack
                         if(sizeReducedBy > Mp4BoxHeader.HEADER_LENGTH )
                         {
+                            logger.info("Writing:Option 5:Smaller Size cannot create free atom but can create top level free atom");
                             Mp4FreeBox freeBox = new Mp4FreeBox(sizeReducedBy);
                             fileWriteChannel.write(freeBox.getHeader().getHeaderData());
                             fileWriteChannel.write(freeBox.getData());
@@ -375,6 +381,7 @@ public class Mp4TagWriter
                         //TODO:STCO needs adjusting
                         else
                         {
+                            logger.info("Writing:Option 6:Smaller Size cannot create free atoms");
                             //Now write the rest of the file which won't have changed
                             fileWriteChannel.transferFrom(fileReadChannel,
                             fileWriteChannel.position(),
@@ -395,7 +402,8 @@ public class Mp4TagWriter
             if (additionalSpaceRequiredForMetadata <= (oldFreeSize - Mp4BoxHeader.HEADER_LENGTH))
             {
                 int newFreeSize = oldFreeSize - (additionalSpaceRequiredForMetadata);
-
+                logger.info("Writing:Option 7;Larger Size can use meta free atom need extra:"+newFreeSize + "bytes");
+                            
                 fileReadChannel.position(0);
                 fileWriteChannel.transferFrom(fileReadChannel, 0, startIstWithinFile);
                 fileWriteChannel.position(startIstWithinFile);
@@ -464,6 +472,7 @@ public class Mp4TagWriter
                 //ok
                 if (topLevelFreeSize - Mp4BoxHeader.HEADER_LENGTH >= additionalMetaSize)
                 {
+                    logger.info("Writing:Option 8;Larger Size can use top free atom");
                     Mp4FreeBox freeBox = new Mp4FreeBox((topLevelFreeSize - Mp4BoxHeader.HEADER_LENGTH) - additionalMetaSize);
                     fileWriteChannel.write(freeBox.getHeader().getHeaderData());
                     fileWriteChannel.write(freeBox.getData());
@@ -479,6 +488,7 @@ public class Mp4TagWriter
                 //TODO STCO
                 else
                 {
+                    logger.info("Writing:Option 9;Larger Size cannot use top free atom");
                     fileWriteChannel.transferFrom(fileReadChannel, fileWriteChannel.position(),
                             fileReadChannel.size() - fileReadChannel.position());
                 }
@@ -488,6 +498,7 @@ public class Mp4TagWriter
         fileReadChannel.close();
         raf.close();
 
+        logger.info("Checking file has been written correctly");                           
         //Renamechannel coz confusing otherwise
         FileChannel newFileReadChannel = fileWriteChannel;
         try
@@ -530,6 +541,7 @@ public class Mp4TagWriter
             if(topLevelFreeHeader==null)
             {
                 topLevelFreeSize = 0;
+                newFileReadChannel.position(topLevelFreePosition);
             }
             else
             {
@@ -540,7 +552,7 @@ public class Mp4TagWriter
 
             //Search for Level-1 MDat Atom
             Mp4BoxHeader newMdatHeader = Mp4BoxHeader.seekWithinLevel(rafTemp, Mp4NotMetaFieldKey.MDAT.getFieldName());
-            if(mdatHeader==null)
+            if(newMdatHeader==null)
             {
                  throw new CannotWriteException("Unable to safetly find audio data in file");
             }
@@ -548,12 +560,12 @@ public class Mp4TagWriter
             {
                 throw new CannotWriteException("Unable to write same length of audio data in file");
             }
-
         }
         catch(Exception e)
-        {
+        {               
             if(e instanceof CannotWriteException)
             {
+
                 throw (CannotWriteException)e;
             }
             else
@@ -567,7 +579,6 @@ public class Mp4TagWriter
             rafTemp.close();
             newFileReadChannel.close();
         }
-
     }
 
 

@@ -112,7 +112,7 @@ public class Mp4BoxHeader
         //Calculate box id
         this.id = Utils.getString(b, IDENTIFIER_POS, IDENTIFIER_LENGTH);
                 
-        logger.info("Read header:"+id+":length:"+length);
+        logger.finest("Read header:"+id+":length:"+length+":at:");
 
     }
 
@@ -199,6 +199,8 @@ public class Mp4BoxHeader
      */
     public static Mp4BoxHeader seekWithinLevel(RandomAccessFile raf, String id) throws IOException
     {
+        logger.finer("Started searching for:"+id+" in file at:"+raf.getChannel().position());
+
         Mp4BoxHeader boxHeader = new Mp4BoxHeader();
         ByteBuffer   headerBuffer = ByteBuffer.allocate(HEADER_LENGTH);
         raf.getChannel().read(headerBuffer);
@@ -206,17 +208,25 @@ public class Mp4BoxHeader
         boxHeader.update(headerBuffer);
         while (!boxHeader.getId().equals(id))
         {
+            logger.finer("Still searching for:"+id+" in file at:"+raf.getChannel().position());
+
             //Something gone wrong probably not at the start of an atom so return null;
             if(boxHeader.getLength() < Mp4BoxHeader.HEADER_LENGTH)
             {
                return null;
             }
-            raf.skipBytes(boxHeader.getLength() - HEADER_LENGTH);
+            int noOfBytesSkipped = raf.skipBytes(boxHeader.getDataLength());
+            logger.finer("Skipped:"+noOfBytesSkipped);
+            if(noOfBytesSkipped<boxHeader.getDataLength())
+            {
+                return null;
+            }
             headerBuffer.rewind();
-            raf.getChannel().read(headerBuffer);
+            int bytesRead = raf.getChannel().read(headerBuffer);
+            logger.finer("Header Bytes Read:"+bytesRead);    
             headerBuffer.rewind();
-            //TODO is this right ?
-            if(headerBuffer.remaining()>=Mp4BoxHeader.HEADER_LENGTH)
+            //TODO is this right?
+            if(bytesRead==Mp4BoxHeader.HEADER_LENGTH)
             {
                 boxHeader.update(headerBuffer);
             }
@@ -244,6 +254,8 @@ public class Mp4BoxHeader
      */
     public static Mp4BoxHeader seekWithinLevel(ByteBuffer data, String id) throws IOException
     {
+        logger.finer("Started searching for:"+id+" in bytebuffer at"+data.position());
+
         Mp4BoxHeader boxHeader = new Mp4BoxHeader();
         if(data.remaining()>=Mp4BoxHeader.HEADER_LENGTH)
         {
@@ -251,7 +263,8 @@ public class Mp4BoxHeader
         }
         while (!boxHeader.getId().equals(id))
         {
-            
+            logger.finer("Still searching for:"+id+" in bytebuffer at"+data.position());
+
             //Something gone wrong probably not at the start of an atom so return null;
             if(boxHeader.getLength() < Mp4BoxHeader.HEADER_LENGTH)
             {

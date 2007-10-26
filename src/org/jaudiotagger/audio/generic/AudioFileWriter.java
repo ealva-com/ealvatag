@@ -21,6 +21,7 @@ package org.jaudiotagger.audio.generic;
 import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.util.logging.Logger;
 
 import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.tag.Tag;
@@ -40,6 +41,9 @@ import org.jaudiotagger.audio.exceptions.CannotReadException;
  */
 public abstract class AudioFileWriter
 {
+
+     // Logger Object
+    public static Logger logger = Logger.getLogger("org.jaudiotagger.audio.generic");
 
     /**
      * If not <code>null</code>, this listener is used to notify the listener
@@ -187,6 +191,8 @@ public abstract class AudioFileWriter
      */
     public synchronized void write(AudioFile af) throws CannotWriteException
     {
+         logger.info("Started writing tag data for file:"+af.getFile().getName());
+
         // Preliminary checks
         try
         {
@@ -243,7 +249,6 @@ public abstract class AudioFileWriter
         }
         catch (Exception e)
         {
-            e.printStackTrace();
             cannotWrite = true;
             throw new CannotWriteException("\"" + af.getFile().getAbsolutePath() + "\" :" + e);
         }
@@ -263,12 +268,13 @@ public abstract class AudioFileWriter
 
                 if (!cannotWrite && tempF.length() > 0)
                 {
+
                     af.getFile().delete();
                     tempF.renameTo(af.getFile());
                     result = tempF;
                 }
                 else
-                {
+                {                       
                     tempF.delete();
                 }
 
