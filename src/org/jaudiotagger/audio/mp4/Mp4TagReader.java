@@ -84,15 +84,27 @@ public class Mp4TagReader
         //Get to the facts everything we are interested in is within the moov box, so just load data from file
         //once so no more file I/O needed
         Mp4BoxHeader moovHeader = Mp4BoxHeader.seekWithinLevel(raf,Mp4NotMetaFieldKey.MOOV.getFieldName());
+        if( moovHeader==null)
+        {
+            throw new CannotReadException("This file does not appear to be an audio file");
+        }
         ByteBuffer moovBuffer = ByteBuffer.allocate(moovHeader.getLength() - Mp4BoxHeader.HEADER_LENGTH);
         raf.getChannel().read(moovBuffer);
         moovBuffer.rewind();
         
         //Level 2-Searching for "udta" within "moov"
-        Mp4BoxHeader.seekWithinLevel(moovBuffer,Mp4NotMetaFieldKey.UDTA.getFieldName());
-
+        Mp4BoxHeader boxHeader = Mp4BoxHeader.seekWithinLevel(moovBuffer,Mp4NotMetaFieldKey.UDTA.getFieldName());
+        if(boxHeader==null)
+        {
+            throw new CannotReadException("This file does not appear to be an audio file");
+        }
+        
         //Level 3-Searching for "meta" within udta
-        Mp4BoxHeader boxHeader  = Mp4BoxHeader.seekWithinLevel(moovBuffer,Mp4NotMetaFieldKey.META.getFieldName());
+        boxHeader  = Mp4BoxHeader.seekWithinLevel(moovBuffer,Mp4NotMetaFieldKey.META.getFieldName());
+        if(boxHeader==null)
+        {
+            throw new CannotReadException("This file does not appear to be an audio file");
+        }
         Mp4MetaBox meta = new Mp4MetaBox(boxHeader,moovBuffer);
         meta.processData();
 

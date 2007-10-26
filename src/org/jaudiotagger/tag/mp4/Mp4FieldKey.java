@@ -48,7 +48,7 @@ public enum Mp4FieldKey
     SHOW_SORT("sosn",TEXT),
     SHOW("tvsh",TEXT),      //tv show but also used just as show
     ARTWORK("covr", COVERART_JPEG),
-    PURCHASE_DATE("purd",TEXT),
+    PURCHASE_DATE("purd",TEXT),    
     MUSICBRAINZ_ARTISTID("com.apple.iTunes","MusicBrainz Artist Id",TEXT),
     MUSICBRAINZ_ALBUMID("com.apple.iTunes","MusicBrainz Album Id",TEXT),
     MUSICBRAINZ_ALBUMARTISTID("com.apple.iTunes","MusicBrainz Album Artist Id",TEXT),

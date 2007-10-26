@@ -53,6 +53,7 @@ public class Mp4Tag extends AbstractTag
         tagFieldToMp4Field.put(TagFieldKey.GROUPING, Mp4FieldKey.GROUPING);
         tagFieldToMp4Field.put(TagFieldKey.DISC_NO, Mp4FieldKey.DISCNUMBER);
         tagFieldToMp4Field.put(TagFieldKey.BPM, Mp4FieldKey.BPM);
+        tagFieldToMp4Field.put(TagFieldKey.ENCODER, Mp4FieldKey.ENCODER);                
         tagFieldToMp4Field.put(TagFieldKey.MUSICBRAINZ_ARTISTID, Mp4FieldKey.MUSICBRAINZ_ARTISTID);
         tagFieldToMp4Field.put(TagFieldKey.MUSICBRAINZ_RELEASEID, Mp4FieldKey.MUSICBRAINZ_ALBUMID);
         tagFieldToMp4Field.put(TagFieldKey.MUSICBRAINZ_RELEASEARTISTID, Mp4FieldKey.MUSICBRAINZ_ALBUMARTISTID);

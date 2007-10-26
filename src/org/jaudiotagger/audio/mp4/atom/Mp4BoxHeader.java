@@ -111,7 +111,7 @@ public class Mp4BoxHeader
 
         //Calculate box id
         this.id = Utils.getString(b, IDENTIFIER_POS, IDENTIFIER_LENGTH);
-
+                
         logger.info("Read header:"+id+":length:"+length);
 
     }
@@ -206,6 +206,11 @@ public class Mp4BoxHeader
         boxHeader.update(headerBuffer);
         while (!boxHeader.getId().equals(id))
         {
+            //Something gone wrong probably not at the start of an atom so return null;
+            if(boxHeader.getLength() < Mp4BoxHeader.HEADER_LENGTH)
+            {
+               return null;
+            }
             raf.skipBytes(boxHeader.getLength() - HEADER_LENGTH);
             headerBuffer.rewind();
             raf.getChannel().read(headerBuffer);
@@ -246,7 +251,12 @@ public class Mp4BoxHeader
         }
         while (!boxHeader.getId().equals(id))
         {
-
+            
+            //Something gone wrong probably not at the start of an atom so return null;
+            if(boxHeader.getLength() < Mp4BoxHeader.HEADER_LENGTH)
+            {
+                return null;
+            }
             data.position(data.position() + (boxHeader.getLength() - HEADER_LENGTH));
             if(data.remaining()>=Mp4BoxHeader.HEADER_LENGTH)
             {

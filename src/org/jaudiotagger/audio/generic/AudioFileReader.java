@@ -66,7 +66,7 @@ public abstract class AudioFileReader
     /*
       * Reads the given file, and return an AudioFile object containing the Tag
       * and the encoding infos present in the file. If the file has no tag, an
-      * empty one is returned. If the encodinginfo is not valid , an error is thrown.
+      * empty one is returned. If the encodinginfo is not valid , an exception is thrown.
       *
       * @param f The file to read
       * @exception CannotReadException If anything went bad during the read of this file
@@ -90,25 +90,13 @@ public abstract class AudioFileReader
             raf.seek(0);
 
             GenericAudioHeader info = getEncodingInfo(raf);
-
-            Tag tag;
-            try
-            {
-                raf.seek(0);
-                tag = getTag(raf);
-            }
-            catch (CannotReadException e)
-            {
-                System.err.println(e.getMessage());
-                tag = new GenericTag();
-            }
-
+            raf.seek(0);
+            Tag tag = getTag(raf);
             return new AudioFile(f, info, tag);
 
         }
         catch (Exception e)
         {
-            e.printStackTrace();
             throw new CannotReadException("\"" + f + "\" :" + e, e);
         }
         finally

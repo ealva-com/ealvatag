@@ -17,8 +17,13 @@ public enum Mp4NotMetaFieldKey
     MDHD("mdhd"),
     TKHD("tkhd"),
     FREE("free"),
-    TRAK("trak");
-
+    TRAK("trak"),
+    SMHD("smhd"),
+    STBL("stbl"),
+    STSD("stsd"),
+    MP4A("mp4a"),
+    ESDS("esds"),
+    MINF("minf");
     private String fieldName;
 
 

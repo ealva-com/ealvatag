@@ -214,11 +214,13 @@ public class Mp4TagWriter
         if(topLevelFreeHeader==null)
         {
             topLevelFreeSize = 0;
+            fileReadChannel.position(topLevelFreePosition);
         }
         else
         {
              topLevelFreeSize = topLevelFreeHeader.getLength();
              topLevelFreePosition = fileReadChannel.position() - Mp4BoxHeader.HEADER_LENGTH;
+             fileReadChannel.position(topLevelFreePosition+topLevelFreeHeader.getLength());
         }
 
         //Search for Level-1 Mdat atom

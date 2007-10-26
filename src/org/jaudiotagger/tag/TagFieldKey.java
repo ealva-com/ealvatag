@@ -39,5 +39,6 @@ public enum TagFieldKey
     ALBUM_ARTIST_SORT,
     ALBUM_SORT,
     TITLE_SORT,
-    COMPOSER_SORT
+    COMPOSER_SORT,
+    ENCODER
 }
