@@ -63,7 +63,7 @@ public class Mp4TagReverseDnsField extends Mp4TagField implements TagTextField
      */
     public Mp4TagReverseDnsField(Mp4FieldKey id, String content)
     {
-        super(id.getFieldName());
+        super(id.getFieldName());      
         this.issuer     = id.getIssuer();
         this.descriptor = id.getIdentifier();
         this.content    = content;

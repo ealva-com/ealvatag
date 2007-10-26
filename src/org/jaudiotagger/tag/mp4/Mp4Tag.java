@@ -312,18 +312,18 @@ public class Mp4Tag extends AbstractTag
                 return new Mp4TrackField(value);
 
             case MUSICBRAINZ_TRACKID:
-                MUSICBRAINZ_ARTISTID:
-                MUSICBRAINZ_ALBUMID:
-                MUSICBRAINZ_ALBUMARTISTID:
-                MUSICBRAINZ_DISCID:
-                MUSICIP_PUID:
-                ASIN:
-                MUSICBRAINZ_ALBUM_STATUS:
-                MUSICBRAINZ_ALBUM_TYPE:
-                RELEASECOUNTRY:
-                PART_OF_GAPLESS_ALBUM:
-                ITUNES_SMPB:
-                ITUNES_NORM:
+            case MUSICBRAINZ_ARTISTID:
+            case MUSICBRAINZ_ALBUMID:
+            case MUSICBRAINZ_ALBUMARTISTID:
+            case MUSICBRAINZ_DISCID:
+            case MUSICIP_PUID:
+            case ASIN:
+            case MUSICBRAINZ_ALBUM_STATUS:
+            case MUSICBRAINZ_ALBUM_TYPE:
+            case RELEASECOUNTRY:
+            case PART_OF_GAPLESS_ALBUM:
+            case ITUNES_SMPB:
+            case ITUNES_NORM:
                 return new Mp4TagReverseDnsField(mp4FieldKey, value);
 
             default:

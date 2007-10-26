@@ -534,6 +534,8 @@ public class Mp4TagWriter
             boxHeader = Mp4BoxHeader.seekWithinLevel(newMoovBuffer, Mp4NotMetaFieldKey.ILST.getFieldName());
             newMoovBuffer.position(newMoovBuffer.position() + boxHeader.getDataLength());
 
+            //TODO:what about checking the correct amount of fields have actually been written
+            
             //Search for Level-1 free atom within file (it may not exist)
             topLevelFreePosition = newFileReadChannel.position();
             topLevelFreeHeader = Mp4BoxHeader.seekWithinLevel(rafTemp, Mp4NotMetaFieldKey.FREE.getFieldName());
