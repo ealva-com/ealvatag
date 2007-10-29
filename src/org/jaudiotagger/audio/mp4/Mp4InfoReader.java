@@ -58,7 +58,7 @@ public class Mp4InfoReader
 
     public GenericAudioHeader read(RandomAccessFile raf) throws CannotReadException, IOException
     {
-        GenericAudioHeader info = new GenericAudioHeader();
+        Mp4AudioHeader info = new Mp4AudioHeader();
 
         //Get to the facts everything we are interested in is within the moov box, so just load data from file
         //once so no more file I/O needed
@@ -135,26 +135,46 @@ public class Mp4InfoReader
             {
                 Mp4StsdBox stsd = new Mp4StsdBox(boxHeader,mvhdBuffer);
                 stsd.processData();
-                ///Level 7-Searching for "mp4a within "stsd" to get No Of Channels
+                ///Level 7-Searching for "mp4a within "stsd"
                 boxHeader = Mp4BoxHeader.seekWithinLevel(mvhdBuffer,Mp4NotMetaFieldKey.MP4A.getFieldName());
                 if(boxHeader!=null)
                 {
-                    Mp4Mp4aBox mp4a = new Mp4Mp4aBox(boxHeader,mvhdBuffer.slice());
-                    info.setChannelNumber(mp4a.getNumberOfChannels());
+                    ByteBuffer mp4aBuffer = mvhdBuffer.slice();
+                    Mp4Mp4aBox mp4a = new Mp4Mp4aBox(boxHeader, mp4aBuffer);
+                    mp4a.processData();
+                    //Level 8-Searching for "esds" within mp4a to get No Of Channels and bitrate
+                    boxHeader = Mp4BoxHeader.seekWithinLevel( mp4aBuffer,Mp4NotMetaFieldKey.ESDS.getFieldName());
+                    if(boxHeader!=null)
+                    {
+                        Mp4EsdsBox esds = new Mp4EsdsBox(boxHeader,mp4aBuffer.slice());
+
+                        //Set Bitrate in kbps
+                        info.setBitrate(esds.getAvgBitrate()/1000);
+
+                        //Set Number of Channels
+                        info.setChannelNumber(esds.getNumberOfChannels());
+
+                        info.setKind(esds.getKind());
+                        info.setProfile(esds.getAudioProfile());
+                    }
                 }
+
             }
         }
-        //Set default if couldnt calculate it
+        //Set default channels if couldnt calculate it
         if(info.getChannelNumber()==-1)
         {
              info.setChannelNumber(2);
         }
 
+        //Set default bitrate if couldnt calculate it
+        if(info.getBitRateAsNumber()== -1)
+        {
+            info.setBitrate(128);
+        }
+
         //This is always the same I think
         info.setEncodingType("AAC");
-
-        //TODO: These is defaults as dont know how to calculate
-        info.setBitrate(128);
 
         logger.info(info.toString());
 

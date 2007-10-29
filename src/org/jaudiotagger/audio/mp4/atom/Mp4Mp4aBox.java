@@ -1,11 +1,15 @@
 package org.jaudiotagger.audio.mp4.atom;
 
 import org.jaudiotagger.audio.generic.Utils;
+import org.jaudiotagger.audio.exceptions.CannotReadException;
 
 import java.nio.ByteBuffer;
 
 /**
- * StsdBox ( sample (frame encoding) description box), holds the Stereo/No of Channels
+ * Mp4aBox ( sample (frame encoding) description box)
+ *
+ * At first glance appears to hold no of channels but actually always returns 2 even for mono recordings
+ * so just need to skip over data in order to get to child atom esds
  *
  * <p>4 bytes version/flags = byte hex version + 24-bit hex flags
    (current = 0)
@@ -54,7 +58,18 @@ public class Mp4Mp4aBox extends AbstractMp4Box
     public static final int AUDIO_PACKET_SIZE_LENGTH        = 2;
     public static final int AUDIO_SAMPLE_RATE_LENGTH        = 4;
 
-    private int numberOfChannels;
+    public static final int TOTAL_LENGTH =
+        RESERVED_LENGTH +
+        REFERENCE_INDEX_LENGTH +
+        AUDIO_ENCODING_LENGTH      +
+        AUDIO_REVISION_LENGTH  +
+        AUDIO_ENCODING_VENDOR_LENGTH +
+        CHANNELS_LENGTH  +
+        AUDIO_SAMPLE_SIZE_LENGTH +
+        AUDIO_COMPRESSION_ID_LENGTH +
+        AUDIO_PACKET_SIZE_LENGTH +
+        AUDIO_SAMPLE_RATE_LENGTH;
+
 
     /**
      *
@@ -64,16 +79,12 @@ public class Mp4Mp4aBox extends AbstractMp4Box
     public Mp4Mp4aBox(Mp4BoxHeader header, ByteBuffer dataBuffer)
     {
         this.header  = header;
-        this.numberOfChannels  = Utils.getNumberBigEndian(dataBuffer,
-                    CHANNELS_POS,
-                    (CHANNELS_POS + CHANNELS_LENGTH  - 1));
-
-       
+        this.dataBuffer = dataBuffer;
     }
 
-    public int getNumberOfChannels()
+
+    public void processData() throws CannotReadException
     {
-        return numberOfChannels;
+        dataBuffer.position(dataBuffer.position()+TOTAL_LENGTH);       
     }
-
 }

@@ -263,8 +263,8 @@ public class Mp4BoxHeader
         }
         while (!boxHeader.getId().equals(id))
         {
-            logger.finer("Still searching for:"+id+" in bytebuffer at"+data.position());
-
+            logger.finer("Found"+boxHeader.getId()+"Still searching for:"+id+" in bytebuffer at"+data.position());
+         
             //Something gone wrong probably not at the start of an atom so return null;
             if(boxHeader.getLength() < Mp4BoxHeader.HEADER_LENGTH)
             {

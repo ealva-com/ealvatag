@@ -22,6 +22,8 @@ import org.jaudiotagger.audio.AudioHeader;
 
 import java.util.Enumeration;
 import java.util.Hashtable;
+import java.util.HashMap;
+import java.util.Set;
 
 /**
  * This class represents a structure for storing and retrieving information
@@ -89,14 +91,14 @@ public class GenericAudioHeader implements AudioHeader
     /**
      * This table containts the parameters.<br>
      */
-    private Hashtable content;
+    protected HashMap content;
 
     /**
      * Creates an instance with emtpy values.<br>
      */
     public GenericAudioHeader()
     {
-        content = new Hashtable(6);
+        content = new HashMap(6);
         content.put(FIELD_BITRATE, new Integer(-1));
         content.put(FIELD_CHANNEL, new Integer(-1));
         content.put(FIELD_TYPE, "");
@@ -256,7 +258,7 @@ public class GenericAudioHeader implements AudioHeader
     }
 
     /**
-     * A string contianing anything else that might be interesting
+     * A string containing anything else that might be interesting
      *
      * @param infos Extra information.
      */
@@ -306,6 +308,16 @@ public class GenericAudioHeader implements AudioHeader
     }
 
     /**
+     * Can be used to add additional information
+     * @param key
+     * @param value
+     */
+    public void setExtra(String key,Object value)
+    {
+        content.put(key, value);
+    }
+    
+    /**
      * Pretty prints this encoding info
      *
      * @see java.lang.Object#toString()
@@ -314,10 +326,9 @@ public class GenericAudioHeader implements AudioHeader
     {
         StringBuffer out = new StringBuffer(50);
         out.append("Encoding infos content:\n");
-        Enumeration en = content.keys();
-        while (en.hasMoreElements())
+        Set set = content.keySet();
+        for(Object key: set)
         {
-            Object key = en.nextElement();
             Object val = content.get(key);
             out.append("\t");
             out.append(key);

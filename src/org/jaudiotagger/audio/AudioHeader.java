@@ -3,11 +3,10 @@ package org.jaudiotagger.audio;
 /**
  * Representation of AudioHeader
  *
- * Used to retrieve info about the Audio Header
+ * <p>Contains info about the Audio Header
  */
 public interface AudioHeader
 {
-
     /**
      *
      * @return the audio file type
@@ -58,5 +57,9 @@ public interface AudioHeader
      */
     public boolean isVariableBitRate();
 
+    /**
+     *
+     * @return track length
+     */
     public int getTrackLength(); 
 }
