@@ -33,7 +33,7 @@ public enum Mp4FieldKey
     GROUPING("©grp",TEXT),
     DISCNUMBER("disk",NUMERIC),
     LYRICS("©lyr",TEXT),
-    RATING("rtng",BYTE),   //AFAIK Cant be set in itunes, but ifd set to explicit itunes will show as explicit
+    RATING("rtng",BYTE),   //AFAIK Cant be set in itunes, but if set to explicit itunes will show as explicit
     ENCODER("©too",TEXT),
     COMPILATION("cpil",BYTE,1),
     COPYRIGHT("cprt",TEXT),
@@ -66,7 +66,7 @@ public enum Mp4FieldKey
     //AFAIK These arent actually used by Audio Only files, but there is nothing to prevent them being used
     CONTENT_TYPE("stik",BYTE,1),
     PODCAST_KEYWORD("keyw",TEXT),
-    PODCAST_URL("purl",NUMERIC),   //TODO Actually seems to store text but is marked as numeric !
+    PODCAST_URL("purl",NUMERIC),   //TODO Actually seems to store text but is marked as numeric!
     EPISODE_GLOBAL_ID("egid",NUMERIC),
     TV_NETWORK("tvnn",TEXT),
     TV_EPISODE_NUMBER("tven",TEXT),

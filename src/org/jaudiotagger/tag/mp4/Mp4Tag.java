@@ -305,7 +305,6 @@ public class Mp4Tag extends AbstractTag
             case CONTENT_TYPE:
             case TV_SEASON:
             case TV_EPISODE:
-
                 return new Mp4TagByteField(mp4FieldKey, value, mp4FieldKey.getFieldLength());
 
             case GENRE:

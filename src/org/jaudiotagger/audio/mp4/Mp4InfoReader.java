@@ -124,41 +124,43 @@ public class Mp4InfoReader
         }
         mvhdBuffer.position(mvhdBuffer.position() + boxHeader.getDataLength());
 
-        //Level 5-Searching for "stbl within "minf" dont think these are mandatory so dont throw
-        //exception if unable to find
+        //Level 5-Searching for "stbl within "minf"
         boxHeader = Mp4BoxHeader.seekWithinLevel(mvhdBuffer,Mp4NotMetaFieldKey.STBL.getFieldName());
+        if(boxHeader==null)
+        {
+            throw new CannotReadException("This file does not appear to be an audio file");
+        }
+        int afterStblHeader = mvhdBuffer.position();
+
+        //Level 6-Searching for "stsd within "stbl" and process it direct data, dont think these are mandatory so dont throw
+        //exception if unable to find
+        boxHeader = Mp4BoxHeader.seekWithinLevel(mvhdBuffer,Mp4NotMetaFieldKey.STSD.getFieldName());
         if(boxHeader!=null)
         {
-            //Level 6-Searching for "stsd within "stbl" and process it direct data
-            boxHeader = Mp4BoxHeader.seekWithinLevel(mvhdBuffer,Mp4NotMetaFieldKey.STSD.getFieldName());
+            Mp4StsdBox stsd = new Mp4StsdBox(boxHeader,mvhdBuffer);
+            stsd.processData();
+            ///Level 7-Searching for "mp4a within "stsd"
+            boxHeader = Mp4BoxHeader.seekWithinLevel(mvhdBuffer,Mp4NotMetaFieldKey.MP4A.getFieldName());
             if(boxHeader!=null)
             {
-                Mp4StsdBox stsd = new Mp4StsdBox(boxHeader,mvhdBuffer);
-                stsd.processData();
-                ///Level 7-Searching for "mp4a within "stsd"
-                boxHeader = Mp4BoxHeader.seekWithinLevel(mvhdBuffer,Mp4NotMetaFieldKey.MP4A.getFieldName());
+                ByteBuffer mp4aBuffer = mvhdBuffer.slice();
+                Mp4Mp4aBox mp4a = new Mp4Mp4aBox(boxHeader, mp4aBuffer);
+                mp4a.processData();
+                //Level 8-Searching for "esds" within mp4a to get No Of Channels and bitrate
+                boxHeader = Mp4BoxHeader.seekWithinLevel( mp4aBuffer,Mp4NotMetaFieldKey.ESDS.getFieldName());
                 if(boxHeader!=null)
                 {
-                    ByteBuffer mp4aBuffer = mvhdBuffer.slice();
-                    Mp4Mp4aBox mp4a = new Mp4Mp4aBox(boxHeader, mp4aBuffer);
-                    mp4a.processData();
-                    //Level 8-Searching for "esds" within mp4a to get No Of Channels and bitrate
-                    boxHeader = Mp4BoxHeader.seekWithinLevel( mp4aBuffer,Mp4NotMetaFieldKey.ESDS.getFieldName());
-                    if(boxHeader!=null)
-                    {
-                        Mp4EsdsBox esds = new Mp4EsdsBox(boxHeader,mp4aBuffer.slice());
+                    Mp4EsdsBox esds = new Mp4EsdsBox(boxHeader,mp4aBuffer.slice());
 
-                        //Set Bitrate in kbps
-                        info.setBitrate(esds.getAvgBitrate()/1000);
+                    //Set Bitrate in kbps
+                    info.setBitrate(esds.getAvgBitrate()/1000);
 
-                        //Set Number of Channels
-                        info.setChannelNumber(esds.getNumberOfChannels());
+                    //Set Number of Channels
+                    info.setChannelNumber(esds.getNumberOfChannels());
 
-                        info.setKind(esds.getKind());
-                        info.setProfile(esds.getAudioProfile());
-                    }
+                    info.setKind(esds.getKind());
+                    info.setProfile(esds.getAudioProfile());
                 }
-
             }
         }
         //Set default channels if couldnt calculate it
@@ -178,6 +180,14 @@ public class Mp4InfoReader
 
         logger.info(info.toString());
 
+        //Looking for stco, this works but there is no need for it
+        /*mvhdBuffer.position(afterStblHeader);
+        boxHeader = Mp4BoxHeader.seekWithinLevel(mvhdBuffer,Mp4NotMetaFieldKey.STCO.getFieldName());
+        if(boxHeader!=null)
+        {
+            Mp4StcoBox stco = new Mp4StcoBox(boxHeader,mvhdBuffer);
+        }
+        */
 
         //Level 2-Searching for another "trak" within "moov", if more than one track exists then we dont
         //know how to deal with it, so reject it.

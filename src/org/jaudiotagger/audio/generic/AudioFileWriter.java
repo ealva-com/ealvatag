@@ -249,8 +249,9 @@ public abstract class AudioFileWriter
         }
         catch (Exception e)
         {
-            cannotWrite = true;
-            throw new CannotWriteException("\"" + af.getFile().getAbsolutePath() + "\" :" + e);
+            e.printStackTrace(System.err);
+            cannotWrite = true;            
+            throw new CannotWriteException("\"" + af.getFile().getAbsolutePath() + "\" :" + e.getMessage());
         }
         finally
         {
