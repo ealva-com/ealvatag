@@ -1990,5 +1990,82 @@ public class M4aWriteTagTest extends TestCase
         }
         assertNull(exceptionCaught);
     }
+
+    /**
+     * Testing to ensure can only have genre or custom genre not both
+     */
+     public void testWriteGenres()
+    {
+        Exception exceptionCaught = null;
+        try
+        {
+            File testFile = AbstractTestCase.copyAudioToTmp("test5.m4a", new File("testWriteGenres.m4a"));
+            AudioFile f = AudioFileIO.read(testFile);
+            Mp4Tag tag = (Mp4Tag)f.getTag();
+
+            assertEquals(TEST_FILE5_SIZE, testFile.length());
+
+            //Change value using key
+            tag.set(tag.createTagField(TagFieldKey.GENRE,"2")); //key for classic rock
+            f.commit();
+            f = AudioFileIO.read(testFile);
+            tag = (Mp4Tag)f.getTag();
+            assertEquals("Classic Rock",tag.getFirst(TagFieldKey.GENRE));
+            assertEquals("Classic Rock",tag.getFirst(Mp4FieldKey.GENRE));
+            assertEquals("",tag.getFirst(Mp4FieldKey.GENRE_CUSTOM));   //coz doesnt exist
+
+            //Change value using string
+            tag.set(tag.createTagField(TagFieldKey.GENRE,"Tango")); //key for classic rock
+            f.commit();
+            f = AudioFileIO.read(testFile);
+            tag = (Mp4Tag)f.getTag();
+            assertEquals("Tango",tag.getFirst(TagFieldKey.GENRE));
+            assertEquals("Tango",tag.getFirst(Mp4FieldKey.GENRE));
+            assertEquals("",tag.getFirst(Mp4FieldKey.GENRE_CUSTOM));   //coz doesnt exist
+
+            //Change value using string which is ok for ID3 but because extended winamp is ot ok for mp4
+            //so has to use custom
+            tag.set(tag.createTagField(TagFieldKey.GENRE,"SynthPop"));
+            f.commit();
+            f = AudioFileIO.read(testFile);
+            tag = (Mp4Tag)f.getTag();
+
+            //TODO really want this value to didsappear automtically but unfortunately have to manully do it
+            //at moment 9 see next)
+            assertEquals("Tango",tag.getFirst(TagFieldKey.GENRE));
+            assertEquals("Tango",tag.getFirst(Mp4FieldKey.GENRE));
+            assertEquals("SynthPop",tag.getFirst(Mp4FieldKey.GENRE_CUSTOM));
+
+            //Delete fields and let lib decide what to do (has to use custom)
+            tag.deleteTagField(Mp4FieldKey.GENRE);
+            tag.deleteTagField(Mp4FieldKey.GENRE_CUSTOM);
+            tag.set(tag.createTagField(TagFieldKey.GENRE,"SynthPop"));
+
+            assertEquals("",tag.getFirst(TagFieldKey.GENRE));
+            assertEquals("",tag.getFirst(Mp4FieldKey.GENRE));
+            assertEquals("SynthPop",tag.getFirst(Mp4FieldKey.GENRE_CUSTOM));
+            f.commit();
+            f = AudioFileIO.read(testFile);
+            tag = (Mp4Tag)f.getTag();
+
+             //Delete fields and let lib decide what to do (can use list)
+            tag.deleteTagField(Mp4FieldKey.GENRE);
+            tag.deleteTagField(Mp4FieldKey.GENRE_CUSTOM);
+            tag.set(tag.createTagField(TagFieldKey.GENRE,"Tango"));
+
+            assertEquals("Tango",tag.getFirst(TagFieldKey.GENRE));
+            assertEquals("Tango",tag.getFirst(Mp4FieldKey.GENRE));
+            assertEquals("",tag.getFirst(Mp4FieldKey.GENRE_CUSTOM));
+            f.commit();
+            f = AudioFileIO.read(testFile);
+            tag = (Mp4Tag)f.getTag();
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            exceptionCaught = e;
+        }
+        assertNull(exceptionCaught);
+    }
 }
 
