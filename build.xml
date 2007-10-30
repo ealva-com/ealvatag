@@ -105,11 +105,10 @@
 		</dirset>
 	</path>
 	
-	<property name="cobertura.dir" value="../cobertura" />
+	<property name="cobertura.dir" value="lib" />
 	<path id="cobertura.classpath">
 	    <fileset dir="${cobertura.dir}">
-	        <include name="cobertura.jar" />
-	        <include name="lib/**/*.jar" />
+	        <include name="*.jar" />	        
 	    </fileset>
 	</path>
 
@@ -187,8 +186,10 @@
 			</fileset>
 		</copy>
 		
+		<!--Delete old file -->
 		<delete file="cobertura.ser" />
 		
+		<!--Instrument the classes for code coverage -->
 		<cobertura-instrument todir="${instrumented.dir}">
 	    <ignore regex="org.apache.log4j.*" />
 	    <fileset dir="${output.dir}">
@@ -210,7 +211,7 @@
 		<!-- Recreate destination dir if missing -->
 		<mkdir dir="${testoutput.dir}"/>
 		
-		<!-- Compile the source as 1.5 )-->
+		<!-- Compile the source as 1.5 -->
 		<javac destdir="${testoutput.dir}"
 			verbose="${compiler.verbose}"
 			debug="${compiler.debug}"
