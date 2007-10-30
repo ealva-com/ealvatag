@@ -500,6 +500,12 @@ public class M4aReadTagTest extends TestCase
 
     public void testDetectVideo()
     {
+        File orig = new File("testdata", "test7.mp4");
+        if(!orig.isFile())
+        {
+            return;
+        }
+
         Exception exceptionCaught = null;
         try
         {
