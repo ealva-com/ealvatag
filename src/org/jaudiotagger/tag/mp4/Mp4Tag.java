@@ -41,7 +41,7 @@ public class Mp4Tag extends AbstractTag
 
     static EnumMap<TagFieldKey, Mp4FieldKey> tagFieldToMp4Field = new EnumMap<TagFieldKey, Mp4FieldKey>(TagFieldKey.class);
 
-    //Mapping from gerneric key to mp4 key
+    //Mapping from generic key to mp4 key
     static
     {
         tagFieldToMp4Field.put(TagFieldKey.ARTIST, Mp4FieldKey.ARTIST);
@@ -157,9 +157,26 @@ public class Mp4Tag extends AbstractTag
         return new Mp4TagTextField(getCommentId(), content);
     }
 
+    /**
+     * Create genre field
+     *
+     * <p>If the content can be parsed to one of the known values use the genre field otherwise
+     * use the custom field. 
+     *
+     * @param content
+     * @return
+     */
+    @Override
     public TagField createGenreField(String content)
     {
-        return new Mp4TagTextField(getGenreId(), content);
+        if(Mp4GenreField.isValidGenre(content))
+        {
+            return new Mp4GenreField(content);
+        }
+        else
+        {
+             return new Mp4TagTextField(GENRE_CUSTOM.getFieldName(), content);    
+        }
     }
 
     protected boolean isAllowedEncoding(String enc)
@@ -252,6 +269,16 @@ public class Mp4Tag extends AbstractTag
     }
 
     /**
+     * Delete fields with this mp4key
+     * 
+     * @param mp4Key
+     */
+    public void deleteTagField(Mp4FieldKey mp4Key)
+    {
+        super.deleteField(mp4Key.getFieldName());
+    }
+
+    /**
      * Create discno field
      *
      * @param content can be any of the following
@@ -308,9 +335,10 @@ public class Mp4Tag extends AbstractTag
                 return new Mp4TagByteField(mp4FieldKey, value, mp4FieldKey.getFieldLength());
 
             case GENRE:
+                 return createGenreField(value);               
+
             case PODCAST_URL:
             case EPISODE_GLOBAL_ID:
-                //TODO this doesnt work
                 return new Mp4TagTextNumberField(mp4FieldKey.getFieldName(),value);
 
             case DISCNUMBER:

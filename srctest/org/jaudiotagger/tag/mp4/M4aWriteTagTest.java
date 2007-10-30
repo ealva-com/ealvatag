@@ -1939,13 +1939,15 @@ public class M4aWriteTagTest extends TestCase
             tag.set(tag.createTagField(TagFieldKey.MUSICBRAINZ_RELEASE_TYPE, "7"));
             tag.set(tag.createTagField(TagFieldKey.MUSICBRAINZ_RELEASEARTISTID, "8"));
             tag.set(tag.createTagField(TagFieldKey.MUSICIP_ID, "9"));
-
+            tag.set(tag.createTagField(TagFieldKey.GENRE,"2")); //key for classic rock
 
             //Save changes and reread from disk
             f.commit();
             f = AudioFileIO.read(testFile);
             tag = f.getTag();
             System.out.println(f.getAudioHeader());
+            System.out.println(tag);
+
 
             //AudioInfo
             //Time in seconds
@@ -1979,7 +1981,7 @@ public class M4aWriteTagTest extends TestCase
             assertEquals("7", tag.getFirst(TagFieldKey.MUSICBRAINZ_RELEASE_TYPE));
             assertEquals("8", tag.getFirst(TagFieldKey.MUSICBRAINZ_RELEASEARTISTID));
             assertEquals("9", tag.getFirst(TagFieldKey.MUSICIP_ID));
-
+            assertEquals("Classic Rock",tag.getFirst(TagFieldKey.GENRE));
         }
         catch (Exception e)
         {

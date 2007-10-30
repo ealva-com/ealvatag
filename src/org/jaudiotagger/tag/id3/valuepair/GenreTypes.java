@@ -23,8 +23,25 @@ package org.jaudiotagger.tag.id3.valuepair;
 
 import org.jaudiotagger.tag.datatype.AbstractIntStringValuePair;
 
+/**
+ * Genre list
+ *
+ * <p>This is the IDv1 list with additional values as defined by Winamp, this list is all used in Mp4
+ * files</p> *
+ */
 public class GenreTypes extends AbstractIntStringValuePair
 {
+    private static int MAX_STANDARD_GENRE_ID = 125;
+
+    /**
+     * @return the maximum genreId that is part of the official Standard, genres above this were added by
+     * winamp later.    
+     */
+    public static int getMaxStandardGenreId()
+    {
+        return  MAX_STANDARD_GENRE_ID;
+    }
+
     private static GenreTypes genreTypes;
 
     public static GenreTypes getInstanceOf()

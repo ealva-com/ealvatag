@@ -179,7 +179,12 @@ public class Mp4TagReader
             {
                  TagField field =   new Mp4DiscNoField(header.getId(), raw);
                  tag.add(field);
-            }           
+            }
+            else if(header.getId().equals(Mp4FieldKey.GENRE.getFieldName()))
+            {
+                 TagField field =   new Mp4GenreField(header.getId(), raw);
+                 tag.add(field);
+            }
             else if(type==Mp4FieldType.TEXT.getFileClassId())
             {
                 TagField field =   new Mp4TagTextField(header.getId(), raw);

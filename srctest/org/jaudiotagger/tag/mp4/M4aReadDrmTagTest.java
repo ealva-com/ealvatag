@@ -65,7 +65,7 @@ public class M4aReadDrmTagTest extends TestCase
             assertEquals("Simpering Blonde Bombshell", tag.getFirstTitle());            
             assertEquals("1990-01-01T08:00:00Z", tag.getFirstYear());
             assertEquals("1/12", tag.getFirstTrack());
-            assertEquals("18", tag.getFirstGenre());
+            assertEquals("Rock", tag.getFirstGenre());
 
             //Cast to format specific tag
             Mp4Tag mp4tag = (Mp4Tag) tag;
