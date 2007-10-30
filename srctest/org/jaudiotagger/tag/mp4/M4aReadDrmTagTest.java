@@ -34,6 +34,12 @@ public class M4aReadDrmTagTest extends TestCase
         Exception exceptionCaught = null;
         try
         {
+            File orig = new File("testdata", "test9.m4p");
+            if(!orig.isFile())
+            {
+                return;
+            }
+
             File testFile = AbstractTestCase.copyAudioToTmp("test9.m4p");
             AudioFile f = AudioFileIO.read(testFile);
             Tag tag = f.getTag();

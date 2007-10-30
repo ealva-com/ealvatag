@@ -26,6 +26,11 @@ public class M4aWriteDrmTagTest extends TestCase
      */
     public void testShowStco()throws Exception
     {
+        File orig = new File("testdata", "test9.m4p");
+        if(!orig.isFile())
+        {
+            return;
+        }
         File testFile = AbstractTestCase.copyAudioToTmp("test9.m4p",new File("WriteDrmFile1.m4p"));
 
         //Stco test
@@ -40,6 +45,12 @@ public class M4aWriteDrmTagTest extends TestCase
      */
     public void testWriteFile()
     {
+        File orig = new File("testdata", "test9.m4p");
+        if(!orig.isFile())
+        {
+            return;
+        }
+        
         Exception exceptionCaught = null;
         try
         {

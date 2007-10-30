@@ -1725,6 +1725,12 @@ public class M4aWriteTagTest extends TestCase
      */
     public void testWriteFileLargerSizeNoTopLevelFreeAtom()
     {
+        File orig = new File("testdata", "test6.m4p");
+        if(!orig.isFile())
+        {
+            return;
+        }
+
         Exception exceptionCaught = null;
         try
         {

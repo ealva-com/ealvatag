@@ -58,6 +58,12 @@ public class OggVorbisHeaderTest extends TestCase
         Exception exceptionCaught = null;
         try
         {
+            File orig = new File("testdata", "test2.ogg");
+            if(!orig.isFile())
+            {
+                return;
+            }
+
             File testFile = AbstractTestCase.copyAudioToTmp("test2.ogg",new File("test2.ogg"));
             AudioFile f = AudioFileIO.read(testFile);
 
