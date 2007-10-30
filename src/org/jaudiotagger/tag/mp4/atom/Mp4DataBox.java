@@ -43,6 +43,10 @@ public class Mp4DataBox extends AbstractMp4Box
 
     //Holds the numbers decoded
     private List<Short> numbers;
+
+    //Holds bytedata for byte fields as is not clear for multibyte fields exactly these should be wrttien
+    private byte[] bytedata;
+
     /**
      * @param header     header info
      * @param dataBuffer data of box (doesnt include header data)
@@ -98,10 +102,18 @@ public class Mp4DataBox extends AbstractMp4Box
         }
         else if (type == Mp4FieldType.BYTE.getFileClassId())
         {
-            //TODO byte data length seems to be 1 for pgap and cpil but 2 for tmpo ?           
+            //TODO byte data length seems to be 1 for pgap and cpil but 2 for tmpo ?
+            //Create String representation for display
             content = Utils.getNumberBigEndian(this.dataBuffer,
                     PRE_DATA_LENGTH,
                     header.getDataLength() - 1) + "";
+
+            //But store data for safer writng back to file
+            bytedata = new byte[header.getDataLength() - PRE_DATA_LENGTH];
+            int pos = dataBuffer.position();
+            dataBuffer.position(pos + PRE_DATA_LENGTH);
+            dataBuffer.get(bytedata);
+            dataBuffer.position(pos);
         }
         else if (type == Mp4FieldType.COVERART_JPEG.getFileClassId())
         {
@@ -123,10 +135,25 @@ public class Mp4DataBox extends AbstractMp4Box
         return type;
     }
 
+    /**
+     * Return numbers, only valid for numeric fields
+     * @return numbers
+     */
     //TODO this is only applicable for numeric databoxes, should we subclass dont know type until start
     //constructing and we also have Mp4tagTextNumericField class as well
     public List<Short> getNumbers()
     {
         return numbers;
+    }
+
+    /**
+
+     * Return raw byte data only vaid for byte fields
+     *
+     * @return byte data
+     */
+    public byte[] getByteData()
+    {
+        return bytedata;
     }
 }

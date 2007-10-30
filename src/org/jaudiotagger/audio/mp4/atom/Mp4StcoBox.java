@@ -1,8 +1,13 @@
 package org.jaudiotagger.audio.mp4.atom;
 
 import org.jaudiotagger.audio.generic.Utils;
+import org.jaudiotagger.audio.mp4.Mp4AudioHeader;
+import org.jaudiotagger.audio.mp4.Mp4NotMetaFieldKey;
+import org.jaudiotagger.audio.exceptions.CannotReadException;
 
 import java.nio.ByteBuffer;
+import java.io.RandomAccessFile;
+import java.io.IOException;
 
 /**
  * StcoBox ( media (stream) header), holds offsets into the Audio data
@@ -49,7 +54,7 @@ public class Mp4StcoBox extends AbstractMp4Box
     }
 
     /**
-     * Show All offsets
+     * Show All offsets, uyseful for debugging
      */
     public void printAlloffsets()
     {
@@ -120,5 +125,83 @@ public class Mp4StcoBox extends AbstractMp4Box
     public int getFirstOffSet()
     {
         return firstOffSet;
+    }
+
+    public static void debugShowStcoInfo(RandomAccessFile raf) throws IOException,CannotReadException
+    {
+        Mp4BoxHeader moovHeader = Mp4BoxHeader.seekWithinLevel(raf, Mp4NotMetaFieldKey.MOOV.getFieldName());
+        if(moovHeader==null)
+        {
+            throw new CannotReadException("This file does not appear to be an audio file");
+        }
+        ByteBuffer   moovBuffer = ByteBuffer.allocate(moovHeader.getLength() - Mp4BoxHeader.HEADER_LENGTH);
+        raf.getChannel().read(moovBuffer);
+        moovBuffer.rewind();
+
+        //Level 2-Searching for "mvhd" somewhere within "moov", we make a slice after finding header
+        //so all get() methods will be relative to mvdh positions
+        Mp4BoxHeader boxHeader = Mp4BoxHeader.seekWithinLevel(moovBuffer,Mp4NotMetaFieldKey.MVHD.getFieldName());
+        if(boxHeader==null)
+        {
+            throw new CannotReadException("This file does not appear to be an audio file");
+        }
+        ByteBuffer mvhdBuffer = moovBuffer.slice();
+        Mp4MvhdBox mvhd = new Mp4MvhdBox(boxHeader,mvhdBuffer);
+        mvhdBuffer.position(mvhdBuffer.position()+boxHeader.getDataLength());
+
+        //Level 2-Searching for "trak" within "moov"
+        boxHeader = Mp4BoxHeader.seekWithinLevel(mvhdBuffer,Mp4NotMetaFieldKey.TRAK.getFieldName());
+        int endOfFirstTrackInBuffer = mvhdBuffer.position() + boxHeader.getDataLength();
+
+        if(boxHeader==null)
+        {
+            throw new CannotReadException("This file does not appear to be an audio file");
+        }
+        //Level 3-Searching for "mdia" within "trak"
+        boxHeader = Mp4BoxHeader.seekWithinLevel(mvhdBuffer,Mp4NotMetaFieldKey.MDIA.getFieldName());
+        if(boxHeader==null)
+        {
+            throw new CannotReadException("This file does not appear to be an audio file");
+        }
+
+        //Level 4-Searching for "mdhd" within "mdia"
+       boxHeader = Mp4BoxHeader.seekWithinLevel(mvhdBuffer,Mp4NotMetaFieldKey.MDHD.getFieldName());
+       if(boxHeader==null)
+       {
+           throw new CannotReadException("This file does not appear to be an audio file");
+       }
+
+       //Level 4-Searching for "minf" within "mdia"
+       mvhdBuffer.position(mvhdBuffer.position() + boxHeader.getDataLength());
+       boxHeader = Mp4BoxHeader.seekWithinLevel(mvhdBuffer,Mp4NotMetaFieldKey.MINF.getFieldName());
+       if(boxHeader==null)
+       {
+           throw new CannotReadException("This file does not appear to be an audio file");
+       }
+
+       //Level 5-Searching for "smhd" within "minf"
+       //Only an audio track would have a smhd frame
+       boxHeader = Mp4BoxHeader.seekWithinLevel(mvhdBuffer,Mp4NotMetaFieldKey.SMHD.getFieldName());
+       if(boxHeader==null)
+       {
+           throw new CannotReadException("This file does not appear to be an audio file");
+       }
+       mvhdBuffer.position(mvhdBuffer.position() + boxHeader.getDataLength());
+
+       //Level 5-Searching for "stbl within "minf"
+       boxHeader = Mp4BoxHeader.seekWithinLevel(mvhdBuffer,Mp4NotMetaFieldKey.STBL.getFieldName());
+       if(boxHeader==null)
+       {
+           throw new CannotReadException("This file does not appear to be an audio file");
+       }
+
+       //Level 6-Searching for "stco within "stbl"
+       boxHeader = Mp4BoxHeader.seekWithinLevel(mvhdBuffer,Mp4NotMetaFieldKey.STCO.getFieldName());
+       if(boxHeader==null)
+       {
+           throw new CannotReadException("This file does not appear to be an audio file");
+       }
+        Mp4StcoBox stco = new Mp4StcoBox(boxHeader,mvhdBuffer);
+        stco.printAlloffsets();
     }
 }

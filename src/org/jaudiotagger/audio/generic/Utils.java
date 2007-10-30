@@ -203,7 +203,7 @@ public class Utils
     }
 
     /**
-     * Create String startinf from offset upto length using encoding
+     * Create String starting from offset upto length using encoding
      *
      * @param b
      * @param offset

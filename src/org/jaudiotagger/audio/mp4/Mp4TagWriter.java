@@ -192,12 +192,30 @@ public class Mp4TagWriter
         long positionWithinFileAfterFindingMoovHeader = fileReadChannel.position();
         fileReadChannel.read(moovBuffer);
         moovBuffer.rewind();
+        //Level 2-Searching for "trak" within "moov"
+        Mp4BoxHeader boxHeader = Mp4BoxHeader.seekWithinLevel(moovBuffer,Mp4NotMetaFieldKey.TRAK.getFieldName());
+
+
+        //Level 3-Searching for "mdia" within "trak"
+        boxHeader = Mp4BoxHeader.seekWithinLevel(moovBuffer,Mp4NotMetaFieldKey.MDIA.getFieldName());
+
+        //Level 4-Searching for "minf" within "mdia"
+        boxHeader = Mp4BoxHeader.seekWithinLevel(moovBuffer,Mp4NotMetaFieldKey.MINF.getFieldName());
+
+        //Level 5-Searching for "stbl within "minf"
+        boxHeader = Mp4BoxHeader.seekWithinLevel(moovBuffer,Mp4NotMetaFieldKey.STBL.getFieldName());
+
+        //Level 6-Searching for stco, within "stbl", we need this to check offsets, need to start because
+        //sometimes the original offset table does nto match the start of MDAT
+        boxHeader = Mp4BoxHeader.seekWithinLevel(moovBuffer,Mp4NotMetaFieldKey.STCO.getFieldName());
+        Mp4StcoBox stco = new Mp4StcoBox(boxHeader,moovBuffer);
+
+        moovBuffer.rewind();
 
         //Level 2-Searching for "udta" within "moov" within moovBuffer
         Mp4BoxHeader.seekWithinLevel(moovBuffer, Mp4NotMetaFieldKey.UDTA.getFieldName());
 
         //Level 3-Searching for "meta" within udta within moovBuffer
-        Mp4BoxHeader boxHeader;
         try
         {
             boxHeader = Mp4BoxHeader.seekWithinLevel(moovBuffer, Mp4NotMetaFieldKey.META.getFieldName());
@@ -273,7 +291,7 @@ public class Mp4TagWriter
         {
              throw new CannotWriteException("Unable to safetly find audio data");
         }
-
+        int mDatHeaderDataLocation = (int)raf.getFilePointer();
         logger.info("Read header successfully ready for writing");
 
         //The easiest option since no difference in the size of the metadata so all we have to do is
@@ -593,7 +611,7 @@ public class Mp4TagWriter
 
             //Level 6-Searching for stco, within "stbl"
             boxHeader = Mp4BoxHeader.seekWithinLevel(newMoovBuffer,Mp4NotMetaFieldKey.STCO.getFieldName());
-            Mp4StcoBox stco = new Mp4StcoBox(boxHeader,newMoovBuffer);
+            Mp4StcoBox newStco = new Mp4StcoBox(boxHeader,newMoovBuffer);
             newMoovBuffer.rewind(); //Rewind so just after moov header ready for searching for level2 again
 
             //Level 2-Searching for "udta" within "moov" within moovBuffer
@@ -645,12 +663,15 @@ public class Mp4TagWriter
                 throw new CannotWriteException("Unable to write same length of audio data in file");
             }
 
-            //Check offsets are correct
-            //TODO what about if wrong in the original file
-            if(stco.getFirstOffSet()!=mDataDataOffset)
+            //Check offsets are correct, may not match exaclty in original file so just want to make
+            //sure that the discrepancy if any is preserved
+            int diff = stco.getFirstOffSet() - mDatHeaderDataLocation;
+            if((newStco.getFirstOffSet() - mDataDataOffset)!=diff)
             {
-                throw new CannotWriteException("Unable to adjust offsets in audio data");
-            }
+                throw new CannotWriteException("Unable to adjust offsets in audio data:"+
+                        (newStco.getFirstOffSet() - mDataDataOffset)
+                    +":"+diff);
+           }
         }
         catch(Exception e)
         {               

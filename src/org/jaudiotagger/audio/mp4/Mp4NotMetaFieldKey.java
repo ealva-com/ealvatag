@@ -25,8 +25,8 @@ public enum Mp4NotMetaFieldKey
     MP4A("mp4a","AAC Audio "),
     ESDS("esds","Track codec specific information"),
     MINF("minf",""),
-    STCO("stco","Offsets into Audio Data");
-
+    STCO("stco","Offsets into Audio Data"),
+    DRMS("drms","DRM protected File");
     private String fieldName;
     private String description;
 

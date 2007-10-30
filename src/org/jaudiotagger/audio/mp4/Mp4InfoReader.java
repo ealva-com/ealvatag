@@ -130,8 +130,7 @@ public class Mp4InfoReader
         {
             throw new CannotReadException("This file does not appear to be an audio file");
         }
-        int afterStblHeader = mvhdBuffer.position();
-
+        
         //Level 6-Searching for "stsd within "stbl" and process it direct data, dont think these are mandatory so dont throw
         //exception if unable to find
         boxHeader = Mp4BoxHeader.seekWithinLevel(mvhdBuffer,Mp4NotMetaFieldKey.STSD.getFieldName());
@@ -139,6 +138,8 @@ public class Mp4InfoReader
         {
             Mp4StsdBox stsd = new Mp4StsdBox(boxHeader,mvhdBuffer);
             stsd.processData();
+            int positionAfterStsdHeaderAndData = mvhdBuffer.position();
+            
             ///Level 7-Searching for "mp4a within "stsd"
             boxHeader = Mp4BoxHeader.seekWithinLevel(mvhdBuffer,Mp4NotMetaFieldKey.MP4A.getFieldName());
             if(boxHeader!=null)
@@ -162,6 +163,35 @@ public class Mp4InfoReader
                     info.setProfile(esds.getAudioProfile());
                 }
             }
+            else
+            {
+                //Level 7 -Searching for drms within stsd instead (m4p files)
+                mvhdBuffer.position(positionAfterStsdHeaderAndData);
+                boxHeader = Mp4BoxHeader.seekWithinLevel(mvhdBuffer,Mp4NotMetaFieldKey.DRMS.getFieldName());
+                if(boxHeader!=null)
+                {
+                    Mp4DrmsBox drms = new Mp4DrmsBox(boxHeader,mvhdBuffer);
+                    drms.processData();
+                    
+                    //Level 8-Searching for "esds" within drms to get No Of Channels and bitrate
+                    boxHeader = Mp4BoxHeader.seekWithinLevel( mvhdBuffer,Mp4NotMetaFieldKey.ESDS.getFieldName());
+                    if(boxHeader!=null)
+                    {
+                        Mp4EsdsBox esds = new Mp4EsdsBox(boxHeader,mvhdBuffer.slice());
+
+                        //Set Bitrate in kbps
+                        info.setBitrate(esds.getAvgBitrate()/1000);
+
+                        //Set Number of Channels
+                        info.setChannelNumber(esds.getNumberOfChannels());
+
+                        info.setKind(esds.getKind());
+                        info.setProfile(esds.getAudioProfile());
+                    }
+                }
+            }
+
+
         }
         //Set default channels if couldnt calculate it
         if(info.getChannelNumber()==-1)
@@ -180,14 +210,7 @@ public class Mp4InfoReader
 
         logger.info(info.toString());
 
-        //Looking for stco, this works but there is no need for it
-        /*mvhdBuffer.position(afterStblHeader);
-        boxHeader = Mp4BoxHeader.seekWithinLevel(mvhdBuffer,Mp4NotMetaFieldKey.STCO.getFieldName());
-        if(boxHeader!=null)
-        {
-            Mp4StcoBox stco = new Mp4StcoBox(boxHeader,mvhdBuffer);
-        }
-        */
+
 
         //Level 2-Searching for another "trak" within "moov", if more than one track exists then we dont
         //know how to deal with it, so reject it.

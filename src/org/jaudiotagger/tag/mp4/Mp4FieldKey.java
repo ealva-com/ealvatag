@@ -72,7 +72,17 @@ public enum Mp4FieldKey
     TV_EPISODE_NUMBER("tven",TEXT),
     TV_SEASON("tvsn",BYTE,1),
     TV_EPISODE("tves",BYTE,1),
-    ;
+
+    //These seem to be used in DRM Files, of type byte , we need to know the byte length to allow them to be written
+    //back correctly on saving them, we dont provides options to moduify them as may break drm
+    AP_ID("apID",TEXT),
+    AT_ID("atID",BYTE,4),
+    CN_ID("cnID",BYTE,4),
+    PL_ID("plID",BYTE,8),
+    GE_ID("geID",BYTE,4),
+    SF_ID("sfID",BYTE,4),
+    AK_ID("akID",BYTE,1),
+    ;                            
 
     private String fieldName;
     private String issuer;

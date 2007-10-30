@@ -218,6 +218,7 @@ public class AudioFileIO
         readers.put(SupportedFileFormat.MP3.getFilesuffix(), new MP3FileReader());
         readers.put(SupportedFileFormat.MP4.getFilesuffix(), new Mp4FileReader());
         readers.put(SupportedFileFormat.M4A.getFilesuffix(), new Mp4FileReader());
+        readers.put(SupportedFileFormat.M4P.getFilesuffix(), new Mp4FileReader());
 
         // Tag Writers
         writers.put(SupportedFileFormat.OGG.getFilesuffix(), new OggFileWriter());
@@ -225,6 +226,7 @@ public class AudioFileIO
         writers.put(SupportedFileFormat.MP3.getFilesuffix(), new MP3FileWriter());
         writers.put(SupportedFileFormat.MP4.getFilesuffix(), new Mp4FileWriter());
         writers.put(SupportedFileFormat.M4A.getFilesuffix(), new Mp4FileWriter());
+        writers.put(SupportedFileFormat.M4P.getFilesuffix(), new Mp4FileWriter());
 
         // Register modificationHandler
         Iterator it = writers.values().iterator();

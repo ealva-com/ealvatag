@@ -15,12 +15,15 @@ import java.nio.ByteBuffer;
  */
 public class Mp4TagByteField extends Mp4TagTextField
 {
-    //TODO:Holds the actual size of the data content as held in the databoxitem, this is required because
-    //we cant accurately work out the size by looking at the content because we only actually ever use a single byte
-    //in calculating the content value
+    //Holds the actual size of the data content as held in the databoxitem, this is required when creating new
+    //items because we cant accurately work out the size by looking at the content because sometimes field must be longer
+    //than is actually required to hold the value
     //e.g byte data length seems to be 1 for pgap and cpil but 2 for tmpo, so we stored the dataSize
-    //when we loaded the value so if greater than 1 we pad the value
+    //when we loaded the value so if greater than 1 we pad the value.
     private int realDataLength;
+
+    //Preserved from data from file
+    private byte[] bytedata;
 
     /**
      * Create new field
@@ -74,6 +77,14 @@ public class Mp4TagByteField extends Mp4TagTextField
      */
     protected byte[] getDataBytes()throws UnsupportedEncodingException
     {
+    
+        //Write original data
+        if(bytedata!=null)
+        {
+            return bytedata;
+        }
+
+        //new field, lets hope the realDataLength is correct
         switch(realDataLength)
         {
             case 2:
@@ -84,7 +95,6 @@ public class Mp4TagByteField extends Mp4TagTextField
                  return rawData;
             }
             case 1:
-            default:
             {
                  //Save as 1 bytes
                  Short shortValue = new Short(content);
@@ -92,18 +102,35 @@ public class Mp4TagByteField extends Mp4TagTextField
                  rawData[0] = shortValue.byteValue();
                  return rawData;
             }
+            case 4:
+            {
+                 //Assume could be int
+                 Integer intValue = new Integer(content);
+                 byte rawData [] = Utils.getSizeBigEndian(intValue);
+                 return rawData;
+            }
+            default:
+            {
+                //TODO
+                throw new RuntimeException(id+":"
+                        +realDataLength
+                        +":"
+                        +"Dont know how to write byte fields of this length");
+            }
         }
 
     }
 
     protected void build(ByteBuffer data) throws UnsupportedEncodingException
     {
-         //Data actually contains a 'Data' Box so process data using this
+        //Data actually contains a 'Data' Box so process data using this
         Mp4BoxHeader header  = new Mp4BoxHeader(data);
         Mp4DataBox   databox = new Mp4DataBox(header,data);
         dataSize        = header.getDataLength();
         //Needed for subsequent write
         realDataLength  = dataSize - Mp4DataBox.PRE_DATA_LENGTH;
+        bytedata= databox.getByteData();
         content  = databox.getContent();
+
     }
 }
