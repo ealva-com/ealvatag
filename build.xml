@@ -39,6 +39,7 @@
 		
 	<!-- Output dirs -->
 	<property name="output.dir"         value="classes"/>
+	<property name="instrumented.dir"  value="instrumentedclasses"/>
 	<property name="testoutput.dir"     value="testclasses"/>
 	<property name="dist.dir"           value="dist"/>
 	<property name="web.dir"            value="www"/>
@@ -51,6 +52,7 @@
 	
 	<property name="junit.file"       value="${lib.dir}/junit.jar"/>
 	<property name="junitreport.dir"  value="junitreport"/>
+	<property name="coveragereport.dir"  value="coveragereport"/>
 	<property name="junitreport.testdata.dir"     value="testdata"/>
 	<property name="junitreport.testdatatmp.dir"  value="testdatatmp"/>
 	
@@ -103,7 +105,17 @@
 		</dirset>
 	</path>
 	
-		<!-- Clean -->
+	<property name="cobertura.dir" value="../cobertura" />
+	<path id="cobertura.classpath">
+	    <fileset dir="${cobertura.dir}">
+	        <include name="cobertura.jar" />
+	        <include name="lib/**/*.jar" />
+	    </fileset>
+	</path>
+
+<taskdef classpathref="cobertura.classpath" resource="tasks.properties" />
+
+	<!-- Clean -->
 	<target name="clean" description="Cleanup module">
 		<delete dir="${output.dir}"/>
 		<delete dir="${testoutput.dir}"/>
@@ -174,8 +186,23 @@
 			<type type="file"/>
 			</fileset>
 		</copy>
+		
+		<delete file="cobertura.ser" />
+		
+		<cobertura-instrument todir="${instrumented.dir}">
+	    <ignore regex="org.apache.log4j.*" />
+	    <fileset dir="${output.dir}">
+	        <include name="**/*.class" />	        
+	    </fileset>	    
+    </cobertura-instrument>
+		
+		
 	</target>
 	
+	
+
+ 
+
 	<!-- Junit tests:for when we write some !-->
 	<target name="compile.tests" depends="compile.production" description="Compile test classes" unless="skip.tests">
 	
@@ -209,9 +236,11 @@
 	<target name="run.tests" depends="compile.tests" description="Run test cases" unless="skip.tests">
 		<mkdir dir="${junitreport.dir}"/>
 		<mkdir dir="${junitreport.testdatatmp.dir}"/>
-		<junit printsummary="true" showoutput="true">			
+		<junit printsummary="true" showoutput="true">		
+			<classpath location="${instrumented.dir}" />	
 			<classpath refid="runtestclasspath"/>		
-			<batchtest fork="yes" todir="${junitreport.dir}">
+			<classpath refid="cobertura.classpath" />
+			<batchtest fork="yes"  todir="${junitreport.dir}">
 				<formatter type="xml"/>				
     				<fileset dir="${testoutput.dir}">
     					<include name="**/*Test.class"/>      			
@@ -225,6 +254,8 @@
 			</fileset>
   			<report format="frames" todir="${junitreport.dir}"/>
 		</junitreport>
+		
+		<cobertura-report format="html" destdir="${coveragereport.dir}" srcdir="${src.dir}" />
 	</target>
 	
 
