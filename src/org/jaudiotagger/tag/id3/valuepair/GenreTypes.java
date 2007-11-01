@@ -26,8 +26,8 @@ import org.jaudiotagger.tag.datatype.AbstractIntStringValuePair;
 /**
  * Genre list
  *
- * <p>This is the IDv1 list with additional values as defined by Winamp, this list is all used in Mp4
- * files</p> *
+ * <p>This is the IDv1 list with additional values as defined by Winamp, this list is also used in Mp4
+ * files, note iTunes doesnt understand genres above MAX_STANDARD_GENRE_ID, Winamp does</p>
  */
 public class GenreTypes extends AbstractIntStringValuePair
 {

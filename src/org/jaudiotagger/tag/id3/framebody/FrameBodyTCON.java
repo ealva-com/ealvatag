@@ -37,7 +37,7 @@ import java.nio.ByteBuffer;
  * begin with a "(" character it should be replaced with "((", e.g. "((I
  * can figure out any genre)" or "(55)((I think...)". The following new
  * content types is defined in ID3v2 and is implemented in the same way
- * as the numerig content types, e.g. "(RX)".
+ * as the numeric content types, e.g. "(RX)".
  * </p><p><table border=0 width="70%">
  * <tr><td>RX</td><td width="100%">Remix</td></tr>
  * <tr><td>CR</td><td>Cover</td></tr>
