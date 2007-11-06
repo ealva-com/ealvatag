@@ -219,7 +219,7 @@ public class TagConverter {
 		 * description. In that case some informations cannot be provided.
 		 */
 		if (source.getExtendedContentDescription() != null) {
-			result.setTrack(source.getExtendedContentDescription().getTrack());
+			//result.setTrack(source.getExtendedContentDescription().getTrack());
 			result.setYear(source.getExtendedContentDescription().getYear());
 			result.setGenre(source.getExtendedContentDescription().getGenre());
 			result.setAlbum(source.getExtendedContentDescription().getAlbum());

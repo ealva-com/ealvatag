@@ -3,6 +3,7 @@ package org.jaudiotagger.tag.mp4.field;
 import org.jaudiotagger.audio.mp4.atom.Mp4BoxHeader;
 import org.jaudiotagger.tag.mp4.atom.Mp4DataBox;
 import org.jaudiotagger.tag.mp4.Mp4FieldKey;
+import org.jaudiotagger.tag.FieldDataInvalidException;
 
 import java.nio.ByteBuffer;
 import java.io.UnsupportedEncodingException;
@@ -22,12 +23,11 @@ public class Mp4DiscNoField extends Mp4TagTextNumberField
     /**
          * Create new Track Field parsing the String for the trackno/total
          *
-         * TODO what should we do if discValue is invalid
-         *
          * @param discValue
          */
         public Mp4DiscNoField(String discValue)
-        {
+              throws FieldDataInvalidException
+    {
             super(Mp4FieldKey.DISCNUMBER.getFieldName(), discValue);
 
             numbers = new ArrayList<Short>();
@@ -44,7 +44,7 @@ public class Mp4DiscNoField extends Mp4TagTextNumberField
                     }
                     catch(NumberFormatException nfe)
                     {
-                         numbers.add(new Short("0"));
+                         throw new FieldDataInvalidException("Value of:"+values[0]+" is invalid for field:"+id);
                     }
                     numbers.add(new Short("0"));
                     break;
@@ -56,21 +56,20 @@ public class Mp4DiscNoField extends Mp4TagTextNumberField
                     }
                     catch(NumberFormatException nfe)
                     {
-                         numbers.add(new Short("0"));
+                         throw new FieldDataInvalidException("Value of:"+values[0]+" is invalid for field:"+id);
                     }
-                     try
+                    try
                     {
                         numbers.add(Short.parseShort(values[1]));
                     }
                     catch(NumberFormatException nfe)
                     {
-                         numbers.add(new Short("0"));
+                         throw new FieldDataInvalidException("Value of:"+values[1]+" is invalid for field:"+id);
                     }
                     break;
 
                 default:
-                    numbers.add(new Short("0"));
-                    numbers.add(new Short("0"));
+                    throw new FieldDataInvalidException("Value is invalid for field:"+id);   
             }
         }
 

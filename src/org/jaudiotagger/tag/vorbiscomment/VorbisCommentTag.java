@@ -27,6 +27,8 @@ import org.jaudiotagger.tag.vorbiscomment.util.Base64Coder;
 
 import static org.jaudiotagger.tag.vorbiscomment.VorbisCommentFieldKey.*;
 import org.jaudiotagger.tag.TagFieldKey;
+import org.jaudiotagger.tag.KeyNotFoundException;
+import org.jaudiotagger.tag.FieldDataInvalidException;
 
 import java.util.EnumMap;
 import java.util.List;
@@ -192,7 +194,12 @@ public class VorbisCommentTag extends AbstractTag
      */
     @Override
     public TagField createTagField(TagFieldKey genericKey, String value)
+            throws KeyNotFoundException
     {
+        if(genericKey==null)
+        {
+            throw new KeyNotFoundException();
+        }
         return new VorbisCommentTagField(tagFieldToOggField.get(genericKey).name(), value);
     }
 
@@ -204,7 +211,12 @@ public class VorbisCommentTag extends AbstractTag
      * @return
      */
     public TagField createTagField(VorbisCommentFieldKey vorbisCommentFieldKey, String value)
+            throws KeyNotFoundException
     {
+        if(vorbisCommentFieldKey==null)
+        {
+            throw new KeyNotFoundException();
+        }
         return new VorbisCommentTagField(vorbisCommentFieldKey.name(), value);
     }
 

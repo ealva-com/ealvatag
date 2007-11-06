@@ -133,7 +133,7 @@ public abstract class AbstractTag implements Tag
      *
      * @see org.jaudiotagger.tag.Tag#addTrack(java.lang.String)
      */
-    public void addTrack(String s)
+    public void addTrack(String s)   throws FieldDataInvalidException
     {
         add(createTrackField(s));
     }
@@ -172,7 +172,7 @@ public abstract class AbstractTag implements Tag
 
     //Needs to be overridden
     //TODO remove
-    public List<TagField>  get(TagFieldKey id)
+    public List<TagField>  get(TagFieldKey id) throws KeyNotFoundException
     {
         List<TagField>  list = fields.get(id.name());
         if (list == null)
@@ -619,6 +619,7 @@ public abstract class AbstractTag implements Tag
      * @see org.jaudiotagger.tag.Tag#setTrack(java.lang.String)
      */
     public void setTrack(String s)
+              throws FieldDataInvalidException
     {
         set(createTrackField(s));
     }
@@ -659,6 +660,7 @@ public abstract class AbstractTag implements Tag
     //as working one format at a time
     //TODO remove
     public TagField createTagField(TagFieldKey genericKey, String value)
+             throws KeyNotFoundException,FieldDataInvalidException
     {
         return null;
     }
@@ -666,7 +668,7 @@ public abstract class AbstractTag implements Tag
     //Should be overridden by all subclasses but provided empty impl
     //as working one format at a time
     //TODO remove
-    public String getFirst(TagFieldKey genericKey)
+    public String getFirst(TagFieldKey genericKey)throws KeyNotFoundException
     {
         return null;
     }
@@ -675,6 +677,7 @@ public abstract class AbstractTag implements Tag
     //as working one format at a time
     //TODO remove
     public void deleteTagField(TagFieldKey tagFieldKey)
+            throws KeyNotFoundException
     {
         ;
     }
@@ -745,7 +748,8 @@ public abstract class AbstractTag implements Tag
      * @param content The content of the created field.
      * @return tagfield representing the &quot;track&quot;
      */
-    public abstract TagField createTrackField(String content);
+    public abstract TagField createTrackField(String content)
+              throws FieldDataInvalidException;
 
     /**
      * Creates a field which represents the &quot;year&quot;.<br>

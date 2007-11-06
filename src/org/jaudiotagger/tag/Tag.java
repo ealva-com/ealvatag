@@ -26,7 +26,7 @@ import org.jaudiotagger.tag.TagFieldKey;
 /**
  * This interface represents the basic data structure for the default
  * audiolibrary functionality.<br>
- * <br>
+ * <p>
  * Some audio file tagging systems allow to specify multiple values for one type
  * of information. The artist for example. Some songs may be a cooperation of
  * two or more artists. Sometimes a tagging user wants to specify them in the
@@ -67,7 +67,7 @@ public interface Tag
      * @param field
      *            The field to add.
      */
-    public void add(TagField field);
+    public void add(TagField field)  throws FieldDataInvalidException;
 
     /**
      * Adds an album to the tag.<br>
@@ -75,7 +75,7 @@ public interface Tag
      * @param album
      *            Album description
      */
-    public void addAlbum(String album);
+    public void addAlbum(String album)  throws FieldDataInvalidException;
 
     /**
      * Adds an artist to the tag.<br>
@@ -83,7 +83,7 @@ public interface Tag
      * @param artist
      *            Artist's name
      */
-    public void addArtist(String artist);
+    public void addArtist(String artist)  throws FieldDataInvalidException;
 
     /**
      * Adds a comment to the tag.<br>
@@ -91,7 +91,7 @@ public interface Tag
      * @param comment
      *            Comment.
      */
-    public void addComment(String comment);
+    public void addComment(String comment)  throws FieldDataInvalidException;
 
     /**
      * Adds a genre to the tag.<br>
@@ -99,7 +99,7 @@ public interface Tag
      * @param genre
      *            Genre
      */
-    public void addGenre(String genre);
+    public void addGenre(String genre)  throws FieldDataInvalidException;
 
     /**
      * Adds a title to the tag.<br>
@@ -107,7 +107,7 @@ public interface Tag
      * @param title
      *            Title
      */
-    public void addTitle(String title);
+    public void addTitle(String title)  throws FieldDataInvalidException;
 
     /**
      * Adds a track to the tag.<br>
@@ -115,7 +115,7 @@ public interface Tag
      * @param track
      *            Track
      */
-    public void addTrack(String track);
+    public void addTrack(String track)   throws FieldDataInvalidException;
 
     /**
      * Adds a year to the Tag.<br>
@@ -123,7 +123,7 @@ public interface Tag
      * @param year
      *            Year
      */
-    public void addYear(String year);
+    public void addYear(String year)  throws FieldDataInvalidException;
 
     /**
      * Returns a {@linkplain List list} of {@link TagField} objects whose &quot;{@linkplain TagField#getId() id}&quot;
@@ -202,37 +202,36 @@ public interface Tag
      */
     public boolean isEmpty();
 
-    public void set(TagField field);
+    public void set(TagField field)  throws FieldDataInvalidException;
 
-    public void setAlbum(String s);
+    public void setAlbum(String s)  throws FieldDataInvalidException;
 
-    public void setArtist(String s);
+    public void setArtist(String s)  throws FieldDataInvalidException;
 
-    public void setComment(String s);
+    public void setComment(String s)  throws FieldDataInvalidException;
 
-    public boolean setEncoding(String enc);
+    public boolean setEncoding(String enc)  throws FieldDataInvalidException;
 
-    public void setGenre(String s);
+    public void setGenre(String s)  throws FieldDataInvalidException;
 
-    public void setTitle(String s);
+    public void setTitle(String s)  throws FieldDataInvalidException;
 
-    public void setTrack(String s);
+    public void setTrack(String s)   throws FieldDataInvalidException;
 
-    public void setYear(String s);
+    public void setYear(String s)  throws FieldDataInvalidException;
 
     /**
      * Create a new TagField
      *
      * Only textual data supported at the moment. The genericKey will be mapped
-     * to the correct implementation key and return and a TagField.
-     *
-     * TODO:What happens if cant map to implementation key
+     * to the correct implementation key and return and a TagField.    
      *
      * @param genericKey is the generic key
      * @param value to store
      * @return
      */
-    public TagField createTagField(TagFieldKey genericKey,String value);
+    public TagField createTagField(TagFieldKey genericKey,String value)
+        throws KeyNotFoundException,FieldDataInvalidException;
 
 
     /**
@@ -243,7 +242,8 @@ public interface Tag
      *            The field id.
      * @return A list of {@link TagField} objects with the given &quot;id&quot;.
      */
-    public List<TagField> get(TagFieldKey id);
+    public List<TagField> get(TagFieldKey id)
+            throws KeyNotFoundException;
 
     /**
      * Retrieve the first value that exists for this key id
@@ -259,7 +259,8 @@ public interface Tag
      * @param id
      * @return String value or empty string
      */
-    public String getFirst(TagFieldKey id);
+    public String getFirst(TagFieldKey id)
+            throws KeyNotFoundException;
 
     /**
      * Retrieve the first tagfield that exists for this generic key
@@ -274,7 +275,8 @@ public interface Tag
      * Delete any instance of tag fields with this key
      * @param tagFieldKey
      */
-    public void deleteTagField(TagFieldKey tagFieldKey);
+    public void deleteTagField(TagFieldKey tagFieldKey)
+            throws KeyNotFoundException;
 
    
 }

@@ -4,6 +4,7 @@ import org.jaudiotagger.audio.mp4.atom.Mp4BoxHeader;
 import org.jaudiotagger.audio.generic.Utils;
 import org.jaudiotagger.tag.mp4.atom.Mp4DataBox;
 import org.jaudiotagger.tag.mp4.Mp4FieldKey;
+import org.jaudiotagger.tag.FieldDataInvalidException;
 
 import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
@@ -33,7 +34,7 @@ public class Mp4TagByteField extends Mp4TagTextField
      * @param id
      * @param value is a String representation of a number
      */
-    public Mp4TagByteField(Mp4FieldKey id, String value)
+    public Mp4TagByteField(Mp4FieldKey id, String value) throws FieldDataInvalidException
     {
         this(id,value,1);
     }
@@ -44,10 +45,20 @@ public class Mp4TagByteField extends Mp4TagTextField
      * @param id
      * @param value is a String representation of a number
      */
-    public Mp4TagByteField(Mp4FieldKey id, String value,int realDataLength)
+    public Mp4TagByteField(Mp4FieldKey id, String value,int realDataLength) throws FieldDataInvalidException
     {
         super(id.getFieldName(), value);
         this.realDataLength=realDataLength;
+        //Check that can actually be store dnumercially, otherwise will have big problems
+        //when try and save the field
+        try
+        {
+            Long.parseLong(value);
+        }
+        catch(NumberFormatException nfe)
+        {
+            throw new FieldDataInvalidException("Value of:"+value+" is invalid for field:"+id);    
+        }
     }
 
     /**

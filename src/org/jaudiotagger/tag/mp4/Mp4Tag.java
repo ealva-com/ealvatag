@@ -22,6 +22,8 @@ import org.jaudiotagger.audio.generic.AbstractTag;
 import org.jaudiotagger.audio.mp4.atom.Mp4BoxHeader;
 import org.jaudiotagger.tag.TagField;
 import org.jaudiotagger.tag.TagFieldKey;
+import org.jaudiotagger.tag.FieldDataInvalidException;
+import org.jaudiotagger.tag.KeyNotFoundException;
 import static org.jaudiotagger.tag.mp4.Mp4FieldKey.*;
 import org.jaudiotagger.tag.mp4.field.*;
 import static org.jaudiotagger.tag.mp4.field.Mp4FieldType.BYTE;
@@ -143,6 +145,7 @@ public class Mp4Tag extends AbstractTag
     }
 
     public TagField createTrackField(String content)
+              throws FieldDataInvalidException
     {
         return new Mp4TrackField(content);
     }
@@ -196,8 +199,12 @@ public class Mp4Tag extends AbstractTag
      * @param genericKey
      */
     @Override
-    public List get(TagFieldKey genericKey)
+    public List get(TagFieldKey genericKey) throws KeyNotFoundException
     {
+        if( genericKey==null)
+        {
+            throw new KeyNotFoundException();
+        }
         return super.get(tagFieldToMp4Field.get(genericKey).getFieldName());
     }
 
@@ -226,8 +233,12 @@ public class Mp4Tag extends AbstractTag
      *
      * @param mp4FieldKey
      */
-    public List get(Mp4FieldKey mp4FieldKey)
+    public List get(Mp4FieldKey mp4FieldKey)  throws KeyNotFoundException
     {
+        if( mp4FieldKey==null)
+        {
+            throw new KeyNotFoundException();
+        }
         return super.get(mp4FieldKey.getFieldName());
     }
 
@@ -237,8 +248,12 @@ public class Mp4Tag extends AbstractTag
      * @param genericKey
      * @return
      */
-    public String getFirst(TagFieldKey genericKey)
+    public String getFirst(TagFieldKey genericKey) throws KeyNotFoundException
     {
+        if(genericKey==null)
+        {
+            throw new KeyNotFoundException();
+        }
         return super.getFirst(tagFieldToMp4Field.get(genericKey).getFieldName());
     }
 
@@ -248,13 +263,21 @@ public class Mp4Tag extends AbstractTag
      * @param mp4Key
      * @return
      */
-    public String getFirst(Mp4FieldKey mp4Key)
+    public String getFirst(Mp4FieldKey mp4Key)  throws KeyNotFoundException
     {
+        if(mp4Key==null)
+        {
+            throw new KeyNotFoundException();
+        }
         return super.getFirst(mp4Key.getFieldName());
     }
 
-    public Mp4TagField getFirstField(Mp4FieldKey mp4Key)
+    public Mp4TagField getFirstField(Mp4FieldKey mp4Key)   throws KeyNotFoundException
     {
+        if(mp4Key==null)
+        {
+            throw new KeyNotFoundException();
+        }
         return (Mp4TagField)super.getFirstField(mp4Key.getFieldName());
     }
 
@@ -263,8 +286,12 @@ public class Mp4Tag extends AbstractTag
      *
      * @param genericKey
      */
-    public void deleteTagField(TagFieldKey genericKey)
+    public void deleteTagField(TagFieldKey genericKey)   throws KeyNotFoundException
     {
+        if(genericKey==null)
+        {
+            throw new KeyNotFoundException();
+        }
         super.deleteField(tagFieldToMp4Field.get(genericKey).getFieldName());
     }
 
@@ -273,8 +300,12 @@ public class Mp4Tag extends AbstractTag
      * 
      * @param mp4Key
      */
-    public void deleteTagField(Mp4FieldKey mp4Key)
+    public void deleteTagField(Mp4FieldKey mp4Key) throws KeyNotFoundException
     {
+        if(mp4Key==null)
+        {
+            throw new KeyNotFoundException();
+        }
         super.deleteField(mp4Key.getFieldName());
     }
 
@@ -287,6 +318,7 @@ public class Mp4Tag extends AbstractTag
      * @return
      */
     public TagField createDiscNoField(String content)
+             throws FieldDataInvalidException
     {
         return new Mp4DiscNoField(content);
     }
@@ -297,19 +329,31 @@ public class Mp4Tag extends AbstractTag
      * @param data raw image data
      * @return
      */
-    public TagField createArtworkField(byte[] data)
+    public TagField createArtworkField(byte[] data)  throws FieldDataInvalidException
     {
         return new Mp4TagCoverField(data);
     }
+
 
     /**
      * Create Tag Field using generic key
      * <p/>
      * This should use the correct subclass for the key
+     *
+     * @param genericKey
+     * @param value
+     * @return
+     * @throws KeyNotFoundException
+     * @throws FieldDataInvalidException
      */
     @Override
     public TagField createTagField(TagFieldKey genericKey, String value)
+    throws KeyNotFoundException,FieldDataInvalidException
     {
+        if(genericKey==null)
+        {
+            throw new KeyNotFoundException();
+        }
         return createTagField(tagFieldToMp4Field.get(genericKey), value);
     }
 
@@ -321,9 +365,17 @@ public class Mp4Tag extends AbstractTag
      * @param mp4FieldKey
      * @param value
      * @return
+     * @throws KeyNotFoundException
+     * @throws FieldDataInvalidException
      */
     public TagField createTagField(Mp4FieldKey mp4FieldKey, String value)
+    throws KeyNotFoundException,FieldDataInvalidException
+
     {
+        if(mp4FieldKey==null)
+        {
+            throw new KeyNotFoundException();
+        }
         switch (mp4FieldKey)
         {
             case BPM:

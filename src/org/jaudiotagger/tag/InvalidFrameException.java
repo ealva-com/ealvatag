@@ -22,7 +22,7 @@
 package org.jaudiotagger.tag;
 
 /**
- * Thrown if frame cannot be read correcly.
+ * Thrown if frame cannot be read correctly.
  * 
  * @author Eric Farng
  * @version $Revision$

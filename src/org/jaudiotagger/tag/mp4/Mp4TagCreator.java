@@ -27,6 +27,7 @@ import java.util.Iterator;
 import org.jaudiotagger.tag.Tag;
 import org.jaudiotagger.tag.TagField;
 import org.jaudiotagger.tag.TagFieldKey;
+import org.jaudiotagger.tag.KeyNotFoundException;
 import org.jaudiotagger.tag.mp4.field.Mp4TagCoverField;
 import org.jaudiotagger.audio.generic.AbstractTagCreator;
 import org.jaudiotagger.audio.generic.Utils;
@@ -102,9 +103,18 @@ public class Mp4TagCreator extends AbstractTagCreator
                         //and special processing here if we have any artwork image (this code only neccessary
                         //if we have more than 1 but do it anyway even if only have 1 image)
                         ByteArrayOutputStream covrDataBaos= new ByteArrayOutputStream();
-                        for(TagField artwork:tag.get(TagFieldKey.COVER_ART))
+
+                        try
                         {
-                            covrDataBaos.write(((Mp4TagField)artwork).getRawContentDataOnly());
+                            for(TagField artwork:tag.get(TagFieldKey.COVER_ART))
+                            {
+                                covrDataBaos.write(((Mp4TagField)artwork).getRawContentDataOnly());
+                            }
+                        }
+                        catch(KeyNotFoundException knfe)
+                        {
+                            //This cannot happen
+                            throw new RuntimeException("Unable to find COVERART Key");
                         }
 
                         //Now create the parent Data
