@@ -29,6 +29,7 @@ import static org.jaudiotagger.tag.vorbiscomment.VorbisCommentFieldKey.*;
 import org.jaudiotagger.tag.TagFieldKey;
 import org.jaudiotagger.tag.KeyNotFoundException;
 import org.jaudiotagger.tag.FieldDataInvalidException;
+import org.jaudiotagger.tag.mp4.Mp4FieldKey;
 
 import java.util.EnumMap;
 import java.util.List;
@@ -241,12 +242,12 @@ public class VorbisCommentTag extends AbstractTag
      * @param genericKey
      */
     @Override
-    public List get(TagFieldKey genericKey)
+    public List get(TagFieldKey genericKey) throws KeyNotFoundException
     {
         VorbisCommentFieldKey vorbisCommentFieldKey = tagFieldToOggField.get(genericKey);
         if (vorbisCommentFieldKey == null)
         {
-            return null;
+             throw new KeyNotFoundException();
         }
         return super.get(vorbisCommentFieldKey.name());
     }
@@ -257,11 +258,11 @@ public class VorbisCommentTag extends AbstractTag
      * @param vorbisCommentKey
      * @return
      */
-    public List get(VorbisCommentFieldKey vorbisCommentKey)
+    public List get(VorbisCommentFieldKey vorbisCommentKey) throws KeyNotFoundException
     {
         if (vorbisCommentKey == null)
         {
-            return null;
+            throw new KeyNotFoundException();
         }
         return super.get(vorbisCommentKey.name());
     }
@@ -272,12 +273,12 @@ public class VorbisCommentTag extends AbstractTag
      * @param genericKey
      * @return
      */
-    public String getFirst(TagFieldKey genericKey)
+    public String getFirst(TagFieldKey genericKey)throws KeyNotFoundException
     {
         VorbisCommentFieldKey vorbisCommentFieldKey = tagFieldToOggField.get(genericKey);
         if (vorbisCommentFieldKey == null)
         {
-            return null;
+             throw new KeyNotFoundException();
         }
         return super.getFirst(vorbisCommentFieldKey.name());
     }
@@ -288,11 +289,11 @@ public class VorbisCommentTag extends AbstractTag
      * @param vorbisCommentKey
      * @return
      */
-    public String getFirst(VorbisCommentFieldKey vorbisCommentKey)
+    public String getFirst(VorbisCommentFieldKey vorbisCommentKey)  throws KeyNotFoundException
     {
         if (vorbisCommentKey == null)
         {
-            return null;
+             throw new KeyNotFoundException();
         }
         return super.getFirst(vorbisCommentKey.name());
     }
@@ -302,12 +303,26 @@ public class VorbisCommentTag extends AbstractTag
      *
      * @param genericKey
      */
-    public void deleteTagField(TagFieldKey genericKey)
+    public void deleteTagField(TagFieldKey genericKey) throws KeyNotFoundException
     {
-        VorbisCommentFieldKey vorbisCommentFieldKey = tagFieldToOggField.get(genericKey);
-        if (vorbisCommentFieldKey == null)
+        if (genericKey == null)
         {
-            return;
+            throw new KeyNotFoundException();
+        }
+        VorbisCommentFieldKey vorbisCommentFieldKey = tagFieldToOggField.get(genericKey);
+        deleteTagField(vorbisCommentFieldKey);
+    }
+
+    /**
+     * Delete fields with this vorbisCommentFieldKey
+     *
+     * @param vorbisCommentFieldKey
+     */
+    public void deleteTagField(VorbisCommentFieldKey vorbisCommentFieldKey) throws KeyNotFoundException
+    {
+        if(vorbisCommentFieldKey==null)
+        {
+            throw new KeyNotFoundException();
         }
         super.deleteField(vorbisCommentFieldKey.name());
     }
