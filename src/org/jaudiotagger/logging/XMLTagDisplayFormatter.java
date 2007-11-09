@@ -42,7 +42,9 @@ public class XMLTagDisplayFormatter extends AbstractTagDisplayFormatter
     protected static final String xmlCDataTagClose = "]]>";
 
 
-    private XMLTagDisplayFormatter()
+    StringBuffer sb = new StringBuffer();
+
+    public XMLTagDisplayFormatter()
     {
 
     }
@@ -109,7 +111,6 @@ public class XMLTagDisplayFormatter extends AbstractTagDisplayFormatter
     }
 
 
-    StringBuffer sb = new StringBuffer();
 
     public void openHeadingElement(String type, String value)
     {
@@ -158,14 +159,7 @@ public class XMLTagDisplayFormatter extends AbstractTagDisplayFormatter
         return sb.toString();
     }
 
-    public static AbstractTagDisplayFormatter getInstanceOf()
-    {
-        if (formatter == null)
-        {
-            formatter = new XMLTagDisplayFormatter();
-        }
-        return formatter;
-    }
+   
 
     /**
      * Replace any special xml characters with the appropiate escape sequences

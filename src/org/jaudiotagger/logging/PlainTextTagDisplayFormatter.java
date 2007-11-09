@@ -30,7 +30,7 @@ public class PlainTextTagDisplayFormatter extends AbstractTagDisplayFormatter
     StringBuffer sb = new StringBuffer();
     StringBuffer indent = new StringBuffer();
 
-    private PlainTextTagDisplayFormatter()
+    public PlainTextTagDisplayFormatter()
     {
 
     }

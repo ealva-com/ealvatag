@@ -787,12 +787,12 @@ public class MP3File extends AudioFile
 
     private static void createXMLStructureFormatter()
     {
-        tagFormatter = XMLTagDisplayFormatter.getInstanceOf();
+        tagFormatter = new XMLTagDisplayFormatter();
     }
 
     private static void createPlainTextStructureFormatter()
     {
-        tagFormatter = PlainTextTagDisplayFormatter.getInstanceOf();
+        tagFormatter = new PlainTextTagDisplayFormatter();
     }
 
     public static AbstractTagDisplayFormatter getStructureFormatter()
