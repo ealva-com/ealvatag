@@ -77,14 +77,6 @@ public abstract class AbstractTagItem
         throws TagException;
 
     /**
-     * Returns a string representation of the datatype
-     *
-     * @return a string representation of the datatype
-     */
-    abstract public String toString();
-
-
-    /**
      * Returns true if this datatype is a subset of the argument. This instance
      * is a subset if it is the same class as the argument.
      *

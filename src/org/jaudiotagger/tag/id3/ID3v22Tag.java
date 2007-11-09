@@ -42,7 +42,7 @@ public class ID3v22Tag
 {
 
     protected static final String TYPE_COMPRESSION = "compression";
-    protected static final String TYPE_UNSYNCHRONISATION = "unsyncronisationr";
+    protected static final String TYPE_UNSYNCHRONISATION = "unsyncronisation";
 
     /**
      * ID3v2.2 Header bit mask
@@ -96,7 +96,7 @@ public class ID3v22Tag
      */
     public ID3v22Tag()
     {
-        frameMap = new HashMap();
+        frameMap = new LinkedHashMap();
     }
 
     /**
@@ -106,13 +106,25 @@ public class ID3v22Tag
     {
         logger.info("Copying primitives");
         super.copyPrimitives(copyObj);
-        ID3v22Tag copyObject = (ID3v22Tag) copyObj;
 
         //Set the primitive types specific to v2_2.
         if (copyObj instanceof ID3v22Tag)
         {
+            ID3v22Tag copyObject = (ID3v22Tag) copyObj;
             this.compression = copyObject.compression;
             this.unsynchronization = copyObject.unsynchronization;
+        }
+        else if (copyObj instanceof ID3v23Tag)
+        {
+            ID3v23Tag copyObject = (ID3v23Tag) copyObj;
+            this.compression = copyObject.compression;
+            this.unsynchronization = copyObject.unsynchronization;
+        }
+        else if (copyObj instanceof ID3v24Tag)
+        {
+            ID3v24Tag copyObject = (ID3v24Tag) copyObj;
+            this.compression        = false;
+            this.unsynchronization  = copyObject.unsynchronization;
         }
     }
 
@@ -188,10 +200,6 @@ public class ID3v22Tag
     {
         //This doesnt do anything.
         super(copyObject);
-        if ((copyObject instanceof ID3v23Tag == true))
-        {
-            throw new UnsupportedOperationException("Do not use Copy Constructor, these are different versions");
-        }
         logger.info("Creating tag from another tag of same type");
         copyPrimitives(copyObject);
         copyFrames(copyObject);
@@ -202,6 +210,7 @@ public class ID3v22Tag
      */
     public ID3v22Tag(AbstractTag mp3tag)
     {
+        frameMap = new LinkedHashMap();
         logger.info("Creating tag from a tag of a different version");
         //Default Superclass constructor does nothing
         if (mp3tag != null)

@@ -34,13 +34,13 @@ import java.util.*;
 import java.util.logging.Level;
 
 /**
- * This class represents an ID3v2.4 tag.
+ * Represents an ID3v2.4 tag.
  *
  * @author : Paul Taylor
  * @author : Eric Farng
  * @version $Id$
  */
-public class ID3v24Tag extends ID3v23Tag
+public class ID3v24Tag  extends AbstractID3v2Tag
 {
     protected static final String TYPE_FOOTER = "footer";
     protected static final String TYPE_IMAGEENCODINGRESTRICTION = "imageEncodingRestriction";
@@ -50,6 +50,12 @@ public class ID3v24Tag extends ID3v23Tag
     protected static final String TYPE_TEXTENCODINGRESTRICTION = "textEncodingRestriction";
     protected static final String TYPE_TEXTFIELDSIZERESTRICTION = "textFieldSizeRestriction";
     protected static final String TYPE_UPDATETAG = "updateTag";
+    protected static final String TYPE_CRCDATA      = "crcdata";
+    protected static final String TYPE_EXPERIMENTAL = "experimental";
+    protected static final String TYPE_EXTENDED     = "extended";
+    protected static final String TYPE_PADDINGSIZE  = "paddingsize";
+    protected static final String TYPE_UNSYNCHRONISATION = "unsyncronisation";
+
 
 
     protected static int TAG_EXT_HEADER_LENGTH = 6;
@@ -165,6 +171,32 @@ public class ID3v24Tag extends ID3v23Tag
     public static final int MASK_V24_DATA_LENGTH_INDICATOR = FileConstants.BIT1;
 
     /**
+     * CRC Checksum calculated
+     */
+    protected boolean crcDataFlag = false;
+
+    /**
+     * Experiemntal tag
+     */
+    protected boolean experimental = false;
+
+    /**
+     * Contains extended header
+     */
+    protected boolean extended = false;
+
+    /**
+     * All frames in the tag uses unsynchronisation
+     */
+    protected  boolean unsynchronization = false;
+
+    /**
+       * CRC Checksum
+       */
+    protected int crcData = 0;
+
+
+    /**
      * Contains a footer
      */
     protected boolean footer = false;
@@ -198,6 +230,12 @@ public class ID3v24Tag extends ID3v23Tag
      * 
      */
     protected byte textEncodingRestriction = 0;
+
+    /**
+     * Tag padding
+     */
+    protected int paddingSize = 0;
+
 
     /**
      * 
@@ -238,6 +276,7 @@ public class ID3v24Tag extends ID3v23Tag
      */
     public ID3v24Tag()
     {
+        frameMap = new LinkedHashMap();
     }
 
     /**
@@ -337,7 +376,7 @@ public class ID3v24Tag extends ID3v23Tag
     public ID3v24Tag(AbstractTag mp3tag)
     {
         logger.info("Creating tag from a tag of a different version");
-
+        frameMap = new LinkedHashMap();
         if (mp3tag != null)
         {
             //Should use simpler copy constructor
@@ -460,6 +499,7 @@ public class ID3v24Tag extends ID3v23Tag
      */
     public ID3v24Tag(ByteBuffer buffer, String loggingFilename) throws TagException
     {
+        frameMap = new LinkedHashMap();
         setLoggingFilename(loggingFilename);
         this.read(buffer);
     }
@@ -473,7 +513,7 @@ public class ID3v24Tag extends ID3v23Tag
      * @deprecated use {@link #ID3v24Tag(ByteBuffer,String)} instead
      */
     public ID3v24Tag(ByteBuffer buffer) throws TagException
-    {
+    {         
         this(buffer, "");
     }
 
@@ -734,7 +774,7 @@ public class ID3v24Tag extends ID3v23Tag
         experimental = false;
         footer = false;
 
-        // Create Header Buffer,allocate maximum possible size for the header*/
+        // Create Header Buffer,allocate maximum possible size for the header
         ByteBuffer headerBuffer = ByteBuffer.allocate(TAG_HEADER_LENGTH);
         //TAGID
         headerBuffer.put(TAG_ID);
@@ -812,33 +852,33 @@ public class ID3v24Tag extends ID3v23Tag
             extHeaderBuffer.put((byte) TAG_EXT_NUMBER_BYTES_DATA_LENGTH);
             //Write Extended Flags
             byte extFlag = 0;
-            if (updateTag == true)
+            if (updateTag)
             {
                 extFlag |= MASK_V24_TAG_UPDATE;
             }
-            if (crcDataFlag == true)
+            if (crcDataFlag)
             {
                 extFlag |= MASK_V24_CRC_DATA_PRESENT;
             }
-            if (tagRestriction == true)
+            if (tagRestriction)
             {
                 extFlag |= MASK_V24_TAG_RESTRICTIONS;
             }
             extHeaderBuffer.put(extFlag);
             //Write Update Data
-            if (updateTag == true)
+            if (updateTag)
             {
                 extHeaderBuffer.put((byte) 0);
             }
             //Write CRC Data
-            if (crcDataFlag == true)
+            if (crcDataFlag)
             {
                 extHeaderBuffer.put((byte) TAG_EXT_HEADER_CRC_DATA_LENGTH);
                 extHeaderBuffer.put((byte) 0);
                 extHeaderBuffer.putInt(crcData);
             }
             //Write Tag Restriction
-            if (tagRestriction == true)
+            if (tagRestriction)
             {
                 extHeaderBuffer.put((byte) TAG_EXT_HEADER_RESTRICTION_DATA_LENGTH);
                 //todo not currently setting restrictions
@@ -930,7 +970,6 @@ public class ID3v24Tag extends ID3v23Tag
 
         //Header
         MP3File.getStructureFormatter().openHeadingElement(TYPE_HEADER, "");
-        MP3File.getStructureFormatter().addElement(TYPE_COMPRESSION, this.isCompression());
         MP3File.getStructureFormatter().addElement(TYPE_UNSYNCHRONISATION, this.isUnsynchronization());
         MP3File.getStructureFormatter().addElement(TYPE_CRCDATA, this.crcData);
         MP3File.getStructureFormatter().addElement(TYPE_EXPERIMENTAL, this.experimental);
@@ -950,6 +989,18 @@ public class ID3v24Tag extends ID3v23Tag
         super.createStructureBody();
 
         MP3File.getStructureFormatter().closeHeadingElement(TYPE_TAG);
+    }
 
+    /**
+    * Are all frame swithin this tag unsynchronized
+     *
+    * <p>Because synchronization occurs at the frame level it is not normally desirable to unsynchronize all frames
+    * and hence this flag is not normally set.
+    *
+    * @return are all frames within the tag unsynchronized
+    */
+    public boolean isUnsynchronization()
+    {
+       return unsynchronization;
     }
 }

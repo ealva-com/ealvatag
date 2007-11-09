@@ -97,7 +97,7 @@ public class Unicode24TagTest extends TestCase
      */
     public void testCreateISO8859EncodedSizeTerminatedString() throws Exception
     {
-        File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3");
+        File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3", new File("testISO8859.mp3"));
         MP3File mp3File = new MP3File(testFile);
 
         ID3v24Frame frame = new ID3v24Frame(ID3v24Frames.FRAME_ID_ARTIST);
@@ -134,14 +134,14 @@ public class Unicode24TagTest extends TestCase
     }
 
     /**
-     * Can explictly uses UTF-16 even if not required
+     * Can explicitly uses UTF-16 even if not required
      * as UTf16 by default
      *
      * @throws Exception
      */
     public void testCreateUTF16EncodedSizeTerminatedString() throws Exception
     {
-        File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3");
+        File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3",new File("testutf16.mp3"));
         MP3File mp3File = new MP3File(testFile);
 
         ID3v24Frame frame = new ID3v24Frame(ID3v24Frames.FRAME_ID_ARTIST);
@@ -187,7 +187,7 @@ public class Unicode24TagTest extends TestCase
      */
     public void testCreateUTF16AutoEncodedSizeTerminatedString() throws Exception
     {
-        File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3");
+        File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3",new File("testutf16-2.mp3"));
         MP3File mp3File = new MP3File(testFile);
 
         ID3v24Frame frame = new ID3v24Frame(ID3v24Frames.FRAME_ID_ARTIST);
@@ -233,7 +233,7 @@ public class Unicode24TagTest extends TestCase
         */
        public void testCreateUTF8AutoEncodedSizeTerminatedString() throws Exception
        {
-           File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3");
+           File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3",new File("testutf8.mp3"));
            MP3File mp3File = new MP3File(testFile);
 
            ID3v24Frame frame = new ID3v24Frame(ID3v24Frames.FRAME_ID_ARTIST);
@@ -282,7 +282,7 @@ public class Unicode24TagTest extends TestCase
      */
     public void testCreateUTF16BEEncodedSizeTerminatedString() throws Exception
     {
-        File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3");
+        File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3",new File("testutf16be.mp3"));
         MP3File mp3File = new MP3File(testFile);
 
         ID3v24Frame frame = new ID3v24Frame(ID3v24Frames.FRAME_ID_ARTIST);
@@ -326,7 +326,7 @@ public class Unicode24TagTest extends TestCase
      */
     public void testCreateUTF8EncodedSizeTerminatedString() throws Exception
     {
-        File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3");
+        File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3",new File("testutf8enc.mp3"));
         MP3File mp3File = new MP3File(testFile);
 
         ID3v24Frame frame = new ID3v24Frame(ID3v24Frames.FRAME_ID_ARTIST);

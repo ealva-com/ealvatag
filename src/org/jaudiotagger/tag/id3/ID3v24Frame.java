@@ -26,6 +26,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.Iterator;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Represents an ID3v2.4 frame.
@@ -34,13 +36,20 @@ import java.util.Iterator;
  * @author : Eric Farng
  * @version $Id$
  */
-public class ID3v24Frame
-    extends ID3v23Frame
+public class ID3v24Frame extends AbstractID3v2Frame
 {
+    Pattern validFrameIdentifier = Pattern.compile("[A-Z][0-9A-Z]{3}");
 
     protected static final int FRAME_DATA_LENGTH_SIZE =4;
+
+    protected static final int FRAME_ID_SIZE = 4;
+    protected static final int FRAME_FLAGS_SIZE = 2;
+    protected static final int FRAME_SIZE_SIZE = 4;
     protected static final int FRAME_ENCRYPTION_INDICATOR_SIZE =1;
     protected static final int FRAME_GROUPING_INDICATOR_SIZE =1;
+
+    protected static final int FRAME_HEADER_SIZE = FRAME_ID_SIZE + FRAME_SIZE_SIZE + FRAME_FLAGS_SIZE;
+
 
     public ID3v24Frame()
     {
@@ -69,8 +78,8 @@ public class ID3v24Frame
     public ID3v24Frame(ID3v24Frame frame)
     {
         super(frame);
-        statusFlags = new StatusFlags(((ID3v23Frame) frame).getStatusFlags().getOriginalFlags());
-        encodingFlags = new EncodingFlags(((ID3v23Frame) frame).getEncodingFlags().getFlags());
+        statusFlags     = new StatusFlags(frame.getStatusFlags().getOriginalFlags());
+        encodingFlags   = new EncodingFlags(frame.getEncodingFlags().getFlags());
     }
 
      private void createV24FrameFromV23Frame(ID3v23Frame frame)throws InvalidFrameException
@@ -289,6 +298,16 @@ public class ID3v24Frame
         return super.equals(obj);
     }
 
+
+    /**
+     * Return size of frame
+     *
+     * @return int frame size
+     */
+    public int getSize()
+    {
+        return frameBody.getSize() + ID3v24Frame.FRAME_HEADER_SIZE;
+    }
 
 
     /**
@@ -654,9 +673,13 @@ public class ID3v24Frame
      * Make adjustments if necessary based on frame type and specification.
      */
     class StatusFlags
-        extends ID3v23Frame.StatusFlags
+        extends AbstractID3v2Frame.StatusFlags
     {
-        /** Note these are in a different location to v2.3*/
+        public static final String TYPE_TAGALTERPRESERVATION = "typeTagAlterPreservation";
+        public static final String TYPE_FILEALTERPRESERVATION = "typeFileAlterPreservation";
+        public static final String TYPE_READONLY = "typeReadOnly";
+
+
         /**
          * Discard frame if tag altered
          */
@@ -872,6 +895,19 @@ public class ID3v24Frame
             MP3File.getStructureFormatter().addElement(TYPE_DATALENGTHINDICATOR, flags & MASK_DATA_LENGTH_INDICATOR);
             MP3File.getStructureFormatter().closeHeadingElement(TYPE_FLAGS);
         }
+    }
+
+     /**
+     * Does the frame identifier meet the syntax for a idv3v2 frame identifier.
+     * must start with a capital letter and only contain capital letters and numbers
+     *
+     * @param identifier to be checked
+     * @return whether the identifier is valid
+     */
+    public boolean isValidID3v2FrameIdentifier(String identifier)
+    {
+        Matcher m = validFrameIdentifier.matcher(identifier);
+        return m.matches();
     }
 
     /**

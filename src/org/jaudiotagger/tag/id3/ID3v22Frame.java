@@ -407,11 +407,6 @@ public class ID3v22Frame extends AbstractID3v2Frame
         return m.matches();
     }
 
-    public String toString()
-    {
-        return "";
-    }
-
     /**
      * Return String Representation of body
      */

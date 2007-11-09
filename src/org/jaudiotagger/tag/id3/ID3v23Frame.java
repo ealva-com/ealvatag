@@ -37,8 +37,7 @@ import java.util.zip.Inflater;
  * @author : Eric Farng
  * @version $Id$
  */
-public class ID3v23Frame
-    extends ID3v22Frame
+public class ID3v23Frame extends AbstractID3v2Frame
 {
     Pattern validFrameIdentifier = Pattern.compile("[A-Z][0-9A-Z]{3}");
 
@@ -98,8 +97,8 @@ public class ID3v23Frame
         }
         if (frame instanceof ID3v24Frame)
         {
-            statusFlags = new StatusFlags((ID3v24Frame.StatusFlags) ((ID3v24Frame) frame).getStatusFlags());
-            encodingFlags = new EncodingFlags(((ID3v23Frame) frame).getEncodingFlags().getFlags());
+            statusFlags = new StatusFlags((ID3v24Frame.StatusFlags) frame.getStatusFlags());
+            encodingFlags = new EncodingFlags(frame.getEncodingFlags().getFlags());
         }
 
         if (frame instanceof ID3v24Frame)
@@ -267,7 +266,7 @@ public class ID3v23Frame
      */
     public int getSize()
     {
-        return frameBody.getSize() + FRAME_HEADER_SIZE;
+        return frameBody.getSize() + ID3v23Frame.FRAME_HEADER_SIZE;
     }
 
     /**

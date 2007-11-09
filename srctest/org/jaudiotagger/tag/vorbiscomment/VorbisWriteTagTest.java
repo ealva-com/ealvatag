@@ -30,7 +30,7 @@ public class VorbisWriteTagTest extends AbstractTestCase
         Exception exceptionCaught = null;
         try
         {
-            File testFile = AbstractTestCase.copyAudioToTmp("test.ogg", new File("testWriteTagToFile.ogg"));
+            File testFile = AbstractTestCase.copyAudioToTmp("test.ogg", new File("testWriteTagTest.ogg"));
             AudioFile f = AudioFileIO.read(testFile);
 
             assertTrue(f.getTag() instanceof VorbisCommentTag);

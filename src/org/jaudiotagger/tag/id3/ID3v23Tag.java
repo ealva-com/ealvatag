@@ -37,12 +37,14 @@ import java.util.logging.Level;
  * @version $Id$
  */
 public class ID3v23Tag
-    extends ID3v22Tag
+    extends AbstractID3v2Tag
 {
+
     protected static final String TYPE_CRCDATA      = "crcdata";
     protected static final String TYPE_EXPERIMENTAL = "experimental";
     protected static final String TYPE_EXTENDED     = "extended";
     protected static final String TYPE_PADDINGSIZE  = "paddingsize";
+    protected static final String TYPE_UNSYNCHRONISATION = "unsyncronisation";
 
 
     protected static int TAG_EXT_HEADER_LENGTH      = 10;
@@ -100,6 +102,17 @@ public class ID3v23Tag
      */
     protected int paddingSize = 0;
 
+    /**
+     * All frames in the tag uses unsynchronisation
+     */
+    protected  boolean unsynchronization = false;
+
+    /**
+     * The tag is compressed
+     */
+    protected boolean compression = false;
+
+
     public static final byte RELEASE  = 2;
     public static final byte MAJOR_VERSION = 3;
     public static final byte REVISION = 0;
@@ -134,7 +147,7 @@ public class ID3v23Tag
      */
     public ID3v23Tag()
     {
-
+        frameMap = new LinkedHashMap();
     }
 
     /**
@@ -271,11 +284,7 @@ public class ID3v23Tag
     public ID3v23Tag(ID3v23Tag copyObject)
     {
         //This doesnt do anything.
-        super(copyObject);
-        if ((copyObject instanceof ID3v24Tag == true))
-        {
-            throw new UnsupportedOperationException("Do not use Copy Constructor, these are different versions");
-        }
+        super(copyObject);       
         logger.info("Creating tag from another tag of same type");
         copyPrimitives(copyObject);
         copyFrames(copyObject);
@@ -288,7 +297,7 @@ public class ID3v23Tag
     public ID3v23Tag(AbstractTag mp3tag)
     {
         logger.info("Creating tag from a tag of a different version");
-
+        frameMap = new LinkedHashMap();
 
         if (mp3tag != null)
         {
@@ -781,13 +790,20 @@ public class ID3v23Tag
         MP3File.getStructureFormatter().addElement(TYPE_UNSYNCHRONISATION, this.isUnsynchronization());
         MP3File.getStructureFormatter().addElement(TYPE_EXTENDED, this.extended);
         MP3File.getStructureFormatter().addElement(TYPE_EXPERIMENTAL, this.experimental);
-        MP3File.getStructureFormatter().addElement(TYPE_COMPRESSION, this.isCompression());
         MP3File.getStructureFormatter().addElement(TYPE_CRCDATA, this.crcData);
         MP3File.getStructureFormatter().addElement(TYPE_PADDINGSIZE, this.paddingSize);
         MP3File.getStructureFormatter().closeHeadingElement(TYPE_HEADER);
         //Body
         super.createStructureBody();
         MP3File.getStructureFormatter().closeHeadingElement(TYPE_TAG);
+    }
 
+    /**
+    *
+    * @return is tag unsynchronized
+    */
+    public boolean isUnsynchronization()
+    {
+       return unsynchronization;
     }
 }
