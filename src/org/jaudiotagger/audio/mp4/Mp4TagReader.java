@@ -223,9 +223,28 @@ public class Mp4TagReader
             }
             else
             {
-                //TODO Try binary is this right?
-                TagField field =  new Mp4TagBinaryField(header.getId(), raw);
-                tag.add(field);
+                boolean existingId = false;
+                for(Mp4FieldKey key:Mp4FieldKey.values())
+                {                     
+                    if(key.getFieldName().equals(header.getId()))
+                    {
+                        //The header is a known id but its field type is not one of the expected types so
+                        //this field is invalid. i.e I received a file with the TMPO set to 15 (Oxf) when it should
+                        //be 21 (ox15) so looks like somebody got their decimal and hex numbering confused
+                        //So in this case best to ignore this field and just write a warning
+                        existingId=true;
+                        logger.warning("Known Field:"+header.getId()+" with invalid field type of:"+type +" is ignored");
+                        break;
+                    }                                             
+                }
+
+                //Unknown field id with unknown type so just create as binary
+                if(!existingId)
+                {
+                    logger.warning("UnKnown Field:"+header.getId()+" with invalid field type of:"+type +" created as binary");
+                    TagField field =  new Mp4TagBinaryField(header.getId(), raw);
+                    tag.add(field);
+                }
             }
         }
     }
