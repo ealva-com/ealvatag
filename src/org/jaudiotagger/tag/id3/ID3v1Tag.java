@@ -235,6 +235,13 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag
         return fields;
     }
 
+    /**
+     * Add Album
+     *
+     * <p>Only one album can be added so if one already exists it will be replaced.
+     *
+     *  @param album
+     */
     public void addAlbum(String album)
     {
         setAlbum(album);
@@ -260,6 +267,10 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag
         return album;
     }
 
+    /**
+     *
+     * @return album within list or empty if does not exist
+     */
     public List getAlbum()
     {
         if(getFirstAlbum().length()>0)
@@ -274,6 +285,13 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag
     }
 
 
+    /**
+    * Add Artist
+    *
+    * <p>Only one artist can be added so if one already exists it will be replaced.
+    *
+    * @param artist
+    */
     public void addArtist(String artist)
     {
        setArtist(album);
@@ -300,7 +318,11 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag
         return artist;
     }
 
-     public List getArtist()
+    /**
+     *
+     * @return Artist within list or empty if does not exist
+     */
+    public List getArtist()
     {
         if(getFirstArtist().length()>0)
         {
@@ -313,6 +335,13 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag
         }
     }
 
+    /**
+     * Add Comment
+     *
+     * <p>Only one comment can be added so if one already exists it will be replaced.
+     *
+     * @param comment
+     */
     public void addComment(String comment)
     {
        setComment(comment);
@@ -328,6 +357,10 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag
         this.comment = ID3Tags.truncate(comment, this.FIELD_COMMENT_LENGTH);
     }
 
+    /**
+     *
+     * @return comment within list or empty if does not exist
+     */
     public List getComment()
     {
         if(getFirstComment().length()>0)
@@ -351,13 +384,22 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag
         return comment;
     }
 
+    /**
+    * Add Genre
+    *
+    * <p>Only one Genre can be added so if one already exists it will be replaced.
+    *
+    * @param genre
+    */
     public void addGenre(String genre)
     {
        setGenre(genre);
     }
 
     /**
-     * Sets the genreID, id3v1 only supports genres defined in a predefined list
+     * Sets the genreID,
+     *
+     * <p>ID3v1 only supports genres defined in a predefined list
      * so if unable to find value in list set 255, which seems to be the value
      * winamp uses for undefined.
      *
@@ -379,14 +421,29 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag
     /**
      * Get Genre
      *
-     * @return genre
+     * @return genre or empty string if not valid
      */
     public String getFirstGenre()
     {
-        Integer genreId = genre & this.BYTE_TO_UNSIGNED;
-        return GenreTypes.getInstanceOf().getValueForId(genreId);
+        Integer genreId   = genre & this.BYTE_TO_UNSIGNED;
+        String genreValue = GenreTypes.getInstanceOf().getValueForId(genreId);
+        if(genreValue==null)
+        {
+            return "";
+        }
+        else
+        {
+            return genreValue;
+        }
     }
 
+    /**
+     * Get Genre field
+     *
+     * <p>Only a single genre is available in ID3v1
+     *
+     * @return
+     */
     public List getGenre()
     {
         if(getFirstGenre().length()>0)
@@ -400,6 +457,13 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag
         }
     }
 
+    /**
+     * Add Title
+     *
+     * <p>Only one title can be added so if one already exists it will be replaced.
+     *
+     * @param title
+     */
     public void addTitle(String title)
     {
        setTitle(title);
@@ -425,6 +489,13 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag
         return title;
     }
 
+    /**
+     * Get title field
+     *
+     * <p>Only a single title is available in ID3v1
+     *
+     * @return
+     */
     public List getTitle()
     {
         if(getFirstTitle().length()>0)
@@ -438,6 +509,13 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag
         }
     }
 
+    /**
+     * Add Year
+     *
+     * <p>Only one year can be added so if one already exists it will be replaced.
+     *
+     * @param year
+     */
     public void addYear(String year)
     {
        setYear(year);
@@ -463,6 +541,13 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag
         return year;
     }
 
+    /**
+     * Get year field
+     *
+     * <p>Only a single year is available in ID3v1
+     *
+     * @return
+     */
     public List getYear()
     {
         if(getFirstYear().length()>0)
