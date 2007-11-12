@@ -51,7 +51,8 @@ public interface Tag
 {
     /**
      * Adds a tagfield to the structure.<br>
-     * It is not recommended to use this method for normal use of the
+     *
+     * <p>It is not recommended to use this method for normal use of the
      * audiolibrary. The developer will circumvent the underlying
      * implementation. For example, if one adds a field with the field id
      * &quot;TALB&quot; for an mp3 file, and the given {@link TagField}
@@ -135,45 +136,91 @@ public interface Tag
      */
     public List get(String id);
 
+    /**
+     *
+     * @return
+     */
     public List getAlbum();
 
-    public List getArtist();
-
-    public List getComment();
-
-    public Iterator getFields();
 
     /**
-     * Return the number of fields
      *
-     * <p>Fields with the same identnifiers are counted seperately
-     * i.e two title fields would contribute two to the count
-     *
-     * @return total number of fields
+     * @return
      */
-    public int getFieldCount();
+    public List getArtist();
 
-    public String getFirstAlbum();
+    /**
+     *
+     * @return
+     */
+    public List getComment();
 
-    public String getFirstArtist();
-
-    public String getFirstComment();
-
-    public String getFirstGenre();
-
-    public String getFirstTitle();
-
-    public String getFirstTrack();
-
-    public String getFirstYear();
-
+    /**
+     *
+     * @return
+     */
     public List getGenre();
 
+    /**
+     *
+     * @return
+     */
     public List getTitle();
 
+    /**
+     *
+     * @return
+     */
     public List getTrack();
 
+    /**
+     *
+     * @return
+     */
     public List getYear();
+
+
+    /**
+     *
+     * @return
+     */
+    public String getFirstAlbum();
+
+    /**
+     *
+     * @return
+     */
+    public String getFirstArtist();
+
+    /**
+     *
+     * @return
+     */
+    public String getFirstComment();
+
+    /**
+     *
+     * @return
+     */
+    public String getFirstGenre();
+
+    /**
+     *
+     * @return
+     */
+    public String getFirstTitle();
+
+    /**
+     *
+     * @return
+     */
+    public String getFirstTrack();
+
+    /**
+     *
+     * @return
+     */
+    public String getFirstYear();
 
     /**
      * Returns <code>true</code>, if at least one of the contained
@@ -202,29 +249,70 @@ public interface Tag
      */
     public boolean isEmpty();
 
+    /**
+     *
+     * @param field
+     * @throws FieldDataInvalidException
+     */
     public void set(TagField field)  throws FieldDataInvalidException;
 
+    /**
+     *
+     * @param s
+     * @throws FieldDataInvalidException
+     */
     public void setAlbum(String s)  throws FieldDataInvalidException;
 
-    public void setArtist(String s)  throws FieldDataInvalidException;
-
-    public void setComment(String s)  throws FieldDataInvalidException;
-
-    public boolean setEncoding(String enc)  throws FieldDataInvalidException;
-
-    public void setGenre(String s)  throws FieldDataInvalidException;
-
-    public void setTitle(String s)  throws FieldDataInvalidException;
-
-    public void setTrack(String s)   throws FieldDataInvalidException;
-
-    public void setYear(String s)  throws FieldDataInvalidException;
 
     /**
-     * Create a new TagField
      *
-     * Only textual data supported at the moment. The genericKey will be mapped
-     * to the correct implementation key and return and a TagField.    
+     * @param s
+     * @throws FieldDataInvalidException
+     */
+    public void setArtist(String s)  throws FieldDataInvalidException;
+
+    /**
+     *
+     * @param s
+     * @throws FieldDataInvalidException
+     */
+    public void setComment(String s)  throws FieldDataInvalidException;
+
+
+    /**
+     *
+     * @param s
+     * @throws FieldDataInvalidException
+     */
+    public void setGenre(String s)  throws FieldDataInvalidException;
+
+    /**
+     *
+     * @param s
+     * @throws FieldDataInvalidException
+     */
+    public void setTitle(String s)  throws FieldDataInvalidException;
+
+    /**
+     *
+     * @param s
+     * @throws FieldDataInvalidException
+     */
+    public void setTrack(String s)   throws FieldDataInvalidException;
+
+    /**
+     *
+     * @param s
+     * @throws FieldDataInvalidException
+     */
+    public void setYear(String s)  throws FieldDataInvalidException;
+
+
+    /**
+     * Create a new TagField based on generic key
+     *
+     * <p>Only textual data supported at the moment. The genericKey will be mapped
+     * to the correct implementation key and return a TagField.
      *
      * @param genericKey is the generic key
      * @param value to store
@@ -234,19 +322,9 @@ public interface Tag
         throws KeyNotFoundException,FieldDataInvalidException;
 
 
-    /**
-     * Returns a {@linkplain List list} of {@link TagField} objects whose &quot;{@linkplain TagField#getId() id}&quot;
-     * is the specified one.<br>
-     *
-     * @param id
-     *            The field id.
-     * @return A list of {@link TagField} objects with the given &quot;id&quot;.
-     */
-    public List<TagField> get(TagFieldKey id)
-            throws KeyNotFoundException;
 
     /**
-     * Retrieve the first value that exists for this key id
+     * Retrieve the first value that exists for this key
      *
      * @param id
      * @return
@@ -254,7 +332,7 @@ public interface Tag
     public String getFirst(String id);
 
     /**
-     * Retrieve String value of first tagfield  that exists for this generic key 
+     * Retrieve String value of first tagfield that exists for this key
      *
      * @param id
      * @return String value or empty string
@@ -263,20 +341,53 @@ public interface Tag
             throws KeyNotFoundException;
 
     /**
-     * Retrieve the first tagfield that exists for this generic key
+     * Retrieve the first tagfield that exists for this key
+     *
      * @param id
      * @return tag field or null if doesnt exist
      */
     public TagField getFirstField(String id);
 
+    //TODO, do we need this
     public String toString();
 
     /**
      * Delete any instance of tag fields with this key
+     *
      * @param tagFieldKey
      */
     public void deleteTagField(TagFieldKey tagFieldKey)
             throws KeyNotFoundException;
 
-   
+    /**
+     * Iterator over all the fields within the tag, handle multiple fields with the same id
+     *
+     * @return iterator over whole list
+     */
+    public Iterator getFields();
+
+    /**
+       * Return the number of fields
+       *
+       * <p>Fields with the same identifiers are counted seperately
+       * i.e two title fields would contribute two to the count
+       *
+       * @return total number of fields
+       */
+      public int getFieldCount();
+
+      //TODO is this a special field?
+      public boolean setEncoding(String enc)  throws FieldDataInvalidException;
+
+    /**
+        * Returns a {@linkplain List list} of {@link TagField} objects whose &quot;{@linkplain TagField#getId() id}&quot;
+        * is the specified one.<br>
+        *
+        * @param id
+        *            The field id.
+        * @return A list of {@link TagField} objects with the given &quot;id&quot;.
+        */
+       public List<TagField> get(TagFieldKey id)
+               throws KeyNotFoundException;
+
 }

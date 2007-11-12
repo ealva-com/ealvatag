@@ -74,7 +74,7 @@ public enum Mp4FieldKey
     TV_EPISODE("tves",BYTE,1),
 
     //These seem to be used in DRM Files, of type byte , we need to know the byte length to allow them to be written
-    //back correctly on saving them, we dont provides options to moduify them as may break drm
+    //back correctly on saving them, we dont provides options to modify them as may break drm
     AP_ID("apID",TEXT),
     AT_ID("atID",BYTE,4),
     CN_ID("cnID",BYTE,4),
@@ -130,7 +130,6 @@ public enum Mp4FieldKey
         this.issuer=issuer;
         this.identifier= identifier;
         this.fieldName = Mp4TagReverseDnsField.IDENTIFIER+":"+issuer+":"+identifier;
-
         this.fieldType = fieldType;
     }
 
