@@ -108,5 +108,17 @@ public class Mp4TagCoverField extends Mp4TagBinaryField
         return true;
     }
 
+    public String toString()
+    {
+        switch(imageType)
+        {
+            case COVERART_JPEG:
+                return "jpeg:"+dataBytes.length +"bytes";
+            case COVERART_PNG:
+                return "png"+dataBytes.length +"bytes";
+            default:
+                return "";
+       }
+    }
 
 }

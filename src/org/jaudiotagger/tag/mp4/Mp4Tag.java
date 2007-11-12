@@ -119,7 +119,7 @@ public class Mp4Tag extends AbstractTag
      * things easier by checking both and returning the populated one (if any)
      */
     @Override
-    public List getGenre()
+    public List<TagField> getGenre()
     {
         List genres = get(GENRE.getFieldName());
         if (genres.size() == 0)
@@ -199,7 +199,7 @@ public class Mp4Tag extends AbstractTag
      * @param genericKey
      */
     @Override
-    public List get(TagFieldKey genericKey) throws KeyNotFoundException
+    public List<TagField> get(TagFieldKey genericKey) throws KeyNotFoundException
     {
         if( genericKey==null)
         {
@@ -214,7 +214,7 @@ public class Mp4Tag extends AbstractTag
      * @param mp4KeyId TODO:this is inefficient we need to change calling code to use the enums directly
      */
     @Override
-    public List get(String mp4KeyId)
+    public List <TagField> get(String mp4KeyId)
     {
         for (Mp4FieldKey mp4FieldKey : Mp4FieldKey.values())
         {
@@ -223,7 +223,7 @@ public class Mp4Tag extends AbstractTag
                 return super.get(mp4FieldKey.getFieldName());
             }
         }
-        return new ArrayList();
+        return new ArrayList<TagField>();
     }
 
     /**
@@ -233,7 +233,7 @@ public class Mp4Tag extends AbstractTag
      *
      * @param mp4FieldKey
      */
-    public List get(Mp4FieldKey mp4FieldKey)  throws KeyNotFoundException
+    public List<TagField> get(Mp4FieldKey mp4FieldKey)  throws KeyNotFoundException
     {
         if( mp4FieldKey==null)
         {
@@ -416,8 +416,6 @@ public class Mp4Tag extends AbstractTag
 
             default:
                 return new Mp4TagTextField(mp4FieldKey.getFieldName(), value);
-
-
         }
     }
 }

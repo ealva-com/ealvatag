@@ -140,44 +140,44 @@ public interface Tag
      *
      * @return
      */
-    public List getAlbum();
+    public List<TagField> getAlbum();
 
 
     /**
      *
      * @return
      */
-    public List getArtist();
+    public List<TagField> getArtist();
 
     /**
      *
      * @return
      */
-    public List getComment();
+    public List<TagField> getComment();
 
     /**
      *
      * @return
      */
-    public List getGenre();
+    public List<TagField> getGenre();
 
     /**
      *
      * @return
      */
-    public List getTitle();
+    public List<TagField> getTitle();
 
     /**
      *
      * @return
      */
-    public List getTrack();
+    public List<TagField> getTrack();
 
     /**
      *
      * @return
      */
-    public List getYear();
+    public List<TagField> getYear();
 
 
     /**

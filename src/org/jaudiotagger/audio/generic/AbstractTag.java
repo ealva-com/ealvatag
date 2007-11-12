@@ -18,6 +18,7 @@
 package org.jaudiotagger.audio.generic;
 
 import java.util.*;
+import java.util.List;
 
 import org.jaudiotagger.tag.*;
 
@@ -153,7 +154,7 @@ public abstract class AbstractTag implements Tag
      *
      * @see org.jaudiotagger.tag.Tag#get(java.lang.String)
      */
-    public List get(String id)
+    public List<TagField> get(String id)
     {
         List<TagField> list =  fields.get(id);
 
@@ -186,7 +187,7 @@ public abstract class AbstractTag implements Tag
     public String getFirst(String id)
     {
         List l = get(id);       
-        return (l.size() != 0) ? ((TagTextField) l.get(0)).getContent() : "";
+        return (l.size() != 0) ? l.get(0).toString():"";   
     }
 
     public TagField getFirstField(String id)
@@ -355,7 +356,7 @@ public abstract class AbstractTag implements Tag
      * @see org.jaudiotagger.tag.Tag#getFirstGenre()
      */
     public String getFirstGenre()
-    {
+    {           
         List l = getGenre();
         return (l.size() != 0) ? ((TagTextField) l.get(0)).getContent() : "";
     }
