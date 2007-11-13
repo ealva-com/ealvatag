@@ -604,21 +604,39 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag
     }
 
 
-    public void merge(Tag tag)
-    {
-        //TODO
-        throw new UnsupportedOperationException("TODO:Not done yet");
-    }
 
     public void set(TagField field)
     {
-        //TODO
-        throw new UnsupportedOperationException("TODO:Not done yet");
+        TagFieldKey genericKey = TagFieldKey.valueOf(field.getId());
+        switch(genericKey)
+        {
+            case ARTIST:
+                setArtist(field.toString());
+
+            case ALBUM:
+                setAlbum(field.toString());
+
+            case TITLE:
+                setTitle(field.toString());
+
+            case GENRE:
+                setGenre(field.toString());
+
+            case YEAR:
+                setYear(field.toString());
+
+            case COMMENT:
+                setComment(field.toString());
+        }
     }
 
+    /**
+     *
+     * @param encoding
+     * @return
+     */
     public boolean setEncoding(String encoding)
     {
-        //TODO, nothing to do
         return true;
     }
 
@@ -659,7 +677,7 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag
                 return getGenre();
 
             case YEAR:
-                return getGenre();
+                return getYear();
 
             case COMMENT:
                 return getComment();
@@ -713,7 +731,10 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag
                 return getFirstGenre();
 
             case YEAR:
-                return getFirstGenre();
+                return getFirstYear();
+
+            case TRACK:
+                return getFirstTrack();
 
             case COMMENT:
                 return getFirstComment();
@@ -726,12 +747,30 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag
     /**
      * Delete any instance of tag fields with this key
      *
-     * @param tagFieldKey
+     * @param genericKey
      */
-    public void deleteTagField(TagFieldKey tagFieldKey)
+    public void deleteTagField(TagFieldKey genericKey)
     {
-        //TODO
-        throw new UnsupportedOperationException("TODO:Not done yet");
+         switch(genericKey)
+        {
+            case ARTIST:
+                setArtist("");
+
+            case ALBUM:
+                setAlbum("");
+
+            case TITLE:
+                setTitle("");
+
+            case GENRE:
+                setGenre("");
+
+            case YEAR:
+                setYear("");
+
+            case COMMENT:
+                setComment("");
+        }
     }
 
     /**

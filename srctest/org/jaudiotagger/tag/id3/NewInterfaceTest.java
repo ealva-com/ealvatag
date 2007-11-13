@@ -59,6 +59,54 @@ public class NewInterfaceTest extends TestCase
         return new TestSuite(NewInterfaceTest.class);
     }
 
+    public void testNewInterfaceBasicReadandWriteID3v1() throws Exception
+    {
+        Exception e=null;
+        File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3", new File("testnewIntId3v24.mp3"));
+        MP3File mp3File = new MP3File(testFile);
+
+        //Has no tag at this point
+        assertFalse(mp3File.hasID3v1Tag());
+        assertFalse(mp3File.hasID3v2Tag());
+
+        //Create v1 tag (old method)
+        ID3v11Tag v1tag = new ID3v11Tag();
+        v1tag.setArtist(V1_ARTIST);
+        v1tag.setAlbum("V1ALBUM");
+        v1tag.set(v1tag.createTagField(TagFieldKey.TITLE,"title"));
+        v1tag.setGenre("Rock");
+        v1tag.set(v1tag.createTagField(TagFieldKey.TRACK,"12"));
+        mp3File.setID3v1Tag(v1tag);
+        mp3File.save();
+
+        //Has only v1 tag
+        assertTrue(mp3File.hasID3v1Tag());
+        assertFalse(mp3File.hasID3v2Tag());
+
+        //Read fields
+        AudioFile af = AudioFileIO.read(testFile);
+        assertEquals(V1_ARTIST, af.getTag().getFirst(TagFieldKey.ARTIST));
+        assertEquals(V1_ARTIST, af.getTag().getFirstArtist());
+        assertEquals(V1_ARTIST, af.getTag().getFirst(TagFieldKey.ARTIST));
+        assertEquals("V1ALBUM", af.getTag().getFirst(TagFieldKey.ALBUM));
+        assertEquals("title", af.getTag().getFirst(TagFieldKey.TITLE));
+        assertEquals("title", af.getTag().getFirstTitle());
+        assertEquals("Rock", af.getTag().getFirst(TagFieldKey.GENRE));
+        assertEquals("12", af.getTag().getFirstTrack());
+        assertEquals("12", af.getTag().getFirst(TagFieldKey.TRACK));
+
+        //Delete some fields (just sets string to empty String)
+        af.getTag().deleteTagField(TagFieldKey.TITLE);
+        assertEquals("",af.getTag().getFirst(TagFieldKey.TITLE));
+
+        //Modify a value
+        af.getTag().setTitle("newtitle");
+        assertEquals("newtitle", af.getTag().getFirst(TagFieldKey.TITLE));
+
+        //Adding just replaces current value
+        af.getTag().addTitle("newtitle2");
+        assertEquals("newtitle2", af.getTag().getFirst(TagFieldKey.TITLE));
+    }
 
     public void testNewInterfaceBasicReadandWriteID3v24() throws Exception
     {

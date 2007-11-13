@@ -284,6 +284,7 @@ public class ID3v11Tag
      *
      * @param trackValue
      */
+    @Override
     public void setTrack(String trackValue)
     {
         int trackAsInt;
@@ -313,16 +314,19 @@ public class ID3v11Tag
      *
      * @return track
      */
+    @Override
     public String getFirstTrack()
     {
         return String.valueOf(track & BYTE_TO_UNSIGNED);
     }
 
+    @Override
     public void addTrack(String track)
     {
        setTrack(track);
     }
-
+    
+    @Override
     public List getTrack()
     {
         if(getFirstTrack().length()>0)
@@ -333,6 +337,34 @@ public class ID3v11Tag
         else
         {
             return new ArrayList();
+        }
+    }
+
+     public void set(TagField field)
+    {
+        TagFieldKey genericKey = TagFieldKey.valueOf(field.getId());
+        switch(genericKey)
+        {
+            case ARTIST:
+                setArtist(field.toString());
+
+            case ALBUM:
+                setAlbum(field.toString());
+
+            case TITLE:
+                setTitle(field.toString());
+
+            case GENRE:
+                setGenre(field.toString());
+
+            case YEAR:
+                setYear(field.toString());
+
+            case COMMENT:
+                setComment(field.toString());
+
+             case TRACK:
+                setTrack(field.toString());
         }
     }
 
