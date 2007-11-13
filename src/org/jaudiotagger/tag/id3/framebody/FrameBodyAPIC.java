@@ -184,7 +184,6 @@ public class FrameBodyAPIC extends AbstractID3v2FrameBody implements ID3v24Frame
 
     /** If the description cannot be encoded using current encoder, change the encoder */
     public void write(ByteArrayOutputStream tagBuffer)
-        throws IOException
     {
         if (((AbstractString) getObject(DataTypes.OBJ_DESCRIPTION)).canBeEncoded() == false)
         {

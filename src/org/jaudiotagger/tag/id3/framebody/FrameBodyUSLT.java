@@ -212,8 +212,7 @@ public class FrameBodyUSLT extends AbstractID3v2FrameBody implements ID3v23Frame
     }
 
 
-    public void write(ByteArrayOutputStream tagBuffer)
-        throws IOException
+    public void write(ByteArrayOutputStream tagBuffer)        
     {
         //Ensure valid for type
         this.setTextEncoding(ID3TextEncodingConversion.getUnicodeTextEncoding(getHeader()));

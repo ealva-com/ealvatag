@@ -108,6 +108,7 @@ public class Mp4TagCoverField extends Mp4TagBinaryField
         return true;
     }
 
+    
     public String toString()
     {
         switch(imageType)

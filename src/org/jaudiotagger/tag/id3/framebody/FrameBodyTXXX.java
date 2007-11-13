@@ -51,6 +51,16 @@ import java.nio.ByteBuffer;
 public class FrameBodyTXXX
     extends AbstractFrameBodyTextInfo implements ID3v24FrameBody, ID3v23FrameBody
 {
+    public static final String MUSIC_BRAINZ_ARTISTID        = "MusicBrainz Artist Id";
+    public static final String MUSIC_BRAINZ_ALBUM_ARTISTID  = "MusicBrainz Album Artist Id";
+    public static final String MUSIC_BRAINZ_ALBUMID         = "MusicBrainz Album Id";
+    public static final String MUSIC_BRAINZ_DISCID          = "MusicBrainz Disc Id";
+    public static final String MUSICBRAINZ_ALBUM_TYPE       = "MusicBrainz Album Type";
+    public static final String MUSICBRAINZ_ALBUM_STATUS     = "MusicBrainz Album Status";
+    public static final String MUSICBRAINZ_ALBUM_COUNTRY    = "MusicBrainz Album Release Country";
+    public static final String AMAZON_ASIN                  = "ASIN";
+    public static final String MUSICIP_ID                   = "MusicIP PUID";
+
     /**
      * Creates a new FrameBodyTXXX datatype.
      */
@@ -123,8 +133,7 @@ public class FrameBodyTXXX
     /**
      * Because TXXX frames also have a text encoded description we need to check this as well.     *
      */
-    public void write(ByteArrayOutputStream tagBuffer)
-        throws IOException
+    public void write(ByteArrayOutputStream tagBuffer)       
     {
         //Ensure valid for type
         setTextEncoding( ID3TextEncodingConversion.getTextEncoding(getHeader(),getTextEncoding()));

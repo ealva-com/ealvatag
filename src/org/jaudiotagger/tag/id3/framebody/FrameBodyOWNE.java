@@ -114,7 +114,6 @@ public class FrameBodyOWNE extends AbstractID3v2FrameBody implements ID3v24Frame
 
       /** If the seller name cannot be encoded using current encoder, change the encoder */
     public void write(ByteArrayOutputStream tagBuffer)
-        throws IOException
     {
        //Ensure valid for type
         setTextEncoding( ID3TextEncodingConversion.getTextEncoding(getHeader(),getTextEncoding()));

@@ -184,6 +184,11 @@ public abstract class AbstractTag implements Tag
     }
 
 
+    /**
+     *
+     * @param id
+     * @return matches for this saudio-specific key
+     */
     public String getFirst(String id)
     {
         List l = get(id);       
@@ -301,7 +306,7 @@ public abstract class AbstractTag implements Tag
     /**
      * Return field count
      *
-     * TODO:Ther emust be a more efficient way to do this.
+     * TODO:There must be a more efficient way to do this.
      * 
      * @return field count
      */

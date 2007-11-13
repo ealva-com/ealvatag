@@ -111,7 +111,7 @@ public abstract class AbstractTagFrame extends AbstractTagItem
     /**
      * Returns true if this datatype and its body equals the argument and its
      * body. this datatype is equal if and only if they are the same class and
-     * have the same <code>getIdentifier</code> id string.
+     * have the same <code>getSubId</code> id string.
      *
      * @param obj datatype to determine equality of
      * @return true if this datatype and its body equals the argument and its

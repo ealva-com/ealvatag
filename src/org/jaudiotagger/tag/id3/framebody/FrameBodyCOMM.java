@@ -191,8 +191,7 @@ public class FrameBodyCOMM  extends AbstractID3v2FrameBody  implements ID3v24Fra
      * not contain characters that cannot be encoded in current encoding before
      * we write data. If there are we change the encoding.
      */
-    public void write(ByteArrayOutputStream tagBuffer)
-        throws IOException
+    public void write(ByteArrayOutputStream tagBuffer)       
     {
         //Ensure valid for type
         setTextEncoding( ID3TextEncodingConversion.getTextEncoding(getHeader(),getTextEncoding()));

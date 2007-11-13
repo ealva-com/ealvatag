@@ -18,12 +18,23 @@ package org.jaudiotagger.tag.id3;
 import org.jaudiotagger.FileConstants;
 import org.jaudiotagger.audio.mp3.MP3File;
 import org.jaudiotagger.tag.*;
+import static org.jaudiotagger.tag.mp4.Mp4FieldKey.ARTIST;
+import static org.jaudiotagger.tag.mp4.Mp4FieldKey.ALBUM;
+import static org.jaudiotagger.tag.mp4.Mp4FieldKey.TITLE;
+import static org.jaudiotagger.tag.mp4.Mp4FieldKey.TRACK;
+import static org.jaudiotagger.tag.mp4.Mp4FieldKey.DAY;
+import static org.jaudiotagger.tag.mp4.Mp4FieldKey.COMMENT;
+import static org.jaudiotagger.tag.mp4.Mp4FieldKey.GENRE;
+import org.jaudiotagger.tag.mp4.Mp4FieldKey;
 import org.jaudiotagger.tag.id3.framebody.AbstractFrameBodyTextInfo;
 import org.jaudiotagger.tag.id3.framebody.FrameBodyTDRC;
+import org.jaudiotagger.tag.id3.framebody.FrameBodyTXXX;
+import org.jaudiotagger.tag.id3.framebody.FrameBodyUFID;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.channels.WritableByteChannel;
@@ -38,7 +49,7 @@ import java.util.logging.Level;
  * @version $Id$
  */
 public class ID3v22Tag
-    extends AbstractID3v2Tag
+    extends AbstractID3v2Tag 
 {
 
     protected static final String TYPE_COMPRESSION = "compression";
@@ -612,5 +623,121 @@ public class ID3v22Tag
     public boolean isCompression()
     {
         return compression;
+    }
+
+    protected String getArtistId()
+    {
+        return ID3v22Frames.FRAME_ID_V2_ARTIST;
+    }
+
+    protected String getAlbumId()
+    {
+        return ID3v22Frames.FRAME_ID_V2_ALBUM;
+    }
+
+    protected String getTitleId()
+    {
+        return ID3v22Frames.FRAME_ID_V2_TITLE;
+    }
+
+    protected String getTrackId()
+    {
+        return ID3v22Frames.FRAME_ID_V2_TRACK;
+    }
+
+    protected String getYearId()
+    {
+       return ID3v22Frames.FRAME_ID_V2_TYER;
+    }
+
+    protected String getCommentId()
+    {
+        return ID3v22Frames.FRAME_ID_V2_COMMENT;
+    }
+
+    protected String getGenreId()
+    {
+        return ID3v22Frames.FRAME_ID_V2_GENRE;
+    }
+
+    /**
+     * Create Frame
+     * @param id frameid
+     * @return
+     */
+   public ID3v22Frame createFrame(String id)
+   {
+        return new ID3v22Frame(id);
+   }
+
+
+
+    /**
+     * Create Frame for Id3 Key
+     * <p/>
+     * Only textual data supported at the moment, should only be used with frames that
+     * support a simple string argument.
+     *
+     * @param id3Key
+     * @param value
+     * @return
+     * @throws KeyNotFoundException
+     * @throws FieldDataInvalidException
+     */
+    public TagField createTagField(ID3v22FieldKey id3Key, String value)
+            throws KeyNotFoundException, FieldDataInvalidException
+    {
+        if (id3Key == null)
+        {
+            throw new KeyNotFoundException();
+        }
+         return super.doCreateTagField(new FrameAndSubId(id3Key.getFrameId(),id3Key.getSubId()),value);
+    }
+
+    /**
+     * Retrieve the first value that exists for this id3v22key
+     *
+     * @param id3v22FieldKey
+     * @return
+     */
+    public String getFirst(ID3v22FieldKey id3v22FieldKey) throws KeyNotFoundException
+    {
+        if (id3v22FieldKey == null)
+        {
+            throw new KeyNotFoundException();
+        }
+        return super.doGetFirst(new FrameAndSubId(id3v22FieldKey.getFrameId(),id3v22FieldKey.getSubId()));
+    }
+
+    /**
+     * Delete fields with this id3v22FieldKey
+     *
+     * @param id3v22FieldKey
+     */
+    public void deleteTagField
+            (ID3v22FieldKey
+                    id3v22FieldKey) throws KeyNotFoundException
+    {
+        if (id3v22FieldKey == null)
+        {
+            throw new KeyNotFoundException();
+        }
+        super.doDeleteTagField(new FrameAndSubId(id3v22FieldKey.getFrameId(),id3v22FieldKey.getSubId()));
+    }
+
+
+    protected FrameAndSubId getFrameAndSubIdFromGenericKey(TagFieldKey genericKey)
+    {
+        ID3v22FieldKey id3v22FieldKey = ID3v22Frames.getInstanceOf().getId3KeyFromGenericKey(genericKey);
+        if (id3v22FieldKey == null)
+        {
+            throw new KeyNotFoundException();
+        }
+        return new FrameAndSubId(id3v22FieldKey.getFrameId(),id3v22FieldKey.getSubId());
+    }
+
+     protected ID3Frames getID3Frames()
+    {
+        return ID3v22Frames.getInstanceOf();
     }
 }

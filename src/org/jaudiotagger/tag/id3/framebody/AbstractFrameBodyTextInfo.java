@@ -178,7 +178,6 @@ public abstract class AbstractFrameBodyTextInfo
      * encoding.
      */
     public void write(ByteArrayOutputStream tagBuffer)
-        throws IOException
     {
         //Ensure valid for type
         setTextEncoding( ID3TextEncodingConversion.getTextEncoding(getHeader(),getTextEncoding()));

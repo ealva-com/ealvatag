@@ -340,17 +340,21 @@ public class MP3File extends AudioFile
             //Read v1 tags (if any)
             readV1Tag(file, newFile, loadOptions);
 
-            //We set the Common Interface tag to the v1 tag
-            //TODO the v2tag doesnt not support the tag interface yet
-            //TODO how does the interface handle having both a v1 and a v2 tag, in original entagged code
-            //the contents of v1 would be merged with v2 , and then v2 returned
-            if(id3v1tag!=null)
+            //Read v2 tags (if any)
+            readV2Tag(file, loadOptions);
+
+            //If we have a v2 tag use that, if we dont but have v1 tag use that
+            //otherwise use nothing
+            //TODO:if have both should we merge
+            //rather than just returning specific ID3v22 tag, would it be better to return v24 version ?
+            if(this.getID3v2Tag()!=null)
+            {
+                tag = this.getID3v2Tag();
+            }
+            else if(id3v1tag!=null)
             {
                 tag=id3v1tag;
             }
-
-            //Read v2 tags (if any)
-            readV2Tag(file, loadOptions);
 
             //Read Lyrics 3
             //readLyrics3Tag(File file,RandomAccessFile  newFile,int loadOptions)

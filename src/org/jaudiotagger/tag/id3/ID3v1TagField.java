@@ -2,7 +2,6 @@ package org.jaudiotagger.tag.id3;
 
 import org.jaudiotagger.tag.TagTextField;
 import org.jaudiotagger.tag.TagField;
-import org.jaudiotagger.tag.vorbiscomment.VorbisCommentFieldKey;
 
 import java.io.UnsupportedEncodingException;
 
@@ -13,7 +12,7 @@ import java.io.UnsupportedEncodingException;
  * @author @author Raphael Slinckx (KiKiDonK)
  * @author Christian Laireiter (liree)
  */
-public class ID3TagField implements TagTextField
+public class ID3v1TagField implements TagTextField
 {
 
     /**
@@ -41,7 +40,7 @@ public class ID3TagField implements TagTextField
      * @param raw Raw byte data of the tagfield.
      * @throws UnsupportedEncodingException If the data doesn't conform "UTF-8" specification.
      */
-    public ID3TagField(byte[] raw) throws UnsupportedEncodingException
+    public ID3v1TagField(byte[] raw) throws UnsupportedEncodingException
     {
         String field = new String(raw, "UTF-8");
 
@@ -74,7 +73,7 @@ public class ID3TagField implements TagTextField
      * @param fieldId      ID (name) of the field.
      * @param fieldContent Content of the field.
      */
-    public ID3TagField(String fieldId, String fieldContent)
+    public ID3v1TagField(String fieldId, String fieldContent)
     {
         this.id = fieldId.toUpperCase();
         this.content = fieldContent;
@@ -88,15 +87,13 @@ public class ID3TagField implements TagTextField
      */
     private void checkCommon()
     {
-        this.common = id.equals(ID3FieldKey.TITLE.name())
-            || id.equals(ID3FieldKey.ALBUM.name())
-            || id.equals(ID3FieldKey.ARTIST.name())
-            || id.equals(ID3FieldKey.GENRE.name())
-            || id.equals(ID3FieldKey.TRACKNUMBER.name())
-            || id.equals(ID3FieldKey.YEAR.name())
-            || id.equals(ID3FieldKey.DESCRIPTION.name())
-            || id.equals(ID3FieldKey.COMMENT.name())
-            || id.equals(ID3FieldKey.TRACK.name());
+        this.common = id.equals(ID3v1FieldKey.TITLE.name())
+            || id.equals(ID3v1FieldKey.ALBUM.name())
+            || id.equals(ID3v1FieldKey.ARTIST.name())
+            || id.equals(ID3v1FieldKey.GENRE.name())
+            || id.equals(ID3v1FieldKey.YEAR.name())          
+            || id.equals(ID3v1FieldKey.COMMENT.name())
+            || id.equals(ID3v1FieldKey.TRACK.name());
     }
 
     /**

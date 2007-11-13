@@ -199,7 +199,7 @@ public abstract class AbstractID3v2FrameBody
      * @throws IOException on any I/O error
      */
     public void write(ByteArrayOutputStream tagBuffer)
-        throws IOException
+
     {
         logger.info("Writing frame body for" + this.getIdentifier() + ":Est Size:" + size);
         //Write the various fields to file in order
@@ -208,7 +208,15 @@ public abstract class AbstractID3v2FrameBody
             byte[] objectData = object.writeByteArray();
             if (objectData != null)
             {
-                tagBuffer.write(objectData);
+                try
+                {
+                    tagBuffer.write(objectData);
+                }
+                catch(IOException ioe)
+                {
+                    //This could never happen coz not writing to file, so convert to RuntimeException
+                    throw new RuntimeException(ioe);
+                }
             }
         }
         setSize();

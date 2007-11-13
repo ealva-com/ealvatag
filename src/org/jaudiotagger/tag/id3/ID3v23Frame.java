@@ -131,15 +131,8 @@ public class ID3v23Frame extends AbstractID3v2Frame
                     else
                     {
                         ByteArrayOutputStream baos = new  ByteArrayOutputStream();
-                        try
-                        {
-                            ((AbstractID3v2FrameBody)frame.getBody()).write(baos);
-                        }
-                        catch(IOException ioe)
-                        {
-                            //Should not happen as not actually writing to file
-                            throw new RuntimeException("Problem writing frame out to bytearraystream",ioe);
-                        }
+                        ((AbstractID3v2FrameBody)frame.getBody()).write(baos);
+
                         identifier = frame.getIdentifier();
                         this.frameBody = new FrameBodyUnsupported(identifier,baos.toByteArray());
                         this.frameBody.setHeader(this);
@@ -468,7 +461,6 @@ public class ID3v23Frame extends AbstractID3v2Frame
      * @throws IOException
      */
     public void write(ByteArrayOutputStream tagBuffer)
-        throws IOException
     {
         logger.info("Writing frame to buffer:" + getIdentifier());
         //This is where we will write header, move position to where we can
@@ -498,11 +490,19 @@ public class ID3v23Frame extends AbstractID3v2Frame
         //Encoding we dont support any of flags so don't set any
         headerBuffer.put(encodingFlags.getFlags());
 
-        //Add header to the Byte Array Output Stream
-        tagBuffer.write(headerBuffer.array());
+        try
+        {
+            //Add header to the Byte Array Output Stream
+            tagBuffer.write(headerBuffer.array());
 
-        //Add body to the Byte Array Output Stream
-        tagBuffer.write(bodyOutputStream.toByteArray());
+            //Add body to the Byte Array Output Stream
+            tagBuffer.write(bodyOutputStream.toByteArray());
+        }
+        catch(IOException ioe)
+        {
+             //This could never happen coz not writing to file, so convert to RuntimeException
+             throw new RuntimeException(ioe);
+        }
 
 
     }
@@ -713,4 +713,21 @@ public class ID3v23Frame extends AbstractID3v2Frame
         MP3File.getStructureFormatter().closeHeadingElement(TYPE_FRAME);
     }
 
+      /**
+     *
+     * @return true if considered a common frame
+     */
+    public boolean isCommon()
+    {
+        return ID3v23Frames.getInstanceOf().isCommon(getId());
+    }
+
+     /**
+     *
+     * @return true if considered a common frame
+     */
+    public boolean isBinary()
+    {
+        return ID3v23Frames.getInstanceOf().isBinary(getId());
+    }
 }

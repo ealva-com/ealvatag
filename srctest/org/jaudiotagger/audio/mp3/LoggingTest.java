@@ -40,7 +40,7 @@ public class LoggingTest extends TestCase
         Document d2 = DocumentBuilderFactory.newInstance()
                 .newDocumentBuilder().parse(new InputSource(new StringReader(mp3File2.displayStructureAsXML())));
         assertEquals("TIT2",xpath1.evaluate(new InputSource(new StringReader(mp3File2.displayStructureAsXML()))));
-
-
     }
+
 }
+

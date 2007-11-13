@@ -27,6 +27,7 @@ import org.jaudiotagger.tag.lyrics3.Lyrics3v2Field;
 import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.channels.WritableByteChannel;
@@ -40,7 +41,7 @@ import java.util.logging.Level;
  * @author : Eric Farng
  * @version $Id$
  */
-public class ID3v24Tag  extends AbstractID3v2Tag
+public class ID3v24Tag extends AbstractID3v2Tag
 {
     protected static final String TYPE_FOOTER = "footer";
     protected static final String TYPE_IMAGEENCODINGRESTRICTION = "imageEncodingRestriction";
@@ -50,12 +51,11 @@ public class ID3v24Tag  extends AbstractID3v2Tag
     protected static final String TYPE_TEXTENCODINGRESTRICTION = "textEncodingRestriction";
     protected static final String TYPE_TEXTFIELDSIZERESTRICTION = "textFieldSizeRestriction";
     protected static final String TYPE_UPDATETAG = "updateTag";
-    protected static final String TYPE_CRCDATA      = "crcdata";
+    protected static final String TYPE_CRCDATA = "crcdata";
     protected static final String TYPE_EXPERIMENTAL = "experimental";
-    protected static final String TYPE_EXTENDED     = "extended";
-    protected static final String TYPE_PADDINGSIZE  = "paddingsize";
+    protected static final String TYPE_EXTENDED = "extended";
+    protected static final String TYPE_PADDINGSIZE = "paddingsize";
     protected static final String TYPE_UNSYNCHRONISATION = "unsyncronisation";
-
 
 
     protected static int TAG_EXT_HEADER_LENGTH = 6;
@@ -188,11 +188,11 @@ public class ID3v24Tag  extends AbstractID3v2Tag
     /**
      * All frames in the tag uses unsynchronisation
      */
-    protected  boolean unsynchronization = false;
+    protected boolean unsynchronization = false;
 
     /**
-       * CRC Checksum
-       */
+     * CRC Checksum
+     */
     protected int crcData = 0;
 
 
@@ -212,22 +212,22 @@ public class ID3v24Tag  extends AbstractID3v2Tag
     protected boolean tagRestriction = false;
 
     /**
-     * 
+     *
      */
     protected byte imageEncodingRestriction = 0;
 
     /**
-     * 
+     *
      */
     protected byte imageSizeRestriction = 0;
 
     /**
-     * 
+     *
      */
     protected byte tagSizeRestriction = 0;
 
     /**
-     * 
+     *
      */
     protected byte textEncodingRestriction = 0;
 
@@ -238,7 +238,7 @@ public class ID3v24Tag  extends AbstractID3v2Tag
 
 
     /**
-     * 
+     *
      */
     protected byte textFieldSizeRestriction = 0;
 
@@ -513,7 +513,7 @@ public class ID3v24Tag  extends AbstractID3v2Tag
      * @deprecated use {@link #ID3v24Tag(ByteBuffer,String)} instead
      */
     public ID3v24Tag(ByteBuffer buffer) throws TagException
-    {         
+    {
         this(buffer, "");
     }
 
@@ -953,7 +953,7 @@ public class ID3v24Tag  extends AbstractID3v2Tag
         logger.info("Writing tag to channel");
 
         byte[] bodyByteBuffer = writeFramesToBuffer().toByteArray();
-        ByteBuffer headerBuffer = writeHeaderToBuffer(0,bodyByteBuffer.length);
+        ByteBuffer headerBuffer = writeHeaderToBuffer(0, bodyByteBuffer.length);
 
         channel.write(headerBuffer);
         channel.write(ByteBuffer.wrap(bodyByteBuffer));
@@ -992,15 +992,132 @@ public class ID3v24Tag  extends AbstractID3v2Tag
     }
 
     /**
-    * Are all frame swithin this tag unsynchronized
+     * Are all frame swithin this tag unsynchronized
+     * <p/>
+     * <p>Because synchronization occurs at the frame level it is not normally desirable to unsynchronize all frames
+     * and hence this flag is not normally set.
      *
-    * <p>Because synchronization occurs at the frame level it is not normally desirable to unsynchronize all frames
-    * and hence this flag is not normally set.
-    *
-    * @return are all frames within the tag unsynchronized
-    */
+     * @return are all frames within the tag unsynchronized
+     */
     public boolean isUnsynchronization()
     {
-       return unsynchronization;
+        return unsynchronization;
+    }
+
+    protected String getArtistId()
+    {
+        return ID3v24Frames.FRAME_ID_ARTIST;
+    }
+
+    protected String getAlbumId()
+    {
+        return ID3v24Frames.FRAME_ID_ALBUM;
+    }
+
+    protected String getTitleId()
+    {
+        return ID3v24Frames.FRAME_ID_TITLE;
+    }
+
+    protected String getTrackId()
+    {
+        return ID3v24Frames.FRAME_ID_TRACK;
+    }
+
+    protected String getYearId()
+    {
+        return ID3v24Frames.FRAME_ID_YEAR;
+    }
+
+    protected String getCommentId()
+    {
+        return ID3v24Frames.FRAME_ID_COMMENT;
+    }
+
+    protected String getGenreId()
+    {
+        return ID3v24Frames.FRAME_ID_GENRE;
+    }
+
+    /**
+     * Create a new frame with the specified frameid
+     *
+     * @param id
+     * @return
+     */
+    public ID3v24Frame createFrame(String id)
+    {
+        return new ID3v24Frame(id);
+    }
+
+
+
+    /**
+     * Create Frame for Id3 Key
+     * <p/>
+     * Only textual data supported at the moment, should only be used with frames that
+     * support a simple string argument.
+     *
+     * @param id3Key
+     * @param value
+     * @return
+     * @throws KeyNotFoundException
+     * @throws FieldDataInvalidException
+     */
+    public TagField createTagField(ID3v24FieldKey id3Key, String value)
+            throws KeyNotFoundException, FieldDataInvalidException
+    {
+        if (id3Key == null)
+        {
+            throw new KeyNotFoundException();
+        }
+         return super.doCreateTagField(new FrameAndSubId(id3Key.getFrameId(),id3Key.getSubId()),value);
+    }
+
+    /**
+     * Retrieve the first value that exists for this id3v24key
+     *
+     * @param id3v24FieldKey
+     * @return
+     */
+    public String getFirst(ID3v24FieldKey id3v24FieldKey) throws KeyNotFoundException
+    {
+        if (id3v24FieldKey == null)
+        {
+            throw new KeyNotFoundException();
+        }
+        return super.doGetFirst(new FrameAndSubId(id3v24FieldKey.getFrameId(),id3v24FieldKey.getSubId()));
+    }
+
+    /**
+     * Delete fields with this id3v24FieldKey
+     *
+     * @param id3v24FieldKey
+     */
+    public void deleteTagField
+            (ID3v24FieldKey
+                    id3v24FieldKey) throws KeyNotFoundException
+    {
+        if (id3v24FieldKey == null)
+        {
+            throw new KeyNotFoundException();
+        }
+        super.doDeleteTagField(new FrameAndSubId(id3v24FieldKey.getFrameId(),id3v24FieldKey.getSubId()));
+    }
+
+
+    protected FrameAndSubId getFrameAndSubIdFromGenericKey(TagFieldKey genericKey)
+    {
+        ID3v24FieldKey id3v24FieldKey = ID3v24Frames.getInstanceOf().getId3KeyFromGenericKey(genericKey);
+        if (id3v24FieldKey == null)
+        {
+            throw new KeyNotFoundException();
+        }
+        return new FrameAndSubId(id3v24FieldKey.getFrameId(),id3v24FieldKey.getSubId());
+    }
+
+    protected ID3Frames getID3Frames()
+    {
+        return ID3v24Frames.getInstanceOf();
     }
 }

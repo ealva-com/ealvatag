@@ -135,8 +135,7 @@ public class FrameBodyGEOB extends AbstractID3v2FrameBody implements ID3v24Frame
 
 
     /** If the filename or description cannot be encoded using current encoder, change the encoder */
-    public void write(ByteArrayOutputStream tagBuffer)
-        throws IOException
+    public void write(ByteArrayOutputStream tagBuffer)       
     {
         if (((AbstractString) getObject(DataTypes.OBJ_FILENAME)).canBeEncoded() == false)
         {

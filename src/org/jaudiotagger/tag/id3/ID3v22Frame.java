@@ -25,6 +25,7 @@ import org.jaudiotagger.tag.id3.framebody.FrameBodyUnsupported;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.nio.ByteBuffer;
 import java.util.logging.Level;
@@ -70,7 +71,6 @@ public class ID3v22Frame extends AbstractID3v2Frame
     public ID3v22Frame(String identifier)
     {
 
-
         logger.info("Creating empty frame of type" + identifier);
         String bodyIdentifier = identifier;
         this.identifier = identifier;
@@ -84,7 +84,7 @@ public class ID3v22Frame extends AbstractID3v2Frame
                  //Do not convert
             }
             //TODO Improve messy fix for datetime
-            //TODO ned to check in case v22 body does exist before using V23 body(e.g PIC)
+            //TODO need to check in case v22 body does exist before using V23 body(e.g PIC)
             else if ((bodyIdentifier.equals(ID3v22Frames.FRAME_ID_V2_TYER)) || (bodyIdentifier.equals(ID3v22Frames.FRAME_ID_V2_TIME)))
             {
                 bodyIdentifier = ID3v24Frames.FRAME_ID_YEAR;
@@ -353,12 +353,13 @@ public class ID3v22Frame extends AbstractID3v2Frame
         return tmpSize;
     }
 
+
     /**
-     * Write Frame to file
+     * Write Frame raw data
      *
      * @throws IOException
      */
-    public void write(ByteArrayOutputStream tagBuffer) throws IOException
+    public void write(ByteArrayOutputStream tagBuffer)
     {
         logger.info("Write Frame to Buffer" + getIdentifier());
         //This is where we will write header, move position to where we can
@@ -375,11 +376,18 @@ public class ID3v22Frame extends AbstractID3v2Frame
         encodeSize(headerBuffer, frameBody.getSize());
 
         //Add header to the Byte Array Output Stream
-        tagBuffer.write(headerBuffer.array());
+        try
+        {
+            tagBuffer.write(headerBuffer.array());
 
-        //Add body to the Byte Array Output Stream
-        tagBuffer.write(bodyOutputStream.toByteArray());
-
+            //Add body to the Byte Array Output Stream
+            tagBuffer.write(bodyOutputStream.toByteArray());
+        }
+        catch(IOException ioe)
+        {
+             //This could never happen coz not writing to file, so convert to RuntimeException
+             throw new RuntimeException(ioe);
+        }
     }
 
     /**
@@ -416,5 +424,23 @@ public class ID3v22Frame extends AbstractID3v2Frame
         MP3File.getStructureFormatter().addElement(TYPE_FRAME_SIZE, frameSize);
         frameBody.createStructure();
         MP3File.getStructureFormatter().closeHeadingElement(TYPE_FRAME);
+    }
+
+     /**
+     *
+     * @return true if considered a common frame
+     */
+    public boolean isCommon()
+    {
+        return ID3v22Frames.getInstanceOf().isCommon(getId());
+    }
+
+     /**
+     *
+     * @return true if considered a common frame
+     */
+    public boolean isBinary()
+    {
+        return ID3v22Frames.getInstanceOf().isBinary(getId());
     }
 }

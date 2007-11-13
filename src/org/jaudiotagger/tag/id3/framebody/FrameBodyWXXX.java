@@ -113,8 +113,7 @@ public class FrameBodyWXXX
      /**
      * If the description cannot be encoded using the current encoding change the encoder
      */
-    public void write(ByteArrayOutputStream tagBuffer)
-        throws IOException
+    public void write(ByteArrayOutputStream tagBuffer)    
     {
         if (((AbstractString) getObject(DataTypes.OBJ_DESCRIPTION)).canBeEncoded() == false)
         {

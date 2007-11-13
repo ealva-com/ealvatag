@@ -134,7 +134,7 @@ public interface Tag
      *            The field id.
      * @return A list of {@link TagField} objects with the given &quot;id&quot;.
      */
-    public List get(String id);
+    public List<TagField> get(String id);
 
     /**
      *
@@ -343,7 +343,10 @@ public interface Tag
     /**
      * Retrieve the first tagfield that exists for this key
      *
-     * @param id
+     * <p>Can be used to retrieve fields with any identifier, useful if the identifier is not within  the 
+     * jaudiotagger enum
+     *
+     * @param id audio specific key
      * @return tag field or null if doesnt exist
      */
     public TagField getFirstField(String id);

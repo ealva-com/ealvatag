@@ -23,6 +23,7 @@ import org.jaudiotagger.tag.id3.framebody.*;
 import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.channels.WritableByteChannel;
@@ -805,5 +806,116 @@ public class ID3v23Tag
     public boolean isUnsynchronization()
     {
        return unsynchronization;
+    }
+
+    protected String getArtistId()
+    {
+        return ID3v23Frames.FRAME_ID_V3_ARTIST;
+    }
+
+     protected String getAlbumId()
+    {
+        return ID3v23Frames.FRAME_ID_V3_ALBUM;
+    }
+
+    protected String getTitleId()
+    {
+        return ID3v23Frames.FRAME_ID_V3_TITLE;
+    }
+
+    protected String getTrackId()
+    {
+        return ID3v23Frames.FRAME_ID_V3_TRACK;
+    }
+
+    protected String getYearId()
+    {
+       return ID3v23Frames.FRAME_ID_V3_TYER;
+    }
+
+    protected String getCommentId()
+    {
+        return ID3v23Frames.FRAME_ID_V3_COMMENT;
+    }
+
+    protected String getGenreId()
+    {
+        return ID3v23Frames.FRAME_ID_V3_GENRE;
+    }
+
+    public ID3v23Frame createFrame(String id)
+   {
+        return new ID3v23Frame(id);       
+   }
+
+
+
+    /**
+     * Create Frame for Id3 Key
+     * <p/>
+     * Only textual data supported at the moment, should only be used with frames that
+     * support a simple string argument.
+     *
+     * @param id3Key
+     * @param value
+     * @return
+     * @throws KeyNotFoundException
+     * @throws FieldDataInvalidException
+     */
+    public TagField createTagField(ID3v23FieldKey id3Key, String value)
+            throws KeyNotFoundException, FieldDataInvalidException
+    {
+        if (id3Key == null)
+        {
+            throw new KeyNotFoundException();
+        }
+         return super.doCreateTagField(new FrameAndSubId(id3Key.getFrameId(),id3Key.getSubId()),value);
+    }
+
+    /**
+     * Retrieve the first value that exists for this id3v23key
+     *
+     * @param id3v23FieldKey
+     * @return
+     */
+    public String getFirst(ID3v23FieldKey id3v23FieldKey) throws KeyNotFoundException
+    {
+        if (id3v23FieldKey == null)
+        {
+            throw new KeyNotFoundException();
+        }
+        return super.doGetFirst(new FrameAndSubId(id3v23FieldKey.getFrameId(),id3v23FieldKey.getSubId()));
+    }
+
+    /**
+     * Delete fields with this id3v23FieldKey
+     *
+     * @param id3v23FieldKey
+     */
+    public void deleteTagField
+            (ID3v23FieldKey
+                    id3v23FieldKey) throws KeyNotFoundException
+    {
+        if (id3v23FieldKey == null)
+        {
+            throw new KeyNotFoundException();
+        }
+        super.doDeleteTagField(new FrameAndSubId(id3v23FieldKey.getFrameId(),id3v23FieldKey.getSubId()));
+    }
+
+
+    protected FrameAndSubId getFrameAndSubIdFromGenericKey(TagFieldKey genericKey)
+    {
+        ID3v23FieldKey id3v23FieldKey = ID3v23Frames.getInstanceOf().getId3KeyFromGenericKey(genericKey);
+        if (id3v23FieldKey == null)
+        {
+            throw new KeyNotFoundException();
+        }
+        return new FrameAndSubId(id3v23FieldKey.getFrameId(),id3v23FieldKey.getSubId());
+    }
+
+     protected ID3Frames getID3Frames()
+    {
+        return ID3v23Frames.getInstanceOf();
     }
 }

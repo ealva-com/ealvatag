@@ -129,8 +129,7 @@ public class FrameBodyUSER extends AbstractID3v2FrameBody implements ID3v24Frame
      * @param tagBuffer
      * @throws IOException
      */
-    public void write(ByteArrayOutputStream tagBuffer)
-        throws IOException
+    public void write(ByteArrayOutputStream tagBuffer)      
     {
         if (((AbstractString) getObject(DataTypes.OBJ_TEXT)).canBeEncoded() == false)
         {

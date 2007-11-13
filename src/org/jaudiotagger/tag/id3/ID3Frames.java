@@ -16,6 +16,8 @@
 package org.jaudiotagger.tag.id3;
 
 import org.jaudiotagger.tag.datatype.AbstractStringStringValuePair;
+import org.jaudiotagger.tag.TagFieldKey;
+import org.jaudiotagger.tag.mp4.Mp4FieldKey;
 
 import java.util.*;
 
@@ -50,6 +52,16 @@ public abstract class ID3Frames extends AbstractStringStringValuePair
     protected TreeSet<String> extensionFrames = new TreeSet<String> ();
 
     /**
+     * These frames are Common , this is a loose term
+     */
+    protected TreeSet<String>  commonFrames = new TreeSet<String> ();
+
+    /**
+     * These frames are Binary
+     */
+    protected TreeSet<String>  binaryFrames = new TreeSet<String> ();
+
+    /**
      * If file changes discard these frames
      */
     public boolean isDiscardIfFileAltered(String frameID)
@@ -78,6 +90,27 @@ public abstract class ID3Frames extends AbstractStringStringValuePair
     /**
      *
      * @param frameID
+     * @return true if frames with this id are considered common
+     */
+    public boolean isCommon(String frameID)
+    {
+        return commonFrames.contains(frameID);
+    }
+
+    /**
+     *
+     * @param frameID
+     * @return true if frames with this id are binary (non textual data)
+     */
+    public boolean isBinary(String frameID)
+    {
+        return binaryFrames.contains(frameID);
+    }
+
+
+    /**
+     *
+     * @param frameID
      *
      * @return true if frame is a known extension
      */
@@ -86,6 +119,7 @@ public abstract class ID3Frames extends AbstractStringStringValuePair
         return extensionFrames.contains(frameID);
     }
 
+   
     /**
      * Mapping from v22 to v23
      */
@@ -98,6 +132,7 @@ public abstract class ID3Frames extends AbstractStringStringValuePair
     public static final Map<String,String> convertv24Tov23 = new LinkedHashMap<String,String>();
     public static final Map<String,String> forcev23Tov24   = new LinkedHashMap<String,String>();
     public static final Map<String,String> forcev24Tov23   = new LinkedHashMap<String,String>();
+
 
     private static void loadID3v23ID3v24Mapping()
     {

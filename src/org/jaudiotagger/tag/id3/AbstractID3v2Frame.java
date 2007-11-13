@@ -18,6 +18,7 @@ package org.jaudiotagger.tag.id3;
 import org.jaudiotagger.audio.mp3.MP3File;
 import org.jaudiotagger.tag.InvalidFrameException;
 import org.jaudiotagger.tag.InvalidTagException;
+import org.jaudiotagger.tag.TagField;
 import org.jaudiotagger.tag.id3.framebody.AbstractID3v2FrameBody;
 import org.jaudiotagger.tag.id3.framebody.FrameBodyUnsupported;
 
@@ -36,13 +37,11 @@ import java.util.logging.Level;
  * @version $Id$
  */
 public abstract class AbstractID3v2Frame
-    extends AbstractTagFrame
+    extends AbstractTagFrame implements TagField
 {
 
     protected static final String TYPE_FRAME = "frame";
-
     protected static final String TYPE_FRAME_SIZE = "frameSize";
-
     protected static final String UNSUPPORTED_ID = "Unsupported";
 
     //Frame identifier
@@ -94,8 +93,8 @@ public abstract class AbstractID3v2Frame
     /**
      * Create a new frame with empty body based on identifier
      *
-     * @TODO the identifier checks should be done in the relevent subclasses
      */
+    //TODO the identifier checks should be done in the relevent subclasses
     public AbstractID3v2Frame(String identifier)
     {
         logger.info("Creating empty frame of type" + identifier);
@@ -150,6 +149,19 @@ public abstract class AbstractID3v2Frame
     }
 
     /**
+     * Return the frame identifier, this only identifiies the frame it does not provide a unique
+     * key, when using frames such as TXXX which are used by many fields     *
+     *
+     * @return the frame identifier (Tag Field Interface)
+     */
+    //TODO, this is confusing only returns the frameId, which does not neccessarily uniquely
+    //identify the frame
+    public String getId()
+    {
+        return getIdentifier();
+    }
+
+    /**
      * Return the frame identifier
      *
      * @return the frame identifier
@@ -159,6 +171,11 @@ public abstract class AbstractID3v2Frame
         return identifier;
     }
 
+    //TODO:needs implementing but not sure if this method is required at all
+    public void copyContent(TagField field)
+    {
+
+    }
 
     /**
      * Read the frame body from the specified file via the buffer
@@ -328,8 +345,35 @@ public abstract class AbstractID3v2Frame
         return frameBody;
     }
 
-    public abstract void write(ByteArrayOutputStream tagBuffer)
-        throws IOException;
+    public byte[] getRawContent()
+    {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        write(baos);
+        return baos.toByteArray();
+    }
+
+    public abstract void write(ByteArrayOutputStream tagBuffer);
+
+    /**
+     *
+     * @param b
+     */
+    public void isBinary(boolean b)
+    {
+        //do nothing because whether or not a field is binary is defined by its id and is immutable
+    }
+
+
+    public boolean isEmpty()
+    {
+        AbstractTagFrameBody body = this.getBody();
+        if(body==null)
+        {
+            return true;
+        }
+        //TODO depends on the body
+        return false;
+    }
 
     protected StatusFlags getStatusFlags()
     {

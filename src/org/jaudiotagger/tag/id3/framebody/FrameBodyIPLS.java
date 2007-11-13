@@ -102,7 +102,6 @@ public class FrameBodyIPLS  extends AbstractID3v2FrameBody implements ID3v23Fram
      * current encoding before we write data. If they do change the encoding.
      */
     public void write(ByteArrayOutputStream tagBuffer)
-        throws IOException
     {
         if (((PairedTextEncodedStringNullTerminated) getObject(DataTypes.OBJ_TEXT)).canBeEncoded() == false)
         {

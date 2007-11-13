@@ -27,7 +27,6 @@ package org.jaudiotagger.tag.id3;
 import org.jaudiotagger.audio.mp3.MP3File;
 import org.jaudiotagger.tag.*;
 import org.jaudiotagger.tag.id3.framebody.*;
-import org.jaudiotagger.tag.id3.valuepair.GenreTypes;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
@@ -328,7 +327,7 @@ public class ID3v11Tag
     {
         if(getFirstTrack().length()>0)
         {
-            ID3TagField field = new ID3TagField(ID3FieldKey.TRACK.name(),getFirstTrack());
+            ID3v1TagField field = new ID3v1TagField(ID3v1FieldKey.TRACK.name(),getFirstTrack());
             return returnFieldToList(field);
         }
         else

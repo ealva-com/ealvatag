@@ -587,7 +587,6 @@ public class ID3v24Frame extends AbstractID3v2Frame
      * @throws IOException
      */
     public void write(ByteArrayOutputStream tagBuffer)
-        throws IOException
     {
         boolean unsynchronization;
 
@@ -645,11 +644,19 @@ public class ID3v24Frame extends AbstractID3v2Frame
         }
         headerBuffer.put(encodingFlags.getFlags());
 
-        //Add header to the Byte Array Output Stream
-        tagBuffer.write(headerBuffer.array());
+        try
+        {
+            //Add header to the Byte Array Output Stream
+            tagBuffer.write(headerBuffer.array());
 
-        //Add bodybuffer to the Byte Array Output Stream
-        tagBuffer.write(bodyBuffer);
+            //Add bodybuffer to the Byte Array Output Stream
+            tagBuffer.write(bodyBuffer);
+        }
+        catch(IOException ioe)
+        {
+             //This could never happen coz not writing to file, so convert to RuntimeException
+             throw new RuntimeException(ioe);
+        }
     }
 
     /**
@@ -921,5 +928,23 @@ public class ID3v24Frame extends AbstractID3v2Frame
         encodingFlags.createStructure();
         frameBody.createStructure();
         MP3File.getStructureFormatter().closeHeadingElement(TYPE_FRAME);
+    }
+
+      /**
+     *
+     * @return true if considered a common frame
+     */
+    public boolean isCommon()
+    {
+        return ID3v24Frames.getInstanceOf().isCommon(getId());
+    }
+
+     /**
+     *
+     * @return true if considered a common frame
+     */
+    public boolean isBinary()
+    {
+        return ID3v24Frames.getInstanceOf().isBinary(getId());
     }
 }

@@ -124,8 +124,7 @@ public class FrameBodyPIC extends AbstractID3v2FrameBody implements ID3v22FrameB
    
 
     /** If the description cannot be encoded using current encoder, change the encoder */
-    public void write(ByteArrayOutputStream tagBuffer)
-        throws IOException
+    public void write(ByteArrayOutputStream tagBuffer)       
     {
         if (((AbstractString) getObject(DataTypes.OBJ_DESCRIPTION)).canBeEncoded() == false)
         {
