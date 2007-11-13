@@ -149,12 +149,20 @@
 
 	<target name="build.jar" depends="compile" description="Jar up the compiled production code jaudiotagger">
 		<echo message="Creating jaudiotagger.jar" />
-		<jar jarfile="${jar.file}" update="false" basedir="${output.dir}"> </jar>      	  
+		<jar jarfile="${jar.file}" update="false" basedir="${output.dir}">
+			<manifest>
+				<attribute name="Version" value="${build.release}" />
+			</manifest>
+		</jar>      	  
 	</target>
 
 	<target name="build.jarsrc" depends="compile" description="Jar up the jaudiotagger source code">
 		<echo message="Creating jaudiotaggersrc.jar" />
-		<jar jarfile="${jarsrc.file}" update="false" basedir="${basedir}/src" includes="org/jaudiotagger/**/*.java"></jar>      	  
+		<jar jarfile="${jarsrc.file}" update="false" basedir="${basedir}/src" includes="org/jaudiotagger/**/*.java">
+			<manifest>
+				<attribute name="Version" value="${build.release}" />
+			</manifest>
+		</jar>
 	</target>
 	
 	<target name="compile" depends="compile.production,compile.tests,run.tests" description="Compile all jaudiotagger code"/>
@@ -238,10 +246,10 @@
 		<mkdir dir="${junitreport.dir}"/>
 		<mkdir dir="${junitreport.testdatatmp.dir}"/>
 		<!-- forkmode="once" -->
-		<junit fork="yes"  printsummary="true" showoutput="true">		
+		<junit fork="yes" printsummary="true" showoutput="true">		
 			<classpath location="${instrumented.dir}" />	
 			<classpath refid="runtestclasspath"/>		
-			<classpath refid="cobertura.classpath" />			
+			<classpath refid="cobertura.classpath" />
 			<batchtest  todir="${junitreport.dir}">
 				<formatter type="xml"/>				
     				<fileset dir="${testoutput.dir}">
