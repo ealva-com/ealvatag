@@ -237,11 +237,12 @@
 	<target name="run.tests" depends="compile.tests" description="Run test cases" unless="skip.tests">
 		<mkdir dir="${junitreport.dir}"/>
 		<mkdir dir="${junitreport.testdatatmp.dir}"/>
-		<junit printsummary="true" showoutput="true">		
+		<!-- forkmode="once" -->
+		<junit fork="yes"  printsummary="true" showoutput="true">		
 			<classpath location="${instrumented.dir}" />	
 			<classpath refid="runtestclasspath"/>		
-			<classpath refid="cobertura.classpath" />
-			<batchtest fork="yes"  todir="${junitreport.dir}">
+			<classpath refid="cobertura.classpath" />			
+			<batchtest  todir="${junitreport.dir}">
 				<formatter type="xml"/>				
     				<fileset dir="${testoutput.dir}">
     					<include name="**/*Test.class"/>      			
