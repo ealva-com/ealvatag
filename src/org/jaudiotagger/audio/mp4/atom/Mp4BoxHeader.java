@@ -203,7 +203,11 @@ public class Mp4BoxHeader
 
         Mp4BoxHeader boxHeader = new Mp4BoxHeader();
         ByteBuffer   headerBuffer = ByteBuffer.allocate(HEADER_LENGTH);
-        raf.getChannel().read(headerBuffer);
+        int bytesRead = raf.getChannel().read(headerBuffer);
+        if(bytesRead!=HEADER_LENGTH)
+        {
+            return null;
+        }
         headerBuffer.rewind();
         boxHeader.update(headerBuffer);
         while (!boxHeader.getId().equals(id))
@@ -222,10 +226,9 @@ public class Mp4BoxHeader
                 return null;
             }
             headerBuffer.rewind();
-            int bytesRead = raf.getChannel().read(headerBuffer);
+            bytesRead = raf.getChannel().read(headerBuffer);
             logger.finer("Header Bytes Read:"+bytesRead);    
             headerBuffer.rewind();
-            //TODO is this right?
             if(bytesRead==Mp4BoxHeader.HEADER_LENGTH)
             {
                 boxHeader.update(headerBuffer);
@@ -261,10 +264,13 @@ public class Mp4BoxHeader
         {
             boxHeader.update(data);
         }
+        else
+        {
+             return null;
+        }
         while (!boxHeader.getId().equals(id))
         {
-            logger.finer("Found"+boxHeader.getId()+"Still searching for:"+id+" in bytebuffer at"+data.position());
-         
+            logger.finer("Found"+boxHeader.getId()+"Still searching for:"+id+" in bytebuffer at"+data.position());          
             //Something gone wrong probably not at the start of an atom so return null;
             if(boxHeader.getLength() < Mp4BoxHeader.HEADER_LENGTH)
             {
