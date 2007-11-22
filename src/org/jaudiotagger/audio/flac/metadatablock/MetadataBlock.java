@@ -16,27 +16,32 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.jaudiotagger.audio.flac.util;
+package org.jaudiotagger.audio.flac.metadatablock;
 
-
-public class MetadataBlockDataPadding implements MetadataBlockData
+public class MetadataBlock
 {
 
-    private int length;
+    private MetadataBlockHeader mbh;
+    private MetadataBlockData mbd;
 
-    public MetadataBlockDataPadding(int length)
+    public MetadataBlock(MetadataBlockHeader mbh, MetadataBlockData mbd)
     {
-        this.length = length;
+        this.mbh = mbh;
+        this.mbd = mbd;
     }
 
-    public byte[] getBytes()
+    public MetadataBlockHeader getHeader()
     {
-        assert false;
-        return null;
+        return mbh;
+    }
+
+    public MetadataBlockData getData()
+    {
+        return mbd;
     }
 
     public int getLength()
     {
-        return length;
+        return mbh.getDataLength() + 4;
     }
 }

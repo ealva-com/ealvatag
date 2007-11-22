@@ -16,15 +16,15 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.jaudiotagger.audio.flac.util;
+package org.jaudiotagger.audio.flac.metadatablock;
 
 
-public class MetadataBlockDataCueSheet implements MetadataBlockData
+public class MetadataBlockDataApplication implements MetadataBlockData
 {
 
     private byte[] data;
 
-    public MetadataBlockDataCueSheet(byte[] b)
+    public MetadataBlockDataApplication(byte[] b)
     {
         data = new byte[b.length];
         for (int i = 0; i < b.length; i++)

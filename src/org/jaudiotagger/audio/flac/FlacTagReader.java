@@ -16,9 +16,10 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.jaudiotagger.audio.flac.util;
+package org.jaudiotagger.audio.flac;
 
 import org.jaudiotagger.audio.exceptions.*;
+import org.jaudiotagger.audio.flac.metadatablock.MetadataBlockHeader;
 import org.jaudiotagger.tag.vorbiscomment.VorbisCommentTag;
 import org.jaudiotagger.tag.vorbiscomment.VorbisCommentReader;
 
@@ -34,6 +35,7 @@ public class FlacTagReader
 
     public VorbisCommentTag read(RandomAccessFile raf) throws CannotReadException, IOException
     {
+        System.out.println("Started searching");
         //Begins tag parsing
         if (raf.length() == 0)
         {
@@ -51,6 +53,7 @@ public class FlacTagReader
             throw new CannotReadException("fLaC Header not found, not a flac file");
         }
 
+        System.out.println("flac found");
         VorbisCommentTag tag = null;
 
         //Seems like we hava a valid stream
@@ -64,9 +67,10 @@ public class FlacTagReader
             switch (mbh.getBlockType())
             {
                 //We got a vorbiscomment comment block, parse it
-                case MetadataBlockHeader.VORBIS_COMMENT :
+                case VORBIS_COMMENT :
                     tag = handleVorbisComment(mbh, raf);
                     mbh = null;
+                    System.out.println("found comment");
                     return tag; //We have it, so no need to go further
 
                     //This is not a vorbiscomment comment block, we skip to next block
@@ -78,6 +82,7 @@ public class FlacTagReader
             isLastBlock = mbh.isLastBlock();
             mbh = null;
         }
+        System.out.println("No tag found");
         //FLAC not found...
         throw new CannotReadException("FLAC Tag could not be found or read..");
     }

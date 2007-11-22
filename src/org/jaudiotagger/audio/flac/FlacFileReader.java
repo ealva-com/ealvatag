@@ -19,8 +19,8 @@
 package org.jaudiotagger.audio.flac;
 
 import org.jaudiotagger.audio.exceptions.*;
-import org.jaudiotagger.audio.flac.util.FlacInfoReader;
-import org.jaudiotagger.audio.flac.util.FlacTagReader;
+import org.jaudiotagger.audio.flac.FlacInfoReader;
+import org.jaudiotagger.audio.flac.FlacTagReader;
 
 import java.io.*;
 

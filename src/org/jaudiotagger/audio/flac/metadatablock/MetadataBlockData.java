@@ -16,32 +16,12 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.jaudiotagger.audio.flac.util;
+package org.jaudiotagger.audio.flac.metadatablock;
 
-public class MetadataBlock
+
+public interface MetadataBlockData
 {
+    public byte[] getBytes();
 
-    private MetadataBlockHeader mbh;
-    private MetadataBlockData mbd;
-
-    public MetadataBlock(MetadataBlockHeader mbh, MetadataBlockData mbd)
-    {
-        this.mbh = mbh;
-        this.mbd = mbd;
-    }
-
-    public MetadataBlockHeader getHeader()
-    {
-        return mbh;
-    }
-
-    public MetadataBlockData getData()
-    {
-        return mbd;
-    }
-
-    public int getLength()
-    {
-        return mbh.getDataLength() + 4;
-    }
+    public int getLength();
 }

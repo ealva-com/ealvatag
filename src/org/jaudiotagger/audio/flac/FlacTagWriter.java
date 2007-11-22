@@ -16,9 +16,10 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.jaudiotagger.audio.flac.util;
+package org.jaudiotagger.audio.flac;
 
 import org.jaudiotagger.audio.exceptions.*;
+import org.jaudiotagger.audio.flac.metadatablock.*;
 import org.jaudiotagger.tag.vorbiscomment.VorbisCommentTag;
 import org.jaudiotagger.tag.Tag;
 
@@ -90,19 +91,19 @@ public class FlacTagWriter
             //System.err.println("BlockType: "+mbh.getBlockTypeString());
             switch (mbh.getBlockType())
             {
-                case MetadataBlockHeader.VORBIS_COMMENT :
+                case VORBIS_COMMENT:
                     handlePadding(mbh, raf);
                     break;
-                case MetadataBlockHeader.PADDING :
+                case PADDING :
                     handlePadding(mbh, raf);
                     break;
-                case MetadataBlockHeader.APPLICATION :
+                case APPLICATION :
                     handleApplication(mbh, raf);
                     break;
-                case MetadataBlockHeader.SEEKTABLE :
+                case SEEKTABLE :
                     handleSeekTable(mbh, raf);
                     break;
-                case MetadataBlockHeader.CUESHEET :
+                case CUESHEET :
                     handleCueSheet(mbh, raf);
                     break;
                 default :

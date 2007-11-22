@@ -18,7 +18,6 @@
  */
 package org.jaudiotagger.audio.flac;
 
-import org.jaudiotagger.audio.flac.util.*;
 import org.jaudiotagger.audio.generic.AudioFileWriter;
 import org.jaudiotagger.audio.exceptions.*;
 import org.jaudiotagger.tag.Tag;

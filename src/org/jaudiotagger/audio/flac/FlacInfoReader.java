@@ -16,10 +16,13 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.jaudiotagger.audio.flac.util;
+package org.jaudiotagger.audio.flac;
 
 import org.jaudiotagger.audio.generic.GenericAudioHeader;
 import org.jaudiotagger.audio.exceptions.*;
+import org.jaudiotagger.audio.flac.metadatablock.MetadataBlockDataStreamInfo;
+import org.jaudiotagger.audio.flac.metadatablock.MetadataBlockHeader;
+import org.jaudiotagger.audio.flac.metadatablock.BlockType;
 
 import java.io.*;
 
@@ -52,7 +55,7 @@ public class FlacInfoReader
             raf.read(b);
             MetadataBlockHeader mbh = new MetadataBlockHeader(b);
 
-            if (mbh.getBlockType() == MetadataBlockHeader.STREAMINFO)
+            if (mbh.getBlockType() == BlockType.STREAMINFO)
             {
                 b = new byte[mbh.getDataLength()];
                 raf.read(b);

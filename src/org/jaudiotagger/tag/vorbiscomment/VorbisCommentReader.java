@@ -87,7 +87,7 @@ public class VorbisCommentReader
         System.arraycopy(rawdata,pos,b,0,vendorStringLength);
         pos+=vendorStringLength;
         tag.setVendor(new String(b, VorbisHeader.CHARSET_UTF_8));
-        //System.err.println("vendorString:" + tag.getVendor());
+        System.err.println("vendorString:" + tag.getVendor());
 
         b = new byte[FIELD_USER_COMMENT_LIST_LENGTH];
         System.arraycopy(rawdata,pos,b,0,FIELD_USER_COMMENT_LIST_LENGTH);

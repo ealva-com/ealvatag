@@ -16,12 +16,30 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.jaudiotagger.audio.flac.util;
+package org.jaudiotagger.audio.flac.metadatablock;
 
 
-public interface MetadataBlockData
+public class MetadataBlockDataSeekTable implements MetadataBlockData
 {
-    public byte[] getBytes();
 
-    public int getLength();
+    private byte[] data;
+
+    public MetadataBlockDataSeekTable(byte[] b)
+    {
+        data = new byte[b.length];
+        for (int i = 0; i < b.length; i++)
+        {
+            data[i] = b[i];
+        }
+    }
+
+    public byte[] getBytes()
+    {
+        return data;
+    }
+
+    public int getLength()
+    {
+        return data.length;
+    }
 }
