@@ -319,7 +319,7 @@ public class ID3v23Frame extends AbstractID3v2Frame
             byteBuffer.position(byteBuffer.position() - (FRAME_ID_SIZE - 1));
             throw new InvalidFrameIdentifierException(getLoggingFilename()+":"+identifier + "is not a valid ID3v2.30 frame");
         }
-        //Read the size field
+        //Read the size field (as Big Endian Int - byte buffers always initlised to Big endian order)
         frameSize = byteBuffer.getInt();
         if (frameSize < 0)
         {
