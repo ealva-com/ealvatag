@@ -58,7 +58,10 @@ public class FlacHeaderTest extends TestCase
         assertNull(exceptionCaught);
     }
 
-     public void testReadFileWithNoVorbisComment()
+    /**
+     * Only contains vorbis comment with minimum encoder info 
+     */
+     public void testReadFileWithOnlyVorbisCommentEncoder()
     {
         Exception exceptionCaught = null;
         try
