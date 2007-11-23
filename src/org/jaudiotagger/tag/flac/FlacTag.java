@@ -370,7 +370,14 @@ public class FlacTag implements Tag
     {
         if(field instanceof MetadataBlockDataPicture)
         {
-            images.set(0,(MetadataBlockDataPicture)field);
+            if(images.size()==0)
+            {
+                images.add(0,(MetadataBlockDataPicture)field);   
+            }
+            else
+            {
+                images.set(0,(MetadataBlockDataPicture)field);
+            }
         }
         else
         {

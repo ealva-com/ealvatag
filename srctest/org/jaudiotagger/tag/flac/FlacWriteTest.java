@@ -51,13 +51,17 @@ public class FlacWriteTest extends TestCase
             tag.addArtist("artist");
             tag.addAlbum("album");
             tag.addTitle("title");
+            tag.addYear("1971");
+            tag.addTrack("2");
+            tag.addGenre("Rock");
+
             tag.set(tag.createTagField(TagFieldKey.BPM,"123"));
 
             //Add new image
             RandomAccessFile imageFile = new RandomAccessFile(new File("testdata", "coverart.png"), "r");
             byte[] imagedata = new byte[(int) imageFile.length()];
             imageFile.read(imagedata);
-            tag.add(tag.createArtworkField(imagedata,
+            tag.set(tag.createArtworkField(imagedata,
                                    PictureTypes.DEFAULT_ID,
                                    ImageFormats.MIME_TYPE_PNG,
                                    "test",
@@ -75,8 +79,19 @@ public class FlacWriteTest extends TestCase
             assertEquals("album",tag.getFirstAlbum());
             assertEquals("title",tag.getFirstTitle());
             assertEquals("123",tag.getFirst(TagFieldKey.BPM));
-
+            assertEquals("1971",tag.getFirstYear());
+            assertEquals("2",tag.getFirstTrack());
+            assertEquals("Rock",tag.getFirstGenre());
+            assertEquals(1,tag.get(TagFieldKey.GENRE.name()).size());
+            assertEquals(1,tag.getArtist().size());
+            assertEquals(1,tag.getAlbum().size());
+            assertEquals(1,tag.getTitle().size());
+            assertEquals(1,tag.get(TagFieldKey.BPM).size());
+            assertEquals(1,tag.getYear().size());
+            assertEquals(1,tag.getTrack().size());
+            assertEquals(1,tag.getGenre().size());
             //One Image
+            assertEquals(1,tag.get(TagFieldKey.COVER_ART.name()).size());
             assertEquals(1,tag.getImages().size());
             MetadataBlockDataPicture pic = tag.getImages().get(0);
             assertEquals((int)PictureTypes.DEFAULT_ID,pic.getPictureType());
@@ -102,6 +117,7 @@ public class FlacWriteTest extends TestCase
             f.commit();
 
             //Two Images
+            assertEquals(2,tag.get(TagFieldKey.COVER_ART.name()).size());
             assertEquals(2,tag.getImages().size());
             pic = tag.getImages().get(1);
             assertEquals((int)PictureTypes.DEFAULT_ID,pic.getPictureType());
@@ -129,4 +145,31 @@ public class FlacWriteTest extends TestCase
         assertNull(exceptionCaught);
     }
 
+    public void testDeleteTagFile()
+    {
+        Exception exceptionCaught = null;
+        try
+        {
+            File testFile = AbstractTestCase.copyAudioToTmp("test.flac",new File("testdeletetag.flac"));
+            AudioFile f = AudioFileIO.read(testFile);
+
+            assertEquals("192",f.getAudioHeader().getBitRate());
+            assertEquals("FLAC 16 bits",f.getAudioHeader().getEncodingType());
+            assertEquals("2",f.getAudioHeader().getChannels());
+            assertEquals("44100",f.getAudioHeader().getSampleRate());
+
+            assertTrue(f.getTag() instanceof FlacTag);
+            assertFalse(f.getTag().isEmpty());
+
+            AudioFileIO.delete(f);
+            f = AudioFileIO.read(testFile);
+            assertTrue(f.getTag().isEmpty());
+        }
+        catch(Exception e)
+        {
+             e.printStackTrace();
+             exceptionCaught = e;
+        }
+        assertNull(exceptionCaught);
+    }
 }
