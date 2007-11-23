@@ -4,8 +4,11 @@ import org.jaudiotagger.AbstractTestCase;
 import org.jaudiotagger.tag.vorbiscomment.VorbisCommentTag;
 import org.jaudiotagger.tag.vorbiscomment.VorbisCommentFieldKey;
 import org.jaudiotagger.tag.TagFieldKey;
+import org.jaudiotagger.tag.id3.valuepair.PictureTypes;
+import org.jaudiotagger.tag.flac.FlacTag;
 import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.AudioFileIO;
+import org.jaudiotagger.audio.flac.metadatablock.MetadataBlockDataPicture;
 
 import java.io.File;
 
@@ -24,14 +27,14 @@ public class FlacHeaderTest extends TestCase
             File testFile = AbstractTestCase.copyAudioToTmp("test.flac");
             AudioFile f = AudioFileIO.read(testFile);
 
-            assertEquals("206",f.getAudioHeader().getBitRate());
+            assertEquals("192",f.getAudioHeader().getBitRate());
             assertEquals("FLAC 16 bits",f.getAudioHeader().getEncodingType());
             assertEquals("2",f.getAudioHeader().getChannels());
             assertEquals("44100",f.getAudioHeader().getSampleRate());
 
 
-            assertTrue(f.getTag() instanceof VorbisCommentTag);
-            VorbisCommentTag tag = (VorbisCommentTag)f.getTag();
+            assertTrue(f.getTag() instanceof FlacTag);
+            FlacTag tag = (FlacTag)f.getTag();
               //Ease of use methods for common fields
             assertEquals("Artist", tag.getFirstArtist());
             assertEquals("Album", tag.getFirstAlbum());
@@ -48,7 +51,21 @@ public class FlacHeaderTest extends TestCase
             assertEquals("comments", tag.getFirst(TagFieldKey.COMMENT));
             assertEquals("1971", tag.getFirst(TagFieldKey.YEAR));
             assertEquals("4", tag.getFirst(TagFieldKey.TRACK));
-            assertEquals("Composer", tag.getFirst(TagFieldKey.COMPOSER));           
+            assertEquals("Composer", tag.getFirst(TagFieldKey.COMPOSER));
+
+            //Images
+            assertEquals(1,tag.getImages().size());
+            MetadataBlockDataPicture image = tag.getImages().get(0);
+            assertEquals((int)PictureTypes.DEFAULT_ID,(int)image.getPictureType());
+            assertEquals("image/png",image.getMimeType());
+            assertEquals("",image.getDescription());
+            assertEquals(200,image.getWidth());
+            assertEquals(200,image.getHeight());
+            assertEquals(24,image.getColourDepth());
+            assertEquals(0,image.getIndexedColourCount());
+            assertEquals(18545,image.getImageData().length);
+
+
         }
         catch(Exception e)
         {
@@ -69,12 +86,15 @@ public class FlacHeaderTest extends TestCase
             File testFile = AbstractTestCase.copyAudioToTmp("test2.flac");
             AudioFile f = AudioFileIO.read(testFile);
 
-            assertEquals("206",f.getAudioHeader().getBitRate());
+            assertEquals("192",f.getAudioHeader().getBitRate());
             assertEquals("FLAC 16 bits",f.getAudioHeader().getEncodingType());
             assertEquals("2",f.getAudioHeader().getChannels());
             assertEquals("44100",f.getAudioHeader().getSampleRate());
 
-            assertTrue(f.getTag() instanceof VorbisCommentTag);
+            assertTrue(f.getTag() instanceof FlacTag);
+            FlacTag tag = (FlacTag)f.getTag();
+            //No Images
+            assertEquals(0,tag.getImages().size());
         }
         catch(Exception e)
         {

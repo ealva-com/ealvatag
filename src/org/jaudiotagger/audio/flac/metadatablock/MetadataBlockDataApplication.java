@@ -19,6 +19,13 @@
 package org.jaudiotagger.audio.flac.metadatablock;
 
 
+/**
+ * Application Block
+ * 
+ * <p>This block is for use by third-party applications. The only mandatory field is a 32-bit identifier.
+ * This ID is granted upon request to an application by the FLAC maintainers. The remainder is of the block is defined
+ * by the registered application.
+ */
 public class MetadataBlockDataApplication implements MetadataBlockData
 {
 

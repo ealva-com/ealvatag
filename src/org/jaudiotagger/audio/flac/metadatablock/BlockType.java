@@ -19,10 +19,14 @@ public enum BlockType
     PICTURE(6);
 
     private int id;
-    private String name;
 
     BlockType(int id)
     {
         this.id=id;
+    }
+
+    public int getId()
+    {
+        return id;
     }
 }

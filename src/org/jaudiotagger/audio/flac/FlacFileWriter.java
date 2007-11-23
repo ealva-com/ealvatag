@@ -26,7 +26,7 @@ import java.io.*;
 
 
 /**
- * Writ/delete tag info for Flac file (opensource lossless encoding)
+ * Write/delete tag info for Flac file (opensource lossless encoding)
  */
 public class FlacFileWriter extends AudioFileWriter
 {

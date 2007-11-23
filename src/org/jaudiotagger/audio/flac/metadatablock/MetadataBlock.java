@@ -18,9 +18,15 @@
  */
 package org.jaudiotagger.audio.flac.metadatablock;
 
+/**
+ * Metadata Block
+ *
+ * <p>A FLAC bitstream consists of the "fLaC" marker at the beginning of the stream,
+ * followed by a mandatory metadata block (called the STREAMINFO block), any number of other metadata blocks,
+ * then the audio frames.
+ */
 public class MetadataBlock
 {
-
     private MetadataBlockHeader mbh;
     private MetadataBlockData mbd;
 
@@ -42,6 +48,6 @@ public class MetadataBlock
 
     public int getLength()
     {
-        return mbh.getDataLength() + 4;
+        return MetadataBlockHeader.HEADER_LENGTH + mbh.getDataLength();
     }
 }

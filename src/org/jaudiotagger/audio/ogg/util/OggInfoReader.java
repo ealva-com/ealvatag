@@ -112,6 +112,7 @@ public class OggInfoReader
         }
         else
         {
+            //TODO need to remove comment from raf.getLength()
             info.setBitrate(computeBitrate(info.getTrackLength(), raf.length()));
             info.setVariableBitRate(true);
         }

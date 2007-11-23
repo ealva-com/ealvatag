@@ -20,57 +20,85 @@ package org.jaudiotagger.audio.flac;
 
 import org.jaudiotagger.tag.vorbiscomment.VorbisCommentCreator;
 import org.jaudiotagger.tag.Tag;
+import org.jaudiotagger.tag.flac.FlacTag;
+import org.jaudiotagger.audio.flac.metadatablock.MetadataBlockHeader;
+import org.jaudiotagger.audio.flac.metadatablock.BlockType;
+import org.jaudiotagger.audio.flac.metadatablock.MetadataBlockDataPadding;
+import org.jaudiotagger.audio.flac.metadatablock.MetadataBlockDataPicture;
+import org.jaudiotagger.audio.generic.AbstractTagCreator;
 
 import java.io.UnsupportedEncodingException;
 import java.nio.*;
+import java.util.logging.Logger;
 
 /**
  * Create the tag data ready for writing to flac file
  */
-public class FlacTagCreator
+public class FlacTagCreator extends AbstractTagCreator
 {
+      // Logger Object
+    public static Logger logger = Logger.getLogger("org.jaudiotagger.audio.flac");
 
     public static final int DEFAULT_PADDING = 4000;
     private static final VorbisCommentCreator creator = new VorbisCommentCreator();
 
-    //Creates the ByteBuffer for the ogg tag
+    /**
+     *
+     * @param tag
+     * @param paddingSize extra padding to be added
+     * @return
+     * @throws UnsupportedEncodingException
+     */
     public ByteBuffer convert(Tag tag, int paddingSize) throws UnsupportedEncodingException
     {
-        ByteBuffer ogg = creator.convert(tag);
-        int tagLength = ogg.capacity() + 4;
+        logger.info("Convert flac tag:padding:"+paddingSize);
+        FlacTag flacTag = (FlacTag)tag;
+        ByteBuffer vorbiscomment = creator.convert(flacTag.getVorbisCommentTag());
 
+        int tagLength =  vorbiscomment.capacity() + MetadataBlockHeader.HEADER_LENGTH;
+        for(MetadataBlockDataPicture image:flacTag.getImages())
+        {
+            tagLength+=image.getBytes().length + MetadataBlockHeader.HEADER_LENGTH;
+        }
+
+        logger.info("Convert flac tag:taglength:"+tagLength);       
         ByteBuffer buf = ByteBuffer.allocate(tagLength + paddingSize);
 
-        //CREATION OF CVORBIS COMMENT METADATA BLOCK HEADER
-        //If we have padding, the comment is not the last block (bit[0] = 0)
-        //If there is no padding, the comment is the last block (bit[0] = 1)
-        byte type = (paddingSize > 0) ? (byte) 0x04 : (byte) 0x84;
-        buf.put(type);
-        int commentLength = tagLength - 4; //Comment length
-        buf.put(new byte[]{(byte) ((commentLength & 0xFF0000) >>> 16), (byte) ((commentLength & 0xFF00) >>> 8), (byte) (commentLength & 0xFF)});
-
-        //The actual tag
-        buf.put(ogg);
-
-        //PADDING
-        if (paddingSize >= 4)
+        MetadataBlockHeader vorbisHeader;
+        //If there are other metadata blocks
+        if((paddingSize > 0)||(flacTag.getImages().size()>0))
         {
-            int paddingDataSize = paddingSize - 4;
-            buf.put((byte) 0x81); //Last frame, padding 0x81
-            buf.put(new byte[]{(byte) ((paddingDataSize & 0xFF0000) >>> 16), (byte) ((paddingDataSize & 0xFF00) >>> 8), (byte) (paddingDataSize & 0xFF)});
+            vorbisHeader = new MetadataBlockHeader(false, BlockType.VORBIS_COMMENT,vorbiscomment.capacity());
+        }
+        else
+        {
+            vorbisHeader = new MetadataBlockHeader(true, BlockType.VORBIS_COMMENT,vorbiscomment.capacity());
+        }
+        buf.put(vorbisHeader.getBytes());
+        buf.put(vorbiscomment);
+
+        //Images (TODO padding stuff)
+        for(MetadataBlockDataPicture imageField:flacTag.getImages())
+        {
+            MetadataBlockHeader imageHeader;
+            imageHeader = new MetadataBlockHeader(false, BlockType.PICTURE,imageField.getLength());
+            buf.put(imageHeader.getBytes());
+            buf.put(imageField.getBytes());
+        }
+
+        //Padding
+        logger.info("Convert flac tag at"+buf.position());
+        if (paddingSize > 0)
+        {
+            int paddingDataSize = paddingSize - MetadataBlockHeader.HEADER_LENGTH;
+            MetadataBlockHeader paddingHeader = new MetadataBlockHeader(true, BlockType.PADDING,paddingDataSize);
+            buf.put(paddingHeader.getBytes());
             for (int i = 0; i < paddingDataSize; i++)
             {
                 buf.put((byte) 0);
             }
         }
         buf.rewind();
-
         return buf;
-    }
-
-    public int getTagLength(Tag tag) throws UnsupportedEncodingException
-    {
-        ByteBuffer ogg = creator.convert(tag);
-        return ogg.capacity() + 4;
     }
 }

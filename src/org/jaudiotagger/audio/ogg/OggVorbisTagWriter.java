@@ -58,6 +58,7 @@ public class OggVorbisTagWriter
         VorbisCommentTag emptyTag = new VorbisCommentTag();
         emptyTag.setVendor(tag.getVendor());
 
+
         write(emptyTag, raf, tempRaf);
     }
 

@@ -24,6 +24,11 @@ package org.jaudiotagger.tag.id3.valuepair;
 
 import org.jaudiotagger.tag.datatype.AbstractIntStringValuePair;
 
+/**
+ * Pictures types for Attched Pictures
+ *
+ * <P>Note this list is used by APIC and PIC frames. It is also used by Flac format Picture blocks 
+ */
 public class PictureTypes extends AbstractIntStringValuePair
 {
     private static PictureTypes pictureTypes;

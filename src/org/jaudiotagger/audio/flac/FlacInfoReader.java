@@ -26,68 +26,63 @@ import org.jaudiotagger.audio.flac.metadatablock.BlockType;
 
 import java.io.*;
 
+/**
+ * Read info from Flac file
+ */
 public class FlacInfoReader
 {
+    private static final int NO_OF_BITS_IN_BYTE = 8;
+    private static final int KILOBYTES_TO_BYTES_MULTIPLIER = 1000;
+
     public GenericAudioHeader read(RandomAccessFile raf) throws CannotReadException, IOException
     {
-        //Read the infos--------------------------------------------------------
-        if (raf.length() == 0)
-        {
-            //Empty File
-            throw new CannotReadException("Error: File empty");
-        }
-        raf.seek(0);
-
-        //FLAC Header string
-        byte[] b = new byte[4];
-        raf.read(b);
-        String flac = new String(b);
-        if (!flac.equals("fLaC"))
-        {
-            throw new CannotReadException("fLaC Header not found");
-        }
+        FlacStream.findStream(raf);
 
         MetadataBlockDataStreamInfo mbdsi = null;
         boolean isLastBlock = false;
+
+        //Search for StreamInfo Block, but even after we found it we still have to continue thorugh all
+        //the metadata blocks so that we can find the start oif the audio frames which we need to calculate
+        //the bitrate
         while (!isLastBlock)
         {
-            b = new byte[4];
-            raf.read(b);
-            MetadataBlockHeader mbh = new MetadataBlockHeader(b);
-
+            MetadataBlockHeader mbh = MetadataBlockHeader.readHeader(raf);
             if (mbh.getBlockType() == BlockType.STREAMINFO)
             {
-                b = new byte[mbh.getDataLength()];
-                raf.read(b);
-
-                mbdsi = new MetadataBlockDataStreamInfo(b);
+                mbdsi = new MetadataBlockDataStreamInfo(mbh,raf);
                 if (!mbdsi.isValid())
                 {
                     throw new CannotReadException("FLAC StreamInfo not valid");
-                }
-                break;
+                }               
             }
-            raf.seek(raf.getFilePointer() + mbh.getDataLength());
+            else
+            {
+                raf.seek(raf.getFilePointer() + mbh.getDataLength());
+            }
 
             isLastBlock = mbh.isLastBlock();
             mbh = null; //Free memory
         }
-        assert mbdsi != null;
+
+        if (mbdsi==null)
+        {
+            throw new CannotReadException("Unable to find Flac StreamInfo");
+        }
 
         GenericAudioHeader info = new GenericAudioHeader();
-//		info.setLength(mbdsi.getTrackLength());
+		info.setLength(mbdsi.getLength());
         info.setPreciseLength(mbdsi.getPreciseLength());
         info.setChannelNumber(mbdsi.getChannelNumber());
-        info.setSamplingRate(mbdsi.getSamplingRate());
+        info.setSamplingRate(mbdsi.getSamplingRatePerChannel());
         info.setEncodingType(mbdsi.getEncodingType());
         info.setExtraEncodingInfos("");
-        info.setBitrate(computeBitrate(mbdsi.getLength(), raf.length()));
+        info.setBitrate(computeBitrate(mbdsi.getLength(), raf.length() -raf.getFilePointer()));
 
         return info;
     }
 
     private int computeBitrate(int length, long size)
     {
-        return (int) ((size / 1000) * 8 / length);
+        return (int) ((size / KILOBYTES_TO_BYTES_MULTIPLIER) * NO_OF_BITS_IN_BYTE / length);
     }
 }

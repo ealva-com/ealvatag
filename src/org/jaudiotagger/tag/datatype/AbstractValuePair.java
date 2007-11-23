@@ -53,4 +53,13 @@ public abstract class AbstractValuePair
     {
         return valueToId;
     }
+
+    /**
+     *
+     * @return the number of elements in the mapping
+     */
+    public int getSize()
+    {
+        return valueList.size();
+    }
 }

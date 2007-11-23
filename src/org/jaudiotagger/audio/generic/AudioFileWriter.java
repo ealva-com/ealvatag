@@ -30,8 +30,9 @@ import org.jaudiotagger.audio.exceptions.ModifyVetoException;
 import org.jaudiotagger.audio.exceptions.CannotReadException;
 
 /**
- * This abstract class is the skeleton for tag writers. It handles the
- * creation/closing of the randomaccessfile objects and then call the subclass
+ * This abstract class is the skeleton for tag writers.
+ *
+ * <p>It handles the creation/closing of the randomaccessfile objects and then call the subclass
  * method writeTag or deleteTag. These two method have to be implemented in the
  * subclass.
  *
@@ -183,7 +184,7 @@ public abstract class AudioFileWriter
     }
 
     /**
-     * Write the tag (if not empty) present in the AudioFile int the associated
+     * Write the tag (if not empty) present in the AudioFile in the associated
      * File
      *
      * @param af The file we want to process
@@ -191,7 +192,7 @@ public abstract class AudioFileWriter
      */
     public synchronized void write(AudioFile af) throws CannotWriteException
     {
-         logger.info("Started writing tag data for file:"+af.getFile().getName());
+        logger.info("Started writing tag data for file:"+af.getFile().getName());
 
         // Preliminary checks
         try
@@ -217,15 +218,17 @@ public abstract class AudioFileWriter
             throw new CannotWriteException("Less than 150 byte \"" + af.getFile().getAbsolutePath() + "\"");
         }
 
-        RandomAccessFile raf = null;
+        RandomAccessFile raf     = null;
         RandomAccessFile rafTemp = null;
         File tempF = null;
+
         // Will be set to true in exception block to not replace original file.
         boolean cannotWrite = false;
         try
         {
-
-            tempF = File.createTempFile("entagged", ".tmp", af.getFile().getParentFile());
+            //TODO Creates temp file in same folder as the original file, this is safe but would impose a performance
+            //overhead if the original file is on a networked drive
+            tempF   = File.createTempFile("entagged", ".tmp", af.getFile().getParentFile());
             rafTemp = new RandomAccessFile(tempF, "rw");
             raf = new RandomAccessFile(af.getFile(), "rw");
             raf.seek(0);
@@ -267,23 +270,25 @@ public abstract class AudioFileWriter
                     rafTemp.close();
                 }
 
+                //If the tempoaray file was used and there were no problems replace original file with it
                 if (!cannotWrite && tempF.length() > 0)
                 {
-
                     af.getFile().delete();
                     tempF.renameTo(af.getFile());
                     result = tempF;
                 }
+                //Either the original file was directly written to or the temp file was used but the write failed
+                //in either case delete the temp file.
                 else
                 {                       
                     tempF.delete();
                 }
-
             }
             catch (Exception ex)
             {
                 System.err.println("AudioFileWriter:165:\"" + af.getFile().getAbsolutePath() + "\" or \"" + tempF.getAbsolutePath() + "\" :" + ex);
             }
+
             if (this.modificationListener != null)
             {
                 this.modificationListener.fileOperationFinished(result);

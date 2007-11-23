@@ -20,60 +20,72 @@ package org.jaudiotagger.audio.flac;
 
 import org.jaudiotagger.audio.exceptions.*;
 import org.jaudiotagger.audio.flac.metadatablock.MetadataBlockHeader;
+import org.jaudiotagger.audio.flac.metadatablock.BlockType;
+import org.jaudiotagger.audio.flac.metadatablock.MetadataBlockDataStreamInfo;
+import org.jaudiotagger.audio.flac.metadatablock.MetadataBlockDataPicture;
 import org.jaudiotagger.tag.vorbiscomment.VorbisCommentTag;
 import org.jaudiotagger.tag.vorbiscomment.VorbisCommentReader;
+import org.jaudiotagger.tag.InvalidFrameException;
+import org.jaudiotagger.tag.flac.FlacTag;
 
 import java.io.*;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.logging.Logger;
 
 /**
- * Read Flac Tag, uses VorbisComment
+ * Read Flac Tag
  */
 public class FlacTagReader
 {
+    // Logger Object
+    public static Logger logger = Logger.getLogger("org.jaudiotagger.audio.flac");
 
     private VorbisCommentReader vorbisCommentReader = new VorbisCommentReader();
 
-    public VorbisCommentTag read(RandomAccessFile raf) throws CannotReadException, IOException
+    public FlacTag read(RandomAccessFile raf) throws CannotReadException, IOException
     {
-        System.out.println("Started searching");
-        //Begins tag parsing
-        if (raf.length() == 0)
-        {
-            //Empty File
-            throw new CannotReadException("Error: File empty");
-        }
-        raf.seek(0);
+        FlacStream.findStream(raf);
 
-        //FLAC Header string
-        byte[] b = new byte[4];
-        raf.read(b);
-        String flac = new String(b);
-        if (!flac.equals("fLaC"))
-        {
-            throw new CannotReadException("fLaC Header not found, not a flac file");
-        }
+        //Hold the metadata
+        VorbisCommentTag        tag = null;
+        List<MetadataBlockDataPicture> images = new ArrayList<MetadataBlockDataPicture>();
 
-        System.out.println("flac found");
-        VorbisCommentTag tag = null;
-
-        //Seems like we hava a valid stream
+        //Seems like we have a valid stream
         boolean isLastBlock = false;
         while (!isLastBlock)
         {
-            b = new byte[4];
-            raf.read(b);
-            MetadataBlockHeader mbh = new MetadataBlockHeader(b);
+            //Read the header
+            MetadataBlockHeader mbh = MetadataBlockHeader.readHeader(raf);
 
+            //Is it one containing some sort of metadata, therefore interested in it?
             switch (mbh.getBlockType())
             {
                 //We got a vorbiscomment comment block, parse it
                 case VORBIS_COMMENT :
-                    tag = handleVorbisComment(mbh, raf);
-                    mbh = null;
-                    System.out.println("found comment");
-                    return tag; //We have it, so no need to go further
+                    byte[] commentHeaderRawPacket = new byte[mbh.getDataLength()];
+                    raf.read(commentHeaderRawPacket);
+                    tag = vorbisCommentReader.read(commentHeaderRawPacket,false);                    
+                    break;
 
-                    //This is not a vorbiscomment comment block, we skip to next block
+                case PICTURE:
+                    try
+                    {
+                        MetadataBlockDataPicture mbdp = new MetadataBlockDataPicture(mbh,raf);
+                        images.add(mbdp);
+                    }
+                    catch(IOException ioe)
+                    {
+                        logger.warning("Unable to read picture metablock, ignoring:"+ioe.getMessage());
+                    }
+                    catch(InvalidFrameException ive)
+                    {
+                         logger.warning("Unable to read picture metablock, ignoring"+ive.getMessage());
+                    }
+
+                    break;
+
+                //This is not a vorbiscomment comment block, we skip to next block
                 default :
                     raf.seek(raf.getFilePointer() + mbh.getDataLength());
                     break;
@@ -82,17 +94,16 @@ public class FlacTagReader
             isLastBlock = mbh.isLastBlock();
             mbh = null;
         }
-        System.out.println("No tag found");
-        //FLAC not found...
-        throw new CannotReadException("FLAC Tag could not be found or read..");
-    }
 
-    private VorbisCommentTag handleVorbisComment(MetadataBlockHeader mbh, RandomAccessFile raf) throws IOException, CannotReadException
-    {
-        byte[] commentHeaderRawPacket = new byte[mbh.getDataLength()];
-        raf.read(commentHeaderRawPacket);
-        VorbisCommentTag tag = vorbisCommentReader.read(commentHeaderRawPacket,false);
-        return tag;                                                                     
+        //Did we find at least the comment tag ?
+        //TODO is it mandatory, anyway
+        if(tag==null)
+        {
+            throw new CannotReadException("FLAC Tag could not be found or read..");
+        }
+
+        FlacTag flacTag = new FlacTag(tag,images);
+        return flacTag;
     }
 }
 

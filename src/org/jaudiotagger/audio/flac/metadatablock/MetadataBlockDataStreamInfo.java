@@ -18,39 +18,89 @@
  */
 package org.jaudiotagger.audio.flac.metadatablock;
 
+import java.io.RandomAccessFile;
+import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.util.logging.Logger;
+
+/**
+ * Stream Info
+ * <p/>
+ * <p>This block has information about the whole stream, like sample rate, number of channels, total number of samples,
+ * etc. It must be present as the first metadata block in the stream. Other metadata blocks may follow, and ones
+ * that the decoder doesn't understand, it will skip.
+ * Format:
+ * <Size in bits> Info
+ * <16> The minimum block size (in samples) used in the stream.
+ * <16> The maximum block size (in samples) used in the stream. (Minimum blocksize == maximum blocksize) implies a fixed-blocksize stream.
+ * <24> The minimum frame size (in bytes) used in the stream. May be 0 to imply the value is not known.
+ * <24> The maximum frame size (in bytes) used in the stream. May be 0 to imply the value is not known.
+ * <20> Sample rate in Hz. Though 20 bits are available, the maximum sample rate is limited by the structure of frame headers to 655350Hz. Also,
+ * a value of 0 is invalid.
+ * <3> 	(number of channels)-1. FLAC supports from 1 to 8 channels
+ * <5> 	(bits per sample)-1. FLAC supports from 4 to 32 bits per sample. Currently the reference encoder and decoders only support up to 24 bits per sample.
+ * <36> 	Total samples in stream. 'Samples' means inter-channel sample,
+ * i.e. one second of 44.1Khz audio will have 44100 samples regardless of the number of channels.
+ * A value of zero here means the number of total samples is unknown.
+ * <128> 	MD5 signature of the unencoded audio data. This allows the decoder to determine if an error exists in the audio data
+ * even when the error does not result in an invalid bitstream.
+ * NOTES
+ * * FLAC specifies a minimum block size of 16 and a maximum block size of 65535, meaning the bit patterns corresponding to the numbers 0-15 in the minimum blocksize and maximum blocksize fields are invalid.
+ */
 public class MetadataBlockDataStreamInfo
 {
+    public static final int STREAM_INFO_DATA_LENGTH = 34;
 
-    private int samplingRate, bitsPerSample, channelNumber;
+    // Logger Object
+     public static Logger logger = Logger.getLogger("org.jaudiotagger.audio.flac.MetadataBlockDataStreamInfo");
+
+    private int minBlockSize, maxBlockSize, minFrameSize, maxFrameSize, samplingRate,samplingRatePerChannel, bitsPerSample, channelNumber, totalNumberOfSamples;
     private float length;
     private boolean isValid = true;
 
-    public MetadataBlockDataStreamInfo(byte[] b)
+    public MetadataBlockDataStreamInfo(MetadataBlockHeader header, RandomAccessFile raf)
+            throws IOException
     {
-        if (b.length < 19)
+        ByteBuffer rawdata = ByteBuffer.allocate(header.getDataLength());
+        int bytesRead = raf.getChannel().read(rawdata);
+        if (bytesRead < header.getDataLength())
         {
-            isValid = false;
-            return;
+            throw new IOException("Unable to read required number of databytes read:" + bytesRead + ":required:" + header.getDataLength());
         }
+        rawdata.rewind();
 
-        samplingRate = readSamplingRate(b[10], b[11], b[12]);
+        minBlockSize = rawdata.getShort();
+        maxBlockSize = rawdata.getShort();
+        minFrameSize = readThreeByteInteger(rawdata.get(), rawdata.get(), rawdata.get());
+        maxFrameSize = readThreeByteInteger(rawdata.get(), rawdata.get(), rawdata.get());
 
-        channelNumber = ((u(b[12]) & 0x0E) >>> 1) + 1;
-        samplingRate = samplingRate / channelNumber;
+        samplingRate = readSamplingRate(rawdata.get(), rawdata.get(), rawdata.get());
+        channelNumber = ((u(rawdata.get(12)) & 0x0E) >>> 1) + 1;
+        samplingRatePerChannel = samplingRate / channelNumber;
+        bitsPerSample = ((u(rawdata.get(12)) & 0x01) << 4) + ((u(rawdata.get(13)) & 0xF0) >>> 4) + 1;
 
-        bitsPerSample = ((u(b[12]) & 0x01) << 4) + ((u(b[13]) & 0xF0) >>> 4) + 1;
+        totalNumberOfSamples = readTotalNumberOfSamples(rawdata.get(13), rawdata.get(14), rawdata.get(15), rawdata.get(16), rawdata.get(17));
 
-        int sampleNumber = readSampleNumber(b[13], b[14], b[15], b[16], b[17]);
+        length = (float) ((double) totalNumberOfSamples / samplingRatePerChannel);
 
-        length = (float) ((double) sampleNumber / samplingRate);
+        logger.info(this.toString());
+    }
 
-        /*
-          System.err.println("SampleRate"+sampleRate);
-          System.err.println("Channel number:"+channelNumber);
-          System.err.println("bits per sample: "+bitsPerSample);
-          System.err.println("SampleNumber: "+sampleNumber);
-          System.err.println("Length: "+length);
-          */
+    public String toString()
+    {
+
+        return
+                  "MinBlockSize:" + minBlockSize
+                + "MaxBlockSize:" + maxBlockSize
+                + "MinFrameSize:" + minFrameSize
+                + "MaxFrameSize:" + maxFrameSize
+                + "SampleRateTotal:" + samplingRate
+                + "SampleRatePerChannel:" + samplingRatePerChannel
+                + ":Channel number:" + channelNumber
+                + ":Bits per sample: " + bitsPerSample
+                + ":TotalNumberOfSamples: " + totalNumberOfSamples
+                + ":Length: " + length;
+
     }
 
     public int getLength()
@@ -73,6 +123,11 @@ public class MetadataBlockDataStreamInfo
         return samplingRate;
     }
 
+     public int getSamplingRatePerChannel()
+    {
+        return samplingRatePerChannel;
+    }
+
     public String getEncodingType()
     {
         return "FLAC " + bitsPerSample + " bits";
@@ -83,16 +138,22 @@ public class MetadataBlockDataStreamInfo
         return isValid;
     }
 
-
-    private int readSamplingRate(byte b1, byte b2, byte b3)
+    private int readThreeByteInteger(byte b1, byte b2, byte b3)
     {
-        int rate = (u(b3) & 0xF0) >>> 3;
-        rate += u(b2) << 5;
-        rate += u(b1) << 13;
+        int rate = (u(b1) << 16) + (u(b2) << 8) + (u(b3));
         return rate;
     }
 
-    private int readSampleNumber(byte b1, byte b2, byte b3, byte b4, byte b5)
+    //TODO this code seems to be give a sampling rate over 21 bytes instead of 20 bytes but attempt to change
+    //to 21 bytes give wrong value
+    private int readSamplingRate(byte b1, byte b2, byte b3)
+    {
+        int rate = (u(b1) << 13) + (u(b2) << 5) + ((u(b3) & 0xF0) >>> 3);
+        return rate;
+
+    }
+
+    private int readTotalNumberOfSamples(byte b1, byte b2, byte b3, byte b4, byte b5)
     {
         int nb = u(b5);
         nb += u(b4) << 8;
