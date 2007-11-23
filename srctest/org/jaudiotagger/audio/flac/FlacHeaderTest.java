@@ -57,7 +57,10 @@ public class FlacHeaderTest extends TestCase
             assertEquals("Composer", tag.getFirst(TagFieldKey.COMPOSER));
 
             //Images
+            assertEquals(1,tag.get(TagFieldKey.COVER_ART).size());
+            assertEquals(1,tag.get(TagFieldKey.COVER_ART.name()).size());
             assertEquals(1,tag.getImages().size());
+           
             MetadataBlockDataPicture image = tag.getImages().get(0);
             assertEquals((int)PictureTypes.DEFAULT_ID,(int)image.getPictureType());
             assertEquals("image/png",image.getMimeType());

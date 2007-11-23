@@ -3,6 +3,7 @@ package org.jaudiotagger.audio.flac.metadatablock;
 import org.jaudiotagger.tag.id3.valuepair.PictureTypes;
 import org.jaudiotagger.tag.InvalidFrameException;
 import org.jaudiotagger.tag.TagField;
+import org.jaudiotagger.tag.TagFieldKey;
 import org.jaudiotagger.audio.generic.Utils;
 
 import java.io.RandomAccessFile;
@@ -40,7 +41,6 @@ import java.util.logging.Logger;
  */
 public class MetadataBlockDataPicture implements MetadataBlockData, TagField
 {
-
     private int     pictureType;
     private String  mimeType;
     private String  description;
@@ -247,7 +247,7 @@ public class MetadataBlockDataPicture implements MetadataBlockData, TagField
 	 */
 	public String getId()
     {
-        return "COVERART";
+        return TagFieldKey.COVER_ART.name();
     }
 
     /**

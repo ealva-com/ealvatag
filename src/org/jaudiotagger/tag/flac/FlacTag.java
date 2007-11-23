@@ -169,7 +169,19 @@ public class FlacTag implements Tag
      */
     public List<TagField> get(String id)
     {
-        return tag.get(id);
+        if(id.equals(TagFieldKey.COVER_ART.name()))
+        {
+            List <TagField> castImages = new ArrayList<TagField>();
+            for(MetadataBlockDataPicture image:images)
+            {
+                castImages.add(image);
+            }
+            return castImages;
+        }
+        else
+        {
+             return tag.get(id);
+        }
     }
 
     /**
@@ -329,7 +341,14 @@ public class FlacTag implements Tag
      */
     public boolean hasField(String id)
     {
-        return tag.hasField(id);
+        if(id.equals(TagFieldKey.COVER_ART.name()))
+        {
+            return images.size()>0;
+        }
+        else
+        {
+            return tag.hasField(id);
+        }
     }
 
     /**
@@ -339,7 +358,7 @@ public class FlacTag implements Tag
      */
     public boolean isEmpty()
     {
-        return tag.isEmpty();
+        return tag.isEmpty() && images.size()==0;
     }
 
     /**
@@ -349,7 +368,14 @@ public class FlacTag implements Tag
      */
     public void set(TagField field)  throws FieldDataInvalidException
     {
-        tag.set(field);
+        if(field instanceof MetadataBlockDataPicture)
+        {
+            images.set(0,(MetadataBlockDataPicture)field);
+        }
+        else
+        {
+            tag.set(field);
+        }
     }
 
     /**
@@ -438,7 +464,14 @@ public class FlacTag implements Tag
     public TagField createTagField(TagFieldKey genericKey,String value)
         throws KeyNotFoundException,FieldDataInvalidException
     {
-        return tag.createTagField(genericKey,value);
+        if(genericKey.equals(TagFieldKey.COVER_ART))
+        {
+            throw new UnsupportedOperationException("Please use the createArtworkField methods to create coverart ");
+        }
+        else
+        {
+            return tag.createTagField(genericKey,value);
+        }
     }
 
 
@@ -451,7 +484,14 @@ public class FlacTag implements Tag
      */
     public String getFirst(String id)
     {
-        return tag.getFirst(id);
+        if(id.equals(TagFieldKey.COVER_ART.name()))
+        {
+            throw new UnsupportedOperationException("Please use the createArtworkField methods to create coverart ");
+        }
+        else
+        {
+            return tag.getFirst(id);
+        }
     }
 
     /**
@@ -463,7 +503,15 @@ public class FlacTag implements Tag
     public String getFirst(TagFieldKey id)
             throws KeyNotFoundException
     {
-        return tag.getFirst(id);
+        if(id.equals(TagFieldKey.COVER_ART))
+        {
+            throw new UnsupportedOperationException("Please use the createArtworkField methods to create coverart ");
+        }
+        else
+        {
+            return tag.getFirst(id);
+        }
+
     }
 
     /**
@@ -477,7 +525,21 @@ public class FlacTag implements Tag
      */
     public TagField getFirstField(String id)
     {
-        return tag.getFirstField(id);
+        if(id.equals(TagFieldKey.COVER_ART))
+        {
+            if(images.size()>0)
+            {
+                return images.get(0);
+            }
+            else
+            {
+                return null;
+            }
+        }
+        else
+        {
+             return tag.getFirstField(id);
+        }
     }
 
 
@@ -489,7 +551,14 @@ public class FlacTag implements Tag
     public void deleteTagField(TagFieldKey tagFieldKey)
             throws KeyNotFoundException
     {
-        tag.deleteTagField(tagFieldKey);
+        if(tagFieldKey.equals(TagFieldKey.COVER_ART))
+        {
+            images.clear();
+        }
+        else
+        {
+             tag.deleteTagField(tagFieldKey);
+        }
     }
 
     /**
@@ -497,10 +566,10 @@ public class FlacTag implements Tag
      *
      * @return iterator over whole list
      */
+    //TODO add images to iterator
     public Iterator getFields()
     {
         return tag.getFields();
-        //Tod add images
     }
 
     /**
@@ -532,7 +601,20 @@ public class FlacTag implements Tag
    public List<TagField> get(TagFieldKey id)
                throws KeyNotFoundException
     {
-        return tag.get(id);
+        if(id.equals(TagFieldKey.COVER_ART))
+        {
+            List <TagField> castImages = new ArrayList<TagField>();
+            for(MetadataBlockDataPicture image:images)
+            {
+                castImages.add(image);
+            }
+            return castImages;
+        }
+        else
+        {
+             return tag.get(id);
+        }
+
     }
 
     /**
