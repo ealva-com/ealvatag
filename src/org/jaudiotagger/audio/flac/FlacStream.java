@@ -8,8 +8,7 @@ import java.io.IOException;
 /**
  * Flac Stream
  * <p/>
- * <p/>
- * identifies this is in fact a flac stream
+ * Identifies this is in fact a flac stream
  */
 public class FlacStream
 {

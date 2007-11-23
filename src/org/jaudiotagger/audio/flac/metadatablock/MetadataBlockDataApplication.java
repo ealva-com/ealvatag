@@ -18,6 +18,9 @@
  */
 package org.jaudiotagger.audio.flac.metadatablock;
 
+import java.io.RandomAccessFile;
+import java.io.IOException;
+
 
 /**
  * Application Block
@@ -31,13 +34,11 @@ public class MetadataBlockDataApplication implements MetadataBlockData
 
     private byte[] data;
 
-    public MetadataBlockDataApplication(byte[] b)
+    public MetadataBlockDataApplication(MetadataBlockHeader header, RandomAccessFile raf)
+            throws IOException
     {
-        data = new byte[b.length];
-        for (int i = 0; i < b.length; i++)
-        {
-            data[i] = b[i];
-        }
+        data = new byte[header.getDataLength()];
+        raf.readFully(data);
     }
 
     public byte[] getBytes()

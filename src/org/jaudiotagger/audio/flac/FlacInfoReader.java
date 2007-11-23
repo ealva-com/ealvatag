@@ -25,12 +25,16 @@ import org.jaudiotagger.audio.flac.metadatablock.MetadataBlockHeader;
 import org.jaudiotagger.audio.flac.metadatablock.BlockType;
 
 import java.io.*;
+import java.util.logging.Logger;
 
 /**
  * Read info from Flac file
  */
 public class FlacInfoReader
 {
+    // Logger Object
+    public static Logger logger = Logger.getLogger("org.jaudiotagger.audio.flac");
+
     private static final int NO_OF_BITS_IN_BYTE = 8;
     private static final int KILOBYTES_TO_BYTES_MULTIPLIER = 1000;
 
@@ -42,7 +46,7 @@ public class FlacInfoReader
         boolean isLastBlock = false;
 
         //Search for StreamInfo Block, but even after we found it we still have to continue thorugh all
-        //the metadata blocks so that we can find the start oif the audio frames which we need to calculate
+        //the metadata blocks so that we can find the start of the audio frames which we need to calculate
         //the bitrate
         while (!isLastBlock)
         {
@@ -84,5 +88,39 @@ public class FlacInfoReader
     private int computeBitrate(int length, long size)
     {
         return (int) ((size / KILOBYTES_TO_BYTES_MULTIPLIER) * NO_OF_BITS_IN_BYTE / length);
+    }
+
+    /**
+     * Count the number of metadatablocks, useful for debugging
+     *
+     * @param f
+     * @return
+     * @throws CannotReadException
+     * @throws IOException
+     */
+    public int countMetaBlocks(File f)throws CannotReadException, IOException
+    {
+        RandomAccessFile raf = new RandomAccessFile(f,"r");
+
+        FlacStream.findStream(raf);
+
+        MetadataBlockDataStreamInfo mbdsi = null;
+        boolean isLastBlock = false;
+
+        //Search for StreamInfo Block, but even after we found it we still have to continue thorugh all
+        //the metadata blocks so that we can find the start of the audio frames which we need to calculate
+        //the bitrate
+        int count = 0;
+        while (!isLastBlock)
+        {
+            MetadataBlockHeader mbh = MetadataBlockHeader.readHeader(raf);
+            logger.info("Found block:"+mbh.getBlockType());
+            raf.seek(raf.getFilePointer() + mbh.getDataLength());
+            isLastBlock = mbh.isLastBlock();
+            mbh = null; //Free memory
+            count ++;
+        }
+        raf.close();
+        return count;
     }
 }

@@ -15,6 +15,7 @@ import org.jaudiotagger.tag.id3.valuepair.ImageFormats;
 import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.AudioFileIO;
 import org.jaudiotagger.audio.flac.metadatablock.MetadataBlockDataPicture;
+import org.jaudiotagger.audio.flac.FlacInfoReader;
 
 import javax.imageio.ImageIO;
 import javax.imageio.stream.ImageInputStream;
@@ -24,8 +25,6 @@ import javax.imageio.stream.ImageInputStream;
  */
 public class FlacWriteTest extends TestCase
 {
-
-
     /**
      * Write flac info to file
      */
@@ -46,7 +45,9 @@ public class FlacWriteTest extends TestCase
             FlacTag tag = (FlacTag)f.getTag();
             //No Images
             assertEquals(0,tag.getImages().size());
-
+            FlacInfoReader infoReader = new FlacInfoReader();
+            assertEquals(4,infoReader.countMetaBlocks(f.getFile()));
+            
             tag.addArtist("artist");
             tag.addAlbum("album");
             tag.addTitle("title");
@@ -65,9 +66,10 @@ public class FlacWriteTest extends TestCase
                                    24,
                                    0));
             f.commit();
-
-            f = AudioFileIO.read(testFile);
+            f = AudioFileIO.read(testFile);            
+            assertEquals(5,infoReader.countMetaBlocks(f.getFile()));
             assertTrue(f.getTag() instanceof FlacTag);
+            
             tag = (FlacTag)f.getTag();
             assertEquals("artist",tag.getFirstArtist());
             assertEquals("album",tag.getFirstAlbum());
@@ -114,6 +116,8 @@ public class FlacWriteTest extends TestCase
             bi = ImageIO.read(stream);
             assertEquals(200,bi.getWidth());
             assertEquals(200,bi.getHeight());
+
+            assertEquals(6,infoReader.countMetaBlocks(f.getFile()));
 
 
         }

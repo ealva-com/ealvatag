@@ -30,6 +30,7 @@ import org.jaudiotagger.audio.generic.AbstractTagCreator;
 import java.io.UnsupportedEncodingException;
 import java.nio.*;
 import java.util.logging.Logger;
+import java.util.ListIterator;
 
 /**
  * Create the tag data ready for writing to flac file
@@ -77,11 +78,21 @@ public class FlacTagCreator extends AbstractTagCreator
         buf.put(vorbisHeader.getBytes());
         buf.put(vorbiscomment);
 
-        //Images (TODO padding stuff)
-        for(MetadataBlockDataPicture imageField:flacTag.getImages())
+        //Images
+        ListIterator<MetadataBlockDataPicture> li = flacTag.getImages().listIterator();
+        while(li.hasNext())
         {
+            MetadataBlockDataPicture imageField = li.next();
             MetadataBlockHeader imageHeader;
-            imageHeader = new MetadataBlockHeader(false, BlockType.PICTURE,imageField.getLength());
+
+            if(paddingSize > 0 ||li.hasNext())
+            {
+                imageHeader = new MetadataBlockHeader(false, BlockType.PICTURE,imageField.getLength());
+            }
+            else
+            {
+                imageHeader = new MetadataBlockHeader(true, BlockType.PICTURE,imageField.getLength());
+            }
             buf.put(imageHeader.getBytes());
             buf.put(imageField.getBytes());
         }
@@ -92,11 +103,9 @@ public class FlacTagCreator extends AbstractTagCreator
         {
             int paddingDataSize = paddingSize - MetadataBlockHeader.HEADER_LENGTH;
             MetadataBlockHeader paddingHeader = new MetadataBlockHeader(true, BlockType.PADDING,paddingDataSize);
+            MetadataBlockDataPadding padding  = new  MetadataBlockDataPadding(paddingDataSize);          
             buf.put(paddingHeader.getBytes());
-            for (int i = 0; i < paddingDataSize; i++)
-            {
-                buf.put((byte) 0);
-            }
+            buf.put(padding.getBytes());
         }
         buf.rewind();
         return buf;

@@ -85,7 +85,7 @@ public class FlacTagReader
 
                     break;
 
-                //This is not a vorbiscomment comment block, we skip to next block
+                //This is not a metadata block we are interested in so we skip to next block
                 default :
                     raf.seek(raf.getFilePointer() + mbh.getDataLength());
                     break;

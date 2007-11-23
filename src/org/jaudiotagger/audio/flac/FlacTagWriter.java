@@ -102,22 +102,38 @@ public class FlacTagWriter
                 case VORBIS_COMMENT:
                 case PADDING :
                 case PICTURE:
-                    handlePadding(mbh, raf);
-                    break;
-
+                    {
+                        //All these will be replaced by the new metadata so we just treat as padding in order
+                        //to determine how much space is already allocated in the file
+                        raf.seek(raf.getFilePointer() + mbh.getDataLength());
+                        MetadataBlockData mbd = new MetadataBlockDataPadding(mbh.getDataLength());
+                        metadataBlockPadding.add(new MetadataBlock(mbh, mbd));
+                        break;
+                    }
                 case APPLICATION :
-                    handleApplication(mbh, raf);
-                    break;
+                    {
+                        MetadataBlockData mbd = new MetadataBlockDataApplication(mbh,raf);
+                        metadataBlockApplication.add(new MetadataBlock(mbh, mbd));
+                        break;
+                    }
                 case SEEKTABLE :
-                    handleSeekTable(mbh, raf);
-                    break;
+                    {
+                        MetadataBlockData mbd = new MetadataBlockDataSeekTable(mbh,raf);
+                        metadataBlockSeekTable.add(new MetadataBlock(mbh, mbd));
+                        break;
+                    }
                 case CUESHEET :
-                    handleCueSheet(mbh, raf);
-                    break;
+                    {
+                        MetadataBlockData mbd = new MetadataBlockDataCueSheet(mbh,raf);
+                        metadataBlockCueSheet.add(new MetadataBlock(mbh, mbd));
+                        break;
+                    }
                 default :
-                    //What are the consequences of doing this
-                    skipBlock(mbh, raf);
-                    break;
+                    {
+                        //What are the consequences of doing this
+                        raf.seek(raf.getFilePointer() + mbh.getDataLength());
+                        break;
+                    }
             }
             isLastBlock = mbh.isLastBlock();
         }
@@ -128,7 +144,7 @@ public class FlacTagWriter
         //Minimum Size of the New tag data without padding         
         int newTagSize =  tc.convert(tag).limit();
 
-        //Number of bytes required for new tagdata an other metadata blocks
+        //Number of bytes required for new tagdata and other metadata blocks
         int neededRoom = newTagSize + computeNeededRoom();
 
         raf.seek(0);
@@ -213,6 +229,10 @@ public class FlacTagWriter
         }
     }
 
+    /**
+     *
+     * @return space currently availble for writing all Flac metadatablocks exceprt for StreamInfo which is fixed size
+     */
     private int computeAvailableRoom()
     {
         int length = 0;
@@ -240,6 +260,11 @@ public class FlacTagWriter
         return length;
     }
 
+    /**
+     *
+     * @return space required to write the metadata blocks that are part of Flac but are not part of tagdata
+     * in the normal sense.
+     */
     private int computeNeededRoom()
     {
         int length = 0;
@@ -261,48 +286,5 @@ public class FlacTagWriter
 
         return length;
     }
-
-
-    private void skipBlock(MetadataBlockHeader mbh, RandomAccessFile raf) throws IOException
-    {
-        raf.seek(raf.getFilePointer() + mbh.getDataLength());
-    }
-
-
-    private void handlePadding(MetadataBlockHeader mbh, RandomAccessFile raf) throws IOException
-    {
-        raf.seek(raf.getFilePointer() + mbh.getDataLength());
-
-        MetadataBlockData mbd = new MetadataBlockDataPadding(mbh.getDataLength());
-        metadataBlockPadding.add(new MetadataBlock(mbh, mbd));
-    }
-
-    private void handleApplication(MetadataBlockHeader mbh, RandomAccessFile raf) throws IOException
-    {
-        byte[] b = new byte[mbh.getDataLength()];
-        raf.readFully(b);
-
-        MetadataBlockData mbd = new MetadataBlockDataApplication(b);
-        metadataBlockApplication.add(new MetadataBlock(mbh, mbd));
-    }
-
-    private void handleSeekTable(MetadataBlockHeader mbh, RandomAccessFile raf) throws IOException
-    {
-        byte[] b = new byte[mbh.getDataLength()];
-        raf.readFully(b);
-
-        MetadataBlockData mbd = new MetadataBlockDataSeekTable(b);
-        metadataBlockSeekTable.add(new MetadataBlock(mbh, mbd));
-    }
-
-    private void handleCueSheet(MetadataBlockHeader mbh, RandomAccessFile raf) throws IOException
-    {
-        byte[] b = new byte[mbh.getDataLength()];
-        raf.readFully(b);
-
-        MetadataBlockData mbd = new MetadataBlockDataCueSheet(b);
-        metadataBlockCueSheet.add(new MetadataBlock(mbh, mbd));
-    }
-
 }
 

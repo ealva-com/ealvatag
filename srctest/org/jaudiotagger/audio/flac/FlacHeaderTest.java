@@ -35,6 +35,9 @@ public class FlacHeaderTest extends TestCase
 
             assertTrue(f.getTag() instanceof FlacTag);
             FlacTag tag = (FlacTag)f.getTag();
+            FlacInfoReader infoReader = new FlacInfoReader();
+            assertEquals(5,infoReader.countMetaBlocks(f.getFile()));
+
               //Ease of use methods for common fields
             assertEquals("Artist", tag.getFirstArtist());
             assertEquals("Album", tag.getFirstAlbum());
@@ -93,6 +96,8 @@ public class FlacHeaderTest extends TestCase
 
             assertTrue(f.getTag() instanceof FlacTag);
             FlacTag tag = (FlacTag)f.getTag();
+            FlacInfoReader infoReader = new FlacInfoReader();
+            assertEquals(4,infoReader.countMetaBlocks(f.getFile()));
             //No Images
             assertEquals(0,tag.getImages().size());
         }

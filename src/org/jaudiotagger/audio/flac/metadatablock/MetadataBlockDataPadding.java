@@ -29,8 +29,6 @@ package org.jaudiotagger.audio.flac.metadatablock;
  */
 public class MetadataBlockDataPadding implements MetadataBlockData
 {
-    public static final int VALID_PADDING_MULTIPLIER = 8;
-    
     private int length;
 
     public MetadataBlockDataPadding(int length)
@@ -40,8 +38,12 @@ public class MetadataBlockDataPadding implements MetadataBlockData
 
     public byte[] getBytes()
     {
-        assert false;
-        return null;
+        byte[] data = new byte[length];
+        for (int i = 0; i < length; i++)
+        {
+            data[i] = 0;
+        }
+        return data;
     }
 
     public int getLength()
