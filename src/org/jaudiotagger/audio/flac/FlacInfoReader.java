@@ -104,12 +104,8 @@ public class FlacInfoReader
 
         FlacStream.findStream(raf);
 
-        MetadataBlockDataStreamInfo mbdsi = null;
         boolean isLastBlock = false;
-
-        //Search for StreamInfo Block, but even after we found it we still have to continue thorugh all
-        //the metadata blocks so that we can find the start of the audio frames which we need to calculate
-        //the bitrate
+              
         int count = 0;
         while (!isLastBlock)
         {
