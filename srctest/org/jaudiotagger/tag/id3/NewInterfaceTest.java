@@ -14,6 +14,7 @@ import org.jaudiotagger.tag.id3.framebody.FrameBodyTPE1Test;
 import org.jaudiotagger.tag.id3.framebody.FrameBodyTALB;
 import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
 import org.jaudiotagger.tag.TagFieldKey;
+import org.jaudiotagger.tag.Tag;
 import org.jaudiotagger.tag.mp4.Mp4Tag;
 import org.jaudiotagger.audio.mp3.MP3File;
 import org.jaudiotagger.audio.AudioFileIO;
@@ -59,6 +60,41 @@ public class NewInterfaceTest extends TestCase
         return new TestSuite(NewInterfaceTest.class);
     }
 
+    public void testBasicWrite()
+    {
+        Exception ex = null;
+        try
+        {
+            File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3", new File("testBasicWrite.mp3"));
+            org.jaudiotagger.audio.AudioFile audioFile = org.jaudiotagger.audio.AudioFileIO.read(testFile);
+            org.jaudiotagger.tag.Tag newTag = audioFile.getTag();
+            newTag.setAlbum("album");
+            newTag.setArtist("artist");
+            newTag.setComment("comment");
+            newTag.setGenre("Rock");
+            newTag.setTitle("title");
+            newTag.setYear("year");
+            newTag.setTrack(Integer.toString(1));
+            audioFile.setTag(newTag); //have todo this to actaally add tag to file
+            audioFile.commit();
+
+            audioFile = org.jaudiotagger.audio.AudioFileIO.read(testFile);
+            newTag = audioFile.getTag();
+            assertEquals("album",newTag.getFirstAlbum());
+            assertEquals("artist",newTag.getFirstArtist());
+            assertEquals("comment",newTag.getFirstComment());
+            assertEquals("Rock",newTag.getFirstGenre()); 
+            assertEquals("title",newTag.getFirstTitle());
+            assertEquals("year",newTag.getFirstYear());
+            assertEquals("1",newTag.getFirstTrack());
+        }
+        catch(Exception e)
+        {
+            ex=e;
+        }
+        assertNull(ex);
+    }
+    
     public void testNewInterfaceBasicReadandWriteID3v1() throws Exception
     {
         Exception e=null;
@@ -773,6 +809,5 @@ public class NewInterfaceTest extends TestCase
          af = AudioFileIO.read(testFile);
          assertEquals(2, af.getTag().get(TagFieldKey.COVER_ART).size());
          assertEquals(10,af.getTag().getFieldCount());
-
     }
 }
