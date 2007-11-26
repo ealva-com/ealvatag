@@ -141,16 +141,16 @@ public class AudioFile
     }
 
     /**
-     * <p>Returns the tag contained in this AudioFile, the <code>Tag</code> contains any useful meta-data, like artist, album, title, etc.</p>
-     * <p>If the file does not contain any tag, a new empty tag is returned</p>
+     * <p>Returns the tag contained in this AudioFile, the <code>Tag</code> contains any useful meta-data, like
+     * artist, album, title, etc. If the file does not contain any tag the null is returned. Some audio formats do
+     * not allow there to be no tag so in this case the reader would return an empty tag whereas for others such
+     * as mp3 it is purely optional. 
      *
-     * @return Returns the tag contained in this AudioFile, or a new one if file hasn't any tag.
+     * @return Returns the tag contained in this AudioFile, or null if no tag exists.
      */
-    //TODO gives impression tag exists when it may not
-    //TODO generic tag is tied to closely to ID3v1 tags 
     public Tag getTag()
     {
-        return (tag == null) ? new GenericTag() : tag;
+        return tag;
     }
 
     /**

@@ -12,9 +12,11 @@ import org.jaudiotagger.AbstractTestCase;
 import org.jaudiotagger.tag.id3.framebody.FrameBodyTPE1;
 import org.jaudiotagger.tag.id3.framebody.FrameBodyTPE1Test;
 import org.jaudiotagger.tag.id3.framebody.FrameBodyTALB;
+import org.jaudiotagger.tag.id3.framebody.AbstractFrameBodyTextInfo;
 import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
 import org.jaudiotagger.tag.TagFieldKey;
 import org.jaudiotagger.tag.Tag;
+import org.jaudiotagger.tag.TagOptionSingleton;
 import org.jaudiotagger.tag.mp4.Mp4Tag;
 import org.jaudiotagger.audio.mp3.MP3File;
 import org.jaudiotagger.audio.AudioFileIO;
@@ -68,14 +70,19 @@ public class NewInterfaceTest extends TestCase
             File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3", new File("testBasicWrite.mp3"));
             org.jaudiotagger.audio.AudioFile audioFile = org.jaudiotagger.audio.AudioFileIO.read(testFile);
             org.jaudiotagger.tag.Tag newTag = audioFile.getTag();
+            if(audioFile.getTag()==null)
+            {
+                audioFile.setTag(new ID3v23Tag());
+                newTag = audioFile.getTag();
+            }
+
             newTag.setAlbum("album");
             newTag.setArtist("artist");
             newTag.setComment("comment");
             newTag.setGenre("Rock");
             newTag.setTitle("title");
             newTag.setYear("year");
-            newTag.setTrack(Integer.toString(1));
-            audioFile.setTag(newTag); //have todo this to actaally add tag to file
+            newTag.setTrack(Integer.toString(1));            
             audioFile.commit();
 
             audioFile = org.jaudiotagger.audio.AudioFileIO.read(testFile);
@@ -87,10 +94,37 @@ public class NewInterfaceTest extends TestCase
             assertEquals("title",newTag.getFirstTitle());
             assertEquals("year",newTag.getFirstYear());
             assertEquals("1",newTag.getFirstTrack());
+            AbstractTagFrameBody body = (((ID3v23Frame)newTag.getFirstField(ID3v23FieldKey.ALBUM.getFrameId())).getBody());
+            assertEquals(TextEncoding.ISO_8859_1,body.getTextEncoding());
+
+            TagOptionSingleton.getInstance().setId3v23DefaultTextEncoding(TextEncoding.UTF_16);
+            TagOptionSingleton.getInstance().setResetTextEncodingForExistingFrames(true);
+            audioFile.commit();
+            audioFile = org.jaudiotagger.audio.AudioFileIO.read(testFile);
+            newTag = audioFile.getTag();
+            assertEquals("album",newTag.getFirstAlbum());
+            assertEquals("artist",newTag.getFirstArtist());
+            assertEquals("comment",newTag.getFirstComment());
+            assertEquals("Rock",newTag.getFirstGenre());
+            assertEquals("title",newTag.getFirstTitle());
+            assertEquals("year",newTag.getFirstYear());
+            assertEquals("1",newTag.getFirstTrack());
+             body = (((ID3v23Frame)newTag.getFirstField(ID3v23FieldKey.ALBUM.getFrameId())).getBody());
+            assertEquals(TextEncoding.UTF_16,body.getTextEncoding());
+
+            TagOptionSingleton.getInstance().setId3v23DefaultTextEncoding(TextEncoding.ISO_8859_1);
+            TagOptionSingleton.getInstance().setResetTextEncodingForExistingFrames(true);
+            audioFile.commit();
+            audioFile = org.jaudiotagger.audio.AudioFileIO.read(testFile);
+            newTag = audioFile.getTag();
+            body = (((ID3v23Frame)newTag.getFirstField(ID3v23FieldKey.ALBUM.getFrameId())).getBody());
+            assertEquals(TextEncoding.ISO_8859_1,body.getTextEncoding());
+             TagOptionSingleton.getInstance().setResetTextEncodingForExistingFrames(false);
         }
         catch(Exception e)
         {
             ex=e;
+            ex.printStackTrace();
         }
         assertNull(ex);
     }

@@ -34,7 +34,9 @@ public class VorbisWriteTagTest extends AbstractTestCase
             AudioFile f = AudioFileIO.read(testFile);
 
             assertTrue(f.getTag() instanceof VorbisCommentTag);
-            Tag tag = f.getTag();
+            VorbisCommentTag tag = (VorbisCommentTag)f.getTag();
+            assertEquals("jaudiotagger",tag.getVendor());
+
             //These have methods coz common over all formats
             tag.setArtist("ARTIST");
             tag.setAlbum("ALBUM");
@@ -65,6 +67,10 @@ public class VorbisWriteTagTest extends AbstractTestCase
             //Vorbis Only keys
             tag.set(((VorbisCommentTag)tag).createTagField(VorbisCommentFieldKey.DESCRIPTION,"description")); 
 
+            //tag.set(tag.createTagField(TagFieldKey.ENCODER,"encoder"));
+            tag.setVendor("encoder");
+            assertEquals("encoder",tag.getVendor());
+
             //Add new image, requires two fields in oggVorbis with data in  base64 encoded form
             RandomAccessFile imageFile = new RandomAccessFile(new File("testdata", "coverart.png"),"r");
             byte[] imagedata = new byte[(int)imageFile.length()];
@@ -80,7 +86,7 @@ public class VorbisWriteTagTest extends AbstractTestCase
             f.commit();
 
             f = AudioFileIO.read(testFile);
-            tag = f.getTag();
+            tag = (VorbisCommentTag)f.getTag();
             assertTrue(tag instanceof VorbisCommentTag);
             assertEquals("ARTIST",tag.getFirstArtist());
             assertEquals("ALBUM",tag.getFirstAlbum());
@@ -141,6 +147,7 @@ public class VorbisWriteTagTest extends AbstractTestCase
 
             assertEquals("Sarah Curtis",vorbisTag.getFirst("VOLINIST"));
 
+            assertEquals("encoder",vorbisTag.getVendor());
 
             //List methods
             List<TagField> list = tag.get(TagFieldKey.ARTIST);

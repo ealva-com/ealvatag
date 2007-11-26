@@ -92,8 +92,9 @@ public abstract class AbstractFrameBodyTextInfo
     }
 
     /**
-     * Creates a new FrameBodyTextInformation datatype from file. The super.super
-     * Constructor sets up the Object list for the frame.
+     * Creates a new FrameBodyTextInformation datatype from file.
+     *
+     * <p>The super.super Constructor sets up the Object list for the frame.
      *
      * @throws InvalidTagException if unable to create framebody from buffer
      */
@@ -105,9 +106,11 @@ public abstract class AbstractFrameBodyTextInfo
     }
 
     /**
-     * Set the Full Text String, if this String contains null terminator characters these are parsed as value
+     * Set the Full Text String.
+     *
+     * <p>If this String contains null terminator characters these are parsed as value
      * seperators, allowing you to hold multiple strings within one text frame. This functionality is only
-     * officilally support in ID3v24.
+     * officially support in ID3v24.
      *
      * @param text to set
      */

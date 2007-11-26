@@ -486,7 +486,7 @@ public class MP3File extends AudioFile
     }
 
     /**
-     * Sets the v1(_1)tag to the tag provided as an argument.
+     * Sets the ID3v1(_1)tag to the tag provided as an argument.
      *
      * @param id3v1tag
      */
@@ -804,29 +804,24 @@ public class MP3File extends AudioFile
         return tagFormatter;
     }
 
-
-    /**
-     *
-     * @return the tag, or create a v11 tag if one does nto exist
-     */
-    //For writing tag to screen
-    //TODO do we want to give the impression it has a tag when it doesnt
-    public Tag getTag()
-    {
-        return (tag == null) ? new ID3v11Tag() : tag;
-    }
-
     /**
      * Set the Tag
      *
-     * Currently using the TagInterface sets the v1tag only
-     *
+     * If the parameter tag is a v1tag then the v1 tag is set if v2tag then the v2tag. 
      * @param tag
      */
     public void setTag(Tag tag)
     {
         this.tag = tag;
-        this.id3v1tag  = (ID3v1Tag)tag;
+        if(tag instanceof ID3v1Tag)
+        {
+            setID3v1Tag((ID3v1Tag)tag);
+        }
+        else
+        {
+            setID3v2Tag((AbstractID3v2Tag )tag);
+        }
+
     }
 }
 

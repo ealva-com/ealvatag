@@ -60,7 +60,7 @@ public class ID3v23Frame extends AbstractID3v2Frame
     /**
      * Creates a new ID3v23 Frame of type identifier.
      *
-     * An empty body of the correct type will be automatically created.
+     * <p>An empty body of the correct type will be automatically created.
      * This constructor should be used when wish to create a new
      * frame from scratch using user data.
      */

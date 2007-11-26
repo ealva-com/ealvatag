@@ -43,6 +43,8 @@ public class FlacWriteTest extends TestCase
 
             assertTrue(f.getTag() instanceof FlacTag);
             FlacTag tag = (FlacTag)f.getTag();
+            assertEquals("reference libFLAC 1.1.4 20070213",tag.getFirst(TagFieldKey.ENCODER));
+            assertEquals("reference libFLAC 1.1.4 20070213",tag.getVorbisCommentTag().getVendor());
             //No Images
             assertEquals(0,tag.getImages().size());
             FlacInfoReader infoReader = new FlacInfoReader();
@@ -73,7 +75,13 @@ public class FlacWriteTest extends TestCase
             f = AudioFileIO.read(testFile);            
             assertEquals(5,infoReader.countMetaBlocks(f.getFile()));
             assertTrue(f.getTag() instanceof FlacTag);
-            
+
+            assertEquals("reference libFLAC 1.1.4 20070213",tag.getFirst(TagFieldKey.ENCODER));
+            assertEquals("reference libFLAC 1.1.4 20070213",tag.getVorbisCommentTag().getVendor());
+            tag.add(tag.createTagField(TagFieldKey.ENCODER,"encoder"));
+            assertEquals("encoder",tag.getFirst(TagFieldKey.ENCODER));
+                       
+
             tag = (FlacTag)f.getTag();
             assertEquals("artist",tag.getFirstArtist());
             assertEquals("album",tag.getFirstAlbum());

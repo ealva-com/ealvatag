@@ -169,6 +169,11 @@ public class ID3v1TagTest extends TestCase
 
         //Create v1 Tag
         Tag   tag = file.getTag();
+        if(tag==null)
+        {
+            file.setTag(new ID3v1Tag());
+            tag=file.getTag();
+        }
         tag.setArtist(ID3v1TagTest.ARTIST);
         tag.setAlbum(ID3v1TagTest.ALBUM);
         tag.setComment(ID3v1TagTest.COMMENT);

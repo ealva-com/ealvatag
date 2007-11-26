@@ -19,6 +19,7 @@ import org.jaudiotagger.audio.mp3.MP3File;
 import org.jaudiotagger.tag.InvalidFrameException;
 import org.jaudiotagger.tag.InvalidTagException;
 import org.jaudiotagger.tag.TagField;
+import org.jaudiotagger.tag.TagOptionSingleton;
 import org.jaudiotagger.tag.id3.framebody.AbstractID3v2FrameBody;
 import org.jaudiotagger.tag.id3.framebody.FrameBodyUnsupported;
 
@@ -125,6 +126,15 @@ public abstract class AbstractID3v2Frame
             throw new RuntimeException(iae);
         }
         frameBody.setHeader(this);
+        if(this instanceof ID3v24Frame)
+        {
+            frameBody.setTextEncoding(TagOptionSingleton.getInstance().getId3v24DefaultTextEncoding());
+        }
+        else if(this instanceof ID3v23Frame)
+        {
+            frameBody.setTextEncoding(TagOptionSingleton.getInstance().getId3v23DefaultTextEncoding());
+        }
+
         logger.info("Created empty frame of type" + identifier);
     }
 

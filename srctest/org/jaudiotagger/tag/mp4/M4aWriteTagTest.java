@@ -1940,7 +1940,7 @@ public class M4aWriteTagTest extends TestCase
             tag.set(tag.createTagField(TagFieldKey.MUSICBRAINZ_RELEASEARTISTID, "8"));
             tag.set(tag.createTagField(TagFieldKey.MUSICIP_ID, "9"));
             tag.set(tag.createTagField(TagFieldKey.GENRE,"2")); //key for classic rock
-
+            tag.set(tag.createTagField(TagFieldKey.ENCODER,"encoder"));
             //Save changes and reread from disk
             f.commit();
             f = AudioFileIO.read(testFile);
