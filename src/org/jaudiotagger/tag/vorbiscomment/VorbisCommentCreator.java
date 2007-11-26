@@ -39,41 +39,40 @@ public class VorbisCommentCreator extends AbstractTagCreator
      * Convert tagdata to rawdata ready for writing to file
      *
      * @param tag
-     * @param padding TODO padding parameter currently ignored
+     * @param padding
      * @return
      * @throws UnsupportedEncodingException
      */
+    //TODO padding parameter currently ignored
     public ByteBuffer convert(Tag tag, int padding) throws UnsupportedEncodingException
     {
         try
         {
-
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
-          
+
+            //Vendor
             String vendorString = ((VorbisCommentTag) tag).getVendor();
             int vendorLength = Utils.getUTF8Bytes(vendorString).length;
-            baos.write(new byte[]{
-                    (byte) (vendorLength & 0xFF),
-                    (byte) ((vendorLength & 0xFF00) >> 8),
-                    (byte) ((vendorLength & 0xFF0000) >> 16),
-                    (byte) ((vendorLength & 0xFF000000) >> 24)});
+            baos.write(Utils.getSizeLittleEndian(vendorLength));
             baos.write(Utils.getUTF8Bytes(vendorString));
 
-            //[user comment list length]
-            int listLength = tag.getFieldCount();
-            byte[] b = new byte[VorbisCommentReader.FIELD_USER_COMMENT_LIST_LENGTH];
-            b[3] = (byte) ((listLength & 0xFF000000) >> 24);
-            b[2] = (byte) ((listLength & 0x00FF0000) >> 16);
-            b[1] = (byte) ((listLength & 0x0000FF00) >> 8);
-            b[0] = (byte) (listLength & 0x000000FF);
-            baos.write(b);
+            //User Comment List
+            int listLength = tag.getFieldCount() - 1; //Remove Vendor from count         
+            baos.write(Utils.getSizeLittleEndian(listLength));
 
             //Add metadata raw content
             Iterator it = tag.getFields();
             while (it.hasNext())
             {
                 TagField frame = (TagField) it.next();
-                baos.write(frame.getRawContent());
+                if(frame.getId().equals(VorbisCommentFieldKey.VENDOR.name()))
+                {
+                    //this is always stored above so ignore                    
+                }
+                else
+                {
+                    baos.write(frame.getRawContent());
+                }
             }
 
             //Put into ByteBuffer

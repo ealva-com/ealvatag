@@ -22,7 +22,7 @@ import org.jaudiotagger.tag.TagField;
 import org.jaudiotagger.tag.TagTextField;
 
 /**
- * This is a complete impelementation of
+ * This is a complete example implementation of
  * {@link AbstractTag}.<br>
  * The identifiers of commonly used fields is defined by {@link #keys}.<br>
  *
@@ -65,7 +65,7 @@ public class GenericTag extends AbstractTag
         /**
          * (overridden)
          *
-         * @see entagged.audioformats.generic.TagField#copyContent(entagged.audioformats.generic.TagField)
+         * @see org.jaudiotagger.tag.TagField#copyContent(org.jaudiotagger.tag.TagField)
          */
         public void copyContent(TagField field)
         {
@@ -78,7 +78,7 @@ public class GenericTag extends AbstractTag
         /**
          * (overridden)
          *
-         * @see entagged.audioformats.generic.TagTextField#getContent()
+         * @see org.jaudiotagger.tag.TagTextField#getContent()
          */
         public String getContent()
         {
@@ -88,7 +88,7 @@ public class GenericTag extends AbstractTag
         /**
          * (overridden)
          *
-         * @see entagged.audioformats.generic.TagTextField#getEncoding()
+         * @see org.jaudiotagger.tag.TagTextField#getEncoding()
          */
         public String getEncoding()
         {
@@ -98,7 +98,7 @@ public class GenericTag extends AbstractTag
         /**
          * (overridden)
          *
-         * @see entagged.audioformats.generic.TagField#getId()
+         * @see org.jaudiotagger.tag.TagField#getId()
          */
         public String getId()
         {
@@ -108,7 +108,7 @@ public class GenericTag extends AbstractTag
         /**
          * (overridden)
          *
-         * @see entagged.audioformats.generic.TagField#getRawContent()
+         * @see org.jaudiotagger.tag.TagField#getRawContent()
          */
         public byte[] getRawContent()
         {
@@ -119,7 +119,7 @@ public class GenericTag extends AbstractTag
         /**
          * (overridden)
          *
-         * @see entagged.audioformats.generic.TagField#isBinary()
+         * @see org.jaudiotagger.tag.TagField#isBinary()
          */
         public boolean isBinary()
         {
@@ -129,7 +129,7 @@ public class GenericTag extends AbstractTag
         /**
          * (overridden)
          *
-         * @see entagged.audioformats.generic.TagField#isBinary(boolean)
+         * @see org.jaudiotagger.tag.TagField#isBinary(boolean)
          */
         public void isBinary(boolean b)
         {
@@ -139,7 +139,7 @@ public class GenericTag extends AbstractTag
         /**
          * (overridden)
          *
-         * @see entagged.audioformats.generic.TagField#isCommon()
+         * @see org.jaudiotagger.tag.TagField#isCommon()
          */
         public boolean isCommon()
         {
@@ -149,7 +149,7 @@ public class GenericTag extends AbstractTag
         /**
          * (overridden)
          *
-         * @see entagged.audioformats.generic.TagField#isEmpty()
+         * @see org.jaudiotagger.tag.TagField#isEmpty()
          */
         public boolean isEmpty()
         {
@@ -159,7 +159,7 @@ public class GenericTag extends AbstractTag
         /**
          * (overridden)
          *
-         * @see entagged.audioformats.generic.TagTextField#setContent(java.lang.String)
+         * @see org.jaudiotagger.tag.TagTextField#setContent(java.lang.String)
          */
         public void setContent(String s)
         {
@@ -169,7 +169,7 @@ public class GenericTag extends AbstractTag
         /**
          * (overridden)
          *
-         * @see entagged.audioformats.generic.TagTextField#setEncoding(java.lang.String)
+         * @see org.jaudiotagger.tag.TagTextField#setEncoding(java.lang.String)
          */
         public void setEncoding(String s)
         {
@@ -320,7 +320,7 @@ public class GenericTag extends AbstractTag
     /**
      * (overridden)
      *
-     * @see entagged.audioformats.generic.AbstractTag#getCommentId()
+     * @see org.jaudiotagger.audio.generic.AbstractTag#getCommentId()
      */
     protected String getCommentId()
     {
@@ -330,7 +330,7 @@ public class GenericTag extends AbstractTag
     /**
      * (overridden)
      *
-     * @see entagged.audioformats.generic.AbstractTag#getGenreId()
+     * @see org.jaudiotagger.audio.generic.AbstractTag#getGenreId()
      */
     protected String getGenreId()
     {
@@ -340,7 +340,7 @@ public class GenericTag extends AbstractTag
     /**
      * (overridden)
      *
-     * @see entagged.audioformats.generic.AbstractTag#getTitleId()
+     * @see org.jaudiotagger.audio.generic.AbstractTag#getTitleId()
      */
     protected String getTitleId()
     {
@@ -350,7 +350,7 @@ public class GenericTag extends AbstractTag
     /**
      * (overridden)
      *
-     * @see entagged.audioformats.generic.AbstractTag#getTrackId()
+     * @see org.jaudiotagger.audio.generic.AbstractTag#getTrackId()
      */
     protected String getTrackId()
     {
@@ -360,7 +360,7 @@ public class GenericTag extends AbstractTag
     /**
      * (overridden)
      *
-     * @see entagged.audioformats.generic.AbstractTag#getYearId()
+     * @see org.jaudiotagger.audio.generic.AbstractTag#getYearId()
      */
     protected String getYearId()
     {
@@ -370,7 +370,7 @@ public class GenericTag extends AbstractTag
     /**
      * (overridden)
      *
-     * @see entagged.audioformats.generic.AbstractTag#isAllowedEncoding(java.lang.String)
+     * @see org.jaudiotagger.audio.generic.AbstractTag#isAllowedEncoding(java.lang.String)
      */
     protected boolean isAllowedEncoding(String enc)
     {

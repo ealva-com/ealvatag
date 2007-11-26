@@ -513,7 +513,7 @@ public abstract class AbstractTag implements Tag
     /**
      * Set field
      *
-     * Changed:Just because field is empty it doesnt mesn it should be deleted. That should be the choice
+     * Changed:Just because field is empty it doesnt mean it should be deleted. That should be the choice
      * of the developer. (Or does this break things)
      *
      * @see org.jaudiotagger.tag.Tag#set(org.jaudiotagger.tag.TagField)

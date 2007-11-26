@@ -5,6 +5,14 @@ package org.jaudiotagger.tag.vorbiscomment;
  * 
  * <p>Note:The enumname is also the the actual name of the field in the VorbisCommentTag, but you could introduce a level
  * of indirection here if required.
+ *
+ * <p>
+ * This partial list is derived fom the following sources:
+ * <ul>
+ * <li>http://xiph.org/vorbis/doc/v-comment.html</li>
+ * <li>http://wiki.musicbrainz.org/PicardQt/TagMapping</li>
+ * <li>http://reactor-core.org/ogg-tagging.html</li>
+ * </ul>
  */
 public enum VorbisCommentFieldKey
 {
@@ -39,5 +47,6 @@ public enum VorbisCommentFieldKey
     TITLESORT,
     COMPOSERSORT,
     COVERARTMIME,
-    COVERART
+    COVERART,
+    VENDOR
 }

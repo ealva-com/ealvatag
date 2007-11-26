@@ -67,20 +67,6 @@ public class AudioFile
 
     /**
      * <p>These constructors are used by the different readers, users should not use them, but use the <code>AudioFileIO.read(File)</code> method instead !.</p>
-     * <p>Create the AudioFile representing file f, the encodingaudioHeaders and containing an empty tag</p>
-     *
-     * @param    f    The file of the audiofile
-     * @param    audioHeader    the encoding audioHeaders over this file
-     */
-    public AudioFile(File f, AudioHeader audioHeader)
-    {
-        this.file=f;
-        this.audioHeader = audioHeader;
-        this.tag = new GenericTag();
-    }
-
-    /**
-     * <p>These constructors are used by the different readers, users should not use them, but use the <code>AudioFileIO.read(File)</code> method instead !.</p>
      * <p>Create the AudioFile representing file f, the encodingaudioHeaders and containing the tag</p>
      *
      * @param    f    The file of the audiofile
@@ -94,18 +80,6 @@ public class AudioFile
         this.tag = tag;
     }
 
-    /**
-     * <p>These constructors are used by the different readers, users should not use them, but use the <code>AudioFileIO.read(File)</code> method instead !.</p>
-     * <p>Create the AudioFile representing file denoted by pathname s, the encodingaudioHeaders and containing an empty tag</p>
-     *
-     * @param    s    The pathname of the audiofile
-     * @param    audioHeader    the encoding audioHeaders over this file
-     */
-    public AudioFile(String s, AudioHeader audioHeader)
-    {
-        this.audioHeader = audioHeader;
-        this.tag = new GenericTag();
-    }
 
     /**
      * <p>These constructors are used by the different readers, users should not use them, but use the <code>AudioFileIO.read(File)</code> method instead !.</p>

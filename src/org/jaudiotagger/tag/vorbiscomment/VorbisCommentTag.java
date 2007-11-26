@@ -37,14 +37,6 @@ import java.util.List;
 /**
  * This is the logical representation of  Vorbis Comment Data 
  *
- * <p>
- * This partial list is derived fom the following sources:
- * <ul> 
- * <li>http://xiph.org/vorbis/doc/v-comment.html</li>
- * <li>http://wiki.musicbrainz.org/PicardQt/TagMapping</li>
- * <li>http://reactor-core.org/ogg-tagging.html</li>
- * </ul>
- *
  */
 public class VorbisCommentTag extends AbstractTag
 {
@@ -82,12 +74,11 @@ public class VorbisCommentTag extends AbstractTag
         tagFieldToOggField.put(TagFieldKey.ALBUM_SORT, VorbisCommentFieldKey.ALBUMSORT);
         tagFieldToOggField.put(TagFieldKey.TITLE_SORT, VorbisCommentFieldKey.TITLESORT);
         tagFieldToOggField.put(TagFieldKey.COMPOSER_SORT, VorbisCommentFieldKey.COMPOSERSORT);
-
-        
+        tagFieldToOggField.put(TagFieldKey.ENCODER, VorbisCommentFieldKey.VENDOR);     //Known as vendor in VorbisComment
     }
 
-    private String vendor = "";
-    //This is the vendor string that will be written if no other is supplied
+    //This is the vendor string that will be written if no other is supplied. Should be the name of the software
+    //that actually encoded the file in the first place.
     public static final String DEFAULT_VENDOR = "jaudiotagger";
 
     public TagField createAlbumField(String content)
@@ -155,14 +146,13 @@ public class VorbisCommentTag extends AbstractTag
         return TRACKNUMBER.name();
     }
 
+    /**
+     *
+     * @return the vendor, generically known as the encoder
+     */
     public String getVendor()
     {
-        if (!this.vendor.trim().equals(""))
-        {
-            return vendor;
-        }
-
-        return DEFAULT_VENDOR;
+        return getFirst(VENDOR.name());
     }
 
     protected String getYearId()
@@ -170,14 +160,21 @@ public class VorbisCommentTag extends AbstractTag
         return DATE.toString();
     }
 
+    /**
+     * Set the vendor, known as the encoder  generally
+     *
+     * We dont want this to be blank, when written to file this field is written to a different location
+     * to all other fields but user of library can just reat it as another field
+     * @param vendor
+     */
     public void setVendor(String vendor)
     {
+
         if (vendor == null)
         {
-            this.vendor = "";
-            return;
+            vendor=DEFAULT_VENDOR;
         }
-        this.vendor = vendor;
+        super.set(new VorbisCommentTagField(VENDOR.name(), vendor));        
     }
 
     protected boolean isAllowedEncoding(String enc)
@@ -201,7 +198,7 @@ public class VorbisCommentTag extends AbstractTag
         {
             throw new KeyNotFoundException();
         }
-        return new VorbisCommentTagField(tagFieldToOggField.get(genericKey).name(), value);
+        return  createTagField(tagFieldToOggField.get(genericKey), value);
     }
 
     /**
@@ -373,6 +370,36 @@ public class VorbisCommentTag extends AbstractTag
     public String getArtworkMimeType()
     {
         return this.getFirst(VorbisCommentFieldKey.COVERARTMIME);
+    }
+
+     /**
+     * Is this tag empty
+     *
+     * <p>Overidden because check for size of one because there is always a vendor tag
+     * @see org.jaudiotagger.tag.Tag#isEmpty()
+     */
+    public boolean isEmpty()
+    {
+        return fields.size() == 1;
+    }
+
+    /**
+     * Add Field
+     *
+     * <p>Overidden because there can only be one vendor set
+     *
+     * @param field
+     */
+    public void add(TagField field)
+    {
+        if (field.getId().equals(VorbisCommentFieldKey.VENDOR.name()))
+        {
+            super.set(field);
+        }
+        else
+        {
+            super.add(field);
+        }
     }
 }
 
