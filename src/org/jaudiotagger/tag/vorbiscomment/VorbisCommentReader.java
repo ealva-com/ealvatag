@@ -33,7 +33,7 @@ import java.util.logging.Logger;
  * Create the VorbisCommentTag by reading from the raw packet data
  *
  * <p>This is in the same format whether encoded with Ogg or Flac
- * except the framing bit is only present when used within Ogg Vorbis, so dont check framing bit here
+ * except the framing bit is only present when used within Ogg Vorbis
  *
  * <pre>
  * From the http://xiph.org/vorbis/doc/Vorbis_I_spec.html#vorbis-spec-comment
@@ -62,8 +62,6 @@ public class VorbisCommentReader
     public static final int FIELD_USER_COMMENT_LIST_LENGTH  = 4;
     public static final int FIELD_COMMENT_LENGTH_LENGTH     = 4;
 
-
-
     /**
      *
      * @param rawdata
@@ -87,15 +85,12 @@ public class VorbisCommentReader
         System.arraycopy(rawdata,pos,b,0,vendorStringLength);
         pos+=vendorStringLength;
         tag.setVendor(new String(b, VorbisHeader.CHARSET_UTF_8));
-        System.err.println("vendorString:" + tag.getVendor());
 
         b = new byte[FIELD_USER_COMMENT_LIST_LENGTH];
         System.arraycopy(rawdata,pos,b,0,FIELD_USER_COMMENT_LIST_LENGTH);
         pos+=FIELD_USER_COMMENT_LIST_LENGTH;
 
-
         int userComments = Utils.getNumberLittleEndian(b);
-
         for (int i = 0; i < userComments; i++)
         {
             b = new byte[FIELD_COMMENT_LENGTH_LENGTH];
@@ -103,7 +98,6 @@ public class VorbisCommentReader
             pos+=FIELD_COMMENT_LENGTH_LENGTH;
 
             int commentLength = Utils.getNumberLittleEndian(b);
-            //System.err.println("Commentlength:" + commentLength);
             b = new byte[commentLength];
             System.arraycopy(rawdata,pos,b,0,commentLength);
             pos+=commentLength;
@@ -113,11 +107,10 @@ public class VorbisCommentReader
             tag.add(fieldComment);
         }
 
-         //Check framing bit, only exists when vorbisComment used within OggVorbis
-        //TODO, do we need to check first bit of byte rather than just byte generally
+        //Check framing bit, only exists when vorbisComment used within OggVorbis       
         if(isFramingBit)
         {
-            if (rawdata[pos]==0)
+            if ((rawdata[pos]&0x01)!=1)
             {
                 throw new CannotReadException("Error: The OGG Stream isn't valid, Vorbis tag valid flag is wrong");
             }

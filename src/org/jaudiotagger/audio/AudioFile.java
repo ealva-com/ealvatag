@@ -71,7 +71,7 @@ public class AudioFile
      *
      * @param    f    The file of the audiofile
      * @param    audioHeader    the encoding audioHeaders over this file
-     * @param    tag    the tag contained in this file
+     * @param    tag    the tag contained in this file or null if no tag exists
      */
     public AudioFile(File f, AudioHeader audioHeader, Tag tag)
     {

@@ -56,9 +56,8 @@ public class FlacTagWriter
      */
     public void delete(RandomAccessFile raf, RandomAccessFile tempRaf) throws IOException, CannotWriteException
     {
-        VorbisCommentTag emptyVorbisTag = new VorbisCommentTag();
-        emptyVorbisTag.setVendor(emptyVorbisTag.getVendor());
-        FlacTag emptyTag = new FlacTag(emptyVorbisTag,new ArrayList<MetadataBlockDataPicture>() );
+        //This will save the file without any Comment or PictureData blocks  
+        FlacTag emptyTag = new FlacTag(null,new ArrayList<MetadataBlockDataPicture>() );
         raf.seek(0);
         tempRaf.seek(0);
         write(emptyTag, raf, tempRaf);

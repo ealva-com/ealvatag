@@ -54,9 +54,14 @@ public class FlacTagCreator extends AbstractTagCreator
     {
         logger.info("Convert flac tag:padding:"+paddingSize);
         FlacTag flacTag = (FlacTag)tag;
-        ByteBuffer vorbiscomment = creator.convert(flacTag.getVorbisCommentTag());
 
-        int tagLength =  vorbiscomment.capacity() + MetadataBlockHeader.HEADER_LENGTH;
+        int tagLength = 0;
+        ByteBuffer vorbiscomment = null;
+        if(flacTag.getVorbisCommentTag()!=null)
+        {
+            vorbiscomment = creator.convert(flacTag.getVorbisCommentTag());
+            tagLength =  vorbiscomment.capacity() + MetadataBlockHeader.HEADER_LENGTH;
+        }
         for(MetadataBlockDataPicture image:flacTag.getImages())
         {
             tagLength+=image.getBytes().length + MetadataBlockHeader.HEADER_LENGTH;
@@ -67,16 +72,20 @@ public class FlacTagCreator extends AbstractTagCreator
 
         MetadataBlockHeader vorbisHeader;
         //If there are other metadata blocks
-        if((paddingSize > 0)||(flacTag.getImages().size()>0))
+        if(flacTag.getVorbisCommentTag()!=null)
         {
-            vorbisHeader = new MetadataBlockHeader(false, BlockType.VORBIS_COMMENT,vorbiscomment.capacity());
+            if((paddingSize > 0)||(flacTag.getImages().size()>0))
+            {
+                vorbisHeader = new MetadataBlockHeader(false, BlockType.VORBIS_COMMENT,vorbiscomment.capacity());
+            }
+            else
+            {
+                vorbisHeader = new MetadataBlockHeader(true, BlockType.VORBIS_COMMENT,vorbiscomment.capacity());
+            }
+            buf.put(vorbisHeader.getBytes());
+            buf.put(vorbiscomment);
         }
-        else
-        {
-            vorbisHeader = new MetadataBlockHeader(true, BlockType.VORBIS_COMMENT,vorbiscomment.capacity());
-        }
-        buf.put(vorbisHeader.getBytes());
-        buf.put(vorbiscomment);
+
 
         //Images
         ListIterator<MetadataBlockDataPicture> li = flacTag.getImages().listIterator();

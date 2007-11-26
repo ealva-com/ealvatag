@@ -43,6 +43,7 @@ public class FlacTagReader
 
     private VorbisCommentReader vorbisCommentReader = new VorbisCommentReader();
 
+    
     public FlacTag read(RandomAccessFile raf) throws CannotReadException, IOException
     {
         FlacStream.findStream(raf);
@@ -95,13 +96,12 @@ public class FlacTagReader
             mbh = null;
         }
 
-        //Did we find at least the comment tag ?
-        //TODO is it mandatory, anyway
+        //Note there may not be either a tag or any images, no problem this is valid however to make it easier we
+        //just initialize Flac with an empty VorbisTag
         if(tag==null)
         {
-            throw new CannotReadException("FLAC Tag could not be found or read..");
+            tag = new VorbisCommentTag();
         }
-
         FlacTag flacTag = new FlacTag(tag,images);
         return flacTag;
     }

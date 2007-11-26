@@ -80,13 +80,15 @@ public class FlacInfoReader
         info.setSamplingRate(mbdsi.getSamplingRatePerChannel());
         info.setEncodingType(mbdsi.getEncodingType());
         info.setExtraEncodingInfos("");
-        info.setBitrate(computeBitrate(mbdsi.getLength(), raf.length() -raf.getFilePointer()));
+        info.setBitrate(computeBitrate(mbdsi.getPreciseLength(), raf.length() -raf.getFilePointer()));
 
         return info;
     }
 
-    private int computeBitrate(int length, long size)
+    private int computeBitrate(float length, long size)
     {
+        System.out.println("size is:"+size);
+        System.out.println("length is:"+length);
         return (int) ((size / KILOBYTES_TO_BYTES_MULTIPLIER) * NO_OF_BITS_IN_BYTE / length);
     }
 

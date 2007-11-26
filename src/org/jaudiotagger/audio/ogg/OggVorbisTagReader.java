@@ -46,6 +46,7 @@ public class OggVorbisTagReader
     /**
      * Read the Logical VorbisComment Tag from the file
      *
+     * <p>Read the CommenyTag, within an OggVorbis file the VorbisCommentTag is mandatory 
      * @param raf
      * @return
      * @throws CannotReadException
@@ -55,10 +56,9 @@ public class OggVorbisTagReader
     {
         logger.info("Starting to read ogg vorbis tag from file:");
         byte[] rawVorbisCommentData = readRawPacketData(raf);
+
         //Begin tag reading
         VorbisCommentTag tag = vorbisCommentReader.read(rawVorbisCommentData,true);
-
-
         logger.fine("CompletedReadCommentTag");
         return tag;
     }
@@ -84,7 +84,7 @@ public class OggVorbisTagReader
      *
      * @param raf
      * @return
-     * @throws CannotReadException
+     * @throws CannotReadException if unable to find vorbiscomment header
      * @throws IOException
      */
     public byte[] readRawPacketData(RandomAccessFile raf) throws CannotReadException, IOException

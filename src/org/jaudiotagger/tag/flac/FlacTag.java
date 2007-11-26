@@ -354,11 +354,14 @@ public class FlacTag implements Tag
     /**
      * Determines whether the tag has no fields specified.<br>
      *
+     * <p>If there are no images we return empty if either there is no VorbisTag or if there is a 
+     * VorbisTag but it is empty
+     *
      * @return <code>true</code> if tag contains no field.
      */
     public boolean isEmpty()
     {
-        return tag.isEmpty() && images.size()==0;
+        return (tag==null||tag.isEmpty()) && images.size()==0;
     }
 
     /**

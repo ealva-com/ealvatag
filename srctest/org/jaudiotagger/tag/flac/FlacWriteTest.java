@@ -14,6 +14,7 @@ import org.jaudiotagger.tag.id3.valuepair.PictureTypes;
 import org.jaudiotagger.tag.id3.valuepair.ImageFormats;
 import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.AudioFileIO;
+import org.jaudiotagger.audio.exceptions.CannotReadException;
 import org.jaudiotagger.audio.flac.metadatablock.MetadataBlockDataPicture;
 import org.jaudiotagger.audio.flac.FlacInfoReader;
 
@@ -172,6 +173,66 @@ public class FlacWriteTest extends TestCase
             AudioFileIO.delete(f);
             f = AudioFileIO.read(testFile);
             assertTrue(f.getTag().isEmpty());
+        }
+        catch(Exception e)
+        {
+             e.printStackTrace();
+             exceptionCaught = e;
+        }
+        assertNull(exceptionCaught);
+    }
+
+    public void testNotFlac()
+    {
+        Exception exceptionCaught = null;
+        try
+        {
+            File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3",new File("testV1noFlac.flac"));
+            AudioFile f = AudioFileIO.read(testFile);
+        }
+        catch(Exception e)
+        {
+             e.printStackTrace();
+             exceptionCaught = e;
+        }
+        assertTrue(exceptionCaught instanceof CannotReadException);       
+    }
+
+    /** Reading file that contains cuesheet */
+    public void testReadCueSheet()
+    {
+         Exception exceptionCaught = null;
+        try
+        {
+            File testFile = AbstractTestCase.copyAudioToTmp("test3.flac");
+            AudioFile f = AudioFileIO.read(testFile);
+            FlacInfoReader infoReader = new FlacInfoReader();
+            assertEquals(5,infoReader.countMetaBlocks(f.getFile()));
+        }
+        catch(Exception e)
+        {
+             e.printStackTrace();
+             exceptionCaught = e;
+        }
+        assertNull(exceptionCaught);           
+    }
+
+    /** Writing file that contains cuesheet */
+    public void testWriteFileWithCueSheet()
+    {
+         Exception exceptionCaught = null;
+        try
+        {
+            File testFile = AbstractTestCase.copyAudioToTmp("test3.flac",new File("testWriteWithCueSheet.flac"));
+            AudioFile f = AudioFileIO.read(testFile);
+            FlacInfoReader infoReader = new FlacInfoReader();
+            assertEquals(5,infoReader.countMetaBlocks(f.getFile()));
+            f.getTag().setAlbum("BLOCK");
+            f.commit();
+            f = AudioFileIO.read(testFile);
+            infoReader = new FlacInfoReader();
+            assertEquals("BLOCK",f.getTag().getFirstAlbum());
+
         }
         catch(Exception e)
         {
