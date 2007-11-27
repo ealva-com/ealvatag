@@ -624,7 +624,7 @@ public class M4aReadTagTest extends TestCase
         assertNull(exceptionCaught);
     }
 
-    public void testIssueWithMp4a()
+    public void testIssue163()
     {
         Exception exceptionCaught = null;
         try

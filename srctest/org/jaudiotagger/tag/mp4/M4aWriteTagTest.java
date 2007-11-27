@@ -5,6 +5,8 @@ import junit.framework.TestCase;
 import java.io.File;
 import java.io.RandomAccessFile;
 import java.util.List;
+import java.nio.ByteBuffer;
+import java.nio.charset.Charset;
 
 import org.jaudiotagger.AbstractTestCase;
 import org.jaudiotagger.tag.Tag;
@@ -808,7 +810,7 @@ public class M4aWriteTagTest extends TestCase
     }
 
     /**
-     * Test to write tagt data, new tagdata identical size to existing data, but no meta free atom
+     * Test to write tag data, new tagdata identical size to existing data, but no meta free atom
      */
     public void testWriteFileSameSizeNoMetaFreeAtom()
     {
@@ -1781,7 +1783,7 @@ public class M4aWriteTagTest extends TestCase
             AudioFile f = AudioFileIO.read(testFile);
             Tag tag = f.getTag();
 
-            //Frig adding pretend image which will require exactly the same size as space availble in top level atom , (there is
+            //Frig adding pretend image which will require exactly the same size as space available in top level atom , (there is
             //no meta atom) in test3.m4a
             byte[] imagedata = new byte[2032];
             imagedata[0] = (byte) 0x89;
@@ -2061,6 +2063,129 @@ public class M4aWriteTagTest extends TestCase
             tag = (Mp4Tag)f.getTag();
         }
         catch (Exception e)
+        {
+            e.printStackTrace();
+            exceptionCaught = e;
+        }
+        assertNull(exceptionCaught);
+    }
+
+
+    /**
+     * Test saving to file that contains a mdat atom and then a free atom at the end of file, normally it is the other
+     * way round or there is no free atom.
+     */
+    public void testWriteWhenFreeisAfterMdat()
+    {
+        Exception exceptionCaught = null;
+        try
+        {
+            File testFile = AbstractTestCase.copyAudioToTmp("unable_to_write.m4p");
+            if (!testFile.isFile())
+            {
+                return;
+            }
+
+            AudioFile f = AudioFileIO.read(testFile);
+            Tag tag = f.getTag();
+            tag.setTitle("tit2");
+            f.commit();
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+            exceptionCaught = e;
+        }
+        assertNull(exceptionCaught);
+    }
+
+    public void testWriteMuchLargerWhenFreeIsAfterMdat()
+    {
+        Exception exceptionCaught = null;
+        try
+        {
+            File testFile = AbstractTestCase.copyAudioToTmp("unable_to_write.m4p");
+            if (!testFile.isFile())
+            {
+                return;
+            }
+
+            AudioFile f = AudioFileIO.read(testFile);
+            Tag tag = f.getTag();
+
+            RandomAccessFile imageFile = new RandomAccessFile(new File("testdata", "coverart.png"), "r");
+            byte[] imagedata = new byte[(int) imageFile.length()];
+            imageFile.read(imagedata);
+            tag.add(((Mp4Tag) tag).createArtworkField(imagedata));
+            f.commit();
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+            exceptionCaught = e;
+        }
+        assertNull(exceptionCaught);
+    }
+
+    public void testWriteFileLargerSizeLessThanTopLevelFreeWhenFreeAafterMdat()
+    {
+        Exception exceptionCaught = null;
+        try
+        {
+            File testFile = AbstractTestCase.copyAudioToTmp("unable_to_write.m4p");
+            if (!testFile.isFile())
+            {
+                return;
+            }
+
+            AudioFile f = AudioFileIO.read(testFile);
+            Tag tag = f.getTag();
+
+            //Frig adding pretend image which will require exactly the same size as space available in the two
+            //free atoms
+            byte[] imagedata = new byte[1340];
+            imagedata[0] = (byte) 0x89;
+            imagedata[1] = (byte) 0x50;
+            imagedata[2] = (byte) 0x4E;
+            imagedata[3] = (byte) 0x47;
+
+            tag.add(((Mp4Tag) tag).createArtworkField(imagedata));
+            f.commit();
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+            exceptionCaught = e;
+        }
+        assertNull(exceptionCaught);
+    }
+
+     public void testWriteFileLargerSizeEqualToTopLevelFreeWhenFreeAafterMdat()
+    {
+        Exception exceptionCaught = null;
+        try
+        {
+            File testFile = AbstractTestCase.copyAudioToTmp("unable_to_write.m4p");
+            if (!testFile.isFile())
+            {
+                return;
+            }
+
+            AudioFile f = AudioFileIO.read(testFile);
+            Tag tag = f.getTag();
+
+            //Frig adding pretend image which will require exactly the same size as space available in the two
+            //free atoms
+            byte[] imagedata = new byte[1349];
+            imagedata[0] = (byte) 0x89;
+            imagedata[1] = (byte) 0x50;
+            imagedata[2] = (byte) 0x4E;
+            imagedata[3] = (byte) 0x47;
+
+            tag.add(((Mp4Tag) tag).createArtworkField(imagedata));
+            f.commit();
+        }
+        catch(Exception e)
         {
             e.printStackTrace();
             exceptionCaught = e;
