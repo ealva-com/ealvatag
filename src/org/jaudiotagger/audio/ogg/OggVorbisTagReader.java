@@ -25,6 +25,7 @@ import org.jaudiotagger.audio.ogg.util.OggPageHeader;
 import org.jaudiotagger.audio.ogg.util.VorbisHeader;
 import org.jaudiotagger.audio.ogg.util.VorbisPacketType;
 import org.jaudiotagger.audio.exceptions.*;
+import org.jaudiotagger.audio.generic.Utils;
 import org.jaudiotagger.tag.Tag;
 
 import java.io.*;
@@ -126,7 +127,7 @@ public class OggVorbisTagReader
      */
     public boolean isVorbisCommentHeader (byte[] headerData)
     {
-        String vorbis = new String(headerData, VorbisHeader.FIELD_CAPTURE_PATTERN_POS, VorbisHeader.FIELD_CAPTURE_PATTERN_LENGTH);
+        String vorbis = Utils.getString(headerData, VorbisHeader.FIELD_CAPTURE_PATTERN_POS, VorbisHeader.FIELD_CAPTURE_PATTERN_LENGTH,"ISO-8859-1");
         if (headerData[VorbisHeader.FIELD_PACKET_TYPE_POS] != VorbisPacketType.COMMENT_HEADER.getType()
             || !vorbis.equals(VorbisHeader.CAPTURE_PATTERN))
         {
@@ -143,7 +144,7 @@ public class OggVorbisTagReader
      */
     public boolean isVorbisSetupHeader (byte[] headerData)
     {
-        String vorbis = new String(headerData, VorbisHeader.FIELD_CAPTURE_PATTERN_POS, VorbisHeader.FIELD_CAPTURE_PATTERN_LENGTH);
+        String vorbis = Utils.getString(headerData, VorbisHeader.FIELD_CAPTURE_PATTERN_POS, VorbisHeader.FIELD_CAPTURE_PATTERN_LENGTH,"ISO-8859-1");
         if (headerData[VorbisHeader.FIELD_PACKET_TYPE_POS] != VorbisPacketType.SETUP_HEADER.getType()
             || !vorbis.equals(VorbisHeader.CAPTURE_PATTERN))
         {

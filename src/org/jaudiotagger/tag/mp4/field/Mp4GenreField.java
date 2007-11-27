@@ -10,7 +10,7 @@ import java.nio.ByteBuffer;
 import java.io.UnsupportedEncodingException;
 
 /**
- * Represents the Genre field , when user has selected from the setlist of genres
+ * Represents the Genre field , when user has selected from the set list of genres
  *
  * <p>This class allows you to retrieve either the internal genreid, or the display value
  */

@@ -24,6 +24,7 @@
 package org.jaudiotagger.tag.id3;
 
 import org.jaudiotagger.audio.mp3.MP3File;
+import org.jaudiotagger.audio.generic.Utils;
 import org.jaudiotagger.tag.*;
 import org.jaudiotagger.tag.id3.valuepair.GenreTypes;
 
@@ -836,19 +837,19 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag
         byte[] dataBuffer = new byte[TAG_LENGTH];
         byteBuffer.position(0);
         byteBuffer.get(dataBuffer, 0, TAG_LENGTH);
-        title = new String(dataBuffer, FIELD_TITLE_POS, this.FIELD_TITLE_LENGTH).trim();
+        title = Utils.getString(dataBuffer, FIELD_TITLE_POS, this.FIELD_TITLE_LENGTH,"ISO-8859-1").trim();
         Matcher m = endofStringPattern.matcher(title);
         if (m.find() == true)
         {
             title = title.substring(0, m.start());
         }
-        artist = new String(dataBuffer, FIELD_ARTIST_POS, this.FIELD_ARTIST_LENGTH).trim();
+        artist = Utils.getString(dataBuffer, FIELD_ARTIST_POS, this.FIELD_ARTIST_LENGTH,"ISO-8859-1").trim();
         m = endofStringPattern.matcher(artist);
         if (m.find() == true)
         {
             artist = artist.substring(0, m.start());
         }
-        album = new String(dataBuffer, FIELD_ALBUM_POS, this.FIELD_ALBUM_LENGTH).trim();
+        album = Utils.getString(dataBuffer, FIELD_ALBUM_POS, this.FIELD_ALBUM_LENGTH,"ISO-8859-1").trim();
         m = endofStringPattern.matcher(album);
         logger.finest(getLoggingFilename() + ":" + "Orig Album is:" + comment + ":");
         if (m.find() == true)
@@ -856,13 +857,13 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag
             album = album.substring(0, m.start());
             logger.finest(getLoggingFilename() + ":" + "Album is:" + album + ":");
         }
-        year = new String(dataBuffer, FIELD_YEAR_POS, this.FIELD_YEAR_LENGTH).trim();
+        year = Utils.getString(dataBuffer, FIELD_YEAR_POS, this.FIELD_YEAR_LENGTH,"ISO-8859-1").trim();
         m = endofStringPattern.matcher(year);
         if (m.find() == true)
         {
             year = year.substring(0, m.start());
         }
-        comment = new String(dataBuffer, FIELD_COMMENT_POS, FIELD_COMMENT_LENGTH).trim();
+        comment = Utils.getString(dataBuffer, FIELD_COMMENT_POS, this.FIELD_COMMENT_LENGTH,"ISO-8859-1").trim();
         m = endofStringPattern.matcher(comment);
         logger.finest(getLoggingFilename() + ":" + "Orig Comment is:" + comment + ":");
         if (m.find() == true)
