@@ -23,6 +23,7 @@ import org.jaudiotagger.audio.generic.Utils;
 import java.io.RandomAccessFile;
 import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.nio.charset.Charset;
 import java.nio.channels.FileChannel;
 import java.util.logging.Logger;
 
@@ -110,7 +111,7 @@ public class Mp4BoxHeader
         this.length = Utils.getNumberBigEndian(b, OFFSET_POS, OFFSET_LENGTH - 1);
 
         //Calculate box id
-        this.id = Utils.getString(b, IDENTIFIER_POS, IDENTIFIER_LENGTH);
+        this.id = Utils.getString(b, IDENTIFIER_POS, IDENTIFIER_LENGTH,"ISO-8859-1");
                 
         logger.finest("Read header:"+id+":length:"+length+":at:");
 

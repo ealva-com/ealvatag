@@ -19,6 +19,8 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Iterator;
 import java.awt.image.BufferedImage;
+import java.nio.charset.Charset;
+import java.nio.ByteBuffer;
 
 import junit.framework.TestCase;
 
@@ -615,6 +617,54 @@ public class M4aReadTagTest extends TestCase
 
         }
         catch (IOException e)
+        {
+            e.printStackTrace();
+            exceptionCaught = e;
+        }
+        assertNull(exceptionCaught);
+    }
+
+    public void testIssueWithMp4a()
+    {
+        Exception exceptionCaught = null;
+        try
+        {
+                //Charset Testing UTf8
+                String copyright_symbol = "\u00A9";
+                ByteBuffer bb = Charset.forName("UTF-8").encode(copyright_symbol);
+                bb.rewind();
+                System.out.println("utf8 bb size is:"+bb.limit());
+                {
+                    System.out.println("utf8 byte value is "+(bb.get(0)&0xFF));
+                    System.out.println("utf8 byte value is "+(bb.get(1)&0xFF));
+                }
+
+                bb = Charset.forName("ISO-8859-1").encode(copyright_symbol);
+                bb.rewind();
+                System.out.println("ISO-8859-1 bb size is:"+bb.limit());
+                {
+                    System.out.println("ISO-8859-1 byte value is "+(bb.get(0)&0xFF));                    
+                }
+
+                File testFile = AbstractTestCase.copyAudioToTmp("unable_to_read.m4a");
+                if (!testFile.isFile())
+                {
+                    return;
+                }
+
+                AudioFile f = AudioFileIO.read(testFile);
+                Tag tag = f.getTag();
+
+               tag.getFirstAlbum();
+               tag.getFirstArtist();
+               tag.getFirstComment();
+               tag.getFirstGenre();
+               tag.getFirstTitle();
+               tag.getFirstTrack();
+               tag.getFirstYear();
+               System.out.println(tag);
+        }
+        catch(Exception e)
         {
             e.printStackTrace();
             exceptionCaught = e;

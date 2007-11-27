@@ -21,6 +21,7 @@ package org.jaudiotagger.audio.generic;
 import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
+import java.nio.charset.Charset;
 
 /**
  * Contains various frequently used static functions in the different tag
@@ -197,11 +198,6 @@ public class Utils
         return b;
     }
 
-    public static String getString(byte[] b, int offset, int length)
-    {
-        return new String(b, offset, length);
-    }
-
     /**
      * Create String starting from offset upto length using encoding
      *
@@ -212,11 +208,17 @@ public class Utils
      * @return
      * @throws UnsupportedEncodingException
      */
-    public static String getString(byte[] b, int offset, int length, String encoding)
-            throws UnsupportedEncodingException
-    {
-
-        return new String(b, offset, length, encoding);
+    public static String getString(byte[] b, int offset, int length, String encoding)            
+    {            
+        try
+        {
+            return new String(b, offset, length, encoding);
+        }
+        catch( UnsupportedEncodingException ue)
+        {
+            //Shouldnt have to worry about this exception as should only be calling with well defined charsets
+            throw new RuntimeException(ue);
+        }
     }
 
     public static String getString(ByteBuffer buffer, int offset, int length, String encoding)
