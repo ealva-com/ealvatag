@@ -2,6 +2,7 @@ package org.jaudiotagger.tag.mp4;
 
 import org.jaudiotagger.AbstractTestCase;
 import org.jaudiotagger.tag.*;
+import org.jaudiotagger.tag.id3.valuepair.GenreTypes;
 import org.jaudiotagger.tag.mp4.Mp4FieldKey;
 import org.jaudiotagger.tag.mp4.Mp4Tag;
 import org.jaudiotagger.tag.mp4.atom.Mp4ContentTypeValue;
@@ -663,6 +664,22 @@ public class M4aReadTagTest extends TestCase
                tag.getFirstTrack();
                tag.getFirstYear();
                System.out.println(tag);
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+            exceptionCaught = e;
+        }
+        assertNull(exceptionCaught);
+    }
+
+    public void testGenre()
+    {
+        Exception exceptionCaught = null;
+        try
+        {
+            assertNull(GenreTypes.getInstanceOf().getIdForValue("fred"));
+            Mp4GenreField.isValidGenre("fred");
         }
         catch(Exception e)
         {

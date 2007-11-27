@@ -44,12 +44,14 @@ public class Mp4GenreField extends Mp4TagTextNumberField
         }
 
         //Is it the String value ?
-        int id3GenreId = GenreTypes.getInstanceOf().getIdForValue(genreId);
-        if(id3GenreId>=0 && id3GenreId <=GenreTypes.getMaxStandardGenreId())
+        Integer id3GenreId = GenreTypes.getInstanceOf().getIdForValue(genreId);
+        if(id3GenreId!=null)
         {
-            return true;
+            if(id3GenreId <=GenreTypes.getMaxStandardGenreId())        
+            {
+                return true;
+            }
         }
-
         return false;
     }
 
@@ -83,17 +85,19 @@ public class Mp4GenreField extends Mp4TagTextNumberField
         }
 
         //Is it the String value ?
-        int id3GenreId = GenreTypes.getInstanceOf().getIdForValue(genreId);
-        if(id3GenreId>=0 && id3GenreId <=GenreTypes.getMaxStandardGenreId())
+        Integer id3GenreId = GenreTypes.getInstanceOf().getIdForValue(genreId);
+        if(id3GenreId!=null)
         {
-            numbers = new ArrayList<Short>();
-            numbers.add((short)(id3GenreId+1));
-            return;
+            if(id3GenreId.intValue() <=GenreTypes.getMaxStandardGenreId())
+            {
+                numbers = new ArrayList<Short>();
+                numbers.add((short)(id3GenreId+1));
+                return;
+            }
         }
-
-         numbers = new ArrayList<Short>();
-         numbers.add((short)(1));
-         return;
+        numbers = new ArrayList<Short>();
+        numbers.add((short)(1));
+        return;
     }
 
     protected void build(ByteBuffer data) throws UnsupportedEncodingException
