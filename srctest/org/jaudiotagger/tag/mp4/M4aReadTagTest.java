@@ -594,8 +594,8 @@ public class M4aReadTagTest extends TestCase
             assertEquals(Mp4EsdsBox.AudioProfile.LOW_COMPLEXITY, audioheader.getProfile());
 
             //These shouldn't be any values for these. because they have invalid fieldtype of 15 instead of 21
-            assertEquals("",tag.getFirst(TagFieldKey.BPM));
-            assertEquals("",tag.getFirst(TagFieldKey.IS_COMPILATION));
+            assertEquals("", tag.getFirst(TagFieldKey.BPM));
+            assertEquals("", tag.getFirst(TagFieldKey.IS_COMPILATION));
 
         }
         catch (IOException e)
@@ -614,7 +614,7 @@ public class M4aReadTagTest extends TestCase
             System.out.println(tag);
 
             //Allow calling getFirst() on binary fields, although value actually currently makes not much sense
-            assertEquals("jpeg:8445bytes",tag.getFirst(TagFieldKey.COVER_ART));
+            assertEquals("jpeg:8445bytes", tag.getFirst(TagFieldKey.COVER_ART));
 
         }
         catch (IOException e)
@@ -630,42 +630,42 @@ public class M4aReadTagTest extends TestCase
         Exception exceptionCaught = null;
         try
         {
-                //Charset Testing UTf8
-                String copyright_symbol = "\u00A9";
-                ByteBuffer bb = Charset.forName("UTF-8").encode(copyright_symbol);
-                bb.rewind();
-                System.out.println("utf8 bb size is:"+bb.limit());
-                {
-                    System.out.println("utf8 byte value is "+(bb.get(0)&0xFF));
-                    System.out.println("utf8 byte value is "+(bb.get(1)&0xFF));
-                }
+            //Charset Testing UTf8
+            String copyright_symbol = "\u00A9";
+            ByteBuffer bb = Charset.forName("UTF-8").encode(copyright_symbol);
+            bb.rewind();
+            System.out.println("utf8 bb size is:" + bb.limit());
+            {
+                System.out.println("utf8 byte value is " + (bb.get(0) & 0xFF));
+                System.out.println("utf8 byte value is " + (bb.get(1) & 0xFF));
+            }
 
-                bb = Charset.forName("ISO-8859-1").encode(copyright_symbol);
-                bb.rewind();
-                System.out.println("ISO-8859-1 bb size is:"+bb.limit());
-                {
-                    System.out.println("ISO-8859-1 byte value is "+(bb.get(0)&0xFF));                    
-                }
+            bb = Charset.forName("ISO-8859-1").encode(copyright_symbol);
+            bb.rewind();
+            System.out.println("ISO-8859-1 bb size is:" + bb.limit());
+            {
+                System.out.println("ISO-8859-1 byte value is " + (bb.get(0) & 0xFF));
+            }
 
-                File testFile = AbstractTestCase.copyAudioToTmp("unable_to_read.m4a");
-                if (!testFile.isFile())
-                {
-                    return;
-                }
+            File testFile = AbstractTestCase.copyAudioToTmp("unable_to_read.m4a");
+            if (!testFile.isFile())
+            {
+                return;
+            }
 
-                AudioFile f = AudioFileIO.read(testFile);
-                Tag tag = f.getTag();
+            AudioFile f = AudioFileIO.read(testFile);
+            Tag tag = f.getTag();
 
-               tag.getFirstAlbum();
-               tag.getFirstArtist();
-               tag.getFirstComment();
-               tag.getFirstGenre();
-               tag.getFirstTitle();
-               tag.getFirstTrack();
-               tag.getFirstYear();
-               System.out.println(tag);
+            tag.getFirstAlbum();
+            tag.getFirstArtist();
+            tag.getFirstComment();
+            tag.getFirstGenre();
+            tag.getFirstTitle();
+            tag.getFirstTrack();
+            tag.getFirstYear();
+            System.out.println(tag);
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             e.printStackTrace();
             exceptionCaught = e;
@@ -681,11 +681,65 @@ public class M4aReadTagTest extends TestCase
             assertNull(GenreTypes.getInstanceOf().getIdForValue("fred"));
             Mp4GenreField.isValidGenre("fred");
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             e.printStackTrace();
             exceptionCaught = e;
         }
         assertNull(exceptionCaught);
     }
+
+    /**
+     * Test reading filers tagged with monkeymedia, which has cuustom image tags
+     *
+     * @throws Exception
+     */
+    public void testIssue168() throws Exception
+    {
+        Exception exceptionCaught = null;
+        try
+        {
+            File testFile = AbstractTestCase.copyAudioToTmp("test14.m4a");
+            if (!testFile.isFile())
+            {
+                return;
+            }
+            AudioFile f = AudioFileIO.read(testFile);
+            Mp4Tag tag = (Mp4Tag)f.getTag();
+
+            System.out.println(f.getAudioHeader());
+            System.out.println(tag);
+
+            //AudioInfo
+            //Time in seconds
+            assertEquals(241, f.getAudioHeader().getTrackLength());
+            assertEquals(44100, f.getAudioHeader().getSampleRateAsNumber());
+
+            //MPEG Specific
+            Mp4AudioHeader audioheader = (Mp4AudioHeader) f.getAudioHeader();
+            assertEquals(Mp4EsdsBox.Kind.MPEG4_AUDIO, audioheader.getKind());
+            assertEquals(Mp4EsdsBox.AudioProfile.LOW_COMPLEXITY, audioheader.getProfile());
+            assertEquals(1,tag.get(Mp4NonStandardFieldKey.AAPR.getFieldName()).size());
+            assertNotNull(tag.getFirst(Mp4NonStandardFieldKey.AAPR.getFieldName()));
+            assertEquals("AApr",tag.getFirstField(Mp4NonStandardFieldKey.AAPR.getFieldName()).getId());
+            //Make a change and save
+            tag.setTitle("NEWTITLE");
+            f.commit();
+
+            f = AudioFileIO.read(testFile);
+            tag = (Mp4Tag)f.getTag();
+
+            assertEquals("AApr",tag.getFirstField(Mp4NonStandardFieldKey.AAPR.getFieldName()).getId());
+            assertEquals("NEWTITLE",tag.getFirstTitle());
+            assertEquals(1,tag.get(Mp4NonStandardFieldKey.AAPR.getFieldName()).size());
+            assertNotNull(tag.getFirst(Mp4NonStandardFieldKey.AAPR.getFieldName()));
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+            exceptionCaught = e;
+        }
+        assertNull(exceptionCaught);
+    }
+
 }

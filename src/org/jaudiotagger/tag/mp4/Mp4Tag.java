@@ -208,28 +208,10 @@ public class Mp4Tag extends AbstractTag
         return super.get(tagFieldToMp4Field.get(genericKey).getFieldName());
     }
 
-    /**
-     * Retrieve the  values that exists for this mp4keyId (this is the internalid actually used)
-     *
-     * @param mp4KeyId TODO:this is inefficient we need to change calling code to use the enums directly
-     */
-    @Override
-    public List <TagField> get(String mp4KeyId)
-    {
-        for (Mp4FieldKey mp4FieldKey : Mp4FieldKey.values())
-        {
-            if (mp4FieldKey.getFieldName().equals(mp4KeyId))
-            {
-                return super.get(mp4FieldKey.getFieldName());
-            }
-        }
-        return new ArrayList<TagField>();
-    }
 
     /**
      * Retrieve the  values that exists for this mp4keyId (this is the internalid actually used)
-     * <p/>
-     * TODO we want AbstractTag to use this method rather than the String equivalent
+     * <p/>    
      *
      * @param mp4FieldKey
      */

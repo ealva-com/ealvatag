@@ -5,7 +5,9 @@ import org.jaudiotagger.tag.mp4.field.Mp4FieldType;
 import org.jaudiotagger.tag.mp4.field.Mp4TagReverseDnsField;
 
 /**
- * Starting list of known mp4 metadata fields
+ * Starting list of known mp4 metadata fields that follow the Parent,Data or ---,issuer,name,data
+ * convention. Atoms that contain metadata in other formats are not listed here because they need to be processed
+ * specially.
  *
  * <p>Simple metaitems use the parent atom id as their identifier whereas reverse dns (----) atoms use
  * the reversedns,issuer and name fields as their identifier.
@@ -74,7 +76,7 @@ public enum Mp4FieldKey
     TV_EPISODE("tves",BYTE,1),
 
     //These seem to be used in DRM Files, of type byte , we need to know the byte length to allow them to be written
-    //back correctly on saving them, we dont provides options to modify them as may break drm
+    //back correctly on saving them, we don't provides options to modify them as may break drm
     AP_ID("apID",TEXT),
     AT_ID("atID",BYTE,4),
     CN_ID("cnID",BYTE,4),

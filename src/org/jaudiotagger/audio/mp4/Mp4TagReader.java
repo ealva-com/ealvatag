@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.io.UnsupportedEncodingException;
 import java.util.logging.Logger;
+import java.util.Iterator;
 import java.nio.ByteBuffer;
 
 import org.jaudiotagger.audio.exceptions.CannotReadException;
@@ -34,6 +35,7 @@ import org.jaudiotagger.tag.mp4.atom.Mp4DataBox;
 import org.jaudiotagger.tag.mp4.field.*;
 import org.jaudiotagger.tag.mp4.Mp4Tag;
 import org.jaudiotagger.tag.mp4.Mp4FieldKey;
+import org.jaudiotagger.tag.mp4.Mp4NonStandardFieldKey;
 
 /**
  * Reads metadata from mp4,
@@ -155,97 +157,123 @@ public class Mp4TagReader
      */
     private void createMp4Field(Mp4Tag tag,Mp4BoxHeader header, ByteBuffer raw) throws UnsupportedEncodingException
     {
+        //Reverse Dns Atom
         if(header.getId().equals(Mp4TagReverseDnsField.IDENTIFIER))
         {
             TagField field =  new Mp4TagReverseDnsField(raw);
             tag.add(field);
         }
+        //Normal Parent with Data atom
         else
         {
-            //Need this to decide what type of Field to create
-            int type = Utils.getNumberBigEndian(raw,
-                                                Mp4DataBox.TYPE_POS_INCLUDING_HEADER,
-                                                Mp4DataBox.TYPE_POS_INCLUDING_HEADER + Mp4DataBox.TYPE_LENGTH - 1);
+            int currentPos = raw.position();
+            boolean isDataIdentifier = Utils.getString(raw, Mp4BoxHeader.IDENTIFIER_POS, Mp4BoxHeader.IDENTIFIER_LENGTH,"ISO-8859-1").equals(Mp4DataBox.IDENTIFIER);
+            raw.position(currentPos);
+            if(isDataIdentifier)
+            {
+                //Need this to decide what type of Field to create
+                int type = Utils.getNumberBigEndian(raw,
+                                                    Mp4DataBox.TYPE_POS_INCLUDING_HEADER,
+                                                    Mp4DataBox.TYPE_POS_INCLUDING_HEADER + Mp4DataBox.TYPE_LENGTH - 1);
 
-            logger.info("Box Type id:"+header.getId()+":type:"+type);
+                logger.info("Box Type id:"+header.getId()+":type:"+type);
 
-            //Special handling for some specific identifiers otherwise just base on class id
-            if(header.getId().equals(Mp4FieldKey.TRACK.getFieldName()))
-            {
-                 TagField field =  new Mp4TrackField(header.getId(), raw);
-                 tag.add(field);
-            }
-            else if(header.getId().equals(Mp4FieldKey.DISCNUMBER.getFieldName()))
-            {
-                 TagField field =   new Mp4DiscNoField(header.getId(), raw);
-                 tag.add(field);
-            }
-            else if(header.getId().equals(Mp4FieldKey.GENRE.getFieldName()))
-            {
-                 TagField field =   new Mp4GenreField(header.getId(), raw);
-                 tag.add(field);
-            }
-            else if(type==Mp4FieldType.TEXT.getFileClassId())
-            {
-                TagField field =   new Mp4TagTextField(header.getId(), raw);
-                tag.add(field);
-            }
-            else if(type==Mp4FieldType.NUMERIC.getFileClassId())
-            {
-                TagField field =  new Mp4TagTextNumberField(header.getId(), raw);
-                tag.add(field);
-            }
-            else if(type==Mp4FieldType.BYTE.getFileClassId())
-            {
-                TagField field =  new Mp4TagByteField(header.getId(), raw);
-                tag.add(field);
-            }
-            else if(type==Mp4FieldType.COVERART_JPEG.getFileClassId()||
-                    type== Mp4FieldType.COVERART_PNG.getFileClassId())
-            {
-                int processedDataSize = 0;
-                int imageCount =0;
-                while(processedDataSize  < header.getDataLength())
+                //Special handling for some specific identifiers otherwise just base on class id
+                if(header.getId().equals(Mp4FieldKey.TRACK.getFieldName()))
                 {
-                    //There maybe a mixture of PNG and JPEG images so have to check type
-                    //for each subimage (if there are more than one image)
-                    if(imageCount>0)
-                    {                           
-                        type = Utils.getNumberBigEndian(raw,
-                                            processedDataSize + Mp4DataBox.TYPE_POS_INCLUDING_HEADER,
-                                            processedDataSize + Mp4DataBox.TYPE_POS_INCLUDING_HEADER + Mp4DataBox.TYPE_LENGTH - 1);
-                    }
-                    Mp4TagCoverField field = new Mp4TagCoverField(raw,type);
+                     TagField field =  new Mp4TrackField(header.getId(), raw);
+                     tag.add(field);
+                }
+                else if(header.getId().equals(Mp4FieldKey.DISCNUMBER.getFieldName()))
+                {
+                     TagField field =   new Mp4DiscNoField(header.getId(), raw);
+                     tag.add(field);
+                }
+                else if(header.getId().equals(Mp4FieldKey.GENRE.getFieldName()))
+                {
+                     TagField field =   new Mp4GenreField(header.getId(), raw);
+                     tag.add(field);
+                }
+                else if(type==Mp4FieldType.TEXT.getFileClassId())
+                {
+                    TagField field =   new Mp4TagTextField(header.getId(), raw);
                     tag.add(field);
-                    processedDataSize+=field.getDataSize() + Mp4BoxHeader.HEADER_LENGTH ;
-                    imageCount++;
+                }
+                else if(type==Mp4FieldType.NUMERIC.getFileClassId())
+                {
+                    TagField field =  new Mp4TagTextNumberField(header.getId(), raw);
+                    tag.add(field);
+                }
+                else if(type==Mp4FieldType.BYTE.getFileClassId())
+                {
+                    TagField field =  new Mp4TagByteField(header.getId(), raw);
+                    tag.add(field);
+                }
+                else if(type==Mp4FieldType.COVERART_JPEG.getFileClassId()||
+                        type== Mp4FieldType.COVERART_PNG.getFileClassId())
+                {
+                    int processedDataSize = 0;
+                    int imageCount =0;
+                    while(processedDataSize  < header.getDataLength())
+                    {
+                        //There maybe a mixture of PNG and JPEG images so have to check type
+                        //for each subimage (if there are more than one image)
+                        if(imageCount>0)
+                        {
+                            type = Utils.getNumberBigEndian(raw,
+                                                processedDataSize + Mp4DataBox.TYPE_POS_INCLUDING_HEADER,
+                                                processedDataSize + Mp4DataBox.TYPE_POS_INCLUDING_HEADER + Mp4DataBox.TYPE_LENGTH - 1);
+                        }
+                        Mp4TagCoverField field = new Mp4TagCoverField(raw,type);
+                        tag.add(field);
+                        processedDataSize+=field.getDataSize() + Mp4BoxHeader.HEADER_LENGTH ;
+                        imageCount++;
+                    }
+                }
+                else
+                {
+                    boolean existingId = false;
+                    for(Mp4FieldKey key:Mp4FieldKey.values())
+                    {
+                        if(key.getFieldName().equals(header.getId()))
+                        {
+                            //The header is a known id but its field type is not one of the expected types so
+                            //this field is invalid. i.e I received a file with the TMPO set to 15 (Oxf) when it should
+                            //be 21 (ox15) so looks like somebody got their decimal and hex numbering confused
+                            //So in this case best to ignore this field and just write a warning
+                            existingId=true;
+                            logger.warning("Known Field:"+header.getId()+" with invalid field type of:"+type +" is ignored");
+                            break;
+                        }
+                    }
+
+                    //Unknown field id with unknown type so just create as binary
+                    if(!existingId)
+                    {
+                        logger.warning("UnKnown Field:"+header.getId()+" with invalid field type of:"+type +" created as binary");
+                        TagField field =  new Mp4TagBinaryField(header.getId(), raw);
+                        tag.add(field);
+                    }
                 }
             }
+            //Special Cases
             else
             {
-                boolean existingId = false;
-                for(Mp4FieldKey key:Mp4FieldKey.values())
-                {                     
-                    if(key.getFieldName().equals(header.getId()))
-                    {
-                        //The header is a known id but its field type is not one of the expected types so
-                        //this field is invalid. i.e I received a file with the TMPO set to 15 (Oxf) when it should
-                        //be 21 (ox15) so looks like somebody got their decimal and hex numbering confused
-                        //So in this case best to ignore this field and just write a warning
-                        existingId=true;
-                        logger.warning("Known Field:"+header.getId()+" with invalid field type of:"+type +" is ignored");
-                        break;
-                    }                                             
-                }
-
-                //Unknown field id with unknown type so just create as binary
-                if(!existingId)
+                //MediaMonkey 3 CoverArt Attributes field, does not have data items so just
+                //copy parent and child as is without modification
+                if(header.getId().equals(Mp4NonStandardFieldKey.AAPR.getFieldName()))
                 {
-                    logger.warning("UnKnown Field:"+header.getId()+" with invalid field type of:"+type +" created as binary");
-                    TagField field =  new Mp4TagBinaryField(header.getId(), raw);
+                    TagField field =  new Mp4TagRawBinaryField(header, raw);
+                    tag.add(field);
+                }
+                //Default case
+                else
+                {
+                    TagField field =  new Mp4TagRawBinaryField(header, raw);
                     tag.add(field);
                 }
             }
         }
+
     }
 }
