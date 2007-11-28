@@ -68,8 +68,7 @@ public class Mp4TagRawBinaryField extends Mp4TagField
         for (int i = 0; i < dataBytes.length; i++)
         {
             this.dataBytes[i] = raw.get();
-       }
-       System.out.println("DATA_BYTES_IS:"+this.dataBytes.length); 
+       }      
     }
 
     public boolean isBinary()
