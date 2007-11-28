@@ -221,6 +221,16 @@ public class Utils
         }
     }
 
+    /**
+     * Create String offset from position by offset upto length using encoding, and position of buffer
+     * is moved to after position + offset + length  
+     *
+     * @param buffer
+     * @param offset
+     * @param length
+     * @param encoding
+     * @return
+     */
     public static String getString(ByteBuffer buffer, int offset, int length, String encoding)
     {         
         byte[] b = new byte[length];
