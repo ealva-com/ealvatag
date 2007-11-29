@@ -36,7 +36,7 @@ public class FlacHeaderTest extends TestCase
             assertTrue(f.getTag() instanceof FlacTag);
             FlacTag tag = (FlacTag)f.getTag();
             FlacInfoReader infoReader = new FlacInfoReader();
-            assertEquals(5,infoReader.countMetaBlocks(f.getFile()));
+            assertEquals(6,infoReader.countMetaBlocks(f.getFile()));
 
               //Ease of use methods for common fields
             assertEquals("Artist", tag.getFirstArtist());
@@ -57,17 +57,17 @@ public class FlacHeaderTest extends TestCase
             assertEquals("Composer", tag.getFirst(TagFieldKey.COMPOSER));
 
             //Images
-            assertEquals(1,tag.get(TagFieldKey.COVER_ART).size());
-            assertEquals(1,tag.get(TagFieldKey.COVER_ART.name()).size());
-            assertEquals(1,tag.getImages().size());
+            assertEquals(2,tag.get(TagFieldKey.COVER_ART).size());
+            assertEquals(2,tag.get(TagFieldKey.COVER_ART.name()).size());
+            assertEquals(2,tag.getImages().size());
            
             MetadataBlockDataPicture image = tag.getImages().get(0);
             assertEquals((int)PictureTypes.DEFAULT_ID,(int)image.getPictureType());
             assertEquals("image/png",image.getMimeType());
             assertEquals("",image.getDescription());
-            assertEquals(200,image.getWidth());
-            assertEquals(200,image.getHeight());
-            assertEquals(24,image.getColourDepth());
+            assertEquals(0,image.getWidth());
+            assertEquals(0,image.getHeight());
+            assertEquals(0,image.getColourDepth());
             assertEquals(0,image.getIndexedColourCount());
             assertEquals(18545,image.getImageData().length);
 

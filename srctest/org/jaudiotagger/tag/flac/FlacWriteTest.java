@@ -166,7 +166,7 @@ public class FlacWriteTest extends TestCase
             assertEquals("FLAC 16 bits",f.getAudioHeader().getEncodingType());
             assertEquals("2",f.getAudioHeader().getChannels());
             assertEquals("44100",f.getAudioHeader().getSampleRate());
-            assertEquals(1,((FlacTag)f.getTag()).getImages().size());
+            assertEquals(2,((FlacTag)f.getTag()).getImages().size());
             assertTrue(f.getTag() instanceof FlacTag);
             assertFalse(f.getTag().isEmpty());
 
