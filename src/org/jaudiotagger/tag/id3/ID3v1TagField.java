@@ -2,6 +2,7 @@ package org.jaudiotagger.tag.id3;
 
 import org.jaudiotagger.tag.TagTextField;
 import org.jaudiotagger.tag.TagField;
+import org.jaudiotagger.audio.generic.Utils;
 
 import java.io.UnsupportedEncodingException;
 
@@ -42,7 +43,7 @@ public class ID3v1TagField implements TagTextField
      */
     public ID3v1TagField(byte[] raw) throws UnsupportedEncodingException
     {
-        String field = new String(raw, "UTF-8");
+        String field = new String(raw,"ISO-8859-1");
 
         int i = field.indexOf("=");
         if (i == -1)
@@ -128,21 +129,6 @@ public class ID3v1TagField implements TagTextField
     }
 
     /**
-     * This method will try to return the byte representation of the given
-     * string after it has been converted to the given encoding. <br>
-     *
-     * @param s        The string whose converted bytes should be returned.
-     * @param encoding The encoding type to which the string should be converted.
-     * @return If <code>encoding</code> is supported the byte data of the
-     *         given string is returned in that encoding.
-     * @throws UnsupportedEncodingException If the requested encoding is not available.
-     */
-    protected byte[] getBytes(String s, String encoding) throws UnsupportedEncodingException
-    {
-        return s.getBytes(encoding);
-    }
-
-    /**
      * @see TagTextField#getContent()
      */
     public String getContent()
@@ -172,8 +158,8 @@ public class ID3v1TagField implements TagTextField
     public byte[] getRawContent() throws UnsupportedEncodingException
     {
         byte[] size = new byte[4];
-        byte[] idBytes = this.id.getBytes();
-        byte[] contentBytes = getBytes(this.content, "UTF-8");
+        byte[] idBytes = this.id.getBytes("ISO-8859-1");
+        byte[] contentBytes = Utils.getDefaultBytes(this.content, "ISO-8859-1");
         byte[] b = new byte[4 + idBytes.length + 1 + contentBytes.length];
 
         int length = idBytes.length + 1 + contentBytes.length;
@@ -207,12 +193,7 @@ public class ID3v1TagField implements TagTextField
      */
     public void isBinary(boolean b)
     {
-        if (b)
-        {
-            // Only throw if binary = true requested.
-            throw new UnsupportedOperationException("OggTagFields cannot be changed to binary.\n"
-                + "binary data should be stored elsewhere" + " according to Vorbis_I_spec.");
-        }
+       //Do nothing, always false
     }
 
     /**
@@ -244,10 +225,7 @@ public class ID3v1TagField implements TagTextField
      */
     public void setEncoding(String s)
     {
-        if (s == null || !s.equalsIgnoreCase("UTF-8"))
-        {
-            throw new UnsupportedOperationException("The encoding of OggTagFields cannot be " + "changed.(specified to be UTF-8)");
-        }
+        //Do nothing, encoding is always ISO-8859-1 for this tag
     }
 
     public String toString()

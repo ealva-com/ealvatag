@@ -132,7 +132,7 @@ public class NewInterfaceTest extends TestCase
     public void testNewInterfaceBasicReadandWriteID3v1() throws Exception
     {
         Exception e=null;
-        File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3", new File("testnewIntId3v24.mp3"));
+        File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3", new File("testnewIntId3v1.mp3"));
         MP3File mp3File = new MP3File(testFile);
 
         //Has no tag at this point
@@ -142,7 +142,7 @@ public class NewInterfaceTest extends TestCase
         //Create v1 tag (old method)
         ID3v11Tag v1tag = new ID3v11Tag();
         v1tag.setArtist(V1_ARTIST);
-        v1tag.setAlbum("V1ALBUM");
+        v1tag.setAlbum("V1ALBUM"+"\u01ff");         //Note always convert to single byte so will be written as FF
         v1tag.set(v1tag.createTagField(TagFieldKey.TITLE,"title"));
         v1tag.setGenre("Rock");
         v1tag.set(v1tag.createTagField(TagFieldKey.TRACK,"12"));
@@ -158,7 +158,7 @@ public class NewInterfaceTest extends TestCase
         assertEquals(V1_ARTIST, af.getTag().getFirst(TagFieldKey.ARTIST));
         assertEquals(V1_ARTIST, af.getTag().getFirstArtist());
         assertEquals(V1_ARTIST, af.getTag().getFirst(TagFieldKey.ARTIST));
-        assertEquals("V1ALBUM", af.getTag().getFirst(TagFieldKey.ALBUM));
+        assertEquals("V1ALBUM"+"\u00ff", af.getTag().getFirst(TagFieldKey.ALBUM));  //Lost the 00, is that what we want
         assertEquals("title", af.getTag().getFirst(TagFieldKey.TITLE));
         assertEquals("title", af.getTag().getFirstTitle());
         assertEquals("Rock", af.getTag().getFirst(TagFieldKey.GENRE));
@@ -324,13 +324,13 @@ public class NewInterfaceTest extends TestCase
 
         //AmazonId
         //This is one of many fields that uses the TXXX frame, the logic is more complicated
-        af.getTag().set(af.getTag().createTagField(TagFieldKey.AMAZON_ID, "asin123456"));
+        af.getTag().set(af.getTag().createTagField(TagFieldKey.AMAZON_ID, "asin123456"+"\u01ff"));
         af.commit();
         af = AudioFileIO.read(testFile);
         System.out.println("Now checkis asin");
 
-        assertEquals("asin123456", af.getTag().getFirst(TagFieldKey.AMAZON_ID));
-        assertEquals("asin123456", ((ID3v24Tag) af.getTag()).getFirst(ID3v24FieldKey.AMAZON_ID));
+        assertEquals("asin123456"+"\u01ff", af.getTag().getFirst(TagFieldKey.AMAZON_ID));
+        assertEquals("asin123456"+"\u01ff", ((ID3v24Tag) af.getTag()).getFirst(ID3v24FieldKey.AMAZON_ID));
         assertEquals(1, af.getTag().get(TagFieldKey.AMAZON_ID).size());
         assertEquals(7,af.getTag().getFieldCount());
 
@@ -343,7 +343,7 @@ public class NewInterfaceTest extends TestCase
         assertEquals("musicip_id", af.getTag().getFirst(TagFieldKey.MUSICIP_ID));
         assertEquals("musicip_id", ((ID3v24Tag) af.getTag()).getFirst(ID3v24FieldKey.MUSICIP_ID));
         assertEquals(1, af.getTag().get(TagFieldKey.MUSICIP_ID).size());
-        assertEquals("asin123456", af.getTag().getFirst(TagFieldKey.AMAZON_ID));
+        assertEquals("asin123456"+"\u01ff", af.getTag().getFirst(TagFieldKey.AMAZON_ID));
         assertEquals(8,af.getTag().getFieldCount());
 
         //Now add yet another different field that also uses a TXXX frame
@@ -353,7 +353,7 @@ public class NewInterfaceTest extends TestCase
         assertEquals(3, ((List) ((ID3v24Tag) af.getTag()).getFrame("TXXX")).size());
         assertEquals("musicip_id", af.getTag().getFirst(TagFieldKey.MUSICIP_ID));
         assertEquals("releaseid", af.getTag().getFirst(TagFieldKey.MUSICBRAINZ_RELEASEID));
-        assertEquals("asin123456", af.getTag().getFirst(TagFieldKey.AMAZON_ID));
+        assertEquals("asin123456"+"\u01ff", af.getTag().getFirst(TagFieldKey.AMAZON_ID));
         assertEquals(1, af.getTag().get(TagFieldKey.MUSICIP_ID).size());
         assertEquals(1, af.getTag().get(TagFieldKey.AMAZON_ID).size());
         assertEquals(1, af.getTag().get(TagFieldKey.MUSICBRAINZ_RELEASEID).size());
@@ -544,19 +544,17 @@ public class NewInterfaceTest extends TestCase
         assertEquals(1, af.getTag().get(TagFieldKey.TRACK).size());
         assertEquals(6,af.getTag().getFieldCount());
 
-        //AmazonId
+        //AmazonId also testing utf encoding here
         //This is one of many fields that uses the TXXX frame, the logic is more complicated
-        af.getTag().set(af.getTag().createTagField(TagFieldKey.AMAZON_ID, "asin123456"));
+        af.getTag().set(af.getTag().createTagField(TagFieldKey.AMAZON_ID, "asin123456"+"\u01ff"));
         af.commit();
         af = AudioFileIO.read(testFile);
-        System.out.println("Now checkis asin");
-
-        assertEquals("asin123456", af.getTag().getFirst(TagFieldKey.AMAZON_ID));
-        assertEquals("asin123456", ((ID3v23Tag) af.getTag()).getFirst(ID3v23FieldKey.AMAZON_ID));
+        assertEquals("asin123456"+"\u01ff", af.getTag().getFirst(TagFieldKey.AMAZON_ID));
+        assertEquals("asin123456"+"\u01ff", ((ID3v23Tag) af.getTag()).getFirst(ID3v23FieldKey.AMAZON_ID));
         assertEquals(1, af.getTag().get(TagFieldKey.AMAZON_ID).size());
         assertEquals(7,af.getTag().getFieldCount());
 
-        System.out.println("Now adding musicip");
+
         //Now add another different field that also uses a TXXX frame
         af.getTag().set(af.getTag().createTagField(TagFieldKey.MUSICIP_ID, "musicip_id"));
         af.commit();
@@ -565,7 +563,7 @@ public class NewInterfaceTest extends TestCase
         assertEquals("musicip_id", af.getTag().getFirst(TagFieldKey.MUSICIP_ID));
         assertEquals("musicip_id", ((ID3v23Tag) af.getTag()).getFirst(ID3v23FieldKey.MUSICIP_ID));
         assertEquals(1, af.getTag().get(TagFieldKey.MUSICIP_ID).size());
-        assertEquals("asin123456", af.getTag().getFirst(TagFieldKey.AMAZON_ID));
+        assertEquals("asin123456"+"\u01ff", af.getTag().getFirst(TagFieldKey.AMAZON_ID));
         assertEquals(8,af.getTag().getFieldCount());
 
         //Now add yet another different field that also uses a TXXX frame
@@ -575,7 +573,7 @@ public class NewInterfaceTest extends TestCase
         assertEquals(3, ((List) ((ID3v23Tag) af.getTag()).getFrame("TXXX")).size());
         assertEquals("musicip_id", af.getTag().getFirst(TagFieldKey.MUSICIP_ID));
         assertEquals("releaseid", af.getTag().getFirst(TagFieldKey.MUSICBRAINZ_RELEASEID));
-        assertEquals("asin123456", af.getTag().getFirst(TagFieldKey.AMAZON_ID));
+        assertEquals("asin123456"+"\u01ff", af.getTag().getFirst(TagFieldKey.AMAZON_ID));
         assertEquals(1, af.getTag().get(TagFieldKey.MUSICIP_ID).size());
         assertEquals(1, af.getTag().get(TagFieldKey.AMAZON_ID).size());
         assertEquals(1, af.getTag().get(TagFieldKey.MUSICBRAINZ_RELEASEID).size());
@@ -769,13 +767,13 @@ public class NewInterfaceTest extends TestCase
 
         //AmazonId
         //This is one of many fields that uses the TXXX frame, the logic is more complicated
-        af.getTag().set(af.getTag().createTagField(TagFieldKey.AMAZON_ID, "asin123456"));
+        af.getTag().set(af.getTag().createTagField(TagFieldKey.AMAZON_ID, "asin123456"+"\u01ff"));
         af.commit();
         af = AudioFileIO.read(testFile);
         System.out.println("Now checkis asin");
 
-        assertEquals("asin123456", af.getTag().getFirst(TagFieldKey.AMAZON_ID));
-        assertEquals("asin123456", ((ID3v22Tag) af.getTag()).getFirst(ID3v22FieldKey.AMAZON_ID));
+        assertEquals("asin123456"+"\u01ff", af.getTag().getFirst(TagFieldKey.AMAZON_ID));
+        assertEquals("asin123456"+"\u01ff", ((ID3v22Tag) af.getTag()).getFirst(ID3v22FieldKey.AMAZON_ID));
         assertEquals(1, af.getTag().get(TagFieldKey.AMAZON_ID).size());
         assertEquals(7,af.getTag().getFieldCount());
 
@@ -788,7 +786,7 @@ public class NewInterfaceTest extends TestCase
         assertEquals("musicip_id", af.getTag().getFirst(TagFieldKey.MUSICIP_ID));
         assertEquals("musicip_id", ((ID3v22Tag) af.getTag()).getFirst(ID3v22FieldKey.MUSICIP_ID));
         assertEquals(1, af.getTag().get(TagFieldKey.MUSICIP_ID).size());
-        assertEquals("asin123456", af.getTag().getFirst(TagFieldKey.AMAZON_ID));
+        assertEquals("asin123456"+"\u01ff", af.getTag().getFirst(TagFieldKey.AMAZON_ID));
         assertEquals(8,af.getTag().getFieldCount());
 
         //Now add yet another different field that also uses a TXX frame
@@ -798,7 +796,7 @@ public class NewInterfaceTest extends TestCase
         assertEquals(3, ((List) ((ID3v22Tag) af.getTag()).getFrame("TXX")).size());
         assertEquals("musicip_id", af.getTag().getFirst(TagFieldKey.MUSICIP_ID));
         assertEquals("releaseid", af.getTag().getFirst(TagFieldKey.MUSICBRAINZ_RELEASEID));
-        assertEquals("asin123456", af.getTag().getFirst(TagFieldKey.AMAZON_ID));
+        assertEquals("asin123456"+"\u01ff", af.getTag().getFirst(TagFieldKey.AMAZON_ID));
         assertEquals(1, af.getTag().get(TagFieldKey.MUSICIP_ID).size());
         assertEquals(1, af.getTag().get(TagFieldKey.AMAZON_ID).size());
         assertEquals(1, af.getTag().get(TagFieldKey.MUSICBRAINZ_RELEASEID).size());

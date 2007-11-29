@@ -18,7 +18,6 @@ import java.io.File;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.List;
-import java.util.Iterator;
 import java.awt.image.BufferedImage;
 import java.nio.charset.Charset;
 import java.nio.ByteBuffer;
@@ -690,7 +689,7 @@ public class M4aReadTagTest extends TestCase
     }
 
     /**
-     * Test reading filers tagged with monkeymedia, which has cuustom image tags
+     * Test reading filers tagged with monkeymedia, which has custom image tags and additiona mm tags
      *
      * @throws Exception
      */
@@ -723,16 +722,36 @@ public class M4aReadTagTest extends TestCase
             assertNotNull(tag.getFirst(Mp4NonStandardFieldKey.AAPR.getFieldName()));
             assertEquals("AApr",tag.getFirstField(Mp4NonStandardFieldKey.AAPR.getFieldName()).getId());
             //Make a change and save
-            tag.setTitle("NEWTITLE");
+            tag.setTitle("NEWTITLE\u00A9\u01ff");      //test UTF8 encoding
+            tag.set(tag.createTagField(Mp4FieldKey.CONTENT_TYPE,Mp4ContentTypeValue.TV_SHOW.getIdAsString()));
             f.commit();
 
             f = AudioFileIO.read(testFile);
             tag = (Mp4Tag)f.getTag();
 
             assertEquals("AApr",tag.getFirstField(Mp4NonStandardFieldKey.AAPR.getFieldName()).getId());
-            assertEquals("NEWTITLE",tag.getFirstTitle());
+            assertEquals("NEWTITLE\u00A9\u01ff",tag.getFirstTitle());
+            assertEquals(Mp4ContentTypeValue.TV_SHOW.getIdAsString(),tag.getFirst(Mp4FieldKey.CONTENT_TYPE));                       
             assertEquals(1,tag.get(Mp4NonStandardFieldKey.AAPR.getFieldName()).size());
             assertNotNull(tag.getFirst(Mp4NonStandardFieldKey.AAPR.getFieldName()));
+
+            //Can we read all the other customfields  (that do follow convention)
+            System.out.println(tag.toString());
+            assertEquals("lyricist",tag.getFirst(Mp4FieldKey.LYRICIST));
+            assertEquals("70",tag.getFirst(Mp4FieldKey.SCORE));
+            assertEquals("conductor",tag.getFirst(Mp4FieldKey.CONDUCTOR));
+            assertEquals("original artist",tag.getFirst(Mp4FieldKey.ORIGINAL_ARTIST));
+            assertEquals("original album title",tag.getFirst(Mp4FieldKey.ORIGINAL_ALBUM_TITLE));
+            assertEquals("involved people",tag.getFirst(Mp4FieldKey.INVOLVED_PEOPLE));
+            assertEquals("Slow",tag.getFirst(Mp4FieldKey.TEMPO));
+            assertEquals("Mellow",tag.getFirst(Mp4FieldKey.MOOD));
+            assertEquals("Dinner",tag.getFirst(Mp4FieldKey.OCCASION));
+            assertEquals("Very good copy",tag.getFirst(Mp4FieldKey.QUALITY));
+            assertEquals("custom1",tag.getFirst(Mp4FieldKey.CUSTOM_1));
+            assertEquals("custom2",tag.getFirst(Mp4FieldKey.CUSTOM_2));
+            assertEquals("custom3",tag.getFirst(Mp4FieldKey.CUSTOM_3));
+            assertEquals("custom4",tag.getFirst(Mp4FieldKey.CUSTOM_4));
+            assertEquals("custom5",tag.getFirst(Mp4FieldKey.CUSTOM_5));
         }
         catch (IOException e)
         {
@@ -740,6 +759,7 @@ public class M4aReadTagTest extends TestCase
             exceptionCaught = e;
         }
         assertNull(exceptionCaught);
+
     }
 
 }

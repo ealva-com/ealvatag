@@ -5,10 +5,10 @@ import java.nio.ByteBuffer;
 /**
  *  Peforms encoding/decoding of an syncsafe integer
  *
- *  Syncsafe integers are used for the size in the tag header of v23 and v24 tags, and in the frame size in
+ *  <p>Syncsafe integers are used for the size in the tag header of v23 and v24 tags, and in the frame size in
  *  the frame header of v24 frames.
  *
- *  In some parts of the tag it is inconvenient to use the
+ *  <p>In some parts of the tag it is inconvenient to use the
  *  unsychronisation scheme because the size of unsynchronised data is
  *  not known in advance, which is particularly problematic with size
  *  descriptors. The solution in ID3v2 is to use synchsafe integers, in

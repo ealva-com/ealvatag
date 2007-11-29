@@ -16,6 +16,7 @@
 package org.jaudiotagger.tag.id3;
 
 import org.jaudiotagger.audio.mp3.MP3File;
+import org.jaudiotagger.audio.generic.Utils;
 import org.jaudiotagger.tag.EmptyFrameException;
 import org.jaudiotagger.tag.InvalidFrameException;
 import org.jaudiotagger.tag.InvalidFrameIdentifierException;
@@ -372,7 +373,7 @@ public class ID3v22Frame extends AbstractID3v2Frame
 
         //Write Frame Header
         //Write Frame ID must adjust can only be 3 bytes long
-        headerBuffer.put(getIdentifier().substring(0, FRAME_ID_SIZE).getBytes(), 0, FRAME_ID_SIZE);
+        headerBuffer.put(Utils.getDefaultBytes(getIdentifier(),"ISO-8859-1"), 0, FRAME_ID_SIZE);
         encodeSize(headerBuffer, frameBody.getSize());
 
         //Add header to the Byte Array Output Stream

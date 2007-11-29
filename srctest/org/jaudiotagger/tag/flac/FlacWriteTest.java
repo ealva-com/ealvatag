@@ -51,7 +51,7 @@ public class FlacWriteTest extends TestCase
             FlacInfoReader infoReader = new FlacInfoReader();
             assertEquals(4,infoReader.countMetaBlocks(f.getFile()));
             
-            tag.addArtist("artist");
+            tag.addArtist("artist\u01ff");
             tag.addAlbum("album");
             tag.addTitle("title");
             tag.addYear("1971");
@@ -84,7 +84,7 @@ public class FlacWriteTest extends TestCase
                        
 
             tag = (FlacTag)f.getTag();
-            assertEquals("artist",tag.getFirstArtist());
+            assertEquals("artist\u01ff",tag.getFirstArtist());
             assertEquals("album",tag.getFirstAlbum());
             assertEquals("title",tag.getFirstTitle());
             assertEquals("123",tag.getFirst(TagFieldKey.BPM));
@@ -166,7 +166,7 @@ public class FlacWriteTest extends TestCase
             assertEquals("FLAC 16 bits",f.getAudioHeader().getEncodingType());
             assertEquals("2",f.getAudioHeader().getChannels());
             assertEquals("44100",f.getAudioHeader().getSampleRate());
-
+            assertEquals(1,((FlacTag)f.getTag()).getImages().size());
             assertTrue(f.getTag() instanceof FlacTag);
             assertFalse(f.getTag().isEmpty());
 

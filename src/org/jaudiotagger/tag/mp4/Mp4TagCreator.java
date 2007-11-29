@@ -120,7 +120,7 @@ public class Mp4TagCreator extends AbstractTagCreator
                         //Now create the parent Data
                         byte[] data = covrDataBaos.toByteArray();
                         baos.write(Utils.getSizeBigEndian(Mp4BoxHeader.HEADER_LENGTH + data.length));
-                        baos.write(Utils.getDefaultBytes(Mp4FieldKey.ARTWORK.getFieldName()));
+                        baos.write(Utils.getDefaultBytes(Mp4FieldKey.ARTWORK.getFieldName(),"ISO-8859-1"));
                         baos.write(data);
                     }
                 }
@@ -133,7 +133,7 @@ public class Mp4TagCreator extends AbstractTagCreator
             //Wrap into ilst box
             ByteArrayOutputStream ilst = new ByteArrayOutputStream();
             ilst.write(Utils.getSizeBigEndian(Mp4BoxHeader.HEADER_LENGTH + baos.size()));
-            ilst.write(Utils.getDefaultBytes(Mp4NotMetaFieldKey.ILST.getFieldName()));
+            ilst.write(Utils.getDefaultBytes(Mp4NotMetaFieldKey.ILST.getFieldName(),"ISO-8859-1"));
             ilst.write(baos.toByteArray());
 
             //Put into ByteBuffer

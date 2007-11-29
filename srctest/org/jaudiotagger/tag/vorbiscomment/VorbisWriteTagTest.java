@@ -47,8 +47,8 @@ public class VorbisWriteTagTest extends AbstractTestCase
             tag.setGenre("Genre");
             //Common keys
             tag.set(tag.createTagField(TagFieldKey.DISC_NO,"4"));
-            tag.set(tag.createTagField(TagFieldKey.COMPOSER,"composer"));
-            tag.set(tag.createTagField(TagFieldKey.ARTIST_SORT,"Sortartist"));
+            tag.set(tag.createTagField(TagFieldKey.COMPOSER,"composer\u00A9"));
+            tag.set(tag.createTagField(TagFieldKey.ARTIST_SORT,"Sortartist\u01ff"));
             tag.set(tag.createTagField(TagFieldKey.LYRICS,"lyrics"));
             tag.set(tag.createTagField(TagFieldKey.BPM,"200"));
             tag.set(tag.createTagField(TagFieldKey.ALBUM_ARTIST,"Albumartist"));
@@ -102,8 +102,8 @@ public class VorbisWriteTagTest extends AbstractTestCase
             assertEquals("1971",tag.getFirst(TagFieldKey.YEAR));
             assertEquals("2",tag.getFirst(TagFieldKey.TRACK));
             assertEquals("4",tag.getFirst(TagFieldKey.DISC_NO));
-            assertEquals("composer",tag.getFirst(TagFieldKey.COMPOSER));
-            assertEquals("Sortartist",tag.getFirst(TagFieldKey.ARTIST_SORT));
+            assertEquals("composer\u00A9",tag.getFirst(TagFieldKey.COMPOSER));
+            assertEquals("Sortartist\u01ff",tag.getFirst(TagFieldKey.ARTIST_SORT));
             assertEquals("lyrics",tag.getFirst(TagFieldKey.LYRICS));
             assertEquals("200",tag.getFirst(TagFieldKey.BPM));
             assertEquals("Albumartist",tag.getFirst(TagFieldKey.ALBUM_ARTIST));
@@ -128,8 +128,8 @@ public class VorbisWriteTagTest extends AbstractTestCase
             assertEquals("1971",vorbisTag.getFirst(VorbisCommentFieldKey.DATE));
             assertEquals("2",vorbisTag.getFirst(VorbisCommentFieldKey.TRACKNUMBER));
             assertEquals("4",vorbisTag.getFirst(VorbisCommentFieldKey.DISCNUMBER));
-            assertEquals("composer",vorbisTag.getFirst(VorbisCommentFieldKey.COMPOSER));
-            assertEquals("Sortartist",vorbisTag.getFirst(VorbisCommentFieldKey.ARTISTSORT));
+            assertEquals("composer\u00A9",vorbisTag.getFirst(VorbisCommentFieldKey.COMPOSER));
+            assertEquals("Sortartist\u01ff",vorbisTag.getFirst(VorbisCommentFieldKey.ARTISTSORT));
             assertEquals("lyrics",vorbisTag.getFirst(VorbisCommentFieldKey.LYRICS));
             assertEquals("200",vorbisTag.getFirst(VorbisCommentFieldKey.BPM));
             assertEquals("Albumartist",vorbisTag.getFirst(VorbisCommentFieldKey.ALBUMARTIST));

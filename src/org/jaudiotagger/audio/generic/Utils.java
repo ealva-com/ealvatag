@@ -45,15 +45,25 @@ public class Utils
         System.arraycopy(src, 0, dst, dstOffset, src.length);
     }
 
-    /**
+
+
+     /**
      * Returns {@link String#getBytes()}.<br>
      *
-     * @param s The String to call.
+     * @param s The String to call, decode bytes using the specfied charset
      * @return The bytes.
      */
-    public static byte[] getDefaultBytes(String s)
+    public static byte[] getDefaultBytes(String s,String charSet)
     {
-        return s.getBytes();
+        try
+        {
+             return s.getBytes(charSet);
+        }
+        catch (UnsupportedEncodingException uee)
+        {
+            throw new RuntimeException(uee);
+        }
+
     }
 
     /*

@@ -25,6 +25,7 @@ package org.jaudiotagger.tag.datatype;
 
 import org.jaudiotagger.tag.id3.AbstractTagFrameBody;
 import org.jaudiotagger.tag.InvalidDataTypeException;
+import org.jaudiotagger.audio.generic.Utils;
 
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -251,8 +252,6 @@ public class Lyrics3Line
 
     public byte[] writeByteArray()
     {
-        return writeString().getBytes();
+          return Utils.getDefaultBytes(writeString(),"ISO8859-1");
     }
-
-
 }

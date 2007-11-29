@@ -6,6 +6,7 @@ import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
 import java.util.logging.Logger;
 
 /**
+ * Functions to encode text according to encodingoptions and ID3 version
  */
 public class ID3TextEncodingConversion
 {

@@ -86,9 +86,7 @@ public class FlacInfoReader
     }
 
     private int computeBitrate(float length, long size)
-    {
-        System.out.println("size is:"+size);
-        System.out.println("length is:"+length);
+    {         
         return (int) ((size / KILOBYTES_TO_BYTES_MULTIPLIER) * NO_OF_BITS_IN_BYTE / length);
     }
 
