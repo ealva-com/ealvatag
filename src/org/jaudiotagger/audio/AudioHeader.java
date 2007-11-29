@@ -61,5 +61,6 @@ public interface AudioHeader
      *
      * @return track length
      */
-    public int getTrackLength(); 
+    public int getTrackLength();
+
 }

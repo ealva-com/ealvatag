@@ -15,6 +15,7 @@ import java.io.File;
 
 /**
  * Read Mp3 Info (retrofitted to entagged ,done differently to entagged which is why some methods throw RuntimeException)
+ * because done elsewhere
  */
 public class MP3FileReader extends AudioFileReader
 {

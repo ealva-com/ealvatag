@@ -18,7 +18,7 @@ import java.util.Map;
 
 
 /**
- * Represents a MPEGFrameHeader, an MP3 is made up of a number of frames each frame starts witha four
+ * Represents a MPEGFrameHeader, an MP3 is made up of a number of frames each frame starts with a four
  * byte frame header.
  */
 public class MPEGFrameHeader

@@ -32,29 +32,31 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * Represents the audio header of an MP3 File, the audio header consists of a number of
+ * Represents the audio header of an MP3 File
+ *
+ * <p>The audio header consists of a number of
  * audio frames. Because we are not trying to play the audio but only extract some information
  * regarding the audio we only need to read the first  audio frames to ensure that we have correctly
  * identified them as audio frames and extracted the metadata we reuire.
 
- * Start of Audio id 0xFF (11111111) and then second byte anded with 0xE0(11100000).
+ * <p>Start of Audio id 0xFF (11111111) and then second byte anded with 0xE0(11100000).
  * For example 2nd byte doesnt have to be 0xE0 is just has to have the top 3 signicant
  * bits set. For example 0xFB (11111011) is a common occurence of the second match. The 2nd byte
  * defines flags to indicate various mp3 values.
  *
- * Having found these two values we then read the header which comprises these two bytes plus a further
+ * <p>Having found these two values we then read the header which comprises these two bytes plus a further
  * two to ensure this really is a MP3Header, sometimes the first frame is actually a dummy frame with summary information
  * held within about the whole file, typically using a Xing Header or LAme Header. This is most useful when the file
  * is variable bit rate, if the file is variable bit rate but does not use a summary header it will not be correctly
- * identified as a VBR frame and the track length will be incorreclty calculated.
- *
- * Strictly speaking MP3 means an MPEG-1, Layer III file but MP2 (MPEG-1,Layer II), MP1 (MPEG-1,Layer I) and MPEG-2 files are
- * sometimes used and named with the .mp3 suffix so this library attempts to supports all these formats.
+ * identified as a VBR frame and the track length will be incorreclty calculated. Strictly speaking MP3 means an MPEG-1,
+ * Layer III file but MP2 (MPEG-1,Layer II), MP1 (MPEG-1,Layer I) and MPEG-2 files are sometimes used and named with
+ * the .mp3 suffix so this library attempts to supports all these formats.
 */
 public final class MP3AudioHeader implements AudioHeader
 {
     private MPEGFrameHeader mp3FrameHeader;
     private XingFrame       mp3XingFrame;
+
 
     private long    fileSize;
     private long    startByte;
@@ -63,6 +65,7 @@ public final class MP3AudioHeader implements AudioHeader
     private long    numberOfFrames;
     private long    numberOfFramesEstimate;
     private long    bitrate;
+    private String  encoder ="";
 
     private static final SimpleDateFormat timeInFormat    = new SimpleDateFormat("ss");
     private static final SimpleDateFormat timeOutFormat   = new SimpleDateFormat("mm:ss");
@@ -186,8 +189,7 @@ public final class MP3AudioHeader implements AudioHeader
 
                         mp3FrameHeader = MPEGFrameHeader.parseMPEGHeader(bb);
                         syncFound = true;
-
-                        if(XingFrame.isXingFrame(bb,mp3FrameHeader))
+                         if(XingFrame.isXingFrame(bb,mp3FrameHeader))
                         {
                             if(MP3AudioHeader.logger.isLoggable(Level.FINEST))
                             {
@@ -195,6 +197,7 @@ public final class MP3AudioHeader implements AudioHeader
                             }
                             try
                             {
+                                //Parses Xing frame without modifying position of main buffer
                                 mp3XingFrame = XingFrame.parseXingFrame();
                             }
                             catch (InvalidAudioFrameException ex)
@@ -268,6 +271,7 @@ public final class MP3AudioHeader implements AudioHeader
         setNumberOfFrames();
         setTrackLength();
         setBitRate();
+        setEncoder();
         return syncFound;
     }
 
@@ -504,6 +508,18 @@ public final class MP3AudioHeader implements AudioHeader
         }
     }
 
+    private void setEncoder()
+    {
+        if(mp3XingFrame!=null)
+        {
+            if(mp3XingFrame.getLameFrame()!=null)
+            {
+                encoder=mp3XingFrame.getLameFrame().getEncoder();                 
+                return;
+            }
+        }
+    }
+
     /**
      *
      * @return bitrate in kbps, no indicator is provided as to whether or not it is vbr
@@ -637,6 +653,15 @@ public final class MP3AudioHeader implements AudioHeader
     }
 
     /**
+     *
+     * @return encoder
+     */
+    public String getEncoder()
+    {
+        return encoder;
+    }
+
+    /**
      * Set the size of the file, required in some calculations
      * @param fileSize
      */
@@ -653,6 +678,7 @@ public final class MP3AudioHeader implements AudioHeader
     public String toString()
     {
         String s = "fileSize:"          + fileSize
+                +  " encoder:"          + encoder
                 +  " startByte:"        + startByte
                 +  " numberOfFrames:"   + numberOfFrames
                 +  " numberOfFramesEst:"+ numberOfFramesEstimate

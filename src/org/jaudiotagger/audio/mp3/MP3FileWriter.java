@@ -9,6 +9,8 @@ import java.io.RandomAccessFile;
 import java.io.IOException;
 
 /**
+ * Write Mp3 Info (retrofitted to entagged ,done differently to entagged which is why some methods throw RuntimeException)
+ * because done elsewhere
  */
 public class MP3FileWriter extends AudioFileWriter
 {

@@ -52,7 +52,8 @@ public class MP3AudioHeaderTest extends TestCase
         assertFalse(mp3AudioHeader.isPrivate());
         assertFalse(mp3AudioHeader.isProtected());
         assertEquals("~127",mp3AudioHeader.getBitRate());
-         assertEquals("mp3",mp3AudioHeader.getEncodingType());
+        assertEquals("mp3",mp3AudioHeader.getEncodingType());
+        assertEquals("LAME3.96r",mp3AudioHeader.getEncoder());
     }
 
     public void testReadV1VbrNew()
@@ -81,7 +82,8 @@ public class MP3AudioHeaderTest extends TestCase
         assertFalse(mp3AudioHeader.isPrivate());
         assertFalse(mp3AudioHeader.isProtected());
         assertEquals("~127",mp3AudioHeader.getBitRate());
-         assertEquals("mp3",mp3AudioHeader.getEncodingType());
+        assertEquals("mp3",mp3AudioHeader.getEncodingType());
+        assertEquals("LAME3.96r",mp3AudioHeader.getEncoder());
     }
 
     public void testReadV1Cbr128()
@@ -111,6 +113,7 @@ public class MP3AudioHeaderTest extends TestCase
         assertFalse(mp3AudioHeader.isProtected());
         assertEquals("128",mp3AudioHeader.getBitRate());
         assertEquals("mp3",mp3AudioHeader.getEncodingType());
+        assertEquals("LAME3.96r",mp3AudioHeader.getEncoder());
     }
 
     public void testReadV1Cbr192()
@@ -139,7 +142,8 @@ public class MP3AudioHeaderTest extends TestCase
             assertFalse(mp3AudioHeader.isPrivate());
             assertFalse(mp3AudioHeader.isProtected());
             assertEquals("192",mp3AudioHeader.getBitRate());
-             assertEquals("mp3",mp3AudioHeader.getEncodingType());
+            assertEquals("mp3",mp3AudioHeader.getEncodingType());
+            assertEquals("LAME3.96r",mp3AudioHeader.getEncoder());
         }
 
 
@@ -169,7 +173,8 @@ public class MP3AudioHeaderTest extends TestCase
         assertFalse(mp3AudioHeader.isPrivate());
         assertFalse(mp3AudioHeader.isProtected());
         assertEquals("~127",mp3AudioHeader.getBitRate());
-         assertEquals("mp3",mp3AudioHeader.getEncodingType());
+        assertEquals("mp3",mp3AudioHeader.getEncodingType());
+        assertEquals("LAME3.96r",mp3AudioHeader.getEncoder());
     }
 
     public void testReadV2VbrNew()
@@ -199,6 +204,7 @@ public class MP3AudioHeaderTest extends TestCase
         assertFalse(mp3AudioHeader.isProtected());
         assertEquals("~127",mp3AudioHeader.getBitRate());
         assertEquals("mp3",mp3AudioHeader.getEncodingType());
+        assertEquals("LAME3.96r",mp3AudioHeader.getEncoder());
     }
 
     public void testReadV25VbrOld()
@@ -228,8 +234,38 @@ public class MP3AudioHeaderTest extends TestCase
         assertFalse(mp3AudioHeader.isProtected());
         assertEquals("~128",mp3AudioHeader.getBitRate());
         assertEquals("mp3",mp3AudioHeader.getEncodingType());
+        assertEquals("LAME3.96r",mp3AudioHeader.getEncoder());
     }
 
+    public void testReadV25()
+    {
+        Exception exceptionCaught = null;
+        File testFile = AbstractTestCase.copyAudioToTmp("testV25.mp3");
+        MP3AudioHeader mp3AudioHeader = null;
+        try
+        {
+            mp3AudioHeader = new MP3AudioHeader(testFile);
+
+        }
+        catch (Exception e)
+        {
+            exceptionCaught = e;
+        }
+        assertNull(exceptionCaught);
+        assertEquals("12000", mp3AudioHeader.getSampleRate());
+        assertEquals("00:14", mp3AudioHeader.getTrackLengthAsString());
+        assertFalse(mp3AudioHeader.isVariableBitRate());
+        assertEquals(MPEGFrameHeader.mpegVersionMap.get(new Integer(MPEGFrameHeader.VERSION_2_5)), mp3AudioHeader.getMpegVersion());
+        assertEquals(MPEGFrameHeader.mpegLayerMap.get(new Integer(MPEGFrameHeader.LAYER_III)), mp3AudioHeader.getMpegLayer());
+        assertEquals(MPEGFrameHeader.modeMap.get(new Integer(MPEGFrameHeader.MODE_MONO)), mp3AudioHeader.getChannels());
+        assertTrue(mp3AudioHeader.isOriginal());
+        assertFalse(mp3AudioHeader.isCopyrighted());
+        assertFalse(mp3AudioHeader.isPrivate());
+        assertFalse(mp3AudioHeader.isProtected());
+        assertEquals("16",mp3AudioHeader.getBitRate());  //TODO Might be wrong 
+        assertEquals("mp3",mp3AudioHeader.getEncodingType());
+        assertEquals("",mp3AudioHeader.getEncoder());   //No Lame header so blank
+    }
 
     public void testReadV25VbrNew()
     {
@@ -258,6 +294,7 @@ public class MP3AudioHeaderTest extends TestCase
         assertFalse(mp3AudioHeader.isProtected());
         assertEquals("~128",mp3AudioHeader.getBitRate());
         assertEquals("mp3",mp3AudioHeader.getEncodingType());
+        assertEquals("LAME3.96r",mp3AudioHeader.getEncoder());
     }
 
     /** Test trying to parse an mp3 file which is not a valid MP3 fails gracefully with expected exception

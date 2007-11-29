@@ -6,9 +6,12 @@ import java.nio.ByteBuffer;
 import java.util.Arrays;
 
 /**
- * In some MP3s the first frame in the file is a special frame called a Xing Frame this is used to store
- * additional information about the file. The most important aspect forthis library is details allowing us to
- * determine the bitrate of a Variable Bit Rate VBR file without having to process the whole file.
+ * Xing Frame
+ *
+ * <p>In some MP3s which variable bit rate the first frame in the file contains a special frame called a Xing Frame,
+ * instead of audio data. This is used to store additional information about the file. The most important aspect for
+ * this library is details allowing us to determine the bitrate of a Variable Bit Rate VBR file without having
+ * to process the whole file.
  *
  * Xing VBR Tag data format is 120 bytes long
  *    4 bytes for Header Tag
@@ -17,6 +20,8 @@ import java.util.Arrays;
  *    4 bytes for AUDIO_SIZE
  *    100 bytes for entry (NUMTOCENTRIES)
  *    4 bytes for VBR SCALE. a VBR quality indicator: 0=best 100=worst
+ *
+ * It my then contain a Lame Frame ( a Lame frame is in essence an extended Xing Frame
  */
 public class XingFrame
 {
@@ -34,7 +39,9 @@ public class XingFrame
     private static final int XING_AUDIOSIZE_BUFFER_SIZE  = 4;
 
     public static final int MAX_BUFFER_SIZE_NEEDED_TO_READ_XING
-          = XING_HEADER_BUFFER_SIZE + MPEG_VERSION_1_MODE_STEREO_OFFSET;
+          = MPEG_VERSION_1_MODE_STEREO_OFFSET +
+            XING_HEADER_BUFFER_SIZE +
+            LameFrame.LAME_HEADER_BUFFER_SIZE;
 
 
     private static final int BYTE_1 = 0;
@@ -57,6 +64,7 @@ public class XingFrame
     private int frameCount = -1;
     private boolean isAudioSizeEnabled = false;
     private int audioSize = -1;
+    private LameFrame lameFrame;
 
     /** Read the Xing Properties from the buffer */
     private XingFrame()
@@ -85,8 +93,20 @@ public class XingFrame
 
         //TODO TOC
         //TODO VBR Quality
+
+        //Look for LAME Header as long as we have enough bytes to do it properly
+        if(header.limit()>=XING_HEADER_BUFFER_SIZE + LameFrame.LAME_HEADER_BUFFER_SIZE)
+        {
+            header.position(XING_HEADER_BUFFER_SIZE);
+            lameFrame = LameFrame.parseLameFrame(header);
+        }
     }
 
+    public LameFrame getLameFrame()
+    {
+        return lameFrame;
+    }
+    
     /** Set whether or not VBR, (Xing can also be used for CBR though this is less useful) */
     private void setVbr()
     {
@@ -180,7 +200,7 @@ public class XingFrame
     /**
      * IS this a Xing frame
      *
-     * @return The mPEGFrame value
+     * @return true if this is a Xing frame
      */
     public static boolean isXingFrame(ByteBuffer bb,MPEGFrameHeader mpegFrameHeader)
     {
