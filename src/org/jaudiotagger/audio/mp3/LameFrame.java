@@ -45,9 +45,7 @@ import java.nio.ByteBuffer;
  * 4 bytes:MusicLength
  * 2 bytes:Music CRC
  * 2 bytes:CRC Tag
- *
- * @author Rapha�l Slinckx (KiKiDonK)
- * @version v0.03
+ * 
  */
 public class LameFrame
 {
