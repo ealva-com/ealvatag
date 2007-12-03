@@ -155,7 +155,7 @@ public abstract class AbstractTag implements Tag
      * @see org.jaudiotagger.tag.Tag#get(java.lang.String)
      */
     public List<TagField> get(String id)
-    {
+    {       
         List<TagField> list =  fields.get(id);
 
         if (list == null)

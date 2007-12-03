@@ -33,9 +33,25 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 
+/**
+ * ID3v22 Attached Picture
+ * <p/>
+ * <p> This frame contains a picture directly related to the audio file.
+ * Image format is preferably "PNG" [PNG] or "JPG" [JFIF]. Description
+ * is a short description of the picture, represented as a terminated
+ * textstring. The description has a maximum length of 64 characters,
+ * but may be empty. There may be several pictures attached to one file,
+ * each in their individual "PIC" frame, but only one with the same
+ * ontent descriptor. There may only be one picture with the picture
+ * type declared as picture type $01 and $02 respectively. There is a
+ * possibility to put only a link to the image file by using the 'image
+ * format' "-->" and having a complete URL [URL] instead of picture data.
+ * The use of linked files should however be used restrictively since
+ * there is the risk of separation of files.
+ */
 public class FrameBodyPIC extends AbstractID3v2FrameBody implements ID3v22FrameBody
 {
-
+    public static final String IMAGE_IS_URL = "-->";
 
     /**
      * Creates a new FrameBodyPIC datatype.
@@ -53,11 +69,11 @@ public class FrameBodyPIC extends AbstractID3v2FrameBody implements ID3v22FrameB
     /**
      * Creates a new FrameBodyPIC datatype.
      *
-     * @param textEncoding 
-     * @param imageFormat  
-     * @param pictureType  
-     * @param description  
-     * @param data         
+     * @param textEncoding
+     * @param imageFormat
+     * @param pictureType
+     * @param description
+     * @param data
      */
     public FrameBodyPIC(byte textEncoding, String imageFormat, byte pictureType, String description, byte[] data)
     {
@@ -87,7 +103,7 @@ public class FrameBodyPIC extends AbstractID3v2FrameBody implements ID3v22FrameB
      * @throws InvalidTagException if unable to create framebody from buffer
      */
     public FrameBodyPIC(ByteBuffer byteBuffer, int frameSize)
-        throws InvalidTagException
+            throws InvalidTagException
     {
         super(byteBuffer, frameSize);
     }
@@ -95,7 +111,7 @@ public class FrameBodyPIC extends AbstractID3v2FrameBody implements ID3v22FrameB
     /**
      * Set a description of the image
      *
-     * @param description  of the image
+     * @param description of the image
      */
     public void setDescription(String description)
     {
@@ -103,28 +119,30 @@ public class FrameBodyPIC extends AbstractID3v2FrameBody implements ID3v22FrameB
     }
 
     /**
-     *  Get a description of the image
+     * Get a description of the image
      *
-     * @return  a description of the image
+     * @return a description of the image
      */
     public String getDescription()
     {
         return (String) getObjectValue(DataTypes.OBJ_DESCRIPTION);
     }
 
-     /**
-      * The ID3v2 frame identifier
-      *
-      * @return the ID3v2 frame identifier  for this frame type
+    /**
+     * The ID3v2 frame identifier
+     *
+     * @return the ID3v2 frame identifier  for this frame type
      */
     public String getIdentifier()
     {
         return ID3v22Frames.FRAME_ID_V2_ATTACHED_PICTURE;
     }
-   
 
-    /** If the description cannot be encoded using current encoder, change the encoder */
-    public void write(ByteArrayOutputStream tagBuffer)       
+
+    /**
+     * If the description cannot be encoded using current encoder, change the encoder
+     */
+    public void write(ByteArrayOutputStream tagBuffer)
     {
         if (((AbstractString) getObject(DataTypes.OBJ_DESCRIPTION)).canBeEncoded() == false)
         {
@@ -134,7 +152,26 @@ public class FrameBodyPIC extends AbstractID3v2FrameBody implements ID3v22FrameB
     }
 
     /**
-     * 
+     * Get a description of the image
+     *
+     * @return a description of the image
+     */
+    public String getFormatType()
+    {
+        return (String) getObjectValue(DataTypes.OBJ_IMAGE_FORMAT);
+    }
+
+    public boolean isImageUrl()
+    {
+        if (getFormatType() == null)
+        {
+            return false;
+        }
+        return getFormatType().equals(IMAGE_IS_URL);
+    }
+
+    /**
+     *
      */
     protected void setupObjectList()
     {

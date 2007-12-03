@@ -2,10 +2,16 @@ package org.jaudiotagger.tag.flac;
 
 import org.jaudiotagger.tag.vorbiscomment.VorbisCommentTag;
 import org.jaudiotagger.tag.*;
+import org.jaudiotagger.tag.datatype.DataTypes;
 import org.jaudiotagger.tag.id3.valuepair.ImageFormats;
+import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
+import org.jaudiotagger.tag.id3.valuepair.PictureTypes;
+import org.jaudiotagger.tag.id3.AbstractID3v2Frame;
+import org.jaudiotagger.tag.id3.framebody.FrameBodyAPIC;
 import org.jaudiotagger.tag.mp4.field.Mp4TagCoverField;
 import org.jaudiotagger.tag.mp4.field.Mp4FieldType;
 import org.jaudiotagger.audio.flac.metadatablock.MetadataBlockDataPicture;
+import org.jaudiotagger.audio.generic.Utils;
 
 import javax.imageio.ImageIO;
 import java.util.List;
@@ -700,5 +706,22 @@ public class FlacTag implements Tag
         {
             throw new FieldDataInvalidException("Unable to convert image to bytearray, check mimetype parameter");
         }
+    }
+
+    /**
+    * Create Link to Image File, not recommended because if either flac or image file is moved link
+    * will be broken.
+    */ 
+    public TagField createLinkedArtworkField(String url)
+    {
+        //Add to image list
+        return new MetadataBlockDataPicture(Utils.getDefaultBytes(url,TextEncoding.CHARSET_ISO_8859_1),
+                                    PictureTypes.DEFAULT_ID,
+                                    MetadataBlockDataPicture.IMAGE_IS_URL,
+                                    "",
+                                    0,
+                                    0,
+                                    0,
+                                    0);
     }
 }

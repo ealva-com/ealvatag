@@ -16,9 +16,11 @@
 package org.jaudiotagger.tag.id3;
 
 import org.jaudiotagger.audio.mp3.MP3File;
+import org.jaudiotagger.audio.generic.Utils;
 import org.jaudiotagger.tag.id3.framebody.*;
 import org.jaudiotagger.tag.id3.valuepair.PictureTypes;
 import org.jaudiotagger.tag.id3.valuepair.ImageFormats;
+import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
 import org.jaudiotagger.tag.*;
 import org.jaudiotagger.tag.datatype.DataTypes;
 import org.jaudiotagger.tag.mp4.field.Mp4TagTextField;
@@ -29,6 +31,7 @@ import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.channels.WritableByteChannel;
 import java.util.*;
+import java.net.URL;
 
 /**
  * This is the abstract base class for all ID3v2 tags.
@@ -1577,6 +1580,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
         return doGetFirst(getFrameAndSubIdFromGenericKey(genericKey));
     }
 
+   
       /**
      * Create a new TagField
      * <p/>
@@ -1705,6 +1709,35 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
             }
             return "";
         }
+    }
+
+    /**
+     * Create a link to artwork, this is not recommended because the link may be broken if the mp3 or image
+     * file is moved
+     *
+     * @param url specifies the link, it could be a local file or could be a full url
+     * @return
+     */
+    public TagField createLinkedArtworkField(String url)
+    {
+        AbstractID3v2Frame frame = createFrame(getFrameAndSubIdFromGenericKey(TagFieldKey.COVER_ART).getFrameId());
+        if(frame.getBody() instanceof FrameBodyAPIC)
+        {
+            FrameBodyAPIC body = (FrameBodyAPIC)frame.getBody();
+            body.setObjectValue(DataTypes.OBJ_PICTURE_DATA, Utils.getDefaultBytes(url, TextEncoding.CHARSET_ISO_8859_1));
+            body.setObjectValue(DataTypes.OBJ_PICTURE_TYPE, PictureTypes.DEFAULT_ID);
+            body.setObjectValue(DataTypes.OBJ_MIME_TYPE, FrameBodyAPIC.IMAGE_IS_URL);
+            body.setObjectValue(DataTypes.OBJ_DESCRIPTION, "");
+        }
+        else if(frame.getBody() instanceof FrameBodyPIC)
+        {
+            FrameBodyPIC body = (FrameBodyPIC)frame.getBody();
+            body.setObjectValue(DataTypes.OBJ_PICTURE_DATA, Utils.getDefaultBytes(url, TextEncoding.CHARSET_ISO_8859_1));                    
+            body.setObjectValue(DataTypes.OBJ_PICTURE_TYPE, PictureTypes.DEFAULT_ID);
+            body.setObjectValue(DataTypes.OBJ_IMAGE_FORMAT, FrameBodyAPIC.IMAGE_IS_URL);
+            body.setObjectValue(DataTypes.OBJ_DESCRIPTION, "");
+        }
+        return frame;
     }
 
     /**

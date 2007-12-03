@@ -71,7 +71,7 @@ public enum Mp4FieldKey
     CONTENT_TYPE("stik",BYTE,1),
     PODCAST_KEYWORD("keyw",TEXT),
     PODCAST_URL("purl",NUMERIC),   //TODO Actually seems to store text but is marked as numeric!
-    EPISODE_GLOBAL_ID("egid",NUMERIC),
+    EPISODE_GLOBAL_ID("egid",NUMERIC),   //TODO Actually seems to store text but is marked as numeric!
     TV_NETWORK("tvnn",TEXT),
     TV_EPISODE_NUMBER("tven",TEXT),
     TV_SEASON("tvsn",BYTE,1),

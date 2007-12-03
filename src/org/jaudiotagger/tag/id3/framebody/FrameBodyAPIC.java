@@ -21,6 +21,7 @@ import org.jaudiotagger.tag.id3.ID3v24Frames;
 import org.jaudiotagger.tag.id3.valuepair.ImageFormats;
 import org.jaudiotagger.tag.id3.valuepair.PictureTypes;
 import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
+import org.jaudiotagger.audio.generic.Utils;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -89,6 +90,7 @@ import java.nio.ByteBuffer;
  */
 public class FrameBodyAPIC extends AbstractID3v2FrameBody implements ID3v24FrameBody,ID3v23FrameBody
 {
+    public static final String IMAGE_IS_URL = "-->";
 
     /**
      * Creates a new FrameBodyAPIC datatype.
@@ -109,7 +111,7 @@ public class FrameBodyAPIC extends AbstractID3v2FrameBody implements ID3v24Frame
      */
     public FrameBodyAPIC(FrameBodyPIC body)
     {
-        this.setObjectValue(DataTypes.OBJ_TEXT_ENCODING, body.getTextEncoding());
+        this.setObjectValue(DataTypes.OBJ_TEXT_ENCODING, body.getTextEncoding());          
         this.setObjectValue(DataTypes.OBJ_MIME_TYPE, ImageFormats.getMimeTypeForFormat((String) body.getObjectValue(DataTypes.OBJ_IMAGE_FORMAT)));
         this.setObjectValue(DataTypes.OBJ_PICTURE_TYPE, body.getObjectValue(DataTypes.OBJ_PICTURE_TYPE));
         this.setObjectValue(DataTypes.OBJ_DESCRIPTION, body.getDescription());
@@ -171,6 +173,17 @@ public class FrameBodyAPIC extends AbstractID3v2FrameBody implements ID3v24Frame
         return (String) getObjectValue(DataTypes.OBJ_DESCRIPTION);
     }
 
+    /**
+    * Get a description of the image
+    *
+    * @return a description of the image
+    */
+    public String getMimeType()
+    {
+       return (String) getObjectValue(DataTypes.OBJ_MIME_TYPE);
+    }
+
+
       /**
       * The ID3v2 frame identifier
       *
@@ -203,4 +216,37 @@ public class FrameBodyAPIC extends AbstractID3v2FrameBody implements ID3v24Frame
         objectList.add(new TextEncodedStringNullTerminated(DataTypes.OBJ_DESCRIPTION, this));
         objectList.add(new ByteArraySizeTerminated(DataTypes.OBJ_PICTURE_DATA, this));
     }
+
+    /**
+        *
+        * @return true if imagedata  is held as a url rather than actually being imagedata
+        */
+       public boolean isImageUrl()
+       {
+           if(getMimeType()==null)
+           {
+               return false;
+           }
+           return getMimeType().equals(IMAGE_IS_URL);
+       }
+
+       /**
+        *
+        * @return the image url if there is otherwise return an empty String
+        */
+       public String getImageUrl()
+       {
+           if(isImageUrl())
+           {
+               return Utils.getString(((byte[])getObjectValue(DataTypes.OBJ_PICTURE_DATA)),
+                       0,
+                       ((byte[]) getObjectValue(DataTypes.OBJ_PICTURE_DATA)).length,
+                       TextEncoding.CHARSET_ISO_8859_1);
+           }
+           else
+           {
+               return "";
+           }
+       }
+
 }

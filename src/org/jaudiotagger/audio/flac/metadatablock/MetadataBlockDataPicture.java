@@ -1,6 +1,7 @@
 package org.jaudiotagger.audio.flac.metadatablock;
 
 import org.jaudiotagger.tag.id3.valuepair.PictureTypes;
+import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
 import org.jaudiotagger.tag.InvalidFrameException;
 import org.jaudiotagger.tag.TagField;
 import org.jaudiotagger.tag.TagFieldKey;
@@ -41,6 +42,8 @@ import java.util.logging.Logger;
  */
 public class MetadataBlockDataPicture implements MetadataBlockData, TagField
 {
+    public static final String IMAGE_IS_URL = "-->";
+
     private int     pictureType;
     private String  mimeType;
     private String  description;
@@ -213,6 +216,30 @@ public class MetadataBlockDataPicture implements MetadataBlockData, TagField
         return imageData;
     }
 
+    /**
+     *
+     * @return true if imagedata  is held as a url rather than actually being imagedata
+     */
+    public boolean isImageUrl()
+    {
+        return getMimeType().equals(IMAGE_IS_URL);
+    }
+
+    /**
+     *
+     * @return the image url if there is otherwise return an empty String
+     */
+    public String getImageUrl()
+    {
+        if(isImageUrl())
+        {
+            return Utils.getString(getImageData(),0,getImageData().length, TextEncoding.CHARSET_ISO_8859_1);
+        }
+        else
+        {
+            return "";
+        }
+    }
 
     public String toString()
     {
