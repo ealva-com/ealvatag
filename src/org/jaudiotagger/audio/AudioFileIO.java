@@ -37,6 +37,8 @@ import org.jaudiotagger.audio.mp3.MP3FileReader;
 import org.jaudiotagger.audio.mp3.MP3FileWriter;
 import org.jaudiotagger.audio.mp4.Mp4FileReader;
 import org.jaudiotagger.audio.mp4.Mp4FileWriter;
+import org.jaudiotagger.audio.asf.AsfFileReader;
+import org.jaudiotagger.audio.asf.AsfFileWriter;
 import org.jaudiotagger.tag.Tag;
 import org.jaudiotagger.tag.TagException;
 
@@ -219,6 +221,7 @@ public class AudioFileIO
         readers.put(SupportedFileFormat.MP4.getFilesuffix(), new Mp4FileReader());
         readers.put(SupportedFileFormat.M4A.getFilesuffix(), new Mp4FileReader());
         readers.put(SupportedFileFormat.M4P.getFilesuffix(), new Mp4FileReader());
+        readers.put(SupportedFileFormat.WMA.getFilesuffix(), new AsfFileReader());
 
         // Tag Writers
         writers.put(SupportedFileFormat.OGG.getFilesuffix(), new OggFileWriter());
@@ -227,7 +230,8 @@ public class AudioFileIO
         writers.put(SupportedFileFormat.MP4.getFilesuffix(), new Mp4FileWriter());
         writers.put(SupportedFileFormat.M4A.getFilesuffix(), new Mp4FileWriter());
         writers.put(SupportedFileFormat.M4P.getFilesuffix(), new Mp4FileWriter());
-
+        writers.put(SupportedFileFormat.WMA.getFilesuffix(), new AsfFileWriter());
+        
         // Register modificationHandler
         Iterator it = writers.values().iterator();
         while (it.hasNext())

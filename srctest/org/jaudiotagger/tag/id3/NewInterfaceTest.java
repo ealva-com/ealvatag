@@ -9,15 +9,14 @@ import java.io.RandomAccessFile;
 import java.util.List;
 
 import org.jaudiotagger.AbstractTestCase;
-import org.jaudiotagger.tag.id3.framebody.FrameBodyTPE1;
-import org.jaudiotagger.tag.id3.framebody.FrameBodyTPE1Test;
-import org.jaudiotagger.tag.id3.framebody.FrameBodyTALB;
-import org.jaudiotagger.tag.id3.framebody.AbstractFrameBodyTextInfo;
+import org.jaudiotagger.tag.id3.framebody.*;
 import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
 import org.jaudiotagger.tag.TagFieldKey;
 import org.jaudiotagger.tag.Tag;
 import org.jaudiotagger.tag.TagOptionSingleton;
+import org.jaudiotagger.tag.TagField;
 import org.jaudiotagger.tag.mp4.Mp4Tag;
+import org.jaudiotagger.tag.mp4.Mp4FieldKey;
 import org.jaudiotagger.audio.mp3.MP3File;
 import org.jaudiotagger.audio.AudioFileIO;
 import org.jaudiotagger.audio.AudioFile;
@@ -212,7 +211,7 @@ public class NewInterfaceTest extends TestCase
         tag.setFrame(frame);
         mp3File.setID3v2TagOnly(tag);
         mp3File.save();
-
+       
         //Has v1 and v2 tag at this point
         assertTrue(mp3File.hasID3v1Tag());
         assertTrue(mp3File.hasID3v2Tag());
@@ -383,24 +382,71 @@ public class NewInterfaceTest extends TestCase
          RandomAccessFile imageFile = new RandomAccessFile(new File("testdata", "coverart.png"), "r");
          byte[] imagedata = new byte[(int) imageFile.length()];
          imageFile.read(imagedata);
-         af.getTag().add(tag.createArtworkField(imagedata,"mime/png"));
+         af.getTag().add(tag.createArtworkField(imagedata,"image/png"));
          af.commit();
          af = AudioFileIO.read(testFile);
-         assertEquals(1, af.getTag().get(TagFieldKey.COVER_ART).size());
+         assertEquals(1, ((ID3v24Tag)af.getTag()).get(TagFieldKey.COVER_ART).size());
+         assertEquals(1, ((ID3v24Tag)af.getTag()).get(ID3v24FieldKey.COVER_ART.getFieldName()).size());
+         //TODO This isnt very user friendly
+         TagField tagField = af.getTag().getFirstField(ID3v24FieldKey.COVER_ART.getFieldName());
+         assertTrue(tagField instanceof ID3v24Frame);
+         ID3v24Frame apicFrame = (ID3v24Frame)tagField;
+         assertTrue(apicFrame.getBody() instanceof FrameBodyAPIC);
+         FrameBodyAPIC apicframebody = (FrameBodyAPIC)apicFrame.getBody();
+         assertFalse(apicframebody.isImageUrl());
          assertEquals(9,af.getTag().getFieldCount());
 
          //Add another image correctly
          imageFile = new RandomAccessFile(new File("testdata", "coverart_small.png"), "r");
          imagedata = new byte[(int) imageFile.length()];
          imageFile.read(imagedata);
-         af.getTag().add(tag.createArtworkField(imagedata,"mime/png"));
+         af.getTag().add(tag.createArtworkField(imagedata,"image/png"));
          af.commit();
          af = AudioFileIO.read(testFile);
          assertEquals(2, af.getTag().get(TagFieldKey.COVER_ART).size());
          assertEquals(10,af.getTag().getFieldCount());
+
+         //Add a linked Image
+         af.getTag().add(tag.createLinkedArtworkField("../testdata/coverart.jpg"));
+         af.commit();
+
+         af = AudioFileIO.read(testFile);
+         assertEquals(3, af.getTag().get(TagFieldKey.COVER_ART).size());
+         assertEquals(11,af.getTag().getFieldCount());
+         List<TagField> imageFields = af.getTag().get(TagFieldKey.COVER_ART);
+         tagField = imageFields.get(2);
+         apicFrame = (ID3v24Frame)tagField;
+         assertTrue(apicFrame.getBody() instanceof FrameBodyAPIC);
+         apicframebody = (FrameBodyAPIC)apicFrame.getBody();
+         assertTrue(apicframebody.isImageUrl());
+         assertEquals("../testdata/coverart.jpg",apicframebody.getImageUrl());
     }
 
-     public void testNewInterfaceBasicReadandWriteID3v23() throws Exception
+  /*  public void testReadUrlImage() throws Exception
+    {
+        Exception ex = null;
+        try
+        {
+            File testFile = AbstractTestCase.copyAudioToTmp("testV1withurlimage.mp3");
+            org.jaudiotagger.audio.AudioFile audioFile = org.jaudiotagger.audio.AudioFileIO.read(testFile);
+            ID3v23Tag newTag = (ID3v23Tag)audioFile.getTag();
+            assertEquals(1, newTag.get(TagFieldKey.COVER_ART).size());
+            TagField tagField = newTag.getFirstField(ID3v23FieldKey.COVER_ART.getFieldName());
+            assertTrue(tagField instanceof ID3v23Frame);
+            ID3v23Frame apicFrame = (ID3v23Frame)tagField;
+            assertTrue(apicFrame.getBody() instanceof FrameBodyAPIC);
+            FrameBodyAPIC apicframebody = (FrameBodyAPIC)apicFrame.getBody();
+            assertFalse(apicframebody.isImageUrl());
+        }
+        catch(Exception e)
+        {
+            ex=e;
+            ex.printStackTrace();
+        }
+        assertNull(ex);
+    }
+ */
+    public void testNewInterfaceBasicReadandWriteID3v23() throws Exception
     {
         Exception e=null;
         File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3", new File("testnewIntId3v23.mp3"));
@@ -603,7 +649,7 @@ public class NewInterfaceTest extends TestCase
          RandomAccessFile imageFile = new RandomAccessFile(new File("testdata", "coverart.png"), "r");
          byte[] imagedata = new byte[(int) imageFile.length()];
          imageFile.read(imagedata);
-         af.getTag().add(tag.createArtworkField(imagedata,"mime/png"));
+         af.getTag().add(tag.createArtworkField(imagedata,"image/png"));
          af.commit();
          af = AudioFileIO.read(testFile);
          assertEquals(1, af.getTag().get(TagFieldKey.COVER_ART).size());
@@ -613,7 +659,7 @@ public class NewInterfaceTest extends TestCase
          imageFile = new RandomAccessFile(new File("testdata", "coverart_small.png"), "r");
          imagedata = new byte[(int) imageFile.length()];
          imageFile.read(imagedata);
-         af.getTag().add(tag.createArtworkField(imagedata,"mime/png"));
+         af.getTag().add(tag.createArtworkField(imagedata,"image/png"));
          af.commit();
          af = AudioFileIO.read(testFile);
          assertEquals(2, af.getTag().get(TagFieldKey.COVER_ART).size());
@@ -826,7 +872,7 @@ public class NewInterfaceTest extends TestCase
          RandomAccessFile imageFile = new RandomAccessFile(new File("testdata", "coverart.png"), "r");
          byte[] imagedata = new byte[(int) imageFile.length()];
          imageFile.read(imagedata);
-         af.getTag().add(tag.createArtworkField(imagedata,"mime/png"));
+         af.getTag().add(tag.createArtworkField(imagedata,"image/png"));
          af.commit();
          af = AudioFileIO.read(testFile);
          assertEquals(1, af.getTag().get(TagFieldKey.COVER_ART).size());
@@ -836,7 +882,7 @@ public class NewInterfaceTest extends TestCase
          imageFile = new RandomAccessFile(new File("testdata", "coverart_small.png"), "r");
          imagedata = new byte[(int) imageFile.length()];
          imageFile.read(imagedata);
-         af.getTag().add(tag.createArtworkField(imagedata,"mime/png"));
+         af.getTag().add(tag.createArtworkField(imagedata,"image/png"));
          af.commit();
          af = AudioFileIO.read(testFile);
          assertEquals(2, af.getTag().get(TagFieldKey.COVER_ART).size());
