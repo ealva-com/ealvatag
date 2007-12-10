@@ -25,13 +25,14 @@ import org.jaudiotagger.tag.TagField;
 
 /**
  * This class encapsulates a
- * {@link entagged.audioformats.asf.data.ContentDescriptor}and provides access
+ * {@link org.jaudiotagger.audio.asf.data.ContentDescriptor}and provides access
  * to it. <br>
  * The content descriptor used for construction is copied.
- * 
+ *
  * @author Christian Laireiter (liree)
  */
-public class ContentDescriptorTagField implements TagField {
+public class ContentDescriptorTagField implements TagField
+{
 
     /**
      * This descriptor is wrapped.
@@ -40,58 +41,64 @@ public class ContentDescriptorTagField implements TagField {
 
     /**
      * Creates an instance.
-     * 
-     * @param source
-     *                   The descriptor which should be represented as a
-     *                   {@link TagField}.
+     *
+     * @param source The descriptor which should be represented as a
+     *               {@link TagField}.
      */
-    public ContentDescriptorTagField(ContentDescriptor source) {
+    public ContentDescriptorTagField(ContentDescriptor source)
+    {
         this.toWrap = source.createCopy();
     }
 
     /**
      * (overridden)
-     * 
-     * @see entagged.audioformats.generic.TagField#copyContent(entagged.audioformats.generic.TagField)
+     *
+     * @see org.jaudiotagger.audio.generic.TagField#copyContent(org.jaudiotagger.audio.generic.TagField)
      */
-    public void copyContent(TagField field) {
+    public void copyContent(TagField field)
+    {
         throw new UnsupportedOperationException("Not implemented yet.");
     }
 
     /**
      * (overridden)
-     * 
-     * @see entagged.audioformats.generic.TagField#getId()
+     *
+     * @see org.jaudiotagger.audio.generic.TagField#getId()
      */
-    public String getId() {
+    public String getId()
+    {
         return toWrap.getName();
     }
 
     /**
      * (overridden)
-     * 
-     * @see entagged.audioformats.generic.TagField#getRawContent()
+     *
+     * @see org.jaudiotagger.audio.generic.TagField#getRawContent()
      */
-    public byte[] getRawContent() throws UnsupportedEncodingException {
+    public byte[] getRawContent() throws UnsupportedEncodingException
+    {
         return toWrap.getRawData();
     }
 
     /**
      * (overridden)
-     * 
-     * @see entagged.audioformats.generic.TagField#isBinary()
+     *
+     * @see org.jaudiotagger.audio.generic.TagField#isBinary()
      */
-    public boolean isBinary() {
+    public boolean isBinary()
+    {
         return toWrap.getType() == ContentDescriptor.TYPE_BINARY;
     }
 
     /**
      * (overridden)
-     * 
-     * @see entagged.audioformats.generic.TagField#isBinary(boolean)
+     *
+     * @see org.jaudiotagger.audio.generic.TagField#isBinary(boolean)
      */
-    public void isBinary(boolean b) {
-        if (!b && isBinary()) {
+    public void isBinary(boolean b)
+    {
+        if (!b && isBinary())
+        {
             throw new UnsupportedOperationException("No conversion supported.");
         }
         toWrap.setBinaryValue(toWrap.getRawData());
@@ -99,28 +106,31 @@ public class ContentDescriptorTagField implements TagField {
 
     /**
      * (overridden)
-     * 
-     * @see entagged.audioformats.generic.TagField#isCommon()
+     *
+     * @see org.jaudiotagger.audio.generic.TagField#isCommon()
      */
-    public boolean isCommon() {
+    public boolean isCommon()
+    {
         return toWrap.isCommon();
     }
 
     /**
      * (overridden)
-     * 
-     * @see entagged.audioformats.generic.TagField#isEmpty()
+     *
+     * @see org.jaudiotagger.audio.generic.TagField#isEmpty()
      */
-    public boolean isEmpty() {
+    public boolean isEmpty()
+    {
         return toWrap.isEmpty();
     }
 
     /**
      * (overridden)
-     * 
-     * @see entagged.audioformats.generic.TagField#toString()
+     *
+     * @see org.jaudiotagger.audio.generic.TagField#toString()
      */
-    public String toString() {
+    public String toString()
+    {
         return toWrap.getString();
     }
 

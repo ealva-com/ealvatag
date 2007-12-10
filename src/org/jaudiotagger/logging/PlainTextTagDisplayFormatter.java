@@ -34,7 +34,7 @@ public class PlainTextTagDisplayFormatter extends AbstractTagDisplayFormatter
     {
 
     }
-    
+
     public void openHeadingElement(String type, String value)
     {
         addElement(type, value);

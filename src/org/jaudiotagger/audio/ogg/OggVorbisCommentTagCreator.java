@@ -30,7 +30,7 @@ import java.util.logging.Logger;
 
 /**
  * Creates an OggVorbis Comment Tag from a VorbisComment for use within an OggVorbis Container
- *
+ * <p/>
  * When a Vorbis Comment is used within OggVorbis it additionally has a vorbis header and a framing
  * bit.
  */
@@ -39,8 +39,8 @@ public class OggVorbisCommentTagCreator
     // Logger Object
     public static Logger logger = Logger.getLogger("org.jaudiotagger.audio.ogg");
 
-    public static final int FIELD_FRAMING_BIT_LENGTH        = 1;
-    public static final byte FRAMING_BIT_VALID_VALUE         = (byte)0x01;
+    public static final int FIELD_FRAMING_BIT_LENGTH = 1;
+    public static final byte FRAMING_BIT_VALID_VALUE = (byte) 0x01;
     private VorbisCommentCreator creator = new VorbisCommentCreator();
 
     //Creates the ByteBuffer for the ogg tag
@@ -48,15 +48,15 @@ public class OggVorbisCommentTagCreator
     {
         ByteBuffer ogg = creator.convert(tag);
         int tagLength = ogg.capacity()
-            + VorbisHeader.FIELD_PACKET_TYPE_LENGTH
-            + VorbisHeader.FIELD_CAPTURE_PATTERN_LENGTH
-            + OggVorbisCommentTagCreator.FIELD_FRAMING_BIT_LENGTH;
+                + VorbisHeader.FIELD_PACKET_TYPE_LENGTH
+                + VorbisHeader.FIELD_CAPTURE_PATTERN_LENGTH
+                + OggVorbisCommentTagCreator.FIELD_FRAMING_BIT_LENGTH;
 
         ByteBuffer buf = ByteBuffer.allocate(tagLength);
 
         //[packet type=comment0x03]['vorbis']
         buf.put((byte) VorbisPacketType.COMMENT_HEADER.getType());
-        buf.put(VorbisHeader.CAPTURE_PATTERN_AS_BYTES );
+        buf.put(VorbisHeader.CAPTURE_PATTERN_AS_BYTES);
 
         //The actual tag
         buf.put(ogg);

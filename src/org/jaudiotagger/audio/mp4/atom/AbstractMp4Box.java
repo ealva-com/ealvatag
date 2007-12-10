@@ -11,7 +11,6 @@ public class AbstractMp4Box
     protected ByteBuffer dataBuffer;
 
     /**
-     *
      * @return the box header
      */
     public Mp4BoxHeader getHeader()
@@ -20,7 +19,6 @@ public class AbstractMp4Box
     }
 
     /**
-     *
      * @return rawdata of this box
      */
     public ByteBuffer getData()
@@ -28,5 +26,5 @@ public class AbstractMp4Box
         return dataBuffer;
     }
 
-  
+
 }

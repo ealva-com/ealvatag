@@ -53,11 +53,11 @@ public class FlacInfoReader
             MetadataBlockHeader mbh = MetadataBlockHeader.readHeader(raf);
             if (mbh.getBlockType() == BlockType.STREAMINFO)
             {
-                mbdsi = new MetadataBlockDataStreamInfo(mbh,raf);
+                mbdsi = new MetadataBlockDataStreamInfo(mbh, raf);
                 if (!mbdsi.isValid())
                 {
                     throw new CannotReadException("FLAC StreamInfo not valid");
-                }               
+                }
             }
             else
             {
@@ -68,25 +68,25 @@ public class FlacInfoReader
             mbh = null; //Free memory
         }
 
-        if (mbdsi==null)
+        if (mbdsi == null)
         {
             throw new CannotReadException("Unable to find Flac StreamInfo");
         }
 
         GenericAudioHeader info = new GenericAudioHeader();
-		info.setLength(mbdsi.getLength());
+        info.setLength(mbdsi.getLength());
         info.setPreciseLength(mbdsi.getPreciseLength());
         info.setChannelNumber(mbdsi.getChannelNumber());
         info.setSamplingRate(mbdsi.getSamplingRatePerChannel());
         info.setEncodingType(mbdsi.getEncodingType());
         info.setExtraEncodingInfos("");
-        info.setBitrate(computeBitrate(mbdsi.getPreciseLength(), raf.length() -raf.getFilePointer()));
+        info.setBitrate(computeBitrate(mbdsi.getPreciseLength(), raf.length() - raf.getFilePointer()));
 
         return info;
     }
 
     private int computeBitrate(float length, long size)
-    {         
+    {
         return (int) ((size / KILOBYTES_TO_BYTES_MULTIPLIER) * NO_OF_BITS_IN_BYTE / length);
     }
 
@@ -98,23 +98,23 @@ public class FlacInfoReader
      * @throws CannotReadException
      * @throws IOException
      */
-    public int countMetaBlocks(File f)throws CannotReadException, IOException
+    public int countMetaBlocks(File f) throws CannotReadException, IOException
     {
-        RandomAccessFile raf = new RandomAccessFile(f,"r");
+        RandomAccessFile raf = new RandomAccessFile(f, "r");
 
         FlacStream.findStream(raf);
 
         boolean isLastBlock = false;
-              
+
         int count = 0;
         while (!isLastBlock)
         {
             MetadataBlockHeader mbh = MetadataBlockHeader.readHeader(raf);
-            logger.info("Found block:"+mbh.getBlockType());
+            logger.info("Found block:" + mbh.getBlockType());
             raf.seek(raf.getFilePointer() + mbh.getDataLength());
             isLastBlock = mbh.isLastBlock();
             mbh = null; //Free memory
-            count ++;
+            count++;
         }
         raf.close();
         return count;

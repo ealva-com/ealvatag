@@ -26,13 +26,13 @@ import java.util.logging.Logger;
 
 /**
  * Vorbis Identification header
- *
+ * <p/>
  * From http://xiph.org/vorbis/doc/Vorbis_I_spec.html#id326710
- *
+ * <p/>
  * The identification header is a short header of only a few fields used to declare the stream definitively as Vorbis,
  * and provide a few externally relevant pieces of information about the audio stream. The identification header is
  * coded as follows:
- *
+ * <p/>
  * 1) [vorbis_version] = read 32 bits as unsigned integer
  * 2) [audio_channels] = read 8 bit integer as unsigned
  * 3) [audio_sample_rate] = read 32 bits as unsigned integer
@@ -42,7 +42,7 @@ import java.util.logging.Logger;
  * 7) [blocksize_0] = 2 exponent (read 4 bits as unsigned integer)
  * 8) [blocksize_1] = 2 exponent (read 4 bits as unsigned integer)
  * 9) [framing_flag] = read one bit
- *
+ * <p/>
  * $Id$
  *
  * @author Raphael Slinckx (KiKiDonK)
@@ -59,23 +59,23 @@ public class VorbisIdentificationHeader implements VorbisHeader
     private int vorbisVersion, audioSampleRate;
     private int bitrateMinimal, bitrateNominal, bitrateMaximal;
 
-    public static final int FIELD_VORBIS_VERSION_POS        = 7;
-    public static final int FIELD_AUDIO_CHANNELS_POS        = 11;
-    public static final int FIELD_AUDIO_SAMPLE_RATE_POS     = 12;
-    public static final int FIELD_BITRATE_MAX_POS           = 16;
-    public static final int FIELD_BITRATE_NOMAIML_POS       = 20;
-    public static final int FIELD_BITRATE_MIN_POS           = 24;
-    public static final int FIELD_BLOCKSIZE_POS             = 28;
-    public static final int FIELD_FRAMING_FLAG_POS          = 29;
+    public static final int FIELD_VORBIS_VERSION_POS = 7;
+    public static final int FIELD_AUDIO_CHANNELS_POS = 11;
+    public static final int FIELD_AUDIO_SAMPLE_RATE_POS = 12;
+    public static final int FIELD_BITRATE_MAX_POS = 16;
+    public static final int FIELD_BITRATE_NOMAIML_POS = 20;
+    public static final int FIELD_BITRATE_MIN_POS = 24;
+    public static final int FIELD_BLOCKSIZE_POS = 28;
+    public static final int FIELD_FRAMING_FLAG_POS = 29;
 
-    public static final int FIELD_VORBIS_VERSION_LENGTH     = 4;
-    public static final int FIELD_AUDIO_CHANNELS_LENGTH     = 1;
-    public static final int FIELD_AUDIO_SAMPLE_RATE_LENGTH  = 4;
-    public static final int FIELD_BITRATE_MAX_LENGTH        = 4;
-    public static final int FIELD_BITRATE_NOMAIML_LENGTH    = 4;
-    public static final int FIELD_BITRATE_MIN_LENGTH        = 4;
-    public static final int FIELD_BLOCKSIZE_LENGTH          = 1;
-    public static final int FIELD_FRAMING_FLAG_LENGTH       = 1;
+    public static final int FIELD_VORBIS_VERSION_LENGTH = 4;
+    public static final int FIELD_AUDIO_CHANNELS_LENGTH = 1;
+    public static final int FIELD_AUDIO_SAMPLE_RATE_LENGTH = 4;
+    public static final int FIELD_BITRATE_MAX_LENGTH = 4;
+    public static final int FIELD_BITRATE_NOMAIML_LENGTH = 4;
+    public static final int FIELD_BITRATE_MIN_LENGTH = 4;
+    public static final int FIELD_BLOCKSIZE_LENGTH = 1;
+    public static final int FIELD_FRAMING_FLAG_LENGTH = 1;
 
 
     public VorbisIdentificationHeader(byte[] vorbisData)
@@ -124,19 +124,19 @@ public class VorbisIdentificationHeader implements VorbisHeader
 
     public void decodeHeader(byte[] b)
     {
-        int packetType = b[FIELD_PACKET_TYPE_POS ];
+        int packetType = b[FIELD_PACKET_TYPE_POS];
         logger.fine("packetType" + packetType);
-        String vorbis = Utils.getString(b, VorbisHeader.FIELD_CAPTURE_PATTERN_POS, VorbisHeader.FIELD_CAPTURE_PATTERN_LENGTH,"ISO-8859-1");
-       
-        if (packetType == VorbisPacketType.IDENTIFICATION_HEADER.getType() && vorbis.equals(CAPTURE_PATTERN ))
+        String vorbis = Utils.getString(b, VorbisHeader.FIELD_CAPTURE_PATTERN_POS, VorbisHeader.FIELD_CAPTURE_PATTERN_LENGTH, "ISO-8859-1");
+
+        if (packetType == VorbisPacketType.IDENTIFICATION_HEADER.getType() && vorbis.equals(CAPTURE_PATTERN))
         {
             this.vorbisVersion = b[7] + (b[8] << 8) + (b[9] << 16) + (b[10] << 24);
-            logger.fine("vorbisVersion" +vorbisVersion );
+            logger.fine("vorbisVersion" + vorbisVersion);
             this.audioChannels = u(b[FIELD_AUDIO_CHANNELS_POS]);
-            logger.fine("audioChannels" +audioChannels );
+            logger.fine("audioChannels" + audioChannels);
             this.audioSampleRate = u(b[12]) + (u(b[13]) << 8) + (u(b[14]) << 16) + (u(b[15]) << 24);
             logger.fine("audioSampleRate" + audioSampleRate);
-            logger.fine("audioSampleRate" + b[12] + " "+b[13] +" "+ b[14]);
+            logger.fine("audioSampleRate" + b[12] + " " + b[13] + " " + b[14]);
 
             //TODO is this right spec says signed
             this.bitrateMinimal = u(b[16]) + (u(b[17]) << 8) + (u(b[18]) << 16) + (u(b[19]) << 24);
@@ -146,7 +146,7 @@ public class VorbisIdentificationHeader implements VorbisHeader
             //byte blockSize1 = (byte) ( b[28] & 15 );
 
             int framingFlag = b[FIELD_FRAMING_FLAG_POS];
-            logger.fine("framingFlag" +framingFlag );
+            logger.fine("framingFlag" + framingFlag);
             if (framingFlag != 0)
             {
                 isValid = true;

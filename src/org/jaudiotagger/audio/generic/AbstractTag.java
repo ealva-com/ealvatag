@@ -43,7 +43,7 @@ public abstract class AbstractTag implements Tag
      * that they are added in is preserved, the only exception to this rule is when two fields of the same id
      * exist, both will be returned according to when the first item was added to the file. <br>
      */
-    protected Map<String,List<TagField>> fields = new LinkedHashMap<String,List<TagField>>();
+    protected Map<String, List<TagField>> fields = new LinkedHashMap<String, List<TagField>>();
 
     /**
      * Add field
@@ -53,7 +53,7 @@ public abstract class AbstractTag implements Tag
      *      Changed so add empty fields
      */
     public void add(TagField field)
-    {           
+    {
         if (field == null)
         {
             return;
@@ -134,7 +134,7 @@ public abstract class AbstractTag implements Tag
      *
      * @see org.jaudiotagger.tag.Tag#addTrack(java.lang.String)
      */
-    public void addTrack(String s)   throws FieldDataInvalidException
+    public void addTrack(String s) throws FieldDataInvalidException
     {
         add(createTrackField(s));
     }
@@ -155,8 +155,8 @@ public abstract class AbstractTag implements Tag
      * @see org.jaudiotagger.tag.Tag#get(java.lang.String)
      */
     public List<TagField> get(String id)
-    {       
-        List<TagField> list =  fields.get(id);
+    {
+        List<TagField> list = fields.get(id);
 
         if (list == null)
         {
@@ -173,32 +173,31 @@ public abstract class AbstractTag implements Tag
 
     //Needs to be overridden
     //TODO remove
-    public List<TagField>  get(TagFieldKey id) throws KeyNotFoundException
+    public List<TagField> get(TagFieldKey id) throws KeyNotFoundException
     {
-        List<TagField>  list = fields.get(id.name());
+        List<TagField> list = fields.get(id.name());
         if (list == null)
         {
-            return new ArrayList<TagField> ();
+            return new ArrayList<TagField>();
         }
         return list;
     }
 
 
     /**
-     *
      * @param id
      * @return matches for this saudio-specific key
      */
     public String getFirst(String id)
     {
-        List l = get(id);       
-        return (l.size() != 0) ? l.get(0).toString():"";   
+        List l = get(id);
+        return (l.size() != 0) ? l.get(0).toString() : "";
     }
 
     public TagField getFirstField(String id)
     {
-        List<TagField>l = get(id);
-        return (l.size() != 0) ? ((TagField) l.get(0)):null;
+        List<TagField> l = get(id);
+        return (l.size() != 0) ? ((TagField) l.get(0)) : null;
     }
 
     /**
@@ -260,7 +259,7 @@ public abstract class AbstractTag implements Tag
      */
     public Iterator getFields()
     {
-        final Iterator<Map.Entry<String,List<TagField>>> it = this.fields.entrySet().iterator();
+        final Iterator<Map.Entry<String, List<TagField>>> it = this.fields.entrySet().iterator();
         return new Iterator()
         {
             private Iterator fieldsIt;
@@ -272,8 +271,8 @@ public abstract class AbstractTag implements Tag
                     return;
                 }
 
-                Map.Entry<String,List<TagField>> e = it.next();
-                List<TagField>  l = e.getValue();
+                Map.Entry<String, List<TagField>> e = it.next();
+                List<TagField> l = e.getValue();
                 fieldsIt = l.iterator();
             }
 
@@ -305,18 +304,18 @@ public abstract class AbstractTag implements Tag
 
     /**
      * Return field count
-     *
+     * <p/>
      * TODO:There must be a more efficient way to do this.
-     * 
+     *
      * @return field count
      */
     public int getFieldCount()
     {
         Iterator it = getFields();
         int count = 0;
-        while(it.hasNext())
+        while (it.hasNext())
         {
-            count ++;
+            count++;
             it.next();
         }
         return count;
@@ -361,7 +360,7 @@ public abstract class AbstractTag implements Tag
      * @see org.jaudiotagger.tag.Tag#getFirstGenre()
      */
     public String getFirstGenre()
-    {           
+    {
         List l = getGenre();
         return (l.size() != 0) ? ((TagTextField) l.get(0)).getContent() : "";
     }
@@ -512,7 +511,7 @@ public abstract class AbstractTag implements Tag
 
     /**
      * Set field
-     *
+     * <p/>
      * Changed:Just because field is empty it doesnt mean it should be deleted. That should be the choice
      * of the developer. (Or does this break things)
      *
@@ -530,12 +529,12 @@ public abstract class AbstractTag implements Tag
         List<TagField> list = fields.get(field.getId());
         if (list != null)
         {
-            list.set(0,field);
+            list.set(0, field);
             return;
         }
 
         // Else we put the new field in the fields.
-        list = new ArrayList<TagField> ();
+        list = new ArrayList<TagField>();
         list.add(field);
         fields.put(field.getId(), list);
         if (field.isCommon())
@@ -625,7 +624,7 @@ public abstract class AbstractTag implements Tag
      * @see org.jaudiotagger.tag.Tag#setTrack(java.lang.String)
      */
     public void setTrack(String s)
-              throws FieldDataInvalidException
+            throws FieldDataInvalidException
     {
         set(createTrackField(s));
     }
@@ -666,7 +665,7 @@ public abstract class AbstractTag implements Tag
     //as working one format at a time
     //TODO remove
     public TagField createTagField(TagFieldKey genericKey, String value)
-             throws KeyNotFoundException,FieldDataInvalidException
+            throws KeyNotFoundException, FieldDataInvalidException
     {
         return null;
     }
@@ -674,7 +673,7 @@ public abstract class AbstractTag implements Tag
     //Should be overridden by all subclasses but provided empty impl
     //as working one format at a time
     //TODO remove
-    public String getFirst(TagFieldKey genericKey)throws KeyNotFoundException
+    public String getFirst(TagFieldKey genericKey) throws KeyNotFoundException
     {
         return null;
     }
@@ -702,7 +701,7 @@ public abstract class AbstractTag implements Tag
         return;
     }
 
-     /**
+    /**
      * Creates a field which represents the &quot;album&quot;.<br>
      * The field will already contain the given content.
      *
@@ -755,7 +754,7 @@ public abstract class AbstractTag implements Tag
      * @return tagfield representing the &quot;track&quot;
      */
     public abstract TagField createTrackField(String content)
-              throws FieldDataInvalidException;
+            throws FieldDataInvalidException;
 
     /**
      * Creates a field which represents the &quot;year&quot;.<br>

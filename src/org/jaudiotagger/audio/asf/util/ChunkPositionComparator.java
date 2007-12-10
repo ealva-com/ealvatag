@@ -24,26 +24,29 @@ import org.jaudiotagger.audio.asf.data.Chunk;
 
 /**
  * This class is needed for ordering all types of
- * {@link entagged.audioformats.asf.data.Chunk}s ascending by their Position.
+ * {@link org.jaudiotagger.audio.asf.data.Chunk}s ascending by their Position.
  * <br>
- * 
+ *
  * @author Christian Laireiter
  */
-public class ChunkPositionComparator implements Comparator {
+public class ChunkPositionComparator implements Comparator
+{
 
-	/**
-	 * (overridden)
-	 * 
-	 * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
-	 */
-	public int compare(Object o1, Object o2) {
-		int result = 0;
-		if (o1 instanceof Chunk && o2 instanceof Chunk) {
-			Chunk c1 = (Chunk) o1;
-			Chunk c2 = (Chunk) o2;
-			result = (int) (c1.getPosition() - c2.getPosition());
-		}
-		return result;
+    /**
+     * (overridden)
+     *
+     * @see java.util.Comparator#compare(java.lang.Object,java.lang.Object)
+     */
+    public int compare(Object o1, Object o2)
+    {
+        int result = 0;
+        if (o1 instanceof Chunk && o2 instanceof Chunk)
+        {
+            Chunk c1 = (Chunk) o1;
+            Chunk c2 = (Chunk) o2;
+            result = (int) (c1.getPosition() - c2.getPosition());
+        }
+        return result;
 	}
 
 }

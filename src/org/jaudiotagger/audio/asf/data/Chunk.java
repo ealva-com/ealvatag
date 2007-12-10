@@ -25,10 +25,11 @@ import java.math.BigInteger;
  * Each chunk starts with a 16byte guid identifying the type. After that a
  * number (represented by 8 bytes) follows which shows the size in bytes of the
  * chunk. Finally there is the data of the chunk.
- * 
+ *
  * @author Christian Laireiter
  */
-public class Chunk {
+public class Chunk
+{
 
     /**
      * The length of current chunk. <br>
@@ -47,25 +48,26 @@ public class Chunk {
 
     /**
      * Creates an instance
-     * 
-     * @param headerGuid
-     *                  The GUID of header object.
-     * @param pos
-     *                  Position of header object within stream or file.
-     * @param chunkLen
-     *                  Length of current chunk.
+     *
+     * @param headerGuid The GUID of header object.
+     * @param pos        Position of header object within stream or file.
+     * @param chunkLen   Length of current chunk.
      */
-    public Chunk(GUID headerGuid, long pos, BigInteger chunkLen) {
-        if (headerGuid == null) {
+    public Chunk(GUID headerGuid, long pos, BigInteger chunkLen)
+    {
+        if (headerGuid == null)
+        {
             throw new IllegalArgumentException(
                     "GUID must not be null nor anything else than "
                             + GUID.GUID_LENGTH + " entries long.");
         }
-        if (pos < 0) {
+        if (pos < 0)
+        {
             throw new IllegalArgumentException(
                     "Position of header can't be negative.");
         }
-        if (chunkLen == null || chunkLen.compareTo(BigInteger.ZERO) < 0) {
+        if (chunkLen == null || chunkLen.compareTo(BigInteger.ZERO) < 0)
+        {
             throw new IllegalArgumentException(
                     "chunkLen must not be null nor negative.");
         }
@@ -77,31 +79,35 @@ public class Chunk {
     /**
      * This method returns the End of the current chunk introduced by current
      * header object.
-     * 
+     *
      * @return Position after current chunk.
      */
-    public long getChunckEnd() {
+    public long getChunckEnd()
+    {
         return position + chunkLength.longValue();
     }
 
     /**
      * @return Returns the chunkLength.
      */
-    public BigInteger getChunkLength() {
+    public BigInteger getChunkLength()
+    {
         return chunkLength;
     }
 
     /**
      * @return Returns the guid.
      */
-    public GUID getGuid() {
+    public GUID getGuid()
+    {
         return guid;
     }
 
     /**
      * @return Returns the position.
      */
-    public long getPosition() {
+    public long getPosition()
+    {
         return position;
     }
 
@@ -109,10 +115,11 @@ public class Chunk {
      * This method creates a String containing usefull information prepared to
      * be printed on stdout. <br>
      * This method is intended to be overwritten by inheriting classes.
-     * 
+     *
      * @return Information of current Chunk Object.
      */
-    public String prettyPrint() {
+    public String prettyPrint()
+    {
         StringBuffer result = new StringBuffer();
         result.append("GUID: " + GUID.getGuidDescription(guid));
         result.append("\n   Starts at position: " + getPosition() + "\n");
@@ -122,10 +129,11 @@ public class Chunk {
 
     /**
      * (overridden)
-     * 
+     *
      * @see java.lang.Object#toString()
      */
-    public String toString() {
+    public String toString()
+    {
         return prettyPrint();
     }
 

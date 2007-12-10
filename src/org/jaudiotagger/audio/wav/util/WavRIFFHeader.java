@@ -1,6 +1,6 @@
 /*
  * Entagged Audio Tag library
- * Copyright (c) 2003-2005 Raphaël Slinckx <raphael@slinckx.net>
+ * Copyright (c) 2003-2005 Raphaï¿½l Slinckx <raphael@slinckx.net>
  * 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -16,20 +16,36 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.jaudiotagger.audio.flac.metadatablock;
+package org.jaudiotagger.audio.wav.util;
 
-/**
- * This defines the interface required of the different metadata block types
- */
-public interface MetadataBlockData
+public class WavRIFFHeader
 {
-    /**
-     * @return the rawdata as it will be written to file
-     */
-    public byte[] getBytes();
 
-    /**
-     * @return the length in bytes that the data uses when written to file
-     */
-    public int getLength();
+    private boolean isValid = false;
+
+    public WavRIFFHeader(byte[] b)
+    {
+        //System.err.println(b.length);
+        String RIFF = new String(b, 0, 4);
+        //System.err.println(RIFF);
+        String WAVE = new String(b, 8, 4);
+        //System.err.println(WAVE);
+        if (RIFF.equals("RIFF") && WAVE.equals("WAVE"))
+        {
+            isValid = true;
+        }
+
+    }
+
+    public boolean isValid()
+    {
+        return isValid;
+    }
+
+    public String toString()
+    {
+        String out = "RIFF-WAVE Header:\n";
+        out += "Is valid?: " + isValid;
+        return out;
+    }
 }

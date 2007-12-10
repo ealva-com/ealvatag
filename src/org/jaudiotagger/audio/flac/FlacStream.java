@@ -17,12 +17,12 @@ public class FlacStream
 
     /**
      * Reads the stream block to ensure it is a flac file
-     * 
+     *
      * @param raf
      * @throws IOException
      * @throws CannotReadException
      */
-    public static void findStream(RandomAccessFile raf)throws IOException,CannotReadException
+    public static void findStream(RandomAccessFile raf) throws IOException, CannotReadException
     {
         //Begins tag parsing
         if (raf.length() == 0)

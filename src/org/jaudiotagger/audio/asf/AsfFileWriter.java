@@ -43,32 +43,31 @@ import org.jaudiotagger.audio.generic.GenericTag;
 /**
  * This class writes given tags to asf files containing wma content. <br>
  * <br>
- * 
+ *
  * @author Christian Laireiter
  */
-public class AsfFileWriter extends AudioFileWriter {
+public class AsfFileWriter extends AudioFileWriter
+{
 
     /**
      * This method copies <code>number</code> of bytes from
      * <code>source</code> to <code>destination</code>.<br>
-     * 
-     * @param source
-     *                   Source for copy
-     * @param destination
-     *                   Destination for copy
-     * @param number
-     *                   number of bytes to copy.
-     * @throws IOException
-     *                    read or write errors.
+     *
+     * @param source      Source for copy
+     * @param destination Destination for copy
+     * @param number      number of bytes to copy.
+     * @throws IOException read or write errors.
      */
     private void copy(RandomAccessFile source, RandomAccessFile destination,
-                      long number) throws IOException {
+                      long number) throws IOException
+    {
         byte[] buffer = new byte[8192];
         long bytesCopied = 0;
         int read = -1;
         while ((read = source.read(buffer, 0,
                 ((bytesCopied + 8192 > number) ? (int) (number - bytesCopied)
-                        : 8192))) > 0) {
+                        : 8192))) > 0)
+        {
             bytesCopied += read;
             destination.write(buffer, 0, read);
         }
@@ -81,25 +80,20 @@ public class AsfFileWriter extends AudioFileWriter {
      * {@link #isExtendedContentDescriptionMandatory(Tag)}) it will be created.
      * If the new file doesn't require such a chunk and the source didn't
      * contain optional values in it, it will be deleted.
-     * 
-     * @param tag
-     *                   Tag containing the new values.
-     * @param header
-     *                   Read header of <code>raf</code>.
-     * @param raf
-     *                   source
-     * @param rafTemp
-     *                   destination.
-     * @param ignoreDescriptions
-     *                   if <code>true</code> the content description and the
-     *                   extended content description won't be written. (For deleting
-     *                   tags.).
-     * @throws IOException
-     *                    read or write errors.
+     *
+     * @param tag                Tag containing the new values.
+     * @param header             Read header of <code>raf</code>.
+     * @param raf                source
+     * @param rafTemp            destination.
+     * @param ignoreDescriptions if <code>true</code> the content description and the
+     *                           extended content description won't be written. (For deleting
+     *                           tags.).
+     * @throws IOException read or write errors.
      */
     private void createModifiedCopy(Tag tag, AsfHeader header,
                                     RandomAccessFile raf, RandomAccessFile rafTemp,
-                                    boolean ignoreDescriptions) throws IOException {
+                                    boolean ignoreDescriptions) throws IOException
+    {
         /*
          * First of all Copy the first 30 bytes of the file. The GUID and one
          * unknown field is needed. (All other values [chunkcount, chunklength]
@@ -120,7 +114,8 @@ public class AsfFileWriter extends AudioFileWriter {
          */
         if (header.getExtendedContentDescription() == null
                 && isExtendedContentDescriptionMandatory(tag)
-                && !ignoreDescriptions) {
+                && !ignoreDescriptions)
+        {
             // The source had no property chunk but one is written. So on chunk
             // more.
             chunkCount++;
@@ -135,7 +130,8 @@ public class AsfFileWriter extends AudioFileWriter {
          * author, copyright, description and rating of the file
          */
         if (header.getContentDescription() == null
-                && isContentdescriptionMandatory(tag) && !ignoreDescriptions) {
+                && isContentdescriptionMandatory(tag) && !ignoreDescriptions)
+        {
             // The source had no content description chunk but one is written.
             // So on
             // chunk more.
@@ -145,14 +141,19 @@ public class AsfFileWriter extends AudioFileWriter {
                     rafTemp).getChunkLength().longValue();
         }
         // Now copy chunks (and modify if necessary)
-        for (int i = 0; i < chunks.length; i++) {
-            if (chunks[i] == header.getContentDescription()) {
-                if (ignoreDescriptions) {
+        for (int i = 0; i < chunks.length; i++)
+        {
+            if (chunks[i] == header.getContentDescription())
+            {
+                if (ignoreDescriptions)
+                {
                     // Remove file size and so on
                     chunkCount--;
                     fileSizeDifference -= header.getContentDescription()
                             .getChunkLength().longValue();
-                } else {
+                }
+                else
+                {
                     // Now write new content description , because of
                     // modifications
                     // Store the difference of sizes between old and new
@@ -160,14 +161,17 @@ public class AsfFileWriter extends AudioFileWriter {
                     fileSizeDifference += createNewContentDescription(tag,
                             header.getContentDescription(), rafTemp)
                             .getChunkLength().subtract(
-                                    header.getContentDescription()
-                                            .getChunkLength()).longValue();
+                            header.getContentDescription()
+                                    .getChunkLength()).longValue();
 
                 }
-            } else if (chunks[i] == header.getExtendedContentDescription()) {
+            }
+            else if (chunks[i] == header.getExtendedContentDescription())
+            {
                 if (deleteExtendedContentDescription(header
                         .getExtendedContentDescription(), tag)
-                        || ignoreDescriptions) {
+                        || ignoreDescriptions)
+                {
                     /*
                      * No property chunk will be written. So lower the
                      * chunkCount and store the amount of bytes lost from the
@@ -177,7 +181,9 @@ public class AsfFileWriter extends AudioFileWriter {
                     fileSizeDifference -= header
                             .getExtendedContentDescription().getChunkLength()
                             .longValue();
-                } else {
+                }
+                else
+                {
                     /*
                      * write a modified copy of the property chunk;
                      */
@@ -187,10 +193,13 @@ public class AsfFileWriter extends AudioFileWriter {
                             header.getExtendedContentDescription()
                                     .getChunkLength()).longValue();
                 }
-            } else {
+            }
+            else
+            {
                 // No special handling required. This chunk can simply be
                 // copied.
-                if (GUID.GUID_FILE.equals(chunks[i].getGuid())) {
+                if (GUID.GUID_FILE.equals(chunks[i].getGuid()))
+                {
                     newFileHeaderPos = rafTemp.getFilePointer();
                 }
                 raf.seek(chunks[i].getPosition());
@@ -219,29 +228,27 @@ public class AsfFileWriter extends AudioFileWriter {
 
     /**
      * Like
-     * {@link #createNewExtendedContentDescription(Tag, ExtendedContentDescription, RandomAccessFile)},
+     * {@link #createNewExtendedContentDescription(Tag,ExtendedContentDescription,RandomAccessFile)},
      * this method creates a new chunk for title, ...
-     * 
-     * @param tag
-     *                   tag which contains the values.
-     * @param contentDescription
-     *                   Description containing old values.
-     * @param rafTemp
-     *                   output.
+     *
+     * @param tag                tag which contains the values.
+     * @param contentDescription Description containing old values.
+     * @param rafTemp            output.
      * @return Representation of new Chunk in <code>rafTemp</code>
-     * @throws IOException
-     *                    write errors.
+     * @throws IOException write errors.
      */
     private Chunk createNewContentDescription(Tag tag,
                                               ContentDescription contentDescription, RandomAccessFile rafTemp)
-            throws IOException {
+            throws IOException
+    {
         // Store current Location
         long chunkStart = rafTemp.getFilePointer();
         // Create a content description object out of tag values.
         ContentDescription description = TagConverter
                 .createContentDescription(tag);
         // Add optional existing values which aren't covered with tag.
-        if (contentDescription != null) {
+        if (contentDescription != null)
+        {
             description.setRating(contentDescription.getRating());
         }
         // Create byte[] for the asf file.
@@ -259,27 +266,25 @@ public class AsfFileWriter extends AudioFileWriter {
      * Some values of {@link Tag}are nested within this chunk. Those values of
      * <code>tagChunk</code> which do not belong to tag will be kept, the rest
      * replaced or even added. <br>
-     * 
-     * @param tag
-     *                   contains new Elements.
-     * @param tagChunk
-     *                   chunk from source. May contain values, which are not reflected
-     *                   by <code>tag</code>. Parameter can be <code>null</code>.
-     * @param rafTemp
-     *                   File to write to.
+     *
+     * @param tag      contains new Elements.
+     * @param tagChunk chunk from source. May contain values, which are not reflected
+     *                 by <code>tag</code>. Parameter can be <code>null</code>.
+     * @param rafTemp  File to write to.
      * @return A new chunk object reflecting position and size.
-     * @throws IOException
-     *                    in Case of write errors.
+     * @throws IOException in Case of write errors.
      */
     private Chunk createNewExtendedContentDescription(Tag tag,
                                                       ExtendedContentDescription tagChunk, RandomAccessFile rafTemp)
-            throws IOException {
+            throws IOException
+    {
         long chunkStart = rafTemp.getFilePointer();
-        if (tagChunk == null) {
+        if (tagChunk == null)
+        {
             tagChunk = new ExtendedContentDescription();
         }
         TagConverter.assignCommonTagValues(tag, tagChunk);
-        TagConverter.assignOptionalTagValues (tag,tagChunk);
+        TagConverter.assignOptionalTagValues(tag, tagChunk);
 
         /*
         * Now perform the creation of the extended content description
@@ -298,19 +303,18 @@ public class AsfFileWriter extends AudioFileWriter {
      * additional tags which are not contained in <code>tag</code> and
      * {@link #isExtendedContentDescriptionMandatory(Tag)}returns
      * <code>false</code>.
-     * 
-     * @param tagHeader
-     *                   ContentDescriptor chunk from source.
-     * @param tag
-     *                   Tag that is written.
+     *
+     * @param tagHeader ContentDescriptor chunk from source.
+     * @param tag       Tag that is written.
      * @return <code>true</code>, if property chunk can be skipped.
      */
     private boolean deleteExtendedContentDescription(
-            ExtendedContentDescription tagHeader, Tag tag) {
-        HashSet ignoreDescriptors = new HashSet(Arrays.asList(new String[] {
+            ExtendedContentDescription tagHeader, Tag tag)
+    {
+        HashSet ignoreDescriptors = new HashSet(Arrays.asList(new String[]{
                 ContentDescriptor.ID_GENRE, ContentDescriptor.ID_GENREID,
                 ContentDescriptor.ID_TRACKNUMBER, ContentDescriptor.ID_ALBUM,
-                ContentDescriptor.ID_YEAR }));
+                ContentDescriptor.ID_YEAR}));
         Iterator it = tagHeader.getDescriptors().iterator();
         boolean found = false;
         /*
@@ -318,7 +322,8 @@ public class AsfFileWriter extends AudioFileWriter {
          * ignoreDescriptors. These descriptors cannot be modified by entagged
          * and will be preserved
          */
-        while (it.hasNext() && !found) {
+        while (it.hasNext() && !found)
+        {
             ContentDescriptor current = (ContentDescriptor) it.next();
             found = !ignoreDescriptors.contains(current.getName());
         }
@@ -327,23 +332,28 @@ public class AsfFileWriter extends AudioFileWriter {
 
     /**
      * (overridden)
-     * 
-     * @see entagged.audioformats.generic.AudioFileWriter#deleteTag(java.io.RandomAccessFile,
-     *           java.io.RandomAccessFile)
+     *
+     * @see org.jaudiotagger.audio.generic.AudioFileWriter#deleteTag(java.io.RandomAccessFile,
+     *java.io.RandomAccessFile)
      */
     protected void deleteTag(RandomAccessFile raf, RandomAccessFile tempRaf)
-            throws CannotWriteException, IOException {
-        try {
+            throws CannotWriteException, IOException
+    {
+        try
+        {
             AsfHeader header = AsfHeaderReader.readHeader(raf);
-            if (header == null) {
+            if (header == null)
+            {
                 throw new NullPointerException(
                         "Header is null, so file couldn't be read properly. "
                                 + "(Interpretation of data, not file access rights.)");
             }
             createModifiedCopy(new GenericTag(), header, raf, tempRaf, true);
-        } catch (IOException ioe) {
+        } catch (IOException ioe)
+        {
             throw ioe;
-        } catch (Exception cre) {
+        } catch (Exception cre)
+        {
             throw new CannotWriteException(
                     "Cannot modify tag because exception occured:\n   "
                             + cre.getMessage());
@@ -357,33 +367,39 @@ public class AsfFileWriter extends AudioFileWriter {
      * <br>
      * This should make it easy to create a copy an modify just specified
      * chunks.
-     * 
-     * @param header
-     *                   The header object containing all chunks.
+     *
+     * @param header The header object containing all chunks.
      * @return All chunks ordered by position.
      */
-    private Chunk[] getOrderedChunks(AsfHeader header) {
+    private Chunk[] getOrderedChunks(AsfHeader header)
+    {
         ArrayList result = new ArrayList();
         // Add all chunks which simply need to be copied.
-        for (int i = 0; i < header.getUnspecifiedChunkCount(); i++) {
+        for (int i = 0; i < header.getUnspecifiedChunkCount(); i++)
+        {
             result.add(header.getUnspecifiedChunk(i));
         }
         // Add all stream chunks
-        for (int i = 0; i < header.getStreamChunkCount(); i++) {
+        for (int i = 0; i < header.getStreamChunkCount(); i++)
+        {
             result.add(header.getStreamChunk(i));
         }
         // Now the rest.
-        if (header.getContentDescription() != null) {
+        if (header.getContentDescription() != null)
+        {
             result.add(header.getContentDescription());
         }
         result.add(header.getFileHeader());
-        if (header.getExtendedContentDescription() != null) {
+        if (header.getExtendedContentDescription() != null)
+        {
             result.add(header.getExtendedContentDescription());
         }
-        if (header.getEncodingChunk() != null) {
+        if (header.getEncodingChunk() != null)
+        {
             result.add(header.getEncodingChunk());
         }
-        if (header.getStreamBitratePropertiesChunk() != null) {
+        if (header.getStreamBitratePropertiesChunk() != null)
+        {
             result.add(header.getStreamBitratePropertiesChunk());
         }
         Chunk[] tmp = (Chunk[]) result.toArray(new Chunk[result.size()]);
@@ -402,13 +418,13 @@ public class AsfFileWriter extends AudioFileWriter {
      * The content description stores another fields which holds the
      * copyright,rating. <br>
      * However entagged doesn't support this.
-     * 
-     * @param tag
-     *                   Tag which should be written.
+     *
+     * @param tag Tag which should be written.
      * @return <code>true</code>, if a property chunk must be written in
-     *               order to store all needed values of tag.
+     *         order to store all needed values of tag.
      */
-    private boolean isContentdescriptionMandatory(Tag tag) {
+    private boolean isContentdescriptionMandatory(Tag tag)
+    {
         return tag.getFirstArtist().trim().length() > 0
                 || tag.getFirstComment().trim().length() > 0
                 || tag.getFirstTitle().trim().length() > 0;
@@ -422,13 +438,13 @@ public class AsfFileWriter extends AudioFileWriter {
      * {@link Tag#getYear()}<br>
      * {@link Tag#getGenre()}<br>
      * {@link Tag#getAlbum()}<br>
-     * 
-     * @param tag
-     *                   Tag which should be written.
+     *
+     * @param tag Tag which should be written.
      * @return <code>true</code>, if a property chunk must be written in
-     *               order to store all needed values of tag.
+     *         order to store all needed values of tag.
      */
-    private boolean isExtendedContentDescriptionMandatory(Tag tag) {
+    private boolean isExtendedContentDescriptionMandatory(Tag tag)
+    {
         return tag.getFirstTrack().trim().length() > 0
                 || tag.getFirstYear().trim().length() > 0
                 || tag.getFirstGenre().trim().length() > 0
@@ -437,17 +453,15 @@ public class AsfFileWriter extends AudioFileWriter {
 
     /**
      * This method writes the lower 16 Bit of <code>value</code> to raf. <br>
-     * 
-     * @param value
-     *                   value
-     * @param raf
-     *                   output
+     *
+     * @param value value
+     * @param raf   output
      * @return number of bytes written (Here always 2)
-     * @throws IOException
-     *                    Write errrors.
+     * @throws IOException Write errrors.
      */
     private int write16UINT(long value, RandomAccessFile raf)
-            throws IOException {
+            throws IOException
+    {
         raf.write((int) value & 0x00FF);
         value >>= 8;
         raf.write((int) value & 0x00FF);
@@ -456,17 +470,15 @@ public class AsfFileWriter extends AudioFileWriter {
 
     /**
      * This method writes the lower 32 Bit of <code>value</code> to raf. <br>
-     * 
-     * @param value
-     *                   value
-     * @param raf
-     *                   output
+     *
+     * @param value value
+     * @param raf   output
      * @return number of bytes written (Here always 4)
-     * @throws IOException
-     *                    Write errrors.
+     * @throws IOException Write errrors.
      */
     private int write32UINT(long value, RandomAccessFile raf)
-            throws IOException {
+            throws IOException
+    {
         raf.write((int) value & 0x00FF);
         value >>= 8;
         raf.write((int) value & 0x00FF);
@@ -482,24 +494,28 @@ public class AsfFileWriter extends AudioFileWriter {
      * First the file <code>raf</code> is read as an asf file. If it could be
      * interpreted correctly it should be possible to properly write the
      * modifications.
-     * 
-     * 
-     * @see entagged.audioformats.generic.AudioFileWriter#writeTag(entagged.audioformats.Tag,
-     *           java.io.RandomAccessFile, java.io.RandomAccessFile)
+     *
+     * @see org.jaudiotagger.audio.generic.AudioFileWriter#writeTag(org.jaudiotagger.audio.Tag,
+     *java.io.RandomAccessFile,java.io.RandomAccessFile)
      */
     protected void writeTag(Tag tag, RandomAccessFile raf,
-                            RandomAccessFile rafTemp) throws CannotWriteException, IOException {
-        try {
+                            RandomAccessFile rafTemp) throws CannotWriteException, IOException
+    {
+        try
+        {
             AsfHeader header = AsfHeaderReader.readHeader(raf);
-            if (header == null) {
+            if (header == null)
+            {
                 throw new NullPointerException(
                         "Header is null, so file couldn't be read properly. "
                                 + "(Interpretation of data, not file access rights.)");
             }
             createModifiedCopy(tag, header, raf, rafTemp, false);
-        } catch (IOException ioe) {
+        } catch (IOException ioe)
+        {
             throw ioe;
-        } catch (Exception cre) {
+        } catch (Exception cre)
+        {
             throw new CannotWriteException(
                     "Cannot modify tag because exception occured:\n   "
                             + cre.getMessage());

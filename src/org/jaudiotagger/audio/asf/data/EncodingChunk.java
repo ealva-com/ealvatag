@@ -30,62 +30,65 @@ import org.jaudiotagger.audio.asf.util.Utils;
  * encoding parameters in textual form. <br>
  * Since the needed parameters were found in other chunks the implementation of
  * this class was paused. <br>
- * TODO complete analysis. 
- * 
+ * TODO complete analysis.
+ *
  * @author Christian Laireiter
  */
-public class EncodingChunk extends Chunk {
+public class EncodingChunk extends Chunk
+{
 
-	/**
-	 * The read strings.
-	 */
-	private final ArrayList strings;
+    /**
+     * The read strings.
+     */
+    private final ArrayList strings;
 
-	/**
-	 * Creates an instance.
-	 * 
-	 * @param pos
-	 *                  Position of the chunk within file or stream
-	 * @param chunkLen
-	 *                  Length of current chunk.
-	 */
-	public EncodingChunk(long pos, BigInteger chunkLen) {
-		super(GUID.GUID_ENCODING, pos, chunkLen);
-		this.strings = new ArrayList();
-	}
+    /**
+     * Creates an instance.
+     *
+     * @param pos      Position of the chunk within file or stream
+     * @param chunkLen Length of current chunk.
+     */
+    public EncodingChunk(long pos, BigInteger chunkLen)
+    {
+        super(GUID.GUID_ENCODING, pos, chunkLen);
+        this.strings = new ArrayList();
+    }
 
-	/**
-	 * This method appends a String.
-	 * 
-	 * @param toAdd
-	 *                  String to add.
-	 */
-	public void addString(String toAdd) {
-		strings.add(toAdd);
-	}
+    /**
+     * This method appends a String.
+     *
+     * @param toAdd String to add.
+     */
+    public void addString(String toAdd)
+    {
+        strings.add(toAdd);
+    }
 
-	/**
-	 * This method returns a collection of all {@link String}s which were addid
-	 * due {@link #addString(String)}.
-	 * 
-	 * @return Inserted Strings.
-	 */
-	public Collection getStrings() {
-		return new ArrayList(strings);
-	}
+    /**
+     * This method returns a collection of all {@link String}s which were addid
+     * due {@link #addString(String)}.
+     *
+     * @return Inserted Strings.
+     */
+    public Collection getStrings()
+    {
+        return new ArrayList(strings);
+    }
 
-	/**
-	 * (overridden)
-	 * 
-	 * @see entagged.audioformats.asf.data.Chunk#prettyPrint()
-	 */
-	public String prettyPrint() {
-		StringBuffer result = new StringBuffer(super.prettyPrint());
-		result.insert(0, Utils.LINE_SEPARATOR + "Encoding:"
-				+ Utils.LINE_SEPARATOR);
-		Iterator iterator = this.strings.iterator();
-		while (iterator.hasNext()) {
-			result.append("   " + iterator.next() + Utils.LINE_SEPARATOR);
+    /**
+     * (overridden)
+     *
+     * @see org.jaudiotagger.audio.asf.data.Chunk#prettyPrint()
+     */
+    public String prettyPrint()
+    {
+        StringBuffer result = new StringBuffer(super.prettyPrint());
+        result.insert(0, Utils.LINE_SEPARATOR + "Encoding:"
+                + Utils.LINE_SEPARATOR);
+        Iterator iterator = this.strings.iterator();
+        while (iterator.hasNext())
+        {
+            result.append("   " + iterator.next() + Utils.LINE_SEPARATOR);
 		}
 		return result.toString();
 	}

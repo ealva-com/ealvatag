@@ -1,6 +1,6 @@
 /*
  * Entagged Audio Tag library
- * Copyright (c) 2003-2005 Raphaël Slinckx <raphael@slinckx.net>
+ * Copyright (c) 2003-2005 Raphaï¿½l Slinckx <raphael@slinckx.net>
  * 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -16,34 +16,32 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.jaudiotagger.audio.ogg;
+package org.jaudiotagger.audio.wav;
 
+import org.jaudiotagger.audio.*;
 import org.jaudiotagger.audio.exceptions.*;
-import org.jaudiotagger.audio.generic.AudioFileWriter;
+import org.jaudiotagger.audio.generic.AudioFileReader;
+import org.jaudiotagger.audio.generic.GenericAudioHeader;
+import org.jaudiotagger.audio.generic.GenericTag;
 import org.jaudiotagger.tag.Tag;
+import org.jaudiotagger.audio.wav.util.WavInfoReader;
 
 import java.io.*;
-import java.util.logging.Logger;
 
-/**
- * Write tag data to Ogg File
- * <p/>
- * Only works for Ogg files containing a vorbis stream
- */
-public class OggFileWriter extends AudioFileWriter
+public class WavFileReader extends AudioFileReader
 {
-    // Logger Object
-    public static Logger logger = Logger.getLogger("org.jaudiotagger.audio.ogg");
 
-    private OggVorbisTagWriter vtw = new OggVorbisTagWriter();
+    private WavInfoReader ir = new WavInfoReader();
 
-    protected void writeTag(Tag tag, RandomAccessFile raf, RandomAccessFile rafTemp) throws CannotReadException, CannotWriteException, IOException
+    protected GenericAudioHeader getEncodingInfo(RandomAccessFile raf) throws CannotReadException, IOException
     {
-        vtw.write(tag, raf, rafTemp);
+        return ir.read(raf);
     }
 
-    protected void deleteTag(RandomAccessFile raf, RandomAccessFile tempRaf) throws CannotReadException, CannotWriteException, IOException
+    protected Tag getTag(RandomAccessFile raf) throws CannotReadException
     {
-        vtw.delete(raf, tempRaf);
+        // TODO: Check if returning null is a good idea. Returning null because I know no better.
+        //return null;
+        return new GenericTag();
     }
 }

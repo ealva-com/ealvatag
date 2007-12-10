@@ -280,27 +280,27 @@ public class MP3File extends AudioFile
      * @throws IOException
      * @throws InvalidAudioFrameException
      */
-    private MP3AudioHeader checkAudioStart(long startByte,MP3AudioHeader currentHeader)throws IOException,InvalidAudioFrameException
+    private MP3AudioHeader checkAudioStart(long startByte, MP3AudioHeader currentHeader) throws IOException, InvalidAudioFrameException
     {
         MP3AudioHeader newAudioHeader;
 
-        logger.warning(file.getPath()+"ID3Tag ends at:"+startByte
-            +":but mp3audio doesnt start until:"+currentHeader.getMp3StartByte());
+        logger.warning(file.getPath() + "ID3Tag ends at:" + startByte
+                + ":but mp3audio doesnt start until:" + currentHeader.getMp3StartByte());
 
         //because we cant agree on start location we reread the audioheader from the start of the file, at least
         //this way we cant overwrite the audio although we might overwrtite part of the tag if we write this file
         //back later
-        newAudioHeader = new MP3AudioHeader(file,0);
-        if(currentHeader.getMp3StartByte()==newAudioHeader.getMp3StartByte())
+        newAudioHeader = new MP3AudioHeader(file, 0);
+        if (currentHeader.getMp3StartByte() == newAudioHeader.getMp3StartByte())
         {
             //Although the tag size appears to be incorrect at least we have found the same location for the start
             //of audio whether we start searching from start of file or at the end of the alleged of file
-            logger.warning(file.getPath()+"Using mp3audio start:"+newAudioHeader.getMp3StartByte());
+            logger.warning(file.getPath() + "Using mp3audio start:" + newAudioHeader.getMp3StartByte());
         }
         else
         {
             //We get a different value if read from start, can't gurantee 100% correct
-            logger.warning(file.getPath()+"Recalculated using mp3audio start:"+newAudioHeader.getMp3StartByte());
+            logger.warning(file.getPath() + "Recalculated using mp3audio start:" + newAudioHeader.getMp3StartByte());
         }
 
         return newAudioHeader;
@@ -330,11 +330,11 @@ public class MP3File extends AudioFile
             long startByte = AbstractID3v2Tag.getV2TagSizeIfExists(file);
 
             //If exception reading Mpeg then we should give up no point continuing
-            audioHeader = new MP3AudioHeader(file,startByte);
+            audioHeader = new MP3AudioHeader(file, startByte);
 
-            if(startByte!=((MP3AudioHeader)audioHeader).getMp3StartByte())
+            if (startByte != ((MP3AudioHeader) audioHeader).getMp3StartByte())
             {
-                audioHeader=checkAudioStart(startByte,(MP3AudioHeader)audioHeader);
+                audioHeader = checkAudioStart(startByte, (MP3AudioHeader) audioHeader);
             }
 
             //Read v1 tags (if any)
@@ -347,13 +347,13 @@ public class MP3File extends AudioFile
             //otherwise use nothing
             //TODO:if have both should we merge
             //rather than just returning specific ID3v22 tag, would it be better to return v24 version ?
-            if(this.getID3v2Tag()!=null)
+            if (this.getID3v2Tag() != null)
             {
                 tag = this.getID3v2Tag();
             }
-            else if(id3v1tag!=null)
+            else if (id3v1tag != null)
             {
-                tag=id3v1tag;
+                tag = id3v1tag;
             }
 
             //Read Lyrics 3
@@ -361,7 +361,7 @@ public class MP3File extends AudioFile
         }
         finally
         {
-            if(newFile!=null)
+            if (newFile != null)
             {
                 newFile.close();
             }
@@ -380,10 +380,10 @@ public class MP3File extends AudioFile
             //Read ID3v2 tag size (if tag exists) to allow audioheader parsing to skip over tag
             long startByte = AbstractID3v2Tag.getV2TagSizeIfExists(file);
 
-            MP3AudioHeader audioHeader = new MP3AudioHeader(file,startByte);
-            if(startByte!=audioHeader.getMp3StartByte())
+            MP3AudioHeader audioHeader = new MP3AudioHeader(file, startByte);
+            if (startByte != audioHeader.getMp3StartByte())
             {
-                audioHeader=checkAudioStart(startByte,audioHeader);
+                audioHeader = checkAudioStart(startByte, audioHeader);
             }
             return audioHeader.getMp3StartByte();
         }
@@ -499,7 +499,7 @@ public class MP3File extends AudioFile
     public void setID3v1Tag(Tag id3v1tag)
     {
         logger.info("setting tagv1:v1 tag");
-        this.id3v1tag = (ID3v1Tag)id3v1tag;
+        this.id3v1tag = (ID3v1Tag) id3v1tag;
     }
 
     /**
@@ -582,7 +582,6 @@ public class MP3File extends AudioFile
     }
 
     /**
-     *
      * @return a representation of tag as v24
      */
     public ID3v24Tag getID3v2TagAsv24()
@@ -663,11 +662,11 @@ public class MP3File extends AudioFile
         {
             save();
         }
-        catch(IOException ioe)
+        catch (IOException ioe)
         {
             throw new CannotWriteException(ioe);
         }
-        catch(TagException te)
+        catch (TagException te)
         {
             throw new CannotWriteException(te);
         }
@@ -729,17 +728,17 @@ public class MP3File extends AudioFile
         }
         catch (FileNotFoundException ex)
         {
-            logger.log(Level.SEVERE,file.getAbsolutePath()+ ":Problem writing tags to file,FileNotFoundException", ex.getMessage());
+            logger.log(Level.SEVERE, file.getAbsolutePath() + ":Problem writing tags to file,FileNotFoundException", ex.getMessage());
             throw ex;
         }
         catch (IOException iex)
         {
-            logger.log(Level.SEVERE, file.getAbsolutePath()+":Problem writing tags to file,IOException", iex.getMessage());
+            logger.log(Level.SEVERE, file.getAbsolutePath() + ":Problem writing tags to file,IOException", iex.getMessage());
             throw iex;
         }
-        catch(RuntimeException re)
+        catch (RuntimeException re)
         {
-            logger.log(Level.SEVERE, file.getAbsolutePath()+":Problem writing tags to file,RuntimeException", re.getMessage());
+            logger.log(Level.SEVERE, file.getAbsolutePath() + ":Problem writing tags to file,RuntimeException", re.getMessage());
             throw re;
         }
         finally
@@ -806,20 +805,21 @@ public class MP3File extends AudioFile
 
     /**
      * Set the Tag
+     * <p/>
+     * If the parameter tag is a v1tag then the v1 tag is set if v2tag then the v2tag.
      *
-     * If the parameter tag is a v1tag then the v1 tag is set if v2tag then the v2tag. 
      * @param tag
      */
     public void setTag(Tag tag)
     {
         this.tag = tag;
-        if(tag instanceof ID3v1Tag)
+        if (tag instanceof ID3v1Tag)
         {
-            setID3v1Tag((ID3v1Tag)tag);
+            setID3v1Tag((ID3v1Tag) tag);
         }
         else
         {
-            setID3v2Tag((AbstractID3v2Tag )tag);
+            setID3v2Tag((AbstractID3v2Tag) tag);
         }
 
     }

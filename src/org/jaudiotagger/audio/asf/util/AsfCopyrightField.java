@@ -32,11 +32,11 @@ import org.jaudiotagger.tag.TagTextField;
  * <b>Use: </b> <br>
  * If you want to modify the copyright field of asf files using the entagged
  * audio library, you should access it using this class. <br>
- * You can get a it using {@link entagged.audioformats.Tag#get(String)}. The
+ * You can get a it using {@link org.jaudiotagger.audio.Tag#get(String)}. The
  * argument must be the value of {@link #FIELD_ID}, since the reading facility
  * of asf files will place the copyright there. (consider that the copyright
  * field of asf fils is only supported once, you may place several copyright
- * fields into {@link entagged.audioformats.Tag}, however only the first one
+ * fields into {@link org.jaudiotagger.audio.Tag}, however only the first one
  * will be written.) <br>
  * It is recommended to use the {@link #setString(String)}method if possible
  * because only then you will get feedback of validity checks. If your
@@ -46,13 +46,13 @@ import org.jaudiotagger.tag.TagTextField;
  * value "Conversion Exception occured." will be placed on errors. <br>
  * <b>Alternative: </b> <br>
  * You can use your own implementation of
- * {@link entagged.audioformats.generic.TagField}, then you must remember using
+ * {@link org.jaudiotagger.audio.generic.TagField}, then you must remember using
  * {@link #FIELD_ID}as the "ID", since the asf writing methods will look at
  * that for writing the file. Additional isCommon() must return
  * <code>true</code><br>
  * <b>Example </b>: <br>
  * <i>Reading copyright </i> <br>
- * 
+ * <p/>
  * <pre>
  * <code>
  * AudioFile file = AudioFileIO.read(new File(&quot;/somewhere/test.wma&quot;));
@@ -61,13 +61,13 @@ import org.jaudiotagger.tag.TagTextField;
  * // Will be null, if no copyright is specified.
  * if (copyright != null)
  * 	System.out.println(copyright.getContent());
- * </code> 
+ * </code>
  * </pre>
- * 
+ * <p/>
  * <br>
  * <br>
  * <i>Modifying copyright </i> <br>
- * 
+ * <p/>
  * <pre>
  * <code>
  * AudioFile file = AudioFileIO.read(new File(&quot;/somewhere/test.wma&quot;));
@@ -80,13 +80,13 @@ import org.jaudiotagger.tag.TagTextField;
  * 	copyright.setContent(&quot;It belongs to me now.&quot;);
  * }
  * AudioFileIO.write(file);
- * </code> 
+ * </code>
  * </pre>
- * 
+ * <p/>
  * <br>
  * <br>
  * <i>Creating new copyright </i> <br>
- * 
+ * <p/>
  * <pre>
  * <code>
  * AudioFile file = AudioFileIO.read(new File(&quot;/somewhere/test.wma&quot;));
@@ -97,13 +97,13 @@ import org.jaudiotagger.tag.TagTextField;
  * // Add the new field
  * file.getTag().set(copyright);
  * AudioFileIO.write(file);
- * </code> 
+ * </code>
  * </pre>
- * 
+ * <p/>
  * <br>
  * <br>
  * <i>Delete copyright </i> <br>
- * 
+ * <p/>
  * <pre>
  * <code>
  * AudioFile file = AudioFileIO.read(new File(&quot;/somewhere/test.wma&quot;));
@@ -112,9 +112,9 @@ import org.jaudiotagger.tag.TagTextField;
  * // Without a value, the field will be deleted.
  * file.getTag().set(copyright);
  * AudioFileIO.write(file);
- * </code> 
+ * </code>
  * </pre>
- * 
+ * <p/>
  * <br>
  * <br>
  * <br>
@@ -123,15 +123,16 @@ import org.jaudiotagger.tag.TagTextField;
  * This class's method {@link #isCommon()}will always return <code>true</code>,
  * so that the represented value will not be handled as a
  * "name"-"value"-property. The
- * {@link entagged.audioformats.asf.util.TagConverter}will identify this field
+ * {@link org.jaudiotagger.audio.asf.util.TagConverter}will identify this field
  * at
- * {@link entagged.audioformats.asf.util.TagConverter#createContentDescription(Tag)}
+ * {@link org.jaudiotagger.audio.asf.util.TagConverter#createContentDescription(Tag)}
  * and place the value into the corresponding java object (
- * {@link entagged.audioformats.asf.data.ContentDescription}).
- * 
+ * {@link org.jaudiotagger.audio.asf.data.ContentDescription}).
+ *
  * @author Christian Laireiter
  */
-public final class AsfCopyrightField implements TagTextField {
+public final class AsfCopyrightField implements TagTextField
+{
 
     /**
      * This constant represents the field id of the currently represented
@@ -144,18 +145,19 @@ public final class AsfCopyrightField implements TagTextField {
      * This method should help programmers to extract the copyright field out of
      * asf files. <br>
      *
-     * @param tag
-     *            The tag which contains the copyright field.
-     *
+     * @param tag The tag which contains the copyright field.
      * @return <code>null</code> if the tag represents a file which is not a
      *         asf file, or no copyright has been entered.
      */
-    public static TagTextField getCopyright(Tag tag) {
+    public static TagTextField getCopyright(Tag tag)
+    {
         TagTextField result = null;
         List list = tag.get(FIELD_ID);
-        if (list != null && list.size() > 0) {
+        if (list != null && list.size() > 0)
+        {
             TagField field = (TagField) list.get(0);
-            if (field instanceof TagTextField) {
+            if (field instanceof TagTextField)
+            {
                 result = (TagTextField) field;
             }
         }
@@ -171,10 +173,12 @@ public final class AsfCopyrightField implements TagTextField {
     /**
      * (overridden)
      *
-     * @see entagged.audioformats.generic.TagField#copyContent(entagged.audioformats.generic.TagField)
+     * @see org.jaudiotagger.audio.generic.TagField#copyContent(org.jaudiotagger.audio.generic.TagField)
      */
-    public void copyContent(TagField field) {
-        if (field instanceof TagTextField) {
+    public void copyContent(TagField field)
+    {
+        if (field instanceof TagTextField)
+        {
             value = ((TagTextField) field).getContent();
         }
     }
@@ -182,55 +186,62 @@ public final class AsfCopyrightField implements TagTextField {
     /**
      * (overridden)
      *
-     * @see entagged.audioformats.generic.TagTextField#getContent()
+     * @see org.jaudiotagger.audio.generic.TagTextField#getContent()
      */
-    public String getContent() {
+    public String getContent()
+    {
         return value;
     }
 
     /**
      * (overridden)
      *
-     * @see entagged.audioformats.generic.TagTextField#getEncoding()
+     * @see org.jaudiotagger.audio.generic.TagTextField#getEncoding()
      */
-    public String getEncoding() {
+    public String getEncoding()
+    {
         return "UTF-16LE";
     }
 
     /**
      * (overridden) Will return {@link #FIELD_ID}.
      *
-     * @see entagged.audioformats.generic.TagField#getId()
+     * @see org.jaudiotagger.audio.generic.TagField#getId()
      */
-    public String getId() {
+    public String getId()
+    {
         return FIELD_ID;
     }
 
     /**
      * (overridden)
      *
-     * @see entagged.audioformats.generic.TagField#getRawContent()
+     * @see org.jaudiotagger.audio.generic.TagField#getRawContent()
      */
-    public byte[] getRawContent() throws UnsupportedEncodingException {
+    public byte[] getRawContent() throws UnsupportedEncodingException
+    {
         return value.getBytes("UTF-16LE");
     }
 
     /**
      * (overridden)
      *
-     * @see entagged.audioformats.generic.TagField#isBinary()
+     * @see org.jaudiotagger.audio.generic.TagField#isBinary()
      */
-    public boolean isBinary() {
+    public boolean isBinary()
+    {
         return false;
     }
 
     /**
      * (overridden)
      *
-     * @see entagged.audioformats.generic.TagField#isBinary(boolean)
+     * @see org.jaudiotagger.audio.generic.TagField#isBinary(boolean)
      */
-    public void isBinary(boolean b) {
-        if (b) {
+    public void isBinary(boolean b)
+    {
+        if (b)
+        {
             throw new UnsupportedOperationException(
                     "No conversion supported. Copyright is a String");
         }
@@ -242,11 +253,11 @@ public final class AsfCopyrightField implements TagTextField {
      * are stored. <br>
      *
      * @see TagConverter#assignOptionalTagValues(Tag,
-     *      ExtendedContentDescription)
-     *
-     * @see entagged.audioformats.generic.TagField#isCommon()
+     *ExtendedContentDescription)
+     * @see org.jaudiotagger.audio.generic.TagField#isCommon()
      */
-    public boolean isCommon() {
+    public boolean isCommon()
+    {
         // Return true, to let this field be ignored at assignOptionalTagValues
         return true;
     }
@@ -254,21 +265,25 @@ public final class AsfCopyrightField implements TagTextField {
     /**
      * (overridden)
      *
-     * @see entagged.audioformats.generic.TagField#isEmpty()
+     * @see org.jaudiotagger.audio.generic.TagField#isEmpty()
      */
-    public boolean isEmpty() {
+    public boolean isEmpty()
+    {
         return value.length() == 0;
     }
 
     /**
      * (overridden)
      *
-     * @see entagged.audioformats.generic.TagTextField#setContent(java.lang.String)
+     * @see org.jaudiotagger.audio.generic.TagTextField#setContent(java.lang.String)
      */
-    public void setContent(String s) {
-        try {
+    public void setContent(String s)
+    {
+        try
+        {
             setString(s);
-        } catch (IllegalArgumentException iae) {
+        } catch (IllegalArgumentException iae)
+        {
             iae.printStackTrace();
             value = "Conversion Exception occured.";
         }
@@ -277,13 +292,16 @@ public final class AsfCopyrightField implements TagTextField {
     /**
      * (overridden)
      *
-     * @see entagged.audioformats.generic.TagTextField#setEncoding(java.lang.String)
+     * @see org.jaudiotagger.audio.generic.TagTextField#setEncoding(java.lang.String)
      */
-    public void setEncoding(String s) {
+    public void setEncoding(String s)
+    {
         if (s == null || !s.equalsIgnoreCase("UTF-16LE"))
+        {
             throw new UnsupportedOperationException(
                     "The encoding of Asf tags cannot be "
                             + "changed.(specified to be UTF-16LE)");
+        }
     }
 
     /**
@@ -294,14 +312,12 @@ public final class AsfCopyrightField implements TagTextField {
      * bytes including the zero termination character and they must be stored in
      * "UTF-16LE" encoding.
      *
-     * @param s
-     *            The new copyright.
-     *
-     * @throws IllegalArgumentException
-     *             If the size of the value would exceed 65535 bytes in UTF-16LE
-     *             encoding including two bytes for zero termination.
+     * @param s The new copyright.
+     * @throws IllegalArgumentException If the size of the value would exceed 65535 bytes in UTF-16LE
+     *                                  encoding including two bytes for zero termination.
      */
-    public void setString(String s) {
+    public void setString(String s)
+    {
         value = s;
         Utils.checkStringLengthNullSafe(value);
     }
@@ -309,9 +325,10 @@ public final class AsfCopyrightField implements TagTextField {
     /**
      * (overridden)
      *
-     * @see entagged.audioformats.generic.TagField#toString()
+     * @see org.jaudiotagger.audio.generic.TagField#toString()
      */
-    public String toString() {
+    public String toString()
+    {
         return FIELD_ID + ":\"" + getContent() + "\"";
     }
 }

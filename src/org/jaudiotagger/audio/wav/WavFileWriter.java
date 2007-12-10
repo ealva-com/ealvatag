@@ -1,6 +1,6 @@
 /*
  * Entagged Audio Tag library
- * Copyright (c) 2003-2005 Raphaël Slinckx <raphael@slinckx.net>
+ * Copyright (c) 2003-2005 Raphaï¿½l Slinckx <raphael@slinckx.net>
  * 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -16,34 +16,23 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.jaudiotagger.audio.ogg;
+package org.jaudiotagger.audio.wav;
 
 import org.jaudiotagger.audio.exceptions.*;
 import org.jaudiotagger.audio.generic.AudioFileWriter;
 import org.jaudiotagger.tag.Tag;
 
 import java.io.*;
-import java.util.logging.Logger;
 
-/**
- * Write tag data to Ogg File
- * <p/>
- * Only works for Ogg files containing a vorbis stream
- */
-public class OggFileWriter extends AudioFileWriter
+public class WavFileWriter extends AudioFileWriter
 {
-    // Logger Object
-    public static Logger logger = Logger.getLogger("org.jaudiotagger.audio.ogg");
-
-    private OggVorbisTagWriter vtw = new OggVorbisTagWriter();
-
-    protected void writeTag(Tag tag, RandomAccessFile raf, RandomAccessFile rafTemp) throws CannotReadException, CannotWriteException, IOException
+    protected void writeTag(Tag tag, RandomAccessFile raf, RandomAccessFile rafTemp) throws CannotWriteException, IOException
     {
-        vtw.write(tag, raf, rafTemp);
+        //Nothing to do for wav file, no tag are supported
     }
 
-    protected void deleteTag(RandomAccessFile raf, RandomAccessFile tempRaf) throws CannotReadException, CannotWriteException, IOException
+    protected void deleteTag(RandomAccessFile raf, RandomAccessFile tempRaf) throws CannotWriteException, IOException
     {
-        vtw.delete(raf, tempRaf);
+        //Nothing to do for wav file, no tag are supported
     }
 }

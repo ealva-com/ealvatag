@@ -28,7 +28,7 @@ import org.jaudiotagger.audio.mp4.Mp4TagWriter;
 
 /**
  * Mp4 File Writer
- *
+ * <p/>
  * <p>This can write files containing either the .mp4 or .m4a suffixes
  */
 public class Mp4FileWriter extends AudioFileWriter

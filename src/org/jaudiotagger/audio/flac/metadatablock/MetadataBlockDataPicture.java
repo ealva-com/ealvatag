@@ -17,7 +17,7 @@ import java.util.logging.Logger;
 
 /**
  * Picture Block
- * 
+ * <p/>
  * <p/>
  * <p>This block is for storing pictures associated with the file, most commonly cover art from CDs.
  * There may be more than one PICTURE block in a file. The picture format is similar to the APIC frame in ID3v2.
@@ -44,14 +44,14 @@ public class MetadataBlockDataPicture implements MetadataBlockData, TagField
 {
     public static final String IMAGE_IS_URL = "-->";
 
-    private int     pictureType;
-    private String  mimeType;
-    private String  description;
-    private int     width;
-    private int     height;
-    private int     colourDepth;
-    private int     indexedColouredCount;
-    private byte[]  imageData;
+    private int pictureType;
+    private String mimeType;
+    private String description;
+    private int width;
+    private int height;
+    private int colourDepth;
+    private int indexedColouredCount;
+    private byte[] imageData;
 
     // Logger Object
     public static Logger logger = Logger.getLogger("org.jaudiotagger.audio.flac.MetadataBlockDataPicture");
@@ -60,31 +60,31 @@ public class MetadataBlockDataPicture implements MetadataBlockData, TagField
      * Construct picture block by reading from file
      */
     //TODO check for buffer underflows see http://research.eeye.com/html/advisories/published/AD20071115.html
-    public MetadataBlockDataPicture( MetadataBlockHeader header,RandomAccessFile raf)
-    throws IOException,InvalidFrameException
+    public MetadataBlockDataPicture(MetadataBlockHeader header, RandomAccessFile raf)
+            throws IOException, InvalidFrameException
     {
         ByteBuffer rawdata = ByteBuffer.allocate(header.getDataLength());
         int bytesRead = raf.getChannel().read(rawdata);
-        if(bytesRead<header.getDataLength())
+        if (bytesRead < header.getDataLength())
         {
-            throw new IOException("Unable to read required number of databytes read:"+bytesRead+":required:"+header.getDataLength());
+            throw new IOException("Unable to read required number of databytes read:" + bytesRead + ":required:" + header.getDataLength());
         }
         rawdata.rewind();
 
         //Picture Type
         pictureType = rawdata.getInt();
-        if(pictureType>= PictureTypes.getInstanceOf().getSize())
+        if (pictureType >= PictureTypes.getInstanceOf().getSize())
         {
-            throw new InvalidFrameException("PictureType was:"+pictureType+"but the maximum allowed is "+(PictureTypes.getInstanceOf().getSize()-1));
+            throw new InvalidFrameException("PictureType was:" + pictureType + "but the maximum allowed is " + (PictureTypes.getInstanceOf().getSize() - 1));
         }
 
         //MimeType
         int mimeTypeSize = rawdata.getInt();
-        mimeType = getString(rawdata,mimeTypeSize,"ISO-8859-1");
+        mimeType = getString(rawdata, mimeTypeSize, "ISO-8859-1");
 
         //Description
         int descriptionSize = rawdata.getInt();
-        description = getString(rawdata,descriptionSize,"UTF-8");
+        description = getString(rawdata, descriptionSize, "UTF-8");
 
         //Image width
         width = rawdata.getInt();
@@ -100,16 +100,16 @@ public class MetadataBlockDataPicture implements MetadataBlockData, TagField
 
         //ImageData
         int rawdataSize = rawdata.getInt();
-        imageData= new byte[rawdataSize];
+        imageData = new byte[rawdataSize];
         rawdata.get(imageData);
 
-        logger.info("Read image:"+this.toString());
+        logger.info("Read image:" + this.toString());
 
     }
 
-    /** Construct new MetadataPicture block
-    *
-    */
+    /**
+     * Construct new MetadataPicture block
+     */
     public MetadataBlockDataPicture(byte[] imageData,
                                     int pictureType,
                                     String mimeType,
@@ -139,7 +139,7 @@ public class MetadataBlockDataPicture implements MetadataBlockData, TagField
         this.imageData = imageData;
     }
 
-    private String getString(ByteBuffer rawdata,int length,String charset)throws IOException
+    private String getString(ByteBuffer rawdata, int length, String charset) throws IOException
     {
         byte[] tempbuffer = new byte[length];
         rawdata.get(tempbuffer);
@@ -162,10 +162,10 @@ public class MetadataBlockDataPicture implements MetadataBlockData, TagField
             baos.write(Utils.getSizeBigEndian(indexedColouredCount));
             baos.write(Utils.getSizeBigEndian(imageData.length));
             baos.write(imageData);
-            return  baos.toByteArray();
+            return baos.toByteArray();
 
         }
-        catch(IOException ioe)
+        catch (IOException ioe)
         {
             throw new RuntimeException(ioe.getMessage());
         }
@@ -206,7 +206,7 @@ public class MetadataBlockDataPicture implements MetadataBlockData, TagField
         return colourDepth;
     }
 
-     public int getIndexedColourCount()
+    public int getIndexedColourCount()
     {
         return indexedColouredCount;
     }
@@ -217,7 +217,6 @@ public class MetadataBlockDataPicture implements MetadataBlockData, TagField
     }
 
     /**
-     *
      * @return true if imagedata  is held as a url rather than actually being imagedata
      */
     public boolean isImageUrl()
@@ -226,14 +225,13 @@ public class MetadataBlockDataPicture implements MetadataBlockData, TagField
     }
 
     /**
-     *
      * @return the image url if there is otherwise return an empty String
      */
     public String getImageUrl()
     {
-        if(isImageUrl())
+        if (isImageUrl())
         {
-            return Utils.getString(getImageData(),0,getImageData().length, TextEncoding.CHARSET_ISO_8859_1);
+            return Utils.getString(getImageData(), 0, getImageData().length, TextEncoding.CHARSET_ISO_8859_1);
         }
         else
         {
@@ -243,106 +241,104 @@ public class MetadataBlockDataPicture implements MetadataBlockData, TagField
 
     public String toString()
     {
-        return  PictureTypes.getInstanceOf().getValueForId(pictureType) + ":" +
+        return PictureTypes.getInstanceOf().getValueForId(pictureType) + ":" +
                 mimeType + ":" +
                 description + ":" +
                 "width:" + width +
-                ":height:"+ height +
-                ":colourdepth:"+ colourDepth +
+                ":height:" + height +
+                ":colourdepth:" + colourDepth +
                 ":indexedColourCount:" + indexedColouredCount +
                 ":image size in bytes:" + imageData.length;
     }
 
     /**
-	 * This method copies the data of the given field to the current data.<br>
-	 *
-	 * @param field
-	 *            The field containing the data to be taken.
-	 */
-	public void copyContent(TagField field)
+     * This method copies the data of the given field to the current data.<br>
+     *
+     * @param field The field containing the data to be taken.
+     */
+    public void copyContent(TagField field)
     {
         throw new UnsupportedOperationException();
     }
 
     /**
-	 * Returns the Id of the represented tag field.<br>
-	 * This value should uniquely identify a kind of tag data, like title.
-	 * {@link org.jaudiotagger.audio.generic.AbstractTag} will use the &quot;id&quot; to summarize multiple
-	 * fields.
-	 *
-	 * @return Unique identifier for the fields type. (title, artist...)
-	 */
-	public String getId()
+     * Returns the Id of the represented tag field.<br>
+     * This value should uniquely identify a kind of tag data, like title.
+     * {@link org.jaudiotagger.audio.generic.AbstractTag} will use the &quot;id&quot; to summarize multiple
+     * fields.
+     *
+     * @return Unique identifier for the fields type. (title, artist...)
+     */
+    public String getId()
     {
         return TagFieldKey.COVER_ART.name();
     }
 
     /**
-	 * This method delivers the binary representation of the fields data in
-	 * order to be directly written to the file.<br>
-	 *
-	 * @return Binary data representing the current tag field.<br>
-	 * @throws java.io.UnsupportedEncodingException
-     *             Most tag data represents text. In some cases the underlying
-	 *             implementation will need to convert the text data in java to
-	 *             a specific charset encoding. In these cases an
-	 *             {@link java.io.UnsupportedEncodingException} may occur.
-	 */
-	public byte[] getRawContent() throws UnsupportedEncodingException
+     * This method delivers the binary representation of the fields data in
+     * order to be directly written to the file.<br>
+     *
+     * @return Binary data representing the current tag field.<br>
+     * @throws java.io.UnsupportedEncodingException
+     *          Most tag data represents text. In some cases the underlying
+     *          implementation will need to convert the text data in java to
+     *          a specific charset encoding. In these cases an
+     *          {@link java.io.UnsupportedEncodingException} may occur.
+     */
+    public byte[] getRawContent() throws UnsupportedEncodingException
     {
         return getBytes();
     }
 
     /**
-	 * Determines whether the represented field contains (is made up of) binary
-	 * data, instead of text data.<br>
-	 * Software can identify fields to be displayed because they are human
-	 * readable if this method returns <code>false</code>.
-	 *
-	 * @return <code>true</code> if field represents binary data (not human
-	 *         readable).
-	 */
-	public boolean isBinary()
+     * Determines whether the represented field contains (is made up of) binary
+     * data, instead of text data.<br>
+     * Software can identify fields to be displayed because they are human
+     * readable if this method returns <code>false</code>.
+     *
+     * @return <code>true</code> if field represents binary data (not human
+     *         readable).
+     */
+    public boolean isBinary()
     {
         return true;
     }
 
     /**
-	 * This method will set the field to represent binary data.<br>
+     * This method will set the field to represent binary data.<br>
+     * <p/>
+     * Some implementations may support conversions.<br>
+     * As of now (Octobre 2005) there is no implementation really using this
+     * method to perform useful operations.
      *
-	 * Some implementations may support conversions.<br>
-	 * As of now (Octobre 2005) there is no implementation really using this
-	 * method to perform useful operations.
-	 *
-	 * @param b
-	 *            <code>true</code>, if the field contains binary data.
-	 * @deprecated As for now is of no use. Implementations should use another
-	 *             way of setting this property.
-	 */
-	public void isBinary(boolean b)
+     * @param b <code>true</code>, if the field contains binary data.
+     * @deprecated As for now is of no use. Implementations should use another
+     *             way of setting this property.
+     */
+    public void isBinary(boolean b)
     {
         //Do nothing, always true
     }
 
     /**
-	 * Identifies a field to be of common use.<br>
+     * Identifies a field to be of common use.<br>
+     * <p/>
+     * Some software may differ between common and not common fields. A common
+     * one is for sure the title field. A web link may not be of common use for
+     * tagging. However some file formats, or future development of users
+     * expectations will make more fields common than now can be known.
      *
-	 * Some software may differ between common and not common fields. A common
-	 * one is for sure the title field. A web link may not be of common use for
-	 * tagging. However some file formats, or future development of users
-	 * expectations will make more fields common than now can be known.
-	 *
-	 * @return <code>true</code> if the field is of common use.
-	 */
-	public boolean isCommon()
+     * @return <code>true</code> if the field is of common use.
+     */
+    public boolean isCommon()
     {
         return true;
     }
 
     /**
-	 * Determines whether the content of the field is empty.<br>
-	 *
-	 * @return <code>true</code> if no data is stored (or empty String).
+     * Determines whether the content of the field is empty.<br>
+     *
+     * @return <code>true</code> if no data is stored (or empty String).
 	 */
 	public boolean isEmpty()
     {

@@ -75,10 +75,10 @@ public class XMLTagDisplayFormatter extends AbstractTagDisplayFormatter
         {
             tempChar = xmlData.charAt(i);
             if (
-                (Character.isLetterOrDigit(tempChar) == true)
-                ||
-                (Character.isSpaceChar(tempChar) == true)
-            )
+                    (Character.isLetterOrDigit(tempChar) == true)
+                            ||
+                            (Character.isSpaceChar(tempChar) == true)
+                    )
             {
                 replacedString.append(tempChar);
             }
@@ -106,10 +106,9 @@ public class XMLTagDisplayFormatter extends AbstractTagDisplayFormatter
     public static String xmlFullTag(String xmlName, String data)
     {
         return xmlOpen(xmlName)
-            + xmlCData(data)
-            + xmlClose(xmlName);
+                + xmlCData(data)
+                + xmlClose(xmlName);
     }
-
 
 
     public void openHeadingElement(String type, String value)
@@ -159,7 +158,6 @@ public class XMLTagDisplayFormatter extends AbstractTagDisplayFormatter
         return sb.toString();
     }
 
-   
 
     /**
      * Replace any special xml characters with the appropiate escape sequences
@@ -173,19 +171,19 @@ public class XMLTagDisplayFormatter extends AbstractTagDisplayFormatter
         {
             switch (c)
             {
-                case '&':
+                case'&':
                     sb.append("&amp;");
                     break;
-                case '<':
+                case'<':
                     sb.append("&lt;");
                     break;
-                case '>':
+                case'>':
                     sb.append("&gt;");
                     break;
-                case '"':
+                case'"':
                     sb.append("&quot;");
                     break;
-                case '\'':
+                case'\'':
                     sb.append("&apos;");
                     break;
 

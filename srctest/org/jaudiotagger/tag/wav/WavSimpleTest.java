@@ -1,11 +1,9 @@
-package org.jaudiotagger.tag.wma;
+package org.jaudiotagger.tag.wav;
 
 import org.jaudiotagger.AbstractTestCase;
-import org.jaudiotagger.tag.flac.FlacTag;
 import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.AudioFileIO;
 import org.jaudiotagger.audio.generic.GenericTag;
-import org.jaudiotagger.audio.flac.FlacInfoReader;
 
 import java.io.File;
 
@@ -13,34 +11,34 @@ import java.io.File;
  * User: paul
  * Date: 07-Dec-2007
  */
-public class WmaSimpleTest extends AbstractTestCase
+public class WavSimpleTest extends AbstractTestCase
 {
      public void testReadFile()
     {
         Exception exceptionCaught = null;
         try
         {
-            File testFile = AbstractTestCase.copyAudioToTmp("test1.wma");
+            File testFile = AbstractTestCase.copyAudioToTmp("test.wav");
             AudioFile f = AudioFileIO.read(testFile);
 
-            assertEquals("32",f.getAudioHeader().getBitRate());
-            assertEquals("ASF (audio): 0x0161 (Windows Media Audio (ver 7,8,9))",f.getAudioHeader().getEncodingType());
-            assertEquals("2",f.getAudioHeader().getChannels());
-            assertEquals("32000",f.getAudioHeader().getSampleRate());
+            assertEquals("176",f.getAudioHeader().getBitRate());
+            assertEquals("WAV-RIFF 8 bits",f.getAudioHeader().getEncodingType());
+            assertEquals("1",f.getAudioHeader().getChannels());
+            assertEquals("22050",f.getAudioHeader().getSampleRate());
 
 
-            assertTrue(f.getTag() instanceof GenericTag);        //TODO Flawed concept hould be asftag
+            assertTrue(f.getTag() instanceof GenericTag);        //TODO Flawed concept should be asftag
             GenericTag tag = (GenericTag)f.getTag();
 
 
               //Ease of use methods for common fields
-            assertEquals("artist", tag.getFirstArtist());
-            assertEquals("album", tag.getFirstAlbum());
-            assertEquals("tracktitle", tag.getFirstTitle());
-            assertEquals("comments", tag.getFirstComment());
-            assertEquals("1971", tag.getFirstYear());
-            assertEquals("3", tag.getFirstTrack());
-            assertEquals("genre", tag.getFirstGenre());
+            assertEquals("", tag.getFirstArtist());
+            assertEquals("", tag.getFirstAlbum());
+            assertEquals("", tag.getFirstTitle());
+            assertEquals("", tag.getFirstComment());
+            assertEquals("", tag.getFirstYear());
+            assertEquals("", tag.getFirstTrack());
+            assertEquals("", tag.getFirstGenre());
         }
         catch(Exception e)
         {
@@ -55,16 +53,16 @@ public class WmaSimpleTest extends AbstractTestCase
         Exception exceptionCaught = null;
         try
         {
-            File testFile = AbstractTestCase.copyAudioToTmp("test1.wma",new File("testwrite1.wma"));
+            File testFile = AbstractTestCase.copyAudioToTmp("test.wav",new File("testwrite1.wav"));
             AudioFile f = AudioFileIO.read(testFile);
 
-            assertEquals("32",f.getAudioHeader().getBitRate());
-            assertEquals("ASF (audio): 0x0161 (Windows Media Audio (ver 7,8,9))",f.getAudioHeader().getEncodingType());
-            assertEquals("2",f.getAudioHeader().getChannels());
-            assertEquals("32000",f.getAudioHeader().getSampleRate());
+            assertEquals("176",f.getAudioHeader().getBitRate());
+            assertEquals("WAV-RIFF 8 bits",f.getAudioHeader().getEncodingType());
+            assertEquals("1",f.getAudioHeader().getChannels());
+            assertEquals("22050",f.getAudioHeader().getSampleRate());
 
 
-            assertTrue(f.getTag() instanceof GenericTag);        //TODO Flawed sconcept hould be asftag
+            assertTrue(f.getTag() instanceof GenericTag);        //TODO Flawed concept hould be wavtag
             GenericTag tag = (GenericTag)f.getTag();
 
             //Write some new values and save

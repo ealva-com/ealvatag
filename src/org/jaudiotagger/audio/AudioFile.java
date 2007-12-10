@@ -36,9 +36,9 @@ import org.jaudiotagger.tag.Tag;
  *
  * @author Raphael Slinckx
  * @version $Id$
+ * @see AudioFileIO
+ * @see Tag
  * @since v0.01
- * @see    AudioFileIO
- * @see    Tag
  */
 public class AudioFile
 {
@@ -69,13 +69,13 @@ public class AudioFile
      * <p>These constructors are used by the different readers, users should not use them, but use the <code>AudioFileIO.read(File)</code> method instead !.</p>
      * <p>Create the AudioFile representing file f, the encodingaudioHeaders and containing the tag</p>
      *
-     * @param    f    The file of the audiofile
-     * @param    audioHeader    the encoding audioHeaders over this file
-     * @param    tag    the tag contained in this file or null if no tag exists
+     * @param f           The file of the audiofile
+     * @param audioHeader the encoding audioHeaders over this file
+     * @param tag         the tag contained in this file or null if no tag exists
      */
     public AudioFile(File f, AudioHeader audioHeader, Tag tag)
     {
-        this.file=f;
+        this.file = f;
         this.audioHeader = audioHeader;
         this.tag = tag;
     }
@@ -85,13 +85,13 @@ public class AudioFile
      * <p>These constructors are used by the different readers, users should not use them, but use the <code>AudioFileIO.read(File)</code> method instead !.</p>
      * <p>Create the AudioFile representing file denoted by pathname s, the encodingaudioHeaders and containing the tag</p>
      *
-     * @param    s    The pathname of the audiofile
-     * @param    audioHeader    the encoding audioHeaders over this file
-     * @param    tag    the tag contained in this file
+     * @param s           The pathname of the audiofile
+     * @param audioHeader the encoding audioHeaders over this file
+     * @param tag         the tag contained in this file
      */
     public AudioFile(String s, AudioHeader audioHeader, Tag tag)
     {
-        this.file=new File(s);
+        this.file = new File(s);
         this.audioHeader = audioHeader;
         this.tag = tag;
     }
@@ -144,7 +144,7 @@ public class AudioFile
      * <p>Returns the tag contained in this AudioFile, the <code>Tag</code> contains any useful meta-data, like
      * artist, album, title, etc. If the file does not contain any tag the null is returned. Some audio formats do
      * not allow there to be no tag so in this case the reader would return an empty tag whereas for others such
-     * as mp3 it is purely optional. 
+     * as mp3 it is purely optional.
      *
      * @return Returns the tag contained in this AudioFile, or null if no tag exists.
      */
@@ -157,12 +157,12 @@ public class AudioFile
      * <p>Returns a multi-line string with the file path, the encoding audioHeaderrmations, and the tag contents.</p>
      *
      * @return A multi-line string with the file path, the encoding audioHeaderrmations, and the tag contents.
-     * TODO Maybe this can be changed ?
+     *         TODO Maybe this can be changed ?
      */
     public String toString()
     {
         return "AudioFile " + getFile().getAbsolutePath()
-            + "  --------\n" + audioHeader.toString() + "\n" + ((tag == null) ? "" : tag.toString()) + "\n-------------------";
+                + "  --------\n" + audioHeader.toString() + "\n" + ((tag == null) ? "" : tag.toString()) + "\n-------------------";
     }
 
     /**
@@ -201,25 +201,25 @@ public class AudioFile
         return newFile;
     }
 
-   /**
-    * Optional debugging method
-    *
-    * @return
-    */
-    public  String displayStructureAsXML()
+    /**
+     * Optional debugging method
+     *
+     * @return
+     */
+    public String displayStructureAsXML()
     {
         return "";
     }
 
-   /**
-    * Optional debugging method
-    *
-    * @return
-    */
-    public  String displayStructureAsPlainText()
-   {
-       return "";
-   }
+    /**
+     * Optional debugging method
+     *
+     * @return
+     */
+    public String displayStructureAsPlainText()
+    {
+        return "";
+    }
 
 
 }

@@ -30,13 +30,12 @@ public class MP3FileReader extends AudioFileReader
     }
 
     /**
-     *
      * @param f
      * @return
      */
     //Override because we read mp3s differently to the entagged code
     public AudioFile read(File f)
-        throws IOException, TagException, ReadOnlyFileException, InvalidAudioFrameException
+            throws IOException, TagException, ReadOnlyFileException, InvalidAudioFrameException
     {
         MP3File mp3File = new MP3File(f, MP3File.LOAD_IDV1TAG | MP3File.LOAD_IDV2TAG);
         return mp3File;

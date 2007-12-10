@@ -11,13 +11,14 @@ public enum SupportedFileFormat
     MP4("mp4"),
     M4A("m4a"),
     M4P("m4p"),
-    WMA("wma");
+    WMA("wma"),
+    WAV("wav");
 
     private String filesuffix;
 
     SupportedFileFormat(String filesuffix)
     {
-        this.filesuffix=filesuffix;
+        this.filesuffix = filesuffix;
     }
 
     public String getFilesuffix()

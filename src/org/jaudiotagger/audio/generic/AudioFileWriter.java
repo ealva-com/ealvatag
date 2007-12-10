@@ -31,7 +31,7 @@ import org.jaudiotagger.audio.exceptions.CannotReadException;
 
 /**
  * This abstract class is the skeleton for tag writers.
- *
+ * <p/>
  * <p>It handles the creation/closing of the randomaccessfile objects and then call the subclass
  * method writeTag or deleteTag. These two method have to be implemented in the
  * subclass.
@@ -43,7 +43,7 @@ import org.jaudiotagger.audio.exceptions.CannotReadException;
 public abstract class AudioFileWriter
 {
 
-     // Logger Object
+    // Logger Object
     public static Logger logger = Logger.getLogger("org.jaudiotagger.audio.generic");
 
     /**
@@ -58,7 +58,7 @@ public abstract class AudioFileWriter
      * @param f The file to process
      * @throws CannotWriteException if anything went wrong
      */
-    public synchronized void delete(AudioFile f) throws CannotReadException,CannotWriteException
+    public synchronized void delete(AudioFile f) throws CannotReadException, CannotWriteException
     {
         if (!f.getFile().canWrite())
         {
@@ -155,7 +155,7 @@ public abstract class AudioFileWriter
      * @param tempRaf The temporary file opened in r-write mode
      * @throws CannotWriteException if anything went wrong
      */
-    public synchronized void delete(RandomAccessFile raf, RandomAccessFile tempRaf) throws CannotReadException,CannotWriteException, IOException
+    public synchronized void delete(RandomAccessFile raf, RandomAccessFile tempRaf) throws CannotReadException, CannotWriteException, IOException
     {
         raf.seek(0);
         tempRaf.seek(0);
@@ -169,7 +169,7 @@ public abstract class AudioFileWriter
      *                              (you should never throw them manually)
      * @throws CannotWriteException when an error occured during the deletion of the tag
      */
-    protected abstract void deleteTag(RandomAccessFile raf, RandomAccessFile tempRaf) throws CannotReadException,CannotWriteException, IOException;
+    protected abstract void deleteTag(RandomAccessFile raf, RandomAccessFile tempRaf) throws CannotReadException, CannotWriteException, IOException;
 
     /**
      * This method sets the {@link AudioFileModificationListener}.<br>
@@ -192,7 +192,7 @@ public abstract class AudioFileWriter
      */
     public synchronized void write(AudioFile af) throws CannotWriteException
     {
-        logger.info("Started writing tag data for file:"+af.getFile().getName());
+        logger.info("Started writing tag data for file:" + af.getFile().getName());
 
         // Preliminary checks
         try
@@ -203,9 +203,9 @@ public abstract class AudioFileWriter
                 return;
             }
         }
-        catch(CannotReadException re)
+        catch (CannotReadException re)
         {
-             throw new CannotWriteException("Can't write to file \"" + af.getFile().getAbsolutePath() + "\"");
+            throw new CannotWriteException("Can't write to file \"" + af.getFile().getAbsolutePath() + "\"");
         }
 
         if (!af.getFile().canWrite())
@@ -218,7 +218,7 @@ public abstract class AudioFileWriter
             throw new CannotWriteException("Less than 150 byte \"" + af.getFile().getAbsolutePath() + "\"");
         }
 
-        RandomAccessFile raf     = null;
+        RandomAccessFile raf = null;
         RandomAccessFile rafTemp = null;
         File tempF = null;
 
@@ -228,7 +228,7 @@ public abstract class AudioFileWriter
         {
             //TODO Creates temp file in same folder as the original file, this is safe but would impose a performance
             //overhead if the original file is on a networked drive
-            tempF   = File.createTempFile("entagged", ".tmp", af.getFile().getParentFile());
+            tempF = File.createTempFile("entagged", ".tmp", af.getFile().getParentFile());
             rafTemp = new RandomAccessFile(tempF, "rw");
             raf = new RandomAccessFile(af.getFile(), "rw");
             raf.seek(0);
@@ -253,7 +253,7 @@ public abstract class AudioFileWriter
         catch (Exception e)
         {
             e.printStackTrace(System.err);
-            cannotWrite = true;            
+            cannotWrite = true;
             throw new CannotWriteException("\"" + af.getFile().getAbsolutePath() + "\" :" + e.getMessage());
         }
         finally
@@ -280,7 +280,7 @@ public abstract class AudioFileWriter
                 //Either the original file was directly written to or the temp file was used but the write failed
                 //in either case delete the temp file.
                 else
-                {                       
+                {
                     tempF.delete();
                 }
             }
@@ -317,6 +317,6 @@ public abstract class AudioFileWriter
      *                              (you should never throw them manually)
      * @throws CannotWriteException when an error occured during the generation of the tag
      */
-    protected abstract void writeTag(Tag tag, RandomAccessFile raf, RandomAccessFile rafTemp) throws CannotReadException,CannotWriteException, IOException;
+    protected abstract void writeTag(Tag tag, RandomAccessFile raf, RandomAccessFile rafTemp) throws CannotReadException, CannotWriteException, IOException;
 
 }

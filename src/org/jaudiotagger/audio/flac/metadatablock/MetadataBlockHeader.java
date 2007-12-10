@@ -34,19 +34,20 @@ public class MetadataBlockHeader
     private byte[] bytes;
     private BlockType blockType;
 
-    /** Create header by reading from file
+    /**
+     * Create header by reading from file
      *
      * @param raf
      * @return
      * @throws IOException
      */
-    public static MetadataBlockHeader readHeader(RandomAccessFile raf) throws IOException          
+    public static MetadataBlockHeader readHeader(RandomAccessFile raf) throws IOException
     {
         ByteBuffer rawdata = ByteBuffer.allocate(HEADER_LENGTH);
         int bytesRead = raf.getChannel().read(rawdata);
-        if(bytesRead<HEADER_LENGTH)
+        if (bytesRead < HEADER_LENGTH)
         {
-            throw new IOException("Unable to read required number of databytes read:"+bytesRead+":required:"+HEADER_LENGTH);
+            throw new IOException("Unable to read required number of databytes read:" + bytesRead + ":required:" + HEADER_LENGTH);
         }
         rawdata.rewind();
         return new MetadataBlockHeader(rawdata);
@@ -85,28 +86,28 @@ public class MetadataBlockHeader
      * @param blockType
      * @param dataLength
      */
-    public MetadataBlockHeader(boolean isLastBlock,BlockType blockType,int dataLength)
+    public MetadataBlockHeader(boolean isLastBlock, BlockType blockType, int dataLength)
     {
         ByteBuffer rawdata = ByteBuffer.allocate(HEADER_LENGTH);
-        this.blockType   = blockType;
+        this.blockType = blockType;
         this.isLastBlock = isLastBlock;
-        this.dataLength  = dataLength;
-        
+        this.dataLength = dataLength;
+
         byte type;
-        if(isLastBlock)
+        if (isLastBlock)
         {
             type = (byte) (0x80 | blockType.getId());
         }
         else
         {
-            type = (byte)blockType.getId();
+            type = (byte) blockType.getId();
         }
         rawdata.put(type);
 
         //Size is 3Byte BigEndian int
-        rawdata.put((byte)((dataLength & 0xFF0000) >>> 16));
-        rawdata.put((byte)((dataLength & 0xFF00) >>> 8));
-        rawdata.put((byte)(dataLength & 0xFF));
+        rawdata.put((byte) ((dataLength & 0xFF0000) >>> 16));
+        rawdata.put((byte) ((dataLength & 0xFF00) >>> 8));
+        rawdata.put((byte) (dataLength & 0xFF));
 
         bytes = new byte[HEADER_LENGTH];
         for (int i = 0; i < HEADER_LENGTH; i++)

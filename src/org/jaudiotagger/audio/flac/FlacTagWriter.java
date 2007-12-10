@@ -38,10 +38,10 @@ public class FlacTagWriter
     // Logger Object
     public static Logger logger = Logger.getLogger("org.jaudiotagger.audio.flac");
 
-    private List<MetadataBlock>  metadataBlockPadding        = new ArrayList<MetadataBlock>(1);
-    private List<MetadataBlock>  metadataBlockApplication    = new ArrayList<MetadataBlock>(1);
-    private List<MetadataBlock>  metadataBlockSeekTable      = new ArrayList<MetadataBlock>(1);
-    private List<MetadataBlock>  metadataBlockCueSheet       = new ArrayList<MetadataBlock>(1);
+    private List<MetadataBlock> metadataBlockPadding = new ArrayList<MetadataBlock>(1);
+    private List<MetadataBlock> metadataBlockApplication = new ArrayList<MetadataBlock>(1);
+    private List<MetadataBlock> metadataBlockSeekTable = new ArrayList<MetadataBlock>(1);
+    private List<MetadataBlock> metadataBlockCueSheet = new ArrayList<MetadataBlock>(1);
 
     private FlacTagCreator tc = new FlacTagCreator();
     private FlacTagReader reader = new FlacTagReader();
@@ -57,7 +57,7 @@ public class FlacTagWriter
     public void delete(RandomAccessFile raf, RandomAccessFile tempRaf) throws IOException, CannotWriteException
     {
         //This will save the file without any Comment or PictureData blocks  
-        FlacTag emptyTag = new FlacTag(null,new ArrayList<MetadataBlockDataPicture>() );
+        FlacTag emptyTag = new FlacTag(null, new ArrayList<MetadataBlockDataPicture>());
         raf.seek(0);
         tempRaf.seek(0);
         write(emptyTag, raf, tempRaf);
@@ -99,40 +99,40 @@ public class FlacTagWriter
             switch (mbh.getBlockType())
             {
                 case VORBIS_COMMENT:
-                case PADDING :
+                case PADDING:
                 case PICTURE:
-                    {
-                        //All these will be replaced by the new metadata so we just treat as padding in order
-                        //to determine how much space is already allocated in the file
-                        raf.seek(raf.getFilePointer() + mbh.getDataLength());
-                        MetadataBlockData mbd = new MetadataBlockDataPadding(mbh.getDataLength());
-                        metadataBlockPadding.add(new MetadataBlock(mbh, mbd));
-                        break;
-                    }
-                case APPLICATION :
-                    {
-                        MetadataBlockData mbd = new MetadataBlockDataApplication(mbh,raf);
-                        metadataBlockApplication.add(new MetadataBlock(mbh, mbd));
-                        break;
-                    }
-                case SEEKTABLE :
-                    {
-                        MetadataBlockData mbd = new MetadataBlockDataSeekTable(mbh,raf);
-                        metadataBlockSeekTable.add(new MetadataBlock(mbh, mbd));
-                        break;
-                    }
-                case CUESHEET :
-                    {
-                        MetadataBlockData mbd = new MetadataBlockDataCueSheet(mbh,raf);
-                        metadataBlockCueSheet.add(new MetadataBlock(mbh, mbd));
-                        break;
-                    }
-                default :
-                    {
-                        //What are the consequences of doing this
-                        raf.seek(raf.getFilePointer() + mbh.getDataLength());
-                        break;
-                    }
+                {
+                    //All these will be replaced by the new metadata so we just treat as padding in order
+                    //to determine how much space is already allocated in the file
+                    raf.seek(raf.getFilePointer() + mbh.getDataLength());
+                    MetadataBlockData mbd = new MetadataBlockDataPadding(mbh.getDataLength());
+                    metadataBlockPadding.add(new MetadataBlock(mbh, mbd));
+                    break;
+                }
+                case APPLICATION:
+                {
+                    MetadataBlockData mbd = new MetadataBlockDataApplication(mbh, raf);
+                    metadataBlockApplication.add(new MetadataBlock(mbh, mbd));
+                    break;
+                }
+                case SEEKTABLE:
+                {
+                    MetadataBlockData mbd = new MetadataBlockDataSeekTable(mbh, raf);
+                    metadataBlockSeekTable.add(new MetadataBlock(mbh, mbd));
+                    break;
+                }
+                case CUESHEET:
+                {
+                    MetadataBlockData mbd = new MetadataBlockDataCueSheet(mbh, raf);
+                    metadataBlockCueSheet.add(new MetadataBlock(mbh, mbd));
+                    break;
+                }
+                default:
+                {
+                    //What are the consequences of doing this
+                    raf.seek(raf.getFilePointer() + mbh.getDataLength());
+                    break;
+                }
             }
             isLastBlock = mbh.isLastBlock();
         }
@@ -141,18 +141,18 @@ public class FlacTagWriter
         int availableRoom = computeAvailableRoom();
 
         //Minimum Size of the New tag data without padding         
-        int newTagSize =  tc.convert(tag).limit();
+        int newTagSize = tc.convert(tag).limit();
 
         //Number of bytes required for new tagdata and other metadata blocks
         int neededRoom = newTagSize + computeNeededRoom();
 
         raf.seek(0);
 
-        logger.info("Writing tag available bytes:"+availableRoom + ":needed bytes:"+neededRoom);
+        logger.info("Writing tag available bytes:" + availableRoom + ":needed bytes:" + neededRoom);
 
         //There is enough room to fit the tag without moving the audio just need to
         //adjust padding accordingly need to allow space for padding header if padding required
-        if ((availableRoom == neededRoom)||(availableRoom > neededRoom + MetadataBlockHeader.HEADER_LENGTH))
+        if ((availableRoom == neededRoom) || (availableRoom > neededRoom + MetadataBlockHeader.HEADER_LENGTH))
         {
             //Jump over Flac and StreamInfoBlock
             raf.seek(FlacStream.FLAC_STREAM_IDENTIFIER_LENGTH
@@ -192,9 +192,9 @@ public class FlacTagWriter
                     + MetadataBlockDataStreamInfo.STREAM_INFO_DATA_LENGTH];
             raf.readFully(b);
             //Skip to start of Audio
-            raf.seek(availableRoom  + FlacStream.FLAC_STREAM_IDENTIFIER_LENGTH
-                                    + MetadataBlockHeader.HEADER_LENGTH
-                                    + MetadataBlockDataStreamInfo.STREAM_INFO_DATA_LENGTH);
+            raf.seek(availableRoom + FlacStream.FLAC_STREAM_IDENTIFIER_LENGTH
+                    + MetadataBlockHeader.HEADER_LENGTH
+                    + MetadataBlockDataStreamInfo.STREAM_INFO_DATA_LENGTH);
 
             FileChannel tempFC = rafTemp.getChannel();
 
@@ -229,7 +229,6 @@ public class FlacTagWriter
     }
 
     /**
-     *
      * @return space currently availble for writing all Flac metadatablocks exceprt for StreamInfo which is fixed size
      */
     private int computeAvailableRoom()
@@ -253,16 +252,15 @@ public class FlacTagWriter
 
         for (int i = 0; i < metadataBlockPadding.size(); i++)
         {
-            length +=  metadataBlockPadding.get(i).getLength();
+            length += metadataBlockPadding.get(i).getLength();
         }
 
         return length;
     }
 
     /**
-     *
      * @return space required to write the metadata blocks that are part of Flac but are not part of tagdata
-     * in the normal sense.
+     *         in the normal sense.
      */
     private int computeNeededRoom()
     {
@@ -270,12 +268,12 @@ public class FlacTagWriter
 
         for (int i = 0; i < metadataBlockApplication.size(); i++)
         {
-            length +=  metadataBlockApplication.get(i).getLength();
+            length += metadataBlockApplication.get(i).getLength();
         }
 
         for (int i = 0; i < metadataBlockSeekTable.size(); i++)
         {
-            length +=  metadataBlockSeekTable.get(i).getLength();
+            length += metadataBlockSeekTable.get(i).getLength();
         }
 
         for (int i = 0; i < metadataBlockCueSheet.size(); i++)

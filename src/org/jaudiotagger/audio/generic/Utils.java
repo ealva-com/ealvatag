@@ -46,18 +46,17 @@ public class Utils
     }
 
 
-
-     /**
+    /**
      * Returns {@link String#getBytes()}.<br>
      *
      * @param s The String to call, decode bytes using the specfied charset
      * @return The bytes.
      */
-    public static byte[] getDefaultBytes(String s,String charSet)
+    public static byte[] getDefaultBytes(String s, String charSet)
     {
         try
         {
-             return s.getBytes(charSet);
+            return s.getBytes(charSet);
         }
         catch (UnsupportedEncodingException uee)
         {
@@ -122,7 +121,7 @@ public class Utils
         int number = 0;
         for (int i = 0; i < (end - start + 1); i++)
         {
-            number += ((b.get(end - i) & 0xFF) << i * 8);            
+            number += ((b.get(end - i) & 0xFF) << i * 8);
         }
 
         return number;
@@ -186,10 +185,9 @@ public class Utils
     {
         byte[] b = new byte[2];
         b[0] = (byte) ((size >> 8) & 0xFF);
-        b[1] = (byte) (size & 0xFF); 
+        b[1] = (byte) (size & 0xFF);
         return b;
     }
-
 
 
     /**
@@ -218,13 +216,13 @@ public class Utils
      * @return
      * @throws UnsupportedEncodingException
      */
-    public static String getString(byte[] b, int offset, int length, String encoding)            
-    {            
+    public static String getString(byte[] b, int offset, int length, String encoding)
+    {
         try
         {
             return new String(b, offset, length, encoding);
         }
-        catch( UnsupportedEncodingException ue)
+        catch (UnsupportedEncodingException ue)
         {
             //Shouldnt have to worry about this exception as should only be calling with well defined charsets
             throw new RuntimeException(ue);
@@ -233,7 +231,7 @@ public class Utils
 
     /**
      * Create String offset from position by offset upto length using encoding, and position of buffer
-     * is moved to after position + offset + length  
+     * is moved to after position + offset + length
      *
      * @param buffer
      * @param offset
@@ -242,9 +240,9 @@ public class Utils
      * @return
      */
     public static String getString(ByteBuffer buffer, int offset, int length, String encoding)
-    {         
+    {
         byte[] b = new byte[length];
-        buffer.position(buffer.position()+offset);
+        buffer.position(buffer.position() + offset);
         buffer.get(b);
         try
         {

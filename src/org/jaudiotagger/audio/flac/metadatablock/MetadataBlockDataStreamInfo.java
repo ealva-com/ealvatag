@@ -52,9 +52,9 @@ public class MetadataBlockDataStreamInfo
     public static final int STREAM_INFO_DATA_LENGTH = 34;
 
     // Logger Object
-     public static Logger logger = Logger.getLogger("org.jaudiotagger.audio.flac.MetadataBlockDataStreamInfo");
+    public static Logger logger = Logger.getLogger("org.jaudiotagger.audio.flac.MetadataBlockDataStreamInfo");
 
-    private int minBlockSize, maxBlockSize, minFrameSize, maxFrameSize, samplingRate,samplingRatePerChannel, bitsPerSample, channelNumber, totalNumberOfSamples;
+    private int minBlockSize, maxBlockSize, minFrameSize, maxFrameSize, samplingRate, samplingRatePerChannel, bitsPerSample, channelNumber, totalNumberOfSamples;
     private float length;
     private boolean isValid = true;
 
@@ -90,16 +90,16 @@ public class MetadataBlockDataStreamInfo
     {
 
         return
-                  "MinBlockSize:" + minBlockSize
-                + "MaxBlockSize:" + maxBlockSize
-                + "MinFrameSize:" + minFrameSize
-                + "MaxFrameSize:" + maxFrameSize
-                + "SampleRateTotal:" + samplingRate
-                + "SampleRatePerChannel:" + samplingRatePerChannel
-                + ":Channel number:" + channelNumber
-                + ":Bits per sample: " + bitsPerSample
-                + ":TotalNumberOfSamples: " + totalNumberOfSamples
-                + ":Length: " + length;
+                "MinBlockSize:" + minBlockSize
+                        + "MaxBlockSize:" + maxBlockSize
+                        + "MinFrameSize:" + minFrameSize
+                        + "MaxFrameSize:" + maxFrameSize
+                        + "SampleRateTotal:" + samplingRate
+                        + "SampleRatePerChannel:" + samplingRatePerChannel
+                        + ":Channel number:" + channelNumber
+                        + ":Bits per sample: " + bitsPerSample
+                        + ":TotalNumberOfSamples: " + totalNumberOfSamples
+                        + ":Length: " + length;
 
     }
 
@@ -123,7 +123,7 @@ public class MetadataBlockDataStreamInfo
         return samplingRate;
     }
 
-     public int getSamplingRatePerChannel()
+    public int getSamplingRatePerChannel()
     {
         return samplingRatePerChannel;
     }

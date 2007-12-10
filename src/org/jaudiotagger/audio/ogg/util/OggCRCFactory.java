@@ -23,7 +23,7 @@ import java.util.logging.Logger;
 
 /**
  * OffCRC Calculations
- *
+ * <p/>
  * $Id$
  *
  * @author Raphael Slinckx (KiKiDonK)
@@ -69,7 +69,7 @@ public class OggCRCFactory
 
     public static byte[] computeCRC(byte[] data)
     {
-        
+
         if (!init)
         {
             init();

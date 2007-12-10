@@ -50,9 +50,9 @@ public class OggFileReader extends AudioFileReader
         return vtr.read(raf);
     }
 
-     /**
+    /**
      * Return count Ogg Page header, count starts from zero
-     *
+     * <p/>
      * count=0; should return PageHeader that contains Vorbis Identification Header
      * count=1; should return Pageheader that contains VorbisComment and possibly SetupHeader
      * count>=2; should return PageHeader containng remaining VorbisComment,SetupHeader and/or Audio
@@ -63,13 +63,13 @@ public class OggFileReader extends AudioFileReader
      * @throws CannotReadException
      * @throws IOException
      */
-    public OggPageHeader readOggPageHeader(RandomAccessFile raf,int count) throws CannotReadException, IOException
+    public OggPageHeader readOggPageHeader(RandomAccessFile raf, int count) throws CannotReadException, IOException
     {
-        OggPageHeader pageHeader = OggPageHeader.read (raf);
-        while(count >0)
+        OggPageHeader pageHeader = OggPageHeader.read(raf);
+        while (count > 0)
         {
             raf.seek(raf.getFilePointer() + pageHeader.getPageLength());
-            pageHeader = OggPageHeader.read (raf);
+            pageHeader = OggPageHeader.read(raf);
             count--;
         }
         return pageHeader;
@@ -77,26 +77,26 @@ public class OggFileReader extends AudioFileReader
 
     /**
      * Summarize all the ogg headers in a file
-     *
+     * <p/>
      * A useful utility function
      *
      * @param oggFile
      * @throws CannotReadException
      * @throws IOException
      */
-    public void summarizeOggPageHeaders(File oggFile)throws CannotReadException, IOException
+    public void summarizeOggPageHeaders(File oggFile) throws CannotReadException, IOException
     {
-        RandomAccessFile raf = new RandomAccessFile(oggFile,"r");
+        RandomAccessFile raf = new RandomAccessFile(oggFile, "r");
 
-        while(raf.getFilePointer()<raf.length())
+        while (raf.getFilePointer() < raf.length())
         {
-            System.out.println("pageHeader starts at:"+raf.getFilePointer());
-            OggPageHeader pageHeader = OggPageHeader.read (raf);
-            System.out.println("pageHeader finishes at:"+raf.getFilePointer());
-            System.out.println(pageHeader+"\n");
+            System.out.println("pageHeader starts at:" + raf.getFilePointer());
+            OggPageHeader pageHeader = OggPageHeader.read(raf);
+            System.out.println("pageHeader finishes at:" + raf.getFilePointer());
+            System.out.println(pageHeader + "\n");
             raf.seek(raf.getFilePointer() + pageHeader.getPageLength());
         }
-        System.out.println("Raf File Pointer at:"+raf.getFilePointer() +"File Size is:"+raf.length());
+        System.out.println("Raf File Pointer at:" + raf.getFilePointer() + "File Size is:" + raf.length());
     }
 }
 

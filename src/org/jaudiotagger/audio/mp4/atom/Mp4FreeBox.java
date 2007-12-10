@@ -9,7 +9,7 @@ import java.io.IOException;
 
 /**
  * FreeBox ( padding)
- *
+ * <p/>
  * <p>There are usually two free boxes, one beneath the meta atom and one toplevel atom
  */
 public class Mp4FreeBox extends AbstractMp4Box
@@ -26,19 +26,19 @@ public class Mp4FreeBox extends AbstractMp4Box
             //Header
             header = new Mp4BoxHeader();
             ByteArrayOutputStream headerBaos = new ByteArrayOutputStream();
-            headerBaos.write(Utils.getSizeBigEndian( Mp4BoxHeader.HEADER_LENGTH + datasize));
-            headerBaos.write(Utils.getDefaultBytes(Mp4NotMetaFieldKey.FREE.getFieldName(),"ISO-8859-1"));
+            headerBaos.write(Utils.getSizeBigEndian(Mp4BoxHeader.HEADER_LENGTH + datasize));
+            headerBaos.write(Utils.getDefaultBytes(Mp4NotMetaFieldKey.FREE.getFieldName(), "ISO-8859-1"));
             header.update(ByteBuffer.wrap(headerBaos.toByteArray()));
 
             //Body
             ByteArrayOutputStream freeBaos = new ByteArrayOutputStream();
-            for(int i=0;i<datasize;i++)
+            for (int i = 0; i < datasize; i++)
             {
                 freeBaos.write(0x0);
             }
             dataBuffer = ByteBuffer.wrap(freeBaos.toByteArray());
         }
-        catch(IOException ioe)
+        catch (IOException ioe)
         {
             //This should never happen as were not actually writing to/from a file
             throw new RuntimeException(ioe);

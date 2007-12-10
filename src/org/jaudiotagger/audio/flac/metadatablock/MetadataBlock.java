@@ -20,7 +20,7 @@ package org.jaudiotagger.audio.flac.metadatablock;
 
 /**
  * Metadata Block
- *
+ * <p/>
  * <p>A FLAC bitstream consists of the "fLaC" marker at the beginning of the stream,
  * followed by a mandatory metadata block (called the STREAMINFO block), any number of other metadata blocks,
  * then the audio frames.

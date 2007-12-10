@@ -55,8 +55,8 @@ public class ModificationHandler implements AudioFileModificationListener
     /**
      * (overridden)
      *
-     * @see entagged.audioformats.generic.AudioFileModificationListener#fileModified(entagged.audioformats.AudioFile,
-     *      File)
+     * @see org.jaudiotagger.audio.generic.AudioFileModificationListener#fileModified(org.jaudiotagger.audio.AudioFile,
+     *File)
      */
     public void fileModified(AudioFile original, File temporary) throws ModifyVetoException
     {
@@ -64,7 +64,7 @@ public class ModificationHandler implements AudioFileModificationListener
         while (enumer.hasMoreElements())
         {
             AudioFileModificationListener current = (AudioFileModificationListener) enumer
-                .nextElement();
+                    .nextElement();
             try
             {
                 current.fileModified(original, temporary);
@@ -80,7 +80,7 @@ public class ModificationHandler implements AudioFileModificationListener
     /**
      * (overridden)
      *
-     * @see entagged.audioformats.generic.AudioFileModificationListener#fileOperationFinished(File)
+     * @see org.jaudiotagger.audio.generic.AudioFileModificationListener#fileOperationFinished(File)
      */
     public void fileOperationFinished(File result)
     {
@@ -88,7 +88,7 @@ public class ModificationHandler implements AudioFileModificationListener
         while (enumer.hasMoreElements())
         {
             AudioFileModificationListener current = (AudioFileModificationListener) enumer
-                .nextElement();
+                    .nextElement();
             current.fileOperationFinished(result);
         }
     }
@@ -96,8 +96,8 @@ public class ModificationHandler implements AudioFileModificationListener
     /**
      * (overridden)
      *
-     * @see entagged.audioformats.generic.AudioFileModificationListener#fileWillBeModified(entagged.audioformats.AudioFile,
-     *      boolean)
+     * @see org.jaudiotagger.audio.generic.AudioFileModificationListener#fileWillBeModified(org.jaudiotagger.audio.AudioFile,
+     *boolean)
      */
     public void fileWillBeModified(AudioFile file, boolean delete) throws ModifyVetoException
     {
@@ -105,7 +105,7 @@ public class ModificationHandler implements AudioFileModificationListener
         while (enumer.hasMoreElements())
         {
             AudioFileModificationListener current = (AudioFileModificationListener) enumer
-                .nextElement();
+                    .nextElement();
             try
             {
                 current.fileWillBeModified(file, delete);
@@ -134,9 +134,9 @@ public class ModificationHandler implements AudioFileModificationListener
     /**
      * (overridden)
      *
-     * @see entagged.audioformats.generic.AudioFileModificationListener#vetoThrown(entagged.audioformats.generic.AudioFileModificationListener,
-     *      entagged.audioformats.AudioFile,
-     *      entagged.audioformats.exceptions.ModifyVetoException)
+     * @see org.jaudiotagger.audio.generic.AudioFileModificationListener#vetoThrown(org.jaudiotagger.audio.generic.AudioFileModificationListener,
+     *org.jaudiotagger.audio.AudioFile,
+     *org.jaudiotagger.audio.exceptions.ModifyVetoException)
      */
     public void vetoThrown(AudioFileModificationListener cause, AudioFile original, ModifyVetoException veto)
     {
@@ -144,8 +144,8 @@ public class ModificationHandler implements AudioFileModificationListener
         while (enumer.hasMoreElements())
         {
             AudioFileModificationListener current = (AudioFileModificationListener) enumer
-                .nextElement();
+                    .nextElement();
             current.vetoThrown(cause, original, veto);
-		}
-	}
+        }
+    }
 }

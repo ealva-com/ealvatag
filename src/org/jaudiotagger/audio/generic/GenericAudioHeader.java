@@ -309,14 +309,15 @@ public class GenericAudioHeader implements AudioHeader
 
     /**
      * Can be used to add additional information
+     *
      * @param key
      * @param value
      */
-    public void setExtra(String key,Object value)
+    public void setExtra(String key, Object value)
     {
         content.put(key, value);
     }
-    
+
     /**
      * Pretty prints this encoding info
      *
@@ -327,7 +328,7 @@ public class GenericAudioHeader implements AudioHeader
         StringBuffer out = new StringBuffer(50);
         out.append("Encoding infos content:\n");
         Set set = content.keySet();
-        for(Object key: set)
+        for (Object key : set)
         {
             Object val = content.get(key);
             out.append("\t");
@@ -337,5 +338,5 @@ public class GenericAudioHeader implements AudioHeader
             out.append("\n");
         }
         return out.toString().substring(0, out.length() - 1);
-	}
+    }
 }

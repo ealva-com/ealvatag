@@ -24,16 +24,15 @@ public class Mp4AudioHeader extends GenericAudioHeader
 
     public void setKind(Mp4EsdsBox.Kind kind)
     {
-        content.put(FIELD_KIND,kind);
+        content.put(FIELD_KIND, kind);
     }
 
     /**
-     *
      * @return kind
      */
     public Mp4EsdsBox.Kind getKind()
     {
-        return (Mp4EsdsBox.Kind)content.get(FIELD_KIND);
+        return (Mp4EsdsBox.Kind) content.get(FIELD_KIND);
     }
 
     /**
@@ -43,16 +42,15 @@ public class Mp4AudioHeader extends GenericAudioHeader
      */
     public void setProfile(Mp4EsdsBox.AudioProfile profile)
     {
-        content.put(FIELD_PROFILE,profile);
+        content.put(FIELD_PROFILE, profile);
     }
 
     /**
-     *
      * @return audio profile
      */
     public Mp4EsdsBox.AudioProfile getProfile()
     {
-        return (Mp4EsdsBox.AudioProfile)content.get(FIELD_PROFILE);
+        return (Mp4EsdsBox.AudioProfile) content.get(FIELD_PROFILE);
     }
 
 }

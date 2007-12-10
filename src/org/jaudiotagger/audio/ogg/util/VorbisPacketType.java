@@ -2,7 +2,7 @@ package org.jaudiotagger.audio.ogg.util;
 
 /**
  * Vorbis Packet Type
- *
+ * <p/>
  * In an Vorbis Stream there should be one instance of the three headers, and many audio packets
  */
 public enum VorbisPacketType

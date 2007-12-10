@@ -7,20 +7,18 @@ import java.nio.ByteBuffer;
 /**
  * This MP4MetaBox is the parent of metadata, it also contains a small amount of data
  * that needs to be processed before we can examine the children
- *
  */
 public class Mp4MetaBox extends AbstractMp4Box
 {
     public static final int FLAGS_LENGTH = 4;
 
     /**
-     *
-     * @param header header info
+     * @param header     header info
      * @param dataBuffer data of box (doesnt include header data)
      */
     public Mp4MetaBox(Mp4BoxHeader header, ByteBuffer dataBuffer)
     {
-        this.header     = header;
+        this.header = header;
         this.dataBuffer = dataBuffer;
     }
 

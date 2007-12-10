@@ -112,7 +112,7 @@ public class GenericTag extends AbstractTag
          */
         public byte[] getRawContent()
         {
-            return this.content == null ? new byte[]{} : Utils.getDefaultBytes(this.content,getEncoding());
+            return this.content == null ? new byte[]{} : Utils.getDefaultBytes(this.content, getEncoding());
         }
 
         /**

@@ -26,10 +26,10 @@ import java.nio.ByteBuffer;
 
 /**
  * The first frame can sometimes contain a LAME frame at th end of the Xing frame
- * 
+ * <p/>
  * <p>This useful to the library because it allows the encoder to be identified, full specification
  * can be found at http://gabriel.mp3-tech.org/mp3infotag.html
- *
+ * <p/>
  * Summarized here:
  * 4 bytes:LAME
  * 5 bytes:LAME Encoder Version
@@ -45,13 +45,12 @@ import java.nio.ByteBuffer;
  * 4 bytes:MusicLength
  * 2 bytes:Music CRC
  * 2 bytes:CRC Tag
- * 
  */
 public class LameFrame
 {
-    public static final int LAME_HEADER_BUFFER_SIZE     = 36;
-    public static final int ENCODER_SIZE     = 9;   //Includes LAME ID
-    public static final int LAME_ID_SIZE     = 4;
+    public static final int LAME_HEADER_BUFFER_SIZE = 36;
+    public static final int ENCODER_SIZE = 9;   //Includes LAME ID
+    public static final int LAME_ID_SIZE = 4;
     public static final String LAME_ID = "LAME";
     private String encoder;
 
@@ -67,13 +66,12 @@ public class LameFrame
      * Parse frame
      *
      * @return frame or null if not exists
-     *
      * @throws InvalidAudioFrameException
      */
     public static LameFrame parseLameFrame(ByteBuffer bb)
     {
         ByteBuffer lameHeader = bb.slice();
-        String id = Utils.getString(lameHeader, 0, LAME_ID_SIZE , TextEncoding.CHARSET_ISO_8859_1);
+        String id = Utils.getString(lameHeader, 0, LAME_ID_SIZE, TextEncoding.CHARSET_ISO_8859_1);
         lameHeader.rewind();
         if (id.equals(LAME_ID))
         {
@@ -84,7 +82,6 @@ public class LameFrame
     }
 
     /**
-     *
      * @return encoder
      */
     public String getEncoder()

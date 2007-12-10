@@ -26,14 +26,14 @@ import org.jaudiotagger.audio.exceptions.ModifyVetoException;
 /**
  * Classes implementing this interface will be notified on audio file's
  * modifications.<br>
- *
+ * <p/>
  * <p>It will be notified on several occasions:<br>
  * <ul>
  * <li>An audio file is about to be modified
- * {@link #fileWillBeModified(AudioFile, boolean)}<br>
+ * {@link #fileWillBeModified(AudioFile,boolean)}<br>
  * Here one can modify the tag data because of global settings.</li>
  * <li>The write process has just finished. But if a copy was created the
- * original has not been replaced yet. ({@link #fileModified(AudioFile, File)}).</li>
+ * original has not been replaced yet. ({@link #fileModified(AudioFile,File)}).</li>
  * <li>The operation has been finished. {@link #fileOperationFinished(File)}</li>
  * </ul>
  *
@@ -85,12 +85,9 @@ public interface AudioFileModificationListener
      * This method notifies about a veto exception that has been thrown by
      * another listener.<br>
      *
-     * @param cause
-     *            The instance which caused the veto.
-     * @param original
-     *            The original file, that was about to be modified.
-     * @param veto
-     *            The thrown exception.
+     * @param cause    The instance which caused the veto.
+     * @param original The original file, that was about to be modified.
+     * @param veto     The thrown exception.
      */
     public void vetoThrown(AudioFileModificationListener cause, AudioFile original, ModifyVetoException veto);
 

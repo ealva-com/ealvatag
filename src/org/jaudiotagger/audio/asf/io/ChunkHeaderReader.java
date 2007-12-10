@@ -28,27 +28,27 @@ import org.jaudiotagger.audio.asf.util.Utils;
 
 /**
  * Default reader, Reads GUID and size out of an inputsream and creates a
- * {@link entagged.audioformats.asf.data.Chunk}object.
- * 
+ * {@link org.jaudiotagger.audio.asf.data.Chunk}object.
+ *
  * @author Christian Laireiter
  */
-class ChunkHeaderReader {
+class ChunkHeaderReader
+{
 
-	/**
-	 * Interprets current data as a header of a chunk.
-	 * 
-	 * @param input
-	 *                  inputdata
-	 * @return Chunk.
-	 * @throws IOException
-	 *                   Access errors.
-	 */
-	public static Chunk readChunckHeader(RandomAccessFile input)
-			throws IOException {
-		long pos = input.getFilePointer();
-		GUID guid = Utils.readGUID(input);
-		BigInteger chunkLength = Utils.readBig64(input);
-		return new Chunk(guid, pos, chunkLength);
+    /**
+     * Interprets current data as a header of a chunk.
+     *
+     * @param input inputdata
+     * @return Chunk.
+     * @throws IOException Access errors.
+     */
+    public static Chunk readChunckHeader(RandomAccessFile input)
+            throws IOException
+    {
+        long pos = input.getFilePointer();
+        GUID guid = Utils.readGUID(input);
+        BigInteger chunkLength = Utils.readBig64(input);
+        return new Chunk(guid, pos, chunkLength);
 	}
 
 }

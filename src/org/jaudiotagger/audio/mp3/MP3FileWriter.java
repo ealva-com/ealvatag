@@ -29,7 +29,7 @@ public class MP3FileWriter extends AudioFileWriter
 
     protected void writeTag(Tag tag, RandomAccessFile raf, RandomAccessFile rafTemp) throws CannotWriteException, IOException
     {
-         throw new RuntimeException("MP3FileReaderwriteTag should not be called");
+        throw new RuntimeException("MP3FileReaderwriteTag should not be called");
     }
 
     protected void deleteTag(RandomAccessFile raf, RandomAccessFile tempRaf) throws CannotWriteException, IOException

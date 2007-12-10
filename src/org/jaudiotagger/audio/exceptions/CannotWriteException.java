@@ -20,43 +20,47 @@ package org.jaudiotagger.audio.exceptions;
 
 /**
  * This exception is thrown if the writing process of an audio file failed.
- * 
+ *
  * @author Raphaël Slinckx
  */
-public class CannotWriteException extends Exception {
-	/**
-	 * (overridden)
-	 * 
-	 * @see Exception#Exception()
-	 */
-	public CannotWriteException() {
-		super();
-	}
+public class CannotWriteException extends Exception
+{
+    /**
+     * (overridden)
+     *
+     * @see Exception#Exception()
+     */
+    public CannotWriteException()
+    {
+        super();
+    }
 
-	/**
-	 * (overridden)
-	 * 
-	 * @see Exception#Exception(java.lang.String)
-	 */
-	public CannotWriteException(String message) {
-		super(message);
-	}
+    /**
+     * (overridden)
+     *
+     * @see Exception#Exception(java.lang.String)
+     */
+    public CannotWriteException(String message)
+    {
+        super(message);
+    }
 
-	/**
-	 * (overridden)
-	 * 
-	 * @see Exception#Exception(java.lang.String, java.lang.Throwable)
-	 */
-	public CannotWriteException(String message, Throwable cause) {
-		super(message, cause);
-	}
+    /**
+     * (overridden)
+     *
+     * @see Exception#Exception(java.lang.String,java.lang.Throwable)
+     */
+    public CannotWriteException(String message, Throwable cause)
+    {
+        super(message, cause);
+    }
 
-	/**
-	 * (overridden)
-	 * 
-	 * @see Exception#Exception(java.lang.Throwable)
-	 */
-	public CannotWriteException(Throwable cause) {
+    /**
+     * (overridden)
+     *
+     * @see Exception#Exception(java.lang.Throwable)
+     */
+    public CannotWriteException(Throwable cause) {
 		super(cause);
 
 	}
