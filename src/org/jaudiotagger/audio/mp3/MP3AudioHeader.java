@@ -52,10 +52,10 @@ import java.util.logging.Logger;
  * Layer III file but MP2 (MPEG-1,Layer II), MP1 (MPEG-1,Layer I) and MPEG-2 files are sometimes used and named with
  * the .mp3 suffix so this library attempts to supports all these formats.
  */
-public final class MP3AudioHeader implements AudioHeader
+public class MP3AudioHeader implements AudioHeader
 {
-    private MPEGFrameHeader mp3FrameHeader;
-    private XingFrame mp3XingFrame;
+    protected MPEGFrameHeader mp3FrameHeader;
+    protected XingFrame mp3XingFrame;
 
 
     private long fileSize;
@@ -84,6 +84,10 @@ public final class MP3AudioHeader implements AudioHeader
     private final static int FILE_BUFFER_SIZE = 5000;
     private final static int MIN_BUFFER_REMAINING_REQUIRED =
             MPEGFrameHeader.HEADER_SIZE + XingFrame.MAX_BUFFER_SIZE_NEEDED_TO_READ_XING;
+
+    public MP3AudioHeader()
+    {
+    }
 
     /**
      * Search for the first MP3Header in the file
@@ -346,7 +350,7 @@ public final class MP3AudioHeader implements AudioHeader
      *
      * @param startByte
      */
-    private void setMp3StartByte(final long startByte)
+    protected void setMp3StartByte(final long startByte)
     {
         this.startByte = startByte;
     }
@@ -368,7 +372,7 @@ public final class MP3AudioHeader implements AudioHeader
     /**
      * Set number of frames in this file, use Xing if exists otherwise ((File Size - Non Audio Part)/Frame Size)
      */
-    private void setNumberOfFrames()
+    protected void setNumberOfFrames()
     {
         numberOfFramesEstimate = (fileSize - startByte) / mp3FrameHeader.getFrameLength();
 
@@ -405,7 +409,7 @@ public final class MP3AudioHeader implements AudioHeader
      * the sampling rate the shorter the audio segment provided by the frame,
      * the number of samples is fixed by the MPEG Version and Layer
      */
-    private void setTimePerFrame()
+    protected void setTimePerFrame()
     {
         timePerFrame = mp3FrameHeader.getNoOfSamples() / mp3FrameHeader.getSamplingRate().doubleValue();
 
@@ -440,7 +444,7 @@ public final class MP3AudioHeader implements AudioHeader
      * divided by the sampling rate, i.e the higher the sampling rate the shorter the audio represented by the frame is going
      * to be.
      */
-    private void setTrackLength()
+    protected void setTrackLength()
     {
         trackLength = numberOfFrames * getTimePerFrame();
     }
@@ -487,7 +491,7 @@ public final class MP3AudioHeader implements AudioHeader
     /**
      * Set bitrate in kbps, if Vbr use Xingheader if possible
      */
-    private void setBitRate()
+    protected void setBitRate()
     {
 
         if (mp3XingFrame != null && mp3XingFrame.isVbr())
@@ -507,7 +511,7 @@ public final class MP3AudioHeader implements AudioHeader
         }
     }
 
-    private void setEncoder()
+    protected void setEncoder()
     {
         if (mp3XingFrame != null)
         {
@@ -653,7 +657,7 @@ public final class MP3AudioHeader implements AudioHeader
      *
      * @param fileSize
      */
-    private void setFileSize(long fileSize)
+    protected void setFileSize(long fileSize)
     {
         this.fileSize = fileSize;
     }
