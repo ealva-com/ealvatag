@@ -19,133 +19,141 @@
  ******************************************************************************/
 /* $Id$ */
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>org.jaudiotagger</groupId>
-  <artifactId>jaudiotagger</artifactId>
-  <version>1.0.2</version>
-  <packaging>jar</packaging>
-  <name>jaudiotagger</name>
-  <description>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+   <modelVersion>4.0.0</modelVersion>
+   <groupId>org.jaudiotagger</groupId>
+   <artifactId>jaudiotagger</artifactId>
+   <version>1.0.8.1</version>
+   <packaging>jar</packaging>
+   <name>jaudiotagger</name>
+   <description>
     The aim of this project is to provide a world class Java library
     for editing tag information in audio files.
     Most existing solutions are not java based inhibiting the use of
     java applications with digital files.
-  </description>
-  <url>https://jaudiotagger.dev.java.net/</url>
-  <inceptionYear>2005</inceptionYear>
-  <scm>
-    <connection>scm:cvs:pserver:guest@cvs.dev.java.net:/cvs:jaudiotagger</connection>
-  </scm>
-  <issueManagement>
-    <url>https://jaudiotagger.dev.java.net/issues</url>
-  </issueManagement>
-  <organization>
-    <name>java.net</name>
-    <url>http://www.java.net/</url>
-  </organization>
-  <mailingLists>
-    <mailingList>
-      <name>Development mailing list</name>
-      <post>dev@jaudiotagger.dev.java.net</post>
-      <archive>https://jaudiotagger.dev.java.net/servlets/SummarizeList?listName=dev</archive>
-    </mailingList>
-    <mailingList>
-      <name>CVS mailing list</name>
-      <post>cvs@jaudiotagger.dev.java.net</post>
-      <archive>https://jaudiotagger.dev.java.net/servlets/SummarizeList?listName=cvs</archive>
-    </mailingList>
-    <mailingList>
-      <name>Issues mailing list</name>
-      <post>issues@jaudiotagger.dev.java.net</post>
-      <archive>https://jaudiotagger.dev.java.net/servlets/SummarizeList?listName=issues</archive>
-    </mailingList>
-  </mailingLists>
-  <developers>
-    <developer>
-      <id>paultaylor</id>
-      <name>Paul Taylor</name>
-      <email>paultaylor@dev.java.net</email>
-      <organization>java.net</organization>
-      <organizationUrl>http://www.java.net/</organizationUrl>
-      <roles>
-        <role>Project Manager</role>
-        <role>Java Developer</role>
-      </roles>
-      <timezone/>
-      <properties/>
-    </developer>
-    <developer>
-      <id>mgimpel</id> 
-      <name>Marc Gimpel</name> 
-      <email>mgimpel@horizonwimba.com</email> 
-      <organization>Horizon Wimba</organization> 
-      <organizationUrl>http://www.horizonwimba.com/</organizationUrl> 
-      <roles>
-        <role>Java Developer</role> 
-      </roles>
-      <timezone>+1</timezone> 
-      <properties/> 
-    </developer>
-  </developers>
-  <licenses>
-    <license>
-      <name>LGPL</name>
-      <url>http://www.gnu.org/copyleft/lesser.html</url>
-    </license>
-  </licenses>
-  <dependencies>
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>3.8.1</version>
-      <scope>test</scope>
-    </dependency>
-  </dependencies>
-  <build>
-    <sourceDirectory>src</sourceDirectory>
-    <testSourceDirectory>srctest</testSourceDirectory>
-  </build>
-  <reporting>
-    <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-project-info-reports-plugin</artifactId>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-surefire-report-plugin</artifactId>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-javadoc-plugin</artifactId>
-        <configuration>
-          <!--<overview>${project.build.sourceDirectory}/overview.html</overview>-->
-          <links>
-            <link>http://java.sun.com/j2ee/1.4/docs/api</link>
-            <link>http://java.sun.com/j2se/1.5.0/docs/api</link>
-            <link>http://www.junit.org/junit/javadoc/</link>
-          </links>
-        </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>jxr-maven-plugin</artifactId>
-      </plugin>
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>changelog-maven-plugin</artifactId>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-checkstyle-plugin</artifactId>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-pmd-plugin</artifactId>
-      </plugin>
-    </plugins>
-  </reporting>
+   </description>
+   <url>https://jaudiotagger.dev.java.net/</url>
+   <inceptionYear>2005</inceptionYear>
+   <scm>
+      <connection>scm:cvs:pserver:guest@cvs.dev.java.net:/cvs:jaudiotagger</connection>
+   </scm>
+   <issueManagement>
+      <url>https://jaudiotagger.dev.java.net/issues</url>
+   </issueManagement>
+   <organization>
+      <name>java.net</name>
+      <url>http://www.java.net/</url>
+   </organization>
+   <mailingLists>
+      <mailingList>
+         <name>Development mailing list</name>
+         <post>dev@jaudiotagger.dev.java.net</post>
+         <archive>https://jaudiotagger.dev.java.net/servlets/SummarizeList?listName=dev</archive>
+      </mailingList>
+      <mailingList>
+         <name>CVS mailing list</name>
+         <post>cvs@jaudiotagger.dev.java.net</post>
+         <archive>https://jaudiotagger.dev.java.net/servlets/SummarizeList?listName=cvs</archive>
+      </mailingList>
+      <mailingList>
+         <name>Issues mailing list</name>
+         <post>issues@jaudiotagger.dev.java.net</post>
+         <archive>https://jaudiotagger.dev.java.net/servlets/SummarizeList?listName=issues</archive>
+      </mailingList>
+   </mailingLists>
+   <developers>
+      <developer>
+         <id>paultaylor</id>
+         <name>Paul Taylor</name>
+         <email>paultaylor@dev.java.net</email>
+         <organization>java.net</organization>
+         <organizationUrl>http://www.java.net/</organizationUrl>
+         <roles>
+            <role>Project Manager</role>
+            <role>Java Developer</role>
+         </roles>
+         <timezone/>
+         <properties/>
+      </developer>
+      <developer>
+         <id>mgimpel</id> 
+         <name>Marc Gimpel</name> 
+         <email>mgimpel@horizonwimba.com</email> 
+         <organization>Horizon Wimba</organization> 
+         <organizationUrl>http://www.horizonwimba.com/</organizationUrl> 
+         <roles>
+            <role>Java Developer</role> 
+         </roles>
+         <timezone>+1</timezone> 
+         <properties/> 
+      </developer>
+   </developers>
+   <licenses>
+      <license>
+         <name>LGPL</name>
+         <url>http://www.gnu.org/copyleft/lesser.html</url>
+      </license>
+   </licenses>
+   <dependencies>
+      <dependency>
+         <groupId>junit</groupId>
+         <artifactId>junit</artifactId>
+         <version>3.8.1</version>
+         <scope>test</scope>
+      </dependency>
+   </dependencies>
+   <build>
+      <plugins>
+         <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-compiler-plugin</artifactId>
+            <configuration>
+               <source>1.5</source>
+               <target>1.5</target>
+            </configuration>
+         </plugin>
+      </plugins>
+      <sourceDirectory>src</sourceDirectory>
+      <testSourceDirectory>srctest</testSourceDirectory>
+   </build>
+   <reporting>
+      <plugins>
+         <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-project-info-reports-plugin</artifactId>
+         </plugin>
+         <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-surefire-report-plugin</artifactId>
+         </plugin>
+         <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-javadoc-plugin</artifactId>
+            <configuration>
+               <!--<overview>${project.build.sourceDirectory}/overview.html</overview>-->
+               <links>
+                  <link>http://java.sun.com/j2ee/1.4/docs/api</link>
+                  <link>http://java.sun.com/j2se/1.5.0/docs/api</link>
+                  <link>http://www.junit.org/junit/javadoc/</link>
+               </links>
+            </configuration>
+         </plugin>
+         <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>jxr-maven-plugin</artifactId>
+         </plugin>
+         <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>changelog-maven-plugin</artifactId>
+         </plugin>
+         <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-checkstyle-plugin</artifactId>
+         </plugin>
+         <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-pmd-plugin</artifactId>
+         </plugin>
+      </plugins>
+   </reporting>
 </project>
