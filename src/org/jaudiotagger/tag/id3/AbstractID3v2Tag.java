@@ -372,12 +372,10 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
         Object o = frameMap.get(field.getId());
         if (o == null || (!getID3Frames().isMultipleAllowed(newFrame.getId())))
         {
-            System.out.println("Replacing....");
             frameMap.put(field.getId(), field);
         }
         else if (o instanceof AbstractID3v2Frame)
         {
-            System.out.println("Frame exists");
             AbstractID3v2Frame oldFrame = (AbstractID3v2Frame) o;
             if (newFrame.getBody() instanceof FrameBodyTXXX)
             {
@@ -389,12 +387,10 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
                     frames.add(oldFrame);
                     frames.add(newFrame);
                     frameMap.put(newFrame.getId(), frames);
-                    System.out.println("Adding....");
                 }
                 //Same key so replace
                 else
                 {
-                    System.out.println("Replacing key....");
                     frameMap.put(newFrame.getId(), newFrame);
                 }
             }
@@ -1493,7 +1489,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
 
     public Iterator getFields()
     {
-        final Iterator<Map.Entry<String,Object>> it = this.frameMap.entrySet().iterator();
+        final Iterator<Map.Entry<String, Object>> it = this.frameMap.entrySet().iterator();
         return new Iterator()
         {
             private Iterator fieldsIt;
@@ -1505,17 +1501,17 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
                     return;
                 }
 
-                Map.Entry<String,Object> e = it.next();
-                if(e.getValue() instanceof List)
+                Map.Entry<String, Object> e = it.next();
+                if (e.getValue() instanceof List)
                 {
-                    List<TagField>  l = (List)e.getValue();
+                    List<TagField> l = (List) e.getValue();
                     fieldsIt = l.iterator();
                 }
                 else
                 {
                     //TODO must be a better way
-                    List<TagField>  l = new ArrayList<TagField>();
-                    l.add((TagField)e.getValue());
+                    List<TagField> l = new ArrayList<TagField>();
+                    l.add((TagField) e.getValue());
                     fieldsIt = l.iterator();
                 }
             }
@@ -1550,9 +1546,9 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
     {
         Iterator it = getFields();
         int count = 0;
-        while(it.hasNext())
+        while (it.hasNext())
         {
-            count ++;
+            count++;
             it.next();
         }
         return count;
@@ -1580,8 +1576,8 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
         return doGetFirst(getFrameAndSubIdFromGenericKey(genericKey));
     }
 
-   
-      /**
+
+    /**
      * Create a new TagField
      * <p/>
      * Only textual data supported at the moment. The genericKey will be mapped
@@ -1598,7 +1594,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
         {
             throw new KeyNotFoundException();
         }
-        return doCreateTagField(getFrameAndSubIdFromGenericKey(genericKey),value);
+        return doCreateTagField(getFrameAndSubIdFromGenericKey(genericKey), value);
     }
 
     /**
@@ -1648,7 +1644,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
         {
             ((AbstractFrameBodyTextInfo) frame.getBody()).setText(value);
         }
-        else if ((frame.getBody() instanceof FrameBodyAPIC )||(frame.getBody() instanceof FrameBodyPIC))
+        else if ((frame.getBody() instanceof FrameBodyAPIC) || (frame.getBody() instanceof FrameBodyPIC))
         {
             throw new UnsupportedOperationException("Please use createArtwork() instead for creating artwork");
         }
@@ -1661,7 +1657,6 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
 
 
     /**
-     *
      * @param formatKey
      * @return
      * @throws KeyNotFoundException
@@ -1721,18 +1716,18 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
     public TagField createLinkedArtworkField(String url)
     {
         AbstractID3v2Frame frame = createFrame(getFrameAndSubIdFromGenericKey(TagFieldKey.COVER_ART).getFrameId());
-        if(frame.getBody() instanceof FrameBodyAPIC)
+        if (frame.getBody() instanceof FrameBodyAPIC)
         {
-            FrameBodyAPIC body = (FrameBodyAPIC)frame.getBody();
+            FrameBodyAPIC body = (FrameBodyAPIC) frame.getBody();
             body.setObjectValue(DataTypes.OBJ_PICTURE_DATA, Utils.getDefaultBytes(url, TextEncoding.CHARSET_ISO_8859_1));
             body.setObjectValue(DataTypes.OBJ_PICTURE_TYPE, PictureTypes.DEFAULT_ID);
             body.setObjectValue(DataTypes.OBJ_MIME_TYPE, FrameBodyAPIC.IMAGE_IS_URL);
             body.setObjectValue(DataTypes.OBJ_DESCRIPTION, "");
         }
-        else if(frame.getBody() instanceof FrameBodyPIC)
+        else if (frame.getBody() instanceof FrameBodyPIC)
         {
-            FrameBodyPIC body = (FrameBodyPIC)frame.getBody();
-            body.setObjectValue(DataTypes.OBJ_PICTURE_DATA, Utils.getDefaultBytes(url, TextEncoding.CHARSET_ISO_8859_1));                    
+            FrameBodyPIC body = (FrameBodyPIC) frame.getBody();
+            body.setObjectValue(DataTypes.OBJ_PICTURE_DATA, Utils.getDefaultBytes(url, TextEncoding.CHARSET_ISO_8859_1));
             body.setObjectValue(DataTypes.OBJ_PICTURE_TYPE, PictureTypes.DEFAULT_ID);
             body.setObjectValue(DataTypes.OBJ_IMAGE_FORMAT, FrameBodyAPIC.IMAGE_IS_URL);
             body.setObjectValue(DataTypes.OBJ_DESCRIPTION, "");
@@ -1743,25 +1738,24 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
     /**
      * Create Artwork
      *
-     * @see PictureTypes
-     *
      * @param data
      * @param mimeType of the image
+     * @see PictureTypes
      */
-    public TagField createArtworkField(byte[] data,String mimeType)
+    public TagField createArtworkField(byte[] data, String mimeType)
     {
         AbstractID3v2Frame frame = createFrame(getFrameAndSubIdFromGenericKey(TagFieldKey.COVER_ART).getFrameId());
-        if(frame.getBody() instanceof FrameBodyAPIC)
+        if (frame.getBody() instanceof FrameBodyAPIC)
         {
-            FrameBodyAPIC body = (FrameBodyAPIC)frame.getBody();
+            FrameBodyAPIC body = (FrameBodyAPIC) frame.getBody();
             body.setObjectValue(DataTypes.OBJ_PICTURE_DATA, data);
             body.setObjectValue(DataTypes.OBJ_PICTURE_TYPE, PictureTypes.DEFAULT_ID);
             body.setObjectValue(DataTypes.OBJ_MIME_TYPE, mimeType);
             body.setObjectValue(DataTypes.OBJ_DESCRIPTION, "");
         }
-        else if(frame.getBody() instanceof FrameBodyPIC)
+        else if (frame.getBody() instanceof FrameBodyPIC)
         {
-            FrameBodyPIC body = (FrameBodyPIC)frame.getBody();
+            FrameBodyPIC body = (FrameBodyPIC) frame.getBody();
             body.setObjectValue(DataTypes.OBJ_PICTURE_DATA, data);
             body.setObjectValue(DataTypes.OBJ_PICTURE_TYPE, PictureTypes.DEFAULT_ID);
             body.setObjectValue(DataTypes.OBJ_IMAGE_FORMAT, ImageFormats.getFormatForMimeType(mimeType));
