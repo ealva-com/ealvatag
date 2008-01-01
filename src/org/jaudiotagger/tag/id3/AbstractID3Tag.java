@@ -31,7 +31,6 @@ import java.util.logging.Logger;
  *
  * @author : Eric Farng
  * @author : Paul Taylor
- *
  */
 public abstract class AbstractID3Tag extends AbstractTag
 {

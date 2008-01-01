@@ -23,9 +23,9 @@ import java.util.*;
 
 /**
  * Subclasses Defines ID3 frames for their Tag Version
- *
+ * <p/>
  * Here we specify how frames are mapped between different Tag Versions
- * 
+ *
  * @author Paul Taylor
  * @version $Id$
  */
@@ -34,32 +34,32 @@ public abstract class ID3Frames extends AbstractStringStringValuePair
     /**
      * Holds frames whereby multiple occurences are allowed
      */
-    protected TreeSet<String>  multipleFrames = new TreeSet<String> ();
+    protected TreeSet<String> multipleFrames = new TreeSet<String>();
 
     /**
      * These frames should be lost if file changes
      */
-    protected TreeSet<String>  discardIfFileAlteredFrames= new TreeSet<String> ();
+    protected TreeSet<String> discardIfFileAlteredFrames = new TreeSet<String>();
 
     /**
      * These frames are part of the Official Specification for that Tag Version
      */
-    protected TreeSet<String>  supportedFrames = new TreeSet<String> ();
+    protected TreeSet<String> supportedFrames = new TreeSet<String>();
 
     /**
      * These frames are extensions to the  Specification for that Tag Version
      */
-    protected TreeSet<String> extensionFrames = new TreeSet<String> ();
+    protected TreeSet<String> extensionFrames = new TreeSet<String>();
 
     /**
      * These frames are Common , this is a loose term
      */
-    protected TreeSet<String>  commonFrames = new TreeSet<String> ();
+    protected TreeSet<String> commonFrames = new TreeSet<String>();
 
     /**
      * These frames are Binary
      */
-    protected TreeSet<String>  binaryFrames = new TreeSet<String> ();
+    protected TreeSet<String> binaryFrames = new TreeSet<String>();
 
     /**
      * If file changes discard these frames
@@ -78,7 +78,6 @@ public abstract class ID3Frames extends AbstractStringStringValuePair
     }
 
     /**
-     *
      * @param frameID
      * @return true if frames with this id are part of the specification
      */
@@ -88,7 +87,6 @@ public abstract class ID3Frames extends AbstractStringStringValuePair
     }
 
     /**
-     *
      * @param frameID
      * @return true if frames with this id are considered common
      */
@@ -98,7 +96,6 @@ public abstract class ID3Frames extends AbstractStringStringValuePair
     }
 
     /**
-     *
      * @param frameID
      * @return true if frames with this id are binary (non textual data)
      */
@@ -109,9 +106,7 @@ public abstract class ID3Frames extends AbstractStringStringValuePair
 
 
     /**
-     *
      * @param frameID
-     *
      * @return true if frame is a known extension
      */
     public boolean isExtensionFrames(String frameID)
@@ -119,19 +114,19 @@ public abstract class ID3Frames extends AbstractStringStringValuePair
         return extensionFrames.contains(frameID);
     }
 
-   
+
     /**
      * Mapping from v22 to v23
      */
-    public static final Map<String,String> convertv22Tov23 = new LinkedHashMap<String,String>();
-    public static final Map<String,String> convertv23Tov22 = new LinkedHashMap<String,String>();
-    public static final Map<String,String> forcev22Tov23   = new LinkedHashMap<String,String>();
-    public static final Map<String,String> forcev23Tov22    = new LinkedHashMap<String,String>();
+    public static final Map<String, String> convertv22Tov23 = new LinkedHashMap<String, String>();
+    public static final Map<String, String> convertv23Tov22 = new LinkedHashMap<String, String>();
+    public static final Map<String, String> forcev22Tov23 = new LinkedHashMap<String, String>();
+    public static final Map<String, String> forcev23Tov22 = new LinkedHashMap<String, String>();
 
-    public static final Map<String,String> convertv23Tov24 = new LinkedHashMap<String,String>();
-    public static final Map<String,String> convertv24Tov23 = new LinkedHashMap<String,String>();
-    public static final Map<String,String> forcev23Tov24   = new LinkedHashMap<String,String>();
-    public static final Map<String,String> forcev24Tov23   = new LinkedHashMap<String,String>();
+    public static final Map<String, String> convertv23Tov24 = new LinkedHashMap<String, String>();
+    public static final Map<String, String> convertv24Tov23 = new LinkedHashMap<String, String>();
+    public static final Map<String, String> forcev23Tov24 = new LinkedHashMap<String, String>();
+    public static final Map<String, String> forcev24Tov23 = new LinkedHashMap<String, String>();
 
 
     private static void loadID3v23ID3v24Mapping()
@@ -159,10 +154,10 @@ public abstract class ID3Frames extends AbstractStringStringValuePair
 
         // Note Force v24 to v23, TDRC is a 1M relationship handled specially.
         // @TODO EQUALISATION
-        forcev24Tov23.put(ID3v24Frames.FRAME_ID_RELATIVE_VOLUME_ADJUSTMENT2,ID3v23Frames.FRAME_ID_V3_RELATIVE_VOLUME_ADJUSTMENT);
+        forcev24Tov23.put(ID3v24Frames.FRAME_ID_RELATIVE_VOLUME_ADJUSTMENT2, ID3v23Frames.FRAME_ID_V3_RELATIVE_VOLUME_ADJUSTMENT);
 
         // Used to be a special frame now a text frame
-        forcev24Tov23.put(ID3v24Frames.FRAME_ID_INVOLVED_PEOPLE,ID3v23Frames.FRAME_ID_V3_IPLS);
+        forcev24Tov23.put(ID3v24Frames.FRAME_ID_INVOLVED_PEOPLE, ID3v23Frames.FRAME_ID_V3_IPLS);
 
     }
 
@@ -182,7 +177,7 @@ public abstract class ID3Frames extends AbstractStringStringValuePair
         convertv22Tov23.put(ID3v22Frames.FRAME_ID_V2_COMMENT, ID3v23Frames.FRAME_ID_V3_COMMENT);
         convertv22Tov23.put(ID3v22Frames.FRAME_ID_V2_COMPOSER, ID3v23Frames.FRAME_ID_V3_COMPOSER);
         convertv22Tov23.put(ID3v22Frames.FRAME_ID_V2_CONDUCTOR, ID3v23Frames.FRAME_ID_V3_CONDUCTOR);
-        convertv22Tov23.put(ID3v22Frames.FRAME_ID_V2_CONTENT_GROUP_DESC,ID3v23Frames.FRAME_ID_V3_CONTENT_GROUP_DESC);
+        convertv22Tov23.put(ID3v22Frames.FRAME_ID_V2_CONTENT_GROUP_DESC, ID3v23Frames.FRAME_ID_V3_CONTENT_GROUP_DESC);
         convertv22Tov23.put(ID3v22Frames.FRAME_ID_V2_COPYRIGHTINFO, ID3v23Frames.FRAME_ID_V3_COPYRIGHTINFO);
         convertv22Tov23.put(ID3v22Frames.FRAME_ID_V2_ENCODEDBY, ID3v23Frames.FRAME_ID_V3_ENCODEDBY);
         convertv22Tov23.put(ID3v22Frames.FRAME_ID_V2_EQUALISATION, ID3v23Frames.FRAME_ID_V3_EQUALISATION);

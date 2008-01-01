@@ -32,7 +32,7 @@ import java.nio.ByteBuffer;
 public class FieldFrameBodyUnsupported extends AbstractLyrics3v2FieldFrameBody
 {
     /**
-     * 
+     *
      */
     private byte[] value = null;
 
@@ -53,7 +53,7 @@ public class FieldFrameBodyUnsupported extends AbstractLyrics3v2FieldFrameBody
     /**
      * Creates a new FieldBodyUnsupported datatype.
      *
-     * @param value 
+     * @param value
      */
     public FieldFrameBodyUnsupported(byte[] value)
     {
@@ -62,21 +62,17 @@ public class FieldFrameBodyUnsupported extends AbstractLyrics3v2FieldFrameBody
 
     /**
      * Creates a new FieldBodyUnsupported datatype.
-     *
-
      */
     public FieldFrameBodyUnsupported(ByteBuffer byteBuffer)
-        throws InvalidTagException
+            throws InvalidTagException
     {
 
-            this.read(byteBuffer);
+        this.read(byteBuffer);
 
     }
 
     /**
-     * 
-     *
-     * @return 
+     * @return
      */
     public String getIdentifier()
     {
@@ -84,10 +80,8 @@ public class FieldFrameBodyUnsupported extends AbstractLyrics3v2FieldFrameBody
     }
 
     /**
-     * 
-     *
-     * @param obj 
-     * @return 
+     * @param obj
+     * @return
      */
     public boolean isSubsetOf(Object obj)
     {
@@ -110,10 +104,8 @@ public class FieldFrameBodyUnsupported extends AbstractLyrics3v2FieldFrameBody
     }
 
     /**
-     * 
-     *
-     * @param obj 
-     * @return 
+     * @param obj
+     * @return
      */
     public boolean equals(Object obj)
     {
@@ -133,13 +125,11 @@ public class FieldFrameBodyUnsupported extends AbstractLyrics3v2FieldFrameBody
     }
 
     /**
-     * 
-     *
-     * @param byteBuffer 
-     * @throws IOException 
+     * @param byteBuffer
+     * @throws IOException
      */
     public void read(ByteBuffer byteBuffer)
-        throws InvalidTagException
+            throws InvalidTagException
     {
         int size;
         byte[] buffer = new byte[5];
@@ -155,9 +145,7 @@ public class FieldFrameBodyUnsupported extends AbstractLyrics3v2FieldFrameBody
     }
 
     /**
-     * 
-     *
-     * @return 
+     * @return
      */
     public String toString()
     {
@@ -165,13 +153,11 @@ public class FieldFrameBodyUnsupported extends AbstractLyrics3v2FieldFrameBody
     }
 
     /**
-     * 
-     *
-     * @param file 
-     * @throws IOException 
+     * @param file
+     * @throws IOException
      */
     public void write(RandomAccessFile file)
-        throws IOException
+            throws IOException
     {
         int offset = 0;
         String str;
@@ -196,11 +182,11 @@ public class FieldFrameBodyUnsupported extends AbstractLyrics3v2FieldFrameBody
         file.write(value);
     }
 
-     /**
-      * TODO
-      */
-     protected void setupObjectList()
-     {
+    /**
+     * TODO
+     */
+    protected void setupObjectList()
+    {
 
-     }
+    }
 }

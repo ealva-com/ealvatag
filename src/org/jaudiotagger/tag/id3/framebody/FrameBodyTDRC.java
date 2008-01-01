@@ -138,7 +138,7 @@ public class FrameBodyTDRC extends AbstractFrameBodyTextInfo implements ID3v24Fr
                 }
                 catch (ParseException e)
                 {
-                     logger.warning("Unable to parse:" + date + " as date");
+                    logger.warning("Unable to parse:" + date + " as date");
                 }
             }
             if (!time.equals(""))
@@ -149,7 +149,7 @@ public class FrameBodyTDRC extends AbstractFrameBodyTextInfo implements ID3v24Fr
                 }
                 catch (ParseException e)
                 {
-                     logger.warning("Unable to parse:" + time + " as time");
+                    logger.warning("Unable to parse:" + time + " as time");
                 }
             }
             return sb.toString();
@@ -265,7 +265,7 @@ public class FrameBodyTDRC extends AbstractFrameBodyTextInfo implements ID3v24Fr
                     break;
                 }
             }
-                //Dont display will occur for each failed format
+            //Dont display will occur for each failed format
             catch (ParseException e)
             {
                 //Do nothing;
@@ -279,7 +279,7 @@ public class FrameBodyTDRC extends AbstractFrameBodyTextInfo implements ID3v24Fr
      * @throws InvalidTagException
      */
     public FrameBodyTDRC(ByteBuffer byteBuffer, int frameSize)
-        throws InvalidTagException
+            throws InvalidTagException
     {
         super(byteBuffer, frameSize);
         //Store the equivalent ID3v23 values in case convert
@@ -296,7 +296,7 @@ public class FrameBodyTDRC extends AbstractFrameBodyTextInfo implements ID3v24Fr
                     break;
                 }
             }
-                //Dont display will occur for each failed format
+            //Dont display will occur for each failed format
             catch (ParseException e)
             {
                 //Do nothing;
@@ -347,10 +347,10 @@ public class FrameBodyTDRC extends AbstractFrameBodyTextInfo implements ID3v24Fr
         }
     }
 
-     /**
-      * The ID3v2 frame identifier
-      *
-      * @return the ID3v2 frame identifier  for this frame type
+    /**
+     * The ID3v2 frame identifier
+     *
+     * @return the ID3v2 frame identifier  for this frame type
      */
     public String getIdentifier()
     {

@@ -26,7 +26,7 @@ import java.nio.ByteBuffer;
 
 /**
  * Represents Cover Art
- *
+ * <p/>
  * <p>Note:Within this library we have a seperate TagCoverField for every image stored, however this does not map
  * very directly to how they are physically stored within a file, because all are stored under a single covr atom, so
  * a more complex conversion has to be done then for other fields when writing multiple images back to file.
@@ -51,51 +51,53 @@ public class Mp4TagCoverField extends Mp4TagBinaryField
      * @param type
      * @throws UnsupportedEncodingException
      */
-    public Mp4TagCoverField(ByteBuffer raw,int type) throws UnsupportedEncodingException
+    public Mp4TagCoverField(ByteBuffer raw, int type) throws UnsupportedEncodingException
     {
         super(Mp4FieldKey.ARTWORK.getFieldName(), raw);
-        if(type==Mp4FieldType.COVERART_JPEG.getFileClassId())
+        if (type == Mp4FieldType.COVERART_JPEG.getFileClassId())
         {
-            imageType=Mp4FieldType.COVERART_JPEG;
+            imageType = Mp4FieldType.COVERART_JPEG;
         }
         else
         {
-            imageType=Mp4FieldType.COVERART_PNG;
+            imageType = Mp4FieldType.COVERART_PNG;
         }
     }
 
     /**
      * Construct new cover art with binarydata provided
-     *
-     * <p>
+     * <p/>
+     * <p/>
      * Identifies the imagetype by looking at the data, if doesnt match PNG assumes it is JPEG
      * TODO:Check how accurate is my method will it work for any PNG
      * TODO:What about if they try to add data that is corrupt or not PNG or JPG
+     *
      * @param data
      * @throws UnsupportedEncodingException
      */
-    public Mp4TagCoverField(byte[] data) 
+    public Mp4TagCoverField(byte[] data)
     {
-        super(Mp4FieldKey.ARTWORK.getFieldName(),data);
+        super(Mp4FieldKey.ARTWORK.getFieldName(), data);
 
         //Read signature
-        if(
-                (0x89==(data[0] & 0xff))||
-                (0x50==(data[0] & 0xff))||
-                (0x4E==(data[0] & 0xff))||
-                (0x47==(data[0] & 0xff))
-        )
+        if (
+                (0x89 == (data[0] & 0xff)) ||
+                        (0x50 == (data[0] & 0xff)) ||
+                        (0x4E == (data[0] & 0xff)) ||
+                        (0x47 == (data[0] & 0xff))
+                )
         {
-            imageType =Mp4FieldType.COVERART_PNG;
+            imageType = Mp4FieldType.COVERART_PNG;
         }
         else
         {
-            imageType =Mp4FieldType.COVERART_JPEG;
+            imageType = Mp4FieldType.COVERART_JPEG;
         }
     }
 
     /**
      * Return field type, for artwork this also identifies the imagetype
+     *
      * @return field type
      */
     public Mp4FieldType getFieldType()
@@ -108,18 +110,18 @@ public class Mp4TagCoverField extends Mp4TagBinaryField
         return true;
     }
 
-    
+
     public String toString()
     {
-        switch(imageType)
+        switch (imageType)
         {
             case COVERART_JPEG:
-                return "jpeg:"+dataBytes.length +"bytes";
+                return "jpeg:" + dataBytes.length + "bytes";
             case COVERART_PNG:
-                return "png"+dataBytes.length +"bytes";
+                return "png" + dataBytes.length + "bytes";
             default:
                 return "";
-       }
+        }
     }
 
 }

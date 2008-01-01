@@ -23,8 +23,8 @@ import java.nio.ByteBuffer;
 
 /**
  * Event timing codes frame.
- * 
- * <p>
+ * <p/>
+ * <p/>
  * This frame allows synchronisation with key events in a song or sound.
  * The header is:
  * </p><p><table border=0 width="70%">
@@ -33,8 +33,8 @@ import java.nio.ByteBuffer;
  * </table></p><p>
  * Where time stamp format is:
  * </p><p>
- *  $01 Absolute time, 32 bit sized, using <a href="#MPEG">MPEG</a> frames as unit<br>
- *  $02 Absolute time, 32 bit sized, using milliseconds as unit
+ * $01 Absolute time, 32 bit sized, using <a href="#MPEG">MPEG</a> frames as unit<br>
+ * $02 Absolute time, 32 bit sized, using milliseconds as unit
  * </p><p>
  * Abolute time means that every stamp contains the time from the
  * beginning of the file.
@@ -83,17 +83,17 @@ import java.nio.ByteBuffer;
  * explosion on-stage, turning on your screensaver etc.
  * </p><p>
  * There may only be one "ETCO" frame in each tag.</p>
- * 
+ * <p/>
  * <p>For more details, please refer to the ID3 specifications:
  * <ul>
  * <li><a href="http://www.id3.org/id3v2.3.0.txt">ID3 v2.3.0 Spec</a>
  * </ul>
- * 
+ *
  * @author : Paul Taylor
  * @author : Eric Farng
  * @version $Id$
  */
-public class FrameBodyETCO extends AbstractID3v2FrameBody implements ID3v24FrameBody,ID3v23FrameBody
+public class FrameBodyETCO extends AbstractID3v2FrameBody implements ID3v24FrameBody, ID3v23FrameBody
 {
     /**
      * Creates a new FrameBodyETCO datatype.
@@ -112,9 +112,9 @@ public class FrameBodyETCO extends AbstractID3v2FrameBody implements ID3v24Frame
     /**
      * Creates a new FrameBodyETCO datatype.
      *
-     * @param timeStampFormat 
-     * @param event           
-     * @param timeStamp       
+     * @param timeStampFormat
+     * @param event
+     * @param timeStamp
      */
     public FrameBodyETCO(byte timeStampFormat, byte event, int timeStamp)
     {
@@ -128,24 +128,21 @@ public class FrameBodyETCO extends AbstractID3v2FrameBody implements ID3v24Frame
      * @throws InvalidTagException if unable to create framebody from buffer
      */
     public FrameBodyETCO(ByteBuffer byteBuffer, int frameSize)
-        throws InvalidTagException
+            throws InvalidTagException
     {
         super(byteBuffer, frameSize);
     }
-  /**
-     * 
-     *
-     * @return 
+
+    /**
+     * @return
      */
     public String getIdentifier()
     {
-        return ID3v24Frames.FRAME_ID_EVENT_TIMING_CODES  ;
+        return ID3v24Frames.FRAME_ID_EVENT_TIMING_CODES;
     }
 
     /**
-     * 
-     *
-     * @return 
+     * @return
      */
     public String getOwner()
     {
@@ -153,9 +150,7 @@ public class FrameBodyETCO extends AbstractID3v2FrameBody implements ID3v24Frame
     }
 
     /**
-     * 
-     *
-     * @param description 
+     * @param description
      */
     public void getOwner(String description)
     {
@@ -163,10 +158,8 @@ public class FrameBodyETCO extends AbstractID3v2FrameBody implements ID3v24Frame
     }
 
     /**
-     * 
-     *
-     * @param event     
-     * @param timeStamp 
+     * @param event
+     * @param timeStamp
      */
     public void addGroup(byte event, int timeStamp)
     {
@@ -179,7 +172,7 @@ public class FrameBodyETCO extends AbstractID3v2FrameBody implements ID3v24Frame
     }
 
     /**
-     * 
+     *
      */
     protected void setupObjectList()
     {

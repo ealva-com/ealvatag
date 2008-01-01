@@ -23,17 +23,17 @@ import java.nio.ByteBuffer;
 /**
  * Internet radio station name Text information frame.
  * <p>The 'Internet radio station name' frame contains the name of the internet radio station from which the audio is streamed.
- * 
+ * <p/>
  * <p>For more details, please refer to the ID3 specifications:
  * <ul>
  * <li><a href="http://www.id3.org/id3v2.3.0.txt">ID3 v2.3.0 Spec</a>
  * </ul>
- * 
+ *
  * @author : Paul Taylor
  * @author : Eric Farng
  * @version $Id$
  */
-public class FrameBodyTRSN extends AbstractFrameBodyTextInfo implements ID3v23FrameBody,ID3v24FrameBody
+public class FrameBodyTRSN extends AbstractFrameBodyTextInfo implements ID3v23FrameBody, ID3v24FrameBody
 {
     /**
      * Creates a new FrameBodyTRSN datatype.
@@ -50,8 +50,8 @@ public class FrameBodyTRSN extends AbstractFrameBodyTextInfo implements ID3v23Fr
     /**
      * Creates a new FrameBodyTRSN datatype.
      *
-     * @param textEncoding 
-     * @param text         
+     * @param textEncoding
+     * @param text
      */
     public FrameBodyTRSN(byte textEncoding, String text)
     {
@@ -61,19 +61,19 @@ public class FrameBodyTRSN extends AbstractFrameBodyTextInfo implements ID3v23Fr
     /**
      * Creates a new FrameBodyTRSN datatype.
      *
-     * @throws java.io.IOException 
-     * @throws InvalidTagException 
+     * @throws java.io.IOException
+     * @throws InvalidTagException
      */
     public FrameBodyTRSN(ByteBuffer byteBuffer, int frameSize)
-        throws InvalidTagException
+            throws InvalidTagException
     {
         super(byteBuffer, frameSize);
     }
 
-     /**
-      * The ID3v2 frame identifier
-      *
-      * @return the ID3v2 frame identifier  for this frame type
+    /**
+     * The ID3v2 frame identifier
+     *
+     * @return the ID3v2 frame identifier  for this frame type
      */
     public String getIdentifier()
     {

@@ -23,8 +23,8 @@ import java.nio.ByteBuffer;
 
 /**
  * Audio encryption Frame.
- * 
- * <p>
+ * <p/>
+ * <p/>
  * This frame indicates if the actual audio stream is encrypted, and by
  * whom. Since standardisation of such encrypion scheme is beyond this
  * document, all "AENC" frames begin with a terminated string with a
@@ -50,17 +50,17 @@ import java.nio.ByteBuffer;
  * <tr><td>Preview length    </td><td>$xx xx                     </td></tr>
  * <tr><td>Encryption info   </td><td>&lt;binary data&gt;        </td></tr>
  * </table></p>
- * 
+ * <p/>
  * <p>For more details, please refer to the ID3 specifications:
  * <ul>
  * <li><a href="http://www.id3.org/id3v2.3.0.txt">ID3 v2.3.0 Spec</a>
  * </ul>
- * 
+ *
  * @author : Paul Taylor
  * @author : Eric Farng
  * @version $Id$
  */
-public class FrameBodyAENC extends AbstractID3v2FrameBody implements ID3v24FrameBody,ID3v23FrameBody
+public class FrameBodyAENC extends AbstractID3v2FrameBody implements ID3v24FrameBody, ID3v23FrameBody
 {
 
     /**
@@ -82,10 +82,10 @@ public class FrameBodyAENC extends AbstractID3v2FrameBody implements ID3v24Frame
     /**
      * Creates a new FrameBodyAENC datatype.
      *
-     * @param owner         
-     * @param previewStart  
-     * @param previewLength 
-     * @param data          
+     * @param owner
+     * @param previewStart
+     * @param previewLength
+     * @param data
      */
     public FrameBodyAENC(String owner,
                          short previewStart,
@@ -104,15 +104,15 @@ public class FrameBodyAENC extends AbstractID3v2FrameBody implements ID3v24Frame
      * @throws InvalidTagException if unable to create framebody from buffer
      */
     public FrameBodyAENC(ByteBuffer byteBuffer, int frameSize)
-        throws InvalidTagException
+            throws InvalidTagException
     {
         super(byteBuffer, frameSize);
     }
 
     /**
-      * The ID3v2 frame identifier
-      *
-      * @return the ID3v2 frame identifier  for this frame type
+     * The ID3v2 frame identifier
+     *
+     * @return the ID3v2 frame identifier  for this frame type
      */
     public String getIdentifier()
     {
@@ -120,8 +120,6 @@ public class FrameBodyAENC extends AbstractID3v2FrameBody implements ID3v24Frame
     }
 
     /**
-     * 
-     *
      * @return owner
      */
     public String getOwner()
@@ -130,9 +128,7 @@ public class FrameBodyAENC extends AbstractID3v2FrameBody implements ID3v24Frame
     }
 
     /**
-     * 
-     *
-     * @param description 
+     * @param description
      */
     public void getOwner(String description)
     {
@@ -140,7 +136,7 @@ public class FrameBodyAENC extends AbstractID3v2FrameBody implements ID3v24Frame
     }
 
     /**
-     * 
+     *
      */
     protected void setupObjectList()
     {

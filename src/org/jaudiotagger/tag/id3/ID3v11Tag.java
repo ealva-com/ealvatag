@@ -40,13 +40,12 @@ import java.util.regex.Matcher;
 
 /**
  * Represents an ID3v11 tag.
- *  
+ *
  * @author : Eric Farng
  * @author : Paul Taylor
- *
  */
 public class ID3v11Tag
-    extends ID3v1Tag
+        extends ID3v1Tag
 {
 
     //For writing output
@@ -70,9 +69,10 @@ public class ID3v11Tag
      */
     protected byte track = (byte) TRACK_UNDEFINED;
 
-    private static final byte RELEASE  = 1;
+    private static final byte RELEASE = 1;
     private static final byte MAJOR_VERSION = 1;
     private static final byte REVISION = 0;
+
     /**
      * Retrieve the Release
      */
@@ -96,6 +96,7 @@ public class ID3v11Tag
     {
         return REVISION;
     }
+
     /**
      * Creates a new ID3v11 datatype.
      */
@@ -113,8 +114,8 @@ public class ID3v11Tag
     /**
      * Creates a new ID3v11 datatype from a non v11 tag
      *
-     * @param mp3tag 
-     * @throws UnsupportedOperationException 
+     * @param mp3tag
+     * @throws UnsupportedOperationException
      */
     public ID3v11Tag(AbstractTag mp3tag)
     {
@@ -142,13 +143,13 @@ public class ID3v11Tag
             {
                 ID3v24Tag id3tag;
                 // first change the tag to ID3v2_4 tag if not one already
-                if(!(mp3tag instanceof ID3v24Tag))
+                if (!(mp3tag instanceof ID3v24Tag))
                 {
                     id3tag = new ID3v24Tag(mp3tag);
                 }
                 else
                 {
-                    id3tag = (ID3v24Tag)mp3tag;
+                    id3tag = (ID3v24Tag) mp3tag;
                 }
                 ID3v24Frame frame;
                 String text;
@@ -191,28 +192,28 @@ public class ID3v11Tag
                 if (id3tag.hasFrame(ID3v24Frames.FRAME_ID_GENRE))
                 {
                     frame = (ID3v24Frame) id3tag.getFrame(ID3v24Frames.FRAME_ID_GENRE);
-                    text =  ((FrameBodyTCON) frame.getBody()).getText();
+                    text = ((FrameBodyTCON) frame.getBody()).getText();
                     try
                     {
                         this.genre = (byte) ID3Tags.findNumber(text);
                     }
                     catch (TagException ex)
                     {
-                        logger.log(Level.WARNING,getLoggingFilename()+":"+"Unable to convert TCON frame to format suitable for v11 tag",ex);
+                        logger.log(Level.WARNING, getLoggingFilename() + ":" + "Unable to convert TCON frame to format suitable for v11 tag", ex);
                         this.genre = (byte) ID3v1Tag.GENRE_UNDEFINED;
                     }
                 }
                 if (id3tag.hasFrame(ID3v24Frames.FRAME_ID_TRACK))
                 {
                     frame = (ID3v24Frame) id3tag.getFrame(ID3v24Frames.FRAME_ID_TRACK);
-                    text =  ((FrameBodyTRCK) frame.getBody()).getText();
+                    text = ((FrameBodyTRCK) frame.getBody()).getText();
                     try
                     {
                         this.track = (byte) ID3Tags.findNumber(text);
                     }
                     catch (TagException ex)
                     {
-                        logger.log(Level.WARNING,getLoggingFilename()+":"+"Unable to convert TRCK frame to format suitable for v11 tag",ex);
+                        logger.log(Level.WARNING, getLoggingFilename() + ":" + "Unable to convert TRCK frame to format suitable for v11 tag", ex);
                         this.track = (byte) TRACK_UNDEFINED;
                     }
                 }
@@ -228,12 +229,12 @@ public class ID3v11Tag
      * @throws TagNotFoundException
      * @throws IOException
      */
-    public ID3v11Tag(RandomAccessFile file,String loggingFilename)
-        throws TagNotFoundException, IOException
+    public ID3v11Tag(RandomAccessFile file, String loggingFilename)
+            throws TagNotFoundException, IOException
     {
         setLoggingFilename(loggingFilename);
         FileChannel fc;
-        ByteBuffer  byteBuffer = ByteBuffer.allocate(TAG_LENGTH);
+        ByteBuffer byteBuffer = ByteBuffer.allocate(TAG_LENGTH);
 
         fc = file.getChannel();
         fc.position(file.length() - TAG_LENGTH);
@@ -247,16 +248,15 @@ public class ID3v11Tag
     /**
      * Creates a new ID3v1_1 datatype.
      *
-     * @param file 
-     * @throws TagNotFoundException 
+     * @param file
+     * @throws TagNotFoundException
      * @throws IOException
-     *
      * @deprecated use {@link #ID3v11Tag(RandomAccessFile,String)} instead
      */
     public ID3v11Tag(RandomAccessFile file)
-        throws TagNotFoundException, IOException
+            throws TagNotFoundException, IOException
     {
-        this(file,"");
+        this(file, "");
 
     }
 
@@ -325,15 +325,15 @@ public class ID3v11Tag
     @Override
     public void addTrack(String track)
     {
-       setTrack(track);
+        setTrack(track);
     }
-    
+
     @Override
     public List getTrack()
     {
-        if(getFirstTrack().length()>0)
+        if (getFirstTrack().length() > 0)
         {
-            ID3v1TagField field = new ID3v1TagField(ID3v1FieldKey.TRACK.name(),getFirstTrack());
+            ID3v1TagField field = new ID3v1TagField(ID3v1FieldKey.TRACK.name(), getFirstTrack());
             return returnFieldToList(field);
         }
         else
@@ -342,10 +342,10 @@ public class ID3v11Tag
         }
     }
 
-     public void set(TagField field)
+    public void set(TagField field)
     {
         TagFieldKey genericKey = TagFieldKey.valueOf(field.getId());
-        switch(genericKey)
+        switch (genericKey)
         {
             case ARTIST:
                 setArtist(field.toString());
@@ -365,7 +365,7 @@ public class ID3v11Tag
             case COMMENT:
                 setComment(field.toString());
 
-             case TRACK:
+            case TRACK:
                 setTrack(field.toString());
         }
     }
@@ -375,7 +375,7 @@ public class ID3v11Tag
      * fields set to same value
      *
      * @param obj Comparing Object
-     * @return 
+     * @return
      */
     public boolean equals(Object obj)
     {
@@ -394,6 +394,7 @@ public class ID3v11Tag
 
     /**
      * Find identifer within byteBuffer to indicate that a v11 tag exists within the buffer
+     *
      * @param byteBuffer
      * @return true if find header for v11 tag within buffer
      */
@@ -430,7 +431,7 @@ public class ID3v11Tag
      * @throws TagNotFoundException if unable to read a tag in the byteBuffer
      */
     public void read(ByteBuffer byteBuffer)
-        throws TagNotFoundException
+            throws TagNotFoundException
     {
         if (seek(byteBuffer) == false)
         {
@@ -442,31 +443,31 @@ public class ID3v11Tag
         byte[] dataBuffer = new byte[TAG_LENGTH];
         byteBuffer.position(0);
         byteBuffer.get(dataBuffer, 0, TAG_LENGTH);
-        title = Utils.getString(dataBuffer, FIELD_TITLE_POS, this.FIELD_TITLE_LENGTH,"ISO-8859-1").trim();
+        title = Utils.getString(dataBuffer, FIELD_TITLE_POS, this.FIELD_TITLE_LENGTH, "ISO-8859-1").trim();
         Matcher m = endofStringPattern.matcher(title);
         if (m.find() == true)
         {
             title = title.substring(0, m.start());
         }
-        artist = Utils.getString(dataBuffer, FIELD_ARTIST_POS, this.FIELD_ARTIST_LENGTH,"ISO-8859-1").trim();
+        artist = Utils.getString(dataBuffer, FIELD_ARTIST_POS, this.FIELD_ARTIST_LENGTH, "ISO-8859-1").trim();
         m = endofStringPattern.matcher(artist);
         if (m.find() == true)
         {
             artist = artist.substring(0, m.start());
         }
-        album = Utils.getString(dataBuffer, FIELD_ALBUM_POS, this.FIELD_ALBUM_LENGTH,"ISO-8859-1").trim();
+        album = Utils.getString(dataBuffer, FIELD_ALBUM_POS, this.FIELD_ALBUM_LENGTH, "ISO-8859-1").trim();
         m = endofStringPattern.matcher(album);
         if (m.find() == true)
         {
             album = album.substring(0, m.start());
         }
-        year = Utils.getString(dataBuffer, FIELD_YEAR_POS, this.FIELD_YEAR_LENGTH,"ISO-8859-1").trim();
+        year = Utils.getString(dataBuffer, FIELD_YEAR_POS, this.FIELD_YEAR_LENGTH, "ISO-8859-1").trim();
         m = endofStringPattern.matcher(year);
         if (m.find() == true)
         {
             year = year.substring(0, m.start());
         }
-        comment = Utils.getString(dataBuffer, FIELD_COMMENT_POS, this.FIELD_COMMENT_LENGTH,"ISO-8859-1").trim();
+        comment = Utils.getString(dataBuffer, FIELD_COMMENT_POS, this.FIELD_COMMENT_LENGTH, "ISO-8859-1").trim();
         m = endofStringPattern.matcher(comment);
         if (m.find() == true)
         {
@@ -484,7 +485,7 @@ public class ID3v11Tag
      * @throws IOException thrown if there were problems writing to the file
      */
     public void write(RandomAccessFile file)
-        throws IOException
+            throws IOException
     {
         logger.info("Saving file");
         byte[] buffer = new byte[TAG_LENGTH];

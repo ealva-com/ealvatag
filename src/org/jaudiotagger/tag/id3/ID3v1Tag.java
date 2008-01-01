@@ -26,7 +26,7 @@ package org.jaudiotagger.tag.id3;
 import org.jaudiotagger.audio.mp3.MP3File;
 import org.jaudiotagger.audio.generic.Utils;
 import org.jaudiotagger.tag.*;
-import org.jaudiotagger.tag.id3.valuepair.GenreTypes;
+import org.jaudiotagger.tag.reference.GenreTypes;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
@@ -577,8 +577,8 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag
 
     public TagField getFirstField(String id)
     {
-       //TODO
-       throw new UnsupportedOperationException("TODO:Not done yet");
+        //TODO
+        throw new UnsupportedOperationException("TODO:Not done yet");
     }
 
     public Iterator getFields()
@@ -605,11 +605,10 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag
     }
 
 
-
     public void set(TagField field)
     {
         TagFieldKey genericKey = TagFieldKey.valueOf(field.getId());
-        switch(genericKey)
+        switch (genericKey)
         {
             case ARTIST:
                 setArtist(field.toString());
@@ -632,7 +631,6 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag
     }
 
     /**
-     *
      * @param encoding
      * @return
      */
@@ -663,7 +661,7 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag
      */
     public List<TagField> get(TagFieldKey genericKey)
     {
-        switch(genericKey)
+        switch (genericKey)
         {
             case ARTIST:
                 return getArtist();
@@ -684,7 +682,7 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag
                 return getComment();
 
             default:
-                return new ArrayList<TagField>();                        
+                return new ArrayList<TagField>();
         }
     }
 
@@ -692,13 +690,13 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag
     /**
      * Retrieve the first value that exists for this key id
      *
-     * @param  genericKey
+     * @param genericKey
      * @return
      */
     public String getFirst(String genericKey)
     {
         TagFieldKey matchingKey = TagFieldKey.valueOf(genericKey);
-        if(matchingKey!=null)
+        if (matchingKey != null)
         {
             return getFirst(matchingKey);
         }
@@ -717,7 +715,7 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag
      */
     public String getFirst(TagFieldKey genericKey)
     {
-         switch(genericKey)
+        switch (genericKey)
         {
             case ARTIST:
                 return getFirstArtist();
@@ -752,7 +750,7 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag
      */
     public void deleteTagField(TagFieldKey genericKey)
     {
-         switch(genericKey)
+        switch (genericKey)
         {
             case ARTIST:
                 setArtist("");
@@ -837,19 +835,19 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag
         byte[] dataBuffer = new byte[TAG_LENGTH];
         byteBuffer.position(0);
         byteBuffer.get(dataBuffer, 0, TAG_LENGTH);
-        title = Utils.getString(dataBuffer, FIELD_TITLE_POS, this.FIELD_TITLE_LENGTH,"ISO-8859-1").trim();
+        title = Utils.getString(dataBuffer, FIELD_TITLE_POS, this.FIELD_TITLE_LENGTH, "ISO-8859-1").trim();
         Matcher m = endofStringPattern.matcher(title);
         if (m.find() == true)
         {
             title = title.substring(0, m.start());
         }
-        artist = Utils.getString(dataBuffer, FIELD_ARTIST_POS, this.FIELD_ARTIST_LENGTH,"ISO-8859-1").trim();
+        artist = Utils.getString(dataBuffer, FIELD_ARTIST_POS, this.FIELD_ARTIST_LENGTH, "ISO-8859-1").trim();
         m = endofStringPattern.matcher(artist);
         if (m.find() == true)
         {
             artist = artist.substring(0, m.start());
         }
-        album = Utils.getString(dataBuffer, FIELD_ALBUM_POS, this.FIELD_ALBUM_LENGTH,"ISO-8859-1").trim();
+        album = Utils.getString(dataBuffer, FIELD_ALBUM_POS, this.FIELD_ALBUM_LENGTH, "ISO-8859-1").trim();
         m = endofStringPattern.matcher(album);
         logger.finest(getLoggingFilename() + ":" + "Orig Album is:" + comment + ":");
         if (m.find() == true)
@@ -857,13 +855,13 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag
             album = album.substring(0, m.start());
             logger.finest(getLoggingFilename() + ":" + "Album is:" + album + ":");
         }
-        year = Utils.getString(dataBuffer, FIELD_YEAR_POS, this.FIELD_YEAR_LENGTH,"ISO-8859-1").trim();
+        year = Utils.getString(dataBuffer, FIELD_YEAR_POS, this.FIELD_YEAR_LENGTH, "ISO-8859-1").trim();
         m = endofStringPattern.matcher(year);
         if (m.find() == true)
         {
             year = year.substring(0, m.start());
         }
-        comment = Utils.getString(dataBuffer, FIELD_COMMENT_POS, this.FIELD_COMMENT_LENGTH,"ISO-8859-1").trim();
+        comment = Utils.getString(dataBuffer, FIELD_COMMENT_POS, this.FIELD_COMMENT_LENGTH, "ISO-8859-1").trim();
         m = endofStringPattern.matcher(comment);
         logger.finest(getLoggingFilename() + ":" + "Orig Comment is:" + comment + ":");
         if (m.find() == true)

@@ -28,24 +28,24 @@ import java.util.NoSuchElementException;
 public class Lyrics3v1Iterator implements Iterator
 {
     /**
-     * 
+     *
      */
     private Lyrics3v1 tag = null;
 
     /**
-     * 
+     *
      */
     private int lastIndex = 0;
 
     /**
-     * 
+     *
      */
     private int removeIndex = 0;
 
     /**
      * Creates a new Lyrics3v1Iterator datatype.
      *
-     * @param lyrics3v1Tag 
+     * @param lyrics3v1Tag
      */
     public Lyrics3v1Iterator(Lyrics3v1 lyrics3v1Tag)
     {
@@ -53,9 +53,7 @@ public class Lyrics3v1Iterator implements Iterator
     }
 
     /**
-     * 
-     *
-     * @return 
+     * @return
      */
     public boolean hasNext()
     {
@@ -63,10 +61,8 @@ public class Lyrics3v1Iterator implements Iterator
     }
 
     /**
-     * 
-     *
-     * @return 
-     * @throws NoSuchElementException 
+     * @return
+     * @throws NoSuchElementException
      */
     public Object next()
     {
@@ -98,7 +94,7 @@ public class Lyrics3v1Iterator implements Iterator
     }
 
     /**
-     * 
+     *
      */
     public void remove()
     {

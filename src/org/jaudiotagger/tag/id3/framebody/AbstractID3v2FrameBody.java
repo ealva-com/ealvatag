@@ -37,7 +37,7 @@ import java.nio.ByteBuffer;
  * Contains the content for an ID3v2 frame, (the header is held directly within the frame
  */
 public abstract class AbstractID3v2FrameBody
-    extends AbstractTagFrameBody
+        extends AbstractTagFrameBody
 {
     protected static final String TYPE_BODY = "body";
 
@@ -47,7 +47,6 @@ public abstract class AbstractID3v2FrameBody
      * when we come to writing data we recalculate it.
      */
     private int size;
-
 
 
     /**
@@ -72,7 +71,7 @@ public abstract class AbstractID3v2FrameBody
      * @param byteBuffer from where to read the frame body from
      */
     protected AbstractID3v2FrameBody(ByteBuffer byteBuffer, int frameSize)
-        throws InvalidTagException
+            throws InvalidTagException
     {
         super();
         setSize(frameSize);
@@ -92,7 +91,7 @@ public abstract class AbstractID3v2FrameBody
      * Return size of frame body,if framebody already exist will take this value from the frame header
      * but it is always recalculated before writing any changes back to disk.
      *
-     * @return  size in bytes of this frame body
+     * @return size in bytes of this frame body
      */
     public int getSize()
     {
@@ -114,7 +113,7 @@ public abstract class AbstractID3v2FrameBody
     public void setSize()
     {
         size = 0;
-        for (AbstractDataType object:objectList)
+        for (AbstractDataType object : objectList)
         {
             size += object.getSize();
         }
@@ -138,18 +137,15 @@ public abstract class AbstractID3v2FrameBody
     /**
      * This reads a frame body from a ByteBuffer into the appropriate FrameBody class and update the position of the
      * buffer to be just after the end of this framebody
-     *
+     * <p/>
      * The ByteBuffer represents the tag and its position should be at the start of this framebody. The size as
      * indicated in the header is passed to the frame constructor when reading from file.
      *
      * @param byteBuffer file to read
-     *
      * @throws InvalidFrameException if unable to construct a framebody from the ByteBuffer
-     *
-     *
      */
     public void read(ByteBuffer byteBuffer)
-        throws InvalidTagException
+            throws InvalidTagException
     {
         int size = getSize();
         logger.info("Reading body for" + this.getIdentifier() + ":" + size);
@@ -165,9 +161,9 @@ public abstract class AbstractID3v2FrameBody
 
         //Go through the ObjectList of the Frame reading the data into the
         //correct datatype.
-        for (AbstractDataType object: objectList)
+        for (AbstractDataType object : objectList)
         {
-            logger.finest("offset:"+offset);
+            logger.finest("offset:" + offset);
 
             //The read has extended further than the defined frame size (ok to extend upto
             //size because the next datatype may be of length 0.)
@@ -185,8 +181,8 @@ public abstract class AbstractID3v2FrameBody
             }
             catch (InvalidDataTypeException e)
             {
-                 logger.warning("Invalid DataType for Frame Body:"+e.getMessage());
-                 throw new InvalidFrameException("Invalid DataType for Frame Body:"+e.getMessage());
+                logger.warning("Invalid DataType for Frame Body:" + e.getMessage());
+                throw new InvalidFrameException("Invalid DataType for Frame Body:" + e.getMessage());
             }
             //Increment Offset to start of next datatype.
             offset += object.getSize();
@@ -203,7 +199,7 @@ public abstract class AbstractID3v2FrameBody
     {
         logger.info("Writing frame body for" + this.getIdentifier() + ":Est Size:" + size);
         //Write the various fields to file in order
-        for (AbstractDataType object:objectList)
+        for (AbstractDataType object : objectList)
         {
             byte[] objectData = object.writeByteArray();
             if (objectData != null)
@@ -212,7 +208,7 @@ public abstract class AbstractID3v2FrameBody
                 {
                     tagBuffer.write(objectData);
                 }
-                catch(IOException ioe)
+                catch (IOException ioe)
                 {
                     //This could never happen coz not writing to file, so convert to RuntimeException
                     throw new RuntimeException(ioe);
@@ -230,7 +226,7 @@ public abstract class AbstractID3v2FrameBody
     public void createStructure()
     {
         MP3File.getStructureFormatter().openHeadingElement(TYPE_BODY, "");
-        for (AbstractDataType nextObject:objectList)
+        for (AbstractDataType nextObject : objectList)
         {
             nextObject.createStructure();
         }

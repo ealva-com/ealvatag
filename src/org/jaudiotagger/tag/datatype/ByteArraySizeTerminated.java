@@ -26,8 +26,9 @@ package org.jaudiotagger.tag.datatype;
 import org.jaudiotagger.tag.id3.AbstractTagFrameBody;
 import org.jaudiotagger.tag.InvalidDataTypeException;
 
-/** Represents a stream of bytes, continuing until the end of the buffer. Usually used for binary data or where
- *  we havent yet mapped the data to a better fitting type.
+/**
+ * Represents a stream of bytes, continuing until the end of the buffer. Usually used for binary data or where
+ * we havent yet mapped the data to a better fitting type.
  */
 public class ByteArraySizeTerminated extends AbstractDataType
 {
@@ -69,12 +70,10 @@ public class ByteArraySizeTerminated extends AbstractDataType
     }
 
     /**
-     * 
-     *
-     * @param arr    
-     * @param offset 
-     * @throws NullPointerException      
-     * @throws IndexOutOfBoundsException 
+     * @param arr
+     * @param offset
+     * @throws NullPointerException
+     * @throws IndexOutOfBoundsException
      */
     public void readByteArray(byte[] arr, int offset) throws InvalidDataTypeException
     {
@@ -104,7 +103,7 @@ public class ByteArraySizeTerminated extends AbstractDataType
      * Because this is usually binary data and could be very long we just return
      * the number of bytes held
      *
-     * @return  the number of bytes
+     * @return the number of bytes
      */
     public String toString()
     {

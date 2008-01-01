@@ -26,11 +26,13 @@ package org.jaudiotagger.tag.datatype;
 import org.jaudiotagger.tag.id3.AbstractTagFrameBody;
 import org.jaudiotagger.tag.InvalidDataTypeException;
 
-/** Represents a bit flag within a byte */
+/**
+ * Represents a bit flag within a byte
+ */
 public class BooleanByte extends AbstractDataType
 {
     /**
-     * 
+     *
      */
     int bitPosition = -1;
 
@@ -59,8 +61,6 @@ public class BooleanByte extends AbstractDataType
     }
 
     /**
-     * 
-     *
      * @return
      */
     public int getBitPosition()
@@ -69,8 +69,6 @@ public class BooleanByte extends AbstractDataType
     }
 
     /**
-     * 
-     *
      * @return
      */
     public int getSize()
@@ -79,8 +77,6 @@ public class BooleanByte extends AbstractDataType
     }
 
     /**
-     * 
-     *
      * @param obj
      * @return
      */
@@ -102,8 +98,6 @@ public class BooleanByte extends AbstractDataType
     }
 
     /**
-     * 
-     *
      * @param arr
      * @param offset
      * @throws NullPointerException
@@ -129,8 +123,6 @@ public class BooleanByte extends AbstractDataType
     }
 
     /**
-     * 
-     *
      * @return
      */
     public String toString()
@@ -139,8 +131,6 @@ public class BooleanByte extends AbstractDataType
     }
 
     /**
-     * 
-     *
      * @return
      */
     public byte[] writeByteArray()

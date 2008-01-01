@@ -24,8 +24,8 @@ import java.nio.ByteBuffer;
 
 /**
  * Table of content frame.
- * 
- * <p>
+ * <p/>
+ * <p/>
  * The purpose of "CTOC" frames is to allow a table of contents to be
  * defined. In the simplest case, a single "CTOC" frame can be used to
  * provide a flat (single-level) table of contents. However, multiple
@@ -48,7 +48,7 @@ import java.nio.ByteBuffer;
  * <tr><td>&lt;Child Element ID list&gt;</td></tr>
  * <tr><td>&lt;Optional embedded sub-frames&gt;</td></tr>
  * </table>
- * <p>
+ * <p/>
  * The Element ID uniquely identifies the frame. It is not intended to
  * be human readable and should not be presented to the end-user.
  * </p><p>
@@ -66,13 +66,13 @@ import java.nio.ByteBuffer;
  * sequence or played individually.
  * </p><p>
  * The Entry count is the number of entries in the Child Element ID list
- * that follows and must be greater than zero. Each entry in the list 
+ * that follows and must be greater than zero. Each entry in the list
  * consists of:
  * </p>
  * <table border="0" width="70%" align="center">
  * <tr><td nowrap="nowrap">Child Element ID</td><td>&nbsp;&nbsp;</td><td width="70%">&lt;text string&gt; $00</td></tr>
  * </table>
- * <p>
+ * <p/>
  * The last entry in the child Element ID list is followed by a sequence
  * of optional frames that are embedded within the "CTOC" frame and which
  * describe this element of the table of contents (e.g. a "TIT2" frame
@@ -85,12 +85,12 @@ import java.nio.ByteBuffer;
  * the size field in the frame header. When it does this it will skip
  * any embedded sub-frames carried within the frame.
  * </p>
- * 
+ * <p/>
  * <p>For more details, please refer to the ID3 Chapter Frame specifications:
  * <ul>
  * <li><a href="http://www.id3.org/id3v2-chapters-1.0.txt">ID3 v2 Chapter Frame Spec</a>
  * </ul>
- * 
+ *
  * @author Marc Gimpel, Horizon Wimba S.A.
  * @version $Id$
  */
@@ -105,7 +105,7 @@ public class FrameBodyCTOC extends AbstractID3v2FrameBody implements ID3v2Chapte
 
     /**
      * Creates a new FrameBodyCTOC datatype.
-     * 
+     *
      * @param body
      */
     public FrameBodyCTOC(FrameBodyCTOC body)
@@ -119,7 +119,7 @@ public class FrameBodyCTOC extends AbstractID3v2FrameBody implements ID3v2Chapte
      * @throws InvalidTagException if unable to create framebody from buffer
      */
     public FrameBodyCTOC(ByteBuffer byteBuffer, int frameSize)
-        throws InvalidTagException
+            throws InvalidTagException
     {
         super(byteBuffer, frameSize);
     }
@@ -139,6 +139,6 @@ public class FrameBodyCTOC extends AbstractID3v2FrameBody implements ID3v2Chapte
      */
     protected void setupObjectList()
     {
-         objectList.add(new ByteArraySizeTerminated(DataTypes.OBJ_DATA, this));
+        objectList.add(new ByteArraySizeTerminated(DataTypes.OBJ_DATA, this));
     }
 }

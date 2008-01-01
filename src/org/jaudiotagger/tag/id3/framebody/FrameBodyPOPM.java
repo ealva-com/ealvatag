@@ -23,8 +23,8 @@ import java.nio.ByteBuffer;
 
 /**
  * Popularimeter frame.
- * 
- * <p>
+ * <p/>
+ * <p/>
  * The purpose of this frame is to specify how good an audio file is.
  * Many interesting applications could be found to this frame such as a
  * playlist that features better audiofiles more often than others or it
@@ -45,30 +45,29 @@ import java.nio.ByteBuffer;
  * <tr><td>Rating       </td><td>$xx                    </td></tr>
  * <tr><td>Counter      </td><td>$xx xx xx xx (xx ...)  </td></tr>
  * </table></p>
- * 
+ * <p/>
  * <p>For more details, please refer to the ID3 specifications:
  * <ul>
  * <li><a href="http://www.id3.org/id3v2.3.0.txt">ID3 v2.3.0 Spec</a>
  * </ul>
- * 
+ *
  * @author : Paul Taylor
  * @author : Eric Farng
  * @version $Id$
- *
  * @todo : Counter should be optional, whereas we always expect it although allow a size of zero
  * needs testing.
  */
-public class FrameBodyPOPM extends AbstractID3v2FrameBody implements ID3v24FrameBody,ID3v23FrameBody
+public class FrameBodyPOPM extends AbstractID3v2FrameBody implements ID3v24FrameBody, ID3v23FrameBody
 {
-    private static final int RATING_FIELD_SIZE=1;
-    private static final int COUNTER_MINIMUM_FIELD_SIZE=0;
+    private static final int RATING_FIELD_SIZE = 1;
+    private static final int COUNTER_MINIMUM_FIELD_SIZE = 0;
 
     /**
      * Creates a new FrameBodyPOPM datatype.
      */
     public FrameBodyPOPM()
     {
-        this.setObjectValue(DataTypes.OBJ_EMAIL,"");
+        this.setObjectValue(DataTypes.OBJ_EMAIL, "");
         this.setObjectValue(DataTypes.OBJ_RATING, (long) 0);
         this.setObjectValue(DataTypes.OBJ_COUNTER, (long) 0);
     }
@@ -81,9 +80,9 @@ public class FrameBodyPOPM extends AbstractID3v2FrameBody implements ID3v24Frame
     /**
      * Creates a new FrameBodyPOPM datatype.
      *
-     * @param emailToUser 
-     * @param rating      
-     * @param counter     
+     * @param emailToUser
+     * @param rating
+     * @param counter
      */
     public FrameBodyPOPM(String emailToUser, long rating, long counter)
     {
@@ -98,15 +97,13 @@ public class FrameBodyPOPM extends AbstractID3v2FrameBody implements ID3v24Frame
      * @throws InvalidTagException if unable to create framebody from buffer
      */
     public FrameBodyPOPM(ByteBuffer byteBuffer, int frameSize)
-        throws  InvalidTagException
+            throws InvalidTagException
     {
         super(byteBuffer, frameSize);
     }
 
     /**
-     * 
-     *
-     * @param description 
+     * @param description
      */
     public void setEmailToUser(String description)
     {
@@ -114,18 +111,14 @@ public class FrameBodyPOPM extends AbstractID3v2FrameBody implements ID3v24Frame
     }
 
     /**
-         *
-         *
-         * @return the memail of the user who rated this
-         */
-        public String getEmailToUser()
-        {
-            return (String) getObjectValue(DataTypes.OBJ_EMAIL);
-        }
+     * @return the memail of the user who rated this
+     */
+    public String getEmailToUser()
+    {
+        return (String) getObjectValue(DataTypes.OBJ_EMAIL);
+    }
 
     /**
-     * 
-     *
      * @return the rating given to this file
      */
     public long getRating()
@@ -143,9 +136,7 @@ public class FrameBodyPOPM extends AbstractID3v2FrameBody implements ID3v24Frame
         setObjectValue(DataTypes.OBJ_RATING, rating);
     }
 
-     /**
-     *
-     *
+    /**
      * @return the play count of this file
      */
     public long getCounter()
@@ -163,10 +154,10 @@ public class FrameBodyPOPM extends AbstractID3v2FrameBody implements ID3v24Frame
         setObjectValue(DataTypes.OBJ_COUNTER, counter);
     }
 
-     /**
-      * The ID3v2 frame identifier
-      *
-      * @return the ID3v2 frame identifier  for this frame type
+    /**
+     * The ID3v2 frame identifier
+     *
+     * @return the ID3v2 frame identifier  for this frame type
      */
     public String getIdentifier()
     {
@@ -174,9 +165,8 @@ public class FrameBodyPOPM extends AbstractID3v2FrameBody implements ID3v24Frame
     }
 
 
-
     /**
-     * 
+     *
      */
     protected void setupObjectList()
     {

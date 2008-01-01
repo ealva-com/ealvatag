@@ -28,22 +28,23 @@ import org.jaudiotagger.tag.InvalidDataTypeException;
 import org.jaudiotagger.tag.id3.ID3Tags;
 
 
-/** Represents a number held as a fixed number of digits.
- *
+/**
+ * Represents a number held as a fixed number of digits.
+ * <p/>
  * The bitorder in ID3v2 is most significant bit first (MSB). The byteorder in multibyte numbers is most significant
  * byte first (e.g. $12345678 would be encoded $12 34 56 78), also known as big endian and network byte order.
- *
+ * <p/>
  * In ID3Specification would be denoted as $xx xx this denotes exactly two bytes required
  */
 public class NumberFixedLength
-    extends AbstractDataType
+        extends AbstractDataType
 {
     /**
      * Creates a new ObjectNumberFixedLength datatype.
      *
-     * @param identifier 
+     * @param identifier
      * @param size       the number of significant places that the number is held to
-     * @throws IllegalArgumentException 
+     * @throws IllegalArgumentException
      */
     public NumberFixedLength(String identifier, AbstractTagFrameBody frameBody, int size)
     {
@@ -88,18 +89,16 @@ public class NumberFixedLength
 
     public void setValue(Object value)
     {
-        if(!(value instanceof Number))
+        if (!(value instanceof Number))
         {
-           throw new IllegalArgumentException("Invalid value type for NumberFixedLength:"+value.getClass());
+            throw new IllegalArgumentException("Invalid value type for NumberFixedLength:" + value.getClass());
         }
         super.setValue(value);
     }
 
 
     /**
-     * 
-     *
-     * @param obj 
+     * @param obj
      * @return true if obj equivalent to this
      */
     public boolean equals(Object obj)
@@ -119,10 +118,10 @@ public class NumberFixedLength
     /**
      * Read the number from the byte array
      *
-     * @param arr    
-     * @param offset 
-     * @throws NullPointerException      
-     * @throws IndexOutOfBoundsException 
+     * @param arr
+     * @param offset
+     * @throws NullPointerException
+     * @throws IndexOutOfBoundsException
      */
     public void readByteArray(byte[] arr, int offset) throws InvalidDataTypeException
     {
@@ -132,8 +131,8 @@ public class NumberFixedLength
         }
         if ((offset < 0) || (offset >= arr.length))
         {
-            throw new  InvalidDataTypeException("Offset to byte array is out of bounds: offset = " + offset +
-                ", array.length = " + arr.length);
+            throw new InvalidDataTypeException("Offset to byte array is out of bounds: offset = " + offset +
+                    ", array.length = " + arr.length);
         }
         long lvalue = 0;
         for (int i = offset; i < (offset + size); i++)
@@ -147,8 +146,6 @@ public class NumberFixedLength
 
 
     /**
-     * 
-     *
      * @return String representation of this datatype
      */
     public String toString()

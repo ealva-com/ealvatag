@@ -23,17 +23,17 @@ import java.nio.ByteBuffer;
 /**
  * Beats Per Minute Text information frame.
  * <p>The 'BPM' frame contains the number of beats per minute in the mainpart of the audio. The BPM is an integer and represented as a numerical string.
- * 
+ * <p/>
  * <p>For more details, please refer to the ID3 specifications:
  * <ul>
  * <li><a href="http://www.id3.org/id3v2.3.0.txt">ID3 v2.3.0 Spec</a>
  * </ul>
- * 
+ *
  * @author : Paul Taylor
  * @author : Eric Farng
  * @version $Id$
  */
-public class FrameBodyTBPM extends AbstractFrameBodyTextInfo implements ID3v24FrameBody,ID3v23FrameBody
+public class FrameBodyTBPM extends AbstractFrameBodyTextInfo implements ID3v24FrameBody, ID3v23FrameBody
 {
     /**
      * Creates a new FrameBodyTBPM datatype.
@@ -50,8 +50,8 @@ public class FrameBodyTBPM extends AbstractFrameBodyTextInfo implements ID3v24Fr
     /**
      * Creates a new FrameBodyTBPM datatype.
      *
-     * @param textEncoding 
-     * @param text         
+     * @param textEncoding
+     * @param text
      */
     public FrameBodyTBPM(byte textEncoding, String text)
     {
@@ -60,20 +60,20 @@ public class FrameBodyTBPM extends AbstractFrameBodyTextInfo implements ID3v24Fr
 
     /**
      * Creates a new FrameBodyTBPM datatype.
-     *                               
-     * @throws InvalidTagException 
+     *
+     * @throws InvalidTagException
      */
     public FrameBodyTBPM(ByteBuffer byteBuffer, int frameSize)
-        throws InvalidTagException
+            throws InvalidTagException
     {
         super(byteBuffer, frameSize);
     }
 
-   
-         /**
-      * The ID3v2 frame identifier
-      *
-      * @return the ID3v2 frame identifier  for this frame type
+
+    /**
+     * The ID3v2 frame identifier
+     *
+     * @return the ID3v2 frame identifier  for this frame type
      */
     public String getIdentifier()
     {

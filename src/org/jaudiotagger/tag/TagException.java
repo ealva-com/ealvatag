@@ -61,7 +61,7 @@ public class TagException extends Exception
      * Creates a new TagException datatype.
      *
      * @param msg the detail message.
-     * @param ex the cause.
+     * @param ex  the cause.
      */
     public TagException(String msg, Throwable ex)
     {

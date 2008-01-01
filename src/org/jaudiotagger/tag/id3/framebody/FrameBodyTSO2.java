@@ -8,7 +8,7 @@ import java.nio.ByteBuffer;
 /**
  * Album Artist Sort name  ( iTunes Only)
  */
-public class FrameBodyTSO2 extends AbstractFrameBodyTextInfo implements ID3v24FrameBody,ID3v23FrameBody
+public class FrameBodyTSO2 extends AbstractFrameBodyTextInfo implements ID3v24FrameBody, ID3v23FrameBody
 {
     /**
      * Creates a new FrameBodyTSOA datatype.
@@ -39,15 +39,15 @@ public class FrameBodyTSO2 extends AbstractFrameBodyTextInfo implements ID3v24Fr
      * @throws InvalidTagException
      */
     public FrameBodyTSO2(ByteBuffer byteBuffer, int frameSize)
-        throws InvalidTagException
+            throws InvalidTagException
     {
         super(byteBuffer, frameSize);
     }
 
-   /**
-      * The ID3v2 frame identifier
-      *
-      * @return the ID3v2 frame identifier  for this frame type
+    /**
+     * The ID3v2 frame identifier
+     *
+     * @return the ID3v2 frame identifier  for this frame type
      */
     public String getIdentifier()
     {

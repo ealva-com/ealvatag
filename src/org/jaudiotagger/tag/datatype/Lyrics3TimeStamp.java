@@ -30,12 +30,12 @@ import org.jaudiotagger.audio.generic.Utils;
 public class Lyrics3TimeStamp extends AbstractDataType
 {
     /**
-     * 
+     *
      */
     private long minute = 0;
 
     /**
-     * 
+     *
      */
     private long second = 0;
 
@@ -74,8 +74,6 @@ public class Lyrics3TimeStamp extends AbstractDataType
     }
 
     /**
-     * 
-     *
      * @return
      */
     public long getMinute()
@@ -89,8 +87,6 @@ public class Lyrics3TimeStamp extends AbstractDataType
     }
 
     /**
-     * 
-     *
      * @return
      */
     public long getSecond()
@@ -99,8 +95,6 @@ public class Lyrics3TimeStamp extends AbstractDataType
     }
 
     /**
-     * 
-     *
      * @return
      */
     public int getSize()
@@ -125,8 +119,6 @@ public class Lyrics3TimeStamp extends AbstractDataType
     }
 
     /**
-     * 
-     *
      * @param obj
      * @return
      */
@@ -153,8 +145,6 @@ public class Lyrics3TimeStamp extends AbstractDataType
     }
 
     /**
-     * 
-     *
      * @param timeStamp
      * @param offset
      * @throws NullPointerException
@@ -187,8 +177,6 @@ public class Lyrics3TimeStamp extends AbstractDataType
     }
 
     /**
-     * 
-     *
      * @return
      */
     public String toString()
@@ -197,8 +185,6 @@ public class Lyrics3TimeStamp extends AbstractDataType
     }
 
     /**
-     * 
-     *
      * @return
      */
     public String writeString()
@@ -248,7 +234,7 @@ public class Lyrics3TimeStamp extends AbstractDataType
 
     public byte[] writeByteArray()
     {
-        return Utils.getDefaultBytes(writeString(),"ISO8859-1");
+        return Utils.getDefaultBytes(writeString(), "ISO8859-1");
     }
 
 }

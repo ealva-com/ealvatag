@@ -23,12 +23,12 @@ import java.nio.ByteBuffer;
 /**
  * Recording dates Text information frame.
  * <p>The 'Recording dates' frame is a intended to be used as complement to the "TYER", "TDAT" and "TIME" frames. E.g. "4th-7th June, 12th June" in combination with the "TYER" frame.
- * 
+ * <p/>
  * <p>For more details, please refer to the ID3 specifications:
  * <ul>
  * <li><a href="http://www.id3.org/id3v2.3.0.txt">ID3 v2.3.0 Spec</a>
  * </ul>
- * 
+ *
  * @author : Paul Taylor
  * @author : Eric Farng
  * @version $Id$
@@ -50,8 +50,8 @@ public class FrameBodyTRDA extends AbstractFrameBodyTextInfo implements ID3v23Fr
     /**
      * Creates a new FrameBodyTRDA datatype.
      *
-     * @param textEncoding 
-     * @param text         
+     * @param textEncoding
+     * @param text
      */
     public FrameBodyTRDA(byte textEncoding, String text)
     {
@@ -61,19 +61,19 @@ public class FrameBodyTRDA extends AbstractFrameBodyTextInfo implements ID3v23Fr
     /**
      * Creates a new FrameBodyTRDA datatype.
      *
-     * @throws java.io.IOException 
-     * @throws InvalidTagException 
+     * @throws java.io.IOException
+     * @throws InvalidTagException
      */
     public FrameBodyTRDA(ByteBuffer byteBuffer, int frameSize)
-        throws InvalidTagException
+            throws InvalidTagException
     {
         super(byteBuffer, frameSize);
     }
 
-     /**
-      * The ID3v2 frame identifier
-      *
-      * @return the ID3v2 frame identifier  for this frame type
+    /**
+     * The ID3v2 frame identifier
+     *
+     * @return the ID3v2 frame identifier  for this frame type
      */
     public String getIdentifier()
     {

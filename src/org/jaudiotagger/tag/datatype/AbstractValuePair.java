@@ -55,7 +55,6 @@ public abstract class AbstractValuePair
     }
 
     /**
-     *
      * @return the number of elements in the mapping
      */
     public int getSize()

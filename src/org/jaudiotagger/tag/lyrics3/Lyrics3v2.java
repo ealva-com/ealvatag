@@ -34,7 +34,7 @@ import java.util.Iterator;
 public class Lyrics3v2 extends AbstractLyrics3
 {
     /**
-     * 
+     *
      */
     private HashMap fieldMap = new HashMap();
 
@@ -66,8 +66,8 @@ public class Lyrics3v2 extends AbstractLyrics3
     /**
      * Creates a new Lyrics3v2 datatype.
      *
-     * @param mp3tag 
-     * @throws UnsupportedOperationException 
+     * @param mp3tag
+     * @throws UnsupportedOperationException
      */
     public Lyrics3v2(AbstractTag mp3tag)
     {
@@ -114,14 +114,15 @@ public class Lyrics3v2 extends AbstractLyrics3
     /**
      * Creates a new Lyrics3v2 datatype.
      *
-     * @param file 
-     * @throws TagNotFoundException 
-     * @throws IOException          
+     * @param file
+     * @throws TagNotFoundException
+     * @throws IOException
      */
     public Lyrics3v2(ByteBuffer byteBuffer)
-        throws TagNotFoundException, IOException
+            throws TagNotFoundException, IOException
     {
-        try {
+        try
+        {
             this.read(byteBuffer);
         }
         catch (TagException e)
@@ -131,9 +132,7 @@ public class Lyrics3v2 extends AbstractLyrics3
     }
 
     /**
-     * 
-     *
-     * @param field 
+     * @param field
      */
     public void setField(Lyrics3v2Field field)
     {
@@ -152,9 +151,7 @@ public class Lyrics3v2 extends AbstractLyrics3
     }
 
     /**
-     * 
-     *
-     * @return 
+     * @return
      */
     public int getFieldCount()
     {
@@ -162,9 +159,7 @@ public class Lyrics3v2 extends AbstractLyrics3
     }
 
     /**
-     * 
-     *
-     * @return 
+     * @return
      */
     public String getIdentifier()
     {
@@ -172,9 +167,7 @@ public class Lyrics3v2 extends AbstractLyrics3
     }
 
     /**
-     * 
-     *
-     * @return 
+     * @return
      */
     public int getSize()
     {
@@ -194,10 +187,8 @@ public class Lyrics3v2 extends AbstractLyrics3
 
 
     /**
-     * 
-     *
-     * @param obj 
-     * @return 
+     * @param obj
+     * @return
      */
     public boolean equals(Object obj)
     {
@@ -217,10 +208,8 @@ public class Lyrics3v2 extends AbstractLyrics3
     }
 
     /**
-     * 
-     *
-     * @param identifier 
-     * @return 
+     * @param identifier
+     * @return
      */
     public boolean hasField(String identifier)
     {
@@ -228,9 +217,7 @@ public class Lyrics3v2 extends AbstractLyrics3
     }
 
     /**
-     * 
-     *
-     * @return 
+     * @return
      */
     public Iterator iterator()
     {
@@ -252,7 +239,7 @@ public class Lyrics3v2 extends AbstractLyrics3
 
 
     public void read(ByteBuffer byteBuffer)
-        throws TagException
+            throws TagException
     {
         long filePointer;
         int lyricSize;
@@ -290,9 +277,7 @@ public class Lyrics3v2 extends AbstractLyrics3
     }
 
     /**
-     * 
-     *
-     * @param identifier 
+     * @param identifier
      */
     public void removeField(String identifier)
     {
@@ -300,14 +285,12 @@ public class Lyrics3v2 extends AbstractLyrics3
     }
 
     /**
-     * 
-     *
-     * @param file 
-     * @return 
-     * @throws IOException 
+     * @param file
+     * @return
+     * @throws IOException
      */
     public boolean seek(RandomAccessFile file)
-        throws IOException
+            throws IOException
     {
         byte[] buffer = new byte[11];
         String lyricEnd = "";
@@ -358,9 +341,7 @@ public class Lyrics3v2 extends AbstractLyrics3
     }
 
     /**
-     * 
-     *
-     * @return 
+     * @return
      */
     public String toString()
     {
@@ -378,9 +359,7 @@ public class Lyrics3v2 extends AbstractLyrics3
     }
 
     /**
-     * 
-     *
-     * @param identifier 
+     * @param identifier
      */
     public void updateField(String identifier)
     {
@@ -405,13 +384,11 @@ public class Lyrics3v2 extends AbstractLyrics3
     }
 
     /**
-     * 
-     *
-     * @param file 
-     * @throws IOException 
+     * @param file
+     * @throws IOException
      */
     public void write(RandomAccessFile file)
-        throws IOException
+            throws IOException
     {
         int offset = 0;
         ;
@@ -505,9 +482,8 @@ public class Lyrics3v2 extends AbstractLyrics3
 
     /**
      * TODO
-     *
      */
-    private int seekSize(ByteBuffer byteBuffer)          
+    private int seekSize(ByteBuffer byteBuffer)
     {
         /*
         byte[] buffer = new byte[11];

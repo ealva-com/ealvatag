@@ -25,8 +25,8 @@ import java.nio.ByteBuffer;
 
 /**
  * Private frame.
- * 
- * <p>
+ * <p/>
+ * <p/>
  * This frame is used to contain information from a software producer
  * that its program uses and does not fit into the other frames. The
  * frame consists of an 'Owner identifier' string and the binary data.
@@ -42,17 +42,17 @@ import java.nio.ByteBuffer;
  * <tr><td>Owner identifier</td><td width="80%">&lt;text string&gt; $00</td></tr>
  * <tr><td>The private data</td><td>&lt;binary data&gt;</td></tr>
  * </table></p>
- * 
+ * <p/>
  * <p>For more details, please refer to the ID3 specifications:
  * <ul>
  * <li><a href="http://www.id3.org/id3v2.3.0.txt">ID3 v2.3.0 Spec</a>
  * </ul>
- * 
+ *
  * @author : Paul Taylor
  * @author : Eric Farng
  * @version $Id$
  */
-public class FrameBodyPRIV extends AbstractID3v2FrameBody implements ID3v24FrameBody,ID3v23FrameBody
+public class FrameBodyPRIV extends AbstractID3v2FrameBody implements ID3v24FrameBody, ID3v23FrameBody
 {
     /**
      * Creates a new FrameBodyPRIV datatype.
@@ -71,8 +71,8 @@ public class FrameBodyPRIV extends AbstractID3v2FrameBody implements ID3v24Frame
     /**
      * Creates a new FrameBodyPRIV datatype.
      *
-     * @param owner 
-     * @param data  
+     * @param owner
+     * @param data
      */
     public FrameBodyPRIV(String owner, byte[] data)
     {
@@ -86,15 +86,13 @@ public class FrameBodyPRIV extends AbstractID3v2FrameBody implements ID3v24Frame
      * @throws InvalidTagException if unable to create framebody from buffer
      */
     public FrameBodyPRIV(ByteBuffer byteBuffer, int frameSize)
-        throws InvalidTagException
+            throws InvalidTagException
     {
         super(byteBuffer, frameSize);
     }
 
     /**
-     * 
-     *
-     * @param data 
+     * @param data
      */
     public void setData(byte[] data)
     {
@@ -102,9 +100,7 @@ public class FrameBodyPRIV extends AbstractID3v2FrameBody implements ID3v24Frame
     }
 
     /**
-     * 
-     *
-     * @return 
+     * @return
      */
     public byte[] getData()
     {
@@ -112,9 +108,9 @@ public class FrameBodyPRIV extends AbstractID3v2FrameBody implements ID3v24Frame
     }
 
     /**
-      * The ID3v2 frame identifier
-      *
-      * @return the ID3v2 frame identifier  for this frame type
+     * The ID3v2 frame identifier
+     *
+     * @return the ID3v2 frame identifier  for this frame type
      */
     public String getIdentifier()
     {
@@ -122,9 +118,7 @@ public class FrameBodyPRIV extends AbstractID3v2FrameBody implements ID3v24Frame
     }
 
     /**
-     * 
-     *
-     * @param owner 
+     * @param owner
      */
     public void setOwner(String owner)
     {
@@ -132,9 +126,7 @@ public class FrameBodyPRIV extends AbstractID3v2FrameBody implements ID3v24Frame
     }
 
     /**
-     * 
-     *
-     * @return 
+     * @return
      */
     public String getOwner()
     {
@@ -142,7 +134,7 @@ public class FrameBodyPRIV extends AbstractID3v2FrameBody implements ID3v24Frame
     }
 
     /**
-     * 
+     *
      */
     protected void setupObjectList()
     {

@@ -16,6 +16,7 @@
 package org.jaudiotagger.tag.id3.framebody;
 
 import org.jaudiotagger.tag.InvalidTagException;
+import org.jaudiotagger.tag.reference.Languages;
 import org.jaudiotagger.tag.datatype.*;
 import org.jaudiotagger.tag.id3.ID3v24Frames;
 import org.jaudiotagger.tag.id3.valuepair.*;
@@ -24,8 +25,8 @@ import java.nio.ByteBuffer;
 
 /**
  * Synchronised lyrics/text frame.
- * 
- * <p>
+ * <p/>
+ * <p/>
  * This is another way of incorporating the words, said or sung lyrics,
  * in the audio file as text, this time, however, in sync with the
  * audio. It might also be used to describing events e.g. occurring on a
@@ -53,11 +54,11 @@ import java.nio.ByteBuffer;
  * <tr><td>$05</td><td>is chord (e.g. "Bb F Fsus")</td></tr>
  * <tr><td>$06</td><td>is trivia/'pop up' information</td></tr>
  * </table></center></p>
- * <p>
+ * <p/>
  * Time stamp format is:
  * </p><p>
- *  $01 Absolute time, 32 bit sized, using MPEG frames as unit<br>
- *  $02 Absolute time, 32 bit sized, using milliseconds as unit
+ * $01 Absolute time, 32 bit sized, using MPEG frames as unit<br>
+ * $02 Absolute time, 32 bit sized, using milliseconds as unit
  * </p><p>
  * Abolute time means that every stamp contains the time from the
  * beginning of the file.
@@ -73,7 +74,7 @@ import java.nio.ByteBuffer;
  * <tr><td nowrap>Sync identifier (terminator to above string)</td><td width="80%">$00 (00)</td></tr>
  * <tr><td>Time stamp</td><td>$xx (xx ...)</td></tr>
  * </table></p>
- * <p>
+ * <p/>
  * The 'time stamp' is set to zero or the whole sync is omitted if
  * located directly at the beginning of the sound. All time stamps
  * should be sorted in chronological order. The sync can be considered
@@ -95,22 +96,22 @@ import java.nio.ByteBuffer;
  * "Strangers in the night" $0A "Exchanging glances"
  * </p><p>would be "SYLT" encoded as:
  * </p><p>
- *  "Strang" $00 xx xx "ers" $00 xx xx " in" $00 xx xx " the" $00 xx xx
- *  " night" $00 xx xx 0A "Ex" $00 xx xx "chang" $00 xx xx "ing" $00 xx
- *  xx "glan" $00 xx xx "ces" $00 xx xx
+ * "Strang" $00 xx xx "ers" $00 xx xx " in" $00 xx xx " the" $00 xx xx
+ * " night" $00 xx xx 0A "Ex" $00 xx xx "chang" $00 xx xx "ing" $00 xx
+ * xx "glan" $00 xx xx "ces" $00 xx xx
  * </p><p>There may be more than one "SYLT" frame in each tag, but only one
  * with the same language and content descriptor.</p>
- * 
+ * <p/>
  * <p>For more details, please refer to the ID3 specifications:
  * <ul>
  * <li><a href="http://www.id3.org/id3v2.3.0.txt">ID3 v2.3.0 Spec</a>
  * </ul>
- * 
+ *
  * @author : Paul Taylor
  * @author : Eric Farng
  * @version $Id$
  */
-public class FrameBodySYLT extends AbstractID3v2FrameBody implements ID3v24FrameBody,ID3v23FrameBody
+public class FrameBodySYLT extends AbstractID3v2FrameBody implements ID3v24FrameBody, ID3v23FrameBody
 {
     /**
      * Creates a new FrameBodySYLT datatype.
@@ -122,21 +123,22 @@ public class FrameBodySYLT extends AbstractID3v2FrameBody implements ID3v24Frame
 
     /**
      * Copy Constructor
+     *
      * @param body
      */
     public FrameBodySYLT(FrameBodySYLT body)
-   {
-       super(body);
-   }
+    {
+        super(body);
+    }
 
     /**
      * Creates a new FrameBodySYLT datatype.
      *
-     * @param textEncoding    
-     * @param language        
-     * @param timeStampFormat 
-     * @param contentType     
-     * @param description     
+     * @param textEncoding
+     * @param language
+     * @param timeStampFormat
+     * @param contentType
+     * @param description
      */
     public FrameBodySYLT(int textEncoding,
                          String language,
@@ -150,7 +152,7 @@ public class FrameBodySYLT extends AbstractID3v2FrameBody implements ID3v24Frame
         setObjectValue(DataTypes.OBJ_TIME_STAMP_FORMAT, timeStampFormat);
         setObjectValue(DataTypes.OBJ_CONTENT_TYPE, contentType);
         setObjectValue(DataTypes.OBJ_DESCRIPTION, description);
-        setObjectValue(DataTypes.OBJ_DATA,lyrics);
+        setObjectValue(DataTypes.OBJ_DATA, lyrics);
     }
 
     /**
@@ -159,14 +161,12 @@ public class FrameBodySYLT extends AbstractID3v2FrameBody implements ID3v24Frame
      * @throws InvalidTagException if unable to create framebody from buffer
      */
     public FrameBodySYLT(ByteBuffer byteBuffer, int frameSize)
-        throws InvalidTagException
+            throws InvalidTagException
     {
         super(byteBuffer, frameSize);
     }
 
     /**
-     *
-     *
      * @return language code
      */
     public String getLanguage()
@@ -175,18 +175,15 @@ public class FrameBodySYLT extends AbstractID3v2FrameBody implements ID3v24Frame
     }
 
     /**
-     *
      * @return timestamp format key
      */
     public int getTimeStampFormat()
     {
-         return ((Number) getObjectValue(DataTypes.OBJ_TIME_STAMP_FORMAT)).intValue();
+        return ((Number) getObjectValue(DataTypes.OBJ_TIME_STAMP_FORMAT)).intValue();
     }
 
-     /**
-     *
-     *
-     * @return  content type key
+    /**
+     * @return content type key
      */
     public int getContentType()
     {
@@ -194,8 +191,6 @@ public class FrameBodySYLT extends AbstractID3v2FrameBody implements ID3v24Frame
     }
 
     /**
-     *
-     *
      * @return description
      */
     public String getDescription()
@@ -204,38 +199,36 @@ public class FrameBodySYLT extends AbstractID3v2FrameBody implements ID3v24Frame
     }
 
     /**
-     * 
-     *
      * @return frame identifier
      */
     public String getIdentifier()
     {
-        return ID3v24Frames.FRAME_ID_SYNC_LYRIC ;
+        return ID3v24Frames.FRAME_ID_SYNC_LYRIC;
     }
 
 
     /**
      * Set lyrics
-     *
+     * <p/>
      * TODO:provide a more user friendly way of adding lyrics
      *
      * @param data
      */
-    public void setLyrics( byte[] data)
+    public void setLyrics(byte[] data)
     {
-         this.setObjectValue(DataTypes.OBJ_DATA, data);
+        this.setObjectValue(DataTypes.OBJ_DATA, data);
     }
 
     /**
      * Get lyrics
-     *
+     * <p/>
      * TODO:better format
      *
      * @return lyrics
      */
     public byte[] getLyrics()
     {
-        return (byte[])this.getObjectValue(DataTypes.OBJ_DATA);
+        return (byte[]) this.getObjectValue(DataTypes.OBJ_DATA);
     }
 
     /**

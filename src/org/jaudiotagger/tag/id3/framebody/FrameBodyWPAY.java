@@ -23,17 +23,17 @@ import java.nio.ByteBuffer;
 /**
  * Payment URL link frames.
  * <p>The 'Payment' frame is a URL pointing at a webpage that will handle the process of paying for this file.
- * 
+ * <p/>
  * <p>For more details, please refer to the ID3 specifications:
  * <ul>
  * <li><a href="http://www.id3.org/id3v2.3.0.txt">ID3 v2.3.0 Spec</a>
  * </ul>
- * 
+ *
  * @author : Paul Taylor
  * @author : Eric Farng
  * @version $Id$
  */
-public class FrameBodyWPAY extends AbstractFrameBodyUrlLink  implements ID3v24FrameBody,ID3v23FrameBody
+public class FrameBodyWPAY extends AbstractFrameBodyUrlLink implements ID3v24FrameBody, ID3v23FrameBody
 {
     /**
      * Creates a new FrameBodyWPAY datatype.
@@ -45,7 +45,7 @@ public class FrameBodyWPAY extends AbstractFrameBodyUrlLink  implements ID3v24Fr
     /**
      * Creates a new FrameBodyWPAY datatype.
      *
-     * @param urlLink 
+     * @param urlLink
      */
     public FrameBodyWPAY(String urlLink)
     {
@@ -59,19 +59,19 @@ public class FrameBodyWPAY extends AbstractFrameBodyUrlLink  implements ID3v24Fr
 
     /**
      * Creates a new FrameBodyWPAY datatype.
-     *   
-     * @throws InvalidTagException 
+     *
+     * @throws InvalidTagException
      */
     public FrameBodyWPAY(ByteBuffer byteBuffer, int frameSize)
-        throws InvalidTagException
+            throws InvalidTagException
     {
         super(byteBuffer, frameSize);
     }
 
     /**
-      * The ID3v2 frame identifier
-      *
-      * @return the ID3v2 frame identifier  for this frame type
+     * The ID3v2 frame identifier
+     *
+     * @return the ID3v2 frame identifier  for this frame type
      */
     public String getIdentifier()
     {

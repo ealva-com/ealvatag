@@ -29,11 +29,13 @@ import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
 import java.nio.charset.Charset;
 import java.nio.charset.CharsetEncoder;
 
-/** A partial implementation for String based ID3 fields */
+/**
+ * A partial implementation for String based ID3 fields
+ */
 public abstract class AbstractString
-    extends AbstractDataType
+        extends AbstractDataType
 {
-     /**
+    /**
      * Creates a new  datatype
      *
      * @param identifier
@@ -50,14 +52,14 @@ public abstract class AbstractString
      * @param identifier
      * @param frameBody
      */
-    public AbstractString(String identifier, AbstractTagFrameBody frameBody,String value)
+    public AbstractString(String identifier, AbstractTagFrameBody frameBody, String value)
     {
-        super(identifier, frameBody,value);
+        super(identifier, frameBody, value);
     }
 
     /**
      * Copy constructor
-     * 
+     *
      * @param object
      */
     protected AbstractString(AbstractString object)
@@ -80,7 +82,6 @@ public abstract class AbstractString
      * Sets the size in bytes of this datatype.
      * This is set after writing the data to allow us to recalculate the size for
      * frame header.
-     *
      */
     protected void setSize(int size)
     {
@@ -115,6 +116,6 @@ public abstract class AbstractString
         {
             logger.finest("Failed Trying to decode" + (String) value + "with" + encoder.toString());
             return false;
-        }           
+        }
     }
 }

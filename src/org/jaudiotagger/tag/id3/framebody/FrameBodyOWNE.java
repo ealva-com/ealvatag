@@ -27,8 +27,8 @@ import java.nio.ByteBuffer;
 
 /**
  * Ownership frame.
- * 
- * <p>
+ * <p/>
+ * <p/>
  * The ownership frame might be used as a reminder of a made transaction
  * or, if signed, as proof. Note that the "USER" and "TOWN" frames are
  * good to use in conjunction with this one. The frame begins, after the
@@ -47,17 +47,17 @@ import java.nio.ByteBuffer;
  * <tr><td>Date of purch. </td><td>&lt;text string&gt;     </td></tr>
  * <tr><td>Seller</td><td>&lt;text string according to encoding&gt;</td></tr>
  * </table></p>
- * 
+ * <p/>
  * <p>For more details, please refer to the ID3 specifications:
  * <ul>
  * <li><a href="http://www.id3.org/id3v2.3.0.txt">ID3 v2.3.0 Spec</a>
  * </ul>
- * 
+ *
  * @author : Paul Taylor
  * @author : Eric Farng
  * @version $Id$
  */
-public class FrameBodyOWNE extends AbstractID3v2FrameBody implements ID3v24FrameBody,ID3v23FrameBody
+public class FrameBodyOWNE extends AbstractID3v2FrameBody implements ID3v24FrameBody, ID3v23FrameBody
 {
     /**
      * Creates a new FrameBodyOWNE datatype.
@@ -78,10 +78,10 @@ public class FrameBodyOWNE extends AbstractID3v2FrameBody implements ID3v24Frame
     /**
      * Creates a new FrameBodyOWNE datatype.
      *
-     * @param textEncoding   
-     * @param pricePaid      
-     * @param dateOfPurchase 
-     * @param seller         
+     * @param textEncoding
+     * @param pricePaid
+     * @param dateOfPurchase
+     * @param seller
      */
     public FrameBodyOWNE(byte textEncoding, String pricePaid, String dateOfPurchase, String seller)
     {
@@ -97,37 +97,39 @@ public class FrameBodyOWNE extends AbstractID3v2FrameBody implements ID3v24Frame
      * @throws InvalidTagException if unable to create framebody from buffer
      */
     public FrameBodyOWNE(ByteBuffer byteBuffer, int frameSize)
-        throws InvalidTagException
+            throws InvalidTagException
     {
         super(byteBuffer, frameSize);
     }
 
     /**
-      * The ID3v2 frame identifier
-      *
-      * @return the ID3v2 frame identifier  for this frame type
+     * The ID3v2 frame identifier
+     *
+     * @return the ID3v2 frame identifier  for this frame type
      */
     public String getIdentifier()
     {
         return ID3v24Frames.FRAME_ID_OWNERSHIP;
     }
 
-      /** If the seller name cannot be encoded using current encoder, change the encoder */
+    /**
+     * If the seller name cannot be encoded using current encoder, change the encoder
+     */
     public void write(ByteArrayOutputStream tagBuffer)
     {
-       //Ensure valid for type
-        setTextEncoding( ID3TextEncodingConversion.getTextEncoding(getHeader(),getTextEncoding()));
+        //Ensure valid for type
+        setTextEncoding(ID3TextEncodingConversion.getTextEncoding(getHeader(), getTextEncoding()));
 
         //Ensure valid for data
         if (((AbstractString) getObject(DataTypes.OBJ_SELLER_NAME)).canBeEncoded() == false)
         {
-           this.setTextEncoding(ID3TextEncodingConversion.getUnicodeTextEncoding(getHeader()));
+            this.setTextEncoding(ID3TextEncodingConversion.getUnicodeTextEncoding(getHeader()));
         }
         super.write(tagBuffer);
     }
 
     /**
-     * 
+     *
      */
     protected void setupObjectList()
     {

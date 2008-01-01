@@ -1,11 +1,8 @@
 package org.jaudiotagger.audio.flac;
 
 import org.jaudiotagger.AbstractTestCase;
-import org.jaudiotagger.tag.vorbiscomment.VorbisCommentTag;
-import org.jaudiotagger.tag.vorbiscomment.VorbisCommentFieldKey;
 import org.jaudiotagger.tag.TagFieldKey;
-import org.jaudiotagger.tag.TagField;
-import org.jaudiotagger.tag.id3.valuepair.PictureTypes;
+import org.jaudiotagger.tag.reference.PictureTypes;
 import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
 import org.jaudiotagger.tag.flac.FlacTag;
 import org.jaudiotagger.audio.AudioFile;
@@ -14,12 +11,10 @@ import org.jaudiotagger.audio.generic.Utils;
 import org.jaudiotagger.audio.flac.metadatablock.MetadataBlockDataPicture;
 
 import java.io.File;
-import java.io.ByteArrayInputStream;
 import java.awt.image.BufferedImage;
 
 import junit.framework.TestCase;
 
-import javax.imageio.stream.ImageInputStream;
 import javax.imageio.ImageIO;
 
 /**
@@ -71,7 +66,7 @@ public class FlacHeaderTest extends TestCase
 
             //Image
             MetadataBlockDataPicture image = tag.getImages().get(0);
-            assertEquals((int)PictureTypes.DEFAULT_ID,(int)image.getPictureType());
+            assertEquals((int) PictureTypes.DEFAULT_ID,(int)image.getPictureType());
             assertEquals("image/png",image.getMimeType());
             assertFalse(image.isImageUrl());
             assertEquals("", image.getImageUrl());

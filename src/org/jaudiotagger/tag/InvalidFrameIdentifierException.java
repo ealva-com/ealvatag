@@ -23,7 +23,7 @@ package org.jaudiotagger.tag;
 
 /**
  * Thrown if a frame identifier isn't valid.
- * 
+ *
  * @author Eric Farng
  * @version $Revision$
  */
@@ -60,11 +60,11 @@ public class InvalidFrameIdentifierException extends InvalidFrameException
      * Creates a new InvalidFrameIdentifierException datatype.
      *
      * @param msg the detail message.
-     * @param ex the cause.
+     * @param ex  the cause.
      */
     public InvalidFrameIdentifierException(String msg, Throwable ex)
     {
         super(msg, ex);
     }
-    
+
 }

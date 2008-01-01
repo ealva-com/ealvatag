@@ -26,7 +26,7 @@ import org.jaudiotagger.tag.TagFieldKey;
 /**
  * This interface represents the basic data structure for the default
  * audiolibrary functionality.<br>
- * <p>
+ * <p/>
  * Some audio file tagging systems allow to specify multiple values for one type
  * of information. The artist for example. Some songs may be a cooperation of
  * two or more artists. Sometimes a tagging user wants to specify them in the
@@ -36,22 +36,22 @@ import org.jaudiotagger.tag.TagFieldKey;
  * does not support that kind of storing multiple values.<br>
  * <br>
  * <b>Code Examples:</b><br>
- * 
+ * <p/>
  * <pre>
  * <code>
  * AudioFile file = AudioFileIO.read(new File(&quot;C:\\test.mp3&quot;));
- * 
+ * <p/>
  * Tag tag = file.getTag();
  * </code>
  * </pre>
- * 
+ *
  * @author Raphaël Slinckx
  */
-public interface Tag 
+public interface Tag
 {
     /**
      * Adds a tagfield to the structure.<br>
-     *
+     * <p/>
      * <p>It is not recommended to use this method for normal use of the
      * audiolibrary. The developer will circumvent the underlying
      * implementation. For example, if one adds a field with the field id
@@ -65,159 +65,136 @@ public interface Tag
      * <li>No conversion of data is perfomed</li>
      * </ul>
      *
-     * @param field
-     *            The field to add.
+     * @param field The field to add.
      */
-    public void add(TagField field)  throws FieldDataInvalidException;
+    public void add(TagField field) throws FieldDataInvalidException;
 
     /**
      * Adds an album to the tag.<br>
      *
-     * @param album
-     *            Album description
+     * @param album Album description
      */
-    public void addAlbum(String album)  throws FieldDataInvalidException;
+    public void addAlbum(String album) throws FieldDataInvalidException;
 
     /**
      * Adds an artist to the tag.<br>
      *
-     * @param artist
-     *            Artist's name
+     * @param artist Artist's name
      */
-    public void addArtist(String artist)  throws FieldDataInvalidException;
+    public void addArtist(String artist) throws FieldDataInvalidException;
 
     /**
      * Adds a comment to the tag.<br>
      *
-     * @param comment
-     *            Comment.
+     * @param comment Comment.
      */
-    public void addComment(String comment)  throws FieldDataInvalidException;
+    public void addComment(String comment) throws FieldDataInvalidException;
 
     /**
      * Adds a genre to the tag.<br>
      *
-     * @param genre
-     *            Genre
+     * @param genre Genre
      */
-    public void addGenre(String genre)  throws FieldDataInvalidException;
+    public void addGenre(String genre) throws FieldDataInvalidException;
 
     /**
      * Adds a title to the tag.<br>
      *
-     * @param title
-     *            Title
+     * @param title Title
      */
-    public void addTitle(String title)  throws FieldDataInvalidException;
+    public void addTitle(String title) throws FieldDataInvalidException;
 
     /**
      * Adds a track to the tag.<br>
      *
-     * @param track
-     *            Track
+     * @param track Track
      */
-    public void addTrack(String track)   throws FieldDataInvalidException;
+    public void addTrack(String track) throws FieldDataInvalidException;
 
     /**
      * Adds a year to the Tag.<br>
      *
-     * @param year
-     *            Year
+     * @param year Year
      */
-    public void addYear(String year)  throws FieldDataInvalidException;
+    public void addYear(String year) throws FieldDataInvalidException;
 
     /**
      * Returns a {@linkplain List list} of {@link TagField} objects whose &quot;{@linkplain TagField#getId() id}&quot;
      * is the specified one.<br>
      *
-     * @param id
-     *            The field id.
+     * @param id The field id.
      * @return A list of {@link TagField} objects with the given &quot;id&quot;.
      */
     public List<TagField> get(String id);
 
     /**
-     *
      * @return
      */
     public List<TagField> getAlbum();
 
 
     /**
-     *
      * @return
      */
     public List<TagField> getArtist();
 
     /**
-     *
      * @return
      */
     public List<TagField> getComment();
 
     /**
-     *
      * @return
      */
     public List<TagField> getGenre();
 
     /**
-     *
      * @return
      */
     public List<TagField> getTitle();
 
     /**
-     *
      * @return
      */
     public List<TagField> getTrack();
 
     /**
-     *
      * @return
      */
     public List<TagField> getYear();
 
 
     /**
-     *
      * @return
      */
     public String getFirstAlbum();
 
     /**
-     *
      * @return
      */
     public String getFirstArtist();
 
     /**
-     *
      * @return
      */
     public String getFirstComment();
 
     /**
-     *
      * @return
      */
     public String getFirstGenre();
 
     /**
-     *
      * @return
      */
     public String getFirstTitle();
 
     /**
-     *
      * @return
      */
     public String getFirstTrack();
 
     /**
-     *
      * @return
      */
     public String getFirstYear();
@@ -235,8 +212,7 @@ public interface Tag
      * Determines whether the tag has at least one field with the specified
      * &quot;id&quot;.
      *
-     * @param id
-     *            The field id to look for.
+     * @param id The field id to look for.
      * @return <code>true</code> if tag contains a {@link TagField} with the
      *         given {@linkplain TagField#getId() id}.
      */
@@ -250,77 +226,68 @@ public interface Tag
     public boolean isEmpty();
 
     /**
-     *
      * @param field
      * @throws FieldDataInvalidException
      */
-    public void set(TagField field)  throws FieldDataInvalidException;
+    public void set(TagField field) throws FieldDataInvalidException;
 
     /**
-     *
      * @param s
      * @throws FieldDataInvalidException
      */
-    public void setAlbum(String s)  throws FieldDataInvalidException;
+    public void setAlbum(String s) throws FieldDataInvalidException;
 
 
     /**
-     *
      * @param s
      * @throws FieldDataInvalidException
      */
-    public void setArtist(String s)  throws FieldDataInvalidException;
+    public void setArtist(String s) throws FieldDataInvalidException;
 
     /**
-     *
      * @param s
      * @throws FieldDataInvalidException
      */
-    public void setComment(String s)  throws FieldDataInvalidException;
+    public void setComment(String s) throws FieldDataInvalidException;
 
 
     /**
-     *
      * @param s
      * @throws FieldDataInvalidException
      */
-    public void setGenre(String s)  throws FieldDataInvalidException;
+    public void setGenre(String s) throws FieldDataInvalidException;
 
     /**
-     *
      * @param s
      * @throws FieldDataInvalidException
      */
-    public void setTitle(String s)  throws FieldDataInvalidException;
+    public void setTitle(String s) throws FieldDataInvalidException;
 
     /**
-     *
      * @param s
      * @throws FieldDataInvalidException
      */
-    public void setTrack(String s)   throws FieldDataInvalidException;
+    public void setTrack(String s) throws FieldDataInvalidException;
 
     /**
-     *
      * @param s
      * @throws FieldDataInvalidException
      */
-    public void setYear(String s)  throws FieldDataInvalidException;
+    public void setYear(String s) throws FieldDataInvalidException;
 
 
     /**
      * Create a new TagField based on generic key
-     *
+     * <p/>
      * <p>Only textual data supported at the moment. The genericKey will be mapped
      * to the correct implementation key and return a TagField.
      *
      * @param genericKey is the generic key
-     * @param value to store
+     * @param value      to store
      * @return
      */
-    public TagField createTagField(TagFieldKey genericKey,String value)
-        throws KeyNotFoundException,FieldDataInvalidException;
-
+    public TagField createTagField(TagFieldKey genericKey, String value)
+            throws KeyNotFoundException, FieldDataInvalidException;
 
 
     /**
@@ -342,8 +309,8 @@ public interface Tag
 
     /**
      * Retrieve the first tagfield that exists for this key
-     *
-     * <p>Can be used to retrieve fields with any identifier, useful if the identifier is not within  the 
+     * <p/>
+     * <p>Can be used to retrieve fields with any identifier, useful if the identifier is not within  the
      * jaudiotagger enum
      *
      * @param id audio specific key
@@ -351,7 +318,6 @@ public interface Tag
      */
     public TagField getFirstField(String id);
 
-    
 
     //TODO, do we need this
     public String toString();
@@ -372,27 +338,26 @@ public interface Tag
     public Iterator getFields();
 
     /**
-       * Return the number of fields
-       *
-       * <p>Fields with the same identifiers are counted seperately
-       * i.e two title fields would contribute two to the count
-       *
-       * @return total number of fields
-       */
-      public int getFieldCount();
+     * Return the number of fields
+     * <p/>
+     * <p>Fields with the same identifiers are counted seperately
+     * i.e two title fields would contribute two to the count
+     *
+     * @return total number of fields
+     */
+    public int getFieldCount();
 
-      //TODO is this a special field?
-      public boolean setEncoding(String enc)  throws FieldDataInvalidException;
+    //TODO is this a special field?
+    public boolean setEncoding(String enc) throws FieldDataInvalidException;
 
     /**
-        * Returns a {@linkplain List list} of {@link TagField} objects whose &quot;{@linkplain TagField#getId() id}&quot;
-        * is the specified one.<br>
-        *
-        * @param id
-        *            The field id.
-        * @return A list of {@link TagField} objects with the given &quot;id&quot;.
-        */
-       public List<TagField> get(TagFieldKey id)
-               throws KeyNotFoundException;
+     * Returns a {@linkplain List list} of {@link TagField} objects whose &quot;{@linkplain TagField#getId() id}&quot;
+     * is the specified one.<br>
+     *
+     * @param id The field id.
+     * @return A list of {@link TagField} objects with the given &quot;id&quot;.
+     */
+    public List<TagField> get(TagFieldKey id)
+            throws KeyNotFoundException;
 
 }

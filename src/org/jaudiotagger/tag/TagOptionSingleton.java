@@ -27,8 +27,8 @@ package org.jaudiotagger.tag;
 import org.jaudiotagger.tag.id3.framebody.AbstractID3v2FrameBody;
 import org.jaudiotagger.tag.id3.framebody.FrameBodyCOMM;
 import org.jaudiotagger.tag.id3.framebody.FrameBodyTIPL;
-import org.jaudiotagger.tag.id3.valuepair.GenreTypes;
-import org.jaudiotagger.tag.id3.valuepair.Languages;
+import org.jaudiotagger.tag.reference.GenreTypes;
+import org.jaudiotagger.tag.reference.Languages;
 import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
 import org.jaudiotagger.tag.lyrics3.Lyrics3v2Fields;
 
@@ -39,22 +39,22 @@ import java.util.LinkedList;
 public class TagOptionSingleton
 {
     /**
-     * 
+     *
      */
     private static HashMap tagOptionTable = new HashMap();
 
     /**
-     * 
+     *
      */
     private static String DEFAULT = "default";
 
     /**
-     * 
+     *
      */
     private static Object defaultOptions = DEFAULT;
 
     /**
-     * 
+     *
      */
     private HashMap keywordMap = new HashMap();
 
@@ -83,7 +83,7 @@ public class TagOptionSingleton
 
 
     /**
-     * 
+     *
      */
     private boolean filenameTagSave = false;
 
@@ -153,7 +153,6 @@ public class TagOptionSingleton
     private boolean id3v2Save = true;
 
 
-
     /**
      * if we should keep an empty Lyrics3 field while we're reading. This is
      * different from a string of white space. Defaults to false.
@@ -168,16 +167,15 @@ public class TagOptionSingleton
 
     /**
      * if we should save empty Lyrics3 field or not. Defaults to false.
-     *
+     * <p/>
      * todo I don't think this is implemented yet.
      */
     private boolean lyrics3SaveEmptyField = false;
 
     /**
-     * 
+     *
      */
     private boolean originalSavedAfterAdjustingID3v2Padding = true;
-
 
 
     /**
@@ -192,7 +190,8 @@ public class TagOptionSingleton
      */
     private int numberMP3SyncFrame = 3;
 
-    /** Unsynchronize tags/frames this is rarely required these days and can cause more
+    /**
+     * Unsynchronize tags/frames this is rarely required these days and can cause more
      * problems than it solves
      */
     private boolean unsyncTags = false;
@@ -201,7 +200,7 @@ public class TagOptionSingleton
      * iTunes needlessly writes null terminators at the end for TextEncodedStringSizeTerminated values,
      * if this option is enabled these characters are removed
      */
-    private boolean removeTrailingTerminatorOnWrite=true;
+    private boolean removeTrailingTerminatorOnWrite = true;
 
     /**
      * This is the default text encoding to use for new v23 frames, when unicode is required
@@ -239,11 +238,8 @@ public class TagOptionSingleton
     }
 
 
-
     /**
-     * 
-     *
-     * @return 
+     * @return
      */
     public static TagOptionSingleton getInstance()
     {
@@ -251,10 +247,8 @@ public class TagOptionSingleton
     }
 
     /**
-     * 
-     *
-     * @param instanceKey 
-     * @return 
+     * @param instanceKey
+     * @return
      */
     public static TagOptionSingleton getInstance(Object instanceKey)
     {
@@ -270,9 +264,7 @@ public class TagOptionSingleton
     }
 
     /**
-     * 
-     *
-     * @param filenameTagSave 
+     * @param filenameTagSave
      */
     public void setFilenameTagSave(boolean filenameTagSave)
     {
@@ -280,9 +272,7 @@ public class TagOptionSingleton
     }
 
     /**
-     * 
-     *
-     * @return 
+     * @return
      */
     public boolean isFilenameTagSave()
     {
@@ -290,11 +280,8 @@ public class TagOptionSingleton
     }
 
 
-
     /**
-     * 
-     *
-     * @param instanceKey 
+     * @param instanceKey
      */
     public void setInstanceKey(Object instanceKey)
     {
@@ -302,9 +289,7 @@ public class TagOptionSingleton
     }
 
     /**
-     * 
-     *
-     * @return 
+     * @return
      */
     public static Object getInstanceKey()
     {
@@ -312,11 +297,8 @@ public class TagOptionSingleton
     }
 
 
-
     /**
-     * 
-     *
-     * @param id3v1Save 
+     * @param id3v1Save
      */
     public void setId3v1Save(boolean id3v1Save)
     {
@@ -324,9 +306,7 @@ public class TagOptionSingleton
     }
 
     /**
-     * 
-     *
-     * @return 
+     * @return
      */
     public boolean isId3v1Save()
     {
@@ -334,9 +314,7 @@ public class TagOptionSingleton
     }
 
     /**
-     * 
-     *
-     * @param id3v1SaveAlbum 
+     * @param id3v1SaveAlbum
      */
     public void setId3v1SaveAlbum(boolean id3v1SaveAlbum)
     {
@@ -344,9 +322,7 @@ public class TagOptionSingleton
     }
 
     /**
-     * 
-     *
-     * @return 
+     * @return
      */
     public boolean isId3v1SaveAlbum()
     {
@@ -354,9 +330,7 @@ public class TagOptionSingleton
     }
 
     /**
-     * 
-     *
-     * @param id3v1SaveArtist 
+     * @param id3v1SaveArtist
      */
     public void setId3v1SaveArtist(boolean id3v1SaveArtist)
     {
@@ -364,9 +338,7 @@ public class TagOptionSingleton
     }
 
     /**
-     * 
-     *
-     * @return 
+     * @return
      */
     public boolean isId3v1SaveArtist()
     {
@@ -374,9 +346,7 @@ public class TagOptionSingleton
     }
 
     /**
-     * 
-     *
-     * @param id3v1SaveComment 
+     * @param id3v1SaveComment
      */
     public void setId3v1SaveComment(boolean id3v1SaveComment)
     {
@@ -384,9 +354,7 @@ public class TagOptionSingleton
     }
 
     /**
-     * 
-     *
-     * @return 
+     * @return
      */
     public boolean isId3v1SaveComment()
     {
@@ -394,9 +362,7 @@ public class TagOptionSingleton
     }
 
     /**
-     * 
-     *
-     * @param id3v1SaveGenre 
+     * @param id3v1SaveGenre
      */
     public void setId3v1SaveGenre(boolean id3v1SaveGenre)
     {
@@ -404,9 +370,7 @@ public class TagOptionSingleton
     }
 
     /**
-     * 
-     *
-     * @return 
+     * @return
      */
     public boolean isId3v1SaveGenre()
     {
@@ -414,9 +378,7 @@ public class TagOptionSingleton
     }
 
     /**
-     * 
-     *
-     * @param id3v1SaveTitle 
+     * @param id3v1SaveTitle
      */
     public void setId3v1SaveTitle(boolean id3v1SaveTitle)
     {
@@ -424,9 +386,7 @@ public class TagOptionSingleton
     }
 
     /**
-     * 
-     *
-     * @return 
+     * @return
      */
     public boolean isId3v1SaveTitle()
     {
@@ -434,9 +394,7 @@ public class TagOptionSingleton
     }
 
     /**
-     * 
-     *
-     * @param id3v1SaveTrack 
+     * @param id3v1SaveTrack
      */
     public void setId3v1SaveTrack(boolean id3v1SaveTrack)
     {
@@ -444,9 +402,7 @@ public class TagOptionSingleton
     }
 
     /**
-     * 
-     *
-     * @return 
+     * @return
      */
     public boolean isId3v1SaveTrack()
     {
@@ -454,9 +410,7 @@ public class TagOptionSingleton
     }
 
     /**
-     * 
-     *
-     * @param id3v1SaveYear 
+     * @param id3v1SaveYear
      */
     public void setId3v1SaveYear(boolean id3v1SaveYear)
     {
@@ -464,9 +418,7 @@ public class TagOptionSingleton
     }
 
     /**
-     * 
-     *
-     * @return 
+     * @return
      */
     public boolean isId3v1SaveYear()
     {
@@ -474,11 +426,8 @@ public class TagOptionSingleton
     }
 
 
-
     /**
-     * 
-     *
-     * @param id3v2PaddingCopyTag 
+     * @param id3v2PaddingCopyTag
      */
     public void setId3v2PaddingCopyTag(boolean id3v2PaddingCopyTag)
     {
@@ -486,9 +435,7 @@ public class TagOptionSingleton
     }
 
     /**
-     * 
-     *
-     * @return 
+     * @return
      */
     public boolean isId3v2PaddingCopyTag()
     {
@@ -496,11 +443,8 @@ public class TagOptionSingleton
     }
 
 
-
     /**
-     * 
-     *
-     * @param id3v2PaddingWillShorten 
+     * @param id3v2PaddingWillShorten
      */
     public void setId3v2PaddingWillShorten(boolean id3v2PaddingWillShorten)
     {
@@ -508,9 +452,7 @@ public class TagOptionSingleton
     }
 
     /**
-     * 
-     *
-     * @return 
+     * @return
      */
     public boolean isId3v2PaddingWillShorten()
     {
@@ -518,9 +460,7 @@ public class TagOptionSingleton
     }
 
     /**
-     * 
-     *
-     * @param id3v2Save 
+     * @param id3v2Save
      */
     public void setId3v2Save(boolean id3v2Save)
     {
@@ -528,9 +468,7 @@ public class TagOptionSingleton
     }
 
     /**
-     * 
-     *
-     * @return 
+     * @return
      */
     public boolean isId3v2Save()
     {
@@ -538,11 +476,8 @@ public class TagOptionSingleton
     }
 
 
-
     /**
-     * 
-     *
-     * @return 
+     * @return
      */
     public Iterator getKeywordIterator()
     {
@@ -550,10 +485,8 @@ public class TagOptionSingleton
     }
 
     /**
-     * 
-     *
-     * @param id3v2_4FrameBody 
-     * @return 
+     * @param id3v2_4FrameBody
+     * @return
      */
     public Iterator getKeywordListIterator(Class id3v2_4FrameBody)
     {
@@ -586,9 +519,7 @@ public class TagOptionSingleton
     }
 
     /**
-     * 
-     *
-     * @param lyrics3KeepEmptyFieldIfRead 
+     * @param lyrics3KeepEmptyFieldIfRead
      */
     public void setLyrics3KeepEmptyFieldIfRead(boolean lyrics3KeepEmptyFieldIfRead)
     {
@@ -596,9 +527,7 @@ public class TagOptionSingleton
     }
 
     /**
-     * 
-     *
-     * @return 
+     * @return
      */
     public boolean isLyrics3KeepEmptyFieldIfRead()
     {
@@ -606,9 +535,7 @@ public class TagOptionSingleton
     }
 
     /**
-     * 
-     *
-     * @param lyrics3Save 
+     * @param lyrics3Save
      */
     public void setLyrics3Save(boolean lyrics3Save)
     {
@@ -616,9 +543,7 @@ public class TagOptionSingleton
     }
 
     /**
-     * 
-     *
-     * @return 
+     * @return
      */
     public boolean isLyrics3Save()
     {
@@ -626,9 +551,7 @@ public class TagOptionSingleton
     }
 
     /**
-     * 
-     *
-     * @param lyrics3SaveEmptyField 
+     * @param lyrics3SaveEmptyField
      */
     public void setLyrics3SaveEmptyField(boolean lyrics3SaveEmptyField)
     {
@@ -636,9 +559,7 @@ public class TagOptionSingleton
     }
 
     /**
-     * 
-     *
-     * @return 
+     * @return
      */
     public boolean isLyrics3SaveEmptyField()
     {
@@ -669,9 +590,7 @@ public class TagOptionSingleton
     }
 
     /**
-     * 
-     *
-     * @return 
+     * @return
      */
     public HashMap getLyrics3SaveFieldMap()
     {
@@ -679,10 +598,8 @@ public class TagOptionSingleton
     }
 
     /**
-     * 
-     *
-     * @param oldWord 
-     * @return 
+     * @param oldWord
+     * @return
      */
     public String getNewReplaceWord(String oldWord)
     {
@@ -716,9 +633,7 @@ public class TagOptionSingleton
     }
 
     /**
-     * 
-     *
-     * @return 
+     * @return
      */
     public Iterator getOldReplaceWordIterator()
     {
@@ -726,10 +641,8 @@ public class TagOptionSingleton
     }
 
     /**
-     * 
-     *
-     * @param open 
-     * @return 
+     * @param open
+     * @return
      */
     public boolean isOpenParenthesis(String open)
     {
@@ -737,9 +650,7 @@ public class TagOptionSingleton
     }
 
     /**
-     * 
-     *
-     * @return 
+     * @return
      */
     public Iterator getOpenParenthesisIterator()
     {
@@ -747,10 +658,8 @@ public class TagOptionSingleton
     }
 
     /**
-     * 
-     *
      * @param originalSavedAfterAdjustingID3v2Padding
-     *         
+     *
      */
     public void setOriginalSavedAfterAdjustingID3v2Padding(boolean originalSavedAfterAdjustingID3v2Padding)
     {
@@ -758,9 +667,7 @@ public class TagOptionSingleton
     }
 
     /**
-     * 
-     *
-     * @return 
+     * @return
      */
     public boolean isOriginalSavedAfterAdjustingID3v2Padding()
     {
@@ -773,7 +680,7 @@ public class TagOptionSingleton
      * While the value will already exist when reading from a file, this value
      * will be used when a new ID3v2 Frame is created from scratch.
      * <p/>
-     * <P>
+     * <p/>
      * $01  Absolute time, 32 bit sized, using MPEG frames as unit<br>
      * $02  Absolute time, 32 bit sized, using milliseconds as unit<br>
      * </p>
@@ -791,7 +698,7 @@ public class TagOptionSingleton
     /**
      * Returns the default time stamp format for ID3v2 tags which require it.
      * <p/>
-     * <P>
+     * <p/>
      * $01  Absolute time, 32 bit sized, using MPEG frames as unit<br>
      * $02  Absolute time, 32 bit sized, using milliseconds as unit<br>
      * </p>
@@ -804,7 +711,7 @@ public class TagOptionSingleton
     }
 
     /**
-     * 
+     *
      */
     public void setToDefault()
     {
@@ -898,9 +805,8 @@ public class TagOptionSingleton
         catch (TagException ex)
         {
             // this shouldn't happen, indicates coding error
-            throw new RuntimeException(ex);              
+            throw new RuntimeException(ex);
         }
-
 
 
         addReplaceWord("v.", "vs.");
@@ -915,9 +821,7 @@ public class TagOptionSingleton
         addReplaceWord("ft", "feat.");
 
 
-
         iterator = this.getKeywordListIterator(FrameBodyTIPL.class);
-
 
 
         addParenthesis("(", ")");
@@ -927,16 +831,13 @@ public class TagOptionSingleton
     }
 
 
-
     /**
-     * 
-     *
-     * @param id3v2FrameBodyClass 
-     * @param keyword             
-     * @throws TagException 
+     * @param id3v2FrameBodyClass
+     * @param keyword
+     * @throws TagException
      */
     public void addKeyword(Class id3v2FrameBodyClass, String keyword)
-        throws TagException
+            throws TagException
     {
         if (AbstractID3v2FrameBody.class.isAssignableFrom(id3v2FrameBodyClass) == false)
         {
@@ -962,10 +863,8 @@ public class TagOptionSingleton
     }
 
     /**
-     * 
-     *
-     * @param open  
-     * @param close 
+     * @param open
+     * @param close
      */
     public void addParenthesis(String open, String close)
     {
@@ -973,10 +872,8 @@ public class TagOptionSingleton
     }
 
     /**
-     * 
-     *
-     * @param oldWord 
-     * @param newWord 
+     * @param oldWord
+     * @param newWord
      */
     public void addReplaceWord(String oldWord, String newWord)
     {
@@ -984,7 +881,6 @@ public class TagOptionSingleton
     }
 
     /**
-     *
      * @return are tags unsynchronized when written if contain bit pattern that could be mistaken for audio marker
      */
     public boolean isUnsyncTags()
@@ -996,7 +892,7 @@ public class TagOptionSingleton
      * Unsync tag where neccessary, currently only applies to IDv23
      *
      * @param unsyncTags set whether tags are  unsynchronized when written if contain bit pattern that could
-     * be mistaken for audio marker
+     *                   be mistaken for audio marker
      */
     public void setUnsyncTags(boolean unsyncTags)
     {
@@ -1017,6 +913,7 @@ public class TagOptionSingleton
      * Remove unneccessary trailing null characters on write
      *
      * @param removeTrailingTerminatorOnWrite
+     *
      */
     public void setRemoveTrailingTerminatorOnWrite(boolean removeTrailingTerminatorOnWrite)
     {
@@ -1042,10 +939,10 @@ public class TagOptionSingleton
      */
     public void setId3v23DefaultTextEncoding(byte id3v23DefaultTextEncoding)
     {
-        if(
-            (id3v23DefaultTextEncoding==TextEncoding.ISO_8859_1) ||
-            (id3v23DefaultTextEncoding==TextEncoding.UTF_16)
-           )
+        if (
+                (id3v23DefaultTextEncoding == TextEncoding.ISO_8859_1) ||
+                        (id3v23DefaultTextEncoding == TextEncoding.UTF_16)
+                )
         {
             this.id3v23DefaultTextEncoding = id3v23DefaultTextEncoding;
         }
@@ -1070,12 +967,12 @@ public class TagOptionSingleton
      */
     public void setId3v24DefaultTextEncoding(byte id3v24DefaultTextEncoding)
     {
-         if(
-            (id3v24DefaultTextEncoding==TextEncoding.ISO_8859_1) ||
-            (id3v24DefaultTextEncoding==TextEncoding.UTF_16)||
-            (id3v24DefaultTextEncoding==TextEncoding.UTF_16BE)||
-            (id3v24DefaultTextEncoding==TextEncoding.UTF_8)
-           )
+        if (
+                (id3v24DefaultTextEncoding == TextEncoding.ISO_8859_1) ||
+                        (id3v24DefaultTextEncoding == TextEncoding.UTF_16) ||
+                        (id3v24DefaultTextEncoding == TextEncoding.UTF_16BE) ||
+                        (id3v24DefaultTextEncoding == TextEncoding.UTF_8)
+                )
         {
             this.id3v24DefaultTextEncoding = id3v24DefaultTextEncoding;
         }
@@ -1101,11 +998,11 @@ public class TagOptionSingleton
      */
     public void setId3v24UnicodeTextEncoding(byte id3v24UnicodeTextEncoding)
     {
-         if(
-            (id3v24UnicodeTextEncoding==TextEncoding.UTF_16)||
-            (id3v24UnicodeTextEncoding==TextEncoding.UTF_16BE)||
-            (id3v24UnicodeTextEncoding==TextEncoding.UTF_8)
-           )
+        if (
+                (id3v24UnicodeTextEncoding == TextEncoding.UTF_16) ||
+                        (id3v24UnicodeTextEncoding == TextEncoding.UTF_16BE) ||
+                        (id3v24UnicodeTextEncoding == TextEncoding.UTF_8)
+                )
         {
             this.id3v24UnicodeTextEncoding = id3v24UnicodeTextEncoding;
         }
@@ -1124,12 +1021,12 @@ public class TagOptionSingleton
     }
 
     /**
-     *
      * When writing frames if this is set to true then the frame will be written
      * using the defaults disregarding the text encoding originally used to create
      * the frame.
      *
      * @param resetTextEncodingForExistingFrames
+     *
      */
     public void setResetTextEncodingForExistingFrames(boolean resetTextEncodingForExistingFrames)
     {

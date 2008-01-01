@@ -32,7 +32,7 @@ import java.nio.ByteBuffer;
 /**
  * Title Sort name
  */
-public class FrameBodyTSOT extends AbstractFrameBodyTextInfo implements ID3v24FrameBody,ID3v23FrameBody
+public class FrameBodyTSOT extends AbstractFrameBodyTextInfo implements ID3v24FrameBody, ID3v23FrameBody
 {
     /**
      * Creates a new FrameBodyTSOT datatype.
@@ -49,8 +49,8 @@ public class FrameBodyTSOT extends AbstractFrameBodyTextInfo implements ID3v24Fr
     /**
      * Creates a new FrameBodyTSOT datatype.
      *
-     * @param textEncoding 
-     * @param text         
+     * @param textEncoding
+     * @param text
      */
     public FrameBodyTSOT(byte textEncoding, String text)
     {
@@ -60,18 +60,18 @@ public class FrameBodyTSOT extends AbstractFrameBodyTextInfo implements ID3v24Fr
     /**
      * Creates a new FrameBodyTSOT datatype.
      *
-     * @throws InvalidTagException 
+     * @throws InvalidTagException
      */
     public FrameBodyTSOT(ByteBuffer byteBuffer, int frameSize)
-        throws InvalidTagException
+            throws InvalidTagException
     {
         super(byteBuffer, frameSize);
     }
 
-     /**
-      * The ID3v2 frame identifier
-      *
-      * @return the ID3v2 frame identifier  for this frame type
+    /**
+     * The ID3v2 frame identifier
+     *
+     * @return the ID3v2 frame identifier  for this frame type
      */
     public String getIdentifier()
     {

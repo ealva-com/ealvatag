@@ -9,8 +9,7 @@ import java.awt.image.BufferedImage;
 
 import org.jaudiotagger.AbstractTestCase;
 import org.jaudiotagger.tag.TagFieldKey;
-import org.jaudiotagger.tag.mp4.Mp4Tag;
-import org.jaudiotagger.tag.id3.valuepair.PictureTypes;
+import org.jaudiotagger.tag.reference.PictureTypes;
 import org.jaudiotagger.tag.id3.valuepair.ImageFormats;
 import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.AudioFileIO;

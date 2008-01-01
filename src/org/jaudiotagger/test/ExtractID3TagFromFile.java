@@ -15,32 +15,32 @@ public class ExtractID3TagFromFile
     {
         ExtractID3TagFromFile test = new ExtractID3TagFromFile();
 
-        if(args.length!=2)
+        if (args.length != 2)
         {
             System.err.println("usage ExtractID3TagFromFile Filename FilenameOut");
             System.err.println("      You must enter the file to extract the tag from and where to extract to");
             System.exit(1);
         }
 
-        File file    = new File(args[0]);
+        File file = new File(args[0]);
         File outFile = new File(args[1]);
-        if(!file.isFile())
+        if (!file.isFile())
         {
             System.err.println("usage ExtractID3TagFromFile Filename FilenameOut");
-            System.err.println("      File "+args[0] +" could not be found");
+            System.err.println("      File " + args[0] + " could not be found");
             System.exit(1);
         }
 
-         try
-         {
+        try
+        {
             final MP3File tmpMP3 = new MP3File(file);
             tmpMP3.extractID3v2TagDataIntoFile(outFile);
-         }
-         catch(Exception e)
-         {
-              System.err.println("Unable to extract tag");
-              System.exit(1);
-         }
+        }
+        catch (Exception e)
+        {
+            System.err.println("Unable to extract tag");
+            System.exit(1);
+        }
     }
 
     public static final String IDENT = "$Id$";

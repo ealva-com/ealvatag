@@ -23,8 +23,8 @@ import java.nio.ByteBuffer;
 
 /**
  * Group identification registration frame.
- * 
- * <p>
+ * <p/>
+ * <p/>
  * This frame enables grouping of otherwise unrelated frames. This can
  * be used when some frames are to be signed. To identify which frames
  * belongs to a set of frames a group identifier must be registered in
@@ -46,17 +46,17 @@ import java.nio.ByteBuffer;
  * <tr><td>Group symbol         </td><td width="80%">$xx        </td></tr>
  * <tr><td>Group dependent data </td><td>&lt;binary data&gt;    </td></tr>
  * </table></p>
- * 
+ * <p/>
  * <p>For more details, please refer to the ID3 specifications:
  * <ul>
  * <li><a href="http://www.id3.org/id3v2.3.0.txt">ID3 v2.3.0 Spec</a>
  * </ul>
- * 
+ *
  * @author : Paul Taylor
  * @author : Eric Farng
  * @version $Id$
  */
-public class FrameBodyGRID extends AbstractID3v2FrameBody implements ID3v24FrameBody,ID3v23FrameBody
+public class FrameBodyGRID extends AbstractID3v2FrameBody implements ID3v24FrameBody, ID3v23FrameBody
 {
     /**
      * Creates a new FrameBodyGRID datatype.
@@ -76,9 +76,9 @@ public class FrameBodyGRID extends AbstractID3v2FrameBody implements ID3v24Frame
     /**
      * Creates a new FrameBodyGRID datatype.
      *
-     * @param owner       
-     * @param groupSymbol 
-     * @param data        
+     * @param owner
+     * @param groupSymbol
+     * @param data
      */
     public FrameBodyGRID(String owner, byte groupSymbol, byte[] data)
     {
@@ -90,18 +90,16 @@ public class FrameBodyGRID extends AbstractID3v2FrameBody implements ID3v24Frame
     /**
      * Creates a new FrameBodyGRID datatype.
      *
-     * @throws InvalidTagException if unable to create framebody from buffer 
+     * @throws InvalidTagException if unable to create framebody from buffer
      */
     public FrameBodyGRID(ByteBuffer byteBuffer, int frameSize)
-        throws  InvalidTagException
+            throws InvalidTagException
     {
         super(byteBuffer, frameSize);
     }
 
     /**
-     * 
-     *
-     * @param textEncoding 
+     * @param textEncoding
      */
     public void setGroupSymbol(byte textEncoding)
     {
@@ -109,9 +107,7 @@ public class FrameBodyGRID extends AbstractID3v2FrameBody implements ID3v24Frame
     }
 
     /**
-     * 
-     *
-     * @return 
+     * @return
      */
     public byte getGroupSymbol()
     {
@@ -121,26 +117,23 @@ public class FrameBodyGRID extends AbstractID3v2FrameBody implements ID3v24Frame
         }
         else
         {
-            return (byte)0;
+            return (byte) 0;
         }
     }
 
-     /**
-      * The ID3v2 frame identifier
-      *
-      * @return the ID3v2 frame identifier  for this frame type
+    /**
+     * The ID3v2 frame identifier
+     *
+     * @return the ID3v2 frame identifier  for this frame type
      */
     public String getIdentifier()
     {
-        return ID3v24Frames.FRAME_ID_GROUP_ID_REG ;
+        return ID3v24Frames.FRAME_ID_GROUP_ID_REG;
     }
 
-    
 
     /**
-     * 
-     *
-     * @param owner 
+     * @param owner
      */
     public void setOwner(String owner)
     {
@@ -148,9 +141,7 @@ public class FrameBodyGRID extends AbstractID3v2FrameBody implements ID3v24Frame
     }
 
     /**
-     * 
-     *
-     * @return 
+     * @return
      */
     public String getOwner()
     {
@@ -158,7 +149,7 @@ public class FrameBodyGRID extends AbstractID3v2FrameBody implements ID3v24Frame
     }
 
     /**
-     * 
+     *
      */
     protected void setupObjectList()
     {

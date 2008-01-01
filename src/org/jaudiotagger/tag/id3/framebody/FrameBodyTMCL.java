@@ -46,8 +46,8 @@ public class FrameBodyTMCL extends AbstractFrameBodyTextInfo implements ID3v24Fr
     /**
      * Creates a new FrameBodyTMCL datatype.
      *
-     * @param textEncoding 
-     * @param text         
+     * @param textEncoding
+     * @param text
      */
     public FrameBodyTMCL(byte textEncoding, String text)
     {
@@ -56,22 +56,22 @@ public class FrameBodyTMCL extends AbstractFrameBodyTextInfo implements ID3v24Fr
 
     /**
      * Creates a new FrameBodyTMCL datatype.
-     *     
-     * @throws InvalidTagException 
+     *
+     * @throws InvalidTagException
      */
     public FrameBodyTMCL(ByteBuffer byteBuffer, int frameSize)
-        throws InvalidTagException
+            throws InvalidTagException
     {
         super(byteBuffer, frameSize);
     }
 
-      /**
-      * The ID3v2 frame identifier
-      *
-      * @return the ID3v2 frame identifier  for this frame type
+    /**
+     * The ID3v2 frame identifier
+     *
+     * @return the ID3v2 frame identifier  for this frame type
      */
     public String getIdentifier()
     {
-        return  ID3v24Frames. FRAME_ID_MUSICIAN_CREDITS;
+        return ID3v24Frames.FRAME_ID_MUSICIAN_CREDITS;
     }
 }

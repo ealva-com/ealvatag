@@ -21,10 +21,10 @@ import java.util.EnumMap;
 
 /**
  * Defines ID3v24 frames and collections that categorise frames.
- *
+ * <p/>
  * <p>You can include frames here that are not officially supported as long as they can be used within an
  * ID3v24Tag
- * 
+ *
  * @author Paul Taylor
  * @version $Id$
  */
@@ -122,10 +122,10 @@ public class ID3v24Frames extends ID3Frames
     public static final String FRAME_ID_IS_COMPILATION = "TCMP";
 
     //TODO this is temporary to provide backwards comptability
-    public static final String FRAME_ID_PERFORMER_SORT_OWNER =  FRAME_ID_ARTIST_SORT_ORDER;
+    public static final String FRAME_ID_PERFORMER_SORT_OWNER = FRAME_ID_ARTIST_SORT_ORDER;
     public static final String FRAME_ID_TITLE_SORT_OWNER = FRAME_ID_TITLE_SORT_ORDER;
 
-    protected EnumMap<TagFieldKey, ID3v24FieldKey> tagFieldToId3 = new EnumMap<TagFieldKey,ID3v24FieldKey>(TagFieldKey.class);
+    protected EnumMap<TagFieldKey, ID3v24FieldKey> tagFieldToId3 = new EnumMap<TagFieldKey, ID3v24FieldKey>(TagFieldKey.class);
 
     private static ID3v24Frames id3v24Frames;
 
@@ -271,7 +271,7 @@ public class ID3v24Frames extends ID3Frames
         idToValue.put(FRAME_ID_FILE_TYPE, "Text: File type");
         idToValue.put(FRAME_ID_GENERAL_ENCAPS_OBJECT, "General encapsulated datatype");
         idToValue.put(FRAME_ID_GENRE, "Text: Content type");
-        idToValue.put(FRAME_ID_GROUP_ID_REG,"Group ID Registration");
+        idToValue.put(FRAME_ID_GROUP_ID_REG, "Group ID Registration");
         idToValue.put(FRAME_ID_HW_SW_SETTINGS, "Text: Software/hardware and settings used for encoding");
         idToValue.put(FRAME_ID_INITIAL_KEY, "Text: Initial key");
         idToValue.put(FRAME_ID_INVOLVED_PEOPLE, "Involved people list");
@@ -295,8 +295,8 @@ public class ID3v24Frames extends ID3Frames
         idToValue.put(FRAME_ID_PLAY_COUNTER, "Play counter");
         idToValue.put(FRAME_ID_POPULARIMETER, "Popularimeter");
         idToValue.put(FRAME_ID_POSITION_SYNC, "Position Sync");
-        idToValue.put(FRAME_ID_PRIVATE,"Private frame");
-        idToValue.put(FRAME_ID_PRODUCED_NOTICE,"Produced Notice");
+        idToValue.put(FRAME_ID_PRIVATE, "Private frame");
+        idToValue.put(FRAME_ID_PRODUCED_NOTICE, "Produced Notice");
         idToValue.put(FRAME_ID_PUBLISHER, "Text: Publisher");
         idToValue.put(FRAME_ID_RADIO_NAME, "Text: Radio Name");
         idToValue.put(FRAME_ID_RADIO_OWNER, "Text: Radio Owner");
@@ -323,16 +323,16 @@ public class ID3v24Frames extends ID3Frames
         idToValue.put(FRAME_ID_URL_COMMERCIAL, "URL: Commercial information");
         idToValue.put(FRAME_ID_URL_COPYRIGHT, "URL: Copyright/Legal information");
         idToValue.put(FRAME_ID_URL_FILE_WEB, "URL: Official audio file webpage");
-        idToValue.put(FRAME_ID_URL_OFFICIAL_RADIO,"URL: Official Radio website");
-        idToValue.put(FRAME_ID_URL_PAYMENT,"URL: Payment for this recording ");
+        idToValue.put(FRAME_ID_URL_OFFICIAL_RADIO, "URL: Official Radio website");
+        idToValue.put(FRAME_ID_URL_PAYMENT, "URL: Payment for this recording ");
         idToValue.put(FRAME_ID_URL_PUBLISHERS, "URL: Publishers official webpage");
         idToValue.put(FRAME_ID_URL_SOURCE_WEB, "URL: Official audio source webpage");
         idToValue.put(FRAME_ID_USER_DEFINED_INFO, "User defined text information frame");
         idToValue.put(FRAME_ID_USER_DEFINED_URL, "User defined URL link frame");
         idToValue.put(FRAME_ID_YEAR, "Text:Year");
-        idToValue.put(FRAME_ID_IS_COMPILATION,"Is Compilation");
-        idToValue.put(FRAME_ID_ALBUM_ARTIST_SORT_ORDER_ITUNES,"Text:Album Artist Sort Order Frame");
-        idToValue.put(FRAME_ID_COMPOSER_SORT_ORDER_ITUNES,"Text:Composer Sort Order Frame");
+        idToValue.put(FRAME_ID_IS_COMPILATION, "Is Compilation");
+        idToValue.put(FRAME_ID_ALBUM_ARTIST_SORT_ORDER_ITUNES, "Text:Album Artist Sort Order Frame");
+        idToValue.put(FRAME_ID_COMPOSER_SORT_ORDER_ITUNES, "Text:Composer Sort Order Frame");
 
 
         createMaps();
@@ -355,47 +355,45 @@ public class ID3v24Frames extends ID3Frames
         discardIfFileAlteredFrames.add(FRAME_ID_ENCODEDBY);
         discardIfFileAlteredFrames.add(FRAME_ID_LENGTH);
 
-        tagFieldToId3.put(TagFieldKey.ARTIST,ID3v24FieldKey.ARTIST);
-        tagFieldToId3.put(TagFieldKey.ALBUM,ID3v24FieldKey.ALBUM);
-        tagFieldToId3.put(TagFieldKey.TITLE,ID3v24FieldKey.TITLE);
-        tagFieldToId3.put(TagFieldKey.TRACK,ID3v24FieldKey.TRACK);
-        tagFieldToId3.put(TagFieldKey.YEAR,ID3v24FieldKey.YEAR);
-        tagFieldToId3.put(TagFieldKey.GENRE,ID3v24FieldKey.GENRE);
-        tagFieldToId3.put(TagFieldKey.COMMENT,ID3v24FieldKey.COMMENT);
-        tagFieldToId3.put(TagFieldKey.ALBUM_ARTIST,ID3v24FieldKey.ALBUM_ARTIST);
-        tagFieldToId3.put(TagFieldKey.COMPOSER,ID3v24FieldKey.COMPOSER);
-        tagFieldToId3.put(TagFieldKey.GROUPING,ID3v24FieldKey.GROUPING);
-        tagFieldToId3.put(TagFieldKey.DISC_NO,ID3v24FieldKey.DISC_NO);
-        tagFieldToId3.put(TagFieldKey.BPM,ID3v24FieldKey.BPM);
-        tagFieldToId3.put(TagFieldKey.ENCODER,ID3v24FieldKey.ENCODER);
-        tagFieldToId3.put(TagFieldKey.MUSICBRAINZ_ARTISTID,ID3v24FieldKey.MUSICBRAINZ_ARTISTID);
-        tagFieldToId3.put(TagFieldKey.MUSICBRAINZ_RELEASEID,ID3v24FieldKey.MUSICBRAINZ_RELEASEID);
-        tagFieldToId3.put(TagFieldKey.MUSICBRAINZ_RELEASEARTISTID,ID3v24FieldKey.MUSICBRAINZ_RELEASEARTISTID);
-        tagFieldToId3.put(TagFieldKey.MUSICBRAINZ_TRACK_ID,ID3v24FieldKey.MUSICBRAINZ_TRACK_ID);
-        tagFieldToId3.put(TagFieldKey.MUSICBRAINZ_DISC_ID,ID3v24FieldKey.MUSICBRAINZ_DISC_ID);
-        tagFieldToId3.put(TagFieldKey.MUSICIP_ID,ID3v24FieldKey.MUSICIP_ID);
-        tagFieldToId3.put(TagFieldKey.AMAZON_ID,ID3v24FieldKey.AMAZON_ID);
-        tagFieldToId3.put(TagFieldKey.MUSICBRAINZ_RELEASE_STATUS,ID3v24FieldKey.MUSICBRAINZ_RELEASE_STATUS);
-        tagFieldToId3.put(TagFieldKey.MUSICBRAINZ_RELEASE_TYPE,ID3v24FieldKey.MUSICBRAINZ_RELEASE_TYPE);
-        tagFieldToId3.put(TagFieldKey.MUSICBRAINZ_RELEASE_COUNTRY,ID3v24FieldKey.MUSICBRAINZ_RELEASE_COUNTRY);
-        tagFieldToId3.put(TagFieldKey.LYRICS,ID3v24FieldKey.LYRICS);
-        tagFieldToId3.put(TagFieldKey.IS_COMPILATION,ID3v24FieldKey.IS_COMPILATION);
-        tagFieldToId3.put(TagFieldKey.ARTIST_SORT,ID3v24FieldKey.ARTIST_SORT);
-        tagFieldToId3.put(TagFieldKey.ALBUM_ARTIST_SORT,ID3v24FieldKey.ALBUM_ARTIST_SORT);
-        tagFieldToId3.put(TagFieldKey.ALBUM_SORT,ID3v24FieldKey.ALBUM_SORT);
-        tagFieldToId3.put(TagFieldKey.TITLE_SORT,ID3v24FieldKey.TITLE_SORT);
-        tagFieldToId3.put(TagFieldKey.COMPOSER_SORT,ID3v24FieldKey.COMPOSER_SORT);
-        tagFieldToId3.put(TagFieldKey.COVER_ART,ID3v24FieldKey.COVER_ART);
+        tagFieldToId3.put(TagFieldKey.ARTIST, ID3v24FieldKey.ARTIST);
+        tagFieldToId3.put(TagFieldKey.ALBUM, ID3v24FieldKey.ALBUM);
+        tagFieldToId3.put(TagFieldKey.TITLE, ID3v24FieldKey.TITLE);
+        tagFieldToId3.put(TagFieldKey.TRACK, ID3v24FieldKey.TRACK);
+        tagFieldToId3.put(TagFieldKey.YEAR, ID3v24FieldKey.YEAR);
+        tagFieldToId3.put(TagFieldKey.GENRE, ID3v24FieldKey.GENRE);
+        tagFieldToId3.put(TagFieldKey.COMMENT, ID3v24FieldKey.COMMENT);
+        tagFieldToId3.put(TagFieldKey.ALBUM_ARTIST, ID3v24FieldKey.ALBUM_ARTIST);
+        tagFieldToId3.put(TagFieldKey.COMPOSER, ID3v24FieldKey.COMPOSER);
+        tagFieldToId3.put(TagFieldKey.GROUPING, ID3v24FieldKey.GROUPING);
+        tagFieldToId3.put(TagFieldKey.DISC_NO, ID3v24FieldKey.DISC_NO);
+        tagFieldToId3.put(TagFieldKey.BPM, ID3v24FieldKey.BPM);
+        tagFieldToId3.put(TagFieldKey.ENCODER, ID3v24FieldKey.ENCODER);
+        tagFieldToId3.put(TagFieldKey.MUSICBRAINZ_ARTISTID, ID3v24FieldKey.MUSICBRAINZ_ARTISTID);
+        tagFieldToId3.put(TagFieldKey.MUSICBRAINZ_RELEASEID, ID3v24FieldKey.MUSICBRAINZ_RELEASEID);
+        tagFieldToId3.put(TagFieldKey.MUSICBRAINZ_RELEASEARTISTID, ID3v24FieldKey.MUSICBRAINZ_RELEASEARTISTID);
+        tagFieldToId3.put(TagFieldKey.MUSICBRAINZ_TRACK_ID, ID3v24FieldKey.MUSICBRAINZ_TRACK_ID);
+        tagFieldToId3.put(TagFieldKey.MUSICBRAINZ_DISC_ID, ID3v24FieldKey.MUSICBRAINZ_DISC_ID);
+        tagFieldToId3.put(TagFieldKey.MUSICIP_ID, ID3v24FieldKey.MUSICIP_ID);
+        tagFieldToId3.put(TagFieldKey.AMAZON_ID, ID3v24FieldKey.AMAZON_ID);
+        tagFieldToId3.put(TagFieldKey.MUSICBRAINZ_RELEASE_STATUS, ID3v24FieldKey.MUSICBRAINZ_RELEASE_STATUS);
+        tagFieldToId3.put(TagFieldKey.MUSICBRAINZ_RELEASE_TYPE, ID3v24FieldKey.MUSICBRAINZ_RELEASE_TYPE);
+        tagFieldToId3.put(TagFieldKey.MUSICBRAINZ_RELEASE_COUNTRY, ID3v24FieldKey.MUSICBRAINZ_RELEASE_COUNTRY);
+        tagFieldToId3.put(TagFieldKey.LYRICS, ID3v24FieldKey.LYRICS);
+        tagFieldToId3.put(TagFieldKey.IS_COMPILATION, ID3v24FieldKey.IS_COMPILATION);
+        tagFieldToId3.put(TagFieldKey.ARTIST_SORT, ID3v24FieldKey.ARTIST_SORT);
+        tagFieldToId3.put(TagFieldKey.ALBUM_ARTIST_SORT, ID3v24FieldKey.ALBUM_ARTIST_SORT);
+        tagFieldToId3.put(TagFieldKey.ALBUM_SORT, ID3v24FieldKey.ALBUM_SORT);
+        tagFieldToId3.put(TagFieldKey.TITLE_SORT, ID3v24FieldKey.TITLE_SORT);
+        tagFieldToId3.put(TagFieldKey.COMPOSER_SORT, ID3v24FieldKey.COMPOSER_SORT);
+        tagFieldToId3.put(TagFieldKey.COVER_ART, ID3v24FieldKey.COVER_ART);
     }
 
     /**
-    *
-    * @param genericKey
-    *
-    * @return id3 key for generic key
-    */
+     * @param genericKey
+     * @return id3 key for generic key
+     */
     public ID3v24FieldKey getId3KeyFromGenericKey(TagFieldKey genericKey)
     {
-       return tagFieldToId3.get(genericKey);
+        return tagFieldToId3.get(genericKey);
     }
 }

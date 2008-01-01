@@ -37,7 +37,7 @@ import java.util.Iterator;
 public class Lyrics3v1 extends AbstractLyrics3
 {
     /**
-     * 
+     *
      */
     private String lyric = "";
 
@@ -82,14 +82,15 @@ public class Lyrics3v1 extends AbstractLyrics3
     /**
      * Creates a new Lyrics3v1 datatype.
      *
-     * @param file 
-     * @throws TagNotFoundException 
-     * @throws java.io.IOException  
+     * @param file
+     * @throws TagNotFoundException
+     * @throws java.io.IOException
      */
     public Lyrics3v1(ByteBuffer byteBuffer)
-        throws TagNotFoundException, java.io.IOException
+            throws TagNotFoundException, java.io.IOException
     {
-        try {
+        try
+        {
             this.read(byteBuffer);
         }
         catch (TagException e)
@@ -99,9 +100,7 @@ public class Lyrics3v1 extends AbstractLyrics3
     }
 
     /**
-     * 
-     *
-     * @return 
+     * @return
      */
     public String getIdentifier()
     {
@@ -109,9 +108,7 @@ public class Lyrics3v1 extends AbstractLyrics3
     }
 
     /**
-     * 
-     *
-     * @param lyric 
+     * @param lyric
      */
     public void setLyric(String lyric)
     {
@@ -119,9 +116,7 @@ public class Lyrics3v1 extends AbstractLyrics3
     }
 
     /**
-     * 
-     *
-     * @return 
+     * @return
      */
     public String getLyric()
     {
@@ -129,9 +124,7 @@ public class Lyrics3v1 extends AbstractLyrics3
     }
 
     /**
-     * 
-     *
-     * @return 
+     * @return
      */
     public int getSize()
     {
@@ -139,10 +132,8 @@ public class Lyrics3v1 extends AbstractLyrics3
     }
 
     /**
-     * 
-     *
-     * @param obj 
-     * @return 
+     * @param obj
+     * @return
      */
     public boolean isSubsetOf(Object obj)
     {
@@ -155,10 +146,8 @@ public class Lyrics3v1 extends AbstractLyrics3
     }
 
     /**
-     * 
-     *
-     * @param obj 
-     * @return 
+     * @param obj
+     * @return
      */
     public boolean equals(Object obj)
     {
@@ -178,11 +167,9 @@ public class Lyrics3v1 extends AbstractLyrics3
     }
 
     /**
-     * 
-     *
-     * @return 
+     * @return
      * @throws java.lang.UnsupportedOperationException
-     *          
+     *
      */
     public Iterator iterator()
     {
@@ -205,14 +192,12 @@ public class Lyrics3v1 extends AbstractLyrics3
     }
 
     /**
-     * 
-     *
-     * @param byteBuffer 
-     * @throws TagNotFoundException 
-     * @throws IOException          
+     * @param byteBuffer
+     * @throws TagNotFoundException
+     * @throws IOException
      */
     public void read(ByteBuffer byteBuffer)
-        throws TagException
+            throws TagException
     {
         byte[] buffer = new byte[5100 + 9 + 11];
         String lyricBuffer;
@@ -229,14 +214,12 @@ public class Lyrics3v1 extends AbstractLyrics3
     }
 
     /**
-     * 
-     *
-     * @param file 
-     * @return 
-     * @throws IOException 
+     * @param file
+     * @return
+     * @throws IOException
      */
     public boolean seek(RandomAccessFile file)
-        throws IOException
+            throws IOException
     {
         byte[] buffer = new byte[5100 + 9 + 11];
         String lyricsEnd = "";
@@ -290,9 +273,7 @@ public class Lyrics3v1 extends AbstractLyrics3
     }
 
     /**
-     * 
-     *
-     * @return 
+     * @return
      */
     public String toString()
     {
@@ -302,13 +283,11 @@ public class Lyrics3v1 extends AbstractLyrics3
     }
 
     /**
-     * 
-     *
-     * @param file 
-     * @throws IOException 
+     * @param file
+     * @throws IOException
      */
     public void write(RandomAccessFile file)
-        throws IOException
+            throws IOException
     {
         String str = "";
         int offset = 0;

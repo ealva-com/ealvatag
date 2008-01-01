@@ -34,22 +34,16 @@ import java.util.Map;
 public interface HashMapInterface
 {
     /**
-     * 
-     *
      * @return a mapping between the key within the frame and the value
      */
     public Map getKeyToValue();
 
     /**
-     * 
-     *
      * @return a mapping between the value to the key within the frame
      */
     public Map getValueToKey();
 
     /**
-     * 
-     *
      * @return an interator of the values within the map
      */
     public Iterator iterator();

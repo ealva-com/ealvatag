@@ -2,7 +2,7 @@ package org.jaudiotagger.tag.mp4;
 
 import org.jaudiotagger.AbstractTestCase;
 import org.jaudiotagger.tag.*;
-import org.jaudiotagger.tag.id3.valuepair.GenreTypes;
+import org.jaudiotagger.tag.reference.GenreTypes;
 import org.jaudiotagger.tag.mp4.Mp4FieldKey;
 import org.jaudiotagger.tag.mp4.Mp4Tag;
 import org.jaudiotagger.tag.mp4.atom.Mp4ContentTypeValue;

@@ -51,8 +51,8 @@ public class FrameBodySIGN extends AbstractID3v2FrameBody implements ID3v24Frame
     /**
      * Creates a new FrameBodySIGN datatype.
      *
-     * @param groupSymbol 
-     * @param signature   
+     * @param groupSymbol
+     * @param signature
      */
     public FrameBodySIGN(byte groupSymbol, byte[] signature)
     {
@@ -63,18 +63,16 @@ public class FrameBodySIGN extends AbstractID3v2FrameBody implements ID3v24Frame
     /**
      * Creates a new FrameBodySIGN datatype.
      *
-     * @throws InvalidTagException if unable to create framebody from buffer 
+     * @throws InvalidTagException if unable to create framebody from buffer
      */
     public FrameBodySIGN(ByteBuffer byteBuffer, int frameSize)
-        throws  InvalidTagException
+            throws InvalidTagException
     {
         super(byteBuffer, frameSize);
     }
 
     /**
-     * 
-     *
-     * @param groupSymbol 
+     * @param groupSymbol
      */
     public void setGroupSymbol(byte groupSymbol)
     {
@@ -82,9 +80,7 @@ public class FrameBodySIGN extends AbstractID3v2FrameBody implements ID3v24Frame
     }
 
     /**
-     * 
-     *
-     * @return 
+     * @return
      */
     public byte getGroupSymbol()
     {
@@ -100,9 +96,9 @@ public class FrameBodySIGN extends AbstractID3v2FrameBody implements ID3v24Frame
 
 
     /**
-      * The ID3v2 frame identifier
-      *
-      * @return the ID3v2 frame identifier  for this frame type
+     * The ID3v2 frame identifier
+     *
+     * @return the ID3v2 frame identifier  for this frame type
      */
     public String getIdentifier()
     {
@@ -110,9 +106,7 @@ public class FrameBodySIGN extends AbstractID3v2FrameBody implements ID3v24Frame
     }
 
     /**
-     * 
-     *
-     * @param signature 
+     * @param signature
      */
     public void setSignature(byte[] signature)
     {
@@ -120,9 +114,7 @@ public class FrameBodySIGN extends AbstractID3v2FrameBody implements ID3v24Frame
     }
 
     /**
-     * 
-     *
-     * @return 
+     * @return
      */
     public byte[] getSignature()
     {
@@ -130,7 +122,7 @@ public class FrameBodySIGN extends AbstractID3v2FrameBody implements ID3v24Frame
     }
 
     /**
-     * 
+     *
      */
     protected void setupObjectList()
     {

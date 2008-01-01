@@ -46,8 +46,8 @@ public class FrameBodyTDEN extends AbstractFrameBodyTextInfo implements ID3v24Fr
     /**
      * Creates a new FrameBodyTDEN datatype.
      *
-     * @param textEncoding 
-     * @param text         
+     * @param textEncoding
+     * @param text
      */
     public FrameBodyTDEN(byte textEncoding, String text)
     {
@@ -60,17 +60,16 @@ public class FrameBodyTDEN extends AbstractFrameBodyTextInfo implements ID3v24Fr
      * @throws InvalidTagException
      */
     public FrameBodyTDEN(ByteBuffer byteBuffer, int frameSize)
-        throws InvalidTagException
+            throws InvalidTagException
     {
         super(byteBuffer, frameSize);
     }
 
 
-
-     /**
-      * The ID3v2 frame identifier
-      *
-      * @return the ID3v2 frame identifier  for this frame type
+    /**
+     * The ID3v2 frame identifier
+     *
+     * @return the ID3v2 frame identifier  for this frame type
      */
     public String getIdentifier()
     {

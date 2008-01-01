@@ -45,7 +45,7 @@ public class FieldFrameBodyINF extends AbstractLyrics3v2FieldFrameBody
     /**
      * Creates a new FieldBodyINF datatype.
      *
-     * @param additionalInformation 
+     * @param additionalInformation
      */
     public FieldFrameBodyINF(String additionalInformation)
     {
@@ -54,20 +54,16 @@ public class FieldFrameBodyINF extends AbstractLyrics3v2FieldFrameBody
 
     /**
      * Creates a new FieldBodyINF datatype.
-     *
-
      */
     public FieldFrameBodyINF(ByteBuffer byteBuffer)
-        throws InvalidTagException
+            throws InvalidTagException
     {
         this.read(byteBuffer);
 
     }
 
     /**
-     * 
-     *
-     * @param additionalInformation 
+     * @param additionalInformation
      */
     public void setAdditionalInformation(String additionalInformation)
     {
@@ -75,9 +71,7 @@ public class FieldFrameBodyINF extends AbstractLyrics3v2FieldFrameBody
     }
 
     /**
-     * 
-     *
-     * @return 
+     * @return
      */
     public String getAdditionalInformation()
     {
@@ -85,9 +79,7 @@ public class FieldFrameBodyINF extends AbstractLyrics3v2FieldFrameBody
     }
 
     /**
-     * 
-     *
-     * @return 
+     * @return
      */
     public String getIdentifier()
     {
@@ -95,7 +87,7 @@ public class FieldFrameBodyINF extends AbstractLyrics3v2FieldFrameBody
     }
 
     /**
-     * 
+     *
      */
     protected void setupObjectList()
     {

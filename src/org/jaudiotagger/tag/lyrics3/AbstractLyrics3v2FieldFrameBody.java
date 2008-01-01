@@ -46,13 +46,13 @@ public abstract class AbstractLyrics3v2FieldFrameBody extends AbstractTagFrameBo
     /**
      * This is called by superclass when attempt to read data from file.
      *
-     * @param file 
-     * @return 
-     * @throws InvalidTagException 
-     * @throws IOException         
+     * @param file
+     * @return
+     * @throws InvalidTagException
+     * @throws IOException
      */
     protected int readHeader(RandomAccessFile file)
-        throws InvalidTagException, IOException
+            throws InvalidTagException, IOException
     {
         int size;
         byte[] buffer = new byte[5];
@@ -72,12 +72,12 @@ public abstract class AbstractLyrics3v2FieldFrameBody extends AbstractTagFrameBo
     /**
      * This is called by superclass when attempt to write data from file.
      *
-     * @param file 
-     * @param size 
-     * @throws IOException 
+     * @param file
+     * @param size
+     * @throws IOException
      */
     protected void writeHeader(RandomAccessFile file, int size)
-        throws IOException
+            throws IOException
     {
         String str;
         int offset = 0;
@@ -150,7 +150,7 @@ public abstract class AbstractLyrics3v2FieldFrameBody extends AbstractTagFrameBo
      * @throws IOException on any I/O error
      */
     public void write(RandomAccessFile file)
-        throws IOException
+            throws IOException
     {
         //Write the various fields to file in order
         byte[] buffer;

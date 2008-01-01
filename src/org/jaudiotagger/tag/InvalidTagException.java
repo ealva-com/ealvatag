@@ -28,7 +28,7 @@ package org.jaudiotagger.tag;
  * string or some way saying that it simply exists. If this string is missing,
  * <code>TagNotFoundException</code> is thrown. If the ID string exists, then
  * any other error while reading throws an <code>InvalidTagException</code>.
- * 
+ *
  * @version $Revision$
  */
 public class InvalidTagException extends TagException
@@ -64,7 +64,7 @@ public class InvalidTagException extends TagException
      * Creates a new InvalidTagException datatype.
      *
      * @param msg the detail message.
-     * @param ex the cause.
+     * @param ex  the cause.
      */
     public InvalidTagException(String msg, Throwable ex)
     {

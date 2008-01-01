@@ -18,8 +18,8 @@ public class SynchronisedLyricsContentType extends AbstractIntStringValuePair
         return SynchronisedLyricsContentType.eventTimingTypes;
     }
 
-    public static final int  CONTENT_KEY_FIELD_SIZE = 1;
-    
+    public static final int CONTENT_KEY_FIELD_SIZE = 1;
+
     private SynchronisedLyricsContentType()
     {
         idToValue.put(0x00, "other");
@@ -31,6 +31,6 @@ public class SynchronisedLyricsContentType extends AbstractIntStringValuePair
         idToValue.put(0x06, "trivia");
         idToValue.put(0x07, "URLs to webpages");
         idToValue.put(0x08, "URLs to images");
-           createMaps();
+        createMaps();
     }
 }

@@ -5,39 +5,37 @@ import org.jaudiotagger.tag.mp4.field.Mp4TagReverseDnsField;
 
 /**
  * List of valid values for the Content Type (Stik) atom
- *
+ * <p/>
  * <p>These are held as a byte field, normally only used for purcahed items, audio files use a stik of one
- *
  */
 public enum Mp4ContentTypeValue
 {
-    MOVIE("Movie",0),
-    NORMAL("Normal",1),
-    AUDIO_BOOK("AudioBook",2),
-    BOOKMARK("Whacked Bookmark",5),
-    MUSIC_VIDEO("Music Video",6),
-    SHORT_FILM("Short Film",9),
-    TV_SHOW("TV Show",10),
-    BOOKLET("Booklet",11)
-    ;
+    MOVIE("Movie", 0),
+    NORMAL("Normal", 1),
+    AUDIO_BOOK("AudioBook", 2),
+    BOOKMARK("Whacked Bookmark", 5),
+    MUSIC_VIDEO("Music Video", 6),
+    SHORT_FILM("Short Film", 9),
+    TV_SHOW("TV Show", 10),
+    BOOKLET("Booklet", 11);
 
     private String description;
-    private int    id;
+    private int id;
 
 
     /**
-     *
      * @param description of value
-     * @param id used internally
+     * @param id          used internally
      */
     Mp4ContentTypeValue(String description, int id)
     {
         this.description = description;
-        this.id          = id;
+        this.id = id;
     }
 
-     /**
+    /**
      * Return id used in the file
+     *
      * @return id
      */
     public int getId()
@@ -46,7 +44,6 @@ public enum Mp4ContentTypeValue
     }
 
     /**
-     *
      * @return the id as a string (convenience method for use with mp4.createtagField()
      */
     public String getIdAsString()

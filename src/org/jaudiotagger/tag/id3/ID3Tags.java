@@ -23,16 +23,16 @@ import java.util.logging.Logger;
 /**
  * This contains static methods that can be performed on tags
  * and to convert between tags.
- * 
+ *
  * @author : Paul Taylor
  * @author : Eric Farng
  * @version $Id$
  */
 public class ID3Tags
 {
-//Logger
+    //Logger
     public static Logger logger = Logger.getLogger("org.jaudiotagger.tag.id3");
-    
+
 
     private ID3Tags()
     {
@@ -100,7 +100,7 @@ public class ID3Tags
      *
      * @param value datatype to find long from.
      * @return <code>long</code> value
-     * @throws IllegalArgumentException 
+     * @throws IllegalArgumentException
      */
     static public long getWholeNumber(Object value)
     {
@@ -158,7 +158,7 @@ public class ID3Tags
         String id = (String) ID3Frames.convertv22Tov23.get(identifier.substring(0, 3));
         if (id != null)
         {
-             //has v2.3 been mapped to v2.4
+            //has v2.3 been mapped to v2.4
             String v23id = (String) ID3Frames.convertv23Tov24.get(id);
             if (v23id == null)
             {
@@ -175,7 +175,7 @@ public class ID3Tags
             }
             else
             {
-                 return v23id;
+                return v23id;
             }
         }
         else
@@ -195,7 +195,7 @@ public class ID3Tags
         }
 
         //If it is a v23 identifier
-        if(ID3v23Frames.getInstanceOf().getIdToValueMap().containsKey(identifier))
+        if (ID3v23Frames.getInstanceOf().getIdToValueMap().containsKey(identifier))
         {
             //If only name has changed  v22 and modified in v23 return result of.
             return (String) ID3Frames.convertv23Tov22.get(identifier.substring(0, 4));
@@ -214,10 +214,10 @@ public class ID3Tags
         }
 
         //If it is a ID3v23 identifier
-        if(ID3v23Frames.getInstanceOf().getIdToValueMap().containsKey(identifier))
+        if (ID3v23Frames.getInstanceOf().getIdToValueMap().containsKey(identifier))
         {
             //If no change between ID3v23 and ID3v24 should be in ID3v24 list.
-            if(ID3v24Frames.getInstanceOf().getIdToValueMap().containsKey(identifier)==true)
+            if (ID3v24Frames.getInstanceOf().getIdToValueMap().containsKey(identifier) == true)
             {
                 return identifier;
             }
@@ -279,7 +279,7 @@ public class ID3Tags
         id = (String) ID3Frames.convertv24Tov23.get(identifier);
         if (id == null)
         {
-            if (ID3v23Frames.getInstanceOf().getIdToValueMap().containsKey(identifier)==true)
+            if (ID3v23Frames.getInstanceOf().getIdToValueMap().containsKey(identifier) == true)
             {
                 id = identifier;
             }
@@ -328,13 +328,13 @@ public class ID3Tags
         }
         catch (java.lang.reflect.InvocationTargetException ex)
         {
-            if(ex.getCause() instanceof Error)
+            if (ex.getCause() instanceof Error)
             {
-                throw (Error)ex.getCause();
+                throw (Error) ex.getCause();
             }
-            else if(ex.getCause() instanceof RuntimeException)
+            else if (ex.getCause() instanceof RuntimeException)
             {
-                throw (RuntimeException)ex.getCause();
+                throw (RuntimeException) ex.getCause();
             }
             else
             {
@@ -348,10 +348,10 @@ public class ID3Tags
      *
      * @param str string to search
      * @return first whole number that can be parsed from the string
-     * @throws TagException 
+     * @throws TagException
      */
     public static long findNumber(String str)
-        throws TagException
+            throws TagException
     {
         return findNumber(str, 0);
     }
@@ -362,12 +362,12 @@ public class ID3Tags
      * @param str    string to search
      * @param offset start seaching from this index
      * @return first whole number that can be parsed from the string
-     * @throws TagException              
-     * @throws NullPointerException      
-     * @throws IndexOutOfBoundsException 
+     * @throws TagException
+     * @throws NullPointerException
+     * @throws IndexOutOfBoundsException
      */
     public static long findNumber(String str, int offset)
-        throws TagException
+            throws TagException
     {
         if (str == null)
         {
@@ -376,7 +376,7 @@ public class ID3Tags
         if ((offset < 0) || (offset >= str.length()))
         {
             throw new IndexOutOfBoundsException("Offset to image string is out of bounds: offset = " + offset +
-                ", string.length()" + str.length());
+                    ", string.length()" + str.length());
         }
         int i;
         int j;
@@ -443,7 +443,7 @@ public class ID3Tags
      *
      * @param str String to truncate
      * @param len maximum desired length of new string
-     * @return 
+     * @return
      */
     public static String truncate(String str, int len)
     {

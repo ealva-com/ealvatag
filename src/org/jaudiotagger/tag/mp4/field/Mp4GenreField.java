@@ -2,7 +2,7 @@ package org.jaudiotagger.tag.mp4.field;
 
 import org.jaudiotagger.tag.mp4.Mp4FieldKey;
 import org.jaudiotagger.tag.mp4.atom.Mp4DataBox;
-import org.jaudiotagger.tag.id3.valuepair.GenreTypes;
+import org.jaudiotagger.tag.reference.GenreTypes;
 import org.jaudiotagger.audio.mp4.atom.Mp4BoxHeader;
 
 import java.util.ArrayList;
@@ -11,7 +11,7 @@ import java.io.UnsupportedEncodingException;
 
 /**
  * Represents the Genre field , when user has selected from the set list of genres
- *
+ * <p/>
  * <p>This class allows you to retrieve either the internal genreid, or the display value
  */
 public class Mp4GenreField extends Mp4TagTextNumberField
@@ -23,7 +23,7 @@ public class Mp4GenreField extends Mp4TagTextNumberField
 
     /**
      * Precheck to see if the value is a valid genre or whether you should use a custom genre.
-     *  
+     *
      * @param genreId
      * @return
      */
@@ -33,21 +33,21 @@ public class Mp4GenreField extends Mp4TagTextNumberField
         try
         {
             short genreVal = Short.parseShort(genreId);
-            if((genreVal - 1) <= GenreTypes.getMaxStandardGenreId())
+            if ((genreVal - 1) <= GenreTypes.getMaxStandardGenreId())
             {
                 return true;
             }
         }
-        catch(NumberFormatException nfe)
+        catch (NumberFormatException nfe)
         {
             //Do Nothing test as String instead
         }
 
         //Is it the String value ?
         Integer id3GenreId = GenreTypes.getInstanceOf().getIdForValue(genreId);
-        if(id3GenreId!=null)
+        if (id3GenreId != null)
         {
-            if(id3GenreId <=GenreTypes.getMaxStandardGenreId())        
+            if (id3GenreId <= GenreTypes.getMaxStandardGenreId())
             {
                 return true;
             }
@@ -68,7 +68,7 @@ public class Mp4GenreField extends Mp4TagTextNumberField
         try
         {
             short genreVal = Short.parseShort(genreId);
-            if((genreVal - 1) <= GenreTypes.getMaxStandardGenreId())
+            if ((genreVal - 1) <= GenreTypes.getMaxStandardGenreId())
             {
                 numbers = new ArrayList<Short>();
                 numbers.add(genreVal);
@@ -76,41 +76,41 @@ public class Mp4GenreField extends Mp4TagTextNumberField
             }
             //Default
             numbers = new ArrayList<Short>();
-            numbers.add((short)(1));
+            numbers.add((short) (1));
             return;
         }
-        catch(NumberFormatException nfe)
+        catch (NumberFormatException nfe)
         {
             //Do Nothing test as String instead
         }
 
         //Is it the String value ?
         Integer id3GenreId = GenreTypes.getInstanceOf().getIdForValue(genreId);
-        if(id3GenreId!=null)
+        if (id3GenreId != null)
         {
-            if(id3GenreId.intValue() <=GenreTypes.getMaxStandardGenreId())
+            if (id3GenreId.intValue() <= GenreTypes.getMaxStandardGenreId())
             {
                 numbers = new ArrayList<Short>();
-                numbers.add((short)(id3GenreId+1));
+                numbers.add((short) (id3GenreId + 1));
                 return;
             }
         }
         numbers = new ArrayList<Short>();
-        numbers.add((short)(1));
+        numbers.add((short) (1));
         return;
     }
 
     protected void build(ByteBuffer data) throws UnsupportedEncodingException
     {
         //Data actually contains a 'Data' Box so process data using this
-        Mp4BoxHeader header  = new Mp4BoxHeader(data);
-        Mp4DataBox databox = new Mp4DataBox(header,data);
+        Mp4BoxHeader header = new Mp4BoxHeader(data);
+        Mp4DataBox databox = new Mp4DataBox(header, data);
         dataSize = header.getDataLength();
-        numbers  = databox.getNumbers();
+        numbers = databox.getNumbers();
 
         int genreId = numbers.get(0);
         //Get value, we have to adjust index by one because iTunes labels from one instead of zero
-        content  = GenreTypes.getInstanceOf().getValueForId(genreId - 1);
+        content = GenreTypes.getInstanceOf().getValueForId(genreId - 1);
     }
 
 

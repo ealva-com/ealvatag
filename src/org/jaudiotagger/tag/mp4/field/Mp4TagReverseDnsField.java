@@ -17,23 +17,23 @@ import java.nio.ByteBuffer;
 
 /**
  * Represents reverse dns field, used for custom information
- *
+ * <p/>
  * <p>Originally only used by Itunes for information that was iTunes specific but now used in a wide range of uses,
  * for example Musicbrainz uses it for many of its fields.
- *
+ * <p/>
  * These fields have a more complex setup
- *      Box ----  shows this is a reverse dns metadata field
- *      Box mean  the issuer in the form of reverse DNS domain (e.g com.apple.iTunes)
- *      Box name  descriptor identifying the type of contents
- *      Box data  contents
- *
+ * Box ----  shows this is a reverse dns metadata field
+ * Box mean  the issuer in the form of reverse DNS domain (e.g com.apple.iTunes)
+ * Box name  descriptor identifying the type of contents
+ * Box data  contents
+ * <p/>
  * The raw data passed starts from the mean box
  */
 public class Mp4TagReverseDnsField extends Mp4TagField implements TagTextField
 {
-    public static final String IDENTIFIER       = "----";
-   
-    protected int    dataSize;
+    public static final String IDENTIFIER = "----";
+
+    protected int dataSize;
 
     //Issuer
     private String issuer;
@@ -63,10 +63,10 @@ public class Mp4TagReverseDnsField extends Mp4TagField implements TagTextField
      */
     public Mp4TagReverseDnsField(Mp4FieldKey id, String content)
     {
-        super(id.getFieldName());      
-        this.issuer     = id.getIssuer();
+        super(id.getFieldName());
+        this.issuer = id.getIssuer();
         this.descriptor = id.getIdentifier();
-        this.content    = content;
+        this.content = content;
     }
 
     public Mp4FieldType getFieldType()
@@ -79,25 +79,25 @@ public class Mp4TagReverseDnsField extends Mp4TagField implements TagTextField
     protected void build(ByteBuffer data) throws UnsupportedEncodingException
     {
         //Read mean box, set the issuer and skip over data
-        Mp4BoxHeader meanBoxHeader  = new Mp4BoxHeader(data);
-        Mp4MeanBox   meanBox        = new Mp4MeanBox(meanBoxHeader,data);
+        Mp4BoxHeader meanBoxHeader = new Mp4BoxHeader(data);
+        Mp4MeanBox meanBox = new Mp4MeanBox(meanBoxHeader, data);
         setIssuer(meanBox.getIssuer());
-        data.position(data.position()+meanBoxHeader.getDataLength());
+        data.position(data.position() + meanBoxHeader.getDataLength());
 
         //Read name box, identify what type of field it is
         Mp4BoxHeader nameBoxHeader = new Mp4BoxHeader(data);
-        Mp4NameBox nameBox       = new Mp4NameBox(nameBoxHeader,data);
+        Mp4NameBox nameBox = new Mp4NameBox(nameBoxHeader, data);
         setDescriptor(nameBox.getName());
-        data.position(data.position()+nameBoxHeader.getDataLength());
+        data.position(data.position() + nameBoxHeader.getDataLength());
 
         //Read data box, identify the data
         Mp4BoxHeader dataBoxHeader = new Mp4BoxHeader(data);
-        Mp4DataBox   dataBox       = new Mp4DataBox(dataBoxHeader,data);
+        Mp4DataBox dataBox = new Mp4DataBox(dataBoxHeader, data);
         setContent(dataBox.getContent());
-        data.position(data.position()+dataBoxHeader.getDataLength());
+        data.position(data.position() + dataBoxHeader.getDataLength());
 
         //Now calculate the id which in order to be unique needs to use all htree values
-        id=IDENTIFIER+":"+issuer+":"+descriptor;
+        id = IDENTIFIER + ":" + issuer + ":" + descriptor;
 
     }
 
@@ -106,14 +106,13 @@ public class Mp4TagReverseDnsField extends Mp4TagField implements TagTextField
     {
         if (field instanceof Mp4TagReverseDnsField)
         {
-            this.issuer     = ((Mp4TagReverseDnsField) field).getIssuer();
+            this.issuer = ((Mp4TagReverseDnsField) field).getIssuer();
             this.descriptor = ((Mp4TagReverseDnsField) field).getDescriptor();
-            this.content    = ((Mp4TagReverseDnsField) field).getContent();
+            this.content = ((Mp4TagReverseDnsField) field).getContent();
         }
     }
 
     /**
-     *
      * @return content
      */
     public String getContent()
@@ -145,34 +144,34 @@ public class Mp4TagReverseDnsField extends Mp4TagField implements TagTextField
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
             //Create Meanbox data
-            byte [] issuerRawData = issuer.getBytes(getEncoding());
+            byte[] issuerRawData = issuer.getBytes(getEncoding());
             baos.write(Utils.getSizeBigEndian(Mp4BoxHeader.HEADER_LENGTH
-                                            + Mp4MeanBox.PRE_DATA_LENGTH
-                                            + issuerRawData.length));
-            baos.write(Utils.getDefaultBytes(Mp4MeanBox.IDENTIFIER,"ISO-8859-1"));
+                    + Mp4MeanBox.PRE_DATA_LENGTH
+                    + issuerRawData.length));
+            baos.write(Utils.getDefaultBytes(Mp4MeanBox.IDENTIFIER, "ISO-8859-1"));
             baos.write(new byte[]{0, 0, 0, 0});
             baos.write(issuerRawData);
 
             //Create Namebox data
-            byte [] nameRawData = descriptor.getBytes(getEncoding());
+            byte[] nameRawData = descriptor.getBytes(getEncoding());
             baos.write(Utils.getSizeBigEndian(Mp4BoxHeader.HEADER_LENGTH
-                                            + Mp4NameBox.PRE_DATA_LENGTH
-                                            + nameRawData.length));
-            baos.write(Utils.getDefaultBytes(Mp4NameBox.IDENTIFIER,"ISO-8859-1"));
+                    + Mp4NameBox.PRE_DATA_LENGTH
+                    + nameRawData.length));
+            baos.write(Utils.getDefaultBytes(Mp4NameBox.IDENTIFIER, "ISO-8859-1"));
             baos.write(new byte[]{0, 0, 0, 0});
             baos.write(nameRawData);
 
             //Create DataBox data
-            baos.write(getRawContentDataOnly());            
+            baos.write(getRawContentDataOnly());
 
             //Now wrap with reversedns box
             ByteArrayOutputStream outerbaos = new ByteArrayOutputStream();
             outerbaos.write(Utils.getSizeBigEndian(Mp4BoxHeader.HEADER_LENGTH + baos.size()));
-            outerbaos.write(Utils.getDefaultBytes(IDENTIFIER,"ISO-8859-1"));
+            outerbaos.write(Utils.getDefaultBytes(IDENTIFIER, "ISO-8859-1"));
             outerbaos.write(baos.toByteArray());
             return outerbaos.toByteArray();
         }
-        catch(IOException ioe)
+        catch (IOException ioe)
         {
             //This should never happen as were not actually writing to/from a file
             throw new RuntimeException(ioe);
@@ -181,16 +180,16 @@ public class Mp4TagReverseDnsField extends Mp4TagField implements TagTextField
 
     public byte[] getRawContentDataOnly() throws UnsupportedEncodingException
     {
-        logger.fine("Getting Raw data for:"+getId());
+        logger.fine("Getting Raw data for:" + getId());
         try
         {
             //Create DataBox data
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            byte [] dataRawData = content.getBytes(getEncoding());
+            byte[] dataRawData = content.getBytes(getEncoding());
             baos.write(Utils.getSizeBigEndian(Mp4BoxHeader.HEADER_LENGTH
-                                            + Mp4DataBox.PRE_DATA_LENGTH
-                                            + dataRawData.length));
-            baos.write(Utils.getDefaultBytes(Mp4DataBox.IDENTIFIER,"ISO-8859-1"));
+                    + Mp4DataBox.PRE_DATA_LENGTH
+                    + dataRawData.length));
+            baos.write(Utils.getDefaultBytes(Mp4DataBox.IDENTIFIER, "ISO-8859-1"));
             baos.write(new byte[]{0});
             baos.write(new byte[]{0, 0, (byte) getFieldType().getFileClassId()});
             baos.write(new byte[]{0, 0, 0, 0});
@@ -230,7 +229,6 @@ public class Mp4TagReverseDnsField extends Mp4TagField implements TagTextField
     }
 
     /**
-     *
      * @return the issuer
      */
     public String getIssuer()
@@ -239,7 +237,6 @@ public class Mp4TagReverseDnsField extends Mp4TagField implements TagTextField
     }
 
     /**
-     *
      * @return the descriptor
      */
     public String getDescriptor()

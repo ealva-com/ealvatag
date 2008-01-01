@@ -22,7 +22,7 @@ import java.nio.ByteBuffer;
 
 /**
  * Content type Text information frame.
- * 
+ * <p/>
  * <p>The 'Content type', which previously was
  * stored as a one byte numeric value only, is now a numeric string. You
  * may use one or several of the types as ID3v1.1 did or, since the
@@ -42,20 +42,20 @@ import java.nio.ByteBuffer;
  * <tr><td>RX</td><td width="100%">Remix</td></tr>
  * <tr><td>CR</td><td>Cover</td></tr>
  * </table></p>
- * 
+ * <p/>
  * <p>For more details, please refer to the ID3 specifications:
  * <ul>
  * <li><a href="http://www.id3.org/id3v2.3.0.txt">ID3 v2.3.0 Spec</a>
  * </ul>
- *
+ * <p/>
  * ID3V24:The 'Content type', which ID3v1 was stored as a one byte numeric
  * value only, is now a string. You may use one or several of the ID3v1
  * types as numerical strings, or, since the category list would be
  * impossible to maintain with accurate and up to date categories,
  * define your own. Example: "21" $00 "Eurodisco" $00
- *
+ * <p/>
  * You may also use any of the following keywords:
-  </p><p><table border=0 width="70%">
+ * </p><p><table border=0 width="70%">
  * <tr><td>RX</td><td width="100%">Remix</td></tr>
  * <tr><td>CR</td><td>Cover</td></tr>
  * </table></p>
@@ -64,7 +64,7 @@ import java.nio.ByteBuffer;
  * @author : Eric Farng
  * @version $Id$
  */
-public class FrameBodyTCON extends AbstractFrameBodyTextInfo implements ID3v24FrameBody,ID3v23FrameBody
+public class FrameBodyTCON extends AbstractFrameBodyTextInfo implements ID3v24FrameBody, ID3v23FrameBody
 {
     /**
      * Creates a new FrameBodyTCON datatype.
@@ -81,8 +81,8 @@ public class FrameBodyTCON extends AbstractFrameBodyTextInfo implements ID3v24Fr
     /**
      * Creates a new FrameBodyTCON datatype.
      *
-     * @param textEncoding 
-     * @param text         
+     * @param textEncoding
+     * @param text
      */
     public FrameBodyTCON(byte textEncoding, String text)
     {
@@ -92,23 +92,22 @@ public class FrameBodyTCON extends AbstractFrameBodyTextInfo implements ID3v24Fr
     /**
      * Creates a new FrameBodyTCON datatype.
      *
-     * @throws InvalidTagException 
+     * @throws InvalidTagException
      */
     public FrameBodyTCON(ByteBuffer byteBuffer, int frameSize)
-        throws InvalidTagException
+            throws InvalidTagException
     {
         super(byteBuffer, frameSize);
     }
 
 
-
     /**
-      * The ID3v2 frame identifier
-      *
-      * @return the ID3v2 frame identifier  for this frame type
+     * The ID3v2 frame identifier
+     *
+     * @return the ID3v2 frame identifier  for this frame type
      */
     public String getIdentifier()
     {
-        return ID3v24Frames.FRAME_ID_GENRE ;
+        return ID3v24Frames.FRAME_ID_GENRE;
     }
 }

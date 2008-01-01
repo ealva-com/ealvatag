@@ -23,7 +23,7 @@ package org.jaudiotagger.tag;
 
 /**
  * Thrown when find a Frame but it contains no data.
- * 
+ *
  * @version $Revision$
  */
 public class EmptyFrameException extends InvalidFrameException
@@ -37,7 +37,7 @@ public class EmptyFrameException extends InvalidFrameException
 
     /**
      * Creates a new EmptyFrameException datatype.
-     * 
+     *
      * @param ex the cause.
      */
     public EmptyFrameException(Throwable ex)
@@ -57,9 +57,9 @@ public class EmptyFrameException extends InvalidFrameException
 
     /**
      * Creates a new EmptyFrameException datatype.
-     * 
+     *
      * @param msg the detail message.
-     * @param ex the cause.
+     * @param ex  the cause.
      */
     public EmptyFrameException(String msg, Throwable ex)
     {

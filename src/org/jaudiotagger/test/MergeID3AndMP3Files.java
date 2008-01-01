@@ -16,64 +16,64 @@ public class MergeID3AndMP3Files
     {
         MergeID3AndMP3Files test = new MergeID3AndMP3Files();
 
-        if(args.length==0)
+        if (args.length == 0)
         {
             System.err.println("usage MergeID3AndMP3Files FromDir ToDir mp3File");
             System.err.println("      You must enter the from dir,outputdir and the mp3file to append");
             System.exit(1);
         }
-        else if(args.length!=3)
+        else if (args.length != 3)
         {
             System.err.println("usage MergeID3AndMP3Files FromDir ToDir mp3File");
             System.err.println("      Only three parameters accepted");
             System.exit(1);
         }
         File rootDir = new File(args[0]);
-        if(!rootDir.isDirectory())
+        if (!rootDir.isDirectory())
         {
             System.err.println("usage MergeID3AndMP3Files FromDir ToDir mp3File");
-            System.err.println("      Directory "+args[0] +" could not be found");
+            System.err.println("      Directory " + args[0] + " could not be found");
             System.exit(1);
         }
 
 
-
         File toDir = new File(args[1]);
-        if(!rootDir.isDirectory())
+        if (!rootDir.isDirectory())
         {
             System.err.println("usage MergeID3AndMP3Files FromDir ToDir mp3File");
-            System.err.println("      Directory "+args[1] +" could not be found");
+            System.err.println("      Directory " + args[1] + " could not be found");
             System.exit(1);
         }
 
         File mp3File = new File(args[2]);
-        if(!mp3File.isFile())
+        if (!mp3File.isFile())
         {
             System.err.println("usage MergeID3AndMP3Files FromDir ToDir mp3File");
-            System.err.println("      Mp3File "+args[2] +" could not be found");
+            System.err.println("      Mp3File " + args[2] + " could not be found");
             System.exit(1);
         }
 
         Date start = new Date();
-        System.out.println("Started to merge from:"+rootDir.getPath()+" at "
-            + DateFormat.getTimeInstance().format(start));
-        test.scanSingleDir(rootDir,toDir,mp3File);
+        System.out.println("Started to merge from:" + rootDir.getPath() + " at "
+                + DateFormat.getTimeInstance().format(start));
+        test.scanSingleDir(rootDir, toDir, mp3File);
         Date finish = new Date();
-       System.out.println("Finished to merge from:"+rootDir.getPath()
-             + DateFormat.getTimeInstance().format(finish));
-        System.out.println("Attempted  to merge:"+ MergeID3AndMP3Files.count);
-        System.out.println("Successful to merge:"+(MergeID3AndMP3Files.count - MergeID3AndMP3Files.failed));
-        System.out.println("Failed     to merge:"+ MergeID3AndMP3Files.failed);
+        System.out.println("Finished to merge from:" + rootDir.getPath()
+                + DateFormat.getTimeInstance().format(finish));
+        System.out.println("Attempted  to merge:" + MergeID3AndMP3Files.count);
+        System.out.println("Successful to merge:" + (MergeID3AndMP3Files.count - MergeID3AndMP3Files.failed));
+        System.out.println("Failed     to merge:" + MergeID3AndMP3Files.failed);
 
     }
 
 
-    private static int count =0;
-    private static int failed=0;
+    private static int count = 0;
+    private static int failed = 0;
+
     /**
      * Recursive function to scan directory
      */
-    private void scanSingleDir(final File fromDir,final File toDir,final File mp3File)
+    private void scanSingleDir(final File fromDir, final File toDir, final File mp3File)
     {
 
         final File[] audioFiles = fromDir.listFiles(new MergeID3AndMP3Files.MP3FileFilter());
@@ -107,8 +107,8 @@ public class MergeID3AndMP3Files
     }
 
     final class MP3FileFilter
-        extends javax.swing.filechooser.FileFilter
-        implements java.io.FileFilter
+            extends javax.swing.filechooser.FileFilter
+            implements java.io.FileFilter
     {
 
         /**
@@ -148,9 +148,9 @@ public class MergeID3AndMP3Files
         public final boolean accept(final File file)
         {
             return (
-                ((file.getName()).toLowerCase().endsWith(".mp3"))
-                    ||
-                    (file.isDirectory() && (this.allowDirectories == true))
+                    ((file.getName()).toLowerCase().endsWith(".mp3"))
+                            ||
+                            (file.isDirectory() && (this.allowDirectories == true))
             );
         }
 
@@ -189,14 +189,14 @@ public class MergeID3AndMP3Files
         public static final String IDENT = "$Id$";
     }
 
-    public static File copyAudioToTmp(File toDir,File tagFile,File mp3File)
+    public static File copyAudioToTmp(File toDir, File tagFile, File mp3File)
     {
         File outputFile = new File(toDir.getPath(), tagFile.getName());
-        boolean result = append(tagFile,mp3File,outputFile);
+        boolean result = append(tagFile, mp3File, outputFile);
         return outputFile;
     }
 
-     private static boolean append(File fromFile1,File fromFile2, File toFile)
+    private static boolean append(File fromFile1, File fromFile2, File toFile)
     {
         try
         {
@@ -205,8 +205,8 @@ public class MergeID3AndMP3Files
 
             toFile.getParentFile().mkdirs();
             FileOutputStream out = new FileOutputStream(toFile);
-            BufferedInputStream inBuffer = new BufferedInputStream   (in);
-            BufferedInputStream inBuffer2 = new BufferedInputStream   (in2);
+            BufferedInputStream inBuffer = new BufferedInputStream(in);
+            BufferedInputStream inBuffer2 = new BufferedInputStream(in2);
             BufferedOutputStream outBuffer = new BufferedOutputStream(out);
 
             int theByte;
@@ -216,7 +216,7 @@ public class MergeID3AndMP3Files
                 outBuffer.write(theByte);
             }
 
-              while ((theByte = inBuffer2.read()) > -1)
+            while ((theByte = inBuffer2.read()) > -1)
             {
                 outBuffer.write(theByte);
             }
@@ -229,7 +229,7 @@ public class MergeID3AndMP3Files
             in2.close();
 
             // cleanupif files are not the same length
-            if ((fromFile1.length() + fromFile2.length())!= toFile.length())
+            if ((fromFile1.length() + fromFile2.length()) != toFile.length())
             {
                 toFile.delete();
 

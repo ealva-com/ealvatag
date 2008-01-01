@@ -46,8 +46,7 @@ public class MultipleTextEncodedStringNullTerminated extends AbstractDataType
      * Returns the size in bytes of this datatype when written to file
      *
      * @return size of this datatype
-     *
-    */
+     */
     public int getSize()
     {
         return size;
@@ -61,7 +60,7 @@ public class MultipleTextEncodedStringNullTerminated extends AbstractDataType
         for (ListIterator li = ((Values) value).getList().listIterator(); li.hasNext();)
         {
             TextEncodedStringNullTerminated next
-                = new TextEncodedStringNullTerminated(identifier, frameBody,(String)li.next());
+                    = new TextEncodedStringNullTerminated(identifier, frameBody, (String) li.next());
             if (!next.canBeEncoded())
             {
                 return false;
@@ -98,10 +97,10 @@ public class MultipleTextEncodedStringNullTerminated extends AbstractDataType
                 else
                 {
                     //Add to value
-                    ((Values) value).add((String)next.getValue());
+                    ((Values) value).add((String) next.getValue());
 
                     //Add to size calculation
-                    size+=next.getSize();
+                    size += next.getSize();
 
                     //Increment Offset to start of next datatype.
                     offset += next.getSize();
@@ -137,9 +136,9 @@ public class MultipleTextEncodedStringNullTerminated extends AbstractDataType
             for (ListIterator li = ((Values) value).getList().listIterator(); li.hasNext();)
             {
                 TextEncodedStringNullTerminated next
-                    = new TextEncodedStringNullTerminated(identifier, frameBody,(String)li.next());
+                        = new TextEncodedStringNullTerminated(identifier, frameBody, (String) li.next());
                 buffer.write(next.writeByteArray());
-                localSize+=next.getSize();
+                localSize += next.getSize();
             }
         }
         catch (IOException ioe)
@@ -199,7 +198,7 @@ public class MultipleTextEncodedStringNullTerminated extends AbstractDataType
             StringBuffer sb = new StringBuffer();
             for (ListIterator li = valueList.listIterator(); li.hasNext();)
             {
-                String next = (String)li.next();
+                String next = (String) li.next();
                 sb.append(next);
                 if (li.hasNext())
                 {

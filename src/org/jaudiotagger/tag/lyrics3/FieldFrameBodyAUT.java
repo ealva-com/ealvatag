@@ -45,7 +45,7 @@ public class FieldFrameBodyAUT extends AbstractLyrics3v2FieldFrameBody
     /**
      * Creates a new FieldBodyAUT datatype.
      *
-     * @param author 
+     * @param author
      */
     public FieldFrameBodyAUT(String author)
     {
@@ -55,18 +55,16 @@ public class FieldFrameBodyAUT extends AbstractLyrics3v2FieldFrameBody
     /**
      * Creates a new FieldBodyAUT datatype.
      *
-     * @throws InvalidTagException 
+     * @throws InvalidTagException
      */
     public FieldFrameBodyAUT(ByteBuffer byteBuffer)
-        throws InvalidTagException
+            throws InvalidTagException
     {
-        this.read(byteBuffer);        
+        this.read(byteBuffer);
     }
 
     /**
-     * 
-     *
-     * @param author 
+     * @param author
      */
     public void setAuthor(String author)
     {
@@ -74,9 +72,7 @@ public class FieldFrameBodyAUT extends AbstractLyrics3v2FieldFrameBody
     }
 
     /**
-     * 
-     *
-     * @return 
+     * @return
      */
     public String getAuthor()
     {
@@ -84,9 +80,7 @@ public class FieldFrameBodyAUT extends AbstractLyrics3v2FieldFrameBody
     }
 
     /**
-     * 
-     *
-     * @return 
+     * @return
      */
     public String getIdentifier()
     {
@@ -94,7 +88,7 @@ public class FieldFrameBodyAUT extends AbstractLyrics3v2FieldFrameBody
     }
 
     /**
-     * 
+     *
      */
     protected void setupObjectList()
     {

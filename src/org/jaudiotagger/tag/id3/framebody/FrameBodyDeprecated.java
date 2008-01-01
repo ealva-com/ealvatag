@@ -5,7 +5,7 @@ package org.jaudiotagger.tag.id3.framebody;
  * earlier tag version.
  * The body consists  of an array of bytes representing all the bytes in the body.
  */
-public class FrameBodyDeprecated extends AbstractID3v2FrameBody implements ID3v24FrameBody,ID3v23FrameBody
+public class FrameBodyDeprecated extends AbstractID3v2FrameBody implements ID3v24FrameBody, ID3v23FrameBody
 {
     /* The original framebody is held so can be retrieved
      * when converting a DeprecatedFrameBody back to a normal Framebody */
@@ -14,7 +14,6 @@ public class FrameBodyDeprecated extends AbstractID3v2FrameBody implements ID3v2
 
     /**
      * Creates a new FrameBodyDeprecated wrapper around the frameBody
-     *
      */
     public FrameBodyDeprecated(AbstractID3v2FrameBody frameBody)
     {
@@ -46,7 +45,7 @@ public class FrameBodyDeprecated extends AbstractID3v2FrameBody implements ID3v2
      * Delgate size to size of original framebody, if framebody already exist will take this value from the frame header
      * but it is always recalculated before writing any changes back to disk.
      *
-     * @return  size in bytes of this frame body
+     * @return size in bytes of this frame body
      */
     public int getSize()
     {
@@ -54,8 +53,6 @@ public class FrameBodyDeprecated extends AbstractID3v2FrameBody implements ID3v2
     }
 
     /**
-     *
-     *
      * @param obj
      * @return whether obj is equivalent to this object
      */
@@ -85,11 +82,10 @@ public class FrameBodyDeprecated extends AbstractID3v2FrameBody implements ID3v2
     }
 
     /**
-     *
      * Because the contents of this frame are an array of bytes and could be large we just
      * return the identifier.
      *
-     * @return  a string representation of this frame
+     * @return a string representation of this frame
      */
     public String toString()
     {
@@ -98,7 +94,7 @@ public class FrameBodyDeprecated extends AbstractID3v2FrameBody implements ID3v2
 
     /**
      * Setup the Object List.
-     *
+     * <p/>
      * This is handled by the wrapped class
      */
     protected void setupObjectList()
@@ -109,7 +105,7 @@ public class FrameBodyDeprecated extends AbstractID3v2FrameBody implements ID3v2
     public String getBriefDescription()
     {
         //TODO When is this null, it seems it can be but Im not sure why
-        if(originalFrameBody!=null)
+        if (originalFrameBody != null)
         {
             return originalFrameBody.getBriefDescription();
         }

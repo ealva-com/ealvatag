@@ -36,7 +36,7 @@ public class EventTimingTimestampTypes extends AbstractIntStringValuePair
         return eventTimingTimestampTypes;
     }
 
-    public static final int  TIMESTAMP_KEY_FIELD_SIZE = 1;
+    public static final int TIMESTAMP_KEY_FIELD_SIZE = 1;
 
     private EventTimingTimestampTypes()
     {

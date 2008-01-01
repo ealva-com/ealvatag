@@ -22,7 +22,7 @@ import java.nio.ByteBuffer;
 
 /**
  * File type Text information frame.
- * 
+ * <p/>
  * <p>The 'File type' frame indicates which type of audio this tag defines.
  * The following type and refinements are defined:
  * </p><p><table border=0 width="70%">
@@ -40,17 +40,17 @@ import java.nio.ByteBuffer;
  * without parentheses. If this frame is not present audio type is
  * assumed to be "MPG".
  * </p>
- * 
+ * <p/>
  * <p>For more details, please refer to the ID3 specifications:
  * <ul>
  * <li><a href="http://www.id3.org/id3v2.3.0.txt">ID3 v2.3.0 Spec</a>
  * </ul>
- * 
+ *
  * @author : Paul Taylor
  * @author : Eric Farng
  * @version $Id$
  */
-public class FrameBodyTFLT extends AbstractFrameBodyTextInfo implements ID3v24FrameBody,ID3v23FrameBody
+public class FrameBodyTFLT extends AbstractFrameBodyTextInfo implements ID3v24FrameBody, ID3v23FrameBody
 {
     /**
      * Creates a new FrameBodyTFLT datatype.
@@ -67,8 +67,8 @@ public class FrameBodyTFLT extends AbstractFrameBodyTextInfo implements ID3v24Fr
     /**
      * Creates a new FrameBodyTFLT datatype.
      *
-     * @param textEncoding 
-     * @param text         
+     * @param textEncoding
+     * @param text
      */
     public FrameBodyTFLT(byte textEncoding, String text)
     {
@@ -78,18 +78,18 @@ public class FrameBodyTFLT extends AbstractFrameBodyTextInfo implements ID3v24Fr
     /**
      * Creates a new FrameBodyTFLT datatype.
      *
-     * @throws InvalidTagException 
+     * @throws InvalidTagException
      */
     public FrameBodyTFLT(ByteBuffer byteBuffer, int frameSize)
-        throws InvalidTagException
+            throws InvalidTagException
     {
         super(byteBuffer, frameSize);
     }
 
-     /**
-      * The ID3v2 frame identifier
-      *
-      * @return the ID3v2 frame identifier  for this frame type
+    /**
+     * The ID3v2 frame identifier
+     *
+     * @return the ID3v2 frame identifier  for this frame type
      */
     public String getIdentifier()
     {

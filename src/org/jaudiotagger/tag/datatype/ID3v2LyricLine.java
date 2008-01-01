@@ -30,12 +30,12 @@ import org.jaudiotagger.audio.generic.Utils;
 public class ID3v2LyricLine extends AbstractDataType
 {
     /**
-     * 
+     *
      */
     String text = "";
 
     /**
-     * 
+     *
      */
     long timeStamp = 0;
 
@@ -52,9 +52,7 @@ public class ID3v2LyricLine extends AbstractDataType
     }
 
     /**
-     * 
-     *
-     * @return 
+     * @return
      */
     public int getSize()
     {
@@ -67,9 +65,7 @@ public class ID3v2LyricLine extends AbstractDataType
     }
 
     /**
-     * 
-     *
-     * @return 
+     * @return
      */
     public String getText()
     {
@@ -82,9 +78,7 @@ public class ID3v2LyricLine extends AbstractDataType
     }
 
     /**
-     * 
-     *
-     * @return 
+     * @return
      */
     public long getTimeStamp()
     {
@@ -92,10 +86,8 @@ public class ID3v2LyricLine extends AbstractDataType
     }
 
     /**
-     * 
-     *
-     * @param obj 
-     * @return 
+     * @param obj
+     * @return
      */
     public boolean equals(Object obj)
     {
@@ -120,12 +112,10 @@ public class ID3v2LyricLine extends AbstractDataType
     }
 
     /**
-     * 
-     *
-     * @param arr    
-     * @param offset 
-     * @throws NullPointerException      
-     * @throws IndexOutOfBoundsException 
+     * @param arr
+     * @param offset
+     * @throws NullPointerException
+     * @throws IndexOutOfBoundsException
      */
     public void readByteArray(byte[] arr, int offset) throws InvalidDataTypeException
     {
@@ -140,7 +130,7 @@ public class ID3v2LyricLine extends AbstractDataType
         }
 
         //offset += ();
-        text = Utils.getString(arr, offset, arr.length - offset - 4,"ISO-8859-1");
+        text = Utils.getString(arr, offset, arr.length - offset - 4, "ISO-8859-1");
 
         //text = text.substring(0, text.length() - 5);
         timeStamp = 0;
@@ -153,9 +143,7 @@ public class ID3v2LyricLine extends AbstractDataType
     }
 
     /**
-     * 
-     *
-     * @return 
+     * @return
      */
     public String toString()
     {
@@ -163,9 +151,7 @@ public class ID3v2LyricLine extends AbstractDataType
     }
 
     /**
-     * 
-     *
-     * @return 
+     * @return
      */
     public byte[] writeByteArray()
     {

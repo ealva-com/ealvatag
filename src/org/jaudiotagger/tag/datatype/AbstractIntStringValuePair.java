@@ -43,7 +43,7 @@ public class AbstractIntStringValuePair extends AbstractValuePair
      */
     public String getValueForId(int id)
     {
-        return  (String) idToValue.get(new Integer(id));              
+        return (String) idToValue.get(new Integer(id));
     }
 
     protected void createMaps()

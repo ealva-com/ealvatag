@@ -18,20 +18,17 @@ package org.jaudiotagger.tag.id3;
 import org.jaudiotagger.audio.mp3.MP3File;
 import org.jaudiotagger.audio.generic.Utils;
 import org.jaudiotagger.tag.id3.framebody.*;
-import org.jaudiotagger.tag.id3.valuepair.PictureTypes;
+import org.jaudiotagger.tag.reference.PictureTypes;
 import org.jaudiotagger.tag.id3.valuepair.ImageFormats;
 import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
 import org.jaudiotagger.tag.*;
 import org.jaudiotagger.tag.datatype.DataTypes;
-import org.jaudiotagger.tag.mp4.field.Mp4TagTextField;
-import org.jaudiotagger.tag.mp4.Mp4FieldKey;
 
 import java.io.*;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.channels.WritableByteChannel;
 import java.util.*;
-import java.net.URL;
 
 /**
  * This is the abstract base class for all ID3v2 tags.

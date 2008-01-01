@@ -30,54 +30,54 @@ import java.util.NoSuchElementException;
 public class ID3v1Iterator implements Iterator
 {
     /**
-     * 
+     *
      */
     private static final int TITLE = 1;
 
     /**
-     * 
+     *
      */
     private static final int ARTIST = 2;
 
     /**
-     * 
+     *
      */
     private static final int ALBUM = 3;
 
     /**
-     * 
+     *
      */
     private static final int COMMENT = 4;
 
     /**
-     * 
+     *
      */
     private static final int YEAR = 5;
 
     /**
-     * 
+     *
      */
     private static final int GENRE = 6;
 
     /**
-     * 
+     *
      */
     private static final int TRACK = 7;
 
     /**
-     * 
+     *
      */
     private ID3v1Tag id3v1tag;
 
     /**
-     * 
+     *
      */
     private int lastIndex = 0;
 
     /**
      * Creates a new ID3v1Iterator datatype.
      *
-     * @param id3v1tag 
+     * @param id3v1tag
      */
     public ID3v1Iterator(ID3v1Tag id3v1tag)
     {
@@ -85,9 +85,7 @@ public class ID3v1Iterator implements Iterator
     }
 
     /**
-     * 
-     *
-     * @return 
+     * @return
      */
     public boolean hasNext()
     {
@@ -95,9 +93,7 @@ public class ID3v1Iterator implements Iterator
     }
 
     /**
-     * 
-     *
-     * @return 
+     * @return
      */
     public Object next()
     {
@@ -105,7 +101,7 @@ public class ID3v1Iterator implements Iterator
     }
 
     /**
-     * 
+     *
      */
     public void remove()
     {
@@ -139,10 +135,8 @@ public class ID3v1Iterator implements Iterator
     }
 
     /**
-     * 
-     *
-     * @param index 
-     * @return 
+     * @param index
+     * @return
      */
     private boolean hasNext(int index)
     {
@@ -179,11 +173,9 @@ public class ID3v1Iterator implements Iterator
     }
 
     /**
-     * 
-     *
-     * @param index 
-     * @return 
-     * @throws NoSuchElementException 
+     * @param index
+     * @return
+     * @throws NoSuchElementException
      */
     private Object next(int index)
     {

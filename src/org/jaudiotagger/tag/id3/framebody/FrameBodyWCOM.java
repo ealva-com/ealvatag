@@ -23,17 +23,17 @@ import java.nio.ByteBuffer;
 /**
  * Commercial information URL link frames.
  * <p>The 'Commercial information' frame is a URL pointing at a webpage with information such as where the album can be bought. There may be more than one "WCOM" frame in a tag, but not with the same content.
- * 
+ * <p/>
  * <p>For more details, please refer to the ID3 specifications:
  * <ul>
  * <li><a href="http://www.id3.org/id3v2.3.0.txt">ID3 v2.3.0 Spec</a>
  * </ul>
- * 
+ *
  * @author : Paul Taylor
  * @author : Eric Farng
  * @version $Id$
  */
-public class FrameBodyWCOM extends AbstractFrameBodyUrlLink   implements ID3v24FrameBody,ID3v23FrameBody
+public class FrameBodyWCOM extends AbstractFrameBodyUrlLink implements ID3v24FrameBody, ID3v23FrameBody
 {
     /**
      * Creates a new FrameBodyWCOM datatype.
@@ -45,7 +45,7 @@ public class FrameBodyWCOM extends AbstractFrameBodyUrlLink   implements ID3v24F
     /**
      * Creates a new FrameBodyWCOM datatype.
      *
-     * @param urlLink 
+     * @param urlLink
      */
     public FrameBodyWCOM(String urlLink)
     {
@@ -59,19 +59,19 @@ public class FrameBodyWCOM extends AbstractFrameBodyUrlLink   implements ID3v24F
 
     /**
      * Creates a new FrameBodyWCOM datatype.
-     *                             
-     * @throws InvalidTagException 
+     *
+     * @throws InvalidTagException
      */
     public FrameBodyWCOM(ByteBuffer byteBuffer, int frameSize)
-        throws InvalidTagException
+            throws InvalidTagException
     {
         super(byteBuffer, frameSize);
     }
 
     /**
-      * The ID3v2 frame identifier
-      *
-      * @return the ID3v2 frame identifier  for this frame type
+     * The ID3v2 frame identifier
+     *
+     * @return the ID3v2 frame identifier  for this frame type
      */
     public String getIdentifier()
     {

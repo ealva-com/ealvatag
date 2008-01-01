@@ -16,20 +16,19 @@
 package org.jaudiotagger.tag.id3.framebody;
 
 import org.jaudiotagger.tag.InvalidTagException;
+import org.jaudiotagger.tag.reference.Languages;
 import org.jaudiotagger.tag.datatype.*;
 import org.jaudiotagger.tag.id3.ID3TextEncodingConversion;
 import org.jaudiotagger.tag.id3.ID3v24Frames;
-import org.jaudiotagger.tag.id3.valuepair.Languages;
 import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
 
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.nio.ByteBuffer;
 
 /**
  * Unsychronised lyrics/text transcription frame.
- * 
- * <p>
+ * <p/>
+ * <p/>
  * This frame contains the lyrics of the song or a text transcription of
  * other vocal activities. The head includes an encoding descriptor and
  * a content descriptor. The body consists of the actual text. The
@@ -45,19 +44,19 @@ import java.nio.ByteBuffer;
  * <tr><td>Content descriptor</td><td>&lt;text string according to encoding&gt; $00 (00)</td></tr>
  * <tr><td>Lyrics/text       </td><td>&lt;full text string according to encoding&gt;</td></tr>
  * </table></p>
- *
+ * <p/>
  * You can retrieve the first value without the null terminator using {@link #getFirstTextValue}
- *
+ * <p/>
  * <p>For more details, please refer to the ID3 specifications:
  * <ul>
  * <li><a href="http://www.id3.org/id3v2.3.0.txt">ID3 v2.3.0 Spec</a>
  * </ul>
- * 
+ *
  * @author : Paul Taylor
  * @author : Eric Farng
  * @version $Id$
  */
-public class FrameBodyUSLT extends AbstractID3v2FrameBody implements ID3v23FrameBody,ID3v24FrameBody
+public class FrameBodyUSLT extends AbstractID3v2FrameBody implements ID3v23FrameBody, ID3v24FrameBody
 {
     /**
      * Creates a new FrameBodyUSLT datatype.
@@ -99,12 +98,12 @@ public class FrameBodyUSLT extends AbstractID3v2FrameBody implements ID3v23Frame
     /**
      * Creates a new FrameBodyUSLT datatype, populated from buffer
      *
-     * @param  byteBuffer
-     * @throws  InvalidTagException
+     * @param byteBuffer
+     * @throws InvalidTagException
      * @throws InvalidTagException
      */
     public FrameBodyUSLT(ByteBuffer byteBuffer, int frameSize)
-        throws InvalidTagException
+            throws InvalidTagException
     {
         super(byteBuffer, frameSize);
     }
@@ -130,9 +129,9 @@ public class FrameBodyUSLT extends AbstractID3v2FrameBody implements ID3v23Frame
     }
 
     /**
-      * The ID3v2 frame identifier
-      *
-      * @return the ID3v2 frame identifier  for this frame type
+     * The ID3v2 frame identifier
+     *
+     * @return the ID3v2 frame identifier  for this frame type
      */
     public String getIdentifier()
     {
@@ -186,7 +185,7 @@ public class FrameBodyUSLT extends AbstractID3v2FrameBody implements ID3v23Frame
      */
     public String getFirstTextValue()
     {
-        TextEncodedStringSizeTerminated text = (TextEncodedStringSizeTerminated)getObject(DataTypes.OBJ_LYRICS);
+        TextEncodedStringSizeTerminated text = (TextEncodedStringSizeTerminated) getObject(DataTypes.OBJ_LYRICS);
         return text.getValueAtIndex(0);
     }
 
@@ -202,8 +201,6 @@ public class FrameBodyUSLT extends AbstractID3v2FrameBody implements ID3v23Frame
     }
 
     /**
-     * 
-     *
      * @param line
      */
     public void addLyric(Lyrics3Line line)
@@ -212,7 +209,7 @@ public class FrameBodyUSLT extends AbstractID3v2FrameBody implements ID3v23Frame
     }
 
 
-    public void write(ByteArrayOutputStream tagBuffer)        
+    public void write(ByteArrayOutputStream tagBuffer)
     {
         //Ensure valid for type
         this.setTextEncoding(ID3TextEncodingConversion.getUnicodeTextEncoding(getHeader()));
@@ -224,13 +221,13 @@ public class FrameBodyUSLT extends AbstractID3v2FrameBody implements ID3v23Frame
         }
         if (((AbstractString) getObject(DataTypes.OBJ_LYRICS)).canBeEncoded() == false)
         {
-             this.setTextEncoding(ID3TextEncodingConversion.getUnicodeTextEncoding(getHeader()));
+            this.setTextEncoding(ID3TextEncodingConversion.getUnicodeTextEncoding(getHeader()));
         }
         super.write(tagBuffer);
     }
 
     /**
-     * 
+     *
      */
     protected void setupObjectList()
     {

@@ -43,13 +43,13 @@ import java.util.logging.Level;
 
 /**
  * Represents an ID3v2.2 tag.
- * 
+ *
  * @author : Paul Taylor
  * @author : Eric Farng
  * @version $Id$
  */
 public class ID3v22Tag
-    extends AbstractID3v2Tag 
+        extends AbstractID3v2Tag
 {
 
     protected static final String TYPE_COMPRESSION = "compression";
@@ -73,9 +73,9 @@ public class ID3v22Tag
     /**
      * All frames in the tag uses unsynchronisation
      */
-    protected  boolean unsynchronization = false;
+    protected boolean unsynchronization = false;
 
-    public static final byte RELEASE  = 2;
+    public static final byte RELEASE = 2;
     public static final byte MAJOR_VERSION = 2;
     public static final byte REVISION = 0;
 
@@ -102,6 +102,7 @@ public class ID3v22Tag
     {
         return REVISION;
     }
+
     /**
      * Creates a new empty ID3v2_2 tag.
      */
@@ -134,8 +135,8 @@ public class ID3v22Tag
         else if (copyObj instanceof ID3v24Tag)
         {
             ID3v24Tag copyObject = (ID3v24Tag) copyObj;
-            this.compression        = false;
-            this.unsynchronization  = copyObject.unsynchronization;
+            this.compression = false;
+            this.unsynchronization = copyObject.unsynchronization;
         }
     }
 
@@ -159,10 +160,10 @@ public class ID3v22Tag
                 frame = (AbstractID3v2Frame) o;
                 //Special case v24 TDRC (FRAME_ID_YEAR) may need converting to multiple frames
                 if (
-                    (frame.getIdentifier().equals(ID3v24Frames.FRAME_ID_YEAR))
-                    &&
-                    (frame.getBody() instanceof FrameBodyTDRC)
-                   )
+                        (frame.getIdentifier().equals(ID3v24Frames.FRAME_ID_YEAR))
+                                &&
+                                (frame.getBody() instanceof FrameBodyTDRC)
+                        )
                 {
                     translateFrame(frame);
                 }
@@ -173,9 +174,9 @@ public class ID3v22Tag
                         newFrame = new ID3v22Frame(frame);
                         frameMap.put(newFrame.getIdentifier(), newFrame);
                     }
-                    catch(InvalidFrameException ife)
+                    catch (InvalidFrameException ife)
                     {
-                         logger.log(Level.SEVERE,"Unable to convert frame:"+frame.getIdentifier(),ife);
+                        logger.log(Level.SEVERE, "Unable to convert frame:" + frame.getIdentifier(), ife);
                     }
 
                 }
@@ -191,11 +192,11 @@ public class ID3v22Tag
                         newFrame = new ID3v22Frame(frame);
                         multiFrame.add(newFrame);
                     }
-                    catch(InvalidFrameException ife)
+                    catch (InvalidFrameException ife)
                     {
-                         logger.log(Level.SEVERE,"Unable to convert frame:"+frame.getIdentifier(),ife);
+                        logger.log(Level.SEVERE, "Unable to convert frame:" + frame.getIdentifier(), ife);
                     }
-                                                             }
+                }
                 if (newFrame != null)
                 {
                     frameMap.put(newFrame.getIdentifier(), multiFrame);
@@ -258,8 +259,8 @@ public class ID3v22Tag
      * @param loggingFilename
      * @throws TagException
      */
-    public ID3v22Tag(ByteBuffer buffer,String loggingFilename)
-        throws TagException
+    public ID3v22Tag(ByteBuffer buffer, String loggingFilename)
+            throws TagException
     {
         setLoggingFilename(loggingFilename);
         this.read(buffer);
@@ -271,18 +272,15 @@ public class ID3v22Tag
      *
      * @param buffer
      * @throws TagException
-     *
      * @deprecated use {@link #ID3v22Tag(ByteBuffer,String)} instead
      */
     public ID3v22Tag(ByteBuffer buffer)
-        throws TagException
+            throws TagException
     {
-        this(buffer,"");
+        this(buffer, "");
     }
 
     /**
-     *
-     *
      * @return an indentifier of the tag type
      */
     public String getIdentifier()
@@ -305,9 +303,7 @@ public class ID3v22Tag
 
 
     /**
-     * 
-     *
-     * @param obj 
+     * @param obj
      * @return equality
      */
     public boolean equals(Object obj)
@@ -337,28 +333,28 @@ public class ID3v22Tag
      * @throws TagNotFoundException
      */
     public void read(ByteBuffer byteBuffer)
-        throws TagException
+            throws TagException
     {
         int size;
         if (seek(byteBuffer) == false)
         {
             throw new TagNotFoundException("ID3v2.20 tag not found");
         }
-        logger.info(getLoggingFilename()+":"+"Reading tag from file");
+        logger.info(getLoggingFilename() + ":" + "Reading tag from file");
 
         //Read the flags
         byte flags = byteBuffer.get();
         unsynchronization = (flags & MASK_V22_UNSYNCHRONIZATION) != 0;
-        compression       = (flags & MASK_V22_COMPRESSION) != 0;
+        compression = (flags & MASK_V22_COMPRESSION) != 0;
 
-        if(unsynchronization)
+        if (unsynchronization)
         {
-            logger.warning(getLoggingFilename()+":"+"ID3v22 Tag is unsynchronized");
+            logger.warning(getLoggingFilename() + ":" + "ID3v22 Tag is unsynchronized");
         }
 
-        if(compression)
+        if (compression)
         {
-            logger.warning(getLoggingFilename()+":"+"ID3v22 Tag is compressed");
+            logger.warning(getLoggingFilename() + ":" + "ID3v22 Tag is compressed");
         }
 
         //TODO if compression bit set should we ignore
@@ -366,15 +362,15 @@ public class ID3v22Tag
         // Read the size
         size = ID3SyncSafeInteger.bufferToValue(byteBuffer);
 
-         //Slice Buffer, so position markers tally with size (i.e do not include tagheader)
+        //Slice Buffer, so position markers tally with size (i.e do not include tagheader)
         ByteBuffer bufferWithoutHeader = byteBuffer.slice();
         //We need to synchronize the buffer
-        if(unsynchronization==true)
+        if (unsynchronization == true)
         {
-             bufferWithoutHeader=ID3Unsynchronization.synchronize(bufferWithoutHeader);
+            bufferWithoutHeader = ID3Unsynchronization.synchronize(bufferWithoutHeader);
         }
-        readFrames(bufferWithoutHeader,size);
-        logger.info(getLoggingFilename()+":"+"Loaded Frames,there are:" + frameMap.keySet().size());
+        readFrames(bufferWithoutHeader, size);
+        logger.info(getLoggingFilename() + ":" + "Loaded Frames,there are:" + frameMap.keySet().size());
     }
 
     /**
@@ -387,31 +383,31 @@ public class ID3v22Tag
         frameMap = new LinkedHashMap();
         //Read the size from the Tag Header
         this.fileReadSize = size;
-        logger.finest(getLoggingFilename()+":"+"Start of frame body at:" + byteBuffer.position() + ",frames sizes and padding is:" + size);
+        logger.finest(getLoggingFilename() + ":" + "Start of frame body at:" + byteBuffer.position() + ",frames sizes and padding is:" + size);
         /* todo not done yet. Read the first Frame, there seems to be quite a
          ** common case of extra data being between the tag header and the first
          ** frame so should we allow for this when reading first frame, but not subsequent frames
          */
         // Read the frames until got to upto the size as specified in header
-        while (byteBuffer.position()<size)
+        while (byteBuffer.position() < size)
         {
             try
             {
                 //Read Frame
-                logger.finest(getLoggingFilename()+":"+"looking for next frame at:" + byteBuffer.position());
-                next = new ID3v22Frame(byteBuffer,getLoggingFilename());
+                logger.finest(getLoggingFilename() + ":" + "looking for next frame at:" + byteBuffer.position());
+                next = new ID3v22Frame(byteBuffer, getLoggingFilename());
                 String id = next.getIdentifier();
                 loadFrameIntoMap(id, next);
             }
-                //Found Empty Frame
+            //Found Empty Frame
             catch (EmptyFrameException ex)
             {
-                 logger.warning(getLoggingFilename()+":"+"Empty Frame:"+ex.getMessage());
+                logger.warning(getLoggingFilename() + ":" + "Empty Frame:" + ex.getMessage());
                 this.emptyFrameBytes += ID3v22Frame.FRAME_HEADER_SIZE;
             }
-            catch ( InvalidFrameIdentifierException ifie)
+            catch (InvalidFrameIdentifierException ifie)
             {
-                logger.info(getLoggingFilename()+":"+"Invalid Frame Identifier:"+ifie.getMessage());
+                logger.info(getLoggingFilename() + ":" + "Invalid Frame Identifier:" + ifie.getMessage());
                 this.invalidFrameBytes++;
                 //Dont try and find any more frames
                 break;
@@ -419,7 +415,7 @@ public class ID3v22Tag
             //Problem trying to find frame
             catch (InvalidFrameException ife)
             {
-                logger.warning(getLoggingFilename()+":"+"Invalid Frame:"+ife.getMessage());
+                logger.warning(getLoggingFilename() + ":" + "Invalid Frame:" + ife.getMessage());
                 this.invalidFrameBytes++;
                 //Dont try and find any more frames
                 break;
@@ -455,13 +451,13 @@ public class ID3v22Tag
 
     /**
      * Write the ID3 header to the ByteBuffer.
-     *
+     * <p/>
      * TODO compression support required.
      *
-     * @return ByteBuffer 
+     * @return ByteBuffer
      * @throws IOException
      */
-    private ByteBuffer writeHeaderToBuffer(int padding,int size) throws IOException
+    private ByteBuffer writeHeaderToBuffer(int padding, int size) throws IOException
     {
         compression = false;
 
@@ -474,7 +470,7 @@ public class ID3v22Tag
         headerBuffer.put(getMajorVersion());
         //Minor Version
         headerBuffer.put(getRevision());
-  
+
         //Flags
         byte flags = (byte) 0;
         if (unsynchronization == true)
@@ -489,7 +485,7 @@ public class ID3v22Tag
         headerBuffer.put(flags);
 
         //Size As Recorded in Header, don't include the main header length
-        headerBuffer.put(ID3SyncSafeInteger.valueToBuffer(padding + size));      
+        headerBuffer.put(ID3SyncSafeInteger.valueToBuffer(padding + size));
         headerBuffer.flip();
         return headerBuffer;
     }
@@ -501,7 +497,7 @@ public class ID3v22Tag
      * @throws IOException
      */
     public void write(File file, long audioStartLocation)
-        throws IOException
+            throws IOException
     {
         logger.info("Writing tag to file");
 
@@ -509,32 +505,32 @@ public class ID3v22Tag
         byte[] bodyByteBuffer = writeFramesToBuffer().toByteArray();
 
         // Unsynchronize if option enabled and unsync required
-        if(TagOptionSingleton.getInstance().isUnsyncTags())
+        if (TagOptionSingleton.getInstance().isUnsyncTags())
         {
             unsynchronization = ID3Unsynchronization.requiresUnsynchronization(bodyByteBuffer);
         }
         else
         {
-            unsynchronization=false;
+            unsynchronization = false;
         }
-        if(isUnsynchronization())
+        if (isUnsynchronization())
         {
-            bodyByteBuffer=ID3Unsynchronization.unsynchronize(bodyByteBuffer);
-            logger.info(getLoggingFilename()+":bodybytebuffer:sizeafterunsynchronisation:"+bodyByteBuffer.length);
+            bodyByteBuffer = ID3Unsynchronization.unsynchronize(bodyByteBuffer);
+            logger.info(getLoggingFilename() + ":bodybytebuffer:sizeafterunsynchronisation:" + bodyByteBuffer.length);
         }
 
         int sizeIncPadding = calculateTagSize(bodyByteBuffer.length + TAG_HEADER_LENGTH, (int) audioStartLocation);
-        int padding = sizeIncPadding - (bodyByteBuffer.length + TAG_HEADER_LENGTH) ;
-        logger.info(getLoggingFilename()+":Current audiostart:"+audioStartLocation);
-        logger.info(getLoggingFilename()+":Size including padding:"+sizeIncPadding);
-        logger.info(getLoggingFilename()+":Padding:"+padding);
+        int padding = sizeIncPadding - (bodyByteBuffer.length + TAG_HEADER_LENGTH);
+        logger.info(getLoggingFilename() + ":Current audiostart:" + audioStartLocation);
+        logger.info(getLoggingFilename() + ":Size including padding:" + sizeIncPadding);
+        logger.info(getLoggingFilename() + ":Padding:" + padding);
 
-        ByteBuffer headerBuffer = writeHeaderToBuffer(padding,bodyByteBuffer.length);
+        ByteBuffer headerBuffer = writeHeaderToBuffer(padding, bodyByteBuffer.length);
 
         //We need to adjust location of audio File
         if (sizeIncPadding > audioStartLocation)
         {
-            logger.info(getLoggingFilename()+":Adjusting Padding");
+            logger.info(getLoggingFilename() + ":Adjusting Padding");
             adjustPadding(file, sizeIncPadding, audioStartLocation);
         }
 
@@ -549,7 +545,7 @@ public class ID3v22Tag
         }
         finally
         {
-            if(fc!=null)
+            if (fc != null)
             {
                 fc.close();
             }
@@ -558,33 +554,33 @@ public class ID3v22Tag
 
     /**
      * Write tag to channel
-     * 
+     *
      * @param channel
      * @throws IOException
      */
     public void write(WritableByteChannel channel)
-        throws IOException
+            throws IOException
     {
-        logger.info(getLoggingFilename()+":Writing tag to channel");
+        logger.info(getLoggingFilename() + ":Writing tag to channel");
 
         byte[] bodyByteBuffer = writeFramesToBuffer().toByteArray();
-        logger.info(getLoggingFilename()+":bodybytebuffer:sizebeforeunsynchronisation:"+bodyByteBuffer.length);
+        logger.info(getLoggingFilename() + ":bodybytebuffer:sizebeforeunsynchronisation:" + bodyByteBuffer.length);
 
         //Unsynchronize if option enabled and unsync required
-        if(TagOptionSingleton.getInstance().isUnsyncTags())
+        if (TagOptionSingleton.getInstance().isUnsyncTags())
         {
             unsynchronization = ID3Unsynchronization.requiresUnsynchronization(bodyByteBuffer);
         }
         else
         {
-            unsynchronization=false;
+            unsynchronization = false;
         }
-        if(isUnsynchronization())
+        if (isUnsynchronization())
         {
-            bodyByteBuffer=ID3Unsynchronization.unsynchronize(bodyByteBuffer);
-            logger.info(getLoggingFilename()+":bodybytebuffer:sizeafterunsynchronisation:"+bodyByteBuffer.length);
+            bodyByteBuffer = ID3Unsynchronization.unsynchronize(bodyByteBuffer);
+            logger.info(getLoggingFilename() + ":bodybytebuffer:sizeafterunsynchronisation:" + bodyByteBuffer.length);
         }
-        ByteBuffer headerBuffer = writeHeaderToBuffer(0,bodyByteBuffer.length);
+        ByteBuffer headerBuffer = writeHeaderToBuffer(0, bodyByteBuffer.length);
 
         channel.write(headerBuffer);
         channel.write(ByteBuffer.wrap(bodyByteBuffer));
@@ -608,7 +604,6 @@ public class ID3v22Tag
     }
 
     /**
-     *
      * @return is tag unsynchronized
      */
     public boolean isUnsynchronization()
@@ -617,7 +612,6 @@ public class ID3v22Tag
     }
 
     /**
-     *
      * @return is tag compressed
      */
     public boolean isCompression()
@@ -647,7 +641,7 @@ public class ID3v22Tag
 
     protected String getYearId()
     {
-       return ID3v22Frames.FRAME_ID_V2_TYER;
+        return ID3v22Frames.FRAME_ID_V2_TYER;
     }
 
     protected String getCommentId()
@@ -662,14 +656,14 @@ public class ID3v22Tag
 
     /**
      * Create Frame
+     *
      * @param id frameid
      * @return
      */
-   public ID3v22Frame createFrame(String id)
-   {
+    public ID3v22Frame createFrame(String id)
+    {
         return new ID3v22Frame(id);
-   }
-
+    }
 
 
     /**
@@ -691,7 +685,7 @@ public class ID3v22Tag
         {
             throw new KeyNotFoundException();
         }
-         return super.doCreateTagField(new FrameAndSubId(id3Key.getFrameId(),id3Key.getSubId()),value);
+        return super.doCreateTagField(new FrameAndSubId(id3Key.getFrameId(), id3Key.getSubId()), value);
     }
 
     /**
@@ -706,7 +700,7 @@ public class ID3v22Tag
         {
             throw new KeyNotFoundException();
         }
-        return super.doGetFirst(new FrameAndSubId(id3v22FieldKey.getFrameId(),id3v22FieldKey.getSubId()));
+        return super.doGetFirst(new FrameAndSubId(id3v22FieldKey.getFrameId(), id3v22FieldKey.getSubId()));
     }
 
     /**
@@ -722,7 +716,7 @@ public class ID3v22Tag
         {
             throw new KeyNotFoundException();
         }
-        super.doDeleteTagField(new FrameAndSubId(id3v22FieldKey.getFrameId(),id3v22FieldKey.getSubId()));
+        super.doDeleteTagField(new FrameAndSubId(id3v22FieldKey.getFrameId(), id3v22FieldKey.getSubId()));
     }
 
 
@@ -733,10 +727,10 @@ public class ID3v22Tag
         {
             throw new KeyNotFoundException();
         }
-        return new FrameAndSubId(id3v22FieldKey.getFrameId(),id3v22FieldKey.getSubId());
+        return new FrameAndSubId(id3v22FieldKey.getFrameId(), id3v22FieldKey.getSubId());
     }
 
-     protected ID3Frames getID3Frames()
+    protected ID3Frames getID3Frames()
     {
         return ID3v22Frames.getInstanceOf();
     }

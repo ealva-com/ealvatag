@@ -45,11 +45,11 @@ public abstract class AbstractTag extends AbstractTagItem
         super(copyObject);
     }
 
-     /**
+    /**
      * Looks for this tag in the buffer
      *
      * @param byteBuffer
-      * @return returns true if found, false otherwise.
+     * @return returns true if found, false otherwise.
      */
     abstract public boolean seek(ByteBuffer byteBuffer);
 
@@ -68,7 +68,7 @@ public abstract class AbstractTag extends AbstractTagItem
      * @param file MP3 file to append to.
      * @throws IOException on any I/O error
      */
-    abstract public void delete(RandomAccessFile file)throws IOException;
+    abstract public void delete(RandomAccessFile file) throws IOException;
 
 
     /**
@@ -89,9 +89,7 @@ public abstract class AbstractTag extends AbstractTagItem
     }
 
     /**
-     * 
-     *
-     * @return 
+     * @return
      */
     abstract public Iterator iterator();
 }

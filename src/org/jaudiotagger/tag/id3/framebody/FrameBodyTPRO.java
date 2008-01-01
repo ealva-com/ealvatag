@@ -46,8 +46,8 @@ public class FrameBodyTPRO extends AbstractFrameBodyTextInfo implements ID3v24Fr
     /**
      * Creates a new FrameBodyTPRO datatype.
      *
-     * @param textEncoding 
-     * @param text         
+     * @param textEncoding
+     * @param text
      */
     public FrameBodyTPRO(byte textEncoding, String text)
     {
@@ -57,19 +57,19 @@ public class FrameBodyTPRO extends AbstractFrameBodyTextInfo implements ID3v24Fr
     /**
      * Creates a new FrameBodyTPRO datatype.
      *
-     * @throws java.io.IOException 
-     * @throws InvalidTagException 
+     * @throws java.io.IOException
+     * @throws InvalidTagException
      */
     public FrameBodyTPRO(ByteBuffer byteBuffer, int frameSize)
-        throws InvalidTagException
+            throws InvalidTagException
     {
         super(byteBuffer, frameSize);
     }
 
     /**
-      * The ID3v2 frame identifier
-      *
-      * @return the ID3v2 frame identifier  for this frame type
+     * The ID3v2 frame identifier
+     *
+     * @return the ID3v2 frame identifier  for this frame type
      */
     public String getIdentifier()
     {

@@ -23,7 +23,7 @@ package org.jaudiotagger.tag;
 
 /**
  * Thrown if frame cannot be read correctly.
- * 
+ *
  * @author Eric Farng
  * @version $Revision$
  */
@@ -60,7 +60,7 @@ public class InvalidFrameException extends InvalidTagException
      * Creates a new InvalidFrameException datatype.
      *
      * @param msg the detail message.
-     * @param ex the cause.
+     * @param ex  the cause.
      */
     public InvalidFrameException(String msg, Throwable ex)
     {

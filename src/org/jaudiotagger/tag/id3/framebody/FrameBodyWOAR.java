@@ -23,17 +23,17 @@ import java.nio.ByteBuffer;
 /**
  * Official artist/performer webpage URL link frames.
  * <p>The 'Official artist/performer webpage' frame is a URL pointing at the artists official webpage. There may be more than one "WOAR" frame in a tag if the audio contains more than one performer, but not with the same content.
- * 
+ * <p/>
  * <p>For more details, please refer to the ID3 specifications:
  * <ul>
  * <li><a href="http://www.id3.org/id3v2.3.0.txt">ID3 v2.3.0 Spec</a>
  * </ul>
- * 
+ *
  * @author : Paul Taylor
  * @author : Eric Farng
  * @version $Id$
  */
-public class FrameBodyWOAR extends AbstractFrameBodyUrlLink   implements ID3v24FrameBody,ID3v23FrameBody
+public class FrameBodyWOAR extends AbstractFrameBodyUrlLink implements ID3v24FrameBody, ID3v23FrameBody
 {
     /**
      * Creates a new FrameBodyWOAR datatype.
@@ -45,7 +45,7 @@ public class FrameBodyWOAR extends AbstractFrameBodyUrlLink   implements ID3v24F
     /**
      * Creates a new FrameBodyWOAR datatype.
      *
-     * @param urlLink 
+     * @param urlLink
      */
     public FrameBodyWOAR(String urlLink)
     {
@@ -59,19 +59,19 @@ public class FrameBodyWOAR extends AbstractFrameBodyUrlLink   implements ID3v24F
 
     /**
      * Creates a new FrameBodyWOAR datatype.
-     *   
-     * @throws InvalidTagException 
+     *
+     * @throws InvalidTagException
      */
     public FrameBodyWOAR(ByteBuffer byteBuffer, int frameSize)
-        throws InvalidTagException
+            throws InvalidTagException
     {
         super(byteBuffer, frameSize);
     }
 
     /**
-      * The ID3v2 frame identifier
-      *
-      * @return the ID3v2 frame identifier  for this frame type
+     * The ID3v2 frame identifier
+     *
+     * @return the ID3v2 frame identifier  for this frame type
      */
     public String getIdentifier()
     {

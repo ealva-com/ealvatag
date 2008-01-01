@@ -31,22 +31,22 @@ import java.util.Iterator;
 import java.util.LinkedList;
 
 public class Lyrics3Line
-    extends AbstractDataType
+        extends AbstractDataType
 {
     /**
-     * 
+     *
      */
     private LinkedList timeStamp = new LinkedList();
 
     /**
-     * 
+     *
      */
     private String lyric = "";
 
     /**
      * Creates a new ObjectLyrics3Line datatype.
      *
-     * @param identifier 
+     * @param identifier
      */
     public Lyrics3Line(String identifier, AbstractTagFrameBody frameBody)
     {
@@ -76,9 +76,7 @@ public class Lyrics3Line
     }
 
     /**
-     * 
-     *
-     * @return 
+     * @return
      */
     public String getLyric()
     {
@@ -86,9 +84,7 @@ public class Lyrics3Line
     }
 
     /**
-     * 
-     *
-     * @return 
+     * @return
      */
     public int getSize()
     {
@@ -101,9 +97,7 @@ public class Lyrics3Line
     }
 
     /**
-     * 
-     *
-     * @param time 
+     * @param time
      */
     public void setTimeStamp(Lyrics3TimeStamp time)
     {
@@ -112,9 +106,7 @@ public class Lyrics3Line
     }
 
     /**
-     * 
-     *
-     * @return 
+     * @return
      */
     public Iterator getTimeStamp()
     {
@@ -132,9 +124,7 @@ public class Lyrics3Line
     }
 
     /**
-     * 
-     *
-     * @param time 
+     * @param time
      */
     public void addTimeStamp(Lyrics3TimeStamp time)
     {
@@ -142,10 +132,8 @@ public class Lyrics3Line
     }
 
     /**
-     * 
-     *
-     * @param obj 
-     * @return 
+     * @param obj
+     * @return
      */
     public boolean equals(Object obj)
     {
@@ -166,9 +154,7 @@ public class Lyrics3Line
     }
 
     /**
-     * 
-     *
-     * @return 
+     * @return
      */
     public boolean hasTimeStamp()
     {
@@ -180,12 +166,10 @@ public class Lyrics3Line
     }
 
     /**
-     * 
-     *
-     * @param lineString 
-     * @param offset     
-     * @throws NullPointerException      
-     * @throws IndexOutOfBoundsException 
+     * @param lineString
+     * @param offset
+     * @throws NullPointerException
+     * @throws IndexOutOfBoundsException
      */
     public void readString(String lineString, int offset)
     {
@@ -196,7 +180,7 @@ public class Lyrics3Line
         if ((offset < 0) || (offset >= lineString.length()))
         {
             throw new IndexOutOfBoundsException("Offset to line is out of bounds: offset = " + offset +
-                ", line.length()" + lineString.length());
+                    ", line.length()" + lineString.length());
         }
         int delim = 0;
         Lyrics3TimeStamp time;
@@ -214,9 +198,7 @@ public class Lyrics3Line
     }
 
     /**
-     * 
-     *
-     * @return 
+     * @return
      */
     public String toString()
     {
@@ -229,9 +211,7 @@ public class Lyrics3Line
     }
 
     /**
-     * 
-     *
-     * @return 
+     * @return
      */
     public String writeString()
     {
@@ -252,6 +232,6 @@ public class Lyrics3Line
 
     public byte[] writeByteArray()
     {
-          return Utils.getDefaultBytes(writeString(),"ISO8859-1");
+        return Utils.getDefaultBytes(writeString(), "ISO8859-1");
     }
 }

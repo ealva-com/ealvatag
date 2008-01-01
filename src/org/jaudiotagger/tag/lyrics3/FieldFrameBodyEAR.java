@@ -46,7 +46,7 @@ public class FieldFrameBodyEAR extends AbstractLyrics3v2FieldFrameBody
     /**
      * Creates a new FieldBodyEAR datatype.
      *
-     * @param artist 
+     * @param artist
      */
     public FieldFrameBodyEAR(String artist)
     {
@@ -56,20 +56,18 @@ public class FieldFrameBodyEAR extends AbstractLyrics3v2FieldFrameBody
     /**
      * Creates a new FieldBodyEAR datatype.
      *
-     * @throws InvalidTagException 
+     * @throws InvalidTagException
      */
     public FieldFrameBodyEAR(ByteBuffer byteBuffer)
-        throws InvalidTagException
+            throws InvalidTagException
     {
 
-            this.read(byteBuffer);
-        
+        this.read(byteBuffer);
+
     }
 
     /**
-     * 
-     *
-     * @param artist 
+     * @param artist
      */
     public void setArtist(String artist)
     {
@@ -77,9 +75,7 @@ public class FieldFrameBodyEAR extends AbstractLyrics3v2FieldFrameBody
     }
 
     /**
-     * 
-     *
-     * @return 
+     * @return
      */
     public String getArtist()
     {
@@ -87,9 +83,7 @@ public class FieldFrameBodyEAR extends AbstractLyrics3v2FieldFrameBody
     }
 
     /**
-     * 
-     *
-     * @return 
+     * @return
      */
     public String getIdentifier()
     {
@@ -97,7 +91,7 @@ public class FieldFrameBodyEAR extends AbstractLyrics3v2FieldFrameBody
     }
 
     /**
-     * 
+     *
      */
     protected void setupObjectList()
     {

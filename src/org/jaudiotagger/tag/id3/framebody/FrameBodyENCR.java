@@ -23,8 +23,8 @@ import java.nio.ByteBuffer;
 
 /**
  * Encryption method registration frame.
- * 
- * <p>
+ * <p/>
+ * <p/>
  * To identify with which method a frame has been encrypted the
  * encryption method must be registered in the tag with this frame. The
  * 'Owner identifier' is a null-terminated string with a URL
@@ -45,17 +45,17 @@ import java.nio.ByteBuffer;
  * <tr><td>Method symbol   </td><td>$xx                           </td></tr>
  * <tr><td>Encryption data </td><td>&lt;binary data&gt;           </td></tr>
  * </table></p>
- * 
+ * <p/>
  * <p>For more details, please refer to the ID3 specifications:
  * <ul>
  * <li><a href="http://www.id3.org/id3v2.3.0.txt">ID3 v2.3.0 Spec</a>
  * </ul>
- * 
+ *
  * @author : Paul Taylor
  * @author : Eric Farng
  * @version $Id$
  */
-public class FrameBodyENCR extends AbstractID3v2FrameBody implements ID3v24FrameBody,ID3v23FrameBody
+public class FrameBodyENCR extends AbstractID3v2FrameBody implements ID3v24FrameBody, ID3v23FrameBody
 {
     /**
      * Creates a new FrameBodyENCR datatype.
@@ -75,9 +75,9 @@ public class FrameBodyENCR extends AbstractID3v2FrameBody implements ID3v24Frame
     /**
      * Creates a new FrameBodyENCR datatype.
      *
-     * @param owner        
-     * @param methodSymbol 
-     * @param data         
+     * @param owner
+     * @param methodSymbol
+     * @param data
      */
     public FrameBodyENCR(String owner, byte methodSymbol, byte[] data)
     {
@@ -92,25 +92,23 @@ public class FrameBodyENCR extends AbstractID3v2FrameBody implements ID3v24Frame
      * @throws InvalidTagException if unable to create framebody from buffer
      */
     public FrameBodyENCR(ByteBuffer byteBuffer, int frameSize)
-        throws InvalidTagException
+            throws InvalidTagException
     {
         super(byteBuffer, frameSize);
     }
 
-      /**
-      * The ID3v2 frame identifier
-      *
-      * @return the ID3v2 frame identifier  for this frame type
+    /**
+     * The ID3v2 frame identifier
+     *
+     * @return the ID3v2 frame identifier  for this frame type
      */
     public String getIdentifier()
     {
-        return  ID3v24Frames.FRAME_ID_ENCRYPTION;
+        return ID3v24Frames.FRAME_ID_ENCRYPTION;
     }
 
     /**
-     * 
-     *
-     * @param owner 
+     * @param owner
      */
     public void setOwner(String owner)
     {
@@ -118,9 +116,7 @@ public class FrameBodyENCR extends AbstractID3v2FrameBody implements ID3v24Frame
     }
 
     /**
-     * 
-     *
-     * @return 
+     * @return
      */
     public String getOwner()
     {
@@ -128,7 +124,7 @@ public class FrameBodyENCR extends AbstractID3v2FrameBody implements ID3v24Frame
     }
 
     /**
-     * 
+     *
      */
     protected void setupObjectList()
     {

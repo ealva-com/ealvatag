@@ -65,7 +65,7 @@ public class TagNotFoundException extends TagException
      * Creates a new TagNotFoundException datatype.
      *
      * @param msg the detail message.
-     * @param ex the cause.
+     * @param ex  the cause.
      */
     public TagNotFoundException(String msg, Throwable ex)
     {

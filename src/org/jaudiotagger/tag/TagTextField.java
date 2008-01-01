@@ -24,10 +24,11 @@ import org.jaudiotagger.tag.TagField;
  * This interface extends the default field definition by methods for working
  * with human readable text.<br>
  * A TagTextField does not store binary data.
- * 
+ *
  * @author Raphaël Slinckx
  */
-public interface TagTextField extends TagField {
+public interface TagTextField extends TagField
+{
 
     /**
      * Returns the content of the field.
@@ -46,16 +47,14 @@ public interface TagTextField extends TagField {
     /**
      * Sets the content of the field.
      *
-     * @param content
-     *            fields content.
+     * @param content fields content.
      */
     public void setContent(String content);
 
     /**
      * Sets the charset encoding used by the field.
      *
-     * @param encoding
-     *            charset.
+     * @param encoding charset.
      */
     public void setEncoding(String encoding);
 }

@@ -34,13 +34,13 @@ import java.nio.ByteBuffer;
 
 /**
  * Represents a framebody for a frame identifier jaudiotagger has not implemented a framebody for.
- *
+ * <p/>
  * This is likley to be because the FrameBody is not specified in the Specification but it may just be because the code
  * has yet to be written, the library uses this framebody when it cant find an alternative. This is different to the
  * ID3v2ExtensionFrameBody Interface which should be implemented by frame bodies that are non standard such as
  * iTunes compilation frame (TCMP) but are commonly used.
  */
-public class FrameBodyUnsupported extends AbstractID3v2FrameBody implements ID3v24FrameBody,ID3v23FrameBody,ID3v22FrameBody
+public class FrameBodyUnsupported extends AbstractID3v2FrameBody implements ID3v24FrameBody, ID3v23FrameBody, ID3v22FrameBody
 {
     /**
      * Because used by any unknown frame identifier varies
@@ -48,7 +48,7 @@ public class FrameBodyUnsupported extends AbstractID3v2FrameBody implements ID3v
     private String identifier = "";
 
     /**
-     * @deprecated  because no identifier set
+     * @deprecated because no identifier set
      */
     public FrameBodyUnsupported()
     {
@@ -69,7 +69,7 @@ public class FrameBodyUnsupported extends AbstractID3v2FrameBody implements ID3v
      * @param identifier
      * @param value
      */
-    public FrameBodyUnsupported(String identifier,byte[] value)
+    public FrameBodyUnsupported(String identifier, byte[] value)
     {
         this.identifier = identifier;
         setObjectValue(DataTypes.OBJ_DATA, value);
@@ -77,9 +77,9 @@ public class FrameBodyUnsupported extends AbstractID3v2FrameBody implements ID3v
 
     /**
      * Creates a new FrameBodyUnsupported datatype.
-     * 
+     *
+     * @param value
      * @deprecated because no identifier set
-     * @param value 
      */
     public FrameBodyUnsupported(byte[] value)
     {
@@ -104,7 +104,7 @@ public class FrameBodyUnsupported extends AbstractID3v2FrameBody implements ID3v
      * @throws InvalidFrameException if unable to create framebody from buffer
      */
     public FrameBodyUnsupported(ByteBuffer byteBuffer, int frameSize)
-    throws InvalidTagException
+            throws InvalidTagException
     {
         super(byteBuffer, frameSize);
     }
@@ -120,9 +120,7 @@ public class FrameBodyUnsupported extends AbstractID3v2FrameBody implements ID3v
     }
 
     /**
-     * 
-     *
-     * @param obj 
+     * @param obj
      * @return whether obj is equivalent to this object
      */
     public boolean equals(Object obj)
@@ -142,11 +140,10 @@ public class FrameBodyUnsupported extends AbstractID3v2FrameBody implements ID3v
 
 
     /**
-     * 
      * Because the contents of this frame are an array of bytes and could be large we just
      * return the identifier.
      *
-     * @return  a string representation of this frame
+     * @return a string representation of this frame
      */
     public String toString()
     {

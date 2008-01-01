@@ -27,8 +27,9 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-/** Represents the image formats support by ID3, provides a mapping between the format field supported in ID3v22 and the
- *  mimetype field supported by ID3v23/ID3v24.
+/**
+ * Represents the image formats support by ID3, provides a mapping between the format field supported in ID3v22 and the
+ * mimetype field supported by ID3v23/ID3v24.
  */
 public class ImageFormats
 {
@@ -38,15 +39,17 @@ public class ImageFormats
     public static final String V22_BMP_FORMAT = "BMP";
 
     public static final String MIME_TYPE_JPEG = "image/jpeg";
-    public static final String MIME_TYPE_PNG  = "image/png";
-    public static final String MIME_TYPE_GIF  = "image/gif";
-    public static final String MIME_TYPE_BMP  = "image/bmp";
+    public static final String MIME_TYPE_PNG = "image/png";
+    public static final String MIME_TYPE_GIF = "image/gif";
+    public static final String MIME_TYPE_BMP = "image/bmp";
 
-    /** Sometimes this is used for jpg instead :or have I made this up */
-    public static final String MIME_TYPE_JPG  = "image/jpg";
+    /**
+     * Sometimes this is used for jpg instead :or have I made this up
+     */
+    public static final String MIME_TYPE_JPG = "image/jpg";
 
-    private static Map<String,String> imageFormatsToMimeType = new HashMap <String,String>();
-    private static Map<String,String> imageMimeTypeToFormat  = new HashMap<String,String>();
+    private static Map<String, String> imageFormatsToMimeType = new HashMap<String, String>();
+    private static Map<String, String> imageMimeTypeToFormat = new HashMap<String, String>();
 
     static
     {
@@ -55,14 +58,14 @@ public class ImageFormats
         imageFormatsToMimeType.put(V22_GIF_FORMAT, MIME_TYPE_GIF);
         imageFormatsToMimeType.put(V22_BMP_FORMAT, MIME_TYPE_BMP);
         String value;
-        for (String key :imageFormatsToMimeType.keySet())
+        for (String key : imageFormatsToMimeType.keySet())
         {
             value = imageFormatsToMimeType.get(key);
             imageMimeTypeToFormat.put(value, key);
         }
 
         //The mapping isnt one-one lets add other mimetypes
-        imageMimeTypeToFormat.put(MIME_TYPE_JPG,V22_JPG_FORMAT);
+        imageMimeTypeToFormat.put(MIME_TYPE_JPG, V22_JPG_FORMAT);
     }
 
     /**

@@ -16,9 +16,9 @@
 package org.jaudiotagger.tag.id3.framebody;
 
 import org.jaudiotagger.tag.InvalidTagException;
+import org.jaudiotagger.tag.reference.Languages;
 import org.jaudiotagger.tag.datatype.*;
 import org.jaudiotagger.tag.id3.ID3v24Frames;
-import org.jaudiotagger.tag.id3.valuepair.Languages;
 import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
 
 import java.io.ByteArrayOutputStream;
@@ -27,8 +27,8 @@ import java.nio.ByteBuffer;
 
 /**
  * Terms of use frame.
- * 
- * <p>
+ * <p/>
+ * <p/>
  * This frame contains a brief description of the terms of use and
  * ownership of the file. More detailed information concerning the legal
  * terms might be available through the "WCOP" frame. Newlines are
@@ -39,17 +39,17 @@ import java.nio.ByteBuffer;
  * <tr><td>Language       </td><td>$xx xx xx</td></tr>
  * <tr><td>The actual text</td><td>&lt;text string according to encoding&gt;</td></tr>
  * </table></p>
- *
+ * <p/>
  * <p>For more details, please refer to the ID3 specifications:
  * <ul>
  * <li><a href="http://www.id3.org/id3v2.3.0.txt">ID3 v2.3.0 Spec</a>
  * </ul>
- * 
+ *
  * @author : Paul Taylor
  * @author : Eric Farng
  * @version $Id$
  */
-public class FrameBodyUSER extends AbstractID3v2FrameBody implements ID3v24FrameBody,ID3v23FrameBody
+public class FrameBodyUSER extends AbstractID3v2FrameBody implements ID3v24FrameBody, ID3v23FrameBody
 {
     /**
      * Creates a new FrameBodyUSER datatype.
@@ -69,9 +69,9 @@ public class FrameBodyUSER extends AbstractID3v2FrameBody implements ID3v24Frame
     /**
      * Creates a new FrameBodyUSER datatype.
      *
-     * @param textEncoding 
-     * @param language     
-     * @param text         
+     * @param textEncoding
+     * @param language
+     * @param text
      */
     public FrameBodyUSER(byte textEncoding, String language, String text)
     {
@@ -89,15 +89,15 @@ public class FrameBodyUSER extends AbstractID3v2FrameBody implements ID3v24Frame
      * @throws InvalidTagException
      */
     public FrameBodyUSER(ByteBuffer byteBuffer, int frameSize)
-        throws InvalidTagException
+            throws InvalidTagException
     {
         super(byteBuffer, frameSize);
     }
 
     /**
-      * The ID3v2 frame identifier
-      *
-      * @return the ID3v2 frame identifier  for this frame type
+     * The ID3v2 frame identifier
+     *
+     * @return the ID3v2 frame identifier  for this frame type
      */
     public String getIdentifier()
     {
@@ -105,9 +105,7 @@ public class FrameBodyUSER extends AbstractID3v2FrameBody implements ID3v24Frame
     }
 
     /**
-     * 
-     *
-     * @return  lanaguage
+     * @return lanaguage
      */
     public String getLanguage()
     {
@@ -115,9 +113,7 @@ public class FrameBodyUSER extends AbstractID3v2FrameBody implements ID3v24Frame
     }
 
     /**
-     * 
-     *
-     * @param language 
+     * @param language
      */
     public void setOwner(String language)
     {
@@ -126,10 +122,11 @@ public class FrameBodyUSER extends AbstractID3v2FrameBody implements ID3v24Frame
 
     /**
      * If the text cannot be encoded using current encoder, change the encoder
+     *
      * @param tagBuffer
      * @throws IOException
      */
-    public void write(ByteArrayOutputStream tagBuffer)      
+    public void write(ByteArrayOutputStream tagBuffer)
     {
         if (((AbstractString) getObject(DataTypes.OBJ_TEXT)).canBeEncoded() == false)
         {
@@ -139,7 +136,7 @@ public class FrameBodyUSER extends AbstractID3v2FrameBody implements ID3v24Frame
     }
 
     /**
-     * 
+     *
      */
     protected void setupObjectList()
     {

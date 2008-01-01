@@ -34,47 +34,48 @@ import java.util.Date;
 public class TestAudioTagger
 {
 
-    public static void main(final String[] args) 
+    public static void main(final String[] args)
     {
         TestAudioTagger test = new TestAudioTagger();
 
-        if(args.length==0)
+        if (args.length == 0)
         {
             System.err.println("usage TestAudioTagger Dirname");
             System.err.println("      You must enter the root directory");
             System.exit(1);
         }
-        else if(args.length>1)
+        else if (args.length > 1)
         {
             System.err.println("usage TestAudioTagger Dirname");
             System.err.println("      Only one parameter accepted");
             System.exit(1);
         }
         File rootDir = new File(args[0]);
-        if(!rootDir.isDirectory())
+        if (!rootDir.isDirectory())
         {
             System.err.println("usage TestAudioTagger Dirname");
-            System.err.println("      Directory "+args[0] +" could not be found");
+            System.err.println("      Directory " + args[0] + " could not be found");
             System.exit(1);
         }
         Date start = new Date();
-        System.out.println("Started to read from:"+rootDir.getPath()+" at "
-            + DateFormat.getTimeInstance().format(start));
+        System.out.println("Started to read from:" + rootDir.getPath() + " at "
+                + DateFormat.getTimeInstance().format(start));
         test.scanSingleDir(rootDir);
         Date finish = new Date();
-        System.out.println("Started to read from:"+rootDir.getPath()+" at "
-                    + DateFormat.getTimeInstance().format(start));
-        System.out.println("Finished to read from:"+rootDir.getPath()
-             + DateFormat.getTimeInstance().format(finish));
-        System.out.println("Attempted  to read:"+count);
-        System.out.println("Successful to read:"+(count-failed));
-        System.out.println("Failed     to read:"+failed);
+        System.out.println("Started to read from:" + rootDir.getPath() + " at "
+                + DateFormat.getTimeInstance().format(start));
+        System.out.println("Finished to read from:" + rootDir.getPath()
+                + DateFormat.getTimeInstance().format(finish));
+        System.out.println("Attempted  to read:" + count);
+        System.out.println("Successful to read:" + (count - failed));
+        System.out.println("Failed     to read:" + failed);
 
     }
 
 
-    private static int count =0;
-    private static int failed=0;
+    private static int count = 0;
+    private static int failed = 0;
+
     /**
      * Recursive function to scan directory
      */
@@ -114,8 +115,8 @@ public class TestAudioTagger
     }
 
     final class MP3FileFilter
-        extends javax.swing.filechooser.FileFilter
-        implements java.io.FileFilter
+            extends javax.swing.filechooser.FileFilter
+            implements java.io.FileFilter
     {
 
         /**
@@ -155,9 +156,9 @@ public class TestAudioTagger
         public final boolean accept(final java.io.File file)
         {
             return (
-                ((file.getName()).toLowerCase().endsWith(".mp3"))
-                    ||
-                    (file.isDirectory() && (this.allowDirectories == true))
+                    ((file.getName()).toLowerCase().endsWith(".mp3"))
+                            ||
+                            (file.isDirectory() && (this.allowDirectories == true))
             );
         }
 

@@ -47,8 +47,6 @@ public class StringDate extends StringFixedLength
     }
 
     /**
-     * 
-     *
      * @param value
      */
     public void setValue(Object value)
@@ -60,8 +58,6 @@ public class StringDate extends StringFixedLength
     }
 
     /**
-     * 
-     *
      * @return
      */
     public Object getValue()

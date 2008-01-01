@@ -32,7 +32,7 @@ import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
 
 /**
  * Represents a String which is not delimited by null character with fixed text encoding.
- * 
+ * <p/>
  * This type of String will usually only be used when it is the last field within a frame, when reading the remainder of the byte array will
  * be read, when writing the frame will accomodate the required size for the String. The String will be encoded
  * using the default encoding regardless of what encoding may be specified in the framebody
@@ -43,7 +43,7 @@ public class StringSizeTerminated extends TextEncodedStringSizeTerminated
     /**
      * Creates a new ObjectStringSizeTerminated datatype.
      *
-     * @param identifier  identifies the frame type
+     * @param identifier identifies the frame type
      */
     public StringSizeTerminated(String identifier, AbstractTagFrameBody frameBody)
     {
@@ -64,7 +64,7 @@ public class StringSizeTerminated extends TextEncodedStringSizeTerminated
         return super.equals(obj);
     }
 
-    protected String  getTextEncodingCharSet()
+    protected String getTextEncodingCharSet()
     {
         return TextEncoding.CHARSET_ISO_8859_1;
     }

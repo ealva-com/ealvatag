@@ -65,7 +65,7 @@ public class VorbisCommentCreator extends AbstractTagCreator
             while (it.hasNext())
             {
                 TagField frame = (TagField) it.next();
-                if(frame.getId().equals(VorbisCommentFieldKey.VENDOR.name()))
+                if (frame.getId().equals(VorbisCommentFieldKey.VENDOR.name()))
                 {
                     //this is always stored above so ignore                    
                 }

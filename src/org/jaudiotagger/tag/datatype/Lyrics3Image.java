@@ -30,24 +30,24 @@ import org.jaudiotagger.audio.generic.Utils;
 public class Lyrics3Image extends AbstractDataType
 {
     /**
-     * 
+     *
      */
     private Lyrics3TimeStamp time = null;
 
     /**
-     * 
+     *
      */
     private String description = "";
 
     /**
-     * 
+     *
      */
     private String filename = "";
 
     /**
      * Creates a new ObjectLyrics3Image datatype.
      *
-     * @param identifier 
+     * @param identifier
      */
     public Lyrics3Image(String identifier, AbstractTagFrameBody frameBody)
     {
@@ -63,9 +63,7 @@ public class Lyrics3Image extends AbstractDataType
     }
 
     /**
-     * 
-     *
-     * @param description 
+     * @param description
      */
     public void setDescription(String description)
     {
@@ -73,9 +71,7 @@ public class Lyrics3Image extends AbstractDataType
     }
 
     /**
-     * 
-     *
-     * @return 
+     * @return
      */
     public String getDescription()
     {
@@ -83,9 +79,7 @@ public class Lyrics3Image extends AbstractDataType
     }
 
     /**
-     * 
-     *
-     * @param filename 
+     * @param filename
      */
     public void setFilename(String filename)
     {
@@ -93,9 +87,7 @@ public class Lyrics3Image extends AbstractDataType
     }
 
     /**
-     * 
-     *
-     * @return 
+     * @return
      */
     public String getFilename()
     {
@@ -103,9 +95,7 @@ public class Lyrics3Image extends AbstractDataType
     }
 
     /**
-     * 
-     *
-     * @return 
+     * @return
      */
     public int getSize()
     {
@@ -122,9 +112,7 @@ public class Lyrics3Image extends AbstractDataType
     }
 
     /**
-     * 
-     *
-     * @param time 
+     * @param time
      */
     public void setTimeStamp(Lyrics3TimeStamp time)
     {
@@ -132,9 +120,7 @@ public class Lyrics3Image extends AbstractDataType
     }
 
     /**
-     * 
-     *
-     * @return 
+     * @return
      */
     public Lyrics3TimeStamp getTimeStamp()
     {
@@ -142,10 +128,8 @@ public class Lyrics3Image extends AbstractDataType
     }
 
     /**
-     * 
-     *
-     * @param obj 
-     * @return 
+     * @param obj
+     * @return
      */
     public boolean equals(Object obj)
     {
@@ -185,12 +169,10 @@ public class Lyrics3Image extends AbstractDataType
     }
 
     /**
-     * 
-     *
-     * @param imageString 
-     * @param offset      
-     * @throws NullPointerException      
-     * @throws IndexOutOfBoundsException 
+     * @param imageString
+     * @param offset
+     * @throws NullPointerException
+     * @throws IndexOutOfBoundsException
      */
     public void readString(String imageString, int offset)
     {
@@ -228,9 +210,7 @@ public class Lyrics3Image extends AbstractDataType
     }
 
     /**
-     * 
-     *
-     * @return 
+     * @return
      */
     public String toString()
     {
@@ -246,9 +226,7 @@ public class Lyrics3Image extends AbstractDataType
     }
 
     /**
-     * 
-     *
-     * @return 
+     * @return
      */
     public String writeString()
     {
@@ -287,7 +265,7 @@ public class Lyrics3Image extends AbstractDataType
 
     public byte[] writeByteArray()
     {
-        return Utils.getDefaultBytes(writeString(),"ISO-8859-1");
+        return Utils.getDefaultBytes(writeString(), "ISO-8859-1");
     }
 
 }

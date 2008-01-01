@@ -24,9 +24,9 @@ import java.nio.ByteBuffer;
 
 /**
  * Relative volume adjustment frame.
- * 
+ * <p/>
  * Only partially implemented.
- * 
+ *
  * @author : Paul Taylor
  * @author : Eric Farng
  * @version $Id$
@@ -49,7 +49,7 @@ public class FrameBodyRVAD extends AbstractID3v2FrameBody implements ID3v23Frame
     }
 
 
-     /**
+    /**
      * Convert from V4 to V3 Frame
      */
     public FrameBodyRVAD(FrameBodyRVA2 body)
@@ -63,15 +63,15 @@ public class FrameBodyRVAD extends AbstractID3v2FrameBody implements ID3v23Frame
      * @throws InvalidTagException if unable to create framebody from buffer
      */
     public FrameBodyRVAD(ByteBuffer byteBuffer, int frameSize)
-        throws  InvalidTagException
+            throws InvalidTagException
     {
         super(byteBuffer, frameSize);
     }
 
-        /**
-      * The ID3v2 frame identifier
-      *
-      * @return the ID3v2 frame identifier  for this frame type
+    /**
+     * The ID3v2 frame identifier
+     *
+     * @return the ID3v2 frame identifier  for this frame type
      */
     public String getIdentifier()
     {
@@ -84,11 +84,10 @@ public class FrameBodyRVAD extends AbstractID3v2FrameBody implements ID3v23Frame
      * @throws java.lang.UnsupportedOperationException
      *          This method is not yet
      *          supported
-     *
      * @todo Implement this java.lang.Object method
      */
     public boolean equals(Object obj)
-    {        
+    {
         throw new java.lang.UnsupportedOperationException("Method equals() not yet implemented.");
     }
 

@@ -37,14 +37,14 @@ import java.nio.charset.*;
  * will be encoded based upon the text encoding of the frame that it belongs to.
  */
 public class StringFixedLength
-    extends AbstractString
+        extends AbstractString
 {
     /**
      * Creates a new ObjectStringFixedsize datatype.
      *
-     * @param identifier 
-     * @param size       
-     * @throws IllegalArgumentException 
+     * @param identifier
+     * @param size
+     * @throws IllegalArgumentException
      */
     public StringFixedLength(String identifier, AbstractTagFrameBody frameBody, int size)
     {
@@ -63,9 +63,7 @@ public class StringFixedLength
     }
 
     /**
-     * 
-     *
-     * @param obj 
+     * @param obj
      * @return if obj is equivalent to this
      */
     public boolean equals(Object obj)
@@ -101,9 +99,9 @@ public class StringFixedLength
             logger.finest("Array length is:" + arr.length + "offset is:" + offset + "Size is:" + size);
 
 
-            if(arr.length - offset < size)
+            if (arr.length - offset < size)
             {
-                throw new InvalidDataTypeException("byte array is to small to retrieve string of declared length:"+size);
+                throw new InvalidDataTypeException("byte array is to small to retrieve string of declared length:" + size);
             }
             String str = decoder.decode(ByteBuffer.wrap(arr, offset, size)).toString();
             if (str == null)
@@ -122,7 +120,7 @@ public class StringFixedLength
 
     /**
      * Write String into byte array
-     *
+     * <p/>
      * The string will be adjusted to ensure the correct number of bytes are written, If the current value is null
      * or to short the written value will have the 'space' character appended to ensure this. We write this instead of
      * the null character because the null character is likely to confuse the parser into misreading the next field.
@@ -135,13 +133,13 @@ public class StringFixedLength
         byte[] data;
 
         //Create with a series of empty of spaces to try and ensure integrity of field
-        if(value==null)
+        if (value == null)
         {
             logger.warning("Value of StringFixedlength Field is null using default value instead");
             data = new byte[size];
-            for(int i=0;i<size;i++)
+            for (int i = 0; i < size; i++)
             {
-                data[i]=' ';
+                data[i] = ' ';
             }
             return data;
         }
@@ -154,11 +152,11 @@ public class StringFixedLength
         }
         catch (CharacterCodingException ce)
         {
-            logger.warning("There was a problem writing the following StringFixedlength Field:"+value+":"+ce.getMessage()+"using default value instead");
+            logger.warning("There was a problem writing the following StringFixedlength Field:" + value + ":" + ce.getMessage() + "using default value instead");
             data = new byte[size];
-            for(int i=0;i<size;i++)
+            for (int i = 0; i < size; i++)
             {
-                data[i]=' ';
+                data[i] = ' ';
             }
             return data;
         }
@@ -178,10 +176,10 @@ public class StringFixedLength
             else if (dataBuffer.limit() > size)
             {
                 logger.warning("There was a problem writing the following StringFixedlength Field:"
-                    +value
-                    +" when converted to bytes has length of:"+dataBuffer.limit()
-                    +" but field was defined with length of:"+size
-                    +" too long so stripping extra length");
+                        + value
+                        + " when converted to bytes has length of:" + dataBuffer.limit()
+                        + " but field was defined with length of:" + size
+                        + " too long so stripping extra length");
                 data = new byte[size];
                 dataBuffer.get(data, 0, size);
                 return data;
@@ -190,42 +188,41 @@ public class StringFixedLength
             else
             {
                 logger.warning("There was a problem writing the following StringFixedlength Field:"
-                    +value
-                    +" when converted to bytes has length of:"+dataBuffer.limit()
-                    +" but field was defined with length of:"+size
-                    +" too short so padding with spaces to make up extra length");
+                        + value
+                        + " when converted to bytes has length of:" + dataBuffer.limit()
+                        + " but field was defined with length of:" + size
+                        + " too short so padding with spaces to make up extra length");
 
                 data = new byte[size];
                 dataBuffer.get(data, 0, dataBuffer.limit());
 
-                for(int i=dataBuffer.limit();i<size;i++)
+                for (int i = dataBuffer.limit(); i < size; i++)
                 {
-                    data[i]=' ';
+                    data[i] = ' ';
                 }
                 return data;
             }
         }
         else
         {
-            logger.warning("There was a serious problem writing the following StringFixedlength Field:"+value+":"+"using default value instead");
+            logger.warning("There was a serious problem writing the following StringFixedlength Field:" + value + ":" + "using default value instead");
             data = new byte[size];
-            for(int i=0;i<size;i++)
+            for (int i = 0; i < size; i++)
             {
-                data[i]=' ';
+                data[i] = ' ';
             }
             return data;
         }
     }
 
     /**
-     *
      * @return the encoding of the frame body this datatype belongs to
      */
-    protected String  getTextEncodingCharSet()
+    protected String getTextEncodingCharSet()
     {
-         byte textEncoding = this.getBody().getTextEncoding();
-         String charSetName = TextEncoding.getInstanceOf().getValueForId(textEncoding);
-         logger.finest("text encoding:"+textEncoding + " charset:"+charSetName);
-         return charSetName;
+        byte textEncoding = this.getBody().getTextEncoding();
+        String charSetName = TextEncoding.getInstanceOf().getValueForId(textEncoding);
+        logger.finest("text encoding:" + textEncoding + " charset:" + charSetName);
+        return charSetName;
     }
 }

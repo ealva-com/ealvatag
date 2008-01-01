@@ -44,8 +44,6 @@ public class BooleanString extends AbstractDataType
     }
 
     /**
-     * 
-     *
      * @return
      */
     public int getSize()
@@ -64,8 +62,6 @@ public class BooleanString extends AbstractDataType
     }
 
     /**
-     * 
-     *
      * @param offset
      * @throws NullPointerException
      * @throws IndexOutOfBoundsException
@@ -77,8 +73,6 @@ public class BooleanString extends AbstractDataType
     }
 
     /**
-     * 
-     *
      * @return
      */
     public String toString()
@@ -87,8 +81,6 @@ public class BooleanString extends AbstractDataType
     }
 
     /**
-     * 
-     *
      * @return
      */
     public byte[] writeByteArray()

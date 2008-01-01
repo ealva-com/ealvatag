@@ -43,7 +43,7 @@ public class ID3v1TagField implements TagTextField
      */
     public ID3v1TagField(byte[] raw) throws UnsupportedEncodingException
     {
-        String field = new String(raw,"ISO-8859-1");
+        String field = new String(raw, "ISO-8859-1");
 
         int i = field.indexOf("=");
         if (i == -1)
@@ -89,12 +89,12 @@ public class ID3v1TagField implements TagTextField
     private void checkCommon()
     {
         this.common = id.equals(ID3v1FieldKey.TITLE.name())
-            || id.equals(ID3v1FieldKey.ALBUM.name())
-            || id.equals(ID3v1FieldKey.ARTIST.name())
-            || id.equals(ID3v1FieldKey.GENRE.name())
-            || id.equals(ID3v1FieldKey.YEAR.name())          
-            || id.equals(ID3v1FieldKey.COMMENT.name())
-            || id.equals(ID3v1FieldKey.TRACK.name());
+                || id.equals(ID3v1FieldKey.ALBUM.name())
+                || id.equals(ID3v1FieldKey.ARTIST.name())
+                || id.equals(ID3v1FieldKey.GENRE.name())
+                || id.equals(ID3v1FieldKey.YEAR.name())
+                || id.equals(ID3v1FieldKey.COMMENT.name())
+                || id.equals(ID3v1FieldKey.TRACK.name());
     }
 
     /**
@@ -193,7 +193,7 @@ public class ID3v1TagField implements TagTextField
      */
     public void isBinary(boolean b)
     {
-       //Do nothing, always false
+        //Do nothing, always false
     }
 
     /**

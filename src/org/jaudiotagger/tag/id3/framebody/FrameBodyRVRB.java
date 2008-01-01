@@ -24,8 +24,8 @@ import java.nio.ByteBuffer;
 
 /**
  * Reverb frame.
- * 
- * <p>
+ * <p/>
+ * <p/>
  * Yet another subjective one. You may here adjust echoes of different
  * kinds. Reverb left/right is the delay between every bounce in ms.
  * Reverb bounces left/right is the number of bounces that should be
@@ -56,17 +56,17 @@ import java.nio.ByteBuffer;
  * <tr><td>Premix left to right            </td><td>$xx      </td></tr>
  * <tr><td>Premix right to left            </td><td>$xx      </td></tr>
  * </table></p>
- * 
+ * <p/>
  * <p>For more details, please refer to the ID3 specifications:
  * <ul>
  * <li><a href="http://www.id3.org/id3v2.3.0.txt">ID3 v2.3.0 Spec</a>
  * </ul>
- * 
+ *
  * @author : Paul Taylor
  * @author : Eric Farng
  * @version $Id$
  */
-public class FrameBodyRVRB extends AbstractID3v2FrameBody implements ID3v24FrameBody,ID3v23FrameBody
+public class FrameBodyRVRB extends AbstractID3v2FrameBody implements ID3v24FrameBody, ID3v23FrameBody
 {
     /**
      * Creates a new FrameBodyRVRB datatype.
@@ -93,16 +93,16 @@ public class FrameBodyRVRB extends AbstractID3v2FrameBody implements ID3v24Frame
     /**
      * Creates a new FrameBodyRVRB datatype.
      *
-     * @param reverbLeft                 
-     * @param reverbRight                
-     * @param reverbBouncesLeft          
-     * @param reverbBouncesRight         
-     * @param reverbFeedbackLeftToLeft   
-     * @param reverbFeedbackLeftToRight  
-     * @param reverbFeedbackRightToRight 
-     * @param reverbFeedbackRightToLeft  
-     * @param premixLeftToRight          
-     * @param premixRightToLeft          
+     * @param reverbLeft
+     * @param reverbRight
+     * @param reverbBouncesLeft
+     * @param reverbBouncesRight
+     * @param reverbFeedbackLeftToLeft
+     * @param reverbFeedbackLeftToRight
+     * @param reverbFeedbackRightToRight
+     * @param reverbFeedbackRightToLeft
+     * @param premixLeftToRight
+     * @param premixRightToLeft
      */
     public FrameBodyRVRB(short reverbLeft, short reverbRight, byte reverbBouncesLeft, byte reverbBouncesRight, byte reverbFeedbackLeftToLeft, byte reverbFeedbackLeftToRight, byte reverbFeedbackRightToRight, byte reverbFeedbackRightToLeft, byte premixLeftToRight, byte premixRightToLeft)
     {
@@ -124,15 +124,15 @@ public class FrameBodyRVRB extends AbstractID3v2FrameBody implements ID3v24Frame
      * @throws InvalidTagException if unable to create framebody from buffer
      */
     public FrameBodyRVRB(ByteBuffer byteBuffer, int frameSize)
-        throws InvalidTagException
+            throws InvalidTagException
     {
         super(byteBuffer, frameSize);
     }
 
-       /**
-      * The ID3v2 frame identifier
-      *
-      * @return the ID3v2 frame identifier  for this frame type
+    /**
+     * The ID3v2 frame identifier
+     *
+     * @return the ID3v2 frame identifier  for this frame type
      */
     public String getIdentifier()
     {
@@ -141,7 +141,7 @@ public class FrameBodyRVRB extends AbstractID3v2FrameBody implements ID3v24Frame
 
 
     /**
-     * 
+     *
      */
     protected void setupObjectList()
     {

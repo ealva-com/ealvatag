@@ -2,14 +2,9 @@ package org.jaudiotagger.tag.flac;
 
 import org.jaudiotagger.tag.vorbiscomment.VorbisCommentTag;
 import org.jaudiotagger.tag.*;
-import org.jaudiotagger.tag.datatype.DataTypes;
+import org.jaudiotagger.tag.reference.PictureTypes;
 import org.jaudiotagger.tag.id3.valuepair.ImageFormats;
 import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
-import org.jaudiotagger.tag.id3.valuepair.PictureTypes;
-import org.jaudiotagger.tag.id3.AbstractID3v2Frame;
-import org.jaudiotagger.tag.id3.framebody.FrameBodyAPIC;
-import org.jaudiotagger.tag.mp4.field.Mp4TagCoverField;
-import org.jaudiotagger.tag.mp4.field.Mp4FieldType;
 import org.jaudiotagger.audio.flac.metadatablock.MetadataBlockDataPicture;
 import org.jaudiotagger.audio.generic.Utils;
 
@@ -24,8 +19,8 @@ import java.io.IOException;
 
 /**
  * Flac uses Vorbis Comment for most of its metadata and a Flac Picture Block for images
- *
- * <p>
+ * <p/>
+ * <p/>
  * This class enscapulates the items into a single tag
  */
 public class FlacTag implements Tag
@@ -33,14 +28,13 @@ public class FlacTag implements Tag
     VorbisCommentTag tag = null;
     List<MetadataBlockDataPicture> images = new ArrayList<MetadataBlockDataPicture>();
 
-    public FlacTag(VorbisCommentTag tag,List<MetadataBlockDataPicture> images)
+    public FlacTag(VorbisCommentTag tag, List<MetadataBlockDataPicture> images)
     {
-        this.tag    = tag;
+        this.tag = tag;
         this.images = images;
     }
 
     /**
-     *
      * @return images
      */
     public List<MetadataBlockDataPicture> getImages()
@@ -49,7 +43,6 @@ public class FlacTag implements Tag
     }
 
     /**
-     *
      * @return the vorbis tag (this is what handles text metadata)
      */
     public VorbisCommentTag getVorbisCommentTag()
@@ -59,7 +52,7 @@ public class FlacTag implements Tag
 
     /**
      * Adds a tagfield to the structure.<br>
-     *
+     * <p/>
      * <p>It is not recommended to use this method for normal use of the
      * audiolibrary. The developer will circumvent the underlying
      * implementation. For example, if one adds a field with the field id
@@ -73,14 +66,13 @@ public class FlacTag implements Tag
      * <li>No conversion of data is perfomed</li>
      * </ul>
      *
-     * @param field
-     *            The field to add.
+     * @param field The field to add.
      */
-    public void add(TagField field)  throws FieldDataInvalidException
+    public void add(TagField field) throws FieldDataInvalidException
     {
-        if(field instanceof MetadataBlockDataPicture)
+        if (field instanceof MetadataBlockDataPicture)
         {
-            images.add((MetadataBlockDataPicture)field);    
+            images.add((MetadataBlockDataPicture) field);
         }
         else
         {
@@ -91,10 +83,9 @@ public class FlacTag implements Tag
     /**
      * Adds an album to the tag.<br>
      *
-     * @param album
-     *            Album description
+     * @param album Album description
      */
-    public void addAlbum(String album)  throws FieldDataInvalidException
+    public void addAlbum(String album) throws FieldDataInvalidException
     {
         tag.addAlbum(album);
     }
@@ -102,10 +93,9 @@ public class FlacTag implements Tag
     /**
      * Adds an artist to the tag.<br>
      *
-     * @param artist
-     *            Artist's name
+     * @param artist Artist's name
      */
-    public void addArtist(String artist)  throws FieldDataInvalidException
+    public void addArtist(String artist) throws FieldDataInvalidException
     {
         tag.addArtist(artist);
     }
@@ -113,10 +103,9 @@ public class FlacTag implements Tag
     /**
      * Adds a comment to the tag.<br>
      *
-     * @param comment
-     *            Comment.
+     * @param comment Comment.
      */
-    public void addComment(String comment)  throws FieldDataInvalidException
+    public void addComment(String comment) throws FieldDataInvalidException
     {
         tag.addComment(comment);
     }
@@ -124,10 +113,9 @@ public class FlacTag implements Tag
     /**
      * Adds a genre to the tag.<br>
      *
-     * @param genre
-     *            Genre
+     * @param genre Genre
      */
-    public void addGenre(String genre)  throws FieldDataInvalidException
+    public void addGenre(String genre) throws FieldDataInvalidException
     {
         tag.addGenre(genre);
     }
@@ -135,10 +123,9 @@ public class FlacTag implements Tag
     /**
      * Adds a title to the tag.<br>
      *
-     * @param title
-     *            Title
+     * @param title Title
      */
-    public void addTitle(String title)  throws FieldDataInvalidException
+    public void addTitle(String title) throws FieldDataInvalidException
     {
         tag.addTitle(title);
     }
@@ -146,10 +133,9 @@ public class FlacTag implements Tag
     /**
      * Adds a track to the tag.<br>
      *
-     * @param track
-     *            Track
+     * @param track Track
      */
-    public void addTrack(String track)   throws FieldDataInvalidException
+    public void addTrack(String track) throws FieldDataInvalidException
     {
         tag.addTrack(track);
     }
@@ -157,10 +143,9 @@ public class FlacTag implements Tag
     /**
      * Adds a year to the Tag.<br>
      *
-     * @param year
-     *            Year
+     * @param year Year
      */
-    public void addYear(String year)  throws FieldDataInvalidException
+    public void addYear(String year) throws FieldDataInvalidException
     {
         tag.addYear(year);
     }
@@ -169,16 +154,15 @@ public class FlacTag implements Tag
      * Returns a {@linkplain List list} of {@link TagField} objects whose &quot;{@linkplain TagField#getId() id}&quot;
      * is the specified one.<br>
      *
-     * @param id
-     *            The field id.
+     * @param id The field id.
      * @return A list of {@link TagField} objects with the given &quot;id&quot;.
      */
     public List<TagField> get(String id)
     {
-        if(id.equals(TagFieldKey.COVER_ART.name()))
+        if (id.equals(TagFieldKey.COVER_ART.name()))
         {
-            List <TagField> castImages = new ArrayList<TagField>();
-            for(MetadataBlockDataPicture image:images)
+            List<TagField> castImages = new ArrayList<TagField>();
+            for (MetadataBlockDataPicture image : images)
             {
                 castImages.add(image);
             }
@@ -186,12 +170,11 @@ public class FlacTag implements Tag
         }
         else
         {
-             return tag.get(id);
+            return tag.get(id);
         }
     }
 
     /**
-     *
      * @return
      */
     public List<TagField> getAlbum()
@@ -201,7 +184,6 @@ public class FlacTag implements Tag
 
 
     /**
-     *
      * @return
      */
     public List<TagField> getArtist()
@@ -210,7 +192,6 @@ public class FlacTag implements Tag
     }
 
     /**
-     *
      * @return
      */
     public List<TagField> getComment()
@@ -219,7 +200,6 @@ public class FlacTag implements Tag
     }
 
     /**
-     *
      * @return
      */
     public List<TagField> getGenre()
@@ -228,7 +208,6 @@ public class FlacTag implements Tag
     }
 
     /**
-     *
      * @return
      */
     public List<TagField> getTitle()
@@ -237,7 +216,6 @@ public class FlacTag implements Tag
     }
 
     /**
-     *
      * @return
      */
     public List<TagField> getTrack()
@@ -246,7 +224,6 @@ public class FlacTag implements Tag
     }
 
     /**
-     *
      * @return
      */
     public List<TagField> getYear()
@@ -256,7 +233,6 @@ public class FlacTag implements Tag
 
 
     /**
-     *
      * @return
      */
     public String getFirstAlbum()
@@ -265,47 +241,42 @@ public class FlacTag implements Tag
     }
 
     /**
-     *
      * @return
      */
     public String getFirstArtist()
     {
-            return tag.getFirstArtist();
-        }
+        return tag.getFirstArtist();
+    }
 
 
     /**
-     *
      * @return
      */
     public String getFirstComment()
     {
-            return tag.getFirstComment();
-        }
+        return tag.getFirstComment();
+    }
 
 
     /**
-     *
      * @return
      */
     public String getFirstGenre()
     {
-            return tag.getFirstGenre();
-        }
+        return tag.getFirstGenre();
+    }
 
 
     /**
-     *
      * @return
      */
     public String getFirstTitle()
     {
-            return tag.getFirstTitle();
-        }
+        return tag.getFirstTitle();
+    }
 
 
     /**
-     *
      * @return
      */
     public String getFirstTrack()
@@ -315,13 +286,12 @@ public class FlacTag implements Tag
 
 
     /**
-     *
      * @return
      */
     public String getFirstYear()
     {
-            return tag.getFirstYear();
-        }
+        return tag.getFirstYear();
+    }
 
 
     /**
@@ -340,16 +310,15 @@ public class FlacTag implements Tag
      * Determines whether the tag has at least one field with the specified
      * &quot;id&quot;.
      *
-     * @param id
-     *            The field id to look for.
+     * @param id The field id to look for.
      * @return <code>true</code> if tag contains a {@link TagField} with the
      *         given {@linkplain TagField#getId() id}.
      */
     public boolean hasField(String id)
     {
-        if(id.equals(TagFieldKey.COVER_ART.name()))
+        if (id.equals(TagFieldKey.COVER_ART.name()))
         {
-            return images.size()>0;
+            return images.size() > 0;
         }
         else
         {
@@ -359,33 +328,32 @@ public class FlacTag implements Tag
 
     /**
      * Determines whether the tag has no fields specified.<br>
-     *
-     * <p>If there are no images we return empty if either there is no VorbisTag or if there is a 
+     * <p/>
+     * <p>If there are no images we return empty if either there is no VorbisTag or if there is a
      * VorbisTag but it is empty
      *
      * @return <code>true</code> if tag contains no field.
      */
     public boolean isEmpty()
     {
-        return (tag==null||tag.isEmpty()) && images.size()==0;
+        return (tag == null || tag.isEmpty()) && images.size() == 0;
     }
 
     /**
-     *
      * @param field
      * @throws FieldDataInvalidException
      */
-    public void set(TagField field)  throws FieldDataInvalidException
+    public void set(TagField field) throws FieldDataInvalidException
     {
-        if(field instanceof MetadataBlockDataPicture)
+        if (field instanceof MetadataBlockDataPicture)
         {
-            if(images.size()==0)
+            if (images.size() == 0)
             {
-                images.add(0,(MetadataBlockDataPicture)field);   
+                images.add(0, (MetadataBlockDataPicture) field);
             }
             else
             {
-                images.set(0,(MetadataBlockDataPicture)field);
+                images.set(0, (MetadataBlockDataPicture) field);
             }
         }
         else
@@ -395,73 +363,66 @@ public class FlacTag implements Tag
     }
 
     /**
-     *
      * @param s
      * @throws FieldDataInvalidException
      */
-    public void setAlbum(String s)  throws FieldDataInvalidException
+    public void setAlbum(String s) throws FieldDataInvalidException
     {
         tag.setAlbum(s);
     }
 
 
     /**
-     *
      * @param s
      * @throws FieldDataInvalidException
      */
-    public void setArtist(String s)  throws FieldDataInvalidException
+    public void setArtist(String s) throws FieldDataInvalidException
     {
         tag.setArtist(s);
     }
 
     /**
-     *
      * @param s
      * @throws FieldDataInvalidException
      */
-    public void setComment(String s)  throws FieldDataInvalidException
+    public void setComment(String s) throws FieldDataInvalidException
     {
         tag.setComment(s);
     }
 
 
     /**
-     *
      * @param s
      * @throws FieldDataInvalidException
      */
-    public void setGenre(String s)  throws FieldDataInvalidException
+    public void setGenre(String s) throws FieldDataInvalidException
     {
         tag.setGenre(s);
     }
 
     /**
-     *
      * @param s
      * @throws FieldDataInvalidException
      */
-    public void setTitle(String s)  throws FieldDataInvalidException
+    public void setTitle(String s) throws FieldDataInvalidException
     {
         tag.setTitle(s);
     }
 
     /**
-     *
      * @param s
      * @throws FieldDataInvalidException
      */
-    public void setTrack(String s)   throws FieldDataInvalidException
+    public void setTrack(String s) throws FieldDataInvalidException
     {
         tag.setTrack(s);
     }
 
     /**
-     *
      * @param s
      * @throws FieldDataInvalidException
      */
-    public void setYear(String s)  throws FieldDataInvalidException
+    public void setYear(String s) throws FieldDataInvalidException
     {
         tag.setYear(s);
     }
@@ -469,27 +430,26 @@ public class FlacTag implements Tag
 
     /**
      * Create a new TagField based on generic key
-     *
+     * <p/>
      * <p>Only textual data supported at the moment. The genericKey will be mapped
      * to the correct implementation key and return a TagField.
      *
      * @param genericKey is the generic key
-     * @param value to store
+     * @param value      to store
      * @return
      */
-    public TagField createTagField(TagFieldKey genericKey,String value)
-        throws KeyNotFoundException,FieldDataInvalidException
+    public TagField createTagField(TagFieldKey genericKey, String value)
+            throws KeyNotFoundException, FieldDataInvalidException
     {
-        if(genericKey.equals(TagFieldKey.COVER_ART))
+        if (genericKey.equals(TagFieldKey.COVER_ART))
         {
             throw new UnsupportedOperationException("Please use the createArtworkField methods to create coverart ");
         }
         else
         {
-            return tag.createTagField(genericKey,value);
+            return tag.createTagField(genericKey, value);
         }
     }
-
 
 
     /**
@@ -500,7 +460,7 @@ public class FlacTag implements Tag
      */
     public String getFirst(String id)
     {
-        if(id.equals(TagFieldKey.COVER_ART.name()))
+        if (id.equals(TagFieldKey.COVER_ART.name()))
         {
             throw new UnsupportedOperationException("Please use the createArtworkField methods to create coverart ");
         }
@@ -519,7 +479,7 @@ public class FlacTag implements Tag
     public String getFirst(TagFieldKey id)
             throws KeyNotFoundException
     {
-        if(id.equals(TagFieldKey.COVER_ART))
+        if (id.equals(TagFieldKey.COVER_ART))
         {
             throw new UnsupportedOperationException("Please use the createArtworkField methods to create coverart ");
         }
@@ -532,7 +492,7 @@ public class FlacTag implements Tag
 
     /**
      * Retrieve the first tagfield that exists for this key
-     *
+     * <p/>
      * <p>Can be used to retrieve fields with any identifier, useful if the identifier is not within  the
      * jaudiotagger enum
      *
@@ -541,9 +501,9 @@ public class FlacTag implements Tag
      */
     public TagField getFirstField(String id)
     {
-        if(id.equals(TagFieldKey.COVER_ART))
+        if (id.equals(TagFieldKey.COVER_ART))
         {
-            if(images.size()>0)
+            if (images.size() > 0)
             {
                 return images.get(0);
             }
@@ -554,7 +514,7 @@ public class FlacTag implements Tag
         }
         else
         {
-             return tag.getFirstField(id);
+            return tag.getFirstField(id);
         }
     }
 
@@ -567,13 +527,13 @@ public class FlacTag implements Tag
     public void deleteTagField(TagFieldKey tagFieldKey)
             throws KeyNotFoundException
     {
-        if(tagFieldKey.equals(TagFieldKey.COVER_ART))
+        if (tagFieldKey.equals(TagFieldKey.COVER_ART))
         {
             images.clear();
         }
         else
         {
-             tag.deleteTagField(tagFieldKey);
+            tag.deleteTagField(tagFieldKey);
         }
     }
 
@@ -589,38 +549,37 @@ public class FlacTag implements Tag
     }
 
     /**
-       * Return the number of fields
-       *
-       * <p>Fields with the same identifiers are counted seperately
-       * i.e two title fields would contribute two to the count
-       *
-       * @return total number of fields
-       */
-      public int getFieldCount()
-      {
-          return tag.getFieldCount() + images.size();
-      }
+     * Return the number of fields
+     * <p/>
+     * <p>Fields with the same identifiers are counted seperately
+     * i.e two title fields would contribute two to the count
+     *
+     * @return total number of fields
+     */
+    public int getFieldCount()
+    {
+        return tag.getFieldCount() + images.size();
+    }
 
-      public boolean setEncoding(String enc)  throws FieldDataInvalidException
-      {
-          return tag.setEncoding(enc);
-      }
+    public boolean setEncoding(String enc) throws FieldDataInvalidException
+    {
+        return tag.setEncoding(enc);
+    }
 
     /**
-        * Returns a {@linkplain List list} of {@link TagField} objects whose &quot;{@linkplain TagField#getId() id}&quot;
-        * is the specified one.<br>
-        *
-        * @param id
-        *            The field id.
-        * @return A list of {@link TagField} objects with the given &quot;id&quot;.
-        */
-   public List<TagField> get(TagFieldKey id)
-               throws KeyNotFoundException
+     * Returns a {@linkplain List list} of {@link TagField} objects whose &quot;{@linkplain TagField#getId() id}&quot;
+     * is the specified one.<br>
+     *
+     * @param id The field id.
+     * @return A list of {@link TagField} objects with the given &quot;id&quot;.
+     */
+    public List<TagField> get(TagFieldKey id)
+            throws KeyNotFoundException
     {
-        if(id.equals(TagFieldKey.COVER_ART))
+        if (id.equals(TagFieldKey.COVER_ART))
         {
-            List <TagField> castImages = new ArrayList<TagField>();
-            for(MetadataBlockDataPicture image:images)
+            List<TagField> castImages = new ArrayList<TagField>();
+            for (MetadataBlockDataPicture image : images)
             {
                 castImages.add(image);
             }
@@ -628,7 +587,7 @@ public class FlacTag implements Tag
         }
         else
         {
-             return tag.get(id);
+            return tag.get(id);
         }
 
     }
@@ -648,28 +607,28 @@ public class FlacTag implements Tag
      * @throws FieldDataInvalidException
      */
     public TagField createArtworkField(byte[] imageData,
-                                    int pictureType,
-                                    String mimeType,
-                                    String description,
-                                    int width,
-                                    int height,
-                                    int colourDepth,
-                                    int indexedColouredCount
-     )  throws FieldDataInvalidException
+                                       int pictureType,
+                                       String mimeType,
+                                       String description,
+                                       int width,
+                                       int height,
+                                       int colourDepth,
+                                       int indexedColouredCount
+    ) throws FieldDataInvalidException
     {
         return new MetadataBlockDataPicture(imageData,
-                                    pictureType,
-                                    mimeType,
-                                    description,
-                                    width,
-                                    height,
-                                    colourDepth,
-                                    indexedColouredCount);
+                pictureType,
+                mimeType,
+                description,
+                width,
+                height,
+                colourDepth,
+                indexedColouredCount);
     }
 
     /**
      * Create Artwork when  have the bufferedimage
-     *                                              
+     *
      * @param pictureType
      * @param mimeType
      * @param description
@@ -679,49 +638,49 @@ public class FlacTag implements Tag
      * @throws FieldDataInvalidException
      */
     public TagField createArtworkField(BufferedImage bi,
-                                    int pictureType,
-                                    String mimeType,
-                                    String description,                                   
-                                    int colourDepth,
-                                    int indexedColouredCount
-     )  throws FieldDataInvalidException
+                                       int pictureType,
+                                       String mimeType,
+                                       String description,
+                                       int colourDepth,
+                                       int indexedColouredCount
+    ) throws FieldDataInvalidException
     {
-         //Convert to byte array
+        //Convert to byte array
         try
         {
             final ByteArrayOutputStream output = new ByteArrayOutputStream();
-            ImageIO.write(bi, ImageFormats.getFormatForMimeType(mimeType),new DataOutputStream(output));
+            ImageIO.write(bi, ImageFormats.getFormatForMimeType(mimeType), new DataOutputStream(output));
 
             //Add to image list
             return new MetadataBlockDataPicture(output.toByteArray(),
-                                    pictureType,
-                                    mimeType,
-                                    description,
-                                    bi.getWidth(),
-                                    bi.getHeight(),
-                                    colourDepth,
-                                    indexedColouredCount);
+                    pictureType,
+                    mimeType,
+                    description,
+                    bi.getWidth(),
+                    bi.getHeight(),
+                    colourDepth,
+                    indexedColouredCount);
         }
-        catch(IOException ioe)
+        catch (IOException ioe)
         {
             throw new FieldDataInvalidException("Unable to convert image to bytearray, check mimetype parameter");
         }
     }
 
     /**
-    * Create Link to Image File, not recommended because if either flac or image file is moved link
-    * will be broken.
-    */ 
+     * Create Link to Image File, not recommended because if either flac or image file is moved link
+     * will be broken.
+     */
     public TagField createLinkedArtworkField(String url)
     {
         //Add to image list
-        return new MetadataBlockDataPicture(Utils.getDefaultBytes(url,TextEncoding.CHARSET_ISO_8859_1),
-                                    PictureTypes.DEFAULT_ID,
-                                    MetadataBlockDataPicture.IMAGE_IS_URL,
-                                    "",
-                                    0,
-                                    0,
-                                    0,
-                                    0);
+        return new MetadataBlockDataPicture(Utils.getDefaultBytes(url, TextEncoding.CHARSET_ISO_8859_1),
+                PictureTypes.DEFAULT_ID,
+                MetadataBlockDataPicture.IMAGE_IS_URL,
+                "",
+                0,
+                0,
+                0,
+                0);
     }
 }

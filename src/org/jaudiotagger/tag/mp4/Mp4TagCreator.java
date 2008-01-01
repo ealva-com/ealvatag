@@ -83,35 +83,35 @@ public class Mp4TagCreator extends AbstractTagCreator
             //Add metadata raw content
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             Iterator it = tag.getFields();
-            boolean processedArtwork=false;
+            boolean processedArtwork = false;
             while (it.hasNext())
             {
                 TagField frame = (TagField) it.next();
                 //To ensure order is maintained dont process artwork until iterator hits it.
-                if(frame instanceof Mp4TagCoverField)
+                if (frame instanceof Mp4TagCoverField)
                 {
-                    if(processedArtwork)
+                    if (processedArtwork)
                     {
                         //ignore
                     }
                     else
                     {
-                        processedArtwork=true;
+                        processedArtwork = true;
 
                         //Because each artwork image is held within the tag as a seperate field, but when
                         //they are written they are all held under a single covr box we need to do some checks
                         //and special processing here if we have any artwork image (this code only neccessary
                         //if we have more than 1 but do it anyway even if only have 1 image)
-                        ByteArrayOutputStream covrDataBaos= new ByteArrayOutputStream();
+                        ByteArrayOutputStream covrDataBaos = new ByteArrayOutputStream();
 
                         try
                         {
-                            for(TagField artwork:tag.get(TagFieldKey.COVER_ART))
+                            for (TagField artwork : tag.get(TagFieldKey.COVER_ART))
                             {
-                                covrDataBaos.write(((Mp4TagField)artwork).getRawContentDataOnly());
+                                covrDataBaos.write(((Mp4TagField) artwork).getRawContentDataOnly());
                             }
                         }
-                        catch(KeyNotFoundException knfe)
+                        catch (KeyNotFoundException knfe)
                         {
                             //This cannot happen
                             throw new RuntimeException("Unable to find COVERART Key");
@@ -120,7 +120,7 @@ public class Mp4TagCreator extends AbstractTagCreator
                         //Now create the parent Data
                         byte[] data = covrDataBaos.toByteArray();
                         baos.write(Utils.getSizeBigEndian(Mp4BoxHeader.HEADER_LENGTH + data.length));
-                        baos.write(Utils.getDefaultBytes(Mp4FieldKey.ARTWORK.getFieldName(),"ISO-8859-1"));
+                        baos.write(Utils.getDefaultBytes(Mp4FieldKey.ARTWORK.getFieldName(), "ISO-8859-1"));
                         baos.write(data);
                     }
                 }
@@ -129,11 +129,11 @@ public class Mp4TagCreator extends AbstractTagCreator
                     baos.write(frame.getRawContent());
                 }
             }
-           
+
             //Wrap into ilst box
             ByteArrayOutputStream ilst = new ByteArrayOutputStream();
             ilst.write(Utils.getSizeBigEndian(Mp4BoxHeader.HEADER_LENGTH + baos.size()));
-            ilst.write(Utils.getDefaultBytes(Mp4NotMetaFieldKey.ILST.getFieldName(),"ISO-8859-1"));
+            ilst.write(Utils.getDefaultBytes(Mp4NotMetaFieldKey.ILST.getFieldName(), "ISO-8859-1"));
             ilst.write(baos.toByteArray());
 
             //Put into ByteBuffer

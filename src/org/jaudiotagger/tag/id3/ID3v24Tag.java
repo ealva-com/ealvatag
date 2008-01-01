@@ -18,8 +18,8 @@ package org.jaudiotagger.tag.id3;
 import org.jaudiotagger.FileConstants;
 import org.jaudiotagger.audio.mp3.MP3File;
 import org.jaudiotagger.tag.*;
+import org.jaudiotagger.tag.reference.GenreTypes;
 import org.jaudiotagger.tag.id3.framebody.*;
-import org.jaudiotagger.tag.id3.valuepair.GenreTypes;
 import org.jaudiotagger.tag.lyrics3.AbstractLyrics3;
 import org.jaudiotagger.tag.lyrics3.Lyrics3v2;
 import org.jaudiotagger.tag.lyrics3.Lyrics3v2Field;
@@ -27,7 +27,6 @@ import org.jaudiotagger.tag.lyrics3.Lyrics3v2Field;
 import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
-import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.channels.WritableByteChannel;
@@ -1051,7 +1050,6 @@ public class ID3v24Tag extends AbstractID3v2Tag
     }
 
 
-
     /**
      * Create Frame for Id3 Key
      * <p/>
@@ -1071,7 +1069,7 @@ public class ID3v24Tag extends AbstractID3v2Tag
         {
             throw new KeyNotFoundException();
         }
-         return super.doCreateTagField(new FrameAndSubId(id3Key.getFrameId(),id3Key.getSubId()),value);
+        return super.doCreateTagField(new FrameAndSubId(id3Key.getFrameId(), id3Key.getSubId()), value);
     }
 
     /**
@@ -1086,10 +1084,9 @@ public class ID3v24Tag extends AbstractID3v2Tag
         {
             throw new KeyNotFoundException();
         }
-        return super.doGetFirst(new FrameAndSubId(id3v24FieldKey.getFrameId(),id3v24FieldKey.getSubId()));
+        return super.doGetFirst(new FrameAndSubId(id3v24FieldKey.getFrameId(), id3v24FieldKey.getSubId()));
     }
 
-    
 
     /**
      * Delete fields with this id3v24FieldKey
@@ -1104,7 +1101,7 @@ public class ID3v24Tag extends AbstractID3v2Tag
         {
             throw new KeyNotFoundException();
         }
-        super.doDeleteTagField(new FrameAndSubId(id3v24FieldKey.getFrameId(),id3v24FieldKey.getSubId()));
+        super.doDeleteTagField(new FrameAndSubId(id3v24FieldKey.getFrameId(), id3v24FieldKey.getSubId()));
     }
 
 
@@ -1115,7 +1112,7 @@ public class ID3v24Tag extends AbstractID3v2Tag
         {
             throw new KeyNotFoundException();
         }
-        return new FrameAndSubId(id3v24FieldKey.getFrameId(),id3v24FieldKey.getSubId());
+        return new FrameAndSubId(id3v24FieldKey.getFrameId(), id3v24FieldKey.getSubId());
     }
 
     protected ID3Frames getID3Frames()

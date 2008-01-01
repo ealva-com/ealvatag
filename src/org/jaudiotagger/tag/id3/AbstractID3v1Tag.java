@@ -33,13 +33,12 @@ import java.util.regex.Pattern;
 
 /**
  * This is the abstract base class for all ID3v1 tags.
- *  
+ *
  * @author : Eric Farng
  * @author : Paul Taylor
- *
  */
 abstract public class AbstractID3v1Tag
-    extends AbstractID3Tag
+        extends AbstractID3Tag
 {
 
     //Logger
@@ -63,7 +62,7 @@ abstract public class AbstractID3v1Tag
 
     //Tag ID as held in file
     protected static final byte[] TAG_ID =
-        {(byte) 'T', (byte) 'A', (byte) 'G'};
+            {(byte) 'T', (byte) 'A', (byte) 'G'};
 
     //Fields Lengths common to v1 and v1.1 tags
     protected static final int TAG_LENGTH = 128;
@@ -108,13 +107,13 @@ abstract public class AbstractID3v1Tag
      * @throws IOException if there was a problem accessing the file
      */
     public void delete(RandomAccessFile file)
-        throws IOException
+            throws IOException
     {
         //Read into Byte Buffer
         logger.info("deleting tag from file if exists");
 
         FileChannel fc;
-        ByteBuffer  byteBuffer;
+        ByteBuffer byteBuffer;
 
 
         fc = file.getChannel();
@@ -129,7 +128,7 @@ abstract public class AbstractID3v1Tag
         }
         else
         {
-             logger.info("unable to find v1 tag to delete");
+            logger.info("unable to find v1 tag to delete");
         }
     }
 }

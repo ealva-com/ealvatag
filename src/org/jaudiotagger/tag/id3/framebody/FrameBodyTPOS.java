@@ -23,17 +23,17 @@ import java.nio.ByteBuffer;
 /**
  * Part of a set Text information frame.
  * <p>The 'Part of a set' frame is a numeric string that describes which part of a set the audio came from. This frame is used if the source described in the "TALB" frame is divided into several mediums, e.g. a double CD. The value may be extended with a "/" character and a numeric string containing the total number of parts in the set. E.g. "1/2".
- * 
+ * <p/>
  * <p>For more details, please refer to the ID3 specifications:
  * <ul>
  * <li><a href="http://www.id3.org/id3v2.3.0.txt">ID3 v2.3.0 Spec</a>
  * </ul>
- * 
+ *
  * @author : Paul Taylor
  * @author : Eric Farng
  * @version $Id$
  */
-public class FrameBodyTPOS extends AbstractFrameBodyTextInfo implements ID3v23FrameBody,ID3v24FrameBody
+public class FrameBodyTPOS extends AbstractFrameBodyTextInfo implements ID3v23FrameBody, ID3v24FrameBody
 {
     /**
      * Creates a new FrameBodyTPOS datatype.
@@ -50,8 +50,8 @@ public class FrameBodyTPOS extends AbstractFrameBodyTextInfo implements ID3v23Fr
     /**
      * Creates a new FrameBodyTPOS datatype.
      *
-     * @param textEncoding 
-     * @param text         
+     * @param textEncoding
+     * @param text
      */
     public FrameBodyTPOS(byte textEncoding, String text)
     {
@@ -61,19 +61,19 @@ public class FrameBodyTPOS extends AbstractFrameBodyTextInfo implements ID3v23Fr
     /**
      * Creates a new FrameBodyTPOS datatype.
      *
-     * @throws java.io.IOException 
-     * @throws InvalidTagException 
+     * @throws java.io.IOException
+     * @throws InvalidTagException
      */
     public FrameBodyTPOS(ByteBuffer byteBuffer, int frameSize)
-        throws InvalidTagException
+            throws InvalidTagException
     {
         super(byteBuffer, frameSize);
     }
 
-  /**
-      * The ID3v2 frame identifier
-      *
-      * @return the ID3v2 frame identifier  for this frame type
+    /**
+     * The ID3v2 frame identifier
+     *
+     * @return the ID3v2 frame identifier  for this frame type
      */
     public String getIdentifier()
     {

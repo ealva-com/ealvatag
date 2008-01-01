@@ -41,13 +41,13 @@ public class ID3v24Frame extends AbstractID3v2Frame
 {
     Pattern validFrameIdentifier = Pattern.compile("[A-Z][0-9A-Z]{3}");
 
-    protected static final int FRAME_DATA_LENGTH_SIZE =4;
+    protected static final int FRAME_DATA_LENGTH_SIZE = 4;
 
     protected static final int FRAME_ID_SIZE = 4;
     protected static final int FRAME_FLAGS_SIZE = 2;
     protected static final int FRAME_SIZE_SIZE = 4;
-    protected static final int FRAME_ENCRYPTION_INDICATOR_SIZE =1;
-    protected static final int FRAME_GROUPING_INDICATOR_SIZE =1;
+    protected static final int FRAME_ENCRYPTION_INDICATOR_SIZE = 1;
+    protected static final int FRAME_GROUPING_INDICATOR_SIZE = 1;
 
     protected static final int FRAME_HEADER_SIZE = FRAME_ID_SIZE + FRAME_SIZE_SIZE + FRAME_FLAGS_SIZE;
 
@@ -79,12 +79,12 @@ public class ID3v24Frame extends AbstractID3v2Frame
     public ID3v24Frame(ID3v24Frame frame)
     {
         super(frame);
-        statusFlags     = new StatusFlags(frame.getStatusFlags().getOriginalFlags());
-        encodingFlags   = new EncodingFlags(frame.getEncodingFlags().getFlags());
+        statusFlags = new StatusFlags(frame.getStatusFlags().getOriginalFlags());
+        encodingFlags = new EncodingFlags(frame.getEncodingFlags().getFlags());
     }
 
-     private void createV24FrameFromV23Frame(ID3v23Frame frame)throws InvalidFrameException
-     {
+    private void createV24FrameFromV23Frame(ID3v23Frame frame) throws InvalidFrameException
+    {
         // Is it a straight conversion e.g TALB - TALB
         identifier = ID3Tags.convertFrameID23To24(frame.getIdentifier());
         if (identifier != null)
@@ -126,7 +126,7 @@ public class ID3v24Frame extends AbstractID3v2Frame
             logger.info("V3:Unknown:Orig id is:" + frame.getIdentifier() + ":New id is:" + identifier);
             return;
         }
-     }
+    }
 
     /**
      * Creates a new ID3v2_4Frame datatype based on another frame of different version
@@ -136,7 +136,7 @@ public class ID3v24Frame extends AbstractID3v2Frame
      * @param frame to construct a new frame from
      */
     public ID3v24Frame(AbstractID3v2Frame frame) throws InvalidFrameException
-    {           
+    {
         //Should not be called
         if ((frame instanceof ID3v24Frame == true))
         {
@@ -160,7 +160,7 @@ public class ID3v24Frame extends AbstractID3v2Frame
         // unknown.
         if (frame instanceof ID3v23Frame)
         {
-            createV24FrameFromV23Frame((ID3v23Frame)frame);
+            createV24FrameFromV23Frame((ID3v23Frame) frame);
         }
         else if (frame instanceof ID3v22Frame)
         {
@@ -178,7 +178,7 @@ public class ID3v24Frame extends AbstractID3v2Frame
      * @throws InvalidTagException
      */
     public ID3v24Frame(Lyrics3v2Field field)
-        throws InvalidTagException
+            throws InvalidTagException
     {
         String id = field.getIdentifier();
         String value;
@@ -196,14 +196,14 @@ public class ID3v24Frame extends AbstractID3v2Frame
             boolean hasTimeStamp = lyric.hasTimeStamp();
             // we'll create only one frame here.
             // if there is any timestamp at all, we will create a sync'ed frame.
-            sync = new FrameBodySYLT((byte) 0, "ENG", (byte) 2, (byte) 1, "",new byte[0]);
+            sync = new FrameBodySYLT((byte) 0, "ENG", (byte) 2, (byte) 1, "", new byte[0]);
             unsync = new FrameBodyUSLT((byte) 0, "ENG", "", "");
             while (iterator.hasNext())
             {
                 line = (Lyrics3Line) iterator.next();
                 if (hasTimeStamp)
                 {
-                   // sync.addLyric(line);
+                    // sync.addLyric(line);
                 }
                 else
                 {
@@ -266,24 +266,23 @@ public class ID3v24Frame extends AbstractID3v2Frame
      *
      * @param byteBuffer to read from
      */
-    public ID3v24Frame(ByteBuffer byteBuffer,String loggingFilename)
-        throws InvalidFrameException
+    public ID3v24Frame(ByteBuffer byteBuffer, String loggingFilename)
+            throws InvalidFrameException
     {
-       setLoggingFilename(loggingFilename);
-       read(byteBuffer);
+        setLoggingFilename(loggingFilename);
+        read(byteBuffer);
     }
 
     /**
      * Creates a new ID3v24Frame datatype by reading from byteBuffer.
      *
      * @param byteBuffer to read from
-     *
      * @deprecated use {@link #ID3v24Frame(ByteBuffer,String)} instead
      */
     public ID3v24Frame(ByteBuffer byteBuffer)
-        throws InvalidFrameException
+            throws InvalidFrameException
     {
-       this(byteBuffer,"");
+        this(byteBuffer, "");
     }
 
     /**
@@ -318,82 +317,85 @@ public class ID3v24Frame extends AbstractID3v2Frame
      * @param byteBuffer to read the frame from
      */
     public void read(ByteBuffer byteBuffer)
-        throws InvalidFrameException
+            throws InvalidFrameException
     {
         byte[] buffer = new byte[FRAME_ID_SIZE];
 
         if (byteBuffer.position() + FRAME_HEADER_SIZE >= byteBuffer.limit())
         {
-            logger.warning(getLoggingFilename()+":"+"No space to find another frame:");
-            throw new InvalidFrameException(getLoggingFilename()+":"+"No space to find another frame");
+            logger.warning(getLoggingFilename() + ":" + "No space to find another frame:");
+            throw new InvalidFrameException(getLoggingFilename() + ":" + "No space to find another frame");
         }
 
         //Read the Frame Identifier
         byteBuffer.get(buffer, 0, FRAME_ID_SIZE);
         identifier = new String(buffer);
-        logger.fine(getLoggingFilename()+":"+"Identifier is" + identifier);
+        logger.fine(getLoggingFilename() + ":" + "Identifier is" + identifier);
 
         //Is this a valid identifier?
         if (isValidID3v2FrameIdentifier(identifier) == false)
         {
             //If not valid move file pointer back to one byte after
             //the original check so can try again.
-            logger.info(getLoggingFilename()+":"+"Invalid identifier:" + identifier);
+            logger.info(getLoggingFilename() + ":" + "Invalid identifier:" + identifier);
             byteBuffer.position(byteBuffer.position() - (FRAME_ID_SIZE - 1));
             throw new InvalidFrameIdentifierException(identifier + " is not a valid ID3v2.40 frame");
         }
-
 
         //Read frame size as syncsafe integer
         frameSize = ID3SyncSafeInteger.bufferToValue(byteBuffer);
 
         if (frameSize < 0)
         {
-            logger.warning(getLoggingFilename()+":"+"Invalid Frame size:" + identifier);
+            logger.warning(getLoggingFilename() + ":" + "Invalid Frame size:" + identifier);
             throw new InvalidFrameException(identifier + " is invalid frame");
         }
         else if (frameSize == 0)
         {
-            logger.warning(getLoggingFilename()+":"+"Empty Frame:" + identifier);
+            logger.warning(getLoggingFilename() + ":" + "Empty Frame:" + identifier);
+            //We dont process this frame or add to framemap becuase contains no useful information
+            //Skip the two flag bytes so in correct position for subsequent frames
+            byteBuffer.get();
+            byteBuffer.get(); 
             throw new EmptyFrameException(identifier + " is empty frame");
         }
         else if (frameSize > (byteBuffer.remaining() - FRAME_FLAGS_SIZE))
         {
-            logger.warning(getLoggingFilename()+":"+"Invalid Frame size larger than size before mp3 audio:" + identifier);
+            logger.warning(getLoggingFilename() + ":" + "Invalid Frame size larger than size before mp3 audio:" + identifier);
             throw new InvalidFrameException(identifier + " is invalid frame");
         }
 
-        if(frameSize>ID3SyncSafeInteger.MAX_SAFE_SIZE)
+        if (frameSize > ID3SyncSafeInteger.MAX_SAFE_SIZE)
         {
             //Set Just after size field this is where we want to be when we leave this if statement
-            int currentPosition     = byteBuffer.position();
+            int currentPosition = byteBuffer.position();
 
             //Read as nonsync safe integer
-            byteBuffer.position(currentPosition  - FRAME_ID_SIZE);
+            byteBuffer.position(currentPosition - FRAME_ID_SIZE);
             int nonSyncSafeFrameSize = byteBuffer.getInt();
 
             //Is the frame size syncsafe, should always be BUT some encoders such as Itunes do not do it properly
             //so do an easy check now.
-            byteBuffer.position(currentPosition  - FRAME_ID_SIZE);
+            byteBuffer.position(currentPosition - FRAME_ID_SIZE);
             boolean isNotSyncSafe = ID3SyncSafeInteger.isBufferNotSyncSafe(byteBuffer);
-                        
+
             //not relative so need to move position
             byteBuffer.position(currentPosition);
 
-            if(isNotSyncSafe)
+            if (isNotSyncSafe)
             {
-                logger.warning(getLoggingFilename()+":"+"Frame size is NOT stored as a sync safe integer:" + identifier);
+                logger.warning(getLoggingFilename() + ":" + "Frame size is NOT stored as a sync safe integer:" + identifier);
 
                 //This will return a larger frame size so need to check against buffer size if too large then we are
                 //buggered , give up
-                if (nonSyncSafeFrameSize > (byteBuffer.remaining() - - FRAME_FLAGS_SIZE))
+                if (nonSyncSafeFrameSize > (byteBuffer.remaining() - -FRAME_FLAGS_SIZE))
                 {
-                    logger.warning(getLoggingFilename()+":"+"Invalid Frame size larger than size before mp3 audio:" + identifier);
+                    logger.warning(getLoggingFilename() + ":" + "Invalid Frame size larger than size before mp3 audio:" + identifier);
                     throw new InvalidFrameException(identifier + " is invalid frame");
                 }
                 else
                 {
-                    frameSize =  nonSyncSafeFrameSize;
+                    frameSize = nonSyncSafeFrameSize;
                 }
             }
             else
@@ -402,10 +404,10 @@ public class ID3v24Frame extends AbstractID3v2Frame
                 //frame to see if find a valid frame header
 
                 //Read the Frame Identifier
-                byte[] readAheadbuffer  = new byte[FRAME_ID_SIZE];
+                byte[] readAheadbuffer = new byte[FRAME_ID_SIZE];
                 byteBuffer.position(currentPosition + frameSize + FRAME_FLAGS_SIZE);
 
-                if(byteBuffer.remaining()<FRAME_ID_SIZE)
+                if (byteBuffer.remaining() < FRAME_ID_SIZE)
                 {
                     //There is no padding or framedata we are at end so assume syncsafe
                     //reset position to just after framesize
@@ -419,11 +421,11 @@ public class ID3v24Frame extends AbstractID3v2Frame
                     byteBuffer.position(currentPosition);
 
                     String readAheadIdentifier = new String(readAheadbuffer);
-                    if(isValidID3v2FrameIdentifier(readAheadIdentifier))
+                    if (isValidID3v2FrameIdentifier(readAheadIdentifier))
                     {
                         //Everything ok, so continue
                     }
-                    else if(ID3SyncSafeInteger.isBufferEmpty(readAheadbuffer))
+                    else if (ID3SyncSafeInteger.isBufferEmpty(readAheadbuffer))
                     {
                         //no data found so assume entered padding in which case assume it is last
                         //frame and we are ok
@@ -441,32 +443,32 @@ public class ID3v24Frame extends AbstractID3v2Frame
                         }
                         else
                         {
-                            readAheadbuffer  = new byte[FRAME_ID_SIZE];
+                            readAheadbuffer = new byte[FRAME_ID_SIZE];
                             byteBuffer.position(currentPosition + nonSyncSafeFrameSize + FRAME_FLAGS_SIZE);
 
-                            if(byteBuffer.remaining() >= FRAME_ID_SIZE)
+                            if (byteBuffer.remaining() >= FRAME_ID_SIZE)
                             {
                                 byteBuffer.get(readAheadbuffer, 0, FRAME_ID_SIZE);
-                                readAheadIdentifier = new String(readAheadbuffer);                                                                  
+                                readAheadIdentifier = new String(readAheadbuffer);
 
                                 //reset position to just after framesize
                                 byteBuffer.position(currentPosition);
 
                                 //ok found a valid identifier using non-syncsafe so assume non-syncsafe size
                                 //and continue
-                                if(isValidID3v2FrameIdentifier(readAheadIdentifier))
+                                if (isValidID3v2FrameIdentifier(readAheadIdentifier))
                                 {
-                                    frameSize =  nonSyncSafeFrameSize;
-                                    logger.warning(getLoggingFilename()+":"+"Assuming frame size is NOT stored as a sync safe integer:" + identifier);
+                                    frameSize = nonSyncSafeFrameSize;
+                                    logger.warning(getLoggingFilename() + ":" + "Assuming frame size is NOT stored as a sync safe integer:" + identifier);
                                 }
                                 //no data found so assume entered padding in which case assume it is last
                                 //frame and we are ok whereas we didnt hit padding when using syncsafe integer
                                 //or we wouldnt have got to this point. So assume syncsafe ineteger ended within
                                 //the frame data whereas this has reached end of frames.
-                                else if(ID3SyncSafeInteger.isBufferEmpty(readAheadbuffer))
+                                else if (ID3SyncSafeInteger.isBufferEmpty(readAheadbuffer))
                                 {
-                                    frameSize =  nonSyncSafeFrameSize;
-                                    logger.warning(getLoggingFilename()+":"+"Assuming frame size is NOT stored as a sync safe integer:" + identifier);
+                                    frameSize = nonSyncSafeFrameSize;
+                                    logger.warning(getLoggingFilename() + ":" + "Assuming frame size is NOT stored as a sync safe integer:" + identifier);
                                 }
                                 //invalid so assume syncsafe as that is is the standard
                                 else
@@ -481,9 +483,9 @@ public class ID3v24Frame extends AbstractID3v2Frame
 
                                 //If the unsync framesize matches exactly the remaining bytes then assume it has the
                                 //correct size for the last frame
-                                if(byteBuffer.remaining() == 0)
+                                if (byteBuffer.remaining() == 0)
                                 {
-                                    frameSize =  nonSyncSafeFrameSize;
+                                    frameSize = nonSyncSafeFrameSize;
                                 }
                                 //Inconclusive stick with syncsafe
                                 else
@@ -507,39 +509,39 @@ public class ID3v24Frame extends AbstractID3v2Frame
         //try to read the frame body data
         int extraHeaderBytesCount = 0;
         boolean isDataLengthindicatorRead = false;
-        if(((EncodingFlags)encodingFlags).isGrouping())
+        if (((EncodingFlags) encodingFlags).isGrouping())
         {
             extraHeaderBytesCount = ID3v24Frame.FRAME_GROUPING_INDICATOR_SIZE;
             byteBuffer.get();
         }
 
-        if(((EncodingFlags)encodingFlags).isCompression())
+        if (((EncodingFlags) encodingFlags).isCompression())
         {
             //Read the sync safe size field
             int datalengthSize = ID3SyncSafeInteger.bufferToValue(byteBuffer);
-            logger.info(getLoggingFilename()+":"+"Frame Size Is:"+ frameSize + "Data Length Size:"+datalengthSize);
+            logger.info(getLoggingFilename() + ":" + "Frame Size Is:" + frameSize + "Data Length Size:" + datalengthSize);
             extraHeaderBytesCount += ID3v24Frame.FRAME_DATA_LENGTH_SIZE;
-            isDataLengthindicatorRead=true;
+            isDataLengthindicatorRead = true;
         }
 
-        if(((EncodingFlags)encodingFlags).isEncryption())
+        if (((EncodingFlags) encodingFlags).isEncryption())
         {
             //Read the Encryption byte, but do nothing with it
             extraHeaderBytesCount += ID3v24Frame.FRAME_ENCRYPTION_INDICATOR_SIZE;
             byteBuffer.get();
         }
 
-        if(((EncodingFlags)encodingFlags).isDataLengthIndicator())
+        if (((EncodingFlags) encodingFlags).isDataLengthIndicator())
         {
             //There is only data length indicator it may have already been read depending on what flags
             //are set
-            if(!isDataLengthindicatorRead)
+            if (!isDataLengthindicatorRead)
             {
                 //Read the sync safe size field
                 int datalengthSize = ID3SyncSafeInteger.bufferToValue(byteBuffer);
                 //Read the Grouping byte, but do nothing with it
                 extraHeaderBytesCount += FRAME_DATA_LENGTH_SIZE;
-                logger.info(getLoggingFilename()+":"+"Frame Size Is:"+ frameSize + "Data Length Size:"+datalengthSize);
+                logger.info(getLoggingFilename() + ":" + "Frame Size Is:" + frameSize + "Data Length Size:" + datalengthSize);
             }
         }
 
@@ -551,33 +553,33 @@ public class ID3v24Frame extends AbstractID3v2Frame
         frameBodyBuffer.limit(realFrameSize);
 
         //Do we need to synchronize the frame body
-        int syncSize=realFrameSize;
-        if(((EncodingFlags)encodingFlags).isUnsynchronised())
+        int syncSize = realFrameSize;
+        if (((EncodingFlags) encodingFlags).isUnsynchronised())
         {
             //We only want to synchronize the buffer upto the end of this frame (remember this
             //buffer contains the remainder of this tag not just this frame), and we cant just
             //create a new buffer because when this method returns the position of the buffer is used
             //to look for the next frame, so we need to modify the buffer. The action of synchronizing causes
             //bytes to be dropped so the existing buffer is large enough to hold the modifications
-            frameBodyBuffer=ID3Unsynchronization.synchronize(frameBodyBuffer);
+            frameBodyBuffer = ID3Unsynchronization.synchronize(frameBodyBuffer);
             syncSize = frameBodyBuffer.limit();
-            logger.info(getLoggingFilename()+":"+"Frame Size After Syncing is:"+ syncSize);
+            logger.info(getLoggingFilename() + ":" + "Frame Size After Syncing is:" + syncSize);
         }
 
         //Read the body data
         try
         {
-            frameBody = readBody(identifier,  frameBodyBuffer, syncSize);
+            frameBody = readBody(identifier, frameBodyBuffer, syncSize);
             if (!(frameBody instanceof ID3v24FrameBody))
             {
-                logger.info(getLoggingFilename()+":"+"Converted frame body with:" + identifier + " to deprecated framebody");
+                logger.info(getLoggingFilename() + ":" + "Converted frame body with:" + identifier + " to deprecated framebody");
                 frameBody = new FrameBodyDeprecated((AbstractID3v2FrameBody) frameBody);
             }
         }
         finally
         {
             //Update position of main buffer, so no attempt is made to reread  these bytes
-            byteBuffer.position(byteBuffer.position()+realFrameSize);
+            byteBuffer.position(byteBuffer.position() + realFrameSize);
         }
     }
 
@@ -603,18 +605,18 @@ public class ID3v24Frame extends AbstractID3v2Frame
 
         //Does it need unsynchronizing, and are we allowing unsychronizing
         byte[] bodyBuffer = bodyOutputStream.toByteArray();
-        if(TagOptionSingleton.getInstance().isUnsyncTags())
+        if (TagOptionSingleton.getInstance().isUnsyncTags())
         {
             unsynchronization = ID3Unsynchronization.requiresUnsynchronization(bodyBuffer);
         }
         else
         {
-            unsynchronization=false;
+            unsynchronization = false;
         }
-        if(unsynchronization)
+        if (unsynchronization)
         {
-            bodyBuffer=ID3Unsynchronization.unsynchronize(bodyBuffer);
-            logger.info("bodybytebuffer:sizeafterunsynchronisation:"+bodyBuffer.length);
+            bodyBuffer = ID3Unsynchronization.unsynchronize(bodyBuffer);
+            logger.info("bodybytebuffer:sizeafterunsynchronisation:" + bodyBuffer.length);
         }
 
         //Write Frame Header
@@ -624,7 +626,7 @@ public class ID3v24Frame extends AbstractID3v2Frame
         {
             identifier = identifier + ' ';
         }
-        headerBuffer.put(Utils.getDefaultBytes(getIdentifier(),"ISO-8859-1"), 0, FRAME_ID_SIZE);
+        headerBuffer.put(Utils.getDefaultBytes(getIdentifier(), "ISO-8859-1"), 0, FRAME_ID_SIZE);
 
         //Write Frame Size based on size of body buffer (if it has been unsynced then it size
         //will have increased accordingly
@@ -639,9 +641,9 @@ public class ID3v24Frame extends AbstractID3v2Frame
         //Enclosing Flags, first reset
         encodingFlags.resetFlags();
         //Encoding we only support unsynchrnization
-        if(unsynchronization)
+        if (unsynchronization)
         {
-            ((ID3v24Frame.EncodingFlags)encodingFlags).setUnsynchronised();
+            ((ID3v24Frame.EncodingFlags) encodingFlags).setUnsynchronised();
         }
         headerBuffer.put(encodingFlags.getFlags());
 
@@ -653,10 +655,10 @@ public class ID3v24Frame extends AbstractID3v2Frame
             //Add bodybuffer to the Byte Array Output Stream
             tagBuffer.write(bodyBuffer);
         }
-        catch(IOException ioe)
+        catch (IOException ioe)
         {
-             //This could never happen coz not writing to file, so convert to RuntimeException
-             throw new RuntimeException(ioe);
+            //This could never happen coz not writing to file, so convert to RuntimeException
+            throw new RuntimeException(ioe);
         }
     }
 
@@ -681,7 +683,7 @@ public class ID3v24Frame extends AbstractID3v2Frame
      * Make adjustments if necessary based on frame type and specification.
      */
     class StatusFlags
-        extends AbstractID3v2Frame.StatusFlags
+            extends AbstractID3v2Frame.StatusFlags
     {
         public static final String TYPE_TAGALTERPRESERVATION = "typeTagAlterPreservation";
         public static final String TYPE_FILEALTERPRESERVATION = "typeFileAlterPreservation";
@@ -780,28 +782,28 @@ public class ID3v24Frame extends AbstractID3v2Frame
      * This represents a frame headers Encoding Flags
      */
     class EncodingFlags
-        extends AbstractID3v2Frame.EncodingFlags
+            extends AbstractID3v2Frame.EncodingFlags
     {
-        public static final String TYPE_COMPRESSION             = "compression";
-        public static final String TYPE_ENCRYPTION              = "encryption";
-        public static final String TYPE_GROUPIDENTITY           = "groupidentity";
-        public static final String TYPE_FRAMEUNSYNCHRONIZATION  = "frameUnsynchronisation";
-        public static final String TYPE_DATALENGTHINDICATOR     = "dataLengthIndicator";
+        public static final String TYPE_COMPRESSION = "compression";
+        public static final String TYPE_ENCRYPTION = "encryption";
+        public static final String TYPE_GROUPIDENTITY = "groupidentity";
+        public static final String TYPE_FRAMEUNSYNCHRONIZATION = "frameUnsynchronisation";
+        public static final String TYPE_DATALENGTHINDICATOR = "dataLengthIndicator";
 
-       /**
+        /**
          * Frame is part of a group
-        */
-       public static final int MASK_GROUPING_IDENTITY = FileConstants.BIT6;
+         */
+        public static final int MASK_GROUPING_IDENTITY = FileConstants.BIT6;
 
-       /**
-        * Frame is compressed
-        */
-       public static final int MASK_COMPRESSION = FileConstants.BIT3;
+        /**
+         * Frame is compressed
+         */
+        public static final int MASK_COMPRESSION = FileConstants.BIT3;
 
-       /**
-        * Frame is encrypted
-        */
-       public static final int MASK_ENCRYPTION = FileConstants.BIT2;
+        /**
+         * Frame is encrypted
+         */
+        public static final int MASK_ENCRYPTION = FileConstants.BIT2;
 
         /**
          * Unsynchronisation
@@ -834,27 +836,27 @@ public class ID3v24Frame extends AbstractID3v2Frame
         {
             if (isCompression())
             {
-                logger.warning(getLoggingFilename()+":"+identifier+" is compressed");
+                logger.warning(getLoggingFilename() + ":" + identifier + " is compressed");
             }
 
             if (isEncryption())
             {
-                logger.warning(getLoggingFilename()+":"+identifier+" is encrypted");
+                logger.warning(getLoggingFilename() + ":" + identifier + " is encrypted");
             }
 
             if (isGrouping())
             {
-                logger.warning(getLoggingFilename()+":"+identifier+" is grouped");
+                logger.warning(getLoggingFilename() + ":" + identifier + " is grouped");
             }
 
             if (isUnsynchronised())
             {
-                logger.warning(getLoggingFilename()+":"+identifier+" is unsynchronised");
+                logger.warning(getLoggingFilename() + ":" + identifier + " is unsynchronised");
             }
 
-             if (isDataLengthIndicator())
+            if (isDataLengthIndicator())
             {
-                logger.warning(getLoggingFilename()+":"+identifier+" has a data length indicator");
+                logger.warning(getLoggingFilename() + ":" + identifier + " has a data length indicator");
             }
         }
 
@@ -865,27 +867,27 @@ public class ID3v24Frame extends AbstractID3v2Frame
 
         public boolean isCompression()
         {
-            return (flags & MASK_COMPRESSION) >0;
+            return (flags & MASK_COMPRESSION) > 0;
         }
 
         public boolean isEncryption()
         {
-            return (flags & MASK_ENCRYPTION) >0;
+            return (flags & MASK_ENCRYPTION) > 0;
         }
 
         public boolean isGrouping()
         {
-            return (flags & MASK_GROUPING_IDENTITY) >0;
+            return (flags & MASK_GROUPING_IDENTITY) > 0;
         }
 
         public boolean isUnsynchronised()
         {
-            return (flags & MASK_FRAME_UNSYNCHRONIZATION) >0;
+            return (flags & MASK_FRAME_UNSYNCHRONIZATION) > 0;
         }
 
         public boolean isDataLengthIndicator()
         {
-            return (flags & MASK_DATA_LENGTH_INDICATOR) >0;
+            return (flags & MASK_DATA_LENGTH_INDICATOR) > 0;
         }
 
         public void setUnsynchronised()
@@ -905,7 +907,7 @@ public class ID3v24Frame extends AbstractID3v2Frame
         }
     }
 
-     /**
+    /**
      * Does the frame identifier meet the syntax for a idv3v2 frame identifier.
      * must start with a capital letter and only contain capital letters and numbers
      *
@@ -931,8 +933,7 @@ public class ID3v24Frame extends AbstractID3v2Frame
         MP3File.getStructureFormatter().closeHeadingElement(TYPE_FRAME);
     }
 
-      /**
-     *
+    /**
      * @return true if considered a common frame
      */
     public boolean isCommon()
@@ -940,8 +941,7 @@ public class ID3v24Frame extends AbstractID3v2Frame
         return ID3v24Frames.getInstanceOf().isCommon(getId());
     }
 
-     /**
-     *
+    /**
      * @return true if considered a common frame
      */
     public boolean isBinary()

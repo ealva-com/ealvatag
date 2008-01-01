@@ -26,8 +26,8 @@ import java.nio.ByteBuffer;
 
 /**
  * Commercial frame.
- * 
- * <p>
+ * <p/>
+ * <p/>
  * This frame enables several competing offers in the same tag by
  * bundling all needed information. That makes this frame rather complex
  * but it's an easier solution than if one tries to achieve the same
@@ -76,17 +76,17 @@ import java.nio.ByteBuffer;
  * <tr><td>Picture MIME type</td><td>&lt;string&gt; $00           </td></tr>
  * <tr><td>Seller logo   </td><td>&lt;binary data&gt;             </td></tr>
  * </table></p>
- * 
+ * <p/>
  * <p>For more details, please refer to the ID3 specifications:
  * <ul>
  * <li><a href="http://www.id3.org/id3v2.3.0.txt">ID3 v2.3.0 Spec</a>
  * </ul>
- * 
+ *
  * @author : Paul Taylor
  * @author : Eric Farng
  * @version $Id$
  */
-public class FrameBodyCOMR extends AbstractID3v2FrameBody implements ID3v24FrameBody,ID3v23FrameBody
+public class FrameBodyCOMR extends AbstractID3v2FrameBody implements ID3v24FrameBody, ID3v23FrameBody
 {
     /**
      * Creates a new FrameBodyCOMR datatype.
@@ -112,15 +112,15 @@ public class FrameBodyCOMR extends AbstractID3v2FrameBody implements ID3v24Frame
     /**
      * Creates a new FrameBodyCOMR datatype.
      *
-     * @param textEncoding 
-     * @param priceString  
-     * @param validUntil   
-     * @param contactUrl   
-     * @param recievedAs   
-     * @param nameOfSeller 
-     * @param description  
-     * @param mimeType     
-     * @param sellerLogo   
+     * @param textEncoding
+     * @param priceString
+     * @param validUntil
+     * @param contactUrl
+     * @param recievedAs
+     * @param nameOfSeller
+     * @param description
+     * @param mimeType
+     * @param sellerLogo
      */
     public FrameBodyCOMR(byte textEncoding, String priceString, String validUntil, String contactUrl, byte recievedAs, String nameOfSeller, String description, String mimeType, byte[] sellerLogo)
     {
@@ -141,25 +141,23 @@ public class FrameBodyCOMR extends AbstractID3v2FrameBody implements ID3v24Frame
      * @throws InvalidTagException if unable to create framebody from buffer
      */
     public FrameBodyCOMR(ByteBuffer byteBuffer, int frameSize)
-        throws InvalidTagException
+            throws InvalidTagException
     {
         super(byteBuffer, frameSize);
     }
 
     /**
-      * The ID3v2 frame identifier
-      *
-      * @return the ID3v2 frame identifier  for this frame type
+     * The ID3v2 frame identifier
+     *
+     * @return the ID3v2 frame identifier  for this frame type
      */
     public String getIdentifier()
     {
-        return ID3v24Frames.FRAME_ID_COMMERCIAL_FRAME;               
+        return ID3v24Frames.FRAME_ID_COMMERCIAL_FRAME;
     }
 
     /**
-     * 
-     *
-     * @return 
+     * @return
      */
     public String getOwner()
     {
@@ -167,16 +165,16 @@ public class FrameBodyCOMR extends AbstractID3v2FrameBody implements ID3v24Frame
     }
 
     /**
-     * 
-     *
-     * @param description 
+     * @param description
      */
     public void getOwner(String description)
     {
         setObjectValue(DataTypes.OBJ_OWNER, description);
     }
 
-    /** If the seller or description cannot be encoded using current encoder, change the encoder */
+    /**
+     * If the seller or description cannot be encoded using current encoder, change the encoder
+     */
     public void write(ByteArrayOutputStream tagBuffer)
     {
         if (((AbstractString) getObject(DataTypes.OBJ_SELLER_NAME)).canBeEncoded() == false)
@@ -191,7 +189,7 @@ public class FrameBodyCOMR extends AbstractID3v2FrameBody implements ID3v24Frame
     }
 
     /**
-     * 
+     *
      */
     protected void setupObjectList()
     {

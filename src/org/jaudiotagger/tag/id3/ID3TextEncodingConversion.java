@@ -17,22 +17,22 @@ public class ID3TextEncodingConversion
     /**
      * Check the text encoding is valid for this header type and is appropriate for
      * user text encoding options.                                             *
-     *
+     * <p/>
      * This is called before writing any frames that use text encoding
      *
-     * @param header used to identify the ID3tagtype
+     * @param header       used to identify the ID3tagtype
      * @param textEncoding currently set
      * @return valid encoding according to version type and user options
      */
-    public static byte getTextEncoding(AbstractTagFrame header,byte textEncoding)
+    public static byte getTextEncoding(AbstractTagFrame header, byte textEncoding)
     {
 
         //Should not happen, assume v23 and provide a warning
-        if(header==null)
+        if (header == null)
         {
             logger.warning("Header has not yet been set for this framebody");
 
-            if(TagOptionSingleton.getInstance().isResetTextEncodingForExistingFrames())
+            if (TagOptionSingleton.getInstance().isResetTextEncodingForExistingFrames())
             {
                 return TagOptionSingleton.getInstance().getId3v23DefaultTextEncoding();
             }
@@ -41,9 +41,9 @@ public class ID3TextEncodingConversion
                 return convertV24textEncodingToV23textEncoding(textEncoding);
             }
         }
-        else if(header instanceof ID3v24Frame)
+        else if (header instanceof ID3v24Frame)
         {
-            if(TagOptionSingleton.getInstance().isResetTextEncodingForExistingFrames())
+            if (TagOptionSingleton.getInstance().isResetTextEncodingForExistingFrames())
             {
                 //Replace with default
                 return TagOptionSingleton.getInstance().getId3v24DefaultTextEncoding();
@@ -55,8 +55,8 @@ public class ID3TextEncodingConversion
             }
         }
         else
-        { 
-            if(TagOptionSingleton.getInstance().isResetTextEncodingForExistingFrames())
+        {
+            if (TagOptionSingleton.getInstance().isResetTextEncodingForExistingFrames())
             {
                 //Replace with default
                 return TagOptionSingleton.getInstance().getId3v23DefaultTextEncoding();
@@ -69,27 +69,29 @@ public class ID3TextEncodingConversion
         }
     }
 
-    /** Sets the text encoding to best Unicode type for the version
+    /**
+     * Sets the text encoding to best Unicode type for the version
      *
      * @param header
      * @return
      */
     public static byte getUnicodeTextEncoding(AbstractTagFrame header)
     {
-        if(header==null)
+        if (header == null)
         {
             logger.warning("Header has not yet been set for this framebody");
             return TextEncoding.UTF_16;
         }
-        else if(header instanceof ID3v24Frame)
+        else if (header instanceof ID3v24Frame)
         {
             return TagOptionSingleton.getInstance().getId3v24UnicodeTextEncoding();
         }
         else
         {
-             return TextEncoding.UTF_16;
+            return TextEncoding.UTF_16;
         }
     }
+
     /**
      * Convert v24 text encoding to a valid v23 encoding
      *
@@ -98,17 +100,17 @@ public class ID3TextEncodingConversion
      */
     private static byte convertV24textEncodingToV23textEncoding(byte textEncoding)
     {
-         if(
-                 (textEncoding==TextEncoding.UTF_16BE)||
-                 (textEncoding==TextEncoding.UTF_8)
+        if (
+                (textEncoding == TextEncoding.UTF_16BE) ||
+                        (textEncoding == TextEncoding.UTF_8)
                 )
-             {
-                 return TextEncoding.UTF_16;
-             }
+        {
+            return TextEncoding.UTF_16;
+        }
         else
-         {
-             return textEncoding;
-         }
+        {
+            return textEncoding;
+        }
     }
 
 

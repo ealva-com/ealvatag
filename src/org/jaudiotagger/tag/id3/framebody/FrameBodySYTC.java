@@ -26,8 +26,8 @@ import java.nio.ByteBuffer;
 
 /**
  * Synchronised tempo codes frame.
- * 
- * <p>
+ * <p/>
+ * <p/>
  * For a more accurate description of the tempo of a musical piece this
  * frame might be used. After the header follows one byte describing
  * which time stamp format should be used. Then follows one or more
@@ -52,23 +52,23 @@ import java.nio.ByteBuffer;
  * </table></p><p>
  * Where time stamp format is:
  * </p><p>
- *  $01 Absolute time, 32 bit sized, using MPEG frames as unit<br>
- *  $02 Absolute time, 32 bit sized, using milliseconds as unit
+ * $01 Absolute time, 32 bit sized, using MPEG frames as unit<br>
+ * $02 Absolute time, 32 bit sized, using milliseconds as unit
  * </p><p>
  * Abolute time means that every stamp contains the time from the
  * beginning of the file.
  * </p>
- * 
+ * <p/>
  * <p>For more details, please refer to the ID3 specifications:
  * <ul>
  * <li><a href="http://www.id3.org/id3v2.3.0.txt">ID3 v2.3.0 Spec</a>
  * </ul>
- * 
+ *
  * @author : Paul Taylor
  * @author : Eric Farng
  * @version $Id$
  */
-public class FrameBodySYTC extends AbstractID3v2FrameBody implements ID3v24FrameBody,ID3v23FrameBody
+public class FrameBodySYTC extends AbstractID3v2FrameBody implements ID3v24FrameBody, ID3v23FrameBody
 {
     /**
      * Creates a new FrameBodySYTC datatype.
@@ -78,7 +78,6 @@ public class FrameBodySYTC extends AbstractID3v2FrameBody implements ID3v24Frame
     }
 
     /**
-     *
      * @param timeStampFormat
      * @param tempo
      */
@@ -86,7 +85,7 @@ public class FrameBodySYTC extends AbstractID3v2FrameBody implements ID3v24Frame
                          byte[] tempo)
     {
         setObjectValue(DataTypes.OBJ_TIME_STAMP_FORMAT, timeStampFormat);
-        setObjectValue(DataTypes.OBJ_DATA,tempo);
+        setObjectValue(DataTypes.OBJ_DATA, tempo);
     }
 
     /**
@@ -95,7 +94,7 @@ public class FrameBodySYTC extends AbstractID3v2FrameBody implements ID3v24Frame
      * @throws InvalidTagException
      */
     public FrameBodySYTC(ByteBuffer byteBuffer, int frameSize)
-        throws InvalidTagException
+            throws InvalidTagException
     {
         super(byteBuffer, frameSize);
     }
@@ -110,20 +109,20 @@ public class FrameBodySYTC extends AbstractID3v2FrameBody implements ID3v24Frame
         super(body);
     }
 
-     /**
-      * The ID3v2 frame identifier
-      *
-      * @return the ID3v2 frame identifier  for this frame type
+    /**
+     * The ID3v2 frame identifier
+     *
+     * @return the ID3v2 frame identifier  for this frame type
      */
     public String getIdentifier()
     {
-        return ID3v24Frames.FRAME_ID_SYNC_TEMPO ;
+        return ID3v24Frames.FRAME_ID_SYNC_TEMPO;
     }
 
 
-     protected void setupObjectList()
-     {
+    protected void setupObjectList()
+    {
         objectList.add(new NumberHashMap(DataTypes.OBJ_TIME_STAMP_FORMAT, this, EventTimingTimestampTypes.TIMESTAMP_KEY_FIELD_SIZE));
         objectList.add(new ByteArraySizeTerminated(DataTypes.OBJ_DATA, this));
-     }
+    }
 }

@@ -32,7 +32,7 @@ import org.jaudiotagger.tag.TagField;
 
 /**
  * Represents simple text field that contains an array of number,
- *
+ * <p/>
  * <p>But reads the data content as an arry of 16 bit unsigned numbers
  */
 public class Mp4TagTextNumberField extends Mp4TagTextField
@@ -40,7 +40,7 @@ public class Mp4TagTextNumberField extends Mp4TagTextField
     public static final int NUMBER_LENGTH = 2;
 
     //Holds the numbers decoded
-    protected List <Short> numbers;
+    protected List<Short> numbers;
 
     /**
      * Create a new number, already parsed in subclasses
@@ -66,13 +66,13 @@ public class Mp4TagTextNumberField extends Mp4TagTextField
     protected byte[] getDataBytes()
     {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        for(Short number:numbers)
+        for (Short number : numbers)
         {
             try
             {
                 baos.write(Utils.getShortSizeBigEndian(number));
             }
-            catch(IOException e)
+            catch (IOException e)
             {
                 //This should never happen because we are not writing to file at this point.
                 throw new RuntimeException(e);
@@ -91,7 +91,6 @@ public class Mp4TagTextNumberField extends Mp4TagTextField
     }
 
     /**
-     *
      * @return type numeric
      */
     public Mp4FieldType getFieldType()
@@ -102,15 +101,14 @@ public class Mp4TagTextNumberField extends Mp4TagTextField
     protected void build(ByteBuffer data) throws UnsupportedEncodingException
     {
         //Data actually contains a 'Data' Box so process data using this
-        Mp4BoxHeader header  = new Mp4BoxHeader(data);
-        Mp4DataBox databox = new Mp4DataBox(header,data);
+        Mp4BoxHeader header = new Mp4BoxHeader(data);
+        Mp4DataBox databox = new Mp4DataBox(header, data);
         dataSize = header.getDataLength();
-        content  = databox.getContent();
-        numbers  = databox.getNumbers();
+        content = databox.getContent();
+        numbers = databox.getNumbers();
     }
 
     /**
-     *
      * @return the individual numbers making up this field
      */
     public List<Short> getNumbers()

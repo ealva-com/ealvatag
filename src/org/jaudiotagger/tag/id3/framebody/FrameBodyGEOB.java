@@ -26,8 +26,8 @@ import java.nio.ByteBuffer;
 
 /**
  * General encapsulated object frame.
- * 
- * <p>
+ * <p/>
+ * <p/>
  * In this frame any type of file can be encapsulated. After the header,
  * 'Frame size' and 'Encoding' follows 'MIME type' represented as
  * as a terminated string encoded with ISO-8859-1. The
@@ -44,17 +44,17 @@ import java.nio.ByteBuffer;
  * <tr><td>Content description </td><td><text string according to encóding> $00 (00)</td></tr>
  * <tr><td>Encapsulated object </td><td>&lt;binary data&gt;     </td></tr>
  * </table></p>
- * 
+ * <p/>
  * <p>For more details, please refer to the ID3 specifications:
  * <ul>
  * <li><a href="http://www.id3.org/id3v2.3.0.txt">ID3 v2.3.0 Spec</a>
  * </ul>
- * 
+ *
  * @author : Paul Taylor
  * @author : Eric Farng
  * @version $Id$
  */
-public class FrameBodyGEOB extends AbstractID3v2FrameBody implements ID3v24FrameBody,ID3v23FrameBody
+public class FrameBodyGEOB extends AbstractID3v2FrameBody implements ID3v24FrameBody, ID3v23FrameBody
 {
 
     /**
@@ -77,11 +77,11 @@ public class FrameBodyGEOB extends AbstractID3v2FrameBody implements ID3v24Frame
     /**
      * Creates a new FrameBodyGEOB datatype.
      *
-     * @param textEncoding 
-     * @param mimeType     
-     * @param filename     
-     * @param description  
-     * @param object       
+     * @param textEncoding
+     * @param mimeType
+     * @param filename
+     * @param description
+     * @param object
      */
     public FrameBodyGEOB(byte textEncoding, String mimeType, String filename, String description, byte[] object)
     {
@@ -98,15 +98,13 @@ public class FrameBodyGEOB extends AbstractID3v2FrameBody implements ID3v24Frame
      * @throws InvalidTagException if unable to create framebody from buffer
      */
     public FrameBodyGEOB(ByteBuffer byteBuffer, int frameSize)
-        throws InvalidTagException
+            throws InvalidTagException
     {
         super(byteBuffer, frameSize);
     }
 
     /**
-     * 
-     *
-     * @param description 
+     * @param description
      */
     public void setDescription(String description)
     {
@@ -114,9 +112,7 @@ public class FrameBodyGEOB extends AbstractID3v2FrameBody implements ID3v24Frame
     }
 
     /**
-     * 
-     *
-     * @return  the description field
+     * @return the description field
      */
     public String getDescription()
     {
@@ -124,18 +120,18 @@ public class FrameBodyGEOB extends AbstractID3v2FrameBody implements ID3v24Frame
     }
 
     /**
-     * 
-     *
-     * @return 
+     * @return
      */
     public String getIdentifier()
     {
-        return ID3v24Frames.FRAME_ID_GENERAL_ENCAPS_OBJECT ;
+        return ID3v24Frames.FRAME_ID_GENERAL_ENCAPS_OBJECT;
     }
 
 
-    /** If the filename or description cannot be encoded using current encoder, change the encoder */
-    public void write(ByteArrayOutputStream tagBuffer)       
+    /**
+     * If the filename or description cannot be encoded using current encoder, change the encoder
+     */
+    public void write(ByteArrayOutputStream tagBuffer)
     {
         if (((AbstractString) getObject(DataTypes.OBJ_FILENAME)).canBeEncoded() == false)
         {
@@ -149,7 +145,7 @@ public class FrameBodyGEOB extends AbstractID3v2FrameBody implements ID3v24Frame
     }
 
     /**
-     * 
+     *
      */
     protected void setupObjectList()
     {

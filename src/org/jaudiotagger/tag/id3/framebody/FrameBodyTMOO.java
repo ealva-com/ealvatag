@@ -29,7 +29,7 @@ import org.jaudiotagger.tag.id3.ID3v24Frames;
 import java.nio.ByteBuffer;
 
 
-public class FrameBodyTMOO extends AbstractFrameBodyTextInfo  implements ID3v24FrameBody
+public class FrameBodyTMOO extends AbstractFrameBodyTextInfo implements ID3v24FrameBody
 {
     /**
      * Creates a new FrameBodyTMOO datatype.
@@ -46,8 +46,8 @@ public class FrameBodyTMOO extends AbstractFrameBodyTextInfo  implements ID3v24F
     /**
      * Creates a new FrameBodyTMOO datatype.
      *
-     * @param textEncoding 
-     * @param text         
+     * @param textEncoding
+     * @param text
      */
     public FrameBodyTMOO(byte textEncoding, String text)
     {
@@ -57,23 +57,23 @@ public class FrameBodyTMOO extends AbstractFrameBodyTextInfo  implements ID3v24F
     /**
      * Creates a new FrameBodyTMOO datatype.
      *
-     * @throws java.io.IOException 
-     * @throws InvalidTagException 
+     * @throws java.io.IOException
+     * @throws InvalidTagException
      */
     public FrameBodyTMOO(ByteBuffer byteBuffer, int frameSize)
-        throws InvalidTagException
+            throws InvalidTagException
     {
         super(byteBuffer, frameSize);
     }
 
-      /**
-      * The ID3v2 frame identifier
-      *
-      * @return the ID3v2 frame identifier  for this frame type
+    /**
+     * The ID3v2 frame identifier
+     *
+     * @return the ID3v2 frame identifier  for this frame type
      */
     public String getIdentifier()
     {
-        return  ID3v24Frames.FRAME_ID_MOOD;
+        return ID3v24Frames.FRAME_ID_MOOD;
     }
 
 }

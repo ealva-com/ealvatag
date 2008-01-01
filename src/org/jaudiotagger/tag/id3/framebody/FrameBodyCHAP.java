@@ -25,8 +25,8 @@ import java.nio.ByteBuffer;
 
 /**
  * Chapter frame.
- * 
- * <p>
+ * <p/>
+ * <p/>
  * The purpose of this frame is to describe a single chapter within an
  * audio file. There may be more than one frame of this type in a tag
  * but each must have an Element ID that is unique with respect to any
@@ -61,20 +61,20 @@ import java.nio.ByteBuffer;
  * </p><p>
  * There then follows a sequence of optional frames that are embedded
  * within the "CHAP" frame and which describe the content of the chapter
- * (e.g. a "TIT2" frame representing the chapter name) or provide 
+ * (e.g. a "TIT2" frame representing the chapter name) or provide
  * related material such as URLs and images. These sub-frames are
  * contained within the bounds of the "CHAP" frame as signalled by the
  * size field in the "CHAP" frame header. If a parser does not recognise
- * "CHAP" frames it can skip them using the size field in the frame 
- * header. When it does this it will skip any embedded sub-frames 
+ * "CHAP" frames it can skip them using the size field in the frame
+ * header. When it does this it will skip any embedded sub-frames
  * carried within the frame.
  * </p>
- * 
+ * <p/>
  * <p>For more details, please refer to the ID3 Chapter Frame specifications:
  * <ul>
  * <li><a href="http://www.id3.org/id3v2-chapters-1.0.txt">ID3 v2 Chapter Frame Spec</a>
  * </ul>
- * 
+ *
  * @author Marc Gimpel, Horizon Wimba S.A.
  * @version $Id$
  */
@@ -89,7 +89,7 @@ public class FrameBodyCHAP extends AbstractID3v2FrameBody implements ID3v2Chapte
 
     /**
      * Creates a new FrameBodyCHAP datatype.
-     * 
+     *
      * @param body
      */
     public FrameBodyCHAP(FrameBodyCHAP body)
@@ -99,7 +99,7 @@ public class FrameBodyCHAP extends AbstractID3v2FrameBody implements ID3v2Chapte
 
     /**
      * Creates a new FrameBodyCHAP datatype.
-     * 
+     *
      * @param elementId
      * @param startTime
      * @param endTime
@@ -125,7 +125,7 @@ public class FrameBodyCHAP extends AbstractID3v2FrameBody implements ID3v2Chapte
      * @throws InvalidTagException if unable to create framebody from buffer
      */
     public FrameBodyCHAP(ByteBuffer byteBuffer, int frameSize)
-        throws InvalidTagException
+            throws InvalidTagException
     {
         super(byteBuffer, frameSize);
     }
@@ -141,14 +141,14 @@ public class FrameBodyCHAP extends AbstractID3v2FrameBody implements ID3v2Chapte
     }
 
     /**
-     * 
+     *
      */
     protected void setupObjectList()
     {
-      objectList.add(new StringNullTerminated(DataTypes.OBJ_ELEMENT_ID, this));
-      objectList.add(new NumberFixedLength(DataTypes.OBJ_START_TIME, this, 4));
-      objectList.add(new NumberFixedLength(DataTypes.OBJ_END_TIME, this, 4));
-      objectList.add(new NumberFixedLength(DataTypes.OBJ_START_OFFSET, this, 4));
-      objectList.add(new NumberFixedLength(DataTypes.OBJ_END_OFFSET, this, 4));
+        objectList.add(new StringNullTerminated(DataTypes.OBJ_ELEMENT_ID, this));
+        objectList.add(new NumberFixedLength(DataTypes.OBJ_START_TIME, this, 4));
+        objectList.add(new NumberFixedLength(DataTypes.OBJ_END_TIME, this, 4));
+        objectList.add(new NumberFixedLength(DataTypes.OBJ_START_OFFSET, this, 4));
+        objectList.add(new NumberFixedLength(DataTypes.OBJ_END_OFFSET, this, 4));
     }
 }

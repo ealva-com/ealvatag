@@ -33,11 +33,11 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 
-/** Represents a user defined url
- *
+/**
+ * Represents a user defined url
  */
 public class FrameBodyWXXX
-    extends AbstractFrameBodyUrlLink  implements ID3v24FrameBody,ID3v23FrameBody
+        extends AbstractFrameBodyUrlLink implements ID3v24FrameBody, ID3v23FrameBody
 {
 
     /**
@@ -58,9 +58,9 @@ public class FrameBodyWXXX
     /**
      * Creates a new FrameBodyWXXX datatype.
      *
-     * @param textEncoding 
-     * @param description  
-     * @param urlLink      
+     * @param textEncoding
+     * @param description
+     * @param urlLink
      */
     public FrameBodyWXXX(byte textEncoding, String description, String urlLink)
     {
@@ -72,18 +72,18 @@ public class FrameBodyWXXX
     /**
      * Creates a new FrameBodyWXXX datatype by reading from file.
      *
-     * @throws InvalidTagException 
+     * @throws InvalidTagException
      */
     public FrameBodyWXXX(ByteBuffer byteBuffer, int frameSize)
-        throws InvalidTagException
+            throws InvalidTagException
     {
         super(byteBuffer, frameSize);
     }
 
     /**
-     *  Set a description of the hyperlink
+     * Set a description of the hyperlink
      *
-     * @param description 
+     * @param description
      */
     public void setDescription(String description)
     {
@@ -91,8 +91,6 @@ public class FrameBodyWXXX
     }
 
     /**
-     * 
-     *
      * @return a description of the hyperlink
      */
     public String getDescription()
@@ -101,19 +99,19 @@ public class FrameBodyWXXX
     }
 
     /**
-      * The ID3v2 frame identifier
-      *
-      * @return the ID3v2 frame identifier  for this frame type
+     * The ID3v2 frame identifier
+     *
+     * @return the ID3v2 frame identifier  for this frame type
      */
     public String getIdentifier()
     {
         return ID3v24Frames.FRAME_ID_USER_DEFINED_URL;
     }
 
-     /**
+    /**
      * If the description cannot be encoded using the current encoding change the encoder
      */
-    public void write(ByteArrayOutputStream tagBuffer)    
+    public void write(ByteArrayOutputStream tagBuffer)
     {
         if (((AbstractString) getObject(DataTypes.OBJ_DESCRIPTION)).canBeEncoded() == false)
         {

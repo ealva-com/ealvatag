@@ -31,22 +31,22 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 public class GroupRepeated
-    extends AbstractDataType
+        extends AbstractDataType
 {
     /**
-     * 
+     *
      */
     private ArrayList objectList;
 
     /**
-     * 
+     *
      */
     private ArrayList propertyList;
 
     /**
      * Creates a new ObjectGroupRepeated datatype.
      *
-     * @param identifier 
+     * @param identifier
      */
     public GroupRepeated(String identifier, AbstractTagFrameBody frameBody)
     {
@@ -72,9 +72,7 @@ public class GroupRepeated
     }
 
     /**
-     * 
-     *
-     * @return 
+     * @return
      */
     public ArrayList getObjectList()
     {
@@ -82,9 +80,7 @@ public class GroupRepeated
     }
 
     /**
-     * 
-     *
-     * @return 
+     * @return
      */
     public ArrayList getPropertyList()
     {
@@ -92,9 +88,7 @@ public class GroupRepeated
     }
 
     /**
-     * 
-     *
-     * @return 
+     * @return
      */
     public int getSize()
     {
@@ -110,9 +104,7 @@ public class GroupRepeated
     }
 
     /**
-     * 
-     *
-     * @param obj 
+     * @param obj
      */
     public void addObject(AbstractDataType obj)
     {
@@ -120,9 +112,7 @@ public class GroupRepeated
     }
 
     /**
-     * 
-     *
-     * @param obj 
+     * @param obj
      */
     public void addProperty(AbstractDataType obj)
     {
@@ -130,10 +120,8 @@ public class GroupRepeated
     }
 
     /**
-     * 
-     *
-     * @param obj 
-     * @return 
+     * @param obj
+     * @return
      */
     public boolean equals(Object obj)
     {
@@ -154,12 +142,10 @@ public class GroupRepeated
     }
 
     /**
-     * 
-     *
-     * @param arr    
-     * @param offset 
-     * @throws NullPointerException      
-     * @throws IndexOutOfBoundsException 
+     * @param arr
+     * @param offset
+     * @throws NullPointerException
+     * @throws IndexOutOfBoundsException
      */
     public void readByteArray(byte[] arr, int offset) throws InvalidDataTypeException
     {
@@ -170,7 +156,7 @@ public class GroupRepeated
         if ((offset < 0) || (offset >= arr.length))
         {
             throw new IndexOutOfBoundsException("Offset to byte array is out of bounds: offset = " + offset +
-                ", array.length = " + arr.length);
+                    ", array.length = " + arr.length);
         }
         AbstractDataType object;
         Class className;
@@ -206,9 +192,7 @@ public class GroupRepeated
     }
 
     /**
-     * 
-     *
-     * @return 
+     * @return
      */
     public String toString()
     {
@@ -224,9 +208,7 @@ public class GroupRepeated
     }
 
     /**
-     * 
-     *
-     * @return 
+     * @return
      */
     public byte[] writeByteArray()
     {

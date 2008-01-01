@@ -32,14 +32,15 @@ import org.jaudiotagger.tag.id3.ID3v24Frames;
 import java.nio.ByteBuffer;
 
 
-/** Body of Recommended buffer size frame, generally used for streaming audio
- *
+/**
+ * Body of Recommended buffer size frame, generally used for streaming audio
  */
-public class FrameBodyRBUF extends AbstractID3v2FrameBody implements ID3v24FrameBody,ID3v23FrameBody
+public class FrameBodyRBUF extends AbstractID3v2FrameBody implements ID3v24FrameBody, ID3v23FrameBody
 {
-    private static int BUFFER_FIELD_SIZE        = 3;
-    private static int EMBED_FLAG_BIT_POSITION  = 1;
-    private static int OFFSET_FIELD_SIZE        = 4;
+    private static int BUFFER_FIELD_SIZE = 3;
+    private static int EMBED_FLAG_BIT_POSITION = 1;
+    private static int OFFSET_FIELD_SIZE = 4;
+
     /**
      * Creates a new FrameBodyRBUF datatype.
      */
@@ -58,9 +59,9 @@ public class FrameBodyRBUF extends AbstractID3v2FrameBody implements ID3v24Frame
     /**
      * Creates a new FrameBodyRBUF datatype.
      *
-     * @param bufferSize       
-     * @param embeddedInfoFlag 
-     * @param offsetToNextTag  
+     * @param bufferSize
+     * @param embeddedInfoFlag
+     * @param offsetToNextTag
      */
     public FrameBodyRBUF(byte bufferSize, boolean embeddedInfoFlag, byte offsetToNextTag)
     {
@@ -75,15 +76,15 @@ public class FrameBodyRBUF extends AbstractID3v2FrameBody implements ID3v24Frame
      * @throws InvalidTagException if unable to create framebody from buffer
      */
     public FrameBodyRBUF(ByteBuffer byteBuffer, int frameSize)
-        throws InvalidTagException
+            throws InvalidTagException
     {
         super(byteBuffer, frameSize);
     }
 
-      /**
-      * The ID3v2 frame identifier
-      *
-      * @return the ID3v2 frame identifier  for this frame type
+    /**
+     * The ID3v2 frame identifier
+     *
+     * @return the ID3v2 frame identifier  for this frame type
      */
     public String getIdentifier()
     {
@@ -91,12 +92,12 @@ public class FrameBodyRBUF extends AbstractID3v2FrameBody implements ID3v24Frame
     }
 
     /**
-     * 
+     *
      */
     protected void setupObjectList()
     {
         objectList.add(new NumberFixedLength(DataTypes.OBJ_BUFFER_SIZE, this, BUFFER_FIELD_SIZE));
-        objectList.add(new BooleanByte(DataTypes.OBJ_EMBED_FLAG, this, (int) (byte) EMBED_FLAG_BIT_POSITION ));
+        objectList.add(new BooleanByte(DataTypes.OBJ_EMBED_FLAG, this, (int) (byte) EMBED_FLAG_BIT_POSITION));
         objectList.add(new NumberFixedLength(DataTypes.OBJ_OFFSET, this, OFFSET_FIELD_SIZE));
     }
 }

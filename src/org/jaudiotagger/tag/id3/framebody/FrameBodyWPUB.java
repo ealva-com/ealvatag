@@ -23,17 +23,17 @@ import java.nio.ByteBuffer;
 /**
  * Publishers official webpage URL link frames.
  * <p>The 'Publishers official webpage' frame is a URL pointing at the official wepage for the publisher.
- * 
+ * <p/>
  * <p>For more details, please refer to the ID3 specifications:
  * <ul>
  * <li><a href="http://www.id3.org/id3v2.3.0.txt">ID3 v2.3.0 Spec</a>
  * </ul>
- * 
+ *
  * @author : Paul Taylor
  * @author : Eric Farng
  * @version $Id$
  */
-public class FrameBodyWPUB extends AbstractFrameBodyUrlLink   implements ID3v24FrameBody,ID3v23FrameBody
+public class FrameBodyWPUB extends AbstractFrameBodyUrlLink implements ID3v24FrameBody, ID3v23FrameBody
 {
     /**
      * Creates a new FrameBodyWPUB datatype.
@@ -45,7 +45,7 @@ public class FrameBodyWPUB extends AbstractFrameBodyUrlLink   implements ID3v24F
     /**
      * Creates a new FrameBodyWPUB datatype.
      *
-     * @param urlLink 
+     * @param urlLink
      */
     public FrameBodyWPUB(String urlLink)
     {
@@ -60,19 +60,19 @@ public class FrameBodyWPUB extends AbstractFrameBodyUrlLink   implements ID3v24F
     /**
      * Creates a new FrameBodyWPUB datatype.
      *
-     * @throws java.io.IOException 
-     * @throws InvalidTagException 
+     * @throws java.io.IOException
+     * @throws InvalidTagException
      */
     public FrameBodyWPUB(ByteBuffer byteBuffer, int frameSize)
-        throws InvalidTagException
+            throws InvalidTagException
     {
         super(byteBuffer, frameSize);
     }
 
     /**
-      * The ID3v2 frame identifier
-      *
-      * @return the ID3v2 frame identifier  for this frame type
+     * The ID3v2 frame identifier
+     *
+     * @return the ID3v2 frame identifier  for this frame type
      */
     public String getIdentifier()
     {

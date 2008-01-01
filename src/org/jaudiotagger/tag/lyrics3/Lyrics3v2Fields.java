@@ -47,25 +47,25 @@ public class Lyrics3v2Fields extends AbstractStringStringValuePair
     }
 
     public static final String FIELD_V2_INDICATIONS = "IND";
-    public static final String FIELD_V2_LYRICS_MULTI_LINE_TEXT      = "LYR";
-    public static final String FIELD_V2_ADDITIONAL_MULTI_LINE_TEXT  = "INF";
+    public static final String FIELD_V2_LYRICS_MULTI_LINE_TEXT = "LYR";
+    public static final String FIELD_V2_ADDITIONAL_MULTI_LINE_TEXT = "INF";
     public static final String FIELD_V2_AUTHOR = "AUT";
-    public static final String FIELD_V2_ALBUM  = "EAL";
+    public static final String FIELD_V2_ALBUM = "EAL";
     public static final String FIELD_V2_ARTIST = "EAR";
-    public static final String FIELD_V2_TRACK  = "ETT";
-    public static final String FIELD_V2_IMAGE  = "IMG";
+    public static final String FIELD_V2_TRACK = "ETT";
+    public static final String FIELD_V2_IMAGE = "IMG";
 
 
     private Lyrics3v2Fields()
     {
-        idToValue.put(FIELD_V2_INDICATIONS,"Indications field");
-        idToValue.put(FIELD_V2_LYRICS_MULTI_LINE_TEXT,"Lyrics multi line text");
-        idToValue.put(FIELD_V2_ADDITIONAL_MULTI_LINE_TEXT,"Additional information multi line text");
-        idToValue.put(FIELD_V2_AUTHOR ,"Lyrics/Music Author name");
-        idToValue.put(FIELD_V2_ALBUM,"Extended Album name");
-        idToValue.put(FIELD_V2_ARTIST,"Extended Artist name");
-        idToValue.put(FIELD_V2_TRACK,"Extended Track Title");
-        idToValue.put(FIELD_V2_IMAGE,"Link to an image files");
+        idToValue.put(FIELD_V2_INDICATIONS, "Indications field");
+        idToValue.put(FIELD_V2_LYRICS_MULTI_LINE_TEXT, "Lyrics multi line text");
+        idToValue.put(FIELD_V2_ADDITIONAL_MULTI_LINE_TEXT, "Additional information multi line text");
+        idToValue.put(FIELD_V2_AUTHOR, "Lyrics/Music Author name");
+        idToValue.put(FIELD_V2_ALBUM, "Extended Album name");
+        idToValue.put(FIELD_V2_ARTIST, "Extended Artist name");
+        idToValue.put(FIELD_V2_TRACK, "Extended Track Title");
+        idToValue.put(FIELD_V2_IMAGE, "Link to an image files");
         createMaps();
     }
 

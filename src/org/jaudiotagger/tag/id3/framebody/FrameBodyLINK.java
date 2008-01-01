@@ -23,8 +23,8 @@ import java.nio.ByteBuffer;
 
 /**
  * Linked information frame.
- * 
- * <p>
+ * <p/>
+ * <p/>
  * To keep space waste as low as possible this frame may be used to link
  * information from another ID3v2 tag that might reside in another audio
  * file or alone in a binary file. It is recommended that this method is
@@ -45,7 +45,7 @@ import java.nio.ByteBuffer;
  * <tr><td>URL                   </td><td>&lt;text string&gt; $00</td></tr>
  * <tr><td>ID and additional data</td><td>&lt;text string(s)&gt; </td></tr>
  * </table></p>
- * <p>
+ * <p/>
  * Frames that may be linked and need no additional data are "IPLS",
  * "MCID", "ETCO", "MLLT", "SYTC", "RVAD", "EQUA", "RVRB", "RBUF", the
  * text information frames and the URL link frames.
@@ -57,17 +57,17 @@ import java.nio.ByteBuffer;
  * of language descriptor directly followed by a content descriptor as
  * additional ID data.
  * </p>
- * 
+ * <p/>
  * <p>For more details, please refer to the ID3 specifications:
  * <ul>
  * <li><a href="http://www.id3.org/id3v2.3.0.txt">ID3 v2.3.0 Spec</a>
  * </ul>
- * 
+ *
  * @author : Paul Taylor
  * @author : Eric Farng
  * @version $Id$
  */
-public class FrameBodyLINK extends AbstractID3v2FrameBody implements ID3v24FrameBody,ID3v23FrameBody
+public class FrameBodyLINK extends AbstractID3v2FrameBody implements ID3v24FrameBody, ID3v23FrameBody
 {
     /**
      * Creates a new FrameBodyLINK datatype.
@@ -87,9 +87,9 @@ public class FrameBodyLINK extends AbstractID3v2FrameBody implements ID3v24Frame
     /**
      * Creates a new FrameBodyLINK datatype.
      *
-     * @param frameIdentifier 
-     * @param url             
-     * @param additionalData  
+     * @param frameIdentifier
+     * @param url
+     * @param additionalData
      */
     public FrameBodyLINK(String frameIdentifier, String url, String additionalData)
     {
@@ -101,18 +101,16 @@ public class FrameBodyLINK extends AbstractID3v2FrameBody implements ID3v24Frame
     /**
      * Creates a new FrameBodyLINK datatype.
      *
-     * @throws InvalidTagException if unable to create framebody from buffer 
+     * @throws InvalidTagException if unable to create framebody from buffer
      */
     public FrameBodyLINK(ByteBuffer byteBuffer, int frameSize)
-        throws  InvalidTagException
+            throws InvalidTagException
     {
         super(byteBuffer, frameSize);
     }
 
     /**
-     * 
-     *
-     * @return 
+     * @return
      */
     public String getAdditionalData()
     {
@@ -120,9 +118,7 @@ public class FrameBodyLINK extends AbstractID3v2FrameBody implements ID3v24Frame
     }
 
     /**
-     * 
-     *
-     * @param additionalData 
+     * @param additionalData
      */
     public void getAdditionalData(String additionalData)
     {
@@ -130,9 +126,7 @@ public class FrameBodyLINK extends AbstractID3v2FrameBody implements ID3v24Frame
     }
 
     /**
-     * 
-     *
-     * @return 
+     * @return
      */
     public String getFrameIdentifier()
     {
@@ -140,9 +134,7 @@ public class FrameBodyLINK extends AbstractID3v2FrameBody implements ID3v24Frame
     }
 
     /**
-     * 
-     *
-     * @param frameIdentifier 
+     * @param frameIdentifier
      */
     public void getFrameIdentifier(String frameIdentifier)
     {
@@ -150,18 +142,18 @@ public class FrameBodyLINK extends AbstractID3v2FrameBody implements ID3v24Frame
     }
 
     /**
-      * The ID3v2 frame identifier
-      *
-      * @return the ID3v2 frame identifier  for this frame type
+     * The ID3v2 frame identifier
+     *
+     * @return the ID3v2 frame identifier  for this frame type
      */
     public String getIdentifier()
     {
         return ID3v24Frames.FRAME_ID_LINKED_INFO;
     }
-    
+
 
     /**
-     * 
+     *
      */
     protected void setupObjectList()
     {

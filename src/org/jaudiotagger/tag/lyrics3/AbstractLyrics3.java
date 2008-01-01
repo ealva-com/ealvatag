@@ -41,17 +41,15 @@ public abstract class AbstractLyrics3 extends AbstractTag
     }
 
     /**
-     * 
-     *
-     * @param file 
-     * @throws IOException 
+     * @param file
+     * @throws IOException
      */
     public void delete(RandomAccessFile file)
-        throws IOException
+            throws IOException
     {
         long filePointer;
         ID3v1Tag id3v1tag = new ID3v1Tag();
 
-       
+
     }
 }

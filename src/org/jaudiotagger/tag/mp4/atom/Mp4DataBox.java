@@ -12,7 +12,7 @@ import java.util.List;
 
 /**
  * This box is used within both normal metadat boxes and ---- boxes to hold the actual data.
- *
+ * <p/>
  * <p>Format is as follows:
  * :length          (4 bytes)
  * :name 'Data'     (4 bytes)
@@ -78,7 +78,7 @@ public class Mp4DataBox extends AbstractMp4Box
         else if (type == Mp4FieldType.NUMERIC.getFileClassId())
         {
             numbers = new ArrayList<Short>();
-                        
+
             for (int i = 0; i < ((header.getDataLength() - PRE_DATA_LENGTH) / NUMBER_LENGTH); i++)
             {
                 short number = Utils.getShortNumberBigEndian(this.dataBuffer,
@@ -98,7 +98,7 @@ public class Mp4DataBox extends AbstractMp4Box
                     sb.append("/");
                 }
             }
-            content = sb.toString();            
+            content = sb.toString();
         }
         else if (type == Mp4FieldType.BYTE.getFileClassId())
         {
@@ -137,6 +137,7 @@ public class Mp4DataBox extends AbstractMp4Box
 
     /**
      * Return numbers, only valid for numeric fields
+     *
      * @return numbers
      */
     //TODO this is only applicable for numeric databoxes, should we subclass dont know type until start
@@ -147,7 +148,6 @@ public class Mp4DataBox extends AbstractMp4Box
     }
 
     /**
-
      * Return raw byte data only vaid for byte fields
      *
      * @return byte data

@@ -29,7 +29,7 @@ import org.jaudiotagger.tag.datatype.AbstractIntStringValuePair;
  * Text Encoding supported by ID3v24, the id is recognised by ID3
  * whereas the value maps to a java java.nio.charset.Charset, all the
  * charsets defined below are guaranteed on every Java platform.
- *
+ * <p/>
  * Note in ID3 UTF_16 can be implemented as either UTF16BE or UTF16LE with byte ordering
  * marks, in JAudioTagger we always implement it as UTF16BE (this is how the Java UTF-16 charset works).
  */
@@ -37,18 +37,18 @@ public class TextEncoding extends AbstractIntStringValuePair
 {
     //Supported Java charsets
     public static final String CHARSET_ISO_8859_1 = "ISO-8859-1";
-    public static final String CHARSET_UTF_16     = "UTF-16";
-    public static final String CHARSET_UTF_16BE   = "UTF-16BE";
-    public static final String CHARSET_UTF_8      = "UTF-8";
+    public static final String CHARSET_UTF_16 = "UTF-16";
+    public static final String CHARSET_UTF_16BE = "UTF-16BE";
+    public static final String CHARSET_UTF_8 = "UTF-8";
 
     //Supported ID3 charset ids
     public static final byte ISO_8859_1 = 0;
-    public static final byte UTF_16     = 1;               // We use UTF-16 with LE byteordering and byte order mark
-    public static final byte UTF_16BE   = 2;
-    public static final byte UTF_8      = 3;
+    public static final byte UTF_16 = 1;               // We use UTF-16 with LE byteordering and byte order mark
+    public static final byte UTF_16BE = 2;
+    public static final byte UTF_8 = 3;
 
     //The number of bytes used to hold the text encoding field size
-    public static final int  TEXT_ENCODING_FIELD_SIZE = 1;
+    public static final int TEXT_ENCODING_FIELD_SIZE = 1;
 
     private static TextEncoding textEncodings;
 
@@ -63,10 +63,10 @@ public class TextEncoding extends AbstractIntStringValuePair
 
     private TextEncoding()
     {
-        idToValue.put((int) ISO_8859_1   , CHARSET_ISO_8859_1 );
-        idToValue.put((int) UTF_16       , CHARSET_UTF_16);
-        idToValue.put((int) UTF_16BE     , CHARSET_UTF_16BE);
-        idToValue.put((int) UTF_8        , CHARSET_UTF_8);
+        idToValue.put((int) ISO_8859_1, CHARSET_ISO_8859_1);
+        idToValue.put((int) UTF_16, CHARSET_UTF_16);
+        idToValue.put((int) UTF_16BE, CHARSET_UTF_16BE);
+        idToValue.put((int) UTF_8, CHARSET_UTF_8);
 
         createMaps();
     }

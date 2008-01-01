@@ -24,8 +24,8 @@ import java.nio.ByteBuffer;
 
 /**
  * Play counter frame.
- * 
- * <p>
+ * <p/>
+ * <p/>
  * This is simply a counter of the number of times a file has been
  * played. The value is increased by one every time the file begins to
  * play. There may only be one "PCNT" frame in each tag. When the
@@ -36,19 +36,19 @@ import java.nio.ByteBuffer;
  * <tr><td colspan=2> &lt;Header for 'Play counter', ID: "PCNT"&gt;</td></tr>
  * <tr><td>Counter </td><td>$xx xx xx xx (xx ...)</td></tr>
  * </table></p>
- * 
+ * <p/>
  * <p>For more details, please refer to the ID3 specifications:
  * <ul>
  * <li><a href="http://www.id3.org/id3v2.3.0.txt">ID3 v2.3.0 Spec</a>
  * </ul>
- * 
+ *
  * @author : Paul Taylor
  * @author : Eric Farng
  * @version $Id$
  */
-public class FrameBodyPCNT extends AbstractID3v2FrameBody implements ID3v24FrameBody,ID3v23FrameBody
+public class FrameBodyPCNT extends AbstractID3v2FrameBody implements ID3v24FrameBody, ID3v23FrameBody
 {
-     private static final int COUNTER_MINIMUM_FIELD_SIZE=4;
+    private static final int COUNTER_MINIMUM_FIELD_SIZE = 4;
 
     /**
      * Creates a new FrameBodyPCNT datatype.
@@ -66,7 +66,7 @@ public class FrameBodyPCNT extends AbstractID3v2FrameBody implements ID3v24Frame
     /**
      * Creates a new FrameBodyPCNT datatype.
      *
-     * @param counter 
+     * @param counter
      */
     public FrameBodyPCNT(long counter)
     {
@@ -79,14 +79,12 @@ public class FrameBodyPCNT extends AbstractID3v2FrameBody implements ID3v24Frame
      * @throws InvalidTagException if unable to create framebody from buffer
      */
     public FrameBodyPCNT(ByteBuffer byteBuffer, int frameSize)
-        throws InvalidTagException
+            throws InvalidTagException
     {
         super(byteBuffer, frameSize);
     }
 
     /**
-     *
-     *
      * @return the play count of this file
      */
     public long getCounter()
@@ -103,10 +101,11 @@ public class FrameBodyPCNT extends AbstractID3v2FrameBody implements ID3v24Frame
     {
         setObjectValue(DataTypes.OBJ_NUMBER, counter);
     }
+
     /**
-      * The ID3v2 frame identifier
-      *
-      * @return the ID3v2 frame identifier  for this frame type
+     * The ID3v2 frame identifier
+     *
+     * @return the ID3v2 frame identifier  for this frame type
      */
     public String getIdentifier()
     {
@@ -114,10 +113,10 @@ public class FrameBodyPCNT extends AbstractID3v2FrameBody implements ID3v24Frame
     }
 
     /**
-     * 
+     *
      */
     protected void setupObjectList()
     {
-        objectList.add(new NumberVariableLength(DataTypes.OBJ_NUMBER, this,COUNTER_MINIMUM_FIELD_SIZE));
+        objectList.add(new NumberVariableLength(DataTypes.OBJ_NUMBER, this, COUNTER_MINIMUM_FIELD_SIZE));
     }
 }

@@ -24,8 +24,8 @@ import java.nio.ByteBuffer;
 
 /**
  * Music CD identifier frame.
- * 
- * <p>
+ * <p/>
+ * <p/>
  * This frame is intended for music that comes from a CD, so that the CD
  * can be identified in databases such as the CDDB. The frame
  * consists of a binary dump of the Table Of Contents, TOC, from the CD,
@@ -40,17 +40,17 @@ import java.nio.ByteBuffer;
  * <tr><td colspan=2> &lt;Header for 'Music CD identifier', ID: "MCDI"&gt;</td></tr>
  * <tr><td>CD TOC</td><td>&lt;binary data&gt;</td></tr>
  * </table></p>
- * 
+ * <p/>
  * <p>For more details, please refer to the ID3 specifications:
  * <ul>
  * <li><a href="http://www.id3.org/id3v2.3.0.txt">ID3 v2.3.0 Spec</a>
  * </ul>
- * 
+ *
  * @author : Paul Taylor
  * @author : Eric Farng
  * @version $Id$
  */
-public class FrameBodyMCDI extends AbstractID3v2FrameBody implements ID3v24FrameBody,ID3v23FrameBody
+public class FrameBodyMCDI extends AbstractID3v2FrameBody implements ID3v24FrameBody, ID3v23FrameBody
 {
     /**
      * Creates a new FrameBodyMCDI datatype.
@@ -68,7 +68,7 @@ public class FrameBodyMCDI extends AbstractID3v2FrameBody implements ID3v24Frame
     /**
      * Creates a new FrameBodyMCDI datatype.
      *
-     * @param cdTOC 
+     * @param cdTOC
      */
     public FrameBodyMCDI(byte[] cdTOC)
     {
@@ -78,18 +78,18 @@ public class FrameBodyMCDI extends AbstractID3v2FrameBody implements ID3v24Frame
     /**
      * Creates a new FrameBodyMCDI datatype.
      *
-     * @throws InvalidTagException if unable to create framebody from buffer 
+     * @throws InvalidTagException if unable to create framebody from buffer
      */
     public FrameBodyMCDI(ByteBuffer byteBuffer, int frameSize)
-        throws InvalidTagException
+            throws InvalidTagException
     {
         super(byteBuffer, frameSize);
     }
 
     /**
-      * The ID3v2 frame identifier
-      *
-      * @return the ID3v2 frame identifier  for this frame type
+     * The ID3v2 frame identifier
+     *
+     * @return the ID3v2 frame identifier  for this frame type
      */
     public String getIdentifier()
     {
@@ -97,7 +97,7 @@ public class FrameBodyMCDI extends AbstractID3v2FrameBody implements ID3v24Frame
     }
 
     /**
-     * 
+     *
      */
     protected void setupObjectList()
     {

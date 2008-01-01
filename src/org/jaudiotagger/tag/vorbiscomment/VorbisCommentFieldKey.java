@@ -2,11 +2,11 @@ package org.jaudiotagger.tag.vorbiscomment;
 
 /**
  * Common Vorbis Comment Field Names
- * 
+ * <p/>
  * <p>Note:The enumname is also the the actual name of the field in the VorbisCommentTag, but you could introduce a level
  * of indirection here if required.
- *
- * <p>
+ * <p/>
+ * <p/>
  * This partial list is derived fom the following sources:
  * <ul>
  * <li>http://xiph.org/vorbis/doc/v-comment.html</li>
@@ -22,7 +22,7 @@ public enum VorbisCommentFieldKey
     GENRE,
     TITLE,
     TRACKNUMBER,
-    DATE,    
+    DATE,
     COMMENT,
     ALBUMARTIST,
     COMPOSER,

@@ -34,12 +34,12 @@ import java.util.logging.Logger;
  * Section 4. ID3v2 frame overview at http://www.id3.org/id3v2.4.0-structure.txt
  */
 public abstract class AbstractDataType
-    extends java.lang.Object
+        extends java.lang.Object
 {
     protected static final String TYPE_ELEMENT = "element";
 
     //Logger
-     public static Logger logger = Logger.getLogger("org.jaudiotagger.tag.datatype");
+    public static Logger logger = Logger.getLogger("org.jaudiotagger.tag.datatype");
 
     /**
      * Holds the data
@@ -68,7 +68,7 @@ public abstract class AbstractDataType
      * an initial value.
      *
      * @param identifier to allow retrieval of this datatype by name from framebody
-     * @param frameBody that the dataype is associated with
+     * @param frameBody  that the dataype is associated with
      */
     protected AbstractDataType(String identifier, AbstractTagFrameBody frameBody)
     {
@@ -79,11 +79,11 @@ public abstract class AbstractDataType
     /**
      * Construct an abstract datatype identified by identifier and linked to a framebody initilised with a value
      *
-     * @param identifier  to allow retrieval of this datatype by name from framebody
-     * @param frameBody that the dataype is associated with
-     * @param value of this DataType
+     * @param identifier to allow retrieval of this datatype by name from framebody
+     * @param frameBody  that the dataype is associated with
+     * @param value      of this DataType
      */
-    protected AbstractDataType(String identifier, AbstractTagFrameBody frameBody,Object value)
+    protected AbstractDataType(String identifier, AbstractTagFrameBody frameBody, Object value)
     {
         this.identifier = identifier;
         this.frameBody = frameBody;
@@ -92,7 +92,7 @@ public abstract class AbstractDataType
 
     /**
      * This is used by subclasses, to clone the data within the copyObject
-     *
+     * <p/>
      * TODO:It seems to be missing some of the more complex value types.
      */
     public AbstractDataType(AbstractDataType copyObject)
@@ -204,7 +204,7 @@ public abstract class AbstractDataType
     /**
      * Return the key as declared by the frame bodies datatype list
      *
-     * @return  the key used to reference this datatype from a framebody
+     * @return the key used to reference this datatype from a framebody
      */
     public String getIdentifier()
     {
@@ -215,7 +215,7 @@ public abstract class AbstractDataType
      * Set the value held by this datatype, this is used typically used when the
      * user wants to modify the value in an existing frame.
      *
-     * @param value 
+     * @param value
      */
     public void setValue(Object value)
     {
@@ -241,7 +241,7 @@ public abstract class AbstractDataType
      */
     final public void readByteArray(byte[] arr) throws InvalidDataTypeException
     {
-        readByteArray(arr, 0);       
+        readByteArray(arr, 0);
     }
 
     /**
@@ -253,9 +253,7 @@ public abstract class AbstractDataType
     abstract public int getSize();
 
     /**
-     * 
-     *
-     * @param obj 
+     * @param obj
      * @return whether this and obj are deemed equivalent
      */
     public boolean equals(Object obj)
@@ -361,8 +359,8 @@ public abstract class AbstractDataType
      * starting at offset.
      * This class must be overridden
      *
-     * @param arr    
-     * @param offset 
+     * @param arr
+     * @param offset
      */
     public abstract void readByteArray(byte[] arr, int offset) throws InvalidDataTypeException;
 

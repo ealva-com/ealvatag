@@ -2,7 +2,7 @@ package org.jaudiotagger.tag;
 
 /**
  * Thrown if the key cannot be found
- *
+ * <p/>
  * <p>Shoudl not happen with well written code, hence RuntimeException.
  */
 public class KeyNotFoundException extends RuntimeException
@@ -38,7 +38,7 @@ public class KeyNotFoundException extends RuntimeException
      * Creates a new KeyNotFoundException datatype.
      *
      * @param msg the detail message.
-     * @param ex the cause.
+     * @param ex  the cause.
      */
     public KeyNotFoundException(String msg, Throwable ex)
     {

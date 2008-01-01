@@ -16,20 +16,19 @@
 package org.jaudiotagger.tag.id3.framebody;
 
 import org.jaudiotagger.tag.InvalidTagException;
+import org.jaudiotagger.tag.reference.Languages;
 import org.jaudiotagger.tag.datatype.*;
 import org.jaudiotagger.tag.id3.ID3TextEncodingConversion;
 import org.jaudiotagger.tag.id3.ID3v24Frames;
-import org.jaudiotagger.tag.id3.valuepair.Languages;
 import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
 
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.nio.ByteBuffer;
 
 /**
  * Comments frame.
- * 
- * <p>
+ * <p/>
+ * <p/>
  * This frame is indended for any kind of full text information that
  * does not fit in any other frame. It consists of a frame header
  * followed by encoding, language and content descriptors and is ended
@@ -44,17 +43,17 @@ import java.nio.ByteBuffer;
  * <tr><td>Short content descrip.</td><td>&lt;text string according to encoding&gt; $00 (00)</td></tr>
  * <tr><td>The actual text </td><td>&lt;full text string according to encoding&gt;</td></tr>
  * </table></p>
- * 
+ * <p/>
  * <p>For more details, please refer to the ID3 specifications:
  * <ul>
  * <li><a href="http://www.id3.org/id3v2.3.0.txt">ID3 v2.3.0 Spec</a>
  * </ul>
- * 
+ *
  * @author : Paul Taylor
  * @author : Eric Farng
  * @version $Id$
  */
-public class FrameBodyCOMM  extends AbstractID3v2FrameBody  implements ID3v24FrameBody,ID3v23FrameBody
+public class FrameBodyCOMM extends AbstractID3v2FrameBody implements ID3v24FrameBody, ID3v23FrameBody
 {
     /**
      * Creates a new FrameBodyCOMM datatype.
@@ -75,10 +74,10 @@ public class FrameBodyCOMM  extends AbstractID3v2FrameBody  implements ID3v24Fra
     /**
      * Creates a new FrameBodyCOMM datatype.
      *
-     * @param textEncoding 
-     * @param language     
-     * @param description  
-     * @param text         
+     * @param textEncoding
+     * @param language
+     * @param description
+     * @param text
      */
     public FrameBodyCOMM(byte textEncoding, String language, String description, String text)
     {
@@ -88,25 +87,24 @@ public class FrameBodyCOMM  extends AbstractID3v2FrameBody  implements ID3v24Fra
         setObjectValue(DataTypes.OBJ_TEXT, text);
     }
 
-     /**
+    /**
      * Construct a Comment frame body from the buffer
-      *
+     *
      * @param byteBuffer
      * @param frameSize
      * @throws InvalidTagException if unable to create framebody from buffer
      */
     public FrameBodyCOMM(ByteBuffer byteBuffer, int frameSize)
-        throws InvalidTagException
+            throws InvalidTagException
     {
         super(byteBuffer, frameSize);
     }
 
 
-
     /**
      * Set the description field, which describes the type of comment
      *
-     * @param description 
+     * @param description
      */
     public void setDescription(String description)
     {
@@ -114,7 +112,7 @@ public class FrameBodyCOMM  extends AbstractID3v2FrameBody  implements ID3v24Fra
     }
 
     /**
-     *  Get the description field, which describes the type of comment
+     * Get the description field, which describes the type of comment
      *
      * @return description field
      */
@@ -123,10 +121,10 @@ public class FrameBodyCOMM  extends AbstractID3v2FrameBody  implements ID3v24Fra
         return (String) getObjectValue(DataTypes.OBJ_DESCRIPTION);
     }
 
-     /**
-      * The ID3v2 frame identifier
-      *
-      * @return the ID3v2 frame identifier  for this frame type
+    /**
+     * The ID3v2 frame identifier
+     *
+     * @return the ID3v2 frame identifier  for this frame type
      */
     public String getIdentifier()
     {
@@ -134,9 +132,9 @@ public class FrameBodyCOMM  extends AbstractID3v2FrameBody  implements ID3v24Fra
     }
 
     /**
-     *  Sets the language the comment is written in
+     * Sets the language the comment is written in
      *
-     * @param language 
+     * @param language
      */
     public void setLanguage(String language)
     {
@@ -154,9 +152,7 @@ public class FrameBodyCOMM  extends AbstractID3v2FrameBody  implements ID3v24Fra
     }
 
     /**
-     * 
-     *
-     * @param text 
+     * @param text
      */
     public void setText(String text)
     {
@@ -171,12 +167,12 @@ public class FrameBodyCOMM  extends AbstractID3v2FrameBody  implements ID3v24Fra
      */
     public String getText()
     {
-        TextEncodedStringSizeTerminated text = (TextEncodedStringSizeTerminated)getObject(DataTypes.OBJ_TEXT);
+        TextEncodedStringSizeTerminated text = (TextEncodedStringSizeTerminated) getObject(DataTypes.OBJ_TEXT);
         return text.getValueAtIndex(0);
     }
 
     /**
-     * 
+     *
      */
     protected void setupObjectList()
     {
@@ -191,15 +187,15 @@ public class FrameBodyCOMM  extends AbstractID3v2FrameBody  implements ID3v24Fra
      * not contain characters that cannot be encoded in current encoding before
      * we write data. If there are we change the encoding.
      */
-    public void write(ByteArrayOutputStream tagBuffer)       
+    public void write(ByteArrayOutputStream tagBuffer)
     {
         //Ensure valid for type
-        setTextEncoding( ID3TextEncodingConversion.getTextEncoding(getHeader(),getTextEncoding()));
+        setTextEncoding(ID3TextEncodingConversion.getTextEncoding(getHeader(), getTextEncoding()));
 
         //Ensure valid for data
         if (((AbstractString) getObject(DataTypes.OBJ_TEXT)).canBeEncoded() == false)
         {
-           this.setTextEncoding(ID3TextEncodingConversion.getUnicodeTextEncoding(getHeader()));
+            this.setTextEncoding(ID3TextEncodingConversion.getUnicodeTextEncoding(getHeader()));
         }
         if (((AbstractString) getObject(DataTypes.OBJ_DESCRIPTION)).canBeEncoded() == false)
         {

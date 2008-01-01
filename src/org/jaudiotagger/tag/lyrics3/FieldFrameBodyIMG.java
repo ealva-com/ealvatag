@@ -35,7 +35,7 @@ import java.util.Iterator;
 public class FieldFrameBodyIMG extends AbstractLyrics3v2FieldFrameBody
 {
     /**
-     * 
+     *
      */
     private ArrayList images = new ArrayList();
 
@@ -62,7 +62,7 @@ public class FieldFrameBodyIMG extends AbstractLyrics3v2FieldFrameBody
     /**
      * Creates a new FieldBodyIMG datatype.
      *
-     * @param imageString 
+     * @param imageString
      */
     public FieldFrameBodyIMG(String imageString)
     {
@@ -72,7 +72,7 @@ public class FieldFrameBodyIMG extends AbstractLyrics3v2FieldFrameBody
     /**
      * Creates a new FieldBodyIMG datatype.
      *
-     * @param image 
+     * @param image
      */
     public FieldFrameBodyIMG(Lyrics3Image image)
     {
@@ -82,18 +82,16 @@ public class FieldFrameBodyIMG extends AbstractLyrics3v2FieldFrameBody
     /**
      * Creates a new FieldBodyIMG datatype.
      *
-     * @throws InvalidTagException 
+     * @throws InvalidTagException
      */
     public FieldFrameBodyIMG(ByteBuffer byteBuffer)
-        throws InvalidTagException
+            throws InvalidTagException
     {
-        this.read(byteBuffer);        
+        this.read(byteBuffer);
     }
 
     /**
-     * 
-     *
-     * @return 
+     * @return
      */
     public String getIdentifier()
     {
@@ -101,9 +99,7 @@ public class FieldFrameBodyIMG extends AbstractLyrics3v2FieldFrameBody
     }
 
     /**
-     * 
-     *
-     * @return 
+     * @return
      */
     public int getSize()
     {
@@ -120,10 +116,8 @@ public class FieldFrameBodyIMG extends AbstractLyrics3v2FieldFrameBody
     }
 
     /**
-     * 
-     *
-     * @param obj 
-     * @return 
+     * @param obj
+     * @return
      */
     public boolean isSubsetOf(Object obj)
     {
@@ -146,9 +140,7 @@ public class FieldFrameBodyIMG extends AbstractLyrics3v2FieldFrameBody
     }
 
     /**
-     * 
-     *
-     * @param value 
+     * @param value
      */
     public void setValue(String value)
     {
@@ -156,9 +148,7 @@ public class FieldFrameBodyIMG extends AbstractLyrics3v2FieldFrameBody
     }
 
     /**
-     * 
-     *
-     * @return 
+     * @return
      */
     public String getValue()
     {
@@ -166,9 +156,7 @@ public class FieldFrameBodyIMG extends AbstractLyrics3v2FieldFrameBody
     }
 
     /**
-     * 
-     *
-     * @param image 
+     * @param image
      */
     public void addImage(Lyrics3Image image)
     {
@@ -176,10 +164,8 @@ public class FieldFrameBodyIMG extends AbstractLyrics3v2FieldFrameBody
     }
 
     /**
-     * 
-     *
-     * @param obj 
-     * @return 
+     * @param obj
+     * @return
      */
     public boolean equals(Object obj)
     {
@@ -199,9 +185,7 @@ public class FieldFrameBodyIMG extends AbstractLyrics3v2FieldFrameBody
     }
 
     /**
-     * 
-     *
-     * @return 
+     * @return
      */
     public Iterator iterator()
     {
@@ -210,7 +194,7 @@ public class FieldFrameBodyIMG extends AbstractLyrics3v2FieldFrameBody
 
 
     public void read(ByteBuffer byteBuffer)
-        throws InvalidTagException
+            throws InvalidTagException
     {
         String imageString;
 
@@ -235,9 +219,7 @@ public class FieldFrameBodyIMG extends AbstractLyrics3v2FieldFrameBody
     }
 
     /**
-     * 
-     *
-     * @return 
+     * @return
      */
     public String toString()
     {
@@ -252,13 +234,11 @@ public class FieldFrameBodyIMG extends AbstractLyrics3v2FieldFrameBody
     }
 
     /**
-     * 
-     *
-     * @param file 
-     * @throws java.io.IOException 
+     * @param file
+     * @throws java.io.IOException
      */
     public void write(RandomAccessFile file)
-        throws java.io.IOException
+            throws java.io.IOException
     {
         int size = 0;
         int offset = 0;
@@ -299,9 +279,7 @@ public class FieldFrameBodyIMG extends AbstractLyrics3v2FieldFrameBody
     }
 
     /**
-     * 
-     *
-     * @param imageString 
+     * @param imageString
      */
     private void readString(String imageString)
     {
@@ -332,9 +310,7 @@ public class FieldFrameBodyIMG extends AbstractLyrics3v2FieldFrameBody
     }
 
     /**
-     * 
-     *
-     * @return 
+     * @return
      */
     private String writeString()
     {
@@ -357,10 +333,10 @@ public class FieldFrameBodyIMG extends AbstractLyrics3v2FieldFrameBody
 
 
     /**
-      * TODO
-      */
-     protected void setupObjectList()
-     {
+     * TODO
+     */
+    protected void setupObjectList()
+    {
 
-     }
+    }
 }

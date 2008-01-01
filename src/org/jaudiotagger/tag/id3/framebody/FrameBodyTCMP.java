@@ -9,19 +9,19 @@ import java.nio.ByteBuffer;
 
 /**
  * Is part of a Compilation (iTunes frame)
- *
+ * <p/>
  * <p>determines whether or not track is part of compilation
  *
  * @author : Paul Taylor
  */
-public class FrameBodyTCMP extends AbstractFrameBodyTextInfo implements ID3v24FrameBody,ID3v23FrameBody
+public class FrameBodyTCMP extends AbstractFrameBodyTextInfo implements ID3v24FrameBody, ID3v23FrameBody
 {
     //TODO does iTunes have to have null terminator?
     static String IS_COMPILATION = "1\u0000";
 
     /**
      * Creates a new FrameBodyTCMP datatype, with compilation enabled
-     *
+     * <p/>
      * This is the preferred constructor to use because TCMP frames should not exist
      * unless they are set to true
      */
@@ -58,15 +58,15 @@ public class FrameBodyTCMP extends AbstractFrameBodyTextInfo implements ID3v24Fr
      * @throws InvalidTagException
      */
     public FrameBodyTCMP(ByteBuffer byteBuffer, int frameSize)
-        throws InvalidTagException
+            throws InvalidTagException
     {
         super(byteBuffer, frameSize);
     }
 
-      /**
-      * The ID3v2 frame identifier
-      *
-      * @return the ID3v2 frame identifier  for this frame type
+    /**
+     * The ID3v2 frame identifier
+     *
+     * @return the ID3v2 frame identifier  for this frame type
      */
     public String getIdentifier()
     {

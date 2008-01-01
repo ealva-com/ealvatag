@@ -30,8 +30,8 @@ import org.jaudiotagger.tag.datatype.StringSizeTerminated;
 import java.nio.ByteBuffer;
 
 /**
- *  Abstract superclass of all URL Frames
-*/
+ * Abstract superclass of all URL Frames
+ */
 public abstract class AbstractFrameBodyUrlLink extends AbstractID3v2FrameBody
 {
 
@@ -54,7 +54,7 @@ public abstract class AbstractFrameBodyUrlLink extends AbstractID3v2FrameBody
     /**
      * Creates a new FrameBodyUrlLink datatype., set up with data.
      *
-     * @param urlLink 
+     * @param urlLink
      */
     public AbstractFrameBodyUrlLink(String urlLink)
     {
@@ -67,7 +67,7 @@ public abstract class AbstractFrameBodyUrlLink extends AbstractID3v2FrameBody
      * @throws InvalidTagException if unable to create framebody from buffer
      */
     protected AbstractFrameBodyUrlLink(ByteBuffer byteBuffer, int frameSize)
-        throws InvalidTagException
+            throws InvalidTagException
     {
         super(byteBuffer, frameSize);
     }
@@ -75,7 +75,7 @@ public abstract class AbstractFrameBodyUrlLink extends AbstractID3v2FrameBody
     /**
      * Set URL Link
      *
-     * @param urlLink 
+     * @param urlLink
      */
     public void setUrlLink(String urlLink)
     {
@@ -93,7 +93,7 @@ public abstract class AbstractFrameBodyUrlLink extends AbstractID3v2FrameBody
     }
 
     /**
-     * 
+     *
      */
     protected void setupObjectList()
     {

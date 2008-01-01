@@ -25,6 +25,8 @@ package org.jaudiotagger.tag.datatype;
 
 import org.jaudiotagger.tag.id3.AbstractTagFrameBody;
 import org.jaudiotagger.tag.InvalidDataTypeException;
+import org.jaudiotagger.tag.reference.GenreTypes;
+import org.jaudiotagger.tag.reference.PictureTypes;
 import org.jaudiotagger.tag.id3.valuepair.*;
 
 import java.util.*;
@@ -46,7 +48,7 @@ public class NumberHashMap extends NumberFixedLength implements HashMapInterface
     private Map valueToKey = null;
 
     /**
-     * 
+     *
      */
     private boolean hasEmptyValue = false;
 
@@ -102,7 +104,7 @@ public class NumberHashMap extends NumberFixedLength implements HashMapInterface
             valueToKey = ReceivedAsTypes.getInstanceOf().getValueToIdMap();
             keyToValue = ReceivedAsTypes.getInstanceOf().getIdToValueMap();
         }
-        else if(identifier.equals(DataTypes.OBJ_CONTENT_TYPE))
+        else if (identifier.equals(DataTypes.OBJ_CONTENT_TYPE))
         {
             valueToKey = SynchronisedLyricsContentType.getInstanceOf().getValueToIdMap();
             keyToValue = SynchronisedLyricsContentType.getInstanceOf().getIdToValueMap();
@@ -125,8 +127,6 @@ public class NumberHashMap extends NumberFixedLength implements HashMapInterface
     }
 
     /**
-     * 
-     *
      * @return the key to value map
      */
     public Map getKeyToValue()
@@ -135,8 +135,6 @@ public class NumberHashMap extends NumberFixedLength implements HashMapInterface
     }
 
     /**
-     * 
-     *
      * @return the value to key map
      */
     public Map getValueToKey()
@@ -145,8 +143,6 @@ public class NumberHashMap extends NumberFixedLength implements HashMapInterface
     }
 
     /**
-     * 
-     *
      * @param value
      */
     public void setValue(Object value)
@@ -170,8 +166,6 @@ public class NumberHashMap extends NumberFixedLength implements HashMapInterface
     }
 
     /**
-     * 
-     *
      * @param obj
      * @return
      */
@@ -223,8 +217,6 @@ public class NumberHashMap extends NumberFixedLength implements HashMapInterface
     }
 
     /**
-     * 
-     *
      * @return
      */
     public Iterator iterator()
@@ -249,28 +241,28 @@ public class NumberHashMap extends NumberFixedLength implements HashMapInterface
 
     /**
      * Read the key from the buffer.
+     *
      * @param arr
      * @param offset
      * @throws InvalidDataTypeException if emptyValues are not allowed and the eky was invalid.
      */
     public void readByteArray(byte[] arr, int offset) throws InvalidDataTypeException
     {
-        super.readByteArray(arr,offset);
+        super.readByteArray(arr, offset);
 
-        if(hasEmptyValue==false)
+        if (hasEmptyValue == false)
         {
             //Mismatch:Superclass uses Long, but maps expect Integer
             Integer intValue = ((Long) value).intValue();
-            if(!keyToValue.containsKey(intValue))
+            if (!keyToValue.containsKey(intValue))
             {
                 throw new InvalidDataTypeException(this.getClass().getName()
-                    +":No key could be found with the value of:"+intValue);
+                        + ":No key could be found with the value of:" + intValue);
             }
         }
     }
+
     /**
-     * 
-     *
      * @return
      */
     public String toString()

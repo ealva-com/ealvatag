@@ -65,7 +65,7 @@ public class ID3v22Frame extends AbstractID3v2Frame
 
     /**
      * Creates a new ID3v22 Frame of type identifier.
-     *
+     * <p/>
      * An empty body of the correct type will be automatically created. This constructor should be used when wish to
      * create a new frame from scratch using user values
      */
@@ -77,16 +77,17 @@ public class ID3v22Frame extends AbstractID3v2Frame
         this.identifier = identifier;
 
         //If dealing with v22 identifier (Note this constructor is used by all three tag versions)
-        if(ID3Tags.isID3v22FrameIdentifier(bodyIdentifier))
+        if (ID3Tags.isID3v22FrameIdentifier(bodyIdentifier))
         {
             //Does it have its own framebody (PIC,CRM) or are we using v23/v24 body (the normal case)
-            if(ID3Tags.forceFrameID22To23(bodyIdentifier)!=null)
+            if (ID3Tags.forceFrameID22To23(bodyIdentifier) != null)
             {
-                 //Do not convert
+                //Do not convert
             }
             //TODO Improve messy fix for datetime
             //TODO need to check in case v22 body does exist before using V23 body(e.g PIC)
-            else if ((bodyIdentifier.equals(ID3v22Frames.FRAME_ID_V2_TYER)) || (bodyIdentifier.equals(ID3v22Frames.FRAME_ID_V2_TIME)))
+            else
+            if ((bodyIdentifier.equals(ID3v22Frames.FRAME_ID_V2_TYER)) || (bodyIdentifier.equals(ID3v22Frames.FRAME_ID_V2_TIME)))
             {
                 bodyIdentifier = ID3v24Frames.FRAME_ID_YEAR;
             }
@@ -130,7 +131,7 @@ public class ID3v22Frame extends AbstractID3v2Frame
 
     /**
      * Copy Constructor
-     *
+     * <p/>
      * Creates a new v22 frame based on another v22 frame
      */
     public ID3v22Frame(ID3v22Frame frame)
@@ -139,7 +140,7 @@ public class ID3v22Frame extends AbstractID3v2Frame
         logger.info("Creating frame from a frame of same version");
     }
 
-    private void createV22FrameFromV23Frame(ID3v23Frame frame)throws InvalidFrameException
+    private void createV22FrameFromV23Frame(ID3v23Frame frame) throws InvalidFrameException
     {
         identifier = ID3Tags.convertFrameID23To22(frame.getIdentifier());
         if (identifier != null)
@@ -215,7 +216,7 @@ public class ID3v22Frame extends AbstractID3v2Frame
         //If it is a v23 frame is it possible to convert it into a v22 frame
         else if (frame instanceof ID3v23Frame)
         {
-            createV22FrameFromV23Frame((ID3v23Frame)frame);
+            createV22FrameFromV23Frame((ID3v23Frame) frame);
         }
         this.frameBody.setHeader(this);
         logger.info("Created frame from a frame of a different version");
@@ -290,6 +291,7 @@ public class ID3v22Frame extends AbstractID3v2Frame
         }
         else if (frameSize == 0)
         {
+            //We dont process this frame or add to framemap becuase contains no useful information
             logger.warning("Empty Frame:" + identifier);
             throw new EmptyFrameException(identifier + " is empty frame");
         }
@@ -373,7 +375,7 @@ public class ID3v22Frame extends AbstractID3v2Frame
 
         //Write Frame Header
         //Write Frame ID must adjust can only be 3 bytes long
-        headerBuffer.put(Utils.getDefaultBytes(getIdentifier(),"ISO-8859-1"), 0, FRAME_ID_SIZE);
+        headerBuffer.put(Utils.getDefaultBytes(getIdentifier(), "ISO-8859-1"), 0, FRAME_ID_SIZE);
         encodeSize(headerBuffer, frameBody.getSize());
 
         //Add header to the Byte Array Output Stream
@@ -384,10 +386,10 @@ public class ID3v22Frame extends AbstractID3v2Frame
             //Add body to the Byte Array Output Stream
             tagBuffer.write(bodyOutputStream.toByteArray());
         }
-        catch(IOException ioe)
+        catch (IOException ioe)
         {
-             //This could never happen coz not writing to file, so convert to RuntimeException
-             throw new RuntimeException(ioe);
+            //This could never happen coz not writing to file, so convert to RuntimeException
+            throw new RuntimeException(ioe);
         }
     }
 
@@ -427,8 +429,7 @@ public class ID3v22Frame extends AbstractID3v2Frame
         MP3File.getStructureFormatter().closeHeadingElement(TYPE_FRAME);
     }
 
-     /**
-     *
+    /**
      * @return true if considered a common frame
      */
     public boolean isCommon()
@@ -436,8 +437,7 @@ public class ID3v22Frame extends AbstractID3v2Frame
         return ID3v22Frames.getInstanceOf().isCommon(getId());
     }
 
-     /**
-     *
+    /**
      * @return true if considered a common frame
      */
     public boolean isBinary()

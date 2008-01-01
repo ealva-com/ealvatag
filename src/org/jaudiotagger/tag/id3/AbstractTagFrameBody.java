@@ -45,23 +45,24 @@ import java.util.Iterator;
  * A frame body contains the data content for a frame
  */
 public abstract class AbstractTagFrameBody
-    extends AbstractTagItem
+        extends AbstractTagItem
 {
     public void createStructure()
     {
     }
 
-    /** Reference to the header associated with this frame body, a framebody can be created without a header
-     *  but one it is associated with a header this should be set. It is principally useful for the framebody to know
-     *  its header, because this will specify its tag version and some framebodies behave slighly different
-     *  between tag versions.
+    /**
+     * Reference to the header associated with this frame body, a framebody can be created without a header
+     * but one it is associated with a header this should be set. It is principally useful for the framebody to know
+     * its header, because this will specify its tag version and some framebodies behave slighly different
+     * between tag versions.
      */
     private AbstractTagFrame header;
 
     /**
      * List of data types that make up this particular frame body.
      */
-    protected ArrayList <AbstractDataType> objectList = new ArrayList<AbstractDataType>();
+    protected ArrayList<AbstractDataType> objectList = new ArrayList<AbstractDataType>();
 
     /**
      * Return the Text Encoding
@@ -125,11 +126,11 @@ public abstract class AbstractTagFrameBody
      * them without any newline characters.
      *
      * @return brief description string
-    */
+     */
     public String getBriefDescription()
     {
         String str = "";
-        for(AbstractDataType object:objectList)
+        for (AbstractDataType object : objectList)
         {
             if ((object.toString() != null) && (object.toString().length() > 0))
             {
@@ -150,11 +151,11 @@ public abstract class AbstractTagFrameBody
     public final String getLongDescription()
     {
         String str = "";
-        for(AbstractDataType object:objectList)
-        {       
+        for (AbstractDataType object : objectList)
+        {
             if ((object.toString() != null) && (object.toString().length() > 0))
             {
-               str += (object.getIdentifier() + " = " + object.toString() + "\n");
+                str += (object.getIdentifier() + " = " + object.toString() + "\n");
             }
         }
         return str;
@@ -164,7 +165,7 @@ public abstract class AbstractTagFrameBody
      * Sets all objects of identifier type to value defined by <code>obj</code> argument.
      *
      * @param identifier <code>MP3Object</code> identifier
-     * @param value        new datatype value
+     * @param value      new datatype value
      */
     public final void setObjectValue(String identifier, Object value)
     {
@@ -311,11 +312,11 @@ public abstract class AbstractTagFrameBody
     /**
      * Create the list of Datatypes that this body
      * expects in the correct order This method needs to be implemented by concrete subclasses
-     *
      */
     protected abstract void setupObjectList();
 
-    /** Get Reference to header
+    /**
+     * Get Reference to header
      *
      * @return
      */
@@ -324,7 +325,8 @@ public abstract class AbstractTagFrameBody
         return header;
     }
 
-    /** Set header
+    /**
+     * Set header
      *
      * @param header
      */

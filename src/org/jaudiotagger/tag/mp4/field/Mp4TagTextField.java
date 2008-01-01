@@ -29,7 +29,7 @@ import org.jaudiotagger.audio.mp4.atom.Mp4BoxHeader;
 
 /**
  * Represents a single text field
- *
+ * <p/>
  * <p>Mp4 metadata normally held as follows:
  * <pre>
  * MP4Box Parent contains
@@ -43,21 +43,20 @@ import org.jaudiotagger.audio.mp4.atom.Mp4BoxHeader;
  *          :null field      (4 bytes)
  *          :data
  * </pre>
- *
+ * <p/>
  * <p>Note:This class is initilized with the child data atom only, the parent data has already been processed, this may
  * change as it seems that code should probably be enscapulated into this. Whereas the raw content returned by the
  * getRawContent() contais the byte data for parent and child.
- *
  */
 public class Mp4TagTextField extends Mp4TagField implements TagTextField
 {
-    protected int    dataSize;
+    protected int dataSize;
     protected String content;
 
     /**
      * Construct from File
      *
-     * @param id  parent id
+     * @param id   parent id
      * @param data atom data
      * @throws UnsupportedEncodingException
      */
@@ -69,7 +68,7 @@ public class Mp4TagTextField extends Mp4TagField implements TagTextField
     /**
      * Construct new Field
      *
-     * @param id  parent id
+     * @param id      parent id
      * @param content data atom data
      */
     public Mp4TagTextField(String id, String content)
@@ -81,10 +80,10 @@ public class Mp4TagTextField extends Mp4TagField implements TagTextField
     protected void build(ByteBuffer data) throws UnsupportedEncodingException
     {
         //Data actually contains a 'Data' Box so process data using this
-        Mp4BoxHeader header  = new Mp4BoxHeader(data);
-        Mp4DataBox   databox = new Mp4DataBox(header,data);
+        Mp4BoxHeader header = new Mp4BoxHeader(data);
+        Mp4DataBox databox = new Mp4DataBox(header, data);
         dataSize = header.getDataLength();
-        content  = databox.getContent();
+        content = databox.getContent();
     }
 
     public void copyContent(TagField field)

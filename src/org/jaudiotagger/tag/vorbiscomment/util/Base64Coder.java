@@ -29,7 +29,7 @@ public class Base64Coder
         map1[i++] = '/';
     }
 
-// Mapping table from Base64 characters to 6-bit nibbles.
+    // Mapping table from Base64 characters to 6-bit nibbles.
     private static final byte[] map2 = new byte[128];
 
     static
@@ -53,7 +53,7 @@ public class Base64Coder
      */
     public static String encode(final String s)
     {
-        return new String(encode(Utils.getDefaultBytes(s,"ISO-8859-1")));
+        return new String(encode(Utils.getDefaultBytes(s, "ISO-8859-1")));
     }
 
     /**

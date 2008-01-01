@@ -35,8 +35,7 @@ import java.util.EnumMap;
 import java.util.List;
 
 /**
- * This is the logical representation of  Vorbis Comment Data 
- *
+ * This is the logical representation of  Vorbis Comment Data
  */
 public class VorbisCommentTag extends AbstractTag
 {
@@ -147,7 +146,6 @@ public class VorbisCommentTag extends AbstractTag
     }
 
     /**
-     *
      * @return the vendor, generically known as the encoder
      */
     public String getVendor()
@@ -162,9 +160,10 @@ public class VorbisCommentTag extends AbstractTag
 
     /**
      * Set the vendor, known as the encoder  generally
-     *
+     * <p/>
      * We dont want this to be blank, when written to file this field is written to a different location
      * to all other fields but user of library can just reat it as another field
+     *
      * @param vendor
      */
     public void setVendor(String vendor)
@@ -172,9 +171,9 @@ public class VorbisCommentTag extends AbstractTag
 
         if (vendor == null)
         {
-            vendor=DEFAULT_VENDOR;
+            vendor = DEFAULT_VENDOR;
         }
-        super.set(new VorbisCommentTagField(VENDOR.name(), vendor));        
+        super.set(new VorbisCommentTagField(VENDOR.name(), vendor));
     }
 
     protected boolean isAllowedEncoding(String enc)
@@ -194,11 +193,11 @@ public class VorbisCommentTag extends AbstractTag
     public TagField createTagField(TagFieldKey genericKey, String value)
             throws KeyNotFoundException
     {
-        if(genericKey==null)
+        if (genericKey == null)
         {
             throw new KeyNotFoundException();
         }
-        return  createTagField(tagFieldToOggField.get(genericKey), value);
+        return createTagField(tagFieldToOggField.get(genericKey), value);
     }
 
     /**
@@ -211,7 +210,7 @@ public class VorbisCommentTag extends AbstractTag
     public TagField createTagField(VorbisCommentFieldKey vorbisCommentFieldKey, String value)
             throws KeyNotFoundException
     {
-        if(vorbisCommentFieldKey==null)
+        if (vorbisCommentFieldKey == null)
         {
             throw new KeyNotFoundException();
         }
@@ -220,7 +219,7 @@ public class VorbisCommentTag extends AbstractTag
 
     /**
      * Create Tag Field using ogg key
-     *
+     * <p/>
      * This method is provided to allow you to create key of any value because VorbisComment allows
      * arbitary keys.
      *
@@ -228,7 +227,7 @@ public class VorbisCommentTag extends AbstractTag
      * @param value
      * @return
      */
-    public TagField createTagField(String vorbisCommentFieldKey,String value)
+    public TagField createTagField(String vorbisCommentFieldKey, String value)
     {
         return new VorbisCommentTagField(vorbisCommentFieldKey, value);
     }
@@ -244,7 +243,7 @@ public class VorbisCommentTag extends AbstractTag
         VorbisCommentFieldKey vorbisCommentFieldKey = tagFieldToOggField.get(genericKey);
         if (vorbisCommentFieldKey == null)
         {
-             throw new KeyNotFoundException();
+            throw new KeyNotFoundException();
         }
         return super.get(vorbisCommentFieldKey.name());
     }
@@ -270,12 +269,12 @@ public class VorbisCommentTag extends AbstractTag
      * @param genericKey
      * @return
      */
-    public String getFirst(TagFieldKey genericKey)throws KeyNotFoundException
+    public String getFirst(TagFieldKey genericKey) throws KeyNotFoundException
     {
         VorbisCommentFieldKey vorbisCommentFieldKey = tagFieldToOggField.get(genericKey);
         if (vorbisCommentFieldKey == null)
         {
-             throw new KeyNotFoundException();
+            throw new KeyNotFoundException();
         }
         return super.getFirst(vorbisCommentFieldKey.name());
     }
@@ -286,11 +285,11 @@ public class VorbisCommentTag extends AbstractTag
      * @param vorbisCommentKey
      * @return
      */
-    public String getFirst(VorbisCommentFieldKey vorbisCommentKey)  throws KeyNotFoundException
+    public String getFirst(VorbisCommentFieldKey vorbisCommentKey) throws KeyNotFoundException
     {
         if (vorbisCommentKey == null)
         {
-             throw new KeyNotFoundException();
+            throw new KeyNotFoundException();
         }
         return super.getFirst(vorbisCommentKey.name());
     }
@@ -317,7 +316,7 @@ public class VorbisCommentTag extends AbstractTag
      */
     public void deleteTagField(VorbisCommentFieldKey vorbisCommentFieldKey) throws KeyNotFoundException
     {
-        if(vorbisCommentFieldKey==null)
+        if (vorbisCommentFieldKey == null)
         {
             throw new KeyNotFoundException();
         }
@@ -326,25 +325,24 @@ public class VorbisCommentTag extends AbstractTag
 
     /**
      * Create artwork field
-     * <p>
+     * <p/>
      * Actually create two fields , the dat field and the mimetype
      *
-     * @param data raw image data
+     * @param data     raw image data
      * @param mimeType mimeType of data
-     *
-     * TODO could possibly work out mimetype from data, but unlike mp4 there is nothing to restrict to only png
-     * or jpeg images
-     * 
+     *                 <p/>
+     *                 TODO could possibly work out mimetype from data, but unlike mp4 there is nothing to restrict to only png
+     *                 or jpeg images
      * @return
      */
-    public void setArtworkField(byte[] data,String mimeType)
+    public void setArtworkField(byte[] data, String mimeType)
     {
         char[] testdata = Base64Coder.encode(data);
         String base64image = new String(testdata);
         VorbisCommentTagField dataField =
-                new VorbisCommentTagField(VorbisCommentFieldKey.COVERART.name(),base64image);
+                new VorbisCommentTagField(VorbisCommentFieldKey.COVERART.name(), base64image);
         VorbisCommentTagField mimeField =
-                new VorbisCommentTagField(VorbisCommentFieldKey.COVERARTMIME.name(),mimeType);
+                new VorbisCommentTagField(VorbisCommentFieldKey.COVERARTMIME.name(), mimeType);
 
         set(dataField);
         set(mimeField);
@@ -359,12 +357,11 @@ public class VorbisCommentTag extends AbstractTag
     public byte[] getArtworkBinaryData()
     {
         String base64data = this.getFirst(VorbisCommentFieldKey.COVERART);
-        byte [] rawdata   = Base64Coder.decode(base64data.toCharArray());
+        byte[] rawdata = Base64Coder.decode(base64data.toCharArray());
         return rawdata;
     }
 
     /**
-     *
      * @return mimetype
      */
     public String getArtworkMimeType()
@@ -372,11 +369,12 @@ public class VorbisCommentTag extends AbstractTag
         return this.getFirst(VorbisCommentFieldKey.COVERARTMIME);
     }
 
-     /**
+    /**
      * Is this tag empty
-     *
+     * <p/>
      * <p>Overridden because check for size of one because there is always a vendor tag unless just
-      * created an empty vorbis tag as part of flac tag in which case size could be zero
+     * created an empty vorbis tag as part of flac tag in which case size could be zero
+     *
      * @see org.jaudiotagger.tag.Tag#isEmpty()
      */
     public boolean isEmpty()
@@ -386,7 +384,7 @@ public class VorbisCommentTag extends AbstractTag
 
     /**
      * Add Field
-     *
+     * <p/>
      * <p>Overidden because there can only be one vendor set
      *
      * @param field

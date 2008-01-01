@@ -51,27 +51,27 @@ public class DataTypes
     //Reference to timestamps
     public static final String OBJ_DATETIME = "DateTime";
     /**
-     * 
+     *
      */
     public static final String OBJ_GENRE = "Genre";
     /**
-     * 
+     *
      */
     public static final String OBJ_ID3V2_FRAME_DESCRIPTION = "ID3v2FrameDescription";
     /**
-     * 
+     *
      */
     public static final String OBJ_TYPE_OF_EVENT = "TypeOfEvent";
     /**
-     * 
+     *
      */
     public static final String OBJ_TIME_STAMP_FORMAT = "TimeStampFormat";
     /**
-     * 
+     *
      */
     public static final String OBJ_TYPE_OF_CHANNEL = "TypeOfChannel";
     /**
-     * 
+     *
      */
     public static final String OBJ_RECIEVED_AS = "RecievedAs";
 
@@ -155,11 +155,11 @@ public class DataTypes
     public static final String OBJ_URLLINK = "URLLink";
 
     //CHAP Frame
-    public static final String OBJ_ELEMENT_ID   = "ElementID";
-    public static final String OBJ_START_TIME   = "StartTime";
-    public static final String OBJ_END_TIME     = "EndTime";
+    public static final String OBJ_ELEMENT_ID = "ElementID";
+    public static final String OBJ_START_TIME = "StartTime";
+    public static final String OBJ_END_TIME = "EndTime";
     public static final String OBJ_START_OFFSET = "StartOffset";
-    public static final String OBJ_END_OFFSET   = "EndOffset";
-    
+    public static final String OBJ_END_OFFSET = "EndOffset";
+
     //CTOC Frame
 }

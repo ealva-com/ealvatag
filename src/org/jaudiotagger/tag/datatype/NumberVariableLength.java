@@ -29,10 +29,10 @@ import org.jaudiotagger.tag.id3.ID3Tags;
 
 /**
  * Represents a number which may span a number of bytes when written to file depending what size is to be represented.
- *
+ * <p/>
  * The bitorder in ID3v2 is most significant bit first (MSB). The byteorder in multibyte numbers is most significant
  * byte first (e.g. $12345678 would be encoded $12 34 56 78), also known as big endian and network byte order.
- *
+ * <p/>
  * In ID3Specification would be denoted as $xx xx xx xx (xx ...) , this denotes at least four bytes but may be more.
  * Sometimes may be completely optional (zero bytes)
  */
@@ -69,7 +69,7 @@ public class NumberVariableLength extends AbstractDataType
     /**
      * Return the maximum number of digits that can be used to express the number
      *
-     * @return  the maximum number of digits that can be used to express the number
+     * @return the maximum number of digits that can be used to express the number
      */
     public int getMaximumLenth()
     {
@@ -87,8 +87,6 @@ public class NumberVariableLength extends AbstractDataType
     }
 
     /**
-     * 
-     *
      * @param minimumSize
      */
     public void setMinimumSize(int minimumSize)
@@ -100,8 +98,6 @@ public class NumberVariableLength extends AbstractDataType
     }
 
     /**
-     * 
-     *
      * @return the number of bytes required to write this to a file
      */
     public int getSize()
@@ -133,8 +129,6 @@ public class NumberVariableLength extends AbstractDataType
     }
 
     /**
-     * 
-     *
      * @param obj
      * @return
      */
@@ -172,9 +166,9 @@ public class NumberVariableLength extends AbstractDataType
         }
 
         //Coding error, should never happen as far as I can see
-        if (offset < 0 )
+        if (offset < 0)
         {
-            throw new IllegalArgumentException("negativer offset into an array offset:"+offset);
+            throw new IllegalArgumentException("negativer offset into an array offset:" + offset);
         }
 
         //If optional then set value to zero, this will mean that if this frame is written back to file it will be created
@@ -183,7 +177,7 @@ public class NumberVariableLength extends AbstractDataType
         //if not optional problem with this frame
         if (offset >= arr.length)
         {
-            if(minLength==0)
+            if (minLength == 0)
             {
                 value = (long) 0;
                 return;
@@ -209,8 +203,6 @@ public class NumberVariableLength extends AbstractDataType
 
 
     /**
-     * 
-     *
      * @return String representation of the number
      */
     public String toString()

@@ -7,7 +7,7 @@ import java.nio.ByteBuffer;
 
 /**
  * Title Sort name, this is what MusicBrainz uses in ID3v23 because TSOT not supported.
- *
+ * <p/>
  * However iTunes uses TSOT even in ID3v23, so we have two possible options
  */
 public class FrameBodyXSOT extends AbstractFrameBodyTextInfo implements ID3v23FrameBody
@@ -41,15 +41,15 @@ public class FrameBodyXSOT extends AbstractFrameBodyTextInfo implements ID3v23Fr
      * @throws InvalidTagException
      */
     public FrameBodyXSOT(ByteBuffer byteBuffer, int frameSize)
-        throws InvalidTagException
+            throws InvalidTagException
     {
         super(byteBuffer, frameSize);
     }
 
-     /**
-      * The ID3v2 frame identifier
-      *
-      * @return the ID3v2 frame identifier  for this frame type
+    /**
+     * The ID3v2 frame identifier
+     *
+     * @return the ID3v2 frame identifier  for this frame type
      */
     public String getIdentifier()
     {

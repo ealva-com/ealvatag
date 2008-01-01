@@ -31,10 +31,10 @@ import java.util.logging.Logger;
 
 /**
  * Create the VorbisCommentTag by reading from the raw packet data
- *
+ * <p/>
  * <p>This is in the same format whether encoded with Ogg or Flac
  * except the framing bit is only present when used within Ogg Vorbis
- *
+ * <p/>
  * <pre>
  * From the http://xiph.org/vorbis/doc/Vorbis_I_spec.html#vorbis-spec-comment
  * Read decodes the packet data using the following algorithm:
@@ -52,65 +52,62 @@ import java.util.logging.Logger;
  */
 public class VorbisCommentReader
 {
-      // Logger Object
+    // Logger Object
     public static Logger logger = Logger.getLogger("org.jaudiotagger.tag.vorbiscomment.VorbisCommentReader");
 
     public static final int FIELD_VENDOR_LENGTH_POS = 0;
     public static final int FIELD_VENDOR_STRING_POS = 4;
 
-    public static final int FIELD_VENDOR_LENGTH_LENGTH      = 4;
-    public static final int FIELD_USER_COMMENT_LIST_LENGTH  = 4;
-    public static final int FIELD_COMMENT_LENGTH_LENGTH     = 4;
+    public static final int FIELD_VENDOR_LENGTH_LENGTH = 4;
+    public static final int FIELD_USER_COMMENT_LIST_LENGTH = 4;
+    public static final int FIELD_COMMENT_LENGTH_LENGTH = 4;
 
     /**
-     *
      * @param rawdata
-     * 
      * @return logical representation of VorbisCommentTag
-     *
      * @throws IOException
      * @throws CannotReadException
      */
-    public VorbisCommentTag read(byte[] rawdata,boolean isFramingBit) throws IOException, CannotReadException
+    public VorbisCommentTag read(byte[] rawdata, boolean isFramingBit) throws IOException, CannotReadException
     {
 
         VorbisCommentTag tag = new VorbisCommentTag();
 
         byte[] b = new byte[FIELD_VENDOR_LENGTH_LENGTH];
-        System.arraycopy(rawdata,FIELD_VENDOR_LENGTH_POS,b,FIELD_VENDOR_LENGTH_POS,FIELD_VENDOR_LENGTH_LENGTH);
+        System.arraycopy(rawdata, FIELD_VENDOR_LENGTH_POS, b, FIELD_VENDOR_LENGTH_POS, FIELD_VENDOR_LENGTH_LENGTH);
         int pos = FIELD_VENDOR_LENGTH_LENGTH;
         int vendorStringLength = Utils.getNumberLittleEndian(b);
 
         b = new byte[vendorStringLength];
-        System.arraycopy(rawdata,pos,b,0,vendorStringLength);
-        pos+=vendorStringLength;
+        System.arraycopy(rawdata, pos, b, 0, vendorStringLength);
+        pos += vendorStringLength;
         tag.setVendor(new String(b, VorbisHeader.CHARSET_UTF_8));
 
         b = new byte[FIELD_USER_COMMENT_LIST_LENGTH];
-        System.arraycopy(rawdata,pos,b,0,FIELD_USER_COMMENT_LIST_LENGTH);
-        pos+=FIELD_USER_COMMENT_LIST_LENGTH;
+        System.arraycopy(rawdata, pos, b, 0, FIELD_USER_COMMENT_LIST_LENGTH);
+        pos += FIELD_USER_COMMENT_LIST_LENGTH;
 
         int userComments = Utils.getNumberLittleEndian(b);
         for (int i = 0; i < userComments; i++)
         {
             b = new byte[FIELD_COMMENT_LENGTH_LENGTH];
-            System.arraycopy(rawdata,pos,b,0,FIELD_COMMENT_LENGTH_LENGTH);
-            pos+=FIELD_COMMENT_LENGTH_LENGTH;
+            System.arraycopy(rawdata, pos, b, 0, FIELD_COMMENT_LENGTH_LENGTH);
+            pos += FIELD_COMMENT_LENGTH_LENGTH;
 
             int commentLength = Utils.getNumberLittleEndian(b);
             b = new byte[commentLength];
-            System.arraycopy(rawdata,pos,b,0,commentLength);
-            pos+=commentLength;
+            System.arraycopy(rawdata, pos, b, 0, commentLength);
+            pos += commentLength;
 
             VorbisCommentTagField fieldComment = new VorbisCommentTagField(b);
-            logger.info("Adding:"+fieldComment.getId());
+            logger.info("Adding:" + fieldComment.getId());
             tag.add(fieldComment);
         }
 
         //Check framing bit, only exists when vorbisComment used within OggVorbis       
-        if(isFramingBit)
+        if (isFramingBit)
         {
-            if ((rawdata[pos]&0x01)!=1)
+            if ((rawdata[pos] & 0x01) != 1)
             {
                 throw new CannotReadException("Error: The OGG Stream isn't valid, Vorbis tag valid flag is wrong");
             }

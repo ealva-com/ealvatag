@@ -24,7 +24,7 @@ package org.jaudiotagger;
 /**
  * Definitions of the bit used when reading file format from file
  */
-public interface FileConstants              
+public interface FileConstants
 {
     /**
      * defined for convenience

@@ -34,16 +34,15 @@ import org.jaudiotagger.tag.id3.ID3v24Frames;
 import java.nio.ByteBuffer;
 
 
-
- /**
-   * A UFID Framebody consists of an owner that identifies the server hosting the
-   * unique identifier database, and the unique identifier itself which can be up to 64
-   * bytes in length.
+/**
+ * A UFID Framebody consists of an owner that identifies the server hosting the
+ * unique identifier database, and the unique identifier itself which can be up to 64
+ * bytes in length.
  */
-public class FrameBodyUFID extends AbstractID3v2FrameBody implements ID3v24FrameBody,ID3v23FrameBody
+public class FrameBodyUFID extends AbstractID3v2FrameBody implements ID3v24FrameBody, ID3v23FrameBody
 {
     public static final String UFID_MUSICBRAINZ = "http://musicbrainz.org";
-    public static final String UFID_ID3TEST     = "http://www.id3.org/dummy/ufid.html";
+    public static final String UFID_ID3TEST = "http://www.id3.org/dummy/ufid.html";
 
     /**
      * Creates a new FrameBodyUFID datatype.
@@ -62,8 +61,8 @@ public class FrameBodyUFID extends AbstractID3v2FrameBody implements ID3v24Frame
     /**
      * Creates a new FrameBodyUFID datatype.
      *
-     * @param owner             url of the database
-     * @param uniqueIdentifier  unique identifier
+     * @param owner            url of the database
+     * @param uniqueIdentifier unique identifier
      */
     public FrameBodyUFID(String owner, byte[] uniqueIdentifier)
     {
@@ -73,19 +72,19 @@ public class FrameBodyUFID extends AbstractID3v2FrameBody implements ID3v24Frame
 
     /**
      * Creates FrameBodyUFID datatype from buffer
-     *                     
-     * @throws InvalidTagException 
+     *
+     * @throws InvalidTagException
      */
     public FrameBodyUFID(ByteBuffer byteBuffer, int frameSize)
-        throws InvalidTagException
+            throws InvalidTagException
     {
         super(byteBuffer, frameSize);
     }
 
     /**
-      * The ID3v2 frame identifier
-      *
-      * @return the ID3v2 frame identifier  for this frame type
+     * The ID3v2 frame identifier
+     *
+     * @return the ID3v2 frame identifier  for this frame type
      */
     public String getIdentifier()
     {
@@ -103,7 +102,6 @@ public class FrameBodyUFID extends AbstractID3v2FrameBody implements ID3v24Frame
     }
 
     /**
-     *
      * @return the url of the the database that this ufid is stored in
      */
     public String getOwner()
@@ -122,12 +120,11 @@ public class FrameBodyUFID extends AbstractID3v2FrameBody implements ID3v24Frame
     }
 
     /**
-     *
      * @return the unique identifier (within the owners domain)
      */
-    public byte[]  getUniqueIdentifier()
+    public byte[] getUniqueIdentifier()
     {
-        return  (byte[])getObjectValue(DataTypes.OBJ_DATA);
+        return (byte[]) getObjectValue(DataTypes.OBJ_DATA);
     }
 
     protected void setupObjectList()

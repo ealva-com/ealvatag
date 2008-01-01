@@ -24,7 +24,7 @@
 package org.jaudiotagger.tag.datatype;
 
 import org.jaudiotagger.tag.id3.AbstractTagFrameBody;
-import org.jaudiotagger.tag.id3.valuepair.Languages;
+import org.jaudiotagger.tag.reference.Languages;
 import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
 
 import java.util.*;
@@ -38,17 +38,17 @@ public class StringHashMap extends StringFixedLength implements HashMapInterface
 {
 
     /**
-     * 
+     *
      */
     Map keyToValue = null;
 
     /**
-     * 
+     *
      */
     Map valueToKey = null;
 
     /**
-     * 
+     *
      */
     boolean hasEmptyValue = false;
 
@@ -84,8 +84,6 @@ public class StringHashMap extends StringFixedLength implements HashMapInterface
     }
 
     /**
-     * 
-     *
      * @return
      */
     public Map getKeyToValue()
@@ -94,8 +92,6 @@ public class StringHashMap extends StringFixedLength implements HashMapInterface
     }
 
     /**
-     * 
-     *
      * @return
      */
     public Map getValueToKey()
@@ -104,8 +100,6 @@ public class StringHashMap extends StringFixedLength implements HashMapInterface
     }
 
     /**
-     * 
-     *
      * @param value
      */
     public void setValue(Object value)
@@ -121,8 +115,6 @@ public class StringHashMap extends StringFixedLength implements HashMapInterface
     }
 
     /**
-     * 
-     *
      * @param obj
      * @return
      */
@@ -174,8 +166,6 @@ public class StringHashMap extends StringFixedLength implements HashMapInterface
     }
 
     /**
-     * 
-     *
      * @return
      */
     public Iterator iterator()
@@ -199,8 +189,6 @@ public class StringHashMap extends StringFixedLength implements HashMapInterface
     }
 
     /**
-     * 
-     *
      * @return
      */
     public String toString()
@@ -220,10 +208,9 @@ public class StringHashMap extends StringFixedLength implements HashMapInterface
     }
 
     /**
-     *
      * @return the ISO_8859 encoding for Datatypes of this type
      */
-     protected String  getTextEncodingCharSet()
+    protected String getTextEncodingCharSet()
     {
         return TextEncoding.CHARSET_ISO_8859_1;
     }

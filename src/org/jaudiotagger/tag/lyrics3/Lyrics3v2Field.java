@@ -34,7 +34,7 @@ import java.nio.ByteBuffer;
 
 
 public class Lyrics3v2Field
-    extends AbstractTagFrame
+        extends AbstractTagFrame
 {
     /**
      * Creates a new Lyrics3v2Field datatype.
@@ -51,7 +51,7 @@ public class Lyrics3v2Field
     /**
      * Creates a new Lyrics3v2Field datatype.
      *
-     * @param body 
+     * @param body
      */
     public Lyrics3v2Field(AbstractLyrics3v2FieldFrameBody body)
     {
@@ -61,11 +61,11 @@ public class Lyrics3v2Field
     /**
      * Creates a new Lyrics3v2Field datatype.
      *
-     * @param frame 
-     * @throws TagException 
+     * @param frame
+     * @throws TagException
      */
     public Lyrics3v2Field(AbstractID3v2Frame frame)
-        throws TagException
+            throws TagException
     {
         AbstractFrameBodyTextInfo textFrame;
         String text;
@@ -127,20 +127,17 @@ public class Lyrics3v2Field
     /**
      * Creates a new Lyrics3v2Field datatype.
      *
-     * @param file 
-     * @throws InvalidTagException 
-
+     * @param file
+     * @throws InvalidTagException
      */
     public Lyrics3v2Field(ByteBuffer byteBuffer)
-        throws InvalidTagException
+            throws InvalidTagException
     {
         this.read(byteBuffer);
     }
 
     /**
-     * 
-     *
-     * @return 
+     * @return
      */
     public String getIdentifier()
     {
@@ -152,9 +149,7 @@ public class Lyrics3v2Field
     }
 
     /**
-     * 
-     *
-     * @return 
+     * @return
      */
     public int getSize()
     {
@@ -162,14 +157,12 @@ public class Lyrics3v2Field
     }
 
     /**
-     * 
-     *
-     * @param byteBuffer 
-     * @throws InvalidTagException 
-     * @throws IOException         
+     * @param byteBuffer
+     * @throws InvalidTagException
+     * @throws IOException
      */
     public void read(ByteBuffer byteBuffer)
-        throws InvalidTagException
+            throws InvalidTagException
     {
         byte[] buffer = new byte[6];
         // lets scan for a non-zero byte;
@@ -180,7 +173,7 @@ public class Lyrics3v2Field
             b = byteBuffer.get();
         }
         while (b == 0);
-        byteBuffer.position(byteBuffer.position()-1);
+        byteBuffer.position(byteBuffer.position() - 1);
         // read the 3 character ID
         byteBuffer.get(buffer, 0, 3);
         String identifier = new String(buffer, 0, 3);
@@ -193,9 +186,7 @@ public class Lyrics3v2Field
     }
 
     /**
-     * 
-     *
-     * @return 
+     * @return
      */
     public String toString()
     {
@@ -207,16 +198,14 @@ public class Lyrics3v2Field
     }
 
     /**
-     * 
-     *
-     * @param file 
-     * @throws IOException 
+     * @param file
+     * @throws IOException
      */
     public void write(RandomAccessFile file)
-    throws IOException
+            throws IOException
     {
         if ((((AbstractLyrics3v2FieldFrameBody) frameBody).getSize() > 0) ||
-            TagOptionSingleton.getInstance().isLyrics3SaveEmptyField())
+                TagOptionSingleton.getInstance().isLyrics3SaveEmptyField())
         {
             byte[] buffer = new byte[3];
             String str = getIdentifier();
@@ -232,12 +221,12 @@ public class Lyrics3v2Field
     /**
      * Read a Lyrics3 Field from a file.
      *
-     * @param identifier 
+     * @param identifier
      * @return
-     * @throws InvalidTagException 
+     * @throws InvalidTagException
      */
     private AbstractLyrics3v2FieldFrameBody readBody(String identifier, ByteBuffer byteBuffer)
-        throws InvalidTagException
+            throws InvalidTagException
     {
         AbstractLyrics3v2FieldFrameBody newBody = null;
         if (identifier.equals(Lyrics3v2Fields.FIELD_V2_AUTHOR))

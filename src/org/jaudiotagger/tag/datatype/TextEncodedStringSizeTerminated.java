@@ -18,13 +18,13 @@ import java.util.List;
  * This type of String will usually only be used when it is the last field within a frame, when reading the remainder of
  * the byte array will be read, when writing the frame will be accomodate the required size for the String. The String
  * will be encoded based upon the text encoding of the frame that it belongs to.
- *
+ * <p/>
  * All TextInformation frames support multiple strings, stored as a null separated list, where null is represented by
  * the termination code for the character encoding. This functionality is only officially support in ID3v24.  Itunes
  * write null terminators characters even though only writes a single value.
  */
 public class TextEncodedStringSizeTerminated
-    extends AbstractString
+        extends AbstractString
 {
 
     /**
@@ -91,8 +91,7 @@ public class TextEncodedStringSizeTerminated
         outBuffer.flip();
 
         //Store value
-        value=outBuffer.toString();
-
+        value = outBuffer.toString();
 
         //SetSize, important this is correct for finding the next datatype
         setSize(arr.length - offset);
@@ -101,7 +100,7 @@ public class TextEncodedStringSizeTerminated
 
     /**
      * Write String into byte array
-     *
+     * <p/>
      * It will remove a trailing null terminator if exists if the option
      * RemoveTrailingTerminatorOnWrite has been set.
      *
@@ -116,15 +115,15 @@ public class TextEncodedStringSizeTerminated
             String charSetName = getTextEncodingCharSet();
             CharsetEncoder encoder = Charset.forName(charSetName).newEncoder();
 
-            if(TagOptionSingleton.getInstance().isRemoveTrailingTerminatorOnWrite())
+            if (TagOptionSingleton.getInstance().isRemoveTrailingTerminatorOnWrite())
             {
-                String stringValue = (String)value;
-                if(stringValue.length()>0)
+                String stringValue = (String) value;
+                if (stringValue.length() > 0)
                 {
-                    if(stringValue.charAt(stringValue.length()-1)=='\0')
+                    if (stringValue.charAt(stringValue.length() - 1) == '\0')
                     {
-                       stringValue=(stringValue).substring(0,stringValue.length()-1);
-                       value=stringValue;
+                        stringValue = (stringValue).substring(0, stringValue.length() - 1);
+                        value = stringValue;
                     }
                 }
             }
@@ -144,7 +143,7 @@ public class TextEncodedStringSizeTerminated
 
     /**
      * Get the text encoding being used.
-     *
+     * <p/>
      * The text encoding is defined by the frame body that the text field belongs to.
      *
      * @return the text encoding charset
@@ -165,10 +164,10 @@ public class TextEncodedStringSizeTerminated
      */
     private static List splitByNullSeperator(String value)
     {
-        String[]valuesarray = value.split("\\u0000");
+        String[] valuesarray = value.split("\\u0000");
         List values = Arrays.asList(valuesarray);
         //Read only list so if empty have to create new list
-        if(values.size()==0)
+        if (values.size() == 0)
         {
             values = new ArrayList(1);
             values.add("");
@@ -193,22 +192,20 @@ public class TextEncodedStringSizeTerminated
      */
     public int getNumberOfValues()
     {
-        return splitByNullSeperator(((String)value)).size();
+        return splitByNullSeperator(((String) value)).size();
     }
 
     /**
      * Get the nth value
      *
      * @param index
-     *
-     * @throws IndexOutOfBoundsException if value does not exist
-     *
      * @return the nth value
+     * @throws IndexOutOfBoundsException if value does not exist
      */
     public String getValueAtIndex(int index)
     {
-       //Split String into seperate components
-       List values = splitByNullSeperator((String)value);
-       return (String)values.get(index);
+        //Split String into seperate components
+        List values = splitByNullSeperator((String) value);
+        return (String) values.get(index);
     }
 }

@@ -25,8 +25,8 @@ import java.nio.ByteBuffer;
 
 /**
  * Position synchronisation frame.
- * 
- * <p>
+ * <p/>
+ * <p/>
  * This frame delivers information to the listener of how far into the
  * audio stream he picked up; in effect, it states the time offset of
  * the first frame in the stream. The frame layout is:
@@ -35,7 +35,7 @@ import java.nio.ByteBuffer;
  * <tr><td>Time stamp format </td><td>$xx          </td></tr>
  * <tr><td>Position          </td><td>$xx (xx ...) </td></tr>
  * </table></center></p>
- * <p>
+ * <p/>
  * Where time stamp format is:
  * </p><p>
  * $01 Absolute time, 32 bit sized, using MPEG frames as unit<br>
@@ -46,17 +46,17 @@ import java.nio.ByteBuffer;
  * beginning of a file the value is always 0. There may only be one
  * "POSS" frame in each tag.
  * </p>
- * 
+ * <p/>
  * <p>For more details, please refer to the ID3 specifications:
  * <ul>
  * <li><a href="http://www.id3.org/id3v2.3.0.txt">ID3 v2.3.0 Spec</a>
  * </ul>
- * 
+ *
  * @author : Paul Taylor
  * @author : Eric Farng
  * @version $Id$
  */
-public class FrameBodyPOSS extends AbstractID3v2FrameBody implements ID3v24FrameBody,ID3v23FrameBody
+public class FrameBodyPOSS extends AbstractID3v2FrameBody implements ID3v24FrameBody, ID3v23FrameBody
 {
     /**
      * Creates a new FrameBodyPOSS datatype.
@@ -75,8 +75,8 @@ public class FrameBodyPOSS extends AbstractID3v2FrameBody implements ID3v24Frame
     /**
      * Creates a new FrameBodyPOSS datatype.
      *
-     * @param timeStampFormat 
-     * @param position        
+     * @param timeStampFormat
+     * @param position
      */
     public FrameBodyPOSS(byte timeStampFormat, long position)
     {
@@ -87,18 +87,18 @@ public class FrameBodyPOSS extends AbstractID3v2FrameBody implements ID3v24Frame
     /**
      * Creates a new FrameBodyPOSS datatype.
      *
-    * @throws InvalidTagException if unable to create framebody from buffer
+     * @throws InvalidTagException if unable to create framebody from buffer
      */
     public FrameBodyPOSS(ByteBuffer byteBuffer, int frameSize)
-        throws InvalidTagException
+            throws InvalidTagException
     {
         super(byteBuffer, frameSize);
     }
 
-      /**
-      * The ID3v2 frame identifier
-      *
-      * @return the ID3v2 frame identifier  for this frame type
+    /**
+     * The ID3v2 frame identifier
+     *
+     * @return the ID3v2 frame identifier  for this frame type
      */
     public String getIdentifier()
     {
@@ -107,7 +107,7 @@ public class FrameBodyPOSS extends AbstractID3v2FrameBody implements ID3v24Frame
 
 
     /**
-     * 
+     *
      */
     protected void setupObjectList()
     {

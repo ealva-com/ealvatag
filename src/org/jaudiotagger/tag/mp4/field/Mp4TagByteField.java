@@ -11,7 +11,7 @@ import java.nio.ByteBuffer;
 
 /**
  * Represents a single byte as a number
- *
+ * <p/>
  * <p>Usually single byte fields are used as a boolean field, but not always so we dont do this conversion
  */
 public class Mp4TagByteField extends Mp4TagTextField
@@ -28,15 +28,15 @@ public class Mp4TagByteField extends Mp4TagTextField
 
     /**
      * Create new field
-     *
+     * <p/>
      * Assume length of 1 which is correct for most but not all byte fields
-     * 
+     *
      * @param id
      * @param value is a String representation of a number
      */
     public Mp4TagByteField(Mp4FieldKey id, String value) throws FieldDataInvalidException
     {
-        this(id,value,1);
+        this(id, value, 1);
     }
 
     /**
@@ -45,19 +45,19 @@ public class Mp4TagByteField extends Mp4TagTextField
      * @param id
      * @param value is a String representation of a number
      */
-    public Mp4TagByteField(Mp4FieldKey id, String value,int realDataLength) throws FieldDataInvalidException
+    public Mp4TagByteField(Mp4FieldKey id, String value, int realDataLength) throws FieldDataInvalidException
     {
         super(id.getFieldName(), value);
-        this.realDataLength=realDataLength;
+        this.realDataLength = realDataLength;
         //Check that can actually be store dnumercially, otherwise will have big problems
         //when try and save the field
         try
         {
             Long.parseLong(value);
         }
-        catch(NumberFormatException nfe)
+        catch (NumberFormatException nfe)
         {
-            throw new FieldDataInvalidException("Value of:"+value+" is invalid for field:"+id);    
+            throw new FieldDataInvalidException("Value of:" + value + " is invalid for field:" + id);
         }
     }
 
@@ -80,53 +80,53 @@ public class Mp4TagByteField extends Mp4TagTextField
 
     /**
      * Return raw data bytes
-     *
+     * <p/>
      * TODO this code should be done better so generalised to any length
      *
      * @return
      * @throws UnsupportedEncodingException
      */
-    protected byte[] getDataBytes()throws UnsupportedEncodingException
+    protected byte[] getDataBytes() throws UnsupportedEncodingException
     {
-    
+
         //Write original data
-        if(bytedata!=null)
+        if (bytedata != null)
         {
             return bytedata;
         }
 
         //new field, lets hope the realDataLength is correct
-        switch(realDataLength)
+        switch (realDataLength)
         {
             case 2:
             {
-                 //Save as two bytes
-                 Short shortValue = new Short(content);
-                 byte rawData [] = Utils.getShortSizeBigEndian(shortValue);                   
-                 return rawData;
+                //Save as two bytes
+                Short shortValue = new Short(content);
+                byte rawData[] = Utils.getShortSizeBigEndian(shortValue);
+                return rawData;
             }
             case 1:
             {
-                 //Save as 1 bytes
-                 Short shortValue = new Short(content);
-                 byte rawData [] = new byte[1];
-                 rawData[0] = shortValue.byteValue();
-                 return rawData;
+                //Save as 1 bytes
+                Short shortValue = new Short(content);
+                byte rawData[] = new byte[1];
+                rawData[0] = shortValue.byteValue();
+                return rawData;
             }
             case 4:
             {
-                 //Assume could be int
-                 Integer intValue = new Integer(content);
-                 byte rawData [] = Utils.getSizeBigEndian(intValue);
-                 return rawData;
+                //Assume could be int
+                Integer intValue = new Integer(content);
+                byte rawData[] = Utils.getSizeBigEndian(intValue);
+                return rawData;
             }
             default:
             {
                 //TODO
-                throw new RuntimeException(id+":"
-                        +realDataLength
-                        +":"
-                        +"Dont know how to write byte fields of this length");
+                throw new RuntimeException(id + ":"
+                        + realDataLength
+                        + ":"
+                        + "Dont know how to write byte fields of this length");
             }
         }
 
@@ -135,13 +135,13 @@ public class Mp4TagByteField extends Mp4TagTextField
     protected void build(ByteBuffer data) throws UnsupportedEncodingException
     {
         //Data actually contains a 'Data' Box so process data using this
-        Mp4BoxHeader header  = new Mp4BoxHeader(data);
-        Mp4DataBox   databox = new Mp4DataBox(header,data);
-        dataSize        = header.getDataLength();
+        Mp4BoxHeader header = new Mp4BoxHeader(data);
+        Mp4DataBox databox = new Mp4DataBox(header, data);
+        dataSize = header.getDataLength();
         //Needed for subsequent write
-        realDataLength  = dataSize - Mp4DataBox.PRE_DATA_LENGTH;
-        bytedata= databox.getByteData();
-        content  = databox.getContent();
+        realDataLength = dataSize - Mp4DataBox.PRE_DATA_LENGTH;
+        bytedata = databox.getByteData();
+        content = databox.getContent();
 
     }
 }

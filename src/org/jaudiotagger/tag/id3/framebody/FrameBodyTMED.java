@@ -99,17 +99,17 @@ import java.nio.ByteBuffer;
  * <tr><td align=right>/III</td><td>Type III cassette (ferric chrome)</td></tr>
  * <tr><td align=right>/IV<br>&nbsp;</td><td>Type IV cassette (metal)</td></tr>
  * </table></p>
- * 
+ * <p/>
  * <p>For more details, please refer to the ID3 specifications:
  * <ul>
  * <li><a href="http://www.id3.org/id3v2.3.0.txt">ID3 v2.3.0 Spec</a>
  * </ul>
- * 
+ *
  * @author : Paul Taylor
  * @author : Eric Farng
  * @version $Id$
  */
-public class FrameBodyTMED extends AbstractFrameBodyTextInfo implements ID3v23FrameBody,ID3v24FrameBody
+public class FrameBodyTMED extends AbstractFrameBodyTextInfo implements ID3v23FrameBody, ID3v24FrameBody
 {
     /**
      * Creates a new FrameBodyTMED datatype.
@@ -126,8 +126,8 @@ public class FrameBodyTMED extends AbstractFrameBodyTextInfo implements ID3v23Fr
     /**
      * Creates a new FrameBodyTMED datatype.
      *
-     * @param textEncoding 
-     * @param text         
+     * @param textEncoding
+     * @param text
      */
     public FrameBodyTMED(byte textEncoding, String text)
     {
@@ -136,23 +136,23 @@ public class FrameBodyTMED extends AbstractFrameBodyTextInfo implements ID3v23Fr
 
     /**
      * Creates a new FrameBodyTMED datatype.
-     *    
-     * @throws InvalidTagException 
+     *
+     * @throws InvalidTagException
      */
     public FrameBodyTMED(ByteBuffer byteBuffer, int frameSize)
-        throws InvalidTagException
+            throws InvalidTagException
     {
         super(byteBuffer, frameSize);
     }
 
 
-     /**
-      * The ID3v2 frame identifier
-      *
-      * @return the ID3v2 frame identifier  for this frame type
+    /**
+     * The ID3v2 frame identifier
+     *
+     * @return the ID3v2 frame identifier  for this frame type
      */
     public String getIdentifier()
     {
-        return  ID3v24Frames.FRAME_ID_MEDIA_TYPE;
+        return ID3v24Frames.FRAME_ID_MEDIA_TYPE;
     }
 }
