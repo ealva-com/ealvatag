@@ -391,6 +391,95 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
                     frameMap.put(newFrame.getId(), newFrame);
                 }
             }
+            else if (newFrame.getBody() instanceof FrameBodyWXXX)
+            {
+                //Different key so convert to list and add as new frame
+                if (!((FrameBodyWXXX) newFrame.getBody()).getDescription()
+                        .equals(((FrameBodyWXXX) oldFrame.getBody()).getDescription()))
+                {
+                    List<AbstractID3v2Frame> frames = new ArrayList<AbstractID3v2Frame>();
+                    frames.add(oldFrame);
+                    frames.add(newFrame);
+                    frameMap.put(newFrame.getId(), frames);
+                }
+                //Same key so replace
+                else
+                {
+                    frameMap.put(newFrame.getId(), newFrame);
+                }
+            }
+            else if (newFrame.getBody() instanceof FrameBodyCOMM)
+            {
+               if (!((FrameBodyCOMM) newFrame.getBody()).getDescription()
+                     .equals(((FrameBodyCOMM) oldFrame.getBody()).getDescription()))
+                 {
+                     List<AbstractID3v2Frame> frames = new ArrayList<AbstractID3v2Frame>();
+                     frames.add(oldFrame);
+                     frames.add(newFrame);
+                     frameMap.put(newFrame.getId(), frames);
+                 }
+                 //Same key so replace
+                 else
+                 {
+                     frameMap.put(newFrame.getId(), newFrame);
+                 }
+            }
+            else if (newFrame.getBody() instanceof FrameBodyUFID)
+            {
+               if (!((FrameBodyUFID) newFrame.getBody()).getOwner()
+                     .equals(((FrameBodyUFID) oldFrame.getBody()).getOwner()))
+                 {
+                     List<AbstractID3v2Frame> frames = new ArrayList<AbstractID3v2Frame>();
+                     frames.add(oldFrame);
+                     frames.add(newFrame);
+                     frameMap.put(newFrame.getId(), frames);
+                 }
+                 //Same key so replace
+                 else
+                 {
+                     frameMap.put(newFrame.getId(), newFrame);
+                 }
+            }
+            else if (newFrame.getBody() instanceof FrameBodyUSLT)
+            {
+               if (!((FrameBodyUSLT) newFrame.getBody()).getDescription()
+                     .equals(((FrameBodyUSLT) oldFrame.getBody()).getDescription()))
+                 {
+                     List<AbstractID3v2Frame> frames = new ArrayList<AbstractID3v2Frame>();
+                     frames.add(oldFrame);
+                     frames.add(newFrame);
+                     frameMap.put(newFrame.getId(), frames);
+                 }
+                 //Same key so replace
+                 else
+                 {
+                     frameMap.put(newFrame.getId(), newFrame);
+                 }
+            }
+            else if (newFrame.getBody() instanceof FrameBodyPOPM)
+            {
+               if (!((FrameBodyPOPM) newFrame.getBody()).getEmailToUser()
+                     .equals(((FrameBodyPOPM) oldFrame.getBody()).getEmailToUser()))
+                 {
+                     List<AbstractID3v2Frame> frames = new ArrayList<AbstractID3v2Frame>();
+                     frames.add(oldFrame);
+                     frames.add(newFrame);
+                     frameMap.put(newFrame.getId(), frames);
+                 }
+                 //Same key so replace
+                 else
+                 {
+                     frameMap.put(newFrame.getId(), newFrame);
+                 }
+            }
+            //Just add new one
+            else
+            {
+                 List<AbstractID3v2Frame> frames = new ArrayList<AbstractID3v2Frame>();
+                 frames.add(oldFrame);
+                 frames.add(newFrame);
+                 frameMap.put(newFrame.getId(), frames);
+            }
         }
         else if (o instanceof List)
         {
@@ -400,16 +489,68 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
 
                 if (newFrame.getBody() instanceof FrameBodyTXXX)
                 {
-                    //Value with matching key exists so replace 
+                    //Value with matching key exists so replace
                     if (((FrameBodyTXXX) newFrame.getBody()).getDescription()
                             .equals(((FrameBodyTXXX) nextFrame.getBody()).getDescription()))
                     {
                         li.set(newFrame);
                         frameMap.put(newFrame.getId(), o);
+                        return;
                     }
                 }
+                else if (newFrame.getBody() instanceof FrameBodyWXXX)
+                {
+                    //Value with matching key exists so replace
+                    if (((FrameBodyWXXX) newFrame.getBody()).getDescription()
+                            .equals(((FrameBodyWXXX) nextFrame.getBody()).getDescription()))
+                    {
+                        li.set(newFrame);
+                        frameMap.put(newFrame.getId(), o);
+                        return;
+                    }
+                }
+                else if (newFrame.getBody() instanceof FrameBodyCOMM)
+                {
+                   if (((FrameBodyCOMM) newFrame.getBody()).getDescription()
+                         .equals(((FrameBodyCOMM) nextFrame.getBody()).getDescription()))
+                     {
+                        li.set(newFrame);
+                        frameMap.put(newFrame.getId(), o);
+                        return;
+                     }
+                }
+                else if (newFrame.getBody() instanceof FrameBodyUFID)
+                {
+                   if (((FrameBodyUFID) newFrame.getBody()).getOwner()
+                         .equals(((FrameBodyUFID) nextFrame.getBody()).getOwner()))
+                     {
+                        li.set(newFrame);
+                        frameMap.put(newFrame.getId(), o);
+                        return;
+                     }
+                }
+                else if (newFrame.getBody() instanceof FrameBodyUSLT)
+                {
+                   if (((FrameBodyUSLT) newFrame.getBody()).getDescription()
+                         .equals(((FrameBodyUSLT) nextFrame.getBody()).getDescription()))
+                     {
+                        li.set(newFrame);
+                        frameMap.put(newFrame.getId(), o);
+                        return;
+                     }
+                }
+                else if (newFrame.getBody() instanceof FrameBodyPOPM)
+                {
+                   if (((FrameBodyPOPM) newFrame.getBody()).getEmailToUser()
+                         .equals(((FrameBodyPOPM) nextFrame.getBody()).getEmailToUser()))
+                     {
+                        li.set(newFrame);
+                        frameMap.put(newFrame.getId(), o);
+                        return;
+                     }
+                }
             }
-            //No match found so add
+            //No match found so add new one
             ((List<AbstractID3v2Frame>) o).add(newFrame);
         }
     }
@@ -1629,12 +1770,20 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
         {
             ((FrameBodyTXXX) frame.getBody()).setDescription(formatKey.getSubId());
             ((FrameBodyTXXX) frame.getBody()).setText(value);
-
         }
         else if (frame.getBody() instanceof FrameBodyWXXX)
         {
             ((FrameBodyWXXX) frame.getBody()).setDescription(formatKey.getSubId());
             ((FrameBodyWXXX) frame.getBody()).setUrlLink(value);
+        }
+        else if (frame.getBody() instanceof FrameBodyCOMM)
+        {
+            ((FrameBodyCOMM) frame.getBody()).setText(value);
+        }
+        else if (frame.getBody() instanceof FrameBodyUSLT)
+        {
+            ((FrameBodyUSLT) frame.getBody()).setDescription("");
+            ((FrameBodyUSLT) frame.getBody()).setLyric(value);
 
         }
         else if (frame.getBody() instanceof AbstractFrameBodyTextInfo)

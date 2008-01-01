@@ -69,7 +69,7 @@ public enum ID3v24FieldKey
 
     /**
      * @param frameId   the frame that will be used
-     * @param subId     the additioanl key reuirted within the frame touniquely identify this key
+     * @param subId     the additional key required within the frame to uniquely identify this key
      * @param fieldType
      */
     ID3v24FieldKey(String frameId, String subId, Id3FieldType fieldType)
