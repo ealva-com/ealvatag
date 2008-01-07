@@ -1,11 +1,8 @@
-package com.gu.r2.admin.controller.file.id3tag;
+package org.jaudiotagger.audio.mp3;
 
 import java.nio.ByteBuffer;
 
 import org.jaudiotagger.audio.exceptions.InvalidAudioFrameException;
-import org.jaudiotagger.audio.mp3.MP3AudioHeader;
-import org.jaudiotagger.audio.mp3.MPEGFrameHeader;
-import org.jaudiotagger.audio.mp3.XingFrame;
 
 public class ByteArrayMP3AudioHeader extends MP3AudioHeader
 {
