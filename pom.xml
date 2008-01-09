@@ -87,6 +87,17 @@
          <timezone>+1</timezone> 
          <properties/> 
       </developer>
+       <developer>
+           <id>nharward</id>
+           <name>Nathaniel Harward</name>
+           <email>nharward@gmail.com</email>
+           <url>http://www.harward.us/~nharward/</url>
+           <roles>
+               <role>Java Developer</role>
+           </roles>
+           <timezone>-8</timezone>
+           <properties/>
+       </developer>
    </developers>
    <licenses>
       <license>

@@ -12,7 +12,9 @@ public enum SupportedFileFormat
     M4A("m4a"),
     M4P("m4p"),
     WMA("wma"),
-    WAV("wav");
+    WAV("wav"),
+    RA("ra"),
+    RM("rm");
 
     private String filesuffix;
 

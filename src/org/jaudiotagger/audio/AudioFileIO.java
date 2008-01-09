@@ -18,31 +18,33 @@
  */
 package org.jaudiotagger.audio;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.*;
-import java.util.logging.Logger;
-
-import org.jaudiotagger.audio.exceptions.*;
+import org.jaudiotagger.audio.asf.AsfFileReader;
+import org.jaudiotagger.audio.asf.AsfFileWriter;
+import org.jaudiotagger.audio.exceptions.CannotReadException;
+import org.jaudiotagger.audio.exceptions.CannotWriteException;
+import org.jaudiotagger.audio.exceptions.InvalidAudioFrameException;
+import org.jaudiotagger.audio.exceptions.ReadOnlyFileException;
 import org.jaudiotagger.audio.flac.FlacFileReader;
 import org.jaudiotagger.audio.flac.FlacFileWriter;
-import org.jaudiotagger.audio.generic.AudioFileModificationListener;
-import org.jaudiotagger.audio.generic.AudioFileReader;
-import org.jaudiotagger.audio.generic.AudioFileWriter;
-import org.jaudiotagger.audio.generic.ModificationHandler;
-import org.jaudiotagger.audio.generic.Utils;
-import org.jaudiotagger.audio.ogg.OggFileReader;
-import org.jaudiotagger.audio.ogg.OggFileWriter;
+import org.jaudiotagger.audio.generic.*;
 import org.jaudiotagger.audio.mp3.MP3FileReader;
 import org.jaudiotagger.audio.mp3.MP3FileWriter;
 import org.jaudiotagger.audio.mp4.Mp4FileReader;
 import org.jaudiotagger.audio.mp4.Mp4FileWriter;
-import org.jaudiotagger.audio.asf.AsfFileReader;
-import org.jaudiotagger.audio.asf.AsfFileWriter;
+import org.jaudiotagger.audio.ogg.OggFileReader;
+import org.jaudiotagger.audio.ogg.OggFileWriter;
+import org.jaudiotagger.audio.real.RealFileReader;
 import org.jaudiotagger.audio.wav.WavFileReader;
 import org.jaudiotagger.audio.wav.WavFileWriter;
 import org.jaudiotagger.tag.Tag;
 import org.jaudiotagger.tag.TagException;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.logging.Logger;
 
 /**
  * <p/>
@@ -225,6 +227,9 @@ public class AudioFileIO
         readers.put(SupportedFileFormat.M4P.getFilesuffix(), new Mp4FileReader());
         readers.put(SupportedFileFormat.WAV.getFilesuffix(), new WavFileReader());
         readers.put(SupportedFileFormat.WMA.getFilesuffix(), new AsfFileReader());
+        final RealFileReader realReader = new RealFileReader();
+        readers.put(SupportedFileFormat.RA.getFilesuffix(), realReader);
+        readers.put(SupportedFileFormat.RM.getFilesuffix(), realReader);
 
         // Tag Writers
         writers.put(SupportedFileFormat.OGG.getFilesuffix(), new OggFileWriter());
