@@ -17,7 +17,7 @@ public class SyncSafeIntegerTest extends AbstractTestCase
         Exception e = null;
         try
         {
-            File testFile = AbstractTestCase.copyAudioToTmp("issue158.id3","testv1.mp3");
+            File testFile = AbstractTestCase.copyAudioToTmp("issue158.id3","testV1.mp3");
             MP3File mp3File = new MP3File(testFile);
             //Read frame that contains the byte>128 value
             assertTrue(mp3File.getID3v2Tag().hasFrame("USLT"));
