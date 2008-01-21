@@ -571,11 +571,13 @@ public class M4aReadTagTest extends TestCase
         Exception exceptionCaught = null;
         try
         {
-            File testFile = AbstractTestCase.copyAudioToTmp("test13.m4a");
-            if (!testFile.isFile())
+            File orig = new File("testdata", "test13.m4a");
+            if (!orig.isFile())
             {
                 return;
             }
+            File testFile = AbstractTestCase.copyAudioToTmp("test13.m4a");
+
             AudioFile f = AudioFileIO.read(testFile);
             Tag tag = f.getTag();
 
@@ -698,11 +700,13 @@ public class M4aReadTagTest extends TestCase
         Exception exceptionCaught = null;
         try
         {
-            File testFile = AbstractTestCase.copyAudioToTmp("test14.m4a");
-            if (!testFile.isFile())
+            File orig = new File("testdata", "test14.m4a");
+            if (!orig.isFile())
             {
                 return;
             }
+            File testFile = AbstractTestCase.copyAudioToTmp("test14.m4a");
+           
             AudioFile f = AudioFileIO.read(testFile);
             Mp4Tag tag = (Mp4Tag)f.getTag();
 

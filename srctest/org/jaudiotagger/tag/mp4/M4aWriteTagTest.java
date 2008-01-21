@@ -2080,11 +2080,13 @@ public class M4aWriteTagTest extends TestCase
         Exception exceptionCaught = null;
         try
         {
-            File testFile = AbstractTestCase.copyAudioToTmp("unable_to_write.m4p");
-            if (!testFile.isFile())
+            File orig = new File("testdata", "unable_to_write.m4p");
+            if (!orig.isFile())
             {
                 return;
             }
+            File testFile = AbstractTestCase.copyAudioToTmp("unable_to_write.m4p");
+
 
             AudioFile f = AudioFileIO.read(testFile);
             Tag tag = f.getTag();
@@ -2104,12 +2106,13 @@ public class M4aWriteTagTest extends TestCase
         Exception exceptionCaught = null;
         try
         {
-            File testFile = AbstractTestCase.copyAudioToTmp("unable_to_write.m4p");
-            if (!testFile.isFile())
+            File orig = new File("testdata", "unable_to_write.m4p");
+            if (!orig.isFile())
             {
                 return;
             }
-
+            File testFile = AbstractTestCase.copyAudioToTmp("unable_to_write.m4p");
+           
             AudioFile f = AudioFileIO.read(testFile);
             Tag tag = f.getTag();
 
@@ -2132,11 +2135,12 @@ public class M4aWriteTagTest extends TestCase
         Exception exceptionCaught = null;
         try
         {
-            File testFile = AbstractTestCase.copyAudioToTmp("unable_to_write.m4p");
-            if (!testFile.isFile())
+            File orig = new File("testdata", "unable_to_write.m4p");
+            if (!orig.isFile())
             {
                 return;
             }
+            File testFile = AbstractTestCase.copyAudioToTmp("unable_to_write.m4p");
 
             AudioFile f = AudioFileIO.read(testFile);
             Tag tag = f.getTag();
@@ -2165,11 +2169,12 @@ public class M4aWriteTagTest extends TestCase
         Exception exceptionCaught = null;
         try
         {
-            File testFile = AbstractTestCase.copyAudioToTmp("unable_to_write.m4p");
-            if (!testFile.isFile())
+            File orig = new File("testdata", "unable_to_write.m4p");
+            if (!orig.isFile())
             {
                 return;
             }
+            File testFile = AbstractTestCase.copyAudioToTmp("unable_to_write.m4p");
 
             AudioFile f = AudioFileIO.read(testFile);
             Tag tag = f.getTag();
