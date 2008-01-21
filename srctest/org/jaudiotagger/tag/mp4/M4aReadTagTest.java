@@ -648,11 +648,12 @@ public class M4aReadTagTest extends TestCase
                 System.out.println("ISO-8859-1 byte value is " + (bb.get(0) & 0xFF));
             }
 
-            File testFile = AbstractTestCase.copyAudioToTmp("unable_to_read.m4a");
-            if (!testFile.isFile())
+            File orig = new File("testdata", "unable_to_read.m4a");
+            if (!orig.isFile())
             {
                 return;
             }
+            File testFile = AbstractTestCase.copyAudioToTmp("unable_to_read.m4a");
 
             AudioFile f = AudioFileIO.read(testFile);
             Tag tag = f.getTag();
