@@ -86,15 +86,15 @@ public class FlacHeaderTest extends TestCase
             assertEquals("coverart.gif", image.getImageUrl());
 
             //Create Image Link
-            tag.getImages().add((MetadataBlockDataPicture)tag.createLinkedArtworkField("..\\testdata\\coverart.jpg"));
+            tag.getImages().add((MetadataBlockDataPicture)tag.createLinkedArtworkField("../testdata/coverart.jpg"));
             f.commit();
             f = AudioFileIO.read(testFile);
             image = tag.getImages().get(2);
             assertEquals(3,(int)image.getPictureType());
             assertEquals("-->",image.getMimeType());
             assertTrue(image.isImageUrl());
-            assertEquals("..\\testdata\\coverart.jpg", Utils.getString(image.getImageData(),0,image.getImageData().length, TextEncoding.CHARSET_ISO_8859_1));
-            assertEquals("..\\testdata\\coverart.jpg", image.getImageUrl());
+            assertEquals("../testdata/coverart.jpg", Utils.getString(image.getImageData(),0,image.getImageData().length, TextEncoding.CHARSET_ISO_8859_1));
+            assertEquals("../testdata/coverart.jpg", image.getImageUrl());
 
             //Can we actually create Buffered Image from the url  of course remember url is relative to the audio file
             //not where we run the program from
