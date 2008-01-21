@@ -37,7 +37,21 @@ public class MP3FileReader extends AudioFileReader
     public AudioFile read(File f)
             throws IOException, TagException, ReadOnlyFileException, InvalidAudioFrameException
     {
-        MP3File mp3File = new MP3File(f, MP3File.LOAD_IDV1TAG | MP3File.LOAD_IDV2TAG);
+        MP3File mp3File = new MP3File(f, MP3File.LOAD_IDV1TAG | MP3File.LOAD_IDV2TAG,true);
         return mp3File;
     }
+
+     /**
+     *  Read
+     * @param f
+     * @throws ReadOnlyFileException thrown if the file is not writable 
+     * @return
+     */
+    public AudioFile readMustBeWritable(File f)
+            throws IOException, TagException, ReadOnlyFileException, InvalidAudioFrameException
+    {
+        MP3File mp3File = new MP3File(f, MP3File.LOAD_IDV1TAG | MP3File.LOAD_IDV2TAG,false);
+        return mp3File;
+    }
+
 }

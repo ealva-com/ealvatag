@@ -213,7 +213,7 @@ public class Mp4InfoReader
         //Level 2-Searching for another "trak" within "moov", if more than one track exists then we dont
         //know how to deal with it, so reject it.
         mvhdBuffer.position(endOfFirstTrackInBuffer);
-        boxHeader = Mp4BoxHeader.seekWithinLevel(mvhdBuffer, Mp4NotMetaFieldKey.TRAK.getFieldName());
+        boxHeader = Mp4BoxHeader.seekWithinLevel(mvhdBuffer, Mp4NotMetaFieldKey.TRAK.getFieldName());    
         if (boxHeader != null)
         {
             throw new CannotReadException("This file does not appear to be an audio file");
