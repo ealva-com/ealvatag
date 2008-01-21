@@ -365,7 +365,7 @@ public class Unicode24TagTest extends TestCase
 
      public void testv24TagsWithUTF8EncodingMaintainedOnSave()  throws Exception
     {
-        File testFile = AbstractTestCase.copyAudioToTmp("Issue109-2.id3", "testV1.mp3");
+        File testFile = AbstractTestCase.copyAudioToTmp("issue109-2.id3", "testV1.mp3");
 
         //Read file as currently stands
         MP3File mp3File = new MP3File(testFile);
@@ -395,7 +395,7 @@ public class Unicode24TagTest extends TestCase
 
      public void testv24TagsWithUTF8OverriddenByDefaultOnSave()  throws Exception
     {
-        File testFile = AbstractTestCase.copyAudioToTmp("Issue109-2.id3", "testV1.mp3");
+        File testFile = AbstractTestCase.copyAudioToTmp("issue109-2.id3", "testV1.mp3");
 
         //Read file as currently stands
         MP3File mp3File = new MP3File(testFile);
@@ -429,7 +429,7 @@ public class Unicode24TagTest extends TestCase
 
       public void testv24TagsWithUTF8OverriddenByDefaultsOnSave()  throws Exception
     {
-        File testFile = AbstractTestCase.copyAudioToTmp("Issue109-2.id3", "testV1.mp3");
+        File testFile = AbstractTestCase.copyAudioToTmp("issue109-2.id3", "testV1.mp3");
 
         //Read file as currently stands
         MP3File mp3File = new MP3File(testFile);

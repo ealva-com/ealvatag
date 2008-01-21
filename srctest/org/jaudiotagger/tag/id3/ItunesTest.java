@@ -170,7 +170,7 @@ public class ItunesTest extends AbstractTestCase
      */
     public void testv24TagWithlargeSyncSafeFrameAndNoPadding() throws Exception
    {
-       File testFile = AbstractTestCase.copyAudioToTmp("Issue115.id3","testV1.mp3");
+       File testFile = AbstractTestCase.copyAudioToTmp("issue115.id3","testV1.mp3");
 
        MP3File mp3File = new MP3File(testFile);
 
