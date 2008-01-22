@@ -112,8 +112,9 @@ public class Mp4FtypBox extends AbstractMp4Box
     }
 
      /**
-     * Major brand, helps identify whats contained in the file, use dby major and comptaible brands
-     * but this is not an exhaustive list.
+     * Major brand, helps identify whats contained in the file, used by major and compatible brands
+     * but this is not an exhaustive list, so for that reason we dont force the values read from the file
+     * to tie in with this enum.
      */
     public static enum Brand
      {
