@@ -100,26 +100,12 @@ public class FrameBodyETCO extends AbstractID3v2FrameBody implements ID3v24Frame
      */
     public FrameBodyETCO()
     {
-        //        this.setObject("Time Stamp Format", new Long(0));
-        //        this.addGroup((byte) 0, (int) 0);
+
     }
 
     public FrameBodyETCO(FrameBodyETCO body)
     {
         super(body);
-    }
-
-    /**
-     * Creates a new FrameBodyETCO datatype.
-     *
-     * @param timeStampFormat
-     * @param event
-     * @param timeStamp
-     */
-    public FrameBodyETCO(byte timeStampFormat, byte event, int timeStamp)
-    {
-        this.setObjectValue(DataTypes.OBJ_TIME_STAMP_FORMAT, (long) timeStampFormat);
-        this.addGroup(event, timeStamp);
     }
 
     /**
@@ -142,45 +128,10 @@ public class FrameBodyETCO extends AbstractID3v2FrameBody implements ID3v24Frame
     }
 
     /**
-     * @return
-     */
-    public String getOwner()
-    {
-        return (String) getObjectValue(DataTypes.OBJ_OWNER);
-    }
-
-    /**
-     * @param description
-     */
-    public void getOwner(String description)
-    {
-        setObjectValue(DataTypes.OBJ_OWNER, description);
-    }
-
-    /**
-     * @param event
-     * @param timeStamp
-     */
-    public void addGroup(byte event, int timeStamp)
-    {
-        GroupRepeated group = (GroupRepeated) this.getObjectValue(DataTypes.OBJ_DATA);
-        AbstractDataType ev = new NumberHashMap(DataTypes.OBJ_TYPE_OF_EVENT, this, 1);
-        AbstractDataType ts = new NumberFixedLength(DataTypes.OBJ_TIME_STAMP_FORMAT, this, 4);
-        group.addObject(ev);
-        group.addObject(ts);
-        this.setObjectValue(DataTypes.OBJ_DATA, group);
-    }
-
-    /**
      *
      */
     protected void setupObjectList()
     {
-        objectList.add(new NumberHashMap(DataTypes.OBJ_TIME_STAMP_FORMAT, this, 1));
-
-        GroupRepeated group = new GroupRepeated(DataTypes.OBJ_DATA, this);
-        group.addProperty(new NumberHashMap(DataTypes.OBJ_TYPE_OF_EVENT, this, 1));
-        group.addProperty(new NumberFixedLength(DataTypes.OBJ_TIME_STAMP_FORMAT, this, 4));
-        objectList.add(group);
+        objectList.add(new ByteArraySizeTerminated(DataTypes.OBJ_DATA, this));
     }
 }

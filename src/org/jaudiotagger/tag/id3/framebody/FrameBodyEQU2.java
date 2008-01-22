@@ -88,21 +88,6 @@ public class FrameBodyEQU2 extends AbstractID3v2FrameBody implements ID3v24Frame
     /**
      * Creates a new FrameBodyEQU2 datatype.
      *
-     * @param interpolationMethod
-     * @param owner
-     * @param frequency
-     * @param volumeAdjustment
-     */
-    public FrameBodyEQU2(byte interpolationMethod, String owner, short frequency, short volumeAdjustment)
-    {
-        this.setObjectValue(DataTypes.OBJ_INTERPOLATION_METHOD, interpolationMethod);
-        this.setObjectValue(DataTypes.OBJ_OWNER, owner);
-        this.addGroup(frequency, volumeAdjustment);
-    }
-
-    /**
-     * Creates a new FrameBodyEQU2 datatype.
-     *
      * @throws InvalidTagException if unable to create framebody from buffer
      */
     public FrameBodyEQU2(ByteBuffer byteBuffer, int frameSize)
@@ -122,46 +107,10 @@ public class FrameBodyEQU2 extends AbstractID3v2FrameBody implements ID3v24Frame
     }
 
     /**
-     * @return
-     */
-    public String getOwner()
-    {
-        return (String) getObjectValue(DataTypes.OBJ_OWNER);
-    }
-
-    /**
-     * @param description
-     */
-    public void getOwner(String description)
-    {
-        setObjectValue(DataTypes.OBJ_OWNER, description);
-    }
-
-    /**
-     * @param frequency
-     * @param volumeAdjustment
-     */
-    public void addGroup(short frequency, short volumeAdjustment)
-    {
-        GroupRepeated group = (GroupRepeated) this.getObjectValue(DataTypes.OBJ_DATA);
-        AbstractDataType freq = new NumberFixedLength(DataTypes.OBJ_FREQUENCY, this, 2);
-        AbstractDataType volume = new NumberFixedLength(DataTypes.OBJ_VOLUME_ADJUSTMENT, this, 2);
-        group.addObject(freq);
-        group.addObject(volume);
-        this.setObjectValue(DataTypes.OBJ_DATA, group);
-    }
-
-    /**
      *
      */
     protected void setupObjectList()
     {
-        objectList.add(new NumberHashMap(DataTypes.OBJ_INTERPOLATION_METHOD, this, 1));
-        objectList.add(new StringNullTerminated(DataTypes.OBJ_OWNER, this));
-
-        GroupRepeated group = new GroupRepeated(DataTypes.OBJ_DATA, this);
-        group.addProperty(new NumberFixedLength(DataTypes.OBJ_FREQUENCY, this, 2));
-        group.addProperty(new NumberFixedLength(DataTypes.OBJ_VOLUME_ADJUSTMENT, this, 2));
-        objectList.add(group);
+        objectList.add(new ByteArraySizeTerminated(DataTypes.OBJ_DATA, this));
     }
 }

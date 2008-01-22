@@ -52,6 +52,7 @@ public class NumberHashMap extends NumberFixedLength implements HashMapInterface
      */
     private boolean hasEmptyValue = false;
 
+    
     /**
      * Creates a new ObjectNumberHashMap datatype.
      *
