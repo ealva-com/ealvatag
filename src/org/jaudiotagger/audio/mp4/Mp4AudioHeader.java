@@ -2,6 +2,7 @@ package org.jaudiotagger.audio.mp4;
 
 import org.jaudiotagger.audio.generic.GenericAudioHeader;
 import org.jaudiotagger.audio.mp4.atom.Mp4EsdsBox;
+import org.jaudiotagger.audio.mp4.atom.Mp4FtypBox;
 
 /**
  * Store some additional attributes not availble for all audio types
@@ -21,6 +22,14 @@ public class Mp4AudioHeader extends GenericAudioHeader
      * @see #content
      */
     public final static String FIELD_PROFILE = "PROFILE";
+
+
+    /**
+     * The key for the ftyp brand<br>
+     *
+     * @see #content
+     */
+    public final static String FIELD_BRAND = "BRAND";
 
     public void setKind(Mp4EsdsBox.Kind kind)
     {
@@ -52,5 +61,24 @@ public class Mp4AudioHeader extends GenericAudioHeader
     {
         return (Mp4EsdsBox.AudioProfile) content.get(FIELD_PROFILE);
     }
+
+    /**
+     *
+     * @param brand
+     */
+    public void setBrand(String brand)
+    {
+          content.put(FIELD_BRAND, brand);
+    }
+
+
+    /**
+      * @return brand
+      */
+    public String getBrand()
+    {
+        return (String) content.get(FIELD_BRAND);
+    }
+
 
 }

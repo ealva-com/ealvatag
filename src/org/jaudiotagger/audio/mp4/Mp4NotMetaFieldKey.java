@@ -8,6 +8,7 @@ package org.jaudiotagger.audio.mp4;
  */
 public enum Mp4NotMetaFieldKey
 {
+    FTYP("ftyp", "File type Identification"),
     MOOV("moov", "Top level Presentation"),
     MVHD("mvhd", "Tracks Summary"),
     UDTA("udta", "Copyright"),
@@ -20,6 +21,7 @@ public enum Mp4NotMetaFieldKey
     FREE("free", "Padding"),
     TRAK("trak", "Track"),
     SMHD("smhd", "Audio Balance"),
+    NMHD("nmhd", "Media Stream Header"),
     STBL("stbl", ""),
     STSD("stsd", ""),
     MP4A("mp4a", "AAC Audio "),

@@ -23,7 +23,7 @@ import java.io.IOException;
  * <p/>
  * This class enscapulates the items into a single tag
  */
-public class FlacTag implements Tag
+public class  FlacTag implements Tag
 {
     VorbisCommentTag tag = null;
     List<MetadataBlockDataPicture> images = new ArrayList<MetadataBlockDataPicture>();

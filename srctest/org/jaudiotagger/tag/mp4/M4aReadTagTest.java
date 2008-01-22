@@ -767,4 +767,29 @@ public class M4aReadTagTest extends TestCase
 
     }
 
+    /** Tests reading of winamp encoded files, that contain additional scene tracks */
+     public void testIssue182() throws Exception
+    {
+        Exception exceptionCaught = null;
+        try
+        {
+            File testFile = AbstractTestCase.copyAudioToTmp("test16.m4a");
+
+            AudioFile f = AudioFileIO.read(testFile);
+            Mp4Tag tag = (Mp4Tag)f.getTag();
+
+            System.out.println(f.getAudioHeader());
+            System.out.println(tag);
+
+            assertEquals("Suerte",tag.getFirstArtist());
+            assertEquals("Kogani",tag.getFirstTitle());
+
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+            exceptionCaught = e;
+        }
+        assertNull(exceptionCaught);
+    }
 }

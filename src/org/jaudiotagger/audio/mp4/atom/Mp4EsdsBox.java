@@ -9,7 +9,7 @@ import java.util.Map;
 /**
  * EsdsBox ( stream specific description box), usually holds the Bitrate/No of Channels
  * <p/>
- * It contains a number of  (possibly optional?)  sections (section 3 - 6) (contaning optional filler) with
+ * It contains a number of  (possibly optional?)  sections (section 3 - 6) (containing optional filler) with
  * differeent info in each section.
  * <p/>
  * <p/>
@@ -172,7 +172,7 @@ public class Mp4EsdsBox extends AbstractMp4Box
 
 
         }
-        //Process Section 5,(to get no of channels and audioprofile(profoile in itunes))
+        //Process Section 5,(to get no of channels and audioprofile(profile in itunes))
         if (dataBuffer.get() == SECTION_FIVE)
         {
             sectionFiveLength = processSectionHeader(dataBuffer);
@@ -340,6 +340,11 @@ public class Mp4EsdsBox extends AbstractMp4Box
         public int getId()
         {
             return id;
+        }
+
+        public String getDescription()
+        {
+            return description;
         }
     }
 }

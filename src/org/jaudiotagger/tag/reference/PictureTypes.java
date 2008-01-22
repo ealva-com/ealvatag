@@ -25,7 +25,7 @@ package org.jaudiotagger.tag.reference;
 import org.jaudiotagger.tag.datatype.AbstractIntStringValuePair;
 
 /**
- * Pictures types for Attched Pictures
+ * Pictures types for Attached Pictures
  * <p/>
  * <P>Note this list is used by APIC and PIC frames. It is also used by Flac format Picture blocks
  */
