@@ -19,13 +19,20 @@
 package org.jaudiotagger.audio.mp4.atom;
 
 import org.jaudiotagger.audio.generic.Utils;
+import org.jaudiotagger.audio.mp4.Mp4NotMetaFieldKey;
+import org.jaudiotagger.audio.exceptions.CannotReadException;
 
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreeModel;
+import javax.swing.tree.TreeNode;
 import java.io.RandomAccessFile;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 import java.nio.channels.FileChannel;
 import java.util.logging.Logger;
+import java.util.Enumeration;
 
 /**
  * Everything in MP4s are held in boxes (formally known as atoms), they are held as a hierachial tree within the MP4.
@@ -61,6 +68,9 @@ public class Mp4BoxHeader
 
     //Box length
     private int length;
+
+    //If reading from file , this can be used to hold the headers position in the file
+    private long filePos;
 
     //Raw Header data
     protected ByteBuffer dataBuffer;
@@ -109,12 +119,11 @@ public class Mp4BoxHeader
 
         //Calculate box size
         this.length = Utils.getNumberBigEndian(b, OFFSET_POS, OFFSET_LENGTH - 1);
-
         //Calculate box id
         this.id = Utils.getString(b, IDENTIFIER_POS, IDENTIFIER_LENGTH, "ISO-8859-1");
 
-        logger.finest("Read header:" + id + ":length:" + length + ":at:");
-
+        logger.finest("Read header:" + id + ":length:" + length);
+ 
     }
 
     /**
@@ -171,7 +180,7 @@ public class Mp4BoxHeader
 
     public String toString()
     {
-        return "Box " + id + ":" + length;
+        return "Box " + id + ":length" + length +":filepos:"+filePos;
     }
 
     /**
@@ -284,5 +293,15 @@ public class Mp4BoxHeader
             }
         }
         return boxHeader;
+    }
+
+    public long getFilePos()
+    {
+        return filePos;
+    }
+
+    public void setFilePos(long filePos)
+    {
+        this.filePos = filePos;
     }
 }

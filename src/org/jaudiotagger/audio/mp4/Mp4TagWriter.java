@@ -31,6 +31,8 @@ import org.jaudiotagger.audio.exceptions.CannotReadException;
 import org.jaudiotagger.audio.mp4.atom.*;
 import org.jaudiotagger.audio.mp4.Mp4NotMetaFieldKey;
 
+import javax.swing.tree.DefaultMutableTreeNode;
+
 
 /**
  * Writes metadata from mp4, the metadata tags are held under the ilst atom as shown below
@@ -99,6 +101,7 @@ public class Mp4TagWriter
             throws CannotWriteException, IOException
     {
         fileReadChannel.position(0);
+        System.out.println("startLstWithinFile:"+startIstWithinFile+"size:"+oldIlstSize);
         fileWriteChannel.transferFrom(fileReadChannel, 0, startIstWithinFile);
         fileWriteChannel.position(startIstWithinFile);
         fileWriteChannel.write(rawIlstData);
@@ -108,7 +111,7 @@ public class Mp4TagWriter
     }
 
     /**
-     * When the size of the metadat has changed and it cant be compensated for by free atom
+     * When the size of the metadata has changed and it cant be compensated for by free atom
      * we have to adjust the size of the size field upto the moovheader level
      *
      * @param moovBuffer
@@ -185,16 +188,131 @@ public class Mp4TagWriter
 
         //Write channel
         FileChannel fileWriteChannel = rafTemp.getChannel();
+        FileChannel fileReadChannel = raf.getChannel();
+        Mp4BoxHeader boxHeader;
 
+        //New Code
+        Mp4AtomTree atomTree;
+        //Make tree
+        try
+        {
+            atomTree = new Mp4AtomTree(raf);
+        }
+        catch(CannotReadException cre)
+        {
+            throw new CannotWriteException("Problem finding meta field");
+        }
+
+        //Moov
+        Mp4BoxHeader moovHeader = atomTree.getBoxHeader(atomTree.getMoovNode());
+        long positionWithinFileAfterFindingMoovHeader = moovHeader.getFilePos() + Mp4BoxHeader.HEADER_LENGTH;
+        Mp4StcoBox stco = atomTree.getStco();
+
+        //Ilst
+        Mp4BoxHeader ilstHeader = atomTree.getBoxHeader(atomTree.getIlstNode());
+        Mp4BoxHeader metaHeader = atomTree.getBoxHeader(atomTree.getMetaNode());
+        Mp4BoxHeader mdatHeader = atomTree.getBoxHeader(atomTree.getMdatNode());
+        ByteBuffer   moovBuffer = atomTree.getMoovBuffer();
+
+        int oldIlstSize = 0;
+        int relativeIlstposition;
+        int relativeIlstEndPosition;
+        int startIstWithinFile;
+        if (ilstHeader != null)
+        {
+            oldIlstSize = ilstHeader.getLength();
+
+            //Relative means - 40,relative to moov buffer after header 
+            relativeIlstposition    = (int)(ilstHeader.getFilePos() - (moovHeader.getFilePos() + Mp4BoxHeader.HEADER_LENGTH));
+            relativeIlstEndPosition = relativeIlstposition + ilstHeader.getLength();
+            startIstWithinFile = (int)ilstHeader.getFilePos();
+        }
+        else
+        {
+            //There no ilst header so we set to position where it would be if it existed
+            relativeIlstposition = (int)
+                      ((metaHeader.getFilePos() + Mp4BoxHeader.HEADER_LENGTH + Mp4MetaBox.FLAGS_LENGTH)
+                    - (moovHeader.getFilePos() + Mp4BoxHeader.HEADER_LENGTH)) ;
+            relativeIlstEndPosition = relativeIlstposition;
+            startIstWithinFile = (int)metaHeader.getFilePos() + Mp4BoxHeader.HEADER_LENGTH + Mp4MetaBox.FLAGS_LENGTH;
+        }
+
+        int newIlstSize = rawIlstData.limit();
+
+        //Level 4 - Free
+        int oldMetaLevelFreeAtomSize = 0;
+        long extraDataSize = 0;
+        for(DefaultMutableTreeNode freeNode: atomTree.getFreeNodes())
+        {
+            DefaultMutableTreeNode parentNode = (DefaultMutableTreeNode)freeNode.getParent();
+
+            if(!parentNode.isRoot())
+            {
+                Mp4BoxHeader header     = ((Mp4BoxHeader)parentNode.getUserObject());
+                Mp4BoxHeader freeHeader = ((Mp4BoxHeader)freeNode.getUserObject());
+
+                if(header.getId().equals(Mp4NotMetaFieldKey.META.getFieldName()))
+                {
+                    oldMetaLevelFreeAtomSize = freeHeader.getLength();
+
+                    //Is there anything else here that needs to be preserved such as uuid atoms
+                    extraDataSize=moovHeader.getFilePos() + moovHeader.getLength() - (freeHeader.getFilePos() + freeHeader.getLength());
+                    break;
+                }
+            }
+        }
+        //If no free atom, still check for unexpected items within meta, after ilst
+        //TODO this logic probably incomplete
+        if(oldMetaLevelFreeAtomSize==0)
+        {
+            extraDataSize=moovHeader.getDataLength() - relativeIlstEndPosition;
+        }
+
+        //Level-1 free atom
+        int level1SearchPosition = 0;
+        int topLevelFreePosition = 0;
+        int topLevelFreeSize     = 0;
+        boolean topLevelFreeAtomComesBeforeMdatAtom = true;
+        Mp4BoxHeader topLevelFreeHeader;
+        for(DefaultMutableTreeNode freeNode: atomTree.getFreeNodes())
+        {
+            DefaultMutableTreeNode parentNode = (DefaultMutableTreeNode)freeNode.getParent();
+            if(parentNode.isRoot())
+            {
+                topLevelFreeHeader = ((Mp4BoxHeader)freeNode.getUserObject());
+                topLevelFreeSize     = topLevelFreeHeader.getLength();
+                topLevelFreePosition = (int)topLevelFreeHeader.getFilePos();
+                level1SearchPosition = topLevelFreePosition;
+                break;
+            }
+        }
+
+        if(topLevelFreeSize>0)
+        {
+            if(topLevelFreePosition>mdatHeader.getFilePos())
+            {
+                topLevelFreeAtomComesBeforeMdatAtom = false;
+                level1SearchPosition=(int)mdatHeader.getFilePos();
+            }
+        }
+        else
+        {
+            topLevelFreePosition=(int)mdatHeader.getFilePos();
+            level1SearchPosition=topLevelFreePosition;
+        }
+        int mDatHeaderDataLocation =(int)mdatHeader.getFilePos() + Mp4BoxHeader.HEADER_LENGTH;
+
+        /*
+        //OLD METHOD, keeping code for reference for now just in case run into anyproblems with new
         //Read the various boxes that we may have to adjust, everything contained under moov atom
         Mp4BoxHeader moovHeader = Mp4BoxHeader.seekWithinLevel(raf, Mp4NotMetaFieldKey.MOOV.getFieldName());
         ByteBuffer moovBuffer = ByteBuffer.allocate(moovHeader.getLength() - Mp4BoxHeader.HEADER_LENGTH);
-        FileChannel fileReadChannel = raf.getChannel();
+
         long positionWithinFileAfterFindingMoovHeader = fileReadChannel.position();
         fileReadChannel.read(moovBuffer);
         moovBuffer.rewind();
         //Level 2-Searching for "trak" within "moov"
-        Mp4BoxHeader boxHeader = Mp4BoxHeader.seekWithinLevel(moovBuffer, Mp4NotMetaFieldKey.TRAK.getFieldName());
+        boxHeader = Mp4BoxHeader.seekWithinLevel(moovBuffer, Mp4NotMetaFieldKey.TRAK.getFieldName());
 
         //Level 3-Searching for "mdia" within "trak"
         boxHeader = Mp4BoxHeader.seekWithinLevel(moovBuffer, Mp4NotMetaFieldKey.MDIA.getFieldName());
@@ -236,7 +354,7 @@ public class Mp4TagWriter
         if (boxHeader != null)
         {
             oldIlstSize = boxHeader.getLength();
-            relativeIlstposition = moovBuffer.position() - Mp4BoxHeader.HEADER_LENGTH;
+            relativeIlstposition = moovBuffer.position() - Mp4BoxHeader.HEADER_LENGTH ;
             moovBuffer.position(moovBuffer.position() + boxHeader.getDataLength());
             relativeIlstEndPosition = moovBuffer.position();
         }
@@ -314,10 +432,11 @@ public class Mp4TagWriter
                 }
             }
         }
-
         int mDatHeaderDataLocation = (int) raf.getFilePointer();
-        logger.info("Read header successfully ready for writing");
+        //************************************************************************************************************
+        */
 
+        logger.info("Read header successfully ready for writing");
         //The easiest option since no difference in the size of the metadata so all we have to do is
         //create a new file identical to first file but with replaced metadata
         if (oldIlstSize == newIlstSize)
@@ -336,7 +455,7 @@ public class Mp4TagWriter
             //Create an amended freeBaos atom and write it if it previously existed
             if (oldMetaLevelFreeAtomSize > 0)
             {
-                logger.info("Writing:Option 2:Smaller Size have free atom");
+                logger.info("Writing:Option 2:Smaller Size have free atom:"+oldIlstSize+":"+newIlstSize);
                 fileReadChannel.position(0);
                 fileWriteChannel.transferFrom(fileReadChannel, 0, startIstWithinFile);
                 fileWriteChannel.position(startIstWithinFile);
@@ -351,7 +470,7 @@ public class Mp4TagWriter
                 //Skip over the read channel old free atom
                 fileReadChannel.position(fileReadChannel.position() + oldMetaLevelFreeAtomSize);
 
-                //Now write the rest of the file which wont have changed
+                //Now write the rest of the file which won't have changed
                 fileWriteChannel.transferFrom(fileReadChannel,
                         fileWriteChannel.position(),
                         fileReadChannel.size() - fileReadChannel.position());
@@ -468,6 +587,7 @@ public class Mp4TagWriter
             //need their sizes adjusted.
             else
             {
+
                 int additionalMetaSizeThatWontFitWithinMetaAtom
                         = additionalSpaceRequiredForMetadata - (oldMetaLevelFreeAtomSize);
 
@@ -477,7 +597,6 @@ public class Mp4TagWriter
                         0,
                         positionWithinFileAfterFindingMoovHeader - Mp4BoxHeader.HEADER_LENGTH);
                 fileWriteChannel.position(positionWithinFileAfterFindingMoovHeader - Mp4BoxHeader.HEADER_LENGTH);
-
                 //Edit stco atom within moov header, if the free atom comes after mdat OR
                 //(there is not enough space in the top level free atom
                 //or special case of matching exactly the free atom plus header)
@@ -485,9 +604,9 @@ public class Mp4TagWriter
                         (!topLevelFreeAtomComesBeforeMdatAtom)
                                 ||
                                 (
-                                        (topLevelFreeSize - Mp4BoxHeader.HEADER_LENGTH < additionalMetaSizeThatWontFitWithinMetaAtom)
-                                                &&
-                                                (topLevelFreeSize != additionalMetaSizeThatWontFitWithinMetaAtom))
+                                (topLevelFreeSize - Mp4BoxHeader.HEADER_LENGTH < additionalMetaSizeThatWontFitWithinMetaAtom)
+                                        &&
+                                        (topLevelFreeSize != additionalMetaSizeThatWontFitWithinMetaAtom))
                         )
                 {
                     //We dont bother using the top level free atom coz not big enough anyway, we need to adjust offsets
@@ -498,15 +617,12 @@ public class Mp4TagWriter
                 //Edit and rewrite the Moov header
                 adjustSizeOfMoovHeader(moovHeader, moovBuffer, additionalMetaSizeThatWontFitWithinMetaAtom);
                 fileWriteChannel.write(moovHeader.getHeaderData());
-
                 //Now write from this edited buffer up until ilst atom
                 moovBuffer.rewind();
                 moovBuffer.limit(relativeIlstposition);
                 fileWriteChannel.write(moovBuffer);
-
                 //Now write ilst data
                 fileWriteChannel.write(rawIlstData);
-
                 //Skip over the read channel old meta level free atom because now used up
                 fileReadChannel.position(startIstWithinFile + oldIlstSize);
                 fileReadChannel.position(fileReadChannel.position() + oldMetaLevelFreeAtomSize);
@@ -520,7 +636,6 @@ public class Mp4TagWriter
                 }
                 //fileReadChannel.position(topLevelFreePosition);
                 fileReadChannel.position(level1SearchPosition);
-
                 //If we have top level free atom that comes before mdat we might be able to use it
                 if (topLevelFreeAtomComesBeforeMdatAtom)
                 {
@@ -541,6 +656,8 @@ public class Mp4TagWriter
                         //Write Mdat
                         fileWriteChannel.transferFrom(fileReadChannel, fileWriteChannel.position(),
                                 fileReadChannel.size() - fileReadChannel.position());
+
+
                     }
                     //If the space required is identical to total size of the free space (inc header)
                     //we could just remove the header
@@ -561,7 +678,6 @@ public class Mp4TagWriter
                         logger.info("Writing:Option 8;Larger Size cannot use top free atom");
                         fileWriteChannel.transferFrom(fileReadChannel, fileWriteChannel.position(),
                                 fileReadChannel.size() - fileReadChannel.position());
-
                     }
                 }
                 else
@@ -630,7 +746,7 @@ public class Mp4TagWriter
             //TODO:what about checking the correct amount of fields have actually been written
 
             //Search for Level-1 free atom within file (it may not exist)
-            long newLevelSearchPosition = newFileReadChannel.position();
+            int newLevelSearchPosition = (int)newFileReadChannel.position();
             topLevelFreePosition = newLevelSearchPosition;
             topLevelFreeHeader = Mp4BoxHeader.seekWithinLevel(rafTemp, Mp4NotMetaFieldKey.FREE.getFieldName());
             topLevelFreeSize = 0;
@@ -651,8 +767,8 @@ public class Mp4TagWriter
             }
             else
             {
-                topLevelFreeSize = topLevelFreeHeader.getLength();
-                topLevelFreePosition = newFileReadChannel.position() - Mp4BoxHeader.HEADER_LENGTH;
+                topLevelFreeSize     = topLevelFreeHeader.getLength();
+                topLevelFreePosition = (int)newFileReadChannel.position() - Mp4BoxHeader.HEADER_LENGTH;
                 newFileReadChannel.position(newFileReadChannel.position() + topLevelFreeHeader.getDataLength());
 
                 //Search for Level-1 MDat Atom
@@ -680,17 +796,23 @@ public class Mp4TagWriter
             }
 
             //Check offsets are correct, may not match exactly in original file so just want to make
-            //sure that the discrepancy if any is preserved
+            //sure that the discrepancy if any is preserved           
             int diff = stco.getFirstOffSet() - mDatHeaderDataLocation;
+            stco.printAlloffsets();
+            newStco.printAlloffsets();
             if ((newStco.getFirstOffSet() - mDataDataOffset) != diff)
             {
                 throw new CannotWriteException("Unable to adjust offsets in audio data:" +
                         (newStco.getFirstOffSet() - mDataDataOffset)
                         + ":" + diff);
             }
+
+            stco.printAlloffsets();
+            newStco.printAlloffsets();
         }
         catch (Exception e)
         {
+            e.printStackTrace();
             if (e instanceof CannotWriteException)
             {
 

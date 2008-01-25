@@ -66,7 +66,7 @@ public class Mp4StcoBox extends AbstractMp4Box
             int offset = Utils.getNumberBigEndian(dataBuffer,
                     dataBuffer.position(),
                     (dataBuffer.position() + OFFSET_LENGTH - 1));
-            System.out.println("offset into audio data is:" + offset);
+         
             dataBuffer.position(dataBuffer.position() + OFFSET_LENGTH);
         }
         int offset = Utils.getNumberBigEndian(dataBuffer,
