@@ -109,9 +109,9 @@ public class EncodingChunkReader
             for (int i = 0; i < stringCount; i++)
             {
                 result.addString(Utils.readCharacterSizedString(raf));
-			}
-		}
-		return result;
-	}
+            }
+        }
+        return result;
+    }
 
 }

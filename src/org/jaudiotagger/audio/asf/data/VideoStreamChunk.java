@@ -132,7 +132,8 @@ public class VideoStreamChunk extends StreamChunk
     /**
      * @param picWidth
      */
-    public void setPictureWidth(long picWidth) {
-		this.pictureWidth = picWidth;
-	}
+    public void setPictureWidth(long picWidth)
+    {
+        this.pictureWidth = picWidth;
+    }
 }

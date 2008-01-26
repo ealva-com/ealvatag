@@ -59,7 +59,7 @@ public class AsfFileWriter extends AudioFileWriter
      * @throws IOException read or write errors.
      */
     private void copy(RandomAccessFile source, RandomAccessFile destination,
-                      long number) throws IOException
+            long number) throws IOException
     {
         byte[] buffer = new byte[8192];
         long bytesCopied = 0;
@@ -91,8 +91,8 @@ public class AsfFileWriter extends AudioFileWriter
      * @throws IOException read or write errors.
      */
     private void createModifiedCopy(Tag tag, AsfHeader header,
-                                    RandomAccessFile raf, RandomAccessFile rafTemp,
-                                    boolean ignoreDescriptions) throws IOException
+            RandomAccessFile raf, RandomAccessFile rafTemp,
+            boolean ignoreDescriptions) throws IOException
     {
         /*
          * First of all Copy the first 30 bytes of the file. The GUID and one
@@ -238,7 +238,7 @@ public class AsfFileWriter extends AudioFileWriter
      * @throws IOException write errors.
      */
     private Chunk createNewContentDescription(Tag tag,
-                                              ContentDescription contentDescription, RandomAccessFile rafTemp)
+            ContentDescription contentDescription, RandomAccessFile rafTemp)
             throws IOException
     {
         // Store current Location
@@ -275,7 +275,7 @@ public class AsfFileWriter extends AudioFileWriter
      * @throws IOException in Case of write errors.
      */
     private Chunk createNewExtendedContentDescription(Tag tag,
-                                                      ExtendedContentDescription tagChunk, RandomAccessFile rafTemp)
+            ExtendedContentDescription tagChunk, RandomAccessFile rafTemp)
             throws IOException
     {
         long chunkStart = rafTemp.getFilePointer();
@@ -349,10 +349,12 @@ public class AsfFileWriter extends AudioFileWriter
                                 + "(Interpretation of data, not file access rights.)");
             }
             createModifiedCopy(new GenericTag(), header, raf, tempRaf, true);
-        } catch (IOException ioe)
+        }
+        catch (IOException ioe)
         {
             throw ioe;
-        } catch (Exception cre)
+        }
+        catch (Exception cre)
         {
             throw new CannotWriteException(
                     "Cannot modify tag because exception occured:\n   "
@@ -499,7 +501,7 @@ public class AsfFileWriter extends AudioFileWriter
      *java.io.RandomAccessFile,java.io.RandomAccessFile)
      */
     protected void writeTag(Tag tag, RandomAccessFile raf,
-                            RandomAccessFile rafTemp) throws CannotWriteException, IOException
+            RandomAccessFile rafTemp) throws CannotWriteException, IOException
     {
         try
         {
@@ -511,10 +513,12 @@ public class AsfFileWriter extends AudioFileWriter
                                 + "(Interpretation of data, not file access rights.)");
             }
             createModifiedCopy(tag, header, raf, rafTemp, false);
-        } catch (IOException ioe)
+        }
+        catch (IOException ioe)
         {
             throw ioe;
-        } catch (Exception cre)
+        }
+        catch (Exception cre)
         {
             throw new CannotWriteException(
                     "Cannot modify tag because exception occured:\n   "

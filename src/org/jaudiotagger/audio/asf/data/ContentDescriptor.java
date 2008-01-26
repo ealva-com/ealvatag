@@ -269,7 +269,8 @@ public final class ContentDescriptor implements Comparable
                 result.write(Utils.getBytes(content.length, 2));
                 result.write(content);
             }
-        } catch (Exception e)
+        }
+        catch (Exception e)
         {
             e.printStackTrace();
         }
@@ -346,7 +347,7 @@ public final class ContentDescriptor implements Comparable
     public byte[] getRawData()
     {
         byte[] copy = new byte[this.content.length];
-        System.arraycopy( this.content, 0, copy, 0,this.content.length);
+        System.arraycopy(this.content, 0, copy, 0, this.content.length);
         return copy;
     }
 
@@ -375,7 +376,8 @@ public final class ContentDescriptor implements Comparable
                 try
                 {
                     result = new String(content, "UTF-16LE");
-                } catch (Exception e)
+                }
+                catch (Exception e)
                 {
                     e.printStackTrace();
                 }
@@ -508,7 +510,8 @@ public final class ContentDescriptor implements Comparable
                                 + "\"UTF-16LE\" is to great. (Maximum is 65535 Bytes)");
             }
             this.content = tmp;
-        } catch (UnsupportedEncodingException e)
+        }
+        catch (UnsupportedEncodingException e)
         {
             e.printStackTrace();
             this.content = new byte[0];

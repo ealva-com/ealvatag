@@ -24,6 +24,7 @@ import java.io.RandomAccessFile;
 import org.jaudiotagger.audio.generic.GenericAudioHeader;
 import org.jaudiotagger.tag.Tag;
 import org.jaudiotagger.audio.asf.data.AsfHeader;
+import org.jaudiotagger.audio.asf.data.AudioStreamChunk;
 import org.jaudiotagger.audio.asf.io.AsfHeaderReader;
 import org.jaudiotagger.audio.asf.util.TagConverter;
 import org.jaudiotagger.audio.exceptions.CannotReadException;
@@ -61,10 +62,12 @@ public class AsfFileReader extends AudioFileReader
                     .getChannelCount());
             info.setEncodingType("ASF (audio): "
                     + header.getAudioStreamChunk().getCodecDescription());
+            info.setLossless(header.getAudioStreamChunk().getCompressionFormat() == AudioStreamChunk.WMA_LOSSLESS);
             info.setPreciseLength(header.getFileHeader().getPreciseDuration());
             info.setSamplingRate((int) header.getAudioStreamChunk()
                     .getSamplingRate());
-        } catch (Exception e)
+        }
+        catch (Exception e)
         {
             if (e instanceof IOException)
             {
@@ -92,7 +95,7 @@ public class AsfFileReader extends AudioFileReader
             IOException
     {
         raf.seek(0);
-        Tag tag = null;
+        Tag tag;
         try
         {
             AsfHeader header = AsfHeaderReader.readHeader(raf);
@@ -105,7 +108,8 @@ public class AsfFileReader extends AudioFileReader
 
             tag = TagConverter.createTagOf(header);
 
-        } catch (Exception e)
+        }
+        catch (Exception e)
         {
             if (e instanceof IOException)
             {

@@ -89,7 +89,7 @@ public class EncodingChunk extends Chunk
         while (iterator.hasNext())
         {
             result.append("   " + iterator.next() + Utils.LINE_SEPARATOR);
-		}
-		return result.toString();
-	}
+        }
+        return result.toString();
+    }
 }

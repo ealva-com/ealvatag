@@ -49,6 +49,11 @@ public class AsfHeader extends Chunk
     private EncodingChunk encodingChunk;
 
     /**
+     * Stores the encoding chunk.
+     */
+    private EncryptionChunk encryptionChunk;
+
+    /**
      * Stores the tag header.
      */
     private ExtendedContentDescription extendedContentDescription;
@@ -179,6 +184,14 @@ public class AsfHeader extends Chunk
     }
 
     /**
+     * @return Returns the encodingChunk.
+     */
+    public EncryptionChunk getEncryptionChunk()
+    {
+        return encryptionChunk;
+    }
+
+    /**
      * @return Returns the tagHeader.
      */
     public ExtendedContentDescription getExtendedContentDescription()
@@ -289,6 +302,16 @@ public class AsfHeader extends Chunk
     }
 
     /**
+     * @param encryptionChunk *            The encodingChunk to set.
+     */
+    public void setEncryptionChunk(EncryptionChunk encChunk)
+    {
+        if (encChunk == null)
+            throw new IllegalArgumentException("Argument must not be null.");
+        this.encryptionChunk = encChunk;
+    }
+
+    /**
      * @param th sets the extendedContentDescription. <code>null</code>
      *           delete the chunk.
      */
@@ -313,7 +336,8 @@ public class AsfHeader extends Chunk
      * @param streamBitratePropertiesChunk The streamBitratePropertiesChunk to set.
      */
     public void setStreamBitratePropertiesChunk(
-			StreamBitratePropertiesChunk streamBitratePropertiesChunk1) {
-		this.streamBitratePropertiesChunk = streamBitratePropertiesChunk1;
-	}
+            StreamBitratePropertiesChunk streamBitratePropertiesChunk1)
+    {
+        this.streamBitratePropertiesChunk = streamBitratePropertiesChunk1;
+    }
 }

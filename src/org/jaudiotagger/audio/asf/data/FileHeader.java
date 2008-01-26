@@ -106,10 +106,10 @@ public class FileHeader extends Chunk
      * @param uncmpVideoFrameSize Size of an uncompressed Video Frame.
      */
     public FileHeader(long fileHeaderStart, BigInteger chunckLen,
-                      BigInteger size, BigInteger fileTime, BigInteger pkgCount,
-                      BigInteger dur, BigInteger timestampStart, BigInteger timestampEnd,
-                      long headerFlags, long minPkgSize, long maxPkgSize,
-                      long uncmpVideoFrameSize)
+            BigInteger size, BigInteger fileTime, BigInteger pkgCount,
+            BigInteger dur, BigInteger timestampStart, BigInteger timestampEnd,
+            long headerFlags, long minPkgSize, long maxPkgSize,
+            long uncmpVideoFrameSize)
     {
         super(GUID.GUID_FILE, fileHeaderStart, chunckLen);
         this.fileSize = size;
@@ -243,6 +243,6 @@ public class FileHeader extends Chunk
                 + getDuration().divide(new BigInteger("10000")).toString()
                 + " ms \n");
         result.append("   Created at    = " + getFileCreationTime() + "\n");
-		return result.toString();
-	}
+        return result.toString();
+    }
 }

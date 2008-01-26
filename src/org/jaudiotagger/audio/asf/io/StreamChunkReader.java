@@ -110,7 +110,7 @@ public class StreamChunkReader
                      */
                 int mask = Utils.readUINT16(raf);
                 int streamNumber = mask & 127;
-                boolean contentEncrypted = (mask & (1 << 15)) != 0;
+                boolean contentEncrypted = (mask & (1 << 15)) == 1;
 
                 /*
                      * Skip a reserved field
@@ -186,9 +186,9 @@ public class StreamChunkReader
                 result.setTypeSpecificDataSize(typeSpecificDataSize);
                 result.setTimeOffset(timeOffset);
                 result.setContentEncrypted(contentEncrypted);
-			}
-		}
-		return result;
-	}
+            }
+        }
+        return result;
+    }
 
 }

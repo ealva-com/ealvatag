@@ -59,7 +59,7 @@ public class TagConverter
      * @see Tag#getGenre() <br>
      */
     public static void assignCommonTagValues(Tag tag,
-                                             ExtendedContentDescription description)
+            ExtendedContentDescription description)
     {
         ContentDescriptor tmp = null;
         if (tag.getFirstAlbum() != null && tag.getFirstAlbum().length() > 0)
@@ -130,7 +130,7 @@ public class TagConverter
      * @param descriptor the extended content description.
      */
     public static void assignOptionalTagValues(Tag tag,
-                                               ExtendedContentDescription descriptor)
+            ExtendedContentDescription descriptor)
     {
         Iterator it = tag.getFields();
         ContentDescriptor tmp = null;
@@ -153,7 +153,8 @@ public class TagConverter
                     }
                     descriptor.addOrReplace(tmp);
                 }
-            } catch (UnsupportedEncodingException uee)
+            }
+            catch (UnsupportedEncodingException uee)
             {
                 uee.printStackTrace();
             }
@@ -215,7 +216,7 @@ public class TagConverter
      * @param source The asf header which contains the information. <br>
      * @return A Tag with all its values.
      */
-    public static Tag createTagOf(AsfHeader source)  throws FieldDataInvalidException
+    public static Tag createTagOf(AsfHeader source) throws FieldDataInvalidException
     {
         GenericTag result = new GenericTag();
         /*
@@ -251,11 +252,12 @@ public class TagConverter
             {
                 ContentDescriptor current = (ContentDescriptor) it.next();
                 // If common, it has been added to the result some lines upward.
-				if (!current.isCommon()) {
-					result.add(new ContentDescriptorTagField(current));
-				}
-			}
-		}
-		return result;
-	}
+                if (!current.isCommon())
+                {
+                    result.add(new ContentDescriptorTagField(current));
+                }
+            }
+        }
+        return result;
+    }
 }

@@ -46,7 +46,7 @@ public class StreamBitratePropertiesReader
      * @throws IOException read errors.
      */
     public static StreamBitratePropertiesChunk read(RandomAccessFile raf,
-                                                    Chunk candidate) throws IOException
+            Chunk candidate) throws IOException
     {
         if (raf == null || candidate == null)
         {
@@ -96,10 +96,10 @@ public class StreamBitratePropertiesReader
                 int flags = Utils.readUINT16(raf);
                 long avgBitrate = Utils.readUINT32(raf);
                 result.addBitrateRecord(flags & 0x00FF, avgBitrate);
-			}
+            }
 
-		}
-		return result;
-	}
+        }
+        return result;
+    }
 
 }

@@ -172,7 +172,8 @@ public class Utils
                 character = raf.read();
                 character |= raf.read() << 8;
             }
-        } while (character != 0 || (result.length() + 1) > strLen);
+        }
+        while (character != 0 || (result.length() + 1) > strLen);
         if (strLen != (result.length() + 1))
         {
             throw new IllegalStateException(
@@ -308,7 +309,8 @@ public class Utils
                             "\"UTF-16LE\" representation exceeds 65535 bytes."
                                     + " (Including zero term character)");
                 }
-            } catch (UnsupportedEncodingException e)
+            }
+            catch (UnsupportedEncodingException e)
             {
                 e.printStackTrace();
             }

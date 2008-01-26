@@ -135,7 +135,8 @@ public class ContentDescription extends Chunk
             result.write(Utils.getBytes(tagContent.length + 24, 8));
             // The tags.
             result.write(tagContent);
-        } catch (Exception e)
+        }
+        catch (Exception e)
         {
             e.printStackTrace();
         }

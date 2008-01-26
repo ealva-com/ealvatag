@@ -1,6 +1,6 @@
 /*
  * Entagged Audio Tag library
- * Copyright (c) 2003-2005 Raphaël Slinckx <raphael@slinckx.net>
+ * Copyright (c) 2003-2005 Raphaï¿½l Slinckx <raphael@slinckx.net>
  * 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -87,6 +87,11 @@ public class GenericAudioHeader implements AudioHeader
      * @see #content
      */
     public final static String FIELD_VBR = "VBR";
+    
+    /**
+     * Used for WMA files
+     */
+    private boolean isLossless = false;
 
     /**
      * This table containts the parameters.<br>
@@ -226,6 +231,16 @@ public class GenericAudioHeader implements AudioHeader
     }
 
     /**
+     * This method returns <code>true</code>, if the audio file is encoded
+     * with &quot;Lossless&quot;.<br>
+     *
+     * @return <code>true</code> if audio clip is encoded with VBR.
+     */
+    public boolean isLossless() {
+    	return isLossless;
+    }
+
+    /**
      * This Method sets the bitrate in &quot;Kbps&quot;.<br>
      *
      * @param bitrate bitrate in kbps.
@@ -306,6 +321,16 @@ public class GenericAudioHeader implements AudioHeader
     {
         content.put(FIELD_VBR, new Boolean(b));
     }
+
+    /**
+     * Sets the Lossless flag for the represented audio clip.<br>
+     *
+     * @param b
+     *            <code>true</code> if Lossless.
+     */
+    public void setLossless(boolean b) {
+    	isLossless = b;
+    } 
 
     /**
      * Can be used to add additional information

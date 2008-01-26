@@ -48,7 +48,7 @@ public class ExtContentDescReader
      * @throws IOException Read errors
      */
     public static ExtendedContentDescription read(RandomAccessFile raf,
-                                                  Chunk candidate) throws IOException
+            Chunk candidate) throws IOException
     {
         if (raf == null || candidate == null)
         {

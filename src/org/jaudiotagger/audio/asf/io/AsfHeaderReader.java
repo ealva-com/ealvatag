@@ -28,6 +28,7 @@ import org.jaudiotagger.audio.asf.data.AsfHeader;
 import org.jaudiotagger.audio.asf.data.Chunk;
 import org.jaudiotagger.audio.asf.data.ContentDescription;
 import org.jaudiotagger.audio.asf.data.EncodingChunk;
+import org.jaudiotagger.audio.asf.data.EncryptionChunk;
 import org.jaudiotagger.audio.asf.data.ExtendedContentDescription;
 import org.jaudiotagger.audio.asf.data.FileHeader;
 import org.jaudiotagger.audio.asf.data.GUID;
@@ -118,6 +119,7 @@ public class AsfHeaderReader
             FileHeader fileHeader = null;
             ExtendedContentDescription extendedDescription = null;
             EncodingChunk encodingChunk = null;
+            EncryptionChunk encryptionChunk = null;
             StreamChunk streamChunk = null;
             ContentDescription contentDescription = null;
             StreamBitratePropertiesChunk bitratePropertiesChunk = null;
@@ -140,6 +142,12 @@ public class AsfHeaderReader
                 }
                 if (encodingChunk == null
                         && (encodingChunk = EncodingChunkReader.read(in,
+                        currentChunk)) != null)
+                {
+                    continue;
+                }
+                if (encryptionChunk == null
+                        && (encryptionChunk = EncryptionChunkReader.read(in,
                         currentChunk)) != null)
                 {
                     continue;
@@ -177,6 +185,8 @@ public class AsfHeaderReader
                 */
             result.setFileHeader(fileHeader);
             result.setEncodingChunk(encodingChunk);
+            if (encryptionChunk != null)
+                result.setEncryptionChunk(encryptionChunk);
             /*
                 * Warning, extendedDescription, contentDescription and
                 * bitratePropertiesChunk maybe null since they are optional fields.
@@ -184,8 +194,8 @@ public class AsfHeaderReader
             result.setExtendedContentDescription(extendedDescription);
             result.setContentDescription(contentDescription);
             result.setStreamBitratePropertiesChunk(bitratePropertiesChunk);
-		}
-		return result;
-	}
+        }
+        return result;
+    }
 
 }

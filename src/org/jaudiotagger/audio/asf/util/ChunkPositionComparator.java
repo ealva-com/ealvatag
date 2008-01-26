@@ -47,6 +47,6 @@ public class ChunkPositionComparator implements Comparator
             result = (int) (c1.getPosition() - c2.getPosition());
         }
         return result;
-	}
+    }
 
 }

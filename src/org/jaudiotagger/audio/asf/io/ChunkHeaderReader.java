@@ -49,6 +49,6 @@ class ChunkHeaderReader
         GUID guid = Utils.readGUID(input);
         BigInteger chunkLength = Utils.readBig64(input);
         return new Chunk(guid, pos, chunkLength);
-	}
+    }
 
 }

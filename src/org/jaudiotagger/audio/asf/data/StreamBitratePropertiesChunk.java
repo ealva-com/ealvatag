@@ -105,7 +105,7 @@ public class StreamBitratePropertiesChunk extends Chunk
                     + "\"" + Utils.LINE_SEPARATOR);
         }
         result.append(Utils.LINE_SEPARATOR);
-		return result.toString();
-	}
+        return result.toString();
+    }
 
 }

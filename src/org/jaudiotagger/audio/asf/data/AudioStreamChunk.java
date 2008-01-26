@@ -29,6 +29,11 @@ import org.jaudiotagger.audio.asf.util.Utils;
  */
 public class AudioStreamChunk extends StreamChunk
 {
+    public final static long WMA = 0x161;
+    public final static long WMA_PRO = 0x162;
+    public final static long WMA_LOSSLESS = 0x163;
+    public final static long WMA_CBR = 0x7A21;
+    public final static long WMA_VBR = 0x7A22;
 
     /**
      * Stores the hex values of codec identifiers to their descriptions. <br>

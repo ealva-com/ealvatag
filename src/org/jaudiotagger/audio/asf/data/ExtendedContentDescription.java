@@ -189,7 +189,8 @@ public class ExtendedContentDescription extends Chunk
             result.write(Utils.getBytes(contentBytes.length + 24, 8));
             // Write the content
             result.write(contentBytes);
-        } catch (Exception e)
+        }
+        catch (Exception e)
         {
             e.printStackTrace();
         }
@@ -271,7 +272,8 @@ public class ExtendedContentDescription extends Chunk
                         {
                             result = DEFAULT_GENRES[genreNum];
                         }
-                    } catch (NumberFormatException e)
+                    }
+                    catch (NumberFormatException e)
                     {
                         // Do nothing
                     }

@@ -110,8 +110,8 @@ public class FileHeaderReader
             result = new FileHeader(fileHeaderStart, chunckLen, fileSize,
                     fileTime, packageCount, duration, timeStartPos, timeEndPos,
                     flags, minPkgSize, maxPkgSize, uncompressedFrameSize);
-		}
-		return result;
-	}
+        }
+        return result;
+    }
 
 }

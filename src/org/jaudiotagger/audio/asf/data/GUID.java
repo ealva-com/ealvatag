@@ -131,14 +131,31 @@ public class GUID
             0x5F, 0x5C, 0x44, 0x2B}, "Video stream");
 
     /**
-     * This field stores all knwon GUIDs.
+     * This is for the Content Encryption Object 2211B3FB-BD23-11D2-B4B7-00A0C955FC6E,
+     * needs to be little-endian.
+     */
+    public final static GUID GUID_CONTENT_ENCRYPTION = new GUID(
+            new int[]{0xfb, 0xb3, 0x11, 0x22, 0x23, 0xbd, 0xd2, 0x11, 0xb4,
+                    0xb7, 0x00, 0xa0, 0xc9, 0x55, 0xfc, 0x6e},
+            "Content Encryption Object");
+
+    public final static GUID SCRIPT_COMMAND_OBJECT = new GUID(
+            new int[]{0x30, 0x1a, 0xfb, 0x1e, 0x62, 0x0b, 0xd0, 0x11, 0xa3,
+                    0x9b, 0x00, 0xa0, 0xc9, 0x03, 0x48, 0xf6},
+            "Script Command Object");
+
+
+    /**
+     * This field stores all known GUIDs.
      */
     public final static GUID[] KNOWN_GUIDS = new GUID[]{
             GUID_AUDIO_ERROR_CONCEALEMENT_ABSENT,
             GUID_AUDIO_ERROR_CONCEALEMENT_INTERLEAVED, GUID_CONTENTDESCRIPTION,
             GUID_AUDIOSTREAM, GUID_ENCODING, GUID_FILE, GUID_HEADER,
             GUID_STREAM, GUID_EXTENDED_CONTENT_DESCRIPTION, GUID_VIDEOSTREAM,
-            GUID_HEADER_EXTENSION, GUID_STREAM_BITRATE_PROPERTIES};
+            GUID_HEADER_EXTENSION, GUID_STREAM_BITRATE_PROPERTIES,
+            GUID_HEADER_EXTENSION, GUID_STREAM_BITRATE_PROPERTIES,
+            SCRIPT_COMMAND_OBJECT, GUID_CONTENT_ENCRYPTION};
 
     /**
      * This method checks if the given <code>value</code> is matching the GUID
@@ -340,7 +357,7 @@ public class GUID
                 result.append(", ");
             }
             result.append("0x" + tmp);
-		}
-		return result.toString();
-	}
+        }
+        return result.toString();
+    }
 }
