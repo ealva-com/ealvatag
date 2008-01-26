@@ -121,9 +121,6 @@ public class Mp4BoxHeader
         this.length = Utils.getNumberBigEndian(b, OFFSET_POS, OFFSET_LENGTH - 1);
         //Calculate box id
         this.id = Utils.getString(b, IDENTIFIER_POS, IDENTIFIER_LENGTH, "ISO-8859-1");
-
-        logger.finest("Read header:" + id + ":length:" + length);
- 
     }
 
     /**

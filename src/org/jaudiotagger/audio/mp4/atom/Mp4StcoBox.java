@@ -30,14 +30,14 @@ public class Mp4StcoBox extends AbstractMp4Box
      * Construct box from data and show contents
      *
      * @param header             header info
-     * @param originalDataBuffer data of box (doesnt include header data)
+     * @param buffer data of box (doesnt include header data)
      */
-    public Mp4StcoBox(Mp4BoxHeader header, ByteBuffer originalDataBuffer)
+    public Mp4StcoBox(Mp4BoxHeader header, ByteBuffer buffer)
     {
         this.header = header;
 
         //Make a slice of databuffer then we can work with relative or absolute methods safetly
-        this.dataBuffer = originalDataBuffer.slice();
+        dataBuffer = buffer.slice();
 
         //Skip the flags
         dataBuffer.position(dataBuffer.position() + VERSION_FLAG_LENGTH + OTHER_FLAG_LENGTH);
@@ -51,14 +51,33 @@ public class Mp4StcoBox extends AbstractMp4Box
         //First Offset, useful for sanity checks
         firstOffSet = Utils.getNumberBigEndian(dataBuffer,
                 dataBuffer.position(),
+                (dataBuffer.position() + OFFSET_LENGTH - 1));        
+    }
+
+    public void printTotalOffset()
+    {
+        int offset = 0;
+        dataBuffer.rewind();
+        dataBuffer.position(VERSION_FLAG_LENGTH + OTHER_FLAG_LENGTH + NO_OF_OFFSETS_LENGTH);
+        for (int i = 0; i < noOfOffSets - 1; i++)
+        {
+            offset+= Utils.getNumberBigEndian(dataBuffer,
+                    dataBuffer.position(),
+                    (dataBuffer.position() + OFFSET_LENGTH - 1));
+            dataBuffer.position(dataBuffer.position() + OFFSET_LENGTH);
+        }
+        offset+= Utils.getNumberBigEndian(dataBuffer,
+                dataBuffer.position(),
                 (dataBuffer.position() + OFFSET_LENGTH - 1));
+        System.out.println("Print Offset Total:"+offset);
     }
 
     /**
-     * Show All offsets, uyseful for debugging
+     * Show All offsets, useful for debugging
      */
     public void printAlloffsets()
     {
+        System.out.println("Print Offsets:start");
         dataBuffer.rewind();
         dataBuffer.position(VERSION_FLAG_LENGTH + OTHER_FLAG_LENGTH + NO_OF_OFFSETS_LENGTH);
         for (int i = 0; i < noOfOffSets - 1; i++)
@@ -66,12 +85,33 @@ public class Mp4StcoBox extends AbstractMp4Box
             int offset = Utils.getNumberBigEndian(dataBuffer,
                     dataBuffer.position(),
                     (dataBuffer.position() + OFFSET_LENGTH - 1));
-         
+            System.out.println("offset into audio data is:"+offset);
+
             dataBuffer.position(dataBuffer.position() + OFFSET_LENGTH);
         }
         int offset = Utils.getNumberBigEndian(dataBuffer,
                 dataBuffer.position(),
                 (dataBuffer.position() + OFFSET_LENGTH - 1));
+        System.out.println("offset into audio data is:"+offset);
+        System.out.println("Print Offsets:end");
+        
+    }
+
+    public void adjustOffsets(int adjustment)
+    {
+        //Skip the flags
+        dataBuffer.rewind();
+        dataBuffer.position(dataBuffer.position() + VERSION_FLAG_LENGTH + OTHER_FLAG_LENGTH + NO_OF_OFFSETS_LENGTH);
+        for (int i = 0; i < noOfOffSets; i++)
+        {
+            int offset = Utils.getNumberBigEndian(dataBuffer,
+                    dataBuffer.position(),
+                    (dataBuffer.position() + NO_OF_OFFSETS_LENGTH - 1));
+
+            //Calculate new offset and update buffer
+            offset = offset + adjustment;
+            dataBuffer.put(Utils.getSizeBigEndian(offset));
+        }
     }
 
     /**

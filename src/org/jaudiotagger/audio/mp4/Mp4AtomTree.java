@@ -16,6 +16,7 @@ import java.nio.ByteBuffer;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.logging.Logger;
 
 /**
  * Tree representing atoms in the mp4 file
@@ -29,10 +30,11 @@ import java.util.ArrayList;
  * be used when reading tags as well.
  *
  * Uses a TreeModel for the tree, with convienience methods holding onto references to most common nodes so they
- * can be used without habing to traverse the tree again.
+ * can be used without having to traverse the tree again.
  */
 public class Mp4AtomTree
 {
+    private DefaultMutableTreeNode  rootNode;
     private DefaultTreeModel        dataTree;
     private DefaultMutableTreeNode  moovNode;
     private DefaultMutableTreeNode  mdatNode;
@@ -43,6 +45,9 @@ public class Mp4AtomTree
     private Mp4StcoBox              stco;
     private ByteBuffer              moovBuffer; //Contains all the data under moov
     private Mp4BoxHeader            moovHeader;
+
+    //Logger Object
+    public static Logger logger = Logger.getLogger("org.jaudiotagger.audio.mp4");
 
     public Mp4AtomTree(RandomAccessFile raf) throws IOException, CannotReadException
     {
@@ -60,7 +65,7 @@ public class Mp4AtomTree
         FileChannel fc = raf.getChannel();
 
         //Build up map of nodes
-        DefaultMutableTreeNode rootNode  = new DefaultMutableTreeNode();
+        rootNode  = new DefaultMutableTreeNode();
         dataTree  = new DefaultTreeModel(rootNode);
 
         //Iterate though all the top level Nodes
@@ -100,17 +105,33 @@ public class Mp4AtomTree
             fc.position(fc.position() + boxHeader.getDataLength());
         }
 
-        /*   Enumeration e = rootNode.breadthFirstEnumeration();
-        DefaultMutableTreeNode nextNode;
-        while(e.hasMoreElements())
-        {
-            nextNode= (DefaultMutableTreeNode)e.nextElement();
-            System.out.println(nextNode.getUserObject());
-        }
-        */
+
         return dataTree;
     }
 
+    /**
+     * Display atom tree
+     */
+    public void printAtomTree()
+    {
+        Enumeration e = rootNode.preorderEnumeration();
+        DefaultMutableTreeNode nextNode;
+        while(e.hasMoreElements())
+        {
+            nextNode= (DefaultMutableTreeNode)e.nextElement();           
+            Mp4BoxHeader header = (Mp4BoxHeader)nextNode.getUserObject();
+            if(header!=null)
+            {
+                String tabbing = new String();
+                for(int i=1;i<nextNode.getLevel();i++)
+                {
+                    tabbing+="\t";
+                }
+                System.out.println(tabbing+"Atom "+header.getId()+ " @ "+header.getFilePos()
+                        +" of size:"+header.getLength() +" ,ends @ "+(header.getFilePos() + header.getLength()));
+            }
+        }
+    }
     public void buildChildrenOfNode(ByteBuffer moovBuffer,DefaultMutableTreeNode parentNode)throws IOException, CannotReadException
     {
         //Preprocessing for nodes that contain data before their children atoms
@@ -121,16 +142,17 @@ public class Mp4AtomTree
             meta.processData();
         }
         
-         Mp4BoxHeader boxHeader;
+        Mp4BoxHeader boxHeader;
         int startPos = moovBuffer.position();
         while(moovBuffer.position()<((startPos + parentBoxHeader.getDataLength()) -  Mp4BoxHeader.HEADER_LENGTH))
         {
-           //System.out.println("position at :"+parentBoxHeader.getId()+":"+moovBuffer.position()+":"+startPos + ":"+ parentBoxHeader.getDataLength());
             boxHeader = new Mp4BoxHeader(moovBuffer);
             if(boxHeader!=null)
-            {                                                                                    
-                //TO Check figure seem slighty wrong
+            {   
                 boxHeader.setFilePos(moovHeader.getFilePos() + moovBuffer.position());
+                logger.finest("Atom "+boxHeader.getId()+ " @ "+boxHeader.getFilePos()
+                        +" of size:"+boxHeader.getLength() +" ,ends @ "+(boxHeader.getFilePos() + boxHeader.getLength()));
+
                 DefaultMutableTreeNode newAtom = new DefaultMutableTreeNode(boxHeader);
                 if(boxHeader.getId().equals(Mp4NotMetaFieldKey.META.getFieldName()))
                 {
@@ -167,7 +189,6 @@ public class Mp4AtomTree
                 {
                     buildChildrenOfNode(moovBuffer,newAtom);
                 }
-                //System.out.println(boxHeader.toString()+"limit"+moovBuffer.limit()+":MoovBuffer at:"+moovBuffer.position() +":"+ boxHeader.getDataLength());
                 if(boxHeader.getId().equals(Mp4NotMetaFieldKey.META.getFieldName()))
                 {
                     moovBuffer.position( moovBuffer.position() + (boxHeader.getDataLength() - Mp4MetaBox.FLAGS_LENGTH));                   
