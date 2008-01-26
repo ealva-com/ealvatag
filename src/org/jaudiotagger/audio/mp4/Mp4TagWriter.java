@@ -178,7 +178,6 @@ public class Mp4TagWriter
         int topLevelFreeSize     = 0;
         boolean topLevelFreeAtomComesBeforeMdatAtom = true;
         Mp4BoxHeader topLevelFreeHeader;
-        int mDatHeaderDataLocation;
 
         Mp4AtomTree atomTree;
         //Make tree
@@ -284,7 +283,6 @@ public class Mp4TagWriter
             topLevelFreePosition=(int)mdatHeader.getFilePos();
             level1SearchPosition=topLevelFreePosition;
         }
-        mDatHeaderDataLocation =(int)mdatHeader.getFilePos() + Mp4BoxHeader.HEADER_LENGTH;
 
         logger.info("Read header successfully ready for writing");
         //The easiest option since no difference in the size of the metadata so all we have to do is
@@ -585,8 +583,7 @@ public class Mp4TagWriter
             }
         }
         catch (Exception e)
-        {
-            e.printStackTrace();
+        {                                       
             if (e instanceof CannotWriteException)
             {
 
