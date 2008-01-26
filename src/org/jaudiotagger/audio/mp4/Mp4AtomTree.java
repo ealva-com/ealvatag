@@ -49,9 +49,30 @@ public class Mp4AtomTree
     //Logger Object
     public static Logger logger = Logger.getLogger("org.jaudiotagger.audio.mp4");
 
+    /**
+     * Create Atom Tree
+     *
+     * @param raf
+     * @throws IOException
+     * @throws CannotReadException
+     */
     public Mp4AtomTree(RandomAccessFile raf) throws IOException, CannotReadException
     {
-        buildTree(raf);
+        buildTree(raf,true);
+    }
+
+    /**
+     * Create Atom Tree and maintain open channel to raf, should only be used if will continue
+     * to use raf after this call, you will have to close raf yourself.
+     *
+     * @param raf
+     * @param closeOnExit
+     * @throws IOException
+     * @throws CannotReadException
+     */
+    public Mp4AtomTree(RandomAccessFile raf,boolean closeOnExit) throws IOException, CannotReadException
+    {
+        buildTree(raf,closeOnExit);
     }
 
     /** Build a tree of the atoms in the file
@@ -60,53 +81,62 @@ public class Mp4AtomTree
      * @return
      * @throws java.io.IOException
      */
-    public DefaultTreeModel buildTree(RandomAccessFile raf)throws IOException, CannotReadException
+    public DefaultTreeModel buildTree(RandomAccessFile raf,boolean closeExit)throws IOException, CannotReadException
     {
-        FileChannel fc = raf.getChannel();
-
-        //Build up map of nodes
-        rootNode  = new DefaultMutableTreeNode();
-        dataTree  = new DefaultTreeModel(rootNode);
-
-        //Iterate though all the top level Nodes
-        while(fc.position()<fc.size())
+        FileChannel fc=null;
+        try
         {
-             Mp4BoxHeader boxHeader = new Mp4BoxHeader();
-            ByteBuffer headerBuffer = ByteBuffer.allocate(Mp4BoxHeader.HEADER_LENGTH);
-            fc.read(headerBuffer);
-            headerBuffer.rewind();
-            boxHeader.update(headerBuffer);
-            boxHeader.setFilePos(fc.position() - Mp4BoxHeader.HEADER_LENGTH);
-            DefaultMutableTreeNode newAtom = new DefaultMutableTreeNode(boxHeader);
-            //Go down moov
-            if(boxHeader.getId().equals(Mp4NotMetaFieldKey.MOOV.getFieldName()))
-            {
-                moovNode=newAtom;
-                moovHeader=boxHeader;
+            fc = raf.getChannel();
 
-                long filePosStart = fc.position();
-                moovBuffer = ByteBuffer.allocate(boxHeader.getDataLength());
-                fc.read(moovBuffer);
-                moovBuffer.rewind();
-                buildChildrenOfNode(moovBuffer,newAtom);
-                fc.position(filePosStart);
-            }
-            else if(boxHeader.getId().equals(Mp4NotMetaFieldKey.FREE.getFieldName()))
+            //Build up map of nodes
+            rootNode  = new DefaultMutableTreeNode();
+            dataTree  = new DefaultTreeModel(rootNode);
+
+            //Iterate though all the top level Nodes
+            while(fc.position()<fc.size())
             {
-                //Might be multiple in different locations
-                freeNodes.add(newAtom);
+                 Mp4BoxHeader boxHeader = new Mp4BoxHeader();
+                ByteBuffer headerBuffer = ByteBuffer.allocate(Mp4BoxHeader.HEADER_LENGTH);
+                fc.read(headerBuffer);
+                headerBuffer.rewind();
+                boxHeader.update(headerBuffer);
+                boxHeader.setFilePos(fc.position() - Mp4BoxHeader.HEADER_LENGTH);
+                DefaultMutableTreeNode newAtom = new DefaultMutableTreeNode(boxHeader);
+                //Go down moov
+                if(boxHeader.getId().equals(Mp4NotMetaFieldKey.MOOV.getFieldName()))
+                {
+                    moovNode=newAtom;
+                    moovHeader=boxHeader;
+
+                    long filePosStart = fc.position();
+                    moovBuffer = ByteBuffer.allocate(boxHeader.getDataLength());
+                    fc.read(moovBuffer);
+                    moovBuffer.rewind();
+                    buildChildrenOfNode(moovBuffer,newAtom);
+                    fc.position(filePosStart);
+                }
+                else if(boxHeader.getId().equals(Mp4NotMetaFieldKey.FREE.getFieldName()))
+                {
+                    //Might be multiple in different locations
+                    freeNodes.add(newAtom);
+                }
+                else if(boxHeader.getId().equals(Mp4NotMetaFieldKey.MDAT.getFieldName()))
+                {
+                    //Might be multiple in different locations
+                    mdatNode=newAtom;
+                }
+                rootNode.add(newAtom);
+                fc.position(fc.position() + boxHeader.getDataLength());
             }
-            else if(boxHeader.getId().equals(Mp4NotMetaFieldKey.MDAT.getFieldName()))
-            {
-                //Might be multiple in different locations
-                mdatNode=newAtom;
-            }
-            rootNode.add(newAtom);
-            fc.position(fc.position() + boxHeader.getDataLength());
+            return dataTree;
         }
-
-
-        return dataTree;
+        finally
+        {
+            if(closeExit)
+            {
+                fc.close();
+            }
+        }
     }
 
     /**
