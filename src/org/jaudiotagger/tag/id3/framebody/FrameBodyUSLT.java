@@ -236,4 +236,5 @@ public class FrameBodyUSLT extends AbstractID3v2FrameBody implements ID3v23Frame
         objectList.add(new TextEncodedStringNullTerminated(DataTypes.OBJ_DESCRIPTION, this));
         objectList.add(new TextEncodedStringSizeTerminated(DataTypes.OBJ_LYRICS, this));
     }
+
 }

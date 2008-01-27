@@ -282,7 +282,8 @@ public final class AsfCopyrightField implements TagTextField
         try
         {
             setString(s);
-        } catch (IllegalArgumentException iae)
+        }
+        catch (IllegalArgumentException iae)
         {
             iae.printStackTrace();
             value = "Conversion Exception occured.";

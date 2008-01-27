@@ -297,6 +297,10 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
         {
             return ((FrameBodyCOMM) frame.getBody()).getText();
         }
+        else if (frame.getBody() instanceof FrameBodyUSLT)
+        {
+          return ((FrameBodyUSLT) frame.getBody()).getFirstTextValue();
+        }
         else if (frame.getBody() instanceof AbstractFrameBodyTextInfo)
         {
             return ((AbstractFrameBodyTextInfo) frame.getBody()).getFirstTextValue();
