@@ -13,12 +13,12 @@ import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.AudioFileIO;
 
 /**
- * Write tags  for a file which contains  MDAT before MOOV, (not normal case)
+ * Write tags  for a file which contains  multiple tracks such as winamp encoder
  */
 public class M4aWriteDatatoMultTrackAudioTest extends TestCase
 {
     /**
-     * Test to write file that has MDAT at start BEFORE MOOV atom, this is what Facc 1.25 does
+     * Test to write file that has  multiple tracks such as winamp encoder
      * <p/>
      */
     public void testWriteFileOption1SameSize()
@@ -116,7 +116,7 @@ public class M4aWriteDatatoMultTrackAudioTest extends TestCase
         Exception exceptionCaught = null;
         try
         {
-            File testFile = AbstractTestCase.copyAudioToTmp("test16.m4a", new File("testWriteWhenMDatAtStart4.m4a"));
+            File testFile = AbstractTestCase.copyAudioToTmp("test16.m4a", new File("testWriteMultiTrack4.m4a"));
 
             //First lets just create tree
             Mp4AtomTree atomTree = new Mp4AtomTree(new RandomAccessFile(testFile, "r"));
@@ -410,6 +410,13 @@ public class M4aWriteDatatoMultTrackAudioTest extends TestCase
             assertEquals("8", tag.getFirst(TagFieldKey.MUSICBRAINZ_RELEASEARTISTID));
             assertEquals("9", tag.getFirst(TagFieldKey.MUSICIP_ID));
             assertEquals("Classic Rock", tag.getFirst(TagFieldKey.GENRE));
+
+
+            //Visual check of atom tree
+            testFile = new File("testdatatmp","testWriteMultiTrack7.m4a");
+            Mp4AtomTree atomTree = new Mp4AtomTree(new RandomAccessFile(testFile, "r"));
+            atomTree.printAtomTree();
+
         }
         catch (Exception e)
         {

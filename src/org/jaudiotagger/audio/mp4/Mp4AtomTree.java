@@ -5,6 +5,7 @@ import org.jaudiotagger.audio.mp4.atom.Mp4MetaBox;
 import org.jaudiotagger.audio.mp4.atom.Mp4BoxHeader;
 import org.jaudiotagger.audio.mp4.atom.AbstractMp4Box;
 import org.jaudiotagger.audio.mp4.atom.Mp4StcoBox;
+import org.jaudiotagger.logging.ErrorMessage;
 
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -88,6 +89,9 @@ public class Mp4AtomTree
         {
             fc = raf.getChannel();
 
+            //make sure at start of file
+            fc.position(0);
+            
             //Build up map of nodes
             rootNode  = new DefaultMutableTreeNode();
             dataTree  = new DefaultTreeModel(rootNode);
@@ -102,6 +106,7 @@ public class Mp4AtomTree
                 boxHeader.update(headerBuffer);
                 boxHeader.setFilePos(fc.position() - Mp4BoxHeader.HEADER_LENGTH);
                 DefaultMutableTreeNode newAtom = new DefaultMutableTreeNode(boxHeader);
+
                 //Go down moov
                 if(boxHeader.getId().equals(Mp4NotMetaFieldKey.MOOV.getFieldName()))
                 {
@@ -122,7 +127,10 @@ public class Mp4AtomTree
                 }
                 else if(boxHeader.getId().equals(Mp4NotMetaFieldKey.MDAT.getFieldName()))
                 {
-                    //Might be multiple in different locations
+                    if(mdatNode!=null)
+                    {
+                        throw new CannotReadException(ErrorMessage.MP4_FILE_CONTAINS_MULTIPLE_DATA_ATOMS.getMsg());    
+                    }
                     mdatNode=newAtom;
                 }
                 rootNode.add(newAtom);

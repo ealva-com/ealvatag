@@ -233,6 +233,8 @@ public class M4aWriteDataBeforeMoovTagTest extends TestCase
             assertEquals("8", tag.getFirst(TagFieldKey.MUSICBRAINZ_RELEASEARTISTID));
             assertEquals("9", tag.getFirst(TagFieldKey.MUSICIP_ID));
             assertEquals("Classic Rock", tag.getFirst(TagFieldKey.GENRE));
+
+
         }
         catch (Exception e)
         {
@@ -319,6 +321,7 @@ public class M4aWriteDataBeforeMoovTagTest extends TestCase
             assertEquals("8", tag.getFirst(TagFieldKey.MUSICBRAINZ_RELEASEARTISTID));
             assertEquals("9", tag.getFirst(TagFieldKey.MUSICIP_ID));
             assertEquals("Classic Rock", tag.getFirst(TagFieldKey.GENRE));
+
         }
         catch (Exception e)
         {

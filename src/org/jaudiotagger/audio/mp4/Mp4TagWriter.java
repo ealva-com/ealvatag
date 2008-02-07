@@ -156,7 +156,7 @@ public class Mp4TagWriter
         ByteBuffer rawIlstData = tc.convert(tag);                  
         rawIlstData.rewind();
 
-        //Read Channel fo reading from old file
+        //Read Channel for reading from old file
         FileChannel fileReadChannel = raf.getChannel();
 
         //Write channel for writing to new file
@@ -540,38 +540,31 @@ public class Mp4TagWriter
         fileReadChannel.close();
         raf.close();
 
-        logger.info("Checking file has been written correctly");        
+        logger.info("Checking file has been written correctly");         
+
         try
         {
             //Create a tree from the new file
-            Mp4AtomTree newAtomTree;
-            try
-            {
-                newAtomTree = new Mp4AtomTree(rafTemp,false);
-            }
-            catch(CannotReadException cre)
-            {
-                throw new CannotWriteException(ErrorMessage.MP4_CHANGES_TO_FILE_FAILED.getMsg());
-            }
+            Mp4AtomTree newAtomTree;           
+            newAtomTree = new Mp4AtomTree(rafTemp,false);
 
             //Check we still have audio data file, and check length
             Mp4BoxHeader newMdatHeader = newAtomTree.getBoxHeader(atomTree.getMdatNode());
             if(newMdatHeader==null)
             {
-                  throw new CannotWriteException(ErrorMessage.MP4_CHANGES_TO_FILE_FAILED.getMsg());
-            }
+                  throw new CannotWriteException(ErrorMessage.MP4_CHANGES_TO_FILE_FAILED_NO_DATA.getMsg());
+            }            
             if(newMdatHeader.getLength()!=mdatHeader.getLength())
             {
-                 throw new CannotWriteException(ErrorMessage.MP4_CHANGES_TO_FILE_FAILED.getMsg());
+                 throw new CannotWriteException(ErrorMessage.MP4_CHANGES_TO_FILE_FAILED_DATA_CORRUPT.getMsg());
             }
 
             //Check we still have all the key atoms
             Mp4BoxHeader newMetaHeader = newAtomTree.getBoxHeader(atomTree.getMetaNode());
             if(newMetaHeader==null)
             {
-                throw new CannotWriteException(ErrorMessage.MP4_CHANGES_TO_FILE_FAILED.getMsg());
+                throw new CannotWriteException(ErrorMessage.MP4_CHANGES_TO_FILE_FAILED_NO_TAG_DATA.getMsg());
             }
-
 
             //Check offsets are correct, may not match exactly in original file so just want to make
             //sure that the discrepancy if any is preserved
@@ -579,19 +572,18 @@ public class Mp4TagWriter
             int diff = (int)(stco.getFirstOffSet() - mdatHeader.getFilePos());
             if ((newStco.getFirstOffSet() - newMdatHeader.getFilePos()) != diff)
             {
-               throw new CannotWriteException(ErrorMessage.MP4_CHANGES_TO_FILE_FAILED.getMsg());
+               throw new CannotWriteException(ErrorMessage.MP4_CHANGES_TO_FILE_FAILED_INCORRECT_OFFSETS.getMsg());
             }
         }
         catch (Exception e)
-        {                                       
+        {
             if (e instanceof CannotWriteException)
             {
-
                 throw (CannotWriteException) e;
             }
             else
             {
-                throw new CannotWriteException(ErrorMessage.MP4_CHANGES_TO_FILE_FAILED.getMsg());
+                throw new CannotWriteException(ErrorMessage.MP4_CHANGES_TO_FILE_FAILED.getMsg()+":"+e.getMessage());
             }
         }
         finally
