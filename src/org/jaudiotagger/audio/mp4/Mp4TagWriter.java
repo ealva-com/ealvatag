@@ -445,6 +445,7 @@ public class Mp4TagWriter
                         0,
                         positionWithinFileAfterFindingMoovHeader - Mp4BoxHeader.HEADER_LENGTH);
                 fileWriteChannel.position(positionWithinFileAfterFindingMoovHeader - Mp4BoxHeader.HEADER_LENGTH);
+
                 //Edit stco atom within moov header, if the free atom comes after mdat OR
                 //(there is not enough space in the top level free atom
                 //or special case of matching exactly the free atom plus header)
@@ -465,15 +466,19 @@ public class Mp4TagWriter
                 //Edit and rewrite the Moov header
                 adjustSizeOfMoovHeader(moovHeader, moovBuffer, additionalMetaSizeThatWontFitWithinMetaAtom);
                 fileWriteChannel.write(moovHeader.getHeaderData());
+
                 //Now write from this edited buffer up until ilst atom
                 moovBuffer.rewind();
                 moovBuffer.limit(relativeIlstposition);
                 fileWriteChannel.write(moovBuffer);
+
                 //Now write ilst data
                 fileWriteChannel.write(rawIlstData);
+
                 //Skip over the read channel old meta level free atom because now used up
                 fileReadChannel.position(startIstWithinFile + oldIlstSize);
                 fileReadChannel.position(fileReadChannel.position() + oldMetaLevelFreeAtomSize);
+
                 //Writes any extra info such as uuid fields at the end of the meta atom after the ilst atom
                 if (extraDataSize > 0)
                 {
@@ -482,8 +487,10 @@ public class Mp4TagWriter
                             extraDataSize);
                     fileWriteChannel.position(fileWriteChannel.position() + extraDataSize);
                 }
+
                 //fileReadChannel.position(topLevelFreePosition);
-                fileReadChannel.position(level1SearchPosition);
+                //fileReadChannel.position(level1SearchPosition);
+
                 //If we have top level free atom that comes before mdat we might be able to use it
                 if (topLevelFreeAtomComesBeforeMdatAtom)
                 {
