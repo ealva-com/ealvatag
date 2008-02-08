@@ -324,6 +324,23 @@ public class ID3v22Tag
         return super.equals(obj);
     }
 
+    /**
+     * Read the size of a tag, based on  the value written in the tag header
+     * @param buffer
+     * @return
+     * @throws TagException
+     */
+    public int readSize(ByteBuffer buffer)
+    {
+        //Skip over flags
+        byte flags = buffer.get();
+
+        // Read the size, this is size of tag not including  the tag header
+        int size = ID3SyncSafeInteger.bufferToValue(buffer);
+
+        //Return the exact size of tag as set in the tag header
+        return size + TAG_HEADER_LENGTH;
+    }
 
     /**
      * Read tag from the ByteBuffer

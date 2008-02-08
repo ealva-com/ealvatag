@@ -20,8 +20,6 @@ package org.jaudiotagger.audio.flac;
 
 import org.jaudiotagger.audio.exceptions.*;
 import org.jaudiotagger.audio.flac.metadatablock.MetadataBlockHeader;
-import org.jaudiotagger.audio.flac.metadatablock.BlockType;
-import org.jaudiotagger.audio.flac.metadatablock.MetadataBlockDataStreamInfo;
 import org.jaudiotagger.audio.flac.metadatablock.MetadataBlockDataPicture;
 import org.jaudiotagger.tag.vorbiscomment.VorbisCommentTag;
 import org.jaudiotagger.tag.vorbiscomment.VorbisCommentReader;
@@ -46,8 +44,9 @@ public class FlacTagReader
 
     public FlacTag read(RandomAccessFile raf) throws CannotReadException, IOException
     {
-        FlacStream.findStream(raf);
-
+        FlacStreamReader flacStream = new FlacStreamReader(raf);
+        flacStream.findStream();
+   
         //Hold the metadata
         VorbisCommentTag tag = null;
         List<MetadataBlockDataPicture> images = new ArrayList<MetadataBlockDataPicture>();

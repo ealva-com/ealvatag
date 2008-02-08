@@ -420,6 +420,24 @@ public class ID3v23Tag
         return super.equals(obj);
     }
 
+    /**
+     * Read the size of a tag, based on  the value written in the tag header
+     * @param buffer
+     * @return
+     * @throws TagException
+     */
+    public int readSize(ByteBuffer buffer)
+    {
+
+        //Skip over flags
+        byte flags = buffer.get();
+
+        // Read the size, this is size of tag not including  the tag header
+        int size = ID3SyncSafeInteger.bufferToValue(buffer);
+
+        //Return the exact size of tag as set in the tag header
+        return size + TAG_HEADER_LENGTH;
+    }
 
     /**
      * Read tag from File
@@ -462,7 +480,7 @@ public class ID3v23Tag
         logger.info(getLoggingFilename() + ":Tag size is:" + size + " according to header (does not include header size, add 10)");
 
         //Extended Header
-        if (extended == true)
+        if (extended)
         {
             // Int is 4 bytes.
             int extendedHeaderSize = buffer.getInt();
@@ -508,7 +526,7 @@ public class ID3v23Tag
         //Slice Buffer, so position markers tally with size (i.e do not include tagheader)
         ByteBuffer bufferWithoutHeader = buffer.slice();
         //We need to synchronize the buffer
-        if (isUnsynchronization() == true)
+        if (isUnsynchronization())
         {
             bufferWithoutHeader = ID3Unsynchronization.synchronize(bufferWithoutHeader);
         }
@@ -517,6 +535,7 @@ public class ID3v23Tag
         logger.info(getLoggingFilename() + ":Loaded Frames,there are:" + frameMap.keySet().size());
 
     }
+
 
     /**
      * Read the frames

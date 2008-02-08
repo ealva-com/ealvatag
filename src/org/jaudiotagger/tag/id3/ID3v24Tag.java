@@ -601,6 +601,25 @@ public class ID3v24Tag extends AbstractID3v2Tag
     }
 
     /**
+     * Read the size of a tag, based on  the value written in the tag header
+     * @param buffer
+     * @return
+     * @throws TagException
+     */
+    public int readSize(ByteBuffer buffer)
+    {
+
+        //Skip over flags
+        byte flags = buffer.get();
+
+        // Read the size, this is size of tag not including  the tag header
+        int size = ID3SyncSafeInteger.bufferToValue(buffer);
+
+        //Return the exact size of tag as set in the tag header
+        return size + TAG_HEADER_LENGTH;
+    }
+
+    /**
      * Read Tag from Specified file.
      * Read tag header, delegate reading of frames to readFrames()
      *

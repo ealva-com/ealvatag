@@ -20,7 +20,6 @@ package org.jaudiotagger.audio.flac;
 
 import org.jaudiotagger.audio.exceptions.*;
 import org.jaudiotagger.audio.flac.metadatablock.*;
-import org.jaudiotagger.tag.vorbiscomment.VorbisCommentTag;
 import org.jaudiotagger.tag.Tag;
 import org.jaudiotagger.tag.flac.FlacTag;
 
@@ -82,14 +81,17 @@ public class FlacTagWriter
         metadataBlockSeekTable.clear();
         metadataBlockCueSheet.clear();
 
+        
+        byte[] b;
         //Read existing data
-        byte[] b = new byte[FlacStream.FLAC_STREAM_IDENTIFIER_LENGTH];
-        raf.readFully(b);
-
-        String flac = new String(b);
-        if (!flac.equals(FlacStream.FLAC_STREAM_IDENTIFIER))
+        FlacStreamReader flacStream = new FlacStreamReader(raf);
+        try
         {
-            throw new CannotWriteException("This is not a FLAC file");
+            flacStream.findStream();
+        }
+        catch(CannotReadException cre)
+        {
+            throw new CannotWriteException(cre.getMessage());
         }
 
         boolean isLastBlock = false;
@@ -146,7 +148,8 @@ public class FlacTagWriter
         //Number of bytes required for new tagdata and other metadata blocks
         int neededRoom = newTagSize + computeNeededRoom();
 
-        raf.seek(0);
+        //Go to start of Flac within file
+        raf.seek(flacStream.getStartOfFlacInFile());
 
         logger.info("Writing tag available bytes:" + availableRoom + ":needed bytes:" + neededRoom);
 
@@ -154,8 +157,9 @@ public class FlacTagWriter
         //adjust padding accordingly need to allow space for padding header if padding required
         if ((availableRoom == neededRoom) || (availableRoom > neededRoom + MetadataBlockHeader.HEADER_LENGTH))
         {
-            //Jump over Flac and StreamInfoBlock
-            raf.seek(FlacStream.FLAC_STREAM_IDENTIFIER_LENGTH
+            //Jump over Id3 (if exists) Flac and StreamInfoBlock
+            raf.seek( flacStream.getStartOfFlacInFile()
+                    + FlacStreamReader.FLAC_STREAM_IDENTIFIER_LENGTH
                     + MetadataBlockHeader.HEADER_LENGTH
                     + MetadataBlockDataStreamInfo.STREAM_INFO_DATA_LENGTH);
 
@@ -183,24 +187,20 @@ public class FlacTagWriter
             //Write tag (and padding)
             raf.getChannel().write(tc.convert(tag, availableRoom - neededRoom));
         }
+        //Need to move audio
         else
         {
-            //Read StreamInfoHeader into buffer
-            FileChannel fc = raf.getChannel();
-            b = new byte[FlacStream.FLAC_STREAM_IDENTIFIER_LENGTH
-                    + MetadataBlockHeader.HEADER_LENGTH
-                    + MetadataBlockDataStreamInfo.STREAM_INFO_DATA_LENGTH];
-            raf.readFully(b);
             //Skip to start of Audio
-            raf.seek(availableRoom + FlacStream.FLAC_STREAM_IDENTIFIER_LENGTH
+            //Write FlacStreamReader and StreamIfoMetablock to new file
+            int dataStartSize =
+                    flacStream.getStartOfFlacInFile()                    
+                    + FlacStreamReader.FLAC_STREAM_IDENTIFIER_LENGTH
                     + MetadataBlockHeader.HEADER_LENGTH
-                    + MetadataBlockDataStreamInfo.STREAM_INFO_DATA_LENGTH);
-
-            FileChannel tempFC = rafTemp.getChannel();
-
-            //Write FlacStream and StreamIfoMetablock to new file
-            rafTemp.write(b);
-
+                    + MetadataBlockDataStreamInfo.STREAM_INFO_DATA_LENGTH;
+            raf.seek(0);
+            rafTemp.getChannel().transferFrom(raf.getChannel(), 0, dataStartSize);
+            rafTemp.seek(dataStartSize);
+            
             //Write all the metadatablocks
             for (int i = 0; i < metadataBlockApplication.size(); i++)
             {
@@ -222,9 +222,9 @@ public class FlacTagWriter
 
             //Write tag data use default padding
             rafTemp.write(tc.convert(tag, FlacTagCreator.DEFAULT_PADDING).array());
-
             //Write audio to new file
-            tempFC.transferFrom(fc, tempFC.position(), fc.size());
+            raf.seek(dataStartSize + availableRoom);
+            rafTemp.getChannel().transferFrom(raf.getChannel(), rafTemp.getChannel().position(), raf.getChannel().size());            
         }
     }
 

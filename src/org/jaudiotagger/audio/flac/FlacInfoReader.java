@@ -40,12 +40,13 @@ public class FlacInfoReader
 
     public GenericAudioHeader read(RandomAccessFile raf) throws CannotReadException, IOException
     {
-        FlacStream.findStream(raf);
-
+        FlacStreamReader flacStream = new FlacStreamReader(raf);
+        flacStream.findStream();
+        
         MetadataBlockDataStreamInfo mbdsi = null;
         boolean isLastBlock = false;
 
-        //Search for StreamInfo Block, but even after we found it we still have to continue thorugh all
+        //Search for StreamInfo Block, but even after we found it we still have to continue through all
         //the metadata blocks so that we can find the start of the audio frames which we need to calculate
         //the bitrate
         while (!isLastBlock)
@@ -70,7 +71,7 @@ public class FlacInfoReader
 
         if (mbdsi == null)
         {
-            throw new CannotReadException("Unable to find Flac StreamInfo");
+             throw new CannotReadException("Unable to find Flac StreamInfo");
         }
 
         GenericAudioHeader info = new GenericAudioHeader();
@@ -81,7 +82,6 @@ public class FlacInfoReader
         info.setEncodingType(mbdsi.getEncodingType());
         info.setExtraEncodingInfos("");
         info.setBitrate(computeBitrate(mbdsi.getPreciseLength(), raf.length() - raf.getFilePointer()));
-
         return info;
     }
 
@@ -101,8 +101,9 @@ public class FlacInfoReader
     public int countMetaBlocks(File f) throws CannotReadException, IOException
     {
         RandomAccessFile raf = new RandomAccessFile(f, "r");
+        FlacStreamReader flacStream = new FlacStreamReader(raf);
+        flacStream.findStream();
 
-        FlacStream.findStream(raf);
 
         boolean isLastBlock = false;
 
