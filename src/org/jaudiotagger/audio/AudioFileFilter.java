@@ -25,7 +25,8 @@ import java.io.File;
 
 /**
  * <p>This is a simple FileFilter that will only allow the file supported by this library.</p>
- * <p>It will also accept directories. An additionnal condition is that file must be readable (read permission) and are not hidden (dot files, or hidden files)</p>
+ * <p>It will also accept directories. An additional condition is that file must be readable (read permission) and
+ * are not hidden (dot files, or hidden files)</p>
  *
  * @author Raphael Slinckx
  * @version $Id$
@@ -53,10 +54,19 @@ public class AudioFileFilter implements FileFilter
         }
 
         String ext = Utils.getExtension(f);
-        if (SupportedFileFormat.valueOf(ext.toUpperCase()) != null)
+
+        try
         {
-            return true;
+            if (SupportedFileFormat.valueOf(ext.toUpperCase()) != null)
+            {
+                return true;
+            }
         }
-		return false;
+        catch(IllegalArgumentException iae)
+        {
+            //Not known enum value
+            return false;    
+        }
+        return false;
 	}
 }
