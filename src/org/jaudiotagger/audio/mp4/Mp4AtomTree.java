@@ -67,7 +67,7 @@ public class Mp4AtomTree
      * to use raf after this call, you will have to close raf yourself.
      *
      * @param raf
-     * @param closeOnExit
+     * @param closeOnExit to keep randomfileaccess open, only used when randomaccessfile already being used
      * @throws IOException
      * @throws CannotReadException
      */
@@ -79,6 +79,7 @@ public class Mp4AtomTree
     /** Build a tree of the atoms in the file
      *
      * @param raf
+     * @param closeExit false to keep randomfileacces open, only used when randomaccessfile already being used
      * @return
      * @throws java.io.IOException
      */
@@ -99,7 +100,7 @@ public class Mp4AtomTree
             //Iterate though all the top level Nodes
             while(fc.position()<fc.size())
             {
-                 Mp4BoxHeader boxHeader = new Mp4BoxHeader();
+                Mp4BoxHeader boxHeader = new Mp4BoxHeader();
                 ByteBuffer headerBuffer = ByteBuffer.allocate(Mp4BoxHeader.HEADER_LENGTH);
                 fc.read(headerBuffer);
                 headerBuffer.rewind();

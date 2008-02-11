@@ -365,7 +365,11 @@ public class Mp4TagWriter
                     fileWriteChannel.position(moovHeader.getFilePos());
 
                     //Edit stco atom within moov header,  we need to adjust offsets by the amount mdat is going to be shifted
-                    stco.adjustOffsets(-sizeReducedBy);
+                    //unless mdat is at start of file
+                    if(mdatHeader.getFilePos()>moovHeader.getFilePos())
+                    {
+                        stco.adjustOffsets(-sizeReducedBy);
+                    }
 
                     //Edit and rewrite the Moov,Udta and Ilst header in moov buffer
                     adjustSizeOfMoovHeader(moovHeader, moovBuffer, -sizeReducedBy);
@@ -460,7 +464,10 @@ public class Mp4TagWriter
                 {
                     //We dont bother using the top level free atom coz not big enough anyway, we need to adjust offsets
                     //by the amount mdat is going to be shifted
-                    stco.adjustOffsets(additionalMetaSizeThatWontFitWithinMetaAtom);                    
+                    if(mdatHeader.getFilePos()>moovHeader.getFilePos())
+                    {
+                        stco.adjustOffsets(additionalMetaSizeThatWontFitWithinMetaAtom);
+                    }
                 }
 
                 //Edit and rewrite the Moov header
@@ -556,7 +563,7 @@ public class Mp4TagWriter
             newAtomTree = new Mp4AtomTree(rafTemp,false);
 
             //Check we still have audio data file, and check length
-            Mp4BoxHeader newMdatHeader = newAtomTree.getBoxHeader(atomTree.getMdatNode());
+            Mp4BoxHeader newMdatHeader = newAtomTree.getBoxHeader(newAtomTree.getMdatNode());
             if(newMdatHeader==null)
             {
                   throw new CannotWriteException(ErrorMessage.MP4_CHANGES_TO_FILE_FAILED_NO_DATA.getMsg());
@@ -575,12 +582,20 @@ public class Mp4TagWriter
 
             //Check offsets are correct, may not match exactly in original file so just want to make
             //sure that the discrepancy if any is preserved
-            Mp4StcoBox   newStco       = atomTree.getStco();
+            Mp4StcoBox   newStco       = newAtomTree.getStco();
+            
+            logger.finer("stco:Original First Offset"+stco.getFirstOffSet());
+            logger.finer("stco:Original Diff"+(int)(stco.getFirstOffSet() - mdatHeader.getFilePos()));
+            logger.finer("stco:Original Mdat Pos"+mdatHeader.getFilePos());
+            logger.finer("stco:New First Offset"+newStco.getFirstOffSet());
+            logger.finer("stco:New Diff"+(int)((newStco.getFirstOffSet() - newMdatHeader.getFilePos())));
+            logger.finer("stco:New Mdat Pos"+newMdatHeader.getFilePos());
             int diff = (int)(stco.getFirstOffSet() - mdatHeader.getFilePos());
             if ((newStco.getFirstOffSet() - newMdatHeader.getFilePos()) != diff)
             {
                throw new CannotWriteException(ErrorMessage.MP4_CHANGES_TO_FILE_FAILED_INCORRECT_OFFSETS.getMsg());
             }
+      
         }
         catch (Exception e)
         {
@@ -598,8 +613,9 @@ public class Mp4TagWriter
             //Close references to new file
             rafTemp.close();
             fileWriteChannel.close();
+
         }
-         logger.info("File has been written correctly");
+        logger.info("File has been written correctly");
     }
 
 

@@ -292,11 +292,20 @@ public class Mp4BoxHeader
         return boxHeader;
     }
 
+    /**
+     *
+     * @return location in file of the start of file header (i.e where the 4 byte length field starts)
+     */
     public long getFilePos()
     {
         return filePos;
     }
 
+    /**
+     * Set location in file of the start of file header (i.e where the 4 byte length field starts)
+     *  
+     * @param filePos
+     */
     public void setFilePos(long filePos)
     {
         this.filePos = filePos;

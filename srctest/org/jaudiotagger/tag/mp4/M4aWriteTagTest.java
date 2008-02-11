@@ -1251,7 +1251,7 @@ public class M4aWriteTagTest extends TestCase
             AudioFile f = AudioFileIO.read(testFile);
             Tag tag = f.getTag();
 
-            //Change values to slightly smaller than values (but less than 8 chras diff in total)
+            //Change values to slightly smaller than values (but less than 8 chars diff in total)
             tag.setArtist("AR");
             tag.setAlbum("AL");
 
