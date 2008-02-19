@@ -816,6 +816,13 @@ public class M4aReadTagTest extends TestCase
             System.out.println(f.getAudioHeader());
             System.out.println(tag);
 
+            assertEquals("The Best Of Buddy Holly",tag.getFirst(TagFieldKey.ALBUM));
+            assertEquals("Buddy Holly & the Crickets",tag.getFirst(TagFieldKey.ARTIST));
+            assertEquals(1,tag.get(Mp4FieldKey.ITUNES_NORM).size());
+            assertEquals(0,tag.get(Mp4FieldKey.ITUNES_SMPB).size());
+            assertEquals(1,tag.get(Mp4FieldKey.CDDB_1).size());
+            assertEquals(1,tag.get(Mp4FieldKey.CDDB_TRACKNUMBER).size());
+            assertEquals(1,tag.get(Mp4FieldKey.CDDB_IDS).size());
         }
         catch (IOException e)
         {

@@ -66,7 +66,9 @@ public enum Mp4FieldKey
     PART_OF_GAPLESS_ALBUM("pgap", BYTE),
     ITUNES_SMPB("com.apple.iTunes", "iTunSMPB", TEXT),
     ITUNES_NORM("com.apple.iTunes", "iTunNORM", TEXT),
-
+    CDDB_1("com.apple.iTunes", "iTunes_CDDB_1", TEXT),
+    CDDB_TRACKNUMBER("com.apple.iTunes", "iTunes_CDDB_TrackNumber", TEXT),
+    CDDB_IDS("com.apple.iTunes", "iTunes_CDDB_IDs", TEXT),                                
     //AFAIK These arent actually used by Audio Only files, but there is nothing to prevent them being used
     CONTENT_TYPE("stik", BYTE, 1),
     PODCAST_KEYWORD("keyw", TEXT),
