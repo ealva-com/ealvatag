@@ -228,7 +228,7 @@ public abstract class AudioFileWriter
         {
             //TODO Creates temp file in same folder as the original file, this is safe but would impose a performance
             //overhead if the original file is on a networked drive
-            tempF = File.createTempFile("entagged", ".tmp", af.getFile().getParentFile());
+            tempF = File.createTempFile("jaudiotagger", ".tmp", af.getFile().getParentFile());
             rafTemp = new RandomAccessFile(tempF, "rw");
             raf = new RandomAccessFile(af.getFile(), "rw");
             raf.seek(0);
@@ -270,11 +270,20 @@ public abstract class AudioFileWriter
                     rafTemp.close();
                 }
 
-                //If the tempoaray file was used and there were no problems replace original file with it
+                //If the temporary file was used and there were no problems replace original file with it
                 if (!cannotWrite && tempF.length() > 0)
                 {
-                    af.getFile().delete();
-                    tempF.renameTo(af.getFile());
+                    boolean deleteResult=af.getFile().delete();
+                    if(deleteResult==false)
+                    {
+                        logger.warning("Deleted:"+deleteResult);
+                    }
+
+                    boolean renameResult=tempF.renameTo(af.getFile());
+                    if(renameResult==false)
+                    {
+                        logger.warning("Rename:"+renameResult);
+                    }
                     result = tempF;
                 }
                 //Either the original file was directly written to or the temp file was used but the write failed

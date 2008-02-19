@@ -51,7 +51,7 @@ public class OggPageHeader
     //Can have upto 255 segments in a page
     public static final int MAXIMUM_NO_OF_SEGMENT_SIZE = 255;
 
-    //Each segmets can be upto 255 bytes
+    //Each segment can be upto 255 bytes
     public static final int MAXIMUM_SEGMENT_SIZE = 255;
 
     //Maximum size of pageheader (27 + 255 = 282)
@@ -160,7 +160,7 @@ public class OggPageHeader
             }
 
             //If last segment value is 255 this packet continues onto next page
-            //and wont have been added to the packetStartAndEnd list yet
+            //and will not have been added to the packetStartAndEnd list yet
             if (segmentLength == MAXIMUM_SEGMENT_SIZE)
             {
                 packetList.add(new PacketStartAndLength(pageLength - packetLength, packetLength));
@@ -248,13 +248,13 @@ public class OggPageHeader
 
     public String toString()
     {
-        String out = "Ogg Page Header:isvalid:" + isValid
+        String out = "Ogg Page Header:isValid:" + isValid
                 + ":type:" + headerTypeFlag
-                + ":oggpageheaderlength:" + rawHeaderData.length
+                + ":oggPageHeaderLength:" + rawHeaderData.length
                 + ":length:" + pageLength
-                + ":seqno:" + getPageSequence()
-                + ":packetincomplete:" + isLastPacketIncomplete()
-                + ":sernum:" + this.getSerialNumber();
+                + ":seqNo:" + getPageSequence()
+                + ":packetIncomplete:" + isLastPacketIncomplete()
+                + ":serNum:" + this.getSerialNumber();
 
         for (PacketStartAndLength packet : getPacketList())
         {
@@ -300,7 +300,7 @@ public class OggPageHeader
 
         public String toString()
         {
-            return "start:" + startPosition + ":length:" + length;
+            return "NextPkt(start:" + startPosition + ":length:" + length+"),";
         }
     }
 

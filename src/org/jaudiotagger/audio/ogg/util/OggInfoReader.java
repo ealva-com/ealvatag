@@ -81,7 +81,7 @@ public class OggInfoReader
             throw new CannotReadException("Error: Could not find the Ogg Setup block");
         }
 
-        //1st page = Identifaction Header
+        //1st page = Identification Header
         OggPageHeader pageHeader = OggPageHeader.read(raf);
         byte[] vorbisData = new byte[pageHeader.getPageLength()];
         raf.read(vorbisData);

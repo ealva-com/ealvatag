@@ -23,6 +23,28 @@ import java.util.List;
 public class VorbisWriteTagTest extends AbstractTestCase
 {
     /**
+     * Can summarize file
+     */
+    public void testSummarizeFile()
+    {
+        Exception exceptionCaught = null;
+        try
+        {
+//Can summarize file
+            File testFile = AbstractTestCase.copyAudioToTmp("test.ogg", new File("testSummarizeFile.ogg"));
+            RandomAccessFile raf = new RandomAccessFile(testFile,"r");
+            OggFileReader oggFileReader = new OggFileReader();
+            oggFileReader.summarizeOggPageHeaders(testFile);
+            raf.close();
+        }
+        catch(Exception e)
+        {
+             e.printStackTrace();
+             exceptionCaught = e;
+        }
+        assertNull(exceptionCaught);
+    }
+    /**
      * Testing of writing various fields
      */
     public void testWriteTagToFile()
@@ -32,7 +54,7 @@ public class VorbisWriteTagTest extends AbstractTestCase
         {
             File testFile = AbstractTestCase.copyAudioToTmp("test.ogg", new File("testWriteTagTest.ogg"));
             AudioFile f = AudioFileIO.read(testFile);
-
+                      
             assertTrue(f.getTag() instanceof VorbisCommentTag);
             VorbisCommentTag tag = (VorbisCommentTag)f.getTag();
             assertEquals("jaudiotagger",tag.getVendor());
@@ -179,6 +201,520 @@ public class VorbisWriteTagTest extends AbstractTestCase
             assertEquals(2,oph.getHeaderType());
 
             
+        }
+        catch(Exception e)
+        {
+             e.printStackTrace();
+             exceptionCaught = e;
+        }
+        assertNull(exceptionCaught);
+    }
+
+    /** Test writing to file, comments too large to fit on single page anymore
+     */
+    public void testWriteToFileMuchLarger()
+    {
+        File orig = new File("testdata", "test.ogg");
+        if (!orig.isFile())
+        {
+            return;
+        }
+
+        Exception exceptionCaught = null;
+        try
+        {
+            File testFile = AbstractTestCase.copyAudioToTmp("test.ogg", new File("testWriteTagTestRequiresTwoPages.ogg"));
+
+            AudioFile f = AudioFileIO.read(testFile);
+            assertTrue(f.getTag() instanceof VorbisCommentTag);
+            VorbisCommentTag tag = (VorbisCommentTag)f.getTag();
+
+            //Add new image, requires two fields in oggVorbis with data in  base64 encoded form
+            RandomAccessFile imageFile = new RandomAccessFile(new File("testdata", "coverart.bmp"),"r");
+            byte[] imagedata = new byte[(int)imageFile.length()];
+            imageFile.read(imagedata);
+            char[] testdata = Base64Coder.encode(imagedata);
+            String base64image = new String(testdata);
+            tag.set(tag.createTagField(VorbisCommentFieldKey.COVERART,base64image));
+            tag.set(tag.createTagField(VorbisCommentFieldKey.COVERARTMIME,"image/png"));
+
+
+            //Save
+            f.commit();
+
+            //Reread
+            f = AudioFileIO.read(testFile);
+            tag = (VorbisCommentTag)f.getTag();
+
+            //Check changes
+            assertEquals(1,tag.get(VorbisCommentFieldKey.COVERART).size());
+            assertEquals(1,tag.get(VorbisCommentFieldKey.COVERARTMIME).size());
+
+            RandomAccessFile raf = new RandomAccessFile(testFile,"r");
+            OggFileReader oggFileReader = new OggFileReader();
+            System.out.println(oggFileReader.readOggPageHeader(raf,0));
+            raf.seek(0);
+            System.out.println(oggFileReader.readOggPageHeader(raf,1));
+            raf.seek(0);
+            System.out.println(oggFileReader.readOggPageHeader(raf,2));
+            raf.close();
+
+        }
+        catch(Exception e)
+        {
+             e.printStackTrace();
+             exceptionCaught = e;
+        }
+        assertNull(exceptionCaught);
+    }
+
+     /** Test writing to file, comments too large to fit on single page anymore, and also setup header gets split
+     */
+    public void testWriteToFileMuchLargerSetupHeaderSplit()
+    {
+        File orig = new File("testdata", "test.ogg");
+        if (!orig.isFile())
+        {
+            return;
+        }
+
+        Exception exceptionCaught = null;
+        try
+        {
+            File testFile = AbstractTestCase.copyAudioToTmp("test.ogg", new File("testWriteTagTestRequiresTwoPagesHeaderSplit.ogg"));
+
+            AudioFile f = AudioFileIO.read(testFile);
+            assertTrue(f.getTag() instanceof VorbisCommentTag);
+            VorbisCommentTag tag = (VorbisCommentTag)f.getTag();
+
+           //Add new pretend image to force split of setup header
+            StringBuffer sb = new StringBuffer();
+            for(int i=0;i<128000;i++)
+            {
+                sb.append("a");
+            }
+            tag.set(tag.createTagField(VorbisCommentFieldKey.COVERART,sb.toString()));
+            tag.set(tag.createTagField(VorbisCommentFieldKey.COVERARTMIME,"image/png"));
+
+            //Save
+            f.commit();
+
+            //Reread
+            f = AudioFileIO.read(testFile);
+            tag = (VorbisCommentTag)f.getTag();
+
+            //Check changes
+            assertEquals(1,tag.get(VorbisCommentFieldKey.COVERART).size());
+            assertEquals(1,tag.get(VorbisCommentFieldKey.COVERARTMIME).size());
+
+            RandomAccessFile raf = new RandomAccessFile(testFile,"r");
+            OggFileReader oggFileReader = new OggFileReader();
+            System.out.println(oggFileReader.readOggPageHeader(raf,0));
+            raf.seek(0);
+            System.out.println(oggFileReader.readOggPageHeader(raf,1));
+            raf.seek(0);
+            System.out.println(oggFileReader.readOggPageHeader(raf,2));
+            raf.seek(0);
+            System.out.println(oggFileReader.readOggPageHeader(raf,3));
+
+            raf.close();
+
+        }
+        catch(Exception e)
+        {
+             e.printStackTrace();
+             exceptionCaught = e;
+        }
+        assertNull(exceptionCaught);
+    }
+
+    /** Issue 197, test writing to file when audio packet come straight after setup packet on same oggPage, edit so
+     * comment data is changed but size of comment header is same length
+     */
+    public void testWriteToFileWithExtraPacketsOnSamePageAsSetupHeader()
+    {
+        File orig = new File("testdata", "test2.ogg");
+        if (!orig.isFile())
+        {
+            return;
+        }
+
+        Exception exceptionCaught = null;
+        try
+        {
+            File testFile = AbstractTestCase.copyAudioToTmp("test2.ogg", new File("testWriteTagWithExtraPacketsHeaderSameSize.ogg"));
+
+            OggFileReader oggFileReader = new OggFileReader();
+            RandomAccessFile raf = new RandomAccessFile(testFile,"r");
+            OggPageHeader pageHeader = oggFileReader.readOggPageHeader(raf,1);
+            int packetsInSecondPageCount = pageHeader.getPacketList().size();
+            pageHeader=null;
+            raf.close();
+
+            AudioFile f = AudioFileIO.read(testFile);
+            assertTrue(f.getTag() instanceof VorbisCommentTag);
+            VorbisCommentTag tag = (VorbisCommentTag)f.getTag();
+
+            //These have methods coz common over all formats
+            tag.setArtist("ARTIST");
+
+            //Save
+            f.commit();
+
+            //Reread
+            f = AudioFileIO.read(testFile);
+            tag = (VorbisCommentTag)f.getTag();
+
+            //Check changes
+            assertEquals("ARTIST",tag.getFirst(TagFieldKey.ARTIST));
+
+            //Check 2nd page has same number of packets, this is only the case for this specific test, so check
+            //in test not code itself.
+            raf = new RandomAccessFile(testFile,"r");
+            pageHeader = oggFileReader.readOggPageHeader(raf,1);
+            raf.close();
+            assertEquals(packetsInSecondPageCount ,pageHeader.getPacketList().size());
+
+
+        }
+        catch(Exception e)
+        {
+             e.printStackTrace();
+             exceptionCaught = e;
+        }
+        assertNull(exceptionCaught);
+    }
+
+    /** Issue 197, test writing to file when audio packet come straight after setup packet on same oggPage, edit enough
+     *  so that comment is larger, but the comment, header and extra packets can still all fit on page 2
+     */
+    public void testWriteToFileWithExtraPacketsOnSamePageAsSetupHeaderLarger()
+    {
+        File orig = new File("testdata", "test2.ogg");
+        if (!orig.isFile())
+        {
+            return;
+        }
+
+        Exception exceptionCaught = null;
+        try
+        {
+            File testFile = AbstractTestCase.copyAudioToTmp("test2.ogg", new File("testWriteTagWithExtraPacketsHeaderLargerSize.ogg"));
+
+            OggFileReader oggFileReader = new OggFileReader();
+            RandomAccessFile raf = new RandomAccessFile(testFile,"r");
+            OggPageHeader pageHeader = oggFileReader.readOggPageHeader(raf,1);
+            int packetsInSecondPageCount = pageHeader.getPacketList().size();
+            pageHeader=null;
+            raf.close();
+
+            AudioFile f = AudioFileIO.read(testFile);
+            assertTrue(f.getTag() instanceof VorbisCommentTag);
+            VorbisCommentTag tag = (VorbisCommentTag)f.getTag();
+
+            //These have methods coz common over all formats
+            tag.setArtist("ARTISTIC");
+
+            //Save
+            f.commit();
+
+            //Reread
+            f = AudioFileIO.read(testFile);
+            tag = (VorbisCommentTag)f.getTag();
+
+            //Check changes
+            assertEquals("ARTISTIC",tag.getFirst(TagFieldKey.ARTIST));
+
+            //Check 2nd page has same number of packets, this is only the case for this specific test, so check
+            //in test not code itself.
+            raf = new RandomAccessFile(testFile,"r");
+            pageHeader = oggFileReader.readOggPageHeader(raf,1);
+            raf.close();
+            assertEquals(packetsInSecondPageCount ,pageHeader.getPacketList().size());
+
+        }
+        catch(Exception e)
+        {
+             e.printStackTrace();
+             exceptionCaught = e;
+        }
+        assertNull(exceptionCaught);
+    }
+
+    /** Issue 197, test writing to file when audio packet come straight after setup packet on same oggPage, edit enough
+     *  so that comment is much larger, so that comment, header and extra packets can no longer fit on page 2
+     */
+    public void testWriteToFileWithExtraPacketsOnSamePageAsSetupHeaderMuchLarger()
+    {
+        File orig = new File("testdata", "test2.ogg");
+        if (!orig.isFile())
+        {
+            return;
+        }
+
+        Exception exceptionCaught = null;
+        try
+        {
+            File testFile = AbstractTestCase.copyAudioToTmp("test.ogg", new File("testWriteTagWithExtraPacketsHeaderMuchLargerSize.ogg"));
+
+            AudioFile f = AudioFileIO.read(testFile);
+            assertTrue(f.getTag() instanceof VorbisCommentTag);
+            VorbisCommentTag tag = (VorbisCommentTag)f.getTag();
+                      
+            //Add new image, requires two fields in oggVorbis with data in  base64 encoded form
+            RandomAccessFile imageFile = new RandomAccessFile(new File("testdata", "coverart.bmp"),"r");
+            byte[] imagedata = new byte[(int)imageFile.length()];
+            imageFile.read(imagedata);
+            char[] testdata = Base64Coder.encode(imagedata);
+            String base64image = new String(testdata);
+            tag.set(tag.createTagField(VorbisCommentFieldKey.COVERART,base64image));
+            tag.set(tag.createTagField(VorbisCommentFieldKey.COVERARTMIME,"image/png"));
+
+
+            //Save
+            f.commit();
+
+            //Reread
+            f = AudioFileIO.read(testFile);
+            tag = (VorbisCommentTag)f.getTag();
+
+            //Check changes
+            assertEquals(1,tag.get(VorbisCommentFieldKey.COVERART).size());
+            assertEquals(1,tag.get(VorbisCommentFieldKey.COVERARTMIME).size());
+
+            RandomAccessFile raf = new RandomAccessFile(testFile,"r");
+            OggFileReader oggFileReader = new OggFileReader();
+            System.out.println(oggFileReader.readOggPageHeader(raf,0));
+            raf.seek(0);
+            System.out.println("Page 2"+oggFileReader.readOggPageHeader(raf,1));
+            //System.out.println("Page 3"+oggFileReader.readOggPageHeader(raf,2));
+            //oggFileReader.readOggPageHeader(raf,4);
+            raf.close();
+
+        }
+        catch(Exception e)
+        {
+             e.printStackTrace();
+             exceptionCaught = e;
+        }
+        assertNull(exceptionCaught);
+    }
+
+    /** Issue 197, test writing to file when audio packet come straight after setup packet on same oggPage, edit enough
+     *  so that comment is much larger, so that comment, header and extra packets can no longer fit on page 2 AND
+     *  setup header is also split over two
+     */
+    public void testWriteToFileWithExtraPacketsOnSamePageAsSetupHeaderMuchLargerAndSplit()
+    {
+        File orig = new File("testdata", "test2.ogg");
+        if (!orig.isFile())
+        {
+            return;
+        }
+
+        Exception exceptionCaught = null;
+        try
+        {
+            File testFile = AbstractTestCase.copyAudioToTmp("test2.ogg", new File("testWriteTagWithExtraPacketsHeaderMuchLargerSizeAndSplit.ogg"));
+
+            AudioFile f = AudioFileIO.read(testFile);
+            assertTrue(f.getTag() instanceof VorbisCommentTag);
+            VorbisCommentTag tag = (VorbisCommentTag)f.getTag();
+
+            //Add new pretend image to force split of setup header
+            StringBuffer sb = new StringBuffer();
+            for(int i=0;i<128000;i++)
+            {
+                sb.append("a");
+            }
+            tag.set(tag.createTagField(VorbisCommentFieldKey.COVERART,sb.toString()));
+            tag.set(tag.createTagField(VorbisCommentFieldKey.COVERARTMIME,"image/png"));
+
+            //Save
+            f.commit();
+
+            //Reread
+            f = AudioFileIO.read(testFile);
+
+            RandomAccessFile raf = new RandomAccessFile(testFile,"r");
+            OggFileReader oggFileReader = new OggFileReader();
+            System.out.println(oggFileReader.readOggPageHeader(raf,0));
+            raf.seek(0);
+            System.out.println(oggFileReader.readOggPageHeader(raf,1));
+            raf.seek(0);
+            System.out.println(oggFileReader.readOggPageHeader(raf,2));
+            raf.seek(0);
+            System.out.println(oggFileReader.readOggPageHeader(raf,3));
+
+            raf.close();
+
+            //tag = (VorbisCommentTag)f.getTag();
+
+            //Check changes
+            //assertEquals(1,tag.get(VorbisCommentFieldKey.COVERART).size());
+            //assertEquals(1,tag.get(VorbisCommentFieldKey.COVERARTMIME).size());
+
+
+
+        }
+        catch(Exception e)
+        {
+             e.printStackTrace();
+             exceptionCaught = e;
+        }
+        assertNull(exceptionCaught);
+    }
+
+    /** Test writing to file, comments was too large for one page but not anymore
+     */
+    public void testWriteToFileNoLongerRequiresTwoPages()
+    {
+        File orig = new File("testdata", "test3.ogg");
+        if (!orig.isFile())
+        {
+            return;
+        }
+
+        Exception exceptionCaught = null;
+        try
+        {
+            File testFile = AbstractTestCase.copyAudioToTmp("test3.ogg", new File("testWriteTagTestNoLongerRequiresTwoPages.ogg"));
+
+            AudioFile f = AudioFileIO.read(testFile);
+            assertTrue(f.getTag() instanceof VorbisCommentTag);
+            VorbisCommentTag tag = (VorbisCommentTag)f.getTag();
+
+            //Delete Large Image
+            tag.deleteTagField(VorbisCommentFieldKey.COVERART);
+            tag.deleteTagField(VorbisCommentFieldKey.COVERARTMIME);
+
+            //Save
+            f.commit();
+
+            //Reread
+            f = AudioFileIO.read(testFile);
+            tag = (VorbisCommentTag)f.getTag();
+
+            //Check changes
+            assertEquals(0,tag.get(VorbisCommentFieldKey.COVERART).size());
+            assertEquals(0,tag.get(VorbisCommentFieldKey.COVERARTMIME).size());
+
+            RandomAccessFile raf = new RandomAccessFile(testFile,"r");
+            OggFileReader oggFileReader = new OggFileReader();
+            System.out.println(oggFileReader.readOggPageHeader(raf,0));
+            raf.seek(0);
+            System.out.println(oggFileReader.readOggPageHeader(raf,1));
+            raf.seek(0);
+            System.out.println(oggFileReader.readOggPageHeader(raf,2));
+            raf.close();
+
+        }
+        catch(Exception e)
+        {
+             e.printStackTrace();
+             exceptionCaught = e;
+        }
+        assertNull(exceptionCaught);
+    }
+
+
+    /** Test writing to file, comments was too large for one page and setup header split but not anymore
+     */
+    public void testWriteToFileNoLongerRequiresTwoPagesNorSplit()
+    {
+        File orig = new File("testdata", "test5.ogg");
+        if (!orig.isFile())
+        {
+            return;
+        }
+
+        Exception exceptionCaught = null;
+        try
+        {
+            File testFile = AbstractTestCase.copyAudioToTmp("test5.ogg", new File("testWriteTagTestNoLongerRequiresTwoPagesNorSplit.ogg"));
+
+            AudioFile f = AudioFileIO.read(testFile);
+            assertTrue(f.getTag() instanceof VorbisCommentTag);
+            VorbisCommentTag tag = (VorbisCommentTag)f.getTag();
+
+            //Delete Large Image
+            tag.deleteTagField(VorbisCommentFieldKey.COVERART);
+            tag.deleteTagField(VorbisCommentFieldKey.COVERARTMIME);
+
+            //Save
+            f.commit();
+
+            //Reread
+            f = AudioFileIO.read(testFile);
+            tag = (VorbisCommentTag)f.getTag();
+
+            //Check changes
+            assertEquals(0,tag.get(VorbisCommentFieldKey.COVERART).size());
+            assertEquals(0,tag.get(VorbisCommentFieldKey.COVERARTMIME).size());
+
+            RandomAccessFile raf = new RandomAccessFile(testFile,"r");
+            OggFileReader oggFileReader = new OggFileReader();
+            System.out.println(oggFileReader.readOggPageHeader(raf,0));
+            raf.seek(0);
+            System.out.println(oggFileReader.readOggPageHeader(raf,1));
+            raf.seek(0);
+            System.out.println(oggFileReader.readOggPageHeader(raf,2));
+            raf.close();
+
+        }
+        catch(Exception e)
+        {
+             e.printStackTrace();
+             exceptionCaught = e;
+        }
+        assertNull(exceptionCaught);
+    }
+
+    /** Test writing to file, comments was too large for one page but not anymore
+     */
+    public void testWriteToFileWriteToFileWithExtraPacketsNoLongerRequiresTwoPages()
+    {
+        File orig = new File("testdata", "test4.ogg");
+        if (!orig.isFile())
+        {
+            return;
+        }
+
+        Exception exceptionCaught = null;
+        try
+        {
+            File testFile = AbstractTestCase.copyAudioToTmp("test4.ogg", new File("testWriteTagTestWithPacketsNoLongerRequiresTwoPages.ogg"));
+
+            AudioFile f = AudioFileIO.read(testFile);
+            assertTrue(f.getTag() instanceof VorbisCommentTag);
+            VorbisCommentTag tag = (VorbisCommentTag)f.getTag();
+
+            //Delete Large Image
+            tag.deleteTagField(VorbisCommentFieldKey.ARTIST);
+            tag.deleteTagField(VorbisCommentFieldKey.COVERART);
+            tag.deleteTagField(VorbisCommentFieldKey.COVERARTMIME);
+
+            //Save
+            f.commit();
+
+            //Reread
+            f = AudioFileIO.read(testFile);
+            tag = (VorbisCommentTag)f.getTag();
+
+            //Check changes
+            assertEquals(0,tag.get(VorbisCommentFieldKey.ARTIST).size());
+            assertEquals(0,tag.get(VorbisCommentFieldKey.COVERART).size());
+            assertEquals(0,tag.get(VorbisCommentFieldKey.COVERARTMIME).size());
+
+            RandomAccessFile raf = new RandomAccessFile(testFile,"r");
+            OggFileReader oggFileReader = new OggFileReader();
+            System.out.println(oggFileReader.readOggPageHeader(raf,0));
+            raf.seek(0);
+            System.out.println(oggFileReader.readOggPageHeader(raf,1));
+            raf.seek(0);
+            System.out.println(oggFileReader.readOggPageHeader(raf,2));
+            raf.close();
+
         }
         catch(Exception e)
         {

@@ -55,7 +55,7 @@ public class OggFileReader extends AudioFileReader
      * <p/>
      * count=0; should return PageHeader that contains Vorbis Identification Header
      * count=1; should return Pageheader that contains VorbisComment and possibly SetupHeader
-     * count>=2; should return PageHeader containng remaining VorbisComment,SetupHeader and/or Audio
+     * count>=2; should return PageHeader containing remaining VorbisComment,SetupHeader and/or Audio
      *
      * @param raf
      * @param count
@@ -90,9 +90,9 @@ public class OggFileReader extends AudioFileReader
 
         while (raf.getFilePointer() < raf.length())
         {
-            System.out.println("pageHeader starts at:" + raf.getFilePointer());
+            System.out.println("pageHeader starts at absolute file position:" + raf.getFilePointer());
             OggPageHeader pageHeader = OggPageHeader.read(raf);
-            System.out.println("pageHeader finishes at:" + raf.getFilePointer());
+            System.out.println("pageHeader finishes at absolute file position:" + raf.getFilePointer());
             System.out.println(pageHeader + "\n");
             raf.seek(raf.getFilePointer() + pageHeader.getPageLength());
         }
