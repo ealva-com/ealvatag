@@ -792,4 +792,36 @@ public class M4aReadTagTest extends TestCase
         }
         assertNull(exceptionCaught);
     }
+
+    /** Test reading mp4 file
+     *
+     * @throws Exception
+     */
+    public void testIssue198()throws Exception
+    {
+        File orig = new File("testdata", "test27.m4a");
+        if (!orig.isFile())
+        {
+            return;
+        }
+
+        Exception exceptionCaught = null;
+        try
+        {
+            File testFile = AbstractTestCase.copyAudioToTmp("test27.m4a");
+
+            AudioFile f = AudioFileIO.read(testFile);
+            Mp4Tag tag = (Mp4Tag)f.getTag();
+
+            System.out.println(f.getAudioHeader());
+            System.out.println(tag);
+
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+            exceptionCaught = e;
+        }
+        assertNull(exceptionCaught);
+    }
 }
