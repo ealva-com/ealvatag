@@ -22,7 +22,6 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.io.UnsupportedEncodingException;
 import java.util.logging.Logger;
-import java.util.Iterator;
 import java.nio.ByteBuffer;
 
 import org.jaudiotagger.audio.exceptions.CannotReadException;
@@ -36,6 +35,7 @@ import org.jaudiotagger.tag.mp4.field.*;
 import org.jaudiotagger.tag.mp4.Mp4Tag;
 import org.jaudiotagger.tag.mp4.Mp4FieldKey;
 import org.jaudiotagger.tag.mp4.Mp4NonStandardFieldKey;
+import org.jaudiotagger.logging.ErrorMessage;
 
 /**
  * Reads metadata from mp4,
@@ -118,7 +118,7 @@ public class Mp4TagReader
         {
             return tag;
         }
-        //Size of metadata (exclude the size of the ilst header), take a slice starting at
+        //Size of metadata (exclude the size of the ilst parentHeader), take a slice starting at
         //metadata children to make things safer
         int length = boxHeader.getLength() - Mp4BoxHeader.HEADER_LENGTH;
         ByteBuffer metadataBuffer = moovBuffer.slice();
@@ -136,7 +136,7 @@ public class Mp4TagReader
             logger.info("Next position is at:" + metadataBuffer.position());
             createMp4Field(tag, boxHeader, metadataBuffer.slice());
 
-            //Move position in buffer to the start of the next header
+            //Move position in buffer to the start of the next parentHeader
             metadataBuffer.position(metadataBuffer.position() + boxHeader.getDataLength());
             read += boxHeader.getLength();
         }
@@ -147,7 +147,7 @@ public class Mp4TagReader
      * Process the field and add to the tag
      * <p/>
      * Note:In the case of coverart MP4 holds all the coverart within individual dataitems all within
-     * a single covr atom, we will add seperate mp4field for eaxh image.
+     * a single covr atom, we will add seperate mp4field for each image.
      *
      * @param tag
      * @param header
@@ -160,8 +160,18 @@ public class Mp4TagReader
         //Reverse Dns Atom
         if (header.getId().equals(Mp4TagReverseDnsField.IDENTIFIER))
         {
-            TagField field = new Mp4TagReverseDnsField(raw);
-            tag.add(field);
+           //
+           try
+           {
+                TagField field = new Mp4TagReverseDnsField(header,raw);
+                tag.add(field);
+           }
+           catch(Exception e)
+           {
+               logger.warning(ErrorMessage.MP4_UNABLE_READ_REVERSE_DNS_FIELD.getMsg(e.getMessage()));
+               TagField field = new Mp4TagRawBinaryField(header, raw);
+               tag.add(field);
+           }
         }
         //Normal Parent with Data atom
         else
@@ -237,7 +247,7 @@ public class Mp4TagReader
                     {
                         if (key.getFieldName().equals(header.getId()))
                         {
-                            //The header is a known id but its field type is not one of the expected types so
+                            //The parentHeader is a known id but its field type is not one of the expected types so
                             //this field is invalid. i.e I received a file with the TMPO set to 15 (Oxf) when it should
                             //be 21 (ox15) so looks like somebody got their decimal and hex numbering confused
                             //So in this case best to ignore this field and just write a warning

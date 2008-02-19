@@ -9,6 +9,7 @@ import org.jaudiotagger.tag.mp4.Mp4TagField;
 import org.jaudiotagger.tag.mp4.Mp4FieldKey;
 import org.jaudiotagger.audio.mp4.atom.Mp4BoxHeader;
 import org.jaudiotagger.audio.generic.Utils;
+import org.jaudiotagger.logging.ErrorMessage;
 
 import java.io.UnsupportedEncodingException;
 import java.io.ByteArrayOutputStream;
@@ -41,7 +42,8 @@ public class Mp4TagReverseDnsField extends Mp4TagField implements TagTextField
     //Descriptor
     private String descriptor;
 
-    //Data Content, TODO assuming always text at the moment
+    //Data Content,
+    //TODO assuming always text at the moment
     protected String content;
 
     /**
@@ -50,9 +52,9 @@ public class Mp4TagReverseDnsField extends Mp4TagField implements TagTextField
      * @param data
      * @throws UnsupportedEncodingException
      */
-    public Mp4TagReverseDnsField(ByteBuffer data) throws UnsupportedEncodingException
+    public Mp4TagReverseDnsField(Mp4BoxHeader parentHeader,ByteBuffer data) throws UnsupportedEncodingException
     {
-        super(data);
+        super(parentHeader,data);
     }
 
     /**
@@ -90,15 +92,25 @@ public class Mp4TagReverseDnsField extends Mp4TagField implements TagTextField
         setDescriptor(nameBox.getName());
         data.position(data.position() + nameBoxHeader.getDataLength());
 
-        //Read data box, identify the data
-        Mp4BoxHeader dataBoxHeader = new Mp4BoxHeader(data);
-        Mp4DataBox dataBox = new Mp4DataBox(dataBoxHeader, data);
-        setContent(dataBox.getContent());
-        data.position(data.position() + dataBoxHeader.getDataLength());
+        //Issue 198:There is not actually a data atom there cannot cant be because no room for one
+        if(parentHeader.getDataLength()==meanBoxHeader.getLength() + nameBoxHeader.getLength())
+        {                                                                      
+            id = IDENTIFIER + ":" + issuer + ":" + descriptor;
+            setContent("");
+            logger.warning(ErrorMessage.MP4_REVERSE_DNS_FIELD_HAS_NO_DATA.getMsg(id));            
+        }
+        //Usual Case
+        else
+        {
+            //Read data box, identify the data
+            Mp4BoxHeader dataBoxHeader = new Mp4BoxHeader(data);
+            Mp4DataBox dataBox = new Mp4DataBox(dataBoxHeader, data);
+            setContent(dataBox.getContent());
+            data.position(data.position() + dataBoxHeader.getDataLength());
 
-        //Now calculate the id which in order to be unique needs to use all htree values
-        id = IDENTIFIER + ":" + issuer + ":" + descriptor;
-
+            //Now calculate the id which in order to be unique needs to use all htree values
+            id = IDENTIFIER + ":" + issuer + ":" + descriptor;
+        }
     }
 
 

@@ -48,6 +48,9 @@ public abstract class Mp4TagField implements TagField
 
     protected String id;
 
+    //Just used by reverese dns class, so it knows the size of its aprent so it can detect end correctly
+    protected Mp4BoxHeader parentHeader;
+
     protected Mp4TagField(String id)
     {
         this.id = id;
@@ -64,6 +67,18 @@ public abstract class Mp4TagField implements TagField
         build(data);
     }
 
+    /**
+     * Used by reverese dns when reading from file, so can identify when there is a data atom
+     *
+     * @param parentHeader
+     * @param data
+     * @throws UnsupportedEncodingException
+     */
+    protected Mp4TagField(Mp4BoxHeader parentHeader,ByteBuffer data) throws UnsupportedEncodingException
+    {
+        this.parentHeader=parentHeader;
+        build(data);
+    }
 
     protected Mp4TagField(String id, ByteBuffer data) throws UnsupportedEncodingException
     {

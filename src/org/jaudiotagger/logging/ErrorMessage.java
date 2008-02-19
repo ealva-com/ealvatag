@@ -1,5 +1,7 @@
 package org.jaudiotagger.logging;
 
+import java.text.MessageFormat;
+
 /**
  * Defines Error Messages
  *
@@ -16,7 +18,12 @@ public enum ErrorMessage
     MP4_CHANGES_TO_FILE_FAILED_NO_TAG_DATA("Unable to make changes to file, no tag data has been written"),
     MP4_CHANGES_TO_FILE_FAILED_INCORRECT_OFFSETS("Unable to make changes to file, incorrect offsets written"),
     FLAC_NO_FLAC_HEADER_FOUND("Flac Header not found, not a flac file"),
-    OGG_VORBIS_NO_VORBIS_HEADER_FOUND("Cannot find vorbis setup header");
+    OGG_VORBIS_NO_VORBIS_HEADER_FOUND("Cannot find vorbis setup parentHeader"),
+    MP4_REVERSE_DNS_FIELD_HAS_NO_DATA("Reverse dns field:{0} has no data"),
+    MP4_UNABLE_READ_REVERSE_DNS_FIELD("Unable to create reverse dns field because of exception:(0} adding as binary data instead"),
+
+    ;
+
 
     String msg;
 
@@ -28,6 +35,11 @@ public enum ErrorMessage
     public String getMsg()
     {
         return msg;
+    }
+
+    public String getMsg(Object ... args)
+    {
+        return MessageFormat.format(getMsg(),args);
     }
 
 }

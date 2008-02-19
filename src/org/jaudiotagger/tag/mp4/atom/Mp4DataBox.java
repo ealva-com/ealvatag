@@ -48,8 +48,8 @@ public class Mp4DataBox extends AbstractMp4Box
     private byte[] bytedata;
 
     /**
-     * @param header     header info
-     * @param dataBuffer data of box (doesnt include header data)
+     * @param header     parentHeader info
+     * @param dataBuffer data of box (doesnt include parentHeader data)
      */
     public Mp4DataBox(Mp4BoxHeader header, ByteBuffer dataBuffer)
     {
@@ -57,7 +57,7 @@ public class Mp4DataBox extends AbstractMp4Box
         //Double check
         if (!header.getId().equals(IDENTIFIER))
         {
-            throw new RuntimeException("Unable to process data");
+            throw new RuntimeException("Unable to process data box because identifier is:"+header.getId());
         }
 
         //Make slice so operations here don't effect position of main buffer
