@@ -173,15 +173,18 @@ public class Mp4TagReverseDnsField extends Mp4TagField implements TagTextField
             baos.write(new byte[]{0, 0, 0, 0});
             baos.write(nameRawData);
 
-            //Create DataBox data
-            baos.write(getRawContentDataOnly());
-
+            //Create DataBox data if we have data only
+            if(content.length()>0)
+            {
+                baos.write(getRawContentDataOnly());
+            }
             //Now wrap with reversedns box
             ByteArrayOutputStream outerbaos = new ByteArrayOutputStream();
             outerbaos.write(Utils.getSizeBigEndian(Mp4BoxHeader.HEADER_LENGTH + baos.size()));
             outerbaos.write(Utils.getDefaultBytes(IDENTIFIER, "ISO-8859-1"));
             outerbaos.write(baos.toByteArray());
             return outerbaos.toByteArray();
+
         }
         catch (IOException ioe)
         {

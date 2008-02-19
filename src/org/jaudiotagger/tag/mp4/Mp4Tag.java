@@ -394,6 +394,9 @@ public class Mp4Tag extends AbstractTag
             case PART_OF_GAPLESS_ALBUM:
             case ITUNES_SMPB:
             case ITUNES_NORM:
+            case CDDB_1:
+            case CDDB_TRACKNUMBER:
+            case CDDB_IDS:
                 return new Mp4TagReverseDnsField(mp4FieldKey, value);
 
             default:

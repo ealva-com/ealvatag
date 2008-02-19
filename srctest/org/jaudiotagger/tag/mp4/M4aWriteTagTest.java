@@ -2198,6 +2198,54 @@ public class M4aWriteTagTest extends TestCase
         assertNull(exceptionCaught);
     }
 
-   
+     /** Test Wrting mp4 file
+     *
+     * @throws Exception
+     */
+    public void testWritingIssue198()throws Exception
+    {
+        File orig = new File("testdata", "test27.m4a");
+        if (!orig.isFile())
+        {
+            return;
+        }
+
+        Exception exceptionCaught = null;
+        try
+        {
+            File testFile = AbstractTestCase.copyAudioToTmp("test27.m4a",new File("rvdnswithoutdata.m4a"));
+
+            AudioFile f = AudioFileIO.read(testFile);
+            Mp4Tag tag = (Mp4Tag)f.getTag();
+
+
+            tag.setTitle("Title");
+            tag.setAlbum("Album");
+            tag.set(tag.createTagField(Mp4FieldKey.CDDB_TRACKNUMBER,"1"));
+            f.commit();
+
+            //Reread changes
+            f = AudioFileIO.read(testFile);
+            tag = (Mp4Tag)f.getTag();
+            assertEquals("Title",tag.getFirst(TagFieldKey.TITLE));
+            assertEquals("Album",tag.getFirst(TagFieldKey.ALBUM));
+            assertEquals("Buddy Holly & the Crickets",tag.getFirst(TagFieldKey.ARTIST));
+            assertEquals(1,tag.get(Mp4FieldKey.ITUNES_NORM).size());
+            assertEquals(0,tag.get(Mp4FieldKey.ITUNES_SMPB).size());
+            assertEquals(1,tag.get(Mp4FieldKey.CDDB_1).size());
+            assertEquals(1,tag.get(Mp4FieldKey.CDDB_TRACKNUMBER).size());
+            assertEquals(1,tag.get(Mp4FieldKey.CDDB_IDS).size());
+
+            System.out.println(f.getAudioHeader());
+            System.out.println(tag);
+
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+            exceptionCaught = e;
+        }
+        assertNull(exceptionCaught);
+    }
 }
 
