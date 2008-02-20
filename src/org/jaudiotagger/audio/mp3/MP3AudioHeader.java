@@ -67,8 +67,9 @@ public class MP3AudioHeader implements AudioHeader
     private long bitrate;
     private String encoder = "";
 
-    private static final SimpleDateFormat timeInFormat = new SimpleDateFormat("ss");
-    private static final SimpleDateFormat timeOutFormat = new SimpleDateFormat("mm:ss");
+    private static final SimpleDateFormat timeInFormat            = new SimpleDateFormat("ss");
+    private static final SimpleDateFormat timeOutFormat           = new SimpleDateFormat("mm:ss");
+    private static final SimpleDateFormat timeOutOverAnHourFormat = new SimpleDateFormat("kk:mm:ss");
     private static final char isVbrIdentifier = '~';
     private static final int CONVERT_TO_KILOBITS = 1000;
     private static final String TYPE_MP3 = "mp3";
@@ -84,6 +85,7 @@ public class MP3AudioHeader implements AudioHeader
     private final static int FILE_BUFFER_SIZE = 5000;
     private final static int MIN_BUFFER_REMAINING_REQUIRED =
             MPEGFrameHeader.HEADER_SIZE + XingFrame.MAX_BUFFER_SIZE_NEEDED_TO_READ_XING;
+    private static final int NO_SECONDS_IN_HOUR = 3600;
 
     public MP3AudioHeader()
     {
@@ -479,7 +481,14 @@ public class MP3AudioHeader implements AudioHeader
         {
             final long lengthInSecs = (long) getTrackLength();
             final Date timeIn = timeInFormat.parse(String.valueOf(lengthInSecs));
-            return timeOutFormat.format(timeIn);
+            if(lengthInSecs < NO_SECONDS_IN_HOUR)
+            {
+                return timeOutFormat.format(timeIn);
+            }
+            else
+            {
+                return timeOutOverAnHourFormat.format(timeIn);
+            }
         }
         catch (ParseException pe)
         {
