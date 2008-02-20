@@ -340,6 +340,10 @@ public class MP3AudioHeader implements AudioHeader
                 result = false;
             }
         }
+        else
+        {
+             MP3AudioHeader.logger.finer("isMPEGFrame has identified this is not an audio header");    
+        }
         //Set back to the start of the previous frame
         bb.position(currentPosition);
         return result;
@@ -413,8 +417,8 @@ public class MP3AudioHeader implements AudioHeader
     {
         timePerFrame = mp3FrameHeader.getNoOfSamples() / mp3FrameHeader.getSamplingRate().doubleValue();
 
-        //Because when calculating framelenggth we alter the calculation slightly for MPEGVersion2
-        //we seem to have to make a correspondinf modification to get the correct time
+        //Because when calculating framelength we may have altered the calculation slightly for MPEGVersion2
+        //to account for mono/stero we seem to have to make a corresponding modification to get the correct time
         if (
                 (mp3FrameHeader.getVersion() == MPEGFrameHeader.VERSION_2) ||
                         (mp3FrameHeader.getVersion() == MPEGFrameHeader.VERSION_2_5))
@@ -424,7 +428,10 @@ public class MP3AudioHeader implements AudioHeader
                             (mp3FrameHeader.getLayer() == MPEGFrameHeader.LAYER_III)
                     )
             {
-                timePerFrame = timePerFrame / 2;
+                if(mp3FrameHeader.getNumberOfChannels()==1)
+                {
+                    timePerFrame = timePerFrame / 2;
+                }
             }
         }
     }
