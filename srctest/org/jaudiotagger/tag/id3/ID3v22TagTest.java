@@ -4,6 +4,12 @@ import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 import org.jaudiotagger.tag.id3.framebody.*;
+import org.jaudiotagger.AbstractTestCase;
+import org.jaudiotagger.audio.mp3.MP3File;
+import org.jaudiotagger.audio.AudioFileIO;
+import org.jaudiotagger.audio.AudioFile;
+
+import java.io.File;
 
 /**
  *
@@ -93,7 +99,44 @@ public class ID3v22TagTest extends TestCase
             assertEquals((byte)2,v2Tag.getRelease());
             assertEquals((byte)2,v2Tag.getMajorVersion());
             assertEquals((byte)0,v2Tag.getRevision());
+    }
 
+     public void testCreateIDv22TagAndSave()
+    {
+        Exception exception = null;
+        try
+        {
+            File        testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3");
+            MP3File     mp3File  = new MP3File(testFile);
+            ID3v22Tag v2Tag = new ID3v22Tag();
+            v2Tag.setTitle("fred");
+            v2Tag.setArtist("artist");
+            v2Tag.setAlbum("album");
+
+            assertEquals((byte)2,v2Tag.getRelease());
+            assertEquals((byte)2,v2Tag.getMajorVersion());
+            assertEquals((byte)0,v2Tag.getRevision());
+            mp3File.setID3v2Tag(v2Tag);
+            mp3File.save();
+
+            //Read using new Interface
+            AudioFile v22File = AudioFileIO.read(testFile);
+            assertEquals("fred",v22File.getTag().getFirstTitle());
+            assertEquals("artist",v22File.getTag().getFirstArtist());
+            assertEquals("album",v22File.getTag().getFirstAlbum());
+
+            //Read using old Interface
+            mp3File = new MP3File(testFile);
+            v2Tag = (ID3v22Tag)mp3File.getID3v2Tag();
+            ID3v22Frame frame = (ID3v22Frame)v2Tag.getFrame(ID3v22Frames.FRAME_ID_V2_TITLE);
+            assertEquals("fred",((AbstractFrameBodyTextInfo)frame.getBody()).getText());
+
+        }
+        catch(Exception e)
+        {
+            exception=e;
+        }
+        assertNull(exception);
     }
 
 }
