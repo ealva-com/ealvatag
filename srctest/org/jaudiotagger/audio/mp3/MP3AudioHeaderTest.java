@@ -180,7 +180,7 @@ public class MP3AudioHeaderTest extends TestCase
         assertEquals("LAME3.96r", mp3AudioHeader.getEncoder());
     }
 
-    public void testReadV2L3VbrNew()
+    public void testReadV2L3MonoVbrNew()
     {
         Exception exceptionCaught = null;
         File testFile = AbstractTestCase.copyAudioToTmp("testV2vbrNew0.mp3");
@@ -390,6 +390,38 @@ public class MP3AudioHeaderTest extends TestCase
         assertEquals("mp3", mp3AudioHeader.getEncodingType());
         assertEquals("", mp3AudioHeader.getEncoder());   //No Lame header so blank
     }
+
+    public void testReadV2L3Stereo()
+      {
+          Exception exceptionCaught = null;
+          File testFile = AbstractTestCase.copyAudioToTmp("testV2L3Stereo.mp3");
+          MP3AudioHeader mp3AudioHeader = null;
+          try
+          {
+              mp3AudioHeader = new MP3AudioHeader(testFile);
+
+          }
+          catch (Exception e)
+          {
+              exceptionCaught = e;
+          }
+          assertNull(exceptionCaught);
+          assertEquals("24000", mp3AudioHeader.getSampleRate());
+          //assertEquals("00:14", mp3AudioHeader.getTrackLengthAsString());
+          assertFalse(mp3AudioHeader.isVariableBitRate());
+          assertEquals(MPEGFrameHeader.mpegVersionMap.get(new Integer(MPEGFrameHeader.VERSION_2)), mp3AudioHeader.getMpegVersion());
+          assertEquals(MPEGFrameHeader.mpegLayerMap.get(new Integer(MPEGFrameHeader.LAYER_III)), mp3AudioHeader.getMpegLayer());
+          assertEquals(MPEGFrameHeader.modeMap.get(new Integer(MPEGFrameHeader.MODE_JOINT_STEREO)), mp3AudioHeader.getChannels());
+          //assertEquals("00:14", mp3AudioHeader.getTrackLengthAsString()); not working returning 0
+          assertTrue(mp3AudioHeader.isOriginal());
+          assertFalse(mp3AudioHeader.isCopyrighted());
+          assertFalse(mp3AudioHeader.isPrivate());
+          assertFalse(mp3AudioHeader.isProtected());
+          assertEquals("64", mp3AudioHeader.getBitRate());
+          assertEquals("mp3", mp3AudioHeader.getEncodingType());
+          assertEquals("LAME3.97 ", mp3AudioHeader.getEncoder());   //TODO should we be removing trailing space
+      }
+
 
     /**
      * Test trying to parse an mp3 file which is not a valid MP3 fails gracefully with expected exception
