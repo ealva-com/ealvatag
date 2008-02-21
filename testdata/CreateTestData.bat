@@ -1,4 +1,4 @@
-rem If you have lame mp3 encoder installed you can recreate all the test files from the single test.wav
+rem If you have lame mp3 encoder and Mp2 Enc ( for Layer II encoding) installed you can recreate all the test files from the single test.wav
 
 rem Resample to higher sampling rate so creates a V1 mp3
 rem cbr
@@ -37,18 +37,20 @@ lame --resample 44.1 -b 128 --id3v2-only --tt testtitle --ta testartist --tl tes
 rem Put in a v1 and a v2 tag
 lame --resample 44.1 -b 128 --add-id3v2 --tt testtitle --ta testartist --tl testalbum --ty 1999 --tc testcomment --tn 100 --tg 1 test.wav testV1Cbr128ID3v1v2.mp3
 
-rem Resample to lower sampling rate so creates a V2.5 mp3
+rem Resample to lower sampling rate so creates a V2.5LIII mp3
 lame --resample 12 test.wav testV25.mp3
 lame --resample 12 -b 128  test.wav testV2Cbr128.mp3
 lame --resample 12 -v -V 0 test.wav testV25vbrOld0.mp3
 lame --resample 12 --vbr-new -V 0 test.wav testV25vbrNew0.mp3
 
-rem use Defaults to create the V2 mp3
+rem use Defaults to create the V2LIII mp3
 lame testV2.mp3
 lame  -b 128  test.wav testV2Cbr128.mp3
 lame -v -V 0 test.wav testV2vbrOld0.mp3
 lame --vbr-new -V 0 test.wav testV2vbrNew0.mp3
 
-
+Rem Creating mp2 (Layer II) files
+mp2enc -b 192 -m m test.wav testV1L2Mono.mp3
+mp2enc -b 192 -m s test.wav testV1L2Stereo.mp3
 
 

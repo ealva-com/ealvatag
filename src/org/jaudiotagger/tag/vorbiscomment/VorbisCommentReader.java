@@ -22,11 +22,11 @@ package org.jaudiotagger.tag.vorbiscomment;
 import org.jaudiotagger.audio.generic.Utils;
 import org.jaudiotagger.audio.exceptions.CannotReadException;
 import org.jaudiotagger.audio.ogg.util.VorbisHeader;
-import org.jaudiotagger.audio.ogg.util.VorbisPacketType;
 import org.jaudiotagger.tag.vorbiscomment.VorbisCommentTagField;
+import org.jaudiotagger.logging.ErrorMessage;
+import org.jaudiotagger.fix.Fix;
 
 import java.io.*;
-import java.nio.IntBuffer;
 import java.util.logging.Logger;
 
 /**
@@ -62,6 +62,16 @@ public class VorbisCommentReader
     public static final int FIELD_USER_COMMENT_LIST_LENGTH = 4;
     public static final int FIELD_COMMENT_LENGTH_LENGTH = 4;
 
+    private Fix fix;
+    public VorbisCommentReader()
+    {
+
+    }
+
+    public VorbisCommentReader(Fix fix)
+    {
+        this.fix=fix;
+    }
     /**
      * @param rawdata
      * @return logical representation of VorbisCommentTag
@@ -88,13 +98,19 @@ public class VorbisCommentReader
         pos += FIELD_USER_COMMENT_LIST_LENGTH;
 
         int userComments = Utils.getNumberLittleEndian(b);
-        for (int i = 0; i < userComments; i++)
+        logger.info("Number of user comments:" + userComments);
+        if(fix==Fix.FIX_OGG_VORBIS_COMMENT_NOT_COUNTING_EMPTY_COLUMNS)
+        {
+            userComments++;    
+        }
+        for (int i = 0; i < userComments ; i++)
         {
             b = new byte[FIELD_COMMENT_LENGTH_LENGTH];
             System.arraycopy(rawdata, pos, b, 0, FIELD_COMMENT_LENGTH_LENGTH);
             pos += FIELD_COMMENT_LENGTH_LENGTH;
 
             int commentLength = Utils.getNumberLittleEndian(b);
+            logger.info("Next Comment Length:" + commentLength);
             b = new byte[commentLength];
             System.arraycopy(rawdata, pos, b, 0, commentLength);
             pos += commentLength;
@@ -108,8 +124,8 @@ public class VorbisCommentReader
         if (isFramingBit)
         {
             if ((rawdata[pos] & 0x01) != 1)
-            {
-                throw new CannotReadException("Error: The OGG Stream isn't valid, Vorbis tag valid flag is wrong");
+            {                   
+                throw new CannotReadException(ErrorMessage.OGG_VORBIS_NO_FRAMING_BIT.getMsg((rawdata[pos] & 0x01) ));
             }
         }
         return tag;

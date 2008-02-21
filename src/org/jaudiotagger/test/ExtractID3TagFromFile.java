@@ -43,6 +43,65 @@ public class ExtractID3TagFromFile
         }
     }
 
+    final class MP3FileFilter
+            extends javax.swing.filechooser.FileFilter
+            implements java.io.FileFilter
+    {
+
+        /**
+         * allows Directories
+         */
+        private final boolean allowDirectories;
+
+        /**
+         * Create a default MP3FileFilter.  The allowDirectories field will
+         * default to false.
+         */
+        public MP3FileFilter()
+        {
+            this(false);
+        }
+
+        /**
+         * Create an MP3FileFilter.  If allowDirectories is true, then this filter
+         * will accept directories as well as mp3 files.  If it is false then
+         * only mp3 files will be accepted.
+         *
+         * @param allowDirectories whether or not to accept directories
+         */
+        private MP3FileFilter(final boolean allowDirectories)
+        {
+            this.allowDirectories = allowDirectories;
+        }
+
+        /**
+         * Determines whether or not the file is an mp3 file.  If the file is
+         * a directory, whether or not is accepted depends upon the
+         * allowDirectories flag passed to the constructor.
+         *
+         * @param file the file to test
+         * @return true if this file or directory should be accepted
+         */
+        public final boolean accept(final File file)
+        {
+            return (
+                    ((file.getName()).toLowerCase().endsWith(".mp3"))
+                            ||
+                            (file.isDirectory() && (this.allowDirectories == true))
+            );
+        }
+
+        /**
+         * Returns the Name of the Filter for use in the Chooser Dialog
+         *
+         * @return The Description of the Filter
+         */
+        public final String getDescription()
+        {
+            return new String(".mp3 Files");
+        }
+    }
+
     public static final String IDENT = "$Id$";
 
 }

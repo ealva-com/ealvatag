@@ -20,8 +20,8 @@ public enum ErrorMessage
     FLAC_NO_FLAC_HEADER_FOUND("Flac Header not found, not a flac file"),
     OGG_VORBIS_NO_VORBIS_HEADER_FOUND("Cannot find vorbis setup parentHeader"),
     MP4_REVERSE_DNS_FIELD_HAS_NO_DATA("Reverse dns field:{0} has no data"),
-    MP4_UNABLE_READ_REVERSE_DNS_FIELD("Unable to create reverse dns field because of exception:(0} adding as binary data instead"),
-
+    MP4_UNABLE_READ_REVERSE_DNS_FIELD("Unable to create reverse dns field because of exception:{0} adding as binary data instead"),
+    OGG_VORBIS_NO_FRAMING_BIT("The OGG Stream is not valid, Vorbis tag valid framing bit is wrong {0} "),
     ;
 
 

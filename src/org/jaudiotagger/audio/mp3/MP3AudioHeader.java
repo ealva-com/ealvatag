@@ -196,6 +196,7 @@ public class MP3AudioHeader implements AudioHeader
 
                         mp3FrameHeader = MPEGFrameHeader.parseMPEGHeader(bb);
                         syncFound = true;
+                        //if(2==1) use this line when you want to test getting the next frame without using xing
                         if (XingFrame.isXingFrame(bb, mp3FrameHeader))
                         {
                             if (MP3AudioHeader.logger.isLoggable(Level.FINEST))

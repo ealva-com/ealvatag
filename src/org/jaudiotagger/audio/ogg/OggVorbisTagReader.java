@@ -28,6 +28,7 @@ import org.jaudiotagger.audio.exceptions.*;
 import org.jaudiotagger.audio.generic.Utils;
 import org.jaudiotagger.tag.Tag;
 import org.jaudiotagger.logging.ErrorMessage;
+import org.jaudiotagger.fix.Fix;
 
 import java.io.*;
 import java.util.List;
@@ -44,7 +45,21 @@ public class OggVorbisTagReader
     // Logger Object
     public static Logger logger = Logger.getLogger("org.jaudiotagger.audio.ogg");
 
-    private VorbisCommentReader vorbisCommentReader = new VorbisCommentReader();
+    private VorbisCommentReader vorbisCommentReader;
+
+    private Fix fix;
+
+    public OggVorbisTagReader()
+    {
+        vorbisCommentReader = new VorbisCommentReader();
+    }
+
+    public OggVorbisTagReader(Fix fix)
+    {
+        this.fix=fix;
+        vorbisCommentReader = new VorbisCommentReader(fix);
+    }
+
 
     /**
      * Read the Logical VorbisComment Tag from the file

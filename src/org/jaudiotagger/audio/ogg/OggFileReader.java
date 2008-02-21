@@ -23,6 +23,7 @@ import org.jaudiotagger.audio.exceptions.*;
 import org.jaudiotagger.audio.generic.AudioFileReader;
 import org.jaudiotagger.audio.generic.GenericAudioHeader;
 import org.jaudiotagger.tag.Tag;
+import org.jaudiotagger.fix.Fix;
 
 import java.io.*;
 import java.util.logging.Logger;
@@ -37,8 +38,22 @@ public class OggFileReader extends AudioFileReader
     // Logger Object
     public static Logger logger = Logger.getLogger("org.jaudiotagger.audio.ogg");
 
-    private OggInfoReader ir = new OggInfoReader();
-    private OggVorbisTagReader vtr = new OggVorbisTagReader();
+    private OggInfoReader      ir;
+    private OggVorbisTagReader vtr;
+    private Fix fix;
+
+    public OggFileReader()
+    {
+        ir  = new OggInfoReader();
+        vtr = new OggVorbisTagReader();
+    }
+
+    public OggFileReader(Fix fix)
+    {
+        this.fix=fix;
+        ir  = new OggInfoReader();
+        vtr = new OggVorbisTagReader(fix);    
+    }
 
     protected GenericAudioHeader getEncodingInfo(RandomAccessFile raf) throws CannotReadException, IOException
     {
