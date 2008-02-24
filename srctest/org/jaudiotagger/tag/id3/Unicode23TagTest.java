@@ -298,7 +298,7 @@ public class Unicode23TagTest extends TestCase
 
     public void testFixv23TagsWithInvalidEncoding()  throws Exception
     {
-        File testFile = AbstractTestCase.copyAudioToTmp("issue109.id3", "testV1.mp3");
+        File testFile = AbstractTestCase.copyAudioToTmp("Issue109.id3", "testV1.mp3");
 
         //Read file as currently stands
         MP3File mp3File = new MP3File(testFile);
@@ -329,7 +329,7 @@ public class Unicode23TagTest extends TestCase
 
     public void testFixv23TagsWithInvalidEncodingAndDefaultOverridden()  throws Exception
     {
-        File testFile = AbstractTestCase.copyAudioToTmp("issue109.id3", "testV1.mp3");
+        File testFile = AbstractTestCase.copyAudioToTmp("Issue109.id3", "testV1.mp3");
 
         //Read file as currently stands
         MP3File mp3File = new MP3File(testFile);
