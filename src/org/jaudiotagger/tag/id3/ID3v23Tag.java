@@ -27,6 +27,7 @@ import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.channels.WritableByteChannel;
+import java.nio.channels.FileLock;
 import java.util.*;
 import java.util.logging.Level;
 
@@ -739,9 +740,12 @@ public class ID3v23Tag
 
         //Write changes to file
         FileChannel fc = null;
+        FileLock fileLock = null;
         try
         {
             fc = new RandomAccessFile(file, "rw").getChannel();
+            fileLock=getFileLockForWriting(fc,file.getPath());
+
             fc.write(headerBuffer);
             fc.write(ByteBuffer.wrap(bodyByteBuffer));
             fc.write(ByteBuffer.wrap(new byte[padding]));
@@ -750,6 +754,10 @@ public class ID3v23Tag
         {
             if (fc != null)
             {
+                if(fileLock!=null)
+                {
+                    fileLock.release();
+                }
                 fc.close();
             }
         }

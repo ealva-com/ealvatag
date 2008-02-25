@@ -302,8 +302,7 @@ public class AudioFileIO
         AudioFileWriter afw = writers.get(ext);
         if (afw == null)
         {
-            throw new CannotWriteException(
-                    "No Writer associated to this extension: " + ext);
+            throw new CannotWriteException("No Writer associated to this extension: " + ext);
         }
 
         afw.write(f);

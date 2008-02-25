@@ -16,7 +16,9 @@
 package org.jaudiotagger.tag.id3;
 
 import org.jaudiotagger.FileConstants;
+import org.jaudiotagger.logging.ErrorMessage;
 import org.jaudiotagger.audio.mp3.MP3File;
+import org.jaudiotagger.audio.exceptions.CannotWriteException;
 import org.jaudiotagger.tag.*;
 import static org.jaudiotagger.tag.mp4.Mp4FieldKey.ARTIST;
 import static org.jaudiotagger.tag.mp4.Mp4FieldKey.ALBUM;
@@ -38,6 +40,7 @@ import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.channels.WritableByteChannel;
+import java.nio.channels.FileLock;
 import java.util.*;
 import java.util.logging.Level;
 
@@ -518,7 +521,7 @@ public class ID3v22Tag
     {
         logger.info("Writing tag to file");
 
-        // Write Body Buffer */
+        // Write Body Buffer
         byte[] bodyByteBuffer = writeFramesToBuffer().toByteArray();
 
         // Unsynchronize if option enabled and unsync required
@@ -552,10 +555,13 @@ public class ID3v22Tag
         }
 
         //Write changes to file
-        FileChannel fc = null;
+        FileChannel fc       = null;
+        FileLock    fileLock = null;
         try
         {
             fc = new RandomAccessFile(file, "rw").getChannel();
+            fileLock=getFileLockForWriting(fc,file.getPath());
+
             fc.write(headerBuffer);
             fc.write(ByteBuffer.wrap(bodyByteBuffer));
             fc.write(ByteBuffer.wrap(new byte[padding]));
@@ -564,10 +570,13 @@ public class ID3v22Tag
         {
             if (fc != null)
             {
+                fileLock.release();
                 fc.close();
             }
         }
     }
+
+
 
     /**
      * Write tag to channel

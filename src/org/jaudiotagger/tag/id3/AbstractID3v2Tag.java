@@ -23,11 +23,13 @@ import org.jaudiotagger.tag.id3.valuepair.ImageFormats;
 import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
 import org.jaudiotagger.tag.*;
 import org.jaudiotagger.tag.datatype.DataTypes;
+import org.jaudiotagger.logging.ErrorMessage;
 
 import java.io.*;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.channels.WritableByteChannel;
+import java.nio.channels.FileLock;
 import java.util.*;
 
 /**
@@ -880,6 +882,25 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
      */
     public void write(File file, long audioStartByte) throws IOException
     {
+    }
+
+    /**
+     * Get file lock for writing too file
+     *
+     * TODO:this appears to have little affect on Windows Vista
+     *
+     * @param fileChannel
+     * @return
+     * @throws IOException
+     */
+    protected FileLock getFileLockForWriting(FileChannel fileChannel,String filePath) throws IOException
+    {
+        FileLock fileLock = fileChannel.tryLock();
+        if(fileLock==null)
+        {
+            throw new IOException(ErrorMessage.GENERAL_WRITE_FAILED_FILE_LOCKED.getMsg(filePath));
+        }
+        return fileLock;
     }
 
     /**

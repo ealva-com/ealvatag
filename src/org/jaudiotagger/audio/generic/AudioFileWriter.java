@@ -22,12 +22,14 @@ import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.logging.Logger;
+import java.nio.channels.FileLock;
 
 import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.tag.Tag;
 import org.jaudiotagger.audio.exceptions.CannotWriteException;
 import org.jaudiotagger.audio.exceptions.ModifyVetoException;
 import org.jaudiotagger.audio.exceptions.CannotReadException;
+import org.jaudiotagger.logging.ErrorMessage;
 
 /**
  * This abstract class is the skeleton for tag writers.
@@ -42,6 +44,10 @@ import org.jaudiotagger.audio.exceptions.CannotReadException;
  */
 public abstract class AudioFileWriter
 {
+    private static final String TEMP_FILENAME_PREFIX = "jaudiotagger";
+    private static final String TEMP_FILENAME_SUFFIX = ".tmp";
+    private static final String WRITE_MODE = "rw";
+    private static final int    MINIMUM_FILESIZE = 150;
 
     // Logger Object
     public static Logger logger = Logger.getLogger("org.jaudiotagger.audio.generic");
@@ -55,47 +61,55 @@ public abstract class AudioFileWriter
     /**
      * Delete the tag (if any) present in the given file
      *
-     * @param f The file to process
+     * @param af The file to process
      * @throws CannotWriteException if anything went wrong
      */
-    public synchronized void delete(AudioFile f) throws CannotReadException, CannotWriteException
+    public synchronized void delete(AudioFile af) throws CannotReadException, CannotWriteException
     {
-        if (!f.getFile().canWrite())
+        if (!af.getFile().canWrite())
         {
-            throw new CannotWriteException("Can't write to file \"" + f.getFile().getAbsolutePath() + "\"");
+            throw new CannotWriteException(ErrorMessage.GENERAL_DELETE_FAILED.getMsg(af.getFile().getPath()));
         }
 
-        if (f.getFile().length() <= 150)
+        if (af.getFile().length() <= MINIMUM_FILESIZE)
         {
-            throw new CannotWriteException("Less than 150 byte \"" + f.getFile().getAbsolutePath() + "\"");
+             throw new CannotWriteException(ErrorMessage.GENERAL_DELETE_FAILED.getMsg(af.getFile().getPath()));
         }
 
         RandomAccessFile raf = null;
         RandomAccessFile rafTemp = null;
         File tempF = null;
-        // Will be set to true on VetoException, causing the finally block to
-        // discard
-        // the tempfile.
+
+        //Will be set to true on VetoException, causing the finally block to discard the tempfile.
         boolean revert = false;
+
         try
         {
 
-            tempF = File.createTempFile("entagged", ".tmp", f.getFile().getParentFile());
-            rafTemp = new RandomAccessFile(tempF, "rw");
-            raf = new RandomAccessFile(f.getFile(), "rw");
+            tempF = File.createTempFile(TEMP_FILENAME_PREFIX,TEMP_FILENAME_SUFFIX, af.getFile().getParentFile());
+            rafTemp = new RandomAccessFile(tempF, WRITE_MODE);
+            raf = new RandomAccessFile(af.getFile(), WRITE_MODE);
             raf.seek(0);
             rafTemp.seek(0);
+
+            FileLock fileLock = null;
+
+            fileLock = raf.getChannel().tryLock();
+            if(fileLock==null)
+            {
+                 throw new CannotWriteException(ErrorMessage.GENERAL_DELETE_FAILED_FILE_LOCKED.getMsg(af.getFile().getPath()));
+            }
 
             try
             {
                 if (this.modificationListener != null)
                 {
-                    this.modificationListener.fileWillBeModified(f, true);
+                    this.modificationListener.fileWillBeModified(af, true);
                 }
                 deleteTag(raf, rafTemp);
                 if (this.modificationListener != null)
                 {
-                    this.modificationListener.fileModified(f, tempF);
+                    this.modificationListener.fileModified(af, tempF);
                 }
             }
             catch (ModifyVetoException veto)
@@ -107,12 +121,12 @@ public abstract class AudioFileWriter
         catch (Exception e)
         {
             revert = true;
-            throw new CannotWriteException("\"" + f.getFile().getAbsolutePath() + "\" :" + e, e);
+            throw new CannotWriteException("\"" + af.getFile().getAbsolutePath() + "\" :" + e, e);
         }
         finally
         {
             // will be set to the remaining file.
-            File result = f.getFile();
+            File result = af.getFile();
             try
             {
                 if (raf != null)
@@ -124,10 +138,21 @@ public abstract class AudioFileWriter
                     rafTemp.close();
                 }
 
+
                 if (tempF.length() > 0 && !revert)
                 {
-                    f.getFile().delete();
-                    tempF.renameTo(f.getFile());
+                    boolean deleteResult=af.getFile().delete();
+                    if(deleteResult==false)
+                    {
+                        logger.warning(ErrorMessage.GENERAL_WRITE_FAILED_TO_DELETE_ORIGINAL_FILE.getMsg(af.getFile().getPath(),tempF.getParentFile()));
+                        throw new CannotWriteException(ErrorMessage.GENERAL_WRITE_FAILED_TO_DELETE_ORIGINAL_FILE.getMsg(af.getFile().getPath(),tempF.getParentFile()));
+                    }
+                    boolean renameResult=tempF.renameTo(af.getFile());
+                    if(renameResult==false)
+                    {
+                        logger.warning(ErrorMessage.GENERAL_WRITE_FAILED_TO_RENAME_TO_ORIGINAL_FILE.getMsg(af.getFile().getPath(),tempF.getParentFile()));
+                        throw new CannotWriteException(ErrorMessage.GENERAL_WRITE_FAILED_TO_RENAME_TO_ORIGINAL_FILE.getMsg(af.getFile().getPath(),tempF.getParentFile()));
+                    }
                     result = tempF;
                 }
                 else
@@ -137,7 +162,7 @@ public abstract class AudioFileWriter
             }
             catch (Exception ex)
             {
-                System.err.println("AudioFileWriter:113:\"" + f.getFile().getAbsolutePath() + "\" or \"" + tempF.getAbsolutePath() + "\" :" + ex);
+                logger.severe("AudioFileWriter exception cleaning up delete:" + af.getFile().getPath() +" or"+ tempF.getAbsolutePath() + ":" + ex);
             }
             // Notify listener
             if (this.modificationListener != null)
@@ -205,22 +230,23 @@ public abstract class AudioFileWriter
         }
         catch (CannotReadException re)
         {
-            throw new CannotWriteException("Can't write to file \"" + af.getFile().getAbsolutePath() + "\"");
+             throw new CannotWriteException(ErrorMessage.GENERAL_WRITE_FAILED.getMsg(af.getFile().getPath()));
         }
 
         if (!af.getFile().canWrite())
         {
-            throw new CannotWriteException("Can't write to file \"" + af.getFile().getAbsolutePath() + "\"");
+            throw new CannotWriteException(ErrorMessage.GENERAL_WRITE_FAILED.getMsg(af.getFile().getPath()));
         }
 
-        if (af.getFile().length() <= 150)
+        if (af.getFile().length() <= MINIMUM_FILESIZE)
         {
-            throw new CannotWriteException("Less than 150 byte \"" + af.getFile().getAbsolutePath() + "\"");
+           throw new CannotWriteException(ErrorMessage.GENERAL_WRITE_FAILED_BECAUSE_FILE_IS_TOO_SMALL.getMsg(af.getFile().getPath()));
         }
 
         RandomAccessFile raf = null;
         RandomAccessFile rafTemp = null;
         File tempF = null;
+        FileLock fileLock = null;
 
         // Will be set to true in exception block to not replace original file.
         boolean cannotWrite = false;
@@ -228,9 +254,16 @@ public abstract class AudioFileWriter
         {
             //TODO Creates temp file in same folder as the original file, this is safe but would impose a performance
             //overhead if the original file is on a networked drive
-            tempF = File.createTempFile("jaudiotagger", ".tmp", af.getFile().getParentFile());
-            rafTemp = new RandomAccessFile(tempF, "rw");
-            raf = new RandomAccessFile(af.getFile(), "rw");
+            tempF = File.createTempFile(TEMP_FILENAME_PREFIX, TEMP_FILENAME_SUFFIX, af.getFile().getParentFile());
+            rafTemp = new RandomAccessFile(tempF, WRITE_MODE);
+            raf = new RandomAccessFile(af.getFile(), WRITE_MODE);
+
+            fileLock = raf.getChannel().tryLock();
+            if(fileLock==null)
+            {
+                 throw new CannotWriteException(ErrorMessage.GENERAL_WRITE_FAILED_FILE_LOCKED.getMsg(af.getFile().getPath()));
+            }
+
             raf.seek(0);
             rafTemp.seek(0);
             try
@@ -254,7 +287,7 @@ public abstract class AudioFileWriter
         {
             e.printStackTrace(System.err);
             cannotWrite = true;
-            throw new CannotWriteException("\"" + af.getFile().getAbsolutePath() + "\" :" + e.getMessage());
+            throw new CannotWriteException(af.getFile().getAbsolutePath() +":" + e.getMessage());
         }
         finally
         {
@@ -276,13 +309,15 @@ public abstract class AudioFileWriter
                     boolean deleteResult=af.getFile().delete();
                     if(deleteResult==false)
                     {
-                        logger.warning("Deleted:"+deleteResult);
+                        logger.warning(ErrorMessage.GENERAL_WRITE_FAILED_TO_DELETE_ORIGINAL_FILE.getMsg(af.getFile().getPath(),tempF.getParentFile()));
+                        throw new CannotWriteException(ErrorMessage.GENERAL_WRITE_FAILED_TO_DELETE_ORIGINAL_FILE.getMsg(af.getFile().getPath(),tempF.getParentFile()));
                     }
 
                     boolean renameResult=tempF.renameTo(af.getFile());
                     if(renameResult==false)
                     {
-                        logger.warning("Rename:"+renameResult);
+                        logger.warning(ErrorMessage.GENERAL_WRITE_FAILED_TO_RENAME_TO_ORIGINAL_FILE.getMsg(af.getFile().getPath(),tempF.getParentFile()));
+                        throw new CannotWriteException(ErrorMessage.GENERAL_WRITE_FAILED_TO_RENAME_TO_ORIGINAL_FILE.getMsg(af.getFile().getPath(),tempF.getParentFile()));
                     }
                     result = tempF;
                 }
@@ -295,7 +330,7 @@ public abstract class AudioFileWriter
             }
             catch (Exception ex)
             {
-                System.err.println("AudioFileWriter:165:\"" + af.getFile().getAbsolutePath() + "\" or \"" + tempF.getAbsolutePath() + "\" :" + ex);
+                logger.severe("AudioFileWriter exception cleaning up write:" + af.getFile().getPath() +" or"+ tempF.getAbsolutePath() + ":" + ex);
             }
 
             if (this.modificationListener != null)
