@@ -36,7 +36,7 @@ public class MP3AudioHeaderTest extends TestCase
         MP3AudioHeader mp3AudioHeader = null;
         try
         {
-            mp3AudioHeader = new MP3AudioHeader(testFile);
+            mp3AudioHeader = new MP3File(testFile).getMP3AudioHeader();
 
         }
         catch (Exception e)
@@ -66,7 +66,7 @@ public class MP3AudioHeaderTest extends TestCase
         MP3AudioHeader mp3AudioHeader = null;
         try
         {
-            mp3AudioHeader = new MP3AudioHeader(testFile);
+            mp3AudioHeader = new MP3File(testFile).getMP3AudioHeader();
 
         }
         catch (Exception e)
@@ -96,7 +96,7 @@ public class MP3AudioHeaderTest extends TestCase
         MP3AudioHeader mp3AudioHeader = null;
         try
         {
-            mp3AudioHeader = new MP3AudioHeader(testFile);
+            mp3AudioHeader = new MP3File(testFile).getMP3AudioHeader();
 
         }
         catch (Exception e)
@@ -126,7 +126,7 @@ public class MP3AudioHeaderTest extends TestCase
         MP3AudioHeader mp3AudioHeader = null;
         try
         {
-            mp3AudioHeader = new MP3AudioHeader(testFile);
+            mp3AudioHeader = new MP3File(testFile).getMP3AudioHeader();
 
         }
         catch (Exception e)
@@ -157,7 +157,7 @@ public class MP3AudioHeaderTest extends TestCase
         MP3AudioHeader mp3AudioHeader = null;
         try
         {
-            mp3AudioHeader = new MP3AudioHeader(testFile);
+            mp3AudioHeader = new MP3File(testFile).getMP3AudioHeader();
 
         }
         catch (Exception e)
@@ -187,7 +187,7 @@ public class MP3AudioHeaderTest extends TestCase
         MP3AudioHeader mp3AudioHeader = null;
         try
         {
-            mp3AudioHeader = new MP3AudioHeader(testFile);
+            mp3AudioHeader = new MP3File(testFile).getMP3AudioHeader();
 
         }
         catch (Exception e)
@@ -217,7 +217,7 @@ public class MP3AudioHeaderTest extends TestCase
         MP3AudioHeader mp3AudioHeader = null;
         try
         {
-            mp3AudioHeader = new MP3AudioHeader(testFile);
+            mp3AudioHeader = new MP3File(testFile).getMP3AudioHeader();
 
         }
         catch (Exception e)
@@ -247,7 +247,7 @@ public class MP3AudioHeaderTest extends TestCase
         MP3AudioHeader mp3AudioHeader = null;
         try
         {
-            mp3AudioHeader = new MP3AudioHeader(testFile);
+            mp3AudioHeader = new MP3File(testFile).getMP3AudioHeader();
 
         }
         catch (Exception e)
@@ -277,7 +277,7 @@ public class MP3AudioHeaderTest extends TestCase
         MP3AudioHeader mp3AudioHeader = null;
         try
         {
-            mp3AudioHeader = new MP3AudioHeader(testFile);
+            mp3AudioHeader = new MP3File(testFile).getMP3AudioHeader();
 
         }
         catch (Exception e)
@@ -307,7 +307,7 @@ public class MP3AudioHeaderTest extends TestCase
         MP3AudioHeader mp3AudioHeader = null;
         try
         {
-            mp3AudioHeader = new MP3AudioHeader(testFile);
+            mp3AudioHeader = new MP3File(testFile).getMP3AudioHeader();
 
         }
         catch (Exception e)
@@ -337,7 +337,7 @@ public class MP3AudioHeaderTest extends TestCase
         MP3AudioHeader mp3AudioHeader = null;
         try
         {
-            mp3AudioHeader = new MP3AudioHeader(testFile);
+            mp3AudioHeader = new MP3File(testFile).getMP3AudioHeader();
 
         }
         catch (Exception e)
@@ -367,7 +367,7 @@ public class MP3AudioHeaderTest extends TestCase
         MP3AudioHeader mp3AudioHeader = null;
         try
         {
-            mp3AudioHeader = new MP3AudioHeader(testFile);
+            mp3AudioHeader = new MP3File(testFile).getMP3AudioHeader();
 
         }
         catch (Exception e)
@@ -398,7 +398,7 @@ public class MP3AudioHeaderTest extends TestCase
           MP3AudioHeader mp3AudioHeader = null;
           try
           {
-              mp3AudioHeader = new MP3AudioHeader(testFile);
+              mp3AudioHeader = new MP3File(testFile).getMP3AudioHeader();
 
           }
           catch (Exception e)
@@ -433,7 +433,7 @@ public class MP3AudioHeaderTest extends TestCase
         MP3AudioHeader mp3AudioHeader = null;
         try
         {
-            mp3AudioHeader = new MP3AudioHeader(testFile);
+            mp3AudioHeader = new MP3File(testFile).getMP3AudioHeader();
 
         }
         catch (Exception e)
@@ -455,7 +455,7 @@ public class MP3AudioHeaderTest extends TestCase
         MP3AudioHeader mp3AudioHeader = null;
         try
         {
-            mp3AudioHeader = new MP3AudioHeader(testFile);
+            mp3AudioHeader = new MP3File(testFile).getMP3AudioHeader();
 
         }
         catch (Exception e)
@@ -475,7 +475,7 @@ public class MP3AudioHeaderTest extends TestCase
         MP3AudioHeader mp3AudioHeader = null;
         try
         {
-            mp3AudioHeader = new MP3AudioHeader(testFile);
+            mp3AudioHeader = new MP3File(testFile).getMP3AudioHeader();
 
         }
         catch (Exception e)
@@ -520,5 +520,37 @@ public class MP3AudioHeaderTest extends TestCase
              exceptionCaught = e;
         }
         assertTrue(exceptionCaught == null);
+    }
+
+     /**
+     * Test trying to parse an mp3 file with a ID3 tag header reporting to short causing
+     * jaudiotagger to end up reading mp3 header from too early causing audio header to be
+     * read incorrectly
+     */
+    public void testIssue110()
+    {
+        File orig = new File("testdata", "test28.mp3");
+        if (!orig.isFile())
+        {
+            return;
+        }
+
+        Exception exceptionCaught = null;
+        File testFile = AbstractTestCase.copyAudioToTmp("test28.mp3");
+        MP3AudioHeader mp3AudioHeader = null;
+        try
+        {
+            mp3AudioHeader = new MP3File(testFile).getMP3AudioHeader();
+
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            exceptionCaught = e;
+        }
+        assertTrue(exceptionCaught == null);
+        assertEquals(MPEGFrameHeader.mpegVersionMap.get(new Integer(MPEGFrameHeader.VERSION_1)), mp3AudioHeader.getMpegVersion());
+        assertEquals(MPEGFrameHeader.mpegLayerMap.get(new Integer(MPEGFrameHeader.LAYER_III)), mp3AudioHeader.getMpegLayer());
+        assertEquals(MPEGFrameHeader.modeMap.get(new Integer(MPEGFrameHeader.MODE_JOINT_STEREO)), mp3AudioHeader.getChannels());
     }
 }
