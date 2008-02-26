@@ -30,6 +30,10 @@ public enum ErrorMessage
     GENERAL_DELETE_FAILED("Cannot delete file {0}"),
     GENERAL_DELETE_FAILED_FILE_LOCKED("Cannot delete file {0} because it is being used by another application"),
     GENERAL_DELETE_FAILED_BECAUSE_FILE_IS_TOO_SMALL("Cannot write to file {0} because too small to be an audio file"),
+    MP3_ID3TAG_LENGTH_INCORRECT(" {0}:Checking further because the ID3 Tag ends at {1} but the mp3 audio doesnt start until {2}"),
+    MP3_RECALCULATED_POSSIBLE_START_OF_MP3_AUDIO("{0}: Recalculated possible start of the audio to be at {1}"),
+    MP3_RECALCULATED_START_OF_MP3_AUDIO("{0}: Recalculated the start of the audio to be at {1}"),
+    MP3_START_OF_AUDIO_CONFIRMED("{0}: Confirmed audio starts at {1} whether searching from start or from end of ID3 tag"),   
     ;
 
 

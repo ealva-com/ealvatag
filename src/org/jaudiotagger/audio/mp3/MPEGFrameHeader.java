@@ -886,6 +886,7 @@ public class MPEGFrameHeader
     {
         return
                 " mpeg frameheader:" +
+                        " frame length:" + getFrameLength() +
                         " version:" + versionAsString +
                         " layer:" + layerAsString +
                         " channelMode:" + channelModeAsString +
@@ -898,9 +899,9 @@ public class MPEGFrameHeader
                         " isOriginal:" + isCopyrighted +
                         " isVariableBitRate" + this.isVariableBitRate() +
                         " header as binary:" +
-                        AbstractTagDisplayFormatter.displayAsBinary(mpegBytes[BYTE_1]) +
-                        AbstractTagDisplayFormatter.displayAsBinary(mpegBytes[BYTE_2]) +
-                        AbstractTagDisplayFormatter.displayAsBinary(mpegBytes[BYTE_3]) +
+                        AbstractTagDisplayFormatter.displayAsBinary(mpegBytes[BYTE_1]) + " "  +
+                        AbstractTagDisplayFormatter.displayAsBinary(mpegBytes[BYTE_2]) + " "  +
+                        AbstractTagDisplayFormatter.displayAsBinary(mpegBytes[BYTE_3]) + " "  +
                         AbstractTagDisplayFormatter.displayAsBinary(mpegBytes[BYTE_4]);
     }
 }

@@ -21,6 +21,7 @@ package org.jaudiotagger.audio.mp3;
 
 import org.jaudiotagger.audio.AudioHeader;
 import org.jaudiotagger.audio.exceptions.InvalidAudioFrameException;
+import org.jaudiotagger.logging.Hex;
 
 import java.io.*;
 import java.nio.ByteBuffer;
@@ -48,8 +49,8 @@ import java.util.logging.Logger;
  * two to ensure this really is a MP3Header, sometimes the first frame is actually a dummy frame with summary information
  * held within about the whole file, typically using a Xing Header or LAme Header. This is most useful when the file
  * is variable bit rate, if the file is variable bit rate but does not use a summary header it will not be correctly
- * identified as a VBR frame and the track length will be incorreclty calculated. Strictly speaking MP3 means an MPEG-1,
- * Layer III file but MP2 (MPEG-1,Layer II), MP1 (MPEG-1,Layer I) and MPEG-2 files are sometimes used and named with
+ * identified as a VBR frame and the track length will be incorrectly calculated. Strictly speaking MP3 means
+ * Layer III file but MP2 Layer II), MP1 Layer I) and MPEG-2 files are sometimes used and named with
  * the .mp3 suffix so this library attempts to supports all these formats.
  */
 public class MP3AudioHeader implements AudioHeader
@@ -117,7 +118,7 @@ public class MP3AudioHeader implements AudioHeader
      * possibility that it might be inaccurately identified as the start of the Audio data. Various checks
      * are done in this code to prevent this happening but it cannot be guaranteed.
      * <p/>
-     * Of course if the startByte provided overstates the length og the tag header, this could mean the
+     * Of course if the startByte provided overstates the length of the tag header, this could mean the
      * start of the MP3AudioHeader is missed, further checks are done within the MP3 class to recognize
      * if this has occurred and take appropriate action.
      *
@@ -687,7 +688,7 @@ public class MP3AudioHeader implements AudioHeader
     {
         String s = "fileSize:" + fileSize
                 + " encoder:" + encoder
-                + " startByte:" + startByte
+                + " startByte:" + Hex.asHex(startByte)
                 + " numberOfFrames:" + numberOfFrames
                 + " numberOfFramesEst:" + numberOfFramesEstimate
                 + " timePerFrame:" + timePerFrame
