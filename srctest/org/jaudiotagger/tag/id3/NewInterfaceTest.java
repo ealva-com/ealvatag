@@ -981,7 +981,7 @@ public class NewInterfaceTest extends TestCase
 
         //TXXX
         {
-            tag = (ID3v24Tag)af.getTag();
+            tag = (ID3v24Tag) af.getTag();
             frame = new ID3v24Frame(ID3v24Frames.FRAME_ID_USER_DEFINED_INFO);
             ((FrameBodyTXXX) frame.getBody()).setText("UserDefined");
             tag.setFrame(frame);
@@ -993,16 +993,16 @@ public class NewInterfaceTest extends TestCase
             fb.setDescription("test");
             //Because has different description the following set will add another txxx rather than overwriting the first one
             af.getTag().set(af.getTag().createTagField(TagFieldKey.MUSICBRAINZ_ARTISTID, "abcdef-ghijklmn"));
-            assertEquals(2, ((List)tag.getFrame("TXXX")).size());
+            assertEquals(2, ((List) tag.getFrame("TXXX")).size());
             //Now adding TXXX with same id so gets overwritten
             af.getTag().set(af.getTag().createTagField(TagFieldKey.MUSICBRAINZ_ARTISTID, "abcfffff"));
-            assertEquals(2, ((List)tag.getFrame("TXXX")).size());
+            assertEquals(2, ((List) tag.getFrame("TXXX")).size());
 
         }
 
         //UFID
         {
-            tag = (ID3v24Tag)af.getTag();
+            tag = (ID3v24Tag) af.getTag();
             frame = new ID3v24Frame(ID3v24Frames.FRAME_ID_UNIQUE_FILE_ID);
             ((FrameBodyUFID) frame.getBody()).setOwner("owner");
             tag.setFrame(frame);
@@ -1012,16 +1012,16 @@ public class NewInterfaceTest extends TestCase
 
             //Because has different owner the following set will add another ufid rather than overwriting the first one
             af.getTag().set(af.getTag().createTagField(TagFieldKey.MUSICBRAINZ_TRACK_ID, "abcdef-ghijklmn"));
-            assertEquals(2, ((List)tag.getFrame("UFID")).size());
+            assertEquals(2, ((List) tag.getFrame("UFID")).size());
             //Now adding UFID with same owner so gets overwritten
             af.getTag().set(af.getTag().createTagField(TagFieldKey.MUSICBRAINZ_TRACK_ID, "abcfffff"));
-            assertEquals(2, ((List)tag.getFrame("UFID")).size());
+            assertEquals(2, ((List) tag.getFrame("UFID")).size());
 
         }
 
         //ULST
         {
-            tag = (ID3v24Tag)af.getTag();
+            tag = (ID3v24Tag) af.getTag();
             frame = new ID3v24Frame(ID3v24Frames.FRAME_ID_UNSYNC_LYRICS);
             ((FrameBodyUSLT) frame.getBody()).setDescription("lyrics1");
             tag.setFrame(frame);
@@ -1031,20 +1031,20 @@ public class NewInterfaceTest extends TestCase
 
             //Because has different desc the following set will add another uslt rather than overwriting the first one
             af.getTag().set(af.getTag().createTagField(TagFieldKey.LYRICS, "abcdef-ghijklmn"));
-            assertEquals(2, ((List)tag.getFrame("USLT")).size());
-            assertEquals(2,af.getTag().get(TagFieldKey.LYRICS).size());
-            frame = (ID3v24Frame)((List)tag.getFrame("USLT")).get(1);
-            assertEquals("",((FrameBodyUSLT)frame.getBody()).getDescription());
+            assertEquals(2, ((List) tag.getFrame("USLT")).size());
+            assertEquals(2, af.getTag().get(TagFieldKey.LYRICS).size());
+            frame = (ID3v24Frame) ((List) tag.getFrame("USLT")).get(1);
+            assertEquals("", ((FrameBodyUSLT) frame.getBody()).getDescription());
             //Now adding USLT with same description so gets overwritten
             af.getTag().set(af.getTag().createTagField(TagFieldKey.LYRICS, "abcfffff"));
-            assertEquals(2, ((List)tag.getFrame("USLT")).size());
-            assertEquals(2,af.getTag().get(TagFieldKey.LYRICS).size());
+            assertEquals(2, ((List) tag.getFrame("USLT")).size());
+            assertEquals(2, af.getTag().get(TagFieldKey.LYRICS).size());
 
         }
 
         //POPM TODO not a supported TagFieldKey yet
         {
-            tag = (ID3v24Tag)af.getTag();
+            tag = (ID3v24Tag) af.getTag();
             frame = new ID3v24Frame(ID3v24Frames.FRAME_ID_POPULARIMETER);
             ((FrameBodyPOPM) frame.getBody()).setEmailToUser("paultaylor@jthink.net");
             tag.setFrame(frame);
@@ -1055,7 +1055,12 @@ public class NewInterfaceTest extends TestCase
 
     }
 
-     public void testNewInterfaceDodgyMp3() throws Exception
+    /**
+     * Test code copes with reading dodgy ID3Tag , header appears ok but gap between header and tag data
+     *
+     * @throws Exception
+     */
+    public void testNewInterfaceDodgyMp3() throws Exception
     {
         File orig = new File("testdata", "test26.mp3");
         if (!orig.isFile())
@@ -1070,12 +1075,54 @@ public class NewInterfaceTest extends TestCase
         //Has no tag at this point
         assertTrue(mp3File.hasID3v1Tag());
         assertTrue(mp3File.hasID3v2Tag());
-        assertEquals("Personality Goes A Long Way",mp3File.getID3v1Tag().getFirstTitle());
-        assertEquals(0,mp3File.getID3v2Tag().getFieldCount());
-        assertFalse(((ID3v23Tag)mp3File.getID3v2Tag()).compression);
-        assertFalse(((ID3v23Tag)mp3File.getID3v2Tag()).experimental);
-        assertFalse(((ID3v23Tag)mp3File.getID3v2Tag()).extended);
+        assertEquals("Personality Goes A Long Way", mp3File.getID3v1Tag().getFirstTitle());
+        assertEquals(0, mp3File.getID3v2Tag().getFieldCount());
+        assertFalse(((ID3v23Tag) mp3File.getID3v2Tag()).compression);
+        assertFalse(((ID3v23Tag) mp3File.getID3v2Tag()).experimental);
+        assertFalse(((ID3v23Tag) mp3File.getID3v2Tag()).extended);
         //assertEquals("Personality Goes A Long Way",mp3File.getID3v2Tag().getFirstTitle());
     }
 
+    /**
+     * Currently genres are written to and from v2 tag as is, the decoding from genre number to string has to be done manually
+     */
+    public void testGenres()
+    {
+        Exception ex = null;
+        try
+        {
+            File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3", new File("testBasicWrite.mp3"));
+            org.jaudiotagger.audio.AudioFile audioFile = org.jaudiotagger.audio.AudioFileIO.read(testFile);
+            org.jaudiotagger.tag.Tag newTag = audioFile.getTag();
+            assertTrue(newTag==null);
+            if (audioFile.getTag() == null)
+            {
+                audioFile.setTag(new ID3v23Tag());
+                newTag = audioFile.getTag();
+            }
+
+            //Write literal String
+            newTag.setGenre("Rock");
+            audioFile.commit();
+            audioFile = org.jaudiotagger.audio.AudioFileIO.read(testFile);
+            newTag = audioFile.getTag();
+            //..and read back
+            assertEquals("Rock", newTag.getFirstGenre());
+
+            //Write Code
+            newTag.setGenre("(17)");
+            audioFile.commit();
+            audioFile = org.jaudiotagger.audio.AudioFileIO.read(testFile);
+            newTag = audioFile.getTag();
+            //..and read back
+            assertEquals("(17)", newTag.getFirstGenre());
+
+        }
+        catch (Exception e)
+        {
+            ex = e;
+            ex.printStackTrace();
+        }
+        assertNull(ex);
+    }
 }
