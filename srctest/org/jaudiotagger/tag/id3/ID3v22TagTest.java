@@ -4,6 +4,7 @@ import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 import org.jaudiotagger.tag.id3.framebody.*;
+import org.jaudiotagger.tag.TagFieldKey;
 import org.jaudiotagger.AbstractTestCase;
 import org.jaudiotagger.audio.mp3.MP3File;
 import org.jaudiotagger.audio.AudioFileIO;
@@ -139,4 +140,65 @@ public class ID3v22TagTest extends TestCase
         assertNull(exception);
     }
 
+     public void testv22TagWithUnnneccessaryTrailingNulls()
+    {
+        File orig = new File("testdata", "test24.mp3");
+        if (!orig.isFile())
+        {
+            return;
+        }
+
+        Exception exception = null;
+        try
+        {
+            File        testFile = AbstractTestCase.copyAudioToTmp("test24.mp3");
+                        AudioFile af = AudioFileIO.read(testFile);
+            MP3File   m  = (MP3File)af;
+
+            //Read using new Interface getFirst method with key
+            assertEquals("Listen to images:"  ,af.getTag().getFirst(TagFieldKey.TITLE)+":");
+            assertEquals("Clean:",af.getTag().getFirst(TagFieldKey.ALBUM)+":");
+            assertEquals("Cosmo Vitelli:",af.getTag().getFirst(TagFieldKey.ARTIST)+":");
+            assertEquals("Electronica/Dance:" ,af.getTag().getFirst(TagFieldKey.GENRE)+":");
+            assertEquals("2003:" ,af.getTag().getFirst(TagFieldKey.YEAR)+":");
+            assertEquals("1/11:" ,af.getTag().getFirst(TagFieldKey.TRACK)+":");
+
+            //Read using new Interface getFirst method with String
+            assertEquals("Listen to images:"  ,af.getTag().getFirst(ID3v22Frames.FRAME_ID_V2_TITLE)+":");
+            assertEquals("Clean:",af.getTag().getFirst(ID3v22Frames.FRAME_ID_V2_ALBUM)+":");
+            assertEquals("Cosmo Vitelli:",af.getTag().getFirst(ID3v22Frames.FRAME_ID_V2_ARTIST)+":");
+            assertEquals("Electronica/Dance:" ,af.getTag().getFirst(ID3v22Frames.FRAME_ID_V2_GENRE)+":");
+            assertEquals("2003:" ,af.getTag().getFirst(ID3v22Frames.FRAME_ID_V2_TYER)+":");
+            assertEquals("1/11:" ,af.getTag().getFirst(ID3v22Frames.FRAME_ID_V2_TRACK)+":");
+
+            //Read using new Interface getFirst methods for common fields
+            assertEquals("Listen to images:"  ,af.getTag().getFirstTitle()+":");
+            assertEquals("Cosmo Vitelli:",af.getTag().getFirstArtist()+":");
+            assertEquals("Clean:",af.getTag().getFirstAlbum()+":");
+            assertEquals("Electronica/Dance:" ,af.getTag().getFirstGenre()+":");
+            assertEquals("2003:" ,af.getTag().getFirstYear()+":");
+            assertEquals("1/11:" ,af.getTag().getFirstTrack()+":");
+                          
+            //Read using old Interface
+            ID3v22Tag v2Tag = (ID3v22Tag)m.getID3v2Tag();
+            ID3v22Frame frame = (ID3v22Frame)v2Tag.getFrame(ID3v22Frames.FRAME_ID_V2_TITLE);
+            assertEquals("Listen to images\0:",((AbstractFrameBodyTextInfo)frame.getBody()).getText()+":");
+            frame = (ID3v22Frame)v2Tag.getFrame(ID3v22Frames.FRAME_ID_V2_ARTIST);
+            assertEquals("Cosmo Vitelli\0:",((AbstractFrameBodyTextInfo)frame.getBody()).getText()+":");
+            frame = (ID3v22Frame)v2Tag.getFrame(ID3v22Frames.FRAME_ID_V2_ALBUM);
+            assertEquals("Clean\0:",((AbstractFrameBodyTextInfo)frame.getBody()).getText()+":");
+            frame = (ID3v22Frame)v2Tag.getFrame(ID3v22Frames.FRAME_ID_V2_GENRE);
+            assertEquals("Electronica/Dance\0:",((AbstractFrameBodyTextInfo)frame.getBody()).getText()+":");
+            frame = (ID3v22Frame)v2Tag.getFrame(ID3v22Frames.FRAME_ID_V2_TYER);
+            assertEquals("2003\0:",((AbstractFrameBodyTextInfo)frame.getBody()).getText()+":");
+            frame = (ID3v22Frame)v2Tag.getFrame(ID3v22Frames.FRAME_ID_V2_TRACK);
+            assertEquals("1/11\0:",((AbstractFrameBodyTextInfo)frame.getBody()).getText()+":");
+
+        }
+        catch(Exception e)
+        {
+            exception=e;
+        }
+        assertNull(exception);
+    }
 }

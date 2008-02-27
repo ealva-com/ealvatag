@@ -1445,17 +1445,16 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
      */
     public String getFirstAlbum()
     {
-        List l = getAlbum();
-        return (l.size() != 0) ? ((AbstractFrameBodyTextInfo) ((AbstractID3v2Frame) l.get(0)).getBody()).getText() : "";
+        return getFirst(getAlbumId());
     }
+
 
     /**
      * @return
      */
     public String getFirstArtist()
     {
-        List l = getArtist();
-        return (l.size() != 0) ? ((AbstractFrameBodyTextInfo) ((AbstractID3v2Frame) l.get(0)).getBody()).getText() : "";
+        return getFirst(getArtistId());
     }
 
     /**
@@ -1463,8 +1462,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
      */
     public String getFirstComment()
     {
-        List l = getComment();
-        return (l.size() != 0) ? ((FrameBodyCOMM) ((AbstractID3v2Frame) l.get(0)).getBody()).getText() : "";
+         return getFirst(getCommentId());
     }
 
     /**
@@ -1472,8 +1470,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
      */
     public String getFirstGenre()
     {
-        List l = getGenre();
-        return (l.size() != 0) ? ((AbstractFrameBodyTextInfo) ((AbstractID3v2Frame) l.get(0)).getBody()).getText() : "";
+        return getFirst(getGenreId());
     }
 
     /**
@@ -1481,8 +1478,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
      */
     public String getFirstTitle()
     {
-        List l = getTitle();
-        return (l.size() != 0) ? ((AbstractFrameBodyTextInfo) ((AbstractID3v2Frame) l.get(0)).getBody()).getText() : "";
+         return getFirst(getTitleId());
     }
 
     /**
@@ -1490,8 +1486,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
      */
     public String getFirstTrack()
     {
-        List l = getTrack();
-        return (l.size() != 0) ? ((AbstractFrameBodyTextInfo) ((AbstractID3v2Frame) l.get(0)).getBody()).getText() : "";
+        return getFirst(getTrackId());
     }
 
     /**
@@ -1499,8 +1494,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
      */
     public String getFirstYear()
     {
-        List l = getYear();
-        return (l.size() != 0) ? ((AbstractFrameBodyTextInfo) ((AbstractID3v2Frame) l.get(0)).getBody()).getText() : "";
+         return getFirst(getYearId());
     }
 
     /**

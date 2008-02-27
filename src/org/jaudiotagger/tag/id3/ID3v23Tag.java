@@ -453,7 +453,7 @@ public class ID3v23Tag
         {
             throw new TagNotFoundException(getIdentifier() + " tag not found");
         }
-        logger.info(getLoggingFilename() + ":" + "Reading tag");
+        logger.info(getLoggingFilename() + ":" + "Reading ID3v23 tag");
 
         //Flags
         byte flags = buffer.get();
