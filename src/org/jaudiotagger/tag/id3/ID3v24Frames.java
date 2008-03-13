@@ -121,7 +121,7 @@ public class ID3v24Frames extends ID3Frames
     public static final String FRAME_ID_COMPOSER_SORT_ORDER_ITUNES = "TSOC";
     public static final String FRAME_ID_IS_COMPILATION = "TCMP";
 
-    //TODO this is temporary to provide backwards comptability
+    //TODO this is temporary to provide backwards compatability
     public static final String FRAME_ID_PERFORMER_SORT_OWNER = FRAME_ID_ARTIST_SORT_ORDER;
     public static final String FRAME_ID_TITLE_SORT_OWNER = FRAME_ID_TITLE_SORT_ORDER;
 

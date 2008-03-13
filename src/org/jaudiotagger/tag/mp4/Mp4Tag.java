@@ -24,6 +24,10 @@ import org.jaudiotagger.tag.TagField;
 import org.jaudiotagger.tag.TagFieldKey;
 import org.jaudiotagger.tag.FieldDataInvalidException;
 import org.jaudiotagger.tag.KeyNotFoundException;
+import org.jaudiotagger.tag.reference.Tagger;
+import org.jaudiotagger.tag.id3.ID3v23Frames;
+import org.jaudiotagger.tag.id3.Id3FieldType;
+import org.jaudiotagger.tag.id3.framebody.FrameBodyTXXX;
 import static org.jaudiotagger.tag.mp4.Mp4FieldKey.*;
 import org.jaudiotagger.tag.mp4.field.*;
 import static org.jaudiotagger.tag.mp4.field.Mp4FieldType.BYTE;
@@ -77,6 +81,20 @@ public class Mp4Tag extends AbstractTag
         tagFieldToMp4Field.put(TagFieldKey.TITLE_SORT, Mp4FieldKey.TITLE_SORT);
         tagFieldToMp4Field.put(TagFieldKey.COMPOSER_SORT, Mp4FieldKey.COMPOSER_SORT);
         tagFieldToMp4Field.put(TagFieldKey.COVER_ART, Mp4FieldKey.ARTWORK);
+        tagFieldToMp4Field.put(TagFieldKey.ISRC, Mp4FieldKey.ISRC);
+        tagFieldToMp4Field.put(TagFieldKey.CATALOG_NO, Mp4FieldKey.CATALOGNO);
+        tagFieldToMp4Field.put(TagFieldKey.BARCODE, Mp4FieldKey.BARCODE);
+        tagFieldToMp4Field.put(TagFieldKey.RECORD_LABEL, Mp4FieldKey.LABEL);
+        tagFieldToMp4Field.put(TagFieldKey.LYRICIST, Mp4FieldKey.LYRICIST);
+        tagFieldToMp4Field.put(TagFieldKey.CONDUCTOR, Mp4FieldKey.CONDUCTOR);
+        tagFieldToMp4Field.put(TagFieldKey.REMIXER, Mp4FieldKey.REMIXER);
+        tagFieldToMp4Field.put(TagFieldKey.MEDIA, Mp4FieldKey.MEDIA);
+        tagFieldToMp4Field.put(TagFieldKey.URL_OFFICIAL_RELEASE_SITE, Mp4FieldKey.URL_OFFICIAL_RELEASE_SITE);
+        tagFieldToMp4Field.put(TagFieldKey.URL_DISCOGS_RELEASE_SITE, Mp4FieldKey.URL_DISCOGS_RELEASE_SITE);
+        tagFieldToMp4Field.put(TagFieldKey.URL_WIKIPEDIA_RELEASE_SITE, Mp4FieldKey.URL_WIKIPEDIA_RELEASE_SITE);
+        tagFieldToMp4Field.put(TagFieldKey.URL_OFFICIAL_ARTIST_SITE, Mp4FieldKey.URL_OFFICIAL_ARTIST_SITE);
+        tagFieldToMp4Field.put(TagFieldKey.URL_DISCOGS_ARTIST_SITE, Mp4FieldKey.URL_DISCOGS_ARTIST_SITE);
+        tagFieldToMp4Field.put(TagFieldKey.URL_WIKIPEDIA_ARTIST_SITE, Mp4FieldKey.URL_WIKIPEDIA_ARTIST_SITE);          
     }
 
     protected String getArtistId()
@@ -397,10 +415,30 @@ public class Mp4Tag extends AbstractTag
             case CDDB_1:
             case CDDB_TRACKNUMBER:
             case CDDB_IDS:
+            case LYRICIST:
+            case CONDUCTOR:
+            case REMIXER:
+            case ENGINEER:
+            case PRODUCER:
+            case DJMIXER:
+            case MIXER:
+            case MOOD:
+            case ISRC:
+            case MEDIA:
+            case LABEL:
+            case CATALOGNO:
+            case BARCODE:
+            case URL_OFFICIAL_RELEASE_SITE:
+            case URL_DISCOGS_RELEASE_SITE:
+            case URL_WIKIPEDIA_RELEASE_SITE:
+            case URL_OFFICIAL_ARTIST_SITE:
+            case URL_DISCOGS_ARTIST_SITE:
+            case URL_WIKIPEDIA_ARTIST_SITE:
                 return new Mp4TagReverseDnsField(mp4FieldKey, value);
 
             default:
                 return new Mp4TagTextField(mp4FieldKey.getFieldName(), value);
         }
+
     }
 }

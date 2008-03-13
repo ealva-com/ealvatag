@@ -40,6 +40,12 @@ public class FrameBodyWXXX
         extends AbstractFrameBodyUrlLink implements ID3v24FrameBody, ID3v23FrameBody
 {
 
+    public static final String URL_DISCOGS_RELEASE_SITE = "DISCOGS_RELEASE";
+    public static final String URL_WIKIPEDIA_RELEASE_SITE = "WIKIPEDIA_RELEASE";
+    public static final String URL_OFFICIAL_RELEASE_SITE = "OFFICIAL_RELEASE";
+    public static final String URL_DISCOGS_ARTIST_SITE = "DISCOGS_ARTIST";
+    public static final String URL_WIKIPEDIA_ARTIST_SITE = "WIKIPEDIA_ARTIST";
+
     /**
      * Creates a new FrameBodyWXXX datatype.
      */

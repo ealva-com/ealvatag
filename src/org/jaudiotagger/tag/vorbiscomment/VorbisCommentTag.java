@@ -74,6 +74,21 @@ public class VorbisCommentTag extends AbstractTag
         tagFieldToOggField.put(TagFieldKey.TITLE_SORT, VorbisCommentFieldKey.TITLESORT);
         tagFieldToOggField.put(TagFieldKey.COMPOSER_SORT, VorbisCommentFieldKey.COMPOSERSORT);
         tagFieldToOggField.put(TagFieldKey.ENCODER, VorbisCommentFieldKey.VENDOR);     //Known as vendor in VorbisComment
+        tagFieldToOggField.put(TagFieldKey.ISRC, VorbisCommentFieldKey.ISRC);
+        tagFieldToOggField.put(TagFieldKey.BARCODE, VorbisCommentFieldKey.BARCODE);
+        tagFieldToOggField.put(TagFieldKey.CATALOG_NO, VorbisCommentFieldKey.CATALOGNUMBER);
+        tagFieldToOggField.put(TagFieldKey.RECORD_LABEL, VorbisCommentFieldKey.LABEL);
+        tagFieldToOggField.put(TagFieldKey.LYRICIST, VorbisCommentFieldKey.LYRICIST);
+        tagFieldToOggField.put(TagFieldKey.CONDUCTOR, VorbisCommentFieldKey.CONDUCTOR);
+        tagFieldToOggField.put(TagFieldKey.REMIXER, VorbisCommentFieldKey.REMIXER);
+        tagFieldToOggField.put(TagFieldKey.MOOD, VorbisCommentFieldKey.MOOD);
+        tagFieldToOggField.put(TagFieldKey.MEDIA, VorbisCommentFieldKey.MEDIA);
+        tagFieldToOggField.put(TagFieldKey.URL_DISCOGS_ARTIST_SITE, VorbisCommentFieldKey.URL_DISCOGS_ARTIST_SITE);
+        tagFieldToOggField.put(TagFieldKey.URL_DISCOGS_RELEASE_SITE, VorbisCommentFieldKey.URL_DISCOGS_RELEASE_SITE);
+        tagFieldToOggField.put(TagFieldKey.URL_OFFICIAL_ARTIST_SITE, VorbisCommentFieldKey.URL_OFFICIAL_ARTIST_SITE);
+        tagFieldToOggField.put(TagFieldKey.URL_OFFICIAL_RELEASE_SITE, VorbisCommentFieldKey.URL_OFFICIAL_RELEASE_SITE);
+        tagFieldToOggField.put(TagFieldKey.URL_WIKIPEDIA_ARTIST_SITE, VorbisCommentFieldKey.URL_WIKIPEDIA_ARTIST_SITE);
+        tagFieldToOggField.put(TagFieldKey.URL_WIKIPEDIA_RELEASE_SITE, VorbisCommentFieldKey.URL_WIKIPEDIA_RELEASE_SITE);
     }
 
     //This is the vendor string that will be written if no other is supplied. Should be the name of the software

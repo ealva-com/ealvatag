@@ -68,7 +68,8 @@ public enum Mp4FieldKey
     ITUNES_NORM("com.apple.iTunes", "iTunNORM", TEXT),
     CDDB_1("com.apple.iTunes", "iTunes_CDDB_1", TEXT),
     CDDB_TRACKNUMBER("com.apple.iTunes", "iTunes_CDDB_TrackNumber", TEXT),
-    CDDB_IDS("com.apple.iTunes", "iTunes_CDDB_IDs", TEXT),                                
+    CDDB_IDS("com.apple.iTunes", "iTunes_CDDB_IDs", TEXT),
+
     //AFAIK These arent actually used by Audio Only files, but there is nothing to prevent them being used
     CONTENT_TYPE("stik", BYTE, 1),
     PODCAST_KEYWORD("keyw", TEXT),
@@ -89,24 +90,51 @@ public enum Mp4FieldKey
     SF_ID("sfID", BYTE, 4),
     AK_ID("akID", BYTE, 1),
 
+    //Media Monkey3 beta
+    LYRICIST_MM3BETA("lyrc", TEXT, Tagger.MEDIA_MONKEY),
+    CONDUCTOR_MM3BETA("cond", TEXT, Tagger.MEDIA_MONKEY),
+    ISRC_MMBETA("isrc", TEXT, Tagger.MEDIA_MONKEY),
+    MOOD_MM3BETA("mood", TEXT, Tagger.MEDIA_MONKEY),
+
     //Media Monkey3
     SCORE("rate", TEXT, Tagger.MEDIA_MONKEY),    //As in mark out of 100
-    ISRC("isrc", TEXT, Tagger.MEDIA_MONKEY),
-    LYRICIST("lyrc", TEXT, Tagger.MEDIA_MONKEY),
-    CONDUCTOR("cond", TEXT, Tagger.MEDIA_MONKEY),
     ORIGINAL_ARTIST("oart", TEXT, Tagger.MEDIA_MONKEY),
     ORIGINAL_ALBUM_TITLE("otit", TEXT, Tagger.MEDIA_MONKEY),
     ORIGINAL_LYRICIST("olyr", TEXT, Tagger.MEDIA_MONKEY),
     INVOLVED_PEOPLE("peop", TEXT, Tagger.MEDIA_MONKEY),
     TEMPO("empo", TEXT, Tagger.MEDIA_MONKEY),
-    MOOD("mood", TEXT, Tagger.MEDIA_MONKEY),
     OCCASION("occa", TEXT, Tagger.MEDIA_MONKEY),
     QUALITY("qual", TEXT, Tagger.MEDIA_MONKEY),
     CUSTOM_1("cus1", TEXT, Tagger.MEDIA_MONKEY),
     CUSTOM_2("cus2", TEXT, Tagger.MEDIA_MONKEY),
     CUSTOM_3("cus3", TEXT, Tagger.MEDIA_MONKEY),
     CUSTOM_4("cus4", TEXT, Tagger.MEDIA_MONKEY),
-    CUSTOM_5("cus5", TEXT, Tagger.MEDIA_MONKEY),;
+    CUSTOM_5("cus5", TEXT, Tagger.MEDIA_MONKEY),
+
+    //Picard Qt
+    LYRICIST("com.apple.iTunes", "LYRICIST", TEXT, Tagger.PICARD),
+    CONDUCTOR("com.apple.iTunes", "CONDUCTOR", TEXT, Tagger.PICARD),
+    REMIXER("com.apple.iTunes", "REMIXER", TEXT, Tagger.PICARD),
+    ENGINEER("com.apple.iTunes", "ENGINEER", TEXT, Tagger.PICARD),
+    PRODUCER("com.apple.iTunes", "PRODUCER", TEXT, Tagger.PICARD),
+    DJMIXER("com.apple.iTunes", "DJMIXER", TEXT, Tagger.PICARD),
+    MIXER("com.apple.iTunes", "MIXER", TEXT, Tagger.PICARD),
+    MOOD("com.apple.iTunes", "MOOD", TEXT, Tagger.PICARD),
+    ISRC("com.apple.iTunes", "ISRC", TEXT, Tagger.PICARD),
+    MEDIA("com.apple.iTunes", "MEDIA", TEXT, Tagger.PICARD),
+    LABEL("com.apple.iTunes", "LABEL", TEXT, Tagger.PICARD),
+    CATALOGNO("com.apple.iTunes", "CATALOGNUMBER", TEXT, Tagger.PICARD),
+    BARCODE("com.apple.iTunes", "BARCODE", TEXT, Tagger.PICARD),
+
+
+    //Jaikoz
+    URL_OFFICIAL_RELEASE_SITE("com.apple.iTunes", "URL_OFFICIAL_RELEASE_SITE", TEXT, Tagger.JAIKOZ),
+    URL_DISCOGS_RELEASE_SITE("com.apple.iTunes", "URL_DISCOGS_RELEASE_SITE", TEXT, Tagger.JAIKOZ),
+    URL_WIKIPEDIA_RELEASE_SITE("com.apple.iTunes", "URL_WIKIPEDIA_RELEASE_SITE", TEXT, Tagger.JAIKOZ),
+    URL_OFFICIAL_ARTIST_SITE("com.apple.iTunes", "URL_OFFICIAL_ARTIST_SITE", TEXT, Tagger.JAIKOZ),
+    URL_DISCOGS_ARTIST_SITE("com.apple.iTunes", "URL_DISCOGS_ARTIST_SITE", TEXT, Tagger.JAIKOZ),
+    URL_WIKIPEDIA_ARTIST_SITE("com.apple.iTunes", "URL_WIKIPEDIA_ARTIST_SITE", TEXT, Tagger.JAIKOZ),
+    ;
 
     private Tagger tagger;
     private String fieldName;
