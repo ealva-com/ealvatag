@@ -742,14 +742,14 @@ public class M4aReadTagTest extends TestCase
 
             //Can we read all the other customfields  (that do follow convention)
             System.out.println(tag.toString());
-            assertEquals("lyricist",tag.getFirst(Mp4FieldKey.LYRICIST));
+            assertEquals("lyricist",tag.getFirst(Mp4FieldKey.LYRICIST_MM3BETA));
             assertEquals("70",tag.getFirst(Mp4FieldKey.SCORE));
-            assertEquals("conductor",tag.getFirst(Mp4FieldKey.CONDUCTOR));
+            assertEquals("conductor",tag.getFirst(Mp4FieldKey.CONDUCTOR_MM3BETA));
             assertEquals("original artist",tag.getFirst(Mp4FieldKey.ORIGINAL_ARTIST));
             assertEquals("original album title",tag.getFirst(Mp4FieldKey.ORIGINAL_ALBUM_TITLE));
             assertEquals("involved people",tag.getFirst(Mp4FieldKey.INVOLVED_PEOPLE));
             assertEquals("Slow",tag.getFirst(Mp4FieldKey.TEMPO));
-            assertEquals("Mellow",tag.getFirst(Mp4FieldKey.MOOD));
+            assertEquals("Mellow",tag.getFirst(Mp4FieldKey.MOOD_MM3BETA));
             assertEquals("Dinner",tag.getFirst(Mp4FieldKey.OCCASION));
             assertEquals("Very good copy",tag.getFirst(Mp4FieldKey.QUALITY));
             assertEquals("custom1",tag.getFirst(Mp4FieldKey.CUSTOM_1));
