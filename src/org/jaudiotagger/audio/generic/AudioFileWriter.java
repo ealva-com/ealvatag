@@ -22,7 +22,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.logging.Logger;
-import java.nio.channels.FileLock;
 
 import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.tag.Tag;
@@ -58,6 +57,7 @@ public abstract class AudioFileWriter
      */
     private AudioFileModificationListener modificationListener = null;
 
+
     /**
      * Delete the tag (if any) present in the given file
      *
@@ -91,14 +91,6 @@ public abstract class AudioFileWriter
             raf = new RandomAccessFile(af.getFile(), WRITE_MODE);
             raf.seek(0);
             rafTemp.seek(0);
-
-            FileLock fileLock = null;
-
-            fileLock = raf.getChannel().tryLock();
-            if(fileLock==null)
-            {
-                 throw new CannotWriteException(ErrorMessage.GENERAL_DELETE_FAILED_FILE_LOCKED.getMsg(af.getFile().getPath()));
-            }
 
             try
             {
@@ -246,7 +238,6 @@ public abstract class AudioFileWriter
         RandomAccessFile raf = null;
         RandomAccessFile rafTemp = null;
         File tempF = null;
-        FileLock fileLock = null;
 
         // Will be set to true in exception block to not replace original file.
         boolean cannotWrite = false;
@@ -258,11 +249,6 @@ public abstract class AudioFileWriter
             rafTemp = new RandomAccessFile(tempF, WRITE_MODE);
             raf = new RandomAccessFile(af.getFile(), WRITE_MODE);
 
-            fileLock = raf.getChannel().tryLock();
-            if(fileLock==null)
-            {
-                 throw new CannotWriteException(ErrorMessage.GENERAL_WRITE_FAILED_FILE_LOCKED.getMsg(af.getFile().getPath()));
-            }
 
             raf.seek(0);
             rafTemp.seek(0);

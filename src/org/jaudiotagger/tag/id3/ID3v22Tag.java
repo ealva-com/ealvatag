@@ -570,7 +570,10 @@ public class ID3v22Tag
         {
             if (fc != null)
             {
-                fileLock.release();
+                if(fileLock!=null)
+                {
+                    fileLock.release();
+                }
                 fc.close();
             }
         }

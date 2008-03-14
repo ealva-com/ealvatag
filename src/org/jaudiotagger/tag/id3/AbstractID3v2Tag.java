@@ -890,12 +890,22 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
      * TODO:this appears to have little affect on Windows Vista
      *
      * @param fileChannel
-     * @return
-     * @throws IOException
+     * @return lock or null if locking is not supported
+     * @throws IOException if unable to get lock because already locked
      */
     protected FileLock getFileLockForWriting(FileChannel fileChannel,String filePath) throws IOException
     {
-        FileLock fileLock = fileChannel.tryLock();
+        FileLock fileLock=null;
+        try
+        {
+            fileLock = fileChannel.tryLock();
+        }
+        //Assumes locking is not supported on this platform so just returns null
+        catch(IOException exception)
+        {
+            return null;
+        }
+
         if(fileLock==null)
         {
             throw new IOException(ErrorMessage.GENERAL_WRITE_FAILED_FILE_LOCKED.getMsg(filePath));
