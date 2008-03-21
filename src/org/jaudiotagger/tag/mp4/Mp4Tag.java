@@ -88,6 +88,7 @@ public class Mp4Tag extends AbstractTag
         tagFieldToMp4Field.put(TagFieldKey.LYRICIST, Mp4FieldKey.LYRICIST);
         tagFieldToMp4Field.put(TagFieldKey.CONDUCTOR, Mp4FieldKey.CONDUCTOR);
         tagFieldToMp4Field.put(TagFieldKey.REMIXER, Mp4FieldKey.REMIXER);
+        tagFieldToMp4Field.put(TagFieldKey.MOOD, Mp4FieldKey.MOOD);
         tagFieldToMp4Field.put(TagFieldKey.MEDIA, Mp4FieldKey.MEDIA);
         tagFieldToMp4Field.put(TagFieldKey.URL_OFFICIAL_RELEASE_SITE, Mp4FieldKey.URL_OFFICIAL_RELEASE_SITE);
         tagFieldToMp4Field.put(TagFieldKey.URL_DISCOGS_RELEASE_SITE, Mp4FieldKey.URL_DISCOGS_RELEASE_SITE);
@@ -253,7 +254,7 @@ public class Mp4Tag extends AbstractTag
         if (genericKey == null)
         {
             throw new KeyNotFoundException();
-        }
+        }        
         return super.getFirst(tagFieldToMp4Field.get(genericKey).getFieldName());
     }
 
