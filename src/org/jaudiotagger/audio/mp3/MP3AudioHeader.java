@@ -320,10 +320,19 @@ public class MP3AudioHeader implements AudioHeader
             bb.flip();
             //So now original buffer has been replaced, so set current position to start of buffer
             currentPosition = 0;
-            if (bb.limit() <= MIN_BUFFER_REMAINING_REQUIRED)
+            //Not enough left
+            if (bb.limit() <= MIN_BUFFER_REMAINING_REQUIRED )
             {
                 //No mp3 exists
                 MP3AudioHeader.logger.finer("Nearly at end of file, no header found:");
+                return false;
+            }
+
+            //Still Not enough left for next alleged frame size so giving up
+            if (bb.limit() <= MIN_BUFFER_REMAINING_REQUIRED  + mp3FrameHeader.getFrameLength() )
+            {
+                //No mp3 exists
+                MP3AudioHeader.logger.finer("Nearly at end of file, no room for next frame, no header found:");
                 return false;
             }
         }
