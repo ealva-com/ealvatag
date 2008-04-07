@@ -855,20 +855,23 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
     }
 
     /**
-     * Remove any frames starting with this
-     * identifier from tag
+     * Remove any frames starting with this identifier from tag
      *
      * @param identifier start of frameId to look for
      */
     public void removeFrameOfType(String identifier)
     {
-        Iterator iterator = this.getFrameOfType(identifier);
+        Iterator iterator = frameMap.keySet().iterator();
+        HashSet result = new HashSet();
+        String key;
         while (iterator.hasNext())
         {
-            AbstractID3v2Frame frame = (AbstractID3v2Frame) iterator.next();
-            logger.finest("Removing frame with identifier:" + frame.getIdentifier() + "because starts with:" + identifier);
-            frameMap.remove(frame.getIdentifier());
-
+            key = (String) iterator.next();
+            if (key.startsWith(identifier))
+            {
+                logger.finest("Removing frame with identifier:" + key + "because starts with:" + identifier);
+                frameMap.remove(key);
+            }
         }
     }
 

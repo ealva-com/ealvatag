@@ -998,6 +998,10 @@ public class NewInterfaceTest extends TestCase
             af.getTag().set(af.getTag().createTagField(TagFieldKey.MUSICBRAINZ_ARTISTID, "abcfffff"));
             assertEquals(2, ((List) tag.getFrame("TXXX")).size());
 
+            //Try deleting some of these
+            tag.removeFrameOfType("TXXX");
+            assertNull(tag.getFrame("TXXX"));
+
         }
 
         //UFID
@@ -1017,6 +1021,9 @@ public class NewInterfaceTest extends TestCase
             af.getTag().set(af.getTag().createTagField(TagFieldKey.MUSICBRAINZ_TRACK_ID, "abcfffff"));
             assertEquals(2, ((List) tag.getFrame("UFID")).size());
 
+            //Try deleting some of these
+            tag.removeFrame("UFID");
+            assertNull(tag.getFrame("UFID"));
         }
 
         //ULST
@@ -1125,4 +1132,6 @@ public class NewInterfaceTest extends TestCase
         }
         assertNull(ex);
     }
+
+
 }
