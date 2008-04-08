@@ -46,6 +46,7 @@ public class Mp4FtypBox extends AbstractMp4Box
         catch(CharacterCodingException cee)
         {
             //Ignore
+
         }
         dataBuffer.position(dataBuffer.position() + MAJOR_BRAND_LENGTH );
 
@@ -78,7 +79,8 @@ public class Mp4FtypBox extends AbstractMp4Box
 
 
     public String toString()
-    {
+    {     
+
         String info =  "Major Brand:"+majorBrand
                 + "Version:"+ majorBrandVersion;
         if(compatibleBrands.size()>0)
@@ -129,6 +131,7 @@ public class Mp4FtypBox extends AbstractMp4Box
         AES_ENCRYPTED_AUDIO("M4B ", "Apple encrypted Audio"),
         APPLE_AUDIO("mp71", "Apple Audio"),
         ISO14496_12_MPEG7_METADATA("mp71","MAIN_SYNTHESIS"),
+        APPLE_AUDIO_ONLY("M4A ","M4A Audio"), //SOmetimes used by protected mutli track audio
         ;
 
         private String id;

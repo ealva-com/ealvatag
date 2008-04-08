@@ -70,7 +70,7 @@ public class Mp4InfoReader
         ByteBuffer ftypBuffer = ByteBuffer.allocate(ftypHeader.getLength() - Mp4BoxHeader.HEADER_LENGTH);
         raf.getChannel().read(ftypBuffer);
         ftypBuffer.rewind();
-        Mp4FtypBox ftyp = new Mp4FtypBox(ftypHeader, ftypBuffer);
+        Mp4FtypBox ftyp = new Mp4FtypBox(ftypHeader, ftypBuffer);        
         ftyp.processData();
         info.setBrand(ftyp.getMajorBrand());
         
@@ -230,10 +230,13 @@ public class Mp4InfoReader
         boxHeader = Mp4BoxHeader.seekWithinLevel(mvhdBuffer, Mp4NotMetaFieldKey.TRAK.getFieldName());
         if (boxHeader != null)
         {
-            //We only allow multiple tracks as audio if the follow the format used by the winamp encoder and if
-            //it contains a nmhd atom rather than smhd.
-            //TDO this probably too restrictive but it fixes the test cases we have 
-            if(ftyp.getMajorBrand().equals(Mp4FtypBox.Brand.ISO14496_1_VERSION_2.getId()))
+            //We only allow multiple tracks as audio if they follow the format used by the winamp encoder or
+            //are marked as being audio only and if track contains a nmhd atom rather than smhd.
+            //TODO this probably too restrictive but it fixes the test cases we have
+            if(ftyp.getMajorBrand().equals(Mp4FtypBox.Brand.ISO14496_1_VERSION_2.getId())
+              ||ftyp.getMajorBrand().equals(Mp4FtypBox.Brand.APPLE_AUDIO_ONLY.getId())
+              ||ftyp.getMajorBrand().equals(Mp4FtypBox.Brand.APPLE_AUDIO.getId())                                  
+               )
             {
                 //Ok, need to do further checks on this track to ensure it is a scene descriptor
                 //Level 3-Searching for "mdia" within "trak"
@@ -266,6 +269,7 @@ public class Mp4InfoReader
             }
             else
             {
+                logger.info(ErrorMessage.MP4_FILE_NOT_AUDIO.getMsg()+":"+ftyp.getMajorBrand());
                 throw new CannotReadException(ErrorMessage.MP4_FILE_NOT_AUDIO.getMsg());
             }
         }
