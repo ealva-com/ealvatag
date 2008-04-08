@@ -81,8 +81,7 @@ public class MetadataBlockDataStreamInfo
 
         totalNumberOfSamples = readTotalNumberOfSamples(rawdata.get(13), rawdata.get(14), rawdata.get(15), rawdata.get(16), rawdata.get(17));
 
-        length = (float) ((double) totalNumberOfSamples / samplingRatePerChannel);
-        //length = (float) ((double) totalNumberOfSamples / samplingRate);
+        length = (float) ((double) totalNumberOfSamples / samplingRate);
         logger.info(this.toString());
     }
 
@@ -148,8 +147,7 @@ public class MetadataBlockDataStreamInfo
     //to 21 bytes give wrong value
     private int readSamplingRate(byte b1, byte b2, byte b3)
     {
-        int rate = (u(b1) << 13) + (u(b2) << 5) + ((u(b3) & 0xF0) >>> 3);
-        //int rate = (u(b1) << 12) + (u(b2) << 4) + ((u(b3) & 0xF0) >>> 4);
+        int rate = (u(b1) << 12) + (u(b2) << 4) + ((u(b3) & 0xF0) >>> 4);
         return rate;
 
     }
