@@ -26,6 +26,57 @@ import javax.imageio.ImageIO;
 public class FlacReadTest extends TestCase
 {
     /**
+     * Read Flac File
+     */
+    public void testReadTwoChannelFile()
+    {
+        Exception exceptionCaught = null;
+        try
+        {
+            File testFile = AbstractTestCase.copyAudioToTmp("test2.flac", new File("test2read.flac"));
+            AudioFile f = AudioFileIO.read(testFile);
+
+            assertEquals("192", f.getAudioHeader().getBitRate());
+            assertEquals("FLAC 16 bits", f.getAudioHeader().getEncodingType());
+            assertEquals("2", f.getAudioHeader().getChannels());
+            assertEquals("44100", f.getAudioHeader().getSampleRate());
+            assertEquals(5, f.getAudioHeader().getTrackLength());
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            exceptionCaught = e;
+        }
+        assertNull(exceptionCaught);
+    }
+
+    /**
+     * Read Flac File
+     */
+    public void testReadSingleChannelFile()
+    {
+        Exception exceptionCaught = null;
+        try
+        {
+            File testFile = AbstractTestCase.copyAudioToTmp("test3.flac", new File("test3read.flac"));
+            AudioFile f = AudioFileIO.read(testFile);
+
+            assertEquals("FLAC 8 bits", f.getAudioHeader().getEncodingType());
+            assertEquals("1", f.getAudioHeader().getChannels());
+            assertEquals("16000", f.getAudioHeader().getSampleRate());
+            assertEquals(0, f.getAudioHeader().getTrackLength());
+            assertEquals("47", f.getAudioHeader().getBitRate());       //is this correct value
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            exceptionCaught = e;
+        }
+        assertNull(exceptionCaught);
+    }
+
+
+    /**
      * Test can identify file that isnt flac
      */
     public void testNotFlac()
@@ -67,7 +118,7 @@ public class FlacReadTest extends TestCase
 
 
     /**
-     * test read flac file with preceing ID3 header
+     * test read flac file with preceding ID3 header
      */
     public void testReadFileWithId3Header()
     {
