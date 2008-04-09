@@ -187,7 +187,7 @@ public class Mp4TagWriter
         }
         catch(CannotReadException cre)
         {
-            throw new CannotWriteException("Problem finding meta field");
+            throw new CannotWriteException(cre.getMessage());
         }
 
 

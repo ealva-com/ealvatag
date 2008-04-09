@@ -22,15 +22,15 @@ import java.util.logging.Logger;
 /**
  * Tree representing atoms in the mp4 file
  *
- * Note it doesnt create the complete tree it delves into subtrees for atom we know about and are interested in. (Note
- * it would be impossible to create a complete tree fro any file without understanding all the nodes because
+ * Note it doesn't create the complete tree it delves into subtrees for atom we know about and are interested in. (Note
+ * it would be impossible to create a complete tree for any file without understanding all the nodes because
  * some atoms such as meta contain data and children and therefore need to be specially preprocessed)
  *
- * This class is currently only used when writing tags because it better handles the diffciulties of mdat aand free
- * atoms being optional/multiple places then the older sequentail method. It is expected this class will eventauuly
+ * This class is currently only used when writing tags because it better handles the difficulties of mdat aand free
+ * atoms being optional/multiple places then the older sequential method. It is expected this class will eventually
  * be used when reading tags as well.
  *
- * Uses a TreeModel for the tree, with convienience methods holding onto references to most common nodes so they
+ * Uses a TreeModel for the tree, with convenience methods holding onto references to most common nodes so they
  * can be used without having to traverse the tree again.
  */
 public class Mp4AtomTree
@@ -43,6 +43,8 @@ public class Mp4AtomTree
     private DefaultMutableTreeNode  ilstNode;
     private DefaultMutableTreeNode  metaNode;
     private List<DefaultMutableTreeNode> freeNodes = new ArrayList<DefaultMutableTreeNode > ();
+    private List<DefaultMutableTreeNode> mdatNodes = new ArrayList<DefaultMutableTreeNode > ();
+
     private Mp4StcoBox              stco;
     private ByteBuffer              moovBuffer; //Contains all the data under moov
     private Mp4BoxHeader            moovHeader;
@@ -128,11 +130,15 @@ public class Mp4AtomTree
                 }
                 else if(boxHeader.getId().equals(Mp4NotMetaFieldKey.MDAT.getFieldName()))
                 {
-                    if(mdatNode!=null)
-                    {
-                        throw new CannotReadException(ErrorMessage.MP4_FILE_CONTAINS_MULTIPLE_DATA_ATOMS.getMsg());    
-                    }
+                    //mdatNode always points to the last mDatNode, normally there is just one mdatnode but do have
+                    //a valid example of multiple mdatnode
+
+                    //if(mdatNode!=null)
+                    //{
+                    //    throw new CannotReadException(ErrorMessage.MP4_FILE_CONTAINS_MULTIPLE_DATA_ATOMS.getMsg());
+                    //}
                     mdatNode=newAtom;
+                    mdatNodes.add(newAtom);
                 }
                 rootNode.add(newAtom);
                 fc.position(fc.position() + boxHeader.getDataLength());
