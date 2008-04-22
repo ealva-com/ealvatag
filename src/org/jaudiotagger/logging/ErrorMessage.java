@@ -33,7 +33,9 @@ public enum ErrorMessage
     MP3_ID3TAG_LENGTH_INCORRECT(" {0}:Checking further because the ID3 Tag ends at {1} but the mp3 audio doesnt start until {2}"),
     MP3_RECALCULATED_POSSIBLE_START_OF_MP3_AUDIO("{0}: Recalculated possible start of the audio to be at {1}"),
     MP3_RECALCULATED_START_OF_MP3_AUDIO("{0}: Recalculated the start of the audio to be at {1}"),
-    MP3_START_OF_AUDIO_CONFIRMED("{0}: Confirmed audio starts at {1} whether searching from start or from end of ID3 tag"),   
+    MP3_START_OF_AUDIO_CONFIRMED("{0}: Confirmed audio starts at {1} whether searching from start or from end of ID3 tag"),
+    MP3_URL_SAVED_ENCODED("Url:{0} saved in encoded form as {1}"),
+    MP3_UNABLE_TO_ENCODE_URL("Unable to save url:{0} because cannot encode all characters setting to blank instead"),
     ;
 
 

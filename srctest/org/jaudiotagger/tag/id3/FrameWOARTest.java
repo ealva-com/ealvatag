@@ -19,6 +19,7 @@ public class FrameWOARTest extends AbstractTestCase
     public static final String UNICODE_LINK_START = "http://ja.wikipedia.org/wiki/";
     public static final String UNICODE_LINK_END   = "\u5742\u672c\u4e5d";
     public static final String UNICODE_ENCODED    = "http://ja.wikipedia.org/wiki/%E5%9D%82%E6%9C%AC%E4%B9%9D";
+    public static final String UNICODE_LINK = "http://ja.wikipedia.org/wiki/\u5742\u672c\u4e5d";
 
 
     //http://ja.wikipedia.org/wiki/%E5%9D%82%E6%9C%AC%E4%B9%9D
@@ -35,8 +36,18 @@ public class FrameWOARTest extends AbstractTestCase
     {
         ID3v24Frame frame = new ID3v24Frame(ID3v24Frames.FRAME_ID_URL_ARTIST_WEB);
         FrameBodyWOAR fb   = new FrameBodyWOAR();
-        //fb.setUrlLink(UNICODE_LINK_START +URLEncoder.encode(UNICODE_LINK_END,"utf8"));
-        fb.setUrlLink(URLEncoder.encode(UNICODE_LINK_START+UNICODE_LINK_END,"utf8"));
+        fb.setUrlLink(UNICODE_LINK_START +URLEncoder.encode(UNICODE_LINK_END,"utf8"));
+        //fb.setUrlLink(URLEncoder.encode(UNICODE_LINK_START+UNICODE_LINK_END,"utf8"));
+
+        frame.setBody(fb);
+        return frame;
+    }
+
+    public static ID3v24Frame getRawUnicodeFrame()throws Exception
+    {
+        ID3v24Frame frame = new ID3v24Frame(ID3v24Frames.FRAME_ID_URL_ARTIST_WEB);
+        FrameBodyWOAR fb   = new FrameBodyWOAR();
+        fb.setUrlLink(UNICODE_LINK);
 
         frame.setBody(fb);
         return frame;
@@ -115,6 +126,29 @@ public class FrameWOARTest extends AbstractTestCase
         //Create and Save
         ID3v24Tag   tag = new ID3v24Tag();
         tag.setFrame(getInitialisedUnicodeFrame());
+        mp3File.setID3v2Tag(tag);
+        mp3File.save();
+
+        //Reload
+        mp3File = new MP3File(testFile);
+        ID3v24Frame  frame = (ID3v24Frame)mp3File.getID3v2Tag().getFrame(ID3v24Frames.FRAME_ID_URL_ARTIST_WEB);
+        assertTrue(frame.getBody() instanceof FrameBodyWOAR);
+        assertEquals(ID3v24Frames.FRAME_ID_URL_ARTIST_WEB,frame.getIdentifier());
+        assertEquals(TextEncoding.ISO_8859_1,frame.getBody().getTextEncoding());
+        assertFalse(ID3v24Frames.getInstanceOf().isExtensionFrames(frame.getIdentifier()));
+        assertTrue(ID3v24Frames.getInstanceOf().isSupportedFrames(frame.getIdentifier()));
+        assertEquals(FrameWOARTest.UNICODE_ENCODED,((FrameBodyWOAR)frame.getBody()).getUrlLink());
+    }
+
+    //This fails beccause cant save Unicode to WOAR fields
+    public void testSaveUnicodeToFile2() throws Exception
+    {
+        File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3");
+        MP3File mp3File = new MP3File(testFile);
+
+        //Create and Save
+        ID3v24Tag   tag = new ID3v24Tag();
+        tag.setFrame(getRawUnicodeFrame());
         mp3File.setID3v2Tag(tag);
         mp3File.save();
 

@@ -114,7 +114,7 @@ public abstract class AbstractString
         }
         else
         {
-            logger.finest("Failed Trying to decode" + (String) value + "with" + encoder.toString());
+            logger.finest("Failed Trying to decode" +  value + "with" + encoder.toString());
             return false;
         }
     }
