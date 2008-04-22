@@ -9,6 +9,7 @@ import java.awt.image.BufferedImage;
 
 import org.jaudiotagger.AbstractTestCase;
 import org.jaudiotagger.tag.TagFieldKey;
+import org.jaudiotagger.tag.vorbiscomment.VorbisCommentTag;
 import org.jaudiotagger.tag.reference.PictureTypes;
 import org.jaudiotagger.tag.id3.valuepair.ImageFormats;
 import org.jaudiotagger.audio.AudioFile;
@@ -318,4 +319,13 @@ public class FlacWriteTest extends TestCase
         assertNull(exceptionCaught);
     }
 
+     public void testDeleteTag() throws Exception
+    {
+        File testFile = AbstractTestCase.copyAudioToTmp("test2.flac", new File("testDelete.flac"));
+        AudioFile f = AudioFileIO.read(testFile);
+        AudioFileIO.delete(f);
+
+        f = AudioFileIO.read(testFile);
+        assertTrue(f.getTag().isEmpty());
+    }
 }

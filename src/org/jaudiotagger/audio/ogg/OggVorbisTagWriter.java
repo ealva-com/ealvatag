@@ -53,14 +53,14 @@ public class OggVorbisTagWriter
         }
         catch (CannotReadException e)
         {
-            write(new VorbisCommentTag(), raf, tempRaf);
+            write(VorbisCommentTag.createNewTag(), raf, tempRaf);
             return;
         }
 
-        VorbisCommentTag emptyTag = new VorbisCommentTag();
-        emptyTag.setVendor(tag.getVendor());
+        VorbisCommentTag emptyTag = VorbisCommentTag.createNewTag();
 
-
+        //Go back to start of file
+        raf.seek(0);
         write(emptyTag, raf, tempRaf);
     }
 

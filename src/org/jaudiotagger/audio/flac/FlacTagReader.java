@@ -99,7 +99,7 @@ public class FlacTagReader
         //just initialize Flac with an empty VorbisTag
         if (tag == null)
         {
-            tag = new VorbisCommentTag();
+            tag = VorbisCommentTag.createNewTag();
         }
         FlacTag flacTag = new FlacTag(tag, images);
         return flacTag;

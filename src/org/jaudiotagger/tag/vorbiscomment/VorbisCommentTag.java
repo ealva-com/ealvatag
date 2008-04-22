@@ -39,7 +39,6 @@ import java.util.List;
  */
 public class VorbisCommentTag extends AbstractTag
 {
-
     static EnumMap<TagFieldKey, VorbisCommentFieldKey> tagFieldToOggField = new EnumMap<TagFieldKey, VorbisCommentFieldKey>(TagFieldKey.class);
 
     static
@@ -94,6 +93,25 @@ public class VorbisCommentTag extends AbstractTag
     //This is the vendor string that will be written if no other is supplied. Should be the name of the software
     //that actually encoded the file in the first place.
     public static final String DEFAULT_VENDOR = "jaudiotagger";
+
+    /** Only used within Package, hidden because it doesnt set Vendor
+     *  which should be done when created by end user */
+    VorbisCommentTag()
+    {
+
+    }
+
+    /**
+     * Use to construct a new tag properly initialized
+     *
+     * @return
+     */
+    public static VorbisCommentTag createNewTag()
+    {
+        VorbisCommentTag tag = new VorbisCommentTag();
+        tag.setVendor(DEFAULT_VENDOR);
+        return tag;
+    }
 
     public TagField createAlbumField(String content)
     {
@@ -183,7 +201,6 @@ public class VorbisCommentTag extends AbstractTag
      */
     public void setVendor(String vendor)
     {
-
         if (vendor == null)
         {
             vendor = DEFAULT_VENDOR;

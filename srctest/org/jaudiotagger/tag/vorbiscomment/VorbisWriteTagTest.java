@@ -723,4 +723,27 @@ public class VorbisWriteTagTest extends AbstractTestCase
         }
         assertNull(exceptionCaught);
     }
+
+    public void testDeleteTag() throws Exception
+    {
+        File testFile = AbstractTestCase.copyAudioToTmp("test.ogg", new File("testDelete.ogg"));
+        AudioFile f = AudioFileIO.read(testFile);
+        f.setTag(VorbisCommentTag.createNewTag());
+        f.commit();
+
+        f = AudioFileIO.read(testFile);
+        assertTrue(f.getTag().isEmpty());
+        assertEquals("jaudiotagger",((VorbisCommentTag)f.getTag()).getVendor());
+    }
+
+    public void testDeleteTag2() throws Exception
+    {
+        File testFile = AbstractTestCase.copyAudioToTmp("test.ogg", new File("testDelete2.ogg"));
+        AudioFile f = AudioFileIO.read(testFile);
+        AudioFileIO.delete(f);
+
+        f = AudioFileIO.read(testFile);
+        assertTrue(f.getTag().isEmpty());
+        assertEquals("jaudiotagger",((VorbisCommentTag)f.getTag()).getVendor());
+    }
 }
