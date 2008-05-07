@@ -10,6 +10,7 @@ import org.jaudiotagger.AbstractTestCase;
 import org.jaudiotagger.tag.Tag;
 import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.AudioFileIO;
+import org.jaudiotagger.audio.exceptions.CannotWriteException;
 import org.jaudiotagger.audio.mp4.Mp4AudioHeader;
 import org.jaudiotagger.audio.mp4.atom.Mp4EsdsBox;
 import org.jaudiotagger.audio.mp4.atom.Mp4StcoBox;
@@ -50,7 +51,7 @@ public class M4aWriteDrmTagTest extends TestCase
         {
             return;
         }
-        
+
         Exception exceptionCaught = null;
         try
         {
@@ -105,5 +106,41 @@ public class M4aWriteDrmTagTest extends TestCase
             exceptionCaught = e;
         }
         assertNull(exceptionCaught);
+    }
+
+    /**
+     * Test to write all data to a m4p which has a free atom with the wrong length set
+     * so unable to find the subsequent data.
+     *
+     * Before fix could cause infinite loop now throws a RuntimeException, but writer catches
+     * it and throws cannotwriteexception
+     */
+    public void testWriteFileWithInvalidFreeAtom()
+    {
+        File orig = new File("testdata", "test28.m4p");
+        if(!orig.isFile())
+        {
+            return;
+        }
+
+        Exception exceptionCaught = null;
+        try
+        {
+            File testFile = AbstractTestCase.copyAudioToTmp("test28.m4p",new File("WriteFileWithInvalidFreeAtom.m4p"));
+
+            AudioFile f = AudioFileIO.read(testFile);
+            Tag tag = f.getTag();
+            tag.setArtist("ARTIST");
+            f.commit();
+            f = AudioFileIO.read(testFile);
+            tag = f.getTag();
+
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            exceptionCaught = e;
+        }
+        assertTrue(exceptionCaught instanceof CannotWriteException);
     }
 }
