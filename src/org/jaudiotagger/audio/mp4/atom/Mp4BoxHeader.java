@@ -21,6 +21,7 @@ package org.jaudiotagger.audio.mp4.atom;
 import org.jaudiotagger.audio.generic.Utils;
 import org.jaudiotagger.audio.mp4.Mp4NotMetaFieldKey;
 import org.jaudiotagger.audio.exceptions.CannotReadException;
+import org.jaudiotagger.logging.ErrorMessage;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
@@ -121,6 +122,11 @@ public class Mp4BoxHeader
         this.length = Utils.getNumberBigEndian(b, OFFSET_POS, OFFSET_LENGTH - 1);
         //Calculate box id
         this.id = Utils.getString(b, IDENTIFIER_POS, IDENTIFIER_LENGTH, "ISO-8859-1");
+
+        if(id.equals("\0\0\0\0"))
+        {
+            throw new RuntimeException(ErrorMessage.MP4_UNABLE_TO_FIND_NEXT_ATOM_BECAUSE_IDENTIFIER_IS_INVALID.getMsg(id));
+        }
     }
 
     /**

@@ -120,6 +120,14 @@ public class Mp4AtomTree
                     moovBuffer = ByteBuffer.allocate(boxHeader.getDataLength());
                     fc.read(moovBuffer);
                     moovBuffer.rewind();
+
+                    /*Maybe needed but dont have test case yet
+                    if(filePosStart + boxHeader.getDataLength() > fc.size())
+                    {
+                        throw new CannotReadException("The atom states its datalength to be "+boxHeader.getDataLength()
+                                + "but there are only "+fc.size()+"bytes in the file and already at position "+filePosStart);    
+                    }
+                    */
                     buildChildrenOfNode(moovBuffer,newAtom);
                     fc.position(filePosStart);
                 }
