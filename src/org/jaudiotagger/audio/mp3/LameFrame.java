@@ -25,7 +25,7 @@ import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
 import java.nio.ByteBuffer;
 
 /**
- * The first frame can sometimes contain a LAME frame at th end of the Xing frame
+ * The first frame can sometimes contain a LAME frame at the end of the Xing frame
  * <p/>
  * <p>This useful to the library because it allows the encoder to be identified, full specification
  * can be found at http://gabriel.mp3-tech.org/mp3infotag.html

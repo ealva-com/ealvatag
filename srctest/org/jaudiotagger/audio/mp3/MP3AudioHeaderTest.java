@@ -17,6 +17,10 @@ package org.jaudiotagger.audio.mp3;
 
 import junit.framework.TestCase;
 import org.jaudiotagger.AbstractTestCase;
+import org.jaudiotagger.tag.TagOptionSingleton;
+import org.jaudiotagger.tag.TagFieldKey;
+import org.jaudiotagger.tag.id3.ID3v24Tag;
+import org.jaudiotagger.tag.id3.ID3v24FieldKey;
 import org.jaudiotagger.audio.exceptions.InvalidAudioFrameException;
 
 import java.io.File;
@@ -552,5 +556,84 @@ public class MP3AudioHeaderTest extends TestCase
         assertEquals(MPEGFrameHeader.mpegVersionMap.get(new Integer(MPEGFrameHeader.VERSION_1)), mp3AudioHeader.getMpegVersion());
         assertEquals(MPEGFrameHeader.mpegLayerMap.get(new Integer(MPEGFrameHeader.LAYER_III)), mp3AudioHeader.getMpegLayer());
         assertEquals(MPEGFrameHeader.modeMap.get(new Integer(MPEGFrameHeader.MODE_JOINT_STEREO)), mp3AudioHeader.getChannels());
+    }
+
+     public void testReadVRBIFrame()
+    {
+        File orig = new File("testdata", "test30.mp3");
+        if (!orig.isFile())
+        {
+            return;
+        }
+
+        Exception exceptionCaught = null;
+        File testFile = AbstractTestCase.copyAudioToTmp("test30.mp3");
+        MP3AudioHeader mp3AudioHeader = null;
+        try
+        {
+            mp3AudioHeader = new MP3File(testFile).getMP3AudioHeader();
+
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            exceptionCaught = e;
+        }
+        assertTrue(exceptionCaught == null);
+        assertEquals(MPEGFrameHeader.mpegVersionMap.get(new Integer(MPEGFrameHeader.VERSION_1)), mp3AudioHeader.getMpegVersion());
+        assertEquals(MPEGFrameHeader.mpegLayerMap.get(new Integer(MPEGFrameHeader.LAYER_III)), mp3AudioHeader.getMpegLayer());
+        assertEquals(MPEGFrameHeader.modeMap.get(new Integer(MPEGFrameHeader.MODE_STEREO)), mp3AudioHeader.getChannels());
+        assertTrue(mp3AudioHeader.isVariableBitRate());
+        assertEquals(147,mp3AudioHeader.getBitRateAsNumber());
+        assertEquals("Fraunhofer",mp3AudioHeader.getEncoder());
+
+    }
+
+     public void testWriteToFileWithVRBIFrame()
+    {
+        File orig = new File("testdata", "test30.mp3");
+        if (!orig.isFile())
+        {
+            return;
+        }
+
+        Exception exceptionCaught = null;
+        File testFile = AbstractTestCase.copyAudioToTmp("test30.mp3");
+        MP3AudioHeader mp3AudioHeader = null;
+        MP3File mp3file = null;
+        try
+        {
+            mp3file = new MP3File(testFile);
+            mp3AudioHeader=mp3file.getMP3AudioHeader();
+
+            //make change to file
+            mp3file.getID3v2Tag().setTitle("FREDDY");
+            mp3file.getID3v2Tag().deleteTagField(TagFieldKey.COVER_ART);
+            ((ID3v24Tag)mp3file.getID3v2Tag()).removeFrame("PRIV");
+            final TagOptionSingleton tagOptions = TagOptionSingleton.getInstance();
+            tagOptions.setToDefault();
+            
+            mp3file.save();
+
+            mp3file = new MP3File(testFile);
+            mp3AudioHeader=mp3file.getMP3AudioHeader();
+
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            exceptionCaught = e;
+        }
+        //change has been made and VBRI Frame is left intact
+        assertEquals("FREDDY",mp3file.getID3v2Tag().getFirstTitle());
+
+        assertTrue(exceptionCaught == null);
+        assertEquals(MPEGFrameHeader.mpegVersionMap.get(new Integer(MPEGFrameHeader.VERSION_1)), mp3AudioHeader.getMpegVersion());
+        assertEquals(MPEGFrameHeader.mpegLayerMap.get(new Integer(MPEGFrameHeader.LAYER_III)), mp3AudioHeader.getMpegLayer());
+        assertEquals(MPEGFrameHeader.modeMap.get(new Integer(MPEGFrameHeader.MODE_STEREO)), mp3AudioHeader.getChannels());
+        assertTrue(mp3AudioHeader.isVariableBitRate());
+        assertEquals(147,mp3AudioHeader.getBitRateAsNumber());
+        assertEquals("Fraunhofer",mp3AudioHeader.getEncoder());
+
     }
 }

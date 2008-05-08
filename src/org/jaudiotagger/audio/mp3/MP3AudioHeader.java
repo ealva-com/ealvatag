@@ -57,6 +57,7 @@ public class MP3AudioHeader implements AudioHeader
 {
     protected MPEGFrameHeader mp3FrameHeader;
     protected XingFrame mp3XingFrame;
+    protected VbriFrame mp3VbriFrame;
 
 
     private long fileSize;
@@ -212,6 +213,24 @@ public class MP3AudioHeader implements AudioHeader
                             catch (InvalidAudioFrameException ex)
                             {
                                 // We Ignore because even if Xing Header is corrupted
+                                //doesn't mean file is corrupted
+                            }
+                            break;
+                        }
+                        else if (VbriFrame.isVbriFrame(bb, mp3FrameHeader))
+                        {
+                            if (MP3AudioHeader.logger.isLoggable(Level.FINEST))
+                            {
+                                MP3AudioHeader.logger.finest("Found Possible VbriHeader");
+                            }
+                            try
+                            {
+                                //Parses Vbri frame without modifying position of main buffer
+                                mp3VbriFrame = VbriFrame.parseVBRIFrame();
+                            }
+                            catch (InvalidAudioFrameException ex)
+                            {
+                                // We Ignore because even if Vbri Header is corrupted
                                 //doesn't mean file is corrupted
                             }
                             break;
@@ -393,9 +412,13 @@ public class MP3AudioHeader implements AudioHeader
     {
         numberOfFramesEstimate = (fileSize - startByte) / mp3FrameHeader.getFrameLength();
 
-        if (mp3XingFrame != null && mp3XingFrame.isFrameCountEnabled() == true)
+        if (mp3XingFrame != null && mp3XingFrame.isFrameCountEnabled())
         {
             numberOfFrames = mp3XingFrame.getFrameCount();
+        }
+        else if (mp3VbriFrame != null)
+        {
+            numberOfFrames = mp3VbriFrame.getFrameCount();
         }
         else
         {
@@ -532,6 +555,17 @@ public class MP3AudioHeader implements AudioHeader
                 bitrate = (long) (((fileSize - startByte) * CONVERTS_BYTE_TO_BITS) / (timePerFrame * getNumberOfFrames() * CONVERT_TO_KILOBITS));
             }
         }
+        else if(mp3VbriFrame != null)
+        {
+            if (mp3VbriFrame.getAudioSize() > 0)
+            {
+                bitrate = (long) ((mp3VbriFrame.getAudioSize() * CONVERTS_BYTE_TO_BITS) / (timePerFrame * getNumberOfFrames() * CONVERT_TO_KILOBITS));
+            }
+            else
+            {
+                bitrate = (long) (((fileSize - startByte) * CONVERTS_BYTE_TO_BITS) / (timePerFrame * getNumberOfFrames() * CONVERT_TO_KILOBITS));
+            }
+        }
         else
         {
             bitrate = mp3FrameHeader.getBitRate();
@@ -547,6 +581,10 @@ public class MP3AudioHeader implements AudioHeader
                 encoder = mp3XingFrame.getLameFrame().getEncoder();
                 return;
             }
+        }
+        else if (mp3VbriFrame != null)
+        {
+           encoder = mp3VbriFrame.getEncoder();
         }
     }
 
@@ -564,7 +602,11 @@ public class MP3AudioHeader implements AudioHeader
      */
     public String getBitRate()
     {
-        if (mp3XingFrame != null && mp3XingFrame.isVbr() == true)
+        if (mp3XingFrame != null && mp3XingFrame.isVbr())
+        {
+            return isVbrIdentifier + String.valueOf(bitrate);
+        }
+        else if (mp3VbriFrame != null)
         {
             return isVbrIdentifier + String.valueOf(bitrate);
         }
@@ -639,6 +681,10 @@ public class MP3AudioHeader implements AudioHeader
         if (mp3XingFrame != null)
         {
             return mp3XingFrame.isVbr();
+        }
+        else if (mp3VbriFrame != null)
+        {
+            return mp3VbriFrame.isVbr();
         }
         else
         {
