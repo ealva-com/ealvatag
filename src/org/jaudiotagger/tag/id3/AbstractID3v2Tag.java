@@ -861,17 +861,22 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
      */
     public void removeFrameOfType(String identifier)
     {
-        Iterator iterator = frameMap.keySet().iterator();
-        HashSet result = new HashSet();
-        String key;
-        while (iterator.hasNext())
+        //First fine matching keys
+        HashSet<String> result = new HashSet<String>();
+        for(Object match:frameMap.keySet())
         {
-            key = (String) iterator.next();
+            String key = (String) match;
             if (key.startsWith(identifier))
             {
-                logger.finest("Removing frame with identifier:" + key + "because starts with:" + identifier);
-                frameMap.remove(key);
+                result.add(key);
             }
+        }                         
+        //Then delete outside of loop to prevent concurrent modificatioon eception if there are two keys
+        //with the same id
+        for(String match:result)
+        {
+            logger.finest("Removing frame with identifier:" + match + "because starts with:" + identifier);
+            frameMap.remove(match);
         }
     }
 

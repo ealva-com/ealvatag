@@ -18,6 +18,8 @@ import org.jaudiotagger.tag.TagField;
 import org.jaudiotagger.tag.mp4.Mp4Tag;
 import org.jaudiotagger.tag.mp4.Mp4FieldKey;
 import org.jaudiotagger.audio.mp3.MP3File;
+import org.jaudiotagger.audio.mp3.MP3AudioHeader;
+import org.jaudiotagger.audio.mp3.MPEGFrameHeader;
 import org.jaudiotagger.audio.AudioFileIO;
 import org.jaudiotagger.audio.AudioFile;
 
@@ -1133,5 +1135,32 @@ public class NewInterfaceTest extends TestCase
         assertNull(ex);
     }
 
+     public void testRemoveFrameOfType()
+    {
+        File orig = new File("testdata", "test30.mp3");
+        if (!orig.isFile())
+        {
+            return;
+        }
 
+        Exception exceptionCaught = null;
+        File testFile = AbstractTestCase.copyAudioToTmp("test30.mp3");
+        MP3File mp3file = null;
+        try
+        {
+            mp3file = new MP3File(testFile);         
+            //delete multiple frames starting make change to file
+            ((ID3v24Tag)mp3file.getID3v2Tag()).removeFrameOfType("PRIV");
+
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            exceptionCaught = e;
+        }
+        assertNull(exceptionCaught);
+
+
+
+    }
 }
