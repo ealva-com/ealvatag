@@ -22,8 +22,8 @@ public class FrameBodyUSLTTest extends AbstractTestCase
         FileOutputStream fos = new FileOutputStream("TEST.TXT");
         fos.write(baos.toByteArray());
         byte[] frameBody = baos.toByteArray();
-        byte[] correctBits = makeByteArray(new int[] {0x01, 'e','n','g', 0xfe,
-                0xff, 0x00, 0x00, 0xfe, 0xff, 0x20, 0x26});
+        byte[] correctBits = makeByteArray(new int[] {0x01, 'e','n','g', 0xff,
+                0xfe, 0x00, 0x00, 0xff, 0xfe, 0x26, 0x20});
         String s = cmp(correctBits, frameBody);
         if (s != null) {
             fail(s);
