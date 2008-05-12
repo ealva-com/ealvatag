@@ -103,12 +103,13 @@ public abstract class AbstractString
      */
     public boolean canBeEncoded()
     {
-        //Try and write to buffer using the CharSet defined by the textEncoding field.
+        //Try and write to buffer using the CharSet defined by the textEncoding field (note if using UTF16 we dont
+        //need to worry about LE,BE at this point it makes no difference)
         byte textEncoding = this.getBody().getTextEncoding();
         String charSetName = TextEncoding.getInstanceOf().getValueForId(textEncoding);
         CharsetEncoder encoder = Charset.forName(charSetName).newEncoder();
 
-        if (encoder.canEncode((String) value) == true)
+        if (encoder.canEncode((String) value))
         {
             return true;
         }

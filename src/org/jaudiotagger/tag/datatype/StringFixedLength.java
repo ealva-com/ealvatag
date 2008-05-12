@@ -147,8 +147,18 @@ public class StringFixedLength
         try
         {
             String charSetName = getTextEncodingCharSet();
-            CharsetEncoder encoder = Charset.forName(charSetName).newEncoder();
-            dataBuffer = encoder.encode(CharBuffer.wrap((String) value));
+            if(charSetName.equals(TextEncoding.CHARSET_UTF_16))
+            {
+                charSetName= TextEncoding.CHARSET_UTF_16_ENCODING_FORMAT;
+                CharsetEncoder encoder = Charset.forName(charSetName).newEncoder();
+                //Note remember LE BOM is ff fe but tis is handled by encoder Unicode char is fe ff
+                dataBuffer = encoder.encode(CharBuffer.wrap('\ufeff' + (String) value));
+            }
+            else
+            {
+                CharsetEncoder encoder = Charset.forName(charSetName).newEncoder();
+                dataBuffer = encoder.encode(CharBuffer.wrap((String) value));
+            }
         }
         catch (CharacterCodingException ce)
         {

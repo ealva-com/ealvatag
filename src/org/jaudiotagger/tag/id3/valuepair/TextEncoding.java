@@ -24,6 +24,8 @@ package org.jaudiotagger.tag.id3.valuepair;
 
 import org.jaudiotagger.tag.datatype.AbstractIntStringValuePair;
 
+import java.nio.charset.Charset;
+
 
 /**
  * Text Encoding supported by ID3v24, the id is recognised by ID3
@@ -31,15 +33,23 @@ import org.jaudiotagger.tag.datatype.AbstractIntStringValuePair;
  * charsets defined below are guaranteed on every Java platform.
  * <p/>
  * Note in ID3 UTF_16 can be implemented as either UTF16BE or UTF16LE with byte ordering
- * marks, in JAudioTagger we always implement it as UTF16BE (this is how the Java UTF-16 charset works).
+ * marks, in JAudioTagger we always implement it as UTF16LE because only this order
+ * is understood in Windows, OSX seesm to understand both.
  */
 public class TextEncoding extends AbstractIntStringValuePair
 {
+
     //Supported Java charsets
     public static final String CHARSET_ISO_8859_1 = "ISO-8859-1";
-    public static final String CHARSET_UTF_16 = "UTF-16";
+    public static final String CHARSET_UTF_16 = "UTF-16";        //Want to use x-UTF-16LE-BOM but not always available
     public static final String CHARSET_UTF_16BE = "UTF-16BE";
     public static final String CHARSET_UTF_8 = "UTF-8";
+
+    //This is a workaround to allow us to write the UTF-16 format using little endian rather than the default big endian
+    //in Java because BE not understood in Windows, workaround means we use UTF-16 for reading unicode from ID3
+    //because it could be in either order but when writing we use UTF-16LE - but have to explicity insert
+    //bom because it doesnt do it by default.
+    public static final String CHARSET_UTF_16_ENCODING_FORMAT = "UTF-16LE";
 
     //Supported ID3 charset ids
     public static final byte ISO_8859_1 = 0;
@@ -69,5 +79,6 @@ public class TextEncoding extends AbstractIntStringValuePair
         idToValue.put((int) UTF_8, CHARSET_UTF_8);
 
         createMaps();
+
     }
 }

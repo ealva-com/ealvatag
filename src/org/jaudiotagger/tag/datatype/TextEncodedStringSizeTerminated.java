@@ -112,9 +112,6 @@ public class TextEncodedStringSizeTerminated
         //Try and write to buffer using the CharSet defined by getTextEncodingCharSet()
         try
         {
-            String charSetName = getTextEncodingCharSet();
-            CharsetEncoder encoder = Charset.forName(charSetName).newEncoder();
-
             if (TagOptionSingleton.getInstance().isRemoveTrailingTerminatorOnWrite())
             {
                 String stringValue = (String) value;
@@ -127,9 +124,25 @@ public class TextEncodedStringSizeTerminated
                     }
                 }
             }
-            ByteBuffer bb = encoder.encode(CharBuffer.wrap((String) value));
-            data = new byte[bb.limit()];
-            bb.get(data, 0, bb.limit());
+
+            String charSetName = getTextEncodingCharSet();
+            if(charSetName.equals(TextEncoding.CHARSET_UTF_16))
+            {
+                charSetName= TextEncoding.CHARSET_UTF_16_ENCODING_FORMAT;
+                CharsetEncoder encoder = Charset.forName(charSetName).newEncoder();
+                //Note remember LE BOM is ff fe but tis is handled by encoder Unicode char is fe ff
+                ByteBuffer bb = encoder.encode(CharBuffer.wrap('\ufeff' + (String) value));
+                data = new byte[bb.limit()];
+                bb.get(data, 0, bb.limit());
+
+            }
+            else
+            {
+                CharsetEncoder encoder = Charset.forName(charSetName).newEncoder();
+                ByteBuffer bb = encoder.encode(CharBuffer.wrap((String) value));
+                data = new byte[bb.limit()];
+                bb.get(data, 0, bb.limit());
+            }
         }
         //Should never happen so if does throw a RuntimeException
         catch (CharacterCodingException ce)
