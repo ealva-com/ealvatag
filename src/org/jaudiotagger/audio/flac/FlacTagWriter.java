@@ -24,7 +24,6 @@ import org.jaudiotagger.tag.Tag;
 import org.jaudiotagger.tag.flac.FlacTag;
 
 import java.io.*;
-import java.nio.channels.*;
 import java.util.*;
 import java.util.logging.Logger;
 

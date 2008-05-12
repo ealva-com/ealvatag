@@ -25,7 +25,7 @@ package org.jaudiotagger.tag.lyrics3;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-public class Lyrics3v1Iterator implements Iterator
+public class Lyrics3v1Iterator implements Iterator<String>
 {
     /**
      *
@@ -64,7 +64,7 @@ public class Lyrics3v1Iterator implements Iterator
      * @return
      * @throws NoSuchElementException
      */
-    public Object next()
+    public String next()
     {
         int nextIndex = tag.getLyric().indexOf('\n', lastIndex);
 

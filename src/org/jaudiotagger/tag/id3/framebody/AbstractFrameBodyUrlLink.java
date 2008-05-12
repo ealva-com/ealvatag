@@ -27,7 +27,6 @@ import org.jaudiotagger.tag.InvalidTagException;
 import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
 import org.jaudiotagger.tag.datatype.DataTypes;
 import org.jaudiotagger.tag.datatype.StringSizeTerminated;
-import org.jaudiotagger.tag.datatype.AbstractString;
 import org.jaudiotagger.logging.ErrorMessage;
 
 import java.nio.ByteBuffer;

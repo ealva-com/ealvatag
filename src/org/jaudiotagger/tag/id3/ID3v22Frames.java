@@ -15,7 +15,6 @@
  */
 package org.jaudiotagger.tag.id3;
 
-import org.jaudiotagger.tag.mp4.Mp4FieldKey;
 import org.jaudiotagger.tag.TagFieldKey;
 
 import java.util.EnumMap;

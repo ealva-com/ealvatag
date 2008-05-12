@@ -109,35 +109,35 @@ public abstract class AbstractDataType
         }
         else if (copyObject.value instanceof Boolean)
         {
-            this.value = (Boolean) copyObject.value;
+            this.value = copyObject.value;
         }
         else if (copyObject.value instanceof Byte)
         {
-            this.value = (Byte) copyObject.value;
+            this.value = copyObject.value;
         }
         else if (copyObject.value instanceof Character)
         {
-            this.value = (Character) copyObject.value;
+            this.value = copyObject.value;
         }
         else if (copyObject.value instanceof Double)
         {
-            this.value = (Double) copyObject.value;
+            this.value = copyObject.value;
         }
         else if (copyObject.value instanceof Float)
         {
-            this.value = (Float) copyObject.value;
+            this.value = copyObject.value;
         }
         else if (copyObject.value instanceof Integer)
         {
-            this.value = (Integer) copyObject.value;
+            this.value = copyObject.value;
         }
         else if (copyObject.value instanceof Long)
         {
-            this.value = (Long) copyObject.value;
+            this.value = copyObject.value;
         }
         else if (copyObject.value instanceof Short)
         {
-            this.value = (Short) copyObject.value;
+            this.value = copyObject.value;
         }
         else if (copyObject.value instanceof boolean[])
         {

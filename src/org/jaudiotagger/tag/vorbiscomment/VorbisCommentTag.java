@@ -28,8 +28,6 @@ import org.jaudiotagger.tag.vorbiscomment.util.Base64Coder;
 import static org.jaudiotagger.tag.vorbiscomment.VorbisCommentFieldKey.*;
 import org.jaudiotagger.tag.TagFieldKey;
 import org.jaudiotagger.tag.KeyNotFoundException;
-import org.jaudiotagger.tag.FieldDataInvalidException;
-import org.jaudiotagger.tag.mp4.Mp4FieldKey;
 
 import java.util.EnumMap;
 import java.util.List;

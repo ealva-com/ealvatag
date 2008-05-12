@@ -78,8 +78,8 @@ public interface TagField
      * method to perform useful operations.
      *
      * @param b <code>true</code>, if the field contains binary data.
-     * @deprecated As for now is of no use. Implementations should use another
-     *             way of setting this property.
+     * //@deprecated As for now is of no use. Implementations should use another
+     * //            way of setting this property.
      */
     public void isBinary(boolean b);
 

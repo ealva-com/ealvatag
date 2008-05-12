@@ -152,10 +152,10 @@ public final class AsfCopyrightField implements TagTextField
     public static TagTextField getCopyright(Tag tag)
     {
         TagTextField result = null;
-        List list = tag.get(FIELD_ID);
+        List<TagField> list = tag.get(FIELD_ID);
         if (list != null && list.size() > 0)
         {
-            TagField field = (TagField) list.get(0);
+            TagField field = list.get(0);
             if (field instanceof TagTextField)
             {
                 result = (TagTextField) field;

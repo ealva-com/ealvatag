@@ -34,18 +34,18 @@ import java.util.*;
  * Represents a String thats acts as a key into an enumeration of values. The String will be encoded
  * using the default encoding regardless of what encoding may be specified in the framebody
  */
-public class StringHashMap extends StringFixedLength implements HashMapInterface
+public class StringHashMap extends StringFixedLength implements HashMapInterface<String,String>
 {
 
     /**
      *
      */
-    Map keyToValue = null;
+    Map<String,String> keyToValue = null;
 
     /**
      *
      */
-    Map valueToKey = null;
+    Map<String,String> valueToKey = null;
 
     /**
      *
@@ -86,7 +86,7 @@ public class StringHashMap extends StringFixedLength implements HashMapInterface
     /**
      * @return
      */
-    public Map getKeyToValue()
+    public Map<String,String> getKeyToValue()
     {
         return keyToValue;
     }
@@ -94,7 +94,7 @@ public class StringHashMap extends StringFixedLength implements HashMapInterface
     /**
      * @return
      */
-    public Map getValueToKey()
+    public Map<String,String> getValueToKey()
     {
         return valueToKey;
     }
@@ -168,7 +168,7 @@ public class StringHashMap extends StringFixedLength implements HashMapInterface
     /**
      * @return
      */
-    public Iterator iterator()
+    public Iterator<String> iterator()
     {
         if (keyToValue == null)
         {
@@ -177,7 +177,7 @@ public class StringHashMap extends StringFixedLength implements HashMapInterface
         else
         {
             // put them in a treeset first to sort them
-            TreeSet treeSet = new TreeSet(keyToValue.values());
+            TreeSet<String> treeSet = new TreeSet<String>(keyToValue.values());
 
             if (hasEmptyValue)
             {

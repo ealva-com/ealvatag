@@ -31,12 +31,12 @@ import org.jaudiotagger.audio.asf.util.Utils;
  *
  * @author Christian Laireiter
  */
-public final class ContentDescriptor implements Comparable
+public final class ContentDescriptor implements Comparable<ContentDescriptor>
 {
     /**
      * This field stores all values of the "ID_"-constants.
      */
-    public final static HashSet COMMON_FIELD_IDS;
+    public final static HashSet<String> COMMON_FIELD_IDS;
 
     /**
      * This constant gives the common id (name) for the "album" field in an asf
@@ -106,7 +106,7 @@ public final class ContentDescriptor implements Comparable
 
     static
     {
-        COMMON_FIELD_IDS = new HashSet();
+        COMMON_FIELD_IDS = new HashSet<String>();
         COMMON_FIELD_IDS.add(ID_ALBUM);
         COMMON_FIELD_IDS.add(ID_ARTIST);
         COMMON_FIELD_IDS.add(ID_GENRE);
@@ -169,14 +169,9 @@ public final class ContentDescriptor implements Comparable
      *
      * @see java.lang.Comparable#compareTo(java.lang.Object)
      */
-    public int compareTo(Object o)
+    public int compareTo(ContentDescriptor o)
     {
-        int result = 0;
-        if (o instanceof ContentDescriptor)
-        {
-            ContentDescriptor other = (ContentDescriptor) o;
-            result = getName().compareTo(other.getName());
-        }
+        int result = getName().compareTo(o.getName());
         return result;
     }
 

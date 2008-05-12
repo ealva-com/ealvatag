@@ -36,7 +36,7 @@ public class Lyrics3Line
     /**
      *
      */
-    private LinkedList timeStamp = new LinkedList();
+    private LinkedList<Lyrics3TimeStamp> timeStamp = new LinkedList<Lyrics3TimeStamp>();
 
     /**
      *
@@ -60,7 +60,7 @@ public class Lyrics3Line
         Lyrics3TimeStamp newTimeStamp;
         for (int i = 0; i < copy.timeStamp.size(); i++)
         {
-            newTimeStamp = new Lyrics3TimeStamp((Lyrics3TimeStamp) copy.timeStamp.get(i));
+            newTimeStamp = new Lyrics3TimeStamp(copy.timeStamp.get(i));
             this.timeStamp.add(newTimeStamp);
         }
     }
@@ -108,7 +108,7 @@ public class Lyrics3Line
     /**
      * @return
      */
-    public Iterator getTimeStamp()
+    public Iterator<Lyrics3TimeStamp> getTimeStamp()
     {
         return timeStamp.iterator();
     }
@@ -184,7 +184,7 @@ public class Lyrics3Line
         }
         int delim = 0;
         Lyrics3TimeStamp time;
-        timeStamp = new LinkedList();
+        timeStamp = new LinkedList<Lyrics3TimeStamp>();
         delim = lineString.indexOf("[", offset);
         while (delim >= 0)
         {

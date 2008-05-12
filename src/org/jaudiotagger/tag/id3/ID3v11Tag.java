@@ -26,7 +26,6 @@ package org.jaudiotagger.tag.id3;
 
 import org.jaudiotagger.audio.mp3.MP3File;
 import org.jaudiotagger.audio.generic.Utils;
-import org.jaudiotagger.audio.ogg.util.VorbisHeader;
 import org.jaudiotagger.tag.*;
 import org.jaudiotagger.tag.id3.framebody.*;
 
@@ -156,25 +155,25 @@ public class ID3v11Tag
                 if (id3tag.hasFrame(ID3v24Frames.FRAME_ID_TITLE))
                 {
                     frame = (ID3v24Frame) id3tag.getFrame(ID3v24Frames.FRAME_ID_TITLE);
-                    text = (String) ((FrameBodyTIT2) frame.getBody()).getText();
+                    text = ((FrameBodyTIT2) frame.getBody()).getText();
                     this.title = ID3Tags.truncate(text, FIELD_TITLE_LENGTH);
                 }
                 if (id3tag.hasFrame(ID3v24Frames.FRAME_ID_ARTIST))
                 {
                     frame = (ID3v24Frame) id3tag.getFrame(ID3v24Frames.FRAME_ID_ARTIST);
-                    text = (String) ((FrameBodyTPE1) frame.getBody()).getText();
+                    text = ((FrameBodyTPE1) frame.getBody()).getText();
                     this.artist = ID3Tags.truncate(text, FIELD_ARTIST_LENGTH);
                 }
                 if (id3tag.hasFrame(ID3v24Frames.FRAME_ID_ALBUM))
                 {
                     frame = (ID3v24Frame) id3tag.getFrame(ID3v24Frames.FRAME_ID_ALBUM);
-                    text = (String) ((FrameBodyTALB) frame.getBody()).getText();
+                    text = ((FrameBodyTALB) frame.getBody()).getText();
                     this.album = ID3Tags.truncate(text, FIELD_ALBUM_LENGTH);
                 }
                 if (id3tag.hasFrame(ID3v24Frames.FRAME_ID_YEAR))
                 {
                     frame = (ID3v24Frame) id3tag.getFrame(ID3v24Frames.FRAME_ID_YEAR);
-                    text = (String) ((FrameBodyTDRC) frame.getBody()).getText();
+                    text = ((FrameBodyTDRC) frame.getBody()).getText();
                     this.year = ID3Tags.truncate(text, FIELD_YEAR_LENGTH);
                 }
 
@@ -329,7 +328,7 @@ public class ID3v11Tag
     }
 
     @Override
-    public List getTrack()
+    public List<TagField> getTrack()
     {
         if (getFirstTrack().length() > 0)
         {
@@ -338,7 +337,7 @@ public class ID3v11Tag
         }
         else
         {
-            return new ArrayList();
+            return new ArrayList<TagField>();
         }
     }
 
@@ -559,8 +558,8 @@ public class ID3v11Tag
         MP3File.getStructureFormatter().addElement(TYPE_ALBUM, this.album);
         MP3File.getStructureFormatter().addElement(TYPE_YEAR, this.year);
         MP3File.getStructureFormatter().addElement(TYPE_COMMENT, this.comment);
-        MP3File.getStructureFormatter().addElement(TYPE_TRACK, (int) this.track);
-        MP3File.getStructureFormatter().addElement(TYPE_GENRE, (int) this.genre);
+        MP3File.getStructureFormatter().addElement(TYPE_TRACK, this.track);
+        MP3File.getStructureFormatter().addElement(TYPE_GENRE, this.genre);
         MP3File.getStructureFormatter().closeHeadingElement(TYPE_TAG);
 
     }

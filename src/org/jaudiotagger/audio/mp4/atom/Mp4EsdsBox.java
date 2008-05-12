@@ -178,7 +178,7 @@ public class Mp4EsdsBox extends AbstractMp4Box
             sectionFiveLength = processSectionHeader(dataBuffer);
 
             //Audio Profile
-            audioProfile = audioProfileMap.get((int) (dataBuffer.get() >> 3));
+            audioProfile = audioProfileMap.get((dataBuffer.get() >> 3));
 
             //Channels
             byte channelByte = dataBuffer.get();

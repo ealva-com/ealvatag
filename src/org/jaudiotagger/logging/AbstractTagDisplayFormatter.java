@@ -34,7 +34,7 @@ public abstract class AbstractTagDisplayFormatter
 {
     protected int level;
 
-    private static HashMap hexBinaryMap = new HashMap();
+    private static HashMap<String,String> hexBinaryMap = new HashMap<String,String>();
 
     public abstract void openHeadingElement(String type, String value);
 
@@ -84,7 +84,7 @@ public abstract class AbstractTagDisplayFormatter
         {
             return "";
         }
-        return (String) hexBinaryMap.get(char1) + (String) hexBinaryMap.get(char2);
+        return hexBinaryMap.get(char1) + hexBinaryMap.get(char2);
     }
 
     static

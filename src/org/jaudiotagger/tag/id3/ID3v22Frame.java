@@ -26,7 +26,6 @@ import org.jaudiotagger.tag.id3.framebody.FrameBodyUnsupported;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.nio.ByteBuffer;
 import java.util.logging.Level;
@@ -69,6 +68,7 @@ public class ID3v22Frame extends AbstractID3v2Frame
      * An empty body of the correct type will be automatically created. This constructor should be used when wish to
      * create a new frame from scratch using user values
      */
+    @SuppressWarnings("unchecked")
     public ID3v22Frame(String identifier)
     {
 
@@ -96,7 +96,7 @@ public class ID3v22Frame extends AbstractID3v2Frame
             // is just to create a body suitable for writing the data to
             else if (ID3Tags.isID3v22FrameIdentifier(bodyIdentifier))
             {
-                bodyIdentifier = (String) ID3Tags.convertFrameID22To23(bodyIdentifier);
+                bodyIdentifier = ID3Tags.convertFrameID22To23(bodyIdentifier);
             }
         }
 
@@ -104,8 +104,8 @@ public class ID3v22Frame extends AbstractID3v2Frame
         // to keep things up to date.
         try
         {
-            Class c = Class.forName("org.jaudiotagger.tag.id3.framebody.FrameBody" + bodyIdentifier);
-            frameBody = (AbstractID3v2FrameBody) c.newInstance();
+            Class<AbstractID3v2FrameBody> c = (Class<AbstractID3v2FrameBody>)Class.forName("org.jaudiotagger.tag.id3.framebody.FrameBody" + bodyIdentifier);
+            frameBody = c.newInstance();
         }
         catch (ClassNotFoundException cnfe)
         {
@@ -171,7 +171,7 @@ public class ID3v22Frame extends AbstractID3v2Frame
             //Was it valid for this tag version, if so try and reconstruct
             if (ID3Tags.isID3v22FrameIdentifier(frame.getIdentifier()))
             {
-                this.frameBody = ((FrameBodyDeprecated) frame.getBody());
+                this.frameBody = frame.getBody();
                 identifier = frame.getIdentifier();
                 logger.info("DEPRECATED:Orig id is:" + frame.getIdentifier() + ":New id is:" + identifier);
             }
@@ -304,11 +304,11 @@ public class ID3v22Frame extends AbstractID3v2Frame
         {
             logger.fine("Frame Size Is:" + frameSize);
             //Convert v2.2 to v2.4 id just for reading the data
-            String id = (String) ID3Tags.convertFrameID22To24(identifier);
+            String id = ID3Tags.convertFrameID22To24(identifier);
             if (id == null)
             {
                 //OK,it may be convertable to a v.3 id even though not valid v.4
-                id = (String) ID3Tags.convertFrameID22To23(identifier);
+                id = ID3Tags.convertFrameID22To23(identifier);
                 if (id == null)
                 {
                     // Is it a valid v22 identifier so should be able to find a

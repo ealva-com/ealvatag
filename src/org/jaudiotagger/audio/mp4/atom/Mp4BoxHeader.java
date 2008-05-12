@@ -19,21 +19,12 @@
 package org.jaudiotagger.audio.mp4.atom;
 
 import org.jaudiotagger.audio.generic.Utils;
-import org.jaudiotagger.audio.mp4.Mp4NotMetaFieldKey;
-import org.jaudiotagger.audio.exceptions.CannotReadException;
 import org.jaudiotagger.logging.ErrorMessage;
 
-import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.DefaultTreeModel;
-import javax.swing.tree.TreeModel;
-import javax.swing.tree.TreeNode;
 import java.io.RandomAccessFile;
 import java.io.IOException;
 import java.nio.ByteBuffer;
-import java.nio.charset.Charset;
-import java.nio.channels.FileChannel;
 import java.util.logging.Logger;
-import java.util.Enumeration;
 
 /**
  * Everything in MP4s are held in boxes (formally known as atoms), they are held as a hierachial tree within the MP4.

@@ -97,7 +97,7 @@ public class FrameBodyRBUF extends AbstractID3v2FrameBody implements ID3v24Frame
     protected void setupObjectList()
     {
         objectList.add(new NumberFixedLength(DataTypes.OBJ_BUFFER_SIZE, this, BUFFER_FIELD_SIZE));
-        objectList.add(new BooleanByte(DataTypes.OBJ_EMBED_FLAG, this, (int) (byte) EMBED_FLAG_BIT_POSITION));
+        objectList.add(new BooleanByte(DataTypes.OBJ_EMBED_FLAG, this, (byte) EMBED_FLAG_BIT_POSITION));
         objectList.add(new NumberFixedLength(DataTypes.OBJ_OFFSET, this, OFFSET_FIELD_SIZE));
     }
 }

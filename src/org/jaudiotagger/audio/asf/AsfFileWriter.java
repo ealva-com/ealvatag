@@ -311,11 +311,11 @@ public class AsfFileWriter extends AudioFileWriter
     private boolean deleteExtendedContentDescription(
             ExtendedContentDescription tagHeader, Tag tag)
     {
-        HashSet ignoreDescriptors = new HashSet(Arrays.asList(new String[]{
+        HashSet<String> ignoreDescriptors = new HashSet<String>(Arrays.asList(new String[]{
                 ContentDescriptor.ID_GENRE, ContentDescriptor.ID_GENREID,
                 ContentDescriptor.ID_TRACKNUMBER, ContentDescriptor.ID_ALBUM,
                 ContentDescriptor.ID_YEAR}));
-        Iterator it = tagHeader.getDescriptors().iterator();
+        Iterator<ContentDescriptor> it = tagHeader.getDescriptors().iterator();
         boolean found = false;
         /*
          * Now search for a content descriptor whose id is not one of
@@ -324,7 +324,7 @@ public class AsfFileWriter extends AudioFileWriter
          */
         while (it.hasNext() && !found)
         {
-            ContentDescriptor current = (ContentDescriptor) it.next();
+            ContentDescriptor current = it.next();
             found = !ignoreDescriptors.contains(current.getName());
         }
         return !found && !isExtendedContentDescriptionMandatory(tag);
@@ -375,7 +375,7 @@ public class AsfFileWriter extends AudioFileWriter
      */
     private Chunk[] getOrderedChunks(AsfHeader header)
     {
-        ArrayList result = new ArrayList();
+        ArrayList<Chunk> result = new ArrayList<Chunk>();
         // Add all chunks which simply need to be copied.
         for (int i = 0; i < header.getUnspecifiedChunkCount(); i++)
         {
@@ -404,7 +404,7 @@ public class AsfFileWriter extends AudioFileWriter
         {
             result.add(header.getStreamBitratePropertiesChunk());
         }
-        Chunk[] tmp = (Chunk[]) result.toArray(new Chunk[result.size()]);
+        Chunk[] tmp = result.toArray(new Chunk[result.size()]);
         Arrays.sort(tmp, new ChunkPositionComparator());
         return tmp;
     }

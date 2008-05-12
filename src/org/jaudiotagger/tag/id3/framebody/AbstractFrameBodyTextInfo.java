@@ -30,7 +30,6 @@ import org.jaudiotagger.tag.id3.ID3TextEncodingConversion;
 import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
 
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.nio.ByteBuffer;
 
 /**

@@ -513,7 +513,7 @@ public class MP3AudioHeader implements AudioHeader
     {
         try
         {
-            final long lengthInSecs = (long) getTrackLength();
+            final long lengthInSecs = getTrackLength();
             final Date timeIn = timeInFormat.parse(String.valueOf(lengthInSecs));
             if(lengthInSecs < NO_SECONDS_IN_HOUR)
             {

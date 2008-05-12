@@ -20,7 +20,6 @@ package org.jaudiotagger.audio.ogg;
 
 import org.jaudiotagger.tag.Tag;
 import org.jaudiotagger.tag.vorbiscomment.VorbisCommentCreator;
-import org.jaudiotagger.tag.vorbiscomment.VorbisCommentReader;
 import org.jaudiotagger.audio.ogg.util.VorbisPacketType;
 import org.jaudiotagger.audio.ogg.util.VorbisHeader;
 

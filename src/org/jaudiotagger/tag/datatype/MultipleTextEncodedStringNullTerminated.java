@@ -57,10 +57,10 @@ public class MultipleTextEncodedStringNullTerminated extends AbstractDataType
      */
     public boolean canBeEncoded()
     {
-        for (ListIterator li = ((Values) value).getList().listIterator(); li.hasNext();)
+        for (ListIterator<String> li = ((Values) value).getList().listIterator(); li.hasNext();)
         {
             TextEncodedStringNullTerminated next
-                    = new TextEncodedStringNullTerminated(identifier, frameBody, (String) li.next());
+                    = new TextEncodedStringNullTerminated(identifier, frameBody, li.next());
             if (!next.canBeEncoded())
             {
                 return false;
@@ -133,10 +133,10 @@ public class MultipleTextEncodedStringNullTerminated extends AbstractDataType
         ByteArrayOutputStream buffer = new ByteArrayOutputStream();
         try
         {
-            for (ListIterator li = ((Values) value).getList().listIterator(); li.hasNext();)
+            for (ListIterator<String> li = ((Values) value).getList().listIterator(); li.hasNext();)
             {
                 TextEncodedStringNullTerminated next
-                        = new TextEncodedStringNullTerminated(identifier, frameBody, (String) li.next());
+                        = new TextEncodedStringNullTerminated(identifier, frameBody, li.next());
                 buffer.write(next.writeByteArray());
                 localSize += next.getSize();
             }
@@ -160,7 +160,7 @@ public class MultipleTextEncodedStringNullTerminated extends AbstractDataType
      */
     public static class Values
     {
-        private List valueList = new ArrayList();
+        private List<String> valueList = new ArrayList<String>();
 
         public Values()
         {
@@ -183,7 +183,7 @@ public class MultipleTextEncodedStringNullTerminated extends AbstractDataType
          *
          * @return the list of values
          */
-        public List getList()
+        public List<String> getList()
         {
             return valueList;
         }
@@ -196,9 +196,9 @@ public class MultipleTextEncodedStringNullTerminated extends AbstractDataType
         public String toString()
         {
             StringBuffer sb = new StringBuffer();
-            for (ListIterator li = valueList.listIterator(); li.hasNext();)
+            for (ListIterator<String> li = valueList.listIterator(); li.hasNext();)
             {
-                String next = (String) li.next();
+                String next = li.next();
                 sb.append(next);
                 if (li.hasNext())
                 {

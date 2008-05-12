@@ -23,7 +23,7 @@ package org.jaudiotagger.tag.datatype;
 
 import java.util.Collections;
 
-public class AbstractStringStringValuePair extends AbstractValuePair
+public class AbstractStringStringValuePair extends AbstractValuePair<String,String>
 {
     protected String lkey = null;
 
@@ -32,7 +32,7 @@ public class AbstractStringStringValuePair extends AbstractValuePair
      */
     public String getIdForValue(String value)
     {
-        return (String) valueToId.get(value);
+        return valueToId.get(value);
     }
 
     /**
@@ -40,7 +40,7 @@ public class AbstractStringStringValuePair extends AbstractValuePair
      */
     public String getValueForId(String id)
     {
-        return (String) idToValue.get(id);
+        return idToValue.get(id);
     }
 
     protected void createMaps()
@@ -48,8 +48,8 @@ public class AbstractStringStringValuePair extends AbstractValuePair
         iterator = idToValue.keySet().iterator();
         while (iterator.hasNext())
         {
-            lkey = (String) iterator.next();
-            value = (String) idToValue.get(lkey);
+            lkey = iterator.next();
+            value = idToValue.get(lkey);
             valueToId.put(value, lkey);
         }
 
@@ -57,7 +57,7 @@ public class AbstractStringStringValuePair extends AbstractValuePair
         iterator = idToValue.keySet().iterator();
         while (iterator.hasNext())
         {
-            valueList.add(idToValue.get((String) iterator.next()));
+            valueList.add(idToValue.get(iterator.next()));
         }
         //Sort alphabetically
         Collections.sort(valueList);

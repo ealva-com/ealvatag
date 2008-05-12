@@ -24,19 +24,11 @@ import org.jaudiotagger.tag.TagField;
 import org.jaudiotagger.tag.TagFieldKey;
 import org.jaudiotagger.tag.FieldDataInvalidException;
 import org.jaudiotagger.tag.KeyNotFoundException;
-import org.jaudiotagger.tag.reference.Tagger;
-import org.jaudiotagger.tag.id3.ID3v23Frames;
-import org.jaudiotagger.tag.id3.Id3FieldType;
-import org.jaudiotagger.tag.id3.framebody.FrameBodyTXXX;
 import static org.jaudiotagger.tag.mp4.Mp4FieldKey.*;
 import org.jaudiotagger.tag.mp4.field.*;
-import static org.jaudiotagger.tag.mp4.field.Mp4FieldType.BYTE;
-import static org.jaudiotagger.tag.mp4.field.Mp4FieldType.TEXT;
-import static org.jaudiotagger.tag.mp4.field.Mp4FieldType.NUMERIC;
 
 import java.util.EnumMap;
 import java.util.List;
-import java.util.ArrayList;
 
 /**
  * A Logical representation of Mp4Tag, i.e the meta information stored in an Mp4 file underneath the
@@ -140,7 +132,7 @@ public class Mp4Tag extends AbstractTag
     @Override
     public List<TagField> getGenre()
     {
-        List genres = get(GENRE.getFieldName());
+        List<TagField> genres = get(GENRE.getFieldName());
         if (genres.size() == 0)
         {
             genres = get(GENRE_CUSTOM.getFieldName());

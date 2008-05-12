@@ -18,7 +18,6 @@
  */
 package org.jaudiotagger.audio.wav;
 
-import org.jaudiotagger.audio.*;
 import org.jaudiotagger.audio.exceptions.*;
 import org.jaudiotagger.audio.generic.AudioFileReader;
 import org.jaudiotagger.audio.generic.GenericAudioHeader;

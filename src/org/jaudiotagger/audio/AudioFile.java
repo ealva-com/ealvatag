@@ -25,7 +25,6 @@ import java.util.logging.Logger;
 
 import org.jaudiotagger.audio.exceptions.CannotWriteException;
 import org.jaudiotagger.audio.exceptions.ReadOnlyFileException;
-import org.jaudiotagger.audio.generic.GenericTag;
 import org.jaudiotagger.tag.Tag;
 
 /**

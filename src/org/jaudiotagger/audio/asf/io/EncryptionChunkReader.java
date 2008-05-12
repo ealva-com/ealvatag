@@ -112,7 +112,7 @@ public class EncryptionChunkReader
             fieldLength = (int) Utils.readUINT32(raf);
             // Secret Data
             secretData = new byte[fieldLength + 1];
-            raf.read(secretData, 0, (int) fieldLength);
+            raf.read(secretData, 0, fieldLength);
             secretData[fieldLength] = 0;
 
             // Protection type Length
@@ -120,7 +120,7 @@ public class EncryptionChunkReader
             fieldLength = (int) Utils.readUINT32(raf);
             // Protection Data Length
             protectionType = new byte[fieldLength + 1];
-            raf.read(protectionType, 0, (int) fieldLength);
+            raf.read(protectionType, 0, fieldLength);
             protectionType[fieldLength] = 0;
 
             // Key ID length
@@ -128,7 +128,7 @@ public class EncryptionChunkReader
             fieldLength = (int) Utils.readUINT32(raf);
             // Key ID
             keyID = new byte[fieldLength + 1];
-            raf.read(keyID, 0, (int) fieldLength);
+            raf.read(keyID, 0, fieldLength);
             keyID[fieldLength] = 0;
 
             // License URL length
@@ -136,7 +136,7 @@ public class EncryptionChunkReader
             fieldLength = (int) Utils.readUINT32(raf);
             // License URL
             licenseURL = new byte[fieldLength + 1];
-            raf.read(licenseURL, 0, (int) fieldLength);
+            raf.read(licenseURL, 0, fieldLength);
             licenseURL[fieldLength] = 0;
 
             result.setSecretData(new String(secretData));

@@ -41,7 +41,7 @@ public class EncryptionChunk extends Chunk
     /**
      * The read strings.
      */
-    private final ArrayList strings;
+    private final ArrayList<String> strings;
 
     private String secretData;
     private String protectionType;
@@ -59,7 +59,7 @@ public class EncryptionChunk extends Chunk
     public EncryptionChunk(long pos, BigInteger chunkLen)
     {
         super(GUID.GUID_CONTENT_ENCRYPTION, pos, chunkLen);
-        this.strings = new ArrayList();
+        this.strings = new ArrayList<String>();
         this.secretData = "";
         this.protectionType = "";
         this.keyID = "";
@@ -158,9 +158,9 @@ public class EncryptionChunk extends Chunk
      *
      * @return Inserted Strings.
      */
-    public Collection getStrings()
+    public Collection<String> getStrings()
     {
-        return new ArrayList(strings);
+        return new ArrayList<String>(strings);
     }
 
     /**
@@ -178,7 +178,7 @@ public class EncryptionChunk extends Chunk
         result.append("	secretData " + this.secretData + Utils.LINE_SEPARATOR);
         result.append("	protectionType " + this.protectionType + Utils.LINE_SEPARATOR);
         result.append("	licenseURL " + this.licenseURL + Utils.LINE_SEPARATOR);
-        Iterator iterator = this.strings.iterator();
+        Iterator<String> iterator = this.strings.iterator();
         while (iterator.hasNext()) {
 			result.append("   " + iterator.next() + Utils.LINE_SEPARATOR);
 		}

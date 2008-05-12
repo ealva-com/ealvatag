@@ -34,18 +34,18 @@ import java.util.*;
 /**
  * Represents a number thats acts as a key into an enumeration of values
  */
-public class NumberHashMap extends NumberFixedLength implements HashMapInterface
+public class NumberHashMap extends NumberFixedLength implements HashMapInterface<Integer,String>
 {
 
     /**
      * key to value map
      */
-    private Map keyToValue = null;
+    private Map<Integer,String> keyToValue = null;
 
     /**
      * value to key map
      */
-    private Map valueToKey = null;
+    private Map<String,Integer> valueToKey = null;
 
     /**
      *
@@ -130,7 +130,7 @@ public class NumberHashMap extends NumberFixedLength implements HashMapInterface
     /**
      * @return the key to value map
      */
-    public Map getKeyToValue()
+    public Map<Integer,String> getKeyToValue()
     {
         return keyToValue;
     }
@@ -138,7 +138,7 @@ public class NumberHashMap extends NumberFixedLength implements HashMapInterface
     /**
      * @return the value to key map
      */
-    public Map getValueToKey()
+    public Map<String,Integer> getValueToKey()
     {
         return valueToKey;
     }
@@ -220,7 +220,7 @@ public class NumberHashMap extends NumberFixedLength implements HashMapInterface
     /**
      * @return
      */
-    public Iterator iterator()
+    public Iterator<String> iterator()
     {
         if (keyToValue == null)
         {
@@ -229,7 +229,7 @@ public class NumberHashMap extends NumberFixedLength implements HashMapInterface
         else
         {
             // put them in a treeset first to sort them
-            TreeSet treeSet = new TreeSet(keyToValue.values());
+            TreeSet<String> treeSet = new TreeSet<String>(keyToValue.values());
 
             if (hasEmptyValue)
             {

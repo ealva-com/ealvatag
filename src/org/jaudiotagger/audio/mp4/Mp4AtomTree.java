@@ -3,13 +3,10 @@ package org.jaudiotagger.audio.mp4;
 import org.jaudiotagger.audio.exceptions.CannotReadException;
 import org.jaudiotagger.audio.mp4.atom.Mp4MetaBox;
 import org.jaudiotagger.audio.mp4.atom.Mp4BoxHeader;
-import org.jaudiotagger.audio.mp4.atom.AbstractMp4Box;
 import org.jaudiotagger.audio.mp4.atom.Mp4StcoBox;
-import org.jaudiotagger.logging.ErrorMessage;
 
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.TreeNode;
 import java.io.RandomAccessFile;
 import java.io.IOException;
 import java.nio.channels.FileChannel;
@@ -165,13 +162,14 @@ public class Mp4AtomTree
     /**
      * Display atom tree
      */
+    @SuppressWarnings("unchecked")
     public void printAtomTree()
     {
-        Enumeration e = rootNode.preorderEnumeration();
+        Enumeration<DefaultMutableTreeNode> e = rootNode.preorderEnumeration();
         DefaultMutableTreeNode nextNode;
         while(e.hasMoreElements())
         {
-            nextNode= (DefaultMutableTreeNode)e.nextElement();           
+            nextNode= e.nextElement();
             Mp4BoxHeader header = (Mp4BoxHeader)nextNode.getUserObject();
             if(header!=null)
             {

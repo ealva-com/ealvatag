@@ -48,7 +48,7 @@ public class MPEGFrameHeader
     /**
      * Constants for MPEG Version
      */
-    public static final Map mpegVersionMap = new HashMap();
+    public static final Map<Integer,String> mpegVersionMap = new HashMap<Integer,String>();
     public final static int VERSION_2_5 = 0;
     public final static int VERSION_2 = 2;
     public final static int VERSION_1 = 3;
@@ -63,7 +63,7 @@ public class MPEGFrameHeader
     /**
      * Constants for MPEG Layer
      */
-    public static final Map mpegLayerMap = new HashMap();
+    public static final Map<Integer,String> mpegLayerMap = new HashMap<Integer,String>();
     public final static int LAYER_I = 3;
     public final static int LAYER_II = 2;
     public final static int LAYER_III = 1;
@@ -85,7 +85,7 @@ public class MPEGFrameHeader
     /**
      * Bit Rates, the setBitrate varies for different Version and Layer
      */
-    private static final Map bitrateMap = new HashMap();
+    private static final Map<Integer,Integer> bitrateMap = new HashMap<Integer,Integer>();
 
     static
     {
@@ -184,7 +184,7 @@ public class MPEGFrameHeader
     /**
      * Constants for Channel mode
      */
-    protected static final Map modeMap = new HashMap();
+    protected static final Map<Integer,String> modeMap = new HashMap<Integer,String>();
     public final static int MODE_STEREO = 0;
     public final static int MODE_JOINT_STEREO = 1;
     public final static int MODE_DUAL_CHANNEL = 2;
@@ -201,7 +201,7 @@ public class MPEGFrameHeader
     /**
      * Constants for Emphasis
      */
-    private static final Map emphasisMap = new HashMap();
+    private static final Map<Integer,String> emphasisMap = new HashMap<Integer,String>();
     public final static int EMPHASIS_NONE = 0;
     public final static int EMPHASIS_5015MS = 1;
     public final static int EMPHASIS_RESERVED = 2;
@@ -216,13 +216,13 @@ public class MPEGFrameHeader
     }
 
 
-    private static final Map modeExtensionMap = new HashMap();
+    private static final Map<Integer,String> modeExtensionMap = new HashMap<Integer,String>();
     private final static int MODE_EXTENSION_NONE = 0;
     private final static int MODE_EXTENSION_ONE = 1;
     private final static int MODE_EXTENSION_TWO = 2;
     private final static int MODE_EXTENSION_THREE = 3;
 
-    private static final Map modeExtensionLayerIIIMap = new HashMap();
+    private static final Map<Integer,String> modeExtensionLayerIIIMap = new HashMap<Integer,String>();
     private final static int MODE_EXTENSION_OFF_OFF = 0;
     private final static int MODE_EXTENSION_ON_OFF = 1;
     private final static int MODE_EXTENSION_OFF_ON = 2;
@@ -244,10 +244,10 @@ public class MPEGFrameHeader
     /**
      * Sampling Rate in Hz
      */
-    private static final Map samplingRateMap = new HashMap();
-    private static final Map samplingV1Map = new HashMap();
-    private static final Map samplingV2Map = new HashMap();
-    private static final Map samplingV25Map = new HashMap();
+    private static final Map<Integer,Map<Integer,Integer>> samplingRateMap = new HashMap<Integer,Map<Integer,Integer>>();
+    private static final Map<Integer,Integer> samplingV1Map = new HashMap<Integer,Integer>();
+    private static final Map<Integer,Integer> samplingV2Map = new HashMap<Integer,Integer>();
+    private static final Map<Integer,Integer> samplingV25Map = new HashMap<Integer,Integer>();
 
     static
     {
@@ -269,10 +269,10 @@ public class MPEGFrameHeader
     }
 
     /* Samples Per Frame */
-    private static final Map samplesPerFrameMap = new HashMap();
-    private static final Map samplesPerFrameV1Map = new HashMap();
-    private static final Map samplesPerFrameV2Map = new HashMap();
-    private static final Map samplesPerFrameV25Map = new HashMap();
+    private static final Map<Integer,Map<Integer,Integer>> samplesPerFrameMap = new HashMap<Integer,Map<Integer,Integer>>();
+    private static final Map<Integer,Integer> samplesPerFrameV1Map = new HashMap<Integer,Integer>();
+    private static final Map<Integer,Integer> samplesPerFrameV2Map = new HashMap<Integer,Integer>();
+    private static final Map<Integer,Integer> samplesPerFrameV25Map = new HashMap<Integer,Integer>();
 
     static
     {
@@ -472,7 +472,7 @@ public class MPEGFrameHeader
     {
         //MPEG Version
         version = (byte) ((mpegBytes[BYTE_2] & MASK_MP3_VERSION) >> 3);
-        versionAsString = (String) mpegVersionMap.get(version);
+        versionAsString = mpegVersionMap.get(version);
         if (versionAsString == null)
         {
             throw new InvalidAudioFrameException("Invalid mpeg version");
@@ -512,7 +512,7 @@ public class MPEGFrameHeader
         int bitRateIndex = mpegBytes[BYTE_3] & MASK_MP3_BITRATE |
                 mpegBytes[BYTE_2] & MASK_MP3_ID | mpegBytes[BYTE_2] & MASK_MP3_LAYER;
 
-        bitRate = (Integer) bitrateMap.get(bitRateIndex);
+        bitRate = bitrateMap.get(bitRateIndex);
         if (bitRate == null)
         {
             throw new InvalidAudioFrameException("Invalid bitrate");
@@ -526,7 +526,7 @@ public class MPEGFrameHeader
     private void setChannelMode() throws InvalidAudioFrameException
     {
         channelMode = (mpegBytes[BYTE_4] & MASK_MP3_MODE) >>> 6;
-        channelModeAsString = (String) modeMap.get(channelMode);
+        channelModeAsString = modeMap.get(channelMode);
         if (channelModeAsString == null)
         {
             throw new InvalidAudioFrameException("Invalid channel mode");
@@ -539,7 +539,7 @@ public class MPEGFrameHeader
     private void setEmphasis() throws InvalidAudioFrameException
     {
         emphasis = mpegBytes[BYTE_4] & MASK_MP3_EMPHASIS;
-        emphasisAsString = (String) emphasisMap.get(emphasis);
+        emphasisAsString = emphasisMap.get(emphasis);
         if (getEmphasisAsString() == null)
         {
             throw new InvalidAudioFrameException("Invalid emphasis");
@@ -562,7 +562,7 @@ public class MPEGFrameHeader
     private void setLayer() throws InvalidAudioFrameException
     {
         layer = (mpegBytes[BYTE_2] & MASK_MP3_LAYER) >>> 1;
-        layerAsString = (String) mpegLayerMap.get(layer);
+        layerAsString = mpegLayerMap.get(layer);
         if (layerAsString == null)
         {
             throw new InvalidAudioFrameException("Invalid Layer");
@@ -578,7 +578,7 @@ public class MPEGFrameHeader
         int index = (mpegBytes[BYTE_4] & MASK_MP3_MODE_EXTENSION) >> 4;
         if (layer == LAYER_III)
         {
-            modeExtension = (String) modeExtensionLayerIIIMap.get(index);
+            modeExtension = modeExtensionLayerIIIMap.get(index);
             if (getModeExtension() == null)
             {
                 throw new InvalidAudioFrameException("Invalid Mode Extension");
@@ -586,7 +586,7 @@ public class MPEGFrameHeader
         }
         else
         {
-            modeExtension = (String) modeExtensionMap.get(index);
+            modeExtension = modeExtensionMap.get(index);
             if (getModeExtension() == null)
             {
                 throw new InvalidAudioFrameException("Invalid Mode Extension");
@@ -601,12 +601,12 @@ public class MPEGFrameHeader
     {
         //Frequency
         int index = (mpegBytes[BYTE_3] & MASK_MP3_FREQUENCY) >>> 2;
-        HashMap samplingRateMapForVersion = (HashMap) samplingRateMap.get(version);
+        Map<Integer,Integer> samplingRateMapForVersion = samplingRateMap.get(version);
         if (samplingRateMapForVersion == null)
         {
             throw new InvalidAudioFrameException("Invalid version");
         }
-        samplingRate = (Integer) (samplingRateMapForVersion.get(new Integer(index)));
+        samplingRate = samplingRateMapForVersion.get(index);
         if (samplingRate == null)
         {
             throw new InvalidAudioFrameException("Invalid sampling rate");
@@ -762,7 +762,7 @@ public class MPEGFrameHeader
      */
     public int getNoOfSamples()
     {
-        Integer noOfSamples = (Integer) ((HashMap) samplesPerFrameMap.get(version)).get(new Integer(layer));
+        Integer noOfSamples = samplesPerFrameMap.get(version).get(layer);
         return noOfSamples;
     }
 

@@ -117,14 +117,14 @@ abstract public class AbstractID3v1Tag
 
 
         fc = file.getChannel();
-        fc.position(file.length() - (long) TAG_LENGTH);
+        fc.position(file.length() - TAG_LENGTH);
         byteBuffer = ByteBuffer.allocate(TAG_LENGTH);
         fc.read(byteBuffer);
         byteBuffer.rewind();
         if (seek(byteBuffer))
         {
             logger.info("deleting v1 tag ");
-            file.setLength(file.length() - (long) TAG_LENGTH);
+            file.setLength(file.length() - TAG_LENGTH);
         }
         else
         {

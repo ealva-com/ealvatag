@@ -89,7 +89,7 @@ public class Mp4DataBox extends AbstractMp4Box
 
             //Make String representation  (separate values with slash)
             StringBuffer sb = new StringBuffer();
-            ListIterator iterator = numbers.listIterator();
+            ListIterator<Short> iterator = numbers.listIterator();
             while (iterator.hasNext())
             {
                 sb.append(iterator.next());

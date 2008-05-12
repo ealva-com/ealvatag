@@ -90,7 +90,7 @@ public class ID3v24Frame extends AbstractID3v2Frame
         if (identifier != null)
         {
             logger.info("V3:Orig id is:" + frame.getIdentifier() + ":New id is:" + identifier);
-            this.frameBody = (AbstractID3v2FrameBody) ID3Tags.copyObject(frame.getBody());
+            this.frameBody = (AbstractTagFrameBody) ID3Tags.copyObject(frame.getBody());
             this.frameBody.setHeader(this);
             return;
         }
@@ -190,7 +190,7 @@ public class ID3v24Frame extends AbstractID3v2Frame
         {
             FieldFrameBodyLYR lyric = (FieldFrameBodyLYR) field.getBody();
             Lyrics3Line line;
-            Iterator iterator = lyric.iterator();
+            Iterator<Lyrics3Line> iterator = lyric.iterator();
             FrameBodySYLT sync;
             FrameBodyUSLT unsync;
             boolean hasTimeStamp = lyric.hasTimeStamp();
@@ -200,7 +200,7 @@ public class ID3v24Frame extends AbstractID3v2Frame
             unsync = new FrameBodyUSLT((byte) 0, "ENG", "", "");
             while (iterator.hasNext())
             {
-                line = (Lyrics3Line) iterator.next();
+                line = iterator.next();
                 if (hasTimeStamp)
                 {
                     // sync.addLyric(line);

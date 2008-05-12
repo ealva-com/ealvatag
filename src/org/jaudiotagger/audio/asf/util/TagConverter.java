@@ -132,13 +132,13 @@ public class TagConverter
     public static void assignOptionalTagValues(Tag tag,
             ExtendedContentDescription descriptor)
     {
-        Iterator it = tag.getFields();
+        Iterator<TagField> it = tag.getFields();
         ContentDescriptor tmp = null;
         while (it.hasNext())
         {
             try
             {
-                TagField currentField = (TagField) it.next();
+                TagField currentField = it.next();
                 if (!currentField.isCommon())
                 {
                     tmp = new ContentDescriptor(currentField.getId(),
@@ -247,10 +247,10 @@ public class TagConverter
             // Now any properties, which don't belong to the common section
             ExtendedContentDescription extDesc = source
                     .getExtendedContentDescription();
-            Iterator it = extDesc.getDescriptors().iterator();
+            Iterator<ContentDescriptor> it = extDesc.getDescriptors().iterator();
             while (it.hasNext())
             {
-                ContentDescriptor current = (ContentDescriptor) it.next();
+                ContentDescriptor current = it.next();
                 // If common, it has been added to the result some lines upward.
                 if (!current.isCommon())
                 {

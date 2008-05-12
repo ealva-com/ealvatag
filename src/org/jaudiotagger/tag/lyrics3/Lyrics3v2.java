@@ -36,7 +36,7 @@ public class Lyrics3v2 extends AbstractLyrics3
     /**
      *
      */
-    private HashMap fieldMap = new HashMap();
+    private HashMap<String,Lyrics3v2Field> fieldMap = new HashMap<String,Lyrics3v2Field>();
 
     /**
      * Creates a new Lyrics3v2 datatype.
@@ -49,16 +49,16 @@ public class Lyrics3v2 extends AbstractLyrics3
     {
         super(copyObject);
 
-        Iterator iterator = copyObject.fieldMap.keySet().iterator();
+        Iterator<String> iterator = copyObject.fieldMap.keySet().iterator();
         String oldIdentifier;
         String newIdentifier;
         Lyrics3v2Field newObject;
 
         while (iterator.hasNext())
         {
-            oldIdentifier = (String) iterator.next().toString();
+            oldIdentifier = iterator.next().toString();
             newIdentifier = new String(oldIdentifier);
-            newObject = new Lyrics3v2Field((Lyrics3v2Field) copyObject.fieldMap.get(newIdentifier));
+            newObject = new Lyrics3v2Field(copyObject.fieldMap.get(newIdentifier));
             fieldMap.put(newIdentifier, newObject);
         }
     }
@@ -88,14 +88,14 @@ public class Lyrics3v2 extends AbstractLyrics3
             else
             {
                 Lyrics3v2Field newField;
-                Iterator iterator;
+                Iterator<AbstractID3v2Frame> iterator;
                 iterator = (new ID3v24Tag(mp3tag)).iterator();
 
                 while (iterator.hasNext())
                 {
                     try
                     {
-                        newField = new Lyrics3v2Field((AbstractID3v2Frame) iterator.next());
+                        newField = new Lyrics3v2Field(iterator.next());
 
                         if (newField != null)
                         {
@@ -147,7 +147,7 @@ public class Lyrics3v2 extends AbstractLyrics3
      */
     public Lyrics3v2Field getField(String identifier)
     {
-        return (Lyrics3v2Field) fieldMap.get(identifier);
+        return fieldMap.get(identifier);
     }
 
     /**
@@ -172,12 +172,12 @@ public class Lyrics3v2 extends AbstractLyrics3
     public int getSize()
     {
         int size = 0;
-        Iterator iterator = fieldMap.values().iterator();
+        Iterator<Lyrics3v2Field> iterator = fieldMap.values().iterator();
         Lyrics3v2Field field;
 
         while (iterator.hasNext())
         {
-            field = (Lyrics3v2Field) iterator.next();
+            field = iterator.next();
             size += field.getSize();
         }
 
@@ -219,7 +219,7 @@ public class Lyrics3v2 extends AbstractLyrics3
     /**
      * @return
      */
-    public Iterator iterator()
+    public Iterator<Lyrics3v2Field> iterator()
     {
         return fieldMap.values().iterator();
     }
@@ -257,7 +257,7 @@ public class Lyrics3v2 extends AbstractLyrics3
         seek(byteBuffer);
         filePointer = byteBuffer.position();
 
-        fieldMap = new HashMap();
+        fieldMap = new HashMap<String,Lyrics3v2Field>();
 
         Lyrics3v2Field lyric;
 
@@ -345,13 +345,13 @@ public class Lyrics3v2 extends AbstractLyrics3
      */
     public String toString()
     {
-        Iterator iterator = fieldMap.values().iterator();
+        Iterator<Lyrics3v2Field> iterator = fieldMap.values().iterator();
         Lyrics3v2Field field;
         String str = getIdentifier() + " " + this.getSize() + "\n";
 
         while (iterator.hasNext())
         {
-            field = (Lyrics3v2Field) iterator.next();
+            field = iterator.next();
             str += (field.toString() + "\n");
         }
 
@@ -372,7 +372,7 @@ public class Lyrics3v2 extends AbstractLyrics3
 
             if (lyricsPresent)
             {
-                lyrField = (Lyrics3v2Field) fieldMap.get("LYR");
+                lyrField = fieldMap.get("LYR");
 
                 FieldFrameBodyLYR lyrBody = (FieldFrameBodyLYR) lyrField.getBody();
                 timeStampPresent = lyrBody.hasTimeStamp();
@@ -399,7 +399,7 @@ public class Lyrics3v2 extends AbstractLyrics3
 
         String str;
         Lyrics3v2Field field;
-        Iterator iterator;
+        Iterator<Lyrics3v2Field> iterator;
         ID3v1Tag id3v1tag = new ID3v1Tag();
 
         id3v1tag = null;
@@ -420,14 +420,14 @@ public class Lyrics3v2 extends AbstractLyrics3
 
         // IND needs to go first. lets create/update it and write it first.
         updateField("IND");
-        field = (Lyrics3v2Field) fieldMap.get("IND");
+        field = fieldMap.get("IND");
         field.write(file);
 
         iterator = fieldMap.values().iterator();
 
         while (iterator.hasNext())
         {
-            field = (Lyrics3v2Field) iterator.next();
+            field = iterator.next();
 
             String id = field.getIdentifier();
             boolean save = TagOptionSingleton.getInstance().getLyrics3SaveField(id);

@@ -543,7 +543,7 @@ public class  FlacTag implements Tag
      * @return iterator over whole list
      */
     //TODO add images to iterator
-    public Iterator getFields()
+    public Iterator<TagField> getFields()
     {
         return tag.getFields();
     }

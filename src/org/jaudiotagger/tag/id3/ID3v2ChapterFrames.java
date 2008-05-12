@@ -49,7 +49,7 @@ public class ID3v2ChapterFrames extends ID3Frames
         idToValue.put(FRAME_ID_CHAPTER, "Chapter");
         idToValue.put(FRAME_ID_TABLE_OF_CONTENT, "Table of content");
         createMaps();
-        multipleFrames = new TreeSet();
-        discardIfFileAlteredFrames = new TreeSet();
+        multipleFrames = new TreeSet<String>();
+        discardIfFileAlteredFrames = new TreeSet<String>();
     }
 }

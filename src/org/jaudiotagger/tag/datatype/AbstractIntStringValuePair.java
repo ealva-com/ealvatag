@@ -26,7 +26,7 @@ import java.util.Collections;
 /**
  * A two way mapping between an Integral Id and a String value
  */
-public class AbstractIntStringValuePair extends AbstractValuePair
+public class AbstractIntStringValuePair extends AbstractValuePair<Integer,String>
 {
     protected Integer key = null;
 
@@ -35,7 +35,7 @@ public class AbstractIntStringValuePair extends AbstractValuePair
      */
     public Integer getIdForValue(String value)
     {
-        return (Integer) valueToId.get(value);
+        return valueToId.get(value);
     }
 
     /**
@@ -43,7 +43,7 @@ public class AbstractIntStringValuePair extends AbstractValuePair
      */
     public String getValueForId(int id)
     {
-        return (String) idToValue.get(new Integer(id));
+        return idToValue.get(new Integer(id));
     }
 
     protected void createMaps()
@@ -51,8 +51,8 @@ public class AbstractIntStringValuePair extends AbstractValuePair
         iterator = idToValue.keySet().iterator();
         while (iterator.hasNext())
         {
-            key = (Integer) iterator.next();
-            value = (String) idToValue.get(key);
+            key = iterator.next();
+            value = idToValue.get(key);
             valueToId.put(value, key);
         }
 
@@ -60,7 +60,7 @@ public class AbstractIntStringValuePair extends AbstractValuePair
         iterator = idToValue.keySet().iterator();
         while (iterator.hasNext())
         {
-            valueList.add(idToValue.get((Integer) iterator.next()));
+            valueList.add(idToValue.get(iterator.next()));
         }
         //Sort alphabetically
         Collections.sort(valueList);

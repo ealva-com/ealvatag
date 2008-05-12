@@ -111,15 +111,15 @@ public class ID3Tags
         }
         else if (value instanceof Byte)
         {
-            number = (long) ((Byte) value).byteValue();
+            number = ((Byte) value).byteValue();
         }
         else if (value instanceof Short)
         {
-            number = (long) ((Short) value).shortValue();
+            number = ((Short) value).shortValue();
         }
         else if (value instanceof Integer)
         {
-            number = (long) ((Integer) value).intValue();
+            number = ((Integer) value).intValue();
         }
         else if (value instanceof Long)
         {
@@ -141,7 +141,7 @@ public class ID3Tags
         {
             return null;
         }
-        return (String) ID3Frames.convertv22Tov23.get(identifier.subSequence(0, 3));
+        return ID3Frames.convertv22Tov23.get(identifier.subSequence(0, 3));
     }
 
     /**
@@ -155,11 +155,11 @@ public class ID3Tags
             return null;
         }
         //Has idv22 been mapped to v23
-        String id = (String) ID3Frames.convertv22Tov23.get(identifier.substring(0, 3));
+        String id = ID3Frames.convertv22Tov23.get(identifier.substring(0, 3));
         if (id != null)
         {
             //has v2.3 been mapped to v2.4
-            String v23id = (String) ID3Frames.convertv23Tov24.get(id);
+            String v23id = ID3Frames.convertv23Tov24.get(id);
             if (v23id == null)
             {
                 //if not it may be because v2.3 and and v2.4 are same so wont be
@@ -198,7 +198,7 @@ public class ID3Tags
         if (ID3v23Frames.getInstanceOf().getIdToValueMap().containsKey(identifier))
         {
             //If only name has changed  v22 and modified in v23 return result of.
-            return (String) ID3Frames.convertv23Tov22.get(identifier.substring(0, 4));
+            return ID3Frames.convertv23Tov22.get(identifier.substring(0, 4));
         }
         return null;
     }
@@ -224,7 +224,7 @@ public class ID3Tags
             //If only name has changed  ID3v23 and modified in ID3v24 return result of.
             else
             {
-                return (String) ID3Frames.convertv23Tov24.get(identifier.substring(0, 4));
+                return ID3Frames.convertv23Tov24.get(identifier.substring(0, 4));
             }
         }
         return null;
@@ -236,7 +236,7 @@ public class ID3Tags
      */
     public static String forceFrameID22To23(String identifier)
     {
-        return (String) ID3Frames.forcev22Tov23.get(identifier);
+        return ID3Frames.forcev22Tov23.get(identifier);
     }
 
     /**
@@ -245,7 +245,7 @@ public class ID3Tags
      */
     public static String forceFrameID23To22(String identifier)
     {
-        return (String) ID3Frames.forcev23Tov22.get(identifier);
+        return ID3Frames.forcev23Tov22.get(identifier);
     }
 
     /**
@@ -254,7 +254,7 @@ public class ID3Tags
      */
     public static String forceFrameID23To24(String identifier)
     {
-        return (String) ID3Frames.forcev23Tov24.get(identifier);
+        return ID3Frames.forcev23Tov24.get(identifier);
     }
 
     /**
@@ -263,7 +263,7 @@ public class ID3Tags
      */
     public static String forceFrameID24To23(String identifier)
     {
-        return (String) ID3Frames.forcev24Tov23.get(identifier);
+        return ID3Frames.forcev24Tov23.get(identifier);
     }
 
     /**
@@ -276,7 +276,7 @@ public class ID3Tags
         {
             return null;
         }
-        id = (String) ID3Frames.convertv24Tov23.get(identifier);
+        id = ID3Frames.convertv24Tov23.get(identifier);
         if (id == null)
         {
             if (ID3v23Frames.getInstanceOf().getIdToValueMap().containsKey(identifier) == true)
@@ -298,8 +298,8 @@ public class ID3Tags
      */
     public static Object copyObject(Object copyObject)
     {
-        Constructor constructor;
-        Class[] constructorParameterArray;
+        Constructor<?> constructor;
+        Class<?>[] constructorParameterArray;
         Object[] parameterArray;
         if (copyObject == null)
         {

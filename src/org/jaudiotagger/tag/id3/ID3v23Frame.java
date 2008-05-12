@@ -111,7 +111,7 @@ public class ID3v23Frame extends AbstractID3v2Frame
                 if (identifier != null)
                 {
                     logger.info("V4:Orig id is:" + frame.getIdentifier() + ":New id is:" + identifier);
-                    this.frameBody = (AbstractID3v2FrameBody) ID3Tags.copyObject(frame.getBody());
+                    this.frameBody = (AbstractTagFrameBody) ID3Tags.copyObject(frame.getBody());
                     this.frameBody.setHeader(this);
                     return;
                 }
@@ -187,7 +187,7 @@ public class ID3v23Frame extends AbstractID3v2Frame
                 if (identifier != null)
                 {
                     logger.info("V3:Orig id is:" + frame.getIdentifier() + ":New id is:" + identifier);
-                    this.frameBody = (AbstractID3v2FrameBody) ID3Tags.copyObject(frame.getBody());
+                    this.frameBody = (AbstractTagFrameBody) ID3Tags.copyObject(frame.getBody());
                     this.frameBody.setHeader(this);
                     return;
                 }
@@ -347,7 +347,7 @@ public class ID3v23Frame extends AbstractID3v2Frame
         String id;
 
         //If this identifier is a valid v24 identifier or easily converted to v24
-        id = (String) ID3Tags.convertFrameID23To24(identifier);
+        id = ID3Tags.convertFrameID23To24(identifier);
 
         // Cant easily be converted to v23 but is it a valid v24 identifier
         if (id == null)

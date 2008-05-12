@@ -18,7 +18,6 @@
  */
 package org.jaudiotagger.audio.exceptions;
 
-import java.io.File;
 
 /**
  * This exception is thrown if a

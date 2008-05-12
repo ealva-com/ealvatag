@@ -1,6 +1,5 @@
 package org.jaudiotagger.audio.mp4.atom;
 
-import org.jaudiotagger.audio.generic.Utils;
 import org.jaudiotagger.audio.exceptions.CannotReadException;
 
 import java.nio.ByteBuffer;

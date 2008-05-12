@@ -40,7 +40,7 @@ public class EncodingChunk extends Chunk
     /**
      * The read strings.
      */
-    private final ArrayList strings;
+    private final ArrayList<String> strings;
 
     /**
      * Creates an instance.
@@ -51,7 +51,7 @@ public class EncodingChunk extends Chunk
     public EncodingChunk(long pos, BigInteger chunkLen)
     {
         super(GUID.GUID_ENCODING, pos, chunkLen);
-        this.strings = new ArrayList();
+        this.strings = new ArrayList<String>();
     }
 
     /**
@@ -70,9 +70,9 @@ public class EncodingChunk extends Chunk
      *
      * @return Inserted Strings.
      */
-    public Collection getStrings()
+    public Collection<String> getStrings()
     {
-        return new ArrayList(strings);
+        return new ArrayList<String>(strings);
     }
 
     /**
@@ -85,7 +85,7 @@ public class EncodingChunk extends Chunk
         StringBuffer result = new StringBuffer(super.prettyPrint());
         result.insert(0, Utils.LINE_SEPARATOR + "Encoding:"
                 + Utils.LINE_SEPARATOR);
-        Iterator iterator = this.strings.iterator();
+        Iterator<String> iterator = this.strings.iterator();
         while (iterator.hasNext())
         {
             result.append("   " + iterator.next() + Utils.LINE_SEPARATOR);

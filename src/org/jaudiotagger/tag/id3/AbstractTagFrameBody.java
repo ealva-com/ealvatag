@@ -170,10 +170,10 @@ public abstract class AbstractTagFrameBody
     public final void setObjectValue(String identifier, Object value)
     {
         AbstractDataType object;
-        Iterator iterator = objectList.listIterator();
+        Iterator<AbstractDataType> iterator = objectList.listIterator();
         while (iterator.hasNext())
         {
-            object = (AbstractDataType) iterator.next();
+            object = iterator.next();
             if (object.getIdentifier().equals(identifier))
             {
                 object.setValue(value);
@@ -205,10 +205,10 @@ public abstract class AbstractTagFrameBody
     public final AbstractDataType getObject(String identifier)
     {
         AbstractDataType object = null;
-        Iterator iterator = objectList.listIterator();
+        Iterator<AbstractDataType> iterator = objectList.listIterator();
         while (iterator.hasNext())
         {
-            object = (AbstractDataType) iterator.next();
+            object = iterator.next();
             if (object.getIdentifier().equals(identifier))
             {
                 return object;
@@ -226,10 +226,10 @@ public abstract class AbstractTagFrameBody
     {
         int size = 0;
         AbstractDataType object;
-        Iterator iterator = objectList.listIterator();
+        Iterator<AbstractDataType> iterator = objectList.listIterator();
         while (iterator.hasNext())
         {
-            object = (AbstractDataType) iterator.next();
+            object = iterator.next();
             size += object.getSize();
         }
         return size;
@@ -250,7 +250,7 @@ public abstract class AbstractTagFrameBody
         {
             return false;
         }
-        ArrayList superset = ((AbstractTagFrameBody) obj).objectList;
+        ArrayList<AbstractDataType> superset = ((AbstractTagFrameBody) obj).objectList;
         for (Object anObjectList : objectList)
         {
             if (((AbstractDataType) anObjectList).getValue() != null)

@@ -18,7 +18,6 @@
  */
 package org.jaudiotagger.audio.asf.data;
 
-import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Date;
 

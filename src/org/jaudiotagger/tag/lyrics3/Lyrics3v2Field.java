@@ -89,33 +89,33 @@ public class Lyrics3v2Field
         {
             textFrame = (AbstractFrameBodyTextInfo) frame.getBody();
             frameBody = new FieldFrameBodyAUT("");
-            if ((textFrame != null) && (((String) ((String) textFrame.getText())).length() > 0))
+            if ((textFrame != null) && (textFrame.getText().length() > 0))
             {
-                frameBody = new FieldFrameBodyAUT(((String) textFrame.getText()));
+                frameBody = new FieldFrameBodyAUT(textFrame.getText());
             }
         }
         else if (frameIdentifier.equals("TALB"))
         {
             textFrame = (AbstractFrameBodyTextInfo) frame.getBody();
-            if ((textFrame != null) && (((String) textFrame.getText()).length() > 0))
+            if ((textFrame != null) && (textFrame.getText().length() > 0))
             {
-                frameBody = new FieldFrameBodyEAL(((String) textFrame.getText()));
+                frameBody = new FieldFrameBodyEAL(textFrame.getText());
             }
         }
         else if (frameIdentifier.equals("TPE1"))
         {
             textFrame = (AbstractFrameBodyTextInfo) frame.getBody();
-            if ((textFrame != null) && (((String) textFrame.getText()).length() > 0))
+            if ((textFrame != null) && (textFrame.getText().length() > 0))
             {
-                frameBody = new FieldFrameBodyEAR(((String) textFrame.getText()));
+                frameBody = new FieldFrameBodyEAR(textFrame.getText());
             }
         }
         else if (frameIdentifier.equals("TIT2"))
         {
             textFrame = (AbstractFrameBodyTextInfo) frame.getBody();
-            if ((textFrame != null) && (((String) textFrame.getText()).length() > 0))
+            if ((textFrame != null) && (textFrame.getText().length() > 0))
             {
-                frameBody = new FieldFrameBodyETT(((String) textFrame.getText()));
+                frameBody = new FieldFrameBodyETT(textFrame.getText());
             }
         }
         else

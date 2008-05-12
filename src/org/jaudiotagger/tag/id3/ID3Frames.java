@@ -16,8 +16,6 @@
 package org.jaudiotagger.tag.id3;
 
 import org.jaudiotagger.tag.datatype.AbstractStringStringValuePair;
-import org.jaudiotagger.tag.TagFieldKey;
-import org.jaudiotagger.tag.mp4.Mp4FieldKey;
 
 import java.util.*;
 
@@ -163,7 +161,7 @@ public abstract class ID3Frames extends AbstractStringStringValuePair
 
     private static void loadID3v22ID3v23Mapping()
     {
-        Iterator iterator;
+        Iterator<String> iterator;
         String key;
         String value;
 
@@ -246,8 +244,8 @@ public abstract class ID3Frames extends AbstractStringStringValuePair
         iterator = convertv22Tov23.keySet().iterator();
         while (iterator.hasNext())
         {
-            key = (String) iterator.next();
-            value = (String) convertv22Tov23.get(key);
+            key = iterator.next();
+            value = convertv22Tov23.get(key);
             convertv23Tov22.put(value, key);
         }
 

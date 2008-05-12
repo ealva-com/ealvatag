@@ -1,7 +1,5 @@
 package org.jaudiotagger.tag.mp4.atom;
 
-import org.jaudiotagger.tag.mp4.field.Mp4FieldType;
-import org.jaudiotagger.tag.mp4.field.Mp4TagReverseDnsField;
 
 /**
  * List of valid values for the Content Type (Stik) atom

@@ -335,7 +335,7 @@ public interface Tag
      *
      * @return iterator over whole list
      */
-    public Iterator getFields();
+    public Iterator<TagField> getFields();
 
     /**
      * Return the number of fields

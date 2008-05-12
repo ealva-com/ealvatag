@@ -47,7 +47,7 @@ public class FieldFrameBodyUnsupported extends AbstractLyrics3v2FieldFrameBody
     public FieldFrameBodyUnsupported(FieldFrameBodyUnsupported copyObject)
     {
         super(copyObject);
-        this.value = (byte[]) copyObject.value.clone();
+        this.value = copyObject.value.clone();
     }
 
     /**
@@ -92,8 +92,8 @@ public class FieldFrameBodyUnsupported extends AbstractLyrics3v2FieldFrameBody
 
         FieldFrameBodyUnsupported object = (FieldFrameBodyUnsupported) obj;
 
-        String subset = new String((byte[]) this.value);
-        String superset = new String((byte[]) object.value);
+        String subset = new String(this.value);
+        String superset = new String(object.value);
 
         if (!superset.contains(subset))
         {

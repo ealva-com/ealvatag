@@ -37,13 +37,13 @@ public class StreamBitratePropertiesChunk extends Chunk
      * For each call of {@link #addBitrateRecord(int,long)} an {@link Long}
      * object is appended, which represents the average bitrage.
      */
-    private final ArrayList bitRates;
+    private final ArrayList<Long> bitRates;
 
     /**
      * For each call of {@link #addBitrateRecord(int,long)} an {@link Integer}
      * object is appended, which represents the stream-number.
      */
-    private final ArrayList streamNumbers;
+    private final ArrayList<Integer> streamNumbers;
 
     /**
      * Creates an instance.
@@ -54,8 +54,8 @@ public class StreamBitratePropertiesChunk extends Chunk
     public StreamBitratePropertiesChunk(long pos, BigInteger chunkSize)
     {
         super(GUID.GUID_STREAM_BITRATE_PROPERTIES, pos, chunkSize);
-        this.bitRates = new ArrayList();
-        this.streamNumbers = new ArrayList();
+        this.bitRates = new ArrayList<Long>();
+        this.streamNumbers = new ArrayList<Integer>();
     }
 
     /**
@@ -83,7 +83,7 @@ public class StreamBitratePropertiesChunk extends Chunk
         int index = streamNumbers.indexOf(seach);
         if (index != -1)
         {
-            return ((Long) bitRates.get(index)).longValue();
+            return bitRates.get(index).longValue();
         }
         return -1;
     }

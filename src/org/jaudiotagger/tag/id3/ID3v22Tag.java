@@ -16,27 +16,14 @@
 package org.jaudiotagger.tag.id3;
 
 import org.jaudiotagger.FileConstants;
-import org.jaudiotagger.logging.ErrorMessage;
 import org.jaudiotagger.audio.mp3.MP3File;
-import org.jaudiotagger.audio.exceptions.CannotWriteException;
 import org.jaudiotagger.tag.*;
-import static org.jaudiotagger.tag.mp4.Mp4FieldKey.ARTIST;
-import static org.jaudiotagger.tag.mp4.Mp4FieldKey.ALBUM;
-import static org.jaudiotagger.tag.mp4.Mp4FieldKey.TITLE;
-import static org.jaudiotagger.tag.mp4.Mp4FieldKey.TRACK;
-import static org.jaudiotagger.tag.mp4.Mp4FieldKey.DAY;
-import static org.jaudiotagger.tag.mp4.Mp4FieldKey.COMMENT;
-import static org.jaudiotagger.tag.mp4.Mp4FieldKey.GENRE;
-import org.jaudiotagger.tag.mp4.Mp4FieldKey;
 import org.jaudiotagger.tag.id3.framebody.AbstractFrameBodyTextInfo;
 import org.jaudiotagger.tag.id3.framebody.FrameBodyTDRC;
-import org.jaudiotagger.tag.id3.framebody.FrameBodyTXXX;
-import org.jaudiotagger.tag.id3.framebody.FrameBodyUFID;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
-import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.channels.WritableByteChannel;
@@ -151,12 +138,12 @@ public class ID3v22Tag
         logger.info("Copying Frames,there are:" + copyObject.frameMap.keySet().size());
         frameMap = new LinkedHashMap();
         //Copy Frames that are a valid 2.2 type
-        Iterator iterator = copyObject.frameMap.keySet().iterator();
+        Iterator<String> iterator = copyObject.frameMap.keySet().iterator();
         AbstractID3v2Frame frame;
         ID3v22Frame newFrame = null;
         while (iterator.hasNext())
         {
-            String id = (String) iterator.next();
+            String id = iterator.next();
             Object o = copyObject.frameMap.get(id);
             if (o instanceof AbstractID3v2Frame)
             {
@@ -186,10 +173,10 @@ public class ID3v22Tag
             }
             else if (o instanceof ArrayList)
             {
-                ArrayList multiFrame = new ArrayList();
-                for (ListIterator li = ((ArrayList) o).listIterator(); li.hasNext();)
+                ArrayList<AbstractID3v2Frame> multiFrame = new ArrayList<AbstractID3v2Frame>();
+                for (ListIterator<AbstractID3v2Frame> li = ((ArrayList<AbstractID3v2Frame>) o).listIterator(); li.hasNext();)
                 {
-                    frame = (AbstractID3v2Frame) li.next();
+                    frame = li.next();
                     try
                     {
                         newFrame = new ID3v22Frame(frame);

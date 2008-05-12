@@ -24,7 +24,6 @@ import org.jaudiotagger.tag.id3.framebody.AbstractID3v2FrameBody;
 import org.jaudiotagger.tag.id3.framebody.FrameBodyUnsupported;
 
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.nio.ByteBuffer;
@@ -104,8 +103,8 @@ public abstract class AbstractID3v2Frame
         // to keep things up to date.
         try
         {
-            Class c = Class.forName("org.jaudiotagger.tag.id3.framebody.FrameBody" + identifier);
-            frameBody = (AbstractID3v2FrameBody) c.newInstance();
+            Class<AbstractID3v2FrameBody> c = (Class<AbstractID3v2FrameBody>)Class.forName("org.jaudiotagger.tag.id3.framebody.FrameBody" + identifier);
+            frameBody = c.newInstance();
         }
         catch (ClassNotFoundException cnfe)
         {
@@ -194,6 +193,7 @@ public abstract class AbstractID3v2Frame
      * @return a newly created FrameBody
      * @throws InvalidFrameException unable to construct a framebody from the data
      */
+    @SuppressWarnings("unchecked")
     protected AbstractID3v2FrameBody readBody(String identifier, ByteBuffer byteBuffer, int frameSize)
             throws InvalidFrameException
     {
@@ -204,15 +204,15 @@ public abstract class AbstractID3v2Frame
         AbstractID3v2FrameBody frameBody;
         try
         {
-            Class c = Class.forName("org.jaudiotagger.tag.id3.framebody.FrameBody" + identifier);
-            Class[] constructorParameterTypes =
-                    {((Class) Class.forName("java.nio.ByteBuffer")), Integer.TYPE
+            Class<AbstractID3v2FrameBody> c = (Class<AbstractID3v2FrameBody>)Class.forName("org.jaudiotagger.tag.id3.framebody.FrameBody" + identifier);
+            Class<?>[] constructorParameterTypes =
+                    {Class.forName("java.nio.ByteBuffer"), Integer.TYPE
                     };
             Object[] constructorParameterValues =
                     {byteBuffer, frameSize
                     };
-            Constructor construct = c.getConstructor(constructorParameterTypes);
-            frameBody = (AbstractID3v2FrameBody) (construct.newInstance(constructorParameterValues));
+            Constructor<AbstractID3v2FrameBody> construct = c.getConstructor(constructorParameterTypes);
+            frameBody = (construct.newInstance(constructorParameterValues));
         }
         //No class defined for this frame type,use FrameUnsupported
         catch (ClassNotFoundException cex)
@@ -291,6 +291,7 @@ public abstract class AbstractID3v2Frame
      * @return newly created framebody for this type
      * @throws InvalidFrameException if unable to construct a framebody for the identifier and body provided.
      */
+    @SuppressWarnings("unchecked")
     protected AbstractID3v2FrameBody readBody(String identifier, AbstractID3v2FrameBody body)
             throws InvalidFrameException
     {
@@ -300,11 +301,11 @@ public abstract class AbstractID3v2Frame
         AbstractID3v2FrameBody frameBody;
         try
         {
-            Class c = Class.forName("org.jaudiotagger.tag.id3.framebody.FrameBody" + identifier);
-            Class[] constructorParameterTypes = {body.getClass()};
+            Class<AbstractID3v2FrameBody> c = (Class<AbstractID3v2FrameBody>)Class.forName("org.jaudiotagger.tag.id3.framebody.FrameBody" + identifier);
+            Class<?>[] constructorParameterTypes = {body.getClass()};
             Object[] constructorParameterValues = {body};
-            Constructor construct = c.getConstructor(constructorParameterTypes);
-            frameBody = (AbstractID3v2FrameBody) (construct.newInstance(constructorParameterValues));
+            Constructor<AbstractID3v2FrameBody> construct = c.getConstructor(constructorParameterTypes);
+            frameBody = (construct.newInstance(constructorParameterValues));
         }
         catch (ClassNotFoundException cex)
         {

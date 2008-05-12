@@ -99,7 +99,7 @@ public class AsfHeaderReader
             /*
                 * Now reading header of chuncks.
                 */
-            ArrayList chunks = new ArrayList();
+            ArrayList<Chunk> chunks = new ArrayList<Chunk>();
             while (chunkLen.compareTo(BigInteger.valueOf(in.getFilePointer())) > 0)
             {
                 Chunk chunk = ChunkHeaderReader.readChunckHeader(in);
@@ -124,10 +124,10 @@ public class AsfHeaderReader
             ContentDescription contentDescription = null;
             StreamBitratePropertiesChunk bitratePropertiesChunk = null;
 
-            Iterator iterator = chunks.iterator();
+            Iterator<Chunk> iterator = chunks.iterator();
             while (iterator.hasNext())
             {
-                Chunk currentChunk = (Chunk) iterator.next();
+                Chunk currentChunk = iterator.next();
                 if (fileHeader == null
                         && (fileHeader = FileHeaderReader
                         .read(in, currentChunk)) != null)

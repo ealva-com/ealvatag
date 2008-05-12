@@ -27,6 +27,7 @@ package org.jaudiotagger.tag;
 import org.jaudiotagger.tag.id3.framebody.AbstractID3v2FrameBody;
 import org.jaudiotagger.tag.id3.framebody.FrameBodyCOMM;
 import org.jaudiotagger.tag.id3.framebody.FrameBodyTIPL;
+import org.jaudiotagger.tag.id3.framebody.ID3v24FrameBody;
 import org.jaudiotagger.tag.reference.GenreTypes;
 import org.jaudiotagger.tag.reference.Languages;
 import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
@@ -41,7 +42,7 @@ public class TagOptionSingleton
     /**
      *
      */
-    private static HashMap tagOptionTable = new HashMap();
+    private static HashMap<String,TagOptionSingleton> tagOptionTable = new HashMap<String,TagOptionSingleton>();
 
     /**
      *
@@ -51,28 +52,28 @@ public class TagOptionSingleton
     /**
      *
      */
-    private static Object defaultOptions = DEFAULT;
+    private static String defaultOptions = DEFAULT;
 
     /**
      *
      */
-    private HashMap keywordMap = new HashMap();
+    private HashMap<Class<? extends ID3v24FrameBody>,LinkedList<String>> keywordMap = new HashMap<Class<? extends ID3v24FrameBody>,LinkedList<String>>();
 
     /**
      * Map of lyric ID's to Boolean objects if we should or should not save the
      * specific Kyrics3 field. Defaults to true.
      */
-    private HashMap lyrics3SaveFieldMap = new HashMap();
+    private HashMap<String,Boolean> lyrics3SaveFieldMap = new HashMap<String,Boolean>();
 
     /**
      * parenthesis map stuff
      */
-    private HashMap parenthesisMap = new HashMap();
+    private HashMap<String,String> parenthesisMap = new HashMap<String,String>();
 
     /**
      * <code>HashMap</code> listing words to be replaced if found
      */
-    private HashMap replaceWordMap = new HashMap();
+    private HashMap<String,String> replaceWordMap = new HashMap<String,String>();
 
 
     /**
@@ -250,9 +251,9 @@ public class TagOptionSingleton
      * @param instanceKey
      * @return
      */
-    public static TagOptionSingleton getInstance(Object instanceKey)
+    public static TagOptionSingleton getInstance(String instanceKey)
     {
-        TagOptionSingleton tagOptions = (TagOptionSingleton) tagOptionTable.get(instanceKey);
+        TagOptionSingleton tagOptions = tagOptionTable.get(instanceKey);
 
         if (tagOptions == null)
         {
@@ -283,7 +284,7 @@ public class TagOptionSingleton
     /**
      * @param instanceKey
      */
-    public void setInstanceKey(Object instanceKey)
+    public void setInstanceKey(String instanceKey)
     {
         TagOptionSingleton.defaultOptions = instanceKey;
     }
@@ -291,7 +292,7 @@ public class TagOptionSingleton
     /**
      * @return
      */
-    public static Object getInstanceKey()
+    public static String getInstanceKey()
     {
         return defaultOptions;
     }
@@ -479,7 +480,7 @@ public class TagOptionSingleton
     /**
      * @return
      */
-    public Iterator getKeywordIterator()
+    public Iterator<Class<? extends ID3v24FrameBody>> getKeywordIterator()
     {
         return keywordMap.keySet().iterator();
     }
@@ -488,9 +489,9 @@ public class TagOptionSingleton
      * @param id3v2_4FrameBody
      * @return
      */
-    public Iterator getKeywordListIterator(Class id3v2_4FrameBody)
+    public Iterator<String> getKeywordListIterator(Class<? extends ID3v24FrameBody> id3v2_4FrameBody)
     {
-        return ((LinkedList) keywordMap.get(id3v2_4FrameBody)).iterator();
+        return keywordMap.get(id3v2_4FrameBody).iterator();
     }
 
     /**
@@ -586,13 +587,13 @@ public class TagOptionSingleton
      */
     public boolean getLyrics3SaveField(String id)
     {
-        return (Boolean) lyrics3SaveFieldMap.get(id);
+        return lyrics3SaveFieldMap.get(id);
     }
 
     /**
      * @return
      */
-    public HashMap getLyrics3SaveFieldMap()
+    public HashMap<String,Boolean> getLyrics3SaveFieldMap()
     {
         return lyrics3SaveFieldMap;
     }
@@ -603,7 +604,7 @@ public class TagOptionSingleton
      */
     public String getNewReplaceWord(String oldWord)
     {
-        return (String) replaceWordMap.get(oldWord);
+        return replaceWordMap.get(oldWord);
     }
 
     /**
@@ -635,7 +636,7 @@ public class TagOptionSingleton
     /**
      * @return
      */
-    public Iterator getOldReplaceWordIterator()
+    public Iterator<String> getOldReplaceWordIterator()
     {
         return replaceWordMap.keySet().iterator();
     }
@@ -652,7 +653,7 @@ public class TagOptionSingleton
     /**
      * @return
      */
-    public Iterator getOpenParenthesisIterator()
+    public Iterator<String> getOpenParenthesisIterator()
     {
         return parenthesisMap.keySet().iterator();
     }
@@ -715,7 +716,7 @@ public class TagOptionSingleton
      */
     public void setToDefault()
     {
-        keywordMap = new HashMap();
+        keywordMap = new HashMap<Class<? extends ID3v24FrameBody>,LinkedList<String>>();
         filenameTagSave = false;
         id3v1Save = true;
         id3v1SaveAlbum = true;
@@ -732,10 +733,10 @@ public class TagOptionSingleton
         lyrics3KeepEmptyFieldIfRead = false;
         lyrics3Save = true;
         lyrics3SaveEmptyField = false;
-        lyrics3SaveFieldMap = new HashMap();
+        lyrics3SaveFieldMap = new HashMap<String,Boolean>();
         numberMP3SyncFrame = 3;
-        parenthesisMap = new HashMap();
-        replaceWordMap = new HashMap();
+        parenthesisMap = new HashMap<String,String>();
+        replaceWordMap = new HashMap<String,String>();
         timeStampFormat = 2;
         unsyncTags = false;
         removeTrailingTerminatorOnWrite = true;
@@ -746,12 +747,12 @@ public class TagOptionSingleton
 
         //default all lyrics3 fields to save. id3v1 fields are individual
         // settings. id3v2 fields are always looked at to save.
-        Iterator iterator = Lyrics3v2Fields.getInstanceOf().getIdToValueMap().keySet().iterator();
+        Iterator<String> iterator = Lyrics3v2Fields.getInstanceOf().getIdToValueMap().keySet().iterator();
         String fieldId;
 
         while (iterator.hasNext())
         {
-            fieldId = (String) iterator.next();
+            fieldId = iterator.next();
             lyrics3SaveFieldMap.put(fieldId, true);
         }
 
@@ -799,7 +800,7 @@ public class TagOptionSingleton
 
             while (iterator.hasNext())
             {
-                addKeyword(FrameBodyCOMM.class, (String) iterator.next());
+                addKeyword(FrameBodyCOMM.class, iterator.next());
             }
         }
         catch (TagException ex)
@@ -836,7 +837,7 @@ public class TagOptionSingleton
      * @param keyword
      * @throws TagException
      */
-    public void addKeyword(Class id3v2FrameBodyClass, String keyword)
+    public void addKeyword(Class<? extends ID3v24FrameBody> id3v2FrameBodyClass, String keyword)
             throws TagException
     {
         if (AbstractID3v2FrameBody.class.isAssignableFrom(id3v2FrameBodyClass) == false)
@@ -846,16 +847,16 @@ public class TagOptionSingleton
 
         if ((keyword != null) && (keyword.length() > 0))
         {
-            LinkedList keywordList;
+            LinkedList<String> keywordList;
 
             if (keywordMap.containsKey(id3v2FrameBodyClass) == false)
             {
-                keywordList = new LinkedList();
+                keywordList = new LinkedList<String>();
                 keywordMap.put(id3v2FrameBodyClass, keywordList);
             }
             else
             {
-                keywordList = (LinkedList) keywordMap.get(id3v2FrameBodyClass);
+                keywordList = keywordMap.get(id3v2FrameBodyClass);
             }
 
             keywordList.add(keyword);

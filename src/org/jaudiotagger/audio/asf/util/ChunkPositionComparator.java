@@ -29,7 +29,7 @@ import org.jaudiotagger.audio.asf.data.Chunk;
  *
  * @author Christian Laireiter
  */
-public class ChunkPositionComparator implements Comparator
+public class ChunkPositionComparator implements Comparator<Chunk>
 {
 
     /**
@@ -37,16 +37,9 @@ public class ChunkPositionComparator implements Comparator
      *
      * @see java.util.Comparator#compare(java.lang.Object,java.lang.Object)
      */
-    public int compare(Object o1, Object o2)
+    public int compare(Chunk c1, Chunk c2)
     {
-        int result = 0;
-        if (o1 instanceof Chunk && o2 instanceof Chunk)
-        {
-            Chunk c1 = (Chunk) o1;
-            Chunk c2 = (Chunk) o2;
-            result = (int) (c1.getPosition() - c2.getPosition());
-        }
+        int result = new Long(c1.getPosition()).compareTo(new Long(c2.getPosition()));
         return result;
     }
-
 }

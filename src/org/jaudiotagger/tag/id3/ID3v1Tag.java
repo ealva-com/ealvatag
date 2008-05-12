@@ -214,7 +214,7 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag
         //TODO
     }
 
-    public List get(String id)
+    public List<TagField> get(String id)
     {
         //TODO
         return null;
@@ -225,9 +225,9 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag
         return 7;
     }
 
-    protected List returnFieldToList(ID3v1TagField field)
+    protected List<TagField> returnFieldToList(ID3v1TagField field)
     {
-        List fields = new ArrayList();
+        List<TagField> fields = new ArrayList<TagField>();
         fields.add(field);
         return fields;
     }
@@ -267,7 +267,7 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag
     /**
      * @return album within list or empty if does not exist
      */
-    public List getAlbum()
+    public List<TagField> getAlbum()
     {
         if (getFirstAlbum().length() > 0)
         {
@@ -276,7 +276,7 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag
         }
         else
         {
-            return new ArrayList();
+            return new ArrayList<TagField>();
         }
     }
 
@@ -317,7 +317,7 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag
     /**
      * @return Artist within list or empty if does not exist
      */
-    public List getArtist()
+    public List<TagField> getArtist()
     {
         if (getFirstArtist().length() > 0)
         {
@@ -326,7 +326,7 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag
         }
         else
         {
-            return new ArrayList();
+            return new ArrayList<TagField>();
         }
     }
 
@@ -355,7 +355,7 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag
     /**
      * @return comment within list or empty if does not exist
      */
-    public List getComment()
+    public List<TagField> getComment()
     {
         if (getFirstComment().length() > 0)
         {
@@ -364,7 +364,7 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag
         }
         else
         {
-            return new ArrayList();
+            return new ArrayList<TagField>();
         }
     }
 
@@ -438,7 +438,7 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag
      *
      * @return
      */
-    public List getGenre()
+    public List<TagField> getGenre()
     {
         if (getFirstGenre().length() > 0)
         {
@@ -447,7 +447,7 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag
         }
         else
         {
-            return new ArrayList();
+            return new ArrayList<TagField>();
         }
     }
 
@@ -490,7 +490,7 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag
      *
      * @return
      */
-    public List getTitle()
+    public List<TagField> getTitle()
     {
         if (getFirstTitle().length() > 0)
         {
@@ -499,7 +499,7 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag
         }
         else
         {
-            return new ArrayList();
+            return new ArrayList<TagField>();
         }
     }
 
@@ -542,7 +542,7 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag
      *
      * @return
      */
-    public List getYear()
+    public List<TagField> getYear()
     {
         if (getFirstYear().length() > 0)
         {
@@ -551,7 +551,7 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag
         }
         else
         {
-            return new ArrayList();
+            return new ArrayList<TagField>();
         }
     }
 
@@ -570,7 +570,7 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag
         throw new UnsupportedOperationException("ID3v10 cannot store track numbers");
     }
 
-    public List getTrack()
+    public List<TagField> getTrack()
     {
         throw new UnsupportedOperationException("ID3v10 cannot store track numbers");
     }
@@ -581,7 +581,7 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag
         throw new UnsupportedOperationException("TODO:Not done yet");
     }
 
-    public Iterator getFields()
+    public Iterator<TagField> getFields()
     {
         throw new UnsupportedOperationException("TODO:Not done yet");
     }
@@ -968,7 +968,7 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag
         MP3File.getStructureFormatter().addElement(TYPE_ALBUM, this.album);
         MP3File.getStructureFormatter().addElement(TYPE_YEAR, this.year);
         MP3File.getStructureFormatter().addElement(TYPE_COMMENT, this.comment);
-        MP3File.getStructureFormatter().addElement(TYPE_GENRE, (int) this.genre);
+        MP3File.getStructureFormatter().addElement(TYPE_GENRE, this.genre);
         MP3File.getStructureFormatter().closeHeadingElement(TYPE_TAG);
     }
 }

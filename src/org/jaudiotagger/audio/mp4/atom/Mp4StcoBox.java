@@ -1,7 +1,6 @@
 package org.jaudiotagger.audio.mp4.atom;
 
 import org.jaudiotagger.audio.generic.Utils;
-import org.jaudiotagger.audio.mp4.Mp4AudioHeader;
 import org.jaudiotagger.audio.mp4.Mp4NotMetaFieldKey;
 import org.jaudiotagger.audio.exceptions.CannotReadException;
 

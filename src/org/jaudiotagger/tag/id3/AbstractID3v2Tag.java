@@ -244,12 +244,12 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
      */
     public boolean hasFrameOfType(String identifier)
     {
-        Iterator iterator = frameMap.keySet().iterator();
+        Iterator<String> iterator = frameMap.keySet().iterator();
         String key;
         boolean found = false;
         while (iterator.hasNext() && !found)
         {
-            key = (String) iterator.next();
+            key = iterator.next();
             if (key.startsWith(identifier))
             {
                 found = true;
@@ -333,7 +333,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
         }
         if (object instanceof List)
         {
-            return (AbstractID3v2Frame) ((List) object).get(0);
+            return ((List<AbstractID3v2Frame>) object).get(0);
         }
         else
         {
@@ -617,7 +617,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
         //There are already frames of this type
         if (o instanceof List)
         {
-            List list = (List) o;
+            List<TagField> list = (List<TagField>) o;
             list.add(field);
         }
         //No frame of this type
@@ -628,8 +628,8 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
         //One frame exists, we are adding another so convert to list
         else
         {
-            List list = new ArrayList();
-            list.add(o);
+            List<TagField> list = new ArrayList<TagField>();
+            list.add((TagField)o);
             list.add(field);
             frameMap.put(field.getId(), list);
         }
@@ -750,12 +750,12 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
      */
     public Iterator getFrameOfType(String identifier)
     {
-        Iterator iterator = frameMap.keySet().iterator();
+        Iterator<String> iterator = frameMap.keySet().iterator();
         HashSet result = new HashSet();
         String key;
         while (iterator.hasNext())
         {
-            key = (String) iterator.next();
+            key = iterator.next();
             if (key.startsWith(identifier))
             {
                 result.add(frameMap.get(key));
@@ -1092,7 +1092,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
         fcIn = new FileInputStream(file).getChannel();
 
         //Write padding to new file (this is where the tag will be written to later)
-        long written = (long) fcOut.write(paddingBuffer);
+        long written = fcOut.write(paddingBuffer);
 
         //Write rest of file starting from audio
         logger.finer("Copying:" + (file.length() - audioStart) + "bytes");
@@ -1247,14 +1247,14 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
                 Object o = frameMap.get(frameId);
                 if (o instanceof ArrayList)
                 {
-                    ArrayList multiValues = (ArrayList) o;
+                    ArrayList<AbstractID3v2Frame> multiValues = (ArrayList<AbstractID3v2Frame>) o;
                     multiValues.add(next);
                     logger.finer("Adding Multi Frame(1)" + frameId);
                 }
                 else
                 {
-                    ArrayList multiValues = new ArrayList();
-                    multiValues.add(o);
+                    ArrayList<AbstractID3v2Frame> multiValues = new ArrayList<AbstractID3v2Frame>();
+                    multiValues.add((AbstractID3v2Frame)o);
                     multiValues.add(next);
                     frameMap.put(frameId, multiValues);
                     logger.finer("Adding Multi Frame(2)" + frameId);
@@ -1302,10 +1302,10 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
             }
             else
             {
-                ArrayList multiFrames = (ArrayList) o;
-                for (ListIterator li = multiFrames.listIterator(); li.hasNext();)
+                ArrayList<AbstractID3v2Frame> multiFrames = (ArrayList<AbstractID3v2Frame>) o;
+                for (ListIterator<AbstractID3v2Frame> li = multiFrames.listIterator(); li.hasNext();)
                 {
-                    frame = (AbstractID3v2Frame) li.next();
+                    frame = li.next();
                     size += frame.getSize();
                 }
             }
@@ -1342,10 +1342,10 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
             }
             else
             {
-                ArrayList multiFrames = (ArrayList) o;
-                for (ListIterator li = multiFrames.listIterator(); li.hasNext();)
+                ArrayList<AbstractID3v2Frame> multiFrames = (ArrayList<AbstractID3v2Frame>) o;
+                for (ListIterator<AbstractID3v2Frame> li = multiFrames.listIterator(); li.hasNext();)
                 {
-                    frame = (AbstractID3v2Frame) li.next();
+                    frame = li.next();
                     frame.write(bodyBuffer);
                 }
             }
@@ -1384,10 +1384,10 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
             }
             else
             {
-                ArrayList multiFrames = (ArrayList) o;
-                for (ListIterator li = multiFrames.listIterator(); li.hasNext();)
+                ArrayList<AbstractID3v2Frame> multiFrames = (ArrayList<AbstractID3v2Frame>) o;
+                for (ListIterator<AbstractID3v2Frame> li = multiFrames.listIterator(); li.hasNext();)
                 {
-                    frame = (AbstractID3v2Frame) li.next();
+                    frame = li.next();
                     frame.createStructure();
                 }
             }
@@ -1408,12 +1408,12 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
         else if (o instanceof List)
         {
             //TODO should return copy
-            return (List) o;
+            return (List<TagField>) o;
         }
         else if (o instanceof AbstractID3v2Frame)
         {
-            List list = new ArrayList<TagField>();
-            list.add(o);
+            List<TagField> list = new ArrayList<TagField>();
+            list.add((TagField)o);
             return list;
         }
         else
@@ -1422,38 +1422,38 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
         }
     }
 
-    public List getAlbum()
+    public List<TagField> getAlbum()
     {
         return get(getAlbumId());
     }
 
-    public List getArtist()
+    public List<TagField> getArtist()
     {
         return get(getArtistId());
     }
 
-    public List getComment()
+    public List<TagField> getComment()
     {
         return get(getCommentId());
     }
 
-    public List getGenre()
+    public List<TagField> getGenre()
     {
         return get(getGenreId());
     }
 
-    public List getTitle()
+    public List<TagField> getTitle()
     {
         return get(getTitleId());
     }
 
-    public List getTrack()
+    public List<TagField> getTrack()
     {
         return get(getTrackId());
     }
 
 
-    public List getYear()
+    public List<TagField> getYear()
     {
         return get(getYearId());
     }
@@ -1662,12 +1662,12 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
     }
 
 
-    public Iterator getFields()
+    public Iterator<TagField> getFields()
     {
         final Iterator<Map.Entry<String, Object>> it = this.frameMap.entrySet().iterator();
-        return new Iterator()
+        return new Iterator<TagField>()
         {
-            private Iterator fieldsIt;
+            private Iterator<TagField> fieldsIt;
 
             private void changeIt()
             {
@@ -1679,7 +1679,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
                 Map.Entry<String, Object> e = it.next();
                 if (e.getValue() instanceof List)
                 {
-                    List<TagField> l = (List) e.getValue();
+                    List<TagField> l = (List<TagField>) e.getValue();
                     fieldsIt = l.iterator();
                 }
                 else
@@ -1700,7 +1700,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
                 return it.hasNext() || (fieldsIt != null && fieldsIt.hasNext());
             }
 
-            public Object next()
+            public TagField next()
             {
                 if (!fieldsIt.hasNext())
                 {
@@ -1719,7 +1719,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
 
     public int getFieldCount()
     {
-        Iterator it = getFields();
+        Iterator<TagField> it = getFields();
         int count = 0;
         while (it.hasNext())
         {

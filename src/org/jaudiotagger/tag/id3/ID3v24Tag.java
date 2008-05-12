@@ -335,10 +335,10 @@ public class ID3v24Tag extends AbstractID3v2Tag
             //MultiFrames
             else if (o instanceof ArrayList)
             {
-                ArrayList multiFrame = new ArrayList();
-                for (ListIterator li = ((ArrayList) o).listIterator(); li.hasNext();)
+                ArrayList<AbstractID3v2Frame> multiFrame = new ArrayList<AbstractID3v2Frame>();
+                for (ListIterator<AbstractID3v2Frame> li = ((ArrayList<AbstractID3v2Frame>) o).listIterator(); li.hasNext();)
                 {
-                    frame = (AbstractID3v2Frame) li.next();
+                    frame = li.next();
                     try
                     {
                         newFrame = new ID3v24Frame(frame);
@@ -470,14 +470,14 @@ public class ID3v24Tag extends AbstractID3v2Tag
                 {
                     lyric = new Lyrics3v2(mp3tag);
                 }
-                Iterator iterator = lyric.iterator();
+                Iterator<Lyrics3v2Field> iterator = lyric.iterator();
                 Lyrics3v2Field field;
                 ID3v24Frame newFrame;
                 while (iterator.hasNext())
                 {
                     try
                     {
-                        field = (Lyrics3v2Field) iterator.next();
+                        field = iterator.next();
                         newFrame = new ID3v24Frame(field);
                         frameMap.put(newFrame.getIdentifier(), newFrame);
                     }
@@ -1003,11 +1003,11 @@ public class ID3v24Tag extends AbstractID3v2Tag
         MP3File.getStructureFormatter().addElement(TYPE_PADDINGSIZE, this.paddingSize);
         MP3File.getStructureFormatter().addElement(TYPE_FOOTER, this.footer);
         MP3File.getStructureFormatter().addElement(TYPE_IMAGEENCODINGRESTRICTION, this.paddingSize);
-        MP3File.getStructureFormatter().addElement(TYPE_IMAGESIZERESTRICTION, (int) this.imageSizeRestriction);
+        MP3File.getStructureFormatter().addElement(TYPE_IMAGESIZERESTRICTION, this.imageSizeRestriction);
         MP3File.getStructureFormatter().addElement(TYPE_TAGRESTRICTION, this.tagRestriction);
-        MP3File.getStructureFormatter().addElement(TYPE_TAGSIZERESTRICTION, (int) this.tagSizeRestriction);
-        MP3File.getStructureFormatter().addElement(TYPE_TEXTFIELDSIZERESTRICTION, (int) this.textFieldSizeRestriction);
-        MP3File.getStructureFormatter().addElement(TYPE_TEXTENCODINGRESTRICTION, (int) this.textEncodingRestriction);
+        MP3File.getStructureFormatter().addElement(TYPE_TAGSIZERESTRICTION, this.tagSizeRestriction);
+        MP3File.getStructureFormatter().addElement(TYPE_TEXTFIELDSIZERESTRICTION, this.textFieldSizeRestriction);
+        MP3File.getStructureFormatter().addElement(TYPE_TEXTENCODINGRESTRICTION, this.textEncodingRestriction);
         MP3File.getStructureFormatter().addElement(TYPE_UPDATETAG, this.updateTag);
         MP3File.getStructureFormatter().closeHeadingElement(TYPE_HEADER);
 

@@ -82,11 +82,11 @@ public class Mp4TagCreator extends AbstractTagCreator
         {
             //Add metadata raw content
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            Iterator it = tag.getFields();
+            Iterator<TagField> it = tag.getFields();
             boolean processedArtwork = false;
             while (it.hasNext())
             {
-                TagField frame = (TagField) it.next();
+                TagField frame = it.next();
                 //To ensure order is maintained dont process artwork until iterator hits it.
                 if (frame instanceof Mp4TagCoverField)
                 {

@@ -26,7 +26,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 
-import org.jaudiotagger.tag.Tag;
 import org.jaudiotagger.audio.asf.util.Utils;
 
 /**
@@ -68,7 +67,7 @@ public class ExtendedContentDescription extends Chunk
     /**
      * Contains the properties. <br>
      */
-    private final ArrayList descriptors;
+    private final ArrayList<ContentDescriptor> descriptors;
 
     /**
      * This map stores the ids (names) of inserted content descriptors. <br>
@@ -76,7 +75,7 @@ public class ExtendedContentDescription extends Chunk
      * <code>null</code>. Any modification of the contents of this object
      * will set this field to <code>null</code>.
      */
-    private HashMap indexMap = null;
+    private HashMap<String,Integer> indexMap = null;
 
     /**
      * Creates an instance.
@@ -95,7 +94,7 @@ public class ExtendedContentDescription extends Chunk
     public ExtendedContentDescription(long pos, BigInteger chunkLen)
     {
         super(GUID.GUID_EXTENDED_CONTENT_DESCRIPTION, pos, chunkLen);
-        this.descriptors = new ArrayList();
+        this.descriptors = new ArrayList<ContentDescriptor>();
     }
 
     /**
@@ -176,10 +175,10 @@ public class ExtendedContentDescription extends Chunk
             ByteArrayOutputStream content = new ByteArrayOutputStream();
             // Write the number of descriptors.
             content.write(Utils.getBytes(this.descriptors.size(), 2));
-            Iterator it = this.descriptors.iterator();
+            Iterator<ContentDescriptor> it = this.descriptors.iterator();
             while (it.hasNext())
             {
-                ContentDescriptor current = (ContentDescriptor) it.next();
+                ContentDescriptor current = it.next();
                 content.write(current.getBytes());
             }
             byte[] contentBytes = content.toByteArray();
@@ -207,18 +206,17 @@ public class ExtendedContentDescription extends Chunk
     {
         if (this.indexMap == null)
         {
-            this.indexMap = new HashMap();
+            this.indexMap = new HashMap<String,Integer>();
             for (int i = 0; i < descriptors.size(); i++)
             {
-                ContentDescriptor current = (ContentDescriptor) descriptors
-                        .get(i);
+                ContentDescriptor current = descriptors.get(i);
                 indexMap.put(current.getName(), new Integer(i));
             }
         }
-        Integer pos = (Integer) indexMap.get(name);
+        Integer pos = indexMap.get(name);
         if (pos != null)
         {
-            return (ContentDescriptor) descriptors.get(pos.intValue());
+            return descriptors.get(pos.intValue());
         }
         return null;
     }
@@ -237,9 +235,9 @@ public class ExtendedContentDescription extends Chunk
      *
      * @return An enumeration of {@link ContentDescriptor}objects.
      */
-    public Collection getDescriptors()
+    public Collection<ContentDescriptor> getDescriptors()
     {
-        return new ArrayList(this.descriptors);
+        return new ArrayList<ContentDescriptor>(this.descriptors);
     }
 
     /**
@@ -329,8 +327,7 @@ public class ExtendedContentDescription extends Chunk
     {
         StringBuffer result = new StringBuffer(super.prettyPrint());
         result.insert(0, "\nExtended Content Description:\n");
-        ContentDescriptor[] list = (ContentDescriptor[]) descriptors
-                .toArray(new ContentDescriptor[descriptors.size()]);
+        ContentDescriptor[] list = descriptors.toArray(new ContentDescriptor[descriptors.size()]);
         Arrays.sort(list);
         for (int i = 0; i < list.length; i++)
         {

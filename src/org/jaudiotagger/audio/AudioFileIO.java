@@ -36,7 +36,6 @@ import org.jaudiotagger.audio.ogg.OggFileWriter;
 import org.jaudiotagger.audio.real.RealFileReader;
 import org.jaudiotagger.audio.wav.WavFileReader;
 import org.jaudiotagger.audio.wav.WavFileWriter;
-import org.jaudiotagger.tag.Tag;
 import org.jaudiotagger.tag.TagException;
 
 import java.io.File;
@@ -242,10 +241,10 @@ public class AudioFileIO
         writers.put(SupportedFileFormat.WMA.getFilesuffix(), new AsfFileWriter());
 
         // Register modificationHandler
-        Iterator it = writers.values().iterator();
+        Iterator<AudioFileWriter> it = writers.values().iterator();
         while (it.hasNext())
         {
-            AudioFileWriter curr = (AudioFileWriter) it.next();
+            AudioFileWriter curr = it.next();
             curr.setAudioFileModificationListener(this.modificationHandler);
         }
     }

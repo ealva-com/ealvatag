@@ -42,7 +42,7 @@ public class ID3SyncSafeInteger
     {
         //Note Need to && with 0xff otherwise if value is greater than 128 we get a negative number
         //when cast byte to int
-        return (int) ((buffer[0] & 0xff) << 21)
+        return ((buffer[0] & 0xff) << 21)
                 + ((buffer[1] & 0xff) << 14)
                 + ((buffer[2] & 0xff) << 7)
                 + ((buffer[3]) & 0xff);

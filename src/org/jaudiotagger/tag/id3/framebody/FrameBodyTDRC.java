@@ -258,7 +258,7 @@ public class FrameBodyTDRC extends AbstractFrameBodyTextInfo implements ID3v24Fr
         {
             try
             {
-                final Date d = ((SimpleDateFormat) formatters.get(i)).parse(getText());
+                final Date d = formatters.get(i).parse(getText());
                 if (d != null)
                 {
                     extractID3v23Formats(d, i);
@@ -289,7 +289,7 @@ public class FrameBodyTDRC extends AbstractFrameBodyTextInfo implements ID3v24Fr
         {
             try
             {
-                final Date d = ((SimpleDateFormat) formatters.get(i)).parse(getText());
+                final Date d = formatters.get(i).parse(getText());
                 if (d != null)
                 {
                     extractID3v23Formats(d, i);

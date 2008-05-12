@@ -24,7 +24,6 @@
 package org.jaudiotagger.tag.id3.valuepair;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
 /**

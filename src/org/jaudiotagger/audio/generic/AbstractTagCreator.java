@@ -20,12 +20,8 @@ package org.jaudiotagger.audio.generic;
 
 import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
 
 import org.jaudiotagger.tag.Tag;
-import org.jaudiotagger.tag.TagField;
 
 /**
  * Abstract class for creating the raw content that represents the tag so it can be written
