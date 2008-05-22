@@ -149,6 +149,7 @@
 
 	<target name="build.jar" depends="compile" description="Jar up the compiled production code jaudiotagger">
 		<echo message="Creating jaudiotagger.jar" />
+		<mkdir dir="${dist.dir}"/>
 		<jar jarfile="${jar.file}" update="false" basedir="${output.dir}">
 			<manifest>
 				<attribute name="Version" value="${build.release}" />
