@@ -23,6 +23,11 @@ package org.jaudiotagger.tag.reference;
 
 import org.jaudiotagger.tag.datatype.AbstractIntStringValuePair;
 
+import java.util.Map;
+import java.util.HashMap;
+import java.util.Set;
+import java.util.LinkedHashMap;
+
 /**
  * Genre list
  * <p/>
@@ -52,6 +57,9 @@ public class GenreTypes extends AbstractIntStringValuePair
         }
         return genreTypes;
     }
+
+    //This maps the lowercase version to the id, so applications can map from the lowercase value to the id
+    private Map<String,Integer> nameToIdMap;
 
 
     private GenreTypes()
@@ -183,30 +191,43 @@ public class GenreTypes extends AbstractIntStringValuePair
         idToValue.put(124, "Euro-House");
         idToValue.put(125, "Dance Hall");
         idToValue.put(126, "Goa");
-        idToValue.put(127, "Drum&Bass");
+        idToValue.put(127, "Drum & Bass");
         idToValue.put(128, "Club-House");
         idToValue.put(129, "Hardcore");
         idToValue.put(130, "Terror");
         idToValue.put(131, "Indie");
         idToValue.put(132, "BritPop");
         idToValue.put(133, "Negerpunk");
-        idToValue.put(134, "PolskPunk");
+        idToValue.put(134, "Polsk Punk");
         idToValue.put(135, "Beat");
-        idToValue.put(136, "ChristianGangstaRap");
-        idToValue.put(137, "HeavyMetal");
-        idToValue.put(138, "BlackMetal");
+        idToValue.put(136, "Christian Gangsta Rap");
+        idToValue.put(137, "Heavy Metal");
+        idToValue.put(138, "Black Metal");
         idToValue.put(139, "Crossover");
-        idToValue.put(140, "ContemporaryChristian");
-        idToValue.put(141, "ChristianRock");
+        idToValue.put(140, "Contemporary Christian");
+        idToValue.put(141, "Christian Rock");
         idToValue.put(142, "Merengue");
         idToValue.put(143, "Salsa");
-        idToValue.put(144, "ThrashMetal");
+        idToValue.put(144, "Thrash Metal");
         idToValue.put(145, "Anime");
         idToValue.put(146, "JPop");
         idToValue.put(147, "SynthPop");
 
         createMaps();
+
+        //We now need to map from lowercase version to Id
+        nameToIdMap = new LinkedHashMap<String,Integer>(idToValue.size());
+        for(Map.Entry <Integer,String>  entry:idToValue.entrySet())
+        {
+            nameToIdMap.put(entry.getValue().toLowerCase(),entry.getKey());
+        }
     }
 
-
+     /**
+     * Get Id for name, match is not case sensitive
+     */
+    public Integer getIdForName(String name)
+    {
+        return nameToIdMap.get(name.toLowerCase());
+    }
 }

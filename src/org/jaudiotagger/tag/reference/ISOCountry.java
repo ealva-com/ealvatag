@@ -47,7 +47,7 @@ public class ISOCountry
      * @param description
      * @return enum with this description
      */
-    public static Country getDescriptionByCode(String description)
+    public static Country getCountryByDescription(String description)
     {
         return descriptionMap.get(description);
     }

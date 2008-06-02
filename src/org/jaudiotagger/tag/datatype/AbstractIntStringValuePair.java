@@ -22,6 +22,7 @@
 package org.jaudiotagger.tag.datatype;
 
 import java.util.Collections;
+import java.util.Map;
 
 /**
  * A two way mapping between an Integral Id and a String value
@@ -48,21 +49,14 @@ public class AbstractIntStringValuePair extends AbstractValuePair<Integer,String
 
     protected void createMaps()
     {
-        iterator = idToValue.keySet().iterator();
-        while (iterator.hasNext())
+        //Create the reverse the map
+        for(Map.Entry <Integer,String>  entry:idToValue.entrySet())
         {
-            key = iterator.next();
-            value = idToValue.get(key);
-            valueToId.put(value, key);
+            valueToId.put(entry.getValue(),entry.getKey());
         }
 
-        //Value List
-        iterator = idToValue.keySet().iterator();
-        while (iterator.hasNext())
-        {
-            valueList.add(idToValue.get(iterator.next()));
-        }
-        //Sort alphabetically
+        //Value List sort alphabetically
+        valueList.addAll(idToValue.values());
         Collections.sort(valueList);
     }
 }
