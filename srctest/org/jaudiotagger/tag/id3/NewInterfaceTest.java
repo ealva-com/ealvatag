@@ -6,7 +6,9 @@ import junit.framework.TestSuite;
 
 import java.io.File;
 import java.io.RandomAccessFile;
+import java.io.ByteArrayInputStream;
 import java.util.List;
+import java.awt.image.BufferedImage;
 
 import org.jaudiotagger.AbstractTestCase;
 import org.jaudiotagger.tag.id3.framebody.*;
@@ -15,6 +17,7 @@ import org.jaudiotagger.tag.TagFieldKey;
 import org.jaudiotagger.tag.Tag;
 import org.jaudiotagger.tag.TagOptionSingleton;
 import org.jaudiotagger.tag.TagField;
+import org.jaudiotagger.tag.datatype.DataTypes;
 import org.jaudiotagger.tag.mp4.Mp4Tag;
 import org.jaudiotagger.tag.mp4.Mp4FieldKey;
 import org.jaudiotagger.audio.mp3.MP3File;
@@ -22,6 +25,9 @@ import org.jaudiotagger.audio.mp3.MP3AudioHeader;
 import org.jaudiotagger.audio.mp3.MPEGFrameHeader;
 import org.jaudiotagger.audio.AudioFileIO;
 import org.jaudiotagger.audio.AudioFile;
+
+import javax.imageio.ImageReader;
+import javax.imageio.ImageIO;
 
 /**
  * Testing retrofitting of entagged interfaces
@@ -424,6 +430,7 @@ public class NewInterfaceTest extends TestCase
         assertEquals(1, ((ID3v24Tag) af.getTag()).get(ID3v24FieldKey.COVER_ART.getFieldName()).size());
         //TODO This isnt very user friendly
         TagField tagField = af.getTag().getFirstField(ID3v24FieldKey.COVER_ART.getFieldName());
+
         assertTrue(tagField instanceof ID3v24Frame);
         ID3v24Frame apicFrame = (ID3v24Frame) tagField;
         assertTrue(apicFrame.getBody() instanceof FrameBodyAPIC);
@@ -441,6 +448,21 @@ public class NewInterfaceTest extends TestCase
         assertEquals(2, af.getTag().get(TagFieldKey.COVER_ART).size());
         assertEquals(10, af.getTag().getFieldCount());
 
+        //Actually create the image from the read data
+        BufferedImage bi=null;
+        TagField imageField = af.getTag().get(TagFieldKey.COVER_ART).get(0);
+        if(imageField instanceof AbstractID3v2Frame)
+        {
+            FrameBodyAPIC imageFrameBody = (FrameBodyAPIC)((AbstractID3v2Frame)imageField).getBody();
+            if(!imageFrameBody.isImageUrl())
+            {
+                byte[] imageRawData = (byte[])imageFrameBody.getObjectValue(DataTypes.OBJ_PICTURE_DATA);
+                bi=ImageIO.read(new ByteArrayInputStream(imageRawData));
+            }
+        }
+        assertNotNull(bi);
+
+        
         //Add a linked Image
         af.getTag().add(tag.createLinkedArtworkField("../testdata/coverart.jpg"));
         af.commit();
@@ -455,6 +477,8 @@ public class NewInterfaceTest extends TestCase
         apicframebody = (FrameBodyAPIC) apicFrame.getBody();
         assertTrue(apicframebody.isImageUrl());
         assertEquals("../testdata/coverart.jpg", apicframebody.getImageUrl());
+
+
     }
 
     /*  public void testReadUrlImage() throws Exception
