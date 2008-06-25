@@ -138,7 +138,7 @@ public class FrameBodyAPIC extends AbstractID3v2FrameBody implements ID3v24Frame
 
         this.setObjectValue(DataTypes.OBJ_PICTURE_TYPE, pictureType);
         this.setObjectValue(DataTypes.OBJ_DESCRIPTION, description);
-        this.setObjectValue(DataTypes.OBJ_PICTURE_DATA, data);
+        this.setObjectValue(DataTypes.OBJ_PICTURE_DATA, data);        
     }
 
     /**

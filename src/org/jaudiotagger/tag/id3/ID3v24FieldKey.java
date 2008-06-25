@@ -10,7 +10,7 @@ import org.jaudiotagger.tag.id3.framebody.FrameBodyWXXX;
  * List of known id3v24 metadata fields
  * <p/>
  * <p>These provide a mapping from the generic key to the underlying ID3v24frames. For example most of the Musicbrainz
- * fields are implemnted using a User Defined Text Info Frame, but with a different description key, so this
+ * fields are implemented using a User Defined Text Info Frame, but with a different description key, so this
  * enum provides the link between the two.
  */
 public enum ID3v24FieldKey
