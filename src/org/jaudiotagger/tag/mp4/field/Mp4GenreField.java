@@ -4,6 +4,7 @@ import org.jaudiotagger.tag.mp4.Mp4FieldKey;
 import org.jaudiotagger.tag.mp4.atom.Mp4DataBox;
 import org.jaudiotagger.tag.reference.GenreTypes;
 import org.jaudiotagger.audio.mp4.atom.Mp4BoxHeader;
+import org.jaudiotagger.logging.ErrorMessage;
 
 import java.util.ArrayList;
 import java.nio.ByteBuffer;
@@ -64,6 +65,9 @@ public class Mp4GenreField extends Mp4TagTextNumberField
     {
         super(Mp4FieldKey.GENRE.getFieldName(), genreId);
 
+
+
+
         //Is it an id        
         try
         {
@@ -111,7 +115,12 @@ public class Mp4GenreField extends Mp4TagTextNumberField
         int genreId = numbers.get(0);
         //Get value, we have to adjust index by one because iTunes labels from one instead of zero
         content = GenreTypes.getInstanceOf().getValueForId(genreId - 1);
+
+        //Some apps set genre to invalid value, we dont disguise this by setting content to empty string we leave
+        //as null so apps can handle if they wish, but we do display a warning to make them aware.
+        if(content==null)
+        {
+            logger.warning(ErrorMessage.MP4_GENRE_OUT_OF_RANGE.getMsg(genreId));
+        }
     }
-
-
 }
