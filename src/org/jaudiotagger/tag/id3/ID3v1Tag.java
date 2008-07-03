@@ -27,6 +27,7 @@ import org.jaudiotagger.audio.mp3.MP3File;
 import org.jaudiotagger.audio.generic.Utils;
 import org.jaudiotagger.tag.*;
 import org.jaudiotagger.tag.reference.GenreTypes;
+import org.jaudiotagger.logging.ErrorMessage;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
@@ -216,13 +217,37 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag
 
     public List<TagField> get(String id)
     {
-        //TODO
-        return null;
+
+        if(TagFieldKey.ARTIST.name().equals(id))
+        {
+            return getArtist();
+        }
+        else if(TagFieldKey.ALBUM.name().equals(id))
+        {
+            return getAlbum();
+        }
+        else if(TagFieldKey.TITLE.name().equals(id))
+        {
+            return getTitle();
+        }
+        else if(TagFieldKey.GENRE.name().equals(id))
+        {
+            return getGenre();
+        }
+        else if(TagFieldKey.YEAR.name().equals(id))
+        {
+            return getYear();
+        }
+        else if(TagFieldKey.COMMENT.name().equals(id))
+        {
+            return getComment();
+        }
+        return new ArrayList<TagField>();
     }
 
     public int getFieldCount()
     {
-        return 7;
+        return 6;
     }
 
     protected List<TagField> returnFieldToList(ID3v1TagField field)
@@ -251,6 +276,10 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag
      */
     public void setAlbum(String album)
     {
+        if(album==null)
+        {
+             throw new IllegalArgumentException(ErrorMessage.GENERAL_INVALID_NULL_ARGUMENT.getMsg());
+        }
         this.album = ID3Tags.truncate(album, this.FIELD_ALBUM_LENGTH);
     }
 
@@ -301,6 +330,10 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag
      */
     public void setArtist(String artist)
     {
+        if(artist==null)
+        {
+             throw new IllegalArgumentException(ErrorMessage.GENERAL_INVALID_NULL_ARGUMENT.getMsg());
+        }
         this.artist = ID3Tags.truncate(artist, this.FIELD_ARTIST_LENGTH);
     }
 
@@ -346,9 +379,15 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag
      * Set Comment
      *
      * @param comment
+     *
+     * @throws IllegalArgumentException if comment null
      */
     public void setComment(String comment)
     {
+        if(comment==null)
+        {
+             throw new IllegalArgumentException(ErrorMessage.GENERAL_INVALID_NULL_ARGUMENT.getMsg());
+        }
         this.comment = ID3Tags.truncate(comment, this.FIELD_COMMENT_LENGTH);
     }
 
@@ -401,6 +440,10 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag
      */
     public void setGenre(String genreVal)
     {
+        if(genreVal==null)
+        {
+             throw new IllegalArgumentException(ErrorMessage.GENERAL_INVALID_NULL_ARGUMENT.getMsg());
+        }
         Integer genreID = GenreTypes.getInstanceOf().getIdForValue(genreVal);
         if (genreID != null)
         {
@@ -470,6 +513,10 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag
      */
     public void setTitle(String title)
     {
+        if(title==null)
+        {
+             throw new IllegalArgumentException(ErrorMessage.GENERAL_INVALID_NULL_ARGUMENT.getMsg());
+        }
         this.title = ID3Tags.truncate(title, this.FIELD_TITLE_LENGTH);
     }
 
@@ -577,8 +624,41 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag
 
     public TagField getFirstField(String id)
     {
-        //TODO
-        throw new UnsupportedOperationException("TODO:Not done yet");
+        List<TagField> results=null;
+
+        if(TagFieldKey.ARTIST.name().equals(id))
+        {
+            results=getArtist();
+        }
+        else if(TagFieldKey.ALBUM.name().equals(id))
+        {
+            results=getAlbum();
+        }
+        else if(TagFieldKey.TITLE.name().equals(id))
+        {
+            results=getTitle();
+        }
+        else if(TagFieldKey.GENRE.name().equals(id))
+        {
+            results=getGenre();
+        }
+        else if(TagFieldKey.YEAR.name().equals(id))
+        {
+            results=getYear();
+        }
+        else if(TagFieldKey.COMMENT.name().equals(id))
+        {
+            results=getComment();
+        }
+
+        if(results!=null)
+        {
+            if(results.size()>0)
+            {
+                return results.get(0);
+            }
+        }
+        return null;
     }
 
     public Iterator<TagField> getFields()
@@ -600,8 +680,16 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag
 
     public boolean isEmpty()
     {
-        //TODO
-        throw new UnsupportedOperationException("TODO:Not done yet");
+        if(   getFirstTitle().length()>0
+            ||getFirstArtist().length()>0
+            ||getFirstAlbum().length()>0
+            ||getFirstGenre().length()>0
+            ||getFirstYear().length()>0
+            ||getFirstComment().length()>0)
+        {
+            return false;
+        }
+        return true;
     }
 
 
@@ -612,21 +700,27 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag
         {
             case ARTIST:
                 setArtist(field.toString());
+                break;
 
             case ALBUM:
                 setAlbum(field.toString());
+                break;
 
             case TITLE:
                 setTitle(field.toString());
+                break;
 
             case GENRE:
                 setGenre(field.toString());
+                break;
 
             case YEAR:
                 setYear(field.toString());
+                break;
 
             case COMMENT:
                 setComment(field.toString());
+                break;
         }
     }
 
@@ -754,21 +848,27 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag
         {
             case ARTIST:
                 setArtist("");
+                break;
 
             case ALBUM:
                 setAlbum("");
+                break;
 
             case TITLE:
                 setTitle("");
+                break;
 
             case GENRE:
                 setGenre("");
+                break;
 
             case YEAR:
                 setYear("");
+                break;
 
             case COMMENT:
                 setComment("");
+                break;
         }
     }
 

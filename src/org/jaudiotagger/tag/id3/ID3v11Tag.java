@@ -28,6 +28,7 @@ import org.jaudiotagger.audio.mp3.MP3File;
 import org.jaudiotagger.audio.generic.Utils;
 import org.jaudiotagger.tag.*;
 import org.jaudiotagger.tag.id3.framebody.*;
+import org.jaudiotagger.logging.ErrorMessage;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
@@ -102,6 +103,11 @@ public class ID3v11Tag
     public ID3v11Tag()
     {
 
+    }
+
+    public int getFieldCount()
+    {
+        return 7;
     }
 
     public ID3v11Tag(ID3v11Tag copyObject)
@@ -266,6 +272,10 @@ public class ID3v11Tag
      */
     public void setComment(String comment)
     {
+        if(comment==null)
+        {
+             throw new IllegalArgumentException(ErrorMessage.GENERAL_INVALID_NULL_ARGUMENT.getMsg());
+        }
         this.comment = ID3Tags.truncate(comment, this.FIELD_COMMENT_LENGTH);
     }
 
@@ -344,31 +354,75 @@ public class ID3v11Tag
     public void set(TagField field)
     {
         TagFieldKey genericKey = TagFieldKey.valueOf(field.getId());
-        switch (genericKey)
+        if(genericKey==TagFieldKey.TRACK)
         {
-            case ARTIST:
-                setArtist(field.toString());
-
-            case ALBUM:
-                setAlbum(field.toString());
-
-            case TITLE:
-                setTitle(field.toString());
-
-            case GENRE:
-                setGenre(field.toString());
-
-            case YEAR:
-                setYear(field.toString());
-
-            case COMMENT:
-                setComment(field.toString());
-
-            case TRACK:
-                setTrack(field.toString());
+            setTrack(field.toString());
+        }
+        else
+        {
+            super.set(field);
         }
     }
 
+    public List<TagField> get(TagFieldKey genericKey)
+    {
+        if(genericKey==TagFieldKey.TRACK)
+        {
+            return getTrack();
+        }
+        else
+        {
+            return super.get(genericKey);
+        }
+    }
+
+    public TagField getFirstField(String id)
+    {
+        List<TagField> results=null;
+
+        if(TagFieldKey.TRACK.name().equals(id))
+        {
+            results=getTrack();
+            if(results!=null)
+            {
+                if(results.size()>0)
+                {
+                    return results.get(0);
+                }
+            }
+            return null;
+        }
+        else
+        {
+            return super.getFirstField(id);
+        }
+    }
+
+    public boolean isEmpty()
+    {
+        if(track>0)
+        {
+            return false;
+        }
+        return super.isEmpty();
+    }
+
+      /**
+     * Delete any instance of tag fields with this key
+     *
+     * @param genericKey
+     */
+    public void deleteTagField(TagFieldKey genericKey)
+    {
+        if(genericKey==TagFieldKey.TRACK)
+        {
+            track=0;
+        }
+        else
+        {
+            super.deleteTagField(genericKey);
+        }
+    }
     /**
      * Compares Object with this only returns true if both v1_1 tags with all
      * fields set to same value
