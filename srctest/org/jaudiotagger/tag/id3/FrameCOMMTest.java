@@ -109,6 +109,7 @@ public class FrameCOMMTest extends AbstractTestCase
             commFrame = (ID3v24Frame)mp3File.getID3v2Tag().getFrame("COMM");
             frameBody = (FrameBodyCOMM)commFrame.getBody();
             assertEquals(SAFE_SHORTER_LANG_CODE,frameBody.getLanguage());
+
         }
         catch(Exception ie)
         {

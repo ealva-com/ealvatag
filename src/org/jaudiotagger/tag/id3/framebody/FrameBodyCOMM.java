@@ -21,6 +21,7 @@ import org.jaudiotagger.tag.datatype.*;
 import org.jaudiotagger.tag.id3.ID3TextEncodingConversion;
 import org.jaudiotagger.tag.id3.ID3v24Frames;
 import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
+import org.jaudiotagger.logging.ErrorMessage;
 
 import java.io.ByteArrayOutputStream;
 import java.nio.ByteBuffer;
@@ -108,6 +109,10 @@ public class FrameBodyCOMM extends AbstractID3v2FrameBody implements ID3v24Frame
      */
     public void setDescription(String description)
     {
+        if(description==null)
+        {
+            throw new IllegalArgumentException(ErrorMessage.GENERAL_INVALID_NULL_ARGUMENT.getMsg());
+        }
         setObjectValue(DataTypes.OBJ_DESCRIPTION, description);
     }
 
@@ -138,6 +143,11 @@ public class FrameBodyCOMM extends AbstractID3v2FrameBody implements ID3v24Frame
      */
     public void setLanguage(String language)
     {
+        //TODO not sure if this might break existing code
+        /*if(language==null)
+        {
+             throw new IllegalArgumentException(ErrorMessage.GENERAL_INVALID_NULL_ARGUMENT.getMsg());
+        } */
         setObjectValue(DataTypes.OBJ_LANGUAGE, language);
     }
 
@@ -156,6 +166,10 @@ public class FrameBodyCOMM extends AbstractID3v2FrameBody implements ID3v24Frame
      */
     public void setText(String text)
     {
+        if(text==null)
+        {
+            throw new IllegalArgumentException(ErrorMessage.GENERAL_INVALID_NULL_ARGUMENT.getMsg());
+        }
         setObjectValue(DataTypes.OBJ_TEXT, text);
     }
 

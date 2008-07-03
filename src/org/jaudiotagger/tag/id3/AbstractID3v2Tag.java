@@ -563,36 +563,64 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
 
     public void setAlbum(String s) throws FieldDataInvalidException
     {
+        if(s==null)
+        {
+            throw new IllegalArgumentException(ErrorMessage.GENERAL_INVALID_NULL_ARGUMENT.getMsg());
+        }
         set(createAlbumField(s));
     }
 
     public void setArtist(String s) throws FieldDataInvalidException
     {
+        if(s==null)
+        {
+            throw new IllegalArgumentException(ErrorMessage.GENERAL_INVALID_NULL_ARGUMENT.getMsg());
+        }
         set(createArtistField(s));
     }
 
     public void setComment(String s) throws FieldDataInvalidException
     {
+        if(s==null)
+        {
+            throw new IllegalArgumentException(ErrorMessage.GENERAL_INVALID_NULL_ARGUMENT.getMsg());
+        }
         set(createCommentField(s));
     }
 
     public void setGenre(String s) throws FieldDataInvalidException
     {
+        if(s==null)
+        {
+            throw new IllegalArgumentException(ErrorMessage.GENERAL_INVALID_NULL_ARGUMENT.getMsg());
+        }
         set(createGenreField(s));
     }
 
     public void setTitle(String s) throws FieldDataInvalidException
     {
+        if(s==null)
+        {
+            throw new IllegalArgumentException(ErrorMessage.GENERAL_INVALID_NULL_ARGUMENT.getMsg());
+        }
         set(createTitleField(s));
     }
 
     public void setTrack(String s) throws FieldDataInvalidException
     {
+        if(s==null)
+        {
+            throw new IllegalArgumentException(ErrorMessage.GENERAL_INVALID_NULL_ARGUMENT.getMsg());
+        }
         set(createTrackField(s));
     }
 
     public void setYear(String s) throws FieldDataInvalidException
     {
+        if(s==null)
+        {
+            throw new IllegalArgumentException(ErrorMessage.GENERAL_INVALID_NULL_ARGUMENT.getMsg());
+        }
         set(createYearField(s));
     }
 
@@ -642,6 +670,10 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
      */
     public void addAlbum(String album) throws FieldDataInvalidException
     {
+        if(album==null)
+        {
+            throw new IllegalArgumentException(ErrorMessage.GENERAL_INVALID_NULL_ARGUMENT.getMsg());
+        }
         add(createAlbumField(album));
     }
 
@@ -652,6 +684,10 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
      */
     public void addArtist(String artist) throws FieldDataInvalidException
     {
+        if(artist==null)
+        {
+            throw new IllegalArgumentException(ErrorMessage.GENERAL_INVALID_NULL_ARGUMENT.getMsg());
+        }
         add(createArtistField(artist));
     }
 
@@ -662,6 +698,10 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
      */
     public void addComment(String comment) throws FieldDataInvalidException
     {
+        if(comment==null)
+        {
+            throw new IllegalArgumentException(ErrorMessage.GENERAL_INVALID_NULL_ARGUMENT.getMsg());
+        }
         add(createCommentField(comment));
     }
 
@@ -672,6 +712,10 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
      */
     public void addGenre(String genre) throws FieldDataInvalidException
     {
+        if(genre==null)
+        {
+            throw new IllegalArgumentException(ErrorMessage.GENERAL_INVALID_NULL_ARGUMENT.getMsg());
+        }
         add(createGenreField(genre));
     }
 
@@ -682,6 +726,10 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
      */
     public void addTitle(String title) throws FieldDataInvalidException
     {
+        if(title==null)
+        {
+            throw new IllegalArgumentException(ErrorMessage.GENERAL_INVALID_NULL_ARGUMENT.getMsg());
+        }
         add(createTitleField(title));
     }
 
@@ -692,6 +740,10 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
      */
     public void addTrack(String track) throws FieldDataInvalidException
     {
+        if(track==null)
+        {
+            throw new IllegalArgumentException(ErrorMessage.GENERAL_INVALID_NULL_ARGUMENT.getMsg());
+        }
         add(createTrackField(track));
     }
 
@@ -702,6 +754,10 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
      */
     public void addYear(String year) throws FieldDataInvalidException
     {
+        if(year==null)
+        {
+            throw new IllegalArgumentException(ErrorMessage.GENERAL_INVALID_NULL_ARGUMENT.getMsg());
+        }
         add(createYearField(year));
     }
 

@@ -28,6 +28,7 @@ import org.jaudiotagger.tag.vorbiscomment.util.Base64Coder;
 import static org.jaudiotagger.tag.vorbiscomment.VorbisCommentFieldKey.*;
 import org.jaudiotagger.tag.TagFieldKey;
 import org.jaudiotagger.tag.KeyNotFoundException;
+import org.jaudiotagger.logging.ErrorMessage;
 
 import java.util.EnumMap;
 import java.util.List;
@@ -113,36 +114,64 @@ public class VorbisCommentTag extends AbstractTag
 
     public TagField createAlbumField(String content)
     {
+        if(content==null)
+        {
+            throw new IllegalArgumentException(ErrorMessage.GENERAL_INVALID_NULL_ARGUMENT.getMsg());
+        }
         return new VorbisCommentTagField(getAlbumId(), content);
     }
 
     public TagField createArtistField(String content)
     {
+        if(content==null)
+        {
+            throw new IllegalArgumentException(ErrorMessage.GENERAL_INVALID_NULL_ARGUMENT.getMsg());
+        }
         return new VorbisCommentTagField(getArtistId(), content);
     }
 
     public TagField createCommentField(String content)
     {
+        if(content==null)
+        {
+            throw new IllegalArgumentException(ErrorMessage.GENERAL_INVALID_NULL_ARGUMENT.getMsg());
+        }
         return new VorbisCommentTagField(getCommentId(), content);
     }
 
     public TagField createGenreField(String content)
     {
+        if(content==null)
+        {
+            throw new IllegalArgumentException(ErrorMessage.GENERAL_INVALID_NULL_ARGUMENT.getMsg());
+        }
         return new VorbisCommentTagField(getGenreId(), content);
     }
 
     public TagField createTitleField(String content)
     {
+        if(content==null)
+        {
+            throw new IllegalArgumentException(ErrorMessage.GENERAL_INVALID_NULL_ARGUMENT.getMsg());
+        }
         return new VorbisCommentTagField(getTitleId(), content);
     }
 
     public TagField createTrackField(String content)
     {
+        if(content==null)
+        {
+            throw new IllegalArgumentException(ErrorMessage.GENERAL_INVALID_NULL_ARGUMENT.getMsg());
+        }
         return new VorbisCommentTagField(getTrackId(), content);
     }
 
     public TagField createYearField(String content)
     {
+        if(content==null)
+        {
+            throw new IllegalArgumentException(ErrorMessage.GENERAL_INVALID_NULL_ARGUMENT.getMsg());
+        }
         return new VorbisCommentTagField(getYearId(), content);
     }
 
@@ -240,6 +269,10 @@ public class VorbisCommentTag extends AbstractTag
     public TagField createTagField(VorbisCommentFieldKey vorbisCommentFieldKey, String value)
             throws KeyNotFoundException
     {
+        if(value==null)
+        {
+            throw new IllegalArgumentException(ErrorMessage.GENERAL_INVALID_NULL_ARGUMENT.getMsg());
+        }
         if (vorbisCommentFieldKey == null)
         {
             throw new KeyNotFoundException();
@@ -259,6 +292,10 @@ public class VorbisCommentTag extends AbstractTag
      */
     public TagField createTagField(String vorbisCommentFieldKey, String value)
     {
+        if(value==null)
+        {
+            throw new IllegalArgumentException(ErrorMessage.GENERAL_INVALID_NULL_ARGUMENT.getMsg());
+        }
         return new VorbisCommentTagField(vorbisCommentFieldKey, value);
     }
 

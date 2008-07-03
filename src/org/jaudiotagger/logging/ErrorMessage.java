@@ -37,6 +37,7 @@ public enum ErrorMessage
     MP3_URL_SAVED_ENCODED("Url:{0} saved in encoded form as {1}"),
     MP3_UNABLE_TO_ENCODE_URL("Unable to save url:{0} because cannot encode all characters setting to blank instead"),
     MP4_UNABLE_TO_FIND_NEXT_ATOM_BECAUSE_IDENTIFIER_IS_INVALID("Unable to find next atom because identifier is invalid {0}"),
+    GENERAL_INVALID_NULL_ARGUMENT("Argument cannot be null")
     ;
 
 

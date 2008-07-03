@@ -28,6 +28,7 @@ import org.jaudiotagger.tag.datatype.NumberHashMap;
 import org.jaudiotagger.tag.datatype.TextEncodedStringSizeTerminated;
 import org.jaudiotagger.tag.id3.ID3TextEncodingConversion;
 import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
+import org.jaudiotagger.logging.ErrorMessage;
 
 import java.io.ByteArrayOutputStream;
 import java.nio.ByteBuffer;
@@ -116,6 +117,10 @@ public abstract class AbstractFrameBodyTextInfo
      */
     public void setText(String text)
     {
+        if(text==null)
+        {
+             throw new IllegalArgumentException(ErrorMessage.GENERAL_INVALID_NULL_ARGUMENT.getMsg());
+        }
         setObjectValue(DataTypes.OBJ_TEXT, text);
     }
 

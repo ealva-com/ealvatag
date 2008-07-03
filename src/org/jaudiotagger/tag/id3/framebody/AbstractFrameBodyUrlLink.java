@@ -86,6 +86,10 @@ public abstract class AbstractFrameBodyUrlLink extends AbstractID3v2FrameBody
      */
     public void setUrlLink(String urlLink)
     {
+        if(urlLink==null)
+        {
+            throw new IllegalArgumentException(ErrorMessage.GENERAL_INVALID_NULL_ARGUMENT.getMsg());
+        }
         setObjectValue(DataTypes.OBJ_URLLINK, urlLink);
     }
 
