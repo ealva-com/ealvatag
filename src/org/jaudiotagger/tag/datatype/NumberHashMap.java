@@ -28,6 +28,7 @@ import org.jaudiotagger.tag.InvalidDataTypeException;
 import org.jaudiotagger.tag.reference.GenreTypes;
 import org.jaudiotagger.tag.reference.PictureTypes;
 import org.jaudiotagger.tag.id3.valuepair.*;
+import org.jaudiotagger.logging.ErrorMessage;
 
 import java.util.*;
 
@@ -68,6 +69,8 @@ public class NumberHashMap extends NumberFixedLength implements HashMapInterface
         {
             valueToKey = GenreTypes.getInstanceOf().getValueToIdMap();
             keyToValue = GenreTypes.getInstanceOf().getIdToValueMap();
+
+            //genres can be an id or literal value
             hasEmptyValue = true;
         }
         else if (identifier.equals(DataTypes.OBJ_TEXT_ENCODING))
@@ -84,6 +87,9 @@ public class NumberHashMap extends NumberFixedLength implements HashMapInterface
         {
             valueToKey = PictureTypes.getInstanceOf().getValueToIdMap();
             keyToValue = PictureTypes.getInstanceOf().getIdToValueMap();
+
+            //Issue #224 Values should map, but have examples where they dont, this is a workaround
+            hasEmptyValue = true;
         }
         else if (identifier.equals(DataTypes.OBJ_TYPE_OF_EVENT))
         {
@@ -251,14 +257,17 @@ public class NumberHashMap extends NumberFixedLength implements HashMapInterface
     {
         super.readByteArray(arr, offset);
 
-        if (hasEmptyValue == false)
+        //Mismatch:Superclass uses Long, but maps expect Integer
+        Integer intValue = ((Long) value).intValue();
+        if (!keyToValue.containsKey(intValue))
         {
-            //Mismatch:Superclass uses Long, but maps expect Integer
-            Integer intValue = ((Long) value).intValue();
-            if (!keyToValue.containsKey(intValue))
+            if (hasEmptyValue == false)
             {
-                throw new InvalidDataTypeException(this.getClass().getName()
-                        + ":No key could be found with the value of:" + intValue);
+                 throw new InvalidDataTypeException( ErrorMessage.MP3_REFERENCE_KEY_INVALID.getMsg(identifier,intValue));
+            }
+            else if(identifier.equals(DataTypes.OBJ_PICTURE_TYPE))
+            {
+                  logger.warning(ErrorMessage.MP3_PICTURE_TYPE_INVALID.getMsg(value));
             }
         }
     }

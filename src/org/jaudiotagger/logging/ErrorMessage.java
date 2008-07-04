@@ -38,7 +38,9 @@ public enum ErrorMessage
     MP3_UNABLE_TO_ENCODE_URL("Unable to save url:{0} because cannot encode all characters setting to blank instead"),
     MP4_UNABLE_TO_FIND_NEXT_ATOM_BECAUSE_IDENTIFIER_IS_INVALID("Unable to find next atom because identifier is invalid {0}"),
     GENERAL_INVALID_NULL_ARGUMENT("Argument cannot be null"),
-    MP4_GENRE_OUT_OF_RANGE("Genre Id {0} does not map to a valid genre")
+    MP4_GENRE_OUT_OF_RANGE("Genre Id {0} does not map to a valid genre"),
+    MP3_PICTURE_TYPE_INVALID("Picture Type is set to invalid value:{0}"),
+    MP3_REFERENCE_KEY_INVALID("{0}:No key could be found with the value of:{1}");
     ;
 
 

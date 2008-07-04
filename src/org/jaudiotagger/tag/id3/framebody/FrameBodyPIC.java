@@ -24,6 +24,7 @@
 package org.jaudiotagger.tag.id3.framebody;
 
 import org.jaudiotagger.tag.InvalidTagException;
+import org.jaudiotagger.tag.reference.PictureTypes;
 import org.jaudiotagger.tag.datatype.*;
 import org.jaudiotagger.tag.id3.ID3v22Frames;
 import org.jaudiotagger.tag.id3.valuepair.ImageFormats;
@@ -78,9 +79,9 @@ public class FrameBodyPIC extends AbstractID3v2FrameBody implements ID3v22FrameB
     {
         this.setObjectValue(DataTypes.OBJ_TEXT_ENCODING, textEncoding);
         this.setObjectValue(DataTypes.OBJ_IMAGE_FORMAT, imageFormat);
-        this.setObjectValue(DataTypes.OBJ_PICTURE_TYPE, pictureType);
-        this.setObjectValue(DataTypes.OBJ_DESCRIPTION, description);
-        this.setObjectValue(DataTypes.OBJ_PICTURE_DATA, data);
+        this.setPictureType(pictureType);
+        this.setDescription(description);
+        this.setImageData(data);
     }
 
     /**
@@ -90,10 +91,9 @@ public class FrameBodyPIC extends AbstractID3v2FrameBody implements ID3v22FrameB
     {
         this.setObjectValue(DataTypes.OBJ_TEXT_ENCODING, body.getTextEncoding());
         this.setObjectValue(DataTypes.OBJ_IMAGE_FORMAT, ImageFormats.getFormatForMimeType((String) body.getObjectValue(DataTypes.OBJ_MIME_TYPE)));
-        this.setObjectValue(DataTypes.OBJ_PICTURE_TYPE, body.getObjectValue(DataTypes.OBJ_PICTURE_TYPE));
-        this.setObjectValue(DataTypes.OBJ_DESCRIPTION, body.getDescription());
         this.setObjectValue(DataTypes.OBJ_PICTURE_DATA, body.getObjectValue(DataTypes.OBJ_PICTURE_DATA));
-
+        this.setDescription(body.getDescription());
+        this.setImageData(body.getImageData());
     }
 
     /**
@@ -126,6 +126,45 @@ public class FrameBodyPIC extends AbstractID3v2FrameBody implements ID3v22FrameB
     {
         return (String) getObjectValue(DataTypes.OBJ_DESCRIPTION);
     }
+
+    /**
+     * Set imageData
+     *
+     * @param imageData
+     */
+    public void setImageData(byte[] imageData)
+    {
+        setObjectValue(DataTypes.OBJ_PICTURE_DATA, imageData);
+    }
+
+    /**
+     * Get Image data
+     *
+     * @return
+     */
+    public byte[] getImageData()
+    {
+        return (byte[]) getObjectValue(DataTypes.OBJ_PICTURE_DATA);
+    }
+
+    /**
+     * Set Picture Type
+     *
+     * @param pictureType
+     */
+    public void setPictureType(byte pictureType)
+    {
+        setObjectValue(DataTypes.OBJ_PICTURE_TYPE, pictureType);
+    }
+
+    /**
+     * @return picturetype
+     */
+    public int getPictureType()
+    {
+        return ((Long) getObjectValue(DataTypes.OBJ_PICTURE_TYPE)).intValue();
+    }
+
 
     /**
      * The ID3v2 frame identifier
@@ -176,7 +215,7 @@ public class FrameBodyPIC extends AbstractID3v2FrameBody implements ID3v22FrameB
     {
         objectList.add(new NumberHashMap(DataTypes.OBJ_TEXT_ENCODING, this, TextEncoding.TEXT_ENCODING_FIELD_SIZE));
         objectList.add(new StringFixedLength(DataTypes.OBJ_IMAGE_FORMAT, this, 3));
-        objectList.add(new NumberHashMap(DataTypes.OBJ_PICTURE_TYPE, this, 1));
+        objectList.add(new NumberHashMap(DataTypes.OBJ_PICTURE_TYPE, this, PictureTypes.PICTURE_TYPE_FIELD_SIZE));
         objectList.add(new StringNullTerminated(DataTypes.OBJ_DESCRIPTION, this));
         objectList.add(new ByteArraySizeTerminated(DataTypes.OBJ_PICTURE_DATA, this));
     }

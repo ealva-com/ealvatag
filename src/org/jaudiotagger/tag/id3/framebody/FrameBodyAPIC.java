@@ -134,11 +134,10 @@ public class FrameBodyAPIC extends AbstractID3v2FrameBody implements ID3v24Frame
                          byte[] data)
     {
         this.setObjectValue(DataTypes.OBJ_TEXT_ENCODING, textEncoding);
-        this.setObjectValue(DataTypes.OBJ_MIME_TYPE, mimeType);
-
-        this.setObjectValue(DataTypes.OBJ_PICTURE_TYPE, pictureType);
-        this.setObjectValue(DataTypes.OBJ_DESCRIPTION, description);
-        this.setObjectValue(DataTypes.OBJ_PICTURE_DATA, data);        
+        this.setMimeType(mimeType);
+        this.setPictureType(pictureType);
+        this.setDescription(description);
+        this.setImageData(data);
     }
 
     /**
@@ -173,7 +172,17 @@ public class FrameBodyAPIC extends AbstractID3v2FrameBody implements ID3v24Frame
     }
 
     /**
-     * Get a description of the image
+     * Set mimeType
+     *
+     * @param mimeType
+     */
+    public void setMimeType(String mimeType)
+    {
+        setObjectValue(DataTypes.OBJ_MIME_TYPE, mimeType);
+    }
+
+    /**
+     * Get mimetype
      *
      * @return a description of the image
      */
@@ -182,6 +191,44 @@ public class FrameBodyAPIC extends AbstractID3v2FrameBody implements ID3v24Frame
         return (String) getObjectValue(DataTypes.OBJ_MIME_TYPE);
     }
 
+    /**
+     * Set imageData
+     *
+     * @param imageData
+     */
+    public void setImageData(byte[] imageData)
+    {
+        setObjectValue(DataTypes.OBJ_PICTURE_DATA, imageData);
+    }
+
+    /**
+     * Get Image data
+     *
+     * @return
+     */
+    public byte[] getImageData()
+    {
+        return ( byte[])getObjectValue(DataTypes.OBJ_PICTURE_DATA);
+    }
+
+    /**
+     * Set Picture Type
+     *
+     * @param pictureType
+     */
+    public void setPictureType(byte pictureType)
+    {
+        setObjectValue(DataTypes.OBJ_PICTURE_TYPE, pictureType);
+    }
+
+    /**
+     *
+     * @return picturetype
+     */
+    public int getPictureType()
+    {
+        return ((Long)getObjectValue(DataTypes.OBJ_PICTURE_TYPE)).intValue();
+    }
 
     /**
      * The ID3v2 frame identifier
