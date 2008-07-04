@@ -25,7 +25,7 @@ package org.jaudiotagger.audio.exceptions;
  * prevent the &quote;entagged audio library&quote; from actually finishing its
  * operation.<br>
  * This exception can be used in all methods but
- * {@link org.jaudiotagger.audio.generic.AudioFileModificationListener#fileOperationFinished(File)}.
+ * {@link org.jaudiotagger.audio.generic.AudioFileModificationListener#fileOperationFinished(java.io.File)}.
  *
  * @author Christian Laireiter
  */

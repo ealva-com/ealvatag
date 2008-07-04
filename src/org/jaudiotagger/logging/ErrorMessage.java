@@ -1,6 +1,7 @@
 package org.jaudiotagger.logging;
 
 import java.text.MessageFormat;
+import java.util.logging.Level;
 
 /**
  * Defines Error Messages
@@ -27,6 +28,9 @@ public enum ErrorMessage
     GENERAL_WRITE_FAILED_BECAUSE_FILE_IS_TOO_SMALL("Cannot make changes to file {0} because too small to be an audio file"),
     GENERAL_WRITE_FAILED_TO_DELETE_ORIGINAL_FILE("Cannot make changes to file {0} because unable to delete the original file ready for updating from temporary file {1}"),
     GENERAL_WRITE_FAILED_TO_RENAME_TO_ORIGINAL_FILE("Cannot make changes to file {0} because unable to rename from temporary file {1}"),
+    GENERAL_WRITE_FAILED_BECAUSE("Cannot make changes to file {0} because {1}"),
+    GENERAL_WRITE_FAILED_BECAUSE_FILE_NOT_FOUND("Cannot make changes to file {0} because the file cannot be found"),
+    GENERAL_WRITE_PROBLEM_CLOSING_FILE_HANDLE("Problem closing file handles for file {0} because {1}"),
     GENERAL_DELETE_FAILED("Cannot delete file {0}"),
     GENERAL_DELETE_FAILED_FILE_LOCKED("Cannot delete file {0} because it is being used by another application"),
     GENERAL_DELETE_FAILED_BECAUSE_FILE_IS_TOO_SMALL("Cannot write to file {0} because too small to be an audio file"),
@@ -41,6 +45,7 @@ public enum ErrorMessage
     MP4_GENRE_OUT_OF_RANGE("Genre Id {0} does not map to a valid genre"),
     MP3_PICTURE_TYPE_INVALID("Picture Type is set to invalid value:{0}"),
     MP3_REFERENCE_KEY_INVALID("{0}:No key could be found with the value of:{1}");
+
     ;
 
 

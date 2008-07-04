@@ -40,6 +40,8 @@ import java.util.logging.Level;
  */
 public class MP3File extends AudioFile
 {
+     private static final int    MINIMUM_FILESIZE = 150;
+
     protected static AbstractTagDisplayFormatter tagFormatter;
 
     /**
@@ -710,6 +712,33 @@ public class MP3File extends AudioFile
     }
 
     /**
+     * Check can write to file
+     * 
+     * @param file
+     * @throws IOException
+     */
+    public void precheck(File file) throws IOException
+    {
+        if (!file.exists())
+        {
+            logger.severe(ErrorMessage.GENERAL_WRITE_FAILED_BECAUSE_FILE_NOT_FOUND.getMsg(file.getName()));
+            throw new IOException(ErrorMessage.GENERAL_WRITE_FAILED_BECAUSE_FILE_NOT_FOUND.getMsg(file.getName()));
+        }
+
+        if (!file.canWrite())
+        {
+            logger.severe(ErrorMessage.GENERAL_WRITE_FAILED.getMsg(file.getName()));
+            throw new IOException(ErrorMessage.GENERAL_WRITE_FAILED.getMsg(file.getName()));
+        }
+
+        if (file.length() <= MINIMUM_FILESIZE)
+        {
+            logger.severe(ErrorMessage.GENERAL_WRITE_FAILED_BECAUSE_FILE_IS_TOO_SMALL.getMsg(file.getName()));
+            throw new IOException(ErrorMessage.GENERAL_WRITE_FAILED_BECAUSE_FILE_IS_TOO_SMALL.getMsg(file.getName()));
+        }
+    }
+
+    /**
      * Saves the tags in this datatype to the file argument. It will be saved as
      * TagConstants.MP3_FILE_SAVE_WRITE
      *
@@ -717,9 +746,13 @@ public class MP3File extends AudioFile
      * @throws FileNotFoundException if unable to find file
      * @throws IOException           on any I/O error
      */
-    public void save(File file) throws FileNotFoundException, IOException
+    public void save(File file) throws IOException
     {
         logger.info("Saving  : " + file.getAbsolutePath());
+
+        //Checks before starting write
+        precheck(file);
+
         RandomAccessFile rfile = null;
         try
         {
@@ -765,17 +798,17 @@ public class MP3File extends AudioFile
         }
         catch (FileNotFoundException ex)
         {
-            logger.log(Level.SEVERE, file.getAbsolutePath() + ":Problem writing tags to file,FileNotFoundException", ex.getMessage());
+            logger.log(Level.SEVERE, ErrorMessage.GENERAL_WRITE_FAILED_BECAUSE_FILE_NOT_FOUND.getMsg(file.getName()), ex);
             throw ex;
         }
         catch (IOException iex)
         {
-            logger.log(Level.SEVERE, file.getAbsolutePath() + ":Problem writing tags to file,IOException", iex.getMessage());
+            logger.log(Level.SEVERE, ErrorMessage.GENERAL_WRITE_FAILED_BECAUSE.getMsg(file.getName(),iex.getMessage()),iex);
             throw iex;
         }
         catch (RuntimeException re)
         {
-            logger.log(Level.SEVERE, file.getAbsolutePath() + ":Problem writing tags to file,RuntimeException", re.getMessage());
+            logger.log(Level.SEVERE, ErrorMessage.GENERAL_WRITE_FAILED_BECAUSE.getMsg(file.getName(),re.getMessage()),re);
             throw re;
         }
         finally
