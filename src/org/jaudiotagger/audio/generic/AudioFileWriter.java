@@ -43,8 +43,7 @@ import org.jaudiotagger.logging.ErrorMessage;
  * @since v0.02
  */
 public abstract class AudioFileWriter
-{
-    private static final String TEMP_FILENAME_PREFIX = "jaudiotagger";
+{       
     private static final String TEMP_FILENAME_SUFFIX = ".tmp";
     private static final String WRITE_MODE = "rw";
     private static final int    MINIMUM_FILESIZE = 150;
@@ -87,7 +86,7 @@ public abstract class AudioFileWriter
         try
         {
 
-            tempF = File.createTempFile(TEMP_FILENAME_PREFIX,TEMP_FILENAME_SUFFIX, af.getFile().getParentFile());
+            tempF = File.createTempFile(af.getFile().getName().replace('.','_'),TEMP_FILENAME_SUFFIX, af.getFile().getParentFile());
             rafTemp = new RandomAccessFile(tempF, WRITE_MODE);
             raf = new RandomAccessFile(af.getFile(), WRITE_MODE);
             raf.seek(0);
@@ -147,9 +146,13 @@ public abstract class AudioFileWriter
                         throw new CannotWriteException(ErrorMessage.GENERAL_WRITE_FAILED_TO_RENAME_TO_ORIGINAL_FILE.getMsg(af.getFile().getPath(),tempF.getParentFile()));
                     }
                     result = tempF;
+
+                    //All ok so delete
+                    tempF.delete();
                 }
                 else
                 {
+                    //It was created but never used
                     tempF.delete();
                 }
             }
@@ -264,7 +267,7 @@ public abstract class AudioFileWriter
 
         try
         {
-            tempF   = File.createTempFile(TEMP_FILENAME_PREFIX, TEMP_FILENAME_SUFFIX, af.getFile().getParentFile());
+            tempF   = File.createTempFile(af.getFile().getName().replace('.','_'),TEMP_FILENAME_SUFFIX, af.getFile().getParentFile());
             rafTemp = new RandomAccessFile(tempF, WRITE_MODE);
             raf     = new RandomAccessFile(af.getFile(), WRITE_MODE);
 
@@ -310,8 +313,11 @@ public abstract class AudioFileWriter
                 //Warn but assume has worked okay
                 logger.log(Level.WARNING,ErrorMessage.GENERAL_WRITE_PROBLEM_CLOSING_FILE_HANDLE.getMsg(af.getFile(),ioe.getMessage()),ioe);
             }
-        }
 
+            //Delete the temporary file because either it was never used so lets just tidy up or we did start writing to it but
+            //the write failed and we havent rename dit back to the original file so we can just delete it.
+            tempF.delete();
+        }
 
         //Result held in this file
         result = af.getFile();
@@ -337,6 +343,11 @@ public abstract class AudioFileWriter
             }
 
             //Delete the temporary file because successfuly renameed
+            tempF.delete();
+        }
+        else
+        {
+            //Delete the temporary file that wasn't ever used
             tempF.delete();
         }
 
