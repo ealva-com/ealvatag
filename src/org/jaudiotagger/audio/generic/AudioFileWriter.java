@@ -293,6 +293,10 @@ public abstract class AudioFileWriter
         catch (Exception e)
         {
             logger.log(Level.SEVERE,ErrorMessage.GENERAL_WRITE_FAILED_BECAUSE.getMsg(af.getFile(),e.getMessage()),e);
+
+            //Delete the temporary file because either it was never used so lets just tidy up or we did start writing to it but
+            //the write failed and we havent rename dit back to the original file so we can just delete it.
+            tempF.delete();
             throw new CannotWriteException(ErrorMessage.GENERAL_WRITE_FAILED_BECAUSE.getMsg(af.getFile(),e.getMessage()));
         }
         finally
@@ -313,10 +317,6 @@ public abstract class AudioFileWriter
                 //Warn but assume has worked okay
                 logger.log(Level.WARNING,ErrorMessage.GENERAL_WRITE_PROBLEM_CLOSING_FILE_HANDLE.getMsg(af.getFile(),ioe.getMessage()),ioe);
             }
-
-            //Delete the temporary file because either it was never used so lets just tidy up or we did start writing to it but
-            //the write failed and we havent rename dit back to the original file so we can just delete it.
-            tempF.delete();
         }
 
         //Result held in this file
