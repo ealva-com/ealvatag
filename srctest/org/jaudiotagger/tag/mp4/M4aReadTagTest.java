@@ -11,6 +11,7 @@ import org.jaudiotagger.tag.mp4.field.*;
 import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.AudioFileIO;
 import org.jaudiotagger.audio.mp4.Mp4AudioHeader;
+import org.jaudiotagger.audio.mp4.EncoderType;
 import org.jaudiotagger.audio.mp4.atom.Mp4EsdsBox;
 import org.jaudiotagger.audio.exceptions.CannotReadException;
 
@@ -892,4 +893,69 @@ public class M4aReadTagTest extends TestCase
         }
         assertNull(exceptionCaught);
     }
+
+
+
+    /** Test properly identified as Apple Lossless
+     *
+     * @throws Exception
+     */
+    public void testIssue226Mono()throws Exception
+    {
+        Exception exceptionCaught = null;
+        try
+        {
+            //Read Image
+            File testFile = AbstractTestCase.copyAudioToTmp("test32.m4a");
+
+            AudioFile f = AudioFileIO.read(testFile);
+            Mp4Tag tag = (Mp4Tag)f.getTag();
+
+            System.out.println(f.getAudioHeader());
+            System.out.println(tag);
+
+            assertEquals("2",f.getAudioHeader().getChannels());      //TODO Should be 1 according to iTunes
+            assertEquals("128",f.getAudioHeader().getBitRate());      //TODO Should be 344 according to iTunes
+
+            assertEquals("44100",f.getAudioHeader().getSampleRate());
+            assertEquals(EncoderType.APPLE_LOSSLESS.getDescription(),f.getAudioHeader().getEncodingType());
+
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+            exceptionCaught = e;
+        }
+        assertNull(exceptionCaught);
+    }
+
+    public void testIssue226Stereo()throws Exception
+    {
+        Exception exceptionCaught = null;
+        try
+        {
+            //Read Image
+            File testFile = AbstractTestCase.copyAudioToTmp("test33.m4a");
+
+            AudioFile f = AudioFileIO.read(testFile);
+            Mp4Tag tag = (Mp4Tag)f.getTag();
+
+            System.out.println(f.getAudioHeader());
+            System.out.println(tag);
+
+            assertEquals("2",f.getAudioHeader().getChannels());      //TODO Should be 1 according to iTunes
+            assertEquals("128",f.getAudioHeader().getBitRate());      //TODO Should be 344 according to iTunes
+
+            assertEquals("44100",f.getAudioHeader().getSampleRate());
+            assertEquals(EncoderType.APPLE_LOSSLESS.getDescription(),f.getAudioHeader().getEncodingType());
+
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+            exceptionCaught = e;
+        }
+        assertNull(exceptionCaught);
+    }
+
 }

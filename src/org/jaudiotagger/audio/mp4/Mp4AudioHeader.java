@@ -4,7 +4,7 @@ import org.jaudiotagger.audio.generic.GenericAudioHeader;
 import org.jaudiotagger.audio.mp4.atom.Mp4EsdsBox;
 
 /**
- * Store some additional attributes not availble for all audio types
+ * Store some additional attributes not available for all audio types
  */
 public class Mp4AudioHeader extends GenericAudioHeader
 {
@@ -16,7 +16,7 @@ public class Mp4AudioHeader extends GenericAudioHeader
     public final static String FIELD_KIND = "KIND";
 
     /**
-     * The key for the kind<br>
+     * The key for the profile<br>
      *
      * @see #content
      */

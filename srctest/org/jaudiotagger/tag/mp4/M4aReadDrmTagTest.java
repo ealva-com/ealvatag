@@ -17,6 +17,7 @@ import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.AudioFileIO;
 import org.jaudiotagger.audio.exceptions.CannotReadException;
 import org.jaudiotagger.audio.mp4.Mp4AudioHeader;
+import org.jaudiotagger.audio.mp4.EncoderType;
 import org.jaudiotagger.audio.mp4.atom.Mp4EsdsBox;
 
 import javax.imageio.ImageIO;
@@ -53,6 +54,7 @@ public class M4aReadDrmTagTest extends TestCase
             assertEquals(44100, f.getAudioHeader().getSampleRateAsNumber());
             assertEquals(new String("2"), f.getAudioHeader().getChannels());
             assertEquals(128, f.getAudioHeader().getBitRateAsNumber());
+            assertEquals(EncoderType.DRM_AAC.getDescription(), f.getAudioHeader().getEncodingType());
 
             //MPEG Specific
             Mp4AudioHeader audioheader =(Mp4AudioHeader)f.getAudioHeader();

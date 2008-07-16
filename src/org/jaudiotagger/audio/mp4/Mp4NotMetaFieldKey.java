@@ -28,7 +28,8 @@ public enum Mp4NotMetaFieldKey
     ESDS("esds", "Track codec specific information"),
     MINF("minf", ""),
     STCO("stco", "Offsets into Audio Data"),
-    DRMS("drms", "DRM protected File");
+    DRMS("drms", "DRM protected File"),
+    ALAC("alac", "Apple Lossless File");
     private String fieldName;
     private String description;
 

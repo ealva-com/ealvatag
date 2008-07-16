@@ -175,6 +175,8 @@ public class Mp4InfoReader
 
                     info.setKind(esds.getKind());
                     info.setProfile(esds.getAudioProfile());
+
+                    info.setEncodingType(EncoderType.AAC.getDescription());
                 }
             }
             else
@@ -201,6 +203,20 @@ public class Mp4InfoReader
 
                         info.setKind(esds.getKind());
                         info.setProfile(esds.getAudioProfile());
+
+                        info.setEncodingType(EncoderType.DRM_AAC.getDescription());
+                    }
+                }
+                //Level 7-Searching for alac (Apple Lossless) instead
+                else
+                {
+                    mvhdBuffer.position(positionAfterStsdHeaderAndData);
+                    boxHeader = Mp4BoxHeader.seekWithinLevel(mvhdBuffer, Mp4NotMetaFieldKey.ALAC.getFieldName());
+                    if (boxHeader != null)
+                    {
+                        info.setEncodingType(EncoderType.APPLE_LOSSLESS.getDescription());
+
+                        //TODO Workout Channels and Bitrate
                     }
                 }
             }
@@ -219,8 +235,11 @@ public class Mp4InfoReader
             info.setBitrate(128);
         }
 
-        //This is always the same I think
-        info.setEncodingType("AAC");
+        //This is the most likley option if cant find a match
+        if(info.getEncodingType().equals(""))
+        {
+            info.setEncodingType(EncoderType.AAC.getDescription());
+        }
 
         logger.info(info.toString());
 
