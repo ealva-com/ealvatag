@@ -831,4 +831,65 @@ public class M4aReadTagTest extends TestCase
         }
         assertNull(exceptionCaught);
     }
+
+    /** Test reading mp4 file with Covr Art that includes a data AND a name field
+     *
+     * @throws Exception
+     */
+    public void testIssue227()throws Exception
+    {
+        File orig = new File("testdata", "test31.m4a");
+        if (!orig.isFile())
+        {
+            return;
+        }
+
+
+        Exception exceptionCaught = null;
+        try
+        {
+            //Read Image
+            File testFile = AbstractTestCase.copyAudioToTmp("test31.m4a");
+
+            AudioFile f = AudioFileIO.read(testFile);
+            Mp4Tag tag = (Mp4Tag)f.getTag();
+
+            System.out.println(f.getAudioHeader());
+            System.out.println(tag);
+
+            assertEquals("Es Wird Morgen",tag.getFirst(TagFieldKey.ALBUM));
+            assertEquals("2raumwohnung",tag.getFirst(TagFieldKey.ARTIST));
+
+            List pictures = tag.get(Mp4FieldKey.ARTWORK);
+            assertEquals(1,pictures.size());
+            Mp4TagCoverField artwork = (Mp4TagCoverField)pictures.get(0);
+            assertEquals(Mp4FieldType.COVERART_PNG,artwork.getFieldType());
+
+            //Add another field and save
+            tag.set(tag.createTagField(TagFieldKey.COMPOSER_SORT, "C3"));
+            f.commit();
+
+            //Reget
+            tag = (Mp4Tag)f.getTag();
+
+            System.out.println(f.getAudioHeader());
+            System.out.println(tag);
+
+            assertEquals("Es Wird Morgen",tag.getFirst(TagFieldKey.ALBUM));
+            assertEquals("2raumwohnung",tag.getFirst(TagFieldKey.ARTIST));
+            pictures = tag.get(Mp4FieldKey.ARTWORK);
+            assertEquals(1,pictures.size());
+            artwork = (Mp4TagCoverField)pictures.get(0);
+            assertEquals(Mp4FieldType.COVERART_PNG,artwork.getFieldType());
+            assertEquals("C3",tag.getFirst(TagFieldKey.COMPOSER_SORT));
+
+
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+            exceptionCaught = e;
+        }
+        assertNull(exceptionCaught);
+    }
 }

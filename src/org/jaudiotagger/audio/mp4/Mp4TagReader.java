@@ -224,6 +224,7 @@ public class Mp4TagReader
                 {
                     int processedDataSize = 0;
                     int imageCount = 0;
+                    //The loop should run for each image (each data atom)
                     while (processedDataSize < header.getDataLength())
                     {
                         //There maybe a mixture of PNG and JPEG images so have to check type
@@ -236,7 +237,7 @@ public class Mp4TagReader
                         }
                         Mp4TagCoverField field = new Mp4TagCoverField(raw, type);
                         tag.add(field);
-                        processedDataSize += field.getDataSize() + Mp4BoxHeader.HEADER_LENGTH;
+                        processedDataSize += field.getDataAndHeaderSize();
                         imageCount++;
                     }
                 }

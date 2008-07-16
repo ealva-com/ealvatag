@@ -20,6 +20,9 @@ package org.jaudiotagger.tag.mp4.field;
 
 import org.jaudiotagger.tag.mp4.field.Mp4TagBinaryField;
 import org.jaudiotagger.tag.mp4.Mp4FieldKey;
+import org.jaudiotagger.tag.mp4.atom.Mp4DataBox;
+import org.jaudiotagger.tag.mp4.atom.Mp4NameBox;
+import org.jaudiotagger.audio.mp4.atom.Mp4BoxHeader;
 
 import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
@@ -33,8 +36,13 @@ import java.nio.ByteBuffer;
  */
 public class Mp4TagCoverField extends Mp4TagBinaryField
 {
+
     //Type
     private Mp4FieldType imageType;
+
+    //Contains the size of each atom including header, required because may honly have data atom or
+    //may have data and name atom
+    private int dataAndHeaderSize;
 
     /**
      * Empty CoverArt Field
@@ -42,6 +50,15 @@ public class Mp4TagCoverField extends Mp4TagBinaryField
     public Mp4TagCoverField()
     {
         super(Mp4FieldKey.ARTWORK.getFieldName());
+    }
+
+    /**
+     *
+     * @return data and header size
+     */
+    public int getDataAndHeaderSize()
+    {
+        return dataAndHeaderSize;
     }
 
     /**
@@ -68,7 +85,7 @@ public class Mp4TagCoverField extends Mp4TagBinaryField
      * Construct new cover art with binarydata provided
      * <p/>
      * <p/>
-     * Identifies the imagetype by looking at the data, if doesnt match PNG assumes it is JPEG
+     * Identifies the imageType by looking at the data, if doesnt match PNG assumes it is JPEG
      * TODO:Check how accurate is my method will it work for any PNG
      * TODO:What about if they try to add data that is corrupt or not PNG or JPG
      *
@@ -122,6 +139,43 @@ public class Mp4TagCoverField extends Mp4TagBinaryField
             default:
                 return "";
         }
+    }
+
+    protected void build(ByteBuffer raw)
+    {           
+        Mp4BoxHeader header = new Mp4BoxHeader(raw);
+        dataSize            = header.getDataLength();
+        dataAndHeaderSize   = header.getLength();
+
+        //Skip the version and length fields
+        raw.position(raw.position() + Mp4DataBox.PRE_DATA_LENGTH);
+
+        //Read the raw data into byte array
+        this.dataBytes = new byte[dataSize - Mp4DataBox.PRE_DATA_LENGTH];
+        for (int i = 0; i < dataBytes.length; i++)
+        {
+            this.dataBytes[i] = raw.get();
+        }
+
+        //Is there room for another atom (remember actually passed all the data so unless Covr is last atom
+        //there will be room even though more likely to be for the text top level atom)
+        int positionAfterDataAtom=raw.position();
+        if(raw.position() + Mp4BoxHeader.HEADER_LENGTH <= raw.limit())
+        {
+            //Is there a following name field (not the norm)
+            Mp4BoxHeader nameHeader = new Mp4BoxHeader(raw);
+            if(nameHeader.getId().equals(Mp4NameBox.IDENTIFIER))
+            {
+                dataSize            += nameHeader.getDataLength();
+                dataAndHeaderSize   += nameHeader.getLength();
+            }
+            else
+            {
+                raw.position(positionAfterDataAtom);
+            }
+        }
+
+        //After returning buffers position will be after the end of this atom
     }
 
 }
