@@ -18,15 +18,12 @@
  */
 package org.jaudiotagger.audio.asf.data;
 
+import org.jaudiotagger.audio.asf.util.Utils;
+import org.jaudiotagger.tag.reference.GenreTypes;
+
 import java.io.ByteArrayOutputStream;
 import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Iterator;
-
-import org.jaudiotagger.audio.asf.util.Utils;
+import java.util.*;
 
 /**
  * This structure represents the data of a chunk, wich contains extended content
@@ -39,31 +36,6 @@ import org.jaudiotagger.audio.asf.util.Utils;
 public class ExtendedContentDescription extends Chunk
 {
 
-    public static final String[] DEFAULT_GENRES = {"Blues", "Classic Rock",
-            "Country", "Dance", "Disco", "Funk", "Grunge", "Hip-Hop", "Jazz",
-            "Metal", "New Age", "Oldies", "Other", "Pop", "R&B", "Rap",
-            "Reggae", "Rock", "Techno", "Industrial", "Alternative", "Ska",
-            "Death Metal", "Pranks", "Soundtrack", "Euro-Techno", "Ambient",
-            "Trip-Hop", "Vocal", "Jazz+Funk", "Fusion", "Trance", "Classical",
-            "Instrumental", "Acid", "House", "Game", "Sound Clip", "Gospel",
-            "Noise", "AlternRock", "Bass", "Soul", "Punk", "Space",
-            "Meditative", "Instrumental Pop", "Instrumental Rock", "Ethnic",
-            "Gothic", "Darkwave", "Techno-Industrial", "Electronic",
-            "Pop-Folk", "Eurodance", "Dream", "Southern Rock", "Comedy",
-            "Cult", "Gangsta", "Top 40", "Christian Rap", "Pop/Funk", "Jungle",
-            "Native American", "Cabaret", "New Wave", "Psychadelic", "Rave",
-            "Showtunes", "Trailer", "Lo-Fi", "Tribal", "Acid Punk",
-            "Acid Jazz", "Polka", "Retro", "Musical", "Rock & Roll",
-            "Hard Rock", "Folk", "Folk-Rock", "National Folk", "Swing",
-            "Fast Fusion", "Bebob", "Latin", "Revival", "Celtic", "Bluegrass",
-            "Avantgarde", "Gothic Rock", "Progressive Rock",
-            "Psychedelic Rock", "Symphonic Rock", "Slow Rock", "Big Band",
-            "Chorus", "Easy Listening", "Acoustic", "Humour", "Speech",
-            "Chanson", "Opera", "Chamber Music", "Sonata", "Symphony",
-            "Booty Bass", "Primus", "Porn Groove", "Satire", "Slow Jam",
-            "Club", "Tango", "Samba", "Folklore", "Ballad", "Power Ballad",
-            "Rhythmic Soul", "Freestyle", "Duet", "Punk Rock", "Drum Solo",
-            "A capella", "Euro-House", "Dance Hall"};
     /**
      * Contains the properties. <br>
      */
@@ -266,9 +238,9 @@ public class ExtendedContentDescription extends Chunk
                     {
                         int genreNum = Integer.parseInt(result);
                         if (genreNum >= 0
-                                && genreNum < DEFAULT_GENRES.length)
+                                && genreNum < GenreTypes.getMaxStandardGenreId())
                         {
-                            result = DEFAULT_GENRES[genreNum];
+                            result = GenreTypes.getInstanceOf().getValueForId(genreNum);
                         }
                     }
                     catch (NumberFormatException e)

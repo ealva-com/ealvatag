@@ -18,8 +18,9 @@
  */
 package org.jaudiotagger.audio.asf.util;
 
+import org.jaudiotagger.tag.reference.GenreTypes;
+
 import java.io.UnsupportedEncodingException;
-import java.util.Arrays;
 import java.util.Iterator;
 
 import org.jaudiotagger.tag.Tag;
@@ -50,7 +51,7 @@ public class TagConverter
      *
      * @param tag         The tag from which the values are gathered. <br>
      *                    Assigned values are: <br>
-     * @param description The extended content description which should recieve the
+     * @param description The extended content description which should receive the
      *                    values. <br>
      *                    <b>Warning: </b> the common values will be replaced.
      * @see Tag#getAlbum() <br>
@@ -101,13 +102,12 @@ public class TagConverter
                     ContentDescriptor.TYPE_STRING);
             tmp.setStringValue(tag.getFirstGenre());
             description.addOrReplace(tmp);
-            int index = Arrays.asList(ExtendedContentDescription.DEFAULT_GENRES).indexOf(
-                    tag.getFirstGenre());
-            if (index != -1)
+            Integer genreNum = GenreTypes.getInstanceOf().getIdForName(tag.getFirstGenre());
+            if (genreNum != null)
             {
                 tmp = new ContentDescriptor(ContentDescriptor.ID_GENREID,
                         ContentDescriptor.TYPE_STRING);
-                tmp.setStringValue("(" + index + ")");
+                tmp.setStringValue("(" + genreNum + ")");
                 description.addOrReplace(tmp);
             }
             else
@@ -193,7 +193,7 @@ public class TagConverter
      * filled with the values of the given <code>tag</code>.<br>
      * Since extended content description of asf files can store name-value
      * pairs, nearly each {@link org.jaudiotagger.tag.TagField}can be
-     * stored whithin. <br>
+     * stored within. <br>
      * One constraint is that the strings must be convertable to "UTF-16LE"
      * encoding and don't exceed a length of 65533 in binary representation.
      * <br>
