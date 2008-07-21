@@ -18,15 +18,13 @@
  */
 package org.jaudiotagger.audio.flac;
 
-import org.jaudiotagger.audio.exceptions.*;
-import org.jaudiotagger.audio.flac.FlacInfoReader;
-import org.jaudiotagger.audio.flac.FlacTagReader;
-
-import java.io.*;
-
+import org.jaudiotagger.audio.exceptions.CannotReadException;
 import org.jaudiotagger.audio.generic.AudioFileReader;
 import org.jaudiotagger.audio.generic.GenericAudioHeader;
 import org.jaudiotagger.tag.Tag;
+
+import java.io.IOException;
+import java.io.RandomAccessFile;
 
 /**
  * Read encoding and tag info for Flac file (opensource lossless encoding)

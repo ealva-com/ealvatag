@@ -1,30 +1,29 @@
 package org.jaudiotagger.logging;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.logging.Formatter;
 import java.util.logging.LogRecord;
-import java.util.Date;
-import java.text.SimpleDateFormat;
-import java.io.StringWriter;
-import java.io.PrintWriter;
 
 /**
  * For Formatting log output
- *
+ * <p/>
  * <p>This is not required by jaudiotagger, but its advantage over the default formatter is that all the format for a log
  * entry is on one line, making it much easier to read. To use this formatter with your code edit loggin.properties
  * within your jre/lib folder and  modify as follows
  * e.g java.util.logging.ConsoleHandler.formatter = org.jaudiotagger.logging.LogFormatter </p>
  */
-public final class LogFormatter
-    extends Formatter
+public final class LogFormatter extends Formatter
 {
     private boolean isObsfucated = false;
     public static final String ACTION_PERFORMED = "actionPerformed";
 
     // Line separator string.  This is the value of the line.separator
     // property at the moment that the SimpleFormatter was created.
-    private final String lineSeparator = (String)java.security.AccessController.doPrivileged(new sun.security.action.
-        GetPropertyAction("line.separator"));
+    private final String lineSeparator = (String) java.security.AccessController.doPrivileged(new sun.security.action.
+            GetPropertyAction("line.separator"));
 
     private final SimpleDateFormat sfDateOut = new SimpleDateFormat("dd/MM/yyyy HH.mm.ss:");
     private final Date date = new Date();
@@ -46,11 +45,11 @@ public final class LogFormatter
 
         if (record.getSourceClassName() != null)
         {
-            recordName = record.getSourceClassName()+":"+record.getSourceMethodName();
+            recordName = record.getSourceClassName() + ":" + record.getSourceMethodName();
         }
         else
         {
-            recordName = record.getLoggerName()+":";
+            recordName = record.getLoggerName() + ":";
         }
         if (recordName != null)
         {

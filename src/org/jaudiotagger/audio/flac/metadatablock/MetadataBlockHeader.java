@@ -18,8 +18,8 @@
  */
 package org.jaudiotagger.audio.flac.metadatablock;
 
-import java.io.RandomAccessFile;
 import java.io.IOException;
+import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
 
 /**

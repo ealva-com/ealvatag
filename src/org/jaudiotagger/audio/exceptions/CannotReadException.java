@@ -55,7 +55,8 @@ public class CannotReadException extends Exception
      * @param message The error message.
      * @param cause   The throwable causing this exception.
      */
-    public CannotReadException(String message, Throwable cause) {
-		super(message, cause);
-	}
+    public CannotReadException(String message, Throwable cause)
+    {
+        super(message, cause);
+    }
 }

@@ -1,16 +1,16 @@
 package org.jaudiotagger.audio.flac.metadatablock;
 
-import org.jaudiotagger.tag.reference.PictureTypes;
-import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
+import org.jaudiotagger.audio.generic.Utils;
 import org.jaudiotagger.tag.InvalidFrameException;
 import org.jaudiotagger.tag.TagField;
 import org.jaudiotagger.tag.TagFieldKey;
-import org.jaudiotagger.audio.generic.Utils;
+import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
+import org.jaudiotagger.tag.reference.PictureTypes;
 
-import java.io.RandomAccessFile;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.RandomAccessFile;
+import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 import java.util.logging.Logger;
 
@@ -60,8 +60,7 @@ public class MetadataBlockDataPicture implements MetadataBlockData, TagField
      * Construct picture block by reading from file
      */
     //TODO check for buffer underflows see http://research.eeye.com/html/advisories/published/AD20071115.html
-    public MetadataBlockDataPicture(MetadataBlockHeader header, RandomAccessFile raf)
-            throws IOException, InvalidFrameException
+    public MetadataBlockDataPicture(MetadataBlockHeader header, RandomAccessFile raf) throws IOException, InvalidFrameException
     {
         ByteBuffer rawdata = ByteBuffer.allocate(header.getDataLength());
         int bytesRead = raf.getChannel().read(rawdata);
@@ -110,14 +109,7 @@ public class MetadataBlockDataPicture implements MetadataBlockData, TagField
     /**
      * Construct new MetadataPicture block
      */
-    public MetadataBlockDataPicture(byte[] imageData,
-                                    int pictureType,
-                                    String mimeType,
-                                    String description,
-                                    int width,
-                                    int height,
-                                    int colourDepth,
-                                    int indexedColouredCount)
+    public MetadataBlockDataPicture(byte[] imageData, int pictureType, String mimeType, String description, int width, int height, int colourDepth, int indexedColouredCount)
     {
         //Picture Type
         this.pictureType = pictureType;
@@ -241,14 +233,7 @@ public class MetadataBlockDataPicture implements MetadataBlockData, TagField
 
     public String toString()
     {
-        return PictureTypes.getInstanceOf().getValueForId(pictureType) + ":" +
-                mimeType + ":" +
-                description + ":" +
-                "width:" + width +
-                ":height:" + height +
-                ":colourdepth:" + colourDepth +
-                ":indexedColourCount:" + indexedColouredCount +
-                ":image size in bytes:" + imageData.length;
+        return PictureTypes.getInstanceOf().getValueForId(pictureType) + ":" + mimeType + ":" + description + ":" + "width:" + width + ":height:" + height + ":colourdepth:" + colourDepth + ":indexedColourCount:" + indexedColouredCount + ":image size in bytes:" + imageData.length;
     }
 
     /**
@@ -339,8 +324,8 @@ public class MetadataBlockDataPicture implements MetadataBlockData, TagField
      * Determines whether the content of the field is empty.<br>
      *
      * @return <code>true</code> if no data is stored (or empty String).
-	 */
-	public boolean isEmpty()
+     */
+    public boolean isEmpty()
     {
         return false;
     }

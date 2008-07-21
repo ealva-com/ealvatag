@@ -1,11 +1,9 @@
 package org.jaudiotagger.logging;
 
 import java.text.MessageFormat;
-import java.util.logging.Level;
 
 /**
  * Defines Error Messages
- *
  */
 public enum ErrorMessage
 {
@@ -45,7 +43,6 @@ public enum ErrorMessage
     MP4_GENRE_OUT_OF_RANGE("Genre Id {0} does not map to a valid genre"),
     MP3_PICTURE_TYPE_INVALID("Picture Type is set to invalid value:{0}"),
     MP3_REFERENCE_KEY_INVALID("{0}:No key could be found with the value of:{1}");
-
     ;
 
 
@@ -53,7 +50,7 @@ public enum ErrorMessage
 
     ErrorMessage(String msg)
     {
-        this.msg =msg;
+        this.msg = msg;
     }
 
     public String getMsg()
@@ -61,9 +58,9 @@ public enum ErrorMessage
         return msg;
     }
 
-    public String getMsg(Object ... args)
+    public String getMsg(Object... args)
     {
-        return MessageFormat.format(getMsg(),args);
+        return MessageFormat.format(getMsg(), args);
     }
 
 }

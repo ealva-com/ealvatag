@@ -58,14 +58,11 @@ public class TestAudioTagger
             System.exit(1);
         }
         Date start = new Date();
-        System.out.println("Started to read from:" + rootDir.getPath() + " at "
-                + DateFormat.getTimeInstance().format(start));
+        System.out.println("Started to read from:" + rootDir.getPath() + " at " + DateFormat.getTimeInstance().format(start));
         test.scanSingleDir(rootDir);
         Date finish = new Date();
-        System.out.println("Started to read from:" + rootDir.getPath() + " at "
-                + DateFormat.getTimeInstance().format(start));
-        System.out.println("Finished to read from:" + rootDir.getPath()
-                + DateFormat.getTimeInstance().format(finish));
+        System.out.println("Started to read from:" + rootDir.getPath() + " at " + DateFormat.getTimeInstance().format(start));
+        System.out.println("Finished to read from:" + rootDir.getPath() + DateFormat.getTimeInstance().format(finish));
         System.out.println("Attempted  to read:" + count);
         System.out.println("Successful to read:" + (count - failed));
         System.out.println("Failed     to read:" + failed);
@@ -114,9 +111,7 @@ public class TestAudioTagger
         }
     }
 
-    final class MP3FileFilter
-            extends javax.swing.filechooser.FileFilter
-            implements java.io.FileFilter
+    final class MP3FileFilter extends javax.swing.filechooser.FileFilter implements java.io.FileFilter
     {
 
         /**
@@ -155,11 +150,7 @@ public class TestAudioTagger
          */
         public final boolean accept(final java.io.File file)
         {
-            return (
-                    ((file.getName()).toLowerCase().endsWith(".mp3"))
-                            ||
-                            (file.isDirectory() && (this.allowDirectories == true))
-            );
+            return (((file.getName()).toLowerCase().endsWith(".mp3")) || (file.isDirectory() && (this.allowDirectories == true)));
         }
 
         /**

@@ -18,8 +18,8 @@
  */
 package org.jaudiotagger.audio.flac.metadatablock;
 
-import java.io.RandomAccessFile;
 import java.io.IOException;
+import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
 import java.util.logging.Logger;
 
@@ -58,8 +58,7 @@ public class MetadataBlockDataStreamInfo
     private float length;
     private boolean isValid = true;
 
-    public MetadataBlockDataStreamInfo(MetadataBlockHeader header, RandomAccessFile raf)
-            throws IOException
+    public MetadataBlockDataStreamInfo(MetadataBlockHeader header, RandomAccessFile raf) throws IOException
     {
         ByteBuffer rawdata = ByteBuffer.allocate(header.getDataLength());
         int bytesRead = raf.getChannel().read(rawdata);
@@ -88,17 +87,7 @@ public class MetadataBlockDataStreamInfo
     public String toString()
     {
 
-        return
-                "MinBlockSize:" + minBlockSize
-                        + "MaxBlockSize:" + maxBlockSize
-                        + "MinFrameSize:" + minFrameSize
-                        + "MaxFrameSize:" + maxFrameSize
-                        + "SampleRateTotal:" + samplingRate
-                        + "SampleRatePerChannel:" + samplingRatePerChannel
-                        + ":Channel number:" + channelNumber
-                        + ":Bits per sample: " + bitsPerSample
-                        + ":TotalNumberOfSamples: " + totalNumberOfSamples
-                        + ":Length: " + length;
+        return "MinBlockSize:" + minBlockSize + "MaxBlockSize:" + maxBlockSize + "MinFrameSize:" + minFrameSize + "MaxFrameSize:" + maxFrameSize + "SampleRateTotal:" + samplingRate + "SampleRatePerChannel:" + samplingRatePerChannel + ":Channel number:" + channelNumber + ":Bits per sample: " + bitsPerSample + ":TotalNumberOfSamples: " + totalNumberOfSamples + ":Length: " + length;
 
     }
 

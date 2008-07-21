@@ -18,17 +18,18 @@
  */
 package org.jaudiotagger.audio.flac;
 
-import org.jaudiotagger.audio.exceptions.*;
-import org.jaudiotagger.audio.flac.metadatablock.MetadataBlockHeader;
+import org.jaudiotagger.audio.exceptions.CannotReadException;
 import org.jaudiotagger.audio.flac.metadatablock.MetadataBlockDataPicture;
-import org.jaudiotagger.tag.vorbiscomment.VorbisCommentTag;
-import org.jaudiotagger.tag.vorbiscomment.VorbisCommentReader;
+import org.jaudiotagger.audio.flac.metadatablock.MetadataBlockHeader;
 import org.jaudiotagger.tag.InvalidFrameException;
 import org.jaudiotagger.tag.flac.FlacTag;
+import org.jaudiotagger.tag.vorbiscomment.VorbisCommentReader;
+import org.jaudiotagger.tag.vorbiscomment.VorbisCommentTag;
 
-import java.io.*;
-import java.util.List;
+import java.io.IOException;
+import java.io.RandomAccessFile;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Logger;
 
 /**
@@ -46,7 +47,7 @@ public class FlacTagReader
     {
         FlacStreamReader flacStream = new FlacStreamReader(raf);
         flacStream.findStream();
-   
+
         //Hold the metadata
         VorbisCommentTag tag = null;
         List<MetadataBlockDataPicture> images = new ArrayList<MetadataBlockDataPicture>();

@@ -18,13 +18,16 @@
  */
 package org.jaudiotagger.audio.flac;
 
-import org.jaudiotagger.audio.exceptions.*;
+import org.jaudiotagger.audio.exceptions.CannotReadException;
+import org.jaudiotagger.audio.exceptions.CannotWriteException;
 import org.jaudiotagger.audio.flac.metadatablock.*;
 import org.jaudiotagger.tag.Tag;
 import org.jaudiotagger.tag.flac.FlacTag;
 
-import java.io.*;
-import java.util.*;
+import java.io.IOException;
+import java.io.RandomAccessFile;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Logger;
 
 
@@ -80,7 +83,7 @@ public class FlacTagWriter
         metadataBlockSeekTable.clear();
         metadataBlockCueSheet.clear();
 
-        
+
         byte[] b;
         //Read existing data
         FlacStreamReader flacStream = new FlacStreamReader(raf);
@@ -88,7 +91,7 @@ public class FlacTagWriter
         {
             flacStream.findStream();
         }
-        catch(CannotReadException cre)
+        catch (CannotReadException cre)
         {
             throw new CannotWriteException(cre.getMessage());
         }
@@ -157,10 +160,7 @@ public class FlacTagWriter
         if ((availableRoom == neededRoom) || (availableRoom > neededRoom + MetadataBlockHeader.HEADER_LENGTH))
         {
             //Jump over Id3 (if exists) Flac and StreamInfoBlock
-            raf.seek( flacStream.getStartOfFlacInFile()
-                    + FlacStreamReader.FLAC_STREAM_IDENTIFIER_LENGTH
-                    + MetadataBlockHeader.HEADER_LENGTH
-                    + MetadataBlockDataStreamInfo.STREAM_INFO_DATA_LENGTH);
+            raf.seek(flacStream.getStartOfFlacInFile() + FlacStreamReader.FLAC_STREAM_IDENTIFIER_LENGTH + MetadataBlockHeader.HEADER_LENGTH + MetadataBlockDataStreamInfo.STREAM_INFO_DATA_LENGTH);
 
             //Write Application Blocks
             for (int i = 0; i < metadataBlockApplication.size(); i++)
@@ -191,15 +191,11 @@ public class FlacTagWriter
         {
             //Skip to start of Audio
             //Write FlacStreamReader and StreamIfoMetablock to new file
-            int dataStartSize =
-                    flacStream.getStartOfFlacInFile()                    
-                    + FlacStreamReader.FLAC_STREAM_IDENTIFIER_LENGTH
-                    + MetadataBlockHeader.HEADER_LENGTH
-                    + MetadataBlockDataStreamInfo.STREAM_INFO_DATA_LENGTH;
+            int dataStartSize = flacStream.getStartOfFlacInFile() + FlacStreamReader.FLAC_STREAM_IDENTIFIER_LENGTH + MetadataBlockHeader.HEADER_LENGTH + MetadataBlockDataStreamInfo.STREAM_INFO_DATA_LENGTH;
             raf.seek(0);
             rafTemp.getChannel().transferFrom(raf.getChannel(), 0, dataStartSize);
             rafTemp.seek(dataStartSize);
-            
+
             //Write all the metadatablocks
             for (int i = 0; i < metadataBlockApplication.size(); i++)
             {
@@ -223,7 +219,7 @@ public class FlacTagWriter
             rafTemp.write(tc.convert(tag, FlacTagCreator.DEFAULT_PADDING).array());
             //Write audio to new file
             raf.seek(dataStartSize + availableRoom);
-            rafTemp.getChannel().transferFrom(raf.getChannel(), rafTemp.getChannel().position(), raf.getChannel().size());            
+            rafTemp.getChannel().transferFrom(raf.getChannel(), rafTemp.getChannel().position(), raf.getChannel().size());
         }
     }
 

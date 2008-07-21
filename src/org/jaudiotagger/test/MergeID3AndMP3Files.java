@@ -54,12 +54,10 @@ public class MergeID3AndMP3Files
         }
 
         Date start = new Date();
-        System.out.println("Started to merge from:" + rootDir.getPath() + " at "
-                + DateFormat.getTimeInstance().format(start));
+        System.out.println("Started to merge from:" + rootDir.getPath() + " at " + DateFormat.getTimeInstance().format(start));
         test.scanSingleDir(rootDir, toDir, mp3File);
         Date finish = new Date();
-        System.out.println("Finished to merge from:" + rootDir.getPath()
-                + DateFormat.getTimeInstance().format(finish));
+        System.out.println("Finished to merge from:" + rootDir.getPath() + DateFormat.getTimeInstance().format(finish));
         System.out.println("Attempted  to merge:" + MergeID3AndMP3Files.count);
         System.out.println("Successful to merge:" + (MergeID3AndMP3Files.count - MergeID3AndMP3Files.failed));
         System.out.println("Failed     to merge:" + MergeID3AndMP3Files.failed);
@@ -106,9 +104,7 @@ public class MergeID3AndMP3Files
         }
     }
 
-    final class MP3FileFilter
-            extends javax.swing.filechooser.FileFilter
-            implements java.io.FileFilter
+    final class MP3FileFilter extends javax.swing.filechooser.FileFilter implements java.io.FileFilter
     {
 
         /**
@@ -147,11 +143,7 @@ public class MergeID3AndMP3Files
          */
         public final boolean accept(final File file)
         {
-            return (
-                    ((file.getName()).toLowerCase().endsWith(".mp3"))
-                            ||
-                            (file.isDirectory() && (this.allowDirectories == true))
-            );
+            return (((file.getName()).toLowerCase().endsWith(".mp3")) || (file.isDirectory() && (this.allowDirectories == true)));
         }
 
         /**

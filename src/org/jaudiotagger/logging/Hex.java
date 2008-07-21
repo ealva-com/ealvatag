@@ -7,7 +7,7 @@ public class Hex
 {
     /**
      * Display as hex
-     * 
+     *
      * @param value
      * @return
      */

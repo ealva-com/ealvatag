@@ -74,11 +74,7 @@ public class XMLTagDisplayFormatter extends AbstractTagDisplayFormatter
         for (int i = 0; i < xmlData.length(); i++)
         {
             tempChar = xmlData.charAt(i);
-            if (
-                    (Character.isLetterOrDigit(tempChar) == true)
-                            ||
-                            (Character.isSpaceChar(tempChar) == true)
-                    )
+            if ((Character.isLetterOrDigit(tempChar) == true) || (Character.isSpaceChar(tempChar) == true))
             {
                 replacedString.append(tempChar);
             }
@@ -105,9 +101,7 @@ public class XMLTagDisplayFormatter extends AbstractTagDisplayFormatter
 
     public static String xmlFullTag(String xmlName, String data)
     {
-        return xmlOpen(xmlName)
-                + xmlCData(data)
-                + xmlClose(xmlName);
+        return xmlOpen(xmlName) + xmlCData(data) + xmlClose(xmlName);
     }
 
 

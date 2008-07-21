@@ -65,8 +65,9 @@ public class ModifyVetoException extends Exception
      *
      * @see Exception#Exception(java.lang.Throwable)
      */
-    public ModifyVetoException(Throwable cause) {
-		super(cause);
-	}
+    public ModifyVetoException(Throwable cause)
+    {
+        super(cause);
+    }
 
 }

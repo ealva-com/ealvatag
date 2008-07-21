@@ -18,11 +18,12 @@
  */
 package org.jaudiotagger.audio.flac;
 
+import org.jaudiotagger.audio.exceptions.CannotWriteException;
 import org.jaudiotagger.audio.generic.AudioFileWriter;
-import org.jaudiotagger.audio.exceptions.*;
 import org.jaudiotagger.tag.Tag;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.RandomAccessFile;
 
 
 /**

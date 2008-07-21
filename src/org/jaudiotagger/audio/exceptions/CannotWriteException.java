@@ -60,9 +60,10 @@ public class CannotWriteException extends Exception
      *
      * @see Exception#Exception(java.lang.Throwable)
      */
-    public CannotWriteException(Throwable cause) {
-		super(cause);
+    public CannotWriteException(Throwable cause)
+    {
+        super(cause);
 
-	}
+    }
 
 }

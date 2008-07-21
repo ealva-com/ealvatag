@@ -18,13 +18,15 @@
  */
 package org.jaudiotagger.audio.flac;
 
-import org.jaudiotagger.audio.generic.GenericAudioHeader;
-import org.jaudiotagger.audio.exceptions.*;
+import org.jaudiotagger.audio.exceptions.CannotReadException;
+import org.jaudiotagger.audio.flac.metadatablock.BlockType;
 import org.jaudiotagger.audio.flac.metadatablock.MetadataBlockDataStreamInfo;
 import org.jaudiotagger.audio.flac.metadatablock.MetadataBlockHeader;
-import org.jaudiotagger.audio.flac.metadatablock.BlockType;
+import org.jaudiotagger.audio.generic.GenericAudioHeader;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.RandomAccessFile;
 import java.util.logging.Logger;
 
 /**
@@ -42,7 +44,7 @@ public class FlacInfoReader
     {
         FlacStreamReader flacStream = new FlacStreamReader(raf);
         flacStream.findStream();
-        
+
         MetadataBlockDataStreamInfo mbdsi = null;
         boolean isLastBlock = false;
 
@@ -71,14 +73,14 @@ public class FlacInfoReader
 
         if (mbdsi == null)
         {
-             throw new CannotReadException("Unable to find Flac StreamInfo");
+            throw new CannotReadException("Unable to find Flac StreamInfo");
         }
 
         GenericAudioHeader info = new GenericAudioHeader();
         info.setLength(mbdsi.getLength());
         info.setPreciseLength(mbdsi.getPreciseLength());
         info.setChannelNumber(mbdsi.getChannelNumber());
-        info.setSamplingRate(mbdsi.getSamplingRate());        
+        info.setSamplingRate(mbdsi.getSamplingRate());
         info.setEncodingType(mbdsi.getEncodingType());
         info.setExtraEncodingInfos("");
         info.setBitrate(computeBitrate(mbdsi.getPreciseLength(), raf.length() - raf.getFilePointer()));

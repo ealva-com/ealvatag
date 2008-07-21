@@ -18,19 +18,19 @@
  */
 package org.jaudiotagger.audio.flac;
 
-import org.jaudiotagger.tag.vorbiscomment.VorbisCommentCreator;
-import org.jaudiotagger.tag.Tag;
-import org.jaudiotagger.tag.flac.FlacTag;
-import org.jaudiotagger.audio.flac.metadatablock.MetadataBlockHeader;
 import org.jaudiotagger.audio.flac.metadatablock.BlockType;
 import org.jaudiotagger.audio.flac.metadatablock.MetadataBlockDataPadding;
 import org.jaudiotagger.audio.flac.metadatablock.MetadataBlockDataPicture;
+import org.jaudiotagger.audio.flac.metadatablock.MetadataBlockHeader;
 import org.jaudiotagger.audio.generic.AbstractTagCreator;
+import org.jaudiotagger.tag.Tag;
+import org.jaudiotagger.tag.flac.FlacTag;
+import org.jaudiotagger.tag.vorbiscomment.VorbisCommentCreator;
 
 import java.io.UnsupportedEncodingException;
-import java.nio.*;
-import java.util.logging.Logger;
+import java.nio.ByteBuffer;
 import java.util.ListIterator;
+import java.util.logging.Logger;
 
 /**
  * Create the tag data ready for writing to flac file
