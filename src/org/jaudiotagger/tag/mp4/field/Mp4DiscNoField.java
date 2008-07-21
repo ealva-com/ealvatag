@@ -1,12 +1,12 @@
 package org.jaudiotagger.tag.mp4.field;
 
 import org.jaudiotagger.audio.mp4.atom.Mp4BoxHeader;
-import org.jaudiotagger.tag.mp4.atom.Mp4DataBox;
-import org.jaudiotagger.tag.mp4.Mp4FieldKey;
 import org.jaudiotagger.tag.FieldDataInvalidException;
+import org.jaudiotagger.tag.mp4.Mp4FieldKey;
+import org.jaudiotagger.tag.mp4.atom.Mp4DataBox;
 
-import java.nio.ByteBuffer;
 import java.io.UnsupportedEncodingException;
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
 
 /**
@@ -25,8 +25,7 @@ public class Mp4DiscNoField extends Mp4TagTextNumberField
      *
      * @param discValue
      */
-    public Mp4DiscNoField(String discValue)
-            throws FieldDataInvalidException
+    public Mp4DiscNoField(String discValue) throws FieldDataInvalidException
     {
         super(Mp4FieldKey.DISCNUMBER.getFieldName(), discValue);
 

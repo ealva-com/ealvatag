@@ -118,8 +118,7 @@ public class FrameBodyCTOC extends AbstractID3v2FrameBody implements ID3v2Chapte
      *
      * @throws InvalidTagException if unable to create framebody from buffer
      */
-    public FrameBodyCTOC(ByteBuffer byteBuffer, int frameSize)
-            throws InvalidTagException
+    public FrameBodyCTOC(ByteBuffer byteBuffer, int frameSize) throws InvalidTagException
     {
         super(byteBuffer, frameSize);
     }

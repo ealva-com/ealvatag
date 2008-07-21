@@ -23,9 +23,9 @@
 
 package org.jaudiotagger.tag.lyrics3;
 
-import org.jaudiotagger.tag.id3.AbstractTag;
 import org.jaudiotagger.tag.TagException;
 import org.jaudiotagger.tag.TagNotFoundException;
+import org.jaudiotagger.tag.id3.AbstractTag;
 import org.jaudiotagger.tag.id3.ID3Tags;
 import org.jaudiotagger.tag.id3.ID3v1Tag;
 
@@ -86,8 +86,7 @@ public class Lyrics3v1 extends AbstractLyrics3
      * @throws TagNotFoundException
      * @throws java.io.IOException
      */
-    public Lyrics3v1(ByteBuffer byteBuffer)
-            throws TagNotFoundException, java.io.IOException
+    public Lyrics3v1(ByteBuffer byteBuffer) throws TagNotFoundException, java.io.IOException
     {
         try
         {
@@ -196,8 +195,7 @@ public class Lyrics3v1 extends AbstractLyrics3
      * @throws TagNotFoundException
      * @throws IOException
      */
-    public void read(ByteBuffer byteBuffer)
-            throws TagException
+    public void read(ByteBuffer byteBuffer) throws TagException
     {
         byte[] buffer = new byte[5100 + 9 + 11];
         String lyricBuffer;
@@ -218,8 +216,7 @@ public class Lyrics3v1 extends AbstractLyrics3
      * @return
      * @throws IOException
      */
-    public boolean seek(RandomAccessFile file)
-            throws IOException
+    public boolean seek(RandomAccessFile file) throws IOException
     {
         byte[] buffer = new byte[5100 + 9 + 11];
         String lyricsEnd = "";
@@ -286,8 +283,7 @@ public class Lyrics3v1 extends AbstractLyrics3
      * @param file
      * @throws IOException
      */
-    public void write(RandomAccessFile file)
-            throws IOException
+    public void write(RandomAccessFile file) throws IOException
     {
         String str = "";
         int offset = 0;

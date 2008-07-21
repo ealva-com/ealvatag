@@ -23,10 +23,8 @@ package org.jaudiotagger.tag.reference;
 
 import org.jaudiotagger.tag.datatype.AbstractIntStringValuePair;
 
-import java.util.Map;
-import java.util.HashMap;
-import java.util.Set;
 import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
  * Genre list
@@ -59,7 +57,7 @@ public class GenreTypes extends AbstractIntStringValuePair
     }
 
     //This maps the lowercase version to the id, so applications can map from the lowercase value to the id
-    private Map<String,Integer> nameToIdMap;
+    private Map<String, Integer> nameToIdMap;
 
 
     private GenreTypes()
@@ -216,14 +214,14 @@ public class GenreTypes extends AbstractIntStringValuePair
         createMaps();
 
         //We now need to map from lowercase version to Id
-        nameToIdMap = new LinkedHashMap<String,Integer>(idToValue.size());
-        for(Map.Entry <Integer,String>  entry:idToValue.entrySet())
+        nameToIdMap = new LinkedHashMap<String, Integer>(idToValue.size());
+        for (Map.Entry<Integer, String> entry : idToValue.entrySet())
         {
-            nameToIdMap.put(entry.getValue().toLowerCase(),entry.getKey());
+            nameToIdMap.put(entry.getValue().toLowerCase(), entry.getKey());
         }
     }
 
-     /**
+    /**
      * Get Id for name, match is not case sensitive
      */
     public Integer getIdForName(String name)

@@ -57,17 +57,7 @@ public class Mp4Mp4aBox extends AbstractMp4Box
     public static final int AUDIO_PACKET_SIZE_LENGTH = 2;
     public static final int AUDIO_SAMPLE_RATE_LENGTH = 4;
 
-    public static final int TOTAL_LENGTH =
-            RESERVED_LENGTH +
-                    REFERENCE_INDEX_LENGTH +
-                    AUDIO_ENCODING_LENGTH +
-                    AUDIO_REVISION_LENGTH +
-                    AUDIO_ENCODING_VENDOR_LENGTH +
-                    CHANNELS_LENGTH +
-                    AUDIO_SAMPLE_SIZE_LENGTH +
-                    AUDIO_COMPRESSION_ID_LENGTH +
-                    AUDIO_PACKET_SIZE_LENGTH +
-                    AUDIO_SAMPLE_RATE_LENGTH;
+    public static final int TOTAL_LENGTH = RESERVED_LENGTH + REFERENCE_INDEX_LENGTH + AUDIO_ENCODING_LENGTH + AUDIO_REVISION_LENGTH + AUDIO_ENCODING_VENDOR_LENGTH + CHANNELS_LENGTH + AUDIO_SAMPLE_SIZE_LENGTH + AUDIO_COMPRESSION_ID_LENGTH + AUDIO_PACKET_SIZE_LENGTH + AUDIO_SAMPLE_RATE_LENGTH;
 
 
     /**

@@ -1,14 +1,14 @@
 package org.jaudiotagger.tag.mp4.field;
 
-import org.jaudiotagger.tag.mp4.Mp4TagField;
-import org.jaudiotagger.tag.TagField;
-import org.jaudiotagger.audio.mp4.atom.Mp4BoxHeader;
 import org.jaudiotagger.audio.generic.Utils;
+import org.jaudiotagger.audio.mp4.atom.Mp4BoxHeader;
+import org.jaudiotagger.tag.TagField;
+import org.jaudiotagger.tag.mp4.Mp4TagField;
 
-import java.nio.ByteBuffer;
-import java.io.UnsupportedEncodingException;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.nio.ByteBuffer;
 
 /**
  * Represents raw binary data

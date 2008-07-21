@@ -21,8 +21,6 @@ package org.jaudiotagger.tag;
 import java.util.Iterator;
 import java.util.List;
 
-import org.jaudiotagger.tag.TagFieldKey;
-
 /**
  * This interface represents the basic data structure for the default
  * audiolibrary functionality.<br>
@@ -286,8 +284,7 @@ public interface Tag
      * @param value      to store
      * @return
      */
-    public TagField createTagField(TagFieldKey genericKey, String value)
-            throws KeyNotFoundException, FieldDataInvalidException;
+    public TagField createTagField(TagFieldKey genericKey, String value) throws KeyNotFoundException, FieldDataInvalidException;
 
 
     /**
@@ -304,8 +301,7 @@ public interface Tag
      * @param id
      * @return String value or empty string
      */
-    public String getFirst(TagFieldKey id)
-            throws KeyNotFoundException;
+    public String getFirst(TagFieldKey id) throws KeyNotFoundException;
 
     /**
      * Retrieve the first tagfield that exists for this key
@@ -327,8 +323,7 @@ public interface Tag
      *
      * @param tagFieldKey
      */
-    public void deleteTagField(TagFieldKey tagFieldKey)
-            throws KeyNotFoundException;
+    public void deleteTagField(TagFieldKey tagFieldKey) throws KeyNotFoundException;
 
     /**
      * Iterator over all the fields within the tag, handle multiple fields with the same id
@@ -357,7 +352,6 @@ public interface Tag
      * @param id The field id.
      * @return A list of {@link TagField} objects with the given &quot;id&quot;.
      */
-    public List<TagField> get(TagFieldKey id)
-            throws KeyNotFoundException;
+    public List<TagField> get(TagFieldKey id) throws KeyNotFoundException;
 
 }

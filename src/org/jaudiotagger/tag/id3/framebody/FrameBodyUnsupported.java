@@ -102,8 +102,7 @@ public class FrameBodyUnsupported extends AbstractID3v2FrameBody implements ID3v
      *
      * @throws InvalidFrameException if unable to create framebody from buffer
      */
-    public FrameBodyUnsupported(ByteBuffer byteBuffer, int frameSize)
-            throws InvalidTagException
+    public FrameBodyUnsupported(ByteBuffer byteBuffer, int frameSize) throws InvalidTagException
     {
         super(byteBuffer, frameSize);
     }

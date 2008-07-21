@@ -16,7 +16,7 @@ public class FrameTCMPTest extends AbstractTestCase
     public static ID3v24Frame getInitialisedFrame()
     {
         ID3v24Frame frame = new ID3v24Frame(ID3v24Frames.FRAME_ID_IS_COMPILATION);
-        FrameBodyTCMP fb   = FrameBodyTCMPTest.getInitialisedBody();
+        FrameBodyTCMP fb = FrameBodyTCMPTest.getInitialisedBody();
         frame.setBody(fb);
         return frame;
     }
@@ -38,16 +38,15 @@ public class FrameTCMPTest extends AbstractTestCase
         }
 
         assertNull(exceptionCaught);
-        assertEquals(ID3v24Frames.FRAME_ID_IS_COMPILATION,frame.getIdentifier());
-        assertEquals(TextEncoding.ISO_8859_1,fb.getTextEncoding());
+        assertEquals(ID3v24Frames.FRAME_ID_IS_COMPILATION, frame.getIdentifier());
+        assertEquals(TextEncoding.ISO_8859_1, fb.getTextEncoding());
         assertTrue(ID3v24Frames.getInstanceOf().isExtensionFrames(frame.getIdentifier()));
         assertFalse(ID3v24Frames.getInstanceOf().isSupportedFrames(frame.getIdentifier()));
 
     }
 
 
-
-     public void testCreateID3v23Frame()
+    public void testCreateID3v23Frame()
     {
         Exception exceptionCaught = null;
         ID3v23Frame frame = null;
@@ -64,8 +63,8 @@ public class FrameTCMPTest extends AbstractTestCase
         }
 
         assertNull(exceptionCaught);
-        assertEquals(ID3v23Frames.FRAME_ID_V3_IS_COMPILATION,frame.getIdentifier());
-        assertEquals(TextEncoding.ISO_8859_1,fb.getTextEncoding());
+        assertEquals(ID3v23Frames.FRAME_ID_V3_IS_COMPILATION, frame.getIdentifier());
+        assertEquals(TextEncoding.ISO_8859_1, fb.getTextEncoding());
         assertTrue(ID3v23Frames.getInstanceOf().isExtensionFrames(frame.getIdentifier()));
         assertFalse(ID3v23Frames.getInstanceOf().isSupportedFrames(frame.getIdentifier()));
 
@@ -88,8 +87,8 @@ public class FrameTCMPTest extends AbstractTestCase
         }
 
         assertNull(exceptionCaught);
-        assertEquals(ID3v22Frames.FRAME_ID_V2_IS_COMPILATION,frame.getIdentifier());
-        assertEquals(TextEncoding.ISO_8859_1,fb.getTextEncoding());
+        assertEquals(ID3v22Frames.FRAME_ID_V2_IS_COMPILATION, frame.getIdentifier());
+        assertEquals(TextEncoding.ISO_8859_1, fb.getTextEncoding());
         assertTrue(ID3v22Frames.getInstanceOf().isExtensionFrames(frame.getIdentifier()));
         assertFalse(ID3v22Frames.getInstanceOf().isSupportedFrames(frame.getIdentifier()));
 
@@ -97,50 +96,50 @@ public class FrameTCMPTest extends AbstractTestCase
 
     public void testSaveToFile() throws Exception
     {
-        File        testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3");
-        MP3File     mp3File = new MP3File(testFile);
+        File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3");
+        MP3File mp3File = new MP3File(testFile);
 
         //Create and Save
-        ID3v24Tag   tag = new ID3v24Tag();
+        ID3v24Tag tag = new ID3v24Tag();
         tag.setFrame(FrameTCMPTest.getInitialisedFrame());
         mp3File.setID3v2Tag(tag);
         mp3File.save();
 
         //Reload
         mp3File = new MP3File(testFile);
-        ID3v24Frame  frame = (ID3v24Frame)mp3File.getID3v2Tag().getFrame(ID3v24Frames.FRAME_ID_IS_COMPILATION);
-        FrameBodyTCMP body = (FrameBodyTCMP)frame.getBody();
-        assertEquals(TextEncoding.ISO_8859_1,body.getTextEncoding());
+        ID3v24Frame frame = (ID3v24Frame) mp3File.getID3v2Tag().getFrame(ID3v24Frames.FRAME_ID_IS_COMPILATION);
+        FrameBodyTCMP body = (FrameBodyTCMP) frame.getBody();
+        assertEquals(TextEncoding.ISO_8859_1, body.getTextEncoding());
     }
 
-     public void testSaveEmptyFrameToFile() throws Exception
+    public void testSaveEmptyFrameToFile() throws Exception
     {
-        File        testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3");
-        MP3File     mp3File = new MP3File(testFile);
+        File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3");
+        MP3File mp3File = new MP3File(testFile);
 
         ID3v24Frame frame = new ID3v24Frame(ID3v24Frames.FRAME_ID_IS_COMPILATION);
         frame.setBody(new FrameBodyTCMP());
 
         //Create and Save
-        ID3v24Tag   tag = new ID3v24Tag();
+        ID3v24Tag tag = new ID3v24Tag();
         tag.setFrame(frame);
         mp3File.setID3v2Tag(tag);
         mp3File.save();
 
         //Reload
         mp3File = new MP3File(testFile);
-        frame = (ID3v24Frame)mp3File.getID3v2Tag().getFrame(ID3v24Frames.FRAME_ID_IS_COMPILATION);
-        FrameBodyTCMP body = (FrameBodyTCMP)frame.getBody();
-        assertEquals(TextEncoding.ISO_8859_1,body.getTextEncoding());
+        frame = (ID3v24Frame) mp3File.getID3v2Tag().getFrame(ID3v24Frames.FRAME_ID_IS_COMPILATION);
+        FrameBodyTCMP body = (FrameBodyTCMP) frame.getBody();
+        assertEquals(TextEncoding.ISO_8859_1, body.getTextEncoding());
     }
 
     public void testConvertV24ToV23() throws Exception
     {
-        File        testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3");
-        MP3File     mp3File = new MP3File(testFile);
+        File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3");
+        MP3File mp3File = new MP3File(testFile);
 
         //Create and Save
-        ID3v24Tag   tag = new ID3v24Tag();
+        ID3v24Tag tag = new ID3v24Tag();
         tag.setFrame(FrameTCMPTest.getInitialisedFrame());
         mp3File.setID3v2Tag(tag);
         mp3File.save();
@@ -152,18 +151,18 @@ public class FrameTCMPTest extends AbstractTestCase
 
         //Reload
         mp3File = new MP3File(testFile);
-        ID3v23Frame  frame = (ID3v23Frame)mp3File.getID3v2Tag().getFrame(ID3v23Frames.FRAME_ID_V3_IS_COMPILATION);
-        FrameBodyTCMP body = (FrameBodyTCMP)frame.getBody();
-        assertEquals(TextEncoding.ISO_8859_1,body.getTextEncoding());
+        ID3v23Frame frame = (ID3v23Frame) mp3File.getID3v2Tag().getFrame(ID3v23Frames.FRAME_ID_V3_IS_COMPILATION);
+        FrameBodyTCMP body = (FrameBodyTCMP) frame.getBody();
+        assertEquals(TextEncoding.ISO_8859_1, body.getTextEncoding());
     }
 
-     public void testConvertV22ToV24() throws Exception
+    public void testConvertV22ToV24() throws Exception
     {
-        File        testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3");
-        MP3File     mp3File = new MP3File(testFile);
+        File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3");
+        MP3File mp3File = new MP3File(testFile);
 
         //Create and Save
-        ID3v22Tag   tag = new ID3v22Tag();
+        ID3v22Tag tag = new ID3v22Tag();
         ID3v22Frame id3v22frame = new ID3v22Frame(ID3v22Frames.FRAME_ID_V2_IS_COMPILATION);
         tag.setFrame(id3v22frame);
         mp3File.setID3v2TagOnly(tag);
@@ -176,9 +175,9 @@ public class FrameTCMPTest extends AbstractTestCase
 
         //Reload
         mp3File = new MP3File(testFile);
-        ID3v24Frame  frame = (ID3v24Frame)mp3File.getID3v2Tag().getFrame(ID3v24Frames.FRAME_ID_IS_COMPILATION);
-        FrameBodyTCMP body = (FrameBodyTCMP)frame.getBody();
-        assertEquals(TextEncoding.ISO_8859_1,body.getTextEncoding());
+        ID3v24Frame frame = (ID3v24Frame) mp3File.getID3v2Tag().getFrame(ID3v24Frames.FRAME_ID_IS_COMPILATION);
+        FrameBodyTCMP body = (FrameBodyTCMP) frame.getBody();
+        assertEquals(TextEncoding.ISO_8859_1, body.getTextEncoding());
     }
 
 

@@ -24,7 +24,8 @@
 package org.jaudiotagger.tag.id3.framebody;
 
 import org.jaudiotagger.tag.InvalidTagException;
-import org.jaudiotagger.tag.datatype.*;
+import org.jaudiotagger.tag.datatype.ByteArraySizeTerminated;
+import org.jaudiotagger.tag.datatype.DataTypes;
 import org.jaudiotagger.tag.id3.ID3v24Frames;
 
 import java.nio.ByteBuffer;
@@ -90,8 +91,7 @@ public class FrameBodyEQU2 extends AbstractID3v2FrameBody implements ID3v24Frame
      *
      * @throws InvalidTagException if unable to create framebody from buffer
      */
-    public FrameBodyEQU2(ByteBuffer byteBuffer, int frameSize)
-            throws InvalidTagException
+    public FrameBodyEQU2(ByteBuffer byteBuffer, int frameSize) throws InvalidTagException
     {
         super(byteBuffer, frameSize);
     }

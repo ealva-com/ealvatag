@@ -56,8 +56,7 @@ public class RealFileReader extends AudioFileReader
         final RealChunk rmf = RealChunk.readChunk(raf);
         final RealChunk prop = RealChunk.readChunk(raf);
         RealChunk rv = RealChunk.readChunk(raf);
-        while (!rv.isCONT())
-            rv = RealChunk.readChunk(raf);
+        while (!rv.isCONT()) rv = RealChunk.readChunk(raf);
         return rv;
     }
 

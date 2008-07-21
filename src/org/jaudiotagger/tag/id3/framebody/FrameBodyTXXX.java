@@ -24,7 +24,10 @@
 package org.jaudiotagger.tag.id3.framebody;
 
 import org.jaudiotagger.tag.InvalidTagException;
-import org.jaudiotagger.tag.datatype.*;
+import org.jaudiotagger.tag.datatype.DataTypes;
+import org.jaudiotagger.tag.datatype.NumberHashMap;
+import org.jaudiotagger.tag.datatype.TextEncodedStringNullTerminated;
+import org.jaudiotagger.tag.datatype.TextEncodedStringSizeTerminated;
 import org.jaudiotagger.tag.id3.ID3TextEncodingConversion;
 import org.jaudiotagger.tag.id3.ID3v24Frames;
 import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
@@ -47,8 +50,7 @@ import java.nio.ByteBuffer;
  * Description       <text string according to encoding> $00 (00)
  * Value             <text string according to encoding>
  */
-public class FrameBodyTXXX
-        extends AbstractFrameBodyTextInfo implements ID3v24FrameBody, ID3v23FrameBody
+public class FrameBodyTXXX extends AbstractFrameBodyTextInfo implements ID3v24FrameBody, ID3v23FrameBody
 {
     public static final String MUSIC_BRAINZ_ARTISTID = "MusicBrainz Artist Id";
     public static final String MUSIC_BRAINZ_ALBUM_ARTISTID = "MusicBrainz Album Artist Id";
@@ -58,9 +60,10 @@ public class FrameBodyTXXX
     public static final String MUSICBRAINZ_ALBUM_STATUS = "MusicBrainz Album Status";
     public static final String MUSICBRAINZ_ALBUM_COUNTRY = "MusicBrainz Album Release Country";
     public static final String AMAZON_ASIN = "ASIN";
-    public static final String MUSICIP_ID   = "MusicIP PUID";
-    public static final String BARCODE      = "BARCODE";
-    public static final String CATALOG_NO   = "CATALOGNUMBER";
+    public static final String MUSICIP_ID = "MusicIP PUID";
+    public static final String BARCODE = "BARCODE";
+    public static final String CATALOG_NO = "CATALOGNUMBER";
+
     /**
      * Creates a new FrameBodyTXXX datatype.
      */
@@ -96,8 +99,7 @@ public class FrameBodyTXXX
      *
      * @throws InvalidTagException
      */
-    public FrameBodyTXXX(ByteBuffer byteBuffer, int frameSize)
-            throws InvalidTagException
+    public FrameBodyTXXX(ByteBuffer byteBuffer, int frameSize) throws InvalidTagException
     {
         super(byteBuffer, frameSize);
     }

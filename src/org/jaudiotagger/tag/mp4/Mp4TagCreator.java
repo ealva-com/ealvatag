@@ -18,21 +18,21 @@
  */
 package org.jaudiotagger.tag.mp4;
 
-import java.io.UnsupportedEncodingException;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.nio.ByteBuffer;
-import java.util.Iterator;
-
+import org.jaudiotagger.audio.generic.AbstractTagCreator;
+import org.jaudiotagger.audio.generic.Utils;
+import org.jaudiotagger.audio.mp4.Mp4NotMetaFieldKey;
+import org.jaudiotagger.audio.mp4.atom.Mp4BoxHeader;
+import org.jaudiotagger.tag.KeyNotFoundException;
 import org.jaudiotagger.tag.Tag;
 import org.jaudiotagger.tag.TagField;
 import org.jaudiotagger.tag.TagFieldKey;
-import org.jaudiotagger.tag.KeyNotFoundException;
 import org.jaudiotagger.tag.mp4.field.Mp4TagCoverField;
-import org.jaudiotagger.audio.generic.AbstractTagCreator;
-import org.jaudiotagger.audio.generic.Utils;
-import org.jaudiotagger.audio.mp4.atom.Mp4BoxHeader;
-import org.jaudiotagger.audio.mp4.Mp4NotMetaFieldKey;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.nio.ByteBuffer;
+import java.util.Iterator;
 
 /**
  * Create raw content of mp4 tag data, concerns itself with atoms upto the ilst atom

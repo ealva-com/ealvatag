@@ -18,10 +18,11 @@
  */
 package org.jaudiotagger.audio.wav.util;
 
+import org.jaudiotagger.audio.exceptions.CannotReadException;
 import org.jaudiotagger.audio.generic.GenericAudioHeader;
-import org.jaudiotagger.audio.exceptions.*;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.RandomAccessFile;
 
 public class WavInfoReader
 {
@@ -48,8 +49,7 @@ public class WavInfoReader
             {
                 // Populates
                 // encodingInfo----------------------------------------------------
-                info.setPreciseLength(((float) raf.length() - (float) 36)
-                        / wfh.getBytesPerSecond());
+                info.setPreciseLength(((float) raf.length() - (float) 36) / wfh.getBytesPerSecond());
                 info.setChannelNumber(wfh.getChannelNumber());
                 info.setSamplingRate(wfh.getSamplingRate());
                 info.setEncodingType("WAV-RIFF " + wfh.getBitrate() + " bits");

@@ -12,7 +12,6 @@ public class FrameBodyTDRCTest extends AbstractTestCase
     public static final String TEST_YEAR = "2002";
 
 
-
     public void testCreateFrameBody()
     {
         Exception exceptionCaught = null;
@@ -28,8 +27,8 @@ public class FrameBodyTDRCTest extends AbstractTestCase
         }
 
         assertNull(exceptionCaught);
-        assertEquals(ID3v24Frames.FRAME_ID_YEAR,fb.getIdentifier());
-        assertEquals(TextEncoding.ISO_8859_1,fb.getTextEncoding());                
-        assertEquals(FrameBodyTDRCTest.TEST_YEAR,fb.getDate());
+        assertEquals(ID3v24Frames.FRAME_ID_YEAR, fb.getIdentifier());
+        assertEquals(TextEncoding.ISO_8859_1, fb.getTextEncoding());
+        assertEquals(FrameBodyTDRCTest.TEST_YEAR, fb.getDate());
     }
 }

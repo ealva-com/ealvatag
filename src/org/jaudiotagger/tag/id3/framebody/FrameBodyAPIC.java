@@ -15,13 +15,13 @@
  */
 package org.jaudiotagger.tag.id3.framebody;
 
+import org.jaudiotagger.audio.generic.Utils;
 import org.jaudiotagger.tag.InvalidTagException;
-import org.jaudiotagger.tag.reference.PictureTypes;
 import org.jaudiotagger.tag.datatype.*;
 import org.jaudiotagger.tag.id3.ID3v24Frames;
 import org.jaudiotagger.tag.id3.valuepair.ImageFormats;
 import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
-import org.jaudiotagger.audio.generic.Utils;
+import org.jaudiotagger.tag.reference.PictureTypes;
 
 import java.io.ByteArrayOutputStream;
 import java.nio.ByteBuffer;
@@ -127,11 +127,7 @@ public class FrameBodyAPIC extends AbstractID3v2FrameBody implements ID3v24Frame
      * @param description
      * @param data
      */
-    public FrameBodyAPIC(byte textEncoding,
-                         String mimeType,
-                         byte pictureType,
-                         String description,
-                         byte[] data)
+    public FrameBodyAPIC(byte textEncoding, String mimeType, byte pictureType, String description, byte[] data)
     {
         this.setObjectValue(DataTypes.OBJ_TEXT_ENCODING, textEncoding);
         this.setMimeType(mimeType);
@@ -145,8 +141,7 @@ public class FrameBodyAPIC extends AbstractID3v2FrameBody implements ID3v24Frame
      *
      * @throws InvalidTagException if unable to create framebody from buffer
      */
-    public FrameBodyAPIC(ByteBuffer byteBuffer, int frameSize)
-            throws InvalidTagException
+    public FrameBodyAPIC(ByteBuffer byteBuffer, int frameSize) throws InvalidTagException
     {
         super(byteBuffer, frameSize);
     }
@@ -208,7 +203,7 @@ public class FrameBodyAPIC extends AbstractID3v2FrameBody implements ID3v24Frame
      */
     public byte[] getImageData()
     {
-        return ( byte[])getObjectValue(DataTypes.OBJ_PICTURE_DATA);
+        return (byte[]) getObjectValue(DataTypes.OBJ_PICTURE_DATA);
     }
 
     /**
@@ -222,12 +217,11 @@ public class FrameBodyAPIC extends AbstractID3v2FrameBody implements ID3v24Frame
     }
 
     /**
-     *
      * @return picturetype
      */
     public int getPictureType()
     {
-        return ((Long)getObjectValue(DataTypes.OBJ_PICTURE_TYPE)).intValue();
+        return ((Long) getObjectValue(DataTypes.OBJ_PICTURE_TYPE)).intValue();
     }
 
     /**
@@ -284,10 +278,7 @@ public class FrameBodyAPIC extends AbstractID3v2FrameBody implements ID3v24Frame
     {
         if (isImageUrl())
         {
-            return Utils.getString(((byte[]) getObjectValue(DataTypes.OBJ_PICTURE_DATA)),
-                    0,
-                    ((byte[]) getObjectValue(DataTypes.OBJ_PICTURE_DATA)).length,
-                    TextEncoding.CHARSET_ISO_8859_1);
+            return Utils.getString(((byte[]) getObjectValue(DataTypes.OBJ_PICTURE_DATA)), 0, ((byte[]) getObjectValue(DataTypes.OBJ_PICTURE_DATA)).length, TextEncoding.CHARSET_ISO_8859_1);
         }
         else
         {

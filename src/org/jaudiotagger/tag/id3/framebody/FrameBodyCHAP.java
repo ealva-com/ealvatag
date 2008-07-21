@@ -106,11 +106,7 @@ public class FrameBodyCHAP extends AbstractID3v2FrameBody implements ID3v2Chapte
      * @param startOffset
      * @param endOffset
      */
-    public FrameBodyCHAP(String elementId,
-                         int startTime,
-                         int endTime,
-                         int startOffset,
-                         int endOffset)
+    public FrameBodyCHAP(String elementId, int startTime, int endTime, int startOffset, int endOffset)
     {
         this.setObjectValue(DataTypes.OBJ_ELEMENT_ID, elementId);
         this.setObjectValue(DataTypes.OBJ_START_TIME, startTime);
@@ -124,8 +120,7 @@ public class FrameBodyCHAP extends AbstractID3v2FrameBody implements ID3v2Chapte
      *
      * @throws InvalidTagException if unable to create framebody from buffer
      */
-    public FrameBodyCHAP(ByteBuffer byteBuffer, int frameSize)
-            throws InvalidTagException
+    public FrameBodyCHAP(ByteBuffer byteBuffer, int frameSize) throws InvalidTagException
     {
         super(byteBuffer, frameSize);
     }

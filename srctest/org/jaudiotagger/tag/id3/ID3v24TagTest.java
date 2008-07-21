@@ -25,20 +25,23 @@ import org.jaudiotagger.tag.id3.framebody.*;
 import java.io.File;
 
 /**
- * 
+ *
  */
 public class ID3v24TagTest extends TestCase
 {
     /**
      * Constructor
+     *
      * @param arg0
      */
-    public ID3v24TagTest(String arg0) {
+    public ID3v24TagTest(String arg0)
+    {
         super(arg0);
     }
 
     /**
      * Command line entrance.
+     *
      * @param args
      */
     public static void main(String[] args)
@@ -73,6 +76,7 @@ public class ID3v24TagTest extends TestCase
 
     /**
      * Builds the Test Suite.
+     *
      * @return the Test Suite.
      */
     public static Test suite()
@@ -151,9 +155,9 @@ public class ID3v24TagTest extends TestCase
     public void testCreateIDv24Tag()
     {
         ID3v24Tag v2Tag = new ID3v24Tag();
-        assertEquals((byte)2,v2Tag.getRelease());
-        assertEquals((byte)4,v2Tag.getMajorVersion());
-        assertEquals((byte)0,v2Tag.getRevision());
+        assertEquals((byte) 2, v2Tag.getRelease());
+        assertEquals((byte) 4, v2Tag.getMajorVersion());
+        assertEquals((byte) 0, v2Tag.getRevision());
 
     }
 
@@ -165,25 +169,23 @@ public class ID3v24TagTest extends TestCase
 
         ID3v24Tag v2Tag = new ID3v24Tag(v1Tag);
         assertNotNull(v2Tag);
-        assertEquals(ID3v11TagTest.ARTIST,((FrameBodyTPE1)((ID3v24Frame)v2Tag.getFrame(ID3v24Frames.FRAME_ID_ARTIST)).getBody()).getText());
-        assertEquals(ID3v11TagTest.ALBUM,((FrameBodyTALB)((ID3v24Frame)v2Tag.getFrame(ID3v24Frames.FRAME_ID_ALBUM)).getBody()).getText());
-        assertEquals(ID3v11TagTest.COMMENT,((FrameBodyCOMM)((ID3v24Frame)v2Tag.getFrame(ID3v24Frames.FRAME_ID_COMMENT)).getBody()).getText());
-        assertEquals(ID3v11TagTest.TITLE,((FrameBodyTIT2)((ID3v24Frame)v2Tag.getFrame(ID3v24Frames.FRAME_ID_TITLE)).getBody()).getText());
-        assertEquals(ID3v11TagTest.TRACK_VALUE,((FrameBodyTRCK)((ID3v24Frame)v2Tag.getFrame(ID3v24Frames.FRAME_ID_TRACK)).getBody()).getText());
-        assertTrue(((FrameBodyTCON)((ID3v24Frame)v2Tag.getFrame(ID3v24Frames.FRAME_ID_GENRE)).getBody()).getText().endsWith(ID3v11TagTest.GENRE_VAL));
-        assertEquals(ID3v11TagTest.YEAR,((FrameBodyTDRC)((ID3v24Frame)v2Tag.getFrame(ID3v24Frames.FRAME_ID_YEAR)).getBody()).getText());
-        assertEquals((byte)2,v2Tag.getRelease());
-        assertEquals((byte)4,v2Tag.getMajorVersion());
-        assertEquals((byte)0,v2Tag.getRevision());
+        assertEquals(ID3v11TagTest.ARTIST, ((FrameBodyTPE1) ((ID3v24Frame) v2Tag.getFrame(ID3v24Frames.FRAME_ID_ARTIST)).getBody()).getText());
+        assertEquals(ID3v11TagTest.ALBUM, ((FrameBodyTALB) ((ID3v24Frame) v2Tag.getFrame(ID3v24Frames.FRAME_ID_ALBUM)).getBody()).getText());
+        assertEquals(ID3v11TagTest.COMMENT, ((FrameBodyCOMM) ((ID3v24Frame) v2Tag.getFrame(ID3v24Frames.FRAME_ID_COMMENT)).getBody()).getText());
+        assertEquals(ID3v11TagTest.TITLE, ((FrameBodyTIT2) ((ID3v24Frame) v2Tag.getFrame(ID3v24Frames.FRAME_ID_TITLE)).getBody()).getText());
+        assertEquals(ID3v11TagTest.TRACK_VALUE, ((FrameBodyTRCK) ((ID3v24Frame) v2Tag.getFrame(ID3v24Frames.FRAME_ID_TRACK)).getBody()).getText());
+        assertTrue(((FrameBodyTCON) ((ID3v24Frame) v2Tag.getFrame(ID3v24Frames.FRAME_ID_GENRE)).getBody()).getText().endsWith(ID3v11TagTest.GENRE_VAL));
+        assertEquals(ID3v11TagTest.YEAR, ((FrameBodyTDRC) ((ID3v24Frame) v2Tag.getFrame(ID3v24Frames.FRAME_ID_YEAR)).getBody()).getText());
+        assertEquals((byte) 2, v2Tag.getRelease());
+        assertEquals((byte) 4, v2Tag.getMajorVersion());
+        assertEquals((byte) 0, v2Tag.getRevision());
 
         //Newer methods
-        assertEquals(ID3v11TagTest.ARTIST,v2Tag.getFirst(ID3v24Frames.FRAME_ID_ARTIST));
-        assertEquals(ID3v11TagTest.ALBUM,v2Tag.getFirst(ID3v24Frames.FRAME_ID_ALBUM));      
-        assertEquals(ID3v11TagTest.TITLE,v2Tag.getFirst(ID3v24Frames.FRAME_ID_TITLE));
-        assertEquals(ID3v11TagTest.YEAR,v2Tag.getFirst(ID3v24Frames.FRAME_ID_YEAR));
-        assertEquals(ID3v11TagTest.ARTIST,
-                ((AbstractFrameBodyTextInfo)v2Tag.getFirstField(ID3v24Frames.FRAME_ID_ARTIST).getBody()).getFirstTextValue());
-        
+        assertEquals(ID3v11TagTest.ARTIST, v2Tag.getFirst(ID3v24Frames.FRAME_ID_ARTIST));
+        assertEquals(ID3v11TagTest.ALBUM, v2Tag.getFirst(ID3v24Frames.FRAME_ID_ALBUM));
+        assertEquals(ID3v11TagTest.TITLE, v2Tag.getFirst(ID3v24Frames.FRAME_ID_TITLE));
+        assertEquals(ID3v11TagTest.YEAR, v2Tag.getFirst(ID3v24Frames.FRAME_ID_YEAR));
+        assertEquals(ID3v11TagTest.ARTIST, ((AbstractFrameBodyTextInfo) v2Tag.getFirstField(ID3v24Frames.FRAME_ID_ARTIST).getBody()).getFirstTextValue());
 
 
     }

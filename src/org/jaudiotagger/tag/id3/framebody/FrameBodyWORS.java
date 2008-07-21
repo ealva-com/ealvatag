@@ -62,8 +62,7 @@ public class FrameBodyWORS extends AbstractFrameBodyUrlLink implements ID3v24Fra
      *
      * @throws InvalidTagException
      */
-    public FrameBodyWORS(ByteBuffer byteBuffer, int frameSize)
-            throws InvalidTagException
+    public FrameBodyWORS(ByteBuffer byteBuffer, int frameSize) throws InvalidTagException
     {
         super(byteBuffer, frameSize);
     }

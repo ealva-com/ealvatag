@@ -23,8 +23,8 @@
 package org.jaudiotagger.tag.datatype;
 
 import org.jaudiotagger.audio.mp3.MP3File;
-import org.jaudiotagger.tag.id3.AbstractTagFrameBody;
 import org.jaudiotagger.tag.InvalidDataTypeException;
+import org.jaudiotagger.tag.id3.AbstractTagFrameBody;
 
 import java.util.Arrays;
 import java.util.logging.Logger;
@@ -33,8 +33,7 @@ import java.util.logging.Logger;
  * Represents a field/data type that can be held within a frames body, these map loosely onto
  * Section 4. ID3v2 frame overview at http://www.id3.org/id3v2.4.0-structure.txt
  */
-public abstract class AbstractDataType
-        extends java.lang.Object
+public abstract class AbstractDataType extends java.lang.Object
 {
     protected static final String TYPE_ELEMENT = "element";
 

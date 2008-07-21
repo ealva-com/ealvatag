@@ -1,25 +1,19 @@
 package org.jaudiotagger.tag.mp4;
 
 import junit.framework.TestCase;
-
-import java.io.File;
-import java.io.RandomAccessFile;
-import java.io.IOException;
-import java.util.List;
-import java.nio.ByteBuffer;
-import java.nio.charset.Charset;
-
 import org.jaudiotagger.AbstractTestCase;
-import org.jaudiotagger.tag.Tag;
-import org.jaudiotagger.tag.TagFieldKey;
-import org.jaudiotagger.tag.TagField;
-import org.jaudiotagger.tag.mp4.field.*;
-import org.jaudiotagger.tag.mp4.atom.Mp4RatingValue;
-import org.jaudiotagger.tag.mp4.atom.Mp4ContentTypeValue;
 import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.AudioFileIO;
-import org.jaudiotagger.audio.mp4.atom.Mp4BoxHeader;
-import org.jaudiotagger.audio.mp4.Mp4AtomTree;
+import org.jaudiotagger.tag.Tag;
+import org.jaudiotagger.tag.TagFieldKey;
+import org.jaudiotagger.tag.mp4.atom.Mp4ContentTypeValue;
+import org.jaudiotagger.tag.mp4.atom.Mp4RatingValue;
+import org.jaudiotagger.tag.mp4.field.*;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.RandomAccessFile;
+import java.util.List;
 
 /**
  */
@@ -2198,11 +2192,12 @@ public class M4aWriteTagTest extends TestCase
         assertNull(exceptionCaught);
     }
 
-     /** Test Wrting mp4 file
+    /**
+     * Test Wrting mp4 file
      *
      * @throws Exception
      */
-    public void testWritingIssue198()throws Exception
+    public void testWritingIssue198() throws Exception
     {
         File orig = new File("testdata", "test27.m4a");
         if (!orig.isFile())
@@ -2213,28 +2208,28 @@ public class M4aWriteTagTest extends TestCase
         Exception exceptionCaught = null;
         try
         {
-            File testFile = AbstractTestCase.copyAudioToTmp("test27.m4a",new File("rvdnswithoutdata.m4a"));
+            File testFile = AbstractTestCase.copyAudioToTmp("test27.m4a", new File("rvdnswithoutdata.m4a"));
 
             AudioFile f = AudioFileIO.read(testFile);
-            Mp4Tag tag = (Mp4Tag)f.getTag();
+            Mp4Tag tag = (Mp4Tag) f.getTag();
 
 
             tag.setTitle("Title");
             tag.setAlbum("Album");
-            tag.set(tag.createTagField(Mp4FieldKey.CDDB_TRACKNUMBER,"1"));
+            tag.set(tag.createTagField(Mp4FieldKey.CDDB_TRACKNUMBER, "1"));
             f.commit();
 
             //Reread changes
             f = AudioFileIO.read(testFile);
-            tag = (Mp4Tag)f.getTag();
-            assertEquals("Title",tag.getFirst(TagFieldKey.TITLE));
-            assertEquals("Album",tag.getFirst(TagFieldKey.ALBUM));
-            assertEquals("Buddy Holly & the Crickets",tag.getFirst(TagFieldKey.ARTIST));
-            assertEquals(1,tag.get(Mp4FieldKey.ITUNES_NORM).size());
-            assertEquals(0,tag.get(Mp4FieldKey.ITUNES_SMPB).size());
-            assertEquals(1,tag.get(Mp4FieldKey.CDDB_1).size());
-            assertEquals(1,tag.get(Mp4FieldKey.CDDB_TRACKNUMBER).size());
-            assertEquals(1,tag.get(Mp4FieldKey.CDDB_IDS).size());
+            tag = (Mp4Tag) f.getTag();
+            assertEquals("Title", tag.getFirst(TagFieldKey.TITLE));
+            assertEquals("Album", tag.getFirst(TagFieldKey.ALBUM));
+            assertEquals("Buddy Holly & the Crickets", tag.getFirst(TagFieldKey.ARTIST));
+            assertEquals(1, tag.get(Mp4FieldKey.ITUNES_NORM).size());
+            assertEquals(0, tag.get(Mp4FieldKey.ITUNES_SMPB).size());
+            assertEquals(1, tag.get(Mp4FieldKey.CDDB_1).size());
+            assertEquals(1, tag.get(Mp4FieldKey.CDDB_TRACKNUMBER).size());
+            assertEquals(1, tag.get(Mp4FieldKey.CDDB_IDS).size());
 
             System.out.println(f.getAudioHeader());
             System.out.println(tag);

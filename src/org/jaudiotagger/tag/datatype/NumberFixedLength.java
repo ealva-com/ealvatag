@@ -23,8 +23,8 @@
  */
 package org.jaudiotagger.tag.datatype;
 
-import org.jaudiotagger.tag.id3.AbstractTagFrameBody;
 import org.jaudiotagger.tag.InvalidDataTypeException;
+import org.jaudiotagger.tag.id3.AbstractTagFrameBody;
 import org.jaudiotagger.tag.id3.ID3Tags;
 
 
@@ -36,8 +36,7 @@ import org.jaudiotagger.tag.id3.ID3Tags;
  * <p/>
  * In ID3Specification would be denoted as $xx xx this denotes exactly two bytes required
  */
-public class NumberFixedLength
-        extends AbstractDataType
+public class NumberFixedLength extends AbstractDataType
 {
     /**
      * Creates a new ObjectNumberFixedLength datatype.
@@ -131,8 +130,7 @@ public class NumberFixedLength
         }
         if ((offset < 0) || (offset >= arr.length))
         {
-            throw new InvalidDataTypeException("Offset to byte array is out of bounds: offset = " + offset +
-                    ", array.length = " + arr.length);
+            throw new InvalidDataTypeException("Offset to byte array is out of bounds: offset = " + offset + ", array.length = " + arr.length);
         }
         long lvalue = 0;
         for (int i = offset; i < (offset + size); i++)

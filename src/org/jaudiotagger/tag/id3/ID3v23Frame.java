@@ -16,12 +16,15 @@
 package org.jaudiotagger.tag.id3;
 
 import org.jaudiotagger.FileConstants;
-import org.jaudiotagger.audio.mp3.MP3File;
 import org.jaudiotagger.audio.generic.Utils;
+import org.jaudiotagger.audio.mp3.MP3File;
 import org.jaudiotagger.tag.EmptyFrameException;
 import org.jaudiotagger.tag.InvalidFrameException;
 import org.jaudiotagger.tag.InvalidFrameIdentifierException;
-import org.jaudiotagger.tag.id3.framebody.*;
+import org.jaudiotagger.tag.id3.framebody.AbstractID3v2FrameBody;
+import org.jaudiotagger.tag.id3.framebody.FrameBodyDeprecated;
+import org.jaudiotagger.tag.id3.framebody.FrameBodyUnsupported;
+import org.jaudiotagger.tag.id3.framebody.ID3v23FrameBody;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -233,8 +236,7 @@ public class ID3v23Frame extends AbstractID3v2Frame
      *
      * @param byteBuffer to read from
      */
-    public ID3v23Frame(ByteBuffer byteBuffer, String loggingFilename)
-            throws InvalidFrameException
+    public ID3v23Frame(ByteBuffer byteBuffer, String loggingFilename) throws InvalidFrameException
     {
         setLoggingFilename(loggingFilename);
         read(byteBuffer);
@@ -246,8 +248,7 @@ public class ID3v23Frame extends AbstractID3v2Frame
      * @param byteBuffer to read from
      * @deprecated use {@link #ID3v23Frame(ByteBuffer,String)} instead
      */
-    public ID3v23Frame(ByteBuffer byteBuffer)
-            throws InvalidFrameException
+    public ID3v23Frame(ByteBuffer byteBuffer) throws InvalidFrameException
     {
         this(byteBuffer, "");
     }
@@ -295,8 +296,7 @@ public class ID3v23Frame extends AbstractID3v2Frame
      *
      * @param byteBuffer buffer to read from
      */
-    public void read(ByteBuffer byteBuffer)
-            throws InvalidFrameException
+    public void read(ByteBuffer byteBuffer) throws InvalidFrameException
     {
         logger.info(getLoggingFilename() + ":Read Frame from byteBuffer");
 
@@ -332,7 +332,7 @@ public class ID3v23Frame extends AbstractID3v2Frame
             //We dont process this frame or add to framemap becuase contains no useful information
             //Skip the two flag bytes so in correct position for subsequent frames
             byteBuffer.get();
-            byteBuffer.get();                        
+            byteBuffer.get();
             throw new EmptyFrameException(identifier + " is empty frame");
         }
         else if (frameSize > byteBuffer.remaining())
@@ -524,8 +524,7 @@ public class ID3v23Frame extends AbstractID3v2Frame
      * This represents a frame headers Status Flags
      * Make adjustments if necessary based on frame type and specification.
      */
-    class StatusFlags
-            extends AbstractID3v2Frame.StatusFlags
+    class StatusFlags extends AbstractID3v2Frame.StatusFlags
     {
         public static final String TYPE_TAGALTERPRESERVATION = "typeTagAlterPreservation";
         public static final String TYPE_FILEALTERPRESERVATION = "typeFileAlterPreservation";
@@ -611,8 +610,7 @@ public class ID3v23Frame extends AbstractID3v2Frame
     /**
      * This represents a frame headers Encoding Flags
      */
-    class EncodingFlags
-            extends AbstractID3v2Frame.EncodingFlags
+    class EncodingFlags extends AbstractID3v2Frame.EncodingFlags
     {
         public static final String TYPE_COMPRESSION = "compression";
         public static final String TYPE_ENCRYPTION = "encryption";

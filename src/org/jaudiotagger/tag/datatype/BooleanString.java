@@ -23,8 +23,8 @@
  */
 package org.jaudiotagger.tag.datatype;
 
-import org.jaudiotagger.tag.id3.AbstractTagFrameBody;
 import org.jaudiotagger.tag.InvalidDataTypeException;
+import org.jaudiotagger.tag.id3.AbstractTagFrameBody;
 
 public class BooleanString extends AbstractDataType
 {

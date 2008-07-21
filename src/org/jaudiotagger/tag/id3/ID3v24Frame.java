@@ -16,8 +16,8 @@
 package org.jaudiotagger.tag.id3;
 
 import org.jaudiotagger.FileConstants;
-import org.jaudiotagger.audio.mp3.MP3File;
 import org.jaudiotagger.audio.generic.Utils;
+import org.jaudiotagger.audio.mp3.MP3File;
 import org.jaudiotagger.tag.*;
 import org.jaudiotagger.tag.datatype.Lyrics3Line;
 import org.jaudiotagger.tag.id3.framebody.*;
@@ -177,8 +177,7 @@ public class ID3v24Frame extends AbstractID3v2Frame
      * @param field
      * @throws InvalidTagException
      */
-    public ID3v24Frame(Lyrics3v2Field field)
-            throws InvalidTagException
+    public ID3v24Frame(Lyrics3v2Field field) throws InvalidTagException
     {
         String id = field.getIdentifier();
         String value;
@@ -266,8 +265,7 @@ public class ID3v24Frame extends AbstractID3v2Frame
      *
      * @param byteBuffer to read from
      */
-    public ID3v24Frame(ByteBuffer byteBuffer, String loggingFilename)
-            throws InvalidFrameException
+    public ID3v24Frame(ByteBuffer byteBuffer, String loggingFilename) throws InvalidFrameException
     {
         setLoggingFilename(loggingFilename);
         read(byteBuffer);
@@ -279,8 +277,7 @@ public class ID3v24Frame extends AbstractID3v2Frame
      * @param byteBuffer to read from
      * @deprecated use {@link #ID3v24Frame(ByteBuffer,String)} instead
      */
-    public ID3v24Frame(ByteBuffer byteBuffer)
-            throws InvalidFrameException
+    public ID3v24Frame(ByteBuffer byteBuffer) throws InvalidFrameException
     {
         this(byteBuffer, "");
     }
@@ -316,8 +313,7 @@ public class ID3v24Frame extends AbstractID3v2Frame
      *
      * @param byteBuffer to read the frame from
      */
-    public void read(ByteBuffer byteBuffer)
-            throws InvalidFrameException
+    public void read(ByteBuffer byteBuffer) throws InvalidFrameException
     {
         byte[] buffer = new byte[FRAME_ID_SIZE];
 
@@ -356,7 +352,7 @@ public class ID3v24Frame extends AbstractID3v2Frame
             //We dont process this frame or add to framemap becuase contains no useful information
             //Skip the two flag bytes so in correct position for subsequent frames
             byteBuffer.get();
-            byteBuffer.get(); 
+            byteBuffer.get();
             throw new EmptyFrameException(identifier + " is empty frame");
         }
         else if (frameSize > (byteBuffer.remaining() - FRAME_FLAGS_SIZE))
@@ -682,8 +678,7 @@ public class ID3v24Frame extends AbstractID3v2Frame
      * Member Class This represents a frame headers Status Flags
      * Make adjustments if necessary based on frame type and specification.
      */
-    class StatusFlags
-            extends AbstractID3v2Frame.StatusFlags
+    class StatusFlags extends AbstractID3v2Frame.StatusFlags
     {
         public static final String TYPE_TAGALTERPRESERVATION = "typeTagAlterPreservation";
         public static final String TYPE_FILEALTERPRESERVATION = "typeFileAlterPreservation";
@@ -781,8 +776,7 @@ public class ID3v24Frame extends AbstractID3v2Frame
     /**
      * This represents a frame headers Encoding Flags
      */
-    class EncodingFlags
-            extends AbstractID3v2Frame.EncodingFlags
+    class EncodingFlags extends AbstractID3v2Frame.EncodingFlags
     {
         public static final String TYPE_COMPRESSION = "compression";
         public static final String TYPE_ENCRYPTION = "encryption";

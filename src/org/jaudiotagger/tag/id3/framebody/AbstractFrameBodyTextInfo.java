@@ -22,13 +22,13 @@
  */
 package org.jaudiotagger.tag.id3.framebody;
 
+import org.jaudiotagger.logging.ErrorMessage;
 import org.jaudiotagger.tag.InvalidTagException;
 import org.jaudiotagger.tag.datatype.DataTypes;
 import org.jaudiotagger.tag.datatype.NumberHashMap;
 import org.jaudiotagger.tag.datatype.TextEncodedStringSizeTerminated;
 import org.jaudiotagger.tag.id3.ID3TextEncodingConversion;
 import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
-import org.jaudiotagger.logging.ErrorMessage;
 
 import java.io.ByteArrayOutputStream;
 import java.nio.ByteBuffer;
@@ -52,8 +52,7 @@ import java.nio.ByteBuffer;
  * <p/>
  * You can retrieve the first value without the null terminator using {@link #getFirstTextValue}
  */
-public abstract class AbstractFrameBodyTextInfo
-        extends AbstractID3v2FrameBody
+public abstract class AbstractFrameBodyTextInfo extends AbstractID3v2FrameBody
 {
 
     /**
@@ -99,9 +98,7 @@ public abstract class AbstractFrameBodyTextInfo
      *
      * @throws InvalidTagException if unable to create framebody from buffer
      */
-    protected AbstractFrameBodyTextInfo(ByteBuffer byteBuffer,
-                                        int frameSize)
-            throws InvalidTagException
+    protected AbstractFrameBodyTextInfo(ByteBuffer byteBuffer, int frameSize) throws InvalidTagException
     {
         super(byteBuffer, frameSize);
     }
@@ -117,9 +114,9 @@ public abstract class AbstractFrameBodyTextInfo
      */
     public void setText(String text)
     {
-        if(text==null)
+        if (text == null)
         {
-             throw new IllegalArgumentException(ErrorMessage.GENERAL_INVALID_NULL_ARGUMENT.getMsg());
+            throw new IllegalArgumentException(ErrorMessage.GENERAL_INVALID_NULL_ARGUMENT.getMsg());
         }
         setObjectValue(DataTypes.OBJ_TEXT, text);
     }

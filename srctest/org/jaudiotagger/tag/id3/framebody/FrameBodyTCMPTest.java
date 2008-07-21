@@ -9,12 +9,12 @@ import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
  */
 public class FrameBodyTCMPTest extends AbstractTestCase
 {
-    public static final String   COMPILATION_TRUE    =  "1";
+    public static final String COMPILATION_TRUE = "1";
 
     public static FrameBodyTCMP getInitialisedBody()
     {
-         FrameBodyTCMP fb = new FrameBodyTCMP();
-         return fb;
+        FrameBodyTCMP fb = new FrameBodyTCMP();
+        return fb;
     }
 
     public void testCreateFrameBody()
@@ -31,11 +31,11 @@ public class FrameBodyTCMPTest extends AbstractTestCase
         }
 
         assertNull(exceptionCaught);
-        assertEquals(ID3v24Frames.FRAME_ID_IS_COMPILATION,fb.getIdentifier());
-        assertEquals(TextEncoding.ISO_8859_1,fb.getTextEncoding());
+        assertEquals(ID3v24Frames.FRAME_ID_IS_COMPILATION, fb.getIdentifier());
+        assertEquals(TextEncoding.ISO_8859_1, fb.getTextEncoding());
         assertTrue(fb.isCompilation());
-        assertEquals(FrameBodyTCMP.IS_COMPILATION,fb.getText());
-        assertEquals(COMPILATION_TRUE,fb.getFirstTextValue());
+        assertEquals(FrameBodyTCMP.IS_COMPILATION, fb.getText());
+        assertEquals(COMPILATION_TRUE, fb.getFirstTextValue());
     }
 
     public void testCreateFrameBodyEmptyConstructor()
@@ -53,11 +53,11 @@ public class FrameBodyTCMPTest extends AbstractTestCase
         }
 
         assertNull(exceptionCaught);
-        assertEquals(ID3v24Frames.FRAME_ID_IS_COMPILATION,fb.getIdentifier());
-        assertEquals(TextEncoding.ISO_8859_1,fb.getTextEncoding());
+        assertEquals(ID3v24Frames.FRAME_ID_IS_COMPILATION, fb.getIdentifier());
+        assertEquals(TextEncoding.ISO_8859_1, fb.getTextEncoding());
         assertTrue(fb.isCompilation());
-        assertEquals(FrameBodyTCMP.IS_COMPILATION,fb.getText());
-        assertEquals(COMPILATION_TRUE,fb.getFirstTextValue());
+        assertEquals(FrameBodyTCMP.IS_COMPILATION, fb.getText());
+        assertEquals(COMPILATION_TRUE, fb.getFirstTextValue());
     }
 
 

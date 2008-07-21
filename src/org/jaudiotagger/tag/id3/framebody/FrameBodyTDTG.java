@@ -61,8 +61,7 @@ public class FrameBodyTDTG extends AbstractFrameBodyTextInfo implements ID3v24Fr
      * @throws java.io.IOException
      * @throws InvalidTagException
      */
-    public FrameBodyTDTG(ByteBuffer byteBuffer, int frameSize)
-            throws InvalidTagException
+    public FrameBodyTDTG(ByteBuffer byteBuffer, int frameSize) throws InvalidTagException
     {
         super(byteBuffer, frameSize);
     }

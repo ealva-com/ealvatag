@@ -14,7 +14,6 @@ public class FrameBodyUFIDTest extends AbstractTestCase
     public static final byte[] TEST_OBJECT_DATA = new byte[2];
 
 
-
     public void testCreateFrameBody()
     {
         Exception exceptionCaught = null;
@@ -32,10 +31,10 @@ public class FrameBodyUFIDTest extends AbstractTestCase
         }
 
         assertNull(exceptionCaught);
-        assertEquals(ID3v24Frames.FRAME_ID_UNIQUE_FILE_ID,fb.getIdentifier());
-        assertEquals(TextEncoding.ISO_8859_1,fb.getTextEncoding());
-        assertEquals(TEST_OWNER,fb.getOwner());
-        assertEquals(TEST_OBJECT_DATA ,fb.getObjectValue(DataTypes.OBJ_DATA));
-        assertEquals(TEST_OBJECT_DATA ,fb.getUniqueIdentifier());
+        assertEquals(ID3v24Frames.FRAME_ID_UNIQUE_FILE_ID, fb.getIdentifier());
+        assertEquals(TextEncoding.ISO_8859_1, fb.getTextEncoding());
+        assertEquals(TEST_OWNER, fb.getOwner());
+        assertEquals(TEST_OBJECT_DATA, fb.getObjectValue(DataTypes.OBJ_DATA));
+        assertEquals(TEST_OBJECT_DATA, fb.getUniqueIdentifier());
     }
 }

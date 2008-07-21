@@ -1,8 +1,8 @@
 package org.jaudiotagger.tag.datatype;
 
-import org.jaudiotagger.tag.id3.AbstractTagFrameBody;
 import org.jaudiotagger.tag.InvalidDataTypeException;
 import org.jaudiotagger.tag.TagOptionSingleton;
+import org.jaudiotagger.tag.id3.AbstractTagFrameBody;
 import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
 
 import java.nio.ByteBuffer;
@@ -23,8 +23,7 @@ import java.util.List;
  * the termination code for the character encoding. This functionality is only officially support in ID3v24.  Itunes
  * write null terminators characters even though only writes a single value.
  */
-public class TextEncodedStringSizeTerminated
-        extends AbstractString
+public class TextEncodedStringSizeTerminated extends AbstractString
 {
 
     /**
@@ -126,9 +125,9 @@ public class TextEncodedStringSizeTerminated
             }
 
             String charSetName = getTextEncodingCharSet();
-            if(charSetName.equals(TextEncoding.CHARSET_UTF_16))
+            if (charSetName.equals(TextEncoding.CHARSET_UTF_16))
             {
-                charSetName= TextEncoding.CHARSET_UTF_16_ENCODING_FORMAT;
+                charSetName = TextEncoding.CHARSET_UTF_16_ENCODING_FORMAT;
                 CharsetEncoder encoder = Charset.forName(charSetName).newEncoder();
                 //Note remember LE BOM is ff fe but tis is handled by encoder Unicode char is fe ff
                 ByteBuffer bb = encoder.encode(CharBuffer.wrap('\ufeff' + (String) value));

@@ -18,13 +18,13 @@
  */
 package org.jaudiotagger.tag.mp4.field;
 
+import org.jaudiotagger.audio.mp4.atom.Mp4BoxHeader;
+import org.jaudiotagger.tag.TagField;
+import org.jaudiotagger.tag.mp4.Mp4TagField;
+import org.jaudiotagger.tag.mp4.atom.Mp4DataBox;
+
 import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
-
-import org.jaudiotagger.tag.TagField;
-import org.jaudiotagger.tag.mp4.atom.Mp4DataBox;
-import org.jaudiotagger.tag.mp4.Mp4TagField;
-import org.jaudiotagger.audio.mp4.atom.Mp4BoxHeader;
 
 /**
  * Represents binary data

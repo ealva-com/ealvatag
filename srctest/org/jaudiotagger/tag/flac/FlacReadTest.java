@@ -1,24 +1,13 @@
 package org.jaudiotagger.tag.flac;
 
 import junit.framework.TestCase;
-
-import java.io.File;
-import java.io.RandomAccessFile;
-import java.io.ByteArrayInputStream;
-import java.awt.image.BufferedImage;
-
 import org.jaudiotagger.AbstractTestCase;
-import org.jaudiotagger.tag.TagFieldKey;
-import org.jaudiotagger.tag.id3.valuepair.ImageFormats;
-import org.jaudiotagger.tag.reference.PictureTypes;
 import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.AudioFileIO;
 import org.jaudiotagger.audio.exceptions.CannotReadException;
 import org.jaudiotagger.audio.flac.FlacInfoReader;
-import org.jaudiotagger.audio.flac.metadatablock.MetadataBlockDataPicture;
 
-import javax.imageio.stream.ImageInputStream;
-import javax.imageio.ImageIO;
+import java.io.File;
 
 /**
  * basic Flac tests

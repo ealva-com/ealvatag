@@ -29,9 +29,7 @@ public class ID3Unsynchronization
     {
         for (int i = 0; i < abySource.length - 1; i++)
         {
-            if (
-                    ((abySource[i] & MPEGFrameHeader.SYNC_BYTE1) == MPEGFrameHeader.SYNC_BYTE1)
-                            && ((abySource[i + 1] & MPEGFrameHeader.SYNC_BYTE2) == MPEGFrameHeader.SYNC_BYTE2))
+            if (((abySource[i] & MPEGFrameHeader.SYNC_BYTE1) == MPEGFrameHeader.SYNC_BYTE1) && ((abySource[i + 1] & MPEGFrameHeader.SYNC_BYTE2) == MPEGFrameHeader.SYNC_BYTE2))
             {
                 logger.finest("Unsynchronisation required found bit at:" + i);
                 return true;

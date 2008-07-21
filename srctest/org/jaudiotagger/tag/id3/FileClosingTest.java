@@ -29,7 +29,7 @@ public class FileClosingTest extends AbstractTestCase
         }
 
         //Error Should have occured
-        assertTrue(exception  != null);
+        assertTrue(exception != null);
 
         //Should be able to delete
         boolean deleted = testFile.delete();
@@ -37,58 +37,58 @@ public class FileClosingTest extends AbstractTestCase
     }
 
     /**
-        * This tests checks files are closed after succesful reading attempt
-        */
-       public void testClosingFileAfterSuccessfulRead()
-       {
-           Exception exception = null;
-           File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3");
+     * This tests checks files are closed after succesful reading attempt
+     */
+    public void testClosingFileAfterSuccessfulRead()
+    {
+        Exception exception = null;
+        File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3");
 
-           //Try and Read
-           try
-           {
-               MP3File mp3File = new MP3File(testFile);
-           }
-           catch (Exception e)
-           {
-               exception = e;
-           }
+        //Try and Read
+        try
+        {
+            MP3File mp3File = new MP3File(testFile);
+        }
+        catch (Exception e)
+        {
+            exception = e;
+        }
 
-           //No Error Should have occured
-           assertTrue(exception  == null);
+        //No Error Should have occured
+        assertTrue(exception == null);
 
-           //Should be able to delete
-           boolean deleted = testFile.delete();
-           assertTrue(deleted);
-       }
+        //Should be able to delete
+        boolean deleted = testFile.delete();
+        assertTrue(deleted);
+    }
 
     /**
-        * This tests checks files are closed after failed reading attempt (read only)
-        */
-       public void testClosingFileAfterFailedReadOnly()
-       {
-           Exception exception = null;
-           File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3");
+     * This tests checks files are closed after failed reading attempt (read only)
+     */
+    public void testClosingFileAfterFailedReadOnly()
+    {
+        Exception exception = null;
+        File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3");
 
-           boolean readonly = testFile.setReadOnly();
-           assertTrue(readonly);
+        boolean readonly = testFile.setReadOnly();
+        assertTrue(readonly);
 
-           //Try and Read
-           try
-           {
-               MP3File mp3File = new MP3File(testFile);
-           }
-           catch (Exception e)
-           {
-               exception = e;
-           }
+        //Try and Read
+        try
+        {
+            MP3File mp3File = new MP3File(testFile);
+        }
+        catch (Exception e)
+        {
+            exception = e;
+        }
 
-          //Error Should have occured
-            assertTrue(exception  != null);
+        //Error Should have occured
+        assertTrue(exception != null);
 
-           //Should be able to delete
-           boolean deleted = testFile.delete();
-           assertTrue(deleted);
-       }
+        //Should be able to delete
+        boolean deleted = testFile.delete();
+        assertTrue(deleted);
+    }
 
 }

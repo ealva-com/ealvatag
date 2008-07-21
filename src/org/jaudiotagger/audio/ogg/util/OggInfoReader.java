@@ -19,10 +19,11 @@
  */
 package org.jaudiotagger.audio.ogg.util;
 
+import org.jaudiotagger.audio.exceptions.CannotReadException;
 import org.jaudiotagger.audio.generic.GenericAudioHeader;
-import org.jaudiotagger.audio.exceptions.*;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.RandomAccessFile;
 import java.util.logging.Logger;
 
 /**
@@ -52,9 +53,7 @@ public class OggInfoReader
                 raf.seek(raf.getFilePointer() - OggPageHeader.FIELD_CAPTURE_PATTERN_LENGTH);
                 byte[] ogg = new byte[3];
                 raf.readFully(ogg);
-                if (ogg[0] == OggPageHeader.CAPTURE_PATTERN[0]
-                        && ogg[1] == OggPageHeader.CAPTURE_PATTERN[1]
-                        && ogg[2] == OggPageHeader.CAPTURE_PATTERN[2])
+                if (ogg[0] == OggPageHeader.CAPTURE_PATTERN[0] && ogg[1] == OggPageHeader.CAPTURE_PATTERN[1] && ogg[2] == OggPageHeader.CAPTURE_PATTERN[2])
                 {
                     raf.seek(raf.getFilePointer() - 3);
 
@@ -95,16 +94,14 @@ public class OggInfoReader
         info.setExtraEncodingInfos("");
 
         //TODO this calculation should be done within identification header
-        if (vorbisIdentificationHeader.getNominalBitrate() != 0
-                && vorbisIdentificationHeader.getMaxBitrate() == vorbisIdentificationHeader.getNominalBitrate()
-                && vorbisIdentificationHeader.getMinBitrate() == vorbisIdentificationHeader.getNominalBitrate())
+        if (vorbisIdentificationHeader.getNominalBitrate() != 0 && vorbisIdentificationHeader.getMaxBitrate() == vorbisIdentificationHeader.getNominalBitrate() && vorbisIdentificationHeader.getMinBitrate() == vorbisIdentificationHeader.getNominalBitrate())
         {
             //CBR (in kbps)
             info.setBitrate(vorbisIdentificationHeader.getNominalBitrate() / 1000);
             info.setVariableBitRate(false);
         }
-        else if (vorbisIdentificationHeader.getNominalBitrate() != 0 && vorbisIdentificationHeader.getMaxBitrate() == 0
-                && vorbisIdentificationHeader.getMinBitrate() == 0)
+        else
+        if (vorbisIdentificationHeader.getNominalBitrate() != 0 && vorbisIdentificationHeader.getMaxBitrate() == 0 && vorbisIdentificationHeader.getMinBitrate() == 0)
         {
             //Average vbr (in kpbs)
             info.setBitrate(vorbisIdentificationHeader.getNominalBitrate() / 1000);

@@ -35,8 +35,7 @@ import java.nio.ByteBuffer;
 /**
  * Represents a user defined url
  */
-public class FrameBodyWXXX
-        extends AbstractFrameBodyUrlLink implements ID3v24FrameBody, ID3v23FrameBody
+public class FrameBodyWXXX extends AbstractFrameBodyUrlLink implements ID3v24FrameBody, ID3v23FrameBody
 {
 
     public static final String URL_DISCOGS_RELEASE_SITE = "DISCOGS_RELEASE";
@@ -79,8 +78,7 @@ public class FrameBodyWXXX
      *
      * @throws InvalidTagException
      */
-    public FrameBodyWXXX(ByteBuffer byteBuffer, int frameSize)
-            throws InvalidTagException
+    public FrameBodyWXXX(ByteBuffer byteBuffer, int frameSize) throws InvalidTagException
     {
         super(byteBuffer, frameSize);
     }

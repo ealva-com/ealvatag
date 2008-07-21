@@ -18,16 +18,16 @@
  */
 package org.jaudiotagger.audio.generic;
 
+import org.jaudiotagger.audio.AudioFile;
+import org.jaudiotagger.audio.exceptions.CannotReadException;
+import org.jaudiotagger.audio.exceptions.InvalidAudioFrameException;
+import org.jaudiotagger.audio.exceptions.ReadOnlyFileException;
+import org.jaudiotagger.tag.Tag;
+import org.jaudiotagger.tag.TagException;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
-
-import org.jaudiotagger.audio.AudioFile;
-import org.jaudiotagger.tag.Tag;
-import org.jaudiotagger.tag.TagException;
-import org.jaudiotagger.audio.exceptions.CannotReadException;
-import org.jaudiotagger.audio.exceptions.ReadOnlyFileException;
-import org.jaudiotagger.audio.exceptions.InvalidAudioFrameException;
 
 /*
  * This abstract class is the skeleton for tag readers. It handles the creation/closing of

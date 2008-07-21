@@ -23,8 +23,8 @@
  */
 package org.jaudiotagger.tag.datatype;
 
-import org.jaudiotagger.tag.id3.AbstractTagFrameBody;
 import org.jaudiotagger.tag.InvalidDataTypeException;
+import org.jaudiotagger.tag.id3.AbstractTagFrameBody;
 
 /**
  * Represents a stream of bytes, continuing until the end of the buffer. Usually used for binary data or where

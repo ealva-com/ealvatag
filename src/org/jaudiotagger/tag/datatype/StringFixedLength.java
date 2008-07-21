@@ -23,21 +23,23 @@
  */
 package org.jaudiotagger.tag.datatype;
 
-import org.jaudiotagger.tag.id3.AbstractTagFrameBody;
 import org.jaudiotagger.tag.InvalidDataTypeException;
+import org.jaudiotagger.tag.id3.AbstractTagFrameBody;
 import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
 
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
-import java.nio.charset.*;
+import java.nio.charset.CharacterCodingException;
+import java.nio.charset.Charset;
+import java.nio.charset.CharsetDecoder;
+import java.nio.charset.CharsetEncoder;
 
 
 /**
  * Represents a fixed length String, whereby the length of the String is known. The String
  * will be encoded based upon the text encoding of the frame that it belongs to.
  */
-public class StringFixedLength
-        extends AbstractString
+public class StringFixedLength extends AbstractString
 {
     /**
      * Creates a new ObjectStringFixedsize datatype.
@@ -147,9 +149,9 @@ public class StringFixedLength
         try
         {
             String charSetName = getTextEncodingCharSet();
-            if(charSetName.equals(TextEncoding.CHARSET_UTF_16))
+            if (charSetName.equals(TextEncoding.CHARSET_UTF_16))
             {
-                charSetName= TextEncoding.CHARSET_UTF_16_ENCODING_FORMAT;
+                charSetName = TextEncoding.CHARSET_UTF_16_ENCODING_FORMAT;
                 CharsetEncoder encoder = Charset.forName(charSetName).newEncoder();
                 //Note remember LE BOM is ff fe but tis is handled by encoder Unicode char is fe ff
                 dataBuffer = encoder.encode(CharBuffer.wrap('\ufeff' + (String) value));
@@ -185,11 +187,7 @@ public class StringFixedLength
             //There is more data available than allowed for this field strip
             else if (dataBuffer.limit() > size)
             {
-                logger.warning("There was a problem writing the following StringFixedlength Field:"
-                        + value
-                        + " when converted to bytes has length of:" + dataBuffer.limit()
-                        + " but field was defined with length of:" + size
-                        + " too long so stripping extra length");
+                logger.warning("There was a problem writing the following StringFixedlength Field:" + value + " when converted to bytes has length of:" + dataBuffer.limit() + " but field was defined with length of:" + size + " too long so stripping extra length");
                 data = new byte[size];
                 dataBuffer.get(data, 0, size);
                 return data;
@@ -197,11 +195,7 @@ public class StringFixedLength
             //There is not enough data
             else
             {
-                logger.warning("There was a problem writing the following StringFixedlength Field:"
-                        + value
-                        + " when converted to bytes has length of:" + dataBuffer.limit()
-                        + " but field was defined with length of:" + size
-                        + " too short so padding with spaces to make up extra length");
+                logger.warning("There was a problem writing the following StringFixedlength Field:" + value + " when converted to bytes has length of:" + dataBuffer.limit() + " but field was defined with length of:" + size + " too short so padding with spaces to make up extra length");
 
                 data = new byte[size];
                 dataBuffer.get(data, 0, dataBuffer.limit());

@@ -34,8 +34,6 @@ package org.jaudiotagger.tag.id3;
 
 import org.jaudiotagger.tag.datatype.AbstractDataType;
 import org.jaudiotagger.tag.datatype.DataTypes;
-import org.jaudiotagger.tag.id3.ID3Tags;
-import org.jaudiotagger.tag.id3.AbstractTagFrame;
 import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
 
 import java.util.ArrayList;
@@ -44,8 +42,7 @@ import java.util.Iterator;
 /**
  * A frame body contains the data content for a frame
  */
-public abstract class AbstractTagFrameBody
-        extends AbstractTagItem
+public abstract class AbstractTagFrameBody extends AbstractTagItem
 {
     public void createStructure()
     {

@@ -24,17 +24,20 @@
  */
 package org.jaudiotagger.tag.id3;
 
-import org.jaudiotagger.audio.mp3.MP3File;
 import org.jaudiotagger.audio.generic.Utils;
+import org.jaudiotagger.audio.mp3.MP3File;
+import org.jaudiotagger.logging.ErrorMessage;
 import org.jaudiotagger.tag.*;
 import org.jaudiotagger.tag.id3.framebody.*;
-import org.jaudiotagger.logging.ErrorMessage;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.regex.Matcher;
 
@@ -44,8 +47,7 @@ import java.util.regex.Matcher;
  * @author : Eric Farng
  * @author : Paul Taylor
  */
-public class ID3v11Tag
-        extends ID3v1Tag
+public class ID3v11Tag extends ID3v1Tag
 {
 
     //For writing output
@@ -234,8 +236,7 @@ public class ID3v11Tag
      * @throws TagNotFoundException
      * @throws IOException
      */
-    public ID3v11Tag(RandomAccessFile file, String loggingFilename)
-            throws TagNotFoundException, IOException
+    public ID3v11Tag(RandomAccessFile file, String loggingFilename) throws TagNotFoundException, IOException
     {
         setLoggingFilename(loggingFilename);
         FileChannel fc;
@@ -258,8 +259,7 @@ public class ID3v11Tag
      * @throws IOException
      * @deprecated use {@link #ID3v11Tag(RandomAccessFile,String)} instead
      */
-    public ID3v11Tag(RandomAccessFile file)
-            throws TagNotFoundException, IOException
+    public ID3v11Tag(RandomAccessFile file) throws TagNotFoundException, IOException
     {
         this(file, "");
 
@@ -272,9 +272,9 @@ public class ID3v11Tag
      */
     public void setComment(String comment)
     {
-        if(comment==null)
+        if (comment == null)
         {
-             throw new IllegalArgumentException(ErrorMessage.GENERAL_INVALID_NULL_ARGUMENT.getMsg());
+            throw new IllegalArgumentException(ErrorMessage.GENERAL_INVALID_NULL_ARGUMENT.getMsg());
         }
         this.comment = ID3Tags.truncate(comment, this.FIELD_COMMENT_LENGTH);
     }
@@ -354,7 +354,7 @@ public class ID3v11Tag
     public void set(TagField field)
     {
         TagFieldKey genericKey = TagFieldKey.valueOf(field.getId());
-        if(genericKey==TagFieldKey.TRACK)
+        if (genericKey == TagFieldKey.TRACK)
         {
             setTrack(field.toString());
         }
@@ -366,7 +366,7 @@ public class ID3v11Tag
 
     public List<TagField> get(TagFieldKey genericKey)
     {
-        if(genericKey==TagFieldKey.TRACK)
+        if (genericKey == TagFieldKey.TRACK)
         {
             return getTrack();
         }
@@ -378,14 +378,14 @@ public class ID3v11Tag
 
     public TagField getFirstField(String id)
     {
-        List<TagField> results=null;
+        List<TagField> results = null;
 
-        if(TagFieldKey.TRACK.name().equals(id))
+        if (TagFieldKey.TRACK.name().equals(id))
         {
-            results=getTrack();
-            if(results!=null)
+            results = getTrack();
+            if (results != null)
             {
-                if(results.size()>0)
+                if (results.size() > 0)
                 {
                     return results.get(0);
                 }
@@ -400,29 +400,30 @@ public class ID3v11Tag
 
     public boolean isEmpty()
     {
-        if(track>0)
+        if (track > 0)
         {
             return false;
         }
         return super.isEmpty();
     }
 
-      /**
+    /**
      * Delete any instance of tag fields with this key
      *
      * @param genericKey
      */
     public void deleteTagField(TagFieldKey genericKey)
     {
-        if(genericKey==TagFieldKey.TRACK)
+        if (genericKey == TagFieldKey.TRACK)
         {
-            track=0;
+            track = 0;
         }
         else
         {
             super.deleteTagField(genericKey);
         }
     }
+
     /**
      * Compares Object with this only returns true if both v1_1 tags with all
      * fields set to same value
@@ -483,8 +484,7 @@ public class ID3v11Tag
      * @param byteBuffer from where to read in a tag
      * @throws TagNotFoundException if unable to read a tag in the byteBuffer
      */
-    public void read(ByteBuffer byteBuffer)
-            throws TagNotFoundException
+    public void read(ByteBuffer byteBuffer) throws TagNotFoundException
     {
         if (seek(byteBuffer) == false)
         {
@@ -537,8 +537,7 @@ public class ID3v11Tag
      * @param file that this tag should be written to
      * @throws IOException thrown if there were problems writing to the file
      */
-    public void write(RandomAccessFile file)
-            throws IOException
+    public void write(RandomAccessFile file) throws IOException
     {
         logger.info("Saving file");
         byte[] buffer = new byte[TAG_LENGTH];

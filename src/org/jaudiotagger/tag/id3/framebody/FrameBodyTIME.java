@@ -64,8 +64,7 @@ public class FrameBodyTIME extends AbstractFrameBodyTextInfo implements ID3v23Fr
      *
      * @throws InvalidTagException
      */
-    public FrameBodyTIME(ByteBuffer byteBuffer, int frameSize)
-            throws InvalidTagException
+    public FrameBodyTIME(ByteBuffer byteBuffer, int frameSize) throws InvalidTagException
     {
         super(byteBuffer, frameSize);
     }

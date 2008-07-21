@@ -9,12 +9,12 @@ import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
  */
 public class FrameBodyPCNTTest extends AbstractTestCase
 {
-    public static final long    PCNT_COUNTER    =  1000;
+    public static final long PCNT_COUNTER = 1000;
 
     public static FrameBodyPCNT getInitialisedBody()
     {
-         FrameBodyPCNT fb = new FrameBodyPCNT(FrameBodyPCNTTest.PCNT_COUNTER);
-         return fb;
+        FrameBodyPCNT fb = new FrameBodyPCNT(FrameBodyPCNTTest.PCNT_COUNTER);
+        return fb;
     }
 
     public void testCreateFrameBody()
@@ -23,7 +23,7 @@ public class FrameBodyPCNTTest extends AbstractTestCase
         FrameBodyPCNT fb = null;
         try
         {
-            fb = new FrameBodyPCNT( FrameBodyPCNTTest.PCNT_COUNTER);
+            fb = new FrameBodyPCNT(FrameBodyPCNTTest.PCNT_COUNTER);
         }
         catch (Exception e)
         {
@@ -31,9 +31,9 @@ public class FrameBodyPCNTTest extends AbstractTestCase
         }
 
         assertNull(exceptionCaught);
-        assertEquals(ID3v24Frames.FRAME_ID_PLAY_COUNTER,fb.getIdentifier());
-        assertEquals(TextEncoding.ISO_8859_1,fb.getTextEncoding());
-        assertEquals(FrameBodyPCNTTest.PCNT_COUNTER ,fb.getCounter());
+        assertEquals(ID3v24Frames.FRAME_ID_PLAY_COUNTER, fb.getIdentifier());
+        assertEquals(TextEncoding.ISO_8859_1, fb.getTextEncoding());
+        assertEquals(FrameBodyPCNTTest.PCNT_COUNTER, fb.getCounter());
     }
 
     public void testCreateFrameBodyEmptyConstructor()
@@ -43,7 +43,7 @@ public class FrameBodyPCNTTest extends AbstractTestCase
         try
         {
             fb = new FrameBodyPCNT();
-            fb.setCounter(FrameBodyPCNTTest.PCNT_COUNTER );
+            fb.setCounter(FrameBodyPCNTTest.PCNT_COUNTER);
         }
         catch (Exception e)
         {
@@ -51,9 +51,9 @@ public class FrameBodyPCNTTest extends AbstractTestCase
         }
 
         assertNull(exceptionCaught);
-        assertEquals(ID3v24Frames.FRAME_ID_PLAY_COUNTER,fb.getIdentifier());
-        assertEquals(TextEncoding.ISO_8859_1,fb.getTextEncoding());
-        assertEquals(FrameBodyPCNTTest.PCNT_COUNTER ,fb.getCounter());
+        assertEquals(ID3v24Frames.FRAME_ID_PLAY_COUNTER, fb.getIdentifier());
+        assertEquals(TextEncoding.ISO_8859_1, fb.getTextEncoding());
+        assertEquals(FrameBodyPCNTTest.PCNT_COUNTER, fb.getCounter());
     }
 
 

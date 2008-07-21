@@ -16,11 +16,11 @@
 package org.jaudiotagger.tag.id3.framebody;
 
 import org.jaudiotagger.tag.InvalidTagException;
-import org.jaudiotagger.tag.reference.Languages;
 import org.jaudiotagger.tag.datatype.*;
 import org.jaudiotagger.tag.id3.ID3TextEncodingConversion;
 import org.jaudiotagger.tag.id3.ID3v24Frames;
 import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
+import org.jaudiotagger.tag.reference.Languages;
 
 import java.io.ByteArrayOutputStream;
 import java.nio.ByteBuffer;
@@ -102,8 +102,7 @@ public class FrameBodyUSLT extends AbstractID3v2FrameBody implements ID3v23Frame
      * @throws InvalidTagException
      * @throws InvalidTagException
      */
-    public FrameBodyUSLT(ByteBuffer byteBuffer, int frameSize)
-            throws InvalidTagException
+    public FrameBodyUSLT(ByteBuffer byteBuffer, int frameSize) throws InvalidTagException
     {
         super(byteBuffer, frameSize);
     }
@@ -213,7 +212,7 @@ public class FrameBodyUSLT extends AbstractID3v2FrameBody implements ID3v23Frame
     {
 
         //Ensure valid for type
-        this.setTextEncoding(ID3TextEncodingConversion.getTextEncoding(getHeader(),TextEncoding.ISO_8859_1));
+        this.setTextEncoding(ID3TextEncodingConversion.getTextEncoding(getHeader(), TextEncoding.ISO_8859_1));
 
         //Ensure valid for data                    
         if (((AbstractString) getObject(DataTypes.OBJ_DESCRIPTION)).canBeEncoded() == false)

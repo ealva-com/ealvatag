@@ -100,10 +100,7 @@ public class ID3TextEncodingConversion
      */
     private static byte convertV24textEncodingToV23textEncoding(byte textEncoding)
     {
-        if (
-                (textEncoding == TextEncoding.UTF_16BE) ||
-                        (textEncoding == TextEncoding.UTF_8)
-                )
+        if ((textEncoding == TextEncoding.UTF_16BE) || (textEncoding == TextEncoding.UTF_8))
         {
             return TextEncoding.UTF_16;
         }

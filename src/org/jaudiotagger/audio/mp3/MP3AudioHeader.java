@@ -23,7 +23,10 @@ import org.jaudiotagger.audio.AudioHeader;
 import org.jaudiotagger.audio.exceptions.InvalidAudioFrameException;
 import org.jaudiotagger.logging.Hex;
 
-import java.io.*;
+import java.io.EOFException;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.text.ParseException;
@@ -69,8 +72,8 @@ public class MP3AudioHeader implements AudioHeader
     private long bitrate;
     private String encoder = "";
 
-    private static final SimpleDateFormat timeInFormat            = new SimpleDateFormat("ss");
-    private static final SimpleDateFormat timeOutFormat           = new SimpleDateFormat("mm:ss");
+    private static final SimpleDateFormat timeInFormat = new SimpleDateFormat("ss");
+    private static final SimpleDateFormat timeOutFormat = new SimpleDateFormat("mm:ss");
     private static final SimpleDateFormat timeOutOverAnHourFormat = new SimpleDateFormat("kk:mm:ss");
     private static final char isVbrIdentifier = '~';
     private static final int CONVERT_TO_KILOBITS = 1000;
@@ -85,8 +88,7 @@ public class MP3AudioHeader implements AudioHeader
      * why chosen as a default.
      */
     private final static int FILE_BUFFER_SIZE = 5000;
-    private final static int MIN_BUFFER_REMAINING_REQUIRED =
-            MPEGFrameHeader.HEADER_SIZE + XingFrame.MAX_BUFFER_SIZE_NEEDED_TO_READ_XING;
+    private final static int MIN_BUFFER_REMAINING_REQUIRED = MPEGFrameHeader.HEADER_SIZE + XingFrame.MAX_BUFFER_SIZE_NEEDED_TO_READ_XING;
     private static final int NO_SECONDS_IN_HOUR = 3600;
 
     public MP3AudioHeader()
@@ -147,8 +149,7 @@ public class MP3AudioHeader implements AudioHeader
      * @throws IOException on any I/O error
      * @noinspection NestedTryStatement
      */
-    public boolean seek(final File seekFile, long startByte)
-            throws IOException
+    public boolean seek(final File seekFile, long startByte) throws IOException
     {
         //This is substantially faster than updating the filechannels position
         long filePointerCount;
@@ -308,13 +309,11 @@ public class MP3AudioHeader implements AudioHeader
      *
      * @return true if frame is valid
      */
-    private boolean isNextFrameValid(File seekFile, long filePointerCount, ByteBuffer bb, FileChannel fc)
-            throws IOException
+    private boolean isNextFrameValid(File seekFile, long filePointerCount, ByteBuffer bb, FileChannel fc) throws IOException
     {
         if (MP3AudioHeader.logger.isLoggable(Level.FINEST))
         {
-            MP3AudioHeader.logger.finer("Checking next frame" + seekFile.getName() + ":fpc:"
-                    + filePointerCount + "skipping to:" + (filePointerCount + mp3FrameHeader.getFrameLength()));
+            MP3AudioHeader.logger.finer("Checking next frame" + seekFile.getName() + ":fpc:" + filePointerCount + "skipping to:" + (filePointerCount + mp3FrameHeader.getFrameLength()));
         }
         boolean result = false;
 
@@ -340,7 +339,7 @@ public class MP3AudioHeader implements AudioHeader
             //So now original buffer has been replaced, so set current position to start of buffer
             currentPosition = 0;
             //Not enough left
-            if (bb.limit() <= MIN_BUFFER_REMAINING_REQUIRED )
+            if (bb.limit() <= MIN_BUFFER_REMAINING_REQUIRED)
             {
                 //No mp3 exists
                 MP3AudioHeader.logger.finer("Nearly at end of file, no header found:");
@@ -348,7 +347,7 @@ public class MP3AudioHeader implements AudioHeader
             }
 
             //Still Not enough left for next alleged frame size so giving up
-            if (bb.limit() <= MIN_BUFFER_REMAINING_REQUIRED  + mp3FrameHeader.getFrameLength() )
+            if (bb.limit() <= MIN_BUFFER_REMAINING_REQUIRED + mp3FrameHeader.getFrameLength())
             {
                 //No mp3 exists
                 MP3AudioHeader.logger.finer("Nearly at end of file, no room for next frame, no header found:");
@@ -374,7 +373,7 @@ public class MP3AudioHeader implements AudioHeader
         }
         else
         {
-             MP3AudioHeader.logger.finer("isMPEGFrame has identified this is not an audio header");    
+            MP3AudioHeader.logger.finer("isMPEGFrame has identified this is not an audio header");
         }
         //Set back to the start of the previous frame
         bb.position(currentPosition);
@@ -455,16 +454,11 @@ public class MP3AudioHeader implements AudioHeader
 
         //Because when calculating framelength we may have altered the calculation slightly for MPEGVersion2
         //to account for mono/stero we seem to have to make a corresponding modification to get the correct time
-        if (
-                (mp3FrameHeader.getVersion() == MPEGFrameHeader.VERSION_2) ||
-                        (mp3FrameHeader.getVersion() == MPEGFrameHeader.VERSION_2_5))
+        if ((mp3FrameHeader.getVersion() == MPEGFrameHeader.VERSION_2) || (mp3FrameHeader.getVersion() == MPEGFrameHeader.VERSION_2_5))
         {
-            if (
-                    (mp3FrameHeader.getLayer() == MPEGFrameHeader.LAYER_II) ||
-                            (mp3FrameHeader.getLayer() == MPEGFrameHeader.LAYER_III)
-                    )
+            if ((mp3FrameHeader.getLayer() == MPEGFrameHeader.LAYER_II) || (mp3FrameHeader.getLayer() == MPEGFrameHeader.LAYER_III))
             {
-                if(mp3FrameHeader.getNumberOfChannels()==1)
+                if (mp3FrameHeader.getNumberOfChannels() == 1)
                 {
                     timePerFrame = timePerFrame / 2;
                 }
@@ -515,7 +509,7 @@ public class MP3AudioHeader implements AudioHeader
         {
             final long lengthInSecs = getTrackLength();
             final Date timeIn = timeInFormat.parse(String.valueOf(lengthInSecs));
-            if(lengthInSecs < NO_SECONDS_IN_HOUR)
+            if (lengthInSecs < NO_SECONDS_IN_HOUR)
             {
                 return timeOutFormat.format(timeIn);
             }
@@ -555,7 +549,7 @@ public class MP3AudioHeader implements AudioHeader
                 bitrate = (long) (((fileSize - startByte) * CONVERTS_BYTE_TO_BITS) / (timePerFrame * getNumberOfFrames() * CONVERT_TO_KILOBITS));
             }
         }
-        else if(mp3VbriFrame != null)
+        else if (mp3VbriFrame != null)
         {
             if (mp3VbriFrame.getAudioSize() > 0)
             {
@@ -584,7 +578,7 @@ public class MP3AudioHeader implements AudioHeader
         }
         else if (mp3VbriFrame != null)
         {
-           encoder = mp3VbriFrame.getEncoder();
+            encoder = mp3VbriFrame.getEncoder();
         }
     }
 
@@ -741,14 +735,7 @@ public class MP3AudioHeader implements AudioHeader
      */
     public String toString()
     {
-        String s = "fileSize:" + fileSize
-                + " encoder:" + encoder
-                + " startByte:" + Hex.asHex(startByte)
-                + " numberOfFrames:" + numberOfFrames
-                + " numberOfFramesEst:" + numberOfFramesEstimate
-                + " timePerFrame:" + timePerFrame
-                + " bitrate:" + bitrate
-                + " trackLength:" + getTrackLengthAsString();
+        String s = "fileSize:" + fileSize + " encoder:" + encoder + " startByte:" + Hex.asHex(startByte) + " numberOfFrames:" + numberOfFrames + " numberOfFramesEst:" + numberOfFramesEstimate + " timePerFrame:" + timePerFrame + " bitrate:" + bitrate + " trackLength:" + getTrackLengthAsString();
 
         if (this.mp3FrameHeader != null)
         {

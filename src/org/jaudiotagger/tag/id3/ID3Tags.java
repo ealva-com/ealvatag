@@ -350,8 +350,7 @@ public class ID3Tags
      * @return first whole number that can be parsed from the string
      * @throws TagException
      */
-    public static long findNumber(String str)
-            throws TagException
+    public static long findNumber(String str) throws TagException
     {
         return findNumber(str, 0);
     }
@@ -366,8 +365,7 @@ public class ID3Tags
      * @throws NullPointerException
      * @throws IndexOutOfBoundsException
      */
-    public static long findNumber(String str, int offset)
-            throws TagException
+    public static long findNumber(String str, int offset) throws TagException
     {
         if (str == null)
         {
@@ -375,8 +373,7 @@ public class ID3Tags
         }
         if ((offset < 0) || (offset >= str.length()))
         {
-            throw new IndexOutOfBoundsException("Offset to image string is out of bounds: offset = " + offset +
-                    ", string.length()" + str.length());
+            throw new IndexOutOfBoundsException("Offset to image string is out of bounds: offset = " + offset + ", string.length()" + str.length());
         }
         int i;
         int j;

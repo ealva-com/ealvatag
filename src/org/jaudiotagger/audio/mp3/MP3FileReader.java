@@ -1,17 +1,17 @@
 package org.jaudiotagger.audio.mp3;
 
-import org.jaudiotagger.audio.generic.GenericAudioHeader;
-import org.jaudiotagger.audio.generic.AudioFileReader;
-import org.jaudiotagger.audio.exceptions.CannotReadException;
-import org.jaudiotagger.audio.exceptions.ReadOnlyFileException;
-import org.jaudiotagger.audio.exceptions.InvalidAudioFrameException;
 import org.jaudiotagger.audio.AudioFile;
+import org.jaudiotagger.audio.exceptions.CannotReadException;
+import org.jaudiotagger.audio.exceptions.InvalidAudioFrameException;
+import org.jaudiotagger.audio.exceptions.ReadOnlyFileException;
+import org.jaudiotagger.audio.generic.AudioFileReader;
+import org.jaudiotagger.audio.generic.GenericAudioHeader;
 import org.jaudiotagger.tag.Tag;
 import org.jaudiotagger.tag.TagException;
 
-import java.io.RandomAccessFile;
-import java.io.IOException;
 import java.io.File;
+import java.io.IOException;
+import java.io.RandomAccessFile;
 
 /**
  * Read Mp3 Info (retrofitted to entagged ,done differently to entagged which is why some methods throw RuntimeException)
@@ -34,23 +34,22 @@ public class MP3FileReader extends AudioFileReader
      * @return
      */
     //Override because we read mp3s differently to the entagged code
-    public AudioFile read(File f)
-            throws IOException, TagException, ReadOnlyFileException, InvalidAudioFrameException
+    public AudioFile read(File f) throws IOException, TagException, ReadOnlyFileException, InvalidAudioFrameException
     {
-        MP3File mp3File = new MP3File(f, MP3File.LOAD_IDV1TAG | MP3File.LOAD_IDV2TAG,true);
+        MP3File mp3File = new MP3File(f, MP3File.LOAD_IDV1TAG | MP3File.LOAD_IDV2TAG, true);
         return mp3File;
     }
 
-     /**
-     *  Read
+    /**
+     * Read
+     *
      * @param f
-     * @throws ReadOnlyFileException thrown if the file is not writable 
      * @return
+     * @throws ReadOnlyFileException thrown if the file is not writable
      */
-    public AudioFile readMustBeWritable(File f)
-            throws IOException, TagException, ReadOnlyFileException, InvalidAudioFrameException
+    public AudioFile readMustBeWritable(File f) throws IOException, TagException, ReadOnlyFileException, InvalidAudioFrameException
     {
-        MP3File mp3File = new MP3File(f, MP3File.LOAD_IDV1TAG | MP3File.LOAD_IDV2TAG,false);
+        MP3File mp3File = new MP3File(f, MP3File.LOAD_IDV1TAG | MP3File.LOAD_IDV2TAG, false);
         return mp3File;
     }
 

@@ -1,21 +1,21 @@
 package org.jaudiotagger.tag.flac;
 
-import org.jaudiotagger.tag.vorbiscomment.VorbisCommentTag;
-import org.jaudiotagger.tag.*;
-import org.jaudiotagger.tag.reference.PictureTypes;
-import org.jaudiotagger.tag.id3.valuepair.ImageFormats;
-import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
 import org.jaudiotagger.audio.flac.metadatablock.MetadataBlockDataPicture;
 import org.jaudiotagger.audio.generic.Utils;
+import org.jaudiotagger.tag.*;
+import org.jaudiotagger.tag.id3.valuepair.ImageFormats;
+import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
+import org.jaudiotagger.tag.reference.PictureTypes;
+import org.jaudiotagger.tag.vorbiscomment.VorbisCommentTag;
 
 import javax.imageio.ImageIO;
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * Flac uses Vorbis Comment for most of its metadata and a Flac Picture Block for images
@@ -23,7 +23,7 @@ import java.io.IOException;
  * <p/>
  * This class enscapulates the items into a single tag
  */
-public class  FlacTag implements Tag
+public class FlacTag implements Tag
 {
     VorbisCommentTag tag = null;
     List<MetadataBlockDataPicture> images = new ArrayList<MetadataBlockDataPicture>();
@@ -438,8 +438,7 @@ public class  FlacTag implements Tag
      * @param value      to store
      * @return
      */
-    public TagField createTagField(TagFieldKey genericKey, String value)
-            throws KeyNotFoundException, FieldDataInvalidException
+    public TagField createTagField(TagFieldKey genericKey, String value) throws KeyNotFoundException, FieldDataInvalidException
     {
         if (genericKey.equals(TagFieldKey.COVER_ART))
         {
@@ -476,8 +475,7 @@ public class  FlacTag implements Tag
      * @param id
      * @return String value or empty string
      */
-    public String getFirst(TagFieldKey id)
-            throws KeyNotFoundException
+    public String getFirst(TagFieldKey id) throws KeyNotFoundException
     {
         if (id.equals(TagFieldKey.COVER_ART))
         {
@@ -524,8 +522,7 @@ public class  FlacTag implements Tag
      *
      * @param tagFieldKey
      */
-    public void deleteTagField(TagFieldKey tagFieldKey)
-            throws KeyNotFoundException
+    public void deleteTagField(TagFieldKey tagFieldKey) throws KeyNotFoundException
     {
         if (tagFieldKey.equals(TagFieldKey.COVER_ART))
         {
@@ -573,8 +570,7 @@ public class  FlacTag implements Tag
      * @param id The field id.
      * @return A list of {@link TagField} objects with the given &quot;id&quot;.
      */
-    public List<TagField> get(TagFieldKey id)
-            throws KeyNotFoundException
+    public List<TagField> get(TagFieldKey id) throws KeyNotFoundException
     {
         if (id.equals(TagFieldKey.COVER_ART))
         {
@@ -606,24 +602,9 @@ public class  FlacTag implements Tag
      * @return
      * @throws FieldDataInvalidException
      */
-    public TagField createArtworkField(byte[] imageData,
-                                       int pictureType,
-                                       String mimeType,
-                                       String description,
-                                       int width,
-                                       int height,
-                                       int colourDepth,
-                                       int indexedColouredCount
-    ) throws FieldDataInvalidException
+    public TagField createArtworkField(byte[] imageData, int pictureType, String mimeType, String description, int width, int height, int colourDepth, int indexedColouredCount) throws FieldDataInvalidException
     {
-        return new MetadataBlockDataPicture(imageData,
-                pictureType,
-                mimeType,
-                description,
-                width,
-                height,
-                colourDepth,
-                indexedColouredCount);
+        return new MetadataBlockDataPicture(imageData, pictureType, mimeType, description, width, height, colourDepth, indexedColouredCount);
     }
 
     /**
@@ -637,13 +618,7 @@ public class  FlacTag implements Tag
      * @return
      * @throws FieldDataInvalidException
      */
-    public TagField createArtworkField(BufferedImage bi,
-                                       int pictureType,
-                                       String mimeType,
-                                       String description,
-                                       int colourDepth,
-                                       int indexedColouredCount
-    ) throws FieldDataInvalidException
+    public TagField createArtworkField(BufferedImage bi, int pictureType, String mimeType, String description, int colourDepth, int indexedColouredCount) throws FieldDataInvalidException
     {
         //Convert to byte array
         try
@@ -652,14 +627,7 @@ public class  FlacTag implements Tag
             ImageIO.write(bi, ImageFormats.getFormatForMimeType(mimeType), new DataOutputStream(output));
 
             //Add to image list
-            return new MetadataBlockDataPicture(output.toByteArray(),
-                    pictureType,
-                    mimeType,
-                    description,
-                    bi.getWidth(),
-                    bi.getHeight(),
-                    colourDepth,
-                    indexedColouredCount);
+            return new MetadataBlockDataPicture(output.toByteArray(), pictureType, mimeType, description, bi.getWidth(), bi.getHeight(), colourDepth, indexedColouredCount);
         }
         catch (IOException ioe)
         {
@@ -674,13 +642,6 @@ public class  FlacTag implements Tag
     public TagField createLinkedArtworkField(String url)
     {
         //Add to image list
-        return new MetadataBlockDataPicture(Utils.getDefaultBytes(url, TextEncoding.CHARSET_ISO_8859_1),
-                PictureTypes.DEFAULT_ID,
-                MetadataBlockDataPicture.IMAGE_IS_URL,
-                "",
-                0,
-                0,
-                0,
-                0);
+        return new MetadataBlockDataPicture(Utils.getDefaultBytes(url, TextEncoding.CHARSET_ISO_8859_1), PictureTypes.DEFAULT_ID, MetadataBlockDataPicture.IMAGE_IS_URL, "", 0, 0, 0, 0);
     }
 }

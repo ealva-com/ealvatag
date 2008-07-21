@@ -75,8 +75,7 @@ public class FrameBodyTYER extends AbstractFrameBodyTextInfo implements ID3v23Fr
      *
      * @throws InvalidTagException
      */
-    public FrameBodyTYER(ByteBuffer byteBuffer, int frameSize)
-            throws InvalidTagException
+    public FrameBodyTYER(ByteBuffer byteBuffer, int frameSize) throws InvalidTagException
     {
         super(byteBuffer, frameSize);
     }

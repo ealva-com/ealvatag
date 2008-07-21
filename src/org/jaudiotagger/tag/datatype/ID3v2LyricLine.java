@@ -23,9 +23,9 @@
  */
 package org.jaudiotagger.tag.datatype;
 
-import org.jaudiotagger.tag.id3.AbstractTagFrameBody;
-import org.jaudiotagger.tag.InvalidDataTypeException;
 import org.jaudiotagger.audio.generic.Utils;
+import org.jaudiotagger.tag.InvalidDataTypeException;
+import org.jaudiotagger.tag.id3.AbstractTagFrameBody;
 
 public class ID3v2LyricLine extends AbstractDataType
 {

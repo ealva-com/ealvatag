@@ -49,21 +49,13 @@ public class Mp4MdhdBox extends AbstractMp4Box
 
         if (version == LONG_FORMAT)
         {
-            this.samplingRate = Utils.getNumberBigEndian(dataBuffer,
-                    TIMESCALE_LONG_POS,
-                    (TIMESCALE_LONG_POS + TIMESCALE_LENGTH - 1));
-            this.timeLength = Utils.getLongNumberBigEndian(dataBuffer,
-                    DURATION_LONG_POS,
-                    (DURATION_LONG_POS + DURATION_LONG_LENGTH - 1));
+            this.samplingRate = Utils.getNumberBigEndian(dataBuffer, TIMESCALE_LONG_POS, (TIMESCALE_LONG_POS + TIMESCALE_LENGTH - 1));
+            this.timeLength = Utils.getLongNumberBigEndian(dataBuffer, DURATION_LONG_POS, (DURATION_LONG_POS + DURATION_LONG_LENGTH - 1));
         }
         else
         {
-            this.samplingRate = Utils.getNumberBigEndian(dataBuffer,
-                    TIMESCALE_SHORT_POS,
-                    (TIMESCALE_SHORT_POS + TIMESCALE_LENGTH - 1));
-            this.timeLength = Utils.getNumberBigEndian(dataBuffer,
-                    DURATION_SHORT_POS,
-                    (DURATION_SHORT_POS + DURATION_SHORT_LENGTH - 1));
+            this.samplingRate = Utils.getNumberBigEndian(dataBuffer, TIMESCALE_SHORT_POS, (TIMESCALE_SHORT_POS + TIMESCALE_LENGTH - 1));
+            this.timeLength = Utils.getNumberBigEndian(dataBuffer, DURATION_SHORT_POS, (DURATION_SHORT_POS + DURATION_SHORT_LENGTH - 1));
         }
     }
 

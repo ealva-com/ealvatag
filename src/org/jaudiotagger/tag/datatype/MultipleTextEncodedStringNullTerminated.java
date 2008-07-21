@@ -1,7 +1,7 @@
 package org.jaudiotagger.tag.datatype;
 
-import org.jaudiotagger.tag.id3.AbstractTagFrameBody;
 import org.jaudiotagger.tag.InvalidDataTypeException;
+import org.jaudiotagger.tag.id3.AbstractTagFrameBody;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -59,8 +59,7 @@ public class MultipleTextEncodedStringNullTerminated extends AbstractDataType
     {
         for (ListIterator<String> li = ((Values) value).getList().listIterator(); li.hasNext();)
         {
-            TextEncodedStringNullTerminated next
-                    = new TextEncodedStringNullTerminated(identifier, frameBody, li.next());
+            TextEncodedStringNullTerminated next = new TextEncodedStringNullTerminated(identifier, frameBody, li.next());
             if (!next.canBeEncoded())
             {
                 return false;
@@ -135,8 +134,7 @@ public class MultipleTextEncodedStringNullTerminated extends AbstractDataType
         {
             for (ListIterator<String> li = ((Values) value).getList().listIterator(); li.hasNext();)
             {
-                TextEncodedStringNullTerminated next
-                        = new TextEncodedStringNullTerminated(identifier, frameBody, li.next());
+                TextEncodedStringNullTerminated next = new TextEncodedStringNullTerminated(identifier, frameBody, li.next());
                 buffer.write(next.writeByteArray());
                 localSize += next.getSize();
             }

@@ -59,8 +59,7 @@ public class FrameBodyTMCL extends AbstractFrameBodyTextInfo implements ID3v24Fr
      *
      * @throws InvalidTagException
      */
-    public FrameBodyTMCL(ByteBuffer byteBuffer, int frameSize)
-            throws InvalidTagException
+    public FrameBodyTMCL(ByteBuffer byteBuffer, int frameSize) throws InvalidTagException
     {
         super(byteBuffer, frameSize);
     }

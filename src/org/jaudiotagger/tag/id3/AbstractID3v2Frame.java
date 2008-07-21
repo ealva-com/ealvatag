@@ -36,8 +36,7 @@ import java.util.logging.Level;
  * @author : Eric Farng
  * @version $Id$
  */
-public abstract class AbstractID3v2Frame
-        extends AbstractTagFrame implements TagField
+public abstract class AbstractID3v2Frame extends AbstractTagFrame implements TagField
 {
 
     protected static final String TYPE_FRAME = "frame";
@@ -103,7 +102,7 @@ public abstract class AbstractID3v2Frame
         // to keep things up to date.
         try
         {
-            Class<AbstractID3v2FrameBody> c = (Class<AbstractID3v2FrameBody>)Class.forName("org.jaudiotagger.tag.id3.framebody.FrameBody" + identifier);
+            Class<AbstractID3v2FrameBody> c = (Class<AbstractID3v2FrameBody>) Class.forName("org.jaudiotagger.tag.id3.framebody.FrameBody" + identifier);
             frameBody = c.newInstance();
         }
         catch (ClassNotFoundException cnfe)
@@ -194,8 +193,7 @@ public abstract class AbstractID3v2Frame
      * @throws InvalidFrameException unable to construct a framebody from the data
      */
     @SuppressWarnings("unchecked")
-    protected AbstractID3v2FrameBody readBody(String identifier, ByteBuffer byteBuffer, int frameSize)
-            throws InvalidFrameException
+    protected AbstractID3v2FrameBody readBody(String identifier, ByteBuffer byteBuffer, int frameSize) throws InvalidFrameException
     {
         //Use reflection to map id to frame body, which makes things much easier
         //to keep things up to date,although slight performance hit.
@@ -204,13 +202,9 @@ public abstract class AbstractID3v2Frame
         AbstractID3v2FrameBody frameBody;
         try
         {
-            Class<AbstractID3v2FrameBody> c = (Class<AbstractID3v2FrameBody>)Class.forName("org.jaudiotagger.tag.id3.framebody.FrameBody" + identifier);
-            Class<?>[] constructorParameterTypes =
-                    {Class.forName("java.nio.ByteBuffer"), Integer.TYPE
-                    };
-            Object[] constructorParameterValues =
-                    {byteBuffer, frameSize
-                    };
+            Class<AbstractID3v2FrameBody> c = (Class<AbstractID3v2FrameBody>) Class.forName("org.jaudiotagger.tag.id3.framebody.FrameBody" + identifier);
+            Class<?>[] constructorParameterTypes = {Class.forName("java.nio.ByteBuffer"), Integer.TYPE};
+            Object[] constructorParameterValues = {byteBuffer, frameSize};
             Constructor<AbstractID3v2FrameBody> construct = c.getConstructor(constructorParameterTypes);
             frameBody = (construct.newInstance(constructorParameterValues));
         }
@@ -237,8 +231,7 @@ public abstract class AbstractID3v2Frame
         //propagate it up otherwise mark this frame as invalid
         catch (InvocationTargetException ite)
         {
-            logger.severe(getLoggingFilename() + ":" + "An error occurred within abstractID3v2FrameBody for identifier:"
-                    + identifier + ":" + ite.getCause().getMessage());
+            logger.severe(getLoggingFilename() + ":" + "An error occurred within abstractID3v2FrameBody for identifier:" + identifier + ":" + ite.getCause().getMessage());
             if (ite.getCause() instanceof Error)
             {
                 throw (Error) ite.getCause();
@@ -292,8 +285,7 @@ public abstract class AbstractID3v2Frame
      * @throws InvalidFrameException if unable to construct a framebody for the identifier and body provided.
      */
     @SuppressWarnings("unchecked")
-    protected AbstractID3v2FrameBody readBody(String identifier, AbstractID3v2FrameBody body)
-            throws InvalidFrameException
+    protected AbstractID3v2FrameBody readBody(String identifier, AbstractID3v2FrameBody body) throws InvalidFrameException
     {
         /* Use reflection to map id to frame body, which makes things much easier
          * to keep things up to date, although slight performance hit.
@@ -301,7 +293,7 @@ public abstract class AbstractID3v2Frame
         AbstractID3v2FrameBody frameBody;
         try
         {
-            Class<AbstractID3v2FrameBody> c = (Class<AbstractID3v2FrameBody>)Class.forName("org.jaudiotagger.tag.id3.framebody.FrameBody" + identifier);
+            Class<AbstractID3v2FrameBody> c = (Class<AbstractID3v2FrameBody>) Class.forName("org.jaudiotagger.tag.id3.framebody.FrameBody" + identifier);
             Class<?>[] constructorParameterTypes = {body.getClass()};
             Object[] constructorParameterValues = {body};
             Constructor<AbstractID3v2FrameBody> construct = c.getConstructor(constructorParameterTypes);

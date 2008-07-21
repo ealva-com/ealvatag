@@ -58,8 +58,7 @@ public class FieldFrameBodyEAL extends AbstractLyrics3v2FieldFrameBody
      *
      * @throws InvalidTagException
      */
-    public FieldFrameBodyEAL(ByteBuffer byteBuffer)
-            throws InvalidTagException
+    public FieldFrameBodyEAL(ByteBuffer byteBuffer) throws InvalidTagException
     {
         read(byteBuffer);
 

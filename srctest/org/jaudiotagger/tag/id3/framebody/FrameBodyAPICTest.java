@@ -12,9 +12,9 @@ public class FrameBodyAPICTest extends AbstractTestCase
 
     public static FrameBodyAPIC getInitialisedBody()
     {
-         FrameBodyAPIC fb = new FrameBodyAPIC();
-         fb.setDescription(DESCRIPTION);
-         return fb;
+        FrameBodyAPIC fb = new FrameBodyAPIC();
+        fb.setDescription(DESCRIPTION);
+        return fb;
     }
 
 
@@ -32,8 +32,8 @@ public class FrameBodyAPICTest extends AbstractTestCase
         }
 
         assertNull(exceptionCaught);
-        assertEquals(ID3v24Frames.FRAME_ID_ATTACHED_PICTURE,fb.getIdentifier());
-        assertTrue(fb.getDescription()==null);
+        assertEquals(ID3v24Frames.FRAME_ID_ATTACHED_PICTURE, fb.getIdentifier());
+        assertTrue(fb.getDescription() == null);
 
     }
 
@@ -53,8 +53,8 @@ public class FrameBodyAPICTest extends AbstractTestCase
         }
 
         assertNull(exceptionCaught);
-        assertEquals(ID3v24Frames.FRAME_ID_ATTACHED_PICTURE,fb.getIdentifier());
-        assertEquals(DESCRIPTION,fb.getDescription());
+        assertEquals(ID3v24Frames.FRAME_ID_ATTACHED_PICTURE, fb.getIdentifier());
+        assertEquals(DESCRIPTION, fb.getDescription());
 
 
     }

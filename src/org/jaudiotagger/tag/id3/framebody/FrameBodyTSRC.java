@@ -59,8 +59,7 @@ public class FrameBodyTSRC extends AbstractFrameBodyTextInfo implements ID3v24Fr
      *
      * @throws InvalidTagException
      */
-    public FrameBodyTSRC(ByteBuffer byteBuffer, int frameSize)
-            throws InvalidTagException
+    public FrameBodyTSRC(ByteBuffer byteBuffer, int frameSize) throws InvalidTagException
     {
         super(byteBuffer, frameSize);
     }

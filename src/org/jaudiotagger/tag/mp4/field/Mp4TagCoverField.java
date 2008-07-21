@@ -18,11 +18,10 @@
  */
 package org.jaudiotagger.tag.mp4.field;
 
-import org.jaudiotagger.tag.mp4.field.Mp4TagBinaryField;
+import org.jaudiotagger.audio.mp4.atom.Mp4BoxHeader;
 import org.jaudiotagger.tag.mp4.Mp4FieldKey;
 import org.jaudiotagger.tag.mp4.atom.Mp4DataBox;
 import org.jaudiotagger.tag.mp4.atom.Mp4NameBox;
-import org.jaudiotagger.audio.mp4.atom.Mp4BoxHeader;
 
 import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
@@ -53,7 +52,6 @@ public class Mp4TagCoverField extends Mp4TagBinaryField
     }
 
     /**
-     *
      * @return data and header size
      */
     public int getDataAndHeaderSize()
@@ -97,12 +95,7 @@ public class Mp4TagCoverField extends Mp4TagBinaryField
         super(Mp4FieldKey.ARTWORK.getFieldName(), data);
 
         //Read signature
-        if (
-                (0x89 == (data[0] & 0xff)) ||
-                        (0x50 == (data[0] & 0xff)) ||
-                        (0x4E == (data[0] & 0xff)) ||
-                        (0x47 == (data[0] & 0xff))
-                )
+        if ((0x89 == (data[0] & 0xff)) || (0x50 == (data[0] & 0xff)) || (0x4E == (data[0] & 0xff)) || (0x47 == (data[0] & 0xff)))
         {
             imageType = Mp4FieldType.COVERART_PNG;
         }
@@ -142,10 +135,10 @@ public class Mp4TagCoverField extends Mp4TagBinaryField
     }
 
     protected void build(ByteBuffer raw)
-    {           
+    {
         Mp4BoxHeader header = new Mp4BoxHeader(raw);
-        dataSize            = header.getDataLength();
-        dataAndHeaderSize   = header.getLength();
+        dataSize = header.getDataLength();
+        dataAndHeaderSize = header.getLength();
 
         //Skip the version and length fields
         raw.position(raw.position() + Mp4DataBox.PRE_DATA_LENGTH);
@@ -159,15 +152,15 @@ public class Mp4TagCoverField extends Mp4TagBinaryField
 
         //Is there room for another atom (remember actually passed all the data so unless Covr is last atom
         //there will be room even though more likely to be for the text top level atom)
-        int positionAfterDataAtom=raw.position();
-        if(raw.position() + Mp4BoxHeader.HEADER_LENGTH <= raw.limit())
+        int positionAfterDataAtom = raw.position();
+        if (raw.position() + Mp4BoxHeader.HEADER_LENGTH <= raw.limit())
         {
             //Is there a following name field (not the norm)
             Mp4BoxHeader nameHeader = new Mp4BoxHeader(raw);
-            if(nameHeader.getId().equals(Mp4NameBox.IDENTIFIER))
+            if (nameHeader.getId().equals(Mp4NameBox.IDENTIFIER))
             {
-                dataSize            += nameHeader.getDataLength();
-                dataAndHeaderSize   += nameHeader.getLength();
+                dataSize += nameHeader.getDataLength();
+                dataAndHeaderSize += nameHeader.getLength();
             }
             else
             {

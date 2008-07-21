@@ -18,10 +18,10 @@
  */
 package org.jaudiotagger.audio.generic;
 
-import java.io.File;
-
 import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.exceptions.ModifyVetoException;
+
+import java.io.File;
 
 /**
  * Classes implementing this interface will be notified on audio file's

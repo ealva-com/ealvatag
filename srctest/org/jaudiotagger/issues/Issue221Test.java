@@ -1,15 +1,12 @@
 package org.jaudiotagger.issues;
 
 import org.jaudiotagger.AbstractTestCase;
-import org.jaudiotagger.audio.mp3.MP3File;
-import org.jaudiotagger.tag.id3.*;
-import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
-import org.jaudiotagger.tag.id3.framebody.FrameBodyPCNT;
-import org.jaudiotagger.tag.id3.framebody.FrameBodyPCNTTest;
+import org.jaudiotagger.tag.id3.ID3v22Tag;
+import org.jaudiotagger.tag.id3.ID3v23Tag;
+import org.jaudiotagger.tag.id3.ID3v24Tag;
 import org.jaudiotagger.tag.mp4.Mp4Tag;
 import org.jaudiotagger.tag.vorbiscomment.VorbisCommentTag;
 
-import java.io.File;
 import java.io.FileOutputStream;
 
 /**
@@ -18,9 +15,9 @@ import java.io.FileOutputStream;
 public class Issue221Test extends AbstractTestCase
 {
 
-     public void testCreateNullMp4FrameTitle()
+    public void testCreateNullMp4FrameTitle()
     {
-        Exception exceptionCaught=null;
+        Exception exceptionCaught = null;
         try
         {
             Mp4Tag tag = new Mp4Tag();
@@ -29,31 +26,31 @@ public class Issue221Test extends AbstractTestCase
         catch (Exception e)
         {
             e.printStackTrace();
-            exceptionCaught=e;
+            exceptionCaught = e;
         }
         assertTrue(exceptionCaught instanceof IllegalArgumentException);
     }
 
     public void testCreateNullOggVorbisFrameTitle()
-       {
-           Exception exceptionCaught=null;
-           try
-           {
-               VorbisCommentTag tag = VorbisCommentTag.createNewTag();
-               tag.setTitle(null);
-           }
-           catch (Exception e)
-           {
-               e.printStackTrace();
-               exceptionCaught=e;
-           }
-           assertTrue(exceptionCaught instanceof IllegalArgumentException);
-       }
+    {
+        Exception exceptionCaught = null;
+        try
+        {
+            VorbisCommentTag tag = VorbisCommentTag.createNewTag();
+            tag.setTitle(null);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            exceptionCaught = e;
+        }
+        assertTrue(exceptionCaught instanceof IllegalArgumentException);
+    }
 
 
     public void testCreateNullID3v23FrameTitle()
     {
-        Exception exceptionCaught=null;
+        Exception exceptionCaught = null;
         try
         {
             ID3v23Tag tag = new ID3v23Tag();
@@ -65,14 +62,14 @@ public class Issue221Test extends AbstractTestCase
         catch (Exception e)
         {
             e.printStackTrace();
-            exceptionCaught=e;
+            exceptionCaught = e;
         }
         assertTrue(exceptionCaught instanceof IllegalArgumentException);
     }
 
     public void testCreateNullID3v23FrameAlbum()
     {
-        Exception exceptionCaught=null;
+        Exception exceptionCaught = null;
         try
         {
             ID3v23Tag tag = new ID3v23Tag();
@@ -84,14 +81,14 @@ public class Issue221Test extends AbstractTestCase
         catch (Exception e)
         {
             e.printStackTrace();
-            exceptionCaught=e;
+            exceptionCaught = e;
         }
         assertTrue(exceptionCaught instanceof IllegalArgumentException);
     }
 
     public void testCreateNullID3v23FrameArtist()
     {
-        Exception exceptionCaught=null;
+        Exception exceptionCaught = null;
         try
         {
             ID3v23Tag tag = new ID3v23Tag();
@@ -103,14 +100,14 @@ public class Issue221Test extends AbstractTestCase
         catch (Exception e)
         {
             e.printStackTrace();
-            exceptionCaught=e;
+            exceptionCaught = e;
         }
         assertTrue(exceptionCaught instanceof IllegalArgumentException);
     }
 
     public void testCreateNullID3v23FrameComment()
     {
-        Exception exceptionCaught=null;
+        Exception exceptionCaught = null;
         try
         {
             ID3v23Tag tag = new ID3v23Tag();
@@ -122,14 +119,14 @@ public class Issue221Test extends AbstractTestCase
         catch (Exception e)
         {
             e.printStackTrace();
-            exceptionCaught=e;
+            exceptionCaught = e;
         }
         assertTrue(exceptionCaught instanceof IllegalArgumentException);
     }
 
     public void testCreateNullID3v23FrameGenre()
     {
-        Exception exceptionCaught=null;
+        Exception exceptionCaught = null;
         try
         {
             ID3v23Tag tag = new ID3v23Tag();
@@ -141,14 +138,14 @@ public class Issue221Test extends AbstractTestCase
         catch (Exception e)
         {
             e.printStackTrace();
-            exceptionCaught=e;
+            exceptionCaught = e;
         }
         assertTrue(exceptionCaught instanceof IllegalArgumentException);
     }
 
     public void testCreateNullID3v23FrameTrack()
     {
-        Exception exceptionCaught=null;
+        Exception exceptionCaught = null;
         try
         {
             ID3v23Tag tag = new ID3v23Tag();
@@ -160,14 +157,14 @@ public class Issue221Test extends AbstractTestCase
         catch (Exception e)
         {
             e.printStackTrace();
-            exceptionCaught=e;
+            exceptionCaught = e;
         }
         assertTrue(exceptionCaught instanceof IllegalArgumentException);
     }
 
     public void testCreateNullID3v24Frame()
     {
-        Exception exceptionCaught=null;
+        Exception exceptionCaught = null;
         try
         {
             ID3v24Tag tag = new ID3v24Tag();
@@ -179,15 +176,15 @@ public class Issue221Test extends AbstractTestCase
         catch (Exception e)
         {
             e.printStackTrace();
-            exceptionCaught=e;
+            exceptionCaught = e;
         }
 
-         assertTrue(exceptionCaught instanceof IllegalArgumentException);
+        assertTrue(exceptionCaught instanceof IllegalArgumentException);
     }
 
     public void testCreateNullID3v22Frame()
     {
-        Exception exceptionCaught=null;
+        Exception exceptionCaught = null;
         try
         {
             ID3v22Tag tag = new ID3v22Tag();
@@ -199,9 +196,9 @@ public class Issue221Test extends AbstractTestCase
         catch (Exception e)
         {
             e.printStackTrace();
-            exceptionCaught=e;
+            exceptionCaught = e;
         }
 
-         assertTrue(exceptionCaught instanceof IllegalArgumentException);
+        assertTrue(exceptionCaught instanceof IllegalArgumentException);
     }
 }

@@ -62,18 +62,17 @@ public class Mp4AudioHeader extends GenericAudioHeader
     }
 
     /**
-     *
      * @param brand
      */
     public void setBrand(String brand)
     {
-          content.put(FIELD_BRAND, brand);
+        content.put(FIELD_BRAND, brand);
     }
 
 
     /**
-      * @return brand
-      */
+     * @return brand
+     */
     public String getBrand()
     {
         return (String) content.get(FIELD_BRAND);

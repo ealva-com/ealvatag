@@ -18,12 +18,12 @@
  */
 package org.jaudiotagger.audio.generic;
 
+import org.jaudiotagger.audio.AudioFile;
+import org.jaudiotagger.audio.exceptions.ModifyVetoException;
+
 import java.io.File;
 import java.util.Enumeration;
 import java.util.Vector;
-
-import org.jaudiotagger.audio.AudioFile;
-import org.jaudiotagger.audio.exceptions.ModifyVetoException;
 
 /**
  * This class multicasts the events to multiple listener instances.<br>

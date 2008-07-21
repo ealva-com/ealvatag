@@ -21,8 +21,8 @@ package org.jaudiotagger.audio.mp4.atom;
 import org.jaudiotagger.audio.generic.Utils;
 import org.jaudiotagger.logging.ErrorMessage;
 
-import java.io.RandomAccessFile;
 import java.io.IOException;
+import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
 import java.util.logging.Logger;
 
@@ -114,7 +114,7 @@ public class Mp4BoxHeader
         //Calculate box id
         this.id = Utils.getString(b, IDENTIFIER_POS, IDENTIFIER_LENGTH, "ISO-8859-1");
 
-        if(id.equals("\0\0\0\0"))
+        if (id.equals("\0\0\0\0"))
         {
             throw new RuntimeException(ErrorMessage.MP4_UNABLE_TO_FIND_NEXT_ATOM_BECAUSE_IDENTIFIER_IS_INVALID.getMsg(id));
         }
@@ -174,7 +174,7 @@ public class Mp4BoxHeader
 
     public String toString()
     {
-        return "Box " + id + ":length" + length +":filepos:"+filePos;
+        return "Box " + id + ":length" + length + ":filepos:" + filePos;
     }
 
     /**
@@ -213,7 +213,7 @@ public class Mp4BoxHeader
         boxHeader.update(headerBuffer);
         while (!boxHeader.getId().equals(id))
         {
-            logger.finer("Found:" + boxHeader.getId() +" Still searching for:" + id + " in file at:" + raf.getChannel().position());
+            logger.finer("Found:" + boxHeader.getId() + " Still searching for:" + id + " in file at:" + raf.getChannel().position());
 
             //Something gone wrong probably not at the start of an atom so return null;
             if (boxHeader.getLength() < Mp4BoxHeader.HEADER_LENGTH)
@@ -286,13 +286,12 @@ public class Mp4BoxHeader
                 return null;
             }
         }
-        logger.finer("Found:"+ id + " in bytebuffer at" + data.position());
+        logger.finer("Found:" + id + " in bytebuffer at" + data.position());
 
         return boxHeader;
     }
 
     /**
-     *
      * @return location in file of the start of file header (i.e where the 4 byte length field starts)
      */
     public long getFilePos()
@@ -302,7 +301,7 @@ public class Mp4BoxHeader
 
     /**
      * Set location in file of the start of file header (i.e where the 4 byte length field starts)
-     *  
+     *
      * @param filePos
      */
     public void setFilePos(long filePos)

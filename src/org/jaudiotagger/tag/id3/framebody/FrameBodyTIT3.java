@@ -63,8 +63,7 @@ public class FrameBodyTIT3 extends AbstractFrameBodyTextInfo implements ID3v24Fr
      *
      * @throws InvalidTagException
      */
-    public FrameBodyTIT3(ByteBuffer byteBuffer, int frameSize)
-            throws InvalidTagException
+    public FrameBodyTIT3(ByteBuffer byteBuffer, int frameSize) throws InvalidTagException
     {
         super(byteBuffer, frameSize);
     }

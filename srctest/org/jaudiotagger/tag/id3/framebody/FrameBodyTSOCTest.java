@@ -10,11 +10,12 @@ import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
 public class FrameBodyTSOCTest extends AbstractTestCase
 {
     public static final String COMPOSER_SORT = "composersort";
+
     public static FrameBodyTSOC getInitialisedBody()
     {
-         FrameBodyTSOC fb = new FrameBodyTSOC();
-         fb.setText(FrameBodyTSOCTest.COMPOSER_SORT);
-         return fb;
+        FrameBodyTSOC fb = new FrameBodyTSOC();
+        fb.setText(FrameBodyTSOCTest.COMPOSER_SORT);
+        return fb;
     }
 
     public void testCreateFrameBody()
@@ -31,9 +32,9 @@ public class FrameBodyTSOCTest extends AbstractTestCase
         }
 
         assertNull(exceptionCaught);
-        assertEquals(ID3v24Frames.FRAME_ID_COMPOSER_SORT_ORDER_ITUNES,fb.getIdentifier());
-        assertEquals(TextEncoding.ISO_8859_1,fb.getTextEncoding());
-        assertEquals(FrameBodyTSOCTest.COMPOSER_SORT,fb.getText());
+        assertEquals(ID3v24Frames.FRAME_ID_COMPOSER_SORT_ORDER_ITUNES, fb.getIdentifier());
+        assertEquals(TextEncoding.ISO_8859_1, fb.getTextEncoding());
+        assertEquals(FrameBodyTSOCTest.COMPOSER_SORT, fb.getText());
 
     }
 
@@ -52,9 +53,9 @@ public class FrameBodyTSOCTest extends AbstractTestCase
         }
 
         assertNull(exceptionCaught);
-        assertEquals(ID3v24Frames.FRAME_ID_COMPOSER_SORT_ORDER_ITUNES,fb.getIdentifier());
-        assertEquals(TextEncoding.ISO_8859_1,fb.getTextEncoding());
-        assertEquals(FrameBodyTSOCTest.COMPOSER_SORT,fb.getText());
+        assertEquals(ID3v24Frames.FRAME_ID_COMPOSER_SORT_ORDER_ITUNES, fb.getIdentifier());
+        assertEquals(TextEncoding.ISO_8859_1, fb.getTextEncoding());
+        assertEquals(FrameBodyTSOCTest.COMPOSER_SORT, fb.getText());
 
     }
 

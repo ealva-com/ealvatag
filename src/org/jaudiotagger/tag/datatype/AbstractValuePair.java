@@ -26,10 +26,10 @@ import java.util.*;
 /**
  * A two way mapping between an id and a value
  */
-public abstract class AbstractValuePair<I,V>
+public abstract class AbstractValuePair<I, V>
 {
-    protected final Map<I,V> idToValue = new LinkedHashMap<I,V>();
-    protected final Map<V,I> valueToId = new LinkedHashMap<V,I>();
+    protected final Map<I, V> idToValue = new LinkedHashMap<I, V>();
+    protected final Map<V, I> valueToId = new LinkedHashMap<V, I>();
     protected final List<V> valueList = new ArrayList<V>();
 
     protected Iterator<I> iterator = idToValue.keySet().iterator();
@@ -44,12 +44,12 @@ public abstract class AbstractValuePair<I,V>
         return valueList;
     }
 
-    public Map<I,V> getIdToValueMap()
+    public Map<I, V> getIdToValueMap()
     {
         return idToValue;
     }
 
-    public Map<V,I> getValueToIdMap()
+    public Map<V, I> getValueToIdMap()
     {
         return valueToId;
     }

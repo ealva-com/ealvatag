@@ -21,11 +21,11 @@ package org.jaudiotagger.audio.ogg.util;
 import org.jaudiotagger.audio.exceptions.CannotReadException;
 import org.jaudiotagger.audio.generic.Utils;
 
-import java.io.RandomAccessFile;
 import java.io.IOException;
+import java.io.RandomAccessFile;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.ArrayList;
 import java.util.logging.Logger;
 
 
@@ -248,13 +248,7 @@ public class OggPageHeader
 
     public String toString()
     {
-        String out = "Ogg Page Header:isValid:" + isValid
-                + ":type:" + headerTypeFlag
-                + ":oggPageHeaderLength:" + rawHeaderData.length
-                + ":length:" + pageLength
-                + ":seqNo:" + getPageSequence()
-                + ":packetIncomplete:" + isLastPacketIncomplete()
-                + ":serNum:" + this.getSerialNumber();
+        String out = "Ogg Page Header:isValid:" + isValid + ":type:" + headerTypeFlag + ":oggPageHeaderLength:" + rawHeaderData.length + ":length:" + pageLength + ":seqNo:" + getPageSequence() + ":packetIncomplete:" + isLastPacketIncomplete() + ":serNum:" + this.getSerialNumber();
 
         for (PacketStartAndLength packet : getPacketList())
         {
@@ -300,7 +294,7 @@ public class OggPageHeader
 
         public String toString()
         {
-            return "NextPkt(start:" + startPosition + ":length:" + length+"),";
+            return "NextPkt(start:" + startPosition + ":length:" + length + "),";
         }
     }
 

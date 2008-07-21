@@ -63,8 +63,7 @@ public class FrameBodyTOAL extends AbstractFrameBodyTextInfo implements ID3v23Fr
      *
      * @throws InvalidTagException
      */
-    public FrameBodyTOAL(ByteBuffer byteBuffer, int frameSize)
-            throws InvalidTagException
+    public FrameBodyTOAL(ByteBuffer byteBuffer, int frameSize) throws InvalidTagException
     {
         super(byteBuffer, frameSize);
     }

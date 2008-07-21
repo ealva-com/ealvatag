@@ -17,10 +17,9 @@
  */
 package org.jaudiotagger.audio.generic;
 
-import java.util.*;
-import java.util.List;
-
 import org.jaudiotagger.tag.*;
+
+import java.util.*;
 
 /**
  * This class is the default implementation for
@@ -623,8 +622,7 @@ public abstract class AbstractTag implements Tag
      *
      * @see org.jaudiotagger.tag.Tag#setTrack(java.lang.String)
      */
-    public void setTrack(String s)
-            throws FieldDataInvalidException
+    public void setTrack(String s) throws FieldDataInvalidException
     {
         set(createTrackField(s));
     }
@@ -664,8 +662,7 @@ public abstract class AbstractTag implements Tag
     //Should be overridden by all subclasses but provided empty impl
     //as working one format at a time
     //TODO remove
-    public TagField createTagField(TagFieldKey genericKey, String value)
-            throws KeyNotFoundException, FieldDataInvalidException
+    public TagField createTagField(TagFieldKey genericKey, String value) throws KeyNotFoundException, FieldDataInvalidException
     {
         return null;
     }
@@ -681,8 +678,7 @@ public abstract class AbstractTag implements Tag
     //Should be overridden by all subclasses but provided empty impl
     //as working one format at a time
     //TODO remove
-    public void deleteTagField(TagFieldKey tagFieldKey)
-            throws KeyNotFoundException
+    public void deleteTagField(TagFieldKey tagFieldKey) throws KeyNotFoundException
     {
         ;
     }
@@ -753,8 +749,7 @@ public abstract class AbstractTag implements Tag
      * @param content The content of the created field.
      * @return tagfield representing the &quot;track&quot;
      */
-    public abstract TagField createTrackField(String content)
-            throws FieldDataInvalidException;
+    public abstract TagField createTrackField(String content) throws FieldDataInvalidException;
 
     /**
      * Creates a field which represents the &quot;year&quot;.<br>

@@ -10,11 +10,12 @@ import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
 public class FrameBodyTSO2Test extends AbstractTestCase
 {
     public static final String ALBUM_ARTIST_SORT = "albumartistsort";
+
     public static FrameBodyTSO2 getInitialisedBody()
     {
-         FrameBodyTSO2 fb = new FrameBodyTSO2();
-         fb.setText(FrameBodyTSO2Test.ALBUM_ARTIST_SORT);
-         return fb;
+        FrameBodyTSO2 fb = new FrameBodyTSO2();
+        fb.setText(FrameBodyTSO2Test.ALBUM_ARTIST_SORT);
+        return fb;
     }
 
     public void testCreateFrameBody()
@@ -31,9 +32,9 @@ public class FrameBodyTSO2Test extends AbstractTestCase
         }
 
         assertNull(exceptionCaught);
-        assertEquals(ID3v24Frames.FRAME_ID_ALBUM_ARTIST_SORT_ORDER_ITUNES,fb.getIdentifier());
-        assertEquals(TextEncoding.ISO_8859_1,fb.getTextEncoding());
-        assertEquals(FrameBodyTSO2Test.ALBUM_ARTIST_SORT,fb.getText());
+        assertEquals(ID3v24Frames.FRAME_ID_ALBUM_ARTIST_SORT_ORDER_ITUNES, fb.getIdentifier());
+        assertEquals(TextEncoding.ISO_8859_1, fb.getTextEncoding());
+        assertEquals(FrameBodyTSO2Test.ALBUM_ARTIST_SORT, fb.getText());
 
     }
 
@@ -52,9 +53,9 @@ public class FrameBodyTSO2Test extends AbstractTestCase
         }
 
         assertNull(exceptionCaught);
-        assertEquals(ID3v24Frames.FRAME_ID_ALBUM_ARTIST_SORT_ORDER_ITUNES,fb.getIdentifier());
-        assertEquals(TextEncoding.ISO_8859_1,fb.getTextEncoding());
-        assertEquals(FrameBodyTSO2Test.ALBUM_ARTIST_SORT,fb.getText());
+        assertEquals(ID3v24Frames.FRAME_ID_ALBUM_ARTIST_SORT_ORDER_ITUNES, fb.getIdentifier());
+        assertEquals(TextEncoding.ISO_8859_1, fb.getTextEncoding());
+        assertEquals(FrameBodyTSO2Test.ALBUM_ARTIST_SORT, fb.getText());
 
     }
 

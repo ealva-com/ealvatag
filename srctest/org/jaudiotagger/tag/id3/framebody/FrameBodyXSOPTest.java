@@ -10,11 +10,12 @@ import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
 public class FrameBodyXSOPTest extends AbstractTestCase
 {
     public static final String ARTIST_SORT = "artistsort";
+
     public static FrameBodyXSOP getInitialisedBody()
     {
-         FrameBodyXSOP fb = new FrameBodyXSOP();
-         fb.setText(FrameBodyXSOPTest.ARTIST_SORT);
-         return fb;
+        FrameBodyXSOP fb = new FrameBodyXSOP();
+        fb.setText(FrameBodyXSOPTest.ARTIST_SORT);
+        return fb;
     }
 
     public void testCreateFrameBody()
@@ -31,9 +32,9 @@ public class FrameBodyXSOPTest extends AbstractTestCase
         }
 
         assertNull(exceptionCaught);
-        assertEquals(ID3v23Frames.FRAME_ID_V3_ARTIST_SORT_ORDER_MUSICBRAINZ,fb.getIdentifier());
-        assertEquals(TextEncoding.ISO_8859_1,fb.getTextEncoding());
-        assertEquals(FrameBodyXSOPTest.ARTIST_SORT,fb.getText());
+        assertEquals(ID3v23Frames.FRAME_ID_V3_ARTIST_SORT_ORDER_MUSICBRAINZ, fb.getIdentifier());
+        assertEquals(TextEncoding.ISO_8859_1, fb.getTextEncoding());
+        assertEquals(FrameBodyXSOPTest.ARTIST_SORT, fb.getText());
 
     }
 
@@ -52,9 +53,9 @@ public class FrameBodyXSOPTest extends AbstractTestCase
         }
 
         assertNull(exceptionCaught);
-        assertEquals(ID3v23Frames.FRAME_ID_V3_ARTIST_SORT_ORDER_MUSICBRAINZ,fb.getIdentifier());
-        assertEquals(TextEncoding.ISO_8859_1,fb.getTextEncoding());
-        assertEquals(FrameBodyXSOPTest.ARTIST_SORT,fb.getText());
+        assertEquals(ID3v23Frames.FRAME_ID_V3_ARTIST_SORT_ORDER_MUSICBRAINZ, fb.getIdentifier());
+        assertEquals(TextEncoding.ISO_8859_1, fb.getTextEncoding());
+        assertEquals(FrameBodyXSOPTest.ARTIST_SORT, fb.getText());
 
     }
 

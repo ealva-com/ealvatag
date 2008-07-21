@@ -23,11 +23,11 @@
  */
 package org.jaudiotagger.tag.id3;
 
-import org.jaudiotagger.audio.mp3.MP3File;
 import org.jaudiotagger.audio.generic.Utils;
+import org.jaudiotagger.audio.mp3.MP3File;
+import org.jaudiotagger.logging.ErrorMessage;
 import org.jaudiotagger.tag.*;
 import org.jaudiotagger.tag.reference.GenreTypes;
-import org.jaudiotagger.logging.ErrorMessage;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
@@ -181,8 +181,7 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag
      * @throws TagNotFoundException
      * @throws IOException
      */
-    public ID3v1Tag(RandomAccessFile file, String loggingFilename)
-            throws TagNotFoundException, IOException
+    public ID3v1Tag(RandomAccessFile file, String loggingFilename) throws TagNotFoundException, IOException
     {
         setLoggingFilename(loggingFilename);
         FileChannel fc;
@@ -204,8 +203,7 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag
      * @throws IOException
      * @deprecated use {@link #ID3v1Tag(RandomAccessFile,String)} instead
      */
-    public ID3v1Tag(RandomAccessFile file)
-            throws TagNotFoundException, IOException
+    public ID3v1Tag(RandomAccessFile file) throws TagNotFoundException, IOException
     {
         this(file, "");
     }
@@ -218,27 +216,27 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag
     public List<TagField> get(String id)
     {
 
-        if(TagFieldKey.ARTIST.name().equals(id))
+        if (TagFieldKey.ARTIST.name().equals(id))
         {
             return getArtist();
         }
-        else if(TagFieldKey.ALBUM.name().equals(id))
+        else if (TagFieldKey.ALBUM.name().equals(id))
         {
             return getAlbum();
         }
-        else if(TagFieldKey.TITLE.name().equals(id))
+        else if (TagFieldKey.TITLE.name().equals(id))
         {
             return getTitle();
         }
-        else if(TagFieldKey.GENRE.name().equals(id))
+        else if (TagFieldKey.GENRE.name().equals(id))
         {
             return getGenre();
         }
-        else if(TagFieldKey.YEAR.name().equals(id))
+        else if (TagFieldKey.YEAR.name().equals(id))
         {
             return getYear();
         }
-        else if(TagFieldKey.COMMENT.name().equals(id))
+        else if (TagFieldKey.COMMENT.name().equals(id))
         {
             return getComment();
         }
@@ -276,9 +274,9 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag
      */
     public void setAlbum(String album)
     {
-        if(album==null)
+        if (album == null)
         {
-             throw new IllegalArgumentException(ErrorMessage.GENERAL_INVALID_NULL_ARGUMENT.getMsg());
+            throw new IllegalArgumentException(ErrorMessage.GENERAL_INVALID_NULL_ARGUMENT.getMsg());
         }
         this.album = ID3Tags.truncate(album, this.FIELD_ALBUM_LENGTH);
     }
@@ -330,9 +328,9 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag
      */
     public void setArtist(String artist)
     {
-        if(artist==null)
+        if (artist == null)
         {
-             throw new IllegalArgumentException(ErrorMessage.GENERAL_INVALID_NULL_ARGUMENT.getMsg());
+            throw new IllegalArgumentException(ErrorMessage.GENERAL_INVALID_NULL_ARGUMENT.getMsg());
         }
         this.artist = ID3Tags.truncate(artist, this.FIELD_ARTIST_LENGTH);
     }
@@ -379,14 +377,13 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag
      * Set Comment
      *
      * @param comment
-     *
      * @throws IllegalArgumentException if comment null
      */
     public void setComment(String comment)
     {
-        if(comment==null)
+        if (comment == null)
         {
-             throw new IllegalArgumentException(ErrorMessage.GENERAL_INVALID_NULL_ARGUMENT.getMsg());
+            throw new IllegalArgumentException(ErrorMessage.GENERAL_INVALID_NULL_ARGUMENT.getMsg());
         }
         this.comment = ID3Tags.truncate(comment, this.FIELD_COMMENT_LENGTH);
     }
@@ -440,9 +437,9 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag
      */
     public void setGenre(String genreVal)
     {
-        if(genreVal==null)
+        if (genreVal == null)
         {
-             throw new IllegalArgumentException(ErrorMessage.GENERAL_INVALID_NULL_ARGUMENT.getMsg());
+            throw new IllegalArgumentException(ErrorMessage.GENERAL_INVALID_NULL_ARGUMENT.getMsg());
         }
         Integer genreID = GenreTypes.getInstanceOf().getIdForValue(genreVal);
         if (genreID != null)
@@ -513,9 +510,9 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag
      */
     public void setTitle(String title)
     {
-        if(title==null)
+        if (title == null)
         {
-             throw new IllegalArgumentException(ErrorMessage.GENERAL_INVALID_NULL_ARGUMENT.getMsg());
+            throw new IllegalArgumentException(ErrorMessage.GENERAL_INVALID_NULL_ARGUMENT.getMsg());
         }
         this.title = ID3Tags.truncate(title, this.FIELD_TITLE_LENGTH);
     }
@@ -624,36 +621,36 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag
 
     public TagField getFirstField(String id)
     {
-        List<TagField> results=null;
+        List<TagField> results = null;
 
-        if(TagFieldKey.ARTIST.name().equals(id))
+        if (TagFieldKey.ARTIST.name().equals(id))
         {
-            results=getArtist();
+            results = getArtist();
         }
-        else if(TagFieldKey.ALBUM.name().equals(id))
+        else if (TagFieldKey.ALBUM.name().equals(id))
         {
-            results=getAlbum();
+            results = getAlbum();
         }
-        else if(TagFieldKey.TITLE.name().equals(id))
+        else if (TagFieldKey.TITLE.name().equals(id))
         {
-            results=getTitle();
+            results = getTitle();
         }
-        else if(TagFieldKey.GENRE.name().equals(id))
+        else if (TagFieldKey.GENRE.name().equals(id))
         {
-            results=getGenre();
+            results = getGenre();
         }
-        else if(TagFieldKey.YEAR.name().equals(id))
+        else if (TagFieldKey.YEAR.name().equals(id))
         {
-            results=getYear();
+            results = getYear();
         }
-        else if(TagFieldKey.COMMENT.name().equals(id))
+        else if (TagFieldKey.COMMENT.name().equals(id))
         {
-            results=getComment();
+            results = getComment();
         }
 
-        if(results!=null)
+        if (results != null)
         {
-            if(results.size()>0)
+            if (results.size() > 0)
             {
                 return results.get(0);
             }
@@ -680,12 +677,7 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag
 
     public boolean isEmpty()
     {
-        if(   getFirstTitle().length()>0
-            ||getFirstArtist().length()>0
-            ||getFirstAlbum().length()>0
-            ||getFirstGenre().length()>0
-            ||getFirstYear().length()>0
-            ||getFirstComment().length()>0)
+        if (getFirstTitle().length() > 0 || getFirstArtist().length() > 0 || getFirstAlbum().length() > 0 || getFirstGenre().length() > 0 || getFirstYear().length() > 0 || getFirstComment().length() > 0)
         {
             return false;
         }
@@ -923,8 +915,7 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag
      * @param byteBuffer
      * @throws TagNotFoundException
      */
-    public void read(ByteBuffer byteBuffer)
-            throws TagNotFoundException
+    public void read(ByteBuffer byteBuffer) throws TagNotFoundException
     {
         if (seek(byteBuffer) == false)
         {
@@ -992,8 +983,7 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag
      * @param file
      * @throws IOException
      */
-    public void write(RandomAccessFile file)
-            throws IOException
+    public void write(RandomAccessFile file) throws IOException
     {
         logger.info("Saving file");
         byte[] buffer = new byte[TAG_LENGTH];

@@ -18,14 +18,13 @@
  */
 package org.jaudiotagger.tag.vorbiscomment;
 
-import java.io.UnsupportedEncodingException;
-
+import org.jaudiotagger.audio.generic.Utils;
+import org.jaudiotagger.audio.ogg.util.VorbisHeader;
 import org.jaudiotagger.tag.TagField;
 import org.jaudiotagger.tag.TagTextField;
-
 import static org.jaudiotagger.tag.vorbiscomment.VorbisCommentFieldKey.*;
-import org.jaudiotagger.audio.ogg.util.VorbisHeader;
-import org.jaudiotagger.audio.generic.Utils;
+
+import java.io.UnsupportedEncodingException;
 
 /**
  * This class represents the name and content of a tag entry in ogg-files.
@@ -109,14 +108,7 @@ public class VorbisCommentTagField implements TagTextField
      */
     private void checkCommon()
     {
-        this.common = id.equals(TITLE.name())
-                || id.equals(ALBUM.name())
-                || id.equals(ARTIST.name())
-                || id.equals(GENRE.name())
-                || id.equals(TRACKNUMBER.name())
-                || id.equals(DATE.name())
-                || id.equals(DESCRIPTION.name())
-                || id.equals(COMMENT.name());
+        this.common = id.equals(TITLE.name()) || id.equals(ALBUM.name()) || id.equals(ARTIST.name()) || id.equals(GENRE.name()) || id.equals(TRACKNUMBER.name()) || id.equals(DATE.name()) || id.equals(DESCRIPTION.name()) || id.equals(COMMENT.name());
 
     }
 

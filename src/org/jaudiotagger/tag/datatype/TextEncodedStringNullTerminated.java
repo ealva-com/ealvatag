@@ -1,7 +1,7 @@
 package org.jaudiotagger.tag.datatype;
 
-import org.jaudiotagger.tag.id3.AbstractTagFrameBody;
 import org.jaudiotagger.tag.InvalidDataTypeException;
+import org.jaudiotagger.tag.id3.AbstractTagFrameBody;
 import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
 
 import java.nio.ByteBuffer;
@@ -14,8 +14,7 @@ import java.nio.charset.*;
  * The String itself might be of length zero (i.e just consist of the null character). The String will be encoded based
  * upon the text encoding of the frame that it belongs to.
  */
-public class TextEncodedStringNullTerminated
-        extends AbstractString
+public class TextEncodedStringNullTerminated extends AbstractString
 {
     /**
      * Creates a new TextEncodedStringNullTerminated datatype.
@@ -82,8 +81,7 @@ public class TextEncodedStringNullTerminated
 
         //Latin-1 and UTF-8 strings are terminated by a single-byte null,
         //while UTF-16 and its variants need two bytes for the null terminator.
-        final boolean nullIsOneByte
-                = (charSetName.equals(TextEncoding.CHARSET_ISO_8859_1) || charSetName.equals(TextEncoding.CHARSET_UTF_8));
+        final boolean nullIsOneByte = (charSetName.equals(TextEncoding.CHARSET_ISO_8859_1) || charSetName.equals(TextEncoding.CHARSET_UTF_8));
 
         boolean isNullTerminatorFound = false;
         while (buffer.hasRemaining())
@@ -127,8 +125,7 @@ public class TextEncodedStringNullTerminated
                         buffer.mark();
                         buffer.reset();
                         endPosition = buffer.position() - 1;
-                        logger.warning("UTF16:Should be two null terminator marks but only found one starting at:"
-                                + endPosition);
+                        logger.warning("UTF16:Should be two null terminator marks but only found one starting at:" + endPosition);
 
                         isNullTerminatorFound = true;
                         break;
@@ -207,14 +204,14 @@ public class TextEncodedStringNullTerminated
         try
         {
             String charSetName = getTextEncodingCharSet();
-            if(charSetName.equals(TextEncoding.CHARSET_UTF_16))
+            if (charSetName.equals(TextEncoding.CHARSET_UTF_16))
             {
-                charSetName= TextEncoding.CHARSET_UTF_16_ENCODING_FORMAT;
+                charSetName = TextEncoding.CHARSET_UTF_16_ENCODING_FORMAT;
                 CharsetEncoder encoder = Charset.forName(charSetName).newEncoder();
                 //Note remember LE BOM is ff fe but tis is handled by encoder Unicode char is fe ff
                 ByteBuffer bb = encoder.encode(CharBuffer.wrap('\ufeff' + (String) value + '\0'));
                 data = new byte[bb.limit()];
-                bb.get(data, 0, bb.limit());                
+                bb.get(data, 0, bb.limit());
             }
             else
             {

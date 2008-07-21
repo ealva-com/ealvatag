@@ -64,8 +64,7 @@ public class FrameBodyTRSN extends AbstractFrameBodyTextInfo implements ID3v23Fr
      * @throws java.io.IOException
      * @throws InvalidTagException
      */
-    public FrameBodyTRSN(ByteBuffer byteBuffer, int frameSize)
-            throws InvalidTagException
+    public FrameBodyTRSN(ByteBuffer byteBuffer, int frameSize) throws InvalidTagException
     {
         super(byteBuffer, frameSize);
     }

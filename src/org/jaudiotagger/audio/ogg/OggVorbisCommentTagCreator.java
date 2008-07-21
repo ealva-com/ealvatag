@@ -18,13 +18,13 @@
  */
 package org.jaudiotagger.audio.ogg;
 
+import org.jaudiotagger.audio.ogg.util.VorbisHeader;
+import org.jaudiotagger.audio.ogg.util.VorbisPacketType;
 import org.jaudiotagger.tag.Tag;
 import org.jaudiotagger.tag.vorbiscomment.VorbisCommentCreator;
-import org.jaudiotagger.audio.ogg.util.VorbisPacketType;
-import org.jaudiotagger.audio.ogg.util.VorbisHeader;
 
 import java.io.UnsupportedEncodingException;
-import java.nio.*;
+import java.nio.ByteBuffer;
 import java.util.logging.Logger;
 
 /**
@@ -46,10 +46,7 @@ public class OggVorbisCommentTagCreator
     public ByteBuffer convert(Tag tag) throws UnsupportedEncodingException
     {
         ByteBuffer ogg = creator.convert(tag);
-        int tagLength = ogg.capacity()
-                + VorbisHeader.FIELD_PACKET_TYPE_LENGTH
-                + VorbisHeader.FIELD_CAPTURE_PATTERN_LENGTH
-                + OggVorbisCommentTagCreator.FIELD_FRAMING_BIT_LENGTH;
+        int tagLength = ogg.capacity() + VorbisHeader.FIELD_PACKET_TYPE_LENGTH + VorbisHeader.FIELD_CAPTURE_PATTERN_LENGTH + OggVorbisCommentTagCreator.FIELD_FRAMING_BIT_LENGTH;
 
         ByteBuffer buf = ByteBuffer.allocate(tagLength);
 

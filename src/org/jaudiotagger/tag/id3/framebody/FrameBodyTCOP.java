@@ -63,8 +63,7 @@ public class FrameBodyTCOP extends AbstractFrameBodyTextInfo implements ID3v24Fr
      *
      * @throws InvalidTagException
      */
-    public FrameBodyTCOP(ByteBuffer byteBuffer, int frameSize)
-            throws InvalidTagException
+    public FrameBodyTCOP(ByteBuffer byteBuffer, int frameSize) throws InvalidTagException
     {
         super(byteBuffer, frameSize);
     }

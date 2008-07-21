@@ -60,8 +60,7 @@ public class FrameBodyTMOO extends AbstractFrameBodyTextInfo implements ID3v24Fr
      * @throws java.io.IOException
      * @throws InvalidTagException
      */
-    public FrameBodyTMOO(ByteBuffer byteBuffer, int frameSize)
-            throws InvalidTagException
+    public FrameBodyTMOO(ByteBuffer byteBuffer, int frameSize) throws InvalidTagException
     {
         super(byteBuffer, frameSize);
     }

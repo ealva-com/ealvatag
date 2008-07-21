@@ -63,8 +63,7 @@ public class FieldFrameBodyUnsupported extends AbstractLyrics3v2FieldFrameBody
     /**
      * Creates a new FieldBodyUnsupported datatype.
      */
-    public FieldFrameBodyUnsupported(ByteBuffer byteBuffer)
-            throws InvalidTagException
+    public FieldFrameBodyUnsupported(ByteBuffer byteBuffer) throws InvalidTagException
     {
 
         this.read(byteBuffer);
@@ -128,8 +127,7 @@ public class FieldFrameBodyUnsupported extends AbstractLyrics3v2FieldFrameBody
      * @param byteBuffer
      * @throws IOException
      */
-    public void read(ByteBuffer byteBuffer)
-            throws InvalidTagException
+    public void read(ByteBuffer byteBuffer) throws InvalidTagException
     {
         int size;
         byte[] buffer = new byte[5];
@@ -156,8 +154,7 @@ public class FieldFrameBodyUnsupported extends AbstractLyrics3v2FieldFrameBody
      * @param file
      * @throws IOException
      */
-    public void write(RandomAccessFile file)
-            throws IOException
+    public void write(RandomAccessFile file) throws IOException
     {
         int offset = 0;
         String str;

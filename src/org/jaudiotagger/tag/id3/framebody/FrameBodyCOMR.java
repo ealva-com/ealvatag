@@ -139,8 +139,7 @@ public class FrameBodyCOMR extends AbstractID3v2FrameBody implements ID3v24Frame
      *
      * @throws InvalidTagException if unable to create framebody from buffer
      */
-    public FrameBodyCOMR(ByteBuffer byteBuffer, int frameSize)
-            throws InvalidTagException
+    public FrameBodyCOMR(ByteBuffer byteBuffer, int frameSize) throws InvalidTagException
     {
         super(byteBuffer, frameSize);
     }

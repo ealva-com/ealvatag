@@ -1,20 +1,15 @@
 package org.jaudiotagger.tag.mp4;
 
 import junit.framework.TestCase;
+import org.jaudiotagger.AbstractTestCase;
+import org.jaudiotagger.audio.AudioFile;
+import org.jaudiotagger.audio.AudioFileIO;
+import org.jaudiotagger.audio.mp4.Mp4AtomTree;
+import org.jaudiotagger.tag.Tag;
+import org.jaudiotagger.tag.TagFieldKey;
 
 import java.io.File;
 import java.io.RandomAccessFile;
-import java.util.List;
-
-import org.jaudiotagger.AbstractTestCase;
-import org.jaudiotagger.tag.Tag;
-import org.jaudiotagger.tag.TagFieldKey;
-import org.jaudiotagger.audio.mp4.atom.Mp4StcoBox;
-import org.jaudiotagger.audio.mp4.atom.Mp4EsdsBox;
-import org.jaudiotagger.audio.mp4.Mp4AudioHeader;
-import org.jaudiotagger.audio.mp4.Mp4AtomTree;
-import org.jaudiotagger.audio.AudioFile;
-import org.jaudiotagger.audio.AudioFileIO;
 
 /**
  * Write tags  for a file which contains  MDAT before MOOV, (not normal case)
@@ -88,7 +83,7 @@ public class M4aWriteDataBeforeMoovTagTest extends TestCase
             tag.setArtist("AR");
             tag.setAlbum("AL");
             tag.setTitle("T");
-            
+
             f.commit();
             f = AudioFileIO.read(testFile);
             tag = f.getTag();
@@ -111,7 +106,7 @@ public class M4aWriteDataBeforeMoovTagTest extends TestCase
         assertNull(exceptionCaught);
     }
 
-     /**
+    /**
      * Test to write file that has MDAT at start BEFORE MOOV atom, this is what Facc 1.25 does
      * <p/>
      */

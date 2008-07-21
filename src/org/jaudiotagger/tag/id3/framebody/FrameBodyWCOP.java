@@ -63,8 +63,7 @@ public class FrameBodyWCOP extends AbstractFrameBodyUrlLink implements ID3v24Fra
      * @throws java.io.IOException
      * @throws InvalidTagException
      */
-    public FrameBodyWCOP(ByteBuffer byteBuffer, int frameSize)
-            throws InvalidTagException
+    public FrameBodyWCOP(ByteBuffer byteBuffer, int frameSize) throws InvalidTagException
     {
         super(byteBuffer, frameSize);
     }

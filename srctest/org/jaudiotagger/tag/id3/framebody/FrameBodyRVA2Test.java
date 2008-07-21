@@ -10,24 +10,26 @@ import org.jaudiotagger.tag.id3.ID3v24Frames;
 public class FrameBodyRVA2Test extends AbstractTestCase
 {
     public static byte[] TEST_BYTES;
+
     static
     {
-        TEST_BYTES = FrameBodyRVA2Test.makeByteArray(new int[] {0x01,0x2});
+        TEST_BYTES = FrameBodyRVA2Test.makeByteArray(new int[]{0x01, 0x2});
     }
 
     public static FrameBodyRVA2 getInitialisedBody()
     {
-         FrameBodyRVA2 fb = new FrameBodyRVA2();
+        FrameBodyRVA2 fb = new FrameBodyRVA2();
 
-         fb.setObjectValue(DataTypes.OBJ_DATA,TEST_BYTES);
-         return fb;
+        fb.setObjectValue(DataTypes.OBJ_DATA, TEST_BYTES);
+        return fb;
     }
 
-     private static byte[] makeByteArray(int[] ints)
+    private static byte[] makeByteArray(int[] ints)
     {
         byte[] bs = new byte[ints.length];
-        for (int i = 0; i < ints.length; i++) {
-            bs[i] = (byte)ints[i];
+        for (int i = 0; i < ints.length; i++)
+        {
+            bs[i] = (byte) ints[i];
         }
         return bs;
     }
@@ -57,7 +59,7 @@ public class FrameBodyRVA2Test extends AbstractTestCase
         try
         {
             fb = new FrameBodyRVA2();
-            fb.setObjectValue(DataTypes.OBJ_DATA,TEST_BYTES);
+            fb.setObjectValue(DataTypes.OBJ_DATA, TEST_BYTES);
         }
         catch (Exception e)
         {
@@ -65,8 +67,8 @@ public class FrameBodyRVA2Test extends AbstractTestCase
         }
 
         assertNull(exceptionCaught);
-        assertEquals(ID3v24Frames.FRAME_ID_RELATIVE_VOLUME_ADJUSTMENT2,fb.getIdentifier());
-        assertEquals(TEST_BYTES,fb.getObjectValue(DataTypes.OBJ_DATA));
+        assertEquals(ID3v24Frames.FRAME_ID_RELATIVE_VOLUME_ADJUSTMENT2, fb.getIdentifier());
+        assertEquals(TEST_BYTES, fb.getObjectValue(DataTypes.OBJ_DATA));
 
 
     }

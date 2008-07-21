@@ -23,37 +23,39 @@
  */
 package org.jaudiotagger.tag.datatype;
 
-import org.jaudiotagger.tag.id3.AbstractTagFrameBody;
+import org.jaudiotagger.logging.ErrorMessage;
 import org.jaudiotagger.tag.InvalidDataTypeException;
+import org.jaudiotagger.tag.id3.AbstractTagFrameBody;
+import org.jaudiotagger.tag.id3.valuepair.*;
 import org.jaudiotagger.tag.reference.GenreTypes;
 import org.jaudiotagger.tag.reference.PictureTypes;
-import org.jaudiotagger.tag.id3.valuepair.*;
-import org.jaudiotagger.logging.ErrorMessage;
 
-import java.util.*;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.TreeSet;
 
 /**
  * Represents a number thats acts as a key into an enumeration of values
  */
-public class NumberHashMap extends NumberFixedLength implements HashMapInterface<Integer,String>
+public class NumberHashMap extends NumberFixedLength implements HashMapInterface<Integer, String>
 {
 
     /**
      * key to value map
      */
-    private Map<Integer,String> keyToValue = null;
+    private Map<Integer, String> keyToValue = null;
 
     /**
      * value to key map
      */
-    private Map<String,Integer> valueToKey = null;
+    private Map<String, Integer> valueToKey = null;
 
     /**
      *
      */
     private boolean hasEmptyValue = false;
 
-    
+
     /**
      * Creates a new ObjectNumberHashMap datatype.
      *
@@ -136,7 +138,7 @@ public class NumberHashMap extends NumberFixedLength implements HashMapInterface
     /**
      * @return the key to value map
      */
-    public Map<Integer,String> getKeyToValue()
+    public Map<Integer, String> getKeyToValue()
     {
         return keyToValue;
     }
@@ -144,7 +146,7 @@ public class NumberHashMap extends NumberFixedLength implements HashMapInterface
     /**
      * @return the value to key map
      */
-    public Map<String,Integer> getValueToKey()
+    public Map<String, Integer> getValueToKey()
     {
         return valueToKey;
     }
@@ -263,11 +265,11 @@ public class NumberHashMap extends NumberFixedLength implements HashMapInterface
         {
             if (hasEmptyValue == false)
             {
-                 throw new InvalidDataTypeException( ErrorMessage.MP3_REFERENCE_KEY_INVALID.getMsg(identifier,intValue));
+                throw new InvalidDataTypeException(ErrorMessage.MP3_REFERENCE_KEY_INVALID.getMsg(identifier, intValue));
             }
-            else if(identifier.equals(DataTypes.OBJ_PICTURE_TYPE))
+            else if (identifier.equals(DataTypes.OBJ_PICTURE_TYPE))
             {
-                  logger.warning(ErrorMessage.MP3_PICTURE_TYPE_INVALID.getMsg(value));
+                logger.warning(ErrorMessage.MP3_PICTURE_TYPE_INVALID.getMsg(value));
             }
         }
     }

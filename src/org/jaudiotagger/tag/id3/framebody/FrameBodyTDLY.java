@@ -63,8 +63,7 @@ public class FrameBodyTDLY extends AbstractFrameBodyTextInfo implements ID3v24Fr
      *
      * @throws InvalidTagException
      */
-    public FrameBodyTDLY(ByteBuffer byteBuffer, int frameSize)
-            throws InvalidTagException
+    public FrameBodyTDLY(ByteBuffer byteBuffer, int frameSize) throws InvalidTagException
     {
         super(byteBuffer, frameSize);
     }

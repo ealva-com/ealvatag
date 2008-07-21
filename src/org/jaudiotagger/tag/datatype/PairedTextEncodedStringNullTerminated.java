@@ -1,7 +1,7 @@
 package org.jaudiotagger.tag.datatype;
 
-import org.jaudiotagger.tag.id3.AbstractTagFrameBody;
 import org.jaudiotagger.tag.InvalidDataTypeException;
+import org.jaudiotagger.tag.id3.AbstractTagFrameBody;
 
 /**
  * Represents a datatype that allow multiple Strings but they should be paired, i.e should be 2,4,6.. Strings

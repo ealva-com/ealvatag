@@ -1,7 +1,5 @@
 package org.jaudiotagger.tag.id3;
 
-import org.jaudiotagger.tag.id3.Id3FieldType;
-import org.jaudiotagger.tag.id3.ID3v24Frames;
 import org.jaudiotagger.tag.id3.framebody.FrameBodyTXXX;
 import org.jaudiotagger.tag.id3.framebody.FrameBodyUFID;
 import org.jaudiotagger.tag.id3.framebody.FrameBodyWXXX;
@@ -49,20 +47,18 @@ public enum ID3v24FieldKey
     ISRC(ID3v24Frames.FRAME_ID_ISRC, Id3FieldType.TEXT),
     BARCODE(ID3v24Frames.FRAME_ID_USER_DEFINED_INFO, FrameBodyTXXX.BARCODE, Id3FieldType.TEXT),
     CATALO_NO(ID3v24Frames.FRAME_ID_USER_DEFINED_INFO, FrameBodyTXXX.CATALOG_NO, Id3FieldType.TEXT),
-    RECORD_LABEL(ID3v24Frames.FRAME_ID_PUBLISHER,Id3FieldType.TEXT),
-    LYRICIST(ID3v24Frames.FRAME_ID_LYRICIST,Id3FieldType.TEXT),
-    CONDUCTOR(ID3v24Frames.FRAME_ID_CONDUCTOR,Id3FieldType.TEXT),
-    REMIXER(ID3v24Frames.FRAME_ID_REMIXED,Id3FieldType.TEXT),
-    MOOD(ID3v24Frames.FRAME_ID_MOOD,Id3FieldType.TEXT),
-    MEDIA(ID3v24Frames.FRAME_ID_MEDIA_TYPE,Id3FieldType.TEXT),
+    RECORD_LABEL(ID3v24Frames.FRAME_ID_PUBLISHER, Id3FieldType.TEXT),
+    LYRICIST(ID3v24Frames.FRAME_ID_LYRICIST, Id3FieldType.TEXT),
+    CONDUCTOR(ID3v24Frames.FRAME_ID_CONDUCTOR, Id3FieldType.TEXT),
+    REMIXER(ID3v24Frames.FRAME_ID_REMIXED, Id3FieldType.TEXT),
+    MOOD(ID3v24Frames.FRAME_ID_MOOD, Id3FieldType.TEXT),
+    MEDIA(ID3v24Frames.FRAME_ID_MEDIA_TYPE, Id3FieldType.TEXT),
     URL_OFFICIAL_RELEASE_SITE(ID3v24Frames.FRAME_ID_USER_DEFINED_URL, FrameBodyWXXX.URL_OFFICIAL_RELEASE_SITE, Id3FieldType.TEXT),
     URL_DISCOGS_RELEASE_SITE(ID3v24Frames.FRAME_ID_USER_DEFINED_URL, FrameBodyWXXX.URL_OFFICIAL_RELEASE_SITE, Id3FieldType.TEXT),
     URL_WIKIPEDIA_RELEASE_SITE(ID3v24Frames.FRAME_ID_USER_DEFINED_URL, FrameBodyWXXX.URL_OFFICIAL_RELEASE_SITE, Id3FieldType.TEXT),
     URL_OFFICIAL_ARTIST_SITE(ID3v24Frames.FRAME_ID_URL_ARTIST_WEB, Id3FieldType.TEXT),
     URL_DISCOGS_ARTIST_SITE(ID3v24Frames.FRAME_ID_USER_DEFINED_URL, FrameBodyWXXX.URL_OFFICIAL_RELEASE_SITE, Id3FieldType.TEXT),
-    URL_WIKIPEDIA_ARTIST_SITE(ID3v24Frames.FRAME_ID_USER_DEFINED_URL, FrameBodyWXXX.URL_OFFICIAL_RELEASE_SITE, Id3FieldType.TEXT),
-
-                                                                           ;
+    URL_WIKIPEDIA_ARTIST_SITE(ID3v24Frames.FRAME_ID_USER_DEFINED_URL, FrameBodyWXXX.URL_OFFICIAL_RELEASE_SITE, Id3FieldType.TEXT),;
     private String fieldName;
 
     private String frameId;

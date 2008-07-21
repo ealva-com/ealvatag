@@ -15,7 +15,7 @@ public class FrameBodyDeprecatedTest extends AbstractTestCase
         FrameBodyDeprecated fb = null;
         try
         {
-            fb = new FrameBodyDeprecated( FrameBodyTPE1Test.getInitialisedBody());
+            fb = new FrameBodyDeprecated(FrameBodyTPE1Test.getInitialisedBody());
         }
         catch (Exception e)
         {
@@ -23,9 +23,9 @@ public class FrameBodyDeprecatedTest extends AbstractTestCase
         }
 
         assertNull(exceptionCaught);
-        assertEquals(ID3v24Frames.FRAME_ID_ARTIST,fb.getIdentifier());
-        assertEquals(FrameBodyTPE1Test.getInitialisedBody().getBriefDescription() ,fb.getBriefDescription());
+        assertEquals(ID3v24Frames.FRAME_ID_ARTIST, fb.getIdentifier());
+        assertEquals(FrameBodyTPE1Test.getInitialisedBody().getBriefDescription(), fb.getBriefDescription());
     }
 
-  
+
 }

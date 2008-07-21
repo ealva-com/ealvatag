@@ -34,7 +34,6 @@ public class Languages extends AbstractStringStringValuePair
 
     private static Languages languageTypes;
 
-    
 
     public static Languages getInstanceOf()
     {

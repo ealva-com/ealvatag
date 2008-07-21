@@ -18,16 +18,15 @@
  */
 package org.jaudiotagger.audio.mp4;
 
-import java.io.IOException;
-import java.io.RandomAccessFile;
-import java.util.logging.Logger;
-import java.nio.ByteBuffer;
-
-import org.jaudiotagger.audio.generic.GenericAudioHeader;
 import org.jaudiotagger.audio.exceptions.CannotReadException;
-import org.jaudiotagger.audio.mp4.Mp4NotMetaFieldKey;
+import org.jaudiotagger.audio.generic.GenericAudioHeader;
 import org.jaudiotagger.audio.mp4.atom.*;
 import org.jaudiotagger.logging.ErrorMessage;
+
+import java.io.IOException;
+import java.io.RandomAccessFile;
+import java.nio.ByteBuffer;
+import java.util.logging.Logger;
 
 /**
  * Read audio info from file.
@@ -70,10 +69,10 @@ public class Mp4InfoReader
         ByteBuffer ftypBuffer = ByteBuffer.allocate(ftypHeader.getLength() - Mp4BoxHeader.HEADER_LENGTH);
         raf.getChannel().read(ftypBuffer);
         ftypBuffer.rewind();
-        Mp4FtypBox ftyp = new Mp4FtypBox(ftypHeader, ftypBuffer);        
+        Mp4FtypBox ftyp = new Mp4FtypBox(ftypHeader, ftypBuffer);
         ftyp.processData();
         info.setBrand(ftyp.getMajorBrand());
-        
+
         //Get to the facts everything we are interested in is within the moov box, so just load data from file
         //once so no more file I/O needed
         Mp4BoxHeader moovHeader = Mp4BoxHeader.seekWithinLevel(raf, Mp4NotMetaFieldKey.MOOV.getFieldName());
@@ -236,7 +235,7 @@ public class Mp4InfoReader
         }
 
         //This is the most likley option if cant find a match
-        if(info.getEncodingType().equals(""))
+        if (info.getEncodingType().equals(""))
         {
             info.setEncodingType(EncoderType.AAC.getDescription());
         }
@@ -252,10 +251,7 @@ public class Mp4InfoReader
             //We only allow multiple tracks as audio if they follow the format used by the winamp encoder or
             //are marked as being audio only and if track contains a nmhd atom rather than smhd.
             //TODO this probably too restrictive but it fixes the test cases we have
-            if(ftyp.getMajorBrand().equals(Mp4FtypBox.Brand.ISO14496_1_VERSION_2.getId())
-              ||ftyp.getMajorBrand().equals(Mp4FtypBox.Brand.APPLE_AUDIO_ONLY.getId())
-              ||ftyp.getMajorBrand().equals(Mp4FtypBox.Brand.APPLE_AUDIO.getId())                                  
-               )
+            if (ftyp.getMajorBrand().equals(Mp4FtypBox.Brand.ISO14496_1_VERSION_2.getId()) || ftyp.getMajorBrand().equals(Mp4FtypBox.Brand.APPLE_AUDIO_ONLY.getId()) || ftyp.getMajorBrand().equals(Mp4FtypBox.Brand.APPLE_AUDIO.getId()))
             {
                 //Ok, need to do further checks on this track to ensure it is a scene descriptor
                 //Level 3-Searching for "mdia" within "trak"
@@ -288,7 +284,7 @@ public class Mp4InfoReader
             }
             else
             {
-                logger.info(ErrorMessage.MP4_FILE_NOT_AUDIO.getMsg()+":"+ftyp.getMajorBrand());
+                logger.info(ErrorMessage.MP4_FILE_NOT_AUDIO.getMsg() + ":" + ftyp.getMajorBrand());
                 throw new CannotReadException(ErrorMessage.MP4_FILE_NOT_AUDIO.getMsg());
             }
         }

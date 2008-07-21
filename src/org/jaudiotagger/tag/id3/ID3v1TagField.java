@@ -1,8 +1,8 @@
 package org.jaudiotagger.tag.id3;
 
-import org.jaudiotagger.tag.TagTextField;
-import org.jaudiotagger.tag.TagField;
 import org.jaudiotagger.audio.generic.Utils;
+import org.jaudiotagger.tag.TagField;
+import org.jaudiotagger.tag.TagTextField;
 
 import java.io.UnsupportedEncodingException;
 
@@ -88,13 +88,7 @@ public class ID3v1TagField implements TagTextField
      */
     private void checkCommon()
     {
-        this.common = id.equals(ID3v1FieldKey.TITLE.name())
-                || id.equals(ID3v1FieldKey.ALBUM.name())
-                || id.equals(ID3v1FieldKey.ARTIST.name())
-                || id.equals(ID3v1FieldKey.GENRE.name())
-                || id.equals(ID3v1FieldKey.YEAR.name())
-                || id.equals(ID3v1FieldKey.COMMENT.name())
-                || id.equals(ID3v1FieldKey.TRACK.name());
+        this.common = id.equals(ID3v1FieldKey.TITLE.name()) || id.equals(ID3v1FieldKey.ALBUM.name()) || id.equals(ID3v1FieldKey.ARTIST.name()) || id.equals(ID3v1FieldKey.GENRE.name()) || id.equals(ID3v1FieldKey.YEAR.name()) || id.equals(ID3v1FieldKey.COMMENT.name()) || id.equals(ID3v1FieldKey.TRACK.name());
     }
 
     /**

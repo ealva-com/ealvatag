@@ -60,8 +60,7 @@ public class FrameBodyIPLS extends AbstractID3v2FrameBody implements ID3v23Frame
         setObjectValue(DataTypes.OBJ_TEXT_ENCODING, TextEncoding.ISO_8859_1);
     }
 
-    public FrameBodyIPLS(ByteBuffer byteBuffer, int frameSize)
-            throws InvalidTagException
+    public FrameBodyIPLS(ByteBuffer byteBuffer, int frameSize) throws InvalidTagException
     {
         super(byteBuffer, frameSize);
     }
@@ -85,8 +84,7 @@ public class FrameBodyIPLS extends AbstractID3v2FrameBody implements ID3v23Frame
 
         String valueAsCommaSeperatedString = (String) body.getObjectValue(DataTypes.OBJ_TEXT);
 
-        PairedTextEncodedStringNullTerminated.ValuePairs value
-                = new PairedTextEncodedStringNullTerminated.ValuePairs();
+        PairedTextEncodedStringNullTerminated.ValuePairs value = new PairedTextEncodedStringNullTerminated.ValuePairs();
         StringTokenizer stz = new StringTokenizer(valueAsCommaSeperatedString, ",");
         while (stz.hasMoreTokens())
         {

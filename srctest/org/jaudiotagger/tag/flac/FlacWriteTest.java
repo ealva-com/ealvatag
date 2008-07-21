@@ -1,25 +1,21 @@
 package org.jaudiotagger.tag.flac;
 
 import junit.framework.TestCase;
-
-import java.io.File;
-import java.io.RandomAccessFile;
-import java.io.ByteArrayInputStream;
-import java.awt.image.BufferedImage;
-
 import org.jaudiotagger.AbstractTestCase;
-import org.jaudiotagger.tag.TagFieldKey;
-import org.jaudiotagger.tag.vorbiscomment.VorbisCommentTag;
-import org.jaudiotagger.tag.reference.PictureTypes;
-import org.jaudiotagger.tag.id3.valuepair.ImageFormats;
 import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.AudioFileIO;
-import org.jaudiotagger.audio.exceptions.CannotReadException;
-import org.jaudiotagger.audio.flac.metadatablock.MetadataBlockDataPicture;
 import org.jaudiotagger.audio.flac.FlacInfoReader;
+import org.jaudiotagger.audio.flac.metadatablock.MetadataBlockDataPicture;
+import org.jaudiotagger.tag.TagFieldKey;
+import org.jaudiotagger.tag.id3.valuepair.ImageFormats;
+import org.jaudiotagger.tag.reference.PictureTypes;
 
 import javax.imageio.ImageIO;
 import javax.imageio.stream.ImageInputStream;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.RandomAccessFile;
 
 /**
  * basic Flac tests
@@ -64,14 +60,7 @@ public class FlacWriteTest extends TestCase
             RandomAccessFile imageFile = new RandomAccessFile(new File("testdata", "coverart.png"), "r");
             byte[] imagedata = new byte[(int) imageFile.length()];
             imageFile.read(imagedata);
-            tag.set(tag.createArtworkField(imagedata,
-                    PictureTypes.DEFAULT_ID,
-                    ImageFormats.MIME_TYPE_PNG,
-                    "test",
-                    200,
-                    200,
-                    24,
-                    0));
+            tag.set(tag.createArtworkField(imagedata, PictureTypes.DEFAULT_ID, ImageFormats.MIME_TYPE_PNG, "test", 200, 200, 24, 0));
             f.commit();
             f = AudioFileIO.read(testFile);
             assertEquals(5, infoReader.countMetaBlocks(f.getFile()));
@@ -117,12 +106,7 @@ public class FlacWriteTest extends TestCase
             assertEquals(200, bi.getHeight());
 
             //Add image using alternative
-            tag.add(tag.createArtworkField(bi,
-                    PictureTypes.DEFAULT_ID,
-                    ImageFormats.MIME_TYPE_PNG,
-                    "test",
-                    24,
-                    0));
+            tag.add(tag.createArtworkField(bi, PictureTypes.DEFAULT_ID, ImageFormats.MIME_TYPE_PNG, "test", 24, 0));
             f.commit();
 
             //Two Images
@@ -247,8 +231,8 @@ public class FlacWriteTest extends TestCase
         assertNull(exceptionCaught);
     }
 
-    /** Metadata size has increased so that shidt required
-     *
+    /**
+     * Metadata size has increased so that shidt required
      */
     public void testWriteFileWithId3HeaderAudioShifted()
     {
@@ -293,14 +277,7 @@ public class FlacWriteTest extends TestCase
             RandomAccessFile imageFile = new RandomAccessFile(new File("testdata", "coverart.png"), "r");
             byte[] imagedata = new byte[(int) imageFile.length()];
             imageFile.read(imagedata);
-            tag.set(tag.createArtworkField(imagedata,
-                    PictureTypes.DEFAULT_ID,
-                    ImageFormats.MIME_TYPE_PNG,
-                    "test",
-                    200,
-                    200,
-                    24,
-                    0));
+            tag.set(tag.createArtworkField(imagedata, PictureTypes.DEFAULT_ID, ImageFormats.MIME_TYPE_PNG, "test", 200, 200, 24, 0));
             f.commit();
             f = AudioFileIO.read(testFile);
             assertEquals(5, infoReader.countMetaBlocks(f.getFile()));
@@ -308,7 +285,7 @@ public class FlacWriteTest extends TestCase
             assertEquals("reference libFLAC 1.1.4 20070213", tag.getFirst(TagFieldKey.ENCODER));
             assertEquals("reference libFLAC 1.1.4 20070213", tag.getVorbisCommentTag().getVendor());
             tag = (FlacTag) f.getTag();
-            assertEquals("BLOCK", tag.getFirstArtist());   
+            assertEquals("BLOCK", tag.getFirstArtist());
 
         }
         catch (Exception e)
@@ -319,7 +296,7 @@ public class FlacWriteTest extends TestCase
         assertNull(exceptionCaught);
     }
 
-     public void testDeleteTag() throws Exception
+    public void testDeleteTag() throws Exception
     {
         File testFile = AbstractTestCase.copyAudioToTmp("test2.flac", new File("testDelete.flac"));
         AudioFile f = AudioFileIO.read(testFile);

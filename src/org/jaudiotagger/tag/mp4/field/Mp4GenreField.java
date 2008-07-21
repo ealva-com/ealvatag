@@ -1,14 +1,14 @@
 package org.jaudiotagger.tag.mp4.field;
 
+import org.jaudiotagger.audio.mp4.atom.Mp4BoxHeader;
+import org.jaudiotagger.logging.ErrorMessage;
 import org.jaudiotagger.tag.mp4.Mp4FieldKey;
 import org.jaudiotagger.tag.mp4.atom.Mp4DataBox;
 import org.jaudiotagger.tag.reference.GenreTypes;
-import org.jaudiotagger.audio.mp4.atom.Mp4BoxHeader;
-import org.jaudiotagger.logging.ErrorMessage;
 
-import java.util.ArrayList;
-import java.nio.ByteBuffer;
 import java.io.UnsupportedEncodingException;
+import java.nio.ByteBuffer;
+import java.util.ArrayList;
 
 /**
  * Represents the Genre field , when user has selected from the set list of genres
@@ -65,10 +65,7 @@ public class Mp4GenreField extends Mp4TagTextNumberField
     {
         super(Mp4FieldKey.GENRE.getFieldName(), genreId);
 
-
-
-
-        //Is it an id        
+        //Is it an id
         try
         {
             short genreVal = Short.parseShort(genreId);
@@ -118,7 +115,7 @@ public class Mp4GenreField extends Mp4TagTextNumberField
 
         //Some apps set genre to invalid value, we dont disguise this by setting content to empty string we leave
         //as null so apps can handle if they wish, but we do display a warning to make them aware.
-        if(content==null)
+        if (content == null)
         {
             logger.warning(ErrorMessage.MP4_GENRE_OUT_OF_RANGE.getMsg(genreId));
         }

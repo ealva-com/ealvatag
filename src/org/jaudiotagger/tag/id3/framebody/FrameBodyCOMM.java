@@ -15,13 +15,13 @@
  */
 package org.jaudiotagger.tag.id3.framebody;
 
+import org.jaudiotagger.logging.ErrorMessage;
 import org.jaudiotagger.tag.InvalidTagException;
-import org.jaudiotagger.tag.reference.Languages;
 import org.jaudiotagger.tag.datatype.*;
 import org.jaudiotagger.tag.id3.ID3TextEncodingConversion;
 import org.jaudiotagger.tag.id3.ID3v24Frames;
 import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
-import org.jaudiotagger.logging.ErrorMessage;
+import org.jaudiotagger.tag.reference.Languages;
 
 import java.io.ByteArrayOutputStream;
 import java.nio.ByteBuffer;
@@ -95,8 +95,7 @@ public class FrameBodyCOMM extends AbstractID3v2FrameBody implements ID3v24Frame
      * @param frameSize
      * @throws InvalidTagException if unable to create framebody from buffer
      */
-    public FrameBodyCOMM(ByteBuffer byteBuffer, int frameSize)
-            throws InvalidTagException
+    public FrameBodyCOMM(ByteBuffer byteBuffer, int frameSize) throws InvalidTagException
     {
         super(byteBuffer, frameSize);
     }
@@ -109,7 +108,7 @@ public class FrameBodyCOMM extends AbstractID3v2FrameBody implements ID3v24Frame
      */
     public void setDescription(String description)
     {
-        if(description==null)
+        if (description == null)
         {
             throw new IllegalArgumentException(ErrorMessage.GENERAL_INVALID_NULL_ARGUMENT.getMsg());
         }
@@ -166,7 +165,7 @@ public class FrameBodyCOMM extends AbstractID3v2FrameBody implements ID3v24Frame
      */
     public void setText(String text)
     {
-        if(text==null)
+        if (text == null)
         {
             throw new IllegalArgumentException(ErrorMessage.GENERAL_INVALID_NULL_ARGUMENT.getMsg());
         }

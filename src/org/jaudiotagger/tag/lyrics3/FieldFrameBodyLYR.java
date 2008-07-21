@@ -97,8 +97,7 @@ public class FieldFrameBodyLYR extends AbstractLyrics3v2FieldFrameBody
     /**
      * Creates a new FieldBodyLYR datatype.
      */
-    public FieldFrameBodyLYR(ByteBuffer byteBuffer)
-            throws InvalidTagException
+    public FieldFrameBodyLYR(ByteBuffer byteBuffer) throws InvalidTagException
     {
 
         this.read(byteBuffer);
@@ -182,7 +181,7 @@ public class FieldFrameBodyLYR extends AbstractLyrics3v2FieldFrameBody
         Lyrics3Line newLine;
         ID3v2LyricLine currentLine;
         Lyrics3TimeStamp timeStamp;
-        HashMap<String,Lyrics3Line> lineMap = new HashMap<String,Lyrics3Line>();
+        HashMap<String, Lyrics3Line> lineMap = new HashMap<String, Lyrics3Line>();
 
         while (iterator.hasNext())
         {
@@ -272,8 +271,7 @@ public class FieldFrameBodyLYR extends AbstractLyrics3v2FieldFrameBody
      *
      *
      */
-    public void read(ByteBuffer byteBuffer)
-            throws InvalidTagException
+    public void read(ByteBuffer byteBuffer) throws InvalidTagException
     {
         String lineString;
 
@@ -316,8 +314,7 @@ public class FieldFrameBodyLYR extends AbstractLyrics3v2FieldFrameBody
      * @param file
      * @throws java.io.IOException
      */
-    public void write(RandomAccessFile file)
-            throws java.io.IOException
+    public void write(RandomAccessFile file) throws java.io.IOException
     {
         int size = 0;
         int offset = 0;

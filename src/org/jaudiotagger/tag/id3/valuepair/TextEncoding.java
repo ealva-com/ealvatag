@@ -24,8 +24,6 @@ package org.jaudiotagger.tag.id3.valuepair;
 
 import org.jaudiotagger.tag.datatype.AbstractIntStringValuePair;
 
-import java.nio.charset.Charset;
-
 
 /**
  * Text Encoding supported by ID3v24, the id is recognised by ID3

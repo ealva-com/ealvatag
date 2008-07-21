@@ -22,10 +22,10 @@
  */
 package org.jaudiotagger.tag.lyrics3;
 
-import org.jaudiotagger.tag.id3.AbstractTagFrameBody;
 import org.jaudiotagger.tag.InvalidTagException;
 import org.jaudiotagger.tag.TagOptionSingleton;
 import org.jaudiotagger.tag.datatype.AbstractDataType;
+import org.jaudiotagger.tag.id3.AbstractTagFrameBody;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
@@ -51,8 +51,7 @@ public abstract class AbstractLyrics3v2FieldFrameBody extends AbstractTagFrameBo
      * @throws InvalidTagException
      * @throws IOException
      */
-    protected int readHeader(RandomAccessFile file)
-            throws InvalidTagException, IOException
+    protected int readHeader(RandomAccessFile file) throws InvalidTagException, IOException
     {
         int size;
         byte[] buffer = new byte[5];
@@ -76,8 +75,7 @@ public abstract class AbstractLyrics3v2FieldFrameBody extends AbstractTagFrameBo
      * @param size
      * @throws IOException
      */
-    protected void writeHeader(RandomAccessFile file, int size)
-            throws IOException
+    protected void writeHeader(RandomAccessFile file, int size) throws IOException
     {
         String str;
         int offset = 0;
@@ -149,8 +147,7 @@ public abstract class AbstractLyrics3v2FieldFrameBody extends AbstractTagFrameBo
      * @param file destination file
      * @throws IOException on any I/O error
      */
-    public void write(RandomAccessFile file)
-            throws IOException
+    public void write(RandomAccessFile file) throws IOException
     {
         //Write the various fields to file in order
         byte[] buffer;

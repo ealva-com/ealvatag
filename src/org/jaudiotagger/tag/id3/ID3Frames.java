@@ -17,7 +17,10 @@ package org.jaudiotagger.tag.id3;
 
 import org.jaudiotagger.tag.datatype.AbstractStringStringValuePair;
 
-import java.util.*;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.TreeSet;
 
 /**
  * Subclasses Defines ID3 frames for their Tag Version

@@ -1,13 +1,13 @@
 package org.jaudiotagger.tag.mp4.field;
 
 import org.jaudiotagger.audio.mp4.atom.Mp4BoxHeader;
-import org.jaudiotagger.tag.mp4.atom.Mp4DataBox;
-import org.jaudiotagger.tag.mp4.Mp4FieldKey;
 import org.jaudiotagger.tag.FieldDataInvalidException;
+import org.jaudiotagger.tag.mp4.Mp4FieldKey;
+import org.jaudiotagger.tag.mp4.atom.Mp4DataBox;
 
-import java.util.ArrayList;
-import java.nio.ByteBuffer;
 import java.io.UnsupportedEncodingException;
+import java.nio.ByteBuffer;
+import java.util.ArrayList;
 
 /**
  * Represents the Track No field
@@ -26,8 +26,7 @@ public class Mp4TrackField extends Mp4TagTextNumberField
      *
      * @param trackValue
      */
-    public Mp4TrackField(String trackValue)
-            throws FieldDataInvalidException
+    public Mp4TrackField(String trackValue) throws FieldDataInvalidException
     {
         super(Mp4FieldKey.TRACK.getFieldName(), trackValue);
 

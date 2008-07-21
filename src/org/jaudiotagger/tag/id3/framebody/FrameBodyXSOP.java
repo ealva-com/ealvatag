@@ -40,8 +40,7 @@ public class FrameBodyXSOP extends AbstractFrameBodyTextInfo implements ID3v23Fr
      *
      * @throws InvalidTagException
      */
-    public FrameBodyXSOP(ByteBuffer byteBuffer, int frameSize)
-            throws InvalidTagException
+    public FrameBodyXSOP(ByteBuffer byteBuffer, int frameSize) throws InvalidTagException
     {
         super(byteBuffer, frameSize);
     }

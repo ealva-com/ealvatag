@@ -23,18 +23,22 @@
 
 package org.jaudiotagger.tag.lyrics3;
 
-import org.jaudiotagger.tag.*;
+import org.jaudiotagger.tag.InvalidTagException;
+import org.jaudiotagger.tag.TagException;
+import org.jaudiotagger.tag.TagOptionSingleton;
 import org.jaudiotagger.tag.id3.AbstractID3v2Frame;
 import org.jaudiotagger.tag.id3.AbstractTagFrame;
-import org.jaudiotagger.tag.id3.framebody.*;
+import org.jaudiotagger.tag.id3.framebody.AbstractFrameBodyTextInfo;
+import org.jaudiotagger.tag.id3.framebody.FrameBodyCOMM;
+import org.jaudiotagger.tag.id3.framebody.FrameBodySYLT;
+import org.jaudiotagger.tag.id3.framebody.FrameBodyUSLT;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
 
 
-public class Lyrics3v2Field
-        extends AbstractTagFrame
+public class Lyrics3v2Field extends AbstractTagFrame
 {
     /**
      * Creates a new Lyrics3v2Field datatype.
@@ -64,8 +68,7 @@ public class Lyrics3v2Field
      * @param frame
      * @throws TagException
      */
-    public Lyrics3v2Field(AbstractID3v2Frame frame)
-            throws TagException
+    public Lyrics3v2Field(AbstractID3v2Frame frame) throws TagException
     {
         AbstractFrameBodyTextInfo textFrame;
         String text;
@@ -130,8 +133,7 @@ public class Lyrics3v2Field
      * @param file
      * @throws InvalidTagException
      */
-    public Lyrics3v2Field(ByteBuffer byteBuffer)
-            throws InvalidTagException
+    public Lyrics3v2Field(ByteBuffer byteBuffer) throws InvalidTagException
     {
         this.read(byteBuffer);
     }
@@ -161,8 +163,7 @@ public class Lyrics3v2Field
      * @throws InvalidTagException
      * @throws IOException
      */
-    public void read(ByteBuffer byteBuffer)
-            throws InvalidTagException
+    public void read(ByteBuffer byteBuffer) throws InvalidTagException
     {
         byte[] buffer = new byte[6];
         // lets scan for a non-zero byte;
@@ -201,11 +202,9 @@ public class Lyrics3v2Field
      * @param file
      * @throws IOException
      */
-    public void write(RandomAccessFile file)
-            throws IOException
+    public void write(RandomAccessFile file) throws IOException
     {
-        if ((((AbstractLyrics3v2FieldFrameBody) frameBody).getSize() > 0) ||
-                TagOptionSingleton.getInstance().isLyrics3SaveEmptyField())
+        if ((((AbstractLyrics3v2FieldFrameBody) frameBody).getSize() > 0) || TagOptionSingleton.getInstance().isLyrics3SaveEmptyField())
         {
             byte[] buffer = new byte[3];
             String str = getIdentifier();
@@ -225,8 +224,7 @@ public class Lyrics3v2Field
      * @return
      * @throws InvalidTagException
      */
-    private AbstractLyrics3v2FieldFrameBody readBody(String identifier, ByteBuffer byteBuffer)
-            throws InvalidTagException
+    private AbstractLyrics3v2FieldFrameBody readBody(String identifier, ByteBuffer byteBuffer) throws InvalidTagException
     {
         AbstractLyrics3v2FieldFrameBody newBody = null;
         if (identifier.equals(Lyrics3v2Fields.FIELD_V2_AUTHOR))

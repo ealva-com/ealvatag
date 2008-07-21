@@ -1,14 +1,14 @@
 package org.jaudiotagger.tag.mp4.atom;
 
-import org.jaudiotagger.audio.mp4.atom.Mp4BoxHeader;
-import org.jaudiotagger.audio.mp4.atom.AbstractMp4Box;
 import org.jaudiotagger.audio.generic.Utils;
+import org.jaudiotagger.audio.mp4.atom.AbstractMp4Box;
+import org.jaudiotagger.audio.mp4.atom.Mp4BoxHeader;
 import org.jaudiotagger.tag.mp4.field.Mp4FieldType;
 
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
-import java.util.ListIterator;
 import java.util.List;
+import java.util.ListIterator;
 
 /**
  * This box is used within both normal metadat boxes and ---- boxes to hold the actual data.
@@ -57,23 +57,18 @@ public class Mp4DataBox extends AbstractMp4Box
         //Double check
         if (!header.getId().equals(IDENTIFIER))
         {
-            throw new RuntimeException("Unable to process data box because identifier is:"+header.getId());
+            throw new RuntimeException("Unable to process data box because identifier is:" + header.getId());
         }
 
         //Make slice so operations here don't effect position of main buffer
         this.dataBuffer = dataBuffer.slice();
 
         //Type
-        type = Utils.getNumberBigEndian(this.dataBuffer,
-                Mp4DataBox.TYPE_POS,
-                Mp4DataBox.TYPE_POS + Mp4DataBox.TYPE_LENGTH - 1);
+        type = Utils.getNumberBigEndian(this.dataBuffer, Mp4DataBox.TYPE_POS, Mp4DataBox.TYPE_POS + Mp4DataBox.TYPE_LENGTH - 1);
 
         if (type == Mp4FieldType.TEXT.getFileClassId())
         {
-            content = Utils.getString(this.dataBuffer,
-                    PRE_DATA_LENGTH,
-                    header.getDataLength() - PRE_DATA_LENGTH,
-                    header.getEncoding());
+            content = Utils.getString(this.dataBuffer, PRE_DATA_LENGTH, header.getDataLength() - PRE_DATA_LENGTH, header.getEncoding());
         }
         else if (type == Mp4FieldType.NUMERIC.getFileClassId())
         {
@@ -81,9 +76,7 @@ public class Mp4DataBox extends AbstractMp4Box
 
             for (int i = 0; i < ((header.getDataLength() - PRE_DATA_LENGTH) / NUMBER_LENGTH); i++)
             {
-                short number = Utils.getShortNumberBigEndian(this.dataBuffer,
-                        PRE_DATA_LENGTH + (i * NUMBER_LENGTH),
-                        PRE_DATA_LENGTH + (i * NUMBER_LENGTH) + (NUMBER_LENGTH - 1));
+                short number = Utils.getShortNumberBigEndian(this.dataBuffer, PRE_DATA_LENGTH + (i * NUMBER_LENGTH), PRE_DATA_LENGTH + (i * NUMBER_LENGTH) + (NUMBER_LENGTH - 1));
                 numbers.add(number);
             }
 
@@ -104,9 +97,7 @@ public class Mp4DataBox extends AbstractMp4Box
         {
             //TODO byte data length seems to be 1 for pgap and cpil but 2 for tmpo ?
             //Create String representation for display
-            content = Utils.getNumberBigEndian(this.dataBuffer,
-                    PRE_DATA_LENGTH,
-                    header.getDataLength() - 1) + "";
+            content = Utils.getNumberBigEndian(this.dataBuffer, PRE_DATA_LENGTH, header.getDataLength() - 1) + "";
 
             //But store data for safer writng back to file
             bytedata = new byte[header.getDataLength() - PRE_DATA_LENGTH];
@@ -117,10 +108,7 @@ public class Mp4DataBox extends AbstractMp4Box
         }
         else if (type == Mp4FieldType.COVERART_JPEG.getFileClassId())
         {
-            content = Utils.getString(this.dataBuffer,
-                    PRE_DATA_LENGTH,
-                    header.getDataLength() - PRE_DATA_LENGTH,
-                    header.getEncoding());
+            content = Utils.getString(this.dataBuffer, PRE_DATA_LENGTH, header.getDataLength() - PRE_DATA_LENGTH, header.getEncoding());
         }
     }
 

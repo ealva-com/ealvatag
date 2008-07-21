@@ -23,7 +23,7 @@ package org.jaudiotagger.tag.datatype;
 
 import java.util.Collections;
 
-public class AbstractStringStringValuePair extends AbstractValuePair<String,String>
+public class AbstractStringStringValuePair extends AbstractValuePair<String, String>
 {
     protected String lkey = null;
 

@@ -28,10 +28,10 @@ import org.jaudiotagger.tag.id3.framebody.AbstractID3v2FrameBody;
 import org.jaudiotagger.tag.id3.framebody.FrameBodyCOMM;
 import org.jaudiotagger.tag.id3.framebody.FrameBodyTIPL;
 import org.jaudiotagger.tag.id3.framebody.ID3v24FrameBody;
-import org.jaudiotagger.tag.reference.GenreTypes;
-import org.jaudiotagger.tag.reference.Languages;
 import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
 import org.jaudiotagger.tag.lyrics3.Lyrics3v2Fields;
+import org.jaudiotagger.tag.reference.GenreTypes;
+import org.jaudiotagger.tag.reference.Languages;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -42,7 +42,7 @@ public class TagOptionSingleton
     /**
      *
      */
-    private static HashMap<String,TagOptionSingleton> tagOptionTable = new HashMap<String,TagOptionSingleton>();
+    private static HashMap<String, TagOptionSingleton> tagOptionTable = new HashMap<String, TagOptionSingleton>();
 
     /**
      *
@@ -57,23 +57,23 @@ public class TagOptionSingleton
     /**
      *
      */
-    private HashMap<Class<? extends ID3v24FrameBody>,LinkedList<String>> keywordMap = new HashMap<Class<? extends ID3v24FrameBody>,LinkedList<String>>();
+    private HashMap<Class<? extends ID3v24FrameBody>, LinkedList<String>> keywordMap = new HashMap<Class<? extends ID3v24FrameBody>, LinkedList<String>>();
 
     /**
      * Map of lyric ID's to Boolean objects if we should or should not save the
      * specific Kyrics3 field. Defaults to true.
      */
-    private HashMap<String,Boolean> lyrics3SaveFieldMap = new HashMap<String,Boolean>();
+    private HashMap<String, Boolean> lyrics3SaveFieldMap = new HashMap<String, Boolean>();
 
     /**
      * parenthesis map stuff
      */
-    private HashMap<String,String> parenthesisMap = new HashMap<String,String>();
+    private HashMap<String, String> parenthesisMap = new HashMap<String, String>();
 
     /**
      * <code>HashMap</code> listing words to be replaced if found
      */
-    private HashMap<String,String> replaceWordMap = new HashMap<String,String>();
+    private HashMap<String, String> replaceWordMap = new HashMap<String, String>();
 
 
     /**
@@ -593,7 +593,7 @@ public class TagOptionSingleton
     /**
      * @return
      */
-    public HashMap<String,Boolean> getLyrics3SaveFieldMap()
+    public HashMap<String, Boolean> getLyrics3SaveFieldMap()
     {
         return lyrics3SaveFieldMap;
     }
@@ -716,7 +716,7 @@ public class TagOptionSingleton
      */
     public void setToDefault()
     {
-        keywordMap = new HashMap<Class<? extends ID3v24FrameBody>,LinkedList<String>>();
+        keywordMap = new HashMap<Class<? extends ID3v24FrameBody>, LinkedList<String>>();
         filenameTagSave = false;
         id3v1Save = true;
         id3v1SaveAlbum = true;
@@ -733,10 +733,10 @@ public class TagOptionSingleton
         lyrics3KeepEmptyFieldIfRead = false;
         lyrics3Save = true;
         lyrics3SaveEmptyField = false;
-        lyrics3SaveFieldMap = new HashMap<String,Boolean>();
+        lyrics3SaveFieldMap = new HashMap<String, Boolean>();
         numberMP3SyncFrame = 3;
-        parenthesisMap = new HashMap<String,String>();
-        replaceWordMap = new HashMap<String,String>();
+        parenthesisMap = new HashMap<String, String>();
+        replaceWordMap = new HashMap<String, String>();
         timeStampFormat = 2;
         unsyncTags = false;
         removeTrailingTerminatorOnWrite = true;
@@ -837,8 +837,7 @@ public class TagOptionSingleton
      * @param keyword
      * @throws TagException
      */
-    public void addKeyword(Class<? extends ID3v24FrameBody> id3v2FrameBodyClass, String keyword)
-            throws TagException
+    public void addKeyword(Class<? extends ID3v24FrameBody> id3v2FrameBodyClass, String keyword) throws TagException
     {
         if (AbstractID3v2FrameBody.class.isAssignableFrom(id3v2FrameBodyClass) == false)
         {
@@ -940,10 +939,7 @@ public class TagOptionSingleton
      */
     public void setId3v23DefaultTextEncoding(byte id3v23DefaultTextEncoding)
     {
-        if (
-                (id3v23DefaultTextEncoding == TextEncoding.ISO_8859_1) ||
-                        (id3v23DefaultTextEncoding == TextEncoding.UTF_16)
-                )
+        if ((id3v23DefaultTextEncoding == TextEncoding.ISO_8859_1) || (id3v23DefaultTextEncoding == TextEncoding.UTF_16))
         {
             this.id3v23DefaultTextEncoding = id3v23DefaultTextEncoding;
         }
@@ -968,12 +964,7 @@ public class TagOptionSingleton
      */
     public void setId3v24DefaultTextEncoding(byte id3v24DefaultTextEncoding)
     {
-        if (
-                (id3v24DefaultTextEncoding == TextEncoding.ISO_8859_1) ||
-                        (id3v24DefaultTextEncoding == TextEncoding.UTF_16) ||
-                        (id3v24DefaultTextEncoding == TextEncoding.UTF_16BE) ||
-                        (id3v24DefaultTextEncoding == TextEncoding.UTF_8)
-                )
+        if ((id3v24DefaultTextEncoding == TextEncoding.ISO_8859_1) || (id3v24DefaultTextEncoding == TextEncoding.UTF_16) || (id3v24DefaultTextEncoding == TextEncoding.UTF_16BE) || (id3v24DefaultTextEncoding == TextEncoding.UTF_8))
         {
             this.id3v24DefaultTextEncoding = id3v24DefaultTextEncoding;
         }
@@ -999,11 +990,7 @@ public class TagOptionSingleton
      */
     public void setId3v24UnicodeTextEncoding(byte id3v24UnicodeTextEncoding)
     {
-        if (
-                (id3v24UnicodeTextEncoding == TextEncoding.UTF_16) ||
-                        (id3v24UnicodeTextEncoding == TextEncoding.UTF_16BE) ||
-                        (id3v24UnicodeTextEncoding == TextEncoding.UTF_8)
-                )
+        if ((id3v24UnicodeTextEncoding == TextEncoding.UTF_16) || (id3v24UnicodeTextEncoding == TextEncoding.UTF_16BE) || (id3v24UnicodeTextEncoding == TextEncoding.UTF_8))
         {
             this.id3v24UnicodeTextEncoding = id3v24UnicodeTextEncoding;
         }

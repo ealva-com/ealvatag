@@ -22,8 +22,14 @@
  */
 package org.jaudiotagger.tag.lyrics3;
 
-import org.jaudiotagger.tag.*;
-import org.jaudiotagger.tag.id3.*;
+import org.jaudiotagger.tag.InvalidTagException;
+import org.jaudiotagger.tag.TagException;
+import org.jaudiotagger.tag.TagNotFoundException;
+import org.jaudiotagger.tag.TagOptionSingleton;
+import org.jaudiotagger.tag.id3.AbstractID3v2Frame;
+import org.jaudiotagger.tag.id3.AbstractTag;
+import org.jaudiotagger.tag.id3.ID3v1Tag;
+import org.jaudiotagger.tag.id3.ID3v24Tag;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
@@ -36,7 +42,7 @@ public class Lyrics3v2 extends AbstractLyrics3
     /**
      *
      */
-    private HashMap<String,Lyrics3v2Field> fieldMap = new HashMap<String,Lyrics3v2Field>();
+    private HashMap<String, Lyrics3v2Field> fieldMap = new HashMap<String, Lyrics3v2Field>();
 
     /**
      * Creates a new Lyrics3v2 datatype.
@@ -118,8 +124,7 @@ public class Lyrics3v2 extends AbstractLyrics3
      * @throws TagNotFoundException
      * @throws IOException
      */
-    public Lyrics3v2(ByteBuffer byteBuffer)
-            throws TagNotFoundException, IOException
+    public Lyrics3v2(ByteBuffer byteBuffer) throws TagNotFoundException, IOException
     {
         try
         {
@@ -238,8 +243,7 @@ public class Lyrics3v2 extends AbstractLyrics3
     }
 
 
-    public void read(ByteBuffer byteBuffer)
-            throws TagException
+    public void read(ByteBuffer byteBuffer) throws TagException
     {
         long filePointer;
         int lyricSize;
@@ -257,7 +261,7 @@ public class Lyrics3v2 extends AbstractLyrics3
         seek(byteBuffer);
         filePointer = byteBuffer.position();
 
-        fieldMap = new HashMap<String,Lyrics3v2Field>();
+        fieldMap = new HashMap<String, Lyrics3v2Field>();
 
         Lyrics3v2Field lyric;
 
@@ -289,8 +293,7 @@ public class Lyrics3v2 extends AbstractLyrics3
      * @return
      * @throws IOException
      */
-    public boolean seek(RandomAccessFile file)
-            throws IOException
+    public boolean seek(RandomAccessFile file) throws IOException
     {
         byte[] buffer = new byte[11];
         String lyricEnd = "";
@@ -387,8 +390,7 @@ public class Lyrics3v2 extends AbstractLyrics3
      * @param file
      * @throws IOException
      */
-    public void write(RandomAccessFile file)
-            throws IOException
+    public void write(RandomAccessFile file) throws IOException
     {
         int offset = 0;
         ;

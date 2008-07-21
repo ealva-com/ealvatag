@@ -62,8 +62,7 @@ public class FrameBodyWCOM extends AbstractFrameBodyUrlLink implements ID3v24Fra
      *
      * @throws InvalidTagException
      */
-    public FrameBodyWCOM(ByteBuffer byteBuffer, int frameSize)
-            throws InvalidTagException
+    public FrameBodyWCOM(ByteBuffer byteBuffer, int frameSize) throws InvalidTagException
     {
         super(byteBuffer, frameSize);
     }

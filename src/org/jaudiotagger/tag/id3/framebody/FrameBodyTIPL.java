@@ -42,8 +42,7 @@ import java.nio.ByteBuffer;
  * TODO currently just reads all the values when converted from the corresponding ID3v23 Frame IPLS as a single value
  * (the individual fields from the IPLS frame will be seperated by commas)
  */
-public class FrameBodyTIPL
-        extends AbstractFrameBodyTextInfo implements ID3v24FrameBody
+public class FrameBodyTIPL extends AbstractFrameBodyTextInfo implements ID3v24FrameBody
 {
     /**
      * Creates a new FrameBodyTIPL datatype.
@@ -64,8 +63,7 @@ public class FrameBodyTIPL
     {
         setObjectValue(DataTypes.OBJ_TEXT_ENCODING, body.getTextEncoding());
 
-        PairedTextEncodedStringNullTerminated.ValuePairs value
-                = (PairedTextEncodedStringNullTerminated.ValuePairs) body.getObjectValue(DataTypes.OBJ_TEXT);
+        PairedTextEncodedStringNullTerminated.ValuePairs value = (PairedTextEncodedStringNullTerminated.ValuePairs) body.getObjectValue(DataTypes.OBJ_TEXT);
         setObjectValue(DataTypes.OBJ_TEXT, value.toString());
     }
 
@@ -85,8 +83,7 @@ public class FrameBodyTIPL
      *
      * @throws InvalidTagException
      */
-    public FrameBodyTIPL(ByteBuffer byteBuffer, int frameSize)
-            throws InvalidTagException
+    public FrameBodyTIPL(ByteBuffer byteBuffer, int frameSize) throws InvalidTagException
     {
         super(byteBuffer, frameSize);
     }

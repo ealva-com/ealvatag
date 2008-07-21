@@ -24,28 +24,30 @@
 package org.jaudiotagger.tag.datatype;
 
 import org.jaudiotagger.tag.id3.AbstractTagFrameBody;
-import org.jaudiotagger.tag.reference.Languages;
 import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
+import org.jaudiotagger.tag.reference.Languages;
 
-import java.util.*;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.TreeSet;
 
 
 /**
  * Represents a String thats acts as a key into an enumeration of values. The String will be encoded
  * using the default encoding regardless of what encoding may be specified in the framebody
  */
-public class StringHashMap extends StringFixedLength implements HashMapInterface<String,String>
+public class StringHashMap extends StringFixedLength implements HashMapInterface<String, String>
 {
 
     /**
      *
      */
-    Map<String,String> keyToValue = null;
+    Map<String, String> keyToValue = null;
 
     /**
      *
      */
-    Map<String,String> valueToKey = null;
+    Map<String, String> valueToKey = null;
 
     /**
      *
@@ -86,7 +88,7 @@ public class StringHashMap extends StringFixedLength implements HashMapInterface
     /**
      * @return
      */
-    public Map<String,String> getKeyToValue()
+    public Map<String, String> getKeyToValue()
     {
         return keyToValue;
     }
@@ -94,7 +96,7 @@ public class StringHashMap extends StringFixedLength implements HashMapInterface
     /**
      * @return
      */
-    public Map<String,String> getValueToKey()
+    public Map<String, String> getValueToKey()
     {
         return valueToKey;
     }

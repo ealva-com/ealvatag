@@ -1,33 +1,25 @@
 package org.jaudiotagger.tag.id3;
 
-import junit.framework.TestCase;
 import junit.framework.Test;
+import junit.framework.TestCase;
 import junit.framework.TestSuite;
-
-import java.io.File;
-import java.io.RandomAccessFile;
-import java.io.ByteArrayInputStream;
-import java.util.List;
-import java.awt.image.BufferedImage;
-
 import org.jaudiotagger.AbstractTestCase;
+import org.jaudiotagger.audio.AudioFile;
+import org.jaudiotagger.audio.AudioFileIO;
+import org.jaudiotagger.audio.mp3.MP3File;
+import org.jaudiotagger.tag.TagField;
+import org.jaudiotagger.tag.TagFieldKey;
+import org.jaudiotagger.tag.TagOptionSingleton;
+import org.jaudiotagger.tag.datatype.DataTypes;
 import org.jaudiotagger.tag.id3.framebody.*;
 import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
-import org.jaudiotagger.tag.TagFieldKey;
-import org.jaudiotagger.tag.Tag;
-import org.jaudiotagger.tag.TagOptionSingleton;
-import org.jaudiotagger.tag.TagField;
-import org.jaudiotagger.tag.datatype.DataTypes;
-import org.jaudiotagger.tag.mp4.Mp4Tag;
-import org.jaudiotagger.tag.mp4.Mp4FieldKey;
-import org.jaudiotagger.audio.mp3.MP3File;
-import org.jaudiotagger.audio.mp3.MP3AudioHeader;
-import org.jaudiotagger.audio.mp3.MPEGFrameHeader;
-import org.jaudiotagger.audio.AudioFileIO;
-import org.jaudiotagger.audio.AudioFile;
 
-import javax.imageio.ImageReader;
 import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.RandomAccessFile;
+import java.util.List;
 
 /**
  * Testing retrofitting of entagged interfaces
@@ -447,20 +439,19 @@ public class NewInterfaceTest extends TestCase
         assertEquals(10, af.getTag().getFieldCount());
 
         //Actually create the image from the read data
-        BufferedImage bi=null;
+        BufferedImage bi = null;
         TagField imageField = af.getTag().get(TagFieldKey.COVER_ART).get(0);
-        if(imageField instanceof AbstractID3v2Frame)
+        if (imageField instanceof AbstractID3v2Frame)
         {
-            FrameBodyAPIC imageFrameBody = (FrameBodyAPIC)((AbstractID3v2Frame)imageField).getBody();
-            if(!imageFrameBody.isImageUrl())
+            FrameBodyAPIC imageFrameBody = (FrameBodyAPIC) ((AbstractID3v2Frame) imageField).getBody();
+            if (!imageFrameBody.isImageUrl())
             {
-                byte[] imageRawData = (byte[])imageFrameBody.getObjectValue(DataTypes.OBJ_PICTURE_DATA);
-                bi=ImageIO.read(new ByteArrayInputStream(imageRawData));
+                byte[] imageRawData = (byte[]) imageFrameBody.getObjectValue(DataTypes.OBJ_PICTURE_DATA);
+                bi = ImageIO.read(new ByteArrayInputStream(imageRawData));
             }
         }
         assertNotNull(bi);
 
-        
         //Add a linked Image
         af.getTag().add(tag.createLinkedArtworkField("../testdata/coverart.jpg"));
         af.commit();
@@ -1123,7 +1114,7 @@ public class NewInterfaceTest extends TestCase
             File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3", new File("testBasicWrite.mp3"));
             org.jaudiotagger.audio.AudioFile audioFile = org.jaudiotagger.audio.AudioFileIO.read(testFile);
             org.jaudiotagger.tag.Tag newTag = audioFile.getTag();
-            assertTrue(newTag==null);
+            assertTrue(newTag == null);
             if (audioFile.getTag() == null)
             {
                 audioFile.setTag(new ID3v23Tag());
@@ -1155,7 +1146,7 @@ public class NewInterfaceTest extends TestCase
         assertNull(ex);
     }
 
-     public void testRemoveFrameOfType()
+    public void testRemoveFrameOfType()
     {
         File orig = new File("testdata", "test30.mp3");
         if (!orig.isFile())
@@ -1168,9 +1159,9 @@ public class NewInterfaceTest extends TestCase
         MP3File mp3file = null;
         try
         {
-            mp3file = new MP3File(testFile);         
+            mp3file = new MP3File(testFile);
             //delete multiple frames starting make change to file
-            ((ID3v24Tag)mp3file.getID3v2Tag()).removeFrameOfType("PRIV");
+            ((ID3v24Tag) mp3file.getID3v2Tag()).removeFrameOfType("PRIV");
 
         }
         catch (Exception e)
@@ -1179,7 +1170,6 @@ public class NewInterfaceTest extends TestCase
             exceptionCaught = e;
         }
         assertNull(exceptionCaught);
-
 
 
     }

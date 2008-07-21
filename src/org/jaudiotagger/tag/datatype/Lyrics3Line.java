@@ -23,15 +23,14 @@
  */
 package org.jaudiotagger.tag.datatype;
 
-import org.jaudiotagger.tag.id3.AbstractTagFrameBody;
-import org.jaudiotagger.tag.InvalidDataTypeException;
 import org.jaudiotagger.audio.generic.Utils;
+import org.jaudiotagger.tag.InvalidDataTypeException;
+import org.jaudiotagger.tag.id3.AbstractTagFrameBody;
 
 import java.util.Iterator;
 import java.util.LinkedList;
 
-public class Lyrics3Line
-        extends AbstractDataType
+public class Lyrics3Line extends AbstractDataType
 {
     /**
      *
@@ -179,8 +178,7 @@ public class Lyrics3Line
         }
         if ((offset < 0) || (offset >= lineString.length()))
         {
-            throw new IndexOutOfBoundsException("Offset to line is out of bounds: offset = " + offset +
-                    ", line.length()" + lineString.length());
+            throw new IndexOutOfBoundsException("Offset to line is out of bounds: offset = " + offset + ", line.length()" + lineString.length());
         }
         int delim = 0;
         Lyrics3TimeStamp time;

@@ -1,8 +1,8 @@
 package org.jaudiotagger.audio.mp3;
 
-import java.nio.ByteBuffer;
-
 import org.jaudiotagger.audio.exceptions.InvalidAudioFrameException;
+
+import java.nio.ByteBuffer;
 
 public class ByteArrayMP3AudioHeader extends MP3AudioHeader
 {
@@ -32,7 +32,8 @@ public class ByteArrayMP3AudioHeader extends MP3AudioHeader
                         {
                             // Parses Xing frame without modifying position of main buffer
                             mp3XingFrame = XingFrame.parseXingFrame();
-                        } catch (InvalidAudioFrameException ex)
+                        }
+                        catch (InvalidAudioFrameException ex)
                         {
                             // We Ignore because even if Xing Header is corrupted
                             // doesn't mean file is corrupted
@@ -56,7 +57,8 @@ public class ByteArrayMP3AudioHeader extends MP3AudioHeader
                         }
                     }
 
-                } catch (InvalidAudioFrameException ex)
+                }
+                catch (InvalidAudioFrameException ex)
                 {
                     // We Ignore because likely to be incorrect sync bits ,
                     // will just continue in loop
@@ -64,7 +66,8 @@ public class ByteArrayMP3AudioHeader extends MP3AudioHeader
             }
             bb.position(bb.position() + 1);
             filePointerCount++;
-        } while (!syncFound);
+        }
+        while (!syncFound);
 
         setFileSize(fileBytes.length);
         setMp3StartByte(filePointerCount);
@@ -88,7 +91,8 @@ public class ByteArrayMP3AudioHeader extends MP3AudioHeader
                 MPEGFrameHeader.parseMPEGHeader(bb);
                 MP3AudioHeader.logger.finer("Check next frame confirms is an audio header ");
                 result = true;
-            } catch (InvalidAudioFrameException ex)
+            }
+            catch (InvalidAudioFrameException ex)
             {
                 MP3AudioHeader.logger.finer("Check next frame has identified this is not an audio header");
                 result = false;

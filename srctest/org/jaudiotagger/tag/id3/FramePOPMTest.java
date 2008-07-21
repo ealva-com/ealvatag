@@ -13,9 +13,9 @@ import java.io.File;
  */
 public class FramePOPMTest extends AbstractTestCase
 {
-    private static final String  ISSUE_72_TEST_EMAIL   = "Windows Media Player 9 Series";
-    private static final int     ISSUE_72_TEST_RATING = 255 ;
-    private static final int     ISSUE_72_TEST_COUNTER = 0 ;
+    private static final String ISSUE_72_TEST_EMAIL = "Windows Media Player 9 Series";
+    private static final int ISSUE_72_TEST_RATING = 255;
+    private static final int ISSUE_72_TEST_COUNTER = 0;
 
 
     public static ID3v24Frame getInitialisedFrame()
@@ -122,9 +122,9 @@ public class FramePOPMTest extends AbstractTestCase
         assertEquals(0, body.getCounter());
     }
 
-     public void testReadFileContainingPOMFrameWithoutCounter() throws Exception
+    public void testReadFileContainingPOMFrameWithoutCounter() throws Exception
     {
-        File testFile = AbstractTestCase.copyAudioToTmp("Issue72.id3","testV1.mp3");
+        File testFile = AbstractTestCase.copyAudioToTmp("Issue72.id3", "testV1.mp3");
 
         MP3File mp3File = new MP3File(testFile);
         ID3v23Frame frame = (ID3v23Frame) mp3File.getID3v2Tag().getFrame(ID3v24Frames.FRAME_ID_POPULARIMETER);

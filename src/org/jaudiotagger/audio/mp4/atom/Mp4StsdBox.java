@@ -36,9 +36,6 @@ public class Mp4StsdBox extends AbstractMp4Box
     public void processData() throws CannotReadException
     {
         //Skip the data
-        dataBuffer.position(dataBuffer.position()
-                + VERSION_FLAG_LENGTH
-                + OTHER_FLAG_LENGTH
-                + NO_OF_DESCRIPTIONS_POS_LENGTH);
+        dataBuffer.position(dataBuffer.position() + VERSION_FLAG_LENGTH + OTHER_FLAG_LENGTH + NO_OF_DESCRIPTIONS_POS_LENGTH);
     }
 }

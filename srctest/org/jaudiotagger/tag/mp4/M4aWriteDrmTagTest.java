@@ -1,19 +1,18 @@
 package org.jaudiotagger.tag.mp4;
 
 import junit.framework.TestCase;
-
-import java.io.File;
-import java.io.RandomAccessFile;
-import java.util.List;
-
 import org.jaudiotagger.AbstractTestCase;
-import org.jaudiotagger.tag.Tag;
 import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.AudioFileIO;
 import org.jaudiotagger.audio.exceptions.CannotWriteException;
 import org.jaudiotagger.audio.mp4.Mp4AudioHeader;
 import org.jaudiotagger.audio.mp4.atom.Mp4EsdsBox;
 import org.jaudiotagger.audio.mp4.atom.Mp4StcoBox;
+import org.jaudiotagger.tag.Tag;
+
+import java.io.File;
+import java.io.RandomAccessFile;
+import java.util.List;
 
 /**
  * Write drms files, we can modify the metadata without breaking the drm file itself
@@ -25,17 +24,17 @@ public class M4aWriteDrmTagTest extends TestCase
      *
      * @throws Exception
      */
-    public void testShowStco()throws Exception
+    public void testShowStco() throws Exception
     {
         File orig = new File("testdata", "test9.m4p");
-        if(!orig.isFile())
+        if (!orig.isFile())
         {
             return;
         }
-        File testFile = AbstractTestCase.copyAudioToTmp("test9.m4p",new File("WriteDrmFile1.m4p"));
+        File testFile = AbstractTestCase.copyAudioToTmp("test9.m4p", new File("WriteDrmFile1.m4p"));
 
         //Stco test
-        RandomAccessFile raf = new RandomAccessFile(testFile,"r");
+        RandomAccessFile raf = new RandomAccessFile(testFile, "r");
         Mp4StcoBox.debugShowStcoInfo(raf);
         raf.close();
     }
@@ -47,7 +46,7 @@ public class M4aWriteDrmTagTest extends TestCase
     public void testWriteFile()
     {
         File orig = new File("testdata", "test9.m4p");
-        if(!orig.isFile())
+        if (!orig.isFile())
         {
             return;
         }
@@ -55,7 +54,7 @@ public class M4aWriteDrmTagTest extends TestCase
         Exception exceptionCaught = null;
         try
         {
-            File testFile = AbstractTestCase.copyAudioToTmp("test9.m4p",new File("WriteDrmFile1.m4p"));
+            File testFile = AbstractTestCase.copyAudioToTmp("test9.m4p", new File("WriteDrmFile1.m4p"));
 
             AudioFile f = AudioFileIO.read(testFile);
             Tag tag = f.getTag();
@@ -76,9 +75,9 @@ public class M4aWriteDrmTagTest extends TestCase
             assertEquals(128, f.getAudioHeader().getBitRateAsNumber());
 
             //MPEG Specific
-            Mp4AudioHeader audioheader =(Mp4AudioHeader)f.getAudioHeader();
-            assertEquals(Mp4EsdsBox.Kind.MPEG4_AUDIO,audioheader.getKind());
-            assertEquals(Mp4EsdsBox.AudioProfile.LOW_COMPLEXITY,audioheader.getProfile());
+            Mp4AudioHeader audioheader = (Mp4AudioHeader) f.getAudioHeader();
+            assertEquals(Mp4EsdsBox.Kind.MPEG4_AUDIO, audioheader.getKind());
+            assertEquals(Mp4EsdsBox.AudioProfile.LOW_COMPLEXITY, audioheader.getProfile());
 
             //Ease of use methods for common fields
             assertEquals("ARTIST", tag.getFirstArtist());
@@ -111,14 +110,14 @@ public class M4aWriteDrmTagTest extends TestCase
     /**
      * Test to write all data to a m4p which has a free atom with the wrong length set
      * so unable to find the subsequent data.
-     *
+     * <p/>
      * Before fix could cause infinite loop now throws a RuntimeException, but writer catches
      * it and throws cannotwriteexception
      */
     public void testWriteFileWithInvalidFreeAtom()
     {
         File orig = new File("testdata", "test28.m4p");
-        if(!orig.isFile())
+        if (!orig.isFile())
         {
             return;
         }
@@ -126,7 +125,7 @@ public class M4aWriteDrmTagTest extends TestCase
         Exception exceptionCaught = null;
         try
         {
-            File testFile = AbstractTestCase.copyAudioToTmp("test28.m4p",new File("WriteFileWithInvalidFreeAtom.m4p"));
+            File testFile = AbstractTestCase.copyAudioToTmp("test28.m4p", new File("WriteFileWithInvalidFreeAtom.m4p"));
 
             AudioFile f = AudioFileIO.read(testFile);
             Tag tag = f.getTag();

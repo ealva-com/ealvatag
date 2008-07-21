@@ -7,7 +7,6 @@ import org.jaudiotagger.AbstractTestCase;
 import org.jaudiotagger.audio.exceptions.InvalidAudioFrameException;
 import org.jaudiotagger.audio.exceptions.ReadOnlyFileException;
 import org.jaudiotagger.audio.mp3.MP3File;
-import org.jaudiotagger.tag.id3.AbstractTagFrameBody;
 import org.jaudiotagger.tag.TagException;
 import org.jaudiotagger.tag.id3.framebody.FrameBodyCOMM;
 import org.jaudiotagger.tag.id3.framebody.FrameBodyWXXX;
@@ -147,7 +146,7 @@ public class Unicode24NullTerminatedTagTest extends TestCase
         assertEquals(ID3v24Frames.FRAME_ID_USER_DEFINED_URL, fb.getIdentifier());
         assertEquals(TextEncoding.ISO_8859_1, fb.getTextEncoding());
         assertEquals(FrameBodyWXXXTest.WXXX_TEST_STRING, fb.getDescription());
-        assertEquals(FrameBodyWXXXTest.WXXX_TEST_URL,fb.getUrlLink());
+        assertEquals(FrameBodyWXXXTest.WXXX_TEST_URL, fb.getUrlLink());
 
         //Create and Save
         ID3v24Tag tag = new ID3v24Tag();
@@ -159,10 +158,10 @@ public class Unicode24NullTerminatedTagTest extends TestCase
         mp3File = new MP3File(testFile);
         frame = (ID3v24Frame) mp3File.getID3v2Tag().getFrame(ID3v24Frames.FRAME_ID_USER_DEFINED_URL);
         FrameBodyWXXX body = (FrameBodyWXXX) frame.getBody();
-        assertEquals(ID3v24Frames.FRAME_ID_USER_DEFINED_URL,body.getIdentifier());
+        assertEquals(ID3v24Frames.FRAME_ID_USER_DEFINED_URL, body.getIdentifier());
         assertEquals(TextEncoding.ISO_8859_1, body.getTextEncoding());
         assertEquals(FrameBodyWXXXTest.WXXX_TEST_STRING, body.getDescription());
-        assertEquals(FrameBodyWXXXTest.WXXX_TEST_URL,body.getUrlLink());
+        assertEquals(FrameBodyWXXXTest.WXXX_TEST_URL, body.getUrlLink());
 
     }
 
@@ -209,7 +208,7 @@ public class Unicode24NullTerminatedTagTest extends TestCase
         assertEquals(ID3v24Frames.FRAME_ID_USER_DEFINED_URL, body.getIdentifier());
         assertEquals(TextEncoding.UTF_16, body.getTextEncoding());
         assertEquals(FrameBodyWXXXTest.WXXX_TEST_STRING, body.getDescription());
-        assertEquals(FrameBodyWXXXTest.WXXX_TEST_URL,body.getUrlLink());
+        assertEquals(FrameBodyWXXXTest.WXXX_TEST_URL, body.getUrlLink());
 
     }
 
@@ -242,8 +241,7 @@ public class Unicode24NullTerminatedTagTest extends TestCase
         assertEquals(ID3v24Frames.FRAME_ID_USER_DEFINED_URL, fb.getIdentifier());
         assertEquals(TextEncoding.ISO_8859_1, fb.getTextEncoding());
         assertEquals(FrameBodyWXXXTest.WXXX_UNICODE_REQUIRED_TEST_STRING, fb.getDescription());
-        assertEquals(FrameBodyWXXXTest.WXXX_TEST_URL,fb.getUrlLink());
-
+        assertEquals(FrameBodyWXXXTest.WXXX_TEST_URL, fb.getUrlLink());
 
         //Create and Save
         ID3v24Tag tag = new ID3v24Tag();
@@ -258,7 +256,7 @@ public class Unicode24NullTerminatedTagTest extends TestCase
         assertEquals(ID3v24Frames.FRAME_ID_USER_DEFINED_URL, body.getIdentifier());
         assertEquals(TextEncoding.UTF_16, body.getTextEncoding());
         assertEquals(FrameBodyWXXXTest.WXXX_UNICODE_REQUIRED_TEST_STRING, body.getDescription());
-        assertEquals(FrameBodyWXXXTest.WXXX_TEST_URL,body.getUrlLink());
+        assertEquals(FrameBodyWXXXTest.WXXX_TEST_URL, body.getUrlLink());
 
     }
 
@@ -290,8 +288,7 @@ public class Unicode24NullTerminatedTagTest extends TestCase
         assertEquals(ID3v24Frames.FRAME_ID_USER_DEFINED_URL, fb.getIdentifier());
         assertEquals(TextEncoding.UTF_16BE, fb.getTextEncoding());
         assertEquals(FrameBodyWXXXTest.WXXX_UNICODE_REQUIRED_TEST_STRING, fb.getDescription());
-        assertEquals(FrameBodyWXXXTest.WXXX_TEST_URL,fb.getUrlLink());
-
+        assertEquals(FrameBodyWXXXTest.WXXX_TEST_URL, fb.getUrlLink());
 
         //Create and Save
         ID3v24Tag tag = new ID3v24Tag();
@@ -306,7 +303,7 @@ public class Unicode24NullTerminatedTagTest extends TestCase
         assertEquals(ID3v24Frames.FRAME_ID_USER_DEFINED_URL, body.getIdentifier());
         assertEquals(TextEncoding.UTF_16BE, body.getTextEncoding());
         assertEquals(FrameBodyWXXXTest.WXXX_UNICODE_REQUIRED_TEST_STRING, body.getDescription());
-        assertEquals(FrameBodyWXXXTest.WXXX_TEST_URL,body.getUrlLink());
+        assertEquals(FrameBodyWXXXTest.WXXX_TEST_URL, body.getUrlLink());
 
     }
 
@@ -338,8 +335,7 @@ public class Unicode24NullTerminatedTagTest extends TestCase
         assertEquals(ID3v24Frames.FRAME_ID_USER_DEFINED_URL, fb.getIdentifier());
         assertEquals(TextEncoding.UTF_8, fb.getTextEncoding());
         assertEquals(FrameBodyWXXXTest.WXXX_UNICODE_REQUIRED_TEST_STRING, fb.getDescription());
-        assertEquals(FrameBodyWXXXTest.WXXX_TEST_URL,fb.getUrlLink());
-
+        assertEquals(FrameBodyWXXXTest.WXXX_TEST_URL, fb.getUrlLink());
 
         //Create and Save
         ID3v24Tag tag = new ID3v24Tag();
@@ -354,7 +350,7 @@ public class Unicode24NullTerminatedTagTest extends TestCase
         assertEquals(ID3v24Frames.FRAME_ID_USER_DEFINED_URL, body.getIdentifier());
         assertEquals(TextEncoding.UTF_8, body.getTextEncoding());
         assertEquals(FrameBodyWXXXTest.WXXX_UNICODE_REQUIRED_TEST_STRING, body.getDescription());
-        assertEquals(FrameBodyWXXXTest.WXXX_TEST_URL,body.getUrlLink());
+        assertEquals(FrameBodyWXXXTest.WXXX_TEST_URL, body.getUrlLink());
 
     }
 }

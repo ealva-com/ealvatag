@@ -26,9 +26,12 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
-import java.nio.channels.WritableByteChannel;
 import java.nio.channels.FileLock;
-import java.util.*;
+import java.nio.channels.WritableByteChannel;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.ListIterator;
 import java.util.logging.Level;
 
 /**
@@ -38,8 +41,7 @@ import java.util.logging.Level;
  * @author : Eric Farng
  * @version $Id$
  */
-public class ID3v22Tag
-        extends AbstractID3v2Tag
+public class ID3v22Tag extends AbstractID3v2Tag
 {
 
     protected static final String TYPE_COMPRESSION = "compression";
@@ -149,11 +151,7 @@ public class ID3v22Tag
             {
                 frame = (AbstractID3v2Frame) o;
                 //Special case v24 TDRC (FRAME_ID_YEAR) may need converting to multiple frames
-                if (
-                        (frame.getIdentifier().equals(ID3v24Frames.FRAME_ID_YEAR))
-                                &&
-                                (frame.getBody() instanceof FrameBodyTDRC)
-                        )
+                if ((frame.getIdentifier().equals(ID3v24Frames.FRAME_ID_YEAR)) && (frame.getBody() instanceof FrameBodyTDRC))
                 {
                     translateFrame(frame);
                 }
@@ -249,8 +247,7 @@ public class ID3v22Tag
      * @param loggingFilename
      * @throws TagException
      */
-    public ID3v22Tag(ByteBuffer buffer, String loggingFilename)
-            throws TagException
+    public ID3v22Tag(ByteBuffer buffer, String loggingFilename) throws TagException
     {
         setLoggingFilename(loggingFilename);
         this.read(buffer);
@@ -264,8 +261,7 @@ public class ID3v22Tag
      * @throws TagException
      * @deprecated use {@link #ID3v22Tag(ByteBuffer,String)} instead
      */
-    public ID3v22Tag(ByteBuffer buffer)
-            throws TagException
+    public ID3v22Tag(ByteBuffer buffer) throws TagException
     {
         this(buffer, "");
     }
@@ -316,6 +312,7 @@ public class ID3v22Tag
 
     /**
      * Read the size of a tag, based on  the value written in the tag header
+     *
      * @param buffer
      * @return
      * @throws TagException
@@ -339,8 +336,7 @@ public class ID3v22Tag
      * @throws TagException
      * @throws TagNotFoundException
      */
-    public void read(ByteBuffer byteBuffer)
-            throws TagException
+    public void read(ByteBuffer byteBuffer) throws TagException
     {
         int size;
         if (seek(byteBuffer) == false)
@@ -503,8 +499,7 @@ public class ID3v22Tag
      * @param file The file to write to
      * @throws IOException
      */
-    public void write(File file, long audioStartLocation)
-            throws IOException
+    public void write(File file, long audioStartLocation) throws IOException
     {
         logger.info("Writing tag to file");
 
@@ -542,12 +537,12 @@ public class ID3v22Tag
         }
 
         //Write changes to file
-        FileChannel fc       = null;
-        FileLock    fileLock = null;
+        FileChannel fc = null;
+        FileLock fileLock = null;
         try
         {
             fc = new RandomAccessFile(file, "rw").getChannel();
-            fileLock=getFileLockForWriting(fc,file.getPath());
+            fileLock = getFileLockForWriting(fc, file.getPath());
 
             fc.write(headerBuffer);
             fc.write(ByteBuffer.wrap(bodyByteBuffer));
@@ -557,7 +552,7 @@ public class ID3v22Tag
         {
             if (fc != null)
             {
-                if(fileLock!=null)
+                if (fileLock != null)
                 {
                     fileLock.release();
                 }
@@ -567,15 +562,13 @@ public class ID3v22Tag
     }
 
 
-
     /**
      * Write tag to channel
      *
      * @param channel
      * @throws IOException
      */
-    public void write(WritableByteChannel channel)
-            throws IOException
+    public void write(WritableByteChannel channel) throws IOException
     {
         logger.info(getLoggingFilename() + ":Writing tag to channel");
 
@@ -694,8 +687,7 @@ public class ID3v22Tag
      * @throws KeyNotFoundException
      * @throws FieldDataInvalidException
      */
-    public TagField createTagField(ID3v22FieldKey id3Key, String value)
-            throws KeyNotFoundException, FieldDataInvalidException
+    public TagField createTagField(ID3v22FieldKey id3Key, String value) throws KeyNotFoundException, FieldDataInvalidException
     {
         if (id3Key == null)
         {
@@ -724,9 +716,7 @@ public class ID3v22Tag
      *
      * @param id3v22FieldKey
      */
-    public void deleteTagField
-            (ID3v22FieldKey
-                    id3v22FieldKey) throws KeyNotFoundException
+    public void deleteTagField(ID3v22FieldKey id3v22FieldKey) throws KeyNotFoundException
     {
         if (id3v22FieldKey == null)
         {

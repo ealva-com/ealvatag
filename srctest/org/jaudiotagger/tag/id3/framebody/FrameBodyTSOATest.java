@@ -10,11 +10,12 @@ import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
 public class FrameBodyTSOATest extends AbstractTestCase
 {
     public static final String ALBUM_SORT = "albumsort";
+
     public static FrameBodyTSOA getInitialisedBody()
     {
-         FrameBodyTSOA fb = new FrameBodyTSOA();
-         fb.setText(FrameBodyTSOATest.ALBUM_SORT);
-         return fb;
+        FrameBodyTSOA fb = new FrameBodyTSOA();
+        fb.setText(FrameBodyTSOATest.ALBUM_SORT);
+        return fb;
     }
 
     public void testCreateFrameBody()
@@ -31,9 +32,9 @@ public class FrameBodyTSOATest extends AbstractTestCase
         }
 
         assertNull(exceptionCaught);
-        assertEquals(ID3v24Frames.FRAME_ID_ALBUM_SORT_ORDER,fb.getIdentifier());
-        assertEquals(TextEncoding.ISO_8859_1,fb.getTextEncoding());
-        assertEquals(FrameBodyTSOATest.ALBUM_SORT,fb.getText());
+        assertEquals(ID3v24Frames.FRAME_ID_ALBUM_SORT_ORDER, fb.getIdentifier());
+        assertEquals(TextEncoding.ISO_8859_1, fb.getTextEncoding());
+        assertEquals(FrameBodyTSOATest.ALBUM_SORT, fb.getText());
 
     }
 
@@ -52,9 +53,9 @@ public class FrameBodyTSOATest extends AbstractTestCase
         }
 
         assertNull(exceptionCaught);
-        assertEquals(ID3v24Frames.FRAME_ID_ALBUM_SORT_ORDER,fb.getIdentifier());
-        assertEquals(TextEncoding.ISO_8859_1,fb.getTextEncoding());
-        assertEquals(FrameBodyTSOATest.ALBUM_SORT,fb.getText());
+        assertEquals(ID3v24Frames.FRAME_ID_ALBUM_SORT_ORDER, fb.getIdentifier());
+        assertEquals(TextEncoding.ISO_8859_1, fb.getTextEncoding());
+        assertEquals(FrameBodyTSOATest.ALBUM_SORT, fb.getText());
 
     }
 

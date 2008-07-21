@@ -13,7 +13,7 @@ import java.io.File;
  */
 public class WavSimpleTest extends AbstractTestCase
 {
-     public void testReadFile()
+    public void testReadFile()
     {
         Exception exceptionCaught = null;
         try
@@ -21,17 +21,16 @@ public class WavSimpleTest extends AbstractTestCase
             File testFile = AbstractTestCase.copyAudioToTmp("test.wav");
             AudioFile f = AudioFileIO.read(testFile);
 
-            assertEquals("176",f.getAudioHeader().getBitRate());
-            assertEquals("WAV-RIFF 8 bits",f.getAudioHeader().getEncodingType());
-            assertEquals("1",f.getAudioHeader().getChannels());
-            assertEquals("22050",f.getAudioHeader().getSampleRate());
+            assertEquals("176", f.getAudioHeader().getBitRate());
+            assertEquals("WAV-RIFF 8 bits", f.getAudioHeader().getEncodingType());
+            assertEquals("1", f.getAudioHeader().getChannels());
+            assertEquals("22050", f.getAudioHeader().getSampleRate());
 
 
             assertTrue(f.getTag() instanceof GenericTag);        //TODO Flawed concept should be asftag
-            GenericTag tag = (GenericTag)f.getTag();
+            GenericTag tag = (GenericTag) f.getTag();
 
-
-              //Ease of use methods for common fields
+            //Ease of use methods for common fields
             assertEquals("", tag.getFirstArtist());
             assertEquals("", tag.getFirstAlbum());
             assertEquals("", tag.getFirstTitle());
@@ -40,10 +39,10 @@ public class WavSimpleTest extends AbstractTestCase
             assertEquals("", tag.getFirstTrack());
             assertEquals("", tag.getFirstGenre());
         }
-        catch(Exception e)
+        catch (Exception e)
         {
-             e.printStackTrace();
-             exceptionCaught = e;
+            e.printStackTrace();
+            exceptionCaught = e;
         }
         assertNull(exceptionCaught);
     }

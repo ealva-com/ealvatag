@@ -16,10 +16,12 @@
 package org.jaudiotagger.tag.id3.framebody;
 
 import org.jaudiotagger.tag.InvalidTagException;
-import org.jaudiotagger.tag.reference.Languages;
 import org.jaudiotagger.tag.datatype.*;
 import org.jaudiotagger.tag.id3.ID3v24Frames;
-import org.jaudiotagger.tag.id3.valuepair.*;
+import org.jaudiotagger.tag.id3.valuepair.EventTimingTimestampTypes;
+import org.jaudiotagger.tag.id3.valuepair.SynchronisedLyricsContentType;
+import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
+import org.jaudiotagger.tag.reference.Languages;
 
 import java.nio.ByteBuffer;
 
@@ -140,12 +142,7 @@ public class FrameBodySYLT extends AbstractID3v2FrameBody implements ID3v24Frame
      * @param contentType
      * @param description
      */
-    public FrameBodySYLT(int textEncoding,
-                         String language,
-                         int timeStampFormat,
-                         int contentType,
-                         String description,
-                         byte[] lyrics)
+    public FrameBodySYLT(int textEncoding, String language, int timeStampFormat, int contentType, String description, byte[] lyrics)
     {
         setObjectValue(DataTypes.OBJ_TEXT_ENCODING, textEncoding);
         setObjectValue(DataTypes.OBJ_LANGUAGE, language);
@@ -160,8 +157,7 @@ public class FrameBodySYLT extends AbstractID3v2FrameBody implements ID3v24Frame
      *
      * @throws InvalidTagException if unable to create framebody from buffer
      */
-    public FrameBodySYLT(ByteBuffer byteBuffer, int frameSize)
-            throws InvalidTagException
+    public FrameBodySYLT(ByteBuffer byteBuffer, int frameSize) throws InvalidTagException
     {
         super(byteBuffer, frameSize);
     }

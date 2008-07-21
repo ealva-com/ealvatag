@@ -20,15 +20,12 @@ package org.jaudiotagger.tag.vorbiscomment;
 
 import org.jaudiotagger.audio.generic.AbstractTag;
 import org.jaudiotagger.audio.ogg.util.VorbisHeader;
-import org.jaudiotagger.tag.TagField;
-import org.jaudiotagger.tag.vorbiscomment.VorbisCommentTagField;
-import org.jaudiotagger.tag.vorbiscomment.VorbisCommentFieldKey;
-import org.jaudiotagger.tag.vorbiscomment.util.Base64Coder;
-
-import static org.jaudiotagger.tag.vorbiscomment.VorbisCommentFieldKey.*;
-import org.jaudiotagger.tag.TagFieldKey;
-import org.jaudiotagger.tag.KeyNotFoundException;
 import org.jaudiotagger.logging.ErrorMessage;
+import org.jaudiotagger.tag.KeyNotFoundException;
+import org.jaudiotagger.tag.TagField;
+import org.jaudiotagger.tag.TagFieldKey;
+import static org.jaudiotagger.tag.vorbiscomment.VorbisCommentFieldKey.*;
+import org.jaudiotagger.tag.vorbiscomment.util.Base64Coder;
 
 import java.util.EnumMap;
 import java.util.List;
@@ -93,8 +90,10 @@ public class VorbisCommentTag extends AbstractTag
     //that actually encoded the file in the first place.
     public static final String DEFAULT_VENDOR = "jaudiotagger";
 
-    /** Only used within Package, hidden because it doesnt set Vendor
-     *  which should be done when created by end user */
+    /**
+     * Only used within Package, hidden because it doesnt set Vendor
+     * which should be done when created by end user
+     */
     VorbisCommentTag()
     {
 
@@ -114,7 +113,7 @@ public class VorbisCommentTag extends AbstractTag
 
     public TagField createAlbumField(String content)
     {
-        if(content==null)
+        if (content == null)
         {
             throw new IllegalArgumentException(ErrorMessage.GENERAL_INVALID_NULL_ARGUMENT.getMsg());
         }
@@ -123,7 +122,7 @@ public class VorbisCommentTag extends AbstractTag
 
     public TagField createArtistField(String content)
     {
-        if(content==null)
+        if (content == null)
         {
             throw new IllegalArgumentException(ErrorMessage.GENERAL_INVALID_NULL_ARGUMENT.getMsg());
         }
@@ -132,7 +131,7 @@ public class VorbisCommentTag extends AbstractTag
 
     public TagField createCommentField(String content)
     {
-        if(content==null)
+        if (content == null)
         {
             throw new IllegalArgumentException(ErrorMessage.GENERAL_INVALID_NULL_ARGUMENT.getMsg());
         }
@@ -141,7 +140,7 @@ public class VorbisCommentTag extends AbstractTag
 
     public TagField createGenreField(String content)
     {
-        if(content==null)
+        if (content == null)
         {
             throw new IllegalArgumentException(ErrorMessage.GENERAL_INVALID_NULL_ARGUMENT.getMsg());
         }
@@ -150,7 +149,7 @@ public class VorbisCommentTag extends AbstractTag
 
     public TagField createTitleField(String content)
     {
-        if(content==null)
+        if (content == null)
         {
             throw new IllegalArgumentException(ErrorMessage.GENERAL_INVALID_NULL_ARGUMENT.getMsg());
         }
@@ -159,7 +158,7 @@ public class VorbisCommentTag extends AbstractTag
 
     public TagField createTrackField(String content)
     {
-        if(content==null)
+        if (content == null)
         {
             throw new IllegalArgumentException(ErrorMessage.GENERAL_INVALID_NULL_ARGUMENT.getMsg());
         }
@@ -168,7 +167,7 @@ public class VorbisCommentTag extends AbstractTag
 
     public TagField createYearField(String content)
     {
-        if(content==null)
+        if (content == null)
         {
             throw new IllegalArgumentException(ErrorMessage.GENERAL_INVALID_NULL_ARGUMENT.getMsg());
         }
@@ -249,8 +248,7 @@ public class VorbisCommentTag extends AbstractTag
      * Create Tag Field using generic key
      */
     @Override
-    public TagField createTagField(TagFieldKey genericKey, String value)
-            throws KeyNotFoundException
+    public TagField createTagField(TagFieldKey genericKey, String value) throws KeyNotFoundException
     {
         if (genericKey == null)
         {
@@ -266,10 +264,9 @@ public class VorbisCommentTag extends AbstractTag
      * @param value
      * @return
      */
-    public TagField createTagField(VorbisCommentFieldKey vorbisCommentFieldKey, String value)
-            throws KeyNotFoundException
+    public TagField createTagField(VorbisCommentFieldKey vorbisCommentFieldKey, String value) throws KeyNotFoundException
     {
-        if(value==null)
+        if (value == null)
         {
             throw new IllegalArgumentException(ErrorMessage.GENERAL_INVALID_NULL_ARGUMENT.getMsg());
         }
@@ -292,7 +289,7 @@ public class VorbisCommentTag extends AbstractTag
      */
     public TagField createTagField(String vorbisCommentFieldKey, String value)
     {
-        if(value==null)
+        if (value == null)
         {
             throw new IllegalArgumentException(ErrorMessage.GENERAL_INVALID_NULL_ARGUMENT.getMsg());
         }
@@ -406,10 +403,8 @@ public class VorbisCommentTag extends AbstractTag
     {
         char[] testdata = Base64Coder.encode(data);
         String base64image = new String(testdata);
-        VorbisCommentTagField dataField =
-                new VorbisCommentTagField(VorbisCommentFieldKey.COVERART.name(), base64image);
-        VorbisCommentTagField mimeField =
-                new VorbisCommentTagField(VorbisCommentFieldKey.COVERARTMIME.name(), mimeType);
+        VorbisCommentTagField dataField = new VorbisCommentTagField(VorbisCommentFieldKey.COVERART.name(), base64image);
+        VorbisCommentTagField mimeField = new VorbisCommentTagField(VorbisCommentFieldKey.COVERARTMIME.name(), mimeType);
 
         set(dataField);
         set(mimeField);

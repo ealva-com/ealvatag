@@ -63,8 +63,7 @@ public class FrameBodyTOFN extends AbstractFrameBodyTextInfo implements ID3v23Fr
      *
      * @throws InvalidTagException
      */
-    public FrameBodyTOFN(ByteBuffer byteBuffer, int frameSize)
-            throws InvalidTagException
+    public FrameBodyTOFN(ByteBuffer byteBuffer, int frameSize) throws InvalidTagException
     {
         super(byteBuffer, frameSize);
     }

@@ -28,7 +28,7 @@ import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
 import java.io.File;
 
 /**
- * 
+ *
  */
 public class Unicode24TagTest extends TestCase
 {
@@ -88,7 +88,6 @@ public class Unicode24TagTest extends TestCase
     }
 
 
-
     /**
      * Create a String that only contains text within IS8859 charset so should be
      * as ISO_88859
@@ -141,7 +140,7 @@ public class Unicode24TagTest extends TestCase
      */
     public void testCreateUTF16EncodedSizeTerminatedString() throws Exception
     {
-        File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3",new File("testutf16.mp3"));
+        File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3", new File("testutf16.mp3"));
         MP3File mp3File = new MP3File(testFile);
 
         ID3v24Frame frame = new ID3v24Frame(ID3v24Frames.FRAME_ID_ARTIST);
@@ -187,7 +186,7 @@ public class Unicode24TagTest extends TestCase
      */
     public void testCreateUTF16AutoEncodedSizeTerminatedString() throws Exception
     {
-        File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3",new File("testutf16-2.mp3"));
+        File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3", new File("testutf16-2.mp3"));
         MP3File mp3File = new MP3File(testFile);
 
         ID3v24Frame frame = new ID3v24Frame(ID3v24Frames.FRAME_ID_ARTIST);
@@ -208,8 +207,6 @@ public class Unicode24TagTest extends TestCase
         assertEquals(TextEncoding.ISO_8859_1, fb.getTextEncoding());
         assertEquals(FrameBodyTPE1Test.TPE1_UNICODE_REQUIRED_TEST_STRING, fb.getText());
 
-
-
         //Create and Save
         ID3v24Tag tag = new ID3v24Tag();
         tag.setFrame(frame);
@@ -226,53 +223,51 @@ public class Unicode24TagTest extends TestCase
     }
 
     /**
-        * Create a String that contains text outside of the IS8859 charset should be written
-        * as UTf8 because overridden default
-        *
-        * @throws Exception
-        */
-       public void testCreateUTF8AutoEncodedSizeTerminatedString() throws Exception
-       {
-           File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3",new File("testutf8.mp3"));
-           MP3File mp3File = new MP3File(testFile);
+     * Create a String that contains text outside of the IS8859 charset should be written
+     * as UTf8 because overridden default
+     *
+     * @throws Exception
+     */
+    public void testCreateUTF8AutoEncodedSizeTerminatedString() throws Exception
+    {
+        File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3", new File("testutf8.mp3"));
+        MP3File mp3File = new MP3File(testFile);
 
-           ID3v24Frame frame = new ID3v24Frame(ID3v24Frames.FRAME_ID_ARTIST);
-           Exception exceptionCaught = null;
-           FrameBodyTPE1 fb = null;
-           try
-           {
-               fb = FrameBodyTPE1Test.getUnicodeRequiredInitialisedBody();
-               frame.setBody(fb);
-           }
-           catch (Exception e)
-           {
-               exceptionCaught = e;
-           }
+        ID3v24Frame frame = new ID3v24Frame(ID3v24Frames.FRAME_ID_ARTIST);
+        Exception exceptionCaught = null;
+        FrameBodyTPE1 fb = null;
+        try
+        {
+            fb = FrameBodyTPE1Test.getUnicodeRequiredInitialisedBody();
+            frame.setBody(fb);
+        }
+        catch (Exception e)
+        {
+            exceptionCaught = e;
+        }
 
-           assertNull(exceptionCaught);
-           assertEquals(ID3v24Frames.FRAME_ID_ARTIST, fb.getIdentifier());
-           assertEquals(TextEncoding.ISO_8859_1, fb.getTextEncoding());
-           assertEquals(FrameBodyTPE1Test.TPE1_UNICODE_REQUIRED_TEST_STRING, fb.getText());
+        assertNull(exceptionCaught);
+        assertEquals(ID3v24Frames.FRAME_ID_ARTIST, fb.getIdentifier());
+        assertEquals(TextEncoding.ISO_8859_1, fb.getTextEncoding());
+        assertEquals(FrameBodyTPE1Test.TPE1_UNICODE_REQUIRED_TEST_STRING, fb.getText());
 
+        //Modify tag options
+        TagOptionSingleton.getInstance().setId3v24UnicodeTextEncoding(TextEncoding.UTF_8);
 
+        //Create and Save
+        ID3v24Tag tag = new ID3v24Tag();
+        tag.setFrame(frame);
+        mp3File.setID3v2Tag(tag);
+        mp3File.save();
 
-           //Modify tag options
-           TagOptionSingleton.getInstance().setId3v24UnicodeTextEncoding(TextEncoding.UTF_8);
-
-           //Create and Save
-           ID3v24Tag tag = new ID3v24Tag();
-           tag.setFrame(frame);
-           mp3File.setID3v2Tag(tag);
-           mp3File.save();
-
-           //Reload, should be written as UTF16 because of the text
-           mp3File = new MP3File(testFile);
-           frame = (ID3v24Frame) mp3File.getID3v2Tag().getFrame(ID3v24Frames.FRAME_ID_ARTIST);
-           FrameBodyTPE1 body = (FrameBodyTPE1) frame.getBody();
-           assertEquals(ID3v24Frames.FRAME_ID_ARTIST, body.getIdentifier());
-           assertEquals(TextEncoding.UTF_8, body.getTextEncoding());
-           assertEquals(FrameBodyTPE1Test.TPE1_UNICODE_REQUIRED_TEST_STRING, body.getText());
-       }
+        //Reload, should be written as UTF16 because of the text
+        mp3File = new MP3File(testFile);
+        frame = (ID3v24Frame) mp3File.getID3v2Tag().getFrame(ID3v24Frames.FRAME_ID_ARTIST);
+        FrameBodyTPE1 body = (FrameBodyTPE1) frame.getBody();
+        assertEquals(ID3v24Frames.FRAME_ID_ARTIST, body.getIdentifier());
+        assertEquals(TextEncoding.UTF_8, body.getTextEncoding());
+        assertEquals(FrameBodyTPE1Test.TPE1_UNICODE_REQUIRED_TEST_STRING, body.getText());
+    }
 
 
     /**
@@ -282,7 +277,7 @@ public class Unicode24TagTest extends TestCase
      */
     public void testCreateUTF16BEEncodedSizeTerminatedString() throws Exception
     {
-        File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3",new File("testutf16be.mp3"));
+        File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3", new File("testutf16be.mp3"));
         MP3File mp3File = new MP3File(testFile);
 
         ID3v24Frame frame = new ID3v24Frame(ID3v24Frames.FRAME_ID_ARTIST);
@@ -326,7 +321,7 @@ public class Unicode24TagTest extends TestCase
      */
     public void testCreateUTF8EncodedSizeTerminatedString() throws Exception
     {
-        File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3",new File("testutf8enc.mp3"));
+        File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3", new File("testutf8enc.mp3"));
         MP3File mp3File = new MP3File(testFile);
 
         ID3v24Frame frame = new ID3v24Frame(ID3v24Frames.FRAME_ID_ARTIST);
@@ -363,7 +358,7 @@ public class Unicode24TagTest extends TestCase
         assertEquals(FrameBodyTPE1Test.TPE1_UNICODE_REQUIRED_TEST_STRING, body.getText());
     }
 
-     public void testv24TagsWithUTF8EncodingMaintainedOnSave()  throws Exception
+    public void testv24TagsWithUTF8EncodingMaintainedOnSave() throws Exception
     {
         File testFile = AbstractTestCase.copyAudioToTmp("issue109-2.id3", "testV1.mp3");
 
@@ -372,8 +367,8 @@ public class Unicode24TagTest extends TestCase
         ID3v24Tag v24tag = (ID3v24Tag) mp3File.getID3v2Tag();
 
         //Currently contains tags with utf8 textencodings
-        ID3v24Frame artistFrame = (ID3v24Frame)v24tag.getFrame(ID3v24Frames.FRAME_ID_ARTIST);
-        FrameBodyTPE1 body = (FrameBodyTPE1)artistFrame.getBody();
+        ID3v24Frame artistFrame = (ID3v24Frame) v24tag.getFrame(ID3v24Frames.FRAME_ID_ARTIST);
+        FrameBodyTPE1 body = (FrameBodyTPE1) artistFrame.getBody();
         assertEquals(ID3v23Frames.FRAME_ID_V3_ARTIST, body.getIdentifier());
         assertEquals(TextEncoding.UTF_8, body.getTextEncoding());
 
@@ -384,8 +379,8 @@ public class Unicode24TagTest extends TestCase
         mp3File = new MP3File(testFile);
         v24tag = (ID3v24Tag) mp3File.getID3v2Tag();
 
-        artistFrame = (ID3v24Frame)v24tag.getFrame(ID3v24Frames.FRAME_ID_ARTIST);
-        body = (FrameBodyTPE1)artistFrame.getBody();
+        artistFrame = (ID3v24Frame) v24tag.getFrame(ID3v24Frames.FRAME_ID_ARTIST);
+        body = (FrameBodyTPE1) artistFrame.getBody();
         assertEquals(ID3v24Frames.FRAME_ID_ARTIST, body.getIdentifier());
 
         //Text Encoding has been corrected ( note the text could use ISO_8859 but because the user has selected
@@ -393,7 +388,7 @@ public class Unicode24TagTest extends TestCase
         assertEquals(TextEncoding.UTF_8, body.getTextEncoding());
     }
 
-     public void testv24TagsWithUTF8OverriddenByDefaultOnSave()  throws Exception
+    public void testv24TagsWithUTF8OverriddenByDefaultOnSave() throws Exception
     {
         File testFile = AbstractTestCase.copyAudioToTmp("issue109-2.id3", "testV1.mp3");
 
@@ -402,8 +397,8 @@ public class Unicode24TagTest extends TestCase
         ID3v24Tag v24tag = (ID3v24Tag) mp3File.getID3v2Tag();
 
         //Currently contains tags with utf8 textencodings
-        ID3v24Frame artistFrame = (ID3v24Frame)v24tag.getFrame(ID3v24Frames.FRAME_ID_ARTIST);
-        FrameBodyTPE1 body = (FrameBodyTPE1)artistFrame.getBody();
+        ID3v24Frame artistFrame = (ID3v24Frame) v24tag.getFrame(ID3v24Frames.FRAME_ID_ARTIST);
+        FrameBodyTPE1 body = (FrameBodyTPE1) artistFrame.getBody();
         assertEquals(ID3v23Frames.FRAME_ID_V3_ARTIST, body.getIdentifier());
         assertEquals(TextEncoding.UTF_8, body.getTextEncoding());
 
@@ -418,8 +413,8 @@ public class Unicode24TagTest extends TestCase
         mp3File = new MP3File(testFile);
         v24tag = (ID3v24Tag) mp3File.getID3v2Tag();
 
-        artistFrame = (ID3v24Frame)v24tag.getFrame(ID3v24Frames.FRAME_ID_ARTIST);
-        body = (FrameBodyTPE1)artistFrame.getBody();
+        artistFrame = (ID3v24Frame) v24tag.getFrame(ID3v24Frames.FRAME_ID_ARTIST);
+        body = (FrameBodyTPE1) artistFrame.getBody();
         assertEquals(ID3v24Frames.FRAME_ID_ARTIST, body.getIdentifier());
 
         //Text Encoding has been corrected ( note the text could use ISO_8859 but because the user has selected
@@ -427,7 +422,7 @@ public class Unicode24TagTest extends TestCase
         assertEquals(TextEncoding.ISO_8859_1, body.getTextEncoding());
     }
 
-      public void testv24TagsWithUTF8OverriddenByDefaultsOnSave()  throws Exception
+    public void testv24TagsWithUTF8OverriddenByDefaultsOnSave() throws Exception
     {
         File testFile = AbstractTestCase.copyAudioToTmp("issue109-2.id3", "testV1.mp3");
 
@@ -436,8 +431,8 @@ public class Unicode24TagTest extends TestCase
         ID3v24Tag v24tag = (ID3v24Tag) mp3File.getID3v2Tag();
 
         //Currently contains tags with utf8 textencodings
-        ID3v24Frame artistFrame = (ID3v24Frame)v24tag.getFrame(ID3v24Frames.FRAME_ID_ARTIST);
-        FrameBodyTPE1 body = (FrameBodyTPE1)artistFrame.getBody();
+        ID3v24Frame artistFrame = (ID3v24Frame) v24tag.getFrame(ID3v24Frames.FRAME_ID_ARTIST);
+        FrameBodyTPE1 body = (FrameBodyTPE1) artistFrame.getBody();
         assertEquals(ID3v23Frames.FRAME_ID_V3_ARTIST, body.getIdentifier());
         assertEquals(TextEncoding.UTF_8, body.getTextEncoding());
 
@@ -452,8 +447,8 @@ public class Unicode24TagTest extends TestCase
         mp3File = new MP3File(testFile);
         v24tag = (ID3v24Tag) mp3File.getID3v2Tag();
 
-        artistFrame = (ID3v24Frame)v24tag.getFrame(ID3v24Frames.FRAME_ID_ARTIST);
-        body = (FrameBodyTPE1)artistFrame.getBody();
+        artistFrame = (ID3v24Frame) v24tag.getFrame(ID3v24Frames.FRAME_ID_ARTIST);
+        body = (FrameBodyTPE1) artistFrame.getBody();
         assertEquals(ID3v24Frames.FRAME_ID_ARTIST, body.getIdentifier());
 
         //Text Encoding has been defaulted by tagoption - no unicode required

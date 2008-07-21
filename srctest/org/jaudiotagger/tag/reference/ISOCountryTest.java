@@ -13,10 +13,10 @@ public class ISOCountryTest extends AbstractTestCase
     public void testCountryMatches()
     {
         //Find by Code
-        assertEquals(ISOCountry.Country.UNITED_KINGDOM,ISOCountry.getCountryByCode("GB"));
-        
+        assertEquals(ISOCountry.Country.UNITED_KINGDOM, ISOCountry.getCountryByCode("GB"));
+
         //Find by Description - case senstive
-        assertEquals(ISOCountry.Country.UNITED_KINGDOM,ISOCountry.getCountryByDescription("United Kingdom"));
+        assertEquals(ISOCountry.Country.UNITED_KINGDOM, ISOCountry.getCountryByDescription("United Kingdom"));
         assertNull(ISOCountry.getCountryByDescription("united kingdom"));
 
         //Doesnt exist
@@ -24,7 +24,7 @@ public class ISOCountryTest extends AbstractTestCase
         assertNull(ISOCountry.getCountryByDescription("england"));
 
         //All values can be found
-        for(ISOCountry.Country country:ISOCountry.Country.values())
+        for (ISOCountry.Country country : ISOCountry.Country.values())
         {
             assertNotNull(ISOCountry.getCountryByCode(country.getCode()));
             assertNotNull(ISOCountry.getCountryByDescription(country.getDescription()));

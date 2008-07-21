@@ -9,24 +9,24 @@ import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
  */
 public class FrameBodyTPE1Test extends AbstractTestCase
 {
-    public static final String     TPE1_TEST_STRING = "beck";
+    public static final String TPE1_TEST_STRING = "beck";
 
-    public static final String     TPE1_UNICODE_REQUIRED_TEST_STRING = "\u01ff\u01ffbeck";
+    public static final String TPE1_UNICODE_REQUIRED_TEST_STRING = "\u01ff\u01ffbeck";
 
 
-     public static FrameBodyTPE1 getInitialisedBody()
+    public static FrameBodyTPE1 getInitialisedBody()
     {
-         //Text Encoding doesnt matter until written to file
-         FrameBodyTPE1 fb = new FrameBodyTPE1(TextEncoding.ISO_8859_1, TPE1_TEST_STRING);
-         return fb;
+        //Text Encoding doesnt matter until written to file
+        FrameBodyTPE1 fb = new FrameBodyTPE1(TextEncoding.ISO_8859_1, TPE1_TEST_STRING);
+        return fb;
     }
 
 
     public static FrameBodyTPE1 getUnicodeRequiredInitialisedBody()
     {
-         //Text Encoding doesnt matter until written to file
-         FrameBodyTPE1 fb = new FrameBodyTPE1(TextEncoding.ISO_8859_1,TPE1_UNICODE_REQUIRED_TEST_STRING);
-         return fb;
+        //Text Encoding doesnt matter until written to file
+        FrameBodyTPE1 fb = new FrameBodyTPE1(TextEncoding.ISO_8859_1, TPE1_UNICODE_REQUIRED_TEST_STRING);
+        return fb;
     }
 
     public void testCreateFrameBody()
@@ -35,7 +35,7 @@ public class FrameBodyTPE1Test extends AbstractTestCase
         FrameBodyTPE1 fb = null;
         try
         {
-            fb = new FrameBodyTPE1( TextEncoding.UTF_16,TPE1_UNICODE_REQUIRED_TEST_STRING);
+            fb = new FrameBodyTPE1(TextEncoding.UTF_16, TPE1_UNICODE_REQUIRED_TEST_STRING);
         }
         catch (Exception e)
         {
@@ -43,9 +43,9 @@ public class FrameBodyTPE1Test extends AbstractTestCase
         }
 
         assertNull(exceptionCaught);
-        assertEquals(ID3v24Frames.FRAME_ID_ARTIST,fb.getIdentifier());
-        assertEquals(TextEncoding.UTF_16,fb.getTextEncoding());
-        assertEquals(FrameBodyTPE1Test.TPE1_UNICODE_REQUIRED_TEST_STRING ,fb.getText());
+        assertEquals(ID3v24Frames.FRAME_ID_ARTIST, fb.getIdentifier());
+        assertEquals(TextEncoding.UTF_16, fb.getTextEncoding());
+        assertEquals(FrameBodyTPE1Test.TPE1_UNICODE_REQUIRED_TEST_STRING, fb.getText());
     }
 
 

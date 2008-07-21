@@ -37,8 +37,7 @@ import java.util.regex.Pattern;
  * @author : Eric Farng
  * @author : Paul Taylor
  */
-abstract public class AbstractID3v1Tag
-        extends AbstractID3Tag
+abstract public class AbstractID3v1Tag extends AbstractID3Tag
 {
 
     //Logger
@@ -61,8 +60,7 @@ abstract public class AbstractID3v1Tag
     protected Pattern endofStringPattern = Pattern.compile("\\x00");
 
     //Tag ID as held in file
-    protected static final byte[] TAG_ID =
-            {(byte) 'T', (byte) 'A', (byte) 'G'};
+    protected static final byte[] TAG_ID = {(byte) 'T', (byte) 'A', (byte) 'G'};
 
     //Fields Lengths common to v1 and v1.1 tags
     protected static final int TAG_LENGTH = 128;
@@ -106,8 +104,7 @@ abstract public class AbstractID3v1Tag
      * @param file to delete the tag from
      * @throws IOException if there was a problem accessing the file
      */
-    public void delete(RandomAccessFile file)
-            throws IOException
+    public void delete(RandomAccessFile file) throws IOException
     {
         //Read into Byte Buffer
         logger.info("deleting tag from file if exists");

@@ -38,10 +38,7 @@ public class XingFrame
     private static final int XING_FRAMECOUNT_BUFFER_SIZE = 4;
     private static final int XING_AUDIOSIZE_BUFFER_SIZE = 4;
 
-    public static final int MAX_BUFFER_SIZE_NEEDED_TO_READ_XING
-            = MPEG_VERSION_1_MODE_STEREO_OFFSET +
-            XING_HEADER_BUFFER_SIZE +
-            LameFrame.LAME_HEADER_BUFFER_SIZE;
+    public static final int MAX_BUFFER_SIZE_NEEDED_TO_READ_XING = MPEG_VERSION_1_MODE_STEREO_OFFSET + XING_HEADER_BUFFER_SIZE + LameFrame.LAME_HEADER_BUFFER_SIZE;
 
 
     private static final int BYTE_1 = 0;
@@ -136,10 +133,7 @@ public class XingFrame
         byte frameCountBuffer[] = new byte[XING_FRAMECOUNT_BUFFER_SIZE];
         header.get(frameCountBuffer);
         isFrameCountEnabled = true;
-        frameCount = (frameCountBuffer[BYTE_1] << 24) & 0xFF000000 |
-                (frameCountBuffer[BYTE_2] << 16) & 0x00FF0000 |
-                (frameCountBuffer[BYTE_3] << 8) & 0x0000FF00 |
-                frameCountBuffer[BYTE_4] & 0x000000FF;
+        frameCount = (frameCountBuffer[BYTE_1] << 24) & 0xFF000000 | (frameCountBuffer[BYTE_2] << 16) & 0x00FF0000 | (frameCountBuffer[BYTE_3] << 8) & 0x0000FF00 | frameCountBuffer[BYTE_4] & 0x000000FF;
     }
 
     /**
@@ -166,10 +160,7 @@ public class XingFrame
         byte frameSizeBuffer[] = new byte[XING_AUDIOSIZE_BUFFER_SIZE];
         header.get(frameSizeBuffer);
         isAudioSizeEnabled = true;
-        audioSize = (frameSizeBuffer[BYTE_1] << 24) & 0xFF000000 |
-                (frameSizeBuffer[BYTE_2] << 16) & 0x00FF0000 |
-                (frameSizeBuffer[BYTE_3] << 8) & 0x0000FF00 |
-                frameSizeBuffer[BYTE_4] & 0x000000FF;
+        audioSize = (frameSizeBuffer[BYTE_1] << 24) & 0xFF000000 | (frameSizeBuffer[BYTE_2] << 16) & 0x00FF0000 | (frameSizeBuffer[BYTE_3] << 8) & 0x0000FF00 | frameSizeBuffer[BYTE_4] & 0x000000FF;
     }
 
     /**
@@ -268,11 +259,6 @@ public class XingFrame
      */
     public String toString()
     {
-        return "xingheader"
-                + " vbr:" + vbr
-                + " frameCountEnabled:" + isFrameCountEnabled
-                + " frameCount:" + frameCount
-                + " audioSizeEnabled:" + isAudioSizeEnabled
-                + " audioFileSize:" + audioSize;
+        return "xingheader" + " vbr:" + vbr + " frameCountEnabled:" + isFrameCountEnabled + " frameCount:" + frameCount + " audioSizeEnabled:" + isAudioSizeEnabled + " audioFileSize:" + audioSize;
     }
 }

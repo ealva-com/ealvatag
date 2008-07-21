@@ -18,20 +18,23 @@ package org.jaudiotagger.tag.id3;
 import org.jaudiotagger.FileConstants;
 import org.jaudiotagger.audio.mp3.MP3File;
 import org.jaudiotagger.tag.*;
-import org.jaudiotagger.tag.reference.GenreTypes;
 import org.jaudiotagger.tag.id3.framebody.*;
 import org.jaudiotagger.tag.lyrics3.AbstractLyrics3;
 import org.jaudiotagger.tag.lyrics3.Lyrics3v2;
 import org.jaudiotagger.tag.lyrics3.Lyrics3v2Field;
+import org.jaudiotagger.tag.reference.GenreTypes;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
-import java.nio.channels.WritableByteChannel;
 import java.nio.channels.FileLock;
-import java.util.*;
+import java.nio.channels.WritableByteChannel;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.ListIterator;
 import java.util.logging.Level;
 
 /**
@@ -603,6 +606,7 @@ public class ID3v24Tag extends AbstractID3v2Tag
 
     /**
      * Read the size of a tag, based on  the value written in the tag header
+     *
      * @param buffer
      * @return
      * @throws TagException
@@ -949,7 +953,7 @@ public class ID3v24Tag extends AbstractID3v2Tag
         try
         {
             fc = new RandomAccessFile(file, "rw").getChannel();
-            fileLock=getFileLockForWriting(fc,file.getPath());
+            fileLock = getFileLockForWriting(fc, file.getPath());
 
             fc.write(headerBuffer);
             fc.write(ByteBuffer.wrap(bodyByteBuffer));
@@ -959,7 +963,7 @@ public class ID3v24Tag extends AbstractID3v2Tag
         {
             if (fc != null)
             {
-                if(fileLock!=null)
+                if (fileLock != null)
                 {
                     fileLock.release();
                 }
@@ -1089,8 +1093,7 @@ public class ID3v24Tag extends AbstractID3v2Tag
      * @throws KeyNotFoundException
      * @throws FieldDataInvalidException
      */
-    public TagField createTagField(ID3v24FieldKey id3Key, String value)
-            throws KeyNotFoundException, FieldDataInvalidException
+    public TagField createTagField(ID3v24FieldKey id3Key, String value) throws KeyNotFoundException, FieldDataInvalidException
     {
         if (id3Key == null)
         {
@@ -1120,9 +1123,7 @@ public class ID3v24Tag extends AbstractID3v2Tag
      *
      * @param id3v24FieldKey
      */
-    public void deleteTagField
-            (ID3v24FieldKey
-                    id3v24FieldKey) throws KeyNotFoundException
+    public void deleteTagField(ID3v24FieldKey id3v24FieldKey) throws KeyNotFoundException
     {
         if (id3v24FieldKey == null)
         {

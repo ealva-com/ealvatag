@@ -32,8 +32,7 @@ import java.nio.charset.CharsetEncoder;
 /**
  * A partial implementation for String based ID3 fields
  */
-public abstract class AbstractString
-        extends AbstractDataType
+public abstract class AbstractString extends AbstractDataType
 {
     /**
      * Creates a new  datatype
@@ -115,7 +114,7 @@ public abstract class AbstractString
         }
         else
         {
-            logger.finest("Failed Trying to decode" +  value + "with" + encoder.toString());
+            logger.finest("Failed Trying to decode" + value + "with" + encoder.toString());
             return false;
         }
     }

@@ -10,22 +10,25 @@ import org.jaudiotagger.tag.id3.ID3v23Frames;
 public class FrameBodyRVADTest extends AbstractTestCase
 {
     public static byte[] TEST_BYTES;
+
     static
     {
-        TEST_BYTES = FrameBodyRVADTest.makeByteArray(new int[] {0x03,0x04});
-    }
-    public static FrameBodyRVAD getInitialisedBody()
-    {
-         FrameBodyRVAD fb = new FrameBodyRVAD();
-         fb.setObjectValue(DataTypes.OBJ_DATA,TEST_BYTES);
-         return fb;
+        TEST_BYTES = FrameBodyRVADTest.makeByteArray(new int[]{0x03, 0x04});
     }
 
-     private static byte[] makeByteArray(int[] ints)
+    public static FrameBodyRVAD getInitialisedBody()
+    {
+        FrameBodyRVAD fb = new FrameBodyRVAD();
+        fb.setObjectValue(DataTypes.OBJ_DATA, TEST_BYTES);
+        return fb;
+    }
+
+    private static byte[] makeByteArray(int[] ints)
     {
         byte[] bs = new byte[ints.length];
-        for (int i = 0; i < ints.length; i++) {
-            bs[i] = (byte)ints[i];
+        for (int i = 0; i < ints.length; i++)
+        {
+            bs[i] = (byte) ints[i];
         }
         return bs;
     }
@@ -44,7 +47,7 @@ public class FrameBodyRVADTest extends AbstractTestCase
         }
 
         assertNull(exceptionCaught);
-        assertEquals(ID3v23Frames.FRAME_ID_V3_RELATIVE_VOLUME_ADJUSTMENT,fb.getIdentifier());
+        assertEquals(ID3v23Frames.FRAME_ID_V3_RELATIVE_VOLUME_ADJUSTMENT, fb.getIdentifier());
 
     }
 
@@ -55,7 +58,7 @@ public class FrameBodyRVADTest extends AbstractTestCase
         try
         {
             fb = new FrameBodyRVAD();
-            fb.setObjectValue(DataTypes.OBJ_DATA,TEST_BYTES);
+            fb.setObjectValue(DataTypes.OBJ_DATA, TEST_BYTES);
         }
         catch (Exception e)
         {
@@ -63,8 +66,8 @@ public class FrameBodyRVADTest extends AbstractTestCase
         }
 
         assertNull(exceptionCaught);
-        assertEquals(ID3v23Frames.FRAME_ID_V3_RELATIVE_VOLUME_ADJUSTMENT,fb.getIdentifier());
-        assertEquals(TEST_BYTES,fb.getObjectValue(DataTypes.OBJ_DATA));
+        assertEquals(ID3v23Frames.FRAME_ID_V3_RELATIVE_VOLUME_ADJUSTMENT, fb.getIdentifier());
+        assertEquals(TEST_BYTES, fb.getObjectValue(DataTypes.OBJ_DATA));
 
 
     }

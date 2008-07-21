@@ -27,7 +27,7 @@ import java.util.Map;
 /**
  * A two way mapping between an Integral Id and a String value
  */
-public class AbstractIntStringValuePair extends AbstractValuePair<Integer,String>
+public class AbstractIntStringValuePair extends AbstractValuePair<Integer, String>
 {
     protected Integer key = null;
 
@@ -50,9 +50,9 @@ public class AbstractIntStringValuePair extends AbstractValuePair<Integer,String
     protected void createMaps()
     {
         //Create the reverse the map
-        for(Map.Entry <Integer,String>  entry:idToValue.entrySet())
+        for (Map.Entry<Integer, String> entry : idToValue.entrySet())
         {
-            valueToId.put(entry.getValue(),entry.getKey());
+            valueToId.put(entry.getValue(), entry.getKey());
         }
 
         //Value List sort alphabetically

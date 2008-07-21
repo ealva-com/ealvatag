@@ -18,8 +18,8 @@
  */
 package org.jaudiotagger.audio.ogg.util;
 
-import org.jaudiotagger.audio.ogg.VorbisVersion;
 import org.jaudiotagger.audio.generic.Utils;
+import org.jaudiotagger.audio.ogg.VorbisVersion;
 
 import java.util.logging.Logger;
 

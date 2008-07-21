@@ -12,9 +12,9 @@ public class FrameBodyPICTest extends AbstractTestCase
 
     public static FrameBodyPIC getInitialisedBody()
     {
-         FrameBodyPIC fb = new FrameBodyPIC();
-         fb.setDescription(FrameBodyPICTest.DESCRIPTION);
-         return fb;
+        FrameBodyPIC fb = new FrameBodyPIC();
+        fb.setDescription(FrameBodyPICTest.DESCRIPTION);
+        return fb;
     }
 
 
@@ -32,8 +32,8 @@ public class FrameBodyPICTest extends AbstractTestCase
         }
 
         assertNull(exceptionCaught);
-        assertEquals(ID3v22Frames.FRAME_ID_V2_ATTACHED_PICTURE,fb.getIdentifier());
-        assertTrue(fb.getDescription()==null);
+        assertEquals(ID3v22Frames.FRAME_ID_V2_ATTACHED_PICTURE, fb.getIdentifier());
+        assertTrue(fb.getDescription() == null);
 
     }
 
@@ -53,8 +53,8 @@ public class FrameBodyPICTest extends AbstractTestCase
         }
 
         assertNull(exceptionCaught);
-        assertEquals(ID3v22Frames.FRAME_ID_V2_ATTACHED_PICTURE,fb.getIdentifier());
-        assertEquals(FrameBodyPICTest.DESCRIPTION,fb.getDescription());
+        assertEquals(ID3v22Frames.FRAME_ID_V2_ATTACHED_PICTURE, fb.getIdentifier());
+        assertEquals(FrameBodyPICTest.DESCRIPTION, fb.getDescription());
 
 
     }

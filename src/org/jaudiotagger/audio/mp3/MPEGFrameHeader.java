@@ -48,7 +48,7 @@ public class MPEGFrameHeader
     /**
      * Constants for MPEG Version
      */
-    public static final Map<Integer,String> mpegVersionMap = new HashMap<Integer,String>();
+    public static final Map<Integer, String> mpegVersionMap = new HashMap<Integer, String>();
     public final static int VERSION_2_5 = 0;
     public final static int VERSION_2 = 2;
     public final static int VERSION_1 = 3;
@@ -63,7 +63,7 @@ public class MPEGFrameHeader
     /**
      * Constants for MPEG Layer
      */
-    public static final Map<Integer,String> mpegLayerMap = new HashMap<Integer,String>();
+    public static final Map<Integer, String> mpegLayerMap = new HashMap<Integer, String>();
     public final static int LAYER_I = 3;
     public final static int LAYER_II = 2;
     public final static int LAYER_III = 1;
@@ -85,7 +85,7 @@ public class MPEGFrameHeader
     /**
      * Bit Rates, the setBitrate varies for different Version and Layer
      */
-    private static final Map<Integer,Integer> bitrateMap = new HashMap<Integer,Integer>();
+    private static final Map<Integer, Integer> bitrateMap = new HashMap<Integer, Integer>();
 
     static
     {
@@ -184,7 +184,7 @@ public class MPEGFrameHeader
     /**
      * Constants for Channel mode
      */
-    protected static final Map<Integer,String> modeMap = new HashMap<Integer,String>();
+    protected static final Map<Integer, String> modeMap = new HashMap<Integer, String>();
     public final static int MODE_STEREO = 0;
     public final static int MODE_JOINT_STEREO = 1;
     public final static int MODE_DUAL_CHANNEL = 2;
@@ -201,7 +201,7 @@ public class MPEGFrameHeader
     /**
      * Constants for Emphasis
      */
-    private static final Map<Integer,String> emphasisMap = new HashMap<Integer,String>();
+    private static final Map<Integer, String> emphasisMap = new HashMap<Integer, String>();
     public final static int EMPHASIS_NONE = 0;
     public final static int EMPHASIS_5015MS = 1;
     public final static int EMPHASIS_RESERVED = 2;
@@ -216,13 +216,13 @@ public class MPEGFrameHeader
     }
 
 
-    private static final Map<Integer,String> modeExtensionMap = new HashMap<Integer,String>();
+    private static final Map<Integer, String> modeExtensionMap = new HashMap<Integer, String>();
     private final static int MODE_EXTENSION_NONE = 0;
     private final static int MODE_EXTENSION_ONE = 1;
     private final static int MODE_EXTENSION_TWO = 2;
     private final static int MODE_EXTENSION_THREE = 3;
 
-    private static final Map<Integer,String> modeExtensionLayerIIIMap = new HashMap<Integer,String>();
+    private static final Map<Integer, String> modeExtensionLayerIIIMap = new HashMap<Integer, String>();
     private final static int MODE_EXTENSION_OFF_OFF = 0;
     private final static int MODE_EXTENSION_ON_OFF = 1;
     private final static int MODE_EXTENSION_OFF_ON = 2;
@@ -244,10 +244,10 @@ public class MPEGFrameHeader
     /**
      * Sampling Rate in Hz
      */
-    private static final Map<Integer,Map<Integer,Integer>> samplingRateMap = new HashMap<Integer,Map<Integer,Integer>>();
-    private static final Map<Integer,Integer> samplingV1Map = new HashMap<Integer,Integer>();
-    private static final Map<Integer,Integer> samplingV2Map = new HashMap<Integer,Integer>();
-    private static final Map<Integer,Integer> samplingV25Map = new HashMap<Integer,Integer>();
+    private static final Map<Integer, Map<Integer, Integer>> samplingRateMap = new HashMap<Integer, Map<Integer, Integer>>();
+    private static final Map<Integer, Integer> samplingV1Map = new HashMap<Integer, Integer>();
+    private static final Map<Integer, Integer> samplingV2Map = new HashMap<Integer, Integer>();
+    private static final Map<Integer, Integer> samplingV25Map = new HashMap<Integer, Integer>();
 
     static
     {
@@ -269,10 +269,10 @@ public class MPEGFrameHeader
     }
 
     /* Samples Per Frame */
-    private static final Map<Integer,Map<Integer,Integer>> samplesPerFrameMap = new HashMap<Integer,Map<Integer,Integer>>();
-    private static final Map<Integer,Integer> samplesPerFrameV1Map = new HashMap<Integer,Integer>();
-    private static final Map<Integer,Integer> samplesPerFrameV2Map = new HashMap<Integer,Integer>();
-    private static final Map<Integer,Integer> samplesPerFrameV25Map = new HashMap<Integer,Integer>();
+    private static final Map<Integer, Map<Integer, Integer>> samplesPerFrameMap = new HashMap<Integer, Map<Integer, Integer>>();
+    private static final Map<Integer, Integer> samplesPerFrameV1Map = new HashMap<Integer, Integer>();
+    private static final Map<Integer, Integer> samplesPerFrameV2Map = new HashMap<Integer, Integer>();
+    private static final Map<Integer, Integer> samplesPerFrameV25Map = new HashMap<Integer, Integer>();
 
     static
     {
@@ -323,8 +323,7 @@ public class MPEGFrameHeader
     /**
      * The setBitrate of this MP3
      */
-    private static final int MASK_MP3_BITRATE = FileConstants.BIT7 | FileConstants.BIT6 | FileConstants.BIT5 |
-            FileConstants.BIT4;
+    private static final int MASK_MP3_BITRATE = FileConstants.BIT7 | FileConstants.BIT6 | FileConstants.BIT5 | FileConstants.BIT4;
 
     /**
      * The sampling/frequency rate
@@ -509,8 +508,7 @@ public class MPEGFrameHeader
     private void setBitrate() throws InvalidAudioFrameException
     {
         /* BitRate, get by checking header setBitrate bits and MPEG Version and Layer */
-        int bitRateIndex = mpegBytes[BYTE_3] & MASK_MP3_BITRATE |
-                mpegBytes[BYTE_2] & MASK_MP3_ID | mpegBytes[BYTE_2] & MASK_MP3_LAYER;
+        int bitRateIndex = mpegBytes[BYTE_3] & MASK_MP3_BITRATE | mpegBytes[BYTE_2] & MASK_MP3_ID | mpegBytes[BYTE_2] & MASK_MP3_LAYER;
 
         bitRate = bitrateMap.get(bitRateIndex);
         if (bitRate == null)
@@ -601,7 +599,7 @@ public class MPEGFrameHeader
     {
         //Frequency
         int index = (mpegBytes[BYTE_3] & MASK_MP3_FREQUENCY) >>> 2;
-        Map<Integer,Integer> samplingRateMapForVersion = samplingRateMap.get(version);
+        Map<Integer, Integer> samplingRateMapForVersion = samplingRateMap.get(version);
         if (samplingRateMapForVersion == null)
         {
             throw new InvalidAudioFrameException("Invalid version");
@@ -707,9 +705,9 @@ public class MPEGFrameHeader
                         return (LAYER_I_FRAME_SIZE_COEFFICIENT * (getBitRate() * SCALE_BY_THOUSAND) / getSamplingRate() + getPaddingLength()) * LAYER_I_SLOT_SIZE;
 
                     case LAYER_II:
-                        if(this.getChannelMode()==MODE_MONO)
+                        if (this.getChannelMode() == MODE_MONO)
                         {
-                            return (LAYER_II_FRAME_SIZE_COEFFICIENT/2) * (getBitRate() * SCALE_BY_THOUSAND) / getSamplingRate() + getPaddingLength() * LAYER_II_SLOT_SIZE;
+                            return (LAYER_II_FRAME_SIZE_COEFFICIENT / 2) * (getBitRate() * SCALE_BY_THOUSAND) / getSamplingRate() + getPaddingLength() * LAYER_II_SLOT_SIZE;
                         }
                         else
                         {
@@ -717,18 +715,18 @@ public class MPEGFrameHeader
                         }
 
                     case LAYER_III:
-                        if(this.getChannelMode()==MODE_MONO)
+                        if (this.getChannelMode() == MODE_MONO)
                         {
-                            return (LAYER_III_FRAME_SIZE_COEFFICIENT/2) * (getBitRate() * SCALE_BY_THOUSAND) / getSamplingRate() + getPaddingLength() * LAYER_III_SLOT_SIZE;
+                            return (LAYER_III_FRAME_SIZE_COEFFICIENT / 2) * (getBitRate() * SCALE_BY_THOUSAND) / getSamplingRate() + getPaddingLength() * LAYER_III_SLOT_SIZE;
                         }
                         else
                         {
-                             return (LAYER_III_FRAME_SIZE_COEFFICIENT) * (getBitRate() * SCALE_BY_THOUSAND) / getSamplingRate() + getPaddingLength() * LAYER_III_SLOT_SIZE;
+                            return (LAYER_III_FRAME_SIZE_COEFFICIENT) * (getBitRate() * SCALE_BY_THOUSAND) / getSamplingRate() + getPaddingLength() * LAYER_III_SLOT_SIZE;
                         }
 
 
                     default:
-                        throw new RuntimeException("Mp3 Unknown Layer:"+layer);
+                        throw new RuntimeException("Mp3 Unknown Layer:" + layer);
 
                 }
 
@@ -746,12 +744,12 @@ public class MPEGFrameHeader
                         return LAYER_III_FRAME_SIZE_COEFFICIENT * (getBitRate() * SCALE_BY_THOUSAND) / getSamplingRate() + getPaddingLength() * LAYER_III_SLOT_SIZE;
 
                     default:
-                        throw new RuntimeException("Mp3 Unknown Layer:"+layer);
+                        throw new RuntimeException("Mp3 Unknown Layer:" + layer);
 
                 }
 
             default:
-                throw new RuntimeException("Mp3 Unknown Version:"+version);
+                throw new RuntimeException("Mp3 Unknown Version:" + version);
 
         }
     }
@@ -852,8 +850,7 @@ public class MPEGFrameHeader
      * @return
      * @throws InvalidAudioFrameException if there is no header at this point
      */
-    public static MPEGFrameHeader parseMPEGHeader(ByteBuffer bb)
-            throws InvalidAudioFrameException
+    public static MPEGFrameHeader parseMPEGHeader(ByteBuffer bb) throws InvalidAudioFrameException
     {
         int position = bb.position();
         bb.get(header, 0, HEADER_SIZE);
@@ -871,11 +868,7 @@ public class MPEGFrameHeader
     public static boolean isMPEGFrame(ByteBuffer bb)
     {
         position = bb.position();
-        return (
-                ((bb.get(position) & SYNC_BYTE1) == SYNC_BYTE1)
-                        &&
-                        ((bb.get(position + 1) & SYNC_BYTE2) == SYNC_BYTE2)
-        );
+        return (((bb.get(position) & SYNC_BYTE1) == SYNC_BYTE1) && ((bb.get(position + 1) & SYNC_BYTE2) == SYNC_BYTE2));
 
     }
 
@@ -884,25 +877,7 @@ public class MPEGFrameHeader
      */
     public String toString()
     {
-        return
-                " mpeg frameheader:" +
-                        " frame length:" + getFrameLength() +
-                        " version:" + versionAsString +
-                        " layer:" + layerAsString +
-                        " channelMode:" + channelModeAsString +
-                        " noOfSamples:" + getNoOfSamples() +
-                        " samplingRate:" + samplingRate +
-                        " isPadding:" + isPadding +
-                        " isProtected:" + isProtected +
-                        " isPrivate:" + isPrivate +
-                        " isCopyrighted:" + isCopyrighted +
-                        " isOriginal:" + isCopyrighted +
-                        " isVariableBitRate" + this.isVariableBitRate() +
-                        " header as binary:" +
-                        AbstractTagDisplayFormatter.displayAsBinary(mpegBytes[BYTE_1]) + " "  +
-                        AbstractTagDisplayFormatter.displayAsBinary(mpegBytes[BYTE_2]) + " "  +
-                        AbstractTagDisplayFormatter.displayAsBinary(mpegBytes[BYTE_3]) + " "  +
-                        AbstractTagDisplayFormatter.displayAsBinary(mpegBytes[BYTE_4]);
+        return " mpeg frameheader:" + " frame length:" + getFrameLength() + " version:" + versionAsString + " layer:" + layerAsString + " channelMode:" + channelModeAsString + " noOfSamples:" + getNoOfSamples() + " samplingRate:" + samplingRate + " isPadding:" + isPadding + " isProtected:" + isProtected + " isPrivate:" + isPrivate + " isCopyrighted:" + isCopyrighted + " isOriginal:" + isCopyrighted + " isVariableBitRate" + this.isVariableBitRate() + " header as binary:" + AbstractTagDisplayFormatter.displayAsBinary(mpegBytes[BYTE_1]) + " " + AbstractTagDisplayFormatter.displayAsBinary(mpegBytes[BYTE_2]) + " " + AbstractTagDisplayFormatter.displayAsBinary(mpegBytes[BYTE_3]) + " " + AbstractTagDisplayFormatter.displayAsBinary(mpegBytes[BYTE_4]);
     }
 }
 

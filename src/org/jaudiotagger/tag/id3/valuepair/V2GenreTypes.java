@@ -2,8 +2,8 @@ package org.jaudiotagger.tag.id3.valuepair;
 
 import org.jaudiotagger.tag.reference.GenreTypes;
 
-import java.util.List;
 import java.util.Collections;
+import java.util.List;
 
 /**
  * ID3V2 Genre list

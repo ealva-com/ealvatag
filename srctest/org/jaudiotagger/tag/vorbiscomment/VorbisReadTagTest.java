@@ -1,11 +1,11 @@
 package org.jaudiotagger.tag.vorbiscomment;
 
 import org.jaudiotagger.AbstractTestCase;
-import org.jaudiotagger.fix.Fix;
-import org.jaudiotagger.audio.ogg.OggFileReader;
-import org.jaudiotagger.audio.AudioFileIO;
 import org.jaudiotagger.audio.AudioFile;
+import org.jaudiotagger.audio.AudioFileIO;
 import org.jaudiotagger.audio.exceptions.CannotReadException;
+import org.jaudiotagger.audio.ogg.OggFileReader;
+import org.jaudiotagger.fix.Fix;
 
 import java.io.File;
 import java.io.RandomAccessFile;
@@ -14,7 +14,7 @@ import java.io.RandomAccessFile;
  * User: paul
  * Date: 21-Feb-2008
  */
-public class VorbisReadTagTest  extends AbstractTestCase
+public class VorbisReadTagTest extends AbstractTestCase
 {
     /**
      * Test reading a file with corrupt vorbis comment tag, however the ogg paging is actually correct
@@ -33,15 +33,15 @@ public class VorbisReadTagTest  extends AbstractTestCase
         {
 //Can summarize file
             File testFile = AbstractTestCase.copyAudioToTmp("test6.ogg");
-            RandomAccessFile raf = new RandomAccessFile(testFile,"r");
+            RandomAccessFile raf = new RandomAccessFile(testFile, "r");
             OggFileReader oggFileReader = new OggFileReader();
             oggFileReader.summarizeOggPageHeaders(testFile);
             raf.close();
         }
-        catch(Exception e)
+        catch (Exception e)
         {
-             e.printStackTrace();
-             exceptionCaught = e;
+            e.printStackTrace();
+            exceptionCaught = e;
         }
         assertNull(exceptionCaught);
     }
@@ -65,12 +65,12 @@ public class VorbisReadTagTest  extends AbstractTestCase
             File testFile = AbstractTestCase.copyAudioToTmp("test6.ogg");
             AudioFileIO.read(testFile);
         }
-        catch(Exception e)
+        catch (Exception e)
         {
-             e.printStackTrace();
-             exceptionCaught = e;
+            e.printStackTrace();
+            exceptionCaught = e;
         }
-        assertTrue(exceptionCaught instanceof CannotReadException);        
+        assertTrue(exceptionCaught instanceof CannotReadException);
     }
 
     /**
@@ -79,7 +79,7 @@ public class VorbisReadTagTest  extends AbstractTestCase
      */
     public void testCreateCorruptFile()
     {
-         Exception exceptionCaught = null;
+        Exception exceptionCaught = null;
         try
         {
             File testFile = AbstractTestCase.copyAudioToTmp("test.ogg", new File("testWithEmptyField.ogg"));
@@ -93,15 +93,16 @@ public class VorbisReadTagTest  extends AbstractTestCase
 
             file = AudioFileIO.read(testFile);
         }
-        catch(Exception e)
+        catch (Exception e)
         {
-             exceptionCaught = e;
+            exceptionCaught = e;
         }
-        assertNull(exceptionCaught);    
+        assertNull(exceptionCaught);
     }
 
-    /** Fixes an issue whereby a file contained a user comment with no value (DATE=) and the number
-     *  of comments was one less than it should be.
+    /**
+     * Fixes an issue whereby a file contained a user comment with no value (DATE=) and the number
+     * of comments was one less than it should be.
      */
     public void testFix202CorruptFile()
     {
@@ -114,7 +115,7 @@ public class VorbisReadTagTest  extends AbstractTestCase
         Exception exceptionCaught = null;
         try
         {
-            File testFile = AbstractTestCase.copyAudioToTmp("test6.ogg",new File("FixedCorruptedFile.ogg"));
+            File testFile = AbstractTestCase.copyAudioToTmp("test6.ogg", new File("FixedCorruptedFile.ogg"));
             OggFileReader fileReader = new OggFileReader(Fix.FIX_OGG_VORBIS_COMMENT_NOT_COUNTING_EMPTY_COLUMNS);
             AudioFile audioFile = fileReader.read(testFile);
             audioFile.commit();
@@ -124,10 +125,10 @@ public class VorbisReadTagTest  extends AbstractTestCase
             audioFile.commit();
 
         }
-        catch(Exception e)
+        catch (Exception e)
         {
-             e.printStackTrace();
-             exceptionCaught = e;
+            e.printStackTrace();
+            exceptionCaught = e;
         }
         assertNull(exceptionCaught);
     }

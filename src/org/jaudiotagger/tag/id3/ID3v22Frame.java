@@ -15,8 +15,8 @@
  */
 package org.jaudiotagger.tag.id3;
 
-import org.jaudiotagger.audio.mp3.MP3File;
 import org.jaudiotagger.audio.generic.Utils;
+import org.jaudiotagger.audio.mp3.MP3File;
 import org.jaudiotagger.tag.EmptyFrameException;
 import org.jaudiotagger.tag.InvalidFrameException;
 import org.jaudiotagger.tag.InvalidFrameIdentifierException;
@@ -104,7 +104,7 @@ public class ID3v22Frame extends AbstractID3v2Frame
         // to keep things up to date.
         try
         {
-            Class<AbstractID3v2FrameBody> c = (Class<AbstractID3v2FrameBody>)Class.forName("org.jaudiotagger.tag.id3.framebody.FrameBody" + bodyIdentifier);
+            Class<AbstractID3v2FrameBody> c = (Class<AbstractID3v2FrameBody>) Class.forName("org.jaudiotagger.tag.id3.framebody.FrameBody" + bodyIdentifier);
             frameBody = c.newInstance();
         }
         catch (ClassNotFoundException cnfe)

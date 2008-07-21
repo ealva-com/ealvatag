@@ -20,13 +20,13 @@ package org.jaudiotagger.tag.mp4;
 
 import org.jaudiotagger.audio.generic.AbstractTag;
 import org.jaudiotagger.audio.mp4.atom.Mp4BoxHeader;
-import org.jaudiotagger.tag.TagField;
-import org.jaudiotagger.tag.TagFieldKey;
+import org.jaudiotagger.logging.ErrorMessage;
 import org.jaudiotagger.tag.FieldDataInvalidException;
 import org.jaudiotagger.tag.KeyNotFoundException;
+import org.jaudiotagger.tag.TagField;
+import org.jaudiotagger.tag.TagFieldKey;
 import static org.jaudiotagger.tag.mp4.Mp4FieldKey.*;
 import org.jaudiotagger.tag.mp4.field.*;
-import org.jaudiotagger.logging.ErrorMessage;
 
 import java.util.EnumMap;
 import java.util.List;
@@ -88,7 +88,7 @@ public class Mp4Tag extends AbstractTag
         tagFieldToMp4Field.put(TagFieldKey.URL_WIKIPEDIA_RELEASE_SITE, Mp4FieldKey.URL_WIKIPEDIA_RELEASE_SITE);
         tagFieldToMp4Field.put(TagFieldKey.URL_OFFICIAL_ARTIST_SITE, Mp4FieldKey.URL_OFFICIAL_ARTIST_SITE);
         tagFieldToMp4Field.put(TagFieldKey.URL_DISCOGS_ARTIST_SITE, Mp4FieldKey.URL_DISCOGS_ARTIST_SITE);
-        tagFieldToMp4Field.put(TagFieldKey.URL_WIKIPEDIA_ARTIST_SITE, Mp4FieldKey.URL_WIKIPEDIA_ARTIST_SITE);          
+        tagFieldToMp4Field.put(TagFieldKey.URL_WIKIPEDIA_ARTIST_SITE, Mp4FieldKey.URL_WIKIPEDIA_ARTIST_SITE);
     }
 
     protected String getArtistId()
@@ -143,7 +143,7 @@ public class Mp4Tag extends AbstractTag
 
     public TagField createArtistField(String content)
     {
-        if(content==null)
+        if (content == null)
         {
             throw new IllegalArgumentException(ErrorMessage.GENERAL_INVALID_NULL_ARGUMENT.getMsg());
         }
@@ -152,7 +152,7 @@ public class Mp4Tag extends AbstractTag
 
     public TagField createAlbumField(String content)
     {
-        if(content==null)
+        if (content == null)
         {
             throw new IllegalArgumentException(ErrorMessage.GENERAL_INVALID_NULL_ARGUMENT.getMsg());
         }
@@ -161,17 +161,16 @@ public class Mp4Tag extends AbstractTag
 
     public TagField createTitleField(String content)
     {
-        if(content==null)
+        if (content == null)
         {
             throw new IllegalArgumentException(ErrorMessage.GENERAL_INVALID_NULL_ARGUMENT.getMsg());
         }
         return new Mp4TagTextField(getTitleId(), content);
     }
 
-    public TagField createTrackField(String content)
-            throws FieldDataInvalidException
+    public TagField createTrackField(String content) throws FieldDataInvalidException
     {
-        if(content==null)
+        if (content == null)
         {
             throw new IllegalArgumentException(ErrorMessage.GENERAL_INVALID_NULL_ARGUMENT.getMsg());
         }
@@ -180,7 +179,7 @@ public class Mp4Tag extends AbstractTag
 
     public TagField createYearField(String content)
     {
-        if(content==null)
+        if (content == null)
         {
             throw new IllegalArgumentException(ErrorMessage.GENERAL_INVALID_NULL_ARGUMENT.getMsg());
         }
@@ -189,7 +188,7 @@ public class Mp4Tag extends AbstractTag
 
     public TagField createCommentField(String content)
     {
-        if(content==null)
+        if (content == null)
         {
             throw new IllegalArgumentException(ErrorMessage.GENERAL_INVALID_NULL_ARGUMENT.getMsg());
         }
@@ -208,7 +207,7 @@ public class Mp4Tag extends AbstractTag
     @Override
     public TagField createGenreField(String content)
     {
-        if(content==null)
+        if (content == null)
         {
             throw new IllegalArgumentException(ErrorMessage.GENERAL_INVALID_NULL_ARGUMENT.getMsg());
         }
@@ -275,7 +274,7 @@ public class Mp4Tag extends AbstractTag
         if (genericKey == null)
         {
             throw new KeyNotFoundException();
-        }        
+        }
         return super.getFirst(tagFieldToMp4Field.get(genericKey).getFieldName());
     }
 
@@ -339,8 +338,7 @@ public class Mp4Tag extends AbstractTag
      *                1/10
      * @return
      */
-    public TagField createDiscNoField(String content)
-            throws FieldDataInvalidException
+    public TagField createDiscNoField(String content) throws FieldDataInvalidException
     {
         return new Mp4DiscNoField(content);
     }
@@ -369,10 +367,9 @@ public class Mp4Tag extends AbstractTag
      * @throws FieldDataInvalidException
      */
     @Override
-    public TagField createTagField(TagFieldKey genericKey, String value)
-            throws KeyNotFoundException, FieldDataInvalidException
+    public TagField createTagField(TagFieldKey genericKey, String value) throws KeyNotFoundException, FieldDataInvalidException
     {
-        if(value==null)
+        if (value == null)
         {
             throw new IllegalArgumentException(ErrorMessage.GENERAL_INVALID_NULL_ARGUMENT.getMsg());
         }
@@ -394,11 +391,10 @@ public class Mp4Tag extends AbstractTag
      * @throws KeyNotFoundException
      * @throws FieldDataInvalidException
      */
-    public TagField createTagField(Mp4FieldKey mp4FieldKey, String value)
-            throws KeyNotFoundException, FieldDataInvalidException
+    public TagField createTagField(Mp4FieldKey mp4FieldKey, String value) throws KeyNotFoundException, FieldDataInvalidException
 
     {
-        if(value==null)
+        if (value == null)
         {
             throw new IllegalArgumentException(ErrorMessage.GENERAL_INVALID_NULL_ARGUMENT.getMsg());
         }

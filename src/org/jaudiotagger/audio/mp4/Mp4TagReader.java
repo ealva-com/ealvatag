@@ -18,24 +18,23 @@
  */
 package org.jaudiotagger.audio.mp4;
 
+import org.jaudiotagger.audio.exceptions.CannotReadException;
+import org.jaudiotagger.audio.generic.Utils;
+import org.jaudiotagger.audio.mp4.atom.Mp4BoxHeader;
+import org.jaudiotagger.audio.mp4.atom.Mp4MetaBox;
+import org.jaudiotagger.logging.ErrorMessage;
+import org.jaudiotagger.tag.TagField;
+import org.jaudiotagger.tag.mp4.Mp4FieldKey;
+import org.jaudiotagger.tag.mp4.Mp4NonStandardFieldKey;
+import org.jaudiotagger.tag.mp4.Mp4Tag;
+import org.jaudiotagger.tag.mp4.atom.Mp4DataBox;
+import org.jaudiotagger.tag.mp4.field.*;
+
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.io.UnsupportedEncodingException;
-import java.util.logging.Logger;
 import java.nio.ByteBuffer;
-
-import org.jaudiotagger.audio.exceptions.CannotReadException;
-import org.jaudiotagger.audio.mp4.atom.Mp4BoxHeader;
-import org.jaudiotagger.audio.mp4.atom.Mp4MetaBox;
-import org.jaudiotagger.audio.mp4.Mp4NotMetaFieldKey;
-import org.jaudiotagger.audio.generic.Utils;
-import org.jaudiotagger.tag.TagField;
-import org.jaudiotagger.tag.mp4.atom.Mp4DataBox;
-import org.jaudiotagger.tag.mp4.field.*;
-import org.jaudiotagger.tag.mp4.Mp4Tag;
-import org.jaudiotagger.tag.mp4.Mp4FieldKey;
-import org.jaudiotagger.tag.mp4.Mp4NonStandardFieldKey;
-import org.jaudiotagger.logging.ErrorMessage;
+import java.util.logging.Logger;
 
 /**
  * Reads metadata from mp4,
@@ -160,18 +159,18 @@ public class Mp4TagReader
         //Reverse Dns Atom
         if (header.getId().equals(Mp4TagReverseDnsField.IDENTIFIER))
         {
-           //
-           try
-           {
-                TagField field = new Mp4TagReverseDnsField(header,raw);
+            //
+            try
+            {
+                TagField field = new Mp4TagReverseDnsField(header, raw);
                 tag.add(field);
-           }
-           catch(Exception e)
-           {
-               logger.warning(ErrorMessage.MP4_UNABLE_READ_REVERSE_DNS_FIELD.getMsg(e.getMessage()));
-               TagField field = new Mp4TagRawBinaryField(header, raw);
-               tag.add(field);
-           }
+            }
+            catch (Exception e)
+            {
+                logger.warning(ErrorMessage.MP4_UNABLE_READ_REVERSE_DNS_FIELD.getMsg(e.getMessage()));
+                TagField field = new Mp4TagRawBinaryField(header, raw);
+                tag.add(field);
+            }
         }
         //Normal Parent with Data atom
         else
@@ -182,9 +181,7 @@ public class Mp4TagReader
             if (isDataIdentifier)
             {
                 //Need this to decide what type of Field to create
-                int type = Utils.getNumberBigEndian(raw,
-                        Mp4DataBox.TYPE_POS_INCLUDING_HEADER,
-                        Mp4DataBox.TYPE_POS_INCLUDING_HEADER + Mp4DataBox.TYPE_LENGTH - 1);
+                int type = Utils.getNumberBigEndian(raw, Mp4DataBox.TYPE_POS_INCLUDING_HEADER, Mp4DataBox.TYPE_POS_INCLUDING_HEADER + Mp4DataBox.TYPE_LENGTH - 1);
 
                 logger.info("Box Type id:" + header.getId() + ":type:" + type);
 
@@ -219,8 +216,8 @@ public class Mp4TagReader
                     TagField field = new Mp4TagByteField(header.getId(), raw);
                     tag.add(field);
                 }
-                else if (type == Mp4FieldType.COVERART_JPEG.getFileClassId() ||
-                        type == Mp4FieldType.COVERART_PNG.getFileClassId())
+                else
+                if (type == Mp4FieldType.COVERART_JPEG.getFileClassId() || type == Mp4FieldType.COVERART_PNG.getFileClassId())
                 {
                     int processedDataSize = 0;
                     int imageCount = 0;
@@ -231,9 +228,7 @@ public class Mp4TagReader
                         //for each subimage (if there are more than one image)
                         if (imageCount > 0)
                         {
-                            type = Utils.getNumberBigEndian(raw,
-                                    processedDataSize + Mp4DataBox.TYPE_POS_INCLUDING_HEADER,
-                                    processedDataSize + Mp4DataBox.TYPE_POS_INCLUDING_HEADER + Mp4DataBox.TYPE_LENGTH - 1);
+                            type = Utils.getNumberBigEndian(raw, processedDataSize + Mp4DataBox.TYPE_POS_INCLUDING_HEADER, processedDataSize + Mp4DataBox.TYPE_POS_INCLUDING_HEADER + Mp4DataBox.TYPE_LENGTH - 1);
                         }
                         Mp4TagCoverField field = new Mp4TagCoverField(raw, type);
                         tag.add(field);

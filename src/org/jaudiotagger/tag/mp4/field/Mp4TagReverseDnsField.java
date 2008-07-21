@@ -1,19 +1,19 @@
 package org.jaudiotagger.tag.mp4.field;
 
-import org.jaudiotagger.tag.TagTextField;
+import org.jaudiotagger.audio.generic.Utils;
+import org.jaudiotagger.audio.mp4.atom.Mp4BoxHeader;
+import org.jaudiotagger.logging.ErrorMessage;
 import org.jaudiotagger.tag.TagField;
+import org.jaudiotagger.tag.TagTextField;
+import org.jaudiotagger.tag.mp4.Mp4FieldKey;
+import org.jaudiotagger.tag.mp4.Mp4TagField;
+import org.jaudiotagger.tag.mp4.atom.Mp4DataBox;
 import org.jaudiotagger.tag.mp4.atom.Mp4MeanBox;
 import org.jaudiotagger.tag.mp4.atom.Mp4NameBox;
-import org.jaudiotagger.tag.mp4.atom.Mp4DataBox;
-import org.jaudiotagger.tag.mp4.Mp4TagField;
-import org.jaudiotagger.tag.mp4.Mp4FieldKey;
-import org.jaudiotagger.audio.mp4.atom.Mp4BoxHeader;
-import org.jaudiotagger.audio.generic.Utils;
-import org.jaudiotagger.logging.ErrorMessage;
 
-import java.io.UnsupportedEncodingException;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 
 /**
@@ -52,9 +52,9 @@ public class Mp4TagReverseDnsField extends Mp4TagField implements TagTextField
      * @param data
      * @throws UnsupportedEncodingException
      */
-    public Mp4TagReverseDnsField(Mp4BoxHeader parentHeader,ByteBuffer data) throws UnsupportedEncodingException
+    public Mp4TagReverseDnsField(Mp4BoxHeader parentHeader, ByteBuffer data) throws UnsupportedEncodingException
     {
-        super(parentHeader,data);
+        super(parentHeader, data);
     }
 
     /**
@@ -93,11 +93,11 @@ public class Mp4TagReverseDnsField extends Mp4TagField implements TagTextField
         data.position(data.position() + nameBoxHeader.getDataLength());
 
         //Issue 198:There is not actually a data atom there cannot cant be because no room for one
-        if(parentHeader.getDataLength()==meanBoxHeader.getLength() + nameBoxHeader.getLength())
-        {                                                                      
+        if (parentHeader.getDataLength() == meanBoxHeader.getLength() + nameBoxHeader.getLength())
+        {
             id = IDENTIFIER + ":" + issuer + ":" + descriptor;
             setContent("");
-            logger.warning(ErrorMessage.MP4_REVERSE_DNS_FIELD_HAS_NO_DATA.getMsg(id));            
+            logger.warning(ErrorMessage.MP4_REVERSE_DNS_FIELD_HAS_NO_DATA.getMsg(id));
         }
         //Usual Case
         else
@@ -157,24 +157,20 @@ public class Mp4TagReverseDnsField extends Mp4TagField implements TagTextField
 
             //Create Meanbox data
             byte[] issuerRawData = issuer.getBytes(getEncoding());
-            baos.write(Utils.getSizeBigEndian(Mp4BoxHeader.HEADER_LENGTH
-                    + Mp4MeanBox.PRE_DATA_LENGTH
-                    + issuerRawData.length));
+            baos.write(Utils.getSizeBigEndian(Mp4BoxHeader.HEADER_LENGTH + Mp4MeanBox.PRE_DATA_LENGTH + issuerRawData.length));
             baos.write(Utils.getDefaultBytes(Mp4MeanBox.IDENTIFIER, "ISO-8859-1"));
             baos.write(new byte[]{0, 0, 0, 0});
             baos.write(issuerRawData);
 
             //Create Namebox data
             byte[] nameRawData = descriptor.getBytes(getEncoding());
-            baos.write(Utils.getSizeBigEndian(Mp4BoxHeader.HEADER_LENGTH
-                    + Mp4NameBox.PRE_DATA_LENGTH
-                    + nameRawData.length));
+            baos.write(Utils.getSizeBigEndian(Mp4BoxHeader.HEADER_LENGTH + Mp4NameBox.PRE_DATA_LENGTH + nameRawData.length));
             baos.write(Utils.getDefaultBytes(Mp4NameBox.IDENTIFIER, "ISO-8859-1"));
             baos.write(new byte[]{0, 0, 0, 0});
             baos.write(nameRawData);
 
             //Create DataBox data if we have data only
-            if(content.length()>0)
+            if (content.length() > 0)
             {
                 baos.write(getRawContentDataOnly());
             }
@@ -201,9 +197,7 @@ public class Mp4TagReverseDnsField extends Mp4TagField implements TagTextField
             //Create DataBox data
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             byte[] dataRawData = content.getBytes(getEncoding());
-            baos.write(Utils.getSizeBigEndian(Mp4BoxHeader.HEADER_LENGTH
-                    + Mp4DataBox.PRE_DATA_LENGTH
-                    + dataRawData.length));
+            baos.write(Utils.getSizeBigEndian(Mp4BoxHeader.HEADER_LENGTH + Mp4DataBox.PRE_DATA_LENGTH + dataRawData.length));
             baos.write(Utils.getDefaultBytes(Mp4DataBox.IDENTIFIER, "ISO-8859-1"));
             baos.write(new byte[]{0});
             baos.write(new byte[]{0, 0, (byte) getFieldType().getFileClassId()});

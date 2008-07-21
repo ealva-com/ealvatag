@@ -18,8 +18,6 @@
  */
 package org.jaudiotagger.tag;
 
-import org.jaudiotagger.tag.TagField;
-
 /**
  * This interface extends the default field definition by methods for working
  * with human readable text.<br>

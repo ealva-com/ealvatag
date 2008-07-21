@@ -8,14 +8,13 @@ public enum EncoderType
 {
     AAC("AAC"),
     DRM_AAC("DRM AAC"),
-    APPLE_LOSSLESS("Apple Lossless"),
-    ;
+    APPLE_LOSSLESS("Apple Lossless"),;
 
     private String description;
 
     EncoderType(String description)
     {
-         this.description=description;
+        this.description = description;
     }
 
     public String getDescription()

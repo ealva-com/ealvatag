@@ -18,17 +18,17 @@
  */
 package org.jaudiotagger.tag.mp4;
 
-import java.io.UnsupportedEncodingException;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.nio.ByteBuffer;
-import java.util.logging.Logger;
-
+import org.jaudiotagger.audio.generic.Utils;
+import org.jaudiotagger.audio.mp4.atom.Mp4BoxHeader;
 import org.jaudiotagger.tag.TagField;
 import org.jaudiotagger.tag.mp4.atom.Mp4DataBox;
 import org.jaudiotagger.tag.mp4.field.Mp4FieldType;
-import org.jaudiotagger.audio.generic.Utils;
-import org.jaudiotagger.audio.mp4.atom.Mp4BoxHeader;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.nio.ByteBuffer;
+import java.util.logging.Logger;
 
 /**
  * This abstract class represents a link between piece of data, and how it is stored as an mp4 atom
@@ -74,9 +74,9 @@ public abstract class Mp4TagField implements TagField
      * @param data
      * @throws UnsupportedEncodingException
      */
-    protected Mp4TagField(Mp4BoxHeader parentHeader,ByteBuffer data) throws UnsupportedEncodingException
+    protected Mp4TagField(Mp4BoxHeader parentHeader, ByteBuffer data) throws UnsupportedEncodingException
     {
-        this.parentHeader=parentHeader;
+        this.parentHeader = parentHeader;
         build(data);
     }
 
@@ -101,13 +101,7 @@ public abstract class Mp4TagField implements TagField
 
     public boolean isCommon()
     {
-        return id.equals(Mp4FieldKey.ARTIST.getFieldName())
-                || id.equals(Mp4FieldKey.ALBUM.getFieldName())
-                || id.equals(Mp4FieldKey.TITLE.getFieldName())
-                || id.equals(Mp4FieldKey.TRACK.getFieldName())
-                || id.equals(Mp4FieldKey.DAY.getFieldName())
-                || id.equals(Mp4FieldKey.COMMENT.getFieldName())
-                || id.equals(Mp4FieldKey.GENRE.getFieldName());
+        return id.equals(Mp4FieldKey.ARTIST.getFieldName()) || id.equals(Mp4FieldKey.ALBUM.getFieldName()) || id.equals(Mp4FieldKey.TITLE.getFieldName()) || id.equals(Mp4FieldKey.TRACK.getFieldName()) || id.equals(Mp4FieldKey.DAY.getFieldName()) || id.equals(Mp4FieldKey.COMMENT.getFieldName()) || id.equals(Mp4FieldKey.GENRE.getFieldName());
     }
 
     /**

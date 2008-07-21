@@ -20,7 +20,7 @@ import junit.framework.TestCase;
 import java.io.*;
 
 /**
- * 
+ *
  */
 public abstract class AbstractTestCase extends TestCase
 {
@@ -39,10 +39,8 @@ public abstract class AbstractTestCase extends TestCase
         {
             FileInputStream in = new FileInputStream(fromFile);
             FileOutputStream out = new FileOutputStream(toFile);
-            BufferedInputStream inBuffer = new BufferedInputStream
-                (in);
-            BufferedOutputStream outBuffer = new
-                BufferedOutputStream(out);
+            BufferedInputStream inBuffer = new BufferedInputStream(in);
+            BufferedOutputStream outBuffer = new BufferedOutputStream(out);
 
             int theByte;
 
@@ -74,15 +72,15 @@ public abstract class AbstractTestCase extends TestCase
 
     }
 
-     private static boolean append(File fromFile1,File fromFile2, File toFile)
+    private static boolean append(File fromFile1, File fromFile2, File toFile)
     {
         try
         {
             FileInputStream in = new FileInputStream(fromFile1);
             FileInputStream in2 = new FileInputStream(fromFile2);
             FileOutputStream out = new FileOutputStream(toFile);
-            BufferedInputStream inBuffer = new BufferedInputStream   (in);
-            BufferedInputStream inBuffer2 = new BufferedInputStream   (in2);
+            BufferedInputStream inBuffer = new BufferedInputStream(in);
+            BufferedInputStream inBuffer2 = new BufferedInputStream(in2);
             BufferedOutputStream outBuffer = new BufferedOutputStream(out);
 
             int theByte;
@@ -92,7 +90,7 @@ public abstract class AbstractTestCase extends TestCase
                 outBuffer.write(theByte);
             }
 
-              while ((theByte = inBuffer2.read()) > -1)
+            while ((theByte = inBuffer2.read()) > -1)
             {
                 outBuffer.write(theByte);
             }
@@ -105,7 +103,7 @@ public abstract class AbstractTestCase extends TestCase
             in2.close();
 
             // cleanupif files are not the same length
-            if ((fromFile1.length() + fromFile2.length())!= toFile.length())
+            if ((fromFile1.length() + fromFile2.length()) != toFile.length())
             {
                 toFile.delete();
 
@@ -123,6 +121,7 @@ public abstract class AbstractTestCase extends TestCase
 
     /**
      * Copy audiofile to processing dir ready for use in test
+     *
      * @param fileName
      * @return
      */
@@ -142,10 +141,11 @@ public abstract class AbstractTestCase extends TestCase
     /**
      * Copy audiofile to processing dir ready for use in test, use this if using same file
      * in multiple tests because with junit multithreading can have problemsa otherwise
+     *
      * @param fileName
      * @return
      */
-    public static File copyAudioToTmp(String fileName,File newFileName)
+    public static File copyAudioToTmp(String fileName, File newFileName)
     {
         File inputFile = new File("testdata", fileName);
         File outputFile = new File("testdatatmp", newFileName.getName());
@@ -166,7 +166,7 @@ public abstract class AbstractTestCase extends TestCase
      * @param fileName
      * @return
      */
-     public static File copyAudioToTmp(String tagfile,String fileName)
+    public static File copyAudioToTmp(String tagfile, String fileName)
     {
         File inputTagFile = new File("testtagdata", tagfile);
         File inputFile = new File("testdata", fileName);
@@ -175,7 +175,7 @@ public abstract class AbstractTestCase extends TestCase
         {
             outputFile.getParentFile().mkdirs();
         }
-        boolean result = append(inputTagFile,inputFile, outputFile);
+        boolean result = append(inputTagFile, inputFile, outputFile);
         assertTrue(result);
         return outputFile;
     }

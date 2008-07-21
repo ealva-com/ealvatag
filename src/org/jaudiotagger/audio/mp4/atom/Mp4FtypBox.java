@@ -4,12 +4,12 @@ import org.jaudiotagger.audio.exceptions.CannotReadException;
 import org.jaudiotagger.audio.generic.Utils;
 
 import java.nio.ByteBuffer;
+import java.nio.charset.CharacterCodingException;
 import java.nio.charset.Charset;
 import java.nio.charset.CharsetDecoder;
-import java.nio.charset.CharacterCodingException;
 import java.nio.charset.CodingErrorAction;
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Ftyp (File Type) is the first atom, can be used to help identify the mp4 container type
@@ -41,57 +41,53 @@ public class Mp4FtypBox extends AbstractMp4Box
         CharsetDecoder decoder = Charset.forName("ISO-8859-1").newDecoder();
         try
         {
-            majorBrand = decoder.decode((ByteBuffer)dataBuffer.slice().limit(MAJOR_BRAND_LENGTH)).toString();
+            majorBrand = decoder.decode((ByteBuffer) dataBuffer.slice().limit(MAJOR_BRAND_LENGTH)).toString();
         }
-        catch(CharacterCodingException cee)
+        catch (CharacterCodingException cee)
         {
             //Ignore
 
         }
-        dataBuffer.position(dataBuffer.position() + MAJOR_BRAND_LENGTH );
+        dataBuffer.position(dataBuffer.position() + MAJOR_BRAND_LENGTH);
 
-        majorBrandVersion = Utils.getNumberBigEndian(dataBuffer,
-                dataBuffer.position(),
-                (dataBuffer.position() + MAJOR_BRAND_VERSION_LENGTH - 1));
+        majorBrandVersion = Utils.getNumberBigEndian(dataBuffer, dataBuffer.position(), (dataBuffer.position() + MAJOR_BRAND_VERSION_LENGTH - 1));
         dataBuffer.position(dataBuffer.position() + MAJOR_BRAND_VERSION_LENGTH);
 
-        while ((dataBuffer.position() < dataBuffer.limit()) &&
-               (dataBuffer.limit() - dataBuffer.position() >= COMPATIBLE_BRAND_LENGTH ))
+        while ((dataBuffer.position() < dataBuffer.limit()) && (dataBuffer.limit() - dataBuffer.position() >= COMPATIBLE_BRAND_LENGTH))
         {
             decoder.onMalformedInput(CodingErrorAction.REPORT);
-            decoder.onMalformedInput(CodingErrorAction.REPORT);                        
+            decoder.onMalformedInput(CodingErrorAction.REPORT);
             try
             {
-                String brand  = decoder.decode((ByteBuffer)dataBuffer.slice().limit(COMPATIBLE_BRAND_LENGTH)).toString();
+                String brand = decoder.decode((ByteBuffer) dataBuffer.slice().limit(COMPATIBLE_BRAND_LENGTH)).toString();
                 //Sometimes just extra groups of four nulls
-                if(!brand.equals("\u0000\u0000\u0000\u0000"))
+                if (!brand.equals("\u0000\u0000\u0000\u0000"))
                 {
                     compatibleBrands.add(brand);
                 }
             }
-            catch(CharacterCodingException cee)
+            catch (CharacterCodingException cee)
             {
                 //Ignore    
             }
-            dataBuffer.position(dataBuffer.position() + COMPATIBLE_BRAND_LENGTH );
+            dataBuffer.position(dataBuffer.position() + COMPATIBLE_BRAND_LENGTH);
         }
     }
 
 
     public String toString()
-    {     
+    {
 
-        String info =  "Major Brand:"+majorBrand
-                + "Version:"+ majorBrandVersion;
-        if(compatibleBrands.size()>0)
+        String info = "Major Brand:" + majorBrand + "Version:" + majorBrandVersion;
+        if (compatibleBrands.size() > 0)
         {
-            info+="Compatible:";
-            for(String brand:compatibleBrands)
+            info += "Compatible:";
+            for (String brand : compatibleBrands)
             {
-                info+=brand;
-                info+=",";
+                info += brand;
+                info += ",";
             }
-            return info.substring(0,info.length()-1);
+            return info.substring(0, info.length() - 1);
         }
         return info;
     }
@@ -113,13 +109,13 @@ public class Mp4FtypBox extends AbstractMp4Box
         return compatibleBrands;
     }
 
-     /**
+    /**
      * Major brand, helps identify whats contained in the file, used by major and compatible brands
      * but this is not an exhaustive list, so for that reason we dont force the values read from the file
      * to tie in with this enum.
      */
     public static enum Brand
-     {
+    {
         ISO14496_1_BASE_MEDIA("isom", "ISO 14496-1"),
         ISO14496_12_BASE_MEDIA("iso2", "ISO 14496-12"),
         ISO14496_1_VERSION_1("mp41", "ISO 14496-1"),
@@ -130,8 +126,8 @@ public class Mp4FtypBox extends AbstractMp4Box
         APPLE_AAC_AUDIO("M4P ", "Apple Audio"),
         AES_ENCRYPTED_AUDIO("M4B ", "Apple encrypted Audio"),
         APPLE_AUDIO("mp71", "Apple Audio"),
-        ISO14496_12_MPEG7_METADATA("mp71","MAIN_SYNTHESIS"),
-        APPLE_AUDIO_ONLY("M4A ","M4A Audio"), //SOmetimes used by protected mutli track audio
+        ISO14496_12_MPEG7_METADATA("mp71", "MAIN_SYNTHESIS"),
+        APPLE_AUDIO_ONLY("M4A ", "M4A Audio"), //SOmetimes used by protected mutli track audio
         ;
 
         private String id;
@@ -156,6 +152,6 @@ public class Mp4FtypBox extends AbstractMp4Box
         {
             return description;
         }
-         
+
     }
 }

@@ -297,8 +297,7 @@ public class Utils
         return i;
     }
 
-    public static String readString(DataInput di, int charsToRead)
-            throws IOException
+    public static String readString(DataInput di, int charsToRead) throws IOException
     {
         final byte[] buf = new byte[charsToRead];
         di.readFully(buf);

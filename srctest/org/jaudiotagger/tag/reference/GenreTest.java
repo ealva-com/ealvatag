@@ -1,10 +1,6 @@
 package org.jaudiotagger.tag.reference;
 
 import org.jaudiotagger.AbstractTestCase;
-import org.jaudiotagger.audio.mp3.MP3File;
-
-import java.io.File;
-import java.util.Locale;
 
 /**
  * Testing of Genres
@@ -18,22 +14,21 @@ public class GenreTest extends AbstractTestCase
     {
         //Case sensitive
         assertNull(GenreTypes.getInstanceOf().getIdForValue("rock"));
-        assertEquals(17,(int)GenreTypes.getInstanceOf().getIdForValue("Rock"));
+        assertEquals(17, (int) GenreTypes.getInstanceOf().getIdForValue("Rock"));
 
         //Case insensitive
-        assertEquals(17,(int)GenreTypes.getInstanceOf().getIdForName("Rock"));
-        assertEquals(17,(int)GenreTypes.getInstanceOf().getIdForName("rock"));
+        assertEquals(17, (int) GenreTypes.getInstanceOf().getIdForName("Rock"));
+        assertEquals(17, (int) GenreTypes.getInstanceOf().getIdForName("rock"));
 
         //Doesnt exist
         assertNull(GenreTypes.getInstanceOf().getIdForValue("rocky"));
         assertNull(GenreTypes.getInstanceOf().getIdForName("rocky"));
 
-
         //All values can be found
-        for(String value:GenreTypes.getInstanceOf().getAlphabeticalValueList())
+        for (String value : GenreTypes.getInstanceOf().getAlphabeticalValueList())
         {
             assertNotNull(GenreTypes.getInstanceOf().getIdForName(value));
-            assertNotNull(GenreTypes.getInstanceOf().getIdForName(value.toLowerCase()));            
+            assertNotNull(GenreTypes.getInstanceOf().getIdForName(value.toLowerCase()));
         }
     }
 }

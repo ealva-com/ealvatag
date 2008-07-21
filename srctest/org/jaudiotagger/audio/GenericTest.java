@@ -14,24 +14,24 @@ public class GenericTest extends TestCase
      */
     public void testReadFileUnsupportedFormat()
     {
-        File nonAudioFile =  new File("testdata", "coverart.bmp");
+        File nonAudioFile = new File("testdata", "coverart.bmp");
         AudioFileFilter aff = new AudioFileFilter();
         aff.accept(nonAudioFile);
         assertFalse(aff.accept(nonAudioFile));
 
-        File audioFile =  new File("testdata", "test.m4a");
+        File audioFile = new File("testdata", "test.m4a");
         aff.accept(audioFile);
         assertTrue(aff.accept(audioFile));
 
-        audioFile =  new File("testdata", "test.flac");
+        audioFile = new File("testdata", "test.flac");
         aff.accept(audioFile);
         assertTrue(aff.accept(audioFile));
 
-        audioFile =  new File("testdata", "test.ogg");
+        audioFile = new File("testdata", "test.ogg");
         aff.accept(audioFile);
         assertTrue(aff.accept(audioFile));
 
-        audioFile =  new File("testdata", "testV1.mp3");
+        audioFile = new File("testdata", "testV1.mp3");
         aff.accept(audioFile);
         assertTrue(aff.accept(audioFile));
     }

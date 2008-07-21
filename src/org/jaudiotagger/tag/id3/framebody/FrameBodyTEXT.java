@@ -64,8 +64,7 @@ public class FrameBodyTEXT extends AbstractFrameBodyTextInfo implements ID3v24Fr
      * @throws java.io.IOException
      * @throws InvalidTagException
      */
-    public FrameBodyTEXT(ByteBuffer byteBuffer, int frameSize)
-            throws InvalidTagException
+    public FrameBodyTEXT(ByteBuffer byteBuffer, int frameSize) throws InvalidTagException
     {
         super(byteBuffer, frameSize);
     }

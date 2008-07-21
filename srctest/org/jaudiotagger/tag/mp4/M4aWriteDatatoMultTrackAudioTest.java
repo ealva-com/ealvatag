@@ -1,16 +1,15 @@
 package org.jaudiotagger.tag.mp4;
 
 import junit.framework.TestCase;
+import org.jaudiotagger.AbstractTestCase;
+import org.jaudiotagger.audio.AudioFile;
+import org.jaudiotagger.audio.AudioFileIO;
+import org.jaudiotagger.audio.mp4.Mp4AtomTree;
+import org.jaudiotagger.tag.Tag;
+import org.jaudiotagger.tag.TagFieldKey;
 
 import java.io.File;
 import java.io.RandomAccessFile;
-
-import org.jaudiotagger.AbstractTestCase;
-import org.jaudiotagger.tag.Tag;
-import org.jaudiotagger.tag.TagFieldKey;
-import org.jaudiotagger.audio.mp4.Mp4AtomTree;
-import org.jaudiotagger.audio.AudioFile;
-import org.jaudiotagger.audio.AudioFileIO;
 
 /**
  * Write tags  for a file which contains  multiple tracks such as winamp encoder
@@ -411,9 +410,8 @@ public class M4aWriteDatatoMultTrackAudioTest extends TestCase
             assertEquals("9", tag.getFirst(TagFieldKey.MUSICIP_ID));
             assertEquals("Classic Rock", tag.getFirst(TagFieldKey.GENRE));
 
-
             //Visual check of atom tree
-            testFile = new File("testdatatmp","testWriteMultiTrack7.m4a");
+            testFile = new File("testdatatmp", "testWriteMultiTrack7.m4a");
             Mp4AtomTree atomTree = new Mp4AtomTree(new RandomAccessFile(testFile, "r"));
             atomTree.printAtomTree();
 

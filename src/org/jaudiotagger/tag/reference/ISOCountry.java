@@ -1,39 +1,38 @@
 package org.jaudiotagger.tag.reference;
 
-import java.util.Map;
 import java.util.HashMap;
+import java.util.Map;
 
 
 /**
  * Represents the ISO 3166-1 Country List with ISO 3166-1-alpha-2 code
- *
+ * <p/>
  * Contains an enum  of countries, their two letter code and description
  * with additional emthod to allow an enum to be found by its two letter code or its description.
  * More details at http://www.iso.org/iso/country_codes/iso_3166_code_lists/english_country_names_and_code_elements.htm#c
  */
 public class ISOCountry
 {
-    private static Map<String,Country> codeMap;
-    private static Map<String,Country> descriptionMap;
+    private static Map<String, Country> codeMap;
+    private static Map<String, Country> descriptionMap;
 
     static
     {
-        codeMap = new HashMap<String,Country>();
-        for(Country country:Country.values())
+        codeMap = new HashMap<String, Country>();
+        for (Country country : Country.values())
         {
-            codeMap.put(country.code,country);
+            codeMap.put(country.code, country);
         }
 
-        descriptionMap = new HashMap<String,Country>();
-        for(Country country:Country.values())
+        descriptionMap = new HashMap<String, Country>();
+        for (Country country : Country.values())
         {
-            descriptionMap.put(country.description,country);
+            descriptionMap.put(country.description, country);
         }
 
     }
 
     /**
-     *
      * @param code
      * @return enum with this two letter code
      */
@@ -43,7 +42,6 @@ public class ISOCountry
     }
 
     /**
-     *
      * @param description
      * @return enum with this description
      */

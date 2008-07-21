@@ -18,14 +18,14 @@
  */
 package org.jaudiotagger.tag.mp4.field;
 
-import java.io.UnsupportedEncodingException;
-import java.nio.ByteBuffer;
-
+import org.jaudiotagger.audio.mp4.atom.Mp4BoxHeader;
 import org.jaudiotagger.tag.TagField;
 import org.jaudiotagger.tag.TagTextField;
 import org.jaudiotagger.tag.mp4.Mp4TagField;
 import org.jaudiotagger.tag.mp4.atom.Mp4DataBox;
-import org.jaudiotagger.audio.mp4.atom.Mp4BoxHeader;
+
+import java.io.UnsupportedEncodingException;
+import java.nio.ByteBuffer;
 
 /**
  * Represents a single text field

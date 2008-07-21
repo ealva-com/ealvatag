@@ -18,11 +18,13 @@
  */
 package org.jaudiotagger.audio.ogg;
 
-import org.jaudiotagger.audio.exceptions.*;
+import org.jaudiotagger.audio.exceptions.CannotReadException;
+import org.jaudiotagger.audio.exceptions.CannotWriteException;
 import org.jaudiotagger.audio.generic.AudioFileWriter;
 import org.jaudiotagger.tag.Tag;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.RandomAccessFile;
 import java.util.logging.Logger;
 
 /**

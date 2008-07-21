@@ -18,17 +18,16 @@
  */
 package org.jaudiotagger.tag.mp4.field;
 
-import java.io.UnsupportedEncodingException;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.util.List;
-import java.nio.ByteBuffer;
-
 import org.jaudiotagger.audio.generic.Utils;
 import org.jaudiotagger.audio.mp4.atom.Mp4BoxHeader;
-import org.jaudiotagger.tag.mp4.field.Mp4TagTextField;
-import org.jaudiotagger.tag.mp4.atom.Mp4DataBox;
 import org.jaudiotagger.tag.TagField;
+import org.jaudiotagger.tag.mp4.atom.Mp4DataBox;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.nio.ByteBuffer;
+import java.util.List;
 
 /**
  * Represents simple text field that contains an array of number,

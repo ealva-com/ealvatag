@@ -63,8 +63,7 @@ public class FrameBodyTCOM extends AbstractFrameBodyTextInfo implements ID3v24Fr
      *
      * @throws InvalidTagException if unable to create framebody from buffer
      */
-    public FrameBodyTCOM(ByteBuffer byteBuffer, int frameSize)
-            throws InvalidTagException
+    public FrameBodyTCOM(ByteBuffer byteBuffer, int frameSize) throws InvalidTagException
     {
         super(byteBuffer, frameSize);
     }

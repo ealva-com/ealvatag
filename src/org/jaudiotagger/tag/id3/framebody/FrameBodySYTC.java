@@ -81,8 +81,7 @@ public class FrameBodySYTC extends AbstractID3v2FrameBody implements ID3v24Frame
      * @param timeStampFormat
      * @param tempo
      */
-    public FrameBodySYTC(int timeStampFormat,
-                         byte[] tempo)
+    public FrameBodySYTC(int timeStampFormat, byte[] tempo)
     {
         setObjectValue(DataTypes.OBJ_TIME_STAMP_FORMAT, timeStampFormat);
         setObjectValue(DataTypes.OBJ_DATA, tempo);
@@ -93,8 +92,7 @@ public class FrameBodySYTC extends AbstractID3v2FrameBody implements ID3v24Frame
      *
      * @throws InvalidTagException
      */
-    public FrameBodySYTC(ByteBuffer byteBuffer, int frameSize)
-            throws InvalidTagException
+    public FrameBodySYTC(ByteBuffer byteBuffer, int frameSize) throws InvalidTagException
     {
         super(byteBuffer, frameSize);
     }

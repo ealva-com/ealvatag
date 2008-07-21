@@ -1,8 +1,8 @@
 package org.jaudiotagger.tag.mp4.atom;
 
-import org.jaudiotagger.audio.mp4.atom.Mp4BoxHeader;
-import org.jaudiotagger.audio.mp4.atom.AbstractMp4Box;
 import org.jaudiotagger.audio.generic.Utils;
+import org.jaudiotagger.audio.mp4.atom.AbstractMp4Box;
+import org.jaudiotagger.audio.mp4.atom.Mp4BoxHeader;
 
 import java.nio.ByteBuffer;
 
@@ -38,7 +38,7 @@ public class Mp4NameBox extends AbstractMp4Box
         this.dataBuffer = dataBuffer.slice();
 
         //issuer
-        this.name = Utils.getString(this.dataBuffer, PRE_DATA_LENGTH, header.getDataLength() - PRE_DATA_LENGTH, header.getEncoding());     
+        this.name = Utils.getString(this.dataBuffer, PRE_DATA_LENGTH, header.getDataLength() - PRE_DATA_LENGTH, header.getEncoding());
     }
 
     public String getName()

@@ -15,7 +15,7 @@ import java.util.Arrays;
  * to process the whole file.
  * <p/>
  * From http://www.codeproject.com/KB/audio-video/mpegaudioinfo.aspx#SideInfo
- *
+ * <p/>
  * This header is only used by MPEG audio files encoded with the Fraunhofer Encoder as far as I know. It is different from the XING header. You find it exactly
  * 32 bytes after the end of the first MPEG audio header in the file. (Note that the position is zero-based; position, length and example are each in byte-format.)
  * Position 	Length 	Meaning 	Example
@@ -46,8 +46,7 @@ public class VbriFrame
     private static final int VBRI_FRAMECOUNT_BUFFER_SIZE = 4;
     private static final int VBRI_TOC_ENTRY_BUFFER_SIZE = 2;
 
-    public static final int MAX_BUFFER_SIZE_NEEDED_TO_READ_VBRI
-            =  VBRI_OFFSET + VBRI_HEADER_BUFFER_SIZE;
+    public static final int MAX_BUFFER_SIZE_NEEDED_TO_READ_VBRI = VBRI_OFFSET + VBRI_HEADER_BUFFER_SIZE;
 
     private static final int BYTE_1 = 0;
     private static final int BYTE_2 = 1;
@@ -89,10 +88,7 @@ public class VbriFrame
         byte frameSizeBuffer[] = new byte[VBRI_AUDIOSIZE_BUFFER_SIZE];
         header.get(frameSizeBuffer);
         isAudioSizeEnabled = true;
-        audioSize = (frameSizeBuffer[BYTE_1] << 24) & 0xFF000000 |
-                (frameSizeBuffer[BYTE_2] << 16) & 0x00FF0000 |
-                (frameSizeBuffer[BYTE_3] << 8) & 0x0000FF00 |
-                frameSizeBuffer[BYTE_4] & 0x000000FF;
+        audioSize = (frameSizeBuffer[BYTE_1] << 24) & 0xFF000000 | (frameSizeBuffer[BYTE_2] << 16) & 0x00FF0000 | (frameSizeBuffer[BYTE_3] << 8) & 0x0000FF00 | frameSizeBuffer[BYTE_4] & 0x000000FF;
     }
 
     /**
@@ -103,10 +99,7 @@ public class VbriFrame
         byte frameCountBuffer[] = new byte[VBRI_FRAMECOUNT_BUFFER_SIZE];
         header.get(frameCountBuffer);
         isFrameCountEnabled = true;
-        frameCount = (frameCountBuffer[BYTE_1] << 24) & 0xFF000000 |
-                (frameCountBuffer[BYTE_2] << 16) & 0x00FF0000 |
-                (frameCountBuffer[BYTE_3] << 8) & 0x0000FF00 |
-                frameCountBuffer[BYTE_4] & 0x000000FF;
+        frameCount = (frameCountBuffer[BYTE_1] << 24) & 0xFF000000 | (frameCountBuffer[BYTE_2] << 16) & 0x00FF0000 | (frameCountBuffer[BYTE_3] << 8) & 0x0000FF00 | frameCountBuffer[BYTE_4] & 0x000000FF;
     }
 
 
@@ -132,6 +125,7 @@ public class VbriFrame
      *
      * @return
      * @throws org.jaudiotagger.audio.exceptions.InvalidAudioFrameException
+     *
      */
     public static VbriFrame parseVBRIFrame() throws InvalidAudioFrameException
     {
@@ -149,8 +143,8 @@ public class VbriFrame
 
         //We store this so can return here after scanning through buffer
         int startPosition = bb.position();
-        MP3File.logger.finest("Checking VBRI Frame at"+startPosition);
-        
+        MP3File.logger.finest("Checking VBRI Frame at" + startPosition);
+
         bb.position(startPosition + VBRI_OFFSET);
 
         //Create header from here
@@ -184,15 +178,12 @@ public class VbriFrame
     {
         return "Fraunhofer";
     }
+
     /**
      * @return a string represntation
      */
     public String toString()
     {
-        return "VBRIheader"
-                + " vbr:" + vbr
-                + " frameCount:" + frameCount                            
-                + " audioFileSize:" + audioSize
-                + " encoder:" + getEncoder();
+        return "VBRIheader" + " vbr:" + vbr + " frameCount:" + frameCount + " audioFileSize:" + audioSize + " encoder:" + getEncoder();
     }
 }

@@ -63,8 +63,7 @@ public class FrameBodyWPUB extends AbstractFrameBodyUrlLink implements ID3v24Fra
      * @throws java.io.IOException
      * @throws InvalidTagException
      */
-    public FrameBodyWPUB(ByteBuffer byteBuffer, int frameSize)
-            throws InvalidTagException
+    public FrameBodyWPUB(ByteBuffer byteBuffer, int frameSize) throws InvalidTagException
     {
         super(byteBuffer, frameSize);
     }

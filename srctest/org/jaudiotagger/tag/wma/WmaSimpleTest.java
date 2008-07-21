@@ -1,11 +1,9 @@
 package org.jaudiotagger.tag.wma;
 
 import org.jaudiotagger.AbstractTestCase;
-import org.jaudiotagger.tag.flac.FlacTag;
 import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.AudioFileIO;
 import org.jaudiotagger.audio.generic.GenericTag;
-import org.jaudiotagger.audio.flac.FlacInfoReader;
 
 import java.io.File;
 
@@ -15,7 +13,7 @@ import java.io.File;
  */
 public class WmaSimpleTest extends AbstractTestCase
 {
-     public void testReadFile()
+    public void testReadFile()
     {
         Exception exceptionCaught = null;
         try
@@ -23,17 +21,16 @@ public class WmaSimpleTest extends AbstractTestCase
             File testFile = AbstractTestCase.copyAudioToTmp("test1.wma");
             AudioFile f = AudioFileIO.read(testFile);
 
-            assertEquals("32",f.getAudioHeader().getBitRate());
-            assertEquals("ASF (audio): 0x0161 (Windows Media Audio (ver 7,8,9))",f.getAudioHeader().getEncodingType());
-            assertEquals("2",f.getAudioHeader().getChannels());
-            assertEquals("32000",f.getAudioHeader().getSampleRate());
+            assertEquals("32", f.getAudioHeader().getBitRate());
+            assertEquals("ASF (audio): 0x0161 (Windows Media Audio (ver 7,8,9))", f.getAudioHeader().getEncodingType());
+            assertEquals("2", f.getAudioHeader().getChannels());
+            assertEquals("32000", f.getAudioHeader().getSampleRate());
 
 
             assertTrue(f.getTag() instanceof GenericTag);        //TODO Flawed concept hould be asftag
-            GenericTag tag = (GenericTag)f.getTag();
+            GenericTag tag = (GenericTag) f.getTag();
 
-
-              //Ease of use methods for common fields
+            //Ease of use methods for common fields
             assertEquals("artist", tag.getFirstArtist());
             assertEquals("album", tag.getFirstAlbum());
             assertEquals("tracktitle", tag.getFirstTitle());
@@ -42,30 +39,30 @@ public class WmaSimpleTest extends AbstractTestCase
             assertEquals("3", tag.getFirstTrack());
             assertEquals("genre", tag.getFirstGenre());
         }
-        catch(Exception e)
+        catch (Exception e)
         {
-             e.printStackTrace();
-             exceptionCaught = e;
+            e.printStackTrace();
+            exceptionCaught = e;
         }
         assertNull(exceptionCaught);
     }
 
-     public void testWriteFile()
+    public void testWriteFile()
     {
         Exception exceptionCaught = null;
         try
         {
-            File testFile = AbstractTestCase.copyAudioToTmp("test1.wma",new File("testwrite1.wma"));
+            File testFile = AbstractTestCase.copyAudioToTmp("test1.wma", new File("testwrite1.wma"));
             AudioFile f = AudioFileIO.read(testFile);
 
-            assertEquals("32",f.getAudioHeader().getBitRate());
-            assertEquals("ASF (audio): 0x0161 (Windows Media Audio (ver 7,8,9))",f.getAudioHeader().getEncodingType());
-            assertEquals("2",f.getAudioHeader().getChannels());
-            assertEquals("32000",f.getAudioHeader().getSampleRate());
+            assertEquals("32", f.getAudioHeader().getBitRate());
+            assertEquals("ASF (audio): 0x0161 (Windows Media Audio (ver 7,8,9))", f.getAudioHeader().getEncodingType());
+            assertEquals("2", f.getAudioHeader().getChannels());
+            assertEquals("32000", f.getAudioHeader().getSampleRate());
 
 
             assertTrue(f.getTag() instanceof GenericTag);        //TODO Flawed sconcept hould be asftag
-            GenericTag tag = (GenericTag)f.getTag();
+            GenericTag tag = (GenericTag) f.getTag();
 
             //Write some new values and save
             tag.setArtist("artist2");
@@ -78,7 +75,7 @@ public class WmaSimpleTest extends AbstractTestCase
             f.commit();
 
             f = AudioFileIO.read(testFile);
-            tag = (GenericTag)f.getTag();
+            tag = (GenericTag) f.getTag();
 
             assertEquals("artist2", tag.getFirstArtist());
             assertEquals("album2", tag.getFirstAlbum());
@@ -88,10 +85,10 @@ public class WmaSimpleTest extends AbstractTestCase
             assertEquals("4", tag.getFirstTrack());
             assertEquals("genre2", tag.getFirstGenre());
         }
-        catch(Exception e)
+        catch (Exception e)
         {
-             e.printStackTrace();
-             exceptionCaught = e;
+            e.printStackTrace();
+            exceptionCaught = e;
         }
         assertNull(exceptionCaught);
     }

@@ -85,7 +85,7 @@ public class GenericAudioHeader implements AudioHeader
      * @see #content
      */
     public final static String FIELD_VBR = "VBR";
-    
+
     /**
      * Used for WMA files
      */
@@ -94,14 +94,14 @@ public class GenericAudioHeader implements AudioHeader
     /**
      * This table containts the parameters.<br>
      */
-    protected HashMap<String,Object> content;
+    protected HashMap<String, Object> content;
 
     /**
      * Creates an instance with emtpy values.<br>
      */
     public GenericAudioHeader()
     {
-        content = new HashMap<String,Object>(6);
+        content = new HashMap<String, Object>(6);
         content.put(FIELD_BITRATE, new Integer(-1));
         content.put(FIELD_CHANNEL, new Integer(-1));
         content.put(FIELD_TYPE, "");
@@ -234,8 +234,9 @@ public class GenericAudioHeader implements AudioHeader
      *
      * @return <code>true</code> if audio clip is encoded with VBR.
      */
-    public boolean isLossless() {
-    	return isLossless;
+    public boolean isLossless()
+    {
+        return isLossless;
     }
 
     /**
@@ -323,12 +324,12 @@ public class GenericAudioHeader implements AudioHeader
     /**
      * Sets the Lossless flag for the represented audio clip.<br>
      *
-     * @param b
-     *            <code>true</code> if Lossless.
+     * @param b <code>true</code> if Lossless.
      */
-    public void setLossless(boolean b) {
-    	isLossless = b;
-    } 
+    public void setLossless(boolean b)
+    {
+        isLossless = b;
+    }
 
     /**
      * Can be used to add additional information

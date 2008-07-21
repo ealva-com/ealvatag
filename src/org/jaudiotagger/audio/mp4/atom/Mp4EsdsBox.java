@@ -155,19 +155,13 @@ public class Mp4EsdsBox extends AbstractMp4Box
             kind = kindMap.get((int) dataBuffer.get());
 
             //Skip Other Section 4 data
-            dataBuffer.position(dataBuffer.position()
-                    + STREAM_TYPE_LENGTH
-                    + BUFFER_SIZE_LENGTH);
+            dataBuffer.position(dataBuffer.position() + STREAM_TYPE_LENGTH + BUFFER_SIZE_LENGTH);
 
             //Bit rates
-            this.maxBitrate = Utils.getNumberBigEndian(dataBuffer,
-                    dataBuffer.position(),
-                    (dataBuffer.position() + MAX_BITRATE_LENGTH - 1));
+            this.maxBitrate = Utils.getNumberBigEndian(dataBuffer, dataBuffer.position(), (dataBuffer.position() + MAX_BITRATE_LENGTH - 1));
             dataBuffer.position(dataBuffer.position() + MAX_BITRATE_LENGTH);
 
-            this.avgBitrate = Utils.getNumberBigEndian(dataBuffer,
-                    dataBuffer.position(),
-                    (dataBuffer.position() + AVERAGE_BITRATE_LENGTH - 1));
+            this.avgBitrate = Utils.getNumberBigEndian(dataBuffer, dataBuffer.position(), (dataBuffer.position() + AVERAGE_BITRATE_LENGTH - 1));
             dataBuffer.position(dataBuffer.position() + AVERAGE_BITRATE_LENGTH);
 
 

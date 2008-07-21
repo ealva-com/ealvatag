@@ -84,8 +84,7 @@ public class FieldFrameBodyIMG extends AbstractLyrics3v2FieldFrameBody
      *
      * @throws InvalidTagException
      */
-    public FieldFrameBodyIMG(ByteBuffer byteBuffer)
-            throws InvalidTagException
+    public FieldFrameBodyIMG(ByteBuffer byteBuffer) throws InvalidTagException
     {
         this.read(byteBuffer);
     }
@@ -193,8 +192,7 @@ public class FieldFrameBodyIMG extends AbstractLyrics3v2FieldFrameBody
     }
 
 
-    public void read(ByteBuffer byteBuffer)
-            throws InvalidTagException
+    public void read(ByteBuffer byteBuffer) throws InvalidTagException
     {
         String imageString;
 
@@ -237,8 +235,7 @@ public class FieldFrameBodyIMG extends AbstractLyrics3v2FieldFrameBody
      * @param file
      * @throws java.io.IOException
      */
-    public void write(RandomAccessFile file)
-            throws java.io.IOException
+    public void write(RandomAccessFile file) throws java.io.IOException
     {
         int size = 0;
         int offset = 0;
