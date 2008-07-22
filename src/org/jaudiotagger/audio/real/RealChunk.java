@@ -1,76 +1,80 @@
 package org.jaudiotagger.audio.real;
 
-import org.jaudiotagger.audio.generic.Utils;
-
 import java.io.ByteArrayInputStream;
-import java.io.DataInput;
 import java.io.DataInputStream;
 import java.io.IOException;
+import java.io.RandomAccessFile;
 
-public class RealChunk
-{
+import org.jaudiotagger.audio.exceptions.CannotReadException;
+import org.jaudiotagger.audio.generic.Utils;
 
-    protected static final String RMF = ".RMF";
-    protected static final String PROP = "PROP";
-    protected static final String MDPR = "MDPR";
-    protected static final String CONT = "CONT";
-    protected static final String DATA = "DATA";
-    protected static final String INDX = "INDX";
+public class RealChunk {
 
-    private final String id;
-    private final int size;
-    private final byte[] bytes;
+	protected static final String RMF = ".RMF";
+	protected static final String PROP = "PROP";
+	protected static final String MDPR = "MDPR";
+	protected static final String CONT = "CONT";
+	protected static final String DATA = "DATA";
+	protected static final String INDX = "INDX";
 
-    public static RealChunk readChunk(DataInput di) throws IOException
-    {
-        final String id = Utils.readString(di, 4);
-        final int size = Utils.readUint32AsInt(di);
-        final byte[] bytes = new byte[size - 8];
-        di.readFully(bytes);
-        return new RealChunk(id, size, bytes);
-    }
+	private final String id;
+	private final int size;
+	private final byte[] bytes;
 
-    public RealChunk(String id, int size, byte[] bytes)
-    {
-        super();
-        this.id = id;
-        this.size = size;
-        this.bytes = bytes;
-    }
+	public static RealChunk readChunk(RandomAccessFile raf)
+			throws CannotReadException, IOException {
+		final String id = Utils.readString(raf, 4);
+		final int size = Utils.readUint32AsInt(raf);
+		if (size < 8) {
+			throw new CannotReadException(
+					"Corrupt file: RealAudio chunk length at position "
+							+ (raf.getFilePointer() - 4)
+							+ " cannot be less than 8");
+		}
+		if (size > (raf.length() - raf.getFilePointer() + 8)) {
+			throw new CannotReadException(
+					"Corrupt file: RealAudio chunk length of " + size
+							+ " at position " + (raf.getFilePointer() - 4)
+							+ " extends beyond the end of the file");
+		}
+		final byte[] bytes = new byte[size - 8];
+		raf.readFully(bytes);
+		return new RealChunk(id, size, bytes);
+	}
 
-    public DataInputStream getDataInputStream()
-    {
-        return new DataInputStream(new ByteArrayInputStream(getBytes()));
-    }
+	public RealChunk(String id, int size, byte[] bytes) {
+		super();
+		this.id = id;
+		this.size = size;
+		this.bytes = bytes;
+	}
 
-    public boolean isCONT()
-    {
-        return CONT.equals(id);
-    }
+	public DataInputStream getDataInputStream() {
+		return new DataInputStream(new ByteArrayInputStream(getBytes()));
+	}
 
-    public boolean isPROP()
-    {
-        return PROP.equals(id);
-    }
+	public boolean isCONT() {
+		return CONT.equals(id);
+	}
 
-    public byte[] getBytes()
-    {
-        return bytes;
-    }
+	public boolean isPROP() {
+		return PROP.equals(id);
+	}
 
-    public String getId()
-    {
-        return id;
-    }
+	public byte[] getBytes() {
+		return bytes;
+	}
 
-    public int getSize()
-    {
-        return size;
-    }
+	public String getId() {
+		return id;
+	}
 
-    @Override
-    public String toString()
-    {
-        return id + "\t" + size;
-    }
+	public int getSize() {
+		return size;
+	}
+
+	@Override
+	public String toString() {
+		return id + "\t" + size;
+	}
 }

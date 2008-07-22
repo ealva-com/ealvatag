@@ -44,14 +44,14 @@ public class RealFileReader extends AudioFileReader
         return rv;
     }
 
-    private RealChunk findPropChunk(RandomAccessFile raf) throws IOException
+    private RealChunk findPropChunk(RandomAccessFile raf) throws IOException, CannotReadException
     {
         final RealChunk rmf = RealChunk.readChunk(raf);
         final RealChunk prop = RealChunk.readChunk(raf);
         return prop;
     }
 
-    private RealChunk findContChunk(RandomAccessFile raf) throws IOException
+    private RealChunk findContChunk(RandomAccessFile raf) throws IOException, CannotReadException
     {
         final RealChunk rmf = RealChunk.readChunk(raf);
         final RealChunk prop = RealChunk.readChunk(raf);
