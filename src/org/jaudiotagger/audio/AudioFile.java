@@ -22,10 +22,16 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.RandomAccessFile;
 import java.util.logging.Logger;
+import java.util.ArrayList;
 
 import org.jaudiotagger.audio.exceptions.CannotWriteException;
 import org.jaudiotagger.audio.exceptions.ReadOnlyFileException;
+import org.jaudiotagger.audio.flac.metadatablock.MetadataBlockDataPicture;
+import org.jaudiotagger.audio.generic.GenericTag;
 import org.jaudiotagger.tag.Tag;
+import org.jaudiotagger.tag.mp4.Mp4Tag;
+import org.jaudiotagger.tag.vorbiscomment.VorbisCommentTag;
+import org.jaudiotagger.tag.flac.FlacTag;
 
 /**
  * <p>This is the main object manipulated by the user representing an audiofile, its properties and its tag.</p>
@@ -221,4 +227,74 @@ public class AudioFile
     }
 
 
+    /** Create Default Tag
+     *
+     * @return
+     */
+    //TODO might be better to instantiate classes such as Mp4File,FlacFile ecetera
+    //TODO Generic tag is very misleading because soem of these formats canta actually save the tag
+    public Tag createDefaultTag()
+    {
+        if(SupportedFileFormat.FLAC.getFilesuffix().equals(file.getName().substring(file.getName().lastIndexOf('.'))))
+        {
+            return new FlacTag(VorbisCommentTag.createNewTag(), new ArrayList< MetadataBlockDataPicture >());
+        }
+        else if(SupportedFileFormat.OGG.getFilesuffix().equals(file.getName().substring(file.getName().lastIndexOf('.'))))
+        {
+            return VorbisCommentTag.createNewTag();
+        }
+        else if(SupportedFileFormat.MP4.getFilesuffix().equals(file.getName().substring(file.getName().lastIndexOf('.'))))
+        {
+            return new Mp4Tag();
+        }
+        else if(SupportedFileFormat.M4A.getFilesuffix().equals(file.getName().substring(file.getName().lastIndexOf('.'))))
+        {
+            return new Mp4Tag();
+        }
+        else if(SupportedFileFormat.M4P.getFilesuffix().equals(file.getName().substring(file.getName().lastIndexOf('.'))))
+        {
+            return new Mp4Tag();
+        }
+        else
+        {
+            //MP3 done by MP3File subclass
+            //Wav doesnt support tags but returing Generictag
+            //Wma not merged yet
+            //Ra but returing Generictag
+            return new GenericTag();
+        }
+
+    }
+
+    /**
+     * Get the tag or if the file doesnt have one at all, create a default tag  and return
+     *
+     * @return
+     */
+    public Tag getTagOrCreateDefault()
+    {
+        Tag tag = getTag();
+        if(tag==null)
+        {
+            return createDefaultTag();
+        }
+        return tag;
+    }
+
+     /**
+     * Get the tag or if the file doesnt have one at all, create a default tag  and set it
+     *
+     * @return
+     */
+    public Tag getTagOrCreateAndSetDefault()
+    {
+        Tag tag = getTag();
+        if(tag==null)
+        {
+            tag = createDefaultTag();
+            setTag(tag);
+            return tag;
+        }
+        return tag;
+    }
 }

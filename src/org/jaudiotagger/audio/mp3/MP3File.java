@@ -894,7 +894,18 @@ public class MP3File extends AudioFile
         {
             setID3v2Tag((AbstractID3v2Tag) tag);
         }
+    }
 
+
+    /** Create Default Tag
+     *
+     * @return
+     */
+    @Override
+    //TODO Should be able to change the Default
+    public Tag createDefaultTag()
+    {
+        return new ID3v23Tag();
     }
 }
 
