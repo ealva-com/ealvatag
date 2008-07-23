@@ -259,6 +259,7 @@ public class FrameBodyTDRC extends AbstractFrameBodyTextInfo implements ID3v24Fr
             try
             {
                 final Date d = formatters.get(i).parse(getText());
+                //If able to parse a date from the text
                 if (d != null)
                 {
                     extractID3v23Formats(d, i);
@@ -269,6 +270,11 @@ public class FrameBodyTDRC extends AbstractFrameBodyTextInfo implements ID3v24Fr
             catch (ParseException e)
             {
                 //Do nothing;
+            }
+            catch(NumberFormatException nfe)
+            {
+                //Do nothing except log warning because not really expecting this to happen
+                logger.warning("Date Formatter:"+formatters.get(i).toPattern() + "failed to parse:"+getText()+ "with "+nfe.getMessage());
             }
         }
     }
@@ -300,9 +306,20 @@ public class FrameBodyTDRC extends AbstractFrameBodyTextInfo implements ID3v24Fr
             {
                 //Do nothing;
             }
+            catch(NumberFormatException nfe)
+            {
+                //Do nothing except log warning because not really expecting this to happen
+                logger.warning("Date Formatter:"+formatters.get(i).toPattern() + "failed to parse:"+getText()+ "with "+nfe.getMessage());
+            }
         }
     }
 
+    /**
+     * Extract Format
+     *
+     * @param dateRecord
+     * @param precision
+     */
     private void extractID3v23Formats(final Date dateRecord, final int precision)
     {
         Date d = dateRecord;
