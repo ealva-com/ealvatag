@@ -985,7 +985,7 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag
      */
     public void write(RandomAccessFile file) throws IOException
     {
-        logger.info("Saving file");
+        logger.info("Saving ID3v1 tag to file");
         byte[] buffer = new byte[TAG_LENGTH];
         int i;
         String str;
@@ -1044,6 +1044,7 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag
             buffer[offset] = genre;
         }
         file.write(buffer);
+        logger.info("Saved ID3v1 tag to file");
     }
 
     /**

@@ -766,10 +766,14 @@ public class MP3File extends AudioFile
                 {
                     rfile = new RandomAccessFile(file, "rw");
                     (new ID3v24Tag()).delete(rfile);
+                    (new ID3v23Tag()).delete(rfile);
+                    (new ID3v22Tag()).delete(rfile);
+                    logger.info("Deleting ID3v2 tag:"+file.getName());
                     rfile.close();
                 }
                 else
                 {
+                    logger.info("Writing ID3v2 tag:"+file.getName());
                     id3v2tag.write(file, ((MP3AudioHeader) this.getAudioHeader()).getMp3StartByte());
                 }
             }
@@ -786,15 +790,15 @@ public class MP3File extends AudioFile
             //ID3v1 tag
             if (TagOptionSingleton.getInstance().isId3v1Save())
             {
-                logger.info("saving v1");
+                logger.info("Processing ID3v1");
                 if (id3v1tag == null)
                 {
-                    logger.info("deleting v1");
+                    logger.info("Deleting ID3v1");
                     (new ID3v1Tag()).delete(rfile);
                 }
                 else
                 {
-                    logger.info("saving v1 still");
+                    logger.info("Saving ID3v1");
                     id3v1tag.write(rfile);
                 }
             }

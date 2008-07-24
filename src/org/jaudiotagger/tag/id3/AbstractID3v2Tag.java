@@ -828,10 +828,10 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
      * @throws IOException if problem accessing the file
      *                     <p/>
      */
-    //TODO should clear all data and preferably recover lost space.
+    //TODO should clear all data and preferably recover lost space and go upto end of mp3s 
     public void delete(RandomAccessFile file) throws IOException
     {
-        // this works by just erasing the "TAG" tag at the beginning
+        // this works by just erasing the "ID3" tag at the beginning
         // of the file
         byte[] buffer = new byte[FIELD_TAGID_LENGTH];
         //Read into Byte Buffer

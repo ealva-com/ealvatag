@@ -539,7 +539,7 @@ public class ID3v11Tag extends ID3v1Tag
      */
     public void write(RandomAccessFile file) throws IOException
     {
-        logger.info("Saving file");
+        logger.info("Saving ID3v11 tag to file");
         byte[] buffer = new byte[TAG_LENGTH];
         int i;
         String str;
@@ -599,6 +599,8 @@ public class ID3v11Tag extends ID3v1Tag
             buffer[offset] = genre;
         }
         file.write(buffer);
+
+        logger.info("Saved ID3v11 tag to file");
     }
 
 

@@ -107,7 +107,7 @@ abstract public class AbstractID3v1Tag extends AbstractID3Tag
     public void delete(RandomAccessFile file) throws IOException
     {
         //Read into Byte Buffer
-        logger.info("deleting tag from file if exists");
+        logger.info("Deleting ID3v1 from file if exists");
 
         FileChannel fc;
         ByteBuffer byteBuffer;
@@ -120,12 +120,12 @@ abstract public class AbstractID3v1Tag extends AbstractID3Tag
         byteBuffer.rewind();
         if (seek(byteBuffer))
         {
-            logger.info("deleting v1 tag ");
+            logger.info("Deleted ID3v1 tag ");
             file.setLength(file.length() - TAG_LENGTH);
         }
         else
         {
-            logger.info("unable to find v1 tag to delete");
+            logger.info("Unable to find ID3v1 tag to delete");
         }
     }
 }
