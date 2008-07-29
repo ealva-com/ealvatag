@@ -18,6 +18,8 @@
  */
 package org.jaudiotagger.audio.asf;
 
+import org.jaudiotagger.audio.asf.tag.AsfTag;
+
 import java.io.IOException;
 import java.io.RandomAccessFile;
 
@@ -91,11 +93,11 @@ public class AsfFileReader extends AudioFileReader
      *
      * @see org.jaudiotagger.audio.generic.AudioFileReader#getTag(java.io.RandomAccessFile)
      */
-    protected Tag getTag(RandomAccessFile raf) throws CannotReadException,
+    protected AsfTag getTag(RandomAccessFile raf) throws CannotReadException,
             IOException
     {
         raf.seek(0);
-        Tag tag;
+        AsfTag tag;
         try
         {
             AsfHeader header = AsfHeaderReader.readHeader(raf);

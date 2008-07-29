@@ -18,6 +18,10 @@
  */
 package org.jaudiotagger.audio.asf.data;
 
+import org.jaudiotagger.audio.asf.tag.AsfTag;
+
+import org.jaudiotagger.audio.asf.tag.AsfFieldKey;
+
 import java.io.ByteArrayOutputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
@@ -34,45 +38,40 @@ import org.jaudiotagger.audio.asf.util.Utils;
 public final class ContentDescriptor implements Comparable<ContentDescriptor>
 {
     /**
-     * This field stores all values of the "ID_"-constants.
-     */
-    public final static HashSet<String> COMMON_FIELD_IDS;
-
-    /**
      * This constant gives the common id (name) for the "album" field in an asf
      * extended content description.
      */
-    public final static String ID_ALBUM = "WM/AlbumTitle";
+    public final static String ID_ALBUM = AsfFieldKey.ALBUM.getFieldId();
 
     /**
      * This constant gives the common id (name) for the "artist" field in an asf
      * extended content description.
      */
-    public final static String ID_ARTIST = "WM/AlbumArtist";
+    public final static String ID_ARTIST = AsfFieldKey.ARTIST.getFieldId();
 
     /**
      * This constant gives the common id (name) for the "genre" field in an asf
      * extended content description.
      */
-    public final static String ID_GENRE = "WM/Genre";
+    public final static String ID_GENRE = AsfFieldKey.GENRE.getFieldId();
 
     /**
      * This constant gives the common id (name) for the "genre Id" field in an
      * asf extended content description.
      */
-    public final static String ID_GENREID = "WM/GenreID";
+    public final static String ID_GENREID = AsfFieldKey.GENRE_ID.getFieldId();
 
     /**
      * This constant gives the common id (name) for the "track number" field in
      * an asf extended content description.
      */
-    public final static String ID_TRACKNUMBER = "WM/TrackNumber";
+    public final static String ID_TRACKNUMBER = AsfFieldKey.TRACK.getFieldId();
 
     /**
      * This constant gives the common id (name) for the "year" field in an asf
      * extended content description.
      */
-    public final static String ID_YEAR = "WM/Year";
+    public final static String ID_YEAR = AsfFieldKey.YEAR.getFieldId();
 
     /**
      * Constant for the content descriptor-type for binary data.
@@ -103,17 +102,6 @@ public final class ContentDescriptor implements Comparable<ContentDescriptor>
      * Constant for the content descriptor-type for integers (16-bit). <br>
      */
     public final static int TYPE_WORD = 5;
-
-    static
-    {
-        COMMON_FIELD_IDS = new HashSet<String>();
-        COMMON_FIELD_IDS.add(ID_ALBUM);
-        COMMON_FIELD_IDS.add(ID_ARTIST);
-        COMMON_FIELD_IDS.add(ID_GENRE);
-        COMMON_FIELD_IDS.add(ID_GENREID);
-        COMMON_FIELD_IDS.add(ID_TRACKNUMBER);
-        COMMON_FIELD_IDS.add(ID_YEAR);
-    }
 
     /**
      * The binary representation of the value.
@@ -176,7 +164,7 @@ public final class ContentDescriptor implements Comparable<ContentDescriptor>
     }
 
     /**
-     * This mehtod creates a copy of the current object. <br>
+     * This method creates a copy of the current object. <br>
      * All data will be copied, too. <br>
      *
      * @return A new Contentdescriptor containing the same values as the current
@@ -206,9 +194,8 @@ public final class ContentDescriptor implements Comparable<ContentDescriptor>
             else
             {
                 ContentDescriptor other = (ContentDescriptor) obj;
-                result = other.getName().equals(getName())
-                        && other.descriptorType == this.descriptorType
-                        && Arrays.equals(this.content, other.content);
+                result = other.getName().equals(getName()) && other.descriptorType == this.descriptorType && Arrays
+                                .equals(this.content, other.content);
             }
         }
         return result;
@@ -264,8 +251,7 @@ public final class ContentDescriptor implements Comparable<ContentDescriptor>
                 result.write(Utils.getBytes(content.length, 2));
                 result.write(content);
             }
-        }
-        catch (Exception e)
+        } catch (Exception e)
         {
             e.printStackTrace();
         }
@@ -318,13 +304,11 @@ public final class ContentDescriptor implements Comparable<ContentDescriptor>
                 bytesNeeded = 2;
                 break;
             default:
-                throw new UnsupportedOperationException(
-                        "The current type doesn't allow an interpretation as a number.");
+                throw new UnsupportedOperationException("The current type doesn't allow an interpretation as a number.");
         }
         if (bytesNeeded > content.length)
         {
-            throw new IllegalStateException(
-                    "The stored data cannot represent the type of current object.");
+            throw new IllegalStateException("The stored data cannot represent the type of current object.");
         }
         for (int i = 0; i < bytesNeeded; i++)
         {
@@ -371,8 +355,7 @@ public final class ContentDescriptor implements Comparable<ContentDescriptor>
                 try
                 {
                     result = new String(content, "UTF-16LE");
-                }
-                catch (Exception e)
+                } catch (Exception e)
                 {
                     e.printStackTrace();
                 }
@@ -404,15 +387,12 @@ public final class ContentDescriptor implements Comparable<ContentDescriptor>
      * commonly specified fields. <br>
      *
      * @return <code>true</code> if a common field.
-     * @see #ID_ALBUM
-     * @see #ID_GENRE
-     * @see #ID_GENREID
-     * @see #ID_TRACKNUMBER
-     * @see #ID_YEAR
+     * @see AsfFieldKey#isCommonField(String)
      */
     public boolean isCommon()
     {
-        return COMMON_FIELD_IDS.contains(this.getName());
+        // TODO: We have at least to specifiy a list of common fields (somwhere in code)
+        return false;
     }
 
     /**
@@ -439,8 +419,7 @@ public final class ContentDescriptor implements Comparable<ContentDescriptor>
     {
         if (data.length > 65535)
         {
-            throw new IllegalArgumentException(
-                    "Too many bytes. 65535 is maximum.");
+            throw new IllegalArgumentException("Too many bytes. 65535 is maximum.");
         }
         this.content = data;
         this.descriptorType = TYPE_BINARY;
@@ -497,16 +476,16 @@ public final class ContentDescriptor implements Comparable<ContentDescriptor>
     {
         try
         {
-            byte[] tmp = value.getBytes("UTF-16LE");
-            if (tmp.length > 65535)
+            Utils.checkStringLengthNullSafe(value);
+            if (value != null)
             {
-                throw new IllegalArgumentException(
-                        "Byte representation of String in "
-                                + "\"UTF-16LE\" is to great. (Maximum is 65535 Bytes)");
+                this.content = value.getBytes(AsfTag.TEXT_ENCODING);
             }
-            this.content = tmp;
-        }
-        catch (UnsupportedEncodingException e)
+            else
+            {
+                this.content = new byte[0];
+            }
+        } catch (UnsupportedEncodingException e)
         {
             e.printStackTrace();
             this.content = new byte[0];
@@ -534,10 +513,6 @@ public final class ContentDescriptor implements Comparable<ContentDescriptor>
      */
     public String toString()
     {
-        return getName()
-                + " : "
-                + new String[]{"String: ", "Binary: ", "Boolean: ",
-                "DWORD: ", "QWORD:", "WORD:"}[this.descriptorType]
-                + getString();
+        return getName() + " : " + new String[]{"String: ", "Binary: ", "Boolean: ", "DWORD: ", "QWORD:", "WORD:"}[this.descriptorType] + getString();
     }
 }

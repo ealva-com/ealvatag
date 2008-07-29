@@ -16,12 +16,12 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.jaudiotagger.audio.asf.data.wrapper;
-
-import java.io.UnsupportedEncodingException;
+package org.jaudiotagger.audio.asf.tag;
 
 import org.jaudiotagger.audio.asf.data.ContentDescriptor;
 import org.jaudiotagger.tag.TagField;
+
+import java.io.UnsupportedEncodingException;
 
 /**
  * This class encapsulates a
@@ -31,7 +31,7 @@ import org.jaudiotagger.tag.TagField;
  *
  * @author Christian Laireiter (liree)
  */
-public class ContentDescriptorTagField implements TagField
+public class AsfTagField implements TagField
 {
 
     /**
@@ -45,9 +45,18 @@ public class ContentDescriptorTagField implements TagField
      * @param source The descriptor which should be represented as a
      *               {@link TagField}.
      */
-    public ContentDescriptorTagField(ContentDescriptor source)
+    public AsfTagField(ContentDescriptor source)
     {
         this.toWrap = source.createCopy();
+    }
+
+    /**
+     * Creates a tag field.
+     * @param fieldKey The field identifier to use. 
+     */
+    public AsfTagField(String fieldKey)
+    {
+        this.toWrap = new ContentDescriptor(fieldKey, ContentDescriptor.TYPE_STRING);
     }
 
     /**
@@ -58,6 +67,15 @@ public class ContentDescriptorTagField implements TagField
     public void copyContent(TagField field)
     {
         throw new UnsupportedOperationException("Not implemented yet.");
+    }
+
+    /**
+     * Returns the wrapped content descriptor (which actually stores the values).
+     * @return the wrapped content descriptor 
+     */
+    public ContentDescriptor getDescriptor()
+    {
+        return this.toWrap;
     }
 
     /**

@@ -18,20 +18,53 @@
  */
 package org.jaudiotagger.audio.asf.data;
 
+import org.jaudiotagger.audio.asf.tag.AsfFieldKey;
+import org.jaudiotagger.audio.asf.tag.AsfTag;
+import org.jaudiotagger.audio.asf.util.Utils;
+
 import java.io.ByteArrayOutputStream;
 import java.math.BigInteger;
-
-import org.jaudiotagger.audio.asf.util.Utils;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * This class represents the data of a chunk which contains title, author,
  * copyright, description and the rating of the file. <br>
- * It is optional whithin asf files. But if exists only once.
+ * It is optional within ASF files. But if exists only once.
  *
  * @author Christian Laireiter
  */
 public class ContentDescription extends Chunk
 {
+
+    /**
+     * List of {@link AsfFieldKey} items, identifying contents that are stored in the
+     * content description chunk (or unit) of ASF files.
+     */
+    public final static Set<AsfFieldKey> DESCRIPTION_FIELDS;
+
+    static
+    {
+        DESCRIPTION_FIELDS = new HashSet<AsfFieldKey>();
+        DESCRIPTION_FIELDS.add(AsfFieldKey.ARTIST);
+        DESCRIPTION_FIELDS.add(AsfFieldKey.COPYRIGHT);
+        DESCRIPTION_FIELDS.add(AsfFieldKey.COMMENT);
+        DESCRIPTION_FIELDS.add(AsfFieldKey.RATING);
+        DESCRIPTION_FIELDS.add(AsfFieldKey.TITLE);
+    }
+
+    /**
+     * Determines if the {@linkplain ContentDescriptor#getName() name} equals an {@link AsfFieldKey} which
+     * is {@linkplain ContentDescription#DESCRIPTION_FIELDS listed} to be stored in the content description chunk.
+     * 
+     * @param contentDesc Descriptor to test.
+     * @return see description.
+     */
+    public static boolean storesDescriptor(ContentDescriptor contentDesc)
+    {
+        AsfFieldKey asfFieldKey = AsfFieldKey.getAsfFieldKey(contentDesc.getName());
+        return asfFieldKey != null && DESCRIPTION_FIELDS.contains(asfFieldKey);
+    }
 
     /**
      * File artist.
@@ -102,19 +135,17 @@ public class ContentDescription extends Chunk
         try
         {
             ByteArrayOutputStream tags = new ByteArrayOutputStream();
-            String[] toWrite = new String[]{getTitle(), getAuthor(),
-                    getCopyRight(), getComment(), getRating()};
+            String[] toWrite = new String[]{getTitle(), getAuthor(), getCopyRight(), getComment(), getRating()};
             byte[][] stringRepresentations = new byte[toWrite.length][];
             // Create byte[] of UTF-16LE encodings
             for (int i = 0; i < toWrite.length; i++)
             {
-                stringRepresentations[i] = toWrite[i].getBytes("UTF-16LE");
+                stringRepresentations[i] = toWrite[i].getBytes(AsfTag.TEXT_ENCODING);
             }
             // Write the amount of bytes needed to store the values.
             for (int i = 0; i < stringRepresentations.length; i++)
             {
-                tags.write(Utils.getBytes(stringRepresentations[i].length + 2,
-                        2));
+                tags.write(Utils.getBytes(stringRepresentations[i].length + 2, 2));
             }
             // Write the values themselves.
             for (int i = 0; i < toWrite.length; i++)
@@ -135,8 +166,7 @@ public class ContentDescription extends Chunk
             result.write(Utils.getBytes(tagContent.length + 24, 8));
             // The tags.
             result.write(tagContent);
-        }
-        catch (Exception e)
+        } catch (Exception e)
         {
             e.printStackTrace();
         }
@@ -199,12 +229,10 @@ public class ContentDescription extends Chunk
     public String prettyPrint()
     {
         StringBuffer result = new StringBuffer(super.prettyPrint());
-        result.insert(0, Utils.LINE_SEPARATOR + "Content Description:"
-                + Utils.LINE_SEPARATOR);
+        result.insert(0, Utils.LINE_SEPARATOR + "Content Description:" + Utils.LINE_SEPARATOR);
         result.append("   Title      : " + getTitle() + Utils.LINE_SEPARATOR);
         result.append("   Author     : " + getAuthor() + Utils.LINE_SEPARATOR);
-        result.append("   Copyright  : " + getCopyRight()
-                + Utils.LINE_SEPARATOR);
+        result.append("   Copyright  : " + getCopyRight() + Utils.LINE_SEPARATOR);
         result.append("   Description: " + getComment() + Utils.LINE_SEPARATOR);
         result.append("   Rating     :" + getRating() + Utils.LINE_SEPARATOR);
         return result.toString();

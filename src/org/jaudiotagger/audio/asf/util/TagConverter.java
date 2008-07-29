@@ -18,21 +18,20 @@
  */
 package org.jaudiotagger.audio.asf.util;
 
-import org.jaudiotagger.tag.reference.GenreTypes;
+import org.jaudiotagger.audio.asf.tag.AsfTagTextField;
 
-import java.io.UnsupportedEncodingException;
-import java.util.Iterator;
-
-import org.jaudiotagger.tag.Tag;
-import org.jaudiotagger.tag.TagField;
 import org.jaudiotagger.audio.asf.data.AsfHeader;
 import org.jaudiotagger.audio.asf.data.ContentDescription;
 import org.jaudiotagger.audio.asf.data.ContentDescriptor;
 import org.jaudiotagger.audio.asf.data.ExtendedContentDescription;
-import org.jaudiotagger.audio.asf.data.wrapper.ContentDescriptorTagField;
-import org.jaudiotagger.audio.generic.GenericTag;
-import org.jaudiotagger.tag.TagTextField;
+import org.jaudiotagger.audio.asf.tag.AsfFieldKey;
+import org.jaudiotagger.audio.asf.tag.AsfTag;
+import org.jaudiotagger.audio.asf.tag.AsfTagField;
 import org.jaudiotagger.tag.FieldDataInvalidException;
+import org.jaudiotagger.tag.Tag;
+import org.jaudiotagger.tag.reference.GenreTypes;
+
+import java.util.Iterator;
 
 /**
  * This class provides functionality to convert
@@ -59,14 +58,12 @@ public class TagConverter
      * @see Tag#getYear() <br>
      * @see Tag#getGenre() <br>
      */
-    public static void assignCommonTagValues(Tag tag,
-            ExtendedContentDescription description)
+    public static void assignCommonTagValues(Tag tag, ExtendedContentDescription description)
     {
         ContentDescriptor tmp = null;
         if (tag.getFirstAlbum() != null && tag.getFirstAlbum().length() > 0)
         {
-            tmp = new ContentDescriptor(ContentDescriptor.ID_ALBUM,
-                    ContentDescriptor.TYPE_STRING);
+            tmp = new ContentDescriptor(ContentDescriptor.ID_ALBUM, ContentDescriptor.TYPE_STRING);
             tmp.setStringValue(tag.getFirstAlbum());
             description.addOrReplace(tmp);
         }
@@ -76,8 +73,7 @@ public class TagConverter
         }
         if (tag.getFirstTrack() != null && tag.getFirstTrack().length() > 0)
         {
-            tmp = new ContentDescriptor(ContentDescriptor.ID_TRACKNUMBER,
-                    ContentDescriptor.TYPE_STRING);
+            tmp = new ContentDescriptor(ContentDescriptor.ID_TRACKNUMBER, ContentDescriptor.TYPE_STRING);
             tmp.setStringValue(tag.getFirstTrack());
             description.addOrReplace(tmp);
         }
@@ -87,8 +83,7 @@ public class TagConverter
         }
         if (tag.getFirstYear() != null && tag.getFirstYear().length() > 0)
         {
-            tmp = new ContentDescriptor(ContentDescriptor.ID_YEAR,
-                    ContentDescriptor.TYPE_STRING);
+            tmp = new ContentDescriptor(ContentDescriptor.ID_YEAR, ContentDescriptor.TYPE_STRING);
             tmp.setStringValue(tag.getFirstYear());
             description.addOrReplace(tmp);
         }
@@ -98,15 +93,13 @@ public class TagConverter
         }
         if (tag.getFirstGenre() != null && tag.getFirstGenre().length() > 0)
         {
-            tmp = new ContentDescriptor(ContentDescriptor.ID_GENRE,
-                    ContentDescriptor.TYPE_STRING);
+            tmp = new ContentDescriptor(ContentDescriptor.ID_GENRE, ContentDescriptor.TYPE_STRING);
             tmp.setStringValue(tag.getFirstGenre());
             description.addOrReplace(tmp);
             Integer genreNum = GenreTypes.getInstanceOf().getIdForName(tag.getFirstGenre());
             if (genreNum != null)
             {
-                tmp = new ContentDescriptor(ContentDescriptor.ID_GENREID,
-                        ContentDescriptor.TYPE_STRING);
+                tmp = new ContentDescriptor(ContentDescriptor.ID_GENREID, ContentDescriptor.TYPE_STRING);
                 tmp.setStringValue("(" + genreNum + ")");
                 description.addOrReplace(tmp);
             }
@@ -129,34 +122,18 @@ public class TagConverter
      * @param tag        The tag containing the values.
      * @param descriptor the extended content description.
      */
-    public static void assignOptionalTagValues(Tag tag,
-            ExtendedContentDescription descriptor)
+    public static void assignOptionalTagValues(AsfTag tag, ExtendedContentDescription descriptor)
     {
-        Iterator<TagField> it = tag.getFields();
-        ContentDescriptor tmp = null;
+        assert tag.isConvertingFields();
+        Iterator<AsfTagField> it = tag.getAsfFields();
         while (it.hasNext())
         {
-            try
+            ContentDescriptor contentDesc = it.next().getDescriptor();
+            // If the contentDescriptor can/is not stored in the content description chunk, then
+            // handle here.
+            if (!ContentDescription.storesDescriptor(contentDesc))
             {
-                TagField currentField = it.next();
-                if (!currentField.isCommon())
-                {
-                    tmp = new ContentDescriptor(currentField.getId(),
-                            ContentDescriptor.TYPE_STRING);
-                    if (currentField.isBinary())
-                    {
-                        tmp.setBinaryValue(currentField.getRawContent());
-                    }
-                    else
-                    {
-                        tmp.setStringValue(currentField.toString());
-                    }
-                    descriptor.addOrReplace(tmp);
-                }
-            }
-            catch (UnsupportedEncodingException uee)
-            {
-                uee.printStackTrace();
+                descriptor.addOrReplace(contentDesc);
             }
         }
     }
@@ -180,32 +157,7 @@ public class TagConverter
         result.setAuthor(tag.getFirstArtist());
         result.setTitle(tag.getFirstTitle());
         result.setComment(tag.getFirstComment());
-        TagTextField cpField = AsfCopyrightField.getCopyright(tag);
-        if (cpField != null)
-        {
-            result.setCopyRight(cpField.getContent());
-        }
-        return result;
-    }
-
-    /**
-     * This method creates a new {@link ExtendedContentDescription}object
-     * filled with the values of the given <code>tag</code>.<br>
-     * Since extended content description of asf files can store name-value
-     * pairs, nearly each {@link org.jaudiotagger.tag.TagField}can be
-     * stored within. <br>
-     * One constraint is that the strings must be convertable to "UTF-16LE"
-     * encoding and don't exceed a length of 65533 in binary representation.
-     * <br>
-     *
-     * @param tag The tag whose values the result will be filled with.
-     * @return A new extended content description object.
-     */
-    public static ExtendedContentDescription createExtendedContentDescription(
-            Tag tag)
-    {
-        ExtendedContentDescription result = new ExtendedContentDescription();
-        assignCommonTagValues(tag, result);
+        result.setCopyRight(tag.getFirst(AsfFieldKey.COPYRIGHT.getPublicFieldId()));
         return result;
     }
 
@@ -213,12 +165,12 @@ public class TagConverter
      * This method creates a {@link Tag}and fills it with the contents of the
      * given {@link AsfHeader}.<br>
      *
-     * @param source The asf header which contains the information. <br>
+     * @param source The ASF header which contains the information. <br>
      * @return A Tag with all its values.
      */
-    public static Tag createTagOf(AsfHeader source) throws FieldDataInvalidException
+    public static AsfTag createTagOf(AsfHeader source) throws FieldDataInvalidException
     {
-        GenericTag result = new GenericTag();
+        AsfTag result = new AsfTag(true);
         /*
            * It is possible that the file contains no content description, since
            * that some informations aren't available.
@@ -228,36 +180,33 @@ public class TagConverter
             result.setArtist(source.getContentDescription().getAuthor());
             result.setComment(source.getContentDescription().getComment());
             result.setTitle(source.getContentDescription().getTitle());
-            AsfCopyrightField cpField = new AsfCopyrightField();
-            // I know I said use the setString() method. However, the value is
-            // already a "UTF-16LE" string within is bounds. So Nothing could
-            // happen.
-            cpField.setContent(source.getContentDescription().getCopyRight());
-            result.set(cpField);
+            result.addCopyright(source.getContentDescription().getCopyRight());
         }
         // It is possible that the file contains no extended content
         // description. In that case some informations cannot be provided.
         if (source.getExtendedContentDescription() != null)
         {
-            result.setTrack(source.getExtendedContentDescription().getTrack());
-            result.setYear(source.getExtendedContentDescription().getYear());
-            result.setGenre(source.getExtendedContentDescription().getGenre());
-            result.setAlbum(source.getExtendedContentDescription().getAlbum());
-
             // Now any properties, which don't belong to the common section
-            ExtendedContentDescription extDesc = source
-                    .getExtendedContentDescription();
+            ExtendedContentDescription extDesc = source.getExtendedContentDescription();
             Iterator<ContentDescriptor> it = extDesc.getDescriptors().iterator();
             while (it.hasNext())
             {
                 ContentDescriptor current = it.next();
-                // If common, it has been added to the result some lines upward.
-                if (!current.isCommon())
+                // XXX: For now, ignore sth like WM/AlbumArtist here
+                if (!ContentDescription.storesDescriptor(current))
                 {
-                    result.add(new ContentDescriptorTagField(current));
+                    if (current.getType() == ContentDescriptor.TYPE_BINARY)
+                    {
+                        result.add(new AsfTagField(current));
+                    }
+                    else
+                    {
+                        result.add(new AsfTagTextField(current));
+                    }
                 }
             }
         }
         return result;
     }
+
 }

@@ -48,8 +48,6 @@ public class EncryptionChunk extends Chunk
     private String keyID;
     private String licenseURL;
 
-    private boolean isEncrypted;
-
     /**
      * Creates an instance.
      *
@@ -64,8 +62,6 @@ public class EncryptionChunk extends Chunk
         this.protectionType = "";
         this.keyID = "";
         this.licenseURL = "";
-        this.isEncrypted = false;
-
     }
 
     /**

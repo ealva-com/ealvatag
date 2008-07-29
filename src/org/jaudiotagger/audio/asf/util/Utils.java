@@ -18,14 +18,20 @@
  */
 package org.jaudiotagger.audio.asf.util;
 
+import org.jaudiotagger.audio.asf.data.GUID;
+import org.jaudiotagger.audio.asf.tag.AsfTag;
+import org.jaudiotagger.audio.asf.tag.AsfTagField;
+import org.jaudiotagger.tag.Tag;
+import org.jaudiotagger.tag.TagField;
+import org.jaudiotagger.tag.TagTextField;
+
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
-
-import org.jaudiotagger.audio.asf.data.GUID;
+import java.util.Iterator;
 
 /**
  * Some static Methods which are used in several Classes. <br>
@@ -38,8 +44,52 @@ public class Utils
     /**
      * Stores the default line seperator of the current underlying system.
      */
-    public final static String LINE_SEPARATOR = System
-            .getProperty("line.separator");
+    public final static String LINE_SEPARATOR = System.getProperty("line.separator");
+
+    /**
+     * This method converts the given string into a byte[] in UTF-16LE encoding
+     * and checks whether the length doesn't exceed 65535 bytes. <br>
+     *
+     * @param value The string to check.
+     * @throws IllegalArgumentException If byte representation takes more than 65535 bytes.
+     */
+    public static void checkStringLengthNullSafe(String value) throws IllegalArgumentException
+    {
+        if (value != null)
+        {
+            try
+            {
+                byte[] tmp = value.getBytes(AsfTag.TEXT_ENCODING);
+                if (tmp.length > 65533)
+                {
+                    throw new IllegalArgumentException("\"UTF-16LE\" representation exceeds 65535 bytes." + " (Including zero term character)");
+                }
+            } catch (UnsupportedEncodingException e)
+            {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    /**
+     * This method tests, whether the specified tag does contain at least one
+     * {@link org.jaudiotagger.tag.TagField} with content, for the specified 
+     * {@linkplain org.jaudiotagger.tag.TagField#getId() key}.<br> 
+     * 
+     * @param tag Tag to look in
+     * @param fieldKey field key to look for content.
+     * @return <code>true</code> if one field with content could be found.
+     */
+    public static boolean containsValue(Tag tag, String fieldKey)
+    {
+        boolean result = false;
+        final Iterator<TagField> iterator = tag.get(fieldKey).iterator();
+        while (!result && iterator.hasNext())
+        {
+            result |= !isEmpty(iterator.next());
+        }
+        return result;
+    }
 
     /**
      * Reads chars out of <code>raf</code> until <code>chars</code> is
@@ -50,8 +100,7 @@ public class Utils
      * @throws IOException read error, or file at end before <code>chars</code> is
      *                     filled.
      */
-    public static void fillChars(char[] chars, RandomAccessFile raf)
-            throws IOException
+    public static void fillChars(char[] chars, RandomAccessFile raf) throws IOException
     {
         if (chars == null)
         {
@@ -113,6 +162,61 @@ public class Utils
     }
 
     /**
+     * Tests if the given string is <code>null</code> or just contains whitespace characters.
+     * @param toTest String to test.
+     * @return see description.
+     */
+    public static boolean isBlank(String toTest)
+    {
+        boolean result = true;
+        if (toTest != null)
+        {
+            for (int i = 0; result && i < toTest.length(); i++)
+            {
+                result &= Character.isWhitespace(toTest.charAt(i));
+            }
+        }
+        return result;
+    }
+
+    /**
+     * Tests whether the specified field contains no content.<br>
+     * For {@link org.jaudiotagger.tag.TagTextField} objects the string will be analyzed for non
+     * wildcard characters.
+     * Other fields (except {@link org.jaudiotagger.audio.asf.tag.AsfTagField} will be tested if {@link TagField#getRawContent()}
+     * has zero length.<br>  
+     * 
+     * @param field the field to test.
+     * @return <code>true</code> if its empty.
+     */
+    public static boolean isEmpty(TagField field)
+    {
+        boolean result = false;
+        if (field instanceof TagTextField)
+        {
+            result = isBlank(((TagTextField) field).getContent());
+        }
+        else if (field instanceof AsfTagField)
+        {
+            result = ((AsfTagField) field).isEmpty();
+        }
+        else
+        {
+            try
+            {
+                byte[] content = field.getRawContent();
+                result = content == null || content.length == 0;
+            } catch (UnsupportedEncodingException e)
+            {
+                // In this case, anything that could discard this field should do so.
+                result = true;
+            }
+
+        }
+        return result;
+    }
+
+    /**
      * This method reads one byte from <code>raf</code> and creates an
      * unsigned value of it. <br>
      *
@@ -157,8 +261,7 @@ public class Utils
      * @return String
      * @throws IOException read errors
      */
-    public static String readCharacterSizedString(RandomAccessFile raf)
-            throws IOException
+    public static String readCharacterSizedString(RandomAccessFile raf) throws IOException
     {
         StringBuffer result = new StringBuffer();
         int strLen = readUINT16(raf);
@@ -176,8 +279,7 @@ public class Utils
         while (character != 0 || (result.length() + 1) > strLen);
         if (strLen != (result.length() + 1))
         {
-            throw new IllegalStateException(
-                    "Invalid Data for current interpretation");
+            throw new IllegalStateException("Invalid Data for current interpretation");
         }
         return result.toString();
     }
@@ -262,8 +364,7 @@ public class Utils
      * @return read String.
      * @throws IOException read errors.
      */
-    public static String readUTF16LEStr(RandomAccessFile raf)
-            throws IOException
+    public static String readUTF16LEStr(RandomAccessFile raf) throws IOException
     {
         int strLen = readUINT16(raf);
         byte[] buf = new byte[strLen];
@@ -282,38 +383,8 @@ public class Utils
                     buf = copy;
                 }
             }
-            return new String(buf, "UTF-16LE");
+            return new String(buf, AsfTag.TEXT_ENCODING);
         }
-        throw new IllegalStateException(
-                "Invalid Data for current interpretation");
-    }
-
-    /**
-     * This method converts the given string into a byte[] in UTF-16LE encoding
-     * and checks whether the length doesn't exceed 65535 bytes. <br>
-     *
-     * @param value The string to check.
-     * @throws IllegalArgumentException If byte representation takes more than 65535 bytes.
-     */
-    public static void checkStringLengthNullSafe(String value)
-            throws IllegalArgumentException
-    {
-        if (value != null)
-        {
-            try
-            {
-                byte[] tmp = value.getBytes("UTF-16LE");
-                if (tmp.length > 65533)
-                {
-                    throw new IllegalArgumentException(
-                            "\"UTF-16LE\" representation exceeds 65535 bytes."
-                                    + " (Including zero term character)");
-                }
-            }
-            catch (UnsupportedEncodingException e)
-            {
-                e.printStackTrace();
-            }
-        }
+        throw new IllegalStateException("Invalid Data for current interpretation");
     }
 }
