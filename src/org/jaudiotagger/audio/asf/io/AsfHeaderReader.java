@@ -125,6 +125,7 @@ public class AsfHeaderReader
             StreamBitratePropertiesChunk bitratePropertiesChunk = null;
 
             Iterator<Chunk> iterator = chunks.iterator();
+            
             while (iterator.hasNext())
             {
                 Chunk currentChunk = iterator.next();
@@ -152,8 +153,7 @@ public class AsfHeaderReader
                 {
                     continue;
                 }
-                if (streamChunk == null
-                        && (streamChunk = StreamChunkReader.read(in,
+                if ((streamChunk = StreamChunkReader.read(in,
                         currentChunk)) != null)
                 {
                     result.addStreamChunk(streamChunk);
