@@ -18,9 +18,9 @@
  */
 package org.jaudiotagger.audio.asf.util;
 
-import java.util.Comparator;
-
 import org.jaudiotagger.audio.asf.data.Chunk;
+
+import java.util.Comparator;
 
 /**
  * This class is needed for ordering all types of
@@ -33,9 +33,7 @@ public class ChunkPositionComparator implements Comparator<Chunk>
 {
 
     /**
-     * (overridden)
-     *
-     * @see java.util.Comparator#compare(java.lang.Object,java.lang.Object)
+     * {@inheritDoc}
      */
     public int compare(Chunk c1, Chunk c2)
     {
