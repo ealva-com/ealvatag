@@ -44,7 +44,27 @@ public class Chunk
     /**
      * The position of current header object within file or stream.
      */
-    protected final long position;
+    protected long position;
+
+    /**
+     * Creates an instance
+     *
+     * @param headerGuid The GUID of header object.
+     * @param chunkLen   Length of current chunk.
+     */
+    public Chunk(GUID headerGuid, BigInteger chunkLen)
+    {
+        if (headerGuid == null)
+        {
+            throw new IllegalArgumentException("GUID must not be null nor anything else than " + GUID.GUID_LENGTH + " entries long.");
+        }
+        if (chunkLen == null || chunkLen.compareTo(BigInteger.ZERO) < 0)
+        {
+            throw new IllegalArgumentException("chunkLen must not be null nor negative.");
+        }
+        this.guid = headerGuid;
+        this.chunkLength = chunkLen;
+    }
 
     /**
      * Creates an instance
@@ -57,19 +77,15 @@ public class Chunk
     {
         if (headerGuid == null)
         {
-            throw new IllegalArgumentException(
-                    "GUID must not be null nor anything else than "
-                            + GUID.GUID_LENGTH + " entries long.");
+            throw new IllegalArgumentException("GUID must not be null nor anything else than " + GUID.GUID_LENGTH + " entries long.");
         }
         if (pos < 0)
         {
-            throw new IllegalArgumentException(
-                    "Position of header can't be negative.");
+            throw new IllegalArgumentException("Position of header can't be negative.");
         }
         if (chunkLen == null || chunkLen.compareTo(BigInteger.ZERO) < 0)
         {
-            throw new IllegalArgumentException(
-                    "chunkLen must not be null nor negative.");
+            throw new IllegalArgumentException("chunkLen must not be null nor negative.");
         }
         this.guid = headerGuid;
         this.position = pos;
@@ -125,6 +141,16 @@ public class Chunk
         result.append("\n   Starts at position: " + getPosition() + "\n");
         result.append("   Last byte at: " + (getChunckEnd() - 1) + "\n\n");
         return result.toString();
+    }
+
+    /**
+     * Sets the position. 
+     * 
+     * @param pos position to set.
+     */
+    public void setPosition(long pos)
+    {
+        this.position = pos;
     }
 
     /**

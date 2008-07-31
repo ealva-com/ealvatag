@@ -18,36 +18,32 @@
  */
 package org.jaudiotagger.audio.asf.io;
 
+import org.jaudiotagger.audio.asf.data.*;
+import org.jaudiotagger.audio.asf.util.Utils;
+
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
-
-import org.jaudiotagger.audio.asf.data.AsfHeader;
-import org.jaudiotagger.audio.asf.data.Chunk;
-import org.jaudiotagger.audio.asf.data.ContentDescription;
-import org.jaudiotagger.audio.asf.data.EncodingChunk;
-import org.jaudiotagger.audio.asf.data.EncryptionChunk;
-import org.jaudiotagger.audio.asf.data.ExtendedContentDescription;
-import org.jaudiotagger.audio.asf.data.FileHeader;
-import org.jaudiotagger.audio.asf.data.GUID;
-import org.jaudiotagger.audio.asf.data.StreamBitratePropertiesChunk;
-import org.jaudiotagger.audio.asf.data.StreamChunk;
-import org.jaudiotagger.audio.asf.util.Utils;
+import java.util.logging.Logger;
 
 /**
- * This <i>class </i> reads an Asf header out of an inputstream an creates an
- * {@link org.jaudiotagger.audio.asf.data.AsfHeader}object if successfull. <br>
- * For now only ASF ver 1.0 is supported, till ver 2.0 seems not to be used
+ * This <i>class </i> reads an ASF header out of an input stream an creates an
+ * {@link org.jaudiotagger.audio.asf.data.AsfHeader}object if successful. <br>
+ * For now only ASF ver 1.0 is supported, because ver 2.0 seems not to be used
  * anywhere. <br>
- * Asf headers contains other chunks. As of this other readers of current
+ * ASF headers contains other chunks. As of this other readers of current
  * <b>package </b> are called from within.
  *
  * @author Christian Laireiter
  */
 public class AsfHeaderReader
 {
+
+    //Logger
+    public static Logger logger = Logger.getLogger("org.jaudiotagger.audio");
 
     /**
      * This method tries to extract an ASF-header out of the given stream. <br>
@@ -65,12 +61,30 @@ public class AsfHeaderReader
     }
 
     /**
+     * Registers GUIDs to their reader classes.<br>
+     */
+    private final HashMap<GUID, ChunkReader> readerMap;
+
+    /**
      * Protected default constructor. <br>
      * At the time no special use.
      */
     protected AsfHeaderReader()
     {
         // Nothing to do
+        readerMap = new HashMap<GUID, ChunkReader>();
+        register(ContentDescriptionReader.class);
+        register(FileHeaderReader.class);
+    }
+
+    public ChunkReader getReader(GUID guid)
+    {
+        return readerMap.get(guid);
+    }
+
+    public boolean isReaderAvailable(GUID guid)
+    {
+        return this.readerMap.containsKey(guid);
     }
 
     /**
@@ -89,7 +103,8 @@ public class AsfHeaderReader
 
         if (GUID.GUID_HEADER.equals(possibleGuid))
         {
-            // For Know the filepointer pointed to an ASF header chunk.
+            RandomAccessFileInputstream stream = new RandomAccessFileInputstream(in);
+            // For Know the file pointer pointed to an ASF header chunk.
             BigInteger chunkLen = Utils.readBig64(in);
 
             long chunkCount = Utils.readUINT32(in);
@@ -97,78 +112,68 @@ public class AsfHeaderReader
             in.skipBytes(2);
 
             /*
-                * Now reading header of chuncks.
-                */
+             * Creating the resulting object
+             */
+            result = new AsfHeader(chunkStart, chunkLen, chunkCount);
+
+            /*
+             * Now reading header of chuncks.
+             */
             ArrayList<Chunk> chunks = new ArrayList<Chunk>();
             while (chunkLen.compareTo(BigInteger.valueOf(in.getFilePointer())) > 0)
             {
-                Chunk chunk = ChunkHeaderReader.readChunckHeader(in);
-                chunks.add(chunk);
-                in.seek(chunk.getChunckEnd());
+                long currentPosition = in.getFilePointer();
+                GUID currentGUID = Utils.readGUID(stream);
+                Chunk chunk;
+                if (isReaderAvailable(currentGUID))
+                {
+                    chunk = getReader(currentGUID).read(stream);
+                    result.addChunk(chunk);
+                    chunk.setPosition(currentPosition);
+                    assert chunk.getChunckEnd() == in.getFilePointer();
+                } else {
+                    chunk = new Chunk(currentGUID, currentPosition, Utils.readBig64(in));
+                    chunks.add(chunk);
+                    in.seek(chunk.getChunckEnd());
+                }
             }
 
-            /*
-                * Creating the resulting object because streamchunks will be added.
-                */
-            result = new AsfHeader(chunkStart, chunkLen, chunkCount);
             /*
                 * Now we know all positions and guids of chunks which are contained
                 * whithin asf header. Further we need to identify the type of those
                 * chunks and parse the interesting ones.
                 */
-            FileHeader fileHeader = null;
             ExtendedContentDescription extendedDescription = null;
             EncodingChunk encodingChunk = null;
             EncryptionChunk encryptionChunk = null;
             StreamChunk streamChunk = null;
-            ContentDescription contentDescription = null;
             StreamBitratePropertiesChunk bitratePropertiesChunk = null;
 
             Iterator<Chunk> iterator = chunks.iterator();
-            
+
             while (iterator.hasNext())
             {
                 Chunk currentChunk = iterator.next();
-                if (fileHeader == null
-                        && (fileHeader = FileHeaderReader
-                        .read(in, currentChunk)) != null)
+                if (extendedDescription == null && (extendedDescription = ExtContentDescReader.read(in, currentChunk)) != null)
                 {
                     continue;
                 }
-                if (extendedDescription == null
-                        && (extendedDescription = ExtContentDescReader.read(in,
-                        currentChunk)) != null)
+                if (encodingChunk == null && (encodingChunk = EncodingChunkReader.read(in, currentChunk)) != null)
                 {
                     continue;
                 }
-                if (encodingChunk == null
-                        && (encodingChunk = EncodingChunkReader.read(in,
-                        currentChunk)) != null)
+                if (encryptionChunk == null && (encryptionChunk = EncryptionChunkReader.read(in, currentChunk)) != null)
                 {
                     continue;
                 }
-                if (encryptionChunk == null
-                        && (encryptionChunk = EncryptionChunkReader.read(in,
-                        currentChunk)) != null)
-                {
-                    continue;
-                }
-                if ((streamChunk = StreamChunkReader.read(in,
-                        currentChunk)) != null)
+                if ((streamChunk = StreamChunkReader.read(in, currentChunk)) != null)
                 {
                     result.addStreamChunk(streamChunk);
                     streamChunk = null;
                     continue;
                 }
-                if (contentDescription == null
-                        && (contentDescription = ContentDescriptionReader.read(
-                        in, currentChunk)) != null)
-                {
-                    continue;
-                }
-                if (bitratePropertiesChunk == null
-                        && (bitratePropertiesChunk = StreamBitratePropertiesReader
-                        .read(in, currentChunk)) != null)
+                if (bitratePropertiesChunk == null && (bitratePropertiesChunk = StreamBitratePropertiesReader
+                                .read(in, currentChunk)) != null)
                 {
                     continue;
                 }
@@ -183,19 +188,32 @@ public class AsfHeaderReader
                 * Finally store the parsed chunks in the resulting ASFHeader
                 * object.
                 */
-            result.setFileHeader(fileHeader);
             result.setEncodingChunk(encodingChunk);
-            if (encryptionChunk != null)
-                result.setEncryptionChunk(encryptionChunk);
+            if (encryptionChunk != null) result.setEncryptionChunk(encryptionChunk);
             /*
                 * Warning, extendedDescription, contentDescription and
                 * bitratePropertiesChunk maybe null since they are optional fields.
                 */
             result.setExtendedContentDescription(extendedDescription);
-            result.setContentDescription(contentDescription);
             result.setStreamBitratePropertiesChunk(bitratePropertiesChunk);
         }
         return result;
+    }
+
+    /**
+     * @param class1
+     */
+    private <T extends ChunkReader> void register(Class<T> toRegister)
+    {
+        try
+        {
+            T reader = toRegister.newInstance();
+            this.readerMap.put(reader.getApplyingId(), reader);
+        } catch (Exception e)
+        {
+            logger.severe(e.getMessage());
+        }
+
     }
 
 }

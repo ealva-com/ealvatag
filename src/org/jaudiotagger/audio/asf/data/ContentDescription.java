@@ -96,7 +96,7 @@ public class ContentDescription extends Chunk
      */
     public ContentDescription()
     {
-        this(0, BigInteger.valueOf(0));
+        this(BigInteger.valueOf(0));
     }
 
     /**
@@ -105,9 +105,9 @@ public class ContentDescription extends Chunk
      * @param pos      Position of content description within file or stream
      * @param chunkLen Length of content description.
      */
-    public ContentDescription(long pos, BigInteger chunkLen)
+    public ContentDescription(BigInteger chunkLen)
     {
-        super(GUID.GUID_CONTENTDESCRIPTION, pos, chunkLen);
+        super(GUID.GUID_CONTENTDESCRIPTION, chunkLen);
     }
 
     /**

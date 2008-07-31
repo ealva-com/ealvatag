@@ -20,6 +20,7 @@ package org.jaudiotagger.audio.asf.data;
 
 import java.math.BigInteger;
 import java.util.Arrays;
+import java.util.Hashtable;
 
 /**
  * Each asf file starts with a so called header. <br>
@@ -33,15 +34,15 @@ public class AsfHeader extends Chunk
 {
 
     /**
-     * An asf header contains multiple chunks. <br>
+     * An ASF header contains multiple chunks. <br>
      * The count of those is stored here.
      */
     private final long chunkCount;
 
     /**
-     * The content description of the entire file.
+     * Stores the {@link Chunk} objects to their {@link GUID}.
      */
-    private ContentDescription contentDescription;
+    private final Hashtable<GUID, Chunk> chunkTable;
 
     /**
      * Stores the encoding chunk.
@@ -57,11 +58,6 @@ public class AsfHeader extends Chunk
      * Stores the tag header.
      */
     private ExtendedContentDescription extendedContentDescription;
-
-    /**
-     * Stores the file header.
-     */
-    private FileHeader fileHeader;
 
     /**
      * Stores additional bitrate information on streams.
@@ -94,6 +90,15 @@ public class AsfHeader extends Chunk
         this.chunkCount = chunkCnt;
         this.streamChunks = new StreamChunk[0];
         this.unspecifiedChunks = new Chunk[0];
+        this.chunkTable = new Hashtable<GUID, Chunk>();
+    }
+
+    /**
+     * @param chunk
+     */
+    public void addChunk(Chunk chunk)
+    {
+        this.chunkTable.put(chunk.getGuid(), chunk);
     }
 
     /**
@@ -110,8 +115,7 @@ public class AsfHeader extends Chunk
         if (!Arrays.asList(this.streamChunks).contains(toAdd))
         {
             StreamChunk[] tmp = new StreamChunk[this.streamChunks.length + 1];
-            System.arraycopy(this.streamChunks, 0, tmp, 0,
-                    this.streamChunks.length);
+            System.arraycopy(this.streamChunks, 0, tmp, 0, this.streamChunks.length);
             tmp[tmp.length - 1] = toAdd;
             this.streamChunks = tmp;
         }
@@ -132,8 +136,7 @@ public class AsfHeader extends Chunk
         if (!Arrays.asList(unspecifiedChunks).contains(toAppend))
         {
             Chunk[] tmp = new Chunk[unspecifiedChunks.length + 1];
-            System.arraycopy(unspecifiedChunks, 0, tmp, 0,
-                    unspecifiedChunks.length);
+            System.arraycopy(unspecifiedChunks, 0, tmp, 0, unspecifiedChunks.length);
             tmp[tmp.length - 1] = toAppend;
             unspecifiedChunks = tmp;
         }
@@ -172,7 +175,7 @@ public class AsfHeader extends Chunk
      */
     public ContentDescription getContentDescription()
     {
-        return contentDescription;
+        return (ContentDescription) this.chunkTable.get(GUID.GUID_CONTENTDESCRIPTION);
     }
 
     /**
@@ -204,7 +207,7 @@ public class AsfHeader extends Chunk
      */
     public FileHeader getFileHeader()
     {
-        return fileHeader;
+        return (FileHeader) this.chunkTable.get(GUID.GUID_FILE);
     }
 
     /**
@@ -286,7 +289,7 @@ public class AsfHeader extends Chunk
      */
     public void setContentDescription(ContentDescription contentDesc)
     {
-        this.contentDescription = contentDesc;
+        this.chunkTable.put(GUID.GUID_CONTENTDESCRIPTION, contentDesc);
     }
 
     /**
@@ -306,8 +309,7 @@ public class AsfHeader extends Chunk
      */
     public void setEncryptionChunk(EncryptionChunk encChunk)
     {
-        if (encChunk == null)
-            throw new IllegalArgumentException("Argument must not be null.");
+        if (encChunk == null) throw new IllegalArgumentException("Argument must not be null.");
         this.encryptionChunk = encChunk;
     }
 
@@ -329,14 +331,13 @@ public class AsfHeader extends Chunk
         {
             throw new IllegalArgumentException("Argument must not be null.");
         }
-        this.fileHeader = fh;
+        this.chunkTable.put(GUID.GUID_FILE, fh);
     }
 
     /**
      * @param streamBitratePropertiesChunk The streamBitratePropertiesChunk to set.
      */
-    public void setStreamBitratePropertiesChunk(
-            StreamBitratePropertiesChunk streamBitratePropertiesChunk1)
+    public void setStreamBitratePropertiesChunk(StreamBitratePropertiesChunk streamBitratePropertiesChunk1)
     {
         this.streamBitratePropertiesChunk = streamBitratePropertiesChunk1;
     }

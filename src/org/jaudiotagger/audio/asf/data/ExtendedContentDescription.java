@@ -19,7 +19,6 @@
 package org.jaudiotagger.audio.asf.data;
 
 import org.jaudiotagger.audio.asf.util.Utils;
-import org.jaudiotagger.tag.reference.GenreTypes;
 
 import java.io.ByteArrayOutputStream;
 import java.math.BigInteger;
@@ -39,15 +38,7 @@ public class ExtendedContentDescription extends Chunk
     /**
      * Contains the properties. <br>
      */
-    private final ArrayList<ContentDescriptor> descriptors;
-
-    /**
-     * This map stores the ids (names) of inserted content descriptors. <br>
-     * If {@link #getDescriptor(String)}is called this field will be filled if
-     * <code>null</code>. Any modification of the contents of this object
-     * will set this field to <code>null</code>.
-     */
-    private HashMap<String,Integer> indexMap = null;
+    private final Map<String, List<ContentDescriptor>> descriptors;
 
     /**
      * Creates an instance.
@@ -66,7 +57,7 @@ public class ExtendedContentDescription extends Chunk
     public ExtendedContentDescription(long pos, BigInteger chunkLen)
     {
         super(GUID.GUID_EXTENDED_CONTENT_DESCRIPTION, pos, chunkLen);
-        this.descriptors = new ArrayList<ContentDescriptor>();
+        this.descriptors = new LinkedHashMap<String, List<ContentDescriptor>>();
     }
 
     /**
@@ -77,12 +68,13 @@ public class ExtendedContentDescription extends Chunk
     public void addDescriptor(ContentDescriptor toAdd)
     {
         assert toAdd != null : "Argument must not be null.";
-        if (getDescriptor(toAdd.getName()) != null)
+        List<ContentDescriptor> list = getDescriptors(toAdd.getName());
+        if (list == null)
         {
-            throw new RuntimeException(toAdd.getName() + " is already present");
+            list = new ArrayList<ContentDescriptor>();
+            this.descriptors.put(toAdd.getName(), list);
         }
-        this.descriptors.add(toAdd);
-        this.indexMap.put(toAdd.getName(), new Integer(descriptors.size() - 1));
+        list.add(toAdd);
     }
 
     /**
@@ -93,45 +85,8 @@ public class ExtendedContentDescription extends Chunk
     public void addOrReplace(ContentDescriptor descriptor)
     {
         assert descriptor != null : "Argument must not be null";
-        if (getDescriptor(descriptor.getName()) != null)
-        {
-            /*
-             * Just remove if exists. Will prevent the indexmap being rebuild.
-             */
-            remove(descriptor.getName());
-        }
+        remove(descriptor.getName());
         addDescriptor(descriptor);
-    }
-
-    /**
-     * Returns the album entered in the content descriptor chunk.
-     *
-     * @return Album, <code>""</code> if not defined.
-     */
-    public String getAlbum()
-    {
-        ContentDescriptor result = getDescriptor(ContentDescriptor.ID_ALBUM);
-        if (result == null)
-        {
-            return "";
-        }
-
-        return result.getString();
-    }
-
-    /**
-     * Returns the "WM/AlbumArtist" entered in the extended content description.
-     *
-     * @return Title, <code>""</code> if not defined.
-     */
-    public String getArtist()
-    {
-        ContentDescriptor result = getDescriptor(ContentDescriptor.ID_ARTIST);
-        if (result == null)
-        {
-            return "";
-        }
-        return result.getString();
     }
 
     /**
@@ -147,7 +102,7 @@ public class ExtendedContentDescription extends Chunk
             ByteArrayOutputStream content = new ByteArrayOutputStream();
             // Write the number of descriptors.
             content.write(Utils.getBytes(this.descriptors.size(), 2));
-            Iterator<ContentDescriptor> it = this.descriptors.iterator();
+            Iterator<ContentDescriptor> it = getDescriptors().iterator();
             while (it.hasNext())
             {
                 ContentDescriptor current = it.next();
@@ -160,8 +115,7 @@ public class ExtendedContentDescription extends Chunk
             result.write(Utils.getBytes(contentBytes.length + 24, 8));
             // Write the content
             result.write(contentBytes);
-        }
-        catch (Exception e)
+        } catch (Exception e)
         {
             e.printStackTrace();
         }
@@ -169,124 +123,43 @@ public class ExtendedContentDescription extends Chunk
     }
 
     /**
-     * Returns a previously inserted content descriptor.
-     *
-     * @param name name of the content descriptor.
-     * @return <code>null</code> if not present.
-     */
-    public ContentDescriptor getDescriptor(String name)
-    {
-        if (this.indexMap == null)
-        {
-            this.indexMap = new HashMap<String,Integer>();
-            for (int i = 0; i < descriptors.size(); i++)
-            {
-                ContentDescriptor current = descriptors.get(i);
-                indexMap.put(current.getName(), new Integer(i));
-            }
-        }
-        Integer pos = indexMap.get(name);
-        if (pos != null)
-        {
-            return descriptors.get(pos.intValue());
-        }
-        return null;
-    }
-
-    /**
      * @return Returns the descriptorCount.
      */
     public long getDescriptorCount()
     {
-        return descriptors.size();
-    }
-
-    /**
-     * Returns a collection of all {@link ContentDescriptor}objects stored in
-     * this extended content description.
-     *
-     * @return An enumeration of {@link ContentDescriptor}objects.
-     */
-    public Collection<ContentDescriptor> getDescriptors()
-    {
-        return new ArrayList<ContentDescriptor>(this.descriptors);
-    }
-
-    /**
-     * Returns the Genre entered in the content descriptor chunk.
-     *
-     * @return Genre, <code>""</code> if not defined.
-     */
-    public String getGenre()
-    {
-        String result = null;
-        ContentDescriptor prop = getDescriptor(ContentDescriptor.ID_GENRE);
-        if (prop == null)
+        int result = 0;
+        for (List<ContentDescriptor> curr : this.descriptors.values())
         {
-            prop = getDescriptor(ContentDescriptor.ID_GENREID);
-            if (prop == null)
-            {
-                result = "";
-            }
-            else
-            {
-                result = prop.getString();
-                if (result.startsWith("(") && result.endsWith(")"))
-                {
-                    result = result.substring(1, result.length() - 1);
-                    try
-                    {
-                        int genreNum = Integer.parseInt(result);
-                        if (genreNum >= 0
-                                && genreNum < GenreTypes.getMaxStandardGenreId())
-                        {
-                            result = GenreTypes.getInstanceOf().getValueForId(genreNum);
-                        }
-                    }
-                    catch (NumberFormatException e)
-                    {
-                        // Do nothing
-                    }
-                }
-            }
-        }
-        else
-        {
-            result = prop.getString();
+            result += curr.size();
         }
         return result;
     }
 
     /**
-     * Returns the Track entered in the content descriptor chunk.
+     * Returns a list of all {@link ContentDescriptor}objects stored in
+     * this extended content description.
      *
-     * @return Track, <code>""</code> if not defined.
+     * @return A listing of {@link ContentDescriptor}objects.
      */
-    public String getTrack()
+    public List<ContentDescriptor> getDescriptors()
     {
-        ContentDescriptor result = getDescriptor(ContentDescriptor.ID_TRACKNUMBER);
-        if (result == null)
+        final ArrayList<ContentDescriptor> result = new ArrayList<ContentDescriptor>();
+        for (List<ContentDescriptor> curr : this.descriptors.values())
         {
-            return "";
+            result.addAll(curr);
         }
-
-        return result.getString();
+        return result;
     }
 
     /**
-     * Returns the Year entered in the extended content descripion.
+     * Returns a previously inserted content descriptors.
      *
-     * @return Year, <code>""</code> if not defined.
+     * @param name name of the content descriptor.
+     * @return <code>null</code> if not present.
      */
-    public String getYear()
+    public List<ContentDescriptor> getDescriptors(String name)
     {
-        ContentDescriptor result = getDescriptor(ContentDescriptor.ID_YEAR);
-        if (result == null)
-        {
-            return "";
-        }
-
-        return result.getString();
+        return this.descriptors.get(name);
     }
 
     /**
@@ -299,12 +172,12 @@ public class ExtendedContentDescription extends Chunk
     {
         StringBuffer result = new StringBuffer(super.prettyPrint());
         result.insert(0, "\nExtended Content Description:\n");
-        ContentDescriptor[] list = descriptors.toArray(new ContentDescriptor[descriptors.size()]);
-        Arrays.sort(list);
-        for (int i = 0; i < list.length; i++)
+        List<ContentDescriptor> list = getDescriptors();
+        Collections.sort(list);
+        for (ContentDescriptor curr : list)
         {
             result.append("   ");
-            result.append(list[i]);
+            result.append(curr);
             result.append(Utils.LINE_SEPARATOR);
         }
         return result.toString();
@@ -314,16 +187,10 @@ public class ExtendedContentDescription extends Chunk
      * This method removes the content descriptor with the given name. <br>
      *
      * @param id The id (name) of the descriptor which should be removed.
-     * @return The descriptor which is removed. If not present <code>null</code>.
+     * @return The descriptors which are removed. If not present <code>null</code>.
      */
-    public ContentDescriptor remove(String id)
+    public List<ContentDescriptor> remove(String id)
     {
-        ContentDescriptor result = getDescriptor(id);
-        if (result != null)
-        {
-            descriptors.remove(result);
-        }
-        this.indexMap = null;
-        return result;
+        return this.descriptors.remove(id);
     }
 }

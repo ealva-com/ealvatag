@@ -25,9 +25,7 @@ import org.jaudiotagger.tag.Tag;
 import org.jaudiotagger.tag.TagField;
 import org.jaudiotagger.tag.TagTextField;
 
-import java.io.IOException;
-import java.io.RandomAccessFile;
-import java.io.UnsupportedEncodingException;
+import java.io.*;
 import java.math.BigInteger;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -231,6 +229,23 @@ public class Utils
     }
 
     /**
+     * @param stream
+     * @return
+     */
+    public static BigInteger readBig64(InputStream stream) throws IOException
+    {
+        byte[] bytes = new byte[8];
+        byte[] oa = new byte[8];
+        assert stream.read(bytes) == 8;
+        for (int i = 0; i < bytes.length; i++)
+        {
+            oa[7 - i] = bytes[i];
+        }
+        BigInteger result = new BigInteger(oa);
+        return result;
+    }
+
+    /**
      * This method reads 8 bytes, interprets them as an unsigned number and
      * creates a {@link BigInteger}
      *
@@ -309,6 +324,43 @@ public class Utils
         return new GUID(binaryGuid);
     }
 
+   /**
+     * This Method reads a GUID (which is a 16 byte long sequence) from the
+     * given <code>raf</code> and creates a wrapper. <br>
+     * <b>Warning </b>: <br>
+     * There is no way of telling if a byte sequence is a guid or not. The next
+     * 16 bytes will be interpreted as a guid, whether it is or not.
+     *
+     * @param stream Input source.
+     * @return A class wrapping the guid.
+     * @throws IOException happens when the file ends before guid could be extracted.
+     */
+    public static GUID readGUID(InputStream stream) throws IOException
+    {
+        if (stream == null)
+        {
+            throw new IllegalArgumentException("Argument must not be null");
+        }
+        int[] binaryGuid = new int[GUID.GUID_LENGTH];
+        for (int i = 0; i < binaryGuid.length; i++)
+        {
+            binaryGuid[i] = stream.read();
+        }
+        return new GUID(binaryGuid);
+    }
+    
+    /**
+     * @param bis
+     * @return
+     */
+    public static int readUINT16(InputStream bis) throws IOException
+    {
+        int result = bis.read();
+        result |= bis.read() << 8;
+        return result;
+    }
+
+
     /**
      * @param raf
      * @return number
@@ -319,6 +371,20 @@ public class Utils
     {
         int result = raf.read();
         result |= raf.read() << 8;
+        return result;
+    }
+
+    /**
+     * @param bis
+     * @return
+     */
+    public static long readUINT32(InputStream stream) throws IOException
+    {
+        long result = 0;
+        for (int i = 24; i >= 0; i -= 8)
+        {
+            result |= stream.read() << i;
+        }
         return result;
     }
 
@@ -337,7 +403,7 @@ public class Utils
         }
         return result;
     }
-
+    
     /**
      * Reads long as little endian.
      *
@@ -353,6 +419,22 @@ public class Utils
             result |= raf.read() << i;
         }
         return result;
+    }
+
+    public static String readUTF16LEStr(InputStream stream) throws IOException
+    {
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        byte[] c = new byte[2];
+        while ((stream.read(c)) == 2)
+        {
+            if (c[0] == 0 && c[1] == 0)
+            {
+                break;
+            }
+            bos.write(c[1]);
+            bos.write(c[0]);
+        }
+        return new String(bos.toByteArray(), AsfTag.TEXT_ENCODING);
     }
 
     /**
@@ -387,4 +469,5 @@ public class Utils
         }
         throw new IllegalStateException("Invalid Data for current interpretation");
     }
+
 }

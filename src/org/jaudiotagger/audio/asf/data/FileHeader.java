@@ -90,7 +90,6 @@ public class FileHeader extends Chunk
     /**
      * Creates an instance.
      *
-     * @param fileHeaderStart     Position in file or stream, where the file header starts.
      * @param chunckLen           Length of the file header (chunk)
      * @param size                Size of file or stream
      * @param fileTime            Time file or stream was created. Time is calculated since 1st
@@ -104,13 +103,13 @@ public class FileHeader extends Chunk
      * @param maxPkgSize          maximum size of packages
      * @param uncmpVideoFrameSize Size of an uncompressed Video Frame.
      */
-    public FileHeader(long fileHeaderStart, BigInteger chunckLen,
+    public FileHeader(BigInteger chunckLen,
             BigInteger size, BigInteger fileTime, BigInteger pkgCount,
             BigInteger dur, BigInteger timestampStart, BigInteger timestampEnd,
             long headerFlags, long minPkgSize, long maxPkgSize,
             long uncmpVideoFrameSize)
     {
-        super(GUID.GUID_FILE, fileHeaderStart, chunckLen);
+        super(GUID.GUID_FILE, chunckLen);
         this.fileSize = size;
         this.packageCount = pkgCount;
         this.duration = dur;

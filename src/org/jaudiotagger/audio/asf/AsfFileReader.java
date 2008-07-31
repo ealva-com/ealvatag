@@ -52,6 +52,8 @@ public class AsfFileReader extends AudioFileReader
         GenericAudioHeader info = new GenericAudioHeader();
         try
         {
+            // TODO do file size check with FileHeader-Chunk. 
+            // New streamed reading does not provide RandomAccessFile to readers.
             AsfHeader header = AsfHeaderReader.readHeader(raf);
             if (header == null)
             {
