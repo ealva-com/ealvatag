@@ -35,6 +35,27 @@ public class AsfTagTest extends TestCase
     }
 
     /**
+     * This method tests the insertion of fields (or data) with empty content.<br>
+     */
+    public void testEmptyField()
+    {
+        AsfTag asfTag = new AsfTag(true);
+        asfTag.addAlbum("");
+        asfTag.setTitle("");
+        assertFalse(asfTag.hasField(AsfFieldKey.ALBUM.getPublicFieldId()));
+        assertFalse(asfTag.hasField(AsfFieldKey.TITLE.getPublicFieldId()));
+        assertTrue(asfTag.isEmpty());
+        assertTrue(asfTag.getFieldCount() == 0);
+        asfTag = new AsfTag();
+        asfTag.addAlbum("");
+        asfTag.setTitle("");
+        assertTrue(asfTag.hasField(AsfFieldKey.ALBUM.getPublicFieldId()));
+        assertTrue(asfTag.hasField(AsfFieldKey.TITLE.getPublicFieldId()));
+        assertFalse(asfTag.isEmpty());
+        assertTrue(asfTag.getFieldCount() == 2);
+    }
+
+    /**
      * Tests {@link AsfFieldKey}.
      */
     public void testFieldKey()

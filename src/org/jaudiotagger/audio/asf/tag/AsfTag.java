@@ -98,13 +98,16 @@ public final class AsfTag extends AbstractTag
         try
         {
             TagField copy = copyFrom(field);
-            if (AsfFieldKey.isMultiValued(copy.getId()))
+            if (copy != null) 
             {
-                super.add(copy);
-            }
-            else
-            {
-                super.set(copy);
+                if (AsfFieldKey.isMultiValued(copy.getId()))
+                {
+                    super.add(copy);
+                }
+                else
+                {
+                    super.set(copy);
+                }
             }
         } catch (UnsupportedEncodingException e)
         {
@@ -458,7 +461,11 @@ public final class AsfTag extends AbstractTag
     {
         try
         {
-            super.set(copyFrom(field));
+            TagField copy = copyFrom(field);
+            if (copy != null)
+            {
+                super.set(copy);
+            }
         } catch (UnsupportedEncodingException e)
         {
             throw new RuntimeException("Cannot get raw content.", e);
