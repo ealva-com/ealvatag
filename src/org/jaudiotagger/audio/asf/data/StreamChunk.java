@@ -31,7 +31,7 @@ import org.jaudiotagger.audio.asf.util.Utils;
  *
  * @author Christian Laireiter
  */
-public class StreamChunk extends Chunk
+public abstract class StreamChunk extends Chunk
 {
 
     /**
@@ -56,6 +56,13 @@ public class StreamChunk extends Chunk
     private long timeOffset;
 
     /**
+     * Stores the stream type.<br>
+     * @see GUID#GUID_AUDIOSTREAM
+     * @see GUID#GUID_VIDEOSTREAM
+     */
+    private GUID type;
+
+    /**
      * Stores the size of type specific data structure within chunk.
      */
     private long typeSpecificDataSize;
@@ -63,12 +70,15 @@ public class StreamChunk extends Chunk
     /**
      * Creates an instance
      *
-     * @param pos      Position of chunk within file or stream.
+     * @param streamType The GUID which tells the stream type represented ({@link GUID#GUID_AUDIOSTREAM} 
+     *                      or {@link GUID#GUID_VIDEOSTREAM}):
      * @param chunkLen length of chunk
      */
-    public StreamChunk(long pos, BigInteger chunkLen)
+    public StreamChunk(GUID streamType, BigInteger chunkLen)
     {
-        super(GUID.GUID_AUDIOSTREAM, pos, chunkLen);
+        super(GUID.GUID_STREAM, chunkLen);
+        assert GUID.GUID_AUDIOSTREAM.equals(streamType) || GUID.GUID_VIDEOSTREAM.equals(streamType);
+        this.type = streamType;
     }
 
     /**
@@ -85,6 +95,16 @@ public class StreamChunk extends Chunk
     public long getStreamSpecificDataSize()
     {
         return streamSpecificDataSize;
+    }
+
+    /**
+     * Returns the stream type of the stream chunk.<br>
+     *  
+     * @return {@link GUID#GUID_AUDIOSTREAM} or {@link GUID#GUID_VIDEOSTREAM}.
+     */
+    public GUID getStreamType()
+    {
+        return this.type;
     }
 
     /**
@@ -119,18 +139,12 @@ public class StreamChunk extends Chunk
     public String prettyPrint()
     {
         StringBuffer result = new StringBuffer(super.prettyPrint());
-        result.insert(0, Utils.LINE_SEPARATOR + "Stream Data:"
-                + Utils.LINE_SEPARATOR);
-        result.append("   Stream number: " + getStreamNumber()
-                + Utils.LINE_SEPARATOR);
-        result.append("   Type specific data size  : "
-                + getTypeSpecificDataSize() + Utils.LINE_SEPARATOR);
-        result.append("   Stream specific data size: "
-                + getStreamSpecificDataSize() + Utils.LINE_SEPARATOR);
-        result.append("   Time Offset              : " + getTimeOffset()
-                + Utils.LINE_SEPARATOR);
-        result.append("   Content Encryption       : " + isContentEncrypted()
-                + Utils.LINE_SEPARATOR);
+        result.insert(0, Utils.LINE_SEPARATOR + "Stream Data:" + Utils.LINE_SEPARATOR);
+        result.append("   Stream number: " + getStreamNumber() + Utils.LINE_SEPARATOR);
+        result.append("   Type specific data size  : " + getTypeSpecificDataSize() + Utils.LINE_SEPARATOR);
+        result.append("   Stream specific data size: " + getStreamSpecificDataSize() + Utils.LINE_SEPARATOR);
+        result.append("   Time Offset              : " + getTimeOffset() + Utils.LINE_SEPARATOR);
+        result.append("   Content Encryption       : " + isContentEncrypted() + Utils.LINE_SEPARATOR);
         return result.toString();
     }
 

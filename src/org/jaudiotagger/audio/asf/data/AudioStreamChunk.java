@@ -38,11 +38,7 @@ public class AudioStreamChunk extends StreamChunk
     /**
      * Stores the hex values of codec identifiers to their descriptions. <br>
      */
-    public final static String[][] CODEC_DESCRIPTIONS = {
-            {"161", " (Windows Media Audio (ver 7,8,9))"},
-            {"162", " (Windows Media Audio 9 series (Professional))"},
-            {"163", "(Windows Media Audio 9 series (Lossless))"},
-            {"7A21", " (GSM-AMR (CBR))"}, {"7A22", " (GSM-AMR (VBR))"}};
+    public final static String[][] CODEC_DESCRIPTIONS = {{"161", " (Windows Media Audio (ver 7,8,9))"}, {"162", " (Windows Media Audio 9 series (Professional))"}, {"163", "(Windows Media Audio 9 series (Lossless))"}, {"7A21", " (GSM-AMR (CBR))"}, {"7A22", " (GSM-AMR (VBR))"}};
 
     /**
      * Stores the average amount of bytes used by audio stream. <br>
@@ -89,12 +85,11 @@ public class AudioStreamChunk extends StreamChunk
     /**
      * Creates an instance.
      *
-     * @param pos      Position of current chunk within asf file or stream.
      * @param chunkLen Length of the entire chunk (including guid and size)
      */
-    public AudioStreamChunk(long pos, BigInteger chunkLen)
+    public AudioStreamChunk(BigInteger chunkLen)
     {
-        super(pos, chunkLen);
+        super(GUID.GUID_AUDIOSTREAM, chunkLen);
     }
 
     /**
@@ -146,8 +141,7 @@ public class AudioStreamChunk extends StreamChunk
      */
     public String getCodecDescription()
     {
-        StringBuffer result = new StringBuffer(Long
-                .toHexString(getCompressionFormat()));
+        StringBuffer result = new StringBuffer(Long.toHexString(getCompressionFormat()));
         String furtherDesc = " (Unknown)";
         for (int i = 0; i < CODEC_DESCRIPTIONS.length; i++)
         {
@@ -214,8 +208,7 @@ public class AudioStreamChunk extends StreamChunk
      */
     public boolean isErrorConcealed()
     {
-        return getErrorConcealment().equals(
-                GUID.GUID_AUDIO_ERROR_CONCEALEMENT_INTERLEAVED);
+        return getErrorConcealment().equals(GUID.GUID_AUDIO_ERROR_CONCEALEMENT_INTERLEAVED);
     }
 
     /**
@@ -225,17 +218,15 @@ public class AudioStreamChunk extends StreamChunk
      */
     public String prettyPrint()
     {
-        StringBuffer result = new StringBuffer(super.prettyPrint().replaceAll(
-                Utils.LINE_SEPARATOR, Utils.LINE_SEPARATOR + "   "));
+        StringBuffer result = new StringBuffer(super.prettyPrint()
+                        .replaceAll(Utils.LINE_SEPARATOR, Utils.LINE_SEPARATOR + "   "));
         result.insert(0, Utils.LINE_SEPARATOR + "AudioStream");
         result.append("Audio info:" + Utils.LINE_SEPARATOR);
         result.append("      Bitrate : " + getKbps() + Utils.LINE_SEPARATOR);
-        result.append("      Channels : " + getChannelCount() + " at "
-                + getSamplingRate() + " Hz" + Utils.LINE_SEPARATOR);
-        result.append("      Bits per Sample: " + getBitsPerSample()
-                + Utils.LINE_SEPARATOR);
-        result.append("      Formatcode: " + getCodecDescription()
-                + Utils.LINE_SEPARATOR);
+        result
+                        .append("      Channels : " + getChannelCount() + " at " + getSamplingRate() + " Hz" + Utils.LINE_SEPARATOR);
+        result.append("      Bits per Sample: " + getBitsPerSample() + Utils.LINE_SEPARATOR);
+        result.append("      Formatcode: " + getCodecDescription() + Utils.LINE_SEPARATOR);
         return result.toString();
     }
 

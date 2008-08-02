@@ -77,6 +77,7 @@ public class AsfHeaderReader
         register(FileHeaderReader.class);
         register(StreamBitratePropertiesReader.class);
         register(ExtContentDescReader.class);
+        register(StreamChunkReader.class);
     }
 
     public ChunkReader getReader(GUID guid)
@@ -146,7 +147,6 @@ public class AsfHeaderReader
                 */
             EncodingChunk encodingChunk = null;
             EncryptionChunk encryptionChunk = null;
-            StreamChunk streamChunk = null;
 
             Iterator<Chunk> iterator = chunks.iterator();
 
@@ -159,12 +159,6 @@ public class AsfHeaderReader
                 }
                 if (encryptionChunk == null && (encryptionChunk = EncryptionChunkReader.read(in, currentChunk)) != null)
                 {
-                    continue;
-                }
-                if ((streamChunk = StreamChunkReader.read(in, currentChunk)) != null)
-                {
-                    result.addStreamChunk(streamChunk);
-                    streamChunk = null;
                     continue;
                 }
                 /*

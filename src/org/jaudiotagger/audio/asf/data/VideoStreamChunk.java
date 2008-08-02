@@ -46,12 +46,11 @@ public class VideoStreamChunk extends StreamChunk
     /**
      * Creates an instance.
      *
-     * @param pos      Position of the current chunk in the asf file or stream.
      * @param chunkLen Length of the entire chunk (including guid and size)
      */
-    public VideoStreamChunk(long pos, BigInteger chunkLen)
+    public VideoStreamChunk(BigInteger chunkLen)
     {
-        super(pos, chunkLen);
+        super(GUID.GUID_VIDEOSTREAM, chunkLen);
     }
 
     /**

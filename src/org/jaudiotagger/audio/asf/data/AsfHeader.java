@@ -19,8 +19,10 @@
 package org.jaudiotagger.audio.asf.data;
 
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Hashtable;
+import java.util.List;
 
 /**
  * Each asf file starts with a so called header. <br>
@@ -57,7 +59,7 @@ public class AsfHeader extends Chunk
     /**
      * This array stores all found stream chunks.
      */
-    private StreamChunk[] streamChunks;
+    private List<StreamChunk> streamChunks;
 
     /**
      * This field stores all chunks which aren't specified and not represented
@@ -78,7 +80,7 @@ public class AsfHeader extends Chunk
     {
         super(GUID.GUID_HEADER, pos, chunkLen);
         this.chunkCount = chunkCnt;
-        this.streamChunks = new StreamChunk[0];
+        this.streamChunks = new ArrayList<StreamChunk>(2);
         this.unspecifiedChunks = new Chunk[0];
         this.chunkTable = new Hashtable<GUID, Chunk>();
     }
@@ -88,7 +90,15 @@ public class AsfHeader extends Chunk
      */
     public void addChunk(Chunk chunk)
     {
-        this.chunkTable.put(chunk.getGuid(), chunk);
+        if (GUID.GUID_STREAM.equals(chunk.getGuid()))
+        {
+            assert chunk instanceof StreamChunk;
+            addStreamChunk((StreamChunk) chunk);
+        }
+        else
+        {
+            this.chunkTable.put(chunk.getGuid(), chunk);
+        }
     }
 
     /**
@@ -102,12 +112,9 @@ public class AsfHeader extends Chunk
         {
             throw new IllegalArgumentException("Argument must not be null.");
         }
-        if (!Arrays.asList(this.streamChunks).contains(toAdd))
+        if (!this.streamChunks.contains(toAdd))
         {
-            StreamChunk[] tmp = new StreamChunk[this.streamChunks.length + 1];
-            System.arraycopy(this.streamChunks, 0, tmp, 0, this.streamChunks.length);
-            tmp[tmp.length - 1] = toAdd;
-            this.streamChunks = tmp;
+            this.streamChunks.add(toAdd);
         }
     }
 
@@ -144,7 +151,7 @@ public class AsfHeader extends Chunk
         for (int i = 0; i < getStreamChunkCount() && result == null; i++)
         {
             StreamChunk tmp = getStreamChunk(i);
-            if (tmp instanceof AudioStreamChunk)
+            if (GUID.GUID_AUDIOSTREAM.equals(tmp.getStreamType()))
             {
                 result = (AudioStreamChunk) tmp;
             }
@@ -216,7 +223,7 @@ public class AsfHeader extends Chunk
      */
     public StreamChunk getStreamChunk(int index)
     {
-        return this.streamChunks[index];
+        return this.streamChunks.get(index);
     }
 
     /**
@@ -226,7 +233,7 @@ public class AsfHeader extends Chunk
      */
     public int getStreamChunkCount()
     {
-        return this.streamChunks.length;
+        return this.streamChunks.size();
     }
 
     /**
