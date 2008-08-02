@@ -267,6 +267,39 @@ public class Utils
     }
 
     /**
+     * This method reads a UTF-16 String, which length is given on the number of
+     * characters it consists of. <br>
+     * The stream must be at the number of
+     * characters. This number contains the terminating zero character (UINT16).
+     *
+     * @param raf Input source
+     * @return String
+     * @throws IOException read errors
+     */
+    public static String readCharacterSizedString(InputStream stream) throws IOException
+    {
+        StringBuffer result = new StringBuffer();
+        int strLen = readUINT16(stream);
+        int character = stream.read();
+        character |= stream.read() << 8;
+        do
+        {
+            if (character != 0)
+            {
+                result.append((char) character);
+                character = stream.read();
+                character |= stream.read() << 8;
+            }
+        }
+        while (character != 0 || (result.length() + 1) > strLen);
+        if (strLen != (result.length() + 1))
+        {
+            throw new IllegalStateException("Invalid Data for current interpretation");
+        }
+        return result.toString();
+    }
+
+    /**
      * This method reads a UTF-16 String, which legth is given on the number of
      * characters it consits of. <br>
      * The filepointer of <code>raf</code> must be at the number of
@@ -300,28 +333,39 @@ public class Utils
     }
 
     /**
-     * This Method reads a GUID (which is a 16 byte long sequence) from the
-     * given <code>raf</code> and creates a wrapper. <br>
-     * <b>Warning </b>: <br>
-     * There is no way of telling if a byte sequence is a guid or not. The next
-     * 16 bytes will be interpreted as a guid, whether it is or not.
+     * This method reads a UTF-16 encoded String. <br>
+     * For the use this method the number of bytes used by current string must
+     * be known. <br>
+     * The ASF spec recommends that those strings end with a terminating zero.
+     * However it also says that it is not always the case.
      *
-     * @param raf Input source.
-     * @return A class wrapping the guid.
-     * @throws IOException happens when the file ends before guid could be extracted.
+     * @param raf    Input source
+     * @param strLen Number of bytes the String may take.
+     * @return read String.
+     * @throws IOException read errors.
      */
-    public static GUID readGUID(RandomAccessFile raf) throws IOException
+    public static String readFixedSizeUTF16Str(InputStream stream, int strLen) throws IOException
     {
-        if (raf == null)
+        byte[] strBytes = new byte[strLen];
+        int read = stream.read(strBytes);
+        if (read == strBytes.length)
         {
-            throw new IllegalArgumentException("Argument must not be null");
+            if (strBytes.length >= 2)
+            {
+                /*
+                 * Zero termination is recommended but optional.
+                 * So check and if, remove.
+                 */
+                if (strBytes[strBytes.length - 1] == 0 && strBytes[strBytes.length - 2] == 0)
+                {
+                    byte[] copy = new byte[strBytes.length - 2];
+                    System.arraycopy(strBytes, 0, copy, 0, strBytes.length - 2);
+                    strBytes = copy;
+                }
+            }
+            return new String(strBytes, "UTF-16LE");
         }
-        int[] binaryGuid = new int[GUID.GUID_LENGTH];
-        for (int i = 0; i < binaryGuid.length; i++)
-        {
-            binaryGuid[i] = raf.read();
-        }
-        return new GUID(binaryGuid);
+        throw new IllegalStateException("Couldn't read the necessary amount of bytes.");
     }
 
    /**
@@ -350,6 +394,32 @@ public class Utils
     }
     
     /**
+     * This Method reads a GUID (which is a 16 byte long sequence) from the
+     * given <code>raf</code> and creates a wrapper. <br>
+     * <b>Warning </b>: <br>
+     * There is no way of telling if a byte sequence is a guid or not. The next
+     * 16 bytes will be interpreted as a guid, whether it is or not.
+     *
+     * @param raf Input source.
+     * @return A class wrapping the guid.
+     * @throws IOException happens when the file ends before guid could be extracted.
+     */
+    public static GUID readGUID(RandomAccessFile raf) throws IOException
+    {
+        if (raf == null)
+        {
+            throw new IllegalArgumentException("Argument must not be null");
+        }
+        int[] binaryGuid = new int[GUID.GUID_LENGTH];
+        for (int i = 0; i < binaryGuid.length; i++)
+        {
+            binaryGuid[i] = raf.read();
+        }
+        return new GUID(binaryGuid);
+    }
+
+
+    /**
      * @param bis
      * @return
      */
@@ -359,7 +429,6 @@ public class Utils
         result |= bis.read() << 8;
         return result;
     }
-
 
     /**
      * @param raf
@@ -381,13 +450,13 @@ public class Utils
     public static long readUINT32(InputStream stream) throws IOException
     {
         long result = 0;
-        for (int i = 24; i >= 0; i -= 8)
+        for (int i = 0; i <= 24; i += 8)
         {
             result |= stream.read() << i;
         }
         return result;
     }
-
+    
     /**
      * @param raf
      * @return number
@@ -403,7 +472,7 @@ public class Utils
         }
         return result;
     }
-    
+
     /**
      * Reads long as little endian.
      *
@@ -469,5 +538,5 @@ public class Utils
         }
         throw new IllegalStateException("Invalid Data for current interpretation");
     }
-
+    
 }
