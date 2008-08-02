@@ -31,6 +31,8 @@ import java.util.Arrays;
 public final class GUID
 {
 
+    public final static int[] CD_GUID = new int[]{0x33, 0x26, 0xB2, 0x75, 0x8E, 0x66, 0xCF, 0x11, 0xA6, 0xD9, 0x00, 0xAA, 0x00, 0x62, 0xCE, 0x6C};
+
     /**
      * This constant defines the GUID for stream chunks describing audio
      * streams, indicating the the audio stream has no error concealment. <br>
@@ -38,10 +40,10 @@ public final class GUID
     public final static GUID GUID_AUDIO_ERROR_CONCEALEMENT_ABSENT = new GUID(new int[]{0x40, 0xA4, 0xF1, 0x49, 0xCE, 0x4E, 0xD0, 0x11, 0xA3, 0xAC, 0x00, 0xA0, 0xC9, 0x03, 0x48, 0xF6}, "Audio error concealment absent.");
 
     /**
-     * This constant defines the GUID for stream chunks describing audio
-     * streams, indicating the the audio stream has interleaved error
-     * concealment. <br>
-     */
+    * This constant defines the GUID for stream chunks describing audio
+    * streams, indicating the the audio stream has interleaved error
+    * concealment. <br>
+    */
     public final static GUID GUID_AUDIO_ERROR_CONCEALEMENT_INTERLEAVED = new GUID(new int[]{0x40, 0xA4, 0xF1, 0x49, 0xCE, 0x4E, 0xD0, 0x11, 0xA3, 0xAC, 0x00, 0xA0, 0xC9, 0x03, 0x48, 0xF6}, "Interleaved audio error concealment.");
 
     /**
@@ -65,8 +67,6 @@ public final class GUID
      * author, copyright, description and rating.
      */
     public final static GUID GUID_CONTENTDESCRIPTION = new GUID(new int[]{0x33, 0x26, 0xB2, 0x75, 0x8E, 0x66, 0xCF, 0x11, 0xA6, 0xD9, 0x00, 0xAA, 0x00, 0x62, 0xCE, 0x6C}, "Content Description");
-
-    public final static int[] CD_GUID = new int[]{0x33, 0x26, 0xB2, 0x75, 0x8E, 0x66, 0xCF, 0x11, 0xA6, 0xD9, 0x00, 0xAA, 0x00, 0x62, 0xCE, 0x6C};
 
     /**
      * This constant stores the GUID for Encoding-Info chunks.
@@ -111,6 +111,12 @@ public final class GUID
     public final static GUID GUID_STREAM_BITRATE_PROPERTIES = new GUID(new int[]{0xCE, 0x75, 0xF8, 0x7B, 0x8D, 0x46, 0xD1, 0x11, 0x8D, 0x82, 0x00, 0x60, 0x97, 0xC9, 0xA2, 0xB2}, "Stream bitrate properties");
 
     /**
+        * This constant represents a GUID implementation which can be used for generic implementations, which have
+        * to provide a GUID, but do not really require a specific GUID to work.
+        */
+    public final static GUID GUID_UNSPECIFIED = new GUID(new int[]{0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}, "Unspecified");
+
+    /**
      * This constant stores the GUID indicating that stream type is video.
      */
     public final static GUID GUID_VIDEOSTREAM = new GUID(new int[]{0xC0, 0xEF, 0x19, 0xBC, 0x4D, 0x5B, 0xCF, 0x11, 0xA8, 0xFD, 0x00, 0x80, 0x5F, 0x5C, 0x44, 0x2B}, "Video stream");
@@ -127,7 +133,7 @@ public final class GUID
 
     static
     {
-        KNOWN_GUIDS = new GUID[]{GUID_AUDIO_ERROR_CONCEALEMENT_ABSENT, GUID_AUDIO_ERROR_CONCEALEMENT_INTERLEAVED, GUID_CONTENTDESCRIPTION, GUID_AUDIOSTREAM, GUID_ENCODING, GUID_FILE, GUID_HEADER, GUID_STREAM, GUID_EXTENDED_CONTENT_DESCRIPTION, GUID_VIDEOSTREAM, GUID_HEADER_EXTENSION, GUID_STREAM_BITRATE_PROPERTIES, GUID_HEADER_EXTENSION, GUID_STREAM_BITRATE_PROPERTIES, SCRIPT_COMMAND_OBJECT, GUID_CONTENT_ENCRYPTION, GUID_CONTENT_BRANDING};
+        KNOWN_GUIDS = new GUID[]{GUID_AUDIO_ERROR_CONCEALEMENT_ABSENT, GUID_AUDIO_ERROR_CONCEALEMENT_INTERLEAVED, GUID_CONTENTDESCRIPTION, GUID_AUDIOSTREAM, GUID_ENCODING, GUID_FILE, GUID_HEADER, GUID_STREAM, GUID_EXTENDED_CONTENT_DESCRIPTION, GUID_VIDEOSTREAM, GUID_HEADER_EXTENSION, GUID_STREAM_BITRATE_PROPERTIES, GUID_HEADER_EXTENSION, GUID_STREAM_BITRATE_PROPERTIES, SCRIPT_COMMAND_OBJECT, GUID_CONTENT_ENCRYPTION, GUID_CONTENT_BRANDING, GUID_UNSPECIFIED};
     }
 
     /**

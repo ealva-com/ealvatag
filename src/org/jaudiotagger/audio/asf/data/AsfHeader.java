@@ -55,16 +55,6 @@ public class AsfHeader extends Chunk
     private EncryptionChunk encryptionChunk;
 
     /**
-     * Stores the tag header.
-     */
-    private ExtendedContentDescription extendedContentDescription;
-
-    /**
-     * Stores additional bitrate information on streams.
-     */
-    private StreamBitratePropertiesChunk streamBitratePropertiesChunk;
-
-    /**
      * This array stores all found stream chunks.
      */
     private StreamChunk[] streamChunks;
@@ -199,7 +189,7 @@ public class AsfHeader extends Chunk
      */
     public ExtendedContentDescription getExtendedContentDescription()
     {
-        return extendedContentDescription;
+        return (ExtendedContentDescription) this.chunkTable.get(GUID.GUID_EXTENDED_CONTENT_DESCRIPTION);
     }
 
     /**
@@ -215,7 +205,7 @@ public class AsfHeader extends Chunk
      */
     public StreamBitratePropertiesChunk getStreamBitratePropertiesChunk()
     {
-        return this.streamBitratePropertiesChunk;
+        return (StreamBitratePropertiesChunk) this.chunkTable.get(GUID.GUID_STREAM_BITRATE_PROPERTIES);
     }
 
     /**
@@ -319,7 +309,7 @@ public class AsfHeader extends Chunk
      */
     public void setExtendedContentDescription(ExtendedContentDescription th)
     {
-        this.extendedContentDescription = th;
+        this.chunkTable.put(GUID.GUID_EXTENDED_CONTENT_DESCRIPTION, th);
     }
 
     /**
@@ -339,6 +329,6 @@ public class AsfHeader extends Chunk
      */
     public void setStreamBitratePropertiesChunk(StreamBitratePropertiesChunk streamBitratePropertiesChunk1)
     {
-        this.streamBitratePropertiesChunk = streamBitratePropertiesChunk1;
+        this.chunkTable.put(GUID.GUID_STREAM_BITRATE_PROPERTIES, streamBitratePropertiesChunk1);
     }
 }

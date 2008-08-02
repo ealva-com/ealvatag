@@ -79,5 +79,23 @@ final class RandomAccessFileInputstream extends InputStream
     {
         this.streamPosition = position;
     }
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public long skip(long n) throws IOException
+    {
+        if (n <= 0)
+        {
+            return 0;
+        }
+        while (n > Integer.MAX_VALUE)
+        {
+            this.source.skipBytes(Integer.MAX_VALUE);
+            n -= Integer.MAX_VALUE;
+        }
+        return this.source.skipBytes((int) n);
+    }
 
 }

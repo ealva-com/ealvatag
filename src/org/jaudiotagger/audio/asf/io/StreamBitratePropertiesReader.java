@@ -18,47 +18,22 @@
  */
 package org.jaudiotagger.audio.asf.io;
 
-import java.io.IOException;
-import java.io.RandomAccessFile;
-import java.math.BigInteger;
-
 import org.jaudiotagger.audio.asf.data.Chunk;
 import org.jaudiotagger.audio.asf.data.GUID;
 import org.jaudiotagger.audio.asf.data.StreamBitratePropertiesChunk;
 import org.jaudiotagger.audio.asf.util.Utils;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.math.BigInteger;
 
 /**
  * This class reads the chunk containing the stream bitrate properties.<br>
  *
  * @author Christian Laireiter
  */
-public class StreamBitratePropertiesReader
+public class StreamBitratePropertiesReader implements ChunkReader
 {
-
-    /**
-     * This reads the current data and interprets it as an "stream bitrate
-     * properties" chunk. <br>
-     *
-     * @param raf       Input source
-     * @param candidate Chunk which possibly contains encoding data.
-     * @return StreamBitratePropertiesChunk, <code>null</code> if its not a
-     *         valid one. <br>
-     * @throws IOException read errors.
-     */
-    public static StreamBitratePropertiesChunk read(RandomAccessFile raf,
-            Chunk candidate) throws IOException
-    {
-        if (raf == null || candidate == null)
-        {
-            throw new IllegalArgumentException("Arguments must not be null.");
-        }
-        if (GUID.GUID_STREAM_BITRATE_PROPERTIES.equals(candidate.getGuid()))
-        {
-            raf.seek(candidate.getPosition());
-            return new StreamBitratePropertiesReader().parseData(raf);
-        }
-        return null;
-    }
 
     /**
      * Should not be used for now.
@@ -69,36 +44,33 @@ public class StreamBitratePropertiesReader
     }
 
     /**
-     * see {@link #read(RandomAccessFile,Chunk)}
-     *
-     * @param raf input source.
-     * @return StreamBitratePropertiesChunk, <code>null</code> if its not a
-     *         valid one. <br>
-     * @throws IOException read errors.
+     * {@inheritDoc}
      */
-    private StreamBitratePropertiesChunk parseData(RandomAccessFile raf)
-            throws IOException
+    public GUID getApplyingId()
+    {
+        return GUID.GUID_STREAM_BITRATE_PROPERTIES;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Chunk read(InputStream stream) throws IOException
     {
         StreamBitratePropertiesChunk result = null;
-        long chunkStart = raf.getFilePointer();
-        GUID guid = Utils.readGUID(raf);
-        if (GUID.GUID_STREAM_BITRATE_PROPERTIES.equals(guid))
+        BigInteger chunkLen = Utils.readBig64(stream);
+        result = new StreamBitratePropertiesChunk(chunkLen);
+
+        /*
+            * Read the amount of bitrate records
+            */
+        long recordCount = Utils.readUINT16(stream);
+        for (int i = 0; i < recordCount; i++)
         {
-            BigInteger chunkLen = Utils.readBig64(raf);
-            result = new StreamBitratePropertiesChunk(chunkStart, chunkLen);
-
-            /*
-                * Read the amount of bitrate records
-                */
-            long recordCount = Utils.readUINT16(raf);
-            for (int i = 0; i < recordCount; i++)
-            {
-                int flags = Utils.readUINT16(raf);
-                long avgBitrate = Utils.readUINT32(raf);
-                result.addBitrateRecord(flags & 0x00FF, avgBitrate);
-            }
-
+            int flags = Utils.readUINT16(stream);
+            long avgBitrate = Utils.readUINT32(stream);
+            result.addBitrateRecord(flags & 0x00FF, avgBitrate);
         }
+
         return result;
     }
 

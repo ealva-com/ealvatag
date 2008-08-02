@@ -75,6 +75,8 @@ public class AsfHeaderReader
         readerMap = new HashMap<GUID, ChunkReader>();
         register(ContentDescriptionReader.class);
         register(FileHeaderReader.class);
+        register(StreamBitratePropertiesReader.class);
+        register(ExtContentDescReader.class);
     }
 
     public ChunkReader getReader(GUID guid)
@@ -129,13 +131,12 @@ public class AsfHeaderReader
                 {
                     chunk = getReader(currentGUID).read(stream);
                     result.addChunk(chunk);
-                    chunk.setPosition(currentPosition);
-                    assert chunk.getChunckEnd() == in.getFilePointer();
                 } else {
-                    chunk = new Chunk(currentGUID, currentPosition, Utils.readBig64(in));
+                    chunk = new ChunkHeaderReader(currentGUID).read(stream);
                     chunks.add(chunk);
-                    in.seek(chunk.getChunckEnd());
                 }
+                chunk.setPosition(currentPosition);
+                assert chunk.getChunckEnd() == in.getFilePointer();
             }
 
             /*
@@ -143,21 +144,15 @@ public class AsfHeaderReader
                 * whithin asf header. Further we need to identify the type of those
                 * chunks and parse the interesting ones.
                 */
-            ExtendedContentDescription extendedDescription = null;
             EncodingChunk encodingChunk = null;
             EncryptionChunk encryptionChunk = null;
             StreamChunk streamChunk = null;
-            StreamBitratePropertiesChunk bitratePropertiesChunk = null;
 
             Iterator<Chunk> iterator = chunks.iterator();
 
             while (iterator.hasNext())
             {
                 Chunk currentChunk = iterator.next();
-                if (extendedDescription == null && (extendedDescription = ExtContentDescReader.read(in, currentChunk)) != null)
-                {
-                    continue;
-                }
                 if (encodingChunk == null && (encodingChunk = EncodingChunkReader.read(in, currentChunk)) != null)
                 {
                     continue;
@@ -170,11 +165,6 @@ public class AsfHeaderReader
                 {
                     result.addStreamChunk(streamChunk);
                     streamChunk = null;
-                    continue;
-                }
-                if (bitratePropertiesChunk == null && (bitratePropertiesChunk = StreamBitratePropertiesReader
-                                .read(in, currentChunk)) != null)
-                {
                     continue;
                 }
                 /*
@@ -190,12 +180,6 @@ public class AsfHeaderReader
                 */
             result.setEncodingChunk(encodingChunk);
             if (encryptionChunk != null) result.setEncryptionChunk(encryptionChunk);
-            /*
-                * Warning, extendedDescription, contentDescription and
-                * bitratePropertiesChunk maybe null since they are optional fields.
-                */
-            result.setExtendedContentDescription(extendedDescription);
-            result.setStreamBitratePropertiesChunk(bitratePropertiesChunk);
         }
         return result;
     }

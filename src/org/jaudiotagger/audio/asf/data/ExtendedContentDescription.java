@@ -45,18 +45,17 @@ public class ExtendedContentDescription extends Chunk
      */
     public ExtendedContentDescription()
     {
-        this(0, BigInteger.valueOf(0));
+        this(BigInteger.valueOf(0));
     }
 
     /**
      * Creates an instance.
      *
-     * @param pos      Position of header object within file or stream.
      * @param chunkLen Length of the represented chunck.
      */
-    public ExtendedContentDescription(long pos, BigInteger chunkLen)
+    public ExtendedContentDescription(BigInteger chunkLen)
     {
-        super(GUID.GUID_EXTENDED_CONTENT_DESCRIPTION, pos, chunkLen);
+        super(GUID.GUID_EXTENDED_CONTENT_DESCRIPTION, chunkLen);
         this.descriptors = new LinkedHashMap<String, List<ContentDescriptor>>();
     }
 

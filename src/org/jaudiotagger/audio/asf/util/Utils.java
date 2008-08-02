@@ -480,6 +480,23 @@ public class Utils
      * @return long value
      * @throws IOException read error, or eof is reached before long is completed
      */
+    public static long readUINT64(InputStream stream) throws IOException
+    {
+        long result = 0;
+        for (int i = 0; i <= 56; i += 8)
+        {
+            result |= stream.read() << i;
+        }
+        return result;
+    }
+
+    /**
+     * Reads long as little endian.
+     *
+     * @param raf Data source
+     * @return long value
+     * @throws IOException read error, or eof is reached before long is completed
+     */
     public static long readUINT64(RandomAccessFile raf) throws IOException
     {
         long result = 0;
@@ -490,20 +507,37 @@ public class Utils
         return result;
     }
 
+    /**
+     * This method reads a UTF-16 encoded String, beginning with a 16-bit value
+     * representing the number of bytes needed. The String is terminated with as
+     * 16-bit ZERO. <br>
+     *
+     * @param raf Input source
+     * @return read String.
+     * @throws IOException read errors.
+     */
     public static String readUTF16LEStr(InputStream stream) throws IOException
     {
-        ByteArrayOutputStream bos = new ByteArrayOutputStream();
-        byte[] c = new byte[2];
-        while ((stream.read(c)) == 2)
+        int strLen = readUINT16(stream);
+        byte[] buf = new byte[strLen];
+        int read = stream.read(buf);
+        if (read == buf.length)
         {
-            if (c[0] == 0 && c[1] == 0)
+            /*
+             * Check on zero termination
+             */
+            if (buf.length >= 2)
             {
-                break;
+                if (buf[buf.length - 1] == 0 && buf[buf.length - 2] == 0)
+                {
+                    byte[] copy = new byte[buf.length - 2];
+                    System.arraycopy(buf, 0, copy, 0, buf.length - 2);
+                    buf = copy;
+                }
             }
-            bos.write(c[1]);
-            bos.write(c[0]);
+            return new String(buf, AsfTag.TEXT_ENCODING);
         }
-        return new String(bos.toByteArray(), AsfTag.TEXT_ENCODING);
+        throw new IllegalStateException("Invalid Data for current interpretation");
     }
 
     /**

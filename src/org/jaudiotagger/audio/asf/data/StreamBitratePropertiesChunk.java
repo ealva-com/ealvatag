@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import org.jaudiotagger.audio.asf.util.Utils;
 
 /**
- * This class represents the "Stream Bitrate Properties" chunk of an asf media
+ * This class represents the "Stream Bitrate Properties" chunk of an ASF media
  * file. <br>
  * It is optional, but contains useful information about the streams bitrate.<br>
  *
@@ -35,7 +35,7 @@ public class StreamBitratePropertiesChunk extends Chunk
 
     /**
      * For each call of {@link #addBitrateRecord(int,long)} an {@link Long}
-     * object is appended, which represents the average bitrage.
+     * object is appended, which represents the average bitrate.
      */
     private final ArrayList<Long> bitRates;
 
@@ -48,12 +48,11 @@ public class StreamBitratePropertiesChunk extends Chunk
     /**
      * Creates an instance.
      *
-     * @param pos      Position of the chunk within file or stream
      * @param chunkLen Length of current chunk.
      */
-    public StreamBitratePropertiesChunk(long pos, BigInteger chunkSize)
+    public StreamBitratePropertiesChunk(BigInteger chunkSize)
     {
-        super(GUID.GUID_STREAM_BITRATE_PROPERTIES, pos, chunkSize);
+        super(GUID.GUID_STREAM_BITRATE_PROPERTIES, chunkSize);
         this.bitRates = new ArrayList<Long>();
         this.streamNumbers = new ArrayList<Integer>();
     }
@@ -61,8 +60,8 @@ public class StreamBitratePropertiesChunk extends Chunk
     /**
      * Adds the public values of a stream-record.
      *
-     * @param streamNum      The number of the refered stream.
-     * @param averageBitrate Its average Bitrate.
+     * @param streamNum      The number of the referred stream.
+     * @param averageBitrate Its average bitrate.
      */
     public void addBitrateRecord(int streamNum, long averageBitrate)
     {
