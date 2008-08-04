@@ -2,6 +2,7 @@ package org.jaudiotagger.audio.mp3;
 
 import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.exceptions.CannotWriteException;
+import org.jaudiotagger.audio.exceptions.CannotReadException;
 import org.jaudiotagger.audio.generic.AudioFileWriter;
 import org.jaudiotagger.tag.Tag;
 
@@ -25,6 +26,21 @@ public class MP3FileWriter extends AudioFileWriter
     {
         //Because audio file is an instanceof MP3File this directs it to save
         f.commit();
+    }
+
+    /**
+     * Delete the Id3v1 and ID3v2 tags from file
+     *
+     * @param af
+     * @throws CannotReadException
+     * @throws CannotWriteException
+     */
+    @Override
+    public synchronized void delete(AudioFile af) throws CannotReadException, CannotWriteException
+    {
+        ((MP3File)af).setID3v1Tag(null);
+        ((MP3File)af).setID3v2Tag(null);                
+        af.commit();
     }
 
     protected void writeTag(Tag tag, RandomAccessFile raf, RandomAccessFile rafTemp) throws CannotWriteException, IOException
