@@ -45,12 +45,11 @@ public class EncodingChunk extends Chunk
     /**
      * Creates an instance.
      *
-     * @param pos      Position of the chunk within file or stream
      * @param chunkLen Length of current chunk.
      */
-    public EncodingChunk(long pos, BigInteger chunkLen)
+    public EncodingChunk(BigInteger chunkLen)
     {
-        super(GUID.GUID_ENCODING, pos, chunkLen);
+        super(GUID.GUID_ENCODING, chunkLen);
         this.strings = new ArrayList<String>();
     }
 

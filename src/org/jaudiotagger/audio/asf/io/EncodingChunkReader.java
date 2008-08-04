@@ -18,14 +18,14 @@
  */
 package org.jaudiotagger.audio.asf.io;
 
-import java.io.IOException;
-import java.io.RandomAccessFile;
-import java.math.BigInteger;
-
 import org.jaudiotagger.audio.asf.data.Chunk;
 import org.jaudiotagger.audio.asf.data.EncodingChunk;
 import org.jaudiotagger.audio.asf.data.GUID;
 import org.jaudiotagger.audio.asf.util.Utils;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.math.BigInteger;
 
 /**
  * This class reads the chunk containing encoding data <br>
@@ -34,35 +34,8 @@ import org.jaudiotagger.audio.asf.util.Utils;
  *
  * @author Christian Laireiter
  */
-public class EncodingChunkReader
+public class EncodingChunkReader implements ChunkReader
 {
-
-    /**
-     * This reads the current data and interprets it as an encoding chunk. <br>
-     * <b>Warning:<b><br>
-     * Implementation is not completed. More analysis of this chunk is needed.
-     *
-     * @param raf       Input source
-     * @param candidate Chunk which possibly contains encoding data.
-     * @return Encoding info. <code>null</code> if its not a valid encoding
-     *         chunk. <br>
-     * @throws IOException read errors.
-     */
-    public static EncodingChunk read(RandomAccessFile raf, Chunk candidate)
-            throws IOException
-    {
-        if (raf == null || candidate == null)
-        {
-            throw new IllegalArgumentException("Arguments must not be null.");
-        }
-        if (GUID.GUID_ENCODING.equals(candidate.getGuid()))
-        {
-            raf.seek(candidate.getPosition());
-            return new EncodingChunkReader().parseData(raf);
-        }
-        return null;
-    }
-
     /**
      * Should not be used for now.
      */
@@ -72,44 +45,41 @@ public class EncodingChunkReader
     }
 
     /**
-     * see {@link #read(RandomAccessFile,Chunk)}
-     *
-     * @param raf input source.
-     * @return Enconding info. <code>null</code> if its not a valid encoding
-     *         chunk. <br>
-     * @throws IOException read errors.
+     * {@inheritDoc}
      */
-    private EncodingChunk parseData(RandomAccessFile raf) throws IOException
+    public GUID getApplyingId()
     {
-        EncodingChunk result = null;
-        long chunkStart = raf.getFilePointer();
-        GUID guid = Utils.readGUID(raf);
-        if (GUID.GUID_ENCODING.equals(guid))
+        return GUID.GUID_ENCODING;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Chunk read(InputStream stream) throws IOException
+    {
+        BigInteger chunkLen = Utils.readBig64(stream);
+        EncodingChunk result = new EncodingChunk(chunkLen);
+
+        // Can't be interpreted
+        /*
+            * What do I think of this data, well it seems to be another GUID.
+            * Then followed by a UINT16 indicating a length of data following
+            * (by half). My test files just had the length of one and a two
+            * bytes zero.
+            */
+        stream.skip(20);
+
+        /*
+            * Read the number of strings which will follow
+            */
+        int stringCount = Utils.readUINT16(stream);
+
+        /*
+            * Now reading the specified amount of strings.
+            */
+        for (int i = 0; i < stringCount; i++)
         {
-            BigInteger chunkLen = Utils.readBig64(raf);
-            result = new EncodingChunk(chunkStart, chunkLen);
-
-            // Can't be interpreted
-            /*
-                * What do I think of this data, well it seems to be another GUID.
-                * Then followed by a UINT16 indicating a length of data following
-                * (by half). My test files just had the length of one and a two
-                * bytes zero.
-                */
-            raf.skipBytes(20);
-
-            /*
-                * Read the number of strings which will follow
-                */
-            int stringCount = Utils.readUINT16(raf);
-
-            /*
-                * Now reading the specified amount of strings.
-                */
-            for (int i = 0; i < stringCount; i++)
-            {
-                result.addString(Utils.readCharacterSizedString(raf));
-            }
+            result.addString(Utils.readCharacterSizedString(stream));
         }
         return result;
     }

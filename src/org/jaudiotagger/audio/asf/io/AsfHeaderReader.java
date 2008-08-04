@@ -18,15 +18,15 @@
  */
 package org.jaudiotagger.audio.asf.io;
 
-import org.jaudiotagger.audio.asf.data.*;
+import org.jaudiotagger.audio.asf.data.AsfHeader;
+import org.jaudiotagger.audio.asf.data.Chunk;
+import org.jaudiotagger.audio.asf.data.GUID;
 import org.jaudiotagger.audio.asf.util.Utils;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.math.BigInteger;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.logging.Logger;
 
 /**
@@ -78,6 +78,7 @@ public class AsfHeaderReader
         register(StreamBitratePropertiesReader.class);
         register(ExtContentDescReader.class);
         register(StreamChunkReader.class);
+        register(EncryptionChunkReader.class);
     }
 
     public ChunkReader getReader(GUID guid)
@@ -122,7 +123,6 @@ public class AsfHeaderReader
             /*
              * Now reading header of chuncks.
              */
-            ArrayList<Chunk> chunks = new ArrayList<Chunk>();
             while (chunkLen.compareTo(BigInteger.valueOf(in.getFilePointer())) > 0)
             {
                 long currentPosition = in.getFilePointer();
@@ -134,46 +134,11 @@ public class AsfHeaderReader
                     result.addChunk(chunk);
                 } else {
                     chunk = new ChunkHeaderReader(currentGUID).read(stream);
-                    chunks.add(chunk);
+                    result.addUnspecifiedChunk(chunk);
                 }
                 chunk.setPosition(currentPosition);
                 assert chunk.getChunckEnd() == in.getFilePointer();
             }
-
-            /*
-                * Now we know all positions and guids of chunks which are contained
-                * whithin asf header. Further we need to identify the type of those
-                * chunks and parse the interesting ones.
-                */
-            EncodingChunk encodingChunk = null;
-            EncryptionChunk encryptionChunk = null;
-
-            Iterator<Chunk> iterator = chunks.iterator();
-
-            while (iterator.hasNext())
-            {
-                Chunk currentChunk = iterator.next();
-                if (encodingChunk == null && (encodingChunk = EncodingChunkReader.read(in, currentChunk)) != null)
-                {
-                    continue;
-                }
-                if (encryptionChunk == null && (encryptionChunk = EncryptionChunkReader.read(in, currentChunk)) != null)
-                {
-                    continue;
-                }
-                /*
-                     * If none of the above statements executed the "continue", this
-                     * chunk couldn't be interpreted. Despite this the chunk is
-                     * remembered
-                     */
-                result.addUnspecifiedChunk(currentChunk);
-            }
-            /*
-                * Finally store the parsed chunks in the resulting ASFHeader
-                * object.
-                */
-            result.setEncodingChunk(encodingChunk);
-            if (encryptionChunk != null) result.setEncryptionChunk(encryptionChunk);
         }
         return result;
     }

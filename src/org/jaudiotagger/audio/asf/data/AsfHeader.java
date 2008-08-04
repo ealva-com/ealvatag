@@ -47,16 +47,6 @@ public class AsfHeader extends Chunk
     private final Hashtable<GUID, Chunk> chunkTable;
 
     /**
-     * Stores the encoding chunk.
-     */
-    private EncodingChunk encodingChunk;
-
-    /**
-     * Stores the encoding chunk.
-     */
-    private EncryptionChunk encryptionChunk;
-
-    /**
      * This array stores all found stream chunks.
      */
     private List<StreamChunk> streamChunks;
@@ -180,7 +170,7 @@ public class AsfHeader extends Chunk
      */
     public EncodingChunk getEncodingChunk()
     {
-        return encodingChunk;
+        return (EncodingChunk) this.chunkTable.get(GUID.GUID_ENCODING);
     }
 
     /**
@@ -188,7 +178,7 @@ public class AsfHeader extends Chunk
      */
     public EncryptionChunk getEncryptionChunk()
     {
-        return encryptionChunk;
+        return (EncryptionChunk) this.chunkTable.get(GUID.GUID_CONTENT_ENCRYPTION);
     }
 
     /**
@@ -298,7 +288,7 @@ public class AsfHeader extends Chunk
         {
             throw new IllegalArgumentException("Argument must not be null.");
         }
-        this.encodingChunk = encChunk;
+        this.chunkTable.put(GUID.GUID_ENCODING, encChunk);
     }
 
     /**
@@ -307,7 +297,7 @@ public class AsfHeader extends Chunk
     public void setEncryptionChunk(EncryptionChunk encChunk)
     {
         if (encChunk == null) throw new IllegalArgumentException("Argument must not be null.");
-        this.encryptionChunk = encChunk;
+        this.chunkTable.put(GUID.GUID_CONTENT_ENCRYPTION, encChunk);
     }
 
     /**

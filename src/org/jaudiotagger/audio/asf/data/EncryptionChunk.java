@@ -51,12 +51,11 @@ public class EncryptionChunk extends Chunk
     /**
      * Creates an instance.
      *
-     * @param pos      Position of the chunk within file or stream
      * @param chunkLen Length of current chunk.
      */
-    public EncryptionChunk(long pos, BigInteger chunkLen)
+    public EncryptionChunk(BigInteger chunkLen)
     {
-        super(GUID.GUID_CONTENT_ENCRYPTION, pos, chunkLen);
+        super(GUID.GUID_CONTENT_ENCRYPTION, chunkLen);
         this.strings = new ArrayList<String>();
         this.secretData = "";
         this.protectionType = "";
