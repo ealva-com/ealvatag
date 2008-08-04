@@ -236,7 +236,7 @@ public class Utils
     {
         byte[] bytes = new byte[8];
         byte[] oa = new byte[8];
-        assert stream.read(bytes) == 8;
+        stream.read(bytes);
         for (int i = 0; i < bytes.length; i++)
         {
             oa[7 - i] = bytes[i];
