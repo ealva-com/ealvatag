@@ -89,6 +89,17 @@ public class ExtendedContentDescription extends Chunk
     }
 
     /**
+     * Looks if the given <code>fieldName</code> is already contained in this descriptor.<br>
+     * 
+     * @param fieldName name of the field to look for.
+     * @return <code>true</code> if a descriptor with the name is contained.
+     */
+    public boolean containsDescriptor(final String fieldName)
+    {
+        return this.descriptors.containsKey(fieldName);
+    }
+
+    /**
      * This method creates a byte array which can be written to asf files.
      *
      * @return asf file representation of the current object.

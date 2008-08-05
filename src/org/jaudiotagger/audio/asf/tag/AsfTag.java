@@ -98,7 +98,7 @@ public final class AsfTag extends AbstractTag
         try
         {
             TagField copy = copyFrom(field);
-            if (copy != null) 
+            if (copy != null)
             {
                 if (AsfFieldKey.isMultiValued(copy.getId()))
                 {
@@ -122,6 +122,16 @@ public final class AsfTag extends AbstractTag
     public void addCopyright(String copyRight)
     {
         add(createCopyrightField(copyRight));
+    }
+
+    /**
+     * Creates a field for rating and adds it.<br>
+     * 
+     * @param rating rating.
+     */
+    public void addRating(String rating)
+    {
+        add(createRatingField(rating));
     }
 
     /**
@@ -257,6 +267,17 @@ public final class AsfTag extends AbstractTag
     }
 
     /**
+     * Creates a field for storing the copyright.<br>
+     * 
+     * @param content Rating value.
+     * @return {@link AsfTagTextField}
+     */
+    public TagField createRatingField(String content)
+    {
+        return createTextField(AsfFieldKey.RATING.getPublicFieldId(), content);
+    }
+
+    /**
      * {@inheritDoc}
      */
     @Override
@@ -385,6 +406,16 @@ public final class AsfTag extends AbstractTag
     }
 
     /**
+     * Returns a list of stored copyrights.
+     * 
+     * @return list of stored copyrights.
+     */
+    public List<TagField> getCopyright()
+    {
+        return get(AsfFieldKey.COPYRIGHT.getPublicFieldId());
+    }
+
+    /**
      * {@inheritDoc}
      */
     @Override
@@ -394,12 +425,42 @@ public final class AsfTag extends AbstractTag
     }
 
     /**
+     * Returns the Copyright.
+     * 
+     * @return the Copyright.
+     */
+    public String getFirstCopyright()
+    {
+        return getFirst(AsfFieldKey.COPYRIGHT.getPublicFieldId());
+    }
+
+    /**
+     * Returns the Rating.
+     * 
+     * @return the Rating.
+     */
+    public String getFirstRating()
+    {
+        return getFirst(AsfFieldKey.RATING.getPublicFieldId());
+    }
+
+    /**
      * {@inheritDoc}
      */
     @Override
     protected String getGenreId()
     {
         return AsfFieldKey.GENRE.getPublicFieldId();
+    }
+
+    /**
+     * Returns a list of stored ratings.
+     * 
+     * @return list of stored ratings.
+     */
+    public List<TagField> getRating()
+    {
+        return get(AsfFieldKey.RATING.getPublicFieldId());
     }
 
     /**
@@ -474,11 +535,20 @@ public final class AsfTag extends AbstractTag
 
     /**
      * Sets the copyright.<br>
-     * @param CopyRight the copyright to set.
+     * @param Copyright the copyright to set.
      */
-    public void setCopyRight(String Copyright)
+    public void setCopyright(String Copyright)
     {
         set(createCopyrightField(Copyright));
+    }
+
+    /**
+     * Sets the Rating.<br>
+     * @param rating the rating to set.
+     */
+    public void setRating(String rating)
+    {
+        set(createRatingField(rating));
     }
 
 }

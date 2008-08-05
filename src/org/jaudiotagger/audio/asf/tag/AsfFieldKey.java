@@ -9,11 +9,11 @@ import org.jaudiotagger.tag.TagFieldKey;
  */
 public enum AsfFieldKey
 {
-
+    
     ALBUM("WM/AlbumTitle", TagFieldKey.ALBUM, false),
     ARTIST("WM/AlbumArtist", TagFieldKey.ARTIST, false),
-    COMMENT(null, TagFieldKey.COMMENT, false),
-    COPYRIGHT("SPECIAL/WM/COPYRIGHT", null, false),
+    COMMENT("WM/Comments", TagFieldKey.COMMENT, false),
+    COPYRIGHT("WM/COPYRIGHT", null, false),
     GENRE("WM/Genre", TagFieldKey.GENRE, false),
     GENRE_ID("WM/GenreID", null, false),
     RATING(null, null, false),
@@ -112,7 +112,14 @@ public enum AsfFieldKey
      */
     private AsfFieldKey(String asfFieldId, TagFieldKey correspondingKey, boolean mutliValue)
     {
-        this.fieldId = asfFieldId;
+        if (asfFieldId != null)
+        {
+            this.fieldId = asfFieldId;
+        }
+        else
+        {
+            this.fieldId = this.name();
+        }
         this.corresponding = correspondingKey;
         this.multiValued = mutliValue;
     }

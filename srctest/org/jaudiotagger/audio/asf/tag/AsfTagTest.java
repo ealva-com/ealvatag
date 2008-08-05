@@ -1,5 +1,9 @@
 package org.jaudiotagger.audio.asf.tag;
 
+import org.jaudiotagger.tag.TagTextField;
+
+import java.util.List;
+
 import junit.framework.TestCase;
 import org.jaudiotagger.tag.TagField;
 import org.jaudiotagger.tag.TagFieldKey;
@@ -63,12 +67,13 @@ public class AsfTagTest extends TestCase
         testFieldKey(AsfFieldKey.ALBUM, "ALBUM", TagFieldKey.ALBUM);
         testFieldKey(AsfFieldKey.ARTIST, "ARTIST", TagFieldKey.ARTIST);
         testFieldKey(AsfFieldKey.COMMENT, "COMMENT", TagFieldKey.COMMENT);
-        testFieldKey(AsfFieldKey.COPYRIGHT, "SPECIAL/WM/COPYRIGHT", null);
+        testFieldKey(AsfFieldKey.COPYRIGHT, "WM/COPYRIGHT", null);
         testFieldKey(AsfFieldKey.GENRE, "GENRE", TagFieldKey.GENRE);
         testFieldKey(AsfFieldKey.GENRE_ID, "WM/GenreID", null);
         testFieldKey(AsfFieldKey.TITLE, "TITLE", TagFieldKey.TITLE);
         testFieldKey(AsfFieldKey.TRACK, "TRACK", TagFieldKey.TRACK);
         testFieldKey(AsfFieldKey.YEAR, "YEAR", TagFieldKey.YEAR);
+        testFieldKey(AsfFieldKey.RATING, "RATING", null);
     }
 
     public void testFieldKey(AsfFieldKey targetKey, String idByString, TagFieldKey idByKey)
@@ -129,5 +134,35 @@ public class AsfTagTest extends TestCase
                         .createTextField(AsfFieldKey.ALBUM.getFieldId(), AsfFieldKey.ALBUM.toString());
         asfTag.set(textField);
         assertTrue(textField == asfTag.getFirstField(TagFieldKey.ALBUM.toString()));
+    }
+    
+    public void testUncommonAsfTagFields()
+    {
+        AsfTag asfTag = new AsfTag(true);
+        asfTag.addCopyright("copyright1");
+        asfTag.addCopyright("copyright2");
+        asfTag.addRating("rating1");
+        asfTag.addRating("rating2");
+        // No Multivalue
+        assertEquals("copyright2", asfTag.getFirstCopyright());
+        assertEquals("rating2", asfTag.getFirstRating());
+        asfTag.setCopyright("copyright3");
+        asfTag.setRating("rating3");
+        // You dont believe it, but the following did the trick. I am convinced of unit testing from now on.
+        assertEquals("copyright3", asfTag.getFirstCopyright());
+        assertEquals("rating3", asfTag.getFirstRating());
+        List<TagField> copies = asfTag.getCopyright();
+        List<TagField> ratings = asfTag.getRating();
+        assertEquals(1, copies.size());
+        assertEquals(1, ratings.size());
+        assertEquals("copyright3", ((TagTextField) copies.get(0)).getContent());
+        assertEquals("rating3", ((TagTextField) ratings.get(0)).getContent());
+        asfTag = new AsfTag(true);
+        asfTag.setCopyright("copyright4");
+        asfTag.setRating("rating4");
+        assertEquals("copyright4", asfTag.getFirstCopyright());
+        assertEquals("rating4", asfTag.getFirstRating());
+        assertEquals(1, asfTag.getCopyright().size());
+        assertEquals(1, asfTag.getRating().size());
     }
 }

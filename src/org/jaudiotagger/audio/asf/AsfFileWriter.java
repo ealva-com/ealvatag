@@ -18,6 +18,8 @@
  */
 package org.jaudiotagger.audio.asf;
 
+import org.jaudiotagger.audio.asf.util.Utils;
+
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.math.BigInteger;
@@ -216,18 +218,13 @@ public class AsfFileWriter extends AudioFileWriter
      * @return Representation of new Chunk in <code>rafTemp</code>
      * @throws IOException write errors.
      */
-    private Chunk createNewContentDescription(Tag tag, ContentDescription contentDescription, RandomAccessFile rafTemp) throws IOException
+    private Chunk createNewContentDescription(AsfTag tag, ContentDescription contentDescription, RandomAccessFile rafTemp) throws IOException
     {
         // Store current Location
         long chunkStart = rafTemp.getFilePointer();
         // Create a content description object out of tag values.
         ContentDescription description = TagConverter.createContentDescription(tag);
-        // Add optional existing values which aren't covered with tag.
-        if (contentDescription != null)
-        {
-            description.setRating(contentDescription.getRating());
-        }
-        // Create byte[] for the asf file.
+        // Create byte[] for the ASF file.
         byte[] asfContent = description.getBytes();
         // write content
         rafTemp.write(asfContent);
@@ -350,38 +347,38 @@ public class AsfFileWriter extends AudioFileWriter
      * {@link Tag#getTitle()}<br>
      * {@link Tag#getComment()}<br>
      * {@link Tag#getArtist()}<br>
-     * <br>
-     * The content description stores another fields which holds the
-     * copyright,rating. <br>
-     * However entagged doesn't support this.
+     * {@link AsfTag#getCopyright()}<br>
+     * {@link AsfTag#getRating()}<br>
      *
      * @param tag Tag which should be written.
      * @return <code>true</code>, if a property chunk must be written in
      *         order to store all needed values of tag.
      */
-    private boolean isContentdescriptionMandatory(Tag tag)
+    private boolean isContentdescriptionMandatory(AsfTag tag)
     {
-        return tag.getFirstArtist().trim().length() > 0 || tag.getFirstComment().trim().length() > 0 || tag
-                        .getFirstTitle().trim().length() > 0;
+        // TODO Create Unit tests which will show, that ContentDescriptions will disappear if no value provided
+        // and exist if at least one value is provided.
+        return !Utils.isBlank(tag.getFirstArtist()) || !Utils.isBlank(tag.getFirstComment()) || !Utils.isBlank(tag
+                        .getFirstTitle()) || !Utils.isBlank(tag.getFirstCopyright()) || !Utils.isBlank(tag
+                        .getFirstRating());
     }
 
     /**
-     * This method decides if a property chunk is needed in order to store
+     * This method decides if an extended property chunk is needed in order to store
      * selected values of <code>tag</code>.<br>
-     * The selected values are: <br>
-     * {@link Tag#getTrack()}<br>
-     * {@link Tag#getYear()}<br>
-     * {@link Tag#getGenre()}<br>
-     * {@link Tag#getAlbum()}<br>
      *
      * @param tag Tag which should be written.
-     * @return <code>true</code>, if a property chunk must be written in
-     *         order to store all needed values of tag.
+     * @return <code>true</code>, if an extended property chunk must be written in
+     *         order to store tag values.
      */
     private boolean isExtendedContentDescriptionMandatory(Tag tag)
     {
-        return tag.getFirstTrack().trim().length() > 0 || tag.getFirstYear().trim().length() > 0 || tag.getFirstGenre()
-                        .trim().length() > 0 || tag.getFirstAlbum().trim().length() > 0;
+        /*
+         * last changes store all values in extended content description. Even those which are normally
+         * stored in the content description chunk.
+         * The content description chunk is still provided for legacy applications. 
+         */
+        return !tag.isEmpty();
     }
 
     /**

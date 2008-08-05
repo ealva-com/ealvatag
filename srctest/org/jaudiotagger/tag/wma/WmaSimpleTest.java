@@ -83,7 +83,8 @@ public class WmaSimpleTest extends AbstractTestCase
             tag.setYear("1972");
             tag.setGenre("genre2");
             tag.setTrack("4");
-            tag.setCopyRight("copyright");
+            tag.setCopyright("copyright");
+            tag.setRating("rating");
             f.commit();
 
             f = AudioFileIO.read(testFile);
@@ -96,7 +97,15 @@ public class WmaSimpleTest extends AbstractTestCase
             assertEquals("1972", tag.getFirstYear());
             assertEquals("4", tag.getFirstTrack());
             assertEquals("genre2", tag.getFirstGenre());
-            assertEquals("copyright", tag.getFirst(AsfFieldKey.COPYRIGHT.toString()));
+            assertEquals("copyright", tag.getFirstCopyright());
+            assertEquals("rating", tag.getFirstRating());
+            
+            AudioFileIO.delete(f);
+            f = AudioFileIO.read(testFile);
+            tag = (AsfTag) f.getTag();
+
+            assertTrue(tag.isEmpty());
+            
         } catch (Exception e)
         {
             e.printStackTrace();

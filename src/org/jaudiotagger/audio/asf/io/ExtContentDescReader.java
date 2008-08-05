@@ -116,7 +116,6 @@ public class ExtContentDescReader implements ChunkReader
     {
         int size = Utils.readUINT16(stream);
         byte[] bytes = new byte[size];
-        // TODO if not enough read, throw exception
         stream.read(bytes);
         return bytes;
     }

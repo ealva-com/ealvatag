@@ -129,9 +129,11 @@ public class TagConverter
         while (it.hasNext())
         {
             ContentDescriptor contentDesc = it.next().getDescriptor();
-            // If the contentDescriptor can/is not stored in the content description chunk, then
-            // handle here.
-            if (!ContentDescription.storesDescriptor(contentDesc))
+            /*
+             * If assignCommonTagValues(..) was called prior to this method, some values have already
+             * been worked up. So here those values should not be overridden.
+             */
+            if (!descriptor.containsDescriptor(contentDesc.getName()))
             {
                 descriptor.addOrReplace(contentDesc);
             }
@@ -140,9 +142,9 @@ public class TagConverter
 
     /**
      * This method creates a new {@link ContentDescription}object, filled with
-     * the according values of the given <code>tag</code>.<br>
+     * the corresponding values of the given <code>tag</code>.<br>
      * <b>Warning </b>: <br>
-     * Only the first values can be stored in asf files, because the content
+     * Only the first values can be stored in ASF files, because the content
      * description is limited.
      *
      * @param tag The tag from which the values are taken. <br>
@@ -150,14 +152,16 @@ public class TagConverter
      * @see Tag#getFirstArtist() <br>
      * @see Tag#getFirstTitle() <br>
      * @see Tag#getFirstComment() <br>
+     * @see AsfTag#getFirstCopyright()<br>
      */
-    public static ContentDescription createContentDescription(Tag tag)
+    public static ContentDescription createContentDescription(AsfTag tag)
     {
         ContentDescription result = new ContentDescription();
         result.setAuthor(tag.getFirstArtist());
         result.setTitle(tag.getFirstTitle());
         result.setComment(tag.getFirstComment());
-        result.setCopyRight(tag.getFirst(AsfFieldKey.COPYRIGHT.getPublicFieldId()));
+        result.setCopyRight(tag.getFirstCopyright());
+        result.setRating(tag.getFirstRating());
         return result;
     }
 
@@ -168,7 +172,7 @@ public class TagConverter
      * @param source The ASF header which contains the information. <br>
      * @return A Tag with all its values.
      */
-    public static AsfTag createTagOf(AsfHeader source) throws FieldDataInvalidException
+    public static AsfTag createTagOf(AsfHeader source) 
     {
         AsfTag result = new AsfTag(true);
         /*
@@ -180,7 +184,8 @@ public class TagConverter
             result.setArtist(source.getContentDescription().getAuthor());
             result.setComment(source.getContentDescription().getComment());
             result.setTitle(source.getContentDescription().getTitle());
-            result.addCopyright(source.getContentDescription().getCopyRight());
+            result.setCopyright(source.getContentDescription().getCopyRight());
+            result.setRating(source.getContentDescription().getRating());
         }
         // It is possible that the file contains no extended content
         // description. In that case some informations cannot be provided.
@@ -192,7 +197,7 @@ public class TagConverter
             while (it.hasNext())
             {
                 ContentDescriptor current = it.next();
-                // XXX: For now, ignore sth like WM/AlbumArtist here
+                // XXX: For now, ignore something like WM/AlbumArtist here
                 if (!ContentDescription.storesDescriptor(current))
                 {
                     if (current.getType() == ContentDescriptor.TYPE_BINARY)
