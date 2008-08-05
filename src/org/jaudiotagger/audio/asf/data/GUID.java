@@ -242,10 +242,6 @@ public final class GUID
             GUID other = (GUID) obj;
             result = Arrays.equals(this.getGUID(), other.getGUID());
         }
-        else
-        {
-            result = super.equals(obj);
-        }
         return result;
     }
 

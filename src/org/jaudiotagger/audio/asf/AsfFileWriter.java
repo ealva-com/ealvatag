@@ -18,7 +18,20 @@
  */
 package org.jaudiotagger.audio.asf;
 
-import org.jaudiotagger.audio.asf.data.*;
+import java.io.IOException;
+import java.io.RandomAccessFile;
+import java.math.BigInteger;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Iterator;
+
+import org.jaudiotagger.audio.asf.data.AsfHeader;
+import org.jaudiotagger.audio.asf.data.Chunk;
+import org.jaudiotagger.audio.asf.data.ContentDescription;
+import org.jaudiotagger.audio.asf.data.ContentDescriptor;
+import org.jaudiotagger.audio.asf.data.ExtendedContentDescription;
+import org.jaudiotagger.audio.asf.data.GUID;
 import org.jaudiotagger.audio.asf.io.AsfHeaderReader;
 import org.jaudiotagger.audio.asf.tag.AsfTag;
 import org.jaudiotagger.audio.asf.util.ChunkPositionComparator;
@@ -26,14 +39,6 @@ import org.jaudiotagger.audio.asf.util.TagConverter;
 import org.jaudiotagger.audio.exceptions.CannotWriteException;
 import org.jaudiotagger.audio.generic.AudioFileWriter;
 import org.jaudiotagger.tag.Tag;
-
-import java.io.IOException;
-import java.io.RandomAccessFile;
-import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Iterator;
 
 /**
  * This class writes given tags to ASF files containing WMA content. <br>
@@ -332,35 +337,7 @@ public class AsfFileWriter extends AudioFileWriter
      */
     private Chunk[] getOrderedChunks(AsfHeader header)
     {
-        ArrayList<Chunk> result = new ArrayList<Chunk>();
-        // Add all chunks which simply need to be copied.
-        for (int i = 0; i < header.getUnspecifiedChunkCount(); i++)
-        {
-            result.add(header.getUnspecifiedChunk(i));
-        }
-        // Add all stream chunks
-        for (int i = 0; i < header.getStreamChunkCount(); i++)
-        {
-            result.add(header.getStreamChunk(i));
-        }
-        // Now the rest.
-        if (header.getContentDescription() != null)
-        {
-            result.add(header.getContentDescription());
-        }
-        result.add(header.getFileHeader());
-        if (header.getExtendedContentDescription() != null)
-        {
-            result.add(header.getExtendedContentDescription());
-        }
-        if (header.getEncodingChunk() != null)
-        {
-            result.add(header.getEncodingChunk());
-        }
-        if (header.getStreamBitratePropertiesChunk() != null)
-        {
-            result.add(header.getStreamBitratePropertiesChunk());
-        }
+        Collection<Chunk> result = header.getChunks();
         Chunk[] tmp = result.toArray(new Chunk[result.size()]);
         Arrays.sort(tmp, new ChunkPositionComparator());
         return tmp;

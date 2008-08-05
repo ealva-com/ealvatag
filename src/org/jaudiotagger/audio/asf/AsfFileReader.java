@@ -54,7 +54,7 @@ public class AsfFileReader extends AudioFileReader
         {
             // TODO do file size check with FileHeader-Chunk. 
             // New streamed reading does not provide RandomAccessFile to readers.
-            AsfHeader header = AsfHeaderReader.readHeader(raf);
+            AsfHeader header = AsfHeaderReader.readInfoHeader(raf);
             if (header == null)
             {
                 throw new CannotReadException(
@@ -102,7 +102,7 @@ public class AsfFileReader extends AudioFileReader
         AsfTag tag;
         try
         {
-            AsfHeader header = AsfHeaderReader.readHeader(raf);
+            AsfHeader header = AsfHeaderReader.readTagHeader(raf);
             if (header == null)
             {
                 throw new CannotReadException(

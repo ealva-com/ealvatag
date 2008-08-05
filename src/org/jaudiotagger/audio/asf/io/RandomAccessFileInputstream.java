@@ -20,12 +20,6 @@ final class RandomAccessFileInputstream extends InputStream
     private final RandomAccessFile source;
 
     /**
-     * Will increase by the read methods.<br>
-     * Should represent the absolute position in a file.<br>
-     */
-    private long streamPosition;
-
-    /**
      * Creates an instance that will provide {@link InputStream} functionality on the given
      * {@link RandomAccessFile} by delegating calls.<br>
      * 
@@ -41,21 +35,12 @@ final class RandomAccessFileInputstream extends InputStream
     }
 
     /**
-     * @return the streamPosition
-     */
-    public long getStreamPosition()
-    {
-        return this.streamPosition;
-    }
-
-    /**
      * {@inheritDoc}
      */
     @Override
     public int read() throws IOException
     {
-        streamPosition++;
-        return source.read();
+        return this.source.read();
     }
 
     /**
@@ -64,23 +49,10 @@ final class RandomAccessFileInputstream extends InputStream
     @Override
     public int read(byte[] b, int off, int len) throws IOException
     {
-        int read = source.read(b, off, len);
-        if (read != -1)
-        {
-            this.streamPosition += read;
-        }
-        return read;
+        return this.source.read(b, off, len);
     }
 
-    /**
-     * @param position the streamPosition to set
-     */
-    public void setStreamPosition(long position)
-    {
-        this.streamPosition = position;
-    }
-    
-    /**
+   /**
      * {@inheritDoc}
      */
     @Override

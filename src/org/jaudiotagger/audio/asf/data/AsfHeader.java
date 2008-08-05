@@ -20,7 +20,8 @@ package org.jaudiotagger.audio.asf.data;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.List;
 
@@ -29,303 +30,212 @@ import java.util.List;
  * This header contains other chunks. Each chunk starts with a 16 byte GUID
  * followed by the length (in bytes) of the chunk (including GUID). The length
  * number takes 8 bytes and is unsigned. Finally the chunk's data appears. <br>
- *
+ * 
  * @author Christian Laireiter
  */
-public class AsfHeader extends Chunk
-{
+public class AsfHeader extends Chunk {
 
-    /**
-     * An ASF header contains multiple chunks. <br>
-     * The count of those is stored here.
-     */
-    private final long chunkCount;
+	/**
+	 * Stores the {@link GUID} instances, which are allowed multiple times
+	 * within an ASF header.
+	 */
+	private final static HashSet<GUID> MULTI_CHUNKS;
 
-    /**
-     * Stores the {@link Chunk} objects to their {@link GUID}.
-     */
-    private final Hashtable<GUID, Chunk> chunkTable;
+	static {
+		MULTI_CHUNKS = new HashSet<GUID>();
+		MULTI_CHUNKS.add(GUID.GUID_STREAM);
+	}
 
-    /**
-     * This array stores all found stream chunks.
-     */
-    private List<StreamChunk> streamChunks;
+	/**
+	 * An ASF header contains multiple chunks. <br>
+	 * The count of those is stored here.
+	 */
+	private final long chunkCount;
 
-    /**
-     * This field stores all chunks which aren't specified and not represented
-     * by a wrapper. <br>
-     * However during write operations this position and size of those chunks is
-     * useful.
-     */
-    private Chunk[] unspecifiedChunks;
+	/**
+	 * Stores the {@link Chunk} objects to their {@link GUID}.
+	 */
+	private final Hashtable<GUID, List<Chunk>> chunkTable;
 
-    /**
-     * Creates an instance.
-     *
-     * @param pos      see {@link Chunk#position}
-     * @param chunkLen see {@link Chunk#chunkLength}
-     * @param chunkCnt
-     */
-    public AsfHeader(long pos, BigInteger chunkLen, long chunkCnt)
-    {
-        super(GUID.GUID_HEADER, pos, chunkLen);
-        this.chunkCount = chunkCnt;
-        this.streamChunks = new ArrayList<StreamChunk>(2);
-        this.unspecifiedChunks = new Chunk[0];
-        this.chunkTable = new Hashtable<GUID, Chunk>();
-    }
+	/**
+	 * Creates an instance.
+	 * 
+	 * @param pos
+	 *            see {@link Chunk#position}
+	 * @param chunkLen
+	 *            see {@link Chunk#chunkLength}
+	 * @param chunkCnt
+	 */
+	public AsfHeader(long pos, BigInteger chunkLen, long chunkCnt) {
+		super(GUID.GUID_HEADER, pos, chunkLen);
+		this.chunkCount = chunkCnt;
+		this.chunkTable = new Hashtable<GUID, List<Chunk>>();
+	}
 
-    /**
-     * @param chunk
-     */
-    public void addChunk(Chunk chunk)
-    {
-        if (GUID.GUID_STREAM.equals(chunk.getGuid()))
-        {
-            assert chunk instanceof StreamChunk;
-            addStreamChunk((StreamChunk) chunk);
-        }
-        else
-        {
-            this.chunkTable.put(chunk.getGuid(), chunk);
-        }
-    }
+	private void add(Chunk toAdd) {
+		List<Chunk> list = assertChunkList(toAdd.getGuid());
+		if (!list.isEmpty() && !MULTI_CHUNKS.contains(toAdd.getGuid())) {
+			throw new IllegalArgumentException(
+					"The GUID of the given chunk indicates, that there is no more instance allowed.");
+		}
+		list.add(toAdd);
+		assert chunkstartsUnique() : "Chunk has equal start position like an already inserted one.";
+	}
 
-    /**
-     * This method appends a StreamChunk to the header. <br>
-     *
-     * @param toAdd Chunk to add.
-     */
-    public void addStreamChunk(StreamChunk toAdd)
-    {
-        if (toAdd == null)
-        {
-            throw new IllegalArgumentException("Argument must not be null.");
-        }
-        if (!this.streamChunks.contains(toAdd))
-        {
-            this.streamChunks.add(toAdd);
-        }
-    }
+	/**
+	 * @param chunk
+	 */
+	public void addChunk(Chunk chunk) {
+		add(chunk);
+	}
 
-    /**
-     * This method appends the given chunk to the
-     * {@linkplain #unspecifiedChunks unspecified}list. <br>
-     *
-     * @param toAppend The chunk whose use is unknown or of no interest.
-     */
-    public void addUnspecifiedChunk(Chunk toAppend)
-    {
-        if (toAppend == null)
-        {
-            throw new IllegalArgumentException("Argument must not be null.");
-        }
-        if (!Arrays.asList(unspecifiedChunks).contains(toAppend))
-        {
-            Chunk[] tmp = new Chunk[unspecifiedChunks.length + 1];
-            System.arraycopy(unspecifiedChunks, 0, tmp, 0, unspecifiedChunks.length);
-            tmp[tmp.length - 1] = toAppend;
-            unspecifiedChunks = tmp;
-        }
-    }
+	private void addOrReplace(Chunk toAdd) {
+		if (toAdd == null) {
+			throw new IllegalArgumentException("Argument must not be null.");
+		}
+		List<Chunk> list = assertChunkList(toAdd.getGuid());
+		if (!list.isEmpty()) {
+			list.set(0, toAdd);
+		} else {
+			list.add(toAdd);
+		}
+		assert chunkstartsUnique() : "Chunk has equal start position like an already inserted one.";
+	}
 
-    /**
-     * This method returns the first audio stream chunk found in the asf file or
-     * stream.
-     *
-     * @return Returns the audioStreamChunk.
-     */
-    public AudioStreamChunk getAudioStreamChunk()
-    {
-        AudioStreamChunk result = null;
-        for (int i = 0; i < getStreamChunkCount() && result == null; i++)
-        {
-            StreamChunk tmp = getStreamChunk(i);
-            if (GUID.GUID_AUDIOSTREAM.equals(tmp.getStreamType()))
-            {
-                result = (AudioStreamChunk) tmp;
-            }
-        }
-        return result;
-    }
+	private List<Chunk> assertChunkList(GUID guid) {
+		List<Chunk> result = this.chunkTable.get(guid);
+		if (result == null) {
+			result = new ArrayList<Chunk>();
+			this.chunkTable.put(guid, result);
+		}
+		return result;
+	}
 
-    /**
-     * @return Returns the chunkCount.
-     */
-    public long getChunkCount()
-    {
-        return chunkCount;
-    }
+	/**
+	 * @return
+	 */
+	private boolean chunkstartsUnique() {
+		boolean result = true;
+		HashSet<Long> chunkStarts = new HashSet<Long>();
+		Collection<Chunk> chunks = getChunks();
+		for (Chunk curr : chunks) {
+			result &= chunkStarts.add(curr.getPosition());
+		}
+		return result;
+	}
 
-    /**
-     * @return Returns the contentDescription.
-     */
-    public ContentDescription getContentDescription()
-    {
-        return (ContentDescription) this.chunkTable.get(GUID.GUID_CONTENTDESCRIPTION);
-    }
+	/**
+	 * This method returns the first audio stream chunk found in the asf file or
+	 * stream.
+	 * 
+	 * @return Returns the audioStreamChunk.
+	 */
+	public AudioStreamChunk getAudioStreamChunk() {
+		AudioStreamChunk result = null;
+		final List<Chunk> streamChunks = assertChunkList(GUID.GUID_STREAM);
+		for (int i = 0; i < streamChunks.size() && result == null; i++) {
+			if (streamChunks.get(i) instanceof AudioStreamChunk) {
+				result = (AudioStreamChunk) streamChunks.get(i);
+			}
+		}
+		return result;
+	}
 
-    /**
-     * @return Returns the encodingChunk.
-     */
-    public EncodingChunk getEncodingChunk()
-    {
-        return (EncodingChunk) this.chunkTable.get(GUID.GUID_ENCODING);
-    }
+	/**
+	 * Returns the amount of chunks, when this instance was created.<br>
+	 * If chunks have been added, this won't be reflected with this call.<br>
+	 * For that use {@link #getChunks()}.
+	 * 
+	 * @return Chunkcount at instance creation.
+	 */
+	public long getChunkCount() {
+		return this.chunkCount;
+	}
 
-    /**
-     * @return Returns the encodingChunk.
-     */
-    public EncryptionChunk getEncryptionChunk()
-    {
-        return (EncryptionChunk) this.chunkTable.get(GUID.GUID_CONTENT_ENCRYPTION);
-    }
+	/**
+	 * Returns a collection of all contained chunks.<br>
+	 * 
+	 * @return all contained chunks
+	 */
+	public Collection<Chunk> getChunks() {
+		final List<Chunk> result = new ArrayList<Chunk>();
+		for (List<Chunk> curr : this.chunkTable.values()) {
+			result.addAll(curr);
+		}
+		return result;
+	}
 
-    /**
-     * @return Returns the tagHeader.
-     */
-    public ExtendedContentDescription getExtendedContentDescription()
-    {
-        return (ExtendedContentDescription) this.chunkTable.get(GUID.GUID_EXTENDED_CONTENT_DESCRIPTION);
-    }
+	/**
+	 * @return Returns the contentDescription.
+	 */
+	public ContentDescription getContentDescription() {
+		return (ContentDescription) getFirst(GUID.GUID_CONTENTDESCRIPTION,
+				ContentDescription.class);
+	}
 
-    /**
-     * @return Returns the fileHeader.
-     */
-    public FileHeader getFileHeader()
-    {
-        return (FileHeader) this.chunkTable.get(GUID.GUID_FILE);
-    }
+	/**
+	 * @return Returns the encodingChunk.
+	 */
+	public EncodingChunk getEncodingChunk() {
+		return (EncodingChunk) getFirst(GUID.GUID_ENCODING, EncodingChunk.class);
+	}
 
-    /**
-     * @return Returns the streamBitratePropertiesChunk.
-     */
-    public StreamBitratePropertiesChunk getStreamBitratePropertiesChunk()
-    {
-        return (StreamBitratePropertiesChunk) this.chunkTable.get(GUID.GUID_STREAM_BITRATE_PROPERTIES);
-    }
+	/**
+	 * @return Returns the encodingChunk.
+	 */
+	public EncryptionChunk getEncryptionChunk() {
+		return (EncryptionChunk) getFirst(GUID.GUID_CONTENT_ENCRYPTION,
+				EncryptionChunk.class);
+	}
 
-    /**
-     * This method returns the StreamChunk at given index. <br>
-     *
-     * @param index index of the wanted chunk
-     * @return StreamChunk at given index.
-     */
-    public StreamChunk getStreamChunk(int index)
-    {
-        return this.streamChunks.get(index);
-    }
+	/**
+	 * @return Returns the tagHeader.
+	 */
+	public ExtendedContentDescription getExtendedContentDescription() {
+		return (ExtendedContentDescription) getFirst(
+				GUID.GUID_EXTENDED_CONTENT_DESCRIPTION,
+				ExtendedContentDescription.class);
+	}
 
-    /**
-     * This method returns the amount of StreamChunks in this header. <br>
-     *
-     * @return Number of inserted StreamChunks.
-     */
-    public int getStreamChunkCount()
-    {
-        return this.streamChunks.size();
-    }
+	/**
+	 * @return Returns the fileHeader.
+	 */
+	public FileHeader getFileHeader() {
+		return (FileHeader) getFirst(GUID.GUID_FILE, FileHeader.class);
+	}
 
-    /**
-     * This method returns the unspecified chunk at given position. <br>
-     *
-     * @param index Index of the wanted chunk
-     * @return The chunk at given index.
-     */
-    public Chunk getUnspecifiedChunk(int index)
-    {
-        return this.unspecifiedChunks[index];
-    }
+	private Chunk getFirst(GUID guid, Class<? extends Chunk> instanceOf) {
+		List<Chunk> list = this.chunkTable.get(guid);
+		if (list != null && !list.isEmpty()) {
+			Chunk result = list.get(0);
+			if (result.getClass().isAssignableFrom(instanceOf)) {
+				return result;
+			}
+		}
+		return null;
+	}
 
-    /**
-     * This method returns the number of {@link Chunk}objects which where
-     * inserted using {@link #addUnspecifiedChunk(Chunk)}.
-     *
-     * @return Number of unspecified chunks.
-     */
-    public int getUnspecifiedChunkCount()
-    {
-        return this.unspecifiedChunks.length;
-    }
+	/**
+	 * @return Returns the streamBitratePropertiesChunk.
+	 */
+	public StreamBitratePropertiesChunk getStreamBitratePropertiesChunk() {
+		return (StreamBitratePropertiesChunk) getFirst(
+				GUID.GUID_STREAM_BITRATE_PROPERTIES,
+				StreamBitratePropertiesChunk.class);
+	}
 
-    /**
-     * (overridden)
-     *
-     * @see org.jaudiotagger.audio.asf.data.Chunk#prettyPrint()
-     */
-    public String prettyPrint()
-    {
-        StringBuffer result = new StringBuffer(super.prettyPrint());
-        result.insert(0, "\nASF Chunk\n");
-        result.append("   Contains: \"" + getChunkCount() + "\" chunks\n");
-        result.append(getFileHeader());
-        result.append(getExtendedContentDescription());
-        result.append(getEncodingChunk());
-        result.append(getContentDescription());
-        result.append(getStreamBitratePropertiesChunk());
-        for (int i = 0; i < getStreamChunkCount(); i++)
-        {
-            result.append(getStreamChunk(i));
-        }
-        return result.toString();
-    }
-
-    /**
-     * @param contentDesc sets the contentDescription. <code>null</code> deletes the
-     *                    chunk.
-     */
-    public void setContentDescription(ContentDescription contentDesc)
-    {
-        this.chunkTable.put(GUID.GUID_CONTENTDESCRIPTION, contentDesc);
-    }
-
-    /**
-     * @param encChunk The encodingChunk to set.
-     */
-    public void setEncodingChunk(EncodingChunk encChunk)
-    {
-        if (encChunk == null)
-        {
-            throw new IllegalArgumentException("Argument must not be null.");
-        }
-        this.chunkTable.put(GUID.GUID_ENCODING, encChunk);
-    }
-
-    /**
-     * @param encryptionChunk *            The encodingChunk to set.
-     */
-    public void setEncryptionChunk(EncryptionChunk encChunk)
-    {
-        if (encChunk == null) throw new IllegalArgumentException("Argument must not be null.");
-        this.chunkTable.put(GUID.GUID_CONTENT_ENCRYPTION, encChunk);
-    }
-
-    /**
-     * @param th sets the extendedContentDescription. <code>null</code>
-     *           delete the chunk.
-     */
-    public void setExtendedContentDescription(ExtendedContentDescription th)
-    {
-        this.chunkTable.put(GUID.GUID_EXTENDED_CONTENT_DESCRIPTION, th);
-    }
-
-    /**
-     * @param fh
-     */
-    public void setFileHeader(FileHeader fh)
-    {
-        if (fh == null)
-        {
-            throw new IllegalArgumentException("Argument must not be null.");
-        }
-        this.chunkTable.put(GUID.GUID_FILE, fh);
-    }
-
-    /**
-     * @param streamBitratePropertiesChunk The streamBitratePropertiesChunk to set.
-     */
-    public void setStreamBitratePropertiesChunk(StreamBitratePropertiesChunk streamBitratePropertiesChunk1)
-    {
-        this.chunkTable.put(GUID.GUID_STREAM_BITRATE_PROPERTIES, streamBitratePropertiesChunk1);
-    }
+	/**
+	 * (overridden)
+	 * 
+	 * @see org.jaudiotagger.audio.asf.data.Chunk#prettyPrint()
+	 */
+	public String prettyPrint() {
+		StringBuffer result = new StringBuffer(super.prettyPrint());
+		result.insert(0, "\nASF Chunk\n");
+		result.append("   Contains: \"" + getChunkCount() + "\" chunks\n");
+		for (Chunk curr : getChunks()) {
+			result.append(curr.toString());
+		}
+		return result.toString();
+	}
 }
