@@ -31,57 +31,56 @@ import java.math.BigInteger;
  * This class reads the chunk containing encoding data <br>
  * <b>Warning:<b><br>
  * Implementation is not completed. More analysis of this chunk is needed.
- *
+ * 
  * @author Christian Laireiter
  */
-public class EncodingChunkReader implements ChunkReader
-{
-    /**
-     * Should not be used for now.
-     */
-    protected EncodingChunkReader()
-    {
-        // NOTHING toDo
-    }
+public class EncodingChunkReader implements ChunkReader {
+	/**
+	 * Should not be used for now.
+	 */
+	protected EncodingChunkReader() {
+		// NOTHING toDo
+	}
 
-    /**
-     * {@inheritDoc}
-     */
-    public GUID getApplyingId()
-    {
-        return GUID.GUID_ENCODING;
-    }
+	/**
+	 * {@inheritDoc}
+	 */
+	public GUID getApplyingId() {
+		return GUID.GUID_ENCODING;
+	}
 
-    /**
-     * {@inheritDoc}
-     */
-    public Chunk read(InputStream stream) throws IOException
-    {
-        BigInteger chunkLen = Utils.readBig64(stream);
-        EncodingChunk result = new EncodingChunk(chunkLen);
-
-        // Can't be interpreted
-        /*
-            * What do I think of this data, well it seems to be another GUID.
-            * Then followed by a UINT16 indicating a length of data following
-            * (by half). My test files just had the length of one and a two
-            * bytes zero.
-            */
-        stream.skip(20);
-
-        /*
-            * Read the number of strings which will follow
-            */
-        int stringCount = Utils.readUINT16(stream);
-
-        /*
-            * Now reading the specified amount of strings.
-            */
-        for (int i = 0; i < stringCount; i++)
-        {
-            result.addString(Utils.readCharacterSizedString(stream));
-        }
-        return result;
-    }
+	/**
+	 * {@inheritDoc}
+	 */
+	public Chunk read(InputStream stream) throws IOException {
+		BigInteger chunkLen = Utils.readBig64(stream);
+		EncodingChunk result = new EncodingChunk(chunkLen);
+		int readBytes = 24;
+		// Can't be interpreted
+		/*
+		 * What do I think of this data, well it seems to be another GUID. Then
+		 * followed by a UINT16 indicating a length of data following (by half).
+		 * My test files just had the length of one and a two bytes zero.
+		 */
+		stream.skip(20);
+		readBytes += 20;
+		
+		/*
+		 * Read the number of strings which will follow
+		 */
+		int stringCount = Utils.readUINT16(stream);
+		readBytes += 2;
+			
+		/*
+		 * Now reading the specified amount of strings.
+		 */
+		for (int i = 0; i < stringCount; i++) {
+			String curr = Utils.readCharacterSizedString(stream);
+			result.addString(curr);
+			readBytes += 4 + 2 * curr.length();
+		}
+		stream.skip(chunkLen.longValue() - readBytes);
+		return result;
+	}
 
 }
