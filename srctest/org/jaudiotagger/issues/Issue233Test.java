@@ -96,4 +96,33 @@ public class Issue233Test extends AbstractTestCase
         }
         assertNull(exceptionCaught);
     }
+
+    public void testReadingID3v1Tag()
+    {
+        File orig = new File("testdata", "test32.mp3");
+        if (!orig.isFile())
+        {
+            return;
+        }
+
+        Exception exceptionCaught = null;
+        try
+        {
+            File        testFile    = AbstractTestCase.copyAudioToTmp("test32.mp3");
+            AudioFile   af          = AudioFileIO.read(testFile);
+            MP3File     mf          = (MP3File)af;
+            assertEquals("The Ides Of March",af.getTag().getFirstTitle());
+            assertEquals("Iron Maiden",mf.getID3v1Tag().getFirstArtist());
+            assertEquals("",mf.getID3v2Tag().getFirstArtist());
+            assertEquals("",af.getTag().getFirstArtist());
+
+
+        }
+        catch (Exception e)
+        {
+            exceptionCaught = e;
+            e.printStackTrace();
+        }
+        assertNull(exceptionCaught);
+    }
 }
