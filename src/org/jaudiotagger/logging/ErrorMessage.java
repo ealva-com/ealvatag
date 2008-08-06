@@ -42,7 +42,10 @@ public enum ErrorMessage
     GENERAL_INVALID_NULL_ARGUMENT("Argument cannot be null"),
     MP4_GENRE_OUT_OF_RANGE("Genre Id {0} does not map to a valid genre"),
     MP3_PICTURE_TYPE_INVALID("Picture Type is set to invalid value:{0}"),
-    MP3_REFERENCE_KEY_INVALID("{0}:No key could be found with the value of:{1}");
+    MP3_REFERENCE_KEY_INVALID("{0}:No key could be found with the value of:{1}"),
+    MP3_UNABLE_TO_ADJUST_PADDING("Problem adjusting padding in large file, expecting to write:{0} only wrote:{1}"),
+    GENERAL_WRITE_FAILED_TO_DELETE_TEMPORARY_FILE("Unable to delete the the temporary file {0}"),
+
     ;
 
 

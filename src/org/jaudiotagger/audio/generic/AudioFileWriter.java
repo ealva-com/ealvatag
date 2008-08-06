@@ -136,24 +136,32 @@ public abstract class AudioFileWriter
                     boolean deleteResult = af.getFile().delete();
                     if (deleteResult == false)
                     {
-                        logger.warning(ErrorMessage.GENERAL_WRITE_FAILED_TO_DELETE_ORIGINAL_FILE.getMsg(af.getFile().getPath(), tempF.getParentFile()));
-                        throw new CannotWriteException(ErrorMessage.GENERAL_WRITE_FAILED_TO_DELETE_ORIGINAL_FILE.getMsg(af.getFile().getPath(), tempF.getParentFile()));
+                        logger.warning(ErrorMessage.GENERAL_WRITE_FAILED_TO_DELETE_ORIGINAL_FILE.getMsg(af.getFile().getPath(), tempF.getPath()));
+                        throw new CannotWriteException(ErrorMessage.GENERAL_WRITE_FAILED_TO_DELETE_ORIGINAL_FILE.getMsg(af.getFile().getPath(), tempF.getPath()));
                     }
                     boolean renameResult = tempF.renameTo(af.getFile());
                     if (renameResult == false)
                     {
-                        logger.warning(ErrorMessage.GENERAL_WRITE_FAILED_TO_RENAME_TO_ORIGINAL_FILE.getMsg(af.getFile().getPath(), tempF.getParentFile()));
-                        throw new CannotWriteException(ErrorMessage.GENERAL_WRITE_FAILED_TO_RENAME_TO_ORIGINAL_FILE.getMsg(af.getFile().getPath(), tempF.getParentFile()));
+                        logger.warning(ErrorMessage.GENERAL_WRITE_FAILED_TO_RENAME_TO_ORIGINAL_FILE.getMsg(af.getFile().getPath(), tempF.getPath()));
+                        throw new CannotWriteException(ErrorMessage.GENERAL_WRITE_FAILED_TO_RENAME_TO_ORIGINAL_FILE.getMsg(af.getFile().getPath(), tempF.getPath()));
                     }
                     result = tempF;
 
                     //All ok so delete
-                    tempF.delete();
+                    if(!tempF.delete())
+                    {
+                        //Non critical failed deletion
+                        logger.warning(ErrorMessage.GENERAL_WRITE_FAILED_TO_DELETE_TEMPORARY_FILE.getMsg(tempF.getPath()));
+                    }
                 }
                 else
                 {
                     //It was created but never used
-                    tempF.delete();
+                    if(!tempF.delete())
+                    {
+                        //Non critical failed deletion
+                        logger.warning(ErrorMessage.GENERAL_WRITE_FAILED_TO_DELETE_TEMPORARY_FILE.getMsg(tempF.getPath()));
+                    }
                 }
             }
             catch (Exception ex)
@@ -344,12 +352,20 @@ public abstract class AudioFileWriter
             }
 
             //Delete the temporary file because successfuly renameed
-            tempF.delete();
+            if(!tempF.delete())
+            {
+                //Non critical failed deletion
+                logger.warning(ErrorMessage.GENERAL_WRITE_FAILED_TO_DELETE_TEMPORARY_FILE.getMsg(tempF.getPath()));
+            }
         }
         else
         {
-            //Delete the temporary file that wasn't ever used
-            tempF.delete();
+            //Delete the temporary file that wasn't ever used           
+            if(!tempF.delete())
+            {
+                //Non critical failed deletion
+                logger.warning(ErrorMessage.GENERAL_WRITE_FAILED_TO_DELETE_TEMPORARY_FILE.getMsg(tempF.getPath()));
+            }
         }
 
         if (this.modificationListener != null)

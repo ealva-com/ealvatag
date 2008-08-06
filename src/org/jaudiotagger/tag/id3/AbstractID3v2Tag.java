@@ -17,6 +17,7 @@ package org.jaudiotagger.tag.id3;
 
 import org.jaudiotagger.audio.generic.Utils;
 import org.jaudiotagger.audio.mp3.MP3File;
+import org.jaudiotagger.audio.exceptions.CannotWriteException;
 import org.jaudiotagger.logging.ErrorMessage;
 import org.jaudiotagger.tag.*;
 import org.jaudiotagger.tag.datatype.DataTypes;
@@ -970,6 +971,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
             return null;
         }
 
+        //Couldnt get lock because file is already locked by another application
         if (fileLock == null)
         {
             throw new IOException(ErrorMessage.GENERAL_WRITE_FAILED_FILE_LOCKED.getMsg(filePath));
@@ -1134,72 +1136,140 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
     public void adjustPadding(File file, int paddingSize, long audioStart) throws FileNotFoundException, IOException
     {
         logger.finer("Need to move audio file to accomodate tag");
-        FileChannel fcIn;
-        FileChannel fcOut;
+        FileChannel fcIn=null;
+        FileChannel fcOut=null;
 
-        // Create buffer holds the neccessary padding
+        //Create buffer holds the neccessary padding
         ByteBuffer paddingBuffer = ByteBuffer.wrap(new byte[paddingSize]);
 
-        // Create Temporary File and write channel
+        //Create Temporary File and write channel, make sure it is locked
         File paddedFile = File.createTempFile("temp", ".mp3", file.getParentFile());
         fcOut = new FileOutputStream(paddedFile).getChannel();
-
-        //Create read channel from original file
-        fcIn = new FileInputStream(file).getChannel();
-
-        //Write padding to new file (this is where the tag will be written to later)
-        long written = fcOut.write(paddingBuffer);
-
-        //Write rest of file starting from audio
-        logger.finer("Copying:" + (file.length() - audioStart) + "bytes");
-
-        //if the amount to be copied is very large we split into 10MB lumps to try and avoid
-        //out of memory errors
-        long audiolength = file.length() - audioStart;
-        if (audiolength <= MAXIMUM_WRITABLE_CHUNK_SIZE)
+        FileLock fileTmpLock = null;
+        try
         {
-            long written2 = fcIn.transferTo(audioStart, audiolength, fcOut);
-            logger.finer("Written padding:" + written + " Data:" + written2);
-            if (written2 != audiolength)
+            //Lock file is possible, only throws exception if already locked
+            fileTmpLock = getFileLockForWriting(fcOut, paddedFile.getPath());
+
+            //Create read channel from original file and lock so cant be modified by anything else
+            fcIn        = new FileInputStream(file).getChannel();
+
+            //Write padding to new file (this is where the tag will be written to later)
+            long written = fcOut.write(paddingBuffer);
+
+            //Write rest of file starting from audio
+            logger.finer("Copying:" + (file.length() - audioStart) + "bytes");
+
+            //If the amount to be copied is very large we split into 10MB lumps to try and avoid
+            //out of memory errors
+            long audiolength = file.length() - audioStart;
+            if (audiolength <= MAXIMUM_WRITABLE_CHUNK_SIZE)
             {
-                throw new RuntimeException("Problem adjusting padding, expecting to write:" + audiolength + ":only wrote:" + written2);
+                long written2 = fcIn.transferTo(audioStart, audiolength, fcOut);
+                logger.finer("Written padding:" + written + " Data:" + written2);
+                if (written2 != audiolength)
+                {
+                    throw new RuntimeException(ErrorMessage.MP3_UNABLE_TO_ADJUST_PADDING.getMsg(audiolength,written2));
+                }
+            }
+            else
+            {
+                long noOfChunks = audiolength / MAXIMUM_WRITABLE_CHUNK_SIZE;
+                long lastChunkSize = audiolength % MAXIMUM_WRITABLE_CHUNK_SIZE;
+                long written2 = 0;
+                for (int i = 0; i < noOfChunks; i++)
+                {
+                    written2 += fcIn.transferTo(audioStart + (i * MAXIMUM_WRITABLE_CHUNK_SIZE), MAXIMUM_WRITABLE_CHUNK_SIZE, fcOut);
+                    //Try and recover memory as quick as possible
+                    Runtime.getRuntime().gc();
+                }
+                written2 += fcIn.transferTo(audioStart + (noOfChunks * MAXIMUM_WRITABLE_CHUNK_SIZE), lastChunkSize, fcOut);
+                logger.finer("Written padding:" + written + " Data:" + written2);
+                if (written2 != audiolength)
+                {
+                    throw new RuntimeException(ErrorMessage.MP3_UNABLE_TO_ADJUST_PADDING.getMsg(audiolength,written2));
+                }
+            }
+
+            //Store original modification time
+            long lastModified = file.lastModified();
+
+            //Close Channels and locks
+            if (fcIn != null)
+            {
+                fcIn.close();
+            }
+
+            if (fcOut != null)
+            {
+                if (fileTmpLock != null)
+                {
+                    fileTmpLock.release();
+                }
+                fcOut.close();
+            }
+            fcOut.close();
+
+            //Replace file with paddedFile
+            replaceFile(file,paddedFile);
+
+            //Update modification time
+            paddedFile.setLastModified(lastModified);
+        }
+        finally
+        {
+            try
+            {
+                //Whatever happens ensure all locks and channels are closed/released
+                if (fcIn != null)
+                {
+                    fcIn.close();
+                }
+
+                if (fcOut != null)
+                {
+                    if (fileTmpLock != null)
+                    {
+                        fileTmpLock.release();
+                    }
+                    fcOut.close();
+                }
+                fcOut.close();
+            }
+            catch(Exception e)
+            {
+                logger.warning("Problem closing channels and locks:"+e.getMessage());
             }
         }
-        else
-        {
-            long noOfChunks = audiolength / MAXIMUM_WRITABLE_CHUNK_SIZE;
-            long lastChunkSize = audiolength % MAXIMUM_WRITABLE_CHUNK_SIZE;
-            long written2 = 0;
-            for (int i = 0; i < noOfChunks; i++)
-            {
-                written2 += fcIn.transferTo(audioStart + (i * MAXIMUM_WRITABLE_CHUNK_SIZE), MAXIMUM_WRITABLE_CHUNK_SIZE, fcOut);
-                //Try and recover memory as quick as possible
-                Runtime.getRuntime().gc();
-            }
-            written2 += fcIn.transferTo(audioStart + (noOfChunks * MAXIMUM_WRITABLE_CHUNK_SIZE), lastChunkSize, fcOut);
-            logger.finer("Written padding:" + written + " Data:" + written2);
-            if (written2 != audiolength)
-            {
-                throw new RuntimeException("Problem adjusting padding in large file, expecting to write:" + audiolength + ":only wrote:" + written2);
-            }
-        }
-
-        //Store original modification time
-        long lastModified = file.lastModified();
-
-        //Close Channels
-        fcIn.close();
-        fcOut.close();
-
-        //Delete original File
-        file.delete();
-
-        //Rename temporary file and set modification time to original time.
-        paddedFile.renameTo(file);
-        paddedFile.setLastModified(lastModified);
-
     }
 
+    /**
+     * Replace originalFile with the contents of newFile
+     *
+     * @param newFile
+     * @param originalFile
+     * @throws IOException
+     */
+    //TODO what about if delete works but rename fails
+    private void replaceFile(File originalFile,File newFile) throws IOException
+    {
+        logger.info("rename "+newFile.getPath() + " over to "+originalFile.getPath());
+        //Delete Original File and check result
+        boolean deleteResult = originalFile.delete();
+        if (!deleteResult)
+        {
+            logger.warning(ErrorMessage.GENERAL_WRITE_FAILED_TO_DELETE_ORIGINAL_FILE.getMsg(originalFile.getPath(), newFile.getPath()));
+            throw new IOException(ErrorMessage.GENERAL_WRITE_FAILED_TO_DELETE_ORIGINAL_FILE.getMsg(originalFile.getPath(), newFile.getPath()));
+        }
+
+        //Rename temporary file
+        boolean renameResult = newFile.renameTo(originalFile);
+        if (!renameResult)
+        {
+            logger.warning(ErrorMessage.GENERAL_WRITE_FAILED_TO_RENAME_TO_ORIGINAL_FILE.getMsg(originalFile.getPath(), newFile.getPath()));
+            throw new IOException(ErrorMessage.GENERAL_WRITE_FAILED_TO_RENAME_TO_ORIGINAL_FILE.getMsg(originalFile.getPath(), newFile.getPath()));
+        }
+    }
     /**
      * Add frame to HashMap used when converting between tag versions, take into account
      * occurences when two frame may both map to a single frame when converting between

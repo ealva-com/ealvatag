@@ -529,21 +529,22 @@ public class ID3v22Tag extends AbstractID3v2Tag
 
         ByteBuffer headerBuffer = writeHeaderToBuffer(padding, bodyByteBuffer.length);
 
-        //We need to adjust location of audio File
-        if (sizeIncPadding > audioStartLocation)
-        {
-            logger.info(getLoggingFilename() + ":Adjusting Padding");
-            adjustPadding(file, sizeIncPadding, audioStartLocation);
-        }
-
         //Write changes to file
         FileChannel fc = null;
         FileLock fileLock = null;
         try
         {
+
+
+            //We need to adjust location of audio File
+            if (sizeIncPadding > audioStartLocation)
+            {
+                logger.info(getLoggingFilename() + ":Adjusting Padding");
+                adjustPadding(file, sizeIncPadding, audioStartLocation);
+            }
+
             fc = new RandomAccessFile(file, "rw").getChannel();
             fileLock = getFileLockForWriting(fc, file.getPath());
-
             fc.write(headerBuffer);
             fc.write(ByteBuffer.wrap(bodyByteBuffer));
             fc.write(ByteBuffer.wrap(new byte[padding]));
