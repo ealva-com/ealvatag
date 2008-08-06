@@ -1208,7 +1208,6 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
                 }
                 fcOut.close();
             }
-            fcOut.close();
 
             //Replace file with paddedFile
             replaceFile(file,paddedFile);
@@ -1234,7 +1233,6 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
                     }
                     fcOut.close();
                 }
-                fcOut.close();
             }
             catch(Exception e)
             {
