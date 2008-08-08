@@ -21,6 +21,8 @@ package org.jaudiotagger.audio.asf.data;
 import org.jaudiotagger.audio.asf.util.Utils;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.math.BigInteger;
 import java.util.*;
 
@@ -111,7 +113,7 @@ public class ExtendedContentDescription extends Chunk
         {
             ByteArrayOutputStream content = new ByteArrayOutputStream();
             // Write the number of descriptors.
-            content.write(Utils.getBytes(this.descriptors.size(), 2));
+            content.write(Utils.getBytes(this.getDescriptorCount(), 2));
             Iterator<ContentDescriptor> it = getDescriptors().iterator();
             while (it.hasNext())
             {
@@ -133,9 +135,55 @@ public class ExtendedContentDescription extends Chunk
     }
 
     /**
+     * Writes the current chunk into the specified output stream, as ASF stream
+     * chunk.<br>
+     * 
+     * @param out
+     *            stream to write into.
+     * @return amount of bytes written.
+     * @throws IOException
+     */
+    public long writeInto(OutputStream out) throws IOException
+    {
+        final long chunkSize = getCurrentAsfChunkSize();
+        final List<ContentDescriptor> descriptorList = getDescriptors();
+        out.write(getGuid().getBytes());
+        Utils.writeUINT64(chunkSize, out);
+        Utils.writeUINT16(descriptorList.size(), out);
+        for (ContentDescriptor curr : descriptorList)
+        {
+            curr.writeInto(out);
+        }
+        return chunkSize;
+    }
+
+    /**
+     * This method calculates the total amount of bytes, this chunk would
+     * consume in an ASF file.<br>
+     * <b>ATTENTION:</b> this size is not the same as
+     * {@link Chunk#getChunkLength()}. If this instance has been read, the
+     * chunklength will always stay the same. However, if the instance is
+     * modified, this method will reflect the new size.
+     * 
+     * @return amount of bytes this chunk would currently need in an ASF file.
+     */
+    public long getCurrentAsfChunkSize()
+    {
+        /*
+         * 16 bytes GUID, 8  bytes chunk size, 2 bytes descriptor count 
+         */
+        long result = 26;
+        for (ContentDescriptor curr : getDescriptors())
+        {
+            result += curr.getCurrentAsfSize();
+        }
+        return result;
+    }
+
+    /**
      * @return Returns the descriptorCount.
      */
-    public long getDescriptorCount()
+    public int getDescriptorCount()
     {
         int result = 0;
         for (List<ContentDescriptor> curr : this.descriptors.values())

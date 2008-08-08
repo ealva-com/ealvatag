@@ -18,14 +18,15 @@
  */
 package org.jaudiotagger.audio.asf.data;
 
-import org.jaudiotagger.audio.asf.tag.AsfFieldKey;
-import org.jaudiotagger.audio.asf.tag.AsfTag;
-import org.jaudiotagger.audio.asf.util.Utils;
-
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.math.BigInteger;
 import java.util.HashSet;
 import java.util.Set;
+
+import org.jaudiotagger.audio.asf.tag.AsfFieldKey;
+import org.jaudiotagger.audio.asf.util.Utils;
 
 /**
  * This class represents the data of a chunk which contains title, author,
@@ -183,6 +184,69 @@ public class ContentDescription extends Chunk
             return "";
         }
         return description;
+    }
+
+    /**
+     * This method calculates the total amount of bytes, this chunk would
+     * consume in an ASF file.<br>
+     * <b>ATTENTION:</b> this size is not the same as
+     * {@link Chunk#getChunkLength()}. If this instance has been read, the
+     * chunklength will always stay the same. However, if the instance is
+     * modified, this method will reflect the new size.
+     * 
+     * @return amount of bytes this chunk would currently need in an ASF file.
+     */
+    public int getCurrentAsfChunkSize()
+    {
+        int result = 44; // GUID + UINT64 for size + 5 times string length (each
+        // 2 bytes) + 5 times zero term char (2 bytes each).
+        result += getAuthor().length() * 2; // UTF-16LE
+        result += getComment().length() * 2;
+        result += getRating().length() * 2;
+        result += getTitle().length() * 2;
+        result += getCopyRight().length() * 2;
+        /*
+         * Now add 10 bytes for 5 times the zero term character, which is
+         * optional but recommended and so provided by this implementation.
+         */
+        result += 10;
+        return result;
+    }
+
+    /**
+     * Writes the current chunk into the specified output stream, as ASF stream
+     * chunk.<br>
+     * 
+     * @param out
+     *            stream to write into.
+     * @return amount of bytes written.
+     * @throws IOException
+     */
+    public int writeInto(OutputStream out) throws IOException
+    {
+        int chunkSize = getCurrentAsfChunkSize();
+
+        out.write(this.getGuid().getBytes());
+        Utils.writeUINT64(getCurrentAsfChunkSize(), out);
+        // write the sizes of the string representations plus 2 bytes zero term
+        // character
+        Utils.writeUINT16(getTitle().length() * 2 + 2, out);
+        Utils.writeUINT16(getAuthor().length() * 2 + 2, out);
+        Utils.writeUINT16(getCopyRight().length() * 2 + 2, out);
+        Utils.writeUINT16(getComment().length() * 2 + 2, out);
+        Utils.writeUINT16(getRating().length() * 2 + 2, out);
+        // write the Strings
+        out.write(getTitle().getBytes(AsfHeader.ASF_CHARSET));
+        out.write(AsfHeader.ZERO_TERM);
+        out.write(getAuthor().getBytes(AsfHeader.ASF_CHARSET));
+        out.write(AsfHeader.ZERO_TERM);
+        out.write(getCopyRight().getBytes(AsfHeader.ASF_CHARSET));
+        out.write(AsfHeader.ZERO_TERM);
+        out.write(getComment().getBytes(AsfHeader.ASF_CHARSET));
+        out.write(AsfHeader.ZERO_TERM);
+        out.write(getRating().getBytes(AsfHeader.ASF_CHARSET));
+        out.write(AsfHeader.ZERO_TERM);
+        return chunkSize;
     }
 
     /**

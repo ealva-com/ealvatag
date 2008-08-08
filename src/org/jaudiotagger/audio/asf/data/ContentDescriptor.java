@@ -18,15 +18,12 @@
  */
 package org.jaudiotagger.audio.asf.data;
 
-import org.jaudiotagger.audio.asf.tag.AsfTag;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.util.Arrays;
 
 import org.jaudiotagger.audio.asf.tag.AsfFieldKey;
-
-import java.io.ByteArrayOutputStream;
-import java.io.UnsupportedEncodingException;
-import java.util.Arrays;
-import java.util.HashSet;
-
 import org.jaudiotagger.audio.asf.util.Utils;
 
 /**
@@ -223,7 +220,7 @@ public final class ContentDescriptor implements Comparable<ContentDescriptor>
         ByteArrayOutputStream result = new ByteArrayOutputStream();
         try
         {
-            byte[] nameBytes = getName().getBytes("UTF-16LE");
+            byte[] nameBytes = getName().getBytes(AsfHeader.ASF_CHARSET);
             // Write the number of bytes the name needs. +2 because of the
             // Zero term character.
             result.write(Utils.getBytes(nameBytes.length + 2, 2));
@@ -255,6 +252,28 @@ public final class ContentDescriptor implements Comparable<ContentDescriptor>
             e.printStackTrace();
         }
         return result.toByteArray();
+    }
+
+    /**
+     * Returns the size (in bytes) this descriptor will take when written to 
+     * an ASF file.<br>
+     * 
+     * @return size of the descriptor in an ASF file.
+     */
+    public int getCurrentAsfSize()
+    {
+        /*
+         * 2 bytes name length, 2 bytes name zero term, 2 bytes type, 2 bytes
+         * content length
+         */
+        int result = 8;
+        result += getName().length() * 2;
+        result += this.content.length;
+        if (TYPE_STRING == this.getType())
+        {
+            result += 2; // zero term of content string.
+        }
+        return result;
     }
 
     /**
@@ -506,5 +525,34 @@ public final class ContentDescriptor implements Comparable<ContentDescriptor>
     public String toString()
     {
         return getName() + " : " + new String[]{"String: ", "Binary: ", "Boolean: ", "DWORD: ", "QWORD:", "WORD:"}[this.descriptorType] + getString();
+    }
+
+    /**
+     * Writes this descriptor into the specified output stream.<br>
+     * 
+     * @param out stream to write into.
+     * @return amount of bytes written.
+     * @throws IOException on I/O Errors
+     */
+    public int writeInto(OutputStream out) throws IOException
+    {
+        final int size = getCurrentAsfSize();
+        Utils.writeUINT16(getName().length() * 2 + 2, out);
+        out.write(getName().getBytes(AsfHeader.ASF_CHARSET));
+        out.write(AsfHeader.ZERO_TERM);
+        final int type = getType();
+        Utils.writeUINT16(type, out);
+        int contentLen = this.content.length;
+        if (TYPE_STRING == type)
+        {
+            contentLen += 2; // Zero Term
+        }
+        Utils.writeUINT16(contentLen, out);
+        out.write(this.content);
+        if (TYPE_STRING == type)
+        {
+            out.write(AsfHeader.ZERO_TERM);
+        }
+        return size;
     }
 }
