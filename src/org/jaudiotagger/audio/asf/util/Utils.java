@@ -18,22 +18,26 @@
  */
 package org.jaudiotagger.audio.asf.util;
 
-import org.jaudiotagger.audio.asf.data.GUID;
-import org.jaudiotagger.audio.asf.tag.AsfTag;
-import org.jaudiotagger.audio.asf.tag.AsfTagField;
-import org.jaudiotagger.tag.Tag;
-import org.jaudiotagger.tag.TagField;
-import org.jaudiotagger.tag.TagTextField;
-
-import java.io.*;
+import java.io.EOFException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.RandomAccessFile;
+import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
-import java.util.Iterator;
+
+import org.jaudiotagger.audio.asf.data.AsfHeader;
+import org.jaudiotagger.audio.asf.data.GUID;
+import org.jaudiotagger.audio.asf.io.RandomAccessFileInputstream;
+import org.jaudiotagger.audio.asf.tag.AsfTagField;
+import org.jaudiotagger.tag.TagField;
+import org.jaudiotagger.tag.TagTextField;
 
 /**
  * Some static Methods which are used in several Classes. <br>
- *
+ * 
  * @author Christian Laireiter
  */
 public class Utils
@@ -42,12 +46,12 @@ public class Utils
     /**
      * Stores the default line seperator of the current underlying system.
      */
-    public final static String LINE_SEPARATOR = System.getProperty("line.separator");
+    public final static String LINE_SEPARATOR = System.getProperty("line.separator"); //$NON-NLS-1$
 
     /**
      * This method converts the given string into a byte[] in UTF-16LE encoding
      * and checks whether the length doesn't exceed 65535 bytes. <br>
-     *
+     * 
      * @param value The string to check.
      * @throws IllegalArgumentException If byte representation takes more than 65535 bytes.
      */
@@ -55,58 +59,11 @@ public class Utils
     {
         if (value != null)
         {
-            try
+            byte[] tmp = value.getBytes(AsfHeader.ASF_CHARSET);
+            if (tmp.length > 65533)
             {
-                byte[] tmp = value.getBytes(AsfTag.TEXT_ENCODING);
-                if (tmp.length > 65533)
-                {
-                    throw new IllegalArgumentException("\"UTF-16LE\" representation exceeds 65535 bytes." + " (Including zero term character)");
-                }
-            } catch (UnsupportedEncodingException e)
-            {
-                e.printStackTrace();
+                throw new IllegalArgumentException("\"UTF-16LE\" representation exceeds 65535 bytes. (Including zero term character)"); //$NON-NLS-1$
             }
-        }
-    }
-
-    /**
-     * This method tests, whether the specified tag does contain at least one
-     * {@link org.jaudiotagger.tag.TagField} with content, for the specified 
-     * {@linkplain org.jaudiotagger.tag.TagField#getId() key}.<br> 
-     * 
-     * @param tag Tag to look in
-     * @param fieldKey field key to look for content.
-     * @return <code>true</code> if one field with content could be found.
-     */
-    public static boolean containsValue(Tag tag, String fieldKey)
-    {
-        boolean result = false;
-        final Iterator<TagField> iterator = tag.get(fieldKey).iterator();
-        while (!result && iterator.hasNext())
-        {
-            result |= !isEmpty(iterator.next());
-        }
-        return result;
-    }
-
-    /**
-     * Reads chars out of <code>raf</code> until <code>chars</code> is
-     * filled.
-     *
-     * @param chars to be filled
-     * @param raf   to be read
-     * @throws IOException read error, or file at end before <code>chars</code> is
-     *                     filled.
-     */
-    public static void fillChars(char[] chars, RandomAccessFile raf) throws IOException
-    {
-        if (chars == null)
-        {
-            throw new IllegalArgumentException("Argument must not be null.");
-        }
-        for (int i = 0; i < chars.length; i++)
-        {
-            chars[i] = raf.readChar();
         }
     }
 
@@ -118,8 +75,8 @@ public class Utils
      * of the value, ignoring the original type of value, since java
      * automatically performs transformations. <br>
      * <b>Warning: </b> This method works with unsigned numbers only.
-     *
-     * @param value     The value to be written into the result.
+     * 
+     * @param value The value to be written into the result.
      * @param byteCount The number of bytes the array has got.
      * @return A byte[] with the size of <code>byteCount</code> containing the
      *         lower byte values of <code>value</code>.
@@ -139,7 +96,7 @@ public class Utils
      * Since date values in asf files are given in 100 ns steps since first
      * january of 1601 a little conversion must be done. <br>
      * This method converts a date given in described manner to a calendar.
-     *
+     * 
      * @param fileTime Time in 100ns since 1 jan 1601
      * @return Calendar holding the date representation.
      */
@@ -148,7 +105,7 @@ public class Utils
         GregorianCalendar result = new GregorianCalendar(1601, 0, 1);
         // lose anything beyond milliseconds, because calendar can't handle
         // less value
-        fileTime = fileTime.divide(new BigInteger("10000"));
+        fileTime = fileTime.divide(new BigInteger("10000")); //$NON-NLS-1$
         BigInteger maxInt = new BigInteger(String.valueOf(Integer.MAX_VALUE));
         while (fileTime.compareTo(maxInt) > 0)
         {
@@ -160,7 +117,9 @@ public class Utils
     }
 
     /**
-     * Tests if the given string is <code>null</code> or just contains whitespace characters.
+     * Tests if the given string is <code>null</code> or just contains
+     * whitespace characters.
+     * 
      * @param toTest String to test.
      * @return see description.
      */
@@ -178,65 +137,23 @@ public class Utils
     }
 
     /**
-     * Tests whether the specified field contains no content.<br>
-     * For {@link org.jaudiotagger.tag.TagTextField} objects the string will be analyzed for non
-     * wildcard characters.
-     * Other fields (except {@link org.jaudiotagger.audio.asf.tag.AsfTagField} will be tested if {@link TagField#getRawContent()}
-     * has zero length.<br>  
+     * Reads 8 bytes from stream and interprets them as a UINT64 which
+     * is returned as {@link BigInteger}.<br>
      * 
-     * @param field the field to test.
-     * @return <code>true</code> if its empty.
-     */
-    public static boolean isEmpty(TagField field)
-    {
-        boolean result = false;
-        if (field instanceof TagTextField)
-        {
-            result = isBlank(((TagTextField) field).getContent());
-        }
-        else if (field instanceof AsfTagField)
-        {
-            result = ((AsfTagField) field).isEmpty();
-        }
-        else
-        {
-            try
-            {
-                byte[] content = field.getRawContent();
-                result = content == null || content.length == 0;
-            } catch (UnsupportedEncodingException e)
-            {
-                // In this case, anything that could discard this field should do so.
-                result = true;
-            }
-
-        }
-        return result;
-    }
-
-    /**
-     * This method reads one byte from <code>raf</code> and creates an
-     * unsigned value of it. <br>
-     *
-     * @param raf The file to read from.
-     * @return next 7 bits as number.
-     * @throws IOException read errors.
-     */
-    public static int read7Bit(RandomAccessFile raf) throws IOException
-    {
-        int result = raf.read();
-        return result & 127;
-    }
-
-    /**
-     * @param stream
-     * @return
+     * @param stream stream to readm from.
+     * @return a BigInteger which represents the read 8 bytes value.
+     * @throws IOException 
      */
     public static BigInteger readBig64(InputStream stream) throws IOException
     {
         byte[] bytes = new byte[8];
         byte[] oa = new byte[8];
-        stream.read(bytes);
+        int read = stream.read(bytes);
+        if (read != 8)
+        {
+            // 8 bytes mandatory.
+            throw new EOFException();
+        }
         for (int i = 0; i < bytes.length; i++)
         {
             oa[7 - i] = bytes[i];
@@ -248,31 +165,23 @@ public class Utils
     /**
      * This method reads 8 bytes, interprets them as an unsigned number and
      * creates a {@link BigInteger}
-     *
+     * 
      * @param raf Input source
      * @return 8 bytes unsigned number
      * @throws IOException read errors.
      */
     public static BigInteger readBig64(RandomAccessFile raf) throws IOException
     {
-        byte[] bytes = new byte[8];
-        byte[] oa = new byte[8];
-        raf.readFully(bytes);
-        for (int i = 0; i < bytes.length; i++)
-        {
-            oa[7 - i] = bytes[i];
-        }
-        BigInteger result = new BigInteger(oa);
-        return result;
+        return readBig64(new RandomAccessFileInputstream(raf));
     }
 
     /**
      * This method reads a UTF-16 String, which length is given on the number of
      * characters it consists of. <br>
-     * The stream must be at the number of
-     * characters. This number contains the terminating zero character (UINT16).
-     *
-     * @param raf Input source
+     * The stream must be at the number of characters. This number contains the
+     * terminating zero character (UINT16).
+     * 
+     * @param stream Input source
      * @return String
      * @throws IOException read errors
      */
@@ -294,7 +203,7 @@ public class Utils
         while (character != 0 || (result.length() + 1) > strLen);
         if (strLen != (result.length() + 1))
         {
-            throw new IllegalStateException("Invalid Data for current interpretation");
+            throw new IllegalStateException("Invalid Data for current interpretation"); //$NON-NLS-1$
         }
         return result.toString();
     }
@@ -302,79 +211,25 @@ public class Utils
     /**
      * This method reads a UTF-16 String, which legth is given on the number of
      * characters it consits of. <br>
-     * The filepointer of <code>raf</code> must be at the number of
-     * characters. This number contains the terminating zero character (UINT16).
-     *
+     * The filepointer of <code>raf</code> must be at the number of characters.
+     * This number contains the terminating zero character (UINT16).
+     * 
      * @param raf Input source
      * @return String
      * @throws IOException read errors
      */
     public static String readCharacterSizedString(RandomAccessFile raf) throws IOException
     {
-        StringBuffer result = new StringBuffer();
-        int strLen = readUINT16(raf);
-        int character = raf.read();
-        character |= raf.read() << 8;
-        do
-        {
-            if (character != 0)
-            {
-                result.append((char) character);
-                character = raf.read();
-                character |= raf.read() << 8;
-            }
-        }
-        while (character != 0 || (result.length() + 1) > strLen);
-        if (strLen != (result.length() + 1))
-        {
-            throw new IllegalStateException("Invalid Data for current interpretation");
-        }
-        return result.toString();
+        return readCharacterSizedString(new RandomAccessFileInputstream(raf));
     }
 
     /**
-     * This method reads a UTF-16 encoded String. <br>
-     * For the use this method the number of bytes used by current string must
-     * be known. <br>
-     * The ASF spec recommends that those strings end with a terminating zero.
-     * However it also says that it is not always the case.
-     *
-     * @param raf    Input source
-     * @param strLen Number of bytes the String may take.
-     * @return read String.
-     * @throws IOException read errors.
-     */
-    public static String readFixedSizeUTF16Str(InputStream stream, int strLen) throws IOException
-    {
-        byte[] strBytes = new byte[strLen];
-        int read = stream.read(strBytes);
-        if (read == strBytes.length)
-        {
-            if (strBytes.length >= 2)
-            {
-                /*
-                 * Zero termination is recommended but optional.
-                 * So check and if, remove.
-                 */
-                if (strBytes[strBytes.length - 1] == 0 && strBytes[strBytes.length - 2] == 0)
-                {
-                    byte[] copy = new byte[strBytes.length - 2];
-                    System.arraycopy(strBytes, 0, copy, 0, strBytes.length - 2);
-                    strBytes = copy;
-                }
-            }
-            return new String(strBytes, "UTF-16LE");
-        }
-        throw new IllegalStateException("Couldn't read the necessary amount of bytes.");
-    }
-
-   /**
      * This Method reads a GUID (which is a 16 byte long sequence) from the
      * given <code>raf</code> and creates a wrapper. <br>
      * <b>Warning </b>: <br>
      * There is no way of telling if a byte sequence is a guid or not. The next
      * 16 bytes will be interpreted as a guid, whether it is or not.
-     *
+     * 
      * @param stream Input source.
      * @return A class wrapping the guid.
      * @throws IOException happens when the file ends before guid could be extracted.
@@ -383,7 +238,7 @@ public class Utils
     {
         if (stream == null)
         {
-            throw new IllegalArgumentException("Argument must not be null");
+            throw new IllegalArgumentException("Argument must not be null"); //$NON-NLS-1$
         }
         int[] binaryGuid = new int[GUID.GUID_LENGTH];
         for (int i = 0; i < binaryGuid.length; i++)
@@ -392,41 +247,34 @@ public class Utils
         }
         return new GUID(binaryGuid);
     }
-    
+
     /**
      * This Method reads a GUID (which is a 16 byte long sequence) from the
      * given <code>raf</code> and creates a wrapper. <br>
      * <b>Warning </b>: <br>
      * There is no way of telling if a byte sequence is a guid or not. The next
      * 16 bytes will be interpreted as a guid, whether it is or not.
-     *
+     * 
      * @param raf Input source.
      * @return A class wrapping the guid.
      * @throws IOException happens when the file ends before guid could be extracted.
      */
     public static GUID readGUID(RandomAccessFile raf) throws IOException
     {
-        if (raf == null)
-        {
-            throw new IllegalArgumentException("Argument must not be null");
-        }
-        int[] binaryGuid = new int[GUID.GUID_LENGTH];
-        for (int i = 0; i < binaryGuid.length; i++)
-        {
-            binaryGuid[i] = raf.read();
-        }
-        return new GUID(binaryGuid);
+        return readGUID(new RandomAccessFileInputstream(raf));
     }
 
-
     /**
-     * @param bis
-     * @return
+     * Reads 2 bytes from stream and interprets them as UINT16.<br> 
+     * 
+     * @param stream stream to read from.
+     * @return UINT16 value
+     * @throws IOException on I/O Errors.
      */
-    public static int readUINT16(InputStream bis) throws IOException
+    public static int readUINT16(InputStream stream) throws IOException
     {
-        int result = bis.read();
-        result |= bis.read() << 8;
+        int result = stream.read();
+        result |= stream.read() << 8;
         return result;
     }
 
@@ -438,25 +286,30 @@ public class Utils
      */
     public static int readUINT16(RandomAccessFile raf) throws IOException
     {
-        int result = raf.read();
-        result |= raf.read() << 8;
-        return result;
+        return readUINT16(new RandomAccessFileInputstream(raf));
     }
 
     /**
-     * @param bis
-     * @return
+     * Reads 4 bytes from stream and interprets them as UINT32.<br> 
+     * 
+     * @param stream stream to read from.
+     * @return UINT32 value
+     * @throws IOException on I/O Errors.
      */
     public static long readUINT32(InputStream stream) throws IOException
     {
         long result = 0;
         for (int i = 0; i <= 24; i += 8)
         {
-            result |= stream.read() << i;
+            // Warning, always cast to long here. Otherwise it will be
+            // shifted as int, which may produce a negative value, which will
+            // then be extended to long and assign the long variable a negative
+            // value.
+            result |= (long) stream.read() << i;
         }
         return result;
     }
-    
+
     /**
      * @param raf
      * @return number
@@ -465,18 +318,13 @@ public class Utils
      */
     public static long readUINT32(RandomAccessFile raf) throws IOException
     {
-        long result = 0;
-        for (int i = 0; i <= 24; i += 8)
-        {
-            result |= raf.read() << i;
-        }
-        return result;
+        return readUINT32(new RandomAccessFileInputstream(raf));
     }
 
     /**
      * Reads long as little endian.
-     *
-     * @param raf Data source
+     * 
+     * @param stream Data source
      * @return long value
      * @throws IOException read error, or eof is reached before long is completed
      */
@@ -485,34 +333,33 @@ public class Utils
         long result = 0;
         for (int i = 0; i <= 56; i += 8)
         {
-            result |= stream.read() << i;
+            // Warning, always cast to long here. Otherwise it will be
+            // shifted as int, which may produce a negative value, which will
+            // then be extended to long and assign the long variable a negative
+            // value.
+            result |= (long) stream.read() << i;
         }
         return result;
     }
 
     /**
      * Reads long as little endian.
-     *
+     * 
      * @param raf Data source
      * @return long value
      * @throws IOException read error, or eof is reached before long is completed
      */
     public static long readUINT64(RandomAccessFile raf) throws IOException
     {
-        long result = 0;
-        for (int i = 0; i <= 56; i += 8)
-        {
-            result |= raf.read() << i;
-        }
-        return result;
+        return readUINT64(new RandomAccessFileInputstream(raf));
     }
 
     /**
      * This method reads a UTF-16 encoded String, beginning with a 16-bit value
      * representing the number of bytes needed. The String is terminated with as
      * 16-bit ZERO. <br>
-     *
-     * @param raf Input source
+     * 
+     * @param stream Input source
      * @return read String.
      * @throws IOException read errors.
      */
@@ -521,7 +368,7 @@ public class Utils
         int strLen = readUINT16(stream);
         byte[] buf = new byte[strLen];
         int read = stream.read(buf);
-        if (read == buf.length)
+        if (read == strLen || (strLen == 0 && read == -1))
         {
             /*
              * Check on zero termination
@@ -535,42 +382,85 @@ public class Utils
                     buf = copy;
                 }
             }
-            return new String(buf, AsfTag.TEXT_ENCODING);
+            return new String(buf, AsfHeader.ASF_CHARSET);
         }
-        throw new IllegalStateException("Invalid Data for current interpretation");
+        throw new IllegalStateException("Invalid Data for current interpretation"); //$NON-NLS-1$
     }
 
     /**
      * This method reads a UTF-16 encoded String, beginning with a 16-bit value
      * representing the number of bytes needed. The String is terminated with as
      * 16-bit ZERO. <br>
-     *
+     * 
      * @param raf Input source
      * @return read String.
      * @throws IOException read errors.
      */
     public static String readUTF16LEStr(RandomAccessFile raf) throws IOException
     {
-        int strLen = readUINT16(raf);
-        byte[] buf = new byte[strLen];
-        int read = raf.read(buf);
-        if (read == buf.length)
-        {
-            /*
-             * Check on zero termination
-             */
-            if (buf.length >= 2)
-            {
-                if (buf[buf.length - 1] == 0 && buf[buf.length - 2] == 0)
-                {
-                    byte[] copy = new byte[buf.length - 2];
-                    System.arraycopy(buf, 0, copy, 0, buf.length - 2);
-                    buf = copy;
-                }
-            }
-            return new String(buf, AsfTag.TEXT_ENCODING);
-        }
-        throw new IllegalStateException("Invalid Data for current interpretation");
+        return readUTF16LEStr(new RandomAccessFileInputstream(raf));
     }
-    
+
+    /**
+     * Writes the given value as UINT16 into the stream.
+     * 
+     * @param number value to write.
+     * @param out stream to write into.
+     * @throws IOException On I/O errors
+     */
+    public static void writeUINT16(int number, OutputStream out) throws IOException
+    {
+        if (number < 0)
+        {
+            throw new IllegalArgumentException("positive value expected."); //$NON-NLS-1$
+        }
+        byte[] toWrite = new byte[2];
+        for (int i = 0; i <= 8; i += 8)
+        {
+            toWrite[i / 8] = (byte) ((number >> i) & 0xFF);
+        }
+        out.write(toWrite);
+    }
+
+    /**
+     * Writes the given value as UINT32 into the stream.
+     * 
+     * @param number value to write.
+     * @param out stream to write into.
+     * @throws IOException On I/O errors
+     */
+    public static void writeUINT32(long number, OutputStream out) throws IOException
+    {
+        if (number < 0)
+        {
+            throw new IllegalArgumentException("positive value expected."); //$NON-NLS-1$
+        }
+        byte[] toWrite = new byte[4];
+        for (int i = 0; i <= 24; i += 8)
+        {
+            toWrite[i / 8] = (byte) ((number >> i) & 0xFF);
+        }
+        out.write(toWrite);
+    }
+
+    /**
+     * Writes the given value as UINT64 into the stream.
+     * 
+     * @param number value to write.
+     * @param out stream to write into.
+     * @throws IOException On I/O errors
+     */
+    public static void writeUINT64(long number, OutputStream out) throws IOException
+    {
+        if (number < 0)
+        {
+            throw new IllegalArgumentException("positive value expected."); //$NON-NLS-1$
+        }
+        byte[] toWrite = new byte[8];
+        for (int i = 0; i <= 56; i += 8)
+        {
+            toWrite[i / 8] = (byte) ((number >> i) & 0xFF);
+        }
+        out.write(toWrite);
+    }
 }

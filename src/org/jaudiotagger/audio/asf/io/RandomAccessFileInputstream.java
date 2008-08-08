@@ -11,7 +11,7 @@ import java.io.RandomAccessFile;
  * Wraps a {@link RandomAccessFile} into an {@link InputStream}.<br>
  * @author Christian Laireiter
  */
-final class RandomAccessFileInputstream extends InputStream
+public final class RandomAccessFileInputstream extends InputStream
 {
 
     /**

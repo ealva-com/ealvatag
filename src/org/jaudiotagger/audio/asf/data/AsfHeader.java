@@ -19,6 +19,7 @@
 package org.jaudiotagger.audio.asf.data;
 
 import java.math.BigInteger;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -36,10 +37,20 @@ import java.util.List;
 public class AsfHeader extends Chunk {
 
 	/**
+	 * The charset &quot;UTF-16LE&quot; is mandatory for ASF handling.
+	 */
+	public final static Charset ASF_CHARSET = Charset.forName("UTF-16LE"); //$NON-NLS-1$
+
+	/**
 	 * Stores the {@link GUID} instances, which are allowed multiple times
 	 * within an ASF header.
 	 */
 	private final static HashSet<GUID> MULTI_CHUNKS;
+
+	/**
+	 * Byte sequence representing the zero term character.
+	 */
+	public final static byte[] ZERO_TERM = { 0, 0 };
 
 	static {
 		MULTI_CHUNKS = new HashSet<GUID>();
