@@ -194,8 +194,7 @@ public final class ContentDescriptor implements Comparable<ContentDescriptor>
             else
             {
                 ContentDescriptor other = (ContentDescriptor) obj;
-                result = other.getName().equals(getName()) && other.descriptorType == this.descriptorType && Arrays
-                                .equals(this.content, other.content);
+                result = other.getName().equals(getName()) && other.descriptorType == this.descriptorType && Arrays.equals(this.content, other.content);
             }
         }
         return result;
@@ -474,20 +473,13 @@ public final class ContentDescriptor implements Comparable<ContentDescriptor>
      */
     public void setStringValue(String value) throws IllegalArgumentException
     {
-        try
+        Utils.checkStringLengthNullSafe(value);
+        if (value != null)
         {
-            Utils.checkStringLengthNullSafe(value);
-            if (value != null)
-            {
-                this.content = value.getBytes(AsfTag.TEXT_ENCODING);
-            }
-            else
-            {
-                this.content = new byte[0];
-            }
-        } catch (UnsupportedEncodingException e)
+            this.content = value.getBytes(AsfHeader.ASF_CHARSET);
+        }
+        else
         {
-            e.printStackTrace();
             this.content = new byte[0];
         }
         this.descriptorType = TYPE_STRING;
