@@ -1,5 +1,6 @@
 package org.jaudiotagger.audio.asf.tag;
 
+import org.jaudiotagger.audio.asf.data.AsfHeader;
 import org.jaudiotagger.audio.asf.data.ContentDescriptor;
 import org.jaudiotagger.tag.TagTextField;
 
@@ -49,7 +50,7 @@ public class AsfTagTextField extends AsfTagField implements TagTextField
      */
     public String getEncoding()
     {
-        return AsfTag.TEXT_ENCODING;
+        return AsfHeader.ASF_CHARSET.name();
     }
 
     /**
@@ -65,7 +66,7 @@ public class AsfTagTextField extends AsfTagField implements TagTextField
      */
     public void setEncoding(String encoding)
     {
-        if (!AsfTag.TEXT_ENCODING.equals(encoding))
+        if (!AsfHeader.ASF_CHARSET.name().equals(encoding))
         {
             throw new IllegalArgumentException("Only UTF-16LE is possible with ASF.");
         }

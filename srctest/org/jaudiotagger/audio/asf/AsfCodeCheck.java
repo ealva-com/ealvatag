@@ -3,6 +3,8 @@ package org.jaudiotagger.audio.asf;
 import org.jaudiotagger.audio.asf.util.Utils;
 
 import junit.framework.TestCase;
+
+import org.jaudiotagger.audio.asf.data.AsfHeader;
 import org.jaudiotagger.audio.asf.data.ContentDescriptor;
 import org.jaudiotagger.audio.asf.tag.AsfFieldKey;
 import org.jaudiotagger.audio.asf.tag.AsfTag;
@@ -45,6 +47,6 @@ public class AsfCodeCheck extends TestCase
         assertFalse(Utils.isBlank(ContentDescriptor.ID_TRACKNUMBER));
         assertFalse(Utils.isBlank(ContentDescriptor.ID_YEAR));
         // UTF16-LE by specification
-        assertEquals("ONLY \"UTF-16LE\" text encoding specified", "UTF-16LE", AsfTag.TEXT_ENCODING); // $NON-NLS-1$ //$NON-NLS-2$ 
+        assertEquals("ONLY \"UTF-16LE\" text encoding specified", "UTF-16LE", AsfHeader.ASF_CHARSET.name()); // $NON-NLS-1$ //$NON-NLS-2$ 
     }
 }

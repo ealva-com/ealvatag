@@ -1,5 +1,6 @@
 package org.jaudiotagger.audio.asf.tag;
 
+import org.jaudiotagger.audio.asf.data.AsfHeader;
 import org.jaudiotagger.audio.asf.data.ContentDescriptor;
 import org.jaudiotagger.audio.asf.util.Utils;
 import org.jaudiotagger.audio.generic.AbstractTag;
@@ -15,12 +16,6 @@ import java.util.List;
  */
 public final class AsfTag extends AbstractTag
 {
-
-    /**
-     * The <b>only</b> text encoding for ASF files.
-     */
-    public final static String TEXT_ENCODING = "UTF-16LE"; // //$NON-NLS-1$
-
     /**
      * Creates a {@link AsfTagTextField} for use with string content.<br>
      * For now the method is relatively useless. However future common checks can be easily implemented.
@@ -496,7 +491,7 @@ public final class AsfTag extends AbstractTag
     @Override
     protected boolean isAllowedEncoding(String enc)
     {
-        return TEXT_ENCODING.equals(enc);
+        return AsfHeader.ASF_CHARSET.name().equals(enc);
     }
 
     /**

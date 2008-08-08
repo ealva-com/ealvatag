@@ -140,7 +140,7 @@ public class ContentDescription extends Chunk
             // Create byte[] of UTF-16LE encodings
             for (int i = 0; i < toWrite.length; i++)
             {
-                stringRepresentations[i] = toWrite[i].getBytes(AsfTag.TEXT_ENCODING);
+                stringRepresentations[i] = toWrite[i].getBytes(AsfHeader.ASF_CHARSET);
             }
             // Write the amount of bytes needed to store the values.
             for (int i = 0; i < stringRepresentations.length; i++)
