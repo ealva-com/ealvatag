@@ -205,11 +205,6 @@ public class ContentDescription extends Chunk
         result += getRating().length() * 2;
         result += getTitle().length() * 2;
         result += getCopyRight().length() * 2;
-        /*
-         * Now add 10 bytes for 5 times the zero term character, which is
-         * optional but recommended and so provided by this implementation.
-         */
-        result += 10;
         return result;
     }
 
