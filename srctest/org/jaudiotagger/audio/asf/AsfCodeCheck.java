@@ -40,12 +40,6 @@ public class AsfCodeCheck extends TestCase
      */
     public void testConstants()
     {
-        assertFalse(Utils.isBlank(ContentDescriptor.ID_ALBUM));
-        assertFalse(Utils.isBlank(ContentDescriptor.ID_ARTIST));
-        assertFalse(Utils.isBlank(ContentDescriptor.ID_GENRE));
-        assertFalse(Utils.isBlank(ContentDescriptor.ID_GENREID));
-        assertFalse(Utils.isBlank(ContentDescriptor.ID_TRACKNUMBER));
-        assertFalse(Utils.isBlank(ContentDescriptor.ID_YEAR));
         // UTF16-LE by specification
         assertEquals("ONLY \"UTF-16LE\" text encoding specified", "UTF-16LE", AsfHeader.ASF_CHARSET.name()); // $NON-NLS-1$ //$NON-NLS-2$ 
     }

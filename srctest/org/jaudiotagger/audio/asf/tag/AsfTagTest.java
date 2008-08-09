@@ -67,7 +67,7 @@ public class AsfTagTest extends TestCase
         testFieldKey(AsfFieldKey.ALBUM, "ALBUM", TagFieldKey.ALBUM);
         testFieldKey(AsfFieldKey.ARTIST, "ARTIST", TagFieldKey.ARTIST);
         testFieldKey(AsfFieldKey.COMMENT, "COMMENT", TagFieldKey.COMMENT);
-        testFieldKey(AsfFieldKey.COPYRIGHT, "WM/COPYRIGHT", null);
+        testFieldKey(AsfFieldKey.COPYRIGHT, "COPYRIGHT", null);
         testFieldKey(AsfFieldKey.GENRE, "GENRE", TagFieldKey.GENRE);
         testFieldKey(AsfFieldKey.GENRE_ID, "WM/GenreID", null);
         testFieldKey(AsfFieldKey.TITLE, "TITLE", TagFieldKey.TITLE);
