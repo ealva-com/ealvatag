@@ -1,12 +1,14 @@
 package org.jaudiotagger.tag.wma;
 
+import java.io.File;
+
 import junit.framework.TestCase;
+
 import org.jaudiotagger.AbstractTestCase;
 import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.AudioFileIO;
+import org.jaudiotagger.audio.asf.util.Utils;
 import org.jaudiotagger.tag.Tag;
-
-import java.io.File;
 
 /**
  * Base class for WMA test cases.<br> 
@@ -64,14 +66,31 @@ public class WmaTestCase extends TestCase
     }
 
     /**
+     * Returns a file for testing purposes. 
+     * @return file for testing.
+     */
+    public File prepareTestFile(String fileName)
+    {
+        assertNotNull(sourceTestFile);
+        File result = null;
+        if (!Utils.isBlank(fileName)) {
+            result = AbstractTestCase.copyAudioToTmp(sourceTestFile, new File(fileName));
+        } else {
+            result = AbstractTestCase.copyAudioToTmp(sourceTestFile);
+        }
+        return result;
+    }
+
+    /**
      * Creates the file copy.
      */
     protected void setUp() throws Exception
     {
         super.setUp();
         assertNotNull(sourceTestFile);
-        this.testFile = AbstractTestCase.copyAudioToTmp(sourceTestFile);
+        this.testFile = prepareTestFile(null);
     }
+
 
     /**
      * Deletes the copy.
