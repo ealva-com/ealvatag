@@ -318,6 +318,12 @@ public final class AsfTag extends AbstractTag
         super.deleteField(fieldKey);
     }
 
+
+    public void deleteTagField(AsfFieldKey fieldKey)
+    {
+        super.deleteField(fieldKey.getPublicFieldId());
+    }
+
     /**
      * {@inheritDoc}
      */
