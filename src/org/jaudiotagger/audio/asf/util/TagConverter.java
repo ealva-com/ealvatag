@@ -18,8 +18,6 @@
  */
 package org.jaudiotagger.audio.asf.util;
 
-import org.jaudiotagger.audio.asf.tag.AsfTagTextField;
-
 import org.jaudiotagger.audio.asf.data.AsfHeader;
 import org.jaudiotagger.audio.asf.data.ContentDescription;
 import org.jaudiotagger.audio.asf.data.ContentDescriptor;
@@ -27,7 +25,7 @@ import org.jaudiotagger.audio.asf.data.ExtendedContentDescription;
 import org.jaudiotagger.audio.asf.tag.AsfFieldKey;
 import org.jaudiotagger.audio.asf.tag.AsfTag;
 import org.jaudiotagger.audio.asf.tag.AsfTagField;
-import org.jaudiotagger.tag.FieldDataInvalidException;
+import org.jaudiotagger.audio.asf.tag.AsfTagTextField;
 import org.jaudiotagger.tag.Tag;
 import org.jaudiotagger.tag.reference.GenreTypes;
 
@@ -61,57 +59,57 @@ public class TagConverter
     public static void assignCommonTagValues(Tag tag, ExtendedContentDescription description)
     {
         ContentDescriptor tmp = null;
-        if (tag.getFirstAlbum() != null && tag.getFirstAlbum().length() > 0)
+        if (!Utils.isBlank(tag.getFirstAlbum()))
         {
-            tmp = new ContentDescriptor(ContentDescriptor.ID_ALBUM, ContentDescriptor.TYPE_STRING);
+            tmp = new ContentDescriptor(AsfFieldKey.ALBUM.getPublicFieldId(), ContentDescriptor.TYPE_STRING);
             tmp.setStringValue(tag.getFirstAlbum());
             description.addOrReplace(tmp);
         }
         else
         {
-            description.remove(ContentDescriptor.ID_ALBUM);
+            description.remove(AsfFieldKey.ALBUM.getPublicFieldId());
         }
-        if (tag.getFirstTrack() != null && tag.getFirstTrack().length() > 0)
+        if (!Utils.isBlank(tag.getFirstTrack()))
         {
-            tmp = new ContentDescriptor(ContentDescriptor.ID_TRACKNUMBER, ContentDescriptor.TYPE_STRING);
+            tmp = new ContentDescriptor(AsfFieldKey.TRACK.getPublicFieldId(), ContentDescriptor.TYPE_STRING);
             tmp.setStringValue(tag.getFirstTrack());
             description.addOrReplace(tmp);
         }
         else
         {
-            description.remove(ContentDescriptor.ID_TRACKNUMBER);
+            description.remove(AsfFieldKey.TRACK.getPublicFieldId());
         }
-        if (tag.getFirstYear() != null && tag.getFirstYear().length() > 0)
+        if (!Utils.isBlank(tag.getFirstYear()))
         {
-            tmp = new ContentDescriptor(ContentDescriptor.ID_YEAR, ContentDescriptor.TYPE_STRING);
+            tmp = new ContentDescriptor(AsfFieldKey.YEAR.getPublicFieldId(), ContentDescriptor.TYPE_STRING);
             tmp.setStringValue(tag.getFirstYear());
             description.addOrReplace(tmp);
         }
         else
         {
-            description.remove(ContentDescriptor.ID_YEAR);
+            description.remove(AsfFieldKey.YEAR.getPublicFieldId());
         }
-        if (tag.getFirstGenre() != null && tag.getFirstGenre().length() > 0)
+        if (!Utils.isBlank(tag.getFirstGenre()))
         {
-            tmp = new ContentDescriptor(ContentDescriptor.ID_GENRE, ContentDescriptor.TYPE_STRING);
+            tmp = new ContentDescriptor(AsfFieldKey.GENRE.getPublicFieldId(), ContentDescriptor.TYPE_STRING);
             tmp.setStringValue(tag.getFirstGenre());
             description.addOrReplace(tmp);
             Integer genreNum = GenreTypes.getInstanceOf().getIdForName(tag.getFirstGenre());
             if (genreNum != null)
             {
-                tmp = new ContentDescriptor(ContentDescriptor.ID_GENREID, ContentDescriptor.TYPE_STRING);
+                tmp = new ContentDescriptor(AsfFieldKey.GENRE_ID.getPublicFieldId(), ContentDescriptor.TYPE_STRING);
                 tmp.setStringValue("(" + genreNum + ")");
                 description.addOrReplace(tmp);
             }
             else
             {
-                description.remove(ContentDescriptor.ID_GENREID);
+                description.remove(AsfFieldKey.GENRE_ID.getPublicFieldId());
             }
         }
         else
         {
-            description.remove(ContentDescriptor.ID_GENRE);
-            description.remove(ContentDescriptor.ID_GENREID);
+            description.remove(AsfFieldKey.GENRE.getPublicFieldId());
+            description.remove(AsfFieldKey.GENRE_ID.getPublicFieldId());
         }
     }
 
@@ -172,7 +170,7 @@ public class TagConverter
      * @param source The ASF header which contains the information. <br>
      * @return A Tag with all its values.
      */
-    public static AsfTag createTagOf(AsfHeader source) 
+    public static AsfTag createTagOf(AsfHeader source)
     {
         AsfTag result = new AsfTag(true);
         /*

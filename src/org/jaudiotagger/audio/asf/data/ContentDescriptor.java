@@ -18,13 +18,13 @@
  */
 package org.jaudiotagger.audio.asf.data;
 
+import org.jaudiotagger.audio.asf.tag.AsfTag;
+import org.jaudiotagger.audio.asf.util.Utils;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Arrays;
-
-import org.jaudiotagger.audio.asf.tag.AsfFieldKey;
-import org.jaudiotagger.audio.asf.util.Utils;
 
 /**
  * This class is a wrapper for properties within a
@@ -34,42 +34,6 @@ import org.jaudiotagger.audio.asf.util.Utils;
  */
 public final class ContentDescriptor implements Comparable<ContentDescriptor>
 {
-    /**
-     * This constant gives the common id (name) for the "album" field in an asf
-     * extended content description.
-     */
-    public final static String ID_ALBUM = AsfFieldKey.ALBUM.getFieldId();
-
-    /**
-     * This constant gives the common id (name) for the "artist" field in an asf
-     * extended content description.
-     */
-    public final static String ID_ARTIST = AsfFieldKey.ARTIST.getFieldId();
-
-    /**
-     * This constant gives the common id (name) for the "genre" field in an asf
-     * extended content description.
-     */
-    public final static String ID_GENRE = AsfFieldKey.GENRE.getFieldId();
-
-    /**
-     * This constant gives the common id (name) for the "genre Id" field in an
-     * asf extended content description.
-     */
-    public final static String ID_GENREID = AsfFieldKey.GENRE_ID.getFieldId();
-
-    /**
-     * This constant gives the common id (name) for the "track number" field in
-     * an asf extended content description.
-     */
-    public final static String ID_TRACKNUMBER = AsfFieldKey.TRACK.getFieldId();
-
-    /**
-     * This constant gives the common id (name) for the "year" field in an asf
-     * extended content description.
-     */
-    public final static String ID_YEAR = AsfFieldKey.YEAR.getFieldId();
-
     /**
      * Constant for the content descriptor-type for binary data.
      */
@@ -409,7 +373,7 @@ public final class ContentDescriptor implements Comparable<ContentDescriptor>
      */
     public boolean isCommon()
     {
-        // TODO: We have at least to specifiy a list of common fields (somwhere in code)
+        // TODO: We have at least to specifiy a list of common fields (somewhere in code)
         return false;
     }
 
@@ -492,15 +456,15 @@ public final class ContentDescriptor implements Comparable<ContentDescriptor>
      */
     public void setStringValue(String value) throws IllegalArgumentException
     {
-        Utils.checkStringLengthNullSafe(value);
-        if (value != null)
-        {
+            Utils.checkStringLengthNullSafe(value);
+            if (value != null)
+            {
             this.content = value.getBytes(AsfHeader.ASF_CHARSET);
-        }
-        else
-        {
-            this.content = new byte[0];
-        }
+            }
+            else
+            {
+                this.content = new byte[0];
+            }
         this.descriptorType = TYPE_STRING;
     }
 

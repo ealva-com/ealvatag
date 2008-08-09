@@ -18,6 +18,8 @@
  */
 package org.jaudiotagger.audio.asf;
 
+import org.jaudiotagger.audio.asf.tag.AsfFieldKey;
+
 import org.jaudiotagger.audio.asf.util.Utils;
 
 import java.io.IOException;
@@ -250,7 +252,9 @@ public class AsfFileWriter extends AudioFileWriter
      */
     private boolean deleteExtendedContentDescription(ExtendedContentDescription tagHeader, Tag tag)
     {
-        HashSet<String> ignoreDescriptors = new HashSet<String>(Arrays.asList(new String[]{ContentDescriptor.ID_GENRE, ContentDescriptor.ID_GENREID, ContentDescriptor.ID_TRACKNUMBER, ContentDescriptor.ID_ALBUM, ContentDescriptor.ID_YEAR}));
+        HashSet<String> ignoreDescriptors = new HashSet<String>(Arrays.asList(new String[]{AsfFieldKey.GENRE
+                        .getPublicFieldId(), AsfFieldKey.GENRE_ID.getPublicFieldId(), AsfFieldKey.ALBUM
+                        .getPublicFieldId(), AsfFieldKey.YEAR.getPublicFieldId()}));
         Iterator<ContentDescriptor> it = tagHeader.getDescriptors().iterator();
         boolean found = false;
         /*

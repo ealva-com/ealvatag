@@ -9,17 +9,56 @@ import org.jaudiotagger.tag.TagFieldKey;
  */
 public enum AsfFieldKey
 {
-    
+
     ALBUM("WM/AlbumTitle", TagFieldKey.ALBUM, false),
-    ARTIST("WM/AlbumArtist", TagFieldKey.ARTIST, false),
-    COMMENT("WM/Comments", TagFieldKey.COMMENT, false),
-    COPYRIGHT("WM/COPYRIGHT", null, false),
+    ALBUM_ARTIST("WM/AlbumArtist", TagFieldKey.ALBUM_ARTIST, false),
+    ALBUM_ARTIST_SORT("WM/AlbumArtistSortOrder", TagFieldKey.ALBUM_ARTIST_SORT, false),
+    ALBUM_SORT("WM/AlbumSortOrder", TagFieldKey.ALBUM_SORT, false),
+    AMAZON_ID(null, TagFieldKey.AMAZON_ID, false),
+    ARTIST(null, TagFieldKey.ARTIST, false),
+    ARTIST_SORT("WM/ArtistSortOrder", TagFieldKey.ARTIST_SORT, false),
+    BARCODE(null, TagFieldKey.BARCODE, false), // Description
+    BPM("WM/BeatsPerMinute", TagFieldKey.BPM, false),
+    CATALOG_NO(null, TagFieldKey.CATALOG_NO, false),
+    COMMENT(null, TagFieldKey.COMMENT, false),
+    COMPOSER("WM/Composer", TagFieldKey.COMPOSER, false),
+    COMPOSER_SORT(null, TagFieldKey.COMPOSER_SORT, false),
+    CONDUCTOR("WM/Conductor", TagFieldKey.CONDUCTOR, false),
+    COPYRIGHT(null, null, false),
+    DISC_NO("WM/PartOfSet", TagFieldKey.DISC_NO, false),
+    ENCODER(null, TagFieldKey.ENCODER, false),
     GENRE("WM/Genre", TagFieldKey.GENRE, false),
     GENRE_ID("WM/GenreID", null, false),
+    GROUPING("WM/ContentGroupDescription", TagFieldKey.GROUPING, false),
+    IS_COMPILATION(null, TagFieldKey.IS_COMPILATION, false),
+    ISRC("WM/ISRC", TagFieldKey.ISRC, false),
+    LYRICIST("WM/Writer", TagFieldKey.LYRICIST, false),
+    LYRICS("WM/Lyrics", TagFieldKey.LYRICS, false),
+    MEDIA(null, TagFieldKey.MEDIA, false),
+    MOOD("WM/Mood", TagFieldKey.MOOD, false),
+    MUSICBRAINZ_ARTISTID("MusicBrainz/Artist Id", TagFieldKey.MUSICBRAINZ_ARTISTID, false),
+    MUSICBRAINZ_DISC_ID("MusicBrainz/Disc Id", TagFieldKey.MUSICBRAINZ_DISC_ID, false),
+    MUSICBRAINZ_RELEASE_COUNTRY(null, TagFieldKey.MUSICBRAINZ_RELEASE_COUNTRY, false),
+    MUSICBRAINZ_RELEASE_STATUS(null, TagFieldKey.MUSICBRAINZ_RELEASE_STATUS, false),
+    MUSICBRAINZ_RELEASE_TYPE(null, TagFieldKey.MUSICBRAINZ_RELEASE_TYPE, false),
+    MUSICBRAINZ_RELEASEARTISTID("MusicBrainz/Album Artist Id", TagFieldKey.MUSICBRAINZ_RELEASEARTISTID, false),
+    MUSICBRAINZ_RELEASEID("MusicBrainz/Album Id", TagFieldKey.MUSICBRAINZ_RELEASEID, false),
+    MUSICBRAINZ_TRACK_ID("MusicBrainz/Track Id", TagFieldKey.MUSICBRAINZ_TRACK_ID, false),
+    MUSICIP_ID(null, TagFieldKey.MUSICIP_ID, false),
     RATING(null, null, false),
-    TITLE(null, TagFieldKey.TITLE, false), // Description
+    RECORD_LABEL(null, TagFieldKey.RECORD_LABEL, false),
+    REMIXER("WM/ModifiedBy", TagFieldKey.REMIXER, false),
+    TITLE(null, TagFieldKey.TITLE, false),
+    TITLE_SORT("WM/TitleSortOrder", TagFieldKey.TITLE_SORT, false),
     TRACK("WM/TrackNumber", TagFieldKey.TRACK, false),
+    URL_DISCOGS_ARTIST_SITE(null, TagFieldKey.URL_DISCOGS_ARTIST_SITE, false),
+    URL_DISCOGS_RELEASE_SITE(null, TagFieldKey.URL_DISCOGS_RELEASE_SITE, false),
+    URL_OFFICIAL_ARTIST_SITE(null, TagFieldKey.URL_OFFICIAL_ARTIST_SITE, false),
+    URL_OFFICIAL_RELEASE_SITE(null, TagFieldKey.URL_OFFICIAL_RELEASE_SITE, false),
+    URL_WIKIPEDIA_ARTIST_SITE(null, TagFieldKey.URL_WIKIPEDIA_ARTIST_SITE, false),
+    URL_WIKIPEDIA_RELEASE_SITE(null, TagFieldKey.URL_WIKIPEDIA_RELEASE_SITE, false),
     YEAR("WM/Year", TagFieldKey.YEAR, false);
+
 
     /**
      * Returns id itself if:<br>
@@ -35,21 +74,14 @@ public enum AsfFieldKey
     public static String convertId(String id)
     {
         String result = null;
-        AsfFieldKey[] fields = AsfFieldKey.class.getEnumConstants();
-        for (int i = 0; i < fields.length && result == null; i++)
-        {
-            if (fields[i].getFieldId() != null && id.equals(fields[i].getFieldId()))
-            {
-                result = id;
-            }
-            else if (fields[i].getCorresponding() != null && id.equals(fields[i].getCorresponding().name()))
-            {
-                result = fields[i].getFieldId();
-            }
-        }
-        if (result == null)
+        AsfFieldKey key = getAsfFieldKey(id);
+        if (key == null)
         {
             result = id;
+        }
+        else
+        {
+            result = key.getPublicFieldId();
         }
         return result;
     }
@@ -73,10 +105,14 @@ public enum AsfFieldKey
             {
                 result = fields[i];
             }
+            else if (fields[i].name().equals(id))
+            {
+                result = fields[i];
+            }
         }
         return result;
     }
-    
+
     public static boolean isMultiValued(String id)
     {
         boolean result = false; // For now, there is no support for multi values.
@@ -112,14 +148,7 @@ public enum AsfFieldKey
      */
     private AsfFieldKey(String asfFieldId, TagFieldKey correspondingKey, boolean mutliValue)
     {
-        if (asfFieldId != null)
-        {
-            this.fieldId = asfFieldId;
-        }
-        else
-        {
-            this.fieldId = this.name();
-        }
+        this.fieldId = asfFieldId;
         this.corresponding = correspondingKey;
         this.multiValued = mutliValue;
     }
@@ -139,7 +168,7 @@ public enum AsfFieldKey
      * 
      * @return the standard field id. (may be <code>null</code>)
      */
-    public String getFieldId()
+    protected String getFieldId()
     {
         return this.fieldId;
     }
@@ -153,9 +182,16 @@ public enum AsfFieldKey
     public String getPublicFieldId()
     {
         String result = getFieldId();
-        if (result == null && getCorresponding() != null)
+        if (result == null)
         {
-            result = getCorresponding().name();
+            if (getCorresponding() != null)
+            {
+                result = getCorresponding().name();
+            }
+            else
+            {
+                result = this.name();
+            }
         }
         return result;
     }
