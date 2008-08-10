@@ -64,7 +64,7 @@ public class ContentDescription extends Chunk
     public static boolean storesDescriptor(ContentDescriptor contentDesc)
     {
         AsfFieldKey asfFieldKey = AsfFieldKey.getAsfFieldKey(contentDesc.getName());
-        return asfFieldKey != null && DESCRIPTION_FIELDS.contains(asfFieldKey);
+        return DESCRIPTION_FIELDS.contains(asfFieldKey);
     }
 
     /**

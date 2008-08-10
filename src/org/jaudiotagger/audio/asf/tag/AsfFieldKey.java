@@ -1,6 +1,10 @@
 package org.jaudiotagger.audio.asf.tag;
 
+import org.jaudiotagger.audio.asf.util.Utils;
+
 import org.jaudiotagger.tag.TagFieldKey;
+
+import java.util.HashMap;
 
 /**
  * Field keys which need to be mapped for ASF files, or only specified for ASF.
@@ -11,7 +15,7 @@ public enum AsfFieldKey
 {
 
     ALBUM("WM/AlbumTitle", TagFieldKey.ALBUM, false),
-    ALBUM_ARTIST("WM/AlbumArtist", TagFieldKey.ALBUM_ARTIST, false),
+    ALBUM_ARTIST(null, TagFieldKey.ALBUM_ARTIST, false),
     ALBUM_ARTIST_SORT("WM/AlbumArtistSortOrder", TagFieldKey.ALBUM_ARTIST_SORT, false),
     ALBUM_SORT("WM/AlbumSortOrder", TagFieldKey.ALBUM_SORT, false),
     AMAZON_ID(null, TagFieldKey.AMAZON_ID, false),
@@ -25,6 +29,7 @@ public enum AsfFieldKey
     COMPOSER_SORT(null, TagFieldKey.COMPOSER_SORT, false),
     CONDUCTOR("WM/Conductor", TagFieldKey.CONDUCTOR, false),
     COPYRIGHT(null, null, false),
+    COVER_ART(null, TagFieldKey.COVER_ART, false),
     DISC_NO("WM/PartOfSet", TagFieldKey.DISC_NO, false),
     ENCODER(null, TagFieldKey.ENCODER, false),
     GENRE("WM/Genre", TagFieldKey.GENRE, false),
@@ -59,6 +64,37 @@ public enum AsfFieldKey
     URL_WIKIPEDIA_RELEASE_SITE(null, TagFieldKey.URL_WIKIPEDIA_RELEASE_SITE, false),
     YEAR("WM/Year", TagFieldKey.YEAR, false);
 
+    /**
+      * Stores the {@link AsfFieldKey#getCorresponding()} name() to the field key.
+      */
+    private final static HashMap<String, AsfFieldKey> CORR_MAP;
+    /**
+     * Stores the {@link AsfFieldKey#fieldId} to the field key.
+     */
+    private final static HashMap<String, AsfFieldKey> FIELD_ID_MAP;
+    /**
+     * Stores the {@link AsfFieldKey#name()} to the field key.}
+     */
+    private final static HashMap<String, AsfFieldKey> NAME_MAP;
+
+    static
+    {
+        FIELD_ID_MAP = new HashMap<String, AsfFieldKey>(AsfFieldKey.values().length);
+        CORR_MAP = new HashMap<String, AsfFieldKey>(AsfFieldKey.values().length);
+        NAME_MAP = new HashMap<String, AsfFieldKey>(AsfFieldKey.values().length);
+        for (AsfFieldKey curr : AsfFieldKey.values())
+        {
+            NAME_MAP.put(curr.name(), curr);
+            if (!Utils.isBlank(curr.getFieldId()))
+            {
+                FIELD_ID_MAP.put(curr.getFieldId(), curr);
+            }
+            if (curr.getCorresponding() != null)
+            {
+                CORR_MAP.put(curr.getCorresponding().name(), curr);
+            }
+        }
+    }
 
     /**
      * Returns id itself if:<br>
@@ -86,33 +122,42 @@ public enum AsfFieldKey
         return result;
     }
 
+    /**
+     * Convenience method for converting the id by the keys {@linkplain TagFieldKey#name() name}.<br>
+     * 
+     * @param key the key whose name to convert.
+     * @return ASF internal key.
+     */
     public static String convertId(TagFieldKey key)
     {
         return convertId(key.name());
     }
 
+    /**
+     * Searches for an ASF field key which represents the given id string.<br>
+     * 
+     * @param id the key configured for this id.
+     * @return ASF field key for the id, or <code>null</code> if not available. 
+     */
     public static AsfFieldKey getAsfFieldKey(String id)
     {
-        AsfFieldKey result = null;
-        AsfFieldKey[] fields = AsfFieldKey.class.getEnumConstants();
-        for (int i = 0; i < fields.length && result == null; i++)
+        AsfFieldKey result = FIELD_ID_MAP.get(id);
+        if (result == null)
         {
-            if (fields[i].getFieldId() != null && id.equals(fields[i].getFieldId()))
-            {
-                result = fields[i];
-            }
-            else if (fields[i].getCorresponding() != null && id.equals(fields[i].getCorresponding().name()))
-            {
-                result = fields[i];
-            }
-            else if (fields[i].name().equals(id))
-            {
-                result = fields[i];
-            }
+            result = CORR_MAP.get(id);
+        }
+        if (result == null)
+        {
+            result = NAME_MAP.get(id);
         }
         return result;
     }
 
+    /**
+     * Tests whether the field is enabled for multiple values.<br>
+     * @param id field id to test.
+     * @return <code>true</code> if ASF implementation supports multiple values for the field.
+     */
     public static boolean isMultiValued(String id)
     {
         boolean result = false; // For now, there is no support for multi values.
@@ -196,6 +241,11 @@ public enum AsfFieldKey
         return result;
     }
 
+    /**
+     * Returns <code>true</code> if this field can store multiple values.
+     * 
+     * @return <code>true</code> if multiple values are supported for this field.
+     */
     public boolean isMultiValued()
     {
         return this.multiValued;

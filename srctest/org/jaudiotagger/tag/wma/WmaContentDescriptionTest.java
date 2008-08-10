@@ -59,11 +59,14 @@ public class WmaContentDescriptionTest extends WmaTestCase
             AudioFileIO.delete(file);
             header = AsfHeaderReader.readHeader(file.getFile());
             assertNull(header.getContentDescription());
+            assertNull(header.getExtendedContentDescription());
+            file = AudioFileIO.read(file.getFile());
             tag = (AsfTag) file.getTag();
             tag.add(AsfTag.createTextField(curr.getPublicFieldId(), curr.getPublicFieldId()));
             file.commit();
             header = AsfHeaderReader.readHeader(file.getFile());
             assertNotNull(header.getContentDescription());
+            assertNull("Key: " + curr.name(), header.getExtendedContentDescription());
             assertEquals(curr.getPublicFieldId(), TagConverter.createTagOf(header).getFirst(curr.getPublicFieldId()));
         }
     }

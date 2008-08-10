@@ -237,7 +237,10 @@ public class AsfHeaderReader
             BigInteger chunkLen = Utils.readBig64(stream);
 
             long chunkCount = Utils.readUINT32(stream);
-            // They are of unknown use.
+            /*
+             * 2 reserved bytes. first should be equal to 0x01 and second 0x02. ASF specification
+             * suggests to not read the content if second byte is not 0x02.
+             */
             stream.skip(2);
 
             /*
