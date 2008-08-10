@@ -15,7 +15,7 @@ import org.jaudiotagger.tag.Tag;
  * 
  * @author Christian Laireiter
  */
-public class WmaTestCase extends TestCase
+public abstract class WmaTestCase extends TestCase
 {
     /**
      * Stores the audio file instance of {@link #testFile}.<br>
