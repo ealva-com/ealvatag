@@ -129,7 +129,8 @@ public class AsfTagField implements TagField
      */
     public boolean isCommon()
     {
-        return toWrap.isCommon();
+        // Hashset is safe against null comparison 
+        return AsfTag.COMMON_FIELDS.contains(AsfFieldKey.getAsfFieldKey(getId()));
     }
 
     /**

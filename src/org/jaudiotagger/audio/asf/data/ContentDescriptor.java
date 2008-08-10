@@ -365,19 +365,6 @@ public final class ContentDescriptor implements Comparable<ContentDescriptor>
     }
 
     /**
-     * This method checks whether the name of the current field is one of the
-     * commonly specified fields. <br>
-     *
-     * @return <code>true</code> if a common field.
-     * @see AsfFieldKey#isCommonField(String)
-     */
-    public boolean isCommon()
-    {
-        // TODO: We have at least to specifiy a list of common fields (somewhere in code)
-        return false;
-    }
-
-    /**
      * This method checks if the binary data is empty. <br>
      * Disregarding the type of the descriptor its content is stored as a byte
      * array.

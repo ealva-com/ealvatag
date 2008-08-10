@@ -328,9 +328,6 @@ public class AsfFileWriter extends AudioFileWriter
      */
     private boolean isContentdescriptionMandatory(AsfTag tag)
     {
-        // TODO Create Unit tests which will show, that ContentDescriptions will
-        // disappear if no value provided
-        // and exist if at least one value is provided.
         return !Utils.isBlank(tag.getFirstArtist()) || !Utils.isBlank(tag.getFirstComment()) || !Utils.isBlank(tag.getFirstTitle()) || !Utils.isBlank(tag.getFirstCopyright()) || !Utils.isBlank(tag.getFirstRating());
     }
 

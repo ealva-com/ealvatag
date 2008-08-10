@@ -7,15 +7,34 @@ import org.jaudiotagger.audio.generic.AbstractTag;
 import org.jaudiotagger.tag.*;
 
 import java.io.UnsupportedEncodingException;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 
 /**
+ * Tag implementation for ASF.<br>
+ * 
  * @author Christian Laireiter
- *
  */
 public final class AsfTag extends AbstractTag
 {
+    /**
+     * Stores a list of field keys, which identify common fields.<br>
+     */
+    public final static HashSet<AsfFieldKey> COMMON_FIELDS;
+
+    static
+    {
+        COMMON_FIELDS = new HashSet<AsfFieldKey>();
+        COMMON_FIELDS.add(AsfFieldKey.ALBUM);
+        COMMON_FIELDS.add(AsfFieldKey.ARTIST);
+        COMMON_FIELDS.add(AsfFieldKey.COMMENT);
+        COMMON_FIELDS.add(AsfFieldKey.GENRE);
+        COMMON_FIELDS.add(AsfFieldKey.TITLE);
+        COMMON_FIELDS.add(AsfFieldKey.TRACK);
+        COMMON_FIELDS.add(AsfFieldKey.YEAR);
+    }
+
     /**
      * Creates a {@link AsfTagTextField} for use with string content.<br>
      * For now the method is relatively useless. However future common checks can be easily implemented.
@@ -308,6 +327,12 @@ public final class AsfTag extends AbstractTag
         return createTextField(getYearId(), content);
     }
 
+    public void deleteTagField(AsfFieldKey fieldKey)
+    {
+        super.deleteField(fieldKey.getPublicFieldId());
+    }
+
+
     /**
      * Removes all fields with the specified field key.<br>
      * 
@@ -316,12 +341,6 @@ public final class AsfTag extends AbstractTag
     public void deleteTagField(String fieldKey)
     {
         super.deleteField(fieldKey);
-    }
-
-
-    public void deleteTagField(AsfFieldKey fieldKey)
-    {
-        super.deleteField(fieldKey.getPublicFieldId());
     }
 
     /**
