@@ -10,6 +10,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Tag implementation for ASF.<br>
@@ -21,8 +22,14 @@ public final class AsfTag extends AbstractTag
     /**
      * Stores a list of field keys, which identify common fields.<br>
      */
-    public final static HashSet<AsfFieldKey> COMMON_FIELDS;
+    public final static Set<AsfFieldKey> COMMON_FIELDS;
 
+    /**
+     * List of {@link AsfFieldKey} items, identifying contents that are stored in the
+     * content description chunk (or unit) of ASF files.
+     */
+    public final static Set<AsfFieldKey> DESCRIPTION_FIELDS;
+    
     static
     {
         COMMON_FIELDS = new HashSet<AsfFieldKey>();
@@ -33,6 +40,12 @@ public final class AsfTag extends AbstractTag
         COMMON_FIELDS.add(AsfFieldKey.TITLE);
         COMMON_FIELDS.add(AsfFieldKey.TRACK);
         COMMON_FIELDS.add(AsfFieldKey.YEAR);
+        DESCRIPTION_FIELDS = new HashSet<AsfFieldKey>();
+        DESCRIPTION_FIELDS.add(AsfFieldKey.ARTIST);
+        DESCRIPTION_FIELDS.add(AsfFieldKey.COPYRIGHT);
+        DESCRIPTION_FIELDS.add(AsfFieldKey.COMMENT);
+        DESCRIPTION_FIELDS.add(AsfFieldKey.RATING);
+        DESCRIPTION_FIELDS.add(AsfFieldKey.TITLE);
     }
 
     /**
@@ -47,6 +60,20 @@ public final class AsfTag extends AbstractTag
     {
         return new AsfTagTextField(fieldKey, content);
     }
+
+    /**
+     * Determines if the {@linkplain ContentDescriptor#getName() name} equals an {@link AsfFieldKey} which
+     * is {@linkplain ContentDescription#DESCRIPTION_FIELDS listed} to be stored in the content description chunk.
+     * 
+     * @param contentDesc Descriptor to test.
+     * @return see description.
+     */
+    public static boolean storesDescriptor(ContentDescriptor contentDesc)
+    {
+        AsfFieldKey asfFieldKey = AsfFieldKey.getAsfFieldKey(contentDesc.getName());
+        return DESCRIPTION_FIELDS.contains(asfFieldKey);
+    }
+
 
     /**
      * @see #isConvertingFields()    

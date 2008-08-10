@@ -37,36 +37,6 @@ import java.util.Set;
  */
 public class ContentDescription extends Chunk implements WriteableChunk
 {
-
-    /**
-     * List of {@link AsfFieldKey} items, identifying contents that are stored in the
-     * content description chunk (or unit) of ASF files.
-     */
-    public final static Set<AsfFieldKey> DESCRIPTION_FIELDS;
-
-    static
-    {
-        DESCRIPTION_FIELDS = new HashSet<AsfFieldKey>();
-        DESCRIPTION_FIELDS.add(AsfFieldKey.ARTIST);
-        DESCRIPTION_FIELDS.add(AsfFieldKey.COPYRIGHT);
-        DESCRIPTION_FIELDS.add(AsfFieldKey.COMMENT);
-        DESCRIPTION_FIELDS.add(AsfFieldKey.RATING);
-        DESCRIPTION_FIELDS.add(AsfFieldKey.TITLE);
-    }
-
-    /**
-     * Determines if the {@linkplain ContentDescriptor#getName() name} equals an {@link AsfFieldKey} which
-     * is {@linkplain ContentDescription#DESCRIPTION_FIELDS listed} to be stored in the content description chunk.
-     * 
-     * @param contentDesc Descriptor to test.
-     * @return see description.
-     */
-    public static boolean storesDescriptor(ContentDescriptor contentDesc)
-    {
-        AsfFieldKey asfFieldKey = AsfFieldKey.getAsfFieldKey(contentDesc.getName());
-        return DESCRIPTION_FIELDS.contains(asfFieldKey);
-    }
-
     /**
      * File artist.
      */

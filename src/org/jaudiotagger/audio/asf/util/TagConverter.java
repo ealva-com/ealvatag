@@ -196,7 +196,7 @@ public class TagConverter
             {
                 ContentDescriptor current = it.next();
                 // XXX: For now, ignore something like WM/AlbumArtist here
-                if (!ContentDescription.storesDescriptor(current))
+                if (!AsfTag.storesDescriptor(current))
                 {
                     if (current.getType() == ContentDescriptor.TYPE_BINARY)
                     {

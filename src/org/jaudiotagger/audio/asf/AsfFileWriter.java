@@ -108,7 +108,7 @@ public class AsfFileWriter extends AudioFileWriter
         while (asfFields.hasNext() && !found)
         {
             AsfTagField curr = asfFields.next();
-            found = !ContentDescription.storesDescriptor(curr.getDescriptor());
+            found = !AsfTag.storesDescriptor(curr.getDescriptor());
         }
         return found;
     }
