@@ -99,13 +99,13 @@ public class WmaSimpleTest extends AbstractTestCase
             assertEquals("genre2", tag.getFirstGenre());
             assertEquals("copyright", tag.getFirstCopyright());
             assertEquals("rating", tag.getFirstRating());
-            
+
             AudioFileIO.delete(f);
             f = AudioFileIO.read(testFile);
             tag = (AsfTag) f.getTag();
 
             assertTrue(tag.isEmpty());
-            
+
         } catch (Exception e)
         {
             e.printStackTrace();
@@ -120,27 +120,31 @@ public class WmaSimpleTest extends AbstractTestCase
         try
         {
             File testFile = AbstractTestCase.copyAudioToTmp("test1.wma", new File("testwrite1.wma"));
-            AudioFile f = AudioFileIO.read(testFile);
-            Tag tag = f.getTag();
-            for (TagFieldKey key : TagFieldKey.values())
+            // Tests multiple iterations on same file
+            for (int i = 0; i < 2; i++)
             {
-                tag.add(AsfTag.createTextField(key.name(), key.name() + "_value"));
-            }
-            f.commit();
-            f = AudioFileIO.read(testFile);
-            tag = f.getTag();
-            for (TagFieldKey key : TagFieldKey.values())
-            {
-                /*
-                 * Test value retrieval, using multiple access methods.
-                 */
-                String value = key.name() + "_value";
-                assertEquals("Key under test: " + key.name(), value, tag.getFirst(key.name()));
-                assertEquals("Key under test: " + key.name(), value, tag.getFirst(key));
-                AsfTagTextField atf = (AsfTagTextField)tag.get(key.name()).get(0);
-                assertEquals("Key under test: " + key.name(), value, atf.getContent());
-                atf = (AsfTagTextField)tag.get(key).get(0);
-                assertEquals("Key under test: " + key.name(), value, atf.getContent());
+                AudioFile f = AudioFileIO.read(testFile);
+                Tag tag = f.getTag();
+                for (TagFieldKey key : TagFieldKey.values())
+                {
+                    tag.add(AsfTag.createTextField(key.name(), key.name() + "_value_" + i));
+                }
+                f.commit();
+                f = AudioFileIO.read(testFile);
+                tag = f.getTag();
+                for (TagFieldKey key : TagFieldKey.values())
+                {
+                    /*
+                     * Test value retrieval, using multiple access methods.
+                     */
+                    String value = key.name() + "_value_" + i;
+                    assertEquals("Key under test: " + key.name(), value, tag.getFirst(key.name()));
+                    assertEquals("Key under test: " + key.name(), value, tag.getFirst(key));
+                    AsfTagTextField atf = (AsfTagTextField) tag.get(key.name()).get(0);
+                    assertEquals("Key under test: " + key.name(), value, atf.getContent());
+                    atf = (AsfTagTextField) tag.get(key).get(0);
+                    assertEquals("Key under test: " + key.name(), value, atf.getContent());
+                }
             }
         } catch (Exception e)
         {
