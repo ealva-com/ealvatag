@@ -18,22 +18,16 @@
  */
 package org.jaudiotagger.audio.asf.util;
 
+import org.jaudiotagger.audio.asf.data.AsfHeader;
+import org.jaudiotagger.audio.asf.data.GUID;
+
 import java.io.EOFException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.RandomAccessFile;
-import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
-
-import org.jaudiotagger.audio.asf.data.AsfHeader;
-import org.jaudiotagger.audio.asf.data.GUID;
-import org.jaudiotagger.audio.asf.io.RandomAccessFileInputstream;
-import org.jaudiotagger.audio.asf.tag.AsfTagField;
-import org.jaudiotagger.tag.TagField;
-import org.jaudiotagger.tag.TagTextField;
 
 /**
  * Some static Methods which are used in several Classes. <br>
@@ -64,6 +58,37 @@ public class Utils
             {
                 throw new IllegalArgumentException("\"UTF-16LE\" representation exceeds 65535 bytes. (Including zero term character)"); //$NON-NLS-1$
             }
+        }
+    }
+
+    public static void copy(InputStream source, OutputStream dest, long amount) throws IOException
+    {
+        byte[] buf = new byte[8192];
+        long copied = 0;
+        while (copied < amount)
+        {
+            int toRead = 8192;
+            if ((amount - copied) < 8192)
+            {
+                toRead = (int) (amount - copied);
+            }
+            int read = source.read(buf, 0, toRead);
+            if (read == -1)
+            {
+                throw new IOException("Inputstream has to continue for another " + (amount - copied) + " bytes.");
+            }
+            dest.write(buf, 0, read);
+            copied += read;
+        }
+    }
+
+    public static void flush(InputStream source, OutputStream dest) throws IOException
+    {
+        byte[] buf = new byte[8192];
+        int read = 0;
+        while ((read = source.read(buf)) != -1)
+        {
+            dest.write(buf, 0, read);
         }
     }
 
@@ -163,19 +188,6 @@ public class Utils
     }
 
     /**
-     * This method reads 8 bytes, interprets them as an unsigned number and
-     * creates a {@link BigInteger}
-     * 
-     * @param raf Input source
-     * @return 8 bytes unsigned number
-     * @throws IOException read errors.
-     */
-    public static BigInteger readBig64(RandomAccessFile raf) throws IOException
-    {
-        return readBig64(new RandomAccessFileInputstream(raf));
-    }
-
-    /**
      * This method reads a UTF-16 String, which length is given on the number of
      * characters it consists of. <br>
      * The stream must be at the number of characters. This number contains the
@@ -209,21 +221,6 @@ public class Utils
     }
 
     /**
-     * This method reads a UTF-16 String, which legth is given on the number of
-     * characters it consits of. <br>
-     * The filepointer of <code>raf</code> must be at the number of characters.
-     * This number contains the terminating zero character (UINT16).
-     * 
-     * @param raf Input source
-     * @return String
-     * @throws IOException read errors
-     */
-    public static String readCharacterSizedString(RandomAccessFile raf) throws IOException
-    {
-        return readCharacterSizedString(new RandomAccessFileInputstream(raf));
-    }
-
-    /**
      * This Method reads a GUID (which is a 16 byte long sequence) from the
      * given <code>raf</code> and creates a wrapper. <br>
      * <b>Warning </b>: <br>
@@ -249,22 +246,6 @@ public class Utils
     }
 
     /**
-     * This Method reads a GUID (which is a 16 byte long sequence) from the
-     * given <code>raf</code> and creates a wrapper. <br>
-     * <b>Warning </b>: <br>
-     * There is no way of telling if a byte sequence is a guid or not. The next
-     * 16 bytes will be interpreted as a guid, whether it is or not.
-     * 
-     * @param raf Input source.
-     * @return A class wrapping the guid.
-     * @throws IOException happens when the file ends before guid could be extracted.
-     */
-    public static GUID readGUID(RandomAccessFile raf) throws IOException
-    {
-        return readGUID(new RandomAccessFileInputstream(raf));
-    }
-
-    /**
      * Reads 2 bytes from stream and interprets them as UINT16.<br> 
      * 
      * @param stream stream to read from.
@@ -276,17 +257,6 @@ public class Utils
         int result = stream.read();
         result |= stream.read() << 8;
         return result;
-    }
-
-    /**
-     * @param raf
-     * @return number
-     * @throws IOException
-     * @see #readUINT64(RandomAccessFile)
-     */
-    public static int readUINT16(RandomAccessFile raf) throws IOException
-    {
-        return readUINT16(new RandomAccessFileInputstream(raf));
     }
 
     /**
@@ -311,17 +281,6 @@ public class Utils
     }
 
     /**
-     * @param raf
-     * @return number
-     * @throws IOException
-     * @see #readUINT64(RandomAccessFile)
-     */
-    public static long readUINT32(RandomAccessFile raf) throws IOException
-    {
-        return readUINT32(new RandomAccessFileInputstream(raf));
-    }
-
-    /**
      * Reads long as little endian.
      * 
      * @param stream Data source
@@ -340,18 +299,6 @@ public class Utils
             result |= (long) stream.read() << i;
         }
         return result;
-    }
-
-    /**
-     * Reads long as little endian.
-     * 
-     * @param raf Data source
-     * @return long value
-     * @throws IOException read error, or eof is reached before long is completed
-     */
-    public static long readUINT64(RandomAccessFile raf) throws IOException
-    {
-        return readUINT64(new RandomAccessFileInputstream(raf));
     }
 
     /**
@@ -388,20 +335,6 @@ public class Utils
     }
 
     /**
-     * This method reads a UTF-16 encoded String, beginning with a 16-bit value
-     * representing the number of bytes needed. The String is terminated with as
-     * 16-bit ZERO. <br>
-     * 
-     * @param raf Input source
-     * @return read String.
-     * @throws IOException read errors.
-     */
-    public static String readUTF16LEStr(RandomAccessFile raf) throws IOException
-    {
-        return readUTF16LEStr(new RandomAccessFileInputstream(raf));
-    }
-
-    /**
      * Writes the given value as UINT16 into the stream.
      * 
      * @param number value to write.
@@ -421,7 +354,7 @@ public class Utils
         }
         out.write(toWrite);
     }
-
+    
     /**
      * Writes the given value as UINT32 into the stream.
      * 
@@ -442,7 +375,7 @@ public class Utils
         }
         out.write(toWrite);
     }
-
+    
     /**
      * Writes the given value as UINT64 into the stream.
      * 

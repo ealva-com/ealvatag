@@ -18,24 +18,24 @@
  */
 package org.jaudiotagger.audio.asf.data;
 
-import java.io.ByteArrayOutputStream;
+import org.jaudiotagger.audio.asf.io.WriteableChunk;
+import org.jaudiotagger.audio.asf.tag.AsfFieldKey;
+import org.jaudiotagger.audio.asf.util.Utils;
+
 import java.io.IOException;
 import java.io.OutputStream;
 import java.math.BigInteger;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.jaudiotagger.audio.asf.tag.AsfFieldKey;
-import org.jaudiotagger.audio.asf.util.Utils;
-
 /**
  * This class represents the data of a chunk which contains title, author,
  * copyright, description and the rating of the file. <br>
- * It is optional within ASF files. But if exists only once.
+ * It is optional within ASF files. But if, exists only once.
  *
  * @author Christian Laireiter
  */
-public class ContentDescription extends Chunk
+public class ContentDescription extends Chunk implements WriteableChunk
 {
 
     /**
@@ -124,57 +124,6 @@ public class ContentDescription extends Chunk
     }
 
     /**
-     * This method creates a byte array that could directly be written to an asf
-     * file. <br>
-     *
-     * @return The asf chunk representation of a content description with the
-     *         values of the current object.
-     */
-    public byte[] getBytes()
-    {
-        ByteArrayOutputStream result = new ByteArrayOutputStream();
-        try
-        {
-            ByteArrayOutputStream tags = new ByteArrayOutputStream();
-            String[] toWrite = new String[]{getTitle(), getAuthor(), getCopyRight(), getComment(), getRating()};
-            byte[][] stringRepresentations = new byte[toWrite.length][];
-            // Create byte[] of UTF-16LE encodings
-            for (int i = 0; i < toWrite.length; i++)
-            {
-                stringRepresentations[i] = toWrite[i].getBytes(AsfHeader.ASF_CHARSET);
-            }
-            // Write the amount of bytes needed to store the values.
-            for (int i = 0; i < stringRepresentations.length; i++)
-            {
-                tags.write(Utils.getBytes(stringRepresentations[i].length + 2, 2));
-            }
-            // Write the values themselves.
-            for (int i = 0; i < toWrite.length; i++)
-            {
-                tags.write(stringRepresentations[i]);
-                // Zero term character.
-                tags.write(Utils.getBytes(0, 2));
-            }
-            // Now tags has got the values. The result just needs
-            // The GUID, length of the chunk and the tags.
-            byte[] tagContent = tags.toByteArray();
-            // The guid of the chunk
-            result.write(GUID.GUID_CONTENTDESCRIPTION.getBytes());
-            /*
-             * The length of the chunk. 16 Bytes guid 8 Bytes the length
-             * tagContent.length bytes.
-             */
-            result.write(Utils.getBytes(tagContent.length + 24, 8));
-            // The tags.
-            result.write(tagContent);
-        } catch (Exception e)
-        {
-            e.printStackTrace();
-        }
-        return result.toByteArray();
-    }
-
-    /**
      * @return Returns the comment.
      */
     public String getComment()
@@ -187,64 +136,6 @@ public class ContentDescription extends Chunk
     }
 
     /**
-     * This method calculates the total amount of bytes, this chunk would
-     * consume in an ASF file.<br>
-     * <b>ATTENTION:</b> this size is not the same as
-     * {@link Chunk#getChunkLength()}. If this instance has been read, the
-     * chunklength will always stay the same. However, if the instance is
-     * modified, this method will reflect the new size.
-     * 
-     * @return amount of bytes this chunk would currently need in an ASF file.
-     */
-    public int getCurrentAsfChunkSize()
-    {
-        int result = 44; // GUID + UINT64 for size + 5 times string length (each
-        // 2 bytes) + 5 times zero term char (2 bytes each).
-        result += getAuthor().length() * 2; // UTF-16LE
-        result += getComment().length() * 2;
-        result += getRating().length() * 2;
-        result += getTitle().length() * 2;
-        result += getCopyRight().length() * 2;
-        return result;
-    }
-
-    /**
-     * Writes the current chunk into the specified output stream, as ASF stream
-     * chunk.<br>
-     * 
-     * @param out
-     *            stream to write into.
-     * @return amount of bytes written.
-     * @throws IOException
-     */
-    public int writeInto(OutputStream out) throws IOException
-    {
-        int chunkSize = getCurrentAsfChunkSize();
-
-        out.write(this.getGuid().getBytes());
-        Utils.writeUINT64(getCurrentAsfChunkSize(), out);
-        // write the sizes of the string representations plus 2 bytes zero term
-        // character
-        Utils.writeUINT16(getTitle().length() * 2 + 2, out);
-        Utils.writeUINT16(getAuthor().length() * 2 + 2, out);
-        Utils.writeUINT16(getCopyRight().length() * 2 + 2, out);
-        Utils.writeUINT16(getComment().length() * 2 + 2, out);
-        Utils.writeUINT16(getRating().length() * 2 + 2, out);
-        // write the Strings
-        out.write(getTitle().getBytes(AsfHeader.ASF_CHARSET));
-        out.write(AsfHeader.ZERO_TERM);
-        out.write(getAuthor().getBytes(AsfHeader.ASF_CHARSET));
-        out.write(AsfHeader.ZERO_TERM);
-        out.write(getCopyRight().getBytes(AsfHeader.ASF_CHARSET));
-        out.write(AsfHeader.ZERO_TERM);
-        out.write(getComment().getBytes(AsfHeader.ASF_CHARSET));
-        out.write(AsfHeader.ZERO_TERM);
-        out.write(getRating().getBytes(AsfHeader.ASF_CHARSET));
-        out.write(AsfHeader.ZERO_TERM);
-        return chunkSize;
-    }
-
-    /**
      * @return Returns the copyRight.
      */
     public String getCopyRight()
@@ -254,6 +145,22 @@ public class ContentDescription extends Chunk
             return "";
         }
         return copyRight;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public long getCurrentAsfChunkSize()
+    {
+        long result = 44; // GUID + UINT64 for size + 5 times string length (each
+        // 2 bytes) + 5 times zero term char (2 bytes each).
+        result += getAuthor().length() * 2; // UTF-16LE
+        result += getComment().length() * 2;
+        result += getRating().length() * 2;
+        result += getTitle().length() * 2;
+        result += getCopyRight().length() * 2;
+        return result;
     }
 
     /**
@@ -278,6 +185,16 @@ public class ContentDescription extends Chunk
             return "";
         }
         return title;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean isEmpty()
+    {
+        return Utils.isBlank(author) && Utils.isBlank(copyRight) && Utils.isBlank(description) && Utils.isBlank(rating) && Utils
+                        .isBlank(title);
     }
 
     /**
@@ -350,5 +267,36 @@ public class ContentDescription extends Chunk
     {
         Utils.checkStringLengthNullSafe(songTitle);
         this.title = songTitle;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public long writeInto(OutputStream out) throws IOException
+    {
+        long chunkSize = getCurrentAsfChunkSize();
+
+        out.write(this.getGuid().getBytes());
+        Utils.writeUINT64(getCurrentAsfChunkSize(), out);
+        // write the sizes of the string representations plus 2 bytes zero term
+        // character
+        Utils.writeUINT16(getTitle().length() * 2 + 2, out);
+        Utils.writeUINT16(getAuthor().length() * 2 + 2, out);
+        Utils.writeUINT16(getCopyRight().length() * 2 + 2, out);
+        Utils.writeUINT16(getComment().length() * 2 + 2, out);
+        Utils.writeUINT16(getRating().length() * 2 + 2, out);
+        // write the Strings
+        out.write(getTitle().getBytes(AsfHeader.ASF_CHARSET));
+        out.write(AsfHeader.ZERO_TERM);
+        out.write(getAuthor().getBytes(AsfHeader.ASF_CHARSET));
+        out.write(AsfHeader.ZERO_TERM);
+        out.write(getCopyRight().getBytes(AsfHeader.ASF_CHARSET));
+        out.write(AsfHeader.ZERO_TERM);
+        out.write(getComment().getBytes(AsfHeader.ASF_CHARSET));
+        out.write(AsfHeader.ZERO_TERM);
+        out.write(getRating().getBytes(AsfHeader.ASF_CHARSET));
+        out.write(AsfHeader.ZERO_TERM);
+        return chunkSize;
     }
 }

@@ -18,7 +18,6 @@
  */
 package org.jaudiotagger.audio.asf.data;
 
-import org.jaudiotagger.audio.asf.tag.AsfTag;
 import org.jaudiotagger.audio.asf.util.Utils;
 
 import java.io.ByteArrayOutputStream;

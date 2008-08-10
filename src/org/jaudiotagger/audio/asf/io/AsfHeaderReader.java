@@ -55,8 +55,8 @@ public class AsfHeaderReader
     private final static AsfHeaderReader FULL_READER;
 
     /**
-     * ASF reader configured to just extract infomation about audio streams.<br>
-     * If the asf file only contains one audiostream it works fine.<br>
+     * ASF reader configured to just extract information about audio streams.<br>
+     * If the ASF file only contains one audio stream it works fine.<br>
      */
     private final static AsfHeaderReader INFO_READER;
 
@@ -95,10 +95,8 @@ public class AsfHeaderReader
      * @param raf
      *            data source to read from.
      * @return a stream which accesses the source.
-     * @throws IOException
-     *             on I/O Errors.
      */
-    private static InputStream createStream(RandomAccessFile raf) throws IOException
+    private static InputStream createStream(RandomAccessFile raf) 
     {
         return new FullRequestInputStream(new BufferedInputStream(new RandomAccessFileInputstream(raf)));
     }
@@ -108,7 +106,7 @@ public class AsfHeaderReader
      * If no header could be extracted <code>null</code> is returned. <br>
      * 
      * @param file the ASF file to read.<br>
-     * @return  AsfHeader-Wrapper, or <code>null</code> if no supported Asf
+     * @return  AsfHeader-Wrapper, or <code>null</code> if no supported ASF
      *         header was found.
      * @throws IOException on I/O Errors.
      */
@@ -216,10 +214,10 @@ public class AsfHeaderReader
      * This Method implements the reading of the header block. <br>
      * 
      * @param stream
-     *            Stream which contains an Asf header.
+     *            Stream which contains an ASF header.
      * @param inputStart
      *            The start of the ASF header from stream start.<br>
-     *            For direct Filestreams one can assume <code>0</code> here.
+     *            For direct file streams one can assume <code>0</code> here.
      * @return <code>null</code> if no valid data found, else a Wrapper
      *         containing all supported data.
      * @throws IOException
@@ -241,7 +239,14 @@ public class AsfHeaderReader
              * 2 reserved bytes. first should be equal to 0x01 and second 0x02. ASF specification
              * suggests to not read the content if second byte is not 0x02.
              */
-            stream.skip(2);
+            if (stream.read() != 1)
+            {
+                throw new IOException("No ASF");
+            }
+            if (stream.read() != 2)
+            {
+                throw new IOException("No ASF");
+            }
 
             /*
              * Creating the resulting object

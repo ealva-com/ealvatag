@@ -18,12 +18,11 @@
  */
 package org.jaudiotagger.audio.asf;
 
-import org.jaudiotagger.audio.asf.data.*;
-import org.jaudiotagger.audio.asf.io.AsfHeaderReader;
-import org.jaudiotagger.audio.asf.io.RandomAccessFileOutputStream;
+import org.jaudiotagger.audio.asf.data.ContentDescription;
+import org.jaudiotagger.audio.asf.data.ExtendedContentDescription;
+import org.jaudiotagger.audio.asf.io.*;
 import org.jaudiotagger.audio.asf.tag.AsfTag;
 import org.jaudiotagger.audio.asf.tag.AsfTagField;
-import org.jaudiotagger.audio.asf.util.ChunkPositionComparator;
 import org.jaudiotagger.audio.asf.util.TagConverter;
 import org.jaudiotagger.audio.asf.util.Utils;
 import org.jaudiotagger.audio.exceptions.CannotWriteException;
@@ -32,8 +31,7 @@ import org.jaudiotagger.tag.Tag;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
-import java.util.Arrays;
-import java.util.Collection;
+import java.util.ArrayList;
 import java.util.Iterator;
 
 /**
@@ -44,172 +42,6 @@ import java.util.Iterator;
  */
 public class AsfFileWriter extends AudioFileWriter
 {
-
-    /**
-     * This method copies <code>number</code> of bytes from <code>source</code>
-     * to <code>destination</code>.<br>
-     * 
-     * @param source
-     *            Source for copy
-     * @param destination
-     *            Destination for copy
-     * @param number
-     *            number of bytes to copy.
-     * @throws IOException
-     *             read or write errors.
-     */
-    private void copy(RandomAccessFile source, RandomAccessFile destination, long number) throws IOException
-    {
-        byte[] buffer = new byte[8192];
-        long bytesCopied = 0;
-        int read = -1;
-        while ((read = source.read(buffer, 0, ((bytesCopied + 8192 > number) ? (int) (number - bytesCopied) : 8192))) > 0)
-        {
-            bytesCopied += read;
-            destination.write(buffer, 0, read);
-        }
-    }
-
-    /**
-     * This method creates a modified copy of the input <code>raf</code> and
-     * writes it to <code>rafTemp</code>.<br>
-     * If the source contains no extended content description but one is needed
-     * ( {@link #isExtendedContentDescriptionMandatory(Tag)}) it will be
-     * created. If the new file doesn't require such a chunk and the source
-     * didn't contain optional values in it, it will be deleted.
-     * 
-     * @param tag
-     *            Tag containing the new values.
-     * @param header
-     *            Read header of <code>raf</code>.
-     * @param raf
-     *            source
-     * @param rafTemp
-     *            destination.
-     * @param ignoreDescriptions
-     *            if <code>true</code> the content description and the extended
-     *            content description won't be written. (For deleting tags.).
-     * @throws IOException
-     *             read or write errors.
-     */
-    private void createModifiedCopy(AsfTag tag, AsfHeader header, RandomAccessFile raf, RandomAccessFile rafTemp, boolean ignoreDescriptions) throws IOException
-    {
-        /*
-         * First of all Copy the first 30 bytes of the file. The GUID and one
-         * unknown field is needed. (All other values [chunkcount, chunklength]
-         * will be adjusted at the end of the method)
-         */
-        raf.seek(0);
-        copy(raf, rafTemp, 30);
-        // Get all chunks in order of their position
-        Chunk[] chunks = getOrderedChunks(header);
-        // We need to know the amount of bytes that differs from the original
-        long fileSizeDifference = 0;
-        long chunkCount = header.getChunkCount();
-        // This field stores the location of the fileheader at the destination
-        long newFileHeaderPos = -1;
-        /*
-         * Now check if the source doesn't contain a property chunk but one is
-         * needed to store all tag values.
-         */
-        if (header.getExtendedContentDescription() == null && isExtendedContentDescriptionMandatory(tag) && !ignoreDescriptions)
-        {
-            // The source had no property chunk but one is written. So on chunk
-            // more.
-            chunkCount++;
-            // Create the property chunk (A new one will always be placed at
-            // first).
-            ExtendedContentDescription extDesc = createNewExtendedContentDescription(tag);
-            fileSizeDifference += extDesc.writeInto(new RandomAccessFileOutputStream(rafTemp));
-        }
-        /*
-         * Now check if the source doesn't contain a content description but one
-         * is needed to store all tag values. Content description stores title,
-         * author, copyright, description and rating of the file
-         */
-        if (header.getContentDescription() == null && isContentdescriptionMandatory(tag) && !ignoreDescriptions)
-        {
-            // The source had no content description chunk but one is written.
-            // So on chunk more.
-            chunkCount++;
-            // Now create the new content description.
-            ContentDescription contentDesc = TagConverter.createContentDescription(tag);
-            fileSizeDifference += contentDesc.writeInto(new RandomAccessFileOutputStream(rafTemp));
-        }
-        // Now copy chunks (and modify if necessary)
-        for (int i = 0; i < chunks.length; i++)
-        {
-            if (chunks[i] == header.getContentDescription())
-            {
-                if (ignoreDescriptions || !isContentdescriptionMandatory(tag))
-                {
-                    // Remove file size and so on
-                    chunkCount--;
-                    fileSizeDifference -= header.getContentDescription().getChunkLength().longValue();
-                }
-                else
-                {
-                    // Now write new content description , because of
-                    // modifications
-                    ContentDescription contentDesc = TagConverter.createContentDescription(tag);
-                    // Store the difference of sizes between old and new
-                    // content description.
-                    fileSizeDifference += contentDesc.writeInto(new RandomAccessFileOutputStream(rafTemp)) - header
-                                    .getContentDescription().getChunkLength().longValue();
-
-                }
-            }
-            else if (chunks[i] == header.getExtendedContentDescription())
-            {
-                if (!isExtendedContentDescriptionMandatory(tag) || ignoreDescriptions)
-                {
-                    /*
-                     * No property chunk will be written. So lower the
-                     * chunkCount and store the amount of bytes lost from the
-                     * original.
-                     */
-                    chunkCount--;
-                    fileSizeDifference -= header.getExtendedContentDescription().getChunkLength().longValue();
-                }
-                else
-                {
-                    /*
-                     * write a modified copy of the property chunk;
-                     */
-                    fileSizeDifference += createNewExtendedContentDescription(tag)
-                                    .writeInto(new RandomAccessFileOutputStream(rafTemp)) - header
-                                    .getExtendedContentDescription().getChunkLength().longValue();
-                }
-            }
-            else
-            {
-                // No special handling required. This chunk can simply be
-                // copied.
-                if (GUID.GUID_FILE.equals(chunks[i].getGuid()))
-                {
-                    newFileHeaderPos = rafTemp.getFilePointer();
-                }
-                raf.seek(chunks[i].getPosition());
-                copy(raf, rafTemp, chunks[i].getChunkLength().longValue());
-            }
-        }
-        // Now the rest of the file needs to be copied
-        raf.seek(header.getChunckEnd());
-        copy(raf, rafTemp, raf.length() - raf.getFilePointer());
-        // Now the asf header and the fileheader need to be adjusted.
-        // First the number of chunks may differ, and second the size of the
-        // file might have been changed. From second comes third: all changes
-        // of the filesize occur in the asf header.
-        rafTemp.seek(24);
-        write16UINT(chunkCount, rafTemp);
-        // Seek to the new file header and 40 more to reach the filesize
-        // property
-        rafTemp.seek(newFileHeaderPos + 40);
-        write32UINT(header.getFileHeader().getFileSize().longValue() + fileSizeDifference, rafTemp);
-        // Seekt to the asf header size and write the new value
-        rafTemp.seek(16);
-        write32UINT(header.getChunkLength().longValue() + fileSizeDifference, rafTemp);
-    }
 
     /**
     * This method writes a completely new extended content description to
@@ -232,47 +64,11 @@ public class AsfFileWriter extends AudioFileWriter
     }
 
     /**
-     * (overridden)
-     * 
-     * @see org.jaudiotagger.audio.generic.AudioFileWriter#deleteTag(java.io.RandomAccessFile,
-     *      java.io.RandomAccessFile)
+     * {@inheritDoc}
      */
     protected void deleteTag(RandomAccessFile raf, RandomAccessFile tempRaf) throws CannotWriteException, IOException
     {
-        try
-        {
-            AsfHeader header = AsfHeaderReader.readHeader(raf);
-            if (header == null)
-            {
-                throw new NullPointerException("Header is null, so file couldn't be read properly. " + "(Interpretation of data, not file access rights.)");
-            }
-            createModifiedCopy(new AsfTag(true), header, raf, tempRaf, true);
-        } catch (IOException ioe)
-        {
-            throw ioe;
-        } catch (Exception cre)
-        {
-            throw new CannotWriteException("Cannot modify tag because exception occured:\n   " + cre.getMessage());
-        }
-    }
-
-    /**
-     * This method returns all chunks contained within the given
-     * <code>header</code> and returns them in an array. Additionally the chunks
-     * in the array are sorted ascending by their appearance in the file. <br>
-     * This should make it easy to create a copy an modify just specified
-     * chunks.
-     * 
-     * @param header
-     *            The header object containing all chunks.
-     * @return All chunks ordered by position.
-     */
-    private Chunk[] getOrderedChunks(AsfHeader header)
-    {
-        Collection<Chunk> result = header.getChunks();
-        Chunk[] tmp = result.toArray(new Chunk[result.size()]);
-        Arrays.sort(tmp, new ChunkPositionComparator());
-        return tmp;
+        writeTag(new AsfTag(true), raf, tempRaf);
     }
 
     /**
@@ -318,59 +114,34 @@ public class AsfFileWriter extends AudioFileWriter
     }
 
     /**
-     * This method writes the lower 16 Bit of <code>value</code> to raf. <br>
-     * 
-     * @param value value
-     * @param raf output
-     * @return number of bytes written (Here always 2)
-     * @throws IOException on I/O errors
-     */
-    private int write16UINT(long value, RandomAccessFile raf) throws IOException
-    {
-        raf.write(Utils.getBytes(value, 2));
-        return 2;
-    }
-
-    /**
-     * This method writes the lower 32 Bit of <code>value</code> to raf. <br>
-     * 
-     * @param value value
-     * @param raf output
-     * @return number of bytes written (Here always 4)
-     * @throws IOException on I/O Errors.
-     */
-    private int write32UINT(long value, RandomAccessFile raf) throws IOException
-    {
-        raf.write(Utils.getBytes(value, 4));
-        return 4;
-    }
-
-    /**
-     * Writes the tag into <code>rafTemp</code>.<br>
-     * First the file <code>raf</code> is read as an asf file. If it could be
-     * interpreted correctly it should be possible to properly write the
-     * modifications.
-     * 
-     * @see org.jaudiotagger.audio.generic.AudioFileWriter#writeTag(org.jaudiotagger.audio.Tag,
-     *      java.io.RandomAccessFile,java.io.RandomAccessFile)
+     * {@inheritDoc}
      */
     protected void writeTag(Tag tag, RandomAccessFile raf, RandomAccessFile rafTemp) throws CannotWriteException, IOException
     {
-        try
+        ContentDescription cdesc = null;
+        AsfTag copy = new AsfTag(tag, true);
+        if (isContentdescriptionMandatory(copy))
         {
-            AsfHeader header = AsfHeaderReader.readHeader(raf);
-            if (header == null)
-            {
-                throw new NullPointerException("Header is null, so file couldn't be read properly. " + "(Interpretation of data, not file access rights.)");
-            }
-            createModifiedCopy(new AsfTag(tag, true), header, raf, rafTemp, false);
-        } catch (IOException ioe)
-        {
-            throw ioe;
-        } catch (Exception cre)
-        {
-            throw new CannotWriteException("Cannot modify tag because exception occured:\n   " + cre.getMessage());
+            cdesc = TagConverter.createContentDescription(copy);
         }
+        else
+        {
+            cdesc = new ContentDescription();
+        }
+        ExtendedContentDescription ext = null;
+        if (isExtendedContentDescriptionMandatory(copy))
+        {
+            ext = createNewExtendedContentDescription(copy);
+        }
+        else
+        {
+            ext = new ExtendedContentDescription();
+        }
+        ArrayList<ChunkModifier> mods = new ArrayList<ChunkModifier>();
+        mods.add(new WriteableChunkModifer(cdesc));
+        mods.add(new WriteableChunkModifer(ext));
+        new AsfStreamer()
+                        .createModifiedCopy(new RandomAccessFileInputstream(raf), new RandomAccessFileOutputStream(rafTemp), mods);
     }
 
 }

@@ -18,9 +18,6 @@
  */
 package org.jaudiotagger.audio.asf.io;
 
-import org.jaudiotagger.audio.asf.util.ChunkPositionComparator;
-
-import org.jaudiotagger.audio.asf.data.AsfHeader;
 import org.jaudiotagger.audio.asf.data.Chunk;
 import org.jaudiotagger.audio.asf.data.ContentDescription;
 import org.jaudiotagger.audio.asf.data.GUID;
@@ -28,7 +25,6 @@ import org.jaudiotagger.audio.asf.util.Utils;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.RandomAccessFile;
 import java.math.BigInteger;
 
 /**

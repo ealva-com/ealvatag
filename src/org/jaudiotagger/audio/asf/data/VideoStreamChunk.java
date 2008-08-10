@@ -113,11 +113,11 @@ public class VideoStreamChunk extends StreamChunk
     }
 
     /**
-     * @param codecId The codecId to set.
+     * @param codecIdentifier The codecId to set.
      */
-    public void setCodecId(byte[] codecId)
+    public void setCodecId(byte[] codecIdentifier)
     {
-        this.codecId = codecId;
+        this.codecId = codecIdentifier;
     }
 
     /**

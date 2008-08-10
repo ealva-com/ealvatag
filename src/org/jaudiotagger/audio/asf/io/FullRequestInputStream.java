@@ -1,6 +1,3 @@
-/**
- * 
- */
 package org.jaudiotagger.audio.asf.io;
 
 import java.io.FilterInputStream;
@@ -8,30 +5,32 @@ import java.io.IOException;
 import java.io.InputStream;
 
 /**
- * @author claireit
+ * This implementation repeatedly reads from the wrapped input stream until the requested amount
+ * of bytes are read.<br> 
  * 
+ * @author Christian Laireiter
  */
 public class FullRequestInputStream extends FilterInputStream {
 
-	public FullRequestInputStream(InputStream in) {
-		super(in);
+    /**
+     * Creates an instance.
+     * @param source stream to read from.
+     */
+	public FullRequestInputStream(InputStream source) {
+		super(source);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.io.FilterInputStream#read(byte[])
-	 */
+	/**
+     * {@inheritDoc}
+     */
 	@Override
 	public int read(byte[] b) throws IOException {
 		return read(b, 0, b.length);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.io.FilterInputStream#read(byte[], int, int)
-	 */
+	/**
+     * {@inheritDoc}
+     */
 	@Override
 	public int read(byte[] b, int off, int len) throws IOException {
 		int totalRead = 0;
@@ -41,15 +40,17 @@ public class FullRequestInputStream extends FilterInputStream {
 			if (read >= 0) {
 				totalRead += read;
 			}
+			if (read == -1)
+            {
+                throw new IOException((len - totalRead) + " more bytes expected.");
+            }
 		}
 		return totalRead;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.io.FilterInputStream#skip(long)
-	 */
+	/**
+     * {@inheritDoc}
+     */
 	@Override
 	public long skip(long n) throws IOException {
 		long skipped = 0;
@@ -61,7 +62,7 @@ public class FullRequestInputStream extends FilterInputStream {
 				zeroSkipCnt++;
 				if (zeroSkipCnt == 2) {
 					// If the skip value exceeds streams size, this and the
-					// number is extremly large, this can lead to a very long
+					// number is extremely large, this can lead to a very long
 					// running loop.
 					return skipped;
 				}

@@ -18,23 +18,23 @@
  */
 package org.jaudiotagger.audio.asf.data;
 
+import org.jaudiotagger.audio.asf.io.WriteableChunk;
 import org.jaudiotagger.audio.asf.util.Utils;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.math.BigInteger;
 import java.util.*;
 
 /**
- * This structure represents the data of a chunk, wich contains extended content
+ * This structure represents the data of a chunk, which contains extended content
  * description. <br>
  * These properties are simply represented by
  * {@link org.jaudiotagger.audio.asf.data.ContentDescriptor}
  *
  * @author Christian Laireiter
  */
-public class ExtendedContentDescription extends Chunk
+public class ExtendedContentDescription extends Chunk implements WriteableChunk
 {
 
     /**
@@ -102,71 +102,9 @@ public class ExtendedContentDescription extends Chunk
     }
 
     /**
-     * This method creates a byte array which can be written to asf files.
-     *
-     * @return asf file representation of the current object.
+     * {@inheritDoc}
      */
-    public byte[] getBytes()
-    {
-        ByteArrayOutputStream result = new ByteArrayOutputStream();
-        try
-        {
-            ByteArrayOutputStream content = new ByteArrayOutputStream();
-            // Write the number of descriptors.
-            content.write(Utils.getBytes(this.getDescriptorCount(), 2));
-            Iterator<ContentDescriptor> it = getDescriptors().iterator();
-            while (it.hasNext())
-            {
-                ContentDescriptor current = it.next();
-                content.write(current.getBytes());
-            }
-            byte[] contentBytes = content.toByteArray();
-            // Write the guid
-            result.write(GUID.GUID_EXTENDED_CONTENT_DESCRIPTION.getBytes());
-            // Write the length + 24.
-            result.write(Utils.getBytes(contentBytes.length + 24, 8));
-            // Write the content
-            result.write(contentBytes);
-        } catch (Exception e)
-        {
-            e.printStackTrace();
-        }
-        return result.toByteArray();
-    }
-
-    /**
-     * Writes the current chunk into the specified output stream, as ASF stream
-     * chunk.<br>
-     * 
-     * @param out
-     *            stream to write into.
-     * @return amount of bytes written.
-     * @throws IOException
-     */
-    public long writeInto(OutputStream out) throws IOException
-    {
-        final long chunkSize = getCurrentAsfChunkSize();
-        final List<ContentDescriptor> descriptorList = getDescriptors();
-        out.write(getGuid().getBytes());
-        Utils.writeUINT64(chunkSize, out);
-        Utils.writeUINT16(descriptorList.size(), out);
-        for (ContentDescriptor curr : descriptorList)
-        {
-            curr.writeInto(out);
-        }
-        return chunkSize;
-    }
-
-    /**
-     * This method calculates the total amount of bytes, this chunk would
-     * consume in an ASF file.<br>
-     * <b>ATTENTION:</b> this size is not the same as
-     * {@link Chunk#getChunkLength()}. If this instance has been read, the
-     * chunklength will always stay the same. However, if the instance is
-     * modified, this method will reflect the new size.
-     * 
-     * @return amount of bytes this chunk would currently need in an ASF file.
-     */
+    @Override
     public long getCurrentAsfChunkSize()
     {
         /*
@@ -221,6 +159,15 @@ public class ExtendedContentDescription extends Chunk
     }
 
     /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean isEmpty()
+    {
+        return getDescriptorCount() == 0;
+    }
+
+    /**
      * This method creates a String containing the tag elements an their values
      * for printing. <br>
      *
@@ -250,5 +197,23 @@ public class ExtendedContentDescription extends Chunk
     public List<ContentDescriptor> remove(String id)
     {
         return this.descriptors.remove(id);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public long writeInto(OutputStream out) throws IOException
+    {
+        final long chunkSize = getCurrentAsfChunkSize();
+        final List<ContentDescriptor> descriptorList = getDescriptors();
+        out.write(getGuid().getBytes());
+        Utils.writeUINT64(chunkSize, out);
+        Utils.writeUINT16(descriptorList.size(), out);
+        for (ContentDescriptor curr : descriptorList)
+        {
+            curr.writeInto(out);
+        }
+        return chunkSize;
     }
 }

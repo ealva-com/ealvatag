@@ -18,14 +18,13 @@
  */
 package org.jaudiotagger.audio.asf.io;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.RandomAccessFile;
-import java.math.BigInteger;
-
 import org.jaudiotagger.audio.asf.data.Chunk;
 import org.jaudiotagger.audio.asf.data.GUID;
 import org.jaudiotagger.audio.asf.util.Utils;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.math.BigInteger;
 
 /**
  * Default reader, Reads GUID and size out of an input stream and creates a
@@ -38,7 +37,7 @@ class ChunkHeaderReader implements ChunkReader
 {
 
     /**
-     * This guid will assigned to all {@linkplain #read(InputStream) read} chunks.
+     * This GUID will assigned to all {@linkplain #read(InputStream) read} chunks.
      */
     private GUID guid;
 
@@ -54,21 +53,6 @@ class ChunkHeaderReader implements ChunkReader
             throw new NullPointerException();
         }
         this.guid = guidOfChunk;
-    }
-
-    /**
-     * Interprets current data as a header of a chunk.
-     *
-     * @param input inputdata
-     * @return Chunk.
-     * @throws IOException Access errors.
-     */
-    public static Chunk readChunckHeader(RandomAccessFile input) throws IOException
-    {
-        long pos = input.getFilePointer();
-        GUID guid = Utils.readGUID(input);
-        BigInteger chunkLength = Utils.readBig64(input);
-        return new Chunk(guid, pos, chunkLength);
     }
 
     /**

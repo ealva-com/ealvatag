@@ -1,6 +1,3 @@
-/**
- * 
- */
 package org.jaudiotagger.audio.asf.io;
 
 import java.io.IOException;
