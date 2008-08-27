@@ -1199,16 +1199,25 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
             //Close Channels and locks
             if (fcIn != null)
             {
-                fcIn.close();
+                if(fcIn.isOpen())
+                {
+                    fcIn.close();
+                }
             }
 
             if (fcOut != null)
             {
-                if (fileTmpLock != null)
+                if(fcOut.isOpen())
                 {
-                    fileTmpLock.release();
+                    if (fileTmpLock != null)
+                    {
+                         if(fileTmpLock.isValid())
+                         {
+                            fileTmpLock.release();
+                         }
+                    }
+                    fcOut.close();
                 }
-                fcOut.close();
             }
 
             //Replace file with paddedFile
@@ -1224,16 +1233,25 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
                 //Whatever happens ensure all locks and channels are closed/released
                 if (fcIn != null)
                 {
-                    fcIn.close();
+                    if(fcIn.isOpen())
+                    {
+                        fcIn.close();
+                    }
                 }
 
                 if (fcOut != null)
                 {
-                    if (fileTmpLock != null)
+                    if(fcOut.isOpen())
                     {
-                        fileTmpLock.release();
+                        if (fileTmpLock != null)
+                        {
+                             if(fileTmpLock.isValid())
+                             {
+                                fileTmpLock.release();
+                             }
+                        }
+                        fcOut.close();
                     }
-                    fcOut.close();
                 }
             }
             catch(Exception e)
