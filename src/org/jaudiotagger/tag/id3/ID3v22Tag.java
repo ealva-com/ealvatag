@@ -185,9 +185,13 @@ public class ID3v22Tag extends AbstractID3v2Tag
                         logger.log(Level.SEVERE, "Unable to convert frame:" + frame.getIdentifier(), ife);
                     }
                 }
-                if (newFrame != null)
+                //Ensure that the list actually contains at lest one value before adding
+                if(multiFrame.size()>0)
                 {
-                    frameMap.put(newFrame.getIdentifier(), multiFrame);
+                    if (newFrame != null)
+                    {
+                        frameMap.put(newFrame.getIdentifier(), multiFrame);
+                    }
                 }
             }
         }

@@ -352,10 +352,14 @@ public class ID3v24Tag extends AbstractID3v2Tag
                         logger.log(Level.SEVERE, "Unable to convert frame:" + frame.getIdentifier());
                     }
                 }
-                if (newFrame != null)
+                //Ensure that the list actually contains at lest one value before adding
+                if(multiFrame.size()>0)
                 {
-                    logger.finest("Adding multi frame list to map:" + newFrame.getIdentifier());
-                    frameMap.put(newFrame.getIdentifier(), multiFrame);
+                    if (newFrame != null)
+                    {
+                        logger.finest("Adding multi frame list to map:" + newFrame.getIdentifier());
+                        frameMap.put(newFrame.getIdentifier(), multiFrame);
+                    }
                 }
             }
         }
