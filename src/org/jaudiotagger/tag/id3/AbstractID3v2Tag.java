@@ -32,6 +32,7 @@ import java.nio.channels.FileChannel;
 import java.nio.channels.FileLock;
 import java.nio.channels.WritableByteChannel;
 import java.util.*;
+import java.util.logging.Level;
 
 /**
  * This is the abstract base class for all ID3v2 tags.
@@ -772,6 +773,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
      */
     public void setFrame(String identifier, List<AbstractID3v2Frame> multiFrame)
     {
+        logger.finest("Adding "+multiFrame.size() + " frames for "+identifier);
         frameMap.put(identifier, multiFrame);
     }
 
@@ -1236,7 +1238,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
             }
             catch(Exception e)
             {
-                logger.warning("Problem closing channels and locks:"+e.getMessage());
+                logger.log(Level.WARNING,"Problem closing channels and locks:"+e.getMessage(),e);
             }
         }
     }
@@ -1791,6 +1793,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
         final Iterator<Map.Entry<String, Object>> it = this.frameMap.entrySet().iterator();
         return new Iterator<TagField>()
         {
+            //this iterates through frames through for a particular frameId
             private Iterator<TagField> fieldsIt;
 
             private void changeIt()
@@ -1800,37 +1803,53 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
                     return;
                 }
 
-                Map.Entry<String, Object> e = it.next();
-                if (e.getValue() instanceof List)
+                while(it.hasNext())
                 {
-                    List<TagField> l = (List<TagField>) e.getValue();
-                    fieldsIt = l.iterator();
-                }
-                else
-                {
-                    //TODO must be a better way
-                    List<TagField> l = new ArrayList<TagField>();
-                    l.add((TagField) e.getValue());
-                    fieldsIt = l.iterator();
+                    Map.Entry<String, Object> e = it.next();
+                    if (e.getValue() instanceof List)
+                    {
+                        List<TagField> l = (List<TagField>) e.getValue();
+                        //If list is empty (which it shouldnt be) we skip over this entry
+                        if(l.size()==0)
+                        {
+                            System.out.println("List has size of:"+l.size() +"for frameid"+e.getKey());
+                            continue;
+                        }
+                        else
+                        {
+                            fieldsIt = l.iterator();
+                            break;
+                        }
+                    }
+                    else
+                    {
+                        //TODO must be a better way
+                        List<TagField> l = new ArrayList<TagField>();
+                        l.add((TagField) e.getValue());
+                        fieldsIt = l.iterator();
+                        break;
+                    }
                 }
             }
 
             public boolean hasNext()
             {
+                //hasnt been initialized yet
                 if (fieldsIt == null)
                 {
                     changeIt();
                 }
-                return it.hasNext() || (fieldsIt != null && fieldsIt.hasNext());
-            }
 
-            public TagField next()
-            {
+                //Go to the end of the run
                 if (!fieldsIt.hasNext())
                 {
                     changeIt();
                 }
+                return (fieldsIt != null && fieldsIt.hasNext());
+            }
 
+            public TagField next()
+            {
                 return fieldsIt.next();
             }
 
