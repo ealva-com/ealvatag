@@ -1840,10 +1840,13 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
                     changeIt();
                 }
 
-                //Go to the end of the run
-                if (!fieldsIt.hasNext())
+                if(fieldsIt!=null)
                 {
-                    changeIt();
+                    //Go to the end of the run
+                    if (!fieldsIt.hasNext())
+                    {
+                        changeIt();
+                    }
                 }
                 return (fieldsIt != null && fieldsIt.hasNext());
             }
