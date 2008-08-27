@@ -10,6 +10,7 @@ import org.jaudiotagger.audio.mp3.MP3File;
 import org.jaudiotagger.tag.TagField;
 import org.jaudiotagger.tag.TagFieldKey;
 import org.jaudiotagger.tag.TagOptionSingleton;
+import org.jaudiotagger.tag.TagTextField;
 import org.jaudiotagger.tag.datatype.DataTypes;
 import org.jaudiotagger.tag.id3.framebody.*;
 import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
@@ -20,6 +21,9 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.RandomAccessFile;
 import java.util.List;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
+import java.util.ArrayList;
 
 /**
  * Testing retrofitting of entagged interfaces
@@ -1101,6 +1105,67 @@ public class NewInterfaceTest extends TestCase
         assertFalse(((ID3v23Tag) mp3File.getID3v2Tag()).experimental);
         assertFalse(((ID3v23Tag) mp3File.getID3v2Tag()).extended);
         //assertEquals("Personality Goes A Long Way",mp3File.getID3v2Tag().getFirstTitle());
+    }
+
+    public void testIterator() throws Exception
+    {
+        File orig = new File("testdata", "test26.mp3");
+        if (!orig.isFile())
+        {
+            return;
+        }
+
+        Exception e = null;
+        File testFile = AbstractTestCase.copyAudioToTmp("test26.mp3");
+        MP3File mp3File = new MP3File(testFile);
+
+
+        assertEquals(0, mp3File.getID3v2Tag().getFieldCount());
+        Iterator<TagField> i = mp3File.getID3v2Tag().getFields();
+        assertFalse(i.hasNext());
+        try
+        {
+            i.next();
+        }
+        catch(Exception ex)
+        {
+            e=ex;
+        }
+        assertTrue(e instanceof NoSuchElementException);
+
+        mp3File.getID3v2Tag().addAlbum("album");
+        assertEquals(1, mp3File.getID3v2Tag().getFieldCount());
+        i = mp3File.getID3v2Tag().getFields();
+
+        //Should be able to iterate without actually having to call isNext() first
+        i.next();
+
+        //Should be able to call hasNext() without it having any effect
+        i = mp3File.getID3v2Tag().getFields();
+        assertTrue(i.hasNext());
+        Object o = i.next();
+        assertTrue( o instanceof ID3v23Frame);
+        assertEquals("album",((AbstractFrameBodyTextInfo)(((ID3v23Frame)o).getBody())).getFirstTextValue());
+
+        try
+        {
+            i.next();
+        }
+        catch(Exception ex)
+        {
+            e=ex;
+        }
+        assertTrue(e instanceof NoSuchElementException);
+        assertFalse(i.hasNext());
+
+        //Empty frame map and force adding of empty list
+        mp3File.getID3v2Tag().frameMap.clear();
+        mp3File.getID3v2Tag().frameMap.put("TXXX",new ArrayList());
+        assertEquals(0,mp3File.getID3v2Tag().getFieldCount());
+
+        //Issue #236
+        //i = mp3File.getID3v2Tag().getFields();
+        //assertFalse(i.hasNext());
     }
 
     /**

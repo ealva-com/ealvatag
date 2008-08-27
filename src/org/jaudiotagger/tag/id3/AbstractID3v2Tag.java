@@ -1805,12 +1805,24 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
         return frameMap.size() == 0;
     }
 
-
+    /**
+     *
+     * @return iterator of all fields, multiple values for the same Id (e.g multiple TXXX frames) count as seperate
+     * fields
+     */
     public Iterator<TagField> getFields()
     {
-        final Iterator<Map.Entry<String, Object>> it = this.frameMap.entrySet().iterator();
+        //Iterator of each different frameId in this tag
+        final Iterator<Map.Entry<String, Object>> it        = this.frameMap.entrySet().iterator();
+
+        //Iterator used by hasNext() so doesnt effect next()
+        final Iterator<Map.Entry<String, Object>> itHasNext = this.frameMap.entrySet().iterator();
+
+
         return new Iterator<TagField>()
         {
+            Map.Entry<String, Object> latestEntry = null;
+
             //this iterates through frames through for a particular frameId
             private Iterator<TagField> fieldsIt;
 
@@ -1824,13 +1836,13 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
                 while(it.hasNext())
                 {
                     Map.Entry<String, Object> e = it.next();
+                    latestEntry=itHasNext.next();
                     if (e.getValue() instanceof List)
                     {
                         List<TagField> l = (List<TagField>) e.getValue();
-                        //If list is empty (which it shouldnt be) we skip over this entry
+                        //If list is empty (which it shouldn't be) we skip over this entry
                         if(l.size()==0)
                         {
-                            System.out.println("List has size of:"+l.size() +"for frameid"+e.getKey());
                             continue;
                         }
                         else
@@ -1850,9 +1862,38 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
                 }
             }
 
+            //TODO assumes if have entry its valid, but what if empty list but very different to check this
+            //without causing a side effect on next() so leaving for now
             public boolean hasNext()
             {
-                //hasnt been initialized yet
+                //Check Current frameId, does it contain more values
+                if(fieldsIt!=null)
+                {
+                    if (fieldsIt.hasNext())
+                    {
+                        return true;
+                    }
+                }
+
+                //No remaining entries return false
+                if(!itHasNext.hasNext())
+                {
+                    return false;
+                }
+
+                //Issue #236
+                //TODO assumes if have entry its valid, but what if empty list but very different to check this
+                //without causing a side effect on next() so leaving for now
+                if(itHasNext.hasNext())
+                {
+                    return true;
+                }
+                return false;
+            }
+
+            public TagField next()
+            {
+                //Hasn't been initialized yet
                 if (fieldsIt == null)
                 {
                     changeIt();
@@ -1866,11 +1907,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
                         changeIt();
                     }
                 }
-                return (fieldsIt != null && fieldsIt.hasNext());
-            }
 
-            public TagField next()
-            {
                 if(fieldsIt==null)
                 {
                     throw new NoSuchElementException();
@@ -1889,10 +1926,20 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
     {
         Iterator<TagField> it = getFields();
         int count = 0;
-        while (it.hasNext())
+
+        //Done this way becuase it.hasNext() incorrectly counts empty list
+        //whereas it.next() works correctly
+        try
         {
-            count++;
-            it.next();
+            while(true)
+            {
+                it.next();
+                count++;
+            }
+        }
+        catch(NoSuchElementException nse)
+        {
+            //this is thrown when no more elements
         }
         return count;
     }
