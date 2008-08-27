@@ -1853,6 +1853,10 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
 
             public TagField next()
             {
+                if(fieldsIt==null)
+                {
+                    throw new NoSuchElementException();
+                }
                 return fieldsIt.next();
             }
 
