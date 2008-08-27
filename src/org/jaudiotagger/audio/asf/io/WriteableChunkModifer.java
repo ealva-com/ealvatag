@@ -33,16 +33,14 @@ public class WriteableChunkModifer implements ChunkModifier
     /**
      * {@inheritDoc}
      */
-    @Override
     public boolean isApplicable(GUID guid)
     {
-        return guid.equals(writableChunk.getGuid());
+        return guid.equals(this.writableChunk.getGuid());
     }
 
     /**
      * {@inheritDoc}
      */
-    @Override
     public ModificationResult modify(GUID guid, InputStream chunk, OutputStream destination) throws IOException
     {
         int chunkDiff = 0;

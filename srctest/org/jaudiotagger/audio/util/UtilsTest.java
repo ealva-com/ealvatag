@@ -117,7 +117,7 @@ public class UtilsTest extends TestCase
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         String charSized = "This is a TestValue"; //$NON-NLS-1$
         bos.write(Utils.getBytes(charSized.length() + 1, 2));
-        bos.write(charSized.getBytes(AsfHeader.ASF_CHARSET));
+        bos.write(Utils.getBytes(charSized, AsfHeader.ASF_CHARSET));
         bos.write(AsfHeader.ZERO_TERM);
         assertEquals(charSized, Utils.readCharacterSizedString(new ByteArrayInputStream(bos.toByteArray())));
     }
@@ -194,14 +194,14 @@ public class UtilsTest extends TestCase
         String testValue = "Testvalue"; //$NON-NLS-1$
         // Test with zero term
         Utils.writeUINT16(testValue.length() * 2 + 2, bos);
-        bos.write(testValue.getBytes(AsfHeader.ASF_CHARSET));
+        bos.write(Utils.getBytes(testValue, AsfHeader.ASF_CHARSET));
         bos.write(AsfHeader.ZERO_TERM);
         String string = Utils.readUTF16LEStr(new ByteArrayInputStream(bos.toByteArray()));
         assertEquals(testValue, string);
         bos.reset();
         // Test without zero term
         Utils.writeUINT16(testValue.length() * 2, bos);
-        bos.write(testValue.getBytes(AsfHeader.ASF_CHARSET));
+        bos.write(Utils.getBytes(testValue, AsfHeader.ASF_CHARSET));
         string = Utils.readUTF16LEStr(new ByteArrayInputStream(bos.toByteArray()));
         assertEquals(testValue, string);
         bos.reset();

@@ -104,7 +104,6 @@ public class ExtendedContentDescription extends Chunk implements WriteableChunk
     /**
      * {@inheritDoc}
      */
-    @Override
     public long getCurrentAsfChunkSize()
     {
         /*
@@ -161,7 +160,6 @@ public class ExtendedContentDescription extends Chunk implements WriteableChunk
     /**
      * {@inheritDoc}
      */
-    @Override
     public boolean isEmpty()
     {
         return getDescriptorCount() == 0;
@@ -202,7 +200,6 @@ public class ExtendedContentDescription extends Chunk implements WriteableChunk
     /**
      * {@inheritDoc}
      */
-    @Override
     public long writeInto(OutputStream out) throws IOException
     {
         final long chunkSize = getCurrentAsfChunkSize();

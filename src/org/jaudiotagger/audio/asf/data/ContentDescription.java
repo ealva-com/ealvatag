@@ -120,7 +120,6 @@ public class ContentDescription extends Chunk implements WriteableChunk
     /**
      * {@inheritDoc}
      */
-    @Override
     public long getCurrentAsfChunkSize()
     {
         long result = 44; // GUID + UINT64 for size + 5 times string length (each
@@ -160,7 +159,6 @@ public class ContentDescription extends Chunk implements WriteableChunk
     /**
      * {@inheritDoc}
      */
-    @Override
     public boolean isEmpty()
     {
         return Utils.isBlank(author) && Utils.isBlank(copyRight) && Utils.isBlank(description) && Utils.isBlank(rating) && Utils
@@ -242,7 +240,6 @@ public class ContentDescription extends Chunk implements WriteableChunk
     /**
      * {@inheritDoc}
      */
-    @Override
     public long writeInto(OutputStream out) throws IOException
     {
         long chunkSize = getCurrentAsfChunkSize();
@@ -257,15 +254,15 @@ public class ContentDescription extends Chunk implements WriteableChunk
         Utils.writeUINT16(getComment().length() * 2 + 2, out);
         Utils.writeUINT16(getRating().length() * 2 + 2, out);
         // write the Strings
-        out.write(getTitle().getBytes(AsfHeader.ASF_CHARSET));
+        out.write(Utils.getBytes(getTitle(),AsfHeader.ASF_CHARSET));
         out.write(AsfHeader.ZERO_TERM);
-        out.write(getAuthor().getBytes(AsfHeader.ASF_CHARSET));
+        out.write(Utils.getBytes(getAuthor(),AsfHeader.ASF_CHARSET));
         out.write(AsfHeader.ZERO_TERM);
-        out.write(getCopyRight().getBytes(AsfHeader.ASF_CHARSET));
+        out.write(Utils.getBytes(getCopyRight(),AsfHeader.ASF_CHARSET));
         out.write(AsfHeader.ZERO_TERM);
-        out.write(getComment().getBytes(AsfHeader.ASF_CHARSET));
+        out.write(Utils.getBytes(getComment(),AsfHeader.ASF_CHARSET));
         out.write(AsfHeader.ZERO_TERM);
-        out.write(getRating().getBytes(AsfHeader.ASF_CHARSET));
+        out.write(Utils.getBytes(getRating(),AsfHeader.ASF_CHARSET));
         out.write(AsfHeader.ZERO_TERM);
         return chunkSize;
     }

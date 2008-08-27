@@ -183,7 +183,7 @@ public final class ContentDescriptor implements Comparable<ContentDescriptor>
         ByteArrayOutputStream result = new ByteArrayOutputStream();
         try
         {
-            byte[] nameBytes = getName().getBytes(AsfHeader.ASF_CHARSET);
+            byte[] nameBytes = Utils.getBytes(getName(), AsfHeader.ASF_CHARSET);
             // Write the number of bytes the name needs. +2 because of the
             // Zero term character.
             result.write(Utils.getBytes(nameBytes.length + 2, 2));
@@ -442,15 +442,15 @@ public final class ContentDescriptor implements Comparable<ContentDescriptor>
      */
     public void setStringValue(String value) throws IllegalArgumentException
     {
-            Utils.checkStringLengthNullSafe(value);
-            if (value != null)
-            {
-            this.content = value.getBytes(AsfHeader.ASF_CHARSET);
-            }
-            else
-            {
-                this.content = new byte[0];
-            }
+        Utils.checkStringLengthNullSafe(value);
+        if (value != null)
+        {
+            this.content = Utils.getBytes(value, AsfHeader.ASF_CHARSET);
+        }
+        else
+        {
+            this.content = new byte[0];
+        }
         this.descriptorType = TYPE_STRING;
     }
 
@@ -488,7 +488,7 @@ public final class ContentDescriptor implements Comparable<ContentDescriptor>
     {
         final int size = getCurrentAsfSize();
         Utils.writeUINT16(getName().length() * 2 + 2, out);
-        out.write(getName().getBytes(AsfHeader.ASF_CHARSET));
+        out.write(Utils.getBytes(getName(), AsfHeader.ASF_CHARSET));
         out.write(AsfHeader.ZERO_TERM);
         final int type = getType();
         Utils.writeUINT16(type, out);

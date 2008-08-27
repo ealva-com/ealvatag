@@ -26,6 +26,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.math.BigInteger;
+import java.nio.ByteBuffer;
+import java.nio.charset.Charset;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
@@ -53,7 +55,7 @@ public class Utils
     {
         if (value != null)
         {
-            byte[] tmp = value.getBytes(AsfHeader.ASF_CHARSET);
+            byte[] tmp = getBytes(value, AsfHeader.ASF_CHARSET);
             if (tmp.length > 65533)
             {
                 throw new IllegalArgumentException("\"UTF-16LE\" representation exceeds 65535 bytes. (Including zero term character)"); //$NON-NLS-1$
@@ -114,6 +116,17 @@ public class Utils
             result[i] = (byte) (value & 0xFF);
             value >>>= 8;
         }
+        return result;
+    }
+
+    public static byte[] getBytes(final String source, final Charset charset)
+    {
+        assert charset != null;
+        assert !isBlank(source);
+        final ByteBuffer encoded = charset.encode(source);
+        final byte[] result = new byte[encoded.limit()];
+        encoded.rewind();
+        encoded.get(result);
         return result;
     }
 
@@ -329,7 +342,7 @@ public class Utils
                     buf = copy;
                 }
             }
-            return new String(buf, AsfHeader.ASF_CHARSET);
+            return new String(buf, AsfHeader.ASF_CHARSET.name());
         }
         throw new IllegalStateException("Invalid Data for current interpretation"); //$NON-NLS-1$
     }
@@ -354,7 +367,7 @@ public class Utils
         }
         out.write(toWrite);
     }
-    
+
     /**
      * Writes the given value as UINT32 into the stream.
      * 
@@ -375,7 +388,7 @@ public class Utils
         }
         out.write(toWrite);
     }
-    
+
     /**
      * Writes the given value as UINT64 into the stream.
      * 
