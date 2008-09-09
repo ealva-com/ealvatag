@@ -156,7 +156,7 @@ public abstract class AbstractID3v2Frame extends AbstractTagFrame implements Tag
     }
 
     /**
-     * Return the frame identifier, this only identifiies the frame it does not provide a unique
+     * Return the frame identifier, this only identifies the frame it does not provide a unique
      * key, when using frames such as TXXX which are used by many fields     *
      *
      * @return the frame identifier (Tag Field Interface)

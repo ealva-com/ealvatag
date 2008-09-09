@@ -28,10 +28,7 @@ import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.channels.FileLock;
 import java.nio.channels.WritableByteChannel;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.ListIterator;
+import java.util.*;
 import java.util.logging.Level;
 
 /**
@@ -744,5 +741,15 @@ public class ID3v22Tag extends AbstractID3v2Tag
     protected ID3Frames getID3Frames()
     {
         return ID3v22Frames.getInstanceOf();
+    }
+
+    /**
+     *
+     * @return comparator used to order frames in preffrred order for writing to file
+     * so that most important frames are written first.
+     */
+    public Comparator getPreferredFrameOrderComparator()
+    {
+        return ID3v22PreferredFrameOrderComparator.getInstanceof();
     }
 }

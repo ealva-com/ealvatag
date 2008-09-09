@@ -17,7 +17,6 @@ package org.jaudiotagger.tag.id3;
 
 import org.jaudiotagger.audio.generic.Utils;
 import org.jaudiotagger.audio.mp3.MP3File;
-import org.jaudiotagger.audio.exceptions.CannotWriteException;
 import org.jaudiotagger.logging.ErrorMessage;
 import org.jaudiotagger.tag.*;
 import org.jaudiotagger.tag.datatype.DataTypes;
@@ -1465,20 +1464,20 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
      *
      * @return ByteBuffer Contains all the frames written within the tag ready for writing to file
      * @throws IOException
-     */
-    //TODO there is a preferred tag order mentioned in spec, e.g ufid first
+     */    
     protected ByteArrayOutputStream writeFramesToBuffer() throws IOException
     {
         //Increases as is required
         ByteArrayOutputStream bodyBuffer = new ByteArrayOutputStream();
 
+        //Sort keys into Preferred Order
+        TreeSet <String> sortedWriteOrder = new TreeSet<String>( getPreferredFrameOrderComparator());
+        sortedWriteOrder.addAll(frameMap.keySet());
 
         AbstractID3v2Frame frame;
-        Iterator iterator;
-        iterator = frameMap.values().iterator();
-        while (iterator.hasNext())
+        for(String id:sortedWriteOrder)
         {
-            Object o = iterator.next();
+            Object o = frameMap.get(id);
             if (o instanceof AbstractID3v2Frame)
             {
                 frame = (AbstractID3v2Frame) o;
@@ -1498,6 +1497,13 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
         return bodyBuffer;
     }
 
+
+    /**
+     *
+     * @return comparator used to order frames in preffrred order for writing to file
+     * so that most important frames are written first.
+     */
+    public abstract Comparator getPreferredFrameOrderComparator();
 
     public void createStructure()
     {

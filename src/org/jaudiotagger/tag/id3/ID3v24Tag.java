@@ -31,10 +31,7 @@ import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.channels.FileLock;
 import java.nio.channels.WritableByteChannel;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.ListIterator;
+import java.util.*;
 import java.util.logging.Level;
 
 /**
@@ -694,11 +691,11 @@ public class ID3v24Tag extends AbstractID3v2Tag
             // read the length byte if the flag is set
             // this tag should always be zero but just in case
             // read this information.
-            if (updateTag == true)
+            if (updateTag)
             {
                 byteBuffer.get();
             }
-            if (crcDataFlag == true)
+            if (crcDataFlag)
             {
                 // the CRC has a variable length
                 byteBuffer.get();
@@ -711,7 +708,7 @@ public class ID3v24Tag extends AbstractID3v2Tag
                     crcData += buffer[i];
                 }
             }
-            if (tagRestriction == true)
+            if (tagRestriction)
             {
                 byteBuffer.get();
                 buffer = new byte[1];
@@ -814,19 +811,19 @@ public class ID3v24Tag extends AbstractID3v2Tag
 
         //Flags
         byte flagsByte = 0;
-        if (isUnsynchronization() == true)
+        if (isUnsynchronization())
         {
             flagsByte |= MASK_V24_UNSYNCHRONIZATION;
         }
-        if (extended == true)
+        if (extended)
         {
             flagsByte |= MASK_V24_EXTENDED_HEADER;
         }
-        if (experimental == true)
+        if (experimental)
         {
             flagsByte |= MASK_V24_EXPERIMENTAL;
         }
-        if (footer == true)
+        if (footer)
         {
             flagsByte |= MASK_V24_FOOTER_PRESENT;
         }
@@ -857,19 +854,19 @@ public class ID3v24Tag extends AbstractID3v2Tag
 
         //Write Extended Header
         ByteBuffer extHeaderBuffer = null;
-        if (extended == true)
+        if (extended)
         {
             //Write Extended Header Size
             int extendedSize = TAG_EXT_HEADER_LENGTH;
-            if (updateTag == true)
+            if (updateTag)
             {
                 extendedSize += TAG_EXT_HEADER_UPDATE_LENGTH;
             }
-            if (crcDataFlag == true)
+            if (crcDataFlag)
             {
                 extendedSize += TAG_EXT_HEADER_CRC_LENGTH;
             }
-            if (tagRestriction == true)
+            if (tagRestriction)
             {
                 extendedSize += TAG_EXT_HEADER_RESTRICTION_LENGTH;
             }
@@ -1150,5 +1147,15 @@ public class ID3v24Tag extends AbstractID3v2Tag
     protected ID3Frames getID3Frames()
     {
         return ID3v24Frames.getInstanceOf();
+    }
+
+     /**
+     *
+     * @return comparator used to order frames in preffrred order for writing to file
+     * so that most important frames are written first.
+     */
+    public Comparator getPreferredFrameOrderComparator()
+    {
+        return ID3v24PreferredFrameOrderComparator.getInstanceof();
     }
 }
