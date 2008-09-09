@@ -164,7 +164,7 @@ public class Mp4TagWriter
         int oldIlstSize = 0;
         int relativeIlstposition;
         int relativeIlstEndPosition;
-        int startIstWithinFile;
+        int startIstWithinFile=0;
         int newIlstSize;
         int oldMetaLevelFreeAtomSize = 0;
         long extraDataSize = 0;
@@ -410,7 +410,7 @@ public class Mp4TagWriter
             }
             //There is not enough padding in the metadata free atom anyway
             //Size meta needs to be increased by (if not writing a free atom)
-            //Special Case this could actually be negative (upto -8)if  is actually enough space but would
+            //Special Case this could actually be negative (upto -8)if is actually enough space but would
             //not be able to write free atom properly, it doesnt matter the parent atoms would still
             //need their sizes adjusted.
             else
@@ -426,7 +426,9 @@ public class Mp4TagWriter
                 //Edit stco atom within moov header, if the free atom comes after mdat OR
                 //(there is not enough space in the top level free atom
                 //or special case of matching exactly the free atom plus header)
-                if ((!topLevelFreeAtomComesBeforeMdatAtom) || ((topLevelFreeSize - Mp4BoxHeader.HEADER_LENGTH < additionalMetaSizeThatWontFitWithinMetaAtom) && (topLevelFreeSize != additionalMetaSizeThatWontFitWithinMetaAtom)))
+                if ((!topLevelFreeAtomComesBeforeMdatAtom)
+                        || ((topLevelFreeSize - Mp4BoxHeader.HEADER_LENGTH < additionalMetaSizeThatWontFitWithinMetaAtom)
+                        && (topLevelFreeSize != additionalMetaSizeThatWontFitWithinMetaAtom)))
                 {
                     //We dont bother using the top level free atom coz not big enough anyway, we need to adjust offsets
                     //by the amount mdat is going to be shifted
@@ -462,8 +464,10 @@ public class Mp4TagWriter
                 //fileReadChannel.position(topLevelFreePosition);
                 //fileReadChannel.position(level1SearchPosition);
 
-                //If we have top level free atom that comes before mdat we might be able to use it
-                if (topLevelFreeAtomComesBeforeMdatAtom)
+
+                //If we have top level free atom that comes before mdat we might be able to use it but only if
+                //the free atom actually come after the the metadata
+                if (topLevelFreeAtomComesBeforeMdatAtom&&(topLevelFreePosition>startIstWithinFile))
                 {
                     //If the shift is less than the space available in this second free atom data size we should
                     //minimize the free atom accordingly (then we don't have to update stco atom)
@@ -481,8 +485,6 @@ public class Mp4TagWriter
 
                         //Write Mdat
                         fileWriteChannel.transferFrom(fileReadChannel, fileWriteChannel.position(), fileReadChannel.size() - fileReadChannel.position());
-
-
                     }
                     //If the space required is identical to total size of the free space (inc header)
                     //we could just remove the header
@@ -505,7 +507,7 @@ public class Mp4TagWriter
                 }
                 else
                 {
-                    logger.info("Writing:Option 9;Top Level Free comes after Mdat so cant use it");
+                    logger.info("Writing:Option 9;Top Level Free comes after Mdat or before Metadata so cant use it");
                     fileWriteChannel.transferFrom(fileReadChannel, fileWriteChannel.position(), fileReadChannel.size() - fileReadChannel.position());
                 }
             }
