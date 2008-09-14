@@ -19,14 +19,11 @@
 package org.jaudiotagger.audio.asf.data;
 
 import org.jaudiotagger.audio.asf.io.WriteableChunk;
-import org.jaudiotagger.audio.asf.tag.AsfFieldKey;
 import org.jaudiotagger.audio.asf.util.Utils;
 
 import java.io.IOException;
 import java.io.OutputStream;
 import java.math.BigInteger;
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  * This class represents the data of a chunk which contains title, author,
@@ -67,7 +64,7 @@ public class ContentDescription extends Chunk implements WriteableChunk
      */
     public ContentDescription()
     {
-        this(BigInteger.valueOf(0));
+        this(0, BigInteger.valueOf(0));
     }
 
     /**
@@ -76,9 +73,9 @@ public class ContentDescription extends Chunk implements WriteableChunk
      * @param pos      Position of content description within file or stream
      * @param chunkLen Length of content description.
      */
-    public ContentDescription(BigInteger chunkLen)
+    public ContentDescription(long pos, BigInteger chunkLen)
     {
-        super(GUID.GUID_CONTENTDESCRIPTION, chunkLen);
+        super(GUID.GUID_CONTENTDESCRIPTION, pos, chunkLen);
     }
 
     /**
@@ -166,19 +163,17 @@ public class ContentDescription extends Chunk implements WriteableChunk
     }
 
     /**
-     * (overridden)
-     *
-     * @see org.jaudiotagger.audio.asf.data.Chunk#prettyPrint()
+     * 
+     * {@inheritDoc}
      */
-    public String prettyPrint()
+    public String prettyPrint(final String prefix)
     {
-        StringBuffer result = new StringBuffer(super.prettyPrint());
-        result.insert(0, Utils.LINE_SEPARATOR + "Content Description:" + Utils.LINE_SEPARATOR);
-        result.append("   Title      : " + getTitle() + Utils.LINE_SEPARATOR);
-        result.append("   Author     : " + getAuthor() + Utils.LINE_SEPARATOR);
-        result.append("   Copyright  : " + getCopyRight() + Utils.LINE_SEPARATOR);
-        result.append("   Description: " + getComment() + Utils.LINE_SEPARATOR);
-        result.append("   Rating     :" + getRating() + Utils.LINE_SEPARATOR);
+        StringBuffer result = new StringBuffer(super.prettyPrint(prefix));
+        result.append(prefix + "  |->Title      : " + getTitle() + Utils.LINE_SEPARATOR);
+        result.append(prefix + "  |->Author     : " + getAuthor() + Utils.LINE_SEPARATOR);
+        result.append(prefix + "  |->Copyright  : " + getCopyRight() + Utils.LINE_SEPARATOR);
+        result.append(prefix + "  |->Description: " + getComment() + Utils.LINE_SEPARATOR);
+        result.append(prefix + "  |->Rating     :" + getRating() + Utils.LINE_SEPARATOR);
         return result.toString();
     }
 
@@ -254,15 +249,15 @@ public class ContentDescription extends Chunk implements WriteableChunk
         Utils.writeUINT16(getComment().length() * 2 + 2, out);
         Utils.writeUINT16(getRating().length() * 2 + 2, out);
         // write the Strings
-        out.write(Utils.getBytes(getTitle(),AsfHeader.ASF_CHARSET));
+        out.write(Utils.getBytes(getTitle(), AsfHeader.ASF_CHARSET));
         out.write(AsfHeader.ZERO_TERM);
-        out.write(Utils.getBytes(getAuthor(),AsfHeader.ASF_CHARSET));
+        out.write(Utils.getBytes(getAuthor(), AsfHeader.ASF_CHARSET));
         out.write(AsfHeader.ZERO_TERM);
-        out.write(Utils.getBytes(getCopyRight(),AsfHeader.ASF_CHARSET));
+        out.write(Utils.getBytes(getCopyRight(), AsfHeader.ASF_CHARSET));
         out.write(AsfHeader.ZERO_TERM);
-        out.write(Utils.getBytes(getComment(),AsfHeader.ASF_CHARSET));
+        out.write(Utils.getBytes(getComment(), AsfHeader.ASF_CHARSET));
         out.write(AsfHeader.ZERO_TERM);
-        out.write(Utils.getBytes(getRating(),AsfHeader.ASF_CHARSET));
+        out.write(Utils.getBytes(getRating(), AsfHeader.ASF_CHARSET));
         out.write(AsfHeader.ZERO_TERM);
         return chunkSize;
     }

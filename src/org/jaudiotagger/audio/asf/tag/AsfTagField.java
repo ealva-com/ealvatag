@@ -60,9 +60,7 @@ public class AsfTagField implements TagField
     }
 
     /**
-     * (overridden)
-     *
-     * @see org.jaudiotagger.audio.generic.TagField#copyContent(org.jaudiotagger.audio.generic.TagField)
+     * {@inheritDoc}
      */
     public void copyContent(TagField field)
     {
@@ -79,9 +77,7 @@ public class AsfTagField implements TagField
     }
 
     /**
-     * (overridden)
-     *
-     * @see org.jaudiotagger.audio.generic.TagField#getId()
+     * {@inheritDoc}
      */
     public String getId()
     {
@@ -89,9 +85,7 @@ public class AsfTagField implements TagField
     }
 
     /**
-     * (overridden)
-     *
-     * @see org.jaudiotagger.audio.generic.TagField#getRawContent()
+     * {@inheritDoc}
      */
     public byte[] getRawContent() throws UnsupportedEncodingException
     {
@@ -99,9 +93,7 @@ public class AsfTagField implements TagField
     }
 
     /**
-     * (overridden)
-     *
-     * @see org.jaudiotagger.audio.generic.TagField#isBinary()
+     * {@inheritDoc}
      */
     public boolean isBinary()
     {
@@ -109,9 +101,7 @@ public class AsfTagField implements TagField
     }
 
     /**
-     * (overridden)
-     *
-     * @see org.jaudiotagger.audio.generic.TagField#isBinary(boolean)
+     * {@inheritDoc}
      */
     public void isBinary(boolean b)
     {
@@ -123,20 +113,16 @@ public class AsfTagField implements TagField
     }
 
     /**
-     * (overridden)
-     *
-     * @see org.jaudiotagger.audio.generic.TagField#isCommon()
+     * {@inheritDoc}
      */
     public boolean isCommon()
     {
-        // Hashset is safe against null comparison 
+        // HashSet is safe against null comparison 
         return AsfTag.COMMON_FIELDS.contains(AsfFieldKey.getAsfFieldKey(getId()));
     }
 
     /**
-     * (overridden)
-     *
-     * @see org.jaudiotagger.audio.generic.TagField#isEmpty()
+     * {@inheritDoc}
      */
     public boolean isEmpty()
     {
@@ -144,9 +130,7 @@ public class AsfTagField implements TagField
     }
 
     /**
-     * (overridden)
-     *
-     * @see org.jaudiotagger.audio.generic.TagField#toString()
+     * {@inheritDoc}
      */
     public String toString()
     {

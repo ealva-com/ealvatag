@@ -229,18 +229,17 @@ public class FileHeader extends Chunk
     /**
      * (overridden)
      *
-     * @see org.jaudiotagger.audio.asf.data.Chunk#prettyPrint()
+     * @see org.jaudiotagger.audio.asf.data.Chunk#prettyPrint(String)
      */
-    public String prettyPrint()
+    public String prettyPrint(final String prefix)
     {
-        StringBuffer result = new StringBuffer(super.prettyPrint());
-        result.insert(0, "\nFileHeader\n");
-        result.append("   Filesize      = " + getFileSize().toString()
-                + " Bytes \n");
-        result.append("   Media duration= "
+        StringBuffer result = new StringBuffer(super.prettyPrint(prefix));
+        result.append(prefix + "  |-> Filesize      = " + getFileSize().toString() + " Bytes" + Utils.LINE_SEPARATOR);
+        result
+                        .append(prefix + "  |-> Media duration= "
                 + getDuration().divide(new BigInteger("10000")).toString()
-                + " ms \n");
-        result.append("   Created at    = " + getFileCreationTime() + "\n");
+                + " ms" + Utils.LINE_SEPARATOR);
+        result.append(prefix + "  |-> Created at    = " + getFileCreationTime() + Utils.LINE_SEPARATOR);
         return result.toString();
     }
 }

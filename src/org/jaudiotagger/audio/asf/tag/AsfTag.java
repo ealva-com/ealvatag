@@ -29,7 +29,7 @@ public final class AsfTag extends AbstractTag
      * content description chunk (or unit) of ASF files.
      */
     public final static Set<AsfFieldKey> DESCRIPTION_FIELDS;
-    
+
     static
     {
         COMMON_FIELDS = new HashSet<AsfFieldKey>();
@@ -63,7 +63,7 @@ public final class AsfTag extends AbstractTag
 
     /**
      * Determines if the {@linkplain ContentDescriptor#getName() name} equals an {@link AsfFieldKey} which
-     * is {@linkplain ContentDescription#DESCRIPTION_FIELDS listed} to be stored in the content description chunk.
+     * is {@linkplain #DESCRIPTION_FIELDS listed} to be stored in the content description chunk.
      * 
      * @param contentDesc Descriptor to test.
      * @return see description.
@@ -354,6 +354,10 @@ public final class AsfTag extends AbstractTag
         return createTextField(getYearId(), content);
     }
 
+    /**
+     * Removes all fields which are stored to the provided field key. 
+     * @param fieldKey fields to remove.
+     */
     public void deleteTagField(AsfFieldKey fieldKey)
     {
         super.deleteField(fieldKey.getPublicFieldId());
@@ -415,6 +419,12 @@ public final class AsfTag extends AbstractTag
         return AsfFieldKey.ARTIST.getPublicFieldId();
     }
 
+    /**
+     * This method iterates through all stored fields.<br>
+     * This method can only be used if this class has been created with field conversion turned on.
+     * @param <F> 
+     * @return Iterator for iterating through ASF fields.
+     */
     public <F extends AsfTagField> Iterator<F> getAsfFields()
     {
         if (!isConvertingFields())

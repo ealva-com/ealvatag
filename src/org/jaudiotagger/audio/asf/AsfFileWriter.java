@@ -18,8 +18,9 @@
  */
 package org.jaudiotagger.audio.asf;
 
-import org.jaudiotagger.audio.asf.data.ContentDescription;
+import org.jaudiotagger.audio.asf.data.AsfHeader;
 import org.jaudiotagger.audio.asf.data.ExtendedContentDescription;
+import org.jaudiotagger.audio.asf.data.GUID;
 import org.jaudiotagger.audio.asf.io.*;
 import org.jaudiotagger.audio.asf.tag.AsfTag;
 import org.jaudiotagger.audio.asf.tag.AsfTagField;
@@ -33,6 +34,7 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 /**
  * This class writes given tags to ASF files containing WMA content. <br>
@@ -118,30 +120,101 @@ public class AsfFileWriter extends AudioFileWriter
      */
     protected void writeTag(Tag tag, RandomAccessFile raf, RandomAccessFile rafTemp) throws CannotWriteException, IOException
     {
-        ContentDescription cdesc = null;
-        AsfTag copy = new AsfTag(tag, true);
+        /*
+         * Since this implementation should not change the structure of the ASF file (locations of content description chunks),
+         * we need to read the content description chunk and the extended content description chunk from the source file.
+         * In the second step we need to determine which modifier (asf header or asf extended header) gets the 
+         * appropriate modifiers.
+         * The following policies are applied:
+         * if the source does not contain any descriptor, the necessary descriptors are appended to the header object.
+         * 
+         * if the source contains only one descriptor in the header extension object, and the other type is needed as well,
+         * the other one will be put into the header extension object.
+         * 
+         * for each descriptor type, if an object is found, an updater will be configured.
+         */
+        final AsfHeader sourceHeader = AsfHeaderReader.readTagHeader(raf);
+        raf.seek(0); // Reset for the streamer
+        final boolean headerCD = sourceHeader.getContentDescription() != null;
+        final boolean headerECD = sourceHeader.getExtendedContentDescription() != null;
+        final boolean extHeaderCD = sourceHeader.getExtendedHeader() != null && sourceHeader.getExtendedHeader()
+                        .getContentDescription() != null;
+        final boolean extHeaderECD = sourceHeader.getExtendedHeader() != null && sourceHeader.getExtendedHeader()
+                        .getExtendedContentDescription() != null;
+        /*
+         * Now create modifiers for content descriptor and extended content descriptor as implied by the given Tag.
+         */
+        final AsfTag copy = new AsfTag(tag, true);
+        // Modifiers for the asf header object
+        final List<ChunkModifier> headerModifier = new ArrayList<ChunkModifier>();
+        // Modifiers for the asf header extension object
+        final List<ChunkModifier> extHeaderModifier = new ArrayList<ChunkModifier>();
+        // determine content description content
         if (isContentdescriptionMandatory(copy))
         {
-            cdesc = TagConverter.createContentDescription(copy);
+            final WriteableChunkModifer Modifier = new WriteableChunkModifer(TagConverter
+                            .createContentDescription(copy));
+            if (headerCD || !extHeaderCD)
+            {
+                /*
+                 * If header contains object update in any case. Otherwise if not the extension header contains it,
+                 * add it to the header.
+                 */
+                headerModifier.add(Modifier);
+            }
+            if (extHeaderCD)
+            {
+                extHeaderModifier.add(Modifier);
+            }
         }
         else
         {
-            cdesc = new ContentDescription();
+            final ChunkRemover remover = new ChunkRemover(GUID.GUID_CONTENTDESCRIPTION);
+            if (headerCD)
+            {
+                headerModifier.add(remover);
+            }
+            if (extHeaderCD)
+            {
+                extHeaderModifier.add(remover);
+            }
         }
-        ExtendedContentDescription ext = null;
+        // determine extended content description content        
         if (isExtendedContentDescriptionMandatory(copy))
         {
-            ext = createNewExtendedContentDescription(copy);
+            final WriteableChunkModifer Modifier = new WriteableChunkModifer(createNewExtendedContentDescription(copy));
+            if (headerECD || !extHeaderECD)
+            {
+                /*
+                 * If header contains object update in any case. Otherwise if not the extension header contains it,
+                 * add it to the header.
+                 */
+                headerModifier.add(Modifier);
+            }
+            if (extHeaderECD)
+            {
+                extHeaderModifier.add(Modifier);
+            }
         }
         else
         {
-            ext = new ExtendedContentDescription();
+            final ChunkRemover remover = new ChunkRemover(GUID.GUID_EXTENDED_CONTENT_DESCRIPTION);
+            if (headerECD)
+            {
+               headerModifier.add(remover);
+            }
+            if (extHeaderECD)
+            {
+                extHeaderModifier.add(remover);
+            }
         }
-        ArrayList<ChunkModifier> mods = new ArrayList<ChunkModifier>();
-        mods.add(new WriteableChunkModifer(cdesc));
-        mods.add(new WriteableChunkModifer(ext));
+        // only add an AsfExtHeaderModifier, if there is actually something to change (performance)
+        if (!extHeaderModifier.isEmpty())
+        {
+            headerModifier.add(new AsfExtHeaderModifier(extHeaderModifier));
+        }
         new AsfStreamer()
-                        .createModifiedCopy(new RandomAccessFileInputstream(raf), new RandomAccessFileOutputStream(rafTemp), mods);
+                        .createModifiedCopy(new RandomAccessFileInputstream(raf), new RandomAccessFileOutputStream(rafTemp), headerModifier);
     }
 
 }

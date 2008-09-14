@@ -39,7 +39,15 @@ public class StreamChunkReader implements ChunkReader
      */
     protected StreamChunkReader()
     {
-        // Nothin todo
+        // Nothing to do
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public boolean canFail()
+    {
+        return true;
     }
 
     /**
@@ -53,7 +61,7 @@ public class StreamChunkReader implements ChunkReader
     /**
      * {@inheritDoc}
      */
-    public Chunk read(InputStream stream) throws IOException
+    public Chunk read(final GUID guid, final InputStream stream, final long chunkStart) throws IOException
     {
         StreamChunk result = null;
         BigInteger chunkLength = Utils.readBig64(stream);
@@ -63,7 +71,7 @@ public class StreamChunkReader implements ChunkReader
         if (GUID.GUID_AUDIOSTREAM.equals(streamTypeGUID) || GUID.GUID_VIDEOSTREAM.equals(streamTypeGUID))
         {
 
-            // A guid is indicating whether the stream is error
+            // A GUID is indicating whether the stream is error
             // concealed
             GUID errorConcealment = Utils.readGUID(stream);
             /*
@@ -75,7 +83,7 @@ public class StreamChunkReader implements ChunkReader
             long streamSpecificDataSize = Utils.readUINT32(stream);
 
             /*
-             * Read a bitfield. (Contains streamnumber, and whether
+             * Read a bit field. (Contains stream number, and whether
              * the stream content is encrypted.)
              */
             int mask = Utils.readUINT16(stream);
@@ -90,7 +98,7 @@ public class StreamChunkReader implements ChunkReader
             /*
              * very important to set for every stream type.
              * The size of bytes read by the specific stream type, in order to skip the remaining
-             * unread bytes of the streamchunk. 
+             * unread bytes of the stream chunk. 
              */
             long streamSpecificBytes = 0;
             
@@ -141,10 +149,10 @@ public class StreamChunkReader implements ChunkReader
                 stream.skip(1);
 
                 /*
-                      * Now read the format specific data
-                      */
-                // Size of the data section
-                long formatDataSize = Utils.readUINT16(stream);
+                 * Now read the format specific data
+                 */
+                // Size of the data section (formatDataSize)
+                stream.skip(2);
 
                 stream.skip(16);
                 byte[] fourCC = new byte[4];
@@ -165,9 +173,10 @@ public class StreamChunkReader implements ChunkReader
             result.setTypeSpecificDataSize(typeSpecificDataSize);
             result.setTimeOffset(timeOffset);
             result.setContentEncrypted(contentEncrypted);
+            result.setPosition(chunkStart);
             /*
              * Now skip remainder of chunks bytes.
-             * Chunklength - 24 (size of GUID and chunklen) - streamSpecificBytes(stream type specific data) - 54 (common data)
+             * chunk-length - 24 (size of GUID and chunklen) - streamSpecificBytes(stream type specific data) - 54 (common data)
              */
             stream.skip(chunkLength.longValue() - 24 - streamSpecificBytes - 54);
         }

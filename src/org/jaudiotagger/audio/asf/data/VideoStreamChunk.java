@@ -95,19 +95,18 @@ public class VideoStreamChunk extends StreamChunk
     /**
      * (overridden)
      *
-     * @see org.jaudiotagger.audio.asf.data.StreamChunk#prettyPrint()
+     * @see org.jaudiotagger.audio.asf.data.StreamChunk#prettyPrint(String)
      */
-    public String prettyPrint()
+    public String prettyPrint(final String prefix)
     {
-        StringBuffer result = new StringBuffer(super.prettyPrint().replaceAll(
-                Utils.LINE_SEPARATOR, Utils.LINE_SEPARATOR + "   "));
-        result.insert(0, Utils.LINE_SEPARATOR + "VideoStream");
-        result.append("Video info:" + Utils.LINE_SEPARATOR);
-        result.append("      Width  : " + getPictureWidth()
+        StringBuffer result = new StringBuffer(super.prettyPrint(prefix));
+        result.insert(0, Utils.LINE_SEPARATOR + prefix + "|->VideoStream");
+        result.append(prefix + "Video info:" + Utils.LINE_SEPARATOR);
+        result.append(prefix + "      |->Width  : " + getPictureWidth()
                 + Utils.LINE_SEPARATOR);
-        result.append("      Heigth : " + getPictureHeight()
+        result.append(prefix + "      |->Heigth : " + getPictureHeight()
                 + Utils.LINE_SEPARATOR);
-        result.append("      Codec  : " + getCodecIdAsString()
+        result.append(prefix + "      |->Codec  : " + getCodecIdAsString()
                 + Utils.LINE_SEPARATOR);
         return result.toString();
     }

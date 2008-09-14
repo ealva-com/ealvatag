@@ -18,14 +18,14 @@
  */
 package org.jaudiotagger.audio.asf.io;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.math.BigInteger;
+
 import org.jaudiotagger.audio.asf.data.Chunk;
 import org.jaudiotagger.audio.asf.data.EncodingChunk;
 import org.jaudiotagger.audio.asf.data.GUID;
 import org.jaudiotagger.audio.asf.util.Utils;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.math.BigInteger;
 
 /**
  * This class reads the chunk containing encoding data <br>
@@ -34,7 +34,8 @@ import java.math.BigInteger;
  * 
  * @author Christian Laireiter
  */
-public class EncodingChunkReader implements ChunkReader {
+class EncodingChunkReader implements ChunkReader
+{
 	/**
 	 * Should not be used for now.
 	 */
@@ -43,16 +44,25 @@ public class EncodingChunkReader implements ChunkReader {
 	}
 
 	/**
+     * {@inheritDoc}
+     */
+    public boolean canFail()
+    {
+        return false;
+    }
+
+	/**
 	 * {@inheritDoc}
 	 */
 	public GUID getApplyingId() {
 		return GUID.GUID_ENCODING;
 	}
 
-	/**
+    /**
 	 * {@inheritDoc}
 	 */
-	public Chunk read(InputStream stream) throws IOException {
+	public Chunk read(final GUID guid, final InputStream stream, final long chunkStart) throws IOException
+    {
 		BigInteger chunkLen = Utils.readBig64(stream);
 		EncodingChunk result = new EncodingChunk(chunkLen);
 		int readBytes = 24;
@@ -80,6 +90,7 @@ public class EncodingChunkReader implements ChunkReader {
 			readBytes += 4 + 2 * curr.length();
 		}
 		stream.skip(chunkLen.longValue() - readBytes);
+		result.setPosition(chunkStart);
 		return result;
 	}
 

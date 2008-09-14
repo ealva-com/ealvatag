@@ -166,20 +166,16 @@ public class ExtendedContentDescription extends Chunk implements WriteableChunk
     }
 
     /**
-     * This method creates a String containing the tag elements an their values
-     * for printing. <br>
-     *
-     * @return nice string.
+     * {@inheritDoc}
      */
-    public String prettyPrint()
+    public String prettyPrint(final String prefix)
     {
-        StringBuffer result = new StringBuffer(super.prettyPrint());
-        result.insert(0, "\nExtended Content Description:\n");
+        StringBuffer result = new StringBuffer(super.prettyPrint(prefix));
         List<ContentDescriptor> list = getDescriptors();
         Collections.sort(list);
         for (ContentDescriptor curr : list)
         {
-            result.append("   ");
+            result.append(prefix + "  |-> ");
             result.append(curr);
             result.append(Utils.LINE_SEPARATOR);
         }

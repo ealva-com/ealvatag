@@ -34,7 +34,7 @@ import java.math.BigInteger;
  *
  * @author Christian Laireiter
  */
-public class EncryptionChunkReader implements ChunkReader
+class EncryptionChunkReader implements ChunkReader
 {
 
     /**
@@ -48,6 +48,14 @@ public class EncryptionChunkReader implements ChunkReader
     /**
      * {@inheritDoc}
      */
+    public boolean canFail()
+    {
+        return false;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public GUID getApplyingId()
     {
         return GUID.GUID_CONTENT_ENCRYPTION;
@@ -56,7 +64,7 @@ public class EncryptionChunkReader implements ChunkReader
     /**
      * {@inheritDoc}
      */
-    public Chunk read(InputStream stream) throws IOException
+    public Chunk read(final GUID guid, final InputStream stream, final long chunkStart) throws IOException
     {
         EncryptionChunk result = null;
         BigInteger chunkLen = Utils.readBig64(stream);
@@ -116,6 +124,9 @@ public class EncryptionChunkReader implements ChunkReader
         result.setProtectionType(new String(protectionType));
         result.setKeyID(new String(keyID));
         result.setLicenseURL(new String(licenseURL));
+        
+        result.setPosition(chunkStart);
+        
         return result;
     }
 

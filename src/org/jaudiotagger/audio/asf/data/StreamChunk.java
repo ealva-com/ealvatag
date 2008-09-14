@@ -134,17 +134,18 @@ public abstract class StreamChunk extends Chunk
     /**
      * (overridden)
      *
-     * @see org.jaudiotagger.audio.asf.data.Chunk#prettyPrint()
+     * @see org.jaudiotagger.audio.asf.data.Chunk#prettyPrint(String)
      */
-    public String prettyPrint()
+    public String prettyPrint(final String prefix)
     {
-        StringBuffer result = new StringBuffer(super.prettyPrint());
-        result.insert(0, Utils.LINE_SEPARATOR + "Stream Data:" + Utils.LINE_SEPARATOR);
-        result.append("   Stream number: " + getStreamNumber() + Utils.LINE_SEPARATOR);
-        result.append("   Type specific data size  : " + getTypeSpecificDataSize() + Utils.LINE_SEPARATOR);
-        result.append("   Stream specific data size: " + getStreamSpecificDataSize() + Utils.LINE_SEPARATOR);
-        result.append("   Time Offset              : " + getTimeOffset() + Utils.LINE_SEPARATOR);
-        result.append("   Content Encryption       : " + isContentEncrypted() + Utils.LINE_SEPARATOR);
+        StringBuffer result = new StringBuffer(super.prettyPrint(prefix));
+        result.append(prefix + "  |-> Stream number: " + getStreamNumber() + Utils.LINE_SEPARATOR);
+        result
+                        .append(prefix + "  |-> Type specific data size  : " + getTypeSpecificDataSize() + Utils.LINE_SEPARATOR);
+        result
+                        .append(prefix + "  |-> Stream specific data size: " + getStreamSpecificDataSize() + Utils.LINE_SEPARATOR);
+        result.append(prefix + "  |-> Time Offset              : " + getTimeOffset() + Utils.LINE_SEPARATOR);
+        result.append(prefix + "  |-> Content Encryption       : " + isContentEncrypted() + Utils.LINE_SEPARATOR);
         return result.toString();
     }
 

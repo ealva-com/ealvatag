@@ -18,13 +18,13 @@
  */
 package org.jaudiotagger.audio.asf.io;
 
-import org.jaudiotagger.audio.asf.data.Chunk;
-import org.jaudiotagger.audio.asf.data.GUID;
-import org.jaudiotagger.audio.asf.util.Utils;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigInteger;
+
+import org.jaudiotagger.audio.asf.data.Chunk;
+import org.jaudiotagger.audio.asf.data.GUID;
+import org.jaudiotagger.audio.asf.util.Utils;
 
 /**
  * Default reader, Reads GUID and size out of an input stream and creates a
@@ -37,22 +37,11 @@ class ChunkHeaderReader implements ChunkReader
 {
 
     /**
-     * This GUID will assigned to all {@linkplain #read(InputStream) read} chunks.
+     * {@inheritDoc}
      */
-    private GUID guid;
-
-    /**
-     * Creates an instance that will read create unspecified chunks.<br>
-     * 
-     * @param guidOfChunk The GUID the created chunks will receive.
-     */
-    public ChunkHeaderReader(GUID guidOfChunk)
+    public boolean canFail()
     {
-        if (guidOfChunk == null)
-        {
-            throw new NullPointerException();
-        }
-        this.guid = guidOfChunk;
+        return false;
     }
 
     /**
@@ -66,11 +55,12 @@ class ChunkHeaderReader implements ChunkReader
     /**
      * {@inheritDoc}
      */
-    public Chunk read(InputStream stream) throws IOException
+    public Chunk read(final GUID guid, final InputStream stream, final long chunkStart) throws IOException
     {
         final BigInteger chunkLen = Utils.readBig64(stream);
         stream.skip(chunkLen.longValue() - 24);
-        return new Chunk(this.guid, chunkLen);
+        final Chunk result = new Chunk(guid, chunkStart, chunkLen);
+        return result;
     }
 
 }

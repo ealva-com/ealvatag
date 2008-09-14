@@ -46,6 +46,14 @@ public class FileHeaderReader implements ChunkReader
     /**
      * {@inheritDoc}
      */
+    public boolean canFail()
+    {
+        return false;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public GUID getApplyingId()
     {
         return GUID.GUID_FILE;
@@ -54,7 +62,7 @@ public class FileHeaderReader implements ChunkReader
     /**
      * {@inheritDoc}
      */
-    public Chunk read(InputStream stream) throws IOException
+    public Chunk read(final GUID guid, final InputStream stream, final long chunkStart) throws IOException
     {
         BigInteger chunkLen = Utils.readBig64(stream);
         // Skip client GUID.
@@ -75,7 +83,9 @@ public class FileHeaderReader implements ChunkReader
         long maxPkgSize = Utils.readUINT32(stream);
         long uncompressedFrameSize = Utils.readUINT32(stream);
 
-        return new FileHeader(chunkLen, fileSize, fileTime, packageCount, duration, timeStartPos, timeEndPos, flags, minPkgSize, maxPkgSize, uncompressedFrameSize);
+        final FileHeader result = new FileHeader(chunkLen, fileSize, fileTime, packageCount, duration, timeStartPos, timeEndPos, flags, minPkgSize, maxPkgSize, uncompressedFrameSize);
+        result.setPosition(chunkStart);
+        return result;
     }
 
 }

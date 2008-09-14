@@ -159,23 +159,21 @@ public class EncryptionChunk extends Chunk
     }
 
     /**
-     * (overridden)
-     *
-     * @see
+     * {@inheritDoc}
      */
     @Override
-    public String prettyPrint()
+    public String prettyPrint(final String prefix)
     {
-        StringBuffer result = new StringBuffer(super.prettyPrint());
-        result.insert(0, Utils.LINE_SEPARATOR + "Encryption:"
+        StringBuffer result = new StringBuffer(super.prettyPrint(prefix));
+        result.insert(0, Utils.LINE_SEPARATOR + prefix + " Encryption:"
                 + Utils.LINE_SEPARATOR);
-        result.append("	keyID " + this.keyID + Utils.LINE_SEPARATOR);
-        result.append("	secretData " + this.secretData + Utils.LINE_SEPARATOR);
-        result.append("	protectionType " + this.protectionType + Utils.LINE_SEPARATOR);
-        result.append("	licenseURL " + this.licenseURL + Utils.LINE_SEPARATOR);
+        result.append(prefix + "	|->keyID " + this.keyID + Utils.LINE_SEPARATOR);
+        result.append(prefix + "	|->secretData " + this.secretData + Utils.LINE_SEPARATOR);
+        result.append(prefix + "	|->protectionType " + this.protectionType + Utils.LINE_SEPARATOR);
+        result.append(prefix + "	|->licenseURL " + this.licenseURL + Utils.LINE_SEPARATOR);
         Iterator<String> iterator = this.strings.iterator();
         while (iterator.hasNext()) {
-			result.append("   " + iterator.next() + Utils.LINE_SEPARATOR);
+			result.append(prefix + "   |->" + iterator.next() + Utils.LINE_SEPARATOR);
 		}
 		return result.toString();
 	}

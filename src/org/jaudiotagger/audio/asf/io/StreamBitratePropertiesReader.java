@@ -46,6 +46,14 @@ public class StreamBitratePropertiesReader implements ChunkReader
     /**
      * {@inheritDoc}
      */
+    public boolean canFail()
+    {
+        return false;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public GUID getApplyingId()
     {
         return GUID.GUID_STREAM_BITRATE_PROPERTIES;
@@ -54,7 +62,7 @@ public class StreamBitratePropertiesReader implements ChunkReader
     /**
      * {@inheritDoc}
      */
-    public Chunk read(InputStream stream) throws IOException
+    public Chunk read(final GUID guid, final InputStream stream, final long chunkStart) throws IOException
     {
         StreamBitratePropertiesChunk result = null;
         BigInteger chunkLen = Utils.readBig64(stream);
@@ -70,6 +78,8 @@ public class StreamBitratePropertiesReader implements ChunkReader
             long avgBitrate = Utils.readUINT32(stream);
             result.addBitrateRecord(flags & 0x00FF, avgBitrate);
         }
+
+        result.setPosition(chunkStart);
 
         return result;
     }

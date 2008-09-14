@@ -150,7 +150,7 @@ public class TagConverter
      * @see Tag#getFirstArtist() <br>
      * @see Tag#getFirstTitle() <br>
      * @see Tag#getFirstComment() <br>
-     * @see AsfTag#getFirstCopyright()<br>
+     * @see AsfTag#getFirstCopyright() <br>
      */
     public static ContentDescription createContentDescription(AsfTag tag)
     {
@@ -173,29 +173,30 @@ public class TagConverter
     public static AsfTag createTagOf(AsfHeader source)
     {
         AsfTag result = new AsfTag(true);
+        final ContentDescription contentDescription = source.findContentDescription();
+        final ExtendedContentDescription extDesc = source.findExtendedContentDescription();
         /*
-           * It is possible that the file contains no content description, since
-           * that some informations aren't available.
-           */
-        if (source.getContentDescription() != null)
+         * It is possible that the file contains no content description, since
+         * that some informations aren't available.
+         */
+        
+        if (source.findContentDescription() != null)
         {
-            result.setArtist(source.getContentDescription().getAuthor());
-            result.setComment(source.getContentDescription().getComment());
-            result.setTitle(source.getContentDescription().getTitle());
-            result.setCopyright(source.getContentDescription().getCopyRight());
-            result.setRating(source.getContentDescription().getRating());
+            result.setArtist(contentDescription.getAuthor());
+            result.setComment(contentDescription.getComment());
+            result.setTitle(contentDescription.getTitle());
+            result.setCopyright(contentDescription.getCopyRight());
+            result.setRating(contentDescription.getRating());
         }
         // It is possible that the file contains no extended content
         // description. In that case some informations cannot be provided.
-        if (source.getExtendedContentDescription() != null)
+        if (extDesc != null)
         {
             // Now any properties, which don't belong to the common section
-            ExtendedContentDescription extDesc = source.getExtendedContentDescription();
             Iterator<ContentDescriptor> it = extDesc.getDescriptors().iterator();
             while (it.hasNext())
             {
                 ContentDescriptor current = it.next();
-                // XXX: For now, ignore something like WM/AlbumArtist here
                 if (!AsfTag.storesDescriptor(current))
                 {
                     if (current.getType() == ContentDescriptor.TYPE_BINARY)

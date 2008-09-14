@@ -30,7 +30,7 @@ import java.math.BigInteger;
 
 /**
  * Class for reading Tag information out of the extended content description of
- * an asf file. <br>
+ * an ASF file. <br>
  *
  * @author Christian Laireiter
  * @see org.jaudiotagger.audio.asf.data.ExtendedContentDescription
@@ -49,6 +49,14 @@ public class ExtContentDescReader implements ChunkReader
     /**
      * {@inheritDoc}
      */
+    public boolean canFail()
+    {
+        return false;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public GUID getApplyingId()
     {
         return GUID.GUID_EXTENDED_CONTENT_DESCRIPTION;
@@ -57,7 +65,7 @@ public class ExtContentDescReader implements ChunkReader
     /**
      * {@inheritDoc}
      */
-    public Chunk read(InputStream stream) throws IOException
+    public Chunk read(final GUID guid, final InputStream stream, final long chunkStart) throws IOException
     {
         BigInteger chunkLen = Utils.readBig64(stream);
 
@@ -102,13 +110,14 @@ public class ExtContentDescReader implements ChunkReader
             }
             result.addDescriptor(prop);
         }
+        result.setPosition(chunkStart);
         return result;
     }
 
     /**
      * This method read binary Data. <br>
      *
-     * @param raf input source.
+     * @param stream input source.
      * @return the binary data
      * @throws IOException read errors.
      */
@@ -128,7 +137,7 @@ public class ExtContentDescReader implements ChunkReader
      * <code>false</code>) and 1 (for <code>true</code>). The third one is
      * zero, maybe indication the end of the value. <br>
      *
-     * @param raf input source
+     * @param stream input source
      * @return boolean representation.
      * @throws IOException read errors.
      */

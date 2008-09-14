@@ -1,5 +1,11 @@
 package org.jaudiotagger.audio.asf.io;
 
+import org.jaudiotagger.audio.asf.data.GUID;
+
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  * Structure to tell the differences occurred by altering a chunk.
  * 
@@ -22,17 +28,39 @@ final class ModificationResult
     private final int chunkCountDifference;
 
     /**
+     * Stores all GUIDs, which have been read.<br>
+     */
+    private final HashSet<GUID> occuredGUIDs = new HashSet<GUID>();
+
+    /**
      * Creates an instance.<br>
      * 
      * @param chunkCountDiff amount of chunks appeared, disappeared
      * @param bytesDiffer amount of bytes added or removed.
+     * @param occurred all GUIDs which have been occurred, during processing
      */
-    public ModificationResult(int chunkCountDiff, long bytesDiffer)
+    public ModificationResult(int chunkCountDiff, long bytesDiffer, GUID... occurred)
+    {
+        assert occurred != null && occurred.length > 0;
+        this.chunkCountDifference = chunkCountDiff;
+        this.byteDifference = bytesDiffer;
+        this.occuredGUIDs.addAll(Arrays.asList(occurred));
+    }
+
+    /**
+     * Creates an instance.<br>
+     * 
+     * @param chunkCountDiff amount of chunks appeared, disappeared
+     * @param bytesDiffer amount of bytes added or removed.
+     * @param occurred all GUIDs which have been occurred, during processing
+     */
+    public ModificationResult(int chunkCountDiff, long bytesDiffer, Set<GUID> occurred)
     {
         this.chunkCountDifference = chunkCountDiff;
         this.byteDifference = bytesDiffer;
+        this.occuredGUIDs.addAll(occurred);
     }
-
+    
     /**
      * Returns the difference of bytes.
      * 
@@ -51,6 +79,15 @@ final class ModificationResult
     public int getChunkCountDifference()
     {
         return this.chunkCountDifference;
+    }
+
+    /**
+     * Returns all GUIDs which have been occurred during processing.
+     * @return see description.s
+     */
+    public HashSet<GUID> getOccuredGUIDs()
+    {
+        return this.occuredGUIDs;
     }
 
 }

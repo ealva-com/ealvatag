@@ -40,7 +40,7 @@ public class Utils
 {
 
     /**
-     * Stores the default line seperator of the current underlying system.
+     * Stores the default line separator of the current underlying system.
      */
     public final static String LINE_SEPARATOR = System.getProperty("line.separator"); //$NON-NLS-1$
 
@@ -63,6 +63,13 @@ public class Utils
         }
     }
 
+    /**
+     * effectively copies a specified amount of bytes from one stream to another.
+     * @param source stream to read from
+     * @param dest stream to write to
+     * @param amount amount of bytes to copy
+     * @throws IOException on I/O errors, and if the source stream depletes before all bytes have been copied. 
+     */
     public static void copy(InputStream source, OutputStream dest, long amount) throws IOException
     {
         byte[] buf = new byte[8192];
@@ -84,6 +91,12 @@ public class Utils
         }
     }
 
+    /**
+     * Copies all of the source to the destination.<br>
+     * @param source source to read from
+     * @param dest stream to write to
+     * @throws IOException on I/O errors.
+     */
     public static void flush(InputStream source, OutputStream dest) throws IOException
     {
         byte[] buf = new byte[8192];
@@ -119,10 +132,17 @@ public class Utils
         return result;
     }
 
+    /**
+     * Convenience method to convert the given string into a byte sequence which has the format
+     * of the charset given.
+     * @param source string to convert.
+     * @param charset charset to apply
+     * @return the source's binary representation according to the charset.
+     */
     public static byte[] getBytes(final String source, final Charset charset)
     {
         assert charset != null;
-        assert !isBlank(source);
+        assert source != null;
         final ByteBuffer encoded = charset.encode(source);
         final byte[] result = new byte[encoded.limit()];
         encoded.rewind();
@@ -197,6 +217,21 @@ public class Utils
             oa[7 - i] = bytes[i];
         }
         BigInteger result = new BigInteger(oa);
+        return result;
+    }
+
+    /**
+     * Reads <code>size</code> bytes from the stream.<br> 
+     *  
+     * @param stream stream to read from.
+     * @param size amount of bytes to read.
+     * @return the read bytes.
+     * @throws IOException on I/O errors.
+     */
+    public static byte[] readBinary(InputStream stream, long size) throws IOException
+    {
+        byte[] result = new byte[(int) size];
+        stream.read(result);
         return result;
     }
 

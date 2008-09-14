@@ -64,7 +64,7 @@ public class EncodingChunk extends Chunk
     }
 
     /**
-     * This method returns a collection of all {@link String}s which were addid
+     * This method returns a collection of all {@linkplain String Strings} which were added
      * due {@link #addString(String)}.
      *
      * @return Inserted Strings.
@@ -75,19 +75,15 @@ public class EncodingChunk extends Chunk
     }
 
     /**
-     * (overridden)
-     *
-     * @see org.jaudiotagger.audio.asf.data.Chunk#prettyPrint()
+     * {@inheritDoc}
      */
-    public String prettyPrint()
+    public String prettyPrint(final String prefix)
     {
-        StringBuffer result = new StringBuffer(super.prettyPrint());
-        result.insert(0, Utils.LINE_SEPARATOR + "Encoding:"
-                + Utils.LINE_SEPARATOR);
+        StringBuffer result = new StringBuffer(super.prettyPrint(prefix));
         Iterator<String> iterator = this.strings.iterator();
         while (iterator.hasNext())
         {
-            result.append("   " + iterator.next() + Utils.LINE_SEPARATOR);
+            result.append(prefix + "  | : " + iterator.next() + Utils.LINE_SEPARATOR);
         }
         return result.toString();
     }

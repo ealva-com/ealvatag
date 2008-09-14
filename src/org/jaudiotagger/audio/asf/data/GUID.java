@@ -21,6 +21,7 @@ package org.jaudiotagger.audio.asf.data;
 import org.jaudiotagger.audio.asf.util.Utils;
 
 import java.util.Arrays;
+import java.util.HashMap;
 
 /**
  * This class is used for representation of GUIDs and as a reference list of all
@@ -30,8 +31,6 @@ import java.util.Arrays;
  */
 public final class GUID
 {
-
-    public final static int[] CD_GUID = new int[]{0x33, 0x26, 0xB2, 0x75, 0x8E, 0x66, 0xCF, 0x11, 0xA6, 0xD9, 0x00, 0xAA, 0x00, 0x62, 0xCE, 0x6C};
 
     /**
      * This constant defines the GUID for stream chunks describing audio
@@ -111,6 +110,14 @@ public final class GUID
     public final static GUID GUID_STREAM_BITRATE_PROPERTIES = new GUID(new int[]{0xCE, 0x75, 0xF8, 0x7B, 0x8D, 0x46, 0xD1, 0x11, 0x8D, 0x82, 0x00, 0x60, 0x97, 0xC9, 0xA2, 0xB2}, "Stream bitrate properties");
 
     /**
+     * This map is used, to get the description of a GUID instance, which has been created by
+     * reading.<br>
+     * The map comparison is done against the {@link GUID#guid} field. But only
+     * the {@link #KNOWN_GUIDS} have a description set.  
+     */
+    private final static HashMap<GUID, GUID> GUID_TO_CONFIGURED;
+
+    /**
         * This constant represents a GUID implementation which can be used for generic implementations, which have
         * to provide a GUID, but do not really require a specific GUID to work.
         */
@@ -134,6 +141,11 @@ public final class GUID
     static
     {
         KNOWN_GUIDS = new GUID[]{GUID_AUDIO_ERROR_CONCEALEMENT_ABSENT, GUID_AUDIO_ERROR_CONCEALEMENT_INTERLEAVED, GUID_CONTENTDESCRIPTION, GUID_AUDIOSTREAM, GUID_ENCODING, GUID_FILE, GUID_HEADER, GUID_STREAM, GUID_EXTENDED_CONTENT_DESCRIPTION, GUID_VIDEOSTREAM, GUID_HEADER_EXTENSION, GUID_STREAM_BITRATE_PROPERTIES, GUID_HEADER_EXTENSION, GUID_STREAM_BITRATE_PROPERTIES, SCRIPT_COMMAND_OBJECT, GUID_CONTENT_ENCRYPTION, GUID_CONTENT_BRANDING, GUID_UNSPECIFIED};
+        GUID_TO_CONFIGURED = new HashMap<GUID, GUID>(KNOWN_GUIDS.length);
+        for (final GUID curr : KNOWN_GUIDS)
+        {
+            GUID_TO_CONFIGURED.put(curr, curr);
+        }
     }
 
     /**
@@ -158,6 +170,23 @@ public final class GUID
     }
 
     /**
+     * This method looks up a GUID instance from {@link #KNOWN_GUIDS} which matches
+     * the value of the given GUID.
+     * @param orig GUID to look up.
+     * @return a GUID instance from {@link #KNOWN_GUIDS} if available. <code>null</code> else.
+     */
+    public static GUID getConfigured(final GUID orig)
+    {
+        assert orig != null;
+        GUID result = null;
+        if (orig != null)
+        {
+            result = GUID_TO_CONFIGURED.get(orig);
+        }
+        return result;
+    }
+
+    /**
      * This method searches a GUID in {@link #KNOWN_GUIDS}which is equal to the
      * given <code>guid</code> and returns its description. <br>
      * This method is useful if a guid was read out of a file and no
@@ -173,12 +202,9 @@ public final class GUID
         {
             throw new IllegalArgumentException("Argument must not be null.");
         }
-        for (int i = 0; i < KNOWN_GUIDS.length; i++)
+        if (getConfigured(guid) != null)
         {
-            if (KNOWN_GUIDS[i].equals(guid))
-            {
-                result = KNOWN_GUIDS[i].getDescription();
-            }
+            result = getConfigured(guid).getDescription();
         }
         return result;
     }
@@ -194,12 +220,12 @@ public final class GUID
      */
     private int[] guid = null;
 
+
     /**
      * Stores the hash code of the object.<br>
      * <code>&quot;-1&quot;</code> if not determined yet.
      */
     private int hashCode;
-
 
     /**
      * Creates an instance and assigns given <code>guid</code>.<br>
@@ -338,10 +364,15 @@ public final class GUID
     public String toString()
     {
         StringBuffer result = new StringBuffer();
-        if (getDescription().trim().length() > 0)
+        String descr = getDescription();
+        if (Utils.isBlank(descr))
         {
-            result.append("Description: " + getDescription() + Utils.LINE_SEPARATOR + "   ");
+            descr = getGuidDescription(this);
         }
+        if (!Utils.isBlank(descr))
+        {
+            result.append("Description: " + descr + Utils.LINE_SEPARATOR + "   ");
+        } 
         for (int i = 0; i < guid.length; i++)
         {
             String tmp = Integer.toHexString(guid[i]);

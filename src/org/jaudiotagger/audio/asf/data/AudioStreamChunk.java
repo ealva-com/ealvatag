@@ -23,16 +23,31 @@ import java.math.BigInteger;
 import org.jaudiotagger.audio.asf.util.Utils;
 
 /**
- * This class represents the streamchunk describing an audio stream. <br>
+ * This class represents the stream chunk describing an audio stream. <br>
  *
  * @author Christian Laireiter
  */
-public class AudioStreamChunk extends StreamChunk
+public final class AudioStreamChunk extends StreamChunk
 {
+    /**
+     * Stores the audio codec number for WMA
+     */
     public final static long WMA = 0x161;
+    /**
+     * Stores the audio codec number for WMA_PRO
+     */
     public final static long WMA_PRO = 0x162;
+    /**
+     * Stores the audio codec number for WMA_LOSSLESS
+     */
     public final static long WMA_LOSSLESS = 0x163;
+    /**
+     * Stores the audio codec number for WMA (CBR)
+     */
     public final static long WMA_CBR = 0x7A21;
+    /**
+     * Stores the audio codec number for WMA (VBR)
+     */
     public final static long WMA_VBR = 0x7A22;
 
     /**
@@ -43,7 +58,7 @@ public class AudioStreamChunk extends StreamChunk
     /**
      * Stores the average amount of bytes used by audio stream. <br>
      * This value is a field within type specific data of audio stream. Maybe it
-     * could be used to calculate the kbps.
+     * could be used to calculate the KBPs.
      */
     private long averageBytesPerSec;
 
@@ -212,21 +227,18 @@ public class AudioStreamChunk extends StreamChunk
     }
 
     /**
-     * (overridden)
-     *
-     * @see org.jaudiotagger.audio.asf.data.StreamChunk#prettyPrint()
+     * 
+     * {@inheritDoc}
      */
-    public String prettyPrint()
+    public String prettyPrint(final String prefix)
     {
-        StringBuffer result = new StringBuffer(super.prettyPrint()
-                        .replaceAll(Utils.LINE_SEPARATOR, Utils.LINE_SEPARATOR + "   "));
-        result.insert(0, Utils.LINE_SEPARATOR + "AudioStream");
-        result.append("Audio info:" + Utils.LINE_SEPARATOR);
-        result.append("      Bitrate : " + getKbps() + Utils.LINE_SEPARATOR);
+        StringBuffer result = new StringBuffer(super.prettyPrint(prefix));
+        result.append(prefix + "  |-> Audio info:" + Utils.LINE_SEPARATOR);
+        result.append(prefix + "  |  : Bitrate : " + getKbps() + Utils.LINE_SEPARATOR);
         result
-                        .append("      Channels : " + getChannelCount() + " at " + getSamplingRate() + " Hz" + Utils.LINE_SEPARATOR);
-        result.append("      Bits per Sample: " + getBitsPerSample() + Utils.LINE_SEPARATOR);
-        result.append("      Formatcode: " + getCodecDescription() + Utils.LINE_SEPARATOR);
+                        .append(prefix + "  |  : Channels : " + getChannelCount() + " at " + getSamplingRate() + " Hz" + Utils.LINE_SEPARATOR);
+        result.append(prefix + "  |  : Bits per Sample: " + getBitsPerSample() + Utils.LINE_SEPARATOR);
+        result.append(prefix + "  |  : Formatcode: " + getCodecDescription() + Utils.LINE_SEPARATOR);
         return result.toString();
     }
 

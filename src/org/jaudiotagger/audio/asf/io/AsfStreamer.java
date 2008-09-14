@@ -60,11 +60,11 @@ public class AsfStreamer
             // used to calculate differences
             long totalDiff = 0;
             long chunkDiff = 0;
-            byte[] reserved = new byte[2];
-            
+
             // read header information
             long headerSize = Utils.readUINT64(source);
             long chunkCount = Utils.readUINT32(source);
+            byte[] reserved = new byte[2];
             reserved[0] = (byte) (source.read() & 0xFF);
             reserved[1] = (byte) (source.read() & 0xFF);
 
@@ -93,7 +93,7 @@ public class AsfStreamer
                 else
                 {
                     /*
-                     * Now look for ChunkModifier objects which modifiy the current chunk
+                     * Now look for ChunkModifier objects which modify the current chunk
                      */
                     boolean handled = false;
                     for (int j = 0; j < modders.size() && !handled; j++)
@@ -145,7 +145,7 @@ public class AsfStreamer
         }
         else
         {
-            // TODO throw an exception
+            throw new IllegalArgumentException("No ASF header object.");
         }
     }
 

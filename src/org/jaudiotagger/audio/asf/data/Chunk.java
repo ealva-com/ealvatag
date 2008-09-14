@@ -18,11 +18,13 @@
  */
 package org.jaudiotagger.audio.asf.data;
 
+import org.jaudiotagger.audio.asf.util.Utils;
+
 import java.math.BigInteger;
 
 /**
- * This class represents a chunk within asf streams. <br>
- * Each chunk starts with a 16byte guid identifying the type. After that a
+ * This class represents a chunk within ASF streams. <br>
+ * Each chunk starts with a 16byte GUID identifying the type. After that a
  * number (represented by 8 bytes) follows which shows the size in bytes of the
  * chunk. Finally there is the data of the chunk.
  *
@@ -128,18 +130,20 @@ public class Chunk
     }
 
     /**
-     * This method creates a String containing usefull information prepared to
-     * be printed on stdout. <br>
+     * This method creates a String containing useful information prepared to
+     * be printed on STD-OUT. <br>
      * This method is intended to be overwritten by inheriting classes.
+     *
+     * @param prefix each line gets this string prepended.
      *
      * @return Information of current Chunk Object.
      */
-    public String prettyPrint()
+    public String prettyPrint(final String prefix)
     {
         StringBuffer result = new StringBuffer();
-        result.append("GUID: " + GUID.getGuidDescription(guid));
-        result.append("\n   Starts at position: " + getPosition() + "\n");
-        result.append("   Last byte at: " + (getChunckEnd() - 1) + "\n\n");
+        result.append(prefix + "-> GUID: " + GUID.getGuidDescription(guid) + Utils.LINE_SEPARATOR);
+        result.append(prefix + "  | : Starts at position: " + getPosition() + Utils.LINE_SEPARATOR);
+        result.append(prefix + "  | : Last byte at: " + (getChunckEnd() - 1) + Utils.LINE_SEPARATOR);
         return result.toString();
     }
 
@@ -160,7 +164,7 @@ public class Chunk
      */
     public String toString()
     {
-        return prettyPrint();
+        return prettyPrint("");
     }
 
 }

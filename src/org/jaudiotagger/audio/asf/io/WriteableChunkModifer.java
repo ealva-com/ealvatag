@@ -14,7 +14,7 @@ import java.io.OutputStream;
  */
 public class WriteableChunkModifer implements ChunkModifier
 {
- 
+
     /**
      * The chunk to write.
      */
@@ -53,10 +53,11 @@ public class WriteableChunkModifer implements ChunkModifier
             {
                 chunkDiff++;
             }
-            
+
         }
         if (guid != null)
         {
+            assert isApplicable(guid);
             if (this.writableChunk.isEmpty())
             {
                 chunkDiff--;
@@ -64,7 +65,7 @@ public class WriteableChunkModifer implements ChunkModifier
             oldSize = Utils.readUINT64(chunk);
             chunk.skip(oldSize - 24);
         }
-        return new ModificationResult(chunkDiff, (newSize - oldSize));
+        return new ModificationResult(chunkDiff, (newSize - oldSize), guid);
     }
 
 }

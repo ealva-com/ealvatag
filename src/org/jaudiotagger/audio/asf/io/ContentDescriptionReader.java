@@ -39,10 +39,10 @@ public class ContentDescriptionReader implements ChunkReader
      * This method reads a UTF-16 encoded String. <br>
      * For the use this method the number of bytes used by current string must
      * be known. <br>
-     * The ASF spec recommends that those strings end with a terminating zero.
+     * The ASF specification recommends that those strings end with a terminating zero.
      * However it also says that it is not always the case.
      *
-     * @param raf    Input source
+     * @param stream    Input source
      * @param strLen Number of bytes the String may take.
      * @return read String.
      * @throws IOException read errors.
@@ -83,11 +83,25 @@ public class ContentDescriptionReader implements ChunkReader
     /**
      * {@inheritDoc}
      */
+    public boolean canFail()
+    {
+        return false;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public GUID getApplyingId()
     {
         return GUID.GUID_CONTENTDESCRIPTION;
     }
 
+    /**
+     * Returns the next 5 UINT16 values as an array.<br>
+     * @param stream stream to read from
+     * @return 5 int values read from stream.
+     * @throws IOException on I/O Errors.
+     */
     private int[] getStringSizes(InputStream stream) throws IOException
     {
         int[] result = new int[5];
@@ -101,7 +115,7 @@ public class ContentDescriptionReader implements ChunkReader
     /**
      * {@inheritDoc}
      */
-    public Chunk read(InputStream stream) throws IOException
+    public Chunk read(final GUID guid, final InputStream stream, final long chunkStart) throws IOException
     {
         final BigInteger chunkSize = Utils.readBig64(stream);
         /*
@@ -124,7 +138,7 @@ public class ContentDescriptionReader implements ChunkReader
         /*
          * Now create the result
          */
-        ContentDescription result = new ContentDescription(chunkSize);
+        ContentDescription result = new ContentDescription(chunkStart, chunkSize);
         if (stringSizes[0] > 0)
         {
             result.setTitle(strings[0]);

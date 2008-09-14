@@ -50,9 +50,9 @@ public class StreamBitratePropertiesChunk extends Chunk
      *
      * @param chunkLen Length of current chunk.
      */
-    public StreamBitratePropertiesChunk(BigInteger chunkSize)
+    public StreamBitratePropertiesChunk(BigInteger chunkLen)
     {
-        super(GUID.GUID_STREAM_BITRATE_PROPERTIES, chunkSize);
+        super(GUID.GUID_STREAM_BITRATE_PROPERTIES, chunkLen);
         this.bitRates = new ArrayList<Long>();
         this.streamNumbers = new ArrayList<Integer>();
     }
@@ -90,20 +90,18 @@ public class StreamBitratePropertiesChunk extends Chunk
     /**
      * (overridden)
      *
-     * @see org.jaudiotagger.audio.asf.data.Chunk#prettyPrint()
+     * @see org.jaudiotagger.audio.asf.data.Chunk#prettyPrint(String)
      */
-    public String prettyPrint()
+    public String prettyPrint(final String prefix)
     {
-        StringBuffer result = new StringBuffer(super.prettyPrint());
-        result.insert(0, Utils.LINE_SEPARATOR + "Stream Bitrate Properties:"
-                + Utils.LINE_SEPARATOR);
+        StringBuffer result = new StringBuffer(super.prettyPrint(prefix));
         for (int i = 0; i < bitRates.size(); i++)
         {
-            result.append("   Stream no. \"" + streamNumbers.get(i)
+            result
+                            .append(prefix + "  |-> Stream no. \"" + streamNumbers.get(i)
                     + "\" has an average bitrate of \"" + bitRates.get(i)
                     + "\"" + Utils.LINE_SEPARATOR);
         }
-        result.append(Utils.LINE_SEPARATOR);
         return result.toString();
     }
 

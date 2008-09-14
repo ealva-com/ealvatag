@@ -18,12 +18,11 @@
  */
 package org.jaudiotagger.audio.asf.data;
 
+import org.jaudiotagger.audio.asf.util.Utils;
+
 import java.math.BigInteger;
 import java.nio.charset.Charset;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashSet;
-import java.util.Hashtable;
 import java.util.List;
 
 /**
@@ -34,7 +33,7 @@ import java.util.List;
  * 
  * @author Christian Laireiter
  */
-public class AsfHeader extends Chunk
+public final class AsfHeader extends ChunkContainer
 {
 
     /**
@@ -66,11 +65,6 @@ public class AsfHeader extends Chunk
     private final long chunkCount;
 
     /**
-     * Stores the {@link Chunk} objects to their {@link GUID}.
-     */
-    private final Hashtable<GUID, List<Chunk>> chunkTable;
-
-    /**
      * Creates an instance.
      * 
      * @param pos
@@ -83,56 +77,36 @@ public class AsfHeader extends Chunk
     {
         super(GUID.GUID_HEADER, pos, chunkLen);
         this.chunkCount = chunkCnt;
-        this.chunkTable = new Hashtable<GUID, List<Chunk>>();
-    }
-
-    private void add(Chunk toAdd)
-    {
-        List<Chunk> list = assertChunkList(toAdd.getGuid());
-        if (!list.isEmpty() && !MULTI_CHUNKS.contains(toAdd.getGuid()))
-        {
-            throw new IllegalArgumentException("The GUID of the given chunk indicates, that there is no more instance allowed.");
-        }
-        list.add(toAdd);
-        assert chunkstartsUnique() : "Chunk has equal start position like an already inserted one.";
     }
 
     /**
-     * @param chunk
-     */
-    public void addChunk(Chunk chunk)
+    * This method looks for an content description object in this header instance, if not found
+    * there, it tries to get one from a contained ASF header extension object.
+    * 
+    * @return content description if found, <code>null</code> otherwise.
+    */
+    public ContentDescription findContentDescription()
     {
-        add(chunk);
-    }
-
-    /**
-     * This method returns a the list, to which chunks of given GUID are stored.
-     *  
-     * @param lookFor GUID to get the storage list of.<br>
-     * @return List, where to store chunks with sepcified guid.
-     */
-    private List<Chunk> assertChunkList(GUID lookFor)
-    {
-        List<Chunk> result = this.chunkTable.get(lookFor);
-        if (result == null)
+        ContentDescription result = getContentDescription();
+        if (result == null && getExtendedHeader() != null)
         {
-            result = new ArrayList<Chunk>();
-            this.chunkTable.put(lookFor, result);
+            result = getExtendedHeader().getContentDescription();
         }
         return result;
     }
 
     /**
-     * @return
+     * This method looks for an extended content description object in this header instance, if not found
+     * there, it tries to get one from a contained ASF header extension object.
+     * 
+     * @return extended content description if found, <code>null</code> otherwise.
      */
-    private boolean chunkstartsUnique()
+    public ExtendedContentDescription findExtendedContentDescription()
     {
-        boolean result = true;
-        HashSet<Long> chunkStarts = new HashSet<Long>();
-        Collection<Chunk> chunks = getChunks();
-        for (Chunk curr : chunks)
+        ExtendedContentDescription result = getExtendedContentDescription();
+        if (result == null && getExtendedHeader() != null)
         {
-            result &= chunkStarts.add(curr.getPosition());
+            result = getExtendedHeader().getExtendedContentDescription();
         }
         return result;
     }
@@ -170,21 +144,6 @@ public class AsfHeader extends Chunk
     }
 
     /**
-     * Returns a collection of all contained chunks.<br>
-     * 
-     * @return all contained chunks
-     */
-    public Collection<Chunk> getChunks()
-    {
-        final List<Chunk> result = new ArrayList<Chunk>();
-        for (List<Chunk> curr : this.chunkTable.values())
-        {
-            result.addAll(curr);
-        }
-        return result;
-    }
-
-    /**
      * @return Returns the contentDescription.
      */
     public ContentDescription getContentDescription()
@@ -217,32 +176,19 @@ public class AsfHeader extends Chunk
     }
 
     /**
+     * @return Returns the extended header.
+     */
+    public AsfExtendedHeader getExtendedHeader()
+    {
+        return (AsfExtendedHeader) getFirst(GUID.GUID_HEADER_EXTENSION, AsfExtendedHeader.class);
+    }
+
+    /**
      * @return Returns the fileHeader.
      */
     public FileHeader getFileHeader()
     {
         return (FileHeader) getFirst(GUID.GUID_FILE, FileHeader.class);
-    }
-
-    /**
-     * Looks for the first stored chunk which has the given GUID.
-     * 
-     * @param lookFor GUID to look up.
-     * @param instanceOf The class which must additionally be matched. 
-     * @return <code>null</code> if no chunk was found, or the stored instance doesn't match.
-     */
-    private Chunk getFirst(GUID lookFor, Class<? extends Chunk> instanceOf)
-    {
-        List<Chunk> list = this.chunkTable.get(lookFor);
-        if (list != null && !list.isEmpty())
-        {
-            Chunk result = list.get(0);
-            if (result.getClass().isAssignableFrom(instanceOf))
-            {
-                return result;
-            }
-        }
-        return null;
     }
 
     /**
@@ -254,19 +200,13 @@ public class AsfHeader extends Chunk
     }
 
     /**
-     * (overridden)
      * 
-     * @see org.jaudiotagger.audio.asf.data.Chunk#prettyPrint()
+     * {@inheritDoc}
      */
-    public String prettyPrint()
+    public String prettyPrint(final String prefix)
     {
-        StringBuffer result = new StringBuffer(super.prettyPrint());
-        result.insert(0, "\nASF Chunk\n");
-        result.append("   Contains: \"" + getChunkCount() + "\" chunks\n");
-        for (Chunk curr : getChunks())
-        {
-            result.append(curr.toString());
-        }
+        StringBuffer result = new StringBuffer(super
+                        .prettyPrint(prefix, prefix + "  | : Contains: \"" + getChunkCount() + "\" chunks" + Utils.LINE_SEPARATOR));
         return result.toString();
     }
 }

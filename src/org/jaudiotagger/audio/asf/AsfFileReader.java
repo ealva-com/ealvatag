@@ -21,9 +21,12 @@ package org.jaudiotagger.audio.asf;
 import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.asf.data.AsfHeader;
 import org.jaudiotagger.audio.asf.data.AudioStreamChunk;
+import org.jaudiotagger.audio.asf.data.ContentDescriptor;
+import org.jaudiotagger.audio.asf.data.ExtendedContentDescription;
 import org.jaudiotagger.audio.asf.io.*;
 import org.jaudiotagger.audio.asf.tag.AsfTag;
 import org.jaudiotagger.audio.asf.util.TagConverter;
+import org.jaudiotagger.audio.asf.util.Utils;
 import org.jaudiotagger.audio.exceptions.CannotReadException;
 import org.jaudiotagger.audio.exceptions.InvalidAudioFrameException;
 import org.jaudiotagger.audio.exceptions.ReadOnlyFileException;
@@ -51,11 +54,38 @@ public class AsfFileReader extends AudioFileReader
     static
     {
         List<Class<? extends ChunkReader>> readers = new ArrayList<Class<? extends ChunkReader>>();
-        readers.add(FileHeaderReader.class);
-        readers.add(StreamChunkReader.class);
         readers.add(ContentDescriptionReader.class);
         readers.add(ExtContentDescReader.class);
+        /* 
+         * Create the header extension object reader with just content description reader as well
+         * as extended content description reader.
+         */
+        AsfExtHeaderReader extReader = new AsfExtHeaderReader(readers, true);
+        readers.add(FileHeaderReader.class);
+        readers.add(StreamChunkReader.class);
         HEADER_READER = new AsfHeaderReader(readers, true);
+        HEADER_READER.setExtendedHeaderReader(extReader);
+    }
+
+    /**
+     * Determines if the &quot;isVbr&quot; field is set in the extended content description.<br>
+     * @param header the header to look up.
+     * @return <code>true</code> if &quot;isVbr&quot; is present with a <code>true</code> value.
+     */
+    private boolean determineVariableBitrate(AsfHeader header)
+    {
+        assert header != null;
+        boolean result = false;
+        ExtendedContentDescription extDesc = header.findExtendedContentDescription();
+        if (extDesc != null)
+        {
+            List<ContentDescriptor> descriptors = extDesc.getDescriptors("IsVBR");
+            if (descriptors != null && !descriptors.isEmpty())
+            {
+                result = Boolean.TRUE.toString().equals(descriptors.get(0).getString());
+            }
+        }
+        return result;
     }
 
     /**
@@ -83,6 +113,7 @@ public class AsfFileReader extends AudioFileReader
         info.setLossless(header.getAudioStreamChunk().getCompressionFormat() == AudioStreamChunk.WMA_LOSSLESS);
         info.setPreciseLength(header.getFileHeader().getPreciseDuration());
         info.setSamplingRate((int) header.getAudioStreamChunk().getSamplingRate());
+        info.setVariableBitRate(determineVariableBitrate(header));
         return info;
     }
 
@@ -183,7 +214,7 @@ public class AsfFileReader extends AudioFileReader
         try
         {
             stream = new FullRequestInputStream(new BufferedInputStream(new FileInputStream(f)));
-            final AsfHeader header = HEADER_READER.parseData(stream, 0);
+            final AsfHeader header = HEADER_READER.read(Utils.readGUID(stream), stream, 0);
             if (header == null)
             {
                 throw new CannotReadException("Some values must have been incorrect for interpretation as asf with wma content.");

@@ -15,7 +15,7 @@ public class AsfTagTextField extends AsfTagField implements TagTextField
     /**
      * Creates an instance.
      * 
-     * @param toWrap The content descriptor, whose content is published.<br> Must not be of type {@link ContentDescriptor#TYPE_BINARY}.
+     * @param source The content descriptor, whose content is published.<br> Must not be of type {@link ContentDescriptor#TYPE_BINARY}.
      */
     public AsfTagTextField(ContentDescriptor source)
     {

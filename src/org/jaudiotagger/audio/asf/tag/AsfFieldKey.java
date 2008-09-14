@@ -15,7 +15,7 @@ public enum AsfFieldKey
 {
 
     ALBUM("WM/AlbumTitle", TagFieldKey.ALBUM, false),
-    ALBUM_ARTIST(null, TagFieldKey.ALBUM_ARTIST, false),
+    ALBUM_ARTIST("WM/AlbumArtist", TagFieldKey.ALBUM_ARTIST, false),
     ALBUM_ARTIST_SORT("WM/AlbumArtistSortOrder", TagFieldKey.ALBUM_ARTIST_SORT, false),
     ALBUM_SORT("WM/AlbumSortOrder", TagFieldKey.ALBUM_SORT, false),
     AMAZON_ID(null, TagFieldKey.AMAZON_ID, false),
@@ -37,6 +37,7 @@ public enum AsfFieldKey
     GROUPING("WM/ContentGroupDescription", TagFieldKey.GROUPING, false),
     IS_COMPILATION(null, TagFieldKey.IS_COMPILATION, false),
     ISRC("WM/ISRC", TagFieldKey.ISRC, false),
+    ISVBR("IsVBR", null, false),
     LYRICIST("WM/Writer", TagFieldKey.LYRICIST, false),
     LYRICS("WM/Lyrics", TagFieldKey.LYRICS, false),
     MEDIA(null, TagFieldKey.MEDIA, false),
@@ -106,6 +107,7 @@ public enum AsfFieldKey
      * Otherwise a AsfFieldKey is searched which has a TagFieldKey with this name assigned, and
      * returns its field identifier.<br>
      * @param id The field identifier (key) to look up.
+     * @return converted identifier
      */
     public static String convertId(String id)
     {
@@ -190,12 +192,13 @@ public enum AsfFieldKey
      * 
      * @param asfFieldId standard field identifier.
      * @param correspondingKey the corresponding tag field key.
+     * @param multiValue <code>true</code> if the this ASF field can have multiple values.
      */
-    private AsfFieldKey(String asfFieldId, TagFieldKey correspondingKey, boolean mutliValue)
+    private AsfFieldKey(String asfFieldId, TagFieldKey correspondingKey, boolean multiValue)
     {
         this.fieldId = asfFieldId;
         this.corresponding = correspondingKey;
-        this.multiValued = mutliValue;
+        this.multiValued = multiValue;
     }
 
     /**
@@ -213,7 +216,7 @@ public enum AsfFieldKey
      * 
      * @return the standard field id. (may be <code>null</code>)
      */
-    protected String getFieldId()
+    public String getFieldId()
     {
         return this.fieldId;
     }

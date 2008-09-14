@@ -113,9 +113,7 @@ public final class ContentDescriptor implements Comparable<ContentDescriptor>
     }
 
     /**
-     * (overridden)
-     *
-     * @see java.lang.Comparable#compareTo(java.lang.Object)
+     * {@inheritDoc}
      */
     public int compareTo(ContentDescriptor o)
     {
@@ -127,7 +125,7 @@ public final class ContentDescriptor implements Comparable<ContentDescriptor>
      * This method creates a copy of the current object. <br>
      * All data will be copied, too. <br>
      *
-     * @return A new Contentdescriptor containing the same values as the current
+     * @return A new content descriptor containing the same values as the current
      *         one.
      */
     public ContentDescriptor createCopy()
