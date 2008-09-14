@@ -39,20 +39,17 @@ public abstract class AbstractTestCase extends TestCase
         {
             FileInputStream in = new FileInputStream(fromFile);
             FileOutputStream out = new FileOutputStream(toFile);
-            BufferedInputStream inBuffer = new BufferedInputStream(in);
-            BufferedOutputStream outBuffer = new BufferedOutputStream(out);
+            byte[] buf = new byte[8192];
 
-            int theByte;
+            int len;
 
-            while ((theByte = inBuffer.read()) > -1)
+            while ((len = in.read(buf)) > -1)
             {
-                outBuffer.write(theByte);
+                out.write(buf, 0, len);
             }
 
-            outBuffer.close();
-            inBuffer.close();
-            out.close();
             in.close();
+            out.close();
 
             // cleanupif files are not the same length
             if (fromFile.length() != toFile.length())
