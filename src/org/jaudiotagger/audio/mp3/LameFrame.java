@@ -64,8 +64,7 @@ public class LameFrame
     /**
      * Parse frame
      *
-     * @return frame or null if not exists
-     * @throws InvalidAudioFrameException
+     * @return frame or null if not exists    
      */
     public static LameFrame parseLameFrame(ByteBuffer bb)
     {
