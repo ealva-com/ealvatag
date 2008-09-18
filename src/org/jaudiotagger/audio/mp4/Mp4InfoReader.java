@@ -54,7 +54,7 @@ import java.util.logging.Logger;
 public class Mp4InfoReader
 {
     // Logger Object
-    public static Logger logger = Logger.getLogger(" org.jaudiotagger.audio.mp4.atom");
+    public static Logger logger = Logger.getLogger("org.jaudiotagger.audio.mp4.atom");
 
     public GenericAudioHeader read(RandomAccessFile raf) throws CannotReadException, IOException
     {
