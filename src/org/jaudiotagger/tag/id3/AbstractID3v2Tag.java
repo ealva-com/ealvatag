@@ -2040,8 +2040,12 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
         {
             ((FrameBodyUSLT) frame.getBody()).setDescription("");
             ((FrameBodyUSLT) frame.getBody()).setLyric(value);
-
         }
+        else if (frame.getBody() instanceof FrameBodyWOAR)
+        {
+            ((FrameBodyWOAR) frame.getBody()).setUrlLink(value);           
+        }
+
         else if (frame.getBody() instanceof AbstractFrameBodyTextInfo)
         {
             ((AbstractFrameBodyTextInfo) frame.getBody()).setText(value);
@@ -2173,7 +2177,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
      */
     public void deleteTagField(TagFieldKey genericKey) throws KeyNotFoundException
     {
-        if (genericKey == null)
+       if (genericKey == null)
         {
             throw new KeyNotFoundException();
         }
@@ -2227,7 +2231,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
                 {
                     throw new RuntimeException("Need to implement get(TagFieldKey genericKey) for:" + next.getClass());
                 }
-            }
+            }            
         }
     }
 

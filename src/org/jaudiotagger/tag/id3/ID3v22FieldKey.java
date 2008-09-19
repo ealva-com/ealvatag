@@ -53,11 +53,11 @@ public enum ID3v22FieldKey
     REMIXER(ID3v22Frames.FRAME_ID_V2_REMIXED, Id3FieldType.TEXT),
     MEDIA(ID3v22Frames.FRAME_ID_V2_MEDIA_TYPE, Id3FieldType.TEXT),
     URL_OFFICIAL_RELEASE_SITE(ID3v22Frames.FRAME_ID_V2_USER_DEFINED_URL, FrameBodyWXXX.URL_OFFICIAL_RELEASE_SITE, Id3FieldType.TEXT),
-    URL_DISCOGS_RELEASE_SITE(ID3v22Frames.FRAME_ID_V2_USER_DEFINED_URL, FrameBodyWXXX.URL_OFFICIAL_RELEASE_SITE, Id3FieldType.TEXT),
-    URL_WIKIPEDIA_RELEASE_SITE(ID3v22Frames.FRAME_ID_V2_USER_DEFINED_URL, FrameBodyWXXX.URL_OFFICIAL_RELEASE_SITE, Id3FieldType.TEXT),
+    URL_DISCOGS_RELEASE_SITE(ID3v22Frames.FRAME_ID_V2_USER_DEFINED_URL, FrameBodyWXXX.URL_DISCOGS_RELEASE_SITE, Id3FieldType.TEXT),
+    URL_WIKIPEDIA_RELEASE_SITE(ID3v22Frames.FRAME_ID_V2_USER_DEFINED_URL, FrameBodyWXXX.URL_WIKIPEDIA_RELEASE_SITE, Id3FieldType.TEXT),
     URL_OFFICIAL_ARTIST_SITE(ID3v22Frames.FRAME_ID_V2_URL_ARTIST_WEB, Id3FieldType.TEXT),
-    URL_DISCOGS_ARTIST_SITE(ID3v22Frames.FRAME_ID_V2_USER_DEFINED_URL, FrameBodyWXXX.URL_OFFICIAL_RELEASE_SITE, Id3FieldType.TEXT),
-    URL_WIKIPEDIA_ARTIST_SITE(ID3v22Frames.FRAME_ID_V2_USER_DEFINED_URL, FrameBodyWXXX.URL_OFFICIAL_RELEASE_SITE, Id3FieldType.TEXT),;
+    URL_DISCOGS_ARTIST_SITE(ID3v22Frames.FRAME_ID_V2_USER_DEFINED_URL, FrameBodyWXXX.URL_DISCOGS_ARTIST_SITE, Id3FieldType.TEXT),
+    URL_WIKIPEDIA_ARTIST_SITE(ID3v22Frames.FRAME_ID_V2_USER_DEFINED_URL, FrameBodyWXXX.URL_WIKIPEDIA_ARTIST_SITE, Id3FieldType.TEXT),;
 
     private String fieldName;
 
@@ -81,7 +81,7 @@ public enum ID3v22FieldKey
 
     /**
      * @param frameId   the frame that will be used
-     * @param subId     the additioanl key reuirted within the frame touniquely identify this key
+     * @param subId     the additioanl key required within the frame to uniquely identify this key
      * @param fieldType
      */
     ID3v22FieldKey(String frameId, String subId, Id3FieldType fieldType)

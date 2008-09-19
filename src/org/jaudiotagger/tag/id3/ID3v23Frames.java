@@ -384,6 +384,12 @@ public class ID3v23Frames extends ID3Frames
         tagFieldToId3.put(TagFieldKey.TITLE_SORT, ID3v23FieldKey.TITLE_SORT);
         tagFieldToId3.put(TagFieldKey.COMPOSER_SORT, ID3v23FieldKey.COMPOSER_SORT);
         tagFieldToId3.put(TagFieldKey.COVER_ART, ID3v23FieldKey.COVER_ART);
+        tagFieldToId3.put(TagFieldKey.URL_DISCOGS_ARTIST_SITE, ID3v23FieldKey.URL_DISCOGS_ARTIST_SITE);
+        tagFieldToId3.put(TagFieldKey.URL_DISCOGS_RELEASE_SITE, ID3v23FieldKey.URL_DISCOGS_RELEASE_SITE);
+        tagFieldToId3.put(TagFieldKey.URL_WIKIPEDIA_ARTIST_SITE, ID3v23FieldKey.URL_WIKIPEDIA_ARTIST_SITE);
+        tagFieldToId3.put(TagFieldKey.URL_WIKIPEDIA_RELEASE_SITE, ID3v23FieldKey.URL_WIKIPEDIA_RELEASE_SITE);
+        tagFieldToId3.put(TagFieldKey.URL_OFFICIAL_ARTIST_SITE, ID3v23FieldKey.URL_OFFICIAL_ARTIST_SITE);
+        tagFieldToId3.put(TagFieldKey.URL_OFFICIAL_RELEASE_SITE, ID3v23FieldKey.URL_OFFICIAL_RELEASE_SITE);
     }
 
 
