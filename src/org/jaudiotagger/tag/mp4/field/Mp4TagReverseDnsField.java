@@ -71,6 +71,17 @@ public class Mp4TagReverseDnsField extends Mp4TagField implements TagTextField
         this.content = content;
     }
 
+    /**
+     * Newly created Reverse Dns field bypassing the Mp4TagField enum for creation of temporary reverse dns fields
+     */
+    public Mp4TagReverseDnsField(final String fieldName, final String issuer, final String identifier, final String content)
+    {
+        super(fieldName);
+        this.issuer     = issuer;
+        this.descriptor = identifier;
+        this.content    = content;
+    }
+
     public Mp4FieldType getFieldType()
     {
         //TODO always assuming text at moment but may not always be the case (though dont have any concrete
