@@ -5,6 +5,7 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 import org.jaudiotagger.tag.TagFieldKey;
 import org.jaudiotagger.tag.TagTextField;
+import org.jaudiotagger.tag.TagOptionSingleton;
 
 /**
  *
@@ -63,18 +64,19 @@ public class ID3v11TagTest extends TestCase
     /////////////////////////////////////////////////////////////////////////
 
     /**
-     *
-     */
-    protected void setUp()
-    {
-    }
+      *
+      */
+     protected void setUp()
+     {
+         TagOptionSingleton.getInstance().setToDefault();
+     }
 
-    /**
-     *
-     */
-    protected void tearDown()
-    {
-    }
+     /**
+      *
+      */
+     protected void tearDown()
+     {
+     }
 
     /**
      *

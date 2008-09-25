@@ -21,6 +21,7 @@ import junit.framework.TestSuite;
 import org.jaudiotagger.AbstractTestCase;
 import org.jaudiotagger.audio.mp3.MP3File;
 import org.jaudiotagger.tag.id3.framebody.*;
+import org.jaudiotagger.tag.TagOptionSingleton;
 
 import java.io.File;
 
@@ -54,18 +55,20 @@ public class ID3v24TagTest extends TestCase
     /////////////////////////////////////////////////////////////////////////
 
     /**
-     *
-     */
-    protected void setUp()
-    {
-    }
+        *
+        */
+       protected void setUp()
+       {
+           TagOptionSingleton.getInstance().setToDefault();
+       }
 
-    /**
-     *
-     */
-    protected void tearDown()
-    {
-    }
+       /**
+        *
+        */
+       protected void tearDown()
+       {
+       }
+
 
     /**
      *

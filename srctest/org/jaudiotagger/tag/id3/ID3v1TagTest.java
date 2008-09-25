@@ -10,6 +10,7 @@ import org.jaudiotagger.audio.mp3.MP3File;
 import org.jaudiotagger.tag.Tag;
 import org.jaudiotagger.tag.TagFieldKey;
 import org.jaudiotagger.tag.TagTextField;
+import org.jaudiotagger.tag.TagOptionSingleton;
 
 import java.io.File;
 
@@ -18,6 +19,7 @@ import java.io.File;
  */
 public class ID3v1TagTest extends TestCase
 {
+
     public static final String ARTIST = "artist";
     public static final String ALBUM = "album";
     public static final String COMMENT = "comment";
@@ -69,18 +71,20 @@ public class ID3v1TagTest extends TestCase
     /////////////////////////////////////////////////////////////////////////
 
     /**
-     *
-     */
-    protected void setUp()
-    {
-    }
+          *
+          */
+         protected void setUp()
+         {
+             TagOptionSingleton.getInstance().setToDefault();
+         }
 
-    /**
-     *
-     */
-    protected void tearDown()
-    {
-    }
+         /**
+          *
+          */
+         protected void tearDown()
+         {
+         }
+
 
     /**
      *

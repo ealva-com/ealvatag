@@ -35,6 +35,24 @@ public class NewInterfaceTest extends TestCase
     public static final String ALBUM_TEST_STRING = "mellow gold";
     public static final String ALBUM_TEST_STRING2 = "odelay";
 
+
+
+        /**
+         *
+         */
+        protected void setUp()
+        {
+            TagOptionSingleton.getInstance().setToDefault();
+        }
+
+        /**
+         *
+         */
+        protected void tearDown()
+        {
+        }
+
+
     /**
      * Constructor
      *

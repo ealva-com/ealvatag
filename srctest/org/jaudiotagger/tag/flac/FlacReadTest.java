@@ -55,7 +55,7 @@ public class FlacReadTest extends TestCase
             assertEquals("16000", f.getAudioHeader().getSampleRate());
             assertEquals(0, f.getAudioHeader().getTrackLength());
             assertEquals("47", f.getAudioHeader().getBitRate());       //is this correct value
-        }
+        }                                           
         catch (Exception e)
         {
             e.printStackTrace();

@@ -4,6 +4,7 @@ import org.jaudiotagger.AbstractTestCase;
 import org.jaudiotagger.audio.mp3.MP3File;
 import org.jaudiotagger.tag.id3.framebody.FrameBodyWXXX;
 import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
+import org.jaudiotagger.tag.TagOptionSingleton;
 
 import java.io.File;
 import java.io.UnsupportedEncodingException;
@@ -22,6 +23,20 @@ public class FrameWXXXTest extends AbstractTestCase
     public static final String UNICODE_ENCODED = "http://ja.wikipedia.org/wiki/%E5%9D%82%E6%9C%AC%E4%B9%9D";
     public static final String UNICODE_LINK = "http://ja.wikipedia.org/wiki/\u5742\u672c\u4e5d";
 
+    /**
+      *
+      */
+     protected void setUp()
+     {
+         TagOptionSingleton.getInstance().setToDefault();
+     }
+
+     /**
+      *
+      */
+     protected void tearDown()
+     {
+     }
 
     public static ID3v24Frame getInitialisedFrame()
     {

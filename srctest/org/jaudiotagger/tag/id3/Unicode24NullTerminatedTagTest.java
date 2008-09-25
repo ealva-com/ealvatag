@@ -8,6 +8,7 @@ import org.jaudiotagger.audio.exceptions.InvalidAudioFrameException;
 import org.jaudiotagger.audio.exceptions.ReadOnlyFileException;
 import org.jaudiotagger.audio.mp3.MP3File;
 import org.jaudiotagger.tag.TagException;
+import org.jaudiotagger.tag.TagOptionSingleton;
 import org.jaudiotagger.tag.id3.framebody.FrameBodyCOMM;
 import org.jaudiotagger.tag.id3.framebody.FrameBodyWXXX;
 import org.jaudiotagger.tag.id3.framebody.FrameBodyWXXXTest;
@@ -50,6 +51,7 @@ public class Unicode24NullTerminatedTagTest extends TestCase
      */
     protected void setUp()
     {
+        TagOptionSingleton.getInstance().setToDefault();
     }
 
     /**

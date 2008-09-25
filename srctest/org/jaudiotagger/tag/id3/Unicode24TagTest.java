@@ -61,6 +61,7 @@ public class Unicode24TagTest extends TestCase
      */
     protected void setUp()
     {
+        TagOptionSingleton.getInstance().setToDefault();
     }
 
     /**

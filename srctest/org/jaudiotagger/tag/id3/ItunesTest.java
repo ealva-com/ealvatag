@@ -24,6 +24,21 @@ public class ItunesTest extends AbstractTestCase
     private static final String EMPTY_VALUE = "";
 
     /**
+     *
+     */
+    protected void setUp()
+    {
+        TagOptionSingleton.getInstance().setToDefault();
+    }
+
+    /**
+     *
+     */
+    protected void tearDown()
+    {
+    }
+
+    /**
      * This tests that we work out that the frame is not unsynced and read the frame size as a normal integer
      * using an integral algorithm
      *
