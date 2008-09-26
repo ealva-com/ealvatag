@@ -628,15 +628,15 @@ public class ID3v23Tag extends AbstractID3v2Tag
 
         //Flags
         byte flagsByte = 0;
-        if (isUnsynchronization() == true)
+        if (isUnsynchronization())
         {
             flagsByte |= MASK_V23_UNSYNCHRONIZATION;
         }
-        if (extended == true)
+        if (extended)
         {
             flagsByte |= MASK_V23_EXTENDED_HEADER;
         }
-        if (experimental == true)
+        if (experimental)
         {
             flagsByte |= MASK_V23_EXPERIMENTAL;
         }
@@ -657,7 +657,7 @@ public class ID3v23Tag extends AbstractID3v2Tag
         headerBuffer.put(ID3SyncSafeInteger.valueToBuffer(padding + size + additionalHeaderSize));
 
         //Write Extended Header
-        if (extended == true)
+        if (extended)
         {
             byte extFlagsByte1 = 0;
             byte extFlagsByte2 = 0;
@@ -933,7 +933,7 @@ public class ID3v23Tag extends AbstractID3v2Tag
 
      /**
      *
-     * @return comparator used to order frames in preffrred order for writing to file
+     * @return comparator used to order frames in preferred order for writing to file
      * so that most important frames are written first.
      */
     public Comparator getPreferredFrameOrderComparator()

@@ -477,11 +477,11 @@ public class ID3v22Tag extends AbstractID3v2Tag
 
         //Flags
         byte flags = (byte) 0;
-        if (unsynchronization == true)
+        if (unsynchronization)
         {
             flags |= (byte) MASK_V22_UNSYNCHRONIZATION;
         }
-        if (compression == true)
+        if (compression)
         {
             flags |= (byte) MASK_V22_COMPRESSION;
         }
