@@ -61,7 +61,7 @@ public class ID3SyncSafeInteger
     }
 
     /**
-     * Is buffer holding a value that is definently not sysncsafe
+     * Is buffer holding a value that is definently not syncsafe
      * <p/>
      * We cannot guarantee a buffer is holding a syncsafe integer but there are some checks
      * we can do to show that it definently is not.
