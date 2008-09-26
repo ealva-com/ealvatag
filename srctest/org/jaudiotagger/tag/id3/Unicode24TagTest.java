@@ -454,6 +454,8 @@ public class Unicode24TagTest extends TestCase
 
         //Text Encoding has been defaulted by tagoption - no unicode required
         assertEquals(TextEncoding.UTF_16, body.getTextEncoding());
+
+        
     }
 
 }
