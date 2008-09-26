@@ -13,8 +13,8 @@ import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
 
 import java.io.File;
 import java.io.RandomAccessFile;
-import java.nio.channels.FileChannel;
 import java.nio.ByteBuffer;
+import java.nio.channels.FileChannel;
 
 /**
  *
@@ -407,106 +407,180 @@ public class Unicode23TagTest extends TestCase
         assertEquals(FrameBodyTPE1Test.TPE1_TEST_STRING, body.getText());
 
 //Check Bytes
-        FileChannel fc     = new RandomAccessFile(testFile,"r").getChannel();
-        ByteBuffer  buffer = ByteBuffer.allocate(100);
-        int count=fc.read(buffer);
+        FileChannel fc = new RandomAccessFile(testFile, "r").getChannel();
+        ByteBuffer buffer = ByteBuffer.allocate(100);
+        int count = fc.read(buffer);
         fc.close();
 
         //Frame Header
-        assertTrue((buffer.get(10)&0xff)=='T');
-        assertTrue((buffer.get(11)&0xff)=='P');
-        assertTrue((buffer.get(12)&0xff)=='E');
-        assertTrue((buffer.get(13)&0xff)=='1');
+        assertTrue((buffer.get(10) & 0xff) == 'T');
+        assertTrue((buffer.get(11) & 0xff) == 'P');
+        assertTrue((buffer.get(12) & 0xff) == 'E');
+        assertTrue((buffer.get(13) & 0xff) == '1');
 
         //Charset
-        assertTrue((buffer.get(20)&0xff)==0x01);
+        assertTrue((buffer.get(20) & 0xff) == 0x01);
 
         //BOM
-        assertTrue((buffer.get(21)&0xff)==0xFF);
-        assertTrue((buffer.get(22)&0xff)==0xFE);
+        assertTrue((buffer.get(21) & 0xff) == 0xFF);
+        assertTrue((buffer.get(22) & 0xff) == 0xFE);
 
         //Data, least significant byte (which contaisn the data is first in each pair)
-        assertTrue((buffer.get(23)&0xff)=='b');
-        assertTrue((buffer.get(24)&0xff)==0x00);
-        assertTrue((buffer.get(25)&0xff)=='e');
-        assertTrue((buffer.get(26)&0xff)==0x00);
-        assertTrue((buffer.get(27)&0xff)=='c');
-        assertTrue((buffer.get(28)&0xff)==0x00);
-        assertTrue((buffer.get(29)&0xff)=='k');
-        assertTrue((buffer.get(28)&0xff)==0x00);
-        
+        assertTrue((buffer.get(23) & 0xff) == 'b');
+        assertTrue((buffer.get(24) & 0xff) == 0x00);
+        assertTrue((buffer.get(25) & 0xff) == 'e');
+        assertTrue((buffer.get(26) & 0xff) == 0x00);
+        assertTrue((buffer.get(27) & 0xff) == 'c');
+        assertTrue((buffer.get(28) & 0xff) == 0x00);
+        assertTrue((buffer.get(29) & 0xff) == 'k');
+        assertTrue((buffer.get(28) & 0xff) == 0x00);
+
     }
 
     /**
-        * @throws Exception
-        */
-       public void testCreateUTF16AndResetEvenIfNotNeededIfDefaultSetEncodedSizeTerminatedString() throws Exception
-       {
+     * @throws Exception
+     */
+    public void testCreateUTF16AndResetEvenIfNotNeededIfDefaultSetEncodedSizeTerminatedString() throws Exception
+    {
 
-           File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3");
-           MP3File mp3File = new MP3File(testFile);
+        File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3");
+        MP3File mp3File = new MP3File(testFile);
 
-           ID3v23Frame frame = new ID3v23Frame(ID3v23Frames.FRAME_ID_V3_ARTIST);
-           Exception exceptionCaught = null;
-           try
-           {
-               frame.getBody().setObjectValue(DataTypes.OBJ_TEXT, FrameBodyTPE1Test.TPE1_TEST_STRING);
-           }
-           catch (Exception e)
-           {
-               exceptionCaught = e;
-           }
-           assertNull(exceptionCaught);
+        ID3v23Frame frame = new ID3v23Frame(ID3v23Frames.FRAME_ID_V3_ARTIST);
+        Exception exceptionCaught = null;
+        try
+        {
+            frame.getBody().setObjectValue(DataTypes.OBJ_TEXT, FrameBodyTPE1Test.TPE1_TEST_STRING);
+        }
+        catch (Exception e)
+        {
+            exceptionCaught = e;
+        }
+        assertNull(exceptionCaught);
 
-           //Modify tag options so rewrites all frames even if already created
-           //So will default to default on save (default is ISO8859) has to be done before the frame is created
-           TagOptionSingleton.getInstance().setId3v23DefaultTextEncoding(TextEncoding.UTF_16);
-           TagOptionSingleton.getInstance().setResetTextEncodingForExistingFrames(true);
+        //Modify tag options so rewrites all frames even if already created
+        //So will default to default on save (default is ISO8859) has to be done before the frame is created
+        TagOptionSingleton.getInstance().setId3v23DefaultTextEncoding(TextEncoding.UTF_16);
+        TagOptionSingleton.getInstance().setResetTextEncodingForExistingFrames(true);
 
-           //Create and Save
-           ID3v23Tag tag = new ID3v23Tag();
-           tag.setFrame(frame);
-           mp3File.setID3v2Tag(tag);
-           mp3File.save();
+        //Create and Save
+        ID3v23Tag tag = new ID3v23Tag();
+        tag.setFrame(frame);
+        mp3File.setID3v2Tag(tag);
+        mp3File.save();
 
-           //Reload, should be written as UTF16 because set in tag options
-           mp3File = new MP3File(testFile);
-           frame = (ID3v23Frame) mp3File.getID3v2Tag().getFrame(ID3v23Frames.FRAME_ID_V3_ARTIST);
-           FrameBodyTPE1 body = (FrameBodyTPE1) frame.getBody();
-           assertEquals(ID3v23Frames.FRAME_ID_V3_ARTIST, body.getIdentifier());
-           assertEquals(TextEncoding.UTF_16, body.getTextEncoding());
-           assertEquals(FrameBodyTPE1Test.TPE1_TEST_STRING, body.getText());
+        //Reload, should be written as UTF16 because set in tag options
+        mp3File = new MP3File(testFile);
+        frame = (ID3v23Frame) mp3File.getID3v2Tag().getFrame(ID3v23Frames.FRAME_ID_V3_ARTIST);
+        FrameBodyTPE1 body = (FrameBodyTPE1) frame.getBody();
+        assertEquals(ID3v23Frames.FRAME_ID_V3_ARTIST, body.getIdentifier());
+        assertEquals(TextEncoding.UTF_16, body.getTextEncoding());
+        assertEquals(FrameBodyTPE1Test.TPE1_TEST_STRING, body.getText());
 
-           //Check Bytes
-           FileChannel fc     = new RandomAccessFile(testFile,"r").getChannel();
-           ByteBuffer  buffer = ByteBuffer.allocate(100);
-           int count=fc.read(buffer);
-           fc.close();
+        //Check Bytes
+        FileChannel fc = new RandomAccessFile(testFile, "r").getChannel();
+        ByteBuffer buffer = ByteBuffer.allocate(100);
+        int count = fc.read(buffer);
+        fc.close();
 
-           //Frame Header
-           assertTrue((buffer.get(10)&0xff)=='T');
-           assertTrue((buffer.get(11)&0xff)=='P');
-           assertTrue((buffer.get(12)&0xff)=='E');
-           assertTrue((buffer.get(13)&0xff)=='1');
+        //Frame Header
+        assertTrue((buffer.get(10) & 0xff) == 'T');
+        assertTrue((buffer.get(11) & 0xff) == 'P');
+        assertTrue((buffer.get(12) & 0xff) == 'E');
+        assertTrue((buffer.get(13) & 0xff) == '1');
 
-           //Charset
-           assertTrue((buffer.get(20)&0xff)==0x01);
+        //Charset
+        assertTrue((buffer.get(20) & 0xff) == 0x01);
 
-           //BOM
-           assertTrue((buffer.get(21)&0xff)==0xFF);
-           assertTrue((buffer.get(22)&0xff)==0xFE);
+        //BOM
+        assertTrue((buffer.get(21) & 0xff) == 0xFF);
+        assertTrue((buffer.get(22) & 0xff) == 0xFE);
 
-           //Data, least significant byte (which contaisn the data is first in each pair)
-           assertTrue((buffer.get(23)&0xff)=='b');
-           assertTrue((buffer.get(24)&0xff)==0x00);
-           assertTrue((buffer.get(25)&0xff)=='e');
-           assertTrue((buffer.get(26)&0xff)==0x00);
-           assertTrue((buffer.get(27)&0xff)=='c');
-           assertTrue((buffer.get(28)&0xff)==0x00);
-           assertTrue((buffer.get(29)&0xff)=='k');
-           assertTrue((buffer.get(28)&0xff)==0x00);
+        //Data, least significant byte (which contaisn the data is first in each pair)
+        assertTrue((buffer.get(23) & 0xff) == 'b');
+        assertTrue((buffer.get(24) & 0xff) == 0x00);
+        assertTrue((buffer.get(25) & 0xff) == 'e');
+        assertTrue((buffer.get(26) & 0xff) == 0x00);
+        assertTrue((buffer.get(27) & 0xff) == 'c');
+        assertTrue((buffer.get(28) & 0xff) == 0x00);
+        assertTrue((buffer.get(29) & 0xff) == 'k');
+        assertTrue((buffer.get(28) & 0xff) == 0x00);
 
-       }
+    }
+
+    /**
+     * @throws Exception
+     */
+    public void testCreateUTF16AndResetEvenIfNotNeededIfDefaultSetEncodedSizeTerminatedStringUnsnced() throws Exception
+    {
+
+        File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3");
+        MP3File mp3File = new MP3File(testFile);
+
+        ID3v23Frame frame = new ID3v23Frame(ID3v23Frames.FRAME_ID_V3_ARTIST);
+        Exception exceptionCaught = null;
+        try
+        {
+            frame.getBody().setObjectValue(DataTypes.OBJ_TEXT, FrameBodyTPE1Test.TPE1_TEST_STRING);
+        }
+        catch (Exception e)
+        {
+            exceptionCaught = e;
+        }
+        assertNull(exceptionCaught);
+
+        //Modify tag options so rewrites all frames even if already created
+        //So will default to default on save (default is ISO8859) has to be done before the frame is created
+        TagOptionSingleton.getInstance().setId3v23DefaultTextEncoding(TextEncoding.UTF_16);
+        TagOptionSingleton.getInstance().setResetTextEncodingForExistingFrames(true);
+        TagOptionSingleton.getInstance().setUnsyncTags(true);
+
+
+        //Create and Save
+        ID3v23Tag tag = new ID3v23Tag();
+        tag.setFrame(frame);
+        mp3File.setID3v2Tag(tag);
+        mp3File.save();
+
+        //Reload, should be written as UTF16 because set in tag options
+        mp3File = new MP3File(testFile);
+        frame = (ID3v23Frame) mp3File.getID3v2Tag().getFrame(ID3v23Frames.FRAME_ID_V3_ARTIST);
+        FrameBodyTPE1 body = (FrameBodyTPE1) frame.getBody();
+        assertEquals(ID3v23Frames.FRAME_ID_V3_ARTIST, body.getIdentifier());
+        assertEquals(TextEncoding.UTF_16, body.getTextEncoding());
+        assertEquals(FrameBodyTPE1Test.TPE1_TEST_STRING, body.getText());
+
+        //Check Bytes
+        FileChannel fc = new RandomAccessFile(testFile, "r").getChannel();
+        ByteBuffer buffer = ByteBuffer.allocate(100);
+        int count = fc.read(buffer);
+        fc.close();
+
+        //Frame Header
+        assertTrue((buffer.get(10) & 0xff) == 'T');
+        assertTrue((buffer.get(11) & 0xff) == 'P');
+        assertTrue((buffer.get(12) & 0xff) == 'E');
+        assertTrue((buffer.get(13) & 0xff) == '1');
+
+        //Charset
+        assertTrue((buffer.get(20) & 0xff) == 0x01);
+
+        //BOM
+        assertTrue((buffer.get(21) & 0xff) == 0xFF);
+        assertTrue((buffer.get(22) & 0xff) == 0x00);        //Unsync applied
+        assertTrue((buffer.get(23) & 0xff) == 0xFE);
+
+        //Data, least significant byte (which contaisn the data is first in each pair)
+        assertTrue((buffer.get(24) & 0xff) == 'b');
+        assertTrue((buffer.get(25) & 0xff) == 0x00);
+        assertTrue((buffer.get(26) & 0xff) == 'e');
+        assertTrue((buffer.get(27) & 0xff) == 0x00);
+        assertTrue((buffer.get(28) & 0xff) == 'c');
+        assertTrue((buffer.get(29) & 0xff) == 0x00);
+        assertTrue((buffer.get(30) & 0xff) == 'k');
+        assertTrue((buffer.get(31) & 0xff) == 0x00);
+
+    }
 
 
     /**
@@ -555,26 +629,26 @@ public class Unicode23TagTest extends TestCase
         assertEquals(TextEncoding.ISO_8859_1, body.getTextEncoding());
         assertEquals(FrameBodyTPE1Test.TPE1_TEST_STRING, body.getText());
 
-       //Check Bytes
-       FileChannel fc     = new RandomAccessFile(testFile,"r").getChannel();
-       ByteBuffer  buffer = ByteBuffer.allocate(100);
-       int count=fc.read(buffer);
-       fc.close();
+        //Check Bytes
+        FileChannel fc = new RandomAccessFile(testFile, "r").getChannel();
+        ByteBuffer buffer = ByteBuffer.allocate(100);
+        int count = fc.read(buffer);
+        fc.close();
 
-       //Frame Header
-       assertTrue((buffer.get(10)&0xff)=='T');
-       assertTrue((buffer.get(11)&0xff)=='P');
-       assertTrue((buffer.get(12)&0xff)=='E');
-       assertTrue((buffer.get(13)&0xff)=='1');
+        //Frame Header
+        assertTrue((buffer.get(10) & 0xff) == 'T');
+        assertTrue((buffer.get(11) & 0xff) == 'P');
+        assertTrue((buffer.get(12) & 0xff) == 'E');
+        assertTrue((buffer.get(13) & 0xff) == '1');
 
-       //Charset ISO8859
-       assertTrue((buffer.get(20)&0xff)==0x00);
+        //Charset ISO8859
+        assertTrue((buffer.get(20) & 0xff) == 0x00);
 
-       //Data
-       assertTrue((buffer.get(21)&0xff)=='b');
-       assertTrue((buffer.get(22)&0xff)=='e');
-       assertTrue((buffer.get(23)&0xff)=='c');
-       assertTrue((buffer.get(24)&0xff)=='k');
+        //Data
+        assertTrue((buffer.get(21) & 0xff) == 'b');
+        assertTrue((buffer.get(22) & 0xff) == 'e');
+        assertTrue((buffer.get(23) & 0xff) == 'c');
+        assertTrue((buffer.get(24) & 0xff) == 'k');
     }
 
 }
