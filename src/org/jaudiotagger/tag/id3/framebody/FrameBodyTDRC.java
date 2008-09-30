@@ -35,6 +35,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+import java.util.logging.Level;
 
 
 public class FrameBodyTDRC extends AbstractFrameBodyTextInfo implements ID3v24FrameBody
@@ -63,21 +65,23 @@ public class FrameBodyTDRC extends AbstractFrameBodyTextInfo implements ID3v24Fr
 
     static
     {
-        //This is allowable v24 format
-        formatters.add(new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss"));
-        formatters.add(new SimpleDateFormat("yyyy-MM-dd'T'HH:mm"));
-        formatters.add(new SimpleDateFormat("yyyy-MM-dd'T'HH"));
-        formatters.add(new SimpleDateFormat("yyyy-MM-dd"));
-        formatters.add(new SimpleDateFormat("yyyy-MM"));
-        formatters.add(new SimpleDateFormat("yyyy"));
+        //This is allowable v24 format , we use UK Locale not because we are restricting to UK
+        //but because these formats are fixed in ID3 spec, and could possibly get unexpected results if library
+        //used with a default locale that has Date Format Symbols that intefere with the pattern  
+        formatters.add(new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.UK));
+        formatters.add(new SimpleDateFormat("yyyy-MM-dd'T'HH:mm", Locale.UK));
+        formatters.add(new SimpleDateFormat("yyyy-MM-dd'T'HH", Locale.UK));
+        formatters.add(new SimpleDateFormat("yyyy-MM-dd", Locale.UK));
+        formatters.add(new SimpleDateFormat("yyyy-MM", Locale.UK));
+        formatters.add(new SimpleDateFormat("yyyy", Locale.UK));
 
         //These are formats used by v23 Frames
-        formatYearIn = new SimpleDateFormat("yyyy");
-        formatYearOut = new SimpleDateFormat("yyyy");
-        formatDateIn = new SimpleDateFormat("ddMM");
-        formatDateOut = new SimpleDateFormat("-MM-dd");
-        formatTimeIn = new SimpleDateFormat("HHmm");
-        formatTimeOut = new SimpleDateFormat("'T'HH:mm");
+        formatYearIn = new SimpleDateFormat("yyyy", Locale.UK);
+        formatYearOut = new SimpleDateFormat("yyyy", Locale.UK);
+        formatDateIn = new SimpleDateFormat("ddMM", Locale.UK);
+        formatDateOut = new SimpleDateFormat("-MM-dd", Locale.UK);
+        formatTimeIn = new SimpleDateFormat("HHmm", Locale.UK);
+        formatTimeOut = new SimpleDateFormat("'T'HH:mm", Locale.UK);
 
     }
 
@@ -274,7 +278,7 @@ public class FrameBodyTDRC extends AbstractFrameBodyTextInfo implements ID3v24Fr
             catch(NumberFormatException nfe)
             {
                 //Do nothing except log warning because not really expecting this to happen
-                logger.warning("Date Formatter:"+formatters.get(i).toPattern() + "failed to parse:"+getText()+ "with "+nfe.getMessage());
+                logger.log(Level.WARNING,"Date Formatter:"+formatters.get(i).toPattern() + "failed to parse:"+getText()+ "with "+nfe.getMessage(),nfe);
             }
         }
     }
@@ -308,8 +312,8 @@ public class FrameBodyTDRC extends AbstractFrameBodyTextInfo implements ID3v24Fr
             }
             catch(NumberFormatException nfe)
             {
-                //Do nothing except log warning because not really expecting this to happen
-                logger.warning("Date Formatter:"+formatters.get(i).toPattern() + "failed to parse:"+getText()+ "with "+nfe.getMessage());
+                //Do nothing except log warning because not really expecting this to happen (but it does !)
+                logger.log(Level.WARNING,"Date Formatter:"+formatters.get(i).toPattern() + "failed to parse:"+getText()+ "with "+nfe.getMessage(),nfe);
             }
         }
     }
