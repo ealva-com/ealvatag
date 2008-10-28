@@ -297,4 +297,19 @@ public class AudioFile
         }
         return tag;
     }
+
+    /**
+     *
+     * @param file
+     * @return filename with audioformat seperator stripped of.
+     */
+    public static String getBaseFilename(File file)
+    {
+        int index=file.getName().toLowerCase().lastIndexOf(".");
+        if(index>0)
+        {
+            return file.getName().substring(0,index);
+        }
+        return file.getName();
+    }
 }

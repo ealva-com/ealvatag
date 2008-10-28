@@ -82,7 +82,7 @@ import java.util.logging.Logger;
  * @author Raphael Slinckx
  * @version $Id$
  * @see AudioFile
- * @see Tag
+ * @see org.jaudiotagger.tag.Tag
  * @since v0.01
  */
 public class AudioFileIO

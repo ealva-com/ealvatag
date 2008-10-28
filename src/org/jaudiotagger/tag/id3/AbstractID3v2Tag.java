@@ -17,6 +17,7 @@ package org.jaudiotagger.tag.id3;
 
 import org.jaudiotagger.audio.generic.Utils;
 import org.jaudiotagger.audio.mp3.MP3File;
+import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.logging.ErrorMessage;
 import org.jaudiotagger.tag.*;
 import org.jaudiotagger.tag.datatype.DataTypes;
@@ -1143,8 +1144,9 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
         //Create buffer holds the neccessary padding
         ByteBuffer paddingBuffer = ByteBuffer.wrap(new byte[paddingSize]);
 
-        //Create Temporary File and write channel, make sure it is locked
-        File paddedFile = File.createTempFile("temp", ".mp3", file.getParentFile());
+        //Create Temporary File and write channel, make sure it is locked        
+        File paddedFile = File.createTempFile(AudioFile.getBaseFilename(file), ".new", file.getParentFile());
+        System.out.println("Padded File:"+paddedFile.getAbsolutePath());
         fcOut = new FileOutputStream(paddedFile).getChannel();
         FileLock fileTmpLock = null;
         try
@@ -1263,28 +1265,55 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
     /**
      * Replace originalFile with the contents of newFile
      *
+     * Both files must exist in the same folder so that there are no problems with fileystem mount points
+     *
      * @param newFile
      * @param originalFile
      * @throws IOException
      */
-    //TODO what about if delete works but rename fails
     private void replaceFile(File originalFile,File newFile) throws IOException
     {
-        logger.info("rename "+newFile.getPath() + " over to "+originalFile.getPath());
-        //Delete Original File and check result
-        boolean deleteResult = originalFile.delete();
-        if (!deleteResult)
+        //Rename Original File to make a backup in case problem with new file
+        File originalFileBackup = new File(originalFile.getParentFile().getPath(), AudioFile.getBaseFilename(originalFile)+ ".old");
+        boolean renameOriginalResult = originalFile.renameTo(originalFileBackup);
+        if (!renameOriginalResult)
         {
-            logger.warning(ErrorMessage.GENERAL_WRITE_FAILED_TO_DELETE_ORIGINAL_FILE.getMsg(originalFile.getPath(), newFile.getPath()));
-            throw new IOException(ErrorMessage.GENERAL_WRITE_FAILED_TO_DELETE_ORIGINAL_FILE.getMsg(originalFile.getPath(), newFile.getPath()));
+            logger.warning(ErrorMessage.GENERAL_WRITE_FAILED_TO_RENAME_ORIGINAL_FILE_TO_BACKUP.getMsg(originalFile.getAbsolutePath(), originalFileBackup.getAbsolutePath()));
+            throw new IOException(ErrorMessage.GENERAL_WRITE_FAILED_TO_RENAME_ORIGINAL_FILE_TO_BACKUP.getMsg(originalFile.getAbsolutePath(), originalFileBackup.getAbsolutePath()));
         }
 
-        //Rename temporary file
+        //Rename new Temporary file to the final file
         boolean renameResult = newFile.renameTo(originalFile);
         if (!renameResult)
         {
-            logger.warning(ErrorMessage.GENERAL_WRITE_FAILED_TO_RENAME_TO_ORIGINAL_FILE.getMsg(originalFile.getPath(), newFile.getPath()));
-            throw new IOException(ErrorMessage.GENERAL_WRITE_FAILED_TO_RENAME_TO_ORIGINAL_FILE.getMsg(originalFile.getPath(), newFile.getPath()));
+            //Renamed failed so lets do some checks rename the backup back to the original file
+            //New File doesnt exist
+            if(!newFile.exists())
+            {
+                logger.warning(ErrorMessage.GENERAL_WRITE_FAILED_NEW_FILE_DOESNT_EXIST.getMsg(newFile.getAbsolutePath()));
+            }
+
+            //Rename the backup back to the original
+            renameOriginalResult = originalFileBackup.renameTo(originalFile);
+            if(!renameOriginalResult)
+            {
+                //TODO now if this happens we are left with testfile.old instead of testfile.mp3
+                logger.warning(ErrorMessage.GENERAL_WRITE_FAILED_TO_RENAME_ORIGINAL_BACKUP_TO_ORIGINAL.getMsg(originalFileBackup.getAbsolutePath(),originalFile.getAbsolutePath()));
+            }
+
+
+            logger.warning(ErrorMessage.GENERAL_WRITE_FAILED_TO_RENAME_TO_ORIGINAL_FILE.getMsg(originalFile.getAbsolutePath(), newFile.getAbsolutePath()));
+            throw new IOException(ErrorMessage.GENERAL_WRITE_FAILED_TO_RENAME_TO_ORIGINAL_FILE.getMsg(originalFile.getAbsolutePath(), newFile.getAbsolutePath()));
+        }
+        else
+        {
+            //Rename was okay so we can now delete the backup of the original
+            boolean deleteResult=originalFileBackup.delete();
+            if(!deleteResult)
+            {
+                //Not a disaster but can't delete the backup so make a warning
+                logger.warning(ErrorMessage.GENERAL_WRITE_WARNING_UNABLE_TO_DELETE_BACKUP_FILE.getMsg(originalFileBackup.getAbsolutePath()));
+            }
         }
     }
     /**
