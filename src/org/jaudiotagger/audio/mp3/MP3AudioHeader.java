@@ -32,6 +32,7 @@ import java.nio.channels.FileChannel;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -72,9 +73,9 @@ public class MP3AudioHeader implements AudioHeader
     private long bitrate;
     private String encoder = "";
 
-    private static final SimpleDateFormat timeInFormat = new SimpleDateFormat("ss");
-    private static final SimpleDateFormat timeOutFormat = new SimpleDateFormat("mm:ss");
-    private static final SimpleDateFormat timeOutOverAnHourFormat = new SimpleDateFormat("kk:mm:ss");
+    private static final SimpleDateFormat timeInFormat = new SimpleDateFormat("ss", Locale.UK);
+    private static final SimpleDateFormat timeOutFormat = new SimpleDateFormat("mm:ss",Locale.UK);
+    private static final SimpleDateFormat timeOutOverAnHourFormat = new SimpleDateFormat("kk:mm:ss",Locale.UK);
     private static final char isVbrIdentifier = '~';
     private static final int CONVERT_TO_KILOBITS = 1000;
     private static final String TYPE_MP3 = "mp3";
@@ -520,6 +521,12 @@ public class MP3AudioHeader implements AudioHeader
         }
         catch (ParseException pe)
         {
+            logger.warning("Unable to parse:"+getPreciseTrackLength() +" failed with ParseException:"+pe.getMessage());
+            return "";
+        }
+        catch(NumberFormatException nfe)
+        {
+            logger.warning("Unable to parse:"+getPreciseTrackLength() +" failed with NumberFormatException:"+nfe.getMessage());
             return "";
         }
     }
