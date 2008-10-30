@@ -506,27 +506,33 @@ public class MP3AudioHeader implements AudioHeader
      */
     public String getTrackLengthAsString()
     {
+        final Date timeIn;
         try
         {
             final long lengthInSecs = getTrackLength();
-            final Date timeIn = timeInFormat.parse(String.valueOf(lengthInSecs));
+            synchronized(timeInFormat)
+            {
+                timeIn = timeInFormat.parse(String.valueOf(lengthInSecs));
+            }
+
             if (lengthInSecs < NO_SECONDS_IN_HOUR)
             {
-                return timeOutFormat.format(timeIn);
+                synchronized(timeOutFormat)
+                {
+                    return timeOutFormat.format(timeIn);
+                }
             }
             else
             {
-                return timeOutOverAnHourFormat.format(timeIn);
+                synchronized(timeOutOverAnHourFormat)
+                {
+                    return timeOutOverAnHourFormat.format(timeIn);
+                }
             }
         }
         catch (ParseException pe)
         {
             logger.warning("Unable to parse:"+getPreciseTrackLength() +" failed with ParseException:"+pe.getMessage());
-            return "";
-        }
-        catch(NumberFormatException nfe)
-        {
-            logger.warning("Unable to parse:"+getPreciseTrackLength() +" failed with NumberFormatException:"+nfe.getMessage());
             return "";
         }
     }
