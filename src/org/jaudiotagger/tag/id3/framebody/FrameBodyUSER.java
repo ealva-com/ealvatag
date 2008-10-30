@@ -122,7 +122,7 @@ public class FrameBodyUSER extends AbstractID3v2FrameBody implements ID3v24Frame
      * If the text cannot be encoded using current encoder, change the encoder
      *
      * @param tagBuffer
-     * @throws IOException
+     * @throws java.io.IOException
      */
     public void write(ByteArrayOutputStream tagBuffer)
     {

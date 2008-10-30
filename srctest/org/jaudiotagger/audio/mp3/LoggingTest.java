@@ -97,7 +97,11 @@ public class LoggingTest extends TestCase
                 public void run() {
                     try
                     {
-                         Date timeIn = timeInFormat.parse(String.valueOf(-28.05122222d));
+                         //Must be synced fo rtest to reliably pass
+                         synchronized(timeInFormat)
+                         {
+                            Date timeIn = timeInFormat.parse(String.valueOf(-28.05122222d));
+                         }
 
                     }
                     catch (RuntimeException e)

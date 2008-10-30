@@ -114,6 +114,27 @@ public class FrameBodyTDRC extends AbstractFrameBodyTextInfo implements ID3v24Fr
      * v4 value, if not this won't.
      */
 
+    /**
+     * Synchronized because SimpleDatFormst arent thread safe
+     *
+     * @param formatDate
+     * @param parseDate
+     * @param text
+     * @return
+     */
+    private synchronized String formatAndParse(SimpleDateFormat formatDate,SimpleDateFormat parseDate,String text)
+    {
+        try
+        {
+            return formatDate.format(parseDate.parse(text));
+        }
+        catch (ParseException e)
+        {
+            logger.warning("Unable to parse:" + text);
+        }
+        return "";
+    }
+
     public String getFormattedText()
     {
         StringBuffer sb = new StringBuffer();
@@ -125,36 +146,15 @@ public class FrameBodyTDRC extends AbstractFrameBodyTextInfo implements ID3v24Fr
         {
             if (year != null && !(year.equals("")))
             {
-                try
-                {
-                    sb.append(formatYearOut.format(formatYearIn.parse(year)));
-                }
-                catch (ParseException e)
-                {
-                    logger.warning("Unable to parse:" + year + " as year");
-                }
+               sb.append(formatAndParse(formatYearOut,formatYearIn,year));
             }
             if (!date.equals(""))
             {
-                try
-                {
-                    sb.append(formatDateOut.format(formatDateIn.parse(date)));
-                }
-                catch (ParseException e)
-                {
-                    logger.warning("Unable to parse:" + date + " as date");
-                }
+                sb.append(formatAndParse(formatDateOut,formatDateIn,date));
             }
             if (!time.equals(""))
             {
-                try
-                {
-                    sb.append(formatTimeOut.format(formatTimeIn.parse(time)));
-                }
-                catch (ParseException e)
-                {
-                    logger.warning("Unable to parse:" + time + " as time");
-                }
+                sb.append(formatAndParse(formatTimeOut,formatTimeIn,time));
             }
             return sb.toString();
         }
@@ -262,7 +262,11 @@ public class FrameBodyTDRC extends AbstractFrameBodyTextInfo implements ID3v24Fr
         {
             try
             {
-                final Date d = formatters.get(i).parse(getText());
+                Date d;
+                synchronized(formatters.get(i))
+                {
+                    d = formatters.get(i).parse(getText());
+                }
                 //If able to parse a date from the text
                 if (d != null)
                 {
@@ -298,7 +302,11 @@ public class FrameBodyTDRC extends AbstractFrameBodyTextInfo implements ID3v24Fr
         {
             try
             {
-                final Date d = formatters.get(i).parse(getText());
+                Date d;
+                synchronized(formatters.get(i))
+                {
+                    d = formatters.get(i).parse(getText());
+                }
                 if (d != null)
                 {
                     extractID3v23Formats(d, i);
@@ -324,7 +332,7 @@ public class FrameBodyTDRC extends AbstractFrameBodyTextInfo implements ID3v24Fr
      * @param dateRecord
      * @param precision
      */
-    private void extractID3v23Formats(final Date dateRecord, final int precision)
+    private synchronized void extractID3v23Formats(final Date dateRecord, final int precision)
     {
         Date d = dateRecord;
 
