@@ -290,7 +290,8 @@ public class ID3Tags
     /**
      * Unable to instantiate abstract classes, so can't call the copy
      * constructor. So find out the instantiated class name and call the copy
-     * constructor through reflection.
+     * constructor through reflection (e.g for a a FrameBody would have to have a constructor
+     * that takes another framebody as the same type as a parameter)
      *
      * @param copyObject
      * @return
@@ -316,15 +317,15 @@ public class ID3Tags
         }
         catch (NoSuchMethodException ex)
         {
-            throw new IllegalArgumentException("NoSuchMethodException: Error finding constructor to create copy");
+            throw new IllegalArgumentException("NoSuchMethodException: Error finding constructor to create copy:"+copyObject.getClass().getName());
         }
         catch (IllegalAccessException ex)
         {
-            throw new IllegalArgumentException("IllegalAccessException: No access to run constructor to create copy");
+            throw new IllegalArgumentException("IllegalAccessException: No access to run constructor to create copy"+copyObject.getClass().getName());
         }
         catch (InstantiationException ex)
         {
-            throw new IllegalArgumentException("InstantiationException: Unable to instantiate constructor to copy");
+            throw new IllegalArgumentException("InstantiationException: Unable to instantiate constructor to copy"+copyObject.getClass().getName());
         }
         catch (java.lang.reflect.InvocationTargetException ex)
         {

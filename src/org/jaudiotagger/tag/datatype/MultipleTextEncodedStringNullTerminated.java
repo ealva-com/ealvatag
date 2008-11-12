@@ -33,6 +33,11 @@ public class MultipleTextEncodedStringNullTerminated extends AbstractDataType
         value = new MultipleTextEncodedStringNullTerminated.Values();
     }
 
+    public MultipleTextEncodedStringNullTerminated(MultipleTextEncodedStringNullTerminated object)
+    {
+        super(object);        
+    }
+
     public boolean equals(Object obj)
     {
         if (obj instanceof MultipleTextEncodedStringNullTerminated == false)
@@ -184,6 +189,15 @@ public class MultipleTextEncodedStringNullTerminated extends AbstractDataType
         public List<String> getList()
         {
             return valueList;
+        }
+
+        /**
+         *
+         * @return no of values
+         */
+        public int getNumberOfValues()
+        {
+            return valueList.size();
         }
 
         /**

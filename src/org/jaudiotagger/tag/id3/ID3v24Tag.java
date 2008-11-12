@@ -384,7 +384,7 @@ public class ID3v24Tag extends AbstractID3v2Tag
         if (mp3tag != null)
         {
             //Should use simpler copy constructor
-            if ((mp3tag instanceof ID3v24Tag == true))
+            if ((mp3tag instanceof ID3v24Tag))
             {
                 throw new UnsupportedOperationException("Copy Constructor not called. Please type cast the argument");
             }

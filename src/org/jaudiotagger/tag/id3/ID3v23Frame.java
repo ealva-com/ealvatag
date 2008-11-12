@@ -95,7 +95,7 @@ public class ID3v23Frame extends AbstractID3v2Frame
     public ID3v23Frame(AbstractID3v2Frame frame) throws InvalidFrameException
     {
         logger.info("Creating frame from a frame of a different version");
-        if ((frame instanceof ID3v23Frame == true) && (frame instanceof ID3v24Frame == false))
+        if ((frame instanceof ID3v23Frame) && (frame instanceof ID3v24Frame == false))
         {
             throw new UnsupportedOperationException("Copy Constructor not called. Please type cast the argument");
         }
@@ -194,8 +194,8 @@ public class ID3v23Frame extends AbstractID3v2Frame
                     this.frameBody.setHeader(this);
                     return;
                 }
-                //Is it a known v2 frame which needs forcing to v4 frame e.g PIC - APIC
-                else if (ID3Tags.isID3v22FrameIdentifier(frame.getIdentifier()) == true)
+                //Is it a known v2 frame which needs forcing to v23 frame e.g PIC - APIC
+                else if (ID3Tags.isID3v22FrameIdentifier(frame.getIdentifier()))
                 {
                     //Force v2 to v3
                     identifier = ID3Tags.forceFrameID22To23(frame.getIdentifier());

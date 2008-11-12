@@ -22,6 +22,11 @@ public class PairedTextEncodedStringNullTerminated extends MultipleTextEncodedSt
         value = new PairedTextEncodedStringNullTerminated.ValuePairs();
     }
 
+    public PairedTextEncodedStringNullTerminated(PairedTextEncodedStringNullTerminated object)
+    {
+        super(object);        
+    }
+
     /**
      * Read Null Terminated Strings from the array starting at offset, continue until unable to find any null terminated
      * Strings or until reached the end of the array. The offset should be set to byte after the last null terminated
@@ -43,11 +48,29 @@ public class PairedTextEncodedStringNullTerminated extends MultipleTextEncodedSt
      */
     public static class ValuePairs extends MultipleTextEncodedStringNullTerminated.Values
     {
-
         public ValuePairs()
         {
             super();
         }
+
+        /**
+         *
+         * @return no of values
+        */
+        public int getNumberOfPairs()
+        {
+            if(this.getNumberOfValues()>0)
+            {
+                return this.getNumberOfValues() / 2;
+            }
+            return 0;
+        }
     }
+
+    public ValuePairs getValue()
+    {
+        return (ValuePairs)value;
+    }
+
 
 }

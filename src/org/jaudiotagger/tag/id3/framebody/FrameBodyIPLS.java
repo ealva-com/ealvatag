@@ -19,6 +19,7 @@ import org.jaudiotagger.tag.InvalidTagException;
 import org.jaudiotagger.tag.datatype.DataTypes;
 import org.jaudiotagger.tag.datatype.NumberHashMap;
 import org.jaudiotagger.tag.datatype.PairedTextEncodedStringNullTerminated;
+import org.jaudiotagger.tag.datatype.TextEncodedStringSizeTerminated;
 import org.jaudiotagger.tag.id3.ID3v23Frames;
 import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
 
@@ -27,7 +28,7 @@ import java.nio.ByteBuffer;
 import java.util.StringTokenizer;
 
 /**
- * Involved People List ID3v23 Only
+ * Involved People List ID3v22/v23 Only
  * <p/>
  * Since there might be a lot of people contributing to an audio file in various ways, such as musicians and technicians,
  * the 'Text information frames' are often insufficient to list everyone involved in a project.
@@ -75,6 +76,11 @@ public class FrameBodyIPLS extends AbstractID3v2FrameBody implements ID3v23Frame
         return ID3v23Frames.FRAME_ID_V3_IPLS;
     }
 
+    public FrameBodyIPLS(FrameBodyIPLS body)
+    {
+        super(body);
+    }
+
     /**
      * Convert from V4 to V3 Frame
      */
@@ -114,5 +120,35 @@ public class FrameBodyIPLS extends AbstractID3v2FrameBody implements ID3v23Frame
     {
         objectList.add(new NumberHashMap(DataTypes.OBJ_TEXT_ENCODING, this, TextEncoding.TEXT_ENCODING_FIELD_SIZE));
         objectList.add(new PairedTextEncodedStringNullTerminated(DataTypes.OBJ_TEXT, this));
+    }
+
+     /**
+     * Get value at index
+     *
+     * @param index
+     * @return value at index
+     */
+    public String getValueAtIndex(int index)
+    {
+        PairedTextEncodedStringNullTerminated text = (PairedTextEncodedStringNullTerminated) getObject(DataTypes.OBJ_TEXT);
+        return text.getValue().getList().get(index);
+    }
+
+    /**
+     * @return number of text values, shopuld be an even number because should make up pairs of values
+     */
+    public int getNumberOfValues()
+    {
+        PairedTextEncodedStringNullTerminated text = (PairedTextEncodedStringNullTerminated) getObject(DataTypes.OBJ_TEXT);
+        return text.getValue().getNumberOfValues();
+    }
+
+    /**
+     * @return number of text pairs
+     */
+    public int getNumberOfPairs()
+    {
+        PairedTextEncodedStringNullTerminated text = (PairedTextEncodedStringNullTerminated) getObject(DataTypes.OBJ_TEXT);
+        return text.getValue().getNumberOfPairs();
     }
 }

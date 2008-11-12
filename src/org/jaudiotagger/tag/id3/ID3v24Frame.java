@@ -138,7 +138,7 @@ public class ID3v24Frame extends AbstractID3v2Frame
     public ID3v24Frame(AbstractID3v2Frame frame) throws InvalidFrameException
     {
         //Should not be called
-        if ((frame instanceof ID3v24Frame == true))
+        if ((frame instanceof ID3v24Frame))
         {
             throw new UnsupportedOperationException("Copy Constructor not called. Please type cast the argument");
         }
@@ -164,7 +164,6 @@ public class ID3v24Frame extends AbstractID3v2Frame
         }
         else if (frame instanceof ID3v22Frame)
         {
-
             ID3v23Frame v23Frame = new ID3v23Frame(frame);
             createV24FrameFromV23Frame(v23Frame);
         }
