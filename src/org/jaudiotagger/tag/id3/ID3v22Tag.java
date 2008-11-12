@@ -353,7 +353,7 @@ public class ID3v22Tag extends AbstractID3v2Tag
 
         if (unsynchronization)
         {
-            logger.warning(getLoggingFilename() + ":" + "ID3v22 Tag is unsynchronized");
+            logger.info(getLoggingFilename() + ":" + "ID3v22 Tag is unsynchronized");
         }
 
         if (compression)

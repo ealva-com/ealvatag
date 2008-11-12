@@ -461,7 +461,7 @@ public class ID3v23Tag extends AbstractID3v2Tag
 
         if (isUnsynchronization())
         {
-            logger.warning(getLoggingFilename() + ":" + "ID3v23 Tag is unsynchronized");
+            logger.info(getLoggingFilename() + ":" + "ID3v23 Tag is unsynchronized");
         }
 
         if (extended)
