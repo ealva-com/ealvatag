@@ -20,6 +20,7 @@ import org.jaudiotagger.audio.mp3.MP3File;
 import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.exceptions.UnableToCreateFileException;
 import org.jaudiotagger.audio.exceptions.UnableToModifyFileException;
+import org.jaudiotagger.audio.exceptions.UnableToRenameFileException;
 import org.jaudiotagger.logging.ErrorMessage;
 import org.jaudiotagger.logging.FileSystemMessage;
 import org.jaudiotagger.tag.*;
@@ -1384,8 +1385,8 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
         boolean renameOriginalResult = originalFile.renameTo(originalFileBackup);
         if (!renameOriginalResult)
         {
-            logger.warning(ErrorMessage.GENERAL_WRITE_FAILED_TO_RENAME_ORIGINAL_FILE_TO_BACKUP.getMsg(originalFile.getAbsolutePath(), originalFileBackup.getAbsolutePath()));
-            throw new IOException(ErrorMessage.GENERAL_WRITE_FAILED_TO_RENAME_ORIGINAL_FILE_TO_BACKUP.getMsg(originalFile.getAbsolutePath(), originalFileBackup.getAbsolutePath()));
+            logger.warning(ErrorMessage.GENERAL_WRITE_FAILED_TO_RENAME_ORIGINAL_FILE_TO_BACKUP.getMsg(originalFile.getAbsolutePath(), originalFileBackup.getName()));
+            throw new UnableToRenameFileException(ErrorMessage.GENERAL_WRITE_FAILED_TO_RENAME_ORIGINAL_FILE_TO_BACKUP.getMsg(originalFile.getAbsolutePath(), originalFileBackup.getName()));
         }
 
         //Rename new Temporary file to the final file
@@ -1404,12 +1405,12 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
             if(!renameOriginalResult)
             {
                 //TODO now if this happens we are left with testfile.old instead of testfile.mp3
-                logger.warning(ErrorMessage.GENERAL_WRITE_FAILED_TO_RENAME_ORIGINAL_BACKUP_TO_ORIGINAL.getMsg(originalFileBackup.getAbsolutePath(),originalFile.getAbsolutePath()));
+                logger.warning(ErrorMessage.GENERAL_WRITE_FAILED_TO_RENAME_ORIGINAL_BACKUP_TO_ORIGINAL.getMsg(originalFileBackup.getAbsolutePath(),originalFile.getName()));
             }
 
 
-            logger.warning(ErrorMessage.GENERAL_WRITE_FAILED_TO_RENAME_TO_ORIGINAL_FILE.getMsg(originalFile.getAbsolutePath(), newFile.getAbsolutePath()));
-            throw new IOException(ErrorMessage.GENERAL_WRITE_FAILED_TO_RENAME_TO_ORIGINAL_FILE.getMsg(originalFile.getAbsolutePath(), newFile.getAbsolutePath()));
+            logger.warning(ErrorMessage.GENERAL_WRITE_FAILED_TO_RENAME_TO_ORIGINAL_FILE.getMsg(originalFile.getAbsolutePath(), newFile.getName()));
+            throw new UnableToRenameFileException(ErrorMessage.GENERAL_WRITE_FAILED_TO_RENAME_TO_ORIGINAL_FILE.getMsg(originalFile.getAbsolutePath(), newFile.getName()));
         }
         else
         {
@@ -1422,6 +1423,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
             }
         }
     }
+    
     /**
      * Add frame to HashMap used when converting between tag versions, take into account
      * occurences when two frame may both map to a single frame when converting between
