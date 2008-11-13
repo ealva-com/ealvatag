@@ -16,7 +16,11 @@
 package org.jaudiotagger.tag.id3;
 
 import org.jaudiotagger.FileConstants;
+import org.jaudiotagger.logging.FileSystemMessage;
+import org.jaudiotagger.logging.ErrorMessage;
 import org.jaudiotagger.audio.mp3.MP3File;
+import org.jaudiotagger.audio.exceptions.UnableToModifyFileException;
+import org.jaudiotagger.audio.exceptions.UnableToCreateFileException;
 import org.jaudiotagger.tag.*;
 import org.jaudiotagger.tag.id3.framebody.*;
 import org.jaudiotagger.tag.lyrics3.AbstractLyrics3;
@@ -27,6 +31,7 @@ import org.jaudiotagger.tag.reference.GenreTypes;
 import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.io.FileNotFoundException;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.channels.FileLock;
@@ -940,37 +945,7 @@ public class ID3v24Tag extends AbstractID3v2Tag
         int padding = sizeIncPadding - (bodyByteBuffer.length + TAG_HEADER_LENGTH);
 
         ByteBuffer headerBuffer = writeHeaderToBuffer(padding, bodyByteBuffer.length);
-
-        //Write changes to file
-        FileChannel fc      = null;
-        FileLock fileLock   = null;
-        try
-        {
-
-            //We need to adjust location of audio File
-            if (sizeIncPadding > audioStartLocation)
-            {
-                logger.finest("Adjusting Padding");
-                adjustPadding(file, sizeIncPadding, audioStartLocation);
-            }
-            
-            fc = new RandomAccessFile(file, "rw").getChannel();
-            fileLock = getFileLockForWriting(fc, file.getPath());
-            fc.write(headerBuffer);
-            fc.write(ByteBuffer.wrap(bodyByteBuffer));
-            fc.write(ByteBuffer.wrap(new byte[padding]));
-        }
-        finally
-        {
-            if (fc != null)
-            {
-                if (fileLock != null)
-                {
-                    fileLock.release();
-                }
-                fc.close();
-            }
-        }
+        writeBufferToFile(file,headerBuffer, bodyByteBuffer,padding,sizeIncPadding,audioStartLocation);       
     }
 
     /**

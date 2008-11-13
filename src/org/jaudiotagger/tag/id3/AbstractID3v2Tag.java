@@ -18,7 +18,10 @@ package org.jaudiotagger.tag.id3;
 import org.jaudiotagger.audio.generic.Utils;
 import org.jaudiotagger.audio.mp3.MP3File;
 import org.jaudiotagger.audio.AudioFile;
+import org.jaudiotagger.audio.exceptions.UnableToCreateFileException;
+import org.jaudiotagger.audio.exceptions.UnableToModifyFileException;
 import org.jaudiotagger.logging.ErrorMessage;
+import org.jaudiotagger.logging.FileSystemMessage;
 import org.jaudiotagger.tag.*;
 import org.jaudiotagger.tag.datatype.DataTypes;
 import org.jaudiotagger.tag.id3.framebody.*;
@@ -1136,7 +1139,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
      * @throws IOException           on any I/O error
      */
     public void adjustPadding(File file, int paddingSize, long audioStart) throws FileNotFoundException, IOException
-    {
+    {           
         logger.finer("Need to move audio file to accomodate tag");
         FileChannel fcIn=null;
         FileChannel fcOut=null;
@@ -1145,9 +1148,40 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
         ByteBuffer paddingBuffer = ByteBuffer.wrap(new byte[paddingSize]);
 
         //Create Temporary File and write channel, make sure it is locked        
-        File paddedFile = File.createTempFile(AudioFile.getBaseFilename(file), ".new", file.getParentFile());
-        System.out.println("Padded File:"+paddedFile.getAbsolutePath());
-        fcOut = new FileOutputStream(paddedFile).getChannel();
+        File paddedFile;
+
+        try
+        {
+            paddedFile=File.createTempFile(AudioFile.getBaseFilename(file), ".new", file.getParentFile());
+        }
+        //Vista:Can occur if have Write permission on folder this file would be created in Denied
+        catch(IOException ioe)
+        {
+            logger.log(Level.SEVERE,ioe.getMessage(),ioe);
+            if(ioe.getMessage().equals(FileSystemMessage.ACCESS_IS_DENIED.getMsg()))
+            {
+                logger.severe(ErrorMessage.GENERAL_WRITE_FAILED_TO_CREATE_TEMPORARY_FILE_IN_FOLDER.getMsg(file.getName(),file.getParentFile().getPath()));
+                throw new UnableToCreateFileException(ErrorMessage.GENERAL_WRITE_FAILED_TO_CREATE_TEMPORARY_FILE_IN_FOLDER.getMsg(file.getName(),file.getParentFile().getPath()));
+            }
+            else
+            {
+                logger.severe(ErrorMessage.GENERAL_WRITE_FAILED_TO_CREATE_TEMPORARY_FILE_IN_FOLDER.getMsg(file.getName(),file.getParentFile().getPath()));
+                throw new UnableToCreateFileException(ErrorMessage.GENERAL_WRITE_FAILED_TO_CREATE_TEMPORARY_FILE_IN_FOLDER.getMsg(file.getName(),file.getParentFile().getPath()));
+            }
+        }
+
+        try
+        {
+            fcOut = new FileOutputStream(paddedFile).getChannel();
+        }
+        //Vista:Can occur if have special permission Create Folder/Append Data denied
+        catch(FileNotFoundException ioe)
+        {
+            logger.log(Level.SEVERE,ioe.getMessage(),ioe);
+            logger.severe(ErrorMessage.GENERAL_WRITE_FAILED_TO_MODIFY_TEMPORARY_FILE_IN_FOLDER.getMsg(file.getName(),file.getParentFile().getPath()));
+            throw new UnableToModifyFileException(ErrorMessage.GENERAL_WRITE_FAILED_TO_MODIFY_TEMPORARY_FILE_IN_FOLDER.getMsg(file.getName(),file.getParentFile().getPath()));
+        }
+
         FileLock fileTmpLock = null;
         try
         {
@@ -1262,6 +1296,78 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
         }
     }
 
+    /**
+     * Write the data from the buffer to the file
+     *
+     * @param file
+     * @param headerBuffer
+     * @param bodyByteBuffer
+     * @param padding
+     * @param sizeIncPadding
+     * @param audioStartLocation
+     * @throws IOException
+     */
+    protected void writeBufferToFile(File file,ByteBuffer headerBuffer, byte[] bodyByteBuffer,int padding,int sizeIncPadding,long audioStartLocation)
+            throws IOException
+    {
+        FileChannel fc = null;
+        FileLock fileLock = null;
+
+        //We need to adjust location of audio File if true
+        if (sizeIncPadding > audioStartLocation)
+        {
+             logger.finest("Adjusting Padding");
+             adjustPadding(file, sizeIncPadding, audioStartLocation);
+        }
+
+        try
+        {
+            fc = new RandomAccessFile(file, "rw").getChannel();
+            fileLock = getFileLockForWriting(fc, file.getPath());
+            fc.write(headerBuffer);
+            fc.write(ByteBuffer.wrap(bodyByteBuffer));
+            fc.write(ByteBuffer.wrap(new byte[padding]));
+        }
+        catch(FileNotFoundException fe)
+        {
+            logger.log(Level.SEVERE,getLoggingFilename() + fe.getMessage(),fe);
+            if(fe.getMessage().equals(FileSystemMessage.ACCESS_IS_DENIED.getMsg()))
+            {
+                logger.severe(ErrorMessage.GENERAL_WRITE_FAILED_TO_OPEN_FILE_FOR_EDITING.getMsg(file.getPath()));
+                throw new UnableToModifyFileException(ErrorMessage.GENERAL_WRITE_FAILED_TO_OPEN_FILE_FOR_EDITING.getMsg(file.getPath()));
+            }
+            else
+            {
+                logger.severe(ErrorMessage.GENERAL_WRITE_FAILED_TO_OPEN_FILE_FOR_EDITING.getMsg(file.getPath()));
+                throw new UnableToCreateFileException(ErrorMessage.GENERAL_WRITE_FAILED_TO_OPEN_FILE_FOR_EDITING.getMsg(file.getPath()));
+            }
+        }
+        catch(IOException ioe)
+        {
+            logger.log(Level.SEVERE,getLoggingFilename() + ioe.getMessage(),ioe);
+            if(ioe.getMessage().equals(FileSystemMessage.ACCESS_IS_DENIED.getMsg()))
+            {
+                logger.severe(ErrorMessage.GENERAL_WRITE_FAILED_TO_OPEN_FILE_FOR_EDITING.getMsg(file.getParentFile().getPath()));
+                throw new UnableToModifyFileException(ErrorMessage.GENERAL_WRITE_FAILED_TO_OPEN_FILE_FOR_EDITING.getMsg(file.getParentFile().getPath()));
+            }
+            else
+            {
+                logger.severe(ErrorMessage.GENERAL_WRITE_FAILED_TO_OPEN_FILE_FOR_EDITING.getMsg(file.getParentFile().getPath()));
+                throw new UnableToCreateFileException(ErrorMessage.GENERAL_WRITE_FAILED_TO_OPEN_FILE_FOR_EDITING.getMsg(file.getParentFile().getPath()));
+            }
+        }
+        finally
+        {
+            if (fc != null)
+            {
+                if (fileLock != null)
+                {
+                    fileLock.release();
+                }
+                fc.close();
+            }
+        }
+    }
     /**
      * Replace originalFile with the contents of newFile
      *

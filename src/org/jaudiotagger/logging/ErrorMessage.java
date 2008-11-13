@@ -48,8 +48,10 @@ public enum ErrorMessage
     MP3_PICTURE_TYPE_INVALID("Picture Type is set to invalid value:{0}"),
     MP3_REFERENCE_KEY_INVALID("{0}:No key could be found with the value of:{1}"),
     MP3_UNABLE_TO_ADJUST_PADDING("Problem adjusting padding in large file, expecting to write:{0} only wrote:{1}"),
-    GENERAL_WRITE_FAILED_TO_DELETE_TEMPORARY_FILE("Unable to delete the the temporary file {0}"),
-
+    GENERAL_WRITE_FAILED_TO_DELETE_TEMPORARY_FILE("Unable to delete the temporary file {0}"),
+    GENERAL_WRITE_FAILED_TO_CREATE_TEMPORARY_FILE_IN_FOLDER("Cannot modify {0} because do not have permissions to create files in the folder {1}"),
+    GENERAL_WRITE_FAILED_TO_MODIFY_TEMPORARY_FILE_IN_FOLDER("Cannot modify {0} because do not have permissions to modify files in the folder {1}"),
+    GENERAL_WRITE_FAILED_TO_OPEN_FILE_FOR_EDITING("Cannot modify {0} because do not have permissions to modify file"),
     ;
 
 

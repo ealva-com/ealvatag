@@ -32,12 +32,15 @@ public class Issue242Test extends AbstractTestCase
             //Add a v24Tag
             AudioFile af = AudioFileIO.read(testFile);
             MP3File mp3File= (MP3File)af;
+            //Checking not overwriting audio when have to pad to fix data                    
+            long mp3AudioLength=testFile.length() - mp3File.getMP3AudioHeader().getMp3StartByte();
             mp3File.setID3v2Tag(new ID3v24Tag());
             mp3File.save();
-            mp3File = new MP3File(testFile);
 
             af = AudioFileIO.read(testFile);
             mp3File= (MP3File)af;
+            assertEquals(mp3AudioLength,testFile.length() - mp3File.getMP3AudioHeader().getMp3StartByte());
+                        
             //Check mapped okay ands empty
             assertEquals(0,mp3File.getTag().get(TagFieldKey.URL_OFFICIAL_RELEASE_SITE).size());
             assertEquals(0,mp3File.getTag().get(TagFieldKey.URL_OFFICIAL_ARTIST_SITE).size());
@@ -106,12 +109,16 @@ public class Issue242Test extends AbstractTestCase
             //Add a v24Tag
             AudioFile af = AudioFileIO.read(testFile);
             MP3File mp3File= (MP3File)af;
+            //Checking not overwriting audio when have to pad to fix data
+            long mp3AudioLength=testFile.length() - mp3File.getMP3AudioHeader().getMp3StartByte();
+
             mp3File.setID3v2Tag(new ID3v23Tag());
             mp3File.save();
-            mp3File = new MP3File(testFile);
 
             af = AudioFileIO.read(testFile);
             mp3File= (MP3File)af;
+            assertEquals(mp3AudioLength,testFile.length() - mp3File.getMP3AudioHeader().getMp3StartByte());
+
             //Check mapped okay ands empty
             assertEquals(0,mp3File.getTag().get(TagFieldKey.URL_OFFICIAL_RELEASE_SITE).size());
             assertEquals(0,mp3File.getTag().get(TagFieldKey.URL_OFFICIAL_ARTIST_SITE).size());
@@ -178,12 +185,17 @@ public class Issue242Test extends AbstractTestCase
             //Add a v24Tag
             AudioFile af = AudioFileIO.read(testFile);
             MP3File mp3File= (MP3File)af;
+
+            //Checking not overwriting audio when have to pad to fix data
+            long mp3AudioLength=testFile.length() - mp3File.getMP3AudioHeader().getMp3StartByte();
+
             mp3File.setID3v2Tag(new ID3v22Tag());
             mp3File.save();
-            mp3File = new MP3File(testFile);
 
             af = AudioFileIO.read(testFile);
             mp3File= (MP3File)af;
+            assertEquals(mp3AudioLength,testFile.length() - mp3File.getMP3AudioHeader().getMp3StartByte());
+
             //Check mapped okay ands empty
             assertEquals(0,mp3File.getTag().get(TagFieldKey.URL_OFFICIAL_RELEASE_SITE).size());
             assertEquals(0,mp3File.getTag().get(TagFieldKey.URL_OFFICIAL_ARTIST_SITE).size());
