@@ -95,6 +95,10 @@ public abstract class AudioFileReader
             return new AudioFile(f, info, tag);
 
         }
+        catch (CannotReadException cre)
+        {
+            throw cre;
+        }
         catch (Exception e)
         {
             throw new CannotReadException("\"" + f + "\" :" + e, e);
