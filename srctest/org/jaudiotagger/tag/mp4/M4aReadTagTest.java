@@ -916,9 +916,9 @@ public class M4aReadTagTest extends TestCase
             System.out.println(f.getAudioHeader());
             System.out.println(tag);
 
-            assertEquals("2", f.getAudioHeader().getChannels());      //TODO Should be 1 according to iTunes
-            assertEquals("128", f.getAudioHeader().getBitRate());      //TODO Should be 344 according to iTunes
-
+            assertEquals("344", f.getAudioHeader().getBitRate());
+            assertEquals("1", f.getAudioHeader().getChannels());      
+                    
             assertEquals("44100", f.getAudioHeader().getSampleRate());
             assertEquals(EncoderType.APPLE_LOSSLESS.getDescription(), f.getAudioHeader().getEncodingType());
 
@@ -945,8 +945,8 @@ public class M4aReadTagTest extends TestCase
             System.out.println(f.getAudioHeader());
             System.out.println(tag);
 
-            assertEquals("2", f.getAudioHeader().getChannels());      //TODO Should be 1 according to iTunes
-            assertEquals("128", f.getAudioHeader().getBitRate());      //TODO Should be 344 according to iTunes
+            assertEquals("2", f.getAudioHeader().getChannels());
+            assertEquals("188", f.getAudioHeader().getBitRate());      
 
             assertEquals("44100", f.getAudioHeader().getSampleRate());
             assertEquals(EncoderType.APPLE_LOSSLESS.getDescription(), f.getAudioHeader().getEncodingType());
