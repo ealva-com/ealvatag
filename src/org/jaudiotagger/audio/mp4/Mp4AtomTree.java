@@ -98,10 +98,11 @@ public class Mp4AtomTree
             dataTree = new DefaultTreeModel(rootNode);
 
             //Iterate though all the top level Nodes
+            ByteBuffer headerBuffer = ByteBuffer.allocate(Mp4BoxHeader.HEADER_LENGTH);
             while (fc.position() < fc.size())
             {
                 Mp4BoxHeader boxHeader = new Mp4BoxHeader();
-                ByteBuffer headerBuffer = ByteBuffer.allocate(Mp4BoxHeader.HEADER_LENGTH);
+                headerBuffer.clear();          
                 fc.read(headerBuffer);
                 headerBuffer.rewind();
                 boxHeader.update(headerBuffer);
