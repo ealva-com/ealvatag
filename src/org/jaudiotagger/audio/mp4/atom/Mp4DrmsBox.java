@@ -38,7 +38,7 @@ public class Mp4DrmsBox extends AbstractMp4Box
                 continue;
             }
 
-            //Have we found esds identifier, if so adjust buffer to start of edds atom
+            //Have we found esds identifier, if so adjust buffer to start of esds atom
             ByteBuffer tempBuffer = dataBuffer.slice();
             if ((tempBuffer.get() == (byte) 's') & (tempBuffer.get() == (byte) 'd') & (tempBuffer.get() == (byte) 's'))
             {

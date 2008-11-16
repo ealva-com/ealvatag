@@ -214,14 +214,23 @@ public class Mp4InfoReader
                     boxHeader = Mp4BoxHeader.seekWithinLevel(mvhdBuffer, Mp4NotMetaFieldKey.ALAC.getFieldName());
                     if (boxHeader != null)
                     {
-                        info.setEncodingType(EncoderType.APPLE_LOSSLESS.getDescription());
-
-                        //TODO Workout Channels and Bitrate
+                        //Process First Alac
+                        Mp4AlacBox alac = new Mp4AlacBox(boxHeader, mvhdBuffer);
+                        alac.processData();
+                        
+                        //Level 8-Searching for 2nd "alac" within box that contains the info we really want
+                        boxHeader = Mp4BoxHeader.seekWithinLevel(mvhdBuffer, Mp4NotMetaFieldKey.ALAC.getFieldName());
+                        if (boxHeader != null)
+                        {
+                            alac = new Mp4AlacBox(boxHeader, mvhdBuffer);
+                            alac.processData();
+                            info.setEncodingType(EncoderType.APPLE_LOSSLESS.getDescription());
+                            info.setChannelNumber(alac.getChannels());
+                            info.setBitrate(alac.getBitRate()/1000);
+                        }
                     }
                 }
             }
-
-
         }
         //Set default channels if couldnt calculate it
         if (info.getChannelNumber() == -1)

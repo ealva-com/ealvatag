@@ -18,10 +18,7 @@
  */
 package org.jaudiotagger.audio.generic;
 
-import java.io.DataInput;
-import java.io.File;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
+import java.io.*;
 import java.nio.ByteBuffer;
 
 /**
@@ -302,6 +299,50 @@ public class Utils
         final byte[] buf = new byte[charsToRead];
         di.readFully(buf);
         return new String(buf);
+    }
+
+    public static long readUInt64(ByteBuffer b) 
+    {
+        long result = 0;
+        result += (readUBEInt32(b) << 32);
+        result += readUBEInt32(b);
+        return result;
+    }
+
+    public static int readUBEInt32(ByteBuffer b)
+    {
+        int result = 0;
+        result += readUBEInt16(b) << 16;
+        result += readUBEInt16(b);
+        return result;
+    }
+
+    public static int readUBEInt24(ByteBuffer b)
+    {
+        int result = 0;
+        result += readUBEInt16(b) << 16;
+        result += readUInt8(b);
+        return result;
+    }
+
+    public static int readUBEInt16(ByteBuffer b)
+    {
+        int result = 0;
+        result += readUInt8(b) << 8;
+        result += readUInt8(b);
+        return result;
+    }
+
+    public static int readUInt8(ByteBuffer b)
+    {
+        return read(b);
+    }
+      
+
+    public static int read(ByteBuffer b)
+    {
+        int result = (b.get() & 0xFF);
+        return result;
     }
 
 }

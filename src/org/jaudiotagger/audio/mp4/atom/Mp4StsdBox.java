@@ -11,7 +11,7 @@ import java.nio.ByteBuffer;
  * (current = 0)
  * - > 4 bytes number of descriptions = long unsigned total
  * (default = 1)
- * Then contains mp4a box (if audio)
+ * Then if audio contains mp4a,alac or drms box
  */
 public class Mp4StsdBox extends AbstractMp4Box
 {
