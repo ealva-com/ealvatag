@@ -300,15 +300,7 @@ public abstract class AudioFileWriter
         {
             logger.log(Level.SEVERE, ErrorMessage.GENERAL_WRITE_FAILED_TO_OPEN_FILE_FOR_EDITING.getMsg(af.getFile().getAbsolutePath()), ioe);
 
-             //Delete the temp file
-            if(!newFile.delete())
-            {
-                //Non critical failed deletion
-                logger.warning(ErrorMessage.GENERAL_WRITE_FAILED_TO_DELETE_TEMPORARY_FILE.getMsg(newFile.getPath()));
-            }
-
-
-            //if we managed to open either file, delete it.
+            //If we managed to open either file, delete it.
             try
             {
                 if (raf != null)
@@ -326,8 +318,14 @@ public abstract class AudioFileWriter
                 logger.log(Level.WARNING, ErrorMessage.GENERAL_WRITE_PROBLEM_CLOSING_FILE_HANDLE.getMsg(af.getFile(), ioe.getMessage()), ioe2);
             }
 
-            throw new CannotWriteException(ErrorMessage.GENERAL_WRITE_FAILED_TO_OPEN_FILE_FOR_EDITING
-            .getMsg(af.getFile().getAbsolutePath()));
+            //Delete the temp file ( we cannot delet until closed correpsonding rafTemp)
+            if(!newFile.delete())
+            {
+                //Non critical failed deletion
+                logger.warning(ErrorMessage.GENERAL_WRITE_FAILED_TO_DELETE_TEMPORARY_FILE.getMsg(newFile.getAbsolutePath()));
+            }
+
+            throw new CannotWriteException(ErrorMessage.GENERAL_WRITE_FAILED_TO_OPEN_FILE_FOR_EDITING.getMsg(af.getFile().getAbsolutePath()));
         }
 
 
@@ -358,9 +356,30 @@ public abstract class AudioFileWriter
         {
             logger.log(Level.SEVERE, ErrorMessage.GENERAL_WRITE_FAILED_BECAUSE.getMsg(af.getFile(), e.getMessage()), e);
 
+            try
+            {
+                if (raf != null)
+                {
+                    raf.close();
+                }
+                if (rafTemp != null)
+                {
+                    rafTemp.close();
+                }
+            }
+            catch (IOException ioe)
+            {
+                //Warn but assume has worked okay
+                logger.log(Level.WARNING, ErrorMessage.GENERAL_WRITE_PROBLEM_CLOSING_FILE_HANDLE.getMsg(af.getFile().getAbsolutePath(), ioe.getMessage()), ioe);
+            }
+            
             //Delete the temporary file because either it was never used so lets just tidy up or we did start writing to it but
             //the write failed and we havent renamed it back to the original file so we can just delete it.
-            newFile.delete();
+            if(!newFile.delete())
+            {
+                 //Non critical failed deletion
+                 logger.warning(ErrorMessage.GENERAL_WRITE_FAILED_TO_DELETE_TEMPORARY_FILE.getMsg(newFile.getAbsolutePath()));   
+            }
             throw new CannotWriteException(ErrorMessage.GENERAL_WRITE_FAILED_BECAUSE.getMsg(af.getFile(), e.getMessage()));
         }
         finally
