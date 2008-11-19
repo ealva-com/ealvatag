@@ -300,6 +300,10 @@ public class Mp4InfoReader
                 throw new CannotReadVideoException(ErrorMessage.MP4_FILE_IS_VIDEO.getMsg());
             }
         }
+
+        //Build AtomTree to ensure it is valid, this means we can detect any problems early on
+        Mp4AtomTree atomTree = new Mp4AtomTree(raf,false); 
+
         return info;
     }
 

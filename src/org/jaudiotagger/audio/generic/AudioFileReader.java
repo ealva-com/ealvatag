@@ -101,7 +101,8 @@ public abstract class AudioFileReader
         }
         catch (Exception e)
         {
-            throw new CannotReadException("\"" + f + "\" :" + e, e);
+            //TODO is this masking exceptions, i.e NullBoxIDException get converted to CannotReadException
+            throw new CannotReadException("\"" + f + "\" :" + e.getMessage(), e);
         }
         finally
         {

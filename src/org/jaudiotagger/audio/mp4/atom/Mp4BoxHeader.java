@@ -19,6 +19,7 @@
 package org.jaudiotagger.audio.mp4.atom;
 
 import org.jaudiotagger.audio.generic.Utils;
+import org.jaudiotagger.audio.exceptions.NullBoxIdException;
 import org.jaudiotagger.logging.ErrorMessage;
 
 import java.io.IOException;
@@ -59,7 +60,7 @@ public class Mp4BoxHeader
     private String id;
 
     //Box length
-    private int length;
+    protected int length;
 
     //If reading from file , this can be used to hold the headers position in the file
     private long filePos;
@@ -116,7 +117,7 @@ public class Mp4BoxHeader
 
         if (id.equals("\0\0\0\0"))
         {
-            throw new RuntimeException(ErrorMessage.MP4_UNABLE_TO_FIND_NEXT_ATOM_BECAUSE_IDENTIFIER_IS_INVALID.getMsg(id));
+            throw new NullBoxIdException(ErrorMessage.MP4_UNABLE_TO_FIND_NEXT_ATOM_BECAUSE_IDENTIFIER_IS_INVALID.getMsg(id));
         }
     }
 

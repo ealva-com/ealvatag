@@ -1,9 +1,12 @@
 package org.jaudiotagger.audio.mp4;
 
 import org.jaudiotagger.audio.exceptions.CannotReadException;
+import org.jaudiotagger.audio.exceptions.NullBoxIdException;
 import org.jaudiotagger.audio.mp4.atom.Mp4BoxHeader;
 import org.jaudiotagger.audio.mp4.atom.Mp4MetaBox;
 import org.jaudiotagger.audio.mp4.atom.Mp4StcoBox;
+import org.jaudiotagger.audio.mp4.atom.NullPadding;
+import org.jaudiotagger.logging.ErrorMessage;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
@@ -39,6 +42,7 @@ public class Mp4AtomTree
     private DefaultMutableTreeNode stcoNode;
     private DefaultMutableTreeNode ilstNode;
     private DefaultMutableTreeNode metaNode;
+    private DefaultMutableTreeNode trailingPaddingNode;
     private List<DefaultMutableTreeNode> freeNodes = new ArrayList<DefaultMutableTreeNode>();
     private List<DefaultMutableTreeNode> mdatNodes = new ArrayList<DefaultMutableTreeNode>();
 
@@ -101,19 +105,41 @@ public class Mp4AtomTree
             ByteBuffer headerBuffer = ByteBuffer.allocate(Mp4BoxHeader.HEADER_LENGTH);
             while (fc.position() < fc.size())
             {
-                Mp4BoxHeader boxHeader = new Mp4BoxHeader();
+                 Mp4BoxHeader boxHeader = new Mp4BoxHeader();
                 headerBuffer.clear();          
                 fc.read(headerBuffer);
                 headerBuffer.rewind();
-                boxHeader.update(headerBuffer);
+
+                try
+                {
+                    boxHeader.update(headerBuffer);
+                }
+                catch(NullBoxIdException ne)
+                {
+                    //If we only get this error after all the expected data has been found we allow it
+                    if(moovNode!=null&mdatNode!=null)
+                    {
+                        NullPadding np = new NullPadding(fc.position() - Mp4BoxHeader.HEADER_LENGTH,fc.size());
+                        trailingPaddingNode =  new DefaultMutableTreeNode(np);
+                        rootNode.add(trailingPaddingNode);
+                        logger.warning(ErrorMessage.NULL_PADDING_FOUND_AT_END_OF_MP4.getMsg(np.getFilePos()));
+                        break;
+                    }
+                    else
+                    {
+                        //File appears invalid
+                        throw ne;
+                    }
+                }
+
                 boxHeader.setFilePos(fc.position() - Mp4BoxHeader.HEADER_LENGTH);
                 DefaultMutableTreeNode newAtom = new DefaultMutableTreeNode(boxHeader);
 
                 //Go down moov
                 if (boxHeader.getId().equals(Mp4NotMetaFieldKey.MOOV.getFieldName()))
                 {
-                    moovNode = newAtom;
-                    moovHeader = boxHeader;
+                    moovNode    = newAtom;
+                    moovHeader  = boxHeader;
 
                     long filePosStart = fc.position();
                     moovBuffer = ByteBuffer.allocate(boxHeader.getDataLength());
@@ -180,7 +206,15 @@ public class Mp4AtomTree
                 {
                     tabbing += "\t";
                 }
-                System.out.println(tabbing + "Atom " + header.getId() + " @ " + header.getFilePos() + " of size:" + header.getLength() + " ,ends @ " + (header.getFilePos() + header.getLength()));
+
+                if(header instanceof NullPadding)
+                {
+                    System.out.println(tabbing + "Null pad " + " @ " + header.getFilePos() + " of size:" + header.getLength() + " ,ends @ " + (header.getFilePos() + header.getLength()));                                        
+                }
+                else
+                {
+                    System.out.println(tabbing + "Atom " + header.getId() + " @ " + header.getFilePos() + " of size:" + header.getLength() + " ,ends @ " + (header.getFilePos() + header.getLength()));
+                }
             }
         }
     }

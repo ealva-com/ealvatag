@@ -107,39 +107,5 @@ public class M4aWriteDrmTagTest extends TestCase
         assertNull(exceptionCaught);
     }
 
-    /**
-     * Test to write all data to a m4p which has a free atom with the wrong length set
-     * so unable to find the subsequent data.
-     * <p/>
-     * Before fix could cause infinite loop now throws a RuntimeException, but writer catches
-     * it and throws cannotwriteexception
-     */
-    public void testWriteFileWithInvalidFreeAtom()
-    {
-        File orig = new File("testdata", "test28.m4p");
-        if (!orig.isFile())
-        {
-            return;
-        }
-
-        Exception exceptionCaught = null;
-        try
-        {
-            File testFile = AbstractTestCase.copyAudioToTmp("test28.m4p", new File("WriteFileWithInvalidFreeAtom.m4p"));
-
-            AudioFile f = AudioFileIO.read(testFile);
-            Tag tag = f.getTag();
-            tag.setArtist("ARTIST");
-            f.commit();
-            f = AudioFileIO.read(testFile);
-            tag = f.getTag();
-
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-            exceptionCaught = e;
-        }
-        assertTrue(exceptionCaught instanceof CannotWriteException);
-    }
+    
 }
