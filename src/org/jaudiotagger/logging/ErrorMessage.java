@@ -54,6 +54,8 @@ public enum ErrorMessage
     GENERAL_WRITE_FAILED_TO_MODIFY_TEMPORARY_FILE_IN_FOLDER("Cannot modify {0} because do not have permissions to modify files in the folder {1}"),
     GENERAL_WRITE_FAILED_TO_OPEN_FILE_FOR_EDITING("Cannot modify {0} because do not have permissions to modify file"),
     NULL_PADDING_FOUND_AT_END_OF_MP4("Null Padding found at end of file starting at offset {0}"),
+    OGG_VORBIS_NO_SETUP_BLOCK("Could not find the Ogg Setup block"),
+    OGG_HEADER_CANNOT_BE_FOUND("OggS Header could not be found, not an ogg stream {0}"),
     ;
 
 

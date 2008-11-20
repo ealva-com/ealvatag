@@ -21,10 +21,12 @@ package org.jaudiotagger.audio.ogg.util;
 
 import org.jaudiotagger.audio.exceptions.CannotReadException;
 import org.jaudiotagger.audio.generic.GenericAudioHeader;
+import org.jaudiotagger.logging.ErrorMessage;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.logging.Logger;
+import java.util.Arrays;
 
 /**
  * Read encoding info, only implemented for vorbis streams
@@ -40,9 +42,17 @@ public class OggInfoReader
         logger.fine("Started");
         long oldPos = 0;
 
-        //TODO this code appears to work backwards from file looking for the last ogg page, it reads
-        //the granule position for this last page which must be set. I dont really understand
-        //why it does this check. But I think it is an arbitary check to make sure weve read the file correctly
+        //Check start of file does it have Ogg pattern
+        byte[] b = new byte[OggPageHeader.CAPTURE_PATTERN.length];
+        raf.read(b);
+        if (!(Arrays.equals(b, OggPageHeader.CAPTURE_PATTERN)))
+        {
+            throw new CannotReadException(ErrorMessage.OGG_HEADER_CANNOT_BE_FOUND.getMsg(new String(b)));
+        }
+
+        //Now work backwards from file looking for the last ogg page, it reads the granule position for this last page
+        //which must be set.
+        //TODO should do buffering to cut down the number of file reads
         raf.seek(0);
         double pcmSamplesNumber = -1;
         raf.seek(raf.length() - 2);
@@ -62,7 +72,7 @@ public class OggInfoReader
                     int pageSegments = raf.readByte() & 0xFF; //Unsigned
                     raf.seek(oldPos);
 
-                    byte[] b = new byte[OggPageHeader.OGG_PAGE_HEADER_FIXED_LENGTH + pageSegments];
+                    b = new byte[OggPageHeader.OGG_PAGE_HEADER_FIXED_LENGTH + pageSegments];
                     raf.readFully(b);
 
                     OggPageHeader pageHeader = new OggPageHeader(b);
@@ -76,8 +86,8 @@ public class OggInfoReader
 
         if (pcmSamplesNumber == -1)
         {
-            //According to spec a value of -1 indicates no packet finished on this page, this should not occurt
-            throw new CannotReadException("Error: Could not find the Ogg Setup block");
+            //According to spec a value of -1 indicates no packet finished on this page, this should not occur
+            throw new CannotReadException(ErrorMessage.OGG_VORBIS_NO_SETUP_BLOCK.getMsg());
         }
 
         //1st page = Identification Header
