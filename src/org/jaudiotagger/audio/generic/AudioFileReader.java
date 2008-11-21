@@ -24,10 +24,13 @@ import org.jaudiotagger.audio.exceptions.InvalidAudioFrameException;
 import org.jaudiotagger.audio.exceptions.ReadOnlyFileException;
 import org.jaudiotagger.tag.Tag;
 import org.jaudiotagger.tag.TagException;
+import org.jaudiotagger.logging.ErrorMessage;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 
 /*
  * This abstract class is the skeleton for tag readers. It handles the creation/closing of
@@ -42,16 +45,20 @@ import java.io.RandomAccessFile;
 public abstract class AudioFileReader
 {
 
+    // Logger Object
+      public static Logger logger = Logger.getLogger("org.jaudiotagger.audio.generic");
+    private static final int MINIMUM_SIZE_FOR_VALID_AUDIO_FILE = 150;
+
     /*
-      * Returns the encoding info object associated wih the current File.
-      * The subclass can assume the RAF pointer is at the first byte of the file.
-      * The RandomAccessFile must be kept open after this function, but can point
-      * at any offset in the file.
-      *
-      * @param raf The RandomAccessFile associtaed with the current file
-      * @exception IOException is thrown when the RandomAccessFile operations throw it (you should never throw them manually)
-      * @exception CannotReadException when an error occured during the parsing of the encoding infos
-      */
+    * Returns the encoding info object associated wih the current File.
+    * The subclass can assume the RAF pointer is at the first byte of the file.
+    * The RandomAccessFile must be kept open after this function, but can point
+    * at any offset in the file.
+    *
+    * @param raf The RandomAccessFile associtaed with the current file
+    * @exception IOException is thrown when the RandomAccessFile operations throw it (you should never throw them manually)
+    * @exception CannotReadException when an error occured during the parsing of the encoding infos
+    */
     protected abstract GenericAudioHeader getEncodingInfo(RandomAccessFile raf) throws CannotReadException, IOException;
 
     /*
@@ -75,12 +82,12 @@ public abstract class AudioFileReader
     {
         if (!f.canRead())
         {
-            throw new CannotReadException("Can't read file \"" + f.getAbsolutePath() + "\"");
+            throw new CannotReadException(ErrorMessage.GENERAL_READ_FAILED_FILE_TOO_SMALL.getMsg(f.getAbsolutePath()));
         }
 
-        if (f.length() <= 150)
+        if (f.length() <= MINIMUM_SIZE_FOR_VALID_AUDIO_FILE)
         {
-            throw new CannotReadException("Less than 150 byte \"" + f.getAbsolutePath() + "\"");
+            throw new CannotReadException(ErrorMessage.GENERAL_READ_FAILED_FILE_TOO_SMALL.getMsg(f.getAbsolutePath()));
         }
 
         RandomAccessFile raf = null;
@@ -102,7 +109,7 @@ public abstract class AudioFileReader
         catch (Exception e)
         {
             //TODO is this masking exceptions, i.e NullBoxIDException get converted to CannotReadException
-            throw new CannotReadException("\"" + f + "\" :" + e.getMessage(), e);
+            throw new CannotReadException(f.getAbsolutePath()+":" + e.getMessage(), e);
         }
         finally
         {
@@ -115,7 +122,7 @@ public abstract class AudioFileReader
             }
             catch (Exception ex)
             {
-                System.err.println("\"" + f + "\" :" + ex);
+                logger.log(Level.WARNING, ErrorMessage.GENERAL_READ_FAILED_UNABLE_TO_CLOSE_RANDOM_ACCESS_FILE.getMsg(f.getAbsolutePath()));
             }
         }
     }

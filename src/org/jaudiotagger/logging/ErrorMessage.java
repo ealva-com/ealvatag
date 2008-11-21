@@ -44,6 +44,7 @@ public enum ErrorMessage
     MP3_URL_SAVED_ENCODED("Url:{0} saved in encoded form as {1}"),
     MP3_UNABLE_TO_ENCODE_URL("Unable to save url:{0} because cannot encode all characters setting to blank instead"),
     MP4_UNABLE_TO_FIND_NEXT_ATOM_BECAUSE_IDENTIFIER_IS_INVALID("Unable to find next atom because identifier is invalid {0}"),
+    MP4_UNABLE_TO_FIND_NEXT_ATOM_BECAUSE_LENGTH_IS_INVALID("Unable to find next atom {0} because length is invalid {1}"),
     GENERAL_INVALID_NULL_ARGUMENT("Argument cannot be null"),
     MP4_GENRE_OUT_OF_RANGE("Genre Id {0} does not map to a valid genre"),
     MP3_PICTURE_TYPE_INVALID("Picture Type is set to invalid value:{0}"),
@@ -56,6 +57,9 @@ public enum ErrorMessage
     NULL_PADDING_FOUND_AT_END_OF_MP4("Null Padding found at end of file starting at offset {0}"),
     OGG_VORBIS_NO_SETUP_BLOCK("Could not find the Ogg Setup block"),
     OGG_HEADER_CANNOT_BE_FOUND("OggS Header could not be found, not an ogg stream {0}"),
+    GENERAL_READ_FAILED_UNABLE_TO_CLOSE_RANDOM_ACCESS_FILE("Unable to close random access file: {0}"),
+    GENERAL_READ_FAILED_FILE_TOO_SMALL("Unable to read file because it is too small to be valid audio file: {0}"),
+    GENERAL_READ_FAILED_DO_NOT_HAVE_PERMISSION_TO_READ_FILE("Unable to read file do not have permission to read: {0}"),
     ;
 
 
