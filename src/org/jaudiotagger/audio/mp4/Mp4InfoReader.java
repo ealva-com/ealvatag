@@ -121,6 +121,18 @@ public class Mp4InfoReader
         Mp4MdhdBox mdhd = new Mp4MdhdBox(boxHeader, mvhdBuffer.slice());
         info.setSamplingRate(mdhd.getSampleRate());
 
+        //Level 4-Searching for "hdlr" within "mdia"
+        /*We dont currently need to process this because contains nothing we want
+        mvhdBuffer.position(mvhdBuffer.position() + boxHeader.getDataLength());
+        boxHeader = Mp4BoxHeader.seekWithinLevel(mvhdBuffer, Mp4NotMetaFieldKey.HDLR.getFieldName());
+        if (boxHeader == null)
+        {
+            throw new CannotReadException(ErrorMessage.MP4_FILE_NOT_AUDIO.getMsg());
+        }
+        Mp4HdlrBox hdlr = new Mp4HdlrBox(boxHeader, mvhdBuffer.slice());
+        hdlr.processData();
+        */
+
         //Level 4-Searching for "minf" within "mdia"
         mvhdBuffer.position(mvhdBuffer.position() + boxHeader.getDataLength());
         boxHeader = Mp4BoxHeader.seekWithinLevel(mvhdBuffer, Mp4NotMetaFieldKey.MINF.getFieldName());
