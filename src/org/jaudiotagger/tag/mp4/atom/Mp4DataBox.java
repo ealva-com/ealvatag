@@ -18,7 +18,7 @@ import java.util.ListIterator;
  * :name 'Data'     (4 bytes)
  * :atom version    (1 byte)
  * :atom type flags (3 bytes)
- * :null field      (4 bytes)
+ * :locale field    (4 bytes) //Currently always zero
  * :data
  */
 public class Mp4DataBox extends AbstractMp4Box
