@@ -131,7 +131,7 @@ public class Mp4AtomTree
                         throw ne;
                     }
                 }
-
+                                   
                 boxHeader.setFilePos(fc.position() - Mp4BoxHeader.HEADER_LENGTH);
                 DefaultMutableTreeNode newAtom = new DefaultMutableTreeNode(boxHeader);
 

@@ -20,6 +20,7 @@ package org.jaudiotagger.audio.mp4.atom;
 
 import org.jaudiotagger.audio.generic.Utils;
 import org.jaudiotagger.audio.exceptions.NullBoxIdException;
+import org.jaudiotagger.audio.exceptions.InvalidBoxHeaderException;
 import org.jaudiotagger.logging.ErrorMessage;
 
 import java.io.IOException;
@@ -115,9 +116,15 @@ public class Mp4BoxHeader
         //Calculate box id
         this.id = Utils.getString(b, IDENTIFIER_POS, IDENTIFIER_LENGTH, "ISO-8859-1");
 
+        logger.finest("Mp4BoxHeader id:"+id+":length:"+length);
         if (id.equals("\0\0\0\0"))
         {
             throw new NullBoxIdException(ErrorMessage.MP4_UNABLE_TO_FIND_NEXT_ATOM_BECAUSE_IDENTIFIER_IS_INVALID.getMsg(id));
+        }
+
+        if(length<HEADER_LENGTH)
+        {
+            throw new InvalidBoxHeaderException(ErrorMessage.MP4_UNABLE_TO_FIND_NEXT_ATOM_BECAUSE_IDENTIFIER_IS_INVALID.getMsg(id,length));
         }
     }
 
