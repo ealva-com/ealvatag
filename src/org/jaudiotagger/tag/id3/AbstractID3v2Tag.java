@@ -1153,7 +1153,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
 
         try
         {
-            paddedFile=File.createTempFile(AudioFile.getBaseFilename(file), ".new", file.getParentFile());
+            paddedFile=File.createTempFile(Utils.getMinBaseFilenameAllowedForTempFile(file), ".new", file.getParentFile());
         }
         //Vista:Can occur if have Write permission on folder this file would be created in Denied
         catch(IOException ioe)

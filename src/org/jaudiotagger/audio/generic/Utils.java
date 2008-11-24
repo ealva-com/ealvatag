@@ -18,6 +18,8 @@
  */
 package org.jaudiotagger.audio.generic;
 
+import org.jaudiotagger.audio.AudioFile;
+
 import java.io.*;
 import java.nio.ByteBuffer;
 
@@ -345,4 +347,31 @@ public class Utils
         return result;
     }
 
+     /**
+     *
+     * @param file
+     * @return filename with audioformat seperator stripped of, lengthened to ensure not too small for calid tempfile
+     * creation.
+     */
+    public static String getMinBaseFilenameAllowedForTempFile(File file)
+    {
+        String s = AudioFile.getBaseFilename(file);
+        if(s.length()>=3)
+        {
+            return s;
+        }
+        if(s.length()==1)
+        {
+            return s + "000";
+        }
+        else if(s.length()==1)
+        {
+            return s + "00";
+        }
+        else if(s.length()==2)
+        {
+            return s + "0";
+        }
+        return s;
+    }
 }
