@@ -148,11 +148,14 @@ public abstract class AudioFileWriter
                     }
                     result = tempF;
 
-                    //All ok so delete
-                    if(!tempF.delete())
+                    //If still exists we can now delete
+                    if(tempF.exists())
                     {
-                        //Non critical failed deletion
-                        logger.warning(ErrorMessage.GENERAL_WRITE_FAILED_TO_DELETE_TEMPORARY_FILE.getMsg(tempF.getPath()));
+                        if(!tempF.delete())
+                        {
+                            //Non critical failed deletion
+                            logger.warning(ErrorMessage.GENERAL_WRITE_FAILED_TO_DELETE_TEMPORARY_FILE.getMsg(tempF.getPath()));
+                        }
                     }
                 }
                 else
@@ -405,7 +408,7 @@ public abstract class AudioFileWriter
         //Result held in this file
         result = af.getFile();
 
-        //If the temporary file was used
+         //If the temporary file was used
         if (newFile.length() > 0)
         {
             //Rename Original File
@@ -450,11 +453,14 @@ public abstract class AudioFileWriter
                 }
             }
 
-            //Delete the temporary file because successfully renamed
-            if(!newFile.delete())
+            //Delete the temporary file if still exists
+            if(newFile.exists())
             {
-                //Non critical failed deletion
-                logger.warning(ErrorMessage.GENERAL_WRITE_FAILED_TO_DELETE_TEMPORARY_FILE.getMsg(newFile.getPath()));
+                if(!newFile.delete())
+                {
+                    //Non critical failed deletion
+                    logger.warning(ErrorMessage.GENERAL_WRITE_FAILED_TO_DELETE_TEMPORARY_FILE.getMsg(newFile.getPath()));
+                }
             }
         }
         else
