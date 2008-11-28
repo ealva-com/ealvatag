@@ -18,20 +18,20 @@ public enum AsfFieldKey
     ALBUM_ARTIST("WM/AlbumArtist", TagFieldKey.ALBUM_ARTIST, false),
     ALBUM_ARTIST_SORT("WM/AlbumArtistSortOrder", TagFieldKey.ALBUM_ARTIST_SORT, false),
     ALBUM_SORT("WM/AlbumSortOrder", TagFieldKey.ALBUM_SORT, false),
-    AMAZON_ID(null, TagFieldKey.AMAZON_ID, false),
-    ARTIST(null, TagFieldKey.ARTIST, false),
+    AMAZON_ID("ASIN", TagFieldKey.AMAZON_ID, false),
+    ARTIST("Artist", TagFieldKey.ARTIST, false),
     ARTIST_SORT("WM/ArtistSortOrder", TagFieldKey.ARTIST_SORT, false),
-    BARCODE(null, TagFieldKey.BARCODE, false), // Description
+    BARCODE(null, TagFieldKey.BARCODE, false),
     BPM("WM/BeatsPerMinute", TagFieldKey.BPM, false),
     CATALOG_NO(null, TagFieldKey.CATALOG_NO, false),
-    COMMENT(null, TagFieldKey.COMMENT, false),
+    COMMENT("WM/Comments", TagFieldKey.COMMENT, false),
     COMPOSER("WM/Composer", TagFieldKey.COMPOSER, false),
     COMPOSER_SORT(null, TagFieldKey.COMPOSER_SORT, false),
     CONDUCTOR("WM/Conductor", TagFieldKey.CONDUCTOR, false),
     COPYRIGHT(null, null, false),
     COVER_ART(null, TagFieldKey.COVER_ART, false),
     DISC_NO("WM/PartOfSet", TagFieldKey.DISC_NO, false),
-    ENCODER(null, TagFieldKey.ENCODER, false),
+    ENCODER("WM/ToolName", TagFieldKey.ENCODER, false),
     GENRE("WM/Genre", TagFieldKey.GENRE, false),
     GENRE_ID("WM/GenreID", null, false),
     GROUPING("WM/ContentGroupDescription", TagFieldKey.GROUPING, false),
@@ -42,19 +42,19 @@ public enum AsfFieldKey
     LYRICS("WM/Lyrics", TagFieldKey.LYRICS, false),
     MEDIA(null, TagFieldKey.MEDIA, false),
     MOOD("WM/Mood", TagFieldKey.MOOD, false),
-    MUSICBRAINZ_ARTISTID("MusicBrainz/Artist Id", TagFieldKey.MUSICBRAINZ_ARTISTID, false),
-    MUSICBRAINZ_DISC_ID("MusicBrainz/Disc Id", TagFieldKey.MUSICBRAINZ_DISC_ID, false),
-    MUSICBRAINZ_RELEASE_COUNTRY(null, TagFieldKey.MUSICBRAINZ_RELEASE_COUNTRY, false),
-    MUSICBRAINZ_RELEASE_STATUS(null, TagFieldKey.MUSICBRAINZ_RELEASE_STATUS, false),
-    MUSICBRAINZ_RELEASE_TYPE(null, TagFieldKey.MUSICBRAINZ_RELEASE_TYPE, false),
-    MUSICBRAINZ_RELEASEARTISTID("MusicBrainz/Album Artist Id", TagFieldKey.MUSICBRAINZ_RELEASEARTISTID, false),
-    MUSICBRAINZ_RELEASEID("MusicBrainz/Album Id", TagFieldKey.MUSICBRAINZ_RELEASEID, false),
-    MUSICBRAINZ_TRACK_ID("MusicBrainz/Track Id", TagFieldKey.MUSICBRAINZ_TRACK_ID, false),
-    MUSICIP_ID(null, TagFieldKey.MUSICIP_ID, false),
-    RATING(null, null, false),
-    RECORD_LABEL(null, TagFieldKey.RECORD_LABEL, false),
+    MUSICBRAINZ_ARTISTID("MusicBrainz/Artist Id", TagFieldKey.MUSICBRAINZ_ARTISTID, false),
+    MUSICBRAINZ_DISC_ID("MusicBrainz/Disc Id", TagFieldKey.MUSICBRAINZ_DISC_ID, false),
+    MUSICBRAINZ_RELEASE_COUNTRY("MusicBrainz/Album Release Country", TagFieldKey.MUSICBRAINZ_RELEASE_COUNTRY, false),
+    MUSICBRAINZ_RELEASE_STATUS("MusicBrainz/Album Status", TagFieldKey.MUSICBRAINZ_RELEASE_STATUS, false),
+    MUSICBRAINZ_RELEASE_TYPE("MusicBrainz/Album Type", TagFieldKey.MUSICBRAINZ_RELEASE_TYPE, false),
+    MUSICBRAINZ_RELEASEARTISTID("MusicBrainz/Album Artist Id", TagFieldKey.MUSICBRAINZ_RELEASEARTISTID, false),
+    MUSICBRAINZ_RELEASEID("MusicBrainz/Album Id", TagFieldKey.MUSICBRAINZ_RELEASEID, false),
+    MUSICBRAINZ_TRACK_ID("MusicBrainz/Track Id", TagFieldKey.MUSICBRAINZ_TRACK_ID, false),
+    MUSICIP_ID("MusicIP/PUID", TagFieldKey.MUSICIP_ID, false),
+    RATING(null, null, false),    
+    RECORD_LABEL("WM/Publisher", TagFieldKey.RECORD_LABEL, false),
     REMIXER("WM/ModifiedBy", TagFieldKey.REMIXER, false),
-    TITLE(null, TagFieldKey.TITLE, false),
+    TITLE("Title", TagFieldKey.TITLE, false),
     TITLE_SORT("WM/TitleSortOrder", TagFieldKey.TITLE_SORT, false),
     TRACK("WM/TrackNumber", TagFieldKey.TRACK, false),
     URL_DISCOGS_ARTIST_SITE(null, TagFieldKey.URL_DISCOGS_ARTIST_SITE, false),
@@ -70,7 +70,7 @@ public enum AsfFieldKey
       */
     private final static HashMap<String, AsfFieldKey> CORR_MAP;
     /**
-     * Stores the {@link AsfFieldKey#fieldId} to the field key.
+     * Stores the {@link AsfFieldKey#fieldName} to the field key.
      */
     private final static HashMap<String, AsfFieldKey> FIELD_ID_MAP;
     /**
@@ -86,9 +86,9 @@ public enum AsfFieldKey
         for (AsfFieldKey curr : AsfFieldKey.values())
         {
             NAME_MAP.put(curr.name(), curr);
-            if (!Utils.isBlank(curr.getFieldId()))
+            if (!Utils.isBlank(curr.getFieldName()))
             {
-                FIELD_ID_MAP.put(curr.getFieldId(), curr);
+                FIELD_ID_MAP.put(curr.getFieldName(), curr);
             }
             if (curr.getCorresponding() != null)
             {
@@ -100,7 +100,7 @@ public enum AsfFieldKey
     /**
      * Returns id itself if:<br>
      * <ol>
-     * <li>Id is the {@linkplain #getFieldId() field identifier} of an AsfFieldKey</li>
+     * <li>Id is the {@linkplain #getFieldName() field identifier} of an AsfFieldKey</li>
      * <li>There is no {@link TagFieldKey} with this {@link Enum#name()}</li>
      * </ol>
      * <br>
@@ -179,7 +179,7 @@ public enum AsfFieldKey
     /**
      * If set, the field has a standard id assigned.
      */
-    private String fieldId;
+    private String fieldName;
 
     /**
      * If <code>true</code>, the field will be stored repeatedly if occurs so in tags.
@@ -196,7 +196,7 @@ public enum AsfFieldKey
      */
     private AsfFieldKey(String asfFieldId, TagFieldKey correspondingKey, boolean multiValue)
     {
-        this.fieldId = asfFieldId;
+        this.fieldName = asfFieldId;
         this.corresponding = correspondingKey;
         this.multiValued = multiValue;
     }
@@ -216,20 +216,20 @@ public enum AsfFieldKey
      * 
      * @return the standard field id. (may be <code>null</code>)
      */
-    public String getFieldId()
+    public String getFieldName()
     {
-        return this.fieldId;
+        return this.fieldName;
     }
 
     /**
-     * Returns {@link #getFieldId()} if not <code>null</code>, otherwise the name of {@link #getCorresponding()}.
+     * Returns {@link #getFieldName()} if not <code>null</code>, otherwise the name of {@link #getCorresponding()}.
      * If this is <code>null</code> too, <code>null</code> will be returned.
      * 
      * @return see description
      */
     public String getPublicFieldId()
     {
-        String result = getFieldId();
+        String result = getFieldName();
         if (result == null)
         {
             if (getCorresponding() != null)
