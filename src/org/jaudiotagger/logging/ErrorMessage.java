@@ -60,6 +60,9 @@ public enum ErrorMessage
     GENERAL_READ_FAILED_UNABLE_TO_CLOSE_RANDOM_ACCESS_FILE("Unable to close random access file: {0}"),
     GENERAL_READ_FAILED_FILE_TOO_SMALL("Unable to read file because it is too small to be valid audio file: {0}"),
     GENERAL_READ_FAILED_DO_NOT_HAVE_PERMISSION_TO_READ_FILE("Unable to read file do not have permission to read: {0}"),
+    ASF_FILE_HEADER_SIZE_DOES_NOT_MATCH_FILE_SIZE("For file {0} the File header size is {1} but different to actual file size of {2}"),
+    ASF_FILE_HEADER_MISSING("For file {0} the File Header missing. Invalid ASF/WMA file."),
+    ASF_HEADER_MISSING("For file {0} the Asf Header missing. Invalid ASF/WMA file."),
     ;
 
 

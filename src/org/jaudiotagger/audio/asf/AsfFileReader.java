@@ -32,6 +32,7 @@ import org.jaudiotagger.audio.exceptions.InvalidAudioFrameException;
 import org.jaudiotagger.audio.exceptions.ReadOnlyFileException;
 import org.jaudiotagger.audio.generic.AudioFileReader;
 import org.jaudiotagger.audio.generic.GenericAudioHeader;
+import org.jaudiotagger.logging.ErrorMessage;
 import org.jaudiotagger.tag.TagException;
 
 import java.io.*;
@@ -56,10 +57,9 @@ public class AsfFileReader extends AudioFileReader
         List<Class<? extends ChunkReader>> readers = new ArrayList<Class<? extends ChunkReader>>();
         readers.add(ContentDescriptionReader.class);
         readers.add(ExtContentDescReader.class);
-        /* 
-         * Create the header extension object reader with just content description reader as well
-         * as extended content description reader.
-         */
+
+        // Create the header extension object reader with just content description reader as well
+        // as extended content description reader.
         AsfExtHeaderReader extReader = new AsfExtHeaderReader(readers, true);
         readers.add(FileHeaderReader.class);
         readers.add(StreamChunkReader.class);
@@ -69,6 +69,7 @@ public class AsfFileReader extends AudioFileReader
 
     /**
      * Determines if the &quot;isVbr&quot; field is set in the extended content description.<br>
+     *
      * @param header the header to look up.
      * @return <code>true</code> if &quot;isVbr&quot; is present with a <code>true</code> value.
      */
@@ -90,11 +91,11 @@ public class AsfFileReader extends AudioFileReader
 
     /**
      * Creates a generic audio header instance with provided data from header.
-     * 
-     * @param header ASF header which contains the information. 
+     *
+     * @param header ASF header which contains the information.
      * @return generic audio header representation.
-     * @throws CannotReadException If header does not contain mandatory information. 
-     *                              (Audio stream chunk and file header chunk)
+     * @throws CannotReadException If header does not contain mandatory information.
+     *                             (Audio stream chunk and file header chunk)
      */
     private GenericAudioHeader getAudioHeader(final AsfHeader header) throws CannotReadException
     {
@@ -134,7 +135,8 @@ public class AsfFileReader extends AudioFileReader
                 throw new CannotReadException("Some values must have been " + "incorrect for interpretation as asf with wma content.");
             }
             info = getAudioHeader(header);
-        } catch (Exception e)
+        }
+        catch (Exception e)
         {
             if (e instanceof IOException)
             {
@@ -154,8 +156,8 @@ public class AsfFileReader extends AudioFileReader
 
     /**
      * Creates a tag instance with provided data from header.
-     * 
-     * @param header ASF header which contains the information. 
+     *
+     * @param header ASF header which contains the information.
      * @return generic audio header representation.
      */
     private AsfTag getTag(AsfHeader header)
@@ -182,7 +184,8 @@ public class AsfFileReader extends AudioFileReader
 
             tag = TagConverter.createTagOf(header);
 
-        } catch (Exception e)
+        }
+        catch (Exception e)
         {
             e.printStackTrace();
             if (e instanceof IOException)
@@ -208,7 +211,7 @@ public class AsfFileReader extends AudioFileReader
     {
         if (!f.canRead())
         {
-            throw new CannotReadException("Can't read file \"" + f.getAbsolutePath() + "\"");
+            throw new CannotReadException(ErrorMessage.GENERAL_READ_FAILED_DO_NOT_HAVE_PERMISSION_TO_READ_FILE.getMsg(f.getAbsolutePath()));
         }
         InputStream stream = null;
         try
@@ -217,22 +220,26 @@ public class AsfFileReader extends AudioFileReader
             final AsfHeader header = HEADER_READER.read(Utils.readGUID(stream), stream, 0);
             if (header == null)
             {
-                throw new CannotReadException("Some values must have been incorrect for interpretation as asf with wma content.");
+                throw new CannotReadException(ErrorMessage.ASF_HEADER_MISSING.getMsg(f.getAbsolutePath()));
             }
             if (header.getFileHeader() == null)
             {
-                throw new CannotReadException("File Header missing. Invalid ASF/WMA file.");
+                throw new CannotReadException(ErrorMessage.ASF_FILE_HEADER_MISSING.getMsg(f.getAbsolutePath()));
             }
+            //TODO note this was throwing an exception for a file tagged by Picard Qt but seems to be okay now
             if (header.getFileHeader().getFileSize().longValue() != f.length())
             {
-                throw new CannotReadException("Invalid ASF/WMA file. File header shows different file size.");
+                throw new CannotReadException(ErrorMessage.ASF_FILE_HEADER_SIZE_DOES_NOT_MATCH_FILE_SIZE.getMsg(f.getAbsolutePath(), header.getFileHeader().getFileSize().longValue(), f.length()));
             }
+
             return new AudioFile(f, getAudioHeader(header), getTag(header));
 
-        } catch (Exception e)
+        }
+        catch (Exception e)
         {
             throw new CannotReadException("\"" + f + "\" :" + e, e);
-        } finally
+        }
+        finally
         {
             try
             {
@@ -240,7 +247,8 @@ public class AsfFileReader extends AudioFileReader
                 {
                     stream.close();
                 }
-            } catch (Exception ex)
+            }
+            catch (Exception ex)
             {
                 System.err.println("\"" + f + "\" :" + ex);
             }
