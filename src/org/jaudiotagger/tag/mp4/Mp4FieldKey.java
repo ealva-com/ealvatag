@@ -95,8 +95,6 @@ public enum Mp4FieldKey
     CONDUCTOR_MM3BETA("cond", TEXT, Tagger.MEDIA_MONKEY),
     ISRC_MMBETA("isrc", TEXT, Tagger.MEDIA_MONKEY),
     MOOD_MM3BETA("mood", TEXT, Tagger.MEDIA_MONKEY),
-
-    //Media Monkey3
     SCORE("rate", TEXT, Tagger.MEDIA_MONKEY),    //As in mark out of 100
     ORIGINAL_ARTIST("oart", TEXT, Tagger.MEDIA_MONKEY),
     ORIGINAL_ALBUM_TITLE("otit", TEXT, Tagger.MEDIA_MONKEY),
@@ -110,6 +108,22 @@ public enum Mp4FieldKey
     CUSTOM_3("cus3", TEXT, Tagger.MEDIA_MONKEY),
     CUSTOM_4("cus4", TEXT, Tagger.MEDIA_MONKEY),
     CUSTOM_5("cus5", TEXT, Tagger.MEDIA_MONKEY),
+
+    //Media Monkey 3.0.6 Onwards
+    MM_PUBLISHER("com.apple.iTunes", "ORGANIZATION", TEXT, Tagger.MEDIA_MONKEY),
+    MM_ORIGINAL_ARTIST("com.apple.iTunes", "ORIGINAL ARTIST", TEXT, Tagger.MEDIA_MONKEY),
+    MM_ORIGINAL_ALBUM_TITLE("com.apple.iTunes", "ORIGINAL ALBUM", TEXT, Tagger.MEDIA_MONKEY),
+    MM_ORIGINAL_LYRICIST("com.apple.iTunes", "ORIGINAL LYRICIST", TEXT, Tagger.MEDIA_MONKEY),
+    MM_INVOLVED_PEOPLE("com.apple.iTunes", "INVOLVED PEOPLE", TEXT, Tagger.MEDIA_MONKEY),
+    MM_ORIGINAL_YEAR("com.apple.iTunes", "ORIGINAL YEAR", TEXT, Tagger.MEDIA_MONKEY),
+    MM_TEMPO("com.apple.iTunes", "TEMPO", TEXT, Tagger.MEDIA_MONKEY),
+    MM_OCCASION("com.apple.iTunes", "OCCASION", TEXT, Tagger.MEDIA_MONKEY),
+    MM_QUALITY("com.apple.iTunes", "QUALITY", TEXT, Tagger.MEDIA_MONKEY),
+    MM_CUSTOM_1("com.apple.iTunes", "CUSTOM1", TEXT, Tagger.MEDIA_MONKEY),
+    MM_CUSTOM_2("com.apple.iTunes", "CUSTOM2", TEXT, Tagger.MEDIA_MONKEY),
+    MM_CUSTOM_3("com.apple.iTunes", "CUSTOM3", TEXT, Tagger.MEDIA_MONKEY),
+    MM_CUSTOM_4("com.apple.iTunes", "CUSTOM4", TEXT, Tagger.MEDIA_MONKEY),
+    MM_CUSTOM_5("com.apple.iTunes", "CUSTOM5", TEXT, Tagger.MEDIA_MONKEY),
 
     //Picard Qt
     LYRICIST("com.apple.iTunes", "LYRICIST", TEXT, Tagger.PICARD),
@@ -132,8 +146,11 @@ public enum Mp4FieldKey
     URL_WIKIPEDIA_RELEASE_SITE("com.apple.iTunes", "URL_WIKIPEDIA_RELEASE_SITE", TEXT, Tagger.JAIKOZ),
     URL_OFFICIAL_ARTIST_SITE("com.apple.iTunes", "URL_OFFICIAL_ARTIST_SITE", TEXT, Tagger.JAIKOZ),
     URL_DISCOGS_ARTIST_SITE("com.apple.iTunes", "URL_DISCOGS_ARTIST_SITE", TEXT, Tagger.JAIKOZ),
-    URL_WIKIPEDIA_ARTIST_SITE("com.apple.iTunes", "URL_WIKIPEDIA_ARTIST_SITE", TEXT, Tagger.JAIKOZ),;
+    URL_WIKIPEDIA_ARTIST_SITE("com.apple.iTunes", "URL_WIKIPEDIA_ARTIST_SITE", TEXT, Tagger.JAIKOZ),
 
+    //Winamp
+    WINAMP_PUBLISHER("com.nullsoft.winamp", "publisher", TEXT, Tagger.WINAMP),       
+    ;
     private Tagger tagger;
     private String fieldName;
     private String issuer;

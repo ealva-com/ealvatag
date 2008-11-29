@@ -14,7 +14,9 @@ import org.jaudiotagger.tag.TagFieldKey;
 import org.jaudiotagger.tag.mp4.atom.Mp4ContentTypeValue;
 import org.jaudiotagger.tag.mp4.atom.Mp4RatingValue;
 import org.jaudiotagger.tag.mp4.field.*;
+import static org.jaudiotagger.tag.mp4.field.Mp4FieldType.TEXT;
 import org.jaudiotagger.tag.reference.GenreTypes;
+import org.jaudiotagger.tag.reference.Tagger;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -180,6 +182,234 @@ public class M4aReadTagTest extends TestCase
         }
         assertNull(exceptionCaught);
     }
+
+    /**
+     * Test to check comptaibility with latest verison of media Monkey
+     */
+    public void testReadFileFromMediaMonkey306()
+    {
+        File orig = new File("testdata", "test38.m4a");
+        if (!orig.isFile())
+        {
+            System.err.println("Unable to test file - not available");
+            return;
+        }
+
+        Exception exceptionCaught = null;
+        try
+        {
+            File testFile = AbstractTestCase.copyAudioToTmp("test38.m4a");
+            AudioFile f = AudioFileIO.read(testFile);
+            Tag tag = f.getTag();
+
+            System.out.println(f.getAudioHeader());
+            System.out.println(tag);
+
+            //AudioInfo
+            //Time in seconds
+            assertEquals(241, f.getAudioHeader().getTrackLength());
+            assertEquals(44100, f.getAudioHeader().getSampleRateAsNumber());
+            assertEquals(new String("2"), f.getAudioHeader().getChannels());
+            assertEquals(128, f.getAudioHeader().getBitRateAsNumber());
+
+            //MPEG Specific
+            Mp4AudioHeader audioheader = (Mp4AudioHeader) f.getAudioHeader();
+            assertEquals(Mp4EsdsBox.Kind.MPEG4_AUDIO, audioheader.getKind());
+            assertEquals(Mp4EsdsBox.AudioProfile.LOW_COMPLEXITY, audioheader.getProfile());
+                     
+
+            //Lookup by generickey
+            assertEquals("artistname", tag.getFirst(TagFieldKey.ARTIST));
+            assertEquals("Album", tag.getFirst(TagFieldKey.ALBUM));
+            assertEquals("title", tag.getFirst(TagFieldKey.TITLE));
+            assertEquals("comments", tag.getFirst(TagFieldKey.COMMENT));
+            assertEquals("1971", tag.getFirst(TagFieldKey.YEAR));
+            assertEquals("1/10", tag.getFirst(TagFieldKey.TRACK));
+            assertEquals("1/10", tag.getFirst(TagFieldKey.DISC_NO));
+            assertEquals("composer", tag.getFirst(TagFieldKey.COMPOSER));
+            assertEquals("Sortartist", tag.getFirst(TagFieldKey.ARTIST_SORT));
+            assertEquals("lyrics", tag.getFirst(TagFieldKey.LYRICS));
+            assertEquals("199", tag.getFirst(TagFieldKey.BPM));
+            assertEquals("Albumartist", tag.getFirst(TagFieldKey.ALBUM_ARTIST));
+            assertEquals("Sortalbumartist", tag.getFirst(TagFieldKey.ALBUM_ARTIST_SORT));
+            assertEquals("Sortalbum", tag.getFirst(TagFieldKey.ALBUM_SORT));
+            assertEquals("grouping", tag.getFirst(TagFieldKey.GROUPING));
+            assertEquals("Sortcomposer", tag.getFirst(TagFieldKey.COMPOSER_SORT));
+            assertEquals("sorttitle", tag.getFirst(TagFieldKey.TITLE_SORT));
+            assertEquals("1", tag.getFirst(TagFieldKey.IS_COMPILATION));
+            assertEquals("iTunes v7.4.3.1, QuickTime 7.2", tag.getFirst(TagFieldKey.ENCODER));
+            assertEquals("66027994-edcf-9d89-bec8-0d30077d888c", tag.getFirst(TagFieldKey.MUSICIP_ID));
+            assertEquals("e785f700-c1aa-4943-bcee-87dd316a2c30", tag.getFirst(TagFieldKey.MUSICBRAINZ_TRACK_ID));
+            assertEquals("989a13f6-b58c-4559-b09e-76ae0adb94ed", tag.getFirst(TagFieldKey.MUSICBRAINZ_ARTISTID));
+            assertEquals("989a13f6-b58c-4559-b09e-76ae0adb94ed", tag.getFirst(TagFieldKey.MUSICBRAINZ_RELEASEARTISTID));
+            assertEquals("19c6f0f6-3d6d-4b02-88c7-ffb559d52be6", tag.getFirst(TagFieldKey.MUSICBRAINZ_RELEASEID));
+
+            //Cast to format specific tag
+            Mp4Tag mp4tag = (Mp4Tag) tag;
+
+            //Lookup by mp4 key
+            assertEquals("artistname", mp4tag.getFirst(Mp4FieldKey.ARTIST));
+            assertEquals("Album", mp4tag.getFirst(Mp4FieldKey.ALBUM));
+            assertEquals("title", mp4tag.getFirst(Mp4FieldKey.TITLE));
+            assertEquals("comments", mp4tag.getFirst(Mp4FieldKey.COMMENT));
+            assertEquals("1971", mp4tag.getFirst(Mp4FieldKey.DAY));
+
+            //Not sure why there are 4 values, only understand 2nd and third
+            assertEquals("1/10", mp4tag.getFirst(Mp4FieldKey.TRACK));
+            assertEquals("1/10", ((Mp4TagTextNumberField) mp4tag.get(Mp4FieldKey.TRACK).get(0)).getContent());
+            assertEquals(new Short("0"), ((Mp4TagTextNumberField) mp4tag.get(Mp4FieldKey.TRACK).get(0)).getNumbers().get(0));
+            assertEquals(new Short("1"), ((Mp4TagTextNumberField) mp4tag.get(Mp4FieldKey.TRACK).get(0)).getNumbers().get(1));
+            assertEquals(new Short("10"), ((Mp4TagTextNumberField) mp4tag.get(Mp4FieldKey.TRACK).get(0)).getNumbers().get(2));
+            assertEquals(new Short("0"), ((Mp4TagTextNumberField) mp4tag.get(Mp4FieldKey.TRACK).get(0)).getNumbers().get(3));
+            assertEquals(new Short("1"), ((Mp4TrackField) mp4tag.getFirstField(Mp4FieldKey.TRACK)).getTrackNo());
+            assertEquals(new Short("10"), ((Mp4TrackField) mp4tag.getFirstField(Mp4FieldKey.TRACK)).getTrackTotal());
+
+            //Not sure why there are 4 values, only understand 2nd and third
+            assertEquals("1/10", mp4tag.getFirst(Mp4FieldKey.DISCNUMBER));
+            assertEquals("1/10", ((Mp4TagTextNumberField) mp4tag.get(Mp4FieldKey.DISCNUMBER).get(0)).getContent());
+            assertEquals(new Short("0"), ((Mp4TagTextNumberField) mp4tag.getFirstField(Mp4FieldKey.DISCNUMBER)).getNumbers().get(0));
+            assertEquals(new Short("1"), ((Mp4TagTextNumberField) mp4tag.getFirstField(Mp4FieldKey.DISCNUMBER)).getNumbers().get(1));
+            assertEquals(new Short("10"), ((Mp4TagTextNumberField) mp4tag.getFirstField(Mp4FieldKey.DISCNUMBER)).getNumbers().get(2));
+            assertEquals(new Short("1"), ((Mp4DiscNoField) mp4tag.getFirstField(Mp4FieldKey.DISCNUMBER)).getDiscNo());
+            assertEquals(new Short("10"), ((Mp4DiscNoField) mp4tag.getFirstField(Mp4FieldKey.DISCNUMBER)).getDiscTotal());
+
+            assertEquals("composer", mp4tag.getFirst(Mp4FieldKey.COMPOSER));
+            assertEquals("Sortartist", mp4tag.getFirst(Mp4FieldKey.ARTIST_SORT));
+            assertEquals("lyrics", mp4tag.getFirst(Mp4FieldKey.LYRICS));
+            assertEquals("199", mp4tag.getFirst(Mp4FieldKey.BPM));
+            assertEquals("Albumartist", mp4tag.getFirst(Mp4FieldKey.ALBUM_ARTIST));
+            assertEquals("Sortalbumartist", mp4tag.getFirst(Mp4FieldKey.ALBUM_ARTIST_SORT));
+            assertEquals("Sortalbum", mp4tag.getFirst(Mp4FieldKey.ALBUM_SORT));
+            assertEquals("grouping", mp4tag.getFirst(Mp4FieldKey.GROUPING));
+            assertEquals("Sortcomposer", mp4tag.getFirst(Mp4FieldKey.COMPOSER_SORT));
+            assertEquals("sorttitle", mp4tag.getFirst(Mp4FieldKey.TITLE_SORT));
+            assertEquals("1", mp4tag.getFirst(Mp4FieldKey.COMPILATION));
+            assertEquals("66027994-edcf-9d89-bec8-0d30077d888c", mp4tag.getFirst(Mp4FieldKey.MUSICIP_PUID));
+            assertEquals("e785f700-c1aa-4943-bcee-87dd316a2c30", mp4tag.getFirst(Mp4FieldKey.MUSICBRAINZ_TRACKID));
+            assertEquals("989a13f6-b58c-4559-b09e-76ae0adb94ed", mp4tag.getFirst(Mp4FieldKey.MUSICBRAINZ_ARTISTID));
+            assertEquals("989a13f6-b58c-4559-b09e-76ae0adb94ed", mp4tag.getFirst(Mp4FieldKey.MUSICBRAINZ_ALBUMARTISTID));
+            assertEquals("19c6f0f6-3d6d-4b02-88c7-ffb559d52be6", mp4tag.getFirst(Mp4FieldKey.MUSICBRAINZ_ALBUMID));
+
+            Mp4TagReverseDnsField rvs = (Mp4TagReverseDnsField) mp4tag.getFirstField(Mp4FieldKey.MUSICBRAINZ_ALBUMID);
+            assertEquals("com.apple.iTunes", rvs.getIssuer());
+            assertEquals("MusicBrainz Album Id", rvs.getDescriptor());
+            assertEquals("19c6f0f6-3d6d-4b02-88c7-ffb559d52be6", rvs.getContent());
+
+            //Lookup by mp4key (no generic key mapping for these yet)
+            assertEquals(" 000002C0 00000298 00004210 00002FD5 0001CB31 0001CB48 0000750D 00007C4A 000291A8 00029191", mp4tag.getFirst(Mp4FieldKey.ITUNES_NORM));
+            assertEquals(" 00000000 00000840 000000E4 0000000000A29EDC 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000", mp4tag.getFirst(Mp4FieldKey.ITUNES_SMPB));
+            assertEquals("1", mp4tag.getFirst(Mp4FieldKey.PART_OF_GAPLESS_ALBUM));
+            assertEquals("iTunes v7.4.3.1, QuickTime 7.2", mp4tag.getFirst(Mp4FieldKey.ENCODER));
+            assertEquals("sortshow", mp4tag.getFirst(Mp4FieldKey.SHOW_SORT));
+            assertEquals("show", mp4tag.getFirst(Mp4FieldKey.SHOW));
+            assertEquals("genre", mp4tag.getFirst(Mp4FieldKey.GENRE_CUSTOM));
+            List coverart = mp4tag.get(Mp4FieldKey.ARTWORK);
+            //Should be three image
+            assertEquals(3, coverart.size());
+
+
+            Mp4TagCoverField coverArtField = (Mp4TagCoverField) coverart.get(0);
+            //Check type png
+            assertEquals(Mp4FieldType.COVERART_PNG, coverArtField.getFieldType());            
+            //Recreate the image
+            BufferedImage bi = ImageIO.read(ImageIO
+                    .createImageInputStream(new ByteArrayInputStream(coverArtField.getData())));
+            assertNotNull(bi);
+
+            //These fields seemed to have chnaged in Media Monkey 3.0.6
+            assertEquals("custom1", mp4tag.getFirst(Mp4FieldKey.MM_CUSTOM_1));
+            assertEquals("custom2", mp4tag.getFirst(Mp4FieldKey.MM_CUSTOM_2));
+            assertEquals("custom3", mp4tag.getFirst(Mp4FieldKey.MM_CUSTOM_3));
+            assertEquals("custom4", mp4tag.getFirst(Mp4FieldKey.MM_CUSTOM_4));
+            assertEquals("custom5", mp4tag.getFirst(Mp4FieldKey.MM_CUSTOM_5));            
+            assertEquals("publisher", mp4tag.getFirst(Mp4FieldKey.MM_PUBLISHER));
+            assertEquals("originalartist", mp4tag.getFirst(Mp4FieldKey.MM_ORIGINAL_ARTIST));
+            assertEquals("originalalbumtitle", mp4tag.getFirst(Mp4FieldKey.MM_ORIGINAL_ALBUM_TITLE));
+            assertEquals("involvedpeople", mp4tag.getFirst(Mp4FieldKey.MM_INVOLVED_PEOPLE));
+            assertEquals("2001", mp4tag.getFirst(Mp4FieldKey.MM_ORIGINAL_YEAR));
+            assertEquals("Slow", mp4tag.getFirst(Mp4FieldKey.MM_TEMPO));
+            assertEquals("Dinner", mp4tag.getFirst(Mp4FieldKey.MM_OCCASION));
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            exceptionCaught = e;
+        }
+        assertNull(exceptionCaught);
+    }
+
+    /**
+       * Test to check comptaibility with latest verison of media Monkey
+       */
+      public void testReadFileFromWinamp5531()
+      {
+          File orig = new File("testdata", "test39.m4a");
+          if (!orig.isFile())
+          {
+              System.err.println("Unable to test file - not available");
+              return;
+          }
+
+          Exception exceptionCaught = null;
+          try
+          {
+              File testFile = AbstractTestCase.copyAudioToTmp("test39.m4a");
+              AudioFile f = AudioFileIO.read(testFile);
+              Tag tag = f.getTag();
+
+              System.out.println(f.getAudioHeader());
+              System.out.println(tag);
+
+              //AudioInfo
+              //Time in seconds
+              assertEquals(241, f.getAudioHeader().getTrackLength());
+              assertEquals(44100, f.getAudioHeader().getSampleRateAsNumber());
+              assertEquals(new String("2"), f.getAudioHeader().getChannels());
+              assertEquals(126, f.getAudioHeader().getBitRateAsNumber());
+
+              //MPEG Specific
+              Mp4AudioHeader audioheader = (Mp4AudioHeader) f.getAudioHeader();
+              assertEquals(Mp4EsdsBox.Kind.MPEG4_AUDIO, audioheader.getKind());
+              assertEquals(Mp4EsdsBox.AudioProfile.LOW_COMPLEXITY, audioheader.getProfile());
+
+
+              //Lookup by generickey
+              assertEquals("artistname", tag.getFirst(TagFieldKey.ARTIST));
+              assertEquals("Album", tag.getFirst(TagFieldKey.ALBUM));
+              assertEquals("title", tag.getFirst(TagFieldKey.TITLE));
+              assertEquals("comments", tag.getFirst(TagFieldKey.COMMENT));
+              assertEquals("1971", tag.getFirst(TagFieldKey.YEAR));
+              assertEquals("1/10", tag.getFirst(TagFieldKey.TRACK));
+              assertEquals("1/10", tag.getFirst(TagFieldKey.DISC_NO));
+              assertEquals("composer", tag.getFirst(TagFieldKey.COMPOSER));
+              assertEquals("Sortartist", tag.getFirst(TagFieldKey.ARTIST_SORT));
+              assertEquals("lyrics", tag.getFirst(TagFieldKey.LYRICS));
+              assertEquals("199", tag.getFirst(TagFieldKey.BPM));
+              assertEquals("Albumartist", tag.getFirst(TagFieldKey.ALBUM_ARTIST));
+
+
+              //Cast to format specific tag
+              Mp4Tag mp4tag = (Mp4Tag) tag;
+
+              //Lookup by mp4 key
+              assertEquals("artistname", mp4tag.getFirst(Mp4FieldKey.ARTIST));
+              assertEquals("Album", mp4tag.getFirst(Mp4FieldKey.ALBUM));
+              assertEquals("title", mp4tag.getFirst(Mp4FieldKey.TITLE));
+              assertEquals("comments", mp4tag.getFirst(Mp4FieldKey.COMMENT));
+              assertEquals("1971", mp4tag.getFirst(Mp4FieldKey.DAY));
+
+
+              //These fields added by winamp
+              assertEquals("publisher", mp4tag.getFirst(Mp4FieldKey.WINAMP_PUBLISHER));
+
+          }
+          catch (Exception e)
+          {
+              e.printStackTrace();
+              exceptionCaught = e;
+          }
+          assertNull(exceptionCaught);
+      }
 
     /**
      * Test to read all metadata from an Apple iTunes encoded m4a file , this tests a few items that could not

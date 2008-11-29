@@ -89,10 +89,10 @@ public class AsfTagTest extends TestCase
         /* 
          * Test correct retrieval by AsfFieldKey itself.
          */
-        if (targetKey.getFieldId() != null)
+        if (targetKey.getFieldName() != null)
         { // Ignore field keys which are just for content description storage.
-            assertEquals(targetKey, AsfFieldKey.getAsfFieldKey(targetKey.getFieldId()));
-            assertEquals(targetKey, AsfFieldKey.getAsfFieldKey(AsfFieldKey.convertId(targetKey.getFieldId())));
+            assertEquals(targetKey, AsfFieldKey.getAsfFieldKey(targetKey.getFieldName()));
+            assertEquals(targetKey, AsfFieldKey.getAsfFieldKey(AsfFieldKey.convertId(targetKey.getFieldName())));
         }
         assertEquals(targetKey, AsfFieldKey.getAsfFieldKey(targetKey.getPublicFieldId()));
         assertEquals(targetKey, AsfFieldKey.getAsfFieldKey(AsfFieldKey.convertId(targetKey.getPublicFieldId())));
@@ -104,11 +104,11 @@ public class AsfTagTest extends TestCase
     public void testIdentifierConversion()
     {
         final AsfTag asfTag = new AsfTag();
-        TagField albumField = asfTag.createAlbumField(AsfFieldKey.ALBUM.getFieldId());
+        TagField albumField = asfTag.createAlbumField(AsfFieldKey.ALBUM.getFieldName());
         asfTag.add(albumField);
         assertSame(albumField, asfTag.get(TagFieldKey.ALBUM).get(0));
         assertSame(albumField, asfTag.getAlbum().get(0));
-        assertSame(albumField, asfTag.get(AsfFieldKey.ALBUM.getFieldId()).get(0));
+        assertSame(albumField, asfTag.get(AsfFieldKey.ALBUM.getFieldName()).get(0));
         assertSame(albumField, asfTag.get(AsfFieldKey.ALBUM.getPublicFieldId()).get(0));
     }
 
@@ -131,7 +131,7 @@ public class AsfTagTest extends TestCase
     {
         final AsfTag asfTag = new AsfTag();
         AsfTagTextField textField = AsfTag
-                        .createTextField(AsfFieldKey.ALBUM.getFieldId(), AsfFieldKey.ALBUM.toString());
+                        .createTextField(AsfFieldKey.ALBUM.getFieldName(), AsfFieldKey.ALBUM.toString());
         asfTag.set(textField);
         assertTrue(textField == asfTag.getFirstField(TagFieldKey.ALBUM.toString()));
     }
