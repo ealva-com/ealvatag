@@ -61,55 +61,55 @@ public class TagConverter
         ContentDescriptor tmp = null;
         if (!Utils.isBlank(tag.getFirstAlbum()))
         {
-            tmp = new ContentDescriptor(AsfFieldKey.ALBUM.getPublicFieldId(), ContentDescriptor.TYPE_STRING);
+            tmp = new ContentDescriptor(AsfFieldKey.ALBUM.getFieldName(), ContentDescriptor.TYPE_STRING);
             tmp.setStringValue(tag.getFirstAlbum());
             description.addOrReplace(tmp);
         }
         else
         {
-            description.remove(AsfFieldKey.ALBUM.getPublicFieldId());
+            description.remove(AsfFieldKey.ALBUM.getFieldName());
         }
         if (!Utils.isBlank(tag.getFirstTrack()))
         {
-            tmp = new ContentDescriptor(AsfFieldKey.TRACK.getPublicFieldId(), ContentDescriptor.TYPE_STRING);
+            tmp = new ContentDescriptor(AsfFieldKey.TRACK.getFieldName(), ContentDescriptor.TYPE_STRING);
             tmp.setStringValue(tag.getFirstTrack());
             description.addOrReplace(tmp);
         }
         else
         {
-            description.remove(AsfFieldKey.TRACK.getPublicFieldId());
+            description.remove(AsfFieldKey.TRACK.getFieldName());
         }
         if (!Utils.isBlank(tag.getFirstYear()))
         {
-            tmp = new ContentDescriptor(AsfFieldKey.YEAR.getPublicFieldId(), ContentDescriptor.TYPE_STRING);
+            tmp = new ContentDescriptor(AsfFieldKey.YEAR.getFieldName(), ContentDescriptor.TYPE_STRING);
             tmp.setStringValue(tag.getFirstYear());
             description.addOrReplace(tmp);
         }
         else
         {
-            description.remove(AsfFieldKey.YEAR.getPublicFieldId());
+            description.remove(AsfFieldKey.YEAR.getFieldName());
         }
         if (!Utils.isBlank(tag.getFirstGenre()))
         {
-            tmp = new ContentDescriptor(AsfFieldKey.GENRE.getPublicFieldId(), ContentDescriptor.TYPE_STRING);
+            tmp = new ContentDescriptor(AsfFieldKey.GENRE.getFieldName(), ContentDescriptor.TYPE_STRING);
             tmp.setStringValue(tag.getFirstGenre());
             description.addOrReplace(tmp);
             Integer genreNum = GenreTypes.getInstanceOf().getIdForName(tag.getFirstGenre());
             if (genreNum != null)
             {
-                tmp = new ContentDescriptor(AsfFieldKey.GENRE_ID.getPublicFieldId(), ContentDescriptor.TYPE_STRING);
+                tmp = new ContentDescriptor(AsfFieldKey.GENRE_ID.getFieldName(), ContentDescriptor.TYPE_STRING);
                 tmp.setStringValue("(" + genreNum + ")");
                 description.addOrReplace(tmp);
             }
             else
             {
-                description.remove(AsfFieldKey.GENRE_ID.getPublicFieldId());
+                description.remove(AsfFieldKey.GENRE_ID.getFieldName());
             }
         }
         else
         {
-            description.remove(AsfFieldKey.GENRE.getPublicFieldId());
-            description.remove(AsfFieldKey.GENRE_ID.getPublicFieldId());
+            description.remove(AsfFieldKey.GENRE.getFieldName());
+            description.remove(AsfFieldKey.GENRE_ID.getFieldName());
         }
     }
 

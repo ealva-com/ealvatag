@@ -63,6 +63,8 @@ public enum ErrorMessage
     ASF_FILE_HEADER_SIZE_DOES_NOT_MATCH_FILE_SIZE("For file {0} the File header size is {1} but different to actual file size of {2}"),
     ASF_FILE_HEADER_MISSING("For file {0} the File Header missing. Invalid ASF/WMA file."),
     ASF_HEADER_MISSING("For file {0} the Asf Header missing. Invalid ASF/WMA file."),
+    GENERAL_UNIDENITIFED_IMAGE_FORMAT("Cannot safetly identify the format of this image setting to default type of Png"),
+    MP4_IMAGE_FORMAT_IS_NOT_TO_EXPECTED_TYPE("ImageFormat for cover art atom is not set to a known image format, instead set to {0}"),
     ;
 
 

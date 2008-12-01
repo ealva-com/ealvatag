@@ -48,12 +48,12 @@ public class WmaDescriptionLocationTest extends WmaTestCase
     /**
      * Creates an instance.
      */
-    public WmaDescriptionLocationTest()
+    public WmaDescriptionLocationTest()   throws Exception
     {
         super(TEST_FILE);
         this.testTag = new AsfTag(true);
         this.testTag.setArtist("TheArtist");
-        this.testTag.set(AsfTag.createTextField(AsfFieldKey.ISVBR.getPublicFieldId(), Boolean.TRUE.toString()));
+        this.testTag.set(this.testTag.createTagField(AsfFieldKey.ISVBR, Boolean.TRUE.toString()));
     }
 
 

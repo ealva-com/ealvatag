@@ -1,5 +1,10 @@
 package org.jaudiotagger.tag.mp4.field;
 
+import org.jaudiotagger.tag.mp4.Mp4FieldKey;
+
+import java.util.EnumSet;
+import java.util.HashMap;
+
 /**
  * Describes the possible types of data held within a Databox
  */
@@ -24,7 +29,7 @@ public enum Mp4FieldType
     BYTE(0x15),
     RIAAPA(0x18),
     UPC(0x19),
-    BMP(0x1B),
+    COVERART_BMP(0x1B),
     ;
 
 
@@ -38,5 +43,42 @@ public enum Mp4FieldType
     public int getFileClassId()
     {
         return fileClassId;
+    }
+
+    private final static HashMap <Integer, Mp4FieldType> fileClassIdFiedTypeMap;
+
+    static
+    {
+        fileClassIdFiedTypeMap = new HashMap<Integer, Mp4FieldType>(Mp4FieldType.values().length);
+        for (Mp4FieldType curr : Mp4FieldType.values())
+        {
+            fileClassIdFiedTypeMap.put(curr.fileClassId,curr);
+        }
+    }
+
+    /**
+     *
+     * @param fieldClassId
+     * @return the Mp4FieldType that this fieldClassId maps to
+     */
+    public static Mp4FieldType getFieldType(int fieldClassId)
+    {
+        return fileClassIdFiedTypeMap.get(fieldClassId);
+    }
+
+    private static EnumSet<Mp4FieldType> coverArtTypes;
+    static
+    {
+        coverArtTypes = EnumSet.of(COVERART_GIF,COVERART_JPEG,COVERART_PNG,COVERART_BMP);
+    }
+
+    /**
+     *
+     * @param mp4FieldType
+     * @return true if this type is for identifying a image format to be used in cover art
+     */
+    public static boolean isCoverArtType(Mp4FieldType mp4FieldType)
+    {
+        return coverArtTypes.contains(mp4FieldType);
     }
 }

@@ -35,7 +35,7 @@ public class ImageFormats
     public static final String V22_JPG_FORMAT = "JPG";
     public static final String V22_PNG_FORMAT = "PNG";
     public static final String V22_GIF_FORMAT = "GIF";
-    public static final String V22_BMP_FORMAT = "BMP";
+    public static final String V22_BMP_FORMAT = "COVERART_BMP";
 
     public static final String MIME_TYPE_JPEG = "image/jpeg";
     public static final String MIME_TYPE_PNG = "image/png";

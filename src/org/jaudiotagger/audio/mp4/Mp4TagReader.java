@@ -182,8 +182,8 @@ public class Mp4TagReader
             {
                 //Need this to decide what type of Field to create
                 int type = Utils.getNumberBigEndian(raw, Mp4DataBox.TYPE_POS_INCLUDING_HEADER, Mp4DataBox.TYPE_POS_INCLUDING_HEADER + Mp4DataBox.TYPE_LENGTH - 1);
-
-                logger.info("Box Type id:" + header.getId() + ":type:" + type);
+                Mp4FieldType fieldType = Mp4FieldType.getFieldType(type);
+                logger.info("Box Type id:" + header.getId() + ":type:" + fieldType);
 
                 //Special handling for some specific identifiers otherwise just base on class id
                 if (header.getId().equals(Mp4FieldKey.TRACK.getFieldName()))
@@ -201,23 +201,7 @@ public class Mp4TagReader
                     TagField field = new Mp4GenreField(header.getId(), raw);
                     tag.add(field);
                 }
-                else if (type == Mp4FieldType.TEXT.getFileClassId())
-                {
-                    TagField field = new Mp4TagTextField(header.getId(), raw);
-                    tag.add(field);
-                }
-                else if (type == Mp4FieldType.NUMERIC.getFileClassId())
-                {
-                    TagField field = new Mp4TagTextNumberField(header.getId(), raw);
-                    tag.add(field);
-                }
-                else if (type == Mp4FieldType.BYTE.getFileClassId())
-                {
-                    TagField field = new Mp4TagByteField(header.getId(), raw);
-                    tag.add(field);
-                }
-                else
-                if (type == Mp4FieldType.COVERART_JPEG.getFileClassId() || type == Mp4FieldType.COVERART_PNG.getFileClassId())
+                else if (header.getId().equals(Mp4FieldKey.ARTWORK.getFieldName()) || Mp4FieldType.isCoverArtType(fieldType))
                 {
                     int processedDataSize = 0;
                     int imageCount = 0;
@@ -229,12 +213,28 @@ public class Mp4TagReader
                         if (imageCount > 0)
                         {
                             type = Utils.getNumberBigEndian(raw, processedDataSize + Mp4DataBox.TYPE_POS_INCLUDING_HEADER, processedDataSize + Mp4DataBox.TYPE_POS_INCLUDING_HEADER + Mp4DataBox.TYPE_LENGTH - 1);
+                            fieldType = Mp4FieldType.getFieldType(type);
                         }
-                        Mp4TagCoverField field = new Mp4TagCoverField(raw, type);
+                        Mp4TagCoverField field = new Mp4TagCoverField(raw,fieldType);
                         tag.add(field);
                         processedDataSize += field.getDataAndHeaderSize();
                         imageCount++;
                     }
+                }
+                else if (fieldType == Mp4FieldType.TEXT)
+                {
+                    TagField field = new Mp4TagTextField(header.getId(), raw);
+                    tag.add(field);
+                }
+                else if (fieldType == Mp4FieldType.NUMERIC)
+                {
+                    TagField field = new Mp4TagTextNumberField(header.getId(), raw);
+                    tag.add(field);
+                }
+                else if (fieldType == Mp4FieldType.BYTE)
+                {
+                    TagField field = new Mp4TagByteField(header.getId(), raw);
+                    tag.add(field);
                 }
                 else
                 {

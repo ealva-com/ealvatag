@@ -77,9 +77,9 @@ public class WmaSimpleTest extends AbstractTestCase
             assertEquals("genre", tag.getFirstGenre());
 
             assertEquals("artist", tag.getFirst(TagFieldKey.ARTIST));
-            //TODO Not sure this is correct use for this next line to work ,
-            //String parameter is for looking up by the underlying Tag id, not the generic id
-            assertEquals("artist", tag.getFirst(TagFieldKey.ARTIST.name()));
+
+            //Should fail because getFirst using String if for the real id not the generic key  
+            assertFalse("artist".equals(tag.getFirst(TagFieldKey.ARTIST.name())));
             assertEquals("artist", tag.getFirst(AsfFieldKey.ARTIST.getFieldName()));
 
             assertEquals("album", tag.getFirst(TagFieldKey.ALBUM));
@@ -170,9 +170,7 @@ public class WmaSimpleTest extends AbstractTestCase
             assertEquals("no wave", tag.getFirstGenre());
 
             assertEquals("Sonic Youth", tag.getFirst(TagFieldKey.ARTIST));
-            //TODO Not sure this is correct use for this next line to work ,
-            //String parameter is for looking up by the underlying Tag id, not the generic id
-            assertEquals("Sonic Youth", tag.getFirst(TagFieldKey.ARTIST.name()));
+
             assertEquals("Sonic Youth", tag.getFirst(AsfFieldKey.ARTIST.getFieldName()));
 
             assertEquals("Sister", tag.getFirst(TagFieldKey.ALBUM));
@@ -286,7 +284,7 @@ public class WmaSimpleTest extends AbstractTestCase
             tag.setCopyright("copyright");
             tag.setRating("rating");
             // set the IsVbr value (can be modified for now)
-            tag.set(AsfTag.createTextField(AsfFieldKey.ISVBR.getPublicFieldId(), Boolean.TRUE.toString()));
+            tag.set(tag.createTagField(AsfFieldKey.ISVBR, Boolean.TRUE.toString()));
             f.commit();
 
             f = AudioFileIO.read(testFile);
@@ -337,7 +335,7 @@ public class WmaSimpleTest extends AbstractTestCase
                 Tag tag = f.getTag();
                 for (TagFieldKey key : TagFieldKey.values())
                 {
-                    tag.add(AsfTag.createTextField(key.name(), key.name() + "_value_" + i));
+                    tag.add(tag.createTagField(key, key.name() + "_value_" + i));
                 }
                 f.commit();
                 f = AudioFileIO.read(testFile);
@@ -348,14 +346,13 @@ public class WmaSimpleTest extends AbstractTestCase
                      * Test value retrieval, using multiple access methods.
                      */
                     String value = key.name() + "_value_" + i;
-                    assertEquals("Key under test: " + key.name(), value, tag.getFirst(key.name()));
                     assertEquals("Key under test: " + key.name(), value, tag.getFirst(key));
-                    AsfTagTextField atf = (AsfTagTextField) tag.get(key.name()).get(0);
+                    assertEquals("Key under test: " + key.name(), value, tag.getFirst(key));
+                    AsfTagTextField atf = (AsfTagTextField) tag.get(key).get(0);
                     assertEquals("Key under test: " + key.name(), value, atf.getContent());
                     atf = (AsfTagTextField) tag.get(key).get(0);
                     assertEquals("Key under test: " + key.name(), value, atf.getContent());
-                    atf = (AsfTagTextField) tag.getFirstField(key.name());
-                    assertEquals("Key under test: " + key.name(), value, atf.getContent());
+                    
 
                 }
             }
@@ -383,7 +380,7 @@ public class WmaSimpleTest extends AbstractTestCase
             Tag tag = f.getTag();
             for (TagFieldKey key : TagFieldKey.values())
             {
-                tag.add(AsfTag.createTextField(key.name(), key.name() + "_value"));
+                tag.add(tag.createTagField(key, key.name() + "_value"));
             }
             f.commit();
 
@@ -418,5 +415,10 @@ public class WmaSimpleTest extends AbstractTestCase
             exceptionCaught = e;
         }
         assertNull(exceptionCaught);
+    }
+
+    public void testIsMultiValues()
+    {
+        assertFalse(AsfFieldKey.isMultiValued(AsfFieldKey.ALBUM.getFieldName()));        
     }
 }

@@ -562,6 +562,7 @@ public class M4aReadTagTest extends TestCase
             //Check 3rd Field
             coverArtField = (Mp4TagCoverField) coverart.get(2);
             //Check type jpeg
+            System.out.println("FieldType:"+coverArtField.getFieldType());
             assertEquals(Mp4FieldType.COVERART_JPEG, coverArtField.getFieldType());
             //Just check jpeg signature
             assertEquals(0xff, coverArtField.getData()[0] & 0xff);
@@ -844,7 +845,7 @@ public class M4aReadTagTest extends TestCase
             System.out.println(tag);
 
             //Allow calling getFirst() on binary fields, although value actually currently makes not much sense
-            assertEquals("jpeg:8445bytes", tag.getFirst(TagFieldKey.COVER_ART));
+            assertEquals("COVERART_JPEG:8445bytes", tag.getFirst(TagFieldKey.COVER_ART));
 
         }
         catch (IOException e)

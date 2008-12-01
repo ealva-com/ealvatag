@@ -5,12 +5,12 @@ import org.jaudiotagger.audio.asf.data.ContentDescriptor;
 import org.jaudiotagger.audio.asf.util.Utils;
 import org.jaudiotagger.audio.generic.AbstractTag;
 import org.jaudiotagger.tag.*;
+import org.jaudiotagger.tag.mp4.Mp4FieldKey;
+import org.jaudiotagger.tag.mp4.field.*;
+import org.jaudiotagger.logging.ErrorMessage;
 
 import java.io.UnsupportedEncodingException;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Tag implementation for ASF.<br>
@@ -30,6 +30,59 @@ public final class AsfTag extends AbstractTag
      */
     public final static Set<AsfFieldKey> DESCRIPTION_FIELDS;
 
+    static EnumMap<TagFieldKey, AsfFieldKey> tagFieldToAsfField = new EnumMap<TagFieldKey, AsfFieldKey>(TagFieldKey.class);
+
+    //Mapping from generic key to mp4 key
+    static
+    {
+        tagFieldToAsfField.put(TagFieldKey.ARTIST, AsfFieldKey.ARTIST);
+        tagFieldToAsfField.put(TagFieldKey.ALBUM, AsfFieldKey.ALBUM);
+        tagFieldToAsfField.put(TagFieldKey.TITLE, AsfFieldKey.TITLE);
+        tagFieldToAsfField.put(TagFieldKey.TRACK, AsfFieldKey.TRACK);
+        tagFieldToAsfField.put(TagFieldKey.YEAR, AsfFieldKey.YEAR);
+        tagFieldToAsfField.put(TagFieldKey.GENRE, AsfFieldKey.GENRE);
+        tagFieldToAsfField.put(TagFieldKey.COMMENT, AsfFieldKey.COMMENT);
+        tagFieldToAsfField.put(TagFieldKey.ALBUM_ARTIST, AsfFieldKey.ALBUM_ARTIST);
+        tagFieldToAsfField.put(TagFieldKey.COMPOSER, AsfFieldKey.COMPOSER);
+        tagFieldToAsfField.put(TagFieldKey.GROUPING, AsfFieldKey.GROUPING);
+        tagFieldToAsfField.put(TagFieldKey.DISC_NO, AsfFieldKey.DISC_NO);
+        tagFieldToAsfField.put(TagFieldKey.BPM, AsfFieldKey.BPM);
+        tagFieldToAsfField.put(TagFieldKey.ENCODER, AsfFieldKey.ENCODER);
+        tagFieldToAsfField.put(TagFieldKey.MUSICBRAINZ_ARTISTID, AsfFieldKey.MUSICBRAINZ_ARTISTID);
+        tagFieldToAsfField.put(TagFieldKey.MUSICBRAINZ_RELEASEID, AsfFieldKey.MUSICBRAINZ_RELEASEID);
+        tagFieldToAsfField.put(TagFieldKey.MUSICBRAINZ_RELEASEARTISTID, AsfFieldKey.MUSICBRAINZ_RELEASEARTISTID);
+        tagFieldToAsfField.put(TagFieldKey.MUSICBRAINZ_TRACK_ID, AsfFieldKey.MUSICBRAINZ_TRACK_ID);
+        tagFieldToAsfField.put(TagFieldKey.MUSICBRAINZ_DISC_ID, AsfFieldKey.MUSICBRAINZ_DISC_ID);
+        tagFieldToAsfField.put(TagFieldKey.MUSICIP_ID, AsfFieldKey.MUSICIP_ID);
+        tagFieldToAsfField.put(TagFieldKey.AMAZON_ID, AsfFieldKey.AMAZON_ID);
+        tagFieldToAsfField.put(TagFieldKey.MUSICBRAINZ_RELEASE_STATUS, AsfFieldKey.MUSICBRAINZ_RELEASE_STATUS);
+        tagFieldToAsfField.put(TagFieldKey.MUSICBRAINZ_RELEASE_TYPE, AsfFieldKey.MUSICBRAINZ_RELEASE_TYPE);
+        tagFieldToAsfField.put(TagFieldKey.MUSICBRAINZ_RELEASE_COUNTRY, AsfFieldKey.MUSICBRAINZ_RELEASE_COUNTRY);
+        tagFieldToAsfField.put(TagFieldKey.LYRICS, AsfFieldKey.LYRICS);
+        tagFieldToAsfField.put(TagFieldKey.IS_COMPILATION, AsfFieldKey.IS_COMPILATION);
+        tagFieldToAsfField.put(TagFieldKey.ARTIST_SORT, AsfFieldKey.ARTIST_SORT);
+        tagFieldToAsfField.put(TagFieldKey.ALBUM_ARTIST_SORT, AsfFieldKey.ALBUM_ARTIST_SORT);
+        tagFieldToAsfField.put(TagFieldKey.ALBUM_SORT, AsfFieldKey.ALBUM_SORT);
+        tagFieldToAsfField.put(TagFieldKey.TITLE_SORT, AsfFieldKey.TITLE_SORT);
+        tagFieldToAsfField.put(TagFieldKey.COMPOSER_SORT, AsfFieldKey.COMPOSER_SORT);
+        tagFieldToAsfField.put(TagFieldKey.COVER_ART, AsfFieldKey.COVER_ART);
+        tagFieldToAsfField.put(TagFieldKey.ISRC, AsfFieldKey.ISRC);
+        tagFieldToAsfField.put(TagFieldKey.CATALOG_NO, AsfFieldKey.CATALOG_NO);
+        tagFieldToAsfField.put(TagFieldKey.BARCODE, AsfFieldKey.BARCODE);
+        tagFieldToAsfField.put(TagFieldKey.RECORD_LABEL, AsfFieldKey.RECORD_LABEL);
+        tagFieldToAsfField.put(TagFieldKey.LYRICIST, AsfFieldKey.LYRICIST);
+        tagFieldToAsfField.put(TagFieldKey.CONDUCTOR, AsfFieldKey.CONDUCTOR);
+        tagFieldToAsfField.put(TagFieldKey.REMIXER, AsfFieldKey.REMIXER);
+        tagFieldToAsfField.put(TagFieldKey.MOOD, AsfFieldKey.MOOD);
+        tagFieldToAsfField.put(TagFieldKey.MEDIA, AsfFieldKey.MEDIA);
+        tagFieldToAsfField.put(TagFieldKey.URL_OFFICIAL_RELEASE_SITE, AsfFieldKey.URL_OFFICIAL_RELEASE_SITE);
+        tagFieldToAsfField.put(TagFieldKey.URL_DISCOGS_RELEASE_SITE, AsfFieldKey.URL_DISCOGS_RELEASE_SITE);
+        tagFieldToAsfField.put(TagFieldKey.URL_WIKIPEDIA_RELEASE_SITE, AsfFieldKey.URL_WIKIPEDIA_RELEASE_SITE);
+        tagFieldToAsfField.put(TagFieldKey.URL_OFFICIAL_ARTIST_SITE, AsfFieldKey.URL_OFFICIAL_ARTIST_SITE);
+        tagFieldToAsfField.put(TagFieldKey.URL_DISCOGS_ARTIST_SITE, AsfFieldKey.URL_DISCOGS_ARTIST_SITE);
+        tagFieldToAsfField.put(TagFieldKey.URL_WIKIPEDIA_ARTIST_SITE, AsfFieldKey.URL_WIKIPEDIA_ARTIST_SITE);
+    }
+
     static
     {
         COMMON_FIELDS = new HashSet<AsfFieldKey>();
@@ -46,19 +99,6 @@ public final class AsfTag extends AbstractTag
         DESCRIPTION_FIELDS.add(AsfFieldKey.COMMENT);
         DESCRIPTION_FIELDS.add(AsfFieldKey.RATING);
         DESCRIPTION_FIELDS.add(AsfFieldKey.TITLE);
-    }
-
-    /**
-     * Creates a {@link AsfTagTextField} for use with string content.<br>
-     * For now the method is relatively useless. However future common checks can be easily implemented.
-     * 
-     * @param fieldKey the field identifier for the field.
-     * @param content The string content.
-     * @return text field for ASF use.
-     */
-    public static AsfTagTextField createTextField(String fieldKey, String content)
-    {
-        return new AsfTagTextField(fieldKey, content);
     }
 
     /**
@@ -216,14 +256,14 @@ public final class AsfTag extends AbstractTag
         if (isConvertingFields())
         {
             // Get the ASF internal key, where it applies
-            String internalId = AsfFieldKey.convertId(source.getId());
+            String internalId = source.getId();
             if (source instanceof TagTextField)
             {
                 String content = ((TagTextField) source).getContent();
                 if (!Utils.isBlank(content))
                 {
                     // If its a non blank text field, value copy is simple
-                    result = createTextField(internalId, content);
+                    result = new AsfTagTextField(internalId, content);
                 }
             }
             else if (source instanceof AsfTagField)
@@ -261,13 +301,15 @@ public final class AsfTag extends AbstractTag
         return result;
     }
 
+
+
     /**
      * {@inheritDoc}
      */
     @Override
     public TagField createAlbumField(String content)
     {
-        return createTextField(getAlbumId(), content);
+        return new AsfTagTextField(getAlbumId(), content);
     }
 
     /**
@@ -276,7 +318,7 @@ public final class AsfTag extends AbstractTag
     @Override
     public TagField createArtistField(String content)
     {
-        return createTextField(getArtistId(), content);
+        return new AsfTagTextField(getArtistId(), content);
     }
 
     /**
@@ -285,7 +327,7 @@ public final class AsfTag extends AbstractTag
     @Override
     public TagField createCommentField(String content)
     {
-        return createTextField(getCommentId(), content);
+        return new AsfTagTextField(getCommentId(), content);
     }
 
     /**
@@ -295,7 +337,7 @@ public final class AsfTag extends AbstractTag
      */
     public TagField createCopyrightField(String content)
     {
-        return createTextField(AsfFieldKey.COPYRIGHT.getPublicFieldId(), content);
+        return new AsfTagTextField(AsfFieldKey.COPYRIGHT.getFieldName(), content);
     }
 
     /**
@@ -304,7 +346,7 @@ public final class AsfTag extends AbstractTag
     @Override
     public TagField createGenreField(String content)
     {
-        return createTextField(getGenreId(), content);
+        return new AsfTagTextField(getGenreId(), content);
     }
 
     /**
@@ -315,7 +357,7 @@ public final class AsfTag extends AbstractTag
      */
     public TagField createRatingField(String content)
     {
-        return createTextField(AsfFieldKey.RATING.getPublicFieldId(), content);
+        return new AsfTagTextField(AsfFieldKey.RATING.getFieldName(), content);
     }
 
     /**
@@ -324,7 +366,44 @@ public final class AsfTag extends AbstractTag
     @Override
     public TagField createTagField(TagFieldKey genericKey, String value) throws KeyNotFoundException, FieldDataInvalidException
     {
-        return createTextField(AsfFieldKey.convertId(genericKey), value);
+        if (value == null)
+        {
+            throw new IllegalArgumentException(ErrorMessage.GENERAL_INVALID_NULL_ARGUMENT.getMsg());
+        }
+        if (genericKey == null)
+        {
+            throw new KeyNotFoundException();
+        }
+        return createTagField(tagFieldToAsfField.get(genericKey), value);
+    }
+
+    /**
+     * Create Tag Field using asf key
+     * <p/>
+     * Uses the correct subclass for the key
+     *
+     * @param asfFieldKey
+     * @param value
+     * @return
+     * @throws KeyNotFoundException
+     * @throws FieldDataInvalidException
+     */
+    public TagField createTagField(AsfFieldKey asfFieldKey, String value) throws KeyNotFoundException, FieldDataInvalidException
+    {
+        if (value == null)
+        {
+            throw new IllegalArgumentException(ErrorMessage.GENERAL_INVALID_NULL_ARGUMENT.getMsg());
+        }
+        if (asfFieldKey == null)
+        {
+            throw new KeyNotFoundException("key not found for value:"+value);
+        }
+        
+        switch (asfFieldKey)
+        {
+            default:
+                return new AsfTagTextField(asfFieldKey.getFieldName(), value);
+        }
     }
 
     /**
@@ -333,7 +412,7 @@ public final class AsfTag extends AbstractTag
     @Override
     public TagField createTitleField(String content)
     {
-        return createTextField(getTitleId(), content);
+        return new AsfTagTextField(getTitleId(), content);
     }
 
     /**
@@ -342,7 +421,7 @@ public final class AsfTag extends AbstractTag
     @Override
     public TagField createTrackField(String content) throws FieldDataInvalidException
     {
-        return createTextField(getTrackId(), content);
+        return new AsfTagTextField(getTrackId(), content);
     }
 
     /**
@@ -351,7 +430,7 @@ public final class AsfTag extends AbstractTag
     @Override
     public TagField createYearField(String content)
     {
-        return createTextField(getYearId(), content);
+        return new AsfTagTextField(getYearId(), content);
     }
 
     /**
@@ -360,7 +439,7 @@ public final class AsfTag extends AbstractTag
      */
     public void deleteTagField(AsfFieldKey fieldKey)
     {
-        super.deleteField(fieldKey.getPublicFieldId());
+        super.deleteField(fieldKey.getFieldName());
     }
 
 
@@ -380,16 +459,11 @@ public final class AsfTag extends AbstractTag
     @Override
     public void deleteTagField(TagFieldKey tagFieldKey) throws KeyNotFoundException
     {
-        super.deleteField(AsfFieldKey.convertId(tagFieldKey));
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public List<TagField> get(String id)
-    {
-        return super.get(AsfFieldKey.convertId(id));
+        if (tagFieldKey == null)
+        {
+            throw new KeyNotFoundException();
+        }
+        super.deleteField(tagFieldToAsfField.get(tagFieldKey).getFieldName());
     }
 
     /**
@@ -398,7 +472,11 @@ public final class AsfTag extends AbstractTag
     @Override
     public List<TagField> get(TagFieldKey id) throws KeyNotFoundException
     {
-        return super.get(AsfFieldKey.convertId(id));
+        if (id == null)
+        {
+            throw new KeyNotFoundException();
+        }
+        return super.get(tagFieldToAsfField.get(id).getFieldName());
     }
 
     /**
@@ -407,7 +485,7 @@ public final class AsfTag extends AbstractTag
     @Override
     protected String getAlbumId()
     {
-        return AsfFieldKey.ALBUM.getPublicFieldId();
+        return AsfFieldKey.ALBUM.getFieldName();
     }
 
     /**
@@ -416,7 +494,7 @@ public final class AsfTag extends AbstractTag
     @Override
     protected String getArtistId()
     {
-        return AsfFieldKey.ARTIST.getPublicFieldId();
+        return AsfFieldKey.ARTIST.getFieldName();
     }
 
     /**
@@ -459,7 +537,7 @@ public final class AsfTag extends AbstractTag
     @Override
     protected String getCommentId()
     {
-        return AsfFieldKey.COMMENT.getPublicFieldId();
+        return AsfFieldKey.COMMENT.getFieldName();
     }
 
     /**
@@ -469,7 +547,7 @@ public final class AsfTag extends AbstractTag
      */
     public List<TagField> getCopyright()
     {
-        return get(AsfFieldKey.COPYRIGHT.getPublicFieldId());
+        return get(AsfFieldKey.COPYRIGHT.getFieldName());
     }
 
     /**
@@ -478,7 +556,11 @@ public final class AsfTag extends AbstractTag
     @Override
     public String getFirst(TagFieldKey genericKey) throws KeyNotFoundException
     {
-        return getFirst(AsfFieldKey.convertId(genericKey));
+        if (genericKey == null)
+        {
+            throw new KeyNotFoundException();
+        }
+        return super.getFirst(tagFieldToAsfField.get(genericKey).getFieldName());
     }
 
     /**
@@ -488,7 +570,7 @@ public final class AsfTag extends AbstractTag
      */
     public String getFirstCopyright()
     {
-        return getFirst(AsfFieldKey.COPYRIGHT.getPublicFieldId());
+        return getFirst(AsfFieldKey.COPYRIGHT.getFieldName());
     }
 
     /**
@@ -498,7 +580,7 @@ public final class AsfTag extends AbstractTag
      */
     public String getFirstRating()
     {
-        return getFirst(AsfFieldKey.RATING.getPublicFieldId());
+        return getFirst(AsfFieldKey.RATING.getFieldName());
     }
 
     /**
@@ -507,7 +589,7 @@ public final class AsfTag extends AbstractTag
     @Override
     protected String getGenreId()
     {
-        return AsfFieldKey.GENRE.getPublicFieldId();
+        return AsfFieldKey.GENRE.getFieldName();
     }
 
     /**
@@ -517,7 +599,7 @@ public final class AsfTag extends AbstractTag
      */
     public List<TagField> getRating()
     {
-        return get(AsfFieldKey.RATING.getPublicFieldId());
+        return get(AsfFieldKey.RATING.getFieldName());
     }
 
     /**
@@ -526,7 +608,7 @@ public final class AsfTag extends AbstractTag
     @Override
     protected String getTitleId()
     {
-        return AsfFieldKey.TITLE.getPublicFieldId();
+        return AsfFieldKey.TITLE.getFieldName();
     }
 
     /**
@@ -535,7 +617,7 @@ public final class AsfTag extends AbstractTag
     @Override
     protected String getTrackId()
     {
-        return AsfFieldKey.TRACK.getPublicFieldId();
+        return AsfFieldKey.TRACK.getFieldName();
     }
 
     /**
@@ -544,7 +626,7 @@ public final class AsfTag extends AbstractTag
     @Override
     protected String getYearId()
     {
-        return AsfFieldKey.YEAR.getPublicFieldId();
+        return AsfFieldKey.YEAR.getFieldName();
     }
 
     /**

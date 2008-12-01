@@ -22,6 +22,7 @@ import org.jaudiotagger.audio.mp4.atom.Mp4BoxHeader;
 import org.jaudiotagger.tag.mp4.Mp4FieldKey;
 import org.jaudiotagger.tag.mp4.atom.Mp4DataBox;
 import org.jaudiotagger.tag.mp4.atom.Mp4NameBox;
+import org.jaudiotagger.logging.ErrorMessage;
 
 import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
@@ -63,19 +64,16 @@ public class Mp4TagCoverField extends Mp4TagBinaryField
      * Construct CoverField by reading data from audio file
      *
      * @param raw
-     * @param type
+     * @param imageType
      * @throws UnsupportedEncodingException
      */
-    public Mp4TagCoverField(ByteBuffer raw, int type) throws UnsupportedEncodingException
+    public Mp4TagCoverField(ByteBuffer raw,Mp4FieldType imageType) throws UnsupportedEncodingException
     {
         super(Mp4FieldKey.ARTWORK.getFieldName(), raw);
-        if (type == Mp4FieldType.COVERART_JPEG.getFileClassId())
+        this.imageType=imageType;
+         if(!Mp4FieldType.isCoverArtType(imageType))
         {
-            imageType = Mp4FieldType.COVERART_JPEG;
-        }
-        else
-        {
-            imageType = Mp4FieldType.COVERART_PNG;
+            logger.warning(ErrorMessage.MP4_IMAGE_FORMAT_IS_NOT_TO_EXPECTED_TYPE.getMsg(imageType));
         }
     }
 
@@ -84,8 +82,7 @@ public class Mp4TagCoverField extends Mp4TagBinaryField
      * <p/>
      * <p/>
      * Identifies the imageType by looking at the data, if doesnt match PNG assumes it is JPEG
-     * TODO:Check how accurate is my method will it work for any PNG
-     * TODO:What about if they try to add data that is corrupt or not PNG or JPG
+     * TODO:Check how accurate is my method will it work for any PNG or BMP    
      *
      * @param data
      * @throws UnsupportedEncodingException
@@ -95,14 +92,87 @@ public class Mp4TagCoverField extends Mp4TagBinaryField
         super(Mp4FieldKey.ARTWORK.getFieldName(), data);
 
         //Read signature
-        if ((0x89 == (data[0] & 0xff)) || (0x50 == (data[0] & 0xff)) || (0x4E == (data[0] & 0xff)) || (0x47 == (data[0] & 0xff)))
+        if (binaryDataIsPngFormat(data))
         {
             imageType = Mp4FieldType.COVERART_PNG;
         }
-        else
+        else if (binaryDataIsJpgFormat(data))
         {
             imageType = Mp4FieldType.COVERART_JPEG;
         }
+        else if (binaryDataIsGifFormat(data))
+        {
+            imageType = Mp4FieldType.COVERART_GIF;
+        }
+        else if (binaryDataIsBmpFormat(data))
+        {
+            imageType = Mp4FieldType.COVERART_BMP;
+        }
+        else
+        {
+            logger.warning(ErrorMessage.GENERAL_UNIDENITIFED_IMAGE_FORMAT.getMsg());
+            imageType = Mp4FieldType.COVERART_PNG;
+        }
+    }
+
+    /**
+     *
+     * @param data
+     * @return true if binary data matches expected header for a png
+     */
+    public static boolean binaryDataIsPngFormat(byte[] data)
+    {
+         //Read signature
+        if ((0x89 == (data[0] & 0xff)) && (0x50 == (data[1] & 0xff)) && (0x4E == (data[2] & 0xff)) && (0x47 == (data[3] & 0xff)))
+        {
+            return true;
+        }
+        return false;
+    }
+
+     /**
+     *
+     * @param data
+     * @return true if binary data matches expected header for a jpg
+     */
+    public static boolean binaryDataIsJpgFormat(byte[] data)
+    {
+         //Read signature
+        if ((0xff == (data[0] & 0xff)) && (0xd8== (data[1] & 0xff)) && (0xff == (data[2] & 0xff)) && (0xff == (data[3] & 0xe0)) )
+        {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     *
+     * @param data
+     * @return true if binary data matches expected header for a gif
+     */
+    public static boolean binaryDataIsGifFormat(byte[] data)
+    {
+         //Read signature
+        if ((0x47 == (data[0] & 0xff)) && (0x49 == (data[1] & 0xff)) && (0x46 == (data[2] & 0xff)) )
+        {
+            return true;
+        }
+        return false;
+    }
+
+     /**
+     *
+     * @param data
+     * @return true if binary data matches expected header for a bmp
+     */
+    public static boolean binaryDataIsBmpFormat(byte[] data)
+    {
+         //Read signature
+        if ((0x42 == (data[0] & 0xff)) && (0x4d == (data[1] & 0xff)) && (0x3c == (data[2] & 0xff)) )
+        {
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -123,15 +193,7 @@ public class Mp4TagCoverField extends Mp4TagBinaryField
 
     public String toString()
     {
-        switch (imageType)
-        {
-            case COVERART_JPEG:
-                return "jpeg:" + dataBytes.length + "bytes";
-            case COVERART_PNG:
-                return "png" + dataBytes.length + "bytes";
-            default:
-                return "";
-        }
+        return imageType +":" + dataBytes.length + "bytes";
     }
 
     protected void build(ByteBuffer raw)

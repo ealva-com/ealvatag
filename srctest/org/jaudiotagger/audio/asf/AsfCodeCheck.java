@@ -26,13 +26,13 @@ public class AsfCodeCheck extends TestCase
     public void testAsfTagImpl() throws Exception
     {
         final AsfTag asfTag = new AsfTag();
-        assertEquals(asfTag.createAlbumField(new String()).getId(), AsfFieldKey.ALBUM.getPublicFieldId());
-        assertEquals(asfTag.createArtistField(new String()).getId(), AsfFieldKey.ARTIST.getPublicFieldId());
-        assertEquals(asfTag.createCommentField(new String()).getId(), AsfFieldKey.COMMENT.getPublicFieldId());
-        assertEquals(asfTag.createGenreField(new String()).getId(), AsfFieldKey.GENRE.getPublicFieldId());
-        assertEquals(asfTag.createTitleField(new String()).getId(), AsfFieldKey.TITLE.getPublicFieldId());
-        assertEquals(asfTag.createTrackField(new String()).getId(), AsfFieldKey.TRACK.getPublicFieldId());
-        assertEquals(asfTag.createYearField(new String()).getId(), AsfFieldKey.YEAR.getPublicFieldId());
+        assertEquals(asfTag.createAlbumField(new String()).getId(), AsfFieldKey.ALBUM.getFieldName());
+        assertEquals(asfTag.createArtistField(new String()).getId(), AsfFieldKey.ARTIST.getFieldName());
+        assertEquals(asfTag.createCommentField(new String()).getId(), AsfFieldKey.COMMENT.getFieldName());
+        assertEquals(asfTag.createGenreField(new String()).getId(), AsfFieldKey.GENRE.getFieldName());
+        assertEquals(asfTag.createTitleField(new String()).getId(), AsfFieldKey.TITLE.getFieldName());
+        assertEquals(asfTag.createTrackField(new String()).getId(), AsfFieldKey.TRACK.getFieldName());
+        assertEquals(asfTag.createYearField(new String()).getId(),  AsfFieldKey.YEAR.getFieldName());
     }
 
     /**
