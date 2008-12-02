@@ -16,6 +16,7 @@
 package org.jaudiotagger.tag.id3;
 
 import org.jaudiotagger.FileConstants;
+import org.jaudiotagger.logging.ErrorMessage;
 import org.jaudiotagger.audio.generic.Utils;
 import org.jaudiotagger.audio.mp3.MP3File;
 import org.jaudiotagger.tag.*;
@@ -829,27 +830,27 @@ public class ID3v24Frame extends AbstractID3v2Frame
         {
             if (isCompression())
             {
-                logger.warning(getLoggingFilename() + ":" + identifier + " is compressed");
+                logger.warning(ErrorMessage.MP3_FRAME_IS_COMPRESSED.getMsg(getLoggingFilename(),identifier));
             }
 
             if (isEncryption())
             {
-                logger.warning(getLoggingFilename() + ":" + identifier + " is encrypted");
+                logger.warning(ErrorMessage.MP3_FRAME_IS_ENCRYPTED.getMsg(getLoggingFilename(),identifier));
             }
 
             if (isGrouping())
             {
-                logger.warning(getLoggingFilename() + ":" + identifier + " is grouped");
+                logger.info(ErrorMessage.MP3_FRAME_IS_GROUPED.getMsg(getLoggingFilename(),identifier));
             }
 
             if (isUnsynchronised())
             {
-                logger.warning(getLoggingFilename() + ":" + identifier + " is unsynchronised");
+                logger.info(ErrorMessage.MP3_FRAME_IS_UNSYNCHRONISED.getMsg(getLoggingFilename(),identifier));
             }
 
             if (isDataLengthIndicator())
             {
-                logger.warning(getLoggingFilename() + ":" + identifier + " has a data length indicator");
+                logger.info(ErrorMessage.MP3_FRAME_IS_DATA_LENGTH_INDICATOR.getMsg(getLoggingFilename(),identifier));
             }
         }
 

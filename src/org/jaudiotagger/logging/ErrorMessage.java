@@ -65,6 +65,11 @@ public enum ErrorMessage
     ASF_HEADER_MISSING("For file {0} the Asf Header missing. Invalid ASF/WMA file."),
     GENERAL_UNIDENITIFED_IMAGE_FORMAT("Cannot safetly identify the format of this image setting to default type of Png"),
     MP4_IMAGE_FORMAT_IS_NOT_TO_EXPECTED_TYPE("ImageFormat for cover art atom is not set to a known image format, instead set to {0}"),
+    MP3_FRAME_IS_COMPRESSED("Filename {0}:{1} is compressed"),
+    MP3_FRAME_IS_ENCRYPTED("Filename {0}:{1} is encrypted"),
+    MP3_FRAME_IS_GROUPED("Filename {0}:{1} is grouped"),
+    MP3_FRAME_IS_UNSYNCHRONISED("Filename {0}:{1} is unsynchronised"),
+    MP3_FRAME_IS_DATA_LENGTH_INDICATOR("Filename {0}:{1} has a data length indicator"),        
     ;
 
 
