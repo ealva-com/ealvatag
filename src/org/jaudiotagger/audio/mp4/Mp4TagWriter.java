@@ -47,6 +47,10 @@ import java.util.logging.Logger;
  * and moov should be recalculated and the top level free atom reduced accordingly
  * If there is not enough space even if using both of the free atoms, then the mdat atom has to be shifted down
  * accordingly to make space, and the stco atom has to have its offsets to mdat chunks table adjusted accordingly.
+ *
+ * Exceptions are that the meta/udta/ilst do not currently exist, in which udta/meta/ilst are created. Note it is valid
+ * to have meta/ilst without udta but this is less common so we always try to write files according to the Apple/iTunes
+ * specification. *
  * <p/>
  * <p/>
  * <pre>
@@ -115,24 +119,33 @@ public class Mp4TagWriter
      * @param sizeAdjustment can be negative or positive     *
      * @return
      */
-    private void adjustSizeOfMoovHeader(Mp4BoxHeader moovHeader, ByteBuffer moovBuffer, int sizeAdjustment) throws IOException
+    private void adjustSizeOfMoovHeader
+            (Mp4BoxHeader moovHeader,
+             ByteBuffer moovBuffer,
+             int sizeAdjustment,
+             Mp4BoxHeader udtaHeader,
+             Mp4BoxHeader metaHeader) throws IOException
     {
         //Adjust header size
         moovHeader.setLength(moovHeader.getLength() + sizeAdjustment);
+
         //Edit the fields in moovBuffer (note moovbuffer doesnt include header), then write moovbuffer
         //upto ilst header
-        //Level 2-Searching for "udta" within "moov"
-        moovBuffer.rewind();
-        Mp4BoxHeader udtaHdr = Mp4BoxHeader.seekWithinLevel(moovBuffer, Mp4NotMetaFieldKey.UDTA.getFieldName());
-        udtaHdr.setLength(udtaHdr.getLength() + sizeAdjustment);
-        moovBuffer.position(moovBuffer.position() - Mp4BoxHeader.HEADER_LENGTH);
-        moovBuffer.put(udtaHdr.getHeaderData());
+        if(udtaHeader!=null)
+        {
+            //Write the updated udta atom header to moov buffer
+            udtaHeader.setLength(udtaHeader.getLength() + sizeAdjustment);
+            moovBuffer.position((int)(udtaHeader.getFilePos() - moovHeader.getFilePos() - Mp4BoxHeader.HEADER_LENGTH));
+            moovBuffer.put(udtaHeader.getHeaderData());
+        }
 
-        //Level 3-Searching for "meta" within udta
-        Mp4BoxHeader metaHdr = Mp4BoxHeader.seekWithinLevel(moovBuffer, Mp4NotMetaFieldKey.META.getFieldName());
-        metaHdr.setLength(metaHdr.getLength() + sizeAdjustment);
-        moovBuffer.position(moovBuffer.position() - Mp4BoxHeader.HEADER_LENGTH);
-        moovBuffer.put(metaHdr.getHeaderData());
+        if(metaHeader!=null)
+        {
+            //Write the updated udta atom header to moov buffer
+            metaHeader.setLength(metaHeader.getLength() + sizeAdjustment);
+            moovBuffer.position((int)(metaHeader.getFilePos() - moovHeader.getFilePos()- Mp4BoxHeader.HEADER_LENGTH));
+            moovBuffer.put(metaHeader.getHeaderData());
+        }
     }
 
     /**
@@ -191,26 +204,52 @@ public class Mp4TagWriter
         Mp4StcoBox stco = atomTree.getStco();
 
         Mp4BoxHeader ilstHeader = atomTree.getBoxHeader(atomTree.getIlstNode());
+        Mp4BoxHeader udtaHeader = atomTree.getBoxHeader(atomTree.getUdtaNode());
         Mp4BoxHeader metaHeader = atomTree.getBoxHeader(atomTree.getMetaNode());
         Mp4BoxHeader mdatHeader = atomTree.getBoxHeader(atomTree.getMdatNode());
         ByteBuffer moovBuffer = atomTree.getMoovBuffer();
 
-        //Ilst
-        if (ilstHeader != null)
-        {
-            oldIlstSize = ilstHeader.getLength();
+        System.out.println("MoovBuffer:"+moovBuffer.limit());
 
-            //Relative means - 40,relative to moov buffer after header 
-            relativeIlstposition = (int) (ilstHeader.getFilePos() - (moovHeader.getFilePos() + Mp4BoxHeader.HEADER_LENGTH));
-            relativeIlstEndPosition = relativeIlstposition + ilstHeader.getLength();
-            startIstWithinFile = (int) ilstHeader.getFilePos();
+        //Udta
+        if(udtaHeader !=null)
+        {
+            //Meta
+            if(metaHeader != null)
+            {
+                //Ilst
+                if (ilstHeader != null)
+                {
+                    oldIlstSize = ilstHeader.getLength();
+
+                    //Relative means relative to moov buffer after moov header
+                    relativeIlstposition = (int) (ilstHeader.getFilePos() - (moovHeader.getFilePos() + Mp4BoxHeader.HEADER_LENGTH));
+                    relativeIlstEndPosition = relativeIlstposition + ilstHeader.getLength();
+                    startIstWithinFile = (int) ilstHeader.getFilePos();
+                }
+                else
+                {
+                    //There no ilst header so we set to position where it would be if it existed
+                    //TODO Seems wrong shoudnlt we be considering hdlr atom, or do we not have this either
+                    relativeIlstposition = (int) ((metaHeader.getFilePos() + Mp4BoxHeader.HEADER_LENGTH + Mp4MetaBox.FLAGS_LENGTH) - (moovHeader.getFilePos() + Mp4BoxHeader.HEADER_LENGTH));
+                    relativeIlstEndPosition = relativeIlstposition;
+                    startIstWithinFile = (int) metaHeader.getFilePos() + Mp4BoxHeader.HEADER_LENGTH + Mp4MetaBox.FLAGS_LENGTH;
+                }
+            }
+            else
+            {
+                //There no ilst or meta header so we set to position where it would be if it existed
+                relativeIlstposition = (int) (moovHeader.getLength() - Mp4BoxHeader.HEADER_LENGTH);
+                relativeIlstEndPosition = relativeIlstposition + ilstHeader.getLength();
+                startIstWithinFile = (int)(moovHeader.getFilePos() + moovHeader.getLength());
+            }
         }
         else
         {
-            //There no ilst header so we set to position where it would be if it existed
-            relativeIlstposition = (int) ((metaHeader.getFilePos() + Mp4BoxHeader.HEADER_LENGTH + Mp4MetaBox.FLAGS_LENGTH) - (moovHeader.getFilePos() + Mp4BoxHeader.HEADER_LENGTH));
+            //There no udta,ilst or meta header so we set to position where it would be if it existed
+            relativeIlstposition = (int) (moovHeader.getLength() - Mp4BoxHeader.HEADER_LENGTH);
             relativeIlstEndPosition = relativeIlstposition;
-            startIstWithinFile = (int) metaHeader.getFilePos() + Mp4BoxHeader.HEADER_LENGTH + Mp4MetaBox.FLAGS_LENGTH;
+            startIstWithinFile = (int)(moovHeader.getFilePos() + moovHeader.getLength());
         }
 
         newIlstSize = rawIlstData.limit();
@@ -354,7 +393,7 @@ public class Mp4TagWriter
                     }
 
                     //Edit and rewrite the Moov,Udta and Ilst header in moov buffer
-                    adjustSizeOfMoovHeader(moovHeader, moovBuffer, -sizeReducedBy);
+                    adjustSizeOfMoovHeader(moovHeader, moovBuffer, -sizeReducedBy,udtaHeader,metaHeader);
                     fileWriteChannel.write(moovHeader.getHeaderData());
                     moovBuffer.rewind();
                     moovBuffer.limit(relativeIlstposition);
@@ -439,11 +478,12 @@ public class Mp4TagWriter
                 }
 
                 //Edit and rewrite the Moov header
-                adjustSizeOfMoovHeader(moovHeader, moovBuffer, additionalMetaSizeThatWontFitWithinMetaAtom);
+                adjustSizeOfMoovHeader(moovHeader, moovBuffer, additionalMetaSizeThatWontFitWithinMetaAtom,udtaHeader,metaHeader);
                 fileWriteChannel.write(moovHeader.getHeaderData());
 
                 //Now write from this edited buffer up until ilst atom
                 moovBuffer.rewind();
+                System.out.println("MoovBuffer:"+moovBuffer.limit() + ":"+relativeIlstposition);
                 moovBuffer.limit(relativeIlstposition);
                 fileWriteChannel.write(moovBuffer);
 
@@ -557,7 +597,6 @@ public class Mp4TagWriter
             {
                 throw new CannotWriteException(ErrorMessage.MP4_CHANGES_TO_FILE_FAILED_INCORRECT_OFFSETS.getMsg());
             }
-
         }
         catch (Exception e)
         {
@@ -567,6 +606,7 @@ public class Mp4TagWriter
             }
             else
             {
+                e.printStackTrace();
                 throw new CannotWriteException(ErrorMessage.MP4_CHANGES_TO_FILE_FAILED.getMsg() + ":" + e.getMessage());
             }
         }
