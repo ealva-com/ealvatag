@@ -39,8 +39,11 @@ import java.util.logging.Logger;
 /**
  * Reads metadata from mp4,
  * <p/>
- * <p>The metadata tags are held under the ilst atom as shown below
- * <p/>
+ * <p>The metadata tags are usually held under the ilst atom as shown below<p/>
+ * <p>Valid Exceptions to the rule:</p>
+ * <p>Can be no udta atom with meta rooted immediately under moov instead<p/>
+ * <p>Can be no udta/meta atom at all<p/>
+ *
  * <pre>
  * |--- ftyp
  * |--- moov
@@ -87,7 +90,7 @@ public class Mp4TagReader
         Mp4BoxHeader moovHeader = Mp4BoxHeader.seekWithinLevel(raf, Mp4NotMetaFieldKey.MOOV.getFieldName());
         if (moovHeader == null)
         {
-            throw new CannotReadException("This file does not appear to be an audio file");
+            throw new CannotReadException(ErrorMessage.MP4_FILE_NOT_CONTAINER.getMsg());
         }
         ByteBuffer moovBuffer = ByteBuffer.allocate(moovHeader.getLength() - Mp4BoxHeader.HEADER_LENGTH);
         raf.getChannel().read(moovBuffer);
@@ -95,28 +98,50 @@ public class Mp4TagReader
 
         //Level 2-Searching for "udta" within "moov"
         Mp4BoxHeader boxHeader = Mp4BoxHeader.seekWithinLevel(moovBuffer, Mp4NotMetaFieldKey.UDTA.getFieldName());
-        if (boxHeader == null)
+        if (boxHeader != null)
         {
-            throw new CannotReadException("This file does not appear to be an audio file");
+            //Level 3-Searching for "meta" within udta
+            boxHeader = Mp4BoxHeader.seekWithinLevel(moovBuffer, Mp4NotMetaFieldKey.META.getFieldName());
+            if (boxHeader == null)
+            {
+                logger.warning(ErrorMessage.MP4_FILE_HAS_NO_METADATA.getMsg());
+                return tag;
+            }
+            Mp4MetaBox meta = new Mp4MetaBox(boxHeader, moovBuffer);
+            meta.processData();
+
+            //Level 4- Search for "ilst" within meta
+            boxHeader = Mp4BoxHeader.seekWithinLevel(moovBuffer, Mp4NotMetaFieldKey.ILST.getFieldName());
+             //This file does not actually contain a tag
+            if (boxHeader == null)
+            {
+                logger.warning(ErrorMessage.MP4_FILE_HAS_NO_METADATA.getMsg());
+                return tag;
+            }
+        }
+        else
+        {
+            //Level 2-Searching for "meta" not within udta
+            boxHeader = Mp4BoxHeader.seekWithinLevel(moovBuffer, Mp4NotMetaFieldKey.META.getFieldName());
+            if (boxHeader == null)
+            {
+                logger.warning(ErrorMessage.MP4_FILE_HAS_NO_METADATA.getMsg());
+                return tag;
+            }
+            Mp4MetaBox meta = new Mp4MetaBox(boxHeader, moovBuffer);
+            meta.processData();
+
+
+            //Level 3- Search for "ilst" within meta
+            boxHeader = Mp4BoxHeader.seekWithinLevel(moovBuffer, Mp4NotMetaFieldKey.ILST.getFieldName());
+            //This file does not actually contain a tag
+            if (boxHeader == null)
+            {
+                logger.warning(ErrorMessage.MP4_FILE_HAS_NO_METADATA.getMsg());
+                return tag;
+            }
         }
 
-        //Level 3-Searching for "meta" within udta
-        boxHeader = Mp4BoxHeader.seekWithinLevel(moovBuffer, Mp4NotMetaFieldKey.META.getFieldName());
-        if (boxHeader == null)
-        {
-            throw new CannotReadException("This file does not appear to be an audio file");
-        }
-        Mp4MetaBox meta = new Mp4MetaBox(boxHeader, moovBuffer);
-        meta.processData();
-
-        //Level 4- Search for "ilst" within meta
-        boxHeader = Mp4BoxHeader.seekWithinLevel(moovBuffer, Mp4NotMetaFieldKey.ILST.getFieldName());
-
-        //This file does not actually contain a tag
-        if (boxHeader == null)
-        {
-            return tag;
-        }
         //Size of metadata (exclude the size of the ilst parentHeader), take a slice starting at
         //metadata children to make things safer
         int length = boxHeader.getLength() - Mp4BoxHeader.HEADER_LENGTH;
