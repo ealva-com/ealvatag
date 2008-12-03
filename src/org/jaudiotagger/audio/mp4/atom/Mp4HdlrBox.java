@@ -21,13 +21,13 @@ public class Mp4HdlrBox extends AbstractMp4Box
     public static final int OTHER_FLAG_LENGTH       = 3;
     public static final int RESERVED_FLAG_LENGTH    = 4;
     public static final int HANDLER_LENGTH          = 4;
-    public static final int NAME_LENGTH             = 4;
     public static final int RESERVED1_LENGTH        = 4;
     public static final int RESERVED2_LENGTH        = 4;
     public static final int RESERVED3_LENGTH        = 4;
+    public static final int NAME_LENGTH             = 2;
 
     public static final int HANDLER_POS = VERSION_FLAG_LENGTH + OTHER_FLAG_LENGTH + RESERVED_FLAG_LENGTH;
-    public static final int NAME_POS    = HANDLER_POS + HANDLER_LENGTH;
+    public static final int RESERVED1_POS    = HANDLER_POS + HANDLER_LENGTH;
 
     //Size used by iTunes, but other application could use different size because name field is variable
     public static final int ITUNES_META_HDLR_DAT_LENGTH =
@@ -35,10 +35,10 @@ public class Mp4HdlrBox extends AbstractMp4Box
         OTHER_FLAG_LENGTH       +
         RESERVED_FLAG_LENGTH    +
         HANDLER_LENGTH          +
-        NAME_LENGTH             +
         RESERVED1_LENGTH        +
         RESERVED2_LENGTH        +
-        RESERVED3_LENGTH;
+        RESERVED3_LENGTH        +
+        NAME_LENGTH;
 
         
     private int             reserved;        // 32 bit
@@ -164,10 +164,10 @@ public class Mp4HdlrBox extends AbstractMp4Box
         hdlrData.put(HANDLER_POS+1,(byte)0x64);
         hdlrData.put(HANDLER_POS+2,(byte)0x69);
         hdlrData.put(HANDLER_POS+3,(byte)0x72);
-        hdlrData.put(NAME_POS,(byte)0x61);          //appl
-        hdlrData.put(NAME_POS+1,(byte)0x70);
-        hdlrData.put(NAME_POS+2,(byte)0x70);
-        hdlrData.put(NAME_POS+3,(byte)0x6c);
+        hdlrData.put(RESERVED1_POS,(byte)0x61);          //appl
+        hdlrData.put(RESERVED1_POS+1,(byte)0x70);
+        hdlrData.put(RESERVED1_POS+2,(byte)0x70);
+        hdlrData.put(RESERVED1_POS+3,(byte)0x6c);
         hdlrData.rewind();
 
         Mp4HdlrBox hdlrBox = new Mp4HdlrBox(hdlrHeader,hdlrData);
