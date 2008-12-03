@@ -1,6 +1,7 @@
 package org.jaudiotagger.audio.mp4.atom;
 
 import org.jaudiotagger.audio.exceptions.CannotReadException;
+import org.jaudiotagger.audio.mp4.Mp4NotMetaFieldKey;
 
 import java.nio.ByteBuffer;
 import java.nio.charset.CharacterCodingException;
@@ -16,15 +17,34 @@ import java.util.HashMap;
  */
 public class Mp4HdlrBox extends AbstractMp4Box
 {
-    public static final int VERSION_FLAG_LENGTH = 1;
-    public static final int OTHER_FLAG_LENGTH = 3;
-    public static final int RESERVED_FLAG_LENGTH = 4;
-    public static final int HANDLER_LENGTH = 4;
+    public static final int VERSION_FLAG_LENGTH     = 1;
+    public static final int OTHER_FLAG_LENGTH       = 3;
+    public static final int RESERVED_FLAG_LENGTH    = 4;
+    public static final int HANDLER_LENGTH          = 4;
+    public static final int NAME_LENGTH             = 4;
+    public static final int RESERVED1_LENGTH        = 4;
+    public static final int RESERVED2_LENGTH        = 4;
+    public static final int RESERVED3_LENGTH        = 4;
 
-    private int reserved;       //32 bit
-    private String handlerType;    //4 bytes;
-    private String name;           //Variable length
-    private MediaDataType mediaDataType;
+    public static final int HANDLER_POS = VERSION_FLAG_LENGTH + OTHER_FLAG_LENGTH + RESERVED_FLAG_LENGTH;
+    public static final int NAME_POS    = HANDLER_POS + HANDLER_LENGTH;
+
+    //Size used by iTunes, but other application could use different size because name field is variable
+    public static final int ITUNES_META_HDLR_DAT_LENGTH =
+        VERSION_FLAG_LENGTH     +
+        OTHER_FLAG_LENGTH       +
+        RESERVED_FLAG_LENGTH    +
+        HANDLER_LENGTH          +
+        NAME_LENGTH             +
+        RESERVED1_LENGTH        +
+        RESERVED2_LENGTH        +
+        RESERVED3_LENGTH;
+
+        
+    private int             reserved;        // 32 bit
+    private String          handlerType;     // 4 bytes;
+    private String          name;            // Variable length but 4 bytes in existing files
+    private MediaDataType   mediaDataType;
 
     private static Map<String, MediaDataType> mediaDataTypeMap;
 
@@ -66,16 +86,16 @@ public class Mp4HdlrBox extends AbstractMp4Box
 
         }
 
-        //To get huma readble name
+        //To get human readable name
         mediaDataType = mediaDataTypeMap.get( handlerType);
     }
 
-    public String gethandlerType()
+    public String getHandlerType()
     {
         return handlerType;
     }
 
-    public MediaDataType getMedaiDataType()
+    public MediaDataType getMediaDataType()
     {
         return mediaDataType;
     }
@@ -125,4 +145,32 @@ public class Mp4HdlrBox extends AbstractMp4Box
         }
     }
 
+    /**
+     * Create an iTunes style Hdlr box for use within Meta box
+     *
+     * <p>Useful when writing to mp4 that previously didn't contain an mp4 meta atom</p>
+     *
+     * <p>Doesnt write the child data but uses it to se the header length, only sets the atoms immediate
+     * data</p
+     * @return
+     */
+    public static Mp4HdlrBox createiTunesStyleHdlrBox()
+    {
+        Mp4BoxHeader hdlrHeader = new Mp4BoxHeader(Mp4NotMetaFieldKey.HDLR.getFieldName());
+        hdlrHeader.setLength(Mp4BoxHeader.HEADER_LENGTH + Mp4HdlrBox.ITUNES_META_HDLR_DAT_LENGTH);
+
+        ByteBuffer hdlrData = ByteBuffer.allocate(Mp4HdlrBox.ITUNES_META_HDLR_DAT_LENGTH);
+        hdlrData.put(HANDLER_POS,(byte)0x6d);       //mdir
+        hdlrData.put(HANDLER_POS+1,(byte)0x64);
+        hdlrData.put(HANDLER_POS+2,(byte)0x69);
+        hdlrData.put(HANDLER_POS+3,(byte)0x72);
+        hdlrData.put(NAME_POS,(byte)0x61);          //appl
+        hdlrData.put(NAME_POS+1,(byte)0x70);
+        hdlrData.put(NAME_POS+2,(byte)0x70);
+        hdlrData.put(NAME_POS+3,(byte)0x6c);
+        hdlrData.rewind();
+
+        Mp4HdlrBox hdlrBox = new Mp4HdlrBox(hdlrHeader,hdlrData);
+        return hdlrBox;
+    }
 }

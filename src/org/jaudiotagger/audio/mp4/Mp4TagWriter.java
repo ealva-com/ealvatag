@@ -20,10 +20,7 @@ package org.jaudiotagger.audio.mp4;
 
 import org.jaudiotagger.audio.exceptions.CannotReadException;
 import org.jaudiotagger.audio.exceptions.CannotWriteException;
-import org.jaudiotagger.audio.mp4.atom.Mp4BoxHeader;
-import org.jaudiotagger.audio.mp4.atom.Mp4FreeBox;
-import org.jaudiotagger.audio.mp4.atom.Mp4MetaBox;
-import org.jaudiotagger.audio.mp4.atom.Mp4StcoBox;
+import org.jaudiotagger.audio.mp4.atom.*;
 import org.jaudiotagger.logging.ErrorMessage;
 import org.jaudiotagger.tag.Tag;
 import org.jaudiotagger.tag.mp4.Mp4Tag;
@@ -218,6 +215,7 @@ public class Mp4TagWriter
         Mp4BoxHeader ilstHeader = atomTree.getBoxHeader(atomTree.getIlstNode());
         Mp4BoxHeader udtaHeader = atomTree.getBoxHeader(atomTree.getUdtaNode());
         Mp4BoxHeader metaHeader = atomTree.getBoxHeader(atomTree.getMetaNode());
+        Mp4BoxHeader hdlrHeader ;
         Mp4BoxHeader mdatHeader = atomTree.getBoxHeader(atomTree.getMdatNode());
         ByteBuffer moovBuffer = atomTree.getMoovBuffer();
         
@@ -492,27 +490,25 @@ public class Mp4TagWriter
 
                 if(udtaHeader==null)
                 {
-                    //Adjust moov header size to allow a udta, and meta atom
-                    //TODO what about hdlr atom?
-                    moovHeader.setLength(moovHeader.getLength()
-                            + Mp4BoxHeader.HEADER_LENGTH
-                            + Mp4BoxHeader.HEADER_LENGTH + Mp4MetaBox.FLAGS_LENGTH);
+                    Mp4HdlrBox hdlrBox = Mp4HdlrBox.createiTunesStyleHdlrBox();
+                    Mp4MetaBox metaBox = Mp4MetaBox.createiTunesStyleMetaBox(hdlrBox.getHeader().getLength() +  rawIlstData.limit());
+                    udtaHeader = new Mp4BoxHeader(Mp4NotMetaFieldKey.UDTA.getFieldName());
+                    udtaHeader.setLength(Mp4BoxHeader.HEADER_LENGTH +metaBox.getHeader().getLength());
+
+                    //Adjust moov header size to allow a udta,meta and hdlr atom, we have already accounted for ilst data
+                    moovHeader.setLength(moovHeader.getLength() + udtaHeader.getLength()  - rawIlstData.limit());
+                    
                     fileWriteChannel.write(moovHeader.getHeaderData());
                     moovBuffer.rewind();
                     moovBuffer.limit(relativeIlstposition);
                     fileWriteChannel.write(moovBuffer);
 
-                    //Add a udta header atom
-                    udtaHeader = new Mp4BoxHeader(Mp4NotMetaFieldKey.UDTA.getFieldName());
-                    udtaHeader.setLength(Mp4BoxHeader.HEADER_LENGTH + Mp4BoxHeader.HEADER_LENGTH + Mp4MetaBox.FLAGS_LENGTH + rawIlstData.limit());
+                    //Write new atoms required for holding metadata in itunes format
                     fileWriteChannel.write(udtaHeader.getHeaderData());
-
-                    //Add a meta atom
-                    metaHeader = new Mp4BoxHeader(Mp4NotMetaFieldKey.META.getFieldName());
-                    metaHeader.setLength(Mp4BoxHeader.HEADER_LENGTH + Mp4MetaBox.FLAGS_LENGTH + rawIlstData.limit());
-                    fileWriteChannel.write(metaHeader.getHeaderData());
-                    ByteBuffer emptyMeta = ByteBuffer.allocate(Mp4MetaBox.FLAGS_LENGTH);
-                    fileWriteChannel.write(emptyMeta);
+                    fileWriteChannel.write(metaBox.getHeader().getHeaderData());                                        
+                    fileWriteChannel.write(metaBox.getData());
+                    fileWriteChannel.write(hdlrBox.getHeader().getHeaderData());
+                    fileWriteChannel.write(hdlrBox.getData());
                 }
                 else
                 {
@@ -660,7 +656,7 @@ public class Mp4TagWriter
             rafTemp.close();
             fileWriteChannel.close();
 
-        }
+        }        
         logger.info("File has been written correctly");
     }
 

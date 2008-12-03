@@ -1,6 +1,7 @@
 package org.jaudiotagger.audio.mp4.atom;
 
 import org.jaudiotagger.audio.exceptions.CannotReadException;
+import org.jaudiotagger.audio.mp4.Mp4NotMetaFieldKey;
 
 import java.nio.ByteBuffer;
 
@@ -31,5 +32,22 @@ public class Mp4MetaBox extends AbstractMp4Box
         {
             throw new CannotReadException();
         }
+    }
+
+    /**
+     * Create an iTunes style Meta box
+     *
+     * <p>Useful when writing to mp4 that previously didn't contain an mp4 meta atom</p>
+     *
+     * @param childrenSize
+     * @return
+     */
+    public static Mp4MetaBox createiTunesStyleMetaBox(int childrenSize)
+    {
+        Mp4BoxHeader metaHeader = new Mp4BoxHeader(Mp4NotMetaFieldKey.META.getFieldName());
+        metaHeader.setLength(Mp4BoxHeader.HEADER_LENGTH + Mp4MetaBox.FLAGS_LENGTH + childrenSize);
+        ByteBuffer metaData = ByteBuffer.allocate(Mp4MetaBox.FLAGS_LENGTH);     
+        Mp4MetaBox metaBox = new Mp4MetaBox(metaHeader,metaData);
+        return metaBox;
     }
 }
