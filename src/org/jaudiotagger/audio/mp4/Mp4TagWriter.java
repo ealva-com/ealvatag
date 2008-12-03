@@ -126,11 +126,10 @@ public class Mp4TagWriter
              Mp4BoxHeader udtaHeader,
              Mp4BoxHeader metaHeader) throws IOException
     {
-        //Adjust header size
+        //Adjust moov header size, adjusts the underlying buffer
         moovHeader.setLength(moovHeader.getLength() + sizeAdjustment);
 
-        //Edit the fields in moovBuffer (note moovbuffer doesnt include header), then write moovbuffer
-        //upto ilst header
+        //Edit the fields in moovBuffer (note moovbuffer doesnt include header)
         if(udtaHeader!=null)
         {
             //Write the updated udta atom header to moov buffer
@@ -146,6 +145,19 @@ public class Mp4TagWriter
             moovBuffer.position((int)(metaHeader.getFilePos() - moovHeader.getFilePos()- Mp4BoxHeader.HEADER_LENGTH));
             moovBuffer.put(metaHeader.getHeaderData());
         }
+    }
+
+
+    private void createMetadataAtoms
+           (Mp4BoxHeader moovHeader,
+             ByteBuffer moovBuffer,
+             int sizeAdjustment,
+             Mp4BoxHeader udtaHeader,
+             Mp4BoxHeader metaHeader) throws IOException
+    {
+        //Adjust moov header size
+        moovHeader.setLength(moovHeader.getLength() + sizeAdjustment);
+
     }
 
     /**
@@ -208,9 +220,7 @@ public class Mp4TagWriter
         Mp4BoxHeader metaHeader = atomTree.getBoxHeader(atomTree.getMetaNode());
         Mp4BoxHeader mdatHeader = atomTree.getBoxHeader(atomTree.getMdatNode());
         ByteBuffer moovBuffer = atomTree.getMoovBuffer();
-
-        System.out.println("MoovBuffer:"+moovBuffer.limit());
-
+        
         //Udta
         if(udtaHeader !=null)
         {
@@ -479,13 +489,40 @@ public class Mp4TagWriter
 
                 //Edit and rewrite the Moov header
                 adjustSizeOfMoovHeader(moovHeader, moovBuffer, additionalMetaSizeThatWontFitWithinMetaAtom,udtaHeader,metaHeader);
-                fileWriteChannel.write(moovHeader.getHeaderData());
 
-                //Now write from this edited buffer up until ilst atom
-                moovBuffer.rewind();
-                System.out.println("MoovBuffer:"+moovBuffer.limit() + ":"+relativeIlstposition);
-                moovBuffer.limit(relativeIlstposition);
-                fileWriteChannel.write(moovBuffer);
+                if(udtaHeader==null)
+                {
+                    //Adjust moov header size to allow a udta, and meta atom
+                    //TODO what about hdlr atom?
+                    moovHeader.setLength(moovHeader.getLength()
+                            + Mp4BoxHeader.HEADER_LENGTH
+                            + Mp4BoxHeader.HEADER_LENGTH + Mp4MetaBox.FLAGS_LENGTH);
+                    fileWriteChannel.write(moovHeader.getHeaderData());
+                    moovBuffer.rewind();
+                    moovBuffer.limit(relativeIlstposition);
+                    fileWriteChannel.write(moovBuffer);
+
+                    //Add a udta header atom
+                    udtaHeader = new Mp4BoxHeader(Mp4NotMetaFieldKey.UDTA.getFieldName());
+                    udtaHeader.setLength(Mp4BoxHeader.HEADER_LENGTH + Mp4BoxHeader.HEADER_LENGTH + Mp4MetaBox.FLAGS_LENGTH + rawIlstData.limit());
+                    fileWriteChannel.write(udtaHeader.getHeaderData());
+
+                    //Add a meta atom
+                    metaHeader = new Mp4BoxHeader(Mp4NotMetaFieldKey.META.getFieldName());
+                    metaHeader.setLength(Mp4BoxHeader.HEADER_LENGTH + Mp4MetaBox.FLAGS_LENGTH + rawIlstData.limit());
+                    fileWriteChannel.write(metaHeader.getHeaderData());
+                    ByteBuffer emptyMeta = ByteBuffer.allocate(Mp4MetaBox.FLAGS_LENGTH);
+                    fileWriteChannel.write(emptyMeta);
+                }
+                else
+                {
+                    fileWriteChannel.write(moovHeader.getHeaderData());
+
+                    //Now write from this edited buffer up until ilst atom
+                    moovBuffer.rewind();
+                    moovBuffer.limit(relativeIlstposition);
+                    fileWriteChannel.write(moovBuffer);
+                }
 
                 //Now write ilst data
                 fileWriteChannel.write(rawIlstData);
@@ -575,8 +612,15 @@ public class Mp4TagWriter
                 throw new CannotWriteException(ErrorMessage.MP4_CHANGES_TO_FILE_FAILED_DATA_CORRUPT.getMsg());
             }
 
-            //Check we still have all the key atoms
-            Mp4BoxHeader newMetaHeader = newAtomTree.getBoxHeader(atomTree.getMetaNode());
+            //Should always have udta atom after writing to file
+            Mp4BoxHeader newUdtaHeader = newAtomTree.getBoxHeader(newAtomTree.getUdtaNode());
+            if (newUdtaHeader == null)
+            {
+                throw new CannotWriteException(ErrorMessage.MP4_CHANGES_TO_FILE_FAILED_NO_TAG_DATA.getMsg());
+            }
+
+            //Should always have meta atom after writing to file
+            Mp4BoxHeader newMetaHeader = newAtomTree.getBoxHeader(newAtomTree.getMetaNode());
             if (newMetaHeader == null)
             {
                 throw new CannotWriteException(ErrorMessage.MP4_CHANGES_TO_FILE_FAILED_NO_TAG_DATA.getMsg());
