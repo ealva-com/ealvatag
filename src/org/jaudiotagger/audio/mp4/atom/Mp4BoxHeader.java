@@ -25,6 +25,7 @@ import org.jaudiotagger.logging.ErrorMessage;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 import java.util.logging.Logger;
 
@@ -80,6 +81,32 @@ public class Mp4BoxHeader
     public Mp4BoxHeader()
     {
 
+    }
+
+     /**
+     * Construct header to allow manual creation of header for writing to file
+     * <p/>
+     */
+    public Mp4BoxHeader(String id)
+    {
+        if(id.length()!=IDENTIFIER_LENGTH)
+        {
+            throw new RuntimeException("Invalid length:atom idenifier should always be 4 characters long");
+        }
+        dataBuffer = ByteBuffer.allocate(HEADER_LENGTH);
+        try
+        {
+            this.id    = id;
+            dataBuffer.put(4, id.getBytes("ISO-8859-1")[0]);
+            dataBuffer.put(5, id.getBytes("ISO-8859-1")[1]);
+            dataBuffer.put(6, id.getBytes("ISO-8859-1")[2]);
+            dataBuffer.put(7, id.getBytes("ISO-8859-1")[3]);
+        }
+        catch(UnsupportedEncodingException uee)
+        {
+            //Should never happen
+            throw new RuntimeException(uee);
+        }
     }
 
     /**
@@ -158,6 +185,26 @@ public class Mp4BoxHeader
         dataBuffer.put(1, headerSize[1]);
         dataBuffer.put(2, headerSize[2]);
         dataBuffer.put(3, headerSize[3]);
+
+        this.length = length;
+
+    }
+
+    /**
+     * Set the Id.
+     * <p/>
+     * Allows you to manully create a header
+     * This will modify the databuffer accordingly
+     *
+     * @param length
+     */
+    public void setId(int length)
+    {
+        byte[] headerSize = Utils.getSizeBigEndian(length);
+        dataBuffer.put(5, headerSize[0]);
+        dataBuffer.put(6, headerSize[1]);
+        dataBuffer.put(7, headerSize[2]);
+        dataBuffer.put(8, headerSize[3]);
 
         this.length = length;
 
@@ -283,6 +330,11 @@ public class Mp4BoxHeader
             if (boxHeader.getLength() < Mp4BoxHeader.HEADER_LENGTH)
             {
                 return null;
+            }
+            if(data.remaining()<(boxHeader.getLength() - HEADER_LENGTH))
+            {
+                //i.e Could happen if Moov header had size incorrectly recorded
+                return null;    
             }
             data.position(data.position() + (boxHeader.getLength() - HEADER_LENGTH));
             if (data.remaining() >= Mp4BoxHeader.HEADER_LENGTH)
