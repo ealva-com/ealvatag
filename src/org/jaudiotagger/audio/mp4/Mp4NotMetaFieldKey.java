@@ -11,7 +11,7 @@ public enum Mp4NotMetaFieldKey
     FTYP("ftyp", "File type Identification"),
     MOOV("moov", "Top level Presentation"),
     MVHD("mvhd", "Movie Header"),
-    UDTA("udta", "Copyright"),
+    UDTA("udta", "User Data"),
     META("meta", "MetaInformation"),
     ILST("ilst", "MetaInformation Optional"),
     MDAT("mdat", "Audio Data"),
