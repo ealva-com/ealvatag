@@ -149,7 +149,11 @@ public enum Mp4FieldKey
     URL_WIKIPEDIA_ARTIST_SITE("com.apple.iTunes", "URL_WIKIPEDIA_ARTIST_SITE", TEXT, Tagger.JAIKOZ),
 
     //Winamp
-    WINAMP_PUBLISHER("com.nullsoft.winamp", "publisher", TEXT, Tagger.WINAMP),       
+    WINAMP_PUBLISHER("com.nullsoft.winamp", "publisher", TEXT, Tagger.WINAMP),
+
+    //Unknown
+    KEYS("keys",TEXT),
+    
     ;
     private Tagger tagger;
     private String fieldName;

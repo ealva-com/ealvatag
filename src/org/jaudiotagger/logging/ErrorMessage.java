@@ -71,6 +71,7 @@ public enum ErrorMessage
     MP3_FRAME_IS_UNSYNCHRONISED("Filename {0}:{1} is unsynchronised"),
     MP3_FRAME_IS_DATA_LENGTH_INDICATOR("Filename {0}:{1} has a data length indicator"),
     MP4_FILE_HAS_NO_METADATA("This file does not currently contain any metadata"),
+    MP4_FILE_META_ATOM_CHILD_DATA_NOT_NULL("Expect data in meta box to be null"),
     ;
 
 
