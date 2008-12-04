@@ -1,12 +1,13 @@
 Describes the test data files, only the files that are freely distributable are actually included in the CVS repositisory . The others are held locally until I can create a copyright free equivalent
 that achives the same test.
 filename,included,issue,description
-
+test7.mp4,yes,,Mp4 Video File
 test35.mp4,no,255,Mp4 with null space at the end of the file
 test37.mp4,no,257,Corrupt Mp4 with extra padding between atoms 
-test38.mp4,yes,Usual Mp4 with all metadata files populated by Media Monkey 3
-test39.mp4,yes,Usual Mp4 with all metadata files populated by Media Monkey 3, and then Winamp 5.31 (created by taking test38.mp4 and the editing fields in Winamp 5.31)
+test38.mp4,yes,,Usual Mp4 with all metadata files populated by Media Monkey 3
+test39.mp4,yes,,Usual Mp4 with all metadata files populated by Media Monkey 3, and then Winamp 5.31 (created by taking test38.mp4 and the editing fields in Winamp 5.31)
 test40.mp4,no,260,Mp4 with no metadata hierachy
-test41.mp4,no,220,Mp4 with only a meta atom within track hierachy - and meta atom atom does not have customary 4 bytes of data
-test42.mp4,no,220,mp4,with udta metadata hierachy imediately after moov, plus meta atom in trak (created by loading test41.mp4 into picard and adding a field in picard)
+test41.mp4,yes,220,Mp4 with only a meta atom within track hierachy - and meta atom atom does not have customary 4 bytes of data
+test42.mp4,yes,220,mp4,with udta metadata hierachy imediately after moov, plus meta atom in trak (created by loading test41.mp4 into picard and adding a field in picard)
 test43.mp4,no,260,mp4,with udta metadata hierachy imediately after moov (created by loading test40.mp4 into picard and adding a field in picard)
+test44.mp4,yes,220,mp4,with udta metadata hierachy imediately after trak plus meta atom in trak (created by loading test41.mp4 into jaikoz and adding a field in jaikoz)
