@@ -1,6 +1,8 @@
 package org.jaudiotagger.issues;
 
 import org.jaudiotagger.AbstractTestCase;
+import org.jaudiotagger.tag.TagField;
+import org.jaudiotagger.tag.TagFieldKey;
 import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.AudioFileIO;
 
@@ -94,7 +96,7 @@ public class Issue220Test extends AbstractTestCase
      * Test read mp4 ok which originally had just meta under trak, then processed in picard and now has a seperate udta atom
      * before mvhd atom (and still has the meta atom under trak)
      */
-    public void testReadMp4WithTwoUdta()
+    public void testReadMp4WithUdtaAndMetaHierachy()
     {
         File orig = new File("testdata", "test42.m4a");
         if (!orig.isFile())
@@ -124,12 +126,11 @@ public class Issue220Test extends AbstractTestCase
         assertNull(exceptionCaught);
     }
 
-    /**
-        * Test read mp4 ok which originally had just meta under trak, then processed in picard and now has a seperate udta atom
+        /**
+        * Test write mp4 ok which originally had just meta under trak, then processed in picard and now has a seperate udta atom
         * before mvhd atom (and still has the meta atom under trak)
         */
-    /*
-       public void testWriteMp4WithTwoUdta()
+       public void testWriteMp4WithUdtaAndMetaHierachy()
        {
            File orig = new File("testdata", "test42.m4a");
            if (!orig.isFile())
@@ -149,11 +150,16 @@ public class Issue220Test extends AbstractTestCase
                af.getTag().setAlbum("KARENTAYLORALBUM");
                af.getTag().setTitle("KARENTAYLORTITLE");
                af.getTag().setGenre("KARENTAYLORGENRE");
+               af.getTag().set(af.getTag().createTagField(TagFieldKey.AMAZON_ID,"12345678"));
+
                af.commit();
+               System.out.println("All is going well");
                af = AudioFileIO.read(testFile);
                assertEquals("KARENTAYLORALBUM",af.getTag().getFirstAlbum());
                assertEquals("KARENTAYLORTITLE",af.getTag().getFirstTitle());
-               assertEquals("KARENTAYLORGENRE",af.getTag().getFirstGenre());               
+               assertEquals("KARENTAYLORGENRE",af.getTag().getFirstGenre());
+               assertEquals("12345678",af.getTag().getFirst(TagFieldKey.AMAZON_ID));               
+
            }
            catch(Exception e)
            {
@@ -163,5 +169,93 @@ public class Issue220Test extends AbstractTestCase
 
            assertNull(exceptionCaught);
        }
-      */
+
+    /**
+             * Test write mp4 ok without any udta atom (but does have meta atom under trak)
+             */
+            public void testWriteMp4WithUdtaAfterTrackSmaller()
+            {
+                File orig = new File("testdata", "test44.m4a");
+                if (!orig.isFile())
+                {
+                    System.err.println("Unable to test file - not available");
+                    return;
+                }
+
+                File testFile = null;
+                Exception exceptionCaught = null;
+                try
+                {
+                    testFile = AbstractTestCase.copyAudioToTmp("test44.m4a");
+
+                    //Read File okay
+                    AudioFile af = AudioFileIO.read(testFile);
+
+
+                    //Write file
+                    af.getTag().setTitle("ti");
+                    af.commit();
+
+                    //Read file again okay
+                    af = AudioFileIO.read(testFile);
+                    assertEquals("ti",af.getTag().getFirstTitle());
+                }
+                catch(Exception e)
+                {
+                    e.printStackTrace();
+                    exceptionCaught=e;
+                }
+
+                assertNull(exceptionCaught);
+            }
+
+
+        /**
+             * Test write mp4 ok without any udta atom (but does have meta atom under trak)
+             */
+            public void testWriteMp4WithUdtaAfterTrack()
+            {
+                File orig = new File("testdata", "test44.m4a");
+                if (!orig.isFile())
+                {
+                    System.err.println("Unable to test file - not available");
+                    return;
+                }
+
+                File testFile = null;
+                Exception exceptionCaught = null;
+                try
+                {
+                    testFile = AbstractTestCase.copyAudioToTmp("test44.m4a");
+
+                    //Read File okay
+                    AudioFile af = AudioFileIO.read(testFile);
+
+
+                    //Write file
+                    af.getTag().setArtist("FREDDYCOUGAR");
+                    af.getTag().setAlbum("album");
+                    af.getTag().setTitle("title");
+                    af.getTag().setGenre("genre");
+                    af.getTag().setYear("year");
+                    af.commit();
+
+                    //Read file again okay
+                    af = AudioFileIO.read(testFile);
+                    assertEquals("FREDDYCOUGAR",af.getTag().getFirstArtist());
+                    assertEquals("album",af.getTag().getFirstAlbum());
+                    assertEquals("title",af.getTag().getFirstTitle());
+                    assertEquals("genre",af.getTag().getFirstGenre());
+                    assertEquals("year",af.getTag().getFirstYear());
+
+                }
+                catch(Exception e)
+                {
+                    e.printStackTrace();
+                    exceptionCaught=e;
+                }
+
+                assertNull(exceptionCaught);
+            }
+
 }

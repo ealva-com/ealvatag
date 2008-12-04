@@ -498,6 +498,8 @@ public class Mp4TagWriter
 
                 if(udtaHeader==null)
                 {
+                    logger.info("Writing:Option 5.1;No udta atom");
+
                     Mp4HdlrBox hdlrBox = Mp4HdlrBox.createiTunesStyleHdlrBox();
                     Mp4MetaBox metaBox = Mp4MetaBox.createiTunesStyleMetaBox(hdlrBox.getHeader().getLength() +  rawIlstData.limit());
                     udtaHeader = new Mp4BoxHeader(Mp4NotMetaFieldKey.UDTA.getFieldName());
@@ -541,6 +543,8 @@ public class Mp4TagWriter
                 }
                 else
                 {
+                    logger.info("Writing:Option 5.2;udta atom exists");
+                    
                      //Edit stco atom within moov header, if the free atom comes after mdat OR
                     //(there is not enough space in the top level free atom
                     //or special case of matching exactly the free atom plus header)

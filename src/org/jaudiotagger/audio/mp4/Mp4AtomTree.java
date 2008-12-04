@@ -240,7 +240,8 @@ public class Mp4AtomTree
         //We set the buffers position back to this after processing the chikdren
         int justAfterHeaderPos = moovBuffer.position();
 
-        //Preprocessing for meta that normally contains 4 data bytes, but sometimes doesnt
+        //Preprocessing for meta that normally contains 4 data bytes, but doesnt whre found under trak atom
+        //TODO is it always under TRAK dont really know the rule
         if (parentBoxHeader.getId().equals(Mp4NotMetaFieldKey.META.getFieldName()))
         {
             Mp4MetaBox meta = new Mp4MetaBox(parentBoxHeader, moovBuffer);
@@ -272,21 +273,18 @@ public class Mp4AtomTree
             {
                 boxHeader.setFilePos(moovHeader.getFilePos() + moovBuffer.position());
                 logger.finest("Atom " + boxHeader.getId() + " @ " + boxHeader.getFilePos() + " of size:" + boxHeader.getLength() + " ,ends @ " + (boxHeader.getFilePos() + boxHeader.getLength()));
-                System.out.println("Atom " + boxHeader.getId() + " @ " + boxHeader.getFilePos() + " of size:" + boxHeader.getLength() + " ,ends @ " + (boxHeader.getFilePos() + boxHeader.getLength()));
 
                 DefaultMutableTreeNode newAtom = new DefaultMutableTreeNode(boxHeader);
+                parentNode.add(newAtom);
 
                 if (boxHeader.getId().equals(Mp4NotMetaFieldKey.UDTA.getFieldName()))
                 {
                     udtaNode = newAtom;
                 }
-                else if (boxHeader.getId().equals(Mp4NotMetaFieldKey.META.getFieldName()))
+                //only interested in metaNode that is child of udta node
+                else if (boxHeader.getId().equals(Mp4NotMetaFieldKey.META.getFieldName())&&parentBoxHeader.getId().equals(Mp4NotMetaFieldKey.UDTA.getFieldName()))
                 {
-                    //To ensure we get the meta node after udta not any others unless one after udta doesnt exist
-                    if(metaNode==null)
-                    {
-                        metaNode = newAtom;
-                    }
+                    metaNode = newAtom;
                 }
                 else if (boxHeader.getId().equals(Mp4NotMetaFieldKey.HDLR.getFieldName())&&parentBoxHeader.getId().equals(Mp4NotMetaFieldKey.META.getFieldName()))
                 {
@@ -306,8 +304,18 @@ public class Mp4AtomTree
                 }
                 else if (boxHeader.getId().equals(Mp4NotMetaFieldKey.ILST.getFieldName()))
                 {
-                    ilstNode = newAtom;
-
+                    DefaultMutableTreeNode parent = (DefaultMutableTreeNode)parentNode.getParent();
+                    if(parent!=null)
+                    {
+                        Mp4BoxHeader parentsParent = (Mp4BoxHeader)(parent).getUserObject();
+                        if(parentsParent!=null)
+                        {
+                            if(parentBoxHeader.getId().equals(Mp4NotMetaFieldKey.META.getFieldName())&&parentsParent.getId().equals(Mp4NotMetaFieldKey.UDTA.getFieldName()))
+                            {
+                                ilstNode = newAtom;
+                            }
+                        }
+                    }    
                 }
                 else if (boxHeader.getId().equals(Mp4NotMetaFieldKey.FREE.getFieldName()))
                 {
@@ -328,12 +336,12 @@ public class Mp4AtomTree
                         (boxHeader.getId().equals(Mp4NotMetaFieldKey.UDTA.getFieldName())) ||
                         (boxHeader.getId().equals(Mp4NotMetaFieldKey.META.getFieldName())) ||
                         (boxHeader.getId().equals(Mp4NotMetaFieldKey.ILST.getFieldName())))
-                {
+                {                
                     buildChildrenOfNode(moovBuffer, newAtom);
                 }
                 //Now  adjust buffer for the next atom header at this level
                 moovBuffer.position(moovBuffer.position() + boxHeader.getDataLength());
-                parentNode.add(newAtom);
+
             }
         }
         moovBuffer.position(justAfterHeaderPos);
