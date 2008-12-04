@@ -43,9 +43,12 @@ public class Mp4AtomTree
     private DefaultMutableTreeNode ilstNode;
     private DefaultMutableTreeNode metaNode;
     private DefaultMutableTreeNode udtaNode;
+    private DefaultMutableTreeNode hdlrWithinMdiaNode;
+    private DefaultMutableTreeNode hdlrWithinMetaNode;
     private DefaultMutableTreeNode trailingPaddingNode;
     private List<DefaultMutableTreeNode> freeNodes = new ArrayList<DefaultMutableTreeNode>();
     private List<DefaultMutableTreeNode> mdatNodes = new ArrayList<DefaultMutableTreeNode>();
+    private List<DefaultMutableTreeNode> trakNodes = new ArrayList<DefaultMutableTreeNode>();
 
     private Mp4StcoBox stco;
     private ByteBuffer moovBuffer; //Contains all the data under moov
@@ -220,6 +223,13 @@ public class Mp4AtomTree
         }
     }
 
+    /**
+     *
+     * @param moovBuffer
+     * @param parentNode
+     * @throws IOException
+     * @throws CannotReadException
+     */
     public void buildChildrenOfNode(ByteBuffer moovBuffer, DefaultMutableTreeNode parentNode) throws IOException, CannotReadException
     {
         Mp4BoxHeader boxHeader;
@@ -262,7 +272,8 @@ public class Mp4AtomTree
             {
                 boxHeader.setFilePos(moovHeader.getFilePos() + moovBuffer.position());
                 logger.finest("Atom " + boxHeader.getId() + " @ " + boxHeader.getFilePos() + " of size:" + boxHeader.getLength() + " ,ends @ " + (boxHeader.getFilePos() + boxHeader.getLength()));
-              
+                System.out.println("Atom " + boxHeader.getId() + " @ " + boxHeader.getFilePos() + " of size:" + boxHeader.getLength() + " ,ends @ " + (boxHeader.getFilePos() + boxHeader.getLength()));
+
                 DefaultMutableTreeNode newAtom = new DefaultMutableTreeNode(boxHeader);
 
                 if (boxHeader.getId().equals(Mp4NotMetaFieldKey.UDTA.getFieldName()))
@@ -271,7 +282,19 @@ public class Mp4AtomTree
                 }
                 else if (boxHeader.getId().equals(Mp4NotMetaFieldKey.META.getFieldName()))
                 {
-                    metaNode = newAtom;
+                    //To ensure we get the meta node after udta not any others unless one after udta doesnt exist
+                    if(metaNode==null)
+                    {
+                        metaNode = newAtom;
+                    }
+                }
+                else if (boxHeader.getId().equals(Mp4NotMetaFieldKey.HDLR.getFieldName())&&parentBoxHeader.getId().equals(Mp4NotMetaFieldKey.META.getFieldName()))
+                {
+                    hdlrWithinMetaNode = newAtom;
+                }
+                else if (boxHeader.getId().equals(Mp4NotMetaFieldKey.HDLR.getFieldName()))
+                {
+                    hdlrWithinMdiaNode = newAtom;
                 }
                 else if (boxHeader.getId().equals(Mp4NotMetaFieldKey.STCO.getFieldName()))
                 {
@@ -290,6 +313,11 @@ public class Mp4AtomTree
                 {
                     //Might be multiple in different locations
                     freeNodes.add(newAtom);
+                }
+                else if (boxHeader.getId().equals(Mp4NotMetaFieldKey.TRAK.getFieldName()))
+                {
+                    //Might be multiple in different locations, although onely one shoud be audio track
+                    trakNodes.add(newAtom);
                 }
 
                 //For these atoms iterate down to build their children
@@ -312,27 +340,48 @@ public class Mp4AtomTree
     }
 
 
+    /**
+     *
+     * @return
+     */
     public DefaultTreeModel getDataTree()
     {
         return dataTree;
     }
 
 
+    /**
+     *
+     * @return
+     */
     public DefaultMutableTreeNode getMoovNode()
     {
         return moovNode;
     }
 
+    /**
+     *
+     * @return
+     */
     public DefaultMutableTreeNode getStcoNode()
     {
         return stcoNode;
     }
 
+    /**
+     *
+     * @return
+     */
     public DefaultMutableTreeNode getIlstNode()
     {
         return ilstNode;
     }
 
+    /**
+     *
+     * @param node
+     * @return
+     */
     public Mp4BoxHeader getBoxHeader(DefaultMutableTreeNode node)
     {
         if (node == null)
@@ -342,36 +391,91 @@ public class Mp4AtomTree
         return (Mp4BoxHeader) node.getUserObject();
     }
 
+    /**
+     *
+     * @return
+     */
     public DefaultMutableTreeNode getMdatNode()
     {
         return mdatNode;
     }
 
+    /**
+     *
+     * @return
+     */
     public DefaultMutableTreeNode getUdtaNode()
     {
         return udtaNode;
     }
 
+    /**
+     *
+     * @return
+     */
     public DefaultMutableTreeNode getMetaNode()
     {
         return metaNode;
     }
 
+    /**
+     *
+     * @return
+     */
+    public DefaultMutableTreeNode getHdlrWithinMetaNode()
+    {
+        return hdlrWithinMetaNode;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public DefaultMutableTreeNode getHdlrWithinMdiaNode()
+    {
+        return hdlrWithinMdiaNode;
+    }
+
+    /**
+     *
+     * @return
+     */
     public List<DefaultMutableTreeNode> getFreeNodes()
     {
         return freeNodes;
     }
 
+    /**
+     *
+     * @return
+     */
+    public List<DefaultMutableTreeNode> getTrakNodes()
+    {
+        return trakNodes;
+    }
+
+    /**
+     *
+     * @return
+     */
     public Mp4StcoBox getStco()
     {
         return stco;
     }
 
+    /**
+     *
+     * @return
+     */
     public ByteBuffer getMoovBuffer()
     {
         return moovBuffer;
     }
 
+    /**
+     *
+     * @return
+     */
     public Mp4BoxHeader getMoovHeader()
     {
         return moovHeader;
