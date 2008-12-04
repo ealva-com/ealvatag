@@ -222,16 +222,39 @@ public class Mp4AtomTree
 
     public void buildChildrenOfNode(ByteBuffer moovBuffer, DefaultMutableTreeNode parentNode) throws IOException, CannotReadException
     {
+        Mp4BoxHeader boxHeader;
+
         //Preprocessing for nodes that contain data before their children atoms
         Mp4BoxHeader parentBoxHeader = (Mp4BoxHeader) parentNode.getUserObject();
+
+        //We set the buffers position back to this after processing the chikdren
+        int justAfterHeaderPos = moovBuffer.position();
+
+        //Preprocessing for meta that normally contains 4 data bytes, but sometimes doesnt
         if (parentBoxHeader.getId().equals(Mp4NotMetaFieldKey.META.getFieldName()))
         {
             Mp4MetaBox meta = new Mp4MetaBox(parentBoxHeader, moovBuffer);
             meta.processData();
+
+            try
+            {
+                boxHeader = new Mp4BoxHeader(moovBuffer);
+            }
+            catch(NullBoxIdException nbe)
+            {
+                //It might be that the meta box didnt actually have any additional data after it so we adjust the buffer
+                //to be immediately after metabox and code can retry
+                moovBuffer.position(moovBuffer.position()-Mp4MetaBox.FLAGS_LENGTH);
+            }
+            finally
+            {
+                //Skip back last header cos this was only a test 
+                moovBuffer.position(moovBuffer.position()-  Mp4BoxHeader.HEADER_LENGTH);
+            }
         }
 
-        Mp4BoxHeader boxHeader;
-        int startPos = moovBuffer.position();
+        //Defines where to start looking for the first child node
+        int startPos = moovBuffer.position();        
         while (moovBuffer.position() < ((startPos + parentBoxHeader.getDataLength()) - Mp4BoxHeader.HEADER_LENGTH))
         {
             boxHeader = new Mp4BoxHeader(moovBuffer);
@@ -239,7 +262,7 @@ public class Mp4AtomTree
             {
                 boxHeader.setFilePos(moovHeader.getFilePos() + moovBuffer.position());
                 logger.finest("Atom " + boxHeader.getId() + " @ " + boxHeader.getFilePos() + " of size:" + boxHeader.getLength() + " ,ends @ " + (boxHeader.getFilePos() + boxHeader.getLength()));
-
+              
                 DefaultMutableTreeNode newAtom = new DefaultMutableTreeNode(boxHeader);
 
                 if (boxHeader.getId().equals(Mp4NotMetaFieldKey.UDTA.getFieldName()))
@@ -269,6 +292,7 @@ public class Mp4AtomTree
                     freeNodes.add(newAtom);
                 }
 
+                //For these atoms iterate down to build their children
                 if ((boxHeader.getId().equals(Mp4NotMetaFieldKey.TRAK.getFieldName())) ||
                         (boxHeader.getId().equals(Mp4NotMetaFieldKey.MDIA.getFieldName())) ||
                         (boxHeader.getId().equals(Mp4NotMetaFieldKey.MINF.getFieldName())) ||
@@ -279,18 +303,12 @@ public class Mp4AtomTree
                 {
                     buildChildrenOfNode(moovBuffer, newAtom);
                 }
-                if (boxHeader.getId().equals(Mp4NotMetaFieldKey.META.getFieldName()))
-                {
-                    moovBuffer.position(moovBuffer.position() + (boxHeader.getDataLength() - Mp4MetaBox.FLAGS_LENGTH));
-                }
-                else
-                {
-                    moovBuffer.position(moovBuffer.position() + boxHeader.getDataLength());
-                }
+                //Now  adjust buffer for the next atom header at this level
+                moovBuffer.position(moovBuffer.position() + boxHeader.getDataLength());
                 parentNode.add(newAtom);
             }
         }
-        moovBuffer.position(startPos);
+        moovBuffer.position(justAfterHeaderPos);
     }
 
 
