@@ -390,6 +390,8 @@ public class ID3v23Frames extends ID3Frames
         tagFieldToId3.put(TagFieldKey.URL_WIKIPEDIA_RELEASE_SITE, ID3v23FieldKey.URL_WIKIPEDIA_RELEASE_SITE);
         tagFieldToId3.put(TagFieldKey.URL_OFFICIAL_ARTIST_SITE, ID3v23FieldKey.URL_OFFICIAL_ARTIST_SITE);
         tagFieldToId3.put(TagFieldKey.URL_OFFICIAL_RELEASE_SITE, ID3v23FieldKey.URL_OFFICIAL_RELEASE_SITE);
+        tagFieldToId3.put(TagFieldKey.LANGUAGE, ID3v23FieldKey.LANGUAGE);
+        tagFieldToId3.put(TagFieldKey.KEY, ID3v23FieldKey.KEY);
     }
 
 

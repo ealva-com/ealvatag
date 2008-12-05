@@ -89,6 +89,8 @@ public class Mp4Tag extends AbstractTag
         tagFieldToMp4Field.put(TagFieldKey.URL_OFFICIAL_ARTIST_SITE, Mp4FieldKey.URL_OFFICIAL_ARTIST_SITE);
         tagFieldToMp4Field.put(TagFieldKey.URL_DISCOGS_ARTIST_SITE, Mp4FieldKey.URL_DISCOGS_ARTIST_SITE);
         tagFieldToMp4Field.put(TagFieldKey.URL_WIKIPEDIA_ARTIST_SITE, Mp4FieldKey.URL_WIKIPEDIA_ARTIST_SITE);
+        tagFieldToMp4Field.put(TagFieldKey.LANGUAGE, Mp4FieldKey.LANGUAGE);
+        tagFieldToMp4Field.put(TagFieldKey.KEY, Mp4FieldKey.KEY);
     }
 
     protected String getArtistId()
@@ -460,6 +462,8 @@ public class Mp4Tag extends AbstractTag
             case URL_OFFICIAL_ARTIST_SITE:
             case URL_DISCOGS_ARTIST_SITE:
             case URL_WIKIPEDIA_ARTIST_SITE:
+            case LANGUAGE:
+            case KEY:                                        
                 return new Mp4TagReverseDnsField(mp4FieldKey, value);
 
             default:

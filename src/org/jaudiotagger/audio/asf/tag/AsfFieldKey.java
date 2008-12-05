@@ -62,7 +62,10 @@ public enum AsfFieldKey
     URL_OFFICIAL_RELEASE_SITE("WM/OfficialReleaseUrl", false),
     URL_WIKIPEDIA_ARTIST_SITE("WM/WikipediaArtistUrl", false),
     URL_WIKIPEDIA_RELEASE_SITE("WM/WikipediaReleaseUrl", false),
-    YEAR("WM/Year", false);
+    YEAR("WM/Year", false),
+    LANGUAGE("WM/Language", false),
+    KEY("WM/Key", false),
+    ;
 
     /**
      * Stores the {@link AsfFieldKey#fieldName} to the field key.

@@ -84,6 +84,8 @@ public class VorbisCommentTag extends AbstractTag
         tagFieldToOggField.put(TagFieldKey.URL_OFFICIAL_RELEASE_SITE, VorbisCommentFieldKey.URL_OFFICIAL_RELEASE_SITE);
         tagFieldToOggField.put(TagFieldKey.URL_WIKIPEDIA_ARTIST_SITE, VorbisCommentFieldKey.URL_WIKIPEDIA_ARTIST_SITE);
         tagFieldToOggField.put(TagFieldKey.URL_WIKIPEDIA_RELEASE_SITE, VorbisCommentFieldKey.URL_WIKIPEDIA_RELEASE_SITE);
+        tagFieldToOggField.put(TagFieldKey.LANGUAGE, VorbisCommentFieldKey.LANGUAGE);
+        tagFieldToOggField.put(TagFieldKey.KEY, VorbisCommentFieldKey.KEY);
     }
 
     //This is the vendor string that will be written if no other is supplied. Should be the name of the software
