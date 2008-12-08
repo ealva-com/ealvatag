@@ -293,20 +293,28 @@ public class Mp4TagWriter
         extraDataSize = 0;
         for (DefaultMutableTreeNode freeNode : atomTree.getFreeNodes())
         {
-            DefaultMutableTreeNode parentNode = (DefaultMutableTreeNode) freeNode.getParent();
-
+            DefaultMutableTreeNode parentNode   = (DefaultMutableTreeNode) freeNode.getParent();
+            DefaultMutableTreeNode brotherNode =  freeNode.getPreviousSibling();
             if (!parentNode.isRoot())
             {
                 Mp4BoxHeader header = ((Mp4BoxHeader) parentNode.getUserObject());
                 Mp4BoxHeader freeHeader = ((Mp4BoxHeader) freeNode.getUserObject());
 
-                if (header.getId().equals(Mp4NotMetaFieldKey.META.getFieldName()))
+                //We are only interested in free atoms at this level if they come after the ilst node
+                if(brotherNode!=null)
                 {
-                    oldMetaLevelFreeAtomSize = freeHeader.getLength();
+                    Mp4BoxHeader brotherHeader = ((Mp4BoxHeader) brotherNode.getUserObject());
 
-                    //Is there anything else here that needs to be preserved such as uuid atoms
-                    extraDataSize = moovHeader.getFilePos() + moovHeader.getLength() - (freeHeader.getFilePos() + freeHeader.getLength());
-                    break;
+                    if (header.getId().equals(Mp4NotMetaFieldKey.META.getFieldName())
+                            &&
+                        brotherHeader.getId().equals(Mp4NotMetaFieldKey.ILST.getFieldName()))
+                    {
+                        oldMetaLevelFreeAtomSize = freeHeader.getLength();
+
+                        //Is there anything else here that needs to be preserved such as uuid atoms
+                        extraDataSize = moovHeader.getFilePos() + moovHeader.getLength() - (freeHeader.getFilePos() + freeHeader.getLength());
+                        break;
+                    }
                 }
             }
         }
