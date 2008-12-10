@@ -486,6 +486,9 @@ public class Mp4Tag extends AbstractTag
             case KEY:                                        
                 return new Mp4TagReverseDnsField(mp4FieldKey, value);
 
+            case ARTWORK:
+                throw new UnsupportedOperationException("Cover Art cannot be created using this method");
+                 
             default:
                 return new Mp4TagTextField(mp4FieldKey.getFieldName(), value);
         }

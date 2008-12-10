@@ -331,7 +331,7 @@ public final class AsfTag extends AbstractTag
      * @throws KeyNotFoundException
      * @throws FieldDataInvalidException
      */
-    public TagField createTagField(AsfFieldKey asfFieldKey, String value) throws KeyNotFoundException, FieldDataInvalidException
+    public TagField createTagField(AsfFieldKey asfFieldKey, String value) throws KeyNotFoundException
     {
         if (value == null)
         {
@@ -344,6 +344,9 @@ public final class AsfTag extends AbstractTag
 
         switch (asfFieldKey)
         {
+            case COVER_ART:
+                throw new UnsupportedOperationException("Cover Art cannot be created using this method");
+
             default:
                 return new AsfTagTextField(asfFieldKey.getFieldName(), value);
         }

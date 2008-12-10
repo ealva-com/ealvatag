@@ -255,7 +255,7 @@ public class VorbisCommentTag extends AbstractTag
      * Create Tag Field using generic key
      */
     @Override
-    public TagField createTagField(TagFieldKey genericKey, String value) throws KeyNotFoundException
+    public TagField createTagField(TagFieldKey genericKey, String value) throws KeyNotFoundException,FieldDataInvalidException
     {
         if (genericKey == null)
         {
@@ -271,7 +271,7 @@ public class VorbisCommentTag extends AbstractTag
      * @param value
      * @return
      */
-    public TagField createTagField(VorbisCommentFieldKey vorbisCommentFieldKey, String value) throws KeyNotFoundException
+    public TagField createTagField(VorbisCommentFieldKey vorbisCommentFieldKey, String value) throws KeyNotFoundException,FieldDataInvalidException
     {
         if (value == null)
         {
@@ -281,6 +281,12 @@ public class VorbisCommentTag extends AbstractTag
         {
             throw new KeyNotFoundException();
         }
+
+        if(vorbisCommentFieldKey==VorbisCommentFieldKey.COVERART)
+        {
+            throw new FieldDataInvalidException("Cover Art cannot be created using this method");
+        }
+
         return new VorbisCommentTagField(vorbisCommentFieldKey.name(), value);
     }
 
