@@ -18,8 +18,12 @@
  */
 package org.jaudiotagger.tag;
 
+import org.jaudiotagger.tag.datatype.Artwork;
+import org.jaudiotagger.tag.mp4.field.Mp4TagCoverField;
+
 import java.util.Iterator;
 import java.util.List;
+import java.io.IOException;
 
 /**
  * This interface represents the basic data structure for the default
@@ -314,6 +318,12 @@ public interface Tag
      */
     public TagField getFirstField(String id);
 
+    /**
+     *
+     * @param id
+     * @return the first field that matches this generic key
+     */
+    public TagField getFirstField(TagFieldKey id);
 
     //TODO, do we need this
     public String toString();
@@ -353,5 +363,36 @@ public interface Tag
      * @return A list of {@link TagField} objects with the given &quot;id&quot;.
      */
     public List<TagField> get(TagFieldKey id) throws KeyNotFoundException;
+
+    /**
+     *
+     * @return a list of all artwork in this file using the format indepedent Artwork class
+     */
+    public List<Artwork> getArtworkList();
+
+    /**
+     *
+     * @return first arttwork or null if none exist
+     */
+    public Artwork getFirstArtwork();
+
+    /**
+     * Create artwork field based on the data in artwork
+     *
+     * @return suitabel tagfield for this format that represents the artwork data
+     */
+    public TagField  createArtworkField(Artwork artwork) throws FieldDataInvalidException;
+
+    /**
+     * Create artwork field based on the data in artwork and then set it in the tag itself
+     *
+     * <p>Note We provide this extra method to get round problem with VorbisComment requiring two seperate fields to
+     * represent an artwork field
+     *
+     * @return suitabel tagfield for this format that represents the artwork data
+     */
+    public void createAndSetArtworkField(Artwork artwork) throws FieldDataInvalidException;
+
+  
 
 }

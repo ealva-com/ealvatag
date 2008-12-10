@@ -18,8 +18,15 @@
  */
 package org.jaudiotagger.audio.generic;
 
-import org.jaudiotagger.tag.TagField;
-import org.jaudiotagger.tag.TagTextField;
+import org.jaudiotagger.tag.*;
+import org.jaudiotagger.tag.mp4.Mp4FieldKey;
+import org.jaudiotagger.tag.mp4.field.Mp4TagCoverField;
+import org.jaudiotagger.tag.datatype.Artwork;
+
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 
 /**
  * This is a complete example implementation of
@@ -28,7 +35,7 @@ import org.jaudiotagger.tag.TagTextField;
  *
  * @author Raphaël Slinckx
  */
-public class GenericTag extends AbstractTag
+public abstract class GenericTag extends AbstractTag
 {
 
     /**
@@ -374,5 +381,49 @@ public class GenericTag extends AbstractTag
     protected boolean isAllowedEncoding(String enc)
     {
         return true;
+    }
+
+    public TagField createTagField(TagFieldKey genericKey, String value) throws KeyNotFoundException, FieldDataInvalidException
+    {
+        throw new UnsupportedOperationException("Not implemented for this format");
+    }
+
+    /**
+     * @param genericKey
+     * @return
+     * @throws KeyNotFoundException
+     */
+    public String getFirst(TagFieldKey genericKey) throws KeyNotFoundException
+    {
+        throw new UnsupportedOperationException("Not implemented for this format");
+    }
+
+    /**
+     * @param tagFieldKey
+     * @throws KeyNotFoundException
+     */
+    public void deleteTagField(TagFieldKey tagFieldKey) throws KeyNotFoundException
+    {
+        throw new UnsupportedOperationException("Not implemented for this format");
+    }
+
+    /**
+     * @param genericKey
+     * @return
+     * @throws KeyNotFoundException
+     */
+    public TagField getFirstField(TagFieldKey genericKey) throws KeyNotFoundException
+    {
+        throw new UnsupportedOperationException("Not implemented for this format");
+    }
+
+    public List<Artwork> getArtworkList()
+    {
+        return Collections.emptyList();
+    }
+
+    public TagField  createArtworkField(Artwork artwork) throws FieldDataInvalidException
+    {
+        throw new UnsupportedOperationException("Not implemented for this format");    
     }
 }

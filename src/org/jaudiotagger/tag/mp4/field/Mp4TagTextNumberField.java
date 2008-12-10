@@ -69,7 +69,7 @@ public class Mp4TagTextNumberField extends Mp4TagTextField
         {
             try
             {
-                baos.write(Utils.getShortSizeBigEndian(number));
+                baos.write(Utils.getSizeBEInt16(number));
             }
             catch (IOException e)
             {

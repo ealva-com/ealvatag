@@ -69,7 +69,7 @@ public class RealFileReader extends AudioFileReader
         final String author = Utils.readString(dis, Utils.readUint16(dis));
         final String copyright = Utils.readString(dis, Utils.readUint16(dis));
         final String comment = Utils.readString(dis, Utils.readUint16(dis));
-        final GenericTag rv = new GenericTag();
+        final RealTag rv = new RealTag();
         // NOTE: frequently these fields are off-by-one, thus the crazy
         // logic below...
         rv.addTitle(title.length() == 0 ? author : title);

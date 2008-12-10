@@ -24,7 +24,11 @@ import org.jaudiotagger.audio.exceptions.UnableToRenameFileException;
 import org.jaudiotagger.logging.ErrorMessage;
 import org.jaudiotagger.logging.FileSystemMessage;
 import org.jaudiotagger.tag.*;
+import org.jaudiotagger.tag.mp4.Mp4TagField;
+import org.jaudiotagger.tag.mp4.Mp4FieldKey;
+import org.jaudiotagger.tag.mp4.field.Mp4TagCoverField;
 import org.jaudiotagger.tag.datatype.DataTypes;
+import org.jaudiotagger.tag.datatype.Artwork;
 import org.jaudiotagger.tag.id3.framebody.*;
 import org.jaudiotagger.tag.id3.valuepair.ImageFormats;
 import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
@@ -322,6 +326,17 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
             return frame.getBody().toString();
         }
     }
+
+    public TagField getFirstField(TagFieldKey genericKey) throws KeyNotFoundException
+    {
+        List<TagField> fields = get(genericKey);
+        if(fields.size()>0)
+        {
+            return fields.get(0);
+        }
+        return null;
+    }
+
 
 
     /**
@@ -2278,34 +2293,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
         return frame;
     }
 
-    /**
-     * Create Artwork
-     *
-     * @param data
-     * @param mimeType of the image
-     * @see PictureTypes
-     */
-    public TagField createArtworkField(byte[] data, String mimeType)
-    {
-        AbstractID3v2Frame frame = createFrame(getFrameAndSubIdFromGenericKey(TagFieldKey.COVER_ART).getFrameId());
-        if (frame.getBody() instanceof FrameBodyAPIC)
-        {
-            FrameBodyAPIC body = (FrameBodyAPIC) frame.getBody();
-            body.setObjectValue(DataTypes.OBJ_PICTURE_DATA, data);
-            body.setObjectValue(DataTypes.OBJ_PICTURE_TYPE, PictureTypes.DEFAULT_ID);
-            body.setObjectValue(DataTypes.OBJ_MIME_TYPE, mimeType);
-            body.setObjectValue(DataTypes.OBJ_DESCRIPTION, "");
-        }
-        else if (frame.getBody() instanceof FrameBodyPIC)
-        {
-            FrameBodyPIC body = (FrameBodyPIC) frame.getBody();
-            body.setObjectValue(DataTypes.OBJ_PICTURE_DATA, data);
-            body.setObjectValue(DataTypes.OBJ_PICTURE_TYPE, PictureTypes.DEFAULT_ID);
-            body.setObjectValue(DataTypes.OBJ_IMAGE_FORMAT, ImageFormats.getFormatForMimeType(mimeType));
-            body.setObjectValue(DataTypes.OBJ_DESCRIPTION, "");
-        }
-        return frame;
-    }
+
 
     /**
      * Delete fields with this generic key
@@ -2464,4 +2452,25 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
             return subId;
         }
     }
+
+    public Artwork getFirstArtwork()
+    {
+        List<Artwork> artwork = getArtworkList();
+        if(artwork.size()>0)
+        {
+            return artwork.get(0);
+        }
+        return null;
+    }
+
+    /**
+      * Create field and then set within tag itself
+      *
+      * @param artwork
+      * @throws FieldDataInvalidException
+      */
+     public void createAndSetArtworkField(Artwork artwork) throws FieldDataInvalidException
+     {
+         this.set(createArtworkField(artwork));
+     }
 }

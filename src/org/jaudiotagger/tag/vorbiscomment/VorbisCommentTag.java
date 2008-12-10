@@ -20,22 +20,27 @@ package org.jaudiotagger.tag.vorbiscomment;
 
 import org.jaudiotagger.audio.generic.AbstractTag;
 import org.jaudiotagger.audio.ogg.util.VorbisHeader;
+import org.jaudiotagger.audio.flac.metadatablock.MetadataBlockDataPicture;
 import org.jaudiotagger.logging.ErrorMessage;
 import org.jaudiotagger.tag.KeyNotFoundException;
 import org.jaudiotagger.tag.TagField;
 import org.jaudiotagger.tag.TagFieldKey;
+import org.jaudiotagger.tag.FieldDataInvalidException;
+import org.jaudiotagger.tag.mp4.field.Mp4TagCoverField;
+import org.jaudiotagger.tag.datatype.Artwork;
 import static org.jaudiotagger.tag.vorbiscomment.VorbisCommentFieldKey.*;
 import org.jaudiotagger.tag.vorbiscomment.util.Base64Coder;
 
 import java.util.EnumMap;
 import java.util.List;
+import java.util.ArrayList;
 
 /**
  * This is the logical representation of  Vorbis Comment Data
  */
 public class VorbisCommentTag extends AbstractTag
 {
-    static EnumMap<TagFieldKey, VorbisCommentFieldKey> tagFieldToOggField = new EnumMap<TagFieldKey, VorbisCommentFieldKey>(TagFieldKey.class);
+    private static EnumMap<TagFieldKey, VorbisCommentFieldKey> tagFieldToOggField = new EnumMap<TagFieldKey, VorbisCommentFieldKey>(TagFieldKey.class);
 
     static
     {
@@ -392,7 +397,7 @@ public class VorbisCommentTag extends AbstractTag
     /**
      * Create artwork field
      * <p/>
-     * Actually create two fields , the dat field and the mimetype
+     * Actually create two fields , the data field and the mimetype
      *
      * @param data     raw image data
      * @param mimeType mimeType of data
@@ -463,6 +468,59 @@ public class VorbisCommentTag extends AbstractTag
         {
             super.add(field);
         }
+    }
+
+     public TagField getFirstField(TagFieldKey genericKey) throws KeyNotFoundException
+    {
+        if (genericKey == null)
+        {
+            throw new KeyNotFoundException();
+        }
+        return getFirstField(tagFieldToOggField.get(genericKey).name());
+    }
+
+    public List<Artwork> getArtworkList()
+    {
+        List<Artwork>  artworkList  = new ArrayList<Artwork>(1);
+
+        if(getArtworkBinaryData()!=null & getArtworkBinaryData().length>0)
+        {
+            Artwork artwork=new Artwork();
+            artwork.setMimeType(getArtworkMimeType());
+            artwork.setBinaryData(getArtworkBinaryData());
+            artworkList.add(artwork);
+        }
+        return artworkList;
+    }
+
+    /**
+     * Create artwork field
+     *
+     * Not supported because reuire two fields to be created use
+     * @return
+     */
+    public TagField createArtworkField(Artwork artwork) throws FieldDataInvalidException
+    {
+        throw new UnsupportedOperationException("Please use createAndSetArtworkField instead");       
+    }
+
+    /**
+     * Create artwork field
+     *
+     * Actually sets two fields
+     *
+     * @return
+     */
+    @Override
+    public void createAndSetArtworkField(Artwork artwork) throws FieldDataInvalidException
+    {
+        char[] testdata = Base64Coder.encode(artwork.getBinaryData());
+  		String base64image = new String(testdata);
+   	    TagField imageTagField  = createTagField(VorbisCommentFieldKey.COVERART, base64image);
+   		TagField imageTypeField = createTagField(VorbisCommentFieldKey.COVERARTMIME, artwork.getMimeType());
+
+        this.set(imageTagField);
+        this.set(imageTypeField);
     }
 }
 

@@ -3,6 +3,7 @@ package org.jaudiotagger.tag.wav;
 import org.jaudiotagger.AbstractTestCase;
 import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.AudioFileIO;
+import org.jaudiotagger.audio.wav.WavTag;
 import org.jaudiotagger.audio.generic.GenericTag;
 
 import java.io.File;
@@ -28,7 +29,7 @@ public class WavSimpleTest extends AbstractTestCase
 
 
             assertTrue(f.getTag() instanceof GenericTag);        //TODO Flawed concept should be asftag
-            GenericTag tag = (GenericTag) f.getTag();
+            WavTag tag = (WavTag) f.getTag();
 
             //Ease of use methods for common fields
             assertEquals("", tag.getFirstArtist());

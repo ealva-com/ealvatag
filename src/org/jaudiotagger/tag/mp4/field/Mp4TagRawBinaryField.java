@@ -110,7 +110,7 @@ public class Mp4TagRawBinaryField extends Mp4TagField
         try
         {
             ByteArrayOutputStream outerbaos = new ByteArrayOutputStream();
-            outerbaos.write(Utils.getSizeBigEndian(Mp4BoxHeader.HEADER_LENGTH + dataSize));
+            outerbaos.write(Utils.getSizeBEInt32(Mp4BoxHeader.HEADER_LENGTH + dataSize));
             outerbaos.write(Utils.getDefaultBytes(getId(), "ISO-8859-1"));
             outerbaos.write(dataBytes);
             System.out.println("SIZE" + outerbaos.size());

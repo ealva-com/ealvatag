@@ -206,7 +206,7 @@ public class Mp4TagReader
             if (isDataIdentifier)
             {
                 //Need this to decide what type of Field to create
-                int type = Utils.getNumberBigEndian(raw, Mp4DataBox.TYPE_POS_INCLUDING_HEADER, Mp4DataBox.TYPE_POS_INCLUDING_HEADER + Mp4DataBox.TYPE_LENGTH - 1);
+                int type = Utils.getIntBE(raw, Mp4DataBox.TYPE_POS_INCLUDING_HEADER, Mp4DataBox.TYPE_POS_INCLUDING_HEADER + Mp4DataBox.TYPE_LENGTH - 1);
                 Mp4FieldType fieldType = Mp4FieldType.getFieldType(type);
                 logger.info("Box Type id:" + header.getId() + ":type:" + fieldType);
 
@@ -237,7 +237,7 @@ public class Mp4TagReader
                         //for each subimage (if there are more than one image)
                         if (imageCount > 0)
                         {
-                            type = Utils.getNumberBigEndian(raw, processedDataSize + Mp4DataBox.TYPE_POS_INCLUDING_HEADER, processedDataSize + Mp4DataBox.TYPE_POS_INCLUDING_HEADER + Mp4DataBox.TYPE_LENGTH - 1);
+                            type = Utils.getIntBE(raw, processedDataSize + Mp4DataBox.TYPE_POS_INCLUDING_HEADER, processedDataSize + Mp4DataBox.TYPE_POS_INCLUDING_HEADER + Mp4DataBox.TYPE_LENGTH - 1);
                             fieldType = Mp4FieldType.getFieldType(type);
                         }
                         Mp4TagCoverField field = new Mp4TagCoverField(raw,fieldType);

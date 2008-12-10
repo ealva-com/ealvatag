@@ -98,7 +98,7 @@ public class Utils
     * So if storing a number which only requires one byte it will be stored in the first
     * byte.
     */
-    public static long getLongNumberLittleEndian(ByteBuffer b, int start, int end)
+    public static long getLongLE(ByteBuffer b, int start, int end)
     {
         long number = 0;
         for (int i = 0; i < (end - start + 1); i++)
@@ -116,7 +116,7 @@ public class Utils
      * So if storing a number which only requires one byte it will be stored in the last
      * byte.
      */
-    public static long getLongNumberBigEndian(ByteBuffer b, int start, int end)
+    public static long getLongBE(ByteBuffer b, int start, int end)
     {
         int number = 0;
         for (int i = 0; i < (end - start + 1); i++)
@@ -127,9 +127,9 @@ public class Utils
         return number;
     }
 
-    public static int getNumberLittleEndian(byte[] b)
+    public static int getIntLE(byte[] b)
     {
-        return (int) getLongNumberLittleEndian(ByteBuffer.wrap(b), 0, b.length - 1);
+        return (int) getLongLE(ByteBuffer.wrap(b), 0, b.length - 1);
     }
 
     /*
@@ -139,24 +139,24 @@ public class Utils
       * most significant byte @return a int number represented by the byte
       * sequence.
       */
-    public static int getNumberLittleEndian(byte[] b, int start, int end)
+    public static int getIntLE(byte[] b, int start, int end)
     {
-        return (int) getLongNumberLittleEndian(ByteBuffer.wrap(b), start, end);
+        return (int) getLongLE(ByteBuffer.wrap(b), start, end);
     }
 
-    public static int getNumberBigEndian(byte[] b, int start, int end)
+    public static int getIntBE(byte[] b, int start, int end)
     {
-        return (int) getLongNumberBigEndian(ByteBuffer.wrap(b), start, end);
+        return (int) getLongBE(ByteBuffer.wrap(b), start, end);
     }
 
-    public static int getNumberBigEndian(ByteBuffer b, int start, int end)
+    public static int getIntBE(ByteBuffer b, int start, int end)
     {
-        return (int) getLongNumberBigEndian(b, start, end);
+        return (int) getLongBE(b, start, end);
     }
 
-    public static short getShortNumberBigEndian(ByteBuffer b, int start, int end)
+    public static short getShortBE(ByteBuffer b, int start, int end)
     {
-        return (short) getNumberBigEndian(b, start, end);
+        return (short) getIntBE(b, start, end);
     }
 
     /**
@@ -165,7 +165,7 @@ public class Utils
      * @param size
      * @return byte represenetation
      */
-    public static byte[] getSizeBigEndian(int size)
+    public static byte[] getSizeBEInt32(int size)
     {
         byte[] b = new byte[4];
         b[0] = (byte) ((size >> 24) & 0xFF);
@@ -181,7 +181,7 @@ public class Utils
      * @param size
      * @return byte represenetation
      */
-    public static byte[] getShortSizeBigEndian(short size)
+    public static byte[] getSizeBEInt16(short size)
     {
         byte[] b = new byte[2];
         b[0] = (byte) ((size >> 8) & 0xFF);
@@ -196,7 +196,7 @@ public class Utils
      * @param size
      * @return byte represenetation
      */
-    public static byte[] getSizeLittleEndian(int size)
+    public static byte[] getSizeLEInt32(int size)
     {
         byte[] b = new byte[4];
         b[0] = (byte) (size & 0xff);

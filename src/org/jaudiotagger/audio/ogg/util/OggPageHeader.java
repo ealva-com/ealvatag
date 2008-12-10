@@ -137,9 +137,9 @@ public class OggPageHeader
                 this.absoluteGranulePosition += u(b[i + FIELD_ABSOLUTE_GRANULE_POS]) * Math.pow(2, 8 * i);
             }
 
-            streamSerialNumber = Utils.getNumberLittleEndian(b, FIELD_STREAM_SERIAL_NO_POS, 17);
-            pageSequenceNumber = Utils.getNumberLittleEndian(b, FIELD_PAGE_SEQUENCE_NO_POS, 21);
-            checksum = Utils.getNumberLittleEndian(b, FIELD_PAGE_CHECKSUM_POS, 25);
+            streamSerialNumber = Utils.getIntLE(b, FIELD_STREAM_SERIAL_NO_POS, 17);
+            pageSequenceNumber = Utils.getIntLE(b, FIELD_PAGE_SEQUENCE_NO_POS, 21);
+            checksum = Utils.getIntLE(b, FIELD_PAGE_CHECKSUM_POS, 25);
             int pageSegments = u(b[FIELD_PAGE_SEGMENTS_POS]);
 
             this.segmentTable = new byte[b.length - OGG_PAGE_HEADER_FIXED_LENGTH];

@@ -37,7 +37,7 @@ public class AsfTagField implements TagField
     /**
      * This descriptor is wrapped.
      */
-    private ContentDescriptor toWrap;
+    protected ContentDescriptor toWrap;
 
     /**
      * Creates an instance.
@@ -87,7 +87,7 @@ public class AsfTagField implements TagField
     /**
      * {@inheritDoc}
      */
-    public byte[] getRawContent() throws UnsupportedEncodingException
+    public byte[] getRawContent()
     {
         return toWrap.getRawData();
     }

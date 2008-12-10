@@ -27,6 +27,9 @@ import org.jaudiotagger.audio.generic.Utils;
 import org.jaudiotagger.audio.mp3.MP3File;
 import org.jaudiotagger.logging.ErrorMessage;
 import org.jaudiotagger.tag.*;
+import org.jaudiotagger.tag.id3.framebody.FrameBodyPIC;
+import org.jaudiotagger.tag.id3.valuepair.ImageFormats;
+import org.jaudiotagger.tag.datatype.Artwork;
 import org.jaudiotagger.tag.reference.GenreTypes;
 
 import java.io.IOException;
@@ -738,6 +741,12 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag
         return "ISO-8859-1";
     }
 
+    public TagField getFirstField(TagFieldKey genericKey)
+    {
+        List<TagField> l = get(genericKey);
+        return (l.size() != 0) ? l.get(0) : null;
+    }
+
     /**
      * Returns a {@linkplain List list} of {@link TagField} objects whose &quot;{@linkplain TagField#getId() id}&quot;
      * is the specified one.<br>
@@ -1061,5 +1070,25 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag
         MP3File.getStructureFormatter().addElement(TYPE_COMMENT, this.comment);
         MP3File.getStructureFormatter().addElement(TYPE_GENRE, this.genre);
         MP3File.getStructureFormatter().closeHeadingElement(TYPE_TAG);
+    }
+
+    public List<Artwork> getArtworkList()
+    {
+       return Collections.emptyList();
+    }
+
+    public Artwork getFirstArtwork()
+    {           
+        return null;
+    }
+
+    public TagField  createArtworkField(Artwork artwork) throws FieldDataInvalidException
+    {
+        throw new UnsupportedOperationException("Not implemented for this format");
+    }
+
+    public void createAndSetArtworkField(Artwork artwork) throws FieldDataInvalidException
+    {
+        throw new UnsupportedOperationException("Not implemented for this format");
     }
 }

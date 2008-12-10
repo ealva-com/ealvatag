@@ -42,11 +42,11 @@ public class Mp4StcoBox extends AbstractMp4Box
         dataBuffer.position(dataBuffer.position() + VERSION_FLAG_LENGTH + OTHER_FLAG_LENGTH);
 
         //No of offsets
-        this.noOfOffSets = Utils.getNumberBigEndian(dataBuffer, dataBuffer.position(), (dataBuffer.position() + NO_OF_OFFSETS_LENGTH - 1));
+        this.noOfOffSets = Utils.getIntBE(dataBuffer, dataBuffer.position(), (dataBuffer.position() + NO_OF_OFFSETS_LENGTH - 1));
         dataBuffer.position(dataBuffer.position() + NO_OF_OFFSETS_LENGTH);
 
         //First Offset, useful for sanity checks
-        firstOffSet = Utils.getNumberBigEndian(dataBuffer, dataBuffer.position(), (dataBuffer.position() + OFFSET_LENGTH - 1));
+        firstOffSet = Utils.getIntBE(dataBuffer, dataBuffer.position(), (dataBuffer.position() + OFFSET_LENGTH - 1));
     }
 
     public void printTotalOffset()
@@ -56,10 +56,10 @@ public class Mp4StcoBox extends AbstractMp4Box
         dataBuffer.position(VERSION_FLAG_LENGTH + OTHER_FLAG_LENGTH + NO_OF_OFFSETS_LENGTH);
         for (int i = 0; i < noOfOffSets - 1; i++)
         {
-            offset += Utils.getNumberBigEndian(dataBuffer, dataBuffer.position(), (dataBuffer.position() + OFFSET_LENGTH - 1));
+            offset += Utils.getIntBE(dataBuffer, dataBuffer.position(), (dataBuffer.position() + OFFSET_LENGTH - 1));
             dataBuffer.position(dataBuffer.position() + OFFSET_LENGTH);
         }
-        offset += Utils.getNumberBigEndian(dataBuffer, dataBuffer.position(), (dataBuffer.position() + OFFSET_LENGTH - 1));
+        offset += Utils.getIntBE(dataBuffer, dataBuffer.position(), (dataBuffer.position() + OFFSET_LENGTH - 1));
         System.out.println("Print Offset Total:" + offset);
     }
 
@@ -73,12 +73,12 @@ public class Mp4StcoBox extends AbstractMp4Box
         dataBuffer.position(VERSION_FLAG_LENGTH + OTHER_FLAG_LENGTH + NO_OF_OFFSETS_LENGTH);
         for (int i = 0; i < noOfOffSets - 1; i++)
         {
-            int offset = Utils.getNumberBigEndian(dataBuffer, dataBuffer.position(), (dataBuffer.position() + OFFSET_LENGTH - 1));
+            int offset = Utils.getIntBE(dataBuffer, dataBuffer.position(), (dataBuffer.position() + OFFSET_LENGTH - 1));
             System.out.println("offset into audio data is:" + offset);
 
             dataBuffer.position(dataBuffer.position() + OFFSET_LENGTH);
         }
-        int offset = Utils.getNumberBigEndian(dataBuffer, dataBuffer.position(), (dataBuffer.position() + OFFSET_LENGTH - 1));
+        int offset = Utils.getIntBE(dataBuffer, dataBuffer.position(), (dataBuffer.position() + OFFSET_LENGTH - 1));
         System.out.println("offset into audio data is:" + offset);
         System.out.println("Print Offsets:end");
 
@@ -91,11 +91,11 @@ public class Mp4StcoBox extends AbstractMp4Box
         dataBuffer.position(dataBuffer.position() + VERSION_FLAG_LENGTH + OTHER_FLAG_LENGTH + NO_OF_OFFSETS_LENGTH);
         for (int i = 0; i < noOfOffSets; i++)
         {
-            int offset = Utils.getNumberBigEndian(dataBuffer, dataBuffer.position(), (dataBuffer.position() + NO_OF_OFFSETS_LENGTH - 1));
+            int offset = Utils.getIntBE(dataBuffer, dataBuffer.position(), (dataBuffer.position() + NO_OF_OFFSETS_LENGTH - 1));
 
             //Calculate new offset and update buffer
             offset = offset + adjustment;
-            dataBuffer.put(Utils.getSizeBigEndian(offset));
+            dataBuffer.put(Utils.getSizeBEInt32(offset));
         }
     }
 
@@ -116,16 +116,16 @@ public class Mp4StcoBox extends AbstractMp4Box
         dataBuffer.position(dataBuffer.position() + VERSION_FLAG_LENGTH + OTHER_FLAG_LENGTH);
 
         //No of offsets
-        this.noOfOffSets = Utils.getNumberBigEndian(dataBuffer, dataBuffer.position(), (dataBuffer.position() + NO_OF_OFFSETS_LENGTH - 1));
+        this.noOfOffSets = Utils.getIntBE(dataBuffer, dataBuffer.position(), (dataBuffer.position() + NO_OF_OFFSETS_LENGTH - 1));
         dataBuffer.position(dataBuffer.position() + NO_OF_OFFSETS_LENGTH);
 
         for (int i = 0; i < noOfOffSets; i++)
         {
-            int offset = Utils.getNumberBigEndian(dataBuffer, dataBuffer.position(), (dataBuffer.position() + NO_OF_OFFSETS_LENGTH - 1));
+            int offset = Utils.getIntBE(dataBuffer, dataBuffer.position(), (dataBuffer.position() + NO_OF_OFFSETS_LENGTH - 1));
 
             //Calculate new offset and update buffer
             offset = offset + adjustment;
-            dataBuffer.put(Utils.getSizeBigEndian(offset));
+            dataBuffer.put(Utils.getSizeBEInt32(offset));
         }
     }
 

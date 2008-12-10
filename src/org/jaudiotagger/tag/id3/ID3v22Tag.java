@@ -22,8 +22,14 @@ import org.jaudiotagger.audio.mp3.MP3File;
 import org.jaudiotagger.audio.exceptions.UnableToModifyFileException;
 import org.jaudiotagger.audio.exceptions.UnableToCreateFileException;
 import org.jaudiotagger.tag.*;
+import org.jaudiotagger.tag.reference.PictureTypes;
+import org.jaudiotagger.tag.datatype.Artwork;
+import org.jaudiotagger.tag.datatype.DataTypes;
 import org.jaudiotagger.tag.id3.framebody.AbstractFrameBodyTextInfo;
 import org.jaudiotagger.tag.id3.framebody.FrameBodyTDRC;
+import org.jaudiotagger.tag.id3.framebody.FrameBodyAPIC;
+import org.jaudiotagger.tag.id3.framebody.FrameBodyPIC;
+import org.jaudiotagger.tag.id3.valuepair.ImageFormats;
 
 import java.io.File;
 import java.io.IOException;
@@ -725,5 +731,45 @@ public class ID3v22Tag extends AbstractID3v2Tag
     public Comparator getPreferredFrameOrderComparator()
     {
         return ID3v22PreferredFrameOrderComparator.getInstanceof();
+    }
+
+     public List<Artwork> getArtworkList()
+    {
+        List<TagField> coverartList = get(TagFieldKey.COVER_ART);
+        List<Artwork> artworkList   = new ArrayList<Artwork>(coverartList.size());
+
+        for(TagField next:coverartList)
+        {
+            FrameBodyPIC coverArt = (FrameBodyPIC) ((AbstractID3v2Frame) next).getBody();
+            Artwork artwork = new Artwork();
+            artwork.setMimeType(ImageFormats.getMimeTypeForFormat(coverArt.getFormatType()));
+            artwork.setPictureType(coverArt.getPictureType());
+            artwork.setBinaryData(coverArt.getImageData());
+            artworkList.add(artwork);
+        }
+        return artworkList;
+    }
+
+
+     public TagField createArtworkField(Artwork artwork) throws FieldDataInvalidException
+    {
+        AbstractID3v2Frame frame = createFrame(getFrameAndSubIdFromGenericKey(TagFieldKey.COVER_ART).getFrameId());
+        FrameBodyPIC body = (FrameBodyPIC) frame.getBody();
+        body.setObjectValue(DataTypes.OBJ_PICTURE_DATA, artwork.getBinaryData());
+        body.setObjectValue(DataTypes.OBJ_PICTURE_TYPE, artwork.getPictureType());
+        body.setObjectValue(DataTypes.OBJ_IMAGE_FORMAT, ImageFormats.getFormatForMimeType(artwork.getMimeType()));
+        body.setObjectValue(DataTypes.OBJ_DESCRIPTION, "");
+        return frame;
+    }
+
+     public TagField createArtworkField(byte[] data, String mimeType)
+    {
+        AbstractID3v2Frame frame = createFrame(getFrameAndSubIdFromGenericKey(TagFieldKey.COVER_ART).getFrameId());       
+        FrameBodyPIC body = (FrameBodyPIC) frame.getBody();
+        body.setObjectValue(DataTypes.OBJ_PICTURE_DATA, data);
+        body.setObjectValue(DataTypes.OBJ_PICTURE_TYPE, PictureTypes.DEFAULT_ID);
+        body.setObjectValue(DataTypes.OBJ_IMAGE_FORMAT, ImageFormats.getFormatForMimeType(mimeType));
+        body.setObjectValue(DataTypes.OBJ_DESCRIPTION, "");
+        return frame;
     }
 }

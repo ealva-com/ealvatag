@@ -25,11 +25,13 @@ import org.jaudiotagger.tag.FieldDataInvalidException;
 import org.jaudiotagger.tag.KeyNotFoundException;
 import org.jaudiotagger.tag.TagField;
 import org.jaudiotagger.tag.TagFieldKey;
+import org.jaudiotagger.tag.datatype.Artwork;
 import static org.jaudiotagger.tag.mp4.Mp4FieldKey.*;
 import org.jaudiotagger.tag.mp4.field.*;
 
 import java.util.EnumMap;
 import java.util.List;
+import java.util.ArrayList;
 
 /**
  * A Logical representation of Mp4Tag, i.e the meta information stored in an Mp4 file underneath the
@@ -295,6 +297,15 @@ public class Mp4Tag extends AbstractTag
         return super.getFirst(mp4Key.getFieldName());
     }
 
+    public Mp4TagField getFirstField(TagFieldKey genericKey) throws KeyNotFoundException
+    {
+        if (genericKey == null)
+        {
+            throw new KeyNotFoundException();
+        }
+        return (Mp4TagField)super.getFirstField(tagFieldToMp4Field.get(genericKey).getFieldName());
+    }
+
     public Mp4TagField getFirstField(Mp4FieldKey mp4Key) throws KeyNotFoundException
     {
         if (mp4Key == null)
@@ -356,6 +367,15 @@ public class Mp4Tag extends AbstractTag
         return new Mp4TagCoverField(data);
     }
 
+     /**
+     * Create artwork field
+     *    
+     * @return
+     */
+    public TagField createArtworkField(Artwork artwork) throws FieldDataInvalidException
+    {
+        return new Mp4TagCoverField(artwork.getBinaryData());
+    }
 
     /**
      * Create Tag Field using generic key
@@ -469,6 +489,23 @@ public class Mp4Tag extends AbstractTag
             default:
                 return new Mp4TagTextField(mp4FieldKey.getFieldName(), value);
         }
-
     }
+
+    public List<Artwork> getArtworkList()
+    {
+        List<TagField> coverartList = get(Mp4FieldKey.ARTWORK);
+        List<Artwork> artworkList = new ArrayList<Artwork>(coverartList.size());
+
+        for(TagField next:coverartList)
+        {
+            Mp4TagCoverField mp4CoverArt = (Mp4TagCoverField)next;
+            Artwork artwork = new Artwork();
+            artwork.setBinaryData(mp4CoverArt.getData());
+            artwork.setMimeType(Mp4TagCoverField.getMimeTypeForImageType(mp4CoverArt.getFieldType()));
+            artworkList.add(artwork);
+        }
+        return artworkList;
+    }
+
+
 }

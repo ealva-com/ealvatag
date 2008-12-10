@@ -52,12 +52,12 @@ public class VorbisCommentCreator extends AbstractTagCreator
             //Vendor
             String vendorString = ((VorbisCommentTag) tag).getVendor();
             int vendorLength = Utils.getUTF8Bytes(vendorString).length;
-            baos.write(Utils.getSizeLittleEndian(vendorLength));
+            baos.write(Utils.getSizeLEInt32(vendorLength));
             baos.write(Utils.getUTF8Bytes(vendorString));
 
             //User Comment List
             int listLength = tag.getFieldCount() - 1; //Remove Vendor from count         
-            baos.write(Utils.getSizeLittleEndian(listLength));
+            baos.write(Utils.getSizeLEInt32(listLength));
 
             //Add metadata raw content
             Iterator<TagField> it = tag.getFields();

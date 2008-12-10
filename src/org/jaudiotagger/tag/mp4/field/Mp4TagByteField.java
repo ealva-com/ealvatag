@@ -102,7 +102,7 @@ public class Mp4TagByteField extends Mp4TagTextField
             {
                 //Save as two bytes
                 Short shortValue = new Short(content);
-                byte rawData[] = Utils.getShortSizeBigEndian(shortValue);
+                byte rawData[] = Utils.getSizeBEInt16(shortValue);
                 return rawData;
             }
             case 1:
@@ -117,7 +117,7 @@ public class Mp4TagByteField extends Mp4TagTextField
             {
                 //Assume could be int
                 Integer intValue = new Integer(content);
-                byte rawData[] = Utils.getSizeBigEndian(intValue);
+                byte rawData[] = Utils.getSizeBEInt32(intValue);
                 return rawData;
             }
             default:

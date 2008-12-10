@@ -2,6 +2,7 @@ package org.jaudiotagger.audio.asf.tag;
 
 import org.jaudiotagger.audio.asf.data.AsfHeader;
 import org.jaudiotagger.audio.asf.data.ContentDescriptor;
+import org.jaudiotagger.audio.asf.util.Utils;
 import org.jaudiotagger.tag.TagTextField;
 
 /**
@@ -72,4 +73,11 @@ public class AsfTagTextField extends AsfTagField implements TagTextField
         }
     }
 
+     /**
+     * @return true if blank or only contains whitespoace
+     */
+    public boolean isEmpty()
+    {
+        return Utils.isBlank(getContent());
+    }
 }

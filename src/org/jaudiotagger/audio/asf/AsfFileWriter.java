@@ -144,6 +144,7 @@ public class AsfFileWriter extends AudioFileWriter
         /*
          * Now create modifiers for content descriptor and extended content descriptor as implied by the given Tag.
          */
+        //TODO not convinced that we need to copy fields here
         final AsfTag copy = new AsfTag(tag, true);
         // Modifiers for the asf header object
         final List<ChunkModifier> headerModifier = new ArrayList<ChunkModifier>();

@@ -83,4 +83,88 @@ public class ImageFormats
         return imageMimeTypeToFormat.get(mimeType);
     }
 
+    /**
+     * @param data
+     * @return true if binary data matches expected header for a png
+     */
+    public static boolean binaryDataIsPngFormat(byte[] data)
+    {
+        //Read signature
+        if ((0x89 == (data[0] & 0xff)) && (0x50 == (data[1] & 0xff)) && (0x4E == (data[2] & 0xff)) && (0x47 == (data[3] & 0xff)))
+        {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * @param data
+     * @return true if binary data matches expected header for a jpg
+     */
+    public static boolean binaryDataIsJpgFormat(byte[] data)
+    {
+        //Read signature
+        if ((0xff == (data[0] & 0xff)) && (0xd8 == (data[1] & 0xff)) && (0xff == (data[2] & 0xff)) && (0xff == (data[3] & 0xe0)))
+        {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * @param data
+     * @return true if binary data matches expected header for a gif
+     */
+    public static boolean binaryDataIsGifFormat(byte[] data)
+    {
+        //Read signature
+        if ((0x47 == (data[0] & 0xff)) && (0x49 == (data[1] & 0xff)) && (0x46 == (data[2] & 0xff)))
+        {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * @param data
+     * @return true if binary data matches expected header for a bmp
+     */
+    public static boolean binaryDataIsBmpFormat(byte[] data)
+    {
+        //Read signature
+        if ((0x42 == (data[0] & 0xff)) && (0x4d == (data[1] & 0xff)) && (0x3c == (data[2] & 0xff)))
+        {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     *
+     * @param data
+     * @return correct mimetype for the image data represented by this byte data
+     */
+    public static String getMimeTypeForBinarySignature(byte[] data)
+    {
+        if(binaryDataIsPngFormat(data))
+        {
+            return MIME_TYPE_PNG;
+        }
+        else if(binaryDataIsJpgFormat(data))
+        {
+            return MIME_TYPE_JPEG;
+        }
+        else if(binaryDataIsGifFormat(data))
+        {
+            return MIME_TYPE_GIF;
+        }
+        else if(binaryDataIsBmpFormat(data))
+        {
+            return MIME_TYPE_BMP;
+        }
+        else
+        {
+            return null;
+        }
+    }
 }

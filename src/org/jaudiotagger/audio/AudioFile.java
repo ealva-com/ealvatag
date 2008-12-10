@@ -28,6 +28,9 @@ import org.jaudiotagger.audio.exceptions.CannotWriteException;
 import org.jaudiotagger.audio.exceptions.ReadOnlyFileException;
 import org.jaudiotagger.audio.flac.metadatablock.MetadataBlockDataPicture;
 import org.jaudiotagger.audio.generic.GenericTag;
+import org.jaudiotagger.audio.asf.tag.AsfTag;
+import org.jaudiotagger.audio.wav.WavTag;
+import org.jaudiotagger.audio.real.RealTag;
 import org.jaudiotagger.tag.Tag;
 import org.jaudiotagger.tag.mp4.Mp4Tag;
 import org.jaudiotagger.tag.vorbiscomment.VorbisCommentTag;
@@ -255,13 +258,25 @@ public class AudioFile
         {
             return new Mp4Tag();
         }
+        else if(SupportedFileFormat.WMA.getFilesuffix().equals(file.getName().substring(file.getName().lastIndexOf('.'))))
+        {
+            return new AsfTag();
+        }
+        else if(SupportedFileFormat.WAV.getFilesuffix().equals(file.getName().substring(file.getName().lastIndexOf('.'))))
+        {
+            return new WavTag();
+        }
+        else if(SupportedFileFormat.RA.getFilesuffix().equals(file.getName().substring(file.getName().lastIndexOf('.'))))
+        {
+            return new RealTag();
+        }
+        else if(SupportedFileFormat.RM.getFilesuffix().equals(file.getName().substring(file.getName().lastIndexOf('.'))))
+        {
+            return new RealTag();
+        }
         else
         {
-            //MP3 done by MP3File subclass
-            //Wav doesnt support tags but returing Generictag
-            //Wma not merged yet
-            //Ra but returing Generictag
-            return new GenericTag();
+            throw new RuntimeException("Unable to create default tag for this file format");
         }
 
     }

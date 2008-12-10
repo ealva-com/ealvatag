@@ -143,16 +143,16 @@ public class MetadataBlockDataPicture implements MetadataBlockData, TagField
         try
         {
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            baos.write(Utils.getSizeBigEndian(pictureType));
-            baos.write(Utils.getSizeBigEndian(mimeType.length()));
+            baos.write(Utils.getSizeBEInt32(pictureType));
+            baos.write(Utils.getSizeBEInt32(mimeType.length()));
             baos.write(mimeType.getBytes("ISO-8859-1"));
-            baos.write(Utils.getSizeBigEndian(description.length()));
+            baos.write(Utils.getSizeBEInt32(description.length()));
             baos.write(description.getBytes("UTF-8"));
-            baos.write(Utils.getSizeBigEndian(width));
-            baos.write(Utils.getSizeBigEndian(height));
-            baos.write(Utils.getSizeBigEndian(colourDepth));
-            baos.write(Utils.getSizeBigEndian(indexedColouredCount));
-            baos.write(Utils.getSizeBigEndian(imageData.length));
+            baos.write(Utils.getSizeBEInt32(width));
+            baos.write(Utils.getSizeBEInt32(height));
+            baos.write(Utils.getSizeBEInt32(colourDepth));
+            baos.write(Utils.getSizeBEInt32(indexedColouredCount));
+            baos.write(Utils.getSizeBEInt32(imageData.length));
             baos.write(imageData);
             return baos.toByteArray();
 

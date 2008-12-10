@@ -22,6 +22,7 @@ public class AsfTagTest extends TestCase
      */
     public void testEmptyField()
     {
+        //Copy fields flag set
         AsfTag asfTag = new AsfTag(true);
         asfTag.addAlbum("");
         asfTag.setTitle("");
@@ -29,13 +30,15 @@ public class AsfTagTest extends TestCase
         assertFalse(asfTag.hasField(AsfFieldKey.TITLE.getFieldName()));
         assertTrue(asfTag.isEmpty());
         assertTrue(asfTag.getFieldCount() == 0);
+
+        //Copy field flag not set
         asfTag = new AsfTag();
         asfTag.addAlbum("");
         asfTag.setTitle("");
-        assertTrue(asfTag.hasField(AsfFieldKey.ALBUM.getFieldName()));
-        assertTrue(asfTag.hasField(AsfFieldKey.TITLE.getFieldName()));
-        assertFalse(asfTag.isEmpty());
-        assertTrue(asfTag.getFieldCount() == 2);
+        assertFalse(asfTag.hasField(AsfFieldKey.ALBUM.getFieldName()));
+        assertFalse(asfTag.hasField(AsfFieldKey.TITLE.getFieldName()));
+        assertTrue(asfTag.isEmpty());
+        assertTrue(asfTag.getFieldCount() == 0);
     }
 
      
@@ -50,7 +53,6 @@ public class AsfTagTest extends TestCase
         asfTag.add(albumField);
         assertSame(albumField, asfTag.get(TagFieldKey.ALBUM).get(0));
         assertSame(albumField, asfTag.getAlbum().get(0));
-        assertSame(albumField, asfTag.get(AsfFieldKey.ALBUM.getFieldName()).get(0));
         assertSame(albumField, asfTag.get(AsfFieldKey.ALBUM.getFieldName()).get(0));
     }
 

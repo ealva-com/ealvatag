@@ -18,6 +18,9 @@
 package org.jaudiotagger.audio.generic;
 
 import org.jaudiotagger.tag.*;
+import org.jaudiotagger.tag.datatype.Artwork;
+import org.jaudiotagger.tag.mp4.Mp4TagField;
+import org.jaudiotagger.tag.mp4.Mp4FieldKey;
 
 import java.util.*;
 
@@ -196,8 +199,9 @@ public abstract class AbstractTag implements Tag
     public TagField getFirstField(String id)
     {
         List<TagField> l = get(id);
-        return (l.size() != 0) ? ((TagField) l.get(0)) : null;
+        return (l.size() != 0) ? l.get(0) : null;
     }
+
 
     /**
      * (overridden)
@@ -659,29 +663,38 @@ public abstract class AbstractTag implements Tag
         return out.toString().substring(0, out.length() - 1);
     }
 
-    //Should be overridden by all subclasses but provided empty impl
-    //as working one format at a time
-    //TODO remove
-    public TagField createTagField(TagFieldKey genericKey, String value) throws KeyNotFoundException, FieldDataInvalidException
-    {
-        return null;
-    }
+    /**
+     *
+     * @param genericKey
+     * @param value
+     * @return
+     * @throws KeyNotFoundException
+     * @throws FieldDataInvalidException
+     */
+    public abstract TagField createTagField(TagFieldKey genericKey, String value) throws KeyNotFoundException, FieldDataInvalidException;
 
-    //Should be overridden by all subclasses but provided empty impl
-    //as working one format at a time
-    //TODO remove
-    public String getFirst(TagFieldKey genericKey) throws KeyNotFoundException
-    {
-        return null;
-    }
+    /**
+     *
+     * @param genericKey
+     * @return
+     * @throws KeyNotFoundException
+     */
+    public abstract String getFirst(TagFieldKey genericKey) throws KeyNotFoundException;
 
-    //Should be overridden by all subclasses but provided empty impl
-    //as working one format at a time
-    //TODO remove
-    public void deleteTagField(TagFieldKey tagFieldKey) throws KeyNotFoundException
-    {
-        ;
-    }
+    /**
+     * 
+     * @param genericKey
+     * @return
+     * @throws KeyNotFoundException
+     */
+    public abstract TagField getFirstField(TagFieldKey genericKey) throws KeyNotFoundException;
+
+    /**
+     * 
+     * @param tagFieldKey
+     * @throws KeyNotFoundException
+     */
+    public abstract void deleteTagField(TagFieldKey tagFieldKey) throws KeyNotFoundException;
 
 
     /**
@@ -759,4 +772,28 @@ public abstract class AbstractTag implements Tag
      * @return tagfield representing the &quot;year&quot;
      */
     public abstract TagField createYearField(String content);
+
+    public Artwork getFirstArtwork()
+    {
+        List<Artwork> artwork = getArtworkList();
+        if(artwork.size()>0)
+        {
+            return artwork.get(0);
+        }
+        return null;
+    }
+
+      /**
+     * Create field and then set within tag itself
+     *
+     * @param artwork
+     * @throws FieldDataInvalidException
+     */
+    public void createAndSetArtworkField(Artwork artwork) throws FieldDataInvalidException
+    {
+        this.set(createArtworkField(artwork));
+    }
+
+   
+
 }

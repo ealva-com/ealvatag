@@ -226,10 +226,11 @@ public class AsfFileReader extends AudioFileReader
             {
                 throw new CannotReadException(ErrorMessage.ASF_FILE_HEADER_MISSING.getMsg(f.getAbsolutePath()));
             }
-            //TODO note this was throwing an exception for a file tagged by Picard Qt but seems to be okay now
+
+            //Just log a warning because file seems to play okay
             if (header.getFileHeader().getFileSize().longValue() != f.length())
             {
-                throw new CannotReadException(ErrorMessage.ASF_FILE_HEADER_SIZE_DOES_NOT_MATCH_FILE_SIZE.getMsg(f.getAbsolutePath(), header.getFileHeader().getFileSize().longValue(), f.length()));
+                logger.warning(ErrorMessage.ASF_FILE_HEADER_SIZE_DOES_NOT_MATCH_FILE_SIZE.getMsg(f.getAbsolutePath(), header.getFileHeader().getFileSize().longValue(), f.length()));
             }
 
             return new AudioFile(f, getAudioHeader(header), getTag(header));

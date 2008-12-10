@@ -22,10 +22,7 @@ import org.jaudiotagger.audio.asf.data.AsfHeader;
 import org.jaudiotagger.audio.asf.data.ContentDescription;
 import org.jaudiotagger.audio.asf.data.ContentDescriptor;
 import org.jaudiotagger.audio.asf.data.ExtendedContentDescription;
-import org.jaudiotagger.audio.asf.tag.AsfFieldKey;
-import org.jaudiotagger.audio.asf.tag.AsfTag;
-import org.jaudiotagger.audio.asf.tag.AsfTagField;
-import org.jaudiotagger.audio.asf.tag.AsfTagTextField;
+import org.jaudiotagger.audio.asf.tag.*;
 import org.jaudiotagger.tag.Tag;
 import org.jaudiotagger.tag.reference.GenreTypes;
 
@@ -122,7 +119,7 @@ public class TagConverter
      */
     public static void assignOptionalTagValues(AsfTag tag, ExtendedContentDescription descriptor)
     {
-        assert tag.isConvertingFields();
+        assert tag.isCopyingFields();
         Iterator<AsfTagField> it = tag.getAsfFields();
         while (it.hasNext())
         {
@@ -170,8 +167,9 @@ public class TagConverter
      * @param source The ASF header which contains the information. <br>
      * @return A Tag with all its values.
      */
+    //TODO do we need to copy all the tag fields really
     public static AsfTag createTagOf(AsfHeader source)
-    {
+    {        
         AsfTag result = new AsfTag(true);
         final ContentDescription contentDescription = source.findContentDescription();
         final ExtendedContentDescription extDesc = source.findExtendedContentDescription();
@@ -201,7 +199,14 @@ public class TagConverter
                 {
                     if (current.getType() == ContentDescriptor.TYPE_BINARY)
                     {
-                        result.add(new AsfTagField(current));
+                        if(current.getName().equals(AsfFieldKey.COVER_ART.getFieldName()))
+                        {
+                            result.add(new AsfTagCoverField(current));
+                        }
+                        else
+                        {
+                            result.add(new AsfTagField(current));
+                        }
                     }
                     else
                     {

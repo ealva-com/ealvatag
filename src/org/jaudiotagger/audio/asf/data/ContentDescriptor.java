@@ -29,6 +29,14 @@ import java.util.Arrays;
  * This class is a wrapper for properties within a
  * {@link org.jaudiotagger.audio.asf.data.ExtendedContentDescription}.<br>
  *
+ * Each descriptor consists of the folloowing:
+ *
+ * Descriptor Name Length  16 bits
+ * Descriptor Name UTF16LE format
+ * Descriptor Value Data Type 16 bits
+ * Descriptor Value Length 16 bits
+ * Descriptor Value varies
+ *
  * @author Christian Laireiter
  */
 public final class ContentDescriptor implements Comparable<ContentDescriptor>
@@ -64,26 +72,27 @@ public final class ContentDescriptor implements Comparable<ContentDescriptor>
     public final static int TYPE_WORD = 5;
 
     /**
-     * The binary representation of the value.
-     */
-    protected byte[] content = new byte[0];
-
-    /**
-     * This field shows the type of the content descriptor. <br>
-     *
-     * @see #TYPE_BINARY
-     * @see #TYPE_BOOLEAN
-     * @see #TYPE_DWORD
-     * @see #TYPE_QWORD
-     * @see #TYPE_STRING
-     * @see #TYPE_WORD
-     */
-    private int descriptorType;
-
-    /**
      * The name of the content descriptor.
      */
     private final String name;
+
+    /**
+         * This field shows the type of the content descriptor. <br>
+         *
+         * @see #TYPE_BINARY
+         * @see #TYPE_BOOLEAN
+         * @see #TYPE_DWORD
+         * @see #TYPE_QWORD
+         * @see #TYPE_STRING
+         * @see #TYPE_WORD
+         */
+    private int descriptorType;
+
+
+     /**
+     * The binary representation of the value.
+     */
+    protected byte[] content = new byte[0];
 
     /**
      * Creates an Instance.

@@ -22,10 +22,10 @@ import org.jaudiotagger.audio.mp3.MP3File;
 import org.jaudiotagger.audio.exceptions.UnableToCreateFileException;
 import org.jaudiotagger.audio.exceptions.UnableToModifyFileException;
 import org.jaudiotagger.tag.*;
-import org.jaudiotagger.tag.id3.framebody.FrameBodyTDAT;
-import org.jaudiotagger.tag.id3.framebody.FrameBodyTDRC;
-import org.jaudiotagger.tag.id3.framebody.FrameBodyTIME;
-import org.jaudiotagger.tag.id3.framebody.FrameBodyTYER;
+import org.jaudiotagger.tag.reference.PictureTypes;
+import org.jaudiotagger.tag.datatype.Artwork;
+import org.jaudiotagger.tag.datatype.DataTypes;
+import org.jaudiotagger.tag.id3.framebody.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -914,5 +914,59 @@ public class ID3v23Tag extends AbstractID3v2Tag
     public Comparator getPreferredFrameOrderComparator()
     {
         return ID3v23PreferredFrameOrderComparator.getInstanceof();
+    }
+
+     public List<Artwork> getArtworkList()
+    {
+        List<TagField> coverartList = get(TagFieldKey.COVER_ART);
+        List<Artwork> artworkList   = new ArrayList<Artwork>(coverartList.size());
+
+        for(TagField next:coverartList)
+        {
+            FrameBodyAPIC coverArt = (FrameBodyAPIC) ((AbstractID3v2Frame) next).getBody();
+            Artwork artwork = new Artwork();
+            artwork.setMimeType(coverArt.getMimeType());
+            artwork.setPictureType(coverArt.getPictureType());
+            if(coverArt.isImageUrl())
+            {
+                artwork.setLinked(true);
+                artwork.setImageUrl(coverArt.getImageUrl());
+            }
+            else
+            {
+                artwork.setBinaryData(coverArt.getImageData());
+            }
+            artworkList.add(artwork);
+        }
+        return artworkList;
+    }
+
+     public TagField createArtworkField(Artwork artwork) throws FieldDataInvalidException
+    {
+        AbstractID3v2Frame frame = createFrame(getFrameAndSubIdFromGenericKey(TagFieldKey.COVER_ART).getFrameId());
+        FrameBodyAPIC body = (FrameBodyAPIC) frame.getBody();
+        body.setObjectValue(DataTypes.OBJ_PICTURE_DATA,artwork.getBinaryData());
+        body.setObjectValue(DataTypes.OBJ_PICTURE_TYPE, artwork.getPictureType());
+        body.setObjectValue(DataTypes.OBJ_MIME_TYPE, artwork.getMimeType());
+        body.setObjectValue(DataTypes.OBJ_DESCRIPTION, "");
+        return frame;
+    }
+
+     /**
+     * Create Artwork
+     *
+     * @param data
+     * @param mimeType of the image
+     * @see PictureTypes
+     */
+    public TagField createArtworkField(byte[] data, String mimeType)
+    {
+        AbstractID3v2Frame frame = createFrame(getFrameAndSubIdFromGenericKey(TagFieldKey.COVER_ART).getFrameId());
+        FrameBodyAPIC body = (FrameBodyAPIC) frame.getBody();
+        body.setObjectValue(DataTypes.OBJ_PICTURE_DATA, data);
+        body.setObjectValue(DataTypes.OBJ_PICTURE_TYPE, PictureTypes.DEFAULT_ID);
+        body.setObjectValue(DataTypes.OBJ_MIME_TYPE, mimeType);
+        body.setObjectValue(DataTypes.OBJ_DESCRIPTION, "");
+        return frame;
     }
 }

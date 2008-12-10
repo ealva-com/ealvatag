@@ -28,7 +28,7 @@ public enum AsfFieldKey
     COMPOSER_SORT("WM/ComposerSort",  false),
     CONDUCTOR("WM/Conductor",  false),
     COPYRIGHT("COPYRIGHT", false),
-    COVER_ART("CoverArt",  false),
+    COVER_ART("WM/Picture",  false),
     DISC_NO("WM/PartOfSet",  false),
     ENCODER("WM/ToolName",  false),
     GENRE("WM/Genre",  false),

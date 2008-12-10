@@ -139,7 +139,7 @@ public class Mp4BoxHeader
         dataBuffer = ByteBuffer.wrap(b);
 
         //Calculate box size
-        this.length = Utils.getNumberBigEndian(b, OFFSET_POS, OFFSET_LENGTH - 1);
+        this.length = Utils.getIntBE(b, OFFSET_POS, OFFSET_LENGTH - 1);
         //Calculate box id
         this.id = Utils.getString(b, IDENTIFIER_POS, IDENTIFIER_LENGTH, "ISO-8859-1");
 
@@ -180,7 +180,7 @@ public class Mp4BoxHeader
      */
     public void setLength(int length)
     {
-        byte[] headerSize = Utils.getSizeBigEndian(length);
+        byte[] headerSize = Utils.getSizeBEInt32(length);
         dataBuffer.put(0, headerSize[0]);
         dataBuffer.put(1, headerSize[1]);
         dataBuffer.put(2, headerSize[2]);
@@ -200,7 +200,7 @@ public class Mp4BoxHeader
      */
     public void setId(int length)
     {
-        byte[] headerSize = Utils.getSizeBigEndian(length);
+        byte[] headerSize = Utils.getSizeBEInt32(length);
         dataBuffer.put(5, headerSize[0]);
         dataBuffer.put(6, headerSize[1]);
         dataBuffer.put(7, headerSize[2]);

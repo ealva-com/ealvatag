@@ -87,7 +87,7 @@ public class VorbisCommentReader
         byte[] b = new byte[FIELD_VENDOR_LENGTH_LENGTH];
         System.arraycopy(rawdata, FIELD_VENDOR_LENGTH_POS, b, FIELD_VENDOR_LENGTH_POS, FIELD_VENDOR_LENGTH_LENGTH);
         int pos = FIELD_VENDOR_LENGTH_LENGTH;
-        int vendorStringLength = Utils.getNumberLittleEndian(b);
+        int vendorStringLength = Utils.getIntLE(b);
 
         b = new byte[vendorStringLength];
         System.arraycopy(rawdata, pos, b, 0, vendorStringLength);
@@ -98,7 +98,7 @@ public class VorbisCommentReader
         System.arraycopy(rawdata, pos, b, 0, FIELD_USER_COMMENT_LIST_LENGTH);
         pos += FIELD_USER_COMMENT_LIST_LENGTH;
 
-        int userComments = Utils.getNumberLittleEndian(b);
+        int userComments = Utils.getIntLE(b);
         logger.info("Number of user comments:" + userComments);
         if (fix == Fix.FIX_OGG_VORBIS_COMMENT_NOT_COUNTING_EMPTY_COLUMNS)
         {
@@ -110,7 +110,7 @@ public class VorbisCommentReader
             System.arraycopy(rawdata, pos, b, 0, FIELD_COMMENT_LENGTH_LENGTH);
             pos += FIELD_COMMENT_LENGTH_LENGTH;
 
-            int commentLength = Utils.getNumberLittleEndian(b);
+            int commentLength = Utils.getIntLE(b);
             logger.info("Next Comment Length:" + commentLength);
             b = new byte[commentLength];
             System.arraycopy(rawdata, pos, b, 0, commentLength);

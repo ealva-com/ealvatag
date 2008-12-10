@@ -2,7 +2,11 @@ package org.jaudiotagger.tag.flac;
 
 import org.jaudiotagger.audio.flac.metadatablock.MetadataBlockDataPicture;
 import org.jaudiotagger.audio.generic.Utils;
+import org.jaudiotagger.audio.asf.tag.AsfTagField;
+import org.jaudiotagger.audio.asf.tag.AsfTagCoverField;
 import org.jaudiotagger.tag.*;
+import org.jaudiotagger.tag.mp4.field.Mp4TagCoverField;
+import org.jaudiotagger.tag.datatype.Artwork;
 import org.jaudiotagger.tag.id3.valuepair.ImageFormats;
 import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
 import org.jaudiotagger.tag.reference.PictureTypes;
@@ -25,8 +29,8 @@ import java.util.List;
  */
 public class FlacTag implements Tag
 {
-    VorbisCommentTag tag = null;
-    List<MetadataBlockDataPicture> images = new ArrayList<MetadataBlockDataPicture>();
+    private VorbisCommentTag tag = null;
+    private List<MetadataBlockDataPicture> images = new ArrayList<MetadataBlockDataPicture>();
 
     public FlacTag(VorbisCommentTag tag, List<MetadataBlockDataPicture> images)
     {
@@ -516,6 +520,22 @@ public class FlacTag implements Tag
         }
     }
 
+    public TagField getFirstField(TagFieldKey genericKey) throws KeyNotFoundException
+    {
+        if (genericKey == null)
+        {
+            throw new KeyNotFoundException();
+        }
+
+        if(genericKey == TagFieldKey.COVER_ART )
+        {
+            return getFirstField(TagFieldKey.COVER_ART.name());
+        }
+        else
+        {
+            return tag.getFirstField(genericKey);            
+        }
+    }
 
     /**
      * Delete any instance of tag fields with this key
@@ -643,5 +663,92 @@ public class FlacTag implements Tag
     {
         //Add to image list
         return new MetadataBlockDataPicture(Utils.getDefaultBytes(url, TextEncoding.CHARSET_ISO_8859_1), PictureTypes.DEFAULT_ID, MetadataBlockDataPicture.IMAGE_IS_URL, "", 0, 0, 0, 0);
+    }
+
+     /**
+     * Create artwork field
+     *
+     * @return
+     */
+    public TagField createArtworkField(Artwork artwork) throws FieldDataInvalidException
+    {
+        if(artwork.isLinked())
+        {
+             return new MetadataBlockDataPicture(
+                    Utils.getDefaultBytes(artwork.getImageUrl(), TextEncoding.CHARSET_ISO_8859_1),
+                    artwork.getPictureType(),
+                    MetadataBlockDataPicture.IMAGE_IS_URL,
+                    "",
+                    0,
+                    0,
+                    0,
+                    0);
+        }
+        else
+        {
+            BufferedImage image;
+            try
+            {
+                image = artwork.getImage();
+            }
+            catch(IOException ioe)
+            {
+                throw new FieldDataInvalidException("Unable to create bufferd image from the image");
+            }
+
+            return new MetadataBlockDataPicture(artwork.getBinaryData(),
+                    artwork.getPictureType(),
+                    artwork.getMimeType(),
+                    artwork.getDescription(),
+                    image.getWidth(),
+                    image.getHeight(),
+                    0,
+                    0);
+        }
+    }
+
+      /**
+     * Create field and then set within tag itself
+     *
+     * @param artwork
+     * @throws FieldDataInvalidException
+     */
+    public void createAndSetArtworkField(Artwork artwork) throws FieldDataInvalidException
+    {
+        this.set(createArtworkField(artwork));
+    }
+
+    public List<Artwork> getArtworkList()
+    {         
+        List<Artwork>  artworkList  = new ArrayList<Artwork>(images.size());
+
+        for(MetadataBlockDataPicture coverArt:images)
+        {
+            Artwork artwork = new Artwork();
+            artwork.setMimeType(coverArt.getMimeType());
+            artwork.setDescription(coverArt.getDescription());
+            artwork.setPictureType(coverArt.getPictureType());
+            if(coverArt.isImageUrl())
+            {
+                artwork.setLinked(coverArt.isImageUrl());
+                artwork.setImageUrl(coverArt.getImageUrl());
+            }
+            else
+            {
+                artwork.setBinaryData(coverArt.getImageData());
+            }
+            artworkList.add(artwork);
+        }
+        return artworkList;
+    }
+
+    public Artwork getFirstArtwork()
+    {
+        List<Artwork> artwork = getArtworkList();
+        if(artwork.size()>0)
+        {
+            return artwork.get(0);
+        }
+        return null;
     }
 }

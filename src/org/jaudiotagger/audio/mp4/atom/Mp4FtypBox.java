@@ -50,7 +50,7 @@ public class Mp4FtypBox extends AbstractMp4Box
         }
         dataBuffer.position(dataBuffer.position() + MAJOR_BRAND_LENGTH);
 
-        majorBrandVersion = Utils.getNumberBigEndian(dataBuffer, dataBuffer.position(), (dataBuffer.position() + MAJOR_BRAND_VERSION_LENGTH - 1));
+        majorBrandVersion = Utils.getIntBE(dataBuffer, dataBuffer.position(), (dataBuffer.position() + MAJOR_BRAND_VERSION_LENGTH - 1));
         dataBuffer.position(dataBuffer.position() + MAJOR_BRAND_VERSION_LENGTH);
 
         while ((dataBuffer.position() < dataBuffer.limit()) && (dataBuffer.limit() - dataBuffer.position() >= COMPATIBLE_BRAND_LENGTH))

@@ -35,7 +35,6 @@ import java.util.List;
  */
 public final class AsfHeader extends ChunkContainer
 {
-
     /**
      * The charset &quot;UTF-16LE&quot; is mandatory for ASF handling.
      */

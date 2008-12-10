@@ -64,7 +64,7 @@ public class Mp4DataBox extends AbstractMp4Box
         this.dataBuffer = dataBuffer.slice();
 
         //Type
-        type = Utils.getNumberBigEndian(this.dataBuffer, Mp4DataBox.TYPE_POS, Mp4DataBox.TYPE_POS + Mp4DataBox.TYPE_LENGTH - 1);
+        type = Utils.getIntBE(this.dataBuffer, Mp4DataBox.TYPE_POS, Mp4DataBox.TYPE_POS + Mp4DataBox.TYPE_LENGTH - 1);
 
         if (type == Mp4FieldType.TEXT.getFileClassId())
         {
@@ -76,7 +76,7 @@ public class Mp4DataBox extends AbstractMp4Box
 
             for (int i = 0; i < ((header.getDataLength() - PRE_DATA_LENGTH) / NUMBER_LENGTH); i++)
             {
-                short number = Utils.getShortNumberBigEndian(this.dataBuffer, PRE_DATA_LENGTH + (i * NUMBER_LENGTH), PRE_DATA_LENGTH + (i * NUMBER_LENGTH) + (NUMBER_LENGTH - 1));
+                short number = Utils.getShortBE(this.dataBuffer, PRE_DATA_LENGTH + (i * NUMBER_LENGTH), PRE_DATA_LENGTH + (i * NUMBER_LENGTH) + (NUMBER_LENGTH - 1));
                 numbers.add(number);
             }
 
@@ -97,7 +97,7 @@ public class Mp4DataBox extends AbstractMp4Box
         {
             //TODO byte data length seems to be 1 for pgap and cpil but 2 for tmpo ?
             //Create String representation for display
-            content = Utils.getNumberBigEndian(this.dataBuffer, PRE_DATA_LENGTH, header.getDataLength() - 1) + "";
+            content = Utils.getIntBE(this.dataBuffer, PRE_DATA_LENGTH, header.getDataLength() - 1) + "";
 
             //But store data for safer writng back to file
             bytedata = new byte[header.getDataLength() - PRE_DATA_LENGTH];

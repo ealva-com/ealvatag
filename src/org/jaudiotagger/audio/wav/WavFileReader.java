@@ -39,9 +39,7 @@ public class WavFileReader extends AudioFileReader
     }
 
     protected Tag getTag(RandomAccessFile raf) throws CannotReadException
-    {
-        // TODO: Check if returning null is a good idea. Returning null because I know no better.
-        //return null;
-        return new GenericTag();
+    {           
+        return new WavTag();
     }
 }

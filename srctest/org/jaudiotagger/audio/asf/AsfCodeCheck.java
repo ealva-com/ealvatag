@@ -21,7 +21,7 @@ public class AsfCodeCheck extends TestCase
     /**
      * Tests the correct implementation of {@link AsfTag}.<br>
      * For example if {@link AsfTag#createAlbumField(String)} returns a field whose {@link org.jaudiotagger.tag.TagField#getId()} 
-     * equals {@link org.jaudiotagger.audio.asf.tag.AsfFieldKey#ALBUM}s {@linkplain org.jaudiotagger.audio.asf.tag.AsfFieldKey#getPublicFieldId() publicId}.
+     * equals {@link org.jaudiotagger.audio.asf.tag.AsfFieldKey#ALBUM}s }.
      */
     public void testAsfTagImpl() throws Exception
     {

@@ -5,13 +5,19 @@ import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.AudioFileIO;
 import org.jaudiotagger.audio.asf.tag.AsfFieldKey;
 import org.jaudiotagger.audio.asf.tag.AsfTag;
+import org.jaudiotagger.audio.asf.tag.AsfTagCoverField;
 import org.jaudiotagger.audio.asf.tag.AsfTagTextField;
 import org.jaudiotagger.tag.Tag;
 import org.jaudiotagger.tag.TagField;
 import org.jaudiotagger.tag.TagFieldKey;
 import org.jaudiotagger.tag.TagTextField;
+import org.jaudiotagger.tag.reference.PictureTypes;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.RandomAccessFile;
 
 /**
  * User: paul
@@ -352,7 +358,7 @@ public class WmaSimpleTest extends AbstractTestCase
                     assertEquals("Key under test: " + key.name(), value, atf.getContent());
                     atf = (AsfTagTextField) tag.get(key).get(0);
                     assertEquals("Key under test: " + key.name(), value, atf.getContent());
-                    
+
 
                 }
             }
@@ -365,8 +371,8 @@ public class WmaSimpleTest extends AbstractTestCase
         assertNull(exceptionCaught);
     }
 
-    /** Lets now check the value explicity are what we expect
-     *
+    /**
+     * Lets now check the value explicity are what we expect
      */
     public void testTagFieldKeyWrite2()
     {
@@ -419,6 +425,424 @@ public class WmaSimpleTest extends AbstractTestCase
 
     public void testIsMultiValues()
     {
-        assertFalse(AsfFieldKey.isMultiValued(AsfFieldKey.ALBUM.getFieldName()));        
+        assertFalse(AsfFieldKey.isMultiValued(AsfFieldKey.ALBUM.getFieldName()));
     }
+
+    /**
+     * Shouldnt fail just ecause header size doesnt match file size because file plays ok in winamp
+     */
+    public void testReadFileWithHeaderSizeDoesntMatchFileSize()
+    {
+        File orig = new File("testdata", "test3.wma");
+        if (!orig.isFile())
+        {
+            System.err.println("Unable to test file - not available");
+            return;
+        }
+
+        Exception exceptionCaught = null;
+        try
+        {
+            File testFile = AbstractTestCase.copyAudioToTmp("test3.wma");
+            AudioFile f = AudioFileIO.read(testFile);
+            assertEquals("Glass",f.getTag().getFirstTitle());
+            //Now
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            exceptionCaught = e;
+        }
+        assertNull(exceptionCaught);
+    }
+
+    public void testReadFileWithGifArtwork()
+    {
+        File orig = new File("testdata", "test1.wma");
+        if (!orig.isFile())
+        {
+            System.err.println("Unable to test file - not available");
+            return;
+        }
+
+        Exception exceptionCaught = null;
+        try
+        {
+            File testFile = AbstractTestCase.copyAudioToTmp("test1.wma");
+            AudioFile f = AudioFileIO.read(testFile);
+            Tag tag = f.getTag();
+            assertEquals(1, tag.get(TagFieldKey.COVER_ART).size());
+
+            TagField tagField = tag.get(TagFieldKey.COVER_ART).get(0);
+            assertEquals("WM/Picture", tagField.getId());
+            assertEquals(14550, tagField.getRawContent().length);
+
+            //Should have been loaded as special field to make things easier
+            assertTrue(tagField instanceof AsfTagCoverField);
+            AsfTagCoverField coverartField = (AsfTagCoverField) tagField;
+            assertEquals("image/gif", coverartField.getMimeType());
+            assertEquals("coverart", coverartField.getDescription());
+            assertEquals(200, coverartField.getImage().getWidth());
+            assertEquals(200, coverartField.getImage().getHeight());
+            assertEquals(3,coverartField.getPictureType());
+            assertEquals(BufferedImage.TYPE_BYTE_INDEXED, coverartField.getImage().getType());
+
+            /***** TO SOME MANUAL CHECKING *****************/
+
+            //First byte of data is immediatley after the 2 byte Descriptor value
+            assertEquals(0x03, tagField.getRawContent()[0]);
+            //Raw Data consists of Unknown/MimeType/Name and Actual Image, null seperated  (two bytes)
+
+            //Skip first three unknown bytes plus two byte nulls
+            int count = 5;
+            String mimeType = null;
+            String name = null;
+            int endOfMimeType = 0;
+            int endOfName = 0;
+            while (count < tagField.getRawContent().length - 1)
+            {
+                if (tagField.getRawContent()[count] == 0 && tagField.getRawContent()[count + 1] == 0)
+                {
+                    if (mimeType == null)
+                    {
+                        mimeType = new String(tagField.getRawContent(), 5, (count) - 5, "UTF-16LE");
+                        endOfMimeType = count + 2;
+                    }
+                    else if (name == null)
+                    {
+                        name = new String(tagField.getRawContent(), endOfMimeType, count - endOfMimeType, "UTF-16LE");
+                        endOfName = count + 2;
+                        break;
+                    }
+                    count += 2;
+                }
+                count += 2;  //keep on two byte word boundary
+            }
+
+
+            assertEquals("image/gif", mimeType);
+            assertEquals("coverart", name);
+
+            BufferedImage bi = ImageIO.read(ImageIO
+                    .createImageInputStream(new ByteArrayInputStream(tagField.getRawContent(), endOfName, tagField.getRawContent().length - endOfName)));
+            assertNotNull(bi);
+            assertEquals(200, bi.getWidth());
+            assertEquals(200, bi.getHeight());
+            assertEquals(BufferedImage.TYPE_BYTE_INDEXED, bi.getType());
+
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            exceptionCaught = e;
+        }
+        assertNull(exceptionCaught);
+    }
+
+    /**
+     * Contains image field, but only has image type and image, it doesnt have a label
+     */
+    public void testReadFileWithGifArtworkNoDescription()
+    {
+        File orig = new File("testdata", "test4.wma");
+        if (!orig.isFile())
+        {
+            System.err.println("Unable to test file - not available");
+            return;
+        }
+
+        Exception exceptionCaught = null;
+        try
+        {
+            File testFile = AbstractTestCase.copyAudioToTmp("test4.wma");
+            AudioFile f = AudioFileIO.read(testFile);
+            Tag tag = f.getTag();
+            assertEquals(1, tag.get(TagFieldKey.COVER_ART).size());
+
+            TagField tagField = tag.get(TagFieldKey.COVER_ART).get(0);
+            assertEquals("WM/Picture", tagField.getId());
+            assertEquals(14534, tagField.getRawContent().length);
+
+            //Should have been loaded as special field to make things easier
+            assertTrue(tagField instanceof AsfTagCoverField);
+            AsfTagCoverField coverartField = (AsfTagCoverField) tagField;
+            assertEquals("image/gif", coverartField.getMimeType());
+            assertEquals("", coverartField.getDescription());
+            assertEquals(200, coverartField.getImage().getWidth());
+            assertEquals(200, coverartField.getImage().getHeight());
+            assertEquals(12,coverartField.getPictureType());
+            assertEquals(BufferedImage.TYPE_BYTE_INDEXED, coverartField.getImage().getType());
+
+            //First byte of data is immediatley after the 2 byte Descriptor value
+            assertEquals(12, tagField.getRawContent()[0]);
+            //Raw Data consists of Unknown/MimeType/Name and Actual Image, null seperated  (two bytes)
+
+            //Skip first three unknown bytes plus two byte nulls
+            int count = 5;
+            String mimeType = null;
+            String name = null;
+            int endOfMimeType = 0;
+            int endOfName = 0;
+            while (count < tagField.getRawContent().length - 1)
+            {
+                if (tagField.getRawContent()[count] == 0 && tagField.getRawContent()[count + 1] == 0)
+                {
+                    if (mimeType == null)
+                    {
+                        mimeType = new String(tagField.getRawContent(), 5, (count) - 5, "UTF-16LE");
+                        endOfMimeType = count + 2;
+                    }
+                    else if (name == null)
+                    {
+                        name = new String(tagField.getRawContent(), endOfMimeType, count - endOfMimeType, "UTF-16LE");
+                        endOfName = count + 2;
+                        break;
+                    }
+                }
+                count += 2;  //keep on two byte word boundary
+            }
+
+
+            assertEquals("image/gif", mimeType);
+            assertEquals("", name);
+
+            BufferedImage bi = ImageIO.read(ImageIO
+                    .createImageInputStream(new ByteArrayInputStream(tagField.getRawContent(), endOfName, tagField.getRawContent().length - endOfName)));
+            assertNotNull(bi);
+            assertEquals(200, bi.getWidth());
+            assertEquals(200, bi.getHeight());
+            assertEquals(BufferedImage.TYPE_BYTE_INDEXED, bi.getType());
+
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            exceptionCaught = e;
+        }
+        assertNull(exceptionCaught);
+    }
+
+    public void testReadFileWithPngArtwork()
+    {
+        File orig = new File("testdata", "test5.wma");
+        if (!orig.isFile())
+        {
+            System.err.println("Unable to test file - not available");
+            return;
+        }
+
+        Exception exceptionCaught = null;
+        try
+        {
+            File testFile = AbstractTestCase.copyAudioToTmp("test5.wma");
+            AudioFile f = AudioFileIO.read(testFile);
+            Tag tag = f.getTag();
+            assertEquals(1, tag.get(TagFieldKey.COVER_ART).size());
+
+            TagField tagField = tag.get(TagFieldKey.COVER_ART).get(0);
+            assertEquals("WM/Picture", tagField.getId());
+            assertEquals(18590, tagField.getRawContent().length);
+
+            //Should have been loaded as special field to make things easier
+            assertTrue(tagField instanceof AsfTagCoverField);
+            AsfTagCoverField coverartField = (AsfTagCoverField) tagField;
+            assertEquals("image/png", coverartField.getMimeType());
+            assertEquals(3,coverartField.getPictureType());
+            assertEquals("coveerart", coverartField.getDescription());
+            assertEquals(200, coverartField.getImage().getWidth());
+            assertEquals(200, coverartField.getImage().getHeight());
+            assertEquals(BufferedImage.TYPE_CUSTOM, coverartField.getImage().getType());
+
+            /***** TO SOME MANUAL CHECKING *****************/
+
+            //First byte of data is immediatley after the 2 byte Descriptor value
+            assertEquals(0x03, tagField.getRawContent()[0]);
+            //Raw Data consists of Unknown/MimeType/Name and Actual Image, null seperated  (two bytes)
+
+            //Skip first three unknown bytes plus two byte nulls
+            int count = 5;
+            String mimeType = null;
+            String name = null;
+            int endOfMimeType = 0;
+            int endOfName = 0;
+            while (count < tagField.getRawContent().length - 1)
+            {
+                if (tagField.getRawContent()[count] == 0 && tagField.getRawContent()[count + 1] == 0)
+                {
+                    if (mimeType == null)
+                    {
+                        mimeType = new String(tagField.getRawContent(), 5, (count) - 5, "UTF-16LE");
+                        endOfMimeType = count + 2;
+                    }
+                    else if (name == null)
+                    {
+                        name = new String(tagField.getRawContent(), endOfMimeType, count - endOfMimeType, "UTF-16LE");
+                        endOfName = count + 2;
+                        break;
+                    }
+                    count += 2;
+                }
+                count += 2;  //keep on two byte word boundary
+            }
+
+
+            assertEquals("image/png", mimeType);
+            assertEquals("coveerart", name);
+
+            BufferedImage bi = ImageIO.read(ImageIO
+                    .createImageInputStream(new ByteArrayInputStream(tagField.getRawContent(), endOfName, tagField.getRawContent().length - endOfName)));
+            assertNotNull(bi);
+            assertEquals(200, bi.getWidth());
+            assertEquals(200, bi.getHeight());
+            assertEquals(BufferedImage.TYPE_CUSTOM, bi.getType());
+
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            exceptionCaught = e;
+        }
+        assertNull(exceptionCaught);
+    }
+
+    public void testReadFileWithJpgArtwork()
+    {
+        File orig = new File("testdata", "test6.wma");
+        if (!orig.isFile())
+        {
+            System.err.println("Unable to test file - not available");
+            return;
+        }
+
+        Exception exceptionCaught = null;
+        try
+        {
+            File testFile = AbstractTestCase.copyAudioToTmp("test6.wma");
+            AudioFile f = AudioFileIO.read(testFile);
+            Tag tag = f.getTag();
+            assertEquals(1, tag.get(TagFieldKey.COVER_ART).size());
+
+            TagField tagField = tag.get(TagFieldKey.COVER_ART).get(0);
+            assertEquals("WM/Picture", tagField.getId());
+            assertEquals(5093, tagField.getRawContent().length);
+
+            //Should have been loaded as special field to make things easier
+            assertTrue(tagField instanceof AsfTagCoverField);
+            AsfTagCoverField coverartField = (AsfTagCoverField) tagField;
+            assertEquals("image/jpeg", coverartField.getMimeType());
+            assertEquals("coveerart", coverartField.getDescription());
+            assertEquals(3,coverartField.getPictureType());
+            assertEquals(200, coverartField.getImage().getWidth());
+            assertEquals(200, coverartField.getImage().getHeight());
+            assertEquals(5093,coverartField.getRawContent().length);
+            assertEquals(5046,coverartField.getRawImageData().length);
+            assertEquals(5046,coverartField.getImageDataSize());
+            assertEquals(coverartField.getRawImageData().length,coverartField.getImageDataSize());
+
+            assertEquals(BufferedImage.TYPE_3BYTE_BGR, coverartField.getImage().getType());
+
+            /***** TO SOME MANUAL CHECKING *****************/
+
+            //First byte of data is immediatley after the 2 byte Descriptor value
+            assertEquals(0x03, tagField.getRawContent()[0]);
+            //Raw Data consists of Unknown/MimeType/Name and Actual Image, null seperated  (two bytes)
+
+            //Skip first three unknown bytes plus two byte nulls
+            int count = 5;
+            String mimeType = null;
+            String name = null;
+            int endOfMimeType = 0;
+            int endOfName = 0;
+            while (count < tagField.getRawContent().length - 1)
+            {
+                if (tagField.getRawContent()[count] == 0 && tagField.getRawContent()[count + 1] == 0)
+                {
+                    if (mimeType == null)
+                    {
+                        mimeType = new String(tagField.getRawContent(), 5, (count) - 5, "UTF-16LE");
+                        endOfMimeType = count + 2;
+                    }
+                    else if (name == null)
+                    {
+                        name = new String(tagField.getRawContent(), endOfMimeType, count - endOfMimeType, "UTF-16LE");
+                        endOfName = count + 2;
+                        break;
+                    }
+                    count += 2;
+                }
+                count += 2;  //keep on two byte word boundary
+            }
+
+
+            assertEquals("image/jpeg", mimeType);
+            assertEquals("coveerart", name);
+
+            BufferedImage bi = ImageIO.read(ImageIO
+                    .createImageInputStream(new ByteArrayInputStream(tagField.getRawContent(), endOfName, tagField.getRawContent().length - endOfName)));
+            assertNotNull(bi);
+            assertEquals(200, bi.getWidth());
+            assertEquals(200, bi.getHeight());
+            assertEquals(BufferedImage.TYPE_3BYTE_BGR, bi.getType());
+
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            exceptionCaught = e;
+        }
+        assertNull(exceptionCaught);
+    }
+
+    /**
+     * Write png , old method
+     */
+    public void testWritePngArtworkToFile()
+    {
+        File orig = new File("testdata", "test7.wma");
+        if (!orig.isFile())
+        {
+            System.err.println("Unable to test file - not available");
+            return;
+        }
+
+        Exception exceptionCaught = null;
+        try
+        {
+            File testFile = AbstractTestCase.copyAudioToTmp("test7.wma");
+            AudioFile f = AudioFileIO.read(testFile);
+            Tag tag = f.getTag();
+            assertEquals(0, tag.get(TagFieldKey.COVER_ART).size());
+
+            //Now create artwork field
+            RandomAccessFile imageFile = new RandomAccessFile(new File("testdata", "coverart.png"), "r");
+            byte[] imagedata = new byte[(int) imageFile.length()];
+            imageFile.read(imagedata);
+            AsfTag asftag = (AsfTag)tag;
+            asftag.set(asftag.createArtworkField(imagedata));
+            f.commit();
+
+            f = AudioFileIO.read(testFile);
+            tag = f.getTag();
+            assertEquals(1, tag.get(TagFieldKey.COVER_ART).size());
+
+            TagField tagField = tag.get(TagFieldKey.COVER_ART).get(0);
+            AsfTagCoverField coverartField = (AsfTagCoverField) tagField;
+            assertEquals("WM/Picture", tagField.getId());
+            assertEquals((Integer)PictureTypes.DEFAULT_ID,(Integer)coverartField.getPictureType());
+            assertEquals(18572, tagField.getRawContent().length);
+            assertEquals(18545,coverartField.getRawImageData().length);
+            assertEquals(coverartField.getImageDataSize(),coverartField.getRawImageData().length);
+            assertEquals(200, coverartField.getImage().getWidth());
+            assertEquals(200, coverartField.getImage().getHeight());
+            assertEquals(BufferedImage.TYPE_CUSTOM, coverartField.getImage().getType());
+
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            exceptionCaught = e;
+        }
+        assertNull(exceptionCaught);
+    }
+
 }

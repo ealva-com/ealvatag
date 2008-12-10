@@ -73,5 +73,4 @@ public class PictureTypes extends AbstractIntStringValuePair
         createMaps();
     }
 
-
 }
