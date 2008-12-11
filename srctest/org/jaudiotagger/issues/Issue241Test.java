@@ -18,12 +18,12 @@ import org.jaudiotagger.audio.AudioFileIO;
 import java.io.File;
 
 /**
- * Support For LANGUAGE and KEY
+ * Support For LANGUAGE and INITIAL_KEY
  */
 public class Issue241Test extends AbstractTestCase
 {
     /**
-     * Test writing KEY and LANGUAGE to Mp3 ID3v23
+     * Test writing INITIAL_KEY and LANGUAGE to Mp3 ID3v23
      */
     public void testWriteFieldsToMp3ID3v24()
     {
@@ -83,7 +83,7 @@ public class Issue241Test extends AbstractTestCase
     }
 
      /**
-     * Test writing KEY and LANGUAGE to Mp3 ID3v23
+     * Test writing INITIAL_KEY and LANGUAGE to Mp3 ID3v23
      */
     public void testWriteFieldsToMp3ID3v23()
     {
@@ -115,7 +115,7 @@ public class Issue241Test extends AbstractTestCase
     }
 
      /**
-     * Test writing KEY and LANGUAGE to Mp3 ID3v23
+     * Test writing INITIAL_KEY and LANGUAGE to Mp3 ID3v23
      */
     public void testWriteFieldsToMp3ID3v22()
     {
@@ -147,7 +147,7 @@ public class Issue241Test extends AbstractTestCase
     }
 
      /**
-     * Test writing KEY and LANGUAGE to Ogg Vorbis
+     * Test writing INITIAL_KEY and LANGUAGE to Ogg Vorbis
      */
     public void testWriteFieldsToOggVorbis()
     {
@@ -178,7 +178,7 @@ public class Issue241Test extends AbstractTestCase
     }
 
     /**
-     * Test writing KEY and LANGUAGE to Flac
+     * Test writing INITIAL_KEY and LANGUAGE to Flac
      */
     public void testWriteFieldsToFlac()
     {
@@ -211,7 +211,7 @@ public class Issue241Test extends AbstractTestCase
 
 
     /**
-     * Test writing KEY and LANGUAGE to Wma
+     * Test writing INITIAL_KEY and LANGUAGE to Wma
      */
     public void testWriteFieldsToWma()
     {
@@ -242,7 +242,7 @@ public class Issue241Test extends AbstractTestCase
     }
 
      /**
-     * Test writing KEY and LANGUAGE to Mp4
+     * Test writing INITIAL_KEY and LANGUAGE to Mp4
      */
     public void testWriteFieldsToMp4()
     {

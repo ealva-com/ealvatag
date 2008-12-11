@@ -37,7 +37,7 @@ public class M4aWriteDataBeforeMoovTagTest extends TestCase
             System.out.println(tag);
 
             //Change values and Save changes and reread from disk
-            tag.setArtist("ARTIST");
+            tag.setArtist("AUTHOR");
             f.commit();
             f = AudioFileIO.read(testFile);
             tag = f.getTag();
@@ -48,7 +48,7 @@ public class M4aWriteDataBeforeMoovTagTest extends TestCase
             atomTree.printAtomTree();
 
             //Ease of use methods for common fields
-            assertEquals("ARTIST", tag.getFirstArtist());
+            assertEquals("AUTHOR", tag.getFirstArtist());
 
         }
         catch (Exception e)

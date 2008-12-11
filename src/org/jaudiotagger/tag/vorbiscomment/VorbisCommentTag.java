@@ -282,11 +282,6 @@ public class VorbisCommentTag extends AbstractTag
             throw new KeyNotFoundException();
         }
 
-        if(vorbisCommentFieldKey==VorbisCommentFieldKey.COVERART)
-        {
-            throw new FieldDataInvalidException("Cover Art cannot be created using this method");
-        }
-
         return new VorbisCommentTagField(vorbisCommentFieldKey.name(), value);
     }
 

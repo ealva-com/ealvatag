@@ -83,10 +83,7 @@ public class WmaSimpleTest extends AbstractTestCase
             assertEquals("genre", tag.getFirstGenre());
 
             assertEquals("artist", tag.getFirst(TagFieldKey.ARTIST));
-
-            //Should fail because getFirst using String if for the real id not the generic key  
-            assertFalse("artist".equals(tag.getFirst(TagFieldKey.ARTIST.name())));
-            assertEquals("artist", tag.getFirst(AsfFieldKey.ARTIST.getFieldName()));
+            assertEquals("artist", tag.getFirst(AsfFieldKey.AUTHOR.getFieldName()));
 
             assertEquals("album", tag.getFirst(TagFieldKey.ALBUM));
             assertEquals("album", tag.getFirst(AsfFieldKey.ALBUM.getFieldName()));
@@ -177,7 +174,7 @@ public class WmaSimpleTest extends AbstractTestCase
 
             assertEquals("Sonic Youth", tag.getFirst(TagFieldKey.ARTIST));
 
-            assertEquals("Sonic Youth", tag.getFirst(AsfFieldKey.ARTIST.getFieldName()));
+            assertEquals("Sonic Youth", tag.getFirst(AsfFieldKey.AUTHOR.getFieldName()));
 
             assertEquals("Sister", tag.getFirst(TagFieldKey.ALBUM));
             assertEquals("Sister", tag.getFirst(AsfFieldKey.ALBUM.getFieldName()));
@@ -325,23 +322,29 @@ public class WmaSimpleTest extends AbstractTestCase
     }
 
     /**
-     * Just create fields for all the tag fied keys defined, se if we hit any problems
+     * Just create fields for all the tag field keys defined, se if we hit any problems
      */
-    //TODO this should really fail because doesnt actually know how to create all these fields e.g COVER_ART, DISCOGS_RELEASE_URL
     public void testTagFieldKeyWrite()
     {
         Exception exceptionCaught = null;
         try
         {
             File testFile = AbstractTestCase.copyAudioToTmp("test1.wma", new File("testwrite1.wma"));
+
+             AudioFile f = AudioFileIO.read(testFile);
+             AudioFileIO.delete(f);
+
             // Tests multiple iterations on same file
             for (int i = 0; i < 2; i++)
-            {
-                AudioFile f = AudioFileIO.read(testFile);
+            {                    
+                f = AudioFileIO.read(testFile);
                 Tag tag = f.getTag();
                 for (TagFieldKey key : TagFieldKey.values())
                 {
-                    tag.add(tag.createTagField(key, key.name() + "_value_" + i));
+                    if(!(key==TagFieldKey.COVER_ART))
+                    {
+                        tag.set(tag.createTagField(key, key.name() + "_value_" + i));
+                    }
                 }
                 f.commit();
                 f = AudioFileIO.read(testFile);
@@ -349,16 +352,19 @@ public class WmaSimpleTest extends AbstractTestCase
                 for (TagFieldKey key : TagFieldKey.values())
                 {
                     /*
-                     * Test value retrieval, using multiple access methods.
-                     */
-                    String value = key.name() + "_value_" + i;
-                    assertEquals("Key under test: " + key.name(), value, tag.getFirst(key));
-                    assertEquals("Key under test: " + key.name(), value, tag.getFirst(key));
-                    AsfTagTextField atf = (AsfTagTextField) tag.get(key).get(0);
-                    assertEquals("Key under test: " + key.name(), value, atf.getContent());
-                    atf = (AsfTagTextField) tag.get(key).get(0);
-                    assertEquals("Key under test: " + key.name(), value, atf.getContent());
-
+                      * Test value retrieval, using multiple access methods.
+                      */
+                    if(!(key==TagFieldKey.COVER_ART))
+                    {
+                        String value = key.name() + "_value_" + i;
+                        System.out.println("Value is:"+value);
+                                                
+                        assertEquals(value, tag.getFirst(key));
+                        AsfTagTextField atf = (AsfTagTextField) tag.get(key).get(0);
+                        assertEquals(value, atf.getContent());
+                        atf = (AsfTagTextField) tag.get(key).get(0);
+                        assertEquals(value, atf.getContent());
+                    }
 
                 }
             }
@@ -380,13 +386,18 @@ public class WmaSimpleTest extends AbstractTestCase
         try
         {
             File testFile = AbstractTestCase.copyAudioToTmp("test1.wma", new File("testwrite1.wma"));
+            AudioFile f = AudioFileIO.read(testFile);
+            AudioFileIO.delete(f);
 
             //test fields are written with correct ids
-            AudioFile f = AudioFileIO.read(testFile);
+            f = AudioFileIO.read(testFile);
             Tag tag = f.getTag();
             for (TagFieldKey key : TagFieldKey.values())
             {
-                tag.add(tag.createTagField(key, key.name() + "_value"));
+                if(!(key==TagFieldKey.COVER_ART))
+                {
+                    tag.add(tag.createTagField(key, key.name() + "_value"));
+                }
             }
             f.commit();
 
@@ -410,7 +421,7 @@ public class WmaSimpleTest extends AbstractTestCase
             assertEquals("UTF-16LE", ((TagTextField) tf).getEncoding());
 
             tf = tag.getFirstField(AsfFieldKey.TITLE.getFieldName());
-            assertEquals("Title", tf.getId());
+            assertEquals("TITLE", tf.getId());
             assertEquals("TITLE_value", ((TagTextField) tf).getContent());
             assertEquals("UTF-16LE", ((TagTextField) tf).getEncoding());
 

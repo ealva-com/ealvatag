@@ -1,11 +1,8 @@
 package org.jaudiotagger.audio.asf;
 
-import org.jaudiotagger.audio.asf.util.Utils;
-
 import junit.framework.TestCase;
 
 import org.jaudiotagger.audio.asf.data.AsfHeader;
-import org.jaudiotagger.audio.asf.data.ContentDescriptor;
 import org.jaudiotagger.audio.asf.tag.AsfFieldKey;
 import org.jaudiotagger.audio.asf.tag.AsfTag;
 
@@ -15,7 +12,7 @@ import org.jaudiotagger.audio.asf.tag.AsfTag;
  * 
  * @author Christian Laireiter
  */
-public class AsfCodeCheck extends TestCase
+public class AsfCodeCheckTest extends TestCase
 {
     
     /**
@@ -27,8 +24,8 @@ public class AsfCodeCheck extends TestCase
     {
         final AsfTag asfTag = new AsfTag();
         assertEquals(asfTag.createAlbumField(new String()).getId(), AsfFieldKey.ALBUM.getFieldName());
-        assertEquals(asfTag.createArtistField(new String()).getId(), AsfFieldKey.ARTIST.getFieldName());
-        assertEquals(asfTag.createCommentField(new String()).getId(), AsfFieldKey.COMMENT.getFieldName());
+        assertEquals(asfTag.createArtistField(new String()).getId(), AsfFieldKey.AUTHOR.getFieldName());
+        assertEquals(asfTag.createCommentField(new String()).getId(), AsfFieldKey.DESCRIPTION.getFieldName());
         assertEquals(asfTag.createGenreField(new String()).getId(), AsfFieldKey.GENRE.getFieldName());
         assertEquals(asfTag.createTitleField(new String()).getId(), AsfFieldKey.TITLE.getFieldName());
         assertEquals(asfTag.createTrackField(new String()).getId(), AsfFieldKey.TRACK.getFieldName());

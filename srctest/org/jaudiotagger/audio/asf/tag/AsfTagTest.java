@@ -63,8 +63,8 @@ public class AsfTagTest extends TestCase
     {
         final AsfTag asfTag = new AsfTag();
         assertEquals(asfTag.getAlbumId(), AsfFieldKey.ALBUM.getFieldName());
-        assertEquals(asfTag.getArtistId(), AsfFieldKey.ARTIST.getFieldName());
-        assertEquals(asfTag.getCommentId(), AsfFieldKey.COMMENT.getFieldName());
+        assertEquals(asfTag.getArtistId(), AsfFieldKey.AUTHOR.getFieldName());
+        assertEquals(asfTag.getCommentId(), AsfFieldKey.DESCRIPTION.getFieldName());
         assertEquals(asfTag.getGenreId(), AsfFieldKey.GENRE.getFieldName());
         assertEquals(asfTag.getTitleId(), AsfFieldKey.TITLE.getFieldName());
         assertEquals(asfTag.getTrackId(), AsfFieldKey.TRACK.getFieldName());

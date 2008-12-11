@@ -60,7 +60,7 @@ public class VorbisWriteTagTest extends AbstractTestCase
             assertEquals("jaudiotagger", tag.getVendor());
 
             //These have methods coz common over all formats
-            tag.setArtist("ARTIST");
+            tag.setArtist("AUTHOR");
             tag.setAlbum("ALBUM");
             tag.setTitle("title");
             tag.setComment("comments");
@@ -110,14 +110,14 @@ public class VorbisWriteTagTest extends AbstractTestCase
             f = AudioFileIO.read(testFile);
             tag = (VorbisCommentTag) f.getTag();
             assertTrue(tag instanceof VorbisCommentTag);
-            assertEquals("ARTIST", tag.getFirstArtist());
+            assertEquals("AUTHOR", tag.getFirstArtist());
             assertEquals("ALBUM", tag.getFirstAlbum());
             assertEquals("title", tag.getFirstTitle());
             assertEquals("comments", tag.getFirstComment());
             assertEquals("1971", tag.getFirstYear());
             assertEquals("2", tag.getFirstTrack());
             assertEquals("Genre", tag.getFirstGenre());
-            assertEquals("ARTIST", tag.getFirst(TagFieldKey.ARTIST));
+            assertEquals("AUTHOR", tag.getFirst(TagFieldKey.ARTIST));
             assertEquals("ALBUM", tag.getFirst(TagFieldKey.ALBUM));
             assertEquals("title", tag.getFirst(TagFieldKey.TITLE));
             assertEquals("comments", tag.getFirst(TagFieldKey.COMMENT));
@@ -143,7 +143,7 @@ public class VorbisWriteTagTest extends AbstractTestCase
             //Cast to format specific tag
             VorbisCommentTag vorbisTag = (VorbisCommentTag) tag;
             //Lookup by vorbis comment key
-            assertEquals("ARTIST", vorbisTag.getFirst(VorbisCommentFieldKey.ARTIST));
+            assertEquals("AUTHOR", vorbisTag.getFirst(VorbisCommentFieldKey.ARTIST));
             assertEquals("ALBUM", vorbisTag.getFirst(VorbisCommentFieldKey.ALBUM));
             assertEquals("title", vorbisTag.getFirst(VorbisCommentFieldKey.TITLE));
             assertEquals("comments", vorbisTag.getFirst(VorbisCommentFieldKey.COMMENT));
@@ -176,7 +176,7 @@ public class VorbisWriteTagTest extends AbstractTestCase
             assertEquals(1, list.size());
             for (TagField field : list)
             {
-                assertEquals("ARTIST", field.toString());
+                assertEquals("AUTHOR", field.toString());
             }
 
             //Vorbis keys that have no mapping to generic key
@@ -357,7 +357,7 @@ public class VorbisWriteTagTest extends AbstractTestCase
             VorbisCommentTag tag = (VorbisCommentTag) f.getTag();
 
             //These have methods coz common over all formats
-            tag.setArtist("ARTIST");
+            tag.setArtist("AUTHOR");
 
             //Save
             f.commit();
@@ -367,7 +367,7 @@ public class VorbisWriteTagTest extends AbstractTestCase
             tag = (VorbisCommentTag) f.getTag();
 
             //Check changes
-            assertEquals("ARTIST", tag.getFirst(TagFieldKey.ARTIST));
+            assertEquals("AUTHOR", tag.getFirst(TagFieldKey.ARTIST));
 
             //Check 2nd page has same number of packets, this is only the case for this specific test, so check
             //in test not code itself.

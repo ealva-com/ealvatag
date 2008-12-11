@@ -2,7 +2,6 @@ package org.jaudiotagger.audio.asf.tag;
 
 import org.jaudiotagger.audio.asf.data.AsfHeader;
 import org.jaudiotagger.audio.asf.data.ContentDescriptor;
-import org.jaudiotagger.audio.asf.util.Utils;
 import org.jaudiotagger.audio.generic.AbstractTag;
 import org.jaudiotagger.logging.ErrorMessage;
 import org.jaudiotagger.tag.*;
@@ -35,13 +34,13 @@ public final class AsfTag extends AbstractTag
     //Mapping from generic key to mp4 key
     static
     {
-        tagFieldToAsfField.put(TagFieldKey.ARTIST, AsfFieldKey.ARTIST);
+        tagFieldToAsfField.put(TagFieldKey.ARTIST, AsfFieldKey.AUTHOR);
         tagFieldToAsfField.put(TagFieldKey.ALBUM, AsfFieldKey.ALBUM);
         tagFieldToAsfField.put(TagFieldKey.TITLE, AsfFieldKey.TITLE);
         tagFieldToAsfField.put(TagFieldKey.TRACK, AsfFieldKey.TRACK);
         tagFieldToAsfField.put(TagFieldKey.YEAR, AsfFieldKey.YEAR);
         tagFieldToAsfField.put(TagFieldKey.GENRE, AsfFieldKey.GENRE);
-        tagFieldToAsfField.put(TagFieldKey.COMMENT, AsfFieldKey.COMMENT);
+        tagFieldToAsfField.put(TagFieldKey.COMMENT, AsfFieldKey.DESCRIPTION);
         tagFieldToAsfField.put(TagFieldKey.ALBUM_ARTIST, AsfFieldKey.ALBUM_ARTIST);
         tagFieldToAsfField.put(TagFieldKey.COMPOSER, AsfFieldKey.COMPOSER);
         tagFieldToAsfField.put(TagFieldKey.GROUPING, AsfFieldKey.GROUPING);
@@ -82,23 +81,23 @@ public final class AsfTag extends AbstractTag
         tagFieldToAsfField.put(TagFieldKey.URL_DISCOGS_ARTIST_SITE, AsfFieldKey.URL_DISCOGS_ARTIST_SITE);
         tagFieldToAsfField.put(TagFieldKey.URL_WIKIPEDIA_ARTIST_SITE, AsfFieldKey.URL_WIKIPEDIA_ARTIST_SITE);
         tagFieldToAsfField.put(TagFieldKey.LANGUAGE, AsfFieldKey.LANGUAGE);
-        tagFieldToAsfField.put(TagFieldKey.KEY, AsfFieldKey.KEY);
+        tagFieldToAsfField.put(TagFieldKey.KEY, AsfFieldKey.INITIAL_KEY);
     }
 
     static
     {
         COMMON_FIELDS = new HashSet<AsfFieldKey>();
         COMMON_FIELDS.add(AsfFieldKey.ALBUM);
-        COMMON_FIELDS.add(AsfFieldKey.ARTIST);
-        COMMON_FIELDS.add(AsfFieldKey.COMMENT);
+        COMMON_FIELDS.add(AsfFieldKey.AUTHOR);
+        COMMON_FIELDS.add(AsfFieldKey.DESCRIPTION);
         COMMON_FIELDS.add(AsfFieldKey.GENRE);
         COMMON_FIELDS.add(AsfFieldKey.TITLE);
         COMMON_FIELDS.add(AsfFieldKey.TRACK);
         COMMON_FIELDS.add(AsfFieldKey.YEAR);
         DESCRIPTION_FIELDS = new HashSet<AsfFieldKey>();
-        DESCRIPTION_FIELDS.add(AsfFieldKey.ARTIST);
+        DESCRIPTION_FIELDS.add(AsfFieldKey.AUTHOR);
         DESCRIPTION_FIELDS.add(AsfFieldKey.COPYRIGHT);
-        DESCRIPTION_FIELDS.add(AsfFieldKey.COMMENT);
+        DESCRIPTION_FIELDS.add(AsfFieldKey.DESCRIPTION);
         DESCRIPTION_FIELDS.add(AsfFieldKey.RATING);
         DESCRIPTION_FIELDS.add(AsfFieldKey.TITLE);
     }
@@ -348,6 +347,7 @@ public final class AsfTag extends AbstractTag
                 throw new UnsupportedOperationException("Cover Art cannot be created using this method");
 
             default:
+                System.out.println("Creating with value:"+value);
                 return new AsfTagTextField(asfFieldKey.getFieldName(), value);
         }
     }
@@ -428,13 +428,13 @@ public final class AsfTag extends AbstractTag
      * {@inheritDoc}
      */
     @Override
-    public List<TagField> get(TagFieldKey id) throws KeyNotFoundException
+    public List<TagField> get(TagFieldKey tagFieldKey) throws KeyNotFoundException
     {
-        if (id == null)
+        if (tagFieldKey == null)
         {
             throw new KeyNotFoundException();
         }
-        return super.get(tagFieldToAsfField.get(id).getFieldName());
+        return super.get(tagFieldToAsfField.get(tagFieldKey).getFieldName());
     }
 
     /**
@@ -452,7 +452,7 @@ public final class AsfTag extends AbstractTag
     @Override
     protected String getArtistId()
     {
-        return AsfFieldKey.ARTIST.getFieldName();
+        return AsfFieldKey.AUTHOR.getFieldName();
     }
 
     /**
@@ -496,7 +496,7 @@ public final class AsfTag extends AbstractTag
     @Override
     protected String getCommentId()
     {
-        return AsfFieldKey.COMMENT.getFieldName();
+        return AsfFieldKey.DESCRIPTION.getFieldName();
     }
 
     /**

@@ -37,7 +37,7 @@ public class M4aWriteTagTest extends TestCase
             Tag tag = f.getTag();
 
             //Change values to different value (but same no of characters, this is the easiest mod to make
-            tag.setArtist("ARTIST");
+            tag.setArtist("AUTHOR");
             tag.setAlbum("ALBUM");
             tag.setTrack("2/12");
             //tag.set(tag.createTagField(TagFieldKey.DISC_NO,"4/15"));
@@ -57,14 +57,14 @@ public class M4aWriteTagTest extends TestCase
             assertEquals(44100, f.getAudioHeader().getSampleRateAsNumber());
 
             //Ease of use methods for common fields
-            assertEquals("ARTIST", tag.getFirstArtist());
+            assertEquals("AUTHOR", tag.getFirstArtist());
             assertEquals("ALBUM", tag.getFirstAlbum());
             assertEquals("title", tag.getFirstTitle());
             assertEquals("comments", tag.getFirstComment());
             assertEquals("1971", tag.getFirstYear());
             assertEquals("2/12", tag.getFirstTrack());
             assertEquals("Genre", tag.getFirstGenre());
-            assertEquals("ARTIST", tag.getFirst(TagFieldKey.ARTIST));
+            assertEquals("AUTHOR", tag.getFirst(TagFieldKey.ARTIST));
             assertEquals("ALBUM", tag.getFirst(TagFieldKey.ALBUM));
             assertEquals("title", tag.getFirst(TagFieldKey.TITLE));
             assertEquals("comments", tag.getFirst(TagFieldKey.COMMENT));
@@ -91,7 +91,7 @@ public class M4aWriteTagTest extends TestCase
             //Cast to format specific tag
             Mp4Tag mp4tag = (Mp4Tag) tag;
             //Lookup by mp4 key
-            assertEquals("ARTIST", mp4tag.getFirst(Mp4FieldKey.ARTIST));
+            assertEquals("AUTHOR", mp4tag.getFirst(Mp4FieldKey.ARTIST));
             assertEquals("ALBUM", mp4tag.getFirst(Mp4FieldKey.ALBUM));
             assertEquals("title", mp4tag.getFirst(Mp4FieldKey.TITLE));
             assertEquals("comments", mp4tag.getFirst(Mp4FieldKey.COMMENT));
@@ -819,7 +819,7 @@ public class M4aWriteTagTest extends TestCase
             Tag tag = f.getTag();
 
             //Change values to different value (but same no of characters, this is the easiest mod to make
-            tag.setArtist("ARTIST");
+            tag.setArtist("AUTHOR");
             tag.setAlbum("ALBUM");
             tag.setTrack("2/12");
             //tag.set(tag.createTagField(TagFieldKey.DISC_NO,"4/15"));
@@ -839,14 +839,14 @@ public class M4aWriteTagTest extends TestCase
             assertEquals(44100, f.getAudioHeader().getSampleRateAsNumber());
 
             //Ease of use methods for common fields
-            assertEquals("ARTIST", tag.getFirstArtist());
+            assertEquals("AUTHOR", tag.getFirstArtist());
             assertEquals("ALBUM", tag.getFirstAlbum());
             assertEquals("title", tag.getFirstTitle());
             assertEquals("comments", tag.getFirstComment());
             assertEquals("1971", tag.getFirstYear());
             assertEquals("2/12", tag.getFirstTrack());
             assertEquals("Genre", tag.getFirstGenre());
-            assertEquals("ARTIST", tag.getFirst(TagFieldKey.ARTIST));
+            assertEquals("AUTHOR", tag.getFirst(TagFieldKey.ARTIST));
             assertEquals("ALBUM", tag.getFirst(TagFieldKey.ALBUM));
             assertEquals("title", tag.getFirst(TagFieldKey.TITLE));
             assertEquals("comments", tag.getFirst(TagFieldKey.COMMENT));
@@ -873,7 +873,7 @@ public class M4aWriteTagTest extends TestCase
             //Cast to format specific tag
             Mp4Tag mp4tag = (Mp4Tag) tag;
             //Lookup by mp4 key
-            assertEquals("ARTIST", mp4tag.getFirst(Mp4FieldKey.ARTIST));
+            assertEquals("AUTHOR", mp4tag.getFirst(Mp4FieldKey.ARTIST));
             assertEquals("ALBUM", mp4tag.getFirst(Mp4FieldKey.ALBUM));
             assertEquals("title", mp4tag.getFirst(Mp4FieldKey.TITLE));
             assertEquals("comments", mp4tag.getFirst(Mp4FieldKey.COMMENT));

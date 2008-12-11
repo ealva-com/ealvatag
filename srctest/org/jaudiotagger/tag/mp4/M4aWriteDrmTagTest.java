@@ -4,7 +4,6 @@ import junit.framework.TestCase;
 import org.jaudiotagger.AbstractTestCase;
 import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.AudioFileIO;
-import org.jaudiotagger.audio.exceptions.CannotWriteException;
 import org.jaudiotagger.audio.mp4.Mp4AudioHeader;
 import org.jaudiotagger.audio.mp4.atom.Mp4EsdsBox;
 import org.jaudiotagger.audio.mp4.atom.Mp4StcoBox;
@@ -58,7 +57,7 @@ public class M4aWriteDrmTagTest extends TestCase
 
             AudioFile f = AudioFileIO.read(testFile);
             Tag tag = f.getTag();
-            tag.setArtist("ARTIST");
+            tag.setArtist("AUTHOR");
             tag.setAlbum("ALBUM");
             f.commit();
             f = AudioFileIO.read(testFile);
@@ -80,7 +79,7 @@ public class M4aWriteDrmTagTest extends TestCase
             assertEquals(Mp4EsdsBox.AudioProfile.LOW_COMPLEXITY, audioheader.getProfile());
 
             //Ease of use methods for common fields
-            assertEquals("ARTIST", tag.getFirstArtist());
+            assertEquals("AUTHOR", tag.getFirstArtist());
             assertEquals("ALBUM", tag.getFirstAlbum());
             assertEquals("Simpering Blonde Bombshell", tag.getFirstTitle());
             assertEquals("1990-01-01T08:00:00Z", tag.getFirstYear());
@@ -91,7 +90,7 @@ public class M4aWriteDrmTagTest extends TestCase
             Mp4Tag mp4tag = (Mp4Tag) tag;
 
             //Lookup by mp4 key
-            assertEquals("ARTIST", mp4tag.getFirst(Mp4FieldKey.ARTIST));
+            assertEquals("AUTHOR", mp4tag.getFirst(Mp4FieldKey.ARTIST));
             assertEquals("ALBUM", mp4tag.getFirst(Mp4FieldKey.ALBUM));
             assertEquals("Simpering Blonde Bombshell", mp4tag.getFirst(Mp4FieldKey.TITLE));
             List coverart = mp4tag.get(Mp4FieldKey.ARTWORK);

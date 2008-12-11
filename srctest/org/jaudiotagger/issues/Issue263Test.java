@@ -6,6 +6,7 @@ import org.jaudiotagger.audio.AudioFileIO;
 import org.jaudiotagger.audio.asf.tag.AsfTagCoverField;
 import org.jaudiotagger.tag.Tag;
 import org.jaudiotagger.tag.TagFieldKey;
+import org.jaudiotagger.tag.KeyNotFoundException;
 import org.jaudiotagger.tag.datatype.Artwork;
 import org.jaudiotagger.tag.id3.ID3v22Tag;
 import org.jaudiotagger.tag.id3.ID3v23Tag;
@@ -117,7 +118,6 @@ public class Issue263Test extends AbstractTestCase
 
             //Read File okay
             AudioFile af = AudioFileIO.read(testFile);
-            af.setTag(new ID3v23Tag());
             Tag tag = af.getTag();
             tag.createTagField(TagFieldKey.COVER_ART, "test");
         }
@@ -127,7 +127,8 @@ public class Issue263Test extends AbstractTestCase
             exceptionCaught = e;
         }
         assertNotNull(exceptionCaught);
-        assertTrue(exceptionCaught instanceof UnsupportedOperationException);
+        //Key not found because vorbis comment reuires two fields we dont map to just single generic field
+        assertTrue(exceptionCaught instanceof KeyNotFoundException);
     }
 
     /**
@@ -143,7 +144,6 @@ public class Issue263Test extends AbstractTestCase
 
             //Read File okay
             AudioFile af = AudioFileIO.read(testFile);
-            af.setTag(new ID3v23Tag());
             Tag tag = af.getTag();
             tag.createTagField(TagFieldKey.COVER_ART, "test");
         }
@@ -170,7 +170,6 @@ public class Issue263Test extends AbstractTestCase
 
             //Read File okay
             AudioFile af = AudioFileIO.read(testFile);
-            af.setTag(new ID3v23Tag());
             Tag tag = af.getTag();
             tag.createTagField(TagFieldKey.COVER_ART, "test");
         }
@@ -196,7 +195,6 @@ public class Issue263Test extends AbstractTestCase
 
             //Read File okay
             AudioFile af = AudioFileIO.read(testFile);
-            af.setTag(new ID3v23Tag());
             Tag tag = af.getTag();
             tag.createTagField(TagFieldKey.COVER_ART, "test");
         }
@@ -223,7 +221,6 @@ public class Issue263Test extends AbstractTestCase
 
             //Read File okay
             AudioFile af = AudioFileIO.read(testFile);
-            af.setTag(new ID3v23Tag());
             Tag tag = af.getTag();
             tag.createTagField(TagFieldKey.COVER_ART, "test");
         }
@@ -249,7 +246,6 @@ public class Issue263Test extends AbstractTestCase
 
             //Read File okay
             AudioFile af = AudioFileIO.read(testFile);
-            af.setTag(new ID3v23Tag());
             Tag tag = af.getTag();
             tag.createTagField(TagFieldKey.COVER_ART, "test");
         }
