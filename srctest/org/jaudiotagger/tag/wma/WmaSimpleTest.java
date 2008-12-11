@@ -3,6 +3,7 @@ package org.jaudiotagger.tag.wma;
 import org.jaudiotagger.AbstractTestCase;
 import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.AudioFileIO;
+import org.jaudiotagger.audio.asf.data.ContentDescriptor;
 import org.jaudiotagger.audio.asf.tag.AsfFieldKey;
 import org.jaudiotagger.audio.asf.tag.AsfTag;
 import org.jaudiotagger.audio.asf.tag.AsfTagCoverField;
@@ -11,6 +12,7 @@ import org.jaudiotagger.tag.Tag;
 import org.jaudiotagger.tag.TagField;
 import org.jaudiotagger.tag.TagFieldKey;
 import org.jaudiotagger.tag.TagTextField;
+import org.jaudiotagger.tag.datatype.Artwork;
 import org.jaudiotagger.tag.reference.PictureTypes;
 
 import javax.imageio.ImageIO;
@@ -331,17 +333,17 @@ public class WmaSimpleTest extends AbstractTestCase
         {
             File testFile = AbstractTestCase.copyAudioToTmp("test1.wma", new File("testwrite1.wma"));
 
-             AudioFile f = AudioFileIO.read(testFile);
-             AudioFileIO.delete(f);
+            AudioFile f = AudioFileIO.read(testFile);
+            AudioFileIO.delete(f);
 
             // Tests multiple iterations on same file
             for (int i = 0; i < 2; i++)
-            {                    
+            {
                 f = AudioFileIO.read(testFile);
                 Tag tag = f.getTag();
                 for (TagFieldKey key : TagFieldKey.values())
                 {
-                    if(!(key==TagFieldKey.COVER_ART))
+                    if (!(key == TagFieldKey.COVER_ART))
                     {
                         tag.set(tag.createTagField(key, key.name() + "_value_" + i));
                     }
@@ -354,11 +356,11 @@ public class WmaSimpleTest extends AbstractTestCase
                     /*
                       * Test value retrieval, using multiple access methods.
                       */
-                    if(!(key==TagFieldKey.COVER_ART))
+                    if (!(key == TagFieldKey.COVER_ART))
                     {
                         String value = key.name() + "_value_" + i;
-                        System.out.println("Value is:"+value);
-                                                
+                        System.out.println("Value is:" + value);
+
                         assertEquals(value, tag.getFirst(key));
                         AsfTagTextField atf = (AsfTagTextField) tag.get(key).get(0);
                         assertEquals(value, atf.getContent());
@@ -394,7 +396,7 @@ public class WmaSimpleTest extends AbstractTestCase
             Tag tag = f.getTag();
             for (TagFieldKey key : TagFieldKey.values())
             {
-                if(!(key==TagFieldKey.COVER_ART))
+                if (!(key == TagFieldKey.COVER_ART))
                 {
                     tag.add(tag.createTagField(key, key.name() + "_value"));
                 }
@@ -456,7 +458,7 @@ public class WmaSimpleTest extends AbstractTestCase
         {
             File testFile = AbstractTestCase.copyAudioToTmp("test3.wma");
             AudioFile f = AudioFileIO.read(testFile);
-            assertEquals("Glass",f.getTag().getFirstTitle());
+            assertEquals("Glass", f.getTag().getFirstTitle());
             //Now
         }
         catch (Exception e)
@@ -495,7 +497,7 @@ public class WmaSimpleTest extends AbstractTestCase
             assertEquals("coverart", coverartField.getDescription());
             assertEquals(200, coverartField.getImage().getWidth());
             assertEquals(200, coverartField.getImage().getHeight());
-            assertEquals(3,coverartField.getPictureType());
+            assertEquals(3, coverartField.getPictureType());
             assertEquals(BufferedImage.TYPE_BYTE_INDEXED, coverartField.getImage().getType());
 
             /***** TO SOME MANUAL CHECKING *****************/
@@ -581,7 +583,7 @@ public class WmaSimpleTest extends AbstractTestCase
             assertEquals("", coverartField.getDescription());
             assertEquals(200, coverartField.getImage().getWidth());
             assertEquals(200, coverartField.getImage().getHeight());
-            assertEquals(12,coverartField.getPictureType());
+            assertEquals(12, coverartField.getPictureType());
             assertEquals(BufferedImage.TYPE_BYTE_INDEXED, coverartField.getImage().getType());
 
             //First byte of data is immediatley after the 2 byte Descriptor value
@@ -658,7 +660,7 @@ public class WmaSimpleTest extends AbstractTestCase
             assertTrue(tagField instanceof AsfTagCoverField);
             AsfTagCoverField coverartField = (AsfTagCoverField) tagField;
             assertEquals("image/png", coverartField.getMimeType());
-            assertEquals(3,coverartField.getPictureType());
+            assertEquals(3, coverartField.getPictureType());
             assertEquals("coveerart", coverartField.getDescription());
             assertEquals(200, coverartField.getImage().getWidth());
             assertEquals(200, coverartField.getImage().getHeight());
@@ -742,13 +744,13 @@ public class WmaSimpleTest extends AbstractTestCase
             AsfTagCoverField coverartField = (AsfTagCoverField) tagField;
             assertEquals("image/jpeg", coverartField.getMimeType());
             assertEquals("coveerart", coverartField.getDescription());
-            assertEquals(3,coverartField.getPictureType());
+            assertEquals(3, coverartField.getPictureType());
             assertEquals(200, coverartField.getImage().getWidth());
             assertEquals(200, coverartField.getImage().getHeight());
-            assertEquals(5093,coverartField.getRawContent().length);
-            assertEquals(5046,coverartField.getRawImageData().length);
-            assertEquals(5046,coverartField.getImageDataSize());
-            assertEquals(coverartField.getRawImageData().length,coverartField.getImageDataSize());
+            assertEquals(5093, coverartField.getRawContent().length);
+            assertEquals(5046, coverartField.getRawImageData().length);
+            assertEquals(5046, coverartField.getImageDataSize());
+            assertEquals(coverartField.getRawImageData().length, coverartField.getImageDataSize());
 
             assertEquals(BufferedImage.TYPE_3BYTE_BGR, coverartField.getImage().getType());
 
@@ -828,7 +830,7 @@ public class WmaSimpleTest extends AbstractTestCase
             RandomAccessFile imageFile = new RandomAccessFile(new File("testdata", "coverart.png"), "r");
             byte[] imagedata = new byte[(int) imageFile.length()];
             imageFile.read(imagedata);
-            AsfTag asftag = (AsfTag)tag;
+            AsfTag asftag = (AsfTag) tag;
             asftag.set(asftag.createArtworkField(imagedata));
             f.commit();
 
@@ -839,10 +841,10 @@ public class WmaSimpleTest extends AbstractTestCase
             TagField tagField = tag.get(TagFieldKey.COVER_ART).get(0);
             AsfTagCoverField coverartField = (AsfTagCoverField) tagField;
             assertEquals("WM/Picture", tagField.getId());
-            assertEquals((Integer)PictureTypes.DEFAULT_ID,(Integer)coverartField.getPictureType());
+            assertEquals((Integer) PictureTypes.DEFAULT_ID, (Integer) coverartField.getPictureType());
             assertEquals(18572, tagField.getRawContent().length);
-            assertEquals(18545,coverartField.getRawImageData().length);
-            assertEquals(coverartField.getImageDataSize(),coverartField.getRawImageData().length);
+            assertEquals(18545, coverartField.getRawImageData().length);
+            assertEquals(coverartField.getImageDataSize(), coverartField.getRawImageData().length);
             assertEquals(200, coverartField.getImage().getWidth());
             assertEquals(200, coverartField.getImage().getHeight());
             assertEquals(BufferedImage.TYPE_CUSTOM, coverartField.getImage().getType());
@@ -856,4 +858,75 @@ public class WmaSimpleTest extends AbstractTestCase
         assertNull(exceptionCaught);
     }
 
+    /**
+     * Try an d write too large a file
+     */
+    public void testWriteTooLargeArtworkToFile()
+    {
+        File orig = new File("testdata", "test7.wma");
+        if (!orig.isFile())
+        {
+            System.err.println("Unable to test file - not available");
+            return;
+        }
+
+        Exception exceptionCaught = null;
+        try
+        {
+            File testFile = AbstractTestCase.copyAudioToTmp("test7.wma");
+            AudioFile f = AudioFileIO.read(testFile);
+            Tag tag = f.getTag();
+            assertEquals(0, tag.get(TagFieldKey.COVER_ART).size());
+
+            //Now create artwork field
+            Artwork artwork = Artwork.createArtworkFromFile(new File("testdata", "coverart.bmp"));
+            tag.createAndSetArtworkField(artwork);
+
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            exceptionCaught = e;
+        }
+        assertTrue(exceptionCaught instanceof IllegalArgumentException);
+    }
+
+    /**
+     * Try an d write too large a file
+     */
+    public void testWriteTooLargeStringToFile()
+    {
+        File orig = new File("testdata", "test7.wma");
+        if (!orig.isFile())
+        {
+            System.err.println("Unable to test file - not available");
+            return;
+        }
+
+        Exception exceptionCaught = null;
+        try
+        {
+            File testFile = AbstractTestCase.copyAudioToTmp("test7.wma");
+            AudioFile f = AudioFileIO.read(testFile);
+            Tag tag = f.getTag();
+            assertEquals(0, tag.get(TagFieldKey.COVER_ART).size());
+
+            //Now create artwork field
+            StringBuffer sb = new StringBuffer();
+            for (int i = 0; i < 34000;i++)
+            {
+                sb.append("x");
+            }
+            tag.setArtist(sb.toString());
+
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            exceptionCaught = e;
+        }
+        assertTrue(exceptionCaught instanceof IllegalArgumentException);
+    }
+
 }
+

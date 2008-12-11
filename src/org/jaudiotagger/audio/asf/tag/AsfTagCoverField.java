@@ -95,20 +95,26 @@ public class AsfTagCoverField extends AsfTagField
      * @param imageData
      * @param description
      */
-    public AsfTagCoverField(byte[] imageData,int pictureType,String description)
+    public AsfTagCoverField(byte[] imageData,int pictureType,String description,String mimeType)
     {
         super(new ContentDescriptor(AsfFieldKey.COVER_ART.getFieldName(), ContentDescriptor.TYPE_BINARY));
-        this.getDescriptor().setBinaryValue(createRawContent(imageData,pictureType,description));
+        this.getDescriptor().setBinaryValue(createRawContent(imageData,pictureType,description,mimeType));
     }
 
-    private byte[] createRawContent(byte[] data,int pictureType,String description)
+    private byte[] createRawContent(byte[] data,int pictureType,String description,String mimeType)
     {
-        //Get Mimetype
-        mimeType=ImageFormats.getMimeTypeForBinarySignature(data);
         description=description;
+
+        //Get Mimetype from data if not already set
         if(mimeType==null)
         {
-            throw new RuntimeException(ErrorMessage.GENERAL_UNIDENITIFED_IMAGE_FORMAT.getMsg());
+            mimeType=ImageFormats.getMimeTypeForBinarySignature(data);
+            //Couldnt identify lets default to png because probably error in code because not 100% sure how to identify
+            //formats
+            if(mimeType==null)
+            {
+                logger.warning(ErrorMessage.GENERAL_UNIDENITIFED_IMAGE_FORMAT.getMsg());
+            }
         }
 
         ByteArrayOutputStream baos = new  ByteArrayOutputStream();

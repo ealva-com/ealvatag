@@ -387,7 +387,7 @@ public final class AsfTag extends AbstractTag
      */
     public TagField createArtworkField(byte[] data) throws FieldDataInvalidException
     {
-        return new AsfTagCoverField(data, PictureTypes.DEFAULT_ID, null);
+        return new AsfTagCoverField(data, PictureTypes.DEFAULT_ID, null,null);
     }
 
     /**
@@ -397,7 +397,7 @@ public final class AsfTag extends AbstractTag
      */
     public TagField createArtworkField(Artwork artwork) throws FieldDataInvalidException
     {
-        return new AsfTagCoverField(artwork.getBinaryData(), artwork.getPictureType(), artwork.getDescription());
+        return new AsfTagCoverField(artwork.getBinaryData(), artwork.getPictureType(), artwork.getDescription(),artwork.getMimeType());
     }
 
     /**

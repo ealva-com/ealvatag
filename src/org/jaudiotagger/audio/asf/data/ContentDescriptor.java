@@ -19,6 +19,7 @@
 package org.jaudiotagger.audio.asf.data;
 
 import org.jaudiotagger.audio.asf.util.Utils;
+import org.jaudiotagger.logging.ErrorMessage;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -29,7 +30,7 @@ import java.util.Arrays;
  * This class is a wrapper for properties within a
  * {@link org.jaudiotagger.audio.asf.data.ExtendedContentDescription}.<br>
  *
- * Each descriptor consists of the folloowing:
+ * Each descriptor consists of the following:
  *
  * Descriptor Name Length  16 bits
  * Descriptor Name UTF16LE format
@@ -93,6 +94,9 @@ public final class ContentDescriptor implements Comparable<ContentDescriptor>
      * The binary representation of the value.
      */
     protected byte[] content = new byte[0];
+
+    //Cant hold larger than this because the length descriptors are only 2 bytes
+    public static final int MAXIMUM_DATA_LENGTH_ALLOWED = 65535;
 
     /**
      * Creates an Instance.
@@ -392,9 +396,9 @@ public final class ContentDescriptor implements Comparable<ContentDescriptor>
      */
     public void setBinaryValue(byte[] data) throws IllegalArgumentException
     {
-        if (data.length > 65535)
+        if (data.length > MAXIMUM_DATA_LENGTH_ALLOWED)
         {
-            throw new IllegalArgumentException("Too many bytes. 65535 is maximum.");
+            throw new IllegalArgumentException(ErrorMessage.WMA_LENGTH_OF_DATA_IS_TOO_LARGE.getMsg(data.length));
         }
         this.content = data;
         this.descriptorType = TYPE_BINARY;

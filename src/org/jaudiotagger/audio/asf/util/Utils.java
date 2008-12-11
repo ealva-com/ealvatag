@@ -20,6 +20,7 @@ package org.jaudiotagger.audio.asf.util;
 
 import org.jaudiotagger.audio.asf.data.AsfHeader;
 import org.jaudiotagger.audio.asf.data.GUID;
+import org.jaudiotagger.logging.ErrorMessage;
 
 import java.io.EOFException;
 import java.io.IOException;
@@ -43,6 +44,7 @@ public class Utils
      * Stores the default line separator of the current underlying system.
      */
     public final static String LINE_SEPARATOR = System.getProperty("line.separator"); //$NON-NLS-1$
+    private static final int MAXIMUM_LENGTH_ALLOWED = 65533;
 
     /**
      * This method converts the given string into a byte[] in UTF-16LE encoding
@@ -56,9 +58,9 @@ public class Utils
         if (value != null)
         {
             byte[] tmp = getBytes(value, AsfHeader.ASF_CHARSET);
-            if (tmp.length > 65533)
+            if (tmp.length > MAXIMUM_LENGTH_ALLOWED)
             {
-                throw new IllegalArgumentException("\"UTF-16LE\" representation exceeds 65535 bytes. (Including zero term character)"); //$NON-NLS-1$
+                throw new IllegalArgumentException(ErrorMessage.WMA_LENGTH_OF_STRING_IS_TOO_LARGE.getMsg(tmp.length));
             }
         }
     }

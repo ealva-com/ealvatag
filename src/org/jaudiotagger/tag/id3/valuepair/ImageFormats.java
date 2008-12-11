@@ -100,11 +100,15 @@ public class ImageFormats
     /**
      * @param data
      * @return true if binary data matches expected header for a jpg
+     *
+     * Some details http://www.obrador.com/essentialjpeg/headerinfo.htm
      */
     public static boolean binaryDataIsJpgFormat(byte[] data)
     {
         //Read signature
-        if ((0xff == (data[0] & 0xff)) && (0xd8 == (data[1] & 0xff)) && (0xff == (data[2] & 0xff)) && (0xff == (data[3] & 0xe0)))
+        //Can be FF D8 FF E0 or FF D8 FF E1
+        //FF D8 is SOI Marker, FFE0 or FFE1 is JFIF Marker
+        if ((0xff == (data[0] & 0xff)) && (0xd8 == (data[1] & 0xff)) && (0xff == (data[2] & 0xff)) && (0xe0 <= (data[3] & 0xff)))
         {
             return true;
         }
@@ -132,7 +136,7 @@ public class ImageFormats
     public static boolean binaryDataIsBmpFormat(byte[] data)
     {
         //Read signature
-        if ((0x42 == (data[0] & 0xff)) && (0x4d == (data[1] & 0xff)) && (0x3c == (data[2] & 0xff)))
+        if ((0x42 == (data[0] & 0xff)) && (0x4d == (data[1] & 0xff)) && (0xf8 == (data[2] & 0xff)))
         {
             return true;
         }
