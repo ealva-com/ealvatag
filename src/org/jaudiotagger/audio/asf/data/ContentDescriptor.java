@@ -20,6 +20,7 @@ package org.jaudiotagger.audio.asf.data;
 
 import org.jaudiotagger.audio.asf.util.Utils;
 import org.jaudiotagger.logging.ErrorMessage;
+import org.jaudiotagger.tag.TagOptionSingleton;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -453,14 +454,22 @@ public final class ContentDescriptor implements Comparable<ContentDescriptor>
      */
     public void setStringValue(String value) throws IllegalArgumentException
     {
-        Utils.checkStringLengthNullSafe(value);
-        if (value != null)
+        if (value == null)
+        {
+             this.content = new byte[0];
+        }
+
+        if(Utils.isStringLengthValidNullSafe(value))
         {
             this.content = Utils.getBytes(value, AsfHeader.ASF_CHARSET);
         }
+        else if(TagOptionSingleton.getInstance().isTruncateTextWithoutErrors())
+        {
+            this.content = Utils.getBytes(value.substring(0,Utils.MAXIMUM_STRING_LENGTH_ALLOWED), AsfHeader.ASF_CHARSET);
+        }
         else
         {
-            this.content = new byte[0];
+            throw new IllegalArgumentException(ErrorMessage.WMA_LENGTH_OF_STRING_IS_TOO_LARGE.getMsg((value.length()*2)));
         }
         this.descriptorType = TYPE_STRING;
     }

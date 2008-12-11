@@ -44,10 +44,11 @@ public class Utils
      * Stores the default line separator of the current underlying system.
      */
     public final static String LINE_SEPARATOR = System.getProperty("line.separator"); //$NON-NLS-1$
-    private static final int MAXIMUM_LENGTH_ALLOWED = 65533;
+    public static final int MAXIMUM_STRING_LENGTH_ALLOWED = 32766;
 
     /**
-     * This method converts the given string into a byte[] in UTF-16LE encoding
+     * This method checks given string will not exceed limit in bytes[] when converted UTF-16LE encoding
+     * (2 bytes per character)
      * and checks whether the length doesn't exceed 65535 bytes. <br>
      * 
      * @param value The string to check.
@@ -57,13 +58,30 @@ public class Utils
     {
         if (value != null)
         {
-            byte[] tmp = getBytes(value, AsfHeader.ASF_CHARSET);
-            if (tmp.length > MAXIMUM_LENGTH_ALLOWED)
+            if (value.length() > MAXIMUM_STRING_LENGTH_ALLOWED)
             {
-                throw new IllegalArgumentException(ErrorMessage.WMA_LENGTH_OF_STRING_IS_TOO_LARGE.getMsg(tmp.length));
+                throw new IllegalArgumentException(ErrorMessage.WMA_LENGTH_OF_STRING_IS_TOO_LARGE.getMsg((value.length()*2)));
             }
         }
     }
+
+    /**
+     *
+     * @param value
+     * @return true unless string is too long
+     */
+    public static boolean isStringLengthValidNullSafe(String value)
+   {
+       if (value != null)
+       {
+           if (value.length() > MAXIMUM_STRING_LENGTH_ALLOWED)
+           {
+               return false;
+           }
+       }
+       return true;
+   }
+
 
     /**
      * effectively copies a specified amount of bytes from one stream to another.

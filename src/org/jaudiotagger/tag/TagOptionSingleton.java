@@ -224,10 +224,17 @@ public class TagOptionSingleton
 
     /**
      * When writing frames if this is set to true then the frame will be written
-     * using the defaults disregarding the text e ncoding originally used to create
+     * using the defaults disregarding the text encoding originally used to create
      * the frame.
      */
     private boolean resetTextEncodingForExistingFrames = false;
+
+    /**
+     * Some formats impose maxmimum lengths for fields , if the text provided is longer
+     * than the formats allows it will truncate and write a warning, if this is not set
+     * it will throw an exception
+     */
+    private boolean truncateTextWithoutErrors = false;
 
     /**
      * Creates a new TagOptions datatype. All Options are set to their default
@@ -744,6 +751,7 @@ public class TagOptionSingleton
         id3v24DefaultTextEncoding = TextEncoding.ISO_8859_1;
         id3v24UnicodeTextEncoding = TextEncoding.UTF_16;
         resetTextEncodingForExistingFrames = false;
+        truncateTextWithoutErrors = false;
 
         //default all lyrics3 fields to save. id3v1 fields are individual
         // settings. id3v2 fields are always looked at to save.
@@ -1019,5 +1027,24 @@ public class TagOptionSingleton
     public void setResetTextEncodingForExistingFrames(boolean resetTextEncodingForExistingFrames)
     {
         this.resetTextEncodingForExistingFrames = resetTextEncodingForExistingFrames;
+    }
+
+    /**
+     *
+     * @return truncate without errors
+     */
+    public boolean isTruncateTextWithoutErrors()
+    {
+        return truncateTextWithoutErrors;
+    }
+
+    /**
+     * Set truncate without errors
+     *
+     * @param truncateTextWithoutErrors
+     */
+    public void setTruncateTextWithoutErrors(boolean truncateTextWithoutErrors)
+    {
+        this.truncateTextWithoutErrors = truncateTextWithoutErrors;
     }
 }

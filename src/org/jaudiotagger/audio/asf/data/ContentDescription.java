@@ -20,6 +20,8 @@ package org.jaudiotagger.audio.asf.data;
 
 import org.jaudiotagger.audio.asf.io.WriteableChunk;
 import org.jaudiotagger.audio.asf.util.Utils;
+import org.jaudiotagger.tag.TagOptionSingleton;
+import org.jaudiotagger.logging.ErrorMessage;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -184,8 +186,18 @@ public class ContentDescription extends Chunk implements WriteableChunk
      */
     public void setAuthor(String fileAuthor) throws IllegalArgumentException
     {
-        Utils.checkStringLengthNullSafe(fileAuthor);
-        this.author = fileAuthor;
+        if(Utils.isStringLengthValidNullSafe(fileAuthor))
+        {
+            this.author = fileAuthor;
+        }
+        else if(TagOptionSingleton.getInstance().isTruncateTextWithoutErrors())
+        {
+            this.author = fileAuthor.substring(0,Utils.MAXIMUM_STRING_LENGTH_ALLOWED);
+        }
+        else
+        {
+            throw new IllegalArgumentException(ErrorMessage.WMA_LENGTH_OF_STRING_IS_TOO_LARGE.getMsg((fileAuthor.length()*2)));
+        }
     }
 
     /**
@@ -195,8 +207,18 @@ public class ContentDescription extends Chunk implements WriteableChunk
      */
     public void setComment(String tagComment) throws IllegalArgumentException
     {
-        Utils.checkStringLengthNullSafe(tagComment);
-        this.description = tagComment;
+        if(Utils.isStringLengthValidNullSafe(tagComment))
+        {
+            this.description = tagComment;
+        }
+        else if(TagOptionSingleton.getInstance().isTruncateTextWithoutErrors())
+        {
+            this.description = tagComment.substring(0,Utils.MAXIMUM_STRING_LENGTH_ALLOWED);
+        }
+        else
+        {
+            throw new IllegalArgumentException(ErrorMessage.WMA_LENGTH_OF_STRING_IS_TOO_LARGE.getMsg((tagComment.length()*2)));
+        }
     }
 
     /**
@@ -206,8 +228,18 @@ public class ContentDescription extends Chunk implements WriteableChunk
      */
     public void setCopyRight(String cpright) throws IllegalArgumentException
     {
-        Utils.checkStringLengthNullSafe(cpright);
-        this.copyRight = cpright;
+        if(Utils.isStringLengthValidNullSafe(cpright))
+        {
+            this.copyRight = cpright;
+        }
+        else if(TagOptionSingleton.getInstance().isTruncateTextWithoutErrors())
+        {
+            this.copyRight = cpright.substring(0,Utils.MAXIMUM_STRING_LENGTH_ALLOWED);
+        }
+        else
+        {
+            throw new IllegalArgumentException(ErrorMessage.WMA_LENGTH_OF_STRING_IS_TOO_LARGE.getMsg((cpright.length()*2)));
+        }
     }
 
     /**
@@ -217,8 +249,18 @@ public class ContentDescription extends Chunk implements WriteableChunk
      */
     public void setRating(String ratingText) throws IllegalArgumentException
     {
-        Utils.checkStringLengthNullSafe(ratingText);
-        this.rating = ratingText;
+        if(Utils.isStringLengthValidNullSafe(ratingText))
+        {
+            this.rating = ratingText;
+        }
+        else if(TagOptionSingleton.getInstance().isTruncateTextWithoutErrors())
+        {
+            this.rating = ratingText.substring(0,Utils.MAXIMUM_STRING_LENGTH_ALLOWED);
+        }
+        else
+        {
+            throw new IllegalArgumentException(ErrorMessage.WMA_LENGTH_OF_STRING_IS_TOO_LARGE.getMsg((ratingText.length()*2)));
+        }
     }
 
     /**
@@ -228,8 +270,18 @@ public class ContentDescription extends Chunk implements WriteableChunk
      */
     public void setTitle(String songTitle) throws IllegalArgumentException
     {
-        Utils.checkStringLengthNullSafe(songTitle);
-        this.title = songTitle;
+        if(Utils.isStringLengthValidNullSafe(songTitle))
+        {
+            this.title = songTitle;
+        }
+        else if(TagOptionSingleton.getInstance().isTruncateTextWithoutErrors())
+        {
+            this.title = songTitle.substring(0,Utils.MAXIMUM_STRING_LENGTH_ALLOWED);
+        }
+        else
+        {
+            throw new IllegalArgumentException(ErrorMessage.WMA_LENGTH_OF_STRING_IS_TOO_LARGE.getMsg((songTitle.length()*2)));
+        }        
     }
 
     /**
