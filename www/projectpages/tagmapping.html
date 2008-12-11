@@ -1,0 +1,746 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+
+<HTML>
+<HEAD>
+	
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=windows-1252">
+	<TITLE></TITLE>
+	<META NAME="GENERATOR" CONTENT="OpenOffice.org 2.4  (Win32)">
+	<META NAME="AUTHOR" CONTENT="Paul Taylor">
+	<META NAME="CREATED" CONTENT="20081211;10284448">
+	<META NAME="CHANGEDBY" CONTENT="Paul Taylor">
+	<META NAME="CHANGED" CONTENT="20081211;10320891">
+	
+	<STYLE>
+		<!-- 
+		BODY,DIV,TABLE,THEAD,TBODY,TFOOT,TR,TH,TD,P { font-family:"Arial"; font-size:x-small }
+		 -->
+	</STYLE>
+	
+</HEAD>
+
+<BODY TEXT="#000000">
+<TABLE FRAME=VOID CELLSPACING=0 COLS=9 RULES=NONE BORDER=0>
+	<COLGROUP><COL WIDTH=192><COL WIDTH=260><COL WIDTH=178><COL WIDTH=232><COL WIDTH=288><COL WIDTH=356><COL WIDTH=241><COL WIDTH=215><COL WIDTH=188></COLGROUP>
+	<TBODY>
+		<TR>
+			<TD WIDTH=192 HEIGHT=17 ALIGN=LEFT><B>Attribute</B></TD>
+			<TD WIDTH=260 ALIGN=LEFT><B>Generic Key</B></TD>
+			<TD WIDTH=178 ALIGN=LEFT><B>ID3v22</B></TD>
+			<TD WIDTH=232 ALIGN=LEFT><B>ID3v23</B></TD>
+			<TD WIDTH=288 ALIGN=LEFT><B>ID3v24</B></TD>
+			<TD WIDTH=356 ALIGN=LEFT><B>Mp4</B></TD>
+			<TD WIDTH=241 ALIGN=LEFT><B>OggVorbis</B></TD>
+			<TD WIDTH=215 ALIGN=LEFT><B>Flac</B></TD>
+			<TD WIDTH=188 ALIGN=LEFT><B>Wma</B></TD>
+		</TR>
+		<TR>
+			<TD HEIGHT=17 ALIGN=LEFT>Artist</TD>
+			<TD ALIGN=LEFT>ARTIST</TD>
+			<TD ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT><FONT FACE="Times New Roman">TPE1 </FONT></TD>
+			<TD ALIGN=LEFT><FONT FACE="Times New Roman">TPE1 </FONT></TD>
+			<TD ALIGN=LEFT><FONT FACE="Times New Roman">&copy;ART </FONT></TD>
+			<TD ALIGN=LEFT>ARTIST</TD>
+			<TD ALIGN=LEFT>ARTIST</TD>
+			<TD ALIGN=LEFT>AUTHOR </TD>
+		</TR>
+		<TR>
+			<TD HEIGHT=17 ALIGN=LEFT>Album</TD>
+			<TD ALIGN=LEFT>ALBUM</TD>
+			<TD ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT><FONT FACE="Times New Roman">TALB </FONT></TD>
+			<TD ALIGN=LEFT><FONT FACE="Times New Roman">TALB </FONT></TD>
+			<TD ALIGN=LEFT><FONT FACE="Times New Roman">&copy;alb </FONT></TD>
+			<TD ALIGN=LEFT>ALBUM</TD>
+			<TD ALIGN=LEFT>ALBUM</TD>
+			<TD ALIGN=LEFT>WM/AlbumTitle </TD>
+		</TR>
+		<TR>
+			<TD HEIGHT=17 ALIGN=LEFT>Title</TD>
+			<TD ALIGN=LEFT>TITLE</TD>
+			<TD ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT><FONT FACE="Times New Roman">TIT2 </FONT></TD>
+			<TD ALIGN=LEFT><FONT FACE="Times New Roman">TIT2 </FONT></TD>
+			<TD ALIGN=LEFT><FONT FACE="Times New Roman">&copy;nam </FONT></TD>
+			<TD ALIGN=LEFT>TITLE</TD>
+			<TD ALIGN=LEFT>TITLE</TD>
+			<TD ALIGN=LEFT>TITLE </TD>
+		</TR>
+		<TR>
+			<TD HEIGHT=17 ALIGN=LEFT>Track</TD>
+			<TD ALIGN=LEFT>TRACK</TD>
+			<TD ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT><FONT FACE="Times New Roman">TRCK </FONT></TD>
+			<TD ALIGN=LEFT><FONT FACE="Times New Roman">TRCK </FONT></TD>
+			<TD ALIGN=LEFT><FONT FACE="Times New Roman">trkn </FONT></TD>
+			<TD ALIGN=LEFT>TRACKNUMBER</TD>
+			<TD ALIGN=LEFT>TRACKNUMBER</TD>
+			<TD ALIGN=LEFT>WM/TrackNumber </TD>
+		</TR>
+		<TR>
+			<TD HEIGHT=17 ALIGN=LEFT>Year</TD>
+			<TD ALIGN=LEFT>YEAR</TD>
+			<TD ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT><FONT FACE="Times New Roman">TYER </FONT></TD>
+			<TD ALIGN=LEFT>TDRC</TD>
+			<TD ALIGN=LEFT><FONT FACE="Times New Roman">&copy;day </FONT></TD>
+			<TD ALIGN=LEFT>DATE</TD>
+			<TD ALIGN=LEFT>DATE</TD>
+			<TD ALIGN=LEFT>WM/Year </TD>
+		</TR>
+		<TR>
+			<TD HEIGHT=17 ALIGN=LEFT>Genre</TD>
+			<TD ALIGN=LEFT>GENRE</TD>
+			<TD ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT><FONT FACE="Times New Roman">TCON </FONT></TD>
+			<TD ALIGN=LEFT><FONT FACE="Times New Roman">TCON </FONT></TD>
+			<TD ALIGN=LEFT><FONT FACE="Times New Roman">&copy;gen </FONT></TD>
+			<TD ALIGN=LEFT>GENRE</TD>
+			<TD ALIGN=LEFT>GENRE</TD>
+			<TD ALIGN=LEFT>WM/Genre OR WM/GenreID </TD>
+		</TR>
+		<TR>
+			<TD HEIGHT=17 ALIGN=LEFT>Comment</TD>
+			<TD ALIGN=LEFT>COMMENT</TD>
+			<TD ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT><FONT FACE="Times New Roman">COMM:description </FONT></TD>
+			<TD ALIGN=LEFT><FONT FACE="Times New Roman">COMM:description </FONT></TD>
+			<TD ALIGN=LEFT><FONT FACE="Times New Roman">&copy;cmt </FONT></TD>
+			<TD ALIGN=LEFT>COMMENT</TD>
+			<TD ALIGN=LEFT>COMMENT</TD>
+			<TD ALIGN=LEFT>DESCRIPTION </TD>
+		</TR>
+		<TR>
+			<TD HEIGHT=17 ALIGN=LEFT>Album Artist</TD>
+			<TD ALIGN=LEFT>ALBUM_ARTIST</TD>
+			<TD ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT><FONT FACE="Times New Roman">TPE2 </FONT></TD>
+			<TD ALIGN=LEFT><FONT FACE="Times New Roman">TPE2 </FONT></TD>
+			<TD ALIGN=LEFT><FONT FACE="Times New Roman">aART </FONT></TD>
+			<TD ALIGN=LEFT>ALBUMARTIST</TD>
+			<TD ALIGN=LEFT>ALBUMARTIST</TD>
+			<TD ALIGN=LEFT>WM/AlbumArtist </TD>
+		</TR>
+		<TR>
+			<TD HEIGHT=17 ALIGN=LEFT>Composer</TD>
+			<TD ALIGN=LEFT>COMPOSER</TD>
+			<TD ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT><FONT FACE="Times New Roman">TCOM </FONT></TD>
+			<TD ALIGN=LEFT><FONT FACE="Times New Roman">TCOM </FONT></TD>
+			<TD ALIGN=LEFT><FONT FACE="Times New Roman">&copy;wrt </FONT></TD>
+			<TD ALIGN=LEFT>COMPOSER</TD>
+			<TD ALIGN=LEFT>COMPOSER</TD>
+			<TD ALIGN=LEFT>WM/Composer </TD>
+		</TR>
+		<TR>
+			<TD HEIGHT=17 ALIGN=LEFT>Grouping</TD>
+			<TD ALIGN=LEFT>GROUPING</TD>
+			<TD ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT><FONT FACE="Times New Roman">TIT1 </FONT></TD>
+			<TD ALIGN=LEFT><FONT FACE="Times New Roman">TIT1 </FONT></TD>
+			<TD ALIGN=LEFT><FONT FACE="Times New Roman">&copy;grp </FONT></TD>
+			<TD ALIGN=LEFT>GROUPING</TD>
+			<TD ALIGN=LEFT>GROUPING</TD>
+			<TD ALIGN=LEFT>WM/ContentGroupDescription </TD>
+		</TR>
+		<TR>
+			<TD HEIGHT=17 ALIGN=LEFT>Disc No</TD>
+			<TD ALIGN=LEFT>DISC_NO</TD>
+			<TD ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT><FONT FACE="Times New Roman">TPOS </FONT></TD>
+			<TD ALIGN=LEFT><FONT FACE="Times New Roman">TPOS </FONT></TD>
+			<TD ALIGN=LEFT><FONT FACE="Times New Roman">disk </FONT></TD>
+			<TD ALIGN=LEFT>DISCNUMBER</TD>
+			<TD ALIGN=LEFT>DISCNUMBER</TD>
+			<TD ALIGN=LEFT>WM/PartOfSet </TD>
+		</TR>
+		<TR>
+			<TD HEIGHT=17 ALIGN=LEFT>Cover Art</TD>
+			<TD ALIGN=LEFT>COVER_ART</TD>
+			<TD ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT><FONT FACE="Times New Roman">APIC</FONT></TD>
+			<TD ALIGN=LEFT><FONT FACE="Times New Roman">APIC</FONT></TD>
+			<TD ALIGN=LEFT>covr</TD>
+			<TD ALIGN=LEFT>COVERART and COVERARTMIME</TD>
+			<TD ALIGN=LEFT>MetadataBlockDataPicture</TD>
+			<TD ALIGN=LEFT>WM/Picture </TD>
+		</TR>
+		<TR>
+			<TD HEIGHT=17 ALIGN=LEFT>Bpm</TD>
+			<TD ALIGN=LEFT>BPM</TD>
+			<TD ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT><FONT FACE="Times New Roman">TBPM </FONT></TD>
+			<TD ALIGN=LEFT><FONT FACE="Times New Roman">TBPM </FONT></TD>
+			<TD ALIGN=LEFT><FONT FACE="Times New Roman">tmpo </FONT></TD>
+			<TD ALIGN=LEFT>BPM</TD>
+			<TD ALIGN=LEFT>BPM</TD>
+			<TD ALIGN=LEFT>WM/BeatsPerMinute </TD>
+		</TR>
+		<TR>
+			<TD HEIGHT=17 ALIGN=LEFT>Musicbrainz Artistid</TD>
+			<TD ALIGN=LEFT>MUSICBRAINZ_ARTISTID</TD>
+			<TD ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT><FONT FACE="Times New Roman">TXXX:MusicBrainz&nbsp;Artist&nbsp;Id </FONT></TD>
+			<TD ALIGN=LEFT><FONT FACE="Times New Roman">TXXX:MusicBrainz&nbsp;Artist&nbsp;Id </FONT></TD>
+			<TD ALIGN=LEFT><FONT FACE="Times New Roman">----:com.apple.iTunes:MusicBrainz&nbsp;Artist&nbsp;Id </FONT></TD>
+			<TD ALIGN=LEFT>MUSICBRAINZ_ARTISTID</TD>
+			<TD ALIGN=LEFT>MUSICBRAINZ_ARTISTID</TD>
+			<TD ALIGN=LEFT>MusicBrainz/Artist Id </TD>
+		</TR>
+		<TR>
+			<TD HEIGHT=17 ALIGN=LEFT>Musicbrainz Releaseid</TD>
+			<TD ALIGN=LEFT>MUSICBRAINZ_RELEASEID</TD>
+			<TD ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT><FONT FACE="Times New Roman">TXXX:MusicBrainz&nbsp;Album&nbsp;Id </FONT></TD>
+			<TD ALIGN=LEFT><FONT FACE="Times New Roman">TXXX:MusicBrainz&nbsp;Album&nbsp;Id </FONT></TD>
+			<TD ALIGN=LEFT><FONT FACE="Times New Roman">----:com.apple.iTunes:MusicBrainz&nbsp;Album&nbsp;Id </FONT></TD>
+			<TD ALIGN=LEFT>MUSICBRAINZ_ALBUMID</TD>
+			<TD ALIGN=LEFT>MUSICBRAINZ_ALBUMID</TD>
+			<TD ALIGN=LEFT>MusicBrainz/Album Id </TD>
+		</TR>
+		<TR>
+			<TD HEIGHT=17 ALIGN=LEFT>Musicbrainz Releaseartistid</TD>
+			<TD ALIGN=LEFT>MUSICBRAINZ_RELEASEARTISTID</TD>
+			<TD ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT><FONT FACE="Times New Roman">TXXX:MusicBrainz&nbsp;Album&nbsp;Artist&nbsp;Id </FONT></TD>
+			<TD ALIGN=LEFT><FONT FACE="Times New Roman">TXXX:MusicBrainz&nbsp;Album&nbsp;Artist&nbsp;Id </FONT></TD>
+			<TD ALIGN=LEFT><FONT FACE="Times New Roman">----:com.apple.iTunes:MusicBrainz&nbsp;Album&nbsp;Artist&nbsp;Id </FONT></TD>
+			<TD ALIGN=LEFT>MUSICBRAINZ_ALBUMARTISTID</TD>
+			<TD ALIGN=LEFT>MUSICBRAINZ_ALBUMARTISTID</TD>
+			<TD ALIGN=LEFT>MusicBrainz/Album Artist Id </TD>
+		</TR>
+		<TR>
+			<TD HEIGHT=17 ALIGN=LEFT>Musicbrainz Track Id</TD>
+			<TD ALIGN=LEFT>MUSICBRAINZ_TRACK_ID</TD>
+			<TD ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT><FONT FACE="Times New Roman">UFID:http://musicbrainz.org </FONT></TD>
+			<TD ALIGN=LEFT><FONT FACE="Times New Roman">UFID:http://musicbrainz.org </FONT></TD>
+			<TD ALIGN=LEFT><FONT FACE="Times New Roman">----:com.apple.iTunes:MusicBrainz&nbsp;Track&nbsp;Id </FONT></TD>
+			<TD ALIGN=LEFT>MUSICBRAINZ_TRACKID</TD>
+			<TD ALIGN=LEFT>MUSICBRAINZ_TRACKID</TD>
+			<TD ALIGN=LEFT>MusicBrainz/Track Id </TD>
+		</TR>
+		<TR>
+			<TD HEIGHT=17 ALIGN=LEFT>Musicbrainz Disc Id</TD>
+			<TD ALIGN=LEFT>MUSICBRAINZ_DISC_ID</TD>
+			<TD ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT><FONT FACE="Times New Roman">TXXX:MusicBrainz&nbsp;Disc&nbsp;Id </FONT></TD>
+			<TD ALIGN=LEFT><FONT FACE="Times New Roman">TXXX:MusicBrainz&nbsp;Disc&nbsp;Id </FONT></TD>
+			<TD ALIGN=LEFT><FONT FACE="Times New Roman">----:com.apple.iTunes:MusicBrainz&nbsp;Disc&nbsp;Id </FONT></TD>
+			<TD ALIGN=LEFT>MUSICBRAINZ_DISCID</TD>
+			<TD ALIGN=LEFT>MUSICBRAINZ_DISCID</TD>
+			<TD ALIGN=LEFT>MusicBrainz/Disc Id </TD>
+		</TR>
+		<TR>
+			<TD HEIGHT=17 ALIGN=LEFT>Musicip Id</TD>
+			<TD ALIGN=LEFT>MUSICIP_ID</TD>
+			<TD ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT><FONT FACE="Times New Roman">TXXX:MusicIP&nbsp;PUID </FONT></TD>
+			<TD ALIGN=LEFT><FONT FACE="Times New Roman">TXXX:MusicIP&nbsp;PUID </FONT></TD>
+			<TD ALIGN=LEFT><FONT FACE="Times New Roman">----:com.apple.iTunes:MusicIP&nbsp;PUID </FONT></TD>
+			<TD ALIGN=LEFT>MUSICIP_PUID</TD>
+			<TD ALIGN=LEFT>MUSICIP_PUID</TD>
+			<TD ALIGN=LEFT>MusicIP/PUID </TD>
+		</TR>
+		<TR>
+			<TD HEIGHT=17 ALIGN=LEFT>Amazon Id</TD>
+			<TD ALIGN=LEFT>AMAZON_ID</TD>
+			<TD ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT><FONT FACE="Times New Roman">TXXX:ASIN </FONT></TD>
+			<TD ALIGN=LEFT><FONT FACE="Times New Roman">TXXX:ASIN </FONT></TD>
+			<TD ALIGN=LEFT><FONT FACE="Times New Roman">----:com.apple.iTunes:ASIN </FONT></TD>
+			<TD ALIGN=LEFT>ASIN</TD>
+			<TD ALIGN=LEFT>ASIN</TD>
+			<TD ALIGN=LEFT>ASIN</TD>
+		</TR>
+		<TR>
+			<TD HEIGHT=17 ALIGN=LEFT>Musicbrainz Release Status</TD>
+			<TD ALIGN=LEFT>MUSICBRAINZ_RELEASE_STATUS</TD>
+			<TD ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT><FONT FACE="Times New Roman">TXXX:MusicBrainz&nbsp;Album&nbsp;Status </FONT></TD>
+			<TD ALIGN=LEFT><FONT FACE="Times New Roman">TXXX:MusicBrainz&nbsp;Album&nbsp;Status </FONT></TD>
+			<TD ALIGN=LEFT><FONT FACE="Times New Roman">----:com.apple.iTunes:MusicBrainz&nbsp;Album&nbsp;Status </FONT></TD>
+			<TD ALIGN=LEFT>MUSICBRAINZ_ALBUMSTATUS</TD>
+			<TD ALIGN=LEFT>MUSICBRAINZ_ALBUMSTATUS</TD>
+			<TD ALIGN=LEFT>MusicBrainz/Album Status </TD>
+		</TR>
+		<TR>
+			<TD HEIGHT=17 ALIGN=LEFT>Musicbrainz Release Type</TD>
+			<TD ALIGN=LEFT>MUSICBRAINZ_RELEASE_TYPE</TD>
+			<TD ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT><FONT FACE="Times New Roman">TXXX:MusicBrainz&nbsp;Album&nbsp;Type </FONT></TD>
+			<TD ALIGN=LEFT><FONT FACE="Times New Roman">TXXX:MusicBrainz&nbsp;Album&nbsp;Type </FONT></TD>
+			<TD ALIGN=LEFT><FONT FACE="Times New Roman">----:com.apple.iTunes:MusicBrainz&nbsp;Album&nbsp;Type </FONT></TD>
+			<TD ALIGN=LEFT>MUSICBRAINZ_ALBUMTYPE</TD>
+			<TD ALIGN=LEFT>MUSICBRAINZ_ALBUMTYPE</TD>
+			<TD ALIGN=LEFT>MusicBrainz/Album Type </TD>
+		</TR>
+		<TR>
+			<TD HEIGHT=32 ALIGN=LEFT>Musicbrainz Release Country</TD>
+			<TD ALIGN=LEFT>MUSICBRAINZ_RELEASE_COUNTRY</TD>
+			<TD ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT><FONT FACE="Times New Roman">TXXX:MusicBrainz&nbsp;Album&nbsp;Release&nbsp;Country </FONT></TD>
+			<TD ALIGN=LEFT><FONT FACE="Times New Roman">TXXX:MusicBrainz&nbsp;Album&nbsp;Release&nbsp;Country </FONT></TD>
+			<TD ALIGN=LEFT><FONT FACE="Times New Roman">----:com.apple.iTunes:MusicBrainz&nbsp;Album&nbsp;Release&nbsp;Country</FONT></TD>
+			<TD ALIGN=LEFT>RELEASECOUNTRY</TD>
+			<TD ALIGN=LEFT>RELEASECOUNTRY</TD>
+			<TD ALIGN=LEFT>MusicBrainz/Album Release Country </TD>
+		</TR>
+		<TR>
+			<TD HEIGHT=17 ALIGN=LEFT>Lyrics</TD>
+			<TD ALIGN=LEFT>LYRICS</TD>
+			<TD ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT><FONT FACE="Times New Roman">USLT:description </FONT></TD>
+			<TD ALIGN=LEFT><FONT FACE="Times New Roman">USLT:description </FONT></TD>
+			<TD ALIGN=LEFT><FONT FACE="Times New Roman">&copy;lyr </FONT></TD>
+			<TD ALIGN=LEFT>LYRICS</TD>
+			<TD ALIGN=LEFT>LYRICS</TD>
+			<TD ALIGN=LEFT>WM/Lyrics </TD>
+		</TR>
+		<TR>
+			<TD HEIGHT=17 ALIGN=LEFT>Is Compilation</TD>
+			<TD ALIGN=LEFT>IS_COMPILATION</TD>
+			<TD ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT><FONT FACE="Times New Roman">TCMP </FONT></TD>
+			<TD ALIGN=LEFT><FONT FACE="Times New Roman">TCMP </FONT></TD>
+			<TD ALIGN=LEFT><FONT FACE="Times New Roman">cpil </FONT></TD>
+			<TD ALIGN=LEFT>COMPILATION</TD>
+			<TD ALIGN=LEFT>COMPILATION</TD>
+			<TD ALIGN=LEFT>WM/IsCompilation </TD>
+		</TR>
+		<TR>
+			<TD HEIGHT=17 ALIGN=LEFT>Artist Sort</TD>
+			<TD ALIGN=LEFT>ARTIST_SORT</TD>
+			<TD ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT>TSOP</TD>
+			<TD ALIGN=LEFT>TSOP</TD>
+			<TD ALIGN=LEFT><FONT FACE="Times New Roman">soar </FONT></TD>
+			<TD ALIGN=LEFT>ARTISTSORT</TD>
+			<TD ALIGN=LEFT>ARTISTSORT</TD>
+			<TD ALIGN=LEFT>WM/ArtistSortOrder    </TD>
+		</TR>
+		<TR>
+			<TD HEIGHT=17 ALIGN=LEFT>Album Artist Sort</TD>
+			<TD ALIGN=LEFT>ALBUM_ARTIST_SORT</TD>
+			<TD ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT>TSO2</TD>
+			<TD ALIGN=LEFT>TSO2</TD>
+			<TD ALIGN=LEFT><FONT FACE="Times New Roman">soaa </FONT></TD>
+			<TD ALIGN=LEFT>ALBUMARTISTSORT</TD>
+			<TD ALIGN=LEFT>ALBUMARTISTSORT</TD>
+			<TD ALIGN=LEFT>WM/AlbumArtistSortOrder </TD>
+		</TR>
+		<TR>
+			<TD HEIGHT=17 ALIGN=LEFT>Album Sort</TD>
+			<TD ALIGN=LEFT>ALBUM_SORT</TD>
+			<TD ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT>TSOA</TD>
+			<TD ALIGN=LEFT>TSOA</TD>
+			<TD ALIGN=LEFT><FONT FACE="Times New Roman">soal </FONT></TD>
+			<TD ALIGN=LEFT>ALBUMSORT</TD>
+			<TD ALIGN=LEFT>ALBUMSORT</TD>
+			<TD ALIGN=LEFT>WM/AlbumSortOrder </TD>
+		</TR>
+		<TR>
+			<TD HEIGHT=17 ALIGN=LEFT>Title Sort</TD>
+			<TD ALIGN=LEFT>TITLE_SORT</TD>
+			<TD ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT>TSOT</TD>
+			<TD ALIGN=LEFT>TSOT</TD>
+			<TD ALIGN=LEFT><FONT FACE="Times New Roman">sonm </FONT></TD>
+			<TD ALIGN=LEFT>TITLESORT</TD>
+			<TD ALIGN=LEFT>TITLESORT</TD>
+			<TD ALIGN=LEFT>WM/TitleSortOrder </TD>
+		</TR>
+		<TR>
+			<TD HEIGHT=17 ALIGN=LEFT>Composer Sort</TD>
+			<TD ALIGN=LEFT>COMPOSER_SORT</TD>
+			<TD ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT>TSOC</TD>
+			<TD ALIGN=LEFT>TSOC</TD>
+			<TD ALIGN=LEFT><FONT FACE="Times New Roman">soco </FONT></TD>
+			<TD ALIGN=LEFT>COMPOSERSORT</TD>
+			<TD ALIGN=LEFT>COMPOSERSORT</TD>
+			<TD ALIGN=LEFT>WM/ComposerSort </TD>
+		</TR>
+		<TR>
+			<TD HEIGHT=17 ALIGN=LEFT>Encoder</TD>
+			<TD ALIGN=LEFT>ENCODER</TD>
+			<TD ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT><FONT FACE="Times New Roman">TENC </FONT></TD>
+			<TD ALIGN=LEFT><FONT FACE="Times New Roman">TENC </FONT></TD>
+			<TD ALIGN=LEFT><FONT FACE="Times New Roman">&copy;too </FONT></TD>
+			<TD ALIGN=LEFT>VENDOR</TD>
+			<TD ALIGN=LEFT>VENDOR</TD>
+			<TD ALIGN=LEFT>WM/ToolName </TD>
+		</TR>
+		<TR>
+			<TD HEIGHT=17 ALIGN=LEFT>Isrc</TD>
+			<TD ALIGN=LEFT>ISRC</TD>
+			<TD ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT><FONT FACE="Times New Roman">TSRC </FONT></TD>
+			<TD ALIGN=LEFT><FONT FACE="Times New Roman">TSRC </FONT></TD>
+			<TD ALIGN=LEFT><FONT FACE="Times New Roman">----:com.apple.iTunes:ISRC </FONT></TD>
+			<TD ALIGN=LEFT>ISRC</TD>
+			<TD ALIGN=LEFT>ISRC</TD>
+			<TD ALIGN=LEFT>WM/ISRC </TD>
+		</TR>
+		<TR>
+			<TD HEIGHT=17 ALIGN=LEFT>Barcode</TD>
+			<TD ALIGN=LEFT>BARCODE</TD>
+			<TD ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT><FONT FACE="Times New Roman">TXXX:BARCODE </FONT></TD>
+			<TD ALIGN=LEFT><FONT FACE="Times New Roman">TXXX:BARCODE </FONT></TD>
+			<TD ALIGN=LEFT><FONT FACE="Times New Roman">----:com.apple.iTunes:BARCODE </FONT></TD>
+			<TD ALIGN=LEFT>BARCODE</TD>
+			<TD ALIGN=LEFT>BARCODE</TD>
+			<TD ALIGN=LEFT>WM/Barcode </TD>
+		</TR>
+		<TR>
+			<TD HEIGHT=17 ALIGN=LEFT>Catalog No</TD>
+			<TD ALIGN=LEFT>CATALOG_NO</TD>
+			<TD ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT><FONT FACE="Times New Roman">TXXX:CATALOGNUMBER </FONT></TD>
+			<TD ALIGN=LEFT><FONT FACE="Times New Roman">TXXX:CATALOGNUMBER </FONT></TD>
+			<TD ALIGN=LEFT><FONT FACE="Times New Roman">----:com.apple.iTunes:CATALOGNUMBER </FONT></TD>
+			<TD ALIGN=LEFT>CATALOGNUMBER</TD>
+			<TD ALIGN=LEFT>CATALOGNUMBER</TD>
+			<TD ALIGN=LEFT>WM/CatalogNo </TD>
+		</TR>
+		<TR>
+			<TD HEIGHT=17 ALIGN=LEFT>Record Label</TD>
+			<TD ALIGN=LEFT>RECORD_LABEL</TD>
+			<TD ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT><FONT FACE="Times New Roman">TPUB </FONT></TD>
+			<TD ALIGN=LEFT><FONT FACE="Times New Roman">TPUB </FONT></TD>
+			<TD ALIGN=LEFT><FONT FACE="Times New Roman">----:com.apple.iTunes:LABEL </FONT></TD>
+			<TD ALIGN=LEFT>LABEL</TD>
+			<TD ALIGN=LEFT>LABEL</TD>
+			<TD ALIGN=LEFT>WM/Publisher </TD>
+		</TR>
+		<TR>
+			<TD HEIGHT=17 ALIGN=LEFT>Lyricist</TD>
+			<TD ALIGN=LEFT>LYRICIST</TD>
+			<TD ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT><FONT FACE="Times New Roman">TEXT </FONT></TD>
+			<TD ALIGN=LEFT><FONT FACE="Times New Roman">TEXT </FONT></TD>
+			<TD ALIGN=LEFT><FONT FACE="Times New Roman">----:com.apple.iTunes:LYRICIST</FONT></TD>
+			<TD ALIGN=LEFT>LYRICIST</TD>
+			<TD ALIGN=LEFT>LYRICIST</TD>
+			<TD ALIGN=LEFT>WM/Writer </TD>
+		</TR>
+		<TR>
+			<TD HEIGHT=17 ALIGN=LEFT>Conductor</TD>
+			<TD ALIGN=LEFT>CONDUCTOR</TD>
+			<TD ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT><FONT FACE="Times New Roman">TPE3 </FONT></TD>
+			<TD ALIGN=LEFT><FONT FACE="Times New Roman">TPE3 </FONT></TD>
+			<TD ALIGN=LEFT><FONT FACE="Times New Roman">----:com.apple.iTunes:CONDUCTOR </FONT></TD>
+			<TD ALIGN=LEFT>CONDUCTOR</TD>
+			<TD ALIGN=LEFT>CONDUCTOR</TD>
+			<TD ALIGN=LEFT>WM/Conductor </TD>
+		</TR>
+		<TR>
+			<TD HEIGHT=17 ALIGN=LEFT>Remixer</TD>
+			<TD ALIGN=LEFT>REMIXER</TD>
+			<TD ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT><FONT FACE="Times New Roman">TPE4 </FONT></TD>
+			<TD ALIGN=LEFT><FONT FACE="Times New Roman">TPE4 </FONT></TD>
+			<TD ALIGN=LEFT><FONT FACE="Times New Roman">----:com.apple.iTunes:REMIXER </FONT></TD>
+			<TD ALIGN=LEFT>REMIXER</TD>
+			<TD ALIGN=LEFT>REMIXER</TD>
+			<TD ALIGN=LEFT>WM/ModifiedBy </TD>
+		</TR>
+		<TR>
+			<TD HEIGHT=17 ALIGN=LEFT>Mood</TD>
+			<TD ALIGN=LEFT>MOOD</TD>
+			<TD ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT><FONT FACE="Times New Roman">TMOO </FONT></TD>
+			<TD ALIGN=LEFT><FONT FACE="Times New Roman">TMOO </FONT></TD>
+			<TD ALIGN=LEFT><FONT FACE="Times New Roman">----:com.apple.iTunes:MOOD </FONT></TD>
+			<TD ALIGN=LEFT>MOOD</TD>
+			<TD ALIGN=LEFT>MOOD</TD>
+			<TD ALIGN=LEFT>WM/Mood </TD>
+		</TR>
+		<TR>
+			<TD HEIGHT=17 ALIGN=LEFT>Media</TD>
+			<TD ALIGN=LEFT>MEDIA</TD>
+			<TD ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT><FONT FACE="Times New Roman">TMED </FONT></TD>
+			<TD ALIGN=LEFT><FONT FACE="Times New Roman">TMED </FONT></TD>
+			<TD ALIGN=LEFT><FONT FACE="Times New Roman">----:com.apple.iTunes:MEDIA </FONT></TD>
+			<TD ALIGN=LEFT>MEDIA</TD>
+			<TD ALIGN=LEFT>MEDIA</TD>
+			<TD ALIGN=LEFT>WM/Media </TD>
+		</TR>
+		<TR>
+			<TD HEIGHT=17 ALIGN=LEFT>Official Release Site Url</TD>
+			<TD ALIGN=LEFT>URL_OFFICIAL_RELEASE_SITE</TD>
+			<TD ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT>WXXX:OFFICIAL_RELEASE</TD>
+			<TD ALIGN=LEFT>WXXX:OFFICIAL_RELEASE</TD>
+			<TD ALIGN=LEFT><FONT FACE="Times New Roman">----:com.apple.iTunes:URL_OFFICIAL_RELEASE_SITE</FONT></TD>
+			<TD ALIGN=LEFT>URL_OFFICIAL_RELEASE_SITE</TD>
+			<TD ALIGN=LEFT>URL_OFFICIAL_RELEASE_SITE</TD>
+			<TD ALIGN=LEFT>WM/OfficialReleaseUrl </TD>
+		</TR>
+		<TR>
+			<TD HEIGHT=17 ALIGN=LEFT>Discogs Release Site Url</TD>
+			<TD ALIGN=LEFT>URL_DISCOGS_RELEASE_SITE</TD>
+			<TD ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT>WXXX:DISCOGS_RELEASE</TD>
+			<TD ALIGN=LEFT>WXXX:DISCOGS_RELEASE</TD>
+			<TD ALIGN=LEFT><FONT FACE="Times New Roman">----:com.apple.iTunes:URL_DISCOGS_RELEASE_SITE</FONT></TD>
+			<TD ALIGN=LEFT>URL_DISCOGS_RELEASE_SITE</TD>
+			<TD ALIGN=LEFT>URL_DISCOGS_RELEASE_SITE</TD>
+			<TD ALIGN=LEFT>WM/DiscogsReleaseUrl </TD>
+		</TR>
+		<TR>
+			<TD HEIGHT=17 ALIGN=LEFT>Wikipedia Release Site Url</TD>
+			<TD ALIGN=LEFT>URL_WIKIPEDIA_RELEASE_SITE</TD>
+			<TD ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT>WXXX:WIKIPEDIA_RELEASE</TD>
+			<TD ALIGN=LEFT>WXXX:WIKIPEDIA_RELEASE</TD>
+			<TD ALIGN=LEFT><FONT FACE="Times New Roman">----:com.apple.iTunes:URL_WIKIPEDIA_RELEASE_SITE</FONT></TD>
+			<TD ALIGN=LEFT>URL_WIKIPEDIA_RELEASE_SITE</TD>
+			<TD ALIGN=LEFT>URL_WIKIPEDIA_RELEASE_SITE</TD>
+			<TD ALIGN=LEFT>WM/WikipediaReleaseUrl </TD>
+		</TR>
+		<TR>
+			<TD HEIGHT=17 ALIGN=LEFT>Official Artist Site Url</TD>
+			<TD ALIGN=LEFT>URL_OFFICIAL_ARTIST_SITE</TD>
+			<TD ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT>WOAR</TD>
+			<TD ALIGN=LEFT>WOAR</TD>
+			<TD ALIGN=LEFT><FONT FACE="Times New Roman">----:com.apple.iTunes:URL_OFFICIAL_ARTIST_SITE</FONT></TD>
+			<TD ALIGN=LEFT>URL_OFFICIAL_ARTIST_SITE</TD>
+			<TD ALIGN=LEFT>URL_OFFICIAL_ARTIST_SITE</TD>
+			<TD ALIGN=LEFT>WM/AuthorURL </TD>
+		</TR>
+		<TR>
+			<TD HEIGHT=17 ALIGN=LEFT>Discogs Artist Site Url</TD>
+			<TD ALIGN=LEFT>URL_DISCOGS_ARTIST_SITE</TD>
+			<TD ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT>WXXX:DISCOGS_ARTIST</TD>
+			<TD ALIGN=LEFT>WXXX:DISCOGS_ARTIST</TD>
+			<TD ALIGN=LEFT><FONT FACE="Times New Roman">----:com.apple.iTunes:URL_DISCOGS_ARTIST_SITE</FONT></TD>
+			<TD ALIGN=LEFT>URL_DISCOGS_ARTIST_SITE</TD>
+			<TD ALIGN=LEFT>URL_DISCOGS_ARTIST_SITE</TD>
+			<TD ALIGN=LEFT>WM/DiscogsArtistUrl </TD>
+		</TR>
+		<TR>
+			<TD HEIGHT=17 ALIGN=LEFT>Wikipedia Artist Site Url</TD>
+			<TD ALIGN=LEFT>URL_WIKIPEDIA_ARTIST_SITE</TD>
+			<TD ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT>WXXX:WIKIPEDIA_ARTIST</TD>
+			<TD ALIGN=LEFT>WXXX:WIKIPEDIA_ARTIST</TD>
+			<TD ALIGN=LEFT><FONT FACE="Times New Roman">----:com.apple.iTunes:URL_WIKIPEDIA_ARTIST_SITE</FONT></TD>
+			<TD ALIGN=LEFT>URL_WIKIPEDIA_ARTIST_SITE</TD>
+			<TD ALIGN=LEFT>URL_WIKIPEDIA_ARTIST_SITE</TD>
+			<TD ALIGN=LEFT>WM/WikipediaArtistUrl </TD>
+		</TR>
+		<TR>
+			<TD HEIGHT=17 ALIGN=LEFT>Language</TD>
+			<TD ALIGN=LEFT>LANGUAGE</TD>
+			<TD ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT>TLAN</TD>
+			<TD ALIGN=LEFT>TLAN</TD>
+			<TD ALIGN=LEFT><FONT FACE="Times New Roman">----:com.apple.iTunes:LANGUAGE</FONT></TD>
+			<TD ALIGN=LEFT>LANGUAGE</TD>
+			<TD ALIGN=LEFT>LANGUAGE</TD>
+			<TD ALIGN=LEFT>WM/Language </TD>
+		</TR>
+		<TR>
+			<TD HEIGHT=17 ALIGN=LEFT>Key</TD>
+			<TD ALIGN=LEFT>KEY</TD>
+			<TD ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT>TKEY</TD>
+			<TD ALIGN=LEFT>TKEY</TD>
+			<TD ALIGN=LEFT><FONT FACE="Times New Roman">----:com.apple.iTunes:KEY</FONT></TD>
+			<TD ALIGN=LEFT>KEY</TD>
+			<TD ALIGN=LEFT>KEY</TD>
+			<TD ALIGN=LEFT>WM/InitialKey </TD>
+		</TR>
+		<TR>
+			<TD HEIGHT=17 ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT><FONT FACE="Times New Roman"><BR></FONT></TD>
+			<TD ALIGN=LEFT><FONT FACE="Times New Roman"><BR></FONT></TD>
+			<TD ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT>DESCRIPTION</TD>
+			<TD ALIGN=LEFT>DESCRIPTION</TD>
+			<TD ALIGN=LEFT><BR></TD>
+		</TR>
+		<TR>
+			<TD HEIGHT=17 ALIGN=LEFT>Certiifcation</TD>
+			<TD ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT>RATING </TD>
+		</TR>
+		<TR>
+			<TD HEIGHT=17 ALIGN=LEFT>Copyright</TD>
+			<TD ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT><FONT FACE="Times New Roman">TCOP </FONT></TD>
+			<TD ALIGN=LEFT><FONT FACE="Times New Roman">cprt </FONT></TD>
+			<TD ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT>COPYRIGHT </TD>
+		</TR>
+		<TR>
+			<TD HEIGHT=17 ALIGN=LEFT>Producer</TD>
+			<TD ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT><FONT FACE="Times New Roman">----:com.apple.iTunes:PRODUCER </FONT></TD>
+			<TD ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT>WM/Producer </TD>
+		</TR>
+		<TR>
+			<TD HEIGHT=17 ALIGN=LEFT>Synchronized Lyrics</TD>
+			<TD ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT>WM/SubTitle </TD>
+		</TR>
+		<TR>
+			<TD HEIGHT=17 ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT>WM/Lyrics_Synchronised </TD>
+		</TR>
+		<TR>
+			<TD HEIGHT=17 ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT>WM/PromotionURL </TD>
+		</TR>
+		<TR>
+			<TD HEIGHT=17 ALIGN=LEFT>Encoded By</TD>
+			<TD ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT>WM/EncodedBy </TD>
+		</TR>
+		<TR>
+			<TD HEIGHT=17 ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT>WM/Category   </TD>
+		</TR>
+		<TR>
+			<TD HEIGHT=17 ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT>WM/AlbumCoverURL </TD>
+		</TR>
+		<TR>
+			<TD HEIGHT=17 ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT>WM/Director </TD>
+		</TR>
+		<TR>
+			<TD HEIGHT=17 ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT><FONT FACE="Times New Roman">sosn </FONT></TD>
+			<TD ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT><BR></TD>
+		</TR>
+		<TR>
+			<TD HEIGHT=17 ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT><FONT FACE="Times New Roman">pgap </FONT></TD>
+			<TD ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT><BR></TD>
+		</TR>
+		<TR>
+			<TD HEIGHT=17 ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT><FONT FACE="Times New Roman">pcst </FONT></TD>
+			<TD ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT><BR></TD>
+		</TR>
+		<TR>
+			<TD HEIGHT=17 ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT><FONT FACE="Times New Roman">purl </FONT></TD>
+			<TD ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT><BR></TD>
+		</TR>
+		<TR>
+			<TD HEIGHT=17 ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT><FONT FACE="Times New Roman">tvsh </FONT></TD>
+			<TD ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT><BR></TD>
+			<TD ALIGN=LEFT><BR></TD>
+		</TR>
+	</TBODY>
+</TABLE>
+<!-- ************************************************************************** -->
+</BODY>
+
+</HTML>
