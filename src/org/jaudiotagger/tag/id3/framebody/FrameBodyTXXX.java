@@ -63,6 +63,7 @@ public class FrameBodyTXXX extends AbstractFrameBodyTextInfo implements ID3v24Fr
     public static final String MUSICIP_ID = "MusicIP PUID";
     public static final String BARCODE = "BARCODE";
     public static final String CATALOG_NO = "CATALOGNUMBER";
+    public static final String MOOD = "MOOD";                          //ID3 v23 only
 
     /**
      * Creates a new FrameBodyTXXX datatype.

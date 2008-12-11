@@ -375,6 +375,7 @@ public class ID3v24Frames extends ID3Frames
         tagFieldToId3.put(TagFieldKey.MUSICBRAINZ_DISC_ID, ID3v24FieldKey.MUSICBRAINZ_DISC_ID);
         tagFieldToId3.put(TagFieldKey.MUSICIP_ID, ID3v24FieldKey.MUSICIP_ID);
         tagFieldToId3.put(TagFieldKey.AMAZON_ID, ID3v24FieldKey.AMAZON_ID);
+        tagFieldToId3.put(TagFieldKey.MOOD, ID3v24FieldKey.MOOD);
         tagFieldToId3.put(TagFieldKey.MUSICBRAINZ_RELEASE_STATUS, ID3v24FieldKey.MUSICBRAINZ_RELEASE_STATUS);
         tagFieldToId3.put(TagFieldKey.MUSICBRAINZ_RELEASE_TYPE, ID3v24FieldKey.MUSICBRAINZ_RELEASE_TYPE);
         tagFieldToId3.put(TagFieldKey.MUSICBRAINZ_RELEASE_COUNTRY, ID3v24FieldKey.MUSICBRAINZ_RELEASE_COUNTRY);

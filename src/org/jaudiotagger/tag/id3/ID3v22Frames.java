@@ -316,6 +316,7 @@ public class ID3v22Frames extends ID3Frames
         tagFieldToId3.put(TagFieldKey.DISC_NO, ID3v22FieldKey.DISC_NO);
         tagFieldToId3.put(TagFieldKey.BPM, ID3v22FieldKey.BPM);
         tagFieldToId3.put(TagFieldKey.ENCODER, ID3v22FieldKey.ENCODER);
+        tagFieldToId3.put(TagFieldKey.MOOD, ID3v22FieldKey.MOOD);
         tagFieldToId3.put(TagFieldKey.MUSICBRAINZ_ARTISTID, ID3v22FieldKey.MUSICBRAINZ_ARTISTID);
         tagFieldToId3.put(TagFieldKey.MUSICBRAINZ_RELEASEID, ID3v22FieldKey.MUSICBRAINZ_RELEASEID);
         tagFieldToId3.put(TagFieldKey.MUSICBRAINZ_RELEASEARTISTID, ID3v22FieldKey.MUSICBRAINZ_RELEASEARTISTID);
