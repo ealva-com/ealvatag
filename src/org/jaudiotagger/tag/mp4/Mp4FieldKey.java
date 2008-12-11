@@ -69,8 +69,8 @@ public enum Mp4FieldKey
     CDDB_1("com.apple.iTunes", "iTunes_CDDB_1", TEXT),
     CDDB_TRACKNUMBER("com.apple.iTunes", "iTunes_CDDB_TrackNumber", TEXT),
     CDDB_IDS("com.apple.iTunes", "iTunes_CDDB_IDs", TEXT),
-    LANGUAGE("com.apple.iTunes", "Language", TEXT, Tagger.JAIKOZ),
-    KEY("com.apple.iTunes", "key", TEXT, Tagger.JAIKOZ),
+    LANGUAGE("com.apple.iTunes", "LANGUAGE", TEXT, Tagger.JAIKOZ),
+    KEY("com.apple.iTunes", "KEY", TEXT, Tagger.JAIKOZ),
 
     //AFAIK These arent actually used by Audio Only files, but there is nothing to prevent them being used
     CONTENT_TYPE("stik", BYTE, 1),
