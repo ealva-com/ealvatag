@@ -9,7 +9,11 @@ import org.jaudiotagger.tag.datatype.Artwork;
 import org.jaudiotagger.tag.reference.PictureTypes;
 
 import java.io.UnsupportedEncodingException;
+import java.io.IOException;
 import java.util.*;
+import java.util.List;
+import java.awt.*;
+import java.awt.image.BufferedImage;
 
 /**
  * Tag implementation for ASF.<br>
@@ -379,6 +383,7 @@ public final class AsfTag extends AbstractTag
         return new AsfTagTextField(getYearId(), content);
     }
 
+
     /**
      * Create artwork field
      *
@@ -397,6 +402,20 @@ public final class AsfTag extends AbstractTag
      */
     public TagField createArtworkField(Artwork artwork) throws FieldDataInvalidException
     {
+        if(artwork.getBinaryData().length>ContentDescriptor.MAXIMUM_DATA_LENGTH_ALLOWED)
+        {
+            if(TagOptionSingleton.getInstance().isTruncateTextWithoutErrors())
+            {
+                try
+                {
+                    ImageHandling.reduceQuality(artwork,ContentDescriptor.MAXIMUM_DATA_LENGTH_ALLOWED);                    
+                }
+                catch(IOException ioe)
+                {
+                    throw new FieldDataInvalidException(ioe.getMessage(),ioe);
+                }
+            }
+        }
         return new AsfTagCoverField(artwork.getBinaryData(), artwork.getPictureType(), artwork.getDescription(),artwork.getMimeType());
     }
 

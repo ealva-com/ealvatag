@@ -1,23 +1,23 @@
 package org.jaudiotagger.audio.asf.tag;
 
-import org.jaudiotagger.audio.asf.data.ContentDescriptor;
 import org.jaudiotagger.audio.asf.data.AsfHeader;
-import org.jaudiotagger.tag.id3.valuepair.ImageFormats;
+import org.jaudiotagger.audio.asf.data.ContentDescriptor;
 import org.jaudiotagger.logging.ErrorMessage;
+import org.jaudiotagger.tag.id3.valuepair.ImageFormats;
 
 import javax.imageio.ImageIO;
-import java.io.UnsupportedEncodingException;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.ByteArrayOutputStream;
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.logging.Logger;
 
 /**
  * Enscapulates the WM/Pictures provides some convenience methods for decoding the binary data it contains
- *
+ * <p/>
  * The value of a Wm/Pictures content descriptor is as follows:
- *
+ * <p/>
  * byte0    Picture Type
  * byte1-4  Length of the image data
  * mimetype encoded as UTF-16LE
@@ -27,11 +27,12 @@ import java.util.logging.Logger;
  * null byte
  * null byte
  * image data
- *
  */
 public class AsfTagCoverField extends AsfTagField
 {
-    /** Logger Object  */
+    /**
+     * Logger Object
+     */
     public static Logger logger = Logger.getLogger("org.jaudiotagger.audio.asf.tag");
 
     /**
@@ -39,13 +40,13 @@ public class AsfTagCoverField extends AsfTagField
      */
     private int pictureType;
 
-    /** Mimetype of binary
-     *
+    /**
+     * Mimetype of binary
      */
     private String mimeType;
 
-    /** Description
-     *
+    /**
+     * Description
      */
     private String description;
 
@@ -57,19 +58,18 @@ public class AsfTagCoverField extends AsfTagField
     /**
      * We need this to retrive the buffered image, if required
      */
-    private int endOfName=0;
+    private int endOfName = 0;
 
-     /**
+    /**
      * Creates an instance from a content descriptor
      *
      * @param source The content descriptor, whose content is published.<br>
-
      */
     public AsfTagCoverField(ContentDescriptor source)
     {
         super(source);
 
-        if(!source.getName().equals(AsfFieldKey.COVER_ART.getFieldName()))
+        if (!source.getName().equals(AsfFieldKey.COVER_ART.getFieldName()))
         {
             throw new IllegalArgumentException("Descriptor description must be WM/Picture");
         }
@@ -82,7 +82,7 @@ public class AsfTagCoverField extends AsfTagField
         {
             processRawContent();
         }
-        catch(UnsupportedEncodingException uee)
+        catch (UnsupportedEncodingException uee)
         {
             //Should never happen
             throw new RuntimeException(uee);
@@ -95,67 +95,68 @@ public class AsfTagCoverField extends AsfTagField
      * @param imageData
      * @param description
      */
-    public AsfTagCoverField(byte[] imageData,int pictureType,String description,String mimeType)
+    public AsfTagCoverField(byte[] imageData, int pictureType, String description, String mimeType)
     {
         super(new ContentDescriptor(AsfFieldKey.COVER_ART.getFieldName(), ContentDescriptor.TYPE_BINARY));
-        this.getDescriptor().setBinaryValue(createRawContent(imageData,pictureType,description,mimeType));
+        this.getDescriptor().setBinaryValue(createRawContent(imageData, pictureType, description, mimeType));
     }
 
-    private byte[] createRawContent(byte[] data,int pictureType,String description,String mimeType)
+    private byte[] createRawContent(byte[] data, int pictureType, String description, String mimeType)
     {
-        description=description;
+        description = description;
 
         //Get Mimetype from data if not already set
-        if(mimeType==null)
+        if (mimeType == null)
         {
-            mimeType=ImageFormats.getMimeTypeForBinarySignature(data);
+            mimeType = ImageFormats.getMimeTypeForBinarySignature(data);
             //Couldnt identify lets default to png because probably error in code because not 100% sure how to identify
             //formats
-            if(mimeType==null)
+            if (mimeType == null)
             {
                 logger.warning(ErrorMessage.GENERAL_UNIDENITIFED_IMAGE_FORMAT.getMsg());
+                mimeType = ImageFormats.MIME_TYPE_PNG;
             }
         }
 
-        ByteArrayOutputStream baos = new  ByteArrayOutputStream();
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
         //PictureType
         baos.write(pictureType);
 
         //ImageDataSize
-        baos.write(org.jaudiotagger.audio.generic.Utils.getSizeLEInt32(data.length),0,4);
+        baos.write(org.jaudiotagger.audio.generic.Utils.getSizeLEInt32(data.length), 0, 4);
 
         //mimetype
         byte[] mimeTypeData;
         try
         {
-            mimeTypeData=mimeType.getBytes(AsfHeader.ASF_CHARSET.name());
+            mimeTypeData = mimeType.getBytes(AsfHeader.ASF_CHARSET.name());
         }
-        catch(UnsupportedEncodingException  uee)
+        catch (UnsupportedEncodingException uee)
         {
             //Should never happen
-            throw new RuntimeException("Unable to find encoding:"+AsfHeader.ASF_CHARSET.name());
+            throw new RuntimeException("Unable to find encoding:" + AsfHeader.ASF_CHARSET.name());
         }
-        baos.write(mimeTypeData,0,mimeTypeData.length);
+        baos.write(mimeTypeData, 0, mimeTypeData.length);
 
         //Seperator
         baos.write(0x00);
         baos.write(0x00);
 
         //description
-        if(description!=null && description.length()>0)
+        if (description != null && description.length() > 0)
         {
             byte[] descriptionData;
             try
             {
-                descriptionData=description.getBytes(AsfHeader.ASF_CHARSET.name());
+                descriptionData = description.getBytes(AsfHeader.ASF_CHARSET.name());
             }
-            catch(UnsupportedEncodingException  uee)
+            catch (UnsupportedEncodingException uee)
             {
                 //Should never happen
-                throw new RuntimeException("Unable to find encoding:"+AsfHeader.ASF_CHARSET.name());
+                throw new RuntimeException("Unable to find encoding:" + AsfHeader.ASF_CHARSET.name());
             }
-            baos.write(descriptionData,0,descriptionData.length);
+            baos.write(descriptionData, 0, descriptionData.length);
         }
 
         //Seperator (always write whther or not we have descriptor field)
@@ -163,7 +164,7 @@ public class AsfTagCoverField extends AsfTagField
         baos.write(0x00);
 
         //Image data
-        baos.write(data,0,data.length);
+        baos.write(data, 0, data.length);
 
         return baos.toByteArray();
     }
@@ -172,34 +173,34 @@ public class AsfTagCoverField extends AsfTagField
     private void processRawContent() throws UnsupportedEncodingException
     {
         //PictureType
-        pictureType=this.getRawContent()[0];
+        pictureType = this.getRawContent()[0];
 
         //ImageDataSize
-        imageDataSize=org.jaudiotagger.audio.generic.Utils.getIntLE(this.getRawContent(), 1, 2);
+        imageDataSize = org.jaudiotagger.audio.generic.Utils.getIntLE(this.getRawContent(), 1, 2);
 
         //Set Count to after picture type,datasize and two byte nulls
-        int count=5;
-        mimeType=null;
-        description =null; //Optional
-        int endOfMimeType=0;
-       
-        while(count<this.getRawContent().length - 1)
+        int count = 5;
+        mimeType = null;
+        description = null; //Optional
+        int endOfMimeType = 0;
+
+        while (count < this.getRawContent().length - 1)
         {
-            if(getRawContent()[count]==0 && getRawContent()[count+1]==0 )
+            if (getRawContent()[count] == 0 && getRawContent()[count + 1] == 0)
             {
-                if(mimeType==null)
+                if (mimeType == null)
                 {
-                    mimeType = new String(getRawContent(),5,(count)-5,"UTF-16LE");
-                    endOfMimeType=count+2;
+                    mimeType = new String(getRawContent(), 5, (count) - 5, "UTF-16LE");
+                    endOfMimeType = count + 2;
                 }
-                else if(description ==null)
+                else if (description == null)
                 {
-                    description = new String(getRawContent(),endOfMimeType,count - endOfMimeType,"UTF-16LE");
-                    endOfName=count+2;
+                    description = new String(getRawContent(), endOfMimeType, count - endOfMimeType, "UTF-16LE");
+                    endOfName = count + 2;
                     break;
                 }
             }
-            count+=2;  //keep on two byte word boundary
+            count += 2;  //keep on two byte word boundary
         }
     }
 
@@ -224,25 +225,23 @@ public class AsfTagCoverField extends AsfTagField
     }
 
     /**
-     *
      * @return the raw image data only
      */
     public byte[] getRawImageData()
     {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        baos.write(getRawContent(),endOfName,getRawContent().length - endOfName);
+        baos.write(getRawContent(), endOfName, getRawContent().length - endOfName);
         return baos.toByteArray();
     }
 
     /**
-     *
      * @return the image
      * @throws IOException
      */
     public BufferedImage getImage() throws IOException
     {
         BufferedImage bi = ImageIO.read(ImageIO
-                    .createImageInputStream(new ByteArrayInputStream(getRawImageData())));
+                .createImageInputStream(new ByteArrayInputStream(getRawImageData())));
         return bi;
     }
 }

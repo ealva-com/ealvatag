@@ -1,6 +1,7 @@
 package org.jaudiotagger.tag.datatype;
 
 import org.jaudiotagger.tag.id3.valuepair.ImageFormats;
+import org.jaudiotagger.tag.reference.PictureTypes;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -96,6 +97,7 @@ public class Artwork
 
         setBinaryData(imagedata);
         setMimeType(ImageFormats.getMimeTypeForBinarySignature(imagedata));
+        setPictureType(PictureTypes.DEFAULT_ID);
     }
 
     public static Artwork createArtworkFromFile(File file)  throws IOException
