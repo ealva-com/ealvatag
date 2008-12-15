@@ -794,6 +794,13 @@ public abstract class AbstractTag implements Tag
         this.set(createArtworkField(artwork));
     }
 
-   
-
+    /**
+     * Delete all instance of artwork Field
+     *
+     * @throws KeyNotFoundException
+     */
+    public void deleteArtworkField() throws KeyNotFoundException
+    {
+        this.deleteTagField(TagFieldKey.COVER_ART);
+    }
 }

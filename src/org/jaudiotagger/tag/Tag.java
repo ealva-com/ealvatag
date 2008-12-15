@@ -393,6 +393,9 @@ public interface Tag
      */
     public void createAndSetArtworkField(Artwork artwork) throws FieldDataInvalidException;
 
-  
+     /**
+     * Delete any instance of tag fields used to store artwork
+     */
+    public void deleteArtworkField()throws KeyNotFoundException;
 
 }

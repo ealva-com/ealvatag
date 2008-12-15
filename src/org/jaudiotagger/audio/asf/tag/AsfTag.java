@@ -674,7 +674,7 @@ public final class AsfTag extends AbstractTag
     {
         if (isValidField(field))
         {
-            //Copy only occUrs if flag set
+            //Copy only occurs if flag set
             field = copyFrom(field);
             if (AsfFieldKey.isMultiValued(field.getId()))
             {
@@ -696,7 +696,7 @@ public final class AsfTag extends AbstractTag
     {
         if (isValidField(field))
         {
-            //Copy only occors if flag set
+            //Copy only occurs if flag set
             field = copyFrom(field);
             super.set(field);
         }

@@ -751,4 +751,14 @@ public class FlacTag implements Tag
         }
         return null;
     }
+
+    /**
+     * Delete all instance of artwork Field
+     *
+     * @throws KeyNotFoundException
+     */
+    public void deleteArtworkField() throws KeyNotFoundException
+    {
+        this.deleteTagField(TagFieldKey.COVER_ART);
+    }
 }

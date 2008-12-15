@@ -1091,4 +1091,14 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag
     {
         throw new UnsupportedOperationException("Not implemented for this format");
     }
+
+    /**
+     * Delete all instance of artwork Field
+     *
+     * @throws KeyNotFoundException
+     */
+    public void deleteArtworkField() throws KeyNotFoundException
+    {
+        throw new UnsupportedOperationException("Not implemented for this format");
+    }
 }

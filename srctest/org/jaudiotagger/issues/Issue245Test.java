@@ -51,6 +51,14 @@ public class Issue245Test extends AbstractTestCase
             assertNotNull(artwork.getImage());
             assertEquals(200, artwork.getImage().getWidth());
             assertEquals(5,artwork.getPictureType());
+
+            tag.deleteArtworkField();
+            assertEquals(0, tag.getArtworkList().size());
+            af.commit();
+            af = AudioFileIO.read(testFile);
+            tag = af.getTag();
+            assertEquals(0, tag.getArtworkList().size());
+
         }
         catch (Exception e)
         {
@@ -94,6 +102,13 @@ public class Issue245Test extends AbstractTestCase
                     assertNotNull(artwork.getImage());
                     assertEquals(200, artwork.getImage().getWidth());
                     assertEquals(11,artwork.getPictureType());
+
+                    tag.deleteArtworkField();
+            assertEquals(0, tag.getArtworkList().size());
+            af.commit();
+            af = AudioFileIO.read(testFile);
+            tag = af.getTag();
+            assertEquals(0, tag.getArtworkList().size());
 
                 }
                 catch (Exception e)
@@ -139,6 +154,13 @@ public class Issue245Test extends AbstractTestCase
                     assertEquals(200, artwork.getImage().getWidth());
                     assertEquals(5,artwork.getPictureType());
 
+                    tag.deleteArtworkField();
+            assertEquals(0, tag.getArtworkList().size());
+            af.commit();
+            af = AudioFileIO.read(testFile);
+            tag = af.getTag();
+            assertEquals(0, tag.getArtworkList().size());
+
                 }
                 catch (Exception e)
                 {
@@ -182,6 +204,13 @@ public class Issue245Test extends AbstractTestCase
             assertEquals("image/png", artwork.getMimeType());
             assertNotNull(artwork.getImage());
             assertEquals(200, artwork.getImage().getWidth());
+
+            tag.deleteArtworkField();
+            assertEquals(0, tag.getArtworkList().size());
+            af.commit();
+            af = AudioFileIO.read(testFile);
+            tag = af.getTag();
+            assertEquals(0, tag.getArtworkList().size());
 
         }
         catch (Exception e)
@@ -230,6 +259,13 @@ public class Issue245Test extends AbstractTestCase
             assertNotNull(artwork.getImage());
             assertEquals(200, artwork.getImage().getWidth());
             assertEquals(7,artwork.getPictureType());
+
+            tag.deleteArtworkField();
+            assertEquals(0, tag.getArtworkList().size());
+            af.commit();
+            af = AudioFileIO.read(testFile);
+            tag = af.getTag();
+            assertEquals(0, tag.getArtworkList().size());
         }
         catch (Exception e)
         {
@@ -281,6 +317,13 @@ public class Issue245Test extends AbstractTestCase
             assertEquals(200, artwork.getImage().getWidth());
             assertEquals(8,artwork.getPictureType());
 
+            tag.deleteArtworkField();
+            assertEquals(0, tag.getArtworkList().size());
+            af.commit();
+            af = AudioFileIO.read(testFile);
+            tag = af.getTag();
+            assertEquals(0, tag.getArtworkList().size());
+
         }
         catch (Exception e)
         {
@@ -326,6 +369,13 @@ public class Issue245Test extends AbstractTestCase
             assertNotNull(artwork.getImage());
             assertEquals(200, artwork.getImage().getWidth());
 
+            tag.deleteArtworkField();
+            assertEquals(0, tag.getArtworkList().size());
+            af.commit();
+            af = AudioFileIO.read(testFile);
+            tag = af.getTag();
+            assertEquals(0, tag.getArtworkList().size());
+
         }
         catch (Exception e)
         {
@@ -353,6 +403,9 @@ public class Issue245Test extends AbstractTestCase
             Tag tag = af.getTag();
 
             assertEquals(0, tag.getArtworkList().size());
+
+
+            
         }
         catch (Exception e)
         {
@@ -369,6 +422,25 @@ public class Issue245Test extends AbstractTestCase
             Artwork newartwork = Artwork.createArtworkFromFile(new File("testdata", "coverart.png"));
             Tag tag = af.getTag();
             tag.createAndSetArtworkField(newartwork);
+
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            exceptionCaught = e;
+        }
+        assertNotNull(exceptionCaught);
+        assertTrue(exceptionCaught instanceof UnsupportedOperationException);
+
+        //Not Supported
+         try
+        {
+            //Now try and add image
+            AudioFile af = AudioFileIO.read(testFile);
+            Tag tag = af.getTag();
+            tag.deleteArtworkField();
+            assertEquals(0, tag.getArtworkList().size());
+            af.commit();
 
         }
         catch (Exception e)
@@ -412,6 +484,24 @@ public class Issue245Test extends AbstractTestCase
             Artwork newartwork = Artwork.createArtworkFromFile(new File("testdata", "coverart.png"));
             Tag tag = af.getTag();
             tag.createAndSetArtworkField(newartwork);
+
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            exceptionCaught = e;
+        }
+        assertNotNull(exceptionCaught);
+        assertTrue(exceptionCaught instanceof UnsupportedOperationException);
+
+        //Not supported
+         try
+        {
+
+            AudioFile af = AudioFileIO.read(testFile);
+            Tag tag = af.getTag();
+            tag.deleteArtworkField();
+
 
         }
         catch (Exception e)

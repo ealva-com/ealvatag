@@ -41,7 +41,7 @@ public class TagConverter
 
     /**
      * This method assigns those tags of <code>tag</code> which are defined to
-     * be common by entagged. <br>
+     * be common by jaudiotagger. <br>
      *
      * @param tag         The tag from which the values are gathered. <br>
      *                    Assigned values are: <br>
@@ -88,10 +88,12 @@ public class TagConverter
         }
         if (!Utils.isBlank(tag.getFirstGenre()))
         {
+            //Write Genre String value
             tmp = new ContentDescriptor(AsfFieldKey.GENRE.getFieldName(), ContentDescriptor.TYPE_STRING);
             tmp.setStringValue(tag.getFirstGenre());
             description.addOrReplace(tmp);
             Integer genreNum = GenreTypes.getInstanceOf().getIdForName(tag.getFirstGenre());
+            //..and if it is one of the standard genre types used the id as well
             if (genreNum != null)
             {
                 tmp = new ContentDescriptor(AsfFieldKey.GENRE_ID.getFieldName(), ContentDescriptor.TYPE_STRING);
@@ -112,7 +114,7 @@ public class TagConverter
 
     /**
      * This method will add or replace all values of tag are not defined as
-     * common by entagged.
+     * common by jaudiotagger.
      *
      * @param tag        The tag containing the values.
      * @param descriptor the extended content description.

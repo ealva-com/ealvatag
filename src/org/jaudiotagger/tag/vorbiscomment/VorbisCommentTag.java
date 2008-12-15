@@ -523,5 +523,16 @@ public class VorbisCommentTag extends AbstractTag
         this.set(imageTagField);
         this.set(imageTypeField);
     }
+
+     /**
+     * Delete all instance of artwork Field
+     *
+     * @throws KeyNotFoundException
+     */
+    public void deleteArtworkField() throws KeyNotFoundException
+    {
+        this.deleteTagField(VorbisCommentFieldKey.COVERART);
+        this.deleteTagField(VorbisCommentFieldKey.COVERARTMIME);
+    }
 }
 
