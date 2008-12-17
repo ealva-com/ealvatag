@@ -213,8 +213,7 @@ public final class AsfTag extends AbstractTag
      * @return A copy, which is as close to the source as possible, or <code>null</code> if the field is empty
      *         (empty byte[] or blank string}.
      * @throws UnsupportedEncodingException upon {@link TagField#getRawContent()}.
-     */
-    //TODO Add support for cover art field
+     */   
     private TagField copyFrom(TagField source)
     {
         TagField result = null;
@@ -227,7 +226,7 @@ public final class AsfTag extends AbstractTag
                 String content = ((TagTextField) source).getContent();
                 result = new AsfTagTextField(internalId, content);
             }
-            else if (source instanceof AsfTagField)
+            else if (source instanceof AsfTagCoverField)
             {
                 result = new AsfTagCoverField(((AsfTagCoverField) source).getDescriptor());
             }
