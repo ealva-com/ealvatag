@@ -18,4 +18,10 @@ test4.wma,yes,245,wma,Gif Artwork
 test5.wma,yes,245,wma,Png Artwork
 test6.wma,yes,245,wma,Jpg Artwork
 test7.wma,yes,245,wma,Png artwork
+test8.wma,no,268,wma,
+test9.wma,no,268,wma,Contains WM/MCDI field, (non artwork binary)
+test46.mp3,no,269,mp3 with extended header flag set but doesnt actually have an extended header
+test47.mp3,yes,269,mp3 with extended header and crc check
+test48.mp3,yes,269,mp3 with encrypted field (TENC)
+
 
