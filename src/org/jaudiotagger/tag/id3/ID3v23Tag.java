@@ -16,24 +16,17 @@
 package org.jaudiotagger.tag.id3;
 
 import org.jaudiotagger.FileConstants;
-import org.jaudiotagger.logging.FileSystemMessage;
-import org.jaudiotagger.logging.ErrorMessage;
 import org.jaudiotagger.audio.mp3.MP3File;
-import org.jaudiotagger.audio.exceptions.UnableToCreateFileException;
-import org.jaudiotagger.audio.exceptions.UnableToModifyFileException;
+import org.jaudiotagger.logging.ErrorMessage;
 import org.jaudiotagger.tag.*;
-import org.jaudiotagger.tag.reference.PictureTypes;
 import org.jaudiotagger.tag.datatype.Artwork;
 import org.jaudiotagger.tag.datatype.DataTypes;
 import org.jaudiotagger.tag.id3.framebody.*;
+import org.jaudiotagger.tag.reference.PictureTypes;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.RandomAccessFile;
-import java.io.FileNotFoundException;
 import java.nio.ByteBuffer;
-import java.nio.channels.FileChannel;
-import java.nio.channels.FileLock;
 import java.nio.channels.WritableByteChannel;
 import java.util.*;
 import java.util.logging.Level;
@@ -101,14 +94,14 @@ public class ID3v23Tag extends AbstractID3v2Tag
     protected boolean extended = false;
 
     /**
-     * CRC Checksum
+     * Crcdata Checksum in extended header
      */
-    protected int crcData = 0;
+    private int crc32;
 
     /**
      * Tag padding
      */
-    protected int paddingSize = 0;
+    private int paddingSize = 0;
 
     /**
      * All frames in the tag uses unsynchronisation
@@ -124,6 +117,7 @@ public class ID3v23Tag extends AbstractID3v2Tag
     public static final byte RELEASE = 2;
     public static final byte MAJOR_VERSION = 3;
     public static final byte REVISION = 0;
+
 
     /**
      * Retrieve the Release
@@ -151,6 +145,14 @@ public class ID3v23Tag extends AbstractID3v2Tag
 
 
     /**
+     * @return  Cyclic Redundancy Check 32 Value
+     */
+    public int getCrc32()
+    {
+        return crc32;
+    }
+
+    /**
      * Creates a new empty ID3v2_3 datatype.
      */
     public ID3v23Tag()
@@ -172,7 +174,7 @@ public class ID3v23Tag extends AbstractID3v2Tag
             this.crcDataFlag = copyObject.crcDataFlag;
             this.experimental = copyObject.experimental;
             this.extended = copyObject.extended;
-            this.crcData = copyObject.crcData;
+            this.crc32 = copyObject.crc32;
             this.paddingSize = copyObject.paddingSize;
         }
     }
@@ -242,7 +244,7 @@ public class ID3v23Tag extends AbstractID3v2Tag
                     }
                 }
                 //Ensure that the list actually contains at lest one value before adding
-                if(multiFrame.size()>0)
+                if (multiFrame.size() > 0)
                 {
                     if (newFrame != null)
                     {
@@ -401,7 +403,7 @@ public class ID3v23Tag extends AbstractID3v2Tag
             return false;
         }
         ID3v23Tag object = (ID3v23Tag) obj;
-        if (this.crcData != object.crcData)
+        if (this.crc32 != object.crc32)
         {
             return false;
         }
@@ -445,6 +447,127 @@ public class ID3v23Tag extends AbstractID3v2Tag
     }
 
     /**
+     * Read header flags
+     *
+     * <p>Log info messages for falgs that have been set and log warnings when bits have been set for unknown flags</p>
+     * @param buffer
+     * @throws TagException
+     */
+    private void readHeaderFlags(ByteBuffer buffer) throws TagException
+    {
+        //Allowable Flags
+        byte flags = buffer.get();
+        unsynchronization = (flags & MASK_V23_UNSYNCHRONIZATION) != 0;
+        extended = (flags & MASK_V23_EXTENDED_HEADER) != 0;
+        experimental = (flags & MASK_V23_EXPERIMENTAL) != 0;
+
+        //Not allowable/Unknown Flags
+        if ((flags & FileConstants.BIT4) != 0)
+        {
+            logger.warning(ErrorMessage.ID3_INVALID_OR_UNKNOWN_FLAG_SET.getMsg(getLoggingFilename(), FileConstants.BIT4));
+        }
+
+        if ((flags & FileConstants.BIT3) != 0)
+        {
+            logger.warning(ErrorMessage.ID3_INVALID_OR_UNKNOWN_FLAG_SET.getMsg(getLoggingFilename(), FileConstants.BIT3));
+        }
+
+        if ((flags & FileConstants.BIT2) != 0)
+        {
+            logger.warning(ErrorMessage.ID3_INVALID_OR_UNKNOWN_FLAG_SET.getMsg(getLoggingFilename(), FileConstants.BIT2));
+        }
+
+        if ((flags & FileConstants.BIT1) != 0)
+        {
+            logger.warning(ErrorMessage.ID3_INVALID_OR_UNKNOWN_FLAG_SET.getMsg(getLoggingFilename(), FileConstants.BIT1));
+        }
+
+        if ((flags & FileConstants.BIT0) != 0)
+        {
+            logger.warning(ErrorMessage.ID3_INVALID_OR_UNKNOWN_FLAG_SET.getMsg(getLoggingFilename(), FileConstants.BIT0));
+        }
+
+        if (isUnsynchronization())
+        {
+            logger.info(ErrorMessage.ID3_TAG_UNSYNCHRONIZED.getMsg(getLoggingFilename()));
+        }
+
+        if (extended)
+        {
+            logger.info(ErrorMessage.ID3_TAG_EXTENDED.getMsg(getLoggingFilename()));
+        }
+
+        if (experimental)
+        {
+            logger.info(ErrorMessage.ID3_TAG_EXPERIMENTAL.getMsg(getLoggingFilename()));
+        }
+    }
+
+    /**
+     * Read the optional extended header
+     *
+     * @param buffer
+     * @param size
+     */
+    private void readExtendedHeader(ByteBuffer buffer, int size)
+    {
+        // Int is 4 bytes.
+        int extendedHeaderSize = buffer.getInt();
+        // Extended header without CRC Data
+        if (extendedHeaderSize == TAG_EXT_HEADER_DATA_LENGTH)
+        {
+            //Flag should not be set , if is log a warning
+            byte extFlag = buffer.get();
+            crcDataFlag = (extFlag & MASK_V23_CRC_DATA_PRESENT) != 0;
+            if (crcDataFlag)
+            {
+                logger.warning(ErrorMessage.ID3_TAG_CRC_FLAG_SET_INCORRECTLY.getMsg(getLoggingFilename()));
+            }
+            //2nd Flag Byte (not used)
+            buffer.get();
+
+            //Take padding and ext header size off the size to be read
+            paddingSize=buffer.getInt();
+            if(paddingSize>0)
+            {
+                logger.info(ErrorMessage.ID3_TAG_PADDING_SIZE.getMsg(getLoggingFilename(),paddingSize));
+            }
+            size = size - ( paddingSize + TAG_EXT_HEADER_LENGTH);
+        }
+        else if (extendedHeaderSize == TAG_EXT_HEADER_DATA_LENGTH + TAG_EXT_HEADER_CRC_LENGTH)
+        {
+            logger.info(ErrorMessage.ID3_TAG_CRC.getMsg(getLoggingFilename()));
+
+            //Flag should be set, if nor just act as if it is
+            byte extFlag = buffer.get();
+            crcDataFlag = (extFlag & MASK_V23_CRC_DATA_PRESENT) != 0;
+            if (crcDataFlag == false)
+            {
+                logger.warning(ErrorMessage.ID3_TAG_CRC_FLAG_SET_INCORRECTLY.getMsg(getLoggingFilename()));
+            }
+            //2nd Flag Byte (not used)
+            buffer.get();
+            //Take padding size of size to be read
+            paddingSize = buffer.getInt();
+            if(paddingSize>0)
+            {
+                logger.info(ErrorMessage.ID3_TAG_PADDING_SIZE.getMsg(getLoggingFilename(),paddingSize));
+            }
+            size = size - (paddingSize + TAG_EXT_HEADER_LENGTH + TAG_EXT_HEADER_CRC_LENGTH);
+            //CRC Data
+            crc32 = buffer.getInt();
+            logger.info(ErrorMessage.ID3_TAG_CRC_SIZE.getMsg(getLoggingFilename(),crc32));
+        }
+        //Extended header size is only allowed to be six or ten bytes so this is invalid but instead
+        //of giving up lets guess its six bytes and carry on and see if we can read file ok
+        else
+        {
+            logger.warning(ErrorMessage.ID3_EXTENDED_HEADER_SIZE_INVALID.getMsg(getLoggingFilename(), extendedHeaderSize));
+            buffer.position(buffer.position() - FIELD_TAG_EXT_SIZE_LENGTH);
+        }
+    }
+
+    /**
      * Read tag from File
      *
      * @param buffer The buffer to read the ID3v23 Tag from
@@ -458,73 +581,16 @@ public class ID3v23Tag extends AbstractID3v2Tag
         }
         logger.info(getLoggingFilename() + ":" + "Reading ID3v23 tag");
 
-        //Flags
-        byte flags = buffer.get();
-        unsynchronization = (flags & MASK_V23_UNSYNCHRONIZATION) != 0;
-        extended = (flags & MASK_V23_EXTENDED_HEADER) != 0;
-        experimental = (flags & MASK_V23_EXPERIMENTAL) != 0;
+        readHeaderFlags(buffer);
 
-        if (isUnsynchronization())
-        {
-            logger.info(getLoggingFilename() + ":" + "ID3v23 Tag is unsynchronized");
-        }
-
-        if (extended)
-        {
-            logger.warning(getLoggingFilename() + ":" + "ID3v23 Tag is extended");
-        }
-
-        if (experimental)
-        {
-            logger.warning(getLoggingFilename() + ":" + "ID3v23 Tag is experimental");
-        }
-
-        // Read the size, this is size of tag not including  the tag header
+        // Read the size, this is size of tag not including the tag header
         size = ID3SyncSafeInteger.bufferToValue(buffer);
-        logger.info(getLoggingFilename() + ":Tag size is:" + size + " according to header (does not include header size, add 10)");
+        logger.info(ErrorMessage.ID_TAG_SIZE.getMsg(getLoggingFilename(),size));
 
         //Extended Header
         if (extended)
         {
-            // Int is 4 bytes.
-            int extendedHeaderSize = buffer.getInt();
-            // Extended header without CRC Data
-            if (extendedHeaderSize == TAG_EXT_HEADER_DATA_LENGTH)
-            {
-                //Flag
-                byte extFlag = buffer.get();
-                crcDataFlag = (extFlag & MASK_V23_CRC_DATA_PRESENT) != 0;
-                if (crcDataFlag == true)
-                {
-                    throw new InvalidTagException(getLoggingFilename() + ":CRC Data flag not set correctly.");
-                }
-                //Flag Byte (not used)
-                buffer.get();
-                //Take padding and ext header size off size to be read
-                size = size - (buffer.getInt() + TAG_EXT_HEADER_LENGTH);
-            }
-            else if (extendedHeaderSize == TAG_EXT_HEADER_DATA_LENGTH + TAG_EXT_HEADER_CRC_LENGTH)
-            {
-                //Flag
-                byte extFlag = buffer.get();
-                crcDataFlag = (extFlag & MASK_V23_CRC_DATA_PRESENT) != 0;
-                if (crcDataFlag == false)
-                {
-                    throw new InvalidTagException(getLoggingFilename() + ":CRC Data flag not set correctly.");
-                }
-                //Flag Byte (not used)
-                buffer.get();
-                //Take padding size of size to be read
-                size = size - (buffer.getInt() + TAG_EXT_HEADER_LENGTH + TAG_EXT_HEADER_CRC_LENGTH);
-                //CRC Data
-                crcData = buffer.getInt();
-            }
-            else
-            {
-                throw new InvalidTagException("Invalid Extended Header Size.");
-            }
-            logger.info(getLoggingFilename() + ":has Extended Header so adjusted Tag size is:" + size);
-
+            readExtendedHeader(buffer, size);
         }
 
         //Slice Buffer, so position markers tally with size (i.e do not include tagheader)
@@ -668,14 +734,14 @@ public class ID3v23Tag extends AbstractID3v2Tag
             byte extFlagsByte2 = 0;
 
             //Contains CRCData
-            if (crcDataFlag == true)
+            if (crcDataFlag)
             {
                 headerBuffer.putInt(TAG_EXT_HEADER_DATA_LENGTH + TAG_EXT_HEADER_CRC_LENGTH);
                 extFlagsByte1 |= MASK_V23_CRC_DATA_PRESENT;
                 headerBuffer.put(extFlagsByte1);
                 headerBuffer.put(extFlagsByte2);
                 headerBuffer.putInt(paddingSize);
-                headerBuffer.putInt(crcData);
+                headerBuffer.putInt(crc32);
             }
             //Just extended Header
             else
@@ -732,7 +798,7 @@ public class ID3v23Tag extends AbstractID3v2Tag
         logger.info(getLoggingFilename() + ":Padding:" + padding);
 
         ByteBuffer headerBuffer = writeHeaderToBuffer(padding, bodyByteBuffer.length);
-        writeBufferToFile(file,headerBuffer, bodyByteBuffer,padding,sizeIncPadding,audioStartLocation);
+        writeBufferToFile(file, headerBuffer, bodyByteBuffer, padding, sizeIncPadding, audioStartLocation);
     }
 
     /**
@@ -783,7 +849,7 @@ public class ID3v23Tag extends AbstractID3v2Tag
         MP3File.getStructureFormatter().addElement(TYPE_UNSYNCHRONISATION, this.isUnsynchronization());
         MP3File.getStructureFormatter().addElement(TYPE_EXTENDED, this.extended);
         MP3File.getStructureFormatter().addElement(TYPE_EXPERIMENTAL, this.experimental);
-        MP3File.getStructureFormatter().addElement(TYPE_CRCDATA, this.crcData);
+        MP3File.getStructureFormatter().addElement(TYPE_CRCDATA, this.crc32);
         MP3File.getStructureFormatter().addElement(TYPE_PADDINGSIZE, this.paddingSize);
         MP3File.getStructureFormatter().closeHeadingElement(TYPE_HEADER);
         //Body
@@ -906,28 +972,27 @@ public class ID3v23Tag extends AbstractID3v2Tag
         return ID3v23Frames.getInstanceOf();
     }
 
-     /**
-     *
+    /**
      * @return comparator used to order frames in preferred order for writing to file
-     * so that most important frames are written first.
+     *         so that most important frames are written first.
      */
     public Comparator getPreferredFrameOrderComparator()
     {
         return ID3v23PreferredFrameOrderComparator.getInstanceof();
     }
 
-     public List<Artwork> getArtworkList()
+    public List<Artwork> getArtworkList()
     {
         List<TagField> coverartList = get(TagFieldKey.COVER_ART);
-        List<Artwork> artworkList   = new ArrayList<Artwork>(coverartList.size());
+        List<Artwork> artworkList = new ArrayList<Artwork>(coverartList.size());
 
-        for(TagField next:coverartList)
+        for (TagField next : coverartList)
         {
             FrameBodyAPIC coverArt = (FrameBodyAPIC) ((AbstractID3v2Frame) next).getBody();
             Artwork artwork = new Artwork();
             artwork.setMimeType(coverArt.getMimeType());
             artwork.setPictureType(coverArt.getPictureType());
-            if(coverArt.isImageUrl())
+            if (coverArt.isImageUrl())
             {
                 artwork.setLinked(true);
                 artwork.setImageUrl(coverArt.getImageUrl());
@@ -941,18 +1006,18 @@ public class ID3v23Tag extends AbstractID3v2Tag
         return artworkList;
     }
 
-     public TagField createArtworkField(Artwork artwork) throws FieldDataInvalidException
+    public TagField createArtworkField(Artwork artwork) throws FieldDataInvalidException
     {
         AbstractID3v2Frame frame = createFrame(getFrameAndSubIdFromGenericKey(TagFieldKey.COVER_ART).getFrameId());
         FrameBodyAPIC body = (FrameBodyAPIC) frame.getBody();
-        body.setObjectValue(DataTypes.OBJ_PICTURE_DATA,artwork.getBinaryData());
+        body.setObjectValue(DataTypes.OBJ_PICTURE_DATA, artwork.getBinaryData());
         body.setObjectValue(DataTypes.OBJ_PICTURE_TYPE, artwork.getPictureType());
         body.setObjectValue(DataTypes.OBJ_MIME_TYPE, artwork.getMimeType());
         body.setObjectValue(DataTypes.OBJ_DESCRIPTION, "");
         return frame;
     }
 
-     /**
+    /**
      * Create Artwork
      *
      * @param data
@@ -968,5 +1033,10 @@ public class ID3v23Tag extends AbstractID3v2Tag
         body.setObjectValue(DataTypes.OBJ_MIME_TYPE, mimeType);
         body.setObjectValue(DataTypes.OBJ_DESCRIPTION, "");
         return frame;
+    }
+
+    public int getPaddingSize()
+    {
+        return paddingSize;
     }
 }

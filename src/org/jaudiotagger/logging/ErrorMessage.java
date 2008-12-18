@@ -73,7 +73,17 @@ public enum ErrorMessage
     MP4_FILE_HAS_NO_METADATA("This file does not currently contain any metadata"),
     MP4_FILE_META_ATOM_CHILD_DATA_NOT_NULL("Expect data in meta box to be null"),
     WMA_LENGTH_OF_DATA_IS_TOO_LARGE("Trying to create field with {0} bytes of data but the maximum data allowed in WMA files is 65535."),
-    WMA_LENGTH_OF_STRING_IS_TOO_LARGE("Trying to create field but UTF-16LE representation is {0} and exceeds maximum allowed of 65535.")
+    WMA_LENGTH_OF_STRING_IS_TOO_LARGE("Trying to create field but UTF-16LE representation is {0} and exceeds maximum allowed of 65535."),
+    ID3_EXTENDED_HEADER_SIZE_INVALID("{0} Invalid Extended Header Size of {0} assuming no extended header after all"),
+    ID3_INVALID_OR_UNKNOWN_FLAG_SET("{0} Invalid or unknown bit flag 0x{1} set in ID3 tag header"),
+    ID3_TAG_UNSYNCHRONIZED("{0} the ID3 Tag is unsynchronized"),
+    ID3_TAG_EXPERIMENTAL("{0} the ID3 Tag is experimental"),
+    ID3_TAG_EXTENDED("{0} the ID3 Tag is extended"),
+    ID3_TAG_CRC("{0} the ID3 Tag has crc check"),
+    ID3_TAG_CRC_SIZE("{0} According to Extended Header the ID3 Tag has crc32 of {1}"),
+    ID3_TAG_PADDING_SIZE("{0} According to Extended Header the ID3 Tag has padding size of {1}"),
+    ID_TAG_SIZE("{0} Tag size is {1} according to header (does not include header size, add 10)"),
+    ID3_TAG_CRC_FLAG_SET_INCORRECTLY("{0} CRC Data flag not set correctly."),
     ;
 
 
