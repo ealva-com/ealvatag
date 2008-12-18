@@ -219,6 +219,13 @@ public class Mp4TagWriter
         Mp4BoxHeader hdlrMetaHeader     = atomTree.getBoxHeader(atomTree.getHdlrWithinMetaNode());
         Mp4BoxHeader hdlrMdiaHeader     = atomTree.getBoxHeader(atomTree.getHdlrWithinMdiaNode());
         Mp4BoxHeader mdatHeader         = atomTree.getBoxHeader(atomTree.getMdatNode());
+
+        //Unable to find audio so no chnace of saving any changes
+        if(mdatHeader==null)
+        {
+            throw new CannotWriteException(ErrorMessage.MP4_CHANGES_TO_FILE_FAILED_CANNOT_FIND_AUDIO.getMsg());    
+        }
+
         Mp4BoxHeader trakHeader         = (Mp4BoxHeader)atomTree.getTrakNodes().get(0).getUserObject();
 
         ByteBuffer   moovBuffer         = atomTree.getMoovBuffer();

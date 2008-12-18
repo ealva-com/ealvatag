@@ -184,6 +184,11 @@ public class Mp4AtomTree
         }
         finally
         {
+             if(mdatNode==null)
+            {
+                logger.warning(ErrorMessage.MP4_CANNOT_FIND_AUDIO.getMsg());
+            }
+
             if (closeExit)
             {
                 fc.close();
