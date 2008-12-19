@@ -2,30 +2,26 @@ package org.jaudiotagger.issues;
 
 import org.jaudiotagger.AbstractTestCase;
 import org.jaudiotagger.tag.TagFieldKey;
-import org.jaudiotagger.tag.mp4.Mp4Tag;
 import org.jaudiotagger.tag.id3.ID3v23Tag;
 import org.jaudiotagger.tag.id3.AbstractID3v2Frame;
 import org.jaudiotagger.tag.id3.ID3v23Frames;
 import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.AudioFileIO;
-import org.jaudiotagger.audio.mp4.Mp4AtomTree;
 
 import java.io.File;
-import java.io.RandomAccessFile;
 
-/** Test write to mp4
+/**
+ * Test read large mp3 with extended header
  */
 public class Issue270Test extends AbstractTestCase
 {
 
     /**
-     * Test write to mp4 file where we cant find the audio
-     *
-     * Not fixed yet but cathes the error earlier than did before when was throwing null pointer
+     * Test read mp3 that says it has extended header but doesnt really
      */
-    public void testWriteToMp4()
+    public void testReadMp3WithExtendedHeaderFlagSetButNoExtendedHeader()
     {
-        File orig = new File("testdata", "test49.m4a");
+        File orig = new File("testdata", "test49.mp3");
         if (!orig.isFile())
         {
             System.err.println("Unable to test file - not available");
@@ -36,19 +32,21 @@ public class Issue270Test extends AbstractTestCase
         Exception exceptionCaught = null;
         try
         {
-            testFile = AbstractTestCase.copyAudioToTmp("test49.m4a");
-
-            //First lets just create tree  , doesnt crash system but last atom is not valid it doesnt shown mdat tree
-            Mp4AtomTree atomTree = new Mp4AtomTree(new RandomAccessFile(testFile, "r"));
-            atomTree.printAtomTree();
+            testFile = AbstractTestCase.copyAudioToTmp("test46.mp3");
 
             //Read File okay
             AudioFile af = AudioFileIO.read(testFile);
             System.out.println(af.getTag().toString());
+            assertEquals("00000",af.getTag().getFirst(TagFieldKey.BPM));
+            assertEquals("thievery corporation - Om Lounge",af.getTag().getFirstArtist());
 
-            //Try and write to file
-            af.getTag().setAlbum("fred");
+            af.getTag().setAlbum("FRED");
             af.commit();
+            af = AudioFileIO.read(testFile);
+            System.out.println(af.getTag().toString());
+            assertEquals("FRED",af.getTag().getFirstAlbum());
+
+
         }
         catch(Exception e)
         {
@@ -56,7 +54,100 @@ public class Issue270Test extends AbstractTestCase
             exceptionCaught=e;
         }
 
-        assertNotNull(exceptionCaught);
-        assertTrue(exceptionCaught.getMessage().contains("Unable to make changes to Mp4 file, unable to determine start of audio"));
+        assertNull(exceptionCaught);
+    }
+
+     /**
+     * Test read mp3 with extended header and crc-32 check
+     */
+    public void testReadMp3WithExtendedHeaderAndCrc()
+    {
+        File orig = new File("testdata", "test47.mp3");
+        if (!orig.isFile())
+        {
+            System.err.println("Unable to test file - not available");
+            return;
+        }
+
+        File testFile = null;
+        Exception exceptionCaught = null;
+        try
+        {
+            testFile = AbstractTestCase.copyAudioToTmp("test47.mp3");
+
+            //Read File okay
+            AudioFile af = AudioFileIO.read(testFile);
+            System.out.println(af.getTag().toString());
+            assertEquals("tonight (instrumental)",af.getTag().getFirstTitle());
+            assertEquals("Young Gunz",af.getTag().getFirstArtist());
+
+            ID3v23Tag id3v23Tag = (ID3v23Tag)af.getTag();
+            assertEquals(156497728,id3v23Tag.getCrc32());
+            assertEquals(0,id3v23Tag.getPaddingSize());
+
+            af.getTag().setAlbum("FRED");
+            af.commit();
+            af = AudioFileIO.read(testFile);
+            System.out.println(af.getTag().toString());
+            assertEquals("FRED",af.getTag().getFirstAlbum());
+
+
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+            exceptionCaught=e;
+        }
+
+        assertNull(exceptionCaught);
+    }
+
+    /**
+     * Test doesnt fail when read mp3 that has an encrypted field
+     *
+     * TODO currently we cant decrypt it, that will come later
+     */
+    public void testReadMp3WithEncryptedField()
+    {
+        File orig = new File("testdata", "test48.mp3");
+        if (!orig.isFile())
+        {
+            System.err.println("Unable to test file - not available");
+            return;
+        }
+
+        File testFile = null;
+        Exception exceptionCaught = null;
+        try
+        {
+            testFile = AbstractTestCase.copyAudioToTmp("test48.mp3");
+
+            //Read File okay
+            AudioFile af = AudioFileIO.read(testFile);
+            System.out.println(af.getTag().toString());
+            assertEquals("Don't Leave Me",af.getTag().getFirstTitle());
+            assertEquals("All-American Rejects",af.getTag().getFirstArtist());
+
+            ID3v23Tag id3v23Tag = (ID3v23Tag)af.getTag();
+            assertEquals(0,id3v23Tag.getPaddingSize());
+
+            AbstractID3v2Frame frame = (AbstractID3v2Frame)id3v23Tag.getFrame(ID3v23Frames.FRAME_ID_V3_ENCODEDBY);
+
+
+            af.getTag().setAlbum("FRED");
+            af.commit();
+            af = AudioFileIO.read(testFile);
+            System.out.println(af.getTag().toString());
+            assertEquals("FRED",af.getTag().getFirstAlbum());
+
+
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+            exceptionCaught=e;
+        }
+
+        assertNull(exceptionCaught);
     }
 }

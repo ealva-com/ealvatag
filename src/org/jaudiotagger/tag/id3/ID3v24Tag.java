@@ -16,17 +16,12 @@
 package org.jaudiotagger.tag.id3;
 
 import org.jaudiotagger.FileConstants;
-import org.jaudiotagger.logging.FileSystemMessage;
-import org.jaudiotagger.logging.ErrorMessage;
 import org.jaudiotagger.audio.mp3.MP3File;
-import org.jaudiotagger.audio.exceptions.UnableToModifyFileException;
-import org.jaudiotagger.audio.exceptions.UnableToCreateFileException;
+import org.jaudiotagger.logging.ErrorMessage;
 import org.jaudiotagger.tag.*;
-import org.jaudiotagger.tag.mp4.field.Mp4TagCoverField;
 import org.jaudiotagger.tag.datatype.Artwork;
 import org.jaudiotagger.tag.datatype.DataTypes;
 import org.jaudiotagger.tag.id3.framebody.*;
-import org.jaudiotagger.tag.id3.valuepair.ImageFormats;
 import org.jaudiotagger.tag.lyrics3.AbstractLyrics3;
 import org.jaudiotagger.tag.lyrics3.Lyrics3v2;
 import org.jaudiotagger.tag.lyrics3.Lyrics3v2Field;
@@ -35,11 +30,7 @@ import org.jaudiotagger.tag.reference.PictureTypes;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.RandomAccessFile;
-import java.io.FileNotFoundException;
 import java.nio.ByteBuffer;
-import java.nio.channels.FileChannel;
-import java.nio.channels.FileLock;
 import java.nio.channels.WritableByteChannel;
 import java.util.*;
 import java.util.logging.Level;
@@ -222,22 +213,40 @@ public class ID3v24Tag extends AbstractID3v2Tag
     protected boolean tagRestriction = false;
 
     /**
+     * If Set Image encoding restrictions
      *
+     *  0   No restrictions
+     *  1   Images are encoded only with PNG [PNG] or JPEG [JFIF].
      */
     protected byte imageEncodingRestriction = 0;
 
     /**
+     * If set Image size restrictions
      *
+     *  00  No restrictions
+     *  01  All images are 256x256 pixels or smaller.
+     *  10  All images are 64x64 pixels or smaller.
+     *  11  All images are exactly 64x64 pixels, unless required
+     *      otherwise.
      */
     protected byte imageSizeRestriction = 0;
 
     /**
+     * If set then Tag Size Restrictions
      *
+     *  00   No more than 128 frames and 1 MB total tag size.
+     *  01   No more than 64 frames and 128 KB total tag size.
+     *  10   No more than 32 frames and 40 KB total tag size.
+     *  11   No more than 32 frames and 4 KB total tag size.
      */
     protected byte tagSizeRestriction = 0;
 
     /**
+     *  If set Text encoding restrictions
      *
+     *  0    No restrictions
+     *  1    Strings are only encoded with ISO-8859-1 [ISO-8859-1] or
+     *       UTF-8 [UTF-8].
      */
     protected byte textEncodingRestriction = 0;
 
@@ -248,7 +257,17 @@ public class ID3v24Tag extends AbstractID3v2Tag
 
 
     /**
+     *  If set Text fields size restrictions
      *
+     *  00   No restrictions
+     *  01   No string is longer than 1024 characters.
+     *   10   No string is longer than 128 characters.
+     *  11   No string is longer than 30 characters.
+     *
+     *  Note that nothing is said about how many bytes is used to
+     *  represent those characters, since it is encoding dependent. If a
+     *  text frame consists of more than one string, the sum of the
+     *  strungs is restricted as stated.
      */
     protected byte textFieldSizeRestriction = 0;
 
@@ -360,7 +379,7 @@ public class ID3v24Tag extends AbstractID3v2Tag
                     }
                 }
                 //Ensure that the list actually contains at lest one value before adding
-                if(multiFrame.size()>0)
+                if (multiFrame.size() > 0)
                 {
                     if (newFrame != null)
                     {
@@ -626,7 +645,7 @@ public class ID3v24Tag extends AbstractID3v2Tag
     {
 
         //Skip over flags
-        byte flags = buffer.get();
+        buffer.get();
 
         // Read the size, this is size of tag not including  the tag header
         int size = ID3SyncSafeInteger.bufferToValue(buffer);
@@ -636,14 +655,134 @@ public class ID3v24Tag extends AbstractID3v2Tag
     }
 
     /**
-     * Read Tag from Specified file.
-     * Read tag header, delegate reading of frames to readFrames()
+     * Read header flags
+     * <p/>
+     * <p>Log info messages for falgs that have been set and log warnings when bits have been set for unknown flags</p>
      *
-     * @param byteBuffer to read the tag from
+     * @param byteBuffer
      * @throws TagException
-     * @throws TagNotFoundException
-     * @throws InvalidTagException
      */
+    private void readHeaderFlags(ByteBuffer byteBuffer) throws TagException
+    {
+        //Flags
+        byte flags = byteBuffer.get();
+        unsynchronization = (flags & MASK_V24_UNSYNCHRONIZATION) != 0;
+        extended = (flags & MASK_V24_EXTENDED_HEADER) != 0;
+        experimental = (flags & MASK_V24_EXPERIMENTAL) != 0;
+        footer = (flags & MASK_V24_FOOTER_PRESENT) != 0;
+
+        //Not allowable/Unknown Flags
+        if ((flags & FileConstants.BIT3) != 0)
+        {
+            logger.warning(ErrorMessage.ID3_INVALID_OR_UNKNOWN_FLAG_SET.getMsg(getLoggingFilename(), FileConstants.BIT3));
+        }
+
+        if ((flags & FileConstants.BIT2) != 0)
+        {
+            logger.warning(ErrorMessage.ID3_INVALID_OR_UNKNOWN_FLAG_SET.getMsg(getLoggingFilename(), FileConstants.BIT2));
+        }
+
+        if ((flags & FileConstants.BIT1) != 0)
+        {
+            logger.warning(ErrorMessage.ID3_INVALID_OR_UNKNOWN_FLAG_SET.getMsg(getLoggingFilename(), FileConstants.BIT1));
+        }
+
+        if ((flags & FileConstants.BIT0) != 0)
+        {
+            logger.warning(ErrorMessage.ID3_INVALID_OR_UNKNOWN_FLAG_SET.getMsg(getLoggingFilename(), FileConstants.BIT0));
+        }
+
+
+        if (isUnsynchronization())
+        {
+            logger.info(ErrorMessage.ID3_TAG_UNSYNCHRONIZED.getMsg(getLoggingFilename()));
+        }
+
+        if (extended)
+        {
+            logger.info(ErrorMessage.ID3_TAG_EXTENDED.getMsg(getLoggingFilename()));
+        }
+
+        if (experimental)
+        {
+            logger.info(ErrorMessage.ID3_TAG_EXPERIMENTAL.getMsg(getLoggingFilename()));
+        }
+
+        if (footer)
+        {
+            logger.warning(ErrorMessage.ID3_TAG_FOOTER.getMsg(getLoggingFilename()));
+        }
+    }
+
+    /**
+     * Read the optional extended header
+     *
+     * @param byteBuffer
+     * @param size
+     */
+    private void readExtendedHeader(ByteBuffer byteBuffer, int size) throws InvalidTagException
+    {
+        byte[] buffer;
+
+        // int is 4 bytes.
+        int extendedHeaderSize = byteBuffer.getInt();
+
+        // the extended header must be at least 6 bytes
+        if (extendedHeaderSize <= TAG_EXT_HEADER_LENGTH)
+        {
+            throw new InvalidTagException(ErrorMessage.ID3_EXTENDED_HEADER_SIZE_TOO_SMALL.getMsg(getLoggingFilename(), extendedHeaderSize));
+        }
+
+        //Number of bytes
+        byteBuffer.get();
+
+        // Read the extended flag bytes
+        byte extFlag = byteBuffer.get();
+        updateTag       = (extFlag & MASK_V24_TAG_UPDATE)       != 0;
+        crcDataFlag     = (extFlag & MASK_V24_CRC_DATA_PRESENT) != 0;
+        tagRestriction  = (extFlag & MASK_V24_TAG_RESTRICTIONS) != 0;
+
+        // read the length byte if the flag is set
+        // this tag should always be zero but just in case
+        // read this information.
+        if (updateTag)
+        {
+            byteBuffer.get();
+        }
+
+        //CRC-32
+        if (crcDataFlag)
+        {
+            // the CRC has a variable length
+            byteBuffer.get();
+            buffer = new byte[TAG_EXT_HEADER_CRC_DATA_LENGTH];
+            byteBuffer.get(buffer, 0, TAG_EXT_HEADER_CRC_DATA_LENGTH);
+            crcData = 0;
+            for (int i = 0; i < TAG_EXT_HEADER_CRC_DATA_LENGTH; i++)
+            {
+                crcData <<= 8;
+                crcData += buffer[i];
+            }
+        }
+
+        //Tag Restriction
+        if (tagRestriction)
+        {
+            byteBuffer.get();
+            buffer = new byte[1];
+            byteBuffer.get(buffer, 0, 1);
+            tagSizeRestriction          = (byte) ((buffer[0] & MASK_V24_TAG_SIZE_RESTRICTIONS) >> 6);
+            textEncodingRestriction     = (byte) ((buffer[0] & MASK_V24_TEXT_ENCODING_RESTRICTIONS) >> 5);
+            textFieldSizeRestriction    = (byte) ((buffer[0] & MASK_V24_TEXT_FIELD_SIZE_RESTRICTIONS) >> 3);
+            imageEncodingRestriction    = (byte) ((buffer[0] & MASK_V24_IMAGE_ENCODING) >> 2);
+            imageSizeRestriction        = (byte) (buffer[0] & MASK_V24_IMAGE_SIZE_RESTRICTIONS);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public void read(ByteBuffer byteBuffer) throws TagException
     {
         int size;
@@ -652,88 +791,21 @@ public class ID3v24Tag extends AbstractID3v2Tag
         {
             throw new TagNotFoundException(getLoggingFilename() + ":" + getIdentifier() + " tag not found");
         }
-        //Flags
-        byte flags = byteBuffer.get();
-        unsynchronization = (flags & MASK_V24_UNSYNCHRONIZATION) != 0;
-        extended = (flags & MASK_V24_EXTENDED_HEADER) != 0;
-        experimental = (flags & MASK_V24_EXPERIMENTAL) != 0;
-        footer = (flags & MASK_V24_FOOTER_PRESENT) != 0;
-
-        if (isUnsynchronization())
-        {
-            logger.info(getLoggingFilename() + ":" + "ID3v24 Tag is unsynchronized");
-        }
-
-        if (extended)
-        {
-            logger.warning(getLoggingFilename() + ":" + "ID3v24 Tag is extended");
-        }
-
-        if (experimental)
-        {
-            logger.warning(getLoggingFilename() + ":" + "ID3v24 Tag is experimental");
-        }
-
-        if (footer)
-        {
-            logger.warning(getLoggingFilename() + ":" + "ID3v24 Tag has footer");
-        }
+        logger.info(getLoggingFilename() + ":" + "Reading ID3v24 tag");
+        readHeaderFlags(byteBuffer);
 
         // Read the size, this is size of tag apart from tag header
         size = ID3SyncSafeInteger.bufferToValue(byteBuffer);
         logger.info(getLoggingFilename() + ":" + "Reading tag from file size set in header is" + size);
+
         if (extended)
         {
-            // int is 4 bytes.
-            int extendedHeaderSize = byteBuffer.getInt();
-            // the extended header must be atleast 6 bytes
-            if (extendedHeaderSize <= TAG_EXT_HEADER_LENGTH)
-            {
-                throw new InvalidTagException(getLoggingFilename() + ":" + "Invalid Extended Header Size.");
-            }
-            //Number of bytes
-            byteBuffer.get();
-            // Read the extended flag bytes
-            byte extFlag = byteBuffer.get();
-            updateTag = (extFlag & MASK_V24_TAG_UPDATE) != 0;
-            crcDataFlag = (extFlag & MASK_V24_CRC_DATA_PRESENT) != 0;
-            tagRestriction = (extFlag & MASK_V24_TAG_RESTRICTIONS) != 0;
-            // read the length byte if the flag is set
-            // this tag should always be zero but just in case
-            // read this information.
-            if (updateTag)
-            {
-                byteBuffer.get();
-            }
-            if (crcDataFlag)
-            {
-                // the CRC has a variable length
-                byteBuffer.get();
-                buffer = new byte[TAG_EXT_HEADER_CRC_DATA_LENGTH];
-                byteBuffer.get(buffer, 0, TAG_EXT_HEADER_CRC_DATA_LENGTH);
-                crcData = 0;
-                for (int i = 0; i < TAG_EXT_HEADER_CRC_DATA_LENGTH; i++)
-                {
-                    crcData <<= 8;
-                    crcData += buffer[i];
-                }
-            }
-            if (tagRestriction)
-            {
-                byteBuffer.get();
-                buffer = new byte[1];
-                byteBuffer.get(buffer, 0, 1);
-                tagSizeRestriction = (byte) ((buffer[0] & MASK_V24_TAG_SIZE_RESTRICTIONS) >> 6);
-                textEncodingRestriction = (byte) ((buffer[0] & MASK_V24_TEXT_ENCODING_RESTRICTIONS) >> 5);
-                textFieldSizeRestriction = (byte) ((buffer[0] & MASK_V24_TEXT_FIELD_SIZE_RESTRICTIONS) >> 3);
-                imageEncodingRestriction = (byte) ((buffer[0] & MASK_V24_IMAGE_ENCODING) >> 2);
-                imageSizeRestriction = (byte) (buffer[0] & MASK_V24_IMAGE_SIZE_RESTRICTIONS);
-            }
+            readExtendedHeader(byteBuffer, size);
         }
+
         //Note if there was an extended header the size value has padding taken
         //off so we dont search it.
         readFrames(byteBuffer, size);
-
     }
 
     /**
@@ -931,11 +1003,9 @@ public class ID3v24Tag extends AbstractID3v2Tag
     }
 
     /**
-     * Write this tag to file.
-     *
-     * @param file
-     * @throws IOException
+     * {@inheritDoc}
      */
+    @Override
     public void write(File file, long audioStartLocation) throws IOException
     {
         logger.info("Writing tag to file");
@@ -950,15 +1020,13 @@ public class ID3v24Tag extends AbstractID3v2Tag
         int padding = sizeIncPadding - (bodyByteBuffer.length + TAG_HEADER_LENGTH);
 
         ByteBuffer headerBuffer = writeHeaderToBuffer(padding, bodyByteBuffer.length);
-        writeBufferToFile(file,headerBuffer, bodyByteBuffer,padding,sizeIncPadding,audioStartLocation);       
+        writeBufferToFile(file, headerBuffer, bodyByteBuffer, padding, sizeIncPadding, audioStartLocation);
     }
 
     /**
-     * Write tag to channel
-     *
-     * @param channel
-     * @throws IOException
+     * {@inheritDoc}
      */
+    @Override
     public void write(WritableByteChannel channel) throws IOException
     {
         logger.info("Writing tag to channel");
@@ -1129,28 +1197,27 @@ public class ID3v24Tag extends AbstractID3v2Tag
         return ID3v24Frames.getInstanceOf();
     }
 
-     /**
-     *
+    /**
      * @return comparator used to order frames in preferred order for writing to file
-     * so that most important frames are written first.
+     *         so that most important frames are written first.
      */
     public Comparator getPreferredFrameOrderComparator()
     {
         return ID3v24PreferredFrameOrderComparator.getInstanceof();
     }
 
-     public List<Artwork> getArtworkList()
+    public List<Artwork> getArtworkList()
     {
         List<TagField> coverartList = get(TagFieldKey.COVER_ART);
-        List<Artwork> artworkList   = new ArrayList<Artwork>(coverartList.size());
+        List<Artwork> artworkList = new ArrayList<Artwork>(coverartList.size());
 
-        for(TagField next:coverartList)
+        for (TagField next : coverartList)
         {
             FrameBodyAPIC coverArt = (FrameBodyAPIC) ((AbstractID3v2Frame) next).getBody();
             Artwork artwork = new Artwork();
             artwork.setMimeType(coverArt.getMimeType());
             artwork.setPictureType(coverArt.getPictureType());
-            if(coverArt.isImageUrl())
+            if (coverArt.isImageUrl())
             {
                 artwork.setLinked(true);
                 artwork.setImageUrl(coverArt.getImageUrl());
@@ -1164,11 +1231,11 @@ public class ID3v24Tag extends AbstractID3v2Tag
         return artworkList;
     }
 
-     public TagField createArtworkField(Artwork artwork) throws FieldDataInvalidException
+    public TagField createArtworkField(Artwork artwork) throws FieldDataInvalidException
     {
         AbstractID3v2Frame frame = createFrame(getFrameAndSubIdFromGenericKey(TagFieldKey.COVER_ART).getFrameId());
         FrameBodyAPIC body = (FrameBodyAPIC) frame.getBody();
-        body.setObjectValue(DataTypes.OBJ_PICTURE_DATA,artwork.getBinaryData());
+        body.setObjectValue(DataTypes.OBJ_PICTURE_DATA, artwork.getBinaryData());
         body.setObjectValue(DataTypes.OBJ_PICTURE_TYPE, artwork.getPictureType());
         body.setObjectValue(DataTypes.OBJ_MIME_TYPE, artwork.getMimeType());
         body.setObjectValue(DataTypes.OBJ_DESCRIPTION, "");

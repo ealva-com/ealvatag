@@ -60,7 +60,7 @@ public class Issue269Test extends AbstractTestCase
      /**
      * Test read mp3 with extended header and crc-32 check
      */
-    public void testReadMp3WithExtendedHeaderAndCrc()
+    public void testReadID3v23Mp3WithExtendedHeaderAndCrc()
     {
         File orig = new File("testdata", "test47.mp3");
         if (!orig.isFile())
@@ -150,4 +150,50 @@ public class Issue269Test extends AbstractTestCase
 
         assertNull(exceptionCaught);
     }
+
+    /**
+        * Test read mp3 with extended header and crc-32 check
+        */
+       public void testReadID3v24Mp3WithExtendedHeaderAndCrc()
+       {
+           File orig = new File("testdata", "test47.mp3");
+           if (!orig.isFile())
+           {
+               System.err.println("Unable to test file - not available");
+               return;
+           }
+
+           File testFile = null;
+           Exception exceptionCaught = null;
+           try
+           {
+               testFile = AbstractTestCase.copyAudioToTmp("test47.mp3");
+
+               //Read File okay
+               AudioFile af = AudioFileIO.read(testFile);
+               System.out.println(af.getTag().toString());
+               assertEquals("tonight (instrumental)",af.getTag().getFirstTitle());
+               assertEquals("Young Gunz",af.getTag().getFirstArtist());
+
+               ID3v23Tag id3v23Tag = (ID3v23Tag)af.getTag();
+               assertEquals(156497728,id3v23Tag.getCrc32());
+               assertEquals(0,id3v23Tag.getPaddingSize());
+
+               af.getTag().setAlbum("FRED");
+               af.commit();
+               af = AudioFileIO.read(testFile);
+               System.out.println(af.getTag().toString());
+               assertEquals("FRED",af.getTag().getFirstAlbum());
+
+
+           }
+           catch(Exception e)
+           {
+               e.printStackTrace();
+               exceptionCaught=e;
+           }
+
+           assertNull(exceptionCaught);
+       }
+
 }

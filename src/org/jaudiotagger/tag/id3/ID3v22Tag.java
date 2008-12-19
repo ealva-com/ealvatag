@@ -56,22 +56,23 @@ public class ID3v22Tag extends AbstractID3v2Tag
     protected static final String TYPE_UNSYNCHRONISATION = "unsyncronisation";
 
     /**
-     * ID3v2.2 Header bit mask
+     * Bit mask to indicate tag is Unsychronization
      */
     public static final int MASK_V22_UNSYNCHRONIZATION = FileConstants.BIT7;
 
     /**
-     * ID3v2.2 Header bit mask
+     * Bit mask to indicate tag is compressed, although compression is not
+     * actually defined in v22 so just ignored
      */
-    public static final int MASK_V22_COMPRESSION = FileConstants.BIT7;
+    public static final int MASK_V22_COMPRESSION = FileConstants.BIT6;
 
     /**
-     * The tag is compressed
+     * The tag is compressed, although no compression scheme is defined in ID3v22
      */
     protected boolean compression = false;
 
     /**
-     * All frames in the tag uses unsynchronisation
+     * If set all frames in the tag uses unsynchronisation
      */
     protected boolean unsynchronization = false;
 
@@ -342,12 +343,59 @@ public class ID3v22Tag extends AbstractID3v2Tag
     }
 
     /**
-     * Read tag from the ByteBuffer
+     * Read tag Header Flags
      *
-     * @param byteBuffer to read the tag from
+     * @param byteBuffer
      * @throws TagException
-     * @throws TagNotFoundException
      */
+    private void readHeaderFlags(ByteBuffer byteBuffer) throws TagException
+    {
+        //Flags
+        byte flags = byteBuffer.get();
+        unsynchronization = (flags & MASK_V22_UNSYNCHRONIZATION) != 0;
+        compression = (flags & MASK_V22_COMPRESSION) != 0;
+
+        if (unsynchronization)
+        {
+            logger.info(ErrorMessage.ID3_TAG_UNSYNCHRONIZED.getMsg(getLoggingFilename()));
+        }
+
+        if (compression)
+        {
+            logger.info(ErrorMessage.ID3_TAG_COMPRESSED.getMsg(getLoggingFilename()));           
+        }
+
+        //Not allowable/Unknown Flags
+        if ((flags & FileConstants.BIT5) != 0)
+        {
+            logger.warning(ErrorMessage.ID3_INVALID_OR_UNKNOWN_FLAG_SET.getMsg(getLoggingFilename(), FileConstants.BIT5));
+        }
+        if ((flags & FileConstants.BIT4) != 0)
+        {
+            logger.warning(ErrorMessage.ID3_INVALID_OR_UNKNOWN_FLAG_SET.getMsg(getLoggingFilename(), FileConstants.BIT4));
+        }
+        if ((flags & FileConstants.BIT3) != 0)
+        {
+            logger.warning(ErrorMessage.ID3_INVALID_OR_UNKNOWN_FLAG_SET.getMsg(getLoggingFilename(), FileConstants.BIT3));
+        }
+        if ((flags & FileConstants.BIT2) != 0)
+        {
+            logger.warning(ErrorMessage.ID3_INVALID_OR_UNKNOWN_FLAG_SET.getMsg(getLoggingFilename(), FileConstants.BIT2));
+        }
+        if ((flags & FileConstants.BIT1) != 0)
+        {
+            logger.warning(ErrorMessage.ID3_INVALID_OR_UNKNOWN_FLAG_SET.getMsg(getLoggingFilename(), FileConstants.BIT1));
+        }
+        if ((flags & FileConstants.BIT0) != 0)
+        {
+            logger.warning(ErrorMessage.ID3_INVALID_OR_UNKNOWN_FLAG_SET.getMsg(getLoggingFilename(), FileConstants.BIT3));
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public void read(ByteBuffer byteBuffer) throws TagException
     {
         int size;
@@ -358,29 +406,16 @@ public class ID3v22Tag extends AbstractID3v2Tag
         logger.info(getLoggingFilename() + ":" + "Reading tag from file");
 
         //Read the flags
-        byte flags = byteBuffer.get();
-        unsynchronization = (flags & MASK_V22_UNSYNCHRONIZATION) != 0;
-        compression = (flags & MASK_V22_COMPRESSION) != 0;
-
-        if (unsynchronization)
-        {
-            logger.info(getLoggingFilename() + ":" + "ID3v22 Tag is unsynchronized");
-        }
-
-        if (compression)
-        {
-            logger.warning(getLoggingFilename() + ":" + "ID3v22 Tag is compressed");
-        }
-
-        //TODO if compression bit set should we ignore
+        readHeaderFlags(byteBuffer);
 
         // Read the size
         size = ID3SyncSafeInteger.bufferToValue(byteBuffer);
 
         //Slice Buffer, so position markers tally with size (i.e do not include tagheader)
         ByteBuffer bufferWithoutHeader = byteBuffer.slice();
+
         //We need to synchronize the buffer
-        if (unsynchronization == true)
+        if (unsynchronization)
         {
             bufferWithoutHeader = ID3Unsynchronization.synchronize(bufferWithoutHeader);
         }
@@ -467,7 +502,6 @@ public class ID3v22Tag extends AbstractID3v2Tag
     /**
      * Write the ID3 header to the ByteBuffer.
      * <p/>
-     * TODO compression support required.
      *
      * @return ByteBuffer
      * @throws IOException
@@ -506,11 +540,9 @@ public class ID3v22Tag extends AbstractID3v2Tag
     }
 
     /**
-     * Write tag to file
-     *
-     * @param file The file to write to
-     * @throws IOException
+     * {@inheritDoc}
      */
+    @Override
     public void write(File file, long audioStartLocation) throws IOException
     {
         logger.info("Writing tag to file");
@@ -545,11 +577,9 @@ public class ID3v22Tag extends AbstractID3v2Tag
 
 
     /**
-     * Write tag to channel
-     *
-     * @param channel
-     * @throws IOException
+     * {@inheritDoc}
      */
+    @Override
     public void write(WritableByteChannel channel) throws IOException
     {
         logger.info(getLoggingFilename() + ":Writing tag to channel");
@@ -733,7 +763,10 @@ public class ID3v22Tag extends AbstractID3v2Tag
         return ID3v22PreferredFrameOrderComparator.getInstanceof();
     }
 
-     public List<Artwork> getArtworkList()
+    /**
+     * {@inheritDoc}
+     */
+    public List<Artwork> getArtworkList()
     {
         List<TagField> coverartList = get(TagFieldKey.COVER_ART);
         List<Artwork> artworkList   = new ArrayList<Artwork>(coverartList.size());
@@ -750,8 +783,10 @@ public class ID3v22Tag extends AbstractID3v2Tag
         return artworkList;
     }
 
-
-     public TagField createArtworkField(Artwork artwork) throws FieldDataInvalidException
+     /**
+     * {@inheritDoc}
+     */
+    public TagField createArtworkField(Artwork artwork) throws FieldDataInvalidException
     {
         AbstractID3v2Frame frame = createFrame(getFrameAndSubIdFromGenericKey(TagFieldKey.COVER_ART).getFrameId());
         FrameBodyPIC body = (FrameBodyPIC) frame.getBody();
