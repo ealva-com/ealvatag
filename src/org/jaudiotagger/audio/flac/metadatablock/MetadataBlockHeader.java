@@ -53,6 +53,11 @@ public class MetadataBlockHeader
         return new MetadataBlockHeader(rawdata);
     }
 
+    public String toString()
+    {
+        return "BlockType:"+blockType + " DataLength:"+dataLength + " isLastBlock:"+isLastBlock;
+    }
+
     /**
      * Construct header by reading bytes
      *

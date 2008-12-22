@@ -27,7 +27,8 @@ import org.jaudiotagger.tag.datatype.AbstractIntStringValuePair;
 /**
  * Pictures types for Attached Pictures
  * <p/>
- * <P>Note this list is used by APIC and PIC frames. It is also used by Flac format Picture blocks
+ * <P>Note this list is used by APIC and PIC frames within ID3v2. It is also used by Flac format Picture blocks
+ * and WMA Picture fields.
  */
 public class PictureTypes extends AbstractIntStringValuePair
 {

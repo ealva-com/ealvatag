@@ -510,6 +510,10 @@ public class Languages extends AbstractStringStringValuePair
         idToValue.put("znd", "Zande");
         idToValue.put("zul", "Zulu");
         idToValue.put("zun", "Zuni");
+        idToValue.put("\0\0\0", "Winamp Format");                 //Not Part of Spec but commonly used by some apps
+        idToValue.put("XXX", "Media Monkey Format");              //Not Part of Spec but commonly used by some apps
+
+
 
         createMaps();
     }

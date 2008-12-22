@@ -80,6 +80,11 @@ public abstract class AudioFileReader
       */
     public AudioFile read(File f) throws CannotReadException, IOException, TagException, ReadOnlyFileException, InvalidAudioFrameException
     {
+        if(logger.isLoggable(Level.INFO))
+        {
+            logger.info(ErrorMessage.GENERAL_READ.getMsg(f.getAbsolutePath()));   
+        }
+
         if (!f.canRead())
         {
             throw new CannotReadException(ErrorMessage.GENERAL_READ_FAILED_FILE_TOO_SMALL.getMsg(f.getAbsolutePath()));

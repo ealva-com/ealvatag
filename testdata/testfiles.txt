@@ -20,8 +20,12 @@ test6.wma,yes,245,wma,Jpg Artwork
 test7.wma,yes,245,wma,Png artwork
 test8.wma,no,268,wma,
 test9.wma,no,268,wma,Contains WM/MCDI field, (non artwork binary)
-test46.mp3,no,269,mp3 with extended header flag set but doesnt actually have an extended header
-test47.mp3,yes,269,mp3 with extended header and crc check
-test48.mp3,yes,269,mp3 with encrypted field (TENC)
-
-
+test46.mp3,no,269,ID3v23 with extended header flag set but doesnt actually have an extended header
+test47.mp3,yes,269,ID3v23 with extended header and crc check
+test48.mp3,yes,269,ID3v23 with encrypted field (TENC)
+test49.m4a,no,270,mp4 where we cant find mdat (although iTunes can)
+test50.m4a,no,270,mp4 test49.m4a after edited by iTunes
+test51.mp3,yes,271,ID3v22 tag with compressed flag set
+test52.mp3,yes,271,ID3v22 tag with unsychronization flag set
+test53.mp3,yes,271,ID3v22 tag with unsychronization and compressed flag set
+test54.flac:no,274:Flac tag with possibly corrupt Vorbis Comment Tag

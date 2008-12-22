@@ -24,7 +24,9 @@ import java.nio.ByteBuffer;
 
 /**
  * Initial key Text information frame.
- * <p>The 'Initial key' frame contains the musical key in which the sound starts. It is represented as a string with a maximum length of three characters. The ground keys are represented with "A","B","C","D","E", "F" and "G" and halfkeys represented with "b" and "#". Minor is represented as "m". Example "Cbm". Off key is represented with an "o" only.
+ * <p>The 'Initial key' frame contains the musical key in which the sound starts. It is represented as a string with
+ * a maximum length of three characters. The ground keys are represented with "A","B","C","D","E", "F" and "G" and halfkeys represented
+ * with "b" and "#". Minor is represented as "m". Example "Cbm". Off key is represented with an "o" only.
  * <p/>
  * <p>For more details, please refer to the ID3 specifications:
  * <ul>
@@ -83,7 +85,7 @@ public class FrameBodyTKEY extends AbstractFrameBodyTextInfo implements ID3v24Fr
 
     /**
      *
-     * @return true if text value is valid language code
+     * @return true if text value is valid musical key notation
      */
     public boolean isValid()
     {

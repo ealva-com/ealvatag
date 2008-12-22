@@ -108,7 +108,15 @@ public class StringHashMap extends StringFixedLength implements HashMapInterface
     {
         if (value instanceof String)
         {
-            this.value = ((String) value).toLowerCase();
+            //Issue #273 temporary hack for MM
+            if(value!=null && value.equals("XXX"))
+            {
+                this.value=value.toString();
+            }
+            else
+            {
+                this.value = ((String) value).toLowerCase();
+            }
         }
         else
         {

@@ -56,6 +56,11 @@ public class VorbisCommentTagField implements TagTextField
     private String id;
 
     /**
+     * If id is invalid
+     */
+    private static final String ERRONEOUS_ID = "ERRONEOUS";
+
+    /**
      * Creates an instance.
      *
      * @param raw Raw byte data of the tagfield.
@@ -64,12 +69,11 @@ public class VorbisCommentTagField implements TagTextField
     public VorbisCommentTagField(byte[] raw) throws UnsupportedEncodingException
     {
         String field = new String(raw, "UTF-8");
-
         int i = field.indexOf("=");
         if (i == -1)
         {
             //Beware that ogg ID, must be capitalized and contain no space..
-            this.id = "ERRONEOUS";
+            this.id = ERRONEOUS_ID;
             this.content = field;
         }
         else

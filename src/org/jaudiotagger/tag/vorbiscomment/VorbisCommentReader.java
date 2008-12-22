@@ -63,6 +63,12 @@ public class VorbisCommentReader
 
     private Fix fix;
 
+    /**
+     * max comment length that jaudiotagger can handle, this isnt the maximum column length allowed but we dont
+     * dont allow comments larger than this because of problem with allocating memory  (10MB shoudl be fine for all apps)
+     */
+    private static final int JAUDIOTAGGER_MAX_COMMENT_LENGTH = 10000000;
+
     public VorbisCommentReader()
     {
 
@@ -93,7 +99,8 @@ public class VorbisCommentReader
         System.arraycopy(rawdata, pos, b, 0, vendorStringLength);
         pos += vendorStringLength;
         tag.setVendor(new String(b, VorbisHeader.CHARSET_UTF_8));
-
+        logger.info("Vendor is:"+tag.getVendor());
+        
         b = new byte[FIELD_USER_COMMENT_LIST_LENGTH];
         System.arraycopy(rawdata, pos, b, 0, FIELD_USER_COMMENT_LIST_LENGTH);
         pos += FIELD_USER_COMMENT_LIST_LENGTH;
@@ -112,13 +119,27 @@ public class VorbisCommentReader
 
             int commentLength = Utils.getIntLE(b);
             logger.info("Next Comment Length:" + commentLength);
-            b = new byte[commentLength];
-            System.arraycopy(rawdata, pos, b, 0, commentLength);
-            pos += commentLength;
 
-            VorbisCommentTagField fieldComment = new VorbisCommentTagField(b);
-            logger.info("Adding:" + fieldComment.getId());
-            tag.add(fieldComment);
+            if(commentLength> JAUDIOTAGGER_MAX_COMMENT_LENGTH)
+            {
+                logger.warning(ErrorMessage.VORBIS_COMMENT_LENGTH_TOO_LARGE.getMsg(commentLength));
+                break;
+            }
+            else if(commentLength>rawdata.length)
+            {
+                logger.warning(ErrorMessage.VORBIS_COMMENT_LENGTH_LARGE_THAN_HEADER.getMsg(commentLength,rawdata.length));
+                break;
+            }
+            else
+            {
+                b = new byte[commentLength];
+                System.arraycopy(rawdata, pos, b, 0, commentLength);
+                pos += commentLength;
+
+                VorbisCommentTagField fieldComment = new VorbisCommentTagField(b);
+                logger.info("Adding:" + fieldComment.getId());
+                tag.add(fieldComment);
+            }
         }
 
         //Check framing bit, only exists when vorbisComment used within OggVorbis       

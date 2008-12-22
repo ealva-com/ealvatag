@@ -31,6 +31,7 @@ import java.io.RandomAccessFile;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
+import java.util.logging.Level;
 
 /**
  * Read Flac Tag
@@ -56,9 +57,19 @@ public class FlacTagReader
         boolean isLastBlock = false;
         while (!isLastBlock)
         {
+            if(logger.isLoggable(Level.INFO))
+            {
+                logger.info("Looking for MetaBlockHeader at:"+raf.getFilePointer());
+            }
+            
             //Read the header
             MetadataBlockHeader mbh = MetadataBlockHeader.readHeader(raf);
 
+            if(logger.isLoggable(Level.INFO))
+            {
+                logger.info("Reading MetadataBlockHeader:"+mbh.toString() + " ending at "+raf.getFilePointer());
+            }
+            
             //Is it one containing some sort of metadata, therefore interested in it?
             switch (mbh.getBlockType())
             {
@@ -86,8 +97,12 @@ public class FlacTagReader
 
                     break;
 
-                    //This is not a metadata block we are interested in so we skip to next block
+                //This is not a metadata block we are interested in so we skip to next block
                 default:
+                    if(logger.isLoggable(Level.INFO))
+                    {
+                        logger.info("Ignoring MetadataBlock:"+mbh.getBlockType());
+                    }
                     raf.seek(raf.getFilePointer() + mbh.getDataLength());
                     break;
             }

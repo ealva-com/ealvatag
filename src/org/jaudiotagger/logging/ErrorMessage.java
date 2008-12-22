@@ -7,6 +7,7 @@ import java.text.MessageFormat;
  */
 public enum ErrorMessage
 {
+    GENERAL_READ("File {0} being read"),
     MP4_FILE_NOT_CONTAINER("This file does not appear to be an Mp4  file"),
     MP4_FILE_NOT_AUDIO("This file does not appear to be an Mp4 Audio file, could be corrupted or video "),
     MP4_FILE_IS_VIDEO("This file appears to be an Mp4 Video file, video files are not supported "),
@@ -89,6 +90,8 @@ public enum ErrorMessage
     ID_TAG_SIZE("{0} Tag size is {1} according to header (does not include header size, add 10)"),
     ID3_TAG_CRC_FLAG_SET_INCORRECTLY("{0} CRC Data flag not set correctly."),
     MP4_CANNOT_FIND_AUDIO("Unable to determine start of audio in file"),
+    VORBIS_COMMENT_LENGTH_TOO_LARGE("Comment field length is very large {0} , assuming comment is corrupt"),
+    VORBIS_COMMENT_LENGTH_LARGE_THAN_HEADER("Comment field length {0} is larger than total comment header {1} ")
     ;
 
 
