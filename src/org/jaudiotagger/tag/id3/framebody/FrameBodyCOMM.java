@@ -147,9 +147,7 @@ public class FrameBodyCOMM extends AbstractID3v2FrameBody implements ID3v24Frame
         {
              throw new IllegalArgumentException(ErrorMessage.GENERAL_INVALID_NULL_ARGUMENT.getMsg());
         } */
-        System.out.println("LANGIN"+language);
-        setObjectValue(DataTypes.OBJ_LANGUAGE, language);
-        System.out.println("LANGOUT"+getObjectValue(DataTypes.OBJ_LANGUAGE));
+        setObjectValue(DataTypes.OBJ_LANGUAGE, language);        
     }
 
     /**
