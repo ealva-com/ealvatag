@@ -184,9 +184,11 @@ public class Mp4AtomTree
         }
         finally
         {
-             if(mdatNode==null)
+            //If we cant find the audio then we cannot modify this file so better to throw exception
+            //now rather than later when try and write to it.
+            if(mdatNode==null)
             {
-                logger.warning(ErrorMessage.MP4_CANNOT_FIND_AUDIO.getMsg());
+                throw new CannotReadException(ErrorMessage.MP4_CANNOT_FIND_AUDIO.getMsg());
             }
 
             if (closeExit)

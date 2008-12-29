@@ -229,7 +229,7 @@ public class ID3v11Tag extends ID3v1Tag
     }
 
     /**
-     * Creates a new ID3v1_1 datatype.
+     * Creates a new ID3v11 datatype.
      *
      * @param file
      * @param loggingFilename
@@ -244,7 +244,7 @@ public class ID3v11Tag extends ID3v1Tag
 
         fc = file.getChannel();
         fc.position(file.length() - TAG_LENGTH);
-        byteBuffer = ByteBuffer.allocate(TAG_LENGTH);
+
         fc.read(byteBuffer);
         byteBuffer.flip();
         read(byteBuffer);
@@ -252,7 +252,7 @@ public class ID3v11Tag extends ID3v1Tag
     }
 
     /**
-     * Creates a new ID3v1_1 datatype.
+     * Creates a new ID3v11 datatype.
      *
      * @param file
      * @throws TagNotFoundException
