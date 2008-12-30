@@ -426,12 +426,21 @@ public class Mp4Tag extends AbstractTag
         }
         switch (mp4FieldKey)
         {
-            case BPM:
+            //This is boolean stored as 1 , but calling program might set as 'true' so we handle this
+            //case internally
             case COMPILATION:
+                if(value.equals("true"))
+                {
+                    value= Mp4TagByteField.TRUE_VALUE;
+                }
+                return new Mp4TagByteField(mp4FieldKey, value, mp4FieldKey.getFieldLength());
+
             case RATING:
+            case BPM:
             case CONTENT_TYPE:
             case TV_SEASON:
             case TV_EPISODE:
+            case TOOL:
                 return new Mp4TagByteField(mp4FieldKey, value, mp4FieldKey.getFieldLength());
 
             case GENRE:

@@ -10,15 +10,15 @@ import java.util.HashMap;
  */
 public enum Mp4FieldType
 {
-    NUMERIC(0x0),
-    TEXT(0x1),
+    IMPLICIT(0x0),  //used for specialized formats such as TrackNo or DiscNo
+    TEXT(0x1),      //UTF-8
     TEXT_UTF16BE(0x02),
     TEXT_JAPANESE(0x03),
     HTML(0x06),
-    XML(0x06),
+    XML(0x07),
     GUID(0x08),
     ISRC(0x09),
-    MI3P(0x10),
+    MI3P(0x0a),
     COVERART_GIF(0x0c),
     COVERART_JPEG(0x0d),
     COVERART_PNG(0x0e),
@@ -26,7 +26,7 @@ public enum Mp4FieldType
     DURATION(0x10),
     DATETIME(0x11),
     GENRES(0x12),
-    BYTE(0x15),
+    INTEGER(0x15), //Formally known as byte
     RIAAPA(0x18),
     UPC(0x19),
     COVERART_BMP(0x1B),

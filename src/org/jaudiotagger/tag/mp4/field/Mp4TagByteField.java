@@ -16,6 +16,8 @@ import java.nio.ByteBuffer;
  */
 public class Mp4TagByteField extends Mp4TagTextField
 {
+    public static String TRUE_VALUE="1";  //when usimng this field to hold a boolean
+
     //Holds the actual size of the data content as held in the databoxitem, this is required when creating new
     //items because we cant accurately work out the size by looking at the content because sometimes field must be longer
     //than is actually required to hold the value
@@ -49,7 +51,7 @@ public class Mp4TagByteField extends Mp4TagTextField
     {
         super(id.getFieldName(), value);
         this.realDataLength = realDataLength;
-        //Check that can actually be store dnumercially, otherwise will have big problems
+        //Check that can actually be stored numercially, otherwise will have big problems
         //when try and save the field
         try
         {
@@ -75,7 +77,7 @@ public class Mp4TagByteField extends Mp4TagTextField
 
     public Mp4FieldType getFieldType()
     {
-        return Mp4FieldType.BYTE;
+        return Mp4FieldType.INTEGER;
     }
 
     /**

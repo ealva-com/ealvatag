@@ -12,7 +12,13 @@ import java.util.ArrayList;
 /**
  * Represents the Track No field
  * <p/>
- * <p>For some reason uses an array of four numbers, but only the middle two are of use for display purposes
+ * <p>There are a number of reseved fields makeing matters more complicated
+ * Reserved:2 bytes
+ * Track Number:2 bytes
+ * No of Tracks:2 bytes (or zero if not known)
+ * PlayListTitleReserved: 1 byte
+ * playtitlenameReserved:0 bytes
+ * </p>
  */
 public class Mp4TrackField extends Mp4TagTextNumberField
 {

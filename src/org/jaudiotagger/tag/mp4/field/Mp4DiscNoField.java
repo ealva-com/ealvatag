@@ -12,7 +12,12 @@ import java.util.ArrayList;
 /**
  * Represents the Disc No field
  * <p/>
- * <p>For some reason uses an array of three numbers, but only the last two are of use for display purposes
+ * <p>Contains some reserved fields that we currently ignore
+ *
+ * Reserved:2 bytes
+ * Disk Number:2 bytes
+ * Total no of Discs:2 bytes
+ * </p>
  */
 public class Mp4DiscNoField extends Mp4TagTextNumberField
 {

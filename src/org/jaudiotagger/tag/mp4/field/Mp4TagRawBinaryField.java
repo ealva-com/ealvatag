@@ -40,7 +40,7 @@ public class Mp4TagRawBinaryField extends Mp4TagField
 
     public Mp4FieldType getFieldType()
     {
-        return Mp4FieldType.NUMERIC;
+        return Mp4FieldType.IMPLICIT;
     }
 
     /**

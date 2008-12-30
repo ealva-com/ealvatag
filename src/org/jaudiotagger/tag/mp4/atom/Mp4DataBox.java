@@ -70,7 +70,7 @@ public class Mp4DataBox extends AbstractMp4Box
         {
             content = Utils.getString(this.dataBuffer, PRE_DATA_LENGTH, header.getDataLength() - PRE_DATA_LENGTH, header.getEncoding());
         }
-        else if (type == Mp4FieldType.NUMERIC.getFileClassId())
+        else if (type == Mp4FieldType.IMPLICIT.getFileClassId())
         {
             numbers = new ArrayList<Short>();
 
@@ -93,7 +93,7 @@ public class Mp4DataBox extends AbstractMp4Box
             }
             content = sb.toString();
         }
-        else if (type == Mp4FieldType.BYTE.getFileClassId())
+        else if (type == Mp4FieldType.INTEGER.getFileClassId())
         {
             //TODO byte data length seems to be 1 for pgap and cpil but 2 for tmpo ?
             //Create String representation for display

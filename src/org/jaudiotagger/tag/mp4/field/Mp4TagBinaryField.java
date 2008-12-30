@@ -77,7 +77,7 @@ public class Mp4TagBinaryField extends Mp4TagField
     {
         //TODO dont know what value this should be do we actually have any binary fields other
         //than cover art
-        return Mp4FieldType.NUMERIC;
+        return Mp4FieldType.IMPLICIT;
     }
 
     /**

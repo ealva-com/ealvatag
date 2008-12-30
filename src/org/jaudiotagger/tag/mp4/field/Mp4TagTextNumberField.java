@@ -94,7 +94,7 @@ public class Mp4TagTextNumberField extends Mp4TagTextField
      */
     public Mp4FieldType getFieldType()
     {
-        return Mp4FieldType.NUMERIC;
+        return Mp4FieldType.IMPLICIT;
     }
 
     protected void build(ByteBuffer data) throws UnsupportedEncodingException

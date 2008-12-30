@@ -251,12 +251,12 @@ public class Mp4TagReader
                     TagField field = new Mp4TagTextField(header.getId(), raw);
                     tag.add(field);
                 }
-                else if (fieldType == Mp4FieldType.NUMERIC)
+                else if (fieldType == Mp4FieldType.IMPLICIT)
                 {
                     TagField field = new Mp4TagTextNumberField(header.getId(), raw);
                     tag.add(field);
                 }
-                else if (fieldType == Mp4FieldType.BYTE)
+                else if (fieldType == Mp4FieldType.INTEGER)
                 {
                     TagField field = new Mp4TagByteField(header.getId(), raw);
                     tag.add(field);

@@ -27,19 +27,19 @@ public enum Mp4FieldKey
     ALBUM("©alb", TEXT),
     ALBUM_ARTIST("aART", TEXT),
     GENRE_CUSTOM("©gen", TEXT),
-    GENRE("gnre", NUMERIC),
+    GENRE("gnre", IMPLICIT),
     TITLE("©nam", TEXT),
-    TRACK("trkn", NUMERIC),
-    BPM("tmpo", BYTE, 2),
+    TRACK("trkn", IMPLICIT),
+    BPM("tmpo", INTEGER, 2),
     DAY("©day", TEXT),
     COMMENT("©cmt", TEXT),
     COMPOSER("©wrt", TEXT),
     GROUPING("©grp", TEXT),
-    DISCNUMBER("disk", NUMERIC),
+    DISCNUMBER("disk", IMPLICIT),
     LYRICS("©lyr", TEXT),
-    RATING("rtng", BYTE),   //AFAIK Cant be set in itunes, but if set to explicit itunes will show as explicit
+    RATING("rtng", INTEGER,1),   //AFAIK Cant be set in itunes, but if set to explicit itunes will show as explicit
     ENCODER("©too", TEXT),
-    COMPILATION("cpil", BYTE, 1),
+    COMPILATION("cpil", INTEGER, 1),
     COPYRIGHT("cprt", TEXT),
     CATEGORY("catg", TEXT),
     KEYWORD("keyw", TEXT),
@@ -63,7 +63,7 @@ public enum Mp4FieldKey
     MUSICBRAINZ_ALBUM_STATUS("com.apple.iTunes", "MusicBrainz Album Status", TEXT, Tagger.PICARD),
     MUSICBRAINZ_ALBUM_TYPE("com.apple.iTunes", "MusicBrainz Album Type", TEXT, Tagger.PICARD),
     RELEASECOUNTRY("com.apple.iTunes", "MusicBrainz Album Release Country", TEXT, Tagger.PICARD),
-    PART_OF_GAPLESS_ALBUM("pgap", BYTE),
+    PART_OF_GAPLESS_ALBUM("pgap", INTEGER),
     ITUNES_SMPB("com.apple.iTunes", "iTunSMPB", TEXT),
     ITUNES_NORM("com.apple.iTunes", "iTunNORM", TEXT),
     CDDB_1("com.apple.iTunes", "iTunes_CDDB_1", TEXT),
@@ -73,24 +73,25 @@ public enum Mp4FieldKey
     KEY("com.apple.iTunes", "KEY", TEXT, Tagger.JAIKOZ),
 
     //AFAIK These arent actually used by Audio Only files, but there is nothing to prevent them being used
-    CONTENT_TYPE("stik", BYTE, 1),
+    CONTENT_TYPE("stik", INTEGER, 1),
+    TOOL("tool", INTEGER, 4),
     PODCAST_KEYWORD("keyw", TEXT),
-    PODCAST_URL("purl", NUMERIC),   //TODO Actually seems to store text but is marked as numeric!
-    EPISODE_GLOBAL_ID("egid", NUMERIC),   //TODO Actually seems to store text but is marked as numeric!
+    PODCAST_URL("purl", IMPLICIT),   //TODO Actually seems to store text but is marked as numeric!
+    EPISODE_GLOBAL_ID("egid", IMPLICIT),   //TODO Actually seems to store text but is marked as numeric!
     TV_NETWORK("tvnn", TEXT),
     TV_EPISODE_NUMBER("tven", TEXT),
-    TV_SEASON("tvsn", BYTE, 1),
-    TV_EPISODE("tves", BYTE, 1),
+    TV_SEASON("tvsn", INTEGER, 1),
+    TV_EPISODE("tves", INTEGER, 1),
 
     //These seem to be used in DRM Files, of type byte , we need to know the byte length to allow them to be written
     //back correctly on saving them, we don't provides options to modify them as may break drm
     AP_ID("apID", TEXT),
-    AT_ID("atID", BYTE, 4),
-    CN_ID("cnID", BYTE, 4),
-    PL_ID("plID", BYTE, 8),
-    GE_ID("geID", BYTE, 4),
-    SF_ID("sfID", BYTE, 4),
-    AK_ID("akID", BYTE, 1),
+    AT_ID("atID", INTEGER, 4),
+    CN_ID("cnID", INTEGER, 4),
+    PL_ID("plID", INTEGER, 8),
+    GE_ID("geID", INTEGER, 4),
+    SF_ID("sfID", INTEGER, 4),
+    AK_ID("akID", INTEGER, 1),
 
     //Media Monkey3 beta
     LYRICIST_MM3BETA("lyrc", TEXT, Tagger.MEDIA_MONKEY),

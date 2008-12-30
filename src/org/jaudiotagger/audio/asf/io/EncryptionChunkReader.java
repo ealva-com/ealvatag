@@ -75,7 +75,7 @@ class EncryptionChunkReader implements ChunkReader
         * Object ID GUID    128
         * Object Size   QWORD   64
         * Secret Data Length    DWORD   32
-        * Secret Data   BYTE    varies
+        * Secret Data   INTEGER    varies
         * Protection Type Length    DWORD   32
         * Protection Type   char    varies
         * Key ID Length DWORD   32
