@@ -101,7 +101,7 @@ public class OggPageHeader
     public static OggPageHeader read(RandomAccessFile raf) throws IOException, CannotReadException
     {
         long start = raf.getFilePointer();
-        logger.info("Trying to read OggPage at:" + start);
+        logger.fine("Trying to read OggPage at:" + start);
 
         byte[] b = new byte[OggPageHeader.CAPTURE_PATTERN.length];
         raf.read(b);
