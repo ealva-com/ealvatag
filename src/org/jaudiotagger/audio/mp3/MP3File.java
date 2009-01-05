@@ -679,7 +679,7 @@ public class MP3File extends AudioFile
      */
     public void delete(AbstractTag mp3tag) throws FileNotFoundException, IOException
     {
-        mp3tag.delete(new RandomAccessFile(this.file, "rw"));
+        mp3tag.delete(new RandomAccessFile(this.file, "rws"));
     }
 
     /**
@@ -764,7 +764,7 @@ public class MP3File extends AudioFile
             {
                 if (id3v2tag == null)
                 {
-                    rfile = new RandomAccessFile(file, "rw");
+                    rfile = new RandomAccessFile(file, "rws");
                     (new ID3v24Tag()).delete(rfile);
                     (new ID3v23Tag()).delete(rfile);
                     (new ID3v22Tag()).delete(rfile);
@@ -777,7 +777,7 @@ public class MP3File extends AudioFile
                     id3v2tag.write(file, ((MP3AudioHeader) this.getAudioHeader()).getMp3StartByte());
                 }
             }
-            rfile = new RandomAccessFile(file, "rw");
+            rfile = new RandomAccessFile(file, "rws");
 
             //Lyrics 3 Tag
             if (TagOptionSingleton.getInstance().isLyrics3Save())
