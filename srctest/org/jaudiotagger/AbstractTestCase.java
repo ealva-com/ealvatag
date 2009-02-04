@@ -33,7 +33,7 @@ public abstract class AbstractTestCase extends TestCase
      *         succeeded;
      *         <code>false</code> otherwise
      */
-    private static boolean copy(File fromFile, File toFile)
+    public static boolean copy(File fromFile, File toFile)
     {
         try
         {
