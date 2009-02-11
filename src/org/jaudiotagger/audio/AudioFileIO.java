@@ -224,6 +224,7 @@ public class AudioFileIO
         readers.put(SupportedFileFormat.MP4.getFilesuffix(), new Mp4FileReader());
         readers.put(SupportedFileFormat.M4A.getFilesuffix(), new Mp4FileReader());
         readers.put(SupportedFileFormat.M4P.getFilesuffix(), new Mp4FileReader());
+        readers.put(SupportedFileFormat.M4B.getFilesuffix(), new Mp4FileReader());
         readers.put(SupportedFileFormat.WAV.getFilesuffix(), new WavFileReader());
         readers.put(SupportedFileFormat.WMA.getFilesuffix(), new AsfFileReader());
         final RealFileReader realReader = new RealFileReader();
@@ -237,6 +238,7 @@ public class AudioFileIO
         writers.put(SupportedFileFormat.MP4.getFilesuffix(), new Mp4FileWriter());
         writers.put(SupportedFileFormat.M4A.getFilesuffix(), new Mp4FileWriter());
         writers.put(SupportedFileFormat.M4P.getFilesuffix(), new Mp4FileWriter());
+        writers.put(SupportedFileFormat.M4B.getFilesuffix(), new Mp4FileWriter());                
         writers.put(SupportedFileFormat.WAV.getFilesuffix(), new WavFileWriter());
         writers.put(SupportedFileFormat.WMA.getFilesuffix(), new AsfFileWriter());
 

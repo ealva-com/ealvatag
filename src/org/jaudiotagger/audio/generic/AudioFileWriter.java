@@ -410,10 +410,10 @@ public abstract class AudioFileWriter
 
          //If the temporary file was used
         if (newFile.length() > 0)
-        {
+        {             
             //Rename Original File
             //Can fail on Vista if have Special Permission 'Delete' set Deny
-            File originalFileBackup = new File(af.getFile().getParentFile().getPath(), AudioFile.getBaseFilename(af.getFile())+ ".old");
+            File originalFileBackup = new File(af.getFile().getAbsoluteFile().getParentFile().getPath(), AudioFile.getBaseFilename(af.getFile())+ ".old");
             boolean renameResult = af.getFile().renameTo(originalFileBackup);
             if (renameResult == false)
             {

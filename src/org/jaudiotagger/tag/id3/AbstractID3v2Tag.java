@@ -1396,7 +1396,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
     private void replaceFile(File originalFile,File newFile) throws IOException
     {
         //Rename Original File to make a backup in case problem with new file
-        File originalFileBackup = new File(originalFile.getParentFile().getPath(), AudioFile.getBaseFilename(originalFile)+ ".old");
+        File originalFileBackup = new File(originalFile.getAbsoluteFile().getParentFile().getPath(), AudioFile.getBaseFilename(originalFile)+ ".old");
         boolean renameOriginalResult = originalFile.renameTo(originalFileBackup);
         if (!renameOriginalResult)
         {

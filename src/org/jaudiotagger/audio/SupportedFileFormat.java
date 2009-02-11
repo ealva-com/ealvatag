@@ -14,7 +14,8 @@ public enum SupportedFileFormat
     WMA("wma"),
     WAV("wav"),
     RA("ra"),
-    RM("rm");
+    RM("rm"),
+    M4B("m4b");
 
     private String filesuffix;
 
