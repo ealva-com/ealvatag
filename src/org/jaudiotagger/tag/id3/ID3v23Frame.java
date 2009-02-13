@@ -107,7 +107,37 @@ public class ID3v23Frame extends AbstractID3v2Frame
 
         if (frame instanceof ID3v24Frame)
         {
-            if (ID3Tags.isID3v24FrameIdentifier(frame.getIdentifier()))
+            //Unknown Frame e.g NCON,also protects when known id but has unsupported frame body
+            if (frame.getBody() instanceof FrameBodyUnsupported)
+            {
+                this.frameBody = new FrameBodyUnsupported((FrameBodyUnsupported) frame.getBody());
+                this.frameBody.setHeader(this);
+                identifier = frame.getIdentifier();
+                logger.info("UNKNOWN:Orig id is:" + frame.getIdentifier() + ":New id is:" + identifier);
+                return;
+            }
+            // Deprecated frame for v24
+            else if (frame.getBody() instanceof FrameBodyDeprecated)
+            {
+                //Was it valid for this tag version, if so try and reconstruct
+                if (ID3Tags.isID3v23FrameIdentifier(frame.getIdentifier()))
+                {
+                    this.frameBody = ((FrameBodyDeprecated) frame.getBody()).getOriginalFrameBody();
+                    this.frameBody.setHeader(this);
+                    identifier = frame.getIdentifier();
+                    logger.info("DEPRECATED:Orig id is:" + frame.getIdentifier() + ":New id is:" + identifier);
+                }
+                //or was it still deprecated, if so leave as is
+                else
+                {
+                    this.frameBody = new FrameBodyDeprecated((FrameBodyDeprecated) frame.getBody());
+                    this.frameBody.setHeader(this);
+                    identifier = frame.getIdentifier();
+                    logger.info("DEPRECATED:Orig id is:" + frame.getIdentifier() + ":New id is:" + identifier);
+                    return;
+                }
+            }
+            else if (ID3Tags.isID3v24FrameIdentifier(frame.getIdentifier()))
             {
                 //Version between v4 and v3
                 identifier = ID3Tags.convertFrameID24To23(frame.getIdentifier());
@@ -143,36 +173,6 @@ public class ID3v23Frame extends AbstractID3v2Frame
                         logger.info("V4:Orig id is:" + frame.getIdentifier() + ":New Id Unsupported is:" + identifier);
                         return;
                     }
-                }
-            }
-            //Unknown Frame e.g NCON
-            else if (frame.getBody() instanceof FrameBodyUnsupported)
-            {
-                this.frameBody = new FrameBodyUnsupported((FrameBodyUnsupported) frame.getBody());
-                this.frameBody.setHeader(this);
-                identifier = frame.getIdentifier();
-                logger.info("UNKNOWN:Orig id is:" + frame.getIdentifier() + ":New id is:" + identifier);
-                return;
-            }
-            // Deprecated frame for v24
-            else if (frame.getBody() instanceof FrameBodyDeprecated)
-            {
-                //Was it valid for this tag version, if so try and reconstruct
-                if (ID3Tags.isID3v23FrameIdentifier(frame.getIdentifier()))
-                {
-                    this.frameBody = ((FrameBodyDeprecated) frame.getBody()).getOriginalFrameBody();
-                    this.frameBody.setHeader(this);
-                    identifier = frame.getIdentifier();
-                    logger.info("DEPRECATED:Orig id is:" + frame.getIdentifier() + ":New id is:" + identifier);
-                }
-                //or was it still deprecated, if so leave as is
-                else
-                {
-                    this.frameBody = new FrameBodyDeprecated((FrameBodyDeprecated) frame.getBody());
-                    this.frameBody.setHeader(this);
-                    identifier = frame.getIdentifier();
-                    logger.info("DEPRECATED:Orig id is:" + frame.getIdentifier() + ":New id is:" + identifier);
-                    return;
                 }
             }
             // Unable to find a suitable framebody, this shold not happen

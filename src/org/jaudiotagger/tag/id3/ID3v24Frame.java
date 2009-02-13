@@ -88,7 +88,17 @@ public class ID3v24Frame extends AbstractID3v2Frame
     {
         // Is it a straight conversion e.g TALB - TALB
         identifier = ID3Tags.convertFrameID23To24(frame.getIdentifier());
-        if (identifier != null)
+
+        //We cant convert unsupported bodie sproperly
+        if(frame.getBody() instanceof FrameBodyUnsupported)
+        {
+            this.frameBody = new FrameBodyUnsupported((FrameBodyUnsupported) frame.getBody());
+            this.frameBody.setHeader(this);
+            identifier = frame.getIdentifier();
+            logger.info("V3:UnsupportedBody:Orig id is:" + frame.getIdentifier() + ":New id is:" + identifier);
+            return;
+        }
+        else if (identifier != null)
         {
             logger.info("V3:Orig id is:" + frame.getIdentifier() + ":New id is:" + identifier);
             this.frameBody = (AbstractTagFrameBody) ID3Tags.copyObject(frame.getBody());
@@ -96,7 +106,7 @@ public class ID3v24Frame extends AbstractID3v2Frame
             return;
         }
         // Is it a known v3 frame which needs forcing to v4 frame e.g. TYER - TDRC
-        else if (ID3Tags.isID3v23FrameIdentifier(frame.getIdentifier()) == true)
+        else if (ID3Tags.isID3v23FrameIdentifier(frame.getIdentifier()))
         {
             identifier = ID3Tags.forceFrameID23To24(frame.getIdentifier());
             if (identifier != null)

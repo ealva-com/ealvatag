@@ -53,6 +53,18 @@ import java.util.StringTokenizer;
 public class FrameBodyIPLS extends AbstractID3v2FrameBody implements ID3v23FrameBody
 {
     /**
+    * Convert from V3 to V4 Frame
+    */
+    /*public FrameBodyTIPL(FrameBodyIPLS body)
+       {
+           setObjectValue(DataTypes.OBJ_TEXT_ENCODING, body.getTextEncoding());
+
+           PairedTextEncodedStringNullTerminated.ValuePairs value = (PairedTextEncodedStringNullTerminated.ValuePairs) body.getObjectValue(DataTypes.OBJ_TEXT);
+           setObjectValue(DataTypes.OBJ_TEXT, value.toString());
+       }
+    */
+
+    /**
      * Creates a new FrameBodyIPLS datatype.
      */
     public FrameBodyIPLS()
