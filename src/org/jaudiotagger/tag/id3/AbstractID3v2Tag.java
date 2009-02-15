@@ -1338,7 +1338,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
 
         try
         {
-            fc = new RandomAccessFile(file, "rw").getChannel();
+            fc = new RandomAccessFile(file, "rws").getChannel();
             fileLock = getFileLockForWriting(fc, file.getPath());
             fc.write(headerBuffer);
             fc.write(ByteBuffer.wrap(bodyByteBuffer));

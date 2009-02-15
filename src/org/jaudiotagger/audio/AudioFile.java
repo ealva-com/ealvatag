@@ -204,7 +204,7 @@ public class AudioFile
                 logger.severe("Unable to write:" + file.getPath());
                 throw new ReadOnlyFileException("Unable to write to:" + file.getPath());
             }
-            newFile = new RandomAccessFile(file, "rw");
+            newFile = new RandomAccessFile(file, "rws");
         }
         return newFile;
     }
