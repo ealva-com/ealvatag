@@ -56,6 +56,12 @@ import java.nio.ByteBuffer;
  */
 public class FrameBodyCOMM extends AbstractID3v2FrameBody implements ID3v24FrameBody, ID3v23FrameBody
 {
+    //Most players only read comment with description of blank
+    public static final String DEFAULT = "";
+
+    //used by iTunes for volume normalization, although uses the COMMENT field not usually displayed as a comment
+    public static final String ITUNES_NORMALIZATION = "iTunNORM";
+
     /**
      * Creates a new FrameBodyCOMM datatype.
      */
