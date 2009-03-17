@@ -228,7 +228,7 @@ public class ID3v23Frame extends AbstractID3v2Frame
             }
         }
 
-        logger.warning("Frame is unknown version");
+        logger.warning("Frame is unknown version:"+frame.getClass());
     }
 
     /**

@@ -20,6 +20,7 @@ package org.jaudiotagger.audio.ogg.util;
 
 import org.jaudiotagger.audio.exceptions.CannotReadException;
 import org.jaudiotagger.audio.generic.Utils;
+import org.jaudiotagger.logging.ErrorMessage;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
@@ -27,6 +28,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Logger;
+import java.util.logging.Level;
 
 
 /**
@@ -107,7 +109,7 @@ public class OggPageHeader
         raf.read(b);
         if (!(Arrays.equals(b, OggPageHeader.CAPTURE_PATTERN)))
         {
-            throw new CannotReadException("OggS Header could not be found, not an ogg stream:" + new String(b));
+            throw new CannotReadException(ErrorMessage.OGG_HEADER_CANNOT_BE_FOUND.getMsg(new String(b)));
         }
 
         raf.seek(start + OggPageHeader.FIELD_PAGE_SEGMENTS_POS);
@@ -169,7 +171,10 @@ public class OggPageHeader
             isValid = true;
         }
 
-        logger.info("Constructed OggPage:" + this.toString());
+        if(logger.isLoggable(Level.CONFIG))
+        {
+            logger.config("Constructed OggPage:" + this.toString());
+        }
     }
 
     private int u(int i)

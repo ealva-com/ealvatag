@@ -579,7 +579,6 @@ public class OggVorbisTagReader
 
         //Reset filepointer to location that it was in at start of method
         raf.seek(filepointer);
-
         return new OggVorbisHeaderSizes(commentHeaderStartPosition, setupHeaderStartPosition, commentHeaderSize, setupHeaderSize, extraPackets);
     }
 

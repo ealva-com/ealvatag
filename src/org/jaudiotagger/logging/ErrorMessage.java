@@ -58,7 +58,7 @@ public enum ErrorMessage
     GENERAL_WRITE_FAILED_TO_OPEN_FILE_FOR_EDITING("Cannot modify {0} because do not have permissions to modify file"),
     NULL_PADDING_FOUND_AT_END_OF_MP4("Null Padding found at end of file starting at offset {0}"),
     OGG_VORBIS_NO_SETUP_BLOCK("Could not find the Ogg Setup block"),
-    OGG_HEADER_CANNOT_BE_FOUND("OggS Header could not be found, not an ogg stream {0}"),
+    OGG_HEADER_CANNOT_BE_FOUND("OggS Header could not be found, not an ogg stream {0}"),    
     GENERAL_READ_FAILED_UNABLE_TO_CLOSE_RANDOM_ACCESS_FILE("Unable to close random access file: {0}"),
     GENERAL_READ_FAILED_FILE_TOO_SMALL("Unable to read file because it is too small to be valid audio file: {0}"),
     GENERAL_READ_FAILED_DO_NOT_HAVE_PERMISSION_TO_READ_FILE("Unable to read file do not have permission to read: {0}"),
