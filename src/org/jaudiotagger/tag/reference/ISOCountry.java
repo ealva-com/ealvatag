@@ -151,7 +151,7 @@ public class ISOCountry
         HAITI("HT", "Haiti"),
         HEARD_ISLAND_AND_MCDONALD_ISLANDS("HM", "Heard Island and Mcdonald Islands"),
         HONDURAS("HN", "Honduras"),
-        HONG_KONG("HK", "Hong_Kong"),
+        HONG_KONG("HK", "Hong Kong"),
         HUNGARY("HU", "Hungary"),
         ICELAND("IS", "Iceland"),
         INDIA("IN", "India"),
