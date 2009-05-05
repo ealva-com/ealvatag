@@ -141,9 +141,9 @@ public class Chunk
     public String prettyPrint(final String prefix)
     {
         StringBuffer result = new StringBuffer();
-        result.append(prefix + "-> GUID: " + GUID.getGuidDescription(guid) + Utils.LINE_SEPARATOR);
-        result.append(prefix + "  | : Starts at position: " + getPosition() + Utils.LINE_SEPARATOR);
-        result.append(prefix + "  | : Last byte at: " + (getChunckEnd() - 1) + Utils.LINE_SEPARATOR);
+        result.append(prefix).append("-> GUID: ").append(GUID.getGuidDescription(guid)).append(Utils.LINE_SEPARATOR);
+        result.append(prefix).append("  | : Starts at position: ").append(getPosition()).append(Utils.LINE_SEPARATOR);
+        result.append(prefix).append("  | : Last byte at: ").append(getChunckEnd() - 1).append(Utils.LINE_SEPARATOR);
         return result.toString();
     }
 

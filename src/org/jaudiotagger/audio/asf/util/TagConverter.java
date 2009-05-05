@@ -55,7 +55,7 @@ public class TagConverter
      */
     public static void assignCommonTagValues(Tag tag, ExtendedContentDescription description)
     {
-        ContentDescriptor tmp = null;
+        ContentDescriptor tmp;
         if (!Utils.isBlank(tag.getFirstAlbum()))
         {
             tmp = new ContentDescriptor(AsfFieldKey.ALBUM.getFieldName(), ContentDescriptor.TYPE_STRING);
@@ -194,14 +194,13 @@ public class TagConverter
         {
             // Now any properties, which don't belong to the common section
             Iterator<ContentDescriptor> it = extDesc.getDescriptors().iterator();
-            while (it.hasNext())
+            for (ContentDescriptor current : extDesc.getDescriptors())
             {
-                ContentDescriptor current = it.next();
                 if (!AsfTag.storesDescriptor(current))
                 {
                     if (current.getType() == ContentDescriptor.TYPE_BINARY)
                     {
-                        if(current.getName().equals(AsfFieldKey.COVER_ART.getFieldName()))
+                        if (current.getName().equals(AsfFieldKey.COVER_ART.getFieldName()))
                         {
                             result.add(new AsfTagCoverField(current));
                         }

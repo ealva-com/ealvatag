@@ -58,8 +58,8 @@ public class Lyrics3Image extends AbstractDataType
     {
         super(copy);
         this.time = new Lyrics3TimeStamp(copy.time);
-        this.description = new String(copy.description);
-        this.filename = new String(copy.filename);
+        this.description = copy.description;
+        this.filename = copy.filename;
     }
 
     /**
@@ -230,7 +230,7 @@ public class Lyrics3Image extends AbstractDataType
      */
     public String writeString()
     {
-        String str = "";
+        String str;
 
         if (filename == null)
         {

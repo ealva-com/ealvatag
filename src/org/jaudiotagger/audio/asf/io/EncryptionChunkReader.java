@@ -89,7 +89,7 @@ class EncryptionChunkReader implements ChunkReader
         byte[] licenseURL;
 
         // Secret Data length
-        int fieldLength = 0;
+        int fieldLength;
         fieldLength = (int) Utils.readUINT32(stream);
         // Secret Data
         secretData = new byte[fieldLength + 1];

@@ -37,7 +37,7 @@ public class ChunkPositionComparator implements Comparator<Chunk>
      */
     public int compare(Chunk c1, Chunk c2)
     {
-        int result = new Long(c1.getPosition()).compareTo(new Long(c2.getPosition()));
+        int result = new Long(c1.getPosition()).compareTo(c2.getPosition());
         return result;
     }
 }

@@ -201,7 +201,7 @@ public abstract class AbstractTagFrameBody extends AbstractTagItem
      */
     public final AbstractDataType getObject(String identifier)
     {
-        AbstractDataType object = null;
+        AbstractDataType object;
         Iterator<AbstractDataType> iterator = objectList.listIterator();
         while (iterator.hasNext())
         {
@@ -248,7 +248,7 @@ public abstract class AbstractTagFrameBody extends AbstractTagItem
             return false;
         }
         ArrayList<AbstractDataType> superset = ((AbstractTagFrameBody) obj).objectList;
-        for (Object anObjectList : objectList)
+        for (AbstractDataType anObjectList : objectList)
         {
             if (((AbstractDataType) anObjectList).getValue() != null)
             {

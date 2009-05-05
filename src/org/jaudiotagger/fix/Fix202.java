@@ -131,7 +131,7 @@ public class Fix202
          */
         public final String getDescription()
         {
-            return new String(".ogg Files");
+            return ".ogg Files";
         }
     }
 

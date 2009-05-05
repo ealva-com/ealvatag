@@ -85,7 +85,7 @@ public class Lyrics3v2Field extends AbstractTagFrame
         }
         else if (frameIdentifier.startsWith("COMM"))
         {
-            text = new String(((FrameBodyCOMM) frame.getBody()).getText());
+            text = ((FrameBodyCOMM) frame.getBody()).getText();
             frameBody = new FieldFrameBodyINF(text);
         }
         else if (frameIdentifier.equals("TCOM"))
@@ -226,7 +226,7 @@ public class Lyrics3v2Field extends AbstractTagFrame
      */
     private AbstractLyrics3v2FieldFrameBody readBody(String identifier, ByteBuffer byteBuffer) throws InvalidTagException
     {
-        AbstractLyrics3v2FieldFrameBody newBody = null;
+        AbstractLyrics3v2FieldFrameBody newBody;
         if (identifier.equals(Lyrics3v2Fields.FIELD_V2_AUTHOR))
         {
             newBody = new FieldFrameBodyAUT(byteBuffer);

@@ -70,7 +70,7 @@ public class PlainTextTagDisplayFormatter extends AbstractTagDisplayFormatter
 
     public void addElement(String type, String value)
     {
-        sb.append(indent + type + ":" + value + '\n');
+        sb.append(indent).append(type).append(":").append(value).append('\n');
     }
 
     public void addElement(String type, int value)

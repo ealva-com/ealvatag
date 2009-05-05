@@ -177,7 +177,6 @@ public final class GUID
      */
     public static GUID getConfigured(final GUID orig)
     {
-        assert orig != null;
         GUID result = null;
         if (orig != null)
         {
@@ -371,7 +370,7 @@ public final class GUID
         }
         if (!Utils.isBlank(descr))
         {
-            result.append("Description: " + descr + Utils.LINE_SEPARATOR + "   ");
+            result.append("Description: ").append(descr).append(Utils.LINE_SEPARATOR).append("   ");
         } 
         for (int i = 0; i < guid.length; i++)
         {
@@ -384,7 +383,7 @@ public final class GUID
             {
                 result.append(", ");
             }
-            result.append("0x" + tmp);
+            result.append("0x").append(tmp);
         }
         return result.toString();
     }

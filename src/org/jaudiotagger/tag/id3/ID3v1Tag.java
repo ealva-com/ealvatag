@@ -141,11 +141,11 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag
     {
         super(copyObject);
 
-        this.album = new String(copyObject.album);
-        this.artist = new String(copyObject.artist);
-        this.comment = new String(copyObject.comment);
-        this.title = new String(copyObject.title);
-        this.year = new String(copyObject.year);
+        this.album = copyObject.album;
+        this.artist = copyObject.artist;
+        this.comment = copyObject.comment;
+        this.title = copyObject.title;
+        this.year = copyObject.year;
         this.genre = copyObject.genre;
     }
 
@@ -167,11 +167,11 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag
             {
                 convertedTag = new ID3v11Tag(mp3tag);
             }
-            this.album = new String(convertedTag.album);
-            this.artist = new String(convertedTag.artist);
-            this.comment = new String(convertedTag.comment);
-            this.title = new String(convertedTag.title);
-            this.year = new String(convertedTag.year);
+            this.album = convertedTag.album;
+            this.artist = convertedTag.artist;
+            this.comment = convertedTag.comment;
+            this.title = convertedTag.title;
+            this.year = convertedTag.year;
             this.genre = convertedTag.genre;
         }
     }

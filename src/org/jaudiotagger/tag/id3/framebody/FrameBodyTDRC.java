@@ -327,51 +327,90 @@ public class FrameBodyTDRC extends AbstractFrameBodyTextInfo implements ID3v24Fr
     }
 
     /**
+     * Format Date
+     *
+     * Synchronized because SimpleDateFormat is invalid
+     *
+     * @param d
+     * @return
+     */
+    private static synchronized String formatDateAsYear(Date d)
+    {
+        return formatYearOut.format(d);
+    }
+
+      /**
+     * Format Date
+     *
+     * Synchronized because SimpleDateFormat is invalid
+     *
+     * @param d
+     * @return
+     */
+    private static synchronized String formatDateAsDate(Date d)
+    {
+        return formatDateOut.format(d);
+    }
+
+      /**
+     * Format Date
+     *
+     * Synchronized because SimpleDateFormat is invalid
+     *
+     * @param d
+     * @return
+     */
+    private static synchronized String formatDateAsTime(Date d)
+    {
+        return formatTimeOut.format(d);
+    }
+
+    /**
      * Extract Format
      *
      * @param dateRecord
      * @param precision
      */
-    private synchronized void extractID3v23Formats(final Date dateRecord, final int precision)
+    private void extractID3v23Formats(final Date dateRecord, final int precision)
     {
         Date d = dateRecord;
 
         //Precision Year
         if (precision == PRECISION_YEAR)
         {
-            setYear(formatYearOut.format(d));
+            setYear(formatDateAsYear(d));
         }
         //Precision Month
         else if (precision == PRECISION_MONTH)
         {
-            setYear(formatYearOut.format(d));
+            setYear(formatDateAsYear(d));
         }
         //Precision Day
         else if (precision == PRECISION_DAY)
         {
-            setYear(formatYearOut.format(d));
-            setDate(formatDateOut.format(d));
+            setYear(formatDateAsYear(d));
+            setDate(formatDateAsDate(d));
         }
         //Precision Hour
         else if (precision == PRECISION_HOUR)
         {
-            setYear(formatYearOut.format(d));
-            setDate(formatDateOut.format(d));
+            setYear(formatDateAsYear(d));
+            setDate(formatDateAsDate(d));
 
         }
         //Precision Minute
         else if (precision == PRECISION_MINUTE)
         {
-            setYear(formatYearOut.format(d));
-            setDate(formatDateOut.format(d));
-            setTime(formatTimeOut.format(d));
+            setYear(formatDateAsYear(d));
+            setDate(formatDateAsDate(d));
+            setTime(formatDateAsTime(d));
         }
         //Precision Minute
         else if (precision == PRECISION_SECOND)
         {
-            setYear(formatYearOut.format(d));
-            setDate(formatDateOut.format(d));
-            setTime(formatTimeOut.format(d));
+            setYear(formatDateAsYear(d));
+            setDate(formatDateAsDate(d));
+            setTime(formatDateAsTime(d));
         }
     }
 

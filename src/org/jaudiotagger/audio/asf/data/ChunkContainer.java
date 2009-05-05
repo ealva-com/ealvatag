@@ -149,14 +149,14 @@ public class ChunkContainer extends Chunk
     {
         final StringBuffer result = new StringBuffer(super.prettyPrint(prefix));
         result.append(containerInfo);
-        result.append(prefix + "  |" + Utils.LINE_SEPARATOR);
+        result.append(prefix).append("  |").append(Utils.LINE_SEPARATOR);
         final ArrayList<Chunk> list = new ArrayList<Chunk>(getChunks());
         Collections.sort(list, new ChunkPositionComparator());
 
         for (Chunk curr : list)
         {
             result.append(curr.prettyPrint(prefix + "  |"));
-            result.append(prefix + "  |" + Utils.LINE_SEPARATOR);
+            result.append(prefix).append("  |").append(Utils.LINE_SEPARATOR);
         }
         return result.toString();
     }

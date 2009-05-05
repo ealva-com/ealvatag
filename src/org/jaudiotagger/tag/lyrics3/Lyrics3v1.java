@@ -51,7 +51,7 @@ public class Lyrics3v1 extends AbstractLyrics3
     public Lyrics3v1(Lyrics3v1 copyObject)
     {
         super(copyObject);
-        this.lyric = new String(copyObject.lyric);
+        this.lyric = copyObject.lyric;
     }
 
     public Lyrics3v1(AbstractTag mp3Tag)
@@ -75,7 +75,7 @@ public class Lyrics3v1 extends AbstractLyrics3
 
             FieldFrameBodyLYR lyricField;
             lyricField = (FieldFrameBodyLYR) lyricTag.getField("LYR").getBody();
-            this.lyric = new String(lyricField.getLyric());
+            this.lyric = lyricField.getLyric();
         }
     }
 
@@ -221,7 +221,7 @@ public class Lyrics3v1 extends AbstractLyrics3
         byte[] buffer = new byte[5100 + 9 + 11];
         String lyricsEnd = "";
         String lyricsStart = "";
-        long offset = 0;
+        long offset;
 
         // check right before the ID3 1.0 tag for the lyrics tag
         file.seek(file.length() - 128 - 9);
@@ -286,9 +286,9 @@ public class Lyrics3v1 extends AbstractLyrics3
     public void write(RandomAccessFile file) throws IOException
     {
         String str = "";
-        int offset = 0;
+        int offset;
         byte[] buffer;
-        ID3v1Tag id3v1tag = null;
+        ID3v1Tag id3v1tag;
 
         id3v1tag = null;
 

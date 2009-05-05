@@ -215,7 +215,7 @@ public class FieldFrameBodyLYR extends AbstractLyrics3v2FieldFrameBody
     {
         // USLT frames are just long text string;
         Lyrics3Line line = new Lyrics3Line("Lyric Line", this);
-        line.setLyric(new String(unsync.getLyric()));
+        line.setLyric(unsync.getLyric());
         lines.add(line);
     }
 
@@ -316,7 +316,7 @@ public class FieldFrameBodyLYR extends AbstractLyrics3v2FieldFrameBody
      */
     public void write(RandomAccessFile file) throws java.io.IOException
     {
-        int size = 0;
+        int size;
         int offset = 0;
         byte[] buffer = new byte[5];
         String str = "";

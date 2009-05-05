@@ -178,9 +178,9 @@ public class OggVorbisTagWriter
         secondPageBuffer.put((byte) segmentTable.length);
 
 //Page segment table
-        for (int i = 0; i < segmentTable.length; i++)
+        for (byte aSegmentTable : segmentTable)
         {
-            secondPageBuffer.put(segmentTable[i]);
+            secondPageBuffer.put(aSegmentTable);
         }
 
 //Add New VorbisComment
@@ -240,9 +240,9 @@ public class OggVorbisTagWriter
         secondPageBuffer.put((byte) segmentTable.length);
 
 //Page segment table
-        for (int i = 0; i < segmentTable.length; i++)
+        for (byte aSegmentTable : segmentTable)
         {
-            secondPageBuffer.put(segmentTable[i]);
+            secondPageBuffer.put(aSegmentTable);
         }
         //Add New VorbisComment
         secondPageBuffer.put(newComment);
@@ -346,9 +346,9 @@ public class OggVorbisTagWriter
 //Number of page Segments
             pageBuffer.put((byte) segmentTable.length);
 //Page segment table
-            for (int j = 0; j < segmentTable.length; j++)
+            for (byte aSegmentTable : segmentTable)
             {
-                pageBuffer.put(segmentTable[j]);
+                pageBuffer.put(aSegmentTable);
             }
             //Put in first bit of Comment
             pageBuffer.put(newComment.array(), newCommentOffset, OggPageHeader.MAXIMUM_PAGE_DATA_SIZE);
@@ -408,9 +408,9 @@ public class OggVorbisTagWriter
             lastCommentHeaderBuffer.put((byte) segmentTable.length);
 
 //Page segment table
-            for (int i = 0; i < segmentTable.length; i++)
+            for (byte aSegmentTable : segmentTable)
             {
-                lastCommentHeaderBuffer.put(segmentTable[i]);
+                lastCommentHeaderBuffer.put(aSegmentTable);
             }
 
 //Add last bit of Comment
@@ -464,9 +464,9 @@ public class OggVorbisTagWriter
 //Number of page Segments
             lastSetupHeaderBuffer.put((byte) segmentTable.length);
 //Page segment table
-            for (int i = 0; i < segmentTable.length; i++)
+            for (byte aSegmentTable1 : segmentTable)
             {
-                lastSetupHeaderBuffer.put(segmentTable[i]);
+                lastSetupHeaderBuffer.put(aSegmentTable1);
             }
 
 //Add last bit of Setup header should match remaining buffer size
@@ -511,9 +511,9 @@ public class OggVorbisTagWriter
 //Number of page Segments
             lastCommentHeaderBuffer.put((byte) segmentTable.length);
 //Page segment table
-            for (int i = 0; i < segmentTable.length; i++)
+            for (byte aSegmentTable : segmentTable)
             {
-                lastCommentHeaderBuffer.put(segmentTable[i]);
+                lastCommentHeaderBuffer.put(aSegmentTable);
             }
             //Add last bit of Comment
             lastCommentHeaderBuffer.put(newComment.array(), newCommentOffset, lastPageCommentPacketSize);

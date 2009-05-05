@@ -70,7 +70,6 @@ public class StreamChunkReader implements ChunkReader
         GUID streamTypeGUID = Utils.readGUID(stream);
         if (GUID.GUID_AUDIOSTREAM.equals(streamTypeGUID) || GUID.GUID_VIDEOSTREAM.equals(streamTypeGUID))
         {
-
             // A GUID is indicating whether the stream is error
             // concealed
             GUID errorConcealment = Utils.readGUID(stream);
@@ -168,12 +167,15 @@ public class StreamChunkReader implements ChunkReader
             /*
              * Setting common values for audio and video
              */
-            result.setStreamNumber(streamNumber);
-            result.setStreamSpecificDataSize(streamSpecificDataSize);
-            result.setTypeSpecificDataSize(typeSpecificDataSize);
-            result.setTimeOffset(timeOffset);
-            result.setContentEncrypted(contentEncrypted);
-            result.setPosition(chunkStart);
+            if(result!=null)
+            {
+                result.setStreamNumber(streamNumber);
+                result.setStreamSpecificDataSize(streamSpecificDataSize);
+                result.setTypeSpecificDataSize(typeSpecificDataSize);
+                result.setTimeOffset(timeOffset);
+                result.setContentEncrypted(contentEncrypted);
+                result.setPosition(chunkStart);
+            }
             /*
              * Now skip remainder of chunks bytes.
              * chunk-length - 24 (size of GUID and chunklen) - streamSpecificBytes(stream type specific data) - 54 (common data)

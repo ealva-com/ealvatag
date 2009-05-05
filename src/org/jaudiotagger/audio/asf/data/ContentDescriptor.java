@@ -281,7 +281,7 @@ public final class ContentDescriptor implements Comparable<ContentDescriptor>
     public long getNumber()
     {
         long result = 0;
-        int bytesNeeded = -1;
+        int bytesNeeded;
         switch (getType())
         {
             case TYPE_BOOLEAN:
@@ -458,8 +458,7 @@ public final class ContentDescriptor implements Comparable<ContentDescriptor>
         {
              this.content = new byte[0];
         }
-
-        if(Utils.isStringLengthValidNullSafe(value))
+        else if(Utils.isStringLengthValidNullSafe(value))
         {
             this.content = Utils.getBytes(value, AsfHeader.ASF_CHARSET);
         }

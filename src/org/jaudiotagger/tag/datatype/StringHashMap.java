@@ -109,7 +109,7 @@ public class StringHashMap extends StringFixedLength implements HashMapInterface
         if (value instanceof String)
         {
             //Issue #273 temporary hack for MM
-            if(value!=null && value.equals("XXX"))
+            if(value.equals("XXX"))
             {
                 this.value=value.toString();
             }

@@ -275,7 +275,7 @@ public abstract class AudioFileWriter
 
         RandomAccessFile raf = null;
         RandomAccessFile rafTemp = null;
-        File newFile = null;
+        File newFile;
         File result = null;
 
         //Create temporary File

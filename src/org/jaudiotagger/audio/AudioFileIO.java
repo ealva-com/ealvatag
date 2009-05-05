@@ -244,9 +244,8 @@ public class AudioFileIO
 
         // Register modificationHandler
         Iterator<AudioFileWriter> it = writers.values().iterator();
-        while (it.hasNext())
+        for (AudioFileWriter curr : writers.values())
         {
-            AudioFileWriter curr = it.next();
             curr.setAudioFileModificationListener(this.modificationHandler);
         }
     }

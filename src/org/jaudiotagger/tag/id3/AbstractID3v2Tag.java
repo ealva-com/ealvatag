@@ -133,7 +133,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
     {
         logger.info("Copying Primitives");
         //Primitives type variables common to all IDv2 Tags
-        this.duplicateFrameId = new String(copyObject.duplicateFrameId);
+        this.duplicateFrameId = copyObject.duplicateFrameId;
         this.duplicateBytes = copyObject.duplicateBytes;
         this.emptyFrameBytes = copyObject.emptyFrameBytes;
         this.fileReadSize = copyObject.fileReadSize;
@@ -981,7 +981,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
      */
     protected FileLock getFileLockForWriting(FileChannel fileChannel, String filePath) throws IOException
     {
-        FileLock fileLock = null;
+        FileLock fileLock;
         try
         {
             fileLock = fileChannel.tryLock();
@@ -1158,7 +1158,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
     {           
         logger.finer("Need to move audio file to accomodate tag");
         FileChannel fcIn=null;
-        FileChannel fcOut=null;
+        FileChannel fcOut;
 
         //Create buffer holds the neccessary padding
         ByteBuffer paddingBuffer = ByteBuffer.wrap(new byte[paddingSize]);

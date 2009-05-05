@@ -175,7 +175,7 @@ public class ExtendedContentDescription extends Chunk implements WriteableChunk
         Collections.sort(list);
         for (ContentDescriptor curr : list)
         {
-            result.append(prefix + "  |-> ");
+            result.append(prefix).append("  |-> ");
             result.append(curr);
             result.append(Utils.LINE_SEPARATOR);
         }

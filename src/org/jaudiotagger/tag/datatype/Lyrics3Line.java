@@ -55,7 +55,7 @@ public class Lyrics3Line extends AbstractDataType
     public Lyrics3Line(Lyrics3Line copy)
     {
         super(copy);
-        this.lyric = new String(copy.lyric);
+        this.lyric = copy.lyric;
         Lyrics3TimeStamp newTimeStamp;
         for (int i = 0; i < copy.timeStamp.size(); i++)
         {
@@ -180,7 +180,7 @@ public class Lyrics3Line extends AbstractDataType
         {
             throw new IndexOutOfBoundsException("Offset to line is out of bounds: offset = " + offset + ", line.length()" + lineString.length());
         }
-        int delim = 0;
+        int delim;
         Lyrics3TimeStamp time;
         timeStamp = new LinkedList<Lyrics3TimeStamp>();
         delim = lineString.indexOf("[", offset);

@@ -160,7 +160,7 @@ public class TestAudioTagger
          */
         public final String getDescription()
         {
-            return new String(".mp3 Files");
+            return ".mp3 Files";
         }
     }
 

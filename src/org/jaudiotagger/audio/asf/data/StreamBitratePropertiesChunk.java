@@ -65,8 +65,8 @@ public class StreamBitratePropertiesChunk extends Chunk
      */
     public void addBitrateRecord(int streamNum, long averageBitrate)
     {
-        this.streamNumbers.add(new Integer(streamNum));
-        this.bitRates.add(new Long(averageBitrate));
+        this.streamNumbers.add(streamNum);
+        this.bitRates.add(averageBitrate);
     }
 
     /**
@@ -78,11 +78,11 @@ public class StreamBitratePropertiesChunk extends Chunk
      */
     public long getAvgBitrate(int streamNumber)
     {
-        Integer seach = new Integer(streamNumber);
+        Integer seach = streamNumber;
         int index = streamNumbers.indexOf(seach);
         if (index != -1)
         {
-            return bitRates.get(index).longValue();
+            return bitRates.get(index);
         }
         return -1;
     }
@@ -97,10 +97,7 @@ public class StreamBitratePropertiesChunk extends Chunk
         StringBuffer result = new StringBuffer(super.prettyPrint(prefix));
         for (int i = 0; i < bitRates.size(); i++)
         {
-            result
-                            .append(prefix + "  |-> Stream no. \"" + streamNumbers.get(i)
-                    + "\" has an average bitrate of \"" + bitRates.get(i)
-                    + "\"" + Utils.LINE_SEPARATOR);
+            result.append(prefix).append("  |-> Stream no. \"").append(streamNumbers.get(i)).append("\" has an average bitrate of \"").append(bitRates.get(i)).append("\"").append(Utils.LINE_SEPARATOR);
         }
         return result.toString();
     }

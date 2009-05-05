@@ -201,6 +201,7 @@ public class Utils
      * @param toTest String to test.
      * @return see description.
      */
+    @SuppressWarnings({"ConstantConditions"})
     public static boolean isBlank(String toTest)
     {
         boolean result = true;

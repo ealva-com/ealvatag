@@ -111,15 +111,15 @@ public class ID3Tags
         }
         else if (value instanceof Byte)
         {
-            number = ((Byte) value).byteValue();
+            number = (Byte) value;
         }
         else if (value instanceof Short)
         {
-            number = ((Short) value).shortValue();
+            number = (Short) value;
         }
         else if (value instanceof Integer)
         {
-            number = ((Integer) value).intValue();
+            number = (Integer) value;
         }
         else if (value instanceof Long)
         {
@@ -141,7 +141,7 @@ public class ID3Tags
         {
             return null;
         }
-        return ID3Frames.convertv22Tov23.get(identifier.subSequence(0, 3));
+        return ID3Frames.convertv22Tov23.get((String)identifier.subSequence(0, 3));
     }
 
     /**

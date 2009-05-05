@@ -81,9 +81,9 @@ public class EncodingChunk extends Chunk
     {
         StringBuffer result = new StringBuffer(super.prettyPrint(prefix));
         Iterator<String> iterator = this.strings.iterator();
-        while (iterator.hasNext())
+        for (String string : this.strings)
         {
-            result.append(prefix + "  | : " + iterator.next() + Utils.LINE_SEPARATOR);
+            result.append(prefix + "  | : " + string + Utils.LINE_SEPARATOR);
         }
         return result.toString();
     }

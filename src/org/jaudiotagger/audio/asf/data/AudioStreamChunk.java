@@ -158,11 +158,11 @@ public final class AudioStreamChunk extends StreamChunk
     {
         StringBuffer result = new StringBuffer(Long.toHexString(getCompressionFormat()));
         String furtherDesc = " (Unknown)";
-        for (int i = 0; i < CODEC_DESCRIPTIONS.length; i++)
+        for (String[] aCODEC_DESCRIPTIONS : CODEC_DESCRIPTIONS)
         {
-            if (CODEC_DESCRIPTIONS[i][0].equalsIgnoreCase(result.toString()))
+            if (aCODEC_DESCRIPTIONS[0].equalsIgnoreCase(result.toString()))
             {
-                furtherDesc = CODEC_DESCRIPTIONS[i][1];
+                furtherDesc = aCODEC_DESCRIPTIONS[1];
                 break;
             }
         }
@@ -233,12 +233,11 @@ public final class AudioStreamChunk extends StreamChunk
     public String prettyPrint(final String prefix)
     {
         StringBuffer result = new StringBuffer(super.prettyPrint(prefix));
-        result.append(prefix + "  |-> Audio info:" + Utils.LINE_SEPARATOR);
-        result.append(prefix + "  |  : Bitrate : " + getKbps() + Utils.LINE_SEPARATOR);
-        result
-                        .append(prefix + "  |  : Channels : " + getChannelCount() + " at " + getSamplingRate() + " Hz" + Utils.LINE_SEPARATOR);
-        result.append(prefix + "  |  : Bits per Sample: " + getBitsPerSample() + Utils.LINE_SEPARATOR);
-        result.append(prefix + "  |  : Formatcode: " + getCodecDescription() + Utils.LINE_SEPARATOR);
+        result.append(prefix).append("  |-> Audio info:").append(Utils.LINE_SEPARATOR);
+        result.append(prefix).append("  |  : Bitrate : ").append(getKbps()).append(Utils.LINE_SEPARATOR);
+        result.append(prefix).append("  |  : Channels : ").append(getChannelCount()).append(" at ").append(getSamplingRate()).append(" Hz").append(Utils.LINE_SEPARATOR);
+        result.append(prefix).append("  |  : Bits per Sample: ").append(getBitsPerSample()).append(Utils.LINE_SEPARATOR);
+        result.append(prefix).append("  |  : Formatcode: ").append(getCodecDescription()).append(Utils.LINE_SEPARATOR);
         return result.toString();
     }
 

@@ -102,13 +102,13 @@ public class GenericAudioHeader implements AudioHeader
     public GenericAudioHeader()
     {
         content = new HashMap<String, Object>(6);
-        content.put(FIELD_BITRATE, new Integer(-1));
-        content.put(FIELD_CHANNEL, new Integer(-1));
+        content.put(FIELD_BITRATE, -1);
+        content.put(FIELD_CHANNEL, -1);
         content.put(FIELD_TYPE, "");
         content.put(FIELD_INFOS, "");
-        content.put(FIELD_SAMPLERATE, new Integer(-1));
-        content.put(FIELD_LENGTH, new Float(-1));
-        content.put(FIELD_VBR, new Boolean(true));
+        content.put(FIELD_SAMPLERATE, -1);
+        content.put(FIELD_LENGTH, (float) -1);
+        content.put(FIELD_VBR, true);
     }
 
     public String getBitRate()
@@ -136,7 +136,7 @@ public class GenericAudioHeader implements AudioHeader
      */
     public int getChannelNumber()
     {
-        return ((Integer) content.get(FIELD_CHANNEL)).intValue();
+        return (Integer) content.get(FIELD_CHANNEL);
     }
 
     /**
@@ -199,7 +199,7 @@ public class GenericAudioHeader implements AudioHeader
      */
     public float getPreciseLength()
     {
-        return ((Float) content.get(FIELD_LENGTH)).floatValue();
+        return (Float) content.get(FIELD_LENGTH);
     }
 
     /**
@@ -214,7 +214,7 @@ public class GenericAudioHeader implements AudioHeader
 
     public int getSampleRateAsNumber()
     {
-        return ((Integer) content.get(FIELD_SAMPLERATE)).intValue();
+        return (Integer) content.get(FIELD_SAMPLERATE);
     }
 
     /**
@@ -225,7 +225,7 @@ public class GenericAudioHeader implements AudioHeader
      */
     public boolean isVariableBitRate()
     {
-        return ((Boolean) content.get(FIELD_VBR)).booleanValue();
+        return (Boolean) content.get(FIELD_VBR);
     }
 
     /**
@@ -246,7 +246,7 @@ public class GenericAudioHeader implements AudioHeader
      */
     public void setBitrate(int bitrate)
     {
-        content.put(FIELD_BITRATE, new Integer(bitrate));
+        content.put(FIELD_BITRATE, bitrate);
     }
 
     /**
@@ -256,7 +256,7 @@ public class GenericAudioHeader implements AudioHeader
      */
     public void setChannelNumber(int chanNb)
     {
-        content.put(FIELD_CHANNEL, new Integer(chanNb));
+        content.put(FIELD_CHANNEL, chanNb);
     }
 
     /**
@@ -288,7 +288,7 @@ public class GenericAudioHeader implements AudioHeader
      */
     public void setLength(int length)
     {
-        content.put(FIELD_LENGTH, new Float(length));
+        content.put(FIELD_LENGTH, (float) length);
     }
 
     /**
@@ -298,7 +298,7 @@ public class GenericAudioHeader implements AudioHeader
      */
     public void setPreciseLength(float seconds)
     {
-        content.put(FIELD_LENGTH, new Float(seconds));
+        content.put(FIELD_LENGTH, seconds);
     }
 
     /**
@@ -308,7 +308,7 @@ public class GenericAudioHeader implements AudioHeader
      */
     public void setSamplingRate(int samplingRate)
     {
-        content.put(FIELD_SAMPLERATE, new Integer(samplingRate));
+        content.put(FIELD_SAMPLERATE, samplingRate);
     }
 
     /**
@@ -318,7 +318,7 @@ public class GenericAudioHeader implements AudioHeader
      */
     public void setVariableBitRate(boolean b)
     {
-        content.put(FIELD_VBR, new Boolean(b));
+        content.put(FIELD_VBR, b);
     }
 
     /**
@@ -352,7 +352,7 @@ public class GenericAudioHeader implements AudioHeader
         StringBuffer out = new StringBuffer(50);
         out.append("Encoding infos content:\n");
         Set<String> set = content.keySet();
-        for (Object key : set)
+        for (String key : set)
         {
             Object val = content.get(key);
             out.append("\t");

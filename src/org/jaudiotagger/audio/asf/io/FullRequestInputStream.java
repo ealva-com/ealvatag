@@ -34,7 +34,7 @@ public class FullRequestInputStream extends FilterInputStream {
 	@Override
 	public int read(byte[] b, int off, int len) throws IOException {
 		int totalRead = 0;
-		int read = -1;
+		int read;
 		while (totalRead < len) {
 			read = super.read(b, off + totalRead, len - totalRead);
 			if (read >= 0) {

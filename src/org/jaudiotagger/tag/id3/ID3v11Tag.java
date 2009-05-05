@@ -134,17 +134,14 @@ public class ID3v11Tag extends ID3v1Tag
                 {
                     throw new UnsupportedOperationException("Copy Constructor not called. Please type cast the argument");
                 }
-                if (mp3tag instanceof ID3v1Tag)
-                {
-                    // id3v1_1 objects are also id3v1 objects
-                    ID3v1Tag id3old = (ID3v1Tag) mp3tag;
-                    this.title = new String(id3old.title);
-                    this.artist = new String(id3old.artist);
-                    this.album = new String(id3old.album);
-                    this.comment = new String(id3old.comment);
-                    this.year = new String(id3old.year);
-                    this.genre = id3old.genre;
-                }
+                // id3v1_1 objects are also id3v1 objects
+                ID3v1Tag id3old = (ID3v1Tag) mp3tag;
+                this.title = id3old.title;
+                this.artist = id3old.artist;
+                this.album = id3old.album;
+                this.comment = id3old.comment;
+                this.year = id3old.year;
+                this.genre = id3old.genre;
             }
             else
             {

@@ -451,7 +451,7 @@ public class OggVorbisTagReader
         }
 
         //If there are no more packets on this page we need to go to next page to get the setup header
-        OggPageHeader.PacketStartAndLength       packet = null;
+        OggPageHeader.PacketStartAndLength       packet;
         if(pageHeader.getPacketList().size()==1)
         {
             pageHeader = OggPageHeader.read(raf);

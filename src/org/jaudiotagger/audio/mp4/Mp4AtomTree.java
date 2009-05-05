@@ -212,7 +212,7 @@ public class Mp4AtomTree
             Mp4BoxHeader header = (Mp4BoxHeader) nextNode.getUserObject();
             if (header != null)
             {
-                String tabbing = new String();
+                String tabbing = "";
                 for (int i = 1; i < nextNode.getLevel(); i++)
                 {
                     tabbing += "\t";

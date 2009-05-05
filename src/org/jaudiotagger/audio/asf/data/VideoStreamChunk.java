@@ -101,13 +101,10 @@ public class VideoStreamChunk extends StreamChunk
     {
         StringBuffer result = new StringBuffer(super.prettyPrint(prefix));
         result.insert(0, Utils.LINE_SEPARATOR + prefix + "|->VideoStream");
-        result.append(prefix + "Video info:" + Utils.LINE_SEPARATOR);
-        result.append(prefix + "      |->Width  : " + getPictureWidth()
-                + Utils.LINE_SEPARATOR);
-        result.append(prefix + "      |->Heigth : " + getPictureHeight()
-                + Utils.LINE_SEPARATOR);
-        result.append(prefix + "      |->Codec  : " + getCodecIdAsString()
-                + Utils.LINE_SEPARATOR);
+        result.append(prefix).append("Video info:").append(Utils.LINE_SEPARATOR);
+        result.append(prefix).append("      |->Width  : ").append(getPictureWidth()).append(Utils.LINE_SEPARATOR);
+        result.append(prefix).append("      |->Heigth : ").append(getPictureHeight()).append(Utils.LINE_SEPARATOR);
+        result.append(prefix).append("      |->Codec  : ").append(getCodecIdAsString()).append(Utils.LINE_SEPARATOR);
         return result.toString();
     }
 

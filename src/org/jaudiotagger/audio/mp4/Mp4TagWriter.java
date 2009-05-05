@@ -189,11 +189,11 @@ public class Mp4TagWriter
         int startIlstWithinFile=0;
         int newIlstSize;
         int oldMetaLevelFreeAtomSize = 0;
-        long extraDataSize = 0;
+        long extraDataSize;
         int level1SearchPosition = 0;
         int topLevelFreePosition = 0;
-        int topLevelFreeSize = 0;
-        boolean topLevelFreeAtomComesBeforeMdatAtom = true;
+        int topLevelFreeSize;
+        boolean topLevelFreeAtomComesBeforeMdatAtom;
         Mp4BoxHeader topLevelFreeHeader;
 
         Mp4AtomTree atomTree;

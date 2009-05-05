@@ -153,7 +153,7 @@ public class MergeID3AndMP3Files
          */
         public final String getDescription()
         {
-            return new String(".mp3 Files");
+            return ".mp3 Files";
         }
     }
 

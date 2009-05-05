@@ -89,7 +89,7 @@ public class Mp4GenreField extends Mp4TagTextNumberField
         Integer id3GenreId = GenreTypes.getInstanceOf().getIdForValue(genreId);
         if (id3GenreId != null)
         {
-            if (id3GenreId.intValue() <= GenreTypes.getMaxStandardGenreId())
+            if (id3GenreId <= GenreTypes.getMaxStandardGenreId())
             {
                 numbers = new ArrayList<Short>();
                 numbers.add((short) (id3GenreId + 1));

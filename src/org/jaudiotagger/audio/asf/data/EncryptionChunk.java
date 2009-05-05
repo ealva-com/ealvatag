@@ -142,14 +142,15 @@ public class EncryptionChunk extends Chunk
         StringBuffer result = new StringBuffer(super.prettyPrint(prefix));
         result.insert(0, Utils.LINE_SEPARATOR + prefix + " Encryption:"
                 + Utils.LINE_SEPARATOR);
-        result.append(prefix + "	|->keyID " + this.keyID + Utils.LINE_SEPARATOR);
-        result.append(prefix + "	|->secretData " + this.secretData + Utils.LINE_SEPARATOR);
-        result.append(prefix + "	|->protectionType " + this.protectionType + Utils.LINE_SEPARATOR);
-        result.append(prefix + "	|->licenseURL " + this.licenseURL + Utils.LINE_SEPARATOR);
+        result.append(prefix).append("	|->keyID ").append(this.keyID).append(Utils.LINE_SEPARATOR);
+        result.append(prefix).append("	|->secretData ").append(this.secretData).append(Utils.LINE_SEPARATOR);
+        result.append(prefix).append("	|->protectionType ").append(this.protectionType).append(Utils.LINE_SEPARATOR);
+        result.append(prefix).append("	|->licenseURL ").append(this.licenseURL).append(Utils.LINE_SEPARATOR);
         Iterator<String> iterator = this.strings.iterator();
-        while (iterator.hasNext()) {
-			result.append(prefix + "   |->" + iterator.next() + Utils.LINE_SEPARATOR);
-		}
-		return result.toString();
+        for (String string : this.strings)
+        {
+            result.append(prefix + "   |->" + string + Utils.LINE_SEPARATOR);
+        }
+        return result.toString();
 	}
 }

@@ -63,7 +63,7 @@ public class Lyrics3v2 extends AbstractLyrics3
         while (iterator.hasNext())
         {
             oldIdentifier = iterator.next().toString();
-            newIdentifier = new String(oldIdentifier);
+            newIdentifier = oldIdentifier;
             newObject = new Lyrics3v2Field(copyObject.fieldMap.get(newIdentifier));
             fieldMap.put(newIdentifier, newObject);
         }
@@ -297,9 +297,9 @@ public class Lyrics3v2 extends AbstractLyrics3
     {
         byte[] buffer = new byte[11];
         String lyricEnd = "";
-        String lyricStart = "";
-        long filePointer = 0;
-        long lyricSize = 0;
+        String lyricStart;
+        long filePointer;
+        long lyricSize;
 
         // check right before the ID3 1.0 tag for the lyrics tag
         file.seek(file.length() - 128 - 9);

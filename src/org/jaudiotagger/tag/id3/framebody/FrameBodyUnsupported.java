@@ -93,7 +93,7 @@ public class FrameBodyUnsupported extends AbstractID3v2FrameBody implements ID3v
     public FrameBodyUnsupported(FrameBodyUnsupported copyObject)
     {
         super(copyObject);
-        this.identifier = new String(copyObject.identifier);
+        this.identifier = copyObject.identifier;
 
     }
 

@@ -139,13 +139,11 @@ public abstract class StreamChunk extends Chunk
     public String prettyPrint(final String prefix)
     {
         StringBuffer result = new StringBuffer(super.prettyPrint(prefix));
-        result.append(prefix + "  |-> Stream number: " + getStreamNumber() + Utils.LINE_SEPARATOR);
-        result
-                        .append(prefix + "  |-> Type specific data size  : " + getTypeSpecificDataSize() + Utils.LINE_SEPARATOR);
-        result
-                        .append(prefix + "  |-> Stream specific data size: " + getStreamSpecificDataSize() + Utils.LINE_SEPARATOR);
-        result.append(prefix + "  |-> Time Offset              : " + getTimeOffset() + Utils.LINE_SEPARATOR);
-        result.append(prefix + "  |-> Content Encryption       : " + isContentEncrypted() + Utils.LINE_SEPARATOR);
+        result.append(prefix).append("  |-> Stream number: ").append(getStreamNumber()).append(Utils.LINE_SEPARATOR);
+        result.append(prefix).append("  |-> Type specific data size  : ").append(getTypeSpecificDataSize()).append(Utils.LINE_SEPARATOR);
+        result.append(prefix).append("  |-> Stream specific data size: ").append(getStreamSpecificDataSize()).append(Utils.LINE_SEPARATOR);
+        result.append(prefix).append("  |-> Time Offset              : ").append(getTimeOffset()).append(Utils.LINE_SEPARATOR);
+        result.append(prefix).append("  |-> Content Encryption       : ").append(isContentEncrypted()).append(Utils.LINE_SEPARATOR);
         return result.toString();
     }
 

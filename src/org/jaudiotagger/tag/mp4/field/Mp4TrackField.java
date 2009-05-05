@@ -139,7 +139,7 @@ public class Mp4TrackField extends Mp4TagTextNumberField
         sb.append(numbers.get(TRACK_NO_INDEX));
         if (numbers.get(TRACK_TOTAL_INDEX) > 0)
         {
-            sb.append("/" + numbers.get(TRACK_TOTAL_INDEX));
+            sb.append("/").append(numbers.get(TRACK_TOTAL_INDEX));
         }
         content = sb.toString();
     }

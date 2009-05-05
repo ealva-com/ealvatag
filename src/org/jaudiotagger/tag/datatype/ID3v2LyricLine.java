@@ -47,7 +47,7 @@ public class ID3v2LyricLine extends AbstractDataType
     public ID3v2LyricLine(ID3v2LyricLine copy)
     {
         super(copy);
-        this.text = new String(copy.text);
+        this.text = copy.text;
         this.timeStamp = copy.timeStamp;
     }
 

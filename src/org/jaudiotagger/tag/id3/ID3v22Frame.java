@@ -202,7 +202,7 @@ public class ID3v22Frame extends AbstractID3v2Frame
     public ID3v22Frame(AbstractID3v2Frame frame) throws InvalidFrameException
     {
         logger.info("Creating frame from a frame of a different version");
-        if ((frame instanceof ID3v22Frame == true) && (frame instanceof ID3v23Frame == false))
+        if (frame instanceof ID3v22Frame)
         {
             throw new UnsupportedOperationException("Copy Constructor not called. Please type cast the argument");
         }

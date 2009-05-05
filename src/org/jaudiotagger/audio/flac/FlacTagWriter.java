@@ -163,24 +163,24 @@ public class FlacTagWriter
             raf.seek(flacStream.getStartOfFlacInFile() + FlacStreamReader.FLAC_STREAM_IDENTIFIER_LENGTH + MetadataBlockHeader.HEADER_LENGTH + MetadataBlockDataStreamInfo.STREAM_INFO_DATA_LENGTH);
 
             //Write Application Blocks
-            for (int i = 0; i < metadataBlockApplication.size(); i++)
+            for (MetadataBlock aMetadataBlockApplication : metadataBlockApplication)
             {
-                raf.write(metadataBlockApplication.get(i).getHeader().getBytesWithoutIsLastBlockFlag());
-                raf.write(metadataBlockApplication.get(i).getData().getBytes());
+                raf.write(aMetadataBlockApplication.getHeader().getBytesWithoutIsLastBlockFlag());
+                raf.write(aMetadataBlockApplication.getData().getBytes());
             }
 
             //Write Seek Table Blocks
-            for (int i = 0; i < metadataBlockSeekTable.size(); i++)
+            for (MetadataBlock aMetadataBlockSeekTable : metadataBlockSeekTable)
             {
-                raf.write(metadataBlockSeekTable.get(i).getHeader().getBytesWithoutIsLastBlockFlag());
-                raf.write(metadataBlockSeekTable.get(i).getData().getBytes());
+                raf.write(aMetadataBlockSeekTable.getHeader().getBytesWithoutIsLastBlockFlag());
+                raf.write(aMetadataBlockSeekTable.getData().getBytes());
             }
 
             //Write Cue sheet Blocks
-            for (int i = 0; i < metadataBlockCueSheet.size(); i++)
+            for (MetadataBlock aMetadataBlockCueSheet : metadataBlockCueSheet)
             {
-                raf.write(metadataBlockCueSheet.get(i).getHeader().getBytesWithoutIsLastBlockFlag());
-                raf.write(metadataBlockCueSheet.get(i).getData().getBytes());
+                raf.write(aMetadataBlockCueSheet.getHeader().getBytesWithoutIsLastBlockFlag());
+                raf.write(aMetadataBlockCueSheet.getData().getBytes());
             }
 
             //Write tag (and padding)
@@ -197,22 +197,22 @@ public class FlacTagWriter
             rafTemp.seek(dataStartSize);
 
             //Write all the metadatablocks
-            for (int i = 0; i < metadataBlockApplication.size(); i++)
+            for (MetadataBlock aMetadataBlockApplication : metadataBlockApplication)
             {
-                rafTemp.write(metadataBlockApplication.get(i).getHeader().getBytesWithoutIsLastBlockFlag());
-                rafTemp.write(metadataBlockApplication.get(i).getData().getBytes());
+                rafTemp.write(aMetadataBlockApplication.getHeader().getBytesWithoutIsLastBlockFlag());
+                rafTemp.write(aMetadataBlockApplication.getData().getBytes());
             }
 
-            for (int i = 0; i < metadataBlockSeekTable.size(); i++)
+            for (MetadataBlock aMetadataBlockSeekTable : metadataBlockSeekTable)
             {
-                rafTemp.write(metadataBlockSeekTable.get(i).getHeader().getBytesWithoutIsLastBlockFlag());
-                rafTemp.write(metadataBlockSeekTable.get(i).getData().getBytes());
+                rafTemp.write(aMetadataBlockSeekTable.getHeader().getBytesWithoutIsLastBlockFlag());
+                rafTemp.write(aMetadataBlockSeekTable.getData().getBytes());
             }
 
-            for (int i = 0; i < metadataBlockCueSheet.size(); i++)
+            for (MetadataBlock aMetadataBlockCueSheet : metadataBlockCueSheet)
             {
-                rafTemp.write(metadataBlockCueSheet.get(i).getHeader().getBytesWithoutIsLastBlockFlag());
-                rafTemp.write(metadataBlockCueSheet.get(i).getData().getBytes());
+                rafTemp.write(aMetadataBlockCueSheet.getHeader().getBytesWithoutIsLastBlockFlag());
+                rafTemp.write(aMetadataBlockCueSheet.getData().getBytes());
             }
 
             //Write tag data use default padding
@@ -230,24 +230,24 @@ public class FlacTagWriter
     {
         int length = 0;
 
-        for (int i = 0; i < metadataBlockApplication.size(); i++)
+        for (MetadataBlock aMetadataBlockApplication : metadataBlockApplication)
         {
-            length += metadataBlockApplication.get(i).getLength();
+            length += aMetadataBlockApplication.getLength();
         }
 
-        for (int i = 0; i < metadataBlockSeekTable.size(); i++)
+        for (MetadataBlock aMetadataBlockSeekTable : metadataBlockSeekTable)
         {
-            length += metadataBlockSeekTable.get(i).getLength();
+            length += aMetadataBlockSeekTable.getLength();
         }
 
-        for (int i = 0; i < metadataBlockCueSheet.size(); i++)
+        for (MetadataBlock aMetadataBlockCueSheet : metadataBlockCueSheet)
         {
-            length += metadataBlockCueSheet.get(i).getLength();
+            length += aMetadataBlockCueSheet.getLength();
         }
 
-        for (int i = 0; i < metadataBlockPadding.size(); i++)
+        for (MetadataBlock aMetadataBlockPadding : metadataBlockPadding)
         {
-            length += metadataBlockPadding.get(i).getLength();
+            length += aMetadataBlockPadding.getLength();
         }
 
         return length;
@@ -261,19 +261,19 @@ public class FlacTagWriter
     {
         int length = 0;
 
-        for (int i = 0; i < metadataBlockApplication.size(); i++)
+        for (MetadataBlock aMetadataBlockApplication : metadataBlockApplication)
         {
-            length += metadataBlockApplication.get(i).getLength();
+            length += aMetadataBlockApplication.getLength();
         }
 
-        for (int i = 0; i < metadataBlockSeekTable.size(); i++)
+        for (MetadataBlock aMetadataBlockSeekTable : metadataBlockSeekTable)
         {
-            length += metadataBlockSeekTable.get(i).getLength();
+            length += aMetadataBlockSeekTable.getLength();
         }
 
-        for (int i = 0; i < metadataBlockCueSheet.size(); i++)
+        for (MetadataBlock aMetadataBlockCueSheet : metadataBlockCueSheet)
         {
-            length += metadataBlockCueSheet.get(i).getLength();
+            length += aMetadataBlockCueSheet.getLength();
         }
 
         return length;

@@ -77,9 +77,9 @@ public class OggCRCFactory
 
         long crc_reg = 0;
 
-        for (int i = 0; i < data.length; i++)
+        for (byte aData : data)
         {
-            int tmp = (int) (((crc_reg >>> 24) & 0xff) ^ u(data[i]));
+            int tmp = (int) (((crc_reg >>> 24) & 0xff) ^ u(aData));
 
             crc_reg = (crc_reg << 8) ^ crc_lookup[tmp];
             crc_reg &= 0xffffffff;

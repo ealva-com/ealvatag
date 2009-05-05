@@ -126,7 +126,7 @@ public class Mp4DiscNoField extends Mp4TagTextNumberField
         sb.append(numbers.get(DISC_NO_INDEX));
         if (numbers.get(DISC_TOTAL_INDEX) > 0)
         {
-            sb.append("/" + numbers.get(DISC_TOTAL_INDEX));
+            sb.append("/").append(numbers.get(DISC_TOTAL_INDEX));
         }
         content = sb.toString();
     }

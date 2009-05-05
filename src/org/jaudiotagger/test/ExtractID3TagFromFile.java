@@ -92,7 +92,7 @@ public class ExtractID3TagFromFile
          */
         public final String getDescription()
         {
-            return new String(".mp3 Files");
+            return ".mp3 Files";
         }
     }
 

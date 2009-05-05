@@ -97,14 +97,14 @@ public abstract class AbstractDataType extends java.lang.Object
     public AbstractDataType(AbstractDataType copyObject)
     {
         // no copy constructor in super class
-        this.identifier = new String(copyObject.identifier);
+        this.identifier = copyObject.identifier;
         if (copyObject.value == null)
         {
             this.value = null;
         }
         else if (copyObject.value instanceof String)
         {
-            this.value = new String((String) copyObject.value);
+            this.value = (String) copyObject.value;
         }
         else if (copyObject.value instanceof Boolean)
         {
