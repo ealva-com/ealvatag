@@ -149,10 +149,7 @@ public class Mp4TagCoverField extends Mp4TagBinaryField
 
         //Read the raw data into byte array
         this.dataBytes = new byte[dataSize - Mp4DataBox.PRE_DATA_LENGTH];
-        for (int i = 0; i < dataBytes.length; i++)
-        {
-            this.dataBytes[i] = raw.get();
-        }
+        raw.get(dataBytes,0,dataBytes.length);
 
         //Is there room for another atom (remember actually passed all the data so unless Covr is last atom
         //there will be room even though more likely to be for the text top level atom)
