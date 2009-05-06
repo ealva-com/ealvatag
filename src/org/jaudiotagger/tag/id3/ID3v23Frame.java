@@ -43,7 +43,7 @@ import java.util.zip.Inflater;
  */
 public class ID3v23Frame extends AbstractID3v2Frame
 {
-    Pattern validFrameIdentifier = Pattern.compile("[A-Z][0-9A-Z]{3}");
+    private static Pattern validFrameIdentifier = Pattern.compile("[A-Z][0-9A-Z]{3}");
 
     protected static final int FRAME_ID_SIZE = 4;
     protected static final int FRAME_FLAGS_SIZE = 2;
@@ -695,7 +695,7 @@ public class ID3v23Frame extends AbstractID3v2Frame
      */
     public boolean isValidID3v2FrameIdentifier(String identifier)
     {
-        Matcher m = validFrameIdentifier.matcher(identifier);
+        Matcher m = ID3v23Frame.validFrameIdentifier.matcher(identifier);
         return m.matches();
     }
 

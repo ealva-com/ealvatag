@@ -494,31 +494,31 @@ public class ID3v11Tag extends ID3v1Tag
         byteBuffer.position(0);
         byteBuffer.get(dataBuffer, 0, TAG_LENGTH);
         title = Utils.getString(dataBuffer, FIELD_TITLE_POS, this.FIELD_TITLE_LENGTH, "ISO-8859-1").trim();
-        Matcher m = endofStringPattern.matcher(title);
+        Matcher m = AbstractID3v1Tag.endofStringPattern.matcher(title);
         if (m.find() == true)
         {
             title = title.substring(0, m.start());
         }
         artist = Utils.getString(dataBuffer, FIELD_ARTIST_POS, this.FIELD_ARTIST_LENGTH, "ISO-8859-1").trim();
-        m = endofStringPattern.matcher(artist);
+        m = AbstractID3v1Tag.endofStringPattern.matcher(artist);
         if (m.find() == true)
         {
             artist = artist.substring(0, m.start());
         }
         album = Utils.getString(dataBuffer, FIELD_ALBUM_POS, this.FIELD_ALBUM_LENGTH, "ISO-8859-1").trim();
-        m = endofStringPattern.matcher(album);
+        m = AbstractID3v1Tag.endofStringPattern.matcher(album);
         if (m.find() == true)
         {
             album = album.substring(0, m.start());
         }
         year = Utils.getString(dataBuffer, FIELD_YEAR_POS, this.FIELD_YEAR_LENGTH, "ISO-8859-1").trim();
-        m = endofStringPattern.matcher(year);
+        m = AbstractID3v1Tag.endofStringPattern.matcher(year);
         if (m.find() == true)
         {
             year = year.substring(0, m.start());
         }
         comment = Utils.getString(dataBuffer, FIELD_COMMENT_POS, this.FIELD_COMMENT_LENGTH, "ISO-8859-1").trim();
-        m = endofStringPattern.matcher(comment);
+        m = AbstractID3v1Tag.endofStringPattern.matcher(comment);
         if (m.find() == true)
         {
             comment = comment.substring(0, m.start());

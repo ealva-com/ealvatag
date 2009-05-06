@@ -60,7 +60,7 @@ abstract public class AbstractID3v1Tag extends AbstractID3Tag
     protected static final byte END_OF_FIELD = (byte) 0;
 
     //Used to detect end of field in String constructed from Data
-    protected Pattern endofStringPattern = Pattern.compile("\\x00");
+    protected static Pattern endofStringPattern = Pattern.compile("\\x00");
 
     //Tag ID as held in file
     protected static final byte[] TAG_ID = {(byte) 'T', (byte) 'A', (byte) 'G'};
