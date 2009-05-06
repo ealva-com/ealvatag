@@ -152,6 +152,7 @@ public class MP3AudioHeader implements AudioHeader
      */
     public boolean seek(final File seekFile, long startByte) throws IOException
     {
+
         //This is substantially faster than updating the filechannels position
         long filePointerCount;
 
@@ -167,7 +168,7 @@ public class MP3AudioHeader implements AudioHeader
         //Update filePointerCount
         filePointerCount = startByte;
 
-        //Read from here into the byte buffer , doesnt move location of filepointer
+        //Read from here into the byte buffer , doesn't move location of filepointer
         fc.read(bb, startByte);
         bb.flip();
 
@@ -176,6 +177,9 @@ public class MP3AudioHeader implements AudioHeader
         {
             do
             {
+                //TODO remaining() is quite an expensive operation, isn't there a way we can work this out without
+                //interrogating the bytebuffer. Also this is rarely going to be true, and could be made less true
+                //by increasing FILE_BUFFER_SIZE
                 if (bb.remaining() <= MIN_BUFFER_REMAINING_REQUIRED)
                 {
                     bb.clear();
@@ -261,8 +265,13 @@ public class MP3AudioHeader implements AudioHeader
                         // will just continue in loop
                     }
                 }
+
+                //TODO position() is quite an expensive operation, isn't there a way we can work this out without
+                //interrogating the bytebuffer
                 bb.position(bb.position() + 1);
                 filePointerCount++;
+
+
             }
             while (!syncFound);
         }
@@ -302,6 +311,11 @@ public class MP3AudioHeader implements AudioHeader
         setTrackLength();
         setBitRate();
         setEncoder();
+        /*if((filePointerCount - startByte )>0)
+        {
+            logger.severe(seekFile.getName()+"length:"+startByte+"Difference:"+(filePointerCount - startByte));
+        }
+        */
         return syncFound;
     }
 
