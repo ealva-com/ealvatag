@@ -22,6 +22,9 @@
 package org.jaudiotagger.test;
 
 import org.jaudiotagger.audio.mp3.MP3File;
+import org.jaudiotagger.audio.AudioFileFilter;
+import org.jaudiotagger.audio.AudioFileIO;
+import org.jaudiotagger.audio.AudioFile;
 
 import java.io.File;
 import java.text.DateFormat;
@@ -79,22 +82,19 @@ public class TestAudioTagger
     private void scanSingleDir(final File dir)
     {
 
-        final File[] audioFiles = dir.listFiles(new MP3FileFilter());
+        final File[] audioFiles = dir.listFiles(new AudioFileFilter(false));
         if (audioFiles.length > 0)
         {
             for (File audioFile : audioFiles)
             {
                 count++;
-                final File mp3File = audioFile;
                 try
                 {
-                    //System.out.println("About to read record:"+count+":"+mp3File.getPath());
-                    final MP3File tmpMP3 = new MP3File(mp3File);
-
+                    AudioFileIO.read(audioFile);
                 }
                 catch (Throwable t)
                 {
-                    System.err.println("Unable to read record:" + count + ":" + mp3File.getPath());
+                    System.err.println("Unable to read record:" + count + ":" + audioFile.getPath());
                     failed++;
                     t.printStackTrace();
                 }
@@ -111,58 +111,6 @@ public class TestAudioTagger
         }
     }
 
-    final class MP3FileFilter extends javax.swing.filechooser.FileFilter implements java.io.FileFilter
-    {
-
-        /**
-         * allows Directories
-         */
-        private final boolean allowDirectories;
-
-        /**
-         * Create a default MP3FileFilter.  The allowDirectories field will
-         * default to false.
-         */
-        public MP3FileFilter()
-        {
-            this(false);
-        }
-
-        /**
-         * Create an MP3FileFilter.  If allowDirectories is true, then this filter
-         * will accept directories as well as mp3 files.  If it is false then
-         * only mp3 files will be accepted.
-         *
-         * @param allowDirectories whether or not to accept directories
-         */
-        private MP3FileFilter(final boolean allowDirectories)
-        {
-            this.allowDirectories = allowDirectories;
-        }
-
-        /**
-         * Determines whether or not the file is an mp3 file.  If the file is
-         * a directory, whether or not is accepted depends upon the
-         * allowDirectories flag passed to the constructor.
-         *
-         * @param file the file to test
-         * @return true if this file or directory should be accepted
-         */
-        public final boolean accept(final java.io.File file)
-        {
-            return (((file.getName()).toLowerCase().endsWith(".mp3")) || (file.isDirectory() && (this.allowDirectories == true)));
-        }
-
-        /**
-         * Returns the Name of the Filter for use in the Chooser Dialog
-         *
-         * @return The Description of the Filter
-         */
-        public final String getDescription()
-        {
-            return ".mp3 Files";
-        }
-    }
 
     public final class DirFilter implements java.io.FileFilter
     {

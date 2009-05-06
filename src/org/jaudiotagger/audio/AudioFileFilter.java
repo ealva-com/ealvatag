@@ -35,6 +35,21 @@ import java.io.File;
 public class AudioFileFilter implements FileFilter
 {
     /**
+     * allows Directories
+     */
+    private final boolean allowDirectories;
+
+    public AudioFileFilter( boolean allowDirectories)
+    {
+        this.allowDirectories=allowDirectories;
+    }
+
+    public AudioFileFilter()
+    {
+        this(true);
+    }
+
+    /**
      * <p>Check whether the given file meet the required conditions (supported by the library OR directory).
      * The File must also be readable and not hidden.</p>
      *
@@ -50,7 +65,11 @@ public class AudioFileFilter implements FileFilter
 
         if (f.isDirectory())
         {
-            return true;
+            if(allowDirectories)
+            {
+                return true;
+            }
+            return false;
         }
 
         String ext = Utils.getExtension(f);
