@@ -163,10 +163,13 @@ public class OggPageHeader
 
             //If last segment value is 255 this packet continues onto next page
             //and will not have been added to the packetStartAndEnd list yet
-            if (segmentLength == MAXIMUM_SEGMENT_SIZE)
+            if(segmentLength!=null)
             {
-                packetList.add(new PacketStartAndLength(pageLength - packetLength, packetLength));
-                lastPacketIncomplete = true;
+                if (segmentLength == MAXIMUM_SEGMENT_SIZE)
+                {
+                    packetList.add(new PacketStartAndLength(pageLength - packetLength, packetLength));
+                    lastPacketIncomplete = true;
+                }
             }
             isValid = true;
         }

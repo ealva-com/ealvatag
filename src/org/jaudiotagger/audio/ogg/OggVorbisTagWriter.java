@@ -50,10 +50,9 @@ public class OggVorbisTagWriter
 
     public void delete(RandomAccessFile raf, RandomAccessFile tempRaf) throws IOException, CannotReadException, CannotWriteException
     {
-        VorbisCommentTag tag = null;
         try
         {
-            tag = (VorbisCommentTag) reader.read(raf);
+            reader.read(raf);
         }
         catch (CannotReadException e)
         {
@@ -103,9 +102,10 @@ public class OggVorbisTagWriter
         int newSecondPageDataLength = vorbisHeaderSizes.getSetupHeaderSize() + newCommentLength + vorbisHeaderSizes.getExtraPacketDataSize();
         logger.fine("Old 2nd Page no of packets: " + secondPageHeader.getPacketList().size());
         logger.fine("Old 2nd Page size: " + secondPageHeader.getPageLength());
-        logger.fine("Old last packet incomplete: " + secondPageHeader.isLastPacketIncomplete());                
+        logger.fine("Old last packet incomplete: " + secondPageHeader.isLastPacketIncomplete());
         logger.fine("Setup Header Size: " + vorbisHeaderSizes.getSetupHeaderSize());
-        logger.fine("Extra Packet Size: " + vorbisHeaderSizes.getExtraPacketDataSize());
+        logger.fine("Extra Packets: " + vorbisHeaderSizes.getExtraPacketList().size());
+        logger.fine("Extra Packet Data Size: " + vorbisHeaderSizes.getExtraPacketDataSize());
         logger.fine("Old comment: " + vorbisHeaderSizes.getCommentHeaderSize());
         logger.fine("New comment: " + newCommentLength);
         logger.fine("New Page Data Size: " + newSecondPageDataLength);
@@ -121,13 +121,7 @@ public class OggVorbisTagWriter
             //   OR
             //There are more than the packets in which case have complete setup header and some audio packets
             //we dont care if the last audio packet is split on next page as long as we preserve it
-            if (
-                    (secondPageHeader.getPageLength() < OggPageHeader.MAXIMUM_PAGE_DATA_SIZE)
-                    &&
-                    (((secondPageHeader.getPacketList().size() == 2) && (!secondPageHeader.isLastPacketIncomplete()))
-                    ||
-                    (secondPageHeader.getPacketList().size() > 2))
-               )
+            if ((secondPageHeader.getPageLength() < OggPageHeader.MAXIMUM_PAGE_DATA_SIZE) && (((secondPageHeader.getPacketList().size() == 2) && (!secondPageHeader.isLastPacketIncomplete())) || (secondPageHeader.getPacketList().size() > 2)))
             {
                 logger.info("Header and Setup remain on single page:");
                 replaceSecondPageOnly(vorbisHeaderSizes, newCommentLength, newSecondPageDataLength, secondPageHeader, newComment, secondPageHeaderEndPos, raf, rafTemp);
@@ -139,13 +133,71 @@ public class OggVorbisTagWriter
                 replaceSecondPageAndRenumberPageSeqs(vorbisHeaderSizes, newCommentLength, newSecondPageDataLength, secondPageHeader, newComment, raf, rafTemp);
             }
         }
-        //Bit more complicated, have to create a load of new pages and renumber audio
+        //Bit more complicated, have to create more than one new page and renumber subsequent audio
         else
         {
             logger.info("Header and Setup with shift audio:");
             replacePagesAndRenumberPageSeqs(vorbisHeaderSizes, newCommentLength, secondPageHeader, newComment, raf, rafTemp);
         }
     }
+
+    /**
+     * Calculate checkSum over the Page
+     *
+     * @param page
+     */
+    private void calculateChecksumOverPage(ByteBuffer page)
+    {
+        //CRC should be zero before calculating it
+        page.putInt(OggPageHeader.FIELD_PAGE_CHECKSUM_POS, 0);
+
+        //Compute CRC over the  page  //TODO shouldnt really use array();
+        byte[] crc = OggCRCFactory.computeCRC(page.array());
+        for (int i = 0; i < crc.length; i++)
+        {
+            page.put(OggPageHeader.FIELD_PAGE_CHECKSUM_POS + i, crc[i]);
+        }
+
+        //Rewind to start of Page
+        page.rewind();
+    }
+
+    private void writeSecondPage(OggVorbisTagReader.OggVorbisHeaderSizes vorbisHeaderSizes, int newCommentLength, int newSecondPageLength, OggPageHeader secondPageHeader, ByteBuffer newComment, long secondPageHeaderEndPos, RandomAccessFile raf, RandomAccessFile rafTemp) throws IOException
+    {
+        logger.fine("WriteOgg Type 1");
+        byte[] segmentTable = createSegmentTable(newCommentLength, vorbisHeaderSizes.getSetupHeaderSize(), vorbisHeaderSizes.getExtraPacketList());
+        int newSecondPageHeaderLength = OggPageHeader.OGG_PAGE_HEADER_FIXED_LENGTH + segmentTable.length;
+        logger.fine("New second page header length:" + newSecondPageHeaderLength);
+        logger.fine("No of segments:" + segmentTable.length);
+
+        ByteBuffer secondPageBuffer = ByteBuffer.allocate(newSecondPageLength + newSecondPageHeaderLength);
+        secondPageBuffer.order(ByteOrder.LITTLE_ENDIAN);
+
+        //Build the new 2nd page header, can mostly be taken from the original upto the segment length OggS capture
+        secondPageBuffer.put(secondPageHeader.getRawHeaderData(), 0, OggPageHeader.OGG_PAGE_HEADER_FIXED_LENGTH - 1);
+
+        //Number of Page Segments
+        secondPageBuffer.put((byte) segmentTable.length);
+
+        //Page segment table
+        for (byte aSegmentTable : segmentTable)
+        {
+            secondPageBuffer.put(aSegmentTable);
+        }
+
+        //Add New VorbisComment
+        secondPageBuffer.put(newComment);
+
+        //Add Setup Header and any extra Packets
+        raf.seek(secondPageHeaderEndPos);
+        raf.skipBytes(vorbisHeaderSizes.getCommentHeaderSize());
+        raf.getChannel().read(secondPageBuffer);
+
+        //Calculate Checksums
+        calculateChecksumOverPage(secondPageBuffer);
+        rafTemp.getChannel().write(secondPageBuffer);
+    }
+
 
     /**
      * Usually can use this method, previously comment and setup header all fit on page 2
@@ -166,46 +218,37 @@ public class OggVorbisTagWriter
         logger.fine("WriteOgg Type 1");
         byte[] segmentTable = createSegmentTable(newCommentLength, vorbisHeaderSizes.getSetupHeaderSize(), vorbisHeaderSizes.getExtraPacketList());
         int newSecondPageHeaderLength = OggPageHeader.OGG_PAGE_HEADER_FIXED_LENGTH + segmentTable.length;
+        logger.fine("New second page header length:" + newSecondPageHeaderLength);
+        logger.fine("No of segments:" + segmentTable.length);
 
         ByteBuffer secondPageBuffer = ByteBuffer.allocate(newSecondPageLength + newSecondPageHeaderLength);
         secondPageBuffer.order(ByteOrder.LITTLE_ENDIAN);
 
-//Build the new 2nd page header, can mostly be taken from the original upto the segment length
-//OggS capture
+        //Build the new 2nd page header, can mostly be taken from the original upto the segment length OggS capture
         secondPageBuffer.put(secondPageHeader.getRawHeaderData(), 0, OggPageHeader.OGG_PAGE_HEADER_FIXED_LENGTH - 1);
 
-//Number of Page Segments
+        //Number of Page Segments
         secondPageBuffer.put((byte) segmentTable.length);
 
-//Page segment table
+        //Page segment table
         for (byte aSegmentTable : segmentTable)
         {
             secondPageBuffer.put(aSegmentTable);
         }
 
-//Add New VorbisComment
+        //Add New VorbisComment
         secondPageBuffer.put(newComment);
 
-//Add Setup Header and any extra Packets
+        //Add Setup Header and any extra Packets
         raf.seek(secondPageHeaderEndPos);
         raf.skipBytes(vorbisHeaderSizes.getCommentHeaderSize());
         raf.getChannel().read(secondPageBuffer);
 
-//CRC should be zero before calculating it
-        secondPageBuffer.putInt(OggPageHeader.FIELD_PAGE_CHECKSUM_POS, 0);
-
-//Compute CRC over the new second page
-        byte[] crc = OggCRCFactory.computeCRC(secondPageBuffer.array());
-        for (int i = 0; i < crc.length; i++)
-        {
-            secondPageBuffer.put(OggPageHeader.FIELD_PAGE_CHECKSUM_POS + i, crc[i]);
-        }
-
-//Transfer the second page bytebuffer content and write to temp file
-        secondPageBuffer.rewind();
+        //Calculate Checksums
+        calculateChecksumOverPage(secondPageBuffer);
         rafTemp.getChannel().write(secondPageBuffer);
 
-//Write the rest of the original file
+        //Write the rest of the original file
         rafTemp.getChannel().transferFrom(raf.getChannel(), rafTemp.getFilePointer(), raf.length() - raf.getFilePointer());
     }
 
@@ -231,15 +274,14 @@ public class OggVorbisTagWriter
 
         ByteBuffer secondPageBuffer = ByteBuffer.allocate(newSecondPageLength + newSecondPageHeaderLength);
 
-//Build the new 2nd page header, can mostly be taken from the original upto the segment length
-//OggS capture
+        //Build the new 2nd page header, can mostly be taken from the original upto the segment length
         secondPageBuffer.put(secondPageHeader.getRawHeaderData(), 0, OggPageHeader.OGG_PAGE_HEADER_FIXED_LENGTH - 1);
         secondPageBuffer.order(ByteOrder.LITTLE_ENDIAN);
 
-//Number of page Segments
+        //Number of page Segments
         secondPageBuffer.put((byte) segmentTable.length);
 
-//Page segment table
+        //Page segment table
         for (byte aSegmentTable : segmentTable)
         {
             secondPageBuffer.put(aSegmentTable);
@@ -248,71 +290,24 @@ public class OggVorbisTagWriter
         secondPageBuffer.put(newComment);
         int pageSequence = secondPageHeader.getPageSequence();
 
-//Now find the setupheader which is on a different page (or extends over pages) and get it with
-//page header stripped out (it has already been worked out that it will all fit in so should be no buffer
-//overflow)
+        //Now find the setupheader which is on a different page (or extends over pages) and get it with
+        //page header stripped out (it has already been worked out that it will all fit in so should be no buffer
+        //overflow)
         byte[] setupHeaderData = reader.convertToVorbisSetupHeaderPacketAndAdditionalPackets(originalHeaderSizes.getSetupHeaderStartPosition(), raf);
         logger.finest(setupHeaderData.length + ":" + secondPageBuffer.position() + ":" + secondPageBuffer.capacity());
         secondPageBuffer.put(setupHeaderData);
 
-//CRC should be zero before calculating it
-        secondPageBuffer.putInt(OggPageHeader.FIELD_PAGE_CHECKSUM_POS, 0);
-
-//Compute CRC over the new second page
-        byte[] crc = OggCRCFactory.computeCRC(secondPageBuffer.array());
-        for (int i = 0; i < crc.length; i++)
-        {
-            secondPageBuffer.put(OggPageHeader.FIELD_PAGE_CHECKSUM_POS + i, crc[i]);
-        }
-
-        //Transfer the second page bytebuffer content and write to temp file
-        secondPageBuffer.rewind();
+        //Calculate Checksum and write to File
+        calculateChecksumOverPage(secondPageBuffer);
         rafTemp.getChannel().write(secondPageBuffer);
 
-//Write the rest of the original file
-
-//Now the Page Sequence Number for all the subsequent pages (containing audio frames) are out because there are
-//less pages before then there used to be, so need to adjust
-
-        long startAudio = raf.getFilePointer();
-        logger.finest("About to read Audio starting from:" + startAudio);
-        long startAudioWritten = rafTemp.getFilePointer();
-        while (raf.getFilePointer() < raf.length())
-        {
-            OggPageHeader nextPage = OggPageHeader.read(raf);
-
-//Create buffer large enough for next page (header and data) and set byte order to LE so we can use
-//putInt method
-            ByteBuffer nextPageHeaderBuffer = ByteBuffer.allocate(nextPage.getRawHeaderData().length + nextPage.getPageLength());
-            nextPageHeaderBuffer.order(ByteOrder.LITTLE_ENDIAN);
-
-            nextPageHeaderBuffer.put(nextPage.getRawHeaderData());
-            raf.getChannel().read(nextPageHeaderBuffer);
-
-//Recalculate Page Sequence Number
-            nextPageHeaderBuffer.putInt(OggPageHeader.FIELD_PAGE_SEQUENCE_NO_POS, ++pageSequence);
-
-//CRC should be zero before calculating it
-            nextPageHeaderBuffer.putInt(OggPageHeader.FIELD_PAGE_CHECKSUM_POS, 0);
-
-//Compute CRC over the modified page
-            crc = OggCRCFactory.computeCRC(nextPageHeaderBuffer.array());
-            for (int i = 0; i < crc.length; i++)
-            {
-                nextPageHeaderBuffer.put(OggPageHeader.FIELD_PAGE_CHECKSUM_POS + i, crc[i]);
-            }
-
-            nextPageHeaderBuffer.rewind();
-            rafTemp.getChannel().write(nextPageHeaderBuffer);
-        }
-        if ((raf.length() - startAudio) != (rafTemp.length() - startAudioWritten))
-        {
-            throw new CannotWriteException("File written counts dont match, file not written");
-        }
+        //Write the rest of the original file
+        writeRemainingPages(pageSequence,raf,rafTemp);
     }
 
     /**
-     * CommentHeader extends over multiple pages
+     * CommentHeader extends over multiple pages OR Comment Header doesnt but it's got larger causing some extra
+     * packets to be shifted onto another page.
      *
      * @param originalHeaderSizes
      * @param newCommentLength
@@ -328,71 +323,71 @@ public class OggVorbisTagWriter
     {
         int pageSequence = secondPageHeader.getPageSequence();
 
-//We need to work out how to split the newcommentlength over the pages
+        //We need to work out how to split the newcommentlength over the pages
         int noOfPagesNeededForComment = newCommentLength / OggPageHeader.MAXIMUM_PAGE_DATA_SIZE;
         logger.info("Comment requires:" + noOfPagesNeededForComment + " complete pages");
-//Create the Pages
+
+        //Create the Pages
         int newCommentOffset = 0;
-        for (int i = 0; i < noOfPagesNeededForComment; i++)
+        if (noOfPagesNeededForComment > 0)
         {
-            //Create ByteBuffer for the New page
-            byte[] segmentTable = this.createSegments(OggPageHeader.MAXIMUM_PAGE_DATA_SIZE, false);
-            int pageHeaderLength = OggPageHeader.OGG_PAGE_HEADER_FIXED_LENGTH + segmentTable.length;
-            ByteBuffer pageBuffer = ByteBuffer.allocate(pageHeaderLength + OggPageHeader.MAXIMUM_PAGE_DATA_SIZE);
-            pageBuffer.order(ByteOrder.LITTLE_ENDIAN);
-
-//Now create the page basing it on the existing 2ndpageheader
-            pageBuffer.put(secondPageHeader.getRawHeaderData(), 0, OggPageHeader.OGG_PAGE_HEADER_FIXED_LENGTH - 1);
-//Number of page Segments
-            pageBuffer.put((byte) segmentTable.length);
-//Page segment table
-            for (byte aSegmentTable : segmentTable)
+            for (int i = 0; i < noOfPagesNeededForComment; i++)
             {
-                pageBuffer.put(aSegmentTable);
+                //Create ByteBuffer for the New page
+                byte[] segmentTable = this.createSegments(OggPageHeader.MAXIMUM_PAGE_DATA_SIZE, false);
+                int pageHeaderLength = OggPageHeader.OGG_PAGE_HEADER_FIXED_LENGTH + segmentTable.length;
+                ByteBuffer pageBuffer = ByteBuffer.allocate(pageHeaderLength + OggPageHeader.MAXIMUM_PAGE_DATA_SIZE);
+                pageBuffer.order(ByteOrder.LITTLE_ENDIAN);
+
+                //Now create the page basing it on the existing 2ndpageheader
+                pageBuffer.put(secondPageHeader.getRawHeaderData(), 0, OggPageHeader.OGG_PAGE_HEADER_FIXED_LENGTH - 1);
+                //Number of Page Segments
+                pageBuffer.put((byte) segmentTable.length);
+                //Page segment table
+                for (byte aSegmentTable : segmentTable)
+                {
+                    pageBuffer.put(aSegmentTable);
+                }
+                //Put in first bit of Comment
+                pageBuffer.put(newComment.array(), newCommentOffset, OggPageHeader.MAXIMUM_PAGE_DATA_SIZE);
+                //Recalculate Page Sequence Number
+                pageBuffer.putInt(OggPageHeader.FIELD_PAGE_SEQUENCE_NO_POS, pageSequence);
+                pageSequence++;
+
+                //Set Header Flag to indicate continuous (except for first flag)
+                if (i != 0)
+                {
+                    pageBuffer.put(OggPageHeader.FIELD_HEADER_TYPE_FLAG_POS, OggPageHeader.HeaderTypeFlag.CONTINUED_PACKET.getFileValue());
+                }
+                // Calculate Checksum
+                calculateChecksumOverPage(pageBuffer);
+
+                rafTemp.getChannel().write(pageBuffer);
+                newCommentOffset += OggPageHeader.MAXIMUM_PAGE_DATA_SIZE;
             }
-            //Put in first bit of Comment
-            pageBuffer.put(newComment.array(), newCommentOffset, OggPageHeader.MAXIMUM_PAGE_DATA_SIZE);
-//Recalculate Page Sequence Number
-            pageBuffer.putInt(OggPageHeader.FIELD_PAGE_SEQUENCE_NO_POS, pageSequence);
-            pageSequence++;
-
-//Set Header Flag to indicate continous (except for first flag)
-            if (i != 0)
-            {
-                pageBuffer.put(OggPageHeader.FIELD_HEADER_TYPE_FLAG_POS, OggPageHeader.HeaderTypeFlag.CONTINUED_PACKET.getFileValue());
-            }
-
-            //CRC should be zero before calculating it
-            pageBuffer.putInt(OggPageHeader.FIELD_PAGE_CHECKSUM_POS, 0);
-
-            //Compute CRC over the page
-            byte[] crc = OggCRCFactory.computeCRC(pageBuffer.array());
-            for (int j = 0; j < crc.length; j++)
-            {
-                pageBuffer.put(OggPageHeader.FIELD_PAGE_CHECKSUM_POS + j, crc[j]);
-            }
-
-            pageBuffer.rewind();
-            rafTemp.getChannel().write(pageBuffer);
-            newCommentOffset += OggPageHeader.MAXIMUM_PAGE_DATA_SIZE;
         }
-
 
         int lastPageCommentPacketSize = newCommentLength % OggPageHeader.MAXIMUM_PAGE_DATA_SIZE;
         logger.fine("Last comment packet size:" + lastPageCommentPacketSize);
 
+
         if (!isCommentAndSetupHeaderFitsOnASinglePage(lastPageCommentPacketSize, originalHeaderSizes.getSetupHeaderSize(), originalHeaderSizes.getExtraPacketList()))
         {
             logger.fine("WriteOgg Type 3");
-//We need to spread over two pages
+            //We put the last remaining part of comment on this page , and associated header and extra packets will complete this page
+            //and spread onto another page.
 
-//This page contains last bit of comment header and part of setup header
+            //This page contains last bit of comment header and part of setup header
             byte[] commentSegmentTable = createSegments(lastPageCommentPacketSize, true);
 
-//Cant just add minus the packet data from the max packet size because space available to header affected
-//by size of last comment segment. i.e if it is 1 then 254 is not avilable from the max size
+            //Can't just add minus the packet data from the max packet size because space available to header affected
+            //by size of last comment segment. i.e if it is 1 then 254 is not available from the max size
             int remainingSegmentSlots = OggPageHeader.MAXIMUM_NO_OF_SEGMENT_SIZE - commentSegmentTable.length;
             int firstHalfOfHeaderSize = remainingSegmentSlots * OggPageHeader.MAXIMUM_SEGMENT_SIZE;
+
+            //TODO this is all wrong, it assumes that it is the setupheader that extends onto second page and  creates segments
+            //based on just one value wheras it may be that the setup header can fully fit on this page, and it is the trailing extra packets
+            //that now drip over onto the next page
             byte[] firstHalfofSegmentHeaderTable = createSegments(firstHalfOfHeaderSize, false);
 
             byte[] segmentTable = createSegmentTable(lastPageCommentPacketSize, firstHalfOfHeaderSize, new ArrayList<OggPageHeader.PacketStartAndLength>());
@@ -400,26 +395,26 @@ public class OggVorbisTagWriter
 
             ByteBuffer lastCommentHeaderBuffer = ByteBuffer.allocate(lastCommentHeaderLength + lastPageCommentPacketSize + firstHalfOfHeaderSize);
 
-//Build the last comment page header
+            //Build the last comment page header
             lastCommentHeaderBuffer.put(secondPageHeader.getRawHeaderData(), 0, OggPageHeader.OGG_PAGE_HEADER_FIXED_LENGTH - 1);
             lastCommentHeaderBuffer.order(ByteOrder.LITTLE_ENDIAN);
 
-//Number of page Segments
+            //Number of page Segments
             lastCommentHeaderBuffer.put((byte) segmentTable.length);
 
-//Page segment table
+            //Page segment table
             for (byte aSegmentTable : segmentTable)
             {
                 lastCommentHeaderBuffer.put(aSegmentTable);
             }
 
-//Add last bit of Comment
+            //Add last bit of Comment
             lastCommentHeaderBuffer.put(newComment.array(), newCommentOffset, lastPageCommentPacketSize);
 
-//Now find the setupheader which is on a different page (or extends over pages) and get it with
-//page header stripped out
+            //Now find the setupheader which is on a different page (or extends over pages) and get it with
+            //page header stripped out
             byte[] setupHeaderData = reader.convertToVorbisSetupHeaderPacketAndAdditionalPackets(originalHeaderSizes.getSetupHeaderStartPosition(), raf);
-            logger.finest(setupHeaderData.length + ":" + lastCommentHeaderBuffer.position() + ":" + lastCommentHeaderBuffer.capacity());
+            logger.finest("setupheader size:" + setupHeaderData.length + ":remainingcomment" + lastCommentHeaderBuffer.position() + ":pageSize" + lastCommentHeaderBuffer.capacity());
             int copyAmount = setupHeaderData.length;
             if (setupHeaderData.length > lastCommentHeaderBuffer.remaining())
             {
@@ -428,89 +423,78 @@ public class OggVorbisTagWriter
             }
             lastCommentHeaderBuffer.put(setupHeaderData, 0, copyAmount);
 
-//Page Sequence No
+            //Page Sequence No
             lastCommentHeaderBuffer.putInt(OggPageHeader.FIELD_PAGE_SEQUENCE_NO_POS, pageSequence);
 
-//Continuous
+            //Continuous
             lastCommentHeaderBuffer.put(OggPageHeader.FIELD_HEADER_TYPE_FLAG_POS, OggPageHeader.HeaderTypeFlag.CONTINUED_PACKET.getFileValue());
-
             pageSequence++;
 
-//CRC should be zero before calculating it
-            lastCommentHeaderBuffer.putInt(OggPageHeader.FIELD_PAGE_CHECKSUM_POS, 0);
-
-//Compute CRC over the new second page
-            byte[] crc = OggCRCFactory.computeCRC(lastCommentHeaderBuffer.array());
-            for (int i = 0; i < crc.length; i++)
-            {
-                lastCommentHeaderBuffer.put(OggPageHeader.FIELD_PAGE_CHECKSUM_POS + i, crc[i]);
-            }
-
-            //Transfer the second page bytebuffer content and write to temp file
-            lastCommentHeaderBuffer.rewind();
+            //Calculate Checksum
+            calculateChecksumOverPage(lastCommentHeaderBuffer);
             rafTemp.getChannel().write(lastCommentHeaderBuffer);
+            ByteBuffer lastSetupHeaderBuffer=null;
 
-//This page contains the remainder of the setup header
+            //*********************** ANOTHER OGG PAGE ****************************
+
+            //This page contains the remainder of the setup header (if there is any ) and any extra packets, it may just be that extra page is just
+            //required for extra packets
             int secondHalfOfHeaderSize = originalHeaderSizes.getSetupHeaderSize() - firstHalfOfHeaderSize;
+            logger.finest("Second Half of Header Size:"+secondHalfOfHeaderSize);
+            if(secondHalfOfHeaderSize<0)
+            {
+                throw new CannotWriteException("#289:Unable to write this file");    
+            }
             segmentTable = createSegmentTable(secondHalfOfHeaderSize, originalHeaderSizes.getExtraPacketList());
             int lastSetupHeaderLength = OggPageHeader.OGG_PAGE_HEADER_FIXED_LENGTH + segmentTable.length;
-            ByteBuffer lastSetupHeaderBuffer = ByteBuffer.allocate(lastSetupHeaderLength + secondHalfOfHeaderSize + originalHeaderSizes.getExtraPacketDataSize());
+            lastSetupHeaderBuffer = ByteBuffer.allocate(lastSetupHeaderLength + secondHalfOfHeaderSize + originalHeaderSizes.getExtraPacketDataSize());
 
             logger.finer("Second half of header and packetdata buffer:" + lastSetupHeaderBuffer.limit());
-//Build the last header page
+            //Build the last header page
             lastSetupHeaderBuffer.put(secondPageHeader.getRawHeaderData(), 0, OggPageHeader.OGG_PAGE_HEADER_FIXED_LENGTH - 1);
             lastSetupHeaderBuffer.order(ByteOrder.LITTLE_ENDIAN);
 
-//Number of page Segments
+            //Number of page Segments
             lastSetupHeaderBuffer.put((byte) segmentTable.length);
-//Page segment table
+            //Page segment table
             for (byte aSegmentTable1 : segmentTable)
             {
                 lastSetupHeaderBuffer.put(aSegmentTable1);
             }
 
-//Add last bit of Setup header should match remaining buffer size
+            //Add last bit of Setup header should match remaining buffer size
             logger.finest(setupHeaderData.length - copyAmount + ":" + lastSetupHeaderBuffer.position() + ":" + lastSetupHeaderBuffer.capacity());
 
-//Copy remainder of setupheader
+            //Copy remainder of setupheader
             lastSetupHeaderBuffer.put(setupHeaderData, copyAmount, setupHeaderData.length - copyAmount);
 
-//Page Sequence No
+            //Page Sequence No
             lastSetupHeaderBuffer.putInt(OggPageHeader.FIELD_PAGE_SEQUENCE_NO_POS, pageSequence);
 
-//Continuous
+            //Continuous
             lastSetupHeaderBuffer.put(OggPageHeader.FIELD_HEADER_TYPE_FLAG_POS, OggPageHeader.HeaderTypeFlag.CONTINUED_PACKET.getFileValue());
 
-//CRC should be zero before calculating it
-            lastSetupHeaderBuffer.putInt(OggPageHeader.FIELD_PAGE_CHECKSUM_POS, 0);
-
-//Compute CRC over the new second page
-            crc = OggCRCFactory.computeCRC(lastSetupHeaderBuffer.array());
-            for (int i = 0; i < crc.length; i++)
-            {
-                lastSetupHeaderBuffer.put(OggPageHeader.FIELD_PAGE_CHECKSUM_POS + i, crc[i]);
-            }
-
-            //Transfer the second page bytebuffer content and write to temp file
-            lastSetupHeaderBuffer.rewind();
+            //Calculate Checksum and write Page
+            calculateChecksumOverPage(lastSetupHeaderBuffer);
             rafTemp.getChannel().write(lastSetupHeaderBuffer);
         }
-//End of Comment and SetupHeader can fit on one page
         else
         {
+            //End of Comment and SetupHeader and extra packets can fit on one page
+
             logger.fine("WriteOgg Type 4");
             byte[] segmentTable = createSegmentTable(lastPageCommentPacketSize, originalHeaderSizes.getSetupHeaderSize(), originalHeaderSizes.getExtraPacketList());
             int lastHeaderLength = OggPageHeader.OGG_PAGE_HEADER_FIXED_LENGTH + segmentTable.length;
             ByteBuffer lastCommentHeaderBuffer = ByteBuffer.allocate(lastHeaderLength + lastPageCommentPacketSize + originalHeaderSizes.getExtraPacketDataSize() + originalHeaderSizes.getSetupHeaderSize());
 
-//Build the last comment page header base on original secondpageheader
-//OggS capture
+            //Build the last comment page header base on original secondpageheader
             lastCommentHeaderBuffer.put(secondPageHeader.getRawHeaderData(), 0, OggPageHeader.OGG_PAGE_HEADER_FIXED_LENGTH - 1);
             lastCommentHeaderBuffer.order(ByteOrder.LITTLE_ENDIAN);
 
-//Number of page Segments
+            //Number of page Segments
             lastCommentHeaderBuffer.put((byte) segmentTable.length);
-//Page segment table
+
+            //Page segment table
             for (byte aSegmentTable : segmentTable)
             {
                 lastCommentHeaderBuffer.put(aSegmentTable);
@@ -518,37 +502,42 @@ public class OggVorbisTagWriter
             //Add last bit of Comment
             lastCommentHeaderBuffer.put(newComment.array(), newCommentOffset, lastPageCommentPacketSize);
 
-//Now find the setupheader which is on a different page
+            //Now find the setupheader which is on a different page
             raf.seek(originalHeaderSizes.getSetupHeaderStartPosition());
 
-//Add setup Header and Extra Packets (although it will fit in this page, it may be over multiple pages in its original form
-//so need to use this function to convert to raw data
+            //Add setup Header and Extra Packets (although it will fit in this page, it may be over multiple pages in its original form
+            //so need to use this function to convert to raw data
             byte[] setupHeaderData = reader.convertToVorbisSetupHeaderPacketAndAdditionalPackets(originalHeaderSizes.getSetupHeaderStartPosition(), raf);
             lastCommentHeaderBuffer.put(setupHeaderData);
 
-//Page Sequence No
+            //Page Sequence No
             lastCommentHeaderBuffer.putInt(OggPageHeader.FIELD_PAGE_SEQUENCE_NO_POS, pageSequence);
 
-//Set Header Flag to indicate continuous (except for first flag)
+            //Set Header Flag to indicate continuous (except for first flag)
             lastCommentHeaderBuffer.put(OggPageHeader.FIELD_HEADER_TYPE_FLAG_POS, OggPageHeader.HeaderTypeFlag.CONTINUED_PACKET.getFileValue());
 
-//CRC should be zero before calculating it
-            lastCommentHeaderBuffer.putInt(OggPageHeader.FIELD_PAGE_CHECKSUM_POS, 0);
-
-//Compute CRC over the new second page
-            byte[] crc = OggCRCFactory.computeCRC(lastCommentHeaderBuffer.array());
-            for (int i = 0; i < crc.length; i++)
-            {
-                lastCommentHeaderBuffer.put(OggPageHeader.FIELD_PAGE_CHECKSUM_POS + i, crc[i]);
-            }
-
-            //Transfer the second page bytebuffer content and write to temp file
-            lastCommentHeaderBuffer.rewind();
+            //Calculate Checksum
+            calculateChecksumOverPage(lastCommentHeaderBuffer);
             rafTemp.getChannel().write(lastCommentHeaderBuffer);
         }
 
         //Write the rest of the original file
+        writeRemainingPages(pageSequence,raf,rafTemp);
+    }
 
+    /**
+     * Write all the remaining pages as they are except that the page sequence needs to be modified.
+     *
+     * @param pageSequence
+     * @param raf
+     * @param rafTemp
+     * @throws IOException
+     * @throws CannotReadException
+     * @throws CannotWriteException
+     */
+    public void writeRemainingPages(int pageSequence,RandomAccessFile raf,RandomAccessFile rafTemp)
+            throws IOException,CannotReadException,CannotWriteException
+    {
         //Now the Page Sequence Number for all the subsequent pages (containing audio frames) are out because there are
         //less pages before then there used to be, so need to adjust
         long startAudio = raf.getFilePointer();
@@ -559,37 +548,26 @@ public class OggVorbisTagWriter
             logger.fine("Reading Ogg Page");
             OggPageHeader nextPage = OggPageHeader.read(raf);
 
-//Create buffer large enough foor next page (header and data) and set byte order to LE so we can use
-//putInt method
+            //Create buffer large enough foor next page (header and data) and set byte order to LE so we can use
+            //putInt method
             ByteBuffer nextPageHeaderBuffer = ByteBuffer.allocate(nextPage.getRawHeaderData().length + nextPage.getPageLength());
             nextPageHeaderBuffer.order(ByteOrder.LITTLE_ENDIAN);
 
             nextPageHeaderBuffer.put(nextPage.getRawHeaderData());
             raf.getChannel().read(nextPageHeaderBuffer);
 
-//Recalculate Page Sequence Number
+            //Recalculate Page Sequence Number
             nextPageHeaderBuffer.putInt(OggPageHeader.FIELD_PAGE_SEQUENCE_NO_POS, ++pageSequence);
 
-//CRC should be zero before calculating it
-            nextPageHeaderBuffer.putInt(OggPageHeader.FIELD_PAGE_CHECKSUM_POS, 0);
-
-//Compute CRC over the modified page
-            byte[] crc = OggCRCFactory.computeCRC(nextPageHeaderBuffer.array());
-            for (int i = 0; i < crc.length; i++)
-            {
-                nextPageHeaderBuffer.put(OggPageHeader.FIELD_PAGE_CHECKSUM_POS + i, crc[i]);
-            }
-
-            nextPageHeaderBuffer.rewind();
+            //Calculate Checksum
+            calculateChecksumOverPage(nextPageHeaderBuffer);
             rafTemp.getChannel().write(nextPageHeaderBuffer);
-
         }
         if ((raf.length() - startAudio) != (rafTemp.length() - startAudioWritten))
         {
-            throw new CannotWriteException("File written counts dont macth, file not written");
+            throw new CannotWriteException("File written counts don't match, file not written");
         }
     }
-
     /**
      * This method creates a new segment table for the second page (header).
      *
@@ -602,6 +580,7 @@ public class OggVorbisTagWriter
      */
     private byte[] createSegmentTable(int newCommentLength, int setupHeaderLength, List<OggPageHeader.PacketStartAndLength> extraPackets)
     {
+        logger.finest("Create SegmentTable CommentLength:" + newCommentLength + ":SetupHeaderLength:" + setupHeaderLength);
         ByteArrayOutputStream resultBaos = new ByteArrayOutputStream();
 
         byte[] newStart;
@@ -633,6 +612,9 @@ public class OggVorbisTagWriter
             restShouldBe = createSegments(setupHeaderLength, false);
         }
 
+        logger.finest("Created " + newStart.length + " segments for header");
+        logger.finest("Created " + restShouldBe.length + " segments for setup");
+
         try
         {
             resultBaos.write(newStart);
@@ -641,7 +623,7 @@ public class OggVorbisTagWriter
             {
                 //Packets are being copied literally not converted from a length, so always pass
                 //false parameter, TODO is this statement correct
-                logger.finer("Creating segments for extra packets");                                    
+                logger.finer("Creating segments for " + extraPackets.size() + " packets");
                 for (OggPageHeader.PacketStartAndLength packet : extraPackets)
                 {
                     nextPacket = createSegments(packet.getLength(), false);
@@ -715,11 +697,12 @@ public class OggVorbisTagWriter
     //this will return 256 segments which is illegal, should be checked somewhere
     private byte[] createSegments(int length, boolean quitStream)
     {
+        logger.finest("Create Segments for length:" + length + ":QuitStream:" + quitStream);
         //It is valid to have nil length packets
-        if(length==0)
+        if (length == 0)
         {
             byte[] result = new byte[1];
-            result[0] = (byte)0x00;
+            result[0] = (byte) 0x00;
             return result;
         }
 
@@ -743,26 +726,51 @@ public class OggVorbisTagWriter
     {
         int totalDataSize = 0;
 
-        totalDataSize = commentLength / OggPageHeader.MAXIMUM_SEGMENT_SIZE;
-        if (commentLength % OggPageHeader.MAXIMUM_SEGMENT_SIZE == 0)
+        if (commentLength == 0)
         {
             totalDataSize++;
         }
-        totalDataSize += setupHeaderLength / OggPageHeader.MAXIMUM_SEGMENT_SIZE;
-        if (setupHeaderLength % OggPageHeader.MAXIMUM_SEGMENT_SIZE == 0)
+        else
         {
-            totalDataSize++;
-        }
-
-        for (OggPageHeader.PacketStartAndLength extraPacket : extraPacketList)
-        {
-            totalDataSize += extraPacket.getLength() / OggPageHeader.MAXIMUM_SEGMENT_SIZE;
-            if (extraPacket.getLength() % OggPageHeader.MAXIMUM_SEGMENT_SIZE == 0)
+            totalDataSize = (commentLength / OggPageHeader.MAXIMUM_SEGMENT_SIZE) + 1;
+            if (commentLength % OggPageHeader.MAXIMUM_SEGMENT_SIZE == 0)
             {
                 totalDataSize++;
             }
         }
+        logger.finest("Require:" + totalDataSize + " segments for comment");
 
+        if (setupHeaderLength == 0)
+        {
+            totalDataSize++;
+        }
+        else
+        {
+            totalDataSize += (setupHeaderLength / OggPageHeader.MAXIMUM_SEGMENT_SIZE) + 1;
+            if (setupHeaderLength % OggPageHeader.MAXIMUM_SEGMENT_SIZE == 0)
+            {
+                totalDataSize++;
+            }
+        }
+        logger.finest("Require:" + totalDataSize + " segments for comment plus setup");
+
+        for (OggPageHeader.PacketStartAndLength extraPacket : extraPacketList)
+        {
+            if (extraPacket.getLength() == 0)
+            {
+                totalDataSize++;
+            }
+            else
+            {
+                totalDataSize += (extraPacket.getLength() / OggPageHeader.MAXIMUM_SEGMENT_SIZE) + 1;
+                if (extraPacket.getLength() % OggPageHeader.MAXIMUM_SEGMENT_SIZE == 0)
+                {
+                    totalDataSize++;
+                }
+            }
+        }
+
+        logger.finest("TotalNoOfSegementsIfNewCommentAndHeaderPutOnOnePage:" + totalDataSize);
         if (totalDataSize <= OggPageHeader.MAXIMUM_NO_OF_SEGMENT_SIZE)
         {
             return true;
