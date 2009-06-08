@@ -115,6 +115,36 @@ public class OggFileReader extends AudioFileReader
             raf.seek(raf.getFilePointer() + pageHeader.getPageLength());
         }
         System.out.println("Raf File Pointer at:" + raf.getFilePointer() + "File Size is:" + raf.length());
+        raf.close();
+    }
+
+    /**
+     * Summarizes the first five pages, normally all we are interested in
+     *
+     * @param oggFile
+     * @throws CannotReadException
+     * @throws IOException
+     */
+    public void shortSummarizeOggPageHeaders(File oggFile) throws CannotReadException, IOException
+    {
+        RandomAccessFile raf = new RandomAccessFile(oggFile, "r");
+
+        int i = 0;
+        while (raf.getFilePointer() < raf.length())
+        {
+            System.out.println("pageHeader starts at absolute file position:" + raf.getFilePointer());
+            OggPageHeader pageHeader = OggPageHeader.read(raf);
+            System.out.println("pageHeader finishes at absolute file position:" + raf.getFilePointer());
+            System.out.println(pageHeader + "\n");
+            raf.seek(raf.getFilePointer() + pageHeader.getPageLength());
+            i++;
+            if(i>=5)
+            {
+                break;
+            }
+        }
+        System.out.println("Raf File Pointer at:" + raf.getFilePointer() + "File Size is:" + raf.length());
+        raf.close();
     }
 }
 
