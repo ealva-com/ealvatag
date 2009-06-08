@@ -162,7 +162,23 @@ public class OggVorbisTagWriter
         page.rewind();
     }
 
-    private void writeSecondPage(OggVorbisTagReader.OggVorbisHeaderSizes vorbisHeaderSizes, int newCommentLength, int newSecondPageLength, OggPageHeader secondPageHeader, ByteBuffer newComment, long secondPageHeaderEndPos, RandomAccessFile raf, RandomAccessFile rafTemp) throws IOException
+    /**
+     * Create a second Page, and add comment header to it, but page is incomplete my want to add addition header and need to calculate CRC
+     *
+     * @param vorbisHeaderSizes
+     * @param newCommentLength
+     * @param newSecondPageLength
+     * @param secondPageHeader
+     * @param newComment
+     * @return
+     * @throws IOException
+     */
+    private ByteBuffer startCreateBasicSecondPage(
+            OggVorbisTagReader.OggVorbisHeaderSizes vorbisHeaderSizes,
+            int newCommentLength,
+            int newSecondPageLength,
+            OggPageHeader secondPageHeader,
+            ByteBuffer newComment) throws IOException
     {
         logger.fine("WriteOgg Type 1");
         byte[] segmentTable = createSegmentTable(newCommentLength, vorbisHeaderSizes.getSetupHeaderSize(), vorbisHeaderSizes.getExtraPacketList());
@@ -187,15 +203,8 @@ public class OggVorbisTagWriter
 
         //Add New VorbisComment
         secondPageBuffer.put(newComment);
+        return secondPageBuffer;
 
-        //Add Setup Header and any extra Packets
-        raf.seek(secondPageHeaderEndPos);
-        raf.skipBytes(vorbisHeaderSizes.getCommentHeaderSize());
-        raf.getChannel().read(secondPageBuffer);
-
-        //Calculate Checksums
-        calculateChecksumOverPage(secondPageBuffer);
-        rafTemp.getChannel().write(secondPageBuffer);
     }
 
 
@@ -213,42 +222,26 @@ public class OggVorbisTagWriter
      * @param rafTemp
      * @throws IOException
      */
-    private void replaceSecondPageOnly(OggVorbisTagReader.OggVorbisHeaderSizes vorbisHeaderSizes, int newCommentLength, int newSecondPageLength, OggPageHeader secondPageHeader, ByteBuffer newComment, long secondPageHeaderEndPos, RandomAccessFile raf, RandomAccessFile rafTemp) throws IOException
+    private void replaceSecondPageOnly(
+            OggVorbisTagReader.OggVorbisHeaderSizes vorbisHeaderSizes,
+            int newCommentLength,
+            int newSecondPageLength,
+            OggPageHeader secondPageHeader,
+            ByteBuffer newComment,
+            long secondPageHeaderEndPos,
+            RandomAccessFile raf,
+            RandomAccessFile rafTemp) throws IOException
     {
         logger.fine("WriteOgg Type 1");
-        byte[] segmentTable = createSegmentTable(newCommentLength, vorbisHeaderSizes.getSetupHeaderSize(), vorbisHeaderSizes.getExtraPacketList());
-        int newSecondPageHeaderLength = OggPageHeader.OGG_PAGE_HEADER_FIXED_LENGTH + segmentTable.length;
-        logger.fine("New second page header length:" + newSecondPageHeaderLength);
-        logger.fine("No of segments:" + segmentTable.length);
+        ByteBuffer secondPageBuffer = startCreateBasicSecondPage(vorbisHeaderSizes, newCommentLength, newSecondPageLength, secondPageHeader, newComment);
 
-        ByteBuffer secondPageBuffer = ByteBuffer.allocate(newSecondPageLength + newSecondPageHeaderLength);
-        secondPageBuffer.order(ByteOrder.LITTLE_ENDIAN);
-
-        //Build the new 2nd page header, can mostly be taken from the original upto the segment length OggS capture
-        secondPageBuffer.put(secondPageHeader.getRawHeaderData(), 0, OggPageHeader.OGG_PAGE_HEADER_FIXED_LENGTH - 1);
-
-        //Number of Page Segments
-        secondPageBuffer.put((byte) segmentTable.length);
-
-        //Page segment table
-        for (byte aSegmentTable : segmentTable)
-        {
-            secondPageBuffer.put(aSegmentTable);
-        }
-
-        //Add New VorbisComment
-        secondPageBuffer.put(newComment);
-
-        //Add Setup Header and any extra Packets
         raf.seek(secondPageHeaderEndPos);
+        //Skip comment header
         raf.skipBytes(vorbisHeaderSizes.getCommentHeaderSize());
+        //Read in setup header and extra packets
         raf.getChannel().read(secondPageBuffer);
-
-        //Calculate Checksums
         calculateChecksumOverPage(secondPageBuffer);
         rafTemp.getChannel().write(secondPageBuffer);
-
-        //Write the rest of the original file
         rafTemp.getChannel().transferFrom(raf.getChannel(), rafTemp.getFilePointer(), raf.length() - raf.getFilePointer());
     }
 
@@ -268,41 +261,17 @@ public class OggVorbisTagWriter
     private void replaceSecondPageAndRenumberPageSeqs(OggVorbisTagReader.OggVorbisHeaderSizes originalHeaderSizes, int newCommentLength, int newSecondPageLength, OggPageHeader secondPageHeader, ByteBuffer newComment, RandomAccessFile raf, RandomAccessFile rafTemp) throws IOException, CannotReadException, CannotWriteException
     {
         logger.fine("WriteOgg Type 2");
+        ByteBuffer secondPageBuffer = startCreateBasicSecondPage(originalHeaderSizes, newCommentLength, newSecondPageLength, secondPageHeader, newComment);
 
-        byte[] segmentTable = createSegmentTable(newCommentLength, originalHeaderSizes.getSetupHeaderSize(), originalHeaderSizes.getExtraPacketList());
-        int newSecondPageHeaderLength = OggPageHeader.OGG_PAGE_HEADER_FIXED_LENGTH + segmentTable.length;
-
-        ByteBuffer secondPageBuffer = ByteBuffer.allocate(newSecondPageLength + newSecondPageHeaderLength);
-
-        //Build the new 2nd page header, can mostly be taken from the original upto the segment length
-        secondPageBuffer.put(secondPageHeader.getRawHeaderData(), 0, OggPageHeader.OGG_PAGE_HEADER_FIXED_LENGTH - 1);
-        secondPageBuffer.order(ByteOrder.LITTLE_ENDIAN);
-
-        //Number of page Segments
-        secondPageBuffer.put((byte) segmentTable.length);
-
-        //Page segment table
-        for (byte aSegmentTable : segmentTable)
-        {
-            secondPageBuffer.put(aSegmentTable);
-        }
-        //Add New VorbisComment
-        secondPageBuffer.put(newComment);
+        //Add setup header and packets
         int pageSequence = secondPageHeader.getPageSequence();
-
-        //Now find the setupheader which is on a different page (or extends over pages) and get it with
-        //page header stripped out (it has already been worked out that it will all fit in so should be no buffer
-        //overflow)
         byte[] setupHeaderData = reader.convertToVorbisSetupHeaderPacketAndAdditionalPackets(originalHeaderSizes.getSetupHeaderStartPosition(), raf);
         logger.finest(setupHeaderData.length + ":" + secondPageBuffer.position() + ":" + secondPageBuffer.capacity());
         secondPageBuffer.put(setupHeaderData);
 
-        //Calculate Checksum and write to File
         calculateChecksumOverPage(secondPageBuffer);
         rafTemp.getChannel().write(secondPageBuffer);
-
-        //Write the rest of the original file
-        writeRemainingPages(pageSequence,raf,rafTemp);
+        writeRemainingPages(pageSequence, raf, rafTemp);
     }
 
     /**
@@ -433,17 +402,17 @@ public class OggVorbisTagWriter
             //Calculate Checksum
             calculateChecksumOverPage(lastCommentHeaderBuffer);
             rafTemp.getChannel().write(lastCommentHeaderBuffer);
-            ByteBuffer lastSetupHeaderBuffer=null;
+            ByteBuffer lastSetupHeaderBuffer = null;
 
             //*********************** ANOTHER OGG PAGE ****************************
 
             //This page contains the remainder of the setup header (if there is any ) and any extra packets, it may just be that extra page is just
             //required for extra packets
             int secondHalfOfHeaderSize = originalHeaderSizes.getSetupHeaderSize() - firstHalfOfHeaderSize;
-            logger.finest("Second Half of Header Size:"+secondHalfOfHeaderSize);
-            if(secondHalfOfHeaderSize<0)
+            logger.finest("Second Half of Header Size:" + secondHalfOfHeaderSize);
+            if (secondHalfOfHeaderSize < 0)
             {
-                throw new CannotWriteException("#289:Unable to write this file");    
+                throw new CannotWriteException("#289:Unable to write this file");
             }
             segmentTable = createSegmentTable(secondHalfOfHeaderSize, originalHeaderSizes.getExtraPacketList());
             int lastSetupHeaderLength = OggPageHeader.OGG_PAGE_HEADER_FIXED_LENGTH + segmentTable.length;
@@ -522,7 +491,7 @@ public class OggVorbisTagWriter
         }
 
         //Write the rest of the original file
-        writeRemainingPages(pageSequence,raf,rafTemp);
+        writeRemainingPages(pageSequence, raf, rafTemp);
     }
 
     /**
@@ -535,8 +504,7 @@ public class OggVorbisTagWriter
      * @throws CannotReadException
      * @throws CannotWriteException
      */
-    public void writeRemainingPages(int pageSequence,RandomAccessFile raf,RandomAccessFile rafTemp)
-            throws IOException,CannotReadException,CannotWriteException
+    public void writeRemainingPages(int pageSequence, RandomAccessFile raf, RandomAccessFile rafTemp) throws IOException, CannotReadException, CannotWriteException
     {
         //Now the Page Sequence Number for all the subsequent pages (containing audio frames) are out because there are
         //less pages before then there used to be, so need to adjust
@@ -568,6 +536,7 @@ public class OggVorbisTagWriter
             throw new CannotWriteException("File written counts don't match, file not written");
         }
     }
+
     /**
      * This method creates a new segment table for the second page (header).
      *
