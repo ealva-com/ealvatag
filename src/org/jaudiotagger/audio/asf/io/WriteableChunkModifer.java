@@ -8,58 +8,65 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 /**
- * A chunk modifier which works with information provided by {@link WriteableChunk} objects.<br>
+ * A chunk modifier which works with information provided by
+ * {@link WriteableChunk} objects.<br>
  * 
  * @author Christian Laireiter
  */
-public class WriteableChunkModifer implements ChunkModifier
-{
+public class WriteableChunkModifer implements ChunkModifier {
 
     /**
      * The chunk to write.
      */
-    private WriteableChunk writableChunk;
+    private final WriteableChunk writableChunk;
 
     /**
      * Creates an instance.<br>
      * 
-     * @param chunk chunk to write
+     * @param chunk
+     *            chunk to write
      */
-    public WriteableChunkModifer(WriteableChunk chunk)
-    {
+    public WriteableChunkModifer(final WriteableChunk chunk) {
         this.writableChunk = chunk;
     }
 
     /**
      * {@inheritDoc}
      */
-    public boolean isApplicable(GUID guid)
-    {
+    public boolean isApplicable(final GUID guid) {
         return guid.equals(this.writableChunk.getGuid());
     }
 
     /**
      * {@inheritDoc}
      */
-    public ModificationResult modify(GUID guid, InputStream chunk, OutputStream destination) throws IOException
-    {
+    public ModificationResult modify(final GUID guid, final InputStream chunk,
+            OutputStream destination) throws IOException { // NOPMD by Christian Laireiter on 5/9/09 5:03 PM
         int chunkDiff = 0;
         long newSize = 0;
         long oldSize = 0;
-        if (!this.writableChunk.isEmpty())
-        {
+        /*
+         * Replace the outputstream with the counting one, only if assert's are
+         * evaluated.
+         */
+        assert (destination = new CountingOutputstream(destination)) != null;
+        if (!this.writableChunk.isEmpty()) {
             newSize = this.writableChunk.writeInto(destination);
-            if (guid == null)
-            {
+            assert newSize == this.writableChunk.getCurrentAsfChunkSize();
+            /*
+             * If assert's are evaluated, we have replaced destination by a
+             * CountingOutpustream and can now verify if
+             * getCurrentAsfChunkSize() really works correctly.
+             */
+            assert ((CountingOutputstream) destination).getCount() == newSize;
+            if (guid == null) {
                 chunkDiff++;
             }
 
         }
-        if (guid != null)
-        {
+        if (guid != null) {
             assert isApplicable(guid);
-            if (this.writableChunk.isEmpty())
-            {
+            if (this.writableChunk.isEmpty()) {
                 chunkDiff--;
             }
             oldSize = Utils.readUINT64(chunk);

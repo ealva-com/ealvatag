@@ -1,6 +1,13 @@
 package org.jaudiotagger.audio.asf.tag;
 
+import org.jaudiotagger.audio.asf.data.ContentBranding;
+
+import org.jaudiotagger.audio.asf.data.ContentDescription;
+
+import org.jaudiotagger.audio.asf.data.ContainerType;
+
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Field keys which need to be mapped for ASF files, or only specified for ASF.
@@ -36,14 +43,26 @@ import java.util.HashMap;
  */
 public enum AsfFieldKey
 {
-    //Keys are arbitary because these fields dont have 'keys' internally because they are stored in preset contents descriptor
-    AUTHOR("AUTHOR", false),
-    TITLE("TITLE", false),
-    RATING("RATING", false),
-    COPYRIGHT("COPYRIGHT", false),
-    DESCRIPTION("DESCRIPTION", false),
-
-    //keys are important because this is how values will be looked up by other applications
+    /*
+     * Keys are arbitrary because these fields don't have 'keys' internally because they are stored in preset contents descriptor
+     */
+    
+    // Content Description Object keys
+    AUTHOR(ContentDescription.KEY_AUTHOR, false, ContainerType.CONTENT_DESCRIPTION),
+    TITLE(ContentDescription.KEY_TITLE, false, ContainerType.CONTENT_DESCRIPTION),
+    RATING(ContentDescription.KEY_RATING, false, ContainerType.CONTENT_DESCRIPTION),
+    COPYRIGHT(ContentDescription.KEY_COPYRIGHT, false, ContainerType.CONTENT_DESCRIPTION),
+    DESCRIPTION(ContentDescription.KEY_DESCRIPTION, false, ContainerType.CONTENT_DESCRIPTION),
+    
+    // Content Branding Object keys
+    BANNER_IMAGE(ContentBranding.KEY_BANNER_IMAGE,false, ContainerType.CONTENT_BRANDING),
+    BANNER_IMAGE_TYPE(ContentBranding.KEY_BANNER_TYPE,false, ContainerType.CONTENT_BRANDING),
+    BANNER_IMAGE_URL(ContentBranding.KEY_BANNER_URL, false, ContainerType.CONTENT_BRANDING),
+    COPYRIGHT_URL(ContentBranding.KEY_COPYRIGHT_URL, false, ContainerType.CONTENT_BRANDING),
+    
+    /*
+     * keys are important because this is how values will be looked up by other applications
+     */
     ALBUM("WM/AlbumTitle", false),
     ALBUM_ARTIST("WM/AlbumArtist", true),
     ALBUM_ARTIST_SORT("WM/AlbumArtistSortOrder", false),
@@ -69,7 +88,7 @@ public enum AsfFieldKey
     INITIAL_KEY("WM/InitialKey", false),
     IS_COMPILATION("WM/IsCompilation", false),
     ISRC("WM/ISRC", false),
-    ISVBR("IsVBR", false),
+    ISVBR("IsVBR", true),
     LANGUAGE("WM/Language", true),
     LYRICIST("WM/Writer", true),
     LYRICS("WM/Lyrics", false),
@@ -98,19 +117,25 @@ public enum AsfFieldKey
     URL_PROMOTIONAL_SITE("WM/PromotionURL", true),
     URL_WIKIPEDIA_ARTIST_SITE("WM/WikipediaArtistUrl", false),
     URL_WIKIPEDIA_RELEASE_SITE("WM/WikipediaReleaseUrl", false),
-    YEAR("WM/Year", false),;
+    YEAR("WM/Year", false),
+    
+    // Special field for all unknown field names, which will get maximum support
+    CUSTOM ("___CUSTOM___", true);
 
     /**
      * Stores the {@link AsfFieldKey#fieldName} to the field key.
      */
-    private final static HashMap<String, AsfFieldKey> FIELD_ID_MAP;
+    private final static Map<String, AsfFieldKey> FIELD_ID_MAP;
 
     static
     {
         FIELD_ID_MAP = new HashMap<String, AsfFieldKey>(AsfFieldKey.values().length);
         for (AsfFieldKey curr : AsfFieldKey.values())
         {
-            FIELD_ID_MAP.put(curr.getFieldName(), curr);
+            if (curr != CUSTOM) {
+                assert !FIELD_ID_MAP.containsKey(curr.getFieldName()) : "duplicate field entry: "+curr.getFieldName();
+                FIELD_ID_MAP.put(curr.getFieldName(), curr);
+            }
         }
     }
 
@@ -118,52 +143,108 @@ public enum AsfFieldKey
     /**
      * Searches for an ASF field key which represents the given id string.<br>
      *
-     * @param fieldName the fieldname used for this key
-     * @return tjhe Enum that represents this field
+     * @param fieldName the field name used for this key
+     * @return the Enum that represents this field
      */
-    public static AsfFieldKey getAsfFieldKey(String fieldName)
+    public static AsfFieldKey getAsfFieldKey(final String fieldName)
     {
-        return FIELD_ID_MAP.get(fieldName);
+        AsfFieldKey result = FIELD_ID_MAP.get(fieldName);
+        if (result == null) {
+            result = CUSTOM;
+        }
+        return result;
     }
 
     /**
      * Tests whether the field is enabled for multiple values.<br>
      *
-     * @param id field id to test.
+     * @param fieldName field id to test.
      * @return <code>true</code> if ASF implementation supports multiple values for the field.
      */
-    public static boolean isMultiValued(String id)
+    public static boolean isMultiValued(final String fieldName)
     {
-        boolean result = false; // For now, there is no support for multi values.
-        AsfFieldKey fieldKey = getAsfFieldKey(id);
-        if (fieldKey != null)
-        {
-            result = fieldKey.isMultiValued();
-        }
-        return result;
+        final AsfFieldKey fieldKey = getAsfFieldKey(fieldName);
+        return fieldKey != null && fieldKey.isMultiValued();
     }
 
 
     /**
      * If set, the field has a standard id assigned.
      */
-    private String fieldName;
+    private final String fieldName;
 
     /**
      * If <code>true</code>, the field will be stored repeatedly if occurs so in tags.
      */
-    private boolean multiValued;
+    private final boolean multiValued;
 
     /**
-     * Creates an instance<br>
-     *
-     * @param asfFieldId standard field identifier.
-     * @param multiValue <code>true</code> if the this ASF field can have multiple values.
+     * The lowest possible container type, such a field can be stored into.<br>
+     * Low means, container with least capabilities.
      */
-    private AsfFieldKey(String asfFieldId, boolean multiValue)
-    {
-        this.fieldName = asfFieldId;
-        this.multiValued = multiValue;
+    private final ContainerType lowestContainer;
+    
+    /**
+     * The highest possible container type, such a field can be stored into.<br>
+     * High means, most capabilities, for example string length exceeds that of
+     * the extended content description, it will be stored one level up (metadata library).
+     */
+    private final ContainerType highestContainer;
+    
+    /**
+     * Creates an instance<br>
+     * Lowest/Highest will be {@link ContainerType#EXTENDED_CONTENT} /
+     * {@link ContainerType#METADATA_LIBRARY_OBJECT}
+     * 
+     * @param asfFieldName
+     *            standard field identifier.
+     * @param multiValue
+     *            <code>true</code> if the this ASF field can have multiple
+     *            values.
+     */
+    private AsfFieldKey(final String asfFieldName, final boolean multiValue) {
+        this(asfFieldName, multiValue, ContainerType.EXTENDED_CONTENT,
+                ContainerType.METADATA_LIBRARY_OBJECT);
+    }
+    
+    /**
+     * Creates an instance.<br>
+     * 
+     * @param asfFieldName
+     *              standard field identifier.
+     * @param multiValue           
+     *              <code>true</code> if the this ASF field can have multiple
+     *              values.
+     * @param restrictedTo
+     *              fields must be stored in this container.
+     */
+    private AsfFieldKey(final String asfFieldName, final boolean multiValue,
+            final ContainerType restrictedTo) {
+        this(asfFieldName, multiValue, restrictedTo, restrictedTo);
+    }
+
+    /**
+     * Creates an instance.<br>
+     * 
+     * @param asfFieldName
+     *              standard field identifier.
+     * @param multiValue           
+     *              <code>true</code> if the this ASF field can have multiple
+     *              values.
+     * @param lowest
+     *              fields must be stored at least in this container.
+     * @param highest
+     *              fields aren't allowed to be stored in better containers than
+     *              this.
+     */
+    private AsfFieldKey(final String asfFieldName, final boolean multiValue,
+            final ContainerType lowest, final ContainerType highest) {
+        this.fieldName = asfFieldName;
+        assert !multiValue || highest.isMultiValued() : "Definition error";
+        this.multiValued = multiValue && highest.isMultiValued();
+        this.lowestContainer = lowest;
+        this.highestContainer = highest;
+        assert ContainerType.areInCorrectOrder(lowest, highest);
     }
 
 
@@ -177,7 +258,20 @@ public enum AsfFieldKey
         return this.fieldName;
     }
 
-
+    /**
+     * @return the highestContainer
+     */
+    public ContainerType getHighestContainer() {
+        return this.highestContainer;
+    }
+    
+    /**
+     * @return the lowestContainer
+     */
+    public ContainerType getLowestContainer() {
+        return this.lowestContainer;
+    }
+    
     /**
      * Returns <code>true</code> if this field can store multiple values.
      *
@@ -187,7 +281,7 @@ public enum AsfFieldKey
     {
         return this.multiValued;
     }
-
+    
     /**
      * {@inheritDoc}
      */

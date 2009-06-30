@@ -74,9 +74,9 @@ public class AsfTagTest extends TestCase
     public void testMixedIdentifiers() throws Exception
     {
         final AsfTag asfTag = new AsfTag();
-        AsfTagTextField textField = (AsfTagTextField)asfTag.createTagField(AsfFieldKey.ALBUM, AsfFieldKey.ALBUM.toString());
+        AsfTagTextField textField = asfTag.createTagField(AsfFieldKey.ALBUM, AsfFieldKey.ALBUM.toString());
         asfTag.set(textField);
-        assertTrue(textField==asfTag.getFirstField(AsfFieldKey.ALBUM.getFieldName()));
+        assertSame(textField, asfTag.getFirstField(AsfFieldKey.ALBUM.getFieldName()));
     }
     
     public void testUncommonAsfTagFields()

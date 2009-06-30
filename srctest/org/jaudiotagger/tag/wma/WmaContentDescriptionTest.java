@@ -1,5 +1,7 @@
 package org.jaudiotagger.tag.wma;
 
+import org.jaudiotagger.audio.asf.data.ContentDescription;
+
 import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.AudioFileIO;
 import org.jaudiotagger.audio.asf.data.AsfHeader;
@@ -38,15 +40,16 @@ public class WmaContentDescriptionTest extends WmaTestCase
     {
         AudioFile file = getAudioFile();
         AsfTag tag = (AsfTag) file.getTag();
-        for (AsfFieldKey curr : AsfTag.DESCRIPTION_FIELDS)
+        for (String curr : ContentDescription.ALLOWED)
         {
-            tag.deleteTagField(curr);
+            tag.deleteTagField(AsfFieldKey.getAsfFieldKey(curr));
         }
         file.commit();
         AsfHeader header = AsfHeaderReader.readHeader(file.getFile());
         assertNull(header.getContentDescription());
-        for (AsfFieldKey curr : AsfTag.DESCRIPTION_FIELDS)
+        for (String currKey : ContentDescription.ALLOWED)
         {
+            AsfFieldKey curr = AsfFieldKey.getAsfFieldKey(currKey);
             AudioFileIO.delete(file);
             header = AsfHeaderReader.readHeader(file.getFile());
             assertNull(header.getContentDescription());

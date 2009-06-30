@@ -1,7 +1,6 @@
 package org.jaudiotagger.audio.asf.tag;
 
 import org.jaudiotagger.audio.asf.data.AsfHeader;
-import org.jaudiotagger.audio.asf.data.ContentDescriptor;
 import org.jaudiotagger.audio.generic.AbstractTag;
 import org.jaudiotagger.logging.ErrorMessage;
 import org.jaudiotagger.tag.*;
@@ -9,87 +8,146 @@ import org.jaudiotagger.tag.datatype.Artwork;
 import org.jaudiotagger.tag.reference.PictureTypes;
 
 import java.io.UnsupportedEncodingException;
-import java.io.IOException;
 import java.util.*;
-import java.util.List;
-import java.awt.*;
-import java.awt.image.BufferedImage;
 
 /**
  * Tag implementation for ASF.<br>
- *
+ * 
  * @author Christian Laireiter
  */
-public final class AsfTag extends AbstractTag
-{
+public final class AsfTag extends AbstractTag {
+    /**
+     * This iterator is used to iterator an {@link Iterator} with
+     * {@link TagField} objects and returns them by casting to
+     * {@link AsfTagField}.<br>
+     * 
+     * @author Christian Laireiter
+     */
+    private static class AsfFieldIterator implements Iterator<AsfTagField> {
+
+        /**
+         * source iterator.
+         */
+        private final Iterator<TagField> fieldIterator;
+
+        /**
+         * Creates an isntance.
+         * 
+         * @param iterator
+         *            iterator to read from.
+         */
+        public AsfFieldIterator(final Iterator<TagField> iterator) {
+            assert iterator != null;
+            this.fieldIterator = iterator;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        public boolean hasNext() {
+            return this.fieldIterator.hasNext();
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        public AsfTagField next() {
+            return (AsfTagField) this.fieldIterator.next();
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        public void remove() {
+            this.fieldIterator.remove();
+        }
+    }
+
     /**
      * Stores a list of field keys, which identify common fields.<br>
      */
     public final static Set<AsfFieldKey> COMMON_FIELDS;
 
     /**
-     * List of {@link AsfFieldKey} items, identifying contents that are stored in the
-     * content description chunk (or unit) of ASF files.
+     * This map contains the mapping from {@link TagFieldKey} to
+     * {@link AsfFieldKey}.
      */
-    public final static Set<AsfFieldKey> DESCRIPTION_FIELDS;
+    private static final EnumMap<TagFieldKey, AsfFieldKey> TAGFIELD2ASFFIELD;
 
-    static EnumMap<TagFieldKey, AsfFieldKey> tagFieldToAsfField = new EnumMap<TagFieldKey, AsfFieldKey>(TagFieldKey.class);
-
-    //Mapping from generic key to mp4 key
-    static
-    {
-        tagFieldToAsfField.put(TagFieldKey.ARTIST, AsfFieldKey.AUTHOR);
-        tagFieldToAsfField.put(TagFieldKey.ALBUM, AsfFieldKey.ALBUM);
-        tagFieldToAsfField.put(TagFieldKey.TITLE, AsfFieldKey.TITLE);
-        tagFieldToAsfField.put(TagFieldKey.TRACK, AsfFieldKey.TRACK);
-        tagFieldToAsfField.put(TagFieldKey.YEAR, AsfFieldKey.YEAR);
-        tagFieldToAsfField.put(TagFieldKey.GENRE, AsfFieldKey.GENRE);
-        tagFieldToAsfField.put(TagFieldKey.COMMENT, AsfFieldKey.DESCRIPTION);
-        tagFieldToAsfField.put(TagFieldKey.ALBUM_ARTIST, AsfFieldKey.ALBUM_ARTIST);
-        tagFieldToAsfField.put(TagFieldKey.COMPOSER, AsfFieldKey.COMPOSER);
-        tagFieldToAsfField.put(TagFieldKey.GROUPING, AsfFieldKey.GROUPING);
-        tagFieldToAsfField.put(TagFieldKey.DISC_NO, AsfFieldKey.DISC_NO);
-        tagFieldToAsfField.put(TagFieldKey.BPM, AsfFieldKey.BPM);
-        tagFieldToAsfField.put(TagFieldKey.ENCODER, AsfFieldKey.ENCODER);
-        tagFieldToAsfField.put(TagFieldKey.MUSICBRAINZ_ARTISTID, AsfFieldKey.MUSICBRAINZ_ARTISTID);
-        tagFieldToAsfField.put(TagFieldKey.MUSICBRAINZ_RELEASEID, AsfFieldKey.MUSICBRAINZ_RELEASEID);
-        tagFieldToAsfField.put(TagFieldKey.MUSICBRAINZ_RELEASEARTISTID, AsfFieldKey.MUSICBRAINZ_RELEASEARTISTID);
-        tagFieldToAsfField.put(TagFieldKey.MUSICBRAINZ_TRACK_ID, AsfFieldKey.MUSICBRAINZ_TRACK_ID);
-        tagFieldToAsfField.put(TagFieldKey.MUSICBRAINZ_DISC_ID, AsfFieldKey.MUSICBRAINZ_DISC_ID);
-        tagFieldToAsfField.put(TagFieldKey.MUSICIP_ID, AsfFieldKey.MUSICIP_ID);
-        tagFieldToAsfField.put(TagFieldKey.AMAZON_ID, AsfFieldKey.AMAZON_ID);
-        tagFieldToAsfField.put(TagFieldKey.MUSICBRAINZ_RELEASE_STATUS, AsfFieldKey.MUSICBRAINZ_RELEASE_STATUS);
-        tagFieldToAsfField.put(TagFieldKey.MUSICBRAINZ_RELEASE_TYPE, AsfFieldKey.MUSICBRAINZ_RELEASE_TYPE);
-        tagFieldToAsfField.put(TagFieldKey.MUSICBRAINZ_RELEASE_COUNTRY, AsfFieldKey.MUSICBRAINZ_RELEASE_COUNTRY);
-        tagFieldToAsfField.put(TagFieldKey.LYRICS, AsfFieldKey.LYRICS);
-        tagFieldToAsfField.put(TagFieldKey.IS_COMPILATION, AsfFieldKey.IS_COMPILATION);
-        tagFieldToAsfField.put(TagFieldKey.ARTIST_SORT, AsfFieldKey.ARTIST_SORT);
-        tagFieldToAsfField.put(TagFieldKey.ALBUM_ARTIST_SORT, AsfFieldKey.ALBUM_ARTIST_SORT);
-        tagFieldToAsfField.put(TagFieldKey.ALBUM_SORT, AsfFieldKey.ALBUM_SORT);
-        tagFieldToAsfField.put(TagFieldKey.TITLE_SORT, AsfFieldKey.TITLE_SORT);
-        tagFieldToAsfField.put(TagFieldKey.COMPOSER_SORT, AsfFieldKey.COMPOSER_SORT);
-        tagFieldToAsfField.put(TagFieldKey.COVER_ART, AsfFieldKey.COVER_ART);
-        tagFieldToAsfField.put(TagFieldKey.ISRC, AsfFieldKey.ISRC);
-        tagFieldToAsfField.put(TagFieldKey.CATALOG_NO, AsfFieldKey.CATALOG_NO);
-        tagFieldToAsfField.put(TagFieldKey.BARCODE, AsfFieldKey.BARCODE);
-        tagFieldToAsfField.put(TagFieldKey.RECORD_LABEL, AsfFieldKey.RECORD_LABEL);
-        tagFieldToAsfField.put(TagFieldKey.LYRICIST, AsfFieldKey.LYRICIST);
-        tagFieldToAsfField.put(TagFieldKey.CONDUCTOR, AsfFieldKey.CONDUCTOR);
-        tagFieldToAsfField.put(TagFieldKey.REMIXER, AsfFieldKey.REMIXER);
-        tagFieldToAsfField.put(TagFieldKey.MOOD, AsfFieldKey.MOOD);
-        tagFieldToAsfField.put(TagFieldKey.MEDIA, AsfFieldKey.MEDIA);
-        tagFieldToAsfField.put(TagFieldKey.URL_OFFICIAL_RELEASE_SITE, AsfFieldKey.URL_OFFICIAL_RELEASE_SITE);
-        tagFieldToAsfField.put(TagFieldKey.URL_DISCOGS_RELEASE_SITE, AsfFieldKey.URL_DISCOGS_RELEASE_SITE);
-        tagFieldToAsfField.put(TagFieldKey.URL_WIKIPEDIA_RELEASE_SITE, AsfFieldKey.URL_WIKIPEDIA_RELEASE_SITE);
-        tagFieldToAsfField.put(TagFieldKey.URL_OFFICIAL_ARTIST_SITE, AsfFieldKey.URL_OFFICIAL_ARTIST_SITE);
-        tagFieldToAsfField.put(TagFieldKey.URL_DISCOGS_ARTIST_SITE, AsfFieldKey.URL_DISCOGS_ARTIST_SITE);
-        tagFieldToAsfField.put(TagFieldKey.URL_WIKIPEDIA_ARTIST_SITE, AsfFieldKey.URL_WIKIPEDIA_ARTIST_SITE);
-        tagFieldToAsfField.put(TagFieldKey.LANGUAGE, AsfFieldKey.LANGUAGE);
-        tagFieldToAsfField.put(TagFieldKey.KEY, AsfFieldKey.INITIAL_KEY);
+    // Mapping from generic key to mp4 key
+    static {
+        TAGFIELD2ASFFIELD = new EnumMap<TagFieldKey, AsfFieldKey>(
+                TagFieldKey.class);
+        TAGFIELD2ASFFIELD.put(TagFieldKey.ARTIST, AsfFieldKey.AUTHOR);
+        TAGFIELD2ASFFIELD.put(TagFieldKey.ALBUM, AsfFieldKey.ALBUM);
+        TAGFIELD2ASFFIELD.put(TagFieldKey.TITLE, AsfFieldKey.TITLE);
+        TAGFIELD2ASFFIELD.put(TagFieldKey.TRACK, AsfFieldKey.TRACK);
+        TAGFIELD2ASFFIELD.put(TagFieldKey.YEAR, AsfFieldKey.YEAR);
+        TAGFIELD2ASFFIELD.put(TagFieldKey.GENRE, AsfFieldKey.GENRE);
+        TAGFIELD2ASFFIELD.put(TagFieldKey.COMMENT, AsfFieldKey.DESCRIPTION);
+        TAGFIELD2ASFFIELD.put(TagFieldKey.ALBUM_ARTIST,
+                AsfFieldKey.ALBUM_ARTIST);
+        TAGFIELD2ASFFIELD.put(TagFieldKey.COMPOSER, AsfFieldKey.COMPOSER);
+        TAGFIELD2ASFFIELD.put(TagFieldKey.GROUPING, AsfFieldKey.GROUPING);
+        TAGFIELD2ASFFIELD.put(TagFieldKey.DISC_NO, AsfFieldKey.DISC_NO);
+        TAGFIELD2ASFFIELD.put(TagFieldKey.BPM, AsfFieldKey.BPM);
+        TAGFIELD2ASFFIELD.put(TagFieldKey.ENCODER, AsfFieldKey.ENCODER);
+        TAGFIELD2ASFFIELD.put(TagFieldKey.MUSICBRAINZ_ARTISTID,
+                AsfFieldKey.MUSICBRAINZ_ARTISTID);
+        TAGFIELD2ASFFIELD.put(TagFieldKey.MUSICBRAINZ_RELEASEID,
+                AsfFieldKey.MUSICBRAINZ_RELEASEID);
+        TAGFIELD2ASFFIELD.put(TagFieldKey.MUSICBRAINZ_RELEASEARTISTID,
+                AsfFieldKey.MUSICBRAINZ_RELEASEARTISTID);
+        TAGFIELD2ASFFIELD.put(TagFieldKey.MUSICBRAINZ_TRACK_ID,
+                AsfFieldKey.MUSICBRAINZ_TRACK_ID);
+        TAGFIELD2ASFFIELD.put(TagFieldKey.MUSICBRAINZ_DISC_ID,
+                AsfFieldKey.MUSICBRAINZ_DISC_ID);
+        TAGFIELD2ASFFIELD.put(TagFieldKey.MUSICIP_ID, AsfFieldKey.MUSICIP_ID);
+        TAGFIELD2ASFFIELD.put(TagFieldKey.AMAZON_ID, AsfFieldKey.AMAZON_ID);
+        TAGFIELD2ASFFIELD.put(TagFieldKey.MUSICBRAINZ_RELEASE_STATUS,
+                AsfFieldKey.MUSICBRAINZ_RELEASE_STATUS);
+        TAGFIELD2ASFFIELD.put(TagFieldKey.MUSICBRAINZ_RELEASE_TYPE,
+                AsfFieldKey.MUSICBRAINZ_RELEASE_TYPE);
+        TAGFIELD2ASFFIELD.put(TagFieldKey.MUSICBRAINZ_RELEASE_COUNTRY,
+                AsfFieldKey.MUSICBRAINZ_RELEASE_COUNTRY);
+        TAGFIELD2ASFFIELD.put(TagFieldKey.LYRICS, AsfFieldKey.LYRICS);
+        TAGFIELD2ASFFIELD.put(TagFieldKey.IS_COMPILATION,
+                AsfFieldKey.IS_COMPILATION);
+        TAGFIELD2ASFFIELD.put(TagFieldKey.ARTIST_SORT, AsfFieldKey.ARTIST_SORT);
+        TAGFIELD2ASFFIELD.put(TagFieldKey.ALBUM_ARTIST_SORT,
+                AsfFieldKey.ALBUM_ARTIST_SORT);
+        TAGFIELD2ASFFIELD.put(TagFieldKey.ALBUM_SORT, AsfFieldKey.ALBUM_SORT);
+        TAGFIELD2ASFFIELD.put(TagFieldKey.TITLE_SORT, AsfFieldKey.TITLE_SORT);
+        TAGFIELD2ASFFIELD.put(TagFieldKey.COMPOSER_SORT,
+                AsfFieldKey.COMPOSER_SORT);
+        TAGFIELD2ASFFIELD.put(TagFieldKey.COVER_ART, AsfFieldKey.COVER_ART);
+        TAGFIELD2ASFFIELD.put(TagFieldKey.ISRC, AsfFieldKey.ISRC);
+        TAGFIELD2ASFFIELD.put(TagFieldKey.CATALOG_NO, AsfFieldKey.CATALOG_NO);
+        TAGFIELD2ASFFIELD.put(TagFieldKey.BARCODE, AsfFieldKey.BARCODE);
+        TAGFIELD2ASFFIELD.put(TagFieldKey.RECORD_LABEL,
+                AsfFieldKey.RECORD_LABEL);
+        TAGFIELD2ASFFIELD.put(TagFieldKey.LYRICIST, AsfFieldKey.LYRICIST);
+        TAGFIELD2ASFFIELD.put(TagFieldKey.CONDUCTOR, AsfFieldKey.CONDUCTOR);
+        TAGFIELD2ASFFIELD.put(TagFieldKey.REMIXER, AsfFieldKey.REMIXER);
+        TAGFIELD2ASFFIELD.put(TagFieldKey.MOOD, AsfFieldKey.MOOD);
+        TAGFIELD2ASFFIELD.put(TagFieldKey.MEDIA, AsfFieldKey.MEDIA);
+        TAGFIELD2ASFFIELD.put(TagFieldKey.URL_OFFICIAL_RELEASE_SITE,
+                AsfFieldKey.URL_OFFICIAL_RELEASE_SITE);
+        TAGFIELD2ASFFIELD.put(TagFieldKey.URL_DISCOGS_RELEASE_SITE,
+                AsfFieldKey.URL_DISCOGS_RELEASE_SITE);
+        TAGFIELD2ASFFIELD.put(TagFieldKey.URL_WIKIPEDIA_RELEASE_SITE,
+                AsfFieldKey.URL_WIKIPEDIA_RELEASE_SITE);
+        TAGFIELD2ASFFIELD.put(TagFieldKey.URL_OFFICIAL_ARTIST_SITE,
+                AsfFieldKey.URL_OFFICIAL_ARTIST_SITE);
+        TAGFIELD2ASFFIELD.put(TagFieldKey.URL_DISCOGS_ARTIST_SITE,
+                AsfFieldKey.URL_DISCOGS_ARTIST_SITE);
+        TAGFIELD2ASFFIELD.put(TagFieldKey.URL_WIKIPEDIA_ARTIST_SITE,
+                AsfFieldKey.URL_WIKIPEDIA_ARTIST_SITE);
+        TAGFIELD2ASFFIELD.put(TagFieldKey.LANGUAGE, AsfFieldKey.LANGUAGE);
+        TAGFIELD2ASFFIELD.put(TagFieldKey.KEY, AsfFieldKey.INITIAL_KEY);
     }
 
-    static
-    {
+    static {
         COMMON_FIELDS = new HashSet<AsfFieldKey>();
         COMMON_FIELDS.add(AsfFieldKey.ALBUM);
         COMMON_FIELDS.add(AsfFieldKey.AUTHOR);
@@ -98,27 +156,7 @@ public final class AsfTag extends AbstractTag
         COMMON_FIELDS.add(AsfFieldKey.TITLE);
         COMMON_FIELDS.add(AsfFieldKey.TRACK);
         COMMON_FIELDS.add(AsfFieldKey.YEAR);
-        DESCRIPTION_FIELDS = new HashSet<AsfFieldKey>();
-        DESCRIPTION_FIELDS.add(AsfFieldKey.AUTHOR);
-        DESCRIPTION_FIELDS.add(AsfFieldKey.COPYRIGHT);
-        DESCRIPTION_FIELDS.add(AsfFieldKey.DESCRIPTION);
-        DESCRIPTION_FIELDS.add(AsfFieldKey.RATING);
-        DESCRIPTION_FIELDS.add(AsfFieldKey.TITLE);
     }
-
-    /**
-     * Determines if the {@linkplain ContentDescriptor#getName() name} equals an {@link AsfFieldKey} which
-     * is {@linkplain #DESCRIPTION_FIELDS listed} to be stored in the content description chunk.
-     *
-     * @param contentDesc Descriptor to test.
-     * @return see description.
-     */
-    public static boolean storesDescriptor(ContentDescriptor contentDesc)
-    {
-        AsfFieldKey asfFieldKey = AsfFieldKey.getAsfFieldKey(contentDesc.getName());
-        return DESCRIPTION_FIELDS.contains(asfFieldKey);
-    }
-
 
     /**
      * @see #isCopyingFields()
@@ -128,131 +166,137 @@ public final class AsfTag extends AbstractTag
     /**
      * Creates an empty instance.
      */
-    public AsfTag()
-    {
+    public AsfTag() {
         this(false);
     }
 
     /**
      * Creates an instance and sets the field conversion property.<br>
-     *
-     * @param copyFields look at {@link #isCopyingFields()}.
+     * 
+     * @param copy
+     *            look at {@link #isCopyingFields()}.
      */
-    public AsfTag(boolean copyFields)
-    {
-        this.copyFields = copyFields;
+    public AsfTag(final boolean copy) {
+        super();
+        this.copyFields = copy;
     }
-
 
     /**
      * Creates an instance and copies the fields of the source into the own
      * structure.<br>
-     *
-     * @param source     source to read tag fields from.
-     * @param copyFields look at {@link #isCopyingFields()}.
-     * @throws UnsupportedEncodingException {@link TagField#getRawContent()} which may be called
+     * 
+     * @param source
+     *            source to read tag fields from.
+     * @param copy
+     *            look at {@link #isCopyingFields()}.
+     * @throws UnsupportedEncodingException
+     *             {@link TagField#getRawContent()} which may be called
      */
-    public AsfTag(Tag source, boolean copyFields) throws UnsupportedEncodingException
-    {
-        this(copyFields);
+    public AsfTag(final Tag source, final boolean copy)
+            throws UnsupportedEncodingException {
+        this(copy);
         copyFrom(source);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    // TODO introduce copy idea to all formats
+    public void add(final TagField field) {
+        if (isValidField(field)) {
+            if (AsfFieldKey.isMultiValued(field.getId())) {
+                super.add(copyFrom(field));
+            } else {
+                super.set(copyFrom(field));
+            }
+        }
+    }
 
     /**
      * Creates a field for copyright and adds it.<br>
-     *
-     * @param copyRight copyright content
+     * 
+     * @param copyRight
+     *            copyright content
      */
-    public void addCopyright(String copyRight)
-    {
+    public void addCopyright(final String copyRight) {
         add(createCopyrightField(copyRight));
     }
 
     /**
      * Creates a field for rating and adds it.<br>
-     *
-     * @param rating rating.
+     * 
+     * @param rating
+     *            rating.
      */
-    public void addRating(String rating)
-    {
+    public void addRating(final String rating) {
         add(createRatingField(rating));
     }
 
     /**
      * This method copies tag fields from the source.<br>
-     *
-     * @param source source to read tag fields from.
-     * @throws UnsupportedEncodingException {@link TagField#getRawContent()} which may be called
+     * 
+     * @param source
+     *            source to read tag fields from.
      */
-    private void copyFrom(Tag source) throws UnsupportedEncodingException
-    {
-        if (source == null)
-        {
-            throw new NullPointerException();
-        }
+    private void copyFrom(final Tag source) {
         final Iterator<TagField> fieldIterator = source.getFields();
-        // iterate over all fields 
-        while (fieldIterator.hasNext())
-        {
-            TagField copy = copyFrom(fieldIterator.next());
-            if (copy != null)
-            {
+        // iterate over all fields
+        while (fieldIterator.hasNext()) {
+            final TagField copy = copyFrom(fieldIterator.next());
+            if (copy != null) {
                 super.add(copy);
             }
         }
     }
 
     /**
-     * If {@link #isCopyingFields()} is <code>true</code>,
-     * Creates a copy of <code>source</code>, if its not empty-<br>
-     * However, plain {@link TagField} objects can only be transformed into binary fields using their
-     * {@link TagField#getRawContent()} method.<br>
-     *
-     * @param source source field to copy.
-     * @return A copy, which is as close to the source as possible, or <code>null</code> if the field is empty
-     *         (empty byte[] or blank string}.
-     * @throws UnsupportedEncodingException upon {@link TagField#getRawContent()}.
-     */   
-    private TagField copyFrom(TagField source)
-    {
+     * If {@link #isCopyingFields()} is <code>true</code>, Creates a copy of
+     * <code>source</code>, if its not empty-<br>
+     * However, plain {@link TagField} objects can only be transformed into
+     * binary fields using their {@link TagField#getRawContent()} method.<br>
+     * 
+     * @param source
+     *            source field to copy.
+     * @return A copy, which is as close to the source as possible, or
+     *         <code>null</code> if the field is empty (empty byte[] or blank
+     *         string}.
+     */
+    private TagField copyFrom(final TagField source) {
         TagField result = null;
-        if (isCopyingFields())
-        {
-            // Get the ASF internal key, where it applies
-            String internalId = source.getId();
-            if (source instanceof TagTextField)
-            {
-                String content = ((TagTextField) source).getContent();
-                result = new AsfTagTextField(internalId, content);
+        if (isCopyingFields()) {
+            if (source instanceof AsfTagField) {
+                try {
+                    result = (TagField) ((AsfTagField) source).clone();
+                } catch (CloneNotSupportedException e) {
+                    result = new AsfTagField(((AsfTagField) source)
+                            .getDescriptor());
+                }
+            } else if (source instanceof TagTextField) {
+                final String content = ((TagTextField) source).getContent();
+                result = new AsfTagTextField(source.getId(), content);
+            } else {
+                throw new RuntimeException("Unknown Asf Tag Field class:" // NOPMD
+                        // by
+                        // Christian
+                        // Laireiter
+                        // on
+                        // 5/9/09
+                        // 5:44
+                        // PM
+                        + source.getClass());
             }
-            else if (source instanceof AsfTagCoverField)
-            {
-                result = new AsfTagCoverField(((AsfTagCoverField) source).getDescriptor());
-            }
-            else if (source instanceof AsfTagField)
-            {
-                result = new AsfTagField(((AsfTagField) source).getDescriptor());
-            }
-            else
-            {
-                throw new RuntimeException("Unknown Asf Tag Field class:"+source.getClass());
-            }
-        }
-        else
-        {
+        } else {
             result = source;
         }
         return result;
     }
 
-
     /**
      * {@inheritDoc}
      */
     @Override
-    public TagField createAlbumField(String content)
-    {
+    public AsfTagTextField createAlbumField(final String content) {
         return new AsfTagTextField(getAlbumId(), content);
     }
 
@@ -260,98 +304,104 @@ public final class AsfTag extends AbstractTag
      * {@inheritDoc}
      */
     @Override
-    public TagField createArtistField(String content)
-    {
+    public AsfTagTextField createArtistField(final String content) {
         return new AsfTagTextField(getArtistId(), content);
+    }
+
+    /**
+     * Creates an {@link AsfTagCoverField} from given artwork
+     * 
+     * @param artwork
+     *            artwork to create a ASF field from.
+     * 
+     * @return ASF field capable of storing artwork.
+     */
+    public AsfTagCoverField createArtworkField(final Artwork artwork) {
+        return new AsfTagCoverField(artwork.getBinaryData(), artwork
+                .getPictureType(), artwork.getDescription(), artwork
+                .getMimeType());
+    }
+
+    /**
+     * Create artwork field
+     * 
+     * @param data
+     *            raw image data
+     * @return creates a default ASF picture field with default
+     *         {@linkplain PictureTypes#DEFAULT_ID picture type}.
+     */
+    public AsfTagCoverField createArtworkField(final byte[] data) {
+        return new AsfTagCoverField(data, PictureTypes.DEFAULT_ID, null, null);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public TagField createCommentField(String content)
-    {
+    public AsfTagTextField createCommentField(final String content) {
         return new AsfTagTextField(getCommentId(), content);
     }
 
     /**
      * Creates a field for storing the copyright.<br>
-     *
-     * @param content Copyright value.
+     * 
+     * @param content
+     *            Copyright value.
      * @return {@link AsfTagTextField}
      */
-    public TagField createCopyrightField(String content)
-    {
-        return new AsfTagTextField(AsfFieldKey.COPYRIGHT.getFieldName(), content);
+    public AsfTagTextField createCopyrightField(final String content) {
+        return new AsfTagTextField(AsfFieldKey.COPYRIGHT, content);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public TagField createGenreField(String content)
-    {
+    public AsfTagTextField createGenreField(final String content) {
         return new AsfTagTextField(getGenreId(), content);
     }
 
     /**
      * Creates a field for storing the copyright.<br>
-     *
-     * @param content Rating value.
+     * 
+     * @param content
+     *            Rating value.
      * @return {@link AsfTagTextField}
      */
-    public TagField createRatingField(String content)
-    {
-        return new AsfTagTextField(AsfFieldKey.RATING.getFieldName(), content);
+    public AsfTagTextField createRatingField(final String content) {
+        return new AsfTagTextField(AsfFieldKey.RATING, content);
     }
 
     /**
-     * {@inheritDoc}
-     */
-    @Override
-    public TagField createTagField(TagFieldKey genericKey, String value) throws KeyNotFoundException, FieldDataInvalidException
-    {
-        if (value == null)
-        {
-            throw new IllegalArgumentException(ErrorMessage.GENERAL_INVALID_NULL_ARGUMENT.getMsg());
-        }
-        if (genericKey == null)
-        {
-            throw new KeyNotFoundException();
-        }
-        return createTagField(tagFieldToAsfField.get(genericKey), value);
-    }
-
-    /**
-     * Create Tag Field using asf key
+     * Create tag text field using ASF key
      * <p/>
-     * Uses the correct subclass for the key
-     *
+     * Uses the correct subclass for the key.<br>
+     * 
      * @param asfFieldKey
+     *            field key to create field for.
      * @param value
-     * @return
-     * @throws KeyNotFoundException
-     * @throws FieldDataInvalidException
+     *            string value for the created field.
+     * @return text field with given content.
      */
-    public TagField createTagField(AsfFieldKey asfFieldKey, String value) throws KeyNotFoundException
-    {
-        if (value == null)
-        {
-            throw new IllegalArgumentException(ErrorMessage.GENERAL_INVALID_NULL_ARGUMENT.getMsg());
+    public AsfTagTextField createTagField(final AsfFieldKey asfFieldKey,
+            final String value) {
+        if (value == null) {
+            throw new IllegalArgumentException(
+                    ErrorMessage.GENERAL_INVALID_NULL_ARGUMENT.getMsg());
         }
-        if (asfFieldKey == null)
-        {
-            throw new KeyNotFoundException("key not found for value:" + value);
+        if (asfFieldKey == null) {
+            throw new IllegalArgumentException(
+                    ErrorMessage.GENERAL_INVALID_NULL_ARGUMENT.getMsg());
         }
-
-        switch (asfFieldKey)
-        {
-            case COVER_ART:
-                throw new UnsupportedOperationException("Cover Art cannot be created using this method");
-
-            default:
-                System.out.println("Creating with value:"+value);
-                return new AsfTagTextField(asfFieldKey.getFieldName(), value);
+        switch (asfFieldKey) {
+        case COVER_ART:
+            throw new UnsupportedOperationException(
+                    "Cover Art cannot be created using this method");
+        case BANNER_IMAGE:
+            throw new UnsupportedOperationException(
+                    "Banner Image cannot be created using this method");
+        default:
+            return new AsfTagTextField(asfFieldKey.getFieldName(), value);
         }
     }
 
@@ -359,8 +409,30 @@ public final class AsfTag extends AbstractTag
      * {@inheritDoc}
      */
     @Override
-    public TagField createTitleField(String content)
-    {
+    public AsfTagTextField createTagField(final TagFieldKey genericKey,
+            final String value) throws KeyNotFoundException,
+            FieldDataInvalidException {
+        if (value == null) {
+            throw new IllegalArgumentException(
+                    ErrorMessage.GENERAL_INVALID_NULL_ARGUMENT.getMsg());
+        }
+        if (genericKey == null) {
+            throw new IllegalArgumentException(
+                    ErrorMessage.GENERAL_INVALID_NULL_ARGUMENT.getMsg());
+        }
+        final AsfFieldKey asfFieldKey = TAGFIELD2ASFFIELD.get(genericKey);
+        if (asfFieldKey == null) {
+            throw new KeyNotFoundException("No ASF fieldkey for "
+                    + genericKey.toString());
+        }
+        return createTagField(asfFieldKey, value);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public AsfTagTextField createTitleField(final String content) {
         return new AsfTagTextField(getTitleId(), content);
     }
 
@@ -368,8 +440,8 @@ public final class AsfTag extends AbstractTag
      * {@inheritDoc}
      */
     @Override
-    public TagField createTrackField(String content) throws FieldDataInvalidException
-    {
+    public AsfTagTextField createTrackField(final String content)
+            throws FieldDataInvalidException {
         return new AsfTagTextField(getTrackId(), content);
     }
 
@@ -377,90 +449,49 @@ public final class AsfTag extends AbstractTag
      * {@inheritDoc}
      */
     @Override
-    public TagField createYearField(String content)
-    {
+    public AsfTagTextField createYearField(final String content) {
         return new AsfTagTextField(getYearId(), content);
-    }
-
-
-    /**
-     * Create artwork field
-     *
-     * @param data raw image data
-     * @return
-     */
-    public TagField createArtworkField(byte[] data) throws FieldDataInvalidException
-    {
-        return new AsfTagCoverField(data, PictureTypes.DEFAULT_ID, null,null);
-    }
-
-    /**
-     * Create artwork field
-     *
-     * @return
-     */
-    public TagField createArtworkField(Artwork artwork) throws FieldDataInvalidException
-    {
-        if(artwork.getBinaryData().length>ContentDescriptor.MAXIMUM_DATA_LENGTH_ALLOWED)
-        {
-            if(TagOptionSingleton.getInstance().isTruncateTextWithoutErrors())
-            {
-                try
-                {
-                    ImageHandling.reduceQuality(artwork,ContentDescriptor.MAXIMUM_DATA_LENGTH_ALLOWED);                    
-                }
-                catch(IOException ioe)
-                {
-                    throw new FieldDataInvalidException(ioe.getMessage(),ioe);
-                }
-            }
-        }
-        return new AsfTagCoverField(artwork.getBinaryData(), artwork.getPictureType(), artwork.getDescription(),artwork.getMimeType());
     }
 
     /**
      * Removes all fields which are stored to the provided field key.
-     *
-     * @param fieldKey fields to remove.
+     * 
+     * @param fieldKey
+     *            fields to remove.
      */
-    public void deleteTagField(AsfFieldKey fieldKey)
-    {
+    public void deleteTagField(final AsfFieldKey fieldKey) {
         super.deleteField(fieldKey.getFieldName());
     }
 
-
     /**
      * {@inheritDoc}
      */
     @Override
-    public void deleteTagField(TagFieldKey tagFieldKey) throws KeyNotFoundException
-    {
-        if (tagFieldKey == null)
-        {
+    public void deleteTagField(final TagFieldKey tagFieldKey)
+            throws KeyNotFoundException {
+        if (tagFieldKey == null) {
             throw new KeyNotFoundException();
         }
-        super.deleteField(tagFieldToAsfField.get(tagFieldKey).getFieldName());
+        super.deleteField(TAGFIELD2ASFFIELD.get(tagFieldKey).getFieldName());
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public List<TagField> get(TagFieldKey tagFieldKey) throws KeyNotFoundException
-    {
-        if (tagFieldKey == null)
-        {
+    public List<TagField> get(final TagFieldKey tagFieldKey)
+            throws KeyNotFoundException {
+        if (tagFieldKey == null) {
             throw new KeyNotFoundException();
         }
-        return super.get(tagFieldToAsfField.get(tagFieldKey).getFieldName());
+        return super.get(TAGFIELD2ASFFIELD.get(tagFieldKey).getFieldName());
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    protected String getAlbumId()
-    {
+    protected String getAlbumId() {
         return AsfFieldKey.ALBUM.getFieldName();
     }
 
@@ -468,62 +499,59 @@ public final class AsfTag extends AbstractTag
      * {@inheritDoc}
      */
     @Override
-    protected String getArtistId()
-    {
+    protected String getArtistId() {
         return AsfFieldKey.AUTHOR.getFieldName();
     }
 
     /**
+     * @return
+     */
+    public List<Artwork> getArtworkList() {
+        final List<TagField> coverartList = get(TagFieldKey.COVER_ART);
+        final List<Artwork> artworkList = new ArrayList<Artwork>(coverartList
+                .size());
+
+        for (final TagField next : coverartList) {
+            final AsfTagCoverField coverArt = (AsfTagCoverField) next;
+            final Artwork artwork = new Artwork();
+            artwork.setBinaryData(coverArt.getRawImageData());
+            artwork.setMimeType(coverArt.getMimeType());
+            artwork.setDescription(coverArt.getDescription());
+            artwork.setPictureType(coverArt.getPictureType());
+            artworkList.add(artwork);
+        }
+        return artworkList;
+    }
+
+    /**
      * This method iterates through all stored fields.<br>
-     * This method can only be used if this class has been created with field conversion turned on.
-     *
-     * @param <F>
+     * This method can only be used if this class has been created with field
+     * conversion turned on.
+     * 
      * @return Iterator for iterating through ASF fields.
      */
-    public <F extends AsfTagField> Iterator<F> getAsfFields()
-    {
-        if (!isCopyingFields())
-        {
-            throw new IllegalStateException("Since the field conversion is not enabled, this method cannot be executed");
+    public Iterator<AsfTagField> getAsfFields() {
+        if (!isCopyingFields()) {
+            throw new IllegalStateException(
+                    "Since the field conversion is not enabled, this method cannot be executed");
         }
-        final Iterator<TagField> it = getFields();
-        return new Iterator<F>()
-        {
-
-            public boolean hasNext()
-            {
-                return it.hasNext();
-            }
-
-            @SuppressWarnings("unchecked")
-            public F next()
-            {
-                return (F) it.next();
-            }
-
-            public void remove()
-            {
-                it.remove();
-            }
-        };
+        return new AsfFieldIterator(getFields());
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    protected String getCommentId()
-    {
+    protected String getCommentId() {
         return AsfFieldKey.DESCRIPTION.getFieldName();
     }
 
     /**
      * Returns a list of stored copyrights.
-     *
+     * 
      * @return list of stored copyrights.
      */
-    public List<TagField> getCopyright()
-    {
+    public List<TagField> getCopyright() {
         return get(AsfFieldKey.COPYRIGHT.getFieldName());
     }
 
@@ -531,41 +559,42 @@ public final class AsfTag extends AbstractTag
      * {@inheritDoc}
      */
     @Override
-    public String getFirst(TagFieldKey genericKey) throws KeyNotFoundException
-    {
-        if (genericKey == null)
-        {
+    public String getFirst(final TagFieldKey genericKey)
+            throws KeyNotFoundException {
+        if (genericKey == null) {
             throw new KeyNotFoundException();
         }
-        return super.getFirst(tagFieldToAsfField.get(genericKey).getFieldName());
-    }
-
-    public AsfTagField getFirstField(TagFieldKey genericKey) throws KeyNotFoundException
-    {
-        if (genericKey == null)
-        {
-            throw new KeyNotFoundException();
-        }
-        return (AsfTagField) super.getFirstField(tagFieldToAsfField.get(genericKey).getFieldName());
+        return super.getFirst(TAGFIELD2ASFFIELD.get(genericKey).getFieldName());
     }
 
     /**
      * Returns the Copyright.
-     *
+     * 
      * @return the Copyright.
      */
-    public String getFirstCopyright()
-    {
+    public String getFirstCopyright() {
         return getFirst(AsfFieldKey.COPYRIGHT.getFieldName());
     }
 
     /**
+     * {@inheritDoc}
+     */
+    @Override
+    public AsfTagField getFirstField(final TagFieldKey genericKey)
+            throws KeyNotFoundException {
+        if (genericKey == null) {
+            throw new KeyNotFoundException();
+        }
+        return (AsfTagField) super.getFirstField(TAGFIELD2ASFFIELD.get(
+                genericKey).getFieldName());
+    }
+
+    /**
      * Returns the Rating.
-     *
+     * 
      * @return the Rating.
      */
-    public String getFirstRating()
-    {
+    public String getFirstRating() {
         return getFirst(AsfFieldKey.RATING.getFieldName());
     }
 
@@ -573,18 +602,16 @@ public final class AsfTag extends AbstractTag
      * {@inheritDoc}
      */
     @Override
-    protected String getGenreId()
-    {
+    protected String getGenreId() {
         return AsfFieldKey.GENRE.getFieldName();
     }
 
     /**
      * Returns a list of stored ratings.
-     *
+     * 
      * @return list of stored ratings.
      */
-    public List<TagField> getRating()
-    {
+    public List<TagField> getRating() {
         return get(AsfFieldKey.RATING.getFieldName());
     }
 
@@ -592,8 +619,7 @@ public final class AsfTag extends AbstractTag
      * {@inheritDoc}
      */
     @Override
-    protected String getTitleId()
-    {
+    protected String getTitleId() {
         return AsfFieldKey.TITLE.getFieldName();
     }
 
@@ -601,8 +627,7 @@ public final class AsfTag extends AbstractTag
      * {@inheritDoc}
      */
     @Override
-    protected String getTrackId()
-    {
+    protected String getTrackId() {
         return AsfFieldKey.TRACK.getFieldName();
     }
 
@@ -610,8 +635,7 @@ public final class AsfTag extends AbstractTag
      * {@inheritDoc}
      */
     @Override
-    protected String getYearId()
-    {
+    protected String getYearId() {
         return AsfFieldKey.YEAR.getFieldName();
     }
 
@@ -619,46 +643,46 @@ public final class AsfTag extends AbstractTag
      * {@inheritDoc}
      */
     @Override
-    protected boolean isAllowedEncoding(String enc)
-    {
+    protected boolean isAllowedEncoding(final String enc) {
         return AsfHeader.ASF_CHARSET.name().equals(enc);
     }
 
     /**
-     * If <code>true</code>, the {@link #copyFrom(TagField)} method creates a new {@link AsfTagField} instance and
-     * copies the content from the source.<br>
-     * This method is utilized by {@link #add(TagField)} and {@link #set(TagField)}.<br>
-     * So if <code>true</code> it is ensured that the {@link AsfTag} instance has its own copies of fields, which cannot
-     * be modified after assignment (which could pass some checks), and it just stores {@link AsfTagField} objects.<br>
-     * Only then {@link #getAsfFields()} can work. otherwise {@link IllegalStateException} is thrown.
-     *
+     * If <code>true</code>, the {@link #copyFrom(TagField)} method creates a
+     * new {@link AsfTagField} instance and copies the content from the source.<br>
+     * This method is utilized by {@link #add(TagField)} and
+     * {@link #set(TagField)}.<br>
+     * So if <code>true</code> it is ensured that the {@link AsfTag} instance
+     * has its own copies of fields, which cannot be modified after assignment
+     * (which could pass some checks), and it just stores {@link AsfTagField}
+     * objects.<br>
+     * Only then {@link #getAsfFields()} can work. otherwise
+     * {@link IllegalStateException} is thrown.
+     * 
      * @return state of field conversion.
      */
-    public boolean isCopyingFields()
-    {
+    public boolean isCopyingFields() {
         return this.copyFields;
     }
 
     /**
      * Check field is valid and can be added to this tag
+     * 
      * @param field
-     * @return
+     *            field to add
+     * @return <code>true</code> if field may be added.
      */
-    //TODO introduce this concept to all formats
-    private boolean isValidField(TagField field)
-    {
-        if (field == null)
-        {
+    // TODO introduce this concept to all formats
+    private boolean isValidField(final TagField field) {
+        if (field == null) {
             return false;
         }
 
-        if (!(field instanceof AsfTagField))
-        {
+        if (!(field instanceof AsfTagField)) {
             return false;
         }
 
-        if (field.isEmpty())
-        {
+        if (field.isEmpty()) {
             return false;
         }
         return true;
@@ -668,77 +692,31 @@ public final class AsfTag extends AbstractTag
      * {@inheritDoc}
      */
     @Override
-    //TODO introduce copy idea to all formats
-    public void add(TagField field)
-    {
-        if (isValidField(field))
-        {
-            //Copy only occurs if flag set
-            field = copyFrom(field);
-            if (AsfFieldKey.isMultiValued(field.getId()))
-            {
-                super.add(field);
-            }
-            else
-            {
-                super.set(field);
-            }
-        }
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    //TODO introduce copy idea to all formats
-    public void set(TagField field)
-    {
-        if (isValidField(field))
-        {
-            //Copy only occurs if flag set
-            field = copyFrom(field);
-            super.set(field);
+    // TODO introduce copy idea to all formats
+    public void set(final TagField field) {
+        if (isValidField(field)) {
+            // Copy only occurs if flag set
+            super.set(copyFrom(field));
         }
     }
 
     /**
      * Sets the copyright.<br>
-     *
-     * @param Copyright the copyright to set.
+     * 
+     * @param Copyright
+     *            the copyright to set.
      */
-    public void setCopyright(String Copyright)
-    {
+    public void setCopyright(final String Copyright) {
         set(createCopyrightField(Copyright));
     }
 
     /**
      * Sets the Rating.<br>
-     *
-     * @param rating the rating to set.
+     * 
+     * @param rating
+     *            the rating to set.
      */
-    public void setRating(String rating)
-    {
+    public void setRating(final String rating) {
         set(createRatingField(rating));
-    }
-
-    /**
-     * @return
-     */
-    public List<Artwork> getArtworkList()
-    {
-        List<TagField> coverartList = get(TagFieldKey.COVER_ART);
-        List<Artwork> artworkList = new ArrayList<Artwork>(coverartList.size());
-
-        for (TagField next : coverartList)
-        {
-            AsfTagCoverField coverArt = (AsfTagCoverField) next;
-            Artwork artwork = new Artwork();
-            artwork.setBinaryData(coverArt.getRawImageData());
-            artwork.setMimeType(coverArt.getMimeType());
-            artwork.setDescription(coverArt.getDescription());
-            artwork.setPictureType(coverArt.getPictureType());
-            artworkList.add(artwork);
-        }
-        return artworkList;
     }
 }

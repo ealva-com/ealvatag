@@ -6,10 +6,10 @@ import java.io.RandomAccessFile;
 
 /**
  * Wraps a {@link RandomAccessFile} into an {@link InputStream}.<br>
+ * 
  * @author Christian Laireiter
  */
-public final class RandomAccessFileInputstream extends InputStream
-{
+public final class RandomAccessFileInputstream extends InputStream {
 
     /**
      * The file access to read from.<br>
@@ -17,16 +17,16 @@ public final class RandomAccessFileInputstream extends InputStream
     private final RandomAccessFile source;
 
     /**
-     * Creates an instance that will provide {@link InputStream} functionality on the given
-     * {@link RandomAccessFile} by delegating calls.<br>
+     * Creates an instance that will provide {@link InputStream} functionality
+     * on the given {@link RandomAccessFile} by delegating calls.<br>
      * 
-     * @param file The file to read.
+     * @param file
+     *            The file to read.
      */
-    public RandomAccessFileInputstream(final RandomAccessFile file)
-    {
-        if (file == null)
-        {
-            throw new NullPointerException();
+    public RandomAccessFileInputstream(final RandomAccessFile file) {
+        super();
+        if (file == null) {
+            throw new IllegalArgumentException("null");
         }
         this.source = file;
     }
@@ -35,8 +35,7 @@ public final class RandomAccessFileInputstream extends InputStream
      * {@inheritDoc}
      */
     @Override
-    public int read() throws IOException
-    {
+    public int read() throws IOException {
         return this.source.read();
     }
 
@@ -44,27 +43,25 @@ public final class RandomAccessFileInputstream extends InputStream
      * {@inheritDoc}
      */
     @Override
-    public int read(byte[] b, int off, int len) throws IOException
-    {
-        return this.source.read(b, off, len);
+    public int read(final byte[] buffer, final int off, final int len)
+            throws IOException {
+        return this.source.read(buffer, off, len);
     }
 
-   /**
+    /**
      * {@inheritDoc}
      */
     @Override
-    public long skip(long n) throws IOException
-    {
-        if (n <= 0)
-        {
-            return 0;
+    public long skip(final long amount) throws IOException {
+        if (amount < 0) {
+            throw new IllegalArgumentException("invalid negative value");
         }
-        while (n > Integer.MAX_VALUE)
-        {
+        long left = amount;
+        while (left > Integer.MAX_VALUE) {
             this.source.skipBytes(Integer.MAX_VALUE);
-            n -= Integer.MAX_VALUE;
+            left -= Integer.MAX_VALUE;
         }
-        return this.source.skipBytes((int) n);
+        return this.source.skipBytes((int) left);
     }
 
 }

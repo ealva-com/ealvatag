@@ -29,53 +29,53 @@ import java.math.BigInteger;
 
 /**
  * This class reads the chunk containing the stream bitrate properties.<br>
- *
+ * 
  * @author Christian Laireiter
  */
-public class StreamBitratePropertiesReader implements ChunkReader
-{
+public class StreamBitratePropertiesReader implements ChunkReader {
+
+    /**
+     * The GUID this reader {@linkplain #getApplyingIds() applies to}
+     */
+    private final static GUID[] APPLYING = { GUID.GUID_STREAM_BITRATE_PROPERTIES };
 
     /**
      * Should not be used for now.
      */
-    protected StreamBitratePropertiesReader()
-    {
+    protected StreamBitratePropertiesReader() {
         // NOTHING toDo
     }
 
     /**
      * {@inheritDoc}
      */
-    public boolean canFail()
-    {
+    public boolean canFail() {
         return false;
     }
 
     /**
      * {@inheritDoc}
      */
-    public GUID getApplyingId()
-    {
-        return GUID.GUID_STREAM_BITRATE_PROPERTIES;
+    public GUID[] getApplyingIds() {
+        return APPLYING.clone();
     }
 
     /**
      * {@inheritDoc}
      */
-    public Chunk read(final GUID guid, final InputStream stream, final long chunkStart) throws IOException
-    {
-        StreamBitratePropertiesChunk result = null;
-        BigInteger chunkLen = Utils.readBig64(stream);
-        result = new StreamBitratePropertiesChunk(chunkLen);
+    public Chunk read(final GUID guid, final InputStream stream,
+            final long chunkStart) throws IOException {
+        final BigInteger chunkLen = Utils.readBig64(stream);
+        final StreamBitratePropertiesChunk result = new StreamBitratePropertiesChunk(
+                chunkLen);
 
         /*
-            * Read the amount of bitrate records
-            */
-        long recordCount = Utils.readUINT16(stream);
-        for (int i = 0; i < recordCount; i++)
-        {
-            int flags = Utils.readUINT16(stream);
-            long avgBitrate = Utils.readUINT32(stream);
+         * Read the amount of bitrate records
+         */
+        final long recordCount = Utils.readUINT16(stream);
+        for (int i = 0; i < recordCount; i++) {
+            final int flags = Utils.readUINT16(stream);
+            final long avgBitrate = Utils.readUINT32(stream);
             result.addBitrateRecord(flags & 0x00FF, avgBitrate);
         }
 

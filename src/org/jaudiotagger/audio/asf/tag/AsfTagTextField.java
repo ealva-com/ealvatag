@@ -1,83 +1,94 @@
 package org.jaudiotagger.audio.asf.tag;
 
 import org.jaudiotagger.audio.asf.data.AsfHeader;
-import org.jaudiotagger.audio.asf.data.ContentDescriptor;
+import org.jaudiotagger.audio.asf.data.MetadataDescriptor;
 import org.jaudiotagger.audio.asf.util.Utils;
 import org.jaudiotagger.tag.TagTextField;
 
 /**
- * Represents a tag text field for ASF fields.<br> 
+ * Represents a tag text field for ASF fields.<br>
  * 
  * @author Christian Laireiter
  */
-public class AsfTagTextField extends AsfTagField implements TagTextField
-{
+public class AsfTagTextField extends AsfTagField implements TagTextField {
+
+    /**
+     * Creates a tag text field and assigns the string value.
+     * 
+     * @param field
+     *            ASF field to represent.
+     * @param value
+     *            the value to assign.
+     */
+    public AsfTagTextField(final AsfFieldKey field, final String value) {
+        super(field);
+        toWrap.setString(value);
+    }
 
     /**
      * Creates an instance.
      * 
-     * @param source The content descriptor, whose content is published.<br> Must not be of type {@link ContentDescriptor#TYPE_BINARY}.
+     * @param source
+     *            The metadata descriptor, whose content is published.<br>
+     *            Must not be of type {@link MetadataDescriptor#TYPE_BINARY}.
      */
-    public AsfTagTextField(ContentDescriptor source)
-    {
+    public AsfTagTextField(final MetadataDescriptor source) {
         super(source);
-        if (source.getType() == ContentDescriptor.TYPE_BINARY)
-        {
-            throw new IllegalArgumentException("Cannot interpret binary as string.");
+        if (source.getType() == MetadataDescriptor.TYPE_BINARY) {
+            throw new IllegalArgumentException(
+                    "Cannot interpret binary as string.");
         }
     }
 
     /**
      * Creates a tag text field and assigns the string value.
-     * @param fieldKey The fields identifier.
-     * @param value the value to assign.
+     * 
+     * @param fieldKey
+     *            The fields identifier.
+     * @param value
+     *            the value to assign.
      */
-    public AsfTagTextField(String fieldKey, String value)
-    {
-        super(new ContentDescriptor(fieldKey, ContentDescriptor.TYPE_STRING));
-        setContent(value);
+    public AsfTagTextField(final String fieldKey, final String value) {
+        super(fieldKey);
+        toWrap.setString(value);
     }
 
     /**
      * {@inheritDoc}
      */
-    public String getContent()
-    {
+    public String getContent() {
         return getDescriptor().getString();
     }
 
     /**
      * {@inheritDoc}
      */
-    public String getEncoding()
-    {
+    public String getEncoding() {
         return AsfHeader.ASF_CHARSET.name();
     }
 
     /**
-     * {@inheritDoc}
+     * @return true if blank or only contains whitespace
      */
-    public void setContent(String content)
-    {
-        getDescriptor().setStringValue(content);
+    @Override
+    public boolean isEmpty() {
+        return Utils.isBlank(getContent());
     }
 
     /**
      * {@inheritDoc}
      */
-    public void setEncoding(String encoding)
-    {
-        if (!AsfHeader.ASF_CHARSET.name().equals(encoding))
-        {
-            throw new IllegalArgumentException("Only UTF-16LE is possible with ASF.");
-        }
+    public void setContent(final String content) {
+        getDescriptor().setString(content);
     }
 
-     /**
-     * @return true if blank or only contains whitespoace
+    /**
+     * {@inheritDoc}
      */
-    public boolean isEmpty()
-    {
-        return Utils.isBlank(getContent());
+    public void setEncoding(final String encoding) {
+        if (!AsfHeader.ASF_CHARSET.name().equals(encoding)) {
+            throw new IllegalArgumentException(
+                    "Only UTF-16LE is possible with ASF.");
+        }
     }
 }

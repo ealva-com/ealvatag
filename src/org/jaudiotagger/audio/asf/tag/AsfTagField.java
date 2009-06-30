@@ -18,123 +18,140 @@
  */
 package org.jaudiotagger.audio.asf.tag;
 
-import org.jaudiotagger.audio.asf.data.ContentDescriptor;
+import org.jaudiotagger.audio.asf.data.MetadataDescriptor;
 import org.jaudiotagger.tag.TagField;
-
-import java.io.UnsupportedEncodingException;
 
 /**
  * This class encapsulates a
- * {@link org.jaudiotagger.audio.asf.data.ContentDescriptor}and provides access
+ * {@link org.jaudiotagger.audio.asf.data.MetadataDescriptor}and provides access
  * to it. <br>
- * The content descriptor used for construction is copied.
- *
+ * The metadata descriptor used for construction is copied.
+ * 
  * @author Christian Laireiter (liree)
  */
-public class AsfTagField implements TagField
-{
+public class AsfTagField implements TagField, Cloneable {
 
     /**
      * This descriptor is wrapped.
      */
-    protected ContentDescriptor toWrap;
+    protected MetadataDescriptor toWrap;
+
+    /**
+     * Creates a tag field.
+     * 
+     * @param field
+     *            the ASF field that should be represented.
+     */
+    public AsfTagField(final AsfFieldKey field) {
+        assert field != null;
+        this.toWrap = new MetadataDescriptor(field.getHighestContainer(), field
+                .getFieldName(), MetadataDescriptor.TYPE_STRING);
+    }
 
     /**
      * Creates an instance.
-     *
-     * @param source The descriptor which should be represented as a
-     *               {@link TagField}.
+     * 
+     * @param source
+     *            The descriptor which should be represented as a
+     *            {@link TagField}.
      */
-    public AsfTagField(ContentDescriptor source)
-    {
+    public AsfTagField(final MetadataDescriptor source) {
+        assert source != null;
+        // XXX Copy ? maybe not really.
         this.toWrap = source.createCopy();
     }
 
     /**
      * Creates a tag field.
-     * @param fieldKey The field identifier to use. 
+     * 
+     * @param fieldKey
+     *            The field identifier to use.
      */
-    public AsfTagField(String fieldKey)
-    {
-        this.toWrap = new ContentDescriptor(fieldKey, ContentDescriptor.TYPE_STRING);
+    public AsfTagField(final String fieldKey) {
+        assert fieldKey != null;
+        this.toWrap = new MetadataDescriptor(AsfFieldKey.getAsfFieldKey(
+                fieldKey).getHighestContainer(), fieldKey,
+                MetadataDescriptor.TYPE_STRING);
     }
 
     /**
      * {@inheritDoc}
      */
-    public void copyContent(TagField field)
-    {
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void copyContent(final TagField field) {
         throw new UnsupportedOperationException("Not implemented yet.");
     }
 
     /**
-     * Returns the wrapped content descriptor (which actually stores the values).
-     * @return the wrapped content descriptor 
+     * Returns the wrapped metadata descriptor (which actually stores the
+     * values).
+     * 
+     * @return the wrapped metadata descriptor
      */
-    public ContentDescriptor getDescriptor()
-    {
+    public MetadataDescriptor getDescriptor() {
         return this.toWrap;
     }
 
     /**
      * {@inheritDoc}
      */
-    public String getId()
-    {
-        return toWrap.getName();
+    public String getId() {
+        return this.toWrap.getName();
     }
 
     /**
      * {@inheritDoc}
      */
-    public byte[] getRawContent()
-    {
-        return toWrap.getRawData();
+    public byte[] getRawContent() {
+        return this.toWrap.getRawData();
     }
 
     /**
      * {@inheritDoc}
      */
-    public boolean isBinary()
-    {
-        return toWrap.getType() == ContentDescriptor.TYPE_BINARY;
+    public boolean isBinary() {
+        return this.toWrap.getType() == MetadataDescriptor.TYPE_BINARY;
     }
 
     /**
      * {@inheritDoc}
      */
-    public void isBinary(boolean b)
-    {
-        if (!b && isBinary())
-        {
+    public void isBinary(final boolean value) {
+        if (!value && isBinary()) {
             throw new UnsupportedOperationException("No conversion supported.");
         }
-        toWrap.setBinaryValue(toWrap.getRawData());
+        this.toWrap.setBinaryValue(this.toWrap.getRawData());
     }
 
     /**
      * {@inheritDoc}
      */
-    public boolean isCommon()
-    {
-        // HashSet is safe against null comparison 
-        return AsfTag.COMMON_FIELDS.contains(AsfFieldKey.getAsfFieldKey(getId()));
+    public boolean isCommon() {
+        // HashSet is safe against null comparison
+        return AsfTag.COMMON_FIELDS.contains(AsfFieldKey
+                .getAsfFieldKey(getId()));
     }
 
     /**
      * {@inheritDoc}
      */
-    public boolean isEmpty()
-    {
-        return toWrap.isEmpty();
+    public boolean isEmpty() {
+        return this.toWrap.isEmpty();
     }
 
     /**
      * {@inheritDoc}
      */
-    public String toString()
-    {
-        return toWrap.getString();
+    @Override
+    public String toString() {
+        return this.toWrap.getString();
     }
 
 }

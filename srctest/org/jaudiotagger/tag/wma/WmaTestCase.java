@@ -40,6 +40,17 @@ public abstract class WmaTestCase extends TestCase
     {
         this.sourceTestFile = sourceFile;
     }
+    
+    /**
+     * Creates an instance, that would perform tests on the given <code>sourceFile</code>.
+     * @param sourceFile The filename of the file to perform tests on. ({@linkplain AbstractTestCase#copyAudioToTmp(String) copy} will be created)
+     * @param name name of the test.
+     */
+    public WmaTestCase(final String sourceFile, final String name)
+    {
+        super(name);
+        this.sourceTestFile = sourceFile;
+    }
 
     /**
      * Returns the audio file to perform the tests on.<br>

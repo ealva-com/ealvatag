@@ -29,84 +29,50 @@ import java.math.BigInteger;
 
 /**
  * Reads and interprets the data of a ASF chunk containing title, author... <br>
- *
+ * 
  * @author Christian Laireiter
  * @see org.jaudiotagger.audio.asf.data.ContentDescription
  */
-public class ContentDescriptionReader implements ChunkReader
-{
+public class ContentDescriptionReader implements ChunkReader {
+
     /**
-     * This method reads a UTF-16 encoded String. <br>
-     * For the use this method the number of bytes used by current string must
-     * be known. <br>
-     * The ASF specification recommends that those strings end with a terminating zero.
-     * However it also says that it is not always the case.
-     *
-     * @param stream    Input source
-     * @param strLen Number of bytes the String may take.
-     * @return read String.
-     * @throws IOException read errors.
+     * The GUID this reader {@linkplain #getApplyingIds() applies to}
      */
-    public static String readFixedSizeUTF16Str(InputStream stream, int strLen) throws IOException
-    {
-        byte[] strBytes = new byte[strLen];
-        int read = stream.read(strBytes);
-        if (read == strBytes.length)
-        {
-            if (strBytes.length >= 2)
-            {
-                /*
-                 * Zero termination is recommended but optional.
-                 * So check and if, remove.
-                 */
-                if (strBytes[strBytes.length - 1] == 0 && strBytes[strBytes.length - 2] == 0)
-                {
-                    byte[] copy = new byte[strBytes.length - 2];
-                    System.arraycopy(strBytes, 0, copy, 0, strBytes.length - 2);
-                    strBytes = copy;
-                }
-            }
-            return new String(strBytes, "UTF-16LE");
-        }
-        throw new IllegalStateException("Couldn't read the necessary amount of bytes.");
-    }
+    private final static GUID[] APPLYING = { GUID.GUID_CONTENTDESCRIPTION };
 
     /**
      * Should not be used for now.
      */
-    protected ContentDescriptionReader()
-    {
+    protected ContentDescriptionReader() {
         // NOTHING toDo
     }
-
 
     /**
      * {@inheritDoc}
      */
-    public boolean canFail()
-    {
+    public boolean canFail() {
         return false;
     }
 
     /**
      * {@inheritDoc}
      */
-    public GUID getApplyingId()
-    {
-        return GUID.GUID_CONTENTDESCRIPTION;
+    public GUID[] getApplyingIds() {
+        return APPLYING.clone();
     }
 
     /**
      * Returns the next 5 UINT16 values as an array.<br>
-     * @param stream stream to read from
+     * 
+     * @param stream
+     *            stream to read from
      * @return 5 int values read from stream.
-     * @throws IOException on I/O Errors.
+     * @throws IOException
+     *             on I/O Errors.
      */
-    private int[] getStringSizes(InputStream stream) throws IOException
-    {
-        int[] result = new int[5];
-        for (int i = 0; i < result.length; i++)
-        {
+    private int[] getStringSizes(final InputStream stream) throws IOException {
+        final int[] result = new int[5];
+        for (int i = 0; i < result.length; i++) {
             result[i] = Utils.readUINT16(stream);
         }
         return result;
@@ -115,48 +81,43 @@ public class ContentDescriptionReader implements ChunkReader
     /**
      * {@inheritDoc}
      */
-    public Chunk read(final GUID guid, final InputStream stream, final long chunkStart) throws IOException
-    {
+    public Chunk read(final GUID guid, final InputStream stream,
+            final long chunkStart) throws IOException {
         final BigInteger chunkSize = Utils.readBig64(stream);
         /*
-         * Now comes 16-Bit values representing the length of the Strings
-         * which follows.
+         * Now comes 16-Bit values representing the length of the Strings which
+         * follows.
          */
         final int[] stringSizes = getStringSizes(stream);
 
         /*
          * Now we know the String length of each occuring String.
          */
-        String[] strings = new String[stringSizes.length];
-        for (int i = 0; i < strings.length; i++)
-        {
-            if (stringSizes[i] > 0)
-            {
-                strings[i] = readFixedSizeUTF16Str(stream, stringSizes[i]);
+        final String[] strings = new String[stringSizes.length];
+        for (int i = 0; i < strings.length; i++) {
+            if (stringSizes[i] > 0) {
+                strings[i] = Utils
+                        .readFixedSizeUTF16Str(stream, stringSizes[i]);
             }
         }
         /*
          * Now create the result
          */
-        ContentDescription result = new ContentDescription(chunkStart, chunkSize);
-        if (stringSizes[0] > 0)
-        {
+        final ContentDescription result = new ContentDescription(chunkStart,
+                chunkSize);
+        if (stringSizes[0] > 0) {
             result.setTitle(strings[0]);
         }
-        if (stringSizes[1] > 0)
-        {
+        if (stringSizes[1] > 0) {
             result.setAuthor(strings[1]);
         }
-        if (stringSizes[2] > 0)
-        {
-            result.setCopyRight(strings[2]);
+        if (stringSizes[2] > 0) {
+            result.setCopyright(strings[2]);
         }
-        if (stringSizes[3] > 0)
-        {
+        if (stringSizes[3] > 0) {
             result.setComment(strings[3]);
         }
-        if (stringSizes[4] > 0)
-        {
+        if (stringSizes[4] > 0) {
             result.setRating(strings[4]);
         }
         return result;

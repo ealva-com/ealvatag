@@ -1,24 +1,13 @@
 package org.jaudiotagger.tag.wma;
 
-import org.jaudiotagger.audio.asf.io.AsfStreamer;
-
-import org.jaudiotagger.audio.asf.io.AsfExtHeaderModifier;
-
-import org.jaudiotagger.audio.asf.io.ChunkModifier;
-
-import org.jaudiotagger.audio.asf.data.ExtendedContentDescription;
-
-import org.jaudiotagger.audio.asf.io.WriteableChunkModifer;
-import org.jaudiotagger.audio.asf.util.TagConverter;
-
-import org.jaudiotagger.audio.asf.data.AsfHeader;
-
-import org.jaudiotagger.audio.asf.io.AsfHeaderReader;
-
 import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.AudioFileIO;
+import org.jaudiotagger.audio.asf.data.AsfHeader;
+import org.jaudiotagger.audio.asf.data.MetadataContainer;
+import org.jaudiotagger.audio.asf.io.*;
 import org.jaudiotagger.audio.asf.tag.AsfFieldKey;
 import org.jaudiotagger.audio.asf.tag.AsfTag;
+import org.jaudiotagger.audio.asf.util.TagConverter;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -73,11 +62,11 @@ public class WmaDescriptionLocationTest extends WmaTestCase
         AudioFile read = AudioFileIO.read(testFile);
         // delete all managed data 
         AudioFileIO.delete(read);
+        // Create chunks
+        MetadataContainer[] distributeMetadata = TagConverter.distributeMetadata(this.testTag);
         // create creator for the content description object (chunk)
-        WriteableChunkModifer cdCreator = new WriteableChunkModifer(TagConverter.createContentDescription(this.testTag));
-        ExtendedContentDescription ecd = new ExtendedContentDescription();
-        TagConverter.assignCommonTagValues(testTag, ecd);
-        TagConverter.assignOptionalTagValues(testTag, ecd);
+        WriteableChunkModifer cdCreator = new WriteableChunkModifer(distributeMetadata[0]);
+        MetadataContainer ecd = distributeMetadata[2];
         // create creator for the extended content description object (chunk) 
         WriteableChunkModifer ecdCreator = new WriteableChunkModifer(ecd);
         // create the modifier lists
@@ -135,7 +124,7 @@ public class WmaDescriptionLocationTest extends WmaTestCase
     }
 
     /**
-     * Tests the locations of the content descriptor object and the extended content descriptor object, upon
+     * Tests the locations of the metadata descriptor object and the extended metadata descriptor object, upon
      * some deep ASF manipulations.
      * 
      * @throws Exception On I/O Errors

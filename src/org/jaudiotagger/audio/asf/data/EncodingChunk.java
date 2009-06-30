@@ -18,12 +18,12 @@
  */
 package org.jaudiotagger.audio.asf.data;
 
+import org.jaudiotagger.audio.asf.util.Utils;
+
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
-
-import org.jaudiotagger.audio.asf.util.Utils;
+import java.util.List;
 
 /**
  * This class was intended to store the data of a chunk which contained the
@@ -31,59 +31,58 @@ import org.jaudiotagger.audio.asf.util.Utils;
  * Since the needed parameters were found in other chunks the implementation of
  * this class was paused. <br>
  * TODO complete analysis.
- *
+ * 
  * @author Christian Laireiter
  */
-public class EncodingChunk extends Chunk
-{
+public class EncodingChunk extends Chunk {
 
     /**
      * The read strings.
      */
-    private final ArrayList<String> strings;
+    private final List<String> strings;
 
     /**
      * Creates an instance.
-     *
-     * @param chunkLen Length of current chunk.
+     * 
+     * @param chunkLen
+     *            Length of current chunk.
      */
-    public EncodingChunk(BigInteger chunkLen)
-    {
+    public EncodingChunk(final BigInteger chunkLen) {
         super(GUID.GUID_ENCODING, chunkLen);
         this.strings = new ArrayList<String>();
     }
 
     /**
      * This method appends a String.
-     *
-     * @param toAdd String to add.
+     * 
+     * @param toAdd
+     *            String to add.
      */
-    public void addString(String toAdd)
-    {
-        strings.add(toAdd);
+    public void addString(final String toAdd) {
+        this.strings.add(toAdd);
     }
 
     /**
-     * This method returns a collection of all {@linkplain String Strings} which were added
-     * due {@link #addString(String)}.
-     *
+     * This method returns a collection of all {@linkplain String Strings} which
+     * were added due {@link #addString(String)}.
+     * 
      * @return Inserted Strings.
      */
-    public Collection<String> getStrings()
-    {
-        return new ArrayList<String>(strings);
+    public Collection<String> getStrings() {
+        return new ArrayList<String>(this.strings);
     }
 
     /**
      * {@inheritDoc}
      */
-    public String prettyPrint(final String prefix)
-    {
-        StringBuffer result = new StringBuffer(super.prettyPrint(prefix));
-        Iterator<String> iterator = this.strings.iterator();
-        for (String string : this.strings)
-        {
-            result.append(prefix + "  | : " + string + Utils.LINE_SEPARATOR);
+    @Override
+    public String prettyPrint(final String prefix) {
+        final StringBuilder result = new StringBuilder(super
+                .prettyPrint(prefix));
+        this.strings.iterator();
+        for (final String string : this.strings) {
+            result.append(prefix).append("  | : ").append(string).append(
+                    Utils.LINE_SEPARATOR);
         }
         return result.toString();
     }

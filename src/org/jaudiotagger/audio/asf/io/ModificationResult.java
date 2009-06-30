@@ -11,8 +11,7 @@ import java.util.Set;
  * 
  * @author Christian Laireiter
  */
-final class ModificationResult
-{
+final class ModificationResult {
 
     /**
      * Stores the difference of bytes.<br>
@@ -25,24 +24,27 @@ final class ModificationResult
      * &quot;0&quot; if the chunk was just modified.<br>
      * &quot;1&quot; if a chunk has been created.<br>
      */
-    private final int chunkCountDifference;
+    private final int chunkDifference;
 
     /**
      * Stores all GUIDs, which have been read.<br>
      */
-    private final HashSet<GUID> occuredGUIDs = new HashSet<GUID>();
+    private final Set<GUID> occuredGUIDs = new HashSet<GUID>();
 
     /**
      * Creates an instance.<br>
      * 
-     * @param chunkCountDiff amount of chunks appeared, disappeared
-     * @param bytesDiffer amount of bytes added or removed.
-     * @param occurred all GUIDs which have been occurred, during processing
+     * @param chunkCountDiff
+     *            amount of chunks appeared, disappeared
+     * @param bytesDiffer
+     *            amount of bytes added or removed.
+     * @param occurred
+     *            all GUIDs which have been occurred, during processing
      */
-    public ModificationResult(int chunkCountDiff, long bytesDiffer, GUID... occurred)
-    {
+    public ModificationResult(final int chunkCountDiff, final long bytesDiffer,
+            final GUID... occurred) {
         assert occurred != null && occurred.length > 0;
-        this.chunkCountDifference = chunkCountDiff;
+        this.chunkDifference = chunkCountDiff;
         this.byteDifference = bytesDiffer;
         this.occuredGUIDs.addAll(Arrays.asList(occurred));
     }
@@ -50,44 +52,45 @@ final class ModificationResult
     /**
      * Creates an instance.<br>
      * 
-     * @param chunkCountDiff amount of chunks appeared, disappeared
-     * @param bytesDiffer amount of bytes added or removed.
-     * @param occurred all GUIDs which have been occurred, during processing
+     * @param chunkCountDiff
+     *            amount of chunks appeared, disappeared
+     * @param bytesDiffer
+     *            amount of bytes added or removed.
+     * @param occurred
+     *            all GUIDs which have been occurred, during processing
      */
-    public ModificationResult(int chunkCountDiff, long bytesDiffer, Set<GUID> occurred)
-    {
-        this.chunkCountDifference = chunkCountDiff;
+    public ModificationResult(final int chunkCountDiff, final long bytesDiffer,
+            final Set<GUID> occurred) {
+        this.chunkDifference = chunkCountDiff;
         this.byteDifference = bytesDiffer;
         this.occuredGUIDs.addAll(occurred);
     }
-    
+
     /**
      * Returns the difference of bytes.
      * 
      * @return the byte difference
      */
-    public long getByteDifference()
-    {
+    public long getByteDifference() {
         return this.byteDifference;
     }
 
     /**
-     * Returns the difference of the amount of chunks. 
+     * Returns the difference of the amount of chunks.
      * 
      * @return the chunk count difference
      */
-    public int getChunkCountDifference()
-    {
-        return this.chunkCountDifference;
+    public int getChunkCountDifference() {
+        return this.chunkDifference;
     }
 
     /**
      * Returns all GUIDs which have been occurred during processing.
+     * 
      * @return see description.s
      */
-    public HashSet<GUID> getOccuredGUIDs()
-    {
-        return this.occuredGUIDs;
+    public Set<GUID> getOccuredGUIDs() {
+        return new HashSet<GUID>(this.occuredGUIDs);
     }
 
 }

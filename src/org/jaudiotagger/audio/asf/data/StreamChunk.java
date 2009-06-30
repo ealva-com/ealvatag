@@ -18,9 +18,9 @@
  */
 package org.jaudiotagger.audio.asf.data;
 
-import java.math.BigInteger;
-
 import org.jaudiotagger.audio.asf.util.Utils;
+
+import java.math.BigInteger;
 
 /**
  * This class is the base for all handled stream contents. <br>
@@ -28,11 +28,10 @@ import org.jaudiotagger.audio.asf.util.Utils;
  * this the stream chunk identifies in one field what type of stream it is
  * describing and so other data is provided. However some information is common
  * to all stream chunks which are stored in this hierarchy of the class tree.
- *
+ * 
  * @author Christian Laireiter
  */
-public abstract class StreamChunk extends Chunk
-{
+public abstract class StreamChunk extends Chunk {
 
     /**
      * If <code>true</code>, the stream data is encrypted.
@@ -57,10 +56,11 @@ public abstract class StreamChunk extends Chunk
 
     /**
      * Stores the stream type.<br>
+     * 
      * @see GUID#GUID_AUDIOSTREAM
      * @see GUID#GUID_VIDEOSTREAM
      */
-    private GUID type;
+    private final GUID type;
 
     /**
      * Stores the size of type specific data structure within chunk.
@@ -69,121 +69,124 @@ public abstract class StreamChunk extends Chunk
 
     /**
      * Creates an instance
-     *
-     * @param streamType The GUID which tells the stream type represented ({@link GUID#GUID_AUDIOSTREAM} 
-     *                      or {@link GUID#GUID_VIDEOSTREAM}):
-     * @param chunkLen length of chunk
+     * 
+     * @param streamType
+     *            The GUID which tells the stream type represented (
+     *            {@link GUID#GUID_AUDIOSTREAM} or {@link GUID#GUID_VIDEOSTREAM}
+     *            ):
+     * @param chunkLen
+     *            length of chunk
      */
-    public StreamChunk(GUID streamType, BigInteger chunkLen)
-    {
+    public StreamChunk(final GUID streamType, final BigInteger chunkLen) {
         super(GUID.GUID_STREAM, chunkLen);
-        assert GUID.GUID_AUDIOSTREAM.equals(streamType) || GUID.GUID_VIDEOSTREAM.equals(streamType);
+        assert GUID.GUID_AUDIOSTREAM.equals(streamType)
+                || GUID.GUID_VIDEOSTREAM.equals(streamType);
         this.type = streamType;
     }
 
     /**
      * @return Returns the streamNumber.
      */
-    public int getStreamNumber()
-    {
-        return streamNumber;
+    public int getStreamNumber() {
+        return this.streamNumber;
     }
 
     /**
      * @return Returns the streamSpecificDataSize.
      */
-    public long getStreamSpecificDataSize()
-    {
-        return streamSpecificDataSize;
+    public long getStreamSpecificDataSize() {
+        return this.streamSpecificDataSize;
     }
 
     /**
      * Returns the stream type of the stream chunk.<br>
-     *  
+     * 
      * @return {@link GUID#GUID_AUDIOSTREAM} or {@link GUID#GUID_VIDEOSTREAM}.
      */
-    public GUID getStreamType()
-    {
+    public GUID getStreamType() {
         return this.type;
     }
 
     /**
      * @return Returns the timeOffset.
      */
-    public long getTimeOffset()
-    {
-        return timeOffset;
+    public long getTimeOffset() {
+        return this.timeOffset;
     }
 
     /**
      * @return Returns the typeSpecificDataSize.
      */
-    public long getTypeSpecificDataSize()
-    {
-        return typeSpecificDataSize;
+    public long getTypeSpecificDataSize() {
+        return this.typeSpecificDataSize;
     }
 
     /**
      * @return Returns the contentEncrypted.
      */
-    public boolean isContentEncrypted()
-    {
-        return contentEncrypted;
+    public boolean isContentEncrypted() {
+        return this.contentEncrypted;
     }
 
     /**
      * (overridden)
-     *
+     * 
      * @see org.jaudiotagger.audio.asf.data.Chunk#prettyPrint(String)
      */
-    public String prettyPrint(final String prefix)
-    {
-        StringBuffer result = new StringBuffer(super.prettyPrint(prefix));
-        result.append(prefix).append("  |-> Stream number: ").append(getStreamNumber()).append(Utils.LINE_SEPARATOR);
-        result.append(prefix).append("  |-> Type specific data size  : ").append(getTypeSpecificDataSize()).append(Utils.LINE_SEPARATOR);
-        result.append(prefix).append("  |-> Stream specific data size: ").append(getStreamSpecificDataSize()).append(Utils.LINE_SEPARATOR);
-        result.append(prefix).append("  |-> Time Offset              : ").append(getTimeOffset()).append(Utils.LINE_SEPARATOR);
-        result.append(prefix).append("  |-> Content Encryption       : ").append(isContentEncrypted()).append(Utils.LINE_SEPARATOR);
+    @Override
+    public String prettyPrint(final String prefix) {
+        final StringBuilder result = new StringBuilder(super.prettyPrint(prefix));
+        result.append(prefix).append("  |-> Stream number: ").append(
+                getStreamNumber()).append(Utils.LINE_SEPARATOR);
+        result.append(prefix).append("  |-> Type specific data size  : ")
+                .append(getTypeSpecificDataSize()).append(Utils.LINE_SEPARATOR);
+        result.append(prefix).append("  |-> Stream specific data size: ")
+                .append(getStreamSpecificDataSize()).append(
+                        Utils.LINE_SEPARATOR);
+        result.append(prefix).append("  |-> Time Offset              : ")
+                .append(getTimeOffset()).append(Utils.LINE_SEPARATOR);
+        result.append(prefix).append("  |-> Content Encryption       : ")
+                .append(isContentEncrypted()).append(Utils.LINE_SEPARATOR);
         return result.toString();
     }
 
     /**
-     * @param cntEnc The contentEncrypted to set.
+     * @param cntEnc
+     *            The contentEncrypted to set.
      */
-    public void setContentEncrypted(boolean cntEnc)
-    {
+    public void setContentEncrypted(final boolean cntEnc) {
         this.contentEncrypted = cntEnc;
     }
 
     /**
-     * @param streamNum The streamNumber to set.
+     * @param streamNum
+     *            The streamNumber to set.
      */
-    public void setStreamNumber(int streamNum)
-    {
+    public void setStreamNumber(final int streamNum) {
         this.streamNumber = streamNum;
     }
 
     /**
-     * @param strSpecDataSize The streamSpecificDataSize to set.
+     * @param strSpecDataSize
+     *            The streamSpecificDataSize to set.
      */
-    public void setStreamSpecificDataSize(long strSpecDataSize)
-    {
+    public void setStreamSpecificDataSize(final long strSpecDataSize) {
         this.streamSpecificDataSize = strSpecDataSize;
     }
 
     /**
-     * @param timeOffs sets the time offset
+     * @param timeOffs
+     *            sets the time offset
      */
-    public void setTimeOffset(long timeOffs)
-    {
+    public void setTimeOffset(final long timeOffs) {
         this.timeOffset = timeOffs;
     }
 
     /**
-     * @param typeSpecDataSize The typeSpecificDataSize to set.
+     * @param typeSpecDataSize
+     *            The typeSpecificDataSize to set.
      */
-    public void setTypeSpecificDataSize(long typeSpecDataSize)
-    {
+    public void setTypeSpecificDataSize(final long typeSpecDataSize) {
         this.typeSpecificDataSize = typeSpecDataSize;
     }
 }

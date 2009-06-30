@@ -6,44 +6,47 @@ import java.io.InputStream;
 
 /**
  * This implementation of {@link FilterInputStream} counts each read byte.<br>
- * So at each time, with {@link #getReadCount()} one can determine how many bytes have been read, by
- * this classes read and skip methods (mark and reset are also taken into account).<br>  
+ * So at each time, with {@link #getReadCount()} one can determine how many
+ * bytes have been read, by this classes read and skip methods (mark and reset
+ * are also taken into account).<br>
+ * 
  * @author Christian Laireiter
  */
-class CountingInputStream extends FilterInputStream
-{
+class CountingInputStream extends FilterInputStream {
 
     /**
-     * If {@link #mark(int)} has been called, the current value of {@link #readCount} is stored, in
-     * order to reset it upon {@link #reset()}.
+     * If {@link #mark(int)} has been called, the current value of
+     * {@link #readCount} is stored, in order to reset it upon {@link #reset()}.
      */
-    private long markPos = 0;
+    private long markPos;
 
     /**
      * The amount of read or skipped bytes.
      */
-    private long readCount = 0;
+    private long readCount;
 
     /**
      * Creates an instance, which delegates the commands to the given stream.
-     * @param stream stream to actually work with.
+     * 
+     * @param stream
+     *            stream to actually work with.
      */
-    public CountingInputStream(InputStream stream)
-    {
+    public CountingInputStream(final InputStream stream) {
         super(stream);
+        this.markPos = 0;
+        this.readCount = 0;
     }
 
     /**
      * Counts the given amount of bytes.
-     * @param i number of bytes to increase.
+     * 
+     * @param amountRead
+     *            number of bytes to increase.
      */
-    private void bytesRead(final long i)
-    {
-        synchronized (this)
-        {
-            if (i >= 0)
-            {
-                readCount += i;
+    private void bytesRead(final long amountRead) {
+        synchronized (this) {
+            if (amountRead >= 0) {
+                this.readCount += amountRead;
             }
         }
     }
@@ -51,27 +54,28 @@ class CountingInputStream extends FilterInputStream
     /**
      * @return the readCount
      */
-    public long getReadCount()
-    {
-        return this.readCount;
+    public long getReadCount() {
+        synchronized (this) {
+            return this.readCount;
+        }
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public synchronized void mark(int readlimit)
-    {
-        super.mark(readlimit);
-        this.markPos = readCount;
+    public void mark(final int readlimit) {
+        synchronized (this) {
+            super.mark(readlimit);
+            this.markPos = this.readCount;
+        }
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public int read() throws IOException
-    {
+    public int read() throws IOException {
         final int result = super.read();
         bytesRead(1);
         return result;
@@ -81,9 +85,9 @@ class CountingInputStream extends FilterInputStream
      * {@inheritDoc}
      */
     @Override
-    public int read(byte[] b, int off, int len) throws IOException
-    {
-        final int result = super.read(b, off, len);
+    public int read(final byte[] destination, final int off, final int len)
+            throws IOException {
+        final int result = super.read(destination, off, len);
         bytesRead(result);
         return result;
     }
@@ -92,12 +96,10 @@ class CountingInputStream extends FilterInputStream
      * {@inheritDoc}
      */
     @Override
-    public synchronized void reset() throws IOException
-    {
+    public synchronized void reset() throws IOException {
         super.reset();
-        synchronized (this)
-        {
-            this.readCount = markPos;
+        synchronized (this) {
+            this.readCount = this.markPos;
         }
     }
 
@@ -105,9 +107,8 @@ class CountingInputStream extends FilterInputStream
      * {@inheritDoc}
      */
     @Override
-    public long skip(long n) throws IOException
-    {
-        long skipped = super.skip(n);
+    public long skip(final long amount) throws IOException {
+        final long skipped = super.skip(amount);
         bytesRead(skipped);
         return skipped;
     }

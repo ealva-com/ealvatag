@@ -3,7 +3,7 @@ package org.jaudiotagger.tag.wma;
 import org.jaudiotagger.AbstractTestCase;
 import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.AudioFileIO;
-import org.jaudiotagger.audio.asf.data.ContentDescriptor;
+import org.jaudiotagger.audio.asf.data.MetadataDescriptor;
 import org.jaudiotagger.audio.asf.tag.AsfFieldKey;
 import org.jaudiotagger.audio.asf.tag.AsfTag;
 import org.jaudiotagger.audio.asf.tag.AsfTagCoverField;

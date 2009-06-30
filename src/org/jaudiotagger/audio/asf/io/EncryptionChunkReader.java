@@ -31,65 +31,60 @@ import java.math.BigInteger;
  * This class reads the chunk containing encoding data <br>
  * <b>Warning:<b><br>
  * Implementation is not completed. More analysis of this chunk is needed.
- *
+ * 
  * @author Christian Laireiter
  */
-class EncryptionChunkReader implements ChunkReader
-{
+class EncryptionChunkReader implements ChunkReader {
+
+    /**
+     * The GUID this reader {@linkplain #getApplyingIds() applies to}
+     */
+    private final static GUID[] APPLYING = { GUID.GUID_CONTENT_ENCRYPTION };
 
     /**
      * Should not be used for now.
      */
-    protected EncryptionChunkReader()
-    {
+    protected EncryptionChunkReader() {
         // NOTHING toDo
     }
 
     /**
      * {@inheritDoc}
      */
-    public boolean canFail()
-    {
+    public boolean canFail() {
         return false;
     }
 
     /**
      * {@inheritDoc}
      */
-    public GUID getApplyingId()
-    {
-        return GUID.GUID_CONTENT_ENCRYPTION;
+    public GUID[] getApplyingIds() {
+        return APPLYING.clone();
     }
 
     /**
      * {@inheritDoc}
      */
-    public Chunk read(final GUID guid, final InputStream stream, final long chunkStart) throws IOException
-    {
+    public Chunk read(final GUID guid, final InputStream stream,
+            final long chunkStart) throws IOException {
         EncryptionChunk result = null;
-        BigInteger chunkLen = Utils.readBig64(stream);
+        final BigInteger chunkLen = Utils.readBig64(stream);
         result = new EncryptionChunk(chunkLen);
 
         // Can't be interpreted
         /*
-        * Object ID GUID    128
-        * Object Size   QWORD   64
-        * Secret Data Length    DWORD   32
-        * Secret Data   INTEGER    varies
-        * Protection Type Length    DWORD   32
-        * Protection Type   char    varies
-        * Key ID Length DWORD   32
-        * Key ID    char    varies
-        * License URL Length    DWORD   32
-        * License URL   char    varies           * Read the
-            */
+         * Object ID GUID 128 Object Size QWORD 64 Secret Data Length DWORD 32
+         * Secret Data INTEGER varies Protection Type Length DWORD 32 Protection
+         * Type char varies Key ID Length DWORD 32 Key ID char varies License
+         * URL Length DWORD 32 License URL char varies * Read the
+         */
         byte[] secretData;
         byte[] protectionType;
         byte[] keyID;
         byte[] licenseURL;
 
         // Secret Data length
-        int fieldLength;
+        int fieldLength = 0;
         fieldLength = (int) Utils.readUINT32(stream);
         // Secret Data
         secretData = new byte[fieldLength + 1];
@@ -124,9 +119,9 @@ class EncryptionChunkReader implements ChunkReader
         result.setProtectionType(new String(protectionType));
         result.setKeyID(new String(keyID));
         result.setLicenseURL(new String(licenseURL));
-        
+
         result.setPosition(chunkStart);
-        
+
         return result;
     }
 

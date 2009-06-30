@@ -18,49 +18,71 @@
  */
 package org.jaudiotagger.audio.asf.io;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.math.BigInteger;
-
 import org.jaudiotagger.audio.asf.data.Chunk;
 import org.jaudiotagger.audio.asf.data.GUID;
 import org.jaudiotagger.audio.asf.util.Utils;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.math.BigInteger;
+
 /**
  * Default reader, Reads GUID and size out of an input stream and creates a
- * {@link org.jaudiotagger.audio.asf.data.Chunk}object, finally skips the 
+ * {@link org.jaudiotagger.audio.asf.data.Chunk}object, finally skips the
  * remaining chunk bytes.
- *
+ * 
  * @author Christian Laireiter
  */
-class ChunkHeaderReader implements ChunkReader
-{
+final class ChunkHeaderReader implements ChunkReader {
+
+    /**
+     * The GUID this reader {@linkplain #getApplyingIds() applies to}
+     */
+    private final static GUID[] APPLYING = { GUID.GUID_UNSPECIFIED };
+
+    /**
+     * Default instance.
+     */
+    private static final ChunkHeaderReader INSTANCE = new ChunkHeaderReader();
+
+    /**
+     * Returns an instance of the reader.
+     * 
+     * @return instance.
+     */
+    public static ChunkHeaderReader getInstance() {
+        return INSTANCE;
+    }
+
+    /**
+     * Hidden Utility class constructor.
+     */
+    private ChunkHeaderReader() {
+        // Hidden
+    }
 
     /**
      * {@inheritDoc}
      */
-    public boolean canFail()
-    {
+    public boolean canFail() {
         return false;
     }
 
     /**
      * {@inheritDoc}
      */
-    public GUID getApplyingId()
-    {
-        return GUID.GUID_UNSPECIFIED;
+    public GUID[] getApplyingIds() {
+        return APPLYING.clone();
     }
 
     /**
      * {@inheritDoc}
      */
-    public Chunk read(final GUID guid, final InputStream stream, final long chunkStart) throws IOException
-    {
+    public Chunk read(final GUID guid, final InputStream stream,
+            final long chunkStart) throws IOException {
         final BigInteger chunkLen = Utils.readBig64(stream);
         stream.skip(chunkLen.longValue() - 24);
-        final Chunk result = new Chunk(guid, chunkStart, chunkLen);
-        return result;
+        return new Chunk(guid, chunkStart, chunkLen);
     }
 
 }

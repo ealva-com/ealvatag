@@ -18,110 +18,105 @@
  */
 package org.jaudiotagger.audio.asf.data;
 
-import org.jaudiotagger.audio.asf.io.WriteableChunk;
 import org.jaudiotagger.audio.asf.util.Utils;
-import org.jaudiotagger.tag.TagOptionSingleton;
-import org.jaudiotagger.logging.ErrorMessage;
 
 import java.io.IOException;
 import java.io.OutputStream;
 import java.math.BigInteger;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * This class represents the data of a chunk which contains title, author,
  * copyright, description and the rating of the file. <br>
  * It is optional within ASF files. But if, exists only once.
- *
+ * 
  * @author Christian Laireiter
  */
-public class ContentDescription extends Chunk implements WriteableChunk
-{
+public final class ContentDescription extends MetadataContainer {
     /**
-     * File artist.
+     * Stores the only allowed keys of this metadata container.
      */
-    private String author = null;
+    public final static Set<String> ALLOWED;
 
     /**
-     * File copyright.
+     * Field key for author.
      */
-    private String copyRight = null;
+    public final static String KEY_AUTHOR = "AUTHOR";
 
     /**
-     * File comment.
+     * Field key for copyright.
      */
-    private String description = null;
+    public final static String KEY_COPYRIGHT = "COPYRIGHT";
 
     /**
-     * File rating.
+     * Field key for description.
      */
-    private String rating = null;
+    public final static String KEY_DESCRIPTION = "DESCRIPTION";
 
     /**
-     * File title.
+     * Field key for rating.
      */
-    private String title = null;
+    public final static String KEY_RATING = "RATING";
+
+    /**
+     * Field key for title.
+     */
+    public final static String KEY_TITLE = "TITLE";
+
+    static {
+        ALLOWED = new HashSet<String>(Arrays.asList(new String[] { KEY_AUTHOR,
+                KEY_COPYRIGHT, KEY_DESCRIPTION, KEY_RATING, KEY_TITLE }));
+    }
 
     /**
      * Creates an instance. <br>
      */
-    public ContentDescription()
-    {
-        this(0, BigInteger.valueOf(0));
+    public ContentDescription() {
+        this(0, BigInteger.ZERO);
     }
 
     /**
      * Creates an instance.
-     *
-     * @param pos      Position of content description within file or stream
-     * @param chunkLen Length of content description.
+     * 
+     * @param pos
+     *            Position of content description within file or stream
+     * @param chunkLen
+     *            Length of content description.
      */
-    public ContentDescription(long pos, BigInteger chunkLen)
-    {
-        super(GUID.GUID_CONTENTDESCRIPTION, pos, chunkLen);
+    public ContentDescription(final long pos,final BigInteger chunkLen) {
+        super(ContainerType.CONTENT_DESCRIPTION, pos, chunkLen);
     }
 
     /**
      * @return Returns the author.
      */
-    public String getAuthor()
-    {
-        if (author == null)
-        {
-            return "";
-        }
-        return author;
+    public String getAuthor() {
+        return getValueFor(KEY_AUTHOR);
     }
 
     /**
      * @return Returns the comment.
      */
-    public String getComment()
-    {
-        if (description == null)
-        {
-            return "";
-        }
-        return description;
+    public String getComment() {
+        return getValueFor(KEY_DESCRIPTION);
     }
 
     /**
      * @return Returns the copyRight.
      */
-    public String getCopyRight()
-    {
-        if (copyRight == null)
-        {
-            return "";
-        }
-        return copyRight;
+    public String getCopyRight() {
+        return getValueFor(KEY_COPYRIGHT);
     }
 
     /**
      * {@inheritDoc}
      */
-    public long getCurrentAsfChunkSize()
-    {
-        long result = 44; // GUID + UINT64 for size + 5 times string length (each
+    @Override
+    public long getCurrentAsfChunkSize() {
+        long result = 44; // GUID + UINT64 for size + 5 times string length
+        // (each
         // 2 bytes) + 5 times zero term char (2 bytes each).
         result += getAuthor().length() * 2; // UTF-16LE
         result += getComment().length() * 2;
@@ -134,162 +129,107 @@ public class ContentDescription extends Chunk implements WriteableChunk
     /**
      * @return returns the rating.
      */
-    public String getRating()
-    {
-        if (rating == null)
-        {
-            return "";
-        }
-        return rating;
+    public String getRating() {
+        return getValueFor(KEY_RATING);
     }
 
     /**
      * @return Returns the title.
      */
-    public String getTitle()
-    {
-        if (title == null)
-        {
-            return "";
-        }
-        return title;
+    public String getTitle() {
+        return getValueFor(KEY_TITLE);
     }
 
     /**
      * {@inheritDoc}
      */
-    public boolean isEmpty()
-    {
-        return Utils.isBlank(author) && Utils.isBlank(copyRight) && Utils.isBlank(description) && Utils.isBlank(rating) && Utils
-                        .isBlank(title);
+    @Override
+    public boolean isAddSupported(final MetadataDescriptor descriptor) {
+        return ALLOWED.contains(descriptor.getName())
+                && super.isAddSupported(descriptor);
     }
 
     /**
      * 
      * {@inheritDoc}
      */
-    public String prettyPrint(final String prefix)
-    {
-        StringBuffer result = new StringBuffer(super.prettyPrint(prefix));
-        result.append(prefix).append("  |->Title      : ").append(getTitle()).append(Utils.LINE_SEPARATOR);
-        result.append(prefix).append("  |->Author     : ").append(getAuthor()).append(Utils.LINE_SEPARATOR);
-        result.append(prefix).append("  |->Copyright  : ").append(getCopyRight()).append(Utils.LINE_SEPARATOR);
-        result.append(prefix).append("  |->Description: ").append(getComment()).append(Utils.LINE_SEPARATOR);
-        result.append(prefix).append("  |->Rating     :").append(getRating()).append(Utils.LINE_SEPARATOR);
+    @Override
+    public String prettyPrint(final String prefix) {
+        final StringBuilder result = new StringBuilder(super.prettyPrint(prefix));
+        result.append(prefix).append("  |->Title      : ").append(getTitle())
+                .append(Utils.LINE_SEPARATOR);
+        result.append(prefix).append("  |->Author     : ").append(getAuthor())
+                .append(Utils.LINE_SEPARATOR);
+        result.append(prefix).append("  |->Copyright  : ").append(
+                getCopyRight()).append(Utils.LINE_SEPARATOR);
+        result.append(prefix).append("  |->Description: ").append(getComment())
+                .append(Utils.LINE_SEPARATOR);
+        result.append(prefix).append("  |->Rating     :").append(getRating())
+                .append(Utils.LINE_SEPARATOR);
         return result.toString();
     }
 
     /**
-     * @param fileAuthor The author to set.
-     * @throws IllegalArgumentException If "UTF-16LE"-byte-representation would take more than 65535
-     *                                  bytes.
+     * @param fileAuthor
+     *            The author to set.
+     * @throws IllegalArgumentException
+     *             If "UTF-16LE"-byte-representation would take more than 65535
+     *             bytes.
      */
-    public void setAuthor(String fileAuthor) throws IllegalArgumentException
-    {
-        if(Utils.isStringLengthValidNullSafe(fileAuthor))
-        {
-            this.author = fileAuthor;
-        }
-        else if(TagOptionSingleton.getInstance().isTruncateTextWithoutErrors())
-        {
-            this.author = fileAuthor.substring(0,Utils.MAXIMUM_STRING_LENGTH_ALLOWED);
-        }
-        else
-        {
-            throw new IllegalArgumentException(ErrorMessage.WMA_LENGTH_OF_STRING_IS_TOO_LARGE.getMsg((fileAuthor.length()*2)));
-        }
+    public void setAuthor(final String fileAuthor) throws IllegalArgumentException {
+        setStringValue(KEY_AUTHOR, fileAuthor);
     }
 
     /**
-     * @param tagComment The comment to set.
-     * @throws IllegalArgumentException If "UTF-16LE"-byte-representation would take more than 65535
-     *                                  bytes.
+     * @param tagComment
+     *            The comment to set.
+     * @throws IllegalArgumentException
+     *             If "UTF-16LE"-byte-representation would take more than 65535
+     *             bytes.
      */
-    public void setComment(String tagComment) throws IllegalArgumentException
-    {
-        if(Utils.isStringLengthValidNullSafe(tagComment))
-        {
-            this.description = tagComment;
-        }
-        else if(TagOptionSingleton.getInstance().isTruncateTextWithoutErrors())
-        {
-            this.description = tagComment.substring(0,Utils.MAXIMUM_STRING_LENGTH_ALLOWED);
-        }
-        else
-        {
-            throw new IllegalArgumentException(ErrorMessage.WMA_LENGTH_OF_STRING_IS_TOO_LARGE.getMsg((tagComment.length()*2)));
-        }
+    public void setComment(final String tagComment) throws IllegalArgumentException {
+        setStringValue(KEY_DESCRIPTION, tagComment);
     }
 
     /**
-     * @param cpright The copyRight to set.
-     * @throws IllegalArgumentException If "UTF-16LE"-byte-representation would take more than 65535
-     *                                  bytes.
+     * @param cpright
+     *            The copyRight to set.
+     * @throws IllegalArgumentException
+     *             If "UTF-16LE"-byte-representation would take more than 65535
+     *             bytes.
      */
-    public void setCopyRight(String cpright) throws IllegalArgumentException
-    {
-        if(Utils.isStringLengthValidNullSafe(cpright))
-        {
-            this.copyRight = cpright;
-        }
-        else if(TagOptionSingleton.getInstance().isTruncateTextWithoutErrors())
-        {
-            this.copyRight = cpright.substring(0,Utils.MAXIMUM_STRING_LENGTH_ALLOWED);
-        }
-        else
-        {
-            throw new IllegalArgumentException(ErrorMessage.WMA_LENGTH_OF_STRING_IS_TOO_LARGE.getMsg((cpright.length()*2)));
-        }
+    public void setCopyright(final String cpright) throws IllegalArgumentException {
+        setStringValue(KEY_COPYRIGHT, cpright);
     }
 
     /**
-     * @param ratingText The rating to be set.
-     * @throws IllegalArgumentException If "UTF-16LE"-byte-representation would take more than 65535
-     *                                  bytes.
+     * @param ratingText
+     *            The rating to be set.
+     * @throws IllegalArgumentException
+     *             If "UTF-16LE"-byte-representation would take more than 65535
+     *             bytes.
      */
-    public void setRating(String ratingText) throws IllegalArgumentException
-    {
-        if(Utils.isStringLengthValidNullSafe(ratingText))
-        {
-            this.rating = ratingText;
-        }
-        else if(TagOptionSingleton.getInstance().isTruncateTextWithoutErrors())
-        {
-            this.rating = ratingText.substring(0,Utils.MAXIMUM_STRING_LENGTH_ALLOWED);
-        }
-        else
-        {
-            throw new IllegalArgumentException(ErrorMessage.WMA_LENGTH_OF_STRING_IS_TOO_LARGE.getMsg((ratingText.length()*2)));
-        }
+    public void setRating(final String ratingText) throws IllegalArgumentException {
+        setStringValue(KEY_RATING, ratingText);
     }
 
     /**
-     * @param songTitle The title to set.
-     * @throws IllegalArgumentException If "UTF-16LE"-byte-representation would take more than 65535
-     *                                  bytes.
+     * @param songTitle
+     *            The title to set.
+     * @throws IllegalArgumentException
+     *             If "UTF-16LE"-byte-representation would take more than 65535
+     *             bytes.
      */
-    public void setTitle(String songTitle) throws IllegalArgumentException
-    {
-        if(Utils.isStringLengthValidNullSafe(songTitle))
-        {
-            this.title = songTitle;
-        }
-        else if(TagOptionSingleton.getInstance().isTruncateTextWithoutErrors())
-        {
-            this.title = songTitle.substring(0,Utils.MAXIMUM_STRING_LENGTH_ALLOWED);
-        }
-        else
-        {
-            throw new IllegalArgumentException(ErrorMessage.WMA_LENGTH_OF_STRING_IS_TOO_LARGE.getMsg((songTitle.length()*2)));
-        }        
+    public void setTitle(final String songTitle) throws IllegalArgumentException {
+        setStringValue(KEY_TITLE, songTitle);
     }
 
     /**
      * {@inheritDoc}
      */
-    public long writeInto(OutputStream out) throws IOException
-    {
-        long chunkSize = getCurrentAsfChunkSize();
+    @Override
+    public long writeInto(final OutputStream out) throws IOException {
+        final long chunkSize = getCurrentAsfChunkSize();
 
         out.write(this.getGuid().getBytes());
         Utils.writeUINT64(getCurrentAsfChunkSize(), out);
