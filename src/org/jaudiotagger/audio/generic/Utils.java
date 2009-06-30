@@ -22,6 +22,8 @@ import org.jaudiotagger.audio.AudioFile;
 
 import java.io.*;
 import java.nio.ByteBuffer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Contains various frequently used static functions in the different tag
@@ -31,6 +33,10 @@ import java.nio.ByteBuffer;
  */
 public class Utils
 {
+
+     // Logger Object
+    public static Logger logger = Logger
+            .getLogger("org.jaudiotagger.audio.generic.utils");
 
     /**
      * Copies the bytes of <code>srd</code> to <code>dst</code> at the
@@ -303,7 +309,7 @@ public class Utils
         return new String(buf);
     }
 
-    public static long readUInt64(ByteBuffer b) 
+    public static long readUInt64(ByteBuffer b)
     {
         long result = 0;
         result += (readUBEInt32(b) << 32);
@@ -339,7 +345,7 @@ public class Utils
     {
         return read(b);
     }
-      
+
 
     public static int read(ByteBuffer b)
     {
@@ -347,31 +353,113 @@ public class Utils
         return result;
     }
 
-     /**
-     *
+    /**
      * @param file
      * @return filename with audioformat seperator stripped of, lengthened to ensure not too small for calid tempfile
-     * creation.
+     *         creation.
      */
     public static String getMinBaseFilenameAllowedForTempFile(File file)
     {
         String s = AudioFile.getBaseFilename(file);
-        if(s.length()>=3)
+        if (s.length() >= 3)
         {
             return s;
         }
-        if(s.length()==1)
+        if (s.length() == 1)
         {
             return s + "000";
         }
-        else if(s.length()==1)
+        else if (s.length() == 1)
         {
             return s + "00";
         }
-        else if(s.length()==2)
+        else if (s.length() == 2)
         {
             return s + "0";
         }
         return s;
+    }
+
+    /**
+     * Rename file, and if normal rename fails, try copy and delete instead
+     *
+     * @param fromFile
+     * @param toFile
+     * @return
+     */
+    public static boolean rename(File fromFile, File toFile)
+    {
+        logger.log(Level.CONFIG,"Renaming From:"+fromFile.getAbsolutePath() + " to "+toFile.getAbsolutePath());
+
+        if(toFile.exists())
+        {
+            logger.log(Level.SEVERE,"Destination File:"+toFile + " already exists");
+            return false;
+        }
+
+        //Rename File
+        final boolean result = fromFile.renameTo(toFile);
+        if (!result)
+        {
+            // Might be trying to rename over filesystem, so try copy and delete instead
+            if (copy(fromFile, toFile))
+            {
+                boolean deleteResult=fromFile.delete();
+                if(deleteResult)
+                {
+                    logger.log(Level.SEVERE,"Unable to delete File:"+fromFile);
+                    return false;
+                }
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Copy a File
+     *
+     * @param fromFile The existing File
+     * @param toFile   The new File
+     * @return <code>true</code> if and only if the renaming succeeded;
+     *         <code>false</code> otherwise
+     */
+    public static boolean copy(File fromFile, File toFile)
+    {
+        try
+        {
+            FileInputStream in = new FileInputStream(fromFile);
+            FileOutputStream out = new FileOutputStream(toFile);
+            byte[] buf = new byte[8192];
+
+            int len;
+
+            while ((len = in.read(buf)) > -1)
+            {
+                out.write(buf, 0, len);
+            }
+
+            in.close();
+            out.close();
+
+            // cleanup if files are not the same length
+            if (fromFile.length() != toFile.length())
+            {
+                toFile.delete();
+
+                return false;
+            }
+
+            return true;
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+            return false;
+        }
     }
 }
