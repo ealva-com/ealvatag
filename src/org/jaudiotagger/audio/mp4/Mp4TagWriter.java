@@ -220,7 +220,7 @@ public class Mp4TagWriter
         Mp4BoxHeader hdlrMdiaHeader     = atomTree.getBoxHeader(atomTree.getHdlrWithinMdiaNode());
         Mp4BoxHeader mdatHeader         = atomTree.getBoxHeader(atomTree.getMdatNode());
 
-        //Unable to find audio so no chnace of saving any changes
+        //Unable to find audio so no chance of saving any changes
         if(mdatHeader==null)
         {
             throw new CannotWriteException(ErrorMessage.MP4_CHANGES_TO_FILE_FAILED_CANNOT_FIND_AUDIO.getMsg());    
@@ -269,8 +269,8 @@ public class Mp4TagWriter
             else
             {
                 //There no ilst or meta header so we set to position where it would be if it existed
-                relativeIlstposition = (int) (moovHeader.getLength() - Mp4BoxHeader.HEADER_LENGTH);
-                relativeIlstEndPosition = relativeIlstposition + ilstHeader.getLength();
+                relativeIlstposition = (int) (moovHeader.getLength() - Mp4BoxHeader.HEADER_LENGTH);                
+                relativeIlstEndPosition = relativeIlstposition ;
                 startIlstWithinFile = (int)(moovHeader.getFilePos() + moovHeader.getLength());
             }
         }
