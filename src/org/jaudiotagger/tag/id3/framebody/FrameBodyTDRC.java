@@ -115,14 +115,14 @@ public class FrameBodyTDRC extends AbstractFrameBodyTextInfo implements ID3v24Fr
      */
 
     /**
-     * Synchronized because SimpleDatFormst arent thread safe
+     * Synchronized because SimpleDatFormat arent thread safe
      *
      * @param formatDate
      * @param parseDate
      * @param text
      * @return
      */
-    private synchronized String formatAndParse(SimpleDateFormat formatDate,SimpleDateFormat parseDate,String text)
+    private static synchronized String formatAndParse(SimpleDateFormat formatDate,SimpleDateFormat parseDate,String text)
     {
         try
         {
