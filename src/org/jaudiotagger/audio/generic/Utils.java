@@ -355,7 +355,7 @@ public class Utils
 
     /**
      * @param file
-     * @return filename with audioformat seperator stripped of, lengthened to ensure not too small for calid tempfile
+     * @return filename with audioformat seperator stripped of, lengthened to ensure not too small for valid tempfile
      *         creation.
      */
     public static String getMinBaseFilenameAllowedForTempFile(File file)
