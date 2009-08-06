@@ -56,7 +56,7 @@ public class ISOCountry
     public static enum Country
     {
         AFGHANISTAN(" AF", "Afghanistan"),
-        ÂLAND_ISLANDS("AX", "≈land Islands"),
+        ALAND_ISLANDS("AX", "\u00e5land Islands"),
         ALBANIA("AL", "Albania"),
         ALGERIA("DZ", "Algeria"),
         AMERICAN_SAMOA("AS", "American Samoa"),
@@ -233,11 +233,11 @@ public class ISOCountry
         PORTUGAL("PT", "Portugal"),
         PUERTO_RICO("PR", "Puerto Rico"),
         QATAR("QA", "Qatar"),
-        RÈUNION("RE", "Union"),
+        REUNION("RE", "Union"),
         ROMANIA("RO", "Romania"),
         RUSSIAN_FEDERATION("RU", "Russia"),
         RWANDA("RW", "Rwanda"),
-        SAINT_BARTHÈLEMY("BL", "Lemy"),
+        SAINT_BARTHOLEMY("BL", "Lemy"),
         SAINT_HELENA("SH", "St Helena"),
         SAINT_KITTS_AND_NEVIS("KN", "St Kitts and Nevis"),
         SAINT_LUCIA("LC", "St Lucia"),
