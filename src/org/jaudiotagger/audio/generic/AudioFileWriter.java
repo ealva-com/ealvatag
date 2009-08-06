@@ -22,6 +22,7 @@ import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.exceptions.CannotReadException;
 import org.jaudiotagger.audio.exceptions.CannotWriteException;
 import org.jaudiotagger.audio.exceptions.ModifyVetoException;
+import org.jaudiotagger.audio.exceptions.UnableToRenameFileException;
 import org.jaudiotagger.logging.ErrorMessage;
 import org.jaudiotagger.tag.Tag;
 
@@ -460,16 +461,26 @@ public abstract class AudioFileWriter
         // If the temporary file was used
         if (newFile.length() > 0)
         {
+
             // Rename Original File
             // Can fail on Vista if have Special Permission 'Delete' set Deny
             File originalFileBackup = new File(af.getFile().getAbsoluteFile().getParentFile().getPath(),
                                                AudioFile.getBaseFilename(af.getFile()) + ".old");
+
+            //If already exists modify the suffix
+            int count=1;
+            while(originalFileBackup.exists())
+            {
+                originalFileBackup = new File(af.getFile().getAbsoluteFile().getParentFile().getPath(), AudioFile.getBaseFilename(af.getFile())+ ".old"+count);
+                count++;
+            }               
+
             boolean renameResult = Utils.rename(af.getFile(),originalFileBackup);
             if (renameResult == false)
             {
                 logger
                         .log(Level.SEVERE, ErrorMessage.GENERAL_WRITE_FAILED_TO_RENAME_ORIGINAL_FILE_TO_BACKUP
-                                .getMsg(af.getFile().getAbsolutePath(), originalFileBackup.getAbsolutePath()));
+                                .getMsg(af.getFile().getAbsolutePath(), originalFileBackup.getName()));
                 throw new CannotWriteException(ErrorMessage.GENERAL_WRITE_FAILED_TO_RENAME_ORIGINAL_FILE_TO_BACKUP
                         .getMsg(af.getFile().getPath(), originalFileBackup.getName()));
             }
