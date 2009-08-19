@@ -132,6 +132,13 @@ public class NumberFixedLength extends AbstractDataType
         {
             throw new InvalidDataTypeException("Offset to byte array is out of bounds: offset = " + offset + ", array.length = " + arr.length);
         }
+
+        if(offset + size > arr.length)
+        {
+            throw new InvalidDataTypeException("Offset plus size to byte array is out of bounds: offset = "
+                    + offset + ", size = "+size  +" + arr.length "+ arr.length );
+        }
+
         long lvalue = 0;
         for (int i = offset; i < (offset + size); i++)
         {
