@@ -108,7 +108,7 @@ public class ISOCountry
         THE_DEMOCRATIC_REPUBLIC_OF_CONGO("CD", "The Democratic Republic Of Congo"),
         COOK_ISLANDS("CK", "Cook Islands"),
         COSTA_RICA("CR", "Costa Rica"),
-        CÙTE_D_IVOIRE("CI", "Ivory Coast"),
+        COTE_D_IVOIRE("CI", "Ivory Coast"),
         CROATIA("HR", "Croatia"),
         CUBA("CU", "Cuba"),
         CYPRUS("CY", "Cyprus"),
