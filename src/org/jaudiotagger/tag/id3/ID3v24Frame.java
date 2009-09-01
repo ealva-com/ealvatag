@@ -514,20 +514,10 @@ public class ID3v24Frame extends AbstractID3v2Frame
         //These are not included in header size but are included in frame size but wont be read when we actually
         //try to read the frame body data
         int extraHeaderBytesCount = 0;
-        boolean isDataLengthindicatorRead = false;
         if (((EncodingFlags) encodingFlags).isGrouping())
         {
             extraHeaderBytesCount = ID3v24Frame.FRAME_GROUPING_INDICATOR_SIZE;
             byteBuffer.get();
-        }
-
-        if (((EncodingFlags) encodingFlags).isCompression())
-        {
-            //Read the sync safe size field
-            int datalengthSize = ID3SyncSafeInteger.bufferToValue(byteBuffer);
-            logger.info(getLoggingFilename() + ":" + "Frame Size Is:" + frameSize + "Data Length Size:" + datalengthSize);
-            extraHeaderBytesCount += ID3v24Frame.FRAME_DATA_LENGTH_SIZE;
-            isDataLengthindicatorRead = true;
         }
 
         if (((EncodingFlags) encodingFlags).isEncryption())
@@ -539,16 +529,11 @@ public class ID3v24Frame extends AbstractID3v2Frame
 
         if (((EncodingFlags) encodingFlags).isDataLengthIndicator())
         {
-            //There is only data length indicator it may have already been read depending on what flags
-            //are set
-            if (!isDataLengthindicatorRead)
-            {
-                //Read the sync safe size field
-                int datalengthSize = ID3SyncSafeInteger.bufferToValue(byteBuffer);
-                //Read the Grouping byte, but do nothing with it
-                extraHeaderBytesCount += FRAME_DATA_LENGTH_SIZE;
-                logger.info(getLoggingFilename() + ":" + "Frame Size Is:" + frameSize + "Data Length Size:" + datalengthSize);
-            }
+            //Read the sync safe size field
+            int datalengthSize = ID3SyncSafeInteger.bufferToValue(byteBuffer);
+            //Read the Grouping byte, but do nothing with it
+            extraHeaderBytesCount += FRAME_DATA_LENGTH_SIZE;
+            logger.info(getLoggingFilename() + ":" + "Frame Size Is:" + frameSize + "Data Length Size:" + datalengthSize);
         }
 
         //Work out the real size of the framebody data
