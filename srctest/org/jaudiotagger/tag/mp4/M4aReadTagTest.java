@@ -316,7 +316,7 @@ public class M4aReadTagTest extends TestCase
                     .createImageInputStream(new ByteArrayInputStream(coverArtField.getData())));
             assertNotNull(bi);
 
-            //These fields seemed to have chnaged in Media Monkey 3.0.6
+            //These fields seemed to have changed in Media Monkey 3.0.6
             assertEquals("custom1", mp4tag.getFirst(Mp4FieldKey.MM_CUSTOM_1));
             assertEquals("custom2", mp4tag.getFirst(Mp4FieldKey.MM_CUSTOM_2));
             assertEquals("custom3", mp4tag.getFirst(Mp4FieldKey.MM_CUSTOM_3));

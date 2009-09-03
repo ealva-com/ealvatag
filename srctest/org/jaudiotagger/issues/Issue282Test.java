@@ -8,7 +8,7 @@ import org.jaudiotagger.audio.AudioFileIO;
 import java.io.File;
 
 /**
- * Problem when reltive filname has been specified
+ * Problem when relative filename has been specified
  */
 public class Issue282Test extends AbstractTestCase
 {

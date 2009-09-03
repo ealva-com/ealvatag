@@ -65,4 +65,7 @@ public enum VorbisCommentFieldKey
     URL_DISCOGS_ARTIST_SITE,
     URL_WIKIPEDIA_ARTIST_SITE,
     KEY,
-    LANGUAGE}
+    LANGUAGE,
+    URL_LYRICS_SITE
+
+}

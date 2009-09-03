@@ -15,7 +15,7 @@ import org.jaudiotagger.tag.id3.ID3v24Tag;
 import java.io.File;
 
 /**
- * SCannot creaeTagField for creating artowkr field
+ * Cannot cretaeTagField for creating artwork field
  */
 public class Issue263Test extends AbstractTestCase
 {

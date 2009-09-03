@@ -1,6 +1,6 @@
 /*
  * Entagged Audio Tag library
- * Copyright (c) 2003-2005 Raphaël Slinckx <raphael@slinckx.net>
+ * Copyright (c) 2003-2005 RaphaÃ«l Slinckx <raphael@slinckx.net>
  * Copyright (c) 2004-2005 Christian Laireiter <liree@web.de>
  * 
  * This library is free software; you can redistribute it and/or

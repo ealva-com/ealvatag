@@ -27,7 +27,7 @@ public class Issue242Test extends AbstractTestCase
         Exception exceptionCaught = null;
         try
         {
-            File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3");
+            File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3", new File("test1030.mp3"));
 
             //Add a v24Tag
             AudioFile af = AudioFileIO.read(testFile);
@@ -48,6 +48,7 @@ public class Issue242Test extends AbstractTestCase
             assertEquals(0,mp3File.getTag().get(TagFieldKey.URL_DISCOGS_ARTIST_SITE).size());
             assertEquals(0,mp3File.getTag().get(TagFieldKey.URL_WIKIPEDIA_RELEASE_SITE).size());
             assertEquals(0,mp3File.getTag().get(TagFieldKey.URL_WIKIPEDIA_ARTIST_SITE).size());
+            assertEquals(0,mp3File.getTag().get(TagFieldKey.URL_LYRICS_SITE).size());
 
             //Now write these fields
             mp3File.getTag().set(mp3File.getTag().createTagField(TagFieldKey.URL_OFFICIAL_RELEASE_SITE,"http://test1"));
@@ -56,6 +57,7 @@ public class Issue242Test extends AbstractTestCase
             mp3File.getTag().set(mp3File.getTag().createTagField(TagFieldKey.URL_WIKIPEDIA_RELEASE_SITE,"http://test4"));
             mp3File.getTag().set(mp3File.getTag().createTagField(TagFieldKey.URL_WIKIPEDIA_ARTIST_SITE,"http://test5"));
             mp3File.getTag().set(mp3File.getTag().createTagField(TagFieldKey.URL_OFFICIAL_ARTIST_SITE,"http://test6"));
+            mp3File.getTag().set(mp3File.getTag().createTagField(TagFieldKey.URL_LYRICS_SITE,"http://test7"));
             mp3File.save();
 
             af = AudioFileIO.read(testFile);
@@ -68,6 +70,7 @@ public class Issue242Test extends AbstractTestCase
             assertEquals(1,mp3File.getTag().get(TagFieldKey.URL_WIKIPEDIA_RELEASE_SITE).size());
             assertEquals(1,mp3File.getTag().get(TagFieldKey.URL_WIKIPEDIA_ARTIST_SITE).size());
             assertEquals(1,mp3File.getTag().get(TagFieldKey.URL_OFFICIAL_ARTIST_SITE).size());
+            assertEquals(1,mp3File.getTag().get(TagFieldKey.URL_LYRICS_SITE).size());
 
             //Delete Fields
             mp3File.getTag().deleteTagField(TagFieldKey.URL_OFFICIAL_RELEASE_SITE); 
@@ -76,6 +79,7 @@ public class Issue242Test extends AbstractTestCase
             mp3File.getTag().deleteTagField(TagFieldKey.URL_WIKIPEDIA_RELEASE_SITE);
             mp3File.getTag().deleteTagField(TagFieldKey.URL_WIKIPEDIA_ARTIST_SITE);
             mp3File.getTag().deleteTagField(TagFieldKey.URL_OFFICIAL_ARTIST_SITE);
+            mp3File.getTag().deleteTagField(TagFieldKey.URL_LYRICS_SITE);
             mp3File.save();
             af = AudioFileIO.read(testFile);
             mp3File= (MP3File)af;
@@ -85,8 +89,7 @@ public class Issue242Test extends AbstractTestCase
             assertEquals(0,mp3File.getTag().get(TagFieldKey.URL_DISCOGS_ARTIST_SITE).size());
             assertEquals(0,mp3File.getTag().get(TagFieldKey.URL_WIKIPEDIA_RELEASE_SITE).size());
             assertEquals(0,mp3File.getTag().get(TagFieldKey.URL_WIKIPEDIA_ARTIST_SITE).size());
-
-
+            assertEquals(0,mp3File.getTag().get(TagFieldKey.URL_LYRICS_SITE).size());
         }
         catch (Exception e)
         {
@@ -104,7 +107,7 @@ public class Issue242Test extends AbstractTestCase
         Exception exceptionCaught = null;
         try
         {
-            File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3");
+            File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3", new File("test1031.mp3"));
 
             //Add a v24Tag
             AudioFile af = AudioFileIO.read(testFile);
@@ -126,6 +129,8 @@ public class Issue242Test extends AbstractTestCase
             assertEquals(0,mp3File.getTag().get(TagFieldKey.URL_DISCOGS_ARTIST_SITE).size());
             assertEquals(0,mp3File.getTag().get(TagFieldKey.URL_WIKIPEDIA_RELEASE_SITE).size());
             assertEquals(0,mp3File.getTag().get(TagFieldKey.URL_WIKIPEDIA_ARTIST_SITE).size());
+            assertEquals(0,mp3File.getTag().get(TagFieldKey.URL_LYRICS_SITE).size());
+
 
             //Now write these fields
             mp3File.getTag().set(mp3File.getTag().createTagField(TagFieldKey.URL_OFFICIAL_RELEASE_SITE,"http://test1"));
@@ -134,6 +139,8 @@ public class Issue242Test extends AbstractTestCase
             mp3File.getTag().set(mp3File.getTag().createTagField(TagFieldKey.URL_WIKIPEDIA_RELEASE_SITE,"http://test4"));
             mp3File.getTag().set(mp3File.getTag().createTagField(TagFieldKey.URL_WIKIPEDIA_ARTIST_SITE,"http://test5"));
             mp3File.getTag().set(mp3File.getTag().createTagField(TagFieldKey.URL_OFFICIAL_ARTIST_SITE,"http://test6"));
+            mp3File.getTag().set(mp3File.getTag().createTagField(TagFieldKey.URL_LYRICS_SITE,"http://test7"));
+
             mp3File.save();
 
             af = AudioFileIO.read(testFile);
@@ -145,6 +152,7 @@ public class Issue242Test extends AbstractTestCase
             assertEquals(1,mp3File.getTag().get(TagFieldKey.URL_WIKIPEDIA_RELEASE_SITE).size());
             assertEquals(1,mp3File.getTag().get(TagFieldKey.URL_WIKIPEDIA_ARTIST_SITE).size());
             assertEquals(1,mp3File.getTag().get(TagFieldKey.URL_OFFICIAL_ARTIST_SITE).size());
+            assertEquals(1,mp3File.getTag().get(TagFieldKey.URL_LYRICS_SITE).size());
 
             //Delete Fields
             mp3File.getTag().deleteTagField(TagFieldKey.URL_OFFICIAL_RELEASE_SITE);
@@ -153,6 +161,7 @@ public class Issue242Test extends AbstractTestCase
             mp3File.getTag().deleteTagField(TagFieldKey.URL_WIKIPEDIA_RELEASE_SITE);
             mp3File.getTag().deleteTagField(TagFieldKey.URL_WIKIPEDIA_ARTIST_SITE);
             mp3File.getTag().deleteTagField(TagFieldKey.URL_OFFICIAL_ARTIST_SITE);
+            mp3File.getTag().deleteTagField(TagFieldKey.URL_LYRICS_SITE);
             mp3File.save();
             af = AudioFileIO.read(testFile);
             mp3File= (MP3File)af;
@@ -163,6 +172,8 @@ public class Issue242Test extends AbstractTestCase
             assertEquals(0,mp3File.getTag().get(TagFieldKey.URL_WIKIPEDIA_RELEASE_SITE).size());
             assertEquals(0,mp3File.getTag().get(TagFieldKey.URL_WIKIPEDIA_ARTIST_SITE).size());
             assertEquals(0,mp3File.getTag().get(TagFieldKey.URL_OFFICIAL_RELEASE_SITE).size());
+            assertEquals(0,mp3File.getTag().get(TagFieldKey.URL_LYRICS_SITE).size());
+
         }
         catch (Exception e)
         {
@@ -180,7 +191,7 @@ public class Issue242Test extends AbstractTestCase
         Exception exceptionCaught = null;
         try
         {
-            File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3");
+            File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3", new File("test1032.mp3"));
 
             //Add a v24Tag
             AudioFile af = AudioFileIO.read(testFile);
@@ -203,6 +214,8 @@ public class Issue242Test extends AbstractTestCase
             assertEquals(0,mp3File.getTag().get(TagFieldKey.URL_DISCOGS_ARTIST_SITE).size());
             assertEquals(0,mp3File.getTag().get(TagFieldKey.URL_WIKIPEDIA_RELEASE_SITE).size());
             assertEquals(0,mp3File.getTag().get(TagFieldKey.URL_WIKIPEDIA_ARTIST_SITE).size());
+            assertEquals(0,mp3File.getTag().get(TagFieldKey.URL_LYRICS_SITE).size());
+
 
             //Now write these fields
             mp3File.getTag().set(mp3File.getTag().createTagField(TagFieldKey.URL_OFFICIAL_RELEASE_SITE,"http://test1"));
@@ -211,6 +224,7 @@ public class Issue242Test extends AbstractTestCase
             mp3File.getTag().set(mp3File.getTag().createTagField(TagFieldKey.URL_WIKIPEDIA_RELEASE_SITE,"http://test4"));
             mp3File.getTag().set(mp3File.getTag().createTagField(TagFieldKey.URL_WIKIPEDIA_ARTIST_SITE,"http://test5"));
             mp3File.getTag().set(mp3File.getTag().createTagField(TagFieldKey.URL_OFFICIAL_ARTIST_SITE,"http://test6"));
+            mp3File.getTag().set(mp3File.getTag().createTagField(TagFieldKey.URL_LYRICS_SITE,"http://test7"));
             mp3File.save();
 
             af = AudioFileIO.read(testFile);
@@ -222,6 +236,7 @@ public class Issue242Test extends AbstractTestCase
             assertEquals(1,mp3File.getTag().get(TagFieldKey.URL_WIKIPEDIA_RELEASE_SITE).size());
             assertEquals(1,mp3File.getTag().get(TagFieldKey.URL_WIKIPEDIA_ARTIST_SITE).size());
             assertEquals(1,mp3File.getTag().get(TagFieldKey.URL_OFFICIAL_ARTIST_SITE).size());
+            assertEquals(1,mp3File.getTag().get(TagFieldKey.URL_LYRICS_SITE).size());
 
             //Delete Fields
             mp3File.getTag().deleteTagField(TagFieldKey.URL_OFFICIAL_RELEASE_SITE);
@@ -230,6 +245,8 @@ public class Issue242Test extends AbstractTestCase
             mp3File.getTag().deleteTagField(TagFieldKey.URL_WIKIPEDIA_RELEASE_SITE);
             mp3File.getTag().deleteTagField(TagFieldKey.URL_WIKIPEDIA_ARTIST_SITE);
             mp3File.getTag().deleteTagField(TagFieldKey.URL_OFFICIAL_ARTIST_SITE);
+            mp3File.getTag().deleteTagField(TagFieldKey.URL_LYRICS_SITE);
+
             mp3File.save();
             af = AudioFileIO.read(testFile);
             mp3File= (MP3File)af;
@@ -239,7 +256,7 @@ public class Issue242Test extends AbstractTestCase
             assertEquals(0,mp3File.getTag().get(TagFieldKey.URL_DISCOGS_ARTIST_SITE).size());
             assertEquals(0,mp3File.getTag().get(TagFieldKey.URL_WIKIPEDIA_RELEASE_SITE).size());
             assertEquals(0,mp3File.getTag().get(TagFieldKey.URL_WIKIPEDIA_ARTIST_SITE).size());
-
+            assertEquals(0,mp3File.getTag().get(TagFieldKey.URL_LYRICS_SITE).size());
         }
         catch (Exception e)
         {

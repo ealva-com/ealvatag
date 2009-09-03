@@ -1,6 +1,6 @@
 /*
  * Entagged Audio Tag library
- * Copyright (c) 2003-2005 Raphaël Slinckx <raphael@slinckx.net>
+ * Copyright (c) 2003-2005 Raphaï¿½l Slinckx <raphael@slinckx.net>
  * 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -91,6 +91,7 @@ public class VorbisCommentTag extends AbstractTag
         tagFieldToOggField.put(TagFieldKey.URL_WIKIPEDIA_RELEASE_SITE, VorbisCommentFieldKey.URL_WIKIPEDIA_RELEASE_SITE);
         tagFieldToOggField.put(TagFieldKey.LANGUAGE, VorbisCommentFieldKey.LANGUAGE);
         tagFieldToOggField.put(TagFieldKey.KEY, VorbisCommentFieldKey.KEY);
+        tagFieldToOggField.put(TagFieldKey.URL_LYRICS_SITE, VorbisCommentFieldKey.URL_LYRICS_SITE);
     }
 
     //This is the vendor string that will be written if no other is supplied. Should be the name of the software

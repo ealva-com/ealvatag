@@ -55,7 +55,13 @@ public class FlacWriteTest extends TestCase
             tag.addGenre("Rock");
 
             tag.set(tag.createTagField(TagFieldKey.BPM, "123"));
-
+            tag.set(tag.createTagField(TagFieldKey.URL_LYRICS_SITE,"http://www.lyrics.fly.com"));
+            tag.set(tag.createTagField(TagFieldKey.URL_DISCOGS_ARTIST_SITE,"http://www.discogs1.com"));
+            tag.set(tag.createTagField(TagFieldKey.URL_DISCOGS_RELEASE_SITE,"http://www.discogs2.com"));
+            tag.set(tag.createTagField(TagFieldKey.URL_OFFICIAL_ARTIST_SITE,"http://www.discogs3.com"));
+            tag.set(tag.createTagField(TagFieldKey.URL_OFFICIAL_RELEASE_SITE,"http://www.discogs4.com"));
+            tag.set(tag.createTagField(TagFieldKey.URL_WIKIPEDIA_ARTIST_SITE,"http://www.discogs5.com"));
+            tag.set(tag.createTagField(TagFieldKey.URL_WIKIPEDIA_RELEASE_SITE,"http://www.discogs6.com"));
             //Add new image
             RandomAccessFile imageFile = new RandomAccessFile(new File("testdata", "coverart.png"), "r");
             byte[] imagedata = new byte[(int) imageFile.length()];
@@ -99,6 +105,14 @@ public class FlacWriteTest extends TestCase
             assertEquals(200, pic.getHeight());
             assertEquals(24, pic.getColourDepth());
             assertEquals(0, pic.getIndexedColourCount());
+
+            assertEquals("http://www.lyrics.fly.com",tag.getFirst(TagFieldKey.URL_LYRICS_SITE));
+            assertEquals("http://www.discogs1.com",tag.getFirst(TagFieldKey.URL_DISCOGS_ARTIST_SITE));
+            assertEquals("http://www.discogs2.com",tag.getFirst(TagFieldKey.URL_DISCOGS_RELEASE_SITE));
+            assertEquals("http://www.discogs3.com",tag.getFirst(TagFieldKey.URL_OFFICIAL_ARTIST_SITE));
+            assertEquals("http://www.discogs4.com",tag.getFirst(TagFieldKey.URL_OFFICIAL_RELEASE_SITE));
+            assertEquals("http://www.discogs5.com",tag.getFirst(TagFieldKey.URL_WIKIPEDIA_ARTIST_SITE));
+            assertEquals("http://www.discogs6.com",tag.getFirst(TagFieldKey.URL_WIKIPEDIA_RELEASE_SITE));
 
             ImageInputStream stream = ImageIO.createImageInputStream(new ByteArrayInputStream(pic.getImageData()));
             BufferedImage bi = ImageIO.read(stream);

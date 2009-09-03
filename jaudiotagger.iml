@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<module version="4" relativePaths="true" type="JAVA_MODULE">
+<module relativePaths="true" type="JAVA_MODULE" version="4">
   <component name="BuildJarSettings">
     <containerInfo>
       <containerElement type="module" name="jaudiotagger">
@@ -7,12 +7,11 @@
         <attribute name="URI" value="/" />
       </containerElement>
     </containerInfo>
-    <setting name="jarPath" value="dist\jaudiotagger.jar" />
+    <setting name="jarUrl" value="file://dist/jaudiotagger.jar" />
     <setting name="buildJar" value="true" />
     <setting name="mainClass" value="org.jaudiotagger.test.TestAudioTagger" />
   </component>
-  <component name="ModuleRootManager" />
-  <component name="NewModuleRootManager">
+  <component name="NewModuleRootManager" inherit-compiler-output="false">
     <output url="file://$MODULE_DIR$/classes" />
     <exclude-output />
     <exclude-exploded />
@@ -30,7 +29,7 @@
       <excludeFolder url="file://$MODULE_DIR$/testdatatmp" />
       <excludeFolder url="file://$MODULE_DIR$/www" />
     </content>
-    <orderEntry type="inheritedJdk" />
+    <orderEntry type="jdk" jdkName="1.5" jdkType="JavaSDK" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module-library">
       <library>

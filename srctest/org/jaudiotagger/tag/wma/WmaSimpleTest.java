@@ -285,6 +285,15 @@ public class WmaSimpleTest extends AbstractTestCase
             tag.setTrack("4");
             tag.setCopyright("copyright");
             tag.setRating("rating");
+            tag.set(tag.createTagField(TagFieldKey.URL_LYRICS_SITE,"http://www.lyrics.fly.com"));
+            tag.set(tag.createTagField(TagFieldKey.URL_DISCOGS_ARTIST_SITE,"http://www.discogs1.com"));
+            tag.set(tag.createTagField(TagFieldKey.URL_DISCOGS_RELEASE_SITE,"http://www.discogs2.com"));
+            tag.set(tag.createTagField(TagFieldKey.URL_OFFICIAL_ARTIST_SITE,"http://www.discogs3.com"));
+            tag.set(tag.createTagField(TagFieldKey.URL_OFFICIAL_RELEASE_SITE,"http://www.discogs4.com"));
+            tag.set(tag.createTagField(TagFieldKey.URL_WIKIPEDIA_ARTIST_SITE,"http://www.discogs5.com"));
+            tag.set(tag.createTagField(TagFieldKey.URL_WIKIPEDIA_RELEASE_SITE,"http://www.discogs6.com"));
+
+
             // set the IsVbr value (can be modified for now)
             tag.set(tag.createTagField(AsfFieldKey.ISVBR, Boolean.TRUE.toString()));
             f.commit();
@@ -303,6 +312,15 @@ public class WmaSimpleTest extends AbstractTestCase
             assertEquals("genre2", tag.getFirstGenre());
             assertEquals("copyright", tag.getFirstCopyright());
             assertEquals("rating", tag.getFirstRating());
+            assertEquals("http://www.lyrics.fly.com",tag.getFirst(TagFieldKey.URL_LYRICS_SITE));
+            assertEquals("http://www.discogs1.com",tag.getFirst(TagFieldKey.URL_DISCOGS_ARTIST_SITE));
+            assertEquals("http://www.discogs2.com",tag.getFirst(TagFieldKey.URL_DISCOGS_RELEASE_SITE));
+            assertEquals("http://www.discogs3.com",tag.getFirst(TagFieldKey.URL_OFFICIAL_ARTIST_SITE));
+            assertEquals("http://www.discogs4.com",tag.getFirst(TagFieldKey.URL_OFFICIAL_RELEASE_SITE));
+            assertEquals("http://www.discogs5.com",tag.getFirst(TagFieldKey.URL_WIKIPEDIA_ARTIST_SITE));
+            assertEquals("http://www.discogs6.com",tag.getFirst(TagFieldKey.URL_WIKIPEDIA_RELEASE_SITE));
+
+
 
             AudioFileIO.delete(f);
             f = AudioFileIO.read(testFile);

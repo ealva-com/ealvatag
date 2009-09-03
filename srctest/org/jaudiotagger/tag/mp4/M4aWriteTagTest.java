@@ -1938,6 +1938,14 @@ public class M4aWriteTagTest extends TestCase
             tag.set(tag.createTagField(TagFieldKey.MUSICIP_ID, "9"));
             tag.set(tag.createTagField(TagFieldKey.GENRE, "2")); //key for classic rock
             tag.set(tag.createTagField(TagFieldKey.ENCODER, "encoder"));
+            tag.set(tag.createTagField(TagFieldKey.URL_LYRICS_SITE,"http://www.lyrics.fly.com"));
+            /*tag.set(tag.createTagField(TagFieldKey.URL_DISCOGS_ARTIST_SITE,"http://www.discogs1.com"));
+            tag.set(tag.createTagField(TagFieldKey.URL_DISCOGS_RELEASE_SITE,"http://www.discogs2.com"));
+            tag.set(tag.createTagField(TagFieldKey.URL_OFFICIAL_ARTIST_SITE,"http://www.discogs3.com"));
+            tag.set(tag.createTagField(TagFieldKey.URL_OFFICIAL_RELEASE_SITE,"http://www.discogs4.com"));
+            tag.set(tag.createTagField(TagFieldKey.URL_WIKIPEDIA_ARTIST_SITE,"http://www.discogs5.com"));
+            tag.set(tag.createTagField(TagFieldKey.URL_WIKIPEDIA_RELEASE_SITE,"http://www.discogs6.com"));
+            */
             //Save changes and reread from disk
             f.commit();
             f = AudioFileIO.read(testFile);
@@ -1978,6 +1986,15 @@ public class M4aWriteTagTest extends TestCase
             assertEquals("8", tag.getFirst(TagFieldKey.MUSICBRAINZ_RELEASEARTISTID));
             assertEquals("9", tag.getFirst(TagFieldKey.MUSICIP_ID));
             assertEquals("Classic Rock", tag.getFirst(TagFieldKey.GENRE));
+            assertEquals("http://www.lyrics.fly.com",tag.getFirst(TagFieldKey.URL_LYRICS_SITE));
+            /*
+            assertEquals("http://www.discogs1.com",tag.getFirst(TagFieldKey.URL_DISCOGS_ARTIST_SITE));
+            assertEquals("http://www.discogs2.com",tag.getFirst(TagFieldKey.URL_DISCOGS_RELEASE_SITE));
+            assertEquals("http://www.discogs3.com",tag.getFirst(TagFieldKey.URL_OFFICIAL_ARTIST_SITE));
+            assertEquals("http://www.discogs4.com",tag.getFirst(TagFieldKey.URL_OFFICIAL_RELEASE_SITE));
+            assertEquals("http://www.discogs5.com",tag.getFirst(TagFieldKey.URL_WIKIPEDIA_ARTIST_SITE));
+            assertEquals("http://www.discogs6.com",tag.getFirst(TagFieldKey.URL_WIKIPEDIA_RELEASE_SITE));
+            */
         }
         catch (Exception e)
         {

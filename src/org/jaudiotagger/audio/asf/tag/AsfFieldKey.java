@@ -117,6 +117,8 @@ public enum AsfFieldKey
     URL_PROMOTIONAL_SITE("WM/PromotionURL", true),
     URL_WIKIPEDIA_ARTIST_SITE("WM/WikipediaArtistUrl", false),
     URL_WIKIPEDIA_RELEASE_SITE("WM/WikipediaReleaseUrl", false),
+    URL_LYRICS_SITE("WM/LyricsUrl", false),
+
     YEAR("WM/Year", false),
     
     // Special field for all unknown field names, which will get maximum support

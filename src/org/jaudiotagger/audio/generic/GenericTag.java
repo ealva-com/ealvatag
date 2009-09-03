@@ -1,6 +1,6 @@
 /*
  * Entagged Audio Tag library
- * Copyright (c) 2003-2005 Raphaël Slinckx <raphael@slinckx.net>
+ * Copyright (c) 2003-2005 RaphaÃ«l Slinckx <raphael@slinckx.net>
  * 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -33,7 +33,7 @@ import java.util.Collections;
  * {@link AbstractTag}.<br>
  * The identifiers of commonly used fields is defined by {@link #keys}.<br>
  *
- * @author Raphaël Slinckx
+ * @author RaphaÃ«l Slinckx
  */
 public abstract class GenericTag extends AbstractTag
 {
@@ -42,7 +42,7 @@ public abstract class GenericTag extends AbstractTag
      * Implementations of {@link TagTextField} for use with
      * &quot;ISO-8859-1&quot; strings.
      *
-     * @author Raphaël Slinckx
+     * @author RaphaÃ«l Slinckx
      */
     private class GenericTagTextField implements TagTextField
     {

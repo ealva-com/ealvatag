@@ -1,6 +1,6 @@
 /*
  * Entagged Audio Tag library
- * Copyright (c) 2003-2005 Raphaël Slinckx <raphael@slinckx.net>
+ * Copyright (c) 2003-2005 RaphaÃ«l Slinckx <raphael@slinckx.net>
  * 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -10,7 +10,7 @@
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
+ * Lesser General Public License for more details. 
  * 
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
@@ -36,9 +36,9 @@ import java.util.logging.Logger;
  * Note there isnt a one to one correspondance between a tag field and a box because some fields are represented
  * by multiple boxes, for example many of the MusicBrainz fields use the '----' box, which in turn uses one of mean,
  * name and data box. So an instance of a tag field maps to one item of data such as 'Title', but it may have to read
- * multiple boxes to do this.
+ * multiple boxes to do this.   
  * <p/>
- * There are various subclasses that represent different types of fields
+ * There are various subclasses that represent different types of fields               
  */
 public abstract class Mp4TagField implements TagField
 {

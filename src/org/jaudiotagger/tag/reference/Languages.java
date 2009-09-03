@@ -206,7 +206,7 @@ public class Languages extends AbstractStringStringValuePair
         idToValue.put("gre", "Greek, Modern (1453-)");
         idToValue.put("grn", "Guarani");
         idToValue.put("guj", "Gujarati");
-        idToValue.put("gwi", "Gwich´in");
+        idToValue.put("gwi", "GwichÂ´in");
         idToValue.put("hai", "Haida");
         idToValue.put("hau", "Hausa");
         idToValue.put("haw", "Hawaiian");
@@ -347,7 +347,7 @@ public class Languages extends AbstractStringStringValuePair
         idToValue.put("niu", "Niuean");
         idToValue.put("nld", "Dutch");
         idToValue.put("nno", "Norwegian Nynorsk");
-        idToValue.put("nob", "Norwegian Bokmål");
+        idToValue.put("nob", "Norwegian BokmÃ¥l");
         idToValue.put("non", "Norse, Old");
         idToValue.put("nor", "Norwegian");
         idToValue.put("nso", "Sotho, Northern");
@@ -357,7 +357,7 @@ public class Languages extends AbstractStringStringValuePair
         idToValue.put("nyn", "Nyankole");
         idToValue.put("nyo", "Nyoro");
         idToValue.put("nzi", "Nzima");
-        idToValue.put("oci", "Occitan (post 1500); Provençal");
+        idToValue.put("oci", "Occitan (post 1500); ProvenÃ§al");
         idToValue.put("oji", "Ojibwa");
         idToValue.put("ori", "Oriya");
         idToValue.put("orm", "Oromo");
@@ -382,7 +382,7 @@ public class Languages extends AbstractStringStringValuePair
         idToValue.put("pon", "Pohnpeian");
         idToValue.put("por", "Portuguese");
         idToValue.put("pra", "Prakrit languages");
-        idToValue.put("pro", "Provençal, Old (to 1500)");
+        idToValue.put("pro", "ProvenÃ§al, Old (to 1500)");
         idToValue.put("pus", "Pushto");
         idToValue.put("que", "Quechua");
         idToValue.put("raj", "Rajasthani");
@@ -487,7 +487,7 @@ public class Languages extends AbstractStringStringValuePair
         idToValue.put("vai", "Vai");
         idToValue.put("ven", "Venda");
         idToValue.put("vie", "Vietnamese");
-        idToValue.put("vol", "Volapük");
+        idToValue.put("vol", "VolapÃ¼k");
         idToValue.put("vot", "Votic");
         idToValue.put("wak", "Wakashan languages");
         idToValue.put("wal", "Walamo");
@@ -510,8 +510,8 @@ public class Languages extends AbstractStringStringValuePair
         idToValue.put("znd", "Zande");
         idToValue.put("zul", "Zulu");
         idToValue.put("zun", "Zuni");
-        idToValue.put("\0\0\0", "Winamp Format");                 //Not Part of Spec but commonly used by some apps
-        idToValue.put("XXX", "Media Monkey Format");              //Not Part of Spec but commonly used by some apps
+        idToValue.put("\0\0\0", "Winamp Format");                 //Not Part of Spec but commonly used by some applications
+        idToValue.put("XXX", "Media Monkey Format");              //Not Part of Spec but commonly used by some applications
 
 
 

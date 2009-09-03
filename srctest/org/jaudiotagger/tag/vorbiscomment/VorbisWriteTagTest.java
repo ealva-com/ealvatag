@@ -85,6 +85,13 @@ public class VorbisWriteTagTest extends AbstractTestCase
             tag.set(tag.createTagField(TagFieldKey.MUSICBRAINZ_ARTISTID, "989a13f6-b58c-4559-b09e-76ae0adb94ed"));
             tag.set(tag.createTagField(TagFieldKey.MUSICBRAINZ_RELEASEARTISTID, "989a13f6-b58c-4559-b09e-76ae0adb94ed"));
             tag.set(tag.createTagField(TagFieldKey.MUSICBRAINZ_RELEASEID, "19c6f0f6-3d6d-4b02-88c7-ffb559d52be6"));
+            tag.set(tag.createTagField(TagFieldKey.URL_LYRICS_SITE,"http://www.lyrics.fly.com"));
+            tag.set(tag.createTagField(TagFieldKey.URL_DISCOGS_ARTIST_SITE,"http://www.discogs1.com"));
+            tag.set(tag.createTagField(TagFieldKey.URL_DISCOGS_RELEASE_SITE,"http://www.discogs2.com"));
+            tag.set(tag.createTagField(TagFieldKey.URL_OFFICIAL_ARTIST_SITE,"http://www.discogs3.com"));
+            tag.set(tag.createTagField(TagFieldKey.URL_OFFICIAL_RELEASE_SITE,"http://www.discogs4.com"));
+            tag.set(tag.createTagField(TagFieldKey.URL_WIKIPEDIA_ARTIST_SITE,"http://www.discogs5.com"));
+            tag.set(tag.createTagField(TagFieldKey.URL_WIKIPEDIA_RELEASE_SITE,"http://www.discogs6.com"));
 
             //Vorbis Only keys
             tag.set(((VorbisCommentTag) tag).createTagField(VorbisCommentFieldKey.DESCRIPTION, "description"));
@@ -166,6 +173,13 @@ public class VorbisWriteTagTest extends AbstractTestCase
             assertEquals("989a13f6-b58c-4559-b09e-76ae0adb94ed", vorbisTag.getFirst(VorbisCommentFieldKey.MUSICBRAINZ_ARTISTID));
             assertEquals("989a13f6-b58c-4559-b09e-76ae0adb94ed", vorbisTag.getFirst(VorbisCommentFieldKey.MUSICBRAINZ_ALBUMARTISTID));
             assertEquals("19c6f0f6-3d6d-4b02-88c7-ffb559d52be6", vorbisTag.getFirst(VorbisCommentFieldKey.MUSICBRAINZ_ALBUMID));
+            assertEquals("http://www.lyrics.fly.com",tag.getFirst(TagFieldKey.URL_LYRICS_SITE));
+            assertEquals("http://www.discogs1.com",tag.getFirst(TagFieldKey.URL_DISCOGS_ARTIST_SITE));
+            assertEquals("http://www.discogs2.com",tag.getFirst(TagFieldKey.URL_DISCOGS_RELEASE_SITE));
+            assertEquals("http://www.discogs3.com",tag.getFirst(TagFieldKey.URL_OFFICIAL_ARTIST_SITE));
+            assertEquals("http://www.discogs4.com",tag.getFirst(TagFieldKey.URL_OFFICIAL_RELEASE_SITE));
+            assertEquals("http://www.discogs5.com",tag.getFirst(TagFieldKey.URL_WIKIPEDIA_ARTIST_SITE));
+            assertEquals("http://www.discogs6.com",tag.getFirst(TagFieldKey.URL_WIKIPEDIA_RELEASE_SITE));
 
             assertEquals("Sarah Curtis", vorbisTag.getFirst("VOLINIST"));
 

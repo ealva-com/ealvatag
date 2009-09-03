@@ -9,6 +9,7 @@ import org.jaudiotagger.tag.reference.Tagger;
  * Starting list of known mp4 metadata fields that follow the Parent,Data or ---,issuer,name,data
  * convention. Atoms that contain metadata in other formats are not listed here because they need to be processed
  * specially.
+ *
  * <p/>
  * <p>Simple metaitems use the parent atom id as their identifier whereas reverse dns (----) atoms use
  * the reversedns,issuer and name fields as their identifier. When the atom is non-0standard but follws the rules
@@ -23,22 +24,22 @@ import org.jaudiotagger.tag.reference.Tagger;
  */
 public enum Mp4FieldKey
 {
-    ARTIST("©ART", TEXT),
-    ALBUM("©alb", TEXT),
+    ARTIST("Â©ART", TEXT),
+    ALBUM("Â©alb", TEXT),
     ALBUM_ARTIST("aART", TEXT),
-    GENRE_CUSTOM("©gen", TEXT),
+    GENRE_CUSTOM("Â©gen", TEXT),
     GENRE("gnre", IMPLICIT),
-    TITLE("©nam", TEXT),
+    TITLE("Â©nam", TEXT),
     TRACK("trkn", IMPLICIT),
     BPM("tmpo", INTEGER, 2),
-    DAY("©day", TEXT),
-    COMMENT("©cmt", TEXT),
-    COMPOSER("©wrt", TEXT),
-    GROUPING("©grp", TEXT),
+    DAY("Â©day", TEXT),
+    COMMENT("Â©cmt", TEXT),
+    COMPOSER("Â©wrt", TEXT),
+    GROUPING("Â©grp", TEXT),
     DISCNUMBER("disk", IMPLICIT),
-    LYRICS("©lyr", TEXT),
+    LYRICS("Â©lyr", TEXT),
     RATING("rtng", INTEGER,1),   //AFAIK Cant be set in itunes, but if set to explicit itunes will show as explicit
-    ENCODER("©too", TEXT),
+    ENCODER("Â©too", TEXT),
     COMPILATION("cpil", INTEGER, 1),
     COPYRIGHT("cprt", TEXT),
     CATEGORY("catg", TEXT),
@@ -144,6 +145,7 @@ public enum Mp4FieldKey
     BARCODE("com.apple.iTunes", "BARCODE", TEXT, Tagger.PICARD),
 
     //Jaikoz
+    URL_LYRICS_SITE("com.apple.iTunes", "URL_LYRICS_SITE", TEXT, Tagger.JAIKOZ),
     URL_OFFICIAL_RELEASE_SITE("com.apple.iTunes", "URL_OFFICIAL_RELEASE_SITE", TEXT, Tagger.JAIKOZ),
     URL_DISCOGS_RELEASE_SITE("com.apple.iTunes", "URL_DISCOGS_RELEASE_SITE", TEXT, Tagger.JAIKOZ),
     URL_WIKIPEDIA_RELEASE_SITE("com.apple.iTunes", "URL_WIKIPEDIA_RELEASE_SITE", TEXT, Tagger.JAIKOZ),

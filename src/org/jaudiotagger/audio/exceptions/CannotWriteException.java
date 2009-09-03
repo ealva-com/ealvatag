@@ -1,6 +1,6 @@
 /*
  * Entagged Audio Tag library
- * Copyright (c) 2003-2005 Raphaël Slinckx <raphael@slinckx.net>
+ * Copyright (c) 2003-2005 RaphaÃ«l Slinckx <raphael@slinckx.net>
  * 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -21,7 +21,7 @@ package org.jaudiotagger.audio.exceptions;
 /**
  * This exception is thrown if the writing process of an audio file failed.
  *
- * @author Raphaël Slinckx
+ * @author Raphaï¿½l Slinckx
  */
 public class CannotWriteException extends Exception
 {

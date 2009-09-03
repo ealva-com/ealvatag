@@ -96,7 +96,7 @@ public class FrameTCMPTest extends AbstractTestCase
 
     public void testSaveToFile() throws Exception
     {
-        File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3");
+        File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3",new File("test1000.mp3"));
         MP3File mp3File = new MP3File(testFile);
 
         //Create and Save
@@ -114,7 +114,7 @@ public class FrameTCMPTest extends AbstractTestCase
 
     public void testSaveEmptyFrameToFile() throws Exception
     {
-        File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3");
+        File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3",new File("test1001.mp3"));
         MP3File mp3File = new MP3File(testFile);
 
         ID3v24Frame frame = new ID3v24Frame(ID3v24Frames.FRAME_ID_IS_COMPILATION);
@@ -135,7 +135,7 @@ public class FrameTCMPTest extends AbstractTestCase
 
     public void testConvertV24ToV23() throws Exception
     {
-        File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3");
+        File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3",new File("test1002.mp3"));
         MP3File mp3File = new MP3File(testFile);
 
         //Create and Save
@@ -158,7 +158,7 @@ public class FrameTCMPTest extends AbstractTestCase
 
     public void testConvertV22ToV24() throws Exception
     {
-        File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3");
+        File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3",new File("test1003.mp3"));
         MP3File mp3File = new MP3File(testFile);
 
         //Create and Save
@@ -179,6 +179,4 @@ public class FrameTCMPTest extends AbstractTestCase
         FrameBodyTCMP body = (FrameBodyTCMP) frame.getBody();
         assertEquals(TextEncoding.ISO_8859_1, body.getTextEncoding());
     }
-
-
 }

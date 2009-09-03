@@ -1,10 +1,9 @@
 package org.jaudiotagger.issues;
 
 import org.jaudiotagger.AbstractTestCase;
-import org.jaudiotagger.tag.TagFieldKey;
-import org.jaudiotagger.audio.ogg.OggFileReader;
 import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.AudioFileIO;
+import org.jaudiotagger.tag.TagFieldKey;
 
 import java.io.File;
 

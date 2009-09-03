@@ -1,6 +1,6 @@
 /*
  * Entagged Audio Tag library
- * Copyright (c) 2003-2005 Raphaël Slinckx <raphael@slinckx.net>
+ * Copyright (c) 2003-2005 Raphael Slinckx <raphael@slinckx.net>
  * 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -93,6 +93,8 @@ public class Mp4Tag extends AbstractTag
         tagFieldToMp4Field.put(TagFieldKey.URL_WIKIPEDIA_ARTIST_SITE, Mp4FieldKey.URL_WIKIPEDIA_ARTIST_SITE);
         tagFieldToMp4Field.put(TagFieldKey.LANGUAGE, Mp4FieldKey.LANGUAGE);
         tagFieldToMp4Field.put(TagFieldKey.KEY, Mp4FieldKey.KEY);
+        tagFieldToMp4Field.put(TagFieldKey.URL_LYRICS_SITE, Mp4FieldKey.URL_LYRICS_SITE);
+
     }
 
     protected String getArtistId()
@@ -492,7 +494,9 @@ public class Mp4Tag extends AbstractTag
             case URL_DISCOGS_ARTIST_SITE:
             case URL_WIKIPEDIA_ARTIST_SITE:
             case LANGUAGE:
-            case KEY:                                        
+            case KEY: 
+            case URL_LYRICS_SITE:
+                      
                 return new Mp4TagReverseDnsField(mp4FieldKey, value);
 
             case ARTWORK:

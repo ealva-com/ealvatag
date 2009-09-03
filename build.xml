@@ -180,7 +180,7 @@
 			nowarn="${compiler.generate.no.warnings}"
 			memoryMaximumSize="${compiler.max.memory}"
 			source="1.5"
-			encoding="cp1252"
+			encoding="UTF-8"
 			fork="true">
 			<compilerarg line="${compiler.args}"/>
 			<bootclasspath refid="bootclasspath"/>
@@ -228,7 +228,7 @@
 			nowarn="${compiler.generate.no.warnings}"
 			memoryMaximumSize="${compiler.max.memory}"
 			source="1.5"
-			encoding="cp1252"
+			encoding="UTF-8"
 			fork="true">
 			<compilerarg line="${compiler.args}"/>
 			<bootclasspath refid="bootclasspath"/>

@@ -40,7 +40,7 @@ import java.nio.ByteBuffer;
  * <tr><td>Text encoding       </td><td>$xx                     </td></tr>
  * <tr><td>MIME type           </td><td>&lt;text string&gt; $00 </td></tr>
  * <tr><td>Filename            </td><td>&lt;text string according to encoding&gt; $00 (00)</td></tr>
- * <tr><td>Content description </td><td><text string according to encóding> $00 (00)</td></tr>
+ * <tr><td>Content description </td><td><text string according to encoding> $00 (00)</td></tr>
  * <tr><td>Encapsulated object </td><td>&lt;binary data&gt;     </td></tr>
  * </table></p>
  * <p/>
