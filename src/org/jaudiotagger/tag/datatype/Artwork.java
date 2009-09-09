@@ -4,6 +4,7 @@ import org.jaudiotagger.tag.id3.valuepair.ImageFormats;
 import org.jaudiotagger.tag.reference.PictureTypes;
 
 import javax.imageio.ImageIO;
+import javax.imageio.stream.ImageInputStream;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.ByteArrayInputStream;
@@ -54,8 +55,11 @@ public class Artwork
 
     public BufferedImage getImage() throws IOException
     {
-        BufferedImage bi = ImageIO.read(ImageIO
-                    .createImageInputStream(new ByteArrayInputStream(getBinaryData())));
+        ByteArrayInputStream bais = new ByteArrayInputStream(getBinaryData());
+        ImageInputStream iis = ImageIO.createImageInputStream(bais);
+        BufferedImage bi = ImageIO.read(iis);
+        iis.close();
+        bais.close();
         return bi;
     }
 
@@ -94,10 +98,12 @@ public class Artwork
         RandomAccessFile imageFile = new RandomAccessFile(file, "r");
         byte[] imagedata = new byte[(int) imageFile.length()];
         imageFile.read(imagedata);
-
+        imageFile.close();
+        
         setBinaryData(imagedata);
         setMimeType(ImageFormats.getMimeTypeForBinarySignature(imagedata));
         setPictureType(PictureTypes.DEFAULT_ID);
+
     }
 
     public static Artwork createArtworkFromFile(File file)  throws IOException
