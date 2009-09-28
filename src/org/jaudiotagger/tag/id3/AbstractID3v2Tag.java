@@ -973,7 +973,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
     /**
      * Get file lock for writing too file
      * <p/>
-     * TODO:this appears to have little affect on Windows Vista
+     * TODO:this appears to have little effect on Windows Vista
      *
      * @param fileChannel
      * @return lock or null if locking is not supported
@@ -981,6 +981,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
      */
     protected FileLock getFileLockForWriting(FileChannel fileChannel, String filePath) throws IOException
     {
+        logger.finest("locking fileChannel for "+filePath);
         FileLock fileLock;
         try
         {
@@ -1169,6 +1170,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
         try
         {
             paddedFile=File.createTempFile(Utils.getMinBaseFilenameAllowedForTempFile(file), ".new", file.getParentFile());
+            logger.finest("Created temp file:"+paddedFile.getName() + " for "+file.getName());
         }
         //Vista:Can occur if have Write permission on folder this file would be created in Denied
         catch(IOException ioe)
