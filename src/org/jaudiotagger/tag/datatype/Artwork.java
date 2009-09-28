@@ -58,8 +58,6 @@ public class Artwork
         ByteArrayInputStream bais = new ByteArrayInputStream(getBinaryData());
         ImageInputStream iis = ImageIO.createImageInputStream(bais);
         BufferedImage bi = ImageIO.read(iis);
-        iis.close();
-        bais.close();
         return bi;
     }
 
