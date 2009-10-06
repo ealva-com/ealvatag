@@ -977,7 +977,9 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
      *
      * @param fileChannel
      * @return lock or null if locking is not supported
-     * @throws IOException if unable to get lock because already locked
+     * @throws IOException if unable to get lock because already locked by another program
+     * @throws java.nio.channels.OverlappingFileLockException if already locked by another thread in the same VM, we dont catch this
+     * because indicates a programming error
      */
     protected FileLock getFileLockForWriting(FileChannel fileChannel, String filePath) throws IOException
     {
@@ -1200,13 +1202,10 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
             throw new UnableToModifyFileException(ErrorMessage.GENERAL_WRITE_FAILED_TO_MODIFY_TEMPORARY_FILE_IN_FOLDER.getMsg(file.getName(),file.getParentFile().getPath()));
         }
 
-        FileLock fileTmpLock = null;
         try
         {
-            //Lock file is possible, only throws exception if already locked
-            fileTmpLock = getFileLockForWriting(fcOut, paddedFile.getPath());
-
-            //Create read channel from original file and lock so cant be modified by anything else
+            //Create read channel from original file
+            //TODO lock so cant be modified by anything else whilst reading from it ?
             fcIn        = new FileInputStream(file).getChannel();
 
             //Write padding to new file (this is where the tag will be written to later)
@@ -1262,13 +1261,6 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
             {
                 if(fcOut.isOpen())
                 {
-                    if (fileTmpLock != null)
-                    {
-                         if(fileTmpLock.isValid())
-                         {
-                            fileTmpLock.release();
-                         }
-                    }
                     fcOut.close();
                 }
             }
@@ -1277,6 +1269,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
             replaceFile(file,paddedFile);
 
             //Update modification time
+            //TODO is this the right file ?
             paddedFile.setLastModified(lastModified);
         }
         finally
@@ -1296,13 +1289,6 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
                 {
                     if(fcOut.isOpen())
                     {
-                        if (fileTmpLock != null)
-                        {
-                             if(fileTmpLock.isValid())
-                             {
-                                fileTmpLock.release();
-                             }
-                        }
                         fcOut.close();
                     }
                 }
@@ -1331,7 +1317,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
         FileChannel fc = null;
         FileLock fileLock = null;
 
-        //We need to adjust location of audio File if true
+        //We need to adjust location of audio file if true
         if (sizeIncPadding > audioStartLocation)
         {
              logger.finest("Adjusting Padding");
