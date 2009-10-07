@@ -337,7 +337,7 @@ public class ID3v23Frame extends AbstractID3v2Frame
         }
         else if (frameSize > byteBuffer.remaining())
         {
-            logger.warning(getLoggingFilename() + ":Invalid Frame size larger than size before mp3 audio:" + identifier);
+            logger.warning(getLoggingFilename() + ":Invalid Frame size of " +frameSize +" larger than size of" + byteBuffer.remaining() + " before mp3 audio:" + identifier);
             throw new InvalidFrameException(identifier + " is invalid frame");
         }
 

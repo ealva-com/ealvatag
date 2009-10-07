@@ -15,4 +15,15 @@ public class Hex
     {
         return "0x" + Long.toHexString(value);
     }
+
+    /**
+     * Display as hex
+     *
+     * @param value
+     * @return
+     */
+    public static String asHex(byte value)
+    {
+        return "0x" + Integer.toHexString(value);
+    }
 }

@@ -53,40 +53,36 @@ public class ID3Unsynchronization
      */
     public static byte[] unsynchronize(byte[] abySource)
     {
-        ByteArrayInputStream oBAIS = new ByteArrayInputStream(abySource);
-        ByteArrayOutputStream oBAOS = new ByteArrayOutputStream();
+        ByteArrayInputStream   input = new ByteArrayInputStream(abySource);
+        ByteArrayOutputStream output = new ByteArrayOutputStream();
 
         int count = 0;
-        while (oBAIS.available() > 0)
+        while (input.available() > 0)
         {
-            int iVal = oBAIS.read();
+            int firstByte = input.read();
             count++;
-            oBAOS.write(iVal);
-            if ((iVal & MPEGFrameHeader.SYNC_BYTE1) == MPEGFrameHeader.SYNC_BYTE1)
+            output.write(firstByte);
+            if ((firstByte & MPEGFrameHeader.SYNC_BYTE1) == MPEGFrameHeader.SYNC_BYTE1)
             {
                 // if byte is $FF, we must check the following byte if there is one
-                if (oBAIS.available() > 0)
+                if (input.available() > 0)
                 {
-                    oBAIS.mark(1);  // remember where we were, if we don't need to unsynchronize
-                    int iNextVal = oBAIS.read();
-                    if ((iNextVal & MPEGFrameHeader.SYNC_BYTE2) == MPEGFrameHeader.SYNC_BYTE2)
+                    input.mark(1);  // remember where we were, if we don't need to unsynchronize
+                    int secondByte = input.read();
+                    if ((secondByte & MPEGFrameHeader.SYNC_BYTE2) == MPEGFrameHeader.SYNC_BYTE2)
                     {
                         // we need to unsynchronize here
                         logger.finest("Writing unsynchronisation bit at:" + count);
-                        oBAOS.write(0);
-                        oBAOS.write(iNextVal);
+                        output.write(0);
+
                     }
-                    else if (iNextVal == 0)
+                    else if (secondByte == 0)
                     {
                         // we need to unsynchronize here
                         logger.finest("Inserting zero unsynchronisation bit at:" + count);
-                        oBAOS.write(0);
-                        oBAOS.write(iNextVal);
+                        output.write(0);
                     }
-                    else
-                    {
-                        oBAIS.reset();
-                    }
+                    input.reset();                     
                 }
             }
         }
@@ -94,9 +90,10 @@ public class ID3Unsynchronization
         // which will be removed on de-unsynchronization later
         if ((abySource[abySource.length - 1] & MPEGFrameHeader.SYNC_BYTE1) == MPEGFrameHeader.SYNC_BYTE1)
         {
-            oBAOS.write(0);
+            logger.finest("Adding unsynchronisation bit at end of stream");
+            output.write(0);
         }
-        return oBAOS.toByteArray();
+        return output.toByteArray();
     }
 
 
