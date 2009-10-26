@@ -64,6 +64,10 @@ public class TextEncodedStringNullTerminated extends AbstractString
      */
     public void readByteArray(byte[] arr, int offset) throws InvalidDataTypeException
     {
+        if(offset>=arr.length)
+        {
+            throw new InvalidDataTypeException("Unable to find null terminated string");
+        }
         int bufferSize = 0;
 
         logger.finer("Reading from array starting from offset:" + offset);

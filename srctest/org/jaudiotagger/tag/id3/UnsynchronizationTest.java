@@ -1,11 +1,19 @@
 package org.jaudiotagger.tag.id3;
 
 import org.jaudiotagger.AbstractTestCase;
+import org.jaudiotagger.logging.Hex;
 import org.jaudiotagger.audio.mp3.MP3File;
+import org.jaudiotagger.audio.AudioFile;
+import org.jaudiotagger.audio.AudioFileIO;
 import org.jaudiotagger.tag.TagOptionSingleton;
+import org.jaudiotagger.tag.Tag;
+import org.jaudiotagger.tag.datatype.Artwork;
 import org.jaudiotagger.tag.id3.framebody.FrameBodyAPIC;
 
+import javax.imageio.ImageIO;
 import java.io.File;
+import java.io.ByteArrayInputStream;
+import java.awt.image.BufferedImage;
 
 /**
  * Test Itunes problems
@@ -145,5 +153,83 @@ public class UnsynchronizationTest extends AbstractTestCase
         v22tag = (ID3v22Tag) mp3File.getID3v2Tag();
         assertTrue(v22tag.isUnsynchronization());
         assertEquals(AbstractID3v2Tag.getV2TagSizeIfExists(testFile), mp3File.getMP3AudioHeader().getMp3StartByte());
+    }
+
+    /**
+     * Test writing Artwork  to Mp3 ID3v23 compares not synchronized to unsynchronised
+     */
+    public void testWriteLargeunsynchronizedFields()
+    {
+        File testFile = null;
+        File testFile2 = null;
+
+        Exception exceptionCaught = null;
+        try
+        {
+            testFile  = AbstractTestCase.copyAudioToTmp("testV1.mp3");
+            testFile2 = AbstractTestCase.copyAudioToTmp("testV1.mp3",new File("testV1-nonsynced.mp3"));
+
+            //Save Unsynced
+            TagOptionSingleton.getInstance().setUnsyncTags(true);
+            AudioFile af = AudioFileIO.read(testFile);
+            af.setTag(new ID3v23Tag());
+            ID3v23Tag v23TagUnsynced = (ID3v23Tag)af.getTag();
+            assertFalse(v23TagUnsynced.isUnsynchronization());
+            Tag unsyncedTag = af.getTag();
+            Artwork artworkUnsynced = Artwork.createArtworkFromFile(new File("testdata/coverart_large.jpg"));
+            unsyncedTag.createAndSetArtworkField(artworkUnsynced);
+            af.commit();
+
+            //Save Notsynced
+            TagOptionSingleton.getInstance().setUnsyncTags(false);
+            af = AudioFileIO.read(testFile2);
+            af.setTag(new ID3v23Tag());
+            ID3v23Tag  v23TagNotsynced = (ID3v23Tag)af.getTag();
+            assertFalse(v23TagNotsynced.isUnsynchronization());
+            Tag notSyncedTag = af.getTag();
+            Artwork artworkNotsynced = Artwork.createArtworkFromFile(new File("testdata/coverart_large.jpg"));
+            notSyncedTag.createAndSetArtworkField(artworkNotsynced);
+            af.commit();
+
+            //Now read back ok
+            af = AudioFileIO.read(testFile2);
+            notSyncedTag = af.getTag();
+            v23TagNotsynced = (ID3v23Tag)notSyncedTag;
+            assertEquals(1,notSyncedTag.getArtworkList().size());
+            artworkNotsynced = notSyncedTag.getArtworkList().get(0);
+
+            //Now read back ok
+            af = AudioFileIO.read(testFile);
+            unsyncedTag = af.getTag();
+            v23TagUnsynced = (ID3v23Tag)unsyncedTag;
+            assertTrue(v23TagUnsynced.isUnsynchronization());
+            assertEquals(1,unsyncedTag.getArtworkList().size());
+            artworkUnsynced = unsyncedTag.getArtworkList().get(0);
+
+            int count=0;
+            assertEquals(114425, artworkUnsynced.getBinaryData().length);
+            assertEquals(114425, artworkNotsynced.getBinaryData().length);
+
+
+            boolean matches = true;
+            for(int i=0;i< artworkUnsynced.getBinaryData().length;i++)
+            {
+           if((artworkUnsynced.getBinaryData()[i])!=(artworkNotsynced.getBinaryData()[i]))
+                {
+                    System.out.println(i+":"+ Hex.asHex(artworkNotsynced.getBinaryData()[i])+":"+Hex.asHex(artworkUnsynced.getBinaryData()[i]));
+                    matches=false;
+                    break;
+                }
+            }
+            assertTrue(matches);
+            BufferedImage bi = ImageIO.read(new ByteArrayInputStream(artworkNotsynced.getBinaryData()));
+            bi = ImageIO.read(new ByteArrayInputStream(artworkUnsynced.getBinaryData()));
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            exceptionCaught = e;
+        }
+        assertNull(exceptionCaught);
     }
 }
