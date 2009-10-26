@@ -1478,6 +1478,12 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
                     logger.finest("Modifying frame in map:" + newFrame.getIdentifier());
                     FrameBodyTDRC body = (FrameBodyTDRC) firstFrame.getBody();
                     FrameBodyTDRC newBody = (FrameBodyTDRC) newFrame.getBody();
+
+                    //#304:Check for NullPointer, just ignore this frame
+                    if(newBody.getOriginalID()==null)
+                    {
+                        return;
+                    }
                     //Just add the data to the frame
                     if (newBody.getOriginalID().equals(ID3v23Frames.FRAME_ID_V3_TYER))
                     {
@@ -1496,9 +1502,8 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
                         body.setReco(newBody.getText());
                     }
                 }
-                /* The first frame was a TDRC frame that was not really allowed, this new frame was probably a
-                * valid frame such as TYER which has been converted to TDRC, replace the firstframe with this frame
-                */
+                // The first frame was a TDRC frame that was not really allowed, this new frame was probably a
+                // valid frame such as TYER which has been converted to TDRC, replace the firstframe with this frame
                 else if (firstFrame.getBody() instanceof FrameBodyUnsupported)
                 {
                     frameMap.put(newFrame.getIdentifier(), newFrame);
