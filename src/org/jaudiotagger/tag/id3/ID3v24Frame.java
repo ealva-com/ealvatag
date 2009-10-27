@@ -86,24 +86,40 @@ public class ID3v24Frame extends AbstractID3v2Frame
 
     private void createV24FrameFromV23Frame(ID3v23Frame frame) throws InvalidFrameException
     {
-        // Is it a straight conversion e.g TALB - TALB
+       // Is it a straight conversion e.g TALB - TALB
         identifier = ID3Tags.convertFrameID23To24(frame.getIdentifier());
+        logger.finer("Creating V24frame from v23:"+frame.getIdentifier()+":"+identifier);
 
-        //We cant convert unsupported bodie sproperly
+
+        //We cant convert unsupported bodies properly
         if(frame.getBody() instanceof FrameBodyUnsupported)
         {
             this.frameBody = new FrameBodyUnsupported((FrameBodyUnsupported) frame.getBody());
             this.frameBody.setHeader(this);
             identifier = frame.getIdentifier();
-            logger.info("V3:UnsupportedBody:Orig id is:" + frame.getIdentifier() + ":New id is:" + identifier);
+            logger.finer("V3:UnsupportedBody:Orig id is:" + frame.getIdentifier() + ":New id is:" + identifier);
             return;
-        }
+        }//Simple Copy
         else if (identifier != null)
         {
-            logger.info("V3:Orig id is:" + frame.getIdentifier() + ":New id is:" + identifier);
-            this.frameBody = (AbstractTagFrameBody) ID3Tags.copyObject(frame.getBody());
-            this.frameBody.setHeader(this);
-            return;
+            //Special Case
+            if(
+                    (frame.getIdentifier().equals(ID3v23Frames.FRAME_ID_V3_USER_DEFINED_INFO))
+                    &&
+                    (((FrameBodyTXXX)frame.getBody()).getDescription().equals(FrameBodyTXXX.MOOD)))
+            {
+                this.frameBody = new FrameBodyTMOO((FrameBodyTXXX)frame.getBody());
+                this.frameBody.setHeader(this);
+                identifier = frameBody.getIdentifier();
+                return;
+            }
+            else
+            {
+                logger.finer("V3:Orig id is:" + frame.getIdentifier() + ":New id is:" + identifier);
+                this.frameBody = (AbstractTagFrameBody) ID3Tags.copyObject(frame.getBody());
+                this.frameBody.setHeader(this);
+                return;
+            }
         }
         // Is it a known v3 frame which needs forcing to v4 frame e.g. TYER - TDRC
         else if (ID3Tags.isID3v23FrameIdentifier(frame.getIdentifier()))
@@ -123,10 +139,9 @@ public class ID3v24Frame extends AbstractID3v2Frame
                 this.frameBody = new FrameBodyDeprecated((AbstractID3v2FrameBody) frame.getBody());
                 this.frameBody.setHeader(this);
                 identifier = frame.getIdentifier();
-                logger.info("V3:Deprecated:Orig id is:" + frame.getIdentifier() + ":New id is:" + identifier);
+                logger.finer("V3:Deprecated:Orig id is:" + frame.getIdentifier() + ":New id is:" + identifier);
                 return;
             }
-
         }
         // Unknown Frame e.g NCON or TDRL (because TDRL unknown to V23)
         else
@@ -134,7 +149,7 @@ public class ID3v24Frame extends AbstractID3v2Frame
             this.frameBody = new FrameBodyUnsupported((FrameBodyUnsupported) frame.getBody());
             this.frameBody.setHeader(this);
             identifier = frame.getIdentifier();
-            logger.info("V3:Unknown:Orig id is:" + frame.getIdentifier() + ":New id is:" + identifier);
+            logger.finer("V3:Unknown:Orig id is:" + frame.getIdentifier() + ":New id is:" + identifier);
             return;
         }
     }

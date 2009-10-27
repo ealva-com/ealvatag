@@ -141,70 +141,7 @@ public class ID3v22Tag extends AbstractID3v2Tag
         }
     }
 
-    /**
-     * Copy frames from one tag into a v2.2 tag
-     */
-    protected void copyFrames(AbstractID3v2Tag copyObject)
-    {
-        logger.info("Copying Frames,there are:" + copyObject.frameMap.keySet().size());
-        frameMap = new LinkedHashMap();
-        //Copy Frames that are a valid 2.2 type
-        Iterator<String> iterator = copyObject.frameMap.keySet().iterator();
-        AbstractID3v2Frame frame;
-        ID3v22Frame newFrame = null;
-        while (iterator.hasNext())
-        {
-            String id = iterator.next();
-            Object o = copyObject.frameMap.get(id);
-            if (o instanceof AbstractID3v2Frame)
-            {
-                frame = (AbstractID3v2Frame) o;
-                //Special case v24 TDRC (FRAME_ID_YEAR) may need converting to multiple frames
-                if ((frame.getIdentifier().equals(ID3v24Frames.FRAME_ID_YEAR)) && (frame.getBody() instanceof FrameBodyTDRC))
-                {
-                    translateFrame(frame);
-                }
-                else
-                {
-                    try
-                    {
-                        newFrame = new ID3v22Frame(frame);
-                        frameMap.put(newFrame.getIdentifier(), newFrame);
-                    }
-                    catch (InvalidFrameException ife)
-                    {
-                        logger.log(Level.SEVERE, "Unable to convert frame:" + frame.getIdentifier(), ife);
-                    }
 
-                }
-            }
-            else if (o instanceof ArrayList)
-            {
-                ArrayList<AbstractID3v2Frame> multiFrame = new ArrayList<AbstractID3v2Frame>();
-                for (ListIterator<AbstractID3v2Frame> li = ((ArrayList<AbstractID3v2Frame>) o).listIterator(); li.hasNext();)
-                {
-                    frame = li.next();
-                    try
-                    {
-                        newFrame = new ID3v22Frame(frame);
-                        multiFrame.add(newFrame);
-                    }
-                    catch (InvalidFrameException ife)
-                    {
-                        logger.log(Level.SEVERE, "Unable to convert frame:" + frame.getIdentifier(), ife);
-                    }
-                }
-                //Ensure that the list actually contains at lest one value before adding
-                if(multiFrame.size()>0)
-                {
-                    if (newFrame != null)
-                    {
-                        frameMap.put(newFrame.getIdentifier(), multiFrame);
-                    }
-                }
-            }
-        }
-    }
 
     /**
      * Copy Constructor, creates a new ID3v2_2 Tag based on another ID3v2_2 Tag
@@ -323,6 +260,27 @@ public class ID3v22Tag extends AbstractID3v2Tag
         return super.equals(obj);
     }
 
+
+    protected void addFrame(AbstractID3v2Frame frame)
+    {
+        try
+        {
+            //Special case to handle TDRC frame from V24 that needs breaking up into seperate frame in V23
+            if ((frame.getIdentifier().equals(ID3v24Frames.FRAME_ID_YEAR)) && (frame.getBody() instanceof FrameBodyTDRC))
+            {
+                translateFrame(frame);
+            }
+            else
+            {
+                ID3v22Frame newFrame = new ID3v22Frame(frame);
+                copyFrameIntoMap(newFrame.getIdentifier(), newFrame);
+            }
+        }
+        catch (InvalidFrameException ife)
+        {
+            logger.log(Level.SEVERE, "Unable to convert frame:" + frame.getIdentifier());
+        }
+    }
     /**
      * Read the size of a tag, based on  the value written in the tag header
      *
@@ -478,6 +436,7 @@ public class ID3v22Tag extends AbstractID3v2Tag
      * This is used when we need to translate a single frame into multiple frames,
      * currently required for TDRC frames.
      */
+    //TODO will overwrite any existing TYER or TIME frame, do we ever want multiples of these
     protected void translateFrame(AbstractID3v2Frame frame)
     {
         FrameBodyTDRC tmpBody = (FrameBodyTDRC) frame.getBody();

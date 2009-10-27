@@ -179,80 +179,26 @@ public class ID3v23Tag extends AbstractID3v2Tag
         }
     }
 
-    /**
-     * Copy frames from one tag into a v2.3 tag
-     *
-     * @param copyObject
-     */
-    protected void copyFrames(AbstractID3v2Tag copyObject)
+
+
+    protected void addFrame(AbstractID3v2Frame frame)
     {
-        logger.info("Copying Frames,there are:" + copyObject.frameMap.keySet().size() + " different types");
-        frameMap = new LinkedHashMap();
-
-        //Copy Frames that are a valid 2.3 type
-        Iterator<String> iterator = copyObject.frameMap.keySet().iterator();
-        AbstractID3v2Frame frame;
-        ID3v23Frame newFrame = null;
-        while (iterator.hasNext())
+        try
         {
-            String id = iterator.next();
-            Object o = copyObject.frameMap.get(id);
-            if (o instanceof AbstractID3v2Frame)
+            //Special case to handle TDRC frame from V24 that needs breaking up into seperate frame in V23
+            if ((frame.getIdentifier().equals(ID3v24Frames.FRAME_ID_YEAR)) && (frame.getBody() instanceof FrameBodyTDRC))
             {
-                frame = (AbstractID3v2Frame) o;
-                logger.info("Frame is:" + frame.getIdentifier());
-
-                //Special case v24 tdrc may need converting to multiple frames, only convert when
-                //it is a valid tdrc to cope with tdrc being added illegally to a v23 tag which is then
-                //converted to v24 tag and back again.
-                if ((frame.getIdentifier().equals(ID3v24Frames.FRAME_ID_YEAR)) && (frame.getBody() instanceof FrameBodyTDRC))
-                {
-                    translateFrame(frame);
-                }
-                //Usual Case
-                else
-                {
-                    try
-                    {
-
-                        newFrame = new ID3v23Frame(frame);
-                        logger.info("Adding Frame:" + newFrame.getIdentifier());
-                        frameMap.put(newFrame.getIdentifier(), newFrame);
-                    }
-                    catch (InvalidFrameException ife)
-                    {
-                        logger.log(Level.SEVERE, "Unable to convert frame:" + frame.getIdentifier());
-                    }
-                }
+                translateFrame(frame);
             }
-            //Multi Frames
-            else if (o instanceof ArrayList)
+            else
             {
-                ArrayList<AbstractID3v2Frame> multiFrame = new ArrayList<AbstractID3v2Frame>();
-                for (ListIterator<AbstractID3v2Frame> li = ((ArrayList<AbstractID3v2Frame>) o).listIterator(); li.hasNext();)
-                {
-                    frame = li.next();
-                    logger.info("Frame is MultiFrame:" + frame.getIdentifier());
-                    try
-                    {
-                        newFrame = new ID3v23Frame(frame);
-                        multiFrame.add(newFrame);
-                    }
-                    catch (InvalidFrameException ife)
-                    {
-                        logger.log(Level.SEVERE, "Unable to convert frame:" + frame.getIdentifier(), ife);
-                    }
-                }
-                //Ensure that the list actually contains at lest one value before adding
-                if (multiFrame.size() > 0)
-                {
-                    if (newFrame != null)
-                    {
-                        logger.info("Adding MultiFrame:" + newFrame.getIdentifier());
-                        frameMap.put(newFrame.getIdentifier(), multiFrame);
-                    }
-                }
+                ID3v23Frame newFrame = new ID3v23Frame(frame);
+                copyFrameIntoMap(newFrame.getIdentifier(), newFrame);
             }
+        }
+        catch (InvalidFrameException ife)
+        {
+            logger.log(Level.SEVERE, "Unable to convert frame:" + frame.getIdentifier());
         }
     }
 
@@ -260,6 +206,7 @@ public class ID3v23Tag extends AbstractID3v2Tag
      * This is used when we need to translate a single frame into multiple frames,
      * currently required for v24 TDRC frames.
      */
+    //TODO will overwrite any existing TYER or TIME frame, do we ever want multiples of these
     protected void translateFrame(AbstractID3v2Frame frame)
     {
         FrameBodyTDRC tmpBody = (FrameBodyTDRC) frame.getBody();

@@ -3,13 +3,11 @@ package org.jaudiotagger.tag.wma;
 import org.jaudiotagger.AbstractTestCase;
 import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.AudioFileIO;
-import org.jaudiotagger.audio.asf.data.MetadataDescriptor;
 import org.jaudiotagger.audio.asf.tag.AsfFieldKey;
 import org.jaudiotagger.audio.asf.tag.AsfTag;
 import org.jaudiotagger.audio.asf.tag.AsfTagCoverField;
 import org.jaudiotagger.audio.asf.tag.AsfTagTextField;
 import org.jaudiotagger.tag.*;
-import org.jaudiotagger.tag.datatype.Artwork;
 import org.jaudiotagger.tag.reference.PictureTypes;
 
 import javax.imageio.ImageIO;
@@ -235,7 +233,7 @@ public class WmaSimpleTest extends AbstractTestCase
             //assertEquals("isrc", tag.getFirst(TagFieldKey.ISRC));
             //assertEquals("Lyricist", tag.getFirst(TagFieldKey.LYRICIST));
             //assertEquals("conductor", tag.getFirst(TagFieldKey.CONDUCTOR));
-            //assertEquals("Mellow", tag.getFirst(TagFieldKey.MOOD));
+            //assertEquals("Mellow", tag.getFirst(TagFieldKey.INVOLVED_PEOPLE));
             //assertEquals("5cbef01b-cc35-4f52-af7b-d0df0c4f61b9", tag.getFirst(TagFieldKey.MUSICIP_ID));
 
             //Picard Qt does not currently support these fields ...

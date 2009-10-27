@@ -141,10 +141,36 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
     }
 
     /**
-     * Copy frames from another tag, needs implemanting by subclasses
+     * Copy frames from another tag,
      */
-    protected abstract void copyFrames(AbstractID3v2Tag copyObject);
+    protected void copyFrames(AbstractID3v2Tag copyObject)
+    {
+        frameMap = new LinkedHashMap();
+        //Copy Frames that are a valid 2.4 type
+        Iterator iterator = copyObject.frameMap.keySet().iterator();
+        AbstractID3v2Frame frame;
+        ID3v23Frame newFrame = null;
+        while (iterator.hasNext())
+        {
+            String id = (String) iterator.next();
+            Object o = copyObject.frameMap.get(id);
+            //SingleFrames
+            if (o instanceof AbstractID3v2Frame)
+            {
+                addFrame((AbstractID3v2Frame) o);
+            }
+            //MultiFrames
+            else if (o instanceof ArrayList)
+            {
+                for (ListIterator<AbstractID3v2Frame> li = ((ArrayList<AbstractID3v2Frame>) o).listIterator(); li.hasNext();)
+                {
+                    addFrame(li.next());
+                }
+            }
+        }
+    }
 
+    protected abstract void addFrame(AbstractID3v2Frame frame);
 
     /**
      * Returns the number of bytes which come from duplicate frames
@@ -1436,94 +1462,31 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
         }
     }
     
-    /**
-     * Add frame to HashMap used when converting between tag versions, take into account
-     * occurences when two frame may both map to a single frame when converting between
-     * versions
-     * <p/>
-     * TODO the logic here is messy and seems to be specific to date fields only when it
-     * was intended to be generic.
-     */
+    /*
+    * Copy framne into map, whilst accounting for multiple frame of same type which can occur even if there were
+    * not frames of the same type in the original tag
+    */
     protected void copyFrameIntoMap(String id, AbstractID3v2Frame newFrame)
     {
-        /* The frame already exists this shouldnt normally happen because frames
-        * that are allowed to be multiple don't call this method. Frames that
-        * arent allowed to be multiple aren't added to hashmap in first place when
-        * originally added.
-        *
-        * We only want to allow one of the frames going forward but we try and merge
-        * all the information into the one frame. However there is a problem here that
-        * if we then take this, modify it and try to write back the original values
-        * we could lose some information although this info is probably invalid anyway.
-        *
-        * However converting some frames from tag of one version to another may
-        * mean that two different frames both get converted to one frame, this
-        * particulary applies to DateTime fields which were originally two fields
-        * in v2.3 but are one field in v2.4.
-        */
+
         if (frameMap.containsKey(newFrame.getIdentifier()))
         {
-            //Retrieve the frame with the same id we have already loaded into the map
-            AbstractID3v2Frame firstFrame = (AbstractID3v2Frame) frameMap.get(newFrame.getIdentifier());
-
-            /* Two different frames both converted to TDRCFrames, now if this is the case one of them
-            * may have actually have been created as a FrameUnsupportedBody because TDRC is only
-            * supported in ID3v24, but is often created in v23 tags as well together with the valid TYER
-            * frame
-            */
-            if (newFrame.getBody() instanceof FrameBodyTDRC)
+            Object o = frameMap.get(newFrame.getIdentifier());
+            if(o instanceof AbstractID3v2Frame)
             {
-                if (firstFrame.getBody() instanceof FrameBodyTDRC)
-                {
-                    logger.finest("Modifying frame in map:" + newFrame.getIdentifier());
-                    FrameBodyTDRC body = (FrameBodyTDRC) firstFrame.getBody();
-                    FrameBodyTDRC newBody = (FrameBodyTDRC) newFrame.getBody();
-
-                    //#304:Check for NullPointer, just ignore this frame
-                    if(newBody.getOriginalID()==null)
-                    {
-                        return;
-                    }
-                    //Just add the data to the frame
-                    if (newBody.getOriginalID().equals(ID3v23Frames.FRAME_ID_V3_TYER))
-                    {
-                        body.setYear(newBody.getText());
-                    }
-                    else if (newBody.getOriginalID().equals(ID3v23Frames.FRAME_ID_V3_TDAT))
-                    {
-                        body.setDate(newBody.getText());
-                    }
-                    else if (newBody.getOriginalID().equals(ID3v23Frames.FRAME_ID_V3_TIME))
-                    {
-                        body.setTime(newBody.getText());
-                    }
-                    else if (newBody.getOriginalID().equals(ID3v23Frames.FRAME_ID_V3_TRDA))
-                    {
-                        body.setReco(newBody.getText());
-                    }
-                }
-                // The first frame was a TDRC frame that was not really allowed, this new frame was probably a
-                // valid frame such as TYER which has been converted to TDRC, replace the firstframe with this frame
-                else if (firstFrame.getBody() instanceof FrameBodyUnsupported)
-                {
-                    frameMap.put(newFrame.getIdentifier(), newFrame);
-                }
-                else
-                {
-                    //we just lose this frame, weve already got one with the correct id.
-                    //TODO may want to store this somewhere
-                    logger.warning("Found duplicate TDRC frame in invalid situation,discarding:" + newFrame.getIdentifier());
-                }
+                List<AbstractID3v2Frame> list = new ArrayList<AbstractID3v2Frame>();
+                list.add((AbstractID3v2Frame)o);
+                list.add(newFrame);
+                frameMap.put(newFrame.getIdentifier(), list);
             }
             else
             {
-                logger.warning("Found duplicate frame in invalid situation,discarding:" + newFrame.getIdentifier());
+                 List<AbstractID3v2Frame> list = (List)o;
+                 list.add(newFrame);
             }
         }
         else
-        //Just add frame to map
         {
-            logger.finest("Adding frame to map:" + newFrame.getIdentifier());
             frameMap.put(newFrame.getIdentifier(), newFrame);
         }
     }

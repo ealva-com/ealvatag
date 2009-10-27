@@ -331,65 +331,118 @@ public class ID3v24Tag extends AbstractID3v2Tag
         }
     }
 
-    /**
-     * Copy frames from one tag into a v2.4 tag
-     */
-    protected void copyFrames(AbstractID3v2Tag copyObject)
+    protected void addFrame(AbstractID3v2Frame frame)
     {
-        logger.info("Copying Frames,there are:" + copyObject.frameMap.keySet().size() + " different types");
-        frameMap = new LinkedHashMap();
-        //Copy Frames that are a valid 2.4 type
-        Iterator iterator = copyObject.frameMap.keySet().iterator();
-        AbstractID3v2Frame frame;
-        ID3v24Frame newFrame = null;
-        while (iterator.hasNext())
+        try
         {
-            String id = (String) iterator.next();
-            Object o = copyObject.frameMap.get(id);
-            //SingleFrames
-            if (o instanceof AbstractID3v2Frame)
-            {
-                frame = (AbstractID3v2Frame) o;
-                try
-                {
-                    newFrame = new ID3v24Frame(frame);
-                    logger.info("Adding Frame:" + newFrame.getIdentifier());
-                    copyFrameIntoMap(newFrame.getIdentifier(), newFrame);
-                }
-                catch (InvalidFrameException ife)
-                {
-                    logger.log(Level.SEVERE, "Unable to convert frame:" + frame.getIdentifier(), ife);
-                }
-            }
-            //MultiFrames
-            else if (o instanceof ArrayList)
-            {
-                ArrayList<AbstractID3v2Frame> multiFrame = new ArrayList<AbstractID3v2Frame>();
-                for (ListIterator<AbstractID3v2Frame> li = ((ArrayList<AbstractID3v2Frame>) o).listIterator(); li.hasNext();)
-                {
-                    frame = li.next();
-                    try
-                    {
-                        newFrame = new ID3v24Frame(frame);
-                        multiFrame.add(newFrame);
-                    }
-                    catch (InvalidFrameException ife)
-                    {
-                        logger.log(Level.SEVERE, "Unable to convert frame:" + frame.getIdentifier());
-                    }
-                }
-                //Ensure that the list actually contains at lest one value before adding
-                if (multiFrame.size() > 0)
-                {
-                    if (newFrame != null)
-                    {
-                        logger.finest("Adding multi frame list to map:" + newFrame.getIdentifier());
-                        frameMap.put(newFrame.getIdentifier(), multiFrame);
-                    }
-                }
-            }
+            ID3v24Frame newFrame = new ID3v24Frame(frame);
+            copyFrameIntoMap(newFrame.getIdentifier(), newFrame);
+        }
+        catch (InvalidFrameException ife)
+        {
+            logger.log(Level.SEVERE, "Unable to convert frame:" + frame.getIdentifier());
         }
     }
+
+    /*
+       * Copy framne into map, whilst accounting for multiple frame sof same type which can occur even if there were
+       * not frames of the dame type in the original tag
+       *
+       * The frame already exists this shouldnt normally happen because frames
+       * that are allowed to be multiple don't call this method. Frames that
+       * arent allowed to be multiple aren't added to hashmap in first place when
+       * originally added.
+       *
+       * We only want to allow one of the frames going forward but we try and merge
+       * all the information into the one frame. However there is a problem here that
+       * if we then take this, modify it and try to write back the original values
+       * we could lose some information although this info is probably invalid anyway.
+       *
+       * However converting some frames from tag of one version to another may
+       * mean that two different frames both get converted to one frame, this
+       * particulary applies to DateTime fields which were originally two fields
+       * in v2.3 but are one field in v2.4.
+       */
+       @Override
+       protected void copyFrameIntoMap(String id, AbstractID3v2Frame newFrame)
+       {
+
+           if (frameMap.containsKey(newFrame.getIdentifier()))
+           {
+               Object o = frameMap.get(newFrame.getIdentifier());
+               if(o instanceof AbstractID3v2Frame)
+               {
+                   //Retrieve the frame with the same id we have already loaded into the map
+                   AbstractID3v2Frame firstFrame = (AbstractID3v2Frame) frameMap.get(newFrame.getIdentifier());
+
+
+                   //Two different frames both converted to TDRCFrames, now if this is the case one of them
+                   //may have actually have been created as a FrameUnsupportedBody because TDRC is only
+                   //supported in ID3v24, but is often created in v23 tags as well together with the valid TYER
+                   //frame
+                   if (newFrame.getBody() instanceof FrameBodyTDRC)
+                   {
+                       if (firstFrame.getBody() instanceof FrameBodyTDRC)
+                       {
+                           logger.finest("Modifying frame in map:" + newFrame.getIdentifier());
+                           FrameBodyTDRC body = (FrameBodyTDRC) firstFrame.getBody();
+                           FrameBodyTDRC newBody = (FrameBodyTDRC) newFrame.getBody();
+
+                           //#304:Check for NullPointer, just ignore this frame
+                           if(newBody.getOriginalID()==null)
+                           {
+                               return;
+                           }
+                           //Just add the data to the frame
+                           if (newBody.getOriginalID().equals(ID3v23Frames.FRAME_ID_V3_TYER))
+                           {
+                               body.setYear(newBody.getText());
+                           }
+                           else if (newBody.getOriginalID().equals(ID3v23Frames.FRAME_ID_V3_TDAT))
+                           {
+                               body.setDate(newBody.getText());
+                           }
+                           else if (newBody.getOriginalID().equals(ID3v23Frames.FRAME_ID_V3_TIME))
+                           {
+                               body.setTime(newBody.getText());
+                           }
+                           else if (newBody.getOriginalID().equals(ID3v23Frames.FRAME_ID_V3_TRDA))
+                           {
+                               body.setReco(newBody.getText());
+                           }
+                       }
+                       // The first frame was a TDRC frame that was not really allowed, this new frame was probably a
+                       // valid frame such as TYER which has been converted to TDRC, replace the firstframe with this frame
+                       else if (firstFrame.getBody() instanceof FrameBodyUnsupported)
+                       {
+                           frameMap.put(newFrame.getIdentifier(), newFrame);
+                       }
+                       else
+                       {
+                           //we just lose this frame, weve already got one with the correct id.
+                           //TODO may want to store this somewhere
+                           logger.warning("Found duplicate TDRC frame in invalid situation,discarding:" + newFrame.getIdentifier());
+                       }
+                   }
+                   else
+                   {
+                       List<AbstractID3v2Frame> list = new ArrayList<AbstractID3v2Frame>();
+                       list.add(firstFrame);
+                       list.add(newFrame);
+                       frameMap.put(newFrame.getIdentifier(), list);
+                   }
+               }
+               else
+               {
+                    List<AbstractID3v2Frame> list = (List)o;
+                    list.add(newFrame);
+               }
+           }
+           else
+           {
+               frameMap.put(newFrame.getIdentifier(), newFrame);
+           }
+       }
 
     /**
      * Copy Constructor, creates a new ID3v2_4 Tag based on another ID3v2_4 Tag

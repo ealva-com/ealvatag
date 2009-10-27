@@ -94,7 +94,7 @@ public class ID3v23Frame extends AbstractID3v2Frame
      */
     public ID3v23Frame(AbstractID3v2Frame frame) throws InvalidFrameException
     {
-        logger.info("Creating frame from a frame of a different version");
+        logger.finer("Creating frame from a frame of a different version");
         if (frame instanceof ID3v23Frame)
         {
             throw new UnsupportedOperationException("Copy Constructor not called. Please type cast the argument");
@@ -139,11 +139,12 @@ public class ID3v23Frame extends AbstractID3v2Frame
             }
             else if (ID3Tags.isID3v24FrameIdentifier(frame.getIdentifier()))
             {
+                logger.finer("isID3v24FrameIdentifier");
                 //Version between v4 and v3
                 identifier = ID3Tags.convertFrameID24To23(frame.getIdentifier());
                 if (identifier != null)
                 {
-                    logger.info("V4:Orig id is:" + frame.getIdentifier() + ":New id is:" + identifier);
+                    logger.finer("V4:Orig id is:" + frame.getIdentifier() + ":New id is:" + identifier);
                     this.frameBody = (AbstractTagFrameBody) ID3Tags.copyObject(frame.getBody());
                     this.frameBody.setHeader(this);
                     return;
@@ -154,7 +155,7 @@ public class ID3v23Frame extends AbstractID3v2Frame
                     identifier = ID3Tags.forceFrameID24To23(frame.getIdentifier());
                     if (identifier != null)
                     {
-                        logger.info("V4:Orig id is:" + frame.getIdentifier() + ":New id is:" + identifier);
+                        logger.finer("V4:Orig id is:" + frame.getIdentifier() + ":New id is:" + identifier);
                         this.frameBody = this.readBody(identifier, (AbstractID3v2FrameBody) frame.getBody());
                         this.frameBody.setHeader(this);
                         return;
@@ -170,7 +171,7 @@ public class ID3v23Frame extends AbstractID3v2Frame
                         identifier = frame.getIdentifier();
                         this.frameBody = new FrameBodyUnsupported(identifier, baos.toByteArray());
                         this.frameBody.setHeader(this);
-                        logger.info("V4:Orig id is:" + frame.getIdentifier() + ":New Id Unsupported is:" + identifier);
+                        logger.finer("V4:Orig id is:" + frame.getIdentifier() + ":New Id Unsupported is:" + identifier);
                         return;
                     }
                 }

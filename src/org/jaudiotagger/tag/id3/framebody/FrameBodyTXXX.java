@@ -24,16 +24,14 @@
 package org.jaudiotagger.tag.id3.framebody;
 
 import org.jaudiotagger.tag.InvalidTagException;
-import org.jaudiotagger.tag.datatype.DataTypes;
-import org.jaudiotagger.tag.datatype.NumberHashMap;
-import org.jaudiotagger.tag.datatype.TextEncodedStringNullTerminated;
-import org.jaudiotagger.tag.datatype.TextEncodedStringSizeTerminated;
+import org.jaudiotagger.tag.datatype.*;
 import org.jaudiotagger.tag.id3.ID3TextEncodingConversion;
 import org.jaudiotagger.tag.id3.ID3v24Frames;
 import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
 
 import java.io.ByteArrayOutputStream;
 import java.nio.ByteBuffer;
+import java.util.StringTokenizer;
 
 
 /**
@@ -74,6 +72,17 @@ public class FrameBodyTXXX extends AbstractFrameBodyTextInfo implements ID3v24Fr
         this.setObjectValue(DataTypes.OBJ_DESCRIPTION, "");
         this.setObjectValue(DataTypes.OBJ_TEXT, "");
 
+    }
+
+    /**
+     * Convert from V4 TMOO Frame to V3 Frame
+     */
+    public FrameBodyTXXX(FrameBodyTMOO body)
+    {
+        setObjectValue(DataTypes.OBJ_TEXT_ENCODING, body.getTextEncoding());
+        this.setObjectValue(DataTypes.OBJ_TEXT_ENCODING, TextEncoding.ISO_8859_1);
+        this.setObjectValue(DataTypes.OBJ_DESCRIPTION, MOOD);
+        this.setObjectValue(DataTypes.OBJ_TEXT, body.getText());
     }
 
     public FrameBodyTXXX(FrameBodyTXXX body)
