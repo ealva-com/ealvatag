@@ -524,7 +524,7 @@ public class OggVorbisTagReader
             raf.read(b);
             if (!isVorbisSetupHeader(b))
             {
-                System.out.println("Expecting but got:"+new String(b)+ "at "+(raf.getFilePointer()  - b.length));
+                logger.warning("Expecting but got:"+new String(b)+ "at "+(raf.getFilePointer()  - b.length));
                 throw new CannotReadException(ErrorMessage.OGG_VORBIS_NO_VORBIS_HEADER_FOUND.getMsg());
             }
             raf.seek(raf.getFilePointer() - (VorbisHeader.FIELD_PACKET_TYPE_LENGTH + VorbisHeader.FIELD_CAPTURE_PATTERN_LENGTH));

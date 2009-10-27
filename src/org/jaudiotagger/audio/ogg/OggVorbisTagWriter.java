@@ -123,20 +123,20 @@ public class OggVorbisTagWriter
             //we dont care if the last audio packet is split on next page as long as we preserve it
             if ((secondPageHeader.getPageLength() < OggPageHeader.MAXIMUM_PAGE_DATA_SIZE) && (((secondPageHeader.getPacketList().size() == 2) && (!secondPageHeader.isLastPacketIncomplete())) || (secondPageHeader.getPacketList().size() > 2)))
             {
-                logger.info("Header and Setup remain on single page:");
+                logger.fine("Header and Setup remain on single page:");
                 replaceSecondPageOnly(vorbisHeaderSizes, newCommentLength, newSecondPageDataLength, secondPageHeader, newComment, secondPageHeaderEndPos, raf, rafTemp);
             }
             //Original 2nd page spanned multiple pages so more work to do
             else
             {
-                logger.info("Header and Setup now on single page:");
+                logger.fine("Header and Setup now on single page:");
                 replaceSecondPageAndRenumberPageSeqs(vorbisHeaderSizes, newCommentLength, newSecondPageDataLength, secondPageHeader, newComment, raf, rafTemp);
             }
         }
         //Bit more complicated, have to create more than one new page and renumber subsequent audio
         else
         {
-            logger.info("Header and Setup with shift audio:");
+            logger.fine("Header and Setup with shift audio:");
             replacePagesAndRenumberPageSeqs(vorbisHeaderSizes, newCommentLength, secondPageHeader, newComment, raf, rafTemp);
         }
     }
@@ -147,7 +147,7 @@ public class OggVorbisTagWriter
      * @param page
      */
     private void calculateChecksumOverPage(ByteBuffer page)
-    {
+    {           
         //CRC should be zero before calculating it
         page.putInt(OggPageHeader.FIELD_PAGE_CHECKSUM_POS, 0);
 
@@ -163,7 +163,7 @@ public class OggVorbisTagWriter
     }
 
     /**
-     * Create a second Page, and add comment header to it, but page is incomplete my want to add addition header and need to calculate CRC
+     * Create a second Page, and add comment header to it, but page is incomplete may want to add addition header and need to calculate CRC
      *
      * @param vorbisHeaderSizes
      * @param newCommentLength
@@ -335,14 +335,13 @@ public class OggVorbisTagWriter
                 rafTemp.getChannel().write(pageBuffer);
                 newCommentOffset += OggPageHeader.MAXIMUM_PAGE_DATA_SIZE;
                 newComment.position(newCommentOffset);
-
             }
         }
 
         int lastPageCommentPacketSize = newCommentLength % OggPageHeader.MAXIMUM_PAGE_DATA_SIZE;
         logger.fine("Last comment packet size:" + lastPageCommentPacketSize);
 
-
+        //End of comment and setup header cannot fit on the last page
         if (!isCommentAndSetupHeaderFitsOnASinglePage(lastPageCommentPacketSize, originalHeaderSizes.getSetupHeaderSize(), originalHeaderSizes.getExtraPacketList()))
         {
             logger.fine("WriteOgg Type 3");
@@ -401,7 +400,7 @@ public class OggVorbisTagWriter
             logger.fine("WriteOgg Type 4");
 
             //Create last header page
-            int newSecondPageDataLength = originalHeaderSizes.getSetupHeaderSize() + newCommentLength + originalHeaderSizes.getExtraPacketDataSize();
+            int newSecondPageDataLength = originalHeaderSizes.getSetupHeaderSize() + lastPageCommentPacketSize + originalHeaderSizes.getExtraPacketDataSize();
             newComment.position(newCommentOffset);
             ByteBuffer lastComment = newComment.slice();
             ByteBuffer lastHeaderBuffer = startCreateBasicSecondPage(
@@ -443,6 +442,47 @@ public class OggVorbisTagWriter
      */
     public void writeRemainingPages(int pageSequence, RandomAccessFile raf, RandomAccessFile rafTemp) throws IOException, CannotReadException, CannotWriteException
     {
+        long startAudio = raf.getFilePointer();
+        long startAudioWritten = rafTemp.getFilePointer();
+
+        //TODO there is a risk we wont have enough memory to create these buffers
+        ByteBuffer bb       = ByteBuffer.allocate((int)(raf.length() - raf.getFilePointer()));
+        ByteBuffer bbTemp   = ByteBuffer.allocate((int)(raf.length() - raf.getFilePointer()));
+
+        //Read in the rest of the data into bytebuffer and rewind it to start
+        raf.getChannel().read(bb);
+        bb.rewind();
+        while(bb.hasRemaining())
+        {
+            OggPageHeader nextPage = OggPageHeader.read(bb);
+
+            //Create buffer large enough for next page (header and data) and set byte order to LE so we can use
+            //putInt method
+            ByteBuffer nextPageHeaderBuffer = ByteBuffer.allocate(nextPage.getRawHeaderData().length + nextPage.getPageLength());
+            nextPageHeaderBuffer.order(ByteOrder.LITTLE_ENDIAN);
+            nextPageHeaderBuffer.put(nextPage.getRawHeaderData());
+            ByteBuffer data = bb.slice();
+            data.limit(nextPage.getPageLength());
+            nextPageHeaderBuffer.put(data);
+            nextPageHeaderBuffer.putInt(OggPageHeader.FIELD_PAGE_SEQUENCE_NO_POS, ++pageSequence);
+            calculateChecksumOverPage(nextPageHeaderBuffer);
+            bb.position(bb.position() + nextPage.getPageLength());
+
+            nextPageHeaderBuffer.rewind();
+            bbTemp.put(nextPageHeaderBuffer);
+        }
+        //Now just write as a single IO operation
+        bbTemp.rewind();
+        rafTemp.getChannel().write(bbTemp);
+        //Check weve written all the data
+        //TODO could we do any other checks to check data written correctly ?
+        if ((raf.length() - startAudio) != (rafTemp.length() - startAudioWritten))
+        {
+            throw new CannotWriteException("File written counts don't match, file not written");
+        }
+    }
+    public void writeRemainingPagesOld(int pageSequence, RandomAccessFile raf, RandomAccessFile rafTemp) throws IOException, CannotReadException, CannotWriteException
+        {
         //Now the Page Sequence Number for all the subsequent pages (containing audio frames) are out because there are
         //less pages before then there used to be, so need to adjust
         long startAudio = raf.getFilePointer();

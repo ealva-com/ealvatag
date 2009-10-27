@@ -1,18 +1,22 @@
 package org.jaudiotagger.issues;
 
 import org.jaudiotagger.AbstractTestCase;
+import org.jaudiotagger.logging.Hex;
 import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.AudioFileIO;
-import org.jaudiotagger.audio.asf.tag.AsfTagCoverField;
 import org.jaudiotagger.tag.Tag;
 import org.jaudiotagger.tag.TagFieldKey;
 import org.jaudiotagger.tag.KeyNotFoundException;
+import org.jaudiotagger.tag.TagOptionSingleton;
 import org.jaudiotagger.tag.datatype.Artwork;
 import org.jaudiotagger.tag.id3.ID3v22Tag;
 import org.jaudiotagger.tag.id3.ID3v23Tag;
 import org.jaudiotagger.tag.id3.ID3v24Tag;
 
+import javax.imageio.ImageIO;
 import java.io.File;
+import java.io.ByteArrayInputStream;
+import java.awt.image.BufferedImage;
 
 /**
  * Cannot cretaeTagField for creating artwork field

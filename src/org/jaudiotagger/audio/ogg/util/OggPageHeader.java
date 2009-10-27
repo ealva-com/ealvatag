@@ -29,6 +29,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Logger;
 import java.util.logging.Level;
+import java.nio.ByteBuffer;
 
 
 /**
@@ -99,7 +100,46 @@ public class OggPageHeader
     private List<PacketStartAndLength> packetList = new ArrayList<PacketStartAndLength>();
     private boolean lastPacketIncomplete = false;
 
+    /**
+     * Read next PageHeader from Buffer
+     *
+     * @param byteBuffer
+     * @return
+     * @throws IOException
+     * @throws CannotReadException
+     */
+    public static OggPageHeader read(ByteBuffer byteBuffer) throws IOException, CannotReadException
+       {
+           //byteBuffer
+           int start = byteBuffer.position();
+           logger.fine("Trying to read OggPage at:" + start);
 
+           byte[] b = new byte[OggPageHeader.CAPTURE_PATTERN.length];
+           byteBuffer.get(b);
+           if (!(Arrays.equals(b, OggPageHeader.CAPTURE_PATTERN)))
+           {
+               throw new CannotReadException(ErrorMessage.OGG_HEADER_CANNOT_BE_FOUND.getMsg(new String(b)));
+           }
+
+           byteBuffer.position(start + OggPageHeader.FIELD_PAGE_SEGMENTS_POS);
+           int pageSegments = byteBuffer.get() & 0xFF; //unsigned
+           byteBuffer.position(start);
+
+           b = new byte[OggPageHeader.OGG_PAGE_HEADER_FIXED_LENGTH + pageSegments];
+           byteBuffer.get(b);
+           OggPageHeader pageHeader = new OggPageHeader(b);
+
+           //Now just after PageHeader, ready for Packet Data
+           return pageHeader;
+       }
+
+    /**
+     * Read next PageHeader from file
+     * @param raf
+     * @return
+     * @throws IOException
+     * @throws CannotReadException
+     */
     public static OggPageHeader read(RandomAccessFile raf) throws IOException, CannotReadException
     {
         long start = raf.getFilePointer();
