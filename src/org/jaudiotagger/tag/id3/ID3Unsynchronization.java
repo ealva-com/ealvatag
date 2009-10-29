@@ -6,6 +6,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.nio.ByteBuffer;
 import java.util.logging.Logger;
+import java.util.logging.Level;
 
 /**
  * Performs unsynchronization and synchronization tasks on a buffer.
@@ -31,7 +32,10 @@ public class ID3Unsynchronization
         {
             if (((abySource[i] & MPEGFrameHeader.SYNC_BYTE1) == MPEGFrameHeader.SYNC_BYTE1) && ((abySource[i + 1] & MPEGFrameHeader.SYNC_BYTE2) == MPEGFrameHeader.SYNC_BYTE2))
             {
-                logger.finest("Unsynchronisation required found bit at:" + i);
+                if(logger.isLoggable(Level.FINEST))
+                {
+                    logger.finest("Unsynchronisation required found bit at:" + i);
+                }
                 return true;
             }
         }
@@ -54,7 +58,7 @@ public class ID3Unsynchronization
     public static byte[] unsynchronize(byte[] abySource)
     {
         ByteArrayInputStream   input = new ByteArrayInputStream(abySource);
-        ByteArrayOutputStream output = new ByteArrayOutputStream();
+        ByteArrayOutputStream output = new ByteArrayOutputStream(abySource.length);
 
         int count = 0;
         while (input.available() > 0)
@@ -72,14 +76,20 @@ public class ID3Unsynchronization
                     if ((secondByte & MPEGFrameHeader.SYNC_BYTE2) == MPEGFrameHeader.SYNC_BYTE2)
                     {
                         // we need to unsynchronize here
-                        logger.finest("Writing unsynchronisation bit at:" + count);
+                        if(logger.isLoggable(Level.FINEST))
+                        {
+                            logger.finest("Writing unsynchronisation bit at:" + count);
+                        }
                         output.write(0);
 
                     }
                     else if (secondByte == 0)
                     {
                         // we need to unsynchronize here
-                        logger.finest("Inserting zero unsynchronisation bit at:" + count);
+                        if(logger.isLoggable(Level.FINEST))
+                        {
+                            logger.finest("Inserting zero unsynchronisation bit at:" + count);
+                        }
                         output.write(0);
                     }
                     input.reset();                     
@@ -107,17 +117,21 @@ public class ID3Unsynchronization
      */
     public static ByteBuffer synchronize(ByteBuffer source)
     {
-        ByteArrayOutputStream oBAOS = new ByteArrayOutputStream();
-        while (source.hasRemaining())
+        int bufferSize = source.limit();
+        ByteArrayOutputStream oBAOS = new ByteArrayOutputStream(bufferSize);
+        int position = 0;
+        while (position < bufferSize)
         {
             int byteValue = source.get();
+            position ++;
             oBAOS.write(byteValue);
             if ((byteValue & MPEGFrameHeader.SYNC_BYTE1) == MPEGFrameHeader.SYNC_BYTE1)
             {
                 // we are skipping if $00 byte but check not an end of stream
-                if (source.hasRemaining())
+                if (position < bufferSize)
                 {
                     int unsyncByteValue = source.get();
+                    position++;
                     //If its the null byte we just ignore it
                     if (unsyncByteValue != 0)
                     {
@@ -128,5 +142,4 @@ public class ID3Unsynchronization
         }
         return ByteBuffer.wrap(oBAOS.toByteArray());
     }
-
 }
