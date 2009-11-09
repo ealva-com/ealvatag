@@ -16,5 +16,6 @@ public enum Tagger
     TAG_AND_RENAME,
     PICARD,
     JAIKOZ,
-    TAGSCANNER
+    TAGSCANNER,
+    XIPH   //standards body rather than tagger xiph.org
 }

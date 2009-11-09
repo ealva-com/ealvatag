@@ -92,6 +92,9 @@ public class VorbisCommentTag extends AbstractTag
         tagFieldToOggField.put(TagFieldKey.LANGUAGE, VorbisCommentFieldKey.LANGUAGE);
         tagFieldToOggField.put(TagFieldKey.KEY, VorbisCommentFieldKey.KEY);
         tagFieldToOggField.put(TagFieldKey.URL_LYRICS_SITE, VorbisCommentFieldKey.URL_LYRICS_SITE);
+        tagFieldToOggField.put(TagFieldKey.TRACK_TOTAL, VorbisCommentFieldKey.TRACKTOTAL);
+        tagFieldToOggField.put(TagFieldKey.DISC_TOTAL, VorbisCommentFieldKey.DISCTOTAL);
+
     }
 
     //This is the vendor string that will be written if no other is supplied. Should be the name of the software
