@@ -58,5 +58,8 @@ public enum TagFieldKey
     URL_WIKIPEDIA_ARTIST_SITE,
     LANGUAGE,
     KEY,
-    URL_LYRICS_SITE;
+    URL_LYRICS_SITE,
+    TRACK_TOTAL,
+    DISC_TOTAL,
+    ;
 }

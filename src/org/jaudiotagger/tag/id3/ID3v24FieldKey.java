@@ -62,6 +62,8 @@ public enum ID3v24FieldKey
     LANGUAGE(ID3v24Frames.FRAME_ID_LANGUAGE,Id3FieldType.TEXT),
     KEY(ID3v24Frames.FRAME_ID_INITIAL_KEY,Id3FieldType.TEXT),
     URL_LYRICS_SITE(ID3v24Frames.FRAME_ID_USER_DEFINED_URL, FrameBodyWXXX.URL_LYRICS_SITE, Id3FieldType.TEXT),
+    DISC_TOTAL(ID3v24Frames.FRAME_ID_SET, Id3FieldType.TEXT),
+    TRACK_TOTAL(ID3v24Frames.FRAME_ID_TRACK, Id3FieldType.TEXT),
     ;
     private String fieldName;
 

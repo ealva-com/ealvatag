@@ -176,7 +176,7 @@ public class ID3v24TagTest extends TestCase
         assertEquals(ID3v11TagTest.ALBUM, ((FrameBodyTALB) ((ID3v24Frame) v2Tag.getFrame(ID3v24Frames.FRAME_ID_ALBUM)).getBody()).getText());
         assertEquals(ID3v11TagTest.COMMENT, ((FrameBodyCOMM) ((ID3v24Frame) v2Tag.getFrame(ID3v24Frames.FRAME_ID_COMMENT)).getBody()).getText());
         assertEquals(ID3v11TagTest.TITLE, ((FrameBodyTIT2) ((ID3v24Frame) v2Tag.getFrame(ID3v24Frames.FRAME_ID_TITLE)).getBody()).getText());
-        assertEquals(ID3v11TagTest.TRACK_VALUE, ((FrameBodyTRCK) ((ID3v24Frame) v2Tag.getFrame(ID3v24Frames.FRAME_ID_TRACK)).getBody()).getText());
+        assertEquals(ID3v11TagTest.TRACK_VALUE, String.valueOf(((FrameBodyTRCK) ((ID3v24Frame) v2Tag.getFrame(ID3v24Frames.FRAME_ID_TRACK)).getBody()).getTrackNo()));
         assertTrue(((FrameBodyTCON) ((ID3v24Frame) v2Tag.getFrame(ID3v24Frames.FRAME_ID_GENRE)).getBody()).getText().endsWith(ID3v11TagTest.GENRE_VAL));
         assertEquals(ID3v11TagTest.YEAR, ((FrameBodyTDRC) ((ID3v24Frame) v2Tag.getFrame(ID3v24Frames.FRAME_ID_YEAR)).getBody()).getText());
         assertEquals((byte) 2, v2Tag.getRelease());

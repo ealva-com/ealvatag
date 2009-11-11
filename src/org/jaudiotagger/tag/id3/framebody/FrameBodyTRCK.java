@@ -16,13 +16,25 @@
 package org.jaudiotagger.tag.id3.framebody;
 
 import org.jaudiotagger.tag.InvalidTagException;
+import org.jaudiotagger.tag.datatype.DataTypes;
+import org.jaudiotagger.tag.datatype.NumberHashMap;
+import org.jaudiotagger.tag.datatype.TextEncodedStringSizeTerminated;
+import org.jaudiotagger.tag.datatype.PartOfSet;
 import org.jaudiotagger.tag.id3.ID3v24Frames;
+import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
 
 import java.nio.ByteBuffer;
 
 /**
- * Track number/Position in set Text information frame.
- * <p>The 'Track number/Position in set' frame is a numeric string containing the order number of the audio-file on its original recording. This may be extended with a "/" character and a numeric string containing the total numer of tracks/elements on the original recording. E.g. "4/9".
+ * Track number/position in set Text Information frame.
+ *
+ * <p>The 'Track number/Position in set' frame is a numeric string containing the order number of the audio-file on its original recording.
+ *
+ * This may be extended with a "/" character and a numeric string containing the total number of tracks/elements on the original recording.
+ *  e.g. "4/9".
+ *
+ * Some applications like to prepend the track number with a zero to aid sorting, (i.e 02 comes before 10)
+ *
  * <p/>
  * <p>For more details, please refer to the ID3 specifications:
  * <ul>
@@ -33,13 +45,16 @@ import java.nio.ByteBuffer;
  * @author : Eric Farng
  * @version $Id$
  */
-public class FrameBodyTRCK extends AbstractFrameBodyTextInfo implements ID3v23FrameBody, ID3v24FrameBody
+public class FrameBodyTRCK extends AbstractID3v2FrameBody implements ID3v23FrameBody, ID3v24FrameBody
 {
+
     /**
      * Creates a new FrameBodyTRCK datatype.
      */
     public FrameBodyTRCK()
     {
+        setObjectValue(DataTypes.OBJ_TEXT_ENCODING, TextEncoding.ISO_8859_1);
+        setObjectValue(DataTypes.OBJ_TEXT, new PartOfSet.PartOfSetValue());
     }
 
     public FrameBodyTRCK(FrameBodyTRCK body)
@@ -48,15 +63,24 @@ public class FrameBodyTRCK extends AbstractFrameBodyTextInfo implements ID3v23Fr
     }
 
     /**
-     * Creates a new FrameBodyTRCK datatype.
+     * Creates a new FrameBodyTRCK datatype, the value is parsed literally
      *
      * @param textEncoding
      * @param text
      */
     public FrameBodyTRCK(byte textEncoding, String text)
     {
-        super(textEncoding, text);
+        setObjectValue(DataTypes.OBJ_TEXT_ENCODING, textEncoding);
+        setObjectValue(DataTypes.OBJ_TEXT, new PartOfSet.PartOfSetValue(text));
     }
+
+    public FrameBodyTRCK(byte textEncoding, Integer trackNo,Integer trackTotal)
+    {
+        super();
+        setObjectValue(DataTypes.OBJ_TEXT_ENCODING, textEncoding);
+        setObjectValue(DataTypes.OBJ_TEXT, new PartOfSet.PartOfSetValue(trackNo,trackTotal));
+    }
+
 
     /**
      * Creates a new FrameBodyTRCK datatype.
@@ -69,6 +93,7 @@ public class FrameBodyTRCK extends AbstractFrameBodyTextInfo implements ID3v23Fr
         super(byteBuffer, frameSize);
     }
 
+
     /**
      * The ID3v2 frame identifier
      *
@@ -77,5 +102,46 @@ public class FrameBodyTRCK extends AbstractFrameBodyTextInfo implements ID3v23Fr
     public String getIdentifier()
     {
         return ID3v24Frames.FRAME_ID_TRACK;
+    }
+
+    public Integer getTrackNo()
+    {
+        PartOfSet.PartOfSetValue value = (PartOfSet.PartOfSetValue)getObjectValue(DataTypes.OBJ_TEXT);
+        return value.getCount();
+    }
+
+    public String getText()
+    {
+        return getObjectValue(DataTypes.OBJ_TEXT).toString();
+    }
+    public void setTrackNo(Integer trackNo)
+    {
+        ((PartOfSet.PartOfSetValue)getObjectValue(DataTypes.OBJ_TEXT)).setCount(trackNo);
+    }
+
+    public void setTrackNo(String trackNo)
+    {
+        ((PartOfSet.PartOfSetValue)getObjectValue(DataTypes.OBJ_TEXT)).setCount(trackNo);
+    }
+
+    public Integer getTrackTotal()
+    {
+        return ((PartOfSet.PartOfSetValue)getObjectValue(DataTypes.OBJ_TEXT)).getTotal();
+    }
+
+    public void setTrackTotal(Integer trackTotal)
+    {
+         ((PartOfSet.PartOfSetValue)getObjectValue(DataTypes.OBJ_TEXT)).setTotal(trackTotal);
+    }
+
+    public void setText(String text)
+    {
+        setObjectValue(DataTypes.OBJ_TEXT, new PartOfSet.PartOfSetValue(text));
+    }
+    
+    protected void setupObjectList()
+    {
+        objectList.add(new NumberHashMap(DataTypes.OBJ_TEXT_ENCODING, this, TextEncoding.TEXT_ENCODING_FIELD_SIZE));
+        objectList.add(new PartOfSet(DataTypes.OBJ_TEXT, this));
     }
 }

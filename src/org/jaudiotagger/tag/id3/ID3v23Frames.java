@@ -340,6 +340,11 @@ public class ID3v23Frames extends ID3Frames
         multipleFrames.add(FRAME_ID_V3_UNSYNC_LYRICS);
         multipleFrames.add(FRAME_ID_V3_POPULARIMETER);
 
+        //TODO this is a hack to allow multiple TRCK and TPOS frames to be created then subsequently merged
+        multipleFrames.add(FRAME_ID_V3_TRACK);
+        multipleFrames.add(FRAME_ID_V3_SET);
+
+
         discardIfFileAlteredFrames.add(FRAME_ID_V3_EVENT_TIMING_CODES);
         discardIfFileAlteredFrames.add(FRAME_ID_V3_EQUALISATION);
         discardIfFileAlteredFrames.add(FRAME_ID_V3_MPEG_LOCATION_LOOKUP_TABLE);
@@ -352,11 +357,12 @@ public class ID3v23Frames extends ID3Frames
         discardIfFileAlteredFrames.add(FRAME_ID_V3_LENGTH);
         discardIfFileAlteredFrames.add(FRAME_ID_V3_TSIZ);
 
-        //Mapping to generic key
+        //Mapping from generic key
         tagFieldToId3.put(TagFieldKey.ARTIST, ID3v23FieldKey.ARTIST);
         tagFieldToId3.put(TagFieldKey.ALBUM, ID3v23FieldKey.ALBUM);
         tagFieldToId3.put(TagFieldKey.TITLE, ID3v23FieldKey.TITLE);
         tagFieldToId3.put(TagFieldKey.TRACK, ID3v23FieldKey.TRACK);
+        tagFieldToId3.put(TagFieldKey.TRACK_TOTAL, ID3v23FieldKey.TRACK_TOTAL);
         tagFieldToId3.put(TagFieldKey.YEAR, ID3v23FieldKey.YEAR);
         tagFieldToId3.put(TagFieldKey.GENRE, ID3v23FieldKey.GENRE);
         tagFieldToId3.put(TagFieldKey.COMMENT, ID3v23FieldKey.COMMENT);
@@ -364,6 +370,7 @@ public class ID3v23Frames extends ID3Frames
         tagFieldToId3.put(TagFieldKey.COMPOSER, ID3v23FieldKey.COMPOSER);
         tagFieldToId3.put(TagFieldKey.GROUPING, ID3v23FieldKey.GROUPING);
         tagFieldToId3.put(TagFieldKey.DISC_NO, ID3v23FieldKey.DISC_NO);
+        tagFieldToId3.put(TagFieldKey.DISC_TOTAL, ID3v23FieldKey.DISC_NO);
         tagFieldToId3.put(TagFieldKey.BPM, ID3v23FieldKey.BPM);
         tagFieldToId3.put(TagFieldKey.ENCODER, ID3v23FieldKey.ENCODER);
         tagFieldToId3.put(TagFieldKey.MOOD,ID3v23FieldKey.MOOD);
@@ -394,7 +401,6 @@ public class ID3v23Frames extends ID3Frames
         tagFieldToId3.put(TagFieldKey.LANGUAGE, ID3v23FieldKey.LANGUAGE);
         tagFieldToId3.put(TagFieldKey.KEY, ID3v23FieldKey.KEY);
         tagFieldToId3.put(TagFieldKey.URL_LYRICS_SITE, ID3v23FieldKey.URL_LYRICS_SITE);
-
     }
 
 

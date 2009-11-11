@@ -27,6 +27,7 @@ import org.jaudiotagger.tag.Tag;
 import org.jaudiotagger.tag.TagField;
 import org.jaudiotagger.tag.TagFieldKey;
 import org.jaudiotagger.tag.mp4.field.Mp4TagCoverField;
+import org.jaudiotagger.tag.mp4.field.Mp4TrackField;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -37,7 +38,7 @@ import java.util.Iterator;
 /**
  * Create raw content of mp4 tag data, concerns itself with atoms upto the ilst atom
  * <p/>
- * <p>This level is was selected because the ilst atom canbe recreated without reference to existing mp4 fields
+ * <p>This level is was selected because the ilst atom can be recreated without reference to existing mp4 fields
  * but fields above this level are dependent upon other information that is not held in the tag.
  * <p/>
  * <pre>
@@ -125,7 +126,7 @@ public class Mp4TagCreator extends AbstractTagCreator
                     }
                 }
                 else
-                {
+                {                     
                     baos.write(frame.getRawContent());
                 }
             }

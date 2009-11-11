@@ -97,7 +97,8 @@ public enum ErrorMessage
     ID3_TAG_CRC_FLAG_SET_INCORRECTLY("{0} CRC Data flag not set correctly."),
     MP4_CANNOT_FIND_AUDIO("Unable to determine start of audio in file"),
     VORBIS_COMMENT_LENGTH_TOO_LARGE("Comment field length is very large {0} , assuming comment is corrupt"),
-    VORBIS_COMMENT_LENGTH_LARGE_THAN_HEADER("Comment field length {0} is larger than total comment header {1} ")
+    VORBIS_COMMENT_LENGTH_LARGE_THAN_HEADER("Comment field length {0} is larger than total comment header {1} "),
+    ARTWORK_CANNOT_BE_CREATED_WITH_THIS_METHOD("Cover Art cannot be created using this method"),
     ;
 
 

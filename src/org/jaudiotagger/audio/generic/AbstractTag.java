@@ -188,7 +188,7 @@ public abstract class AbstractTag implements Tag
 
     /**
      * @param id
-     * @return matches for this saudio-specific key
+     * @return matches for this audio-specific key
      */
     public String getFirst(String id)
     {
@@ -511,6 +511,22 @@ public abstract class AbstractTag implements Tag
     {
         return fields.size() == 0;
     }
+
+    /**
+     * Create new field and set it in the tag
+     *
+     * @param genericKey
+     * @param value
+     * @throws KeyNotFoundException
+     * @throws FieldDataInvalidException
+     */
+    public void createAndSet(TagFieldKey genericKey, String value) throws KeyNotFoundException, FieldDataInvalidException
+    {
+        TagField tagfield = createTagField(genericKey,value);
+        set(tagfield);
+    }
+
+   
 
     /**
      * Set field

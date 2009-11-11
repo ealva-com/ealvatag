@@ -210,16 +210,7 @@ public class ID3v11Tag extends ID3v1Tag
                 if (id3tag.hasFrame(ID3v24Frames.FRAME_ID_TRACK))
                 {
                     frame = (ID3v24Frame) id3tag.getFrame(ID3v24Frames.FRAME_ID_TRACK);
-                    text = ((FrameBodyTRCK) frame.getBody()).getText();
-                    try
-                    {
-                        this.track = (byte) ID3Tags.findNumber(text);
-                    }
-                    catch (TagException ex)
-                    {
-                        logger.log(Level.WARNING, getLoggingFilename() + ":" + "Unable to convert TRCK frame to format suitable for v11 tag", ex);
-                        this.track = (byte) TRACK_UNDEFINED;
-                    }
+                    this.track = (byte) ((FrameBodyTRCK) frame.getBody()).getTrackNo().intValue();
                 }
             }
         }

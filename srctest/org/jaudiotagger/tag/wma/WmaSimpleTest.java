@@ -290,6 +290,8 @@ public class WmaSimpleTest extends AbstractTestCase
             tag.set(tag.createTagField(TagFieldKey.URL_OFFICIAL_RELEASE_SITE,"http://www.discogs4.com"));
             tag.set(tag.createTagField(TagFieldKey.URL_WIKIPEDIA_ARTIST_SITE,"http://www.discogs5.com"));
             tag.set(tag.createTagField(TagFieldKey.URL_WIKIPEDIA_RELEASE_SITE,"http://www.discogs6.com"));
+            tag.set(tag.createTagField(TagFieldKey.DISC_TOTAL,"3"));
+            tag.set(tag.createTagField(TagFieldKey.TRACK_TOTAL,"11"));
 
 
             // set the IsVbr value (can be modified for now)
@@ -317,6 +319,9 @@ public class WmaSimpleTest extends AbstractTestCase
             assertEquals("http://www.discogs4.com",tag.getFirst(TagFieldKey.URL_OFFICIAL_RELEASE_SITE));
             assertEquals("http://www.discogs5.com",tag.getFirst(TagFieldKey.URL_WIKIPEDIA_ARTIST_SITE));
             assertEquals("http://www.discogs6.com",tag.getFirst(TagFieldKey.URL_WIKIPEDIA_RELEASE_SITE));
+            assertEquals("3",tag.getFirst(TagFieldKey.DISC_TOTAL));
+            assertEquals("11",tag.getFirst(TagFieldKey.TRACK_TOTAL));
+
 
 
 

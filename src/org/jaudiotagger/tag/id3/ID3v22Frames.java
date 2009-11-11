@@ -302,11 +302,16 @@ public class ID3v22Frames extends ID3Frames
         multipleFrames.add(FRAME_ID_V2_COMMENT);
         multipleFrames.add(FRAME_ID_V2_UNSYNC_LYRICS);
 
+        //TODO this is a hack to allow multiple TRCK and TPOS frame sto be created then subsequently merged
+        multipleFrames.add(FRAME_ID_V2_TRACK);
+        multipleFrames.add(FRAME_ID_V2_SET);
+
         //Mapping generic key to id3v22 key
         tagFieldToId3.put(TagFieldKey.ARTIST, ID3v22FieldKey.ARTIST);
         tagFieldToId3.put(TagFieldKey.ALBUM, ID3v22FieldKey.ALBUM);
         tagFieldToId3.put(TagFieldKey.TITLE, ID3v22FieldKey.TITLE);
         tagFieldToId3.put(TagFieldKey.TRACK, ID3v22FieldKey.TRACK);
+        tagFieldToId3.put(TagFieldKey.TRACK_TOTAL, ID3v22FieldKey.TRACK_TOTAL);
         tagFieldToId3.put(TagFieldKey.YEAR, ID3v22FieldKey.YEAR);
         tagFieldToId3.put(TagFieldKey.GENRE, ID3v22FieldKey.GENRE);
         tagFieldToId3.put(TagFieldKey.COMMENT, ID3v22FieldKey.COMMENT);
@@ -314,6 +319,7 @@ public class ID3v22Frames extends ID3Frames
         tagFieldToId3.put(TagFieldKey.COMPOSER, ID3v22FieldKey.COMPOSER);
         tagFieldToId3.put(TagFieldKey.GROUPING, ID3v22FieldKey.GROUPING);
         tagFieldToId3.put(TagFieldKey.DISC_NO, ID3v22FieldKey.DISC_NO);
+        tagFieldToId3.put(TagFieldKey.DISC_TOTAL, ID3v22FieldKey.DISC_NO);
         tagFieldToId3.put(TagFieldKey.BPM, ID3v22FieldKey.BPM);
         tagFieldToId3.put(TagFieldKey.ENCODER, ID3v22FieldKey.ENCODER);
         tagFieldToId3.put(TagFieldKey.MOOD, ID3v22FieldKey.MOOD);

@@ -24,13 +24,9 @@ import org.jaudiotagger.audio.exceptions.UnableToRenameFileException;
 import org.jaudiotagger.logging.ErrorMessage;
 import org.jaudiotagger.logging.FileSystemMessage;
 import org.jaudiotagger.tag.*;
-import org.jaudiotagger.tag.mp4.Mp4TagField;
-import org.jaudiotagger.tag.mp4.Mp4FieldKey;
-import org.jaudiotagger.tag.mp4.field.Mp4TagCoverField;
 import org.jaudiotagger.tag.datatype.DataTypes;
 import org.jaudiotagger.tag.datatype.Artwork;
 import org.jaudiotagger.tag.id3.framebody.*;
-import org.jaudiotagger.tag.id3.valuepair.ImageFormats;
 import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
 import org.jaudiotagger.tag.reference.PictureTypes;
 
@@ -347,6 +343,14 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
         {
             return ((AbstractFrameBodyUrlLink) frame.getBody()).getUrlLink();
         }
+        else if (frame.getBody() instanceof FrameBodyTRCK)
+        {
+            return String.valueOf(((FrameBodyTRCK) frame.getBody()).getTrackNo());
+        }
+        else if (frame.getBody() instanceof FrameBodyTPOS)
+        {
+            return String.valueOf(((FrameBodyTPOS) frame.getBody()).getDiscNo());
+        }
         else
         {
             return frame.getBody().toString();
@@ -356,13 +360,12 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
     public TagField getFirstField(TagFieldKey genericKey) throws KeyNotFoundException
     {
         List<TagField> fields = get(genericKey);
-        if(fields.size()>0)
+        if (fields.size() > 0)
         {
             return fields.get(0);
         }
         return null;
     }
-
 
 
     /**
@@ -406,6 +409,125 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
 
     protected abstract ID3Frames getID3Frames();
 
+    public void createAndSet(TagFieldKey genericKey, String value) throws KeyNotFoundException, FieldDataInvalidException
+    {
+        TagField tagfield = createTagField(genericKey, value);
+        set(tagfield);
+    }
+
+    /**
+     * Add frame taking into account existing frame sof the same type
+     *
+     * @param newFrame
+     * @param frames
+     */
+    public void mergeDuplicateFrames(AbstractID3v2Frame newFrame, List<AbstractID3v2Frame> frames)
+    {
+        for (ListIterator<AbstractID3v2Frame> li = frames.listIterator(); li.hasNext();)
+        {
+            AbstractID3v2Frame nextFrame = li.next();
+
+            if (newFrame.getBody() instanceof FrameBodyTXXX)
+            {
+                //Value with matching key exists so replace
+                if (((FrameBodyTXXX) newFrame.getBody()).getDescription()
+                        .equals(((FrameBodyTXXX) nextFrame.getBody()).getDescription()))
+                {
+                    li.set(newFrame);
+                    frameMap.put(newFrame.getId(), frames);
+                    return;
+                }
+            }
+            else if (newFrame.getBody() instanceof FrameBodyWXXX)
+            {
+                //Value with matching key exists so replace
+                if (((FrameBodyWXXX) newFrame.getBody()).getDescription()
+                        .equals(((FrameBodyWXXX) nextFrame.getBody()).getDescription()))
+                {
+                    li.set(newFrame);
+                    frameMap.put(newFrame.getId(), frames);
+                    return;
+                }
+            }
+            else if (newFrame.getBody() instanceof FrameBodyCOMM)
+            {
+                if (((FrameBodyCOMM) newFrame.getBody()).getDescription()
+                        .equals(((FrameBodyCOMM) nextFrame.getBody()).getDescription()))
+                {
+                    li.set(newFrame);
+                    frameMap.put(newFrame.getId(), frames);
+                    return;
+                }
+            }
+            else if (newFrame.getBody() instanceof FrameBodyUFID)
+            {
+                if (((FrameBodyUFID) newFrame.getBody()).getOwner()
+                        .equals(((FrameBodyUFID) nextFrame.getBody()).getOwner()))
+                {
+                    li.set(newFrame);
+                    frameMap.put(newFrame.getId(), frames);
+                    return;
+                }
+            }
+            else if (newFrame.getBody() instanceof FrameBodyUSLT)
+            {
+                if (((FrameBodyUSLT) newFrame.getBody()).getDescription()
+                        .equals(((FrameBodyUSLT) nextFrame.getBody()).getDescription()))
+                {
+                    li.set(newFrame);
+                    frameMap.put(newFrame.getId(), frames);
+                    return;
+                }
+            }
+            else if (newFrame.getBody() instanceof FrameBodyPOPM)
+            {
+                if (((FrameBodyPOPM) newFrame.getBody()).getEmailToUser()
+                        .equals(((FrameBodyPOPM) nextFrame.getBody()).getEmailToUser()))
+                {
+                    li.set(newFrame);
+                    frameMap.put(newFrame.getId(), frames);
+                    return;
+                }
+            }
+            else if (newFrame.getBody() instanceof FrameBodyTRCK)
+            {
+                FrameBodyTRCK newBody = (FrameBodyTRCK) newFrame.getBody();
+                FrameBodyTRCK oldBody = (FrameBodyTRCK) nextFrame.getBody();
+
+                if(newBody.getTrackNo()!=null && newBody.getTrackNo()>0)
+                {
+                    oldBody.setTrackNo(newBody.getTrackNo());
+                }
+
+                if(newBody.getTrackTotal()!=null && newBody.getTrackTotal()>0)
+                {
+                    oldBody.setTrackTotal(newBody.getTrackTotal());
+                }
+                return;
+            }
+            else if (newFrame.getBody() instanceof FrameBodyTPOS)
+            {
+                FrameBodyTPOS newBody = (FrameBodyTPOS) newFrame.getBody();
+                FrameBodyTPOS oldBody = (FrameBodyTPOS) nextFrame.getBody();
+
+                if(newBody.getDiscNo()>0)
+                {
+                    oldBody.setDiscNo(newBody.getDiscNo());
+                }
+
+                if(newBody.getDiscTotal()>0)
+                {
+                    oldBody.setDiscTotal(newBody.getDiscTotal());
+                }
+                return;
+            }
+        }
+        //No match found so add new one
+        frames.add(newFrame);
+        frameMap.put(newFrame.getId(), frames);
+        return;
+    }
+
     /**
      * @param field
      * @throws FieldDataInvalidException
@@ -419,192 +541,25 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
 
         AbstractID3v2Frame newFrame = (AbstractID3v2Frame) field;
 
-        Object o = frameMap.get(field.getId());
-        if (o == null || (!getID3Frames().isMultipleAllowed(newFrame.getId())))
+        Object obj = frameMap.get(field.getId());
+
+
+        //If no frame of this type exist or if multiples are not allowed
+        if (obj == null || (!getID3Frames().isMultipleAllowed(newFrame.getId())))
         {
             frameMap.put(field.getId(), field);
         }
-        else if (o instanceof AbstractID3v2Frame)
+        //frame of this type al;ready exists
+        else if (obj instanceof AbstractID3v2Frame)
         {
-            AbstractID3v2Frame oldFrame = (AbstractID3v2Frame) o;
-            if (newFrame.getBody() instanceof FrameBodyTXXX)
-            {
-                //Different key so convert to list and add as new frame
-                if (!((FrameBodyTXXX) newFrame.getBody()).getDescription()
-                        .equals(((FrameBodyTXXX) oldFrame.getBody()).getDescription()))
-                {
-                    List<AbstractID3v2Frame> frames = new ArrayList<AbstractID3v2Frame>();
-                    frames.add(oldFrame);
-                    frames.add(newFrame);
-                    frameMap.put(newFrame.getId(), frames);
-                }
-                //Same key so replace
-                else
-                {
-                    frameMap.put(newFrame.getId(), newFrame);
-                }
-            }
-            else if (newFrame.getBody() instanceof FrameBodyWXXX)
-            {
-                //Different key so convert to list and add as new frame
-                if (!((FrameBodyWXXX) newFrame.getBody()).getDescription()
-                        .equals(((FrameBodyWXXX) oldFrame.getBody()).getDescription()))
-                {
-                    List<AbstractID3v2Frame> frames = new ArrayList<AbstractID3v2Frame>();
-                    frames.add(oldFrame);
-                    frames.add(newFrame);
-                    frameMap.put(newFrame.getId(), frames);
-                }
-                //Same key so replace
-                else
-                {
-                    frameMap.put(newFrame.getId(), newFrame);
-                }
-            }
-            else if (newFrame.getBody() instanceof FrameBodyCOMM)
-            {
-                if (!((FrameBodyCOMM) newFrame.getBody()).getDescription()
-                        .equals(((FrameBodyCOMM) oldFrame.getBody()).getDescription()))
-                {
-                    List<AbstractID3v2Frame> frames = new ArrayList<AbstractID3v2Frame>();
-                    frames.add(oldFrame);
-                    frames.add(newFrame);
-                    frameMap.put(newFrame.getId(), frames);
-                }
-                //Same key so replace
-                else
-                {
-                    frameMap.put(newFrame.getId(), newFrame);
-                }
-            }
-            else if (newFrame.getBody() instanceof FrameBodyUFID)
-            {
-                if (!((FrameBodyUFID) newFrame.getBody()).getOwner()
-                        .equals(((FrameBodyUFID) oldFrame.getBody()).getOwner()))
-                {
-                    List<AbstractID3v2Frame> frames = new ArrayList<AbstractID3v2Frame>();
-                    frames.add(oldFrame);
-                    frames.add(newFrame);
-                    frameMap.put(newFrame.getId(), frames);
-                }
-                //Same key so replace
-                else
-                {
-                    frameMap.put(newFrame.getId(), newFrame);
-                }
-            }
-            else if (newFrame.getBody() instanceof FrameBodyUSLT)
-            {
-                if (!((FrameBodyUSLT) newFrame.getBody()).getDescription()
-                        .equals(((FrameBodyUSLT) oldFrame.getBody()).getDescription()))
-                {
-                    List<AbstractID3v2Frame> frames = new ArrayList<AbstractID3v2Frame>();
-                    frames.add(oldFrame);
-                    frames.add(newFrame);
-                    frameMap.put(newFrame.getId(), frames);
-                }
-                //Same key so replace
-                else
-                {
-                    frameMap.put(newFrame.getId(), newFrame);
-                }
-            }
-            else if (newFrame.getBody() instanceof FrameBodyPOPM)
-            {
-                if (!((FrameBodyPOPM) newFrame.getBody()).getEmailToUser()
-                        .equals(((FrameBodyPOPM) oldFrame.getBody()).getEmailToUser()))
-                {
-                    List<AbstractID3v2Frame> frames = new ArrayList<AbstractID3v2Frame>();
-                    frames.add(oldFrame);
-                    frames.add(newFrame);
-                    frameMap.put(newFrame.getId(), frames);
-                }
-                //Same key so replace
-                else
-                {
-                    frameMap.put(newFrame.getId(), newFrame);
-                }
-            }
-            //Just add new one
-            else
-            {
-                List<AbstractID3v2Frame> frames = new ArrayList<AbstractID3v2Frame>();
-                frames.add(oldFrame);
-                frames.add(newFrame);
-                frameMap.put(newFrame.getId(), frames);
-            }
+            List<AbstractID3v2Frame> frames = new ArrayList<AbstractID3v2Frame>();
+            frames.add((AbstractID3v2Frame) obj);
+            mergeDuplicateFrames(newFrame, frames);
         }
-        else if (o instanceof List)
+        //Multiple frames of this type already exist
+        else if (obj instanceof List)
         {
-            for (ListIterator<AbstractID3v2Frame> li = ((List<AbstractID3v2Frame>) o).listIterator(); li.hasNext();)
-            {
-                AbstractID3v2Frame nextFrame = li.next();
-
-                if (newFrame.getBody() instanceof FrameBodyTXXX)
-                {
-                    //Value with matching key exists so replace
-                    if (((FrameBodyTXXX) newFrame.getBody()).getDescription()
-                            .equals(((FrameBodyTXXX) nextFrame.getBody()).getDescription()))
-                    {
-                        li.set(newFrame);
-                        frameMap.put(newFrame.getId(), o);
-                        return;
-                    }
-                }
-                else if (newFrame.getBody() instanceof FrameBodyWXXX)
-                {
-                    //Value with matching key exists so replace
-                    if (((FrameBodyWXXX) newFrame.getBody()).getDescription()
-                            .equals(((FrameBodyWXXX) nextFrame.getBody()).getDescription()))
-                    {
-                        li.set(newFrame);
-                        frameMap.put(newFrame.getId(), o);
-                        return;
-                    }
-                }
-                else if (newFrame.getBody() instanceof FrameBodyCOMM)
-                {
-                    if (((FrameBodyCOMM) newFrame.getBody()).getDescription()
-                            .equals(((FrameBodyCOMM) nextFrame.getBody()).getDescription()))
-                    {
-                        li.set(newFrame);
-                        frameMap.put(newFrame.getId(), o);
-                        return;
-                    }
-                }
-                else if (newFrame.getBody() instanceof FrameBodyUFID)
-                {
-                    if (((FrameBodyUFID) newFrame.getBody()).getOwner()
-                            .equals(((FrameBodyUFID) nextFrame.getBody()).getOwner()))
-                    {
-                        li.set(newFrame);
-                        frameMap.put(newFrame.getId(), o);
-                        return;
-                    }
-                }
-                else if (newFrame.getBody() instanceof FrameBodyUSLT)
-                {
-                    if (((FrameBodyUSLT) newFrame.getBody()).getDescription()
-                            .equals(((FrameBodyUSLT) nextFrame.getBody()).getDescription()))
-                    {
-                        li.set(newFrame);
-                        frameMap.put(newFrame.getId(), o);
-                        return;
-                    }
-                }
-                else if (newFrame.getBody() instanceof FrameBodyPOPM)
-                {
-                    if (((FrameBodyPOPM) newFrame.getBody()).getEmailToUser()
-                            .equals(((FrameBodyPOPM) nextFrame.getBody()).getEmailToUser()))
-                    {
-                        li.set(newFrame);
-                        frameMap.put(newFrame.getId(), o);
-                        return;
-                    }
-                }
-            }
-            //No match found so add new one
-            ((List<AbstractID3v2Frame>) o).add(newFrame);
+            mergeDuplicateFrames(newFrame, (List<AbstractID3v2Frame>) obj);
         }
     }
 
@@ -818,7 +773,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
      */
     public void setFrame(String identifier, List<AbstractID3v2Frame> multiFrame)
     {
-        logger.finest("Adding "+multiFrame.size() + " frames for "+identifier);
+        logger.finest("Adding " + multiFrame.size() + " frames for " + identifier);
         frameMap.put(identifier, multiFrame);
     }
 
@@ -1004,12 +959,13 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
      * @param fileChannel
      * @return lock or null if locking is not supported
      * @throws IOException if unable to get lock because already locked by another program
-     * @throws java.nio.channels.OverlappingFileLockException if already locked by another thread in the same VM, we dont catch this
-     * because indicates a programming error
+     * @throws java.nio.channels.OverlappingFileLockException
+     *                     if already locked by another thread in the same VM, we dont catch this
+     *                     because indicates a programming error
      */
     protected FileLock getFileLockForWriting(FileChannel fileChannel, String filePath) throws IOException
     {
-        logger.finest("locking fileChannel for "+filePath);
+        logger.finest("locking fileChannel for " + filePath);
         FileLock fileLock;
         try
         {
@@ -1184,9 +1140,9 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
      * @throws IOException           on any I/O error
      */
     public void adjustPadding(File file, int paddingSize, long audioStart) throws FileNotFoundException, IOException
-    {           
+    {
         logger.finer("Need to move audio file to accomodate tag");
-        FileChannel fcIn=null;
+        FileChannel fcIn = null;
         FileChannel fcOut;
 
         //Create buffer holds the neccessary padding
@@ -1197,22 +1153,22 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
 
         try
         {
-            paddedFile=File.createTempFile(Utils.getMinBaseFilenameAllowedForTempFile(file), ".new", file.getParentFile());
-            logger.finest("Created temp file:"+paddedFile.getName() + " for "+file.getName());
+            paddedFile = File.createTempFile(Utils.getMinBaseFilenameAllowedForTempFile(file), ".new", file.getParentFile());
+            logger.finest("Created temp file:" + paddedFile.getName() + " for " + file.getName());
         }
         //Vista:Can occur if have Write permission on folder this file would be created in Denied
-        catch(IOException ioe)
+        catch (IOException ioe)
         {
-            logger.log(Level.SEVERE,ioe.getMessage(),ioe);
-            if(ioe.getMessage().equals(FileSystemMessage.ACCESS_IS_DENIED.getMsg()))
+            logger.log(Level.SEVERE, ioe.getMessage(), ioe);
+            if (ioe.getMessage().equals(FileSystemMessage.ACCESS_IS_DENIED.getMsg()))
             {
-                logger.severe(ErrorMessage.GENERAL_WRITE_FAILED_TO_CREATE_TEMPORARY_FILE_IN_FOLDER.getMsg(file.getName(),file.getParentFile().getPath()));
-                throw new UnableToCreateFileException(ErrorMessage.GENERAL_WRITE_FAILED_TO_CREATE_TEMPORARY_FILE_IN_FOLDER.getMsg(file.getName(),file.getParentFile().getPath()));
+                logger.severe(ErrorMessage.GENERAL_WRITE_FAILED_TO_CREATE_TEMPORARY_FILE_IN_FOLDER.getMsg(file.getName(), file.getParentFile().getPath()));
+                throw new UnableToCreateFileException(ErrorMessage.GENERAL_WRITE_FAILED_TO_CREATE_TEMPORARY_FILE_IN_FOLDER.getMsg(file.getName(), file.getParentFile().getPath()));
             }
             else
             {
-                logger.severe(ErrorMessage.GENERAL_WRITE_FAILED_TO_CREATE_TEMPORARY_FILE_IN_FOLDER.getMsg(file.getName(),file.getParentFile().getPath()));
-                throw new UnableToCreateFileException(ErrorMessage.GENERAL_WRITE_FAILED_TO_CREATE_TEMPORARY_FILE_IN_FOLDER.getMsg(file.getName(),file.getParentFile().getPath()));
+                logger.severe(ErrorMessage.GENERAL_WRITE_FAILED_TO_CREATE_TEMPORARY_FILE_IN_FOLDER.getMsg(file.getName(), file.getParentFile().getPath()));
+                throw new UnableToCreateFileException(ErrorMessage.GENERAL_WRITE_FAILED_TO_CREATE_TEMPORARY_FILE_IN_FOLDER.getMsg(file.getName(), file.getParentFile().getPath()));
             }
         }
 
@@ -1221,18 +1177,18 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
             fcOut = new FileOutputStream(paddedFile).getChannel();
         }
         //Vista:Can occur if have special permission Create Folder/Append Data denied
-        catch(FileNotFoundException ioe)
+        catch (FileNotFoundException ioe)
         {
-            logger.log(Level.SEVERE,ioe.getMessage(),ioe);
-            logger.severe(ErrorMessage.GENERAL_WRITE_FAILED_TO_MODIFY_TEMPORARY_FILE_IN_FOLDER.getMsg(file.getName(),file.getParentFile().getPath()));
-            throw new UnableToModifyFileException(ErrorMessage.GENERAL_WRITE_FAILED_TO_MODIFY_TEMPORARY_FILE_IN_FOLDER.getMsg(file.getName(),file.getParentFile().getPath()));
+            logger.log(Level.SEVERE, ioe.getMessage(), ioe);
+            logger.severe(ErrorMessage.GENERAL_WRITE_FAILED_TO_MODIFY_TEMPORARY_FILE_IN_FOLDER.getMsg(file.getName(), file.getParentFile().getPath()));
+            throw new UnableToModifyFileException(ErrorMessage.GENERAL_WRITE_FAILED_TO_MODIFY_TEMPORARY_FILE_IN_FOLDER.getMsg(file.getName(), file.getParentFile().getPath()));
         }
 
         try
         {
             //Create read channel from original file
             //TODO lock so cant be modified by anything else whilst reading from it ?
-            fcIn        = new FileInputStream(file).getChannel();
+            fcIn = new FileInputStream(file).getChannel();
 
             //Write padding to new file (this is where the tag will be written to later)
             long written = fcOut.write(paddingBuffer);
@@ -1249,7 +1205,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
                 logger.finer("Written padding:" + written + " Data:" + written2);
                 if (written2 != audiolength)
                 {
-                    throw new RuntimeException(ErrorMessage.MP3_UNABLE_TO_ADJUST_PADDING.getMsg(audiolength,written2));
+                    throw new RuntimeException(ErrorMessage.MP3_UNABLE_TO_ADJUST_PADDING.getMsg(audiolength, written2));
                 }
             }
             else
@@ -1267,7 +1223,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
                 logger.finer("Written padding:" + written + " Data:" + written2);
                 if (written2 != audiolength)
                 {
-                    throw new RuntimeException(ErrorMessage.MP3_UNABLE_TO_ADJUST_PADDING.getMsg(audiolength,written2));
+                    throw new RuntimeException(ErrorMessage.MP3_UNABLE_TO_ADJUST_PADDING.getMsg(audiolength, written2));
                 }
             }
 
@@ -1277,7 +1233,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
             //Close Channels and locks
             if (fcIn != null)
             {
-                if(fcIn.isOpen())
+                if (fcIn.isOpen())
                 {
                     fcIn.close();
                 }
@@ -1285,14 +1241,14 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
 
             if (fcOut != null)
             {
-                if(fcOut.isOpen())
+                if (fcOut.isOpen())
                 {
                     fcOut.close();
                 }
             }
 
             //Replace file with paddedFile
-            replaceFile(file,paddedFile);
+            replaceFile(file, paddedFile);
 
             //Update modification time
             //TODO is this the right file ?
@@ -1305,7 +1261,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
                 //Whatever happens ensure all locks and channels are closed/released
                 if (fcIn != null)
                 {
-                    if(fcIn.isOpen())
+                    if (fcIn.isOpen())
                     {
                         fcIn.close();
                     }
@@ -1313,15 +1269,15 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
 
                 if (fcOut != null)
                 {
-                    if(fcOut.isOpen())
+                    if (fcOut.isOpen())
                     {
                         fcOut.close();
                     }
                 }
             }
-            catch(Exception e)
+            catch (Exception e)
             {
-                logger.log(Level.WARNING,"Problem closing channels and locks:"+e.getMessage(),e);
+                logger.log(Level.WARNING, "Problem closing channels and locks:" + e.getMessage(), e);
             }
         }
     }
@@ -1337,8 +1293,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
      * @param audioStartLocation
      * @throws IOException
      */
-    protected void writeBufferToFile(File file,ByteBuffer headerBuffer, byte[] bodyByteBuffer,int padding,int sizeIncPadding,long audioStartLocation)
-            throws IOException
+    protected void writeBufferToFile(File file, ByteBuffer headerBuffer, byte[] bodyByteBuffer, int padding, int sizeIncPadding, long audioStartLocation) throws IOException
     {
         FileChannel fc = null;
         FileLock fileLock = null;
@@ -1346,8 +1301,8 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
         //We need to adjust location of audio file if true
         if (sizeIncPadding > audioStartLocation)
         {
-             logger.finest("Adjusting Padding");
-             adjustPadding(file, sizeIncPadding, audioStartLocation);
+            logger.finest("Adjusting Padding");
+            adjustPadding(file, sizeIncPadding, audioStartLocation);
         }
 
         try
@@ -1358,10 +1313,10 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
             fc.write(ByteBuffer.wrap(bodyByteBuffer));
             fc.write(ByteBuffer.wrap(new byte[padding]));
         }
-        catch(FileNotFoundException fe)
+        catch (FileNotFoundException fe)
         {
-            logger.log(Level.SEVERE,getLoggingFilename() + fe.getMessage(),fe);
-            if(fe.getMessage().equals(FileSystemMessage.ACCESS_IS_DENIED.getMsg()))
+            logger.log(Level.SEVERE, getLoggingFilename() + fe.getMessage(), fe);
+            if (fe.getMessage().equals(FileSystemMessage.ACCESS_IS_DENIED.getMsg()))
             {
                 logger.severe(ErrorMessage.GENERAL_WRITE_FAILED_TO_OPEN_FILE_FOR_EDITING.getMsg(file.getPath()));
                 throw new UnableToModifyFileException(ErrorMessage.GENERAL_WRITE_FAILED_TO_OPEN_FILE_FOR_EDITING.getMsg(file.getPath()));
@@ -1372,10 +1327,10 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
                 throw new UnableToCreateFileException(ErrorMessage.GENERAL_WRITE_FAILED_TO_OPEN_FILE_FOR_EDITING.getMsg(file.getPath()));
             }
         }
-        catch(IOException ioe)
+        catch (IOException ioe)
         {
-            logger.log(Level.SEVERE,getLoggingFilename() + ioe.getMessage(),ioe);
-            if(ioe.getMessage().equals(FileSystemMessage.ACCESS_IS_DENIED.getMsg()))
+            logger.log(Level.SEVERE, getLoggingFilename() + ioe.getMessage(), ioe);
+            if (ioe.getMessage().equals(FileSystemMessage.ACCESS_IS_DENIED.getMsg()))
             {
                 logger.severe(ErrorMessage.GENERAL_WRITE_FAILED_TO_OPEN_FILE_FOR_EDITING.getMsg(file.getParentFile().getPath()));
                 throw new UnableToModifyFileException(ErrorMessage.GENERAL_WRITE_FAILED_TO_OPEN_FILE_FOR_EDITING.getMsg(file.getParentFile().getPath()));
@@ -1398,25 +1353,26 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
             }
         }
     }
+
     /**
      * Replace originalFile with the contents of newFile
-     *
+     * <p/>
      * Both files must exist in the same folder so that there are no problems with fileystem mount points
      *
      * @param newFile
      * @param originalFile
      * @throws IOException
      */
-    private void replaceFile(File originalFile,File newFile) throws IOException
+    private void replaceFile(File originalFile, File newFile) throws IOException
     {
-        boolean renameOriginalResult =false;
+        boolean renameOriginalResult = false;
         //Rename Original File to make a backup in case problem with new file
-        File originalFileBackup = new File(originalFile.getAbsoluteFile().getParentFile().getPath(), AudioFile.getBaseFilename(originalFile)+ ".old");
+        File originalFileBackup = new File(originalFile.getAbsoluteFile().getParentFile().getPath(), AudioFile.getBaseFilename(originalFile) + ".old");
         //If already exists modify the suffix
-        int count=1;
-        while(originalFileBackup.exists())
+        int count = 1;
+        while (originalFileBackup.exists())
         {
-            originalFileBackup = new File(originalFile.getAbsoluteFile().getParentFile().getPath(), AudioFile.getBaseFilename(originalFile)+ ".old"+count);
+            originalFileBackup = new File(originalFile.getAbsoluteFile().getParentFile().getPath(), AudioFile.getBaseFilename(originalFile) + ".old" + count);
             count++;
         }
 
@@ -1433,17 +1389,17 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
         {
             //Renamed failed so lets do some checks rename the backup back to the original file
             //New File doesnt exist
-            if(!newFile.exists())
+            if (!newFile.exists())
             {
                 logger.warning(ErrorMessage.GENERAL_WRITE_FAILED_NEW_FILE_DOESNT_EXIST.getMsg(newFile.getAbsolutePath()));
             }
 
             //Rename the backup back to the original
             renameOriginalResult = originalFileBackup.renameTo(originalFile);
-            if(!renameOriginalResult)
+            if (!renameOriginalResult)
             {
                 //TODO now if this happens we are left with testfile.old instead of testfile.mp3
-                logger.warning(ErrorMessage.GENERAL_WRITE_FAILED_TO_RENAME_ORIGINAL_BACKUP_TO_ORIGINAL.getMsg(originalFileBackup.getAbsolutePath(),originalFile.getName()));
+                logger.warning(ErrorMessage.GENERAL_WRITE_FAILED_TO_RENAME_ORIGINAL_BACKUP_TO_ORIGINAL.getMsg(originalFileBackup.getAbsolutePath(), originalFile.getName()));
             }
 
 
@@ -1453,15 +1409,15 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
         else
         {
             //Rename was okay so we can now delete the backup of the original
-            boolean deleteResult=originalFileBackup.delete();
-            if(!deleteResult)
+            boolean deleteResult = originalFileBackup.delete();
+            if (!deleteResult)
             {
                 //Not a disaster but can't delete the backup so make a warning
                 logger.warning(ErrorMessage.GENERAL_WRITE_WARNING_UNABLE_TO_DELETE_BACKUP_FILE.getMsg(originalFileBackup.getAbsolutePath()));
             }
         }
     }
-    
+
     /*
     * Copy framne into map, whilst accounting for multiple frame of same type which can occur even if there were
     * not frames of the same type in the original tag
@@ -1472,17 +1428,17 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
         if (frameMap.containsKey(newFrame.getIdentifier()))
         {
             Object o = frameMap.get(newFrame.getIdentifier());
-            if(o instanceof AbstractID3v2Frame)
+            if (o instanceof AbstractID3v2Frame)
             {
                 List<AbstractID3v2Frame> list = new ArrayList<AbstractID3v2Frame>();
-                list.add((AbstractID3v2Frame)o);
+                list.add((AbstractID3v2Frame) o);
                 list.add(newFrame);
                 frameMap.put(newFrame.getIdentifier(), list);
             }
             else
             {
-                 List<AbstractID3v2Frame> list = (List)o;
-                 list.add(newFrame);
+                List<AbstractID3v2Frame> list = (List) o;
+                list.add(newFrame);
             }
         }
         else
@@ -1581,18 +1537,18 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
      *
      * @return ByteBuffer Contains all the frames written within the tag ready for writing to file
      * @throws IOException
-     */    
+     */
     protected ByteArrayOutputStream writeFramesToBuffer() throws IOException
     {
         //Increases as is required
         ByteArrayOutputStream bodyBuffer = new ByteArrayOutputStream();
 
         //Sort keys into Preferred Order
-        TreeSet <String> sortedWriteOrder = new TreeSet<String>( getPreferredFrameOrderComparator());
+        TreeSet<String> sortedWriteOrder = new TreeSet<String>(getPreferredFrameOrderComparator());
         sortedWriteOrder.addAll(frameMap.keySet());
 
         AbstractID3v2Frame frame;
-        for(String id:sortedWriteOrder)
+        for (String id : sortedWriteOrder)
         {
             Object o = frameMap.get(id);
             if (o instanceof AbstractID3v2Frame)
@@ -1616,9 +1572,8 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
 
 
     /**
-     *
      * @return comparator used to order frames in preffrred order for writing to file
-     * so that most important frames are written first.
+     *         so that most important frames are written first.
      */
     public abstract Comparator getPreferredFrameOrderComparator();
 
@@ -1865,7 +1820,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
     public TagField createTrackField(String content)
     {
         AbstractID3v2Frame frame = createFrame(getTrackId());
-        ((AbstractFrameBodyTextInfo) frame.getBody()).setText(content);
+        ((FrameBodyTRCK) frame.getBody()).setTrackNo(content);
         return frame;
     }
 
@@ -1929,14 +1884,13 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
     }
 
     /**
-     *
      * @return iterator of all fields, multiple values for the same Id (e.g multiple TXXX frames) count as seperate
-     * fields
+     *         fields
      */
     public Iterator<TagField> getFields()
     {
         //Iterator of each different frameId in this tag
-        final Iterator<Map.Entry<String, Object>> it        = this.frameMap.entrySet().iterator();
+        final Iterator<Map.Entry<String, Object>> it = this.frameMap.entrySet().iterator();
 
         //Iterator used by hasNext() so doesnt effect next()
         final Iterator<Map.Entry<String, Object>> itHasNext = this.frameMap.entrySet().iterator();
@@ -1956,15 +1910,15 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
                     return;
                 }
 
-                while(it.hasNext())
+                while (it.hasNext())
                 {
                     Map.Entry<String, Object> e = it.next();
-                    latestEntry=itHasNext.next();
+                    latestEntry = itHasNext.next();
                     if (e.getValue() instanceof List)
                     {
                         List<TagField> l = (List<TagField>) e.getValue();
                         //If list is empty (which it shouldn't be) we skip over this entry
-                        if(l.size()==0)
+                        if (l.size() == 0)
                         {
                             continue;
                         }
@@ -1990,7 +1944,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
             public boolean hasNext()
             {
                 //Check Current frameId, does it contain more values
-                if(fieldsIt!=null)
+                if (fieldsIt != null)
                 {
                     if (fieldsIt.hasNext())
                     {
@@ -1999,7 +1953,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
                 }
 
                 //No remaining entries return false
-                if(!itHasNext.hasNext())
+                if (!itHasNext.hasNext())
                 {
                     return false;
                 }
@@ -2007,7 +1961,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
                 //Issue #236
                 //TODO assumes if have entry its valid, but what if empty list but very different to check this
                 //without causing a side effect on next() so leaving for now
-                if(itHasNext.hasNext())
+                if (itHasNext.hasNext())
                 {
                     return true;
                 }
@@ -2022,7 +1976,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
                     changeIt();
                 }
 
-                if(fieldsIt!=null)
+                if (fieldsIt != null)
                 {
                     //Go to the end of the run
                     if (!fieldsIt.hasNext())
@@ -2031,7 +1985,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
                     }
                 }
 
-                if(fieldsIt==null)
+                if (fieldsIt == null)
                 {
                     throw new NoSuchElementException();
                 }
@@ -2054,13 +2008,13 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
         //whereas it.next() works correctly
         try
         {
-            while(true)
+            while (true)
             {
                 it.next();
                 count++;
             }
         }
-        catch(NoSuchElementException nse)
+        catch (NoSuchElementException nse)
         {
             //this is thrown when no more elements
         }
@@ -2086,7 +2040,31 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
             throw new KeyNotFoundException();
         }
 
-        return doGetFirst(getFrameAndSubIdFromGenericKey(genericKey));
+        FrameAndSubId frameAndSubId = getFrameAndSubIdFromGenericKey(genericKey);
+        if (genericKey == TagFieldKey.TRACK)
+        {
+            AbstractID3v2Frame frame = getFirstField(frameAndSubId.getFrameId());
+            return String.valueOf(((FrameBodyTRCK)frame.getBody()).getTrackNo());
+        }
+        else if (genericKey == TagFieldKey.TRACK_TOTAL)
+        {
+            AbstractID3v2Frame frame = getFirstField(frameAndSubId.getFrameId());
+            return String.valueOf(((FrameBodyTRCK)frame.getBody()).getTrackTotal());
+        }
+        else if (genericKey == TagFieldKey.DISC_NO)
+        {
+            AbstractID3v2Frame frame = getFirstField(frameAndSubId.getFrameId());
+            return String.valueOf(((FrameBodyTPOS)frame.getBody()).getDiscNo());
+        }
+        else if (genericKey == TagFieldKey.DISC_TOTAL)
+        {
+            AbstractID3v2Frame frame = getFirstField(frameAndSubId.getFrameId());
+            return String.valueOf(((FrameBodyTPOS)frame.getBody()).getDiscTotal());
+        }
+        else
+        {
+            return doGetFirst(frameAndSubId);
+        }
     }
 
 
@@ -2106,7 +2084,41 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
         {
             throw new KeyNotFoundException();
         }
-        return doCreateTagField(getFrameAndSubIdFromGenericKey(genericKey), value);
+
+        
+        FrameAndSubId formatKey = getFrameAndSubIdFromGenericKey(genericKey);
+        if (genericKey == TagFieldKey.TRACK)
+        {
+            AbstractID3v2Frame frame = createFrame(formatKey.getFrameId());
+            FrameBodyTRCK framebody = (FrameBodyTRCK) frame.getBody();
+            framebody.setTrackNo(Integer.parseInt(value));
+            return frame;
+        }
+        else if (genericKey == TagFieldKey.TRACK_TOTAL)
+        {
+            AbstractID3v2Frame frame = createFrame(formatKey.getFrameId());
+            FrameBodyTRCK framebody = (FrameBodyTRCK) frame.getBody();
+            framebody.setTrackTotal(Integer.parseInt(value));
+            return frame;
+        }
+        else if (genericKey == TagFieldKey.DISC_NO)
+        {
+            AbstractID3v2Frame frame = createFrame(formatKey.getFrameId());
+            FrameBodyTPOS framebody = (FrameBodyTPOS) frame.getBody();
+            framebody.setDiscNo(Integer.parseInt(value));
+            return frame;
+        }
+        else if (genericKey == TagFieldKey.DISC_TOTAL)
+        {
+            AbstractID3v2Frame frame = createFrame(formatKey.getFrameId());
+            FrameBodyTPOS framebody = (FrameBodyTPOS) frame.getBody();
+            framebody.setDiscTotal(Integer.parseInt(value));
+            return frame;
+        }
+        else
+        {
+            return doCreateTagField(formatKey, value);
+        }
     }
 
     /**
@@ -2137,7 +2149,6 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
                 //but just in case
                 throw new RuntimeException("When encoding UFID charset ISO-8859-1 was deemed unsupported");
             }
-
         }
         else if (frame.getBody() instanceof FrameBodyTXXX)
         {
@@ -2160,16 +2171,15 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
         }
         else if (frame.getBody() instanceof FrameBodyWOAR)
         {
-            ((FrameBodyWOAR) frame.getBody()).setUrlLink(value);           
+            ((FrameBodyWOAR) frame.getBody()).setUrlLink(value);
         }
-
         else if (frame.getBody() instanceof AbstractFrameBodyTextInfo)
         {
             ((AbstractFrameBodyTextInfo) frame.getBody()).setText(value);
         }
         else if ((frame.getBody() instanceof FrameBodyAPIC) || (frame.getBody() instanceof FrameBodyPIC))
         {
-            throw new UnsupportedOperationException("Please use createArtwork() instead for creating artwork");
+            throw new UnsupportedOperationException(ErrorMessage.ARTWORK_CANNOT_BE_CREATED_WITH_THIS_METHOD.getMsg());
         }
         else
         {
@@ -2259,7 +2269,6 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
     }
 
 
-
     /**
      * Delete fields with this generic key
      *
@@ -2267,7 +2276,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
      */
     public void deleteTagField(TagFieldKey genericKey) throws KeyNotFoundException
     {
-       if (genericKey == null)
+        if (genericKey == null)
         {
             throw new KeyNotFoundException();
         }
@@ -2321,7 +2330,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
                 {
                     throw new RuntimeException("Need to implement get(TagFieldKey genericKey) for:" + next.getClass());
                 }
-            }            
+            }
         }
     }
 
@@ -2393,7 +2402,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
     /**
      * This class had to be created to minimize the duplicate code in concrete subclasses
      * of this class. It is required in some cases when using the Fieldkey enums because enums
-     * cant be subclassed. We want to use enums instead of regular classes because they are
+     * cannot be subclassed. We want to use enums instead of regular classes because they are
      * much easier for endusers to  to use.
      */
     class FrameAndSubId
@@ -2421,7 +2430,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
     public Artwork getFirstArtwork()
     {
         List<Artwork> artwork = getArtworkList();
-        if(artwork.size()>0)
+        if (artwork.size() > 0)
         {
             return artwork.get(0);
         }
@@ -2429,17 +2438,17 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
     }
 
     /**
-      * Create field and then set within tag itself
-      *
-      * @param artwork
-      * @throws FieldDataInvalidException
-      */
-     public void createAndSetArtworkField(Artwork artwork) throws FieldDataInvalidException
-     {
-         this.set(createArtworkField(artwork));
-     }
+     * Create field and then set within tag itself
+     *
+     * @param artwork
+     * @throws FieldDataInvalidException
+     */
+    public void createAndSetArtworkField(Artwork artwork) throws FieldDataInvalidException
+    {
+        this.set(createArtworkField(artwork));
+    }
 
-     /**
+    /**
      * Delete all instance of artwork Field
      *
      * @throws KeyNotFoundException

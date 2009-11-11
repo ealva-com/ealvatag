@@ -88,12 +88,14 @@ public class Mp4TrackField extends Mp4TagTextNumberField
      */
     public Mp4TrackField(int trackNo)
     {
+
         super(Mp4FieldKey.TRACK.getFieldName(), String.valueOf(trackNo));
         numbers = new ArrayList<Short>();
         numbers.add(new Short("0"));
         numbers.add((short) trackNo);
         numbers.add(new Short("0"));
         numbers.add(new Short("0"));
+        System.out.println("Created field"+trackNo);
     }
 
     /**
@@ -158,5 +160,26 @@ public class Mp4TrackField extends Mp4TagTextNumberField
     public Short getTrackTotal()
     {
         return numbers.get(TRACK_TOTAL_INDEX);
+    }
+
+     /**
+     * Set Track No
+     *
+     * @param trackNo
+     */
+    public void setTrackNo(int trackNo)
+    {
+        numbers.set(TRACK_NO_INDEX,new Short((short)trackNo));
+    }
+
+
+    /**
+     * Set total number of tracks
+     *
+     * @param trackTotal
+     */
+    public void setTrackTotal(int trackTotal)
+    {
+       numbers.set(TRACK_TOTAL_INDEX,new Short((short)trackTotal));
     }
 }

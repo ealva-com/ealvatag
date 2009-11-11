@@ -343,6 +343,12 @@ public class FlacTag implements Tag
         return (tag == null || tag.isEmpty()) && images.size() == 0;
     }
 
+    public void createAndSet(TagFieldKey genericKey, String value) throws KeyNotFoundException, FieldDataInvalidException
+    {
+        TagField tagfield = createTagField(genericKey,value);
+        set(tagfield);
+    }
+
     /**
      * @param field
      * @throws FieldDataInvalidException

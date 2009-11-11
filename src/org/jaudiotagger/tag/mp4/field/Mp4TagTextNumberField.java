@@ -32,7 +32,7 @@ import java.util.List;
 /**
  * Represents simple text field that contains an array of number,
  * <p/>
- * <p>But reads the data content as an arry of 16 bit unsigned numbers
+ * <p>But reads the data content as an array of 16 bit unsigned numbers
  */
 public class Mp4TagTextNumberField extends Mp4TagTextField
 {

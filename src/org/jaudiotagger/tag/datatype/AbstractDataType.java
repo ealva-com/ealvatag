@@ -142,6 +142,10 @@ public abstract class AbstractDataType extends java.lang.Object
         {
             this.value = ((MultipleTextEncodedStringNullTerminated.Values) copyObject.value);
         }
+        else if(copyObject.value instanceof PartOfSet.PartOfSetValue)
+        {
+            this.value = ((PartOfSet.PartOfSetValue) copyObject.value);
+        }
         else if (copyObject.value instanceof boolean[])
         {
             this.value = ((boolean[]) copyObject.value).clone();

@@ -68,7 +68,7 @@ public class VorbisWriteTagTest extends AbstractTestCase
             tag.setTrack("2");
             tag.setGenre("Genre");
             //Common keys
-            tag.set(tag.createTagField(TagFieldKey.DISC_NO, "4"));
+            tag.set(tag.createTagField(TagFieldKey.DISC_NO, "1"));
             tag.set(tag.createTagField(TagFieldKey.COMPOSER, "composer\u00A9"));
             tag.set(tag.createTagField(TagFieldKey.ARTIST_SORT, "Sortartist\u01ff"));
             tag.set(tag.createTagField(TagFieldKey.LYRICS, "lyrics"));
@@ -92,6 +92,9 @@ public class VorbisWriteTagTest extends AbstractTestCase
             tag.set(tag.createTagField(TagFieldKey.URL_OFFICIAL_RELEASE_SITE,"http://www.discogs4.com"));
             tag.set(tag.createTagField(TagFieldKey.URL_WIKIPEDIA_ARTIST_SITE,"http://www.discogs5.com"));
             tag.set(tag.createTagField(TagFieldKey.URL_WIKIPEDIA_RELEASE_SITE,"http://www.discogs6.com"));
+            tag.set(tag.createTagField(TagFieldKey.TRACK_TOTAL,"11"));
+            tag.set(tag.createTagField(TagFieldKey.DISC_TOTAL,"3"));
+
 
             //Vorbis Only keys
             tag.set(((VorbisCommentTag) tag).createTagField(VorbisCommentFieldKey.DESCRIPTION, "description"));
@@ -130,7 +133,7 @@ public class VorbisWriteTagTest extends AbstractTestCase
             assertEquals("comments", tag.getFirst(TagFieldKey.COMMENT));
             assertEquals("1971", tag.getFirst(TagFieldKey.YEAR));
             assertEquals("2", tag.getFirst(TagFieldKey.TRACK));
-            assertEquals("4", tag.getFirst(TagFieldKey.DISC_NO));
+            assertEquals("1", tag.getFirst(TagFieldKey.DISC_NO));
             assertEquals("composer\u00A9", tag.getFirst(TagFieldKey.COMPOSER));
             assertEquals("Sortartist\u01ff", tag.getFirst(TagFieldKey.ARTIST_SORT));
             assertEquals("lyrics", tag.getFirst(TagFieldKey.LYRICS));
@@ -147,6 +150,9 @@ public class VorbisWriteTagTest extends AbstractTestCase
             assertEquals("989a13f6-b58c-4559-b09e-76ae0adb94ed", tag.getFirst(TagFieldKey.MUSICBRAINZ_ARTISTID));
             assertEquals("989a13f6-b58c-4559-b09e-76ae0adb94ed", tag.getFirst(TagFieldKey.MUSICBRAINZ_RELEASEARTISTID));
             assertEquals("19c6f0f6-3d6d-4b02-88c7-ffb559d52be6", tag.getFirst(TagFieldKey.MUSICBRAINZ_RELEASEID));
+            assertEquals("11", tag.getFirst(TagFieldKey.TRACK_TOTAL));
+            assertEquals("3", tag.getFirst(TagFieldKey.DISC_TOTAL));
+
             //Cast to format specific tag
             VorbisCommentTag vorbisTag = (VorbisCommentTag) tag;
             //Lookup by vorbis comment key
@@ -156,7 +162,7 @@ public class VorbisWriteTagTest extends AbstractTestCase
             assertEquals("comments", vorbisTag.getFirst(VorbisCommentFieldKey.COMMENT));
             assertEquals("1971", vorbisTag.getFirst(VorbisCommentFieldKey.DATE));
             assertEquals("2", vorbisTag.getFirst(VorbisCommentFieldKey.TRACKNUMBER));
-            assertEquals("4", vorbisTag.getFirst(VorbisCommentFieldKey.DISCNUMBER));
+            assertEquals("1", vorbisTag.getFirst(VorbisCommentFieldKey.DISCNUMBER));
             assertEquals("composer\u00A9", vorbisTag.getFirst(VorbisCommentFieldKey.COMPOSER));
             assertEquals("Sortartist\u01ff", vorbisTag.getFirst(VorbisCommentFieldKey.ARTISTSORT));
             assertEquals("lyrics", vorbisTag.getFirst(VorbisCommentFieldKey.LYRICS));
@@ -173,13 +179,15 @@ public class VorbisWriteTagTest extends AbstractTestCase
             assertEquals("989a13f6-b58c-4559-b09e-76ae0adb94ed", vorbisTag.getFirst(VorbisCommentFieldKey.MUSICBRAINZ_ARTISTID));
             assertEquals("989a13f6-b58c-4559-b09e-76ae0adb94ed", vorbisTag.getFirst(VorbisCommentFieldKey.MUSICBRAINZ_ALBUMARTISTID));
             assertEquals("19c6f0f6-3d6d-4b02-88c7-ffb559d52be6", vorbisTag.getFirst(VorbisCommentFieldKey.MUSICBRAINZ_ALBUMID));
-            assertEquals("http://www.lyrics.fly.com",tag.getFirst(TagFieldKey.URL_LYRICS_SITE));
-            assertEquals("http://www.discogs1.com",tag.getFirst(TagFieldKey.URL_DISCOGS_ARTIST_SITE));
-            assertEquals("http://www.discogs2.com",tag.getFirst(TagFieldKey.URL_DISCOGS_RELEASE_SITE));
-            assertEquals("http://www.discogs3.com",tag.getFirst(TagFieldKey.URL_OFFICIAL_ARTIST_SITE));
-            assertEquals("http://www.discogs4.com",tag.getFirst(TagFieldKey.URL_OFFICIAL_RELEASE_SITE));
-            assertEquals("http://www.discogs5.com",tag.getFirst(TagFieldKey.URL_WIKIPEDIA_ARTIST_SITE));
-            assertEquals("http://www.discogs6.com",tag.getFirst(TagFieldKey.URL_WIKIPEDIA_RELEASE_SITE));
+            assertEquals("http://www.lyrics.fly.com",tag.getFirst(VorbisCommentFieldKey.URL_LYRICS_SITE));
+            assertEquals("http://www.discogs1.com",tag.getFirst(VorbisCommentFieldKey.URL_DISCOGS_ARTIST_SITE));
+            assertEquals("http://www.discogs2.com",tag.getFirst(VorbisCommentFieldKey.URL_DISCOGS_RELEASE_SITE));
+            assertEquals("http://www.discogs3.com",tag.getFirst(VorbisCommentFieldKey.URL_OFFICIAL_ARTIST_SITE));
+            assertEquals("http://www.discogs4.com",tag.getFirst(VorbisCommentFieldKey.URL_OFFICIAL_RELEASE_SITE));
+            assertEquals("http://www.discogs5.com",tag.getFirst(VorbisCommentFieldKey.URL_WIKIPEDIA_ARTIST_SITE));
+            assertEquals("http://www.discogs6.com",tag.getFirst(VorbisCommentFieldKey.URL_WIKIPEDIA_RELEASE_SITE));
+            assertEquals("11", tag.getFirst(VorbisCommentFieldKey.TRACKTOTAL));
+            assertEquals("3", tag.getFirst(VorbisCommentFieldKey.DISCTOTAL));
 
             assertEquals("Sarah Curtis", vorbisTag.getFirst("VOLINIST"));
 

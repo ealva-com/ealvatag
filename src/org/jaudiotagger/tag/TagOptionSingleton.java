@@ -237,6 +237,11 @@ public class TagOptionSingleton
     private boolean truncateTextWithoutErrors = false;
 
     /**
+     * Frames such as TRCK and TPOS sometimes pad single didgit numbers to aid sorting
+     */
+    private boolean padNumbers = false;
+
+    /**
      * Creates a new TagOptions datatype. All Options are set to their default
      * values
      */
@@ -752,6 +757,7 @@ public class TagOptionSingleton
         id3v24UnicodeTextEncoding = TextEncoding.UTF_16;
         resetTextEncodingForExistingFrames = false;
         truncateTextWithoutErrors = false;
+        padNumbers = false;
 
         //default all lyrics3 fields to save. id3v1 fields are individual
         // settings. id3v2 fields are always looked at to save.
@@ -1046,5 +1052,15 @@ public class TagOptionSingleton
     public void setTruncateTextWithoutErrors(boolean truncateTextWithoutErrors)
     {
         this.truncateTextWithoutErrors = truncateTextWithoutErrors;
+    }
+
+    public boolean isPadNumbers()
+    {
+        return padNumbers;
+    }
+
+    public void setPadNumbers(boolean padNumbers)
+    {
+        this.padNumbers = padNumbers;
     }
 }

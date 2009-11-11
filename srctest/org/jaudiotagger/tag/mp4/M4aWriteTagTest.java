@@ -39,7 +39,10 @@ public class M4aWriteTagTest extends TestCase
             //Change values to different value (but same no of characters, this is the easiest mod to make
             tag.setArtist("AUTHOR");
             tag.setAlbum("ALBUM");
-            tag.setTrack("2/12");
+            //tag.setTrack("2");
+            tag.set(tag.createTagField(TagFieldKey.TRACK, "2"));
+            tag.set(tag.createTagField(TagFieldKey.TRACK_TOTAL, "12"));
+            assertEquals("2",tag.getFirstTrack());
             //tag.set(tag.createTagField(TagFieldKey.DISC_NO,"4/15"));
             tag.set(new Mp4DiscNoField(4, 15));
             tag.set(tag.createTagField(TagFieldKey.MUSICBRAINZ_TRACK_ID, "e785f700-c1aa-4943-bcee-87dd316a2c31"));
@@ -69,8 +72,9 @@ public class M4aWriteTagTest extends TestCase
             assertEquals("title", tag.getFirst(TagFieldKey.TITLE));
             assertEquals("comments", tag.getFirst(TagFieldKey.COMMENT));
             assertEquals("1971", tag.getFirst(TagFieldKey.YEAR));
-            assertEquals("2/12", tag.getFirst(TagFieldKey.TRACK));
-            assertEquals("4/15", tag.getFirst(TagFieldKey.DISC_NO));
+            assertEquals("2", tag.getFirst(TagFieldKey.TRACK));
+            assertEquals("12", tag.getFirst(TagFieldKey.TRACK_TOTAL));
+            assertEquals("4", tag.getFirst(TagFieldKey.DISC_NO));
             assertEquals("composer", tag.getFirst(TagFieldKey.COMPOSER));
             assertEquals("Sortartist", tag.getFirst(TagFieldKey.ARTIST_SORT));
             assertEquals("lyrics", tag.getFirst(TagFieldKey.LYRICS));
@@ -208,8 +212,10 @@ public class M4aWriteTagTest extends TestCase
             assertEquals("title", tag.getFirst(TagFieldKey.TITLE));
             assertEquals("comments", tag.getFirst(TagFieldKey.COMMENT));
             assertEquals("1971", tag.getFirst(TagFieldKey.YEAR));
-            assertEquals("1/10", tag.getFirst(TagFieldKey.TRACK));
-            assertEquals("1/10", tag.getFirst(TagFieldKey.DISC_NO));
+            assertEquals("1", tag.getFirst(TagFieldKey.TRACK));
+            assertEquals("1", tag.getFirst(TagFieldKey.DISC_NO));
+            assertEquals("10", tag.getFirst(TagFieldKey.TRACK_TOTAL));
+            assertEquals("10", tag.getFirst(TagFieldKey.DISC_TOTAL));
             assertEquals("composer", tag.getFirst(TagFieldKey.COMPOSER));
             assertEquals("Sortartist", tag.getFirst(TagFieldKey.ARTIST_SORT));
             assertEquals("lyrics", tag.getFirst(TagFieldKey.LYRICS));
@@ -348,8 +354,10 @@ public class M4aWriteTagTest extends TestCase
             assertEquals("title", tag.getFirst(TagFieldKey.TITLE));
             assertEquals("comments", tag.getFirst(TagFieldKey.COMMENT));
             assertEquals("1971", tag.getFirst(TagFieldKey.YEAR));
-            assertEquals("1/10", tag.getFirst(TagFieldKey.TRACK));
-            assertEquals("1/10", tag.getFirst(TagFieldKey.DISC_NO));
+            assertEquals("1", tag.getFirst(TagFieldKey.TRACK));
+            assertEquals("1", tag.getFirst(TagFieldKey.DISC_NO));
+            assertEquals("10", tag.getFirst(TagFieldKey.TRACK_TOTAL));
+            assertEquals("10", tag.getFirst(TagFieldKey.DISC_TOTAL));
             assertEquals("composer", tag.getFirst(TagFieldKey.COMPOSER));
             assertEquals("Sortartist", tag.getFirst(TagFieldKey.ARTIST_SORT));
             assertEquals("lyrics", tag.getFirst(TagFieldKey.LYRICS));
@@ -496,8 +504,10 @@ public class M4aWriteTagTest extends TestCase
             assertEquals("title", tag.getFirst(TagFieldKey.TITLE));
             assertEquals("comments", tag.getFirst(TagFieldKey.COMMENT));
             assertEquals("1971", tag.getFirst(TagFieldKey.YEAR));
-            assertEquals("1/10", tag.getFirst(TagFieldKey.TRACK));
-            assertEquals("1/10", tag.getFirst(TagFieldKey.DISC_NO));
+            assertEquals("1", tag.getFirst(TagFieldKey.TRACK));
+            assertEquals("1", tag.getFirst(TagFieldKey.DISC_NO));
+            assertEquals("10", tag.getFirst(TagFieldKey.TRACK_TOTAL));
+            assertEquals("10", tag.getFirst(TagFieldKey.DISC_TOTAL));
             assertEquals("composer", tag.getFirst(TagFieldKey.COMPOSER));
             assertEquals("Sortartist", tag.getFirst(TagFieldKey.ARTIST_SORT));
             assertEquals("lyrics", tag.getFirst(TagFieldKey.LYRICS));
@@ -651,8 +661,11 @@ public class M4aWriteTagTest extends TestCase
             assertEquals("title", tag.getFirst(TagFieldKey.TITLE));
             assertEquals("comments", tag.getFirst(TagFieldKey.COMMENT));
             assertEquals("1971", tag.getFirst(TagFieldKey.YEAR));
-            assertEquals("1/10", tag.getFirst(TagFieldKey.TRACK));
-            assertEquals("1/10", tag.getFirst(TagFieldKey.DISC_NO));
+            assertEquals("1", tag.getFirst(TagFieldKey.TRACK));
+            assertEquals("1", tag.getFirst(TagFieldKey.DISC_NO));
+            assertEquals("10", tag.getFirst(TagFieldKey.TRACK_TOTAL));
+            assertEquals("10", tag.getFirst(TagFieldKey.DISC_TOTAL));
+
             assertEquals("composer", tag.getFirst(TagFieldKey.COMPOSER));
             assertEquals("Sortartist", tag.getFirst(TagFieldKey.ARTIST_SORT));
             assertEquals("lyrics", tag.getFirst(TagFieldKey.LYRICS));
@@ -821,8 +834,7 @@ public class M4aWriteTagTest extends TestCase
             //Change values to different value (but same no of characters, this is the easiest mod to make
             tag.setArtist("AUTHOR");
             tag.setAlbum("ALBUM");
-            tag.setTrack("2/12");
-            //tag.set(tag.createTagField(TagFieldKey.DISC_NO,"4/15"));
+            tag.set(new Mp4TrackField(2, 12));
             tag.set(new Mp4DiscNoField(4, 15));
             tag.set(tag.createTagField(TagFieldKey.MUSICBRAINZ_TRACK_ID, "e785f700-c1aa-4943-bcee-87dd316a2c31"));
             tag.set(tag.createTagField(TagFieldKey.BPM, "300"));
@@ -851,8 +863,8 @@ public class M4aWriteTagTest extends TestCase
             assertEquals("title", tag.getFirst(TagFieldKey.TITLE));
             assertEquals("comments", tag.getFirst(TagFieldKey.COMMENT));
             assertEquals("1971", tag.getFirst(TagFieldKey.YEAR));
-            assertEquals("2/12", tag.getFirst(TagFieldKey.TRACK));
-            assertEquals("4/15", tag.getFirst(TagFieldKey.DISC_NO));
+            assertEquals("2", tag.getFirst(TagFieldKey.TRACK));
+            assertEquals("4", tag.getFirst(TagFieldKey.DISC_NO));
             assertEquals("composer", tag.getFirst(TagFieldKey.COMPOSER));
             assertEquals("Sortartist", tag.getFirst(TagFieldKey.ARTIST_SORT));
             assertEquals("lyrics", tag.getFirst(TagFieldKey.LYRICS));
@@ -993,8 +1005,8 @@ public class M4aWriteTagTest extends TestCase
             assertEquals("t", tag.getFirst(TagFieldKey.TITLE));
             assertEquals("C", tag.getFirst(TagFieldKey.COMMENT));
             assertEquals("1971", tag.getFirst(TagFieldKey.YEAR));
-            assertEquals("1/10", tag.getFirst(TagFieldKey.TRACK));
-            assertEquals("1/10", tag.getFirst(TagFieldKey.DISC_NO));
+            assertEquals("1", tag.getFirst(TagFieldKey.TRACK));
+            assertEquals("1", tag.getFirst(TagFieldKey.DISC_NO));
             assertEquals("composer", tag.getFirst(TagFieldKey.COMPOSER));
             assertEquals("Sortartist", tag.getFirst(TagFieldKey.ARTIST_SORT));
             assertEquals("lyrics", tag.getFirst(TagFieldKey.LYRICS));
@@ -1134,8 +1146,8 @@ public class M4aWriteTagTest extends TestCase
             assertEquals("title", tag.getFirst(TagFieldKey.TITLE));
             assertEquals("comments", tag.getFirst(TagFieldKey.COMMENT));
             assertEquals("1971", tag.getFirst(TagFieldKey.YEAR));
-            assertEquals("1/10", tag.getFirst(TagFieldKey.TRACK));
-            assertEquals("1/10", tag.getFirst(TagFieldKey.DISC_NO));
+            assertEquals("1", tag.getFirst(TagFieldKey.TRACK));
+            assertEquals("1", tag.getFirst(TagFieldKey.DISC_NO));
             assertEquals("composer", tag.getFirst(TagFieldKey.COMPOSER));
             assertEquals("Sortartist", tag.getFirst(TagFieldKey.ARTIST_SORT));
             assertEquals("lyrics", tag.getFirst(TagFieldKey.LYRICS));
@@ -1275,8 +1287,8 @@ public class M4aWriteTagTest extends TestCase
             assertEquals("title", tag.getFirst(TagFieldKey.TITLE));
             assertEquals("comments", tag.getFirst(TagFieldKey.COMMENT));
             assertEquals("1971", tag.getFirst(TagFieldKey.YEAR));
-            assertEquals("1/10", tag.getFirst(TagFieldKey.TRACK));
-            assertEquals("1/10", tag.getFirst(TagFieldKey.DISC_NO));
+            assertEquals("1", tag.getFirst(TagFieldKey.TRACK));
+            assertEquals("1", tag.getFirst(TagFieldKey.DISC_NO));
             assertEquals("composer", tag.getFirst(TagFieldKey.COMPOSER));
             assertEquals("Sortartist", tag.getFirst(TagFieldKey.ARTIST_SORT));
             assertEquals("lyrics", tag.getFirst(TagFieldKey.LYRICS));
@@ -1417,8 +1429,8 @@ public class M4aWriteTagTest extends TestCase
             assertEquals("title", tag.getFirst(TagFieldKey.TITLE));
             assertEquals("C", tag.getFirst(TagFieldKey.COMMENT));
             assertEquals("1971", tag.getFirst(TagFieldKey.YEAR));
-            assertEquals("1/10", tag.getFirst(TagFieldKey.TRACK));
-            assertEquals("1/10", tag.getFirst(TagFieldKey.DISC_NO));
+            assertEquals("1", tag.getFirst(TagFieldKey.TRACK));
+            assertEquals("1", tag.getFirst(TagFieldKey.DISC_NO));
             assertEquals("composer", tag.getFirst(TagFieldKey.COMPOSER));
             assertEquals("Sortartist", tag.getFirst(TagFieldKey.ARTIST_SORT));
             assertEquals("lyrics", tag.getFirst(TagFieldKey.LYRICS));
@@ -1547,8 +1559,8 @@ public class M4aWriteTagTest extends TestCase
             assertEquals("title", tag.getFirst(TagFieldKey.TITLE));
             assertEquals("comments", tag.getFirst(TagFieldKey.COMMENT));
             assertEquals("1971", tag.getFirst(TagFieldKey.YEAR));
-            assertEquals("1/10", tag.getFirst(TagFieldKey.TRACK));
-            assertEquals("1/10", tag.getFirst(TagFieldKey.DISC_NO));
+            assertEquals("1", tag.getFirst(TagFieldKey.TRACK));
+            assertEquals("1", tag.getFirst(TagFieldKey.DISC_NO));
             assertEquals("composer", tag.getFirst(TagFieldKey.COMPOSER));
             assertEquals("Sortartist", tag.getFirst(TagFieldKey.ARTIST_SORT));
             assertEquals("lyrics", tag.getFirst(TagFieldKey.LYRICS));
@@ -1811,8 +1823,10 @@ public class M4aWriteTagTest extends TestCase
             assertEquals("title", tag.getFirst(TagFieldKey.TITLE));
             assertEquals("comments", tag.getFirst(TagFieldKey.COMMENT));
             assertEquals("1971", tag.getFirst(TagFieldKey.YEAR));
-            assertEquals("1/10", tag.getFirst(TagFieldKey.TRACK));
-            assertEquals("1/10", tag.getFirst(TagFieldKey.DISC_NO));
+            assertEquals("1", tag.getFirst(TagFieldKey.TRACK));
+            assertEquals("10", tag.getFirst(TagFieldKey.TRACK_TOTAL));
+            assertEquals("1", tag.getFirst(TagFieldKey.DISC_NO));
+            assertEquals("10", tag.getFirst(TagFieldKey.DISC_TOTAL));                        
             assertEquals("composer", tag.getFirst(TagFieldKey.COMPOSER));
             assertEquals("Sortartist", tag.getFirst(TagFieldKey.ARTIST_SORT));
             assertEquals("lyrics", tag.getFirst(TagFieldKey.LYRICS));
@@ -1917,35 +1931,60 @@ public class M4aWriteTagTest extends TestCase
             //Change values
             tag.setArtist("VERYLONGARTISTNAME");
             tag.setAlbum("VERYLONGALBUMTNAME");
-            tag.set(tag.createTagField(TagFieldKey.ALBUM_ARTIST, "A1"));
-            tag.set(tag.createTagField(TagFieldKey.ALBUM_ARTIST_SORT, "A2"));
-            tag.set(tag.createTagField(TagFieldKey.ALBUM_SORT, "A3"));
-            tag.set(tag.createTagField(TagFieldKey.AMAZON_ID, "A4"));
-            tag.set(tag.createTagField(TagFieldKey.ARTIST_SORT, "A5"));
-            tag.set(tag.createTagField(TagFieldKey.BPM, "200"));
-            tag.set(tag.createTagField(TagFieldKey.COMMENT, "C1"));
-            tag.set(tag.createTagField(TagFieldKey.COMPOSER, "C2"));
-            tag.set(tag.createTagField(TagFieldKey.COMPOSER_SORT, "C3"));
-            tag.set(tag.createTagField(TagFieldKey.DISC_NO, "1"));
-            tag.set(tag.createTagField(TagFieldKey.MUSICBRAINZ_ARTISTID, "1"));
-            tag.set(tag.createTagField(TagFieldKey.MUSICBRAINZ_RELEASEID, "2"));
-            tag.set(tag.createTagField(TagFieldKey.MUSICBRAINZ_TRACK_ID, "3"));
-            tag.set(tag.createTagField(TagFieldKey.MUSICBRAINZ_DISC_ID, "4"));
-            tag.set(tag.createTagField(TagFieldKey.MUSICBRAINZ_RELEASE_COUNTRY, "5"));
-            tag.set(tag.createTagField(TagFieldKey.MUSICBRAINZ_RELEASE_STATUS, "6"));
-            tag.set(tag.createTagField(TagFieldKey.MUSICBRAINZ_RELEASE_TYPE, "7"));
-            tag.set(tag.createTagField(TagFieldKey.MUSICBRAINZ_RELEASEARTISTID, "8"));
-            tag.set(tag.createTagField(TagFieldKey.MUSICIP_ID, "9"));
-            tag.set(tag.createTagField(TagFieldKey.GENRE, "2")); //key for classic rock
-            tag.set(tag.createTagField(TagFieldKey.ENCODER, "encoder"));
-            tag.set(tag.createTagField(TagFieldKey.URL_LYRICS_SITE,"http://www.lyrics.fly.com"));
-            /*tag.set(tag.createTagField(TagFieldKey.URL_DISCOGS_ARTIST_SITE,"http://www.discogs1.com"));
-            tag.set(tag.createTagField(TagFieldKey.URL_DISCOGS_RELEASE_SITE,"http://www.discogs2.com"));
-            tag.set(tag.createTagField(TagFieldKey.URL_OFFICIAL_ARTIST_SITE,"http://www.discogs3.com"));
-            tag.set(tag.createTagField(TagFieldKey.URL_OFFICIAL_RELEASE_SITE,"http://www.discogs4.com"));
-            tag.set(tag.createTagField(TagFieldKey.URL_WIKIPEDIA_ARTIST_SITE,"http://www.discogs5.com"));
-            tag.set(tag.createTagField(TagFieldKey.URL_WIKIPEDIA_RELEASE_SITE,"http://www.discogs6.com"));
-            */
+            tag.createAndSet(TagFieldKey.ALBUM_ARTIST, "A1");
+            tag.createAndSet(TagFieldKey.ALBUM_ARTIST_SORT, "A2");
+            tag.createAndSet(TagFieldKey.ALBUM_SORT, "A3");
+            tag.createAndSet(TagFieldKey.AMAZON_ID, "A4");
+            tag.createAndSet(TagFieldKey.ARTIST_SORT, "A5");
+            tag.createAndSet(TagFieldKey.BPM, "200");
+            tag.createAndSet(TagFieldKey.COMMENT, "C1");
+            tag.createAndSet(TagFieldKey.COMPOSER, "C2");
+            tag.createAndSet(TagFieldKey.COMPOSER_SORT, "C3");
+            tag.createAndSet(TagFieldKey.DISC_NO, "1");
+            tag.createAndSet(TagFieldKey.TRACK, "1");                        
+
+            assertEquals("1",tag.getFirst(TagFieldKey.TRACK));
+
+
+            tag.createAndSet(TagFieldKey.MUSICBRAINZ_ARTISTID, "1");
+            tag.createAndSet(TagFieldKey.MUSICBRAINZ_RELEASEID, "2");
+            tag.createAndSet(TagFieldKey.MUSICBRAINZ_TRACK_ID, "3");
+            tag.createAndSet(TagFieldKey.MUSICBRAINZ_DISC_ID, "4");
+            tag.createAndSet(TagFieldKey.MUSICBRAINZ_RELEASE_COUNTRY, "5");
+            tag.createAndSet(TagFieldKey.MUSICBRAINZ_RELEASE_STATUS, "6");
+            tag.createAndSet(TagFieldKey.MUSICBRAINZ_RELEASE_TYPE, "7");
+            tag.createAndSet(TagFieldKey.MUSICBRAINZ_RELEASEARTISTID, "8");
+            tag.createAndSet(TagFieldKey.MUSICIP_ID, "9");
+            tag.createAndSet(TagFieldKey.GENRE, "2"); //key for classic rock
+            tag.createAndSet(TagFieldKey.ENCODER, "encoder");
+            tag.createAndSet(TagFieldKey.URL_LYRICS_SITE,"http://www.lyrics.fly.com");
+            tag.createAndSet(TagFieldKey.URL_DISCOGS_ARTIST_SITE,"http://www.discogs1.com");
+            tag.createAndSet(TagFieldKey.URL_DISCOGS_RELEASE_SITE,"http://www.discogs2.com");
+            tag.createAndSet(TagFieldKey.URL_OFFICIAL_ARTIST_SITE,"http://www.discogs3.com");
+            tag.createAndSet(TagFieldKey.URL_OFFICIAL_RELEASE_SITE,"http://www.discogs4.com");
+            tag.createAndSet(TagFieldKey.URL_WIKIPEDIA_ARTIST_SITE,"http://www.discogs5.com");
+            tag.createAndSet(TagFieldKey.URL_WIKIPEDIA_RELEASE_SITE,"http://www.discogs6.com");
+            assertEquals("1",tag.getFirst(TagFieldKey.TRACK));
+            assertEquals("",tag.getFirst(TagFieldKey.TRACK_TOTAL));
+            tag.createAndSet(TagFieldKey.TRACK_TOTAL,"11");
+            tag.createAndSet(TagFieldKey.DISC_TOTAL,"3"); //error content not updated when just set field
+
+            //They share Field
+            assertEquals(1,tag.get(TagFieldKey.TRACK_TOTAL).size());
+            assertEquals(1,tag.get(TagFieldKey.TRACK).size());
+
+            //They share Field
+            assertEquals(1,tag.get(TagFieldKey.DISC_NO).size());
+            assertEquals(1,tag.get(TagFieldKey.DISC_TOTAL).size());
+
+            assertEquals(1,tag.get("trkn").size());
+            assertEquals(1,tag.get("disk").size());
+
+            assertEquals("1",tag.getFirst(TagFieldKey.TRACK));
+            assertEquals("11",tag.getFirst(TagFieldKey.TRACK_TOTAL));
+            assertEquals("1",tag.getFirst(TagFieldKey.DISC_NO));
+            assertEquals("3",tag.getFirst(TagFieldKey.DISC_TOTAL));
+
             //Save changes and reread from disk
             f.commit();
             f = AudioFileIO.read(testFile);
@@ -1974,7 +2013,10 @@ public class M4aWriteTagTest extends TestCase
             assertEquals("C1", tag.getFirst(TagFieldKey.COMMENT));
             assertEquals("C2", tag.getFirst(TagFieldKey.COMPOSER));
             assertEquals("C3", tag.getFirst(TagFieldKey.COMPOSER_SORT));
+            assertEquals("1", tag.getFirst(TagFieldKey.TRACK));
             assertEquals("1", tag.getFirst(TagFieldKey.DISC_NO));
+            assertEquals("11", tag.getFirst(TagFieldKey.TRACK_TOTAL));
+            assertEquals("3", tag.getFirst(TagFieldKey.DISC_TOTAL));
 
             assertEquals("1", tag.getFirst(TagFieldKey.MUSICBRAINZ_ARTISTID));
             assertEquals("2", tag.getFirst(TagFieldKey.MUSICBRAINZ_RELEASEID));
@@ -1987,14 +2029,16 @@ public class M4aWriteTagTest extends TestCase
             assertEquals("9", tag.getFirst(TagFieldKey.MUSICIP_ID));
             assertEquals("Classic Rock", tag.getFirst(TagFieldKey.GENRE));
             assertEquals("http://www.lyrics.fly.com",tag.getFirst(TagFieldKey.URL_LYRICS_SITE));
-            /*
             assertEquals("http://www.discogs1.com",tag.getFirst(TagFieldKey.URL_DISCOGS_ARTIST_SITE));
             assertEquals("http://www.discogs2.com",tag.getFirst(TagFieldKey.URL_DISCOGS_RELEASE_SITE));
             assertEquals("http://www.discogs3.com",tag.getFirst(TagFieldKey.URL_OFFICIAL_ARTIST_SITE));
             assertEquals("http://www.discogs4.com",tag.getFirst(TagFieldKey.URL_OFFICIAL_RELEASE_SITE));
             assertEquals("http://www.discogs5.com",tag.getFirst(TagFieldKey.URL_WIKIPEDIA_ARTIST_SITE));
             assertEquals("http://www.discogs6.com",tag.getFirst(TagFieldKey.URL_WIKIPEDIA_RELEASE_SITE));
-            */
+            assertEquals("11",tag.getFirst(TagFieldKey.TRACK_TOTAL));
+            assertEquals("3",tag.getFirst(TagFieldKey.DISC_TOTAL));
+            assertEquals("1/11",tag.getFirst("trkn"));
+            assertEquals("1/3",tag.getFirst("disk"));
         }
         catch (Exception e)
         {

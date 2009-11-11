@@ -15,7 +15,7 @@ import java.util.ArrayList;
  * <p>Contains some reserved fields that we currently ignore
  *
  * Reserved:2 bytes
- * Disk Number:2 bytes
+ * Disc Number:2 bytes
  * Total no of Discs:2 bytes
  * </p>
  */
@@ -26,7 +26,7 @@ public class Mp4DiscNoField extends Mp4TagTextNumberField
     private static final int DISC_TOTAL_INDEX = 2;
 
     /**
-     * Create new Track Field parsing the String for the trackno/total
+     * Create new Disc Field parsing the String for the discno/total
      *
      * @param discValue
      */
@@ -79,7 +79,7 @@ public class Mp4DiscNoField extends Mp4TagTextNumberField
 
 
     /**
-     * Create new Disc no  Field with only discNo
+     * Create new Disc No field with only discNo
      *
      * @param discNo
      */
@@ -93,7 +93,7 @@ public class Mp4DiscNoField extends Mp4TagTextNumberField
     }
 
     /**
-     * Create new Disc No Field with disc No and total tracks
+     * Create new Disc No Field with Disc No and total number of discs
      *
      * @param discNo
      * @param total
@@ -140,10 +140,30 @@ public class Mp4DiscNoField extends Mp4TagTextNumberField
     }
 
     /**
+     * Set Disc No
+     *
+     * @param discNo
+     */
+    public void setDiscNo(int discNo)
+    {
+        numbers.set(DISC_NO_INDEX,new Short((short)discNo));
+    }
+
+    /**
      * @return
      */
     public Short getDiscTotal()
     {
         return numbers.get(DISC_TOTAL_INDEX);
+    }
+
+    /**
+     * Set total number of discs
+     *
+     * @param discTotal
+     */
+    public void setDiscTotal(int discTotal)
+    {
+        numbers.set(DISC_TOTAL_INDEX,new Short((short)discTotal));
     }
 }

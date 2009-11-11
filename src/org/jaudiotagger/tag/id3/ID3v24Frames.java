@@ -346,6 +346,10 @@ public class ID3v24Frames extends ID3Frames
         multipleFrames.add(FRAME_ID_UNSYNC_LYRICS);
         multipleFrames.add(FRAME_ID_POPULARIMETER);
 
+        //TODO this is a hack to allow multiple TRCK and TPOS frames to be created then subsequently merged
+        multipleFrames.add(FRAME_ID_TRACK);
+        multipleFrames.add(FRAME_ID_SET);
+
         discardIfFileAlteredFrames.add(FRAME_ID_EVENT_TIMING_CODES);
         discardIfFileAlteredFrames.add(FRAME_ID_MPEG_LOCATION_LOOKUP_TABLE);
         discardIfFileAlteredFrames.add(FRAME_ID_POSITION_SYNC);
@@ -359,6 +363,7 @@ public class ID3v24Frames extends ID3Frames
         tagFieldToId3.put(TagFieldKey.ALBUM, ID3v24FieldKey.ALBUM);
         tagFieldToId3.put(TagFieldKey.TITLE, ID3v24FieldKey.TITLE);
         tagFieldToId3.put(TagFieldKey.TRACK, ID3v24FieldKey.TRACK);
+        tagFieldToId3.put(TagFieldKey.TRACK_TOTAL, ID3v24FieldKey.TRACK_TOTAL);
         tagFieldToId3.put(TagFieldKey.YEAR, ID3v24FieldKey.YEAR);
         tagFieldToId3.put(TagFieldKey.GENRE, ID3v24FieldKey.GENRE);
         tagFieldToId3.put(TagFieldKey.COMMENT, ID3v24FieldKey.COMMENT);
@@ -366,6 +371,7 @@ public class ID3v24Frames extends ID3Frames
         tagFieldToId3.put(TagFieldKey.COMPOSER, ID3v24FieldKey.COMPOSER);
         tagFieldToId3.put(TagFieldKey.GROUPING, ID3v24FieldKey.GROUPING);
         tagFieldToId3.put(TagFieldKey.DISC_NO, ID3v24FieldKey.DISC_NO);
+        tagFieldToId3.put(TagFieldKey.DISC_TOTAL, ID3v24FieldKey.DISC_NO);
         tagFieldToId3.put(TagFieldKey.BPM, ID3v24FieldKey.BPM);
         tagFieldToId3.put(TagFieldKey.ENCODER, ID3v24FieldKey.ENCODER);
         tagFieldToId3.put(TagFieldKey.MUSICBRAINZ_ARTISTID, ID3v24FieldKey.MUSICBRAINZ_ARTISTID);

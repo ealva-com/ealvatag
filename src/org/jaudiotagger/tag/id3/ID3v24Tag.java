@@ -1216,7 +1216,32 @@ public class ID3v24Tag extends AbstractID3v2Tag
         {
             throw new KeyNotFoundException();
         }
-        return super.doGetFirst(new FrameAndSubId(id3v24FieldKey.getFrameId(), id3v24FieldKey.getSubId()));
+
+        FrameAndSubId frameAndSubId = new FrameAndSubId(id3v24FieldKey.getFrameId(), id3v24FieldKey.getSubId());
+        if (id3v24FieldKey == ID3v24FieldKey.TRACK)
+        {
+            AbstractID3v2Frame frame = getFirstField(frameAndSubId.getFrameId());
+            return String.valueOf(((FrameBodyTRCK)frame.getBody()).getTrackNo());
+        }
+        else if (id3v24FieldKey == ID3v24FieldKey.TRACK_TOTAL)
+        {
+            AbstractID3v2Frame frame = getFirstField(frameAndSubId.getFrameId());
+            return String.valueOf(((FrameBodyTRCK)frame.getBody()).getTrackTotal());
+        }
+        else if (id3v24FieldKey == ID3v24FieldKey.DISC_NO)
+        {
+            AbstractID3v2Frame frame = getFirstField(frameAndSubId.getFrameId());
+            return String.valueOf(((FrameBodyTPOS)frame.getBody()).getDiscNo());
+        }
+        else if (id3v24FieldKey == ID3v24FieldKey.DISC_TOTAL)
+        {
+            AbstractID3v2Frame frame = getFirstField(frameAndSubId.getFrameId());
+            return String.valueOf(((FrameBodyTPOS)frame.getBody()).getDiscTotal());
+        }
+        else
+        {
+            return super.doGetFirst(frameAndSubId);
+        }
     }
 
 

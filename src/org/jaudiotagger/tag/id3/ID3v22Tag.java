@@ -16,30 +16,23 @@
 package org.jaudiotagger.tag.id3;
 
 import org.jaudiotagger.FileConstants;
-import org.jaudiotagger.logging.FileSystemMessage;
-import org.jaudiotagger.logging.ErrorMessage;
 import org.jaudiotagger.audio.mp3.MP3File;
-import org.jaudiotagger.audio.exceptions.UnableToModifyFileException;
-import org.jaudiotagger.audio.exceptions.UnableToCreateFileException;
+import org.jaudiotagger.logging.ErrorMessage;
 import org.jaudiotagger.tag.*;
-import org.jaudiotagger.tag.reference.PictureTypes;
 import org.jaudiotagger.tag.datatype.Artwork;
 import org.jaudiotagger.tag.datatype.DataTypes;
-import org.jaudiotagger.tag.id3.framebody.AbstractFrameBodyTextInfo;
-import org.jaudiotagger.tag.id3.framebody.FrameBodyTDRC;
-import org.jaudiotagger.tag.id3.framebody.FrameBodyAPIC;
-import org.jaudiotagger.tag.id3.framebody.FrameBodyPIC;
+import org.jaudiotagger.tag.id3.framebody.*;
 import org.jaudiotagger.tag.id3.valuepair.ImageFormats;
+import org.jaudiotagger.tag.reference.PictureTypes;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.RandomAccessFile;
-import java.io.FileNotFoundException;
 import java.nio.ByteBuffer;
-import java.nio.channels.FileChannel;
-import java.nio.channels.FileLock;
 import java.nio.channels.WritableByteChannel;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.logging.Level;
 
 /**
@@ -679,7 +672,32 @@ public class ID3v22Tag extends AbstractID3v2Tag
         {
             throw new KeyNotFoundException();
         }
-        return super.doGetFirst(new FrameAndSubId(id3v22FieldKey.getFrameId(), id3v22FieldKey.getSubId()));
+
+        FrameAndSubId frameAndSubId = new FrameAndSubId(id3v22FieldKey.getFrameId(), id3v22FieldKey.getSubId());
+        if (id3v22FieldKey == ID3v22FieldKey.TRACK)
+        {
+            AbstractID3v2Frame frame = getFirstField(frameAndSubId.getFrameId());
+            return String.valueOf(((FrameBodyTRCK)frame.getBody()).getTrackNo());
+        }
+        else if (id3v22FieldKey == ID3v22FieldKey.TRACK_TOTAL)
+        {
+            AbstractID3v2Frame frame = getFirstField(frameAndSubId.getFrameId());
+            return String.valueOf(((FrameBodyTRCK)frame.getBody()).getTrackTotal());
+        }
+        else if (id3v22FieldKey == ID3v22FieldKey.DISC_NO)
+        {
+            AbstractID3v2Frame frame = getFirstField(frameAndSubId.getFrameId());
+            return String.valueOf(((FrameBodyTPOS)frame.getBody()).getDiscNo());
+        }
+        else if (id3v22FieldKey == ID3v22FieldKey.DISC_TOTAL)
+        {
+            AbstractID3v2Frame frame = getFirstField(frameAndSubId.getFrameId());
+            return String.valueOf(((FrameBodyTPOS)frame.getBody()).getDiscTotal());
+        }
+        else
+        {
+            return super.doGetFirst(frameAndSubId);
+        }
     }
 
     /**

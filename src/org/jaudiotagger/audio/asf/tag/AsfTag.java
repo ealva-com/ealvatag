@@ -146,6 +146,8 @@ public final class AsfTag extends AbstractTag {
         TAGFIELD_TO_ASFFIELD.put(TagFieldKey.LANGUAGE, AsfFieldKey.LANGUAGE);
         TAGFIELD_TO_ASFFIELD.put(TagFieldKey.KEY, AsfFieldKey.INITIAL_KEY);
         TAGFIELD_TO_ASFFIELD.put(TagFieldKey.URL_LYRICS_SITE, AsfFieldKey.URL_LYRICS_SITE);
+        TAGFIELD_TO_ASFFIELD.put(TagFieldKey.TRACK_TOTAL, AsfFieldKey.TRACK_TOTAL);
+        TAGFIELD_TO_ASFFIELD.put(TagFieldKey.DISC_TOTAL, AsfFieldKey.DISC_TOTAL);
     }
 
     static {

@@ -688,6 +688,12 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag
     }
 
 
+    public void createAndSet(TagFieldKey genericKey, String value) throws KeyNotFoundException, FieldDataInvalidException
+    {
+        TagField tagfield = createTagField(genericKey,value);
+        set(tagfield);
+    }
+
     public void set(TagField field)
     {
         TagFieldKey genericKey = TagFieldKey.valueOf(field.getId());

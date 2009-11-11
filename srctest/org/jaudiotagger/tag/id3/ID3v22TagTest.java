@@ -98,7 +98,7 @@ public class ID3v22TagTest extends TestCase
         assertEquals(ID3v11TagTest.ALBUM, ((FrameBodyTALB) ((ID3v22Frame) v2Tag.getFrame(ID3v22Frames.FRAME_ID_V2_ALBUM)).getBody()).getText());
         assertEquals(ID3v11TagTest.COMMENT, ((FrameBodyCOMM) ((ID3v22Frame) v2Tag.getFrame(ID3v22Frames.FRAME_ID_V2_COMMENT)).getBody()).getText());
         assertEquals(ID3v11TagTest.TITLE, ((FrameBodyTIT2) ((ID3v22Frame) v2Tag.getFrame(ID3v22Frames.FRAME_ID_V2_TITLE)).getBody()).getText());
-        assertEquals(ID3v11TagTest.TRACK_VALUE, ((FrameBodyTRCK) ((ID3v22Frame) v2Tag.getFrame(ID3v22Frames.FRAME_ID_V2_TRACK)).getBody()).getText());
+        assertEquals(ID3v11TagTest.TRACK_VALUE, String.valueOf(((FrameBodyTRCK) ((ID3v22Frame) v2Tag.getFrame(ID3v22Frames.FRAME_ID_V2_TRACK)).getBody()).getTrackNo()));
         assertTrue(((FrameBodyTCON) ((ID3v22Frame) v2Tag.getFrame(ID3v22Frames.FRAME_ID_V2_GENRE)).getBody()).getText().endsWith(ID3v11TagTest.GENRE_VAL));
 
         //TODO:Note confusingly V22 YEAR Frame shave v2 identifier but use TDRC behind the scenes, is confusing
@@ -168,7 +168,8 @@ public class ID3v22TagTest extends TestCase
             assertEquals("Cosmo Vitelli:", af.getTag().getFirst(TagFieldKey.ARTIST) + ":");
             assertEquals("Electronica/Dance:", af.getTag().getFirst(TagFieldKey.GENRE) + ":");
             assertEquals("2003:", af.getTag().getFirst(TagFieldKey.YEAR) + ":");
-            assertEquals("1/11:", af.getTag().getFirst(TagFieldKey.TRACK) + ":");
+            assertEquals("1:", af.getTag().getFirst(TagFieldKey.TRACK) + ":");
+            assertEquals("11:", af.getTag().getFirst(TagFieldKey.TRACK_TOTAL) + ":");
 
             //Read using new Interface getFirst method with String
             assertEquals("Listen to images:", af.getTag().getFirst(ID3v22Frames.FRAME_ID_V2_TITLE) + ":");
@@ -176,7 +177,7 @@ public class ID3v22TagTest extends TestCase
             assertEquals("Cosmo Vitelli:", af.getTag().getFirst(ID3v22Frames.FRAME_ID_V2_ARTIST) + ":");
             assertEquals("Electronica/Dance:", af.getTag().getFirst(ID3v22Frames.FRAME_ID_V2_GENRE) + ":");
             assertEquals("2003:", af.getTag().getFirst(ID3v22Frames.FRAME_ID_V2_TYER) + ":");
-            assertEquals("1/11:", af.getTag().getFirst(ID3v22Frames.FRAME_ID_V2_TRACK) + ":");
+            assertEquals("1:", af.getTag().getFirst(ID3v22Frames.FRAME_ID_V2_TRACK) + ":");
 
             //Read using new Interface getFirst methods for common fields
             assertEquals("Listen to images:", af.getTag().getFirstTitle() + ":");
@@ -184,7 +185,7 @@ public class ID3v22TagTest extends TestCase
             assertEquals("Clean:", af.getTag().getFirstAlbum() + ":");
             assertEquals("Electronica/Dance:", af.getTag().getFirstGenre() + ":");
             assertEquals("2003:", af.getTag().getFirstYear() + ":");
-            assertEquals("1/11:", af.getTag().getFirstTrack() + ":");
+            assertEquals("1:", af.getTag().getFirstTrack() + ":");
 
             //Read using old Interface
             ID3v22Tag v2Tag = (ID3v22Tag) m.getID3v2Tag();
@@ -199,11 +200,12 @@ public class ID3v22TagTest extends TestCase
             frame = (ID3v22Frame) v2Tag.getFrame(ID3v22Frames.FRAME_ID_V2_TYER);
             assertEquals("2003\0:", ((AbstractFrameBodyTextInfo) frame.getBody()).getText() + ":");
             frame = (ID3v22Frame) v2Tag.getFrame(ID3v22Frames.FRAME_ID_V2_TRACK);
-            assertEquals("1/11\0:", ((AbstractFrameBodyTextInfo) frame.getBody()).getText() + ":");
+            assertEquals("1/11\0:", ((FrameBodyTRCK) frame.getBody()).getText() + ":");
 
         }
         catch (Exception e)
         {
+            e.printStackTrace();
             exception = e;
         }
         assertNull(exception);

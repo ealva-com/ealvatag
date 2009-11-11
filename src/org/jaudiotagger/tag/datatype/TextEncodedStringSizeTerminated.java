@@ -21,7 +21,7 @@ import java.util.List;
  * <p/>
  * All TextInformation frames support multiple strings, stored as a null separated list, where null is represented by
  * the termination code for the character encoding. This functionality is only officially support in ID3v24.  Itunes
- * write null terminators characters even though only writes a single value.
+ * write null terminators characters after the String even though it only writes a single value.
  */
 public class TextEncodedStringSizeTerminated extends AbstractString
 {

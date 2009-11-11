@@ -94,6 +94,8 @@ public class Mp4Tag extends AbstractTag
         tagFieldToMp4Field.put(TagFieldKey.LANGUAGE, Mp4FieldKey.LANGUAGE);
         tagFieldToMp4Field.put(TagFieldKey.KEY, Mp4FieldKey.KEY);
         tagFieldToMp4Field.put(TagFieldKey.URL_LYRICS_SITE, Mp4FieldKey.URL_LYRICS_SITE);
+        tagFieldToMp4Field.put(TagFieldKey.TRACK_TOTAL, Mp4FieldKey.TRACK);
+        tagFieldToMp4Field.put(TagFieldKey.DISC_TOTAL, Mp4FieldKey.DISCNUMBER);
 
     }
 
@@ -180,7 +182,7 @@ public class Mp4Tag extends AbstractTag
         {
             throw new IllegalArgumentException(ErrorMessage.GENERAL_INVALID_NULL_ARGUMENT.getMsg());
         }
-        return new Mp4TrackField(content);
+        return new Mp4TrackField(Integer.parseInt(content));
     }
 
     public TagField createYearField(String content)
@@ -281,7 +283,61 @@ public class Mp4Tag extends AbstractTag
         {
             throw new KeyNotFoundException();
         }
-        return super.getFirst(tagFieldToMp4Field.get(genericKey).getFieldName());
+
+        if(genericKey==TagFieldKey.TRACK)
+        {
+            List<TagField> list = get(tagFieldToMp4Field.get(genericKey));
+            if(list.size()>0)
+            {
+                Mp4TrackField trackField = (Mp4TrackField)list.get(0);
+                if(trackField.getTrackNo()>0)
+                {
+                    return String.valueOf(trackField.getTrackNo());
+                }
+            }
+        }
+        else if(genericKey==TagFieldKey.TRACK_TOTAL)
+        {
+            List<TagField> list = get(tagFieldToMp4Field.get(genericKey));
+            if(list.size()>0)
+            {
+                Mp4TrackField trackField = (Mp4TrackField)list.get(0);
+                if(trackField.getTrackTotal()>0)
+                {
+                    return String.valueOf(trackField.getTrackTotal());
+                }
+            }
+        }
+        else if(genericKey==TagFieldKey.DISC_NO)
+        {
+            List<TagField> list = get(tagFieldToMp4Field.get(genericKey));
+            if(list.size()>0)
+            {
+                Mp4DiscNoField discField = (Mp4DiscNoField)list.get(0);
+                if(discField.getDiscNo()>0)
+                {
+                     return String.valueOf(discField.getDiscNo());
+                }
+
+            }
+        }
+        else if(genericKey==TagFieldKey.DISC_TOTAL)
+        {
+            List<TagField> list = get(tagFieldToMp4Field.get(genericKey));
+            if(list.size()>0)
+            {
+                Mp4DiscNoField discField = (Mp4DiscNoField)list.get(0);
+                if(discField.getDiscTotal()>0)
+                {
+                     return String.valueOf(discField.getDiscTotal());
+                }
+            }
+        }
+        else
+        {
+            return super.getFirst(tagFieldToMp4Field.get(genericKey).getFieldName());
+        }
+        return "";
     }
 
     /**
@@ -401,7 +457,98 @@ public class Mp4Tag extends AbstractTag
         {
             throw new KeyNotFoundException();
         }
-        return createTagField(tagFieldToMp4Field.get(genericKey), value);
+
+        if(genericKey==TagFieldKey.TRACK)
+        {
+            return new Mp4TrackField(Integer.parseInt(value));
+        }
+        else if(genericKey==TagFieldKey.TRACK_TOTAL)
+        {
+            return new Mp4TrackField(0,Integer.parseInt(value));
+        }
+        else if(genericKey==TagFieldKey.DISC_NO)
+        {
+            return new Mp4DiscNoField(Integer.parseInt(value));
+        }
+        else if(genericKey==TagFieldKey.DISC_TOTAL)
+        {
+            return new Mp4DiscNoField(0,Integer.parseInt(value));
+        }
+        else
+        {
+            return createTagField(tagFieldToMp4Field.get(genericKey), value);
+        }
+    }
+
+    /**
+     * Set field, special handling for track and disc because they hold two fields
+     * 
+     * @param field
+     */
+    @Override
+    public void set(TagField field)
+    {
+        if (field == null)
+        {
+            return;
+        }
+
+        if(field.getId()==TRACK.getFieldName())
+        {
+            List<TagField> list = fields.get(field.getId());
+            if(list==null||list.size()==0)
+            {
+                 super.set(field);
+            }
+            else
+            {
+                Mp4TrackField existingTrackField = (Mp4TrackField)list.get(0);
+                Mp4TrackField newTrackField      = (Mp4TrackField)field;
+                Short trackNo    = existingTrackField.getTrackNo();
+                Short trackTotal = existingTrackField.getTrackTotal();
+                if(newTrackField.getTrackNo()>0 )
+                {
+                    trackNo = newTrackField.getTrackNo();
+                }
+                if(newTrackField.getTrackTotal()>0 )
+                {
+                    trackTotal = newTrackField.getTrackTotal();
+                }
+
+                Mp4TrackField mergedTrackField = new Mp4TrackField(trackNo,trackTotal);
+                super.set(mergedTrackField);
+            }
+        }
+        else if(field.getId()==DISCNUMBER.getFieldName())
+        {
+            List<TagField> list = fields.get(field.getId());
+            if(list==null||list.size()==0)
+            {
+                 super.set(field);
+            }
+            else
+            {
+                Mp4DiscNoField existingDiscNoField = (Mp4DiscNoField)list.get(0);
+                Mp4DiscNoField newDiscNoField      = (Mp4DiscNoField)field;
+                Short discNo    = existingDiscNoField.getDiscNo();
+                Short discTotal = existingDiscNoField.getDiscTotal();
+                if(newDiscNoField.getDiscNo()>0 )
+                {
+                    discNo = newDiscNoField.getDiscNo();
+                }
+                if(newDiscNoField.getDiscTotal()>0 )
+                {
+                    discTotal = newDiscNoField.getDiscTotal();
+                }
+
+                Mp4DiscNoField mergedDiscNoField = new Mp4DiscNoField(discNo,discTotal);
+                super.set(mergedDiscNoField);
+            }
+        }
+        else
+        {
+            super.set(field);
+        }
     }
 
     /**
@@ -416,7 +563,6 @@ public class Mp4Tag extends AbstractTag
      * @throws FieldDataInvalidException
      */
     public TagField createTagField(Mp4FieldKey mp4FieldKey, String value) throws KeyNotFoundException, FieldDataInvalidException
-
     {
         if (value == null)
         {
@@ -428,7 +574,7 @@ public class Mp4Tag extends AbstractTag
         }
         switch (mp4FieldKey)
         {
-            //This is boolean stored as 1 , but calling program might set as 'true' so we handle this
+            //This is boolean stored as 1, but calling program might set as 'true' so we handle this
             //case internally
             case COMPILATION:
                 if(value.equals("true"))
@@ -496,11 +642,10 @@ public class Mp4Tag extends AbstractTag
             case LANGUAGE:
             case KEY: 
             case URL_LYRICS_SITE:
-                      
                 return new Mp4TagReverseDnsField(mp4FieldKey, value);
 
             case ARTWORK:
-                throw new UnsupportedOperationException("Cover Art cannot be created using this method");
+                throw new UnsupportedOperationException(ErrorMessage.ARTWORK_CANNOT_BE_CREATED_WITH_THIS_METHOD.getMsg());
                  
             default:
                 return new Mp4TagTextField(mp4FieldKey.getFieldName(), value);

@@ -25,7 +25,7 @@ public class FlacWriteTest extends TestCase
     /**
      * Write flac info to file
      */
-    public void testWriteFile()
+    public void testWriteAllFieldsToFile()
     {
         Exception exceptionCaught = null;
         try
@@ -62,11 +62,18 @@ public class FlacWriteTest extends TestCase
             tag.set(tag.createTagField(TagFieldKey.URL_OFFICIAL_RELEASE_SITE,"http://www.discogs4.com"));
             tag.set(tag.createTagField(TagFieldKey.URL_WIKIPEDIA_ARTIST_SITE,"http://www.discogs5.com"));
             tag.set(tag.createTagField(TagFieldKey.URL_WIKIPEDIA_RELEASE_SITE,"http://www.discogs6.com"));
+            tag.set(tag.createTagField(TagFieldKey.TRACK_TOTAL,"11"));
+            tag.set(tag.createTagField(TagFieldKey.DISC_TOTAL,"3"));
             //Add new image
             RandomAccessFile imageFile = new RandomAccessFile(new File("testdata", "coverart.png"), "r");
             byte[] imagedata = new byte[(int) imageFile.length()];
             imageFile.read(imagedata);
             tag.set(tag.createArtworkField(imagedata, PictureTypes.DEFAULT_ID, ImageFormats.MIME_TYPE_PNG, "test", 200, 200, 24, 0));
+
+            assertEquals("11",tag.getFirst(TagFieldKey.TRACK_TOTAL));
+            assertEquals("3",tag.getFirst(TagFieldKey.DISC_TOTAL));
+
+
             f.commit();
             f = AudioFileIO.read(testFile);
             assertEquals(5, infoReader.countMetaBlocks(f.getFile()));
@@ -113,6 +120,8 @@ public class FlacWriteTest extends TestCase
             assertEquals("http://www.discogs4.com",tag.getFirst(TagFieldKey.URL_OFFICIAL_RELEASE_SITE));
             assertEquals("http://www.discogs5.com",tag.getFirst(TagFieldKey.URL_WIKIPEDIA_ARTIST_SITE));
             assertEquals("http://www.discogs6.com",tag.getFirst(TagFieldKey.URL_WIKIPEDIA_RELEASE_SITE));
+            assertEquals("11",tag.getFirst(TagFieldKey.TRACK_TOTAL));
+            assertEquals("3",tag.getFirst(TagFieldKey.DISC_TOTAL));
 
             ImageInputStream stream = ImageIO.createImageInputStream(new ByteArrayInputStream(pic.getImageData()));
             BufferedImage bi = ImageIO.read(stream);

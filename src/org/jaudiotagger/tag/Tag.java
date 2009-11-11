@@ -290,6 +290,15 @@ public interface Tag
      */
     public TagField createTagField(TagFieldKey genericKey, String value) throws KeyNotFoundException, FieldDataInvalidException;
 
+    /**
+     * Create the field based on the generic key and set it in the tag
+     *
+     * @param genericKey
+     * @param value
+     * @throws KeyNotFoundException
+     * @throws FieldDataInvalidException
+     */
+    public void createAndSet(TagFieldKey genericKey, String value) throws KeyNotFoundException, FieldDataInvalidException;
 
     /**
      * Retrieve the first value that exists for this key
@@ -379,7 +388,7 @@ public interface Tag
     /**
      * Create artwork field based on the data in artwork
      *
-     * @return suitabel tagfield for this format that represents the artwork data
+     * @return suitable tagfield for this format that represents the artwork data
      */
     public TagField  createArtworkField(Artwork artwork) throws FieldDataInvalidException;
 
@@ -389,7 +398,7 @@ public interface Tag
      * <p>Note We provide this extra method to get round problem with VorbisComment requiring two seperate fields to
      * represent an artwork field
      *
-     * @return suitabel tagfield for this format that represents the artwork data
+     * @return suitable tagfield for this format that represents the artwork data
      */
     public void createAndSetArtworkField(Artwork artwork) throws FieldDataInvalidException;
 
