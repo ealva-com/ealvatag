@@ -406,7 +406,7 @@ public abstract class AbstractTag implements Tag
         return null;
     }
 
-      /**                         
+     /**
      * Create field and then set within tag itself
      *
      * @param artwork
@@ -416,6 +416,18 @@ public abstract class AbstractTag implements Tag
     {
         this.setField(createField(artwork));
     }
+
+     /**
+     * Create field and then add within tag itself
+     *
+     * @param artwork
+     * @throws FieldDataInvalidException
+     */
+    public void addField(Artwork artwork) throws FieldDataInvalidException
+    {
+       this.addField(createField(artwork));
+    }
+
 
     /**
      * Delete all instance of artwork Field

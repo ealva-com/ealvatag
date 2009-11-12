@@ -8,6 +8,7 @@ import org.jaudiotagger.tag.id3.valuepair.ImageFormats;
 import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
 import org.jaudiotagger.tag.reference.PictureTypes;
 import org.jaudiotagger.tag.vorbiscomment.VorbisCommentTag;
+import org.jaudiotagger.logging.ErrorMessage;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -51,24 +52,6 @@ public class FlacTag implements Tag
         return tag;
     }
 
-    /**
-     * Adds a tagfield to the structure.<br>
-     * <p/>
-     * <p>It is not recommended to use this method for normal use of the
-     * audiolibrary. The developer will circumvent the underlying
-     * implementation. For example, if one adds a field with the field id
-     * &quot;TALB&quot; for an mp3 file, and the given {@link org.jaudiotagger.tag.TagField}
-     * implementation does not return a text field compliant data with
-     * {@link org.jaudiotagger.tag.TagField#getRawContent()} other software and the audio library
-     * won't read the file correctly, if they do read it at all. <br>
-     * So for short:<br>
-     * <uil>
-     * <li>The field is stored without validation</li>
-     * <li>No conversion of data is perfomed</li>
-     * </ul>
-     *
-     * @param field The field to add.
-     */
     public void addField(TagField field) throws FieldDataInvalidException
     {
         if (field instanceof MetadataBlockDataPicture)
@@ -81,18 +64,6 @@ public class FlacTag implements Tag
         }
     }
 
-
-
-
-
-
-    /**
-     * Returns a {@linkplain List list} of {@link TagField} objects whose &quot;{@linkplain TagField#getId() id}&quot;
-     * is the specified one.<br>
-     *
-     * @param id The field id.
-     * @return A list of {@link TagField} objects with the given &quot;id&quot;.
-     */
     public List<TagField> get(String id)
     {
         if (id.equals(FieldKey.COVER_ART.name()))
@@ -111,27 +82,12 @@ public class FlacTag implements Tag
     }
 
 
-    /**
-     * Returns <code>true</code>, if at least one of the contained
-     * {@linkplain TagField fields} is a common field ({@link TagField#isCommon()}).
-     *
-     * @return <code>true</code> if a {@linkplain TagField#isCommon() common}
-     *         field is present.
-     */
     public boolean hasCommonFields()
     {
         return tag.hasCommonFields();
     }
 
-    /**
-     * Determines whether the tag has at least one field with the specified
-     * &quot;id&quot;.
-     *
-     * @param id The field id to look for.
-     * @return <code>true</code> if tag contains a {@link TagField} with the
-     *         given {@linkplain TagField#getId() id}.
-     */
-    public boolean hasField(String id)
+   public boolean hasField(String id)
     {
         if (id.equals(FieldKey.COVER_ART.name()))
         {
@@ -191,22 +147,11 @@ public class FlacTag implements Tag
         }
     }
 
-
-    /**
-     * Create a new TagField based on generic key
-     * <p/>
-     * <p>Only textual data supported at the moment. The genericKey will be mapped
-     * to the correct implementation key and return a TagField.
-     *
-     * @param genericKey is the generic key
-     * @param value      to store
-     * @return
-     */
     public TagField createField(FieldKey genericKey, String value) throws KeyNotFoundException, FieldDataInvalidException
     {
         if (genericKey.equals(FieldKey.COVER_ART))
         {
-            throw new UnsupportedOperationException("Please use the createField methods to createField coverart ");
+            throw new UnsupportedOperationException(ErrorMessage.ARTWORK_CANNOT_BE_CREATED_WITH_THIS_METHOD.getMsg());
         }
         else
         {
@@ -214,18 +159,11 @@ public class FlacTag implements Tag
         }
     }
 
-
-    /**
-     * Retrieve the first value that exists for this key
-     *
-     * @param id
-     * @return
-     */
     public String getFirst(String id)
     {
         if (id.equals(FieldKey.COVER_ART.name()))
         {
-            throw new UnsupportedOperationException("Please use the createField methods to createField coverart ");
+            throw new UnsupportedOperationException(ErrorMessage.ARTWORK_CANNOT_BE_CREATED_WITH_THIS_METHOD.getMsg());
         }
         else
         {
@@ -233,17 +171,11 @@ public class FlacTag implements Tag
         }
     }
 
-    /**
-     * Retrieve String value of first tagfield that exists for this key
-     *
-     * @param id
-     * @return String value or empty string
-     */
     public String getFirst(FieldKey id) throws KeyNotFoundException
     {
         if (id.equals(FieldKey.COVER_ART))
         {
-            throw new UnsupportedOperationException("Please use the createField methods to createField coverart ");
+            throw new UnsupportedOperationException(ErrorMessage.ARTWORK_CANNOT_BE_RETRIEVED_WITH_THIS_METHOD.getMsg());
         }
         else
         {
@@ -252,15 +184,6 @@ public class FlacTag implements Tag
 
     }
 
-    /**
-     * Retrieve the first tagfield that exists for this key
-     * <p/>
-     * <p>Can be used to retrieve fields with any identifier, useful if the identifier is not within  the
-     * jaudiotagger enum
-     *
-     * @param id audio specific key
-     * @return tag field or null if doesnt exist
-     */
     public TagField getFirstField(String id)
     {
         if (id.equals(FieldKey.COVER_ART.name()))
@@ -314,25 +237,12 @@ public class FlacTag implements Tag
         }
     }
 
-    /**
-     * Iterator over all the fields within the tag, handle multiple fields with the same id
-     *
-     * @return iterator over whole list
-     */
     //TODO addField images to iterator
     public Iterator<TagField> getFields()
     {
         return tag.getFields();
     }
 
-    /**
-     * Return the number of fields
-     * <p/>
-     * <p>Fields with the same identifiers are counted seperately
-     * i.e two title fields would contribute two to the count
-     *
-     * @return total number of fields
-     */
     public int getFieldCount()
     {
         return tag.getFieldCount() + images.size();
@@ -343,13 +253,6 @@ public class FlacTag implements Tag
         return tag.setEncoding(enc);
     }
 
-    /**
-     * Returns a {@linkplain List list} of {@link TagField} objects whose &quot;{@linkplain TagField#getId() id}&quot;
-     * is the specified one.<br>
-     *
-     * @param id The field id.
-     * @return A list of {@link TagField} objects with the given &quot;id&quot;.
-     */
     public List<TagField> getFields(FieldKey id) throws KeyNotFoundException
     {
         if (id.equals(FieldKey.COVER_ART))
@@ -365,23 +268,8 @@ public class FlacTag implements Tag
         {
             return tag.getFields(id);
         }
+     }
 
-    }
-
-    /**
-     * Create Artwork when have the raw image data
-     *
-     * @param imageData
-     * @param pictureType
-     * @param mimeType
-     * @param description
-     * @param width
-     * @param height
-     * @param colourDepth
-     * @param indexedColouredCount
-     * @return
-     * @throws FieldDataInvalidException
-     */
     public TagField createArtworkField(byte[] imageData, int pictureType, String mimeType, String description, int width, int height, int colourDepth, int indexedColouredCount) throws FieldDataInvalidException
     {
         return new MetadataBlockDataPicture(imageData, pictureType, mimeType, description, width, height, colourDepth, indexedColouredCount);
@@ -469,15 +357,14 @@ public class FlacTag implements Tag
         }
     }
 
-      /**
-     * Create field and then set within tag itself
-     *
-     * @param artwork
-     * @throws FieldDataInvalidException
-     */
     public void setField(Artwork artwork) throws FieldDataInvalidException
     {
         this.setField(createField(artwork));
+    }
+
+    public void addField(Artwork artwork) throws FieldDataInvalidException
+    {
+        this.addField(createField(artwork));
     }
 
     public List<Artwork> getArtworkList()

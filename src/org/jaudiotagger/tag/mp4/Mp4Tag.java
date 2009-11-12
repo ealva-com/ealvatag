@@ -37,7 +37,7 @@ import java.util.List;
 public class Mp4Tag extends AbstractTag
 {
 
-    static EnumMap<FieldKey, Mp4FieldKey> tagFieldToMp4Field = new EnumMap<FieldKey, Mp4FieldKey>(FieldKey.class);
+    private static final EnumMap<FieldKey, Mp4FieldKey> tagFieldToMp4Field = new EnumMap<FieldKey, Mp4FieldKey>(FieldKey.class);
 
     //Mapping from generic key to mp4 key
     static
@@ -104,6 +104,7 @@ public class Mp4Tag extends AbstractTag
      * @param content
      * @return
      */
+    @SuppressWarnings({"JavaDoc"})
     private TagField createGenreField(String content)
     {
         if (content == null)
@@ -136,6 +137,7 @@ public class Mp4Tag extends AbstractTag
      *
      * @param genericKey
      */
+    @SuppressWarnings({"JavaDoc"})
     @Override
     public List<TagField> getFields(FieldKey genericKey) throws KeyNotFoundException
     {
@@ -152,6 +154,8 @@ public class Mp4Tag extends AbstractTag
      * <p/>
      *
      * @param mp4FieldKey
+     * @throws org.jaudiotagger.tag.KeyNotFoundException
+     * @return
      */
     public List<TagField> get(Mp4FieldKey mp4FieldKey) throws KeyNotFoundException
     {
@@ -253,6 +257,7 @@ public class Mp4Tag extends AbstractTag
      *
      * @param mp4Key
      * @return
+     * @throws org.jaudiotagger.tag.KeyNotFoundException
      */
     public String getFirst(Mp4FieldKey mp4Key) throws KeyNotFoundException
     {
@@ -299,6 +304,7 @@ public class Mp4Tag extends AbstractTag
      * Delete fields with this mp4key
      *
      * @param mp4Key
+     * @throws org.jaudiotagger.tag.KeyNotFoundException
      */
     public void deleteTagField(Mp4FieldKey mp4Key) throws KeyNotFoundException
     {
@@ -316,6 +322,7 @@ public class Mp4Tag extends AbstractTag
      *                1
      *                1/10
      * @return
+     * @throws org.jaudiotagger.tag.FieldDataInvalidException
      */
     public TagField createDiscNoField(String content) throws FieldDataInvalidException
     {
@@ -327,8 +334,9 @@ public class Mp4Tag extends AbstractTag
      *
      * @param data raw image data
      * @return
+     * @throws org.jaudiotagger.tag.FieldDataInvalidException
      */
-    public TagField createArtworkField(byte[] data) throws FieldDataInvalidException
+    public TagField createArtworkField(byte[] data)
     {
         return new Mp4TagCoverField(data);
     }
@@ -575,6 +583,5 @@ public class Mp4Tag extends AbstractTag
         }
         return artworkList;
     }
-
 
 }

@@ -88,7 +88,7 @@ public interface Tag {
     /**
      * Retrieve String value of the first value that exists for this format specific key
      * <p/>
-     * <p>Can be used to retrieve fields with any identifier, useful if the identifier is not within {@link TagField}
+     * <p>Can be used to retrieve fields with any identifier, useful if the identifier is not within {@link FieldKey}
      *
      * @param id
      * @return
@@ -106,7 +106,7 @@ public interface Tag {
     /**
      * Retrieve the first field that exists for this format specific key
      * <p/>
-     * <p>Can be used to retrieve fields with any identifier, useful if the identifier is not within {@link TagField}
+     * <p>Can be used to retrieve fields with any identifier, useful if the identifier is not within {@link FieldKey}
      *
      * @param id audio specific key
      * @return tag field or null if doesnt exist
@@ -212,17 +212,21 @@ public interface Tag {
     /**
      * Create artwork field based on the data in artwork and then set it in the tag itself
      * <p/>
-     * <p>Note We provide this extra method to get round problem with VorbisComment requiring two seperate fields to
-     * represent an artwork field
      *
      * @param artwork
-     * @return suitable tagfield for this format that represents the artwork data
      */
     public void setField(Artwork artwork) throws FieldDataInvalidException;
 
+    /**
+     * Create artwork field based on the data in artwork and then add it to the tag itself
+     * <p/>
+     *
+     * @param artwork
+     */
+    public void addField(Artwork artwork) throws FieldDataInvalidException;
 
     /**
-     * Sets a tagfield in the structure, used internally by the library<br>
+     * Sets a field in the structure, used internally by the library<br>
      * <p/>
      * <p>It is not recommended to use this method for normal use of the
      * audiolibrary. The developer will circumvent the underlying
@@ -242,7 +246,7 @@ public interface Tag {
     public void setField(TagField field) throws FieldDataInvalidException;
 
     /**
-     * Adds a tagfield to the structure, used internally by the library<br>
+     * Adds a field to the structure, used internally by the library<br>
      * <p/>
      * <p>It is not recommended to use this method for normal use of the
      * audiolibrary. The developer will circumvent the underlying
@@ -262,7 +266,7 @@ public interface Tag {
     public void addField(TagField field) throws FieldDataInvalidException;
 
     /**
-     * Create a new TagField based on generic key, used internally by the library
+     * Create a new field based on generic key, used internally by the library
      * <p/>
      * <p>Only textual data supported at the moment. The genericKey will be mapped
      * to the correct implementation key and return a TagField.

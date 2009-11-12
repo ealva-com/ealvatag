@@ -99,6 +99,7 @@ public enum ErrorMessage
     VORBIS_COMMENT_LENGTH_TOO_LARGE("Comment field length is very large {0} , assuming comment is corrupt"),
     VORBIS_COMMENT_LENGTH_LARGE_THAN_HEADER("Comment field length {0} is larger than total comment header {1} "),
     ARTWORK_CANNOT_BE_CREATED_WITH_THIS_METHOD("Cover Art cannot be created using this method"),
+    ARTWORK_CANNOT_BE_RETRIEVED_WITH_THIS_METHOD("Cover Art cannot be retrieved using this method"),
     GENERIC_NOT_SUPPORTED("Not implemented for this format"),
     ;
 
