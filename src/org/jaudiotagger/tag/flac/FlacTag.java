@@ -93,7 +93,6 @@ public class FlacTag implements Tag
      * @param id The field id.
      * @return A list of {@link TagField} objects with the given &quot;id&quot;.
      */
-    @Override
     public List<TagField> get(String id)
     {
         if (id.equals(FieldKey.COVER_ART.name()))
