@@ -40,6 +40,7 @@ public class BooleanByte extends AbstractDataType
      * Creates a new ObjectBooleanByte datatype.
      *
      * @param identifier
+     * @param frameBody
      * @param bitPosition
      * @throws IndexOutOfBoundsException
      */
@@ -89,12 +90,8 @@ public class BooleanByte extends AbstractDataType
 
         BooleanByte object = (BooleanByte) obj;
 
-        if (this.bitPosition != object.bitPosition)
-        {
-            return false;
-        }
+        return this.bitPosition == object.bitPosition && super.equals(obj);
 
-        return super.equals(obj);
     }
 
     /**

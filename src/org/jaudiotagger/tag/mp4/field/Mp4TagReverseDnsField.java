@@ -49,6 +49,7 @@ public class Mp4TagReverseDnsField extends Mp4TagField implements TagTextField
     /**
      * Construct from existing file data
      *
+     * @param parentHeader
      * @param data
      * @throws UnsupportedEncodingException
      */
@@ -73,6 +74,10 @@ public class Mp4TagReverseDnsField extends Mp4TagField implements TagTextField
 
     /**
      * Newly created Reverse Dns field bypassing the Mp4TagField enum for creation of temporary reverse dns fields
+     * @param fieldName
+     * @param issuer
+     * @param identifier
+     * @param content
      */
     public Mp4TagReverseDnsField(final String fieldName, final String issuer, final String identifier, final String content)
     {

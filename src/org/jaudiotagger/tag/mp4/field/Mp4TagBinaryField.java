@@ -140,7 +140,7 @@ public class Mp4TagBinaryField extends Mp4TagField
         if (field instanceof Mp4TagBinaryField)
         {
             this.dataBytes = ((Mp4TagBinaryField) field).getData();
-            this.isBinary = ((Mp4TagBinaryField) field).isBinary();
+            this.isBinary = field.isBinary();
         }
     }
 }

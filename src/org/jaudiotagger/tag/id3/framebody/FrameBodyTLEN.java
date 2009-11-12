@@ -61,6 +61,8 @@ public class FrameBodyTLEN extends AbstractFrameBodyTextInfo implements ID3v24Fr
     /**
      * Creates a new FrameBodyTLEN datatype.
      *
+     * @param byteBuffer
+     * @param frameSize
      * @throws InvalidTagException
      */
     public FrameBodyTLEN(ByteBuffer byteBuffer, int frameSize) throws InvalidTagException

@@ -59,6 +59,7 @@ public abstract class AbstractID3v2FrameBody extends AbstractTagFrameBody
 
     /**
      * Create Body based on another body
+     * @param copyObject
      */
     protected AbstractID3v2FrameBody(AbstractID3v2FrameBody copyObject)
     {
@@ -70,6 +71,7 @@ public abstract class AbstractID3v2FrameBody extends AbstractTagFrameBody
      * Constructor sets up the Object list for the frame.
      *
      * @param byteBuffer from where to read the frame body from
+     * @param frameSize
      */
     protected AbstractID3v2FrameBody(ByteBuffer byteBuffer, int frameSize) throws InvalidTagException
     {
@@ -101,6 +103,7 @@ public abstract class AbstractID3v2FrameBody extends AbstractTagFrameBody
     /**
      * Set size based on size passed as parameter from frame header,
      * done before read
+     * @param size
      */
     public void setSize(int size)
     {
@@ -117,8 +120,7 @@ public abstract class AbstractID3v2FrameBody extends AbstractTagFrameBody
         {
             size += object.getSize();
         }
-        ;
-    }
+        }
 
     /**
      * Are two bodies equal
@@ -127,12 +129,8 @@ public abstract class AbstractID3v2FrameBody extends AbstractTagFrameBody
      */
     public boolean equals(Object obj)
     {
-        if ((obj instanceof AbstractID3v2FrameBody) == false)
-        {
-            return false;
+        return (obj instanceof AbstractID3v2FrameBody) != false && super.equals(obj);
         }
-        return super.equals(obj);
-    }
 
     /**
      * This reads a frame body from a ByteBuffer into the appropriate FrameBody class and update the position of the
@@ -191,6 +189,7 @@ public abstract class AbstractID3v2FrameBody extends AbstractTagFrameBody
     /**
      * Write the contents of this datatype to the byte array
      *
+     * @param tagBuffer
      * @throws IOException on any I/O error
      */
     public void write(ByteArrayOutputStream tagBuffer)

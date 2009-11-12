@@ -55,6 +55,8 @@ public class FrameBodyTCMP extends AbstractFrameBodyTextInfo implements ID3v24Fr
     /**
      * Creates a new FrameBodyTIT1 datatype.
      *
+     * @param byteBuffer
+     * @param frameSize
      * @throws InvalidTagException
      */
     public FrameBodyTCMP(ByteBuffer byteBuffer, int frameSize) throws InvalidTagException

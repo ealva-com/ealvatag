@@ -90,6 +90,8 @@ public class FrameBodySYTC extends AbstractID3v2FrameBody implements ID3v24Frame
     /**
      * Creates a new FrameBody from buffer
      *
+     * @param byteBuffer
+     * @param frameSize
      * @throws InvalidTagException
      */
     public FrameBodySYTC(ByteBuffer byteBuffer, int frameSize) throws InvalidTagException

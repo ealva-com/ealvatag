@@ -401,7 +401,7 @@ public class Mp4Tag extends AbstractTag
             return;
         }
 
-        if(field.getId()==TRACK.getFieldName())
+        if(field.getId().equals(TRACK.getFieldName()))
         {
             List<TagField> list = fields.get(field.getId());
             if(list==null||list.size()==0)
@@ -427,7 +427,7 @@ public class Mp4Tag extends AbstractTag
                 super.setField(mergedTrackField);
             }
         }
-        else if(field.getId()==DISCNUMBER.getFieldName())
+        else if(field.getId().equals(DISCNUMBER.getFieldName()))
         {
             List<TagField> list = fields.get(field.getId());
             if(list==null||list.size()==0)

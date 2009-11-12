@@ -95,6 +95,8 @@ public class FrameBodyCRM extends AbstractID3v2FrameBody implements ID3v22FrameB
     /**
      * Creates a new FrameBodyCRM datatype.
      *
+     * @param byteBuffer
+     * @param frameSize
      * @throws InvalidTagException if unable to create framebody from buffer
      */
     public FrameBodyCRM(ByteBuffer byteBuffer, int frameSize) throws InvalidTagException

@@ -58,6 +58,7 @@ public class StringHashMap extends StringFixedLength implements HashMapInterface
      * Creates a new ObjectStringHashMap datatype.
      *
      * @param identifier
+     * @param frameBody
      * @param size
      * @throws IllegalArgumentException
      */
@@ -213,7 +214,7 @@ public class StringHashMap extends StringFixedLength implements HashMapInterface
         }
         else
         {
-            return keyToValue.get(value).toString();
+            return keyToValue.get(value);
         }
     }
 

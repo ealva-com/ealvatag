@@ -55,6 +55,7 @@ public class FieldFrameBodyAUT extends AbstractLyrics3v2FieldFrameBody
     /**
      * Creates a new FieldBodyAUT datatype.
      *
+     * @param byteBuffer
      * @throws InvalidTagException
      */
     public FieldFrameBodyAUT(ByteBuffer byteBuffer) throws InvalidTagException

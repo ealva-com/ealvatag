@@ -137,6 +137,8 @@ public class FrameBodyTMED extends AbstractFrameBodyTextInfo implements ID3v23Fr
     /**
      * Creates a new FrameBodyTMED datatype.
      *
+     * @param byteBuffer
+     * @param frameSize
      * @throws InvalidTagException
      */
     public FrameBodyTMED(ByteBuffer byteBuffer, int frameSize) throws InvalidTagException

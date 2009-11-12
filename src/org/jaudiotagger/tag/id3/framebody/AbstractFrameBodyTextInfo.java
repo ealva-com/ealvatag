@@ -96,6 +96,8 @@ public abstract class AbstractFrameBodyTextInfo extends AbstractID3v2FrameBody
      * <p/>
      * <p>The super.super Constructor sets up the Object list for the frame.
      *
+     * @param byteBuffer
+     * @param frameSize
      * @throws InvalidTagException if unable to create framebody from buffer
      */
     protected AbstractFrameBodyTextInfo(ByteBuffer byteBuffer, int frameSize) throws InvalidTagException

@@ -69,6 +69,7 @@ public class ImageFormats
 
     /**
      * Get v2.3 mimetype from v2.2 format
+     * @param format
      */
     public static String getMimeTypeForFormat(String format)
     {
@@ -77,6 +78,7 @@ public class ImageFormats
 
     /**
      * Get v2.2 format from v2.3 mimetype
+     * @param mimeType
      */
     public static String getFormatForMimeType(String mimeType)
     {

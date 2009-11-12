@@ -41,6 +41,7 @@ public class Lyrics3TimeStamp extends AbstractDataType
 
     /**
      * Todo this is wrong
+     * @param s
      */
     public void readString(String s)
     {
@@ -50,6 +51,7 @@ public class Lyrics3TimeStamp extends AbstractDataType
      * Creates a new ObjectLyrics3TimeStamp datatype.
      *
      * @param identifier
+     * @param frameBody
      */
     public Lyrics3TimeStamp(String identifier, AbstractTagFrameBody frameBody)
     {
@@ -136,12 +138,8 @@ public class Lyrics3TimeStamp extends AbstractDataType
             return false;
         }
 
-        if (this.second != object.second)
-        {
-            return false;
-        }
+        return this.second == object.second && super.equals(obj);
 
-        return super.equals(obj);
     }
 
     /**

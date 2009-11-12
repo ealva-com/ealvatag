@@ -184,6 +184,7 @@ public enum Mp4FieldKey
      *
      * @param fieldName
      * @param fieldType of data atom
+     * @param tagger
      */
     Mp4FieldKey(String fieldName, Mp4FieldType fieldType, Tagger tagger)
     {
@@ -211,6 +212,7 @@ public enum Mp4FieldKey
      * For reverse dns fields that use an internal fieldname of '----' and have  additional issuer
      * and identifier fields, we use all three seperated by a ':' ) to give us a unique key
      *
+     * @param issuer
      * @param identifier
      * @param fieldType  of data atom
      */
@@ -228,8 +230,10 @@ public enum Mp4FieldKey
      * and identifier fields, we use all three seperated by a ':' ) to give us a unique key
      * For non-standard fields
      *
+     * @param issuer
      * @param identifier
      * @param fieldType  of data atom
+     * @param tagger
      */
     Mp4FieldKey(String issuer, String identifier, Mp4FieldType fieldType, Tagger tagger)
     {

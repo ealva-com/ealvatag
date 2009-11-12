@@ -52,6 +52,7 @@ public class FrameBodyTYER extends AbstractFrameBodyTextInfo implements ID3v23Fr
 
     /**
      * When converting v4 TDRC frame to v3 TYER
+     * @param body
      */
     public FrameBodyTYER(FrameBodyTDRC body)
     {
@@ -73,6 +74,8 @@ public class FrameBodyTYER extends AbstractFrameBodyTextInfo implements ID3v23Fr
     /**
      * Creates a new FrameBodyTYER datatype.
      *
+     * @param byteBuffer
+     * @param frameSize
      * @throws InvalidTagException
      */
     public FrameBodyTYER(ByteBuffer byteBuffer, int frameSize) throws InvalidTagException

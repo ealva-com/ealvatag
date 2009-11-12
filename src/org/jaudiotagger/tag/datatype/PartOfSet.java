@@ -8,24 +8,22 @@ import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 import java.nio.charset.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.ListIterator;
-import java.util.regex.Pattern;
 import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Represents the form 01/10 whereby the second part is optional. This is used by frame such as TRCK and TPOS
  *
  * Some applications like to prepend the count with a zero to aid sorting, (i.e 02 comes before 10)
  */
+@SuppressWarnings({"EmptyCatchBlock"})
 public class PartOfSet extends AbstractString
 {
     /**
      * Creates a new empty  PartOfSet datatype.
      *
      * @param identifier identifies the frame type
+     * @param frameBody
      */
     public PartOfSet(String identifier, AbstractTagFrameBody frameBody)
     {
@@ -44,11 +42,7 @@ public class PartOfSet extends AbstractString
 
     public boolean equals(Object obj)
     {
-        if (obj instanceof PartOfSet == false)
-        {
-            return false;
-        }
-        return super.equals(obj);
+        return obj instanceof PartOfSet != false && super.equals(obj);
     }
 
     /**
@@ -289,7 +283,7 @@ public class PartOfSet extends AbstractString
                 }
                 if(total!=null)
                 {
-                    sb.append(SEPARATOR + total.intValue());
+                    sb.append(SEPARATOR).append(total);
                 }
                 if(extra!=null)
                 {
@@ -302,7 +296,7 @@ public class PartOfSet extends AbstractString
                 {
                     if(count>0 && count<10)
                     {
-                        sb.append("0"+count.intValue());
+                        sb.append("0").append(count);
                     }
                     else
                     {
@@ -317,11 +311,11 @@ public class PartOfSet extends AbstractString
                 {
                     if(total>0 && total<10)
                     {
-                        sb.append(SEPARATOR + "0" + total.intValue());
+                        sb.append(SEPARATOR + "0").append(total);
                     }
                     else
                     {
-                        sb.append(SEPARATOR + total.intValue());
+                        sb.append(SEPARATOR).append(total);
                     }
                 }
                 if(extra!=null)

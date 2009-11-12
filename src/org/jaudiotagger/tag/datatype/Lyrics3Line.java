@@ -46,6 +46,7 @@ public class Lyrics3Line extends AbstractDataType
      * Creates a new ObjectLyrics3Line datatype.
      *
      * @param identifier
+     * @param frameBody
      */
     public Lyrics3Line(String identifier, AbstractTagFrameBody frameBody)
     {
@@ -145,11 +146,7 @@ public class Lyrics3Line extends AbstractDataType
         {
             return false;
         }
-        if (this.timeStamp.equals(object.timeStamp) == false)
-        {
-            return false;
-        }
-        return super.equals(obj);
+        return this.timeStamp.equals(object.timeStamp) != false && super.equals(obj);
     }
 
     /**

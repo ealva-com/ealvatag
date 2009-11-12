@@ -20,6 +20,7 @@ public class TextEncodedStringNullTerminated extends AbstractString
      * Creates a new TextEncodedStringNullTerminated datatype.
      *
      * @param identifier identifies the frame type
+     * @param frameBody
      */
     public TextEncodedStringNullTerminated(String identifier, AbstractTagFrameBody frameBody)
     {
@@ -45,11 +46,7 @@ public class TextEncodedStringNullTerminated extends AbstractString
 
     public boolean equals(Object obj)
     {
-        if (obj instanceof TextEncodedStringNullTerminated == false)
-        {
-            return false;
-        }
-        return super.equals(obj);
+        return obj instanceof TextEncodedStringNullTerminated != false && super.equals(obj);
     }
 
     /**

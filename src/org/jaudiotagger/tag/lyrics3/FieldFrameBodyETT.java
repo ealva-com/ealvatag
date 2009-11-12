@@ -56,6 +56,7 @@ public class FieldFrameBodyETT extends AbstractLyrics3v2FieldFrameBody
     /**
      * Creates a new FieldBodyETT datatype.
      *
+     * @param byteBuffer
      * @throws InvalidTagException
      */
     public FieldFrameBodyETT(ByteBuffer byteBuffer) throws InvalidTagException

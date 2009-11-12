@@ -52,14 +52,7 @@ public class ID3Tags
             return false;
         }
         //If 3 is it a known identifier
-        else if (identifier.length() == 3)
-        {
-            return ID3v22Frames.getInstanceOf().getIdToValueMap().containsKey(identifier);
-        }
-        else
-        {
-            return false;
-        }
+        else return identifier.length() == 3 && ID3v22Frames.getInstanceOf().getIdToValueMap().containsKey(identifier);
     }
 
     /**
@@ -70,11 +63,7 @@ public class ID3Tags
      */
     public static boolean isID3v23FrameIdentifier(String identifier)
     {
-        if (identifier.length() < 4)
-        {
-            return false;
-        }
-        return ID3v23Frames.getInstanceOf().getIdToValueMap().containsKey(identifier.substring(0, 4));
+        return identifier.length() >= 4 && ID3v23Frames.getInstanceOf().getIdToValueMap().containsKey(identifier.substring(0, 4));
     }
 
     /**
@@ -85,11 +74,7 @@ public class ID3Tags
      */
     public static boolean isID3v24FrameIdentifier(String identifier)
     {
-        if (identifier.length() < 4)
-        {
-            return false;
-        }
-        return ID3v24Frames.getInstanceOf().getIdToValueMap().containsKey(identifier.substring(0, 4));
+        return identifier.length() >= 4 && ID3v24Frames.getInstanceOf().getIdToValueMap().containsKey(identifier.substring(0, 4));
     }
 
     /**
@@ -134,6 +119,7 @@ public class ID3Tags
 
     /**
      * Convert from ID3v22 FrameIdentifier to ID3v23
+     * @param identifier
      */
     public static String convertFrameID22To23(String identifier)
     {
@@ -141,11 +127,12 @@ public class ID3Tags
         {
             return null;
         }
-        return ID3Frames.convertv22Tov23.get((String)identifier.subSequence(0, 3));
+        return ID3Frames.convertv22Tov23.get(identifier.subSequence(0, 3));
     }
 
     /**
      * Convert from ID3v22 FrameIdentifier to ID3v24
+     * @param identifier
      */
     public static String convertFrameID22To24(String identifier)
     {
@@ -186,6 +173,7 @@ public class ID3Tags
 
     /**
      * Convert from ID3v23 FrameIdentifier to ID3v22
+     * @param identifier
      */
     public static String convertFrameID23To22(String identifier)
     {
@@ -205,6 +193,7 @@ public class ID3Tags
 
     /**
      * Convert from ID3v23 FrameIdentifier to ID3v24
+     * @param identifier
      */
     public static String convertFrameID23To24(String identifier)
     {
@@ -233,6 +222,7 @@ public class ID3Tags
     /**
      * Force from ID3v22 FrameIdentifier to ID3v23, this is where the frame and structure
      * has changed from v2 to v3 but we can still do some kind of conversion.
+     * @param identifier
      */
     public static String forceFrameID22To23(String identifier)
     {
@@ -242,6 +232,7 @@ public class ID3Tags
     /**
      * Force from ID3v22 FrameIdentifier to ID3v23, this is where the frame and structure
      * has changed from v2 to v3 but we can still do some kind of conversion.
+     * @param identifier
      */
     public static String forceFrameID23To22(String identifier)
     {
@@ -251,6 +242,7 @@ public class ID3Tags
     /**
      * Force from ID3v2.30 FrameIdentifier to ID3v2.40, this is where the frame and structure
      * has changed from v3 to v4 but we can still do some kind of conversion.
+     * @param identifier
      */
     public static String forceFrameID23To24(String identifier)
     {
@@ -260,6 +252,7 @@ public class ID3Tags
     /**
      * Force from ID3v2.40 FrameIdentifier to ID3v2.30, this is where the frame and structure
      * has changed between v4 to v3 but we can still do some kind of conversion.
+     * @param identifier
      */
     public static String forceFrameID24To23(String identifier)
     {
@@ -268,6 +261,7 @@ public class ID3Tags
 
     /**
      * Convert from ID3v24 FrameIdentifier to ID3v23
+     * @param identifier
      */
     public static String convertFrameID24To23(String identifier)
     {

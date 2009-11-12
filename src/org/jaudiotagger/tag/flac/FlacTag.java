@@ -263,7 +263,7 @@ public class FlacTag implements Tag
      */
     public TagField getFirstField(String id)
     {
-        if (id.equals(FieldKey.COVER_ART))
+        if (id.equals(FieldKey.COVER_ART.name()))
         {
             if (images.size() > 0)
             {
@@ -390,6 +390,7 @@ public class FlacTag implements Tag
     /**
      * Create Artwork when  have the bufferedimage
      *
+     * @param bi
      * @param pictureType
      * @param mimeType
      * @param description
@@ -418,6 +419,7 @@ public class FlacTag implements Tag
     /**
      * Create Link to Image File, not recommended because if either flac or image file is moved link
      * will be broken.
+     * @param url
      */
     public TagField createLinkedArtworkField(String url)
     {

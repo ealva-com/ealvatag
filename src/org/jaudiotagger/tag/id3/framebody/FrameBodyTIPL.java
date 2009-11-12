@@ -58,6 +58,7 @@ public class FrameBodyTIPL extends AbstractFrameBodyTextInfo implements ID3v24Fr
 
     /**
      * Convert from V3 to V4 Frame
+     * @param body
      */
     public FrameBodyTIPL(FrameBodyIPLS body)
     {
@@ -81,6 +82,8 @@ public class FrameBodyTIPL extends AbstractFrameBodyTextInfo implements ID3v24Fr
     /**
      * Creates a new FrameBodyTIPL datatype.
      *
+     * @param byteBuffer
+     * @param frameSize
      * @throws InvalidTagException
      */
     public FrameBodyTIPL(ByteBuffer byteBuffer, int frameSize) throws InvalidTagException

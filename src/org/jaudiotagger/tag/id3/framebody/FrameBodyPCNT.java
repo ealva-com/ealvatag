@@ -76,6 +76,8 @@ public class FrameBodyPCNT extends AbstractID3v2FrameBody implements ID3v24Frame
     /**
      * Creates a new FrameBodyPCNT datatype.
      *
+     * @param byteBuffer
+     * @param frameSize
      * @throws InvalidTagException if unable to create framebody from buffer
      */
     public FrameBodyPCNT(ByteBuffer byteBuffer, int frameSize) throws InvalidTagException

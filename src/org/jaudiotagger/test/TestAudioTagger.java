@@ -21,10 +21,8 @@
  */
 package org.jaudiotagger.test;
 
-import org.jaudiotagger.audio.mp3.MP3File;
 import org.jaudiotagger.audio.AudioFileFilter;
 import org.jaudiotagger.audio.AudioFileIO;
-import org.jaudiotagger.audio.AudioFile;
 
 import java.io.File;
 import java.text.DateFormat;
@@ -78,6 +76,7 @@ public class TestAudioTagger
 
     /**
      * Recursive function to scan directory
+     * @param dir
      */
     private void scanSingleDir(final File dir)
     {

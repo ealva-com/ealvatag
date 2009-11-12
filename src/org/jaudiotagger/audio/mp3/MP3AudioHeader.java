@@ -322,6 +322,10 @@ public class MP3AudioHeader implements AudioHeader
     /**
      * Called in some circumstances to check the next frame to ensure we have the correct audio header
      *
+     * @param seekFile
+     * @param filePointerCount
+     * @param bb
+     * @param fc
      * @return true if frame is valid
      */
     private boolean isNextFrameValid(File seekFile, long filePointerCount, ByteBuffer bb, FileChannel fc) throws IOException

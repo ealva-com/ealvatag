@@ -14,6 +14,7 @@ import java.util.Set;
  * 
  * @author Christian Laireiter
  */
+@SuppressWarnings({"ManualArrayToCollectionCopy"})
 public class ChunkRemover implements ChunkModifier {
 
     /**

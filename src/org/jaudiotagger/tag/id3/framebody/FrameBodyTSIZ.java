@@ -61,6 +61,8 @@ public class FrameBodyTSIZ extends AbstractFrameBodyTextInfo implements ID3v23Fr
     /**
      * Creates a new FrameBodyTSIZ datatype.
      *
+     * @param byteBuffer
+     * @param frameSize
      * @throws InvalidTagException
      */
     public FrameBodyTSIZ(ByteBuffer byteBuffer, int frameSize) throws InvalidTagException

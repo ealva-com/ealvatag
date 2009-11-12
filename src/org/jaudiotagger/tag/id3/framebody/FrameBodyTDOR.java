@@ -47,6 +47,7 @@ public class FrameBodyTDOR extends AbstractFrameBodyTextInfo implements ID3v24Fr
 
     /**
      * When converting v3 TDAT to v4 TDRC frame
+     * @param body
      */
     public FrameBodyTDOR(FrameBodyTORY body)
     {
@@ -68,6 +69,8 @@ public class FrameBodyTDOR extends AbstractFrameBodyTextInfo implements ID3v24Fr
     /**
      * Creates a new FrameBodyTDOR datatype.
      *
+     * @param byteBuffer
+     * @param frameSize
      * @throws InvalidTagException
      */
     public FrameBodyTDOR(ByteBuffer byteBuffer, int frameSize) throws InvalidTagException

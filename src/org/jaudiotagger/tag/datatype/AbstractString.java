@@ -50,6 +50,7 @@ public abstract class AbstractString extends AbstractDataType
      *
      * @param identifier
      * @param frameBody
+     * @param value
      */
     public AbstractString(String identifier, AbstractTagFrameBody frameBody, String value)
     {
@@ -81,6 +82,7 @@ public abstract class AbstractString extends AbstractDataType
      * Sets the size in bytes of this datatype.
      * This is set after writing the data to allow us to recalculate the size for
      * frame header.
+     * @param size
      */
     protected void setSize(int size)
     {

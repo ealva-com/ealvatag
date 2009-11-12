@@ -112,6 +112,8 @@ public class FrameBodyETCO extends AbstractID3v2FrameBody implements ID3v24Frame
     /**
      * Creates a new FrameBodyETCO datatype.
      *
+     * @param byteBuffer
+     * @param frameSize
      * @throws InvalidTagException if unable to create framebody from buffer
      */
     public FrameBodyETCO(ByteBuffer byteBuffer, int frameSize) throws InvalidTagException

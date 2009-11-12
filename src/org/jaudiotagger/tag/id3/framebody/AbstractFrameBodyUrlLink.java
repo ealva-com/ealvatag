@@ -52,6 +52,7 @@ public abstract class AbstractFrameBodyUrlLink extends AbstractID3v2FrameBody
 
     /**
      * Copy Constructor
+     * @param body
      */
     protected AbstractFrameBodyUrlLink(AbstractFrameBodyUrlLink body)
     {
@@ -71,6 +72,8 @@ public abstract class AbstractFrameBodyUrlLink extends AbstractID3v2FrameBody
     /**
      * Creates a new FrameBodyUrlLink datatype.
      *
+     * @param byteBuffer
+     * @param frameSize
      * @throws InvalidTagException if unable to create framebody from buffer
      */
     protected AbstractFrameBodyUrlLink(ByteBuffer byteBuffer, int frameSize) throws InvalidTagException

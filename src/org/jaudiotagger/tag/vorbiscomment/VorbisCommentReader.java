@@ -81,6 +81,7 @@ public class VorbisCommentReader
 
     /**
      * @param rawdata
+     * @param isFramingBit
      * @return logical representation of VorbisCommentTag
      * @throws IOException
      * @throws CannotReadException

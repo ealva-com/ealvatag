@@ -169,7 +169,7 @@ public class Mp4TrackField extends Mp4TagTextNumberField
      */
     public void setTrackNo(int trackNo)
     {
-        numbers.set(TRACK_NO_INDEX,new Short((short)trackNo));
+        numbers.set(TRACK_NO_INDEX, (short) trackNo);
     }
 
 
@@ -180,6 +180,6 @@ public class Mp4TrackField extends Mp4TagTextNumberField
      */
     public void setTrackTotal(int trackTotal)
     {
-       numbers.set(TRACK_TOTAL_INDEX,new Short((short)trackTotal));
+       numbers.set(TRACK_TOTAL_INDEX, (short) trackTotal);
     }
 }

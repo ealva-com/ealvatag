@@ -92,6 +92,8 @@ public class FrameBodyENCR extends AbstractID3v2FrameBody implements ID3v24Frame
     /**
      * Creates a new FrameBodyENCR datatype.
      *
+     * @param byteBuffer
+     * @param frameSize
      * @throws InvalidTagException if unable to create framebody from buffer
      */
     public FrameBodyENCR(ByteBuffer byteBuffer, int frameSize) throws InvalidTagException

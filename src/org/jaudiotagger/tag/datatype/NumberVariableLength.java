@@ -49,6 +49,7 @@ public class NumberVariableLength extends AbstractDataType
      * if this datatype is optional.
      *
      * @param identifier
+     * @param frameBody
      * @param minimumSize
      */
     public NumberVariableLength(String identifier, AbstractTagFrameBody frameBody, int minimumSize)
@@ -141,12 +142,8 @@ public class NumberVariableLength extends AbstractDataType
 
         NumberVariableLength object = (NumberVariableLength) obj;
 
-        if (this.minLength != object.minLength)
-        {
-            return false;
-        }
+        return this.minLength == object.minLength && super.equals(obj);
 
-        return super.equals(obj);
     }
 
     /**

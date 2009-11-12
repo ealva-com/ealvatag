@@ -78,6 +78,8 @@ public class FrameBodyMCDI extends AbstractID3v2FrameBody implements ID3v24Frame
     /**
      * Creates a new FrameBodyMCDI datatype.
      *
+     * @param byteBuffer
+     * @param frameSize
      * @throws InvalidTagException if unable to create framebody from buffer
      */
     public FrameBodyMCDI(ByteBuffer byteBuffer, int frameSize) throws InvalidTagException

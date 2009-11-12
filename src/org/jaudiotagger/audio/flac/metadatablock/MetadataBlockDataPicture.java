@@ -58,6 +58,8 @@ public class MetadataBlockDataPicture implements MetadataBlockData, TagField
 
     /**
      * Construct picture block by reading from file
+     * @param header
+     * @param raf
      */
     //TODO check for buffer underflows see http://research.eeye.com/html/advisories/published/AD20071115.html
     public MetadataBlockDataPicture(MetadataBlockHeader header, RandomAccessFile raf) throws IOException, InvalidFrameException
@@ -108,6 +110,14 @@ public class MetadataBlockDataPicture implements MetadataBlockData, TagField
 
     /**
      * Construct new MetadataPicture block
+     * @param imageData
+     * @param pictureType
+     * @param mimeType
+     * @param description
+     * @param width
+     * @param height
+     * @param colourDepth
+     * @param indexedColouredCount
      */
     public MetadataBlockDataPicture(byte[] imageData, int pictureType, String mimeType, String description, int width, int height, int colourDepth, int indexedColouredCount)
     {

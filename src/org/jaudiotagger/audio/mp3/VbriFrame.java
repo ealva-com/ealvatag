@@ -136,6 +136,8 @@ public class VbriFrame
     /**
      * IS this a VBRI frame
      *
+     * @param bb
+     * @param mpegFrameHeader
      * @return true if this is a VBRI frame
      */
     public static boolean isVbriFrame(ByteBuffer bb, MPEGFrameHeader mpegFrameHeader)

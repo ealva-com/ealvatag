@@ -141,6 +141,7 @@ public class FrameBodySYLT extends AbstractID3v2FrameBody implements ID3v24Frame
      * @param timeStampFormat
      * @param contentType
      * @param description
+     * @param lyrics
      */
     public FrameBodySYLT(int textEncoding, String language, int timeStampFormat, int contentType, String description, byte[] lyrics)
     {
@@ -155,6 +156,8 @@ public class FrameBodySYLT extends AbstractID3v2FrameBody implements ID3v24Frame
     /**
      * Creates a new FrameBodySYLT datatype.
      *
+     * @param byteBuffer
+     * @param frameSize
      * @throws InvalidTagException if unable to create framebody from buffer
      */
     public FrameBodySYLT(ByteBuffer byteBuffer, int frameSize) throws InvalidTagException

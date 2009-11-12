@@ -32,6 +32,7 @@ public class BooleanString extends AbstractDataType
      * Creates a new ObjectBooleanString datatype.
      *
      * @param identifier
+     * @param frameBody
      */
     public BooleanString(String identifier, AbstractTagFrameBody frameBody)
     {
@@ -53,12 +54,8 @@ public class BooleanString extends AbstractDataType
 
     public boolean equals(Object obj)
     {
-        if (obj instanceof BooleanString == false)
-        {
-            return false;
-        }
+        return obj instanceof BooleanString != false && super.equals(obj);
 
-        return super.equals(obj);
     }
 
     /**

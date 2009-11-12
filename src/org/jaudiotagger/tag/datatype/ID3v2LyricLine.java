@@ -103,12 +103,8 @@ public class ID3v2LyricLine extends AbstractDataType
             return false;
         }
 
-        if (this.timeStamp != object.timeStamp)
-        {
-            return false;
-        }
+        return this.timeStamp == object.timeStamp && super.equals(obj);
 
-        return super.equals(obj);
     }
 
     /**

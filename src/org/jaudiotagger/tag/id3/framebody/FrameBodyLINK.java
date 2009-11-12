@@ -104,6 +104,8 @@ public class FrameBodyLINK extends AbstractID3v2FrameBody implements ID3v24Frame
     /**
      * Creates a new FrameBodyLINK datatype.
      *
+     * @param byteBuffer
+     * @param frameSize
      * @throws InvalidTagException if unable to create framebody from buffer
      */
     public FrameBodyLINK(ByteBuffer byteBuffer, int frameSize) throws InvalidTagException

@@ -204,6 +204,7 @@ public interface Tag {
     /**
      * Create artwork field based on the data in artwork
      *
+     * @param artwork
      * @return suitable tagfield for this format that represents the artwork data
      */
     public TagField createField(Artwork artwork) throws FieldDataInvalidException;
@@ -214,6 +215,7 @@ public interface Tag {
      * <p>Note We provide this extra method to get round problem with VorbisComment requiring two seperate fields to
      * represent an artwork field
      *
+     * @param artwork
      * @return suitable tagfield for this format that represents the artwork data
      */
     public void setField(Artwork artwork) throws FieldDataInvalidException;

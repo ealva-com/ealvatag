@@ -61,6 +61,8 @@ public class FrameBodyTORY extends AbstractFrameBodyTextInfo implements ID3v23Fr
     /**
      * Creates a new FrameBodyTORY datatype.
      *
+     * @param byteBuffer
+     * @param frameSize
      * @throws InvalidTagException
      */
     public FrameBodyTORY(ByteBuffer byteBuffer, int frameSize) throws InvalidTagException

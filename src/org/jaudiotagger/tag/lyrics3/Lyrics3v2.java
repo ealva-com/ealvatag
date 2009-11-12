@@ -62,7 +62,7 @@ public class Lyrics3v2 extends AbstractLyrics3
 
         while (iterator.hasNext())
         {
-            oldIdentifier = iterator.next().toString();
+            oldIdentifier = iterator.next();
             newIdentifier = oldIdentifier;
             newObject = new Lyrics3v2Field(copyObject.fieldMap.get(newIdentifier));
             fieldMap.put(newIdentifier, newObject);
@@ -123,6 +123,7 @@ public class Lyrics3v2 extends AbstractLyrics3
      * @param file
      * @throws TagNotFoundException
      * @throws IOException
+     * @param byteBuffer
      */
     public Lyrics3v2(ByteBuffer byteBuffer) throws TagNotFoundException, IOException
     {
@@ -204,12 +205,8 @@ public class Lyrics3v2 extends AbstractLyrics3
 
         Lyrics3v2 object = (Lyrics3v2) obj;
 
-        if (this.fieldMap.equals(object.fieldMap) == false)
-        {
-            return false;
-        }
+        return this.fieldMap.equals(object.fieldMap) != false && super.equals(obj);
 
-        return super.equals(obj);
     }
 
     /**
@@ -393,7 +390,6 @@ public class Lyrics3v2 extends AbstractLyrics3
     public void write(RandomAccessFile file) throws IOException
     {
         int offset = 0;
-        ;
 
         long size;
         long filePointer;
@@ -484,6 +480,7 @@ public class Lyrics3v2 extends AbstractLyrics3
 
     /**
      * TODO
+     * @param byteBuffer
      */
     private int seekSize(ByteBuffer byteBuffer)
     {

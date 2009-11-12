@@ -29,6 +29,7 @@ public class AbstractStringStringValuePair extends AbstractValuePair<String, Str
 
     /**
      * Get Id for Value
+     * @param value
      */
     public String getIdForValue(String value)
     {
@@ -37,6 +38,7 @@ public class AbstractStringStringValuePair extends AbstractValuePair<String, Str
 
     /**
      * Get value for Id
+     * @param id
      */
     public String getValueForId(String id)
     {

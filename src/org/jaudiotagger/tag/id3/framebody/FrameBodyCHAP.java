@@ -118,6 +118,8 @@ public class FrameBodyCHAP extends AbstractID3v2FrameBody implements ID3v2Chapte
     /**
      * Creates a new FrameBodyAENC datatype.
      *
+     * @param byteBuffer
+     * @param frameSize
      * @throws InvalidTagException if unable to create framebody from buffer
      */
     public FrameBodyCHAP(ByteBuffer byteBuffer, int frameSize) throws InvalidTagException

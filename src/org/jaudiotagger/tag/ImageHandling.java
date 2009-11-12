@@ -1,7 +1,7 @@
 package org.jaudiotagger.tag;
 
-import org.jaudiotagger.tag.id3.valuepair.ImageFormats;
 import org.jaudiotagger.tag.datatype.Artwork;
+import org.jaudiotagger.tag.id3.valuepair.ImageFormats;
 
 import javax.imageio.ImageIO;
 import javax.imageio.ImageWriter;
@@ -10,7 +10,6 @@ import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.ByteArrayInputStream;
 import java.util.Iterator;
 
 /**
@@ -37,7 +36,9 @@ public class ImageHandling
     }
      /**
      * Resize image using Java 2D
-     */
+      * @param artwork
+      * @param size
+      */
     private static void makeSmaller(Artwork artwork,int size) throws IOException
     {
         Image srcImage = artwork.getImage();

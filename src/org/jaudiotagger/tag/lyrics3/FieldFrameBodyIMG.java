@@ -82,6 +82,7 @@ public class FieldFrameBodyIMG extends AbstractLyrics3v2FieldFrameBody
     /**
      * Creates a new FieldBodyIMG datatype.
      *
+     * @param byteBuffer
      * @throws InvalidTagException
      */
     public FieldFrameBodyIMG(ByteBuffer byteBuffer) throws InvalidTagException
@@ -175,12 +176,8 @@ public class FieldFrameBodyIMG extends AbstractLyrics3v2FieldFrameBody
 
         FieldFrameBodyIMG object = (FieldFrameBodyIMG) obj;
 
-        if (this.images.equals(object.images) == false)
-        {
-            return false;
-        }
+        return this.images.equals(object.images) != false && super.equals(obj);
 
-        return super.equals(obj);
     }
 
     /**

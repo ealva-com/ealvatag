@@ -112,8 +112,11 @@ public class Mp4TagWriter
      * we have to adjust the size of the size field upto the moovheader level for the udta atom and
      * its child meta atom.
      *
+     * @param moovHeader
      * @param moovBuffer
      * @param sizeAdjustment can be negative or positive     *
+     * @param udtaHeader
+     * @param metaHeader
      * @return
      */
     private void adjustSizeOfMoovHeader
@@ -269,7 +272,7 @@ public class Mp4TagWriter
             else
             {
                 //There no ilst or meta header so we set to position where it would be if it existed
-                relativeIlstposition = (int) (moovHeader.getLength() - Mp4BoxHeader.HEADER_LENGTH);                
+                relativeIlstposition = moovHeader.getLength() - Mp4BoxHeader.HEADER_LENGTH;
                 relativeIlstEndPosition = relativeIlstposition ;
                 startIlstWithinFile = (int)(moovHeader.getFilePos() + moovHeader.getLength());
             }
@@ -288,7 +291,7 @@ public class Mp4TagWriter
             else
             {
                 //There no udta,ilst or meta header so we set to position where it would be if it existed
-                relativeIlstposition = (int) (moovHeader.getLength() - Mp4BoxHeader.HEADER_LENGTH);
+                relativeIlstposition = moovHeader.getLength() - Mp4BoxHeader.HEADER_LENGTH;
                 relativeIlstEndPosition = relativeIlstposition;
                 startIlstWithinFile = (int)(moovHeader.getFilePos() + moovHeader.getLength());
             }

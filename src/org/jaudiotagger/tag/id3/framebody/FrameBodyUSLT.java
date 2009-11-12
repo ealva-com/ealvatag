@@ -99,6 +99,7 @@ public class FrameBodyUSLT extends AbstractID3v2FrameBody implements ID3v23Frame
      * Creates a new FrameBodyUSLT datatype, populated from buffer
      *
      * @param byteBuffer
+     * @param frameSize
      * @throws InvalidTagException
      * @throws InvalidTagException
      */
@@ -196,8 +197,7 @@ public class FrameBodyUSLT extends AbstractID3v2FrameBody implements ID3v23Frame
     public void addLyric(String text)
     {
         setLyric(getLyric() + text);
-        ;
-    }
+        }
 
     /**
      * @param line

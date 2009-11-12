@@ -31,7 +31,6 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -665,6 +664,7 @@ public class OggVorbisTagWriter
     /**
      * @param commentLength
      * @param setupHeaderLength
+     * @param extraPacketList
      * @return true if there is enough room to fit the comment and the setup headers on one page taking into
      *         account the maximum no of segments allowed per page and zero lacing values.
      */

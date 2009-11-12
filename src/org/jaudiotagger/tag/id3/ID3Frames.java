@@ -64,6 +64,7 @@ public abstract class ID3Frames extends AbstractStringStringValuePair
 
     /**
      * If file changes discard these frames
+     * @param frameID
      */
     public boolean isDiscardIfFileAltered(String frameID)
     {
@@ -72,6 +73,7 @@ public abstract class ID3Frames extends AbstractStringStringValuePair
 
     /**
      * Are multiple ocurrences of frame allowed
+     * @param frameID
      */
     public boolean isMultipleAllowed(String frameID)
     {

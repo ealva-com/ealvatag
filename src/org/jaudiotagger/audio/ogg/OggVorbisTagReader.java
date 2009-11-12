@@ -169,6 +169,8 @@ public class OggVorbisTagReader
     /**
      * The Vorbis Comment may span multiple pages so we we need to identify the pages they contain and then
      * extract the packet data from the pages
+     * @param startVorbisCommentPage
+     * @param raf
      */
     private byte[] convertToVorbisCommentPacket(OggPageHeader startVorbisCommentPage, RandomAccessFile raf) throws IOException, CannotReadException
     {
@@ -222,6 +224,8 @@ public class OggVorbisTagReader
     /**
      * The Vorbis Setup Header may span multiple(2) pages, athough it doesnt normally. We pass the start of the
      * file offset of the OggPage it belongs on, it probably won't be first packet.
+     * @param fileOffsetOfStartingOggPage
+     * @param raf
      */
     public byte[] convertToVorbisSetupHeaderPacket(long fileOffsetOfStartingOggPage, RandomAccessFile raf) throws IOException, CannotReadException
     {
@@ -304,6 +308,8 @@ public class OggVorbisTagReader
      * The Vorbis Setup Header may span multiple(2) pages, athough it doesnt normally. We pass the start of the
      * file offset of the OggPage it belongs on, it probably won't be first packet, also returns any addditional
      * packets that immediately follow the setup header in original file
+     * @param fileOffsetOfStartingOggPage
+     * @param raf
      */
     public byte[] convertToVorbisSetupHeaderPacketAndAdditionalPackets(long fileOffsetOfStartingOggPage, RandomAccessFile raf) throws IOException, CannotReadException
     {

@@ -104,6 +104,7 @@ public class Mp4StcoBox extends AbstractMp4Box
      *
      * @param header             header info
      * @param originalDataBuffer data of box (doesnt include header data)
+     * @param adjustment
      */
     public Mp4StcoBox(Mp4BoxHeader header, ByteBuffer originalDataBuffer, int adjustment)
     {

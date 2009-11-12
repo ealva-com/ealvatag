@@ -35,6 +35,7 @@ public class StringDate extends StringFixedLength
      * Creates a new ObjectStringDate datatype.
      *
      * @param identifier
+     * @param frameBody
      */
     public StringDate(String identifier, AbstractTagFrameBody frameBody)
     {
@@ -74,11 +75,7 @@ public class StringDate extends StringFixedLength
 
     public boolean equals(Object obj)
     {
-        if (obj instanceof StringDate == false)
-        {
-            return false;
-        }
+        return obj instanceof StringDate != false && super.equals(obj);
 
-        return super.equals(obj);
     }
 }

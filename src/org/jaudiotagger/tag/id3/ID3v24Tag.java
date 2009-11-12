@@ -446,6 +446,7 @@ public class ID3v24Tag extends AbstractID3v2Tag
 
     /**
      * Copy Constructor, creates a new ID3v2_4 Tag based on another ID3v2_4 Tag
+     * @param copyObject
      */
     public ID3v24Tag(ID3v24Tag copyObject)
     {
@@ -680,11 +681,7 @@ public class ID3v24Tag extends AbstractID3v2Tag
         {
             return false;
         }
-        if (this.updateTag != object.updateTag)
-        {
-            return false;
-        }
-        return super.equals(obj);
+        return this.updateTag == object.updateTag && super.equals(obj);
     }
 
     /**
@@ -863,6 +860,8 @@ public class ID3v24Tag extends AbstractID3v2Tag
 
     /**
      * Read frames from tag
+     * @param byteBuffer
+     * @param size
      */
     protected void readFrames(ByteBuffer byteBuffer, int size)
     {

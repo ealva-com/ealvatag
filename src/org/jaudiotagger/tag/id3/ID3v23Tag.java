@@ -208,6 +208,7 @@ public class ID3v23Tag extends AbstractID3v2Tag
     /**
      * This is used when we need to translate a single frame into multiple frames,
      * currently required for v24 TDRC frames.
+     * @param frame
      */
     //TODO will overwrite any existing TYER or TIME frame, do we ever want multiples of these
     protected void translateFrame(AbstractID3v2Frame frame)
@@ -239,6 +240,7 @@ public class ID3v23Tag extends AbstractID3v2Tag
 
     /**
      * Copy Constructor, creates a new ID3v2_3 Tag based on another ID3v2_3 Tag
+     * @param copyObject
      */
     public ID3v23Tag(ID3v23Tag copyObject)
     {
@@ -252,6 +254,7 @@ public class ID3v23Tag extends AbstractID3v2Tag
 
     /**
      * Constructs a new tag based upon another tag of different version/type
+     * @param mp3tag
      */
     public ID3v23Tag(AbstractTag mp3tag)
     {
@@ -369,11 +372,7 @@ public class ID3v23Tag extends AbstractID3v2Tag
         {
             return false;
         }
-        if (this.paddingSize != object.paddingSize)
-        {
-            return false;
-        }
-        return super.equals(obj);
+        return this.paddingSize == object.paddingSize && super.equals(obj);
     }
 
     /**
@@ -609,8 +608,7 @@ public class ID3v23Tag extends AbstractID3v2Tag
                 //Dont try and find any more frames
                 break;
             }
-            ;
-        }
+            }
     }
 
     /**
@@ -726,14 +724,7 @@ public class ID3v23Tag extends AbstractID3v2Tag
         logger.info(getLoggingFilename() + ":bodybytebuffer:sizebeforeunsynchronisation:" + bodyByteBuffer.length);
 
         // Unsynchronize if option enabled and unsync required
-        if (TagOptionSingleton.getInstance().isUnsyncTags())
-        {
-            unsynchronization = ID3Unsynchronization.requiresUnsynchronization(bodyByteBuffer);
-        }
-        else
-        {
-            unsynchronization = false;
-        }
+        unsynchronization = TagOptionSingleton.getInstance().isUnsyncTags() && ID3Unsynchronization.requiresUnsynchronization(bodyByteBuffer);
         if (isUnsynchronization())
         {
             bodyByteBuffer = ID3Unsynchronization.unsynchronize(bodyByteBuffer);
@@ -762,14 +753,7 @@ public class ID3v23Tag extends AbstractID3v2Tag
         logger.info(getLoggingFilename() + ":bodybytebuffer:sizebeforeunsynchronisation:" + bodyByteBuffer.length);
 
         // Unsynchronize if option enabled and unsync required
-        if (TagOptionSingleton.getInstance().isUnsyncTags())
-        {
-            unsynchronization = ID3Unsynchronization.requiresUnsynchronization(bodyByteBuffer);
-        }
-        else
-        {
-            unsynchronization = false;
-        }
+        unsynchronization = TagOptionSingleton.getInstance().isUnsyncTags() && ID3Unsynchronization.requiresUnsynchronization(bodyByteBuffer);
         if (isUnsynchronization())
         {
             bodyByteBuffer = ID3Unsynchronization.unsynchronize(bodyByteBuffer);

@@ -54,6 +54,7 @@ public class FieldFrameBodyINF extends AbstractLyrics3v2FieldFrameBody
 
     /**
      * Creates a new FieldBodyINF datatype.
+     * @param byteBuffer
      */
     public FieldFrameBodyINF(ByteBuffer byteBuffer) throws InvalidTagException
     {

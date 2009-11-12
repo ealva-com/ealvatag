@@ -56,6 +56,7 @@ public class Utils
      * Returns {@link String#getBytes()}.<br>
      *
      * @param s The String to call, decode bytes using the specfied charset
+     * @param charSet
      * @return The bytes.
      */
     public static byte[] getDefaultBytes(String s, String charSet)
@@ -275,6 +276,7 @@ public class Utils
 
     /**
      * Overflow checking since java can't handle unsigned numbers.
+     * @param di
      */
     public static int readUint32AsInt(DataInput di) throws IOException
     {

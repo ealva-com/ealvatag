@@ -96,6 +96,7 @@ public class FieldFrameBodyLYR extends AbstractLyrics3v2FieldFrameBody
 
     /**
      * Creates a new FieldBodyLYR datatype.
+     * @param byteBuffer
      */
     public FieldFrameBodyLYR(ByteBuffer byteBuffer) throws InvalidTagException
     {
@@ -232,12 +233,8 @@ public class FieldFrameBodyLYR extends AbstractLyrics3v2FieldFrameBody
 
         FieldFrameBodyLYR object = (FieldFrameBodyLYR) obj;
 
-        if (this.lines.equals(object.lines) == false)
-        {
-            return false;
-        }
+        return this.lines.equals(object.lines) != false && super.equals(obj);
 
-        return super.equals(obj);
     }
 
     /**

@@ -107,6 +107,7 @@ public class FrameBodyAPIC extends AbstractID3v2FrameBody implements ID3v24Frame
 
     /**
      * Conversion from v2 PIC to v3/v4 APIC
+     * @param body
      */
     public FrameBodyAPIC(FrameBodyPIC body)
     {
@@ -139,6 +140,8 @@ public class FrameBodyAPIC extends AbstractID3v2FrameBody implements ID3v24Frame
     /**
      * Creates a new FrameBodyAPIC datatype.
      *
+     * @param byteBuffer
+     * @param frameSize
      * @throws InvalidTagException if unable to create framebody from buffer
      */
     public FrameBodyAPIC(ByteBuffer byteBuffer, int frameSize) throws InvalidTagException
@@ -264,11 +267,7 @@ public class FrameBodyAPIC extends AbstractID3v2FrameBody implements ID3v24Frame
      */
     public boolean isImageUrl()
     {
-        if (getMimeType() == null)
-        {
-            return false;
-        }
-        return getMimeType().equals(IMAGE_IS_URL);
+        return getMimeType() != null && getMimeType().equals(IMAGE_IS_URL);
     }
 
     /**

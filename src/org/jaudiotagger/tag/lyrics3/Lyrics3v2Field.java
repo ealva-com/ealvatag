@@ -132,6 +132,7 @@ public class Lyrics3v2Field extends AbstractTagFrame
      *
      * @param file
      * @throws InvalidTagException
+     * @param byteBuffer
      */
     public Lyrics3v2Field(ByteBuffer byteBuffer) throws InvalidTagException
     {
@@ -204,7 +205,7 @@ public class Lyrics3v2Field extends AbstractTagFrame
      */
     public void write(RandomAccessFile file) throws IOException
     {
-        if ((((AbstractLyrics3v2FieldFrameBody) frameBody).getSize() > 0) || TagOptionSingleton.getInstance().isLyrics3SaveEmptyField())
+        if ((frameBody.getSize() > 0) || TagOptionSingleton.getInstance().isLyrics3SaveEmptyField())
         {
             byte[] buffer = new byte[3];
             String str = getIdentifier();
@@ -221,6 +222,7 @@ public class Lyrics3v2Field extends AbstractTagFrame
      * Read a Lyrics3 Field from a file.
      *
      * @param identifier
+     * @param byteBuffer
      * @return
      * @throws InvalidTagException
      */

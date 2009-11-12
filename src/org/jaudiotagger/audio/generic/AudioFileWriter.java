@@ -22,7 +22,6 @@ import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.exceptions.CannotReadException;
 import org.jaudiotagger.audio.exceptions.CannotWriteException;
 import org.jaudiotagger.audio.exceptions.ModifyVetoException;
-import org.jaudiotagger.audio.exceptions.UnableToRenameFileException;
 import org.jaudiotagger.logging.ErrorMessage;
 import org.jaudiotagger.tag.Tag;
 
@@ -218,6 +217,8 @@ public abstract class AudioFileWriter
     /**
      * Same as above, but delete tag in the file.
      *
+     * @param raf
+     * @param tempRaf
      * @throws IOException          is thrown when the RandomAccessFile operations throw it (you
      *                              should never throw them manually)
      * @throws CannotWriteException when an error occured during the deletion of the tag
@@ -581,6 +582,9 @@ public abstract class AudioFileWriter
      * the file. The subclass must not close these two files when the method
      * returns.
      *
+     * @param tag
+     * @param raf
+     * @param rafTemp
      * @throws IOException          is thrown when the RandomAccessFile operations throw it (you
      *                              should never throw them manually)
      * @throws CannotWriteException when an error occured during the generation of the tag

@@ -113,7 +113,7 @@ public class GenericAudioHeader implements AudioHeader
 
     public String getBitRate()
     {
-        return ((Integer) content.get(FIELD_BITRATE)).toString();
+        return content.get(FIELD_BITRATE).toString();
     }
 
 
@@ -209,7 +209,7 @@ public class GenericAudioHeader implements AudioHeader
      */
     public String getSampleRate()
     {
-        return ((Integer) content.get(FIELD_SAMPLERATE)).toString();
+        return content.get(FIELD_SAMPLERATE).toString();
     }
 
     public int getSampleRateAsNumber()

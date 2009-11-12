@@ -56,6 +56,7 @@ public class FrameBodyUnsupported extends AbstractID3v2FrameBody implements ID3v
 
     /**
      * Creates a new FrameBodyUnsupported
+     * @param identifier
      */
     public FrameBodyUnsupported(String identifier)
     {
@@ -100,6 +101,8 @@ public class FrameBodyUnsupported extends AbstractID3v2FrameBody implements ID3v
     /**
      * Creates a new FrameBodyUnsupported datatype.
      *
+     * @param byteBuffer
+     * @param frameSize
      * @throws InvalidFrameException if unable to create framebody from buffer
      */
     public FrameBodyUnsupported(ByteBuffer byteBuffer, int frameSize) throws InvalidTagException
@@ -129,11 +132,7 @@ public class FrameBodyUnsupported extends AbstractID3v2FrameBody implements ID3v
         }
 
         FrameBodyUnsupported object = (FrameBodyUnsupported) obj;
-        if (this.identifier.equals(object.identifier) == false)
-        {
-            return false;
-        }
-        return super.equals(obj);
+        return this.identifier.equals(object.identifier) != false && super.equals(obj);
     }
 
 

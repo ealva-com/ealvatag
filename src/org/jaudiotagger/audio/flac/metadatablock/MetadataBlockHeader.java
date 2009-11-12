@@ -81,8 +81,7 @@ public class MetadataBlockHeader
         {
             bytes[i] = rawdata.get(i);
         }
-        ;
-    }
+        }
 
     /**
      * Construct a new header in order to write metadatablock to file

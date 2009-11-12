@@ -63,6 +63,8 @@ public class FrameBodySIGN extends AbstractID3v2FrameBody implements ID3v24Frame
     /**
      * Creates a new FrameBodySIGN datatype.
      *
+     * @param byteBuffer
+     * @param frameSize
      * @throws InvalidTagException if unable to create framebody from buffer
      */
     public FrameBodySIGN(ByteBuffer byteBuffer, int frameSize) throws InvalidTagException

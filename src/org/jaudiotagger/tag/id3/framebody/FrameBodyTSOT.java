@@ -60,6 +60,8 @@ public class FrameBodyTSOT extends AbstractFrameBodyTextInfo implements ID3v24Fr
     /**
      * Creates a new FrameBodyTSOT datatype.
      *
+     * @param byteBuffer
+     * @param frameSize
      * @throws InvalidTagException
      */
     public FrameBodyTSOT(ByteBuffer byteBuffer, int frameSize) throws InvalidTagException

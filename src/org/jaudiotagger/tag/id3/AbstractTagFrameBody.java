@@ -105,6 +105,7 @@ public abstract class AbstractTagFrameBody extends AbstractTagItem
     /**
      * Copy Constructor for fragment body. Copies all objects in the
      * Object Iterator with data.
+     * @param copyObject
      */
     protected AbstractTagFrameBody(AbstractTagFrameBody copyObject)
     {
@@ -250,7 +251,7 @@ public abstract class AbstractTagFrameBody extends AbstractTagItem
         ArrayList<AbstractDataType> superset = ((AbstractTagFrameBody) obj).objectList;
         for (AbstractDataType anObjectList : objectList)
         {
-            if (((AbstractDataType) anObjectList).getValue() != null)
+            if (anObjectList.getValue() != null)
             {
                 if (superset.contains(anObjectList) == false)
                 {
@@ -277,11 +278,7 @@ public abstract class AbstractTagFrameBody extends AbstractTagItem
             return false;
         }
         AbstractTagFrameBody object = (AbstractTagFrameBody) obj;
-        if (this.objectList.equals(object.objectList) == false)
-        {
-            return false;
-        }
-        return super.equals(obj);
+        return this.objectList.equals(object.objectList) != false && super.equals(obj);
     }
 
     /**

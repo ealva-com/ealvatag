@@ -60,6 +60,8 @@ public class FrameBodyWPAY extends AbstractFrameBodyUrlLink implements ID3v24Fra
     /**
      * Creates a new FrameBodyWPAY datatype.
      *
+     * @param byteBuffer
+     * @param frameSize
      * @throws InvalidTagException
      */
     public FrameBodyWPAY(ByteBuffer byteBuffer, int frameSize) throws InvalidTagException

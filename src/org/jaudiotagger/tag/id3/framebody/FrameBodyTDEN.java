@@ -57,6 +57,8 @@ public class FrameBodyTDEN extends AbstractFrameBodyTextInfo implements ID3v24Fr
     /**
      * Creates a new FrameBodyTDEN datatype.
      *
+     * @param byteBuffer
+     * @param frameSize
      * @throws InvalidTagException
      */
     public FrameBodyTDEN(ByteBuffer byteBuffer, int frameSize) throws InvalidTagException

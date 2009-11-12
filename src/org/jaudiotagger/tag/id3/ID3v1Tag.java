@@ -832,11 +832,7 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag
         {
             return false;
         }
-        if (this.year.equals(object.year) == false)
-        {
-            return false;
-        }
-        return super.equals(obj);
+        return this.year.equals(object.year) != false && super.equals(obj);
     }
 
     /**

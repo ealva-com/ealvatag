@@ -19,7 +19,6 @@ import org.jaudiotagger.tag.InvalidTagException;
 import org.jaudiotagger.tag.datatype.DataTypes;
 import org.jaudiotagger.tag.datatype.NumberHashMap;
 import org.jaudiotagger.tag.datatype.PairedTextEncodedStringNullTerminated;
-import org.jaudiotagger.tag.datatype.TextEncodedStringSizeTerminated;
 import org.jaudiotagger.tag.id3.ID3v23Frames;
 import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
 
@@ -83,6 +82,7 @@ public class FrameBodyIPLS extends AbstractID3v2FrameBody implements ID3v23Frame
 
     /**
      * Convert from V4 to V3 Frame
+     * @param body
      */
     public FrameBodyIPLS(FrameBodyTIPL body)
     {

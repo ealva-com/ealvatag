@@ -57,6 +57,8 @@ public class FrameBodyTDRL extends AbstractFrameBodyTextInfo implements ID3v24Fr
     /**
      * Creates a new FrameBodyTDRL datatype.
      *
+     * @param byteBuffer
+     * @param frameSize
      * @throws InvalidTagException
      */
     public FrameBodyTDRL(ByteBuffer byteBuffer, int frameSize) throws InvalidTagException

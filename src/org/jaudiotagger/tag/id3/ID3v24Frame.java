@@ -16,9 +16,9 @@
 package org.jaudiotagger.tag.id3;
 
 import org.jaudiotagger.FileConstants;
-import org.jaudiotagger.logging.ErrorMessage;
 import org.jaudiotagger.audio.generic.Utils;
 import org.jaudiotagger.audio.mp3.MP3File;
+import org.jaudiotagger.logging.ErrorMessage;
 import org.jaudiotagger.tag.*;
 import org.jaudiotagger.tag.datatype.Lyrics3Line;
 import org.jaudiotagger.tag.id3.framebody.*;
@@ -76,6 +76,7 @@ public class ID3v24Frame extends AbstractID3v2Frame
 
     /**
      * Copy Constructor:Creates a new ID3v2_4Frame datatype based on another frame.
+     * @param frame
      */
     public ID3v24Frame(ID3v24Frame frame)
     {
@@ -171,8 +172,8 @@ public class ID3v24Frame extends AbstractID3v2Frame
         //Flags
         if (frame instanceof ID3v23Frame)
         {
-            statusFlags = new StatusFlags((ID3v23Frame.StatusFlags) ((ID3v23Frame) frame).getStatusFlags());
-            encodingFlags = new EncodingFlags(((ID3v23Frame) frame).getEncodingFlags().getFlags());
+            statusFlags = new StatusFlags((ID3v23Frame.StatusFlags) frame.getStatusFlags());
+            encodingFlags = new EncodingFlags(frame.getEncodingFlags().getFlags());
         }
         else
         {
@@ -289,6 +290,7 @@ public class ID3v24Frame extends AbstractID3v2Frame
      * Creates a new ID3v24Frame datatype by reading from byteBuffer.
      *
      * @param byteBuffer to read from
+     * @param loggingFilename
      */
     public ID3v24Frame(ByteBuffer byteBuffer, String loggingFilename) throws InvalidFrameException
     {
@@ -313,11 +315,7 @@ public class ID3v24Frame extends AbstractID3v2Frame
      */
     public boolean equals(Object obj)
     {
-        if ((obj instanceof ID3v24Frame) == false)
-        {
-            return false;
-        }
-        return super.equals(obj);
+        return (obj instanceof ID3v24Frame) != false && super.equals(obj);
     }
 
 
@@ -494,8 +492,7 @@ public class ID3v24Frame extends AbstractID3v2Frame
                                 //invalid so assume syncsafe as that is is the standard
                                 else
                                 {
-                                    ;
-                                }
+                                    }
                             }
                             else
                             {
@@ -511,8 +508,7 @@ public class ID3v24Frame extends AbstractID3v2Frame
                                 //Inconclusive stick with syncsafe
                                 else
                                 {
-                                    ;
-                                }
+                                    }
 
                             }
                         }
@@ -611,14 +607,7 @@ public class ID3v24Frame extends AbstractID3v2Frame
 
         //Does it need unsynchronizing, and are we allowing unsychronizing
         byte[] bodyBuffer = bodyOutputStream.toByteArray();
-        if (TagOptionSingleton.getInstance().isUnsyncTags())
-        {
-            unsynchronization = ID3Unsynchronization.requiresUnsynchronization(bodyBuffer);
-        }
-        else
-        {
-            unsynchronization = false;
-        }
+        unsynchronization = TagOptionSingleton.getInstance().isUnsyncTags() && ID3Unsynchronization.requiresUnsynchronization(bodyBuffer);
         if (unsynchronization)
         {
             bodyBuffer = ID3Unsynchronization.unsynchronize(bodyBuffer);
@@ -720,6 +709,7 @@ public class ID3v24Frame extends AbstractID3v2Frame
 
         /**
          * Use this constructor when reading from file or from another v4 frame
+         * @param flags
          */
         StatusFlags(byte flags)
         {
@@ -730,6 +720,7 @@ public class ID3v24Frame extends AbstractID3v2Frame
 
         /**
          * Use this constructor when convert a v23 frame
+         * @param statusFlags
          */
         StatusFlags(ID3v23Frame.StatusFlags statusFlags)
         {
@@ -740,6 +731,7 @@ public class ID3v24Frame extends AbstractID3v2Frame
 
         /**
          * Convert V3 Flags to equivalent V4 Flags
+         * @param v3Flag
          */
         private byte convertV3ToV4Flags(byte v3Flag)
         {
@@ -829,6 +821,7 @@ public class ID3v24Frame extends AbstractID3v2Frame
 
         /**
          * Use this when creating a frame from existing flags in another v4 frame
+         * @param flags
          */
         EncodingFlags(byte flags)
         {

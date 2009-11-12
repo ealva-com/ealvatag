@@ -67,6 +67,7 @@ public class ID3v23Frame extends AbstractID3v2Frame
      * <p>An empty body of the correct type will be automatically created.
      * This constructor should be used when wish to create a new
      * frame from scratch using user data.
+     * @param identifier
      */
     public ID3v23Frame(String identifier)
     {
@@ -79,6 +80,7 @@ public class ID3v23Frame extends AbstractID3v2Frame
      * Copy Constructor
      * <p/>
      * Creates a new v23 frame  based on another v23 frame
+     * @param frame
      */
     public ID3v23Frame(ID3v23Frame frame)
     {
@@ -236,6 +238,7 @@ public class ID3v23Frame extends AbstractID3v2Frame
      * Creates a new ID3v23Frame datatype by reading from byteBuffer.
      *
      * @param byteBuffer to read from
+     * @param loggingFilename
      */
     public ID3v23Frame(ByteBuffer byteBuffer, String loggingFilename) throws InvalidFrameException
     {
@@ -285,11 +288,7 @@ public class ID3v23Frame extends AbstractID3v2Frame
         {
             return false;
         }
-        if (this.encodingFlags.getFlags() != object.encodingFlags.getFlags())
-        {
-            return false;
-        }
-        return super.equals(obj);
+        return this.encodingFlags.getFlags() == object.encodingFlags.getFlags() && super.equals(obj);
     }
 
     /**
@@ -561,6 +560,7 @@ public class ID3v23Frame extends AbstractID3v2Frame
 
         /**
          * Use this constructor when convert a v24 frame
+         * @param statusFlags
          */
         StatusFlags(ID3v24Frame.StatusFlags statusFlags)
         {

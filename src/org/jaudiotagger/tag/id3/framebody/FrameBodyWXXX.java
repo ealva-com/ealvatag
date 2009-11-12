@@ -77,6 +77,8 @@ public class FrameBodyWXXX extends AbstractFrameBodyUrlLink implements ID3v24Fra
     /**
      * Creates a new FrameBodyWXXX datatype by reading from file.
      *
+     * @param byteBuffer
+     * @param frameSize
      * @throws InvalidTagException
      */
     public FrameBodyWXXX(ByteBuffer byteBuffer, int frameSize) throws InvalidTagException

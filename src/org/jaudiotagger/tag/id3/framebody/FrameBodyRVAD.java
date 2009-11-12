@@ -51,6 +51,7 @@ public class FrameBodyRVAD extends AbstractID3v2FrameBody implements ID3v23Frame
 
     /**
      * Convert from V4 to V3 Frame
+     * @param body
      */
     public FrameBodyRVAD(FrameBodyRVA2 body)
     {
@@ -60,6 +61,8 @@ public class FrameBodyRVAD extends AbstractID3v2FrameBody implements ID3v23Frame
     /**
      * Creates a new FrameBodyRVAD datatype.
      *
+     * @param byteBuffer
+     * @param frameSize
      * @throws InvalidTagException if unable to create framebody from buffer
      */
     public FrameBodyRVAD(ByteBuffer byteBuffer, int frameSize) throws InvalidTagException

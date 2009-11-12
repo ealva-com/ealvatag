@@ -30,6 +30,7 @@ public class TextEncodedStringSizeTerminated extends AbstractString
      * Creates a new empty TextEncodedStringSizeTerminated datatype.
      *
      * @param identifier identifies the frame type
+     * @param frameBody
      */
     public TextEncodedStringSizeTerminated(String identifier, AbstractTagFrameBody frameBody)
     {
@@ -48,11 +49,7 @@ public class TextEncodedStringSizeTerminated extends AbstractString
 
     public boolean equals(Object obj)
     {
-        if (obj instanceof TextEncodedStringSizeTerminated == false)
-        {
-            return false;
-        }
-        return super.equals(obj);
+        return obj instanceof TextEncodedStringSizeTerminated != false && super.equals(obj);
     }
 
     /**

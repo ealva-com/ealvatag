@@ -70,6 +70,9 @@ public class MergeID3AndMP3Files
 
     /**
      * Recursive function to scan directory
+     * @param fromDir
+     * @param toDir
+     * @param mp3File
      */
     private void scanSingleDir(final File fromDir, final File toDir, final File mp3File)
     {

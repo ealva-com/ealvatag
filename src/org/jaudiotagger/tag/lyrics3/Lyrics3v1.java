@@ -85,6 +85,7 @@ public class Lyrics3v1 extends AbstractLyrics3
      * @param file
      * @throws TagNotFoundException
      * @throws java.io.IOException
+     * @param byteBuffer
      */
     public Lyrics3v1(ByteBuffer byteBuffer) throws TagNotFoundException, java.io.IOException
     {
@@ -136,12 +137,8 @@ public class Lyrics3v1 extends AbstractLyrics3
      */
     public boolean isSubsetOf(Object obj)
     {
-        if ((obj instanceof Lyrics3v1) == false)
-        {
-            return false;
-        }
+        return (obj instanceof Lyrics3v1) != false && (((Lyrics3v1) obj).lyric.contains(this.lyric));
 
-        return (((Lyrics3v1) obj).lyric.contains(this.lyric));
     }
 
     /**
@@ -157,12 +154,8 @@ public class Lyrics3v1 extends AbstractLyrics3
 
         Lyrics3v1 object = (Lyrics3v1) obj;
 
-        if (this.lyric.equals(object.lyric) == false)
-        {
-            return false;
-        }
+        return this.lyric.equals(object.lyric) != false && super.equals(obj);
 
-        return super.equals(obj);
     }
 
     /**

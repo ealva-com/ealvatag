@@ -386,11 +386,7 @@ public class ID3v11Tag extends ID3v1Tag
 
     public boolean isEmpty()
     {
-        if (track > 0)
-        {
-            return false;
-        }
-        return super.isEmpty();
+        return track <= 0 && super.isEmpty();
     }
 
     /**
@@ -424,11 +420,7 @@ public class ID3v11Tag extends ID3v1Tag
             return false;
         }
         ID3v11Tag object = (ID3v11Tag) obj;
-        if (this.track != object.track)
-        {
-            return false;
-        }
-        return super.equals(obj);
+        return this.track == object.track && super.equals(obj);
     }
 
 

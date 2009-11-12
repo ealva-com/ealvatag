@@ -61,6 +61,8 @@ public class FrameBodyTOPE extends AbstractFrameBodyTextInfo implements ID3v23Fr
     /**
      * Creates a new FrameBodyTOPE datatype.
      *
+     * @param byteBuffer
+     * @param frameSize
      * @throws InvalidTagException
      */
     public FrameBodyTOPE(ByteBuffer byteBuffer, int frameSize) throws InvalidTagException

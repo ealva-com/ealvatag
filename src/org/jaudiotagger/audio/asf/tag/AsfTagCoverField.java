@@ -55,7 +55,9 @@ public class AsfTagCoverField extends AbstractAsfTagImageField {
      * Create New Image Field
      * 
      * @param imageData
+     * @param pictureType
      * @param description
+     * @param mimeType
      */
     public AsfTagCoverField(final byte[] imageData, final int pictureType,
             final String description, final String mimeType) {

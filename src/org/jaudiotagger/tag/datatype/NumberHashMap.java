@@ -60,6 +60,7 @@ public class NumberHashMap extends NumberFixedLength implements HashMapInterface
      * Creates a new ObjectNumberHashMap datatype.
      *
      * @param identifier
+     * @param frameBody
      * @param size
      * @throws IllegalArgumentException
      */
@@ -289,7 +290,7 @@ public class NumberHashMap extends NumberFixedLength implements HashMapInterface
         }
         else
         {
-            return keyToValue.get(value).toString();
+            return keyToValue.get(value);
         }
     }
 }

@@ -223,6 +223,7 @@ public class GenreTypes extends AbstractIntStringValuePair
 
     /**
      * Get Id for name, match is not case sensitive
+     * @param name
      */
     public Integer getIdForName(String name)
     {

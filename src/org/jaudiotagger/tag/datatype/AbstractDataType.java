@@ -33,7 +33,7 @@ import java.util.logging.Logger;
  * Represents a field/data type that can be held within a frames body, these map loosely onto
  * Section 4. ID3v2 frame overview at http://www.id3.org/id3v2.4.0-structure.txt
  */
-public abstract class AbstractDataType extends java.lang.Object
+public abstract class AbstractDataType
 {
     protected static final String TYPE_ELEMENT = "element";
 
@@ -93,6 +93,7 @@ public abstract class AbstractDataType extends java.lang.Object
      * This is used by subclasses, to clone the data within the copyObject
      * <p/>
      * TODO:It seems to be missing some of the more complex value types.
+     * @param copyObject
      */
     public AbstractDataType(AbstractDataType copyObject)
     {
@@ -104,7 +105,7 @@ public abstract class AbstractDataType extends java.lang.Object
         }
         else if (copyObject.value instanceof String)
         {
-            this.value = (String) copyObject.value;
+            this.value = copyObject.value;
         }
         else if (copyObject.value instanceof Boolean)
         {
@@ -140,11 +141,11 @@ public abstract class AbstractDataType extends java.lang.Object
         }
         else if(copyObject.value instanceof MultipleTextEncodedStringNullTerminated.Values)
         {
-            this.value = ((MultipleTextEncodedStringNullTerminated.Values) copyObject.value);
+            this.value = copyObject.value;
         }
         else if(copyObject.value instanceof PartOfSet.PartOfSetValue)
         {
-            this.value = ((PartOfSet.PartOfSetValue) copyObject.value);
+            this.value = copyObject.value;
         }
         else if (copyObject.value instanceof boolean[])
         {
@@ -245,6 +246,7 @@ public abstract class AbstractDataType extends java.lang.Object
      * for non String Objects
      *
      * @param arr
+     * @throws org.jaudiotagger.tag.InvalidDataTypeException
      */
     final public void readByteArray(byte[] arr) throws InvalidDataTypeException
     {
@@ -368,6 +370,7 @@ public abstract class AbstractDataType extends java.lang.Object
      *
      * @param arr
      * @param offset
+     * @throws org.jaudiotagger.tag.InvalidDataTypeException
      */
     public abstract void readByteArray(byte[] arr, int offset) throws InvalidDataTypeException;
 

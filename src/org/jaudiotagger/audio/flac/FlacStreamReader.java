@@ -26,6 +26,7 @@ public class FlacStreamReader
 
     /**
      * Create instance for holding stream info
+     * @param raf
      */
     public FlacStreamReader(RandomAccessFile raf)
     {

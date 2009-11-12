@@ -117,6 +117,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
     /**
      * This constructor is used when a tag is created as a duplicate of another
      * tag of the same type and version.
+     * @param copyObject
      */
     protected AbstractID3v2Tag(AbstractID3v2Tag copyObject)
     {
@@ -124,6 +125,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
 
     /**
      * Copy primitives apply to all tags
+     * @param copyObject
      */
     protected void copyPrimitives(AbstractID3v2Tag copyObject)
     {
@@ -138,28 +140,23 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
 
     /**
      * Copy frames from another tag,
+     * @param copyObject
      */
     protected void copyFrames(AbstractID3v2Tag copyObject)
     {
         frameMap = new LinkedHashMap();
         //Copy Frames that are a valid 2.4 type
-        Iterator iterator = copyObject.frameMap.keySet().iterator();
-        AbstractID3v2Frame frame;
-        ID3v23Frame newFrame = null;
-        while (iterator.hasNext())
-        {
-            String id = (String) iterator.next();
+
+        for (Object o1 : copyObject.frameMap.keySet()) {
+            String id = (String) o1;
             Object o = copyObject.frameMap.get(id);
             //SingleFrames
-            if (o instanceof AbstractID3v2Frame)
-            {
+            if (o instanceof AbstractID3v2Frame) {
                 addFrame((AbstractID3v2Frame) o);
             }
             //MultiFrames
-            else if (o instanceof ArrayList)
-            {
-                for (ListIterator<AbstractID3v2Frame> li = ((ArrayList<AbstractID3v2Frame>) o).listIterator(); li.hasNext();)
-                {
+            else if (o instanceof ArrayList) {
+                for (ListIterator<AbstractID3v2Frame> li = ((ArrayList<AbstractID3v2Frame>) o).listIterator(); li.hasNext();) {
                     addFrame(li.next());
                 }
             }
@@ -254,12 +251,8 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
             Object o = getFrame(identifier);
             if (o instanceof AbstractID3v2Frame)
             {
-                if (((AbstractID3v2Frame) o).getBody() instanceof FrameBodyUnsupported)
-                {
-                    return false;
+                return !(((AbstractID3v2Frame) o).getBody() instanceof FrameBodyUnsupported);
                 }
-                return true;
-            }
             return true;
         }
         return false;
@@ -532,8 +525,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
         //No match found so addField new one
         frames.add(newFrame);
         frameMap.put(newFrame.getId(), frames);
-        return;
-    }
+        }
 
     /**
      * @param field
@@ -616,6 +608,8 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
      * Warning if frame(s) already exists for this identifier thay are overwritten
      * <p/>
      * TODO needs to ensure do not add an invalid frame for this tag
+     * @param identifier
+     * @param multiFrame
      */
     public void setFrame(String identifier, List<AbstractID3v2Frame> multiFrame)
     {
@@ -704,17 +698,13 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
      */
     public boolean equals(Object obj)
     {
-        if ((obj instanceof AbstractID3v2Tag) == false)
+        if (!(obj instanceof AbstractID3v2Tag))
         {
             return false;
         }
         AbstractID3v2Tag object = (AbstractID3v2Tag) obj;
-        if (this.frameMap.equals(object.frameMap) == false)
-        {
-            return false;
+        return this.frameMap.equals(object.frameMap) != false && super.equals(obj);
         }
-        return super.equals(obj);
-    }
 
 
     /**
@@ -803,6 +793,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
      * TODO:this appears to have little effect on Windows Vista
      *
      * @param fileChannel
+     * @param filePath
      * @return lock or null if locking is not supported
      * @throws IOException if unable to get lock because already locked by another program
      * @throws java.nio.channels.OverlappingFileLockException
@@ -859,6 +850,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
      *
      * @param file
      * @return the end of the tag in the file or zero if no tag exists.
+     * @throws java.io.IOException
      */
     public static long getV2TagSizeIfExists(File file) throws IOException
     {
@@ -946,17 +938,16 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
             return false;
         }
         //Minor Version
-        if (byteBuffer.get() != getRevision())
-        {
-            return false;
-        }
-        return true;
+        return byteBuffer.get() == getRevision();
     }
 
     /**
      * This method determines the total tag size taking into account
      * where the audio file starts, the size of the tagging data and
      * user options for defining how tags should shrink or grow.
+     * @param tagSize
+     * @param audioStart
+     * @return
      */
     protected int calculateTagSize(int tagSize, int audioStart)
     {
@@ -979,6 +970,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
      * The old file will be deleted, and the new file renamed.
      *
      * @param paddingSize This is total size required to store tag before audio
+     * @param audioStart
      * @param file        The file to adjust the padding length of
      * @throws FileNotFoundException if the file exists but is a directory
      *                               rather than a regular file or cannot be opened for any other
@@ -1211,7 +1203,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
      */
     private void replaceFile(File originalFile, File newFile) throws IOException
     {
-        boolean renameOriginalResult = false;
+        boolean renameOriginalResult  ;
         //Rename Original File to make a backup in case problem with new file
         File originalFileBackup = new File(originalFile.getAbsoluteFile().getParentFile().getPath(), AudioFile.getBaseFilename(originalFile) + ".old");
         //If already exists modify the suffix
@@ -1298,6 +1290,8 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
      * If the frame is an allowable duplicate frame and is a duplicate we add all
      * frames into an ArrayList and add the Arraylist to the hashMap. if not allowed
      * to be duplicate we store bytes in the duplicateBytes variable.
+     * @param frameId
+     * @param next
      */
     protected void loadFrameIntoMap(String frameId, AbstractID3v2Frame next)
     {
@@ -1431,11 +1425,11 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
 
     public void createStructureHeader()
     {
-        MP3File.getStructureFormatter().addElement(this.TYPE_DUPLICATEBYTES, this.duplicateBytes);
-        MP3File.getStructureFormatter().addElement(this.TYPE_DUPLICATEFRAMEID, this.duplicateFrameId);
-        MP3File.getStructureFormatter().addElement(this.TYPE_EMPTYFRAMEBYTES, this.emptyFrameBytes);
-        MP3File.getStructureFormatter().addElement(this.TYPE_FILEREADSIZE, this.fileReadSize);
-        MP3File.getStructureFormatter().addElement(this.TYPE_INVALIDFRAMEBYTES, this.invalidFrameBytes);
+        MP3File.getStructureFormatter().addElement(TYPE_DUPLICATEBYTES, this.duplicateBytes);
+        MP3File.getStructureFormatter().addElement(TYPE_DUPLICATEFRAMEID, this.duplicateFrameId);
+        MP3File.getStructureFormatter().addElement(TYPE_EMPTYFRAMEBYTES, this.emptyFrameBytes);
+        MP3File.getStructureFormatter().addElement(TYPE_FILEREADSIZE, this.fileReadSize);
+        MP3File.getStructureFormatter().addElement(TYPE_INVALIDFRAMEBYTES, this.invalidFrameBytes);
     }
 
     public void createStructureBody()
@@ -1747,11 +1741,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
                 //Issue #236
                 //TODO assumes if have entry its valid, but what if empty list but very different to check this
                 //without causing a side effect on next() so leaving for now
-                if (itHasNext.hasNext())
-                {
-                    return true;
-                }
-                return false;
+                return itHasNext.hasNext();
             }
 
             public TagField next()
@@ -2011,7 +2001,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
                 }
                 else if (next instanceof FrameBodyUFID)
                 {
-                    if (!((FrameBodyUFID) next).getUniqueIdentifier().equals(formatKey.getSubId()))
+                    if (Arrays.equals(((FrameBodyUFID) next).getUniqueIdentifier(), formatKey.getSubId().getBytes()))
                     {
                         return new String(((FrameBodyUFID) next).getUniqueIdentifier());
                     }
@@ -2107,7 +2097,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
                 }
                 else if (next instanceof FrameBodyUFID)
                 {
-                    if (((FrameBodyUFID) next).getUniqueIdentifier().equals(formatKey.getSubId()))
+                    if (Arrays.equals(((FrameBodyUFID) next).getUniqueIdentifier(), formatKey.getSubId().getBytes()))
                     {
                         li.remove();
                     }
@@ -2167,7 +2157,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
                 }
                 else if (next instanceof FrameBodyUFID)
                 {
-                    if (((FrameBodyUFID) next).getUniqueIdentifier().equals(formatKey.getSubId()))
+                    if (Arrays.equals(((FrameBodyUFID) next).getUniqueIdentifier(), formatKey.getSubId().getBytes()))
                     {
                         filteredList.add(tagfield);
                     }

@@ -16,9 +16,8 @@
 package org.jaudiotagger.tag.id3.framebody;
 
 import org.jaudiotagger.tag.InvalidTagException;
-import org.jaudiotagger.tag.reference.Languages;
-import org.jaudiotagger.tag.reference.MusicalKey;
 import org.jaudiotagger.tag.id3.ID3v24Frames;
+import org.jaudiotagger.tag.reference.MusicalKey;
 
 import java.nio.ByteBuffer;
 
@@ -65,6 +64,8 @@ public class FrameBodyTKEY extends AbstractFrameBodyTextInfo implements ID3v24Fr
     /**
      * Creates a new FrameBodyTKEY datatype.
      *
+     * @param byteBuffer
+     * @param frameSize
      * @throws java.io.IOException
      * @throws InvalidTagException
      */

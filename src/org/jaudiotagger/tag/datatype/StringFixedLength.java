@@ -45,6 +45,7 @@ public class StringFixedLength extends AbstractString
      * Creates a new ObjectStringFixedsize datatype.
      *
      * @param identifier
+     * @param frameBody
      * @param size
      * @throws IllegalArgumentException
      */
@@ -75,11 +76,7 @@ public class StringFixedLength extends AbstractString
             return false;
         }
         StringFixedLength object = (StringFixedLength) obj;
-        if (this.size != object.size)
-        {
-            return false;
-        }
-        return super.equals(obj);
+        return this.size == object.size && super.equals(obj);
     }
 
     /**

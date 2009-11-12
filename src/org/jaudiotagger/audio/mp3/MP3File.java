@@ -412,6 +412,7 @@ public class MP3File extends AudioFile
     /**
      * Used by tags when writing to calculate the location of the music file
      *
+     * @param file
      * @return the location within the file that the audio starts
      */
     public long getMP3StartByte(File file) throws InvalidAudioFrameException, IOException
@@ -606,6 +607,7 @@ public class MP3File extends AudioFile
      * Set v2 tag ,dont need to set v24 tag because saving
      * <p/>
      * TODO temp its rather messy
+     * @param id3v2tag
      */
     public void setID3v2TagOnly(AbstractID3v2Tag id3v2tag)
     {

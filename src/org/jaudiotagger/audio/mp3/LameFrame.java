@@ -55,6 +55,7 @@ public class LameFrame
 
     /**
      * Initilise a Lame Mpeg Frame
+     * @param lameHeader
      */
     private LameFrame(ByteBuffer lameHeader)
     {
@@ -64,7 +65,8 @@ public class LameFrame
     /**
      * Parse frame
      *
-     * @return frame or null if not exists    
+     * @param bb
+     * @return frame or null if not exists
      */
     public static LameFrame parseLameFrame(ByteBuffer bb)
     {

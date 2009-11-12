@@ -101,7 +101,7 @@ public class EncryptionChunk extends Chunk {
                 .append(Utils.LINE_SEPARATOR);
         this.strings.iterator();
         for (final String string : this.strings) {
-            result.append(prefix + "   |->" + string + Utils.LINE_SEPARATOR);
+            result.append(prefix).append("   |->").append(string).append(Utils.LINE_SEPARATOR);
         }
         return result.toString();
     }

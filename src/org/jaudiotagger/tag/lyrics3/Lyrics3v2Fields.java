@@ -77,10 +77,6 @@ public class Lyrics3v2Fields extends AbstractStringStringValuePair
      */
     public static boolean isLyrics3v2FieldIdentifier(String identifier)
     {
-        if (identifier.length() < 3)
-        {
-            return false;
-        }
-        return getInstanceOf().getIdToValueMap().containsKey(identifier.substring(0, 3));
+        return identifier.length() >= 3 && getInstanceOf().getIdToValueMap().containsKey(identifier.substring(0, 3));
     }
 }

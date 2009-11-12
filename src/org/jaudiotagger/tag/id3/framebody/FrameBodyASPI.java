@@ -108,6 +108,8 @@ public class FrameBodyASPI extends AbstractID3v2FrameBody implements ID3v24Frame
     /**
      * Creates a new FrameBodyASPI datatype.
      *
+     * @param byteBuffer
+     * @param frameSize
      * @throws InvalidTagException
      */
     public FrameBodyASPI(ByteBuffer byteBuffer, int frameSize) throws InvalidTagException

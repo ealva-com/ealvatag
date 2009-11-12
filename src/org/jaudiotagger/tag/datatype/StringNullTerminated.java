@@ -37,6 +37,7 @@ public class StringNullTerminated extends TextEncodedStringNullTerminated
      * Creates a new ObjectStringNullTerminated datatype.
      *
      * @param identifier identifies the frame type
+     * @param frameBody
      */
     public StringNullTerminated(String identifier, AbstractTagFrameBody frameBody)
     {
@@ -50,11 +51,7 @@ public class StringNullTerminated extends TextEncodedStringNullTerminated
 
     public boolean equals(Object obj)
     {
-        if (obj instanceof StringNullTerminated == false)
-        {
-            return false;
-        }
-        return super.equals(obj);
+        return obj instanceof StringNullTerminated != false && super.equals(obj);
     }
 
     protected String getTextEncodingCharSet()

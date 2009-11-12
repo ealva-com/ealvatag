@@ -59,8 +59,7 @@ public abstract class AbstractID3v2Frame extends AbstractTagFrame implements Tag
      */
     protected AbstractID3v2Frame()
     {
-        ;
-    }
+        }
 
     /**
      * This holds the Status flags (not supported in v2.20
@@ -74,6 +73,7 @@ public abstract class AbstractID3v2Frame extends AbstractTagFrame implements Tag
 
     /**
      * Create a frame based on another frame
+     * @param frame
      */
     public AbstractID3v2Frame(AbstractID3v2Frame frame)
     {
@@ -82,6 +82,7 @@ public abstract class AbstractID3v2Frame extends AbstractTagFrame implements Tag
 
     /**
      * Create a frame based on a body
+     * @param body
      */
     public AbstractID3v2Frame(AbstractID3v2FrameBody body)
     {
@@ -91,6 +92,7 @@ public abstract class AbstractID3v2Frame extends AbstractTagFrame implements Tag
 
     /**
      * Create a new frame with empty body based on identifier
+     * @param identifier
      */
     //TODO the identifier checks should be done in the relevent subclasses
     public AbstractID3v2Frame(String identifier)
@@ -189,6 +191,7 @@ public abstract class AbstractID3v2Frame extends AbstractTagFrame implements Tag
      *
      * @param identifier the frame identifier
      * @param byteBuffer to read the frabe body from
+     * @param frameSize
      * @return a newly created FrameBody
      * @throws InvalidFrameException unable to construct a framebody from the data
      */
@@ -281,6 +284,7 @@ public abstract class AbstractID3v2Frame extends AbstractTagFrame implements Tag
      * will be thrown
      *
      * @param identifier to determine type of the frame
+     * @param body
      * @return newly created framebody for this type
      * @throws InvalidFrameException if unable to construct a framebody for the identifier and body provided.
      */

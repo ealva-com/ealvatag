@@ -60,6 +60,8 @@ public class FrameBodyWOAF extends AbstractFrameBodyUrlLink implements ID3v24Fra
     /**
      * Creates a new FrameBodyWOAF datatype.
      *
+     * @param byteBuffer
+     * @param frameSize
      * @throws InvalidTagException
      */
     public FrameBodyWOAF(ByteBuffer byteBuffer, int frameSize) throws InvalidTagException

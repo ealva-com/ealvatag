@@ -66,8 +66,8 @@ public final class ContentDescription extends MetadataContainer {
     public final static String KEY_TITLE = "TITLE";
 
     static {
-        ALLOWED = new HashSet<String>(Arrays.asList(new String[] { KEY_AUTHOR,
-                KEY_COPYRIGHT, KEY_DESCRIPTION, KEY_RATING, KEY_TITLE }));
+        ALLOWED = new HashSet<String>(Arrays.asList(KEY_AUTHOR,
+                KEY_COPYRIGHT, KEY_DESCRIPTION, KEY_RATING, KEY_TITLE));
     }
 
     /**

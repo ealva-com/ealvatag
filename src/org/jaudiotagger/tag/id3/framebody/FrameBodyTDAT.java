@@ -62,6 +62,8 @@ public class FrameBodyTDAT extends AbstractFrameBodyTextInfo implements ID3v23Fr
     /**
      * Creates a new FrameBodyTDAT datatype.
      *
+     * @param byteBuffer
+     * @param frameSize
      * @throws InvalidTagException
      */
     public FrameBodyTDAT(ByteBuffer byteBuffer, int frameSize) throws InvalidTagException

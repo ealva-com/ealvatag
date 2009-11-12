@@ -44,6 +44,7 @@ public class StringSizeTerminated extends TextEncodedStringSizeTerminated
      * Creates a new ObjectStringSizeTerminated datatype.
      *
      * @param identifier identifies the frame type
+     * @param frameBody
      */
     public StringSizeTerminated(String identifier, AbstractTagFrameBody frameBody)
     {
@@ -57,11 +58,7 @@ public class StringSizeTerminated extends TextEncodedStringSizeTerminated
 
     public boolean equals(Object obj)
     {
-        if (obj instanceof StringSizeTerminated == false)
-        {
-            return false;
-        }
-        return super.equals(obj);
+        return obj instanceof StringSizeTerminated != false && super.equals(obj);
     }
 
     protected String getTextEncodingCharSet()

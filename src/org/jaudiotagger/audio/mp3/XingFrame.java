@@ -195,6 +195,8 @@ public class XingFrame
     /**
      * IS this a Xing frame
      *
+     * @param bb
+     * @param mpegFrameHeader
      * @return true if this is a Xing frame
      */
     public static boolean isXingFrame(ByteBuffer bb, MPEGFrameHeader mpegFrameHeader)

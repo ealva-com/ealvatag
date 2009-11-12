@@ -18,9 +18,9 @@
  */
 package org.jaudiotagger.audio.mp4.atom;
 
-import org.jaudiotagger.audio.generic.Utils;
-import org.jaudiotagger.audio.exceptions.NullBoxIdException;
 import org.jaudiotagger.audio.exceptions.InvalidBoxHeaderException;
+import org.jaudiotagger.audio.exceptions.NullBoxIdException;
+import org.jaudiotagger.audio.generic.Utils;
 import org.jaudiotagger.logging.ErrorMessage;
 
 import java.io.IOException;
@@ -86,7 +86,8 @@ public class Mp4BoxHeader
      /**
      * Construct header to allow manual creation of header for writing to file
      * <p/>
-     */
+      * @param id
+      */
     public Mp4BoxHeader(String id)
     {
         if(id.length()!=IDENTIFIER_LENGTH)

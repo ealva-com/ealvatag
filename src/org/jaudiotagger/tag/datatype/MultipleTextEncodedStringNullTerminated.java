@@ -20,6 +20,7 @@ public class MultipleTextEncodedStringNullTerminated extends AbstractDataType
      * Creates a new ObjectStringSizeTerminated datatype.
      *
      * @param identifier identifies the frame type
+     * @param frameBody
      */
     public MultipleTextEncodedStringNullTerminated(String identifier, AbstractTagFrameBody frameBody)
     {
@@ -40,11 +41,7 @@ public class MultipleTextEncodedStringNullTerminated extends AbstractDataType
 
     public boolean equals(Object obj)
     {
-        if (obj instanceof MultipleTextEncodedStringNullTerminated == false)
-        {
-            return false;
-        }
-        return super.equals(obj);
+        return obj instanceof MultipleTextEncodedStringNullTerminated != false && super.equals(obj);
     }
 
     /**

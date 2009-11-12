@@ -48,6 +48,7 @@ public class Lyrics3Image extends AbstractDataType
      * Creates a new ObjectLyrics3Image datatype.
      *
      * @param identifier
+     * @param frameBody
      */
     public Lyrics3Image(String identifier, AbstractTagFrameBody frameBody)
     {

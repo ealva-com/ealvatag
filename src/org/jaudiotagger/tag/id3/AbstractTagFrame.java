@@ -44,6 +44,7 @@ public abstract class AbstractTagFrame extends AbstractTagItem
     /**
      * This constructs the bodies copy constructor this in turn invokes
      * * bodies objectlist.
+     * @param copyObject
      */
     public AbstractTagFrame(AbstractTagFrame copyObject)
     {
@@ -98,12 +99,8 @@ public abstract class AbstractTagFrame extends AbstractTagItem
             return false;
         }
 
-        if (frameBody.isSubsetOf(((AbstractTagFrame) obj).frameBody) == false)
-        {
-            return false;
-        }
+        return frameBody.isSubsetOf(((AbstractTagFrame) obj).frameBody) != false && super.isSubsetOf(obj);
 
-        return super.isSubsetOf(obj);
     }
 
     /**
@@ -129,11 +126,7 @@ public abstract class AbstractTagFrame extends AbstractTagItem
             return false;
         }
 
-        if (this.frameBody.equals(object.frameBody) == false)
-        {
-            return false;
-        }
+        return this.frameBody.equals(object.frameBody) != false && super.equals(obj);
 
-        return super.equals(obj);
     }
 }

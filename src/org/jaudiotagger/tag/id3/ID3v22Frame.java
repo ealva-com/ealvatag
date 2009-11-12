@@ -67,6 +67,7 @@ public class ID3v22Frame extends AbstractID3v2Frame
      * <p/>
      * An empty body of the correct type will be automatically created. This constructor should be used when wish to
      * create a new frame from scratch using user values
+     * @param identifier
      */
     @SuppressWarnings("unchecked")
     public ID3v22Frame(String identifier)
@@ -133,6 +134,7 @@ public class ID3v22Frame extends AbstractID3v2Frame
      * Copy Constructor
      * <p/>
      * Creates a new v22 frame based on another v22 frame
+     * @param frame
      */
     public ID3v22Frame(ID3v22Frame frame)
     {
@@ -226,6 +228,7 @@ public class ID3v22Frame extends AbstractID3v2Frame
      * Creates a new ID3v22Frame datatype by reading from byteBuffer.
      *
      * @param byteBuffer to read from
+     * @param loggingFilename
      */
     public ID3v22Frame(ByteBuffer byteBuffer, String loggingFilename) throws InvalidFrameException
     {
@@ -344,6 +347,7 @@ public class ID3v22Frame extends AbstractID3v2Frame
 
     /**
      * Read Frame Size, which has to be decoded
+     * @param buffer
      */
     private int decodeSize(byte[] buffer)
     {
@@ -396,6 +400,8 @@ public class ID3v22Frame extends AbstractID3v2Frame
     /**
      * Write Frame Size (can now be accurately calculated, have to convert 4 byte int
      * to 3 byte format.
+     * @param headerBuffer
+     * @param size
      */
     private void encodeSize(ByteBuffer headerBuffer, int size)
     {

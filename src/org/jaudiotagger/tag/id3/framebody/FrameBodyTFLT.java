@@ -78,6 +78,8 @@ public class FrameBodyTFLT extends AbstractFrameBodyTextInfo implements ID3v24Fr
     /**
      * Creates a new FrameBodyTFLT datatype.
      *
+     * @param byteBuffer
+     * @param frameSize
      * @throws InvalidTagException
      */
     public FrameBodyTFLT(ByteBuffer byteBuffer, int frameSize) throws InvalidTagException

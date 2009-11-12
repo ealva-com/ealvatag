@@ -146,7 +146,7 @@ public class Mp4DiscNoField extends Mp4TagTextNumberField
      */
     public void setDiscNo(int discNo)
     {
-        numbers.set(DISC_NO_INDEX,new Short((short)discNo));
+        numbers.set(DISC_NO_INDEX, (short) discNo);
     }
 
     /**
@@ -164,6 +164,6 @@ public class Mp4DiscNoField extends Mp4TagTextNumberField
      */
     public void setDiscTotal(int discTotal)
     {
-        numbers.set(DISC_TOTAL_INDEX,new Short((short)discTotal));
+        numbers.set(DISC_TOTAL_INDEX, (short) discTotal);
     }
 }

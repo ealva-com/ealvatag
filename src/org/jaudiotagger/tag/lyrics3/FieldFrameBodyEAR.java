@@ -56,6 +56,7 @@ public class FieldFrameBodyEAR extends AbstractLyrics3v2FieldFrameBody
     /**
      * Creates a new FieldBodyEAR datatype.
      *
+     * @param byteBuffer
      * @throws InvalidTagException
      */
     public FieldFrameBodyEAR(ByteBuffer byteBuffer) throws InvalidTagException

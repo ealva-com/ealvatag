@@ -21,6 +21,7 @@ import java.util.Map;
  * Represents a MPEGFrameHeader, an MP3 is made up of a number of frames each frame starts with a four
  * byte frame header.
  */
+@SuppressWarnings({"PointlessArithmeticExpression"})
 public class MPEGFrameHeader
 {
     /**
@@ -863,6 +864,7 @@ public class MPEGFrameHeader
     /**
      * Gets the MPEGFrame attribute of the MPEGFrame object
      *
+     * @param bb
      * @return The mPEGFrame value
      */
     public static boolean isMPEGFrame(ByteBuffer bb)

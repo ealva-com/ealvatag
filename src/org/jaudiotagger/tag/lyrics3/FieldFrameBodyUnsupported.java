@@ -62,6 +62,7 @@ public class FieldFrameBodyUnsupported extends AbstractLyrics3v2FieldFrameBody
 
     /**
      * Creates a new FieldBodyUnsupported datatype.
+     * @param byteBuffer
      */
     public FieldFrameBodyUnsupported(ByteBuffer byteBuffer) throws InvalidTagException
     {
@@ -94,12 +95,8 @@ public class FieldFrameBodyUnsupported extends AbstractLyrics3v2FieldFrameBody
         String subset = new String(this.value);
         String superset = new String(object.value);
 
-        if (!superset.contains(subset))
-        {
-            return false;
-        }
+        return superset.contains(subset) && super.isSubsetOf(obj);
 
-        return super.isSubsetOf(obj);
     }
 
     /**
@@ -115,12 +112,8 @@ public class FieldFrameBodyUnsupported extends AbstractLyrics3v2FieldFrameBody
 
         FieldFrameBodyUnsupported object = (FieldFrameBodyUnsupported) obj;
 
-        if (java.util.Arrays.equals(this.value, object.value) == false)
-        {
-            return false;
-        }
+        return java.util.Arrays.equals(this.value, object.value) != false && super.equals(obj);
 
-        return super.equals(obj);
     }
 
     /**

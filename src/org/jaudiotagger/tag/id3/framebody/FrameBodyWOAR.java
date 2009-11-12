@@ -60,6 +60,8 @@ public class FrameBodyWOAR extends AbstractFrameBodyUrlLink implements ID3v24Fra
     /**
      * Creates a new FrameBodyWOAR datatype.
      *
+     * @param byteBuffer
+     * @param frameSize
      * @throws InvalidTagException
      */
     public FrameBodyWOAR(ByteBuffer byteBuffer, int frameSize) throws InvalidTagException

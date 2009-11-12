@@ -42,6 +42,7 @@ public class NumberFixedLength extends AbstractDataType
      * Creates a new ObjectNumberFixedLength datatype.
      *
      * @param identifier
+     * @param frameBody
      * @param size       the number of significant places that the number is held to
      * @throws IllegalArgumentException
      */
@@ -107,11 +108,7 @@ public class NumberFixedLength extends AbstractDataType
             return false;
         }
         NumberFixedLength object = (NumberFixedLength) obj;
-        if (this.size != object.size)
-        {
-            return false;
-        }
-        return super.equals(obj);
+        return this.size == object.size && super.equals(obj);
     }
 
     /**
