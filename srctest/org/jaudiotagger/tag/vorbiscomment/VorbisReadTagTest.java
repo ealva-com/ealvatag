@@ -6,6 +6,7 @@ import org.jaudiotagger.audio.AudioFileIO;
 import org.jaudiotagger.audio.exceptions.CannotReadException;
 import org.jaudiotagger.audio.ogg.OggFileReader;
 import org.jaudiotagger.fix.Fix;
+import org.jaudiotagger.tag.FieldKey;
 
 import java.io.File;
 import java.io.RandomAccessFile;
@@ -84,11 +85,11 @@ public class VorbisReadTagTest extends AbstractTestCase
         {
             File testFile = AbstractTestCase.copyAudioToTmp("test.ogg", new File("testWithEmptyField.ogg"));
             AudioFile file = AudioFileIO.read(testFile);
-            file.getTag().setYear("");
+            file.getTag().setField(FieldKey.YEAR,"");
             file.commit();
 
             file = AudioFileIO.read(testFile);
-            file.getTag().setTitle("testtitle");
+            file.getTag().setField(FieldKey.TITLE,"testtitle");
             file.commit();
 
             file = AudioFileIO.read(testFile);

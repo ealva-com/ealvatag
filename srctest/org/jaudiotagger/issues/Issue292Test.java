@@ -1,9 +1,9 @@
 package org.jaudiotagger.issues;
 
 import org.jaudiotagger.AbstractTestCase;
-import org.jaudiotagger.tag.TagFieldKey;
 import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.AudioFileIO;
+import org.jaudiotagger.tag.FieldKey;
 
 import java.io.File;
 
@@ -37,13 +37,13 @@ public class Issue292Test extends AbstractTestCase
 
             //Read and save chnages
             AudioFile af = AudioFileIO.read(testFile);
-            af.getTag().set(af.getTag().createTagField(TagFieldKey.ARTIST,"fredqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq"));
-            af.getTag().set(af.getTag().createTagField(TagFieldKey.AMAZON_ID,"fredqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq"));
+            af.getTag().setField(af.getTag().createField(FieldKey.ARTIST,"fredqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq"));
+            af.getTag().setField(af.getTag().createField(FieldKey.AMAZON_ID,"fredqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq"));
 
             af.commit();
 
             af = AudioFileIO.read(testFile);
-            assertEquals("fredqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq",af.getTag().getFirst(TagFieldKey.ARTIST));
+            assertEquals("fredqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq",af.getTag().getFirst(FieldKey.ARTIST));
         }
         catch (Exception e)
         {
@@ -82,13 +82,13 @@ public class Issue292Test extends AbstractTestCase
 
             //Read and save chnages
             AudioFile af = AudioFileIO.read(testFile);
-            af.getTag().set(af.getTag().createTagField(TagFieldKey.ARTIST,"fredqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq"));
-            af.getTag().set(af.getTag().createTagField(TagFieldKey.AMAZON_ID,"fredqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq"));
+            af.getTag().setField(af.getTag().createField(FieldKey.ARTIST,"fredqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq"));
+            af.getTag().setField(af.getTag().createField(FieldKey.AMAZON_ID,"fredqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq"));
 
             af.commit();
 
             af = AudioFileIO.read(testFile);
-            assertEquals("fredqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq",af.getTag().getFirst(TagFieldKey.ARTIST));
+            assertEquals("fredqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq",af.getTag().getFirst(FieldKey.ARTIST));
         }
         catch (Exception e)
         {

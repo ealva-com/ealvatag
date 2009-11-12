@@ -2,10 +2,7 @@ package org.jaudiotagger.tag.flac;
 
 import org.jaudiotagger.audio.flac.metadatablock.MetadataBlockDataPicture;
 import org.jaudiotagger.audio.generic.Utils;
-import org.jaudiotagger.audio.asf.tag.AsfTagField;
-import org.jaudiotagger.audio.asf.tag.AsfTagCoverField;
 import org.jaudiotagger.tag.*;
-import org.jaudiotagger.tag.mp4.field.Mp4TagCoverField;
 import org.jaudiotagger.tag.datatype.Artwork;
 import org.jaudiotagger.tag.id3.valuepair.ImageFormats;
 import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
@@ -72,7 +69,7 @@ public class FlacTag implements Tag
      *
      * @param field The field to add.
      */
-    public void add(TagField field) throws FieldDataInvalidException
+    public void addField(TagField field) throws FieldDataInvalidException
     {
         if (field instanceof MetadataBlockDataPicture)
         {
@@ -80,79 +77,14 @@ public class FlacTag implements Tag
         }
         else
         {
-            tag.add(field);
+            tag.addField(field);
         }
     }
 
-    /**
-     * Adds an album to the tag.<br>
-     *
-     * @param album Album description
-     */
-    public void addAlbum(String album) throws FieldDataInvalidException
-    {
-        tag.addAlbum(album);
-    }
 
-    /**
-     * Adds an artist to the tag.<br>
-     *
-     * @param artist Artist's name
-     */
-    public void addArtist(String artist) throws FieldDataInvalidException
-    {
-        tag.addArtist(artist);
-    }
 
-    /**
-     * Adds a comment to the tag.<br>
-     *
-     * @param comment Comment.
-     */
-    public void addComment(String comment) throws FieldDataInvalidException
-    {
-        tag.addComment(comment);
-    }
 
-    /**
-     * Adds a genre to the tag.<br>
-     *
-     * @param genre Genre
-     */
-    public void addGenre(String genre) throws FieldDataInvalidException
-    {
-        tag.addGenre(genre);
-    }
 
-    /**
-     * Adds a title to the tag.<br>
-     *
-     * @param title Title
-     */
-    public void addTitle(String title) throws FieldDataInvalidException
-    {
-        tag.addTitle(title);
-    }
-
-    /**
-     * Adds a track to the tag.<br>
-     *
-     * @param track Track
-     */
-    public void addTrack(String track) throws FieldDataInvalidException
-    {
-        tag.addTrack(track);
-    }
-
-    /**
-     * Adds a year to the Tag.<br>
-     *
-     * @param year Year
-     */
-    public void addYear(String year) throws FieldDataInvalidException
-    {
-        tag.addYear(year);
-    }
 
     /**
      * Returns a {@linkplain List list} of {@link TagField} objects whose &quot;{@linkplain TagField#getId() id}&quot;
@@ -161,9 +93,10 @@ public class FlacTag implements Tag
      * @param id The field id.
      * @return A list of {@link TagField} objects with the given &quot;id&quot;.
      */
+    @Override
     public List<TagField> get(String id)
     {
-        if (id.equals(TagFieldKey.COVER_ART.name()))
+        if (id.equals(FieldKey.COVER_ART.name()))
         {
             List<TagField> castImages = new ArrayList<TagField>();
             for (MetadataBlockDataPicture image : images)
@@ -176,125 +109,6 @@ public class FlacTag implements Tag
         {
             return tag.get(id);
         }
-    }
-
-    /**
-     * @return
-     */
-    public List<TagField> getAlbum()
-    {
-        return tag.getAlbum();
-    }
-
-
-    /**
-     * @return
-     */
-    public List<TagField> getArtist()
-    {
-        return tag.getArtist();
-    }
-
-    /**
-     * @return
-     */
-    public List<TagField> getComment()
-    {
-        return tag.getComment();
-    }
-
-    /**
-     * @return
-     */
-    public List<TagField> getGenre()
-    {
-        return tag.getGenre();
-    }
-
-    /**
-     * @return
-     */
-    public List<TagField> getTitle()
-    {
-        return tag.getTitle();
-    }
-
-    /**
-     * @return
-     */
-    public List<TagField> getTrack()
-    {
-        return tag.getTrack();
-    }
-
-    /**
-     * @return
-     */
-    public List<TagField> getYear()
-    {
-        return tag.getYear();
-    }
-
-
-    /**
-     * @return
-     */
-    public String getFirstAlbum()
-    {
-        return tag.getFirstAlbum();
-    }
-
-    /**
-     * @return
-     */
-    public String getFirstArtist()
-    {
-        return tag.getFirstArtist();
-    }
-
-
-    /**
-     * @return
-     */
-    public String getFirstComment()
-    {
-        return tag.getFirstComment();
-    }
-
-
-    /**
-     * @return
-     */
-    public String getFirstGenre()
-    {
-        return tag.getFirstGenre();
-    }
-
-
-    /**
-     * @return
-     */
-    public String getFirstTitle()
-    {
-        return tag.getFirstTitle();
-    }
-
-
-    /**
-     * @return
-     */
-    public String getFirstTrack()
-    {
-        return tag.getFirstTrack();
-    }
-
-
-    /**
-     * @return
-     */
-    public String getFirstYear()
-    {
-        return tag.getFirstYear();
     }
 
 
@@ -320,7 +134,7 @@ public class FlacTag implements Tag
      */
     public boolean hasField(String id)
     {
-        if (id.equals(TagFieldKey.COVER_ART.name()))
+        if (id.equals(FieldKey.COVER_ART.name()))
         {
             return images.size() > 0;
         }
@@ -343,17 +157,23 @@ public class FlacTag implements Tag
         return (tag == null || tag.isEmpty()) && images.size() == 0;
     }
 
-    public void createAndSet(TagFieldKey genericKey, String value) throws KeyNotFoundException, FieldDataInvalidException
+    public void setField(FieldKey genericKey, String value) throws KeyNotFoundException, FieldDataInvalidException
     {
-        TagField tagfield = createTagField(genericKey,value);
-        set(tagfield);
+        TagField tagfield = createField(genericKey,value);
+        setField(tagfield);
     }
 
+    public void addField(FieldKey genericKey, String value) throws KeyNotFoundException, FieldDataInvalidException
+    {
+        TagField tagfield = createField(genericKey,value);
+        addField(tagfield);
+    }
+    
     /**
      * @param field
      * @throws FieldDataInvalidException
      */
-    public void set(TagField field) throws FieldDataInvalidException
+    public void setField(TagField field) throws FieldDataInvalidException
     {
         if (field instanceof MetadataBlockDataPicture)
         {
@@ -368,73 +188,8 @@ public class FlacTag implements Tag
         }
         else
         {
-            tag.set(field);
+            tag.setField(field);
         }
-    }
-
-    /**
-     * @param s
-     * @throws FieldDataInvalidException
-     */
-    public void setAlbum(String s) throws FieldDataInvalidException
-    {
-        tag.setAlbum(s);
-    }
-
-
-    /**
-     * @param s
-     * @throws FieldDataInvalidException
-     */
-    public void setArtist(String s) throws FieldDataInvalidException
-    {
-        tag.setArtist(s);
-    }
-
-    /**
-     * @param s
-     * @throws FieldDataInvalidException
-     */
-    public void setComment(String s) throws FieldDataInvalidException
-    {
-        tag.setComment(s);
-    }
-
-
-    /**
-     * @param s
-     * @throws FieldDataInvalidException
-     */
-    public void setGenre(String s) throws FieldDataInvalidException
-    {
-        tag.setGenre(s);
-    }
-
-    /**
-     * @param s
-     * @throws FieldDataInvalidException
-     */
-    public void setTitle(String s) throws FieldDataInvalidException
-    {
-        tag.setTitle(s);
-    }
-
-    /**
-     * @param s
-     * @throws FieldDataInvalidException
-     */
-    public void setTrack(String s) throws FieldDataInvalidException
-    {
-        tag.setTrack(s);
-    }
-
-    /**
-     * @param s
-     * @throws FieldDataInvalidException
-     */
-    public void setYear(String s) throws FieldDataInvalidException
-    {
-        tag.setYear(s);
     }
 
 
@@ -448,15 +203,15 @@ public class FlacTag implements Tag
      * @param value      to store
      * @return
      */
-    public TagField createTagField(TagFieldKey genericKey, String value) throws KeyNotFoundException, FieldDataInvalidException
+    public TagField createField(FieldKey genericKey, String value) throws KeyNotFoundException, FieldDataInvalidException
     {
-        if (genericKey.equals(TagFieldKey.COVER_ART))
+        if (genericKey.equals(FieldKey.COVER_ART))
         {
-            throw new UnsupportedOperationException("Please use the createArtworkField methods to create coverart ");
+            throw new UnsupportedOperationException("Please use the createField methods to createField coverart ");
         }
         else
         {
-            return tag.createTagField(genericKey, value);
+            return tag.createField(genericKey, value);
         }
     }
 
@@ -469,9 +224,9 @@ public class FlacTag implements Tag
      */
     public String getFirst(String id)
     {
-        if (id.equals(TagFieldKey.COVER_ART.name()))
+        if (id.equals(FieldKey.COVER_ART.name()))
         {
-            throw new UnsupportedOperationException("Please use the createArtworkField methods to create coverart ");
+            throw new UnsupportedOperationException("Please use the createField methods to createField coverart ");
         }
         else
         {
@@ -485,11 +240,11 @@ public class FlacTag implements Tag
      * @param id
      * @return String value or empty string
      */
-    public String getFirst(TagFieldKey id) throws KeyNotFoundException
+    public String getFirst(FieldKey id) throws KeyNotFoundException
     {
-        if (id.equals(TagFieldKey.COVER_ART))
+        if (id.equals(FieldKey.COVER_ART))
         {
-            throw new UnsupportedOperationException("Please use the createArtworkField methods to create coverart ");
+            throw new UnsupportedOperationException("Please use the createField methods to createField coverart ");
         }
         else
         {
@@ -509,7 +264,7 @@ public class FlacTag implements Tag
      */
     public TagField getFirstField(String id)
     {
-        if (id.equals(TagFieldKey.COVER_ART))
+        if (id.equals(FieldKey.COVER_ART))
         {
             if (images.size() > 0)
             {
@@ -526,16 +281,16 @@ public class FlacTag implements Tag
         }
     }
 
-    public TagField getFirstField(TagFieldKey genericKey) throws KeyNotFoundException
+    public TagField getFirstField(FieldKey genericKey) throws KeyNotFoundException
     {
         if (genericKey == null)
         {
             throw new KeyNotFoundException();
         }
 
-        if(genericKey == TagFieldKey.COVER_ART )
+        if(genericKey == FieldKey.COVER_ART )
         {
-            return getFirstField(TagFieldKey.COVER_ART.name());
+            return getFirstField(FieldKey.COVER_ART.name());
         }
         else
         {
@@ -546,17 +301,17 @@ public class FlacTag implements Tag
     /**
      * Delete any instance of tag fields with this key
      *
-     * @param tagFieldKey
+     * @param fieldKey
      */
-    public void deleteTagField(TagFieldKey tagFieldKey) throws KeyNotFoundException
+    public void deleteField(FieldKey fieldKey) throws KeyNotFoundException
     {
-        if (tagFieldKey.equals(TagFieldKey.COVER_ART))
+        if (fieldKey.equals(FieldKey.COVER_ART))
         {
             images.clear();
         }
         else
         {
-            tag.deleteTagField(tagFieldKey);
+            tag.deleteField(fieldKey);
         }
     }
 
@@ -565,7 +320,7 @@ public class FlacTag implements Tag
      *
      * @return iterator over whole list
      */
-    //TODO add images to iterator
+    //TODO addField images to iterator
     public Iterator<TagField> getFields()
     {
         return tag.getFields();
@@ -596,9 +351,9 @@ public class FlacTag implements Tag
      * @param id The field id.
      * @return A list of {@link TagField} objects with the given &quot;id&quot;.
      */
-    public List<TagField> get(TagFieldKey id) throws KeyNotFoundException
+    public List<TagField> getFields(FieldKey id) throws KeyNotFoundException
     {
-        if (id.equals(TagFieldKey.COVER_ART))
+        if (id.equals(FieldKey.COVER_ART))
         {
             List<TagField> castImages = new ArrayList<TagField>();
             for (MetadataBlockDataPicture image : images)
@@ -609,7 +364,7 @@ public class FlacTag implements Tag
         }
         else
         {
-            return tag.get(id);
+            return tag.getFields(id);
         }
 
     }
@@ -676,7 +431,7 @@ public class FlacTag implements Tag
      *
      * @return
      */
-    public TagField createArtworkField(Artwork artwork) throws FieldDataInvalidException
+    public TagField createField(Artwork artwork) throws FieldDataInvalidException
     {
         if(artwork.isLinked())
         {
@@ -699,7 +454,7 @@ public class FlacTag implements Tag
             }
             catch(IOException ioe)
             {
-                throw new FieldDataInvalidException("Unable to create bufferd image from the image");
+                throw new FieldDataInvalidException("Unable to createField bufferd image from the image");
             }
 
             return new MetadataBlockDataPicture(artwork.getBinaryData(),
@@ -719,9 +474,9 @@ public class FlacTag implements Tag
      * @param artwork
      * @throws FieldDataInvalidException
      */
-    public void createAndSetArtworkField(Artwork artwork) throws FieldDataInvalidException
+    public void setField(Artwork artwork) throws FieldDataInvalidException
     {
-        this.set(createArtworkField(artwork));
+        this.setField(createField(artwork));
     }
 
     public List<Artwork> getArtworkList()
@@ -765,6 +520,6 @@ public class FlacTag implements Tag
      */
     public void deleteArtworkField() throws KeyNotFoundException
     {
-        this.deleteTagField(TagFieldKey.COVER_ART);
+        this.deleteField(FieldKey.COVER_ART);
     }
 }

@@ -10,22 +10,22 @@
  *  See the GNU Lesser General Public License for more details.
  *
  *  You should have received a copy of the GNU Lesser General Public License along with this library; if not,
- *  you can get a copy from http://www.opensource.org/licenses/lgpl-license.php or write to the Free Software
+ *  you can getFields a copy from http://www.opensource.org/licenses/lgpl-license.php or write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 package org.jaudiotagger.tag.id3;
 
-import org.jaudiotagger.audio.generic.Utils;
-import org.jaudiotagger.audio.mp3.MP3File;
 import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.exceptions.UnableToCreateFileException;
 import org.jaudiotagger.audio.exceptions.UnableToModifyFileException;
 import org.jaudiotagger.audio.exceptions.UnableToRenameFileException;
+import org.jaudiotagger.audio.generic.Utils;
+import org.jaudiotagger.audio.mp3.MP3File;
 import org.jaudiotagger.logging.ErrorMessage;
 import org.jaudiotagger.logging.FileSystemMessage;
 import org.jaudiotagger.tag.*;
-import org.jaudiotagger.tag.datatype.DataTypes;
 import org.jaudiotagger.tag.datatype.Artwork;
+import org.jaudiotagger.tag.datatype.DataTypes;
 import org.jaudiotagger.tag.id3.framebody.*;
 import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
 import org.jaudiotagger.tag.reference.PictureTypes;
@@ -357,9 +357,9 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
         }
     }
 
-    public TagField getFirstField(TagFieldKey genericKey) throws KeyNotFoundException
+    public TagField getFirstField(FieldKey genericKey) throws KeyNotFoundException
     {
-        List<TagField> fields = get(genericKey);
+        List<TagField> fields = getFields(genericKey);
         if (fields.size() > 0)
         {
             return fields.get(0);
@@ -400,7 +400,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
      *              Warning if frame(s) already exists for this identifier thay are overwritten
      *              <p/>
      */
-    //TODO needs to ensure do not add an invalid frame for this tag
+    //TODO needs to ensure do not addField an invalid frame for this tag
     //TODO what happens if already contains a list with this ID
     public void setFrame(AbstractID3v2Frame frame)
     {
@@ -409,11 +409,18 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
 
     protected abstract ID3Frames getID3Frames();
 
-    public void createAndSet(TagFieldKey genericKey, String value) throws KeyNotFoundException, FieldDataInvalidException
+    public void setField(FieldKey genericKey, String value) throws KeyNotFoundException, FieldDataInvalidException
     {
-        TagField tagfield = createTagField(genericKey, value);
-        set(tagfield);
+        TagField tagfield = createField(genericKey, value);
+        setField(tagfield);
     }
+
+    public void addField(FieldKey genericKey, String value) throws KeyNotFoundException, FieldDataInvalidException
+    {
+        TagField tagfield = createField(genericKey, value);
+        addField(tagfield);
+    }
+
 
     /**
      * Add frame taking into account existing frame sof the same type
@@ -522,7 +529,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
                 return;
             }
         }
-        //No match found so add new one
+        //No match found so addField new one
         frames.add(newFrame);
         frameMap.put(newFrame.getId(), frames);
         return;
@@ -532,7 +539,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
      * @param field
      * @throws FieldDataInvalidException
      */
-    public void set(TagField field) throws FieldDataInvalidException
+    public void setField(TagField field) throws FieldDataInvalidException
     {
         if (!(field instanceof AbstractID3v2Frame))
         {
@@ -563,74 +570,11 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
         }
     }
 
-    public void setAlbum(String s) throws FieldDataInvalidException
-    {
-        if (s == null)
-        {
-            throw new IllegalArgumentException(ErrorMessage.GENERAL_INVALID_NULL_ARGUMENT.getMsg());
-        }
-        set(createAlbumField(s));
-    }
-
-    public void setArtist(String s) throws FieldDataInvalidException
-    {
-        if (s == null)
-        {
-            throw new IllegalArgumentException(ErrorMessage.GENERAL_INVALID_NULL_ARGUMENT.getMsg());
-        }
-        set(createArtistField(s));
-    }
-
-    public void setComment(String s) throws FieldDataInvalidException
-    {
-        if (s == null)
-        {
-            throw new IllegalArgumentException(ErrorMessage.GENERAL_INVALID_NULL_ARGUMENT.getMsg());
-        }
-        set(createCommentField(s));
-    }
-
-    public void setGenre(String s) throws FieldDataInvalidException
-    {
-        if (s == null)
-        {
-            throw new IllegalArgumentException(ErrorMessage.GENERAL_INVALID_NULL_ARGUMENT.getMsg());
-        }
-        set(createGenreField(s));
-    }
-
-    public void setTitle(String s) throws FieldDataInvalidException
-    {
-        if (s == null)
-        {
-            throw new IllegalArgumentException(ErrorMessage.GENERAL_INVALID_NULL_ARGUMENT.getMsg());
-        }
-        set(createTitleField(s));
-    }
-
-    public void setTrack(String s) throws FieldDataInvalidException
-    {
-        if (s == null)
-        {
-            throw new IllegalArgumentException(ErrorMessage.GENERAL_INVALID_NULL_ARGUMENT.getMsg());
-        }
-        set(createTrackField(s));
-    }
-
-    public void setYear(String s) throws FieldDataInvalidException
-    {
-        if (s == null)
-        {
-            throw new IllegalArgumentException(ErrorMessage.GENERAL_INVALID_NULL_ARGUMENT.getMsg());
-        }
-        set(createYearField(s));
-    }
-
     /**
      * @param field
      * @throws FieldDataInvalidException
      */
-    public void add(TagField field) throws FieldDataInvalidException
+    public void addField(TagField field) throws FieldDataInvalidException
     {
         if (field == null)
         {
@@ -663,104 +607,6 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
             list.add(field);
             frameMap.put(field.getId(), list);
         }
-    }
-
-    /**
-     * Adds an album to the tag.<br>
-     *
-     * @param album Album description
-     */
-    public void addAlbum(String album) throws FieldDataInvalidException
-    {
-        if (album == null)
-        {
-            throw new IllegalArgumentException(ErrorMessage.GENERAL_INVALID_NULL_ARGUMENT.getMsg());
-        }
-        add(createAlbumField(album));
-    }
-
-    /**
-     * Adds an artist to the tag.<br>
-     *
-     * @param artist Artist's name
-     */
-    public void addArtist(String artist) throws FieldDataInvalidException
-    {
-        if (artist == null)
-        {
-            throw new IllegalArgumentException(ErrorMessage.GENERAL_INVALID_NULL_ARGUMENT.getMsg());
-        }
-        add(createArtistField(artist));
-    }
-
-    /**
-     * Adds a comment to the tag.<br>
-     *
-     * @param comment Comment.
-     */
-    public void addComment(String comment) throws FieldDataInvalidException
-    {
-        if (comment == null)
-        {
-            throw new IllegalArgumentException(ErrorMessage.GENERAL_INVALID_NULL_ARGUMENT.getMsg());
-        }
-        add(createCommentField(comment));
-    }
-
-    /**
-     * Adds a genre to the tag.<br>
-     *
-     * @param genre Genre
-     */
-    public void addGenre(String genre) throws FieldDataInvalidException
-    {
-        if (genre == null)
-        {
-            throw new IllegalArgumentException(ErrorMessage.GENERAL_INVALID_NULL_ARGUMENT.getMsg());
-        }
-        add(createGenreField(genre));
-    }
-
-    /**
-     * Adds a title to the tag.<br>
-     *
-     * @param title Title
-     */
-    public void addTitle(String title) throws FieldDataInvalidException
-    {
-        if (title == null)
-        {
-            throw new IllegalArgumentException(ErrorMessage.GENERAL_INVALID_NULL_ARGUMENT.getMsg());
-        }
-        add(createTitleField(title));
-    }
-
-    /**
-     * Adds a track to the tag.<br>
-     *
-     * @param track Track
-     */
-    public void addTrack(String track) throws FieldDataInvalidException
-    {
-        if (track == null)
-        {
-            throw new IllegalArgumentException(ErrorMessage.GENERAL_INVALID_NULL_ARGUMENT.getMsg());
-        }
-        add(createTrackField(track));
-    }
-
-    /**
-     * Adds a year to the Tag.<br>
-     *
-     * @param year Year
-     */
-    public void addYear(String year) throws FieldDataInvalidException
-    {
-        if (year == null)
-        {
-            throw new IllegalArgumentException(ErrorMessage.GENERAL_INVALID_NULL_ARGUMENT.getMsg());
-        }
-        add(createYearField(year));
     }
 
 
@@ -930,7 +776,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
                 result.add(key);
             }
         }
-        //Then delete outside of loop to prevent concurrent modificatioon eception if there are two keys
+        //Then deleteField outside of loop to prevent concurrent modificatioon eception if there are two keys
         //with the same id
         for (String match : result)
         {
@@ -977,7 +823,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
             return null;
         }
 
-        //Couldnt get lock because file is already locked by another application
+        //Couldnt getFields lock because file is already locked by another application
         if (fileLock == null)
         {
             throw new IOException(ErrorMessage.GENERAL_WRITE_FAILED_FILE_LOCKED.getMsg(filePath));
@@ -1071,7 +917,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
         //Get size as recorded in frame header
         int frameSize = ID3SyncSafeInteger.bufferToValue(bb);
 
-        //add header size to frame size
+        //addField header size to frame size
         frameSize += TAG_HEADER_LENGTH;
         return frameSize;
     }
@@ -1408,11 +1254,11 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
         }
         else
         {
-            //Rename was okay so we can now delete the backup of the original
+            //Rename was okay so we can now deleteField the backup of the original
             boolean deleteResult = originalFileBackup.delete();
             if (!deleteResult)
             {
-                //Not a disaster but can't delete the backup so make a warning
+                //Not a disaster but can't deleteField the backup so make a warning
                 logger.warning(ErrorMessage.GENERAL_WRITE_WARNING_UNABLE_TO_DELETE_BACKUP_FILE.getMsg(originalFileBackup.getAbsolutePath()));
             }
         }
@@ -1644,66 +1490,6 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
         }
     }
 
-    public List<TagField> getAlbum()
-    {
-        return get(getAlbumId());
-    }
-
-    public List<TagField> getArtist()
-    {
-        return get(getArtistId());
-    }
-
-    public List<TagField> getComment()
-    {
-        return get(getCommentId());
-    }
-
-    public List<TagField> getGenre()
-    {
-        return get(getGenreId());
-    }
-
-    public List<TagField> getTitle()
-    {
-        return get(getTitleId());
-    }
-
-    public List<TagField> getTrack()
-    {
-        return get(getTrackId());
-    }
-
-
-    public List<TagField> getYear()
-    {
-        return get(getYearId());
-    }
-
-    /**
-     * @return
-     */
-    public String getFirstAlbum()
-    {
-        return getFirst(getAlbumId());
-    }
-
-
-    /**
-     * @return
-     */
-    public String getFirstArtist()
-    {
-        return getFirst(getArtistId());
-    }
-
-    /**
-     * @return
-     */
-    public String getFirstComment()
-    {
-        return getFirst(getCommentId());
-    }
 
     /**
      * @return
@@ -2033,7 +1819,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
      * @param genericKey
      * @return
      */
-    public String getFirst(TagFieldKey genericKey) throws KeyNotFoundException
+    public String getFirst(FieldKey genericKey) throws KeyNotFoundException
     {
         if (genericKey == null)
         {
@@ -2041,22 +1827,22 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
         }
 
         FrameAndSubId frameAndSubId = getFrameAndSubIdFromGenericKey(genericKey);
-        if (genericKey == TagFieldKey.TRACK)
+        if (genericKey == FieldKey.TRACK)
         {
             AbstractID3v2Frame frame = getFirstField(frameAndSubId.getFrameId());
             return String.valueOf(((FrameBodyTRCK)frame.getBody()).getTrackNo());
         }
-        else if (genericKey == TagFieldKey.TRACK_TOTAL)
+        else if (genericKey == FieldKey.TRACK_TOTAL)
         {
             AbstractID3v2Frame frame = getFirstField(frameAndSubId.getFrameId());
             return String.valueOf(((FrameBodyTRCK)frame.getBody()).getTrackTotal());
         }
-        else if (genericKey == TagFieldKey.DISC_NO)
+        else if (genericKey == FieldKey.DISC_NO)
         {
             AbstractID3v2Frame frame = getFirstField(frameAndSubId.getFrameId());
             return String.valueOf(((FrameBodyTPOS)frame.getBody()).getDiscNo());
         }
-        else if (genericKey == TagFieldKey.DISC_TOTAL)
+        else if (genericKey == FieldKey.DISC_TOTAL)
         {
             AbstractID3v2Frame frame = getFirstField(frameAndSubId.getFrameId());
             return String.valueOf(((FrameBodyTPOS)frame.getBody()).getDiscTotal());
@@ -2078,7 +1864,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
      * @param value      to store
      * @return
      */
-    public TagField createTagField(TagFieldKey genericKey, String value) throws KeyNotFoundException, FieldDataInvalidException
+    public TagField createField(FieldKey genericKey, String value) throws KeyNotFoundException, FieldDataInvalidException
     {
         if (genericKey == null)
         {
@@ -2087,28 +1873,28 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
 
         
         FrameAndSubId formatKey = getFrameAndSubIdFromGenericKey(genericKey);
-        if (genericKey == TagFieldKey.TRACK)
+        if (genericKey == FieldKey.TRACK)
         {
             AbstractID3v2Frame frame = createFrame(formatKey.getFrameId());
             FrameBodyTRCK framebody = (FrameBodyTRCK) frame.getBody();
             framebody.setTrackNo(Integer.parseInt(value));
             return frame;
         }
-        else if (genericKey == TagFieldKey.TRACK_TOTAL)
+        else if (genericKey == FieldKey.TRACK_TOTAL)
         {
             AbstractID3v2Frame frame = createFrame(formatKey.getFrameId());
             FrameBodyTRCK framebody = (FrameBodyTRCK) frame.getBody();
             framebody.setTrackTotal(Integer.parseInt(value));
             return frame;
         }
-        else if (genericKey == TagFieldKey.DISC_NO)
+        else if (genericKey == FieldKey.DISC_NO)
         {
             AbstractID3v2Frame frame = createFrame(formatKey.getFrameId());
             FrameBodyTPOS framebody = (FrameBodyTPOS) frame.getBody();
             framebody.setDiscNo(Integer.parseInt(value));
             return frame;
         }
-        else if (genericKey == TagFieldKey.DISC_TOTAL)
+        else if (genericKey == FieldKey.DISC_TOTAL)
         {
             AbstractID3v2Frame frame = createFrame(formatKey.getFrameId());
             FrameBodyTPOS framebody = (FrameBodyTPOS) frame.getBody();
@@ -2232,7 +2018,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
                 }
                 else
                 {
-                    throw new RuntimeException("Need to implement get(TagFieldKey genericKey) for:" + next.getClass());
+                    throw new RuntimeException("Need to implement getFields(FieldKey genericKey) for:" + next.getClass());
                 }
             }
             return "";
@@ -2248,7 +2034,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
      */
     public TagField createLinkedArtworkField(String url)
     {
-        AbstractID3v2Frame frame = createFrame(getFrameAndSubIdFromGenericKey(TagFieldKey.COVER_ART).getFrameId());
+        AbstractID3v2Frame frame = createFrame(getFrameAndSubIdFromGenericKey(FieldKey.COVER_ART).getFrameId());
         if (frame.getBody() instanceof FrameBodyAPIC)
         {
             FrameBodyAPIC body = (FrameBodyAPIC) frame.getBody();
@@ -2274,7 +2060,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
      *
      * @param genericKey
      */
-    public void deleteTagField(TagFieldKey genericKey) throws KeyNotFoundException
+    public void deleteField(FieldKey genericKey) throws KeyNotFoundException
     {
         if (genericKey == null)
         {
@@ -2328,13 +2114,13 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
                 }
                 else
                 {
-                    throw new RuntimeException("Need to implement get(TagFieldKey genericKey) for:" + next.getClass());
+                    throw new RuntimeException("Need to implement getFields(FieldKey genericKey) for:" + next.getClass());
                 }
             }
         }
     }
 
-    protected abstract FrameAndSubId getFrameAndSubIdFromGenericKey(TagFieldKey genericKey);
+    protected abstract FrameAndSubId getFrameAndSubIdFromGenericKey(FieldKey genericKey);
 
     /**
      * Get field(s) for this key
@@ -2343,7 +2129,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
      * @return
      * @throws KeyNotFoundException
      */
-    public List<TagField> get(TagFieldKey genericKey) throws KeyNotFoundException
+    public List<TagField> getFields(FieldKey genericKey) throws KeyNotFoundException
     {
         if (genericKey == null)
         {
@@ -2388,7 +2174,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
                 }
                 else
                 {
-                    throw new RuntimeException("Need to implement get(TagFieldKey genericKey) for:" + next.getClass());
+                    throw new RuntimeException("Need to implement getFields(FieldKey genericKey) for:" + next.getClass());
                 }
             }
             return filteredList;
@@ -2443,9 +2229,9 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
      * @param artwork
      * @throws FieldDataInvalidException
      */
-    public void createAndSetArtworkField(Artwork artwork) throws FieldDataInvalidException
+    public void setField(Artwork artwork) throws FieldDataInvalidException
     {
-        this.set(createArtworkField(artwork));
+        this.setField(createField(artwork));
     }
 
     /**
@@ -2455,6 +2241,6 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
      */
     public void deleteArtworkField() throws KeyNotFoundException
     {
-        this.deleteTagField(TagFieldKey.COVER_ART);
+        this.deleteField(FieldKey.COVER_ART);
     }
 }

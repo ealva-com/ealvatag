@@ -6,6 +6,7 @@ import org.jaudiotagger.audio.AudioFileIO;
 import org.jaudiotagger.audio.exceptions.CannotReadException;
 import org.jaudiotagger.audio.exceptions.InvalidAudioFrameException;
 import org.jaudiotagger.audio.exceptions.ReadOnlyFileException;
+import org.jaudiotagger.tag.FieldKey;
 import org.jaudiotagger.tag.Tag;
 import org.jaudiotagger.tag.TagException;
 
@@ -76,9 +77,9 @@ public class RealReadTagTest extends AbstractTestCase
         AudioFile f = AudioFileIO.read(testFile);
         Tag tag = f.getTag();
         assertEquals(3, tag.getFieldCount()); // If this line fails we need to update our test as the RealMedia tag parser has been augmented
-        assertEquals(title, tag.getFirstTitle());
-        assertEquals(artist, tag.getFirstArtist());
-        assertEquals(comment, tag.getFirstComment());
+        assertEquals(title, tag.getFirst(FieldKey.TITLE));
+        assertEquals(artist, tag.getFirst(FieldKey.ARTIST));
+        assertEquals(comment, tag.getFirst(FieldKey.COMMENT));
     }
 
 }

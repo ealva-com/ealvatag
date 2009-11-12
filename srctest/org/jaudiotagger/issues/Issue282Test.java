@@ -1,9 +1,9 @@
 package org.jaudiotagger.issues;
 
 import org.jaudiotagger.AbstractTestCase;
-import org.jaudiotagger.tag.datatype.Artwork;
 import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.AudioFileIO;
+import org.jaudiotagger.tag.datatype.Artwork;
 
 import java.io.File;
 
@@ -41,7 +41,7 @@ public class Issue282Test extends AbstractTestCase
             System.out.println(af.getTag().toString());
 
             //Change File
-            af.getTag().createAndSetArtworkField(Artwork.createArtworkFromFile(new File("testdata/coverart.jpg")));
+            af.getTag().setField(Artwork.createArtworkFromFile(new File("testdata/coverart.jpg")));
             af.commit();
 
         }
@@ -81,7 +81,7 @@ public class Issue282Test extends AbstractTestCase
 
                //Create tag and Change File
                af.getTagOrCreateAndSetDefault();
-               af.getTag().createAndSetArtworkField(Artwork.createArtworkFromFile(new File("testdata/coverart.jpg")));
+               af.getTag().setField(Artwork.createArtworkFromFile(new File("testdata/coverart.jpg")));
                af.commit();
 
            }

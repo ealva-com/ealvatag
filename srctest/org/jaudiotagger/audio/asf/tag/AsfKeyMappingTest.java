@@ -1,9 +1,8 @@
 package org.jaudiotagger.audio.asf.tag;
 
-import org.jaudiotagger.tag.TagFieldKey;
-import org.jaudiotagger.tag.Tag;
-
 import junit.framework.TestCase;
+import org.jaudiotagger.tag.FieldKey;
+import org.jaudiotagger.tag.Tag;
 
 /**
  * @author Christian Laireiter
@@ -13,7 +12,7 @@ public class AsfKeyMappingTest extends TestCase
 {
 
     /**
-     * This method tests whether each {@link org.jaudiotagger.tag.TagFieldKey} is mapped
+     * This method tests whether each {@link org.jaudiotagger.tag.FieldKey} is mapped
      * to an {@link AsfFieldKey}.<br>
      */
     public void testTagFieldKeyMappingComplete()
@@ -22,9 +21,9 @@ public class AsfKeyMappingTest extends TestCase
         Tag tag = new AsfTag();
         try
         {
-            for (TagFieldKey curr : TagFieldKey.values())
+            for (FieldKey curr : FieldKey.values())
             {
-                tag.get(curr);
+                tag.getFields(curr);
             }
         }
         catch(Exception e)

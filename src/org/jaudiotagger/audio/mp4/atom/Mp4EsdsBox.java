@@ -146,7 +146,7 @@ public class Mp4EsdsBox extends AbstractMp4Box
             dataBuffer.position(dataBuffer.position() + ES_ID_LENGTH + STREAM_PRIORITY_LENGTH);
         }
 
-        //Process Section 4 (to get type and bitrate)
+        //Process Section 4 (to getFields type and bitrate)
         if (dataBuffer.get() == SECTION_FOUR)
         {
             sectionFourLength = processSectionHeader(dataBuffer);
@@ -166,7 +166,7 @@ public class Mp4EsdsBox extends AbstractMp4Box
 
 
         }
-        //Process Section 5,(to get no of channels and audioprofile(profile in itunes))
+        //Process Section 5,(to getFields no of channels and audioprofile(profile in itunes))
         if (dataBuffer.get() == SECTION_FIVE)
         {
             sectionFiveLength = processSectionHeader(dataBuffer);

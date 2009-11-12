@@ -283,7 +283,7 @@ public class ID3v11Tag extends ID3v1Tag
      *
      * @param trackValue
      */
-    @Override
+    
     public void setTrack(String trackValue)
     {
         int trackAsInt;
@@ -313,24 +313,22 @@ public class ID3v11Tag extends ID3v1Tag
      *
      * @return track
      */
-    @Override
+
     public String getFirstTrack()
     {
         return String.valueOf(track & BYTE_TO_UNSIGNED);
     }
 
-    @Override
     public void addTrack(String track)
     {
         setTrack(track);
     }
 
-    @Override
     public List<TagField> getTrack()
     {
-        if (getFirstTrack().length() > 0)
+        if (getFirst(FieldKey.TRACK).length() > 0)
         {
-            ID3v1TagField field = new ID3v1TagField(ID3v1FieldKey.TRACK.name(), getFirstTrack());
+            ID3v1TagField field = new ID3v1TagField(ID3v1FieldKey.TRACK.name(), getFirst(FieldKey.TRACK));
             return returnFieldToList(field);
         }
         else
@@ -339,28 +337,28 @@ public class ID3v11Tag extends ID3v1Tag
         }
     }
 
-    public void set(TagField field)
+    public void setField(TagField field)
     {
-        TagFieldKey genericKey = TagFieldKey.valueOf(field.getId());
-        if (genericKey == TagFieldKey.TRACK)
+        FieldKey genericKey = FieldKey.valueOf(field.getId());
+        if (genericKey == FieldKey.TRACK)
         {
             setTrack(field.toString());
         }
         else
         {
-            super.set(field);
+            super.setField(field);
         }
     }
 
-    public List<TagField> get(TagFieldKey genericKey)
+    public List<TagField> getFields(FieldKey genericKey)
     {
-        if (genericKey == TagFieldKey.TRACK)
+        if (genericKey == FieldKey.TRACK)
         {
             return getTrack();
         }
         else
         {
-            return super.get(genericKey);
+            return super.getFields(genericKey);
         }
     }
 
@@ -368,7 +366,7 @@ public class ID3v11Tag extends ID3v1Tag
     {
         List<TagField> results = null;
 
-        if (TagFieldKey.TRACK.name().equals(id))
+        if (FieldKey.TRACK.name().equals(id))
         {
             results = getTrack();
             if (results != null)
@@ -400,15 +398,15 @@ public class ID3v11Tag extends ID3v1Tag
      *
      * @param genericKey
      */
-    public void deleteTagField(TagFieldKey genericKey)
+    public void deleteField(FieldKey genericKey)
     {
-        if (genericKey == TagFieldKey.TRACK)
+        if (genericKey == FieldKey.TRACK)
         {
             track = 0;
         }
         else
         {
-            super.deleteTagField(genericKey);
+            super.deleteField(genericKey);
         }
     }
 
@@ -457,7 +455,7 @@ public class ID3v11Tag extends ID3v1Tag
             return false;
         }
         //Now check for TRACK if the next byte is also null byte then not v1.1
-        //tag, however this means cannot have v1_1 tag with track set to zero/undefined
+        //tag, however this means cannot have v1_1 tag with track setField to zero/undefined
         //because on next read will be v1 tag.
         if (byteBuffer.get() == END_OF_FIELD)
         {

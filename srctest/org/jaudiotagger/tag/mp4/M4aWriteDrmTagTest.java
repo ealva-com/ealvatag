@@ -7,6 +7,7 @@ import org.jaudiotagger.audio.AudioFileIO;
 import org.jaudiotagger.audio.mp4.Mp4AudioHeader;
 import org.jaudiotagger.audio.mp4.atom.Mp4EsdsBox;
 import org.jaudiotagger.audio.mp4.atom.Mp4StcoBox;
+import org.jaudiotagger.tag.FieldKey;
 import org.jaudiotagger.tag.Tag;
 
 import java.io.File;
@@ -57,8 +58,8 @@ public class M4aWriteDrmTagTest extends TestCase
 
             AudioFile f = AudioFileIO.read(testFile);
             Tag tag = f.getTag();
-            tag.setArtist("AUTHOR");
-            tag.setAlbum("ALBUM");
+            tag.setField(FieldKey.ARTIST,"AUTHOR");
+            tag.setField(FieldKey.ALBUM,"ALBUM");
             f.commit();
             f = AudioFileIO.read(testFile);
             tag = f.getTag();
@@ -79,12 +80,12 @@ public class M4aWriteDrmTagTest extends TestCase
             assertEquals(Mp4EsdsBox.AudioProfile.LOW_COMPLEXITY, audioheader.getProfile());
 
             //Ease of use methods for common fields
-            assertEquals("AUTHOR", tag.getFirstArtist());
-            assertEquals("ALBUM", tag.getFirstAlbum());
-            assertEquals("Simpering Blonde Bombshell", tag.getFirstTitle());
-            assertEquals("1990-01-01T08:00:00Z", tag.getFirstYear());
-            assertEquals("1/12", tag.getFirstTrack());
-            assertEquals("Rock", tag.getFirstGenre());
+            assertEquals("AUTHOR", tag.getFirst(FieldKey.ARTIST));
+            assertEquals("ALBUM", tag.getFirst(FieldKey.ALBUM));
+            assertEquals("Simpering Blonde Bombshell", tag.getFirst(FieldKey.TITLE));
+            assertEquals("1990-01-01T08:00:00Z", tag.getFirst(FieldKey.YEAR));
+            assertEquals("1/12", tag.getFirst(FieldKey.TRACK));
+            assertEquals("Rock", tag.getFirst(FieldKey.GENRE));
 
             //Cast to format specific tag
             Mp4Tag mp4tag = (Mp4Tag) tag;

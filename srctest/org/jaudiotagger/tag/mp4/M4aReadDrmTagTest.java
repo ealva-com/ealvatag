@@ -7,6 +7,7 @@ import org.jaudiotagger.audio.AudioFileIO;
 import org.jaudiotagger.audio.mp4.EncoderType;
 import org.jaudiotagger.audio.mp4.Mp4AudioHeader;
 import org.jaudiotagger.audio.mp4.atom.Mp4EsdsBox;
+import org.jaudiotagger.tag.FieldKey;
 import org.jaudiotagger.tag.Tag;
 
 import java.io.File;
@@ -52,12 +53,12 @@ public class M4aReadDrmTagTest extends TestCase
             assertEquals(Mp4EsdsBox.AudioProfile.LOW_COMPLEXITY, audioheader.getProfile());
 
             //Ease of use methods for common fields
-            assertEquals("The King Of The Slums", tag.getFirstArtist());
-            assertEquals("Barbarous English Fayre", tag.getFirstAlbum());
-            assertEquals("Simpering Blonde Bombshell", tag.getFirstTitle());
-            assertEquals("1990-01-01T08:00:00Z", tag.getFirstYear());
-            assertEquals("1/12", tag.getFirstTrack());
-            assertEquals("Rock", tag.getFirstGenre());
+            assertEquals("The King Of The Slums", tag.getFirst(FieldKey.ARTIST));
+            assertEquals("Barbarous English Fayre", tag.getFirst(FieldKey.ALBUM));
+            assertEquals("Simpering Blonde Bombshell", tag.getFirst(FieldKey.TITLE));
+            assertEquals("1990-01-01T08:00:00Z", tag.getFirst(FieldKey.YEAR));
+            assertEquals("1/12", tag.getFirst(FieldKey.TRACK));
+            assertEquals("Rock", tag.getFirst(FieldKey.GENRE));
 
             //Cast to format specific tag
             Mp4Tag mp4tag = (Mp4Tag) tag;

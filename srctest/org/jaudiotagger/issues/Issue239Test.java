@@ -1,13 +1,11 @@
 package org.jaudiotagger.issues;
 
 import org.jaudiotagger.AbstractTestCase;
-import org.jaudiotagger.tag.id3.ID3v24Tag;
-import org.jaudiotagger.tag.id3.ID3v23Tag;
-import org.jaudiotagger.tag.id3.ID3v22Tag;
-import org.jaudiotagger.tag.TagFieldKey;
 import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.AudioFileIO;
 import org.jaudiotagger.audio.mp3.MP3File;
+import org.jaudiotagger.tag.FieldKey;
+import org.jaudiotagger.tag.id3.ID3v23Tag;
 
 import java.io.File;
 
@@ -36,11 +34,11 @@ public class Issue239Test extends AbstractTestCase
             af = AudioFileIO.read(testFile);
             mp3File= (MP3File)af;
             //Check mapped okay ands empty
-            assertEquals(0,mp3File.getTag().get(TagFieldKey.COMMENT).size());
+            assertEquals(0,mp3File.getTag().getFields(FieldKey.COMMENT).size());
 
             //Now write these fields
-            mp3File.getTag().set(mp3File.getTag().createTagField(TagFieldKey.COMMENT,"comment1"));
-            mp3File.getTag().add(mp3File.getTag().createTagField(TagFieldKey.COMMENT,"comment2"));
+            mp3File.getTag().setField(mp3File.getTag().createField(FieldKey.COMMENT,"comment1"));
+            mp3File.getTag().addField(mp3File.getTag().createField(FieldKey.COMMENT,"comment2"));
 
             mp3File.save();
 
@@ -48,14 +46,14 @@ public class Issue239Test extends AbstractTestCase
             mp3File= (MP3File)af;
             //Check mapped okay ands empty
             assertTrue(mp3File.getTag() instanceof ID3v23Tag);
-            assertEquals(2,mp3File.getTag().get(TagFieldKey.COMMENT).size());
+            assertEquals(2,mp3File.getTag().getFields(FieldKey.COMMENT).size());
 
             //Delete Fields
-            mp3File.getTag().deleteTagField(TagFieldKey.COMMENT);
+            mp3File.getTag().deleteField(FieldKey.COMMENT);
             mp3File.save();
             af = AudioFileIO.read(testFile);
             mp3File= (MP3File)af;
-            assertEquals(0,mp3File.getTag().get(TagFieldKey.COMMENT).size());
+            assertEquals(0,mp3File.getTag().getFields(FieldKey.COMMENT).size());
         }
         catch (Exception e)
         {

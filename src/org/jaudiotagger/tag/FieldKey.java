@@ -1,14 +1,14 @@
 package org.jaudiotagger.tag;
 
 /**
- * This is an enumeration of common tag keys
+ * This is an enumeration of fields implemented by all major formats
  * <p/>
  * <p/>
  * <p/>
  * This enumeration is used by subclasses to map from the common key to their implementation key, the keys
  * are grouped within EnumSets within Tag class.
  */
-public enum TagFieldKey
+public enum FieldKey
 {
     ARTIST,
     ALBUM,

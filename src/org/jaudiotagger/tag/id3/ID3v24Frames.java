@@ -10,12 +10,12 @@
  * See the GNU Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public License along with this library; if not,
- * you can get a copy from http://www.opensource.org/licenses/lgpl-license.php or write to the Free Software
+ * you can getFields a copy from http://www.opensource.org/licenses/lgpl-license.php or write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 package org.jaudiotagger.tag.id3;
 
-import org.jaudiotagger.tag.TagFieldKey;
+import org.jaudiotagger.tag.FieldKey;
 
 import java.util.EnumMap;
 
@@ -125,7 +125,7 @@ public class ID3v24Frames extends ID3Frames
     public static final String FRAME_ID_PERFORMER_SORT_OWNER = FRAME_ID_ARTIST_SORT_ORDER;
     public static final String FRAME_ID_TITLE_SORT_OWNER = FRAME_ID_TITLE_SORT_ORDER;
 
-    protected EnumMap<TagFieldKey, ID3v24FieldKey> tagFieldToId3 = new EnumMap<TagFieldKey, ID3v24FieldKey>(TagFieldKey.class);
+    protected EnumMap<FieldKey, ID3v24FieldKey> tagFieldToId3 = new EnumMap<FieldKey, ID3v24FieldKey>(FieldKey.class);
 
     private static ID3v24Frames id3v24Frames;
 
@@ -306,7 +306,7 @@ public class ID3v24Frames extends ID3Frames
         idToValue.put(FRAME_ID_REMIXED, "Text: Interpreted, remixed, or otherwise modified by");
         idToValue.put(FRAME_ID_REVERB, "Reverb");
         idToValue.put(FRAME_ID_SEEK, "Seek");
-        idToValue.put(FRAME_ID_SET, "Text: Part of a set");
+        idToValue.put(FRAME_ID_SET, "Text: Part of a setField");
         idToValue.put(FRAME_ID_SET_SUBTITLE, "Text: Set subtitle");
         idToValue.put(FRAME_ID_SIGNATURE, "Signature");
         idToValue.put(FRAME_ID_SYNC_LYRIC, "Synchronized lyric/text");
@@ -316,7 +316,7 @@ public class ID3v24Frames extends ID3Frames
         idToValue.put(FRAME_ID_TITLE, "Text: title");
         idToValue.put(FRAME_ID_TITLE_REFINEMENT, "Text: Subtitle/Description refinement");
         idToValue.put(FRAME_ID_TITLE_SORT_ORDER, "Text: title sort order");
-        idToValue.put(FRAME_ID_TRACK, "Text: Track number/Position in set");
+        idToValue.put(FRAME_ID_TRACK, "Text: Track number/Position in setField");
         idToValue.put(FRAME_ID_UNIQUE_FILE_ID, "Unique file identifier");
         idToValue.put(FRAME_ID_UNSYNC_LYRICS, "Unsychronized lyric/text transcription");
         idToValue.put(FRAME_ID_URL_ARTIST_WEB, "URL: Official artist/performer webpage");
@@ -359,49 +359,49 @@ public class ID3v24Frames extends ID3Frames
         discardIfFileAlteredFrames.add(FRAME_ID_ENCODEDBY);
         discardIfFileAlteredFrames.add(FRAME_ID_LENGTH);
 
-        tagFieldToId3.put(TagFieldKey.ARTIST, ID3v24FieldKey.ARTIST);
-        tagFieldToId3.put(TagFieldKey.ALBUM, ID3v24FieldKey.ALBUM);
-        tagFieldToId3.put(TagFieldKey.TITLE, ID3v24FieldKey.TITLE);
-        tagFieldToId3.put(TagFieldKey.TRACK, ID3v24FieldKey.TRACK);
-        tagFieldToId3.put(TagFieldKey.TRACK_TOTAL, ID3v24FieldKey.TRACK_TOTAL);
-        tagFieldToId3.put(TagFieldKey.YEAR, ID3v24FieldKey.YEAR);
-        tagFieldToId3.put(TagFieldKey.GENRE, ID3v24FieldKey.GENRE);
-        tagFieldToId3.put(TagFieldKey.COMMENT, ID3v24FieldKey.COMMENT);
-        tagFieldToId3.put(TagFieldKey.ALBUM_ARTIST, ID3v24FieldKey.ALBUM_ARTIST);
-        tagFieldToId3.put(TagFieldKey.COMPOSER, ID3v24FieldKey.COMPOSER);
-        tagFieldToId3.put(TagFieldKey.GROUPING, ID3v24FieldKey.GROUPING);
-        tagFieldToId3.put(TagFieldKey.DISC_NO, ID3v24FieldKey.DISC_NO);
-        tagFieldToId3.put(TagFieldKey.DISC_TOTAL, ID3v24FieldKey.DISC_NO);
-        tagFieldToId3.put(TagFieldKey.BPM, ID3v24FieldKey.BPM);
-        tagFieldToId3.put(TagFieldKey.ENCODER, ID3v24FieldKey.ENCODER);
-        tagFieldToId3.put(TagFieldKey.MUSICBRAINZ_ARTISTID, ID3v24FieldKey.MUSICBRAINZ_ARTISTID);
-        tagFieldToId3.put(TagFieldKey.MUSICBRAINZ_RELEASEID, ID3v24FieldKey.MUSICBRAINZ_RELEASEID);
-        tagFieldToId3.put(TagFieldKey.MUSICBRAINZ_RELEASEARTISTID, ID3v24FieldKey.MUSICBRAINZ_RELEASEARTISTID);
-        tagFieldToId3.put(TagFieldKey.MUSICBRAINZ_TRACK_ID, ID3v24FieldKey.MUSICBRAINZ_TRACK_ID);
-        tagFieldToId3.put(TagFieldKey.MUSICBRAINZ_DISC_ID, ID3v24FieldKey.MUSICBRAINZ_DISC_ID);
-        tagFieldToId3.put(TagFieldKey.MUSICIP_ID, ID3v24FieldKey.MUSICIP_ID);
-        tagFieldToId3.put(TagFieldKey.AMAZON_ID, ID3v24FieldKey.AMAZON_ID);
-        tagFieldToId3.put(TagFieldKey.MOOD, ID3v24FieldKey.MOOD);
-        tagFieldToId3.put(TagFieldKey.MUSICBRAINZ_RELEASE_STATUS, ID3v24FieldKey.MUSICBRAINZ_RELEASE_STATUS);
-        tagFieldToId3.put(TagFieldKey.MUSICBRAINZ_RELEASE_TYPE, ID3v24FieldKey.MUSICBRAINZ_RELEASE_TYPE);
-        tagFieldToId3.put(TagFieldKey.MUSICBRAINZ_RELEASE_COUNTRY, ID3v24FieldKey.MUSICBRAINZ_RELEASE_COUNTRY);
-        tagFieldToId3.put(TagFieldKey.LYRICS, ID3v24FieldKey.LYRICS);
-        tagFieldToId3.put(TagFieldKey.IS_COMPILATION, ID3v24FieldKey.IS_COMPILATION);
-        tagFieldToId3.put(TagFieldKey.ARTIST_SORT, ID3v24FieldKey.ARTIST_SORT);
-        tagFieldToId3.put(TagFieldKey.ALBUM_ARTIST_SORT, ID3v24FieldKey.ALBUM_ARTIST_SORT);
-        tagFieldToId3.put(TagFieldKey.ALBUM_SORT, ID3v24FieldKey.ALBUM_SORT);
-        tagFieldToId3.put(TagFieldKey.TITLE_SORT, ID3v24FieldKey.TITLE_SORT);
-        tagFieldToId3.put(TagFieldKey.COMPOSER_SORT, ID3v24FieldKey.COMPOSER_SORT);
-        tagFieldToId3.put(TagFieldKey.COVER_ART, ID3v24FieldKey.COVER_ART);
-        tagFieldToId3.put(TagFieldKey.URL_DISCOGS_ARTIST_SITE, ID3v24FieldKey.URL_DISCOGS_ARTIST_SITE);
-        tagFieldToId3.put(TagFieldKey.URL_DISCOGS_RELEASE_SITE, ID3v24FieldKey.URL_DISCOGS_RELEASE_SITE);
-        tagFieldToId3.put(TagFieldKey.URL_WIKIPEDIA_ARTIST_SITE, ID3v24FieldKey.URL_WIKIPEDIA_ARTIST_SITE);
-        tagFieldToId3.put(TagFieldKey.URL_WIKIPEDIA_RELEASE_SITE, ID3v24FieldKey.URL_WIKIPEDIA_RELEASE_SITE);
-        tagFieldToId3.put(TagFieldKey.URL_OFFICIAL_ARTIST_SITE, ID3v24FieldKey.URL_OFFICIAL_ARTIST_SITE);
-        tagFieldToId3.put(TagFieldKey.URL_OFFICIAL_RELEASE_SITE, ID3v24FieldKey.URL_OFFICIAL_RELEASE_SITE);
-        tagFieldToId3.put(TagFieldKey.LANGUAGE, ID3v24FieldKey.LANGUAGE);
-        tagFieldToId3.put(TagFieldKey.KEY, ID3v24FieldKey.KEY);
-        tagFieldToId3.put(TagFieldKey.URL_LYRICS_SITE, ID3v24FieldKey.URL_LYRICS_SITE);
+        tagFieldToId3.put(FieldKey.ARTIST, ID3v24FieldKey.ARTIST);
+        tagFieldToId3.put(FieldKey.ALBUM, ID3v24FieldKey.ALBUM);
+        tagFieldToId3.put(FieldKey.TITLE, ID3v24FieldKey.TITLE);
+        tagFieldToId3.put(FieldKey.TRACK, ID3v24FieldKey.TRACK);
+        tagFieldToId3.put(FieldKey.TRACK_TOTAL, ID3v24FieldKey.TRACK_TOTAL);
+        tagFieldToId3.put(FieldKey.YEAR, ID3v24FieldKey.YEAR);
+        tagFieldToId3.put(FieldKey.GENRE, ID3v24FieldKey.GENRE);
+        tagFieldToId3.put(FieldKey.COMMENT, ID3v24FieldKey.COMMENT);
+        tagFieldToId3.put(FieldKey.ALBUM_ARTIST, ID3v24FieldKey.ALBUM_ARTIST);
+        tagFieldToId3.put(FieldKey.COMPOSER, ID3v24FieldKey.COMPOSER);
+        tagFieldToId3.put(FieldKey.GROUPING, ID3v24FieldKey.GROUPING);
+        tagFieldToId3.put(FieldKey.DISC_NO, ID3v24FieldKey.DISC_NO);
+        tagFieldToId3.put(FieldKey.DISC_TOTAL, ID3v24FieldKey.DISC_NO);
+        tagFieldToId3.put(FieldKey.BPM, ID3v24FieldKey.BPM);
+        tagFieldToId3.put(FieldKey.ENCODER, ID3v24FieldKey.ENCODER);
+        tagFieldToId3.put(FieldKey.MUSICBRAINZ_ARTISTID, ID3v24FieldKey.MUSICBRAINZ_ARTISTID);
+        tagFieldToId3.put(FieldKey.MUSICBRAINZ_RELEASEID, ID3v24FieldKey.MUSICBRAINZ_RELEASEID);
+        tagFieldToId3.put(FieldKey.MUSICBRAINZ_RELEASEARTISTID, ID3v24FieldKey.MUSICBRAINZ_RELEASEARTISTID);
+        tagFieldToId3.put(FieldKey.MUSICBRAINZ_TRACK_ID, ID3v24FieldKey.MUSICBRAINZ_TRACK_ID);
+        tagFieldToId3.put(FieldKey.MUSICBRAINZ_DISC_ID, ID3v24FieldKey.MUSICBRAINZ_DISC_ID);
+        tagFieldToId3.put(FieldKey.MUSICIP_ID, ID3v24FieldKey.MUSICIP_ID);
+        tagFieldToId3.put(FieldKey.AMAZON_ID, ID3v24FieldKey.AMAZON_ID);
+        tagFieldToId3.put(FieldKey.MOOD, ID3v24FieldKey.MOOD);
+        tagFieldToId3.put(FieldKey.MUSICBRAINZ_RELEASE_STATUS, ID3v24FieldKey.MUSICBRAINZ_RELEASE_STATUS);
+        tagFieldToId3.put(FieldKey.MUSICBRAINZ_RELEASE_TYPE, ID3v24FieldKey.MUSICBRAINZ_RELEASE_TYPE);
+        tagFieldToId3.put(FieldKey.MUSICBRAINZ_RELEASE_COUNTRY, ID3v24FieldKey.MUSICBRAINZ_RELEASE_COUNTRY);
+        tagFieldToId3.put(FieldKey.LYRICS, ID3v24FieldKey.LYRICS);
+        tagFieldToId3.put(FieldKey.IS_COMPILATION, ID3v24FieldKey.IS_COMPILATION);
+        tagFieldToId3.put(FieldKey.ARTIST_SORT, ID3v24FieldKey.ARTIST_SORT);
+        tagFieldToId3.put(FieldKey.ALBUM_ARTIST_SORT, ID3v24FieldKey.ALBUM_ARTIST_SORT);
+        tagFieldToId3.put(FieldKey.ALBUM_SORT, ID3v24FieldKey.ALBUM_SORT);
+        tagFieldToId3.put(FieldKey.TITLE_SORT, ID3v24FieldKey.TITLE_SORT);
+        tagFieldToId3.put(FieldKey.COMPOSER_SORT, ID3v24FieldKey.COMPOSER_SORT);
+        tagFieldToId3.put(FieldKey.COVER_ART, ID3v24FieldKey.COVER_ART);
+        tagFieldToId3.put(FieldKey.URL_DISCOGS_ARTIST_SITE, ID3v24FieldKey.URL_DISCOGS_ARTIST_SITE);
+        tagFieldToId3.put(FieldKey.URL_DISCOGS_RELEASE_SITE, ID3v24FieldKey.URL_DISCOGS_RELEASE_SITE);
+        tagFieldToId3.put(FieldKey.URL_WIKIPEDIA_ARTIST_SITE, ID3v24FieldKey.URL_WIKIPEDIA_ARTIST_SITE);
+        tagFieldToId3.put(FieldKey.URL_WIKIPEDIA_RELEASE_SITE, ID3v24FieldKey.URL_WIKIPEDIA_RELEASE_SITE);
+        tagFieldToId3.put(FieldKey.URL_OFFICIAL_ARTIST_SITE, ID3v24FieldKey.URL_OFFICIAL_ARTIST_SITE);
+        tagFieldToId3.put(FieldKey.URL_OFFICIAL_RELEASE_SITE, ID3v24FieldKey.URL_OFFICIAL_RELEASE_SITE);
+        tagFieldToId3.put(FieldKey.LANGUAGE, ID3v24FieldKey.LANGUAGE);
+        tagFieldToId3.put(FieldKey.KEY, ID3v24FieldKey.KEY);
+        tagFieldToId3.put(FieldKey.URL_LYRICS_SITE, ID3v24FieldKey.URL_LYRICS_SITE);
 
     }
 
@@ -409,7 +409,7 @@ public class ID3v24Frames extends ID3Frames
      * @param genericKey
      * @return id3 key for generic key
      */
-    public ID3v24FieldKey getId3KeyFromGenericKey(TagFieldKey genericKey)
+    public ID3v24FieldKey getId3KeyFromGenericKey(FieldKey genericKey)
     {
         return tagFieldToId3.get(genericKey);
     }

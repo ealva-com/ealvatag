@@ -398,7 +398,7 @@ public class Unicode23TagTest extends TestCase
         mp3File.setID3v2Tag(tag);
         mp3File.save();
 
-        //Reload, should be written as UTF16 because set in tag options
+        //Reload, should be written as UTF16 because setField in tag options
         mp3File = new MP3File(testFile);
         frame = (ID3v23Frame) mp3File.getID3v2Tag().getFrame(ID3v23Frames.FRAME_ID_V3_ARTIST);
         FrameBodyTPE1 body = (FrameBodyTPE1) frame.getBody();
@@ -469,7 +469,7 @@ public class Unicode23TagTest extends TestCase
         mp3File.setID3v2Tag(tag);
         mp3File.save();
 
-        //Reload, should be written as UTF16 because set in tag options
+        //Reload, should be written as UTF16 because setField in tag options
         mp3File = new MP3File(testFile);
         frame = (ID3v23Frame) mp3File.getID3v2Tag().getFrame(ID3v23Frames.FRAME_ID_V3_ARTIST);
         FrameBodyTPE1 body = (FrameBodyTPE1) frame.getBody();
@@ -542,7 +542,7 @@ public class Unicode23TagTest extends TestCase
         mp3File.setID3v2Tag(tag);
         mp3File.save();
 
-        //Reload, should be written as UTF16 because set in tag options
+        //Reload, should be written as UTF16 because setField in tag options
         mp3File = new MP3File(testFile);
         frame = (ID3v23Frame) mp3File.getID3v2Tag().getFrame(ID3v23Frames.FRAME_ID_V3_ARTIST);
         FrameBodyTPE1 body = (FrameBodyTPE1) frame.getBody();

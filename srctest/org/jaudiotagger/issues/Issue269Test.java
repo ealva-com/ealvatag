@@ -1,12 +1,12 @@
 package org.jaudiotagger.issues;
 
 import org.jaudiotagger.AbstractTestCase;
-import org.jaudiotagger.tag.TagFieldKey;
-import org.jaudiotagger.tag.id3.ID3v23Tag;
-import org.jaudiotagger.tag.id3.ID3v23Frames;
-import org.jaudiotagger.tag.id3.AbstractID3v2Frame;
 import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.AudioFileIO;
+import org.jaudiotagger.tag.FieldKey;
+import org.jaudiotagger.tag.id3.AbstractID3v2Frame;
+import org.jaudiotagger.tag.id3.ID3v23Frames;
+import org.jaudiotagger.tag.id3.ID3v23Tag;
 
 import java.io.File;
 
@@ -37,14 +37,14 @@ public class Issue269Test extends AbstractTestCase
             //Read File okay
             AudioFile af = AudioFileIO.read(testFile);
             System.out.println(af.getTag().toString());                                 
-            assertEquals("00000",af.getTag().getFirst(TagFieldKey.BPM));
-            assertEquals("thievery corporation - Om Lounge",af.getTag().getFirstArtist());
+            assertEquals("00000",af.getTag().getFirst(FieldKey.BPM));
+            assertEquals("thievery corporation - Om Lounge",af.getTag().getFirst(FieldKey.ARTIST));
 
-            af.getTag().setAlbum("FRED");
+            af.getTag().setField(FieldKey.ALBUM,"FRED");
             af.commit();
             af = AudioFileIO.read(testFile);
             System.out.println(af.getTag().toString());
-            assertEquals("FRED",af.getTag().getFirstAlbum());
+            assertEquals("FRED",af.getTag().getFirst(FieldKey.ALBUM));
 
 
         }
@@ -78,18 +78,18 @@ public class Issue269Test extends AbstractTestCase
             //Read File okay
             AudioFile af = AudioFileIO.read(testFile);
             System.out.println(af.getTag().toString());
-            assertEquals("tonight (instrumental)",af.getTag().getFirstTitle());
-            assertEquals("Young Gunz",af.getTag().getFirstArtist());
+            assertEquals("tonight (instrumental)",af.getTag().getFirst(FieldKey.TITLE));
+            assertEquals("Young Gunz",af.getTag().getFirst(FieldKey.ARTIST));
 
             ID3v23Tag id3v23Tag = (ID3v23Tag)af.getTag();
             assertEquals(156497728,id3v23Tag.getCrc32());
             assertEquals(0,id3v23Tag.getPaddingSize());
 
-            af.getTag().setAlbum("FRED");
+            af.getTag().setField(FieldKey.ALBUM,"FRED");
             af.commit();
             af = AudioFileIO.read(testFile);
             System.out.println(af.getTag().toString());
-            assertEquals("FRED",af.getTag().getFirstAlbum());
+            assertEquals("FRED",af.getTag().getFirst(FieldKey.ALBUM));
 
 
         }
@@ -125,8 +125,8 @@ public class Issue269Test extends AbstractTestCase
             //Read File okay
             AudioFile af = AudioFileIO.read(testFile);
             System.out.println(af.getTag().toString());
-            assertEquals("Don't Leave Me",af.getTag().getFirstTitle());
-            assertEquals("All-American Rejects",af.getTag().getFirstArtist());
+            assertEquals("Don't Leave Me",af.getTag().getFirst(FieldKey.TITLE));
+            assertEquals("All-American Rejects",af.getTag().getFirst(FieldKey.ARTIST));
 
             ID3v23Tag id3v23Tag = (ID3v23Tag)af.getTag();            
             assertEquals(0,id3v23Tag.getPaddingSize());
@@ -134,11 +134,11 @@ public class Issue269Test extends AbstractTestCase
             AbstractID3v2Frame frame = (AbstractID3v2Frame)id3v23Tag.getFrame(ID3v23Frames.FRAME_ID_V3_ENCODEDBY);
 
 
-            af.getTag().setAlbum("FRED");
+            af.getTag().setField(FieldKey.ALBUM,"FRED");
             af.commit();
             af = AudioFileIO.read(testFile);
             System.out.println(af.getTag().toString());
-            assertEquals("FRED",af.getTag().getFirstAlbum());
+            assertEquals("FRED",af.getTag().getFirst(FieldKey.ALBUM));
 
 
         }
@@ -172,18 +172,18 @@ public class Issue269Test extends AbstractTestCase
                //Read File okay
                AudioFile af = AudioFileIO.read(testFile);
                System.out.println(af.getTag().toString());
-               assertEquals("tonight (instrumental)",af.getTag().getFirstTitle());
-               assertEquals("Young Gunz",af.getTag().getFirstArtist());
+               assertEquals("tonight (instrumental)",af.getTag().getFirst(FieldKey.TITLE));
+               assertEquals("Young Gunz",af.getTag().getFirst(FieldKey.ARTIST));
 
                ID3v23Tag id3v23Tag = (ID3v23Tag)af.getTag();
                assertEquals(156497728,id3v23Tag.getCrc32());
                assertEquals(0,id3v23Tag.getPaddingSize());
 
-               af.getTag().setAlbum("FRED");
+               af.getTag().setField(FieldKey.ALBUM,"FRED");
                af.commit();
                af = AudioFileIO.read(testFile);
                System.out.println(af.getTag().toString());
-               assertEquals("FRED",af.getTag().getFirstAlbum());
+               assertEquals("FRED",af.getTag().getFirst(FieldKey.ALBUM));
 
 
            }

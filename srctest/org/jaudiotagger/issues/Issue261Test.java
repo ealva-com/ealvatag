@@ -3,6 +3,7 @@ package org.jaudiotagger.issues;
 import org.jaudiotagger.AbstractTestCase;
 import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.AudioFileIO;
+import org.jaudiotagger.tag.FieldKey;
 
 import java.io.File;
 
@@ -34,11 +35,11 @@ public class Issue261Test extends AbstractTestCase
             AudioFile af = AudioFileIO.read(testFile);
             
             //Write file
-            af.getTag().setYear("2007");
+            af.getTag().setField(FieldKey.YEAR,"2007");
             af.commit();
 
             af = AudioFileIO.read(testFile);
-            assertEquals("2007",af.getTag().getFirstYear());
+            assertEquals("2007",af.getTag().getFirst(FieldKey.YEAR));
 
 
 

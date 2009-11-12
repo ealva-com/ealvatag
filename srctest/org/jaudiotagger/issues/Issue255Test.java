@@ -3,15 +3,9 @@ package org.jaudiotagger.issues;
 import org.jaudiotagger.AbstractTestCase;
 import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.AudioFileIO;
-import org.jaudiotagger.audio.exceptions.CannotWriteException;
-import org.jaudiotagger.audio.exceptions.NullBoxIdException;
 import org.jaudiotagger.audio.exceptions.CannotReadException;
 import org.jaudiotagger.audio.mp4.Mp4AtomTree;
-import org.jaudiotagger.audio.mp3.MP3File;
-import org.jaudiotagger.tag.id3.*;
-import org.jaudiotagger.tag.id3.framebody.FrameBodyTIPL;
-import org.jaudiotagger.tag.id3.framebody.FrameBodyIPLS;
-import org.jaudiotagger.tag.Tag;
+import org.jaudiotagger.tag.FieldKey;
 
 import java.io.File;
 import java.io.RandomAccessFile;
@@ -26,7 +20,7 @@ public class Issue255Test extends AbstractTestCase
      */
     public void testReadMp4FileWithPaddingAfterLastAtom()
     {
-        File orig = new File("testdata", "test35.m4a");
+        File orig = new File("testdata", "test35.m4a");                 
         if (!orig.isFile())
         {
             System.err.println("Unable to test file - not available");
@@ -55,7 +49,7 @@ public class Issue255Test extends AbstractTestCase
 
         try
         {
-            //Now just create tree
+            //Now just createField tree
             Mp4AtomTree atomTree = new Mp4AtomTree(new RandomAccessFile(testFile, "r"));
             atomTree.printAtomTree();
         }
@@ -115,7 +109,7 @@ public class Issue255Test extends AbstractTestCase
 
             //Add a v24Tag
             AudioFile af = AudioFileIO.read(testFile);
-            af.getTag().setAlbum("NewValue");
+            af.getTag().setField(FieldKey.ALBUM,"NewValue");
             af.commit();
         }
         catch(Exception e)

@@ -1260,7 +1260,7 @@ public class ID3v24Tag extends AbstractID3v2Tag
     }
 
 
-    protected FrameAndSubId getFrameAndSubIdFromGenericKey(TagFieldKey genericKey)
+    protected FrameAndSubId getFrameAndSubIdFromGenericKey(FieldKey genericKey)
     {
         ID3v24FieldKey id3v24FieldKey = ID3v24Frames.getInstanceOf().getId3KeyFromGenericKey(genericKey);
         if (id3v24FieldKey == null)
@@ -1286,7 +1286,7 @@ public class ID3v24Tag extends AbstractID3v2Tag
 
     public List<Artwork> getArtworkList()
     {
-        List<TagField> coverartList = get(TagFieldKey.COVER_ART);
+        List<TagField> coverartList = getFields(FieldKey.COVER_ART);
         List<Artwork> artworkList = new ArrayList<Artwork>(coverartList.size());
 
         for (TagField next : coverartList)
@@ -1309,9 +1309,9 @@ public class ID3v24Tag extends AbstractID3v2Tag
         return artworkList;
     }
 
-    public TagField createArtworkField(Artwork artwork) throws FieldDataInvalidException
+    public TagField createField(Artwork artwork) throws FieldDataInvalidException
     {
-        AbstractID3v2Frame frame = createFrame(getFrameAndSubIdFromGenericKey(TagFieldKey.COVER_ART).getFrameId());
+        AbstractID3v2Frame frame = createFrame(getFrameAndSubIdFromGenericKey(FieldKey.COVER_ART).getFrameId());
         FrameBodyAPIC body = (FrameBodyAPIC) frame.getBody();
         body.setObjectValue(DataTypes.OBJ_PICTURE_DATA, artwork.getBinaryData());
         body.setObjectValue(DataTypes.OBJ_PICTURE_TYPE, artwork.getPictureType());
@@ -1329,7 +1329,7 @@ public class ID3v24Tag extends AbstractID3v2Tag
      */
     public TagField createArtworkField(byte[] data, String mimeType)
     {
-        AbstractID3v2Frame frame = createFrame(getFrameAndSubIdFromGenericKey(TagFieldKey.COVER_ART).getFrameId());
+        AbstractID3v2Frame frame = createFrame(getFrameAndSubIdFromGenericKey(FieldKey.COVER_ART).getFrameId());
         FrameBodyAPIC body = (FrameBodyAPIC) frame.getBody();
         body.setObjectValue(DataTypes.OBJ_PICTURE_DATA, data);
         body.setObjectValue(DataTypes.OBJ_PICTURE_TYPE, PictureTypes.DEFAULT_ID);

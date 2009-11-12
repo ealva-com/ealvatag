@@ -3,8 +3,9 @@ package org.jaudiotagger.tag.wav;
 import org.jaudiotagger.AbstractTestCase;
 import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.AudioFileIO;
-import org.jaudiotagger.audio.wav.WavTag;
 import org.jaudiotagger.audio.generic.GenericTag;
+import org.jaudiotagger.audio.wav.WavTag;
+import org.jaudiotagger.tag.FieldKey;
 
 import java.io.File;
 
@@ -32,13 +33,13 @@ public class WavSimpleTest extends AbstractTestCase
             WavTag tag = (WavTag) f.getTag();
 
             //Ease of use methods for common fields
-            assertEquals("", tag.getFirstArtist());
-            assertEquals("", tag.getFirstAlbum());
-            assertEquals("", tag.getFirstTitle());
-            assertEquals("", tag.getFirstComment());
-            assertEquals("", tag.getFirstYear());
-            assertEquals("", tag.getFirstTrack());
-            assertEquals("", tag.getFirstGenre());
+            assertEquals("", tag.getFirst(FieldKey.ARTIST));
+            assertEquals("", tag.getFirst(FieldKey.ALBUM));
+            assertEquals("", tag.getFirst(FieldKey.TITLE));
+            assertEquals("", tag.getFirst(FieldKey.COMMENT));
+            assertEquals("", tag.getFirst(FieldKey.YEAR));
+            assertEquals("", tag.getFirst(FieldKey.TRACK));
+            assertEquals("", tag.getFirst(FieldKey.GENRE));
         }
         catch (Exception e)
         {
@@ -67,25 +68,25 @@ public class WavSimpleTest extends AbstractTestCase
             GenericTag tag = (GenericTag)f.getTag();
 
             //Write some new values and save
-            tag.setArtist("artist2");
-            tag.setAlbum("album2");
-            tag.setTitle("tracktitle2");
-            tag.setComment("comments2");
-            tag.setYear("1972");
-            tag.setGenre("genre2");
-            tag.setTrack("4");
+            tag.setField(FieldKey.ARTIST,("artist2");
+            tag.setField(FieldKey.ALBUM,"album2");
+            tag.setField(FieldKey.TITLE,"tracktitle2");
+            tag.setField(FieldKey.COMMENT,"comments2");
+            tag.setField(FieldKey.YEAR,"1972");
+            tag.setField(FieldKey.GENRE,("genre2");
+            tag.setField(FieldKey.TRACK,"4");
             f.commit();
 
             f = AudioFileIO.read(testFile);
             tag = (GenericTag)f.getTag();
 
-            assertEquals("artist2", tag.getFirstArtist());
-            assertEquals("album2", tag.getFirstAlbum());
-            assertEquals("tracktitle2", tag.getFirstTitle());
+            assertEquals("artist2", tag.getFirst(FieldKey.ARTIST));
+            assertEquals("album2", tag.getFirst(FieldKey.ALBUM));
+            assertEquals("tracktitle2", tag.getFirst(FieldKey.TITLE));
             assertEquals("comments2", tag.getFirstComment());
-            assertEquals("1972", tag.getFirstYear());
-            assertEquals("4", tag.getFirstTrack());
-            assertEquals("genre2", tag.getFirstGenre());
+            assertEquals("1972", tag.getFirst(FieldKey.YEAR));
+            assertEquals("4", tag.getFirst(FieldKey.TRACK));
+            assertEquals("genre2", tag.getFirst(FieldKey.GENRE));
         }
         catch(Exception e)
         {

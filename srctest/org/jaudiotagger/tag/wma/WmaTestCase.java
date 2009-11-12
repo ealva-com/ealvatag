@@ -1,14 +1,13 @@
 package org.jaudiotagger.tag.wma;
 
-import java.io.File;
-
 import junit.framework.TestCase;
-
 import org.jaudiotagger.AbstractTestCase;
 import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.AudioFileIO;
 import org.jaudiotagger.audio.asf.util.Utils;
 import org.jaudiotagger.tag.Tag;
+
+import java.io.File;
 
 /**
  * Base class for WMA test cases.<br> 
@@ -109,7 +108,7 @@ public abstract class WmaTestCase extends TestCase
     protected void tearDown() throws Exception
     {
         super.tearDown();
-        //        this.testFile.delete();
+        //        this.testFile.deleteField();
     }
 
 

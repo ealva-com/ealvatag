@@ -1,10 +1,8 @@
 package org.jaudiotagger.audio.asf.tag;
 
-import org.jaudiotagger.audio.asf.data.ContentBranding;
-
-import org.jaudiotagger.audio.asf.data.ContentDescription;
-
 import org.jaudiotagger.audio.asf.data.ContainerType;
+import org.jaudiotagger.audio.asf.data.ContentBranding;
+import org.jaudiotagger.audio.asf.data.ContentDescription;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -123,7 +121,7 @@ public enum AsfFieldKey
 
     YEAR("WM/Year", false),
     
-    // Special field for all unknown field names, which will get maximum support
+    // Special field for all unknown field names, which will getFields maximum support
     CUSTOM ("___CUSTOM___", true);
 
     /**

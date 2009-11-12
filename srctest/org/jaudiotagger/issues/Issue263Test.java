@@ -1,22 +1,16 @@
 package org.jaudiotagger.issues;
 
 import org.jaudiotagger.AbstractTestCase;
-import org.jaudiotagger.logging.Hex;
 import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.AudioFileIO;
-import org.jaudiotagger.tag.Tag;
-import org.jaudiotagger.tag.TagFieldKey;
+import org.jaudiotagger.tag.FieldKey;
 import org.jaudiotagger.tag.KeyNotFoundException;
-import org.jaudiotagger.tag.TagOptionSingleton;
-import org.jaudiotagger.tag.datatype.Artwork;
+import org.jaudiotagger.tag.Tag;
 import org.jaudiotagger.tag.id3.ID3v22Tag;
 import org.jaudiotagger.tag.id3.ID3v23Tag;
 import org.jaudiotagger.tag.id3.ID3v24Tag;
 
-import javax.imageio.ImageIO;
 import java.io.File;
-import java.io.ByteArrayInputStream;
-import java.awt.image.BufferedImage;
 
 /**
  * Cannot cretaeTagField for creating artwork field
@@ -38,7 +32,7 @@ public class Issue263Test extends AbstractTestCase
             AudioFile af = AudioFileIO.read(testFile);
             af.setTag(new ID3v24Tag());
             Tag tag = af.getTag();
-            tag.createTagField(TagFieldKey.COVER_ART, "test");
+            tag.createField(FieldKey.COVER_ART, "test");
         }
         catch (Exception e)
         {
@@ -66,7 +60,7 @@ public class Issue263Test extends AbstractTestCase
             AudioFile af = AudioFileIO.read(testFile);
             af.setTag(new ID3v22Tag());
             Tag tag = af.getTag();
-            tag.createTagField(TagFieldKey.COVER_ART, "test");
+            tag.createField(FieldKey.COVER_ART, "test");
         }
         catch (Exception e)
         {
@@ -94,7 +88,7 @@ public class Issue263Test extends AbstractTestCase
             AudioFile af = AudioFileIO.read(testFile);
             af.setTag(new ID3v23Tag());
             Tag tag = af.getTag();
-            tag.createTagField(TagFieldKey.COVER_ART, "test");
+            tag.createField(FieldKey.COVER_ART, "test");
         }
         catch (Exception e)
         {
@@ -123,7 +117,7 @@ public class Issue263Test extends AbstractTestCase
             //Read File okay
             AudioFile af = AudioFileIO.read(testFile);
             Tag tag = af.getTag();
-            tag.createTagField(TagFieldKey.COVER_ART, "test");
+            tag.createField(FieldKey.COVER_ART, "test");
         }
         catch (Exception e)
         {
@@ -149,7 +143,7 @@ public class Issue263Test extends AbstractTestCase
             //Read File okay
             AudioFile af = AudioFileIO.read(testFile);
             Tag tag = af.getTag();
-            tag.createTagField(TagFieldKey.COVER_ART, "test");
+            tag.createField(FieldKey.COVER_ART, "test");
         }
         catch (Exception e)
         {
@@ -175,7 +169,7 @@ public class Issue263Test extends AbstractTestCase
             //Read File okay
             AudioFile af = AudioFileIO.read(testFile);
             Tag tag = af.getTag();
-            tag.createTagField(TagFieldKey.COVER_ART, "test");
+            tag.createField(FieldKey.COVER_ART, "test");
         }
         catch (Exception e)
         {
@@ -200,7 +194,7 @@ public class Issue263Test extends AbstractTestCase
             //Read File okay
             AudioFile af = AudioFileIO.read(testFile);
             Tag tag = af.getTag();
-            tag.createTagField(TagFieldKey.COVER_ART, "test");
+            tag.createField(FieldKey.COVER_ART, "test");
         }
         catch (Exception e)
         {
@@ -226,7 +220,7 @@ public class Issue263Test extends AbstractTestCase
             //Read File okay
             AudioFile af = AudioFileIO.read(testFile);
             Tag tag = af.getTag();
-            tag.createTagField(TagFieldKey.COVER_ART, "test");
+            tag.createField(FieldKey.COVER_ART, "test");
         }
         catch (Exception e)
         {
@@ -251,7 +245,7 @@ public class Issue263Test extends AbstractTestCase
             //Read File okay
             AudioFile af = AudioFileIO.read(testFile);
             Tag tag = af.getTag();
-            tag.createTagField(TagFieldKey.COVER_ART, "test");
+            tag.createField(FieldKey.COVER_ART, "test");
         }
         catch (Exception e)
         {

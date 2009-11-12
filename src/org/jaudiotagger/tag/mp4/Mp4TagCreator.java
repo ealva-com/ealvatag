@@ -22,12 +22,11 @@ import org.jaudiotagger.audio.generic.AbstractTagCreator;
 import org.jaudiotagger.audio.generic.Utils;
 import org.jaudiotagger.audio.mp4.Mp4NotMetaFieldKey;
 import org.jaudiotagger.audio.mp4.atom.Mp4BoxHeader;
+import org.jaudiotagger.tag.FieldKey;
 import org.jaudiotagger.tag.KeyNotFoundException;
 import org.jaudiotagger.tag.Tag;
 import org.jaudiotagger.tag.TagField;
-import org.jaudiotagger.tag.TagFieldKey;
 import org.jaudiotagger.tag.mp4.field.Mp4TagCoverField;
-import org.jaudiotagger.tag.mp4.field.Mp4TrackField;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -107,7 +106,7 @@ public class Mp4TagCreator extends AbstractTagCreator
 
                         try
                         {
-                            for (TagField artwork : tag.get(TagFieldKey.COVER_ART))
+                            for (TagField artwork : tag.getFields(FieldKey.COVER_ART))
                             {
                                 covrDataBaos.write(((Mp4TagField) artwork).getRawContentDataOnly());
                             }

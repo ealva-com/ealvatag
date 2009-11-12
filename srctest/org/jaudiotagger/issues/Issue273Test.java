@@ -1,12 +1,12 @@
 package org.jaudiotagger.issues;
 
 import org.jaudiotagger.AbstractTestCase;
-import org.jaudiotagger.tag.id3.ID3v23Tag;
-import org.jaudiotagger.tag.id3.AbstractID3v2Frame;
-import org.jaudiotagger.tag.id3.framebody.FrameBodyCOMM;
-import org.jaudiotagger.tag.reference.Languages;
 import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.AudioFileIO;
+import org.jaudiotagger.tag.FieldKey;
+import org.jaudiotagger.tag.id3.AbstractID3v2Frame;
+import org.jaudiotagger.tag.id3.ID3v23Tag;
+import org.jaudiotagger.tag.id3.framebody.FrameBodyCOMM;
 
 import java.io.File;
 
@@ -31,12 +31,12 @@ public class Issue273Test extends AbstractTestCase
 
             af = AudioFileIO.read(testFile);
             ID3v23Tag tag = (ID3v23Tag)af.getTag();
-            tag.addComment("COMMENTVALUE");
+            tag.addField(FieldKey.COMMENT,"COMMENTVALUE");
             af.commit();
 
             af = AudioFileIO.read(testFile);
             tag = (ID3v23Tag)af.getTag();
-            assertEquals("COMMENTVALUE",tag.getFirstComment());
+            assertEquals("COMMENTVALUE",tag.getFirst(FieldKey.COMMENT));
             AbstractID3v2Frame frame = tag.getFirstField("COMM");
             FrameBodyCOMM fb = (FrameBodyCOMM)frame.getBody();
             assertEquals("eng",fb.getLanguage());
@@ -50,7 +50,7 @@ public class Issue273Test extends AbstractTestCase
 
             af = AudioFileIO.read(testFile);
             tag = (ID3v23Tag)af.getTag();
-            assertEquals("COMMENTVALUE",tag.getFirstComment());
+            assertEquals("COMMENTVALUE",tag.getFirst(FieldKey.COMMENT));
             frame = tag.getFirstField("COMM");
             fb = (FrameBodyCOMM)frame.getBody();
             assertEquals("XXX",fb.getLanguage());
@@ -61,7 +61,7 @@ public class Issue273Test extends AbstractTestCase
 
             af = AudioFileIO.read(testFile);
             tag = (ID3v23Tag)af.getTag();
-            assertEquals("COMMENTVALUE",tag.getFirstComment());
+            assertEquals("COMMENTVALUE",tag.getFirst(FieldKey.COMMENT));
             frame = tag.getFirstField("COMM");
             fb = (FrameBodyCOMM)frame.getBody();
             assertEquals("\0\0\0",fb.getLanguage());

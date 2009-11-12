@@ -1,9 +1,9 @@
 package org.jaudiotagger.issues;
 
 import org.jaudiotagger.AbstractTestCase;
-import org.jaudiotagger.tag.Tag;
 import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.AudioFileIO;
+import org.jaudiotagger.tag.FieldKey;
 
 import java.io.File;
 
@@ -66,20 +66,20 @@ public class Issue260Test extends AbstractTestCase
             assertTrue(af.getTag().isEmpty());
 
             //Write file
-            af.getTag().setArtist("artist");
-            af.getTag().setAlbum("album");
-            af.getTag().setTitle("title");
-            af.getTag().setGenre("genre");
-            af.getTag().setYear("year");
+            af.getTag().setField(FieldKey.ARTIST,"artist");
+            af.getTag().setField(FieldKey.ALBUM,"album");
+            af.getTag().setField(FieldKey.TITLE,"title");
+            af.getTag().setField(FieldKey.GENRE,"genre");
+            af.getTag().setField(FieldKey.YEAR,"year");
             af.commit();
 
             //Read file again okay
             af = AudioFileIO.read(testFile);
-            assertEquals("artist",af.getTag().getFirstArtist());
-            assertEquals("album",af.getTag().getFirstAlbum());
-            assertEquals("title",af.getTag().getFirstTitle());
-            assertEquals("genre",af.getTag().getFirstGenre());
-            assertEquals("year",af.getTag().getFirstYear());
+            assertEquals("artist",af.getTag().getFirst(FieldKey.ARTIST));
+            assertEquals("album",af.getTag().getFirst(FieldKey.ALBUM));
+            assertEquals("title",af.getTag().getFirst(FieldKey.TITLE));
+            assertEquals("genre",af.getTag().getFirst(FieldKey.GENRE));
+            assertEquals("year",af.getTag().getFirst(FieldKey.YEAR));
 
         }
         catch(Exception e)
@@ -111,7 +111,7 @@ public class Issue260Test extends AbstractTestCase
 
             //Read File okay
             AudioFile af = AudioFileIO.read(testFile);
-            assertEquals("test43",af.getTag().getFirstTitle());
+            assertEquals("test43",af.getTag().getFirst(FieldKey.TITLE));
         }
         catch(Exception e)
         {
@@ -142,23 +142,23 @@ public class Issue260Test extends AbstractTestCase
 
             //Read File okay
             AudioFile af = AudioFileIO.read(testFile);
-            assertEquals("test43",af.getTag().getFirstTitle());
+            assertEquals("test43",af.getTag().getFirst(FieldKey.TITLE));
 
             //Write file
-            af.getTag().setArtist("artist");
-            af.getTag().setAlbum("album");
-            af.getTag().setTitle("title");
-            af.getTag().setGenre("genre");
-            af.getTag().setYear("year");
+            af.getTag().setField(FieldKey.ARTIST,"artist");
+            af.getTag().setField(FieldKey.ALBUM,"album");
+            af.getTag().setField(FieldKey.TITLE,"title");
+            af.getTag().setField(FieldKey.GENRE,"genre");
+            af.getTag().setField(FieldKey.YEAR,"year");
             af.commit();
 
             //Read file again okay
             af = AudioFileIO.read(testFile);
-            assertEquals("artist",af.getTag().getFirstArtist());
-            assertEquals("album",af.getTag().getFirstAlbum());
-            assertEquals("title",af.getTag().getFirstTitle());
-            assertEquals("genre",af.getTag().getFirstGenre());
-            assertEquals("year",af.getTag().getFirstYear());
+            assertEquals("artist",af.getTag().getFirst(FieldKey.ARTIST));
+            assertEquals("album",af.getTag().getFirst(FieldKey.ALBUM));
+            assertEquals("title",af.getTag().getFirst(FieldKey.TITLE));
+            assertEquals("genre",af.getTag().getFirst(FieldKey.GENRE));
+            assertEquals("year",af.getTag().getFirst(FieldKey.YEAR));
 
         }
         catch(Exception e)

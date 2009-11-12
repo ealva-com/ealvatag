@@ -3,6 +3,7 @@ package org.jaudiotagger.issues;
 import org.jaudiotagger.AbstractTestCase;
 import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.AudioFileIO;
+import org.jaudiotagger.tag.FieldKey;
 
 import java.io.File;
 
@@ -34,11 +35,11 @@ public class Issue268Test extends AbstractTestCase
             AudioFile af = AudioFileIO.read(testFile);
             System.out.println(af.getTag().toString());
 
-            af.getTag().setAlbum("FRED");
+            af.getTag().setField(FieldKey.ALBUM,"FRED");
             af.commit();
             af = AudioFileIO.read(testFile);
             System.out.println(af.getTag().toString());
-            assertEquals("FRED",af.getTag().getFirstAlbum());
+            assertEquals("FRED",af.getTag().getFirst(FieldKey.ALBUM));
 
 
         }

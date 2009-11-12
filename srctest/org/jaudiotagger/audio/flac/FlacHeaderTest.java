@@ -6,7 +6,7 @@ import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.AudioFileIO;
 import org.jaudiotagger.audio.flac.metadatablock.MetadataBlockDataPicture;
 import org.jaudiotagger.audio.generic.Utils;
-import org.jaudiotagger.tag.TagFieldKey;
+import org.jaudiotagger.tag.FieldKey;
 import org.jaudiotagger.tag.flac.FlacTag;
 import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
 import org.jaudiotagger.tag.reference.PictureTypes;
@@ -40,26 +40,26 @@ public class FlacHeaderTest extends TestCase
             assertEquals(6, infoReader.countMetaBlocks(f.getFile()));
 
             //Ease of use methods for common fields
-            assertEquals("Artist", tag.getFirstArtist());
-            assertEquals("Album", tag.getFirstAlbum());
-            assertEquals("test3", tag.getFirstTitle());
-            assertEquals("comments", tag.getFirstComment());
-            assertEquals("1971", tag.getFirstYear());
-            assertEquals("4", tag.getFirstTrack());
-            assertEquals("Crossover", tag.getFirstGenre());
+            assertEquals("Artist", tag.getFirst(FieldKey.ARTIST));
+            assertEquals("Album", tag.getFirst(FieldKey.ALBUM));
+            assertEquals("test3", tag.getFirst(FieldKey.TITLE));
+            assertEquals("comments", tag.getFirst(FieldKey.COMMENT));
+            assertEquals("1971", tag.getFirst(FieldKey.YEAR));
+            assertEquals("4", tag.getFirst(FieldKey.TRACK));
+            assertEquals("Crossover", tag.getFirst(FieldKey.GENRE));
 
             //Lookup by generickey
-            assertEquals("Artist", tag.getFirst(TagFieldKey.ARTIST));
-            assertEquals("Album", tag.getFirst(TagFieldKey.ALBUM));
-            assertEquals("test3", tag.getFirst(TagFieldKey.TITLE));
-            assertEquals("comments", tag.getFirst(TagFieldKey.COMMENT));
-            assertEquals("1971", tag.getFirst(TagFieldKey.YEAR));
-            assertEquals("4", tag.getFirst(TagFieldKey.TRACK));
-            assertEquals("Composer", tag.getFirst(TagFieldKey.COMPOSER));
+            assertEquals("Artist", tag.getFirst(FieldKey.ARTIST));
+            assertEquals("Album", tag.getFirst(FieldKey.ALBUM));
+            assertEquals("test3", tag.getFirst(FieldKey.TITLE));
+            assertEquals("comments", tag.getFirst(FieldKey.COMMENT));
+            assertEquals("1971", tag.getFirst(FieldKey.YEAR));
+            assertEquals("4", tag.getFirst(FieldKey.TRACK));
+            assertEquals("Composer", tag.getFirst(FieldKey.COMPOSER));
 
             //Images
-            assertEquals(2, tag.get(TagFieldKey.COVER_ART).size());
-            assertEquals(2, tag.get(TagFieldKey.COVER_ART.name()).size());
+            assertEquals(2, tag.getFields(FieldKey.COVER_ART).size());
+            assertEquals(2, tag.get(FieldKey.COVER_ART.name()).size());
             assertEquals(2, tag.getImages().size());
 
             //Image
@@ -94,7 +94,7 @@ public class FlacHeaderTest extends TestCase
             assertEquals("../testdata/coverart.jpg", Utils.getString(image.getImageData(), 0, image.getImageData().length, TextEncoding.CHARSET_ISO_8859_1));
             assertEquals("../testdata/coverart.jpg", image.getImageUrl());
 
-            //Can we actually create Buffered Image from the url  of course remember url is relative to the audio file
+            //Can we actually createField Buffered Image from the url  of course remember url is relative to the audio file
             //not where we run the program from
             File file = new File("testdatatmp", image.getImageUrl());
             assertTrue(file.exists());

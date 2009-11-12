@@ -38,7 +38,7 @@ public enum Mp4FieldKey
     GROUPING("©grp", TEXT),
     DISCNUMBER("disk", IMPLICIT),
     LYRICS("©lyr", TEXT),
-    RATING("rtng", INTEGER,1),   //AFAIK Cant be set in itunes, but if set to explicit itunes will show as explicit
+    RATING("rtng", INTEGER,1),   //AFAIK Cant be setField in itunes, but if setField to explicit itunes will show as explicit
     ENCODER("©too", TEXT),
     COMPILATION("cpil", INTEGER, 1),
     COPYRIGHT("cprt", TEXT),

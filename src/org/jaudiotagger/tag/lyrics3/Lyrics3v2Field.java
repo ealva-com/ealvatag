@@ -123,7 +123,7 @@ public class Lyrics3v2Field extends AbstractTagFrame
         }
         else
         {
-            throw new TagException("Cannot create Lyrics3v2 field from given ID3v2 frame");
+            throw new TagException("Cannot createField Lyrics3v2 field from given ID3v2 frame");
         }
     }
 

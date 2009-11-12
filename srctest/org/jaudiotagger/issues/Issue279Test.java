@@ -1,15 +1,9 @@
 package org.jaudiotagger.issues;
 
 import org.jaudiotagger.AbstractTestCase;
-import org.jaudiotagger.tag.TagFieldKey;
-import org.jaudiotagger.tag.TagOptionSingleton;
-import org.jaudiotagger.tag.id3.ID3v23Tag;
-import org.jaudiotagger.tag.id3.AbstractID3v2Frame;
-import org.jaudiotagger.tag.id3.ID3v23Frames;
-import org.jaudiotagger.tag.id3.ID3v22Tag;
 import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.AudioFileIO;
-import org.jaudiotagger.audio.mp3.MP3File;
+import org.jaudiotagger.tag.FieldKey;
 
 import java.io.File;
 
@@ -42,11 +36,11 @@ public class Issue279Test extends AbstractTestCase
             System.out.println(af.getTag().toString());
 
 
-            af.getTag().setAlbum("FRED");
+            af.getTag().setField(FieldKey.ALBUM,"FRED");
             af.commit();
             af = AudioFileIO.read(testFile);
             System.out.println(af.getTag().toString());
-            assertEquals("FRED", af.getTag().getFirstAlbum());
+            assertEquals("FRED", af.getTag().getFirst(FieldKey.ALBUM));
 
 
         }

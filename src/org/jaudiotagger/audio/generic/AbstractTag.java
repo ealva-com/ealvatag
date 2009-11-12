@@ -19,8 +19,6 @@ package org.jaudiotagger.audio.generic;
 
 import org.jaudiotagger.tag.*;
 import org.jaudiotagger.tag.datatype.Artwork;
-import org.jaudiotagger.tag.mp4.Mp4TagField;
-import org.jaudiotagger.tag.mp4.Mp4FieldKey;
 
 import java.util.*;
 
@@ -50,11 +48,11 @@ public abstract class AbstractTag implements Tag
     /**
      * Add field
      *
-     * @see org.jaudiotagger.tag.Tag#add(org.jaudiotagger.tag.TagField)
+     * @see org.jaudiotagger.tag.Tag#addField(org.jaudiotagger.tag.TagField)
      *      <p/>
      *      Changed so add empty fields
      */
-    public void add(TagField field)
+    public void addField(TagField field)
     {
         if (field == null)
         {
@@ -81,75 +79,6 @@ public abstract class AbstractTag implements Tag
         }
     }
 
-    /**
-     * Add (another) album
-     *
-     * @see org.jaudiotagger.tag.Tag#addAlbum(java.lang.String)
-     */
-    public void addAlbum(String s)
-    {
-        add(createAlbumField(s));
-    }
-
-    /**
-     * Add (another) artist
-     *
-     * @see org.jaudiotagger.tag.Tag#addArtist(java.lang.String)
-     */
-    public void addArtist(String s)
-    {
-        add(createArtistField(s));
-    }
-
-    /**
-     * Add (another) comment
-     *
-     * @see org.jaudiotagger.tag.Tag#addComment(java.lang.String)
-     */
-    public void addComment(String s)
-    {
-        add(createCommentField(s));
-    }
-
-    /**
-     * Add (another) genre
-     *
-     * @see org.jaudiotagger.tag.Tag#addGenre(java.lang.String)
-     */
-    public void addGenre(String s)
-    {
-        add(createGenreField(s));
-    }
-
-    /**
-     * Add (another) title
-     *
-     * @see org.jaudiotagger.tag.Tag#addTitle(java.lang.String)
-     */
-    public void addTitle(String s)
-    {
-        add(createTitleField(s));
-    }
-
-    /**
-     * Add (another) track
-     *
-     * @see org.jaudiotagger.tag.Tag#addTrack(java.lang.String)
-     */
-    public void addTrack(String s) throws FieldDataInvalidException
-    {
-        add(createTrackField(s));
-    }
-
-    /**
-     * (Add (another) year
-     *
-     * @see org.jaudiotagger.tag.Tag#addYear(java.lang.String)
-     */
-    public void addYear(String s)
-    {
-        add(createYearField(s));
-    }
 
     /**
      * Get list of fields within this tag with the specified id
@@ -175,7 +104,7 @@ public abstract class AbstractTag implements Tag
 
     //Needs to be overridden
     //TODO remove
-    public List<TagField> get(TagFieldKey id) throws KeyNotFoundException
+    public List<TagField> getFields(FieldKey id) throws KeyNotFoundException
     {
         List<TagField> list = fields.get(id.name());
         if (list == null)
@@ -202,60 +131,6 @@ public abstract class AbstractTag implements Tag
         return (l.size() != 0) ? l.get(0) : null;
     }
 
-
-    /**
-     * (overridden)
-     *
-     * @see org.jaudiotagger.tag.Tag#getAlbum()
-     */
-    public List<TagField> getAlbum()
-    {
-        return get(getAlbumId());
-    }
-
-    /**
-     * Returns the identifier for a field representing the &quot;album&quot;<br>
-     *
-     * @return identifier for the &quot;album&quot; field.
-     * @see TagField#getId()
-     */
-    protected abstract String getAlbumId();
-
-    /**
-     * Get Artist
-     *
-     * @see org.jaudiotagger.tag.Tag#getArtist()
-     */
-    public List<TagField> getArtist()
-    {
-        return get(getArtistId());
-    }
-
-    /**
-     * Returns the identifier for a field representing the &quot;artist&quot;<br>
-     *
-     * @return identifier for the &quot;artist&quot; field.
-     * @see TagField#getId()
-     */
-    protected abstract String getArtistId();
-
-    /**
-     * Get Comment
-     *
-     * @see org.jaudiotagger.tag.Tag#getComment()
-     */
-    public List<TagField> getComment()
-    {
-        return get(getCommentId());
-    }
-
-    /**
-     * Returns the identifier for a field representing the &quot;comment&quot;<br>
-     *
-     * @return identifier for the &quot;comment&quot; field.
-     * @see TagField#getId()
-     */
-    protected abstract String getCommentId();
 
     /**
      * @see org.jaudiotagger.tag.Tag#getFields()
@@ -324,154 +199,6 @@ public abstract class AbstractTag implements Tag
         return count;
     }
 
-    /**
-     * Get the first album or empty string if doesnt exist
-     *
-     * @see org.jaudiotagger.tag.Tag#getFirstAlbum()
-     */
-    public String getFirstAlbum()
-    {
-        List<TagField> l = getAlbum();
-        return (l.size() != 0) ? ((TagTextField) l.get(0)).getContent() : "";
-    }
-
-    /**
-     * Get the first artist or empty string if doesnt exist
-     *
-     * @see org.jaudiotagger.tag.Tag#getFirstArtist()
-     */
-    public String getFirstArtist()
-    {
-        List<TagField> l = getArtist();
-        return (l.size() != 0) ? ((TagTextField) l.get(0)).getContent() : "";
-    }
-
-    /**
-     * Get the first comment or empty string if doesnt exist
-     *
-     * @see org.jaudiotagger.tag.Tag#getFirstComment()
-     */
-    public String getFirstComment()
-    {
-        List<TagField> l = getComment();
-        return (l.size() != 0) ? ((TagTextField) l.get(0)).getContent() : "";
-    }
-
-    /**
-     * Get the first genre or empty string if doesnt exist
-     *
-     * @see org.jaudiotagger.tag.Tag#getFirstGenre()
-     */
-    public String getFirstGenre()
-    {
-        List<TagField> l = getGenre();
-        return (l.size() != 0) ? ((TagTextField) l.get(0)).getContent() : "";
-    }
-
-    /**
-     * Get the first title or empty string if doesnt exist
-     *
-     * @see org.jaudiotagger.tag.Tag#getFirstTitle()
-     */
-    public String getFirstTitle()
-    {
-        List<TagField> l = getTitle();
-        return (l.size() != 0) ? ((TagTextField) l.get(0)).getContent() : "";
-    }
-
-    /**
-     * Get the first track or empty string if doesnt exist
-     *
-     * @see org.jaudiotagger.tag.Tag#getFirstTrack()
-     */
-    public String getFirstTrack()
-    {
-        List<TagField> l = getTrack();
-        return (l.size() != 0) ? ((TagTextField) l.get(0)).getContent() : "";
-    }
-
-    /**
-     * Get the first year or empty string if doesnt exist
-     *
-     * @see org.jaudiotagger.tag.Tag#getFirstYear()
-     */
-    public String getFirstYear()
-    {
-        List<TagField> l = getYear();
-        return (l.size() != 0) ? ((TagTextField) l.get(0)).getContent() : "";
-    }
-
-    /**
-     * Get the genres or empty list if none exist
-     *
-     * @see org.jaudiotagger.tag.Tag#getGenre()
-     */
-    public List<TagField> getGenre()
-    {
-        return get(getGenreId());
-    }
-
-    /**
-     * Returns the identifier for a field representing the &quot;genre&quot;<br>
-     *
-     * @return identifier for the &quot;genre&quot; field.
-     * @see TagField#getId()
-     */
-    protected abstract String getGenreId();
-
-    /**
-     * Get the titles or empty list if none exist
-     *
-     * @see org.jaudiotagger.tag.Tag#getTitle()
-     */
-    public List<TagField> getTitle()
-    {
-        return get(getTitleId());
-    }
-
-    /**
-     * Returns the identifier for a field representing the &quot;title&quot;<br>
-     *
-     * @return identifier for the &quot;title&quot; field.
-     * @see TagField#getId()
-     */
-    protected abstract String getTitleId();
-
-    /**
-     * Get the tracks or empty list if none exist
-     *
-     * @see org.jaudiotagger.tag.Tag#getTrack()
-     */
-    public List<TagField> getTrack()
-    {
-        return get(getTrackId());
-    }
-
-    /**
-     * Returns the identifier for a field representing the &quot;track&quot;<br>
-     *
-     * @return identifier for the &quot;track&quot; field.
-     * @see TagField#getId()
-     */
-    protected abstract String getTrackId();
-
-    /**
-     * Get the  years or empty list if none exist
-     *
-     * @see org.jaudiotagger.tag.Tag#getYear()
-     */
-    public List<TagField> getYear()
-    {
-        return get(getYearId());
-    }
-
-    /**
-     * Returns the identifier for a field representing the &quot;year&quot;<br>
-     *
-     * @return identifier for the &quot;year&quot; field.
-     * @see TagField#getId()
-     */
-    protected abstract String getYearId();
 
     /**
      * Does this tag contain any comon fields
@@ -520,13 +247,26 @@ public abstract class AbstractTag implements Tag
      * @throws KeyNotFoundException
      * @throws FieldDataInvalidException
      */
-    public void createAndSet(TagFieldKey genericKey, String value) throws KeyNotFoundException, FieldDataInvalidException
+    public void setField(FieldKey genericKey, String value) throws KeyNotFoundException, FieldDataInvalidException
     {
-        TagField tagfield = createTagField(genericKey,value);
-        set(tagfield);
+        TagField tagfield = createField(genericKey,value);
+        setField(tagfield);
     }
 
-   
+
+     /**
+     * Create new field and add it to the tag
+     *
+     * @param genericKey
+     * @param value
+     * @throws KeyNotFoundException
+     * @throws FieldDataInvalidException
+     */
+    public void addField(FieldKey genericKey, String value) throws KeyNotFoundException, FieldDataInvalidException
+    {
+        TagField tagfield = createField(genericKey,value);
+        addField(tagfield);
+    }
 
     /**
      * Set field
@@ -534,9 +274,9 @@ public abstract class AbstractTag implements Tag
      * Changed:Just because field is empty it doesnt mean it should be deleted. That should be the choice
      * of the developer. (Or does this break things)
      *
-     * @see org.jaudiotagger.tag.Tag#set(org.jaudiotagger.tag.TagField)
+     * @see org.jaudiotagger.tag.Tag#setField(org.jaudiotagger.tag.TagField)
      */
-    public void set(TagField field)
+    public void setField(TagField field)
     {
         if (field == null)
         {
@@ -563,36 +303,6 @@ public abstract class AbstractTag implements Tag
     }
 
     /**
-     * Set or add album
-     *
-     * @see org.jaudiotagger.tag.Tag#setAlbum(java.lang.String)
-     */
-    public void setAlbum(String s)
-    {
-        set(createAlbumField(s));
-    }
-
-    /**
-     * Set or add artist
-     *
-     * @see org.jaudiotagger.tag.Tag#setArtist(java.lang.String)
-     */
-    public void setArtist(String s)
-    {
-        set(createArtistField(s));
-    }
-
-    /**
-     * Set or add comment
-     *
-     * @see org.jaudiotagger.tag.Tag#setComment(java.lang.String)
-     */
-    public void setComment(String s)
-    {
-        set(createCommentField(s));
-    }
-
-    /**
      * Set or add encoding
      *
      * @see org.jaudiotagger.tag.Tag#setEncoding(java.lang.String)
@@ -615,46 +325,6 @@ public abstract class AbstractTag implements Tag
         }
 
         return true;
-    }
-
-    /**
-     * Set or add genre
-     *
-     * @see org.jaudiotagger.tag.Tag#setGenre(java.lang.String)
-     */
-    public void setGenre(String s)
-    {
-        set(createGenreField(s));
-    }
-
-    /**
-     * Set or add title
-     *
-     * @see org.jaudiotagger.tag.Tag#setTitle(java.lang.String)
-     */
-    public void setTitle(String s)
-    {
-        set(createTitleField(s));
-    }
-
-    /**
-     * Set or add track
-     *
-     * @see org.jaudiotagger.tag.Tag#setTrack(java.lang.String)
-     */
-    public void setTrack(String s) throws FieldDataInvalidException
-    {
-        set(createTrackField(s));
-    }
-
-    /**
-     * Set or add year
-     *
-     * @see org.jaudiotagger.tag.Tag#setYear(java.lang.String)
-     */
-    public void setYear(String s)
-    {
-        set(createYearField(s));
     }
 
     /**
@@ -687,7 +357,7 @@ public abstract class AbstractTag implements Tag
      * @throws KeyNotFoundException
      * @throws FieldDataInvalidException
      */
-    public abstract TagField createTagField(TagFieldKey genericKey, String value) throws KeyNotFoundException, FieldDataInvalidException;
+    public abstract TagField createField(FieldKey genericKey, String value) throws KeyNotFoundException, FieldDataInvalidException;
 
     /**
      *
@@ -695,7 +365,7 @@ public abstract class AbstractTag implements Tag
      * @return
      * @throws KeyNotFoundException
      */
-    public abstract String getFirst(TagFieldKey genericKey) throws KeyNotFoundException;
+    public abstract String getFirst(FieldKey genericKey) throws KeyNotFoundException;
 
     /**
      * 
@@ -703,14 +373,14 @@ public abstract class AbstractTag implements Tag
      * @return
      * @throws KeyNotFoundException
      */
-    public abstract TagField getFirstField(TagFieldKey genericKey) throws KeyNotFoundException;
+    public abstract TagField getFirstField(FieldKey genericKey) throws KeyNotFoundException;
 
     /**
      * 
-     * @param tagFieldKey
+     * @param fieldKey
      * @throws KeyNotFoundException
      */
-    public abstract void deleteTagField(TagFieldKey tagFieldKey) throws KeyNotFoundException;
+    public abstract void deleteField(FieldKey fieldKey) throws KeyNotFoundException;
 
 
     /**
@@ -726,69 +396,6 @@ public abstract class AbstractTag implements Tag
         return;
     }
 
-    /**
-     * Creates a field which represents the &quot;album&quot;.<br>
-     * The field will already contain the given content.
-     *
-     * @param content The content of the created field.
-     * @return tagfield representing the &quot;album&quot;
-     */
-    public abstract TagField createAlbumField(String content);
-
-    /**
-     * Creates a field which represents the &quot;artist&quot;.<br>
-     * The field will already contain the given content.
-     *
-     * @param content The content of the created field.
-     * @return tagfield representing the &quot;artist&quot;
-     */
-    public abstract TagField createArtistField(String content);
-
-    /**
-     * Creates a field which represents the &quot;comment&quot;.<br>
-     * The field will already contain the given content.
-     *
-     * @param content The content of the created field.
-     * @return tagfield representing the &quot;comment&quot;
-     */
-    public abstract TagField createCommentField(String content);
-
-    /**
-     * Creates a field which represents the &quot;genre&quot;.<br>
-     * The field will already contain the given content.
-     *
-     * @param content The content of the created field.
-     * @return tagfield representing the &quot;genre&quot;
-     */
-    public abstract TagField createGenreField(String content);
-
-    /**
-     * Creates a field which represents the &quot;title&quot;.<br>
-     * The field will already contain the given content.
-     *
-     * @param content The content of the created field.
-     * @return tagfield representing the &quot;title&quot;
-     */
-    public abstract TagField createTitleField(String content);
-
-    /**
-     * Creates a field which represents the &quot;track&quot;.<br>
-     * The field will already contain the given content.
-     *
-     * @param content The content of the created field.
-     * @return tagfield representing the &quot;track&quot;
-     */
-    public abstract TagField createTrackField(String content) throws FieldDataInvalidException;
-
-    /**
-     * Creates a field which represents the &quot;year&quot;.<br>
-     * The field will already contain the given content.
-     *
-     * @param content The content of the created field.
-     * @return tagfield representing the &quot;year&quot;
-     */
-    public abstract TagField createYearField(String content);
-
     public Artwork getFirstArtwork()
     {
         List<Artwork> artwork = getArtworkList();
@@ -799,15 +406,15 @@ public abstract class AbstractTag implements Tag
         return null;
     }
 
-      /**
+      /**                         
      * Create field and then set within tag itself
      *
      * @param artwork
      * @throws FieldDataInvalidException
      */
-    public void createAndSetArtworkField(Artwork artwork) throws FieldDataInvalidException
+    public void setField(Artwork artwork) throws FieldDataInvalidException
     {
-        this.set(createArtworkField(artwork));
+        this.setField(createField(artwork));
     }
 
     /**
@@ -817,6 +424,6 @@ public abstract class AbstractTag implements Tag
      */
     public void deleteArtworkField() throws KeyNotFoundException
     {
-        this.deleteTagField(TagFieldKey.COVER_ART);
+        this.deleteField(FieldKey.COVER_ART);
     }
 }

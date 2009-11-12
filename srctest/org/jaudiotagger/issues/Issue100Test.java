@@ -1,18 +1,15 @@
 package org.jaudiotagger.issues;
 
 import org.jaudiotagger.AbstractTestCase;
-import org.jaudiotagger.tag.mp4.Mp4Tag;
-import org.jaudiotagger.tag.TagFieldKey;
-import org.jaudiotagger.tag.datatype.DataTypes;
-import org.jaudiotagger.tag.id3.*;
 import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.AudioFileIO;
 import org.jaudiotagger.audio.mp3.MP3File;
+import org.jaudiotagger.tag.datatype.DataTypes;
+import org.jaudiotagger.tag.id3.*;
 
 import java.io.File;
-import java.io.RandomAccessFile;
-import java.util.Set;
 import java.util.Iterator;
+import java.util.Set;
 
 
 /**

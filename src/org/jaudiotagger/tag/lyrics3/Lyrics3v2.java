@@ -110,7 +110,7 @@ public class Lyrics3v2 extends AbstractLyrics3
                     }
                     catch (TagException ex)
                     {
-                        //invalid frame to create lyrics3 field. ignore and keep going
+                        //invalid frame to createField lyrics3 field. ignore and keep going
                     }
                 }
             }
@@ -420,7 +420,7 @@ public class Lyrics3v2 extends AbstractLyrics3
 
         file.write(buffer, 0, str.length());
 
-        // IND needs to go first. lets create/update it and write it first.
+        // IND needs to go first. lets createField/update it and write it first.
         updateField("IND");
         field = fieldMap.get("IND");
         field.write(file);

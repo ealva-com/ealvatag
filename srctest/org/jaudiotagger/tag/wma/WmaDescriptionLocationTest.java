@@ -8,6 +8,7 @@ import org.jaudiotagger.audio.asf.io.*;
 import org.jaudiotagger.audio.asf.tag.AsfFieldKey;
 import org.jaudiotagger.audio.asf.tag.AsfTag;
 import org.jaudiotagger.audio.asf.util.TagConverter;
+import org.jaudiotagger.tag.FieldKey;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -41,8 +42,8 @@ public class WmaDescriptionLocationTest extends WmaTestCase
     {
         super(TEST_FILE);
         this.testTag = new AsfTag(true);
-        this.testTag.setArtist("TheArtist");
-        this.testTag.set(this.testTag.createTagField(AsfFieldKey.ISVBR, Boolean.TRUE.toString()));
+        this.testTag.setField(FieldKey.ARTIST,"TheArtist");
+        this.testTag.setField(this.testTag.createTagField(AsfFieldKey.ISVBR, Boolean.TRUE.toString()));
     }
 
 
@@ -58,18 +59,18 @@ public class WmaDescriptionLocationTest extends WmaTestCase
      */
     private void applyTag(File testFile, boolean hcd, boolean hecd) throws Exception
     {
-        // get an audio file instance
+        // getFields an audio file instance
         AudioFile read = AudioFileIO.read(testFile);
-        // delete all managed data 
+        // deleteField all managed data
         AudioFileIO.delete(read);
         // Create chunks
         MetadataContainer[] distributeMetadata = TagConverter.distributeMetadata(this.testTag);
-        // create creator for the content description object (chunk)
+        // createField creator for the content description object (chunk)
         WriteableChunkModifer cdCreator = new WriteableChunkModifer(distributeMetadata[0]);
         MetadataContainer ecd = distributeMetadata[2];
-        // create creator for the extended content description object (chunk) 
+        // createField creator for the extended content description object (chunk)
         WriteableChunkModifer ecdCreator = new WriteableChunkModifer(ecd);
-        // create the modifier lists
+        // createField the modifier lists
         List<ChunkModifier> headerMods = new ArrayList<ChunkModifier>();
         List<ChunkModifier> extHeaderMods = new ArrayList<ChunkModifier>();
         if (hcd)
@@ -111,7 +112,7 @@ public class WmaDescriptionLocationTest extends WmaTestCase
     {
         AudioFile read = AudioFileIO.read(testFile);
         assertTrue(read.getAudioHeader().isVariableBitRate());
-        assertEquals("TheArtist", read.getTag().getFirstArtist());
+        assertEquals("TheArtist", read.getTag().getFirst(FieldKey.ARTIST));
         AsfHeader readHeader = AsfHeaderReader.readHeader(testFile);
         assertNotNull(readHeader.findContentDescription());
         assertNotNull(readHeader.findExtendedContentDescription());

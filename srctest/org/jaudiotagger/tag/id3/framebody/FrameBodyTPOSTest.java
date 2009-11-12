@@ -1,9 +1,9 @@
 package org.jaudiotagger.tag.id3.framebody;
 
 import org.jaudiotagger.AbstractTestCase;
+import org.jaudiotagger.tag.TagOptionSingleton;
 import org.jaudiotagger.tag.id3.ID3v24Frames;
 import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
-import org.jaudiotagger.tag.TagOptionSingleton;
 
 /**
  * Test TPOSFrameBody
@@ -21,6 +21,7 @@ public class FrameBodyTPOSTest extends AbstractTestCase
 
     public void testCreateFrameBodyStringConstructor()
     {
+        TagOptionSingleton.getInstance().setPadNumbers(false);
         Exception exceptionCaught = null;
         FrameBodyTPOS fb = null;
         try
@@ -44,6 +45,8 @@ public class FrameBodyTPOSTest extends AbstractTestCase
 
      public void testCreateFrameBodyIntegerConstructor()
     {
+        TagOptionSingleton.getInstance().setPadNumbers(false);
+                
         Exception exceptionCaught = null;
         FrameBodyTPOS fb = null;
         try
@@ -67,6 +70,7 @@ public class FrameBodyTPOSTest extends AbstractTestCase
 
     public void testCreateFrameBodyEmptyConstructor()
     {
+        TagOptionSingleton.getInstance().setPadNumbers(false);
         Exception exceptionCaught = null;
         FrameBodyTPOS fb = null;
         try
@@ -90,6 +94,7 @@ public class FrameBodyTPOSTest extends AbstractTestCase
 
     public void testCreateFrameBodyDiscOnly()
     {
+        TagOptionSingleton.getInstance().setPadNumbers(false);
         Exception exceptionCaught = null;
         FrameBodyTPOS fb = null;
         try

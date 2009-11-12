@@ -1,11 +1,10 @@
 package org.jaudiotagger.issues;
 
 import org.jaudiotagger.AbstractTestCase;
-import org.jaudiotagger.tag.TagFieldKey;
-import org.jaudiotagger.tag.id3.ID3v23Tag;
-import org.jaudiotagger.tag.id3.ID3v23Frame;
-import org.jaudiotagger.tag.id3.framebody.FrameBodyIPLS;
 import org.jaudiotagger.audio.mp3.MP3File;
+import org.jaudiotagger.tag.id3.ID3v23Frame;
+import org.jaudiotagger.tag.id3.ID3v23Tag;
+import org.jaudiotagger.tag.id3.framebody.FrameBodyIPLS;
 
 import java.io.File;
 
@@ -18,6 +17,13 @@ public class Issue307Test extends AbstractTestCase
 
     public void testMultiThreadedMP3HeaderAccess() throws Exception
     {
+        File orig = new File("testdata", "test71.mp3");
+        if (!orig.isFile())
+        {
+            System.err.println("Unable to test file - not available");
+            return;
+        }
+
         Exception e=null;
         MP3File mp3File = null;
         try

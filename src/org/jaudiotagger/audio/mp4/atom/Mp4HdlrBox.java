@@ -7,8 +7,8 @@ import java.nio.ByteBuffer;
 import java.nio.charset.CharacterCodingException;
 import java.nio.charset.Charset;
 import java.nio.charset.CharsetDecoder;
-import java.util.Map;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * HdlrBox ( Handler box),
@@ -86,7 +86,7 @@ public class Mp4HdlrBox extends AbstractMp4Box
 
         }
 
-        //To get human readable name
+        //To getFields human readable name
         mediaDataType = mediaDataTypeMap.get( handlerType);
     }
 

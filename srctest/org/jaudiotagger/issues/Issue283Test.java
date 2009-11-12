@@ -1,9 +1,9 @@
 package org.jaudiotagger.issues;
 
 import org.jaudiotagger.AbstractTestCase;
-import org.jaudiotagger.tag.datatype.Artwork;
 import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.AudioFileIO;
+import org.jaudiotagger.tag.FieldKey;
 
 import java.io.File;
 
@@ -29,9 +29,9 @@ public class Issue283Test extends AbstractTestCase {
             testFile = AbstractTestCase.copyAudioToTmp("test56.m4b");
             AudioFile af = AudioFileIO.read(testFile);
             System.out.println(af.getTag().toString());
-            assertEquals("Aesop",af.getTag().getFirstArtist());
-            assertEquals("Aesop's Fables (Unabridged)",af.getTag().getFirstTitle());
-            assertEquals("Aesop's Fables (Unabridged)",af.getTag().getFirstAlbum());
+            assertEquals("Aesop",af.getTag().getFirst(FieldKey.ARTIST));
+            assertEquals("Aesop's Fables (Unabridged)",af.getTag().getFirst(FieldKey.TITLE));
+            assertEquals("Aesop's Fables (Unabridged)",af.getTag().getFirst(FieldKey.ALBUM));
 
         }
         catch (Exception e)
@@ -58,11 +58,11 @@ public class Issue283Test extends AbstractTestCase {
            {
                testFile = AbstractTestCase.copyAudioToTmp("test56.m4b");
                AudioFile af = AudioFileIO.read(testFile);
-               af.getTag().setArtist("Aesops");
+               af.getTag().setField(FieldKey.ARTIST,"Aesops");
                af.commit();
 
                af = AudioFileIO.read(testFile);
-               assertEquals("Aesops",af.getTag().getFirstArtist());
+               assertEquals("Aesops",af.getTag().getFirst(FieldKey.ARTIST));
 
 
            }

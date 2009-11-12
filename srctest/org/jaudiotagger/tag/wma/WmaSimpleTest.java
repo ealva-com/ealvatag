@@ -7,7 +7,10 @@ import org.jaudiotagger.audio.asf.tag.AsfFieldKey;
 import org.jaudiotagger.audio.asf.tag.AsfTag;
 import org.jaudiotagger.audio.asf.tag.AsfTagCoverField;
 import org.jaudiotagger.audio.asf.tag.AsfTagTextField;
-import org.jaudiotagger.tag.*;
+import org.jaudiotagger.tag.FieldKey;
+import org.jaudiotagger.tag.Tag;
+import org.jaudiotagger.tag.TagField;
+import org.jaudiotagger.tag.TagTextField;
 import org.jaudiotagger.tag.reference.PictureTypes;
 
 import javax.imageio.ImageIO;
@@ -71,55 +74,55 @@ public class WmaSimpleTest extends AbstractTestCase
             System.out.println(tag);
 
             //Ease of use methods for common fields
-            assertEquals("artist", tag.getFirstArtist());
-            assertEquals("album", tag.getFirstAlbum());
-            assertEquals("tracktitle", tag.getFirstTitle());
-            assertEquals("comments", tag.getFirstComment());
-            assertEquals("1971", tag.getFirstYear());
-            assertEquals("3", tag.getFirstTrack());
-            assertEquals("genre", tag.getFirstGenre());
+            assertEquals("artist", tag.getFirst(FieldKey.ARTIST));
+            assertEquals("album", tag.getFirst(FieldKey.ALBUM));
+            assertEquals("tracktitle", tag.getFirst(FieldKey.TITLE));
+            assertEquals("comments", tag.getFirst(FieldKey.COMMENT));
+            assertEquals("1971", tag.getFirst(FieldKey.YEAR));
+            assertEquals("3", tag.getFirst(FieldKey.TRACK));
+            assertEquals("genre", tag.getFirst(FieldKey.GENRE));
 
-            assertEquals("artist", tag.getFirst(TagFieldKey.ARTIST));
+            assertEquals("artist", tag.getFirst(FieldKey.ARTIST));
             assertEquals("artist", tag.getFirst(AsfFieldKey.AUTHOR.getFieldName()));
 
-            assertEquals("album", tag.getFirst(TagFieldKey.ALBUM));
+            assertEquals("album", tag.getFirst(FieldKey.ALBUM));
             assertEquals("album", tag.getFirst(AsfFieldKey.ALBUM.getFieldName()));
 
-            assertEquals("tracktitle", tag.getFirst(TagFieldKey.TITLE));
+            assertEquals("tracktitle", tag.getFirst(FieldKey.TITLE));
             assertEquals("tracktitle", tag.getFirst(AsfFieldKey.TITLE.getFieldName()));
 
-            assertEquals("genre", tag.getFirst(TagFieldKey.GENRE));
+            assertEquals("genre", tag.getFirst(FieldKey.GENRE));
             assertEquals("genre", tag.getFirst(AsfFieldKey.GENRE.getFieldName()));
 
-            assertEquals("3", tag.getFirst(TagFieldKey.TRACK));
-            assertEquals("1971", tag.getFirst(TagFieldKey.YEAR));
-            assertEquals("genre", tag.getFirst(TagFieldKey.GENRE));
-            assertEquals("comments", tag.getFirst(TagFieldKey.COMMENT));
-            assertEquals("albumartist", tag.getFirst(TagFieldKey.ALBUM_ARTIST));
-            assertEquals("composer", tag.getFirst(TagFieldKey.COMPOSER));
-            assertEquals("grouping", tag.getFirst(TagFieldKey.GROUPING));
-            assertEquals("2", tag.getFirst(TagFieldKey.DISC_NO));
-            assertEquals("lyrics for song", tag.getFirst(TagFieldKey.LYRICS));
+            assertEquals("3", tag.getFirst(FieldKey.TRACK));
+            assertEquals("1971", tag.getFirst(FieldKey.YEAR));
+            assertEquals("genre", tag.getFirst(FieldKey.GENRE));
+            assertEquals("comments", tag.getFirst(FieldKey.COMMENT));
+            assertEquals("albumartist", tag.getFirst(FieldKey.ALBUM_ARTIST));
+            assertEquals("composer", tag.getFirst(FieldKey.COMPOSER));
+            assertEquals("grouping", tag.getFirst(FieldKey.GROUPING));
+            assertEquals("2", tag.getFirst(FieldKey.DISC_NO));
+            assertEquals("lyrics for song", tag.getFirst(FieldKey.LYRICS));
 
-            assertEquals("encoder", tag.getFirst(TagFieldKey.ENCODER));
-            assertEquals("isrc", tag.getFirst(TagFieldKey.ISRC));
+            assertEquals("encoder", tag.getFirst(FieldKey.ENCODER));
+            assertEquals("isrc", tag.getFirst(FieldKey.ISRC));
 
-            assertEquals("publisher", tag.getFirst(TagFieldKey.RECORD_LABEL));
-            assertEquals("Lyricist", tag.getFirst(TagFieldKey.LYRICIST));
-            assertEquals("conductor", tag.getFirst(TagFieldKey.CONDUCTOR));
+            assertEquals("publisher", tag.getFirst(FieldKey.RECORD_LABEL));
+            assertEquals("Lyricist", tag.getFirst(FieldKey.LYRICIST));
+            assertEquals("conductor", tag.getFirst(FieldKey.CONDUCTOR));
 
-            assertEquals("Mellow", tag.getFirst(TagFieldKey.MOOD));
+            assertEquals("Mellow", tag.getFirst(FieldKey.MOOD));
 
             //Media Monkey does not currently support these fields ...
-            //assertEquals("is_compilation", tag.getFirst(TagFieldKey.IS_COMPILATION));
-            //assertEquals("artist_sort", tag.getFirst(TagFieldKey.ARTIST_SORT));
-            //assertEquals("album_artist_sort", tag.getFirst(TagFieldKey.ALBUM_ARTIST_SORT));
-            //assertEquals("album_sort", tag.getFirst(TagFieldKey.ALBUM_SORT));
-            //assertEquals("title_sort", tag.getFirst(TagFieldKey.TITLE_SORT));
-            //assertEquals("barcode", tag.getFirst(TagFieldKey.BARCODE));
-            //assertEquals("catalogno", tag.getFirst(TagFieldKey.CATALOG_NO));
-            //assertEquals("media", tag.getFirst(TagFieldKey.MEDIA));
-            //assertEquals("remixer", tag.getFirst(TagFieldKey.REMIXER));
+            //assertEquals("is_compilation", tag.getFirst(FieldKey.IS_COMPILATION));
+            //assertEquals("artist_sort", tag.getFirst(FieldKey.ARTIST_SORT));
+            //assertEquals("album_artist_sort", tag.getFirst(FieldKey.ALBUM_ARTIST_SORT));
+            //assertEquals("album_sort", tag.getFirst(FieldKey.ALBUM_SORT));
+            //assertEquals("title_sort", tag.getFirst(FieldKey.TITLE_SORT));
+            //assertEquals("barcode", tag.getFirst(FieldKey.BARCODE));
+            //assertEquals("catalogno", tag.getFirst(FieldKey.CATALOG_NO));
+            //assertEquals("media", tag.getFirst(FieldKey.MEDIA));
+            //assertEquals("remixer", tag.getFirst(FieldKey.REMIXER));
             //Now
         }
         catch (Exception e)
@@ -162,88 +165,88 @@ public class WmaSimpleTest extends AbstractTestCase
             System.out.println(tag);
 
             //Ease of use methods for common fields
-            assertEquals("Sonic Youth", tag.getFirstArtist());
-            assertEquals("Sister", tag.getFirstAlbum());
-            assertEquals("(I Got a) Catholic Block", tag.getFirstTitle());
-            assertEquals("1987", tag.getFirstYear());
-            assertEquals("2", tag.getFirstTrack());  //NOTE:track can have seroes or not
-            assertEquals("no wave", tag.getFirstGenre());
+            assertEquals("Sonic Youth", tag.getFirst(FieldKey.ARTIST));
+            assertEquals("Sister", tag.getFirst(FieldKey.ALBUM));
+            assertEquals("(I Got a) Catholic Block", tag.getFirst(FieldKey.TITLE));
+            assertEquals("1987", tag.getFirst(FieldKey.YEAR));
+            assertEquals("2", tag.getFirst(FieldKey.TRACK));  //NOTE:track can have seroes or not
+            assertEquals("no wave", tag.getFirst(FieldKey.GENRE));
 
-            assertEquals("Sonic Youth", tag.getFirst(TagFieldKey.ARTIST));
+            assertEquals("Sonic Youth", tag.getFirst(FieldKey.ARTIST));
 
             assertEquals("Sonic Youth", tag.getFirst(AsfFieldKey.AUTHOR.getFieldName()));
 
-            assertEquals("Sister", tag.getFirst(TagFieldKey.ALBUM));
+            assertEquals("Sister", tag.getFirst(FieldKey.ALBUM));
             assertEquals("Sister", tag.getFirst(AsfFieldKey.ALBUM.getFieldName()));
 
-            assertEquals("(I Got a) Catholic Block", tag.getFirst(TagFieldKey.TITLE));
+            assertEquals("(I Got a) Catholic Block", tag.getFirst(FieldKey.TITLE));
             assertEquals("(I Got a) Catholic Block", tag.getFirst(AsfFieldKey.TITLE.getFieldName()));
 
-            assertEquals("no wave", tag.getFirst(TagFieldKey.GENRE));
+            assertEquals("no wave", tag.getFirst(FieldKey.GENRE));
             assertEquals("no wave", tag.getFirst(AsfFieldKey.GENRE.getFieldName()));
 
-            assertEquals("2", tag.getFirst(TagFieldKey.TRACK));
+            assertEquals("2", tag.getFirst(FieldKey.TRACK));
             assertEquals("2", tag.getFirst(AsfFieldKey.TRACK.getFieldName()));
 
-            assertEquals("1987", tag.getFirst(TagFieldKey.YEAR));
+            assertEquals("1987", tag.getFirst(FieldKey.YEAR));
             assertEquals("1987", tag.getFirst(AsfFieldKey.YEAR.getFieldName()));
 
-            assertEquals("Sonic Youth", tag.getFirst(TagFieldKey.ALBUM_ARTIST));
+            assertEquals("Sonic Youth", tag.getFirst(FieldKey.ALBUM_ARTIST));
             assertEquals("Sonic Youth", tag.getFirst(AsfFieldKey.ALBUM_ARTIST.getFieldName()));
 
-            assertEquals("Blast First", tag.getFirst(TagFieldKey.RECORD_LABEL));
+            assertEquals("Blast First", tag.getFirst(FieldKey.RECORD_LABEL));
             assertEquals("Blast First", tag.getFirst(AsfFieldKey.RECORD_LABEL.getFieldName()));
 
-            assertEquals("Sonic Youth", tag.getFirst(TagFieldKey.ARTIST_SORT));
+            assertEquals("Sonic Youth", tag.getFirst(FieldKey.ARTIST_SORT));
             assertEquals("Sonic Youth", tag.getFirst(AsfFieldKey.ARTIST_SORT.getFieldName()));
 
-            assertEquals("Sonic Youth", tag.getFirst(TagFieldKey.ARTIST_SORT));
+            assertEquals("Sonic Youth", tag.getFirst(FieldKey.ARTIST_SORT));
             assertEquals("Sonic Youth", tag.getFirst(AsfFieldKey.ARTIST_SORT.getFieldName()));
 
-            assertEquals("Sonic Youth", tag.getFirst(TagFieldKey.ALBUM_ARTIST_SORT));
+            assertEquals("Sonic Youth", tag.getFirst(FieldKey.ALBUM_ARTIST_SORT));
             assertEquals("Sonic Youth", tag.getFirst(AsfFieldKey.ALBUM_ARTIST_SORT.getFieldName()));
 
-            assertEquals("official", tag.getFirst(TagFieldKey.MUSICBRAINZ_RELEASE_STATUS));
+            assertEquals("official", tag.getFirst(FieldKey.MUSICBRAINZ_RELEASE_STATUS));
             assertEquals("official", tag.getFirst(AsfFieldKey.MUSICBRAINZ_RELEASE_STATUS.getFieldName()));
 
-            assertEquals("album", tag.getFirst(TagFieldKey.MUSICBRAINZ_RELEASE_TYPE));
+            assertEquals("album", tag.getFirst(FieldKey.MUSICBRAINZ_RELEASE_TYPE));
             assertEquals("album", tag.getFirst(AsfFieldKey.MUSICBRAINZ_RELEASE_TYPE.getFieldName()));
 
-            assertEquals("GB", tag.getFirst(TagFieldKey.MUSICBRAINZ_RELEASE_COUNTRY));
+            assertEquals("GB", tag.getFirst(FieldKey.MUSICBRAINZ_RELEASE_COUNTRY));
             assertEquals("GB", tag.getFirst(AsfFieldKey.MUSICBRAINZ_RELEASE_COUNTRY.getFieldName()));
 
-            assertEquals("5cbef01b-cc35-4f52-af7b-d0df0c4f61b9", tag.getFirst(TagFieldKey.MUSICBRAINZ_RELEASEARTISTID));
+            assertEquals("5cbef01b-cc35-4f52-af7b-d0df0c4f61b9", tag.getFirst(FieldKey.MUSICBRAINZ_RELEASEARTISTID));
             assertEquals("5cbef01b-cc35-4f52-af7b-d0df0c4f61b9", tag.getFirst(AsfFieldKey.MUSICBRAINZ_RELEASEARTISTID.getFieldName()));
 
-            assertEquals("f8ece8ad-0ef1-45c0-9d20-a58a10052d5c", tag.getFirst(TagFieldKey.MUSICBRAINZ_TRACK_ID));
+            assertEquals("f8ece8ad-0ef1-45c0-9d20-a58a10052d5c", tag.getFirst(FieldKey.MUSICBRAINZ_TRACK_ID));
             assertEquals("f8ece8ad-0ef1-45c0-9d20-a58a10052d5c", tag.getFirst(AsfFieldKey.MUSICBRAINZ_TRACK_ID.getFieldName()));
 
-            assertEquals("ca16e36d-fa43-4b49-8c71-d98bd70b341f", tag.getFirst(TagFieldKey.MUSICBRAINZ_RELEASEID));
+            assertEquals("ca16e36d-fa43-4b49-8c71-d98bd70b341f", tag.getFirst(FieldKey.MUSICBRAINZ_RELEASEID));
             assertEquals("ca16e36d-fa43-4b49-8c71-d98bd70b341f", tag.getFirst(AsfFieldKey.MUSICBRAINZ_RELEASEID.getFieldName()));
 
-            assertEquals("5cbef01b-cc35-4f52-af7b-d0df0c4f61b9", tag.getFirst(TagFieldKey.MUSICBRAINZ_ARTISTID));
+            assertEquals("5cbef01b-cc35-4f52-af7b-d0df0c4f61b9", tag.getFirst(FieldKey.MUSICBRAINZ_ARTISTID));
             assertEquals("5cbef01b-cc35-4f52-af7b-d0df0c4f61b9", tag.getFirst(AsfFieldKey.MUSICBRAINZ_ARTISTID.getFieldName()));
 
             //This example doesnt populate these fields
-            //assertEquals("Sonic Youth", tag.getFirst(TagFieldKey.COMPOSER));
-            //assertEquals("grouping", tag.getFirst(TagFieldKey.GROUPING));
-            //assertEquals("2", tag.getFirst(TagFieldKey.DISC_NO));
-            //assertEquals("lyrics for song", tag.getFirst(TagFieldKey.LYRICS));
-            //assertEquals("encoder", tag.getFirst(TagFieldKey.ENCODER));
-            //assertEquals("isrc", tag.getFirst(TagFieldKey.ISRC));
-            //assertEquals("Lyricist", tag.getFirst(TagFieldKey.LYRICIST));
-            //assertEquals("conductor", tag.getFirst(TagFieldKey.CONDUCTOR));
-            //assertEquals("Mellow", tag.getFirst(TagFieldKey.INVOLVED_PEOPLE));
-            //assertEquals("5cbef01b-cc35-4f52-af7b-d0df0c4f61b9", tag.getFirst(TagFieldKey.MUSICIP_ID));
+            //assertEquals("Sonic Youth", tag.getFirst(FieldKey.COMPOSER));
+            //assertEquals("grouping", tag.getFirst(FieldKey.GROUPING));
+            //assertEquals("2", tag.getFirst(FieldKey.DISC_NO));
+            //assertEquals("lyrics for song", tag.getFirst(FieldKey.LYRICS));
+            //assertEquals("encoder", tag.getFirst(FieldKey.ENCODER));
+            //assertEquals("isrc", tag.getFirst(FieldKey.ISRC));
+            //assertEquals("Lyricist", tag.getFirst(FieldKey.LYRICIST));
+            //assertEquals("conductor", tag.getFirst(FieldKey.CONDUCTOR));
+            //assertEquals("Mellow", tag.getFirst(FieldKey.INVOLVED_PEOPLE));
+            //assertEquals("5cbef01b-cc35-4f52-af7b-d0df0c4f61b9", tag.getFirst(FieldKey.MUSICIP_ID));
 
             //Picard Qt does not currently support these fields ...
-            //assertEquals("is_compilation", tag.getFirst(TagFieldKey.IS_COMPILATION));
-            //assertEquals("album_sort", tag.getFirst(TagFieldKey.ALBUM_SORT));
-            //assertEquals("title_sort", tag.getFirst(TagFieldKey.TITLE_SORT));
-            //assertEquals("barcode", tag.getFirst(TagFieldKey.BARCODE));
-            //assertEquals("catalogno", tag.getFirst(TagFieldKey.CATALOG_NO));
-            //assertEquals("media", tag.getFirst(TagFieldKey.MEDIA));
-            //assertEquals("remixer", tag.getFirst(TagFieldKey.REMIXER));
+            //assertEquals("is_compilation", tag.getFirst(FieldKey.IS_COMPILATION));
+            //assertEquals("album_sort", tag.getFirst(FieldKey.ALBUM_SORT));
+            //assertEquals("title_sort", tag.getFirst(FieldKey.TITLE_SORT));
+            //assertEquals("barcode", tag.getFirst(FieldKey.BARCODE));
+            //assertEquals("catalogno", tag.getFirst(FieldKey.CATALOG_NO));
+            //assertEquals("media", tag.getFirst(FieldKey.MEDIA));
+            //assertEquals("remixer", tag.getFirst(FieldKey.REMIXER));
 
             //Now
         }
@@ -274,28 +277,28 @@ public class WmaSimpleTest extends AbstractTestCase
             AsfTag tag = (AsfTag) f.getTag();
 
             //Write some new values and save
-            tag.setArtist("artist2");
-            tag.setAlbum("album2");
-            tag.setTitle("tracktitle2");
-            tag.setComment("comments2");
-            tag.setYear("1972");
-            tag.setGenre("genre2");
-            tag.setTrack("4");
+            tag.setField(FieldKey.ARTIST,"artist2");
+            tag.setField(FieldKey.ALBUM,"album2");
+            tag.setField(FieldKey.TITLE,"tracktitle2");
+            tag.setField(FieldKey.COMMENT,"comments2");
+            tag.setField(FieldKey.YEAR,"1972");
+            tag.setField(FieldKey.GENRE,"genre2");
+            tag.setField(FieldKey.TRACK,"4");
             tag.setCopyright("copyright");
             tag.setRating("rating");
-            tag.set(tag.createTagField(TagFieldKey.URL_LYRICS_SITE,"http://www.lyrics.fly.com"));
-            tag.set(tag.createTagField(TagFieldKey.URL_DISCOGS_ARTIST_SITE,"http://www.discogs1.com"));
-            tag.set(tag.createTagField(TagFieldKey.URL_DISCOGS_RELEASE_SITE,"http://www.discogs2.com"));
-            tag.set(tag.createTagField(TagFieldKey.URL_OFFICIAL_ARTIST_SITE,"http://www.discogs3.com"));
-            tag.set(tag.createTagField(TagFieldKey.URL_OFFICIAL_RELEASE_SITE,"http://www.discogs4.com"));
-            tag.set(tag.createTagField(TagFieldKey.URL_WIKIPEDIA_ARTIST_SITE,"http://www.discogs5.com"));
-            tag.set(tag.createTagField(TagFieldKey.URL_WIKIPEDIA_RELEASE_SITE,"http://www.discogs6.com"));
-            tag.set(tag.createTagField(TagFieldKey.DISC_TOTAL,"3"));
-            tag.set(tag.createTagField(TagFieldKey.TRACK_TOTAL,"11"));
+            tag.setField(tag.createField(FieldKey.URL_LYRICS_SITE,"http://www.lyrics.fly.com"));
+            tag.setField(tag.createField(FieldKey.URL_DISCOGS_ARTIST_SITE,"http://www.discogs1.com"));
+            tag.setField(tag.createField(FieldKey.URL_DISCOGS_RELEASE_SITE,"http://www.discogs2.com"));
+            tag.setField(tag.createField(FieldKey.URL_OFFICIAL_ARTIST_SITE,"http://www.discogs3.com"));
+            tag.setField(tag.createField(FieldKey.URL_OFFICIAL_RELEASE_SITE,"http://www.discogs4.com"));
+            tag.setField(tag.createField(FieldKey.URL_WIKIPEDIA_ARTIST_SITE,"http://www.discogs5.com"));
+            tag.setField(tag.createField(FieldKey.URL_WIKIPEDIA_RELEASE_SITE,"http://www.discogs6.com"));
+            tag.setField(tag.createField(FieldKey.DISC_TOTAL,"3"));
+            tag.setField(tag.createField(FieldKey.TRACK_TOTAL,"11"));
 
 
-            // set the IsVbr value (can be modified for now)
-            tag.set(tag.createTagField(AsfFieldKey.ISVBR, Boolean.TRUE.toString()));
+            // setField the IsVbr value (can be modified for now)
+            tag.setField(tag.createTagField(AsfFieldKey.ISVBR, Boolean.TRUE.toString()));
             f.commit();
 
             f = AudioFileIO.read(testFile);
@@ -303,24 +306,24 @@ public class WmaSimpleTest extends AbstractTestCase
 
             assertTrue(f.getAudioHeader().isVariableBitRate());
 
-            assertEquals("artist2", tag.getFirstArtist());
-            assertEquals("album2", tag.getFirstAlbum());
-            assertEquals("tracktitle2", tag.getFirstTitle());
-            assertEquals("comments2", tag.getFirstComment());
-            assertEquals("1972", tag.getFirstYear());
-            assertEquals("4", tag.getFirstTrack());
-            assertEquals("genre2", tag.getFirstGenre());
+            assertEquals("artist2", tag.getFirst(FieldKey.ARTIST));
+            assertEquals("album2", tag.getFirst(FieldKey.ALBUM));
+            assertEquals("tracktitle2", tag.getFirst(FieldKey.TITLE));
+            assertEquals("comments2", tag.getFirst(FieldKey.COMMENT));
+            assertEquals("1972", tag.getFirst(FieldKey.YEAR));
+            assertEquals("4", tag.getFirst(FieldKey.TRACK));
+            assertEquals("genre2", tag.getFirst(FieldKey.GENRE));
             assertEquals("copyright", tag.getFirstCopyright());
             assertEquals("rating", tag.getFirstRating());
-            assertEquals("http://www.lyrics.fly.com",tag.getFirst(TagFieldKey.URL_LYRICS_SITE));
-            assertEquals("http://www.discogs1.com",tag.getFirst(TagFieldKey.URL_DISCOGS_ARTIST_SITE));
-            assertEquals("http://www.discogs2.com",tag.getFirst(TagFieldKey.URL_DISCOGS_RELEASE_SITE));
-            assertEquals("http://www.discogs3.com",tag.getFirst(TagFieldKey.URL_OFFICIAL_ARTIST_SITE));
-            assertEquals("http://www.discogs4.com",tag.getFirst(TagFieldKey.URL_OFFICIAL_RELEASE_SITE));
-            assertEquals("http://www.discogs5.com",tag.getFirst(TagFieldKey.URL_WIKIPEDIA_ARTIST_SITE));
-            assertEquals("http://www.discogs6.com",tag.getFirst(TagFieldKey.URL_WIKIPEDIA_RELEASE_SITE));
-            assertEquals("3",tag.getFirst(TagFieldKey.DISC_TOTAL));
-            assertEquals("11",tag.getFirst(TagFieldKey.TRACK_TOTAL));
+            assertEquals("http://www.lyrics.fly.com",tag.getFirst(FieldKey.URL_LYRICS_SITE));
+            assertEquals("http://www.discogs1.com",tag.getFirst(FieldKey.URL_DISCOGS_ARTIST_SITE));
+            assertEquals("http://www.discogs2.com",tag.getFirst(FieldKey.URL_DISCOGS_RELEASE_SITE));
+            assertEquals("http://www.discogs3.com",tag.getFirst(FieldKey.URL_OFFICIAL_ARTIST_SITE));
+            assertEquals("http://www.discogs4.com",tag.getFirst(FieldKey.URL_OFFICIAL_RELEASE_SITE));
+            assertEquals("http://www.discogs5.com",tag.getFirst(FieldKey.URL_WIKIPEDIA_ARTIST_SITE));
+            assertEquals("http://www.discogs6.com",tag.getFirst(FieldKey.URL_WIKIPEDIA_RELEASE_SITE));
+            assertEquals("3",tag.getFirst(FieldKey.DISC_TOTAL));
+            assertEquals("11",tag.getFirst(FieldKey.TRACK_TOTAL));
 
 
 
@@ -359,30 +362,30 @@ public class WmaSimpleTest extends AbstractTestCase
             {
                 f = AudioFileIO.read(testFile);
                 Tag tag = f.getTag();
-                for (TagFieldKey key : TagFieldKey.values())
+                for (FieldKey key : FieldKey.values())
                 {
-                    if (!(key == TagFieldKey.COVER_ART))
+                    if (!(key == FieldKey.COVER_ART))
                     {
-                        tag.set(tag.createTagField(key, key.name() + "_value_" + i));
+                        tag.setField(tag.createField(key, key.name() + "_value_" + i));
                     }
                 }
                 f.commit();
                 f = AudioFileIO.read(testFile);
                 tag = f.getTag();
-                for (TagFieldKey key : TagFieldKey.values())
+                for (FieldKey key : FieldKey.values())
                 {
                     /*
                       * Test value retrieval, using multiple access methods.
                       */
-                    if (!(key == TagFieldKey.COVER_ART))
+                    if (!(key == FieldKey.COVER_ART))
                     {
                         String value = key.name() + "_value_" + i;
                         System.out.println("Value is:" + value);
 
                         assertEquals(value, tag.getFirst(key));
-                        AsfTagTextField atf = (AsfTagTextField) tag.get(key).get(0);
+                        AsfTagTextField atf = (AsfTagTextField) tag.getFields(key).get(0);
                         assertEquals(value, atf.getContent());
-                        atf = (AsfTagTextField) tag.get(key).get(0);
+                        atf = (AsfTagTextField) tag.getFields(key).get(0);
                         assertEquals(value, atf.getContent());
                     }
 
@@ -412,11 +415,11 @@ public class WmaSimpleTest extends AbstractTestCase
             //test fields are written with correct ids
             f = AudioFileIO.read(testFile);
             Tag tag = f.getTag();
-            for (TagFieldKey key : TagFieldKey.values())
+            for (FieldKey key : FieldKey.values())
             {
-                if (!(key == TagFieldKey.COVER_ART))
+                if (!(key == FieldKey.COVER_ART))
                 {
-                    tag.add(tag.createTagField(key, key.name() + "_value"));
+                    tag.addField(tag.createField(key, key.name() + "_value"));
                 }
             }
             f.commit();
@@ -476,7 +479,7 @@ public class WmaSimpleTest extends AbstractTestCase
         {
             File testFile = AbstractTestCase.copyAudioToTmp("test3.wma");
             AudioFile f = AudioFileIO.read(testFile);
-            assertEquals("Glass", f.getTag().getFirstTitle());
+            assertEquals("Glass", f.getTag().getFirst(FieldKey.TITLE));
             //Now
         }
         catch (Exception e)
@@ -502,9 +505,9 @@ public class WmaSimpleTest extends AbstractTestCase
             File testFile = AbstractTestCase.copyAudioToTmp("test1.wma");
             AudioFile f = AudioFileIO.read(testFile);
             Tag tag = f.getTag();
-            assertEquals(1, tag.get(TagFieldKey.COVER_ART).size());
+            assertEquals(1, tag.getFields(FieldKey.COVER_ART).size());
 
-            TagField tagField = tag.get(TagFieldKey.COVER_ART).get(0);
+            TagField tagField = tag.getFields(FieldKey.COVER_ART).get(0);
             assertEquals("WM/Picture", tagField.getId());
             assertEquals(14550, tagField.getRawContent().length);
 
@@ -588,9 +591,9 @@ public class WmaSimpleTest extends AbstractTestCase
             File testFile = AbstractTestCase.copyAudioToTmp("test4.wma");
             AudioFile f = AudioFileIO.read(testFile);
             Tag tag = f.getTag();
-            assertEquals(1, tag.get(TagFieldKey.COVER_ART).size());
+            assertEquals(1, tag.getFields(FieldKey.COVER_ART).size());
 
-            TagField tagField = tag.get(TagFieldKey.COVER_ART).get(0);
+            TagField tagField = tag.getFields(FieldKey.COVER_ART).get(0);
             assertEquals("WM/Picture", tagField.getId());
             assertEquals(14534, tagField.getRawContent().length);
 
@@ -668,9 +671,9 @@ public class WmaSimpleTest extends AbstractTestCase
             File testFile = AbstractTestCase.copyAudioToTmp("test5.wma");
             AudioFile f = AudioFileIO.read(testFile);
             Tag tag = f.getTag();
-            assertEquals(1, tag.get(TagFieldKey.COVER_ART).size());
+            assertEquals(1, tag.getFields(FieldKey.COVER_ART).size());
 
-            TagField tagField = tag.get(TagFieldKey.COVER_ART).get(0);
+            TagField tagField = tag.getFields(FieldKey.COVER_ART).get(0);
             assertEquals("WM/Picture", tagField.getId());
             assertEquals(18590, tagField.getRawContent().length);
 
@@ -751,9 +754,9 @@ public class WmaSimpleTest extends AbstractTestCase
             File testFile = AbstractTestCase.copyAudioToTmp("test6.wma");
             AudioFile f = AudioFileIO.read(testFile);
             Tag tag = f.getTag();
-            assertEquals(1, tag.get(TagFieldKey.COVER_ART).size());
+            assertEquals(1, tag.getFields(FieldKey.COVER_ART).size());
 
-            TagField tagField = tag.get(TagFieldKey.COVER_ART).get(0);
+            TagField tagField = tag.getFields(FieldKey.COVER_ART).get(0);
             assertEquals("WM/Picture", tagField.getId());
             assertEquals(5093, tagField.getRawContent().length);
 
@@ -842,21 +845,21 @@ public class WmaSimpleTest extends AbstractTestCase
             File testFile = AbstractTestCase.copyAudioToTmp("test7.wma");
             AudioFile f = AudioFileIO.read(testFile);
             Tag tag = f.getTag();
-            assertEquals(0, tag.get(TagFieldKey.COVER_ART).size());
+            assertEquals(0, tag.getFields(FieldKey.COVER_ART).size());
 
-            //Now create artwork field
+            //Now createField artwork field
             RandomAccessFile imageFile = new RandomAccessFile(new File("testdata", "coverart.png"), "r");
             byte[] imagedata = new byte[(int) imageFile.length()];
             imageFile.read(imagedata);
             AsfTag asftag = (AsfTag) tag;
-            asftag.set(asftag.createArtworkField(imagedata));
+            asftag.setField(asftag.createArtworkField(imagedata));
             f.commit();
 
             f = AudioFileIO.read(testFile);
             tag = f.getTag();
-            assertEquals(1, tag.get(TagFieldKey.COVER_ART).size());
+            assertEquals(1, tag.getFields(FieldKey.COVER_ART).size());
 
-            TagField tagField = tag.get(TagFieldKey.COVER_ART).get(0);
+            TagField tagField = tag.getFields(FieldKey.COVER_ART).get(0);
             AsfTagCoverField coverartField = (AsfTagCoverField) tagField;
             assertEquals("WM/Picture", tagField.getId());
             assertEquals((Integer) PictureTypes.DEFAULT_ID, (Integer) coverartField.getPictureType());

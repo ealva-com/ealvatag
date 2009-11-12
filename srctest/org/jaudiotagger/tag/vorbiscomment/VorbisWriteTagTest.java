@@ -5,8 +5,8 @@ import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.AudioFileIO;
 import org.jaudiotagger.audio.ogg.OggFileReader;
 import org.jaudiotagger.audio.ogg.util.OggPageHeader;
+import org.jaudiotagger.tag.FieldKey;
 import org.jaudiotagger.tag.TagField;
-import org.jaudiotagger.tag.TagFieldKey;
 import org.jaudiotagger.tag.vorbiscomment.util.Base64Coder;
 
 import javax.imageio.ImageIO;
@@ -60,46 +60,46 @@ public class VorbisWriteTagTest extends AbstractTestCase
             assertEquals("jaudiotagger", tag.getVendor());
 
             //These have methods coz common over all formats
-            tag.setArtist("AUTHOR");
-            tag.setAlbum("ALBUM");
-            tag.setTitle("title");
-            tag.setComment("comments");
-            tag.setYear("1971");
-            tag.setTrack("2");
-            tag.setGenre("Genre");
+            tag.setField(FieldKey.ARTIST,"AUTHOR");
+            tag.setField(FieldKey.ALBUM,"ALBUM");
+            tag.setField(FieldKey.TITLE,"title");
+            tag.setField(FieldKey.COMMENT,"comments");
+            tag.setField(FieldKey.YEAR,"1971");
+            tag.setField(FieldKey.TRACK,"2");
+            tag.setField(FieldKey.GENRE,"Genre");
             //Common keys
-            tag.set(tag.createTagField(TagFieldKey.DISC_NO, "1"));
-            tag.set(tag.createTagField(TagFieldKey.COMPOSER, "composer\u00A9"));
-            tag.set(tag.createTagField(TagFieldKey.ARTIST_SORT, "Sortartist\u01ff"));
-            tag.set(tag.createTagField(TagFieldKey.LYRICS, "lyrics"));
-            tag.set(tag.createTagField(TagFieldKey.BPM, "200"));
-            tag.set(tag.createTagField(TagFieldKey.ALBUM_ARTIST, "Albumartist"));
-            tag.set(tag.createTagField(TagFieldKey.ALBUM_ARTIST_SORT, "Sortalbumartist"));
-            tag.set(tag.createTagField(TagFieldKey.ALBUM_SORT, "Sortalbum"));
-            tag.set(tag.createTagField(TagFieldKey.GROUPING, "GROUping"));
-            tag.set(tag.createTagField(TagFieldKey.COMPOSER_SORT, "Sortcomposer"));
-            tag.set(tag.createTagField(TagFieldKey.TITLE_SORT, "sorttitle"));
-            tag.set(tag.createTagField(TagFieldKey.IS_COMPILATION, "1"));
-            tag.set(tag.createTagField(TagFieldKey.MUSICIP_ID, "66027994-edcf-9d89-bec8-0d30077d888c"));
-            tag.set(tag.createTagField(TagFieldKey.MUSICBRAINZ_TRACK_ID, "e785f700-c1aa-4943-bcee-87dd316a2c31"));
-            tag.set(tag.createTagField(TagFieldKey.MUSICBRAINZ_ARTISTID, "989a13f6-b58c-4559-b09e-76ae0adb94ed"));
-            tag.set(tag.createTagField(TagFieldKey.MUSICBRAINZ_RELEASEARTISTID, "989a13f6-b58c-4559-b09e-76ae0adb94ed"));
-            tag.set(tag.createTagField(TagFieldKey.MUSICBRAINZ_RELEASEID, "19c6f0f6-3d6d-4b02-88c7-ffb559d52be6"));
-            tag.set(tag.createTagField(TagFieldKey.URL_LYRICS_SITE,"http://www.lyrics.fly.com"));
-            tag.set(tag.createTagField(TagFieldKey.URL_DISCOGS_ARTIST_SITE,"http://www.discogs1.com"));
-            tag.set(tag.createTagField(TagFieldKey.URL_DISCOGS_RELEASE_SITE,"http://www.discogs2.com"));
-            tag.set(tag.createTagField(TagFieldKey.URL_OFFICIAL_ARTIST_SITE,"http://www.discogs3.com"));
-            tag.set(tag.createTagField(TagFieldKey.URL_OFFICIAL_RELEASE_SITE,"http://www.discogs4.com"));
-            tag.set(tag.createTagField(TagFieldKey.URL_WIKIPEDIA_ARTIST_SITE,"http://www.discogs5.com"));
-            tag.set(tag.createTagField(TagFieldKey.URL_WIKIPEDIA_RELEASE_SITE,"http://www.discogs6.com"));
-            tag.set(tag.createTagField(TagFieldKey.TRACK_TOTAL,"11"));
-            tag.set(tag.createTagField(TagFieldKey.DISC_TOTAL,"3"));
+            tag.setField(tag.createField(FieldKey.DISC_NO, "1"));
+            tag.setField(tag.createField(FieldKey.COMPOSER, "composer\u00A9"));
+            tag.setField(tag.createField(FieldKey.ARTIST_SORT, "Sortartist\u01ff"));
+            tag.setField(tag.createField(FieldKey.LYRICS, "lyrics"));
+            tag.setField(tag.createField(FieldKey.BPM, "200"));
+            tag.setField(tag.createField(FieldKey.ALBUM_ARTIST, "Albumartist"));
+            tag.setField(tag.createField(FieldKey.ALBUM_ARTIST_SORT, "Sortalbumartist"));
+            tag.setField(tag.createField(FieldKey.ALBUM_SORT, "Sortalbum"));
+            tag.setField(tag.createField(FieldKey.GROUPING, "GROUping"));
+            tag.setField(tag.createField(FieldKey.COMPOSER_SORT, "Sortcomposer"));
+            tag.setField(tag.createField(FieldKey.TITLE_SORT, "sorttitle"));
+            tag.setField(tag.createField(FieldKey.IS_COMPILATION, "1"));
+            tag.setField(tag.createField(FieldKey.MUSICIP_ID, "66027994-edcf-9d89-bec8-0d30077d888c"));
+            tag.setField(tag.createField(FieldKey.MUSICBRAINZ_TRACK_ID, "e785f700-c1aa-4943-bcee-87dd316a2c31"));
+            tag.setField(tag.createField(FieldKey.MUSICBRAINZ_ARTISTID, "989a13f6-b58c-4559-b09e-76ae0adb94ed"));
+            tag.setField(tag.createField(FieldKey.MUSICBRAINZ_RELEASEARTISTID, "989a13f6-b58c-4559-b09e-76ae0adb94ed"));
+            tag.setField(tag.createField(FieldKey.MUSICBRAINZ_RELEASEID, "19c6f0f6-3d6d-4b02-88c7-ffb559d52be6"));
+            tag.setField(tag.createField(FieldKey.URL_LYRICS_SITE,"http://www.lyrics.fly.com"));
+            tag.setField(tag.createField(FieldKey.URL_DISCOGS_ARTIST_SITE,"http://www.discogs1.com"));
+            tag.setField(tag.createField(FieldKey.URL_DISCOGS_RELEASE_SITE,"http://www.discogs2.com"));
+            tag.setField(tag.createField(FieldKey.URL_OFFICIAL_ARTIST_SITE,"http://www.discogs3.com"));
+            tag.setField(tag.createField(FieldKey.URL_OFFICIAL_RELEASE_SITE,"http://www.discogs4.com"));
+            tag.setField(tag.createField(FieldKey.URL_WIKIPEDIA_ARTIST_SITE,"http://www.discogs5.com"));
+            tag.setField(tag.createField(FieldKey.URL_WIKIPEDIA_RELEASE_SITE,"http://www.discogs6.com"));
+            tag.setField(tag.createField(FieldKey.TRACK_TOTAL,"11"));
+            tag.setField(tag.createField(FieldKey.DISC_TOTAL,"3"));
 
 
             //Vorbis Only keys
-            tag.set(((VorbisCommentTag) tag).createTagField(VorbisCommentFieldKey.DESCRIPTION, "description"));
+            tag.setField(((VorbisCommentTag) tag).createTagField(VorbisCommentFieldKey.DESCRIPTION, "description"));
 
-            //tag.set(tag.createTagField(TagFieldKey.ENCODER,"encoder"));
+            //tag.setField(tag.createField(FieldKey.ENCODER,"encoder"));
             tag.setVendor("encoder");
             assertEquals("encoder", tag.getVendor());
 
@@ -109,49 +109,49 @@ public class VorbisWriteTagTest extends AbstractTestCase
             imageFile.read(imagedata);
             char[] testdata = Base64Coder.encode(imagedata);
             String base64image = new String(testdata);
-            tag.set(((VorbisCommentTag) tag).createTagField(VorbisCommentFieldKey.COVERART, base64image));
-            tag.set(((VorbisCommentTag) tag).createTagField(VorbisCommentFieldKey.COVERARTMIME, "image/png"));
+            tag.setField(((VorbisCommentTag) tag).createTagField(VorbisCommentFieldKey.COVERART, base64image));
+            tag.setField(((VorbisCommentTag) tag).createTagField(VorbisCommentFieldKey.COVERARTMIME, "image/png"));
 
             //key not known to jaudiotagger
-            tag.set(((VorbisCommentTag) tag).createTagField("VOLINIST", "Sarah Curtis"));
+            tag.setField(((VorbisCommentTag) tag).createTagField("VOLINIST", "Sarah Curtis"));
 
             f.commit();
 
             f = AudioFileIO.read(testFile);
             tag = (VorbisCommentTag) f.getTag();
             assertTrue(tag instanceof VorbisCommentTag);
-            assertEquals("AUTHOR", tag.getFirstArtist());
-            assertEquals("ALBUM", tag.getFirstAlbum());
-            assertEquals("title", tag.getFirstTitle());
-            assertEquals("comments", tag.getFirstComment());
-            assertEquals("1971", tag.getFirstYear());
-            assertEquals("2", tag.getFirstTrack());
-            assertEquals("Genre", tag.getFirstGenre());
-            assertEquals("AUTHOR", tag.getFirst(TagFieldKey.ARTIST));
-            assertEquals("ALBUM", tag.getFirst(TagFieldKey.ALBUM));
-            assertEquals("title", tag.getFirst(TagFieldKey.TITLE));
-            assertEquals("comments", tag.getFirst(TagFieldKey.COMMENT));
-            assertEquals("1971", tag.getFirst(TagFieldKey.YEAR));
-            assertEquals("2", tag.getFirst(TagFieldKey.TRACK));
-            assertEquals("1", tag.getFirst(TagFieldKey.DISC_NO));
-            assertEquals("composer\u00A9", tag.getFirst(TagFieldKey.COMPOSER));
-            assertEquals("Sortartist\u01ff", tag.getFirst(TagFieldKey.ARTIST_SORT));
-            assertEquals("lyrics", tag.getFirst(TagFieldKey.LYRICS));
-            assertEquals("200", tag.getFirst(TagFieldKey.BPM));
-            assertEquals("Albumartist", tag.getFirst(TagFieldKey.ALBUM_ARTIST));
-            assertEquals("Sortalbumartist", tag.getFirst(TagFieldKey.ALBUM_ARTIST_SORT));
-            assertEquals("Sortalbum", tag.getFirst(TagFieldKey.ALBUM_SORT));
-            assertEquals("GROUping", tag.getFirst(TagFieldKey.GROUPING));
-            assertEquals("Sortcomposer", tag.getFirst(TagFieldKey.COMPOSER_SORT));
-            assertEquals("sorttitle", tag.getFirst(TagFieldKey.TITLE_SORT));
-            assertEquals("1", tag.getFirst(TagFieldKey.IS_COMPILATION));
-            assertEquals("66027994-edcf-9d89-bec8-0d30077d888c", tag.getFirst(TagFieldKey.MUSICIP_ID));
-            assertEquals("e785f700-c1aa-4943-bcee-87dd316a2c31", tag.getFirst(TagFieldKey.MUSICBRAINZ_TRACK_ID));
-            assertEquals("989a13f6-b58c-4559-b09e-76ae0adb94ed", tag.getFirst(TagFieldKey.MUSICBRAINZ_ARTISTID));
-            assertEquals("989a13f6-b58c-4559-b09e-76ae0adb94ed", tag.getFirst(TagFieldKey.MUSICBRAINZ_RELEASEARTISTID));
-            assertEquals("19c6f0f6-3d6d-4b02-88c7-ffb559d52be6", tag.getFirst(TagFieldKey.MUSICBRAINZ_RELEASEID));
-            assertEquals("11", tag.getFirst(TagFieldKey.TRACK_TOTAL));
-            assertEquals("3", tag.getFirst(TagFieldKey.DISC_TOTAL));
+            assertEquals("AUTHOR", tag.getFirst(FieldKey.ARTIST));
+            assertEquals("ALBUM", tag.getFirst(FieldKey.ALBUM));
+            assertEquals("title", tag.getFirst(FieldKey.TITLE));
+            assertEquals("comments", tag.getFirst(FieldKey.COMMENT));
+            assertEquals("1971", tag.getFirst(FieldKey.YEAR));
+            assertEquals("2", tag.getFirst(FieldKey.TRACK));
+            assertEquals("Genre", tag.getFirst(FieldKey.GENRE));
+            assertEquals("AUTHOR", tag.getFirst(FieldKey.ARTIST));
+            assertEquals("ALBUM", tag.getFirst(FieldKey.ALBUM));
+            assertEquals("title", tag.getFirst(FieldKey.TITLE));
+            assertEquals("comments", tag.getFirst(FieldKey.COMMENT));
+            assertEquals("1971", tag.getFirst(FieldKey.YEAR));
+            assertEquals("2", tag.getFirst(FieldKey.TRACK));
+            assertEquals("1", tag.getFirst(FieldKey.DISC_NO));
+            assertEquals("composer\u00A9", tag.getFirst(FieldKey.COMPOSER));
+            assertEquals("Sortartist\u01ff", tag.getFirst(FieldKey.ARTIST_SORT));
+            assertEquals("lyrics", tag.getFirst(FieldKey.LYRICS));
+            assertEquals("200", tag.getFirst(FieldKey.BPM));
+            assertEquals("Albumartist", tag.getFirst(FieldKey.ALBUM_ARTIST));
+            assertEquals("Sortalbumartist", tag.getFirst(FieldKey.ALBUM_ARTIST_SORT));
+            assertEquals("Sortalbum", tag.getFirst(FieldKey.ALBUM_SORT));
+            assertEquals("GROUping", tag.getFirst(FieldKey.GROUPING));
+            assertEquals("Sortcomposer", tag.getFirst(FieldKey.COMPOSER_SORT));
+            assertEquals("sorttitle", tag.getFirst(FieldKey.TITLE_SORT));
+            assertEquals("1", tag.getFirst(FieldKey.IS_COMPILATION));
+            assertEquals("66027994-edcf-9d89-bec8-0d30077d888c", tag.getFirst(FieldKey.MUSICIP_ID));
+            assertEquals("e785f700-c1aa-4943-bcee-87dd316a2c31", tag.getFirst(FieldKey.MUSICBRAINZ_TRACK_ID));
+            assertEquals("989a13f6-b58c-4559-b09e-76ae0adb94ed", tag.getFirst(FieldKey.MUSICBRAINZ_ARTISTID));
+            assertEquals("989a13f6-b58c-4559-b09e-76ae0adb94ed", tag.getFirst(FieldKey.MUSICBRAINZ_RELEASEARTISTID));
+            assertEquals("19c6f0f6-3d6d-4b02-88c7-ffb559d52be6", tag.getFirst(FieldKey.MUSICBRAINZ_RELEASEID));
+            assertEquals("11", tag.getFirst(FieldKey.TRACK_TOTAL));
+            assertEquals("3", tag.getFirst(FieldKey.DISC_TOTAL));
 
             //Cast to format specific tag
             VorbisCommentTag vorbisTag = (VorbisCommentTag) tag;
@@ -194,7 +194,7 @@ public class VorbisWriteTagTest extends AbstractTestCase
             assertEquals("encoder", vorbisTag.getVendor());
 
             //List methods
-            List<TagField> list = tag.get(TagFieldKey.ARTIST);
+            List<TagField> list = tag.getFields(FieldKey.ARTIST);
             assertEquals(1, list.size());
             for (TagField field : list)
             {
@@ -257,8 +257,8 @@ public class VorbisWriteTagTest extends AbstractTestCase
             imageFile.read(imagedata);
             char[] testdata = Base64Coder.encode(imagedata);
             String base64image = new String(testdata);
-            tag.set(tag.createTagField(VorbisCommentFieldKey.COVERART, base64image));
-            tag.set(tag.createTagField(VorbisCommentFieldKey.COVERARTMIME, "image/png"));
+            tag.setField(tag.createTagField(VorbisCommentFieldKey.COVERART, base64image));
+            tag.setField(tag.createTagField(VorbisCommentFieldKey.COVERARTMIME, "image/png"));
 
             //Save
             f.commit();
@@ -315,8 +315,8 @@ public class VorbisWriteTagTest extends AbstractTestCase
             {
                 sb.append("a");
             }
-            tag.set(tag.createTagField(VorbisCommentFieldKey.COVERART, sb.toString()));
-            tag.set(tag.createTagField(VorbisCommentFieldKey.COVERARTMIME, "image/png"));
+            tag.setField(tag.createTagField(VorbisCommentFieldKey.COVERART, sb.toString()));
+            tag.setField(tag.createTagField(VorbisCommentFieldKey.COVERARTMIME, "image/png"));
 
             //Save
             f.commit();
@@ -379,7 +379,7 @@ public class VorbisWriteTagTest extends AbstractTestCase
             VorbisCommentTag tag = (VorbisCommentTag) f.getTag();
 
             //These have methods coz common over all formats
-            tag.setArtist("AUTHOR");
+            tag.setField(FieldKey.ARTIST,"AUTHOR");
 
             //Save
             f.commit();
@@ -389,7 +389,7 @@ public class VorbisWriteTagTest extends AbstractTestCase
             tag = (VorbisCommentTag) f.getTag();
 
             //Check changes
-            assertEquals("AUTHOR", tag.getFirst(TagFieldKey.ARTIST));
+            assertEquals("AUTHOR", tag.getFirst(FieldKey.ARTIST));
 
             //Check 2nd page has same number of packets, this is only the case for this specific test, so check
             //in test not code itself.
@@ -437,7 +437,7 @@ public class VorbisWriteTagTest extends AbstractTestCase
             VorbisCommentTag tag = (VorbisCommentTag) f.getTag();
 
             //These have methods coz common over all formats
-            tag.setArtist("ARTISTIC");
+            tag.setField(FieldKey.ARTIST,"ARTISTIC");
 
             //Save
             f.commit();
@@ -447,7 +447,7 @@ public class VorbisWriteTagTest extends AbstractTestCase
             tag = (VorbisCommentTag) f.getTag();
 
             //Check changes
-            assertEquals("ARTISTIC", tag.getFirst(TagFieldKey.ARTIST));
+            assertEquals("ARTISTIC", tag.getFirst(FieldKey.ARTIST));
 
             //Check 2nd page has same number of packets, this is only the case for this specific test, so check
             //in test not code itself.
@@ -492,8 +492,8 @@ public class VorbisWriteTagTest extends AbstractTestCase
             imageFile.read(imagedata);
             char[] testdata = Base64Coder.encode(imagedata);
             String base64image = new String(testdata);
-            tag.set(tag.createTagField(VorbisCommentFieldKey.COVERART, base64image));
-            tag.set(tag.createTagField(VorbisCommentFieldKey.COVERARTMIME, "image/png"));
+            tag.setField(tag.createTagField(VorbisCommentFieldKey.COVERART, base64image));
+            tag.setField(tag.createTagField(VorbisCommentFieldKey.COVERARTMIME, "image/png"));
 
             //Save
             f.commit();
@@ -552,8 +552,8 @@ public class VorbisWriteTagTest extends AbstractTestCase
             {
                 sb.append("a");
             }
-            tag.set(tag.createTagField(VorbisCommentFieldKey.COVERART, sb.toString()));
-            tag.set(tag.createTagField(VorbisCommentFieldKey.COVERARTMIME, "image/png"));
+            tag.setField(tag.createTagField(VorbisCommentFieldKey.COVERART, sb.toString()));
+            tag.setField(tag.createTagField(VorbisCommentFieldKey.COVERARTMIME, "image/png"));
 
             //Save
             f.commit();
@@ -576,8 +576,8 @@ public class VorbisWriteTagTest extends AbstractTestCase
             //tag = (VorbisCommentTag)f.getTag();
 
             //Check changes
-            //assertEquals(1,tag.get(VorbisCommentFieldKey.COVERART).size());
-            //assertEquals(1,tag.get(VorbisCommentFieldKey.COVERARTMIME).size());
+            //assertEquals(1,tag.getFields(VorbisCommentFieldKey.COVERART).size());
+            //assertEquals(1,tag.getFields(VorbisCommentFieldKey.COVERARTMIME).size());
 
 
         }

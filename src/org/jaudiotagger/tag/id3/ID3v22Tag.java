@@ -10,7 +10,7 @@
  *  See the GNU Lesser General Public License for more details.
  *
  *  You should have received a copy of the GNU Lesser General Public License along with this library; if not,
- *  you can get a copy from http://www.opensource.org/licenses/lgpl-license.php or write to the Free Software
+ *  you can getFields a copy from http://www.opensource.org/licenses/lgpl-license.php or write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 package org.jaudiotagger.tag.id3;
@@ -164,7 +164,7 @@ public class ID3v22Tag extends AbstractID3v2Tag
             {
                 throw new UnsupportedOperationException("Copy Constructor not called. Please type cast the argument");
             }
-            //If v2.4 can get variables from this
+            //If v2.4 can getFields variables from this
             else if (mp3tag instanceof ID3v24Tag)
             {
                 convertedTag = (ID3v24Tag) mp3tag;
@@ -289,7 +289,7 @@ public class ID3v22Tag extends AbstractID3v2Tag
         // Read the size, this is size of tag not including  the tag header
         int size = ID3SyncSafeInteger.bufferToValue(buffer);
 
-        //Return the exact size of tag as set in the tag header
+        //Return the exact size of tag as setField in the tag header
         return size + TAG_HEADER_LENGTH;
     }
 
@@ -715,7 +715,7 @@ public class ID3v22Tag extends AbstractID3v2Tag
     }
 
 
-    protected FrameAndSubId getFrameAndSubIdFromGenericKey(TagFieldKey genericKey)
+    protected FrameAndSubId getFrameAndSubIdFromGenericKey(FieldKey genericKey)
     {
         ID3v22FieldKey id3v22FieldKey = ID3v22Frames.getInstanceOf().getId3KeyFromGenericKey(genericKey);
         if (id3v22FieldKey == null)
@@ -745,7 +745,7 @@ public class ID3v22Tag extends AbstractID3v2Tag
      */
     public List<Artwork> getArtworkList()
     {
-        List<TagField> coverartList = get(TagFieldKey.COVER_ART);
+        List<TagField> coverartList = getFields(FieldKey.COVER_ART);
         List<Artwork> artworkList   = new ArrayList<Artwork>(coverartList.size());
 
         for(TagField next:coverartList)
@@ -763,9 +763,9 @@ public class ID3v22Tag extends AbstractID3v2Tag
      /**
      * {@inheritDoc}
      */
-    public TagField createArtworkField(Artwork artwork) throws FieldDataInvalidException
+    public TagField createField(Artwork artwork) throws FieldDataInvalidException
     {
-        AbstractID3v2Frame frame = createFrame(getFrameAndSubIdFromGenericKey(TagFieldKey.COVER_ART).getFrameId());
+        AbstractID3v2Frame frame = createFrame(getFrameAndSubIdFromGenericKey(FieldKey.COVER_ART).getFrameId());
         FrameBodyPIC body = (FrameBodyPIC) frame.getBody();
         body.setObjectValue(DataTypes.OBJ_PICTURE_DATA, artwork.getBinaryData());
         body.setObjectValue(DataTypes.OBJ_PICTURE_TYPE, artwork.getPictureType());
@@ -776,7 +776,7 @@ public class ID3v22Tag extends AbstractID3v2Tag
 
      public TagField createArtworkField(byte[] data, String mimeType)
     {
-        AbstractID3v2Frame frame = createFrame(getFrameAndSubIdFromGenericKey(TagFieldKey.COVER_ART).getFrameId());       
+        AbstractID3v2Frame frame = createFrame(getFrameAndSubIdFromGenericKey(FieldKey.COVER_ART).getFrameId());
         FrameBodyPIC body = (FrameBodyPIC) frame.getBody();
         body.setObjectValue(DataTypes.OBJ_PICTURE_DATA, data);
         body.setObjectValue(DataTypes.OBJ_PICTURE_TYPE, PictureTypes.DEFAULT_ID);

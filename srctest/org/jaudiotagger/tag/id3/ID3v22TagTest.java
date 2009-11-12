@@ -7,7 +7,7 @@ import org.jaudiotagger.AbstractTestCase;
 import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.AudioFileIO;
 import org.jaudiotagger.audio.mp3.MP3File;
-import org.jaudiotagger.tag.TagFieldKey;
+import org.jaudiotagger.tag.FieldKey;
 import org.jaudiotagger.tag.TagOptionSingleton;
 import org.jaudiotagger.tag.id3.framebody.*;
 
@@ -117,9 +117,9 @@ public class ID3v22TagTest extends TestCase
             File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3");
             MP3File mp3File = new MP3File(testFile);
             ID3v22Tag v2Tag = new ID3v22Tag();
-            v2Tag.setTitle("fred");
-            v2Tag.setArtist("artist");
-            v2Tag.setAlbum("album");
+            v2Tag.setField(FieldKey.TITLE,"fred");
+            v2Tag.setField(FieldKey.ARTIST,"artist");
+            v2Tag.setField(FieldKey.ALBUM,"album");
 
             assertEquals((byte) 2, v2Tag.getRelease());
             assertEquals((byte) 2, v2Tag.getMajorVersion());
@@ -129,9 +129,9 @@ public class ID3v22TagTest extends TestCase
 
             //Read using new Interface
             AudioFile v22File = AudioFileIO.read(testFile);
-            assertEquals("fred", v22File.getTag().getFirstTitle());
-            assertEquals("artist", v22File.getTag().getFirstArtist());
-            assertEquals("album", v22File.getTag().getFirstAlbum());
+            assertEquals("fred", v22File.getTag().getFirst(FieldKey.TITLE));
+            assertEquals("artist", v22File.getTag().getFirst(FieldKey.ARTIST));
+            assertEquals("album", v22File.getTag().getFirst(FieldKey.ALBUM));
 
             //Read using old Interface
             mp3File = new MP3File(testFile);
@@ -163,13 +163,13 @@ public class ID3v22TagTest extends TestCase
             MP3File m = (MP3File) af;
 
             //Read using new Interface getFirst method with key
-            assertEquals("Listen to images:", af.getTag().getFirst(TagFieldKey.TITLE) + ":");
-            assertEquals("Clean:", af.getTag().getFirst(TagFieldKey.ALBUM) + ":");
-            assertEquals("Cosmo Vitelli:", af.getTag().getFirst(TagFieldKey.ARTIST) + ":");
-            assertEquals("Electronica/Dance:", af.getTag().getFirst(TagFieldKey.GENRE) + ":");
-            assertEquals("2003:", af.getTag().getFirst(TagFieldKey.YEAR) + ":");
-            assertEquals("1:", af.getTag().getFirst(TagFieldKey.TRACK) + ":");
-            assertEquals("11:", af.getTag().getFirst(TagFieldKey.TRACK_TOTAL) + ":");
+            assertEquals("Listen to images:", af.getTag().getFirst(FieldKey.TITLE) + ":");
+            assertEquals("Clean:", af.getTag().getFirst(FieldKey.ALBUM) + ":");
+            assertEquals("Cosmo Vitelli:", af.getTag().getFirst(FieldKey.ARTIST) + ":");
+            assertEquals("Electronica/Dance:", af.getTag().getFirst(FieldKey.GENRE) + ":");
+            assertEquals("2003:", af.getTag().getFirst(FieldKey.YEAR) + ":");
+            assertEquals("1:", af.getTag().getFirst(FieldKey.TRACK) + ":");
+            assertEquals("11:", af.getTag().getFirst(FieldKey.TRACK_TOTAL) + ":");
 
             //Read using new Interface getFirst method with String
             assertEquals("Listen to images:", af.getTag().getFirst(ID3v22Frames.FRAME_ID_V2_TITLE) + ":");
@@ -180,12 +180,12 @@ public class ID3v22TagTest extends TestCase
             assertEquals("1:", af.getTag().getFirst(ID3v22Frames.FRAME_ID_V2_TRACK) + ":");
 
             //Read using new Interface getFirst methods for common fields
-            assertEquals("Listen to images:", af.getTag().getFirstTitle() + ":");
-            assertEquals("Cosmo Vitelli:", af.getTag().getFirstArtist() + ":");
-            assertEquals("Clean:", af.getTag().getFirstAlbum() + ":");
-            assertEquals("Electronica/Dance:", af.getTag().getFirstGenre() + ":");
-            assertEquals("2003:", af.getTag().getFirstYear() + ":");
-            assertEquals("1:", af.getTag().getFirstTrack() + ":");
+            assertEquals("Listen to images:", af.getTag().getFirst(FieldKey.TITLE) + ":");
+            assertEquals("Cosmo Vitelli:", af.getTag().getFirst(FieldKey.ARTIST) + ":");
+            assertEquals("Clean:", af.getTag().getFirst(FieldKey.ALBUM) + ":");
+            assertEquals("Electronica/Dance:", af.getTag().getFirst(FieldKey.GENRE) + ":");
+            assertEquals("2003:", af.getTag().getFirst(FieldKey.YEAR) + ":");
+            assertEquals("1:", af.getTag().getFirst(FieldKey.TRACK) + ":");
 
             //Read using old Interface
             ID3v22Tag v2Tag = (ID3v22Tag) m.getID3v2Tag();

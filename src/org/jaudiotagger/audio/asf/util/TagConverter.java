@@ -20,6 +20,7 @@ package org.jaudiotagger.audio.asf.util;
 
 import org.jaudiotagger.audio.asf.data.*;
 import org.jaudiotagger.audio.asf.tag.*;
+import org.jaudiotagger.tag.FieldKey;
 import org.jaudiotagger.tag.Tag;
 import org.jaudiotagger.tag.reference.GenreTypes;
 
@@ -46,58 +47,54 @@ public final class TagConverter {
      *            The extended content description which should receive the
      *            values. <br>
      *            <b>Warning: </b> the common values will be replaced.
-     * @see Tag#getAlbum() <br>
-     * @see Tag#getTrack() <br>
-     * @see Tag#getYear() <br>
-     * @see Tag#getGenre() <br>
      */
     public static void assignCommonTagValues(Tag tag,
             MetadataContainer description) {
         assert description.getContainerType() == ContainerType.EXTENDED_CONTENT;
         MetadataDescriptor tmp = null;
-        if (!Utils.isBlank(tag.getFirstAlbum())) {
+        if (!Utils.isBlank(tag.getFirst(FieldKey.ALBUM))) {
             tmp = new MetadataDescriptor(description.getContainerType(),
                     AsfFieldKey.ALBUM.getFieldName(),
                     MetadataDescriptor.TYPE_STRING);
-            tmp.setStringValue(tag.getFirstAlbum());
+            tmp.setStringValue(tag.getFirst(FieldKey.ALBUM));
             description.removeDescriptorsByName(tmp.getName());
             description.addDescriptor(tmp);
         } else {
             description.removeDescriptorsByName(AsfFieldKey.ALBUM
                     .getFieldName());
         }
-        if (!Utils.isBlank(tag.getFirstTrack())) {
+        if (!Utils.isBlank(tag.getFirst(FieldKey.TRACK))) {
             tmp = new MetadataDescriptor(description.getContainerType(),
                     AsfFieldKey.TRACK.getFieldName(),
                     MetadataDescriptor.TYPE_STRING);
-            tmp.setStringValue(tag.getFirstTrack());
+            tmp.setStringValue(tag.getFirst(FieldKey.TRACK));
             description.removeDescriptorsByName(tmp.getName());
             description.addDescriptor(tmp);
         } else {
             description.removeDescriptorsByName(AsfFieldKey.TRACK
                     .getFieldName());
         }
-        if (!Utils.isBlank(tag.getFirstYear())) {
+        if (!Utils.isBlank(tag.getFirst(FieldKey.YEAR))) {
             tmp = new MetadataDescriptor(description.getContainerType(),
                     AsfFieldKey.YEAR.getFieldName(),
                     MetadataDescriptor.TYPE_STRING);
-            tmp.setStringValue(tag.getFirstYear());
+            tmp.setStringValue(tag.getFirst(FieldKey.YEAR));
             description.removeDescriptorsByName(tmp.getName());
             description.addDescriptor(tmp);
         } else {
             description
                     .removeDescriptorsByName(AsfFieldKey.YEAR.getFieldName());
         }
-        if (!Utils.isBlank(tag.getFirstGenre())) {
+        if (!Utils.isBlank(tag.getFirst(FieldKey.GENRE))) {
             // Write Genre String value
             tmp = new MetadataDescriptor(description.getContainerType(),
                     AsfFieldKey.GENRE.getFieldName(),
                     MetadataDescriptor.TYPE_STRING);
-            tmp.setStringValue(tag.getFirstGenre());
+            tmp.setStringValue(tag.getFirst(FieldKey.GENRE));
             description.removeDescriptorsByName(tmp.getName());
             description.addDescriptor(tmp);
             Integer genreNum = GenreTypes.getInstanceOf().getIdForName(
-                    tag.getFirstGenre());
+                    tag.getFirst(FieldKey.GENRE));
             // ..and if it is one of the standard genre types used the id as
             // well
             if (genreNum != null) {
@@ -150,7 +147,7 @@ public final class TagConverter {
                     } else {
                         toAdd = new AsfTagTextField(descriptor);
                     }
-                    result.add(toAdd);
+                    result.addField(toAdd);
                 }
             }
         }

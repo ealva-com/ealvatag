@@ -1,6 +1,7 @@
 package org.jaudiotagger.issues;
 
 import org.jaudiotagger.AbstractTestCase;
+import org.jaudiotagger.tag.FieldKey;
 import org.jaudiotagger.tag.id3.ID3v22Tag;
 import org.jaudiotagger.tag.id3.ID3v23Tag;
 import org.jaudiotagger.tag.id3.ID3v24Tag;
@@ -21,7 +22,7 @@ public class Issue221Test extends AbstractTestCase
         try
         {
             Mp4Tag tag = new Mp4Tag();
-            tag.setTitle(null);
+            tag.setField(FieldKey.TITLE,null);
         }
         catch (Exception e)
         {
@@ -37,7 +38,7 @@ public class Issue221Test extends AbstractTestCase
         try
         {
             VorbisCommentTag tag = VorbisCommentTag.createNewTag();
-            tag.setTitle(null);
+            tag.setField(FieldKey.TITLE,null);
         }
         catch (Exception e)
         {
@@ -54,7 +55,7 @@ public class Issue221Test extends AbstractTestCase
         try
         {
             ID3v23Tag tag = new ID3v23Tag();
-            tag.setTitle(null);
+            tag.setField(FieldKey.TITLE,null);
             FileOutputStream os = new FileOutputStream("testdatatmp/issue_221_title_v23.mp3");
             tag.write(os.getChannel());
             os.close();
@@ -73,7 +74,7 @@ public class Issue221Test extends AbstractTestCase
         try
         {
             ID3v23Tag tag = new ID3v23Tag();
-            tag.setAlbum(null);
+            tag.setField(FieldKey.ALBUM,null);
             FileOutputStream os = new FileOutputStream("testdatatmp/issue_221_title_v23.mp3");
             tag.write(os.getChannel());
             os.close();
@@ -92,7 +93,7 @@ public class Issue221Test extends AbstractTestCase
         try
         {
             ID3v23Tag tag = new ID3v23Tag();
-            tag.setArtist(null);
+            tag.setField(FieldKey.ARTIST,null);
             FileOutputStream os = new FileOutputStream("testdatatmp/issue_221_title_v23.mp3");
             tag.write(os.getChannel());
             os.close();
@@ -111,7 +112,7 @@ public class Issue221Test extends AbstractTestCase
         try
         {
             ID3v23Tag tag = new ID3v23Tag();
-            tag.setComment(null);
+            tag.setField(FieldKey.COMMENT,null);
             FileOutputStream os = new FileOutputStream("testdatatmp/issue_221_title_v23.mp3");
             tag.write(os.getChannel());
             os.close();
@@ -130,7 +131,7 @@ public class Issue221Test extends AbstractTestCase
         try
         {
             ID3v23Tag tag = new ID3v23Tag();
-            tag.setGenre(null);
+            tag.setField(FieldKey.GENRE,null);
             FileOutputStream os = new FileOutputStream("testdatatmp/issue_221_title_v23.mp3");
             tag.write(os.getChannel());
             os.close();
@@ -149,7 +150,7 @@ public class Issue221Test extends AbstractTestCase
         try
         {
             ID3v23Tag tag = new ID3v23Tag();
-            tag.setTrack(null);
+            tag.setField(FieldKey.TRACK,null);
             FileOutputStream os = new FileOutputStream("testdatatmp/issue_221_title_v23.mp3");
             tag.write(os.getChannel());
             os.close();
@@ -168,7 +169,7 @@ public class Issue221Test extends AbstractTestCase
         try
         {
             ID3v24Tag tag = new ID3v24Tag();
-            tag.setTitle(null);
+            tag.setField(FieldKey.TITLE,null);
             FileOutputStream os = new FileOutputStream("testdatatmp/issue_221_title_v24.mp3");
             tag.write(os.getChannel());
             os.close();
@@ -188,7 +189,7 @@ public class Issue221Test extends AbstractTestCase
         try
         {
             ID3v22Tag tag = new ID3v22Tag();
-            tag.setTitle(null);
+            tag.setField(FieldKey.TITLE,null);
             FileOutputStream os = new FileOutputStream("testdatatmp/issue_221_title_v24.mp3");
             tag.write(os.getChannel());
             os.close();

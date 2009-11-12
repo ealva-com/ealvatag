@@ -10,7 +10,7 @@
  *  See the GNU Lesser General Public License for more details.
  *
  *  You should have received a copy of the GNU Lesser General Public License along with this library; if not,
- *  you can get a copy from http://www.opensource.org/licenses/lgpl-license.php or write to the Free Software
+ *  you can getFields a copy from http://www.opensource.org/licenses/lgpl-license.php or write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 package org.jaudiotagger.tag.id3;
@@ -28,7 +28,10 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.WritableByteChannel;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.logging.Level;
 
 /**
@@ -389,7 +392,7 @@ public class ID3v23Tag extends AbstractID3v2Tag
         // Read the size, this is size of tag not including  the tag header
         int size = ID3SyncSafeInteger.bufferToValue(buffer);
 
-        //Return the exact size of tag as set in the tag header
+        //Return the exact size of tag as setField in the tag header
         return size + TAG_HEADER_LENGTH;
     }
 
@@ -463,7 +466,7 @@ public class ID3v23Tag extends AbstractID3v2Tag
         // Extended header without CRC Data
         if (extendedHeaderSize == TAG_EXT_HEADER_DATA_LENGTH)
         {
-            //Flag should not be set , if is log a warning
+            //Flag should not be setField , if is log a warning
             byte extFlag = buffer.get();
             crcDataFlag = (extFlag & MASK_V23_CRC_DATA_PRESENT) != 0;
             if (crcDataFlag)
@@ -485,7 +488,7 @@ public class ID3v23Tag extends AbstractID3v2Tag
         {
             logger.info(ErrorMessage.ID3_TAG_CRC.getMsg(getLoggingFilename()));
 
-            //Flag should be set, if nor just act as if it is
+            //Flag should be setField, if nor just act as if it is
             byte extFlag = buffer.get();
             crcDataFlag = (extFlag & MASK_V23_CRC_DATA_PRESENT) != 0;
             if (crcDataFlag == false)
@@ -625,7 +628,7 @@ public class ID3v23Tag extends AbstractID3v2Tag
     {
         // Flags,currently we never calculate the CRC
         // and if we dont calculate them cant keep orig values. Tags are not
-        // experimental and we never create extended header to keep things simple.
+        // experimental and we never createField extended header to keep things simple.
         extended = false;
         experimental = false;
         crcDataFlag = false;
@@ -926,7 +929,7 @@ public class ID3v23Tag extends AbstractID3v2Tag
     }
 
 
-    protected FrameAndSubId getFrameAndSubIdFromGenericKey(TagFieldKey genericKey)
+    protected FrameAndSubId getFrameAndSubIdFromGenericKey(FieldKey genericKey)
     {
         ID3v23FieldKey id3v23FieldKey = ID3v23Frames.getInstanceOf().getId3KeyFromGenericKey(genericKey);
         if (id3v23FieldKey == null)
@@ -955,7 +958,7 @@ public class ID3v23Tag extends AbstractID3v2Tag
      */
     public List<Artwork> getArtworkList()
     {
-        List<TagField> coverartList = get(TagFieldKey.COVER_ART);
+        List<TagField> coverartList = getFields(FieldKey.COVER_ART);
         List<Artwork> artworkList = new ArrayList<Artwork>(coverartList.size());
 
         for (TagField next : coverartList)
@@ -981,9 +984,9 @@ public class ID3v23Tag extends AbstractID3v2Tag
     /**
      * {@inheritDoc}
      */    
-    public TagField createArtworkField(Artwork artwork) throws FieldDataInvalidException
+    public TagField createField(Artwork artwork) throws FieldDataInvalidException
     {
-        AbstractID3v2Frame frame = createFrame(getFrameAndSubIdFromGenericKey(TagFieldKey.COVER_ART).getFrameId());
+        AbstractID3v2Frame frame = createFrame(getFrameAndSubIdFromGenericKey(FieldKey.COVER_ART).getFrameId());
         FrameBodyAPIC body = (FrameBodyAPIC) frame.getBody();
         body.setObjectValue(DataTypes.OBJ_PICTURE_DATA, artwork.getBinaryData());
         body.setObjectValue(DataTypes.OBJ_PICTURE_TYPE, artwork.getPictureType());
@@ -1001,7 +1004,7 @@ public class ID3v23Tag extends AbstractID3v2Tag
      */
     public TagField createArtworkField(byte[] data, String mimeType)
     {
-        AbstractID3v2Frame frame = createFrame(getFrameAndSubIdFromGenericKey(TagFieldKey.COVER_ART).getFrameId());
+        AbstractID3v2Frame frame = createFrame(getFrameAndSubIdFromGenericKey(FieldKey.COVER_ART).getFrameId());
         FrameBodyAPIC body = (FrameBodyAPIC) frame.getBody();
         body.setObjectValue(DataTypes.OBJ_PICTURE_DATA, data);
         body.setObjectValue(DataTypes.OBJ_PICTURE_TYPE, PictureTypes.DEFAULT_ID);

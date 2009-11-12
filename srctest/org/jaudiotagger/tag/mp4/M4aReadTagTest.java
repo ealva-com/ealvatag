@@ -4,19 +4,16 @@ import junit.framework.TestCase;
 import org.jaudiotagger.AbstractTestCase;
 import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.AudioFileIO;
-import org.jaudiotagger.audio.exceptions.CannotReadException;
 import org.jaudiotagger.audio.exceptions.CannotReadVideoException;
 import org.jaudiotagger.audio.mp4.EncoderType;
 import org.jaudiotagger.audio.mp4.Mp4AudioHeader;
 import org.jaudiotagger.audio.mp4.atom.Mp4EsdsBox;
+import org.jaudiotagger.tag.FieldKey;
 import org.jaudiotagger.tag.Tag;
-import org.jaudiotagger.tag.TagFieldKey;
 import org.jaudiotagger.tag.mp4.atom.Mp4ContentTypeValue;
 import org.jaudiotagger.tag.mp4.atom.Mp4RatingValue;
 import org.jaudiotagger.tag.mp4.field.*;
-import static org.jaudiotagger.tag.mp4.field.Mp4FieldType.TEXT;
 import org.jaudiotagger.tag.reference.GenreTypes;
-import org.jaudiotagger.tag.reference.Tagger;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -59,43 +56,43 @@ public class M4aReadTagTest extends TestCase
             assertEquals(Mp4EsdsBox.AudioProfile.LOW_COMPLEXITY, audioheader.getProfile());
 
             //Ease of use methods for common fields
-            assertEquals("Artist", tag.getFirstArtist());
-            assertEquals("Album", tag.getFirstAlbum());
-            assertEquals("title", tag.getFirstTitle());
-            assertEquals("comments", tag.getFirstComment());
-            assertEquals("1971", tag.getFirstYear());
-            assertEquals("1/10", tag.getFirstTrack());
+            assertEquals("Artist", tag.getFirst(FieldKey.ARTIST));
+            assertEquals("Album", tag.getFirst(FieldKey.ALBUM));
+            assertEquals("title", tag.getFirst(FieldKey.TITLE));
+            assertEquals("comments", tag.getFirst(FieldKey.COMMENT));
+            assertEquals("1971", tag.getFirst(FieldKey.YEAR));
+            assertEquals("1", tag.getFirst(FieldKey.TRACK));
 
             //Although using custom genre this call works this out and gets correct value
-            assertEquals("Genre", tag.getFirstGenre());
+            assertEquals("Genre", tag.getFirst(FieldKey.GENRE));
 
             //Lookup by generickey
-            assertEquals("Artist", tag.getFirst(TagFieldKey.ARTIST));
-            assertEquals("Album", tag.getFirst(TagFieldKey.ALBUM));
-            assertEquals("title", tag.getFirst(TagFieldKey.TITLE));
-            assertEquals("comments", tag.getFirst(TagFieldKey.COMMENT));
-            assertEquals("1971", tag.getFirst(TagFieldKey.YEAR));
-            assertEquals("1", tag.getFirst(TagFieldKey.TRACK));
-            assertEquals("10", tag.getFirst(TagFieldKey.TRACK_TOTAL));
-            assertEquals("1", tag.getFirst(TagFieldKey.DISC_NO));
-            assertEquals("10", tag.getFirst(TagFieldKey.DISC_TOTAL));
-            assertEquals("composer", tag.getFirst(TagFieldKey.COMPOSER));
-            assertEquals("Sortartist", tag.getFirst(TagFieldKey.ARTIST_SORT));
-            assertEquals("lyrics", tag.getFirst(TagFieldKey.LYRICS));
-            assertEquals("199", tag.getFirst(TagFieldKey.BPM));
-            assertEquals("Albumartist", tag.getFirst(TagFieldKey.ALBUM_ARTIST));
-            assertEquals("Sortalbumartist", tag.getFirst(TagFieldKey.ALBUM_ARTIST_SORT));
-            assertEquals("Sortalbum", tag.getFirst(TagFieldKey.ALBUM_SORT));
-            assertEquals("GROUping", tag.getFirst(TagFieldKey.GROUPING));
-            assertEquals("Sortcomposer", tag.getFirst(TagFieldKey.COMPOSER_SORT));
-            assertEquals("sorttitle", tag.getFirst(TagFieldKey.TITLE_SORT));
-            assertEquals("1", tag.getFirst(TagFieldKey.IS_COMPILATION));
-            assertEquals("iTunes v7.4.3.1, QuickTime 7.2", tag.getFirst(TagFieldKey.ENCODER));
-            assertEquals("66027994-edcf-9d89-bec8-0d30077d888c", tag.getFirst(TagFieldKey.MUSICIP_ID));
-            assertEquals("e785f700-c1aa-4943-bcee-87dd316a2c30", tag.getFirst(TagFieldKey.MUSICBRAINZ_TRACK_ID));
-            assertEquals("989a13f6-b58c-4559-b09e-76ae0adb94ed", tag.getFirst(TagFieldKey.MUSICBRAINZ_ARTISTID));
-            assertEquals("989a13f6-b58c-4559-b09e-76ae0adb94ed", tag.getFirst(TagFieldKey.MUSICBRAINZ_RELEASEARTISTID));
-            assertEquals("19c6f0f6-3d6d-4b02-88c7-ffb559d52be6", tag.getFirst(TagFieldKey.MUSICBRAINZ_RELEASEID));
+            assertEquals("Artist", tag.getFirst(FieldKey.ARTIST));
+            assertEquals("Album", tag.getFirst(FieldKey.ALBUM));
+            assertEquals("title", tag.getFirst(FieldKey.TITLE));
+            assertEquals("comments", tag.getFirst(FieldKey.COMMENT));
+            assertEquals("1971", tag.getFirst(FieldKey.YEAR));
+            assertEquals("1", tag.getFirst(FieldKey.TRACK));
+            assertEquals("10", tag.getFirst(FieldKey.TRACK_TOTAL));
+            assertEquals("1", tag.getFirst(FieldKey.DISC_NO));
+            assertEquals("10", tag.getFirst(FieldKey.DISC_TOTAL));
+            assertEquals("composer", tag.getFirst(FieldKey.COMPOSER));
+            assertEquals("Sortartist", tag.getFirst(FieldKey.ARTIST_SORT));
+            assertEquals("lyrics", tag.getFirst(FieldKey.LYRICS));
+            assertEquals("199", tag.getFirst(FieldKey.BPM));
+            assertEquals("Albumartist", tag.getFirst(FieldKey.ALBUM_ARTIST));
+            assertEquals("Sortalbumartist", tag.getFirst(FieldKey.ALBUM_ARTIST_SORT));
+            assertEquals("Sortalbum", tag.getFirst(FieldKey.ALBUM_SORT));
+            assertEquals("GROUping", tag.getFirst(FieldKey.GROUPING));
+            assertEquals("Sortcomposer", tag.getFirst(FieldKey.COMPOSER_SORT));
+            assertEquals("sorttitle", tag.getFirst(FieldKey.TITLE_SORT));
+            assertEquals("1", tag.getFirst(FieldKey.IS_COMPILATION));
+            assertEquals("iTunes v7.4.3.1, QuickTime 7.2", tag.getFirst(FieldKey.ENCODER));
+            assertEquals("66027994-edcf-9d89-bec8-0d30077d888c", tag.getFirst(FieldKey.MUSICIP_ID));
+            assertEquals("e785f700-c1aa-4943-bcee-87dd316a2c30", tag.getFirst(FieldKey.MUSICBRAINZ_TRACK_ID));
+            assertEquals("989a13f6-b58c-4559-b09e-76ae0adb94ed", tag.getFirst(FieldKey.MUSICBRAINZ_ARTISTID));
+            assertEquals("989a13f6-b58c-4559-b09e-76ae0adb94ed", tag.getFirst(FieldKey.MUSICBRAINZ_RELEASEARTISTID));
+            assertEquals("19c6f0f6-3d6d-4b02-88c7-ffb559d52be6", tag.getFirst(FieldKey.MUSICBRAINZ_RELEASEID));
 
             //Cast to format specific tag
             Mp4Tag mp4tag = (Mp4Tag) tag;
@@ -221,32 +218,32 @@ public class M4aReadTagTest extends TestCase
                      
 
             //Lookup by generickey
-            assertEquals("artistname", tag.getFirst(TagFieldKey.ARTIST));
-            assertEquals("Album", tag.getFirst(TagFieldKey.ALBUM));
-            assertEquals("title", tag.getFirst(TagFieldKey.TITLE));
-            assertEquals("comments", tag.getFirst(TagFieldKey.COMMENT));
-            assertEquals("1971", tag.getFirst(TagFieldKey.YEAR));
-            assertEquals("1", tag.getFirst(TagFieldKey.TRACK));
-            assertEquals("10", tag.getFirst(TagFieldKey.TRACK_TOTAL));
-            assertEquals("1", tag.getFirst(TagFieldKey.DISC_NO));
-            assertEquals("10", tag.getFirst(TagFieldKey.DISC_TOTAL));
-            assertEquals("composer", tag.getFirst(TagFieldKey.COMPOSER));
-            assertEquals("Sortartist", tag.getFirst(TagFieldKey.ARTIST_SORT));
-            assertEquals("lyrics", tag.getFirst(TagFieldKey.LYRICS));
-            assertEquals("199", tag.getFirst(TagFieldKey.BPM));
-            assertEquals("Albumartist", tag.getFirst(TagFieldKey.ALBUM_ARTIST));
-            assertEquals("Sortalbumartist", tag.getFirst(TagFieldKey.ALBUM_ARTIST_SORT));
-            assertEquals("Sortalbum", tag.getFirst(TagFieldKey.ALBUM_SORT));
-            assertEquals("grouping", tag.getFirst(TagFieldKey.GROUPING));
-            assertEquals("Sortcomposer", tag.getFirst(TagFieldKey.COMPOSER_SORT));
-            assertEquals("sorttitle", tag.getFirst(TagFieldKey.TITLE_SORT));
-            assertEquals("1", tag.getFirst(TagFieldKey.IS_COMPILATION));
-            assertEquals("iTunes v7.4.3.1, QuickTime 7.2", tag.getFirst(TagFieldKey.ENCODER));
-            assertEquals("66027994-edcf-9d89-bec8-0d30077d888c", tag.getFirst(TagFieldKey.MUSICIP_ID));
-            assertEquals("e785f700-c1aa-4943-bcee-87dd316a2c30", tag.getFirst(TagFieldKey.MUSICBRAINZ_TRACK_ID));
-            assertEquals("989a13f6-b58c-4559-b09e-76ae0adb94ed", tag.getFirst(TagFieldKey.MUSICBRAINZ_ARTISTID));
-            assertEquals("989a13f6-b58c-4559-b09e-76ae0adb94ed", tag.getFirst(TagFieldKey.MUSICBRAINZ_RELEASEARTISTID));
-            assertEquals("19c6f0f6-3d6d-4b02-88c7-ffb559d52be6", tag.getFirst(TagFieldKey.MUSICBRAINZ_RELEASEID));
+            assertEquals("artistname", tag.getFirst(FieldKey.ARTIST));
+            assertEquals("Album", tag.getFirst(FieldKey.ALBUM));
+            assertEquals("title", tag.getFirst(FieldKey.TITLE));
+            assertEquals("comments", tag.getFirst(FieldKey.COMMENT));
+            assertEquals("1971", tag.getFirst(FieldKey.YEAR));
+            assertEquals("1", tag.getFirst(FieldKey.TRACK));
+            assertEquals("10", tag.getFirst(FieldKey.TRACK_TOTAL));
+            assertEquals("1", tag.getFirst(FieldKey.DISC_NO));
+            assertEquals("10", tag.getFirst(FieldKey.DISC_TOTAL));
+            assertEquals("composer", tag.getFirst(FieldKey.COMPOSER));
+            assertEquals("Sortartist", tag.getFirst(FieldKey.ARTIST_SORT));
+            assertEquals("lyrics", tag.getFirst(FieldKey.LYRICS));
+            assertEquals("199", tag.getFirst(FieldKey.BPM));
+            assertEquals("Albumartist", tag.getFirst(FieldKey.ALBUM_ARTIST));
+            assertEquals("Sortalbumartist", tag.getFirst(FieldKey.ALBUM_ARTIST_SORT));
+            assertEquals("Sortalbum", tag.getFirst(FieldKey.ALBUM_SORT));
+            assertEquals("grouping", tag.getFirst(FieldKey.GROUPING));
+            assertEquals("Sortcomposer", tag.getFirst(FieldKey.COMPOSER_SORT));
+            assertEquals("sorttitle", tag.getFirst(FieldKey.TITLE_SORT));
+            assertEquals("1", tag.getFirst(FieldKey.IS_COMPILATION));
+            assertEquals("iTunes v7.4.3.1, QuickTime 7.2", tag.getFirst(FieldKey.ENCODER));
+            assertEquals("66027994-edcf-9d89-bec8-0d30077d888c", tag.getFirst(FieldKey.MUSICIP_ID));
+            assertEquals("e785f700-c1aa-4943-bcee-87dd316a2c30", tag.getFirst(FieldKey.MUSICBRAINZ_TRACK_ID));
+            assertEquals("989a13f6-b58c-4559-b09e-76ae0adb94ed", tag.getFirst(FieldKey.MUSICBRAINZ_ARTISTID));
+            assertEquals("989a13f6-b58c-4559-b09e-76ae0adb94ed", tag.getFirst(FieldKey.MUSICBRAINZ_RELEASEARTISTID));
+            assertEquals("19c6f0f6-3d6d-4b02-88c7-ffb559d52be6", tag.getFirst(FieldKey.MUSICBRAINZ_RELEASEID));
 
             //Cast to format specific tag
             Mp4Tag mp4tag = (Mp4Tag) tag;
@@ -378,18 +375,18 @@ public class M4aReadTagTest extends TestCase
 
 
               //Lookup by generickey
-              assertEquals("artistname", tag.getFirst(TagFieldKey.ARTIST));
-              assertEquals("Album", tag.getFirst(TagFieldKey.ALBUM));
-              assertEquals("title", tag.getFirst(TagFieldKey.TITLE));
-              assertEquals("comments", tag.getFirst(TagFieldKey.COMMENT));
-              assertEquals("1971", tag.getFirst(TagFieldKey.YEAR));
-              assertEquals("1", tag.getFirst(TagFieldKey.TRACK));
-              assertEquals("1", tag.getFirst(TagFieldKey.DISC_NO));
-              assertEquals("composer", tag.getFirst(TagFieldKey.COMPOSER));
-              assertEquals("Sortartist", tag.getFirst(TagFieldKey.ARTIST_SORT));
-              assertEquals("lyrics", tag.getFirst(TagFieldKey.LYRICS));
-              assertEquals("199", tag.getFirst(TagFieldKey.BPM));
-              assertEquals("Albumartist", tag.getFirst(TagFieldKey.ALBUM_ARTIST));
+              assertEquals("artistname", tag.getFirst(FieldKey.ARTIST));
+              assertEquals("Album", tag.getFirst(FieldKey.ALBUM));
+              assertEquals("title", tag.getFirst(FieldKey.TITLE));
+              assertEquals("comments", tag.getFirst(FieldKey.COMMENT));
+              assertEquals("1971", tag.getFirst(FieldKey.YEAR));
+              assertEquals("1", tag.getFirst(FieldKey.TRACK));
+              assertEquals("1", tag.getFirst(FieldKey.DISC_NO));
+              assertEquals("composer", tag.getFirst(FieldKey.COMPOSER));
+              assertEquals("Sortartist", tag.getFirst(FieldKey.ARTIST_SORT));
+              assertEquals("lyrics", tag.getFirst(FieldKey.LYRICS));
+              assertEquals("199", tag.getFirst(FieldKey.BPM));
+              assertEquals("Albumartist", tag.getFirst(FieldKey.ALBUM_ARTIST));
 
 
               //Cast to format specific tag
@@ -444,42 +441,42 @@ public class M4aReadTagTest extends TestCase
             assertEquals(Mp4EsdsBox.AudioProfile.LOW_COMPLEXITY, audioheader.getProfile());
 
             //Ease of use methods for common fields
-            assertEquals("Artist\u01fft", tag.getFirstArtist());
-            assertEquals("Album", tag.getFirstAlbum());
-            assertEquals("title", tag.getFirstTitle());
-            assertEquals("comments", tag.getFirstComment());
-            assertEquals("1971", tag.getFirstYear());
-            assertEquals("1/10", tag.getFirstTrack());
+            assertEquals("Artist\u01fft", tag.getFirst(FieldKey.ARTIST));
+            assertEquals("Album", tag.getFirst(FieldKey.ALBUM));
+            assertEquals("title", tag.getFirst(FieldKey.TITLE));
+            assertEquals("comments", tag.getFirst(FieldKey.COMMENT));
+            assertEquals("1971", tag.getFirst(FieldKey.YEAR));
+            assertEquals("1", tag.getFirst(FieldKey.TRACK));
 
             //Althjough using cusotm genre this call works this out and gets correct value
-            assertEquals("Religious", tag.getFirstGenre());
+            assertEquals("Religious", tag.getFirst(FieldKey.GENRE));
 
             //Lookup by generickey
-            assertEquals("Artist\u01fft", tag.getFirst(TagFieldKey.ARTIST));
-            assertEquals("Album", tag.getFirst(TagFieldKey.ALBUM));
-            assertEquals("title", tag.getFirst(TagFieldKey.TITLE));
-            assertEquals("comments", tag.getFirst(TagFieldKey.COMMENT));
-            assertEquals("1971", tag.getFirst(TagFieldKey.YEAR));
-            assertEquals("1", tag.getFirst(TagFieldKey.TRACK));
-            assertEquals("10", tag.getFirst(TagFieldKey.TRACK_TOTAL));
-            assertEquals("1", tag.getFirst(TagFieldKey.DISC_NO));
-            assertEquals("10", tag.getFirst(TagFieldKey.DISC_TOTAL));
-            assertEquals("composer", tag.getFirst(TagFieldKey.COMPOSER));
-            assertEquals("Sortartist", tag.getFirst(TagFieldKey.ARTIST_SORT));
-            assertEquals("lyrics", tag.getFirst(TagFieldKey.LYRICS));
-            assertEquals("199", tag.getFirst(TagFieldKey.BPM));
-            assertEquals("Albumartist", tag.getFirst(TagFieldKey.ALBUM_ARTIST));
-            assertEquals("Sortalbumartist", tag.getFirst(TagFieldKey.ALBUM_ARTIST_SORT));
-            assertEquals("Sortalbum", tag.getFirst(TagFieldKey.ALBUM_SORT));
-            assertEquals("GROUping", tag.getFirst(TagFieldKey.GROUPING));
-            assertEquals("Sortcomposer", tag.getFirst(TagFieldKey.COMPOSER_SORT));
-            assertEquals("sorttitle", tag.getFirst(TagFieldKey.TITLE_SORT));
-            assertEquals("1", tag.getFirst(TagFieldKey.IS_COMPILATION));
-            assertEquals("66027994-edcf-9d89-bec8-0d30077d888c", tag.getFirst(TagFieldKey.MUSICIP_ID));
-            assertEquals("e785f700-c1aa-4943-bcee-87dd316a2c30", tag.getFirst(TagFieldKey.MUSICBRAINZ_TRACK_ID));
-            assertEquals("989a13f6-b58c-4559-b09e-76ae0adb94ed", tag.getFirst(TagFieldKey.MUSICBRAINZ_ARTISTID));
-            assertEquals("989a13f6-b58c-4559-b09e-76ae0adb94ed", tag.getFirst(TagFieldKey.MUSICBRAINZ_RELEASEARTISTID));
-            assertEquals("19c6f0f6-3d6d-4b02-88c7-ffb559d52be6", tag.getFirst(TagFieldKey.MUSICBRAINZ_RELEASEID));
+            assertEquals("Artist\u01fft", tag.getFirst(FieldKey.ARTIST));
+            assertEquals("Album", tag.getFirst(FieldKey.ALBUM));
+            assertEquals("title", tag.getFirst(FieldKey.TITLE));
+            assertEquals("comments", tag.getFirst(FieldKey.COMMENT));
+            assertEquals("1971", tag.getFirst(FieldKey.YEAR));
+            assertEquals("1", tag.getFirst(FieldKey.TRACK));
+            assertEquals("10", tag.getFirst(FieldKey.TRACK_TOTAL));
+            assertEquals("1", tag.getFirst(FieldKey.DISC_NO));
+            assertEquals("10", tag.getFirst(FieldKey.DISC_TOTAL));
+            assertEquals("composer", tag.getFirst(FieldKey.COMPOSER));
+            assertEquals("Sortartist", tag.getFirst(FieldKey.ARTIST_SORT));
+            assertEquals("lyrics", tag.getFirst(FieldKey.LYRICS));
+            assertEquals("199", tag.getFirst(FieldKey.BPM));
+            assertEquals("Albumartist", tag.getFirst(FieldKey.ALBUM_ARTIST));
+            assertEquals("Sortalbumartist", tag.getFirst(FieldKey.ALBUM_ARTIST_SORT));
+            assertEquals("Sortalbum", tag.getFirst(FieldKey.ALBUM_SORT));
+            assertEquals("GROUping", tag.getFirst(FieldKey.GROUPING));
+            assertEquals("Sortcomposer", tag.getFirst(FieldKey.COMPOSER_SORT));
+            assertEquals("sorttitle", tag.getFirst(FieldKey.TITLE_SORT));
+            assertEquals("1", tag.getFirst(FieldKey.IS_COMPILATION));
+            assertEquals("66027994-edcf-9d89-bec8-0d30077d888c", tag.getFirst(FieldKey.MUSICIP_ID));
+            assertEquals("e785f700-c1aa-4943-bcee-87dd316a2c30", tag.getFirst(FieldKey.MUSICBRAINZ_TRACK_ID));
+            assertEquals("989a13f6-b58c-4559-b09e-76ae0adb94ed", tag.getFirst(FieldKey.MUSICBRAINZ_ARTISTID));
+            assertEquals("989a13f6-b58c-4559-b09e-76ae0adb94ed", tag.getFirst(FieldKey.MUSICBRAINZ_RELEASEARTISTID));
+            assertEquals("19c6f0f6-3d6d-4b02-88c7-ffb559d52be6", tag.getFirst(FieldKey.MUSICBRAINZ_RELEASEID));
 
             //Cast to format specific tag
             Mp4Tag mp4tag = (Mp4Tag) tag;
@@ -615,42 +612,42 @@ public class M4aReadTagTest extends TestCase
             assertEquals(Mp4EsdsBox.AudioProfile.LOW_COMPLEXITY, audioheader.getProfile());
 
             //Ease of use methods for common fields
-            assertEquals("Artist", tag.getFirstArtist());
-            assertEquals("Album", tag.getFirstAlbum());
-            assertEquals("title", tag.getFirstTitle());
-            assertEquals("comments", tag.getFirstComment());
-            assertEquals("1971", tag.getFirstYear());
-            assertEquals("1/10", tag.getFirstTrack());
+            assertEquals("Artist", tag.getFirst(FieldKey.ARTIST));
+            assertEquals("Album", tag.getFirst(FieldKey.ALBUM));
+            assertEquals("title", tag.getFirst(FieldKey.TITLE));
+            assertEquals("comments", tag.getFirst(FieldKey.COMMENT));
+            assertEquals("1971", tag.getFirst(FieldKey.YEAR));
+            assertEquals("1", tag.getFirst(FieldKey.TRACK));
 
             //Althjough using cusotm genre this call works this out and gets correct value
-            assertEquals("Genre", tag.getFirstGenre());
+            assertEquals("Genre", tag.getFirst(FieldKey.GENRE));
 
             //Lookup by generickey
-            assertEquals("Artist", tag.getFirst(TagFieldKey.ARTIST));
-            assertEquals("Album", tag.getFirst(TagFieldKey.ALBUM));
-            assertEquals("title", tag.getFirst(TagFieldKey.TITLE));
-            assertEquals("comments", tag.getFirst(TagFieldKey.COMMENT));
-            assertEquals("1971", tag.getFirst(TagFieldKey.YEAR));
-            assertEquals("1", tag.getFirst(TagFieldKey.TRACK));
-            assertEquals("1", tag.getFirst(TagFieldKey.DISC_NO));
-            assertEquals("10", tag.getFirst(TagFieldKey.TRACK_TOTAL));
-            assertEquals("10", tag.getFirst(TagFieldKey.DISC_TOTAL));
-            assertEquals("composer", tag.getFirst(TagFieldKey.COMPOSER));
-            assertEquals("Sortartist", tag.getFirst(TagFieldKey.ARTIST_SORT));
-            assertEquals("lyrics", tag.getFirst(TagFieldKey.LYRICS));
-            assertEquals("199", tag.getFirst(TagFieldKey.BPM));
-            assertEquals("Albumartist", tag.getFirst(TagFieldKey.ALBUM_ARTIST));
-            assertEquals("Sortalbumartist", tag.getFirst(TagFieldKey.ALBUM_ARTIST_SORT));
-            assertEquals("Sortalbum", tag.getFirst(TagFieldKey.ALBUM_SORT));
-            assertEquals("GROUping", tag.getFirst(TagFieldKey.GROUPING));
-            assertEquals("Sortcomposer", tag.getFirst(TagFieldKey.COMPOSER_SORT));
-            assertEquals("sorttitle", tag.getFirst(TagFieldKey.TITLE_SORT));
-            assertEquals("1", tag.getFirst(TagFieldKey.IS_COMPILATION));
-            assertEquals("66027994-edcf-9d89-bec8-0d30077d888c", tag.getFirst(TagFieldKey.MUSICIP_ID));
-            assertEquals("e785f700-c1aa-4943-bcee-87dd316a2c30", tag.getFirst(TagFieldKey.MUSICBRAINZ_TRACK_ID));
-            assertEquals("989a13f6-b58c-4559-b09e-76ae0adb94ed", tag.getFirst(TagFieldKey.MUSICBRAINZ_ARTISTID));
-            assertEquals("989a13f6-b58c-4559-b09e-76ae0adb94ed", tag.getFirst(TagFieldKey.MUSICBRAINZ_RELEASEARTISTID));
-            assertEquals("19c6f0f6-3d6d-4b02-88c7-ffb559d52be6", tag.getFirst(TagFieldKey.MUSICBRAINZ_RELEASEID));
+            assertEquals("Artist", tag.getFirst(FieldKey.ARTIST));
+            assertEquals("Album", tag.getFirst(FieldKey.ALBUM));
+            assertEquals("title", tag.getFirst(FieldKey.TITLE));
+            assertEquals("comments", tag.getFirst(FieldKey.COMMENT));
+            assertEquals("1971", tag.getFirst(FieldKey.YEAR));
+            assertEquals("1", tag.getFirst(FieldKey.TRACK));
+            assertEquals("1", tag.getFirst(FieldKey.DISC_NO));
+            assertEquals("10", tag.getFirst(FieldKey.TRACK_TOTAL));
+            assertEquals("10", tag.getFirst(FieldKey.DISC_TOTAL));
+            assertEquals("composer", tag.getFirst(FieldKey.COMPOSER));
+            assertEquals("Sortartist", tag.getFirst(FieldKey.ARTIST_SORT));
+            assertEquals("lyrics", tag.getFirst(FieldKey.LYRICS));
+            assertEquals("199", tag.getFirst(FieldKey.BPM));
+            assertEquals("Albumartist", tag.getFirst(FieldKey.ALBUM_ARTIST));
+            assertEquals("Sortalbumartist", tag.getFirst(FieldKey.ALBUM_ARTIST_SORT));
+            assertEquals("Sortalbum", tag.getFirst(FieldKey.ALBUM_SORT));
+            assertEquals("GROUping", tag.getFirst(FieldKey.GROUPING));
+            assertEquals("Sortcomposer", tag.getFirst(FieldKey.COMPOSER_SORT));
+            assertEquals("sorttitle", tag.getFirst(FieldKey.TITLE_SORT));
+            assertEquals("1", tag.getFirst(FieldKey.IS_COMPILATION));
+            assertEquals("66027994-edcf-9d89-bec8-0d30077d888c", tag.getFirst(FieldKey.MUSICIP_ID));
+            assertEquals("e785f700-c1aa-4943-bcee-87dd316a2c30", tag.getFirst(FieldKey.MUSICBRAINZ_TRACK_ID));
+            assertEquals("989a13f6-b58c-4559-b09e-76ae0adb94ed", tag.getFirst(FieldKey.MUSICBRAINZ_ARTISTID));
+            assertEquals("989a13f6-b58c-4559-b09e-76ae0adb94ed", tag.getFirst(FieldKey.MUSICBRAINZ_RELEASEARTISTID));
+            assertEquals("19c6f0f6-3d6d-4b02-88c7-ffb559d52be6", tag.getFirst(FieldKey.MUSICBRAINZ_RELEASEID));
 
             //Cast to format specific tag
             Mp4Tag mp4tag = (Mp4Tag) tag;
@@ -833,8 +830,8 @@ public class M4aReadTagTest extends TestCase
             assertEquals(Mp4EsdsBox.AudioProfile.LOW_COMPLEXITY, audioheader.getProfile());
 
             //These shouldn't be any values for these. because they have invalid fieldtype of 15 instead of 21
-            assertEquals("", tag.getFirst(TagFieldKey.BPM));
-            assertEquals("", tag.getFirst(TagFieldKey.IS_COMPILATION));
+            assertEquals("", tag.getFirst(FieldKey.BPM));
+            assertEquals("", tag.getFirst(FieldKey.IS_COMPILATION));
 
         }
         catch (IOException e)
@@ -853,7 +850,7 @@ public class M4aReadTagTest extends TestCase
             System.out.println(tag);
 
             //Allow calling getFirst() on binary fields, although value actually currently makes not much sense
-            assertEquals("COVERART_JPEG:8445bytes", tag.getFirst(TagFieldKey.COVER_ART));
+            assertEquals("COVERART_JPEG:8445bytes", tag.getFirst(FieldKey.COVER_ART));
 
         }
         catch (IOException e)
@@ -896,13 +893,13 @@ public class M4aReadTagTest extends TestCase
             AudioFile f = AudioFileIO.read(testFile);
             Tag tag = f.getTag();
 
-            tag.getFirstAlbum();
-            tag.getFirstArtist();
-            tag.getFirstComment();
-            tag.getFirstGenre();
-            tag.getFirstTitle();
-            tag.getFirstTrack();
-            tag.getFirstYear();
+            tag.getFirst(FieldKey.ALBUM);
+            tag.getFirst(FieldKey.ARTIST);
+            tag.getFirst(FieldKey.COMMENT);
+            tag.getFirst(FieldKey.GENRE);
+            tag.getFirst(FieldKey.TITLE);
+            tag.getFirst(FieldKey.TRACK);
+            tag.getFirst(FieldKey.YEAR);
             System.out.println(tag);
         }
         catch (Exception e)
@@ -965,15 +962,15 @@ public class M4aReadTagTest extends TestCase
             assertNotNull(tag.getFirst(Mp4NonStandardFieldKey.AAPR.getFieldName()));
             assertEquals("AApr", tag.getFirstField(Mp4NonStandardFieldKey.AAPR.getFieldName()).getId());
             //Make a change and save
-            tag.setTitle("NEWTITLE\u00A9\u01ff");      //test UTF8 encoding
-            tag.set(tag.createTagField(Mp4FieldKey.CONTENT_TYPE, Mp4ContentTypeValue.TV_SHOW.getIdAsString()));
+            tag.setField(FieldKey.TITLE,"NEWTITLE\u00A9\u01ff");      //test UTF8 encoding
+            tag.setField(tag.createTagField(Mp4FieldKey.CONTENT_TYPE, Mp4ContentTypeValue.TV_SHOW.getIdAsString()));
             f.commit();
 
             f = AudioFileIO.read(testFile);
             tag = (Mp4Tag) f.getTag();
 
             assertEquals("AApr", tag.getFirstField(Mp4NonStandardFieldKey.AAPR.getFieldName()).getId());
-            assertEquals("NEWTITLE\u00A9\u01ff", tag.getFirstTitle());
+            assertEquals("NEWTITLE\u00A9\u01ff", tag.getFirst(FieldKey.TITLE));
             assertEquals(Mp4ContentTypeValue.TV_SHOW.getIdAsString(), tag.getFirst(Mp4FieldKey.CONTENT_TYPE));
             assertEquals(1, tag.get(Mp4NonStandardFieldKey.AAPR.getFieldName()).size());
             assertNotNull(tag.getFirst(Mp4NonStandardFieldKey.AAPR.getFieldName()));
@@ -1021,8 +1018,8 @@ public class M4aReadTagTest extends TestCase
             System.out.println(f.getAudioHeader());
             System.out.println(tag);
 
-            assertEquals("Suerte", tag.getFirstArtist());
-            assertEquals("Kogani", tag.getFirstTitle());
+            assertEquals("Suerte", tag.getFirst(FieldKey.ARTIST));
+            assertEquals("Kogani", tag.getFirst(FieldKey.TITLE));
 
         }
         catch (IOException e)
@@ -1057,8 +1054,8 @@ public class M4aReadTagTest extends TestCase
             System.out.println(f.getAudioHeader());
             System.out.println(tag);
 
-            assertEquals("The Best Of Buddy Holly", tag.getFirst(TagFieldKey.ALBUM));
-            assertEquals("Buddy Holly & the Crickets", tag.getFirst(TagFieldKey.ARTIST));
+            assertEquals("The Best Of Buddy Holly", tag.getFirst(FieldKey.ALBUM));
+            assertEquals("Buddy Holly & the Crickets", tag.getFirst(FieldKey.ARTIST));
             assertEquals(1, tag.get(Mp4FieldKey.ITUNES_NORM).size());
             assertEquals(0, tag.get(Mp4FieldKey.ITUNES_SMPB).size());
             assertEquals(1, tag.get(Mp4FieldKey.CDDB_1).size());
@@ -1099,8 +1096,8 @@ public class M4aReadTagTest extends TestCase
             System.out.println(f.getAudioHeader());
             System.out.println(tag);
 
-            assertEquals("Es Wird Morgen", tag.getFirst(TagFieldKey.ALBUM));
-            assertEquals("2raumwohnung", tag.getFirst(TagFieldKey.ARTIST));
+            assertEquals("Es Wird Morgen", tag.getFirst(FieldKey.ALBUM));
+            assertEquals("2raumwohnung", tag.getFirst(FieldKey.ARTIST));
 
             List pictures = tag.get(Mp4FieldKey.ARTWORK);
             assertEquals(1, pictures.size());
@@ -1108,7 +1105,7 @@ public class M4aReadTagTest extends TestCase
             assertEquals(Mp4FieldType.COVERART_PNG, artwork.getFieldType());
 
             //Add another field and save
-            tag.set(tag.createTagField(TagFieldKey.COMPOSER_SORT, "C3"));
+            tag.setField(tag.createField(FieldKey.COMPOSER_SORT, "C3"));
             f.commit();
 
             //Reget
@@ -1117,13 +1114,13 @@ public class M4aReadTagTest extends TestCase
             System.out.println(f.getAudioHeader());
             System.out.println(tag);
 
-            assertEquals("Es Wird Morgen", tag.getFirst(TagFieldKey.ALBUM));
-            assertEquals("2raumwohnung", tag.getFirst(TagFieldKey.ARTIST));
+            assertEquals("Es Wird Morgen", tag.getFirst(FieldKey.ALBUM));
+            assertEquals("2raumwohnung", tag.getFirst(FieldKey.ARTIST));
             pictures = tag.get(Mp4FieldKey.ARTWORK);
             assertEquals(1, pictures.size());
             artwork = (Mp4TagCoverField) pictures.get(0);
             assertEquals(Mp4FieldType.COVERART_PNG, artwork.getFieldType());
-            assertEquals("C3", tag.getFirst(TagFieldKey.COMPOSER_SORT));
+            assertEquals("C3", tag.getFirst(FieldKey.COMPOSER_SORT));
 
 
         }

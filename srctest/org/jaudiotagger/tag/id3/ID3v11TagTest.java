@@ -3,9 +3,9 @@ package org.jaudiotagger.tag.id3;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
-import org.jaudiotagger.tag.TagFieldKey;
-import org.jaudiotagger.tag.TagTextField;
+import org.jaudiotagger.tag.FieldKey;
 import org.jaudiotagger.tag.TagOptionSingleton;
+import org.jaudiotagger.tag.TagTextField;
 
 /**
  *
@@ -114,13 +114,13 @@ public class ID3v11TagTest extends TestCase
         assertEquals((byte) 1, v11Tag.getMajorVersion());
         assertEquals((byte) 0, v11Tag.getRevision());
 
-        assertEquals(ARTIST, v11Tag.getFirstArtist());
-        assertEquals(ALBUM, v11Tag.getFirstAlbum());
+        assertEquals(ARTIST, v11Tag.getFirst(FieldKey.ARTIST));
+        assertEquals(ALBUM, v11Tag.getFirst(FieldKey.ALBUM));
         assertEquals(COMMENT, v11Tag.getFirstComment());
-        assertEquals(TITLE, v11Tag.getFirstTitle());
-        assertEquals(TRACK_VALUE, v11Tag.getFirstTrack());
-        assertEquals(GENRE_VAL, v11Tag.getFirstGenre());
-        assertEquals(YEAR, v11Tag.getFirstYear());
+        assertEquals(TITLE, v11Tag.getFirst(FieldKey.TITLE));
+        assertEquals(TRACK_VALUE, v11Tag.getFirst(FieldKey.TRACK));
+        assertEquals(GENRE_VAL, v11Tag.getFirst(FieldKey.GENRE));
+        assertEquals(YEAR, v11Tag.getFirst(FieldKey.YEAR));
 
         //Check with entagged interface
         assertEquals(ID3v1TagTest.ARTIST, ((TagTextField) v11Tag.getArtist().get(0)).getContent());
@@ -173,81 +173,81 @@ public class ID3v11TagTest extends TestCase
         ID3v1Tag v1Tag = new ID3v11Tag();
         assertTrue(v1Tag.isEmpty());
 
-        v1Tag.set(new ID3v1TagField(TagFieldKey.ARTIST.name(), "artist"));
-        assertEquals("artist", ((TagTextField) v1Tag.get(TagFieldKey.ARTIST).get(0)).getContent());
-        assertEquals("artist", v1Tag.getFirstArtist());
+        v1Tag.setField(new ID3v1TagField(FieldKey.ARTIST.name(), "artist"));
+        assertEquals("artist", ((TagTextField) v1Tag.getFields(FieldKey.ARTIST).get(0)).getContent());
+        assertEquals("artist", v1Tag.getFirst(FieldKey.ARTIST));
         assertEquals("artist", ((TagTextField) (v1Tag.getArtist().get(0))).getContent());
-        assertEquals("artist", ((TagTextField) v1Tag.getFirstField(TagFieldKey.ARTIST.name())).getContent());
-        assertEquals("artist", ((TagTextField) (v1Tag.get(TagFieldKey.ARTIST.name()).get(0))).getContent());
+        assertEquals("artist", ((TagTextField) v1Tag.getFirstField(FieldKey.ARTIST.name())).getContent());
+        assertEquals("artist", ((TagTextField) (v1Tag.get(FieldKey.ARTIST.name()).get(0))).getContent());
 
-        v1Tag.set(new ID3v1TagField(TagFieldKey.ALBUM.name(), "album"));
-        assertEquals("album", ((TagTextField) v1Tag.get(TagFieldKey.ALBUM).get(0)).getContent());
-        assertEquals("album", v1Tag.getFirstAlbum());
+        v1Tag.setField(new ID3v1TagField(FieldKey.ALBUM.name(), "album"));
+        assertEquals("album", ((TagTextField) v1Tag.getFields(FieldKey.ALBUM).get(0)).getContent());
+        assertEquals("album", v1Tag.getFirst(FieldKey.ALBUM));
         assertEquals("album", ((TagTextField) (v1Tag.getAlbum().get(0))).getContent());
-        assertEquals("album", ((TagTextField) v1Tag.getFirstField(TagFieldKey.ALBUM.name())).getContent());
+        assertEquals("album", ((TagTextField) v1Tag.getFirstField(FieldKey.ALBUM.name())).getContent());
 
-        v1Tag.set(new ID3v1TagField(TagFieldKey.TITLE.name(), "title"));
-        assertEquals("title", ((TagTextField) v1Tag.get(TagFieldKey.TITLE).get(0)).getContent());
-        assertEquals("title", v1Tag.getFirstTitle());
+        v1Tag.setField(new ID3v1TagField(FieldKey.TITLE.name(), "title"));
+        assertEquals("title", ((TagTextField) v1Tag.getFields(FieldKey.TITLE).get(0)).getContent());
+        assertEquals("title", v1Tag.getFirst(FieldKey.TITLE));
         assertEquals("title", ((TagTextField) (v1Tag.getTitle().get(0))).getContent());
-        assertEquals("title", ((TagTextField) v1Tag.getFirstField(TagFieldKey.TITLE.name())).getContent());
+        assertEquals("title", ((TagTextField) v1Tag.getFirstField(FieldKey.TITLE.name())).getContent());
 
-        v1Tag.set(new ID3v1TagField(TagFieldKey.YEAR.name(), "year"));
-        assertEquals("year", ((TagTextField) v1Tag.get(TagFieldKey.YEAR).get(0)).getContent());
-        assertEquals("year", v1Tag.getFirstYear());
+        v1Tag.setField(new ID3v1TagField(FieldKey.YEAR.name(), "year"));
+        assertEquals("year", ((TagTextField) v1Tag.getFields(FieldKey.YEAR).get(0)).getContent());
+        assertEquals("year", v1Tag.getFirst(FieldKey.YEAR));
         assertEquals("year", ((TagTextField) (v1Tag.getYear().get(0))).getContent());
-        assertEquals("year", ((TagTextField) v1Tag.getFirstField(TagFieldKey.YEAR.name())).getContent());
+        assertEquals("year", ((TagTextField) v1Tag.getFirstField(FieldKey.YEAR.name())).getContent());
 
-        v1Tag.set(new ID3v1TagField(TagFieldKey.GENRE.name(), "Country"));
-        assertEquals("Country", ((TagTextField) v1Tag.get(TagFieldKey.GENRE).get(0)).getContent());
-        assertEquals("Country", v1Tag.getFirstGenre());
+        v1Tag.setField(new ID3v1TagField(FieldKey.GENRE.name(), "Country"));
+        assertEquals("Country", ((TagTextField) v1Tag.getFields(FieldKey.GENRE).get(0)).getContent());
+        assertEquals("Country", v1Tag.getFirst(FieldKey.GENRE));
         assertEquals("Country", ((TagTextField) (v1Tag.getGenre().get(0))).getContent());
-        assertEquals("Country", ((TagTextField) v1Tag.getFirstField(TagFieldKey.GENRE.name())).getContent());
+        assertEquals("Country", ((TagTextField) v1Tag.getFirstField(FieldKey.GENRE.name())).getContent());
 
-        v1Tag.set(new ID3v1TagField(TagFieldKey.COMMENT.name(), "comment"));
-        assertEquals("comment", ((TagTextField) v1Tag.get(TagFieldKey.COMMENT).get(0)).getContent());
+        v1Tag.setField(new ID3v1TagField(FieldKey.COMMENT.name(), "comment"));
+        assertEquals("comment", ((TagTextField) v1Tag.getFields(FieldKey.COMMENT).get(0)).getContent());
         assertEquals("comment", v1Tag.getFirstComment());
-        assertEquals("comment", ((TagTextField) (v1Tag.getComment().get(0))).getContent());
-        assertEquals("comment", ((TagTextField) v1Tag.getFirstField(TagFieldKey.COMMENT.name())).getContent());
+        assertEquals("comment", ((TagTextField) (v1Tag.getFields(FieldKey.COMMENT).get(0))).getContent());
+        assertEquals("comment", ((TagTextField) v1Tag.getFirstField(FieldKey.COMMENT.name())).getContent());
 
-        v1Tag.set(new ID3v1TagField(TagFieldKey.TRACK.name(), "5"));
-        assertEquals("5", ((TagTextField) v1Tag.get(TagFieldKey.TRACK).get(0)).getContent());
-        assertEquals("5", v1Tag.getFirstTrack());
+        v1Tag.setField(new ID3v1TagField(FieldKey.TRACK.name(), "5"));
+        assertEquals("5", ((TagTextField) v1Tag.getFields(FieldKey.TRACK).get(0)).getContent());
+        assertEquals("5", v1Tag.getFirst(FieldKey.TRACK));
         assertEquals("5", ((TagTextField) (v1Tag.getTrack().get(0))).getContent());
-        assertEquals("5", ((TagTextField) v1Tag.getFirstField(TagFieldKey.TRACK.name())).getContent());
+        assertEquals("5", ((TagTextField) v1Tag.getFirstField(FieldKey.TRACK.name())).getContent());
 
         //Check nothing been overwritten
-        assertEquals("year", v1Tag.getFirstYear());
-        assertEquals("Country", v1Tag.getFirstGenre());
-        assertEquals("title", v1Tag.getFirstTitle());
-        assertEquals("album", v1Tag.getFirstAlbum());
-        assertEquals("artist", v1Tag.getFirstArtist());
+        assertEquals("year", v1Tag.getFirst(FieldKey.YEAR));
+        assertEquals("Country", v1Tag.getFirst(FieldKey.GENRE));
+        assertEquals("title", v1Tag.getFirst(FieldKey.TITLE));
+        assertEquals("album", v1Tag.getFirst(FieldKey.ALBUM));
+        assertEquals("artist", v1Tag.getFirst(FieldKey.ARTIST));
 
         //Delete artist field
-        v1Tag.deleteTagField(TagFieldKey.ARTIST);
-        assertEquals("", v1Tag.getFirstArtist());
-        assertEquals("year", v1Tag.getFirstYear());
-        assertEquals("Country", v1Tag.getFirstGenre());
-        assertEquals("title", v1Tag.getFirstTitle());
-        assertEquals("album", v1Tag.getFirstAlbum());
+        v1Tag.deleteField(FieldKey.ARTIST);
+        assertEquals("", v1Tag.getFirst(FieldKey.ARTIST));
+        assertEquals("year", v1Tag.getFirst(FieldKey.YEAR));
+        assertEquals("Country", v1Tag.getFirst(FieldKey.GENRE));
+        assertEquals("title", v1Tag.getFirst(FieldKey.TITLE));
+        assertEquals("album", v1Tag.getFirst(FieldKey.ALBUM));
 
         //Not Empty
         assertFalse(v1Tag.isEmpty());
 
-        v1Tag.deleteTagField(TagFieldKey.ALBUM);
-        v1Tag.deleteTagField(TagFieldKey.YEAR);
-        v1Tag.deleteTagField(TagFieldKey.GENRE);
-        v1Tag.deleteTagField(TagFieldKey.TITLE);
-        v1Tag.deleteTagField(TagFieldKey.COMMENT);
-        v1Tag.set(new ID3v1TagField(TagFieldKey.COMMENT.name(), ""));
-        v1Tag.deleteTagField(TagFieldKey.TRACK);
+        v1Tag.deleteField(FieldKey.ALBUM);
+        v1Tag.deleteField(FieldKey.YEAR);
+        v1Tag.deleteField(FieldKey.GENRE);
+        v1Tag.deleteField(FieldKey.TITLE);
+        v1Tag.deleteField(FieldKey.COMMENT);
+        v1Tag.setField(new ID3v1TagField(FieldKey.COMMENT.name(), ""));
+        v1Tag.deleteField(FieldKey.TRACK);
         //Empty
         assertTrue(v1Tag.isEmpty());
 
         //Null Handling
         try
         {
-            v1Tag.set(new ID3v1TagField(TagFieldKey.COMMENT.name(), null));
+            v1Tag.setField(new ID3v1TagField(FieldKey.COMMENT.name(), null));
         }
         catch (Exception e)
         {

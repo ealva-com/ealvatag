@@ -4,7 +4,7 @@ import org.jaudiotagger.AbstractTestCase;
 import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.AudioFileIO;
 import org.jaudiotagger.audio.mp3.MP3File;
-import org.jaudiotagger.tag.TagFieldKey;
+import org.jaudiotagger.tag.FieldKey;
 import org.jaudiotagger.tag.id3.framebody.FrameBodyUSLT;
 import org.jaudiotagger.tag.reference.Languages;
 
@@ -30,7 +30,7 @@ public class FrameULSTTest extends AbstractTestCase
 
         //New Method should be same length
         AudioFile file = AudioFileIO.read(testFile);
-        assertEquals(589, file.getTag().getFirst(TagFieldKey.LYRICS).length());
+        assertEquals(589, file.getTag().getFirst(FieldKey.LYRICS).length());
     }
 
     public void testWriteULSTID3v24() throws Exception

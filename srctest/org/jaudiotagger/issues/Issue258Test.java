@@ -1,24 +1,12 @@
 package org.jaudiotagger.issues;
 
 import org.jaudiotagger.AbstractTestCase;
-import org.jaudiotagger.tag.Tag;
-import org.jaudiotagger.tag.TagField;
-import org.jaudiotagger.tag.TagFieldKey;
-import org.jaudiotagger.tag.datatype.DataTypes;
-import org.jaudiotagger.tag.id3.ID3v24Tag;
-import org.jaudiotagger.tag.id3.AbstractID3v2Frame;
-import org.jaudiotagger.tag.id3.ID3v24FieldKey;
-import org.jaudiotagger.tag.id3.framebody.FrameBodyAPIC;
 import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.AudioFileIO;
-import org.jaudiotagger.audio.mp3.MP3File;
-import org.jaudiotagger.audio.exceptions.CannotReadException;
+import org.jaudiotagger.tag.FieldKey;
+import org.jaudiotagger.tag.Tag;
 
-import javax.imageio.ImageIO;
 import java.io.File;
-import java.io.ByteArrayInputStream;
-import java.io.RandomAccessFile;
-import java.awt.image.BufferedImage;
 
 /**
  * Test Creating Temp file when filename < 3
@@ -46,7 +34,7 @@ public class Issue258Test extends AbstractTestCase
             //Read File, and write tag cause padding to be adjusted and temp file created
             AudioFile af = AudioFileIO.read(testFile);
             Tag t = af.getTagOrCreateAndSetDefault();
-            t.setArtist("fred");
+            t.setField(FieldKey.ARTIST,"fred");
             af.commit();
         }
         catch(Exception e)
@@ -79,7 +67,7 @@ public class Issue258Test extends AbstractTestCase
             //Read File
             AudioFile af = AudioFileIO.read(testFile);            
             Tag t = af.getTagOrCreateAndSetDefault();
-            t.setArtist("fred");
+            t.setField(FieldKey.ARTIST,"fred");
             af.commit();
         }
         catch(Exception e)

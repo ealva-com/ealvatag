@@ -1,19 +1,19 @@
 package org.jaudiotagger.tag.id3;
 
 import org.jaudiotagger.AbstractTestCase;
-import org.jaudiotagger.logging.Hex;
-import org.jaudiotagger.audio.mp3.MP3File;
 import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.AudioFileIO;
-import org.jaudiotagger.tag.TagOptionSingleton;
+import org.jaudiotagger.audio.mp3.MP3File;
+import org.jaudiotagger.logging.Hex;
 import org.jaudiotagger.tag.Tag;
+import org.jaudiotagger.tag.TagOptionSingleton;
 import org.jaudiotagger.tag.datatype.Artwork;
 import org.jaudiotagger.tag.id3.framebody.FrameBodyAPIC;
 
 import javax.imageio.ImageIO;
-import java.io.File;
-import java.io.ByteArrayInputStream;
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.File;
 
 /**
  * Test Itunes problems
@@ -177,7 +177,7 @@ public class UnsynchronizationTest extends AbstractTestCase
             assertFalse(v23TagUnsynced.isUnsynchronization());
             Tag unsyncedTag = af.getTag();
             Artwork artworkUnsynced = Artwork.createArtworkFromFile(new File("testdata/coverart_large.jpg"));
-            unsyncedTag.createAndSetArtworkField(artworkUnsynced);
+            unsyncedTag.setField(artworkUnsynced);
             af.commit();
 
             //Save Notsynced
@@ -188,7 +188,7 @@ public class UnsynchronizationTest extends AbstractTestCase
             assertFalse(v23TagNotsynced.isUnsynchronization());
             Tag notSyncedTag = af.getTag();
             Artwork artworkNotsynced = Artwork.createArtworkFromFile(new File("testdata/coverart_large.jpg"));
-            notSyncedTag.createAndSetArtworkField(artworkNotsynced);
+            notSyncedTag.setField(artworkNotsynced);
             af.commit();
 
             //Now read back ok

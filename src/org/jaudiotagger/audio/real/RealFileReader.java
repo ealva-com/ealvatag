@@ -3,8 +3,9 @@ package org.jaudiotagger.audio.real;
 import org.jaudiotagger.audio.exceptions.CannotReadException;
 import org.jaudiotagger.audio.generic.AudioFileReader;
 import org.jaudiotagger.audio.generic.GenericAudioHeader;
-import org.jaudiotagger.audio.generic.GenericTag;
 import org.jaudiotagger.audio.generic.Utils;
+import org.jaudiotagger.tag.FieldDataInvalidException;
+import org.jaudiotagger.tag.FieldKey;
 import org.jaudiotagger.tag.Tag;
 
 import java.io.DataInputStream;
@@ -72,9 +73,16 @@ public class RealFileReader extends AudioFileReader
         final RealTag rv = new RealTag();
         // NOTE: frequently these fields are off-by-one, thus the crazy
         // logic below...
-        rv.addTitle(title.length() == 0 ? author : title);
-        rv.addArtist(title.length() == 0 ? copyright : author);
-        rv.addComment(comment);
+        try
+        {
+            rv.addField(FieldKey.TITLE,(title.length() == 0 ? author : title));
+            rv.addField(FieldKey.ARTIST, title.length() == 0 ? copyright : author);
+            rv.addField(FieldKey.COMMENT,comment);
+        }
+        catch(FieldDataInvalidException fdie)
+        {
+            throw new RuntimeException(fdie);
+        }
         return rv;
     }
 

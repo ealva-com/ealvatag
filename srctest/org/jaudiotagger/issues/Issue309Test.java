@@ -1,14 +1,8 @@
 package org.jaudiotagger.issues;
 
 import org.jaudiotagger.AbstractTestCase;
-import org.jaudiotagger.tag.TagFieldKey;
-import org.jaudiotagger.tag.datatype.Artwork;
-import org.jaudiotagger.tag.id3.ID3v23Tag;
-import org.jaudiotagger.tag.id3.ID3v23Frame;
-import org.jaudiotagger.tag.id3.framebody.FrameBodyIPLS;
-import org.jaudiotagger.audio.mp3.MP3File;
-import org.jaudiotagger.audio.AudioFileIO;
 import org.jaudiotagger.audio.AudioFile;
+import org.jaudiotagger.audio.AudioFileIO;
 
 import java.io.File;
 
@@ -21,15 +15,17 @@ public class Issue309Test extends AbstractTestCase
 
     public void testAddingLargeImageToOgg() throws Exception
     {
+        File orig = new File("testdata", "test73.m4a");
+        if (!orig.isFile())
+        {
+            System.err.println("Unable to test file - not available");
+            return;
+        }
+
         Exception e=null;
         try
         {
             final File testFile = AbstractTestCase.copyAudioToTmp("test73.m4a");
-            if (!testFile.isFile())
-            {
-                System.err.println("Unable to test file - not available");
-                return;
-            }
             AudioFile af = AudioFileIO.read(testFile);
 
         }

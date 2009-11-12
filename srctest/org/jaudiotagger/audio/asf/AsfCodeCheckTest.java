@@ -1,10 +1,10 @@
 package org.jaudiotagger.audio.asf;
 
 import junit.framework.TestCase;
-
 import org.jaudiotagger.audio.asf.data.AsfHeader;
 import org.jaudiotagger.audio.asf.tag.AsfFieldKey;
 import org.jaudiotagger.audio.asf.tag.AsfTag;
+import org.jaudiotagger.tag.FieldKey;
 
 /**
  * This test covers some mistakes that could be made by changing the implementation.<br>
@@ -23,13 +23,13 @@ public class AsfCodeCheckTest extends TestCase
     public void testAsfTagImpl() throws Exception
     {
         final AsfTag asfTag = new AsfTag();
-        assertEquals(asfTag.createAlbumField(new String()).getId(), AsfFieldKey.ALBUM.getFieldName());
-        assertEquals(asfTag.createArtistField(new String()).getId(), AsfFieldKey.AUTHOR.getFieldName());
-        assertEquals(asfTag.createCommentField(new String()).getId(), AsfFieldKey.DESCRIPTION.getFieldName());
-        assertEquals(asfTag.createGenreField(new String()).getId(), AsfFieldKey.GENRE.getFieldName());
-        assertEquals(asfTag.createTitleField(new String()).getId(), AsfFieldKey.TITLE.getFieldName());
-        assertEquals(asfTag.createTrackField(new String()).getId(), AsfFieldKey.TRACK.getFieldName());
-        assertEquals(asfTag.createYearField(new String()).getId(),  AsfFieldKey.YEAR.getFieldName());
+        assertEquals(asfTag.createField(FieldKey.ALBUM,new String()).getId(), AsfFieldKey.ALBUM.getFieldName());
+        assertEquals(asfTag.createField(FieldKey.ARTIST,new String()).getId(), AsfFieldKey.AUTHOR.getFieldName());
+        assertEquals(asfTag.createField(FieldKey.COMMENT,new String()).getId(), AsfFieldKey.DESCRIPTION.getFieldName());
+        assertEquals(asfTag.createField(FieldKey.GENRE,new String()).getId(), AsfFieldKey.GENRE.getFieldName());
+        assertEquals(asfTag.createField(FieldKey.TITLE,new String()).getId(), AsfFieldKey.TITLE.getFieldName());
+        assertEquals(asfTag.createField(FieldKey.TRACK,new String()).getId(), AsfFieldKey.TRACK.getFieldName());
+        assertEquals(asfTag.createField(FieldKey.YEAR,new String()).getId(),  AsfFieldKey.YEAR.getFieldName());
     }
 
     /**

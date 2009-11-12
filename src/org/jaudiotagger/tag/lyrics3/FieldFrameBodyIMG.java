@@ -108,7 +108,7 @@ public class FieldFrameBodyIMG extends AbstractLyrics3v2FieldFrameBody
         for (Object image1 : images)
         {
             image = (Lyrics3Image) image1;
-            size += (image.getSize() + 2); // add CRLF pair
+            size += (image.getSize() + 2); // addField CRLF pair
         }
 
         return size - 2; // cut off trailing crlf pair

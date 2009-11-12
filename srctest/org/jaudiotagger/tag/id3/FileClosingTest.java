@@ -31,7 +31,7 @@ public class FileClosingTest extends AbstractTestCase
         //Error Should have occured
         assertTrue(exception != null);
 
-        //Should be able to delete
+        //Should be able to deleteField
         boolean deleted = testFile.delete();
         assertTrue(deleted);
     }
@@ -57,7 +57,7 @@ public class FileClosingTest extends AbstractTestCase
         //No Error Should have occured
         assertTrue(exception == null);
 
-        //Should be able to delete
+        //Should be able to deleteField
         boolean deleted = testFile.delete();
         assertTrue(deleted);
     }
@@ -86,7 +86,7 @@ public class FileClosingTest extends AbstractTestCase
         //Error Should have occured
         assertTrue(exception != null);
 
-        //Should be able to delete
+        //Should be able to deleteField
         boolean deleted = testFile.delete();
         assertTrue(deleted);
     }

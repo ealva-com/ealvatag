@@ -1,20 +1,17 @@
 package org.jaudiotagger.issues;
 
 import org.jaudiotagger.AbstractTestCase;
-import org.jaudiotagger.logging.Hex;
-import org.jaudiotagger.tag.TagFieldKey;
-import org.jaudiotagger.tag.TagOptionSingleton;
-import org.jaudiotagger.tag.id3.AbstractID3v2Frame;
-import org.jaudiotagger.tag.datatype.Artwork;
-import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.AudioFileIO;
 import org.jaudiotagger.audio.mp3.MP3File;
 import org.jaudiotagger.audio.mp3.MPEGFrameHeader;
+import org.jaudiotagger.logging.Hex;
+import org.jaudiotagger.tag.TagOptionSingleton;
+import org.jaudiotagger.tag.datatype.Artwork;
 
 import java.io.File;
-import java.util.List;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * Jpg added to this mp3 fails on read back
@@ -23,14 +20,18 @@ public class Issue294Test extends AbstractTestCase
 {
     public void testSavingArtworkToMp3File()
     {
-        File testFile = AbstractTestCase.copyAudioToTmp("test70.mp3");
-        File testPix  = AbstractTestCase.copyAudioToTmp("test70.jpg");
 
-        if (!testFile.isFile())
+        File orig = new File("testdata", "test70.mp3");
+        if (!orig.isFile())
         {
             System.err.println("Unable to test file - not available");
             return;
         }
+
+
+        File testFile = AbstractTestCase.copyAudioToTmp("test70.mp3");
+        File testPix  = AbstractTestCase.copyAudioToTmp("test70.jpg");
+
 
         File originalFileBackup = null;
 
@@ -53,7 +54,7 @@ public class Issue294Test extends AbstractTestCase
             //af.getID3v2TagAsv24().removeFrame("APIC");
 
             final List multiFrames = new ArrayList();
-            multiFrames.add(af.getID3v2Tag().createArtworkField(Artwork.createArtworkFromFile(testPix)));
+            multiFrames.add(af.getID3v2Tag().createField(Artwork.createArtworkFromFile(testPix)));
             af.getID3v2Tag().setFrame("APIC", multiFrames);
             af.commit();
 

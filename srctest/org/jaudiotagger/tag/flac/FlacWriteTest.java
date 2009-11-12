@@ -6,7 +6,7 @@ import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.AudioFileIO;
 import org.jaudiotagger.audio.flac.FlacInfoReader;
 import org.jaudiotagger.audio.flac.metadatablock.MetadataBlockDataPicture;
-import org.jaudiotagger.tag.TagFieldKey;
+import org.jaudiotagger.tag.FieldKey;
 import org.jaudiotagger.tag.id3.valuepair.ImageFormats;
 import org.jaudiotagger.tag.reference.PictureTypes;
 
@@ -40,38 +40,41 @@ public class FlacWriteTest extends TestCase
 
             assertTrue(f.getTag() instanceof FlacTag);
             FlacTag tag = (FlacTag) f.getTag();
-            assertEquals("reference libFLAC 1.1.4 20070213", tag.getFirst(TagFieldKey.ENCODER));
+            assertEquals("reference libFLAC 1.1.4 20070213", tag.getFirst(FieldKey.ENCODER));
             assertEquals("reference libFLAC 1.1.4 20070213", tag.getVorbisCommentTag().getVendor());
             //No Images
             assertEquals(0, tag.getImages().size());
             FlacInfoReader infoReader = new FlacInfoReader();
             assertEquals(4, infoReader.countMetaBlocks(f.getFile()));
 
-            tag.addArtist("artist\u01ff");
-            tag.addAlbum("album");
-            tag.addTitle("title");
-            tag.addYear("1971");
-            tag.addTrack("2");
-            tag.addGenre("Rock");
+            tag.addField(FieldKey.ARTIST,"artist\u01ff");
+            tag.addField(FieldKey.ALBUM,"album");
+            tag.addField(FieldKey.TITLE,"title");
+            assertEquals(1, tag.get(FieldKey.TITLE.name()).size());
+            tag.addField(FieldKey.YEAR,"1971");
+            assertEquals(1, tag.getFields(FieldKey.YEAR).size());
+            tag.addField(FieldKey.TRACK,"2");
+            tag.addField(FieldKey.GENRE,"Rock");
 
-            tag.set(tag.createTagField(TagFieldKey.BPM, "123"));
-            tag.set(tag.createTagField(TagFieldKey.URL_LYRICS_SITE,"http://www.lyrics.fly.com"));
-            tag.set(tag.createTagField(TagFieldKey.URL_DISCOGS_ARTIST_SITE,"http://www.discogs1.com"));
-            tag.set(tag.createTagField(TagFieldKey.URL_DISCOGS_RELEASE_SITE,"http://www.discogs2.com"));
-            tag.set(tag.createTagField(TagFieldKey.URL_OFFICIAL_ARTIST_SITE,"http://www.discogs3.com"));
-            tag.set(tag.createTagField(TagFieldKey.URL_OFFICIAL_RELEASE_SITE,"http://www.discogs4.com"));
-            tag.set(tag.createTagField(TagFieldKey.URL_WIKIPEDIA_ARTIST_SITE,"http://www.discogs5.com"));
-            tag.set(tag.createTagField(TagFieldKey.URL_WIKIPEDIA_RELEASE_SITE,"http://www.discogs6.com"));
-            tag.set(tag.createTagField(TagFieldKey.TRACK_TOTAL,"11"));
-            tag.set(tag.createTagField(TagFieldKey.DISC_TOTAL,"3"));
+
+            tag.setField(tag.createField(FieldKey.BPM, "123"));
+            tag.setField(tag.createField(FieldKey.URL_LYRICS_SITE,"http://www.lyrics.fly.com"));
+            tag.setField(tag.createField(FieldKey.URL_DISCOGS_ARTIST_SITE,"http://www.discogs1.com"));
+            tag.setField(tag.createField(FieldKey.URL_DISCOGS_RELEASE_SITE,"http://www.discogs2.com"));
+            tag.setField(tag.createField(FieldKey.URL_OFFICIAL_ARTIST_SITE,"http://www.discogs3.com"));
+            tag.setField(tag.createField(FieldKey.URL_OFFICIAL_RELEASE_SITE,"http://www.discogs4.com"));
+            tag.setField(tag.createField(FieldKey.URL_WIKIPEDIA_ARTIST_SITE,"http://www.discogs5.com"));
+            tag.setField(tag.createField(FieldKey.URL_WIKIPEDIA_RELEASE_SITE,"http://www.discogs6.com"));
+            tag.setField(tag.createField(FieldKey.TRACK_TOTAL,"11"));
+            tag.setField(tag.createField(FieldKey.DISC_TOTAL,"3"));
             //Add new image
             RandomAccessFile imageFile = new RandomAccessFile(new File("testdata", "coverart.png"), "r");
             byte[] imagedata = new byte[(int) imageFile.length()];
             imageFile.read(imagedata);
-            tag.set(tag.createArtworkField(imagedata, PictureTypes.DEFAULT_ID, ImageFormats.MIME_TYPE_PNG, "test", 200, 200, 24, 0));
+            tag.setField(tag.createArtworkField(imagedata, PictureTypes.DEFAULT_ID, ImageFormats.MIME_TYPE_PNG, "test", 200, 200, 24, 0));
 
-            assertEquals("11",tag.getFirst(TagFieldKey.TRACK_TOTAL));
-            assertEquals("3",tag.getFirst(TagFieldKey.DISC_TOTAL));
+            assertEquals("11",tag.getFirst(FieldKey.TRACK_TOTAL));
+            assertEquals("3",tag.getFirst(FieldKey.DISC_TOTAL));
 
 
             f.commit();
@@ -79,30 +82,29 @@ public class FlacWriteTest extends TestCase
             assertEquals(5, infoReader.countMetaBlocks(f.getFile()));
             assertTrue(f.getTag() instanceof FlacTag);
 
-            assertEquals("reference libFLAC 1.1.4 20070213", tag.getFirst(TagFieldKey.ENCODER));
+            assertEquals("reference libFLAC 1.1.4 20070213", tag.getFirst(FieldKey.ENCODER));
             assertEquals("reference libFLAC 1.1.4 20070213", tag.getVorbisCommentTag().getVendor());
-            tag.add(tag.createTagField(TagFieldKey.ENCODER, "encoder"));
-            assertEquals("encoder", tag.getFirst(TagFieldKey.ENCODER));
+            tag.addField(tag.createField(FieldKey.ENCODER, "encoder"));
+            assertEquals("encoder", tag.getFirst(FieldKey.ENCODER));
 
 
             tag = (FlacTag) f.getTag();
-            assertEquals("artist\u01ff", tag.getFirstArtist());
-            assertEquals("album", tag.getFirstAlbum());
-            assertEquals("title", tag.getFirstTitle());
-            assertEquals("123", tag.getFirst(TagFieldKey.BPM));
-            assertEquals("1971", tag.getFirstYear());
-            assertEquals("2", tag.getFirstTrack());
-            assertEquals("Rock", tag.getFirstGenre());
-            assertEquals(1, tag.get(TagFieldKey.GENRE.name()).size());
-            assertEquals(1, tag.getArtist().size());
-            assertEquals(1, tag.getAlbum().size());
-            assertEquals(1, tag.getTitle().size());
-            assertEquals(1, tag.get(TagFieldKey.BPM).size());
-            assertEquals(1, tag.getYear().size());
-            assertEquals(1, tag.getTrack().size());
-            assertEquals(1, tag.getGenre().size());
+            assertEquals("artist\u01ff", tag.getFirst(FieldKey.ARTIST));
+            assertEquals("album", tag.getFirst(FieldKey.ALBUM));
+            assertEquals("title", tag.getFirst(FieldKey.TITLE));
+            assertEquals("123", tag.getFirst(FieldKey.BPM));
+            assertEquals("1971", tag.getFirst(FieldKey.YEAR));
+            assertEquals("2", tag.getFirst(FieldKey.TRACK));
+            assertEquals("Rock", tag.getFirst(FieldKey.GENRE));
+            assertEquals(1, tag.getFields(FieldKey.GENRE).size());
+            assertEquals(1, tag.getFields(FieldKey.ARTIST).size());
+            assertEquals(1, tag.getFields(FieldKey.ALBUM).size());
+            assertEquals(1, tag.getFields(FieldKey.TITLE).size());
+            assertEquals(1, tag.getFields(FieldKey.BPM).size());
+            assertEquals(1, tag.getFields(FieldKey.YEAR).size());
+            assertEquals(1, tag.getFields(FieldKey.TRACK).size());
             //One Image
-            assertEquals(1, tag.get(TagFieldKey.COVER_ART.name()).size());
+            assertEquals(1, tag.get(FieldKey.COVER_ART.name()).size());
             assertEquals(1, tag.getImages().size());
             MetadataBlockDataPicture pic = tag.getImages().get(0);
             assertEquals((int) PictureTypes.DEFAULT_ID, pic.getPictureType());
@@ -113,15 +115,15 @@ public class FlacWriteTest extends TestCase
             assertEquals(24, pic.getColourDepth());
             assertEquals(0, pic.getIndexedColourCount());
 
-            assertEquals("http://www.lyrics.fly.com",tag.getFirst(TagFieldKey.URL_LYRICS_SITE));
-            assertEquals("http://www.discogs1.com",tag.getFirst(TagFieldKey.URL_DISCOGS_ARTIST_SITE));
-            assertEquals("http://www.discogs2.com",tag.getFirst(TagFieldKey.URL_DISCOGS_RELEASE_SITE));
-            assertEquals("http://www.discogs3.com",tag.getFirst(TagFieldKey.URL_OFFICIAL_ARTIST_SITE));
-            assertEquals("http://www.discogs4.com",tag.getFirst(TagFieldKey.URL_OFFICIAL_RELEASE_SITE));
-            assertEquals("http://www.discogs5.com",tag.getFirst(TagFieldKey.URL_WIKIPEDIA_ARTIST_SITE));
-            assertEquals("http://www.discogs6.com",tag.getFirst(TagFieldKey.URL_WIKIPEDIA_RELEASE_SITE));
-            assertEquals("11",tag.getFirst(TagFieldKey.TRACK_TOTAL));
-            assertEquals("3",tag.getFirst(TagFieldKey.DISC_TOTAL));
+            assertEquals("http://www.lyrics.fly.com",tag.getFirst(FieldKey.URL_LYRICS_SITE));
+            assertEquals("http://www.discogs1.com",tag.getFirst(FieldKey.URL_DISCOGS_ARTIST_SITE));
+            assertEquals("http://www.discogs2.com",tag.getFirst(FieldKey.URL_DISCOGS_RELEASE_SITE));
+            assertEquals("http://www.discogs3.com",tag.getFirst(FieldKey.URL_OFFICIAL_ARTIST_SITE));
+            assertEquals("http://www.discogs4.com",tag.getFirst(FieldKey.URL_OFFICIAL_RELEASE_SITE));
+            assertEquals("http://www.discogs5.com",tag.getFirst(FieldKey.URL_WIKIPEDIA_ARTIST_SITE));
+            assertEquals("http://www.discogs6.com",tag.getFirst(FieldKey.URL_WIKIPEDIA_RELEASE_SITE));
+            assertEquals("11",tag.getFirst(FieldKey.TRACK_TOTAL));
+            assertEquals("3",tag.getFirst(FieldKey.DISC_TOTAL));
 
             ImageInputStream stream = ImageIO.createImageInputStream(new ByteArrayInputStream(pic.getImageData()));
             BufferedImage bi = ImageIO.read(stream);
@@ -129,11 +131,11 @@ public class FlacWriteTest extends TestCase
             assertEquals(200, bi.getHeight());
 
             //Add image using alternative
-            tag.add(tag.createArtworkField(bi, PictureTypes.DEFAULT_ID, ImageFormats.MIME_TYPE_PNG, "test", 24, 0));
+            tag.addField(tag.createArtworkField(bi, PictureTypes.DEFAULT_ID, ImageFormats.MIME_TYPE_PNG, "test", 24, 0));
             f.commit();
 
             //Two Images
-            assertEquals(2, tag.get(TagFieldKey.COVER_ART.name()).size());
+            assertEquals(2, tag.get(FieldKey.COVER_ART.name()).size());
             assertEquals(2, tag.getImages().size());
             pic = tag.getImages().get(1);
             assertEquals((int) PictureTypes.DEFAULT_ID, pic.getPictureType());
@@ -205,11 +207,11 @@ public class FlacWriteTest extends TestCase
             AudioFile f = AudioFileIO.read(testFile);
             FlacInfoReader infoReader = new FlacInfoReader();
             assertEquals(5, infoReader.countMetaBlocks(f.getFile()));
-            f.getTag().setAlbum("BLOCK");
+            f.getTag().setField(FieldKey.ALBUM,"BLOCK");
             f.commit();
             f = AudioFileIO.read(testFile);
             infoReader = new FlacInfoReader();
-            assertEquals("BLOCK", f.getTag().getFirstAlbum());
+            assertEquals("BLOCK", f.getTag().getFirst(FieldKey.ALBUM));
 
         }
         catch (Exception e)
@@ -238,12 +240,12 @@ public class FlacWriteTest extends TestCase
             AudioFile f = AudioFileIO.read(testFile);
             FlacInfoReader infoReader = new FlacInfoReader();
             assertEquals(4, infoReader.countMetaBlocks(f.getFile()));
-            f.getTag().setAlbum("BLOCK");
+            f.getTag().setField(FieldKey.ALBUM,"BLOCK");
             f.commit();
             f = AudioFileIO.read(testFile);
             infoReader = new FlacInfoReader();
             assertEquals(4, infoReader.countMetaBlocks(f.getFile()));
-            assertEquals("BLOCK", f.getTag().getFirstAlbum());
+            assertEquals("BLOCK", f.getTag().getFirst(FieldKey.ALBUM));
 
         }
         catch (Exception e)
@@ -279,7 +281,7 @@ public class FlacWriteTest extends TestCase
 
             assertTrue(f.getTag() instanceof FlacTag);
             FlacTag tag = (FlacTag) f.getTag();
-            assertEquals("reference libFLAC 1.1.4 20070213", tag.getFirst(TagFieldKey.ENCODER));
+            assertEquals("reference libFLAC 1.1.4 20070213", tag.getFirst(FieldKey.ENCODER));
             assertEquals("reference libFLAC 1.1.4 20070213", tag.getVorbisCommentTag().getVendor());
 
             //No Images
@@ -287,28 +289,27 @@ public class FlacWriteTest extends TestCase
             FlacInfoReader infoReader = new FlacInfoReader();
             assertEquals(4, infoReader.countMetaBlocks(f.getFile()));
 
-            tag.setArtist("BLOCK");
-            tag.addAlbum("album");
-            tag.addTitle("title");
-            tag.addYear("1971");
-            tag.addTrack("2");
-            tag.addGenre("Rock");
-
-            tag.set(tag.createTagField(TagFieldKey.BPM, "123"));
+            tag.addField(FieldKey.ARTIST,"BLOCK");
+            tag.addField(FieldKey.ALBUM,"album");
+            tag.addField(FieldKey.TITLE,"title");
+            tag.addField(FieldKey.YEAR,"1971");;
+            tag.addField(FieldKey.TRACK,"2");
+            tag.addField(FieldKey.GENRE,"Rock");
+            tag.setField(tag.createField(FieldKey.BPM, "123"));
 
             //Add new image
             RandomAccessFile imageFile = new RandomAccessFile(new File("testdata", "coverart.png"), "r");
             byte[] imagedata = new byte[(int) imageFile.length()];
             imageFile.read(imagedata);
-            tag.set(tag.createArtworkField(imagedata, PictureTypes.DEFAULT_ID, ImageFormats.MIME_TYPE_PNG, "test", 200, 200, 24, 0));
+            tag.setField(tag.createArtworkField(imagedata, PictureTypes.DEFAULT_ID, ImageFormats.MIME_TYPE_PNG, "test", 200, 200, 24, 0));
             f.commit();
             f = AudioFileIO.read(testFile);
             assertEquals(5, infoReader.countMetaBlocks(f.getFile()));
             assertTrue(f.getTag() instanceof FlacTag);
-            assertEquals("reference libFLAC 1.1.4 20070213", tag.getFirst(TagFieldKey.ENCODER));
+            assertEquals("reference libFLAC 1.1.4 20070213", tag.getFirst(FieldKey.ENCODER));
             assertEquals("reference libFLAC 1.1.4 20070213", tag.getVorbisCommentTag().getVendor());
             tag = (FlacTag) f.getTag();
-            assertEquals("BLOCK", tag.getFirstArtist());
+            assertEquals("BLOCK", tag.getFirst(FieldKey.ARTIST));
 
         }
         catch (Exception e)

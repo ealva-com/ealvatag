@@ -24,15 +24,12 @@
  */
 package org.jaudiotagger.tag.id3;
 
-import org.jaudiotagger.tag.datatype.Artwork;
-
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
-import java.util.List;
 
 /**
  * This is the abstract base class for all ID3v1 tags.
@@ -128,7 +125,7 @@ abstract public class AbstractID3v1Tag extends AbstractID3Tag
         }
         else
         {
-            logger.info("Unable to find ID3v1 tag to delete");
+            logger.info("Unable to find ID3v1 tag to deleteField");
         }
     }
 

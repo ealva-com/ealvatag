@@ -18,26 +18,29 @@
  */
 package org.jaudiotagger.audio.generic;
 
+import org.jaudiotagger.logging.ErrorMessage;
 import org.jaudiotagger.tag.*;
-import org.jaudiotagger.tag.mp4.Mp4FieldKey;
-import org.jaudiotagger.tag.mp4.field.Mp4TagCoverField;
 import org.jaudiotagger.tag.datatype.Artwork;
 
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
+import java.util.EnumSet;
+import java.util.List;
 
 /**
  * This is a complete example implementation of
- * {@link AbstractTag}.<br>
- * The identifiers of commonly used fields is defined by {@link #keys}.<br>
+ * {@link AbstractTag} and it currenlty used to provide basic support to audio formats with only read tagging
+ * ability such as Real or Wav files <br>
  *
  * @author Raphaël Slinckx
  */
 public abstract class GenericTag extends AbstractTag
 {
+    private static EnumSet<FieldKey> supportedKeys;
 
+    static
+    {
+        supportedKeys = EnumSet.of(FieldKey.ALBUM,FieldKey.ARTIST,FieldKey.TITLE,FieldKey.TRACK,FieldKey.GENRE,FieldKey.COMMENT,FieldKey.YEAR);
+    }
     /**
      * Implementations of {@link TagTextField} for use with
      * &quot;ISO-8859-1&quot; strings.
@@ -189,188 +192,8 @@ public abstract class GenericTag extends AbstractTag
          */
         public String toString()
         {
-            return getId() + " : " + getContent();
+            return getContent();
         }
-    }
-
-    /**
-     * Index for the &quot;album&quot;-identifier in {@link #keys}.
-     */
-    public static final int ALBUM = 1;
-
-    /**
-     * Index for the &quot;artist&quot;-identifier in {@link #keys}.
-     */
-    public static final int ARTIST = 0;
-
-    /**
-     * Index for the &quot;comment&quot;-identifier in {@link #keys}.
-     */
-    public static final int COMMENT = 6;
-
-    /**
-     * Index for the &quot;genre&quot;-identifier in {@link #keys}.
-     */
-    public static final int GENRE = 5;
-
-    /**
-     * Stores the generic identifiers of commonly used fields.
-     */
-    private final static String[] keys = {"ARTIST", "ALBUM", "TITLE", "TRACK", "YEAR", "GENRE", "COMMENT",};
-
-    /**
-     * Index for the &quot;title&quot;-identifier in {@link #keys}.
-     */
-    public static final int TITLE = 2;
-
-    /**
-     * Index for the &quot;track&quot;-identifier in {@link #keys}.
-     */
-    public static final int TRACK = 3;
-
-    /**
-     * Index for the &quot;year&quot;-identifier in {@link #keys}.
-     */
-    public static final int YEAR = 4;
-
-    /**
-     * (overridden)
-     *
-     * @see AbstractTag#createAlbumField(java.lang.String)
-     */
-    public TagField createAlbumField(String content)
-    {
-        return new GenericTagTextField(keys[ALBUM], content);
-    }
-
-    /**
-     * (overridden)
-     *
-     * @see AbstractTag#createArtistField(java.lang.String)
-     */
-    public TagField createArtistField(String content)
-    {
-        return new GenericTagTextField(keys[ARTIST], content);
-    }
-
-    /**
-     * (overridden)
-     *
-     * @see AbstractTag#createCommentField(java.lang.String)
-     */
-    public TagField createCommentField(String content)
-    {
-        return new GenericTagTextField(keys[COMMENT], content);
-    }
-
-    /**
-     * (overridden)
-     *
-     * @see AbstractTag#createGenreField(java.lang.String)
-     */
-    public TagField createGenreField(String content)
-    {
-        return new GenericTagTextField(keys[GENRE], content);
-    }
-
-    /**
-     * (overridden)
-     *
-     * @see AbstractTag#createTitleField(java.lang.String)
-     */
-    public TagField createTitleField(String content)
-    {
-        return new GenericTagTextField(keys[TITLE], content);
-    }
-
-    /**
-     * (overridden)
-     *
-     * @see AbstractTag#createTrackField(java.lang.String)
-     */
-    public TagField createTrackField(String content)
-    {
-        return new GenericTagTextField(keys[TRACK], content);
-    }
-
-    /**
-     * (overridden)
-     *
-     * @see AbstractTag#createYearField(java.lang.String)
-     */
-    public TagField createYearField(String content)
-    {
-        return new GenericTagTextField(keys[YEAR], content);
-    }
-
-    /**
-     * (overridden)
-     *
-     * @see AbstractTag#getAlbumId()
-     */
-    protected String getAlbumId()
-    {
-        return keys[ALBUM];
-    }
-
-    /**
-     * (overridden)
-     *
-     * @see AbstractTag#getArtistId()
-     */
-    protected String getArtistId()
-    {
-        return keys[ARTIST];
-    }
-
-    /**
-     * (overridden)
-     *
-     * @see org.jaudiotagger.audio.generic.AbstractTag#getCommentId()
-     */
-    protected String getCommentId()
-    {
-        return keys[COMMENT];
-    }
-
-    /**
-     * (overridden)
-     *
-     * @see org.jaudiotagger.audio.generic.AbstractTag#getGenreId()
-     */
-    protected String getGenreId()
-    {
-        return keys[GENRE];
-    }
-
-    /**
-     * (overridden)
-     *
-     * @see org.jaudiotagger.audio.generic.AbstractTag#getTitleId()
-     */
-    protected String getTitleId()
-    {
-        return keys[TITLE];
-    }
-
-    /**
-     * (overridden)
-     *
-     * @see org.jaudiotagger.audio.generic.AbstractTag#getTrackId()
-     */
-    protected String getTrackId()
-    {
-        return keys[TRACK];
-    }
-
-    /**
-     * (overridden)
-     *
-     * @see org.jaudiotagger.audio.generic.AbstractTag#getYearId()
-     */
-    protected String getYearId()
-    {
-        return keys[YEAR];
     }
 
     /**
@@ -383,9 +206,16 @@ public abstract class GenericTag extends AbstractTag
         return true;
     }
 
-    public TagField createTagField(TagFieldKey genericKey, String value) throws KeyNotFoundException, FieldDataInvalidException
+    public TagField createField(FieldKey genericKey, String value) throws KeyNotFoundException, FieldDataInvalidException
     {
-        throw new UnsupportedOperationException("Not implemented for this format");
+        if(supportedKeys.contains(genericKey))
+        {
+            return new GenericTagTextField(genericKey.name(),value);
+        }
+        else
+        {
+            throw new UnsupportedOperationException(ErrorMessage.GENERIC_NOT_SUPPORTED.getMsg());
+        }
     }
 
     /**
@@ -393,18 +223,32 @@ public abstract class GenericTag extends AbstractTag
      * @return
      * @throws KeyNotFoundException
      */
-    public String getFirst(TagFieldKey genericKey) throws KeyNotFoundException
+    public String getFirst(FieldKey genericKey) throws KeyNotFoundException
     {
-        throw new UnsupportedOperationException("Not implemented for this format");
+        if(supportedKeys.contains(genericKey))
+        {
+            return getFirst(genericKey.name());
+        }
+        else
+        {
+            throw new UnsupportedOperationException(ErrorMessage.GENERIC_NOT_SUPPORTED.getMsg());
+        }
     }
 
     /**
-     * @param tagFieldKey
+     * @param genericKey
      * @throws KeyNotFoundException
      */
-    public void deleteTagField(TagFieldKey tagFieldKey) throws KeyNotFoundException
+    public void deleteField(FieldKey genericKey) throws KeyNotFoundException
     {
-        throw new UnsupportedOperationException("Not implemented for this format");
+        if(supportedKeys.contains(genericKey))
+        {
+            deleteField(genericKey.name());
+        }
+        else
+        {
+            throw new UnsupportedOperationException(ErrorMessage.GENERIC_NOT_SUPPORTED.getMsg());
+        }
     }
 
     /**
@@ -412,9 +256,16 @@ public abstract class GenericTag extends AbstractTag
      * @return
      * @throws KeyNotFoundException
      */
-    public TagField getFirstField(TagFieldKey genericKey) throws KeyNotFoundException
+    public TagField getFirstField(FieldKey genericKey) throws KeyNotFoundException
     {
-        throw new UnsupportedOperationException("Not implemented for this format");
+        if(supportedKeys.contains(genericKey))
+        {
+            return getFirstField(genericKey.name());
+        }
+        else
+        {
+            throw new UnsupportedOperationException(ErrorMessage.GENERIC_NOT_SUPPORTED.getMsg());
+        }
     }
 
     public List<Artwork> getArtworkList()
@@ -422,8 +273,8 @@ public abstract class GenericTag extends AbstractTag
         return Collections.emptyList();
     }
 
-    public TagField  createArtworkField(Artwork artwork) throws FieldDataInvalidException
+    public TagField createField(Artwork artwork) throws FieldDataInvalidException
     {
-        throw new UnsupportedOperationException("Not implemented for this format");    
+        throw new UnsupportedOperationException(ErrorMessage.GENERIC_NOT_SUPPORTED.getMsg());
     }
 }

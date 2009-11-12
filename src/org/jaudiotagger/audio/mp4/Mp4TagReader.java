@@ -188,13 +188,13 @@ public class Mp4TagReader
             try
             {
                 TagField field = new Mp4TagReverseDnsField(header, raw);
-                tag.add(field);
+                tag.addField(field);
             }
             catch (Exception e)
             {
                 logger.warning(ErrorMessage.MP4_UNABLE_READ_REVERSE_DNS_FIELD.getMsg(e.getMessage()));
                 TagField field = new Mp4TagRawBinaryField(header, raw);
-                tag.add(field);
+                tag.addField(field);
             }
         }
         //Normal Parent with Data atom
@@ -214,17 +214,17 @@ public class Mp4TagReader
                 if (header.getId().equals(Mp4FieldKey.TRACK.getFieldName()))
                 {
                     TagField field = new Mp4TrackField(header.getId(), raw);
-                    tag.add(field);
+                    tag.addField(field);
                 }
                 else if (header.getId().equals(Mp4FieldKey.DISCNUMBER.getFieldName()))
                 {
                     TagField field = new Mp4DiscNoField(header.getId(), raw);
-                    tag.add(field);
+                    tag.addField(field);
                 }
                 else if (header.getId().equals(Mp4FieldKey.GENRE.getFieldName()))
                 {
                     TagField field = new Mp4GenreField(header.getId(), raw);
-                    tag.add(field);
+                    tag.addField(field);
                 }
                 else if (header.getId().equals(Mp4FieldKey.ARTWORK.getFieldName()) || Mp4FieldType.isCoverArtType(fieldType))
                 {
@@ -241,7 +241,7 @@ public class Mp4TagReader
                             fieldType = Mp4FieldType.getFieldType(type);
                         }
                         Mp4TagCoverField field = new Mp4TagCoverField(raw,fieldType);
-                        tag.add(field);
+                        tag.addField(field);
                         processedDataSize += field.getDataAndHeaderSize();
                         imageCount++;
                     }
@@ -249,17 +249,17 @@ public class Mp4TagReader
                 else if (fieldType == Mp4FieldType.TEXT)
                 {
                     TagField field = new Mp4TagTextField(header.getId(), raw);
-                    tag.add(field);
+                    tag.addField(field);
                 }
                 else if (fieldType == Mp4FieldType.IMPLICIT)
                 {
                     TagField field = new Mp4TagTextNumberField(header.getId(), raw);
-                    tag.add(field);
+                    tag.addField(field);
                 }
                 else if (fieldType == Mp4FieldType.INTEGER)
                 {
                     TagField field = new Mp4TagByteField(header.getId(), raw);
-                    tag.add(field);
+                    tag.addField(field);
                 }
                 else
                 {
@@ -283,7 +283,7 @@ public class Mp4TagReader
                     {
                         logger.warning("UnKnown Field:" + header.getId() + " with invalid field type of:" + type + " created as binary");
                         TagField field = new Mp4TagBinaryField(header.getId(), raw);
-                        tag.add(field);
+                        tag.addField(field);
                     }
                 }
             }
@@ -295,13 +295,13 @@ public class Mp4TagReader
                 if (header.getId().equals(Mp4NonStandardFieldKey.AAPR.getFieldName()))
                 {
                     TagField field = new Mp4TagRawBinaryField(header, raw);
-                    tag.add(field);
+                    tag.addField(field);
                 }
                 //Default case
                 else
                 {
                     TagField field = new Mp4TagRawBinaryField(header, raw);
-                    tag.add(field);
+                    tag.addField(field);
                 }
             }
         }

@@ -4,13 +4,11 @@ import org.jaudiotagger.AbstractTestCase;
 import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.AudioFileIO;
 import org.jaudiotagger.audio.asf.tag.AsfTagCoverField;
+import org.jaudiotagger.tag.FieldKey;
 import org.jaudiotagger.tag.Tag;
-import org.jaudiotagger.tag.TagFieldKey;
 import org.jaudiotagger.tag.datatype.Artwork;
 import org.jaudiotagger.tag.id3.ID3v22Tag;
 import org.jaudiotagger.tag.id3.ID3v24Tag;
-import org.jaudiotagger.tag.reference.Languages;
-import org.jaudiotagger.tag.reference.PictureTypes;
 
 import java.io.File;
 
@@ -37,10 +35,10 @@ public class Issue245Test extends AbstractTestCase
 
             assertEquals(0, tag.getArtworkList().size());
 
-            //Now add the image
+            //Now addField the image
             Artwork newartwork = Artwork.createArtworkFromFile(new File("testdata", "coverart.png"));
             newartwork.setPictureType(5);
-            tag.createAndSetArtworkField(newartwork);
+            tag.setField(newartwork);
             af.commit();
             af = AudioFileIO.read(testFile);
             tag = af.getTag();
@@ -88,10 +86,10 @@ public class Issue245Test extends AbstractTestCase
 
                     assertEquals(0, tag.getArtworkList().size());
 
-                    //Now add the image
+                    //Now addField the image
                     Artwork newartwork = Artwork.createArtworkFromFile(new File("testdata", "coverart.png"));
                     newartwork.setPictureType(11);
-                    tag.createAndSetArtworkField(newartwork);
+                    tag.setField(newartwork);
                     af.commit();
                     af = AudioFileIO.read(testFile);
                     tag = af.getTag();
@@ -139,10 +137,10 @@ public class Issue245Test extends AbstractTestCase
 
                     assertEquals(0, tag.getArtworkList().size());
 
-                    //Now add the image
+                    //Now addField the image
                     Artwork newartwork = Artwork.createArtworkFromFile(new File("testdata", "coverart.png"));
                     newartwork.setPictureType(5);
-                    tag.createAndSetArtworkField(newartwork);
+                    tag.setField(newartwork);
                     af.commit();
                     af = AudioFileIO.read(testFile);
                     tag = af.getTag();
@@ -194,7 +192,7 @@ public class Issue245Test extends AbstractTestCase
             assertEquals(200, artwork.getImage().getWidth());
             //Now replace the image
             Artwork newartwork = Artwork.createArtworkFromFile(new File("testdata", "coverart.png"));
-            tag.createAndSetArtworkField(newartwork);
+            tag.setField(newartwork);
             af.commit();
             af = AudioFileIO.read(testFile);
             tag = af.getTag();
@@ -248,7 +246,7 @@ public class Issue245Test extends AbstractTestCase
             Artwork newartwork = Artwork.createArtworkFromFile(new File("testdata", "coverart.png"));
             newartwork.setDescription("freddy");
             newartwork.setPictureType(7);
-            tag.createAndSetArtworkField(newartwork);
+            tag.setField(newartwork);
             af.commit();
             af = AudioFileIO.read(testFile);
             tag = af.getTag();            
@@ -304,11 +302,11 @@ public class Issue245Test extends AbstractTestCase
             Artwork newartwork = Artwork.createArtworkFromFile(new File("testdata", "coverart.png"));
             newartwork.setDescription("freddy");
             newartwork.setPictureType(8);
-            tag.createAndSetArtworkField(newartwork);
+            tag.setField(newartwork);
             af.commit();
             af = AudioFileIO.read(testFile);
             tag = af.getTag();
-            assertTrue(tag.getFirstField(TagFieldKey.COVER_ART) instanceof AsfTagCoverField);
+            assertTrue(tag.getFirstField(FieldKey.COVER_ART) instanceof AsfTagCoverField);
             assertEquals(1, tag.getArtworkList().size());
             assertTrue(tag.getArtworkList().get(0) instanceof Artwork);
             artwork = tag.getFirstArtwork();
@@ -358,7 +356,7 @@ public class Issue245Test extends AbstractTestCase
 
             //Now replace the image
             Artwork newartwork = Artwork.createArtworkFromFile(new File("testdata", "coverart.png"));
-            tag.createAndSetArtworkField(newartwork);
+            tag.setField(newartwork);
             af.commit();
             af = AudioFileIO.read(testFile);
             tag = af.getTag();
@@ -417,11 +415,11 @@ public class Issue245Test extends AbstractTestCase
 
         try
         {
-            //Now try and add image
+            //Now try and addField image
             AudioFile af = AudioFileIO.read(testFile);
             Artwork newartwork = Artwork.createArtworkFromFile(new File("testdata", "coverart.png"));
             Tag tag = af.getTag();
-            tag.createAndSetArtworkField(newartwork);
+            tag.setField(newartwork);
 
         }
         catch (Exception e)
@@ -435,7 +433,7 @@ public class Issue245Test extends AbstractTestCase
         //Not Supported
          try
         {
-            //Now try and add image
+            //Now try and addField image
             AudioFile af = AudioFileIO.read(testFile);
             Tag tag = af.getTag();
             tag.deleteArtworkField();
@@ -479,11 +477,11 @@ public class Issue245Test extends AbstractTestCase
 
         try
         {
-            //Now try and add image
+            //Now try and addField image
             AudioFile af = AudioFileIO.read(testFile);
             Artwork newartwork = Artwork.createArtworkFromFile(new File("testdata", "coverart.png"));
             Tag tag = af.getTag();
-            tag.createAndSetArtworkField(newartwork);
+            tag.setField(newartwork);
 
         }
         catch (Exception e)

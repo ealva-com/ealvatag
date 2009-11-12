@@ -1,12 +1,9 @@
 package org.jaudiotagger.issues;
 
 import org.jaudiotagger.AbstractTestCase;
-import org.jaudiotagger.tag.id3.*;
-import org.jaudiotagger.tag.id3.framebody.FrameBodyUnsupported;
-import org.jaudiotagger.audio.mp3.MP3File;
-import org.jaudiotagger.audio.AudioFileIO;
 import org.jaudiotagger.audio.AudioFile;
-import org.jaudiotagger.audio.ogg.OggFileReader;
+import org.jaudiotagger.audio.AudioFileIO;
+import org.jaudiotagger.tag.FieldKey;
 
 import java.io.File;
 
@@ -37,7 +34,7 @@ public class Issue285Test extends AbstractTestCase
             //ofr.summarizeOggPageHeaders(testFile);
 
             AudioFile af = AudioFileIO.read(testFile);
-            af.getTag().setComment("TEST");
+            af.getTag().setField(FieldKey.COMMENT,"TEST");
             af.commit();
 
         }

@@ -10,7 +10,7 @@
  * See the GNU Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public License along with this library; if not,
- * you can get a copy from http://www.opensource.org/licenses/lgpl-license.php or write to the Free Software
+ * you can getFields a copy from http://www.opensource.org/licenses/lgpl-license.php or write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 package org.jaudiotagger.audio.mp3;
@@ -18,7 +18,7 @@ package org.jaudiotagger.audio.mp3;
 import junit.framework.TestCase;
 import org.jaudiotagger.AbstractTestCase;
 import org.jaudiotagger.audio.exceptions.InvalidAudioFrameException;
-import org.jaudiotagger.tag.TagFieldKey;
+import org.jaudiotagger.tag.FieldKey;
 import org.jaudiotagger.tag.TagOptionSingleton;
 import org.jaudiotagger.tag.id3.ID3v24Tag;
 
@@ -605,8 +605,8 @@ public class MP3AudioHeaderTest extends TestCase
             mp3AudioHeader = mp3file.getMP3AudioHeader();
 
             //make change to file
-            mp3file.getID3v2Tag().setTitle("FREDDY");
-            mp3file.getID3v2Tag().deleteTagField(TagFieldKey.COVER_ART);
+            mp3file.getID3v2Tag().setField(FieldKey.TITLE,"FREDDY");
+            mp3file.getID3v2Tag().deleteField(FieldKey.COVER_ART);
             ((ID3v24Tag) mp3file.getID3v2Tag()).removeFrame("PRIV");
             final TagOptionSingleton tagOptions = TagOptionSingleton.getInstance();
             tagOptions.setToDefault();
@@ -623,7 +623,7 @@ public class MP3AudioHeaderTest extends TestCase
             exceptionCaught = e;
         }
         //change has been made and VBRI Frame is left intact
-        assertEquals("FREDDY", mp3file.getID3v2Tag().getFirstTitle());
+        assertEquals("FREDDY", mp3file.getID3v2Tag().getFirst(FieldKey.TITLE));
 
         assertTrue(exceptionCaught == null);
         assertEquals(MPEGFrameHeader.mpegVersionMap.get(new Integer(MPEGFrameHeader.VERSION_1)), mp3AudioHeader.getMpegVersion());

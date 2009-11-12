@@ -1,16 +1,11 @@
 package org.jaudiotagger.issues;
 
 import org.jaudiotagger.AbstractTestCase;
-import org.jaudiotagger.tag.id3.ID3v24Tag;
-import org.jaudiotagger.tag.id3.ID3v22Tag;
-import org.jaudiotagger.tag.id3.ID3v23Tag;
-import org.jaudiotagger.tag.Tag;
-import org.jaudiotagger.tag.TagFieldKey;
-import org.jaudiotagger.tag.KeyNotFoundException;
-import org.jaudiotagger.tag.TagOptionSingleton;
-import org.jaudiotagger.tag.datatype.Artwork;
 import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.AudioFileIO;
+import org.jaudiotagger.tag.FieldKey;
+import org.jaudiotagger.tag.Tag;
+import org.jaudiotagger.tag.TagOptionSingleton;
 
 import java.io.File;
 
@@ -40,16 +35,16 @@ public class Issue265Test extends AbstractTestCase
             File testFile = AbstractTestCase.copyAudioToTmp("test7.wma");
             AudioFile f = AudioFileIO.read(testFile);
             Tag tag = f.getTag();
-            assertEquals(0, tag.get(TagFieldKey.COVER_ART).size());
+            assertEquals(0, tag.getFields(FieldKey.COVER_ART).size());
 
 
-            //Now create artwork field
+            //Now createField artwork field
             StringBuffer sb = new StringBuffer();
             for (int i = 0; i < 34000;i++)
             {
                 sb.append("x");
             }
-            tag.setArtist(sb.toString());
+            tag.setField(FieldKey.ARTIST,sb.toString());
 
         }
         catch (Exception e)
@@ -81,18 +76,18 @@ public class Issue265Test extends AbstractTestCase
             File testFile = AbstractTestCase.copyAudioToTmp("test7.wma");
             AudioFile f = AudioFileIO.read(testFile);
             Tag tag = f.getTag();
-            assertEquals(0, tag.get(TagFieldKey.COVER_ART).size());
+            assertEquals(0, tag.getFields(FieldKey.COVER_ART).size());
 
             //Enable value
             TagOptionSingleton.getInstance().setTruncateTextWithoutErrors(true);
 
-            //Now create artwork field
+            //Now createField artwork field
             StringBuffer sb = new StringBuffer();
             for (int i = 0; i < 34000;i++)
             {
                 sb.append("x");
             }
-            tag.setArtist(sb.toString());
+            tag.setField(FieldKey.ARTIST,sb.toString());
             f.commit();
 
         }
@@ -129,7 +124,7 @@ public class Issue265Test extends AbstractTestCase
                {
                    sb.append("x");
                }
-               tag.setTitle(sb.toString());
+               tag.setField(FieldKey.TITLE,sb.toString());
 
            }
            catch (Exception e)
@@ -165,13 +160,13 @@ public class Issue265Test extends AbstractTestCase
                //Enable value
                TagOptionSingleton.getInstance().setTruncateTextWithoutErrors(true);
 
-               //Now create artwork field
+               //Now createField artwork field
                StringBuffer sb = new StringBuffer();
                for (int i = 0; i < 34000;i++)
                {
                    sb.append("x");
                }
-               tag.setTitle(sb.toString());
+               tag.setField(FieldKey.TITLE,sb.toString());
                f.commit();
 
            }

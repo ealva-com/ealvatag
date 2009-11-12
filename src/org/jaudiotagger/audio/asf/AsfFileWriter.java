@@ -90,7 +90,7 @@ public class AsfFileWriter extends AudioFileWriter {
         final AsfHeader sourceHeader = AsfHeaderReader.readTagHeader(raf);
         raf.seek(0); // Reset for the streamer
         /*
-         * Now create modifiers for metadata descriptor and extended content
+         * Now createField modifiers for metadata descriptor and extended content
          * descriptor as implied by the given Tag.
          */
         // TODO not convinced that we need to copy fields here
@@ -127,7 +127,7 @@ public class AsfFileWriter extends AudioFileWriter {
                 }
             }
         }
-        // only add an AsfExtHeaderModifier, if there is actually something to
+        // only addField an AsfExtHeaderModifier, if there is actually something to
         // change (performance)
         if (!extHeaderModifier.isEmpty()) {
             headerModifier.add(new AsfExtHeaderModifier(extHeaderModifier));

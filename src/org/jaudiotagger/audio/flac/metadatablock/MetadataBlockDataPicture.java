@@ -1,9 +1,9 @@
 package org.jaudiotagger.audio.flac.metadatablock;
 
 import org.jaudiotagger.audio.generic.Utils;
+import org.jaudiotagger.tag.FieldKey;
 import org.jaudiotagger.tag.InvalidFrameException;
 import org.jaudiotagger.tag.TagField;
-import org.jaudiotagger.tag.TagFieldKey;
 import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
 import org.jaudiotagger.tag.reference.PictureTypes;
 
@@ -256,7 +256,7 @@ public class MetadataBlockDataPicture implements MetadataBlockData, TagField
      */
     public String getId()
     {
-        return TagFieldKey.COVER_ART.name();
+        return FieldKey.COVER_ART.name();
     }
 
     /**

@@ -96,7 +96,7 @@ public class AsfTagCoverField extends AbstractAsfTagImageField {
             final String description, String mimeType) { // NOPMD by Christian Laireiter on 5/9/09 5:46 PM
         this.description = description;
 
-        // Get Mimetype from data if not already set
+        // Get Mimetype from data if not already setField
         if (mimeType == null) {
             mimeType = ImageFormats.getMimeTypeForBinarySignature(data);
             // Couldnt identify lets default to png because probably error in

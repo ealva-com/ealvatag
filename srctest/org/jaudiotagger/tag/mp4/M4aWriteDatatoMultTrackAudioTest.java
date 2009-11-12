@@ -5,8 +5,8 @@ import org.jaudiotagger.AbstractTestCase;
 import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.AudioFileIO;
 import org.jaudiotagger.audio.mp4.Mp4AtomTree;
+import org.jaudiotagger.tag.FieldKey;
 import org.jaudiotagger.tag.Tag;
-import org.jaudiotagger.tag.TagFieldKey;
 
 import java.io.File;
 import java.io.RandomAccessFile;
@@ -27,7 +27,7 @@ public class M4aWriteDatatoMultTrackAudioTest extends TestCase
         {
             File testFile = AbstractTestCase.copyAudioToTmp("test16.m4a", new File("testWriteMultiTrack1.m4a"));
 
-            //First lets just create tree
+            //First lets just createField tree
             Mp4AtomTree atomTree = new Mp4AtomTree(new RandomAccessFile(testFile, "r"));
             atomTree.printAtomTree();
 
@@ -37,7 +37,7 @@ public class M4aWriteDatatoMultTrackAudioTest extends TestCase
             System.out.println(tag);
 
             //Change values and Save changes and reread from disk
-            tag.setArtist("AUTHOR");
+            tag.setField(FieldKey.ARTIST,"AUTHOR");
 
             f.commit();
             f = AudioFileIO.read(testFile);
@@ -49,7 +49,7 @@ public class M4aWriteDatatoMultTrackAudioTest extends TestCase
             atomTree.printAtomTree();
 
             //Ease of use methods for common fields
-            assertEquals("AUTHOR", tag.getFirstArtist());
+            assertEquals("AUTHOR", tag.getFirst(FieldKey.ARTIST));
 
 
         }
@@ -72,7 +72,7 @@ public class M4aWriteDatatoMultTrackAudioTest extends TestCase
         {
             File testFile = AbstractTestCase.copyAudioToTmp("test16.m4a", new File("testWriteMultiTrack3.m4a"));
 
-            //First lets just create tree
+            //First lets just createField tree
             Mp4AtomTree atomTree = new Mp4AtomTree(new RandomAccessFile(testFile, "r"));
             atomTree.printAtomTree();
 
@@ -82,8 +82,8 @@ public class M4aWriteDatatoMultTrackAudioTest extends TestCase
             System.out.println(tag);
 
             //Change values and Save changes and reread from disk
-            tag.setArtist("A");
-            tag.setTitle("T");
+            tag.setField(FieldKey.ARTIST,"A");
+            tag.setField(FieldKey.TITLE,"T");
             f.commit();
             f = AudioFileIO.read(testFile);
             tag = f.getTag();
@@ -94,8 +94,8 @@ public class M4aWriteDatatoMultTrackAudioTest extends TestCase
             atomTree.printAtomTree();
 
             //Ease of use methods for common fields
-            assertEquals("A", tag.getFirstArtist());
-            assertEquals("T", tag.getFirstTitle());
+            assertEquals("A", tag.getFirst(FieldKey.ARTIST));
+            assertEquals("T", tag.getFirst(FieldKey.TITLE));
 
         }
         catch (Exception e)
@@ -117,7 +117,7 @@ public class M4aWriteDatatoMultTrackAudioTest extends TestCase
         {
             File testFile = AbstractTestCase.copyAudioToTmp("test16.m4a", new File("testWriteMultiTrack4.m4a"));
 
-            //First lets just create tree
+            //First lets just createField tree
             Mp4AtomTree atomTree = new Mp4AtomTree(new RandomAccessFile(testFile, "r"));
             atomTree.printAtomTree();
 
@@ -127,7 +127,7 @@ public class M4aWriteDatatoMultTrackAudioTest extends TestCase
             System.out.println(tag);
 
             //Change values and Save changes and reread from disk
-            tag.setArtist("AR");
+            tag.setField(FieldKey.ARTIST,"AR");
             f.commit();
             f = AudioFileIO.read(testFile);
             tag = f.getTag();
@@ -138,7 +138,7 @@ public class M4aWriteDatatoMultTrackAudioTest extends TestCase
             atomTree.printAtomTree();
 
             //Ease of use methods for common fields
-            assertEquals("AR", tag.getFirstArtist());
+            assertEquals("AR", tag.getFirst(FieldKey.ARTIST));
 
         }
         catch (Exception e)
@@ -165,29 +165,29 @@ public class M4aWriteDatatoMultTrackAudioTest extends TestCase
             Tag tag = f.getTag();
 
             //Change values
-            tag.setArtist("VERYLONGARTISTNAME");
-            tag.setAlbum("VERYLONGALBUMTNAME");
-            tag.set(tag.createTagField(TagFieldKey.ALBUM_ARTIST, "A1"));
-            tag.set(tag.createTagField(TagFieldKey.ALBUM_ARTIST_SORT, "A2"));
-            tag.set(tag.createTagField(TagFieldKey.ALBUM_SORT, "A3"));
-            tag.set(tag.createTagField(TagFieldKey.AMAZON_ID, "A4"));
-            tag.set(tag.createTagField(TagFieldKey.ARTIST_SORT, "A5"));
-            tag.set(tag.createTagField(TagFieldKey.BPM, "200"));
-            tag.set(tag.createTagField(TagFieldKey.COMMENT, "C1"));
-            tag.set(tag.createTagField(TagFieldKey.COMPOSER, "C2"));
-            tag.set(tag.createTagField(TagFieldKey.COMPOSER_SORT, "C3"));
-            tag.set(tag.createTagField(TagFieldKey.DISC_NO, "1"));
-            tag.set(tag.createTagField(TagFieldKey.MUSICBRAINZ_ARTISTID, "1"));
-            tag.set(tag.createTagField(TagFieldKey.MUSICBRAINZ_RELEASEID, "2"));
-            tag.set(tag.createTagField(TagFieldKey.MUSICBRAINZ_TRACK_ID, "3"));
-            tag.set(tag.createTagField(TagFieldKey.MUSICBRAINZ_DISC_ID, "4"));
-            tag.set(tag.createTagField(TagFieldKey.MUSICBRAINZ_RELEASE_COUNTRY, "5"));
-            tag.set(tag.createTagField(TagFieldKey.MUSICBRAINZ_RELEASE_STATUS, "6"));
-            tag.set(tag.createTagField(TagFieldKey.MUSICBRAINZ_RELEASE_TYPE, "7"));
-            tag.set(tag.createTagField(TagFieldKey.MUSICBRAINZ_RELEASEARTISTID, "8"));
-            tag.set(tag.createTagField(TagFieldKey.MUSICIP_ID, "9"));
-            tag.set(tag.createTagField(TagFieldKey.GENRE, "2")); //key for classic rock
-            tag.set(tag.createTagField(TagFieldKey.ENCODER, "encoder"));
+            tag.setField(FieldKey.ARTIST,"VERYLONGARTISTNAME");
+            tag.setField(FieldKey.ALBUM,"VERYLONGALBUMTNAME");
+            tag.setField(tag.createField(FieldKey.ALBUM_ARTIST, "A1"));
+            tag.setField(tag.createField(FieldKey.ALBUM_ARTIST_SORT, "A2"));
+            tag.setField(tag.createField(FieldKey.ALBUM_SORT, "A3"));
+            tag.setField(tag.createField(FieldKey.AMAZON_ID, "A4"));
+            tag.setField(tag.createField(FieldKey.ARTIST_SORT, "A5"));
+            tag.setField(tag.createField(FieldKey.BPM, "200"));
+            tag.setField(tag.createField(FieldKey.COMMENT, "C1"));
+            tag.setField(tag.createField(FieldKey.COMPOSER, "C2"));
+            tag.setField(tag.createField(FieldKey.COMPOSER_SORT, "C3"));
+            tag.setField(tag.createField(FieldKey.DISC_NO, "1"));
+            tag.setField(tag.createField(FieldKey.MUSICBRAINZ_ARTISTID, "1"));
+            tag.setField(tag.createField(FieldKey.MUSICBRAINZ_RELEASEID, "2"));
+            tag.setField(tag.createField(FieldKey.MUSICBRAINZ_TRACK_ID, "3"));
+            tag.setField(tag.createField(FieldKey.MUSICBRAINZ_DISC_ID, "4"));
+            tag.setField(tag.createField(FieldKey.MUSICBRAINZ_RELEASE_COUNTRY, "5"));
+            tag.setField(tag.createField(FieldKey.MUSICBRAINZ_RELEASE_STATUS, "6"));
+            tag.setField(tag.createField(FieldKey.MUSICBRAINZ_RELEASE_TYPE, "7"));
+            tag.setField(tag.createField(FieldKey.MUSICBRAINZ_RELEASEARTISTID, "8"));
+            tag.setField(tag.createField(FieldKey.MUSICIP_ID, "9"));
+            tag.setField(tag.createField(FieldKey.GENRE, "2")); //key for classic rock
+            tag.setField(tag.createField(FieldKey.ENCODER, "encoder"));
             //Save changes and reread from disk
             f.commit();
             f = AudioFileIO.read(testFile);
@@ -204,30 +204,30 @@ public class M4aWriteDatatoMultTrackAudioTest extends TestCase
             //assertEquals(new String("2"),f.getAudioHeader().getChannels());
 
             //Ease of use methods for common fields
-            assertEquals("VERYLONGARTISTNAME", tag.getFirstArtist());
-            assertEquals("VERYLONGALBUMTNAME", tag.getFirstAlbum());
+            assertEquals("VERYLONGARTISTNAME", tag.getFirst(FieldKey.ARTIST));
+            assertEquals("VERYLONGALBUMTNAME", tag.getFirst(FieldKey.ALBUM));
 
-            assertEquals("A1", tag.getFirst(TagFieldKey.ALBUM_ARTIST));
-            assertEquals("A2", tag.getFirst(TagFieldKey.ALBUM_ARTIST_SORT));
-            assertEquals("A3", tag.getFirst(TagFieldKey.ALBUM_SORT));
-            assertEquals("A4", tag.getFirst(TagFieldKey.AMAZON_ID));
-            assertEquals("A5", tag.getFirst(TagFieldKey.ARTIST_SORT));
-            assertEquals("200", tag.getFirst(TagFieldKey.BPM));
-            assertEquals("C1", tag.getFirst(TagFieldKey.COMMENT));
-            assertEquals("C2", tag.getFirst(TagFieldKey.COMPOSER));
-            assertEquals("C3", tag.getFirst(TagFieldKey.COMPOSER_SORT));
-            assertEquals("1", tag.getFirst(TagFieldKey.DISC_NO));
+            assertEquals("A1", tag.getFirst(FieldKey.ALBUM_ARTIST));
+            assertEquals("A2", tag.getFirst(FieldKey.ALBUM_ARTIST_SORT));
+            assertEquals("A3", tag.getFirst(FieldKey.ALBUM_SORT));
+            assertEquals("A4", tag.getFirst(FieldKey.AMAZON_ID));
+            assertEquals("A5", tag.getFirst(FieldKey.ARTIST_SORT));
+            assertEquals("200", tag.getFirst(FieldKey.BPM));
+            assertEquals("C1", tag.getFirst(FieldKey.COMMENT));
+            assertEquals("C2", tag.getFirst(FieldKey.COMPOSER));
+            assertEquals("C3", tag.getFirst(FieldKey.COMPOSER_SORT));
+            assertEquals("1", tag.getFirst(FieldKey.DISC_NO));
 
-            assertEquals("1", tag.getFirst(TagFieldKey.MUSICBRAINZ_ARTISTID));
-            assertEquals("2", tag.getFirst(TagFieldKey.MUSICBRAINZ_RELEASEID));
-            assertEquals("3", tag.getFirst(TagFieldKey.MUSICBRAINZ_TRACK_ID));
-            assertEquals("4", tag.getFirst(TagFieldKey.MUSICBRAINZ_DISC_ID));
-            assertEquals("5", tag.getFirst(TagFieldKey.MUSICBRAINZ_RELEASE_COUNTRY));
-            assertEquals("6", tag.getFirst(TagFieldKey.MUSICBRAINZ_RELEASE_STATUS));
-            assertEquals("7", tag.getFirst(TagFieldKey.MUSICBRAINZ_RELEASE_TYPE));
-            assertEquals("8", tag.getFirst(TagFieldKey.MUSICBRAINZ_RELEASEARTISTID));
-            assertEquals("9", tag.getFirst(TagFieldKey.MUSICIP_ID));
-            assertEquals("Classic Rock", tag.getFirst(TagFieldKey.GENRE));
+            assertEquals("1", tag.getFirst(FieldKey.MUSICBRAINZ_ARTISTID));
+            assertEquals("2", tag.getFirst(FieldKey.MUSICBRAINZ_RELEASEID));
+            assertEquals("3", tag.getFirst(FieldKey.MUSICBRAINZ_TRACK_ID));
+            assertEquals("4", tag.getFirst(FieldKey.MUSICBRAINZ_DISC_ID));
+            assertEquals("5", tag.getFirst(FieldKey.MUSICBRAINZ_RELEASE_COUNTRY));
+            assertEquals("6", tag.getFirst(FieldKey.MUSICBRAINZ_RELEASE_STATUS));
+            assertEquals("7", tag.getFirst(FieldKey.MUSICBRAINZ_RELEASE_TYPE));
+            assertEquals("8", tag.getFirst(FieldKey.MUSICBRAINZ_RELEASEARTISTID));
+            assertEquals("9", tag.getFirst(FieldKey.MUSICIP_ID));
+            assertEquals("Classic Rock", tag.getFirst(FieldKey.GENRE));
         }
         catch (Exception e)
         {
@@ -250,29 +250,29 @@ public class M4aWriteDatatoMultTrackAudioTest extends TestCase
             Tag tag = f.getTag();
 
             //Change values
-            tag.setArtist("VERYLONGARTISTNAME");
-            tag.setAlbum("VERYLONGALBUMTNAME");
-            tag.set(tag.createTagField(TagFieldKey.ALBUM_ARTIST, "A1"));
-            tag.set(tag.createTagField(TagFieldKey.ALBUM_ARTIST_SORT, "A2"));
-            tag.set(tag.createTagField(TagFieldKey.ALBUM_SORT, "A3"));
-            tag.set(tag.createTagField(TagFieldKey.AMAZON_ID, "A4"));
-            tag.set(tag.createTagField(TagFieldKey.ARTIST_SORT, "A5"));
-            tag.set(tag.createTagField(TagFieldKey.BPM, "200"));
-            tag.set(tag.createTagField(TagFieldKey.COMMENT, "C1"));
-            tag.set(tag.createTagField(TagFieldKey.COMPOSER, "C2"));
-            tag.set(tag.createTagField(TagFieldKey.COMPOSER_SORT, "C3"));
-            tag.set(tag.createTagField(TagFieldKey.DISC_NO, "1"));
-            tag.set(tag.createTagField(TagFieldKey.MUSICBRAINZ_ARTISTID, "1"));
-            tag.set(tag.createTagField(TagFieldKey.MUSICBRAINZ_RELEASEID, "2"));
-            tag.set(tag.createTagField(TagFieldKey.MUSICBRAINZ_TRACK_ID, "3"));
-            tag.set(tag.createTagField(TagFieldKey.MUSICBRAINZ_DISC_ID, "4"));
-            tag.set(tag.createTagField(TagFieldKey.MUSICBRAINZ_RELEASE_COUNTRY, "5"));
-            tag.set(tag.createTagField(TagFieldKey.MUSICBRAINZ_RELEASE_STATUS, "6"));
-            tag.set(tag.createTagField(TagFieldKey.MUSICBRAINZ_RELEASE_TYPE, "7"));
-            tag.set(tag.createTagField(TagFieldKey.MUSICBRAINZ_RELEASEARTISTID, "8"));
-            tag.set(tag.createTagField(TagFieldKey.MUSICIP_ID, "9"));
-            tag.set(tag.createTagField(TagFieldKey.GENRE, "2")); //key for classic rock
-            tag.set(tag.createTagField(TagFieldKey.ENCODER, "encoder"));
+            tag.setField(FieldKey.ARTIST,"VERYLONGARTISTNAME");
+            tag.setField(FieldKey.ALBUM,"VERYLONGALBUMTNAME");
+            tag.setField(tag.createField(FieldKey.ALBUM_ARTIST, "A1"));
+            tag.setField(tag.createField(FieldKey.ALBUM_ARTIST_SORT, "A2"));
+            tag.setField(tag.createField(FieldKey.ALBUM_SORT, "A3"));
+            tag.setField(tag.createField(FieldKey.AMAZON_ID, "A4"));
+            tag.setField(tag.createField(FieldKey.ARTIST_SORT, "A5"));
+            tag.setField(tag.createField(FieldKey.BPM, "200"));
+            tag.setField(tag.createField(FieldKey.COMMENT, "C1"));
+            tag.setField(tag.createField(FieldKey.COMPOSER, "C2"));
+            tag.setField(tag.createField(FieldKey.COMPOSER_SORT, "C3"));
+            tag.setField(tag.createField(FieldKey.DISC_NO, "1"));
+            tag.setField(tag.createField(FieldKey.MUSICBRAINZ_ARTISTID, "1"));
+            tag.setField(tag.createField(FieldKey.MUSICBRAINZ_RELEASEID, "2"));
+            tag.setField(tag.createField(FieldKey.MUSICBRAINZ_TRACK_ID, "3"));
+            tag.setField(tag.createField(FieldKey.MUSICBRAINZ_DISC_ID, "4"));
+            tag.setField(tag.createField(FieldKey.MUSICBRAINZ_RELEASE_COUNTRY, "5"));
+            tag.setField(tag.createField(FieldKey.MUSICBRAINZ_RELEASE_STATUS, "6"));
+            tag.setField(tag.createField(FieldKey.MUSICBRAINZ_RELEASE_TYPE, "7"));
+            tag.setField(tag.createField(FieldKey.MUSICBRAINZ_RELEASEARTISTID, "8"));
+            tag.setField(tag.createField(FieldKey.MUSICIP_ID, "9"));
+            tag.setField(tag.createField(FieldKey.GENRE, "2")); //key for classic rock
+            tag.setField(tag.createField(FieldKey.ENCODER, "encoder"));
             //Save changes and reread from disk
             f.commit();
             f = AudioFileIO.read(testFile);
@@ -289,30 +289,30 @@ public class M4aWriteDatatoMultTrackAudioTest extends TestCase
             //assertEquals(new String("2"),f.getAudioHeader().getChannels());
 
             //Ease of use methods for common fields
-            assertEquals("VERYLONGARTISTNAME", tag.getFirstArtist());
-            assertEquals("VERYLONGALBUMTNAME", tag.getFirstAlbum());
+            assertEquals("VERYLONGARTISTNAME", tag.getFirst(FieldKey.ARTIST));
+            assertEquals("VERYLONGALBUMTNAME", tag.getFirst(FieldKey.ALBUM));
 
-            assertEquals("A1", tag.getFirst(TagFieldKey.ALBUM_ARTIST));
-            assertEquals("A2", tag.getFirst(TagFieldKey.ALBUM_ARTIST_SORT));
-            assertEquals("A3", tag.getFirst(TagFieldKey.ALBUM_SORT));
-            assertEquals("A4", tag.getFirst(TagFieldKey.AMAZON_ID));
-            assertEquals("A5", tag.getFirst(TagFieldKey.ARTIST_SORT));
-            assertEquals("200", tag.getFirst(TagFieldKey.BPM));
-            assertEquals("C1", tag.getFirst(TagFieldKey.COMMENT));
-            assertEquals("C2", tag.getFirst(TagFieldKey.COMPOSER));
-            assertEquals("C3", tag.getFirst(TagFieldKey.COMPOSER_SORT));
-            assertEquals("1", tag.getFirst(TagFieldKey.DISC_NO));
+            assertEquals("A1", tag.getFirst(FieldKey.ALBUM_ARTIST));
+            assertEquals("A2", tag.getFirst(FieldKey.ALBUM_ARTIST_SORT));
+            assertEquals("A3", tag.getFirst(FieldKey.ALBUM_SORT));
+            assertEquals("A4", tag.getFirst(FieldKey.AMAZON_ID));
+            assertEquals("A5", tag.getFirst(FieldKey.ARTIST_SORT));
+            assertEquals("200", tag.getFirst(FieldKey.BPM));
+            assertEquals("C1", tag.getFirst(FieldKey.COMMENT));
+            assertEquals("C2", tag.getFirst(FieldKey.COMPOSER));
+            assertEquals("C3", tag.getFirst(FieldKey.COMPOSER_SORT));
+            assertEquals("1", tag.getFirst(FieldKey.DISC_NO));
 
-            assertEquals("1", tag.getFirst(TagFieldKey.MUSICBRAINZ_ARTISTID));
-            assertEquals("2", tag.getFirst(TagFieldKey.MUSICBRAINZ_RELEASEID));
-            assertEquals("3", tag.getFirst(TagFieldKey.MUSICBRAINZ_TRACK_ID));
-            assertEquals("4", tag.getFirst(TagFieldKey.MUSICBRAINZ_DISC_ID));
-            assertEquals("5", tag.getFirst(TagFieldKey.MUSICBRAINZ_RELEASE_COUNTRY));
-            assertEquals("6", tag.getFirst(TagFieldKey.MUSICBRAINZ_RELEASE_STATUS));
-            assertEquals("7", tag.getFirst(TagFieldKey.MUSICBRAINZ_RELEASE_TYPE));
-            assertEquals("8", tag.getFirst(TagFieldKey.MUSICBRAINZ_RELEASEARTISTID));
-            assertEquals("9", tag.getFirst(TagFieldKey.MUSICIP_ID));
-            assertEquals("Classic Rock", tag.getFirst(TagFieldKey.GENRE));
+            assertEquals("1", tag.getFirst(FieldKey.MUSICBRAINZ_ARTISTID));
+            assertEquals("2", tag.getFirst(FieldKey.MUSICBRAINZ_RELEASEID));
+            assertEquals("3", tag.getFirst(FieldKey.MUSICBRAINZ_TRACK_ID));
+            assertEquals("4", tag.getFirst(FieldKey.MUSICBRAINZ_DISC_ID));
+            assertEquals("5", tag.getFirst(FieldKey.MUSICBRAINZ_RELEASE_COUNTRY));
+            assertEquals("6", tag.getFirst(FieldKey.MUSICBRAINZ_RELEASE_STATUS));
+            assertEquals("7", tag.getFirst(FieldKey.MUSICBRAINZ_RELEASE_TYPE));
+            assertEquals("8", tag.getFirst(FieldKey.MUSICBRAINZ_RELEASEARTISTID));
+            assertEquals("9", tag.getFirst(FieldKey.MUSICIP_ID));
+            assertEquals("Classic Rock", tag.getFirst(FieldKey.GENRE));
         }
         catch (Exception e)
         {
@@ -335,29 +335,29 @@ public class M4aWriteDatatoMultTrackAudioTest extends TestCase
             Tag tag = f.getTag();
 
             //Change values
-            tag.setArtist("VERYLONGARTISTNAME");
-            tag.setAlbum("VERYLONGALBUMTNAME");
-            tag.set(tag.createTagField(TagFieldKey.ALBUM_ARTIST, "A1"));
-            tag.set(tag.createTagField(TagFieldKey.ALBUM_ARTIST_SORT, "A2"));
-            tag.set(tag.createTagField(TagFieldKey.ALBUM_SORT, "A3"));
-            tag.set(tag.createTagField(TagFieldKey.AMAZON_ID, "A4"));
-            tag.set(tag.createTagField(TagFieldKey.ARTIST_SORT, "A5"));
-            tag.set(tag.createTagField(TagFieldKey.BPM, "200"));
-            tag.set(tag.createTagField(TagFieldKey.COMMENT, "C1"));
-            tag.set(tag.createTagField(TagFieldKey.COMPOSER, "C2"));
-            tag.set(tag.createTagField(TagFieldKey.COMPOSER_SORT, "C3"));
-            tag.set(tag.createTagField(TagFieldKey.DISC_NO, "1"));
-            tag.set(tag.createTagField(TagFieldKey.MUSICBRAINZ_ARTISTID, "1"));
-            tag.set(tag.createTagField(TagFieldKey.MUSICBRAINZ_RELEASEID, "2"));
-            tag.set(tag.createTagField(TagFieldKey.MUSICBRAINZ_TRACK_ID, "3"));
-            tag.set(tag.createTagField(TagFieldKey.MUSICBRAINZ_DISC_ID, "4"));
-            tag.set(tag.createTagField(TagFieldKey.MUSICBRAINZ_RELEASE_COUNTRY, "5"));
-            tag.set(tag.createTagField(TagFieldKey.MUSICBRAINZ_RELEASE_STATUS, "6"));
-            tag.set(tag.createTagField(TagFieldKey.MUSICBRAINZ_RELEASE_TYPE, "7"));
-            tag.set(tag.createTagField(TagFieldKey.MUSICBRAINZ_RELEASEARTISTID, "8"));
-            tag.set(tag.createTagField(TagFieldKey.MUSICIP_ID, "9"));
-            tag.set(tag.createTagField(TagFieldKey.GENRE, "2")); //key for classic rock
-            tag.set(tag.createTagField(TagFieldKey.ENCODER, "encoder"));
+            tag.setField(FieldKey.ARTIST,"VERYLONGARTISTNAME");
+            tag.setField(FieldKey.ALBUM,"VERYLONGALBUMTNAME");
+            tag.setField(tag.createField(FieldKey.ALBUM_ARTIST, "A1"));
+            tag.setField(tag.createField(FieldKey.ALBUM_ARTIST_SORT, "A2"));
+            tag.setField(tag.createField(FieldKey.ALBUM_SORT, "A3"));
+            tag.setField(tag.createField(FieldKey.AMAZON_ID, "A4"));
+            tag.setField(tag.createField(FieldKey.ARTIST_SORT, "A5"));
+            tag.setField(tag.createField(FieldKey.BPM, "200"));
+            tag.setField(tag.createField(FieldKey.COMMENT, "C1"));
+            tag.setField(tag.createField(FieldKey.COMPOSER, "C2"));
+            tag.setField(tag.createField(FieldKey.COMPOSER_SORT, "C3"));
+            tag.setField(tag.createField(FieldKey.DISC_NO, "1"));
+            tag.setField(tag.createField(FieldKey.MUSICBRAINZ_ARTISTID, "1"));
+            tag.setField(tag.createField(FieldKey.MUSICBRAINZ_RELEASEID, "2"));
+            tag.setField(tag.createField(FieldKey.MUSICBRAINZ_TRACK_ID, "3"));
+            tag.setField(tag.createField(FieldKey.MUSICBRAINZ_DISC_ID, "4"));
+            tag.setField(tag.createField(FieldKey.MUSICBRAINZ_RELEASE_COUNTRY, "5"));
+            tag.setField(tag.createField(FieldKey.MUSICBRAINZ_RELEASE_STATUS, "6"));
+            tag.setField(tag.createField(FieldKey.MUSICBRAINZ_RELEASE_TYPE, "7"));
+            tag.setField(tag.createField(FieldKey.MUSICBRAINZ_RELEASEARTISTID, "8"));
+            tag.setField(tag.createField(FieldKey.MUSICIP_ID, "9"));
+            tag.setField(tag.createField(FieldKey.GENRE, "2")); //key for classic rock
+            tag.setField(tag.createField(FieldKey.ENCODER, "encoder"));
 
             //Frig adding pretend image which will require exactly the same size as space available in the
             //free atom
@@ -367,7 +367,7 @@ public class M4aWriteDatatoMultTrackAudioTest extends TestCase
             imagedata[2] = (byte) 0x4E;
             imagedata[3] = (byte) 0x47;
 
-            tag.add(((Mp4Tag) tag).createArtworkField(imagedata));
+            tag.addField(((Mp4Tag) tag).createArtworkField(imagedata));
 
             //Save changes and reread from disk
             f.commit();
@@ -385,30 +385,30 @@ public class M4aWriteDatatoMultTrackAudioTest extends TestCase
             //assertEquals(new String("2"),f.getAudioHeader().getChannels());
 
             //Ease of use methods for common fields
-            assertEquals("VERYLONGARTISTNAME", tag.getFirstArtist());
-            assertEquals("VERYLONGALBUMTNAME", tag.getFirstAlbum());
+            assertEquals("VERYLONGARTISTNAME", tag.getFirst(FieldKey.ARTIST));
+            assertEquals("VERYLONGALBUMTNAME", tag.getFirst(FieldKey.ALBUM));
 
-            assertEquals("A1", tag.getFirst(TagFieldKey.ALBUM_ARTIST));
-            assertEquals("A2", tag.getFirst(TagFieldKey.ALBUM_ARTIST_SORT));
-            assertEquals("A3", tag.getFirst(TagFieldKey.ALBUM_SORT));
-            assertEquals("A4", tag.getFirst(TagFieldKey.AMAZON_ID));
-            assertEquals("A5", tag.getFirst(TagFieldKey.ARTIST_SORT));
-            assertEquals("200", tag.getFirst(TagFieldKey.BPM));
-            assertEquals("C1", tag.getFirst(TagFieldKey.COMMENT));
-            assertEquals("C2", tag.getFirst(TagFieldKey.COMPOSER));
-            assertEquals("C3", tag.getFirst(TagFieldKey.COMPOSER_SORT));
-            assertEquals("1", tag.getFirst(TagFieldKey.DISC_NO));
+            assertEquals("A1", tag.getFirst(FieldKey.ALBUM_ARTIST));
+            assertEquals("A2", tag.getFirst(FieldKey.ALBUM_ARTIST_SORT));
+            assertEquals("A3", tag.getFirst(FieldKey.ALBUM_SORT));
+            assertEquals("A4", tag.getFirst(FieldKey.AMAZON_ID));
+            assertEquals("A5", tag.getFirst(FieldKey.ARTIST_SORT));
+            assertEquals("200", tag.getFirst(FieldKey.BPM));
+            assertEquals("C1", tag.getFirst(FieldKey.COMMENT));
+            assertEquals("C2", tag.getFirst(FieldKey.COMPOSER));
+            assertEquals("C3", tag.getFirst(FieldKey.COMPOSER_SORT));
+            assertEquals("1", tag.getFirst(FieldKey.DISC_NO));
 
-            assertEquals("1", tag.getFirst(TagFieldKey.MUSICBRAINZ_ARTISTID));
-            assertEquals("2", tag.getFirst(TagFieldKey.MUSICBRAINZ_RELEASEID));
-            assertEquals("3", tag.getFirst(TagFieldKey.MUSICBRAINZ_TRACK_ID));
-            assertEquals("4", tag.getFirst(TagFieldKey.MUSICBRAINZ_DISC_ID));
-            assertEquals("5", tag.getFirst(TagFieldKey.MUSICBRAINZ_RELEASE_COUNTRY));
-            assertEquals("6", tag.getFirst(TagFieldKey.MUSICBRAINZ_RELEASE_STATUS));
-            assertEquals("7", tag.getFirst(TagFieldKey.MUSICBRAINZ_RELEASE_TYPE));
-            assertEquals("8", tag.getFirst(TagFieldKey.MUSICBRAINZ_RELEASEARTISTID));
-            assertEquals("9", tag.getFirst(TagFieldKey.MUSICIP_ID));
-            assertEquals("Classic Rock", tag.getFirst(TagFieldKey.GENRE));
+            assertEquals("1", tag.getFirst(FieldKey.MUSICBRAINZ_ARTISTID));
+            assertEquals("2", tag.getFirst(FieldKey.MUSICBRAINZ_RELEASEID));
+            assertEquals("3", tag.getFirst(FieldKey.MUSICBRAINZ_TRACK_ID));
+            assertEquals("4", tag.getFirst(FieldKey.MUSICBRAINZ_DISC_ID));
+            assertEquals("5", tag.getFirst(FieldKey.MUSICBRAINZ_RELEASE_COUNTRY));
+            assertEquals("6", tag.getFirst(FieldKey.MUSICBRAINZ_RELEASE_STATUS));
+            assertEquals("7", tag.getFirst(FieldKey.MUSICBRAINZ_RELEASE_TYPE));
+            assertEquals("8", tag.getFirst(FieldKey.MUSICBRAINZ_RELEASEARTISTID));
+            assertEquals("9", tag.getFirst(FieldKey.MUSICIP_ID));
+            assertEquals("Classic Rock", tag.getFirst(FieldKey.GENRE));
 
             //Visual check of atom tree
             testFile = new File("testdatatmp", "testWriteMultiTrack7.m4a");

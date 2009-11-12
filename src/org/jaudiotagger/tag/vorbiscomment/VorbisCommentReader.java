@@ -138,7 +138,7 @@ public class VorbisCommentReader
 
                 VorbisCommentTagField fieldComment = new VorbisCommentTagField(b);
                 logger.info("Adding:" + fieldComment.getId());
-                tag.add(fieldComment);
+                tag.addField(fieldComment);
             }
         }
 
