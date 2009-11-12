@@ -257,7 +257,7 @@ public class FlacWriteTest extends TestCase
     }
 
     /**
-     * Metadata size has increased so that shidt required
+     * Metadata size has increased so that shift required
      */
     public void testWriteFileWithId3HeaderAudioShifted()
     {
@@ -289,7 +289,7 @@ public class FlacWriteTest extends TestCase
             FlacInfoReader infoReader = new FlacInfoReader();
             assertEquals(4, infoReader.countMetaBlocks(f.getFile()));
 
-            tag.addField(FieldKey.ARTIST,"BLOCK");
+            tag.setField(FieldKey.ARTIST,"BLOCK");
             tag.addField(FieldKey.ALBUM,"album");
             tag.addField(FieldKey.TITLE,"title");
             tag.addField(FieldKey.YEAR,"1971");;

@@ -84,7 +84,8 @@ public class M4aWriteDrmTagTest extends TestCase
             assertEquals("ALBUM", tag.getFirst(FieldKey.ALBUM));
             assertEquals("Simpering Blonde Bombshell", tag.getFirst(FieldKey.TITLE));
             assertEquals("1990-01-01T08:00:00Z", tag.getFirst(FieldKey.YEAR));
-            assertEquals("1/12", tag.getFirst(FieldKey.TRACK));
+            assertEquals("1", tag.getFirst(FieldKey.TRACK));
+            assertEquals("12", tag.getFirst(FieldKey.TRACK_TOTAL));
             assertEquals("Rock", tag.getFirst(FieldKey.GENRE));
 
             //Cast to format specific tag
