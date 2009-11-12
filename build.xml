@@ -136,7 +136,7 @@
 	
 	<target name="build.zip" description="Create simple zipfile of the JAudiotagger Project">	  
 		<zip destfile="../${zip.file}">
-    <zipfileset dir="${basedir}" excludes="(junitreport.testdata.dir},releases/**,${output.dir}/**,${testoutput.dir}/**,${junitreport.testdatatmp.dir}/**,${junitreport.dir}/**"/>    
+    <zipfileset dir="${basedir}" excludes="${junitreport.testdata.dir}/**,releases/**,${output.dir}/**,${testoutput.dir}/**,${junitreport.testdatatmp.dir}/**,${junitreport.dir}/**"/>    
   </zip>
 	</target>	
 	
