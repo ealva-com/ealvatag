@@ -267,12 +267,12 @@ public abstract class AbstractDataType
      */
     public boolean equals(Object obj)
     {
-        if ((obj instanceof AbstractDataType) == false)
+        if (!(obj instanceof AbstractDataType))
         {
             return false;
         }
         AbstractDataType object = (AbstractDataType) obj;
-        if (this.identifier.equals(object.identifier) == false)
+        if (!this.identifier.equals(object.identifier))
         {
             return false;
         }
@@ -287,7 +287,7 @@ public abstract class AbstractDataType
         // boolean[]
         if (this.value instanceof boolean[] && object.value instanceof boolean[])
         {
-            if (Arrays.equals((boolean[]) this.value, (boolean[]) object.value) == false)
+            if (!Arrays.equals((boolean[]) this.value, (boolean[]) object.value))
             {
                 return false;
             }
@@ -295,7 +295,7 @@ public abstract class AbstractDataType
         }
         else if (this.value instanceof byte[] && object.value instanceof byte[])
         {
-            if (Arrays.equals((byte[]) this.value, (byte[]) object.value) == false)
+            if (!Arrays.equals((byte[]) this.value, (byte[]) object.value))
             {
                 return false;
             }
@@ -303,7 +303,7 @@ public abstract class AbstractDataType
         }
         else if (this.value instanceof char[] && object.value instanceof char[])
         {
-            if (Arrays.equals((char[]) this.value, (char[]) object.value) == false)
+            if (!Arrays.equals((char[]) this.value, (char[]) object.value))
             {
                 return false;
             }
@@ -311,7 +311,7 @@ public abstract class AbstractDataType
         }
         else if (this.value instanceof double[] && object.value instanceof double[])
         {
-            if (Arrays.equals((double[]) this.value, (double[]) object.value) == false)
+            if (!Arrays.equals((double[]) this.value, (double[]) object.value))
             {
                 return false;
             }
@@ -319,7 +319,7 @@ public abstract class AbstractDataType
         }
         else if (this.value instanceof float[] && object.value instanceof float[])
         {
-            if (Arrays.equals((float[]) this.value, (float[]) object.value) == false)
+            if (!Arrays.equals((float[]) this.value, (float[]) object.value))
             {
                 return false;
             }
@@ -327,7 +327,7 @@ public abstract class AbstractDataType
         }
         else if (this.value instanceof int[] && object.value instanceof int[])
         {
-            if (Arrays.equals((int[]) this.value, (int[]) object.value) == false)
+            if (!Arrays.equals((int[]) this.value, (int[]) object.value))
             {
                 return false;
             }
@@ -335,7 +335,7 @@ public abstract class AbstractDataType
         }
         else if (this.value instanceof long[] && object.value instanceof long[])
         {
-            if (Arrays.equals((long[]) this.value, (long[]) object.value) == false)
+            if (!Arrays.equals((long[]) this.value, (long[]) object.value))
             {
                 return false;
             }
@@ -343,7 +343,7 @@ public abstract class AbstractDataType
         }
         else if (this.value instanceof Object[] && object.value instanceof Object[])
         {
-            if (Arrays.equals((Object[]) this.value, (Object[]) object.value) == false)
+            if (!Arrays.equals((Object[]) this.value, (Object[]) object.value))
             {
                 return false;
             }
@@ -351,12 +351,12 @@ public abstract class AbstractDataType
         }
         else if (this.value instanceof short[] && object.value instanceof short[])
         {
-            if (Arrays.equals((short[]) this.value, (short[]) object.value) == false)
+            if (!Arrays.equals((short[]) this.value, (short[]) object.value))
             {
                 return false;
             }
         }
-        else if (this.value.equals(object.value) == false)
+        else if (!this.value.equals(object.value))
         {
             return false;
         }

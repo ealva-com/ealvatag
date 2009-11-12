@@ -181,7 +181,7 @@ public class NumberHashMap extends NumberFixedLength implements HashMapInterface
      */
     public boolean equals(Object obj)
     {
-        if ((obj instanceof NumberHashMap) == false)
+        if (!(obj instanceof NumberHashMap))
         {
             return false;
         }
@@ -202,7 +202,7 @@ public class NumberHashMap extends NumberFixedLength implements HashMapInterface
         }
         else
         {
-            if (this.keyToValue.equals(object.keyToValue) == false)
+            if (!this.keyToValue.equals(object.keyToValue))
             {
                 return false;
             }
@@ -217,7 +217,7 @@ public class NumberHashMap extends NumberFixedLength implements HashMapInterface
         }
         else
         {
-            if (this.valueToKey.equals(object.valueToKey) == false)
+            if (!this.valueToKey.equals(object.valueToKey))
             {
                 return false;
             }
@@ -264,7 +264,7 @@ public class NumberHashMap extends NumberFixedLength implements HashMapInterface
         Integer intValue = ((Long) value).intValue();
         if (!keyToValue.containsKey(intValue))
         {
-            if (hasEmptyValue == false)
+            if (!hasEmptyValue)
             {
                 throw new InvalidDataTypeException(ErrorMessage.MP3_REFERENCE_KEY_INVALID.getMsg(identifier, intValue));
             }

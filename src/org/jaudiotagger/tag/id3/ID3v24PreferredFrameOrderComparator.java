@@ -141,11 +141,7 @@ public class ID3v24PreferredFrameOrderComparator implements Comparator<String>
 
     public boolean equals(Object obj)
     {
-        if (obj instanceof ID3v24PreferredFrameOrderComparator)
-        {
-            return true;
-        }
-        return false;
+        return obj instanceof ID3v24PreferredFrameOrderComparator;
     }
 
 }

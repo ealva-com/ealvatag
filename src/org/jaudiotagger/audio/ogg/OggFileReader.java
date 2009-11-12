@@ -43,7 +43,6 @@ public class OggFileReader extends AudioFileReader
 
     private OggInfoReader ir;
     private OggVorbisTagReader vtr;
-    private Fix fix;
 
     public OggFileReader()
     {
@@ -53,7 +52,7 @@ public class OggFileReader extends AudioFileReader
 
     public OggFileReader(Fix fix)
     {
-        this.fix = fix;
+        Fix fix1 = fix;
         ir = new OggInfoReader();
         vtr = new OggVorbisTagReader(fix);
     }

@@ -121,7 +121,7 @@ public class FieldFrameBodyIMG extends AbstractLyrics3v2FieldFrameBody
      */
     public boolean isSubsetOf(Object obj)
     {
-        if ((obj instanceof FieldFrameBodyIMG) == false)
+        if (!(obj instanceof FieldFrameBodyIMG))
         {
             return false;
         }
@@ -130,7 +130,7 @@ public class FieldFrameBodyIMG extends AbstractLyrics3v2FieldFrameBody
 
         for (Object image : images)
         {
-            if (superset.contains(image) == false)
+            if (!superset.contains(image))
             {
                 return false;
             }
@@ -169,14 +169,14 @@ public class FieldFrameBodyIMG extends AbstractLyrics3v2FieldFrameBody
      */
     public boolean equals(Object obj)
     {
-        if ((obj instanceof FieldFrameBodyIMG) == false)
+        if (!(obj instanceof FieldFrameBodyIMG))
         {
             return false;
         }
 
         FieldFrameBodyIMG object = (FieldFrameBodyIMG) obj;
 
-        return this.images.equals(object.images) != false && super.equals(obj);
+        return this.images.equals(object.images) && super.equals(obj);
 
     }
 
@@ -200,7 +200,7 @@ public class FieldFrameBodyIMG extends AbstractLyrics3v2FieldFrameBody
 
         int size = Integer.parseInt(new String(buffer, 0, 5));
 
-        if ((size == 0) && (TagOptionSingleton.getInstance().isLyrics3KeepEmptyFieldIfRead() == false))
+        if ((size == 0) && (!TagOptionSingleton.getInstance().isLyrics3KeepEmptyFieldIfRead()))
         {
             throw new InvalidTagException("Lyircs3v2 Field has size of zero.");
         }
@@ -234,7 +234,7 @@ public class FieldFrameBodyIMG extends AbstractLyrics3v2FieldFrameBody
      */
     public void write(RandomAccessFile file) throws java.io.IOException
     {
-        int size = 0;
+        int size;
         int offset = 0;
         byte[] buffer = new byte[5];
         String str;
@@ -279,7 +279,7 @@ public class FieldFrameBodyIMG extends AbstractLyrics3v2FieldFrameBody
     {
         // now read each picture and put in the vector;
         Lyrics3Image image;
-        String token = "";
+        String token;
         int offset = 0;
         int delim = imageString.indexOf(Lyrics3v2Fields.CRLF);
         images = new ArrayList<Lyrics3Image>();

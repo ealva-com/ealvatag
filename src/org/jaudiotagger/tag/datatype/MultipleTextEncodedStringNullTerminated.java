@@ -41,7 +41,7 @@ public class MultipleTextEncodedStringNullTerminated extends AbstractDataType
 
     public boolean equals(Object obj)
     {
-        return obj instanceof MultipleTextEncodedStringNullTerminated != false && super.equals(obj);
+        return obj instanceof MultipleTextEncodedStringNullTerminated && super.equals(obj);
     }
 
     /**
@@ -56,6 +56,7 @@ public class MultipleTextEncodedStringNullTerminated extends AbstractDataType
 
     /**
      * Check the value can be encoded with the specified encoding
+     * @return
      */
     public boolean canBeEncoded()
     {

@@ -67,7 +67,7 @@ class EncryptionChunkReader implements ChunkReader {
      */
     public Chunk read(final GUID guid, final InputStream stream,
             final long chunkStart) throws IOException {
-        EncryptionChunk result = null;
+        EncryptionChunk result;
         final BigInteger chunkLen = Utils.readBig64(stream);
         result = new EncryptionChunk(chunkLen);
 
@@ -84,7 +84,7 @@ class EncryptionChunkReader implements ChunkReader {
         byte[] licenseURL;
 
         // Secret Data length
-        int fieldLength = 0;
+        int fieldLength;
         fieldLength = (int) Utils.readUINT32(stream);
         // Secret Data
         secretData = new byte[fieldLength + 1];

@@ -308,6 +308,7 @@ public class FlacTag implements Tag
      * Create Link to Image File, not recommended because if either flac or image file is moved link
      * will be broken.
      * @param url
+     * @return
      */
     public TagField createLinkedArtworkField(String url)
     {

@@ -101,6 +101,7 @@ public abstract class AbstractString extends AbstractDataType
 
     /**
      * Check the value can be encoded with the specified encoding
+     * @return
      */
     public boolean canBeEncoded()
     {

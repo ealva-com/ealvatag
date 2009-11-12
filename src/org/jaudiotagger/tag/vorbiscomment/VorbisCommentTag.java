@@ -180,6 +180,8 @@ public class VorbisCommentTag extends AbstractTag
      * @param vorbisCommentFieldKey
      * @param value
      * @return
+     * @throws org.jaudiotagger.tag.KeyNotFoundException
+     * @throws org.jaudiotagger.tag.FieldDataInvalidException
      */
     public TagField createTagField(VorbisCommentFieldKey vorbisCommentFieldKey, String value) throws KeyNotFoundException,FieldDataInvalidException
     {
@@ -235,6 +237,7 @@ public class VorbisCommentTag extends AbstractTag
      *
      * @param vorbisCommentKey
      * @return
+     * @throws org.jaudiotagger.tag.KeyNotFoundException
      */
     public List<TagField> get(VorbisCommentFieldKey vorbisCommentKey) throws KeyNotFoundException
     {
@@ -266,6 +269,7 @@ public class VorbisCommentTag extends AbstractTag
      *
      * @param vorbisCommentKey
      * @return
+     * @throws org.jaudiotagger.tag.KeyNotFoundException
      */
     public String getFirst(VorbisCommentFieldKey vorbisCommentKey) throws KeyNotFoundException
     {
@@ -295,6 +299,7 @@ public class VorbisCommentTag extends AbstractTag
      * Delete fields with this vorbisCommentFieldKey
      *
      * @param vorbisCommentFieldKey
+     * @throws org.jaudiotagger.tag.KeyNotFoundException
      */
     public void deleteTagField(VorbisCommentFieldKey vorbisCommentFieldKey) throws KeyNotFoundException
     {

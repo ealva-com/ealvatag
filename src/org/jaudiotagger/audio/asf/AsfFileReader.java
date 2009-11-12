@@ -146,7 +146,7 @@ public class AsfFileReader extends AudioFileReader {
     protected GenericAudioHeader getEncodingInfo(final RandomAccessFile raf)
             throws CannotReadException, IOException {
         raf.seek(0);
-        GenericAudioHeader info = null;
+        GenericAudioHeader info;
         try {
             final AsfHeader header = AsfHeaderReader.readInfoHeader(raf);
             if (header == null) {

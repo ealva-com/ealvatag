@@ -100,7 +100,7 @@ public class StreamChunkReader implements ChunkReader {
              * read by the specific stream type, in order to skip the remaining
              * unread bytes of the stream chunk.
              */
-            long streamSpecificBytes = 0;
+            long streamSpecificBytes;
 
             if (GUID.GUID_AUDIOSTREAM.equals(streamTypeGUID)) {
                 /*

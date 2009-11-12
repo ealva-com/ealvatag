@@ -60,6 +60,8 @@ public class MetadataBlockDataPicture implements MetadataBlockData, TagField
      * Construct picture block by reading from file
      * @param header
      * @param raf
+     * @throws java.io.IOException
+     * @throws org.jaudiotagger.tag.InvalidFrameException
      */
     //TODO check for buffer underflows see http://research.eeye.com/html/advisories/published/AD20071115.html
     public MetadataBlockDataPicture(MetadataBlockHeader header, RandomAccessFile raf) throws IOException, InvalidFrameException

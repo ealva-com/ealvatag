@@ -253,6 +253,7 @@ public class Mp4BoxHeader
      * @param raf
      * @param id
      * @throws java.io.IOException
+     * @return
      */
     public static Mp4BoxHeader seekWithinLevel(RandomAccessFile raf, String id) throws IOException
     {
@@ -310,6 +311,7 @@ public class Mp4BoxHeader
      * @param data
      * @param id
      * @throws java.io.IOException
+     * @return
      */
     public static Mp4BoxHeader seekWithinLevel(ByteBuffer data, String id) throws IOException
     {

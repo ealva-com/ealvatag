@@ -623,18 +623,18 @@ public class ID3v24Tag extends AbstractID3v2Tag
         int size = TAG_HEADER_LENGTH;
         if (extended)
         {
-            size += this.TAG_EXT_HEADER_LENGTH;
+            size += TAG_EXT_HEADER_LENGTH;
             if (updateTag)
             {
-                size += this.TAG_EXT_HEADER_UPDATE_LENGTH;
+                size += TAG_EXT_HEADER_UPDATE_LENGTH;
             }
             if (crcDataFlag)
             {
-                size += this.TAG_EXT_HEADER_CRC_LENGTH;
+                size += TAG_EXT_HEADER_CRC_LENGTH;
             }
             if (tagRestriction)
             {
-                size += this.TAG_EXT_HEADER_RESTRICTION_LENGTH;
+                size += TAG_EXT_HEADER_RESTRICTION_LENGTH;
             }
         }
         size += super.getSize();
@@ -648,7 +648,7 @@ public class ID3v24Tag extends AbstractID3v2Tag
      */
     public boolean equals(Object obj)
     {
-        if ((obj instanceof ID3v24Tag) == false)
+        if (!(obj instanceof ID3v24Tag))
         {
             return false;
         }
@@ -769,6 +769,7 @@ public class ID3v24Tag extends AbstractID3v2Tag
      *
      * @param byteBuffer
      * @param size
+     * @throws org.jaudiotagger.tag.InvalidTagException
      */
     private void readExtendedHeader(ByteBuffer byteBuffer, int size) throws InvalidTagException
     {
@@ -837,7 +838,7 @@ public class ID3v24Tag extends AbstractID3v2Tag
     {
         int size;
         byte[] buffer;
-        if (seek(byteBuffer) == false)
+        if (!seek(byteBuffer))
         {
             throw new TagNotFoundException(getLoggingFilename() + ":" + getIdentifier() + " tag not found");
         }
@@ -968,18 +969,18 @@ public class ID3v24Tag extends AbstractID3v2Tag
         int additionalHeaderSize = 0;
         if (extended)
         {
-            additionalHeaderSize += this.TAG_EXT_HEADER_LENGTH;
+            additionalHeaderSize += TAG_EXT_HEADER_LENGTH;
             if (updateTag)
             {
-                additionalHeaderSize += this.TAG_EXT_HEADER_UPDATE_LENGTH;
+                additionalHeaderSize += TAG_EXT_HEADER_UPDATE_LENGTH;
             }
             if (crcDataFlag)
             {
-                additionalHeaderSize += this.TAG_EXT_HEADER_CRC_LENGTH;
+                additionalHeaderSize += TAG_EXT_HEADER_CRC_LENGTH;
             }
             if (tagRestriction)
             {
-                additionalHeaderSize += this.TAG_EXT_HEADER_RESTRICTION_LENGTH;
+                additionalHeaderSize += TAG_EXT_HEADER_RESTRICTION_LENGTH;
             }
         }
 
@@ -1208,6 +1209,7 @@ public class ID3v24Tag extends AbstractID3v2Tag
      *
      * @param id3v24FieldKey
      * @return
+     * @throws org.jaudiotagger.tag.KeyNotFoundException
      */
     public String getFirst(ID3v24FieldKey id3v24FieldKey) throws KeyNotFoundException
     {
@@ -1248,6 +1250,7 @@ public class ID3v24Tag extends AbstractID3v2Tag
      * Delete fields with this id3v24FieldKey
      *
      * @param id3v24FieldKey
+     * @throws org.jaudiotagger.tag.KeyNotFoundException
      */
     public void deleteTagField(ID3v24FieldKey id3v24FieldKey) throws KeyNotFoundException
     {
@@ -1325,6 +1328,7 @@ public class ID3v24Tag extends AbstractID3v2Tag
      * @param data
      * @param mimeType of the image
      * @see PictureTypes
+     * @return
      */
     public TagField createArtworkField(byte[] data, String mimeType)
     {

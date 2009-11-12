@@ -49,8 +49,6 @@ public class OggVorbisTagReader
 
     private VorbisCommentReader vorbisCommentReader;
 
-    private Fix fix;
-
     public OggVorbisTagReader()
     {
         vorbisCommentReader = new VorbisCommentReader();
@@ -58,7 +56,7 @@ public class OggVorbisTagReader
 
     public OggVorbisTagReader(Fix fix)
     {
-        this.fix = fix;
+        Fix fix1 = fix;
         vorbisCommentReader = new VorbisCommentReader(fix);
     }
 
@@ -143,11 +141,7 @@ public class OggVorbisTagReader
     public boolean isVorbisCommentHeader(byte[] headerData)
     {
         String vorbis = Utils.getString(headerData, VorbisHeader.FIELD_CAPTURE_PATTERN_POS, VorbisHeader.FIELD_CAPTURE_PATTERN_LENGTH, "ISO-8859-1");
-        if (headerData[VorbisHeader.FIELD_PACKET_TYPE_POS] != VorbisPacketType.COMMENT_HEADER.getType() || !vorbis.equals(VorbisHeader.CAPTURE_PATTERN))
-        {
-            return false;
-        }
-        return true;
+        return !(headerData[VorbisHeader.FIELD_PACKET_TYPE_POS] != VorbisPacketType.COMMENT_HEADER.getType() || !vorbis.equals(VorbisHeader.CAPTURE_PATTERN));
     }
 
     /**
@@ -159,11 +153,7 @@ public class OggVorbisTagReader
     public boolean isVorbisSetupHeader(byte[] headerData)
     {
         String vorbis = Utils.getString(headerData, VorbisHeader.FIELD_CAPTURE_PATTERN_POS, VorbisHeader.FIELD_CAPTURE_PATTERN_LENGTH, "ISO-8859-1");
-        if (headerData[VorbisHeader.FIELD_PACKET_TYPE_POS] != VorbisPacketType.SETUP_HEADER.getType() || !vorbis.equals(VorbisHeader.CAPTURE_PATTERN))
-        {
-            return false;
-        }
-        return true;
+        return !(headerData[VorbisHeader.FIELD_PACKET_TYPE_POS] != VorbisPacketType.SETUP_HEADER.getType() || !vorbis.equals(VorbisHeader.CAPTURE_PATTERN));
     }
 
     /**
@@ -171,6 +161,9 @@ public class OggVorbisTagReader
      * extract the packet data from the pages
      * @param startVorbisCommentPage
      * @param raf
+     * @throws org.jaudiotagger.audio.exceptions.CannotReadException
+     * @throws java.io.IOException
+     * @return
      */
     private byte[] convertToVorbisCommentPacket(OggPageHeader startVorbisCommentPage, RandomAccessFile raf) throws IOException, CannotReadException
     {
@@ -226,6 +219,9 @@ public class OggVorbisTagReader
      * file offset of the OggPage it belongs on, it probably won't be first packet.
      * @param fileOffsetOfStartingOggPage
      * @param raf
+     * @throws org.jaudiotagger.audio.exceptions.CannotReadException
+     * @throws java.io.IOException
+     * @return
      */
     public byte[] convertToVorbisSetupHeaderPacket(long fileOffsetOfStartingOggPage, RandomAccessFile raf) throws IOException, CannotReadException
     {
@@ -310,6 +306,9 @@ public class OggVorbisTagReader
      * packets that immediately follow the setup header in original file
      * @param fileOffsetOfStartingOggPage
      * @param raf
+     * @throws org.jaudiotagger.audio.exceptions.CannotReadException
+     * @throws java.io.IOException
+     * @return
      */
     public byte[] convertToVorbisSetupHeaderPacketAndAdditionalPackets(long fileOffsetOfStartingOggPage, RandomAccessFile raf) throws IOException, CannotReadException
     {
@@ -415,10 +414,10 @@ public class OggVorbisTagReader
         //Extra Packets on same page as setup header
         List<OggPageHeader.PacketStartAndLength> extraPackets = new ArrayList<OggPageHeader.PacketStartAndLength>();
 
-        long commentHeaderStartPosition = 0;
-        long setupHeaderStartPosition = 0;
+        long commentHeaderStartPosition;
+        long setupHeaderStartPosition;
         int commentHeaderSize = 0;
-        int setupHeaderSize = 0;
+        int setupHeaderSize;
         //1st page = codec infos
         OggPageHeader pageHeader = OggPageHeader.read(raf);
         //Skip over data to end of page header 1

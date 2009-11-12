@@ -51,7 +51,7 @@ public final class TagConverter {
     public static void assignCommonTagValues(Tag tag,
             MetadataContainer description) {
         assert description.getContainerType() == ContainerType.EXTENDED_CONTENT;
-        MetadataDescriptor tmp = null;
+        MetadataDescriptor tmp;
         if (!Utils.isBlank(tag.getFirst(FieldKey.ALBUM))) {
             tmp = new MetadataDescriptor(description.getContainerType(),
                     AsfFieldKey.ALBUM.getFieldName(),
@@ -133,7 +133,7 @@ public final class TagConverter {
             if (current != null) {
                 List<MetadataDescriptor> descriptors = current.getDescriptors();
                 for (MetadataDescriptor descriptor : descriptors) {
-                    AsfTagField toAdd = null;
+                    AsfTagField toAdd;
                     if (descriptor.getType() == MetadataDescriptor.TYPE_BINARY) {
                         if (descriptor.getName().equals(
                                 AsfFieldKey.COVER_ART.getFieldName())) {
@@ -167,8 +167,8 @@ public final class TagConverter {
         final Iterator<AsfTagField> asfFields = tag.getAsfFields();
         final MetadataContainer[] createContainers = MetadataContainerFactory
                 .getInstance().createContainers(ContainerType.getOrdered());
-        boolean assigned = false;
-        AsfTagField current = null;
+        boolean assigned;
+        AsfTagField current;
         while (asfFields.hasNext()) {
             current = asfFields.next();
             assigned = false;

@@ -75,7 +75,7 @@ public class StringDate extends StringFixedLength
 
     public boolean equals(Object obj)
     {
-        return obj instanceof StringDate != false && super.equals(obj);
+        return obj instanceof StringDate && super.equals(obj);
 
     }
 }

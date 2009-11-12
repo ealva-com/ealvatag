@@ -853,7 +853,7 @@ public class TagOptionSingleton
      */
     public void addKeyword(Class<? extends ID3v24FrameBody> id3v2FrameBodyClass, String keyword) throws TagException
     {
-        if (AbstractID3v2FrameBody.class.isAssignableFrom(id3v2FrameBodyClass) == false)
+        if (!AbstractID3v2FrameBody.class.isAssignableFrom(id3v2FrameBodyClass))
         {
             throw new TagException("Invalid class type. Must be AbstractId3v2FrameBody " + id3v2FrameBodyClass);
         }
@@ -862,7 +862,7 @@ public class TagOptionSingleton
         {
             LinkedList<String> keywordList;
 
-            if (keywordMap.containsKey(id3v2FrameBodyClass) == false)
+            if (!keywordMap.containsKey(id3v2FrameBodyClass))
             {
                 keywordList = new LinkedList<String>();
                 keywordMap.put(id3v2FrameBodyClass, keywordList);

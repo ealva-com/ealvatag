@@ -120,6 +120,7 @@ public class ID3Tags
     /**
      * Convert from ID3v22 FrameIdentifier to ID3v23
      * @param identifier
+     * @return
      */
     public static String convertFrameID22To23(String identifier)
     {
@@ -133,6 +134,7 @@ public class ID3Tags
     /**
      * Convert from ID3v22 FrameIdentifier to ID3v24
      * @param identifier
+     * @return
      */
     public static String convertFrameID22To24(String identifier)
     {
@@ -174,6 +176,7 @@ public class ID3Tags
     /**
      * Convert from ID3v23 FrameIdentifier to ID3v22
      * @param identifier
+     * @return
      */
     public static String convertFrameID23To22(String identifier)
     {
@@ -194,6 +197,7 @@ public class ID3Tags
     /**
      * Convert from ID3v23 FrameIdentifier to ID3v24
      * @param identifier
+     * @return
      */
     public static String convertFrameID23To24(String identifier)
     {
@@ -206,7 +210,7 @@ public class ID3Tags
         if (ID3v23Frames.getInstanceOf().getIdToValueMap().containsKey(identifier))
         {
             //If no change between ID3v23 and ID3v24 should be in ID3v24 list.
-            if (ID3v24Frames.getInstanceOf().getIdToValueMap().containsKey(identifier) == true)
+            if (ID3v24Frames.getInstanceOf().getIdToValueMap().containsKey(identifier))
             {
                 return identifier;
             }
@@ -223,6 +227,7 @@ public class ID3Tags
      * Force from ID3v22 FrameIdentifier to ID3v23, this is where the frame and structure
      * has changed from v2 to v3 but we can still do some kind of conversion.
      * @param identifier
+     * @return
      */
     public static String forceFrameID22To23(String identifier)
     {
@@ -233,6 +238,7 @@ public class ID3Tags
      * Force from ID3v22 FrameIdentifier to ID3v23, this is where the frame and structure
      * has changed from v2 to v3 but we can still do some kind of conversion.
      * @param identifier
+     * @return
      */
     public static String forceFrameID23To22(String identifier)
     {
@@ -243,6 +249,7 @@ public class ID3Tags
      * Force from ID3v2.30 FrameIdentifier to ID3v2.40, this is where the frame and structure
      * has changed from v3 to v4 but we can still do some kind of conversion.
      * @param identifier
+     * @return
      */
     public static String forceFrameID23To24(String identifier)
     {
@@ -253,6 +260,7 @@ public class ID3Tags
      * Force from ID3v2.40 FrameIdentifier to ID3v2.30, this is where the frame and structure
      * has changed between v4 to v3 but we can still do some kind of conversion.
      * @param identifier
+     * @return
      */
     public static String forceFrameID24To23(String identifier)
     {
@@ -262,6 +270,7 @@ public class ID3Tags
     /**
      * Convert from ID3v24 FrameIdentifier to ID3v23
      * @param identifier
+     * @return
      */
     public static String convertFrameID24To23(String identifier)
     {
@@ -273,7 +282,7 @@ public class ID3Tags
         id = ID3Frames.convertv24Tov23.get(identifier);
         if (id == null)
         {
-            if (ID3v23Frames.getInstanceOf().getIdToValueMap().containsKey(identifier) == true)
+            if (ID3v23Frames.getInstanceOf().getIdToValueMap().containsKey(identifier))
             {
                 id = identifier;
             }

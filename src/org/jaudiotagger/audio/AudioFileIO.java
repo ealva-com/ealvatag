@@ -107,6 +107,7 @@ public class AudioFileIO
      * @param f The file where the tag will be deleted
      * @throws CannotWriteException If the file could not be written/accessed, the extension
      *                              wasn't recognized, or other IO error occured.
+     * @throws org.jaudiotagger.audio.exceptions.CannotReadException
      */
     public static void delete(AudioFile f) throws CannotReadException, CannotWriteException
     {
@@ -136,6 +137,10 @@ public class AudioFileIO
      * @return The AudioFile with the file tag and the file encoding infos.
      * @throws CannotReadException If the file could not be read, the extension wasn't
      *                             recognized, or an IO error occured during the read.
+     * @throws org.jaudiotagger.tag.TagException
+     * @throws org.jaudiotagger.audio.exceptions.ReadOnlyFileException
+     * @throws java.io.IOException
+     * @throws org.jaudiotagger.audio.exceptions.InvalidAudioFrameException
      */
     public static AudioFile read(File f)
             throws CannotReadException, IOException, TagException, ReadOnlyFileException, InvalidAudioFrameException
@@ -196,6 +201,7 @@ public class AudioFileIO
      * @param f The file where the tag will be deleted
      * @throws CannotWriteException If the file could not be written/accessed, the extension
      *                              wasn't recognized, or other IO error occured.
+     * @throws org.jaudiotagger.audio.exceptions.CannotReadException
      */
     public void deleteTag(AudioFile f) throws CannotReadException, CannotWriteException
     {
@@ -259,6 +265,10 @@ public class AudioFileIO
      * @return The AudioFile with the file tag and the file encoding infos.
      * @throws CannotReadException If the file could not be read, the extension wasn't
      *                             recognized, or an IO error occured during the read.
+     * @throws org.jaudiotagger.tag.TagException
+     * @throws org.jaudiotagger.audio.exceptions.ReadOnlyFileException
+     * @throws java.io.IOException
+     * @throws org.jaudiotagger.audio.exceptions.InvalidAudioFrameException
      */
     public AudioFile readFile(File f)
             throws CannotReadException, IOException, TagException, ReadOnlyFileException, InvalidAudioFrameException

@@ -104,6 +104,7 @@ public class FrameBodyUnsupported extends AbstractID3v2FrameBody implements ID3v
      * @param byteBuffer
      * @param frameSize
      * @throws InvalidFrameException if unable to create framebody from buffer
+     * @throws org.jaudiotagger.tag.InvalidTagException
      */
     public FrameBodyUnsupported(ByteBuffer byteBuffer, int frameSize) throws InvalidTagException
     {
@@ -126,13 +127,13 @@ public class FrameBodyUnsupported extends AbstractID3v2FrameBody implements ID3v
      */
     public boolean equals(Object obj)
     {
-        if ((obj instanceof FrameBodyUnsupported) == false)
+        if (!(obj instanceof FrameBodyUnsupported))
         {
             return false;
         }
 
         FrameBodyUnsupported object = (FrameBodyUnsupported) obj;
-        return this.identifier.equals(object.identifier) != false && super.equals(obj);
+        return this.identifier.equals(object.identifier) && super.equals(obj);
     }
 
 

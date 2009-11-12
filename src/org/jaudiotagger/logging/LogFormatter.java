@@ -41,7 +41,7 @@ public final class LogFormatter extends Formatter
 
         sb.append(sfDateOut.format(date));
 
-        String recordName = null;
+        String recordName;
 
         if (record.getSourceClassName() != null)
         {

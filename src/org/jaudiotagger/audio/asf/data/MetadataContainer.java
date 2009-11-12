@@ -63,7 +63,7 @@ public class MetadataContainer extends Chunk implements WriteableChunk {
          */
         @Override
         public int hashCode() {
-            int hashCode = -1;
+            int hashCode;
             hashCode = this.desc.getName().hashCode();
             hashCode = hashCode * 31 + this.desc.getLanguageIndex();
             hashCode = hashCode * 31 + this.desc.getStreamNumber();
@@ -236,7 +236,7 @@ public class MetadataContainer extends Chunk implements WriteableChunk {
      */
     protected final MetadataDescriptor assertDescriptor(final String key,
             final int type) {
-        MetadataDescriptor desc = null;
+        MetadataDescriptor desc;
         final List<MetadataDescriptor> descriptorsByName = getDescriptorsByName(key);
         if (descriptorsByName == null || descriptorsByName.isEmpty()) {
             desc = new MetadataDescriptor(getContainerType(), key, type);

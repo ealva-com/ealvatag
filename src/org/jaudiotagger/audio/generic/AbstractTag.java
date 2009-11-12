@@ -393,7 +393,6 @@ public abstract class AbstractTag implements Tag
         Object removed = fields.remove(key);
         //if (removed != null && field.isCommon())
         //    commonNumber--;
-        return;
     }
 
     public Artwork getFirstArtwork()

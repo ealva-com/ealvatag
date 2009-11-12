@@ -33,9 +33,7 @@ public class Mp4MdhdBox extends AbstractMp4Box
 
     private static final int LONG_FORMAT = 1;
 
-    private byte version;
     private int samplingRate;
-    private long timeLength;
 
     /**
      * @param header     header info
@@ -45,17 +43,18 @@ public class Mp4MdhdBox extends AbstractMp4Box
     {
         this.header = header;
 
-        this.version = dataBuffer.get(VERSION_FLAG_POS);
+        byte version = dataBuffer.get(VERSION_FLAG_POS);
 
+        long timeLength;
         if (version == LONG_FORMAT)
         {
             this.samplingRate = Utils.getIntBE(dataBuffer, TIMESCALE_LONG_POS, (TIMESCALE_LONG_POS + TIMESCALE_LENGTH - 1));
-            this.timeLength = Utils.getLongBE(dataBuffer, DURATION_LONG_POS, (DURATION_LONG_POS + DURATION_LONG_LENGTH - 1));
+            timeLength = Utils.getLongBE(dataBuffer, DURATION_LONG_POS, (DURATION_LONG_POS + DURATION_LONG_LENGTH - 1));
         }
         else
         {
             this.samplingRate = Utils.getIntBE(dataBuffer, TIMESCALE_SHORT_POS, (TIMESCALE_SHORT_POS + TIMESCALE_LENGTH - 1));
-            this.timeLength = Utils.getIntBE(dataBuffer, DURATION_SHORT_POS, (DURATION_SHORT_POS + DURATION_SHORT_LENGTH - 1));
+            timeLength = Utils.getIntBE(dataBuffer, DURATION_SHORT_POS, (DURATION_SHORT_POS + DURATION_SHORT_LENGTH - 1));
         }
     }
 

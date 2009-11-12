@@ -70,6 +70,7 @@ public class ImageFormats
     /**
      * Get v2.3 mimetype from v2.2 format
      * @param format
+     * @return
      */
     public static String getMimeTypeForFormat(String format)
     {
@@ -79,6 +80,7 @@ public class ImageFormats
     /**
      * Get v2.2 format from v2.3 mimetype
      * @param mimeType
+     * @return
      */
     public static String getFormatForMimeType(String mimeType)
     {
@@ -92,11 +94,7 @@ public class ImageFormats
     public static boolean binaryDataIsPngFormat(byte[] data)
     {
         //Read signature
-        if ((0x89 == (data[0] & 0xff)) && (0x50 == (data[1] & 0xff)) && (0x4E == (data[2] & 0xff)) && (0x47 == (data[3] & 0xff)))
-        {
-            return true;
-        }
-        return false;
+        return (0x89 == (data[0] & 0xff)) && (0x50 == (data[1] & 0xff)) && (0x4E == (data[2] & 0xff)) && (0x47 == (data[3] & 0xff));
     }
 
     /**
@@ -110,11 +108,7 @@ public class ImageFormats
         //Read signature
         //Can be FF D8 FF E0 or FF D8 FF E1
         //FF D8 is SOI Marker, FFE0 or FFE1 is JFIF Marker
-        if ((0xff == (data[0] & 0xff)) && (0xd8 == (data[1] & 0xff)) && (0xff == (data[2] & 0xff)) && (0xe0 <= (data[3] & 0xff)))
-        {
-            return true;
-        }
-        return false;
+        return (0xff == (data[0] & 0xff)) && (0xd8 == (data[1] & 0xff)) && (0xff == (data[2] & 0xff)) && (0xe0 <= (data[3] & 0xff));
     }
 
     /**
@@ -124,11 +118,7 @@ public class ImageFormats
     public static boolean binaryDataIsGifFormat(byte[] data)
     {
         //Read signature
-        if ((0x47 == (data[0] & 0xff)) && (0x49 == (data[1] & 0xff)) && (0x46 == (data[2] & 0xff)))
-        {
-            return true;
-        }
-        return false;
+        return (0x47 == (data[0] & 0xff)) && (0x49 == (data[1] & 0xff)) && (0x46 == (data[2] & 0xff));
     }
 
     /**
@@ -138,11 +128,7 @@ public class ImageFormats
     public static boolean binaryDataIsBmpFormat(byte[] data)
     {
         //Read signature
-        if ((0x42 == (data[0] & 0xff)) && (0x4d == (data[1] & 0xff)) && (0xf8 == (data[2] & 0xff)))
-        {
-            return true;
-        }
-        return false;
+        return (0x42 == (data[0] & 0xff)) && (0x4d == (data[1] & 0xff)) && (0xf8 == (data[2] & 0xff));
     }
 
     /**

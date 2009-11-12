@@ -198,14 +198,14 @@ public class Lyrics3v2 extends AbstractLyrics3
      */
     public boolean equals(Object obj)
     {
-        if ((obj instanceof Lyrics3v2) == false)
+        if (!(obj instanceof Lyrics3v2))
         {
             return false;
         }
 
         Lyrics3v2 object = (Lyrics3v2) obj;
 
-        return this.fieldMap.equals(object.fieldMap) != false && super.equals(obj);
+        return this.fieldMap.equals(object.fieldMap) && super.equals(obj);
 
     }
 
@@ -293,7 +293,7 @@ public class Lyrics3v2 extends AbstractLyrics3
     public boolean seek(RandomAccessFile file) throws IOException
     {
         byte[] buffer = new byte[11];
-        String lyricEnd = "";
+        String lyricEnd;
         String lyricStart;
         long filePointer;
         long lyricSize;
@@ -337,7 +337,7 @@ public class Lyrics3v2 extends AbstractLyrics3
         file.read(buffer, 0, 11);
         lyricStart = new String(buffer, 0, 11);
 
-        return lyricStart.equals("LYRICSBEGIN") == true;
+        return lyricStart.equals("LYRICSBEGIN");
     }
 
     /**
@@ -398,7 +398,8 @@ public class Lyrics3v2 extends AbstractLyrics3
         String str;
         Lyrics3v2Field field;
         Iterator<Lyrics3v2Field> iterator;
-        ID3v1Tag id3v1tag = new ID3v1Tag();
+        ID3v1Tag id3v1tag;
+        new ID3v1Tag();
 
         id3v1tag = null;
 
@@ -430,7 +431,7 @@ public class Lyrics3v2 extends AbstractLyrics3
             String id = field.getIdentifier();
             boolean save = TagOptionSingleton.getInstance().getLyrics3SaveField(id);
 
-            if ((id.equals("IND") == false) && save)
+            if ((!id.equals("IND")) && save)
             {
                 field.write(file);
             }
@@ -481,6 +482,7 @@ public class Lyrics3v2 extends AbstractLyrics3
     /**
      * TODO
      * @param byteBuffer
+     * @return
      */
     private int seekSize(ByteBuffer byteBuffer)
     {

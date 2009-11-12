@@ -49,7 +49,7 @@ public class TextEncodedStringSizeTerminated extends AbstractString
 
     public boolean equals(Object obj)
     {
-        return obj instanceof TextEncodedStringSizeTerminated != false && super.equals(obj);
+        return obj instanceof TextEncodedStringSizeTerminated && super.equals(obj);
     }
 
     /**
@@ -104,7 +104,7 @@ public class TextEncodedStringSizeTerminated extends AbstractString
      */
     public byte[] writeByteArray()
     {
-        byte[] data = null;
+        byte[] data;
         //Try and write to buffer using the CharSet defined by getTextEncodingCharSet()
         try
         {

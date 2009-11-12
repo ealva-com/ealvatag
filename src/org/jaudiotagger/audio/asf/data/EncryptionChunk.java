@@ -47,6 +47,7 @@ public class EncryptionChunk extends Chunk {
 
     /**
      * This method gets the keyID.
+     * @return
      */
     public String getKeyID() {
         return this.keyID;
@@ -54,6 +55,7 @@ public class EncryptionChunk extends Chunk {
 
     /**
      * This method gets the license URL.
+     * @return
      */
     public String getLicenseURL() {
         return this.licenseURL;
@@ -61,6 +63,7 @@ public class EncryptionChunk extends Chunk {
 
     /**
      * This method gets the secret data.
+     * @return
      */
     public String getProtectionType() {
         return this.protectionType;
@@ -68,6 +71,7 @@ public class EncryptionChunk extends Chunk {
 
     /**
      * This method gets the secret data.
+     * @return
      */
     public String getSecretData() {
         return this.secretData;

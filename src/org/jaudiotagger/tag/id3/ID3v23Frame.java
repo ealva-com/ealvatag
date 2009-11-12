@@ -93,6 +93,7 @@ public class ID3v23Frame extends AbstractID3v2Frame
      * Creates a new ID3v23Frame  based on another frame.
      *
      * @param frame
+     * @throws org.jaudiotagger.tag.InvalidFrameException
      */
     public ID3v23Frame(AbstractID3v2Frame frame) throws InvalidFrameException
     {
@@ -239,6 +240,7 @@ public class ID3v23Frame extends AbstractID3v2Frame
      *
      * @param byteBuffer to read from
      * @param loggingFilename
+     * @throws org.jaudiotagger.tag.InvalidFrameException
      */
     public ID3v23Frame(ByteBuffer byteBuffer, String loggingFilename) throws InvalidFrameException
     {
@@ -251,6 +253,7 @@ public class ID3v23Frame extends AbstractID3v2Frame
      *
      * @param byteBuffer to read from
      * @deprecated use {@link #ID3v23Frame(ByteBuffer,String)} instead
+     * @throws org.jaudiotagger.tag.InvalidFrameException
      */
     public ID3v23Frame(ByteBuffer byteBuffer) throws InvalidFrameException
     {
@@ -279,7 +282,7 @@ public class ID3v23Frame extends AbstractID3v2Frame
      */
     public boolean equals(Object obj)
     {
-        if ((obj instanceof ID3v23Frame) == false)
+        if (!(obj instanceof ID3v23Frame))
         {
             return false;
         }
@@ -313,7 +316,7 @@ public class ID3v23Frame extends AbstractID3v2Frame
         identifier = new String(buffer);
 
         // Is this a valid identifier?
-        if (isValidID3v2FrameIdentifier(identifier) == false)
+        if (!isValidID3v2FrameIdentifier(identifier))
         {
             logger.info(getLoggingFilename() + ":Invalid identifier:" + identifier);
             byteBuffer.position(byteBuffer.position() - (FRAME_ID_SIZE - 1));
@@ -354,7 +357,7 @@ public class ID3v23Frame extends AbstractID3v2Frame
         {
             // It is a valid v23 identifier so should be able to find a
             //  frame body for it.
-            if (ID3Tags.isID3v23FrameIdentifier(identifier) == true)
+            if (ID3Tags.isID3v23FrameIdentifier(identifier))
             {
                 id = identifier;
             }
@@ -586,7 +589,7 @@ public class ID3v23Frame extends AbstractID3v2Frame
         protected void modifyFlags()
         {
             String str = getIdentifier();
-            if (ID3v23Frames.getInstanceOf().isDiscardIfFileAltered(str) == true)
+            if (ID3v23Frames.getInstanceOf().isDiscardIfFileAltered(str))
             {
                 writeFlags |= (byte) MASK_FILE_ALTER_PRESERVATION;
                 writeFlags &= (byte) ~MASK_TAG_ALTER_PRESERVATION;

@@ -121,7 +121,7 @@ public class FrameBodyOWNE extends AbstractID3v2FrameBody implements ID3v24Frame
         setTextEncoding(ID3TextEncodingConversion.getTextEncoding(getHeader(), getTextEncoding()));
 
         //Ensure valid for data
-        if (((AbstractString) getObject(DataTypes.OBJ_SELLER_NAME)).canBeEncoded() == false)
+        if (!((AbstractString) getObject(DataTypes.OBJ_SELLER_NAME)).canBeEncoded())
         {
             this.setTextEncoding(ID3TextEncodingConversion.getUnicodeTextEncoding(getHeader()));
         }

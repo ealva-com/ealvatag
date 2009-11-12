@@ -119,7 +119,7 @@ public class FrameBodyWXXX extends AbstractFrameBodyUrlLink implements ID3v24Fra
      */
     public void write(ByteArrayOutputStream tagBuffer)
     {
-        if (((AbstractString) getObject(DataTypes.OBJ_DESCRIPTION)).canBeEncoded() == false)
+        if (!((AbstractString) getObject(DataTypes.OBJ_DESCRIPTION)).canBeEncoded())
         {
             this.setTextEncoding(TextEncoding.UTF_16);
         }

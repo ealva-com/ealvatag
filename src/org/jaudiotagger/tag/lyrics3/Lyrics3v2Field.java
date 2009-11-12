@@ -180,7 +180,7 @@ public class Lyrics3v2Field extends AbstractTagFrame
         byteBuffer.get(buffer, 0, 3);
         String identifier = new String(buffer, 0, 3);
         // is this a valid identifier?
-        if (Lyrics3v2Fields.isLyrics3v2FieldIdentifier(identifier) == false)
+        if (!Lyrics3v2Fields.isLyrics3v2FieldIdentifier(identifier))
         {
             throw new InvalidTagException(identifier + " is not a valid ID3v2.4 frame");
         }

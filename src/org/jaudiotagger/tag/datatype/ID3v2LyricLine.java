@@ -91,14 +91,14 @@ public class ID3v2LyricLine extends AbstractDataType
      */
     public boolean equals(Object obj)
     {
-        if ((obj instanceof ID3v2LyricLine) == false)
+        if (!(obj instanceof ID3v2LyricLine))
         {
             return false;
         }
 
         ID3v2LyricLine object = (ID3v2LyricLine) obj;
 
-        if (this.text.equals(object.text) == false)
+        if (!this.text.equals(object.text))
         {
             return false;
         }

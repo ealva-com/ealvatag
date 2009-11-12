@@ -137,7 +137,7 @@ public class Lyrics3v1 extends AbstractLyrics3
      */
     public boolean isSubsetOf(Object obj)
     {
-        return (obj instanceof Lyrics3v1) != false && (((Lyrics3v1) obj).lyric.contains(this.lyric));
+        return (obj instanceof Lyrics3v1) && (((Lyrics3v1) obj).lyric.contains(this.lyric));
 
     }
 
@@ -147,14 +147,14 @@ public class Lyrics3v1 extends AbstractLyrics3
      */
     public boolean equals(Object obj)
     {
-        if ((obj instanceof Lyrics3v1) == false)
+        if (!(obj instanceof Lyrics3v1))
         {
             return false;
         }
 
         Lyrics3v1 object = (Lyrics3v1) obj;
 
-        return this.lyric.equals(object.lyric) != false && super.equals(obj);
+        return this.lyric.equals(object.lyric) && super.equals(obj);
 
     }
 
@@ -193,7 +193,7 @@ public class Lyrics3v1 extends AbstractLyrics3
         byte[] buffer = new byte[5100 + 9 + 11];
         String lyricBuffer;
 
-        if (seek(byteBuffer) == false)
+        if (!seek(byteBuffer))
         {
             throw new TagNotFoundException("ID3v1 tag not found");
         }
@@ -212,8 +212,8 @@ public class Lyrics3v1 extends AbstractLyrics3
     public boolean seek(RandomAccessFile file) throws IOException
     {
         byte[] buffer = new byte[5100 + 9 + 11];
-        String lyricsEnd = "";
-        String lyricsStart = "";
+        String lyricsEnd;
+        String lyricsStart;
         long offset;
 
         // check right before the ID3 1.0 tag for the lyrics tag
@@ -278,7 +278,7 @@ public class Lyrics3v1 extends AbstractLyrics3
      */
     public void write(RandomAccessFile file) throws IOException
     {
-        String str = "";
+        String str;
         int offset;
         byte[] buffer;
         ID3v1Tag id3v1tag;

@@ -43,32 +43,27 @@ class CountingInputStream extends FilterInputStream {
      * @param amountRead
      *            number of bytes to increase.
      */
-    private void bytesRead(final long amountRead) {
-        synchronized (this) {
-            if (amountRead >= 0) {
-                this.readCount += amountRead;
-            }
+    private synchronized void bytesRead(final long amountRead) {
+        if (amountRead >= 0)
+        {
+            this.readCount += amountRead;
         }
     }
 
     /**
      * @return the readCount
      */
-    public long getReadCount() {
-        synchronized (this) {
-            return this.readCount;
-        }
+    public synchronized long getReadCount() {
+        return this.readCount;
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void mark(final int readlimit) {
-        synchronized (this) {
-            super.mark(readlimit);
-            this.markPos = this.readCount;
-        }
+    public synchronized void mark(final int readlimit) {
+        super.mark(readlimit);
+        this.markPos = this.readCount;
     }
 
     /**

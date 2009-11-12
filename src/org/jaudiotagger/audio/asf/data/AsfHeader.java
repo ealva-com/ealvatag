@@ -41,18 +41,12 @@ public final class AsfHeader extends ChunkContainer {
     public final static Charset ASF_CHARSET = Charset.forName("UTF-16LE"); //$NON-NLS-1$
 
     /**
-     * Stores the {@link GUID} instances, which are allowed multiple times
-     * within an ASF header.
-     */
-    private final static Set<GUID> MULTI_CHUNKS;
-
-    /**
      * Byte sequence representing the zero term character.
      */
     public final static byte[] ZERO_TERM = { 0, 0 };
 
     static {
-        MULTI_CHUNKS = new HashSet<GUID>();
+        Set<GUID> MULTI_CHUNKS = new HashSet<GUID>();
         MULTI_CHUNKS.add(GUID.GUID_STREAM);
     }
 

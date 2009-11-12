@@ -212,11 +212,11 @@ public class FrameBodyCOMM extends AbstractID3v2FrameBody implements ID3v24Frame
         setTextEncoding(ID3TextEncodingConversion.getTextEncoding(getHeader(), getTextEncoding()));
 
         //Ensure valid for data
-        if (((AbstractString) getObject(DataTypes.OBJ_TEXT)).canBeEncoded() == false)
+        if (!((AbstractString) getObject(DataTypes.OBJ_TEXT)).canBeEncoded())
         {
             this.setTextEncoding(ID3TextEncodingConversion.getUnicodeTextEncoding(getHeader()));
         }
-        if (((AbstractString) getObject(DataTypes.OBJ_DESCRIPTION)).canBeEncoded() == false)
+        if (!((AbstractString) getObject(DataTypes.OBJ_DESCRIPTION)).canBeEncoded())
         {
             this.setTextEncoding(ID3TextEncodingConversion.getUnicodeTextEncoding(getHeader()));
         }

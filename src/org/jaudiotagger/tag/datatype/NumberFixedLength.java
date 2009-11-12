@@ -103,7 +103,7 @@ public class NumberFixedLength extends AbstractDataType
      */
     public boolean equals(Object obj)
     {
-        if ((obj instanceof NumberFixedLength) == false)
+        if (!(obj instanceof NumberFixedLength))
         {
             return false;
         }

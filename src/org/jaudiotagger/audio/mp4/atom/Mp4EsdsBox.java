@@ -213,7 +213,7 @@ public class Mp4EsdsBox extends AbstractMp4Box
      */
     public int processSectionHeader(ByteBuffer dataBuffer)
     {
-        int datalength = 0;
+        int datalength;
         byte nextByte = dataBuffer.get();
         if (((nextByte & 0xFF) == FILLER_START) || ((nextByte & 0xFF) == FILLER_OTHER) || ((nextByte & 0xFF) == FILLER_END))
         {

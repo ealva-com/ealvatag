@@ -86,11 +86,7 @@ public abstract class AbstractTagItem
      */
     public boolean isSubsetOf(Object obj)
     {
-        if ((obj instanceof AbstractTagItem) == false)
-        {
-            return false;
-        }
-        return true;
+        return obj instanceof AbstractTagItem;
     }
 
     /**

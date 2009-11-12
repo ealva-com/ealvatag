@@ -333,10 +333,10 @@ public class ID3v23Tag extends AbstractID3v2Tag
         int size = TAG_HEADER_LENGTH;
         if (extended)
         {
-            size += this.TAG_EXT_HEADER_LENGTH;
+            size += TAG_EXT_HEADER_LENGTH;
             if (crcDataFlag)
             {
-                size += this.TAG_EXT_HEADER_CRC_LENGTH;
+                size += TAG_EXT_HEADER_CRC_LENGTH;
             }
         }
         size += super.getSize();
@@ -351,7 +351,7 @@ public class ID3v23Tag extends AbstractID3v2Tag
      */
     public boolean equals(Object obj)
     {
-        if ((obj instanceof ID3v23Tag) == false)
+        if (!(obj instanceof ID3v23Tag))
         {
             return false;
         }
@@ -490,7 +490,7 @@ public class ID3v23Tag extends AbstractID3v2Tag
             //Flag should be setField, if nor just act as if it is
             byte extFlag = buffer.get();
             crcDataFlag = (extFlag & MASK_V23_CRC_DATA_PRESENT) != 0;
-            if (crcDataFlag == false)
+            if (!crcDataFlag)
             {
                 logger.warning(ErrorMessage.ID3_TAG_CRC_FLAG_SET_INCORRECTLY.getMsg(getLoggingFilename()));
             }
@@ -523,7 +523,7 @@ public class ID3v23Tag extends AbstractID3v2Tag
     public void read(ByteBuffer buffer) throws TagException
     {
         int size;
-        if (seek(buffer) == false)
+        if (!seek(buffer))
         {
             throw new TagNotFoundException(getIdentifier() + " tag not found");
         }
@@ -664,10 +664,10 @@ public class ID3v23Tag extends AbstractID3v2Tag
         int additionalHeaderSize = 0;
         if (extended)
         {
-            additionalHeaderSize += this.TAG_EXT_HEADER_LENGTH;
+            additionalHeaderSize += TAG_EXT_HEADER_LENGTH;
             if (crcDataFlag)
             {
-                additionalHeaderSize += this.TAG_EXT_HEADER_CRC_LENGTH;
+                additionalHeaderSize += TAG_EXT_HEADER_CRC_LENGTH;
             }
         }
 
@@ -863,6 +863,7 @@ public class ID3v23Tag extends AbstractID3v2Tag
      *
      * @param id3v23FieldKey
      * @return
+     * @throws org.jaudiotagger.tag.KeyNotFoundException
      */
     public String getFirst(ID3v23FieldKey id3v23FieldKey) throws KeyNotFoundException
     {
@@ -902,6 +903,7 @@ public class ID3v23Tag extends AbstractID3v2Tag
      * Delete fields with this id3v23FieldKey
      *
      * @param id3v23FieldKey
+     * @throws org.jaudiotagger.tag.KeyNotFoundException
      */
     public void deleteTagField(ID3v23FieldKey id3v23FieldKey) throws KeyNotFoundException
     {
@@ -985,6 +987,7 @@ public class ID3v23Tag extends AbstractID3v2Tag
      * @param data
      * @param mimeType of the image
      * @see PictureTypes
+     * @return
      */
     public TagField createArtworkField(byte[] data, String mimeType)
     {

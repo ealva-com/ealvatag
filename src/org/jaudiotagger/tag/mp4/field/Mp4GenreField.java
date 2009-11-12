@@ -98,7 +98,6 @@ public class Mp4GenreField extends Mp4TagTextNumberField
         }
         numbers = new ArrayList<Short>();
         numbers.add((short) (1));
-        return;
     }
 
     protected void build(ByteBuffer data) throws UnsupportedEncodingException

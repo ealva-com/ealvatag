@@ -42,7 +42,7 @@ public class PartOfSet extends AbstractString
 
     public boolean equals(Object obj)
     {
-        return obj instanceof PartOfSet != false && super.equals(obj);
+        return obj instanceof PartOfSet && super.equals(obj);
     }
 
     /**
@@ -99,7 +99,7 @@ public class PartOfSet extends AbstractString
     public byte[] writeByteArray()
     {
         String value = getValue().toString();
-        byte[] data = null;
+        byte[] data;
         //Try and write to buffer using the CharSet defined by getTextEncodingCharSet()
         try
         {
@@ -204,7 +204,6 @@ public class PartOfSet extends AbstractString
             {
                 this.count = Integer.parseInt(m.group(1));
                 this.extra = m.group(2);
-                return;
             }
         }
 

@@ -256,6 +256,8 @@ public class OggVorbisTagWriter
      * @param raf
      * @param rafTemp
      * @throws IOException
+     * @throws org.jaudiotagger.audio.exceptions.CannotReadException
+     * @throws org.jaudiotagger.audio.exceptions.CannotWriteException
      */
     private void replaceSecondPageAndRenumberPageSeqs(OggVorbisTagReader.OggVorbisHeaderSizes originalHeaderSizes, int newCommentLength, int newSecondPageLength, OggPageHeader secondPageHeader, ByteBuffer newComment, RandomAccessFile raf, RandomAccessFile rafTemp) throws IOException, CannotReadException, CannotWriteException
     {
@@ -717,11 +719,7 @@ public class OggVorbisTagWriter
         }
 
         logger.finest("Total No Of Segment If New Comment And Header Put On One Page:" + totalDataSize);
-        if (totalDataSize <= OggPageHeader.MAXIMUM_NO_OF_SEGMENT_SIZE)
-        {
-            return true;
-        }
-        return false;
+        return totalDataSize <= OggPageHeader.MAXIMUM_NO_OF_SEGMENT_SIZE;
     }
 
 }

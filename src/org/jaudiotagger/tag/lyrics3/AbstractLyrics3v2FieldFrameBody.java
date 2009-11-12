@@ -60,7 +60,7 @@ public abstract class AbstractLyrics3v2FieldFrameBody extends AbstractTagFrameBo
         file.read(buffer, 0, 5);
         size = Integer.parseInt(new String(buffer, 0, 5));
 
-        if ((size == 0) && (TagOptionSingleton.getInstance().isLyrics3KeepEmptyFieldIfRead() == false))
+        if ((size == 0) && (!TagOptionSingleton.getInstance().isLyrics3KeepEmptyFieldIfRead()))
         {
             throw new InvalidTagException("Lyircs3v2 Field has size of zero.");
         }

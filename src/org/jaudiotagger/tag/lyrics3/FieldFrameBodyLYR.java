@@ -97,6 +97,7 @@ public class FieldFrameBodyLYR extends AbstractLyrics3v2FieldFrameBody
     /**
      * Creates a new FieldBodyLYR datatype.
      * @param byteBuffer
+     * @throws org.jaudiotagger.tag.InvalidTagException
      */
     public FieldFrameBodyLYR(ByteBuffer byteBuffer) throws InvalidTagException
     {
@@ -154,7 +155,7 @@ public class FieldFrameBodyLYR extends AbstractLyrics3v2FieldFrameBody
      */
     public boolean isSubsetOf(Object obj)
     {
-        if ((obj instanceof FieldFrameBodyLYR) == false)
+        if (!(obj instanceof FieldFrameBodyLYR))
         {
             return false;
         }
@@ -163,7 +164,7 @@ public class FieldFrameBodyLYR extends AbstractLyrics3v2FieldFrameBody
 
         for (Object line : lines)
         {
-            if (superset.contains(line) == false)
+            if (!superset.contains(line))
             {
                 return false;
             }
@@ -226,14 +227,14 @@ public class FieldFrameBodyLYR extends AbstractLyrics3v2FieldFrameBody
      */
     public boolean equals(Object obj)
     {
-        if ((obj instanceof FieldFrameBodyLYR) == false)
+        if (!(obj instanceof FieldFrameBodyLYR))
         {
             return false;
         }
 
         FieldFrameBodyLYR object = (FieldFrameBodyLYR) obj;
 
-        return this.lines.equals(object.lines) != false && super.equals(obj);
+        return this.lines.equals(object.lines) && super.equals(obj);
 
     }
 
@@ -279,7 +280,7 @@ public class FieldFrameBodyLYR extends AbstractLyrics3v2FieldFrameBody
 
         int size = Integer.parseInt(new String(buffer, 0, 5));
 
-        if ((size == 0) && (TagOptionSingleton.getInstance().isLyrics3KeepEmptyFieldIfRead() == false))
+        if ((size == 0) && (!TagOptionSingleton.getInstance().isLyrics3KeepEmptyFieldIfRead()))
         {
             throw new InvalidTagException("Lyircs3v2 Field has size of zero.");
         }
@@ -316,7 +317,7 @@ public class FieldFrameBodyLYR extends AbstractLyrics3v2FieldFrameBody
         int size;
         int offset = 0;
         byte[] buffer = new byte[5];
-        String str = "";
+        String str;
 
         size = getSize();
         str = Integer.toString(size);
@@ -356,7 +357,7 @@ public class FieldFrameBodyLYR extends AbstractLyrics3v2FieldFrameBody
     private void readString(String lineString)
     {
         // now readString each line and put in the vector;
-        String token = "";
+        String token;
         int offset = 0;
         int delim = lineString.indexOf(Lyrics3v2Fields.CRLF);
         lines = new ArrayList<Lyrics3Line>();

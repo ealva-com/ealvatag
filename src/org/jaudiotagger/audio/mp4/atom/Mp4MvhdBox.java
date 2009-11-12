@@ -56,7 +56,6 @@ public class Mp4MvhdBox extends AbstractMp4Box
 
     private int timeScale;
     private long timeLength;
-    private byte version;
 
     /**
      * @param header     header info
@@ -65,7 +64,7 @@ public class Mp4MvhdBox extends AbstractMp4Box
     public Mp4MvhdBox(Mp4BoxHeader header, ByteBuffer dataBuffer)
     {
         this.header = header;
-        this.version = dataBuffer.get(VERSION_FLAG_POS);
+        byte version = dataBuffer.get(VERSION_FLAG_POS);
 
         if (version == LONG_FORMAT)
         {

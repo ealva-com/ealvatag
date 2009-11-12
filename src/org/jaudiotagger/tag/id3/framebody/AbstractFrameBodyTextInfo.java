@@ -189,7 +189,7 @@ public abstract class AbstractFrameBodyTextInfo extends AbstractID3v2FrameBody
         setTextEncoding(ID3TextEncodingConversion.getTextEncoding(getHeader(), getTextEncoding()));
 
         //Ensure valid for data
-        if (((TextEncodedStringSizeTerminated) getObject(DataTypes.OBJ_TEXT)).canBeEncoded() == false)
+        if (!((TextEncodedStringSizeTerminated) getObject(DataTypes.OBJ_TEXT)).canBeEncoded())
         {
             this.setTextEncoding(ID3TextEncodingConversion.getUnicodeTextEncoding(getHeader()));
         }

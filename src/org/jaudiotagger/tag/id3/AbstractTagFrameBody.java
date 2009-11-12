@@ -244,7 +244,7 @@ public abstract class AbstractTagFrameBody extends AbstractTagItem
      */
     public boolean isSubsetOf(Object obj)
     {
-        if ((obj instanceof AbstractTagFrameBody) == false)
+        if (!(obj instanceof AbstractTagFrameBody))
         {
             return false;
         }
@@ -253,7 +253,7 @@ public abstract class AbstractTagFrameBody extends AbstractTagItem
         {
             if (anObjectList.getValue() != null)
             {
-                if (superset.contains(anObjectList) == false)
+                if (!superset.contains(anObjectList))
                 {
                     return false;
                 }
@@ -273,12 +273,12 @@ public abstract class AbstractTagFrameBody extends AbstractTagItem
      */
     public boolean equals(Object obj)
     {
-        if ((obj instanceof AbstractTagFrameBody) == false)
+        if (!(obj instanceof AbstractTagFrameBody))
         {
             return false;
         }
         AbstractTagFrameBody object = (AbstractTagFrameBody) obj;
-        return this.objectList.equals(object.objectList) != false && super.equals(obj);
+        return this.objectList.equals(object.objectList) && super.equals(obj);
     }
 
     /**

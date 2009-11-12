@@ -70,7 +70,7 @@ public class Lyrics3v1Iterator implements Iterator<String>
 
         removeIndex = lastIndex;
 
-        String line = null;
+        String line;
 
         if (lastIndex >= 0)
         {

@@ -100,6 +100,7 @@ public class FrameBodyTDRC extends AbstractFrameBodyTextInfo implements ID3v24Fr
 
     /**
      * Retrieve the original identifier
+     * @return
      */
     public String getOriginalID()
     {

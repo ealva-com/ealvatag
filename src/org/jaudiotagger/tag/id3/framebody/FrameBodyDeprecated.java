@@ -59,13 +59,13 @@ public class FrameBodyDeprecated extends AbstractID3v2FrameBody implements ID3v2
      */
     public boolean equals(Object obj)
     {
-        if ((obj instanceof FrameBodyDeprecated) == false)
+        if (!(obj instanceof FrameBodyDeprecated))
         {
             return false;
         }
 
         FrameBodyDeprecated object = (FrameBodyDeprecated) obj;
-        return this.getIdentifier().equals(object.getIdentifier()) != false && super.equals(obj);
+        return this.getIdentifier().equals(object.getIdentifier()) && super.equals(obj);
     }
 
     /**

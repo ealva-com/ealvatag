@@ -131,7 +131,7 @@ public class StringHashMap extends StringFixedLength implements HashMapInterface
      */
     public boolean equals(Object obj)
     {
-        if ((obj instanceof StringHashMap) == false)
+        if (!(obj instanceof StringHashMap))
         {
             return false;
         }
@@ -152,7 +152,7 @@ public class StringHashMap extends StringFixedLength implements HashMapInterface
         }
         else
         {
-            if (this.keyToValue.equals(object.keyToValue) == false)
+            if (!this.keyToValue.equals(object.keyToValue))
             {
                 return false;
             }
@@ -167,7 +167,7 @@ public class StringHashMap extends StringFixedLength implements HashMapInterface
         }
         else
         {
-            if (this.valueToKey.equals(object.valueToKey) == false)
+            if (!this.valueToKey.equals(object.valueToKey))
             {
                 return false;
             }

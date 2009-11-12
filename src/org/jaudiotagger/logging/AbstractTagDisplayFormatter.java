@@ -56,6 +56,7 @@ public abstract class AbstractTagDisplayFormatter
     /**
      * Use to display headers as their binary representation
      * @param buffer
+     * @return
      */
     public static String displayAsBinary(byte buffer)
     {

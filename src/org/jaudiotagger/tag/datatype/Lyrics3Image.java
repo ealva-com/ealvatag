@@ -134,19 +134,19 @@ public class Lyrics3Image extends AbstractDataType
      */
     public boolean equals(Object obj)
     {
-        if ((obj instanceof Lyrics3Image) == false)
+        if (!(obj instanceof Lyrics3Image))
         {
             return false;
         }
 
         Lyrics3Image object = (Lyrics3Image) obj;
 
-        if (this.description.equals(object.description) == false)
+        if (!this.description.equals(object.description))
         {
             return false;
         }
 
-        if (this.filename.equals(object.filename) == false)
+        if (!this.filename.equals(object.filename))
         {
             return false;
         }
@@ -160,7 +160,7 @@ public class Lyrics3Image extends AbstractDataType
         }
         else
         {
-            if (this.time.equals(object.time) == false)
+            if (!this.time.equals(object.time))
             {
                 return false;
             }

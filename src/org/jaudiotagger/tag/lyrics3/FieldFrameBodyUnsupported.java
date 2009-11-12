@@ -63,6 +63,7 @@ public class FieldFrameBodyUnsupported extends AbstractLyrics3v2FieldFrameBody
     /**
      * Creates a new FieldBodyUnsupported datatype.
      * @param byteBuffer
+     * @throws org.jaudiotagger.tag.InvalidTagException
      */
     public FieldFrameBodyUnsupported(ByteBuffer byteBuffer) throws InvalidTagException
     {
@@ -85,7 +86,7 @@ public class FieldFrameBodyUnsupported extends AbstractLyrics3v2FieldFrameBody
      */
     public boolean isSubsetOf(Object obj)
     {
-        if ((obj instanceof FieldFrameBodyUnsupported) == false)
+        if (!(obj instanceof FieldFrameBodyUnsupported))
         {
             return false;
         }
@@ -105,14 +106,14 @@ public class FieldFrameBodyUnsupported extends AbstractLyrics3v2FieldFrameBody
      */
     public boolean equals(Object obj)
     {
-        if ((obj instanceof FieldFrameBodyUnsupported) == false)
+        if (!(obj instanceof FieldFrameBodyUnsupported))
         {
             return false;
         }
 
         FieldFrameBodyUnsupported object = (FieldFrameBodyUnsupported) obj;
 
-        return java.util.Arrays.equals(this.value, object.value) != false && super.equals(obj);
+        return java.util.Arrays.equals(this.value, object.value) && super.equals(obj);
 
     }
 

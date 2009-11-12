@@ -46,7 +46,7 @@ public class TextEncodedStringNullTerminated extends AbstractString
 
     public boolean equals(Object obj)
     {
-        return obj instanceof TextEncodedStringNullTerminated != false && super.equals(obj);
+        return obj instanceof TextEncodedStringNullTerminated && super.equals(obj);
     }
 
     /**
@@ -65,10 +65,10 @@ public class TextEncodedStringNullTerminated extends AbstractString
         {
             throw new InvalidDataTypeException("Unable to find null terminated string");
         }
-        int bufferSize = 0;
+        int bufferSize;
 
         logger.finer("Reading from array starting from offset:" + offset);
-        int size = 0;
+        int size;
 
         //Get the Specified Decoder
         String charSetName = getTextEncodingCharSet();
@@ -146,7 +146,7 @@ public class TextEncodedStringNullTerminated extends AbstractString
             }
         }
 
-        if (isNullTerminatorFound == false)
+        if (!isNullTerminatorFound)
         {
             throw new InvalidDataTypeException("Unable to find null terminated string");
         }
@@ -199,7 +199,7 @@ public class TextEncodedStringNullTerminated extends AbstractString
     public byte[] writeByteArray()
     {
         logger.info("Writing NullTerminatedString." + value);
-        byte[] data = null;
+        byte[] data;
         //Write to buffer using the CharSet defined by getTextEncodingCharSet()
         //Add a null terminator which will be encoded based on encoding.
         try

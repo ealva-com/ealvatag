@@ -403,6 +403,7 @@ public abstract class AbstractID3v2Frame extends AbstractTagFrame implements Tag
 
         /**
          * This returns the flags as they were originally read or created
+         * @return
          */
         public byte getOriginalFlags()
         {
@@ -411,6 +412,7 @@ public abstract class AbstractID3v2Frame extends AbstractTagFrame implements Tag
 
         /**
          * This returns the flags amended to meet specification
+         * @return
          */
         public byte getWriteFlags()
         {

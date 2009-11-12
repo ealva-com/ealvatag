@@ -75,7 +75,7 @@ public class StringDateTime extends StringSizeTerminated
 
     public boolean equals(Object obj)
     {
-        return obj instanceof StringDateTime != false && super.equals(obj);
+        return obj instanceof StringDateTime && super.equals(obj);
 
     }
 }

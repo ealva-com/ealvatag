@@ -24,6 +24,7 @@ import org.jaudiotagger.audio.exceptions.ModifyVetoException;
 import java.io.File;
 import java.util.Enumeration;
 import java.util.Vector;
+import java.util.Iterator;
 
 /**
  * This class multicasts the events to multiple listener instances.<br>
@@ -60,10 +61,10 @@ public class ModificationHandler implements AudioFileModificationListener
      */
     public void fileModified(AudioFile original, File temporary) throws ModifyVetoException
     {
-        Enumeration<AudioFileModificationListener> enumer = this.listeners.elements();
-        while (enumer.hasMoreElements())
+        Iterator<AudioFileModificationListener> iterator = this.listeners.iterator();
+        while (iterator.hasNext())
         {
-            AudioFileModificationListener current = enumer.nextElement();
+            AudioFileModificationListener current = iterator.next();
             try
             {
                 current.fileModified(original, temporary);
@@ -83,10 +84,10 @@ public class ModificationHandler implements AudioFileModificationListener
      */
     public void fileOperationFinished(File result)
     {
-        Enumeration<AudioFileModificationListener> enumer = this.listeners.elements();
-        while (enumer.hasMoreElements())
+        Iterator<AudioFileModificationListener> iterator = this.listeners.iterator();
+        while (iterator.hasNext())
         {
-            AudioFileModificationListener current = enumer.nextElement();
+            AudioFileModificationListener current = iterator.next();
             current.fileOperationFinished(result);
         }
     }
@@ -99,10 +100,10 @@ public class ModificationHandler implements AudioFileModificationListener
      */
     public void fileWillBeModified(AudioFile file, boolean delete) throws ModifyVetoException
     {
-        Enumeration<AudioFileModificationListener> enumer = this.listeners.elements();
-        while (enumer.hasMoreElements())
+        Iterator<AudioFileModificationListener> iterator = this.listeners.iterator();
+        while (iterator.hasNext())
         {
-            AudioFileModificationListener current = enumer.nextElement();
+            AudioFileModificationListener current = iterator.next();
             try
             {
                 current.fileWillBeModified(file, delete);
@@ -137,10 +138,10 @@ public class ModificationHandler implements AudioFileModificationListener
      */
     public void vetoThrown(AudioFileModificationListener cause, AudioFile original, ModifyVetoException veto)
     {
-        Enumeration<AudioFileModificationListener> enumer = this.listeners.elements();
-        while (enumer.hasMoreElements())
+        Iterator<AudioFileModificationListener> iterator = this.listeners.iterator();
+        while (iterator.hasNext())
         {
-            AudioFileModificationListener current = enumer.nextElement();
+            AudioFileModificationListener current = iterator.next();
             current.vetoThrown(cause, original, veto);
         }
     }

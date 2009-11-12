@@ -82,7 +82,7 @@ public class FlacStreamReader
 
     private boolean isId3v24Tag() throws IOException
     {
-        int id3tagsize = 0;
+        int id3tagsize;
         ID3v24Tag id3tag = new ID3v24Tag();
         ByteBuffer bb = ByteBuffer.allocate(AbstractID3v2Tag.TAG_HEADER_LENGTH);
         raf.seek(0);
@@ -102,7 +102,7 @@ public class FlacStreamReader
 
     private boolean isId3v23Tag() throws IOException
     {
-        int id3tagsize = 0;
+        int id3tagsize;
         ID3v23Tag id3tag = new ID3v23Tag();
         ByteBuffer bb = ByteBuffer.allocate(AbstractID3v2Tag.TAG_HEADER_LENGTH);
         raf.seek(0);
@@ -122,7 +122,7 @@ public class FlacStreamReader
 
     private boolean isId3v22Tag() throws IOException
     {
-        int id3tagsize = 0;
+        int id3tagsize;
         ID3v22Tag id3tag = new ID3v22Tag();
         ByteBuffer bb = ByteBuffer.allocate(AbstractID3v2Tag.TAG_HEADER_LENGTH);
         raf.seek(0);
@@ -146,11 +146,7 @@ public class FlacStreamReader
         byte[] b = new byte[FLAC_STREAM_IDENTIFIER_LENGTH];
         raf.read(b);
         String flac = new String(b);
-        if (flac.equals(FLAC_STREAM_IDENTIFIER))
-        {
-            return true;
-        }
-        return false;
+        return flac.equals(FLAC_STREAM_IDENTIFIER);
     }
 
     /**

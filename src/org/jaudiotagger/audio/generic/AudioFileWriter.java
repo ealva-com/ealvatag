@@ -65,6 +65,7 @@ public abstract class AudioFileWriter
      *
      * @param af The file to process
      * @throws CannotWriteException if anything went wrong
+     * @throws org.jaudiotagger.audio.exceptions.CannotReadException
      */
     public synchronized void delete(AudioFile af) throws CannotReadException, CannotWriteException
     {
@@ -140,7 +141,7 @@ public abstract class AudioFileWriter
                 if (tempF.length() > 0 && !revert)
                 {
                     boolean deleteResult = af.getFile().delete();
-                    if (deleteResult == false)
+                    if (!deleteResult)
                     {
                         logger
                                 .warning(ErrorMessage.GENERAL_WRITE_FAILED_TO_DELETE_ORIGINAL_FILE
@@ -151,7 +152,7 @@ public abstract class AudioFileWriter
                                 .getPath()));
                     }
                     boolean renameResult = tempF.renameTo(af.getFile());
-                    if (renameResult == false)
+                    if (!renameResult)
                     {
                         logger
                                 .warning(ErrorMessage.GENERAL_WRITE_FAILED_TO_RENAME_TO_ORIGINAL_FILE
@@ -206,6 +207,8 @@ public abstract class AudioFileWriter
      * @param raf     The source file, already opened in r-write mode
      * @param tempRaf The temporary file opened in r-write mode
      * @throws CannotWriteException if anything went wrong
+     * @throws org.jaudiotagger.audio.exceptions.CannotReadException
+     * @throws java.io.IOException
      */
     public synchronized void delete(RandomAccessFile raf, RandomAccessFile tempRaf) throws CannotReadException, CannotWriteException, IOException
     {
@@ -222,6 +225,7 @@ public abstract class AudioFileWriter
      * @throws IOException          is thrown when the RandomAccessFile operations throw it (you
      *                              should never throw them manually)
      * @throws CannotWriteException when an error occured during the deletion of the tag
+     * @throws org.jaudiotagger.audio.exceptions.CannotReadException
      */
     protected abstract void deleteTag(RandomAccessFile raf, RandomAccessFile tempRaf) throws CannotReadException, CannotWriteException, IOException;
 
@@ -305,7 +309,7 @@ public abstract class AudioFileWriter
         RandomAccessFile raf = null;
         RandomAccessFile rafTemp = null;
         File newFile;
-        File result = null;
+        File result;
 
         // Create temporary File
         try
@@ -477,7 +481,7 @@ public abstract class AudioFileWriter
             }               
 
             boolean renameResult = Utils.rename(af.getFile(),originalFileBackup);
-            if (renameResult == false)
+            if (!renameResult)
             {
                 logger
                         .log(Level.SEVERE, ErrorMessage.GENERAL_WRITE_FAILED_TO_RENAME_ORIGINAL_FILE_TO_BACKUP
@@ -588,6 +592,7 @@ public abstract class AudioFileWriter
      * @throws IOException          is thrown when the RandomAccessFile operations throw it (you
      *                              should never throw them manually)
      * @throws CannotWriteException when an error occured during the generation of the tag
+     * @throws org.jaudiotagger.audio.exceptions.CannotReadException
      */
     protected abstract void writeTag(Tag tag, RandomAccessFile raf, RandomAccessFile rafTemp) throws CannotReadException, CannotWriteException, IOException;
 

@@ -65,11 +65,7 @@ public class AudioFileFilter implements FileFilter
 
         if (f.isDirectory())
         {
-            if(allowDirectories)
-            {
-                return true;
-            }
-            return false;
+            return allowDirectories;
         }
 
         String ext = Utils.getExtension(f);

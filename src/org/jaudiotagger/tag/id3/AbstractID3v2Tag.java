@@ -703,7 +703,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
             return false;
         }
         AbstractID3v2Tag object = (AbstractID3v2Tag) obj;
-        return this.frameMap.equals(object.frameMap) != false && super.equals(obj);
+        return this.frameMap.equals(object.frameMap) && super.equals(obj);
         }
 
 
@@ -2222,6 +2222,17 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
     public void setField(Artwork artwork) throws FieldDataInvalidException
     {
         this.setField(createField(artwork));
+    }
+
+     /**
+     * Create field and then set within tag itself
+     *
+     * @param artwork
+     * @throws FieldDataInvalidException
+     */
+    public void addField(Artwork artwork) throws FieldDataInvalidException
+    {
+        this.addField(createField(artwork));
     }
 
     /**

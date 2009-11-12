@@ -135,7 +135,7 @@ public class NumberVariableLength extends AbstractDataType
      */
     public boolean equals(Object obj)
     {
-        if ((obj instanceof NumberVariableLength) == false)
+        if (!(obj instanceof NumberVariableLength))
         {
             return false;
         }

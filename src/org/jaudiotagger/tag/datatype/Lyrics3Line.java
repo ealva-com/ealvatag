@@ -137,16 +137,16 @@ public class Lyrics3Line extends AbstractDataType
      */
     public boolean equals(Object obj)
     {
-        if ((obj instanceof Lyrics3Line) == false)
+        if (!(obj instanceof Lyrics3Line))
         {
             return false;
         }
         Lyrics3Line object = (Lyrics3Line) obj;
-        if (this.lyric.equals(object.lyric) == false)
+        if (!this.lyric.equals(object.lyric))
         {
             return false;
         }
-        return this.timeStamp.equals(object.timeStamp) != false && super.equals(obj);
+        return this.timeStamp.equals(object.timeStamp) && super.equals(obj);
     }
 
     /**
@@ -154,11 +154,7 @@ public class Lyrics3Line extends AbstractDataType
      */
     public boolean hasTimeStamp()
     {
-        if (timeStamp.isEmpty())
-        {
-            return false;
-        }
-        return true;
+        return !timeStamp.isEmpty();
     }
 
     /**

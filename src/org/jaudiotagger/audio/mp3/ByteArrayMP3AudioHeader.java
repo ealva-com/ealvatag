@@ -51,7 +51,7 @@ public class ByteArrayMP3AudioHeader extends MP3AudioHeader
                     else
                     {
                         syncFound = isNextFrameValid(bb);
-                        if (syncFound == true)
+                        if (syncFound)
                         {
                             break;
                         }

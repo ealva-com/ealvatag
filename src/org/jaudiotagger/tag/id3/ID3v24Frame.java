@@ -99,7 +99,6 @@ public class ID3v24Frame extends AbstractID3v2Frame
             this.frameBody.setHeader(this);
             identifier = frame.getIdentifier();
             logger.finer("V3:UnsupportedBody:Orig id is:" + frame.getIdentifier() + ":New id is:" + identifier);
-            return;
         }//Simple Copy
         else if (identifier != null)
         {
@@ -112,14 +111,12 @@ public class ID3v24Frame extends AbstractID3v2Frame
                 this.frameBody = new FrameBodyTMOO((FrameBodyTXXX)frame.getBody());
                 this.frameBody.setHeader(this);
                 identifier = frameBody.getIdentifier();
-                return;
             }
             else
             {
                 logger.finer("V3:Orig id is:" + frame.getIdentifier() + ":New id is:" + identifier);
                 this.frameBody = (AbstractTagFrameBody) ID3Tags.copyObject(frame.getBody());
                 this.frameBody.setHeader(this);
-                return;
             }
         }
         // Is it a known v3 frame which needs forcing to v4 frame e.g. TYER - TDRC
@@ -131,7 +128,6 @@ public class ID3v24Frame extends AbstractID3v2Frame
                 logger.info("V3:Orig id is:" + frame.getIdentifier() + ":New id is:" + identifier);
                 this.frameBody = this.readBody(identifier, (AbstractID3v2FrameBody) frame.getBody());
                 this.frameBody.setHeader(this);
-                return;
             }
             // No mechanism exists to convert it to a v24 frame, e.g deprecated frame e.g TSIZ, so hold
             // as a deprecated frame consisting of an array of bytes*/
@@ -141,7 +137,6 @@ public class ID3v24Frame extends AbstractID3v2Frame
                 this.frameBody.setHeader(this);
                 identifier = frame.getIdentifier();
                 logger.finer("V3:Deprecated:Orig id is:" + frame.getIdentifier() + ":New id is:" + identifier);
-                return;
             }
         }
         // Unknown Frame e.g NCON or TDRL (because TDRL unknown to V23)
@@ -151,7 +146,6 @@ public class ID3v24Frame extends AbstractID3v2Frame
             this.frameBody.setHeader(this);
             identifier = frame.getIdentifier();
             logger.finer("V3:Unknown:Orig id is:" + frame.getIdentifier() + ":New id is:" + identifier);
-            return;
         }
     }
 
@@ -161,6 +155,7 @@ public class ID3v24Frame extends AbstractID3v2Frame
      * is unknown.
      *
      * @param frame to construct a new frame from
+     * @throws org.jaudiotagger.tag.InvalidFrameException
      */
     public ID3v24Frame(AbstractID3v2Frame frame) throws InvalidFrameException
     {
@@ -291,6 +286,7 @@ public class ID3v24Frame extends AbstractID3v2Frame
      *
      * @param byteBuffer to read from
      * @param loggingFilename
+     * @throws org.jaudiotagger.tag.InvalidFrameException
      */
     public ID3v24Frame(ByteBuffer byteBuffer, String loggingFilename) throws InvalidFrameException
     {
@@ -303,6 +299,7 @@ public class ID3v24Frame extends AbstractID3v2Frame
      *
      * @param byteBuffer to read from
      * @deprecated use {@link #ID3v24Frame(ByteBuffer,String)} instead
+     * @throws org.jaudiotagger.tag.InvalidFrameException
      */
     public ID3v24Frame(ByteBuffer byteBuffer) throws InvalidFrameException
     {
@@ -315,7 +312,7 @@ public class ID3v24Frame extends AbstractID3v2Frame
      */
     public boolean equals(Object obj)
     {
-        return (obj instanceof ID3v24Frame) != false && super.equals(obj);
+        return (obj instanceof ID3v24Frame) && super.equals(obj);
     }
 
 
@@ -352,7 +349,7 @@ public class ID3v24Frame extends AbstractID3v2Frame
         logger.fine(getLoggingFilename() + ":" + "Identifier is" + identifier);
 
         //Is this a valid identifier?
-        if (isValidID3v2FrameIdentifier(identifier) == false)
+        if (!isValidID3v2FrameIdentifier(identifier))
         {
             //If not valid move file pointer back to one byte after
             //the original check so can try again.
@@ -732,6 +729,7 @@ public class ID3v24Frame extends AbstractID3v2Frame
         /**
          * Convert V3 Flags to equivalent V4 Flags
          * @param v3Flag
+         * @return
          */
         private byte convertV3ToV4Flags(byte v3Flag)
         {
@@ -753,7 +751,7 @@ public class ID3v24Frame extends AbstractID3v2Frame
         protected void modifyFlags()
         {
             String str = getIdentifier();
-            if (ID3v24Frames.getInstanceOf().isDiscardIfFileAltered(str) == true)
+            if (ID3v24Frames.getInstanceOf().isDiscardIfFileAltered(str))
             {
                 writeFlags |= (byte) MASK_FILE_ALTER_PRESERVATION;
                 writeFlags &= (byte) ~MASK_TAG_ALTER_PRESERVATION;

@@ -84,7 +84,7 @@ public abstract class AbstractTagFrame extends AbstractTagItem
      */
     public boolean isSubsetOf(Object obj)
     {
-        if ((obj instanceof AbstractTagFrame) == false)
+        if (!(obj instanceof AbstractTagFrame))
         {
             return false;
         }
@@ -99,7 +99,7 @@ public abstract class AbstractTagFrame extends AbstractTagItem
             return false;
         }
 
-        return frameBody.isSubsetOf(((AbstractTagFrame) obj).frameBody) != false && super.isSubsetOf(obj);
+        return frameBody.isSubsetOf(((AbstractTagFrame) obj).frameBody) && super.isSubsetOf(obj);
 
     }
 
@@ -114,19 +114,19 @@ public abstract class AbstractTagFrame extends AbstractTagItem
      */
     public boolean equals(Object obj)
     {
-        if ((obj instanceof AbstractTagFrame) == false)
+        if (!(obj instanceof AbstractTagFrame))
         {
             return false;
         }
 
         AbstractTagFrame object = (AbstractTagFrame) obj;
 
-        if (this.getIdentifier().equals(object.getIdentifier()) == false)
+        if (!this.getIdentifier().equals(object.getIdentifier()))
         {
             return false;
         }
 
-        return this.frameBody.equals(object.frameBody) != false && super.equals(obj);
+        return this.frameBody.equals(object.frameBody) && super.equals(obj);
 
     }
 }

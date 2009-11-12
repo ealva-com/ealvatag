@@ -267,7 +267,7 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag
         {
             throw new IllegalArgumentException(ErrorMessage.GENERAL_INVALID_NULL_ARGUMENT.getMsg());
         }
-        this.album = ID3Tags.truncate(album, this.FIELD_ALBUM_LENGTH);
+        this.album = ID3Tags.truncate(album, FIELD_ALBUM_LENGTH);
     }
 
     /**
@@ -310,7 +310,7 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag
         {
             throw new IllegalArgumentException(ErrorMessage.GENERAL_INVALID_NULL_ARGUMENT.getMsg());
         }
-        this.artist = ID3Tags.truncate(artist, this.FIELD_ARTIST_LENGTH);
+        this.artist = ID3Tags.truncate(artist, FIELD_ARTIST_LENGTH);
     }
 
     /**
@@ -351,7 +351,7 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag
         {
             throw new IllegalArgumentException(ErrorMessage.GENERAL_INVALID_NULL_ARGUMENT.getMsg());
         }
-        this.comment = ID3Tags.truncate(comment, this.FIELD_COMMENT_LENGTH);
+        this.comment = ID3Tags.truncate(comment, FIELD_COMMENT_LENGTH);
     }
 
     /**
@@ -413,7 +413,7 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag
      */
     public String getFirstGenre()
     {
-        Integer genreId = genre & this.BYTE_TO_UNSIGNED;
+        Integer genreId = genre & BYTE_TO_UNSIGNED;
         String genreValue = GenreTypes.getInstanceOf().getValueForId(genreId);
         if (genreValue == null)
         {
@@ -456,7 +456,7 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag
         {
             throw new IllegalArgumentException(ErrorMessage.GENERAL_INVALID_NULL_ARGUMENT.getMsg());
         }
-        this.title = ID3Tags.truncate(title, this.FIELD_TITLE_LENGTH);
+        this.title = ID3Tags.truncate(title, FIELD_TITLE_LENGTH);
     }
 
     /**
@@ -496,7 +496,7 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag
      */
     public void setYear(String year)
     {
-        this.year = ID3Tags.truncate(year, this.FIELD_YEAR_LENGTH);
+        this.year = ID3Tags.truncate(year, FIELD_YEAR_LENGTH);
     }
 
     /**
@@ -597,11 +597,7 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag
 
     public boolean isEmpty()
     {
-        if (getFirst(FieldKey.TITLE).length() > 0 || getFirstArtist().length() > 0 || getFirstAlbum().length() > 0 || getFirst(FieldKey.GENRE).length() > 0 || getFirst(FieldKey.YEAR).length() > 0 || getFirstComment().length() > 0)
-        {
-            return false;
-        }
-        return true;
+        return !(getFirst(FieldKey.TITLE).length() > 0 || getFirstArtist().length() > 0 || getFirstAlbum().length() > 0 || getFirst(FieldKey.GENRE).length() > 0 || getFirst(FieldKey.YEAR).length() > 0 || getFirstComment().length() > 0);
     }
 
 
@@ -807,20 +803,20 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag
      */
     public boolean equals(Object obj)
     {
-        if ((obj instanceof ID3v1Tag) == false)
+        if (!(obj instanceof ID3v1Tag))
         {
             return false;
         }
         ID3v1Tag object = (ID3v1Tag) obj;
-        if (this.album.equals(object.album) == false)
+        if (!this.album.equals(object.album))
         {
             return false;
         }
-        if (this.artist.equals(object.artist) == false)
+        if (!this.artist.equals(object.artist))
         {
             return false;
         }
-        if (this.comment.equals(object.comment) == false)
+        if (!this.comment.equals(object.comment))
         {
             return false;
         }
@@ -828,11 +824,11 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag
         {
             return false;
         }
-        if (this.title.equals(object.title) == false)
+        if (!this.title.equals(object.title))
         {
             return false;
         }
-        return this.year.equals(object.year) != false && super.equals(obj);
+        return this.year.equals(object.year) && super.equals(obj);
     }
 
     /**
@@ -850,7 +846,7 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag
      */
     public void read(ByteBuffer byteBuffer) throws TagNotFoundException
     {
-        if (seek(byteBuffer) == false)
+        if (!seek(byteBuffer))
         {
             throw new TagNotFoundException(getLoggingFilename() + ":" + "ID3v1 tag not found");
         }
@@ -859,41 +855,41 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag
         byte[] dataBuffer = new byte[TAG_LENGTH];
         byteBuffer.position(0);
         byteBuffer.get(dataBuffer, 0, TAG_LENGTH);
-        title = Utils.getString(dataBuffer, FIELD_TITLE_POS, this.FIELD_TITLE_LENGTH, "ISO-8859-1").trim();
+        title = Utils.getString(dataBuffer, FIELD_TITLE_POS, FIELD_TITLE_LENGTH, "ISO-8859-1").trim();
         Matcher m = AbstractID3v1Tag.endofStringPattern.matcher(title);
-        if (m.find() == true)
+        if (m.find())
         {
             title = title.substring(0, m.start());
         }
-        artist = Utils.getString(dataBuffer, FIELD_ARTIST_POS, this.FIELD_ARTIST_LENGTH, "ISO-8859-1").trim();
+        artist = Utils.getString(dataBuffer, FIELD_ARTIST_POS, FIELD_ARTIST_LENGTH, "ISO-8859-1").trim();
         m = AbstractID3v1Tag.endofStringPattern.matcher(artist);
-        if (m.find() == true)
+        if (m.find())
         {
             artist = artist.substring(0, m.start());
         }
-        album = Utils.getString(dataBuffer, FIELD_ALBUM_POS, this.FIELD_ALBUM_LENGTH, "ISO-8859-1").trim();
+        album = Utils.getString(dataBuffer, FIELD_ALBUM_POS, FIELD_ALBUM_LENGTH, "ISO-8859-1").trim();
         m = AbstractID3v1Tag.endofStringPattern.matcher(album);
         logger.finest(getLoggingFilename() + ":" + "Orig Album is:" + comment + ":");
-        if (m.find() == true)
+        if (m.find())
         {
             album = album.substring(0, m.start());
             logger.finest(getLoggingFilename() + ":" + "Album is:" + album + ":");
         }
-        year = Utils.getString(dataBuffer, FIELD_YEAR_POS, this.FIELD_YEAR_LENGTH, "ISO-8859-1").trim();
+        year = Utils.getString(dataBuffer, FIELD_YEAR_POS, FIELD_YEAR_LENGTH, "ISO-8859-1").trim();
         m = AbstractID3v1Tag.endofStringPattern.matcher(year);
-        if (m.find() == true)
+        if (m.find())
         {
             year = year.substring(0, m.start());
         }
-        comment = Utils.getString(dataBuffer, FIELD_COMMENT_POS, this.FIELD_COMMENT_LENGTH, "ISO-8859-1").trim();
+        comment = Utils.getString(dataBuffer, FIELD_COMMENT_POS, FIELD_COMMENT_LENGTH, "ISO-8859-1").trim();
         m = AbstractID3v1Tag.endofStringPattern.matcher(comment);
         logger.finest(getLoggingFilename() + ":" + "Orig Comment is:" + comment + ":");
-        if (m.find() == true)
+        if (m.find())
         {
             comment = comment.substring(0, m.start());
             logger.finest(getLoggingFilename() + ":" + "Comment is:" + comment + ":");
         }
-        genre = dataBuffer[this.FIELD_GENRE_POS];
+        genre = dataBuffer[FIELD_GENRE_POS];
 
     }
 
@@ -925,35 +921,35 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag
         delete(file);
         file.seek(file.length());
         //Copy the TAGID into new buffer
-        System.arraycopy(TAG_ID, this.FIELD_TAGID_POS, buffer, this.FIELD_TAGID_POS, TAG_ID.length);
-        int offset = this.FIELD_TITLE_POS;
+        System.arraycopy(TAG_ID, FIELD_TAGID_POS, buffer, FIELD_TAGID_POS, TAG_ID.length);
+        int offset = FIELD_TITLE_POS;
         if (TagOptionSingleton.getInstance().isId3v1SaveTitle())
         {
-            str = ID3Tags.truncate(title, this.FIELD_TITLE_LENGTH);
+            str = ID3Tags.truncate(title, FIELD_TITLE_LENGTH);
             for (i = 0; i < str.length(); i++)
             {
                 buffer[i + offset] = (byte) str.charAt(i);
             }
         }
-        offset = this.FIELD_ARTIST_POS;
+        offset = FIELD_ARTIST_POS;
         if (TagOptionSingleton.getInstance().isId3v1SaveArtist())
         {
-            str = ID3Tags.truncate(artist, this.FIELD_ARTIST_LENGTH);
+            str = ID3Tags.truncate(artist, FIELD_ARTIST_LENGTH);
             for (i = 0; i < str.length(); i++)
             {
                 buffer[i + offset] = (byte) str.charAt(i);
             }
         }
-        offset = this.FIELD_ALBUM_POS;
+        offset = FIELD_ALBUM_POS;
         if (TagOptionSingleton.getInstance().isId3v1SaveAlbum())
         {
-            str = ID3Tags.truncate(album, this.FIELD_ALBUM_LENGTH);
+            str = ID3Tags.truncate(album, FIELD_ALBUM_LENGTH);
             for (i = 0; i < str.length(); i++)
             {
                 buffer[i + offset] = (byte) str.charAt(i);
             }
         }
-        offset = this.FIELD_YEAR_POS;
+        offset = FIELD_YEAR_POS;
         if (TagOptionSingleton.getInstance().isId3v1SaveYear())
         {
             str = ID3Tags.truncate(year, AbstractID3v1Tag.FIELD_YEAR_LENGTH);
@@ -962,16 +958,16 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag
                 buffer[i + offset] = (byte) str.charAt(i);
             }
         }
-        offset = this.FIELD_COMMENT_POS;
+        offset = FIELD_COMMENT_POS;
         if (TagOptionSingleton.getInstance().isId3v1SaveComment())
         {
-            str = ID3Tags.truncate(comment, this.FIELD_COMMENT_LENGTH);
+            str = ID3Tags.truncate(comment, FIELD_COMMENT_LENGTH);
             for (i = 0; i < str.length(); i++)
             {
                 buffer[i + offset] = (byte) str.charAt(i);
             }
         }
-        offset = this.FIELD_GENRE_POS;
+        offset = FIELD_GENRE_POS;
         if (TagOptionSingleton.getInstance().isId3v1SaveGenre())
         {
             buffer[offset] = genre;
@@ -1008,14 +1004,18 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag
 
     public TagField createField(Artwork artwork) throws FieldDataInvalidException
     {
-        throw new UnsupportedOperationException("Not implemented for this format");
+        throw new UnsupportedOperationException(ErrorMessage.GENERIC_NOT_SUPPORTED.getMsg());
     }
 
     public void setField(Artwork artwork) throws FieldDataInvalidException
     {
-        throw new UnsupportedOperationException("Not implemented for this format");
+        throw new UnsupportedOperationException(ErrorMessage.GENERIC_NOT_SUPPORTED.getMsg());
     }
 
+    public void addField(Artwork artwork) throws FieldDataInvalidException
+    {
+        throw new UnsupportedOperationException(ErrorMessage.GENERIC_NOT_SUPPORTED.getMsg());
+    }
     /**
      * Delete all instance of artwork Field
      *
@@ -1023,6 +1023,6 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag
      */
     public void deleteArtworkField() throws KeyNotFoundException
     {
-        throw new UnsupportedOperationException("Not implemented for this format");
+        throw new UnsupportedOperationException(ErrorMessage.GENERIC_NOT_SUPPORTED.getMsg());
     }
 }

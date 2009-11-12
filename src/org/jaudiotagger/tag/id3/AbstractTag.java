@@ -80,7 +80,7 @@ public abstract class AbstractTag extends AbstractTagItem
      */
     public boolean equals(Object obj)
     {
-        return (obj instanceof AbstractTag) != false && super.equals(obj);
+        return (obj instanceof AbstractTag) && super.equals(obj);
 
     }
 

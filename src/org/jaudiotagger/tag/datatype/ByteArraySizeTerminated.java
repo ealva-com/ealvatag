@@ -61,7 +61,7 @@ public class ByteArraySizeTerminated extends AbstractDataType
 
     public boolean equals(Object obj)
     {
-        return obj instanceof ByteArraySizeTerminated != false && super.equals(obj);
+        return obj instanceof ByteArraySizeTerminated && super.equals(obj);
 
     }
 

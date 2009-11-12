@@ -58,7 +58,7 @@ public class StringSizeTerminated extends TextEncodedStringSizeTerminated
 
     public boolean equals(Object obj)
     {
-        return obj instanceof StringSizeTerminated != false && super.equals(obj);
+        return obj instanceof StringSizeTerminated && super.equals(obj);
     }
 
     protected String getTextEncodingCharSet()

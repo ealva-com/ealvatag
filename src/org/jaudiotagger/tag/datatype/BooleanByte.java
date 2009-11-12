@@ -83,7 +83,7 @@ public class BooleanByte extends AbstractDataType
      */
     public boolean equals(Object obj)
     {
-        if ((obj instanceof BooleanByte) == false)
+        if (!(obj instanceof BooleanByte))
         {
             return false;
         }

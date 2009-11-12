@@ -71,7 +71,7 @@ public class StringFixedLength extends AbstractString
      */
     public boolean equals(Object obj)
     {
-        if ((obj instanceof StringFixedLength) == false)
+        if (!(obj instanceof StringFixedLength))
         {
             return false;
         }
@@ -128,7 +128,7 @@ public class StringFixedLength extends AbstractString
      */
     public byte[] writeByteArray()
     {
-        ByteBuffer dataBuffer = null;
+        ByteBuffer dataBuffer;
         byte[] data;
 
         //Create with a series of empty of spaces to try and ensure integrity of field

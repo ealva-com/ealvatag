@@ -266,7 +266,7 @@ public final class AsfTag extends AbstractTag {
      *         string}.
      */
     private TagField copyFrom(final TagField source) {
-        TagField result = null;
+        TagField result;
         if (isCopyingFields()) {
             if (source instanceof AsfTagField) {
                 try {
@@ -574,10 +574,7 @@ public final class AsfTag extends AbstractTag {
             return false;
         }
 
-        if (field.isEmpty()) {
-            return false;
-        }
-        return true;
+        return !field.isEmpty();
     }
 
     /**

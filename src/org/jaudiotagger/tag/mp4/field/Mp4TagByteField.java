@@ -35,6 +35,7 @@ public class Mp4TagByteField extends Mp4TagTextField
      *
      * @param id
      * @param value is a String representation of a number
+     * @throws org.jaudiotagger.tag.FieldDataInvalidException
      */
     public Mp4TagByteField(Mp4FieldKey id, String value) throws FieldDataInvalidException
     {
@@ -47,6 +48,7 @@ public class Mp4TagByteField extends Mp4TagTextField
      * @param id
      * @param value is a String representation of a number
      * @param realDataLength
+     * @throws org.jaudiotagger.tag.FieldDataInvalidException
      */
     public Mp4TagByteField(Mp4FieldKey id, String value, int realDataLength) throws FieldDataInvalidException
     {

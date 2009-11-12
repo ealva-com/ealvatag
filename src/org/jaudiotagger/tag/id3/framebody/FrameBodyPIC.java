@@ -215,7 +215,7 @@ public class FrameBodyPIC extends AbstractID3v2FrameBody implements ID3v22FrameB
      */
     public void write(ByteArrayOutputStream tagBuffer)
     {
-        if (((AbstractString) getObject(DataTypes.OBJ_DESCRIPTION)).canBeEncoded() == false)
+        if (!((AbstractString) getObject(DataTypes.OBJ_DESCRIPTION)).canBeEncoded())
         {
             this.setTextEncoding(TextEncoding.UTF_16);
         }

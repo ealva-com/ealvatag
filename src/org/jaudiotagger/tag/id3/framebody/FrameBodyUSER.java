@@ -126,7 +126,7 @@ public class FrameBodyUSER extends AbstractID3v2FrameBody implements ID3v24Frame
      */
     public void write(ByteArrayOutputStream tagBuffer)
     {
-        if (((AbstractString) getObject(DataTypes.OBJ_TEXT)).canBeEncoded() == false)
+        if (!((AbstractString) getObject(DataTypes.OBJ_TEXT)).canBeEncoded())
         {
             this.setTextEncoding(TextEncoding.UTF_16);
         }

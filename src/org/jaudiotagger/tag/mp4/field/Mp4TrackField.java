@@ -31,6 +31,7 @@ public class Mp4TrackField extends Mp4TagTextNumberField
      * Create new Track Field parsing the String for the trackno/total
      *
      * @param trackValue
+     * @throws org.jaudiotagger.tag.FieldDataInvalidException
      */
     public Mp4TrackField(String trackValue) throws FieldDataInvalidException
     {

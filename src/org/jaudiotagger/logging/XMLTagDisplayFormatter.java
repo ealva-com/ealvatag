@@ -52,6 +52,7 @@ public class XMLTagDisplayFormatter extends AbstractTagDisplayFormatter
     /**
      * Return xml open tag round a string e.g <tag>
      * @param xmlName
+     * @return
      */
     public static String xmlOpen(String xmlName)
     {
@@ -68,6 +69,7 @@ public class XMLTagDisplayFormatter extends AbstractTagDisplayFormatter
      * Return CDATA tag around xml data e.g <![CDATA[xmlData]]>
      * We also need to deal with special chars
      * @param xmlData
+     * @return
      */
     public static String xmlCData(String xmlData)
     {
@@ -76,7 +78,7 @@ public class XMLTagDisplayFormatter extends AbstractTagDisplayFormatter
         for (int i = 0; i < xmlData.length(); i++)
         {
             tempChar = xmlData.charAt(i);
-            if ((Character.isLetterOrDigit(tempChar) == true) || (Character.isSpaceChar(tempChar) == true))
+            if ((Character.isLetterOrDigit(tempChar)) || (Character.isSpaceChar(tempChar)))
             {
                 replacedString.append(tempChar);
             }
@@ -91,6 +93,7 @@ public class XMLTagDisplayFormatter extends AbstractTagDisplayFormatter
     /**
      * Return xml close tag around a string e.g </tag>
      * @param xmlName
+     * @return
      */
     public static String xmlClose(String xmlName)
     {
@@ -160,6 +163,7 @@ public class XMLTagDisplayFormatter extends AbstractTagDisplayFormatter
      * Replace any special xml characters with the appropiate escape sequences
      * required to be done for the actual element names
      * @param xmlData
+     * @return
      */
     public static String replaceXMLCharacters(String xmlData)
     {

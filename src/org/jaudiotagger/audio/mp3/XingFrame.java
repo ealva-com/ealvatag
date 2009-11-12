@@ -58,7 +58,6 @@ public class XingFrame
 
 
     private static ByteBuffer header;
-    private static XingFrame xingFrame = null;
 
     private boolean vbr = false;
     private boolean isFrameCountEnabled = false;
@@ -188,7 +187,7 @@ public class XingFrame
      */
     public static XingFrame parseXingFrame() throws InvalidAudioFrameException
     {
-        xingFrame = new XingFrame();
+        XingFrame xingFrame = new XingFrame();
         return xingFrame;
     }
 

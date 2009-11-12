@@ -38,6 +38,7 @@ public class ImageHandling
      * Resize image using Java 2D
       * @param artwork
       * @param size
+      * @throws java.io.IOException
       */
     private static void makeSmaller(Artwork artwork,int size) throws IOException
     {
@@ -77,11 +78,7 @@ public class ImageHandling
     public static boolean isMimeTypeWritable(String mimeType)
     {
         Iterator<ImageWriter> writers =  ImageIO.getImageWritersByMIMEType(mimeType);
-        if(writers.hasNext())
-        {
-            return true;
-        }
-        return false;
+        return writers.hasNext();
     }
     /**
      *  Write buffered image as required format

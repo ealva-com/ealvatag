@@ -45,7 +45,6 @@ public class Mp4AtomTree
     private DefaultMutableTreeNode udtaNode;
     private DefaultMutableTreeNode hdlrWithinMdiaNode;
     private DefaultMutableTreeNode hdlrWithinMetaNode;
-    private DefaultMutableTreeNode trailingPaddingNode;
     private List<DefaultMutableTreeNode> freeNodes = new ArrayList<DefaultMutableTreeNode>();
     private List<DefaultMutableTreeNode> mdatNodes = new ArrayList<DefaultMutableTreeNode>();
     private List<DefaultMutableTreeNode> trakNodes = new ArrayList<DefaultMutableTreeNode>();
@@ -90,6 +89,7 @@ public class Mp4AtomTree
      * @param closeExit false to keep randomfileacces open, only used when randomaccessfile already being used
      * @return
      * @throws java.io.IOException
+     * @throws org.jaudiotagger.audio.exceptions.CannotReadException
      */
     public DefaultTreeModel buildTree(RandomAccessFile raf, boolean closeExit) throws IOException, CannotReadException
     {
@@ -124,7 +124,7 @@ public class Mp4AtomTree
                     if(moovNode!=null&mdatNode!=null)
                     {
                         NullPadding np = new NullPadding(fc.position() - Mp4BoxHeader.HEADER_LENGTH,fc.size());
-                        trailingPaddingNode =  new DefaultMutableTreeNode(np);
+                        DefaultMutableTreeNode trailingPaddingNode = new DefaultMutableTreeNode(np);
                         rootNode.add(trailingPaddingNode);
                         logger.warning(ErrorMessage.NULL_PADDING_FOUND_AT_END_OF_MP4.getMsg(np.getFilePos()));
                         break;

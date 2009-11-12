@@ -146,7 +146,7 @@ public class MergeID3AndMP3Files
          */
         public final boolean accept(final File file)
         {
-            return (((file.getName()).toLowerCase().endsWith(".mp3")) || (file.isDirectory() && (this.allowDirectories == true)));
+            return (((file.getName()).toLowerCase().endsWith(".mp3")) || (file.isDirectory() && (this.allowDirectories)));
         }
 
         /**

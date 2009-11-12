@@ -142,6 +142,7 @@ public class AudioFile
 
     /**
      * Return audio header
+     * @return
      */
     public AudioHeader getAudioHeader()
     {
@@ -180,13 +181,14 @@ public class AudioFile
      * @param readOnly
      * @throws ReadOnlyFileException
      * @throws FileNotFoundException
+     * @return
      */
     protected RandomAccessFile checkFilePermissions(File file, boolean readOnly) throws ReadOnlyFileException, FileNotFoundException
     {
         RandomAccessFile newFile;
 
         logger.info("Reading file:" + "path" + file.getPath() + ":abs:" + file.getAbsolutePath());
-        if (file.exists() == false)
+        if (!file.exists())
         {
             logger.severe("Unable to find:" + file.getPath());
             throw new FileNotFoundException("Unable to find:" + file.getPath());
@@ -199,7 +201,7 @@ public class AudioFile
         }
         else
         {
-            if (file.canWrite() == false)
+            if (!file.canWrite())
             {
                 logger.severe("Unable to write:" + file.getPath());
                 throw new ReadOnlyFileException("Unable to write to:" + file.getPath());

@@ -56,7 +56,7 @@ public class OggCRCFactory
                 }
             }
 
-            crc_lookup[i] = (r & 0xffffffff);
+            crc_lookup[i] = (r);
         }
         init = true;
     }

@@ -72,6 +72,7 @@ public interface Tag {
      * Delete any fields with this key
      *
      * @param fieldKey
+     * @throws KeyNotFoundException
      */
     public void deleteField(FieldKey fieldKey) throws KeyNotFoundException;
 
@@ -100,6 +101,7 @@ public interface Tag {
      *
      * @param id
      * @return String value or empty string
+     * @throws KeyNotFoundException
      */
     public String getFirst(FieldKey id) throws KeyNotFoundException;
 
@@ -156,6 +158,7 @@ public interface Tag {
      *
      * @param id The field id.
      * @return A list of {@link TagField} objects with the given &quot;id&quot;.
+     * @throws KeyNotFoundException
      */
     public List<TagField> getFields(FieldKey id) throws KeyNotFoundException;
 
@@ -196,7 +199,8 @@ public interface Tag {
      *
      * <p>We need this additional deleteField method because in some formats artwork can be stored
      * in multiple fields
-     * 
+     *
+     * @throws KeyNotFoundException
      */
     public void deleteArtworkField() throws KeyNotFoundException;
 
@@ -206,6 +210,7 @@ public interface Tag {
      *
      * @param artwork
      * @return suitable tagfield for this format that represents the artwork data
+     * @throws FieldDataInvalidException
      */
     public TagField createField(Artwork artwork) throws FieldDataInvalidException;
 
@@ -214,6 +219,7 @@ public interface Tag {
      * <p/>
      *
      * @param artwork
+     * @throws FieldDataInvalidException
      */
     public void setField(Artwork artwork) throws FieldDataInvalidException;
 
@@ -222,6 +228,7 @@ public interface Tag {
      * <p/>
      *
      * @param artwork
+     * @throws FieldDataInvalidException
      */
     public void addField(Artwork artwork) throws FieldDataInvalidException;
 
@@ -242,6 +249,7 @@ public interface Tag {
      * </ul>
      *
      * @param field The field to add.
+     * @throws FieldDataInvalidException
      */
     public void setField(TagField field) throws FieldDataInvalidException;
 
@@ -262,6 +270,7 @@ public interface Tag {
      * </ul>
      *
      * @param field The field to add.
+     * @throws FieldDataInvalidException
      */
     public void addField(TagField field) throws FieldDataInvalidException;
 
@@ -277,6 +286,8 @@ public interface Tag {
      * @param genericKey is the generic key
      * @param value      to store
      * @return
+     * @throws KeyNotFoundException
+     * @throws FieldDataInvalidException
      */
     public TagField createField(FieldKey genericKey, String value) throws KeyNotFoundException, FieldDataInvalidException;
 

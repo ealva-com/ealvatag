@@ -118,6 +118,7 @@ public class Mp4TagWriter
      * @param udtaHeader
      * @param metaHeader
      * @return
+     * @throws java.io.IOException
      */
     private void adjustSizeOfMoovHeader
             (Mp4BoxHeader moovHeader,
@@ -189,12 +190,12 @@ public class Mp4TagWriter
         int oldIlstSize = 0;
         int relativeIlstposition;
         int relativeIlstEndPosition;
-        int startIlstWithinFile=0;
+        int startIlstWithinFile;
         int newIlstSize;
-        int oldMetaLevelFreeAtomSize = 0;
+        int oldMetaLevelFreeAtomSize;
         long extraDataSize;
         int level1SearchPosition = 0;
-        int topLevelFreePosition = 0;
+        int topLevelFreePosition;
         int topLevelFreeSize;
         boolean topLevelFreeAtomComesBeforeMdatAtom;
         Mp4BoxHeader topLevelFreeHeader;

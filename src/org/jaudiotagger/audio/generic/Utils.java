@@ -277,6 +277,8 @@ public class Utils
     /**
      * Overflow checking since java can't handle unsigned numbers.
      * @param di
+     * @throws java.io.IOException
+     * @return
      */
     public static int readUint32AsInt(DataInput di) throws IOException
     {

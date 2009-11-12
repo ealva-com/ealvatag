@@ -108,7 +108,7 @@ public class MP3AudioHeader implements AudioHeader
      */
     public MP3AudioHeader(final File seekFile) throws IOException, InvalidAudioFrameException
     {
-        if (seek(seekFile, 0) == false)
+        if (!seek(seekFile, 0))
         {
             throw new InvalidAudioFrameException("No audio header found within" + seekFile.getName());
         }
@@ -133,7 +133,7 @@ public class MP3AudioHeader implements AudioHeader
      */
     public MP3AudioHeader(final File seekFile, long startByte) throws IOException, InvalidAudioFrameException
     {
-        if (seek(seekFile, startByte) == false)
+        if (!seek(seekFile, startByte))
         {
             throw new InvalidAudioFrameException("No audio header found within" + seekFile.getName());
         }
@@ -252,7 +252,7 @@ public class MP3AudioHeader implements AudioHeader
                         else
                         {
                             syncFound = isNextFrameValid(seekFile, filePointerCount, bb, fc);
-                            if (syncFound == true)
+                            if (syncFound)
                             {
                                 break;
                             }
@@ -327,6 +327,7 @@ public class MP3AudioHeader implements AudioHeader
      * @param bb
      * @param fc
      * @return true if frame is valid
+     * @throws java.io.IOException
      */
     private boolean isNextFrameValid(File seekFile, long filePointerCount, ByteBuffer bb, FileChannel fc) throws IOException
     {
@@ -521,6 +522,7 @@ public class MP3AudioHeader implements AudioHeader
 
     /**
      * Return the length in user friendly format
+     * @return
      */
     public String getTrackLengthAsString()
     {
@@ -604,7 +606,6 @@ public class MP3AudioHeader implements AudioHeader
             if (mp3XingFrame.getLameFrame() != null)
             {
                 encoder = mp3XingFrame.getLameFrame().getEncoder();
-                return;
             }
         }
         else if (mp3VbriFrame != null)

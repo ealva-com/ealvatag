@@ -162,7 +162,7 @@ public class ID3v22Tag extends AbstractID3v2Tag
         {
             ID3v24Tag convertedTag;
             //Should use the copy constructor instead
-            if ((mp3tag instanceof ID3v23Tag == false) && (mp3tag instanceof ID3v22Tag == true))
+            if ((!(mp3tag instanceof ID3v23Tag)) && (mp3tag instanceof ID3v22Tag))
             {
                 throw new UnsupportedOperationException("Copy Constructor not called. Please type cast the argument");
             }
@@ -239,7 +239,7 @@ public class ID3v22Tag extends AbstractID3v2Tag
      */
     public boolean equals(Object obj)
     {
-        if ((obj instanceof ID3v22Tag) == false)
+        if (!(obj instanceof ID3v22Tag))
         {
             return false;
         }
@@ -348,7 +348,7 @@ public class ID3v22Tag extends AbstractID3v2Tag
     public void read(ByteBuffer byteBuffer) throws TagException
     {
         int size;
-        if (seek(byteBuffer) == false)
+        if (!seek(byteBuffer))
         {
             throw new TagNotFoundException("ID3v2.20 tag not found");
         }
@@ -653,6 +653,7 @@ public class ID3v22Tag extends AbstractID3v2Tag
      *
      * @param id3v22FieldKey
      * @return
+     * @throws org.jaudiotagger.tag.KeyNotFoundException
      */
     public String getFirst(ID3v22FieldKey id3v22FieldKey) throws KeyNotFoundException
     {
@@ -692,6 +693,7 @@ public class ID3v22Tag extends AbstractID3v2Tag
      * Delete fields with this id3v22FieldKey
      *
      * @param id3v22FieldKey
+     * @throws org.jaudiotagger.tag.KeyNotFoundException
      */
     public void deleteTagField(ID3v22FieldKey id3v22FieldKey) throws KeyNotFoundException
     {

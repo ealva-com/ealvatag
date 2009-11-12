@@ -54,7 +54,7 @@ public class BooleanString extends AbstractDataType
 
     public boolean equals(Object obj)
     {
-        return obj instanceof BooleanString != false && super.equals(obj);
+        return obj instanceof BooleanString && super.equals(obj);
 
     }
 
@@ -89,7 +89,7 @@ public class BooleanString extends AbstractDataType
         }
         else
         {
-            if ((Boolean) value == true)
+            if ((Boolean) value)
             {
                 booleanValue[0] = '0';
             }

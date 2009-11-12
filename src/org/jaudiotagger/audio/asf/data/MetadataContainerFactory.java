@@ -60,7 +60,7 @@ public final class MetadataContainerFactory {
      */
     public MetadataContainer createContainer(final ContainerType type,
             final long pos, final BigInteger chunkSize) {
-        MetadataContainer result = null;
+        MetadataContainer result;
         if (type == ContainerType.CONTENT_DESCRIPTION) {
             result = new ContentDescription(pos, chunkSize);
         } else if (type == ContainerType.CONTENT_BRANDING) {

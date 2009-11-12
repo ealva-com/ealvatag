@@ -84,7 +84,6 @@ public class FlacTagWriter
         metadataBlockCueSheet.clear();
 
 
-        byte[] b;
         //Read existing data
         FlacStreamReader flacStream = new FlacStreamReader(raf);
         try

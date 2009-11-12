@@ -51,7 +51,7 @@ public class StringNullTerminated extends TextEncodedStringNullTerminated
 
     public boolean equals(Object obj)
     {
-        return obj instanceof StringNullTerminated != false && super.equals(obj);
+        return obj instanceof StringNullTerminated && super.equals(obj);
     }
 
     protected String getTextEncodingCharSet()

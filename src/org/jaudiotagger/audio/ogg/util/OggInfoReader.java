@@ -40,7 +40,7 @@ public class OggInfoReader
     {
         GenericAudioHeader info = new GenericAudioHeader();
         logger.fine("Started");
-        long oldPos = 0;
+        long oldPos;
 
         //Check start of file does it have Ogg pattern
         byte[] b = new byte[OggPageHeader.CAPTURE_PATTERN.length];
