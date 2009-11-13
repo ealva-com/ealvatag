@@ -17,6 +17,7 @@ package org.jaudiotagger;
 
 import junit.framework.TestCase;
 import org.jaudiotagger.logging.ErrorMessage;
+import org.jaudiotagger.tag.TagOptionSingleton;
 
 import java.io.*;
 import java.util.EnumMap;
@@ -27,6 +28,11 @@ import java.util.regex.Pattern;
  */
 public abstract class AbstractTestCase extends TestCase {
 
+    @Override
+    public void setUp()
+    {
+        TagOptionSingleton.getInstance().setToDefault();    
+    }
     /**
      * Stores a {@link Pattern} for each {@link ErrorMessage}.<br>
      * Place holders like &quot;{&lt;number&gt;}&quot; will be replaced with
