@@ -306,7 +306,7 @@ public class Mp4Tag extends AbstractTag
      * @param mp4Key
      * @throws org.jaudiotagger.tag.KeyNotFoundException
      */
-    public void deleteTagField(Mp4FieldKey mp4Key) throws KeyNotFoundException
+    public void deleteField(Mp4FieldKey mp4Key) throws KeyNotFoundException
     {
         if (mp4Key == null)
         {
@@ -392,7 +392,7 @@ public class Mp4Tag extends AbstractTag
         }
         else
         {
-            return createTagField(tagFieldToMp4Field.get(genericKey), value);
+            return createField(tagFieldToMp4Field.get(genericKey), value);
         }
     }
 
@@ -478,7 +478,7 @@ public class Mp4Tag extends AbstractTag
      * @throws KeyNotFoundException
      * @throws FieldDataInvalidException
      */
-    public TagField createTagField(Mp4FieldKey mp4FieldKey, String value) throws KeyNotFoundException, FieldDataInvalidException
+    public TagField createField(Mp4FieldKey mp4FieldKey, String value) throws KeyNotFoundException, FieldDataInvalidException
     {
         if (value == null)
         {

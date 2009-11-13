@@ -2,8 +2,8 @@ package org.jaudiotagger.audio.asf;
 
 import junit.framework.TestCase;
 import org.jaudiotagger.audio.asf.data.AsfHeader;
-import org.jaudiotagger.audio.asf.tag.AsfFieldKey;
-import org.jaudiotagger.audio.asf.tag.AsfTag;
+import org.jaudiotagger.tag.asf.AsfFieldKey;
+import org.jaudiotagger.tag.asf.AsfTag;
 import org.jaudiotagger.tag.FieldKey;
 
 /**
@@ -18,7 +18,7 @@ public class AsfCodeCheckTest extends TestCase
     /**
      * Tests the correct implementation of {@link AsfTag}.<br>
      * For example if {@link AsfTag#createAlbumField(String)} returns a field whose {@link org.jaudiotagger.tag.TagField#getId()} 
-     * equals {@link org.jaudiotagger.audio.asf.tag.AsfFieldKey#ALBUM}s }.
+     * equals {@link org.jaudiotagger.tag.asf.AsfFieldKey#ALBUM}s }.
      */
     public void testAsfTagImpl() throws Exception
     {

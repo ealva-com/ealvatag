@@ -5,8 +5,8 @@ import org.jaudiotagger.audio.AudioFileIO;
 import org.jaudiotagger.audio.asf.data.AsfHeader;
 import org.jaudiotagger.audio.asf.data.ContentDescription;
 import org.jaudiotagger.audio.asf.io.AsfHeaderReader;
-import org.jaudiotagger.audio.asf.tag.AsfFieldKey;
-import org.jaudiotagger.audio.asf.tag.AsfTag;
+import org.jaudiotagger.tag.asf.AsfFieldKey;
+import org.jaudiotagger.tag.asf.AsfTag;
 import org.jaudiotagger.audio.asf.util.TagConverter;
 
 /**
@@ -41,7 +41,7 @@ public class WmaContentDescriptionTest extends WmaTestCase
         AsfTag tag = (AsfTag) file.getTag();
         for (String curr : ContentDescription.ALLOWED)
         {
-            tag.deleteTagField(AsfFieldKey.getAsfFieldKey(curr));
+            tag.deleteField(AsfFieldKey.getAsfFieldKey(curr));
         }
         file.commit();
         AsfHeader header = AsfHeaderReader.readHeader(file.getFile());
@@ -55,11 +55,11 @@ public class WmaContentDescriptionTest extends WmaTestCase
             assertNull(header.getExtendedContentDescription());
             file = AudioFileIO.read(file.getFile());
             tag = (AsfTag) file.getTag();
-            tag.addField(tag.createTagField(curr, curr.getFieldName()));
+            tag.addField(tag.createField(curr, curr.getFieldName()));
             file.commit();
             header = AsfHeaderReader.readHeader(file.getFile());
             assertNotNull(header.getContentDescription());
-            assertNull("Key: " + curr.name(), header.getExtendedContentDescription());
+            assertNull("Key: " + curr.getFieldName(), header.getExtendedContentDescription());
             assertEquals(curr.getFieldName(), TagConverter.createTagOf(header).getFirst(curr.getFieldName()));
         }
     }

@@ -1,6 +1,8 @@
-package org.jaudiotagger.audio.asf.tag;
+package org.jaudiotagger.tag.asf;
 
 import org.jaudiotagger.audio.asf.data.MetadataDescriptor;
+import org.jaudiotagger.tag.asf.AsfTagField;
+import org.jaudiotagger.tag.asf.AsfFieldKey;
 import org.jaudiotagger.tag.TagField;
 
 import javax.imageio.ImageIO;
@@ -15,7 +17,8 @@ import java.io.IOException;
  * 
  * @author Christian Laireiter
  */
-abstract class AbstractAsfTagImageField extends AsfTagField {
+abstract class AbstractAsfTagImageField extends AsfTagField
+{
 
     /**
      * Creates a image tag field.

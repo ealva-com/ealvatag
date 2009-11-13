@@ -8,6 +8,8 @@ import org.jaudiotagger.tag.id3.valuepair.ImageFormats;
 import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
 import org.jaudiotagger.tag.reference.PictureTypes;
 import org.jaudiotagger.tag.vorbiscomment.VorbisCommentTag;
+import org.jaudiotagger.tag.vorbiscomment.VorbisCommentFieldKey;
+import org.jaudiotagger.tag.vorbiscomment.VorbisCommentTagField;
 import org.jaudiotagger.logging.ErrorMessage;
 
 import javax.imageio.ImageIO;
@@ -123,7 +125,34 @@ public class FlacTag implements Tag
         TagField tagfield = createField(genericKey,value);
         addField(tagfield);
     }
-    
+
+    /**
+     * Create and set field with name of vorbisCommentkey
+     *
+     * @param vorbisCommentKey
+     * @param value
+     * @throws KeyNotFoundException
+     * @throws FieldDataInvalidException
+     */
+    public void setField(String vorbisCommentKey, String value) throws KeyNotFoundException, FieldDataInvalidException
+    {
+        TagField tagfield = createField(vorbisCommentKey,value);
+        setField(tagfield);
+    }
+
+    /**
+     * Create and add field with name of vorbisCommentkey
+     * @param vorbisCommentKey
+     * @param value
+     * @throws KeyNotFoundException
+     * @throws FieldDataInvalidException
+     */
+    public void addField(String vorbisCommentKey, String value) throws KeyNotFoundException, FieldDataInvalidException
+    {
+        TagField tagfield = createField(vorbisCommentKey,value);
+        addField(tagfield);
+    }
+
     /**
      * @param field
      * @throws FieldDataInvalidException
@@ -157,6 +186,43 @@ public class FlacTag implements Tag
         {
             return tag.createField(genericKey, value);
         }
+    }
+
+    /**
+     * Create Tag Field using ogg key
+     *
+     * @param vorbisCommentFieldKey
+     * @param value
+     * @return
+     * @throws org.jaudiotagger.tag.KeyNotFoundException
+     * @throws org.jaudiotagger.tag.FieldDataInvalidException
+     */
+    public TagField createField(VorbisCommentFieldKey vorbisCommentFieldKey, String value) throws KeyNotFoundException,FieldDataInvalidException
+    {
+        if (vorbisCommentFieldKey.equals(VorbisCommentFieldKey.COVERART))
+        {
+            throw new UnsupportedOperationException(ErrorMessage.ARTWORK_CANNOT_BE_CREATED_WITH_THIS_METHOD.getMsg());
+        }
+        return tag.createField(vorbisCommentFieldKey,value);
+    }
+
+    /**
+     * Create Tag Field using ogg key
+     * <p/>
+     * This method is provided to allow you to create key of any value because VorbisComment allows
+     * arbitary keys.
+     *
+     * @param vorbisCommentFieldKey
+     * @param value
+     * @return
+     */
+    public TagField createField(String vorbisCommentFieldKey, String value)
+    {
+        if (vorbisCommentFieldKey.equals(VorbisCommentFieldKey.COVERART.getFieldName()))
+        {
+            throw new UnsupportedOperationException(ErrorMessage.ARTWORK_CANNOT_BE_CREATED_WITH_THIS_METHOD.getMsg());
+        }
+        return tag.createField(vorbisCommentFieldKey,value);
     }
 
     public String getFirst(String id)

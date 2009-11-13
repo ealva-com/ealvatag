@@ -1,9 +1,11 @@
-package org.jaudiotagger.audio.asf.tag;
+package org.jaudiotagger.tag.asf;
 
 import org.jaudiotagger.audio.asf.data.AsfHeader;
 import org.jaudiotagger.audio.asf.data.MetadataDescriptor;
 import org.jaudiotagger.logging.ErrorMessage;
 import org.jaudiotagger.tag.id3.valuepair.ImageFormats;
+import org.jaudiotagger.tag.asf.AbstractAsfTagImageField;
+import org.jaudiotagger.tag.asf.AsfFieldKey;
 
 import java.io.ByteArrayOutputStream;
 import java.io.UnsupportedEncodingException;
@@ -19,7 +21,8 @@ import java.util.logging.Logger;
  * UTF-16LE null byte null byte description encoded as UTF-16LE (optional) null
  * byte null byte image data
  */
-public class AsfTagCoverField extends AbstractAsfTagImageField {
+public class AsfTagCoverField extends AbstractAsfTagImageField
+{
     /**
      * Logger Object
      */

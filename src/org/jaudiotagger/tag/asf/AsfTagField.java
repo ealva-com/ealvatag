@@ -16,10 +16,12 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.jaudiotagger.audio.asf.tag;
+package org.jaudiotagger.tag.asf;
 
 import org.jaudiotagger.audio.asf.data.MetadataDescriptor;
 import org.jaudiotagger.tag.TagField;
+import org.jaudiotagger.tag.asf.AsfFieldKey;
+import org.jaudiotagger.tag.asf.AsfTag;
 
 /**
  * This class encapsulates a

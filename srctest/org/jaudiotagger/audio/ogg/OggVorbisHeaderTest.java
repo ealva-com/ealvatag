@@ -145,7 +145,7 @@ public class OggVorbisHeaderTest extends TestCase
             //Size of VorbisComment should decrease just setting a nonsical but muuch smaller value for image
             assertTrue(f.getTag() instanceof VorbisCommentTag);
             VorbisCommentTag vorbisTag = (VorbisCommentTag) f.getTag();
-            vorbisTag.setField(vorbisTag.createTagField(VorbisCommentFieldKey.COVERART, "ccc"));
+            vorbisTag.setField(vorbisTag.createField(VorbisCommentFieldKey.COVERART, "ccc"));
             f.commit();
 
             f = AudioFileIO.read(testFile);

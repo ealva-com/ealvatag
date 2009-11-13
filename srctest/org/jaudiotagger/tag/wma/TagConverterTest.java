@@ -5,7 +5,7 @@ import org.jaudiotagger.audio.asf.data.ContainerType;
 import org.jaudiotagger.audio.asf.data.MetadataContainer;
 import org.jaudiotagger.audio.asf.data.MetadataContainerUtils;
 import org.jaudiotagger.audio.asf.io.AsfHeaderReader;
-import org.jaudiotagger.audio.asf.tag.AsfTag;
+import org.jaudiotagger.tag.asf.AsfTag;
 import org.jaudiotagger.audio.asf.util.TagConverter;
 
 import java.io.IOException;
@@ -34,7 +34,7 @@ public class TagConverterTest extends WmaTestCase {
 
     /**
      * Test method for
-     * {@link org.jaudiotagger.audio.asf.util.TagConverter#distributeMetadata(org.jaudiotagger.audio.asf.tag.AsfTag)}
+     * {@link org.jaudiotagger.audio.asf.util.TagConverter#distributeMetadata(org.jaudiotagger.tag.asf.AsfTag)}
      * .
      */
     public void testDistributeMetadata() throws IOException {

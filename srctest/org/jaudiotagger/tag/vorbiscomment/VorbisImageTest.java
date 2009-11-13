@@ -87,8 +87,8 @@ public class VorbisImageTest extends AbstractTestCase
             imageFile.read(imagedata);
             char[] testdata = Base64Coder.encode(imagedata);
             String base64image = new String(testdata);
-            tag.setField(tag.createTagField(VorbisCommentFieldKey.COVERART, base64image));
-            tag.setField(tag.createTagField(VorbisCommentFieldKey.COVERARTMIME, "image/png"));
+            tag.setField(tag.createField(VorbisCommentFieldKey.COVERART, base64image));
+            tag.setField(tag.createField(VorbisCommentFieldKey.COVERARTMIME, "image/png"));
             f.commit();
 
             f = AudioFileIO.read(testFile);
@@ -163,8 +163,8 @@ public class VorbisImageTest extends AbstractTestCase
             imageFile.read(imagedata);
             char[] testdata = Base64Coder.encode(imagedata);
             String base64image = new String(testdata);
-            tag.setField(tag.createTagField(VorbisCommentFieldKey.COVERART, base64image));
-            tag.setField(tag.createTagField(VorbisCommentFieldKey.COVERARTMIME, "image/png"));
+            tag.setField(tag.createField(VorbisCommentFieldKey.COVERART, base64image));
+            tag.setField(tag.createField(VorbisCommentFieldKey.COVERARTMIME, "image/png"));
             f.commit();
 
             f = AudioFileIO.read(testFile);

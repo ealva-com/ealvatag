@@ -1,9 +1,13 @@
-package org.jaudiotagger.audio.asf.tag;
+package org.jaudiotagger.tag.asf;
 
 import org.jaudiotagger.audio.asf.data.AsfHeader;
+import org.jaudiotagger.tag.asf.AsfTagField;
+import org.jaudiotagger.tag.asf.AsfTagTextField;
+import org.jaudiotagger.tag.asf.AsfTagCoverField;
 import org.jaudiotagger.audio.generic.AbstractTag;
 import org.jaudiotagger.logging.ErrorMessage;
 import org.jaudiotagger.tag.*;
+import org.jaudiotagger.tag.asf.AsfFieldKey;
 import org.jaudiotagger.tag.datatype.Artwork;
 import org.jaudiotagger.tag.reference.PictureTypes;
 
@@ -356,7 +360,7 @@ public final class AsfTag extends AbstractTag {
      *            string value for the created field.
      * @return text field with given content.
      */
-    public AsfTagTextField createTagField(final AsfFieldKey asfFieldKey,
+    public AsfTagTextField createField(final AsfFieldKey asfFieldKey,
             final String value) {
         if (value == null) {
             throw new IllegalArgumentException(
@@ -398,7 +402,7 @@ public final class AsfTag extends AbstractTag {
             throw new KeyNotFoundException("No ASF fieldkey for "
                     + genericKey.toString());
         }
-        return createTagField(asfFieldKey, value);
+        return createField(asfFieldKey, value);
     }
 
     /**
@@ -407,7 +411,7 @@ public final class AsfTag extends AbstractTag {
      * @param fieldKey
      *            fields to remove.
      */
-    public void deleteTagField(final AsfFieldKey fieldKey) {
+    public void deleteField(final AsfFieldKey fieldKey) {
         super.deleteField(fieldKey.getFieldName());
     }
 

@@ -5,8 +5,8 @@ import org.jaudiotagger.audio.AudioFileIO;
 import org.jaudiotagger.audio.asf.data.AsfHeader;
 import org.jaudiotagger.audio.asf.data.MetadataContainer;
 import org.jaudiotagger.audio.asf.io.*;
-import org.jaudiotagger.audio.asf.tag.AsfFieldKey;
-import org.jaudiotagger.audio.asf.tag.AsfTag;
+import org.jaudiotagger.tag.asf.AsfFieldKey;
+import org.jaudiotagger.tag.asf.AsfTag;
 import org.jaudiotagger.audio.asf.util.TagConverter;
 import org.jaudiotagger.tag.FieldKey;
 
@@ -43,7 +43,7 @@ public class WmaDescriptionLocationTest extends WmaTestCase
         super(TEST_FILE);
         this.testTag = new AsfTag(true);
         this.testTag.setField(FieldKey.ARTIST,"TheArtist");
-        this.testTag.setField(this.testTag.createTagField(AsfFieldKey.ISVBR, Boolean.TRUE.toString()));
+        this.testTag.setField(this.testTag.createField(AsfFieldKey.ISVBR, Boolean.TRUE.toString()));
     }
 
 

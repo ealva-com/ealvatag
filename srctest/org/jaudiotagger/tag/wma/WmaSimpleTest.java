@@ -3,10 +3,10 @@ package org.jaudiotagger.tag.wma;
 import org.jaudiotagger.AbstractTestCase;
 import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.AudioFileIO;
-import org.jaudiotagger.audio.asf.tag.AsfFieldKey;
-import org.jaudiotagger.audio.asf.tag.AsfTag;
-import org.jaudiotagger.audio.asf.tag.AsfTagCoverField;
-import org.jaudiotagger.audio.asf.tag.AsfTagTextField;
+import org.jaudiotagger.tag.asf.AsfFieldKey;
+import org.jaudiotagger.tag.asf.AsfTag;
+import org.jaudiotagger.tag.asf.AsfTagCoverField;
+import org.jaudiotagger.tag.asf.AsfTagTextField;
 import org.jaudiotagger.tag.FieldKey;
 import org.jaudiotagger.tag.Tag;
 import org.jaudiotagger.tag.TagField;
@@ -298,7 +298,7 @@ public class WmaSimpleTest extends AbstractTestCase
 
 
             // setField the IsVbr value (can be modified for now)
-            tag.setField(tag.createTagField(AsfFieldKey.ISVBR, Boolean.TRUE.toString()));
+            tag.setField(tag.createField(AsfFieldKey.ISVBR, Boolean.TRUE.toString()));
             f.commit();
 
             f = AudioFileIO.read(testFile);

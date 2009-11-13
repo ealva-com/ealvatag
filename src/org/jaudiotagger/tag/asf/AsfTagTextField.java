@@ -1,9 +1,11 @@
-package org.jaudiotagger.audio.asf.tag;
+package org.jaudiotagger.tag.asf;
 
 import org.jaudiotagger.audio.asf.data.AsfHeader;
 import org.jaudiotagger.audio.asf.data.MetadataDescriptor;
 import org.jaudiotagger.audio.asf.util.Utils;
 import org.jaudiotagger.tag.TagTextField;
+import org.jaudiotagger.tag.asf.AsfFieldKey;
+import org.jaudiotagger.tag.asf.AsfTagField;
 
 /**
  * Represents a tag text field for ASF fields.<br>

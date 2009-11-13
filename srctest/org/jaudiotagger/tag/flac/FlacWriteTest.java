@@ -67,6 +67,9 @@ public class FlacWriteTest extends TestCase
             tag.setField(tag.createField(FieldKey.URL_WIKIPEDIA_RELEASE_SITE,"http://www.discogs6.com"));
             tag.setField(tag.createField(FieldKey.TRACK_TOTAL,"11"));
             tag.setField(tag.createField(FieldKey.DISC_TOTAL,"3"));
+            //key not known to jaudiotagger
+            tag.setField("VIOLINIST", "Sarah Curtis");
+
             //Add new image
             RandomAccessFile imageFile = new RandomAccessFile(new File("testdata", "coverart.png"), "r");
             byte[] imagedata = new byte[(int) imageFile.length()];
@@ -124,6 +127,7 @@ public class FlacWriteTest extends TestCase
             assertEquals("http://www.discogs6.com",tag.getFirst(FieldKey.URL_WIKIPEDIA_RELEASE_SITE));
             assertEquals("11",tag.getFirst(FieldKey.TRACK_TOTAL));
             assertEquals("3",tag.getFirst(FieldKey.DISC_TOTAL));
+            assertEquals("Sarah Curtis",tag.getFirst("VIOLINIST"));
 
             ImageInputStream stream = ImageIO.createImageInputStream(new ByteArrayInputStream(pic.getImageData()));
             BufferedImage bi = ImageIO.read(stream);
@@ -292,7 +296,7 @@ public class FlacWriteTest extends TestCase
             tag.setField(FieldKey.ARTIST,"BLOCK");
             tag.addField(FieldKey.ALBUM,"album");
             tag.addField(FieldKey.TITLE,"title");
-            tag.addField(FieldKey.YEAR,"1971");;
+            tag.addField(FieldKey.YEAR,"1971");
             tag.addField(FieldKey.TRACK,"2");
             tag.addField(FieldKey.GENRE,"Rock");
             tag.setField(tag.createField(FieldKey.BPM, "123"));

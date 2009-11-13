@@ -5,6 +5,9 @@ import org.jaudiotagger.tag.FieldDataInvalidException;
 import org.jaudiotagger.tag.FieldKey;
 import org.jaudiotagger.tag.TagField;
 import org.jaudiotagger.tag.TagTextField;
+import org.jaudiotagger.tag.asf.AsfFieldKey;
+import org.jaudiotagger.tag.asf.AsfTag;
+import org.jaudiotagger.tag.asf.AsfTagTextField;
 
 import java.util.List;
 
@@ -49,7 +52,7 @@ public class AsfTagTest extends TestCase
     public void testIdentifierConversion() throws FieldDataInvalidException
     {
         final AsfTag asfTag = new AsfTag();
-        TagField albumField = asfTag.createField(FieldKey.ALBUM,AsfFieldKey.ALBUM.getFieldName());
+        TagField albumField = asfTag.createField(FieldKey.ALBUM, AsfFieldKey.ALBUM.getFieldName());
         asfTag.addField(albumField);
         assertSame(albumField, asfTag.getFields(FieldKey.ALBUM).get(0));
         assertSame(albumField, asfTag.get(AsfFieldKey.ALBUM.getFieldName()).get(0));
@@ -60,7 +63,7 @@ public class AsfTagTest extends TestCase
     public void testMixedIdentifiers() throws Exception
     {
         final AsfTag asfTag = new AsfTag();
-        AsfTagTextField textField = asfTag.createTagField(AsfFieldKey.ALBUM, AsfFieldKey.ALBUM.toString());
+        AsfTagTextField textField = asfTag.createField(AsfFieldKey.ALBUM, AsfFieldKey.ALBUM.toString());
         asfTag.setField(textField);
         assertSame(textField, asfTag.getFirstField(AsfFieldKey.ALBUM.getFieldName()));
     }

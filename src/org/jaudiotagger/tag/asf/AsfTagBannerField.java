@@ -1,9 +1,11 @@
-package org.jaudiotagger.audio.asf.tag;
+package org.jaudiotagger.tag.asf;
 
 import org.jaudiotagger.audio.asf.data.ContentBranding;
 
 import org.jaudiotagger.audio.asf.data.ContainerType;
 import org.jaudiotagger.audio.asf.data.MetadataDescriptor;
+import org.jaudiotagger.tag.asf.AbstractAsfTagImageField;
+import org.jaudiotagger.tag.asf.AsfFieldKey;
 
 /**
  * This field represents the image content of the banner image which is stored
@@ -11,7 +13,8 @@ import org.jaudiotagger.audio.asf.data.MetadataDescriptor;
  * 
  * @author Christian Laireiter
  */
-public class AsfTagBannerField extends AbstractAsfTagImageField {
+public class AsfTagBannerField extends AbstractAsfTagImageField
+{
 
     /**
      * Creates an instance with no image data.<br>

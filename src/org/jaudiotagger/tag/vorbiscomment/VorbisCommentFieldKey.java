@@ -101,6 +101,11 @@ public enum VorbisCommentFieldKey
         this.taggers = taggers;
     }
 
+    public String getFieldName()
+    {
+        return fieldName;
+    }
+
     /**
      * List of taggers using this field, concentrates primarily on the original tagger to start using a field.
      * Tagger.XIPH means the field is either part  of the Vorbis Standard or a Vorbis proposed extension to the

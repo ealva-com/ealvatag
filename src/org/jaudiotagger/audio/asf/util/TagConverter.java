@@ -19,9 +19,9 @@
 package org.jaudiotagger.audio.asf.util;
 
 import org.jaudiotagger.audio.asf.data.*;
-import org.jaudiotagger.audio.asf.tag.*;
 import org.jaudiotagger.tag.FieldKey;
 import org.jaudiotagger.tag.Tag;
+import org.jaudiotagger.tag.asf.*;
 import org.jaudiotagger.tag.reference.GenreTypes;
 
 import java.util.Iterator;

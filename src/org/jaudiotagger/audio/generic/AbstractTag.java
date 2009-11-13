@@ -253,6 +253,7 @@ public abstract class AbstractTag implements Tag
         setField(tagfield);
     }
 
+    
 
      /**
      * Create new field and add it to the tag

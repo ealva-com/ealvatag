@@ -963,7 +963,7 @@ public class M4aReadTagTest extends TestCase
             assertEquals("AApr", tag.getFirstField(Mp4NonStandardFieldKey.AAPR.getFieldName()).getId());
             //Make a change and save
             tag.setField(FieldKey.TITLE,"NEWTITLE\u00A9\u01ff");      //test UTF8 encoding
-            tag.setField(tag.createTagField(Mp4FieldKey.CONTENT_TYPE, Mp4ContentTypeValue.TV_SHOW.getIdAsString()));
+            tag.setField(tag.createField(Mp4FieldKey.CONTENT_TYPE, Mp4ContentTypeValue.TV_SHOW.getIdAsString()));
             f.commit();
 
             f = AudioFileIO.read(testFile);

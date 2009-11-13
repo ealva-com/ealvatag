@@ -112,7 +112,9 @@ public class VorbisCommentTagField implements TagTextField
      */
     private void checkCommon()
     {
-        this.common = id.equals(TITLE.name()) || id.equals(ALBUM.name()) || id.equals(ARTIST.name()) || id.equals(GENRE.name()) || id.equals(TRACKNUMBER.name()) || id.equals(DATE.name()) || id.equals(DESCRIPTION.name()) || id.equals(COMMENT.name());
+        this.common = id.equals(TITLE.getFieldName()) || id.equals(ALBUM.getFieldName()) || id.equals(ARTIST.getFieldName())
+                || id.equals(GENRE.getFieldName()) || id.equals(TRACKNUMBER.getFieldName()) || id.equals(DATE.getFieldName())
+        || id.equals(DESCRIPTION.getFieldName()) || id.equals(COMMENT.getFieldName());
 
     }
 

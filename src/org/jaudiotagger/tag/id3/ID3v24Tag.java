@@ -1136,41 +1136,6 @@ public class ID3v24Tag extends AbstractID3v2Tag
         return unsynchronization;
     }
 
-    protected String getArtistId()
-    {
-        return ID3v24Frames.FRAME_ID_ARTIST;
-    }
-
-    protected String getAlbumId()
-    {
-        return ID3v24Frames.FRAME_ID_ALBUM;
-    }
-
-    protected String getTitleId()
-    {
-        return ID3v24Frames.FRAME_ID_TITLE;
-    }
-
-    protected String getTrackId()
-    {
-        return ID3v24Frames.FRAME_ID_TRACK;
-    }
-
-    protected String getYearId()
-    {
-        return ID3v24Frames.FRAME_ID_YEAR;
-    }
-
-    protected String getCommentId()
-    {
-        return ID3v24Frames.FRAME_ID_COMMENT;
-    }
-
-    protected String getGenreId()
-    {
-        return ID3v24Frames.FRAME_ID_GENRE;
-    }
-
     /**
      * Create a new frame with the specified frameid
      *
@@ -1195,7 +1160,7 @@ public class ID3v24Tag extends AbstractID3v2Tag
      * @throws KeyNotFoundException
      * @throws FieldDataInvalidException
      */
-    public TagField createTagField(ID3v24FieldKey id3Key, String value) throws KeyNotFoundException, FieldDataInvalidException
+    public TagField createField(ID3v24FieldKey id3Key, String value) throws KeyNotFoundException, FieldDataInvalidException
     {
         if (id3Key == null)
         {
@@ -1252,7 +1217,7 @@ public class ID3v24Tag extends AbstractID3v2Tag
      * @param id3v24FieldKey
      * @throws org.jaudiotagger.tag.KeyNotFoundException
      */
-    public void deleteTagField(ID3v24FieldKey id3v24FieldKey) throws KeyNotFoundException
+    public void deleteField(ID3v24FieldKey id3v24FieldKey) throws KeyNotFoundException
     {
         if (id3v24FieldKey == null)
         {

@@ -71,9 +71,9 @@ public class VorbisWriteTagTest extends AbstractTestCase
             tag.setField(tag.createField(FieldKey.DISC_NO, "1"));
             tag.setField(tag.createField(FieldKey.COMPOSER, "composer\u00A9"));
             tag.setField(tag.createField(FieldKey.ARTIST_SORT, "Sortartist\u01ff"));
-            tag.setField(tag.createField(FieldKey.LYRICS, "lyrics"));
-            tag.setField(tag.createField(FieldKey.BPM, "200"));
-            tag.setField(tag.createField(FieldKey.ALBUM_ARTIST, "Albumartist"));
+            tag.setField(FieldKey.LYRICS, "lyrics");
+            tag.setField(FieldKey.BPM, "200");
+            tag.setField(FieldKey.ALBUM_ARTIST, "Albumartist");
             tag.setField(tag.createField(FieldKey.ALBUM_ARTIST_SORT, "Sortalbumartist"));
             tag.setField(tag.createField(FieldKey.ALBUM_SORT, "Sortalbum"));
             tag.setField(tag.createField(FieldKey.GROUPING, "GROUping"));
@@ -97,7 +97,7 @@ public class VorbisWriteTagTest extends AbstractTestCase
 
 
             //Vorbis Only keys
-            tag.setField(((VorbisCommentTag) tag).createTagField(VorbisCommentFieldKey.DESCRIPTION, "description"));
+            tag.setField(((VorbisCommentTag) tag).createField(VorbisCommentFieldKey.DESCRIPTION, "description"));
 
             //tag.setField(tag.createField(FieldKey.ENCODER,"encoder"));
             tag.setVendor("encoder");
@@ -109,11 +109,11 @@ public class VorbisWriteTagTest extends AbstractTestCase
             imageFile.read(imagedata);
             char[] testdata = Base64Coder.encode(imagedata);
             String base64image = new String(testdata);
-            tag.setField(((VorbisCommentTag) tag).createTagField(VorbisCommentFieldKey.COVERART, base64image));
-            tag.setField(((VorbisCommentTag) tag).createTagField(VorbisCommentFieldKey.COVERARTMIME, "image/png"));
+            tag.setField(tag.createField(VorbisCommentFieldKey.COVERART, base64image));
+            tag.setField(tag.createField(VorbisCommentFieldKey.COVERARTMIME, "image/png"));
 
             //key not known to jaudiotagger
-            tag.setField(((VorbisCommentTag) tag).createTagField("VOLINIST", "Sarah Curtis"));
+            tag.setField("VOLINIST", "Sarah Curtis");
 
             f.commit();
 
@@ -257,8 +257,8 @@ public class VorbisWriteTagTest extends AbstractTestCase
             imageFile.read(imagedata);
             char[] testdata = Base64Coder.encode(imagedata);
             String base64image = new String(testdata);
-            tag.setField(tag.createTagField(VorbisCommentFieldKey.COVERART, base64image));
-            tag.setField(tag.createTagField(VorbisCommentFieldKey.COVERARTMIME, "image/png"));
+            tag.setField(tag.createField(VorbisCommentFieldKey.COVERART, base64image));
+            tag.setField(tag.createField(VorbisCommentFieldKey.COVERARTMIME, "image/png"));
 
             //Save
             f.commit();
@@ -315,8 +315,8 @@ public class VorbisWriteTagTest extends AbstractTestCase
             {
                 sb.append("a");
             }
-            tag.setField(tag.createTagField(VorbisCommentFieldKey.COVERART, sb.toString()));
-            tag.setField(tag.createTagField(VorbisCommentFieldKey.COVERARTMIME, "image/png"));
+            tag.setField(tag.createField(VorbisCommentFieldKey.COVERART, sb.toString()));
+            tag.setField(tag.createField(VorbisCommentFieldKey.COVERARTMIME, "image/png"));
 
             //Save
             f.commit();
@@ -492,8 +492,8 @@ public class VorbisWriteTagTest extends AbstractTestCase
             imageFile.read(imagedata);
             char[] testdata = Base64Coder.encode(imagedata);
             String base64image = new String(testdata);
-            tag.setField(tag.createTagField(VorbisCommentFieldKey.COVERART, base64image));
-            tag.setField(tag.createTagField(VorbisCommentFieldKey.COVERARTMIME, "image/png"));
+            tag.setField(tag.createField(VorbisCommentFieldKey.COVERART, base64image));
+            tag.setField(tag.createField(VorbisCommentFieldKey.COVERARTMIME, "image/png"));
 
             //Save
             f.commit();
@@ -552,8 +552,8 @@ public class VorbisWriteTagTest extends AbstractTestCase
             {
                 sb.append("a");
             }
-            tag.setField(tag.createTagField(VorbisCommentFieldKey.COVERART, sb.toString()));
-            tag.setField(tag.createTagField(VorbisCommentFieldKey.COVERARTMIME, "image/png"));
+            tag.setField(tag.createField(VorbisCommentFieldKey.COVERART, sb.toString()));
+            tag.setField(tag.createField(VorbisCommentFieldKey.COVERARTMIME, "image/png"));
 
             //Save
             f.commit();
@@ -610,8 +610,8 @@ public class VorbisWriteTagTest extends AbstractTestCase
             VorbisCommentTag tag = (VorbisCommentTag) f.getTag();
 
             //Delete Large Image
-            tag.deleteTagField(VorbisCommentFieldKey.COVERART);
-            tag.deleteTagField(VorbisCommentFieldKey.COVERARTMIME);
+            tag.deleteField(VorbisCommentFieldKey.COVERART);
+            tag.deleteField(VorbisCommentFieldKey.COVERARTMIME);
 
             //Save
             f.commit();
@@ -664,8 +664,8 @@ public class VorbisWriteTagTest extends AbstractTestCase
             VorbisCommentTag tag = (VorbisCommentTag) f.getTag();
 
             //Delete Large Image
-            tag.deleteTagField(VorbisCommentFieldKey.COVERART);
-            tag.deleteTagField(VorbisCommentFieldKey.COVERARTMIME);
+            tag.deleteField(VorbisCommentFieldKey.COVERART);
+            tag.deleteField(VorbisCommentFieldKey.COVERARTMIME);
 
             //Save
             f.commit();
@@ -717,9 +717,9 @@ public class VorbisWriteTagTest extends AbstractTestCase
             VorbisCommentTag tag = (VorbisCommentTag) f.getTag();
 
             //Delete Large Image
-            tag.deleteTagField(VorbisCommentFieldKey.ARTIST);
-            tag.deleteTagField(VorbisCommentFieldKey.COVERART);
-            tag.deleteTagField(VorbisCommentFieldKey.COVERARTMIME);
+            tag.deleteField(VorbisCommentFieldKey.ARTIST);
+            tag.deleteField(VorbisCommentFieldKey.COVERART);
+            tag.deleteField(VorbisCommentFieldKey.COVERARTMIME);
 
             //Save
             f.commit();

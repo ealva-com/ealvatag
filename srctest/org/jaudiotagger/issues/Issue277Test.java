@@ -114,7 +114,7 @@ public class Issue277Test extends AbstractTestCase
             assertEquals(0,tag.get(Mp4FieldKey.RATING).size());
 
             //Old way
-            af.getTag().setField(tag.createTagField(Mp4FieldKey.RATING,"1"));
+            af.getTag().setField(tag.createField(Mp4FieldKey.RATING,"1"));
             af.commit();
             af = AudioFileIO.read(testFile);
             assertEquals(1,tag.get(Mp4FieldKey.RATING).size());
@@ -152,7 +152,7 @@ public class Issue277Test extends AbstractTestCase
             Mp4Tag tag = (Mp4Tag)af.getTag();
             assertEquals(0,tag.get(Mp4FieldKey.RATING).size());
 
-            af.getTag().setField(tag.createTagField(Mp4FieldKey.RATING,"true"));
+            af.getTag().setField(tag.createField(Mp4FieldKey.RATING,"true"));
 
 
         }

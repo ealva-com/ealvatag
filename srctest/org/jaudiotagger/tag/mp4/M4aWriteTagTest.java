@@ -2020,8 +2020,8 @@ public class M4aWriteTagTest extends TestCase
             assertEquals("SynthPop", tag.getFirst(Mp4FieldKey.GENRE_CUSTOM));
 
             //Delete fields and let lib decide what to do (has to use custom)
-            tag.deleteTagField(Mp4FieldKey.GENRE);
-            tag.deleteTagField(Mp4FieldKey.GENRE_CUSTOM);
+            tag.deleteField(Mp4FieldKey.GENRE);
+            tag.deleteField(Mp4FieldKey.GENRE_CUSTOM);
             tag.setField(tag.createField(FieldKey.GENRE, "SynthPop"));
 
             assertEquals("SynthPop", tag.getFirst(FieldKey.GENRE));
@@ -2032,8 +2032,8 @@ public class M4aWriteTagTest extends TestCase
             tag = (Mp4Tag) f.getTag();
 
             //Delete fields and let lib decide what to do (can use list)
-            tag.deleteTagField(Mp4FieldKey.GENRE);
-            tag.deleteTagField(Mp4FieldKey.GENRE_CUSTOM);
+            tag.deleteField(Mp4FieldKey.GENRE);
+            tag.deleteField(Mp4FieldKey.GENRE_CUSTOM);
             tag.setField(tag.createField(FieldKey.GENRE, "Tango"));
 
             assertEquals("Tango", tag.getFirst(FieldKey.GENRE));
@@ -2203,7 +2203,7 @@ public class M4aWriteTagTest extends TestCase
 
             tag.setField(FieldKey.TITLE,"Title");
             tag.setField(FieldKey.ALBUM,"Album");
-            tag.setField(tag.createTagField(Mp4FieldKey.CDDB_TRACKNUMBER, "1"));
+            tag.setField(tag.createField(Mp4FieldKey.CDDB_TRACKNUMBER, "1"));
             f.commit();
 
             //Reread changes
