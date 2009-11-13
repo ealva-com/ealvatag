@@ -5,9 +5,7 @@ import org.jaudiotagger.audio.mp3.MP3File;
 
 import java.io.File;
 
-/**
- * Test Writing to mp4 with top level free data atoms but free atoms and mdat are before ilst so not useful
- */
+
 public class Issue248Test extends AbstractTestCase
 {
     public static int countExceptions =0;
@@ -24,7 +22,7 @@ public class Issue248Test extends AbstractTestCase
                 {
                     try
                     {
-                         System.out.println("Output is"+mp3File.getMP3AudioHeader().getTrackLengthAsString());
+                         //System.out.println("Output is"+mp3File.getMP3AudioHeader().getTrackLengthAsString());
                     }
                     catch (RuntimeException e)
                     {
