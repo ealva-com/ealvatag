@@ -38,7 +38,7 @@ public class GenreTypes extends AbstractIntStringValuePair
 
     /**
      * @return the maximum genreId that is part of the official Standard, genres above this were added by
-     *         winamp later.
+     *         Winamp later.
      */
     public static int getMaxStandardGenreId()
     {
