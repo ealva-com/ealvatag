@@ -23,13 +23,7 @@ public class ItunesTest extends AbstractTestCase
     private static final String SECOND_VALUE = "test";
     private static final String EMPTY_VALUE = "";
 
-    /**
-     *
-     */
-    protected void setUp()
-    {
-        TagOptionSingleton.getInstance().setToDefault();
-    }
+    
 
     /**
      *
