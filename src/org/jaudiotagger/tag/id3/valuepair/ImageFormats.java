@@ -34,7 +34,9 @@ import java.util.Map;
  * Note only JPG and PNG are mentioned specifically in the ID3 v22 Spec but it only says 'Image Format is preferably
  * PNG or JPG' , not mandatory. In the jaudiotagger library we also consider GIF as a portable format, and we recognise
  * BMP,PDF and TIFF but do not consider these formats as portable.
+ *
  */
+//TODO identifying PICT, bit more difficult because in certain formats has an empty 512byte header
 public class ImageFormats
 {
     public static final String V22_JPG_FORMAT = "JPG";
@@ -43,6 +45,7 @@ public class ImageFormats
     public static final String V22_BMP_FORMAT = "BMP";
     public static final String V22_TIF_FORMAT = "TIF";
     public static final String V22_PDF_FORMAT = "PDF";
+    public static final String V22_PIC_FORMAT = "PIC";
 
 
     public static final String MIME_TYPE_JPEG = "image/jpeg";
@@ -51,6 +54,7 @@ public class ImageFormats
     public static final String MIME_TYPE_BMP  = "image/bmp";
     public static final String MIME_TYPE_TIFF = "image/tiff";
     public static final String MIME_TYPE_PDF  = "image/pdf";
+    public static final String MIME_TYPE_PICT = "image/x-pict";
 
     /**
      * Sometimes this is used for jpg instead :or have I made this up
@@ -68,6 +72,7 @@ public class ImageFormats
         imageFormatsToMimeType.put(V22_BMP_FORMAT, MIME_TYPE_BMP);
         imageFormatsToMimeType.put(V22_TIF_FORMAT, MIME_TYPE_TIFF);
         imageFormatsToMimeType.put(V22_PDF_FORMAT, MIME_TYPE_PDF);
+        imageFormatsToMimeType.put(V22_PIC_FORMAT, MIME_TYPE_PICT);
 
         String value;
         for (String key : imageFormatsToMimeType.keySet())
@@ -76,7 +81,7 @@ public class ImageFormats
             imageMimeTypeToFormat.put(value, key);
         }
 
-        //The mapping isnt one-one lets add other mimetypes
+        //The mapping isn't one-one lets add other mimetypes
         imageMimeTypeToFormat.put(MIME_TYPE_JPG, V22_JPG_FORMAT);
     }
 
