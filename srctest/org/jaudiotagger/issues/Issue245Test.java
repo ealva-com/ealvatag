@@ -9,6 +9,7 @@ import org.jaudiotagger.tag.Tag;
 import org.jaudiotagger.tag.datatype.Artwork;
 import org.jaudiotagger.tag.id3.ID3v22Tag;
 import org.jaudiotagger.tag.id3.ID3v24Tag;
+import org.jaudiotagger.tag.id3.valuepair.ImageFormats;
 
 import java.io.File;
 
@@ -37,6 +38,8 @@ public class Issue245Test extends AbstractTestCase
 
             //Now addField the image
             Artwork newartwork = Artwork.createArtworkFromFile(new File("testdata", "coverart.png"));
+            assertTrue(ImageFormats.isPortableFormat(newartwork.getBinaryData()));
+
             newartwork.setPictureType(5);
             tag.setField(newartwork);
             af.commit();
@@ -88,6 +91,8 @@ public class Issue245Test extends AbstractTestCase
 
                     //Now addField the image
                     Artwork newartwork = Artwork.createArtworkFromFile(new File("testdata", "coverart.png"));
+                    assertTrue(ImageFormats.isPortableFormat(newartwork.getBinaryData()));
+
                     newartwork.setPictureType(11);
                     tag.setField(newartwork);
                     af.commit();
@@ -139,6 +144,8 @@ public class Issue245Test extends AbstractTestCase
 
                     //Now addField the image
                     Artwork newartwork = Artwork.createArtworkFromFile(new File("testdata", "coverart.png"));
+                    assertTrue(ImageFormats.isPortableFormat(newartwork.getBinaryData()));
+
                     newartwork.setPictureType(5);
                     tag.setField(newartwork);
                     af.commit();
@@ -192,6 +199,7 @@ public class Issue245Test extends AbstractTestCase
             assertEquals(200, artwork.getImage().getWidth());
             //Now replace the image
             Artwork newartwork = Artwork.createArtworkFromFile(new File("testdata", "coverart.png"));
+            assertTrue(ImageFormats.isPortableFormat(newartwork.getBinaryData()));
             tag.setField(newartwork);
             af.commit();
             af = AudioFileIO.read(testFile);
@@ -244,6 +252,8 @@ public class Issue245Test extends AbstractTestCase
             assertEquals(3,artwork.getPictureType());
             //Now replace the image
             Artwork newartwork = Artwork.createArtworkFromFile(new File("testdata", "coverart.png"));
+            assertTrue(ImageFormats.isPortableFormat(newartwork.getBinaryData()));
+
             newartwork.setDescription("freddy");
             newartwork.setPictureType(7);
             tag.setField(newartwork);
@@ -300,6 +310,8 @@ public class Issue245Test extends AbstractTestCase
             assertEquals(3,artwork.getPictureType());
             //Now replace the image
             Artwork newartwork = Artwork.createArtworkFromFile(new File("testdata", "coverart.png"));
+            assertTrue(ImageFormats.isPortableFormat(newartwork.getBinaryData()));
+
             newartwork.setDescription("freddy");
             newartwork.setPictureType(8);
             tag.setField(newartwork);
@@ -356,6 +368,8 @@ public class Issue245Test extends AbstractTestCase
 
             //Now replace the image
             Artwork newartwork = Artwork.createArtworkFromFile(new File("testdata", "coverart.png"));
+            assertTrue(ImageFormats.isPortableFormat(newartwork.getBinaryData()));
+
             tag.setField(newartwork);
             af.commit();
             af = AudioFileIO.read(testFile);
@@ -418,6 +432,8 @@ public class Issue245Test extends AbstractTestCase
             //Now try and addField image
             AudioFile af = AudioFileIO.read(testFile);
             Artwork newartwork = Artwork.createArtworkFromFile(new File("testdata", "coverart.png"));
+            assertTrue(ImageFormats.isPortableFormat(newartwork.getBinaryData()));
+
             Tag tag = af.getTag();
             tag.setField(newartwork);
 
@@ -480,6 +496,8 @@ public class Issue245Test extends AbstractTestCase
             //Now try and addField image
             AudioFile af = AudioFileIO.read(testFile);
             Artwork newartwork = Artwork.createArtworkFromFile(new File("testdata", "coverart.png"));
+            assertTrue(ImageFormats.isPortableFormat(newartwork.getBinaryData()));
+
             Tag tag = af.getTag();
             tag.setField(newartwork);
 

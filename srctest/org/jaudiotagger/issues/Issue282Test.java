@@ -4,6 +4,7 @@ import org.jaudiotagger.AbstractTestCase;
 import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.AudioFileIO;
 import org.jaudiotagger.tag.datatype.Artwork;
+import org.jaudiotagger.tag.id3.valuepair.ImageFormats;
 
 import java.io.File;
 
@@ -42,6 +43,7 @@ public class Issue282Test extends AbstractTestCase
 
             //Change File
             af.getTag().setField(Artwork.createArtworkFromFile(new File("testdata/coverart.jpg")));
+
             af.commit();
 
         }

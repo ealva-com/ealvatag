@@ -7,6 +7,7 @@ import org.jaudiotagger.audio.mp3.MPEGFrameHeader;
 import org.jaudiotagger.logging.Hex;
 import org.jaudiotagger.tag.TagOptionSingleton;
 import org.jaudiotagger.tag.datatype.Artwork;
+import org.jaudiotagger.tag.id3.valuepair.ImageFormats;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -46,6 +47,8 @@ public class Issue294Test extends AbstractTestCase
             assertEquals(1,af.getTag().getArtworkList().size());
             Artwork artwork = af.getTag().getFirstArtwork();
             assertEquals("image/jpeg",artwork.getMimeType());
+            assertTrue(ImageFormats.isPortableFormat(artwork.getBinaryData()));
+
 
             //Delete and commit
             //af.getTag().deleteArtworkField();

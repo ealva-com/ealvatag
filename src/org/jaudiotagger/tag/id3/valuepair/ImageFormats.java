@@ -27,28 +27,38 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Represents the image formats support by ID3, provides a mapping between the format field supported in ID3v22 and the
+ * Represents common image formats support by ID3 and provides a mapping between the format field supported in ID3v22 and the
  * mimetype field supported by ID3v23/ID3v24.
+ *
+ *
+ * Note only JPG and PNG are mentioned specifically in the ID3 v22 Spec but it only says 'Image Format is preferably
+ * PNG or JPG' , not mandatory. In the jaudiotagger library we also consider GIF as a portable format, and we recognise
+ * BMP,PDF and TIFF but do not consider these formats as portable.
  */
 public class ImageFormats
 {
     public static final String V22_JPG_FORMAT = "JPG";
     public static final String V22_PNG_FORMAT = "PNG";
     public static final String V22_GIF_FORMAT = "GIF";
-    public static final String V22_BMP_FORMAT = "COVERART_BMP";
+    public static final String V22_BMP_FORMAT = "BMP";
+    public static final String V22_TIF_FORMAT = "TIF";
+    public static final String V22_PDF_FORMAT = "PDF";
+
 
     public static final String MIME_TYPE_JPEG = "image/jpeg";
-    public static final String MIME_TYPE_PNG = "image/png";
-    public static final String MIME_TYPE_GIF = "image/gif";
-    public static final String MIME_TYPE_BMP = "image/bmp";
+    public static final String MIME_TYPE_PNG  = "image/png";
+    public static final String MIME_TYPE_GIF  = "image/gif";
+    public static final String MIME_TYPE_BMP  = "image/bmp";
+    public static final String MIME_TYPE_TIFF = "image/tiff";
+    public static final String MIME_TYPE_PDF  = "image/pdf";
 
     /**
      * Sometimes this is used for jpg instead :or have I made this up
      */
-    public static final String MIME_TYPE_JPG = "image/jpg";
+    public static final String MIME_TYPE_JPG  = "image/jpg";
 
     private static Map<String, String> imageFormatsToMimeType = new HashMap<String, String>();
-    private static Map<String, String> imageMimeTypeToFormat = new HashMap<String, String>();
+    private static Map<String, String> imageMimeTypeToFormat = new HashMap <String, String>();
 
     static
     {
@@ -56,6 +66,9 @@ public class ImageFormats
         imageFormatsToMimeType.put(V22_PNG_FORMAT, MIME_TYPE_PNG);
         imageFormatsToMimeType.put(V22_GIF_FORMAT, MIME_TYPE_GIF);
         imageFormatsToMimeType.put(V22_BMP_FORMAT, MIME_TYPE_BMP);
+        imageFormatsToMimeType.put(V22_TIF_FORMAT, MIME_TYPE_TIFF);
+        imageFormatsToMimeType.put(V22_PDF_FORMAT, MIME_TYPE_PDF);
+
         String value;
         for (String key : imageFormatsToMimeType.keySet())
         {
@@ -88,6 +101,8 @@ public class ImageFormats
     }
 
     /**
+     * Is this binary data a png image
+     *
      * @param data
      * @return true if binary data matches expected header for a png
      */
@@ -98,6 +113,8 @@ public class ImageFormats
     }
 
     /**
+     * Is this binary data a jpg image
+     *
      * @param data
      * @return true if binary data matches expected header for a jpg
      *
@@ -112,6 +129,8 @@ public class ImageFormats
     }
 
     /**
+     * Is this binary data a gif image
+     *
      * @param data
      * @return true if binary data matches expected header for a gif
      */
@@ -122,13 +141,57 @@ public class ImageFormats
     }
 
     /**
+     *
+     * Is this binary data a bmp image
+     *
      * @param data
      * @return true if binary data matches expected header for a bmp
      */
     public static boolean binaryDataIsBmpFormat(byte[] data)
     {
         //Read signature
-        return (0x42 == (data[0] & 0xff)) && (0x4d == (data[1] & 0xff)) && (0xf8 == (data[2] & 0xff));
+        return (0x42 == (data[0] & 0xff)) && (0x4d == (data[1] & 0xff));
+    }
+
+    /**
+     * Is this binary data a pdf image
+     *
+     * Details at http://en.wikipedia.org/wiki/Magic_number_%28programming%29
+     *
+     * @param data
+     * @return true if binary data matches expected header for a pdf
+     */
+    public static boolean binaryDataIsPdfFormat(byte[] data)
+    {
+        //Read signature
+        return (0x25 == (data[0] & 0xff)) && (0x50 == (data[1] & 0xff)) && (0x44 == (data[2] & 0xff)) && (0x46 == (data[3] & 0xff));
+    }
+
+    /**
+     * is this binary data a tiff image
+     *
+     * Details at http://en.wikipedia.org/wiki/Magic_number_%28programming%29
+     * @param data
+     * @return true if binary data matches expected header for a tiff
+     */
+    public static boolean binaryDataIsTiffFormat(byte[] data)
+    {
+        //Read signature Intel
+        return (
+                ((0x49 == (data[0] & 0xff)) && (0x49 == (data[1] & 0xff)) && (0x2a == (data[2] & 0xff)) && (0x00 == (data[3] & 0xff)))
+                ||
+                ((0x4d == (data[0] & 0xff)) && (0x4d == (data[1] & 0xff)) && (0x00 == (data[2] & 0xff)) && (0x2a == (data[3] & 0xff)))
+                );
+    }
+
+    /**
+     *
+     * @param data
+     * @return true if the image format is a portable format recognised across operating systems
+     */
+    public static boolean isPortableFormat(byte[] data)
+    {
+        return binaryDataIsPngFormat(data) ||  binaryDataIsJpgFormat(data) ||  binaryDataIsGifFormat(data);     
     }
 
     /**
@@ -153,6 +216,14 @@ public class ImageFormats
         else if(binaryDataIsBmpFormat(data))
         {
             return MIME_TYPE_BMP;
+        }
+        else if(binaryDataIsPdfFormat(data))
+        {
+            return MIME_TYPE_PDF;
+        }
+        else if(binaryDataIsTiffFormat(data))
+        {
+            return MIME_TYPE_TIFF;
         }
         else
         {
