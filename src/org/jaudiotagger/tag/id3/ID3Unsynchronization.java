@@ -115,6 +115,7 @@ public class ID3Unsynchronization
      * @param source a ByteBuffer to be unsynchronized
      * @return a synchronized representation of the source
      */
+    /*
     public static ByteBuffer synchronize(ByteBuffer source)
     {
         int bufferSize = source.limit();
@@ -140,6 +141,57 @@ public class ID3Unsynchronization
                 }
             }
         }
+        System.out.println("POWS"+oBAOS.toByteArray().length);
         return ByteBuffer.wrap(oBAOS.toByteArray());
+    }
+    */
+
+    /**
+     * Synchronize an array of bytes, this should only be called if it has been determined the tag is unsynchronised
+     * <p/>
+     * Any patterns of the form $FF $00 should be replaced by $FF
+     *
+     * @param source a ByteBuffer to be unsynchronized
+     * @return a synchronized representation of the source
+     */
+    public static ByteBuffer synchronize(ByteBuffer source)
+    {
+        int bufferSize = source.limit();
+        ByteBuffer output = ByteBuffer.allocate(bufferSize);
+        int position = 0;
+        int offset   = 0;
+        int length   = 0;
+        while (position < bufferSize)
+        {
+            int byteValue = source.get();
+            position++;
+            length++;
+            if ((byteValue & MPEGFrameHeader.SYNC_BYTE1) == MPEGFrameHeader.SYNC_BYTE1)
+            {
+                // we are skipping if $00 byte but check not an end of stream
+                if (position < bufferSize)
+                {
+                    int unsyncByteValue = source.get();
+                    position++;
+                    //If this is null byte, then write upto this point
+                    if (unsyncByteValue == 0)
+                    {
+                        output.put(source.array(),source.arrayOffset() + offset,length);
+                        offset=position;
+                        length=0;
+                    }
+                    else
+                    {
+                        length++;
+                    }
+                }
+            }
+        }
+        if(length>0)
+        {
+            output.put(source.array(),source.arrayOffset() + offset,length);
+        }
+        output.flip();
+        return output;
     }
 }

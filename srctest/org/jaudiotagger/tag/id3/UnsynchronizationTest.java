@@ -14,6 +14,7 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.util.Date;
 
 /**
  * Test Itunes problems
@@ -192,19 +193,25 @@ public class UnsynchronizationTest extends AbstractTestCase
             af.commit();
 
             //Now read back ok
+            Date start = new Date();
             af = AudioFileIO.read(testFile2);
             notSyncedTag = af.getTag();
             v23TagNotsynced = (ID3v23Tag)notSyncedTag;
             assertEquals(1,notSyncedTag.getArtworkList().size());
             artworkNotsynced = notSyncedTag.getArtworkList().get(0);
+            Date end = new Date();
+            System.out.println("NOTSYNCED:"+(end.getTime() - start.getTime()));
 
             //Now read back ok
+            start = new Date();
             af = AudioFileIO.read(testFile);
             unsyncedTag = af.getTag();
             v23TagUnsynced = (ID3v23Tag)unsyncedTag;
             assertTrue(v23TagUnsynced.isUnsynchronization());
             assertEquals(1,unsyncedTag.getArtworkList().size());
             artworkUnsynced = unsyncedTag.getArtworkList().get(0);
+            end = new Date();
+            System.out.println("UNSYNCED:"+(end.getTime() - start.getTime()));
 
             int count=0;
             assertEquals(114425, artworkUnsynced.getBinaryData().length);
@@ -214,7 +221,7 @@ public class UnsynchronizationTest extends AbstractTestCase
             boolean matches = true;
             for(int i=0;i< artworkUnsynced.getBinaryData().length;i++)
             {
-           if((artworkUnsynced.getBinaryData()[i])!=(artworkNotsynced.getBinaryData()[i]))
+                if((artworkUnsynced.getBinaryData()[i])!=(artworkNotsynced.getBinaryData()[i]))
                 {
                     System.out.println(i+":"+ Hex.asHex(artworkNotsynced.getBinaryData()[i])+":"+Hex.asHex(artworkUnsynced.getBinaryData()[i]));
                     matches=false;
@@ -232,4 +239,6 @@ public class UnsynchronizationTest extends AbstractTestCase
         }
         assertNull(exceptionCaught);
     }
+
+
 }
