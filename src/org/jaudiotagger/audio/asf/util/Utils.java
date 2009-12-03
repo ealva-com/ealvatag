@@ -30,6 +30,7 @@ import java.math.BigInteger;
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
 
 /**
@@ -39,6 +40,7 @@ import java.util.GregorianCalendar;
  */
 public class Utils {
 
+    public static final long DIFF_BETWEEN_ASF_DATE_AND_JAVA_DATE = 11644470000000l;
     /**
      * Stores the default line separator of the current underlying system.
      */
@@ -47,7 +49,7 @@ public class Utils {
     /**
      * 
      */
-    public static final int MAXIMUM_STRING_LENGTH_ALLOWED = 32766;
+    private static final int MAXIMUM_STRING_LENGTH_ALLOWED = 32766;
 
     /**
      * This method checks given string will not exceed limit in bytes[] when
@@ -72,7 +74,7 @@ public class Utils {
 
     /**
      * 
-     * @param value
+     * @param value String to check for null
      * @return true unless string is too long
      */
     public static boolean isStringLengthValidNullSafe(String value) {
@@ -190,6 +192,8 @@ public class Utils {
      *            Time in 100ns since 1 jan 1601
      * @return Calendar holding the date representation.
      */
+    /* Old method that ran very slowely and doesnt logical correct, how does dividing something
+      at 10-4 by 10,000 convert it to 10 -3
     public static GregorianCalendar getDateOf(final BigInteger fileTime) {
         final GregorianCalendar result = new GregorianCalendar(1601, 0, 1);
         // lose anything beyond milliseconds, because calendar can't handle
@@ -204,6 +208,25 @@ public class Utils {
         result.add(Calendar.MILLISECOND, time.intValue());
         return result;
     }
+    */
+
+    /**
+     * Date values in ASF files are given in 100 ns (10 exp -4) steps since first
+     *
+     * @param fileTime
+     *            Time in 100ns since 1 jan 1601
+     * @return Calendar holding the date representation.
+     */
+    public static GregorianCalendar getDateOf(final BigInteger fileTime) {
+        final GregorianCalendar result = new GregorianCalendar();
+
+        // Divide by 10 to convert from -4 to -3 (millisecs)
+        BigInteger time = fileTime.divide(new BigInteger("10"));
+        // Construct Date taking into the diff between 1601 and 1970
+        Date date = new Date(time.longValue() - DIFF_BETWEEN_ASF_DATE_AND_JAVA_DATE);
+        result.setTime(date);
+        return result;
+    }
 
     /**
      * Tests if the given string is <code>null</code> or just contains
@@ -214,13 +237,19 @@ public class Utils {
      * @return see description.
      */
     public static boolean isBlank(String toTest) {
-        boolean result = true;
-        if (toTest != null) {
-            for (int i = 0; result && i < toTest.length(); i++) {
-                result &= Character.isWhitespace(toTest.charAt(i));
+        if (toTest == null)
+        {
+            return true;
+        }
+
+        for (int i = 0; i < toTest.length(); i++)
+        {
+            if(!Character.isWhitespace(toTest.charAt(i)))
+            {
+                return false;
             }
         }
-        return result;
+        return true;
     }
 
     /**
@@ -230,7 +259,7 @@ public class Utils {
      * @param stream
      *            stream to readm from.
      * @return a BigInteger which represents the read 8 bytes value.
-     * @throws IOException
+     * @throws IOException if problem reading bytes
      */
     public static BigInteger readBig64(InputStream stream) throws IOException {
         byte[] bytes = new byte[8];
@@ -243,8 +272,7 @@ public class Utils {
         for (int i = 0; i < bytes.length; i++) {
             oa[7 - i] = bytes[i];
         }
-        BigInteger result = new BigInteger(oa);
-        return result;
+        return new BigInteger(oa);
     }
 
     /**
