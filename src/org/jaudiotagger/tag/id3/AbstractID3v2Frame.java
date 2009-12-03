@@ -191,12 +191,13 @@ public abstract class AbstractID3v2Frame extends AbstractTagFrame implements Tag
      * Read the frame body from the specified file via the buffer
      *
      * @param identifier the frame identifier
-     * @param byteBuffer to read the frabe body from
+     * @param byteBuffer to read the frame body from
      * @param frameSize
      * @return a newly created FrameBody
      * @throws InvalidFrameException unable to construct a framebody from the data
      */
     @SuppressWarnings("unchecked")
+    //TODO using reflection is rather slow perhaps we should change this
     protected AbstractID3v2FrameBody readBody(String identifier, ByteBuffer byteBuffer, int frameSize) throws InvalidFrameException
     {
         //Use reflection to map id to frame body, which makes things much easier
@@ -290,6 +291,7 @@ public abstract class AbstractID3v2Frame extends AbstractTagFrame implements Tag
      * @throws InvalidFrameException if unable to construct a framebody for the identifier and body provided.
      */
     @SuppressWarnings("unchecked")
+    //TODO using reflection is rather slow perhaps we should change this
     protected AbstractID3v2FrameBody readBody(String identifier, AbstractID3v2FrameBody body) throws InvalidFrameException
     {
         /* Use reflection to map id to frame body, which makes things much easier

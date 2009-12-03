@@ -143,6 +143,9 @@ public abstract class AbstractID3v2FrameBody extends AbstractTagFrameBody
      * @param byteBuffer file to read
      * @throws InvalidFrameException if unable to construct a framebody from the ByteBuffer
      */
+    //TODO why don't we just slice byteBuffer, set limit to size and convert readByteArray to take a ByteBuffer
+    //then we wouldn't have to temporary allocate space for the buffer, using alot of needless memory
+    //and providing extra work for the grabage collector.
     public void read(ByteBuffer byteBuffer) throws InvalidTagException
     {
         int size = getSize();
@@ -158,8 +161,8 @@ public abstract class AbstractID3v2FrameBody extends AbstractTagFrameBody
         int offset = 0;
 
         //Go through the ObjectList of the Frame reading the data into the
-        //correct datatype.
         for (AbstractDataType object : objectList)
+        //correct datatype.
         {
             logger.finest("offset:" + offset);
 
