@@ -29,6 +29,7 @@ import org.jaudiotagger.tag.id3.AbstractTagFrameBody;
 import org.jaudiotagger.tag.id3.valuepair.*;
 import org.jaudiotagger.tag.reference.GenreTypes;
 import org.jaudiotagger.tag.reference.PictureTypes;
+import org.jaudiotagger.utils.EqualsUtil;
 
 import java.util.Iterator;
 import java.util.Map;
@@ -181,49 +182,23 @@ public class NumberHashMap extends NumberFixedLength implements HashMapInterface
      */
     public boolean equals(Object obj)
     {
+        if(obj==this)
+        {
+            return true;
+        }
+        
         if (!(obj instanceof NumberHashMap))
         {
             return false;
         }
 
-        NumberHashMap object = (NumberHashMap) obj;
+        NumberHashMap that = (NumberHashMap) obj;
 
-        if (this.hasEmptyValue != object.hasEmptyValue)
-        {
-            return false;
-        }
-
-        if (this.keyToValue == null)
-        {
-            if (object.keyToValue != null)
-            {
-                return false;
-            }
-        }
-        else
-        {
-            if (!this.keyToValue.equals(object.keyToValue))
-            {
-                return false;
-            }
-        }
-
-        if (this.valueToKey == null)
-        {
-            if (object.valueToKey != null)
-            {
-                return false;
-            }
-        }
-        else
-        {
-            if (!this.valueToKey.equals(object.valueToKey))
-            {
-                return false;
-            }
-        }
-
-        return super.equals(obj);
+        return
+              EqualsUtil.areEqual(hasEmptyValue, that.hasEmptyValue) &&
+              EqualsUtil.areEqual(keyToValue, that.keyToValue) &&
+              EqualsUtil.areEqual(valueToKey, that.valueToKey) &&
+              super.equals(that);
     }
 
     /**

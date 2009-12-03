@@ -49,6 +49,10 @@ public class TextEncodedStringSizeTerminated extends AbstractString
 
     public boolean equals(Object obj)
     {
+        if(this==obj)
+        {
+            return true;
+        }
         return obj instanceof TextEncodedStringSizeTerminated && super.equals(obj);
     }
 

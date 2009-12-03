@@ -131,6 +131,7 @@ public class ID3v22Frames extends ID3Frames
         supportedFrames.add(FRAME_ID_V2_BPM);
         supportedFrames.add(FRAME_ID_V2_COMMENT);
         supportedFrames.add(FRAME_ID_V2_COMPOSER);
+        supportedFrames.add(FRAME_ID_V2_ENCRYPTED_FRAME);
         supportedFrames.add(FRAME_ID_V2_CONDUCTOR);
         supportedFrames.add(FRAME_ID_V2_CONTENT_GROUP_DESC);
         supportedFrames.add(FRAME_ID_V2_COPYRIGHTINFO);

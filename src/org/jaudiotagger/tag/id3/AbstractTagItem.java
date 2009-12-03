@@ -27,6 +27,7 @@
 package org.jaudiotagger.tag.id3;
 
 import org.jaudiotagger.tag.TagException;
+import org.jaudiotagger.utils.EqualsUtil;
 
 import java.nio.ByteBuffer;
 import java.util.logging.Logger;
@@ -98,6 +99,7 @@ public abstract class AbstractTagItem
      */
     public boolean equals(Object obj)
     {
+        if ( this == obj ) return true;
         return obj instanceof AbstractTagItem;
     }
 }

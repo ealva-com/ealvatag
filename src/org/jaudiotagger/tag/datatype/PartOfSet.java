@@ -4,6 +4,7 @@ import org.jaudiotagger.tag.InvalidDataTypeException;
 import org.jaudiotagger.tag.TagOptionSingleton;
 import org.jaudiotagger.tag.id3.AbstractTagFrameBody;
 import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
+import org.jaudiotagger.utils.EqualsUtil;
 
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
@@ -42,7 +43,19 @@ public class PartOfSet extends AbstractString
 
     public boolean equals(Object obj)
     {
-        return obj instanceof PartOfSet && super.equals(obj);
+        if(obj==this)
+        {
+            return true;
+        }
+
+        if (!(obj instanceof PartOfSet))
+        {
+            return false;
+        }
+
+        PartOfSet that = (PartOfSet) obj;
+
+        return EqualsUtil.areEqual(value, that.value);
     }
 
     /**
@@ -323,6 +336,25 @@ public class PartOfSet extends AbstractString
                 }
             }
             return sb.toString();
+        }
+
+        public boolean equals(Object obj)
+        {
+            if(obj==this)
+            {
+                return true;
+            }
+
+            if (!(obj instanceof PartOfSetValue))
+            {
+                return false;
+            }
+
+            PartOfSetValue that = (PartOfSetValue) obj;
+
+            return
+                  EqualsUtil.areEqual(getCount(), that.getCount()) &&
+                  EqualsUtil.areEqual(getTotal(), that.getTotal());
         }
 
     }

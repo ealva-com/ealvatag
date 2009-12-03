@@ -23,6 +23,7 @@ import org.jaudiotagger.tag.*;
 import org.jaudiotagger.tag.datatype.Lyrics3Line;
 import org.jaudiotagger.tag.id3.framebody.*;
 import org.jaudiotagger.tag.lyrics3.*;
+import org.jaudiotagger.utils.EqualsUtil;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -312,7 +313,20 @@ public class ID3v24Frame extends AbstractID3v2Frame
      */
     public boolean equals(Object obj)
     {
-        return (obj instanceof ID3v24Frame) && super.equals(obj);
+
+        if ( this == obj ) return true;
+
+        if (!(obj instanceof ID3v24Frame))
+        {
+            return false;
+        }
+        ID3v24Frame that = (ID3v24Frame) obj;
+
+
+        return
+              EqualsUtil.areEqual(this.statusFlags, that.statusFlags) &&
+              EqualsUtil.areEqual(this.encodingFlags, that.encodingFlags) &&
+              super.equals(that);
     }
 
 
@@ -657,7 +671,7 @@ public class ID3v24Frame extends AbstractID3v2Frame
     /**
      * Get Status Flags Object
      */
-    protected AbstractID3v2Frame.StatusFlags getStatusFlags()
+    public AbstractID3v2Frame.StatusFlags getStatusFlags()
     {
         return statusFlags;
     }
@@ -665,7 +679,7 @@ public class ID3v24Frame extends AbstractID3v2Frame
     /**
      * Get Encoding Flags Object
      */
-    protected AbstractID3v2Frame.EncodingFlags getEncodingFlags()
+    public AbstractID3v2Frame.EncodingFlags getEncodingFlags()
     {
         return encodingFlags;
     }
@@ -771,6 +785,8 @@ public class ID3v24Frame extends AbstractID3v2Frame
             MP3File.getStructureFormatter().addElement(TYPE_READONLY, originalFlags & MASK_READ_ONLY);
             MP3File.getStructureFormatter().closeHeadingElement(TYPE_FLAGS);
         }
+
+
     }
 
     /**

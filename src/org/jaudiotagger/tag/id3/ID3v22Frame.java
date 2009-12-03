@@ -23,6 +23,7 @@ import org.jaudiotagger.tag.InvalidFrameIdentifierException;
 import org.jaudiotagger.tag.id3.framebody.AbstractID3v2FrameBody;
 import org.jaudiotagger.tag.id3.framebody.FrameBodyDeprecated;
 import org.jaudiotagger.tag.id3.framebody.FrameBodyUnsupported;
+import org.jaudiotagger.utils.EqualsUtil;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -62,6 +63,34 @@ public class ID3v22Frame extends AbstractID3v2Frame
         super(body);
     }
 
+     /**
+     * Compare for equality
+     * To be deemed equal obj must be a IDv23Frame with the same identifier
+     * and the same flags.
+     * containing the same body,datatype list ectera.
+     * equals() method is made up from all the various components
+     *
+     * @param obj
+     * @return if true if this object is equivalent to obj
+     */
+    public boolean equals(Object obj)
+    {
+        if ( this == obj ) return true;
+
+        if (!(obj instanceof ID3v22Frame))
+        {
+            return false;
+        }
+        ID3v22Frame that = (ID3v22Frame) obj;
+
+
+        return
+              EqualsUtil.areEqual(this.statusFlags, that.statusFlags) &&
+              EqualsUtil.areEqual(this.encodingFlags, that.encodingFlags) &&
+              super.equals(that);
+
+    }
+
     /**
      * Creates a new ID3v22 Frame of type identifier.
      * <p/>
@@ -85,10 +114,14 @@ public class ID3v22Frame extends AbstractID3v2Frame
             {
                 //Do not convert
             }
+            else if(bodyIdentifier.equals("CRM"))
+            {
+                //Do not convert.
+                //TODO we don't have a way of converting this to v23 which is why its not in the ForceMap
+            }
             //TODO Improve messy fix for datetime
             //TODO need to check in case v22 body does exist before using V23 body(e.g PIC)
-            else
-            if ((bodyIdentifier.equals(ID3v22Frames.FRAME_ID_V2_TYER)) || (bodyIdentifier.equals(ID3v22Frames.FRAME_ID_V2_TIME)))
+            else if ((bodyIdentifier.equals(ID3v22Frames.FRAME_ID_V2_TYER)) || (bodyIdentifier.equals(ID3v22Frames.FRAME_ID_V2_TIME)))
             {
                 bodyIdentifier = ID3v24Frames.FRAME_ID_YEAR;
             }

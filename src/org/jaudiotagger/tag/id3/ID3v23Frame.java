@@ -25,6 +25,7 @@ import org.jaudiotagger.tag.id3.framebody.AbstractID3v2FrameBody;
 import org.jaudiotagger.tag.id3.framebody.FrameBodyDeprecated;
 import org.jaudiotagger.tag.id3.framebody.FrameBodyUnsupported;
 import org.jaudiotagger.tag.id3.framebody.ID3v23FrameBody;
+import org.jaudiotagger.utils.EqualsUtil;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -282,16 +283,20 @@ public class ID3v23Frame extends AbstractID3v2Frame
      */
     public boolean equals(Object obj)
     {
+        if ( this == obj ) return true;
+
         if (!(obj instanceof ID3v23Frame))
         {
             return false;
         }
-        ID3v23Frame object = (ID3v23Frame) obj;
-        if (this.statusFlags.getOriginalFlags() != object.statusFlags.getOriginalFlags())
-        {
-            return false;
-        }
-        return this.encodingFlags.getFlags() == object.encodingFlags.getFlags() && super.equals(obj);
+        ID3v23Frame that = (ID3v23Frame) obj;
+
+
+        return
+              EqualsUtil.areEqual(this.statusFlags, that.statusFlags) &&
+              EqualsUtil.areEqual(this.encodingFlags, that.encodingFlags) &&
+              super.equals(that);
+
     }
 
     /**
@@ -513,12 +518,12 @@ public class ID3v23Frame extends AbstractID3v2Frame
 
     }
 
-    protected AbstractID3v2Frame.StatusFlags getStatusFlags()
+    public AbstractID3v2Frame.StatusFlags getStatusFlags()
     {
         return statusFlags;
     }
 
-    protected AbstractID3v2Frame.EncodingFlags getEncodingFlags()
+    public AbstractID3v2Frame.EncodingFlags getEncodingFlags()
     {
         return encodingFlags;
     }

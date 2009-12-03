@@ -2,6 +2,7 @@ package org.jaudiotagger.tag.datatype;
 
 import org.jaudiotagger.tag.InvalidDataTypeException;
 import org.jaudiotagger.tag.id3.AbstractTagFrameBody;
+import org.jaudiotagger.utils.EqualsUtil;
 
 /**
  * Represents a datatype that allow multiple Strings but they should be paired, i.e should be 2,4,6.. Strings
@@ -25,6 +26,23 @@ public class PairedTextEncodedStringNullTerminated extends MultipleTextEncodedSt
     public PairedTextEncodedStringNullTerminated(PairedTextEncodedStringNullTerminated object)
     {
         super(object);        
+    }
+
+    public boolean equals(Object obj)
+    {
+        if(obj==this)
+        {
+            return true;
+        }
+
+        if (!(obj instanceof PairedTextEncodedStringNullTerminated))
+        {
+            return false;
+        }
+
+        PairedTextEncodedStringNullTerminated that = (PairedTextEncodedStringNullTerminated) obj;
+
+        return EqualsUtil.areEqual(value, that.value);
     }
 
     /**
@@ -64,6 +82,24 @@ public class PairedTextEncodedStringNullTerminated extends MultipleTextEncodedSt
                 return this.getNumberOfValues() / 2;
             }
             return 0;
+        }
+
+        public boolean equals(Object obj)
+        {
+            if(obj==this)
+            {
+                return true;
+            }
+
+            if (!(obj instanceof  ValuePairs))
+            {
+                return false;
+            }
+
+            ValuePairs that = ( ValuePairs) obj;
+
+            return
+                  EqualsUtil.areEqual(getNumberOfValues(), that.getNumberOfValues());
         }
     }
 

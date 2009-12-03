@@ -26,6 +26,8 @@
  */
 package org.jaudiotagger.tag.id3;
 
+import org.jaudiotagger.utils.EqualsUtil;
+
 /**
  * A frame contains meta-information of a particular type. A frame contains a header and a body
  */
@@ -114,19 +116,17 @@ public abstract class AbstractTagFrame extends AbstractTagItem
      */
     public boolean equals(Object obj)
     {
+        if ( this == obj ) return true;
         if (!(obj instanceof AbstractTagFrame))
         {
             return false;
         }
 
-        AbstractTagFrame object = (AbstractTagFrame) obj;
-
-        if (!this.getIdentifier().equals(object.getIdentifier()))
-        {
-            return false;
-        }
-
-        return this.frameBody.equals(object.frameBody) && super.equals(obj);
+        AbstractTagFrame that = (AbstractTagFrame) obj;
+        return
+              EqualsUtil.areEqual(this.getIdentifier(), that.getIdentifier()) &&
+              EqualsUtil.areEqual(this.frameBody, that.frameBody) &&
+              super.equals(that);
 
     }
 }

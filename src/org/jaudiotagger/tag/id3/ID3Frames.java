@@ -91,6 +91,10 @@ public abstract class ID3Frames extends AbstractStringStringValuePair
         return supportedFrames.contains(frameID);
     }
 
+    public TreeSet<String> getSupportedFrames()
+    {
+        return supportedFrames;
+    }
     /**
      * @param frameID
      * @return true if frames with this id are considered common

@@ -22,6 +22,7 @@ import org.jaudiotagger.tag.TagField;
 import org.jaudiotagger.tag.TagOptionSingleton;
 import org.jaudiotagger.tag.id3.framebody.AbstractID3v2FrameBody;
 import org.jaudiotagger.tag.id3.framebody.FrameBodyUnsupported;
+import org.jaudiotagger.utils.EqualsUtil;
 
 import java.io.ByteArrayOutputStream;
 import java.lang.reflect.Constructor;
@@ -379,12 +380,12 @@ public abstract class AbstractID3v2Frame extends AbstractTagFrame implements Tag
         return false;
     }
 
-    protected StatusFlags getStatusFlags()
+    public StatusFlags getStatusFlags()
     {
         return statusFlags;
     }
 
-    protected EncodingFlags getEncodingFlags()
+    public EncodingFlags getEncodingFlags()
     {
         return encodingFlags;
     }
@@ -423,7 +424,22 @@ public abstract class AbstractID3v2Frame extends AbstractTagFrame implements Tag
         {
         }
 
+        public boolean equals(Object obj)
+        {
+            if ( this == obj ) return true;
 
+            if (!(obj instanceof StatusFlags))
+            {
+                return false;
+            }
+            StatusFlags that = (StatusFlags) obj;
+
+
+            return
+                  EqualsUtil.areEqual(this.getOriginalFlags(), that.getOriginalFlags()) &&
+                  EqualsUtil.areEqual(this.getWriteFlags(), that.getWriteFlags()) ;
+
+        }
     }
 
     class EncodingFlags
@@ -460,6 +476,21 @@ public abstract class AbstractID3v2Frame extends AbstractTagFrame implements Tag
         public void createStructure()
         {
         }
+
+        public boolean equals(Object obj)
+        {
+            if ( this == obj ) return true;
+
+            if (!(obj instanceof EncodingFlags))
+            {
+                return false;
+            }
+            EncodingFlags that = (EncodingFlags) obj;
+
+
+            return EqualsUtil.areEqual(this.getFlags(), that.getFlags());
+
+        }
     }
 
     /**
@@ -469,5 +500,17 @@ public abstract class AbstractID3v2Frame extends AbstractTagFrame implements Tag
     {
         MP3File.getStructureFormatter().openHeadingElement(TYPE_FRAME, getIdentifier());
         MP3File.getStructureFormatter().closeHeadingElement(TYPE_FRAME);
+    }
+
+    public boolean equals(Object obj)
+    {
+        if ( this == obj ) return true;
+        if (!(obj instanceof AbstractID3v2Frame))
+        {
+            return false;
+        }
+
+        AbstractID3v2Frame that = (AbstractID3v2Frame) obj;
+        return super.equals(that);
     }
 }

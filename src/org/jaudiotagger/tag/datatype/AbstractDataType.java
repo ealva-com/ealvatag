@@ -72,7 +72,7 @@ public abstract class AbstractDataType
     protected AbstractDataType(String identifier, AbstractTagFrameBody frameBody)
     {
         this.identifier = identifier;
-        this.frameBody = frameBody;
+        this.frameBody  = frameBody;
     }
 
     /**
@@ -85,7 +85,7 @@ public abstract class AbstractDataType
     protected AbstractDataType(String identifier, AbstractTagFrameBody frameBody, Object value)
     {
         this.identifier = identifier;
-        this.frameBody = frameBody;
+        this.frameBody  = frameBody;
         setValue(value);
     }
 
@@ -267,6 +267,11 @@ public abstract class AbstractDataType
      */
     public boolean equals(Object obj)
     {
+        if(this==obj)
+        {
+            return true;
+        }
+
         if (!(obj instanceof AbstractDataType))
         {
             return false;

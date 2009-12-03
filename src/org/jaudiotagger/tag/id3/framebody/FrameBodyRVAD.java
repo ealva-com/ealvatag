@@ -81,20 +81,6 @@ public class FrameBodyRVAD extends AbstractID3v2FrameBody implements ID3v23Frame
     }
 
     /**
-     * This method is not yet supported.
-     *
-     * @throws java.lang.UnsupportedOperationException
-     *          This method is not yet
-     *          supported
-     * @todo Implement this java.lang.Object method
-     */
-    public boolean equals(Object obj)
-    {
-        throw new java.lang.UnsupportedOperationException("Method equals() not yet implemented.");
-    }
-
-
-    /**
      * Setup the Object List. A byte Array which will be read upto frame size
      * bytes.
      */
