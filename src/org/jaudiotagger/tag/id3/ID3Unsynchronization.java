@@ -32,7 +32,7 @@ public class ID3Unsynchronization
         {
             if (((abySource[i] & MPEGFrameHeader.SYNC_BYTE1) == MPEGFrameHeader.SYNC_BYTE1) && ((abySource[i + 1] & MPEGFrameHeader.SYNC_BYTE2) == MPEGFrameHeader.SYNC_BYTE2))
             {
-                if(logger.isLoggable(Level.FINEST))
+                if (logger.isLoggable(Level.FINEST))
                 {
                     logger.finest("Unsynchronisation required found bit at:" + i);
                 }
@@ -57,7 +57,7 @@ public class ID3Unsynchronization
      */
     public static byte[] unsynchronize(byte[] abySource)
     {
-        ByteArrayInputStream   input = new ByteArrayInputStream(abySource);
+        ByteArrayInputStream input = new ByteArrayInputStream(abySource);
         ByteArrayOutputStream output = new ByteArrayOutputStream(abySource.length);
 
         int count = 0;
@@ -76,7 +76,7 @@ public class ID3Unsynchronization
                     if ((secondByte & MPEGFrameHeader.SYNC_BYTE2) == MPEGFrameHeader.SYNC_BYTE2)
                     {
                         // we need to unsynchronize here
-                        if(logger.isLoggable(Level.FINEST))
+                        if (logger.isLoggable(Level.FINEST))
                         {
                             logger.finest("Writing unsynchronisation bit at:" + count);
                         }
@@ -86,13 +86,13 @@ public class ID3Unsynchronization
                     else if (secondByte == 0)
                     {
                         // we need to unsynchronize here
-                        if(logger.isLoggable(Level.FINEST))
+                        if (logger.isLoggable(Level.FINEST))
                         {
                             logger.finest("Inserting zero unsynchronisation bit at:" + count);
                         }
                         output.write(0);
                     }
-                    input.reset();                     
+                    input.reset();
                 }
             }
         }
@@ -118,6 +118,8 @@ public class ID3Unsynchronization
     /*
     public static ByteBuffer synchronize(ByteBuffer source)
     {
+        long start = System.nanoTime();
+
         int bufferSize = source.limit();
         ByteArrayOutputStream oBAOS = new ByteArrayOutputStream(bufferSize);
         int position = 0;
@@ -141,8 +143,10 @@ public class ID3Unsynchronization
                 }
             }
         }
-        System.out.println("POWS"+oBAOS.toByteArray().length);
-        return ByteBuffer.wrap(oBAOS.toByteArray());
+        long time = System.nanoTime() - start;
+        ByteBuffer bb = ByteBuffer.wrap(oBAOS.toByteArray());
+        System.out.printf("Took %6.3f ms, was %d bytes, now %,d bytes%n", time/1e6, source.limit(), bb.limit());
+        return bb;
     }
     */
 
@@ -154,13 +158,16 @@ public class ID3Unsynchronization
      * @param source a ByteBuffer to be unsynchronized
      * @return a synchronized representation of the source
      */
+    /*
     public static ByteBuffer synchronize(ByteBuffer source)
     {
+        long start = System.nanoTime();
+
         int bufferSize = source.limit();
         ByteBuffer output = ByteBuffer.allocate(bufferSize);
         int position = 0;
-        int offset   = 0;
-        int length   = 0;
+        int offset = 0;
+        int length = 0;
         while (position < bufferSize)
         {
             int byteValue = source.get();
@@ -176,9 +183,9 @@ public class ID3Unsynchronization
                     //If this is null byte, then write upto this point
                     if (unsyncByteValue == 0)
                     {
-                        output.put(source.array(),source.arrayOffset() + offset,length);
-                        offset=position;
-                        length=0;
+                        output.put(source.array(), source.arrayOffset() + offset, length);
+                        offset = position;
+                        length = 0;
                     }
                     else
                     {
@@ -187,11 +194,46 @@ public class ID3Unsynchronization
                 }
             }
         }
-        if(length>0)
+        if (length > 0)
         {
-            output.put(source.array(),source.arrayOffset() + offset,length);
+            output.put(source.array(), source.arrayOffset() + offset, length);
         }
         output.flip();
+        long time = System.nanoTime() - start;
+        System.out.printf("Took %6.3f ms, was %d bytes, now %,d bytes%n", time/1e6, source.limit(), output.limit());
         return output;
     }
+    */
+
+    /**
+     * Synchronize an array of bytes, this should only be called if it has been determined the tag is unsynchronised
+     * <p/>
+     * Any patterns of the form $FF $00 should be replaced by $FF
+     *
+     * @param source a ByteBuffer to be unsynchronized
+     * @return a synchronized representation of the source
+     */
+
+    public static ByteBuffer synchronize(ByteBuffer source)
+    {
+        //long start = System.nanoTime();
+        
+        int len = source.remaining();
+        byte[] bytes = new byte[len + 1]; // an extra byte saves a check later.
+        source.get(bytes, 0, len);
+        int from = 0, to = 0;
+        boolean copy = true; // whether to copy the byte, if false, check the byte != 0.
+        while (from < len)
+        {
+            byte byteValue = bytes[from++];
+            if (copy || byteValue != 0) bytes[to++] = byteValue;
+            copy = ((byteValue & MPEGFrameHeader.SYNC_BYTE1) != MPEGFrameHeader.SYNC_BYTE1);
+        }
+
+        ByteBuffer bb2 = ByteBuffer.wrap(bytes, 0, to);
+        //long time = System.nanoTime() - start;
+        //System.out.printf("Took %6.3f ms, was %d bytes, now %,d bytes%n", time/1e6, source.limit(), bb2.limit());
+        return bb2;
+    }
+
 }

@@ -193,25 +193,27 @@ public class UnsynchronizationTest extends AbstractTestCase
             af.commit();
 
             //Now read back ok
-            Date start = new Date();
+            long start = System.nanoTime();
             af = AudioFileIO.read(testFile2);
+            long time = System.nanoTime() - start;
+            System.out.printf("NOTSYNCED Took %6.3f ms \n", time/1e6);
+
             notSyncedTag = af.getTag();
             v23TagNotsynced = (ID3v23Tag)notSyncedTag;
             assertEquals(1,notSyncedTag.getArtworkList().size());
             artworkNotsynced = notSyncedTag.getArtworkList().get(0);
-            Date end = new Date();
-            System.out.println("NOTSYNCED:"+(end.getTime() - start.getTime()));
-
+            
             //Now read back ok
-            start = new Date();
+            start = System.nanoTime();
             af = AudioFileIO.read(testFile);
+            time = System.nanoTime() - start;
+            System.out.printf("UNSYCNCED Took %6.3f ms \n", time/1e6);
+
             unsyncedTag = af.getTag();
             v23TagUnsynced = (ID3v23Tag)unsyncedTag;
             assertTrue(v23TagUnsynced.isUnsynchronization());
             assertEquals(1,unsyncedTag.getArtworkList().size());
             artworkUnsynced = unsyncedTag.getArtworkList().get(0);
-            end = new Date();
-            System.out.println("UNSYNCED:"+(end.getTime() - start.getTime()));
 
             int count=0;
             assertEquals(114425, artworkUnsynced.getBinaryData().length);
