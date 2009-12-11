@@ -39,6 +39,7 @@ public class FlacTagWriter
     // Logger Object
     public static Logger logger = Logger.getLogger("org.jaudiotagger.audio.flac");
 
+    private MetadataBlock       streamInfoBlock;
     private List<MetadataBlock> metadataBlockPadding = new ArrayList<MetadataBlock>(1);
     private List<MetadataBlock> metadataBlockApplication = new ArrayList<MetadataBlock>(1);
     private List<MetadataBlock> metadataBlockSeekTable = new ArrayList<MetadataBlock>(1);
@@ -78,6 +79,7 @@ public class FlacTagWriter
         logger.info("Writing tag");
 
         //Clean up old data
+        streamInfoBlock=null;
         metadataBlockPadding.clear();
         metadataBlockApplication.clear();
         metadataBlockSeekTable.clear();
@@ -101,6 +103,12 @@ public class FlacTagWriter
             MetadataBlockHeader mbh = MetadataBlockHeader.readHeader(raf);
             switch (mbh.getBlockType())
             {
+                case STREAMINFO:
+                {
+                    streamInfoBlock = new MetadataBlock(mbh,new MetadataBlockDataStreamInfo(mbh, raf));
+                    break;
+                }
+
                 case VORBIS_COMMENT:
                 case PADDING:
                 case PICTURE:
@@ -159,7 +167,11 @@ public class FlacTagWriter
         if ((availableRoom == neededRoom) || (availableRoom > neededRoom + MetadataBlockHeader.HEADER_LENGTH))
         {
             //Jump over Id3 (if exists) Flac and StreamInfoBlock
-            raf.seek(flacStream.getStartOfFlacInFile() + FlacStreamReader.FLAC_STREAM_IDENTIFIER_LENGTH + MetadataBlockHeader.HEADER_LENGTH + MetadataBlockDataStreamInfo.STREAM_INFO_DATA_LENGTH);
+            raf.seek(flacStream.getStartOfFlacInFile() + FlacStreamReader.FLAC_STREAM_IDENTIFIER_LENGTH);
+
+            //Write StreamInfo, we always write this first even if wasnt first in original spec
+            raf.write(streamInfoBlock.getHeader().getBytesWithoutIsLastBlockFlag());
+            raf.write(streamInfoBlock.getData().getBytes());
 
             //Write Application Blocks
             for (MetadataBlock aMetadataBlockApplication : metadataBlockApplication)

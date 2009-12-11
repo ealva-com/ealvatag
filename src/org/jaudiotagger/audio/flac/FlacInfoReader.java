@@ -77,7 +77,7 @@ public class FlacInfoReader
         }
 
         GenericAudioHeader info = new GenericAudioHeader();
-        info.setLength(mbdsi.getLength());
+        info.setLength(mbdsi.getSongLength());
         info.setPreciseLength(mbdsi.getPreciseLength());
         info.setChannelNumber(mbdsi.getChannelNumber());
         info.setSamplingRate(mbdsi.getSamplingRate());

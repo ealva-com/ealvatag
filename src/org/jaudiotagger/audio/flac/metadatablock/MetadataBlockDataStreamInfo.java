@@ -47,7 +47,7 @@ import java.util.logging.Logger;
  * NOTES
  * * FLAC specifies a minimum block size of 16 and a maximum block size of 65535, meaning the bit patterns corresponding to the numbers 0-15 in the minimum blocksize and maximum blocksize fields are invalid.
  */
-public class MetadataBlockDataStreamInfo
+public class MetadataBlockDataStreamInfo  implements MetadataBlockData
 {
     public static final int STREAM_INFO_DATA_LENGTH = 34;
 
@@ -55,12 +55,14 @@ public class MetadataBlockDataStreamInfo
     public static Logger logger = Logger.getLogger("org.jaudiotagger.audio.flac.MetadataBlockDataStreamInfo");
 
     private int minBlockSize, maxBlockSize, minFrameSize, maxFrameSize, samplingRate, samplingRatePerChannel, bitsPerSample, channelNumber, totalNumberOfSamples;
-    private float length;
+    private float songLength;
     private boolean isValid = true;
+
+    private ByteBuffer rawdata;
 
     public MetadataBlockDataStreamInfo(MetadataBlockHeader header, RandomAccessFile raf) throws IOException
     {
-        ByteBuffer rawdata = ByteBuffer.allocate(header.getDataLength());
+        rawdata = ByteBuffer.allocate(header.getDataLength());
         int bytesRead = raf.getChannel().read(rawdata);
         if (bytesRead < header.getDataLength())
         {
@@ -80,25 +82,39 @@ public class MetadataBlockDataStreamInfo
 
         totalNumberOfSamples = readTotalNumberOfSamples(rawdata.get(13), rawdata.get(14), rawdata.get(15), rawdata.get(16), rawdata.get(17));
 
-        length = (float) ((double) totalNumberOfSamples / samplingRate);
+        songLength = (float) ((double) totalNumberOfSamples / samplingRate);
         logger.info(this.toString());
     }
 
-    public String toString()
+    /**
+     * @return the rawdata as it will be written to file
+     */
+    public byte[] getBytes()
     {
-
-        return "MinBlockSize:" + minBlockSize + "MaxBlockSize:" + maxBlockSize + "MinFrameSize:" + minFrameSize + "MaxFrameSize:" + maxFrameSize + "SampleRateTotal:" + samplingRate + "SampleRatePerChannel:" + samplingRatePerChannel + ":Channel number:" + channelNumber + ":Bits per sample: " + bitsPerSample + ":TotalNumberOfSamples: " + totalNumberOfSamples + ":Length: " + length;
-
+        return rawdata.array();
     }
 
     public int getLength()
     {
-        return (int) length;
+        return getBytes().length;
+    }
+
+
+    public String toString()
+    {
+
+        return "MinBlockSize:" + minBlockSize + "MaxBlockSize:" + maxBlockSize + "MinFrameSize:" + minFrameSize + "MaxFrameSize:" + maxFrameSize + "SampleRateTotal:" + samplingRate + "SampleRatePerChannel:" + samplingRatePerChannel + ":Channel number:" + channelNumber + ":Bits per sample: " + bitsPerSample + ":TotalNumberOfSamples: " + totalNumberOfSamples + ":Length: " + songLength;
+
+    }
+
+    public int getSongLength()
+    {
+        return (int) songLength;
     }
 
     public float getPreciseLength()
     {
-        return length;
+        return songLength;
     }
 
     public int getChannelNumber()
