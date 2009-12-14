@@ -281,7 +281,7 @@ public interface Tag {
      * to the correct implementation key and return a TagField.
      * <p/>
      * It is not recommended to use this method for normal use of the
-     * audiolibrary, this is snot added to the structure
+     * audiolibrary, because this field is actually added to the structure
      *
      * @param genericKey is the generic key
      * @param value      to store
