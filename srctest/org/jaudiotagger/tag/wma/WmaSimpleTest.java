@@ -281,7 +281,7 @@ public class WmaSimpleTest extends AbstractTestCase
             tag.setField(FieldKey.ALBUM,"album2");
             tag.setField(FieldKey.TITLE,"tracktitle2");
             tag.setField(FieldKey.COMMENT,"comments2");
-            tag.setField(FieldKey.YEAR,"1972");
+            tag.addField(FieldKey.YEAR,"1972");
             tag.setField(FieldKey.GENRE,"genre2");
             tag.setField(FieldKey.TRACK,"4");
             tag.setCopyright("copyright");
@@ -291,8 +291,8 @@ public class WmaSimpleTest extends AbstractTestCase
             tag.setField(tag.createField(FieldKey.URL_DISCOGS_RELEASE_SITE,"http://www.discogs2.com"));
             tag.setField(tag.createField(FieldKey.URL_OFFICIAL_ARTIST_SITE,"http://www.discogs3.com"));
             tag.setField(tag.createField(FieldKey.URL_OFFICIAL_RELEASE_SITE,"http://www.discogs4.com"));
-            tag.setField(tag.createField(FieldKey.URL_WIKIPEDIA_ARTIST_SITE,"http://www.discogs5.com"));
-            tag.setField(tag.createField(FieldKey.URL_WIKIPEDIA_RELEASE_SITE,"http://www.discogs6.com"));
+            tag.addField(tag.createField(FieldKey.URL_WIKIPEDIA_ARTIST_SITE,"http://www.discogs5.com"));
+            tag.addField(tag.createField(FieldKey.URL_WIKIPEDIA_RELEASE_SITE,"http://www.discogs6.com"));
             tag.setField(tag.createField(FieldKey.DISC_TOTAL,"3"));
             tag.setField(tag.createField(FieldKey.TRACK_TOTAL,"11"));
 
