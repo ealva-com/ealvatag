@@ -316,20 +316,6 @@ public class Mp4Tag extends AbstractTag
     }
 
     /**
-     * Create discno field
-     *
-     * @param content can be any of the following
-     *                1
-     *                1/10
-     * @return
-     * @throws org.jaudiotagger.tag.FieldDataInvalidException
-     */
-    public TagField createDiscNoField(String content) throws FieldDataInvalidException
-    {
-        return new Mp4DiscNoField(content);
-    }
-
-    /**
      * Create artwork field
      *
      * @param data raw image data
