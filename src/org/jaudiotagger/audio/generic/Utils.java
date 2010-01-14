@@ -125,10 +125,10 @@ public class Utils
      */
     public static long getLongBE(ByteBuffer b, int start, int end)
     {
-        int number = 0;
+        long number = 0;
         for (int i = 0; i < (end - start + 1); i++)
         {
-            number += ((b.get(end - i) & 0xFF) << i * 8);
+            number += ((long)((b.get(end - i) & 0xFF)) << i * 8);
         }
 
         return number;
