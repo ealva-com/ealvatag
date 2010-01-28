@@ -25,6 +25,7 @@ import org.jaudiotagger.tag.datatype.AbstractIntStringValuePair;
 
 public class EventTimingTimestampTypes extends AbstractIntStringValuePair
 {
+
     private static EventTimingTimestampTypes eventTimingTimestampTypes;
 
     public static EventTimingTimestampTypes getInstanceOf()

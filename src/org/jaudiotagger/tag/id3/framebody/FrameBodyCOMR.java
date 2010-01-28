@@ -18,6 +18,7 @@ package org.jaudiotagger.tag.id3.framebody;
 import org.jaudiotagger.tag.InvalidTagException;
 import org.jaudiotagger.tag.datatype.*;
 import org.jaudiotagger.tag.id3.ID3v24Frames;
+import org.jaudiotagger.tag.id3.valuepair.ReceivedAsTypes;
 import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
 
 import java.io.ByteArrayOutputStream;
@@ -197,7 +198,7 @@ public class FrameBodyCOMR extends AbstractID3v2FrameBody implements ID3v24Frame
         objectList.add(new StringNullTerminated(DataTypes.OBJ_PRICE_STRING, this));
         objectList.add(new StringDate(DataTypes.OBJ_VALID_UNTIL, this));
         objectList.add(new StringNullTerminated(DataTypes.OBJ_CONTACT_URL, this));
-        objectList.add(new NumberHashMap(DataTypes.OBJ_RECIEVED_AS, this, 1));
+        objectList.add(new NumberHashMap(DataTypes.OBJ_RECIEVED_AS, this, ReceivedAsTypes.RECEIVED_AS_FIELD_SIZE));
         objectList.add(new TextEncodedStringNullTerminated(DataTypes.OBJ_SELLER_NAME, this));
         objectList.add(new TextEncodedStringNullTerminated(DataTypes.OBJ_DESCRIPTION, this));
         objectList.add(new StringNullTerminated(DataTypes.OBJ_MIME_TYPE, this));

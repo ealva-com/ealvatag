@@ -9,7 +9,8 @@ JAudiotagger is a JAVA API for audio metatagging. Both a common API and format s
  src                  :source code directory 
  srctest              :source code directory  
  www                  :java doc directory
- testdata             :test mp3 files for use by the junit tests
+ testdata             :test files for use by the junit tests, not all tests are included in the distribution because of copyright
+ target               :contains the jadiotagger***.jar built from maven
 
  Other files:
  pom.xml              :Maven build file
@@ -31,7 +32,11 @@ JAudiotagger is a JAVA API for audio metatagging. Both a common API and format s
  Build details:
 
  Install Maven2
- Run mvn package to compile and test
+ Run
+    mvn package
+ to compile and test
 
  Admin only
- Run mvn javanet:deploy-jar to upload to the java.nety maven repository
+ Run
+    mvn deploy
+ to upload to the java.net maven repository

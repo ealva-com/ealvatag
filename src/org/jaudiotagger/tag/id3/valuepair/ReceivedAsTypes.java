@@ -24,8 +24,15 @@ package org.jaudiotagger.tag.id3.valuepair;
 
 import org.jaudiotagger.tag.datatype.AbstractIntStringValuePair;
 
+/**
+ * Defines how song was purchased used by the COMR frame
+ * 
+ */
 public class ReceivedAsTypes extends AbstractIntStringValuePair
 {
+    //The number of bytes used to hold the text encoding field size
+    public static final int RECEIVED_AS_FIELD_SIZE = 1;
+
     private static ReceivedAsTypes receivedAsTypes;
 
     public static ReceivedAsTypes getInstanceOf()
