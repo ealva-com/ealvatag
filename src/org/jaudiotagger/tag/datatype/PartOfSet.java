@@ -281,7 +281,7 @@ public class PartOfSet extends AbstractString
 
         public String toString()
         {
-            //Dont Pad
+            //Don't Pad
             StringBuffer sb = new StringBuffer();
             if(!TagOptionSingleton.getInstance().isPadNumbers())
             {
