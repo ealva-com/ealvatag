@@ -30,3 +30,4 @@ test52.mp3,yes,271,ID3v22 tag with unsychronization flag set
 test53.mp3,yes,271,ID3v22 tag with unsychronization and compressed flag set
 test54.flac:no,274:Flac tag with possibly corrupt Vorbis Comment Tag
 test55.ogg,no,279,Ogg file with setup header on new ogg page instaead of immediatley after Comment header
+test74.mp3,yes,256,NullPointerException

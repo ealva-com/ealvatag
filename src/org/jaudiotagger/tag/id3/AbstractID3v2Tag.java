@@ -1673,30 +1673,45 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
         }
 
         FrameAndSubId frameAndSubId = getFrameAndSubIdFromGenericKey(genericKey);
-        if (genericKey == FieldKey.TRACK)
+
+        //Special Mappings for these fields because two generic fields map to different parts of the same frame
+        if(
+                (genericKey== FieldKey.TRACK)||
+                (genericKey== FieldKey.TRACK_TOTAL)||
+                (genericKey== FieldKey.DISC_NO)||
+                (genericKey== FieldKey.DISC_TOTAL)
+                )
         {
             AbstractID3v2Frame frame = getFirstField(frameAndSubId.getFrameId());
-            return String.valueOf(((FrameBodyTRCK)frame.getBody()).getTrackNo());
-        }
-        else if (genericKey == FieldKey.TRACK_TOTAL)
-        {
-            AbstractID3v2Frame frame = getFirstField(frameAndSubId.getFrameId());
-            return String.valueOf(((FrameBodyTRCK)frame.getBody()).getTrackTotal());
-        }
-        else if (genericKey == FieldKey.DISC_NO)
-        {
-            AbstractID3v2Frame frame = getFirstField(frameAndSubId.getFrameId());
-            return String.valueOf(((FrameBodyTPOS)frame.getBody()).getDiscNo());
-        }
-        else if (genericKey == FieldKey.DISC_TOTAL)
-        {
-            AbstractID3v2Frame frame = getFirstField(frameAndSubId.getFrameId());
-            return String.valueOf(((FrameBodyTPOS)frame.getBody()).getDiscTotal());
+            if(frame!=null)
+            {
+                if (genericKey == FieldKey.TRACK)
+                {
+                    return String.valueOf(((FrameBodyTRCK)frame.getBody()).getTrackNo());
+                }
+                else if (genericKey == FieldKey.TRACK_TOTAL)
+                {
+                    return String.valueOf(((FrameBodyTRCK)frame.getBody()).getTrackTotal());
+                }
+                else if (genericKey == FieldKey.DISC_NO)
+                {
+                    return String.valueOf(((FrameBodyTPOS)frame.getBody()).getDiscNo());
+                }
+                else if (genericKey == FieldKey.DISC_TOTAL)
+                {
+                    return String.valueOf(((FrameBodyTPOS)frame.getBody()).getDiscTotal());
+                }
+            }
+            else
+            {
+                return "";
+            }
         }
         else
         {
             return doGetFirst(frameAndSubId);
         }
+        return "";
     }
 
 
