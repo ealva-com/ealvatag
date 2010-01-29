@@ -237,9 +237,15 @@ public class TagOptionSingleton
     private boolean truncateTextWithoutErrors = false;
 
     /**
-     * Frames such as TRCK and TPOS sometimes pad single didgit numbers to aid sorting
+     * Frames such as TRCK and TPOS sometimes pad single digit numbers to aid sorting
      */
     private boolean padNumbers = false;
+
+    /**
+     * There are a couple of problems with the Java implemenatation ono Google Android, enabling this value
+     * switches on Google workarounds
+     */
+    private boolean isAndroid = false;
 
     /**
      * Creates a new TagOptions datatype. All Options are set to their default
@@ -758,6 +764,7 @@ public class TagOptionSingleton
         resetTextEncodingForExistingFrames = false;
         truncateTextWithoutErrors = false;
         padNumbers = false;
+        isAndroid = false;
 
         //default all lyrics3 fields to save. id3v1 fields are individual
         // settings. id3v2 fields are always looked at to save.
@@ -1062,5 +1069,15 @@ public class TagOptionSingleton
     public void setPadNumbers(boolean padNumbers)
     {
         this.padNumbers = padNumbers;
+    }
+
+    public boolean isAndroid()
+    {
+        return isAndroid;
+    }
+
+    public void setAndroid(boolean android)
+    {
+        isAndroid = android;
     }
 }
