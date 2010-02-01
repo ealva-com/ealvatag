@@ -335,8 +335,15 @@ public class ID3v24Tag extends AbstractID3v2Tag
     {
         try
         {
-            ID3v24Frame newFrame = new ID3v24Frame(frame);
-            copyFrameIntoMap(newFrame.getIdentifier(), newFrame);
+            if (frame instanceof ID3v24Frame)
+            {
+                 copyFrameIntoMap(frame.getIdentifier(),frame);
+            }
+            else
+            {
+                ID3v24Frame newFrame = new ID3v24Frame(frame);
+                copyFrameIntoMap(newFrame.getIdentifier(), newFrame);
+            }
         }
         catch (InvalidFrameException ife)
         {

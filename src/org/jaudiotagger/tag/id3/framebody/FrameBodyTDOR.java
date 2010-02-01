@@ -31,6 +31,11 @@ import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
 import java.nio.ByteBuffer;
 
 
+/**
+ *  <p>The 'Original release time' frame contains a timestamp describing
+ *  when the original recording of the audio was released. Timestamp
+ *  format is described in the ID3v2 structure document.</p>
+*/
 public class FrameBodyTDOR extends AbstractFrameBodyTextInfo implements ID3v24FrameBody
 {
     /**

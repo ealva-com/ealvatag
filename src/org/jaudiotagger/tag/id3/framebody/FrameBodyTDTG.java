@@ -29,6 +29,11 @@ import org.jaudiotagger.tag.id3.ID3v24Frames;
 import java.nio.ByteBuffer;
 
 
+/**
+ * <p>The 'Tagging time' frame contains a timestamp describing then the
+ *  audio was tagged. Timestamp format is described in the ID3v2
+ *  structure document </p>
+ */
 public class FrameBodyTDTG extends AbstractFrameBodyTextInfo implements ID3v24FrameBody
 {
 
@@ -69,7 +74,7 @@ public class FrameBodyTDTG extends AbstractFrameBodyTextInfo implements ID3v24Fr
     }
 
     /**
-     * @return the frmae identifier
+     * @return the frame identifier
      */
     public String getIdentifier()
     {

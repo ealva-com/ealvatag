@@ -193,6 +193,10 @@ public class ID3v23Tag extends AbstractID3v2Tag
             {
                 translateFrame(frame);
             }
+            else if (frame instanceof ID3v23Frame)
+            {
+                 copyFrameIntoMap(frame.getIdentifier(),frame);
+            }
             else
             {
                 ID3v23Frame newFrame = new ID3v23Frame(frame);

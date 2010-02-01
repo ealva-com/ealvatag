@@ -390,7 +390,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
      * @param frame the frame to add
      *              <p/>
      *              <p/>
-     *              Warning if frame(s) already exists for this identifier thay are overwritten
+     *              Warning if frame(s) already exists for this identifier that they are overwritten
      *              <p/>
      */
     //TODO needs to ensure do not addField an invalid frame for this tag

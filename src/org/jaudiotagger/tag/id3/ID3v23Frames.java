@@ -401,6 +401,7 @@ public class ID3v23Frames extends ID3Frames
         tagFieldToId3.put(FieldKey.LANGUAGE, ID3v23FieldKey.LANGUAGE);
         tagFieldToId3.put(FieldKey.KEY, ID3v23FieldKey.KEY);
         tagFieldToId3.put(FieldKey.URL_LYRICS_SITE, ID3v23FieldKey.URL_LYRICS_SITE);
+        tagFieldToId3.put(FieldKey.CONDUCTOR, ID3v23FieldKey.CONDUCTOR);
     }
 
 
