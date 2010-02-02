@@ -119,6 +119,7 @@ public class ID3v23Frames extends ID3Frames
     public static final String FRAME_ID_V3_ALBUM_ARTIST_SORT_ORDER_ITUNES = "TSO2";
     public static final String FRAME_ID_V3_COMPOSER_SORT_ORDER_ITUNES = "TSOC";
 
+
     private static ID3v23Frames id3v23Frames;
 
     /**
@@ -402,6 +403,10 @@ public class ID3v23Frames extends ID3Frames
         tagFieldToId3.put(FieldKey.KEY, ID3v23FieldKey.KEY);
         tagFieldToId3.put(FieldKey.URL_LYRICS_SITE, ID3v23FieldKey.URL_LYRICS_SITE);
         tagFieldToId3.put(FieldKey.CONDUCTOR, ID3v23FieldKey.CONDUCTOR);
+        tagFieldToId3.put(FieldKey.RECORD_LABEL, ID3v23FieldKey.RECORD_LABEL);
+        tagFieldToId3.put(FieldKey.LYRICIST, ID3v23FieldKey.LYRICIST);
+        tagFieldToId3.put(FieldKey.REMIXER, ID3v23FieldKey.REMIXER);
+        tagFieldToId3.put(FieldKey.MEDIA, ID3v23FieldKey.MEDIA);
     }
 
 

@@ -402,6 +402,10 @@ public class ID3v24Frames extends ID3Frames
         tagFieldToId3.put(FieldKey.LANGUAGE, ID3v24FieldKey.LANGUAGE);
         tagFieldToId3.put(FieldKey.KEY, ID3v24FieldKey.KEY);
         tagFieldToId3.put(FieldKey.URL_LYRICS_SITE, ID3v24FieldKey.URL_LYRICS_SITE);
+        tagFieldToId3.put(FieldKey.RECORD_LABEL, ID3v24FieldKey.RECORD_LABEL);
+        tagFieldToId3.put(FieldKey.LYRICIST, ID3v24FieldKey.LYRICIST);
+        tagFieldToId3.put(FieldKey.REMIXER, ID3v24FieldKey.REMIXER);
+        tagFieldToId3.put(FieldKey.MEDIA, ID3v24FieldKey.MEDIA);
 
     }
 
