@@ -1,6 +1,8 @@
 package org.jaudiotagger.tag.id3;
 
 import org.jaudiotagger.AbstractTestCase;
+import org.jaudiotagger.audio.AudioFile;
+import org.jaudiotagger.audio.AudioFileIO;
 import org.jaudiotagger.audio.mp3.MP3File;
 import org.jaudiotagger.tag.id3.framebody.FrameBodyAPIC;
 import org.jaudiotagger.tag.id3.framebody.FrameBodyCOMM;
@@ -9,7 +11,7 @@ import org.jaudiotagger.tag.id3.framebody.FrameBodyTIT2;
 import java.io.File;
 
 /**
- * testing of reading compressed frames
+ * Testing of reading compressed frames
  */
 public class CompressedTest extends AbstractTestCase
 {
@@ -67,7 +69,23 @@ public class CompressedTest extends AbstractTestCase
         frame = (ID3v23Frame) v23tag.getFrame(ID3v23Frames.FRAME_ID_V3_TITLE);
         FrameBodyTIT2 frameBodyTitle = (FrameBodyTIT2) frame.getBody();
         assertEquals(TITLE_TEXT, frameBodyTitle.getText());
-
-
     }
+
+    /**
+     * This tests reading a v24tag that contains a compressed Picture frame
+     *
+     * @throws Exception
+     */
+    public void testv24TagReadCompressedPictureFrame() throws Exception
+    {
+        File testFile = AbstractTestCase.copyAudioToTmp("Issue98-3.id3", "testV1.mp3");
+        MP3File mp3File = new MP3File(testFile);
+        ID3v24Tag v24tag = (ID3v24Tag) mp3File.getID3v2Tag();
+
+        assertTrue(v24tag.hasFrame(ID3v24Frames.FRAME_ID_ATTACHED_PICTURE ));
+        ID3v24Frame frame = (ID3v24Frame) v24tag.getFrame(ID3v24Frames.FRAME_ID_ATTACHED_PICTURE);
+        assertTrue(((ID3v24Frame.EncodingFlags) frame.getEncodingFlags()).isCompression());
+        assertEquals(27,v24tag.getFieldCount());
+    }
+
 }

@@ -30,6 +30,7 @@ import org.jaudiotagger.utils.EqualsUtil;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.zip.DataFormatException;
@@ -327,7 +328,8 @@ public class ID3v23Frame extends AbstractID3v2Frame
             byteBuffer.position(byteBuffer.position() - (FRAME_ID_SIZE - 1));
             throw new InvalidFrameIdentifierException(getLoggingFilename() + ":" + identifier + "is not a valid ID3v2.30 frame");
         }
-        //Read the size field (as Big Endian Int - byte buffers always initlised to Big endian order)
+        //Read the size field (as Big Endian Int - byte buffers always initialised to Big Endian order)
+        //TODO where are we defining Byte Order is this safe
         frameSize = byteBuffer.getInt();
         if (frameSize < 0)
         {
@@ -337,7 +339,7 @@ public class ID3v23Frame extends AbstractID3v2Frame
         else if (frameSize == 0)
         {
             logger.warning(getLoggingFilename() + ":Empty Frame Size:" + identifier);
-            //We dont process this frame or add to framemap becuase contains no useful information
+            //We don't process this frame or add to framemap because contains no useful information
             //Skip the two flag bytes so in correct position for subsequent frames
             byteBuffer.get();
             byteBuffer.get();
@@ -357,7 +359,7 @@ public class ID3v23Frame extends AbstractID3v2Frame
         //If this identifier is a valid v24 identifier or easily converted to v24
         id = ID3Tags.convertFrameID23To24(identifier);
 
-        // Cant easily be converted to v23 but is it a valid v24 identifier
+        // Cant easily be converted to v24 but is it a valid v23 identifier
         if (id == null)
         {
             // It is a valid v23 identifier so should be able to find a
@@ -404,43 +406,13 @@ public class ID3v23Frame extends AbstractID3v2Frame
         //Work out the real size of the framebody data
         int realFrameSize = frameSize - extraHeaderBytesCount;
 
-        ByteBuffer frameBodyBuffer = null;
-
-        //Uncompress the frame
-        if (((EncodingFlags) encodingFlags).isCompression())
-        {
-            // Decompress the bytes into this buffer, size initialized from header field
-            byte[] result = new byte[decompressedFrameSize];
-            byte[] input = new byte[realFrameSize];
-
-            //Store position ( just after frame header and any extra bits)
-            //Read frame data into array, and then put buffer back to where it was
-            int position = byteBuffer.position();
-            byteBuffer.get(input, 0, realFrameSize);
-            byteBuffer.position(position);
-
-            Inflater decompresser = new Inflater();
-            decompresser.setInput(input);
-            try
-            {
-                decompresser.inflate(result);
-            }
-            catch (DataFormatException dfe)
-            {
-                dfe.printStackTrace();
-                //Update position of main buffer, so no attempt is made to reread these bytes
-                byteBuffer.position(byteBuffer.position() + realFrameSize);
-                throw new InvalidFrameException(getLoggingFilename() + "Unable to decompress this frame:" + identifier + ":" + dfe.getMessage());
-            }
-            decompresser.end();
-            frameBodyBuffer = ByteBuffer.wrap(result);
-        }
-
+        ByteBuffer frameBodyBuffer;
         //Read the body data
         try
         {
             if (((EncodingFlags) encodingFlags).isCompression())
             {
+                frameBodyBuffer = ID3Compression.uncompress(identifier,getLoggingFilename(),byteBuffer, decompressedFrameSize, realFrameSize);
                 frameBody = readBody(id, frameBodyBuffer, decompressedFrameSize);
             }
             else
@@ -451,7 +423,7 @@ public class ID3v23Frame extends AbstractID3v2Frame
                 frameBody = readBody(id, frameBodyBuffer, realFrameSize);
             }
             //TODO code seems to assume that if the frame created is not a v23FrameBody
-            //it should be deprecated, but what about if somehow a V24Frame has been put into a V23 Tag, shouldnt
+            //it should be deprecated, but what about if somehow a V24Frame has been put into a V23 Tag, shouldn't
             //it then be created as FrameBodyUnsupported
             if (!(frameBody instanceof ID3v23FrameBody))
             {

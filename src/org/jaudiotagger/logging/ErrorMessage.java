@@ -101,6 +101,7 @@ public enum ErrorMessage
     ARTWORK_CANNOT_BE_CREATED_WITH_THIS_METHOD("Cover Art cannot be created using this method"),
     ARTWORK_CANNOT_BE_RETRIEVED_WITH_THIS_METHOD("Cover Art cannot be retrieved using this method"),
     GENERIC_NOT_SUPPORTED("Not implemented for this format"),
+    ID3_UNABLE_TO_DECOMPRESS_FRAME("Unable to decompress frame {0} in file {1} because {2}"),
     ;
 
 

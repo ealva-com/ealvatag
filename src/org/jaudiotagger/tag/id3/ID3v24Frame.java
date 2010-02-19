@@ -31,6 +31,8 @@ import java.nio.ByteBuffer;
 import java.util.Iterator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.zip.DataFormatException;
+import java.util.zip.Inflater;
 
 /**
  * Represents an ID3v2.4 frame.
@@ -460,7 +462,7 @@ public class ID3v24Frame extends AbstractID3v2Frame
                         //no data found so assume entered padding in which case assume it is last
                         //frame and we are ok
                     }
-                    //havent found identifier so maybe not syncsafe or maybe there are no more frames, just padding
+                    //haven't found identifier so maybe not syncsafe or maybe there are no more frames, just padding
                     else
                     {
                         //Ok lets try using a non-syncsafe integer
@@ -492,8 +494,8 @@ public class ID3v24Frame extends AbstractID3v2Frame
                                     logger.warning(getLoggingFilename() + ":" + "Assuming frame size is NOT stored as a sync safe integer:" + identifier);
                                 }
                                 //no data found so assume entered padding in which case assume it is last
-                                //frame and we are ok whereas we didnt hit padding when using syncsafe integer
-                                //or we wouldnt have got to this point. So assume syncsafe ineteger ended within
+                                //frame and we are ok whereas we didn't hit padding when using syncsafe integer
+                                //or we wouldn't have got to this point. So assume syncsafe integer ended within
                                 //the frame data whereas this has reached end of frames.
                                 else if (ID3SyncSafeInteger.isBufferEmpty(readAheadbuffer))
                                 {
@@ -503,7 +505,8 @@ public class ID3v24Frame extends AbstractID3v2Frame
                                 //invalid so assume syncsafe as that is is the standard
                                 else
                                 {
-                                    }
+
+                                }
                             }
                             else
                             {
@@ -519,7 +522,7 @@ public class ID3v24Frame extends AbstractID3v2Frame
                                 //Inconclusive stick with syncsafe
                                 else
                                 {
-                                    }
+                                }
 
                             }
                         }
@@ -536,6 +539,7 @@ public class ID3v24Frame extends AbstractID3v2Frame
         //These are not included in header size but are included in frame size but wont be read when we actually
         //try to read the frame body data
         int extraHeaderBytesCount = 0;
+        int datalengthSize        = -1;
         if (((EncodingFlags) encodingFlags).isGrouping())
         {
             extraHeaderBytesCount = ID3v24Frame.FRAME_GROUPING_INDICATOR_SIZE;
@@ -552,10 +556,10 @@ public class ID3v24Frame extends AbstractID3v2Frame
         if (((EncodingFlags) encodingFlags).isDataLengthIndicator())
         {
             //Read the sync safe size field
-            int datalengthSize = ID3SyncSafeInteger.bufferToValue(byteBuffer);
+            datalengthSize = ID3SyncSafeInteger.bufferToValue(byteBuffer);
             //Read the Grouping byte, but do nothing with it
             extraHeaderBytesCount += FRAME_DATA_LENGTH_SIZE;
-            logger.info(getLoggingFilename() + ":" + "Frame Size Is:" + frameSize + "Data Length Size:" + datalengthSize);
+            logger.info(getLoggingFilename() + ":" + "Frame Size Is:" + frameSize + " Data Length Size:" + datalengthSize);
         }
 
         //Work out the real size of the framebody data
@@ -582,7 +586,15 @@ public class ID3v24Frame extends AbstractID3v2Frame
         //Read the body data
         try
         {
-            frameBody = readBody(identifier, frameBodyBuffer, syncSize);
+            if (((EncodingFlags) encodingFlags).isCompression())
+            {
+                frameBodyBuffer = ID3Compression.uncompress(identifier,getLoggingFilename(),byteBuffer, datalengthSize, realFrameSize);
+                frameBody = readBody(identifier, frameBodyBuffer, datalengthSize);
+            }
+            else
+            {
+                frameBody = readBody(identifier, frameBodyBuffer, syncSize);
+            }
             if (!(frameBody instanceof ID3v24FrameBody))
             {
                 logger.info(getLoggingFilename() + ":" + "Converted frame body with:" + identifier + " to deprecated framebody");

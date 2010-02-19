@@ -402,7 +402,7 @@ public class ID3v23Tag extends AbstractID3v2Tag
     /**
      * Read header flags
      *
-     * <p>Log info messages for falgs that have been set and log warnings when bits have been set for unknown flags</p>
+     * <p>Log info messages for flags that have been set and log warnings when bits have been set for unknown flags</p>
      * @param buffer
      * @throws TagException
      */
