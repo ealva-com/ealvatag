@@ -692,7 +692,9 @@ public class MP3File extends AudioFile
      */
     public void delete(AbstractTag mp3tag) throws FileNotFoundException, IOException
     {
-        mp3tag.delete(new RandomAccessFile(this.file, "rws"));
+        RandomAccessFile raf = new RandomAccessFile(this.file, "rws");
+        mp3tag.delete(raf);
+        raf.close();
     }
 
     /**
