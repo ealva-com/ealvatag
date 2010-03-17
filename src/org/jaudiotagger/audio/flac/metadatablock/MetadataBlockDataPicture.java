@@ -56,24 +56,8 @@ public class MetadataBlockDataPicture implements MetadataBlockData, TagField
     // Logger Object
     public static Logger logger = Logger.getLogger("org.jaudiotagger.audio.flac.MetadataBlockDataPicture");
 
-    /**
-     * Construct picture block by reading from file
-     * @param header
-     * @param raf
-     * @throws java.io.IOException
-     * @throws org.jaudiotagger.tag.InvalidFrameException
-     */
-    //TODO check for buffer underflows see http://research.eeye.com/html/advisories/published/AD20071115.html
-    public MetadataBlockDataPicture(MetadataBlockHeader header, RandomAccessFile raf) throws IOException, InvalidFrameException
+    private void initFromByteBuffer(ByteBuffer rawdata) throws IOException, InvalidFrameException
     {
-        ByteBuffer rawdata = ByteBuffer.allocate(header.getDataLength());
-        int bytesRead = raf.getChannel().read(rawdata);
-        if (bytesRead < header.getDataLength())
-        {
-            throw new IOException("Unable to read required number of databytes read:" + bytesRead + ":required:" + header.getDataLength());
-        }
-        rawdata.rewind();
-
         //Picture Type
         pictureType = rawdata.getInt();
         if (pictureType >= PictureTypes.getInstanceOf().getSize())
@@ -107,6 +91,40 @@ public class MetadataBlockDataPicture implements MetadataBlockData, TagField
         rawdata.get(imageData);
 
         logger.info("Read image:" + this.toString());
+    }
+
+    /**
+     * Initialize MetaBlockDataPicture from byteBuffer
+     *
+     * @param rawdata
+     * @throws IOException
+     * @throws InvalidFrameException
+     */
+    public MetadataBlockDataPicture(ByteBuffer rawdata) throws IOException, InvalidFrameException
+    {
+        initFromByteBuffer(rawdata);
+    }
+
+    /**
+     * Construct picture block by reading from file, the header informs us how many bytes we should be reading from
+     *
+     * @param header
+     * @param raf
+     * @throws java.io.IOException
+     * @throws org.jaudiotagger.tag.InvalidFrameException
+     */
+    //TODO check for buffer underflows see http://research.eeye.com/html/advisories/published/AD20071115.html
+    public MetadataBlockDataPicture(MetadataBlockHeader header, RandomAccessFile raf) throws IOException, InvalidFrameException
+    {
+        ByteBuffer rawdata = ByteBuffer.allocate(header.getDataLength());
+        int bytesRead = raf.getChannel().read(rawdata);
+        if (bytesRead < header.getDataLength())
+        {
+            throw new IOException("Unable to read required number of databytes read:" + bytesRead + ":required:" + header.getDataLength());
+        }
+        rawdata.rewind();
+        initFromByteBuffer(rawdata);
+
 
     }
 

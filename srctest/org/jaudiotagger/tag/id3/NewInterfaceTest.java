@@ -1151,34 +1151,7 @@ public class NewInterfaceTest extends TestCase
 
     }
 
-    /**
-     * Test code copes with reading dodgy ID3Tag , header appears ok but gap between header and tag data
-     *
-     * @throws Exception
-     */
-    public void testNewInterfaceDodgyMp3() throws Exception
-    {
-        File orig = new File("testdata", "test26.mp3");
-        if (!orig.isFile())
-        {
-            return;
-        }
-
-        Exception e = null;
-        File testFile = AbstractTestCase.copyAudioToTmp("test26.mp3");
-        MP3File mp3File = new MP3File(testFile);
-
-        //Has no tag at this point
-        assertTrue(mp3File.hasID3v1Tag());
-        assertTrue(mp3File.hasID3v2Tag());
-        assertEquals("Personality Goes A Long Way", mp3File.getID3v1Tag().getFirst(FieldKey.TITLE));
-        assertEquals(0, mp3File.getID3v2Tag().getFieldCount());
-        assertFalse(((ID3v23Tag) mp3File.getID3v2Tag()).compression);
-        assertFalse(((ID3v23Tag) mp3File.getID3v2Tag()).experimental);
-        assertFalse(((ID3v23Tag) mp3File.getID3v2Tag()).extended);
-        //assertEquals("Personality Goes A Long Way",mp3File.getID3v2Tag().getFirst(FieldKey.TITLE));
-    }
-
+   
     public void testIterator() throws Exception
     {
         File orig = new File("testdata", "test26.mp3");

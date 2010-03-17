@@ -114,6 +114,7 @@ public class VorbisWriteTagTest extends AbstractTestCase
 
             //key not known to jaudiotagger
             tag.setField("VOLINIST", "Sarah Curtis");
+            assertEquals("image/png", tag.getFirst(VorbisCommentFieldKey.COVERARTMIME));
 
             f.commit();
 
@@ -205,8 +206,8 @@ public class VorbisWriteTagTest extends AbstractTestCase
             assertEquals("description", vorbisTag.getFirst(VorbisCommentFieldKey.DESCRIPTION));
 
             //VorbisImage base64 image, and reconstruct
-            assertEquals(base64image, vorbisTag.getFirst(VorbisCommentFieldKey.COVERART));
             assertEquals("image/png", vorbisTag.getFirst(VorbisCommentFieldKey.COVERARTMIME));
+            assertEquals(base64image, vorbisTag.getFirst(VorbisCommentFieldKey.COVERART));
             BufferedImage bi = ImageIO.read(ImageIO
                     .createImageInputStream(new ByteArrayInputStream(Base64Coder.
                     decode(vorbisTag.getFirst(VorbisCommentFieldKey.COVERART).toCharArray()))));

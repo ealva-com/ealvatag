@@ -7,6 +7,7 @@ import org.jaudiotagger.audio.AudioFileIO;
 import org.jaudiotagger.audio.exceptions.CannotReadVideoException;
 import org.jaudiotagger.audio.mp4.EncoderType;
 import org.jaudiotagger.audio.mp4.Mp4AudioHeader;
+import org.jaudiotagger.audio.mp4.Mp4TagReader;
 import org.jaudiotagger.audio.mp4.atom.Mp4EsdsBox;
 import org.jaudiotagger.tag.FieldKey;
 import org.jaudiotagger.tag.Tag;
@@ -20,6 +21,7 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 import java.util.List;
@@ -1196,5 +1198,24 @@ public class M4aReadTagTest extends TestCase
         assertNull(exceptionCaught);
     }
 
-   
+    public void testNumericGenres() throws Exception
+    {
+        Exception exceptionCaught = null;
+        try
+        {
+            assertTrue(Mp4GenreField.isValidGenre("Rock"));
+
+            //Read Image
+            File testFile = AbstractTestCase.copyAudioToTmp("test75.m4a");
+            RandomAccessFile raf = new RandomAccessFile(testFile,"r");
+            Mp4Tag tagReader = new Mp4TagReader().read(raf);
+            assertEquals("Rock",tagReader.getFirst(FieldKey.GENRE));
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+            exceptionCaught = e;
+        }
+    }
+
 }

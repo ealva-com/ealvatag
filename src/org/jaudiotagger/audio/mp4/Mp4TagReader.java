@@ -171,7 +171,7 @@ public class Mp4TagReader
      * Process the field and add to the tag
      * <p/>
      * Note:In the case of coverart MP4 holds all the coverart within individual dataitems all within
-     * a single covr atom, we will add seperate mp4field for each image.
+     * a single covr atom, we will add separate mp4field for each image.
      *
      * @param tag
      * @param header
