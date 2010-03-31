@@ -441,6 +441,7 @@ public class FlacTag implements Tag
         for(MetadataBlockDataPicture coverArt:images)
         {
             Artwork artwork=Artwork.createArtworkFromMetadataBlockDataPicture(coverArt);
+            artworkList.add(artwork);
         }
         return artworkList;
     }

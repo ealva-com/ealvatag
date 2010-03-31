@@ -121,7 +121,7 @@ public class Artwork
     {
         setMimeType(coverArt.getMimeType());
         setDescription(coverArt.getDescription());
-        setPictureType(coverArt.getPictureType());
+        setPictureType(coverArt.getPictureType());       
         if(coverArt.isImageUrl())
         {
             setLinked(coverArt.isImageUrl());
