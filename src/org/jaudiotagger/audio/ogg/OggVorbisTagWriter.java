@@ -475,7 +475,7 @@ public class OggVorbisTagWriter
         //Now just write as a single IO operation
         bbTemp.rewind();
         rafTemp.getChannel().write(bbTemp);
-        //Check weve written all the data
+        //Check we have written all the data
         //TODO could we do any other checks to check data written correctly ?
         if ((raf.length() - startAudio) != (rafTemp.length() - startAudioWritten))
         {

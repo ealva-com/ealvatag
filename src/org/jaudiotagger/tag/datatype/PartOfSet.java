@@ -338,6 +338,7 @@ public class PartOfSet extends AbstractString
             return sb.toString();
         }
 
+
         public boolean equals(Object obj)
         {
             if(obj==this)
@@ -358,6 +359,7 @@ public class PartOfSet extends AbstractString
         }
 
     }
+
 
     public PartOfSetValue getValue()
     {

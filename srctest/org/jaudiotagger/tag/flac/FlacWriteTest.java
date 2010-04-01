@@ -314,6 +314,7 @@ public class FlacWriteTest extends TestCase
             assertEquals("reference libFLAC 1.1.4 20070213", tag.getVorbisCommentTag().getVendor());
             tag = (FlacTag) f.getTag();
             assertEquals("BLOCK", tag.getFirst(FieldKey.ARTIST));
+            assertEquals(1,tag.getArtworkList().size());
 
         }
         catch (Exception e)

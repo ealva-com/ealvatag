@@ -18,18 +18,23 @@
  */
 package org.jaudiotagger.tag.vorbiscomment;
 
+import org.jaudiotagger.audio.flac.metadatablock.MetadataBlockDataPicture;
 import org.jaudiotagger.audio.generic.AbstractTag;
+import org.jaudiotagger.audio.generic.Utils;
 import org.jaudiotagger.audio.ogg.util.VorbisHeader;
 import org.jaudiotagger.logging.ErrorMessage;
-import org.jaudiotagger.tag.FieldDataInvalidException;
-import org.jaudiotagger.tag.FieldKey;
-import org.jaudiotagger.tag.KeyNotFoundException;
-import org.jaudiotagger.tag.TagField;
+import org.jaudiotagger.tag.*;
 import org.jaudiotagger.tag.datatype.Artwork;
 import static org.jaudiotagger.tag.vorbiscomment.VorbisCommentFieldKey.ALBUM;
 import static org.jaudiotagger.tag.vorbiscomment.VorbisCommentFieldKey.VENDOR;
+
+import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
 import org.jaudiotagger.tag.vorbiscomment.util.Base64Coder;
 
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
@@ -54,6 +59,7 @@ public class VorbisCommentTag extends AbstractTag
         tagFieldToOggField.put(FieldKey.COMPOSER, VorbisCommentFieldKey.COMPOSER);
         tagFieldToOggField.put(FieldKey.GROUPING, VorbisCommentFieldKey.GROUPING);
         tagFieldToOggField.put(FieldKey.DISC_NO, VorbisCommentFieldKey.DISCNUMBER);
+        tagFieldToOggField.put(FieldKey.COVER_ART, VorbisCommentFieldKey.METADATA_BLOCK_PICTURE);
         tagFieldToOggField.put(FieldKey.BPM, VorbisCommentFieldKey.BPM);
         tagFieldToOggField.put(FieldKey.MUSICBRAINZ_ARTISTID, VorbisCommentFieldKey.MUSICBRAINZ_ARTISTID);
         tagFieldToOggField.put(FieldKey.MUSICBRAINZ_RELEASEID, VorbisCommentFieldKey.MUSICBRAINZ_ALBUMID);
@@ -305,32 +311,10 @@ public class VorbisCommentTag extends AbstractTag
         super.deleteField(vorbisCommentFieldKey.getFieldName());
     }
 
-    /**
-     * Create artwork field
-     * <p/>
-     * Actually create two fields , the data field and the mimetype
-     *
-     * @param data     raw image data
-     * @param mimeType mimeType of data
-     *                 <p/>
-     *                 TODO could possibly work out mimetype from data, but unlike mp4 there is nothing to restrict to only png
-     *                 or jpeg images
-     * @return
-     */
-    public void setArtworkField(byte[] data, String mimeType)
-    {
-        char[] testdata = Base64Coder.encode(data);
-        String base64image = new String(testdata);
-        VorbisCommentTagField dataField = new VorbisCommentTagField(VorbisCommentFieldKey.COVERART.getFieldName(), base64image);
-        VorbisCommentTagField mimeField = new VorbisCommentTagField(VorbisCommentFieldKey.COVERARTMIME.getFieldName(), mimeType);
 
-        setField(dataField);
-        setField(mimeField);
-
-    }
 
     /**
-     * Retrieve artwork raw data
+     * Retrieve artwork raw data when using the deprecated COVERART format
      *
      * @return
      */
@@ -342,6 +326,8 @@ public class VorbisCommentTag extends AbstractTag
     }
 
     /**
+     * Retrieve artwork mimeType when using deprecated COVERART format
+     *
      * @return mimetype
      */
     public String getArtworkMimeType()
@@ -390,10 +376,15 @@ public class VorbisCommentTag extends AbstractTag
         return getFirstField(tagFieldToOggField.get(genericKey).getFieldName());
     }
 
+    /**
+     *
+     * @return list of artwork images
+     */
     public List<Artwork> getArtworkList()
     {
         List<Artwork>  artworkList  = new ArrayList<Artwork>(1);
 
+        //Read Old Format
         if(getArtworkBinaryData()!=null & getArtworkBinaryData().length>0)
         {
             Artwork artwork=new Artwork();
@@ -401,37 +392,151 @@ public class VorbisCommentTag extends AbstractTag
             artwork.setBinaryData(getArtworkBinaryData());
             artworkList.add(artwork);
         }
+
+        //New Format (Supports Multiple Images)
+        List<TagField> metadataBlockPics = this.get(VorbisCommentFieldKey.METADATA_BLOCK_PICTURE);
+        for(TagField tagField:metadataBlockPics)
+        {
+
+            try
+            {
+                byte[] imageBinaryData = Base64Coder.decode(((TagTextField)tagField).getContent());
+                MetadataBlockDataPicture coverArt = new MetadataBlockDataPicture(ByteBuffer.wrap(imageBinaryData));
+                Artwork artwork=Artwork.createArtworkFromMetadataBlockDataPicture(coverArt);
+                artworkList.add(artwork);
+            }
+            catch(IOException ioe)
+            {
+                throw new RuntimeException(ioe);
+            }
+            catch(InvalidFrameException ife)
+            {
+                throw new RuntimeException(ife);
+            }
+        }
         return artworkList;
     }
 
+
     /**
-     * Create artwork field
-     *
-     * Not supported because reuire two fields to be created use
-     * @return
+       * Create MetadataBlockPicture field, this is the preferred way of storing artwork in VorbisComment tag now but
+       * has to be base encoded to be stored in VorbisComment
+       *
+       * @return MetadataBlockDataPicture
      */
-    public TagField createField(Artwork artwork) throws FieldDataInvalidException
-    {
-        throw new UnsupportedOperationException("Please use setField instead");
+      private MetadataBlockDataPicture createMetadataBlockDataPicture(Artwork artwork) throws FieldDataInvalidException
+      {
+          if(artwork.isLinked())
+          {
+               return new MetadataBlockDataPicture(
+                      Utils.getDefaultBytes(artwork.getImageUrl(), TextEncoding.CHARSET_ISO_8859_1),
+                      artwork.getPictureType(),
+                      MetadataBlockDataPicture.IMAGE_IS_URL,
+                      "",
+                      0,
+                      0,
+                      0,
+                      0);
+          }
+          else
+          {
+              BufferedImage image;
+              try
+              {
+                  image = artwork.getImage();
+              }
+              catch(IOException ioe)
+              {
+                  throw new FieldDataInvalidException("Unable to create MetadataBlockDataPicture from buffered:"+ioe.getMessage());
+              }
+
+              return new MetadataBlockDataPicture(artwork.getBinaryData(),
+                      artwork.getPictureType(),
+                      artwork.getMimeType(),
+                      artwork.getDescription(),
+                      image.getWidth(),
+                      image.getHeight(),
+                      0,
+                      0);
+          }
+      }
+
+    /**
+     * Create Artwork field
+     *
+     * @param artwork
+     * @return
+     * @throws FieldDataInvalidException
+     */
+      public TagField createField(Artwork artwork) throws FieldDataInvalidException
+      {
+        try
+        {
+            char[] testdata = Base64Coder.encode(createMetadataBlockDataPicture(artwork).getRawContent());
+            String base64image = new String(testdata);
+            TagField imageTagField  = createField(VorbisCommentFieldKey.METADATA_BLOCK_PICTURE, base64image);
+            return imageTagField;
+        }
+        catch(UnsupportedEncodingException uee)
+        {
+            throw new RuntimeException(uee);
+        }
     }
 
     /**
-     * Create artwork field
-     *
-     * Actually sets two fields
+     * Create and set artwork field
      *
      * @return
      */
     @Override
     public void setField(Artwork artwork) throws FieldDataInvalidException
     {
-        char[] testdata = Base64Coder.encode(artwork.getBinaryData());
-  		String base64image = new String(testdata);
-   	    TagField imageTagField  = createField(VorbisCommentFieldKey.COVERART, base64image);
-   		TagField imageTypeField = createField(VorbisCommentFieldKey.COVERARTMIME, artwork.getMimeType());
+        //Set field
+        this.setField(createField(artwork));
 
-        this.setField(imageTagField);
-        this.setField(imageTypeField);
+        //If worked okay above then that should be first artwork and if we still had old coverart format
+        //that should be removed
+        if(this.getFirst(VorbisCommentFieldKey.COVERART).length()>0)
+        {
+            this.deleteField(VorbisCommentFieldKey.COVERART);
+            this.deleteField(VorbisCommentFieldKey.COVERARTMIME);
+        }
+    }
+
+    /**
+     * Add artwork field
+     *
+     * @param artwork
+     * @throws FieldDataInvalidException
+     */
+    public void addField(Artwork artwork) throws FieldDataInvalidException
+    {
+        this.addField(createField(artwork));
+    }
+
+     /**
+     * Create artwork field using the non-standard COVERART tag
+     *
+     * <p/>
+     * Actually create two fields , the data field and the mimetype. Its is not recommended that you use this
+     * method anymore.
+      *
+     * @param data     raw image data
+     * @param mimeType mimeType of data
+     *                 <p/>
+     * @return
+     */
+    @Deprecated
+    public void setArtworkField(byte[] data, String mimeType)
+    {
+        char[] testdata = Base64Coder.encode(data);
+        String base64image = new String(testdata);
+        VorbisCommentTagField dataField = new VorbisCommentTagField(VorbisCommentFieldKey.COVERART.getFieldName(), base64image);
+        VorbisCommentTagField mimeField = new VorbisCommentTagField(VorbisCommentFieldKey.COVERARTMIME.getFieldName(), mimeType);
+
+        setField(dataField);
+        setField(mimeField);
+
     }
 
     /**
@@ -468,6 +573,10 @@ public class VorbisCommentTag extends AbstractTag
      */
     public void deleteArtworkField() throws KeyNotFoundException
     {
+        //New Method
+        this.deleteField(VorbisCommentFieldKey.METADATA_BLOCK_PICTURE);
+
+        //Old Method
         this.deleteField(VorbisCommentFieldKey.COVERART);
         this.deleteField(VorbisCommentFieldKey.COVERARTMIME);
     }

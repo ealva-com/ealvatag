@@ -23,7 +23,7 @@
    <modelVersion>4.0.0</modelVersion>
    <groupId>org</groupId>
    <artifactId>jaudiotagger</artifactId>
-   <version>2.0.2-SNAPSHOT</version>
+   <version>2.0.2</version>
    <packaging>jar</packaging>
    <name>jaudiotagger</name>
    <description>
@@ -129,6 +129,31 @@
               <argLine>-Dfile.encoding=UTF-8</argLine>
             </configuration>        
          </plugin>
+
+         <plugin>
+           <groupId>org.apache.maven.plugins</groupId>
+           <artifactId>maven-source-plugin</artifactId>
+           <executions>
+             <execution>
+             <id>attach-sources</id>
+             <goals>
+               <goal>jar</goal>
+             </goals>
+             </execution>
+           </executions>
+         </plugin>              
+         <plugin>
+           <groupId>org.apache.maven.plugins</groupId>
+           <artifactId>maven-javadoc-plugin</artifactId>
+           <executions>
+             <execution>
+             <id>attach-javadocs</id>
+             <goals>
+                <goal>jar</goal>
+             </goals>
+             </execution>
+           </executions>
+         </plugin>
       </plugins>
       <sourceDirectory>src</sourceDirectory>
       <testSourceDirectory>srctest</testSourceDirectory>
@@ -161,7 +186,7 @@
                <format>xml</format>
              </formats>
           </configuration>
-         </plugin>   
+         </plugin>
          <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-pmd-plugin</artifactId>
