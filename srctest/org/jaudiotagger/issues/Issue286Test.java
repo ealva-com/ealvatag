@@ -32,7 +32,7 @@ public class Issue286Test extends AbstractTestCase
         assertEquals(600,artwork.getImage().getWidth());
         assertEquals(800,artwork.getImage().getHeight());
         assertEquals("image/jpeg",artwork.getMimeType());
-        assertEquals(0,artwork.getPictureType());
+        assertEquals(3,artwork.getPictureType());
 
     }
 
