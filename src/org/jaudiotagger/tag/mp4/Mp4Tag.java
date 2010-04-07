@@ -360,26 +360,45 @@ public class Mp4Tag extends AbstractTag
             throw new KeyNotFoundException();
         }
 
-        if(genericKey== FieldKey.TRACK)
+        //Special handling for these number fields
+        if(
+                (genericKey== FieldKey.TRACK)||
+                (genericKey== FieldKey.TRACK_TOTAL)||
+                (genericKey== FieldKey.DISC_NO)||
+                (genericKey== FieldKey.DISC_TOTAL)
+            )
         {
-            return new Mp4TrackField(Integer.parseInt(value));
+            try
+            {
+                int number = Integer.parseInt(value);
+                if(genericKey== FieldKey.TRACK)
+                {
+                    return new Mp4TrackField(number);
+                }
+                else if(genericKey== FieldKey.TRACK_TOTAL)
+                {
+                    return new Mp4TrackField(0,number);
+                }
+                else if(genericKey== FieldKey.DISC_NO)
+                {
+                    return new Mp4DiscNoField(number);
+                }
+                else if(genericKey== FieldKey.DISC_TOTAL)
+                {
+                    return new Mp4DiscNoField(0,number);
+                }
+            }
+            catch(NumberFormatException nfe)
+            {
+                //If not number we want to convert to an expected exception (which is not a RuntimeException)
+                //so can be handled properly by calling program
+                throw new FieldDataInvalidException("Value "+value + " is not a number as required",nfe);
+            }
         }
-        else if(genericKey== FieldKey.TRACK_TOTAL)
-        {
-            return new Mp4TrackField(0,Integer.parseInt(value));
-        }
-        else if(genericKey== FieldKey.DISC_NO)
-        {
-            return new Mp4DiscNoField(Integer.parseInt(value));
-        }
-        else if(genericKey== FieldKey.DISC_TOTAL)
-        {
-            return new Mp4DiscNoField(0,Integer.parseInt(value));
-        }
-        else
-        {
-            return createField(tagFieldToMp4Field.get(genericKey), value);
-        }
+
+        //Default for all other fields
+        return createField(tagFieldToMp4Field.get(genericKey), value);
+
     }
 
     /**
