@@ -977,7 +977,7 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag
     }
 
     /**
-     * Create strcutured representation of this item.
+     * Create structured representation of this item.
      */
     public void createStructure()
     {

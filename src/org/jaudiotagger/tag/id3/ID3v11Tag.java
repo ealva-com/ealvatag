@@ -425,7 +425,7 @@ public class ID3v11Tag extends ID3v1Tag
 
 
     /**
-     * Find identifer within byteBuffer to indicate that a v11 tag exists within the buffer
+     * Find identifier within byteBuffer to indicate that a v11 tag exists within the buffer
      *
      * @param byteBuffer
      * @return true if find header for v11 tag within buffer

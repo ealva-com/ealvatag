@@ -27,7 +27,9 @@ package org.jaudiotagger.tag.id3;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
+import java.nio.CharBuffer;
 import java.nio.channels.FileChannel;
+import java.util.Arrays;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
 
@@ -98,6 +100,18 @@ abstract public class AbstractID3v1Tag extends AbstractID3Tag
     }
 
     /**
+     * Does a v1tag or a v11tag exist
+     *
+     * @return whether tag exists within the byteBuffer
+     */
+    public static boolean seekForV1OrV11Tag(ByteBuffer byteBuffer)
+    {
+        byte[] buffer = new byte[FIELD_TAGID_LENGTH];
+        // read the TAG value
+        byteBuffer.get(buffer, 0, FIELD_TAGID_LENGTH);
+        return (Arrays.equals(buffer, TAG_ID));
+    }
+    /**
      * Delete tag from file
      * Looks for tag and if found lops it off the file.
      *
@@ -118,14 +132,14 @@ abstract public class AbstractID3v1Tag extends AbstractID3Tag
         byteBuffer = ByteBuffer.allocate(TAG_LENGTH);
         fc.read(byteBuffer);
         byteBuffer.rewind();
-        if (seek(byteBuffer))
+        if (AbstractID3v1Tag.seekForV1OrV11Tag(byteBuffer))
         {
-            logger.info("Deleted ID3v1 tag ");
+            logger.config("Deleted ID3v1 tag");
             file.setLength(file.length() - TAG_LENGTH);
         }
         else
         {
-            logger.info("Unable to find ID3v1 tag to deleteField");
+            logger.config("Unable to find ID3v1 tag to deleteField");
         }
     }
 
