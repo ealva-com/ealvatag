@@ -25,7 +25,7 @@ import java.util.List;
 
 /**
  * This interface represents the basic data structure for the default
- * audiolibrary functionality.<br>
+ * audio library functionality.<br>
  * <p/>
  * Some audio file tagging systems allow to specify multiple values for one type
  * of information. The artist for example. Some songs may be a cooperation of
@@ -236,7 +236,7 @@ public interface Tag {
      * Sets a field in the structure, used internally by the library<br>
      * <p/>
      * <p>It is not recommended to use this method for normal use of the
-     * audiolibrary. The developer will circumvent the underlying
+     * audio library. The developer will circumvent the underlying
      * implementation. For example, if one adds a field with the field id
      * &quot;TALB&quot; for an mp3 file, and the given {@link TagField}
      * implementation does not return a text field compliant data with
@@ -257,7 +257,7 @@ public interface Tag {
      * Adds a field to the structure, used internally by the library<br>
      * <p/>
      * <p>It is not recommended to use this method for normal use of the
-     * audiolibrary. The developer will circumvent the underlying
+     * audio library. The developer will circumvent the underlying
      * implementation. For example, if one adds a field with the field id
      * &quot;TALB&quot; for an mp3 file, and the given {@link TagField}
      * implementation does not return a text field compliant data with

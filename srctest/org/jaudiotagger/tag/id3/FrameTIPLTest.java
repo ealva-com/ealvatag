@@ -134,11 +134,7 @@ public class FrameTIPLTest extends AbstractTestCase
         ID3v23Tag v23Tag = new ID3v23Tag(mp3File.getID3v2TagAsv24());
         mp3File.setID3v2TagOnly(v23Tag);
 
-        Iterator i = v23Tag.getFields();
-        while(i.hasNext())
-        {
-            System.out.println(((ID3v23Frame)i.next()).getIdentifier());
-        }
+        assertTrue(v23Tag.hasFrame("IPLS"));
         mp3File.save();
 
         //Reload
@@ -146,6 +142,7 @@ public class FrameTIPLTest extends AbstractTestCase
         ID3v23Frame frame = (ID3v23Frame) mp3File.getID3v2Tag().getFrame(ID3v23Frames.FRAME_ID_V3_IPLS);
         FrameBodyIPLS body = (FrameBodyIPLS) frame.getBody();
         assertEquals(TextEncoding.ISO_8859_1, body.getTextEncoding());
-        assertEquals(FrameBodyTIPLTest.INVOLVED_PEOPLE, body.getValueAtIndex(0));
+        assertEquals(FrameBodyTIPLTest.INVOLVED_PEOPLE, body.getText());
+        assertEquals("producer", body.getValueAtIndex(0));
     }
 }

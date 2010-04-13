@@ -24,6 +24,7 @@ import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
 
 import java.io.ByteArrayOutputStream;
 import java.nio.ByteBuffer;
+import java.util.List;
 import java.util.StringTokenizer;
 
 /**
@@ -81,17 +82,35 @@ public class FrameBodyIPLS extends AbstractID3v2FrameBody implements ID3v23Frame
     }
 
     /**
+     * Creates a new FrameBodyIPLS data type.
+     *
+     * @param textEncoding
+     * @param text
+     */
+    public FrameBodyIPLS(byte textEncoding, String text)
+    {
+        setObjectValue(DataTypes.OBJ_TEXT_ENCODING, textEncoding);
+        setText(text);
+    }
+
+    /**
      * Convert from V4 to V3 Frame
      * @param body
      */
     public FrameBodyIPLS(FrameBodyTIPL body)
     {
         setObjectValue(DataTypes.OBJ_TEXT_ENCODING, body.getTextEncoding());
+        setText(body.getText());
+    }
 
-        String valueAsCommaSeperatedString = (String) body.getObjectValue(DataTypes.OBJ_TEXT);
-
+    /**
+     * Set the text, decoded as pairs of involvee - involvment
+     * @param text
+     */
+    public void setText(String text)
+    {
         PairedTextEncodedStringNullTerminated.ValuePairs value = new PairedTextEncodedStringNullTerminated.ValuePairs();
-        StringTokenizer stz = new StringTokenizer(valueAsCommaSeperatedString, ",");
+        StringTokenizer stz = new StringTokenizer(text, "\0");
         while (stz.hasMoreTokens())
         {
             value.add(stz.nextToken());
@@ -135,7 +154,7 @@ public class FrameBodyIPLS extends AbstractID3v2FrameBody implements ID3v23Frame
     }
 
     /**
-     * @return number of text values, shopuld be an even number because should make up pairs of values
+     * @return number of text values, should be an even number because should make up pairs of values
      */
     public int getNumberOfValues()
     {
@@ -150,5 +169,21 @@ public class FrameBodyIPLS extends AbstractID3v2FrameBody implements ID3v23Frame
     {
         PairedTextEncodedStringNullTerminated text = (PairedTextEncodedStringNullTerminated) getObject(DataTypes.OBJ_TEXT);
         return text.getValue().getNumberOfPairs();
+    }
+
+    public String getText()
+    {
+        PairedTextEncodedStringNullTerminated text = (PairedTextEncodedStringNullTerminated) getObject(DataTypes.OBJ_TEXT);
+        StringBuffer sb = new StringBuffer();
+        List<String> values = text.getValue().getList();
+        for(int i=0; i< values.size(); i++)
+        {
+            if(i>0)
+            {
+                sb.append("\0");
+            }
+            sb.append(values.get(i));
+        }
+        return sb.toString();
     }
 }

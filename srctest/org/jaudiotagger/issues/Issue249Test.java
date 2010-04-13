@@ -52,18 +52,20 @@ public class Issue249Test extends AbstractTestCase
 
         assertNotNull(frame);
         assertNotNull(framev2);
-        FrameBodyTIPL framebody = (FrameBodyTIPL)frame.getBody();
-        assertEquals(1,framebody.getNumberOfValues());
-        assertEquals(",PRAISE J.R. \"BOB\" DOBBS!!!",framebody.getFirstTextValue());
-        assertEquals(",PRAISE J.R. \"BOB\" DOBBS!!!",framebody.getValueAtIndex(0));
 
+        //Original
         FrameBodyIPLS framebodyv2 = (FrameBodyIPLS)framev2.getBody();
         assertEquals(2,framebodyv2.getNumberOfValues());
-        assertEquals(1,framebodyv2.getNumberOfPairs());   
+        assertEquals(1,framebodyv2.getNumberOfPairs());
         assertEquals("",framebodyv2.getValueAtIndex(0));
         assertEquals("PRAISE J.R. \"BOB\" DOBBS!!!",framebodyv2.getValueAtIndex(1));
 
-
+        //Converted to v24
+        FrameBodyTIPL framebody = (FrameBodyTIPL)frame.getBody();
+        assertEquals(2,framebody.getNumberOfValues());
+        assertEquals("",framebody.getFirstTextValue());
+        assertEquals("",framebody.getValueAtIndex(0));
+        assertEquals("PRAISE J.R. \"BOB\" DOBBS!!!",framebody.getValueAtIndex(1));
     }
 
 }

@@ -5,7 +5,7 @@ import org.jaudiotagger.tag.id3.AbstractTagFrameBody;
 import org.jaudiotagger.utils.EqualsUtil;
 
 /**
- * Represents a datatype that allow multiple Strings but they should be paired, i.e should be 2,4,6.. Strings
+ * Represents a data type that allow multiple Strings but they should be paired, i.e should be 2,4,6.. Strings
  * <p/>
  * TODO Pair restriction not currently implemented
  */

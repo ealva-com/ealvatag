@@ -36,11 +36,6 @@ import java.nio.ByteBuffer;
  * The 'Involved people list' is intended as a mapping between functions like producer and names. Every odd field is a
  * function and every even is an name or a comma delimited list of names.
  * <p/>
- * TODO currently just reads the first String when directly from file, this will be fixed when we add support for
- * multiple Strings for all ID3v24Frames
- * <p/>
- * TODO currently just reads all the values when converted from the corresponding ID3v23 Frame IPLS as a single value
- * (the individual fields from the IPLS frame will be seperated by commas)
  */
 public class FrameBodyTIPL extends AbstractFrameBodyTextInfo implements ID3v24FrameBody
 {
@@ -63,13 +58,11 @@ public class FrameBodyTIPL extends AbstractFrameBodyTextInfo implements ID3v24Fr
     public FrameBodyTIPL(FrameBodyIPLS body)
     {
         setObjectValue(DataTypes.OBJ_TEXT_ENCODING, body.getTextEncoding());
-
-        PairedTextEncodedStringNullTerminated.ValuePairs value = (PairedTextEncodedStringNullTerminated.ValuePairs) body.getObjectValue(DataTypes.OBJ_TEXT);
-        setObjectValue(DataTypes.OBJ_TEXT, value.toString());
+        setObjectValue(DataTypes.OBJ_TEXT, body.getText());
     }
 
     /**
-     * Creates a new FrameBodyTIPL datatype.
+     * Creates a new FrameBodyTIPL data type.
      *
      * @param textEncoding
      * @param text
@@ -80,7 +73,7 @@ public class FrameBodyTIPL extends AbstractFrameBodyTextInfo implements ID3v24Fr
     }
 
     /**
-     * Creates a new FrameBodyTIPL datatype.
+     * Creates a new FrameBodyTIPL data type.
      *
      * @param byteBuffer
      * @param frameSize

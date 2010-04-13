@@ -16,12 +16,17 @@ import java.util.List;
  * Represents a String which is not delimited by null character.
  * <p/>
  * This type of String will usually only be used when it is the last field within a frame, when reading the remainder of
- * the byte array will be read, when writing the frame will be accomodate the required size for the String. The String
+ * the byte array will be read, when writing the frame will be accommodate the required size for the String. The String
  * will be encoded based upon the text encoding of the frame that it belongs to.
  * <p/>
  * All TextInformation frames support multiple strings, stored as a null separated list, where null is represented by
- * the termination code for the character encoding. This functionality is only officially support in ID3v24.  Itunes
- * write null terminators characters after the String even though it only writes a single value.
+ * the termination code for the character encoding. This functionality is only officially support in ID3v24.
+ *
+ * Most applications will ignore any but the first value, but some such as Foobar 2000 will decode them properly
+ *
+ * Itunes write null terminators characters after the String even though it only writes a single value.
+ *
+ *
  */
 public class TextEncodedStringSizeTerminated extends AbstractString
 {
@@ -182,7 +187,7 @@ public class TextEncodedStringSizeTerminated extends AbstractString
     }
 
     /**
-     * Split the values seperated by null character
+     * Split the values separated by null character
      *
      * @param value the raw value
      * @return list of values, guaranteed to be at least one value
@@ -211,7 +216,7 @@ public class TextEncodedStringSizeTerminated extends AbstractString
     }
 
     /**
-     * How many values are held, each value is seperated by a null terminator
+     * How many values are held, each value is separated by a null terminator
      *
      * @return number of values held, usually this will be one.
      */

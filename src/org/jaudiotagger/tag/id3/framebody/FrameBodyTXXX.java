@@ -120,7 +120,7 @@ public class FrameBodyTXXX extends AbstractFrameBodyTextInfo implements ID3v24Fr
     }
 
     /**
-     * Set the desciption field
+     * Set the description field
      *
      * @param description
      */
