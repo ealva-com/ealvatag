@@ -18,6 +18,7 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.RandomAccessFile;
+import java.util.List;
 
 /**
  * User: paul
@@ -879,6 +880,21 @@ public class WmaSimpleTest extends AbstractTestCase
         assertNull(exceptionCaught);
     }
 
-    
+   /* TODO multiple fields for WMA
+
+    public void testWriteMultipleFields() throws Exception
+    {
+        File testFile = AbstractTestCase.copyAudioToTmp("test1.wma", new File("testWriteMultiple.wma"));
+        AudioFile f = AudioFileIO.read(testFile);
+        List<TagField> tagFields = f.getTag().getFields(FieldKey.ALBUM_ARTIST_SORT);
+        assertEquals(tagFields.size(),0);
+        f.getTag().addField(FieldKey.ALBUM_ARTIST_SORT,"artist1");
+        f.getTag().addField(FieldKey.ALBUM_ARTIST_SORT,"artist2");
+        f.commit();
+        f = AudioFileIO.read(testFile);
+        tagFields = f.getTag().getFields(FieldKey.ALBUM_ARTIST_SORT);
+        assertEquals(2,tagFields.size());
+    }
+    */
 }
 

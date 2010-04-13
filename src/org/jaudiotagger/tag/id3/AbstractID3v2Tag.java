@@ -1286,9 +1286,9 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
     }
 
     /**
-     * Decides what to with the frame that has just be read from file.
+     * Decides what to with the frame that has just been read from file.
      * If the frame is an allowable duplicate frame and is a duplicate we add all
-     * frames into an ArrayList and add the Arraylist to the hashMap. if not allowed
+     * frames into an ArrayList and add the ArrayList to the HashMap. if not allowed
      * to be duplicate we store bytes in the duplicateBytes variable.
      * @param frameId
      * @param next
@@ -1528,7 +1528,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
         //Iterator of each different frameId in this tag
         final Iterator<Map.Entry<String, Object>> it = this.frameMap.entrySet().iterator();
 
-        //Iterator used by hasNext() so doesnt effect next()
+        //Iterator used by hasNext() so doesn't effect next()
         final Iterator<Map.Entry<String, Object>> itHasNext = this.frameMap.entrySet().iterator();
 
 

@@ -774,4 +774,16 @@ public class VorbisWriteTagTest extends AbstractTestCase
         assertTrue(f.getTag().isEmpty());
         assertEquals("jaudiotagger", ((VorbisCommentTag) f.getTag()).getVendor());
     }
+
+    public void testWriteMultipleFields() throws Exception
+    {
+        File testFile = AbstractTestCase.copyAudioToTmp("test.ogg", new File("testWriteMultiple.ogg"));
+        AudioFile f = AudioFileIO.read(testFile);
+        f.getTag().addField(FieldKey.ALBUM_ARTIST,"artist1");
+        f.getTag().addField(FieldKey.ALBUM_ARTIST,"artist2");
+        f.commit();
+        f = AudioFileIO.read(testFile);
+        List<TagField> tagFields = f.getTag().getFields(FieldKey.ALBUM_ARTIST);
+        assertEquals(tagFields.size(),2);
+    }
 }

@@ -73,7 +73,7 @@ public abstract class ID3Frames extends AbstractStringStringValuePair
     }
 
     /**
-     * Are multiple ocurrences of frame allowed
+     * Are multiple occurrences of frame allowed
      * @param frameID
      * @return
      */

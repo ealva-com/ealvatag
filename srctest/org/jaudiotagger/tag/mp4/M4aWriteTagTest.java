@@ -6,6 +6,7 @@ import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.AudioFileIO;
 import org.jaudiotagger.tag.FieldKey;
 import org.jaudiotagger.tag.Tag;
+import org.jaudiotagger.tag.TagField;
 import org.jaudiotagger.tag.mp4.atom.Mp4ContentTypeValue;
 import org.jaudiotagger.tag.mp4.atom.Mp4RatingValue;
 import org.jaudiotagger.tag.mp4.field.*;
@@ -2228,6 +2229,20 @@ public class M4aWriteTagTest extends TestCase
             exceptionCaught = e;
         }
         assertNull(exceptionCaught);
+    }
+
+    public void testWriteMultipleFields() throws Exception
+    {
+        File testFile = AbstractTestCase.copyAudioToTmp("test.m4a", new File("testWriteMultiple.m4a"));
+        AudioFile f = AudioFileIO.read(testFile);
+        List<TagField> tagFields = f.getTag().getFields(FieldKey.ALBUM_ARTIST_SORT);
+        assertEquals(tagFields.size(),1);
+        f.getTag().addField(FieldKey.ALBUM_ARTIST_SORT,"artist1");
+        f.getTag().addField(FieldKey.ALBUM_ARTIST_SORT,"artist2");
+        f.commit();
+        f = AudioFileIO.read(testFile);
+        tagFields = f.getTag().getFields(FieldKey.ALBUM_ARTIST_SORT);
+        assertEquals(tagFields.size(),3);
     }
 }
 

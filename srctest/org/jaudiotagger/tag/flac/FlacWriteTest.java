@@ -7,6 +7,7 @@ import org.jaudiotagger.audio.AudioFileIO;
 import org.jaudiotagger.audio.flac.FlacInfoReader;
 import org.jaudiotagger.audio.flac.metadatablock.MetadataBlockDataPicture;
 import org.jaudiotagger.tag.FieldKey;
+import org.jaudiotagger.tag.TagField;
 import org.jaudiotagger.tag.id3.valuepair.ImageFormats;
 import org.jaudiotagger.tag.reference.PictureTypes;
 
@@ -16,6 +17,7 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.RandomAccessFile;
+import java.util.List;
 
 /**
  * basic Flac tests
@@ -333,5 +335,19 @@ public class FlacWriteTest extends TestCase
 
         f = AudioFileIO.read(testFile);
         assertTrue(f.getTag().isEmpty());
+    }
+
+    public void testWriteMultipleFields() throws Exception
+    {
+        File testFile = AbstractTestCase.copyAudioToTmp("test.flac", new File("testWriteMultiple.flac"));
+        AudioFile f = AudioFileIO.read(testFile);
+        List<TagField> tagFields = f.getTag().getFields(FieldKey.ALBUM_ARTIST_SORT);
+        assertEquals(0,tagFields.size());
+        f.getTag().addField(FieldKey.ALBUM_ARTIST_SORT,"artist1");
+        f.getTag().addField(FieldKey.ALBUM_ARTIST_SORT,"artist2");
+        f.commit();
+        f = AudioFileIO.read(testFile);
+        tagFields = f.getTag().getFields(FieldKey.ALBUM_ARTIST_SORT);
+        assertEquals(2,tagFields.size());
     }
 }

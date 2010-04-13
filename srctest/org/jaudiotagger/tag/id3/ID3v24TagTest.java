@@ -19,11 +19,16 @@ import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 import org.jaudiotagger.AbstractTestCase;
+import org.jaudiotagger.audio.AudioFile;
+import org.jaudiotagger.audio.AudioFileIO;
 import org.jaudiotagger.audio.mp3.MP3File;
+import org.jaudiotagger.tag.FieldKey;
+import org.jaudiotagger.tag.TagField;
 import org.jaudiotagger.tag.TagOptionSingleton;
 import org.jaudiotagger.tag.id3.framebody.*;
 
 import java.io.File;
+import java.util.List;
 
 /**
  *
@@ -189,7 +194,31 @@ public class ID3v24TagTest extends TestCase
         assertEquals(ID3v11TagTest.TITLE, v2Tag.getFirst(ID3v24Frames.FRAME_ID_TITLE));
         assertEquals(ID3v11TagTest.YEAR, v2Tag.getFirst(ID3v24Frames.FRAME_ID_YEAR));
         assertEquals(ID3v11TagTest.ARTIST, ((AbstractFrameBodyTextInfo) v2Tag.getFirstField(ID3v24Frames.FRAME_ID_ARTIST).getBody()).getFirstTextValue());
+    }
 
-
+    /** Writing multiple text frames of same type to file
+     * TODO Current behaviour is to allow writing, but when reading back only reads the first one. This doesnt make much sense
+     * if we allow to write multiples we should allow to read multiples but would be better if code realised added another value
+     * to the existing frmae rathert than creating anew frame */
+    public void testWriteMultipleFields() throws Exception
+    {
+        File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3", new File("testWriteMultiple.mp3"));
+        AudioFile f = AudioFileIO.read(testFile);
+        assertNull(f.getTag());
+        f.setTag(new ID3v24Tag());
+        List<TagField> tagFields = f.getTag().getFields(FieldKey.ALBUM_ARTIST_SORT);
+        assertEquals(0,tagFields.size());
+        f.getTag().addField(FieldKey.ALBUM_ARTIST_SORT,"artist1");
+        f.getTag().addField(FieldKey.ALBUM_ARTIST_SORT,"artist2");
+        assertEquals(2,f.getTag().getFields(FieldKey.ALBUM_ARTIST_SORT).size());
+        assertEquals(2,f.getTag().getFieldCount());
+        tagFields = f.getTag().getFields(FieldKey.ALBUM_ARTIST_SORT);
+        assertEquals(2,tagFields.size());
+        f.commit();
+        f = AudioFileIO.read(testFile);
+        assertEquals(1,f.getTag().getFields(FieldKey.ALBUM_ARTIST_SORT).size());
+        assertEquals(1,f.getTag().getFieldCount());
+        tagFields = f.getTag().getFields(FieldKey.ALBUM_ARTIST_SORT);
+        assertEquals(1,tagFields.size());
     }
 }
