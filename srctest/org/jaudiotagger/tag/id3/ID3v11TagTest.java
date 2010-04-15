@@ -178,7 +178,7 @@ public class ID3v11TagTest extends TestCase
         assertEquals("artist", v1Tag.getFirst(FieldKey.ARTIST));
         assertEquals("artist", ((TagTextField) (v1Tag.getArtist().get(0))).getContent());
         assertEquals("artist", ((TagTextField) v1Tag.getFirstField(FieldKey.ARTIST.name())).getContent());
-        assertEquals("artist", ((TagTextField) (v1Tag.get(FieldKey.ARTIST.name()).get(0))).getContent());
+        assertEquals("artist", ((TagTextField) (v1Tag.getFields(FieldKey.ARTIST.name()).get(0))).getContent());
 
         v1Tag.setField(new ID3v1TagField(FieldKey.ALBUM.name(), "album"));
         assertEquals("album", ((TagTextField) v1Tag.getFields(FieldKey.ALBUM).get(0)).getContent());

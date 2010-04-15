@@ -168,7 +168,7 @@ public void testCreateID3v22Frame()
         //Reload and convert to v23 and save
         mp3File = new MP3File(testFile);
         ID3v23Tag v23Tag = new ID3v23Tag(mp3File.getID3v2TagAsv24());
-        assertEquals(2, v23Tag.get("TXXX").size());
+        assertEquals(2, v23Tag.getFields("TXXX").size());
         mp3File.setID3v2TagOnly(v23Tag);
 
         Iterator i = v23Tag.getFields();

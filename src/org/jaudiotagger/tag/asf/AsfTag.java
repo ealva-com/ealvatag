@@ -436,7 +436,7 @@ public final class AsfTag extends AbstractTag {
         if (fieldKey == null) {
             throw new KeyNotFoundException();
         }
-        return super.get(TAGFIELD_TO_ASFFIELD.get(fieldKey).getFieldName());
+        return super.getFields(TAGFIELD_TO_ASFFIELD.get(fieldKey).getFieldName());
     }
 
     /**
@@ -480,7 +480,7 @@ public final class AsfTag extends AbstractTag {
      * @return list of stored copyrights.
      */
     public List<TagField> getCopyright() {
-        return get(AsfFieldKey.COPYRIGHT.getFieldName());
+        return getFields(AsfFieldKey.COPYRIGHT.getFieldName());
     }
 
     /**
@@ -541,7 +541,7 @@ public final class AsfTag extends AbstractTag {
      * @return list of stored ratings.
      */
     public List<TagField> getRating() {
-        return get(AsfFieldKey.RATING.getFieldName());
+        return getFields(AsfFieldKey.RATING.getFieldName());
     }
 
     /**

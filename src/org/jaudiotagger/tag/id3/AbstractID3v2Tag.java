@@ -1508,7 +1508,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
     /**
      * Retrieve the  values that exists for this id3 frame id
      */
-    public List<TagField> get(String id) throws KeyNotFoundException
+    public List<TagField> getFields(String id) throws KeyNotFoundException
     {
         Object o = getFrame(id);
         if (o == null)
@@ -1554,7 +1554,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
      */
     public boolean hasField(String id)
     {
-        return get(id).size() != 0;
+        return getFields(id).size() != 0;
     }
 
     /**
@@ -1967,7 +1967,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
         //Simple 1 to 1 mapping
         if (formatKey.getSubId() == null)
         {
-            List<TagField> list = get(formatKey.getFrameId());
+            List<TagField> list = getFields(formatKey.getFrameId());
             if(list.size()>index)
             {
                 return getTextValueForFrame((AbstractID3v2Frame)list.get(index));
@@ -1976,7 +1976,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
         else
         {
             //Get list of frames that this uses
-            List<TagField> list = get(formatKey.getFrameId());
+            List<TagField> list = getFields(formatKey.getFrameId());
             ListIterator<TagField> li = list.listIterator();
             List<String> listOfMatches = new ArrayList<String>();
             while (li.hasNext())
@@ -2081,7 +2081,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
         else
         {
             //Get list of frames that this uses
-            List<TagField> list = get(formatKey.getFrameId());
+            List<TagField> list = getFields(formatKey.getFrameId());
             ListIterator<TagField> li = list.listIterator();
             while (li.hasNext())
             {
@@ -2134,7 +2134,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
         FrameAndSubId formatKey = getFrameAndSubIdFromGenericKey(genericKey);
 
         //Get list of frames that this uses, as we are going to remove entries we don't want take a copy
-        List<TagField> list = get(formatKey.getFrameId());
+        List<TagField> list = getFields(formatKey.getFrameId());
         List<TagField> filteredList = new ArrayList<TagField>();
         String subFieldId = formatKey.getSubId();
 

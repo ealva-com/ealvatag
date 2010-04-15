@@ -455,7 +455,7 @@ public class NewInterfaceTest extends TestCase
         af.commit();
         af = AudioFileIO.read(testFile);
         assertEquals(1, ((ID3v24Tag) af.getTag()).getFields(FieldKey.COVER_ART).size());
-        assertEquals(1, ((ID3v24Tag) af.getTag()).get(ID3v24FieldKey.COVER_ART.getFieldName()).size());
+        assertEquals(1, ((ID3v24Tag) af.getTag()).getFields(ID3v24FieldKey.COVER_ART.getFieldName()).size());
         //TODO This isnt very user friendly
         TagField tagField = af.getTag().getFirstField(ID3v24FieldKey.COVER_ART.getFieldName());
 

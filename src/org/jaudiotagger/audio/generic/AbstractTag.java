@@ -83,9 +83,9 @@ public abstract class AbstractTag implements Tag
     /**
      * Get list of fields within this tag with the specified id
      *
-     * @see org.jaudiotagger.tag.Tag#get(java.lang.String)
+     * @see org.jaudiotagger.tag.Tag#getFields(java.lang.String)
      */
-    public List<TagField> get(String id)
+    public List<TagField> getFields(String id)
     {
         List<TagField> list = fields.get(id);
 
@@ -123,7 +123,7 @@ public abstract class AbstractTag implements Tag
      */
     public String getItem(String id,int index)
     {
-        List<TagField> l = get(id);
+        List<TagField> l = getFields(id);
         return (l.size()>index) ? l.get(index).toString() : "";
     }
 
@@ -145,7 +145,7 @@ public abstract class AbstractTag implements Tag
      */
     public String getFirst(String id)
     {
-        List<TagField> l = get(id);
+        List<TagField> l = getFields(id);
         return (l.size() != 0) ? l.get(0).toString() : "";
     }
 
@@ -156,7 +156,7 @@ public abstract class AbstractTag implements Tag
      */
     public TagField getFirstField(String id)
     {
-        List<TagField> l = get(id);
+        List<TagField> l = getFields(id);
         return (l.size() != 0) ? l.get(0) : null;
     }
 
@@ -250,7 +250,7 @@ public abstract class AbstractTag implements Tag
      */
     public boolean hasField(String id)
     {
-        return get(id).size() != 0;
+        return getFields(id).size() != 0;
     }
 
     /**

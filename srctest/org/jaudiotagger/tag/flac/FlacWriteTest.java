@@ -52,7 +52,7 @@ public class FlacWriteTest extends TestCase
             tag.addField(FieldKey.ARTIST,"artist\u01ff");
             tag.addField(FieldKey.ALBUM,"album");
             tag.addField(FieldKey.TITLE,"title");
-            assertEquals(1, tag.get(FieldKey.TITLE.name()).size());
+            assertEquals(1, tag.getFields(FieldKey.TITLE.name()).size());
             tag.addField(FieldKey.YEAR,"1971");
             assertEquals(1, tag.getFields(FieldKey.YEAR).size());
             tag.addField(FieldKey.TRACK,"2");
@@ -109,7 +109,7 @@ public class FlacWriteTest extends TestCase
             assertEquals(1, tag.getFields(FieldKey.YEAR).size());
             assertEquals(1, tag.getFields(FieldKey.TRACK).size());
             //One Image
-            assertEquals(1, tag.get(FieldKey.COVER_ART.name()).size());
+            assertEquals(1, tag.getFields(FieldKey.COVER_ART.name()).size());
             assertEquals(1, tag.getImages().size());
             MetadataBlockDataPicture pic = tag.getImages().get(0);
             assertEquals((int) PictureTypes.DEFAULT_ID, pic.getPictureType());
@@ -141,7 +141,7 @@ public class FlacWriteTest extends TestCase
             f.commit();
 
             //Two Images
-            assertEquals(2, tag.get(FieldKey.COVER_ART.name()).size());
+            assertEquals(2, tag.getFields(FieldKey.COVER_ART.name()).size());
             assertEquals(2, tag.getImages().size());
             pic = tag.getImages().get(1);
             assertEquals((int) PictureTypes.DEFAULT_ID, pic.getPictureType());

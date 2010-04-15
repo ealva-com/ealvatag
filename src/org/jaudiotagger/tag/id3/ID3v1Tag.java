@@ -214,7 +214,7 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag
         //TODO
     }
 
-    public List<TagField> get(String id)
+    public List<TagField> getFields(String id)
     {
 
         if (FieldKey.ARTIST.name().equals(id))

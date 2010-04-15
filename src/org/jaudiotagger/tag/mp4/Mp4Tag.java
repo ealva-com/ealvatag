@@ -145,7 +145,7 @@ public class Mp4Tag extends AbstractTag
         {
             throw new KeyNotFoundException();
         }
-        return super.get(tagFieldToMp4Field.get(genericKey).getFieldName());
+        return super.getFields(tagFieldToMp4Field.get(genericKey).getFieldName());
     }
 
 
@@ -163,7 +163,7 @@ public class Mp4Tag extends AbstractTag
         {
             throw new KeyNotFoundException();
         }
-        return super.get(mp4FieldKey.getFieldName());
+        return super.getFields(mp4FieldKey.getFieldName());
     }
 
     /**
@@ -181,10 +181,10 @@ public class Mp4Tag extends AbstractTag
 
         if(genericKey== FieldKey.GENRE)
         {
-            List<TagField> genres = get(GENRE.getFieldName());
+            List<TagField> genres = getFields(GENRE.getFieldName());
             if (genres.size() == 0)
             {
-                genres = get(GENRE_CUSTOM.getFieldName());
+                genres = getFields(GENRE_CUSTOM.getFieldName());
             }
             if(genres.size()>index)
             {

@@ -88,8 +88,7 @@ public interface Tag {
      * @param id The field id.
      * @return A list of {@link TagField} objects with the given &quot;id&quot;.
      */
-    //TODO method should be called getFields(String id)
-    public List<TagField> get(String id);
+    public List<TagField> getFields(String id);
 
     /**
      * Returns a {@linkplain List list} of {@link TagField} objects whose &quot;{@linkplain TagField#getId() id}&quot;

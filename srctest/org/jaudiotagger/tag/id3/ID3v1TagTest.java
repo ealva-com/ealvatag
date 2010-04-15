@@ -245,7 +245,7 @@ public class ID3v1TagTest extends TestCase
         v1Tag.setField(new ID3v1TagField(FieldKey.ARTIST.name(), "artist"));
         assertEquals("artist", ((TagTextField) v1Tag.getFields(FieldKey.ARTIST).get(0)).getContent());
         assertEquals("artist", ((TagTextField) v1Tag.getFirstField(FieldKey.ARTIST.name())).getContent());
-        assertEquals("artist", ((TagTextField) (v1Tag.get(FieldKey.ARTIST.name()).get(0))).getContent());
+        assertEquals("artist", ((TagTextField) (v1Tag.getFields(FieldKey.ARTIST.name()).get(0))).getContent());
 
         v1Tag.setField(new ID3v1TagField(FieldKey.ALBUM.name(), "album"));
         assertEquals("album", ((TagTextField) v1Tag.getFields(FieldKey.ALBUM).get(0)).getContent());

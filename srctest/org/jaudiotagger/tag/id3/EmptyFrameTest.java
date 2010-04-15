@@ -37,8 +37,8 @@ public class EmptyFrameTest extends TestCase
         //Empty frame is disregarded, but doesnt prevent retrievel of valid WORS frame, so count of frame increased by
         //one
         assertEquals(9, mp3File.getID3v2Tag().getFieldCount());
-        assertEquals(0, mp3File.getID3v2Tag().get("WOAF").size());
-        assertEquals(1, mp3File.getID3v2Tag().get("WORS").size());
+        assertEquals(0, mp3File.getID3v2Tag().getFields("WOAF").size());
+        assertEquals(1, mp3File.getID3v2Tag().getFields("WORS").size());
     }
 
     public void testWriteID3v24TagWithEmptyFrameFirst() throws Exception
@@ -69,8 +69,8 @@ public class EmptyFrameTest extends TestCase
         //Empty frame is disregarded, but doesnt prevent retrievel of valid WORS frame, so count of frame increased by
         //one
         assertEquals(9, mp3File.getID3v2Tag().getFieldCount());
-        assertEquals(0, mp3File.getID3v2Tag().get("WOAF").size());
-        assertEquals(1, mp3File.getID3v2Tag().get("WORS").size());
+        assertEquals(0, mp3File.getID3v2Tag().getFields("WOAF").size());
+        assertEquals(1, mp3File.getID3v2Tag().getFields("WORS").size());
     }
 
     public void testWriteID3v22TagWithEmptyFrameFirst() throws Exception
@@ -101,8 +101,8 @@ public class EmptyFrameTest extends TestCase
         //Empty frame is disregarded, but doesnt prevent retrievel of valid WORS frame, so count of frame increased by
         //one
         assertEquals(9, mp3File.getID3v2Tag().getFieldCount());
-        assertEquals(0, mp3File.getID3v2Tag().get("WAF").size());
-        assertEquals(1, mp3File.getID3v2Tag().get("WRS").size());
+        assertEquals(0, mp3File.getID3v2Tag().getFields("WAF").size());
+        assertEquals(1, mp3File.getID3v2Tag().getFields("WRS").size());
 
 
     }

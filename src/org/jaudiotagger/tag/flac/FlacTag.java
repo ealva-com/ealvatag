@@ -65,7 +65,7 @@ public class FlacTag implements Tag
         }
     }
 
-    public List<TagField> get(String id)
+    public List<TagField> getFields(String id)
     {
         if (id.equals(FieldKey.COVER_ART.name()))
         {
@@ -78,7 +78,7 @@ public class FlacTag implements Tag
         }
         else
         {
-            return tag.get(id);
+            return tag.getFields(id);
         }
     }
 

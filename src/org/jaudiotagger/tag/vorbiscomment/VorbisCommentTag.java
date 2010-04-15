@@ -25,7 +25,7 @@ import org.jaudiotagger.audio.ogg.util.VorbisHeader;
 import org.jaudiotagger.logging.ErrorMessage;
 import org.jaudiotagger.tag.*;
 import org.jaudiotagger.tag.datatype.Artwork;
-import static org.jaudiotagger.tag.vorbiscomment.VorbisCommentFieldKey.ALBUM;
+
 import static org.jaudiotagger.tag.vorbiscomment.VorbisCommentFieldKey.VENDOR;
 
 import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
@@ -230,7 +230,7 @@ public class VorbisCommentTag extends AbstractTag
         {
             throw new KeyNotFoundException();
         }
-        return super.get(vorbisCommentFieldKey.getFieldName());
+        return super.getFields(vorbisCommentFieldKey.getFieldName());
     }
 
     /**
@@ -246,7 +246,7 @@ public class VorbisCommentTag extends AbstractTag
         {
             throw new KeyNotFoundException();
         }
-        return super.get(vorbisCommentKey.getFieldName());
+        return super.getFields(vorbisCommentKey.getFieldName());
     }
 
     public String getValue(FieldKey genericKey,int index) throws KeyNotFoundException

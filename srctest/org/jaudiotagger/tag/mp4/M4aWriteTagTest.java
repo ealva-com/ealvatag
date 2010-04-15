@@ -1904,8 +1904,8 @@ public class M4aWriteTagTest extends TestCase
             assertEquals(1,tag.getFields(FieldKey.DISC_NO).size());
             assertEquals(1,tag.getFields(FieldKey.DISC_TOTAL).size());
 
-            assertEquals(1,tag.get("trkn").size());
-            assertEquals(1,tag.get("disk").size());
+            assertEquals(1,tag.getFields("trkn").size());
+            assertEquals(1,tag.getFields("disk").size());
 
             assertEquals("1",tag.getFirst(FieldKey.TRACK));
             assertEquals("11",tag.getFirst(FieldKey.TRACK_TOTAL));
