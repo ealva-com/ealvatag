@@ -329,34 +329,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
      */
     private String getTextValueForFrame(AbstractID3v2Frame frame)
     {
-        if (frame.getBody() instanceof FrameBodyCOMM)
-        {
-            return ((FrameBodyCOMM) frame.getBody()).getText();
-        }
-        else if (frame.getBody() instanceof FrameBodyUSLT)
-        {
-            return ((FrameBodyUSLT) frame.getBody()).getFirstTextValue();
-        }
-        else if (frame.getBody() instanceof AbstractFrameBodyTextInfo)
-        {
-            return ((AbstractFrameBodyTextInfo) frame.getBody()).getTextWithoutTrailingNulls();
-        }
-        else if (frame.getBody() instanceof AbstractFrameBodyUrlLink)
-        {
-            return ((AbstractFrameBodyUrlLink) frame.getBody()).getUrlLink();
-        }
-        else if (frame.getBody() instanceof FrameBodyTRCK)
-        {
-            return String.valueOf(((FrameBodyTRCK) frame.getBody()).getTrackNo());
-        }
-        else if (frame.getBody() instanceof FrameBodyTPOS)
-        {
-            return String.valueOf(((FrameBodyTPOS) frame.getBody()).getDiscNo());
-        }
-        else
-        {
-            return frame.getBody().toString();
-        }
+        return frame.getBody().getUserFriendlyValue();
     }
 
     public TagField getFirstField(FieldKey genericKey) throws KeyNotFoundException

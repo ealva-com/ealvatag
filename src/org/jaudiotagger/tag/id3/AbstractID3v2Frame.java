@@ -16,12 +16,10 @@
 package org.jaudiotagger.tag.id3;
 
 import org.jaudiotagger.audio.mp3.MP3File;
-import org.jaudiotagger.tag.InvalidFrameException;
-import org.jaudiotagger.tag.InvalidTagException;
-import org.jaudiotagger.tag.TagField;
-import org.jaudiotagger.tag.TagOptionSingleton;
+import org.jaudiotagger.tag.*;
 import org.jaudiotagger.tag.id3.framebody.AbstractID3v2FrameBody;
 import org.jaudiotagger.tag.id3.framebody.FrameBodyUnsupported;
+import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
 import org.jaudiotagger.utils.EqualsUtil;
 
 import java.io.ByteArrayOutputStream;
@@ -37,7 +35,7 @@ import java.util.logging.Level;
  * @author : Eric Farng
  * @version $Id$
  */
-public abstract class AbstractID3v2Frame extends AbstractTagFrame implements TagField
+public abstract class AbstractID3v2Frame extends AbstractTagFrame implements TagTextField
 {
 
     protected static final String TYPE_FRAME = "frame";
@@ -515,4 +513,38 @@ public abstract class AbstractID3v2Frame extends AbstractTagFrame implements Tag
         AbstractID3v2Frame that = (AbstractID3v2Frame) obj;
         return super.equals(that);
     }
+
+    /**
+     * Returns the content of the field.
+     *
+     * For frames consisting of different fields, this will return the value deemed to be most
+     * likely to be required
+     *
+     * @return Content
+     */
+    public String getContent()
+    {
+        return getBody().getUserFriendlyValue();
+    }
+
+    /**
+     * Returns the current used charset encoding.
+     *
+     * @return Charset encoding.
+     */
+    public String getEncoding()
+    {
+        return TextEncoding.getInstanceOf().getValueForId(this.getBody().getTextEncoding());
+    }
+
+    /**
+     * Sets the content of the field.
+     *
+     * @param content fields content.
+     */
+    public void setContent(String content)
+    {
+        throw new UnsupportedOperationException("Not implemeneted please use the generic tag methods for setting content");
+    }
+
 }

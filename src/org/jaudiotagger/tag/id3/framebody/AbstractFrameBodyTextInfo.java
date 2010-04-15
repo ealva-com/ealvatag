@@ -123,6 +123,10 @@ public abstract class AbstractFrameBodyTextInfo extends AbstractID3v2FrameBody
         setObjectValue(DataTypes.OBJ_TEXT, text);
     }
 
+    public String getUserFriendlyValue()
+    {
+        return getTextWithoutTrailingNulls();
+    }
 
     /**
      * Retrieve the complete text String as it is held internally.

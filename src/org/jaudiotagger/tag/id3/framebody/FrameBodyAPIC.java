@@ -149,6 +149,12 @@ public class FrameBodyAPIC extends AbstractID3v2FrameBody implements ID3v24Frame
         super(byteBuffer, frameSize);
     }
 
+    public String getUserFriendlyValue()
+    {
+      return getMimeType()+":"+getDescription()+":"+getImageData().length;
+    }
+
+
     /**
      * Set a description of the image
      *

@@ -81,6 +81,11 @@ public abstract class AbstractFrameBodyUrlLink extends AbstractID3v2FrameBody
         super(byteBuffer, frameSize);
     }
 
+    public String getUserFriendlyValue()
+    {
+        return getUrlLink();
+    }
+
     /**
      * Set URL Link
      *

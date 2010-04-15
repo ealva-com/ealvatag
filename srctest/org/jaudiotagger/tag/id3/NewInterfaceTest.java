@@ -10,6 +10,7 @@ import org.jaudiotagger.audio.mp3.MP3File;
 import org.jaudiotagger.tag.FieldKey;
 import org.jaudiotagger.tag.TagField;
 import org.jaudiotagger.tag.TagOptionSingleton;
+import org.jaudiotagger.tag.TagTextField;
 import org.jaudiotagger.tag.datatype.DataTypes;
 import org.jaudiotagger.tag.id3.framebody.*;
 import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
@@ -251,6 +252,7 @@ public class NewInterfaceTest extends TestCase
         assertEquals(FrameBodyTPE1Test.TPE1_TEST_STRING, af.getTag().getFirst(FieldKey.ARTIST));
         assertEquals(FrameBodyTPE1Test.TPE1_TEST_STRING, af.getTag().getFirst(FieldKey.ARTIST));
         assertEquals(FrameBodyTPE1Test.TPE1_TEST_STRING, ((ID3v24Tag) af.getTag()).getFirst(ID3v24FieldKey.ARTIST));
+        assertEquals(FrameBodyTPE1Test.TPE1_TEST_STRING,((TagTextField)af.getTag().getFirstField(FieldKey.ARTIST)).getContent());
         //.... but v1 value is still there
         assertEquals(V1_ARTIST, ((MP3File) af).getID3v1Tag().getFirst(FieldKey.ARTIST));
         //Write album ( new method)
@@ -262,6 +264,7 @@ public class NewInterfaceTest extends TestCase
         assertEquals(ALBUM_TEST_STRING, af.getTag().getFirst(FieldKey.ALBUM));
         assertEquals(ALBUM_TEST_STRING, af.getTag().getFirst(FieldKey.ALBUM));
         assertEquals(ALBUM_TEST_STRING, ((ID3v24Tag) af.getTag()).getFirst(ID3v24FieldKey.ALBUM));
+        assertEquals(ALBUM_TEST_STRING,((TagTextField)af.getTag().getFirstField(FieldKey.ALBUM)).getContent());
         assertEquals(1, af.getTag().getFields(FieldKey.ALBUM).size());
 
         //Read back album (old method)
@@ -277,6 +280,7 @@ public class NewInterfaceTest extends TestCase
         assertEquals(ALBUM_TEST_STRING, af.getTag().getSubValue(FieldKey.ALBUM,0,0));
         assertEquals(ALBUM_TEST_STRING2, af.getTag().getSubValue(FieldKey.ALBUM,0,1));
         assertEquals(ALBUM_TEST_STRING + "\u0000" + ALBUM_TEST_STRING2, ((ID3v24Tag) af.getTag()).getFirst(ID3v24FieldKey.ALBUM));
+        assertEquals(ALBUM_TEST_STRING + "\u0000" + ALBUM_TEST_STRING2,((TagTextField)af.getTag().getFirstField(FieldKey.ALBUM)).getContent());
         assertEquals(1, af.getTag().getFields(FieldKey.ALBUM).size());
 
         //And can replace existing value
@@ -305,6 +309,7 @@ public class NewInterfaceTest extends TestCase
         assertEquals("1991", af.getTag().getFirst(FieldKey.YEAR));
         assertEquals("1991", af.getTag().getFirst(FieldKey.YEAR));
         assertEquals("1991", ((ID3v24Tag) af.getTag()).getFirst(ID3v24FieldKey.YEAR));
+        assertEquals("1991",((TagTextField)af.getTag().getFirstField(FieldKey.YEAR)).getContent());
         assertEquals(1, af.getTag().getFields(FieldKey.YEAR).size());
         assertEquals(2, af.getTag().getFieldCount());
 
@@ -315,6 +320,7 @@ public class NewInterfaceTest extends TestCase
         assertEquals("Title", af.getTag().getFirst(FieldKey.TITLE));
         assertEquals("Title", af.getTag().getFirst(FieldKey.TITLE));
         assertEquals("Title", ((ID3v24Tag) af.getTag()).getFirst(ID3v24FieldKey.TITLE));
+        assertEquals("Title",((TagTextField)af.getTag().getFirstField(FieldKey.TITLE)).getContent());
         assertEquals(1, af.getTag().getFields(FieldKey.TITLE).size());
         assertEquals(3, af.getTag().getFieldCount());
 
@@ -421,6 +427,7 @@ public class NewInterfaceTest extends TestCase
         assertEquals(3, ((List) ((ID3v24Tag) af.getTag()).getFrame("TXXX")).size());
         assertEquals("musicip_id", af.getTag().getFirst(FieldKey.MUSICIP_ID));
         assertEquals("releaseid", af.getTag().getFirst(FieldKey.MUSICBRAINZ_RELEASEID));
+        assertEquals("releaseid",((TagTextField)af.getTag().getFirstField(FieldKey.MUSICBRAINZ_RELEASEID)).getContent());
         assertEquals("asin123456" + "\u01ff", af.getTag().getFirst(FieldKey.AMAZON_ID));
         assertEquals(1, af.getTag().getFields(FieldKey.MUSICIP_ID).size());
         assertEquals(1, af.getTag().getFields(FieldKey.AMAZON_ID).size());
@@ -458,6 +465,7 @@ public class NewInterfaceTest extends TestCase
         assertEquals(1, ((ID3v24Tag) af.getTag()).getFields(ID3v24FieldKey.COVER_ART.getFieldName()).size());
         //TODO This isnt very user friendly
         TagField tagField = af.getTag().getFirstField(ID3v24FieldKey.COVER_ART.getFieldName());
+        assertEquals("image/png::18545",((TagTextField)af.getTag().getFirstField(FieldKey.COVER_ART)).getContent());
 
         assertTrue(tagField instanceof ID3v24Frame);
         ID3v24Frame apicFrame = (ID3v24Frame) tagField;

@@ -23,6 +23,7 @@ import org.jaudiotagger.tag.InvalidFrameIdentifierException;
 import org.jaudiotagger.tag.id3.framebody.AbstractID3v2FrameBody;
 import org.jaudiotagger.tag.id3.framebody.FrameBodyDeprecated;
 import org.jaudiotagger.tag.id3.framebody.FrameBodyUnsupported;
+import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
 import org.jaudiotagger.utils.EqualsUtil;
 
 import java.io.ByteArrayOutputStream;
@@ -482,5 +483,22 @@ public class ID3v22Frame extends AbstractID3v2Frame
     public boolean isBinary()
     {
         return ID3v22Frames.getInstanceOf().isBinary(getId());
+    }
+
+     /**
+     * Sets the charset encoding used by the field.
+     *
+     * @param encoding charset.
+     */
+    public void setEncoding(String encoding)
+    {
+        Integer encodingId = TextEncoding.getInstanceOf().getIdForValue(encoding);
+        if(encoding!=null)
+        {
+            if(encodingId.intValue()<2)
+            {
+                this.getBody().setTextEncoding(encodingId.byteValue());
+            }
+        }
     }
 }

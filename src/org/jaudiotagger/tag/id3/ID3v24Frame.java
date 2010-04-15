@@ -22,6 +22,7 @@ import org.jaudiotagger.logging.ErrorMessage;
 import org.jaudiotagger.tag.*;
 import org.jaudiotagger.tag.datatype.Lyrics3Line;
 import org.jaudiotagger.tag.id3.framebody.*;
+import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
 import org.jaudiotagger.tag.lyrics3.*;
 import org.jaudiotagger.utils.EqualsUtil;
 
@@ -996,5 +997,22 @@ public class ID3v24Frame extends AbstractID3v2Frame
     public boolean isBinary()
     {
         return ID3v24Frames.getInstanceOf().isBinary(getId());
+    }
+
+     /**
+     * Sets the charset encoding used by the field.
+     *
+     * @param encoding charset.
+     */
+    public void setEncoding(String encoding)
+    {
+        Integer encodingId = TextEncoding.getInstanceOf().getIdForValue(encoding);
+        if(encoding!=null)
+        {
+            if(encodingId.intValue()<4)
+            {
+                this.getBody().setTextEncoding(encodingId.byteValue());
+            }
+        }
     }
 }

@@ -106,6 +106,12 @@ public class FrameBodyUSLT extends AbstractID3v2FrameBody implements ID3v23Frame
         super(byteBuffer, frameSize);
     }
 
+    public String getUserFriendlyValue()
+    {
+        return getFirstTextValue();
+    }
+
+
     /**
      * Set a description field
      *

@@ -120,6 +120,16 @@ public abstract class AbstractTagFrameBody extends AbstractTagItem
 
 
     /**
+     *
+     * @return the text value that the user would expect to see for this framebody type, this should be overrridden
+     * for all framebodies
+     */
+    public String getUserFriendlyValue()
+    {
+        return toString();
+    }
+
+    /**
      * This method calls <code>toString</code> for all it's objects and appends
      * them without any newline characters.
      *

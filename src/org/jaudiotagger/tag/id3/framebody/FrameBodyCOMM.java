@@ -188,6 +188,12 @@ public class FrameBodyCOMM extends AbstractID3v2FrameBody implements ID3v24Frame
         return text.getValueAtIndex(0);
     }
 
+    public String getUserFriendlyValue()
+    {
+        return getText();
+    }
+
+
     /**
      *
      */

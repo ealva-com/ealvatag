@@ -32,7 +32,7 @@ import org.jaudiotagger.tag.datatype.AbstractIntStringValuePair;
  * <p/>
  * Note in ID3 UTF_16 can be implemented as either UTF16BE or UTF16LE with byte ordering
  * marks, in JAudioTagger we always implement it as UTF16LE because only this order
- * is understood in Windows, OSX seesm to understand both.
+ * is understood in Windows, OSX seem to understand both.
  */
 public class TextEncoding extends AbstractIntStringValuePair
 {

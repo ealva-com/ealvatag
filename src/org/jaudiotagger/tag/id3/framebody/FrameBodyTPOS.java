@@ -101,7 +101,12 @@ public class FrameBodyTPOS extends AbstractID3v2FrameBody implements ID3v23Frame
         return ID3v24Frames.FRAME_ID_SET;
     }
 
-     public String getText()
+    public String getUserFriendlyValue()
+    {
+        return String.valueOf(getDiscNo());
+    }
+
+    public String getText()
     {
         return getObjectValue(DataTypes.OBJ_TEXT).toString();
     }
