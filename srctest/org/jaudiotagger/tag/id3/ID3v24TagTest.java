@@ -196,11 +196,114 @@ public class ID3v24TagTest extends TestCase
         assertEquals(ID3v11TagTest.ARTIST, ((AbstractFrameBodyTextInfo) v2Tag.getFirstField(ID3v24Frames.FRAME_ID_ARTIST).getBody()).getFirstTextValue());
     }
 
-    /** Writing multiple text frames of same type to file
-     * TODO Current behaviour is to allow writing, but when reading back only reads the first one. This doesnt make much sense
-     * if we allow to write multiples we should allow to read multiples but would be better if code realised added another value
-     * to the existing frmae rathert than creating anew frame */
-    public void testWriteMultipleFields() throws Exception
+    /** When try and write multiple text fields of the same type will now actually append the second value to the first
+     * frame, getFieldCount() adjusted to show the number of values in frame but getFields() will just show number of frames
+     * this fills a bit inconsistent but I haven't worked out a better way at the moment
+     * @throws Exception
+     */
+    public void testWriteMultipleTextFields() throws Exception
+    {
+        File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3", new File("testWriteMultipleText.mp3"));
+        AudioFile f = AudioFileIO.read(testFile);
+        assertNull(f.getTag());
+        f.setTag(new ID3v24Tag());
+        List<TagField> tagFields = f.getTag().getFields(FieldKey.ALBUM_ARTIST_SORT);
+        assertEquals(0,tagFields.size());
+
+        //Add album artist sort field
+        f.getTag().addField(FieldKey.ALBUM_ARTIST_SORT,"artist1");
+
+        //Add another, jaudiotagger silently adds second value to the same frame because only one frame of this type
+        //allowed, but text frames allow multiple values within them - I this is the correct (albeit confusing) behaviour
+        f.getTag().addField(FieldKey.ALBUM_ARTIST_SORT,"artist2");
+
+        //because added to the same frame, the number of fields is only one
+        assertEquals(1,f.getTag().getFields(FieldKey.ALBUM_ARTIST_SORT).size());
+        assertEquals(1,f.getTag().getFieldCount());
+
+        //but the field count includng subvalues takes this into account and shows 2
+        assertEquals(2,f.getTag().getFieldCountIncludingSubValues());
+        
+        //And if we get the value back we see the whole value (both values)
+        //TODO is this what we want ?
+        assertEquals("artist1\u0000artist2",f.getTag().getFirst(FieldKey.ALBUM_ARTIST_SORT));
+        assertEquals("artist1\u0000artist2",f.getTag().getValue(FieldKey.ALBUM_ARTIST_SORT,0));
+        //As can be seen from the longhand method
+        ID3v24Frame frame = (ID3v24Frame)f.getTag().getFirstField(FieldKey.ALBUM_ARTIST_SORT);
+        assertEquals("artist1\u0000artist2",((AbstractFrameBodyTextInfo)frame.frameBody).getText());
+
+        //We can get individual values back using longhand as well
+        assertEquals("artist1",((AbstractFrameBodyTextInfo)frame.frameBody).getValueAtIndex(0));
+        assertEquals("artist2",((AbstractFrameBodyTextInfo)frame.frameBody).getValueAtIndex(1));
+
+        //TODO .. but we need a neater generic method
+
+
+        assertEquals(1,((AbstractID3v2Tag)f.getTag()).getFieldCount());
+        tagFields = f.getTag().getFields(FieldKey.ALBUM_ARTIST_SORT);
+        assertEquals(1,tagFields.size());
+        f.commit();
+        f = AudioFileIO.read(testFile);
+        assertEquals(1,f.getTag().getFields(FieldKey.ALBUM_ARTIST_SORT).size());
+        assertEquals("artist1\u0000artist2",f.getTag().getFirst(FieldKey.ALBUM_ARTIST_SORT));
+        assertEquals(1,f.getTag().getFieldCount());
+        assertEquals(2,f.getTag().getFieldCountIncludingSubValues());
+        assertEquals(1,((AbstractID3v2Tag)f.getTag()).getFieldCount());
+        tagFields = f.getTag().getFields(FieldKey.ALBUM_ARTIST_SORT);
+        assertEquals(1,tagFields.size());
+    }
+
+    /** TXXX frames are not treated as text frames regarding nul serpretd strings, only allowed one string
+     */
+    public void testWriteMultipleTextTXXXFields() throws Exception
+    {
+        File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3", new File("testWriteMultipleTextTXXX.mp3"));
+        AudioFile f = AudioFileIO.read(testFile);
+        assertNull(f.getTag());
+        f.setTag(new ID3v24Tag());
+        List<TagField> tagFields = f.getTag().getFields(FieldKey.BARCODE);
+        assertEquals(0,tagFields.size());
+        f.getTag().addField(FieldKey.BARCODE,"xxxxxxxxxxxxxx");
+        f.getTag().addField(FieldKey.BARCODE,"yyyyyyyyyyyyyy");
+        assertEquals(2,f.getTag().getFields(FieldKey.BARCODE).size());
+        assertEquals(2,f.getTag().getFieldCount());
+        tagFields = f.getTag().getFields(FieldKey.BARCODE);
+        assertEquals(2,tagFields.size());
+        f.commit();
+        f = AudioFileIO.read(testFile);
+        assertEquals(2,f.getTag().getFields(FieldKey.BARCODE).size());
+        assertEquals(2,f.getTag().getFieldCount());
+        tagFields = f.getTag().getFields(FieldKey.BARCODE);
+        assertEquals(2,tagFields.size());
+    }
+
+    /** TXXX frames are not treated as text frames regarding nul serpretd strings, only allowed one string
+     */
+    public void testWriteMultipleDifferentTextTXXXFields() throws Exception
+    {
+        File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3", new File("testWriteMultipleTextTXXX.mp3"));
+        AudioFile f = AudioFileIO.read(testFile);
+        assertNull(f.getTag());
+        f.setTag(new ID3v24Tag());
+        List<TagField> tagFields = f.getTag().getFields(FieldKey.BARCODE);
+        assertEquals(0,tagFields.size());
+        f.getTag().addField(FieldKey.BARCODE,"xxxxxxxxxxxxxx");
+        f.getTag().addField(FieldKey.MUSICBRAINZ_DISC_ID,"yyyyyyyyyyyyyy");
+        assertEquals(1,f.getTag().getFields(FieldKey.BARCODE).size());
+        assertEquals(1,f.getTag().getFields(FieldKey.MUSICBRAINZ_DISC_ID).size());
+        assertEquals(2,f.getTag().getFieldCount());
+        tagFields = f.getTag().getFields(FieldKey.BARCODE);
+        assertEquals(1,tagFields.size());
+        f.commit();
+        f = AudioFileIO.read(testFile);
+        assertEquals(1,f.getTag().getFields(FieldKey.BARCODE).size());
+        assertEquals(1,f.getTag().getFields(FieldKey.MUSICBRAINZ_DISC_ID).size());
+        assertEquals(2,f.getTag().getFieldCount());
+        tagFields = f.getTag().getFields(FieldKey.BARCODE);
+        assertEquals(1,tagFields.size());
+    }
+
+     public void testWriteMultipleFields() throws Exception
     {
         File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3", new File("testWriteMultiple.mp3"));
         AudioFile f = AudioFileIO.read(testFile);
@@ -208,17 +311,19 @@ public class ID3v24TagTest extends TestCase
         f.setTag(new ID3v24Tag());
         List<TagField> tagFields = f.getTag().getFields(FieldKey.ALBUM_ARTIST_SORT);
         assertEquals(0,tagFields.size());
-        f.getTag().addField(FieldKey.ALBUM_ARTIST_SORT,"artist1");
-        f.getTag().addField(FieldKey.ALBUM_ARTIST_SORT,"artist2");
-        assertEquals(2,f.getTag().getFields(FieldKey.ALBUM_ARTIST_SORT).size());
+        f.getTag().addField(FieldKey.URL_OFFICIAL_RELEASE_SITE,"http://www,test.org");
+        f.getTag().addField(FieldKey.URL_OFFICIAL_RELEASE_SITE,"http://www,test.org");
+        assertEquals(2,f.getTag().getFields(FieldKey.URL_OFFICIAL_RELEASE_SITE).size());
         assertEquals(2,f.getTag().getFieldCount());
-        tagFields = f.getTag().getFields(FieldKey.ALBUM_ARTIST_SORT);
-        assertEquals(2,tagFields.size());
+        assertEquals(2,((AbstractID3v2Tag)f.getTag()).getFieldCount());
+        tagFields = f.getTag().getFields(FieldKey.URL_OFFICIAL_RELEASE_SITE);
+        //assertEquals(1,tagFields.size());
         f.commit();
         f = AudioFileIO.read(testFile);
-        assertEquals(1,f.getTag().getFields(FieldKey.ALBUM_ARTIST_SORT).size());
-        assertEquals(1,f.getTag().getFieldCount());
-        tagFields = f.getTag().getFields(FieldKey.ALBUM_ARTIST_SORT);
-        assertEquals(1,tagFields.size());
+        assertEquals(2,f.getTag().getFields(FieldKey.URL_OFFICIAL_RELEASE_SITE).size());
+        assertEquals(2,f.getTag().getFieldCount());
+        assertEquals(2,((AbstractID3v2Tag)f.getTag()).getFieldCount());
+        tagFields = f.getTag().getFields(FieldKey.URL_OFFICIAL_RELEASE_SITE);
+        assertEquals(2,tagFields.size());
     }
 }

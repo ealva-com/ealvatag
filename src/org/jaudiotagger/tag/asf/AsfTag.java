@@ -488,11 +488,20 @@ public final class AsfTag extends AbstractTag {
      */
     @Override
     public String getFirst(final FieldKey genericKey)
+            throws KeyNotFoundException
+    {
+        return getValue(genericKey,0);
+    }
+
+     /**
+     * {@inheritDoc}
+     */
+    public String getValue(final FieldKey genericKey,int index)
             throws KeyNotFoundException {
         if (genericKey == null) {
             throw new KeyNotFoundException();
         }
-        return super.getFirst(TAGFIELD_TO_ASFFIELD.get(genericKey).getFieldName());
+        return super.getItem(TAGFIELD_TO_ASFFIELD.get(genericKey).getFieldName(),index);
     }
 
     /**

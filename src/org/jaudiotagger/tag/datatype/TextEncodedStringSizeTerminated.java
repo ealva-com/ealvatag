@@ -24,7 +24,7 @@ import java.util.List;
  *
  * Most applications will ignore any but the first value, but some such as Foobar 2000 will decode them properly
  *
- * Itunes write null terminators characters after the String even though it only writes a single value.
+ * iTunes write null terminators characters after the String even though it only writes a single value.
  *
  *
  */
@@ -192,14 +192,14 @@ public class TextEncodedStringSizeTerminated extends AbstractString
      * @param value the raw value
      * @return list of values, guaranteed to be at least one value
      */
-    private static List splitByNullSeperator(String value)
+    public static List<String> splitByNullSeperator(String value)
     {
         String[] valuesarray = value.split("\\u0000");
-        List values = Arrays.asList(valuesarray);
+        List<String> values = Arrays.asList(valuesarray);
         //Read only list so if empty have to create new list
         if (values.size() == 0)
         {
-            values = new ArrayList(1);
+            values = new ArrayList<String>(1);
             values.add("");
         }
         return values;
@@ -234,8 +234,37 @@ public class TextEncodedStringSizeTerminated extends AbstractString
      */
     public String getValueAtIndex(int index)
     {
-        //Split String into seperate components
+        //Split String into separate components
         List values = splitByNullSeperator((String) value);
         return (String) values.get(index);
+    }
+
+    /**
+     *
+     * @return list of all values
+     */
+    public List<String> getValues()
+    {
+        return splitByNullSeperator((String) value);
+    }
+
+    /**
+     * Get value(s) whilst removing any trailing nulls
+     *
+     * @return
+     */
+    public String getValueWithoutTrailingNull()
+    {
+        List<String> values = splitByNullSeperator((String) value);
+        StringBuffer sb = new StringBuffer();
+        for(int i=0;i<values.size();i++)
+        {
+            if(i!=0)
+            {
+                sb.append("\u0000");
+            }
+            sb.append(values.get(i));
+        }
+        return sb.toString();
     }
 }

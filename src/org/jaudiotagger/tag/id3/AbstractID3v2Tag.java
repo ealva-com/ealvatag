@@ -26,6 +26,7 @@ import org.jaudiotagger.logging.FileSystemMessage;
 import org.jaudiotagger.tag.*;
 import org.jaudiotagger.tag.datatype.Artwork;
 import org.jaudiotagger.tag.datatype.DataTypes;
+import org.jaudiotagger.tag.datatype.TextEncodedStringSizeTerminated;
 import org.jaudiotagger.tag.id3.framebody.*;
 import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
 import org.jaudiotagger.tag.reference.PictureTypes;
@@ -48,7 +49,7 @@ import java.util.logging.Level;
 public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
 {
     protected static final String TYPE_HEADER = "header";
-    protected static final String TYPE_BODY = "body";
+    protected static final String TYPE_BODY = "body";     
 
     //Tag ID as held in file
     protected static final byte[] TAG_ID = {'I', 'D', '3'};
@@ -296,7 +297,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
      * @return matching frame, or list of matching frames
      */
     //TODO:This method is problematic because sometimes it returns a list and sometimes a frame, we need to
-    //replace with two seperate methods as in the tag interface.
+    //replace with two separate methods as in the tag interface.
     public Object getFrame(String identifier)
     {
         return frameMap.get(identifier);
@@ -311,8 +312,6 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
      * @param identifier
      * @return
      */
-    //TODO:we should be just be using the bodies toString() method so we dont have if statement in this method
-    //but this is being used by something else at the moment
     public String getFirst(String identifier)
     {
         AbstractID3v2Frame frame = getFirstField(identifier);
@@ -320,6 +319,16 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
         {
             return "";
         }
+        return getTextValueForFrame(frame);
+    }
+
+    /**
+     *
+     * @param frame
+     * @return
+     */
+    private String getTextValueForFrame(AbstractID3v2Frame frame)
+    {
         if (frame.getBody() instanceof FrameBodyCOMM)
         {
             return ((FrameBodyCOMM) frame.getBody()).getText();
@@ -330,7 +339,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
         }
         else if (frame.getBody() instanceof AbstractFrameBodyTextInfo)
         {
-            return ((AbstractFrameBodyTextInfo) frame.getBody()).getFirstTextValue();
+            return ((AbstractFrameBodyTextInfo) frame.getBody()).getTextWithoutTrailingNulls();
         }
         else if (frame.getBody() instanceof AbstractFrameBodyUrlLink)
         {
@@ -362,10 +371,10 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
 
 
     /**
-     * Retrieve the first tagfield that exists for this identifier
+     * Retrieve the first tag field that exists for this identifier
      *
      * @param identifier
-     * @return tag field or null if doesnt exist
+     * @return tag field or null if doesn't exist
      */
     public AbstractID3v2Frame getFirstField(String identifier)
     {
@@ -416,7 +425,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
 
 
     /**
-     * Add frame taking into account existing frame sof the same type
+     * Add frame taking into account existing frames of the same type
      *
      * @param newFrame
      * @param frames
@@ -562,7 +571,43 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
         }
     }
 
+    /** If the frame is a TextInformation (but not the TXXX) frame then we just add an extra string to the existing frame
+     *  otherwise we create a new frame
+     *
+     * @param list
+     * @param frameMap
+     * @param existingFrame
+     * @param frame
+     */
+    private void addNewFrameOrAddField(List<TagField> list, HashMap frameMap,AbstractID3v2Frame existingFrame,AbstractID3v2Frame frame)
+    {
+        if(frame.getBody() instanceof AbstractFrameBodyTextInfo && !(frame.getBody() instanceof FrameBodyTXXX))
+        {
+            AbstractFrameBodyTextInfo frameBody = (AbstractFrameBodyTextInfo) frame.getBody();
+            AbstractFrameBodyTextInfo existingFrameBody = (AbstractFrameBodyTextInfo) existingFrame.getBody();
+            existingFrameBody.addTextValue(frameBody.getText());
+        }
+        else
+        {
+            if(list.size()==0)
+            {
+                list.add(existingFrame);
+                list.add(frame);
+                frameMap.put(frame.getId(), list);
+            }
+            else
+            {
+                list.add(frame);
+            }
+        }
+    }
+
     /**
+     * Add new field
+     *
+     * There is a special handling if adding another text field of the same type, in this case the value will
+     * be appended to the existing field, serpated by the null character.
+     *
      * @param field
      * @throws FieldDataInvalidException
      */
@@ -578,26 +623,27 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
             throw new FieldDataInvalidException("Field " + field + " is not of type AbstractID3v2Frame");
         }
 
+        AbstractID3v2Frame frame = (AbstractID3v2Frame)field;
+
         Object o = frameMap.get(field.getId());
 
-        //There are already frames of this type
-        if (o instanceof List)
-        {
-            List<TagField> list = (List<TagField>) o;
-            list.add(field);
-        }
         //No frame of this type
-        else if (o == null)
+        if (o == null)
         {
             frameMap.put(field.getId(), field);
         }
-        //One frame exists, we are adding another so convert to list
+        //There are already frames of this type
+        else if (o instanceof List)
+        {
+            List<TagField> list = (List<TagField>) o;
+            addNewFrameOrAddField(list, frameMap, null, frame);
+        }
+        //One frame exists, we are adding another so may need to convert to list
         else
         {
+            AbstractID3v2Frame existingFrame = (AbstractID3v2Frame)o;
             List<TagField> list = new ArrayList<TagField>();
-            list.add((TagField) o);
-            list.add(field);
-            frameMap.put(field.getId(), list);
+            addNewFrameOrAddField(list, frameMap, existingFrame, frame);
         }
     }
 
@@ -623,6 +669,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
      *
      * @return a count of different frames
      */
+    /*
     public int getFrameCount()
     {
         if (frameMap == null)
@@ -634,11 +681,12 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
             return frameMap.size();
         }
     }
+    */
 
     /**
      * Return all frames which start with the identifier, this
      * can be more than one which is useful if trying to retrieve
-     * similar frames e.g TIT1,TIT2,TIT3 ... and don't know exaclty
+     * similar frames e.g TIT1,TIT2,TIT3 ... and don't know exactly
      * which ones there are.
      * <p/>
      * Warning the match is only done against the identifier so if a tag contains a frame with an unsupported body
@@ -1520,7 +1568,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
     }
 
     /**
-     * @return iterator of all fields, multiple values for the same Id (e.g multiple TXXX frames) count as seperate
+     * @return iterator of all fields, multiple values for the same Id (e.g multiple TXXX frames) count as separate
      *         fields
      */
     public Iterator<TagField> getFields()
@@ -1631,18 +1679,64 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
         };
     }
 
+    /**
+     * Count number of frames/fields in this tag
+     * 
+     * @return
+     */
     public int getFieldCount()
     {
         Iterator<TagField> it = getFields();
         int count = 0;
 
-        //Done this way becuase it.hasNext() incorrectly counts empty list
+        //Done this way because it.hasNext() incorrectly counts empty list
         //whereas it.next() works correctly
         try
         {
             while (true)
             {
-                it.next();
+                TagField next = it.next();
+                count++;
+            }
+        }
+        catch (NoSuchElementException nse)
+        {
+            //this is thrown when no more elements
+        }
+        return count;
+    }
+
+    /**
+     * Return count of fields, this considers a text frame with two null separated values as two fields, if you want
+     * a count of frames @see getFrameCount
+     *
+     * @return count of fields
+     */
+    public int getFieldCountIncludingSubValues()
+    {
+        Iterator<TagField> it = getFields();
+        int count = 0;
+
+        //Done this way because it.hasNext() incorrectly counts empty list
+        //whereas it.next() works correctly
+        try
+        {
+            while (true)
+            {
+                TagField next = it.next();
+                if(next instanceof AbstractID3v2Frame)
+                {
+                    AbstractID3v2Frame frame = (AbstractID3v2Frame)next;
+                    if(
+                        (frame.getBody() instanceof AbstractFrameBodyTextInfo) &&
+                       !(frame.getBody() instanceof FrameBodyTXXX)
+                       )
+                    {
+                        AbstractFrameBodyTextInfo frameBody =  (AbstractFrameBodyTextInfo)frame.getBody();
+                        count+=frameBody.getNumberOfValues();
+                        continue;
+                    }
+                }
                 count++;
             }
         }
@@ -1667,6 +1761,38 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
      */
     public String getFirst(FieldKey genericKey) throws KeyNotFoundException
     {
+        return getValue(genericKey,0);
+    }
+
+    /**
+     *  Retrieve the mth value that exists in the nth frame for this generic key 
+     * @param genericKey
+     * @param n the index of the frame
+     * @param m
+     * @return
+     */
+    public String getSubValue(FieldKey genericKey, int n, int m)
+    {
+        String wholeValue = getValue(genericKey, n);
+        List<String> values = TextEncodedStringSizeTerminated.splitByNullSeperator(wholeValue);
+        if(values.size()>m)
+        {
+            return values.get(m);
+        }
+        return "";
+    }
+
+     /**
+     * Retrieve the value that exists for this generic key and this index
+     *
+     * Have to do some special mapping for certain generic keys because they share frame
+     * with another generic key.
+     *
+     * @param genericKey
+     * @return
+     */
+    public String getValue(FieldKey genericKey, int index) throws KeyNotFoundException
+    {
         if (genericKey == null)
         {
             throw new KeyNotFoundException();
@@ -1674,15 +1800,10 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
 
         FrameAndSubId frameAndSubId = getFrameAndSubIdFromGenericKey(genericKey);
 
-        //Special Mappings for these fields because two generic fields map to different parts of the same frame
-        if(
-                (genericKey== FieldKey.TRACK)||
-                (genericKey== FieldKey.TRACK_TOTAL)||
-                (genericKey== FieldKey.DISC_NO)||
-                (genericKey== FieldKey.DISC_TOTAL)
-                )
+        List<TagField> fields = getFields(genericKey);
+        if(fields!=null && fields.size()>index)
         {
-            AbstractID3v2Frame frame = getFirstField(frameAndSubId.getFrameId());
+            AbstractID3v2Frame frame = (AbstractID3v2Frame) fields.get(index);
             if(frame!=null)
             {
                 if (genericKey == FieldKey.TRACK)
@@ -1701,19 +1822,18 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
                 {
                     return String.valueOf(((FrameBodyTPOS)frame.getBody()).getDiscTotal());
                 }
+                else
+                {
+                    return doGetValueAtIndex(frameAndSubId, index);
+                }
             }
             else
             {
                 return "";
             }
         }
-        else
-        {
-            return doGetFirst(frameAndSubId);
-        }
         return "";
     }
-
 
     /**
      * Create a new TagField
@@ -1838,21 +1958,27 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
 
     /**
      * @param formatKey
+     * @param index
      * @return
      * @throws KeyNotFoundException
      */
-    protected String doGetFirst(FrameAndSubId formatKey) throws KeyNotFoundException
+    protected String doGetValueAtIndex(FrameAndSubId formatKey, int index) throws KeyNotFoundException
     {
         //Simple 1 to 1 mapping
         if (formatKey.getSubId() == null)
         {
-            return getFirst(formatKey.getFrameId());
+            List<TagField> list = get(formatKey.getFrameId());
+            if(list.size()>index)
+            {
+                return getTextValueForFrame((AbstractID3v2Frame)list.get(index));
+            }
         }
         else
         {
             //Get list of frames that this uses
             List<TagField> list = get(formatKey.getFrameId());
             ListIterator<TagField> li = list.listIterator();
+            List<String> listOfMatches = new ArrayList<String>();
             while (li.hasNext())
             {
                 AbstractTagFrameBody next = ((AbstractID3v2Frame) li.next()).getBody();
@@ -1860,21 +1986,21 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
                 {
                     if (((FrameBodyTXXX) next).getDescription().equals(formatKey.getSubId()))
                     {
-                        return ((FrameBodyTXXX) next).getText();
+                        listOfMatches.add(((FrameBodyTXXX) next).getText());
                     }
                 }
                 else if (next instanceof FrameBodyWXXX)
                 {
                     if (((FrameBodyWXXX) next).getDescription().equals(formatKey.getSubId()))
                     {
-                        return ((FrameBodyWXXX) next).getUrlLink();
+                        listOfMatches.add(((FrameBodyWXXX) next).getUrlLink());
                     }
                 }
                 else if (next instanceof FrameBodyUFID)
                 {
                     if (Arrays.equals(((FrameBodyUFID) next).getUniqueIdentifier(), formatKey.getSubId().getBytes()))
                     {
-                        return new String(((FrameBodyUFID) next).getUniqueIdentifier());
+                        listOfMatches.add(new String(((FrameBodyUFID) next).getUniqueIdentifier()));
                     }
                 }
                 else
@@ -1882,8 +2008,16 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
                     throw new RuntimeException("Need to implement getFields(FieldKey genericKey) for:" + next.getClass());
                 }
             }
-            return "";
+            if(listOfMatches.size() > index)
+            {
+                return listOfMatches.get(index);
+            }
+            else
+            {
+                return "";
+            }
         }
+        return "";
     }
 
     /**
@@ -1999,11 +2133,10 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
 
         FrameAndSubId formatKey = getFrameAndSubIdFromGenericKey(genericKey);
 
-        //Get list of frames that this uses, as we are going to remove entries we dont want take a copy
+        //Get list of frames that this uses, as we are going to remove entries we don't want take a copy
         List<TagField> list = get(formatKey.getFrameId());
         List<TagField> filteredList = new ArrayList<TagField>();
         String subFieldId = formatKey.getSubId();
-        String frameid = formatKey.getFrameId();
 
         //... do we need to refine the list further i.e we only want TXXX frames that relate to the particular
         //key that was passed as a parameter

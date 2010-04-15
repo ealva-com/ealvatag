@@ -167,12 +167,12 @@ public class Mp4Tag extends AbstractTag
     }
 
     /**
-     * Retrieve the first value that exists for this generic key
+     * Retrieve the indexed value that exists for this generic key
      *
      * @param genericKey
      * @return
      */
-    public String getFirst(FieldKey genericKey) throws KeyNotFoundException
+    public String getValue(FieldKey genericKey, int index) throws KeyNotFoundException
     {
         if (genericKey == null)
         {
@@ -186,9 +186,9 @@ public class Mp4Tag extends AbstractTag
             {
                 genres = get(GENRE_CUSTOM.getFieldName());
             }
-            if(genres.size()>0)
+            if(genres.size()>index)
             {
-                return ((TagTextField)genres.get(0)).getContent();
+                return ((TagTextField)genres.get(index)).getContent();
             }
             else
             {
@@ -199,9 +199,9 @@ public class Mp4Tag extends AbstractTag
         else if(genericKey== FieldKey.TRACK)
         {
             List<TagField> list = get(tagFieldToMp4Field.get(genericKey));
-            if(list.size()>0)
+            if(list.size()>index)
             {
-                Mp4TrackField trackField = (Mp4TrackField)list.get(0);
+                Mp4TrackField trackField = (Mp4TrackField)list.get(index);
                 if(trackField.getTrackNo()>0)
                 {
                     return String.valueOf(trackField.getTrackNo());
@@ -211,9 +211,9 @@ public class Mp4Tag extends AbstractTag
         else if(genericKey== FieldKey.TRACK_TOTAL)
         {
             List<TagField> list = get(tagFieldToMp4Field.get(genericKey));
-            if(list.size()>0)
+            if(list.size()>index)
             {
-                Mp4TrackField trackField = (Mp4TrackField)list.get(0);
+                Mp4TrackField trackField = (Mp4TrackField)list.get(index);
                 if(trackField.getTrackTotal()>0)
                 {
                     return String.valueOf(trackField.getTrackTotal());
@@ -223,9 +223,9 @@ public class Mp4Tag extends AbstractTag
         else if(genericKey== FieldKey.DISC_NO)
         {
             List<TagField> list = get(tagFieldToMp4Field.get(genericKey));
-            if(list.size()>0)
+            if(list.size()>index)
             {
-                Mp4DiscNoField discField = (Mp4DiscNoField)list.get(0);
+                Mp4DiscNoField discField = (Mp4DiscNoField)list.get(index);
                 if(discField.getDiscNo()>0)
                 {
                      return String.valueOf(discField.getDiscNo());
@@ -236,9 +236,9 @@ public class Mp4Tag extends AbstractTag
         else if(genericKey== FieldKey.DISC_TOTAL)
         {
             List<TagField> list = get(tagFieldToMp4Field.get(genericKey));
-            if(list.size()>0)
+            if(list.size()>index)
             {
-                Mp4DiscNoField discField = (Mp4DiscNoField)list.get(0);
+                Mp4DiscNoField discField = (Mp4DiscNoField)list.get(index);
                 if(discField.getDiscTotal()>0)
                 {
                      return String.valueOf(discField.getDiscTotal());
@@ -247,12 +247,12 @@ public class Mp4Tag extends AbstractTag
         }
         else
         {
-            return super.getFirst(tagFieldToMp4Field.get(genericKey).getFieldName());
+            return super.getItem(tagFieldToMp4Field.get(genericKey).getFieldName(), index);
         }
         return "";
     }
 
-    /**
+  /**
      * Retrieve the first value that exists for this mp4key
      *
      * @param mp4Key

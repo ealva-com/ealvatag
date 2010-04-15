@@ -125,13 +125,28 @@ public abstract class AbstractFrameBodyTextInfo extends AbstractID3v2FrameBody
 
 
     /**
-     * Retrieve the complete Text String.
+     * Retrieve the complete text String as it is held internally.
+     *
+     * If multiple values are held these wil be returned, needless trailing nulls will also be returned
      *
      * @return the text string
      */
     public String getText()
     {
         return (String) getObjectValue(DataTypes.OBJ_TEXT);
+    }
+
+    /**
+     * Retrieve the complete text String but without any trailing nulls
+     *
+     * If multiple values are held these will be returned, needless trailing nulls will not be returned
+     *
+     * @return the text string
+     */
+    public String getTextWithoutTrailingNulls()
+    {
+        TextEncodedStringSizeTerminated text = (TextEncodedStringSizeTerminated) getObject(DataTypes.OBJ_TEXT);
+        return text.getValueWithoutTrailingNull();
     }
 
     /**
@@ -146,7 +161,10 @@ public abstract class AbstractFrameBodyTextInfo extends AbstractID3v2FrameBody
     }
 
     /**
-     * Get value at index
+     * Get text value at index
+     *
+     * When a multiple values are stored within a single text frame this method allows access to any of the
+     * individual values.
      *
      * @param index
      * @return value at index

@@ -864,7 +864,7 @@ public class ID3v23Tag extends AbstractID3v2Tag
         }
         else
         {
-            return super.doGetFirst(frameAndSubId);
+            return super.doGetValueAtIndex(frameAndSubId, 0);
         }
     }
 

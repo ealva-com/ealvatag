@@ -116,8 +116,32 @@ public abstract class AbstractTag implements Tag
 
 
     /**
+     *
      * @param id
-     * @return matches for this audio-specific key
+     * @param index
+     * @return
+     */
+    public String getItem(String id,int index)
+    {
+        List<TagField> l = get(id);
+        return (l.size()>index) ? l.get(index).toString() : "";
+    }
+
+    /**
+     * Retrieve the first value that exists for this generic key
+     *
+     * @param genericKey
+     * @return
+     */
+    public String getFirst(FieldKey genericKey) throws KeyNotFoundException
+    {
+        return getValue(genericKey,0);
+    }
+
+    /**
+     *
+     * @param id
+     * @return
      */
     public String getFirst(String id)
     {
@@ -125,6 +149,11 @@ public abstract class AbstractTag implements Tag
         return (l.size() != 0) ? l.get(0).toString() : "";
     }
 
+    /**
+     *
+     * @param id audio specific key
+     * @return
+     */
     public TagField getFirstField(String id)
     {
         List<TagField> l = get(id);
@@ -198,7 +227,11 @@ public abstract class AbstractTag implements Tag
         }
         return count;
     }
-
+        
+    public int getFieldCountIncludingSubValues()
+    {
+        return getFieldCount();
+    }
 
     /**
      * Does this tag contain any comon fields
@@ -304,6 +337,19 @@ public abstract class AbstractTag implements Tag
     }
 
     /**
+     * The m parameter is effectively ignored
+     *
+     * @param id
+     * @param n
+     * @param m
+     * @return
+     */
+    public String getSubValue(FieldKey id, int n, int m)
+    {
+        return getValue(id,n);
+    }
+
+    /**
      * Set or add encoding
      *
      * @see org.jaudiotagger.tag.Tag#setEncoding(java.lang.String)
@@ -359,14 +405,6 @@ public abstract class AbstractTag implements Tag
      * @throws FieldDataInvalidException
      */
     public abstract TagField createField(FieldKey genericKey, String value) throws KeyNotFoundException, FieldDataInvalidException;
-
-    /**
-     *
-     * @param genericKey
-     * @return
-     * @throws KeyNotFoundException
-     */
-    public abstract String getFirst(FieldKey genericKey) throws KeyNotFoundException;
 
     /**
      * 

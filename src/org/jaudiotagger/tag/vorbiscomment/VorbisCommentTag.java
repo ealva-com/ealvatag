@@ -249,20 +249,14 @@ public class VorbisCommentTag extends AbstractTag
         return super.get(vorbisCommentKey.getFieldName());
     }
 
-    /**
-     * Retrieve the first value that exists for this generic key
-     *
-     * @param genericKey
-     * @return
-     */
-    public String getFirst(FieldKey genericKey) throws KeyNotFoundException
+    public String getValue(FieldKey genericKey,int index) throws KeyNotFoundException
     {
         VorbisCommentFieldKey vorbisCommentFieldKey = tagFieldToOggField.get(genericKey);
         if (vorbisCommentFieldKey == null)
         {
             throw new KeyNotFoundException();
         }
-        return super.getFirst(vorbisCommentFieldKey.getFieldName());
+        return super.getItem(vorbisCommentFieldKey.getFieldName(),index);
     }
 
     /**

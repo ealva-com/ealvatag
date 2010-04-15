@@ -921,9 +921,9 @@ public class TagOptionSingleton
     }
 
     /**
-     * Do we remove unneccessary trailing null characters on write
+     * Do we remove unnecessary trailing null characters on write
      *
-     * @return true if we remove unneccessary trailing null characters on write
+     * @return true if we remove unnecessary trailing null characters on write
      */
     public boolean isRemoveTrailingTerminatorOnWrite()
     {
@@ -931,7 +931,7 @@ public class TagOptionSingleton
     }
 
     /**
-     * Remove unneccessary trailing null characters on write
+     * Remove unnecessary trailing null characters on write
      *
      * @param removeTrailingTerminatorOnWrite
      *

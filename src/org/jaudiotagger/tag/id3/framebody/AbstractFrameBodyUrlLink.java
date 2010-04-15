@@ -37,7 +37,7 @@ import java.nio.charset.Charset;
 import java.nio.charset.CharsetEncoder;
 
 /**
- * Abstract superclass of all URL Frames
+ * Abstract super class of all URL Frames
  */
 public abstract class AbstractFrameBodyUrlLink extends AbstractID3v2FrameBody
 {

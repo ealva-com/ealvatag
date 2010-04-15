@@ -163,7 +163,7 @@ public class ID3v22TagTest extends TestCase
             MP3File m = (MP3File) af;
 
             //Read using new Interface getFirst method with key
-            assertEquals("Listen to images:", af.getTag().getFirst(FieldKey.TITLE) + ":");
+            assertEquals("*Listen to images:*", "*"+af.getTag().getFirst(FieldKey.TITLE) + ":*");
             assertEquals("Clean:", af.getTag().getFirst(FieldKey.ALBUM) + ":");
             assertEquals("Cosmo Vitelli:", af.getTag().getFirst(FieldKey.ARTIST) + ":");
             assertEquals("Electronica/Dance:", af.getTag().getFirst(FieldKey.GENRE) + ":");

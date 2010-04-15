@@ -20,7 +20,7 @@ public class Issue271Test extends AbstractTestCase
 {
 
     /**
-     * Test read mp3 that says it has extended header but doesnt really
+     * Test read mp3 that says it has extended header but doesn't really
      */
     public void testReadMp3WithExtendedHeaderFlagSetButNoExtendedHeader()
     {
@@ -41,7 +41,7 @@ public class Issue271Test extends AbstractTestCase
             AudioFile af = AudioFileIO.read(testFile);
             System.out.println(af.getTag().toString());
             assertEquals("00000", af.getTag().getFirst(FieldKey.BPM));
-            assertEquals("thievery corporation - Om Lounge", af.getTag().getFirst(FieldKey.ARTIST));
+            assertEquals("*thievery corporation - Om Lounge*", "*"+af.getTag().getFirst(FieldKey.ARTIST)+"*");
 
             af.getTag().setField(FieldKey.ALBUM,"FRED");
             af.commit();

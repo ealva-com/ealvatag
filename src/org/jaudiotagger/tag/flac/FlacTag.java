@@ -9,7 +9,6 @@ import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
 import org.jaudiotagger.tag.reference.PictureTypes;
 import org.jaudiotagger.tag.vorbiscomment.VorbisCommentTag;
 import org.jaudiotagger.tag.vorbiscomment.VorbisCommentFieldKey;
-import org.jaudiotagger.tag.vorbiscomment.VorbisCommentTagField;
 import org.jaudiotagger.logging.ErrorMessage;
 
 import javax.imageio.ImageIO;
@@ -237,7 +236,20 @@ public class FlacTag implements Tag
         }
     }
 
-    public String getFirst(FieldKey id) throws KeyNotFoundException
+     /**
+     * The m parameter is effectively ignored
+     *
+     * @param id
+     * @param n
+     * @param m
+     * @return
+     */
+    public String getSubValue(FieldKey id, int n, int m)
+    {
+        return getValue(id,n);
+    }
+
+    public String getValue(FieldKey id,int index) throws KeyNotFoundException
     {
         if (id.equals(FieldKey.COVER_ART))
         {
@@ -245,9 +257,13 @@ public class FlacTag implements Tag
         }
         else
         {
-            return tag.getFirst(id);
+            return tag.getValue(id, index);
         }
+    }
 
+    public String getFirst(FieldKey id) throws KeyNotFoundException
+    {
+        return getValue(id,0);
     }
 
     public TagField getFirstField(String id)
@@ -312,6 +328,11 @@ public class FlacTag implements Tag
     public int getFieldCount()
     {
         return tag.getFieldCount() + images.size();
+    }
+
+    public int getFieldCountIncludingSubValues()
+    {
+       return getFieldCount();
     }
 
     public boolean setEncoding(String enc) throws FieldDataInvalidException

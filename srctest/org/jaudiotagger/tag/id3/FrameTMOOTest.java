@@ -221,7 +221,7 @@ public void testCreateID3v22Frame()
         {
             System.out.println("kkk" + ((ID3v24Frame) i.next()).getIdentifier());
         }
-        assertEquals(1, v24Tag.getFrameCount());
+        assertEquals(1, v24Tag.getFieldCount());
         ID3v24Frame v24frame = (ID3v24Frame)v24Tag.getFrame("TMOO");
         assertTrue(v24frame.getBody() instanceof FrameBodyTMOO); 
         FrameBodyTMOO v24framebody = (FrameBodyTMOO)v24frame.getBody();
@@ -264,7 +264,7 @@ public void testCreateID3v22Frame()
         {
             System.out.println("kkk" + ((ID3v24Frame) i.next()).getIdentifier());
         }
-        assertEquals(2, v24Tag.getFrameCount());
+        assertEquals(2, v24Tag.getFieldCount());
         ID3v24Frame v24frame = (ID3v24Frame)v24Tag.getFrame("TMOO");
         assertNotNull(v24frame);
         assertTrue(v24frame.getBody() instanceof FrameBodyTMOO);

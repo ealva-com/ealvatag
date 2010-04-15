@@ -249,6 +249,11 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag
         return 6;
     }
 
+    public int getFieldCountIncludingSubValues()
+    {
+       return getFieldCount();
+    }
+
     protected List<TagField> returnFieldToList(ID3v1TagField field)
     {
         List<TagField> fields = new ArrayList<TagField>();
@@ -760,6 +765,24 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag
             default:
                 return "";
         }
+    }
+
+     /**
+     * The m parameter is effectively ignored
+     *
+     * @param id
+     * @param n
+     * @param m
+     * @return
+     */
+    public String getSubValue(FieldKey id, int n, int m)
+    {
+        return getValue(id,n);
+    }
+
+    public String getValue(FieldKey genericKey, int index)
+    {
+        return getFirst(genericKey);
     }
 
     /**

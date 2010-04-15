@@ -29,14 +29,12 @@ import java.nio.ByteBuffer;
  * Unsychronised lyrics/text transcription frame.
  * <p/>
  * <p/>
- * This frame contains the lyrics of the song or a text transcription of
- * other vocal activities. The head includes an encoding descriptor and
- * a content descriptor. The body consists of the actual text. The
- * 'Content descriptor' is a terminated string. If no descriptor is
- * entered, 'Content descriptor' is $00 (00) only. Newline characters
- * are allowed in the text. There may be more than one 'Unsynchronised
- * lyrics/text transcription' frame in each tag, but only one with the
- * same language and content descriptor.
+ * This frame contains the lyrics of the song or a text transcription of other vocal activities. The head includes an
+ * encoding descriptor and a content descriptor. The body consists of the actual text. The 'Content descriptor' is a
+ * terminated string. If no descriptor is entered, 'Content descriptor' is $00 (00) only. Newline characters are
+ * allowed in the text. There may be more than one 'Unsynchronised lyrics/text transcription' frame in each tag, but
+ * only one with the same language and content descriptor.
+ *
  * </p><p><table border=0 width="70%">
  * <tr><td colspan=2>&lt;Header for 'Unsynchronised lyrics/text transcription', ID: "USLT"&gt;</td></tr>
  * <tr><td>Text encoding     </td><td width="80%">$xx</td></tr>

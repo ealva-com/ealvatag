@@ -30,13 +30,11 @@ import java.nio.ByteBuffer;
  * Comments frame.
  * <p/>
  * <p/>
- * This frame is indended for any kind of full text information that
- * does not fit in any other frame. It consists of a frame header
- * followed by encoding, language and content descriptors and is ended
- * with the actual comment as a text string. Newline characters are
- * allowed in the comment text string. There may be more than one
- * comment frame in each tag, but only one with the same language and
- * content descriptor.
+ * This frame is intended for any kind of full text information that does not fit in any other frame. It consists of a
+ * frame header followed by encoding, language and content descriptors and is ended with the actual comment as a
+ * text string. Newline characters are allowed in the comment text string. There may be more than one comment frame
+ * in each tag, but only one with the same language and* content descriptor.
+ * 
  * </p><p><table border=0 width="70%">
  * <tr><td colspan=2>&lt;Header for 'Comment', ID: "COMM"&gt;</td></tr>
  * <tr><td>Text encoding   </td><td width="80%">$xx          </td></tr>

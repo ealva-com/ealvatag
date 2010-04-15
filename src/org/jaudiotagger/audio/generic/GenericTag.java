@@ -225,15 +225,21 @@ public abstract class GenericTag extends AbstractTag
      */
     public String getFirst(FieldKey genericKey) throws KeyNotFoundException
     {
+        return getValue(genericKey, 0);
+    }
+
+    public String getValue(FieldKey genericKey,int index) throws KeyNotFoundException
+    {
         if(supportedKeys.contains(genericKey))
         {
-            return getFirst(genericKey.name());
+            return getItem(genericKey.name(),index);
         }
         else
         {
             throw new UnsupportedOperationException(ErrorMessage.GENERIC_NOT_SUPPORTED.getMsg());
         }
     }
+
 
     /**
      * @param genericKey

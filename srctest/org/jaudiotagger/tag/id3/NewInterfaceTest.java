@@ -246,7 +246,7 @@ public class NewInterfaceTest extends TestCase
         assertTrue(mp3File.hasID3v1Tag());
         assertTrue(mp3File.hasID3v2Tag());
 
-        //Read back artist (new method ,v1 value overrriden by v2 method)
+        //Read back artist (new method ,v1 value overridden by v2 method)
         af = AudioFileIO.read(testFile);
         assertEquals(FrameBodyTPE1Test.TPE1_TEST_STRING, af.getTag().getFirst(FieldKey.ARTIST));
         assertEquals(FrameBodyTPE1Test.TPE1_TEST_STRING, af.getTag().getFirst(FieldKey.ARTIST));
@@ -268,16 +268,18 @@ public class NewInterfaceTest extends TestCase
         AbstractID3v2Frame checkframe = (AbstractID3v2Frame) ((MP3File) af).getID3v2Tag().getFrame(ID3v24Frames.FRAME_ID_ALBUM);
         assertEquals(ALBUM_TEST_STRING, ((FrameBodyTALB) checkframe.getBody()).getText());
 
-        //Should only be allowed to addField one album, there is no multi value support for it
+        //If addField again, the value gets appended using the null char sperator system
         af.getTag().addField(FieldKey.ALBUM,ALBUM_TEST_STRING2);
         af.commit();
         af = AudioFileIO.read(testFile);
-        assertEquals(ALBUM_TEST_STRING, af.getTag().getFirst(FieldKey.ALBUM));
-        assertEquals(ALBUM_TEST_STRING, af.getTag().getFirst(FieldKey.ALBUM));
-        assertEquals(ALBUM_TEST_STRING, ((ID3v24Tag) af.getTag()).getFirst(ID3v24FieldKey.ALBUM));
+        assertEquals(ALBUM_TEST_STRING + "\u0000" + ALBUM_TEST_STRING2, af.getTag().getFirst(FieldKey.ALBUM));
+        assertEquals(ALBUM_TEST_STRING + "\u0000" + ALBUM_TEST_STRING2, af.getTag().getValue(FieldKey.ALBUM,0));
+        assertEquals(ALBUM_TEST_STRING, af.getTag().getSubValue(FieldKey.ALBUM,0,0));
+        assertEquals(ALBUM_TEST_STRING2, af.getTag().getSubValue(FieldKey.ALBUM,0,1));
+        assertEquals(ALBUM_TEST_STRING + "\u0000" + ALBUM_TEST_STRING2, ((ID3v24Tag) af.getTag()).getFirst(ID3v24FieldKey.ALBUM));
         assertEquals(1, af.getTag().getFields(FieldKey.ALBUM).size());
 
-        //But can replace existing value
+        //And can replace existing value
         af.getTag().setField(FieldKey.ALBUM,ALBUM_TEST_STRING2);
         af.commit();
         af = AudioFileIO.read(testFile);
@@ -591,13 +593,15 @@ public class NewInterfaceTest extends TestCase
         AbstractID3v2Frame checkframe = (AbstractID3v2Frame) ((MP3File) af).getID3v2Tag().getFrame(ID3v23Frames.FRAME_ID_V3_ALBUM);
         assertEquals(ALBUM_TEST_STRING, ((FrameBodyTALB) checkframe.getBody()).getText());
 
-        //Should only be allowed to addField one album, there is no multi value support for it
+        //If add smae field again appended to existiong frame
         af.getTag().addField(FieldKey.ALBUM,ALBUM_TEST_STRING2);
         af.commit();
         af = AudioFileIO.read(testFile);
-        assertEquals(ALBUM_TEST_STRING, af.getTag().getFirst(FieldKey.ALBUM));
-        assertEquals(ALBUM_TEST_STRING, af.getTag().getFirst(FieldKey.ALBUM));
-        assertEquals(ALBUM_TEST_STRING, ((ID3v23Tag) af.getTag()).getFirst(ID3v23FieldKey.ALBUM));
+        assertEquals(ALBUM_TEST_STRING + "\u0000" + ALBUM_TEST_STRING2, af.getTag().getFirst(FieldKey.ALBUM));
+        assertEquals(ALBUM_TEST_STRING + "\u0000" + ALBUM_TEST_STRING2, af.getTag().getFirst(FieldKey.ALBUM));
+        assertEquals(ALBUM_TEST_STRING, af.getTag().getSubValue(FieldKey.ALBUM,0,0));
+        assertEquals(ALBUM_TEST_STRING2, af.getTag().getSubValue(FieldKey.ALBUM,0,1));
+        assertEquals(ALBUM_TEST_STRING + "\u0000" + ALBUM_TEST_STRING2, ((ID3v23Tag) af.getTag()).getFirst(ID3v23FieldKey.ALBUM));
         assertEquals(1, af.getTag().getFields(FieldKey.ALBUM).size());
 
         //But can replace existing value
@@ -816,6 +820,7 @@ public class NewInterfaceTest extends TestCase
         af = AudioFileIO.read(testFile);
         assertEquals(FrameBodyTPE1Test.TPE1_TEST_STRING, af.getTag().getFirst(FieldKey.ARTIST));
         assertEquals(FrameBodyTPE1Test.TPE1_TEST_STRING, af.getTag().getFirst(FieldKey.ARTIST));
+
         assertEquals(FrameBodyTPE1Test.TPE1_TEST_STRING, ((ID3v22Tag) af.getTag()).getFirst(ID3v22FieldKey.ARTIST));
         //.... but v1 value is still there
         assertEquals(V1_ARTIST, ((MP3File) af).getID3v1Tag().getFirst(FieldKey.ARTIST));
@@ -837,13 +842,15 @@ public class NewInterfaceTest extends TestCase
         AbstractID3v2Frame checkframe = (AbstractID3v2Frame) ((MP3File) af).getID3v2Tag().getFrame(ID3v22Frames.FRAME_ID_V2_ALBUM);
         assertEquals(ALBUM_TEST_STRING, ((FrameBodyTALB) checkframe.getBody()).getText());
 
-        //Should only be allowed to addField one album, there is no multi value support for it
+        //If add extra text field its appended to existing frame
         af.getTag().addField(FieldKey.ALBUM,ALBUM_TEST_STRING2);
         af.commit();
         af = AudioFileIO.read(testFile);
-        assertEquals(ALBUM_TEST_STRING, af.getTag().getFirst(FieldKey.ALBUM));
-        assertEquals(ALBUM_TEST_STRING, af.getTag().getFirst(FieldKey.ALBUM));
-        assertEquals(ALBUM_TEST_STRING, ((ID3v22Tag) af.getTag()).getFirst(ID3v22FieldKey.ALBUM));
+        assertEquals(ALBUM_TEST_STRING + "\u0000" + ALBUM_TEST_STRING2, af.getTag().getFirst(FieldKey.ALBUM));
+        assertEquals(ALBUM_TEST_STRING + "\u0000" + ALBUM_TEST_STRING2, af.getTag().getFirst(FieldKey.ALBUM));
+        assertEquals(ALBUM_TEST_STRING, af.getTag().getSubValue(FieldKey.ALBUM,0,0));
+        assertEquals(ALBUM_TEST_STRING2, af.getTag().getSubValue(FieldKey.ALBUM,0,1));
+        assertEquals(ALBUM_TEST_STRING + "\u0000" + ALBUM_TEST_STRING2, ((ID3v22Tag) af.getTag()).getFirst(ID3v22FieldKey.ALBUM));
         assertEquals(1, af.getTag().getFields(FieldKey.ALBUM).size());
 
         //But can replace existing value
