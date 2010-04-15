@@ -52,6 +52,7 @@ import java.nio.ByteBuffer;
  */
 public class FrameBodyTXXX extends AbstractFrameBodyTextInfo implements ID3v24FrameBody, ID3v23FrameBody
 {
+    //Used by Picard and Jaikoz
     public static final String MUSIC_BRAINZ_ARTISTID = "MusicBrainz Artist Id";
     public static final String MUSIC_BRAINZ_ALBUM_ARTISTID = "MusicBrainz Album Artist Id";
     public static final String MUSIC_BRAINZ_ALBUMID = "MusicBrainz Album Id";
@@ -64,6 +65,10 @@ public class FrameBodyTXXX extends AbstractFrameBodyTextInfo implements ID3v24Fr
     public static final String BARCODE = "BARCODE";
     public static final String CATALOG_NO = "CATALOGNUMBER";
     public static final String MOOD = "MOOD";                          //ID3 v23 only
+
+    //used by Foobar 20000
+    public static final String ALBUM_ARTIST = "ALBUM ARTIST";
+    public static final String PERFORMER = "PERFORMER";
 
     /**
      * Creates a new FrameBodyTXXX datatype.
