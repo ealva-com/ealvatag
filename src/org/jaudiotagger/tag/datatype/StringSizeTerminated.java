@@ -34,7 +34,7 @@ import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
  * Represents a String which is not delimited by null character with fixed text encoding.
  * <p/>
  * This type of String will usually only be used when it is the last field within a frame, when reading the remainder of the byte array will
- * be read, when writing the frame will accomodate the required size for the String. The String will be encoded
+ * be read, when writing the frame will accommodate the required size for the String. The String will be encoded
  * using the default encoding regardless of what encoding may be specified in the framebody
  */
 public class StringSizeTerminated extends TextEncodedStringSizeTerminated

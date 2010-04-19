@@ -1,10 +1,12 @@
 package org.jaudiotagger.tag.datatype;
 
+import org.jaudiotagger.logging.Hex;
 import org.jaudiotagger.tag.InvalidDataTypeException;
 import org.jaudiotagger.tag.TagOptionSingleton;
 import org.jaudiotagger.tag.id3.AbstractTagFrameBody;
 import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
 
+import java.nio.Buffer;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 import java.nio.charset.*;
@@ -82,6 +84,7 @@ public class TextEncodedStringSizeTerminated extends AbstractString
         //Get the Specified Decoder
         String charSetName = getTextEncodingCharSet();
         CharsetDecoder decoder = Charset.forName(charSetName).newDecoder();
+        decoder.reset();
 
         //Decode sliced inBuffer
         ByteBuffer inBuffer;
@@ -98,7 +101,6 @@ public class TextEncodedStringSizeTerminated extends AbstractString
         }
 
         CharBuffer outBuffer = CharBuffer.allocate(arr.length - offset);
-        decoder.reset();
         CoderResult coderResult = decoder.decode(inBuffer, outBuffer, true);
         if (coderResult.isError())
         {
@@ -107,12 +109,120 @@ public class TextEncodedStringSizeTerminated extends AbstractString
         decoder.flush(outBuffer);
         outBuffer.flip();
 
-        //Store value
-        value = outBuffer.toString();
-
+        //If using UTF16 with BOM we then search through the text removing any BOMs that could exist
+        //for multiple values, BOM could be Big Endian or Little Endian
+        if (charSetName.equals(TextEncoding.CHARSET_UTF_16))
+        {
+            value = outBuffer.toString().replace("\ufeff","").replace("\ufffe","");
+        }
+        else
+        {
+            value = outBuffer.toString();
+        }
         //SetSize, important this is correct for finding the next datatype
         setSize(arr.length - offset);
         logger.info("Read SizeTerminatedString:" + value + " size:" + size);
+
+    }
+
+    /**
+     * Write String using specified encoding
+     *
+     * When this is called multiple times, all but the last value has a trailing null
+     *
+     * @param encoder
+     * @param next
+     * @param i
+     * @param noOfValues
+     * @return
+     * @throws CharacterCodingException
+     */
+    private ByteBuffer writeString( CharsetEncoder encoder, String next, int i, int noOfValues)
+            throws CharacterCodingException
+    {
+
+        ByteBuffer bb;
+        if(( i + 1) == noOfValues )
+        {
+            bb = encoder.encode(CharBuffer.wrap(next));
+        }
+        else
+        {
+            bb = encoder.encode(CharBuffer.wrap(next + '\0'));
+        }
+        bb.rewind();
+        return bb;
+    }
+
+    /**
+     * Write String in UTF-LEBOM format
+     *
+     * When this is called multiple times, all but the last value has a trailing null
+     *
+     * Remember we are using this charset because the charset that writes BOM does it the wrong way for us
+     * so we use this none and then manually add the BOM ourselves.
+     *
+     * @param next
+     * @param i
+     * @param noOfValues
+     * @return
+     * @throws CharacterCodingException
+     */
+    private ByteBuffer writeStringUTF16LEBOM( String next, int i, int noOfValues)
+            throws CharacterCodingException
+    {
+        CharsetEncoder encoder = Charset.forName(TextEncoding.CHARSET_UTF_16_ENCODING_FORMAT).newEncoder();
+        ByteBuffer bb = null;
+        //Note remember LE BOM is ff fe but this is handled by encoder Unicode char is fe ff
+        if(( i + 1)==noOfValues)
+        {
+            bb = encoder.encode(CharBuffer.wrap('\ufeff' + next ));
+        }
+        else
+        {
+            bb = encoder.encode(CharBuffer.wrap('\ufeff' + next + '\0'));
+        }
+        bb.rewind();
+        return bb;
+    }
+
+    /**
+     * Removing trailing null from end of String, this should be there but some applications continue to write
+     * this unnecessary null char.
+     */
+    private void stripTrailingNull()
+    {
+        if (TagOptionSingleton.getInstance().isRemoveTrailingTerminatorOnWrite())
+        {
+            String stringValue = (String) value;
+            if (stringValue.length() > 0)
+            {
+                if (stringValue.charAt(stringValue.length() - 1) == '\0')
+                {
+                    stringValue = (stringValue).substring(0, stringValue.length() - 1);
+                    value = stringValue;
+                }
+            }
+        }
+    }
+
+    /**
+     * Because nulls are stripped we need to check if not removing trailing nulls whether the original
+     * value ended with a null and if so add it back in.
+     * @param values
+     * @param stringValue
+     */
+    private void checkTrailingNull( List<String> values, String stringValue)
+    {
+        if(!TagOptionSingleton.getInstance().isRemoveTrailingTerminatorOnWrite())
+        {
+            if (stringValue.charAt(stringValue.length() - 1) == '\0')
+            {
+                String lastVal = values.get(values.size() - 1);
+                String newLastVal = lastVal + '\0';
+                values.set(values.size() - 1,newLastVal);
+            }
+        }
     }
 
     /**
@@ -129,37 +239,42 @@ public class TextEncodedStringSizeTerminated extends AbstractString
         //Try and write to buffer using the CharSet defined by getTextEncodingCharSet()
         try
         {
-            if (TagOptionSingleton.getInstance().isRemoveTrailingTerminatorOnWrite())
-            {
-                String stringValue = (String) value;
-                if (stringValue.length() > 0)
-                {
-                    if (stringValue.charAt(stringValue.length() - 1) == '\0')
-                    {
-                        stringValue = (stringValue).substring(0, stringValue.length() - 1);
-                        value = stringValue;
-                    }
-                }
-            }
+            
+            stripTrailingNull();
 
+            //Special Handling because there is no UTF16 BOM LE charset
+            String stringValue = (String)value;
             String charSetName = getTextEncodingCharSet();
             if (charSetName.equals(TextEncoding.CHARSET_UTF_16))
             {
                 charSetName = TextEncoding.CHARSET_UTF_16_ENCODING_FORMAT;
-                CharsetEncoder encoder = Charset.forName(charSetName).newEncoder();
-                //Note remember LE BOM is ff fe but tis is handled by encoder Unicode char is fe ff
-                ByteBuffer bb = encoder.encode(CharBuffer.wrap('\ufeff' + (String) value));
-                data = new byte[bb.limit()];
-                bb.get(data, 0, bb.limit());
+            }
 
-            }
-            else
+            //Ensure large enough for any encoding
+            ByteBuffer outputBuffer = ByteBuffer.allocate((stringValue.length() + 3)* 3);
+
+            //Ensure each string (if multiple values) is written with BOM by writing separately
+            List<String> values = splitByNullSeperator(stringValue);
+            checkTrailingNull(values, stringValue);
+
+            //For each value
+            for(int i=0;i<values.size();i++)
             {
-                CharsetEncoder encoder = Charset.forName(charSetName).newEncoder();
-                ByteBuffer bb = encoder.encode(CharBuffer.wrap((String) value));
-                data = new byte[bb.limit()];
-                bb.get(data, 0, bb.limit());
+                String next = values.get(i);
+                if (charSetName.equals(TextEncoding.CHARSET_UTF_16_ENCODING_FORMAT))
+                {
+                    outputBuffer.put(writeStringUTF16LEBOM( next, i, values.size()));
+                }
+                else
+                {
+                    outputBuffer.put(writeString( Charset.forName(charSetName).newEncoder(), next, i, values.size()));
+                }
             }
+            outputBuffer.flip();
+            data = new byte[outputBuffer.limit()];
+            outputBuffer.rewind();
+            outputBuffer.get(data, 0, outputBuffer.limit());
+            setSize(data.length);
         }
         //Should never happen so if does throw a RuntimeException
         catch (CharacterCodingException ce)
@@ -167,7 +282,6 @@ public class TextEncodedStringSizeTerminated extends AbstractString
             logger.severe(ce.getMessage());
             throw new RuntimeException(ce);
         }
-        setSize(data.length);
         return data;
     }
 

@@ -13,7 +13,7 @@ import org.jaudiotagger.tag.id3.ID3v1Tag;
 import java.io.File;
 
 /**
- * Test tag Equality (specifically PartOfSet)
+ * Test deletions of ID3v1 tag
  */
 public class Issue324Test extends AbstractTestCase
 {

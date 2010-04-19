@@ -1433,7 +1433,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
 
 
     /**
-     * @return comparator used to order frames in preffrred order for writing to file
+     * @return comparator used to order frames in preferred order for writing to file
      *         so that most important frames are written first.
      */
     public abstract Comparator getPreferredFrameOrderComparator();
@@ -1738,7 +1738,8 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
     }
 
     /**
-     *  Retrieve the mth value that exists in the nth frame for this generic key 
+     * Retrieve the mth value that exists in the nth frame for this generic key
+     *
      * @param genericKey
      * @param n the index of the frame
      * @param m
