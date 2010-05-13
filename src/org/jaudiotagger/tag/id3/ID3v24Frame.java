@@ -290,7 +290,7 @@ public class ID3v24Frame extends AbstractID3v2Frame
      * @throws org.jaudiotagger.tag.InvalidFrameException
      *
      */
-    public ID3v24Frame(ByteBuffer byteBuffer, String loggingFilename) throws InvalidFrameException
+    public ID3v24Frame(ByteBuffer byteBuffer, String loggingFilename) throws InvalidFrameException, InvalidDataTypeException
     {
         setLoggingFilename(loggingFilename);
         read(byteBuffer);
@@ -304,7 +304,7 @@ public class ID3v24Frame extends AbstractID3v2Frame
      *
      * @deprecated use {@link #ID3v24Frame(ByteBuffer,String)} instead
      */
-    public ID3v24Frame(ByteBuffer byteBuffer) throws InvalidFrameException
+    public ID3v24Frame(ByteBuffer byteBuffer) throws InvalidFrameException, InvalidDataTypeException
     {
         this(byteBuffer, "");
     }
@@ -527,7 +527,7 @@ public class ID3v24Frame extends AbstractID3v2Frame
      *
      * @param byteBuffer to read the frame from
      */
-    public void read(ByteBuffer byteBuffer) throws InvalidFrameException
+    public void read(ByteBuffer byteBuffer) throws InvalidFrameException, InvalidDataTypeException
     {
         byte[] buffer = new byte[FRAME_ID_SIZE];
 

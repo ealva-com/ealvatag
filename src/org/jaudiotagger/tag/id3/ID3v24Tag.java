@@ -22,7 +22,6 @@ import org.jaudiotagger.tag.*;
 import org.jaudiotagger.tag.datatype.Artwork;
 import org.jaudiotagger.tag.datatype.DataTypes;
 import org.jaudiotagger.tag.id3.framebody.*;
-import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
 import org.jaudiotagger.tag.lyrics3.AbstractLyrics3;
 import org.jaudiotagger.tag.lyrics3.Lyrics3v2;
 import org.jaudiotagger.tag.lyrics3.Lyrics3v2Field;
@@ -902,7 +901,7 @@ public class ID3v24Tag extends AbstractID3v2Tag
             catch (InvalidFrameIdentifierException ifie)
             {
                 logger.info(getLoggingFilename() + ":" + "Invalid Frame Identifier:" + ifie.getMessage());
-                this.invalidFrameBytes++;
+                this.invalidFrames++;
                 //Dont try and find any more frames
                 break;
             }
@@ -910,9 +909,17 @@ public class ID3v24Tag extends AbstractID3v2Tag
             catch (InvalidFrameException ife)
             {
                 logger.warning(getLoggingFilename() + ":" + "Invalid Frame:" + ife.getMessage());
-                this.invalidFrameBytes++;
+                this.invalidFrames++;
                 //Dont try and find any more frames
                 break;
+            }
+            //Failed reading frame but may just have invalid data but correct length so lets carry on
+            //in case we can read the next frame
+            catch(InvalidDataTypeException idete)
+            {
+                logger.warning(getLoggingFilename() + ":Corrupt Frame:" + idete.getMessage());
+                this.invalidFrames++;
+                continue;
             }
         }
     }

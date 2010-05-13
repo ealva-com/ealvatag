@@ -196,7 +196,8 @@ public abstract class AbstractID3v2Frame extends AbstractTagFrame implements Tag
      */
     @SuppressWarnings("unchecked")
     //TODO using reflection is rather slow perhaps we should change this
-    protected AbstractID3v2FrameBody readBody(String identifier, ByteBuffer byteBuffer, int frameSize) throws InvalidFrameException
+    protected AbstractID3v2FrameBody readBody(String identifier, ByteBuffer byteBuffer, int frameSize)
+            throws InvalidFrameException, InvalidDataTypeException
     {
         //Use reflection to map id to frame body, which makes things much easier
         //to keep things up to date,although slight performance hit.
@@ -242,6 +243,14 @@ public abstract class AbstractID3v2Frame extends AbstractTagFrame implements Tag
             else if (ite.getCause() instanceof RuntimeException)
             {
                 throw (RuntimeException) ite.getCause();
+            }
+            else if(ite.getCause() instanceof  InvalidFrameException )
+            {
+                throw (InvalidFrameException)ite.getCause();
+            }
+            else if(ite.getCause() instanceof  InvalidDataTypeException )
+            {
+                throw (InvalidDataTypeException)ite.getCause();
             }
             else
             {

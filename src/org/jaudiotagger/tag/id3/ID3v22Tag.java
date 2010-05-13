@@ -413,7 +413,7 @@ public class ID3v22Tag extends AbstractID3v2Tag
             catch (InvalidFrameIdentifierException ifie)
             {
                 logger.info(getLoggingFilename() + ":" + "Invalid Frame Identifier:" + ifie.getMessage());
-                this.invalidFrameBytes++;
+                this.invalidFrames++;
                 //Dont try and find any more frames
                 break;
             }
@@ -421,11 +421,19 @@ public class ID3v22Tag extends AbstractID3v2Tag
             catch (InvalidFrameException ife)
             {
                 logger.warning(getLoggingFilename() + ":" + "Invalid Frame:" + ife.getMessage());
-                this.invalidFrameBytes++;
+                this.invalidFrames++;
                 //Dont try and find any more frames
                 break;
             }
+            //Failed reading frame but may just have invalid data but correct length so lets carry on
+            //in case we can read the next frame
+            catch(InvalidDataTypeException idete)
+            {
+                logger.warning(getLoggingFilename() + ":Corrupt Frame:" + idete.getMessage());
+                this.invalidFrames++;
+                continue;
             }
+        }
     }
 
     /**

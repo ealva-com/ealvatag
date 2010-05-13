@@ -67,7 +67,7 @@ public abstract class AbstractID3v2FrameBody extends AbstractTagFrameBody
     }
 
     /**
-     * Creates a new FrameBody datatype from file. The super
+     * Creates a new FrameBody dataType from file. The super
      * Constructor sets up the Object list for the frame.
      *
      * @param byteBuffer from where to read the frame body from
@@ -91,7 +91,7 @@ public abstract class AbstractID3v2FrameBody extends AbstractTagFrameBody
 
 
     /**
-     * Return size of frame body,if framebody already exist will take this value from the frame header
+     * Return size of frame body,if frameBody already exist will take this value from the frame header
      * but it is always recalculated before writing any changes back to disk.
      *
      * @return size in bytes of this frame body
@@ -135,17 +135,17 @@ public abstract class AbstractID3v2FrameBody extends AbstractTagFrameBody
 
     /**
      * This reads a frame body from a ByteBuffer into the appropriate FrameBody class and update the position of the
-     * buffer to be just after the end of this framebody
+     * buffer to be just after the end of this frameBody
      * <p/>
-     * The ByteBuffer represents the tag and its position should be at the start of this framebody. The size as
+     * The ByteBuffer represents the tag and its position should be at the start of this frameBody. The size as
      * indicated in the header is passed to the frame constructor when reading from file.
      *
      * @param byteBuffer file to read
-     * @throws InvalidFrameException if unable to construct a framebody from the ByteBuffer
+     * @throws InvalidFrameException if unable to construct a frameBody from the ByteBuffer
      */
     //TODO why don't we just slice byteBuffer, set limit to size and convert readByteArray to take a ByteBuffer
-    //then we wouldn't have to temporary allocate space for the buffer, using alot of needless memory
-    //and providing extra work for the grabage collector.
+    //then we wouldn't have to temporary allocate space for the buffer, using lots of needless memory
+    //and providing extra work for the garbage collector.
     public void read(ByteBuffer byteBuffer) throws InvalidTagException
     {
         int size = getSize();
@@ -155,14 +155,14 @@ public abstract class AbstractID3v2FrameBody extends AbstractTagFrameBody
         byte[] buffer = new byte[size];
         byteBuffer.get(buffer);
 
-        //Offset into buffer, incremented by length of previous Datatype
+        //Offset into buffer, incremented by length of previous dataType
         //this offset is only used internally to decide where to look for the next
-        //datatype within a framebody, it does not decide where to look for the next frame body
+        //dataType within a frameBody, it does not decide where to look for the next frame body
         int offset = 0;
 
         //Go through the ObjectList of the Frame reading the data into the
         for (AbstractDataType object : objectList)
-        //correct datatype.
+        //correct dataType.
         {
             logger.finest("offset:" + offset);
 
@@ -182,8 +182,8 @@ public abstract class AbstractID3v2FrameBody extends AbstractTagFrameBody
             }
             catch (InvalidDataTypeException e)
             {
-                logger.warning("Invalid DataType for Frame Body:" + e.getMessage());
-                throw new InvalidFrameException("Invalid DataType for Frame Body:" + e.getMessage());
+                logger.warning("Problem reading datatype within Frame Body:" + e.getMessage());
+                throw e;
             }
             //Increment Offset to start of next datatype.
             offset += object.getSize();

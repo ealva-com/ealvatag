@@ -577,7 +577,7 @@ public class ID3v23Tag extends AbstractID3v2Tag
         this.fileReadSize = size;
         logger.finest(getLoggingFilename() + ":Start of frame body at:" + byteBuffer.position() + ",frames data size is:" + size);
 
-        // Read the frames until got to upto the size as specified in header or until
+        // Read the frames until got to up to the size as specified in header or until
         // we hit an invalid frame identifier
         while (byteBuffer.position() < size)
         {
@@ -590,7 +590,7 @@ public class ID3v23Tag extends AbstractID3v2Tag
                 id = next.getIdentifier();
                 loadFrameIntoMap(id, next);
             }
-            //Found Empty Frame , log it - empty frames should not exist
+            //Found Empty Frame, log it - empty frames should not exist
             catch (EmptyFrameException ex)
             {
                 logger.warning(getLoggingFilename() + ":Empty Frame:" + ex.getMessage());
@@ -598,21 +598,29 @@ public class ID3v23Tag extends AbstractID3v2Tag
             }
             catch (InvalidFrameIdentifierException ifie)
             {
-                logger.info(getLoggingFilename() + ":Invalid Frame Identifier:" + ifie.getMessage());
-                this.invalidFrameBytes++;
-                //Dont try and find any more frames
+                logger.warning(getLoggingFilename() + ":Invalid Frame Identifier:" + ifie.getMessage());
+                this.invalidFrames++;
+                //Don't try and find any more frames
                 break;
             }
-            //Problem trying to find frame, often just occurs because frameheader includes padding
+            //Problem trying to find frame, often just occurs because frameHeader includes padding
             //and we have reached padding
             catch (InvalidFrameException ife)
             {
                 logger.warning(getLoggingFilename() + ":Invalid Frame:" + ife.getMessage());
-                this.invalidFrameBytes++;
-                //Dont try and find any more frames
+                this.invalidFrames++;
+                //Don't try and find any more frames
                 break;
             }
+            //Failed reading frame but may just have invalid data but correct length so lets carry on
+            //in case we can read the next frame
+            catch(InvalidDataTypeException idete)
+            {
+                logger.warning(getLoggingFilename() + ":Corrupt Frame:" + idete.getMessage());
+                this.invalidFrames++;
+                continue;
             }
+        }
     }
 
     /**

@@ -85,13 +85,13 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
     protected String duplicateFrameId = "";
 
     /**
-     * Holds byte count of invalid duplicate frames
+     * Holds count the number of bytes used up by invalid duplicate frames
      */
     protected static final String TYPE_DUPLICATEBYTES = "duplicateBytes";
     protected int duplicateBytes = 0;
 
     /**
-     * Holds byte count of empty frames
+     * Holds count the number bytes used up by empty frames
      */
     protected static final String TYPE_EMPTYFRAMEBYTES = "emptyFrameBytes";
     protected int emptyFrameBytes = 0;
@@ -103,10 +103,10 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
     protected int fileReadSize = 0;
 
     /**
-     * Holds byte count of invalid frames
+     * Holds count of invalid frames, (frames that could not be read)
      */
-    protected static final String TYPE_INVALIDFRAMEBYTES = "invalidFrameBytes";
-    protected int invalidFrameBytes = 0;
+    protected static final String TYPE_INVALIDFRAMES = "invalidFrames";
+    protected int invalidFrames = 0;
 
     /**
      * Empty Constructor
@@ -136,7 +136,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
         this.duplicateBytes = copyObject.duplicateBytes;
         this.emptyFrameBytes = copyObject.emptyFrameBytes;
         this.fileReadSize = copyObject.fileReadSize;
-        this.invalidFrameBytes = copyObject.invalidFrameBytes;
+        this.invalidFrames = copyObject.invalidFrames;
     }
 
     /**
@@ -202,9 +202,9 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
      *
      * @return byte count of invalid frames
      */
-    public int getInvalidFrameBytes()
+    public int getInvalidFrames()
     {
-        return invalidFrameBytes;
+        return invalidFrames;
     }
 
     /**
@@ -1004,7 +1004,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
         FileChannel fcIn = null;
         FileChannel fcOut;
 
-        //Create buffer holds the neccessary padding
+        //Create buffer holds the necessary padding
         ByteBuffer paddingBuffer = ByteBuffer.wrap(new byte[paddingSize]);
 
         //Create Temporary File and write channel, make sure it is locked        
@@ -1310,13 +1310,17 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
      * Decides what to with the frame that has just been read from file.
      * If the frame is an allowable duplicate frame and is a duplicate we add all
      * frames into an ArrayList and add the ArrayList to the HashMap. if not allowed
-     * to be duplicate we store bytes in the duplicateBytes variable.
+     * to be duplicate we store the number of bytes in the duplicateBytes variable and discard
+     * the frame itself.
+     *
      * @param frameId
      * @param next
      */
     protected void loadFrameIntoMap(String frameId, AbstractID3v2Frame next)
     {
-        if ((ID3v24Frames.getInstanceOf().isMultipleAllowed(frameId)) || (ID3v23Frames.getInstanceOf().isMultipleAllowed(frameId)) || (ID3v22Frames.getInstanceOf().isMultipleAllowed(frameId)))
+        if ((ID3v24Frames.getInstanceOf().isMultipleAllowed(frameId)) ||
+            (ID3v23Frames.getInstanceOf().isMultipleAllowed(frameId)) ||
+            (ID3v22Frames.getInstanceOf().isMultipleAllowed(frameId)))
         {
             //If a frame already exists of this type
             if (frameMap.containsKey(frameId))
@@ -1343,12 +1347,17 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
                 frameMap.put(frameId, next);
             }
         }
-        //If duplicate frame just stores it somewhere else
+        //If duplicate frame just stores the name of the frame and the number of bytes the frame contains
         else if (frameMap.containsKey(frameId))
         {
             logger.warning("Duplicate Frame" + frameId);
-            this.duplicateFrameId += (frameId + "; ");
-            this.duplicateBytes += ((AbstractID3v2Frame) frameMap.get(frameId)).getSize();
+            //If we have multiple duplicate frames in a tag separate them with semicolons
+            if(this.duplicateFrameId.length()>0)
+            {
+                this.duplicateFrameId +=";";
+            }
+            this.duplicateFrameId += frameId;
+            this.duplicateBytes   += ((AbstractID3v2Frame) frameMap.get(frameId)).getSize();
         }
         else
         {
@@ -1450,7 +1459,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
         MP3File.getStructureFormatter().addElement(TYPE_DUPLICATEFRAMEID, this.duplicateFrameId);
         MP3File.getStructureFormatter().addElement(TYPE_EMPTYFRAMEBYTES, this.emptyFrameBytes);
         MP3File.getStructureFormatter().addElement(TYPE_FILEREADSIZE, this.fileReadSize);
-        MP3File.getStructureFormatter().addElement(TYPE_INVALIDFRAMEBYTES, this.invalidFrameBytes);
+        MP3File.getStructureFormatter().addElement(TYPE_INVALIDFRAMES, this.invalidFrames);
     }
 
     public void createStructureBody()

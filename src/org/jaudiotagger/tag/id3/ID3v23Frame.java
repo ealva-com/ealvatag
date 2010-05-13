@@ -19,6 +19,7 @@ import org.jaudiotagger.FileConstants;
 import org.jaudiotagger.audio.generic.Utils;
 import org.jaudiotagger.audio.mp3.MP3File;
 import org.jaudiotagger.tag.EmptyFrameException;
+import org.jaudiotagger.tag.InvalidDataTypeException;
 import org.jaudiotagger.tag.InvalidFrameException;
 import org.jaudiotagger.tag.InvalidFrameIdentifierException;
 import org.jaudiotagger.tag.id3.framebody.AbstractID3v2FrameBody;
@@ -182,7 +183,7 @@ public class ID3v23Frame extends AbstractID3v2Frame
                     }
                 }
             }
-            // Unable to find a suitable framebody, this shold not happen
+            // Unable to find a suitable framebody, this should not happen
             else
             {
                 logger.severe("Orig id is:" + frame.getIdentifier() + "Unable to create Frame Body");
@@ -245,7 +246,7 @@ public class ID3v23Frame extends AbstractID3v2Frame
      * @param loggingFilename
      * @throws org.jaudiotagger.tag.InvalidFrameException
      */
-    public ID3v23Frame(ByteBuffer byteBuffer, String loggingFilename) throws InvalidFrameException
+    public ID3v23Frame(ByteBuffer byteBuffer, String loggingFilename) throws InvalidFrameException, InvalidDataTypeException
     {
         setLoggingFilename(loggingFilename);
         read(byteBuffer);
@@ -258,7 +259,7 @@ public class ID3v23Frame extends AbstractID3v2Frame
      * @deprecated use {@link #ID3v23Frame(ByteBuffer,String)} instead
      * @throws org.jaudiotagger.tag.InvalidFrameException
      */
-    public ID3v23Frame(ByteBuffer byteBuffer) throws InvalidFrameException
+    public ID3v23Frame(ByteBuffer byteBuffer) throws InvalidFrameException, InvalidDataTypeException
     {
         this(byteBuffer, "");
     }
@@ -302,11 +303,11 @@ public class ID3v23Frame extends AbstractID3v2Frame
     }
 
     /**
-     * Read the frame from a bytebuffer
+     * Read the frame from a byteBuffer
      *
      * @param byteBuffer buffer to read from
      */
-    public void read(ByteBuffer byteBuffer) throws InvalidFrameException
+    public void read(ByteBuffer byteBuffer) throws InvalidFrameException,  InvalidDataTypeException
     {
         logger.info(getLoggingFilename() + ":Read Frame from byteBuffer");
 
@@ -427,7 +428,7 @@ public class ID3v23Frame extends AbstractID3v2Frame
             //it then be created as FrameBodyUnsupported
             if (!(frameBody instanceof ID3v23FrameBody))
             {
-                logger.info(getLoggingFilename() + ":Converted frame body with:" + identifier + " to deprecated framebody");
+                logger.info(getLoggingFilename() + ":Converted frameBody with:" + identifier + " to deprecated frameBody");
                 frameBody = new FrameBodyDeprecated((AbstractID3v2FrameBody) frameBody);
             }
         }
