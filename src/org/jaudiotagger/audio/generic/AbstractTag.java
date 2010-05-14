@@ -423,15 +423,13 @@ public abstract class AbstractTag implements Tag
 
 
     /**
-     * Delete all ocurrences of field.
+     * Delete all occurrences of field with this id.
      *
      * @param key
      */
-    protected void deleteField(String key)
+    public void deleteField(String key)
     {
-        Object removed = fields.remove(key);
-        //if (removed != null && field.isCommon())
-        //    commonNumber--;
+        fields.remove(key);
     }
 
     public Artwork getFirstArtwork()

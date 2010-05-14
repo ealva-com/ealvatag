@@ -820,6 +820,15 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag
         }
     }
 
+    public void deleteField(String id)
+    {
+        FieldKey key = FieldKey.valueOf(id);
+        if(key!=null)
+        {
+            deleteField(key);
+        }
+    }
+
     /**
      * @param obj
      * @return true if this and obj are equivalent

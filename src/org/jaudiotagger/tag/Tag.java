@@ -80,6 +80,14 @@ public interface Tag {
     public void deleteField(FieldKey fieldKey) throws KeyNotFoundException;
 
     /**
+     * Delete any fields with this Flac (Vorbis Comment) id
+     *
+     * @param key
+     * @throws KeyNotFoundException
+     */
+    public void deleteField(String key)throws KeyNotFoundException;
+
+    /**
      * Returns a {@linkplain List list} of {@link TagField} objects whose &quot;{@linkplain TagField#getId() id}&quot;
      * is the specified one.<br>
      *

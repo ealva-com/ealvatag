@@ -891,6 +891,14 @@ public class ID3v23Tag extends AbstractID3v2Tag
         super.doDeleteTagField(new FrameAndSubId(id3v23FieldKey.getFrameId(), id3v23FieldKey.getSubId()));
     }
 
+     /**
+     * Delete fields with this (frame) id
+     * @param id
+     */
+    public void deleteField(String id)
+    {
+        super.doDeleteTagField(new FrameAndSubId(id,null));
+    }
 
     protected FrameAndSubId getFrameAndSubIdFromGenericKey(FieldKey genericKey)
     {

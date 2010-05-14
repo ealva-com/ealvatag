@@ -326,4 +326,39 @@ public class ID3v24TagTest extends TestCase
         tagFields = f.getTag().getFields(FieldKey.URL_OFFICIAL_RELEASE_SITE);
         assertEquals(2,tagFields.size());
     }
+
+     public void testDeleteFields() throws Exception
+    {
+        File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3");
+        MP3File mp3File = new MP3File(testFile);
+        ID3v23Tag v2Tag = new ID3v23Tag();
+        mp3File.setID3v2Tag(v2Tag);
+        mp3File.save();
+
+        //Delete using generic key
+        AudioFile f = AudioFileIO.read(testFile);
+        List<TagField> tagFields = f.getTag().getFields(FieldKey.ALBUM_ARTIST_SORT);
+        assertEquals(0,tagFields.size());
+        f.getTag().addField(FieldKey.ALBUM_ARTIST_SORT,"artist1");
+        tagFields = f.getTag().getFields(FieldKey.ALBUM_ARTIST_SORT);
+        assertEquals(1,tagFields.size());
+        f.getTag().deleteField(FieldKey.ALBUM_ARTIST_SORT);
+        f.commit();
+
+        //Delete using flac id
+        f = AudioFileIO.read(testFile);
+        tagFields = f.getTag().getFields(FieldKey.ALBUM_ARTIST_SORT);
+        assertEquals(0,tagFields.size());
+        f.getTag().addField(FieldKey.ALBUM_ARTIST_SORT,"artist1");
+        tagFields = f.getTag().getFields(FieldKey.ALBUM_ARTIST_SORT);
+        assertEquals(1,tagFields.size());
+        f.getTag().deleteField("TSO2");
+        tagFields = f.getTag().getFields(FieldKey.ALBUM_ARTIST_SORT);
+        assertEquals(0,tagFields.size());
+        f.commit();
+
+        f = AudioFileIO.read(testFile);
+        tagFields = f.getTag().getFields(FieldKey.ALBUM_ARTIST_SORT);
+        assertEquals(0,tagFields.size());
+    }
 }

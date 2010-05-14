@@ -786,4 +786,37 @@ public class VorbisWriteTagTest extends AbstractTestCase
         List<TagField> tagFields = f.getTag().getFields(FieldKey.ALBUM_ARTIST);
         assertEquals(tagFields.size(),2);
     }
+
+     public void testDeleteFields() throws Exception
+    {
+        //Delete using generic key
+        File testFile = AbstractTestCase.copyAudioToTmp("test.ogg", new File("testDeleteFields.ogg"));
+        AudioFile f = AudioFileIO.read(testFile);
+        List<TagField> tagFields = f.getTag().getFields(FieldKey.ALBUM_ARTIST_SORT);
+        assertEquals(0,tagFields.size());
+        f.getTag().addField(FieldKey.ALBUM_ARTIST_SORT,"artist1");
+        f.getTag().addField(FieldKey.ALBUM_ARTIST_SORT,"artist2");
+        tagFields = f.getTag().getFields(FieldKey.ALBUM_ARTIST_SORT);
+        assertEquals(2,tagFields.size());
+        f.getTag().deleteField(FieldKey.ALBUM_ARTIST_SORT);
+        f.commit();
+
+        //Delete using flac id
+        f = AudioFileIO.read(testFile);
+        tagFields = f.getTag().getFields(FieldKey.ALBUM_ARTIST_SORT);
+        assertEquals(0,tagFields.size());
+        f.getTag().addField(FieldKey.ALBUM_ARTIST_SORT,"artist1");
+        f.getTag().addField(FieldKey.ALBUM_ARTIST_SORT,"artist2");
+        tagFields = f.getTag().getFields(FieldKey.ALBUM_ARTIST_SORT);
+        assertEquals(2,tagFields.size());
+        f.getTag().deleteField("ALBUMARTISTSORT");
+        tagFields = f.getTag().getFields(FieldKey.ALBUM_ARTIST_SORT);
+        assertEquals(0,tagFields.size());
+        f.commit();
+
+        f = AudioFileIO.read(testFile);
+        tagFields = f.getTag().getFields(FieldKey.ALBUM_ARTIST_SORT);
+        assertEquals(0,tagFields.size());
+
+    }
 }

@@ -319,6 +319,19 @@ public class FlacTag implements Tag
         }
     }
 
+    public void deleteField(String id) throws KeyNotFoundException
+      {
+          if (id.equals(FieldKey.COVER_ART.name()))
+          {
+              images.clear();
+          }
+          else
+          {
+              tag.deleteField(id);
+          }
+      }
+
+
     //TODO addField images to iterator
     public Iterator<TagField> getFields()
     {
