@@ -174,6 +174,22 @@ public class AudioFile
     }
 
     /**
+     * Check does file exist
+     *
+     * @param file
+     * @throws FileNotFoundException
+     */
+    public void checkFileExists(File file)throws FileNotFoundException
+    {
+        logger.info("Reading file:" + "path" + file.getPath() + ":abs:" + file.getAbsolutePath());
+        if (!file.exists())
+        {
+            logger.severe("Unable to find:" + file.getPath());
+            throw new FileNotFoundException("Unable to find:" + file.getPath());
+        }
+    }
+
+    /**
      * Checks the file is accessible with the correct permissions, otherwise exception occurs
      *
      * @param file
@@ -186,12 +202,7 @@ public class AudioFile
     {
         RandomAccessFile newFile;
 
-        logger.info("Reading file:" + "path" + file.getPath() + ":abs:" + file.getAbsolutePath());
-        if (!file.exists())
-        {
-            logger.severe("Unable to find:" + file.getPath());
-            throw new FileNotFoundException("Unable to find:" + file.getPath());
-        }
+        checkFileExists(file);
 
         // Unless opened as readonly the file must be writable
         if (readOnly)
@@ -283,7 +294,7 @@ public class AudioFile
     }
 
     /**
-     * Get the tag or if the file doesnt have one at all, create a default tag  and return
+     * Get the tag or if the file doesn't have one at all, create a default tag  and return
      *
      * @return
      */
@@ -298,7 +309,7 @@ public class AudioFile
     }
 
      /**
-     * Get the tag or if the file doesnt have one at all, create a default tag  and set it
+     * Get the tag or if the file doesn't have one at all, create a default tag  and set it
      *
      * @return
      */

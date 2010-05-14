@@ -39,6 +39,7 @@ import org.jaudiotagger.audio.wav.WavFileWriter;
 import org.jaudiotagger.tag.TagException;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -106,7 +107,7 @@ public class AudioFileIO
      *
      * @param f The file where the tag will be deleted
      * @throws CannotWriteException If the file could not be written/accessed, the extension
-     *                              wasn't recognized, or other IO error occured.
+     *                              wasn't recognized, or other IO error occurred.
      * @throws org.jaudiotagger.audio.exceptions.CannotReadException
      */
     public static void delete(AudioFile f) throws CannotReadException, CannotWriteException
@@ -115,7 +116,7 @@ public class AudioFileIO
     }
 
     /**
-     * This method returns the default isntance for static use.<br>
+     * This method returns the default instance for static use.<br>
      *
      * @return The default instance.
      */
@@ -134,9 +135,9 @@ public class AudioFileIO
      * </p>
      *
      * @param f The file to read.
-     * @return The AudioFile with the file tag and the file encoding infos.
+     * @return The AudioFile with the file tag and the file encoding info.
      * @throws CannotReadException If the file could not be read, the extension wasn't
-     *                             recognized, or an IO error occured during the read.
+     *                             recognized, or an IO error occurred during the read.
      * @throws org.jaudiotagger.tag.TagException
      * @throws org.jaudiotagger.audio.exceptions.ReadOnlyFileException
      * @throws java.io.IOException
@@ -150,12 +151,12 @@ public class AudioFileIO
 
     /**
      * <p/>
-     * Write the tag contained in the audiofile in the actual file on the disk.
+     * Write the tag contained in the audioFile in the actual file on the disk.
      * </p>
      *
      * @param f The AudioFile to be written
      * @throws CannotWriteException If the file could not be written/accessed, the extension
-     *                              wasn't recognized, or other IO error occured.
+     *                              wasn't recognized, or other IO error occurred.
      */
     public static void write(AudioFile f) throws CannotWriteException
     {
@@ -200,7 +201,7 @@ public class AudioFileIO
      *
      * @param f The file where the tag will be deleted
      * @throws CannotWriteException If the file could not be written/accessed, the extension
-     *                              wasn't recognized, or other IO error occured.
+     *                              wasn't recognized, or other IO error occurred.
      * @throws org.jaudiotagger.audio.exceptions.CannotReadException
      */
     public void deleteTag(AudioFile f) throws CannotReadException, CannotWriteException
@@ -225,7 +226,7 @@ public class AudioFileIO
 
         // Tag Readers
         readers.put(SupportedFileFormat.OGG.getFilesuffix(), new OggFileReader());
-        readers.put(SupportedFileFormat.FLAC.getFilesuffix(), new FlacFileReader());
+        readers.put(SupportedFileFormat.FLAC.getFilesuffix(),new FlacFileReader());
         readers.put(SupportedFileFormat.MP3.getFilesuffix(), new MP3FileReader());
         readers.put(SupportedFileFormat.MP4.getFilesuffix(), new Mp4FileReader());
         readers.put(SupportedFileFormat.M4A.getFilesuffix(), new Mp4FileReader());
@@ -262,9 +263,9 @@ public class AudioFileIO
      * </p>
      *
      * @param f The file to read.
-     * @return The AudioFile with the file tag and the file encoding infos.
+     * @return The AudioFile with the file tag and the file encoding info.
      * @throws CannotReadException If the file could not be read, the extension wasn't
-     *                             recognized, or an IO error occured during the read.
+     *                             recognized, or an IO error occurred during the read.
      * @throws org.jaudiotagger.tag.TagException
      * @throws org.jaudiotagger.audio.exceptions.ReadOnlyFileException
      * @throws java.io.IOException
@@ -273,6 +274,7 @@ public class AudioFileIO
     public AudioFile readFile(File f)
             throws CannotReadException, IOException, TagException, ReadOnlyFileException, InvalidAudioFrameException
     {
+        checkFileExists(f);
         String ext = Utils.getExtension(f);
 
         AudioFileReader afr = readers.get(ext);
@@ -286,6 +288,21 @@ public class AudioFileIO
     }
 
     /**
+     * Check does file exist
+     *
+     * @param file
+     * @throws java.io.FileNotFoundException
+     */
+    public void checkFileExists(File file)throws FileNotFoundException
+    {
+        logger.info("Reading file:" + "path" + file.getPath() + ":abs:" + file.getAbsolutePath());
+        if (!file.exists())
+        {
+            logger.severe("Unable to find:" + file.getPath());
+            throw new FileNotFoundException("Unable to find:" + file.getPath());
+        }
+    }
+    /**
      * Removes an listener for all file formats.
      *
      * @param listener listener
@@ -298,12 +315,12 @@ public class AudioFileIO
 
     /**
      * <p/>
-     * Write the tag contained in the audiofile in the actual file on the disk.
+     * Write the tag contained in the audioFile in the actual file on the disk.
      * </p>
      *
      * @param f The AudioFile to be written
      * @throws CannotWriteException If the file could not be written/accessed, the extension
-     *                              wasn't recognized, or other IO error occured.
+     *                              wasn't recognized, or other IO error occurred.
      */
     public void writeFile(AudioFile f) throws CannotWriteException
     {

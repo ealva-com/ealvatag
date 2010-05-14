@@ -7,7 +7,7 @@ import org.jaudiotagger.tag.id3.*;
 /**
  * Test frame and Tag Equality
  */
-public class Issue36Test extends AbstractTestCase
+public class Issue036Test extends AbstractTestCase
 {
     public void testIDv24Frame() throws Exception
     {
