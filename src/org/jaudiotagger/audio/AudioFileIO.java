@@ -36,6 +36,7 @@ import org.jaudiotagger.audio.ogg.OggFileWriter;
 import org.jaudiotagger.audio.real.RealFileReader;
 import org.jaudiotagger.audio.wav.WavFileReader;
 import org.jaudiotagger.audio.wav.WavFileWriter;
+import org.jaudiotagger.logging.ErrorMessage;
 import org.jaudiotagger.tag.TagException;
 
 import java.io.File;
@@ -211,8 +212,7 @@ public class AudioFileIO
         Object afw = writers.get(ext);
         if (afw == null)
         {
-            throw new CannotWriteException(
-                    "No Deleter associated to this extension: " + ext);
+            throw new CannotWriteException(ErrorMessage.NO_DELETER_FOR_THIS_FORMAT.getMsg(ext));
         }
 
         ((AudioFileWriter) afw).delete(f);
@@ -280,8 +280,7 @@ public class AudioFileIO
         AudioFileReader afr = readers.get(ext);
         if (afr == null)
         {
-            throw new CannotReadException(
-                    "No Reader associated to this extension: " + ext);
+            throw new CannotReadException(ErrorMessage.NO_READER_FOR_THIS_FORMAT.getMsg(ext));
         }
 
         return afr.read(f);
@@ -299,7 +298,7 @@ public class AudioFileIO
         if (!file.exists())
         {
             logger.severe("Unable to find:" + file.getPath());
-            throw new FileNotFoundException("Unable to find:" + file.getPath());
+            throw new FileNotFoundException(ErrorMessage.UNABLE_TO_FIND_FILE.getMsg(file.getPath()));
         }
     }
     /**
@@ -329,7 +328,7 @@ public class AudioFileIO
         AudioFileWriter afw = writers.get(ext);
         if (afw == null)
         {
-            throw new CannotWriteException("No Writer associated to this extension: " + ext);
+            throw new CannotWriteException(ErrorMessage.NO_WRITER_FOR_THIS_FORMAT.getMsg(ext));
         }
 
         afw.write(f);
