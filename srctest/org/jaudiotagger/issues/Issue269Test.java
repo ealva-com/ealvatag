@@ -5,8 +5,11 @@ import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.AudioFileIO;
 import org.jaudiotagger.tag.FieldKey;
 import org.jaudiotagger.tag.id3.AbstractID3v2Frame;
+import org.jaudiotagger.tag.id3.ID3v23Frame;
 import org.jaudiotagger.tag.id3.ID3v23Frames;
 import org.jaudiotagger.tag.id3.ID3v23Tag;
+import org.jaudiotagger.tag.id3.framebody.FrameBodyTCOP;
+import org.jaudiotagger.tag.id3.framebody.FrameBodyTENC;
 
 import java.io.File;
 
@@ -103,9 +106,8 @@ public class Issue269Test extends AbstractTestCase
     }
 
     /**
-     * Test doesnt fail when read mp3 that has an encrypted field
+     * Test read and stores encrypted frames separately, and that they are preserved when writing frame
      *
-     * TODO currently we cant decrypt it, that will come later
      */
     public void testReadMp3WithEncryptedField()
     {
@@ -131,15 +133,40 @@ public class Issue269Test extends AbstractTestCase
             ID3v23Tag id3v23Tag = (ID3v23Tag)af.getTag();            
             assertEquals(0,id3v23Tag.getPaddingSize());
 
-            AbstractID3v2Frame frame = (AbstractID3v2Frame)id3v23Tag.getFrame(ID3v23Frames.FRAME_ID_V3_ENCODEDBY);
+            AbstractID3v2Frame frame1 = (AbstractID3v2Frame)id3v23Tag.getFrame(ID3v23Frames.FRAME_ID_V3_COPYRIGHTINFO);
+            assertNotNull(frame1);
+            assertEquals("",((FrameBodyTCOP)frame1.getBody()).getText());
 
-
+            //This frame is marked as encrypted(Although it actually isn't) so we cant decode it we should just store it
+            //as a special encrypted frame.
+            ID3v23Frame frame = (ID3v23Frame)id3v23Tag.getFrame(ID3v23Frames.FRAME_ID_V3_ENCODEDBY);
+            assertNull(frame);
+            frame = (ID3v23Frame)id3v23Tag.getEncryptedFrame(ID3v23Frames.FRAME_ID_V3_ENCODEDBY);
+            assertNotNull(frame);
+            assertEquals(0x22,frame.getEncryptionMethod());
+            assertEquals(0,frame.getGroupIdentifier());
+            assertEquals(0,frame.getStatusFlags().getOriginalFlags());
+            //jaudiotagger converts to this because encodeby frame should be updated if the audio is changed and so
+            //this falg should be set
+            assertEquals(0x40,frame.getStatusFlags().getWriteFlags());
             af.getTag().setField(FieldKey.ALBUM,"FRED");
             af.commit();
             af = AudioFileIO.read(testFile);
+            id3v23Tag = (ID3v23Tag)af.getTag();
             System.out.println(af.getTag().toString());
             assertEquals("FRED",af.getTag().getFirst(FieldKey.ALBUM));
 
+            //The frame is preserved and still encrypted
+            frame = (ID3v23Frame)id3v23Tag.getFrame(ID3v23Frames.FRAME_ID_V3_ENCODEDBY);
+            assertNull(frame);
+            frame = (ID3v23Frame)id3v23Tag.getEncryptedFrame(ID3v23Frames.FRAME_ID_V3_ENCODEDBY);
+            assertNotNull(frame);
+            //Encryption Method Preserved
+            assertEquals(0x22,frame.getEncryptionMethod());
+            assertEquals(0,frame.getGroupIdentifier());
+            //Note fiel preservation flag now set
+            assertEquals(0x40,frame.getStatusFlags().getOriginalFlags());
+            assertEquals(0x40,frame.getStatusFlags().getWriteFlags());
 
         }
         catch(Exception e)
@@ -147,7 +174,6 @@ public class Issue269Test extends AbstractTestCase
             e.printStackTrace();
             exceptionCaught=e;
         }
-
         assertNull(exceptionCaught);
     }
 

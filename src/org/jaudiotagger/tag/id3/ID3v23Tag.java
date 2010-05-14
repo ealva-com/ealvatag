@@ -161,6 +161,7 @@ public class ID3v23Tag extends AbstractID3v2Tag
     public ID3v23Tag()
     {
         frameMap = new LinkedHashMap();
+        encryptedFrameMap = new LinkedHashMap();
     }
 
     /**
@@ -188,7 +189,7 @@ public class ID3v23Tag extends AbstractID3v2Tag
     {
         try
         {
-            //Special case to handle TDRC frame from V24 that needs breaking up into seperate frame in V23
+            //Special case to handle TDRC frame from V24 that needs breaking up into separate frame in V23
             if ((frame.getIdentifier().equals(ID3v24Frames.FRAME_ID_YEAR)) && (frame.getBody() instanceof FrameBodyTDRC))
             {
                 translateFrame(frame);
@@ -264,6 +265,7 @@ public class ID3v23Tag extends AbstractID3v2Tag
     {
         logger.info("Creating tag from a tag of a different version");
         frameMap = new LinkedHashMap();
+        encryptedFrameMap = new LinkedHashMap();
 
         if (mp3tag != null)
         {
@@ -545,7 +547,7 @@ public class ID3v23Tag extends AbstractID3v2Tag
             readExtendedHeader(buffer, size);
         }
 
-        //Slice Buffer, so position markers tally with size (i.e do not include tagheader)
+        //Slice Buffer, so position markers tally with size (i.e do not include tagHeader)
         ByteBuffer bufferWithoutHeader = buffer.slice();
         //We need to synchronize the buffer
         if (isUnsynchronization())
@@ -572,6 +574,8 @@ public class ID3v23Tag extends AbstractID3v2Tag
         //Now start looking for frames
         ID3v23Frame next;
         frameMap = new LinkedHashMap();
+        encryptedFrameMap = new LinkedHashMap();
+
 
         //Read the size from the Tag Header
         this.fileReadSize = size;

@@ -22,10 +22,7 @@ import org.jaudiotagger.tag.EmptyFrameException;
 import org.jaudiotagger.tag.InvalidDataTypeException;
 import org.jaudiotagger.tag.InvalidFrameException;
 import org.jaudiotagger.tag.InvalidFrameIdentifierException;
-import org.jaudiotagger.tag.id3.framebody.AbstractID3v2FrameBody;
-import org.jaudiotagger.tag.id3.framebody.FrameBodyDeprecated;
-import org.jaudiotagger.tag.id3.framebody.FrameBodyUnsupported;
-import org.jaudiotagger.tag.id3.framebody.ID3v23FrameBody;
+import org.jaudiotagger.tag.id3.framebody.*;
 import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
 import org.jaudiotagger.utils.EqualsUtil;
 
@@ -57,6 +54,16 @@ public class ID3v23Frame extends AbstractID3v2Frame
     protected static final int FRAME_GROUPING_INDICATOR_SIZE = 1;
 
     protected static final int FRAME_HEADER_SIZE = FRAME_ID_SIZE + FRAME_SIZE_SIZE + FRAME_FLAGS_SIZE;
+
+    /**
+     * If the frame is encrypted then the encryption method is stored in this byte
+     */
+    private int encryptionMethod;
+
+    /**
+     * If the frame belongs in a group with other frames then the group identifier byte is stored
+     */
+    private int groupIdentifier;
 
     /**
      * Creates a new ID3v23 Frame
@@ -240,7 +247,7 @@ public class ID3v23Frame extends AbstractID3v2Frame
     }
 
     /**
-     * Creates a new ID3v23Frame datatype by reading from byteBuffer.
+     * Creates a new ID3v23Frame dataType by reading from byteBuffer.
      *
      * @param byteBuffer to read from
      * @param loggingFilename
@@ -340,7 +347,7 @@ public class ID3v23Frame extends AbstractID3v2Frame
         else if (frameSize == 0)
         {
             logger.warning(getLoggingFilename() + ":Empty Frame Size:" + identifier);
-            //We don't process this frame or add to framemap because contains no useful information
+            //We don't process this frame or add to frameMap because contains no useful information
             //Skip the two flag bytes so in correct position for subsequent frames
             byteBuffer.get();
             byteBuffer.get();
@@ -378,7 +385,7 @@ public class ID3v23Frame extends AbstractID3v2Frame
         logger.fine(getLoggingFilename() + ":Identifier was:" + identifier + " reading using:" + id + "with frame size:" + frameSize);
 
         //Read extra bits appended to frame header for various encodings
-        //These are not included in header size but are included in frame size but wont be read when we actually
+        //These are not included in header size but are included in frame size but won't be read when we actually
         //try to read the frame body data
         int extraHeaderBytesCount = 0;
         int decompressedFrameSize = -1;
@@ -392,19 +399,19 @@ public class ID3v23Frame extends AbstractID3v2Frame
 
         if (((EncodingFlags) encodingFlags).isEncryption())
         {
-            //Read the Encryption byte, but do nothing with it
+           //Consume the encryption byte
             extraHeaderBytesCount += FRAME_ENCRYPTION_INDICATOR_SIZE;
-            byteBuffer.get();
+            encryptionMethod = byteBuffer.get();
         }
 
         if (((EncodingFlags) encodingFlags).isGrouping())
         {
             //Read the Grouping byte, but do nothing with it
             extraHeaderBytesCount += FRAME_GROUPING_INDICATOR_SIZE;
-            byteBuffer.get();
+            groupIdentifier = byteBuffer.get();
         }
 
-        //Work out the real size of the framebody data
+        //Work out the real size of the frameBody data
         int realFrameSize = frameSize - extraHeaderBytesCount;
 
         ByteBuffer frameBodyBuffer;
@@ -415,6 +422,12 @@ public class ID3v23Frame extends AbstractID3v2Frame
             {
                 frameBodyBuffer = ID3Compression.uncompress(identifier,getLoggingFilename(),byteBuffer, decompressedFrameSize, realFrameSize);
                 frameBody = readBody(id, frameBodyBuffer, decompressedFrameSize);
+            }
+            else if (((EncodingFlags) encodingFlags).isEncryption())
+            {
+                frameBodyBuffer = byteBuffer.slice();
+                frameBodyBuffer.limit(realFrameSize);
+                frameBody = readEncryptedBody(identifier, byteBuffer,frameSize);
             }
             else
             {
@@ -469,15 +482,24 @@ public class ID3v23Frame extends AbstractID3v2Frame
         //Status Flags:leave as they were when we read
         headerBuffer.put(statusFlags.getWriteFlags());
 
-        //Enclosing Flags, first reset
-        encodingFlags.resetFlags();
-        //Encoding we dont support any of flags so don't set any
+        //Unset Compression flag if previously set because we uncompress previously compressed frames on write.
+        ((EncodingFlags)encodingFlags).unsetCompression();
         headerBuffer.put(encodingFlags.getFlags());
 
         try
         {
             //Add header to the Byte Array Output Stream
             tagBuffer.write(headerBuffer.array());
+
+            if (((EncodingFlags) encodingFlags).isEncryption())
+            {
+               tagBuffer.write(encryptionMethod);
+            }
+
+            if (((EncodingFlags) encodingFlags).isGrouping())
+            {
+                tagBuffer.write(groupIdentifier);
+            }
 
             //Add body to the Byte Array Output Stream
             tagBuffer.write(bodyOutputStream.toByteArray());
@@ -501,6 +523,16 @@ public class ID3v23Frame extends AbstractID3v2Frame
         return encodingFlags;
     }
 
+    public int getEncryptionMethod()
+    {
+        return encryptionMethod;
+    }
+
+    public int getGroupIdentifier()
+    {
+        return groupIdentifier;
+    }
+
     /**
      * This represents a frame headers Status Flags
      * Make adjustments if necessary based on frame type and specification.
@@ -517,7 +549,7 @@ public class ID3v23Frame extends AbstractID3v2Frame
         public static final int MASK_TAG_ALTER_PRESERVATION = FileConstants.BIT7;
 
         /**
-         * Discard frame if audio file part  altered
+         * Discard frame if audio file part altered
          */
         public static final int MASK_FILE_ALTER_PRESERVATION = FileConstants.BIT6;
 
@@ -538,6 +570,7 @@ public class ID3v23Frame extends AbstractID3v2Frame
             writeFlags = flags;
             modifyFlags();
         }
+
 
         /**
          * Use this constructor when convert a v24 frame
@@ -622,6 +655,36 @@ public class ID3v23Frame extends AbstractID3v2Frame
         {
             super(flags);
             logEnabledFlags();
+        }
+
+        public void setCompression()
+        {
+            flags |= MASK_COMPRESSION;
+        }
+
+        public void setEncryption()
+        {
+            flags |= MASK_ENCRYPTION;
+        }
+
+         public void setGrouping()
+        {
+            flags |= MASK_GROUPING_IDENTITY;
+        }
+
+        public void unsetCompression()
+        {
+            flags &= (byte) ~MASK_COMPRESSION;
+        }
+
+        public void unsetEncryption()
+        {
+            flags &= (byte) ~MASK_ENCRYPTION;
+        }
+
+        public void unsetGrouping()
+        {
+            flags &= (byte) ~MASK_GROUPING_IDENTITY;
         }
 
         public void logEnabledFlags()

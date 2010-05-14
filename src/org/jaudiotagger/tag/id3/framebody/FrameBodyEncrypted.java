@@ -1,5 +1,5 @@
 /*
- *  MusicTag Copyright (C)2003,2004
+ *  Jthink Copyright (C)2010
  *
  *  This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser
  *  General Public  License as published by the Free Software Foundation; either version 2.1 of the License,
@@ -16,62 +16,52 @@
 package org.jaudiotagger.tag.id3.framebody;
 
 import org.jaudiotagger.tag.InvalidTagException;
-import org.jaudiotagger.tag.id3.ID3v24Frames;
+import org.jaudiotagger.tag.datatype.ByteArraySizeTerminated;
+import org.jaudiotagger.tag.datatype.DataTypes;
+import org.jaudiotagger.tag.id3.ID3v23Frames;
 
 import java.nio.ByteBuffer;
 
 /**
- * Encoded by Text information frame.
- * <p>The 'Encoded by' frame contains the name of the person or organisation that encoded the audio file.
- *  This field may contain a copyright message, if the audio file also is copyrighted by the encoder.
+ * Encrypted frame.
  * <p/>
- * <p>For more details, please refer to the ID3 specifications:
- * <ul>
- * <li><a href="http://www.id3.org/id3v2.3.0.txt">ID3 v2.3.0 Spec</a>
- * </ul>
+ * <p/>
+ * Container for an encrypted frame, we cannot decrypt encrypted frame but it may be possible
+ * for the calling application to decrypt the frame if they understand how it has been encrypted,
+ * information on this will be held within an ENCR frame
  *
  * @author : Paul Taylor
- * @author : Eric Farng
- * @version $Id$
  */
-public class FrameBodyTENC extends AbstractFrameBodyTextInfo implements ID3v24FrameBody, ID3v23FrameBody
+public class FrameBodyEncrypted extends AbstractID3v2FrameBody implements ID3v24FrameBody, ID3v23FrameBody
 {
+    private String identifier=null;
+
     /**
-     * Creates a new FrameBodyTENC dataType.
+     * Creates a new FrameBodyEncrypted dataType.
      */
-    public FrameBodyTENC()
+    public FrameBodyEncrypted(String identifier)
     {
+        this.identifier=identifier;
     }
 
-    public FrameBodyTENC(FrameBodyTENC body)
+    public FrameBodyEncrypted(FrameBodyEncrypted body)
     {
         super(body);
     }
 
     /**
-     * Creates a new FrameBodyTENC dataType.
+     * Read from file
      *
-     * @param textEncoding
-     * @param text
-     */
-    public FrameBodyTENC(byte textEncoding, String text)
-    {
-        super(textEncoding, text);
-    }
-
-    /**
-     * Creates a new FrameBodyTENC dataType.
-     *
+     * @param identifier
      * @param byteBuffer
      * @param frameSize
-     * @throws java.io.IOException
      * @throws InvalidTagException
      */
-    public FrameBodyTENC(ByteBuffer byteBuffer, int frameSize) throws InvalidTagException
+    public FrameBodyEncrypted(String identifier,ByteBuffer byteBuffer, int frameSize) throws InvalidTagException
     {
         super(byteBuffer, frameSize);
+        this.identifier=identifier;
     }
-
     /**
      * The ID3v2 frame identifier
      *
@@ -79,6 +69,14 @@ public class FrameBodyTENC extends AbstractFrameBodyTextInfo implements ID3v24Fr
      */
     public String getIdentifier()
     {
-        return ID3v24Frames.FRAME_ID_ENCODEDBY;
+        return identifier;
+    }
+
+    /**
+     * TODO:proper mapping
+     */
+    protected void setupObjectList()
+    {
+        objectList.add(new ByteArraySizeTerminated(DataTypes.OBJ_DATA, this));
     }
 }

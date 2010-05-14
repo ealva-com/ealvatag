@@ -306,6 +306,8 @@ public class ID3v24Tag extends AbstractID3v2Tag
     public ID3v24Tag()
     {
         frameMap = new LinkedHashMap();
+        encryptedFrameMap = new LinkedHashMap();
+                
     }
 
     /**
@@ -352,12 +354,12 @@ public class ID3v24Tag extends AbstractID3v2Tag
     }
 
     /*
-       * Copy framne into map, whilst accounting for multiple frame sof same type which can occur even if there were
+       * Copy frame into map, whilst accounting for multiple frames of same type which can occur even if there were
        * not frames of the dame type in the original tag
        *
-       * The frame already exists this shouldnt normally happen because frames
+       * The frame already exists this shouldn't normally happen because frames
        * that are allowed to be multiple don't call this method. Frames that
-       * arent allowed to be multiple aren't added to hashmap in first place when
+       * aren't allowed to be multiple aren't added to hashMap in first place when
        * originally added.
        *
        * We only want to allow one of the frames going forward but we try and merge
@@ -367,7 +369,7 @@ public class ID3v24Tag extends AbstractID3v2Tag
        *
        * However converting some frames from tag of one version to another may
        * mean that two different frames both get converted to one frame, this
-       * particulary applies to DateTime fields which were originally two fields
+       * particularly applies to DateTime fields which were originally two fields
        * in v2.3 but are one field in v2.4.
        */
        @Override
@@ -471,6 +473,8 @@ public class ID3v24Tag extends AbstractID3v2Tag
     {
         logger.info("Creating tag from a tag of a different version");
         frameMap = new LinkedHashMap();
+        encryptedFrameMap = new LinkedHashMap();
+
         if (mp3tag != null)
         {
             //Should use simpler copy constructor
@@ -594,6 +598,8 @@ public class ID3v24Tag extends AbstractID3v2Tag
     public ID3v24Tag(ByteBuffer buffer, String loggingFilename) throws TagException
     {
         frameMap = new LinkedHashMap();
+        encryptedFrameMap = new LinkedHashMap();
+
         setLoggingFilename(loggingFilename);
         this.read(buffer);
     }
@@ -877,6 +883,8 @@ public class ID3v24Tag extends AbstractID3v2Tag
         //Now start looking for frames
         ID3v24Frame next;
         frameMap = new LinkedHashMap();
+        encryptedFrameMap = new LinkedHashMap();
+
         //Read the size from the Tag Header
         this.fileReadSize = size;
         // Read the frames until got to upto the size as specified in header
@@ -902,7 +910,7 @@ public class ID3v24Tag extends AbstractID3v2Tag
             {
                 logger.info(getLoggingFilename() + ":" + "Invalid Frame Identifier:" + ifie.getMessage());
                 this.invalidFrames++;
-                //Dont try and find any more frames
+                //Don't try and find any more frames
                 break;
             }
             //Problem trying to find frame
@@ -910,7 +918,7 @@ public class ID3v24Tag extends AbstractID3v2Tag
             {
                 logger.warning(getLoggingFilename() + ":" + "Invalid Frame:" + ife.getMessage());
                 this.invalidFrames++;
-                //Dont try and find any more frames
+                //Don't try and find any more frames
                 break;
             }
             //Failed reading frame but may just have invalid data but correct length so lets carry on

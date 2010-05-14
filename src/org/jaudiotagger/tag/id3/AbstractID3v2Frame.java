@@ -18,6 +18,7 @@ package org.jaudiotagger.tag.id3;
 import org.jaudiotagger.audio.mp3.MP3File;
 import org.jaudiotagger.tag.*;
 import org.jaudiotagger.tag.id3.framebody.AbstractID3v2FrameBody;
+import org.jaudiotagger.tag.id3.framebody.FrameBodyEncrypted;
 import org.jaudiotagger.tag.id3.framebody.FrameBodyUnsupported;
 import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
 import org.jaudiotagger.utils.EqualsUtil;
@@ -185,6 +186,31 @@ public abstract class AbstractID3v2Frame extends AbstractTagFrame implements Tag
 
     }
 
+    /**
+     * Read the frameBody when frame marked as encrypted
+     *
+     * @param identifier
+     * @param byteBuffer
+     * @param frameSize
+     * @return
+     * @throws InvalidFrameException
+     * @throws InvalidDataTypeException
+     * @throws InvalidTagException
+     */
+    protected AbstractID3v2FrameBody readEncryptedBody(String identifier, ByteBuffer byteBuffer, int frameSize)
+            throws InvalidFrameException, InvalidDataTypeException 
+    {
+        try
+        {
+            AbstractID3v2FrameBody frameBody = new  FrameBodyEncrypted(identifier,byteBuffer, frameSize);
+            frameBody.setHeader(this);
+            return frameBody;
+        }
+        catch(InvalidTagException ite)
+        {
+            throw new InvalidDataTypeException(ite);
+        }
+    }
     /**
      * Read the frame body from the specified file via the buffer
      *
@@ -399,7 +425,7 @@ public abstract class AbstractID3v2Frame extends AbstractTagFrame implements Tag
         return encodingFlags;
     }
 
-    class StatusFlags
+    public class StatusFlags
     {
         protected static final String TYPE_FLAGS = "statusFlags";
 

@@ -54,6 +54,16 @@ public class ID3v24Frame extends AbstractID3v2Frame
 
     protected static final int FRAME_HEADER_SIZE = FRAME_ID_SIZE + FRAME_SIZE_SIZE + FRAME_FLAGS_SIZE;
 
+    /**
+     * If the frame is encrypted then the encryption method is stored in this byte
+     */
+    private int encryptionMethod;
+
+    /**
+     * If the frame belongs in a group with other frames then the group identifier byte is stored
+     */
+    private int groupIdentifier;
+
 
     public ID3v24Frame()
     {
@@ -567,14 +577,14 @@ public class ID3v24Frame extends AbstractID3v2Frame
         if (((EncodingFlags) encodingFlags).isGrouping())
         {
             extraHeaderBytesCount = ID3v24Frame.FRAME_GROUPING_INDICATOR_SIZE;
-            byteBuffer.get();
+            groupIdentifier=byteBuffer.get();
         }
 
         if (((EncodingFlags) encodingFlags).isEncryption())
         {
             //Read the Encryption byte, but do nothing with it
             extraHeaderBytesCount += ID3v24Frame.FRAME_ENCRYPTION_INDICATOR_SIZE;
-            byteBuffer.get();
+            encryptionMethod=byteBuffer.get();
         }
 
         if (((EncodingFlags) encodingFlags).isDataLengthIndicator())
@@ -585,7 +595,7 @@ public class ID3v24Frame extends AbstractID3v2Frame
             logger.info(getLoggingFilename() + ":" + "Frame Size Is:" + frameSize + " Data Length Size:" + dataLengthSize);
         }
 
-        //Work out the real size of the framebody data
+        //Work out the real size of the frameBody data
         int realFrameSize = frameSize - extraHeaderBytesCount;
 
         //Create Buffer that only contains the body of this frame rather than the remainder of tag
@@ -613,6 +623,12 @@ public class ID3v24Frame extends AbstractID3v2Frame
             {
                 frameBodyBuffer = ID3Compression.uncompress(identifier, getLoggingFilename(), byteBuffer, dataLengthSize, realFrameSize);
                 frameBody = readBody(identifier, frameBodyBuffer, dataLengthSize);
+            }
+            else if (((EncodingFlags) encodingFlags).isEncryption())
+            {
+                frameBodyBuffer = byteBuffer.slice();
+                frameBodyBuffer.limit(realFrameSize);
+                frameBody = readEncryptedBody(identifier, byteBuffer,frameSize);
             }
             else
             {
@@ -679,19 +695,34 @@ public class ID3v24Frame extends AbstractID3v2Frame
         //Status Flags:leave as they were when we read
         headerBuffer.put(statusFlags.getWriteFlags());
 
-        //Enclosing Flags, first reset
-        encodingFlags.resetFlags();
-        //Encoding we only support unsynchrnization
+        //Encoding we only support unsynchronization
         if (unsynchronization)
         {
             ((ID3v24Frame.EncodingFlags) encodingFlags).setUnsynchronised();
         }
+        else
+        {
+            ((ID3v24Frame.EncodingFlags) encodingFlags).unsetUnsynchronised();
+        }
+        //These are not currently supported on write
+        ((ID3v24Frame.EncodingFlags) encodingFlags).unsetCompression();
+        ((ID3v24Frame.EncodingFlags) encodingFlags).unsetDataLengthIndicator();
         headerBuffer.put(encodingFlags.getFlags());
 
         try
         {
             //Add header to the Byte Array Output Stream
             tagBuffer.write(headerBuffer.array());
+
+            if (((EncodingFlags) encodingFlags).isEncryption())
+            {
+               tagBuffer.write(encryptionMethod);
+            }
+
+            if (((EncodingFlags) encodingFlags).isGrouping())
+            {
+                tagBuffer.write(groupIdentifier);
+            }
 
             //Add bodybuffer to the Byte Array Output Stream
             tagBuffer.write(bodyBuffer);
@@ -717,6 +748,16 @@ public class ID3v24Frame extends AbstractID3v2Frame
     public AbstractID3v2Frame.EncodingFlags getEncodingFlags()
     {
         return encodingFlags;
+    }
+
+    public int getEncryptionMethod()
+    {
+        return encryptionMethod;
+    }
+
+    public int getGroupIdentifier()
+    {
+        return groupIdentifier;
     }
 
     /**
@@ -940,9 +981,54 @@ public class ID3v24Frame extends AbstractID3v2Frame
             return (flags & MASK_DATA_LENGTH_INDICATOR) > 0;
         }
 
+        public void setCompression()
+        {
+            flags |= MASK_COMPRESSION;
+        }
+
+        public void setEncryption()
+        {
+            flags |= MASK_ENCRYPTION;
+        }
+
+         public void setGrouping()
+        {
+            flags |= MASK_GROUPING_IDENTITY;
+        }
+
         public void setUnsynchronised()
         {
             flags |= MASK_FRAME_UNSYNCHRONIZATION;
+        }
+
+        public void setDataLengthIndicator()
+        {
+            flags |= MASK_DATA_LENGTH_INDICATOR;
+        }
+
+        public void unsetCompression()
+        {
+            flags &= (byte) ~MASK_COMPRESSION;
+        }
+
+        public void unsetEncryption()
+        {
+            flags &= (byte) ~MASK_ENCRYPTION;
+        }
+
+        public void unsetGrouping()
+        {
+            flags &= (byte) ~MASK_GROUPING_IDENTITY;
+        }
+
+        public void unsetUnsynchronised()
+        {
+            flags &= (byte) ~MASK_FRAME_UNSYNCHRONIZATION;
+        }
+
+        public void unsetDataLengthIndicator()
+        {
+            flags &= (byte) ~MASK_DATA_LENGTH_INDICATOR;
         }
 
         public void createStructure()

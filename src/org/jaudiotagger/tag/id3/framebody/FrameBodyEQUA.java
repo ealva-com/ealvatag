@@ -64,7 +64,7 @@ import org.jaudiotagger.tag.id3.ID3v23Frames;
 public class FrameBodyEQUA extends AbstractID3v2FrameBody implements ID3v23FrameBody
 {
     /**
-     * Creates a new FrameBodyEQUA datatype.
+     * Creates a new FrameBodyEQUA dataType.
      */
     public FrameBodyEQUA()
     {

@@ -1,11 +1,8 @@
 package org.jaudiotagger.tag.id3;
 
-import org.jaudiotagger.audio.mp3.MPEGFrameHeader;
 import org.jaudiotagger.logging.ErrorMessage;
 import org.jaudiotagger.tag.InvalidFrameException;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.nio.ByteBuffer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -17,8 +14,8 @@ import java.util.zip.Inflater;
  * <p/>
  * Is currently required for V23Frames and V24Frames
  * <p/>
- * TODO compress framedata
  */
+//TODO also need to support compress framedata
 public class ID3Compression
 {
     //Logger
