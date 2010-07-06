@@ -24,7 +24,7 @@ public class ID3TextEncodingConversion
      * @param textEncoding currently set
      * @return valid encoding according to version type and user options
      */
-    public static byte getTextEncoding(AbstractTagFrame header, byte textEncoding)
+    public static byte  getTextEncoding(AbstractTagFrame header, byte textEncoding)
     {
 
         //Should not happen, assume v23 and provide a warning
@@ -100,9 +100,16 @@ public class ID3TextEncodingConversion
      */
     private static byte convertV24textEncodingToV23textEncoding(byte textEncoding)
     {
-        if ((textEncoding == TextEncoding.UTF_16BE) || (textEncoding == TextEncoding.UTF_8))
+        //Convert to equivalent UTF16 format
+        if (textEncoding == TextEncoding.UTF_16BE)
         {
             return TextEncoding.UTF_16;
+        }
+        //UTF-8 is not supported in ID3v23 and UTF-16 Format can be problematic on ID3v23 so change
+        //to ISO-8859-1, a check before writing data will check the format is capable of writing the data 
+        else if (textEncoding == TextEncoding.UTF_8)
+        {
+            return TextEncoding.ISO_8859_1;
         }
         else
         {

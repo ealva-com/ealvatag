@@ -101,7 +101,7 @@ public class ID3v23Frame extends AbstractID3v2Frame
     }
 
     /**
-     * Creates a new ID3v23Frame  based on another frame.
+     * Creates a new ID3v23Frame  based on another frame of a different version.
      *
      * @param frame
      * @throws org.jaudiotagger.tag.InvalidFrameException
@@ -121,7 +121,7 @@ public class ID3v23Frame extends AbstractID3v2Frame
 
         if (frame instanceof ID3v24Frame)
         {
-            //Unknown Frame e.g NCON,also protects when known id but has unsupported frame body
+            //Unknown Frame e.g NCON, also protects when known id but has unsupported frame body
             if (frame.getBody() instanceof FrameBodyUnsupported)
             {
                 this.frameBody = new FrameBodyUnsupported((FrameBodyUnsupported) frame.getBody());
@@ -138,6 +138,7 @@ public class ID3v23Frame extends AbstractID3v2Frame
                 {
                     this.frameBody = ((FrameBodyDeprecated) frame.getBody()).getOriginalFrameBody();
                     this.frameBody.setHeader(this);
+                    this.frameBody.setTextEncoding(ID3TextEncodingConversion.getTextEncoding(this,this.frameBody.getTextEncoding()));
                     identifier = frame.getIdentifier();
                     logger.info("DEPRECATED:Orig id is:" + frame.getIdentifier() + ":New id is:" + identifier);
                 }
@@ -146,6 +147,8 @@ public class ID3v23Frame extends AbstractID3v2Frame
                 {
                     this.frameBody = new FrameBodyDeprecated((FrameBodyDeprecated) frame.getBody());
                     this.frameBody.setHeader(this);
+                    this.frameBody.setTextEncoding(ID3TextEncodingConversion.getTextEncoding(this,this.frameBody.getTextEncoding()));
+
                     identifier = frame.getIdentifier();
                     logger.info("DEPRECATED:Orig id is:" + frame.getIdentifier() + ":New id is:" + identifier);
                     return;
@@ -161,6 +164,7 @@ public class ID3v23Frame extends AbstractID3v2Frame
                     logger.finer("V4:Orig id is:" + frame.getIdentifier() + ":New id is:" + identifier);
                     this.frameBody = (AbstractTagFrameBody) ID3Tags.copyObject(frame.getBody());
                     this.frameBody.setHeader(this);
+                    this.frameBody.setTextEncoding(ID3TextEncodingConversion.getTextEncoding(this,this.frameBody.getTextEncoding()));
                     return;
                 }
                 else
@@ -172,10 +176,11 @@ public class ID3v23Frame extends AbstractID3v2Frame
                         logger.finer("V4:Orig id is:" + frame.getIdentifier() + ":New id is:" + identifier);
                         this.frameBody = this.readBody(identifier, (AbstractID3v2FrameBody) frame.getBody());
                         this.frameBody.setHeader(this);
+                        this.frameBody.setTextEncoding(ID3TextEncodingConversion.getTextEncoding(this,this.frameBody.getTextEncoding()));
                         return;
                     }
                     //It is a v24 frame that is not known and cannot be forced in v23 e.g TDRL,in which case
-                    //we convert to a framebody unsupported by writing contents as a byte array and feeding
+                    //we convert to a frameBody unsupported by writing contents as a byte array and feeding
                     //it into FrameBodyUnsupported
                     else
                     {
@@ -190,7 +195,7 @@ public class ID3v23Frame extends AbstractID3v2Frame
                     }
                 }
             }
-            // Unable to find a suitable framebody, this should not happen
+            // Unable to find a suitable frameBody, this should not happen
             else
             {
                 logger.severe("Orig id is:" + frame.getIdentifier() + "Unable to create Frame Body");
@@ -260,7 +265,7 @@ public class ID3v23Frame extends AbstractID3v2Frame
     }
 
     /**
-     * Creates a new ID3v23Frame datatype by reading from byteBuffer.
+     * Creates a new ID3v23Frame dataType by reading from byteBuffer.
      *
      * @param byteBuffer to read from
      * @deprecated use {@link #ID3v23Frame(ByteBuffer,String)} instead
@@ -285,7 +290,7 @@ public class ID3v23Frame extends AbstractID3v2Frame
      * Compare for equality
      * To be deemed equal obj must be a IDv23Frame with the same identifier
      * and the same flags.
-     * containing the same body,datatype list ectera.
+     * containing the same body,dataType list ectera.
      * equals() method is made up from all the various components
      *
      * @param obj
