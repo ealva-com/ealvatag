@@ -345,6 +345,7 @@ public class ID3v24Frames extends ID3Frames
         multipleFrames.add(FRAME_ID_UNIQUE_FILE_ID);
         multipleFrames.add(FRAME_ID_UNSYNC_LYRICS);
         multipleFrames.add(FRAME_ID_POPULARIMETER);
+        multipleFrames.add(FRAME_ID_GENERAL_ENCAPS_OBJECT);
 
         //TODO this is a hack to allow multiple TRCK and TPOS frames to be created then subsequently merged
         multipleFrames.add(FRAME_ID_TRACK);

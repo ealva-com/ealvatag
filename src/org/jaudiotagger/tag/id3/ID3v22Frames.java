@@ -302,6 +302,7 @@ public class ID3v22Frames extends ID3Frames
         multipleFrames.add(FRAME_ID_V2_USER_DEFINED_URL);
         multipleFrames.add(FRAME_ID_V2_COMMENT);
         multipleFrames.add(FRAME_ID_V2_UNSYNC_LYRICS);
+        multipleFrames.add(FRAME_ID_V2_GENERAL_ENCAPS_OBJECT);
 
         //TODO this is a hack to allow multiple TRCK and TPOS frame sto be created then subsequently merged
         multipleFrames.add(FRAME_ID_V2_TRACK);
