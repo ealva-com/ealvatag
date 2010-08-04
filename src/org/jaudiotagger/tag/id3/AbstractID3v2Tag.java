@@ -492,6 +492,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
                     return;
                 }
             }
+            //Just grab any additional info from new TRCK Frame and add to the existing one
             else if (newFrame.getBody() instanceof FrameBodyTRCK)
             {
                 FrameBodyTRCK newBody = (FrameBodyTRCK) newFrame.getBody();
@@ -508,19 +509,22 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
                 }
                 return;
             }
+            //Just grab any additional info from new TPOS Frame and add to the existing one
             else if (newFrame.getBody() instanceof FrameBodyTPOS)
             {
                 FrameBodyTPOS newBody = (FrameBodyTPOS) newFrame.getBody();
                 FrameBodyTPOS oldBody = (FrameBodyTPOS) nextFrame.getBody();
 
-                if (newBody.getDiscNo() > 0)
+                Integer newDiscNo = newBody.getDiscNo();
+                if ((newDiscNo != null) && (newDiscNo > 0))
                 {
-                    oldBody.setDiscNo(newBody.getDiscNo());
+                    oldBody.setDiscNo(newDiscNo);
                 }
 
-                if (newBody.getDiscTotal() > 0)
+                Integer newDiscTotal = newBody.getDiscTotal();
+                if ((newDiscTotal != null) && (newDiscTotal > 0))
                 {
-                    oldBody.setDiscTotal(newBody.getDiscTotal());
+                    oldBody.setDiscTotal(newDiscTotal);
                 }
                 return;
             }
@@ -551,7 +555,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
         {
             frameMap.put(field.getId(), field);
         }
-        //frame of this type al;ready exists
+        //frame of this type already exists
         else if (obj instanceof AbstractID3v2Frame)
         {
             List<AbstractID3v2Frame> frames = new ArrayList<AbstractID3v2Frame>();

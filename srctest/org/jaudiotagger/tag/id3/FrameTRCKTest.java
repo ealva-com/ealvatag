@@ -2,6 +2,7 @@ package org.jaudiotagger.tag.id3;
 
 import org.jaudiotagger.AbstractTestCase;
 import org.jaudiotagger.audio.mp3.MP3File;
+import org.jaudiotagger.tag.FieldKey;
 import org.jaudiotagger.tag.id3.framebody.FrameBodyTRCK;
 import org.jaudiotagger.tag.id3.framebody.FrameBodyTRCKTest;
 import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
@@ -110,4 +111,15 @@ public class FrameTRCKTest extends AbstractTestCase
         assertEquals(TextEncoding.ISO_8859_1, body.getTextEncoding());
         assertEquals("", ((FrameBodyTRCK) frame.getBody()).getText());
     }
+
+    public void testMergingMultipleTrackFrames() throws Exception
+    {
+        ID3v24Tag tag = new ID3v24Tag();
+        tag.setField(tag.createField(FieldKey.TRACK,"1"));
+        tag.setField(tag.createField(FieldKey.TRACK_TOTAL,"10"));
+        assertEquals("1",tag.getFirst(FieldKey.TRACK));
+        assertEquals("10",tag.getFirst(FieldKey.TRACK_TOTAL));
+        assertTrue(tag.getFrame("TRCK") instanceof AbstractID3v2Frame);
+    }
+
 }
