@@ -57,14 +57,14 @@ import java.nio.ByteBuffer;
 public class FrameBodyUSLT extends AbstractID3v2FrameBody implements ID3v23FrameBody, ID3v24FrameBody
 {
     /**
-     * Creates a new FrameBodyUSLT datatype.
+     * Creates a new FrameBodyUSLT dataType.
      */
     public FrameBodyUSLT()
     {
-        //        setObject("Text Encoding", new Byte((byte) 0));
-        //        setObject("Language", "");
-        //        setObject(ObjectTypes.OBJ_DESCRIPTION, "");
-        //        setObject("Lyrics/Text", "");
+        setObjectValue(DataTypes.OBJ_TEXT_ENCODING, TextEncoding.ISO_8859_1);
+        setObjectValue(DataTypes.OBJ_LANGUAGE, "");
+        setObjectValue(DataTypes.OBJ_DESCRIPTION, "");
+        setObjectValue(DataTypes.OBJ_LYRICS, "");
     }
 
     /**
@@ -216,7 +216,7 @@ public class FrameBodyUSLT extends AbstractID3v2FrameBody implements ID3v23Frame
     {
 
         //Ensure valid for type
-        this.setTextEncoding(ID3TextEncodingConversion.getTextEncoding(getHeader(), TextEncoding.ISO_8859_1));
+        this.setTextEncoding(ID3TextEncodingConversion.getTextEncoding(getHeader(), getTextEncoding()));
 
         //Ensure valid for data                    
         if (!((AbstractString) getObject(DataTypes.OBJ_DESCRIPTION)).canBeEncoded())
