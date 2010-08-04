@@ -362,6 +362,36 @@ public class ID3v11Tag extends ID3v1Tag
         }
     }
 
+    public String getFirst(FieldKey genericKey)
+    {
+        switch (genericKey)
+        {
+            case ARTIST:
+                return getFirstArtist();
+
+            case ALBUM:
+                return getFirstAlbum();
+
+            case TITLE:
+                return getFirstTitle();
+
+            case GENRE:
+                return getFirstGenre();
+
+            case YEAR:
+                return getFirstYear();
+
+            case TRACK:
+                return getFirstTrack();
+
+            case COMMENT:
+                return getFirstComment();
+
+            default:
+                return "";
+        }
+    }
+
     public TagField getFirstField(String id)
     {
         List<TagField> results;

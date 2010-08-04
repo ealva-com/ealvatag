@@ -280,7 +280,7 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag
      *
      * @return album
      */
-    private String getFirstAlbum()
+    protected String getFirstAlbum()
     {
         return album;
     }
@@ -323,7 +323,7 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag
      *
      * @return artist
      */
-    private String getFirstArtist()
+    protected String getFirstArtist()
     {
         return artist;
     }
@@ -755,9 +755,6 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag
 
             case YEAR:
                 return getFirstYear();
-
-            case TRACK:
-                return getFirstTrack();
 
             case COMMENT:
                 return getFirstComment();

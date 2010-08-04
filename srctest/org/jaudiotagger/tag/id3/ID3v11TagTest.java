@@ -3,9 +3,13 @@ package org.jaudiotagger.tag.id3;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
+import org.jaudiotagger.AbstractTestCase;
+import org.jaudiotagger.audio.mp3.MP3File;
 import org.jaudiotagger.tag.FieldKey;
 import org.jaudiotagger.tag.TagOptionSingleton;
 import org.jaudiotagger.tag.TagTextField;
+
+import java.io.File;
 
 /**
  *
@@ -99,7 +103,7 @@ public class ID3v11TagTest extends TestCase
     // Tests
     /////////////////////////////////////////////////////////////////////////
 
-    public void testCreateID3v11Tag()
+    public void testCreateID3v11Tag()     throws Exception
     {
         ID3v11Tag v11Tag = new ID3v11Tag();
         v11Tag.setArtist(ARTIST);
@@ -130,6 +134,9 @@ public class ID3v11TagTest extends TestCase
         assertEquals(ID3v1TagTest.GENRE_VAL, ((TagTextField) v11Tag.getGenre().get(0)).getContent());
         assertEquals(ID3v1TagTest.TRACK_VALUE, ((TagTextField) v11Tag.getTrack().get(0)).getContent());
         assertEquals(ID3v1TagTest.YEAR, ((TagTextField) v11Tag.getYear().get(0)).getContent());
+
+        v11Tag.setField(FieldKey.TRACK,"3");
+        assertEquals("3",v11Tag.getFirst(FieldKey.TRACK));
 
 
     }
@@ -254,5 +261,42 @@ public class ID3v11TagTest extends TestCase
             exceptionCaught = e;
         }
         assertTrue(exceptionCaught instanceof IllegalArgumentException);
+    }
+
+    public void testSaveID3v11TagToFile() throws Exception
+    {
+        File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3");
+        MP3File mp3File = new MP3File(testFile);
+
+        //Create v11 Tag
+        ID3v11Tag tag = new ID3v11Tag();
+        tag.setArtist(ID3v11TagTest.ARTIST);
+        tag.setAlbum(ID3v11TagTest.ALBUM);
+        tag.setComment(ID3v11TagTest.COMMENT);
+        tag.setTitle(ID3v11TagTest.TITLE);
+        tag.setGenre(ID3v11TagTest.GENRE_VAL);
+        tag.setYear(ID3v11TagTest.YEAR);
+        tag.setTrack(ID3v11TagTest.TRACK_VALUE);
+        //Save tag to file
+        mp3File.setID3v1Tag(tag);
+        mp3File.save();
+
+        //Reload
+        mp3File = new MP3File(testFile);
+        tag = (ID3v11Tag)mp3File.getID3v1Tag();
+        assertEquals(ID3v11TagTest.ARTIST, tag.getFirst(FieldKey.ARTIST));
+        assertEquals(ID3v11TagTest.ALBUM, tag.getFirst(FieldKey.ALBUM));
+        assertEquals(ID3v11TagTest.COMMENT, tag.getFirstComment());
+        assertEquals(ID3v11TagTest.TITLE, tag.getFirst(FieldKey.TITLE));
+        assertEquals(ID3v11TagTest.GENRE_VAL, tag.getFirst(FieldKey.GENRE));
+        assertEquals(ID3v11TagTest.YEAR, tag.getFirst(FieldKey.YEAR));
+        assertEquals(ID3v11TagTest.YEAR, tag.getFirst(FieldKey.YEAR));
+        assertEquals(ID3v11TagTest.TRACK_VALUE, tag.getFirst(FieldKey.TRACK));
+
+        tag.setField(FieldKey.TRACK,"3");
+        mp3File.save();
+        mp3File = new MP3File(testFile);
+        tag = (ID3v11Tag)mp3File.getID3v1Tag();
+        assertEquals("3", tag.getFirst(FieldKey.TRACK ));
     }
 }

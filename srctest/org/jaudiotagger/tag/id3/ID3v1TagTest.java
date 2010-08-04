@@ -29,7 +29,7 @@ public class ID3v1TagTest extends TestCase
     public static final String YEAR = "1971";
 
     /**
-     * Provides an initilised object to be used in other tests
+     * Provides an initialised object to be used in other tests
      * to prevent code duplication
      *
      * @return ID3v1Tag
@@ -107,7 +107,7 @@ public class ID3v1TagTest extends TestCase
     // Tests
     /////////////////////////////////////////////////////////////////////////
 
-    public void testCreateID3v11Tag()
+    public void testCreateID3v1Tag()
     {
         ID3v1Tag v1Tag = new ID3v1Tag();
         v1Tag.setArtist(ID3v1TagTest.ARTIST);
@@ -165,6 +165,14 @@ public class ID3v1TagTest extends TestCase
         assertEquals(ID3v1TagTest.TITLE, tag.getFirst(FieldKey.TITLE));
         assertEquals(ID3v1TagTest.GENRE_VAL, tag.getFirst(FieldKey.GENRE));
         assertEquals(ID3v1TagTest.YEAR, tag.getFirst(FieldKey.YEAR));
+
+        tag.setField(FieldKey.TRACK,"3");
+        mp3File.save();
+        mp3File = new MP3File(testFile);
+        tag = mp3File.getID3v1Tag();
+        assertEquals("", tag.getFirst(FieldKey.TRACK));
+
+        
 
     }
 
