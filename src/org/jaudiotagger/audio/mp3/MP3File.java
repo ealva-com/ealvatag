@@ -697,6 +697,15 @@ public class MP3File extends AudioFile
         RandomAccessFile raf = new RandomAccessFile(this.file, "rws");
         mp3tag.delete(raf);
         raf.close();
+        if(mp3tag instanceof ID3v1Tag)
+        {
+            id3v1tag=null;
+        }
+
+        if(mp3tag instanceof AbstractID3v2Tag)
+        {
+            id3v2tag=null;
+        }
     }
 
     /**

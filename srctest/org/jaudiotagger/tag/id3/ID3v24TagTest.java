@@ -361,4 +361,28 @@ public class ID3v24TagTest extends TestCase
         tagFields = f.getTag().getFields(FieldKey.ALBUM_ARTIST_SORT);
         assertEquals(0,tagFields.size());
     }
+
+    /** Test Deleting tag and that deletion of tag is represented startight away
+     *
+      * @throws Exception
+     */
+    public void testDeleteTag() throws Exception
+    {
+        File testFile = AbstractTestCase.copyAudioToTmp("test70.mp3");
+        MP3File audioFile = new MP3File(testFile);
+
+        ID3v1Tag v1tag = audioFile.getID3v1Tag();
+        assertTrue(audioFile.hasID3v1Tag());
+        audioFile.delete(v1tag);
+        assertFalse(audioFile.hasID3v1Tag());
+
+        AbstractID3v2Tag tag = audioFile.getID3v2Tag();
+        assertTrue(audioFile.hasID3v2Tag());
+        audioFile.delete(tag);
+        assertFalse(audioFile.hasID3v2Tag());
+
+        audioFile = new MP3File(testFile);
+        assertFalse(audioFile.hasID3v2Tag());
+        assertFalse(audioFile.hasID3v1Tag());
+    }
 }
