@@ -385,4 +385,20 @@ public class ID3v24TagTest extends TestCase
         assertFalse(audioFile.hasID3v2Tag());
         assertFalse(audioFile.hasID3v1Tag());
     }
+
+     public void testWriteTagUsingAudioIOMethod()
+    {
+        Exception exceptionCaught=null;
+        try
+        {
+            File testFile = AbstractTestCase.copyAudioToTmp("test70.mp3");
+            MP3File audioFile = new MP3File(testFile);
+            AudioFileIO.write(audioFile);
+        }
+        catch(Exception e)
+        {
+            exceptionCaught=e;
+        }
+        assertNull(exceptionCaught);
+    }
 }
