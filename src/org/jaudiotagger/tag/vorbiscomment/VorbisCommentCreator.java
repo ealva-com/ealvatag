@@ -70,7 +70,6 @@ public class VorbisCommentCreator extends AbstractTagCreator
                 }
                 else
                 {
-                    System.out.println(frame.getId());
                     baos.write(frame.getRawContent());
                 }
             }
