@@ -358,6 +358,7 @@ public class ID3v22Frames extends ID3Frames
         tagFieldToId3.put(FieldKey.MEDIA, ID3v22FieldKey.MEDIA);
         tagFieldToId3.put(FieldKey.BARCODE, ID3v22FieldKey.BARCODE);
         tagFieldToId3.put(FieldKey.CATALOG_NO, ID3v22FieldKey.CATALOG_NO);
+        tagFieldToId3.put(FieldKey.ISRC, ID3v22FieldKey.ISRC);
     }
 
     /**
