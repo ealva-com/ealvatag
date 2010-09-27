@@ -31,14 +31,14 @@ public class Issue250Test extends AbstractTestCase
         //Dodgy frame is not counted
         assertEquals(13,id3v23tag.getFieldCount());
         assertEquals(3,id3v23tag.getFields("PRIV").size());
-        assertEquals(2,id3v23tag.getInvalidFrames()); //PRIV frame and padding at end of frame
+        assertEquals(1,id3v23tag.getInvalidFrames()); //PRIV frame
         f.commit();
         f = (MP3File)AudioFileIO.read(testFile);
         tag = f.getTag();
         id3v23tag = (ID3v23Tag)tag;
         assertEquals(13,id3v23tag.getFieldCount());
         assertEquals(3,id3v23tag.getFields("PRIV").size());
-        assertEquals(1,id3v23tag.getInvalidFrames()); //PRIV frame thrown away, but still have padding issue
+        assertEquals(0,id3v23tag.getInvalidFrames()); //PRIV frame thrown away
 
     }
 }

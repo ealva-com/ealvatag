@@ -65,6 +65,21 @@ public class ID3v23Frame extends AbstractID3v2Frame
      */
     private int groupIdentifier;
 
+    protected int getFrameIdSize()
+    {
+        return FRAME_ID_SIZE;
+    }
+
+    protected int getFrameSizeSize()
+    {
+        return FRAME_SIZE_SIZE;
+    }
+
+    protected int getFrameHeaderSize()
+    {
+        return FRAME_HEADER_SIZE;
+    }
+
     /**
      * Creates a new ID3v23 Frame
      */
@@ -314,6 +329,8 @@ public class ID3v23Frame extends AbstractID3v2Frame
 
     }
 
+    
+
     /**
      * Read the frame from a byteBuffer
      *
@@ -321,25 +338,11 @@ public class ID3v23Frame extends AbstractID3v2Frame
      */
     public void read(ByteBuffer byteBuffer) throws InvalidFrameException,  InvalidDataTypeException
     {
-        logger.info(getLoggingFilename() + ":Read Frame from byteBuffer");
-
-        if (byteBuffer.position() + FRAME_HEADER_SIZE >= byteBuffer.limit())
-        {
-            logger.warning(getLoggingFilename() + ":No space to find another frame:");
-            throw new InvalidFrameException(getLoggingFilename() + ":No space to find another frame");
-        }
-
-        byte[] buffer = new byte[FRAME_ID_SIZE];
-
-        // Read the Frame Identifier
-        byteBuffer.get(buffer, 0, FRAME_ID_SIZE);
-        identifier = new String(buffer);
-
-        // Is this a valid identifier?
+        String identifier = readIdentifier(byteBuffer);
         if (!isValidID3v2FrameIdentifier(identifier))
         {
             logger.info(getLoggingFilename() + ":Invalid identifier:" + identifier);
-            byteBuffer.position(byteBuffer.position() - (FRAME_ID_SIZE - 1));
+            byteBuffer.position(byteBuffer.position() - (getFrameIdSize() - 1));
             throw new InvalidFrameIdentifierException(getLoggingFilename() + ":" + identifier + "is not a valid ID3v2.30 frame");
         }
         //Read the size field (as Big Endian Int - byte buffers always initialised to Big Endian order)

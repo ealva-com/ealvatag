@@ -582,7 +582,7 @@ public class ID3v23Tag extends AbstractID3v2Tag
         logger.finest(getLoggingFilename() + ":Start of frame body at:" + byteBuffer.position() + ",frames data size is:" + size);
 
         // Read the frames until got to up to the size as specified in header or until
-        // we hit an invalid frame identifier
+        // we hit an invalid frame identifier or padding
         while (byteBuffer.position() < size)
         {
             String id;
@@ -593,6 +593,12 @@ public class ID3v23Tag extends AbstractID3v2Tag
                 next = new ID3v23Frame(byteBuffer, getLoggingFilename());
                 id = next.getIdentifier();
                 loadFrameIntoMap(id, next);
+            }
+            //Found Padding, no more frames
+            catch (PaddingException ex)
+            {
+                logger.warning(getLoggingFilename() + ":Found padding starting at:" + byteBuffer.position());
+                break;
             }
             //Found Empty Frame, log it - empty frames should not exist
             catch (EmptyFrameException ex)

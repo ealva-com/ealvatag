@@ -408,6 +408,12 @@ public class ID3v22Tag extends AbstractID3v2Tag
                 String id = next.getIdentifier();
                 loadFrameIntoMap(id, next);
             }
+            //Found Padding, no more frames
+            catch (PaddingException ex)
+            {
+                logger.warning(getLoggingFilename() + ":Found padding starting at:" + byteBuffer.position());
+                break;
+            }
             //Found Empty Frame
             catch (EmptyFrameException ex)
             {

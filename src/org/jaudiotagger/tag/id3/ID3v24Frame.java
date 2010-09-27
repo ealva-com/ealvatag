@@ -64,6 +64,26 @@ public class ID3v24Frame extends AbstractID3v2Frame
      */
     private int groupIdentifier;
 
+    protected int getFrameIdSize()
+    {
+        return FRAME_ID_SIZE;
+    }
+
+    protected int getFrameSizeSize()
+    {
+        return FRAME_SIZE_SIZE;
+    }
+
+    protected int getFrameFlagsSize()
+    {
+        return FRAME_FLAGS_SIZE;
+    }
+
+    protected int getFrameHeaderSize()
+    {
+        return FRAME_HEADER_SIZE;
+    }
+
 
     public ID3v24Frame()
     {
@@ -366,12 +386,12 @@ public class ID3v24Frame extends AbstractID3v2Frame
             int currentPosition = byteBuffer.position();
 
             //Read as nonsync safe integer
-            byteBuffer.position(currentPosition - FRAME_ID_SIZE);
+            byteBuffer.position(currentPosition - getFrameIdSize());
             int nonSyncSafeFrameSize = byteBuffer.getInt();
 
             //Is the frame size syncsafe, should always be BUT some encoders such as Itunes do not do it properly
             //so do an easy check now.
-            byteBuffer.position(currentPosition - FRAME_ID_SIZE);
+            byteBuffer.position(currentPosition - getFrameIdSize());
             boolean isNotSyncSafe = ID3SyncSafeInteger.isBufferNotSyncSafe(byteBuffer);
 
             //not relative so need to move position
@@ -383,7 +403,7 @@ public class ID3v24Frame extends AbstractID3v2Frame
 
                 //This will return a larger frame size so need to check against buffer size if too large then we are
                 //buggered , give up
-                if (nonSyncSafeFrameSize > (byteBuffer.remaining() - -FRAME_FLAGS_SIZE))
+                if (nonSyncSafeFrameSize > (byteBuffer.remaining() - -getFrameFlagsSize()))
                 {
                     logger.warning(getLoggingFilename() + ":" + "Invalid Frame size larger than size before mp3 audio:" + identifier);
                     throw new InvalidFrameException(identifier + " is invalid frame");
@@ -399,10 +419,10 @@ public class ID3v24Frame extends AbstractID3v2Frame
                 //frame to see if find a valid frame header
 
                 //Read the Frame Identifier
-                byte[] readAheadbuffer = new byte[FRAME_ID_SIZE];
-                byteBuffer.position(currentPosition + frameSize + FRAME_FLAGS_SIZE);
+                byte[] readAheadbuffer = new byte[getFrameIdSize()];
+                byteBuffer.position(currentPosition + frameSize + getFrameFlagsSize());
 
-                if (byteBuffer.remaining() < FRAME_ID_SIZE)
+                if (byteBuffer.remaining() < getFrameIdSize())
                 {
                     //There is no padding or framedata we are at end so assume syncsafe
                     //reset position to just after framesize
@@ -410,7 +430,7 @@ public class ID3v24Frame extends AbstractID3v2Frame
                 }
                 else
                 {
-                    byteBuffer.get(readAheadbuffer, 0, FRAME_ID_SIZE);
+                    byteBuffer.get(readAheadbuffer, 0, getFrameIdSize());
 
                     //reset position to just after framesize
                     byteBuffer.position(currentPosition);
@@ -431,19 +451,19 @@ public class ID3v24Frame extends AbstractID3v2Frame
                         //Ok lets try using a non-syncsafe integer
 
                         //size returned will be larger so is it valid
-                        if (nonSyncSafeFrameSize > byteBuffer.remaining() - FRAME_FLAGS_SIZE)
+                        if (nonSyncSafeFrameSize > byteBuffer.remaining() - getFrameFlagsSize())
                         {
                             //invalid so assume syncsafe
                             byteBuffer.position(currentPosition);
                         }
                         else
                         {
-                            readAheadbuffer = new byte[FRAME_ID_SIZE];
-                            byteBuffer.position(currentPosition + nonSyncSafeFrameSize + FRAME_FLAGS_SIZE);
+                            readAheadbuffer = new byte[getFrameIdSize()];
+                            byteBuffer.position(currentPosition + nonSyncSafeFrameSize + getFrameFlagsSize());
 
-                            if (byteBuffer.remaining() >= FRAME_ID_SIZE)
+                            if (byteBuffer.remaining() >= getFrameIdSize())
                             {
-                                byteBuffer.get(readAheadbuffer, 0, FRAME_ID_SIZE);
+                                byteBuffer.get(readAheadbuffer, 0, getFrameIdSize());
                                 readAheadIdentifier = new String(readAheadbuffer);
 
                                 //reset position to just after framesize
@@ -528,7 +548,6 @@ public class ID3v24Frame extends AbstractID3v2Frame
         }
 
         checkIfFrameSizeThatIsNotSyncSafe(byteBuffer);
-
     }
 
     /**
@@ -539,18 +558,7 @@ public class ID3v24Frame extends AbstractID3v2Frame
      */
     public void read(ByteBuffer byteBuffer) throws InvalidFrameException, InvalidDataTypeException
     {
-        byte[] buffer = new byte[FRAME_ID_SIZE];
-
-        if (byteBuffer.position() + FRAME_HEADER_SIZE >= byteBuffer.limit())
-        {
-            logger.warning(getLoggingFilename() + ":" + "No space to find another frame:");
-            throw new InvalidFrameException(getLoggingFilename() + ":" + "No space to find another frame");
-        }
-
-        //Read the Frame Identifier
-        byteBuffer.get(buffer, 0, FRAME_ID_SIZE);
-        identifier = new String(buffer);
-        logger.fine(getLoggingFilename() + ":" + "Identifier is" + identifier);
+        String identifier = readIdentifier(byteBuffer);
 
         //Is this a valid identifier?
         if (!isValidID3v2FrameIdentifier(identifier))
@@ -558,7 +566,7 @@ public class ID3v24Frame extends AbstractID3v2Frame
             //If not valid move file pointer back to one byte after
             //the original check so can try again.
             logger.info(getLoggingFilename() + ":" + "Invalid identifier:" + identifier);
-            byteBuffer.position(byteBuffer.position() - (FRAME_ID_SIZE - 1));
+            byteBuffer.position(byteBuffer.position() - (getFrameIdSize() - 1));
             throw new InvalidFrameIdentifierException(identifier + " is not a valid ID3v2.40 frame");
         }
 

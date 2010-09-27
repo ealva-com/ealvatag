@@ -17,10 +17,7 @@ package org.jaudiotagger.tag.id3;
 
 import org.jaudiotagger.audio.generic.Utils;
 import org.jaudiotagger.audio.mp3.MP3File;
-import org.jaudiotagger.tag.EmptyFrameException;
-import org.jaudiotagger.tag.InvalidDataTypeException;
-import org.jaudiotagger.tag.InvalidFrameException;
-import org.jaudiotagger.tag.InvalidFrameIdentifierException;
+import org.jaudiotagger.tag.*;
 import org.jaudiotagger.tag.id3.framebody.AbstractID3v2FrameBody;
 import org.jaudiotagger.tag.id3.framebody.FrameBodyDeprecated;
 import org.jaudiotagger.tag.id3.framebody.FrameBodyUnsupported;
@@ -53,6 +50,21 @@ public class ID3v22Frame extends AbstractID3v2Frame
     public ID3v22Frame()
     {
 
+    }
+
+    protected int getFrameIdSize()
+    {
+        return FRAME_ID_SIZE;
+    }
+
+    protected int getFrameSizeSize()
+    {
+        return FRAME_SIZE_SIZE;
+    }
+
+    protected int getFrameHeaderSize()
+    {
+        return FRAME_HEADER_SIZE;
     }
 
     /**
@@ -288,7 +300,21 @@ public class ID3v22Frame extends AbstractID3v2Frame
      */
     public int getSize()
     {
-        return frameBody.getSize() + FRAME_HEADER_SIZE;
+        return frameBody.getSize() + getFrameHeaderSize();
+    }
+
+    @Override 
+    protected boolean isPadding(byte[] buffer)
+    {
+        if(
+                (buffer[0]=='\0')&&
+                (buffer[1]=='\0')&&
+                (buffer[2]=='\0')
+           )
+        {
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -299,28 +325,19 @@ public class ID3v22Frame extends AbstractID3v2Frame
      */
     public void read(ByteBuffer byteBuffer) throws InvalidFrameException, InvalidDataTypeException
     {
-        byte[] buffer = new byte[FRAME_ID_SIZE];
+        String identifier = readIdentifier(byteBuffer);
 
-        if (byteBuffer.position() + FRAME_HEADER_SIZE >= byteBuffer.limit())
-        {
-            logger.warning("No space to find another frame:");
-            throw new InvalidFrameException(" No space to find another frame");
-        }
-
-        // Read the FrameID Identifier
-        byteBuffer.get(buffer, 0, FRAME_ID_SIZE);
-        identifier = new String(buffer);
-        logger.info("Read Frame from file identifier is:" + identifier);
+        byte[] buffer = new byte[getFrameSizeSize()];
 
         // Is this a valid identifier?
         if (!isValidID3v2FrameIdentifier(identifier))
         {
             logger.info("Invalid identifier:" + identifier);
-            byteBuffer.position(byteBuffer.position() - (FRAME_ID_SIZE - 1));
+            byteBuffer.position(byteBuffer.position() - (getFrameIdSize() - 1));
             throw new InvalidFrameIdentifierException(identifier + " is not a valid ID3v2.20 frame");
         }
         //Read Frame Size (same size as Frame Id so reuse buffer)
-        byteBuffer.get(buffer, 0, FRAME_SIZE_SIZE);
+        byteBuffer.get(buffer, 0, getFrameSizeSize());
         frameSize = decodeSize(buffer);
         if (frameSize < 0)
         {
@@ -406,7 +423,7 @@ public class ID3v22Frame extends AbstractID3v2Frame
         logger.info("Write Frame to Buffer" + getIdentifier());
         //This is where we will write header, move position to where we can
         //write body
-        ByteBuffer headerBuffer = ByteBuffer.allocate(FRAME_HEADER_SIZE);
+        ByteBuffer headerBuffer = ByteBuffer.allocate(getFrameHeaderSize());
 
         //Write Frame Body Data
         ByteArrayOutputStream bodyOutputStream = new ByteArrayOutputStream();
@@ -414,7 +431,7 @@ public class ID3v22Frame extends AbstractID3v2Frame
 
         //Write Frame Header
         //Write Frame ID must adjust can only be 3 bytes long
-        headerBuffer.put(Utils.getDefaultBytes(getIdentifier(), "ISO-8859-1"), 0, FRAME_ID_SIZE);
+        headerBuffer.put(Utils.getDefaultBytes(getIdentifier(), "ISO-8859-1"), 0, getFrameIdSize());
         encodeSize(headerBuffer, frameBody.getSize());
 
         //Add header to the Byte Array Output Stream

@@ -55,6 +55,24 @@ public abstract class AbstractID3v2Frame extends AbstractTagFrame implements Tag
     private String loggingFilename = "";
 
     /**
+     *
+     * @return size in bytes of the frameid field
+     */
+    protected abstract int getFrameIdSize();
+
+    /**
+     *
+     * @return the size in bytes of the frame size field
+     */
+    protected abstract int getFrameSizeSize();
+
+    /**
+     *
+     * @return the size in bytes of the frame header
+     */
+    protected abstract int getFrameHeaderSize();
+
+    /**
      * Create an empty frame
      */
     protected AbstractID3v2Frame()
@@ -211,6 +229,21 @@ public abstract class AbstractID3v2Frame extends AbstractTagFrame implements Tag
             throw new InvalidDataTypeException(ite);
         }
     }
+
+    protected boolean isPadding(byte[] buffer)
+    {
+        if(
+                (buffer[0]=='\0')&&
+                (buffer[1]=='\0')&&
+                (buffer[2]=='\0')&&
+                (buffer[3]=='\0')
+           )
+        {
+            return true;
+        }
+        return false;
+    }
+
     /**
      * Read the frame body from the specified file via the buffer
      *
@@ -304,6 +337,37 @@ public abstract class AbstractID3v2Frame extends AbstractTagFrame implements Tag
         logger.finest(getLoggingFilename() + ":" + "Created framebody:end" + frameBody.getIdentifier());
         frameBody.setHeader(this);
         return frameBody;
+    }
+
+    /**
+     * Get the next frame id, throwing an exception if unable to do this and check against just having padded data
+     * 
+     * @param byteBuffer
+     * @return
+     * @throws PaddingException
+     * @throws InvalidFrameException
+     */
+    protected String readIdentifier(ByteBuffer byteBuffer) throws PaddingException,InvalidFrameException
+    {
+        byte[] buffer = new byte[getFrameIdSize()];
+
+        if (byteBuffer.position() + getFrameHeaderSize() >= byteBuffer.limit())
+        {
+            logger.warning(getLoggingFilename() + ":" + "No space to find another frame:");
+            throw new InvalidFrameException(getLoggingFilename() + ":" + "No space to find another frame");
+        }
+
+        //Read the Frame Identifier
+        byteBuffer.get(buffer, 0, getFrameIdSize());
+
+        if(isPadding(buffer))
+        {
+            throw new PaddingException(getLoggingFilename() + ":only padding found");
+        }
+
+        identifier = new String(buffer);
+        logger.fine(getLoggingFilename() + ":" + "Identifier is" + identifier);
+        return identifier;
     }
 
     /**
