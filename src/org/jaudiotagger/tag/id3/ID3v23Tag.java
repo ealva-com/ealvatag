@@ -597,7 +597,7 @@ public class ID3v23Tag extends AbstractID3v2Tag
             //Found Padding, no more frames
             catch (PaddingException ex)
             {
-                logger.warning(getLoggingFilename() + ":Found padding starting at:" + byteBuffer.position());
+                logger.config(getLoggingFilename() + ":Found padding starting at:" + byteBuffer.position());
                 break;
             }
             //Found Empty Frame, log it - empty frames should not exist
