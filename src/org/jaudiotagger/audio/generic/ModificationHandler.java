@@ -61,10 +61,9 @@ public class ModificationHandler implements AudioFileModificationListener
      */
     public void fileModified(AudioFile original, File temporary) throws ModifyVetoException
     {
-        Iterator<AudioFileModificationListener> iterator = this.listeners.iterator();
-        while (iterator.hasNext())
+        for (AudioFileModificationListener listener : this.listeners)
         {
-            AudioFileModificationListener current = iterator.next();
+            AudioFileModificationListener current = listener;
             try
             {
                 current.fileModified(original, temporary);
@@ -84,10 +83,9 @@ public class ModificationHandler implements AudioFileModificationListener
      */
     public void fileOperationFinished(File result)
     {
-        Iterator<AudioFileModificationListener> iterator = this.listeners.iterator();
-        while (iterator.hasNext())
+        for (AudioFileModificationListener listener : this.listeners)
         {
-            AudioFileModificationListener current = iterator.next();
+            AudioFileModificationListener current = listener;
             current.fileOperationFinished(result);
         }
     }
@@ -100,10 +98,9 @@ public class ModificationHandler implements AudioFileModificationListener
      */
     public void fileWillBeModified(AudioFile file, boolean delete) throws ModifyVetoException
     {
-        Iterator<AudioFileModificationListener> iterator = this.listeners.iterator();
-        while (iterator.hasNext())
+        for (AudioFileModificationListener listener : this.listeners)
         {
-            AudioFileModificationListener current = iterator.next();
+            AudioFileModificationListener current = listener;
             try
             {
                 current.fileWillBeModified(file, delete);
@@ -138,10 +135,9 @@ public class ModificationHandler implements AudioFileModificationListener
      */
     public void vetoThrown(AudioFileModificationListener cause, AudioFile original, ModifyVetoException veto)
     {
-        Iterator<AudioFileModificationListener> iterator = this.listeners.iterator();
-        while (iterator.hasNext())
+        for (AudioFileModificationListener listener : this.listeners)
         {
-            AudioFileModificationListener current = iterator.next();
+            AudioFileModificationListener current = listener;
             current.vetoThrown(cause, original, veto);
         }
     }
