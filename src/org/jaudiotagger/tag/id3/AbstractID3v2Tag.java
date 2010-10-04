@@ -1103,8 +1103,6 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
                 for (int i = 0; i < noOfChunks; i++)
                 {
                     written2 += fcIn.transferTo(audioStart + (i * MAXIMUM_WRITABLE_CHUNK_SIZE), MAXIMUM_WRITABLE_CHUNK_SIZE, fcOut);
-                    //Try and recover memory as quick as possible
-                    Runtime.getRuntime().gc();
                 }
                 written2 += fcIn.transferTo(audioStart + (noOfChunks * MAXIMUM_WRITABLE_CHUNK_SIZE), lastChunkSize, fcOut);
                 logger.finer("Written padding:" + written + " Data:" + written2);
@@ -1482,6 +1480,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
             if (o instanceof AbstractID3v2Frame)
             {
                 frame = (AbstractID3v2Frame) o;
+                frame.setLoggingFilename(getLoggingFilename());
                 frame.write(bodyBuffer);
             }
             else
@@ -1489,6 +1488,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
                 List<AbstractID3v2Frame> multiFrames = (List<AbstractID3v2Frame>) o;
                 for (AbstractID3v2Frame nextFrame : multiFrames)
                 {
+                    nextFrame.setLoggingFilename(getLoggingFilename());
                     nextFrame.write(bodyBuffer);
                 }
             }

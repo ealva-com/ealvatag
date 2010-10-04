@@ -19,6 +19,7 @@ import org.jaudiotagger.FileConstants;
 import org.jaudiotagger.audio.generic.Utils;
 import org.jaudiotagger.audio.mp3.MP3File;
 import org.jaudiotagger.logging.ErrorMessage;
+import org.jaudiotagger.logging.Hex;
 import org.jaudiotagger.tag.*;
 import org.jaudiotagger.tag.datatype.Lyrics3Line;
 import org.jaudiotagger.tag.id3.framebody.*;
@@ -703,6 +704,9 @@ public class ID3v24Frame extends AbstractID3v2Frame
         //Status Flags:leave as they were when we read
         headerBuffer.put(statusFlags.getWriteFlags());
 
+        //Remove any non standard flags
+        ((ID3v24Frame.EncodingFlags) encodingFlags).unsetNonStandardFlags();
+                
         //Encoding we only support unsynchronization
         if (unsynchronization)
         {
@@ -933,6 +937,10 @@ public class ID3v24Frame extends AbstractID3v2Frame
 
         public void logEnabledFlags()
         {
+            if(isNonStandardFlags())
+            {
+                logger.warning(getLoggingFilename() + ":" + identifier + ":Unknown Encoding Flags:"+ Hex.asHex(flags));
+            }
             if (isCompression())
             {
                 logger.warning(ErrorMessage.MP3_FRAME_IS_COMPRESSED.getMsg(getLoggingFilename(), identifier));
@@ -1039,6 +1047,24 @@ public class ID3v24Frame extends AbstractID3v2Frame
             flags &= (byte) ~MASK_DATA_LENGTH_INDICATOR;
         }
 
+        public boolean isNonStandardFlags()
+        {
+            return ((flags & FileConstants.BIT7) > 0) ||
+                   ((flags & FileConstants.BIT5) > 0) ||
+                   ((flags & FileConstants.BIT4) > 0);
+        }
+
+        public void unsetNonStandardFlags()
+        {
+            if(isNonStandardFlags())
+            {
+                logger.warning(getLoggingFilename() + ":" + getIdentifier() + ":Unsetting Unknown Encoding Flags:"+  Hex.asHex(flags));
+                flags &= (byte) ~FileConstants.BIT7;
+                flags &= (byte) ~FileConstants.BIT5;
+                flags &= (byte) ~FileConstants.BIT4;
+            }
+        }
+
         public void createStructure()
         {
             MP3File.getStructureFormatter().openHeadingElement(TYPE_FLAGS, "");
@@ -1103,7 +1129,7 @@ public class ID3v24Frame extends AbstractID3v2Frame
         Integer encodingId = TextEncoding.getInstanceOf().getIdForValue(encoding);
         if(encoding!=null)
         {
-            if(encodingId.intValue()<4)
+            if(encodingId <4)
             {
                 this.getBody().setTextEncoding(encodingId.byteValue());
             }

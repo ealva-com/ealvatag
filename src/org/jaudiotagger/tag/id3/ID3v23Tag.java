@@ -284,6 +284,7 @@ public class ID3v23Tag extends AbstractID3v2Tag
             {
                 convertedTag = new ID3v24Tag(mp3tag);
             }
+            this.setLoggingFilename(convertedTag.getLoggingFilename());
             //Copy Primitives
             copyPrimitives(convertedTag);
             //Copy Frames
@@ -739,7 +740,8 @@ public class ID3v23Tag extends AbstractID3v2Tag
      */
     public void write(File file, long audioStartLocation) throws IOException
     {
-        logger.info(getLoggingFilename() + ":Writing tag to file");
+        setLoggingFilename(file.getName());
+        logger.info("Writing tag to file:"+getLoggingFilename());
 
         //Write Body Buffer
         byte[] bodyByteBuffer = writeFramesToBuffer().toByteArray();

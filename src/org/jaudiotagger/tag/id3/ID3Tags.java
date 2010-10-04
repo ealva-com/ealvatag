@@ -128,7 +128,7 @@ public class ID3Tags
         {
             return null;
         }
-        return ID3Frames.convertv22Tov23.get(identifier.subSequence(0, 3));
+        return ID3Frames.convertv22Tov23.get((String)identifier.subSequence(0, 3));
     }
 
     /**

@@ -18,6 +18,7 @@ package org.jaudiotagger.tag.id3;
 import org.jaudiotagger.FileConstants;
 import org.jaudiotagger.audio.generic.Utils;
 import org.jaudiotagger.audio.mp3.MP3File;
+import org.jaudiotagger.logging.Hex;
 import org.jaudiotagger.tag.EmptyFrameException;
 import org.jaudiotagger.tag.InvalidDataTypeException;
 import org.jaudiotagger.tag.InvalidFrameException;
@@ -490,6 +491,9 @@ public class ID3v23Frame extends AbstractID3v2Frame
         //Status Flags:leave as they were when we read
         headerBuffer.put(statusFlags.getWriteFlags());
 
+        //Remove any non standard flags
+        ((EncodingFlags) encodingFlags).unsetNonStandardFlags();
+
         //Unset Compression flag if previously set because we uncompress previously compressed frames on write.
         ((EncodingFlags)encodingFlags).unsetCompression();
         headerBuffer.put(encodingFlags.getFlags());
@@ -695,8 +699,36 @@ public class ID3v23Frame extends AbstractID3v2Frame
             flags &= (byte) ~MASK_GROUPING_IDENTITY;
         }
 
+        public boolean isNonStandardFlags()
+        {
+            return ((flags & FileConstants.BIT4) > 0) ||
+                   ((flags & FileConstants.BIT3) > 0) ||
+                   ((flags & FileConstants.BIT2) > 0) ||
+                   ((flags & FileConstants.BIT1) > 0) ||
+                   ((flags & FileConstants.BIT0) > 0);
+
+        }
+
+        public void unsetNonStandardFlags()
+        {
+            if(isNonStandardFlags())
+            {
+                logger.warning(getLoggingFilename() + ":" + getIdentifier() + ":Unsetting Unknown Encoding Flags:"+  Hex.asHex(flags));
+                flags &= (byte) ~FileConstants.BIT4;
+                flags &= (byte) ~FileConstants.BIT3;
+                flags &= (byte) ~FileConstants.BIT2;
+                flags &= (byte) ~FileConstants.BIT1;
+                flags &= (byte) ~FileConstants.BIT0;
+            }
+        }
+
+
         public void logEnabledFlags()
         {
+            if(isNonStandardFlags())
+            {
+                logger.warning(getLoggingFilename() + ":" + identifier + ":Unknown Encoding Flags:"+  Hex.asHex(flags));
+            }
             if (isCompression())
             {
                 logger.warning(getLoggingFilename() + ":" + identifier + " is compressed");
@@ -791,7 +823,7 @@ public class ID3v23Frame extends AbstractID3v2Frame
         Integer encodingId = TextEncoding.getInstanceOf().getIdForValue(encoding);
         if(encoding!=null)
         {
-            if(encodingId.intValue()<2)
+            if(encodingId <2)
             {
                 this.getBody().setTextEncoding(encodingId.byteValue());
             }

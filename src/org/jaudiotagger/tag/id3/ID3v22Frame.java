@@ -513,7 +513,7 @@ public class ID3v22Frame extends AbstractID3v2Frame
         Integer encodingId = TextEncoding.getInstanceOf().getIdForValue(encoding);
         if(encoding!=null)
         {
-            if(encodingId.intValue()<2)
+            if(encodingId <2)
             {
                 this.getBody().setTextEncoding(encodingId.byteValue());
             }
