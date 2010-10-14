@@ -12,11 +12,11 @@ import java.util.Map;
  *
  * TODO These attributes and their v23 mapping that havent been added to enum yet
  *
- * WMA      ID3v1   ID3v22  ID3v2324
+ * WMA                 ID3v1   ID3v22  ID3v2324
  *
- * CopyrightURL 	  	WCP 	WCOP
- * Duration 	  	TLE 	TLEN
- * FileSize 	  	  	TSIZ
+ * CopyrightURL 	  	       WCP 	WCOP
+ * Duration 	  	           TLE 	TLEN
+ * FileSize 	  	  	            TSIZ
  * WM/AudioFileURL 	  	WAF 	WOAF
  * WM/AudioSourceURL 	  	WAS 	WOAS
  * WM/Binary 	  	GEO 	GEOB
@@ -24,11 +24,7 @@ import java.util.Map;
  * WM/EncodingTime 	  	  	TDEN
  * WM/MCDI 	  	  	MCDI
  * WM/ModifiedBy 	  	  	TPE4
- * WM/OriginalAlbumTitle 	  	TOT 	TOAL
- * WM/OriginalArtist 	  	TOA 	TOPE
  * WM/OriginalFilename 	  	TOF 	TOFN
- * WM/OriginalLyricist 	  	TOL 	TOLY
- * WM/OriginalReleaseYear 	  	TOR 	TORY
  * WM/PlaylistDelay 	  	  	TDLY
  * WM/RadioStationName 	  	TRN 	TRSN
  * WM/RadioStationOwner 	  	TRO 	TRSO
@@ -118,6 +114,7 @@ public enum AsfFieldKey
     ORIGINAL_YEAR("WM/OriginalReleaseYear", true),
     PRODUCER("WM/Producer", false),
     QUALITY("Quality", true),
+    MM_RATING("SDB/Rating", true),
     RECORD_LABEL("WM/Publisher", false),
     REMIXER("WM/ModifiedBy", false),
     SCRIPT("WM/Script", false),

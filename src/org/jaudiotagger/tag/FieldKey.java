@@ -61,6 +61,7 @@ public enum FieldKey
     ORIGINAL_LYRICIST,
     ORIGINAL_YEAR,
     QUALITY,
+    RATING,
     RECORD_LABEL,
     REMIXER,
     SCRIPT,

@@ -22,7 +22,9 @@ import java.nio.ByteBuffer;
 
 /**
  * Original release year Text information frame.
- * <p>The 'Original release year' frame is intended for the year when the original recording, if for example the music in the file should be a cover of a previously released song, was released. The field is formatted as in the "TYER" frame.
+ * <p>The 'Original release year' frame is intended for the year when the original recording, if for example the music
+ * in the file should be a cover of a previously released song, was released. The field is formatted as in the "TYER"
+ * frame.
  * <p/>
  * <p>For more details, please refer to the ID3 specifications:
  * <ul>

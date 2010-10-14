@@ -134,6 +134,7 @@ public final class AsfTag extends AbstractTag
         tagFieldToAsfField.put(FieldKey.ORIGINAL_ALBUM, AsfFieldKey.ORIGINAL_ALBUM);
         tagFieldToAsfField.put(FieldKey.ORIGINAL_LYRICIST, AsfFieldKey.ORIGINAL_LYRICIST);
         tagFieldToAsfField.put(FieldKey.ORIGINAL_YEAR, AsfFieldKey.ORIGINAL_YEAR);
+        tagFieldToAsfField.put(FieldKey.RATING, AsfFieldKey.MM_RATING);
         tagFieldToAsfField.put(FieldKey.RECORD_LABEL, AsfFieldKey.RECORD_LABEL);
         tagFieldToAsfField.put(FieldKey.QUALITY, AsfFieldKey.QUALITY);
         tagFieldToAsfField.put(FieldKey.REMIXER, AsfFieldKey.REMIXER);

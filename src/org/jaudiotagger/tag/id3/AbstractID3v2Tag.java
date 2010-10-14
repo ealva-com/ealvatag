@@ -1859,6 +1859,10 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
                 {
                     return String.valueOf(((FrameBodyTPOS) frame.getBody()).getDiscTotal());
                 }
+                else if (genericKey == FieldKey.RATING)
+                {
+                    return String.valueOf(((FrameBodyPOPM) frame.getBody()).getRating());
+                }
                 else
                 {
                     return doGetValueAtIndex(frameAndSubId, index);
@@ -1990,6 +1994,10 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
         else if (frame.getBody() instanceof AbstractFrameBodyTextInfo)
         {
             ((AbstractFrameBodyTextInfo) frame.getBody()).setText(value);
+        }
+        else if (frame.getBody() instanceof FrameBodyPOPM)
+        {
+            ((FrameBodyPOPM) frame.getBody()). parseString(value);
         }
         else if ((frame.getBody() instanceof FrameBodyAPIC) || (frame.getBody() instanceof FrameBodyPIC))
         {

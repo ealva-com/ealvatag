@@ -84,6 +84,7 @@ public enum VorbisCommentFieldKey
     PERFORMER("PERFORMER",EnumSet.of(Tagger.XIPH,Tagger.PICARD)),
     PRODUCTNUMBER("PRODUCTNUMBER",EnumSet.of(Tagger.XIPH)),
     QUALITY("QUALITY",EnumSet.of(Tagger.MEDIA_MONKEY)),
+    RATING("RATING",EnumSet.of(Tagger.MEDIA_MONKEY)),
     RELEASECOUNTRY("RELEASECOUNTRY",EnumSet.of(Tagger.PICARD,Tagger.JAIKOZ)),
     REMIXER("REMIXER",EnumSet.of(Tagger.PICARD,Tagger.JAIKOZ)),
     SCRIPT("SCRIPT",EnumSet.of(Tagger.JAIKOZ)),

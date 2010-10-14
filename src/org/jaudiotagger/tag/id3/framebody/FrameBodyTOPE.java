@@ -22,7 +22,9 @@ import java.nio.ByteBuffer;
 
 /**
  * Original artist(s)/performer(s) Text information frame.
- * <p>The 'Original artist(s)/performer(s)' frame is intended for the performer(s) of the original recording, if for example the music in the file should be a cover of a previously released song. The performers are seperated with the "/" character.
+ * <p>The 'Original artist(s)/performer(s)' frame is intended for the performer(s) of the original recording, if for
+ * example the music in the file should be a cover of a previously released song. The performers are separated with
+ * the "/" character.
  * <p/>
  * <p>For more details, please refer to the ID3 specifications:
  * <ul>

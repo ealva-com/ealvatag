@@ -62,9 +62,9 @@ import java.nio.ByteBuffer;
  */
 public class FrameBodyPOPM extends AbstractID3v2FrameBody implements ID3v24FrameBody, ID3v23FrameBody
 {
-    private static final int RATING_FIELD_SIZE = 1;
-    private static final int COUNTER_MINIMUM_FIELD_SIZE = 0;
-
+    private static final int    RATING_FIELD_SIZE = 1;
+    private static final int    COUNTER_MINIMUM_FIELD_SIZE = 0;
+    private static final String MEDIA_MONKEY_NO_EMAIL = "no@email";
     /**
      * Creates a new FrameBodyPOPM datatype.
      */
@@ -168,6 +168,24 @@ public class FrameBodyPOPM extends AbstractID3v2FrameBody implements ID3v24Frame
         return ID3v24Frames.FRAME_ID_POPULARIMETER;
     }
 
+    public String getUserFriendlyValue()
+    {
+        return getEmailToUser()+":"+getRating()+":"+getCounter();
+    }
+
+    public void parseString(String data)
+    {
+        try
+        {
+            int value = Integer.parseInt(data);
+            setRating(value);
+            setEmailToUser(MEDIA_MONKEY_NO_EMAIL);
+        }
+        catch(NumberFormatException nfe)
+        {
+
+        }
+    }
 
     /**
      *

@@ -360,6 +360,7 @@ public class ID3v22Frames extends ID3Frames
         tagFieldToId3.put(FieldKey.ORIGINAL_LYRICIST, ID3v22FieldKey.ORIGINAL_LYRICIST);
         tagFieldToId3.put(FieldKey.ORIGINAL_YEAR, ID3v22FieldKey.ORIGINAL_YEAR);
         tagFieldToId3.put(FieldKey.QUALITY, ID3v22FieldKey.QUALITY);
+        tagFieldToId3.put(FieldKey.RATING, ID3v22FieldKey.RATING);
         tagFieldToId3.put(FieldKey.RECORD_LABEL, ID3v22FieldKey.RECORD_LABEL);
         tagFieldToId3.put(FieldKey.REMIXER, ID3v22FieldKey.REMIXER);
         tagFieldToId3.put(FieldKey.SCRIPT, ID3v22FieldKey.SCRIPT);
