@@ -60,6 +60,44 @@ public class FrameBodyCOMM extends AbstractID3v2FrameBody implements ID3v24Frame
     //used by iTunes for volume normalization, although uses the COMMENT field not usually displayed as a comment
     public static final String ITUNES_NORMALIZATION = "iTunNORM";
 
+    //Various descriptions used by MediaMonkey, (note Media Monkey uses non-standard language field XXX)
+    private static final String MM_PREFIX               = "Songs-DB";
+    public static final String MM_CUSTOM1               = "Songs-DB_Custom1";
+    public static final String MM_CUSTOM2               = "Songs-DB_Custom2";
+    public static final String MM_CUSTOM3               = "Songs-DB_Custom3";
+    public static final String MM_CUSTOM4               = "Songs-DB_Custom4";
+    public static final String MM_CUSTOM5               = "Songs-DB_Custom5";
+    public static final String MM_OCCASION              = "Songs-DB_Occasion";
+    public static final String MM_QUALITY               = "Songs-DB_Preference";
+    public static final String MM_TEMPO                 = "Songs-DB_Tempo";
+
+    public boolean isMediaMonkeyFrame()
+    {
+        String desc = getDescription();
+        if(desc!=null && !desc.isEmpty())
+        {
+            if(desc.startsWith(MM_PREFIX))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean isItunesFrame()
+    {
+        String desc = getDescription();
+        if(desc!=null && !desc.isEmpty())
+        {
+            if(desc.equals(ITUNES_NORMALIZATION))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    
     /**
      * Creates a new FrameBodyCOMM datatype.
      */

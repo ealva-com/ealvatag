@@ -16,7 +16,7 @@ import java.nio.ByteBuffer;
  */
 public class Mp4TagByteField extends Mp4TagTextField
 {
-    public static String TRUE_VALUE="1";  //when usimng this field to hold a boolean
+    public static String TRUE_VALUE="1";  //when using this field to hold a boolean
 
     //Holds the actual size of the data content as held in the databoxitem, this is required when creating new
     //items because we cant accurately work out the size by looking at the content because sometimes field must be longer

@@ -18,5 +18,6 @@ public enum Tagger
     JAIKOZ,
     TAGSCANNER,
     XIPH,   //standards body rather than tagger xiph.org
-    FOOBAR2000
+    FOOBAR2000,
+    BEATUNES
 }

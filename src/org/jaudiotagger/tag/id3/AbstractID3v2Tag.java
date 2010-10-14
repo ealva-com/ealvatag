@@ -29,6 +29,7 @@ import org.jaudiotagger.tag.datatype.DataTypes;
 import org.jaudiotagger.tag.datatype.TextEncodedStringSizeTerminated;
 import org.jaudiotagger.tag.id3.framebody.*;
 import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
+import org.jaudiotagger.tag.reference.Languages;
 import org.jaudiotagger.tag.reference.PictureTypes;
 
 import java.io.*;
@@ -1965,6 +1966,16 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
         }
         else if (frame.getBody() instanceof FrameBodyCOMM)
         {
+            //Set description if set
+            if(formatKey.getSubId()!=null)
+            {
+                ((FrameBodyCOMM) frame.getBody()).setDescription(formatKey.getSubId());
+                //Special Handling for Media Monkey Compatability
+                if(((FrameBodyCOMM)frame.getBody()).isMediaMonkeyFrame())
+                {
+                    ((FrameBodyCOMM)frame.getBody()).setLanguage(Languages.MEDIA_MONKEY_ID);
+                }
+            }
             ((FrameBodyCOMM) frame.getBody()).setText(value);
         }
         else if (frame.getBody() instanceof FrameBodyUSLT)
@@ -2030,6 +2041,13 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
                     if (((FrameBodyWXXX) next).getDescription().equals(formatKey.getSubId()))
                     {
                         listOfMatches.add(((FrameBodyWXXX) next).getUrlLink());
+                    }
+                }
+                else if (next instanceof FrameBodyCOMM)
+                {
+                    if (((FrameBodyCOMM) next).getDescription().equals(formatKey.getSubId()))
+                    {
+                        listOfMatches.add(((FrameBodyCOMM) next).getText());
                     }
                 }
                 else if (next instanceof FrameBodyUFID)
@@ -2191,6 +2209,13 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
                 else if (next instanceof FrameBodyWXXX)
                 {
                     if (((FrameBodyWXXX) next).getDescription().equals(formatKey.getSubId()))
+                    {
+                        filteredList.add(tagfield);
+                    }
+                }
+                else if (next instanceof FrameBodyCOMM)
+                {
+                    if (((FrameBodyCOMM) next).getDescription().equals(formatKey.getSubId()))
                     {
                         filteredList.add(tagfield);
                     }

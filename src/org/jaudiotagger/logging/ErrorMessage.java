@@ -107,7 +107,9 @@ public enum ErrorMessage
     NO_DELETER_FOR_THIS_FORMAT("No Deleter associated with this extension:{0}"),
     UNABLE_TO_FIND_FILE("Unable to find:{0}"),
     NO_PERMISSIONS_TO_WRITE_TO_FILE("Unable to write to:{0}"),
+    DO_NOT_KNOW_HOW_TO_CREATE_THIS_ATOM_TYPE("DO not know how to create this atom type {0}"),
     ;
+
 
     String msg;
 

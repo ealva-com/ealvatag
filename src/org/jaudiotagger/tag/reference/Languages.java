@@ -27,6 +27,9 @@ import org.jaudiotagger.tag.datatype.AbstractStringStringValuePair;
 public class Languages extends AbstractStringStringValuePair
 {
     public static final String DEFAULT_ID = "eng";
+    public static final String MEDIA_MONKEY_ID = "XXX";
+    public static final String WINAMP_ID = "\0\0\0";
+
     public static final String DEFAULT_VALUE = "English";
 
     //The number of bytes used to hold the language field size
