@@ -1106,6 +1106,10 @@ public class NewInterfaceTest extends TestCase
             tag.removeFrameOfType("TXXX");
             assertNull(tag.getFrame("TXXX"));
 
+            af.getTag().setField(af.getTag().createField(FieldKey.MUSICBRAINZ_ARTISTID, "abcdef-ghijklmn"));
+            ((ID3v24Tag) af.getTag()).deleteField(FieldKey.MUSICBRAINZ_ARTISTID);
+            assertNull(tag.getFrame("TXXX"));
+
         }
 
         //UFID

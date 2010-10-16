@@ -79,5 +79,10 @@ public enum FieldKey
     URL_WIKIPEDIA_ARTIST_SITE,
     URL_WIKIPEDIA_RELEASE_SITE,
     YEAR,
+    ENGINEER,
+    PRODUCER,
+    DJMIXER,
+    MIXER,
+    ARRANGER,
     ;
 }

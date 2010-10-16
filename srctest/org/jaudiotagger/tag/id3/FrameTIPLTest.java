@@ -21,6 +21,14 @@ public class FrameTIPLTest extends AbstractTestCase
         return frame;
     }
 
+     public static ID3v24Frame getInitialisedFrameOdd()
+    {
+        ID3v24Frame frame = new ID3v24Frame(ID3v24Frames.FRAME_ID_INVOLVED_PEOPLE);
+        FrameBodyTIPL fb = FrameBodyTIPLTest.getInitialisedBodyOdd();
+        frame.setBody(fb);
+        return frame;
+    }
+
     public static ID3v23Frame getV23InitialisedFrame()
     {
         ID3v23Frame frame = new ID3v23Frame(ID3v23Frames.FRAME_ID_V3_IPLS);
@@ -96,6 +104,24 @@ public class FrameTIPLTest extends AbstractTestCase
         assertEquals(TextEncoding.ISO_8859_1, body.getTextEncoding());
     }
 
+    public void testSaveToFileOdd() throws Exception
+    {
+        File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3",new File("test1016.mp3"));
+        MP3File mp3File = new MP3File(testFile);
+
+        //Create and Save
+        ID3v24Tag tag = new ID3v24Tag();
+        tag.setFrame(FrameTIPLTest.getInitialisedFrameOdd());
+        mp3File.setID3v2Tag(tag);
+        mp3File.save();
+
+        //Reload
+        mp3File = new MP3File(testFile);
+        ID3v24Frame frame = (ID3v24Frame) mp3File.getID3v2Tag().getFrame(ID3v24Frames.FRAME_ID_INVOLVED_PEOPLE);
+        FrameBodyTIPL body = (FrameBodyTIPL) frame.getBody();
+        assertEquals(TextEncoding.ISO_8859_1, body.getTextEncoding());
+    }
+
     public void testSaveEmptyFrameToFile() throws Exception
     {
         File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3",new File("test1004.mp3"));
@@ -143,6 +169,7 @@ public class FrameTIPLTest extends AbstractTestCase
         FrameBodyIPLS body = (FrameBodyIPLS) frame.getBody();
         assertEquals(TextEncoding.ISO_8859_1, body.getTextEncoding());
         assertEquals(FrameBodyTIPLTest.INVOLVED_PEOPLE, body.getText());
-        assertEquals("producer", body.getValueAtIndex(0));
+        assertEquals("producer", body.getKeyAtIndex(0));
+        assertEquals("eno,lanois", body.getValueAtIndex(0));
     }
 }

@@ -18,13 +18,14 @@ package org.jaudiotagger.tag.id3.framebody;
 import org.jaudiotagger.tag.InvalidTagException;
 import org.jaudiotagger.tag.datatype.DataTypes;
 import org.jaudiotagger.tag.datatype.NumberHashMap;
+import org.jaudiotagger.tag.datatype.Pair;
 import org.jaudiotagger.tag.datatype.PairedTextEncodedStringNullTerminated;
 import org.jaudiotagger.tag.id3.ID3v23Frames;
 import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
 
 import java.io.ByteArrayOutputStream;
 import java.nio.ByteBuffer;
-import java.util.List;
+import java.util.Map;
 import java.util.StringTokenizer;
 
 /**
@@ -48,7 +49,6 @@ import java.util.StringTokenizer;
  * @author : Paul Taylor
  * @author : Eric Farng
  * @version $Id$
- * @TODO currently just allows any number of values, should only really support pairs of values
  */
 public class FrameBodyIPLS extends AbstractID3v2FrameBody implements ID3v23FrameBody
 {
@@ -104,7 +104,7 @@ public class FrameBodyIPLS extends AbstractID3v2FrameBody implements ID3v23Frame
     }
 
     /**
-     * Set the text, decoded as pairs of involvee - involvment
+     * Set the text, decoded as pairs of involvee - involvement
      * @param text
      */
     public void setText(String text)
@@ -113,9 +113,24 @@ public class FrameBodyIPLS extends AbstractID3v2FrameBody implements ID3v23Frame
         StringTokenizer stz = new StringTokenizer(text, "\0");
         while (stz.hasMoreTokens())
         {
-            value.add(stz.nextToken());
+            String key =stz.nextToken();
+            if(stz.hasMoreTokens())
+            {
+                value.add(key, stz.nextToken());
+            }
+
         }
         setObjectValue(DataTypes.OBJ_TEXT, value);
+    }
+
+    public void addPair(String text)
+    {
+        PairedTextEncodedStringNullTerminated.ValuePairs value = ((PairedTextEncodedStringNullTerminated) getObject(DataTypes.OBJ_TEXT)).getValue();
+        StringTokenizer stz = new StringTokenizer(text, "\0");
+        if (stz.hasMoreTokens())
+        {
+            value.add(stz.nextToken(),stz.nextToken());
+        }
     }
 
     /**
@@ -141,6 +156,22 @@ public class FrameBodyIPLS extends AbstractID3v2FrameBody implements ID3v23Frame
         objectList.add(new PairedTextEncodedStringNullTerminated(DataTypes.OBJ_TEXT, this));
     }
 
+    public PairedTextEncodedStringNullTerminated.ValuePairs getPairing()
+    {
+        return  (PairedTextEncodedStringNullTerminated.ValuePairs)getObject(DataTypes.OBJ_TEXT).getValue();  
+    }
+     /**
+     * Get key at index
+     *
+     * @param index
+     * @return value at index
+     */
+    public String getKeyAtIndex(int index)
+    {
+        PairedTextEncodedStringNullTerminated text = (PairedTextEncodedStringNullTerminated) getObject(DataTypes.OBJ_TEXT);
+        return text.getValue().getMapping().get(index).getKey();
+    }
+
      /**
      * Get value at index
      *
@@ -150,16 +181,7 @@ public class FrameBodyIPLS extends AbstractID3v2FrameBody implements ID3v23Frame
     public String getValueAtIndex(int index)
     {
         PairedTextEncodedStringNullTerminated text = (PairedTextEncodedStringNullTerminated) getObject(DataTypes.OBJ_TEXT);
-        return text.getValue().getList().get(index);
-    }
-
-    /**
-     * @return number of text values, should be an even number because should make up pairs of values
-     */
-    public int getNumberOfValues()
-    {
-        PairedTextEncodedStringNullTerminated text = (PairedTextEncodedStringNullTerminated) getObject(DataTypes.OBJ_TEXT);
-        return text.getValue().getNumberOfValues();
+        return text.getValue().getMapping().get(index).getValue();
     }
 
     /**
@@ -174,16 +196,22 @@ public class FrameBodyIPLS extends AbstractID3v2FrameBody implements ID3v23Frame
     public String getText()
     {
         PairedTextEncodedStringNullTerminated text = (PairedTextEncodedStringNullTerminated) getObject(DataTypes.OBJ_TEXT);
-        StringBuffer sb = new StringBuffer();
-        List<String> values = text.getValue().getList();
-        for(int i=0; i< values.size(); i++)
+        StringBuilder sb = new StringBuilder();
+        int count=1;
+        for(Pair entry:text.getValue().getMapping())
         {
-            if(i>0)
+            sb.append(entry.getKey()+'\0'+entry.getValue());
+            if(count!=getNumberOfPairs())
             {
-                sb.append("\0");
+                sb.append('\0');
             }
-            sb.append(values.get(i));
+            count++;
         }
         return sb.toString();
+    }
+
+     public String getUserFriendlyValue()
+    {
+        return getText();
     }
 }

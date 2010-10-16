@@ -5,6 +5,7 @@ import org.jaudiotagger.audio.generic.AbstractTag;
 import org.jaudiotagger.logging.ErrorMessage;
 import org.jaudiotagger.tag.*;
 import org.jaudiotagger.tag.datatype.Artwork;
+import org.jaudiotagger.tag.mp4.Mp4FieldKey;
 import org.jaudiotagger.tag.reference.PictureTypes;
 
 import java.io.UnsupportedEncodingException;
@@ -153,6 +154,11 @@ public final class AsfTag extends AbstractTag
         tagFieldToAsfField.put(FieldKey.URL_WIKIPEDIA_ARTIST_SITE, AsfFieldKey.URL_WIKIPEDIA_ARTIST_SITE);
         tagFieldToAsfField.put(FieldKey.URL_WIKIPEDIA_RELEASE_SITE, AsfFieldKey.URL_WIKIPEDIA_RELEASE_SITE);
         tagFieldToAsfField.put(FieldKey.YEAR, AsfFieldKey.YEAR);
+        tagFieldToAsfField.put(FieldKey.ENGINEER, AsfFieldKey.ENGINEER);
+        tagFieldToAsfField.put(FieldKey.PRODUCER, AsfFieldKey.PRODUCER);
+        tagFieldToAsfField.put(FieldKey.DJMIXER, AsfFieldKey.DJMIXER);
+        tagFieldToAsfField.put(FieldKey.MIXER, AsfFieldKey.MIXER);
+        tagFieldToAsfField.put(FieldKey.ARRANGER, AsfFieldKey.ARRANGER);
 
     }
 

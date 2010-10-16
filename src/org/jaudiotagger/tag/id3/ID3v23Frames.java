@@ -342,11 +342,6 @@ public class ID3v23Frames extends ID3Frames
         multipleFrames.add(FRAME_ID_V3_POPULARIMETER);
         multipleFrames.add(FRAME_ID_V3_GENERAL_ENCAPS_OBJECT);
 
-        //TODO this is a hack to allow multiple TRCK and TPOS frames to be created then subsequently merged
-        multipleFrames.add(FRAME_ID_V3_TRACK);
-        multipleFrames.add(FRAME_ID_V3_SET);
-
-
         discardIfFileAlteredFrames.add(FRAME_ID_V3_EVENT_TIMING_CODES);
         discardIfFileAlteredFrames.add(FRAME_ID_V3_EQUALISATION);
         discardIfFileAlteredFrames.add(FRAME_ID_V3_MPEG_LOCATION_LOOKUP_TABLE);
@@ -429,6 +424,11 @@ public class ID3v23Frames extends ID3Frames
         tagFieldToId3.put(FieldKey.URL_WIKIPEDIA_ARTIST_SITE, ID3v23FieldKey.URL_WIKIPEDIA_ARTIST_SITE);
         tagFieldToId3.put(FieldKey.URL_WIKIPEDIA_RELEASE_SITE, ID3v23FieldKey.URL_WIKIPEDIA_RELEASE_SITE);
         tagFieldToId3.put(FieldKey.YEAR, ID3v23FieldKey.YEAR);
+        tagFieldToId3.put(FieldKey.ENGINEER, ID3v23FieldKey.ENGINEER);
+        tagFieldToId3.put(FieldKey.PRODUCER, ID3v23FieldKey.PRODUCER);
+        tagFieldToId3.put(FieldKey.MIXER, ID3v23FieldKey.MIXER);
+        tagFieldToId3.put(FieldKey.DJMIXER, ID3v23FieldKey.DJMIXER);
+        tagFieldToId3.put(FieldKey.ARRANGER, ID3v23FieldKey.ARRANGER);
     }
 
 

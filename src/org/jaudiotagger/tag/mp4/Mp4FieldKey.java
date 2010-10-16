@@ -140,6 +140,7 @@ public enum Mp4FieldKey
     PRODUCER("com.apple.iTunes", "PRODUCER", TEXT, Tagger.PICARD),
     DJMIXER("com.apple.iTunes", "DJMIXER", TEXT, Tagger.PICARD),
     MIXER("com.apple.iTunes", "MIXER", TEXT, Tagger.PICARD),
+    ARRANGER("com.apple.iTunes", "ARRANGER", TEXT, Tagger.PICARD),
     MOOD("com.apple.iTunes", "MOOD", TEXT, Tagger.PICARD),
     ISRC("com.apple.iTunes", "ISRC", TEXT, Tagger.PICARD),
     MEDIA("com.apple.iTunes", "MEDIA", TEXT, Tagger.PICARD),

@@ -11,6 +11,14 @@ import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
 public class FrameBodyTIPLTest extends AbstractTestCase
 {
     public static final String INVOLVED_PEOPLE = "producer\0eno,lanois";
+    public static final String INVOLVED_PEOPLE_ODD = "producer\0eno,lanois\0engineer";
+
+    public static FrameBodyTIPL getInitialisedBodyOdd()
+    {
+        FrameBodyTIPL fb = new FrameBodyTIPL();
+        fb.setText(FrameBodyTIPLTest.INVOLVED_PEOPLE_ODD);
+        return fb;
+    }
 
     public static FrameBodyTIPL getInitialisedBody()
     {
@@ -25,7 +33,8 @@ public class FrameBodyTIPLTest extends AbstractTestCase
         FrameBodyTIPL fb = null;
         try
         {
-            fb = new FrameBodyTIPL(TextEncoding.ISO_8859_1, FrameBodyTIPLTest.INVOLVED_PEOPLE);
+            fb = new FrameBodyTIPL();
+            fb.setText(FrameBodyTIPLTest.INVOLVED_PEOPLE);
         }
         catch (Exception e)
         {
@@ -36,13 +45,38 @@ public class FrameBodyTIPLTest extends AbstractTestCase
         assertEquals(ID3v24Frames.FRAME_ID_INVOLVED_PEOPLE, fb.getIdentifier());
         assertEquals(TextEncoding.ISO_8859_1, fb.getTextEncoding());
         assertEquals(FrameBodyTIPLTest.INVOLVED_PEOPLE, fb.getText());
-        assertEquals(2,fb.getNumberOfValues());
-        assertEquals("producer",fb.getFirstTextValue());
-        assertEquals("producer",fb.getValueAtIndex(0));
-        assertEquals("eno,lanois",fb.getValueAtIndex(1));
+        //assertEquals(2,fb.getNumberOfValues());
+        //assertEquals("producer",fb.getNumberOfPairs());
+        assertEquals("producer",fb.getKeyAtIndex(0));
+        assertEquals("eno,lanois",fb.getValueAtIndex(0));
 
     }
 
+    public void testCreateFrameBodyodd()
+    {
+        Exception exceptionCaught = null;
+        FrameBodyTIPL fb = null;
+        try
+        {
+            fb = new FrameBodyTIPL();
+            fb.setText(FrameBodyTIPLTest.INVOLVED_PEOPLE_ODD);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            exceptionCaught = e;
+        }
+
+        assertNull(exceptionCaught);
+        assertEquals(ID3v24Frames.FRAME_ID_INVOLVED_PEOPLE, fb.getIdentifier());
+        assertEquals(TextEncoding.ISO_8859_1, fb.getTextEncoding());
+        assertEquals(FrameBodyTIPLTest.INVOLVED_PEOPLE, fb.getText());
+        //assertEquals(2,fb.getNumberOfValues());
+        //assertEquals("producer",fb.getNumberOfPairs());
+        assertEquals("producer",fb.getKeyAtIndex(0));
+        assertEquals("eno,lanois",fb.getValueAtIndex(0));
+
+    }
     public void testCreateFrameBodyEmptyConstructor()
     {
         Exception exceptionCaught = null;
@@ -82,9 +116,9 @@ public class FrameBodyTIPLTest extends AbstractTestCase
         assertEquals(ID3v24Frames.FRAME_ID_INVOLVED_PEOPLE, fb.getIdentifier());
         assertEquals(TextEncoding.ISO_8859_1, fb.getTextEncoding());
         assertEquals("*"+fb.getText()+"*","*"+FrameBodyIPLSTest.INVOLVED_PEOPLE+"*");
-        assertEquals(2,fb.getNumberOfValues());
-        assertEquals("producer",fb.getValueAtIndex(0));
-        assertEquals("eno,lanois",fb.getValueAtIndex(1));
+        assertEquals(2,fb.getNumberOfPairs());
+        assertEquals("producer",fb.getKeyAtIndex(0));
+        assertEquals("eno,lanois",fb.getValueAtIndex(0));
 
     }
 

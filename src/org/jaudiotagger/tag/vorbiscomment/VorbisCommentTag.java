@@ -29,6 +29,7 @@ import org.jaudiotagger.tag.datatype.Artwork;
 import static org.jaudiotagger.tag.vorbiscomment.VorbisCommentFieldKey.VENDOR;
 
 import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
+import org.jaudiotagger.tag.reference.Tagger;
 import org.jaudiotagger.tag.vorbiscomment.util.Base64Coder;
 
 import java.awt.image.BufferedImage;
@@ -37,6 +38,7 @@ import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.EnumMap;
+import java.util.EnumSet;
 import java.util.List;
 
 /**
@@ -118,6 +120,11 @@ public class VorbisCommentTag extends AbstractTag
         tagFieldToOggField.put(FieldKey.URL_WIKIPEDIA_RELEASE_SITE, VorbisCommentFieldKey.URL_WIKIPEDIA_RELEASE_SITE);
         tagFieldToOggField.put(FieldKey.YEAR, VorbisCommentFieldKey.DATE);
 
+        tagFieldToOggField.put(FieldKey.ENGINEER, VorbisCommentFieldKey.ENGINEER);
+        tagFieldToOggField.put(FieldKey.PRODUCER, VorbisCommentFieldKey.PRODUCER);
+        tagFieldToOggField.put(FieldKey.DJMIXER, VorbisCommentFieldKey.DJMIXER);
+        tagFieldToOggField.put(FieldKey.MIXER, VorbisCommentFieldKey.MIXER);
+        tagFieldToOggField.put(FieldKey.ARRANGER, VorbisCommentFieldKey.ARRANGER);
     }
 
     //This is the vendor string that will be written if no other is supplied. Should be the name of the software

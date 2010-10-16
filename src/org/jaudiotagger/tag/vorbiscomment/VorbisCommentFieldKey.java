@@ -105,6 +105,11 @@ public enum VorbisCommentFieldKey
     VENDOR("VENDOR"),
     VERSION("VERSION", EnumSet.of(Tagger.XIPH)),// The version field may be used to differentiate multiple versions of the same track title in a single collection. (e.g. remix info)
 
+    ENGINEER("ENGINEER",EnumSet.of(Tagger.PICARD)),
+    PRODUCER("PRODUCER",EnumSet.of(Tagger.PICARD)),
+    DJMIXER("DJMIXER",EnumSet.of(Tagger.PICARD)),
+    MIXER("MIXER",EnumSet.of(Tagger.PICARD)),
+    ARRANGER("ARRANGER",EnumSet.of(Tagger.PICARD)),
     ;
 
     private String fieldName;

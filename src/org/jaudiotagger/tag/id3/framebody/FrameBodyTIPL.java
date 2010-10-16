@@ -26,10 +26,16 @@ package org.jaudiotagger.tag.id3.framebody;
 
 import org.jaudiotagger.tag.InvalidTagException;
 import org.jaudiotagger.tag.datatype.DataTypes;
+import org.jaudiotagger.tag.datatype.NumberHashMap;
+import org.jaudiotagger.tag.datatype.Pair;
 import org.jaudiotagger.tag.datatype.PairedTextEncodedStringNullTerminated;
 import org.jaudiotagger.tag.id3.ID3v24Frames;
+import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
 
+import java.io.ByteArrayOutputStream;
 import java.nio.ByteBuffer;
+import java.util.Map;
+import java.util.StringTokenizer;
 
 
 /**
@@ -37,28 +43,21 @@ import java.nio.ByteBuffer;
  * function and every even is an name or a comma delimited list of names.
  * <p/>
  */
-public class FrameBodyTIPL extends AbstractFrameBodyTextInfo implements ID3v24FrameBody
+public class FrameBodyTIPL extends AbstractID3v2FrameBody implements ID3v24FrameBody
 {
+    //Standard function names, taken from Picard Mapping
+    public static final String ENGINEER = "engineer";
+    public static final String MIXER = "mix";
+    public static final String DJMIXER = "DJ-mix";
+    public static final String PRODUCER = "producer";
+    public static final String ARRANGER = "arranger";
+
     /**
      * Creates a new FrameBodyTIPL datatype.
      */
     public FrameBodyTIPL()
     {
-    }
-
-    public FrameBodyTIPL(FrameBodyTIPL body)
-    {
-        super(body);
-    }
-
-    /**
-     * Convert from V3 to V4 Frame
-     * @param body
-     */
-    public FrameBodyTIPL(FrameBodyIPLS body)
-    {
-        setObjectValue(DataTypes.OBJ_TEXT_ENCODING, body.getTextEncoding());
-        setObjectValue(DataTypes.OBJ_TEXT, body.getText());
+        setObjectValue(DataTypes.OBJ_TEXT_ENCODING, TextEncoding.ISO_8859_1);
     }
 
     /**
@@ -69,7 +68,8 @@ public class FrameBodyTIPL extends AbstractFrameBodyTextInfo implements ID3v24Fr
      */
     public FrameBodyTIPL(byte textEncoding, String text)
     {
-        super(textEncoding, text);
+        setObjectValue(DataTypes.OBJ_TEXT_ENCODING, textEncoding);
+        setText(text);
     }
 
     /**
@@ -85,6 +85,17 @@ public class FrameBodyTIPL extends AbstractFrameBodyTextInfo implements ID3v24Fr
     }
 
     /**
+     * Convert from V3 to V4 Frame
+     *
+     * @param body
+     */
+    public FrameBodyTIPL(FrameBodyIPLS body)
+    {
+        setObjectValue(DataTypes.OBJ_TEXT_ENCODING, body.getTextEncoding());
+        setObjectValue(DataTypes.OBJ_TEXT, body.getPairing());
+    }
+
+    /**
      * The ID3v2 frame identifier
      *
      * @return the ID3v2 frame identifier  for this frame type
@@ -92,5 +103,120 @@ public class FrameBodyTIPL extends AbstractFrameBodyTextInfo implements ID3v24Fr
     public String getIdentifier()
     {
         return ID3v24Frames.FRAME_ID_INVOLVED_PEOPLE;
+    }
+
+    /**
+     * Set the text, decoded as pairs of involvee - involvment
+     *
+     * @param text
+     */
+    public void setText(String text)
+    {
+        PairedTextEncodedStringNullTerminated.ValuePairs value = new PairedTextEncodedStringNullTerminated.ValuePairs();
+        StringTokenizer stz = new StringTokenizer(text, "\0");
+
+        while (stz.hasMoreTokens())
+        {
+            String key =stz.nextToken();
+            if(stz.hasMoreTokens())
+            {
+                value.add(key, stz.nextToken());
+            }
+            
+        }
+        setObjectValue(DataTypes.OBJ_TEXT, value);
+    }
+
+    public void addPair(String text)
+    {
+        PairedTextEncodedStringNullTerminated.ValuePairs value = ((PairedTextEncodedStringNullTerminated) getObject(DataTypes.OBJ_TEXT)).getValue();
+        StringTokenizer stz = new StringTokenizer(text, "\0");
+        if (stz.hasMoreTokens())
+        {
+            value.add(stz.nextToken(),stz.nextToken());
+        }
+    }
+
+    /**
+     * Because have a text encoding we need to check the data values do not contain characters that cannot be encoded in
+     * current encoding before we write data. If they do change the encoding.
+     */
+    public void write(ByteArrayOutputStream tagBuffer)
+    {
+        if (!((PairedTextEncodedStringNullTerminated) getObject(DataTypes.OBJ_TEXT)).canBeEncoded())
+        {
+            this.setTextEncoding(TextEncoding.UTF_16);
+        }
+        super.write(tagBuffer);
+    }
+
+    /**
+     * Consists of a text encoding , and then a series of null terminated Strings, there should be an even number
+     * of Strings as they are paired as involvement/involvee
+     */
+    protected void setupObjectList()
+    {
+        objectList.add(new NumberHashMap(DataTypes.OBJ_TEXT_ENCODING, this, TextEncoding.TEXT_ENCODING_FIELD_SIZE));
+        objectList.add(new PairedTextEncodedStringNullTerminated(DataTypes.OBJ_TEXT, this));
+    }
+
+    public PairedTextEncodedStringNullTerminated.ValuePairs getPairing()
+    {
+        return (PairedTextEncodedStringNullTerminated.ValuePairs) getObject(DataTypes.OBJ_TEXT).getValue();
+    }
+
+    /**
+     * Get key at index
+     *
+     * @param index
+     * @return value at index
+     */
+    public String getKeyAtIndex(int index)
+    {
+        PairedTextEncodedStringNullTerminated text = (PairedTextEncodedStringNullTerminated) getObject(DataTypes.OBJ_TEXT);
+        return (String) text.getValue().getMapping().get(index).getKey();
+    }
+
+    /**
+     * Get value at index
+     *
+     * @param index
+     * @return value at index
+     */
+    public String getValueAtIndex(int index)
+    {
+        PairedTextEncodedStringNullTerminated text = (PairedTextEncodedStringNullTerminated) getObject(DataTypes.OBJ_TEXT);
+        return (String) text.getValue().getMapping().get(index).getValue();
+    }
+
+    /**
+     * @return number of text pairs
+     */
+    public int getNumberOfPairs()
+    {
+        PairedTextEncodedStringNullTerminated text = (PairedTextEncodedStringNullTerminated) getObject(DataTypes.OBJ_TEXT);
+        return text.getValue().getNumberOfPairs();
+    }
+
+    public String getText()
+    {
+        PairedTextEncodedStringNullTerminated text = (PairedTextEncodedStringNullTerminated) getObject(DataTypes.OBJ_TEXT);
+        StringBuilder sb = new StringBuilder();
+        int count = 1;
+        for (Pair entry : text.getValue().getMapping())
+        {
+            sb.append(entry.getKey() + '\0' + entry.getValue());
+            if (count != getNumberOfPairs())
+            {
+                sb.append('\0');
+            }
+            count++;
+        }
+        return sb.toString();
+    }
+
+    public String getUserFriendlyValue()
+    {
+        return getText();
     }
 }

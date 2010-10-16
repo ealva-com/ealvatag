@@ -143,6 +143,10 @@ public abstract class AbstractDataType
         {
             this.value = copyObject.value;
         }
+        else if(copyObject.value instanceof PairedTextEncodedStringNullTerminated.ValuePairs)
+        {
+            this.value = copyObject.value;
+        }
         else if(copyObject.value instanceof PartOfSet.PartOfSetValue)
         {
             this.value = copyObject.value;

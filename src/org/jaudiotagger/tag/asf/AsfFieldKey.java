@@ -3,7 +3,9 @@ package org.jaudiotagger.tag.asf;
 import org.jaudiotagger.audio.asf.data.ContainerType;
 import org.jaudiotagger.audio.asf.data.ContentBranding;
 import org.jaudiotagger.audio.asf.data.ContentDescription;
+import org.jaudiotagger.tag.reference.Tagger;
 
+import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -133,7 +135,12 @@ public enum AsfFieldKey
     URL_WIKIPEDIA_RELEASE_SITE("WM/WikipediaReleaseUrl", false),
     URL_LYRICS_SITE("WM/LyricsUrl", false),
     YEAR("WM/Year", false),
-    
+
+    ENGINEER("WM/Engineer",false),    
+    DJMIXER("WM/DJMixer",false),
+    MIXER("WM/Mixer",false),
+    ARRANGER("WM/Arranger",false),
+
     // Special field for all unknown field names, which will getFields maximum support
     CUSTOM ("___CUSTOM___", true);
 

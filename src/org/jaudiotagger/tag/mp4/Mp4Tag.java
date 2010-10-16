@@ -25,6 +25,7 @@ import org.jaudiotagger.tag.*;
 import org.jaudiotagger.tag.datatype.Artwork;
 import static org.jaudiotagger.tag.mp4.Mp4FieldKey.*;
 import org.jaudiotagger.tag.mp4.field.*;
+import org.jaudiotagger.tag.vorbiscomment.VorbisCommentFieldKey;
 
 import java.util.ArrayList;
 import java.util.EnumMap;
@@ -111,6 +112,11 @@ public class Mp4Tag extends AbstractTag
         tagFieldToMp4Field.put(FieldKey.URL_WIKIPEDIA_ARTIST_SITE, Mp4FieldKey.URL_WIKIPEDIA_ARTIST_SITE);
         tagFieldToMp4Field.put(FieldKey.URL_WIKIPEDIA_RELEASE_SITE, Mp4FieldKey.URL_WIKIPEDIA_RELEASE_SITE);
         tagFieldToMp4Field.put(FieldKey.YEAR, Mp4FieldKey.DAY);
+        tagFieldToMp4Field.put(FieldKey.ENGINEER, Mp4FieldKey.ENGINEER);
+        tagFieldToMp4Field.put(FieldKey.PRODUCER, Mp4FieldKey.PRODUCER);
+        tagFieldToMp4Field.put(FieldKey.DJMIXER, Mp4FieldKey.DJMIXER);
+        tagFieldToMp4Field.put(FieldKey.MIXER, Mp4FieldKey.MIXER);
+        tagFieldToMp4Field.put(FieldKey.ARRANGER, Mp4FieldKey.ARRANGER);
     }
 
     /**

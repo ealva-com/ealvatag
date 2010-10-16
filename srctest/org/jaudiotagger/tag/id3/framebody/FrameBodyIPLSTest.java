@@ -10,7 +10,7 @@ import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
  */
 public class FrameBodyIPLSTest extends AbstractTestCase
 {
-    public static final String INVOLVED_PEOPLE = "producer\0eno,lanois";
+    public static final String INVOLVED_PEOPLE = "producer\0eno,lanois\0engineer\0lillywhite";
 
     public static FrameBodyIPLS getInitialisedBody()
     {
@@ -36,9 +36,11 @@ public class FrameBodyIPLSTest extends AbstractTestCase
         assertEquals(ID3v23Frames.FRAME_ID_V3_IPLS, fb.getIdentifier());
         assertEquals(TextEncoding.ISO_8859_1, fb.getTextEncoding());
         assertEquals("*"+FrameBodyIPLSTest.INVOLVED_PEOPLE+"*", "*"+fb.getText()+"*");
-        assertEquals(2,fb.getNumberOfValues());
-        assertEquals("producer",fb.getValueAtIndex(0));
-        assertEquals("eno,lanois",fb.getValueAtIndex(1));
+        assertEquals(2,fb.getNumberOfPairs());
+        assertEquals("producer",fb.getKeyAtIndex(0));
+        assertEquals("eno,lanois",fb.getValueAtIndex(0));
+        assertEquals("engineer",fb.getKeyAtIndex(1));
+        assertEquals("lillywhite",fb.getValueAtIndex(1));
 
     }
 
@@ -60,9 +62,11 @@ public class FrameBodyIPLSTest extends AbstractTestCase
         assertEquals(ID3v23Frames.FRAME_ID_V3_IPLS, fb.getIdentifier());
         assertEquals(TextEncoding.ISO_8859_1, fb.getTextEncoding());
         assertEquals("*"+FrameBodyIPLSTest.INVOLVED_PEOPLE+"*", "*"+fb.getText()+"*");
-        assertEquals(2,fb.getNumberOfValues());
-        assertEquals("producer",fb.getValueAtIndex(0));
-        assertEquals("eno,lanois",fb.getValueAtIndex(1));
+        assertEquals(2,fb.getNumberOfPairs());
+        assertEquals("producer",fb.getKeyAtIndex(0));
+        assertEquals("eno,lanois",fb.getValueAtIndex(0));
+        assertEquals("engineer",fb.getKeyAtIndex(1));
+        assertEquals("lillywhite",fb.getValueAtIndex(1));
 
     }
 
@@ -83,9 +87,9 @@ public class FrameBodyIPLSTest extends AbstractTestCase
         assertNull(exceptionCaught);
         assertEquals(ID3v23Frames.FRAME_ID_V3_IPLS, fb.getIdentifier());
         assertEquals(TextEncoding.ISO_8859_1, fb.getTextEncoding());
-        assertEquals("*"+fb.getText()+"*","*"+FrameBodyIPLSTest.INVOLVED_PEOPLE+"*");
-        assertEquals(2,fb.getNumberOfValues());
-        assertEquals("producer",fb.getValueAtIndex(0));
-        assertEquals("eno,lanois",fb.getValueAtIndex(1));
+        assertEquals("*"+fb.getText()+"*","*"+FrameBodyTIPLTest.INVOLVED_PEOPLE+"*");
+        assertEquals(1,fb.getNumberOfPairs());
+        assertEquals("producer",fb.getKeyAtIndex(0));
+        assertEquals("eno,lanois",fb.getValueAtIndex(0));
     }
 }

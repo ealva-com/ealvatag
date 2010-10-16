@@ -1,9 +1,6 @@
 package org.jaudiotagger.tag.id3;
 
-import org.jaudiotagger.tag.id3.framebody.FrameBodyCOMM;
-import org.jaudiotagger.tag.id3.framebody.FrameBodyTXXX;
-import org.jaudiotagger.tag.id3.framebody.FrameBodyUFID;
-import org.jaudiotagger.tag.id3.framebody.FrameBodyWXXX;
+import org.jaudiotagger.tag.id3.framebody.*;
 
 /**
  * List of known id3v23 metadata fields
@@ -83,6 +80,12 @@ public enum ID3v23FieldKey
     URL_WIKIPEDIA_ARTIST_SITE(ID3v23Frames.FRAME_ID_V3_USER_DEFINED_URL, FrameBodyWXXX.URL_WIKIPEDIA_ARTIST_SITE, Id3FieldType.TEXT),
     URL_WIKIPEDIA_RELEASE_SITE(ID3v23Frames.FRAME_ID_V3_USER_DEFINED_URL, FrameBodyWXXX.URL_WIKIPEDIA_RELEASE_SITE, Id3FieldType.TEXT),
     YEAR(ID3v23Frames.FRAME_ID_V3_TYER, Id3FieldType.TEXT),
+    ENGINEER(ID3v23Frames.FRAME_ID_V3_IPLS, FrameBodyTIPL.ENGINEER, Id3FieldType.TEXT),
+    PRODUCER(ID3v23Frames.FRAME_ID_V3_IPLS, FrameBodyTIPL.PRODUCER, Id3FieldType.TEXT),
+    MIXER(ID3v23Frames.FRAME_ID_V3_IPLS, FrameBodyTIPL.MIXER, Id3FieldType.TEXT),
+    DJMIXER(ID3v23Frames.FRAME_ID_V3_IPLS, FrameBodyTIPL.DJMIXER, Id3FieldType.TEXT),
+    ARRANGER(ID3v23Frames.FRAME_ID_V3_IPLS, FrameBodyTIPL.ARRANGER, Id3FieldType.TEXT),
+
     ;
     private String fieldName;
 
