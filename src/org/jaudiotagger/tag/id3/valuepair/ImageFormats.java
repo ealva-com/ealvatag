@@ -37,7 +37,7 @@ import java.util.Map;
  *
  */
 //TODO identifying PICT, bit more difficult because in certain formats has an empty 512byte header
-public class ImageFormats
+public class  ImageFormats
 {
     public static final String V22_JPG_FORMAT = "JPG";
     public static final String V22_PNG_FORMAT = "PNG";
@@ -114,6 +114,10 @@ public class ImageFormats
     public static boolean binaryDataIsPngFormat(byte[] data)
     {
         //Read signature
+        if(data.length<4)
+        {
+            return false;
+        }
         return (0x89 == (data[0] & 0xff)) && (0x50 == (data[1] & 0xff)) && (0x4E == (data[2] & 0xff)) && (0x47 == (data[3] & 0xff));
     }
 
@@ -127,6 +131,10 @@ public class ImageFormats
      */
     public static boolean binaryDataIsJpgFormat(byte[] data)
     {
+        if(data.length<4)
+        {
+            return false;
+        }
         //Read signature
         //Can be FF D8 FF E0 or FF D8 FF E1
         //FF D8 is SOI Marker, FFE0 or FFE1 is JFIF Marker
@@ -141,6 +149,10 @@ public class ImageFormats
      */
     public static boolean binaryDataIsGifFormat(byte[] data)
     {
+        if(data.length<3)
+        {
+            return false;
+        }
         //Read signature
         return (0x47 == (data[0] & 0xff)) && (0x49 == (data[1] & 0xff)) && (0x46 == (data[2] & 0xff));
     }
