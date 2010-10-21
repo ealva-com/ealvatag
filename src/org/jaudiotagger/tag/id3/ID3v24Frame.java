@@ -568,7 +568,7 @@ public class ID3v24Frame extends AbstractID3v2Frame
             //the original check so can try again.
             logger.info(getLoggingFilename() + ":" + "Invalid identifier:" + identifier);
             byteBuffer.position(byteBuffer.position() - (getFrameIdSize() - 1));
-            throw new InvalidFrameIdentifierException(identifier + " is not a valid ID3v2.40 frame");
+            throw new InvalidFrameIdentifierException(getLoggingFilename() + ":" + identifier + ":is not a valid ID3v2.30 frame");
         }
 
         //Get the frame size, adjusted as necessary
