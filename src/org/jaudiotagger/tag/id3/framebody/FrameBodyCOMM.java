@@ -74,7 +74,7 @@ public class FrameBodyCOMM extends AbstractID3v2FrameBody implements ID3v24Frame
     public boolean isMediaMonkeyFrame()
     {
         String desc = getDescription();
-        if(desc!=null && !desc.isEmpty())
+        if(desc!=null && !(desc.length()==0))
         {
             if(desc.startsWith(MM_PREFIX))
             {
@@ -87,7 +87,7 @@ public class FrameBodyCOMM extends AbstractID3v2FrameBody implements ID3v24Frame
     public boolean isItunesFrame()
     {
         String desc = getDescription();
-        if(desc!=null && !desc.isEmpty())
+        if(desc!=null && !(desc.length()==0))
         {
             if(desc.equals(ITUNES_NORMALIZATION))
             {
