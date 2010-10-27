@@ -125,9 +125,12 @@ abstract public class AbstractID3v1Tag extends AbstractID3Tag
 
         FileChannel fc;
         ByteBuffer byteBuffer;
-
-
         fc = file.getChannel();
+
+        if(file.length() < TAG_LENGTH)
+        {
+            throw new IOException("File not not appear large enough to contain a tag");
+        }
         fc.position(file.length() - TAG_LENGTH);
         byteBuffer = ByteBuffer.allocate(TAG_LENGTH);
         fc.read(byteBuffer);
