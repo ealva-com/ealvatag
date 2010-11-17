@@ -4,6 +4,8 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.ArrayList;
 
+import static org.jaudiotagger.tag.id3.ID3v24Frames.FRAME_ID_ACCOMPANIMENT;
+
 /**
  * Orders frame Ids so that the most important frames are writtne first
  */
@@ -30,6 +32,7 @@ public class ID3v22PreferredFrameOrderComparator implements Comparator<String>
         frameIdsInPreferredOrder.add(ID3v22Frames.FRAME_ID_V2_BPM);
         frameIdsInPreferredOrder.add(ID3v22Frames.FRAME_ID_V2_ISRC);
         frameIdsInPreferredOrder.add(ID3v22Frames.FRAME_ID_V2_TORY);
+        frameIdsInPreferredOrder.add(ID3v22Frames.FRAME_ID_V2_ACCOMPANIMENT);
         frameIdsInPreferredOrder.add(ID3v22Frames.FRAME_ID_V2_TITLE_REFINEMENT);
         frameIdsInPreferredOrder.add(ID3v22Frames.FRAME_ID_V2_UNSYNC_LYRICS);
         frameIdsInPreferredOrder.add(ID3v22Frames.FRAME_ID_V2_USER_DEFINED_INFO);
@@ -62,7 +65,6 @@ public class ID3v22PreferredFrameOrderComparator implements Comparator<String>
         frameIdsInPreferredOrder.add(ID3v22Frames.FRAME_ID_V2_COMMENT);
 
         //Not so bothered about these
-        frameIdsInPreferredOrder.add(ID3v22Frames.FRAME_ID_V2_ACCOMPANIMENT);
         frameIdsInPreferredOrder.add(ID3v22Frames.FRAME_ID_V2_TRDA);
         frameIdsInPreferredOrder.add(ID3v22Frames.FRAME_ID_V2_COPYRIGHTINFO);
         frameIdsInPreferredOrder.add(ID3v22Frames.FRAME_ID_V2_ENCODEDBY);

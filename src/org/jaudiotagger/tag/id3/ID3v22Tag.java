@@ -103,6 +103,7 @@ public class ID3v22Tag extends AbstractID3v2Tag
     public ID3v22Tag()
     {
         frameMap = new LinkedHashMap();
+        encryptedFrameMap = new LinkedHashMap();
     }
 
     /**
@@ -156,6 +157,7 @@ public class ID3v22Tag extends AbstractID3v2Tag
     public ID3v22Tag(AbstractTag mp3tag)
     {
         frameMap = new LinkedHashMap();
+        encryptedFrameMap = new LinkedHashMap();
         logger.info("Creating tag from a tag of a different version");
         //Default Superclass constructor does nothing
         if (mp3tag != null)
@@ -177,6 +179,7 @@ public class ID3v22Tag extends AbstractID3v2Tag
             {
                 convertedTag = new ID3v24Tag(mp3tag);
             }
+            this.setLoggingFilename(convertedTag.getLoggingFilename());
             //Set the primitive types specific to v2_2.
             copyPrimitives(convertedTag);
             //Set v2.2 Frames
@@ -256,7 +259,7 @@ public class ID3v22Tag extends AbstractID3v2Tag
     {
         try
         {
-            //Special case to handle TDRC frame from V24 that needs breaking up into seperate frame in V23
+            //Special case to handle TDRC frame from V24 that needs breaking up into separate frame in V23
             if ((frame.getIdentifier().equals(ID3v24Frames.FRAME_ID_YEAR)) && (frame.getBody() instanceof FrameBodyTDRC))
             {
                 translateFrame(frame);
@@ -386,6 +389,8 @@ public class ID3v22Tag extends AbstractID3v2Tag
         //Now start looking for frames
         ID3v22Frame next;
         frameMap = new LinkedHashMap();
+        encryptedFrameMap = new LinkedHashMap();
+
         //Read the size from the Tag Header
         this.fileReadSize = size;
         logger.finest(getLoggingFilename() + ":" + "Start of frame body at:" + byteBuffer.position() + ",frames sizes and padding is:" + size);
@@ -404,6 +409,12 @@ public class ID3v22Tag extends AbstractID3v2Tag
                 String id = next.getIdentifier();
                 loadFrameIntoMap(id, next);
             }
+            //Found Padding, no more frames
+            catch (PaddingException ex)
+            {
+                logger.config(getLoggingFilename() + ":Found padding starting at:" + byteBuffer.position());
+                break;
+            }
             //Found Empty Frame
             catch (EmptyFrameException ex)
             {
@@ -413,7 +424,7 @@ public class ID3v22Tag extends AbstractID3v2Tag
             catch (InvalidFrameIdentifierException ifie)
             {
                 logger.info(getLoggingFilename() + ":" + "Invalid Frame Identifier:" + ifie.getMessage());
-                this.invalidFrameBytes++;
+                this.invalidFrames++;
                 //Dont try and find any more frames
                 break;
             }
@@ -421,11 +432,19 @@ public class ID3v22Tag extends AbstractID3v2Tag
             catch (InvalidFrameException ife)
             {
                 logger.warning(getLoggingFilename() + ":" + "Invalid Frame:" + ife.getMessage());
-                this.invalidFrameBytes++;
+                this.invalidFrames++;
                 //Dont try and find any more frames
                 break;
             }
+            //Failed reading frame but may just have invalid data but correct length so lets carry on
+            //in case we can read the next frame
+            catch(InvalidDataTypeException idete)
+            {
+                logger.warning(getLoggingFilename() + ":Corrupt Frame:" + idete.getMessage());
+                this.invalidFrames++;
+                continue;
             }
+        }
     }
 
     /**
@@ -503,7 +522,8 @@ public class ID3v22Tag extends AbstractID3v2Tag
     @Override
     public void write(File file, long audioStartLocation) throws IOException
     {
-        logger.info("Writing tag to file");
+        setLoggingFilename(file.getName());
+        logger.info("Writing tag to file:"+getLoggingFilename());
 
         // Write Body Buffer
         byte[] bodyByteBuffer = writeFramesToBuffer().toByteArray();
@@ -654,7 +674,7 @@ public class ID3v22Tag extends AbstractID3v2Tag
         }
         else
         {
-            return super.doGetFirst(frameAndSubId);
+            return super.doGetValueAtIndex(frameAndSubId, 0);
         }
     }
 
@@ -673,6 +693,14 @@ public class ID3v22Tag extends AbstractID3v2Tag
         super.doDeleteTagField(new FrameAndSubId(id3v22FieldKey.getFrameId(), id3v22FieldKey.getSubId()));
     }
 
+     /**
+     * Delete fields with this (frame) id
+     * @param id
+     */
+    public void deleteField(String id)
+    {
+        super.doDeleteTagField(new FrameAndSubId(id,null));
+    }
 
     protected FrameAndSubId getFrameAndSubIdFromGenericKey(FieldKey genericKey)
     {

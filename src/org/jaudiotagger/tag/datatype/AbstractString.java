@@ -79,7 +79,7 @@ public abstract class AbstractString extends AbstractDataType
     }
 
     /**
-     * Sets the size in bytes of this datatype.
+     * Sets the size in bytes of this data type.
      * This is set after writing the data to allow us to recalculate the size for
      * frame header.
      * @param size
@@ -90,7 +90,7 @@ public abstract class AbstractString extends AbstractDataType
     }
 
     /**
-     * Return String representation of datatype
+     * Return String representation of data type
      *
      * @return a string representation of the value
      */

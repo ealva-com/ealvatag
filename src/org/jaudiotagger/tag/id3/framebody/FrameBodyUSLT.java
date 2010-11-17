@@ -29,14 +29,12 @@ import java.nio.ByteBuffer;
  * Unsychronised lyrics/text transcription frame.
  * <p/>
  * <p/>
- * This frame contains the lyrics of the song or a text transcription of
- * other vocal activities. The head includes an encoding descriptor and
- * a content descriptor. The body consists of the actual text. The
- * 'Content descriptor' is a terminated string. If no descriptor is
- * entered, 'Content descriptor' is $00 (00) only. Newline characters
- * are allowed in the text. There may be more than one 'Unsynchronised
- * lyrics/text transcription' frame in each tag, but only one with the
- * same language and content descriptor.
+ * This frame contains the lyrics of the song or a text transcription of other vocal activities. The head includes an
+ * encoding descriptor and a content descriptor. The body consists of the actual text. The 'Content descriptor' is a
+ * terminated string. If no descriptor is entered, 'Content descriptor' is $00 (00) only. Newline characters are
+ * allowed in the text. There may be more than one 'Unsynchronised lyrics/text transcription' frame in each tag, but
+ * only one with the same language and content descriptor.
+ *
  * </p><p><table border=0 width="70%">
  * <tr><td colspan=2>&lt;Header for 'Unsynchronised lyrics/text transcription', ID: "USLT"&gt;</td></tr>
  * <tr><td>Text encoding     </td><td width="80%">$xx</td></tr>
@@ -59,14 +57,14 @@ import java.nio.ByteBuffer;
 public class FrameBodyUSLT extends AbstractID3v2FrameBody implements ID3v23FrameBody, ID3v24FrameBody
 {
     /**
-     * Creates a new FrameBodyUSLT datatype.
+     * Creates a new FrameBodyUSLT dataType.
      */
     public FrameBodyUSLT()
     {
-        //        setObject("Text Encoding", new Byte((byte) 0));
-        //        setObject("Language", "");
-        //        setObject(ObjectTypes.OBJ_DESCRIPTION, "");
-        //        setObject("Lyrics/Text", "");
+        setObjectValue(DataTypes.OBJ_TEXT_ENCODING, TextEncoding.ISO_8859_1);
+        setObjectValue(DataTypes.OBJ_LANGUAGE, "");
+        setObjectValue(DataTypes.OBJ_DESCRIPTION, "");
+        setObjectValue(DataTypes.OBJ_LYRICS, "");
     }
 
     /**
@@ -107,6 +105,12 @@ public class FrameBodyUSLT extends AbstractID3v2FrameBody implements ID3v23Frame
     {
         super(byteBuffer, frameSize);
     }
+
+    public String getUserFriendlyValue()
+    {
+        return getFirstTextValue();
+    }
+
 
     /**
      * Set a description field
@@ -212,7 +216,7 @@ public class FrameBodyUSLT extends AbstractID3v2FrameBody implements ID3v23Frame
     {
 
         //Ensure valid for type
-        this.setTextEncoding(ID3TextEncodingConversion.getTextEncoding(getHeader(), TextEncoding.ISO_8859_1));
+        this.setTextEncoding(ID3TextEncodingConversion.getTextEncoding(getHeader(), getTextEncoding()));
 
         //Ensure valid for data                    
         if (!((AbstractString) getObject(DataTypes.OBJ_DESCRIPTION)).canBeEncoded())

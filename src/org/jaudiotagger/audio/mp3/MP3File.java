@@ -351,8 +351,8 @@ public class MP3File extends AudioFile
     }
 
     /**
-     * Creates a new MP3File datatype and parse the tag from the given file
-     * Object, files can be onpened read only if required.
+     * Creates a new MP3File dataType and parse the tag from the given file
+     * Object, files can be opened read only if required.
      *
      * @param file        MP3 file
      * @param loadOptions decide what tags to load
@@ -372,7 +372,7 @@ public class MP3File extends AudioFile
             //Check File accessibility
             newFile = checkFilePermissions(file, readOnly);
 
-            //Read ID3v2 tag size (if tag exists) to allow audioheader parsing to skip over tag
+            //Read ID3v2 tag size (if tag exists) to allow audioHeader parsing to skip over tag
             long startByte = AbstractID3v2Tag.getV2TagSizeIfExists(file);
 
             //If exception reading Mpeg then we should give up no point continuing
@@ -427,7 +427,7 @@ public class MP3File extends AudioFile
     {
         try
         {
-            //Read ID3v2 tag size (if tag exists) to allow audioheader parsing to skip over tag
+            //Read ID3v2 tag size (if tag exists) to allow audio header parsing to skip over tag
             long startByte = AbstractID3v2Tag.getV2TagSizeIfExists(file);
 
             MP3AudioHeader audioHeader = new MP3AudioHeader(file, startByte);
@@ -557,12 +557,12 @@ public class MP3File extends AudioFile
     }
 
     /**
-     * Sets the <code>ID3v1</code> tag for this datatype. A new
-     * <code>ID3v1_1</code> datatype is created from the argument and then used
+     * Sets the <code>ID3v1</code> tag for this dataType. A new
+     * <code>ID3v1_1</code> dataType is created from the argument and then used
      * here.
      *
-     * @param mp3tag Any MP3Tag datatype can be used and will be converted into a
-     *               new ID3v1_1 datatype.
+     * @param mp3tag Any MP3Tag dataType can be used and will be converted into a
+     *               new ID3v1_1 dataType.
      */
     public void setID3v1Tag(AbstractTag mp3tag)
     {
@@ -571,9 +571,9 @@ public class MP3File extends AudioFile
     }
 
     /**
-     * Returns the <code>ID3v1</code> tag for this datatype.
+     * Returns the <code>ID3v1</code> tag for this dataType.
      *
-     * @return the <code>ID3v1</code> tag for this datatype
+     * @return the <code>ID3v1</code> tag for this dataType
      */
     public ID3v1Tag getID3v1Tag()
     {
@@ -581,12 +581,12 @@ public class MP3File extends AudioFile
     }
 
     /**
-     * Sets the <code>ID3v2</code> tag for this datatype. A new
-     * <code>ID3v2_4</code> datatype is created from the argument and then used
+     * Sets the <code>ID3v2</code> tag for this dataType. A new
+     * <code>ID3v2_4</code> dataType is created from the argument and then used
      * here.
      *
-     * @param mp3tag Any MP3Tag datatype can be used and will be converted into a
-     *               new ID3v2_4 datatype.
+     * @param mp3tag Any MP3Tag dataType can be used and will be converted into a
+     *               new ID3v2_4 dataType.
      */
     public void setID3v2Tag(AbstractTag mp3tag)
     {
@@ -615,11 +615,12 @@ public class MP3File extends AudioFile
     }
 
     /**
-     * Set v2 tag ,dont need to set v24 tag because saving
+     * Set v2 tag ,don't need to set v24 tag because saving
      * <p/>
-     * TODO temp its rather messy
+
      * @param id3v2tag
      */
+    //TODO temp its rather messy
     public void setID3v2TagOnly(AbstractID3v2Tag id3v2tag)
     {
         this.id3v2tag = id3v2tag;
@@ -645,12 +646,13 @@ public class MP3File extends AudioFile
     }
 
     /**
-     * Sets the <code>Lyrics3</code> tag for this datatype. A new
-     * <code>Lyrics3v2</code> datatype is created from the argument and then
+     * Sets the <code>Lyrics3</code> tag for this dataType. A new
+     * <code>Lyrics3v2</code> dataType is created from the argument and then
+     *
      * used here.
      *
-     * @param mp3tag Any MP3Tag datatype can be used and will be converted into a
-     *               new Lyrics3v2 datatype.
+     * @param mp3tag Any MP3Tag dataType can be used and will be converted into a
+     *               new Lyrics3v2 dataType.
      */
     /*
     public void setLyrics3Tag(AbstractTag mp3tag)
@@ -692,11 +694,22 @@ public class MP3File extends AudioFile
      */
     public void delete(AbstractTag mp3tag) throws FileNotFoundException, IOException
     {
-        mp3tag.delete(new RandomAccessFile(this.file, "rws"));
+        RandomAccessFile raf = new RandomAccessFile(this.file, "rws");
+        mp3tag.delete(raf);
+        raf.close();
+        if(mp3tag instanceof ID3v1Tag)
+        {
+            id3v1tag=null;
+        }
+
+        if(mp3tag instanceof AbstractID3v2Tag)
+        {
+            id3v2tag=null;
+        }
     }
 
     /**
-     * Saves the tags in this datatype to the file referred to by this datatype.
+     * Saves the tags in this dataType to the file referred to by this dataType.
      *
      * @throws IOException  on any I/O error
      * @throws TagException on any exception generated by this library.
@@ -707,7 +720,7 @@ public class MP3File extends AudioFile
     }
 
     /**
-     * Overriden for comptability with merged code
+     * Overridden for compatibility with merged code
      *
      * @throws CannotWriteException
      */
@@ -755,10 +768,10 @@ public class MP3File extends AudioFile
     }
 
     /**
-     * Saves the tags in this datatype to the file argument. It will be saved as
+     * Saves the tags in this dataType to the file argument. It will be saved as
      * TagConstants.MP3_FILE_SAVE_WRITE
      *
-     * @param file file to save the this datatype's tags to
+     * @param file file to save the this dataTypes tags to
      * @throws FileNotFoundException if unable to find file
      * @throws IOException           on any I/O error
      */

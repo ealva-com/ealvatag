@@ -128,7 +128,7 @@ public class ID3Tags
         {
             return null;
         }
-        return ID3Frames.convertv22Tov23.get(identifier.subSequence(0, 3));
+        return ID3Frames.convertv22Tov23.get((String)identifier.subSequence(0, 3));
     }
 
     /**
@@ -294,7 +294,7 @@ public class ID3Tags
      * Unable to instantiate abstract classes, so can't call the copy
      * constructor. So find out the instantiated class name and call the copy
      * constructor through reflection (e.g for a a FrameBody would have to have a constructor
-     * that takes another framebody as the same type as a parameter)
+     * that takes another frameBody as the same type as a parameter)
      *
      * @param copyObject
      * @return

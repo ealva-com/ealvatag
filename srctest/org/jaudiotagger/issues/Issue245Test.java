@@ -197,6 +197,7 @@ public class Issue245Test extends AbstractTestCase
             assertEquals("image/png", artwork.getMimeType());
             assertNotNull(artwork.getImage());
             assertEquals(200, artwork.getImage().getWidth());
+
             //Now replace the image
             Artwork newartwork = Artwork.createArtworkFromFile(new File("testdata", "coverart.png"));
             assertTrue(ImageFormats.isPortableFormat(newartwork.getBinaryData()));
@@ -237,7 +238,7 @@ public class Issue245Test extends AbstractTestCase
         Exception exceptionCaught = null;
         try
         {
-            testFile = AbstractTestCase.copyAudioToTmp("test.flac");
+            testFile = AbstractTestCase.copyAudioToTmp("test.flac",new File("testwriteartwork.flac"));
 
             //Read File okay
             AudioFile af = AudioFileIO.read(testFile);

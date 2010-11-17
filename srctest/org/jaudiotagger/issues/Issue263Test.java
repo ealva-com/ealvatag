@@ -124,9 +124,7 @@ public class Issue263Test extends AbstractTestCase
             e.printStackTrace();
             exceptionCaught = e;
         }
-        assertNotNull(exceptionCaught);
-        //Key not found because vorbis comment reuires two fields we dont map to just single generic field
-        assertTrue(exceptionCaught instanceof KeyNotFoundException);
+        assertNull(exceptionCaught);
     }
 
     /**

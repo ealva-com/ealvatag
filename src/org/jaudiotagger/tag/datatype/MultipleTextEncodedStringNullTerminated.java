@@ -11,7 +11,7 @@ import java.util.ListIterator;
 import java.util.logging.Level;
 
 /**
- * Represents a datatype that supports multiple terminated Strings (there may only be one)
+ * Represents a data type that supports multiple terminated Strings (there may only be one)
  */
 public class MultipleTextEncodedStringNullTerminated extends AbstractDataType
 {
@@ -157,7 +157,7 @@ public class MultipleTextEncodedStringNullTerminated extends AbstractDataType
     }
 
     /**
-     * This holds the values held by a MultipleTextEncodedDatatype
+     * This holds the values held by a MultipleTextEncodedData type
      */
     public static class Values
     {
@@ -169,7 +169,7 @@ public class MultipleTextEncodedStringNullTerminated extends AbstractDataType
         }
 
         /**
-         * Add String Datatype to the value list
+         * Add String Data type to the value list
          *
          * @param value to add to the list
          */
@@ -199,7 +199,7 @@ public class MultipleTextEncodedStringNullTerminated extends AbstractDataType
         }
 
         /**
-         * Return the list of values as a single string seperated by a comma
+         * Return the list of values as a single string separated by a comma
          *
          * @return a string representation of the value
          */

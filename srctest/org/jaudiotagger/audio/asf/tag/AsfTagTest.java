@@ -55,7 +55,7 @@ public class AsfTagTest extends TestCase
         TagField albumField = asfTag.createField(FieldKey.ALBUM, AsfFieldKey.ALBUM.getFieldName());
         asfTag.addField(albumField);
         assertSame(albumField, asfTag.getFields(FieldKey.ALBUM).get(0));
-        assertSame(albumField, asfTag.get(AsfFieldKey.ALBUM.getFieldName()).get(0));
+        assertSame(albumField, asfTag.getFields(AsfFieldKey.ALBUM.getFieldName()).get(0));
     }
 
     

@@ -34,7 +34,7 @@ public class Issue249Test extends AbstractTestCase
             //This is a V2 File with an IPL frame
             File testFile = AbstractTestCase.copyAudioToTmp("test34.mp3");
 
-            //Add a v24Tag
+            //Convert to v24Tag
             AudioFile af = AudioFileIO.read(testFile);
             MP3File mp3File= (MP3File)af;
             v24tag = mp3File.getID3v2TagAsv24();
@@ -52,18 +52,18 @@ public class Issue249Test extends AbstractTestCase
 
         assertNotNull(frame);
         assertNotNull(framev2);
-        FrameBodyTIPL framebody = (FrameBodyTIPL)frame.getBody();
-        assertEquals(1,framebody.getNumberOfValues());
-        assertEquals(",PRAISE J.R. \"BOB\" DOBBS!!!",framebody.getFirstTextValue());
-        assertEquals(",PRAISE J.R. \"BOB\" DOBBS!!!",framebody.getValueAtIndex(0));
 
+        //Original
         FrameBodyIPLS framebodyv2 = (FrameBodyIPLS)framev2.getBody();
-        assertEquals(2,framebodyv2.getNumberOfValues());
-        assertEquals(1,framebodyv2.getNumberOfPairs());   
-        assertEquals("",framebodyv2.getValueAtIndex(0));
-        assertEquals("PRAISE J.R. \"BOB\" DOBBS!!!",framebodyv2.getValueAtIndex(1));
+        assertEquals(1,framebodyv2.getNumberOfPairs());
+        assertEquals("",framebodyv2.getKeyAtIndex(0));
+        assertEquals("PRAISE J.R. \"BOB\" DOBBS!!!",framebodyv2.getValueAtIndex(0));
 
-
+        //Converted to v24
+        FrameBodyTIPL framebody = (FrameBodyTIPL)frame.getBody();
+        assertEquals(1,framebody.getNumberOfPairs());
+        assertEquals("",framebody.getKeyAtIndex(0));
+        assertEquals("PRAISE J.R. \"BOB\" DOBBS!!!",framebody.getValueAtIndex(0));
     }
 
 }

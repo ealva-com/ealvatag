@@ -27,7 +27,7 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 
 /**
- * Read encoding and tag info for Flac file (opensource lossless encoding)
+ * Read encoding and tag info for Flac file (open source lossless encoding)
  */
 public class FlacFileReader extends AudioFileReader
 {

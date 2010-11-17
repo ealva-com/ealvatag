@@ -7,6 +7,7 @@ import org.jaudiotagger.audio.AudioFileIO;
 import org.jaudiotagger.audio.flac.FlacInfoReader;
 import org.jaudiotagger.audio.flac.metadatablock.MetadataBlockDataPicture;
 import org.jaudiotagger.tag.FieldKey;
+import org.jaudiotagger.tag.TagField;
 import org.jaudiotagger.tag.id3.valuepair.ImageFormats;
 import org.jaudiotagger.tag.reference.PictureTypes;
 
@@ -16,6 +17,7 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.RandomAccessFile;
+import java.util.List;
 
 /**
  * basic Flac tests
@@ -50,7 +52,7 @@ public class FlacWriteTest extends TestCase
             tag.addField(FieldKey.ARTIST,"artist\u01ff");
             tag.addField(FieldKey.ALBUM,"album");
             tag.addField(FieldKey.TITLE,"title");
-            assertEquals(1, tag.get(FieldKey.TITLE.name()).size());
+            assertEquals(1, tag.getFields(FieldKey.TITLE.name()).size());
             tag.addField(FieldKey.YEAR,"1971");
             assertEquals(1, tag.getFields(FieldKey.YEAR).size());
             tag.addField(FieldKey.TRACK,"2");
@@ -107,7 +109,7 @@ public class FlacWriteTest extends TestCase
             assertEquals(1, tag.getFields(FieldKey.YEAR).size());
             assertEquals(1, tag.getFields(FieldKey.TRACK).size());
             //One Image
-            assertEquals(1, tag.get(FieldKey.COVER_ART.name()).size());
+            assertEquals(1, tag.getFields(FieldKey.COVER_ART.name()).size());
             assertEquals(1, tag.getImages().size());
             MetadataBlockDataPicture pic = tag.getImages().get(0);
             assertEquals((int) PictureTypes.DEFAULT_ID, pic.getPictureType());
@@ -139,7 +141,7 @@ public class FlacWriteTest extends TestCase
             f.commit();
 
             //Two Images
-            assertEquals(2, tag.get(FieldKey.COVER_ART.name()).size());
+            assertEquals(2, tag.getFields(FieldKey.COVER_ART.name()).size());
             assertEquals(2, tag.getImages().size());
             pic = tag.getImages().get(1);
             assertEquals((int) PictureTypes.DEFAULT_ID, pic.getPictureType());
@@ -314,6 +316,7 @@ public class FlacWriteTest extends TestCase
             assertEquals("reference libFLAC 1.1.4 20070213", tag.getVorbisCommentTag().getVendor());
             tag = (FlacTag) f.getTag();
             assertEquals("BLOCK", tag.getFirst(FieldKey.ARTIST));
+            assertEquals(1,tag.getArtworkList().size());
 
         }
         catch (Exception e)
@@ -332,5 +335,54 @@ public class FlacWriteTest extends TestCase
 
         f = AudioFileIO.read(testFile);
         assertTrue(f.getTag().isEmpty());
+    }
+
+    public void testWriteMultipleFields() throws Exception
+    {
+        File testFile = AbstractTestCase.copyAudioToTmp("test.flac", new File("testWriteMultiple.flac"));
+        AudioFile f = AudioFileIO.read(testFile);
+        List<TagField> tagFields = f.getTag().getFields(FieldKey.ALBUM_ARTIST_SORT);
+        assertEquals(0,tagFields.size());
+        f.getTag().addField(FieldKey.ALBUM_ARTIST_SORT,"artist1");
+        f.getTag().addField(FieldKey.ALBUM_ARTIST_SORT,"artist2");
+        tagFields = f.getTag().getFields(FieldKey.ALBUM_ARTIST_SORT);
+        assertEquals(2,tagFields.size());
+        f.commit();
+        f = AudioFileIO.read(testFile);
+        tagFields = f.getTag().getFields(FieldKey.ALBUM_ARTIST_SORT);
+        assertEquals(2,tagFields.size());
+    }
+
+     public void testDeleteFields() throws Exception
+    {
+        //Delete using generic key
+        File testFile = AbstractTestCase.copyAudioToTmp("test.flac", new File("testWriteMultiple.flac"));
+        AudioFile f = AudioFileIO.read(testFile);
+        List<TagField> tagFields = f.getTag().getFields(FieldKey.ALBUM_ARTIST_SORT);
+        assertEquals(0,tagFields.size());
+        f.getTag().addField(FieldKey.ALBUM_ARTIST_SORT,"artist1");
+        f.getTag().addField(FieldKey.ALBUM_ARTIST_SORT,"artist2");
+        tagFields = f.getTag().getFields(FieldKey.ALBUM_ARTIST_SORT);
+        assertEquals(2,tagFields.size());
+        f.getTag().deleteField(FieldKey.ALBUM_ARTIST_SORT);
+        f.commit();
+
+        //Delete using flac id
+        f = AudioFileIO.read(testFile);
+        tagFields = f.getTag().getFields(FieldKey.ALBUM_ARTIST_SORT);
+        assertEquals(0,tagFields.size());
+        f.getTag().addField(FieldKey.ALBUM_ARTIST_SORT,"artist1");
+        f.getTag().addField(FieldKey.ALBUM_ARTIST_SORT,"artist2");
+        tagFields = f.getTag().getFields(FieldKey.ALBUM_ARTIST_SORT);
+        assertEquals(2,tagFields.size());
+        f.getTag().deleteField("ALBUMARTISTSORT");
+        tagFields = f.getTag().getFields(FieldKey.ALBUM_ARTIST_SORT);
+        assertEquals(0,tagFields.size());
+        f.commit();
+
+        f = AudioFileIO.read(testFile);
+        tagFields = f.getTag().getFields(FieldKey.ALBUM_ARTIST_SORT);
+        assertEquals(0,tagFields.size());
+
     }
 }

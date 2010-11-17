@@ -59,7 +59,7 @@ public class FlacHeaderTest extends TestCase
 
             //Images
             assertEquals(2, tag.getFields(FieldKey.COVER_ART).size());
-            assertEquals(2, tag.get(FieldKey.COVER_ART.name()).size());
+            assertEquals(2, tag.getFields(FieldKey.COVER_ART.name()).size());
             assertEquals(2, tag.getImages().size());
 
             //Image

@@ -22,6 +22,7 @@ import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.exceptions.CannotReadException;
 import org.jaudiotagger.audio.exceptions.CannotWriteException;
 import org.jaudiotagger.audio.exceptions.ModifyVetoException;
+import org.jaudiotagger.audio.mp3.MP3File;
 import org.jaudiotagger.logging.ErrorMessage;
 import org.jaudiotagger.tag.Tag;
 
@@ -305,6 +306,13 @@ public abstract class AudioFileWriter
 
         // Prechecks
         precheckWrite(af);
+
+        //mp3's use a different mechanism to the other formats
+        if(af instanceof MP3File)
+        {
+            af.commit();
+            return;
+        }
 
         RandomAccessFile raf = null;
         RandomAccessFile rafTemp = null;

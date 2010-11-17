@@ -1,6 +1,6 @@
 /*
  * Entagged Audio Tag library
- * Copyright (c) 2003-2005 Raphaël Slinckx <raphael@slinckx.net>
+ * Copyright (c) 2003-2010 Raphaël Slinckx <raphael@slinckx.net>
  * 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -25,15 +25,15 @@ import java.util.List;
 
 /**
  * This interface represents the basic data structure for the default
- * audiolibrary functionality.<br>
+ * audio library functionality.<br>
  * <p/>
  * Some audio file tagging systems allow to specify multiple values for one type
  * of information. The artist for example. Some songs may be a cooperation of
  * two or more artists. Sometimes a tagging user wants to specify them in the
  * tag without making one long text string.<br>
- * For that kind of fields, the <b>commonly</b> used fields have adequate
- * methods for adding values. But it is possible the underlying implementation
- * does not support that kind of storing multiple values.<br>
+ *
+ * The addField() method can be used for this but it is possible the underlying implementation
+ * does not support that kind of storing multiple values and will just overwrite the existing value<br>
  * <br>
  * <b>Code Examples:</b><br>
  * <p/>
@@ -46,6 +46,7 @@ import java.util.List;
  * </pre>
  *
  * @author Raphael Slinckx
+ * @author Paul Taylor
  */
 public interface Tag {
     /**
@@ -60,6 +61,8 @@ public interface Tag {
 
     /**
      * Create the field based on the generic key and add it to the tag
+     *
+     * This is handled differently by different formats
      *
      * @param genericKey
      * @param value
@@ -77,13 +80,41 @@ public interface Tag {
     public void deleteField(FieldKey fieldKey) throws KeyNotFoundException;
 
     /**
+     * Delete any fields with this Flac (Vorbis Comment) id
+     *
+     * @param key
+     * @throws KeyNotFoundException
+     */
+    public void deleteField(String key)throws KeyNotFoundException;
+
+    /**
+     * Returns a {@linkplain List list} of {@link TagField} objects whose &quot;{@linkplain TagField#getId() id}&quot;
+     * is the specified one.<br>
+     *
+     * <p>Can be used to retrieve fields with any identifier, useful if the identifier is not within {@link FieldKey}
+     *
+     * @param id The field id.
+     * @return A list of {@link TagField} objects with the given &quot;id&quot;.
+     */
+    public List<TagField> getFields(String id);
+
+    /**
      * Returns a {@linkplain List list} of {@link TagField} objects whose &quot;{@linkplain TagField#getId() id}&quot;
      * is the specified one.<br>
      *
      * @param id The field id.
      * @return A list of {@link TagField} objects with the given &quot;id&quot;.
+     * @throws KeyNotFoundException
      */
-    public List<TagField> get(String id);
+    public List<TagField> getFields(FieldKey id) throws KeyNotFoundException;
+
+
+    /**
+     * Iterator over all the fields within the tag, handle multiple fields with the same id
+     *
+     * @return iterator over whole list
+     */
+    public Iterator<TagField> getFields();
 
 
     /**
@@ -96,8 +127,10 @@ public interface Tag {
      */
     public String getFirst(String id);
 
+
+
     /**
-     * Retrieve String value of the first tagfield that exists for this generic key
+     * Retrieve String value of the first tag field that exists for this generic key
      *
      * @param id
      * @return String value or empty string
@@ -106,12 +139,35 @@ public interface Tag {
     public String getFirst(FieldKey id) throws KeyNotFoundException;
 
     /**
+     * Retrieve String value of the nth tag field that exists for this generic key
+     *
+     * @param id
+     * @param n
+     * @return
+     */
+    public String getValue(FieldKey id, int n);
+
+    /**
+     * Retrieve String value of the mth field within the nth tag field that exists for this id
+     *
+     * <p>This method id useful for formats that hold multiple values within one field, namely ID3v2 can
+     * hold multiple values within one Text Frame. the #getValue() method will return all values within the
+     * frame but this method lets you retrieve just the individual values.
+     * </p>
+     *
+     * @param id
+     * @param n
+     * @return
+     */
+    public String getSubValue(FieldKey id, int n, int m);
+
+    /**
      * Retrieve the first field that exists for this format specific key
      * <p/>
      * <p>Can be used to retrieve fields with any identifier, useful if the identifier is not within {@link FieldKey}
      *
      * @param id audio specific key
-     * @return tag field or null if doesnt exist
+     * @return tag field or null if doesn't exist
      */
     public TagField getFirstField(String id);
 
@@ -152,33 +208,31 @@ public interface Tag {
     //TODO, do we need this
     public String toString();
 
-    /**
-     * Returns a {@linkplain List list} of {@link TagField} objects whose &quot;{@linkplain TagField#getId() id}&quot;
-     * is the specified one.<br>
-     *
-     * @param id The field id.
-     * @return A list of {@link TagField} objects with the given &quot;id&quot;.
-     * @throws KeyNotFoundException
-     */
-    public List<TagField> getFields(FieldKey id) throws KeyNotFoundException;
 
-
-    /**
-     * Iterator over all the fields within the tag, handle multiple fields with the same id
-     *
-     * @return iterator over whole list
-     */
-    public Iterator<TagField> getFields();
 
     /**
      * Return the number of fields
      * <p/>
-     * <p>Fields with the same identifiers are counted seperately
-     * i.e two title fields would contribute two to the count
+     * <p>Fields with the same identifiers are counted separately
+     *
+     * i.e two TITLE fields in a Vorbis Comment file would count as two
      *
      * @return total number of fields
      */
     public int getFieldCount();
+
+
+    /**
+     * Return the number of fields taking multiple value fields into consideration
+     *
+     * Fields that actually contain multiple values are counted seperately
+     *
+     * i.e. a TCON frame in ID3v24 frame containing multiple genres would add to count for each genre.
+     *
+     * @return total number of fields taking multiple value fields into consideration
+     */
+    public int getFieldCountIncludingSubValues();
+
 
     //TODO is this a special field?
     public boolean setEncoding(String enc) throws FieldDataInvalidException;
@@ -235,18 +289,6 @@ public interface Tag {
     /**
      * Sets a field in the structure, used internally by the library<br>
      * <p/>
-     * <p>It is not recommended to use this method for normal use of the
-     * audiolibrary. The developer will circumvent the underlying
-     * implementation. For example, if one adds a field with the field id
-     * &quot;TALB&quot; for an mp3 file, and the given {@link TagField}
-     * implementation does not return a text field compliant data with
-     * {@link TagField#getRawContent()} other software and the audio library
-     * won't read the file correctly, if they do read it at all. <br>
-     * So for short:<br>
-     * <uil>
-     * <li>The field is stored without validation</li>
-     * <li>No conversion of data is perfomed</li>
-     * </ul>
      *
      * @param field The field to add.
      * @throws FieldDataInvalidException
@@ -256,18 +298,6 @@ public interface Tag {
     /**
      * Adds a field to the structure, used internally by the library<br>
      * <p/>
-     * <p>It is not recommended to use this method for normal use of the
-     * audiolibrary. The developer will circumvent the underlying
-     * implementation. For example, if one adds a field with the field id
-     * &quot;TALB&quot; for an mp3 file, and the given {@link TagField}
-     * implementation does not return a text field compliant data with
-     * {@link TagField#getRawContent()} other software and the audio library
-     * won't read the file correctly, if they do read it at all. <br>
-     * So for short:<br>
-     * <uil>
-     * <li>The field is stored without validation</li>
-     * <li>No conversion of data is perfomed</li>
-     * </ul>
      *
      * @param field The field to add.
      * @throws FieldDataInvalidException
@@ -280,8 +310,6 @@ public interface Tag {
      * <p>Only textual data supported at the moment. The genericKey will be mapped
      * to the correct implementation key and return a TagField.
      * <p/>
-     * It is not recommended to use this method for normal use of the
-     * audiolibrary, because this field is actually added to the structure
      *
      * @param genericKey is the generic key
      * @param value      to store

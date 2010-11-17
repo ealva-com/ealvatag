@@ -22,7 +22,8 @@ import java.nio.ByteBuffer;
 
 /**
  * Encoded by Text information frame.
- * <p>The 'Encoded by' frame contains the name of the person or organisation that encoded the audio file. This field may contain a copyright message, if the audio file also is copyrighted by the encoder.
+ * <p>The 'Encoded by' frame contains the name of the person or organisation that encoded the audio file.
+ *  This field may contain a copyright message, if the audio file also is copyrighted by the encoder.
  * <p/>
  * <p>For more details, please refer to the ID3 specifications:
  * <ul>
@@ -36,7 +37,7 @@ import java.nio.ByteBuffer;
 public class FrameBodyTENC extends AbstractFrameBodyTextInfo implements ID3v24FrameBody, ID3v23FrameBody
 {
     /**
-     * Creates a new FrameBodyTENC datatype.
+     * Creates a new FrameBodyTENC dataType.
      */
     public FrameBodyTENC()
     {
@@ -48,7 +49,7 @@ public class FrameBodyTENC extends AbstractFrameBodyTextInfo implements ID3v24Fr
     }
 
     /**
-     * Creates a new FrameBodyTENC datatype.
+     * Creates a new FrameBodyTENC dataType.
      *
      * @param textEncoding
      * @param text
@@ -59,7 +60,7 @@ public class FrameBodyTENC extends AbstractFrameBodyTextInfo implements ID3v24Fr
     }
 
     /**
-     * Creates a new FrameBodyTENC datatype.
+     * Creates a new FrameBodyTENC dataType.
      *
      * @param byteBuffer
      * @param frameSize

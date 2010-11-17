@@ -83,9 +83,9 @@ public abstract class AbstractTag implements Tag
     /**
      * Get list of fields within this tag with the specified id
      *
-     * @see org.jaudiotagger.tag.Tag#get(java.lang.String)
+     * @see org.jaudiotagger.tag.Tag#getFields(java.lang.String)
      */
-    public List<TagField> get(String id)
+    public List<TagField> getFields(String id)
     {
         List<TagField> list = fields.get(id);
 
@@ -116,18 +116,47 @@ public abstract class AbstractTag implements Tag
 
 
     /**
+     *
      * @param id
-     * @return matches for this audio-specific key
+     * @param index
+     * @return
+     */
+    public String getItem(String id,int index)
+    {
+        List<TagField> l = getFields(id);
+        return (l.size()>index) ? l.get(index).toString() : "";
+    }
+
+    /**
+     * Retrieve the first value that exists for this generic key
+     *
+     * @param genericKey
+     * @return
+     */
+    public String getFirst(FieldKey genericKey) throws KeyNotFoundException
+    {
+        return getValue(genericKey,0);
+    }
+
+    /**
+     *
+     * @param id
+     * @return
      */
     public String getFirst(String id)
     {
-        List<TagField> l = get(id);
+        List<TagField> l = getFields(id);
         return (l.size() != 0) ? l.get(0).toString() : "";
     }
 
+    /**
+     *
+     * @param id audio specific key
+     * @return
+     */
     public TagField getFirstField(String id)
     {
-        List<TagField> l = get(id);
+        List<TagField> l = getFields(id);
         return (l.size() != 0) ? l.get(0) : null;
     }
 
@@ -198,7 +227,11 @@ public abstract class AbstractTag implements Tag
         }
         return count;
     }
-
+        
+    public int getFieldCountIncludingSubValues()
+    {
+        return getFieldCount();
+    }
 
     /**
      * Does this tag contain any comon fields
@@ -217,7 +250,7 @@ public abstract class AbstractTag implements Tag
      */
     public boolean hasField(String id)
     {
-        return get(id).size() != 0;
+        return getFields(id).size() != 0;
     }
 
     /**
@@ -272,7 +305,7 @@ public abstract class AbstractTag implements Tag
     /**
      * Set field
      * <p/>
-     * Changed:Just because field is empty it doesnt mean it should be deleted. That should be the choice
+     * Changed:Just because field is empty it doesn't mean it should be deleted. That should be the choice
      * of the developer. (Or does this break things)
      *
      * @see org.jaudiotagger.tag.Tag#setField(org.jaudiotagger.tag.TagField)
@@ -301,6 +334,19 @@ public abstract class AbstractTag implements Tag
         {
             commonNumber++;
         }
+    }
+
+    /**
+     * The m parameter is effectively ignored
+     *
+     * @param id
+     * @param n
+     * @param m
+     * @return
+     */
+    public String getSubValue(FieldKey id, int n, int m)
+    {
+        return getValue(id,n);
     }
 
     /**
@@ -361,14 +407,6 @@ public abstract class AbstractTag implements Tag
     public abstract TagField createField(FieldKey genericKey, String value) throws KeyNotFoundException, FieldDataInvalidException;
 
     /**
-     *
-     * @param genericKey
-     * @return
-     * @throws KeyNotFoundException
-     */
-    public abstract String getFirst(FieldKey genericKey) throws KeyNotFoundException;
-
-    /**
      * 
      * @param genericKey
      * @return
@@ -385,15 +423,13 @@ public abstract class AbstractTag implements Tag
 
 
     /**
-     * Delete all ocurrences of field.
+     * Delete all occurrences of field with this id.
      *
      * @param key
      */
-    protected void deleteField(String key)
+    public void deleteField(String key)
     {
-        Object removed = fields.remove(key);
-        //if (removed != null && field.isCommon())
-        //    commonNumber--;
+        fields.remove(key);
     }
 
     public Artwork getFirstArtwork()

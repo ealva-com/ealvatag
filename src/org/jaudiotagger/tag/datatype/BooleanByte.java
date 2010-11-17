@@ -138,7 +138,7 @@ public class BooleanByte extends AbstractDataType
 
         if (value != null)
         {
-            retValue[0] = (byte) (((Boolean) value).booleanValue() ? 1 : 0);
+            retValue[0] = (byte) ((Boolean) value ? 1 : 0);
             retValue[0] <<= bitPosition;
         }
 

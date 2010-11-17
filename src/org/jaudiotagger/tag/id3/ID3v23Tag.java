@@ -161,6 +161,7 @@ public class ID3v23Tag extends AbstractID3v2Tag
     public ID3v23Tag()
     {
         frameMap = new LinkedHashMap();
+        encryptedFrameMap = new LinkedHashMap();
     }
 
     /**
@@ -188,7 +189,7 @@ public class ID3v23Tag extends AbstractID3v2Tag
     {
         try
         {
-            //Special case to handle TDRC frame from V24 that needs breaking up into seperate frame in V23
+            //Special case to handle TDRC frame from V24 that needs breaking up into separate frame in V23
             if ((frame.getIdentifier().equals(ID3v24Frames.FRAME_ID_YEAR)) && (frame.getBody() instanceof FrameBodyTDRC))
             {
                 translateFrame(frame);
@@ -264,6 +265,7 @@ public class ID3v23Tag extends AbstractID3v2Tag
     {
         logger.info("Creating tag from a tag of a different version");
         frameMap = new LinkedHashMap();
+        encryptedFrameMap = new LinkedHashMap();
 
         if (mp3tag != null)
         {
@@ -282,6 +284,7 @@ public class ID3v23Tag extends AbstractID3v2Tag
             {
                 convertedTag = new ID3v24Tag(mp3tag);
             }
+            this.setLoggingFilename(convertedTag.getLoggingFilename());
             //Copy Primitives
             copyPrimitives(convertedTag);
             //Copy Frames
@@ -545,7 +548,7 @@ public class ID3v23Tag extends AbstractID3v2Tag
             readExtendedHeader(buffer, size);
         }
 
-        //Slice Buffer, so position markers tally with size (i.e do not include tagheader)
+        //Slice Buffer, so position markers tally with size (i.e do not include tagHeader)
         ByteBuffer bufferWithoutHeader = buffer.slice();
         //We need to synchronize the buffer
         if (isUnsynchronization())
@@ -572,13 +575,15 @@ public class ID3v23Tag extends AbstractID3v2Tag
         //Now start looking for frames
         ID3v23Frame next;
         frameMap = new LinkedHashMap();
+        encryptedFrameMap = new LinkedHashMap();
+
 
         //Read the size from the Tag Header
         this.fileReadSize = size;
         logger.finest(getLoggingFilename() + ":Start of frame body at:" + byteBuffer.position() + ",frames data size is:" + size);
 
-        // Read the frames until got to upto the size as specified in header or until
-        // we hit an invalid frame identifier
+        // Read the frames until got to up to the size as specified in header or until
+        // we hit an invalid frame identifier or padding
         while (byteBuffer.position() < size)
         {
             String id;
@@ -590,7 +595,13 @@ public class ID3v23Tag extends AbstractID3v2Tag
                 id = next.getIdentifier();
                 loadFrameIntoMap(id, next);
             }
-            //Found Empty Frame , log it - empty frames should not exist
+            //Found Padding, no more frames
+            catch (PaddingException ex)
+            {
+                logger.config(getLoggingFilename() + ":Found padding starting at:" + byteBuffer.position());
+                break;
+            }
+            //Found Empty Frame, log it - empty frames should not exist
             catch (EmptyFrameException ex)
             {
                 logger.warning(getLoggingFilename() + ":Empty Frame:" + ex.getMessage());
@@ -598,21 +609,29 @@ public class ID3v23Tag extends AbstractID3v2Tag
             }
             catch (InvalidFrameIdentifierException ifie)
             {
-                logger.info(getLoggingFilename() + ":Invalid Frame Identifier:" + ifie.getMessage());
-                this.invalidFrameBytes++;
-                //Dont try and find any more frames
+                logger.warning(getLoggingFilename() + ":Invalid Frame Identifier:" + ifie.getMessage());
+                this.invalidFrames++;
+                //Don't try and find any more frames
                 break;
             }
-            //Problem trying to find frame, often just occurs because frameheader includes padding
+            //Problem trying to find frame, often just occurs because frameHeader includes padding
             //and we have reached padding
             catch (InvalidFrameException ife)
             {
                 logger.warning(getLoggingFilename() + ":Invalid Frame:" + ife.getMessage());
-                this.invalidFrameBytes++;
-                //Dont try and find any more frames
+                this.invalidFrames++;
+                //Don't try and find any more frames
                 break;
             }
+            //Failed reading frame but may just have invalid data but correct length so lets carry on
+            //in case we can read the next frame
+            catch(InvalidDataTypeException idete)
+            {
+                logger.warning(getLoggingFilename() + ":Corrupt Frame:" + idete.getMessage());
+                this.invalidFrames++;
+                continue;
             }
+        }
     }
 
     /**
@@ -721,7 +740,8 @@ public class ID3v23Tag extends AbstractID3v2Tag
      */
     public void write(File file, long audioStartLocation) throws IOException
     {
-        logger.info(getLoggingFilename() + ":Writing tag to file");
+        setLoggingFilename(file.getName());
+        logger.info("Writing tag to file:"+getLoggingFilename());
 
         //Write Body Buffer
         byte[] bodyByteBuffer = writeFramesToBuffer().toByteArray();
@@ -864,7 +884,7 @@ public class ID3v23Tag extends AbstractID3v2Tag
         }
         else
         {
-            return super.doGetFirst(frameAndSubId);
+            return super.doGetValueAtIndex(frameAndSubId, 0);
         }
     }
 
@@ -883,6 +903,14 @@ public class ID3v23Tag extends AbstractID3v2Tag
         super.doDeleteTagField(new FrameAndSubId(id3v23FieldKey.getFrameId(), id3v23FieldKey.getSubId()));
     }
 
+     /**
+     * Delete fields with this (frame) id
+     * @param id
+     */
+    public void deleteField(String id)
+    {
+        super.doDeleteTagField(new FrameAndSubId(id,null));
+    }
 
     protected FrameAndSubId getFrameAndSubIdFromGenericKey(FieldKey genericKey)
     {

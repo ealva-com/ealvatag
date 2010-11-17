@@ -3,7 +3,9 @@ package org.jaudiotagger.tag.asf;
 import org.jaudiotagger.audio.asf.data.ContainerType;
 import org.jaudiotagger.audio.asf.data.ContentBranding;
 import org.jaudiotagger.audio.asf.data.ContentDescription;
+import org.jaudiotagger.tag.reference.Tagger;
 
+import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -12,11 +14,11 @@ import java.util.Map;
  *
  * TODO These attributes and their v23 mapping that havent been added to enum yet
  *
- * WMA      ID3v1   ID3v22  ID3v2324
+ * WMA                 ID3v1   ID3v22  ID3v2324
  *
- * CopyrightURL 	  	WCP 	WCOP
- * Duration 	  	TLE 	TLEN
- * FileSize 	  	  	TSIZ
+ * CopyrightURL 	  	       WCP 	WCOP
+ * Duration 	  	           TLE 	TLEN
+ * FileSize 	  	  	            TSIZ
  * WM/AudioFileURL 	  	WAF 	WOAF
  * WM/AudioSourceURL 	  	WAS 	WOAS
  * WM/Binary 	  	GEO 	GEOB
@@ -24,11 +26,7 @@ import java.util.Map;
  * WM/EncodingTime 	  	  	TDEN
  * WM/MCDI 	  	  	MCDI
  * WM/ModifiedBy 	  	  	TPE4
- * WM/OriginalAlbumTitle 	  	TOT 	TOAL
- * WM/OriginalArtist 	  	TOA 	TOPE
  * WM/OriginalFilename 	  	TOF 	TOFN
- * WM/OriginalLyricist 	  	TOL 	TOLY
- * WM/OriginalReleaseYear 	  	TOR 	TORY
  * WM/PlaylistDelay 	  	  	TDLY
  * WM/RadioStationName 	  	TRN 	TRSN
  * WM/RadioStationOwner 	  	TRO 	TRSO
@@ -76,11 +74,17 @@ public enum AsfFieldKey
     CONDUCTOR("WM/Conductor", true),
     COVER_ART("WM/Picture", true),
     COVER_ART_URL("WM/AlbumCoverURL", true),
+    CUSTOM1("CUSTOM1", true),
+    CUSTOM2("CUSTOM2", true),
+    CUSTOM3("CUSTOM3", true),
+    CUSTOM4("CUSTOM4", true),
+    CUSTOM5("CUSTOM5", true),
     DIRECTOR("WM/Director", true),
     DISC_NO("WM/PartOfSet", false),
     DISC_TOTAL("WM/DiscTotal", false),
     ENCODER("WM/ToolName", false),
     ENCODED_BY("WM/EncodedBy", false),
+    FBPM("FBPM", true),
     GENRE("WM/Genre", true),
     GENRE_ID("WM/GenreID", true),
     GROUPING("WM/ContentGroupDescription", false),
@@ -101,12 +105,24 @@ public enum AsfFieldKey
     MUSICBRAINZ_RELEASE_TYPE("MusicBrainz/Album Type", false),
     MUSICBRAINZ_RELEASEARTISTID("MusicBrainz/Album Artist Id", false),
     MUSICBRAINZ_RELEASEID("MusicBrainz/Album Id", false),
+    MUSICBRAINZ_RELEASEGROUPID("MusicBrainz/Release Group Id", false),
     MUSICBRAINZ_TRACK_ID("MusicBrainz/Track Id", false),
+    MUSICBRAINZ_WORKID("MusicBrainz/Work Id", false),
     MUSICIP_ID("MusicIP/PUID", false),
+    OCCASION("Occasion", true),
+    ORIGINAL_ALBUM("WM/OriginalAlbumTitle", true),
+    ORIGINAL_ARTIST("WM/OriginalArtist", true),
+    ORIGINAL_LYRICIST("WM/OriginalLyricist", true),
+    ORIGINAL_YEAR("WM/OriginalReleaseYear", true),
     PRODUCER("WM/Producer", false),
+    QUALITY("Quality", true),
+    MM_RATING("SDB/Rating", true),
     RECORD_LABEL("WM/Publisher", false),
     REMIXER("WM/ModifiedBy", false),
+    SCRIPT("WM/Script", false),
     SUBTITLE("WM/SubTitle", false),
+    TAGS("WM/Tags", false),
+    TEMPO("Tempo", true),
     TITLE_SORT("WM/TitleSortOrder", false),
     TRACK("WM/TrackNumber", false),
     TRACK_TOTAL("WM/TrackTotal", false),
@@ -118,9 +134,13 @@ public enum AsfFieldKey
     URL_WIKIPEDIA_ARTIST_SITE("WM/WikipediaArtistUrl", false),
     URL_WIKIPEDIA_RELEASE_SITE("WM/WikipediaReleaseUrl", false),
     URL_LYRICS_SITE("WM/LyricsUrl", false),
-
     YEAR("WM/Year", false),
-    
+
+    ENGINEER("WM/Engineer",false),    
+    DJMIXER("WM/DJMixer",false),
+    MIXER("WM/Mixer",false),
+    ARRANGER("WM/Arranger",false),
+
     // Special field for all unknown field names, which will getFields maximum support
     CUSTOM ("___CUSTOM___", true);
 

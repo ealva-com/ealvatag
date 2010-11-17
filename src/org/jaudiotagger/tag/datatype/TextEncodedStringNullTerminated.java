@@ -209,7 +209,7 @@ public class TextEncodedStringNullTerminated extends AbstractString
             {
                 charSetName = TextEncoding.CHARSET_UTF_16_ENCODING_FORMAT;
                 CharsetEncoder encoder = Charset.forName(charSetName).newEncoder();
-                //Note remember LE BOM is ff fe but tis is handled by encoder Unicode char is fe ff
+                //Note remember LE BOM is ff fe but this is handled by encoder Unicode char is fe ff
                 ByteBuffer bb = encoder.encode(CharBuffer.wrap('\ufeff' + (String) value + '\0'));
                 data = new byte[bb.limit()];
                 bb.get(data, 0, bb.limit());

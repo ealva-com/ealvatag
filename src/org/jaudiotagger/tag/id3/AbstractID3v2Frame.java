@@ -16,12 +16,11 @@
 package org.jaudiotagger.tag.id3;
 
 import org.jaudiotagger.audio.mp3.MP3File;
-import org.jaudiotagger.tag.InvalidFrameException;
-import org.jaudiotagger.tag.InvalidTagException;
-import org.jaudiotagger.tag.TagField;
-import org.jaudiotagger.tag.TagOptionSingleton;
+import org.jaudiotagger.tag.*;
 import org.jaudiotagger.tag.id3.framebody.AbstractID3v2FrameBody;
+import org.jaudiotagger.tag.id3.framebody.FrameBodyEncrypted;
 import org.jaudiotagger.tag.id3.framebody.FrameBodyUnsupported;
+import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
 import org.jaudiotagger.utils.EqualsUtil;
 
 import java.io.ByteArrayOutputStream;
@@ -37,7 +36,7 @@ import java.util.logging.Level;
  * @author : Eric Farng
  * @version $Id$
  */
-public abstract class AbstractID3v2Frame extends AbstractTagFrame implements TagField
+public abstract class AbstractID3v2Frame extends AbstractTagFrame implements TagTextField
 {
 
     protected static final String TYPE_FRAME = "frame";
@@ -54,6 +53,24 @@ public abstract class AbstractID3v2Frame extends AbstractTagFrame implements Tag
     //when problems occur reading or writing to file, otherwise it is difficult to track down the error
     //when processing many files
     private String loggingFilename = "";
+
+    /**
+     *
+     * @return size in bytes of the frameid field
+     */
+    protected abstract int getFrameIdSize();
+
+    /**
+     *
+     * @return the size in bytes of the frame size field
+     */
+    protected abstract int getFrameSizeSize();
+
+    /**
+     *
+     * @return the size in bytes of the frame header
+     */
+    protected abstract int getFrameHeaderSize();
 
     /**
      * Create an empty frame
@@ -188,6 +205,46 @@ public abstract class AbstractID3v2Frame extends AbstractTagFrame implements Tag
     }
 
     /**
+     * Read the frameBody when frame marked as encrypted
+     *
+     * @param identifier
+     * @param byteBuffer
+     * @param frameSize
+     * @return
+     * @throws InvalidFrameException
+     * @throws InvalidDataTypeException
+     * @throws InvalidTagException
+     */
+    protected AbstractID3v2FrameBody readEncryptedBody(String identifier, ByteBuffer byteBuffer, int frameSize)
+            throws InvalidFrameException, InvalidDataTypeException 
+    {
+        try
+        {
+            AbstractID3v2FrameBody frameBody = new  FrameBodyEncrypted(identifier,byteBuffer, frameSize);
+            frameBody.setHeader(this);
+            return frameBody;
+        }
+        catch(InvalidTagException ite)
+        {
+            throw new InvalidDataTypeException(ite);
+        }
+    }
+
+    protected boolean isPadding(byte[] buffer)
+    {
+        if(
+                (buffer[0]=='\0')&&
+                (buffer[1]=='\0')&&
+                (buffer[2]=='\0')&&
+                (buffer[3]=='\0')
+           )
+        {
+            return true;
+        }
+        return false;
+    }
+
+    /**
      * Read the frame body from the specified file via the buffer
      *
      * @param identifier the frame identifier
@@ -198,7 +255,8 @@ public abstract class AbstractID3v2Frame extends AbstractTagFrame implements Tag
      */
     @SuppressWarnings("unchecked")
     //TODO using reflection is rather slow perhaps we should change this
-    protected AbstractID3v2FrameBody readBody(String identifier, ByteBuffer byteBuffer, int frameSize) throws InvalidFrameException
+    protected AbstractID3v2FrameBody readBody(String identifier, ByteBuffer byteBuffer, int frameSize)
+            throws InvalidFrameException, InvalidDataTypeException
     {
         //Use reflection to map id to frame body, which makes things much easier
         //to keep things up to date,although slight performance hit.
@@ -245,6 +303,14 @@ public abstract class AbstractID3v2Frame extends AbstractTagFrame implements Tag
             {
                 throw (RuntimeException) ite.getCause();
             }
+            else if(ite.getCause() instanceof  InvalidFrameException )
+            {
+                throw (InvalidFrameException)ite.getCause();
+            }
+            else if(ite.getCause() instanceof  InvalidDataTypeException )
+            {
+                throw (InvalidDataTypeException)ite.getCause();
+            }
             else
             {
                 throw new InvalidFrameException(ite.getCause().getMessage());
@@ -271,6 +337,37 @@ public abstract class AbstractID3v2Frame extends AbstractTagFrame implements Tag
         logger.finest(getLoggingFilename() + ":" + "Created framebody:end" + frameBody.getIdentifier());
         frameBody.setHeader(this);
         return frameBody;
+    }
+
+    /**
+     * Get the next frame id, throwing an exception if unable to do this and check against just having padded data
+     * 
+     * @param byteBuffer
+     * @return
+     * @throws PaddingException
+     * @throws InvalidFrameException
+     */
+    protected String readIdentifier(ByteBuffer byteBuffer) throws PaddingException,InvalidFrameException
+    {
+        byte[] buffer = new byte[getFrameIdSize()];
+
+        if (byteBuffer.position() + getFrameHeaderSize() >= byteBuffer.limit())
+        {
+            logger.warning(getLoggingFilename() + ":" + "No space to find another frame:");
+            throw new InvalidFrameException(getLoggingFilename() + ":" + "No space to find another frame");
+        }
+
+        //Read the Frame Identifier
+        byteBuffer.get(buffer, 0, getFrameIdSize());
+
+        if(isPadding(buffer))
+        {
+            throw new PaddingException(getLoggingFilename() + ":only padding found");
+        }
+
+        identifier = new String(buffer);
+        logger.fine(getLoggingFilename() + ":" + "Identifier is" + identifier);
+        return identifier;
     }
 
     /**
@@ -392,7 +489,7 @@ public abstract class AbstractID3v2Frame extends AbstractTagFrame implements Tag
         return encodingFlags;
     }
 
-    class StatusFlags
+    public class StatusFlags
     {
         protected static final String TYPE_FLAGS = "statusFlags";
 
@@ -515,4 +612,38 @@ public abstract class AbstractID3v2Frame extends AbstractTagFrame implements Tag
         AbstractID3v2Frame that = (AbstractID3v2Frame) obj;
         return super.equals(that);
     }
+
+    /**
+     * Returns the content of the field.
+     *
+     * For frames consisting of different fields, this will return the value deemed to be most
+     * likely to be required
+     *
+     * @return Content
+     */
+    public String getContent()
+    {
+        return getBody().getUserFriendlyValue();
+    }
+
+    /**
+     * Returns the current used charset encoding.
+     *
+     * @return Charset encoding.
+     */
+    public String getEncoding()
+    {
+        return TextEncoding.getInstanceOf().getValueForId(this.getBody().getTextEncoding());
+    }
+
+    /**
+     * Sets the content of the field.
+     *
+     * @param content fields content.
+     */
+    public void setContent(String content)
+    {
+        throw new UnsupportedOperationException("Not implemeneted please use the generic tag methods for setting content");
+    }
+
 }

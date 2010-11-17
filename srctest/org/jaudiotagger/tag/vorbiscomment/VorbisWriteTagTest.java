@@ -114,6 +114,7 @@ public class VorbisWriteTagTest extends AbstractTestCase
 
             //key not known to jaudiotagger
             tag.setField("VOLINIST", "Sarah Curtis");
+            assertEquals("image/png", tag.getFirst(VorbisCommentFieldKey.COVERARTMIME));
 
             f.commit();
 
@@ -205,8 +206,8 @@ public class VorbisWriteTagTest extends AbstractTestCase
             assertEquals("description", vorbisTag.getFirst(VorbisCommentFieldKey.DESCRIPTION));
 
             //VorbisImage base64 image, and reconstruct
-            assertEquals(base64image, vorbisTag.getFirst(VorbisCommentFieldKey.COVERART));
             assertEquals("image/png", vorbisTag.getFirst(VorbisCommentFieldKey.COVERARTMIME));
+            assertEquals(base64image, vorbisTag.getFirst(VorbisCommentFieldKey.COVERART));
             BufferedImage bi = ImageIO.read(ImageIO
                     .createImageInputStream(new ByteArrayInputStream(Base64Coder.
                     decode(vorbisTag.getFirst(VorbisCommentFieldKey.COVERART).toCharArray()))));
@@ -772,5 +773,50 @@ public class VorbisWriteTagTest extends AbstractTestCase
         f = AudioFileIO.read(testFile);
         assertTrue(f.getTag().isEmpty());
         assertEquals("jaudiotagger", ((VorbisCommentTag) f.getTag()).getVendor());
+    }
+
+    public void testWriteMultipleFields() throws Exception
+    {
+        File testFile = AbstractTestCase.copyAudioToTmp("test.ogg", new File("testWriteMultiple.ogg"));
+        AudioFile f = AudioFileIO.read(testFile);
+        f.getTag().addField(FieldKey.ALBUM_ARTIST,"artist1");
+        f.getTag().addField(FieldKey.ALBUM_ARTIST,"artist2");
+        f.commit();
+        f = AudioFileIO.read(testFile);
+        List<TagField> tagFields = f.getTag().getFields(FieldKey.ALBUM_ARTIST);
+        assertEquals(tagFields.size(),2);
+    }
+
+     public void testDeleteFields() throws Exception
+    {
+        //Delete using generic key
+        File testFile = AbstractTestCase.copyAudioToTmp("test.ogg", new File("testDeleteFields.ogg"));
+        AudioFile f = AudioFileIO.read(testFile);
+        List<TagField> tagFields = f.getTag().getFields(FieldKey.ALBUM_ARTIST_SORT);
+        assertEquals(0,tagFields.size());
+        f.getTag().addField(FieldKey.ALBUM_ARTIST_SORT,"artist1");
+        f.getTag().addField(FieldKey.ALBUM_ARTIST_SORT,"artist2");
+        tagFields = f.getTag().getFields(FieldKey.ALBUM_ARTIST_SORT);
+        assertEquals(2,tagFields.size());
+        f.getTag().deleteField(FieldKey.ALBUM_ARTIST_SORT);
+        f.commit();
+
+        //Delete using flac id
+        f = AudioFileIO.read(testFile);
+        tagFields = f.getTag().getFields(FieldKey.ALBUM_ARTIST_SORT);
+        assertEquals(0,tagFields.size());
+        f.getTag().addField(FieldKey.ALBUM_ARTIST_SORT,"artist1");
+        f.getTag().addField(FieldKey.ALBUM_ARTIST_SORT,"artist2");
+        tagFields = f.getTag().getFields(FieldKey.ALBUM_ARTIST_SORT);
+        assertEquals(2,tagFields.size());
+        f.getTag().deleteField("ALBUMARTISTSORT");
+        tagFields = f.getTag().getFields(FieldKey.ALBUM_ARTIST_SORT);
+        assertEquals(0,tagFields.size());
+        f.commit();
+
+        f = AudioFileIO.read(testFile);
+        tagFields = f.getTag().getFields(FieldKey.ALBUM_ARTIST_SORT);
+        assertEquals(0,tagFields.size());
+
     }
 }

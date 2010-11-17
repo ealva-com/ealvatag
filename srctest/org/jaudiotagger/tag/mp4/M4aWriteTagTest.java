@@ -4,8 +4,11 @@ import junit.framework.TestCase;
 import org.jaudiotagger.AbstractTestCase;
 import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.AudioFileIO;
+import org.jaudiotagger.audio.mp3.MP3File;
 import org.jaudiotagger.tag.FieldKey;
 import org.jaudiotagger.tag.Tag;
+import org.jaudiotagger.tag.TagField;
+import org.jaudiotagger.tag.id3.ID3v23Tag;
 import org.jaudiotagger.tag.mp4.atom.Mp4ContentTypeValue;
 import org.jaudiotagger.tag.mp4.atom.Mp4RatingValue;
 import org.jaudiotagger.tag.mp4.field.*;
@@ -1903,8 +1906,8 @@ public class M4aWriteTagTest extends TestCase
             assertEquals(1,tag.getFields(FieldKey.DISC_NO).size());
             assertEquals(1,tag.getFields(FieldKey.DISC_TOTAL).size());
 
-            assertEquals(1,tag.get("trkn").size());
-            assertEquals(1,tag.get("disk").size());
+            assertEquals(1,tag.getFields("trkn").size());
+            assertEquals(1,tag.getFields("disk").size());
 
             assertEquals("1",tag.getFirst(FieldKey.TRACK));
             assertEquals("11",tag.getFirst(FieldKey.TRACK_TOTAL));
@@ -2228,6 +2231,50 @@ public class M4aWriteTagTest extends TestCase
             exceptionCaught = e;
         }
         assertNull(exceptionCaught);
+    }
+
+    public void testWriteMultipleFields() throws Exception
+    {
+        File testFile = AbstractTestCase.copyAudioToTmp("test.m4a", new File("testWriteMultiple.m4a"));
+        AudioFile f = AudioFileIO.read(testFile);
+        List<TagField> tagFields = f.getTag().getFields(FieldKey.ALBUM_ARTIST_SORT);
+        assertEquals(tagFields.size(),1);
+        f.getTag().addField(FieldKey.ALBUM_ARTIST_SORT,"artist1");
+        f.getTag().addField(FieldKey.ALBUM_ARTIST_SORT,"artist2");
+        f.commit();
+        f = AudioFileIO.read(testFile);
+        tagFields = f.getTag().getFields(FieldKey.ALBUM_ARTIST_SORT);
+        assertEquals(tagFields.size(),3);
+    }
+
+     public void testDeleteFields() throws Exception
+    {
+        File testFile = AbstractTestCase.copyAudioToTmp("test.m4a");
+
+        //Delete using generic key
+        AudioFile f = AudioFileIO.read(testFile);
+        List<TagField> tagFields = f.getTag().getFields(FieldKey.ALBUM_ARTIST_SORT);
+        assertEquals(1,tagFields.size());
+        tagFields = f.getTag().getFields(FieldKey.ALBUM_ARTIST_SORT);
+        assertEquals(1,tagFields.size());
+        f.getTag().deleteField(FieldKey.ALBUM_ARTIST_SORT);
+        f.commit();
+
+        //Delete using mp4key
+        f = AudioFileIO.read(testFile);
+        tagFields = f.getTag().getFields(FieldKey.ALBUM_ARTIST_SORT);
+        assertEquals(0,tagFields.size());
+        f.getTag().addField(FieldKey.ALBUM_ARTIST_SORT,"artist1");
+        tagFields = f.getTag().getFields(FieldKey.ALBUM_ARTIST_SORT);
+        assertEquals(1,tagFields.size());
+        f.getTag().deleteField("soaa");
+        tagFields = f.getTag().getFields(FieldKey.ALBUM_ARTIST_SORT);
+        assertEquals(0,tagFields.size());
+        f.commit();
+
+        f = AudioFileIO.read(testFile);
+        tagFields = f.getTag().getFields(FieldKey.ALBUM_ARTIST_SORT);
+        assertEquals(0,tagFields.size());
     }
 }
 

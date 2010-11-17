@@ -80,6 +80,10 @@ public class FrameBodyTRCK extends AbstractID3v2FrameBody implements ID3v23Frame
         setObjectValue(DataTypes.OBJ_TEXT, new PartOfSet.PartOfSetValue(trackNo,trackTotal));
     }
 
+    public String getUserFriendlyValue()
+    {
+        return String.valueOf(getTrackNo());
+    }
 
     /**
      * Creates a new FrameBodyTRCK datatype.

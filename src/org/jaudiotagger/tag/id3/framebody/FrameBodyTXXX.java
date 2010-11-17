@@ -52,18 +52,28 @@ import java.nio.ByteBuffer;
  */
 public class FrameBodyTXXX extends AbstractFrameBodyTextInfo implements ID3v24FrameBody, ID3v23FrameBody
 {
-    public static final String MUSIC_BRAINZ_ARTISTID = "MusicBrainz Artist Id";
-    public static final String MUSIC_BRAINZ_ALBUM_ARTISTID = "MusicBrainz Album Artist Id";
-    public static final String MUSIC_BRAINZ_ALBUMID = "MusicBrainz Album Id";
-    public static final String MUSIC_BRAINZ_DISCID = "MusicBrainz Disc Id";
-    public static final String MUSICBRAINZ_ALBUM_TYPE = "MusicBrainz Album Type";
-    public static final String MUSICBRAINZ_ALBUM_STATUS = "MusicBrainz Album Status";
-    public static final String MUSICBRAINZ_ALBUM_COUNTRY = "MusicBrainz Album Release Country";
-    public static final String AMAZON_ASIN = "ASIN";
-    public static final String MUSICIP_ID = "MusicIP PUID";
-    public static final String BARCODE = "BARCODE";
-    public static final String CATALOG_NO = "CATALOGNUMBER";
-    public static final String MOOD = "MOOD";                          //ID3 v23 only
+    //Used by Picard and Jaikoz
+    public static final String MUSICBRAINZ_ARTISTID         = "MusicBrainz Artist Id";
+    public static final String MUSICBRAINZ_ALBUM_ARTISTID   = "MusicBrainz Album Artist Id";
+    public static final String MUSICBRAINZ_ALBUMID          = "MusicBrainz Album Id";
+    public static final String MUSICBRAINZ_RELEASE_GROUPID  = "MusicBrainz Release Group Id";
+    public static final String MUSICBRAINZ_DISCID           = "MusicBrainz Disc Id";
+    public static final String MUSICBRAINZ_ALBUM_TYPE       = "MusicBrainz Album Type";
+    public static final String MUSICBRAINZ_ALBUM_STATUS     = "MusicBrainz Album Status";
+    public static final String MUSICBRAINZ_ALBUM_COUNTRY    = "MusicBrainz Album Release Country";
+    public static final String MUSICBRAINZ_WORKID           = "MusicBrainz Work Id";
+    public static final String AMAZON_ASIN                  = "ASIN";
+    public static final String MUSICIP_ID                   = "MusicIP PUID";
+    public static final String BARCODE                      = "BARCODE";
+    public static final String CATALOG_NO                   = "CATALOGNUMBER";
+    public static final String MOOD                         = "MOOD";          //ID3 v23 only
+    public static final String TAGS                         = "TAGS";
+    public static final String FBPM                         = "FBPM";
+    public static final String SCRIPT                       = "SCRIPT";    
+
+    //used by Foobar 20000
+    public static final String ALBUM_ARTIST = "ALBUM ARTIST";
+    public static final String PERFORMER = "PERFORMER";
 
     /**
      * Creates a new FrameBodyTXXX datatype.
@@ -120,7 +130,7 @@ public class FrameBodyTXXX extends AbstractFrameBodyTextInfo implements ID3v24Fr
     }
 
     /**
-     * Set the desciption field
+     * Set the description field
      *
      * @param description
      */

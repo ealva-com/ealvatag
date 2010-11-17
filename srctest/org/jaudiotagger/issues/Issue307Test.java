@@ -44,14 +44,10 @@ public class Issue307Test extends AbstractTestCase
         assertNull(e);
         FrameBodyIPLS frameBody = (FrameBodyIPLS)(((ID3v23Frame)((ID3v23Tag)mp3File.getTag()).getFirstField("IPLS")).getBody());
         assertEquals(3,frameBody.getNumberOfPairs());
-        assertEquals(7,frameBody.getNumberOfValues());
-        assertEquals("producer",frameBody.getValueAtIndex(0));
-        assertEquals("Tom Wilson",frameBody.getValueAtIndex(1));
-        assertEquals("producer",frameBody.getValueAtIndex(2));
-        assertEquals("John H. Hammond",frameBody.getValueAtIndex(3));
-        assertEquals("lead vocal",frameBody.getValueAtIndex(4));
-        //assertEquals("l",frameBody.getValueAtIndex(5));
-        //assertEquals("",frameBody.getValueAtIndex(6));
+        assertEquals("producer",frameBody.getKeyAtIndex(0));
+        assertEquals("Tom Wilson",frameBody.getValueAtIndex(0));
+        assertEquals("producer",frameBody.getKeyAtIndex(1));
+        assertEquals("John H. Hammond",frameBody.getValueAtIndex(1));
 
 
     }

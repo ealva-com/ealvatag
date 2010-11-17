@@ -46,7 +46,7 @@ import java.nio.ByteBuffer;
  * Text encoding                $xx
  * Information                  <text string(s) according to encoding>
  * <p/>
- * The list of valid text encodings increaded from two in ID3v23 to four in ID3v24
+ * The list of valid text encodings increased from two in ID3v23 to four in ID3v24
  * <p/>
  * iTunes incorrectly writes null terminators at the end of every String, even though it only writes one String.
  * <p/>
@@ -77,10 +77,10 @@ public abstract class AbstractFrameBodyTextInfo extends AbstractID3v2FrameBody
     }
 
     /**
-     * Creates a new FrameBodyTextInformation datatype. This is used when user
+     * Creates a new FrameBodyTextInformation data type. This is used when user
      * wants to create a new frame based on data in a user interface.
      *
-     * @param textEncoding Specifys what encoding should be used to write
+     * @param textEncoding Specifies what encoding should be used to write
      *                     text to file.
      * @param text         Specifies the text String.
      */
@@ -92,7 +92,7 @@ public abstract class AbstractFrameBodyTextInfo extends AbstractID3v2FrameBody
     }
 
     /**
-     * Creates a new FrameBodyTextInformation datatype from file.
+     * Creates a new FrameBodyTextInformation data type from file.
      * <p/>
      * <p>The super.super Constructor sets up the Object list for the frame.
      *
@@ -109,7 +109,7 @@ public abstract class AbstractFrameBodyTextInfo extends AbstractID3v2FrameBody
      * Set the Full Text String.
      * <p/>
      * <p>If this String contains null terminator characters these are parsed as value
-     * seperators, allowing you to hold multiple strings within one text frame. This functionality is only
+     * separators, allowing you to hold multiple strings within one text frame. This functionality is only
      * officially support in ID3v24.
      *
      * @param text to set
@@ -123,15 +123,34 @@ public abstract class AbstractFrameBodyTextInfo extends AbstractID3v2FrameBody
         setObjectValue(DataTypes.OBJ_TEXT, text);
     }
 
+    public String getUserFriendlyValue()
+    {
+        return getTextWithoutTrailingNulls();
+    }
 
     /**
-     * Retrieve the complete Text String.
+     * Retrieve the complete text String as it is held internally.
+     *
+     * If multiple values are held these wil be returned, needless trailing nulls will also be returned
      *
      * @return the text string
      */
     public String getText()
     {
         return (String) getObjectValue(DataTypes.OBJ_TEXT);
+    }
+
+    /**
+     * Retrieve the complete text String but without any trailing nulls
+     *
+     * If multiple values are held these will be returned, needless trailing nulls will not be returned
+     *
+     * @return the text string
+     */
+    public String getTextWithoutTrailingNulls()
+    {
+        TextEncodedStringSizeTerminated text = (TextEncodedStringSizeTerminated) getObject(DataTypes.OBJ_TEXT);
+        return text.getValueWithoutTrailingNull();
     }
 
     /**
@@ -146,7 +165,10 @@ public abstract class AbstractFrameBodyTextInfo extends AbstractID3v2FrameBody
     }
 
     /**
-     * Get value at index
+     * Get text value at index
+     *
+     * When a multiple values are stored within a single text frame this method allows access to any of the
+     * individual values.
      *
      * @param index
      * @return value at index
@@ -200,7 +222,7 @@ public abstract class AbstractFrameBodyTextInfo extends AbstractID3v2FrameBody
      * Setup the Object List. All text frames contain a text encoding
      * and then a text string.
      * <p/>
-     * TODO:would like to make final but cannnot because overriden by FrameBodyTXXX
+     * TODO:would like to make final but cannot because overridden by FrameBodyTXXX
      */
     protected void setupObjectList()
     {

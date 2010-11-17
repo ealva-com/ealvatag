@@ -214,7 +214,7 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag
         //TODO
     }
 
-    public List<TagField> get(String id)
+    public List<TagField> getFields(String id)
     {
 
         if (FieldKey.ARTIST.name().equals(id))
@@ -249,6 +249,11 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag
         return 6;
     }
 
+    public int getFieldCountIncludingSubValues()
+    {
+       return getFieldCount();
+    }
+
     protected List<TagField> returnFieldToList(ID3v1TagField field)
     {
         List<TagField> fields = new ArrayList<TagField>();
@@ -275,7 +280,7 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag
      *
      * @return album
      */
-    private String getFirstAlbum()
+    protected String getFirstAlbum()
     {
         return album;
     }
@@ -318,7 +323,7 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag
      *
      * @return artist
      */
-    private String getFirstArtist()
+    protected String getFirstArtist()
     {
         return artist;
     }
@@ -751,15 +756,30 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag
             case YEAR:
                 return getFirstYear();
 
-            case TRACK:
-                return getFirstTrack();
-
             case COMMENT:
                 return getFirstComment();
 
             default:
                 return "";
         }
+    }
+
+     /**
+     * The m parameter is effectively ignored
+     *
+     * @param id
+     * @param n
+     * @param m
+     * @return
+     */
+    public String getSubValue(FieldKey id, int n, int m)
+    {
+        return getValue(id,n);
+    }
+
+    public String getValue(FieldKey genericKey, int index)
+    {
+        return getFirst(genericKey);
     }
 
     /**
@@ -794,6 +814,15 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag
             case COMMENT:
                 setComment("");
                 break;
+        }
+    }
+
+    public void deleteField(String id)
+    {
+        FieldKey key = FieldKey.valueOf(id);
+        if(key!=null)
+        {
+            deleteField(key);
         }
     }
 
@@ -977,7 +1006,7 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag
     }
 
     /**
-     * Create strcutured representation of this item.
+     * Create structured representation of this item.
      */
     public void createStructure()
     {

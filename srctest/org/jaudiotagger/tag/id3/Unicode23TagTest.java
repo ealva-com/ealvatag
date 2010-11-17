@@ -327,9 +327,8 @@ public class Unicode23TagTest extends TestCase
         body = (FrameBodyTPE1) artistFrame.getBody();
         assertEquals(ID3v23Frames.FRAME_ID_V3_ARTIST, body.getIdentifier());
 
-        //Text Encoding has been corrected ( note the text could use ISO_8859 but because the user has selected
-        //a Unicode text encoding the default behaviour is to just conver to a valid text encoding for this id3 version
-        assertEquals(TextEncoding.UTF_16, body.getTextEncoding());
+        //Text Encoding has been corrected
+        assertEquals(TextEncoding.ISO_8859_1, body.getTextEncoding());
     }
 
     public void testFixv23TagsWithInvalidEncodingAndDefaultOverridden() throws Exception

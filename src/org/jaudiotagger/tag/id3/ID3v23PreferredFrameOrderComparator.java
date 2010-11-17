@@ -30,6 +30,7 @@ public class ID3v23PreferredFrameOrderComparator implements Comparator<String>
         frameIdsInPreferredOrder.add(ID3v23Frames.FRAME_ID_V3_BPM);           
         frameIdsInPreferredOrder.add(ID3v23Frames.FRAME_ID_V3_ISRC);
         frameIdsInPreferredOrder.add(ID3v23Frames.FRAME_ID_V3_TORY);
+        frameIdsInPreferredOrder.add(ID3v23Frames.FRAME_ID_V3_ACCOMPANIMENT);
         frameIdsInPreferredOrder.add(ID3v23Frames.FRAME_ID_V3_TITLE_REFINEMENT);
         frameIdsInPreferredOrder.add(ID3v23Frames.FRAME_ID_V3_UNSYNC_LYRICS);
         frameIdsInPreferredOrder.add(ID3v23Frames.FRAME_ID_V3_USER_DEFINED_INFO);
@@ -66,7 +67,6 @@ public class ID3v23PreferredFrameOrderComparator implements Comparator<String>
 
 
         //Not so bothered about these
-        frameIdsInPreferredOrder.add(ID3v23Frames.FRAME_ID_V3_ACCOMPANIMENT);
         frameIdsInPreferredOrder.add(ID3v23Frames.FRAME_ID_V3_TRDA);
         frameIdsInPreferredOrder.add(ID3v23Frames.FRAME_ID_V3_COMMERCIAL_FRAME);
         frameIdsInPreferredOrder.add(ID3v23Frames.FRAME_ID_V3_COPYRIGHTINFO);

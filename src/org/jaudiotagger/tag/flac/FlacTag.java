@@ -9,7 +9,6 @@ import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
 import org.jaudiotagger.tag.reference.PictureTypes;
 import org.jaudiotagger.tag.vorbiscomment.VorbisCommentTag;
 import org.jaudiotagger.tag.vorbiscomment.VorbisCommentFieldKey;
-import org.jaudiotagger.tag.vorbiscomment.VorbisCommentTagField;
 import org.jaudiotagger.logging.ErrorMessage;
 
 import javax.imageio.ImageIO;
@@ -66,7 +65,7 @@ public class FlacTag implements Tag
         }
     }
 
-    public List<TagField> get(String id)
+    public List<TagField> getFields(String id)
     {
         if (id.equals(FieldKey.COVER_ART.name()))
         {
@@ -79,7 +78,7 @@ public class FlacTag implements Tag
         }
         else
         {
-            return tag.get(id);
+            return tag.getFields(id);
         }
     }
 
@@ -237,7 +236,20 @@ public class FlacTag implements Tag
         }
     }
 
-    public String getFirst(FieldKey id) throws KeyNotFoundException
+     /**
+     * The m parameter is effectively ignored
+     *
+     * @param id
+     * @param n
+     * @param m
+     * @return
+     */
+    public String getSubValue(FieldKey id, int n, int m)
+    {
+        return getValue(id,n);
+    }
+
+    public String getValue(FieldKey id,int index) throws KeyNotFoundException
     {
         if (id.equals(FieldKey.COVER_ART))
         {
@@ -245,9 +257,13 @@ public class FlacTag implements Tag
         }
         else
         {
-            return tag.getFirst(id);
+            return tag.getValue(id, index);
         }
+    }
 
+    public String getFirst(FieldKey id) throws KeyNotFoundException
+    {
+        return getValue(id,0);
     }
 
     public TagField getFirstField(String id)
@@ -303,6 +319,19 @@ public class FlacTag implements Tag
         }
     }
 
+    public void deleteField(String id) throws KeyNotFoundException
+      {
+          if (id.equals(FieldKey.COVER_ART.name()))
+          {
+              images.clear();
+          }
+          else
+          {
+              tag.deleteField(id);
+          }
+      }
+
+
     //TODO addField images to iterator
     public Iterator<TagField> getFields()
     {
@@ -312,6 +341,11 @@ public class FlacTag implements Tag
     public int getFieldCount()
     {
         return tag.getFieldCount() + images.size();
+    }
+
+    public int getFieldCountIncludingSubValues()
+    {
+       return getFieldCount();
     }
 
     public boolean setEncoding(String enc) throws FieldDataInvalidException
@@ -440,19 +474,7 @@ public class FlacTag implements Tag
 
         for(MetadataBlockDataPicture coverArt:images)
         {
-            Artwork artwork = new Artwork();
-            artwork.setMimeType(coverArt.getMimeType());
-            artwork.setDescription(coverArt.getDescription());
-            artwork.setPictureType(coverArt.getPictureType());
-            if(coverArt.isImageUrl())
-            {
-                artwork.setLinked(coverArt.isImageUrl());
-                artwork.setImageUrl(coverArt.getImageUrl());
-            }
-            else
-            {
-                artwork.setBinaryData(coverArt.getImageData());
-            }
+            Artwork artwork=Artwork.createArtworkFromMetadataBlockDataPicture(coverArt);
             artworkList.add(artwork);
         }
         return artworkList;

@@ -25,6 +25,7 @@ import org.jaudiotagger.tag.*;
 import org.jaudiotagger.tag.datatype.Artwork;
 import static org.jaudiotagger.tag.mp4.Mp4FieldKey.*;
 import org.jaudiotagger.tag.mp4.field.*;
+import org.jaudiotagger.tag.vorbiscomment.VorbisCommentFieldKey;
 
 import java.util.ArrayList;
 import java.util.EnumMap;
@@ -42,57 +43,80 @@ public class Mp4Tag extends AbstractTag
     //Mapping from generic key to mp4 key
     static
     {
-        tagFieldToMp4Field.put(FieldKey.ARTIST, Mp4FieldKey.ARTIST);
         tagFieldToMp4Field.put(FieldKey.ALBUM, Mp4FieldKey.ALBUM);
-        tagFieldToMp4Field.put(FieldKey.TITLE, Mp4FieldKey.TITLE);
-        tagFieldToMp4Field.put(FieldKey.TRACK, Mp4FieldKey.TRACK);
-        tagFieldToMp4Field.put(FieldKey.YEAR, Mp4FieldKey.DAY);
-        tagFieldToMp4Field.put(FieldKey.GENRE, Mp4FieldKey.GENRE);
-        tagFieldToMp4Field.put(FieldKey.COMMENT, Mp4FieldKey.COMMENT);
         tagFieldToMp4Field.put(FieldKey.ALBUM_ARTIST, Mp4FieldKey.ALBUM_ARTIST);
-        tagFieldToMp4Field.put(FieldKey.COMPOSER, Mp4FieldKey.COMPOSER);
-        tagFieldToMp4Field.put(FieldKey.GROUPING, Mp4FieldKey.GROUPING);
-        tagFieldToMp4Field.put(FieldKey.DISC_NO, Mp4FieldKey.DISCNUMBER);
-        tagFieldToMp4Field.put(FieldKey.BPM, Mp4FieldKey.BPM);
-        tagFieldToMp4Field.put(FieldKey.ENCODER, Mp4FieldKey.ENCODER);
-        tagFieldToMp4Field.put(FieldKey.MUSICBRAINZ_ARTISTID, Mp4FieldKey.MUSICBRAINZ_ARTISTID);
-        tagFieldToMp4Field.put(FieldKey.MUSICBRAINZ_RELEASEID, Mp4FieldKey.MUSICBRAINZ_ALBUMID);
-        tagFieldToMp4Field.put(FieldKey.MUSICBRAINZ_RELEASEARTISTID, Mp4FieldKey.MUSICBRAINZ_ALBUMARTISTID);
-        tagFieldToMp4Field.put(FieldKey.MUSICBRAINZ_TRACK_ID, Mp4FieldKey.MUSICBRAINZ_TRACKID);
-        tagFieldToMp4Field.put(FieldKey.MUSICBRAINZ_DISC_ID, Mp4FieldKey.MUSICBRAINZ_DISCID);
-        tagFieldToMp4Field.put(FieldKey.MUSICIP_ID, Mp4FieldKey.MUSICIP_PUID);
-        tagFieldToMp4Field.put(FieldKey.AMAZON_ID, Mp4FieldKey.ASIN);
-        tagFieldToMp4Field.put(FieldKey.MUSICBRAINZ_RELEASE_STATUS, Mp4FieldKey.MUSICBRAINZ_ALBUM_STATUS);
-        tagFieldToMp4Field.put(FieldKey.MUSICBRAINZ_RELEASE_TYPE, Mp4FieldKey.MUSICBRAINZ_ALBUM_TYPE);
-        tagFieldToMp4Field.put(FieldKey.MUSICBRAINZ_RELEASE_COUNTRY, Mp4FieldKey.RELEASECOUNTRY);
-        tagFieldToMp4Field.put(FieldKey.LYRICS, Mp4FieldKey.LYRICS);
-        tagFieldToMp4Field.put(FieldKey.IS_COMPILATION, Mp4FieldKey.COMPILATION);
-        tagFieldToMp4Field.put(FieldKey.ARTIST_SORT, Mp4FieldKey.ARTIST_SORT);
         tagFieldToMp4Field.put(FieldKey.ALBUM_ARTIST_SORT, Mp4FieldKey.ALBUM_ARTIST_SORT);
         tagFieldToMp4Field.put(FieldKey.ALBUM_SORT, Mp4FieldKey.ALBUM_SORT);
-        tagFieldToMp4Field.put(FieldKey.TITLE_SORT, Mp4FieldKey.TITLE_SORT);
-        tagFieldToMp4Field.put(FieldKey.COMPOSER_SORT, Mp4FieldKey.COMPOSER_SORT);
-        tagFieldToMp4Field.put(FieldKey.COVER_ART, Mp4FieldKey.ARTWORK);
-        tagFieldToMp4Field.put(FieldKey.ISRC, Mp4FieldKey.ISRC);
-        tagFieldToMp4Field.put(FieldKey.CATALOG_NO, Mp4FieldKey.CATALOGNO);
+        tagFieldToMp4Field.put(FieldKey.AMAZON_ID, Mp4FieldKey.ASIN);
+        tagFieldToMp4Field.put(FieldKey.ARTIST, Mp4FieldKey.ARTIST);
+        tagFieldToMp4Field.put(FieldKey.ARTIST_SORT, Mp4FieldKey.ARTIST_SORT);
         tagFieldToMp4Field.put(FieldKey.BARCODE, Mp4FieldKey.BARCODE);
-        tagFieldToMp4Field.put(FieldKey.RECORD_LABEL, Mp4FieldKey.LABEL);
-        tagFieldToMp4Field.put(FieldKey.LYRICIST, Mp4FieldKey.LYRICIST);
+        tagFieldToMp4Field.put(FieldKey.BPM, Mp4FieldKey.BPM);
+        tagFieldToMp4Field.put(FieldKey.CATALOG_NO, Mp4FieldKey.CATALOGNO);
+        tagFieldToMp4Field.put(FieldKey.COMMENT, Mp4FieldKey.COMMENT);
+        tagFieldToMp4Field.put(FieldKey.COMPOSER, Mp4FieldKey.COMPOSER);
+        tagFieldToMp4Field.put(FieldKey.COMPOSER_SORT, Mp4FieldKey.COMPOSER_SORT);
         tagFieldToMp4Field.put(FieldKey.CONDUCTOR, Mp4FieldKey.CONDUCTOR);
-        tagFieldToMp4Field.put(FieldKey.REMIXER, Mp4FieldKey.REMIXER);
-        tagFieldToMp4Field.put(FieldKey.MOOD, Mp4FieldKey.MOOD);
-        tagFieldToMp4Field.put(FieldKey.MEDIA, Mp4FieldKey.MEDIA);
-        tagFieldToMp4Field.put(FieldKey.URL_OFFICIAL_RELEASE_SITE, Mp4FieldKey.URL_OFFICIAL_RELEASE_SITE);
-        tagFieldToMp4Field.put(FieldKey.URL_DISCOGS_RELEASE_SITE, Mp4FieldKey.URL_DISCOGS_RELEASE_SITE);
-        tagFieldToMp4Field.put(FieldKey.URL_WIKIPEDIA_RELEASE_SITE, Mp4FieldKey.URL_WIKIPEDIA_RELEASE_SITE);
-        tagFieldToMp4Field.put(FieldKey.URL_OFFICIAL_ARTIST_SITE, Mp4FieldKey.URL_OFFICIAL_ARTIST_SITE);
-        tagFieldToMp4Field.put(FieldKey.URL_DISCOGS_ARTIST_SITE, Mp4FieldKey.URL_DISCOGS_ARTIST_SITE);
-        tagFieldToMp4Field.put(FieldKey.URL_WIKIPEDIA_ARTIST_SITE, Mp4FieldKey.URL_WIKIPEDIA_ARTIST_SITE);
-        tagFieldToMp4Field.put(FieldKey.LANGUAGE, Mp4FieldKey.LANGUAGE);
-        tagFieldToMp4Field.put(FieldKey.KEY, Mp4FieldKey.KEY);
-        tagFieldToMp4Field.put(FieldKey.URL_LYRICS_SITE, Mp4FieldKey.URL_LYRICS_SITE);
-        tagFieldToMp4Field.put(FieldKey.TRACK_TOTAL, Mp4FieldKey.TRACK);
+        tagFieldToMp4Field.put(FieldKey.COVER_ART, Mp4FieldKey.ARTWORK);
+        tagFieldToMp4Field.put(FieldKey.CUSTOM1, Mp4FieldKey.MM_CUSTOM_1);
+        tagFieldToMp4Field.put(FieldKey.CUSTOM2, Mp4FieldKey.MM_CUSTOM_2);
+        tagFieldToMp4Field.put(FieldKey.CUSTOM3, Mp4FieldKey.MM_CUSTOM_3);
+        tagFieldToMp4Field.put(FieldKey.CUSTOM4, Mp4FieldKey.MM_CUSTOM_4);
+        tagFieldToMp4Field.put(FieldKey.CUSTOM5, Mp4FieldKey.MM_CUSTOM_5);
+        tagFieldToMp4Field.put(FieldKey.DISC_NO, Mp4FieldKey.DISCNUMBER);
         tagFieldToMp4Field.put(FieldKey.DISC_TOTAL, Mp4FieldKey.DISCNUMBER);
+        tagFieldToMp4Field.put(FieldKey.ENCODER, Mp4FieldKey.ENCODER);
+        tagFieldToMp4Field.put(FieldKey.FBPM, Mp4FieldKey.FBPM);
+        tagFieldToMp4Field.put(FieldKey.GENRE, Mp4FieldKey.GENRE);
+        tagFieldToMp4Field.put(FieldKey.GROUPING, Mp4FieldKey.GROUPING);
+        tagFieldToMp4Field.put(FieldKey.ISRC, Mp4FieldKey.ISRC);
+        tagFieldToMp4Field.put(FieldKey.IS_COMPILATION, Mp4FieldKey.COMPILATION);
+        tagFieldToMp4Field.put(FieldKey.KEY, Mp4FieldKey.KEY);
+        tagFieldToMp4Field.put(FieldKey.LANGUAGE, Mp4FieldKey.LANGUAGE);
+        tagFieldToMp4Field.put(FieldKey.LYRICIST, Mp4FieldKey.LYRICIST);
+        tagFieldToMp4Field.put(FieldKey.LYRICS, Mp4FieldKey.LYRICS);
+        tagFieldToMp4Field.put(FieldKey.MEDIA, Mp4FieldKey.MEDIA);
+        tagFieldToMp4Field.put(FieldKey.MOOD, Mp4FieldKey.MOOD);
+        tagFieldToMp4Field.put(FieldKey.MUSICBRAINZ_ARTISTID, Mp4FieldKey.MUSICBRAINZ_ARTISTID);
+        tagFieldToMp4Field.put(FieldKey.MUSICBRAINZ_DISC_ID, Mp4FieldKey.MUSICBRAINZ_DISCID);
+        tagFieldToMp4Field.put(FieldKey.MUSICBRAINZ_RELEASEARTISTID, Mp4FieldKey.MUSICBRAINZ_ALBUMARTISTID);
+        tagFieldToMp4Field.put(FieldKey.MUSICBRAINZ_RELEASEID, Mp4FieldKey.MUSICBRAINZ_ALBUMID);
+        tagFieldToMp4Field.put(FieldKey.MUSICBRAINZ_RELEASE_COUNTRY, Mp4FieldKey.RELEASECOUNTRY);
+        tagFieldToMp4Field.put(FieldKey.MUSICBRAINZ_RELEASE_GROUP_ID, Mp4FieldKey.MUSICBRAINZ_RELEASE_GROUPID);
+        tagFieldToMp4Field.put(FieldKey.MUSICBRAINZ_RELEASE_STATUS, Mp4FieldKey.MUSICBRAINZ_ALBUM_STATUS);
+        tagFieldToMp4Field.put(FieldKey.MUSICBRAINZ_RELEASE_TYPE, Mp4FieldKey.MUSICBRAINZ_ALBUM_TYPE);
+        tagFieldToMp4Field.put(FieldKey.MUSICBRAINZ_TRACK_ID, Mp4FieldKey.MUSICBRAINZ_TRACKID);
+        tagFieldToMp4Field.put(FieldKey.MUSICBRAINZ_WORK_ID, Mp4FieldKey.MUSICBRAINZ_WORKID);
+        tagFieldToMp4Field.put(FieldKey.MUSICIP_ID, Mp4FieldKey.MUSICIP_PUID);
+        tagFieldToMp4Field.put(FieldKey.OCCASION, Mp4FieldKey.OCCASION);
+        tagFieldToMp4Field.put(FieldKey.ORIGINAL_ALBUM, Mp4FieldKey.MM_ORIGINAL_ALBUM_TITLE);
+        tagFieldToMp4Field.put(FieldKey.ORIGINAL_ARTIST, Mp4FieldKey.MM_ORIGINAL_ARTIST);
+        tagFieldToMp4Field.put(FieldKey.ORIGINAL_LYRICIST, Mp4FieldKey.MM_ORIGINAL_LYRICIST);
+        tagFieldToMp4Field.put(FieldKey.ORIGINAL_YEAR, Mp4FieldKey.MM_ORIGINAL_YEAR);
+        tagFieldToMp4Field.put(FieldKey.QUALITY, Mp4FieldKey.QUALITY);
+        tagFieldToMp4Field.put(FieldKey.RATING, Mp4FieldKey.SCORE);
+        tagFieldToMp4Field.put(FieldKey.RECORD_LABEL, Mp4FieldKey.LABEL);
+        tagFieldToMp4Field.put(FieldKey.REMIXER, Mp4FieldKey.REMIXER);
+        tagFieldToMp4Field.put(FieldKey.SCRIPT, Mp4FieldKey.SCRIPT);
+        tagFieldToMp4Field.put(FieldKey.TAGS, Mp4FieldKey.TAGS);
+        tagFieldToMp4Field.put(FieldKey.TEMPO, Mp4FieldKey.TEMPO);
+        tagFieldToMp4Field.put(FieldKey.TITLE, Mp4FieldKey.TITLE);
+        tagFieldToMp4Field.put(FieldKey.TITLE_SORT, Mp4FieldKey.TITLE_SORT);
+        tagFieldToMp4Field.put(FieldKey.TRACK, Mp4FieldKey.TRACK);
+        tagFieldToMp4Field.put(FieldKey.TRACK_TOTAL, Mp4FieldKey.TRACK);
+        tagFieldToMp4Field.put(FieldKey.URL_DISCOGS_ARTIST_SITE, Mp4FieldKey.URL_DISCOGS_ARTIST_SITE);
+        tagFieldToMp4Field.put(FieldKey.URL_DISCOGS_RELEASE_SITE, Mp4FieldKey.URL_DISCOGS_RELEASE_SITE);
+        tagFieldToMp4Field.put(FieldKey.URL_LYRICS_SITE, Mp4FieldKey.URL_LYRICS_SITE);
+        tagFieldToMp4Field.put(FieldKey.URL_OFFICIAL_ARTIST_SITE, Mp4FieldKey.URL_OFFICIAL_ARTIST_SITE);
+        tagFieldToMp4Field.put(FieldKey.URL_OFFICIAL_RELEASE_SITE, Mp4FieldKey.URL_OFFICIAL_RELEASE_SITE);
+        tagFieldToMp4Field.put(FieldKey.URL_WIKIPEDIA_ARTIST_SITE, Mp4FieldKey.URL_WIKIPEDIA_ARTIST_SITE);
+        tagFieldToMp4Field.put(FieldKey.URL_WIKIPEDIA_RELEASE_SITE, Mp4FieldKey.URL_WIKIPEDIA_RELEASE_SITE);
+        tagFieldToMp4Field.put(FieldKey.YEAR, Mp4FieldKey.DAY);
+        tagFieldToMp4Field.put(FieldKey.ENGINEER, Mp4FieldKey.ENGINEER);
+        tagFieldToMp4Field.put(FieldKey.PRODUCER, Mp4FieldKey.PRODUCER);
+        tagFieldToMp4Field.put(FieldKey.DJMIXER, Mp4FieldKey.DJMIXER);
+        tagFieldToMp4Field.put(FieldKey.MIXER, Mp4FieldKey.MIXER);
+        tagFieldToMp4Field.put(FieldKey.ARRANGER, Mp4FieldKey.ARRANGER);
     }
 
     /**
@@ -145,7 +169,7 @@ public class Mp4Tag extends AbstractTag
         {
             throw new KeyNotFoundException();
         }
-        return super.get(tagFieldToMp4Field.get(genericKey).getFieldName());
+        return super.getFields(tagFieldToMp4Field.get(genericKey).getFieldName());
     }
 
 
@@ -163,16 +187,16 @@ public class Mp4Tag extends AbstractTag
         {
             throw new KeyNotFoundException();
         }
-        return super.get(mp4FieldKey.getFieldName());
+        return super.getFields(mp4FieldKey.getFieldName());
     }
 
     /**
-     * Retrieve the first value that exists for this generic key
+     * Retrieve the indexed value that exists for this generic key
      *
      * @param genericKey
      * @return
      */
-    public String getFirst(FieldKey genericKey) throws KeyNotFoundException
+    public String getValue(FieldKey genericKey, int index) throws KeyNotFoundException
     {
         if (genericKey == null)
         {
@@ -181,14 +205,14 @@ public class Mp4Tag extends AbstractTag
 
         if(genericKey== FieldKey.GENRE)
         {
-            List<TagField> genres = get(GENRE.getFieldName());
+            List<TagField> genres = getFields(GENRE.getFieldName());
             if (genres.size() == 0)
             {
-                genres = get(GENRE_CUSTOM.getFieldName());
+                genres = getFields(GENRE_CUSTOM.getFieldName());
             }
-            if(genres.size()>0)
+            if(genres.size()>index)
             {
-                return ((TagTextField)genres.get(0)).getContent();
+                return ((TagTextField)genres.get(index)).getContent();
             }
             else
             {
@@ -199,9 +223,9 @@ public class Mp4Tag extends AbstractTag
         else if(genericKey== FieldKey.TRACK)
         {
             List<TagField> list = get(tagFieldToMp4Field.get(genericKey));
-            if(list.size()>0)
+            if(list.size()>index)
             {
-                Mp4TrackField trackField = (Mp4TrackField)list.get(0);
+                Mp4TrackField trackField = (Mp4TrackField)list.get(index);
                 if(trackField.getTrackNo()>0)
                 {
                     return String.valueOf(trackField.getTrackNo());
@@ -211,9 +235,9 @@ public class Mp4Tag extends AbstractTag
         else if(genericKey== FieldKey.TRACK_TOTAL)
         {
             List<TagField> list = get(tagFieldToMp4Field.get(genericKey));
-            if(list.size()>0)
+            if(list.size()>index)
             {
-                Mp4TrackField trackField = (Mp4TrackField)list.get(0);
+                Mp4TrackField trackField = (Mp4TrackField)list.get(index);
                 if(trackField.getTrackTotal()>0)
                 {
                     return String.valueOf(trackField.getTrackTotal());
@@ -223,9 +247,9 @@ public class Mp4Tag extends AbstractTag
         else if(genericKey== FieldKey.DISC_NO)
         {
             List<TagField> list = get(tagFieldToMp4Field.get(genericKey));
-            if(list.size()>0)
+            if(list.size()>index)
             {
-                Mp4DiscNoField discField = (Mp4DiscNoField)list.get(0);
+                Mp4DiscNoField discField = (Mp4DiscNoField)list.get(index);
                 if(discField.getDiscNo()>0)
                 {
                      return String.valueOf(discField.getDiscNo());
@@ -236,9 +260,9 @@ public class Mp4Tag extends AbstractTag
         else if(genericKey== FieldKey.DISC_TOTAL)
         {
             List<TagField> list = get(tagFieldToMp4Field.get(genericKey));
-            if(list.size()>0)
+            if(list.size()>index)
             {
-                Mp4DiscNoField discField = (Mp4DiscNoField)list.get(0);
+                Mp4DiscNoField discField = (Mp4DiscNoField)list.get(index);
                 if(discField.getDiscTotal()>0)
                 {
                      return String.valueOf(discField.getDiscTotal());
@@ -247,12 +271,12 @@ public class Mp4Tag extends AbstractTag
         }
         else
         {
-            return super.getFirst(tagFieldToMp4Field.get(genericKey).getFieldName());
+            return super.getItem(tagFieldToMp4Field.get(genericKey).getFieldName(), index);
         }
         return "";
     }
 
-    /**
+  /**
      * Retrieve the first value that exists for this mp4key
      *
      * @param mp4Key
@@ -360,26 +384,45 @@ public class Mp4Tag extends AbstractTag
             throw new KeyNotFoundException();
         }
 
-        if(genericKey== FieldKey.TRACK)
+        //Special handling for these number fields
+        if(
+                (genericKey== FieldKey.TRACK)||
+                (genericKey== FieldKey.TRACK_TOTAL)||
+                (genericKey== FieldKey.DISC_NO)||
+                (genericKey== FieldKey.DISC_TOTAL)
+            )
         {
-            return new Mp4TrackField(Integer.parseInt(value));
+            try
+            {
+                int number = Integer.parseInt(value);
+                if(genericKey== FieldKey.TRACK)
+                {
+                    return new Mp4TrackField(number);
+                }
+                else if(genericKey== FieldKey.TRACK_TOTAL)
+                {
+                    return new Mp4TrackField(0,number);
+                }
+                else if(genericKey== FieldKey.DISC_NO)
+                {
+                    return new Mp4DiscNoField(number);
+                }
+                else if(genericKey== FieldKey.DISC_TOTAL)
+                {
+                    return new Mp4DiscNoField(0,number);
+                }
+            }
+            catch(NumberFormatException nfe)
+            {
+                //If not number we want to convert to an expected exception (which is not a RuntimeException)
+                //so can be handled properly by calling program
+                throw new FieldDataInvalidException("Value "+value + " is not a number as required",nfe);
+            }
         }
-        else if(genericKey== FieldKey.TRACK_TOTAL)
-        {
-            return new Mp4TrackField(0,Integer.parseInt(value));
-        }
-        else if(genericKey== FieldKey.DISC_NO)
-        {
-            return new Mp4DiscNoField(Integer.parseInt(value));
-        }
-        else if(genericKey== FieldKey.DISC_TOTAL)
-        {
-            return new Mp4DiscNoField(0,Integer.parseInt(value));
-        }
-        else
-        {
-            return createField(tagFieldToMp4Field.get(genericKey), value);
-        }
+
+        //Default for all other fields
+        return createField(tagFieldToMp4Field.get(genericKey), value);
+
     }
 
     /**
@@ -474,83 +517,56 @@ public class Mp4Tag extends AbstractTag
         {
             throw new KeyNotFoundException();
         }
-        switch (mp4FieldKey)
+
+        //This is boolean stored as 1, but calling program might setField as 'true' so we handle this
+        //case internally
+        if(mp4FieldKey==Mp4FieldKey.COMPILATION)
         {
-            //This is boolean stored as 1, but calling program might setField as 'true' so we handle this
-            //case internally
-            case COMPILATION:
-                if(value.equals("true"))
-                {
-                    value= Mp4TagByteField.TRUE_VALUE;
-                }
-                return new Mp4TagByteField(mp4FieldKey, value, mp4FieldKey.getFieldLength());
-
-            case RATING:
-            case BPM:
-            case CONTENT_TYPE:
-            case TV_SEASON:
-            case TV_EPISODE:
-            case TOOL:
-                return new Mp4TagByteField(mp4FieldKey, value, mp4FieldKey.getFieldLength());
-
-            case GENRE:
-                return createGenreField(value);
-
-            case PODCAST_URL:
-            case EPISODE_GLOBAL_ID:
-                return new Mp4TagTextNumberField(mp4FieldKey.getFieldName(), value);
-
-            case DISCNUMBER:
-                return new Mp4DiscNoField(value);
-
-            case TRACK:
-                return new Mp4TrackField(value);
-
-            case MUSICBRAINZ_TRACKID:
-            case MUSICBRAINZ_ARTISTID:
-            case MUSICBRAINZ_ALBUMID:
-            case MUSICBRAINZ_ALBUMARTISTID:
-            case MUSICBRAINZ_DISCID:
-            case MUSICIP_PUID:
-            case ASIN:
-            case MUSICBRAINZ_ALBUM_STATUS:
-            case MUSICBRAINZ_ALBUM_TYPE:
-            case RELEASECOUNTRY:
-            case PART_OF_GAPLESS_ALBUM:
-            case ITUNES_SMPB:
-            case ITUNES_NORM:
-            case CDDB_1:
-            case CDDB_TRACKNUMBER:
-            case CDDB_IDS:
-            case LYRICIST:
-            case CONDUCTOR:
-            case REMIXER:
-            case ENGINEER:
-            case PRODUCER:
-            case DJMIXER:
-            case MIXER:
-            case MOOD:
-            case ISRC:
-            case MEDIA:
-            case LABEL:
-            case CATALOGNO:
-            case BARCODE:
-            case URL_OFFICIAL_RELEASE_SITE:
-            case URL_DISCOGS_RELEASE_SITE:
-            case URL_WIKIPEDIA_RELEASE_SITE:
-            case URL_OFFICIAL_ARTIST_SITE:
-            case URL_DISCOGS_ARTIST_SITE:
-            case URL_WIKIPEDIA_ARTIST_SITE:
-            case LANGUAGE:
-            case KEY: 
-            case URL_LYRICS_SITE:
-                return new Mp4TagReverseDnsField(mp4FieldKey, value);
-
-            case ARTWORK:
-                throw new UnsupportedOperationException(ErrorMessage.ARTWORK_CANNOT_BE_CREATED_WITH_THIS_METHOD.getMsg());
-                 
-            default:
-                return new Mp4TagTextField(mp4FieldKey.getFieldName(), value);
+            if(value.equals("true"))
+            {
+                value= Mp4TagByteField.TRUE_VALUE;
+            }
+            return new Mp4TagByteField(mp4FieldKey, value, mp4FieldKey.getFieldLength());
+        }
+        else if(mp4FieldKey==Mp4FieldKey.GENRE)
+        {
+            return createGenreField(value);
+        }
+        else if(mp4FieldKey.getSubClassFieldType()==Mp4TagFieldSubType.DISC_NO)
+        {
+            return new Mp4DiscNoField(value);
+        }
+        else if(mp4FieldKey.getSubClassFieldType()==Mp4TagFieldSubType.TRACK_NO)
+        {
+            return new Mp4TrackField(value);
+        }
+        else if(mp4FieldKey.getSubClassFieldType()==Mp4TagFieldSubType.BYTE)
+        {
+            return new Mp4TagByteField(mp4FieldKey, value, mp4FieldKey.getFieldLength());
+        }
+        else if(mp4FieldKey.getSubClassFieldType()==Mp4TagFieldSubType.NUMBER)
+        {
+            return new Mp4TagTextNumberField(mp4FieldKey.getFieldName(), value);
+        }
+        else if(mp4FieldKey.getSubClassFieldType()==Mp4TagFieldSubType.REVERSE_DNS)
+        {
+            return new Mp4TagReverseDnsField(mp4FieldKey, value);
+        }
+        else if(mp4FieldKey.getSubClassFieldType()==Mp4TagFieldSubType.ARTWORK)
+        {
+            throw new UnsupportedOperationException(ErrorMessage.ARTWORK_CANNOT_BE_CREATED_WITH_THIS_METHOD.getMsg());
+        }
+        else if(mp4FieldKey.getSubClassFieldType()==Mp4TagFieldSubType.TEXT)
+        {
+            return new Mp4TagTextField(mp4FieldKey.getFieldName(), value);
+        }
+        else if(mp4FieldKey.getSubClassFieldType()==Mp4TagFieldSubType.UNKNOWN)
+        {
+            throw new UnsupportedOperationException(ErrorMessage.DO_NOT_KNOW_HOW_TO_CREATE_THIS_ATOM_TYPE.getMsg(mp4FieldKey.getFieldName()));
+        }
+        else
+        {
+            throw new UnsupportedOperationException(ErrorMessage.DO_NOT_KNOW_HOW_TO_CREATE_THIS_ATOM_TYPE.getMsg(mp4FieldKey.getFieldName()));
         }
     }
 

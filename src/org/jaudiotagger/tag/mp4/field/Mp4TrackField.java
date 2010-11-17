@@ -96,7 +96,6 @@ public class Mp4TrackField extends Mp4TagTextNumberField
         numbers.add((short) trackNo);
         numbers.add(new Short("0"));
         numbers.add(new Short("0"));
-        System.out.println("Created field"+trackNo);
     }
 
     /**

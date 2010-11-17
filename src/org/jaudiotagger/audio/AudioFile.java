@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import org.jaudiotagger.audio.exceptions.CannotWriteException;
 import org.jaudiotagger.audio.exceptions.ReadOnlyFileException;
 import org.jaudiotagger.audio.flac.metadatablock.MetadataBlockDataPicture;
+import org.jaudiotagger.logging.ErrorMessage;
 import org.jaudiotagger.tag.asf.AsfTag;
 import org.jaudiotagger.audio.wav.WavTag;
 import org.jaudiotagger.audio.real.RealTag;
@@ -74,9 +75,9 @@ public class AudioFile
 
     /**
      * <p>These constructors are used by the different readers, users should not use them, but use the <code>AudioFileIO.read(File)</code> method instead !.</p>
-     * <p>Create the AudioFile representing file f, the encodingaudioHeaders and containing the tag</p>
+     * <p>Create the AudioFile representing file f, the encoding audio headers and containing the tag</p>
      *
-     * @param f           The file of the audiofile
+     * @param f           The file of the audio file
      * @param audioHeader the encoding audioHeaders over this file
      * @param tag         the tag contained in this file or null if no tag exists
      */
@@ -90,9 +91,9 @@ public class AudioFile
 
     /**
      * <p>These constructors are used by the different readers, users should not use them, but use the <code>AudioFileIO.read(File)</code> method instead !.</p>
-     * <p>Create the AudioFile representing file denoted by pathname s, the encodingaudioHeaders and containing the tag</p>
+     * <p>Create the AudioFile representing file denoted by pathnames, the encoding audio Headers and containing the tag</p>
      *
-     * @param s           The pathname of the audiofile
+     * @param s           The pathname of the audio file
      * @param audioHeader the encoding audioHeaders over this file
      * @param tag         the tag contained in this file
      */
@@ -162,15 +163,31 @@ public class AudioFile
     }
 
     /**
-     * <p>Returns a multi-line string with the file path, the encoding audioHeaderrmations, and the tag contents.</p>
+     * <p>Returns a multi-line string with the file path, the encoding audioHeader, and the tag contents.</p>
      *
-     * @return A multi-line string with the file path, the encoding audioHeaderrmations, and the tag contents.
+     * @return A multi-line string with the file path, the encoding audioHeader, and the tag contents.
      *         TODO Maybe this can be changed ?
      */
     public String toString()
     {
         return "AudioFile " + getFile().getAbsolutePath()
                 + "  --------\n" + audioHeader.toString() + "\n" + ((tag == null) ? "" : tag.toString()) + "\n-------------------";
+    }
+
+    /**
+     * Check does file exist
+     *
+     * @param file
+     * @throws FileNotFoundException
+     */
+    public void checkFileExists(File file)throws FileNotFoundException
+    {
+        logger.info("Reading file:" + "path" + file.getPath() + ":abs:" + file.getAbsolutePath());
+        if (!file.exists())
+        {
+            logger.severe("Unable to find:" + file.getPath());
+            throw new FileNotFoundException(ErrorMessage.UNABLE_TO_FIND_FILE.getMsg(file.getPath()));
+        }
     }
 
     /**
@@ -186,12 +203,7 @@ public class AudioFile
     {
         RandomAccessFile newFile;
 
-        logger.info("Reading file:" + "path" + file.getPath() + ":abs:" + file.getAbsolutePath());
-        if (!file.exists())
-        {
-            logger.severe("Unable to find:" + file.getPath());
-            throw new FileNotFoundException("Unable to find:" + file.getPath());
-        }
+        checkFileExists(file);
 
         // Unless opened as readonly the file must be writable
         if (readOnly)
@@ -203,7 +215,7 @@ public class AudioFile
             if (!file.canWrite())
             {
                 logger.severe("Unable to write:" + file.getPath());
-                throw new ReadOnlyFileException("Unable to write to:" + file.getPath());
+                throw new ReadOnlyFileException(ErrorMessage.NO_PERMISSIONS_TO_WRITE_TO_FILE.getMsg(file.getPath()));
             }
             newFile = new RandomAccessFile(file, "rws");
         }
@@ -283,7 +295,7 @@ public class AudioFile
     }
 
     /**
-     * Get the tag or if the file doesnt have one at all, create a default tag  and return
+     * Get the tag or if the file doesn't have one at all, create a default tag  and return
      *
      * @return
      */
@@ -298,7 +310,7 @@ public class AudioFile
     }
 
      /**
-     * Get the tag or if the file doesnt have one at all, create a default tag  and set it
+     * Get the tag or if the file doesn't have one at all, create a default tag  and set it
      *
      * @return
      */
@@ -317,7 +329,7 @@ public class AudioFile
     /**
      *
      * @param file
-     * @return filename with audioformat seperator stripped of.
+     * @return filename with audioFormat separator stripped of.
      */
     public static String getBaseFilename(File file)
     {

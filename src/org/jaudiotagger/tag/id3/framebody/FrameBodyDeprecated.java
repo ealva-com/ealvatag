@@ -1,14 +1,15 @@
 package org.jaudiotagger.tag.id3.framebody;
 
 /**
- * Represents a framebody for a frame identifier that is not defined for the tag version but was valid for a for an
+ * Represents a frameBody for a frame identifier that is not defined for the tag version but was valid for a for an
  * earlier tag version.
  * The body consists  of an array of bytes representing all the bytes in the body.
  */
 public class FrameBodyDeprecated extends AbstractID3v2FrameBody implements ID3v24FrameBody, ID3v23FrameBody
 {
-    /* The original framebody is held so can be retrieved
-     * when converting a DeprecatedFrameBody back to a normal Framebody */
+    /** The original frameBody is held so can be retrieved
+     *  when converting a DeprecatedFrameBody back to a normal framebody
+     */
     private AbstractID3v2FrameBody originalFrameBody;
 
 
@@ -43,7 +44,7 @@ public class FrameBodyDeprecated extends AbstractID3v2FrameBody implements ID3v2
     }
 
     /**
-     * Delgate size to size of original framebody, if framebody already exist will take this value from the frame header
+     * Delgate size to size of original frameBody, if frameBody already exist will take this value from the frame header
      * but it is always recalculated before writing any changes back to disk.
      *
      * @return size in bytes of this frame body
@@ -69,7 +70,7 @@ public class FrameBodyDeprecated extends AbstractID3v2FrameBody implements ID3v2
     }
 
     /**
-     * Return the original framebody that was used to construct the DeprecatedFrameBody
+     * Return the original frameBody that was used to construct the DeprecatedFrameBody
      *
      * @return the original frameBody
      */

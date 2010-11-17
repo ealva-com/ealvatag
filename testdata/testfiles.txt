@@ -1,7 +1,16 @@
 Describes the test data files, only the files that are freely distributable are actually included in the CVS repositisory . The others are held locally until I can create a copyright free equivalent
 that achives the same test.
 filename,included,issue,description
+test1.wma,yes,245,wma,Tagged 
+test2.wma,yes,245,wma,Tagged from Media Monkey
+test3.wma,yes,245,wma,tagged from Picard, header size doesnt match file size
+test4.wma,yes,245,wma,Gif Artwork
+test5.wma,yes,245,wma,Png Artwork
+test6.wma,yes,245,wma,Jpg Artwork
+test7.wma,yes,245,wma,Png artwork
 test7.mp4,yes,,Mp4 Video File
+test8.wma,no,268,wma,
+test9.wma,no,268,wma,Contains WM/MCDI field, (non artwork binary)
 test35.mp4,no,255,Mp4 with null space at the end of the file
 test37.mp4,no,257,Corrupt Mp4 with extra padding between atoms 
 test38.mp4,yes,,Usual Mp4 with all metadata files populated by Media Monkey 3
@@ -11,15 +20,6 @@ test41.mp4,yes,220,Mp4 with only a meta atom within track hierachy - and meta at
 test42.mp4,yes,220,mp4,with udta metadata hierachy imediately after moov, plus meta atom in trak (created by loading test41.mp4 into picard and adding a field in picard)
 test43.mp4,no,260,mp4,with udta metadata hierachy imediately after moov (created by loading test40.mp4 into picard and adding a field in picard)
 test44.mp4,yes,220,mp4,with udta metadata hierachy imediately after trak plus meta atom in trak (created by loading test41.mp4 into jaikoz and adding a field in jaikoz)
-test1.wma,yes,245,wma,Tagged 
-test2.wma,yes,245,wma,Tagged from Media Monkey
-test3.wma,yes,245,wma,tagged from Picard, header size doesnt match file size
-test4.wma,yes,245,wma,Gif Artwork
-test5.wma,yes,245,wma,Png Artwork
-test6.wma,yes,245,wma,Jpg Artwork
-test7.wma,yes,245,wma,Png artwork
-test8.wma,no,268,wma,
-test9.wma,no,268,wma,Contains WM/MCDI field, (non artwork binary)
 test46.mp3,no,269,ID3v23 with extended header flag set but doesnt actually have an extended header
 test47.mp3,yes,269,ID3v23 with extended header and crc check
 test48.mp3,yes,269,ID3v23 with encrypted field (TENC)
@@ -31,3 +31,6 @@ test53.mp3,yes,271,ID3v22 tag with unsychronization and compressed flag set
 test54.flac:no,274:Flac tag with possibly corrupt Vorbis Comment Tag
 test55.ogg,no,279,Ogg file with setup header on new ogg page instaead of immediatley after Comment header
 test74.mp3,yes,256,NullPointerException
+test76.ogg,yes,286,Ogg File with artwork installed using new method from http://wiki.xiph.org/index.php/VorbisComment#Cover_art
+test77.ogg,yes,286,Ogg File with artwork installed using new method from http://wiki.xiph.org/index.php/VorbisComment#Cover_art
+test78.mp3,no,250,Mp3 file with bad data in first PRIV frame

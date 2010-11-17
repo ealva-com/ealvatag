@@ -8,6 +8,7 @@ import org.jaudiotagger.tag.id3.framebody.FrameBodyCOMM;
 import org.jaudiotagger.tag.id3.framebody.FrameBodyTPE1;
 
 import java.io.File;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -177,13 +178,14 @@ public class ItunesTest extends AbstractTestCase
     public void testCanFindStartOfMp3AudioWithinUTF16LETag() throws Exception
     {
         long START_OF_AUDIO_LOCATION = 2048;
-        int FRAME_COUNT = 10;
+        int FRAME_COUNT = 11;
         File testFile = AbstractTestCase.copyAudioToTmp("Issue104-1.id3", "testV1.mp3");
         MP3File mp3File = new MP3File(testFile);
 
         //Should find mp3 in same location whether start search from start or after ID3tag
         assertEquals(START_OF_AUDIO_LOCATION, mp3File.getMP3AudioHeader().getMp3StartByte());
-        assertEquals(FRAME_COUNT, mp3File.getID3v2Tag().getFrameCount());
+        assertEquals(FRAME_COUNT, mp3File.getID3v2Tag().getFieldCountIncludingSubValues());
+        assertEquals(FRAME_COUNT, mp3File.getID3v2Tag().getFieldCount());        
     }
 
     /**

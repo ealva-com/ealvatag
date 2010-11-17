@@ -56,7 +56,7 @@ public class FrameULSTTest extends AbstractTestCase
         assertEquals(Languages.DEFAULT_ID, lyricsBody.getLanguage());
         assertEquals("description", lyricsBody.getDescription());
         assertEquals("lyric1", lyricsBody.getLyric());
-        assertEquals(0, lyricsBody.getTextEncoding());
+        assertEquals(1, lyricsBody.getTextEncoding());
 
         //Now force to UTF-16
         lyricsBody.setLyric("lyric\u111F");
@@ -230,6 +230,15 @@ public class FrameULSTTest extends AbstractTestCase
         assertEquals("", lyricsBody.getDescription());
         assertEquals("lyric1", lyricsBody.getLyric());
         assertEquals(0, lyricsBody.getTextEncoding());
+
+        //Change Encoding
+        lyricsBody.setTextEncoding((byte)1);
+        mp3File.save();
+
+        mp3File = new MP3File(testFile);
+        v23frame = (ID3v23Frame) mp3File.getID3v2Tag().getFrame(ID3v23Frames.FRAME_ID_V3_UNSYNC_LYRICS);
+        assertEquals(1, lyricsBody.getTextEncoding());
+
     }
 
 }

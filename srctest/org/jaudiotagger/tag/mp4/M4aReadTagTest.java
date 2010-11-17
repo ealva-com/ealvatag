@@ -7,6 +7,7 @@ import org.jaudiotagger.audio.AudioFileIO;
 import org.jaudiotagger.audio.exceptions.CannotReadVideoException;
 import org.jaudiotagger.audio.mp4.EncoderType;
 import org.jaudiotagger.audio.mp4.Mp4AudioHeader;
+import org.jaudiotagger.audio.mp4.Mp4TagReader;
 import org.jaudiotagger.audio.mp4.atom.Mp4EsdsBox;
 import org.jaudiotagger.tag.FieldKey;
 import org.jaudiotagger.tag.Tag;
@@ -20,6 +21,7 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 import java.util.List;
@@ -958,7 +960,7 @@ public class M4aReadTagTest extends TestCase
             Mp4AudioHeader audioheader = (Mp4AudioHeader) f.getAudioHeader();
             assertEquals(Mp4EsdsBox.Kind.MPEG4_AUDIO, audioheader.getKind());
             assertEquals(Mp4EsdsBox.AudioProfile.LOW_COMPLEXITY, audioheader.getProfile());
-            assertEquals(1, tag.get(Mp4NonStandardFieldKey.AAPR.getFieldName()).size());
+            assertEquals(1, tag.getFields(Mp4NonStandardFieldKey.AAPR.getFieldName()).size());
             assertNotNull(tag.getFirst(Mp4NonStandardFieldKey.AAPR.getFieldName()));
             assertEquals("AApr", tag.getFirstField(Mp4NonStandardFieldKey.AAPR.getFieldName()).getId());
             //Make a change and save
@@ -972,7 +974,7 @@ public class M4aReadTagTest extends TestCase
             assertEquals("AApr", tag.getFirstField(Mp4NonStandardFieldKey.AAPR.getFieldName()).getId());
             assertEquals("NEWTITLE\u00A9\u01ff", tag.getFirst(FieldKey.TITLE));
             assertEquals(Mp4ContentTypeValue.TV_SHOW.getIdAsString(), tag.getFirst(Mp4FieldKey.CONTENT_TYPE));
-            assertEquals(1, tag.get(Mp4NonStandardFieldKey.AAPR.getFieldName()).size());
+            assertEquals(1, tag.getFields(Mp4NonStandardFieldKey.AAPR.getFieldName()).size());
             assertNotNull(tag.getFirst(Mp4NonStandardFieldKey.AAPR.getFieldName()));
 
             //Can we read all the other customfields  (that do follow convention)
@@ -1196,5 +1198,24 @@ public class M4aReadTagTest extends TestCase
         assertNull(exceptionCaught);
     }
 
-   
+    public void testNumericGenres() throws Exception
+    {
+        Exception exceptionCaught = null;
+        try
+        {
+            assertTrue(Mp4GenreField.isValidGenre("Rock"));
+
+            //Read Image
+            File testFile = AbstractTestCase.copyAudioToTmp("test75.m4a");
+            RandomAccessFile raf = new RandomAccessFile(testFile,"r");
+            Mp4Tag tagReader = new Mp4TagReader().read(raf);
+            assertEquals("Rock",tagReader.getFirst(FieldKey.GENRE));
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+            exceptionCaught = e;
+        }
+    }
+
 }
