@@ -35,7 +35,8 @@ import java.util.logging.Logger;
 
 
 /**
- * Writes metadata from mp4, the metadata tags are held under the ilst atom as shown below
+ * Writes metadata from mp4, the metadata tags are held under the ilst atom as shown below, (note all free atoms are
+ * optional).
  * <p/>
  * <p/>
  * When writing changes the size of all the atoms upto ilst has to be recalculated, then if the size of
@@ -52,6 +53,7 @@ import java.util.logging.Logger;
  * <p/>
  * <pre>
  * |--- ftyp
+ * |--- free
  * |--- moov
  * |......|
  * |......|----- mvdh
@@ -194,10 +196,15 @@ public class Mp4TagWriter
         int newIlstSize;
         int oldMetaLevelFreeAtomSize;
         long extraDataSize;
-        int level1SearchPosition = 0;
         int topLevelFreePosition;
         int topLevelFreeSize;
-        boolean topLevelFreeAtomComesBeforeMdatAtom;
+
+        //Found top level free atom that comes after moov and before mdat, (also true if no free atom ?)
+        boolean topLevelFreeAtomComesBeforeMdatAtomAndAfterMetadata;
+
+        //Found top level free atom that comes between ftyp and moov
+        boolean topLevelFreeAtomComesBeforeMdatAndMetadata;
+
         Mp4BoxHeader topLevelFreeHeader;
 
         Mp4AtomTree atomTree;
@@ -337,10 +344,10 @@ public class Mp4TagWriter
         }
 
         //Level-1 free atom
-        level1SearchPosition = 0;
         topLevelFreePosition = 0;
         topLevelFreeSize = 0;
-        topLevelFreeAtomComesBeforeMdatAtom = true;
+        topLevelFreeAtomComesBeforeMdatAtomAndAfterMetadata = true;
+        topLevelFreeAtomComesBeforeMdatAndMetadata = false;
         for (DefaultMutableTreeNode freeNode : atomTree.getFreeNodes())
         {
             DefaultMutableTreeNode parentNode = (DefaultMutableTreeNode) freeNode.getParent();
@@ -349,7 +356,6 @@ public class Mp4TagWriter
                 topLevelFreeHeader = ((Mp4BoxHeader) freeNode.getUserObject());
                 topLevelFreeSize = topLevelFreeHeader.getLength();
                 topLevelFreePosition = (int) topLevelFreeHeader.getFilePos();
-                level1SearchPosition = topLevelFreePosition;
                 break;
             }
         }
@@ -358,14 +364,17 @@ public class Mp4TagWriter
         {
             if (topLevelFreePosition > mdatHeader.getFilePos())
             {
-                topLevelFreeAtomComesBeforeMdatAtom = false;
-                level1SearchPosition = (int) mdatHeader.getFilePos();
+                topLevelFreeAtomComesBeforeMdatAtomAndAfterMetadata = false;
+            }
+            else if(topLevelFreePosition < moovHeader.getFilePos())
+            {
+                topLevelFreeAtomComesBeforeMdatAtomAndAfterMetadata = false;
+                topLevelFreeAtomComesBeforeMdatAndMetadata = true;
             }
         }
         else
         {
             topLevelFreePosition = (int) mdatHeader.getFilePos();
-            level1SearchPosition = topLevelFreePosition;
         }
 
 
@@ -530,7 +539,7 @@ public class Mp4TagWriter
                     //Edit stco atom within moov header, if the free atom comes after mdat OR
                     //(there is not enough space in the top level free atom
                     //or special case of matching exactly the free atom plus header)
-                    if ((!topLevelFreeAtomComesBeforeMdatAtom)
+                    if ((!topLevelFreeAtomComesBeforeMdatAtomAndAfterMetadata)
                            || ((topLevelFreeSize - Mp4BoxHeader.HEADER_LENGTH < additionalMetaSizeThatWontFitWithinMetaAtom)
                            && (topLevelFreeSize != additionalMetaSizeThatWontFitWithinMetaAtom)))
                     {
@@ -567,7 +576,7 @@ public class Mp4TagWriter
                      //Edit stco atom within moov header, if the free atom comes after mdat OR
                     //(there is not enough space in the top level free atom
                     //or special case of matching exactly the free atom plus header)
-                    if ((!topLevelFreeAtomComesBeforeMdatAtom)
+                    if ((!topLevelFreeAtomComesBeforeMdatAtomAndAfterMetadata)
                             || ((topLevelFreeSize - Mp4BoxHeader.HEADER_LENGTH < additionalMetaSizeThatWontFitWithinMetaAtom)
                             && (topLevelFreeSize != additionalMetaSizeThatWontFitWithinMetaAtom)))
                     {
@@ -610,7 +619,7 @@ public class Mp4TagWriter
 
                 //If we have top level free atom that comes before mdat we might be able to use it but only if
                 //the free atom actually come after the the metadata
-                if (topLevelFreeAtomComesBeforeMdatAtom&&(topLevelFreePosition>startIlstWithinFile))
+                if (topLevelFreeAtomComesBeforeMdatAtomAndAfterMetadata&&(topLevelFreePosition>startIlstWithinFile))
                 {
                     //If the shift is less than the space available in this second free atom data size we should
                     //minimize the free atom accordingly (then we don't have to update stco atom)

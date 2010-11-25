@@ -34,3 +34,4 @@ test74.mp3,yes,256,NullPointerException
 test76.ogg,yes,286,Ogg File with artwork installed using new method from http://wiki.xiph.org/index.php/VorbisComment#Cover_art
 test77.ogg,yes,286,Ogg File with artwork installed using new method from http://wiki.xiph.org/index.php/VorbisComment#Cover_art
 test78.mp3,no,250,Mp3 file with bad data in first PRIV frame
+test83.mp4,no,291,Mp4 with free atom before moov atom when writing

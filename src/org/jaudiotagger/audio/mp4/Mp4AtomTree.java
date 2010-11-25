@@ -26,7 +26,7 @@ import java.util.logging.Logger;
  * it would be impossible to create a complete tree for any file without understanding all the nodes because
  * some atoms such as meta contain data and children and therefore need to be specially preprocessed)
  * <p/>
- * This class is currently only used when writing tags because it better handles the difficulties of mdat aand free
+ * This class is currently only used when writing tags because it better handles the difficulties of mdat and free
  * atoms being optional/multiple places then the older sequential method. It is expected this class will eventually
  * be used when reading tags as well.
  * <p/>
@@ -109,7 +109,7 @@ public class Mp4AtomTree
             ByteBuffer headerBuffer = ByteBuffer.allocate(Mp4BoxHeader.HEADER_LENGTH);
             while (fc.position() < fc.size())
             {
-                 Mp4BoxHeader boxHeader = new Mp4BoxHeader();
+                Mp4BoxHeader boxHeader = new Mp4BoxHeader();
                 headerBuffer.clear();          
                 fc.read(headerBuffer);
                 headerBuffer.rewind();
