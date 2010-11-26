@@ -36,6 +36,8 @@ import java.nio.ByteBuffer;
  */
 public class FrameBodyTDAT extends AbstractFrameBodyTextInfo implements ID3v23FrameBody
 {
+    private boolean monthOnly;
+
     /**
      * Creates a new FrameBodyTDAT datatype.
      */
@@ -79,5 +81,15 @@ public class FrameBodyTDAT extends AbstractFrameBodyTextInfo implements ID3v23Fr
     public String getIdentifier()
     {
         return ID3v23Frames.FRAME_ID_V3_TDAT;
+    }
+
+    public boolean isMonthOnly()
+    {
+        return monthOnly;
+    }
+
+    public void setMonthOnly(boolean monthOnly)
+    {
+        this.monthOnly = monthOnly;
     }
 }

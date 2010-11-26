@@ -231,6 +231,7 @@ public class ID3v23Tag extends AbstractID3v2Tag
         {
             newFrame = new ID3v23Frame(ID3v23Frames.FRAME_ID_V3_TDAT);
             ((FrameBodyTDAT) newFrame.getBody()).setText(tmpBody.getDate());
+            ((FrameBodyTDAT) newFrame.getBody()).setMonthOnly(tmpBody.isMonthOnly());
             logger.info("Adding Frame:" + newFrame.getIdentifier());
             frameMap.put(newFrame.getIdentifier(), newFrame);
         }
@@ -238,6 +239,7 @@ public class ID3v23Tag extends AbstractID3v2Tag
         {
             newFrame = new ID3v23Frame(ID3v23Frames.FRAME_ID_V3_TIME);
             ((FrameBodyTIME) newFrame.getBody()).setText(tmpBody.getTime());
+            ((FrameBodyTIME) newFrame.getBody()).setHoursOnly(tmpBody.isHoursOnly());
             logger.info("Adding Frame:" + newFrame.getIdentifier());
             frameMap.put(newFrame.getIdentifier(), newFrame);
         }
@@ -249,7 +251,7 @@ public class ID3v23Tag extends AbstractID3v2Tag
      */
     public ID3v23Tag(ID3v23Tag copyObject)
     {
-        //This doesnt do anything.
+        //This doesn't do anything.
         super(copyObject);
         logger.info("Creating tag from another tag of same type");
         copyPrimitives(copyObject);

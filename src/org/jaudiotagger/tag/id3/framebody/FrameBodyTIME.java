@@ -36,6 +36,7 @@ import java.nio.ByteBuffer;
  */
 public class FrameBodyTIME extends AbstractFrameBodyTextInfo implements ID3v23FrameBody
 {
+    private boolean hoursOnly;
     /**
      * Creates a new FrameBodyTIME datatype.
      */
@@ -79,5 +80,15 @@ public class FrameBodyTIME extends AbstractFrameBodyTextInfo implements ID3v23Fr
     public String getIdentifier()
     {
         return ID3v23Frames.FRAME_ID_V3_TIME;
+    }
+
+    public boolean isHoursOnly()
+    {
+        return hoursOnly;
+    }
+
+    public void setHoursOnly(boolean hoursOnly)
+    {
+        this.hoursOnly = hoursOnly;
     }
 }

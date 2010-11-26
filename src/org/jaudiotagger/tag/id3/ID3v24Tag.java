@@ -388,7 +388,7 @@ public class ID3v24Tag extends AbstractID3v2Tag
                    //Two different frames both converted to TDRCFrames, now if this is the case one of them
                    //may have actually have been created as a FrameUnsupportedBody because TDRC is only
                    //supported in ID3v24, but is often created in v23 tags as well together with the valid TYER
-                   //frame
+                   //frame OR it might be that we have two v23 frames that map to TDRC such as TYER,TIME or TDAT
                    if (newFrame.getBody() instanceof FrameBodyTDRC)
                    {
                        if (firstFrame.getBody() instanceof FrameBodyTDRC)
@@ -405,20 +405,19 @@ public class ID3v24Tag extends AbstractID3v2Tag
                            //Just add the data to the frame
                            if (newBody.getOriginalID().equals(ID3v23Frames.FRAME_ID_V3_TYER))
                            {
-                               body.setYear(newBody.getText());
+                               body.setYear(newBody.getYear());
                            }
                            else if (newBody.getOriginalID().equals(ID3v23Frames.FRAME_ID_V3_TDAT))
                            {
-                               body.setDate(newBody.getText());
+                               body.setDate(newBody.getDate());
+                               body.setMonthOnly(newBody.isMonthOnly());
                            }
                            else if (newBody.getOriginalID().equals(ID3v23Frames.FRAME_ID_V3_TIME))
                            {
-                               body.setTime(newBody.getText());
+                               body.setTime(newBody.getTime());
+                               body.setHoursOnly(newBody.isHoursOnly());
                            }
-                           else if (newBody.getOriginalID().equals(ID3v23Frames.FRAME_ID_V3_TRDA))
-                           {
-                               body.setReco(newBody.getText());
-                           }
+                           body.setObjectValue(DataTypes.OBJ_TEXT,body.getFormattedText());
                        }
                        // The first frame was a TDRC frame that was not really allowed, this new frame was probably a
                        // valid frame such as TYER which has been converted to TDRC, replace the firstframe with this frame
