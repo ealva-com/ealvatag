@@ -113,7 +113,7 @@ public abstract class AudioFileReader
         }
         catch (Exception e)
         {
-            //TODO is this masking exceptions, i.e NullBoxIDException get converted to CannotReadException
+            logger.log(Level.SEVERE, ErrorMessage.GENERAL_READ.getMsg(f.getAbsolutePath()),e);
             throw new CannotReadException(f.getAbsolutePath()+":" + e.getMessage(), e);
         }
         finally

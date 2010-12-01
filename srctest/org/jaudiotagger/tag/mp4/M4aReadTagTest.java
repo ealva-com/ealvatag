@@ -1218,4 +1218,38 @@ public class M4aReadTagTest extends TestCase
         }
     }
 
+    public void testReadFile3() throws Exception
+    {
+        Exception exceptionCaught = null;
+        try
+        {
+            File testFile = AbstractTestCase.copyAudioToTmp("test84.m4a");
+            AudioFile f = AudioFileIO.read(testFile);
+            Tag tag = f.getTag();
+            assertEquals("6",tag.getFirst(FieldKey.TRACK));
+            assertEquals("12",tag.getFirst(FieldKey.TRACK_TOTAL));
+
+            System.out.println(f.getAudioHeader());
+            System.out.println(tag);
+
+            tag.setField(FieldKey.TRACK,"8");
+            f.commit();
+
+            f = AudioFileIO.read(testFile);
+            tag = f.getTag();
+            assertEquals("8",tag.getFirst(FieldKey.TRACK));
+            assertEquals("12",tag.getFirst(FieldKey.TRACK_TOTAL));
+
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+            exceptionCaught = e;
+        }
+        assertNull(exceptionCaught);
+
+
+    }
+
+
 }

@@ -99,12 +99,22 @@ public class Mp4DataBox extends AbstractMp4Box
             //Create String representation for display
             content = Utils.getIntBE(this.dataBuffer, PRE_DATA_LENGTH, header.getDataLength() - 1) + "";
 
-            //But store data for safer writng back to file
+            //But store data for safer writing back to file
             bytedata = new byte[header.getDataLength() - PRE_DATA_LENGTH];
             int pos = dataBuffer.position();
             dataBuffer.position(pos + PRE_DATA_LENGTH);
             dataBuffer.get(bytedata);
             dataBuffer.position(pos);
+
+            //Songbird uses this type for trkn atom (normally implicit type) is used so just added this code so can be used
+            //by the Mp4TrackField atom
+            numbers = new ArrayList<Short>();
+            for (int i = 0; i < ((header.getDataLength() - PRE_DATA_LENGTH) / NUMBER_LENGTH); i++)
+            {
+                short number = Utils.getShortBE(this.dataBuffer, PRE_DATA_LENGTH + (i * NUMBER_LENGTH), PRE_DATA_LENGTH + (i * NUMBER_LENGTH) + (NUMBER_LENGTH - 1));
+                numbers.add(number);
+            }
+
         }
         else if (type == Mp4FieldType.COVERART_JPEG.getFileClassId())
         {

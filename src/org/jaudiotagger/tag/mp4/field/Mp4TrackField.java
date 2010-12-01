@@ -12,7 +12,7 @@ import java.util.ArrayList;
 /**
  * Represents the Track No field
  * <p/>
- * <p>There are a number of reseved fields makeing matters more complicated
+ * <p>There are a number of reserved fields making matters more complicated
  * Reserved:2 bytes
  * Track Number:2 bytes
  * No of Tracks:2 bytes (or zero if not known)
@@ -138,10 +138,13 @@ public class Mp4TrackField extends Mp4TagTextNumberField
         //Track number always hold three values, we can discard the first one, the second one is the track no
         //and the third is the total no of tracks so only use if not zero
         StringBuffer sb = new StringBuffer();
-        sb.append(numbers.get(TRACK_NO_INDEX));
-        if (numbers.get(TRACK_TOTAL_INDEX) > 0)
+        if(numbers!=null)
         {
-            sb.append("/").append(numbers.get(TRACK_TOTAL_INDEX));
+            sb.append(numbers.get(TRACK_NO_INDEX));
+            if (numbers.get(TRACK_TOTAL_INDEX) > 0)
+            {
+                sb.append("/").append(numbers.get(TRACK_TOTAL_INDEX));
+            }
         }
         content = sb.toString();
     }
