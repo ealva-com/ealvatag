@@ -25,13 +25,13 @@ import org.jaudiotagger.logging.ErrorMessage;
 import org.jaudiotagger.tag.Tag;
 import org.jaudiotagger.tag.mp4.Mp4Tag;
 import org.jaudiotagger.tag.mp4.Mp4TagCreator;
+import org.jaudiotagger.utils.tree.DefaultMutableTreeNode;
 
-import javax.swing.tree.DefaultMutableTreeNode;
+
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
-import java.util.Enumeration;
 import java.util.logging.Logger;
 
 

@@ -24,7 +24,6 @@ import org.jaudiotagger.audio.generic.Utils;
 import org.jaudiotagger.audio.ogg.util.OggPageHeader;
 import org.jaudiotagger.audio.ogg.util.VorbisHeader;
 import org.jaudiotagger.audio.ogg.util.VorbisPacketType;
-import org.jaudiotagger.fix.Fix;
 import org.jaudiotagger.logging.ErrorMessage;
 import org.jaudiotagger.tag.Tag;
 import org.jaudiotagger.tag.vorbiscomment.VorbisCommentReader;
@@ -54,12 +53,7 @@ public class OggVorbisTagReader
         vorbisCommentReader = new VorbisCommentReader();
     }
 
-    public OggVorbisTagReader(Fix fix)
-    {
-        Fix fix1 = fix;
-        vorbisCommentReader = new VorbisCommentReader(fix);
-    }
-
+    
 
     /**
      * Read the Logical VorbisComment Tag from the file

@@ -1,5 +1,7 @@
 package org.jaudiotagger.audio.mp4;
 
+import org.jaudiotagger.utils.tree.DefaultMutableTreeNode;
+import org.jaudiotagger.utils.tree.DefaultTreeModel;
 import org.jaudiotagger.audio.exceptions.CannotReadException;
 import org.jaudiotagger.audio.exceptions.NullBoxIdException;
 import org.jaudiotagger.audio.mp4.atom.Mp4BoxHeader;
@@ -8,8 +10,7 @@ import org.jaudiotagger.audio.mp4.atom.Mp4StcoBox;
 import org.jaudiotagger.audio.mp4.atom.NullPadding;
 import org.jaudiotagger.logging.ErrorMessage;
 
-import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.DefaultTreeModel;
+
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;

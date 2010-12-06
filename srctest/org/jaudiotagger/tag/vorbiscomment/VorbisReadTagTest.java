@@ -5,7 +5,6 @@ import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.AudioFileIO;
 import org.jaudiotagger.audio.exceptions.CannotReadException;
 import org.jaudiotagger.audio.ogg.OggFileReader;
-import org.jaudiotagger.fix.Fix;
 import org.jaudiotagger.tag.FieldKey;
 
 import java.io.File;
@@ -101,36 +100,5 @@ public class VorbisReadTagTest extends AbstractTestCase
         assertNull(exceptionCaught);
     }
 
-    /**
-     * Fixes an issue whereby a file contained a user comment with no value (DATE=) and the number
-     * of comments was one less than it should be.
-     */
-    public void testFix202CorruptFile()
-    {
-        File orig = new File("testdata", "test6.ogg");
-        if (!orig.isFile())
-        {
-            return;
-        }
-
-        Exception exceptionCaught = null;
-        try
-        {
-            File testFile = AbstractTestCase.copyAudioToTmp("test6.ogg", new File("FixedCorruptedFile.ogg"));
-            OggFileReader fileReader = new OggFileReader(Fix.FIX_OGG_VORBIS_COMMENT_NOT_COUNTING_EMPTY_COLUMNS);
-            AudioFile audioFile = fileReader.read(testFile);
-            audioFile.commit();
-
-            fileReader = new OggFileReader();
-            audioFile = fileReader.read(testFile);
-            audioFile.commit();
-
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-            exceptionCaught = e;
-        }
-        assertNull(exceptionCaught);
-    }
+    
 }
