@@ -771,13 +771,16 @@ public class MP3File extends AudioFile
      * Saves the tags in this dataType to the file argument. It will be saved as
      * TagConstants.MP3_FILE_SAVE_WRITE
      *
-     * @param file file to save the this dataTypes tags to
+     * @param fileToSave file to save the this dataTypes tags to
      * @throws FileNotFoundException if unable to find file
      * @throws IOException           on any I/O error
      */
-    public void save(File file) throws IOException
+    public void save(File fileToSave) throws IOException
     {
-        logger.info("Saving  : " + file.getAbsolutePath());
+        //Ensure we are dealing with absolute filepqaths not relative ones
+        File file = fileToSave.getAbsoluteFile();
+
+        logger.info("Saving  : " + file.getPath());
 
         //Checks before starting write
         precheck(file);
