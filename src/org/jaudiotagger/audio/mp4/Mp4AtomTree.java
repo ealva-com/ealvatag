@@ -42,6 +42,7 @@ public class Mp4AtomTree
     private DefaultMutableTreeNode stcoNode;
     private DefaultMutableTreeNode ilstNode;
     private DefaultMutableTreeNode metaNode;
+    private DefaultMutableTreeNode tagsNode;
     private DefaultMutableTreeNode udtaNode;
     private DefaultMutableTreeNode hdlrWithinMdiaNode;
     private DefaultMutableTreeNode hdlrWithinMetaNode;
@@ -244,11 +245,10 @@ public class Mp4AtomTree
         //Preprocessing for nodes that contain data before their children atoms
         Mp4BoxHeader parentBoxHeader = (Mp4BoxHeader) parentNode.getUserObject();
 
-        //We set the buffers position back to this after processing the chikdren
+        //We set the buffers position back to this after processing the children
         int justAfterHeaderPos = moovBuffer.position();
 
-        //Preprocessing for meta that normally contains 4 data bytes, but doesnt whre found under trak atom
-        //TODO is it always under TRAK dont really know the rule
+        //Preprocessing for meta that normally contains 4 data bytes, but doesn't where found under track or tags atom
         if (parentBoxHeader.getId().equals(Mp4NotMetaFieldKey.META.getFieldName()))
         {
             Mp4MetaBox meta = new Mp4MetaBox(parentBoxHeader, moovBuffer);
@@ -260,7 +260,7 @@ public class Mp4AtomTree
             }
             catch(NullBoxIdException nbe)
             {
-                //It might be that the meta box didnt actually have any additional data after it so we adjust the buffer
+                //It might be that the meta box didn't actually have any additional data after it so we adjust the buffer
                 //to be immediately after metabox and code can retry
                 moovBuffer.position(moovBuffer.position()-Mp4MetaBox.FLAGS_LENGTH);
             }
@@ -301,6 +301,10 @@ public class Mp4AtomTree
                 {
                     hdlrWithinMdiaNode = newAtom;
                 }
+                else if (boxHeader.getId().equals(Mp4NotMetaFieldKey.TAGS.getFieldName()))
+                {
+                    tagsNode = newAtom;
+                }
                 else if (boxHeader.getId().equals(Mp4NotMetaFieldKey.STCO.getFieldName()))
                 {
                     if (stco == null)
@@ -331,7 +335,7 @@ public class Mp4AtomTree
                 }
                 else if (boxHeader.getId().equals(Mp4NotMetaFieldKey.TRAK.getFieldName()))
                 {
-                    //Might be multiple in different locations, although onely one shoud be audio track
+                    //Might be multiple in different locations, although only one should be audio track
                     trakNodes.add(newAtom);
                 }
 
@@ -449,6 +453,15 @@ public class Mp4AtomTree
     public DefaultMutableTreeNode getHdlrWithinMdiaNode()
     {
         return hdlrWithinMdiaNode;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public DefaultMutableTreeNode getTagsNode()
+    {
+        return tagsNode;
     }
 
     /**

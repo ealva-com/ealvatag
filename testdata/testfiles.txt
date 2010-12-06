@@ -36,3 +36,4 @@ test77.ogg,yes,286,Ogg File with artwork installed using new method from http://
 test78.mp3,no,250,Mp3 file with bad data in first PRIV frame
 test83.mp4,no,291,Mp4 with free atom before moov atom when writing
 test84.mp4,no,354,Mp4 from Songbird writing trkn atom with field type integer instead of implicit
+test85.mp4,no,310,Mp4 from Nero with metadata stored under tags	

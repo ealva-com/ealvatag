@@ -1280,7 +1280,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
     /**
      * Replace originalFile with the contents of newFile
      * <p/>
-     * Both files must exist in the same folder so that there are no problems with fileystem mount points
+     * Both files must exist in the same folder so that there are no problems with filesystem mount points
      *
      * @param newFile
      * @param originalFile
@@ -1342,7 +1342,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
     }
 
     /*
-    * Copy framne into map, whilst accounting for multiple frame of same type which can occur even if there were
+    * Copy frame into map, whilst accounting for multiple frame of same type which can occur even if there were
     * not frames of the same type in the original tag
     */
 
