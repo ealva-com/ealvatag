@@ -64,7 +64,7 @@ public class FrameBodyPOPM extends AbstractID3v2FrameBody implements ID3v24Frame
 {
     private static final int    RATING_FIELD_SIZE = 1;
     private static final int    COUNTER_MINIMUM_FIELD_SIZE = 0;
-    private static final String MEDIA_MONKEY_NO_EMAIL = "no@email";
+    public  static final String MEDIA_MONKEY_NO_EMAIL = "no@email";
     /**
      * Creates a new FrameBodyPOPM datatype.
      */
