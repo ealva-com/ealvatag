@@ -1,6 +1,8 @@
 package org.jaudiotagger.tag.reference;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
@@ -204,5 +206,15 @@ public class ISOScript
         {
             return getDescription();
         }
+    }
+    
+    public static String[] getDescriptionsAsArray()
+    {
+        List<String> descriptions = new ArrayList<String>();
+        for(Script script:Script.values())
+        {
+            descriptions.add(script.description);
+        }
+        return descriptions.toArray(new String[0]);
     }
 }

@@ -1,6 +1,8 @@
 package org.jaudiotagger.tag.reference;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
@@ -326,5 +328,15 @@ public class ISOCountry
         {
             return getDescription();
         }
+    }
+
+    public static String[] getDescriptionsAsArray()
+    {
+        List<String> descriptions = new ArrayList<String>();
+        for (Country country : Country.values())
+        {
+            descriptions.add(country.description);
+        }
+        return descriptions.toArray(new String[0]);
     }
 }
