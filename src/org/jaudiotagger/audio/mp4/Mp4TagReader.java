@@ -237,7 +237,8 @@ public class Mp4TagReader
                         //for each subimage (if there are more than one image)
                         if (imageCount > 0)
                         {
-                            type = Utils.getIntBE(raw, processedDataSize + Mp4DataBox.TYPE_POS_INCLUDING_HEADER, processedDataSize + Mp4DataBox.TYPE_POS_INCLUDING_HEADER + Mp4DataBox.TYPE_LENGTH - 1);
+                            type = Utils.getIntBE(raw, processedDataSize + Mp4DataBox.TYPE_POS_INCLUDING_HEADER,
+                                    processedDataSize + Mp4DataBox.TYPE_POS_INCLUDING_HEADER + Mp4DataBox.TYPE_LENGTH - 1);
                             fieldType = Mp4FieldType.getFieldType(type);
                         }
                         Mp4TagCoverField field = new Mp4TagCoverField(raw,fieldType);

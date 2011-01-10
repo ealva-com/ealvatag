@@ -242,10 +242,18 @@ public class TagOptionSingleton
     private boolean padNumbers = false;
 
     /**
-     * There are a couple of problems with the Java implemenatation ono Google Android, enabling this value
+     * There are a couple of problems with the Java implementatation on Google Android, enabling this value
      * switches on Google workarounds
      */
     private boolean isAndroid = false;
+
+    /**
+     * When this is set and using the generic interface jaudiotagger will make some adjustmensts
+     * when saving field sso they work best with the specified Tagger
+     *
+     */
+     //TODO Not Actually Used yet, originally intended for dealing with ratings and genres
+    private int playerCompatability=-1;
 
     /**
      * Creates a new TagOptions datatype. All Options are set to their default
@@ -1079,5 +1087,20 @@ public class TagOptionSingleton
     public void setAndroid(boolean android)
     {
         isAndroid = android;
+    }
+
+    /**
+     * When this is set and using the generic interface jaudiotagger will make some adjustmensts
+     * when saving field sso they work best with the specified Tagger
+     *
+     */
+    public int getPlayerCompatability()
+    {
+        return playerCompatability;
+    }
+
+    public void setPlayerCompatability(int playerCompatability)
+    {
+        this.playerCompatability = playerCompatability;
     }
 }
