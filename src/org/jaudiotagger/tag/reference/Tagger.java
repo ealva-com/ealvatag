@@ -19,5 +19,8 @@ public enum Tagger
     TAGSCANNER,
     XIPH,   //standards body rather than tagger xiph.org
     FOOBAR2000,
-    BEATUNES
+    BEATUNES,
+    SONGBIRD,
+    JRIVER,
+    GODFATHER
 }
