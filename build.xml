@@ -105,7 +105,7 @@
 		</dirset>
 	</path>
 	
-	<property name="cobertura.dir" value="lib" />
+	<property name="cobertura.dir" value="../cobertura" />
 	<path id="cobertura.classpath">
 	    <fileset dir="${cobertura.dir}">
 	        <include name="*.jar" />	        

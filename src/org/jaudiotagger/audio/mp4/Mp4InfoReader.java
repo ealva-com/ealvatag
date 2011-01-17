@@ -57,6 +57,33 @@ public class Mp4InfoReader
     // Logger Object
     public static Logger logger = Logger.getLogger("org.jaudiotagger.audio.mp4.atom");
 
+    private boolean isTrackAtomVideo(Mp4FtypBox ftyp,  Mp4BoxHeader boxHeader, ByteBuffer mvhdBuffer )
+            throws IOException
+    {
+        boxHeader = Mp4BoxHeader.seekWithinLevel(mvhdBuffer, Mp4NotMetaFieldKey.MDIA.getFieldName());
+        if (boxHeader == null)
+        {
+            return false;
+        }
+        boxHeader = Mp4BoxHeader.seekWithinLevel(mvhdBuffer, Mp4NotMetaFieldKey.MDHD.getFieldName());
+        if (boxHeader == null)
+        {
+            return false;
+        }
+        mvhdBuffer.position(mvhdBuffer.position() + boxHeader.getDataLength());
+        boxHeader = Mp4BoxHeader.seekWithinLevel(mvhdBuffer, Mp4NotMetaFieldKey.MINF.getFieldName());
+        if (boxHeader == null)
+        {
+            return false;
+        }
+        boxHeader = Mp4BoxHeader.seekWithinLevel(mvhdBuffer, Mp4NotMetaFieldKey.VMHD.getFieldName());
+        if (boxHeader != null)
+        {
+            return true;
+        }
+        return false;
+    }
+
     public GenericAudioHeader read(RandomAccessFile raf) throws CannotReadException, IOException
     {
         Mp4AudioHeader info = new Mp4AudioHeader();
@@ -143,10 +170,21 @@ public class Mp4InfoReader
 
         //Level 5-Searching for "smhd" within "minf"
         //Only an audio track would have a smhd frame
+        int pos = mvhdBuffer.position();
         boxHeader = Mp4BoxHeader.seekWithinLevel(mvhdBuffer, Mp4NotMetaFieldKey.SMHD.getFieldName());
         if (boxHeader == null)
         {
-            throw new CannotReadException(ErrorMessage.MP4_FILE_NOT_AUDIO.getMsg());
+            mvhdBuffer.position(pos);
+            boxHeader = Mp4BoxHeader.seekWithinLevel(mvhdBuffer, Mp4NotMetaFieldKey.VMHD.getFieldName());
+            //try easy check to confirm that it is video
+            if(boxHeader!=null)
+            {
+                throw new CannotReadVideoException(ErrorMessage.MP4_FILE_IS_VIDEO.getMsg());
+            }
+            else
+            {
+                throw new CannotReadException(ErrorMessage.MP4_FILE_NOT_AUDIO.getMsg());
+            }
         }
         mvhdBuffer.position(mvhdBuffer.position() + boxHeader.getDataLength());
 
@@ -264,57 +302,28 @@ public class Mp4InfoReader
 
         logger.info(info.toString());
 
-        //Level 2-Searching for another "trak" within "moov", if more than one track exists then probably
-        //video so reject it, unless it fits into certain encoding patterns
+        //Level 2-Searching for others "trak" within "moov", if we find any traks containing video
+        //then reject it if no track if not video then we allow it because many encoders seem to contain all sorts
+        //of stuff that you wouldn't expect in an audio track
         mvhdBuffer.position(endOfFirstTrackInBuffer);
-        boxHeader = Mp4BoxHeader.seekWithinLevel(mvhdBuffer, Mp4NotMetaFieldKey.TRAK.getFieldName());
-        if (boxHeader != null)
+        while(mvhdBuffer.hasRemaining())
         {
-            //We only allow multiple tracks as audio if they follow the format used by the winamp encoder or
-            //are marked as being audio only and if track contains a nmhd atom rather than smhd.
-            //TODO this probably too restrictive but it fixes the test cases we have
-            if (ftyp.getMajorBrand().equals(Mp4FtypBox.Brand.ISO14496_1_VERSION_2.getId())
-                    || ftyp.getMajorBrand().equals(Mp4FtypBox.Brand.APPLE_AUDIO_ONLY.getId())
-                    || ftyp.getMajorBrand().equals(Mp4FtypBox.Brand.APPLE_AUDIO.getId()))
+            boxHeader = Mp4BoxHeader.seekWithinLevel(mvhdBuffer, Mp4NotMetaFieldKey.TRAK.getFieldName());
+            if (boxHeader != null)
             {
-                //Ok, need to do further checks on this track to ensure it is a scene descriptor
-                //Level 3-Searching for "mdia" within "trak"
-                boxHeader = Mp4BoxHeader.seekWithinLevel(mvhdBuffer, Mp4NotMetaFieldKey.MDIA.getFieldName());
-                if (boxHeader == null)
-                {
-                    throw new CannotReadVideoException(ErrorMessage.MP4_FILE_IS_VIDEO.getMsg());
-                }
-                //Level 4-Searching for "mdhd" within "mdia"
-                boxHeader = Mp4BoxHeader.seekWithinLevel(mvhdBuffer, Mp4NotMetaFieldKey.MDHD.getFieldName());
-                if (boxHeader == null)
-                {
-                    throw new CannotReadVideoException(ErrorMessage.MP4_FILE_IS_VIDEO.getMsg());
-                }
-                //Level 4-Searching for "minf" within "mdia"
-                mvhdBuffer.position(mvhdBuffer.position() + boxHeader.getDataLength());
-                boxHeader = Mp4BoxHeader.seekWithinLevel(mvhdBuffer, Mp4NotMetaFieldKey.MINF.getFieldName());
-                if (boxHeader == null)
-                {
-                    throw new CannotReadVideoException(ErrorMessage.MP4_FILE_IS_VIDEO.getMsg());
-                }
-
-                //Level 5-Searching for "nmhd" within "minf"
-                //Only an audio track would have a nmhd frame
-                boxHeader = Mp4BoxHeader.seekWithinLevel(mvhdBuffer, Mp4NotMetaFieldKey.NMHD.getFieldName());
-                if (boxHeader == null)
+                if(isTrackAtomVideo(ftyp,boxHeader,mvhdBuffer))
                 {
                     throw new CannotReadVideoException(ErrorMessage.MP4_FILE_IS_VIDEO.getMsg());
                 }
             }
             else
             {
-                logger.info(ErrorMessage.MP4_FILE_IS_VIDEO.getMsg() + ":" + ftyp.getMajorBrand());
-                throw new CannotReadVideoException(ErrorMessage.MP4_FILE_IS_VIDEO.getMsg());
+                break;
             }
         }
 
         //Build AtomTree to ensure it is valid, this means we can detect any problems early on
-        Mp4AtomTree atomTree = new Mp4AtomTree(raf,false); 
+        new Mp4AtomTree(raf,false);
 
         return info;
     }

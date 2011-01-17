@@ -28,7 +28,7 @@
       <excludeFolder url="file://$MODULE_DIR$/testdatatmp" />
       <excludeFolder url="file://$MODULE_DIR$/www" />
     </content>
-    <orderEntry type="jdk" jdkName="1.5" jdkType="JavaSDK" />
+    <orderEntry type="jdk" jdkName="1.6" jdkType="JavaSDK" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module-library" exported="">
       <library>
@@ -40,7 +40,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/../junit3.8.2/junit.jar!/" />
+          <root url="jar://$MODULE_DIR$/../../../Jaikoz/trunk/src/libs/junit.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />

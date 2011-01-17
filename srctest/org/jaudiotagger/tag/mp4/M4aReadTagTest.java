@@ -6,6 +6,7 @@ import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.AudioFileIO;
 import org.jaudiotagger.audio.exceptions.CannotReadVideoException;
 import org.jaudiotagger.audio.mp4.EncoderType;
+import org.jaudiotagger.audio.mp4.Mp4AtomTree;
 import org.jaudiotagger.audio.mp4.Mp4AudioHeader;
 import org.jaudiotagger.audio.mp4.Mp4TagReader;
 import org.jaudiotagger.audio.mp4.atom.Mp4EsdsBox;
@@ -739,9 +740,70 @@ public class M4aReadTagTest extends TestCase
         assertNull(exceptionCaught);
     }
 
+    /**
+     * This is just an audio file , despite having three tracks
+     */
+    public void testDetectMultiTrackAudio()
+       {
+           File orig = new File("testdata", "test7.mp4");
+           if (!orig.isFile())
+           {
+               return;
+           }
+
+           Exception exceptionCaught = null;
+           try
+           {
+               File testFile = AbstractTestCase.copyAudioToTmp("test7.mp4");
+               Mp4AtomTree tree = new Mp4AtomTree(new RandomAccessFile(testFile,"r"),false);
+               tree.printAtomTree();
+
+               AudioFile f = AudioFileIO.read(testFile);
+
+           }
+           catch (Exception e)
+           {
+               e.printStackTrace(System.err);
+               exceptionCaught = e;
+           }
+
+           assertNull(exceptionCaught);
+       }
+
+     /**
+     * This is just an audio file , despite having three tracks
+     */
+    public void testDetectMultiTrackAudio2()
+       {
+           File orig = new File("testdata", "test86.mp4");
+           if (!orig.isFile())
+           {
+               return;
+           }
+
+           Exception exceptionCaught = null;
+           try
+           {
+               File testFile = AbstractTestCase.copyAudioToTmp("test86.mp4");
+               Mp4AtomTree tree = new Mp4AtomTree(new RandomAccessFile(testFile,"r"),false);
+               tree.printAtomTree();
+
+               AudioFile f = AudioFileIO.read(testFile);
+
+           }
+           catch (Exception e)
+           {
+               e.printStackTrace(System.err);
+               exceptionCaught = e;
+           }
+
+           assertNull(exceptionCaught);
+       }
+
+    /**This is a video file, detected via its vmhd atom */
     public void testDetectVideo()
     {
-        File orig = new File("testdata", "test7.mp4");
+        File orig = new File("testdata", "test87.mp4");
         if (!orig.isFile())
         {
             return;
@@ -750,14 +812,20 @@ public class M4aReadTagTest extends TestCase
         Exception exceptionCaught = null;
         try
         {
-            File testFile = AbstractTestCase.copyAudioToTmp("test7.mp4");
+            File testFile = AbstractTestCase.copyAudioToTmp("test87.mp4");
+
+            Mp4AtomTree tree = new Mp4AtomTree(new RandomAccessFile(testFile,"r"),false);
+            tree.printAtomTree();
+
             AudioFile f = AudioFileIO.read(testFile);
+
         }
         catch (Exception e)
         {
             e.printStackTrace(System.err);
             exceptionCaught = e;
         }
+
         assertNotNull(exceptionCaught);
         assertTrue(exceptionCaught instanceof CannotReadVideoException);
     }
@@ -1251,5 +1319,26 @@ public class M4aReadTagTest extends TestCase
 
     }
 
+    public void testReadFile4() throws Exception
+    {
+        Exception exceptionCaught = null;
+        try
+        {
+            File testFile = AbstractTestCase.copyAudioToTmp("test86.m4a");
+            AudioFile f = AudioFileIO.read(testFile);
+            Tag tag = f.getTag();
+            assertEquals("Away From The Sun",tag.getFirst(FieldKey.TITLE));
+            System.out.println(f.getAudioHeader());
+            System.out.println(tag);
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+            exceptionCaught = e;
+        }
+        assertNull(exceptionCaught);
+
+
+    }
 
 }

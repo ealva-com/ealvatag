@@ -8,7 +8,7 @@ test4.wma,yes,245,wma,Gif Artwork
 test5.wma,yes,245,wma,Png Artwork
 test6.wma,yes,245,wma,Jpg Artwork
 test7.wma,yes,245,wma,Png artwork
-test7.mp4,yes,,Mp4 Video File
+test7.mp4,yes,,Mp4 Audio File, but with three trck atoms
 test8.wma,no,268,wma,
 test9.wma,no,268,wma,Contains WM/MCDI field, (non artwork binary)
 test35.mp4,no,255,Mp4 with null space at the end of the file
@@ -36,4 +36,6 @@ test77.ogg,yes,286,Ogg File with artwork installed using new method from http://
 test78.mp3,no,250,Mp3 file with bad data in first PRIV frame
 test83.mp4,no,291,Mp4 with free atom before moov atom when writing
 test84.mp4,no,354,Mp4 from Songbird writing trkn atom with field type integer instead of implicit
-test85.mp4,no,310,Mp4 from Nero with metadata stored under tags	
+test85.mp4,no,310,Mp4 from Nero with metadata stored under tags
+test86.mp4,no,310,Mp4 Audio File, but encoded by dbPoweramp with Nero, has multiple tracks
+test87.mp4,no,310,Video mp4
