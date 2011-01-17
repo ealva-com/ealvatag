@@ -142,7 +142,7 @@ public class Mp4AtomTree
                 DefaultMutableTreeNode newAtom = new DefaultMutableTreeNode(boxHeader);
 
                 //Go down moov
-                if (boxHeader.getId().equals(Mp4NotMetaFieldKey.MOOV.getFieldName()))
+                if (boxHeader.getId().equals(Mp4AtomIdentifier.MOOV.getFieldName()))
                 {
                     moovNode    = newAtom;
                     moovHeader  = boxHeader;
@@ -162,12 +162,12 @@ public class Mp4AtomTree
                     buildChildrenOfNode(moovBuffer, newAtom);
                     fc.position(filePosStart);
                 }
-                else if (boxHeader.getId().equals(Mp4NotMetaFieldKey.FREE.getFieldName()))
+                else if (boxHeader.getId().equals(Mp4AtomIdentifier.FREE.getFieldName()))
                 {
                     //Might be multiple in different locations
                     freeNodes.add(newAtom);
                 }
-                else if (boxHeader.getId().equals(Mp4NotMetaFieldKey.MDAT.getFieldName()))
+                else if (boxHeader.getId().equals(Mp4AtomIdentifier.MDAT.getFieldName()))
                 {
                     //mdatNode always points to the last mDatNode, normally there is just one mdatnode but do have
                     //a valid example of multiple mdatnode
@@ -250,7 +250,7 @@ public class Mp4AtomTree
         int justAfterHeaderPos = moovBuffer.position();
 
         //Preprocessing for meta that normally contains 4 data bytes, but doesn't where found under track or tags atom
-        if (parentBoxHeader.getId().equals(Mp4NotMetaFieldKey.META.getFieldName()))
+        if (parentBoxHeader.getId().equals(Mp4AtomIdentifier.META.getFieldName()))
         {
             Mp4MetaBox meta = new Mp4MetaBox(parentBoxHeader, moovBuffer);
             meta.processData();
@@ -285,28 +285,28 @@ public class Mp4AtomTree
                 DefaultMutableTreeNode newAtom = new DefaultMutableTreeNode(boxHeader);
                 parentNode.add(newAtom);
 
-                if (boxHeader.getId().equals(Mp4NotMetaFieldKey.UDTA.getFieldName()))
+                if (boxHeader.getId().equals(Mp4AtomIdentifier.UDTA.getFieldName()))
                 {
                     udtaNode = newAtom;
                 }
                 //only interested in metaNode that is child of udta node
-                else if (boxHeader.getId().equals(Mp4NotMetaFieldKey.META.getFieldName())&&parentBoxHeader.getId().equals(Mp4NotMetaFieldKey.UDTA.getFieldName()))
+                else if (boxHeader.getId().equals(Mp4AtomIdentifier.META.getFieldName())&&parentBoxHeader.getId().equals(Mp4AtomIdentifier.UDTA.getFieldName()))
                 {
                     metaNode = newAtom;
                 }
-                else if (boxHeader.getId().equals(Mp4NotMetaFieldKey.HDLR.getFieldName())&&parentBoxHeader.getId().equals(Mp4NotMetaFieldKey.META.getFieldName()))
+                else if (boxHeader.getId().equals(Mp4AtomIdentifier.HDLR.getFieldName())&&parentBoxHeader.getId().equals(Mp4AtomIdentifier.META.getFieldName()))
                 {
                     hdlrWithinMetaNode = newAtom;
                 }
-                else if (boxHeader.getId().equals(Mp4NotMetaFieldKey.HDLR.getFieldName()))
+                else if (boxHeader.getId().equals(Mp4AtomIdentifier.HDLR.getFieldName()))
                 {
                     hdlrWithinMdiaNode = newAtom;
                 }
-                else if (boxHeader.getId().equals(Mp4NotMetaFieldKey.TAGS.getFieldName()))
+                else if (boxHeader.getId().equals(Mp4AtomIdentifier.TAGS.getFieldName()))
                 {
                     tagsNode = newAtom;
                 }
-                else if (boxHeader.getId().equals(Mp4NotMetaFieldKey.STCO.getFieldName()))
+                else if (boxHeader.getId().equals(Mp4AtomIdentifier.STCO.getFieldName()))
                 {
                     if (stco == null)
                     {
@@ -314,7 +314,7 @@ public class Mp4AtomTree
                         stcoNode = newAtom;
                     }
                 }
-                else if (boxHeader.getId().equals(Mp4NotMetaFieldKey.ILST.getFieldName()))
+                else if (boxHeader.getId().equals(Mp4AtomIdentifier.ILST.getFieldName()))
                 {
                     DefaultMutableTreeNode parent = (DefaultMutableTreeNode)parentNode.getParent();
                     if(parent!=null)
@@ -322,32 +322,32 @@ public class Mp4AtomTree
                         Mp4BoxHeader parentsParent = (Mp4BoxHeader)(parent).getUserObject();
                         if(parentsParent!=null)
                         {
-                            if(parentBoxHeader.getId().equals(Mp4NotMetaFieldKey.META.getFieldName())&&parentsParent.getId().equals(Mp4NotMetaFieldKey.UDTA.getFieldName()))
+                            if(parentBoxHeader.getId().equals(Mp4AtomIdentifier.META.getFieldName())&&parentsParent.getId().equals(Mp4AtomIdentifier.UDTA.getFieldName()))
                             {
                                 ilstNode = newAtom;
                             }
                         }
                     }    
                 }
-                else if (boxHeader.getId().equals(Mp4NotMetaFieldKey.FREE.getFieldName()))
+                else if (boxHeader.getId().equals(Mp4AtomIdentifier.FREE.getFieldName()))
                 {
                     //Might be multiple in different locations
                     freeNodes.add(newAtom);
                 }
-                else if (boxHeader.getId().equals(Mp4NotMetaFieldKey.TRAK.getFieldName()))
+                else if (boxHeader.getId().equals(Mp4AtomIdentifier.TRAK.getFieldName()))
                 {
                     //Might be multiple in different locations, although only one should be audio track
                     trakNodes.add(newAtom);
                 }
 
                 //For these atoms iterate down to build their children
-                if ((boxHeader.getId().equals(Mp4NotMetaFieldKey.TRAK.getFieldName())) ||
-                        (boxHeader.getId().equals(Mp4NotMetaFieldKey.MDIA.getFieldName())) ||
-                        (boxHeader.getId().equals(Mp4NotMetaFieldKey.MINF.getFieldName())) ||
-                        (boxHeader.getId().equals(Mp4NotMetaFieldKey.STBL.getFieldName())) ||
-                        (boxHeader.getId().equals(Mp4NotMetaFieldKey.UDTA.getFieldName())) ||
-                        (boxHeader.getId().equals(Mp4NotMetaFieldKey.META.getFieldName())) ||
-                        (boxHeader.getId().equals(Mp4NotMetaFieldKey.ILST.getFieldName())))
+                if ((boxHeader.getId().equals(Mp4AtomIdentifier.TRAK.getFieldName())) ||
+                        (boxHeader.getId().equals(Mp4AtomIdentifier.MDIA.getFieldName())) ||
+                        (boxHeader.getId().equals(Mp4AtomIdentifier.MINF.getFieldName())) ||
+                        (boxHeader.getId().equals(Mp4AtomIdentifier.STBL.getFieldName())) ||
+                        (boxHeader.getId().equals(Mp4AtomIdentifier.UDTA.getFieldName())) ||
+                        (boxHeader.getId().equals(Mp4AtomIdentifier.META.getFieldName())) ||
+                        (boxHeader.getId().equals(Mp4AtomIdentifier.ILST.getFieldName())))
                 {                
                     buildChildrenOfNode(moovBuffer, newAtom);
                 }

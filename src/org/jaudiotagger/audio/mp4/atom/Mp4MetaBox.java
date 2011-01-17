@@ -1,7 +1,7 @@
 package org.jaudiotagger.audio.mp4.atom;
 
 import org.jaudiotagger.audio.exceptions.CannotReadException;
-import org.jaudiotagger.audio.mp4.Mp4NotMetaFieldKey;
+import org.jaudiotagger.audio.mp4.Mp4AtomIdentifier;
 import org.jaudiotagger.logging.ErrorMessage;
 
 import java.nio.ByteBuffer;
@@ -46,7 +46,7 @@ public class Mp4MetaBox extends AbstractMp4Box
      */
     public static Mp4MetaBox createiTunesStyleMetaBox(int childrenSize)
     {
-        Mp4BoxHeader metaHeader = new Mp4BoxHeader(Mp4NotMetaFieldKey.META.getFieldName());
+        Mp4BoxHeader metaHeader = new Mp4BoxHeader(Mp4AtomIdentifier.META.getFieldName());
         metaHeader.setLength(Mp4BoxHeader.HEADER_LENGTH + Mp4MetaBox.FLAGS_LENGTH + childrenSize);
         ByteBuffer metaData = ByteBuffer.allocate(Mp4MetaBox.FLAGS_LENGTH);     
         Mp4MetaBox metaBox = new Mp4MetaBox(metaHeader,metaData);

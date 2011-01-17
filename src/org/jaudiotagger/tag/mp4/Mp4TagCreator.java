@@ -20,7 +20,7 @@ package org.jaudiotagger.tag.mp4;
 
 import org.jaudiotagger.audio.generic.AbstractTagCreator;
 import org.jaudiotagger.audio.generic.Utils;
-import org.jaudiotagger.audio.mp4.Mp4NotMetaFieldKey;
+import org.jaudiotagger.audio.mp4.Mp4AtomIdentifier;
 import org.jaudiotagger.audio.mp4.atom.Mp4BoxHeader;
 import org.jaudiotagger.tag.FieldKey;
 import org.jaudiotagger.tag.KeyNotFoundException;
@@ -133,7 +133,7 @@ public class Mp4TagCreator extends AbstractTagCreator
             //Wrap into ilst box
             ByteArrayOutputStream ilst = new ByteArrayOutputStream();
             ilst.write(Utils.getSizeBEInt32(Mp4BoxHeader.HEADER_LENGTH + baos.size()));
-            ilst.write(Utils.getDefaultBytes(Mp4NotMetaFieldKey.ILST.getFieldName(), "ISO-8859-1"));
+            ilst.write(Utils.getDefaultBytes(Mp4AtomIdentifier.ILST.getFieldName(), "ISO-8859-1"));
             ilst.write(baos.toByteArray());
 
             //Put into ByteBuffer

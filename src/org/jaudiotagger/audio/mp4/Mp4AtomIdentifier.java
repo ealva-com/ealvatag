@@ -1,12 +1,12 @@
 package org.jaudiotagger.audio.mp4;
 
 /**
- * This a list of mp4boxes identifiers, that are not part of the metadata info.
- * <p/>
- * <p>These are of limited interest to JAudiotagger but are required when reading audio info
- * or when writing modifications to the file when the location of audio has shifted.
+ * This a list of mp4boxes identifiers that can bwe found in a mp4 container. This list is by no means
+ * exhaustive.
+ *
+ * Only a limited number are of interest to Jaudiotagger
  */
-public enum Mp4NotMetaFieldKey
+public enum Mp4AtomIdentifier
 {
     ALAC("alac", "Apple Lossless File"),
     ALBM("albm", "Album title and track number (user-data)"),
@@ -167,7 +167,7 @@ public enum Mp4NotMetaFieldKey
     private String fieldName;
     private String description;
 
-    Mp4NotMetaFieldKey(String fieldName, String description)
+    Mp4AtomIdentifier(String fieldName, String description)
     {
         this.fieldName = fieldName;
         this.description = description;

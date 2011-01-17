@@ -87,7 +87,7 @@ public class Mp4TagReader
 
         //Get to the facts everything we are interested in is within the moov box, so just load data from file
         //once so no more file I/O needed
-        Mp4BoxHeader moovHeader = Mp4BoxHeader.seekWithinLevel(raf, Mp4NotMetaFieldKey.MOOV.getFieldName());
+        Mp4BoxHeader moovHeader = Mp4BoxHeader.seekWithinLevel(raf, Mp4AtomIdentifier.MOOV.getFieldName());
         if (moovHeader == null)
         {
             throw new CannotReadException(ErrorMessage.MP4_FILE_NOT_CONTAINER.getMsg());
@@ -97,11 +97,11 @@ public class Mp4TagReader
         moovBuffer.rewind();
 
         //Level 2-Searching for "udta" within "moov"
-        Mp4BoxHeader boxHeader = Mp4BoxHeader.seekWithinLevel(moovBuffer, Mp4NotMetaFieldKey.UDTA.getFieldName());
+        Mp4BoxHeader boxHeader = Mp4BoxHeader.seekWithinLevel(moovBuffer, Mp4AtomIdentifier.UDTA.getFieldName());
         if (boxHeader != null)
         {
             //Level 3-Searching for "meta" within udta
-            boxHeader = Mp4BoxHeader.seekWithinLevel(moovBuffer, Mp4NotMetaFieldKey.META.getFieldName());
+            boxHeader = Mp4BoxHeader.seekWithinLevel(moovBuffer, Mp4AtomIdentifier.META.getFieldName());
             if (boxHeader == null)
             {
                 logger.warning(ErrorMessage.MP4_FILE_HAS_NO_METADATA.getMsg());
@@ -111,7 +111,7 @@ public class Mp4TagReader
             meta.processData();
 
             //Level 4- Search for "ilst" within meta
-            boxHeader = Mp4BoxHeader.seekWithinLevel(moovBuffer, Mp4NotMetaFieldKey.ILST.getFieldName());
+            boxHeader = Mp4BoxHeader.seekWithinLevel(moovBuffer, Mp4AtomIdentifier.ILST.getFieldName());
              //This file does not actually contain a tag
             if (boxHeader == null)
             {
@@ -122,7 +122,7 @@ public class Mp4TagReader
         else
         {
             //Level 2-Searching for "meta" not within udta
-            boxHeader = Mp4BoxHeader.seekWithinLevel(moovBuffer, Mp4NotMetaFieldKey.META.getFieldName());
+            boxHeader = Mp4BoxHeader.seekWithinLevel(moovBuffer, Mp4AtomIdentifier.META.getFieldName());
             if (boxHeader == null)
             {
                 logger.warning(ErrorMessage.MP4_FILE_HAS_NO_METADATA.getMsg());
@@ -133,7 +133,7 @@ public class Mp4TagReader
 
 
             //Level 3- Search for "ilst" within meta
-            boxHeader = Mp4BoxHeader.seekWithinLevel(moovBuffer, Mp4NotMetaFieldKey.ILST.getFieldName());
+            boxHeader = Mp4BoxHeader.seekWithinLevel(moovBuffer, Mp4AtomIdentifier.ILST.getFieldName());
             //This file does not actually contain a tag
             if (boxHeader == null)
             {

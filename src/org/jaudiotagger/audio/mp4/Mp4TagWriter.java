@@ -496,7 +496,7 @@ public class Mp4TagWriter
 
                        Mp4HdlrBox hdlrBox = Mp4HdlrBox.createiTunesStyleHdlrBox();
                        Mp4MetaBox metaBox = Mp4MetaBox.createiTunesStyleMetaBox(hdlrBox.getHeader().getLength() +  rawIlstData.limit());
-                       udtaHeader = new Mp4BoxHeader(Mp4NotMetaFieldKey.UDTA.getFieldName());
+                       udtaHeader = new Mp4BoxHeader(Mp4AtomIdentifier.UDTA.getFieldName());
                        udtaHeader.setLength(Mp4BoxHeader.HEADER_LENGTH +metaBox.getHeader().getLength());
 
                        additionalMetaSizeThatWontFitWithinMetaAtom =
@@ -729,9 +729,9 @@ public class Mp4TagWriter
                 {
                     Mp4BoxHeader brotherHeader = ((Mp4BoxHeader) brotherNode.getUserObject());
 
-                    if (parentHeader.getId().equals(Mp4NotMetaFieldKey.META.getFieldName())
+                    if (parentHeader.getId().equals(Mp4AtomIdentifier.META.getFieldName())
                             &&
-                        brotherHeader.getId().equals(Mp4NotMetaFieldKey.ILST.getFieldName()))
+                        brotherHeader.getId().equals(Mp4AtomIdentifier.ILST.getFieldName()))
                     {
                         oldMetaLevelFreeAtomSize = freeHeader.getLength();
                         break;
