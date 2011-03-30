@@ -121,6 +121,7 @@ public final class AsfTag extends AbstractTag
         tagFieldToAsfField.put(FieldKey.MOOD, AsfFieldKey.MOOD);
         tagFieldToAsfField.put(FieldKey.MUSICBRAINZ_ARTISTID, AsfFieldKey.MUSICBRAINZ_ARTISTID);
         tagFieldToAsfField.put(FieldKey.MUSICBRAINZ_DISC_ID, AsfFieldKey.MUSICBRAINZ_DISC_ID);
+        tagFieldToAsfField.put(FieldKey.MUSICBRAINZ_ORIGINAL_RELEASE_ID, AsfFieldKey.MUSICBRAINZ_ORIGINAL_RELEASEID);
         tagFieldToAsfField.put(FieldKey.MUSICBRAINZ_RELEASEARTISTID, AsfFieldKey.MUSICBRAINZ_RELEASEARTISTID);
         tagFieldToAsfField.put(FieldKey.MUSICBRAINZ_RELEASEID, AsfFieldKey.MUSICBRAINZ_RELEASEID);
         tagFieldToAsfField.put(FieldKey.MUSICBRAINZ_RELEASE_COUNTRY, AsfFieldKey.MUSICBRAINZ_RELEASE_COUNTRY);
@@ -135,7 +136,7 @@ public final class AsfTag extends AbstractTag
         tagFieldToAsfField.put(FieldKey.ORIGINAL_ALBUM, AsfFieldKey.ORIGINAL_ALBUM);
         tagFieldToAsfField.put(FieldKey.ORIGINAL_LYRICIST, AsfFieldKey.ORIGINAL_LYRICIST);
         tagFieldToAsfField.put(FieldKey.ORIGINAL_YEAR, AsfFieldKey.ORIGINAL_YEAR);
-        tagFieldToAsfField.put(FieldKey.RATING, AsfFieldKey.MM_RATING);
+        tagFieldToAsfField.put(FieldKey.RATING, AsfFieldKey.USER_RATING);
         tagFieldToAsfField.put(FieldKey.RECORD_LABEL, AsfFieldKey.RECORD_LABEL);
         tagFieldToAsfField.put(FieldKey.QUALITY, AsfFieldKey.QUALITY);
         tagFieldToAsfField.put(FieldKey.REMIXER, AsfFieldKey.REMIXER);
