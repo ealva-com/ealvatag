@@ -202,21 +202,28 @@ public class PartOfSet extends AbstractString
          */
         public PartOfSetValue(String value)
         {
-            
-            Matcher m = trackNoPatternWithTotalCount.matcher(value);
-            if (m.matches())
+            try
             {
-                this.count = Integer.parseInt(m.group(1));
-                this.total = Integer.parseInt(m.group(2));
-                this.extra = m.group(3);
-                return;
-            }
+                Matcher m = trackNoPatternWithTotalCount.matcher(value);
+                if (m.matches())
+                {
+                    this.extra = m.group(3);
+                    this.count = Integer.parseInt(m.group(1));
+                    this.total = Integer.parseInt(m.group(2));
+                    return;
+                }
 
-            m = trackNoPattern.matcher(value);
-            if (m.matches())
+                m = trackNoPattern.matcher(value);
+                if (m.matches())
+                {
+                    this.extra = m.group(2);
+                    this.count = Integer.parseInt(m.group(1));
+                }
+            }
+            catch(NumberFormatException nfe)
             {
-                this.count = Integer.parseInt(m.group(1));
-                this.extra = m.group(2);
+                //#JAUDIOTAGGER-366 Could occur if actually value is a long not an int
+                this.count = 0;
             }
         }
 
