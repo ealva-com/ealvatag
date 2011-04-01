@@ -39,3 +39,5 @@ test84.mp4,no,354,Mp4 from Songbird writing trkn atom with field type integer in
 test85.mp4,no,310,Mp4 from Nero with metadata stored under tags
 test86.mp4,no,310,Mp4 Audio File, but encoded by dbPoweramp with Nero, has multiple tracks
 test87.mp4,no,310,Video mp4
+test90.ogg,no,365,OggVorbis file with ID3 tag at start
+test91.mp3,no,366,Contains TPOS frame with huge value too large for an into
