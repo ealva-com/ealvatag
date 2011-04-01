@@ -50,6 +50,7 @@ public class Mp4Tag extends AbstractTag
         tagFieldToMp4Field.put(FieldKey.AMAZON_ID, Mp4FieldKey.ASIN);
         tagFieldToMp4Field.put(FieldKey.ARTIST, Mp4FieldKey.ARTIST);
         tagFieldToMp4Field.put(FieldKey.ARTIST_SORT, Mp4FieldKey.ARTIST_SORT);
+        tagFieldToMp4Field.put(FieldKey.ARTISTS, Mp4FieldKey.ARTISTS);
         tagFieldToMp4Field.put(FieldKey.BARCODE, Mp4FieldKey.BARCODE);
         tagFieldToMp4Field.put(FieldKey.BPM, Mp4FieldKey.BPM);
         tagFieldToMp4Field.put(FieldKey.CATALOG_NO, Mp4FieldKey.CATALOGNO);

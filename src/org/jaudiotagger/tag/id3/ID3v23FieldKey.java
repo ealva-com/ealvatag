@@ -86,6 +86,8 @@ public enum ID3v23FieldKey
     MIXER(ID3v23Frames.FRAME_ID_V3_IPLS, FrameBodyTIPL.MIXER, Id3FieldType.TEXT),
     DJMIXER(ID3v23Frames.FRAME_ID_V3_IPLS, FrameBodyTIPL.DJMIXER, Id3FieldType.TEXT),
     ARRANGER(ID3v23Frames.FRAME_ID_V3_IPLS, FrameBodyTIPL.ARRANGER, Id3FieldType.TEXT),
+    ARTISTS(ID3v23Frames.FRAME_ID_V3_USER_DEFINED_INFO, FrameBodyTXXX.ARTISTS, Id3FieldType.TEXT),
+
 
     ;
     private String fieldName;

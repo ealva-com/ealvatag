@@ -26,6 +26,7 @@ public enum VorbisCommentFieldKey
     ALBUMARTISTSORT("ALBUMARTISTSORT",EnumSet.of(Tagger.PICARD,Tagger.JAIKOZ)),
     ALBUMSORT("ALBUMSORT",EnumSet.of(Tagger.PICARD,Tagger.JAIKOZ)),
     ARTIST("ARTIST", EnumSet.of(Tagger.XIPH,Tagger.PICARD,Tagger.JAIKOZ)),
+    ARTISTS("ARTISTS", EnumSet.of(Tagger.JAIKOZ)),
     ARTISTSORT("ARTISTSORT",EnumSet.of(Tagger.PICARD,Tagger.JAIKOZ)),
     ASIN("ASIN",EnumSet.of(Tagger.PICARD,Tagger.JAIKOZ)),
     BARCODE("BARCODE",EnumSet.of(Tagger.JAIKOZ)),

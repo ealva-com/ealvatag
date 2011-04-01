@@ -92,6 +92,7 @@ public final class AsfTag extends AbstractTag
         tagFieldToAsfField.put(FieldKey.AMAZON_ID, AsfFieldKey.AMAZON_ID);
         tagFieldToAsfField.put(FieldKey.ARTIST, AsfFieldKey.AUTHOR);
         tagFieldToAsfField.put(FieldKey.ARTIST_SORT, AsfFieldKey.ARTIST_SORT);
+        tagFieldToAsfField.put(FieldKey.ARTISTS, AsfFieldKey.ARTISTS);
         tagFieldToAsfField.put(FieldKey.BARCODE, AsfFieldKey.BARCODE);
         tagFieldToAsfField.put(FieldKey.BPM, AsfFieldKey.BPM);
         tagFieldToAsfField.put(FieldKey.CATALOG_NO, AsfFieldKey.CATALOG_NO);

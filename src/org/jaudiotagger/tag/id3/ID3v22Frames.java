@@ -380,6 +380,7 @@ public class ID3v22Frames extends ID3Frames
         tagFieldToId3.put(FieldKey.MIXER, ID3v22FieldKey.MIXER);
         tagFieldToId3.put(FieldKey.DJMIXER, ID3v22FieldKey.DJMIXER);
         tagFieldToId3.put(FieldKey.ARRANGER, ID3v22FieldKey.ARRANGER);
+        tagFieldToId3.put(FieldKey.ARTISTS, ID3v22FieldKey.ARTISTS);
     }
 
     /**

@@ -18,6 +18,7 @@ public enum FieldKey
     ARRANGER,
     ARTIST,
     ARTIST_SORT,
+    ARTISTS,
     BARCODE,
     BPM,
     CATALOG_NO,
