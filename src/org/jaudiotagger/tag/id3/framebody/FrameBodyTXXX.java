@@ -70,7 +70,7 @@ public class FrameBodyTXXX extends AbstractFrameBodyTextInfo implements ID3v24Fr
     public static final String MOOD                         = "MOOD";          //ID3 v23 only
     public static final String TAGS                         = "TAGS";
     public static final String FBPM                         = "FBPM";
-    public static final String SCRIPT                       = "SCRIPT";
+    public static final String SCRIPT                       = "Script";
     public static final String ARTISTS                      = "ARTISTS";
 
     //used by Foobar 20000
