@@ -216,7 +216,7 @@ public class TextEncodedStringSizeTerminated extends AbstractString
     {
         if(!TagOptionSingleton.getInstance().isRemoveTrailingTerminatorOnWrite())
         {
-            if (stringValue.charAt(stringValue.length() - 1) == '\0')
+            if (stringValue.length() > 0 && stringValue.charAt(stringValue.length() - 1) == '\0')
             {
                 String lastVal = values.get(values.size() - 1);
                 String newLastVal = lastVal + '\0';
