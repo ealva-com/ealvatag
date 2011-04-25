@@ -140,8 +140,11 @@ public class Mp4TrackField extends Mp4TagTextNumberField
         StringBuffer sb = new StringBuffer();
         if(numbers!=null)
         {
-            sb.append(numbers.get(TRACK_NO_INDEX));
-            if (numbers.get(TRACK_TOTAL_INDEX) > 0)
+            if ((numbers.size() > TRACK_NO_INDEX) && (numbers.get(TRACK_NO_INDEX) > 0))
+            {
+                sb.append(numbers.get(TRACK_NO_INDEX));
+            }
+            if ((numbers.size() > TRACK_TOTAL_INDEX) && (numbers.get(TRACK_TOTAL_INDEX) > 0))
             {
                 sb.append("/").append(numbers.get(TRACK_TOTAL_INDEX));
             }
