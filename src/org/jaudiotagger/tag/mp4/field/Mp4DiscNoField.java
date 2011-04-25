@@ -124,8 +124,11 @@ public class Mp4DiscNoField extends Mp4TagTextNumberField
         //Disc number always hold four values, we can discard the first one and last one, the second one is the disc no
         //and the third is the total no of discs so only use if not zero
         StringBuffer sb = new StringBuffer();
-        sb.append(numbers.get(DISC_NO_INDEX));
-        if (numbers.get(DISC_TOTAL_INDEX) > 0)
+        if ((numbers.size() > DISC_NO_INDEX) && (numbers.get(DISC_NO_INDEX) > 0))
+        {
+            sb.append(numbers.get(DISC_NO_INDEX));
+        }
+        if ((numbers.size() > DISC_TOTAL_INDEX) && (numbers.get(DISC_TOTAL_INDEX) > 0))
         {
             sb.append("/").append(numbers.get(DISC_TOTAL_INDEX));
         }
