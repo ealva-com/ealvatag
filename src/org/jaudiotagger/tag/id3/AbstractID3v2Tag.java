@@ -1066,7 +1066,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
      */
     public void adjustPadding(File file, int paddingSize, long audioStart) throws FileNotFoundException, IOException
     {
-        logger.finer("Need to move audio file to accomodate tag");
+        logger.finer("Need to move audio file to accommodate tag");
         FileChannel fcIn = null;
         FileChannel fcOut;
 
@@ -1303,6 +1303,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
         if (!renameOriginalResult)
         {
             logger.warning(ErrorMessage.GENERAL_WRITE_FAILED_TO_RENAME_ORIGINAL_FILE_TO_BACKUP.getMsg(originalFile.getAbsolutePath(), originalFileBackup.getName()));
+            newFile.delete();
             throw new UnableToRenameFileException(ErrorMessage.GENERAL_WRITE_FAILED_TO_RENAME_ORIGINAL_FILE_TO_BACKUP.getMsg(originalFile.getAbsolutePath(), originalFileBackup.getName()));
         }
 
@@ -1327,6 +1328,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
 
 
             logger.warning(ErrorMessage.GENERAL_WRITE_FAILED_TO_RENAME_TO_ORIGINAL_FILE.getMsg(originalFile.getAbsolutePath(), newFile.getName()));
+            newFile.delete();
             throw new UnableToRenameFileException(ErrorMessage.GENERAL_WRITE_FAILED_TO_RENAME_TO_ORIGINAL_FILE.getMsg(originalFile.getAbsolutePath(), newFile.getName()));
         }
         else

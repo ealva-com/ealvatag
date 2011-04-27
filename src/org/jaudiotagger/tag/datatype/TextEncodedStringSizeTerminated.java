@@ -81,7 +81,6 @@ public class TextEncodedStringSizeTerminated extends AbstractString
 
         //Get the Specified Decoder
         String charSetName = getTextEncodingCharSet();
-        System.out.println("Reading Charset was:"+charSetName);
         CharsetDecoder decoder = Charset.forName(charSetName).newDecoder();
         decoder.reset();
 
@@ -199,7 +198,6 @@ public class TextEncodedStringSizeTerminated extends AbstractString
     private ByteBuffer writeStringUTF16BEBOM( String next, int i, int noOfValues)
             throws CharacterCodingException
     {
-        System.out.println("WriteBEBOM:"+next);
         CharsetEncoder encoder = Charset.forName(TextEncoding.CHARSET_UTF_16_BE_ENCODING_FORMAT).newEncoder();
         ByteBuffer bb = null;
         //Add BOM
@@ -275,10 +273,8 @@ public class TextEncodedStringSizeTerminated extends AbstractString
             String stringValue   = (String)value;
             String charSetName   = getTextEncodingCharSet();
             String actualCharSet = null;
-            System.out.println("Writing SizeTerminated:"+stringValue+":"+charSetName);
             if (charSetName.equals(TextEncoding.CHARSET_UTF_16))
             {
-                System.out.println("BOMLE:"+TagOptionSingleton.getInstance().isEncodeUTF16BomAsLittleEndian());
                 if(TagOptionSingleton.getInstance().isEncodeUTF16BomAsLittleEndian())
                 {
                     actualCharSet = TextEncoding.CHARSET_UTF_16_LE_ENCODING_FORMAT;
