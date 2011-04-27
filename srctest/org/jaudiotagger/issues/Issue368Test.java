@@ -25,11 +25,8 @@ public class Issue368Test extends AbstractTestCase
             }
 
             File testFile = AbstractTestCase.copyAudioToTmp("test95.m4a");
-            long startTime = System.nanoTime();
             AudioFile af = AudioFileIO.read(testFile);
-            long endTime = System.nanoTime();
-            double totalTime = (endTime - startTime) / 1000000.0;
-            System.out.println("Time:"+totalTime);
+            assertEquals(af.getTag().getFirst(FieldKey.DISC_NO),"2");
         }
         catch(Exception e)
         {

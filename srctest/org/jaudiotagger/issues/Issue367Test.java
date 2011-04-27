@@ -17,15 +17,21 @@ public class Issue367Test extends AbstractTestCase
         Exception caught = null;
         try
         {
-            File orig = new File("testdata", "test94.mp3");
+            File orig = new File("testdata", "test93.mp3");
             if (!orig.isFile())
             {
                 System.err.println("Unable to test file - not available");
                 return;
             }
 
-            File testFile = AbstractTestCase.copyAudioToTmp("test94.mp3");
+            File testFile = AbstractTestCase.copyAudioToTmp("test93.mp3");
+            long startTime = System.nanoTime();
             AudioFile af = AudioFileIO.read(testFile);
+            long endTime = System.nanoTime();
+            double totalTime = (endTime - startTime) / 1000000.0;
+            System.out.println("Time:"+totalTime + ":ms");
+
+
         }
         catch(Exception e)
         {
