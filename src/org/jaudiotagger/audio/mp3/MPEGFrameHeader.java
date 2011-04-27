@@ -41,6 +41,7 @@ public class MPEGFrameHeader
 
     public static final int SYNC_BYTE1 = 0xFF;
     public static final int SYNC_BYTE2 = 0xE0;
+    public static final int SYNC_BIT_ANDSAMPING_BYTE3 = 0xFC;
 
     private static final byte[] header = new byte[HEADER_SIZE];
 
@@ -838,10 +839,10 @@ public class MPEGFrameHeader
     private MPEGFrameHeader(byte[] b) throws InvalidAudioFrameException
     {
         mpegBytes = b;
+        setBitrate();
         setVersion();
         setLayer();
         setProtected();
-        setBitrate();
         setSamplingRate();
         setPadding();
         setPrivate();
@@ -878,8 +879,9 @@ public class MPEGFrameHeader
     public static boolean isMPEGFrame(ByteBuffer bb)
     {
         int position = bb.position();
-        return (((bb.get(position) & SYNC_BYTE1) == SYNC_BYTE1) && ((bb.get(position + 1) & SYNC_BYTE2) == SYNC_BYTE2));
-
+        return (((bb.get(position) & SYNC_BYTE1) == SYNC_BYTE1)
+                && ((bb.get(position + 1) & SYNC_BYTE2) == SYNC_BYTE2)
+                && ((bb.get(position + 2) & SYNC_BIT_ANDSAMPING_BYTE3) != SYNC_BIT_ANDSAMPING_BYTE3));
     }
 
     /**
