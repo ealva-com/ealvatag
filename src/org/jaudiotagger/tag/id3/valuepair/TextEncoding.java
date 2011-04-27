@@ -43,15 +43,14 @@ public class TextEncoding extends AbstractIntStringValuePair
     public static final String CHARSET_UTF_16BE = "UTF-16BE";
     public static final String CHARSET_UTF_8 = "UTF-8";
 
-    //This is a workaround to allow us to write the UTF-16 format using little endian rather than the default big endian
-    //in Java because BE not understood in Windows, workaround means we use UTF-16 for reading unicode from ID3
-    //because it could be in either order but when writing we use UTF-16LE - but have to explicity insert
-    //bom because it doesnt do it by default.
-    public static final String CHARSET_UTF_16_ENCODING_FORMAT = "UTF-16LE";
+    //Need both depending on whether want to use BigEndian or Little Endian
+    public static final String CHARSET_UTF_16_LE_ENCODING_FORMAT = "UTF-16LE";
+    public static final String CHARSET_UTF_16_BE_ENCODING_FORMAT = "UTF-16BE";
 
     //Supported ID3 charset ids
     public static final byte ISO_8859_1 = 0;
-    public static final byte UTF_16 = 1;               // We use UTF-16 with LE byteordering and byte order mark
+    public static final byte UTF_16 = 1;               //We use UTF-16 with LE byte-ordering and byte order mark buy default
+                                                       //but can also use BOM with BE byte ordering
     public static final byte UTF_16BE = 2;
     public static final byte UTF_8 = 3;
 

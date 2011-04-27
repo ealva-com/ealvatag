@@ -148,7 +148,7 @@ public class StringFixedLength extends AbstractString
             String charSetName = getTextEncodingCharSet();
             if (charSetName.equals(TextEncoding.CHARSET_UTF_16))
             {
-                charSetName = TextEncoding.CHARSET_UTF_16_ENCODING_FORMAT;
+                charSetName = TextEncoding.CHARSET_UTF_16_LE_ENCODING_FORMAT;
                 CharsetEncoder encoder = Charset.forName(charSetName).newEncoder();
                 //Note remember LE BOM is ff fe but tis is handled by encoder Unicode char is fe ff
                 dataBuffer = encoder.encode(CharBuffer.wrap('\ufeff' + (String) value));

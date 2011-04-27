@@ -248,6 +248,12 @@ public class TagOptionSingleton
     private boolean isAndroid = false;
 
     /**
+     * When you specify a field should be stored as UTF16 in ID3 this means write with BOM indicating whether
+     * written as Little Endian or Big Endian, its defaults to little Endian
+     */
+    private boolean isEncodeUTF16BomAsLittleEndian = true;
+
+    /**
      * When this is set and using the generic interface jaudiotagger will make some adjustmensts
      * when saving field sso they work best with the specified Tagger
      *
@@ -773,6 +779,7 @@ public class TagOptionSingleton
         truncateTextWithoutErrors = false;
         padNumbers = false;
         isAndroid = false;
+        isEncodeUTF16BomAsLittleEndian = true;
 
         //default all lyrics3 fields to save. id3v1 fields are individual
         // settings. id3v2 fields are always looked at to save.
@@ -918,7 +925,7 @@ public class TagOptionSingleton
     }
 
     /**
-     * Unsync tag where neccessary, currently only applies to IDv23
+     * Unsync tag where necessary, currently only applies to IDv23
      *
      * @param unsyncTags set whether tags are  unsynchronized when written if contain bit pattern that could
      *                   be mistaken for audio marker
@@ -1102,5 +1109,19 @@ public class TagOptionSingleton
     public void setPlayerCompatability(int playerCompatability)
     {
         this.playerCompatability = playerCompatability;
+    }
+
+    /**
+     * When you specify a field should be stored as UTF16 in ID3 this means write with BOM indicating whether
+     * written as Little Endian or Big Endian, its defaults to little Endian
+     */
+    public boolean isEncodeUTF16BomAsLittleEndian()
+    {
+        return isEncodeUTF16BomAsLittleEndian;
+    }
+
+    public void setEncodeUTF16BomAsLittleEndian(boolean encodeUTF16BomAsLittleEndian)
+    {
+        isEncodeUTF16BomAsLittleEndian = encodeUTF16BomAsLittleEndian;
     }
 }

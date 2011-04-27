@@ -139,7 +139,7 @@ public class Unicode24TagTest extends TestCase
      *
      * @throws Exception
      */
-    public void testCreateUTF16EncodedSizeTerminatedString() throws Exception
+    public void testCreateUTF16BOMLEEncodedSizeTerminatedString() throws Exception
     {
         File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3", new File("testutf16.mp3"));
         MP3File mp3File = new MP3File(testFile);
@@ -178,6 +178,52 @@ public class Unicode24TagTest extends TestCase
         assertEquals(FrameBodyTPE1Test.TPE1_TEST_STRING, body.getText());
     }
 
+    /**
+    * Can explicitly uses UTF-16 even if not required
+    * as UTf16 by default
+    *
+    * @throws Exception
+    */
+   public void testCreateUTF16BOMBEEncodedSizeTerminatedString() throws Exception
+   {
+       TagOptionSingleton.getInstance().setEncodeUTF16BomAsLittleEndian(false);
+       File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3", new File("testutf16bombe.mp3"));
+       MP3File mp3File = new MP3File(testFile);
+
+       ID3v24Frame frame = new ID3v24Frame(ID3v24Frames.FRAME_ID_ARTIST);
+       Exception exceptionCaught = null;
+       FrameBodyTPE1 fb = null;
+       try
+       {
+           fb = FrameBodyTPE1Test.getInitialisedBody();
+           fb.setTextEncoding(TextEncoding.UTF_16);
+           frame.setBody(fb);
+       }
+       catch (Exception e)
+       {
+           exceptionCaught = e;
+       }
+
+       assertNull(exceptionCaught);
+       assertEquals(ID3v24Frames.FRAME_ID_ARTIST, fb.getIdentifier());
+       assertEquals(TextEncoding.UTF_16, fb.getTextEncoding());
+       assertEquals(FrameBodyTPE1Test.TPE1_TEST_STRING, fb.getText());
+
+       //Create and Save
+       ID3v24Tag tag = new ID3v24Tag();
+       tag.setFrame(frame);
+       mp3File.setID3v2Tag(tag);
+       mp3File.save();
+
+       //Reload, should be written as UTF16 because of the text
+       mp3File = new MP3File(testFile);
+       frame = (ID3v24Frame) mp3File.getID3v2Tag().getFrame(ID3v24Frames.FRAME_ID_ARTIST);
+       FrameBodyTPE1 body = (FrameBodyTPE1) frame.getBody();
+       assertEquals(ID3v24Frames.FRAME_ID_ARTIST, body.getIdentifier());
+       assertEquals(TextEncoding.UTF_16, body.getTextEncoding());
+       assertEquals(FrameBodyTPE1Test.TPE1_TEST_STRING, body.getText());
+   }
+
 
     /**
      * Create a String that contains text outside of the IS8859 charset should be written
@@ -185,7 +231,7 @@ public class Unicode24TagTest extends TestCase
      *
      * @throws Exception
      */
-    public void testCreateUTF16AutoEncodedSizeTerminatedString() throws Exception
+    public void testCreateUTF16BOMLEAutoEncodedSizeTerminatedString() throws Exception
     {
         File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3", new File("testutf16-2.mp3"));
         MP3File mp3File = new MP3File(testFile);
@@ -261,7 +307,6 @@ public class Unicode24TagTest extends TestCase
         mp3File.setID3v2Tag(tag);
         mp3File.save();
 
-        //Reload, should be written as UTF16 because of the text
         mp3File = new MP3File(testFile);
         frame = (ID3v24Frame) mp3File.getID3v2Tag().getFrame(ID3v24Frames.FRAME_ID_ARTIST);
         FrameBodyTPE1 body = (FrameBodyTPE1) frame.getBody();
@@ -272,7 +317,7 @@ public class Unicode24TagTest extends TestCase
 
 
     /**
-     * Strings can bbe written to UTF16BE if text encoding explicitly set
+     * Strings can be written to UTF16BE if text encoding explicitly set
      *
      * @throws Exception
      */
@@ -316,7 +361,7 @@ public class Unicode24TagTest extends TestCase
     }
 
     /**
-     * Strings can bbe written to UTF8 if text encoding explicitly set
+     * Strings can be written to UTF8 if text encoding explicitly set
      *
      * @throws Exception
      */

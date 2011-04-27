@@ -123,13 +123,59 @@ public class Unicode23TagTest extends TestCase
     }
 
     /**
-     * Can explictly uses UTF-16 even if not required
+     * Can explicitly uses UTF-16 even if not required
      * as UTf16 by default
      *
      * @throws Exception
      */
-    public void testCreateUTF16EncodedSizeTerminatedString() throws Exception
+    public void testCreateUTF16BOMLEEncodedSizeTerminatedString() throws Exception
     {
+        File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3");
+        MP3File mp3File = new MP3File(testFile);
+
+        ID3v23Frame frame = new ID3v23Frame(ID3v23Frames.FRAME_ID_V3_ARTIST);
+        Exception exceptionCaught = null;
+        FrameBodyTPE1 fb = null;
+        try
+        {
+            fb = FrameBodyTPE1Test.getInitialisedBody();
+            fb.setTextEncoding(TextEncoding.UTF_16);
+            frame.setBody(fb);
+        }
+        catch (Exception e)
+        {
+            exceptionCaught = e;
+        }
+
+        assertNull(exceptionCaught);
+        assertEquals(ID3v23Frames.FRAME_ID_V3_ARTIST, fb.getIdentifier());
+        assertEquals(TextEncoding.UTF_16, fb.getTextEncoding());
+        assertEquals(FrameBodyTPE1Test.TPE1_TEST_STRING, fb.getText());
+
+        //Create and Save
+        ID3v23Tag tag = new ID3v23Tag();
+        tag.setFrame(frame);
+        mp3File.setID3v2Tag(tag);
+        mp3File.save();
+
+        //Reload, should be written as UTF16 because of the text
+        mp3File = new MP3File(testFile);
+        frame = (ID3v23Frame) mp3File.getID3v2Tag().getFrame(ID3v23Frames.FRAME_ID_V3_ARTIST);
+        FrameBodyTPE1 body = (FrameBodyTPE1) frame.getBody();
+        assertEquals(ID3v23Frames.FRAME_ID_V3_ARTIST, body.getIdentifier());
+        assertEquals(TextEncoding.UTF_16, body.getTextEncoding());
+        assertEquals(FrameBodyTPE1Test.TPE1_TEST_STRING, body.getText());
+    }
+
+    /**
+     * Can explicitly uses UTF-16 even if not required
+     * as UTf16 by default
+     *
+     * @throws Exception
+     */
+    public void testCreateUTF16BOMBEEncodedSizeTerminatedString() throws Exception
+    {
+        TagOptionSingleton.getInstance().setEncodeUTF16BomAsLittleEndian(false);
         File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3");
         MP3File mp3File = new MP3File(testFile);
 
@@ -369,9 +415,8 @@ public class Unicode23TagTest extends TestCase
     /**
      * @throws Exception
      */
-    public void testCreateUTF16EvenIfNotNeededIfDefaultSetEncodedSizeTerminatedString() throws Exception
+    public void testCreateUTF16BOMLEEvenIfNotNeededIfDefaultSetEncodedSizeTerminatedString() throws Exception
     {
-
         //Modify tag options
         //So will default to default on save (default is ISO8859) has to be done before the frame is created
         TagOptionSingleton.getInstance().setId3v23DefaultTextEncoding(TextEncoding.UTF_16);

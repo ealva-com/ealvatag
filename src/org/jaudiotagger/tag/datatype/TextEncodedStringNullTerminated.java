@@ -1,6 +1,7 @@
 package org.jaudiotagger.tag.datatype;
 
 import org.jaudiotagger.tag.InvalidDataTypeException;
+import org.jaudiotagger.tag.TagOptionSingleton;
 import org.jaudiotagger.tag.id3.AbstractTagFrameBody;
 import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
 
@@ -53,7 +54,7 @@ public class TextEncodedStringNullTerminated extends AbstractString
      * Read a string from buffer upto null character (if exists)
      * <p/>
      * Must take into account the text encoding defined in the Encoding Object
-     * ID3 Text Frames often allow multiple strings seperated by the null char
+     * ID3 Text Frames often allow multiple strings separated by the null char
      * appropriate for the encoding.
      *
      * @param arr    this is the buffer for the frame
@@ -207,12 +208,24 @@ public class TextEncodedStringNullTerminated extends AbstractString
             String charSetName = getTextEncodingCharSet();
             if (charSetName.equals(TextEncoding.CHARSET_UTF_16))
             {
-                charSetName = TextEncoding.CHARSET_UTF_16_ENCODING_FORMAT;
-                CharsetEncoder encoder = Charset.forName(charSetName).newEncoder();
-                //Note remember LE BOM is ff fe but this is handled by encoder Unicode char is fe ff
-                ByteBuffer bb = encoder.encode(CharBuffer.wrap('\ufeff' + (String) value + '\0'));
-                data = new byte[bb.limit()];
-                bb.get(data, 0, bb.limit());
+                if(TagOptionSingleton.getInstance().isEncodeUTF16BomAsLittleEndian())
+                {
+                    charSetName = TextEncoding.CHARSET_UTF_16_LE_ENCODING_FORMAT;
+                    CharsetEncoder encoder = Charset.forName(charSetName).newEncoder();
+                    //Note remember LE BOM is ff fe but this is handled by encoder Unicode char is fe ff
+                    ByteBuffer bb = encoder.encode(CharBuffer.wrap('\ufeff' + (String) value + '\0'));
+                    data = new byte[bb.limit()];
+                    bb.get(data, 0, bb.limit());
+                }
+                else
+                {
+                     charSetName = TextEncoding.CHARSET_UTF_16_BE_ENCODING_FORMAT;
+                     CharsetEncoder encoder = Charset.forName(charSetName).newEncoder();
+                     //Note  BE BOM will leave as fe ff
+                     ByteBuffer bb = encoder.encode(CharBuffer.wrap('\ufeff' + (String) value + '\0'));
+                     data = new byte[bb.limit()];
+                     bb.get(data, 0, bb.limit());
+                }
             }
             else
             {
