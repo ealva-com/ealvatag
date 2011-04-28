@@ -279,24 +279,7 @@ public class ID3v22Tag extends AbstractID3v2Tag
             logger.log(Level.SEVERE, "Unable to convert frame:" + frame.getIdentifier());
         }
     }
-    /**
-     * Read the size of a tag, based on  the value written in the tag header
-     *
-     * @param buffer
-     * @return
-     * @throws TagException
-     */
-    public int readSize(ByteBuffer buffer)
-    {
-        //Skip over flags
-        byte flags = buffer.get();
 
-        // Read the size, this is size of tag not including  the tag header
-        int size = ID3SyncSafeInteger.bufferToValue(buffer);
-
-        //Return the exact size of tag as setField in the tag header
-        return size + TAG_HEADER_LENGTH;
-    }
 
     /**
      * Read tag Header Flags

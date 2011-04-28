@@ -2,14 +2,15 @@ package org.jaudiotagger.audio.flac;
 
 import org.jaudiotagger.audio.exceptions.CannotReadException;
 import org.jaudiotagger.logging.ErrorMessage;
+import org.jaudiotagger.tag.flac.FlacTag;
 import org.jaudiotagger.tag.id3.AbstractID3v2Tag;
 import org.jaudiotagger.tag.id3.ID3v22Tag;
 import org.jaudiotagger.tag.id3.ID3v23Tag;
-import org.jaudiotagger.tag.id3.ID3v24Tag;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
+import java.util.logging.Logger;
 
 /**
  * Flac Stream
@@ -18,6 +19,8 @@ import java.nio.ByteBuffer;
  */
 public class FlacStreamReader
 {
+    public static Logger logger = Logger.getLogger("org.jaudiotagger.audio.flac");
+
     public static final int FLAC_STREAM_IDENTIFIER_LENGTH = 4;
     public static final String FLAC_STREAM_IDENTIFIER = "fLaC";
 
@@ -58,21 +61,7 @@ public class FlacStreamReader
         }
 
         //Ok maybe there is an ID3v24tag first
-        if (isId3v24Tag())
-        {
-            startOfFlacInFile = (int) (raf.getFilePointer() - FLAC_STREAM_IDENTIFIER_LENGTH);
-            return;
-        }
-
-        //Ok maybe there is an ID3v23tag first
-        if (isId3v23Tag())
-        {
-            startOfFlacInFile = (int) (raf.getFilePointer() - FLAC_STREAM_IDENTIFIER_LENGTH);
-            return;
-        }
-
-        //Ok maybe there is an ID3v22tag first
-        if (isId3v22Tag())
+        if (isId3v2Tag())
         {
             startOfFlacInFile = (int) (raf.getFilePointer() - FLAC_STREAM_IDENTIFIER_LENGTH);
             return;
@@ -80,57 +69,12 @@ public class FlacStreamReader
         throw new CannotReadException(ErrorMessage.FLAC_NO_FLAC_HEADER_FOUND.getMsg());
     }
 
-    private boolean isId3v24Tag() throws IOException
+    private boolean isId3v2Tag() throws IOException
     {
-        int id3tagsize;
-        ID3v24Tag id3tag = new ID3v24Tag();
-        ByteBuffer bb = ByteBuffer.allocate(AbstractID3v2Tag.TAG_HEADER_LENGTH);
         raf.seek(0);
-        raf.getChannel().read(bb);
-        if (id3tag.seek(bb))
+        if(AbstractID3v2Tag.isId3Tag(raf))
         {
-            id3tagsize = id3tag.readSize(bb);
-            raf.seek(id3tagsize);
-            //FLAC Stream immediately after end of id3 tag
-            if (isFlacHeader())
-            {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private boolean isId3v23Tag() throws IOException
-    {
-        int id3tagsize;
-        ID3v23Tag id3tag = new ID3v23Tag();
-        ByteBuffer bb = ByteBuffer.allocate(AbstractID3v2Tag.TAG_HEADER_LENGTH);
-        raf.seek(0);
-        raf.getChannel().read(bb);
-        if (id3tag.seek(bb))
-        {
-            id3tagsize = id3tag.readSize(bb);
-            raf.seek(id3tagsize);
-            //FLAC Stream immediately after end of id3 tag
-            if (isFlacHeader())
-            {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private boolean isId3v22Tag() throws IOException
-    {
-        int id3tagsize;
-        ID3v22Tag id3tag = new ID3v22Tag();
-        ByteBuffer bb = ByteBuffer.allocate(AbstractID3v2Tag.TAG_HEADER_LENGTH);
-        raf.seek(0);
-        raf.getChannel().read(bb);
-        if (id3tag.seek(bb))
-        {
-            id3tagsize = id3tag.readSize(bb);
-            raf.seek(id3tagsize);
+            logger.warning(ErrorMessage.FLAC_CONTAINS_ID3TAG.getMsg(raf.getFilePointer()));
             //FLAC Stream immediately after end of id3 tag
             if (isFlacHeader())
             {

@@ -22,6 +22,7 @@ package org.jaudiotagger.audio.ogg.util;
 import org.jaudiotagger.audio.exceptions.CannotReadException;
 import org.jaudiotagger.audio.generic.GenericAudioHeader;
 import org.jaudiotagger.logging.ErrorMessage;
+import org.jaudiotagger.tag.id3.AbstractID3v2Tag;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
@@ -38,6 +39,7 @@ public class OggInfoReader
 
     public GenericAudioHeader read(RandomAccessFile raf) throws CannotReadException, IOException
     {
+        long start = raf.getFilePointer();
         GenericAudioHeader info = new GenericAudioHeader();
         logger.fine("Started");
         long oldPos;
@@ -47,13 +49,25 @@ public class OggInfoReader
         raf.read(b);
         if (!(Arrays.equals(b, OggPageHeader.CAPTURE_PATTERN)))
         {
-            throw new CannotReadException(ErrorMessage.OGG_HEADER_CANNOT_BE_FOUND.getMsg(new String(b)));
+            raf.seek(0);
+            if(AbstractID3v2Tag.isId3Tag(raf))
+            {
+                raf.read(b);
+                if ((Arrays.equals(b, OggPageHeader.CAPTURE_PATTERN)))
+                {
+                    start=raf.getFilePointer();
+                }
+            }
+            else
+            {
+                throw new CannotReadException(ErrorMessage.OGG_HEADER_CANNOT_BE_FOUND.getMsg(new String(b)));
+            }
         }
 
         //Now work backwards from file looking for the last ogg page, it reads the granule position for this last page
         //which must be set.
         //TODO should do buffering to cut down the number of file reads
-        raf.seek(0);
+        raf.seek(start);
         double pcmSamplesNumber = -1;
         raf.seek(raf.length() - 2);
         while (raf.getFilePointer() >= 4)

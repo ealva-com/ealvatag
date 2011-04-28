@@ -30,6 +30,7 @@ import org.jaudiotagger.tag.reference.PictureTypes;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
 import java.nio.channels.WritableByteChannel;
 import java.util.*;
@@ -698,26 +699,6 @@ public class ID3v24Tag extends AbstractID3v2Tag
     }
 
     /**
-     * Read the size of a tag, based on  the value written in the tag header
-     *
-     * @param buffer
-     * @return
-     * @throws TagException
-     */
-    public int readSize(ByteBuffer buffer)
-    {
-
-        //Skip over flags
-        buffer.get();
-
-        // Read the size, this is size of tag not including  the tag header
-        int size = ID3SyncSafeInteger.bufferToValue(buffer);
-
-        //Return the exact size of tag as set in the tag header
-        return size + TAG_HEADER_LENGTH;
-    }
-
-    /**
      * Read header flags
      * <p/>
      * <p>Log info messages for falgs that have been set and log warnings when bits have been set for unknown flags</p>
@@ -842,6 +823,7 @@ public class ID3v24Tag extends AbstractID3v2Tag
             imageSizeRestriction        = (byte) (buffer[0] & MASK_V24_IMAGE_SIZE_RESTRICTIONS);
         }
     }
+
 
     /**
      * {@inheritDoc}
@@ -1343,4 +1325,7 @@ public class ID3v24Tag extends AbstractID3v2Tag
         body.setObjectValue(DataTypes.OBJ_DESCRIPTION, "");
         return frame;
     }
+
+
+
 }

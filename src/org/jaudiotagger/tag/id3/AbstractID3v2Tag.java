@@ -29,6 +29,7 @@ import org.jaudiotagger.tag.id3.framebody.*;
 import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
 import org.jaudiotagger.tag.reference.Languages;
 import org.jaudiotagger.tag.reference.PictureTypes;
+import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
 
 import java.io.*;
 import java.nio.ByteBuffer;
@@ -111,6 +112,53 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
      */
     protected static final String TYPE_INVALIDFRAMES = "invalidFrames";
     protected int invalidFrames = 0;
+
+    /**
+     * True if files has a ID3v2 header
+     *
+     * @param raf
+     * @return
+     * @throws IOException
+     */
+    private static boolean isID3V2Header(RandomAccessFile raf) throws IOException
+    {
+        long start = raf.getFilePointer();
+        byte[] tagIdentifier = new byte[FIELD_TAGID_LENGTH];
+        raf.read(tagIdentifier);
+        raf.seek(start);
+        if (!(Arrays.equals(tagIdentifier, TAG_ID)))
+        {
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * Determines if file contain an id3 tag and if so positions the file pointer just after the end
+     * of the tag.
+     *
+     * This method is used by non mp3s (such as .ogg and .flac) to determine if they contain an id3 tag
+     *
+     * @param raf
+     * @return
+     * @throws IOException
+     */
+    public static boolean isId3Tag(RandomAccessFile raf) throws IOException
+    {
+        if(!isID3V2Header(raf))
+        {
+            return false;
+        }
+        //So we have a tag
+        byte[] tagHeader = new byte[FIELD_TAG_SIZE_LENGTH];
+        raf.seek(raf.getFilePointer() + 6);
+        raf.read(tagHeader);
+        ByteBuffer bb = ByteBuffer.wrap(tagHeader);
+
+        int size = ID3SyncSafeInteger.bufferToValue(bb);
+        raf.seek(size + TAG_HEADER_LENGTH);
+        return true;
+    }
 
     /**
      * Empty Constructor

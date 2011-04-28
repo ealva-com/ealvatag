@@ -108,6 +108,8 @@ public enum ErrorMessage
     UNABLE_TO_FIND_FILE("Unable to find:{0}"),
     NO_PERMISSIONS_TO_WRITE_TO_FILE("Unable to write to:{0}"),
     DO_NOT_KNOW_HOW_TO_CREATE_THIS_ATOM_TYPE("DO not know how to create this atom type {0}"),
+    OGG_CONTAINS_ID3TAG("Ogg File contains invalid ID3 Tag, skipping ID3 Tag of length:{0}"),
+    FLAC_CONTAINS_ID3TAG("Flac File contains invalid ID3 Tag, skipping ID3 Tag of length:{0}"),
     ;
 
 

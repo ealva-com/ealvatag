@@ -21,6 +21,7 @@ package org.jaudiotagger.audio.ogg.util;
 import org.jaudiotagger.audio.exceptions.CannotReadException;
 import org.jaudiotagger.audio.generic.Utils;
 import org.jaudiotagger.logging.ErrorMessage;
+import org.jaudiotagger.tag.id3.AbstractID3v2Tag;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
@@ -149,7 +150,21 @@ public class OggPageHeader
         raf.read(b);
         if (!(Arrays.equals(b, OggPageHeader.CAPTURE_PATTERN)))
         {
-            throw new CannotReadException(ErrorMessage.OGG_HEADER_CANNOT_BE_FOUND.getMsg(new String(b)));
+            raf.seek(start);
+            if(AbstractID3v2Tag.isId3Tag(raf))
+            {
+                logger.warning(ErrorMessage.OGG_CONTAINS_ID3TAG.getMsg(raf.getFilePointer() - start));
+                raf.read(b);
+                if ((Arrays.equals(b, OggPageHeader.CAPTURE_PATTERN)))
+                {
+
+                    start=raf.getFilePointer() - OggPageHeader.CAPTURE_PATTERN.length;
+                }
+            }
+            else
+            {
+                throw new CannotReadException(ErrorMessage.OGG_HEADER_CANNOT_BE_FOUND.getMsg(new String(b)));
+            }
         }
 
         raf.seek(start + OggPageHeader.FIELD_PAGE_SEGMENTS_POS);
