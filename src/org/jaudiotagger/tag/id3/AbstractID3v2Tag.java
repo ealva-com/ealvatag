@@ -33,6 +33,7 @@ import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
 
 import java.io.*;
 import java.nio.ByteBuffer;
+import java.nio.channels.Channels;
 import java.nio.channels.FileChannel;
 import java.nio.channels.FileLock;
 import java.nio.channels.WritableByteChannel;
@@ -976,7 +977,16 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
     {
     }
 
-
+    /**
+     * Write tag to output stream
+     *
+     * @param outputStream
+     * @throws IOException
+     */
+    public void write(OutputStream outputStream) throws IOException
+    {
+        write(Channels.newChannel(outputStream));
+    }
     /**
      * Checks to see if the file contains an ID3tag and if so return its size as reported in
      * the tag header  and return the size of the tag (including header), if no such tag exists return
