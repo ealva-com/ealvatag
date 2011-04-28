@@ -131,33 +131,6 @@ public class FlacWriteTest extends TestCase
             assertEquals("3",tag.getFirst(FieldKey.DISC_TOTAL));
             assertEquals("Sarah Curtis",tag.getFirst("VIOLINIST"));
 
-            ImageInputStream stream = ImageIO.createImageInputStream(new ByteArrayInputStream(pic.getImageData()));
-            BufferedImage bi = ImageIO.read(stream);
-            assertEquals(200, bi.getWidth());
-            assertEquals(200, bi.getHeight());
-
-            //Add image using alternative
-            tag.addField(tag.createArtworkField(bi, PictureTypes.DEFAULT_ID, ImageFormats.MIME_TYPE_PNG, "test", 24, 0));
-            f.commit();
-
-            //Two Images
-            assertEquals(2, tag.getFields(FieldKey.COVER_ART.name()).size());
-            assertEquals(2, tag.getImages().size());
-            pic = tag.getImages().get(1);
-            assertEquals((int) PictureTypes.DEFAULT_ID, pic.getPictureType());
-            assertEquals(ImageFormats.MIME_TYPE_PNG, pic.getMimeType());
-            assertEquals("test", pic.getDescription());
-            assertEquals(200, pic.getWidth());
-            assertEquals(200, pic.getHeight());
-            assertEquals(24, pic.getColourDepth());
-            assertEquals(0, pic.getIndexedColourCount());
-
-            stream = ImageIO.createImageInputStream(new ByteArrayInputStream(pic.getImageData()));
-            bi = ImageIO.read(stream);
-            assertEquals(200, bi.getWidth());
-            assertEquals(200, bi.getHeight());
-
-            assertEquals(6, infoReader.countMetaBlocks(f.getFile()));
 
 
         }

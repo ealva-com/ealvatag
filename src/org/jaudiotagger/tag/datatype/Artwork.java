@@ -2,10 +2,9 @@ package org.jaudiotagger.tag.datatype;
 
 import org.jaudiotagger.audio.flac.metadatablock.MetadataBlockDataPicture;
 import org.jaudiotagger.tag.id3.valuepair.ImageFormats;
+import org.jaudiotagger.tag.images.ImageHandlingFactory;
 import org.jaudiotagger.tag.reference.PictureTypes;
 
-import javax.imageio.ImageIO;
-import javax.imageio.stream.ImageInputStream;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.ByteArrayInputStream;
@@ -23,6 +22,8 @@ public class Artwork
     private boolean         isLinked=false;
     private String          imageUrl="";
     private int             pictureType=-1;
+    private int             width;
+    private int             height;
 
     public byte[] getBinaryData()   
     {
@@ -49,16 +50,29 @@ public class Artwork
         return description;
     }
 
+    public int getHeight()
+    {
+        return height;
+    }
+
+    public int getWidth()
+    {
+        return width;
+    }
+
     public void setDescription(String description)
     {
         this.description = description;
     }
 
+    public void setImageFromData() throws IOException
+    {
+        BufferedImage bi = ImageHandlingFactory.getInstance().getImage(new ByteArrayInputStream(getBinaryData()));
+    }
+
     public BufferedImage getImage() throws IOException
     {
-        ByteArrayInputStream bais = new ByteArrayInputStream(getBinaryData());
-        ImageInputStream iis = ImageIO.createImageInputStream(bais);
-        BufferedImage bi = ImageIO.read(iis);
+        BufferedImage bi = ImageHandlingFactory.getInstance().getImage(new ByteArrayInputStream(getBinaryData()));
         return bi;
     }
 
@@ -131,6 +145,8 @@ public class Artwork
         {
             setBinaryData(coverArt.getImageData());
         }
+        setWidth(coverArt.getWidth());
+        setHeight(coverArt.getHeight());
     }
 
     public static Artwork createArtworkFromMetadataBlockDataPicture(MetadataBlockDataPicture coverArt)
@@ -140,4 +156,13 @@ public class Artwork
         return artwork;
     }
 
+    public void setWidth(int width)
+    {
+        this.width = width;
+    }
+
+    public void setHeight(int height)
+    {
+        this.height = height;
+    }
 }

@@ -4,17 +4,12 @@ import org.jaudiotagger.audio.flac.metadatablock.MetadataBlockDataPicture;
 import org.jaudiotagger.audio.generic.Utils;
 import org.jaudiotagger.tag.*;
 import org.jaudiotagger.tag.datatype.Artwork;
-import org.jaudiotagger.tag.id3.valuepair.ImageFormats;
 import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
 import org.jaudiotagger.tag.reference.PictureTypes;
 import org.jaudiotagger.tag.vorbiscomment.VorbisCommentTag;
 import org.jaudiotagger.tag.vorbiscomment.VorbisCommentFieldKey;
 import org.jaudiotagger.logging.ErrorMessage;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -376,35 +371,6 @@ public class FlacTag implements Tag
     }
 
     /**
-     * Create Artwork when  have the bufferedimage
-     *
-     * @param bi
-     * @param pictureType
-     * @param mimeType
-     * @param description
-     * @param colourDepth
-     * @param indexedColouredCount
-     * @return
-     * @throws FieldDataInvalidException
-     */
-    public TagField createArtworkField(BufferedImage bi, int pictureType, String mimeType, String description, int colourDepth, int indexedColouredCount) throws FieldDataInvalidException
-    {
-        //Convert to byte array
-        try
-        {
-            final ByteArrayOutputStream output = new ByteArrayOutputStream();
-            ImageIO.write(bi, ImageFormats.getFormatForMimeType(mimeType), new DataOutputStream(output));
-
-            //Add to image list
-            return new MetadataBlockDataPicture(output.toByteArray(), pictureType, mimeType, description, bi.getWidth(), bi.getHeight(), colourDepth, indexedColouredCount);
-        }
-        catch (IOException ioe)
-        {
-            throw new FieldDataInvalidException("Unable to convert image to bytearray, check mimetype parameter");
-        }
-    }
-
-    /**
      * Create Link to Image File, not recommended because if either flac or image file is moved link
      * will be broken.
      * @param url
@@ -437,22 +403,21 @@ public class FlacTag implements Tag
         }
         else
         {
-            BufferedImage image;
             try
             {
-                image = artwork.getImage();
+                artwork.setImageFromData();
             }
             catch(IOException ioe)
             {
-                throw new FieldDataInvalidException("Unable to createField bufferd image from the image");
+                throw new FieldDataInvalidException("Unable to createField buffered image from the image");
             }
 
             return new MetadataBlockDataPicture(artwork.getBinaryData(),
                     artwork.getPictureType(),
                     artwork.getMimeType(),
                     artwork.getDescription(),
-                    image.getWidth(),
-                    image.getHeight(),
+                    artwork.getWidth(),
+                    artwork.getHeight(),
                     0,
                     0);
         }
@@ -499,4 +464,6 @@ public class FlacTag implements Tag
     {
         this.deleteField(FieldKey.COVER_ART);
     }
+
+
 }

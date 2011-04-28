@@ -1,11 +1,8 @@
 package org.jaudiotagger.tag.asf;
 
 import org.jaudiotagger.audio.asf.data.MetadataDescriptor;
-import org.jaudiotagger.tag.asf.AsfTagField;
-import org.jaudiotagger.tag.asf.AsfFieldKey;
 import org.jaudiotagger.tag.TagField;
-
-import javax.imageio.ImageIO;
+import org.jaudiotagger.tag.images.ImageHandlingFactory;
 
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
@@ -59,7 +56,7 @@ abstract class AbstractAsfTagImageField extends AsfTagField
      * @throws IOException
      */
     public BufferedImage getImage() throws IOException {
-        return ImageIO.read(new ByteArrayInputStream(getRawImageData()));
+        return ImageHandlingFactory.getInstance().getImage2(new ByteArrayInputStream(getRawImageData()));
     }
 
     /**

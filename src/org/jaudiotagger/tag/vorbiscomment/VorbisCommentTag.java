@@ -32,13 +32,11 @@ import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
 import org.jaudiotagger.tag.reference.Tagger;
 import org.jaudiotagger.tag.vorbiscomment.util.Base64Coder;
 
-import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.EnumMap;
-import java.util.EnumSet;
 import java.util.List;
 
 /**
@@ -461,10 +459,9 @@ public class VorbisCommentTag extends AbstractTag
           }
           else
           {
-              BufferedImage image;
               try
               {
-                  image = artwork.getImage();
+                  artwork.setImageFromData();
               }
               catch(IOException ioe)
               {
@@ -475,8 +472,8 @@ public class VorbisCommentTag extends AbstractTag
                       artwork.getPictureType(),
                       artwork.getMimeType(),
                       artwork.getDescription(),
-                      image.getWidth(),
-                      image.getHeight(),
+                      artwork.getWidth(),
+                      artwork.getHeight(),
                       0,
                       0);
           }
