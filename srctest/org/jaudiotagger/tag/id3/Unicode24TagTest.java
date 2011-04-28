@@ -141,7 +141,7 @@ public class Unicode24TagTest extends TestCase
      */
     public void testCreateUTF16BOMLEEncodedSizeTerminatedString() throws Exception
     {
-        File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3", new File("testutf16.mp3"));
+        File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3", new File("testutf16bomle.mp3"));
         MP3File mp3File = new MP3File(testFile);
 
         ID3v24Frame frame = new ID3v24Frame(ID3v24Frames.FRAME_ID_ARTIST);

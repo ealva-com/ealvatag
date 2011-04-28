@@ -130,7 +130,7 @@ public class Unicode23TagTest extends TestCase
      */
     public void testCreateUTF16BOMLEEncodedSizeTerminatedString() throws Exception
     {
-        File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3");
+        File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3", new File("testv23utf16bomle.mp3"));
         MP3File mp3File = new MP3File(testFile);
 
         ID3v23Frame frame = new ID3v23Frame(ID3v23Frames.FRAME_ID_V3_ARTIST);
@@ -176,7 +176,7 @@ public class Unicode23TagTest extends TestCase
     public void testCreateUTF16BOMBEEncodedSizeTerminatedString() throws Exception
     {
         TagOptionSingleton.getInstance().setEncodeUTF16BomAsLittleEndian(false);
-        File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3");
+        File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3", new File("testv23utf16bombe.mp3"));
         MP3File mp3File = new MP3File(testFile);
 
         ID3v23Frame frame = new ID3v23Frame(ID3v23Frames.FRAME_ID_V3_ARTIST);
@@ -222,7 +222,7 @@ public class Unicode23TagTest extends TestCase
      */
     public void testCreateUTF16AutoEncodedSizeTerminatedString() throws Exception
     {
-        File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3");
+        File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3", new File("testv23utf16bomberequired.mp3"));
         MP3File mp3File = new MP3File(testFile);
 
         ID3v23Frame frame = new ID3v23Frame(ID3v23Frames.FRAME_ID_V3_ARTIST);
@@ -421,7 +421,7 @@ public class Unicode23TagTest extends TestCase
         //So will default to default on save (default is ISO8859) has to be done before the frame is created
         TagOptionSingleton.getInstance().setId3v23DefaultTextEncoding(TextEncoding.UTF_16);
 
-        File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3");
+        File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3", new File("testv23utf16bomleoption.mp3"));
         MP3File mp3File = new MP3File(testFile);
 
         ID3v23Frame frame = new ID3v23Frame(ID3v23Frames.FRAME_ID_V3_ARTIST);
