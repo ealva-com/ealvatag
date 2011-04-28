@@ -101,6 +101,7 @@ public class OggPageHeader
     private List<PacketStartAndLength> packetList = new ArrayList<PacketStartAndLength>();
     private boolean lastPacketIncomplete = false;
 
+    private long startByte = 0;
     /**
      * Read next PageHeader from Buffer
      *
@@ -157,7 +158,7 @@ public class OggPageHeader
                 raf.read(b);
                 if ((Arrays.equals(b, OggPageHeader.CAPTURE_PATTERN)))
                 {
-
+                    //Go to the end of the ID3 header
                     start=raf.getFilePointer() - OggPageHeader.CAPTURE_PATTERN.length;
                 }
             }
@@ -176,7 +177,7 @@ public class OggPageHeader
 
 
         OggPageHeader pageHeader = new OggPageHeader(b);
-
+        pageHeader.setStartByte(start);
         //Now just after PageHeader, ready for Packet Data
         return pageHeader;
     }
@@ -318,6 +319,21 @@ public class OggPageHeader
             out += packet.toString();
         }
         return out;
+    }
+
+    /** Startbyte of this pageHeader in the file
+     *
+     * This is useful for Ogg files that contain unsupported additional data at the start of the file such
+     * as ID3 data
+     */
+    public long getStartByte()
+    {
+        return startByte;
+    }
+
+    public void setStartByte(long startByte)
+    {
+        this.startByte = startByte;
     }
 
     /**

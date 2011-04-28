@@ -4,6 +4,7 @@ import org.jaudiotagger.AbstractTestCase;
 import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.AudioFileIO;
 import org.jaudiotagger.tag.FieldKey;
+import org.jaudiotagger.tag.TagField;
 
 import java.io.File;
 
@@ -26,6 +27,10 @@ public class Issue365Test extends AbstractTestCase
 
             File testFile = AbstractTestCase.copyAudioToTmp("test90.ogg");
             AudioFile af = AudioFileIO.read(testFile);
+            af.getTag().setField(FieldKey.ARTIST,"fred");
+            af.commit();
+            af = AudioFileIO.read(testFile);
+            assertEquals("fred",af.getTag().getFirst(FieldKey.ARTIST));
         }
         catch(Exception e)
         {

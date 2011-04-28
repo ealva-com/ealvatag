@@ -73,7 +73,7 @@ public class OggVorbisTagWriter
         //1st Page:Identification Header
         logger.fine("Read 1st Page:identificationHeader:");
         OggPageHeader pageHeader = OggPageHeader.read(raf);
-        raf.seek(0);
+        raf.seek(pageHeader.getStartByte());
 
         //Write 1st page (unchanged) and place writer pointer at end of data
         rafTemp.getChannel().transferFrom(raf.getChannel(), 0, pageHeader.getPageLength() + OggPageHeader.OGG_PAGE_HEADER_FIXED_LENGTH + pageHeader.getSegmentTable().length);
