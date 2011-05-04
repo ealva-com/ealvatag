@@ -18,7 +18,7 @@
  */
 package org.jaudiotagger.tag;
 
-import org.jaudiotagger.tag.datatype.Artwork;
+import org.jaudiotagger.tag.images.Artwork;
 
 import java.util.Iterator;
 import java.util.List;

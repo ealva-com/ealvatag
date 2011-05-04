@@ -3,14 +3,14 @@ package org.jaudiotagger.tag.flac;
 import org.jaudiotagger.audio.flac.metadatablock.MetadataBlockDataPicture;
 import org.jaudiotagger.audio.generic.Utils;
 import org.jaudiotagger.tag.*;
-import org.jaudiotagger.tag.datatype.Artwork;
+import org.jaudiotagger.tag.images.Artwork;
 import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
+import org.jaudiotagger.tag.images.ArtworkFactory;
 import org.jaudiotagger.tag.reference.PictureTypes;
 import org.jaudiotagger.tag.vorbiscomment.VorbisCommentTag;
 import org.jaudiotagger.tag.vorbiscomment.VorbisCommentFieldKey;
 import org.jaudiotagger.logging.ErrorMessage;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -403,11 +403,7 @@ public class FlacTag implements Tag
         }
         else
         {
-            try
-            {
-                artwork.setImageFromData();
-            }
-            catch(IOException ioe)
+            if(!artwork.setImageFromData())
             {
                 throw new FieldDataInvalidException("Unable to createField buffered image from the image");
             }
@@ -439,7 +435,7 @@ public class FlacTag implements Tag
 
         for(MetadataBlockDataPicture coverArt:images)
         {
-            Artwork artwork=Artwork.createArtworkFromMetadataBlockDataPicture(coverArt);
+            Artwork artwork= ArtworkFactory.createArtworkFromMetadataBlockDataPicture(coverArt);
             artworkList.add(artwork);
         }
         return artworkList;

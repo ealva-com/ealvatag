@@ -22,10 +22,11 @@ import org.jaudiotagger.audio.generic.AbstractTag;
 import org.jaudiotagger.audio.mp4.atom.Mp4BoxHeader;
 import org.jaudiotagger.logging.ErrorMessage;
 import org.jaudiotagger.tag.*;
-import org.jaudiotagger.tag.datatype.Artwork;
+import org.jaudiotagger.tag.images.Artwork;
 import static org.jaudiotagger.tag.mp4.Mp4FieldKey.*;
+
+import org.jaudiotagger.tag.images.ArtworkFactory;
 import org.jaudiotagger.tag.mp4.field.*;
-import org.jaudiotagger.tag.vorbiscomment.VorbisCommentFieldKey;
 
 import java.util.ArrayList;
 import java.util.EnumMap;
@@ -580,7 +581,7 @@ public class Mp4Tag extends AbstractTag
         for(TagField next:coverartList)
         {
             Mp4TagCoverField mp4CoverArt = (Mp4TagCoverField)next;
-            Artwork artwork = new Artwork();
+            Artwork artwork = ArtworkFactory.getNew();
             artwork.setBinaryData(mp4CoverArt.getData());
             artwork.setMimeType(Mp4TagCoverField.getMimeTypeForImageType(mp4CoverArt.getFieldType()));
             artworkList.add(artwork);

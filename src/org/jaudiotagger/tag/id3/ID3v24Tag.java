@@ -19,9 +19,10 @@ import org.jaudiotagger.FileConstants;
 import org.jaudiotagger.audio.mp3.MP3File;
 import org.jaudiotagger.logging.ErrorMessage;
 import org.jaudiotagger.tag.*;
-import org.jaudiotagger.tag.datatype.Artwork;
+import org.jaudiotagger.tag.images.Artwork;
 import org.jaudiotagger.tag.datatype.DataTypes;
 import org.jaudiotagger.tag.id3.framebody.*;
+import org.jaudiotagger.tag.images.ArtworkFactory;
 import org.jaudiotagger.tag.lyrics3.AbstractLyrics3;
 import org.jaudiotagger.tag.lyrics3.Lyrics3v2;
 import org.jaudiotagger.tag.lyrics3.Lyrics3v2Field;
@@ -30,7 +31,6 @@ import org.jaudiotagger.tag.reference.PictureTypes;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
 import java.nio.channels.WritableByteChannel;
 import java.util.*;
@@ -1279,7 +1279,7 @@ public class ID3v24Tag extends AbstractID3v2Tag
         for (TagField next : coverartList)
         {
             FrameBodyAPIC coverArt = (FrameBodyAPIC) ((AbstractID3v2Frame) next).getBody();
-            Artwork artwork = new Artwork();
+            Artwork artwork = ArtworkFactory.getNew();
             artwork.setMimeType(coverArt.getMimeType());
             artwork.setPictureType(coverArt.getPictureType());
             if (coverArt.isImageUrl())

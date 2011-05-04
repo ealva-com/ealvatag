@@ -18,7 +18,7 @@
 package org.jaudiotagger.audio.generic;
 
 import org.jaudiotagger.tag.*;
-import org.jaudiotagger.tag.datatype.Artwork;
+import org.jaudiotagger.tag.images.Artwork;
 
 import java.util.*;
 

@@ -1,20 +1,21 @@
-package org.jaudiotagger.tag.datatype;
+package org.jaudiotagger.tag.images;
 
 import org.jaudiotagger.audio.flac.metadatablock.MetadataBlockDataPicture;
 import org.jaudiotagger.tag.id3.valuepair.ImageFormats;
-import org.jaudiotagger.tag.images.ImageHandlingFactory;
 import org.jaudiotagger.tag.reference.PictureTypes;
 
+import javax.imageio.ImageIO;
+import javax.imageio.stream.ImageInputStream;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
 import java.io.ByteArrayInputStream;
-import java.io.RandomAccessFile;
 import java.io.File;
+import java.io.IOException;
+import java.io.RandomAccessFile;
 
 /**
- * Represents artwork in a format independent  way
+ * Represents artwork in a format independent way
  */
-public class Artwork
+public class StandardArtwork implements Artwork
 {
     private byte[]          binaryData;
     private String          mimeType="";
@@ -25,7 +26,11 @@ public class Artwork
     private int             width;
     private int             height;
 
-    public byte[] getBinaryData()   
+    public StandardArtwork()
+    {
+
+    }
+    public byte[] getBinaryData()
     {
         return binaryData;
     }
@@ -65,14 +70,30 @@ public class Artwork
         this.description = description;
     }
 
-    public void setImageFromData() throws IOException
+    /**
+     * Should be called when you wish to prime the artwork for saving
+     *
+     * @return
+     */
+    public boolean setImageFromData()
     {
-        BufferedImage bi = ImageHandlingFactory.getInstance().getImage(new ByteArrayInputStream(getBinaryData()));
+        try
+        {
+            BufferedImage image = (BufferedImage)getImage();
+            setWidth(image.getWidth());
+            setHeight(image.getHeight());
+        }
+        catch(IOException ioe)
+        {
+            return false;
+        }
+        return true;
     }
 
-    public BufferedImage getImage() throws IOException
+    public Object getImage() throws IOException
     {
-        BufferedImage bi = ImageHandlingFactory.getInstance().getImage(new ByteArrayInputStream(getBinaryData()));
+        ImageInputStream iis = ImageIO.createImageInputStream(new ByteArrayInputStream(getBinaryData()));
+        BufferedImage bi = ImageIO.read(iis);
         return bi;
     }
 
@@ -106,22 +127,35 @@ public class Artwork
         this.pictureType = pictureType;
     }
 
+    /**
+     * Create Artwork from File
+     *
+     * @param file
+     * @throws java.io.IOException
+     */
     public void setFromFile(File file)  throws IOException
     {
         RandomAccessFile imageFile = new RandomAccessFile(file, "r");
         byte[] imagedata = new byte[(int) imageFile.length()];
         imageFile.read(imagedata);
         imageFile.close();
-        
+
         setBinaryData(imagedata);
         setMimeType(ImageFormats.getMimeTypeForBinarySignature(imagedata));
         setDescription("");
         setPictureType(PictureTypes.DEFAULT_ID);
     }
 
-    public static Artwork createArtworkFromFile(File file)  throws IOException
+    /**
+     * Create Artwork from File
+     *
+     * @param file
+     * @return
+     * @throws java.io.IOException
+     */
+    public static StandardArtwork createArtworkFromFile(File file)  throws IOException
     {
-        Artwork artwork = new Artwork();
+        StandardArtwork artwork = new StandardArtwork();
         artwork.setFromFile(file);
         return artwork;
     }
@@ -149,9 +183,15 @@ public class Artwork
         setHeight(coverArt.getHeight());
     }
 
-    public static Artwork createArtworkFromMetadataBlockDataPicture(MetadataBlockDataPicture coverArt)
+    /**
+     * Create artwork from Flac block
+     *
+     * @param coverArt
+     * @return
+     */
+    public static StandardArtwork createArtworkFromMetadataBlockDataPicture(MetadataBlockDataPicture coverArt)
     {
-        Artwork artwork = new Artwork();
+        StandardArtwork artwork = new StandardArtwork();
         artwork.setFromMetadataBlockDataPicture(coverArt);
         return artwork;
     }

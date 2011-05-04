@@ -3,13 +3,11 @@ package org.jaudiotagger.issues;
 import org.jaudiotagger.AbstractTestCase;
 import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.AudioFileIO;
-import org.jaudiotagger.audio.mp3.MP3File;
-import org.jaudiotagger.tag.FieldKey;
-import org.jaudiotagger.tag.KeyNotFoundException;
 import org.jaudiotagger.tag.Tag;
-import org.jaudiotagger.tag.datatype.Artwork;
+import org.jaudiotagger.tag.images.Artwork;
 import org.jaudiotagger.tag.id3.valuepair.ImageFormats;
-import org.jaudiotagger.tag.reference.PictureTypes;
+import org.jaudiotagger.tag.images.ArtworkFactory;
+import org.jaudiotagger.tag.images.Images;
 
 import java.io.File;
 
@@ -29,8 +27,8 @@ public class Issue286Test extends AbstractTestCase
         assertEquals(1,af.getTag().getArtworkList().size());
         Artwork artwork = af.getTag().getFirstArtwork();
         System.out.println(artwork);
-        assertEquals(600,artwork.getImage().getWidth());
-        assertEquals(800,artwork.getImage().getHeight());
+        assertEquals(600, Images.getImage(artwork).getWidth());
+        assertEquals(800, Images.getImage(artwork).getHeight());
         assertEquals("image/jpeg",artwork.getMimeType());
         assertEquals(3,artwork.getPictureType());
 
@@ -47,8 +45,8 @@ public class Issue286Test extends AbstractTestCase
         assertEquals(1,af.getTag().getArtworkList().size());
         Artwork artwork = af.getTag().getFirstArtwork();
         System.out.println(artwork);
-        assertEquals(600,artwork.getImage().getWidth());
-        assertEquals(800,artwork.getImage().getHeight());
+        assertEquals(600,Images.getImage(artwork).getWidth());
+        assertEquals(800,Images.getImage(artwork).getHeight());
         assertEquals("image/jpeg",artwork.getMimeType());
         assertEquals(3,artwork.getPictureType());
 
@@ -75,10 +73,10 @@ public class Issue286Test extends AbstractTestCase
             assertEquals("image/png", artwork.getMimeType());
             assertNotNull(artwork.getImage());
             assertEquals("",artwork.getDescription());
-            assertEquals(200, artwork.getImage().getWidth());
+            assertEquals(200, Images.getImage(artwork).getWidth());
 
             //Now add new image
-            Artwork newartwork = Artwork.createArtworkFromFile(new File("testdata", "coverart.png"));
+            Artwork newartwork = ArtworkFactory.createArtworkFromFile(new File("testdata", "coverart.png"));
             newartwork.setDescription("A new file");
             assertTrue(ImageFormats.isPortableFormat(newartwork.getBinaryData()));
             tag.addField(newartwork);
@@ -93,14 +91,14 @@ public class Issue286Test extends AbstractTestCase
             assertEquals("image/png", artwork.getMimeType());
             assertNotNull(artwork.getImage());
             assertEquals("",artwork.getDescription());
-            assertEquals(200, artwork.getImage().getWidth());
+            assertEquals(200, Images.getImage(artwork).getWidth());
 
             assertTrue(tag.getArtworkList().get(1) instanceof Artwork);
             artwork = tag.getArtworkList().get(1);
             assertEquals("image/png", artwork.getMimeType());
             assertNotNull(artwork.getImage());
             assertEquals("A new file",artwork.getDescription());
-            assertEquals(200, artwork.getImage().getWidth());
+            assertEquals(200, Images.getImage(artwork).getWidth());
 
 
         }

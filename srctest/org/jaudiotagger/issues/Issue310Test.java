@@ -5,7 +5,7 @@ import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.AudioFileIO;
 import org.jaudiotagger.audio.mp4.Mp4AtomTree;
 import org.jaudiotagger.tag.FieldKey;
-import org.jaudiotagger.tag.datatype.Artwork;
+import org.jaudiotagger.tag.images.ArtworkFactory;
 
 import java.io.File;
 import java.io.RandomAccessFile;
@@ -96,7 +96,7 @@ public class Issue310Test extends AbstractTestCase
         {
             testFile = AbstractTestCase.copyAudioToTmp("test85.mp4",new File("test85Test3.mp4"));
             AudioFile af = AudioFileIO.read(testFile);
-            af.getTag().setField(Artwork.createArtworkFromFile(new File("testdata", "coverart.png")));
+            af.getTag().setField(ArtworkFactory.createArtworkFromFile(new File("testdata", "coverart.png")));
             af.commit();
             af = AudioFileIO.read(testFile);
         }

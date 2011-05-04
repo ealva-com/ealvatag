@@ -6,10 +6,12 @@ import org.jaudiotagger.audio.AudioFileIO;
 import org.jaudiotagger.tag.asf.AsfTagCoverField;
 import org.jaudiotagger.tag.FieldKey;
 import org.jaudiotagger.tag.Tag;
-import org.jaudiotagger.tag.datatype.Artwork;
+import org.jaudiotagger.tag.images.Artwork;
 import org.jaudiotagger.tag.id3.ID3v22Tag;
 import org.jaudiotagger.tag.id3.ID3v24Tag;
 import org.jaudiotagger.tag.id3.valuepair.ImageFormats;
+import org.jaudiotagger.tag.images.ArtworkFactory;
+import org.jaudiotagger.tag.images.Images;
 
 import java.io.File;
 
@@ -37,7 +39,7 @@ public class Issue245Test extends AbstractTestCase
             assertEquals(0, tag.getArtworkList().size());
 
             //Now addField the image
-            Artwork newartwork = Artwork.createArtworkFromFile(new File("testdata", "coverart.png"));
+            Artwork newartwork = ArtworkFactory.createArtworkFromFile(new File("testdata", "coverart.png"));
             assertTrue(ImageFormats.isPortableFormat(newartwork.getBinaryData()));
 
             newartwork.setPictureType(5);
@@ -50,7 +52,7 @@ public class Issue245Test extends AbstractTestCase
             Artwork artwork = tag.getFirstArtwork();
             assertEquals("image/png", artwork.getMimeType());
             assertNotNull(artwork.getImage());
-            assertEquals(200, artwork.getImage().getWidth());
+            assertEquals(200, Images.getImage(artwork).getWidth());
             assertEquals(5,artwork.getPictureType());
 
             tag.deleteArtworkField();
@@ -90,7 +92,7 @@ public class Issue245Test extends AbstractTestCase
                     assertEquals(0, tag.getArtworkList().size());
 
                     //Now addField the image
-                    Artwork newartwork = Artwork.createArtworkFromFile(new File("testdata", "coverart.png"));
+                    Artwork newartwork = ArtworkFactory.createArtworkFromFile(new File("testdata", "coverart.png"));
                     assertTrue(ImageFormats.isPortableFormat(newartwork.getBinaryData()));
 
                     newartwork.setPictureType(11);
@@ -103,7 +105,7 @@ public class Issue245Test extends AbstractTestCase
                     Artwork artwork = tag.getFirstArtwork();
                     assertEquals("image/png", artwork.getMimeType());
                     assertNotNull(artwork.getImage());
-                    assertEquals(200, artwork.getImage().getWidth());
+                    assertEquals(200, Images.getImage(artwork).getWidth());
                     assertEquals(11,artwork.getPictureType());
 
                     tag.deleteArtworkField();
@@ -143,7 +145,7 @@ public class Issue245Test extends AbstractTestCase
                     assertEquals(0, tag.getArtworkList().size());
 
                     //Now addField the image
-                    Artwork newartwork = Artwork.createArtworkFromFile(new File("testdata", "coverart.png"));
+                    Artwork newartwork = ArtworkFactory.createArtworkFromFile(new File("testdata", "coverart.png"));
                     assertTrue(ImageFormats.isPortableFormat(newartwork.getBinaryData()));
 
                     newartwork.setPictureType(5);
@@ -156,7 +158,7 @@ public class Issue245Test extends AbstractTestCase
                     Artwork artwork = tag.getFirstArtwork();
                     assertEquals("image/png", artwork.getMimeType());
                     assertNotNull(artwork.getImage());
-                    assertEquals(200, artwork.getImage().getWidth());
+                    assertEquals(200, Images.getImage(artwork).getWidth());
                     assertEquals(5,artwork.getPictureType());
 
                     tag.deleteArtworkField();
@@ -196,10 +198,10 @@ public class Issue245Test extends AbstractTestCase
             Artwork artwork = tag.getFirstArtwork();
             assertEquals("image/png", artwork.getMimeType());
             assertNotNull(artwork.getImage());
-            assertEquals(200, artwork.getImage().getWidth());
+            assertEquals(200, Images.getImage(artwork).getWidth());
 
             //Now replace the image
-            Artwork newartwork = Artwork.createArtworkFromFile(new File("testdata", "coverart.png"));
+            Artwork newartwork = ArtworkFactory.createArtworkFromFile(new File("testdata", "coverart.png"));
             assertTrue(ImageFormats.isPortableFormat(newartwork.getBinaryData()));
             tag.setField(newartwork);
             af.commit();
@@ -210,7 +212,7 @@ public class Issue245Test extends AbstractTestCase
             artwork = tag.getFirstArtwork();
             assertEquals("image/png", artwork.getMimeType());
             assertNotNull(artwork.getImage());
-            assertEquals(200, artwork.getImage().getWidth());
+            assertEquals(200, Images.getImage(artwork).getWidth());
 
             tag.deleteArtworkField();
             assertEquals(0, tag.getArtworkList().size());
@@ -249,10 +251,10 @@ public class Issue245Test extends AbstractTestCase
             Artwork artwork = tag.getFirstArtwork();
             assertEquals("image/png", artwork.getMimeType());
             assertNotNull(artwork.getImage());
-            assertEquals(200, artwork.getImage().getWidth());
+            assertEquals(200, Images.getImage(artwork).getWidth());
             assertEquals(3,artwork.getPictureType());
             //Now replace the image
-            Artwork newartwork = Artwork.createArtworkFromFile(new File("testdata", "coverart.png"));
+            Artwork newartwork = ArtworkFactory.createArtworkFromFile(new File("testdata", "coverart.png"));
             assertTrue(ImageFormats.isPortableFormat(newartwork.getBinaryData()));
 
             newartwork.setDescription("freddy");
@@ -266,7 +268,7 @@ public class Issue245Test extends AbstractTestCase
             artwork = tag.getFirstArtwork();
             assertEquals("image/png", artwork.getMimeType());
             assertNotNull(artwork.getImage());
-            assertEquals(200, artwork.getImage().getWidth());
+            assertEquals(200, Images.getImage(artwork).getWidth());
             assertEquals(7,artwork.getPictureType());
 
             tag.deleteArtworkField();
@@ -307,10 +309,10 @@ public class Issue245Test extends AbstractTestCase
             Artwork artwork = tag.getFirstArtwork();
             assertEquals("image/png", artwork.getMimeType());
             assertNotNull(artwork.getImage());
-            assertEquals(200, artwork.getImage().getWidth());
+            assertEquals(200, Images.getImage(artwork).getWidth());
             assertEquals(3,artwork.getPictureType());
             //Now replace the image
-            Artwork newartwork = Artwork.createArtworkFromFile(new File("testdata", "coverart.png"));
+            Artwork newartwork = ArtworkFactory.createArtworkFromFile(new File("testdata", "coverart.png"));
             assertTrue(ImageFormats.isPortableFormat(newartwork.getBinaryData()));
 
             newartwork.setDescription("freddy");
@@ -325,7 +327,7 @@ public class Issue245Test extends AbstractTestCase
             artwork = tag.getFirstArtwork();
             assertEquals("image/png", artwork.getMimeType());
             assertNotNull(artwork.getImage());
-            assertEquals(200, artwork.getImage().getWidth());
+            assertEquals(200, Images.getImage(artwork).getWidth());
             assertEquals(8,artwork.getPictureType());
 
             tag.deleteArtworkField();
@@ -365,10 +367,10 @@ public class Issue245Test extends AbstractTestCase
             Artwork artwork = tag.getFirstArtwork();
             assertEquals("image/jpeg", artwork.getMimeType());
             assertNotNull(artwork.getImage());
-            assertEquals(159, artwork.getImage().getWidth());
+            assertEquals(159, Images.getImage(artwork).getWidth());
 
             //Now replace the image
-            Artwork newartwork = Artwork.createArtworkFromFile(new File("testdata", "coverart.png"));
+            Artwork newartwork = ArtworkFactory.createArtworkFromFile(new File("testdata", "coverart.png"));
             assertTrue(ImageFormats.isPortableFormat(newartwork.getBinaryData()));
 
             tag.setField(newartwork);
@@ -380,7 +382,7 @@ public class Issue245Test extends AbstractTestCase
             artwork = tag.getFirstArtwork();
             assertEquals("image/png", artwork.getMimeType());
             assertNotNull(artwork.getImage());
-            assertEquals(200, artwork.getImage().getWidth());
+            assertEquals(200, Images.getImage(artwork).getWidth());
 
             tag.deleteArtworkField();
             assertEquals(0, tag.getArtworkList().size());
@@ -432,7 +434,7 @@ public class Issue245Test extends AbstractTestCase
         {
             //Now try and addField image
             AudioFile af = AudioFileIO.read(testFile);
-            Artwork newartwork = Artwork.createArtworkFromFile(new File("testdata", "coverart.png"));
+            Artwork newartwork = ArtworkFactory.createArtworkFromFile(new File("testdata", "coverart.png"));
             assertTrue(ImageFormats.isPortableFormat(newartwork.getBinaryData()));
 
             Tag tag = af.getTag();
@@ -496,7 +498,7 @@ public class Issue245Test extends AbstractTestCase
         {
             //Now try and addField image
             AudioFile af = AudioFileIO.read(testFile);
-            Artwork newartwork = Artwork.createArtworkFromFile(new File("testdata", "coverart.png"));
+            Artwork newartwork = ArtworkFactory.createArtworkFromFile(new File("testdata", "coverart.png"));
             assertTrue(ImageFormats.isPortableFormat(newartwork.getBinaryData()));
 
             Tag tag = af.getTag();

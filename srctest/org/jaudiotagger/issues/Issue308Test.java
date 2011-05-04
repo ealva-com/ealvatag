@@ -4,8 +4,8 @@ import org.jaudiotagger.AbstractTestCase;
 import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.AudioFileIO;
 import org.jaudiotagger.tag.FieldKey;
-import org.jaudiotagger.tag.datatype.Artwork;
-import org.jaudiotagger.tag.id3.valuepair.ImageFormats;
+import org.jaudiotagger.tag.images.Artwork;
+import org.jaudiotagger.tag.images.ArtworkFactory;
 
 import java.io.File;
 
@@ -35,7 +35,7 @@ public class Issue308Test extends AbstractTestCase
                 return;
             }
             AudioFile af = AudioFileIO.read(testFile);
-            Artwork artwork = new Artwork();
+            Artwork artwork = ArtworkFactory.getNew();
             artwork.setFromFile(new File("testdata","coverart_large.jpg"));
 
             af.getTag().setField(artwork);

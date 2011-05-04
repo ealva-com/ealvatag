@@ -24,12 +24,12 @@ import org.jaudiotagger.audio.generic.Utils;
 import org.jaudiotagger.audio.ogg.util.VorbisHeader;
 import org.jaudiotagger.logging.ErrorMessage;
 import org.jaudiotagger.tag.*;
-import org.jaudiotagger.tag.datatype.Artwork;
+import org.jaudiotagger.tag.images.Artwork;
 
 import static org.jaudiotagger.tag.vorbiscomment.VorbisCommentFieldKey.VENDOR;
 
 import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
-import org.jaudiotagger.tag.reference.Tagger;
+import org.jaudiotagger.tag.images.ArtworkFactory;
 import org.jaudiotagger.tag.vorbiscomment.util.Base64Coder;
 
 import java.io.IOException;
@@ -406,7 +406,7 @@ public class VorbisCommentTag extends AbstractTag
         //Read Old Format
         if(getArtworkBinaryData()!=null & getArtworkBinaryData().length>0)
         {
-            Artwork artwork=new Artwork();
+            Artwork artwork= ArtworkFactory.getNew();
             artwork.setMimeType(getArtworkMimeType());
             artwork.setBinaryData(getArtworkBinaryData());
             artworkList.add(artwork);
@@ -421,7 +421,7 @@ public class VorbisCommentTag extends AbstractTag
             {
                 byte[] imageBinaryData = Base64Coder.decode(((TagTextField)tagField).getContent());
                 MetadataBlockDataPicture coverArt = new MetadataBlockDataPicture(ByteBuffer.wrap(imageBinaryData));
-                Artwork artwork=Artwork.createArtworkFromMetadataBlockDataPicture(coverArt);
+                Artwork artwork=ArtworkFactory.createArtworkFromMetadataBlockDataPicture(coverArt);
                 artworkList.add(artwork);
             }
             catch(IOException ioe)
@@ -459,15 +459,10 @@ public class VorbisCommentTag extends AbstractTag
           }
           else
           {
-              try
+              if(!artwork.setImageFromData())
               {
-                  artwork.setImageFromData();
+                  throw new FieldDataInvalidException("Unable to create MetadataBlockDataPicture from buffered");
               }
-              catch(IOException ioe)
-              {
-                  throw new FieldDataInvalidException("Unable to create MetadataBlockDataPicture from buffered:"+ioe.getMessage());
-              }
-
               return new MetadataBlockDataPicture(artwork.getBinaryData(),
                       artwork.getPictureType(),
                       artwork.getMimeType(),

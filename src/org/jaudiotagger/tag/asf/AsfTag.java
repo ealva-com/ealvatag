@@ -4,8 +4,8 @@ import org.jaudiotagger.audio.asf.data.AsfHeader;
 import org.jaudiotagger.audio.generic.AbstractTag;
 import org.jaudiotagger.logging.ErrorMessage;
 import org.jaudiotagger.tag.*;
-import org.jaudiotagger.tag.datatype.Artwork;
-import org.jaudiotagger.tag.mp4.Mp4FieldKey;
+import org.jaudiotagger.tag.images.Artwork;
+import org.jaudiotagger.tag.images.ArtworkFactory;
 import org.jaudiotagger.tag.reference.PictureTypes;
 
 import java.io.UnsupportedEncodingException;
@@ -470,7 +470,7 @@ public final class AsfTag extends AbstractTag
         for (final TagField next : coverartList)
         {
             final AsfTagCoverField coverArt = (AsfTagCoverField) next;
-            final Artwork artwork = new Artwork();
+            final Artwork artwork = ArtworkFactory.getNew();
             artwork.setBinaryData(coverArt.getRawImageData());
             artwork.setMimeType(coverArt.getMimeType());
             artwork.setDescription(coverArt.getDescription());

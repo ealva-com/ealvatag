@@ -20,7 +20,7 @@ package org.jaudiotagger.audio.generic;
 
 import org.jaudiotagger.logging.ErrorMessage;
 import org.jaudiotagger.tag.*;
-import org.jaudiotagger.tag.datatype.Artwork;
+import org.jaudiotagger.tag.images.Artwork;
 
 import java.util.Collections;
 import java.util.EnumSet;

@@ -6,8 +6,10 @@ import org.jaudiotagger.audio.mp3.MP3File;
 import org.jaudiotagger.audio.mp3.MPEGFrameHeader;
 import org.jaudiotagger.logging.Hex;
 import org.jaudiotagger.tag.TagOptionSingleton;
-import org.jaudiotagger.tag.datatype.Artwork;
+import org.jaudiotagger.tag.images.Artwork;
 import org.jaudiotagger.tag.id3.valuepair.ImageFormats;
+import org.jaudiotagger.tag.images.ArtworkFactory;
+import org.jaudiotagger.tag.images.Images;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -57,12 +59,12 @@ public class Issue294Test extends AbstractTestCase
             //af.getID3v2TagAsv24().removeFrame("APIC");
 
             final List multiFrames = new ArrayList();
-            multiFrames.add(af.getID3v2Tag().createField(Artwork.createArtworkFromFile(testPix)));
+            multiFrames.add(af.getID3v2Tag().createField(ArtworkFactory.createArtworkFromFile(testPix)));
             af.getID3v2Tag().setFrame("APIC", multiFrames);
             af.commit();
 
             //Can we read this image file
-            artwork = Artwork.createArtworkFromFile(testPix);
+            artwork = ArtworkFactory.createArtworkFromFile(testPix);
             assertEquals(118145,artwork.getBinaryData().length);
             assertEquals(0xFF,(int)artwork.getBinaryData()[0] & MPEGFrameHeader.SYNC_BYTE1);
             assertEquals(0xD8,(int)artwork.getBinaryData()[1] & MPEGFrameHeader.SYNC_BYTE1);
@@ -70,8 +72,8 @@ public class Issue294Test extends AbstractTestCase
             assertEquals(0xE0,(int)artwork.getBinaryData()[3] & MPEGFrameHeader.SYNC_BYTE1);
             assertEquals("image/jpeg",artwork.getMimeType());
             assertNotNull(artwork.getImage());
-            assertEquals(500,artwork.getImage().getHeight());
-            assertEquals(500,artwork.getImage().getWidth());
+            assertEquals(500, Images.getImage(artwork).getHeight());
+            assertEquals(500,Images.getImage(artwork).getWidth());
 
             byte[]origData=artwork.getBinaryData();
 
@@ -95,8 +97,8 @@ public class Issue294Test extends AbstractTestCase
             }
             assertTrue(Arrays.equals(origData,artwork.getBinaryData()));
             assertNotNull(artwork.getImage());
-            assertEquals(500,artwork.getImage().getHeight());
-            assertEquals(500,artwork.getImage().getWidth());
+            assertEquals(500,Images.getImage(artwork).getHeight());
+            assertEquals(500,Images.getImage(artwork).getWidth());
 
         }
         catch (Exception e)

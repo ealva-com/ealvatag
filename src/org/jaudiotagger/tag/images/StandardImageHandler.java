@@ -1,6 +1,5 @@
 package org.jaudiotagger.tag.images;
 
-import org.jaudiotagger.tag.datatype.Artwork;
 import org.jaudiotagger.tag.id3.valuepair.ImageFormats;
 
 import javax.imageio.ImageIO;
@@ -19,16 +18,20 @@ import java.util.Iterator;
  */
 public class StandardImageHandler implements ImageHandler
 {
-    public BufferedImage getImage(ByteArrayInputStream bais) throws IOException
+    private static StandardImageHandler instance;
+
+    public static StandardImageHandler getInstanceOf()
     {
-        ImageInputStream iis = ImageIO.createImageInputStream(bais);
-        BufferedImage bi = ImageIO.read(iis);
-        return bi;
+        if(instance==null)
+        {
+            instance = new StandardImageHandler();
+        }
+        return instance;
     }
 
-    public BufferedImage getImage2(ByteArrayInputStream bais) throws IOException
+    private StandardImageHandler()
     {
-        return ImageIO.read(bais);
+
     }
 
     /**
@@ -41,7 +44,7 @@ public class StandardImageHandler implements ImageHandler
     {
         while(artwork.getBinaryData().length > maxSize)
         {
-            Image srcImage = artwork.getImage();
+            Image srcImage = (Image)artwork.getImage();
             int w = srcImage.getWidth(null);
             int newSize = w /2;
             makeSmaller(artwork,newSize);
@@ -55,7 +58,7 @@ public class StandardImageHandler implements ImageHandler
       */
     public void makeSmaller(Artwork artwork,int size) throws IOException
     {
-        Image srcImage = artwork.getImage();
+        Image srcImage = (Image)artwork.getImage();
 
         int w = srcImage.getWidth(null);
         int h = srcImage.getHeight(null);

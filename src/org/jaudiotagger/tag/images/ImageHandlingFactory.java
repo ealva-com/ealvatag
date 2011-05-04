@@ -18,7 +18,7 @@ public class ImageHandlingFactory
         {
             if(standardImageHandler==null)
             {
-                standardImageHandler = new StandardImageHandler();
+                standardImageHandler = StandardImageHandler.getInstanceOf();
             }
             return standardImageHandler;
         }
@@ -27,7 +27,7 @@ public class ImageHandlingFactory
         {
             if(androidImageHandler==null)
             {
-                androidImageHandler = new AndroidImageHandler();
+                androidImageHandler = AndroidImageHandler.getInstanceOf();
             }
             return androidImageHandler;
         }

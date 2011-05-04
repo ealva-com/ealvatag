@@ -7,8 +7,9 @@ import org.jaudiotagger.audio.mp3.MP3File;
 import org.jaudiotagger.logging.Hex;
 import org.jaudiotagger.tag.Tag;
 import org.jaudiotagger.tag.TagOptionSingleton;
-import org.jaudiotagger.tag.datatype.Artwork;
+import org.jaudiotagger.tag.images.Artwork;
 import org.jaudiotagger.tag.id3.framebody.FrameBodyAPIC;
+import org.jaudiotagger.tag.images.ArtworkFactory;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -176,7 +177,7 @@ public class UnsynchronizationTest extends AbstractTestCase
             ID3v23Tag v23TagUnsynced = (ID3v23Tag)af.getTag();
             assertFalse(v23TagUnsynced.isUnsynchronization());
             Tag unsyncedTag = af.getTag();
-            Artwork artworkUnsynced = Artwork.createArtworkFromFile(new File("testdata/coverart_large.jpg"));
+            Artwork artworkUnsynced = ArtworkFactory.createArtworkFromFile(new File("testdata/coverart_large.jpg"));
             unsyncedTag.setField(artworkUnsynced);
             af.commit();
 
@@ -187,7 +188,7 @@ public class UnsynchronizationTest extends AbstractTestCase
             ID3v23Tag  v23TagNotsynced = (ID3v23Tag)af.getTag();
             assertFalse(v23TagNotsynced.isUnsynchronization());
             Tag notSyncedTag = af.getTag();
-            Artwork artworkNotsynced = Artwork.createArtworkFromFile(new File("testdata/coverart_large.jpg"));
+            Artwork artworkNotsynced = ArtworkFactory.createArtworkFromFile(new File("testdata/coverart_large.jpg"));
             notSyncedTag.setField(artworkNotsynced);
             af.commit();
 

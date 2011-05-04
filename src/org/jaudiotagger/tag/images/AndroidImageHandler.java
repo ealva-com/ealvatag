@@ -1,7 +1,5 @@
 package org.jaudiotagger.tag.images;
 
-import org.jaudiotagger.tag.datatype.Artwork;
-
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -13,15 +11,20 @@ import java.io.IOException;
  */
 public class AndroidImageHandler implements ImageHandler
 {
+    private static AndroidImageHandler instance;
 
-    public BufferedImage getImage(ByteArrayInputStream bais) throws IOException
+    public static AndroidImageHandler getInstanceOf()
     {
-        throw new UnsupportedOperationException();
+        if(instance==null)
+        {
+            instance = new AndroidImageHandler();
+        }
+        return instance;
     }
 
-    public BufferedImage getImage2(ByteArrayInputStream bais) throws IOException
+    private AndroidImageHandler()
     {
-        throw new UnsupportedOperationException();
+
     }
 
     /**
