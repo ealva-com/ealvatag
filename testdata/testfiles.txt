@@ -46,3 +46,4 @@ test93.mp3,no,368,Invalid mp3
 test94.mp3,no,369,mp3 without id3
 test95.m4a,no,368,MPE reading discno,disctotal
 test96.m4a,no,370,valid mp4 with corrupted free header preventing finding mdat atom
+test97.mp3,no,028,Audio Version 2 Layer III

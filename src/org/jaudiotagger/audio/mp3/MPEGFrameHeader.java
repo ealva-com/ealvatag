@@ -185,7 +185,7 @@ public class MPEGFrameHeader
     /**
      * Constants for Channel mode
      */
-    protected static final Map<Integer, String> modeMap = new HashMap<Integer, String>();
+    public static final Map<Integer, String> modeMap = new HashMap<Integer, String>();
     public final static int MODE_STEREO = 0;
     public final static int MODE_JOINT_STEREO = 1;
     public final static int MODE_DUAL_CHANNEL = 2;
@@ -283,11 +283,11 @@ public class MPEGFrameHeader
 
         samplesPerFrameV2Map.put(LAYER_I, 384);
         samplesPerFrameV2Map.put(LAYER_II, 1152);
-        samplesPerFrameV2Map.put(LAYER_III, 1152);
+        samplesPerFrameV2Map.put(LAYER_III, 576);
 
         samplesPerFrameV25Map.put(LAYER_I, 384);
         samplesPerFrameV25Map.put(LAYER_II, 1152);
-        samplesPerFrameV25Map.put(LAYER_III, 1152);
+        samplesPerFrameV25Map.put(LAYER_III, 576);
 
         samplesPerFrameMap.put(VERSION_1, samplesPerFrameV1Map);
         samplesPerFrameMap.put(VERSION_2, samplesPerFrameV2Map);
@@ -713,19 +713,12 @@ public class MPEGFrameHeader
                         return (LAYER_I_FRAME_SIZE_COEFFICIENT * (getBitRate() * SCALE_BY_THOUSAND) / getSamplingRate() + getPaddingLength()) * LAYER_I_SLOT_SIZE;
 
                     case LAYER_II:
-                        if (this.getChannelMode() == MODE_MONO)
-                        {
-                            return (LAYER_II_FRAME_SIZE_COEFFICIENT / 2) * (getBitRate() * SCALE_BY_THOUSAND) / getSamplingRate() + getPaddingLength() * LAYER_II_SLOT_SIZE;
-                        }
-                        else
-                        {
-                            return (LAYER_II_FRAME_SIZE_COEFFICIENT) * (getBitRate() * SCALE_BY_THOUSAND) / getSamplingRate() + getPaddingLength() * LAYER_II_SLOT_SIZE;
-                        }
+                        return (LAYER_II_FRAME_SIZE_COEFFICIENT ) * (getBitRate() * SCALE_BY_THOUSAND) / getSamplingRate() + getPaddingLength() * LAYER_II_SLOT_SIZE;
 
                     case LAYER_III:
                         if (this.getChannelMode() == MODE_MONO)
                         {
-                            return (LAYER_III_FRAME_SIZE_COEFFICIENT / 2) * (getBitRate() * SCALE_BY_THOUSAND) / getSamplingRate() + getPaddingLength() * LAYER_III_SLOT_SIZE;
+                            return (LAYER_III_FRAME_SIZE_COEFFICIENT / 2 ) * (getBitRate() * SCALE_BY_THOUSAND) / getSamplingRate() + getPaddingLength() * LAYER_III_SLOT_SIZE;
                         }
                         else
                         {

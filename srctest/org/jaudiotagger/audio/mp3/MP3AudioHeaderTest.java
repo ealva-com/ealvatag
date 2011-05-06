@@ -327,7 +327,7 @@ public class MP3AudioHeaderTest extends TestCase
         assertFalse(mp3AudioHeader.isCopyrighted());
         assertFalse(mp3AudioHeader.isPrivate());
         assertFalse(mp3AudioHeader.isProtected());
-        assertEquals("16", mp3AudioHeader.getBitRate());  //TODO Might be wrong
+        assertEquals("16", mp3AudioHeader.getBitRate());
         assertEquals("mp3", mp3AudioHeader.getEncodingType());
         assertEquals("", mp3AudioHeader.getEncoder());   //No Lame header so blank
     }
