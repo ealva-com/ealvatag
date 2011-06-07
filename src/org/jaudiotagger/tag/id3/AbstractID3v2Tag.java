@@ -2528,4 +2528,23 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
     {
         this.deleteField(FieldKey.COVER_ART);
     }
+
+    @Override
+    public String toString()
+    {
+        final StringBuilder out = new StringBuilder();
+        out.append("Tag content:\n");
+        final Iterator<TagField> it = getFields();
+        while (it.hasNext())
+        {
+            final TagField field = it.next();
+            out.append("\t");
+            out.append(field.getId());
+            out.append(":");
+            out.append(field.toString());
+            out.append("\n");
+        }
+
+        return out.toString();
+    }
 }

@@ -129,4 +129,10 @@ public abstract class AbstractTagFrame extends AbstractTagItem
               super.equals(that);
 
     }
+
+    @Override
+    public String toString ()
+    {
+        return getBody ().toString ();
+    }
 }

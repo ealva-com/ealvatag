@@ -58,6 +58,7 @@ public abstract class AbstractID3Tag extends AbstractTag
 
     /**
      * Retrieve the Release
+     *
      * @return
      */
     public abstract byte getRelease();
@@ -65,12 +66,14 @@ public abstract class AbstractID3Tag extends AbstractTag
 
     /**
      * Retrieve the Major Version
+     *
      * @return
      */
     public abstract byte getMajorVersion();
 
     /**
      * Retrieve the Revision
+     *
      * @return
      */
     public abstract byte getRevision();
@@ -81,10 +84,7 @@ public abstract class AbstractID3Tag extends AbstractTag
         super(copyObject);
     }
 
-    public String toString()
-    {
-        return "";
-    }
+
 
     /**
      * Retrieve the logging filename to be used in debugging
