@@ -11,6 +11,7 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.net.URL;
 
 /**
  * Represents artwork in a format independent way
@@ -147,6 +148,19 @@ public class StandardArtwork implements Artwork
     }
 
     /**
+     * Create Linked Artwork from URL
+     *
+     * @param url
+     * @throws java.io.IOException
+     */
+    public void setLinkedFromURL(String url)  throws IOException
+    {
+        setLinked(true);
+        setImageUrl(url);
+    }
+
+
+    /**
      * Create Artwork from File
      *
      * @param file
@@ -157,6 +171,13 @@ public class StandardArtwork implements Artwork
     {
         StandardArtwork artwork = new StandardArtwork();
         artwork.setFromFile(file);
+        return artwork;
+    }
+
+    public static StandardArtwork createLinkedArtworkFromURL(String url)  throws IOException
+    {
+        StandardArtwork artwork = new StandardArtwork();
+        artwork.setLinkedFromURL(url);
         return artwork;
     }
 

@@ -31,6 +31,7 @@ import org.jaudiotagger.tag.reference.PictureTypes;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 import java.nio.channels.WritableByteChannel;
 import java.util.*;
@@ -1300,11 +1301,29 @@ public class ID3v24Tag extends AbstractID3v2Tag
     {
         AbstractID3v2Frame frame = createFrame(getFrameAndSubIdFromGenericKey(FieldKey.COVER_ART).getFrameId());
         FrameBodyAPIC body = (FrameBodyAPIC) frame.getBody();
-        body.setObjectValue(DataTypes.OBJ_PICTURE_DATA, artwork.getBinaryData());
-        body.setObjectValue(DataTypes.OBJ_PICTURE_TYPE, artwork.getPictureType());
-        body.setObjectValue(DataTypes.OBJ_MIME_TYPE, artwork.getMimeType());
-        body.setObjectValue(DataTypes.OBJ_DESCRIPTION, "");
-        return frame;
+        if(!artwork.isLinked())
+        {
+            body.setObjectValue(DataTypes.OBJ_PICTURE_DATA, artwork.getBinaryData());
+            body.setObjectValue(DataTypes.OBJ_PICTURE_TYPE, artwork.getPictureType());
+            body.setObjectValue(DataTypes.OBJ_MIME_TYPE, artwork.getMimeType());
+            body.setObjectValue(DataTypes.OBJ_DESCRIPTION, "");
+            return frame;
+        }
+        else
+        {
+            try
+            {
+                body.setObjectValue(DataTypes.OBJ_PICTURE_DATA,artwork.getImageUrl().getBytes("ISO-8859-1"));
+            }
+            catch(UnsupportedEncodingException uoe)
+            {
+                throw new RuntimeException(uoe.getMessage());
+            }
+            body.setObjectValue(DataTypes.OBJ_PICTURE_TYPE, artwork.getPictureType());
+            body.setObjectValue(DataTypes.OBJ_MIME_TYPE, FrameBodyAPIC.IMAGE_IS_URL);
+            body.setObjectValue(DataTypes.OBJ_DESCRIPTION, "");
+            return frame;
+        }
     }
 
     /**

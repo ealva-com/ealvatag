@@ -5,6 +5,7 @@ import org.jaudiotagger.tag.TagOptionSingleton;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 
 /**
  * Get appropriate Artwork class
@@ -68,4 +69,24 @@ public class ArtworkFactory
         }
     }
 
+    /**
+     * Create Artwork instance from an image file
+     *
+     * @param link
+     * @return
+     * @throws IOException
+     */
+    public static Artwork createLinkedArtworkFromURL(String link) throws IOException
+    {
+        //Normal
+        if(!TagOptionSingleton.getInstance().isAndroid())
+        {
+            return StandardArtwork.createLinkedArtworkFromURL(link);
+        }
+        //Android
+        else
+        {
+            return AndroidArtwork.createLinkedArtworkFromURL(link);
+        }
+    }
 }

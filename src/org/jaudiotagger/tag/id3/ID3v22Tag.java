@@ -28,6 +28,7 @@ import org.jaudiotagger.tag.reference.PictureTypes;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 import java.nio.channels.WritableByteChannel;
 import java.util.ArrayList;
@@ -719,13 +720,21 @@ public class ID3v22Tag extends AbstractID3v2Tag
         List<TagField> coverartList = getFields(FieldKey.COVER_ART);
         List<Artwork> artworkList   = new ArrayList<Artwork>(coverartList.size());
 
-        for(TagField next:coverartList)
+        for (TagField next : coverartList)
         {
             FrameBodyPIC coverArt = (FrameBodyPIC) ((AbstractID3v2Frame) next).getBody();
             Artwork artwork = ArtworkFactory.getNew();
             artwork.setMimeType(ImageFormats.getMimeTypeForFormat(coverArt.getFormatType()));
             artwork.setPictureType(coverArt.getPictureType());
-            artwork.setBinaryData(coverArt.getImageData());
+            if (coverArt.isImageUrl())
+            {
+                artwork.setLinked(true);
+                artwork.setImageUrl(coverArt.getImageUrl());
+            }
+            else
+            {
+                artwork.setBinaryData(coverArt.getImageData());
+            }
             artworkList.add(artwork);
         }
         return artworkList;
@@ -738,11 +747,29 @@ public class ID3v22Tag extends AbstractID3v2Tag
     {
         AbstractID3v2Frame frame = createFrame(getFrameAndSubIdFromGenericKey(FieldKey.COVER_ART).getFrameId());
         FrameBodyPIC body = (FrameBodyPIC) frame.getBody();
-        body.setObjectValue(DataTypes.OBJ_PICTURE_DATA, artwork.getBinaryData());
-        body.setObjectValue(DataTypes.OBJ_PICTURE_TYPE, artwork.getPictureType());
-        body.setObjectValue(DataTypes.OBJ_IMAGE_FORMAT, ImageFormats.getFormatForMimeType(artwork.getMimeType()));
-        body.setObjectValue(DataTypes.OBJ_DESCRIPTION, "");
-        return frame;
+        if(!artwork.isLinked())
+        {
+            body.setObjectValue(DataTypes.OBJ_PICTURE_DATA, artwork.getBinaryData());
+            body.setObjectValue(DataTypes.OBJ_PICTURE_TYPE, artwork.getPictureType());
+            body.setObjectValue(DataTypes.OBJ_IMAGE_FORMAT, ImageFormats.getFormatForMimeType(artwork.getMimeType()));
+            body.setObjectValue(DataTypes.OBJ_DESCRIPTION, "");
+            return frame;
+        }
+        else
+        {
+            try
+            {
+                body.setObjectValue(DataTypes.OBJ_PICTURE_DATA,artwork.getImageUrl().getBytes("ISO-8859-1"));
+            }
+            catch(UnsupportedEncodingException uoe)
+            {
+                throw new RuntimeException(uoe.getMessage());
+            }
+            body.setObjectValue(DataTypes.OBJ_PICTURE_TYPE, artwork.getPictureType());
+            body.setObjectValue(DataTypes.OBJ_IMAGE_FORMAT, FrameBodyAPIC.IMAGE_IS_URL);
+            body.setObjectValue(DataTypes.OBJ_DESCRIPTION, "");
+            return frame;
+        }
     }
 
      public TagField createArtworkField(byte[] data, String mimeType)

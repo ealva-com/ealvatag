@@ -146,6 +146,32 @@ public class AndroidArtwork implements Artwork
     }
 
     /**
+     *
+     * @param url
+     * @return
+     * @throws IOException
+     */
+    public static AndroidArtwork createLinkedArtworkFromURL(String url)  throws IOException
+    {
+        AndroidArtwork artwork = new AndroidArtwork();
+        artwork.setLinkedFromURL(url);
+        return artwork;
+    }
+
+    /**
+       * Create Linked Artwork from URL
+       *
+       * @param url
+       * @throws java.io.IOException
+       */
+      public void setLinkedFromURL(String url)  throws IOException
+      {
+          setLinked(true);
+          setImageUrl(url);
+      }
+
+
+    /**
      * Populate Artwork from MetadataBlockDataPicture as used by Flac and VorbisComment
      *
      * @param coverArt
