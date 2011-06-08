@@ -302,7 +302,7 @@ public abstract class AudioFileWriter
     // but would impose a performance overhead if the original file is on a networked drive
     public synchronized void write(AudioFile af) throws CannotWriteException
     {
-        logger.info("Started writing tag data for file:" + af.getFile().getName());
+        logger.config("Started writing tag data for file:" + af.getFile().getName());
 
         // Prechecks
         precheckWrite(af);

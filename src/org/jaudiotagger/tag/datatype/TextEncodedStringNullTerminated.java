@@ -189,7 +189,7 @@ public class TextEncodedStringNullTerminated extends AbstractString
             value = outBuffer.toString();
         }
         //Set Size so offset is ready for next field (includes the null terminator)
-        logger.info("Read NullTerminatedString:" + value + " size inc terminator:" + size);
+        logger.config("Read NullTerminatedString:" + value + " size inc terminator:" + size);
     }
 
     /**
@@ -199,7 +199,7 @@ public class TextEncodedStringNullTerminated extends AbstractString
      */
     public byte[] writeByteArray()
     {
-        logger.info("Writing NullTerminatedString." + value);
+        logger.config("Writing NullTerminatedString." + value);
         byte[] data;
         //Write to buffer using the CharSet defined by getTextEncodingCharSet()
         //Add a null terminator which will be encoded based on encoding.

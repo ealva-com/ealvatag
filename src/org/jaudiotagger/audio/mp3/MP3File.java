@@ -139,7 +139,7 @@ public class MP3File extends AudioFile
             }
             catch (TagNotFoundException ex)
             {
-                logger.info("No ids3v11 tag found");
+                logger.config("No ids3v11 tag found");
             }
 
             try
@@ -151,7 +151,7 @@ public class MP3File extends AudioFile
             }
             catch (TagNotFoundException ex)
             {
-                logger.info("No id3v1 tag found");
+                logger.config("No id3v1 tag found");
             }
         }
     }
@@ -202,14 +202,14 @@ public class MP3File extends AudioFile
 
             if ((loadOptions & LOAD_IDV2TAG) != 0)
             {
-                logger.info("Attempting to read id3v2tags");
+                logger.config("Attempting to read id3v2tags");
                 try
                 {
                     this.setID3v2Tag(new ID3v24Tag(bb, file.getName()));
                 }
                 catch (TagNotFoundException ex)
                 {
-                    logger.info("No id3v24 tag found");
+                    logger.config("No id3v24 tag found");
                 }
 
                 try
@@ -221,7 +221,7 @@ public class MP3File extends AudioFile
                 }
                 catch (TagNotFoundException ex)
                 {
-                    logger.info("No id3v23 tag found");
+                    logger.config("No id3v23 tag found");
                 }
 
                 try
@@ -233,13 +233,13 @@ public class MP3File extends AudioFile
                 }
                 catch (TagNotFoundException ex)
                 {
-                    logger.info("No id3v22 tag found");
+                    logger.config("No id3v22 tag found");
                 }
             }
         }
         else
         {
-            logger.info("Not enough room for valid id3v2 tag:" + startByte);
+            logger.config("Not enough room for valid id3v2 tag:" + startByte);
         }
     }
 
@@ -299,27 +299,27 @@ public class MP3File extends AudioFile
         //this way we cant overwrite the audio although we might overwrite part of the tag if we write this file
         //back later
         newAudioHeader = new MP3AudioHeader(file, 0);
-        logger.info("Checking from start:" + newAudioHeader);
+        logger.config("Checking from start:" + newAudioHeader);
 
         if (currentHeader.getMp3StartByte() == newAudioHeader.getMp3StartByte())
         {
             //Although the tag size appears to be incorrect at least we have found the same location for the start
             //of audio whether we start searching from start of file or at the end of the alleged of file so no real
             //problem
-            logger.info(ErrorMessage.MP3_START_OF_AUDIO_CONFIRMED.getMsg(file.getPath(), Hex.asHex(newAudioHeader.getMp3StartByte())));
+            logger.config(ErrorMessage.MP3_START_OF_AUDIO_CONFIRMED.getMsg(file.getPath(), Hex.asHex(newAudioHeader.getMp3StartByte())));
             return currentHeader;
         }
         else
         {
             //We get a different value if read from start, can't guarantee 100% correct lets do some more checks
-            logger.info((ErrorMessage.MP3_RECALCULATED_POSSIBLE_START_OF_MP3_AUDIO.getMsg(file.getPath(), Hex.asHex(newAudioHeader.getMp3StartByte()))));
+            logger.config((ErrorMessage.MP3_RECALCULATED_POSSIBLE_START_OF_MP3_AUDIO.getMsg(file.getPath(), Hex.asHex(newAudioHeader.getMp3StartByte()))));
 
             //Frame counts dont match so eiither currentHeader or newAudioHeader isnt really audio header
             if (currentHeader.getNumberOfFrames() != newAudioHeader.getNumberOfFrames())
             {
                 //Skip to the next header (header 2, counting from start of file)
                 nextAudioHeader = new MP3AudioHeader(file, newAudioHeader.getMp3StartByte() + newAudioHeader.mp3FrameHeader.getFrameLength());
-                logger.info("Checking next:" + nextAudioHeader);
+                logger.config("Checking next:" + nextAudioHeader);
 
                 //It matches the header we found when doing the original search from after the ID3Tag therefore it
                 //seems that newAudioHeader was a false match and the original header was correct
@@ -380,7 +380,7 @@ public class MP3File extends AudioFile
 
             if (startByte != ((MP3AudioHeader) audioHeader).getMp3StartByte())
             {
-                logger.info("First header found after tag:" + audioHeader);
+                logger.config("First header found after tag:" + audioHeader);
                 audioHeader = checkAudioStart(startByte, (MP3AudioHeader) audioHeader);
             }
 
@@ -433,7 +433,7 @@ public class MP3File extends AudioFile
             MP3AudioHeader audioHeader = new MP3AudioHeader(file, startByte);
             if (startByte != audioHeader.getMp3StartByte())
             {
-                logger.info("First header found after tag:" + audioHeader);
+                logger.config("First header found after tag:" + audioHeader);
                 audioHeader = checkAudioStart(startByte, audioHeader);
             }
             return audioHeader.getMp3StartByte();
@@ -546,13 +546,13 @@ public class MP3File extends AudioFile
      */
     public void setID3v1Tag(ID3v1Tag id3v1tag)
     {
-        logger.info("setting tagv1:v1 tag");
+        logger.config("setting tagv1:v1 tag");
         this.id3v1tag = id3v1tag;
     }
 
     public void setID3v1Tag(Tag id3v1tag)
     {
-        logger.info("setting tagv1:v1 tag");
+        logger.config("setting tagv1:v1 tag");
         this.id3v1tag = (ID3v1Tag) id3v1tag;
     }
 
@@ -566,7 +566,7 @@ public class MP3File extends AudioFile
      */
     public void setID3v1Tag(AbstractTag mp3tag)
     {
-        logger.info("setting tagv1:abstract");
+        logger.config("setting tagv1:abstract");
         id3v1tag = new ID3v11Tag(mp3tag);
     }
 
@@ -780,7 +780,7 @@ public class MP3File extends AudioFile
         //Ensure we are dealing with absolute filepqaths not relative ones
         File file = fileToSave.getAbsoluteFile();
 
-        logger.info("Saving  : " + file.getPath());
+        logger.config("Saving  : " + file.getPath());
 
         //Checks before starting write
         precheck(file);
@@ -797,12 +797,12 @@ public class MP3File extends AudioFile
                     (new ID3v24Tag()).delete(rfile);
                     (new ID3v23Tag()).delete(rfile);
                     (new ID3v22Tag()).delete(rfile);
-                    logger.info("Deleting ID3v2 tag:"+file.getName());
+                    logger.config("Deleting ID3v2 tag:"+file.getName());
                     rfile.close();
                 }
                 else
                 {
-                    logger.info("Writing ID3v2 tag:"+file.getName());
+                    logger.config("Writing ID3v2 tag:"+file.getName());
                     id3v2tag.write(file, ((MP3AudioHeader) this.getAudioHeader()).getMp3StartByte());
                 }
             }
@@ -819,15 +819,15 @@ public class MP3File extends AudioFile
             //ID3v1 tag
             if (TagOptionSingleton.getInstance().isId3v1Save())
             {
-                logger.info("Processing ID3v1");
+                logger.config("Processing ID3v1");
                 if (id3v1tag == null)
                 {
-                    logger.info("Deleting ID3v1");
+                    logger.config("Deleting ID3v1");
                     (new ID3v1Tag()).delete(rfile);
                 }
                 else
                 {
-                    logger.info("Saving ID3v1");
+                    logger.config("Saving ID3v1");
                     id3v1tag.write(rfile);
                 }
             }

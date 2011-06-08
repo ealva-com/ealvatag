@@ -147,9 +147,9 @@ public class Mp4TagReader
         int length = boxHeader.getLength() - Mp4BoxHeader.HEADER_LENGTH;
         ByteBuffer metadataBuffer = moovBuffer.slice();
         //Datalength is longer are there boxes after ilst at this level?
-        logger.info("headerlengthsays:" + length + "datalength:" + metadataBuffer.limit());
+        logger.config("headerlengthsays:" + length + "datalength:" + metadataBuffer.limit());
         int read = 0;
-        logger.info("Started to read metadata fields at position is in metadata buffer:" + metadataBuffer.position());
+        logger.config("Started to read metadata fields at position is in metadata buffer:" + metadataBuffer.position());
         while (read < length)
         {
             //Read the boxHeader
@@ -157,7 +157,7 @@ public class Mp4TagReader
 
             //Create the corresponding datafield from the id, and slice the buffer so position of main buffer
             //wont get affected
-            logger.info("Next position is at:" + metadataBuffer.position());
+            logger.config("Next position is at:" + metadataBuffer.position());
             createMp4Field(tag, boxHeader, metadataBuffer.slice());
 
             //Move position in buffer to the start of the next parentHeader
@@ -208,7 +208,7 @@ public class Mp4TagReader
                 //Need this to decide what type of Field to create
                 int type = Utils.getIntBE(raw, Mp4DataBox.TYPE_POS_INCLUDING_HEADER, Mp4DataBox.TYPE_POS_INCLUDING_HEADER + Mp4DataBox.TYPE_LENGTH - 1);
                 Mp4FieldType fieldType = Mp4FieldType.getFieldType(type);
-                logger.info("Box Type id:" + header.getId() + ":type:" + fieldType);
+                logger.config("Box Type id:" + header.getId() + ":type:" + fieldType);
 
                 //Special handling for some specific identifiers otherwise just base on class id
                 if (header.getId().equals(Mp4FieldKey.TRACK.getFieldName()))

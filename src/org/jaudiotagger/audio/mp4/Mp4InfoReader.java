@@ -300,7 +300,7 @@ public class Mp4InfoReader
             info.setEncodingType(EncoderType.AAC.getDescription());
         }
 
-        logger.info(info.toString());
+        logger.config(info.toString());
 
         //Level 2-Searching for others "trak" within "moov", if we find any traks containing video
         //then reject it if no track if not video then we allow it because many encoders seem to contain all sorts

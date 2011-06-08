@@ -185,7 +185,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
      */
     protected void copyPrimitives(AbstractID3v2Tag copyObject)
     {
-        logger.info("Copying Primitives");
+        logger.config("Copying Primitives");
         //Primitives type variables common to all IDv2 Tags
         this.duplicateFrameId = copyObject.duplicateFrameId;
         this.duplicateBytes = copyObject.duplicateBytes;
@@ -1067,7 +1067,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
     public boolean seek(ByteBuffer byteBuffer)
     {
         byteBuffer.rewind();
-        logger.info("ByteBuffer pos:" + byteBuffer.position() + ":limit" + byteBuffer.limit() + ":cap" + byteBuffer.capacity());
+        logger.config("ByteBuffer pos:" + byteBuffer.position() + ":limit" + byteBuffer.limit() + ":cap" + byteBuffer.capacity());
 
 
         byte[] tagIdentifier = new byte[FIELD_TAGID_LENGTH];

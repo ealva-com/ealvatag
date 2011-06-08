@@ -83,7 +83,7 @@ public class MetadataBlockDataStreamInfo  implements MetadataBlockData
         totalNumberOfSamples = readTotalNumberOfSamples(rawdata.get(13), rawdata.get(14), rawdata.get(15), rawdata.get(16), rawdata.get(17));
 
         songLength = (float) ((double) totalNumberOfSamples / samplingRate);
-        logger.info(this.toString());
+        logger.config(this.toString());
     }
 
     /**

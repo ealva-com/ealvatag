@@ -57,17 +57,17 @@ public class FlacTagReader
         boolean isLastBlock = false;
         while (!isLastBlock)
         {
-            if(logger.isLoggable(Level.INFO))
+            if(logger.isLoggable(Level.CONFIG))
             {
-                logger.info("Looking for MetaBlockHeader at:"+raf.getFilePointer());
+                logger.config("Looking for MetaBlockHeader at:"+raf.getFilePointer());
             }
             
             //Read the header
             MetadataBlockHeader mbh = MetadataBlockHeader.readHeader(raf);
 
-            if(logger.isLoggable(Level.INFO))
+            if(logger.isLoggable(Level.CONFIG))
             {
-                logger.info("Reading MetadataBlockHeader:"+mbh.toString() + " ending at "+raf.getFilePointer());
+                logger.config("Reading MetadataBlockHeader:"+mbh.toString() + " ending at "+raf.getFilePointer());
             }
             
             //Is it one containing some sort of metadata, therefore interested in it?
@@ -99,9 +99,9 @@ public class FlacTagReader
 
                 //This is not a metadata block we are interested in so we skip to next block
                 default:
-                    if(logger.isLoggable(Level.INFO))
+                    if(logger.isLoggable(Level.CONFIG))
                     {
-                        logger.info("Ignoring MetadataBlock:"+mbh.getBlockType());
+                        logger.config("Ignoring MetadataBlock:"+mbh.getBlockType());
                     }
                     raf.seek(raf.getFilePointer() + mbh.getDataLength());
                     break;

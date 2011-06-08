@@ -115,7 +115,7 @@ public abstract class AbstractID3v2Frame extends AbstractTagFrame implements Tag
     //TODO the identifier checks should be done in the relevent subclasses
     public AbstractID3v2Frame(String identifier)
     {
-        logger.info("Creating empty frame of type" + identifier);
+        logger.config("Creating empty frame of type" + identifier);
         this.identifier = identifier;
 
         // Use reflection to map id to frame body, which makes things much easier
@@ -152,7 +152,7 @@ public abstract class AbstractID3v2Frame extends AbstractTagFrame implements Tag
             frameBody.setTextEncoding(TagOptionSingleton.getInstance().getId3v23DefaultTextEncoding());
         }
 
-        logger.info("Created empty frame of type" + identifier);
+        logger.config("Created empty frame of type" + identifier);
     }
 
     /**
@@ -274,7 +274,7 @@ public abstract class AbstractID3v2Frame extends AbstractTagFrame implements Tag
         //No class defined for this frame type,use FrameUnsupported
         catch (ClassNotFoundException cex)
         {
-            logger.info(getLoggingFilename() + ":" + "Identifier not recognised:" + identifier + " using FrameBodyUnsupported");
+            logger.config(getLoggingFilename() + ":" + "Identifier not recognised:" + identifier + " using FrameBodyUnsupported");
             try
             {
                 frameBody = new FrameBodyUnsupported(byteBuffer, frameSize);
@@ -405,7 +405,7 @@ public abstract class AbstractID3v2Frame extends AbstractTagFrame implements Tag
         }
         catch (ClassNotFoundException cex)
         {
-            logger.info("Identifier not recognised:" + identifier + " unable to create framebody");
+            logger.config("Identifier not recognised:" + identifier + " unable to create framebody");
             throw new InvalidFrameException("FrameBody" + identifier + " does not exist");
         }
         //If suitable constructor does not exist

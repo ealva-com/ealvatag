@@ -87,7 +87,7 @@ public class StringFixedLength extends AbstractString
      */
     public void readByteArray(byte[] arr, int offset) throws InvalidDataTypeException
     {
-        logger.info("Reading from array from offset:" + offset);
+        logger.config("Reading from array from offset:" + offset);
         try
         {
             String charSetName = getTextEncodingCharSet();
@@ -114,7 +114,7 @@ public class StringFixedLength extends AbstractString
             logger.severe(ce.getMessage());
             value = "";
         }
-        logger.info("Read StringFixedLength:" + value);
+        logger.config("Read StringFixedLength:" + value);
     }
 
     /**

@@ -116,7 +116,7 @@ public class ID3v22Frame extends AbstractID3v2Frame
     public ID3v22Frame(String identifier)
     {
 
-        logger.info("Creating empty frame of type" + identifier);
+        logger.config("Creating empty frame of type" + identifier);
         String bodyIdentifier = identifier;
         this.identifier = identifier;
 
@@ -173,7 +173,7 @@ public class ID3v22Frame extends AbstractID3v2Frame
             throw new RuntimeException(iae);
         }
         frameBody.setHeader(this);
-        logger.info("Created empty frame of type" + this.identifier + "with frame body of" + bodyIdentifier);
+        logger.config("Created empty frame of type" + this.identifier + "with frame body of" + bodyIdentifier);
 
     }
 
@@ -186,7 +186,7 @@ public class ID3v22Frame extends AbstractID3v2Frame
     public ID3v22Frame(ID3v22Frame frame)
     {
         super(frame);
-        logger.info("Creating frame from a frame of same version");
+        logger.config("Creating frame from a frame of same version");
     }
 
     private void createV22FrameFromV23Frame(ID3v23Frame frame) throws InvalidFrameException
@@ -194,7 +194,7 @@ public class ID3v22Frame extends AbstractID3v2Frame
         identifier = ID3Tags.convertFrameID23To22(frame.getIdentifier());
         if (identifier != null)
         {
-            logger.info("V2:Orig id is:" + frame.getIdentifier() + ":New id is:" + identifier);
+            logger.config("V2:Orig id is:" + frame.getIdentifier() + ":New id is:" + identifier);
             this.frameBody = (AbstractID3v2FrameBody) ID3Tags.copyObject(frame.getBody());
         }
         // Is it a known v3 frame which needs forcing to v2 frame e.g. APIC - PIC
@@ -203,7 +203,7 @@ public class ID3v22Frame extends AbstractID3v2Frame
             identifier = ID3Tags.forceFrameID23To22(frame.getIdentifier());
             if (identifier != null)
             {
-                logger.info("V2:Force:Orig id is:" + frame.getIdentifier() + ":New id is:" + identifier);
+                logger.config("V2:Force:Orig id is:" + frame.getIdentifier() + ":New id is:" + identifier);
                 this.frameBody = this.readBody(identifier, (AbstractID3v2FrameBody) frame.getBody());
             }
             // No mechanism exists to convert it to a v22 frame
@@ -220,14 +220,14 @@ public class ID3v22Frame extends AbstractID3v2Frame
             {
                 this.frameBody = frame.getBody();
                 identifier = frame.getIdentifier();
-                logger.info("DEPRECATED:Orig id is:" + frame.getIdentifier() + ":New id is:" + identifier);
+                logger.config("DEPRECATED:Orig id is:" + frame.getIdentifier() + ":New id is:" + identifier);
             }
             //or was it still deprecated, if so leave as is
             else
             {
                 this.frameBody = new FrameBodyDeprecated((FrameBodyDeprecated) frame.getBody());
                 identifier = frame.getIdentifier();
-                logger.info("DEPRECATED:Orig id is:" + frame.getIdentifier() + ":New id is:" + identifier);
+                logger.config("DEPRECATED:Orig id is:" + frame.getIdentifier() + ":New id is:" + identifier);
             }
         }
         // Unknown Frame e.g NCON
@@ -235,7 +235,7 @@ public class ID3v22Frame extends AbstractID3v2Frame
         {
             this.frameBody = new FrameBodyUnsupported((FrameBodyUnsupported) frame.getBody());
             identifier = frame.getIdentifier();
-            logger.info("v2:UNKNOWN:Orig id is:" + frame.getIdentifier() + ":New id is:" + identifier);
+            logger.config("v2:UNKNOWN:Orig id is:" + frame.getIdentifier() + ":New id is:" + identifier);
         }
     }
 
@@ -247,7 +247,7 @@ public class ID3v22Frame extends AbstractID3v2Frame
      */
     public ID3v22Frame(AbstractID3v2Frame frame) throws InvalidFrameException
     {
-        logger.info("Creating frame from a frame of a different version");
+        logger.config("Creating frame from a frame of a different version");
         if (frame instanceof ID3v22Frame)
         {
             throw new UnsupportedOperationException("Copy Constructor not called. Please type cast the argument");
@@ -265,7 +265,7 @@ public class ID3v22Frame extends AbstractID3v2Frame
             createV22FrameFromV23Frame((ID3v23Frame) frame);
         }
         this.frameBody.setHeader(this);
-        logger.info("Created frame from a frame of a different version");
+        logger.config("Created frame from a frame of a different version");
     }
 
     /**
@@ -332,7 +332,7 @@ public class ID3v22Frame extends AbstractID3v2Frame
         // Is this a valid identifier?
         if (!isValidID3v2FrameIdentifier(identifier))
         {
-            logger.info("Invalid identifier:" + identifier);
+            logger.config("Invalid identifier:" + identifier);
             byteBuffer.position(byteBuffer.position() - (getFrameIdSize() - 1));
             throw new InvalidFrameIdentifierException(getLoggingFilename() + ":" + identifier + ":is not a valid ID3v2.20 frame");
         }
@@ -420,7 +420,7 @@ public class ID3v22Frame extends AbstractID3v2Frame
      */
     public void write(ByteArrayOutputStream tagBuffer)
     {
-        logger.info("Write Frame to Buffer" + getIdentifier());
+        logger.config("Write Frame to Buffer" + getIdentifier());
         //This is where we will write header, move position to where we can
         //write body
         ByteBuffer headerBuffer = ByteBuffer.allocate(getFrameHeaderSize());

@@ -149,7 +149,7 @@ public abstract class AbstractID3v2FrameBody extends AbstractTagFrameBody
     public void read(ByteBuffer byteBuffer) throws InvalidTagException
     {
         int size = getSize();
-        logger.info("Reading body for" + this.getIdentifier() + ":" + size);
+        logger.config("Reading body for" + this.getIdentifier() + ":" + size);
 
         //Allocate a buffer to the size of the Frame Body and read from file
         byte[] buffer = new byte[size];
@@ -199,7 +199,7 @@ public abstract class AbstractID3v2FrameBody extends AbstractTagFrameBody
     public void write(ByteArrayOutputStream tagBuffer)
 
     {
-        logger.info("Writing frame body for" + this.getIdentifier() + ":Est Size:" + size);
+        logger.config("Writing frame body for" + this.getIdentifier() + ":Est Size:" + size);
         //Write the various fields to file in order
         for (AbstractDataType object : objectList)
         {
@@ -218,7 +218,7 @@ public abstract class AbstractID3v2FrameBody extends AbstractTagFrameBody
             }
         }
         setSize();
-        logger.info("Written frame body for" + this.getIdentifier() + ":Real Size:" + size);
+        logger.config("Written frame body for" + this.getIdentifier() + ":Real Size:" + size);
 
     }
 

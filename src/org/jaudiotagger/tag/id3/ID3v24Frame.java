@@ -156,7 +156,7 @@ public class ID3v24Frame extends AbstractID3v2Frame
             identifier = ID3Tags.forceFrameID23To24(frame.getIdentifier());
             if (identifier != null)
             {
-                logger.info("V3:Orig id is:" + frame.getIdentifier() + ":New id is:" + identifier);
+                logger.config("V3:Orig id is:" + frame.getIdentifier() + ":New id is:" + identifier);
                 this.frameBody = this.readBody(identifier, (AbstractID3v2FrameBody) frame.getBody());
                 this.frameBody.setHeader(this);
             }
@@ -566,7 +566,7 @@ public class ID3v24Frame extends AbstractID3v2Frame
         {
             //If not valid move file pointer back to one byte after
             //the original check so can try again.
-            logger.info(getLoggingFilename() + ":" + "Invalid identifier:" + identifier);
+            logger.config(getLoggingFilename() + ":" + "Invalid identifier:" + identifier);
             byteBuffer.position(byteBuffer.position() - (getFrameIdSize() - 1));
             throw new InvalidFrameIdentifierException(getLoggingFilename() + ":" + identifier + ":is not a valid ID3v2.30 frame");
         }
@@ -601,7 +601,7 @@ public class ID3v24Frame extends AbstractID3v2Frame
             //Read the sync safe size field
             dataLengthSize = ID3SyncSafeInteger.bufferToValue(byteBuffer);
             extraHeaderBytesCount += FRAME_DATA_LENGTH_SIZE;
-            logger.info(getLoggingFilename() + ":" + "Frame Size Is:" + frameSize + " Data Length Size:" + dataLengthSize);
+            logger.config(getLoggingFilename() + ":" + "Frame Size Is:" + frameSize + " Data Length Size:" + dataLengthSize);
         }
 
         //Work out the real size of the frameBody data
@@ -622,7 +622,7 @@ public class ID3v24Frame extends AbstractID3v2Frame
             //bytes to be dropped so the existing buffer is large enough to hold the modifications
             frameBodyBuffer = ID3Unsynchronization.synchronize(frameBodyBuffer);
             syncSize = frameBodyBuffer.limit();
-            logger.info(getLoggingFilename() + ":" + "Frame Size After Syncing is:" + syncSize);
+            logger.config(getLoggingFilename() + ":" + "Frame Size After Syncing is:" + syncSize);
         }
 
         //Read the body data
@@ -645,7 +645,7 @@ public class ID3v24Frame extends AbstractID3v2Frame
             }
             if (!(frameBody instanceof ID3v24FrameBody))
             {
-                logger.info(getLoggingFilename() + ":" + "Converted frame body with:" + identifier + " to deprecated framebody");
+                logger.config(getLoggingFilename() + ":" + "Converted frame body with:" + identifier + " to deprecated framebody");
                 frameBody = new FrameBodyDeprecated((AbstractID3v2FrameBody) frameBody);
             }
         }
@@ -666,7 +666,7 @@ public class ID3v24Frame extends AbstractID3v2Frame
     {
         boolean unsynchronization;
 
-        logger.info("Writing frame to file:" + getIdentifier());
+        logger.config("Writing frame to file:" + getIdentifier());
 
         //This is where we will write header, move position to where we can
         //write bodybuffer
@@ -682,7 +682,7 @@ public class ID3v24Frame extends AbstractID3v2Frame
         if (unsynchronization)
         {
             bodyBuffer = ID3Unsynchronization.unsynchronize(bodyBuffer);
-            logger.info("bodybytebuffer:sizeafterunsynchronisation:" + bodyBuffer.length);
+            logger.config("bodybytebuffer:sizeafterunsynchronisation:" + bodyBuffer.length);
         }
 
         //Write Frame Header
@@ -953,17 +953,17 @@ public class ID3v24Frame extends AbstractID3v2Frame
 
             if (isGrouping())
             {
-                logger.info(ErrorMessage.MP3_FRAME_IS_GROUPED.getMsg(getLoggingFilename(), identifier));
+                logger.config(ErrorMessage.MP3_FRAME_IS_GROUPED.getMsg(getLoggingFilename(), identifier));
             }
 
             if (isUnsynchronised())
             {
-                logger.info(ErrorMessage.MP3_FRAME_IS_UNSYNCHRONISED.getMsg(getLoggingFilename(), identifier));
+                logger.config(ErrorMessage.MP3_FRAME_IS_UNSYNCHRONISED.getMsg(getLoggingFilename(), identifier));
             }
 
             if (isDataLengthIndicator())
             {
-                logger.info(ErrorMessage.MP3_FRAME_IS_DATA_LENGTH_INDICATOR.getMsg(getLoggingFilename(), identifier));
+                logger.config(ErrorMessage.MP3_FRAME_IS_DATA_LENGTH_INDICATOR.getMsg(getLoggingFilename(), identifier));
             }
         }
 

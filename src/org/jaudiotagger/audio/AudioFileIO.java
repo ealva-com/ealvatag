@@ -294,7 +294,7 @@ public class AudioFileIO
      */
     public void checkFileExists(File file)throws FileNotFoundException
     {
-        logger.info("Reading file:" + "path" + file.getPath() + ":abs:" + file.getAbsolutePath());
+        logger.config("Reading file:" + "path" + file.getPath() + ":abs:" + file.getAbsolutePath());
         if (!file.exists())
         {
             logger.severe("Unable to find:" + file.getPath());

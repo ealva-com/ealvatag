@@ -51,7 +51,7 @@ public class FlacTagCreator extends AbstractTagCreator
      */
     public ByteBuffer convert(Tag tag, int paddingSize) throws UnsupportedEncodingException
     {
-        logger.info("Convert flac tag:padding:" + paddingSize);
+        logger.config("Convert flac tag:padding:" + paddingSize);
         FlacTag flacTag = (FlacTag) tag;
 
         int tagLength = 0;
@@ -66,7 +66,7 @@ public class FlacTagCreator extends AbstractTagCreator
             tagLength += image.getBytes().length + MetadataBlockHeader.HEADER_LENGTH;
         }
 
-        logger.info("Convert flac tag:taglength:" + tagLength);
+        logger.config("Convert flac tag:taglength:" + tagLength);
         ByteBuffer buf = ByteBuffer.allocate(tagLength + paddingSize);
 
         MetadataBlockHeader vorbisHeader;
@@ -105,7 +105,7 @@ public class FlacTagCreator extends AbstractTagCreator
         }
 
         //Padding
-        logger.info("Convert flac tag at" + buf.position());
+        logger.config("Convert flac tag at" + buf.position());
         if (paddingSize > 0)
         {
             int paddingDataSize = paddingSize - MetadataBlockHeader.HEADER_LENGTH;

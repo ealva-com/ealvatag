@@ -90,7 +90,7 @@ public class MetadataBlockDataPicture implements MetadataBlockData, TagField
         imageData = new byte[rawdataSize];
         rawdata.get(imageData);
 
-        logger.info("Read image:" + this.toString());
+        logger.config("Read image:" + this.toString());
     }
 
     /**

@@ -76,7 +76,7 @@ public class FlacTagWriter
      */
     public void write(Tag tag, RandomAccessFile raf, RandomAccessFile rafTemp) throws CannotWriteException, IOException
     {
-        logger.info("Writing tag");
+        logger.config("Writing tag");
 
         //Clean up old data
         streamInfoBlock=null;
@@ -160,7 +160,7 @@ public class FlacTagWriter
         //Go to start of Flac within file
         raf.seek(flacStream.getStartOfFlacInFile());
 
-        logger.info("Writing tag available bytes:" + availableRoom + ":needed bytes:" + neededRoom);
+        logger.config("Writing tag available bytes:" + availableRoom + ":needed bytes:" + neededRoom);
 
         //There is enough room to fit the tag without moving the audio just need to
         //adjust padding accordingly need to allow space for padding header if padding required

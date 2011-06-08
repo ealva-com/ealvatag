@@ -143,7 +143,7 @@ public class NumberFixedLength extends AbstractDataType
             lvalue += (arr[i] & 0xff);
         }
         value = lvalue;
-        logger.info("Read NumberFixedlength:" + value);
+        logger.config("Read NumberFixedlength:" + value);
     }
 
 

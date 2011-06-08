@@ -113,7 +113,7 @@ public class FlacInfoReader
         while (!isLastBlock)
         {
             MetadataBlockHeader mbh = MetadataBlockHeader.readHeader(raf);
-            logger.info("Found block:" + mbh.getBlockType());
+            logger.config("Found block:" + mbh.getBlockType());
             raf.seek(raf.getFilePointer() + mbh.getDataLength());
             isLastBlock = mbh.isLastBlock();
             mbh = null; //Free memory
