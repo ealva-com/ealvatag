@@ -26,9 +26,9 @@ public class ID3v24FrameBodyTest {
       }
     }
     if (success) {
-      log.info("Test was successful.");
+      log.config("Test was successful.");
     } else {
-      log.info("Test was not successful. Errors haven been reported above.");
+      log.config("Test was not successful. Errors haven been reported above.");
     }
   }
 
