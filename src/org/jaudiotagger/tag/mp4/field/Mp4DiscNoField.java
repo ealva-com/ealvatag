@@ -158,6 +158,10 @@ public class Mp4DiscNoField extends Mp4TagTextNumberField
      */
     public Short getDiscTotal()
     {
+        if(numbers.size()<=DISC_TOTAL_INDEX)
+        {
+            return 0;
+        }
         return numbers.get(DISC_TOTAL_INDEX);
     }
 
