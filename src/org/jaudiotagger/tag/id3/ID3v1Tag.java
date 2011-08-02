@@ -280,7 +280,7 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag
      *
      * @return album
      */
-    protected String getFirstAlbum()
+    public String getFirstAlbum()
     {
         return album;
     }
