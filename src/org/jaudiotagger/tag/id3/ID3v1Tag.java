@@ -323,7 +323,7 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag
      *
      * @return artist
      */
-    protected String getFirstArtist()
+    public String getFirstArtist()
     {
         return artist;
     }
