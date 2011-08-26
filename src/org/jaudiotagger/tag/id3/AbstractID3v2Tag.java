@@ -1236,6 +1236,11 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
             //TODO is this the right file ?
             paddedFile.setLastModified(lastModified);
         }
+        catch(UnableToRenameFileException ure)
+        {
+            paddedFile.delete();
+            throw ure;
+        }
         finally
         {
             try
