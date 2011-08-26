@@ -1184,7 +1184,8 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
             long audiolength = file.length() - audioStart;
             if (audiolength <= MAXIMUM_WRITABLE_CHUNK_SIZE)
             {
-                long written2 = fcIn.transferTo(audioStart, audiolength, fcOut);
+                fcIn.position(audioStart);
+                long written2 = fcOut.transferFrom(fcIn, paddingSize, audiolength);
                 logger.finer("Written padding:" + written + " Data:" + written2);
                 if (written2 != audiolength)
                 {
