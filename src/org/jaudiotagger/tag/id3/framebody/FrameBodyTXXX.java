@@ -72,6 +72,7 @@ public class FrameBodyTXXX extends AbstractFrameBodyTextInfo implements ID3v24Fr
     public static final String FBPM                         = "FBPM";
     public static final String SCRIPT                       = "Script";
     public static final String ARTISTS                      = "ARTISTS";
+    public static final String ACOUSTID_FINGERPRINT         = "Acoustid Fingerprint";
 
     //used by Foobar 20000
     public static final String ALBUM_ARTIST = "ALBUM ARTIST";

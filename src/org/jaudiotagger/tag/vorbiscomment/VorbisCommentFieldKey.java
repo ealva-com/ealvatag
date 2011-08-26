@@ -113,6 +113,7 @@ public enum VorbisCommentFieldKey
     DJMIXER("DJMIXER",EnumSet.of(Tagger.PICARD)),
     MIXER("MIXER",EnumSet.of(Tagger.PICARD)),
     ARRANGER("ARRANGER",EnumSet.of(Tagger.PICARD)),
+    ACOUSTID_FINGERPRINT("ACOUSTID_FINGERPRINT",EnumSet.of(Tagger.PICARD)),
     ;
 
     private String fieldName;

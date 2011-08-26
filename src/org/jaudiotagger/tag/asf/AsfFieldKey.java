@@ -111,6 +111,7 @@ public enum AsfFieldKey
     MUSICBRAINZ_TRACK_ID("MusicBrainz/Track Id", false),
     MUSICBRAINZ_WORKID("MusicBrainz/Work Id", false),
     MUSICIP_ID("MusicIP/PUID", false),
+    ACOUSTID_FINGERPRINT("AcoustId/Fingerprint", false),
     OCCASION("Occasion", true),
     ORIGINAL_ALBUM("WM/OriginalAlbumTitle", true),
     ORIGINAL_ARTIST("WM/OriginalArtist", true),
