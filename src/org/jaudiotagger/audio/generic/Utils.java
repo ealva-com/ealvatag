@@ -409,7 +409,7 @@ public class Utils
             if (copy(fromFile, toFile))
             {
                 boolean deleteResult=fromFile.delete();
-                if(deleteResult)
+                if(!deleteResult)
                 {
                     logger.log(Level.SEVERE,"Unable to delete File:"+fromFile);
                     return false;
