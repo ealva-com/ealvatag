@@ -36,7 +36,8 @@ public class Utils
 
      // Logger Object
     public static Logger logger = Logger
-            .getLogger("org.jaudiotagger.audio.generic.utils");
+             .getLogger("org.jaudiotagger.audio.generic.utils");
+    private static final int MAX_BASE_TEMP_FILENAME_LENGTH = 20;
 
     /**
      * Copies the bytes of <code>srd</code> to <code>dst</code> at the
@@ -358,8 +359,26 @@ public class Utils
     }
 
     /**
+     * Get a base for temp file, this should be long enough so that it easy to work out later what file the temp file
+     * was created for if it is left lying round, but not ridiculously long as this can cause problems with max filename
+     * limits and is not very useful
+     *
      * @param file
-     * @return filename with audioformat seperator stripped of, lengthened to ensure not too small for valid tempfile
+     * @return
+     */
+    public static String getBaseFilenameForTempFile(File file)
+    {
+        String filename = getMinBaseFilenameAllowedForTempFile(file);
+        if(filename.length()<= MAX_BASE_TEMP_FILENAME_LENGTH)
+        {
+           return filename;
+        }
+        return filename.substring(0,MAX_BASE_TEMP_FILENAME_LENGTH);
+    }
+
+    /**
+     * @param file
+     * @return filename with audioformat separator stripped of, lengthened to ensure not too small for valid tempfile
      *         creation.
      */
     public static String getMinBaseFilenameAllowedForTempFile(File file)
