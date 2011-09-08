@@ -8,6 +8,7 @@ import org.jaudiotagger.audio.flac.FlacInfoReader;
 import org.jaudiotagger.audio.flac.metadatablock.MetadataBlockDataPicture;
 import org.jaudiotagger.tag.FieldKey;
 import org.jaudiotagger.tag.TagField;
+import org.jaudiotagger.tag.TagOptionSingleton;
 import org.jaudiotagger.tag.id3.valuepair.ImageFormats;
 import org.jaudiotagger.tag.reference.PictureTypes;
 
@@ -24,6 +25,12 @@ import java.util.List;
  */
 public class FlacWriteTest extends TestCase
 {
+    @Override
+    public void setUp()
+    {
+        TagOptionSingleton.getInstance().setToDefault();
+    }
+
     /**
      * Write flac info to file
      */
@@ -32,6 +39,8 @@ public class FlacWriteTest extends TestCase
         Exception exceptionCaught = null;
         try
         {
+            //Put artifically low just to test it out
+            TagOptionSingleton.getInstance().setWriteChunkSize(10000);
             File testFile = AbstractTestCase.copyAudioToTmp("test2.flac", new File("test2write.flac"));
             AudioFile f = AudioFileIO.read(testFile);
 

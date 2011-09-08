@@ -261,6 +261,8 @@ public class TagOptionSingleton
      //TODO Not Actually Used yet, originally intended for dealing with ratings and genres
     private int playerCompatability=-1;
 
+    private long writeChunkSize=5000000;
+
     /**
      * Creates a new TagOptions datatype. All Options are set to their default
      * values
@@ -780,6 +782,7 @@ public class TagOptionSingleton
         padNumbers = false;
         isAndroid = false;
         isEncodeUTF16BomAsLittleEndian = true;
+        writeChunkSize=5000000;
 
         //default all lyrics3 fields to save. id3v1 fields are individual
         // settings. id3v2 fields are always looked at to save.
@@ -1123,5 +1126,20 @@ public class TagOptionSingleton
     public void setEncodeUTF16BomAsLittleEndian(boolean encodeUTF16BomAsLittleEndian)
     {
         isEncodeUTF16BomAsLittleEndian = encodeUTF16BomAsLittleEndian;
+    }
+
+    /**
+     * When we have to create new audio files and shift audio data to fit in more metadata this value
+     * set the maximum amount in bytes that can be transferred in one call, this is to protect against
+     * various OutOfMemoryExceptions that cna occur, especially on networked filesystems.
+     */
+    public long getWriteChunkSize()
+    {
+        return writeChunkSize;
+    }
+
+    public void setWriteChunkSize(long writeChunkSize)
+    {
+        this.writeChunkSize = writeChunkSize;
     }
 }
