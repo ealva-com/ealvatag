@@ -8,6 +8,7 @@ import org.jaudiotagger.audio.mp3.MP3File;
 import org.jaudiotagger.tag.FieldKey;
 import org.jaudiotagger.tag.Tag;
 import org.jaudiotagger.tag.TagField;
+import org.jaudiotagger.tag.TagOptionSingleton;
 import org.jaudiotagger.tag.id3.ID3v23Tag;
 import org.jaudiotagger.tag.mp4.atom.Mp4ContentTypeValue;
 import org.jaudiotagger.tag.mp4.atom.Mp4RatingValue;
@@ -26,6 +27,11 @@ public class M4aWriteTagTest extends TestCase
     private static int TEST_FILE2_SIZE = 3882440;
     private static int TEST_FILE5_SIZE = 119472;
 
+    @Override
+    public void setUp()
+    {
+        TagOptionSingleton.getInstance().setToDefault();
+    }
 
     /**
      * Test to write tagt data, new tagdata identical size to existing data
@@ -1465,6 +1471,7 @@ public class M4aWriteTagTest extends TestCase
      */
     public void testWriteFileLargerSizeNoMetaFreeAtom()
     {
+        TagOptionSingleton.getInstance().setWriteChunkSize(1000000);
         Exception exceptionCaught = null;
         try
         {

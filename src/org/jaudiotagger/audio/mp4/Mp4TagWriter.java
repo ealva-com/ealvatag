@@ -23,6 +23,7 @@ import org.jaudiotagger.audio.exceptions.CannotWriteException;
 import org.jaudiotagger.audio.mp4.atom.*;
 import org.jaudiotagger.logging.ErrorMessage;
 import org.jaudiotagger.tag.Tag;
+import org.jaudiotagger.tag.TagOptionSingleton;
 import org.jaudiotagger.tag.mp4.Mp4Tag;
 import org.jaudiotagger.tag.mp4.Mp4TagCreator;
 import org.jaudiotagger.utils.tree.DefaultMutableTreeNode;
@@ -612,7 +613,7 @@ public class Mp4TagWriter
                            fileReadChannel.position(fileReadChannel.position() + topLevelFreeSize);
 
                            //Write Mdat
-                           fileWriteChannel.transferFrom(fileReadChannel, fileWriteChannel.position(), fileReadChannel.size() - fileReadChannel.position());
+                           writeDataInChunks(fileReadChannel,fileWriteChannel);
                        }
                        //If the space required is identical to total size of the free space (inc header)
                        //we could just remove the header
@@ -623,7 +624,7 @@ public class Mp4TagWriter
                            fileReadChannel.position(fileReadChannel.position() + topLevelFreeSize);
 
                            //Write Mdat
-                           fileWriteChannel.transferFrom(fileReadChannel, fileWriteChannel.position(), fileReadChannel.size() - fileReadChannel.position());
+                           writeDataInChunks(fileReadChannel,fileWriteChannel);
                        }
                        //Mdat is going to have to move anyway, so keep free atom as is and write it and mdat
                        //(have already updated stco above)
@@ -631,12 +632,13 @@ public class Mp4TagWriter
                        {
                            logger.config("Writing:Option 8;Larger Size cannot use top free atom");
                            fileWriteChannel.transferFrom(fileReadChannel, fileWriteChannel.position(), fileReadChannel.size() - fileReadChannel.position());
+                           writeDataInChunks(fileReadChannel,fileWriteChannel);
                        }
                    }
                    else
                    {
                        logger.config("Writing:Option 9;Top Level Free comes after Mdat or before Metadata so cant use it");
-                       fileWriteChannel.transferFrom(fileReadChannel, fileWriteChannel.position(), fileReadChannel.size() - fileReadChannel.position());
+                       writeDataInChunks(fileReadChannel,fileWriteChannel);
                    }
                }
            }
@@ -647,6 +649,34 @@ public class Mp4TagWriter
            checkFileWrittenCorrectly(rafTemp,mdatHeader,fileWriteChannel,stco);
        }
 
+    /**
+     * #385 Write data in chunks, needing if writing large amounts of data on netwoek
+     *
+     * @param fileReadChannel
+     * @param fileWriteChannel
+     * @throws IOException
+     * @throws CannotWriteException
+     */
+    private void writeDataInChunks(FileChannel fileReadChannel,FileChannel fileWriteChannel)
+            throws IOException, CannotWriteException
+    {
+        long amountToBeWritten=fileReadChannel.size() - fileReadChannel.position();
+        long written   = 0;
+        long chunksize = TagOptionSingleton.getInstance().getWriteChunkSize();
+        long count = amountToBeWritten / chunksize;
+
+        long mod   = amountToBeWritten % chunksize;
+        for(int i = 0; i<count; i++)
+        {
+            written+=fileWriteChannel.transferFrom(fileReadChannel,fileWriteChannel.position(), chunksize);
+            fileWriteChannel.position(fileWriteChannel.position() + chunksize);
+        }
+        written+=fileWriteChannel.transferFrom(fileReadChannel,fileWriteChannel.position(), mod);
+        if(written!=amountToBeWritten)
+        {
+            throw new CannotWriteException("Was meant to write "+amountToBeWritten+" bytes but only written "+written+" bytes");
+        }
+    }
     /**
      * Replace tags atom (and children) by a free atom
      *
