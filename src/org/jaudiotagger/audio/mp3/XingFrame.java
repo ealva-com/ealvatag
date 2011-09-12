@@ -57,7 +57,7 @@ public class XingFrame
     private static final byte[] XING_CBR_ID = {'I', 'n', 'f', 'o'};
 
 
-    private static ByteBuffer header;
+    private ByteBuffer header;
 
     private boolean vbr = false;
     private boolean isFrameCountEnabled = false;
@@ -69,8 +69,10 @@ public class XingFrame
     /**
      * Read the Xing Properties from the buffer
      */
-    private XingFrame()
+    private XingFrame(ByteBuffer header)
     {
+        this.header=header;
+
         //Go to start of Buffer
         header.rewind();
 
@@ -185,9 +187,9 @@ public class XingFrame
      * @return
      * @throws InvalidAudioFrameException
      */
-    public static XingFrame parseXingFrame() throws InvalidAudioFrameException
+    public static XingFrame parseXingFrame(ByteBuffer header) throws InvalidAudioFrameException
     {
-        XingFrame xingFrame = new XingFrame();
+        XingFrame xingFrame = new XingFrame(header);
         return xingFrame;
     }
 
@@ -198,7 +200,7 @@ public class XingFrame
      * @param mpegFrameHeader
      * @return true if this is a Xing frame
      */
-    public static boolean isXingFrame(ByteBuffer bb, MPEGFrameHeader mpegFrameHeader)
+    public static ByteBuffer isXingFrame(ByteBuffer bb, MPEGFrameHeader mpegFrameHeader)
     {
         //We store this so can return here after scanning through buffer
         int startPosition = bb.position();
@@ -229,7 +231,7 @@ public class XingFrame
         }
 
         //Create header from here
-        header = bb.slice();
+        ByteBuffer header = bb.slice();
 
         // Return Buffer to start Point
         bb.position(startPosition);
@@ -239,14 +241,14 @@ public class XingFrame
         header.get(identifier);
         if ((!Arrays.equals(identifier, XING_VBR_ID)) && (!Arrays.equals(identifier, XING_CBR_ID)))
         {
-            return false;
+            return null;
         }
         MP3File.logger.finest("Found Xing Frame");
-        return true;
+        return header;
     }
 
     /**
-     * Is this XingFrame detailing a varaible bit rate MPEG
+     * Is this XingFrame detailing a variable bit rate MPEG
      *
      * @return
      */
@@ -256,7 +258,7 @@ public class XingFrame
     }
 
     /**
-     * @return a string represntation
+     * @return a string representation
      */
     public String toString()
     {

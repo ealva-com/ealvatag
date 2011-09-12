@@ -58,7 +58,7 @@ public class VbriFrame
      */
     private static final byte[] VBRI_VBR_ID = {'V', 'B', 'R', 'I'};
 
-    private static ByteBuffer header;
+    private ByteBuffer header;
 
     private boolean vbr = false;
     private int frameCount = -1;
@@ -68,8 +68,9 @@ public class VbriFrame
     /**
      * Read the VBRI Properties from the buffer
      */
-    private VbriFrame()
+    private VbriFrame(ByteBuffer header)
     {
+        this.header=header;
         //Go to start of Buffer
         header.rewind();
         header.position(10);
@@ -124,9 +125,9 @@ public class VbriFrame
      * @throws org.jaudiotagger.audio.exceptions.InvalidAudioFrameException
      *
      */
-    public static VbriFrame parseVBRIFrame() throws InvalidAudioFrameException
+    public static VbriFrame parseVBRIFrame(ByteBuffer header) throws InvalidAudioFrameException
     {
-        VbriFrame VBRIFrame = new VbriFrame();
+        VbriFrame VBRIFrame = new VbriFrame(header);
         return VBRIFrame;
     }
 
@@ -135,9 +136,9 @@ public class VbriFrame
      *
      * @param bb
      * @param mpegFrameHeader
-     * @return true if this is a VBRI frame
+     * @return raw header if this is a VBRI frame
      */
-    public static boolean isVbriFrame(ByteBuffer bb, MPEGFrameHeader mpegFrameHeader)
+    public static ByteBuffer isVbriFrame(ByteBuffer bb, MPEGFrameHeader mpegFrameHeader)
     {
 
         //We store this so can return here after scanning through buffer
@@ -147,7 +148,7 @@ public class VbriFrame
         bb.position(startPosition + VBRI_OFFSET);
 
         //Create header from here
-        header = bb.slice();
+        ByteBuffer header = bb.slice();
 
         // Return Buffer to start Point
         bb.position(startPosition);
@@ -157,10 +158,10 @@ public class VbriFrame
         header.get(identifier);
         if ((!Arrays.equals(identifier, VBRI_VBR_ID)))
         {
-            return false;
+            return null;
         }
         MP3File.logger.finest("Found VBRI Frame");
-        return true;
+        return header;
     }
 
     /**

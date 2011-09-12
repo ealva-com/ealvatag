@@ -152,6 +152,8 @@ public class MP3AudioHeader implements AudioHeader
      */
     public boolean seek(final File seekFile, long startByte) throws IOException
     {
+        //References to Xing/VRbi Header
+        ByteBuffer header;
 
         //This is substantially faster than updating the filechannels position
         long filePointerCount;
@@ -205,7 +207,8 @@ public class MP3AudioHeader implements AudioHeader
                         mp3FrameHeader = MPEGFrameHeader.parseMPEGHeader(bb);
                         syncFound = true;
                         //if(2==1) use this line when you want to test getting the next frame without using xing
-                        if (XingFrame.isXingFrame(bb, mp3FrameHeader))
+
+                        if ((header = XingFrame.isXingFrame(bb, mp3FrameHeader))!=null)
                         {
                             if (MP3AudioHeader.logger.isLoggable(Level.FINEST))
                             {
@@ -214,7 +217,7 @@ public class MP3AudioHeader implements AudioHeader
                             try
                             {
                                 //Parses Xing frame without modifying position of main buffer
-                                mp3XingFrame = XingFrame.parseXingFrame();
+                                mp3XingFrame = XingFrame.parseXingFrame(header);
                             }
                             catch (InvalidAudioFrameException ex)
                             {
@@ -223,7 +226,7 @@ public class MP3AudioHeader implements AudioHeader
                             }
                             break;
                         }
-                        else if (VbriFrame.isVbriFrame(bb, mp3FrameHeader))
+                        else if ((header = VbriFrame.isVbriFrame(bb, mp3FrameHeader))!=null)
                         {
                             if (MP3AudioHeader.logger.isLoggable(Level.FINEST))
                             {
@@ -232,7 +235,7 @@ public class MP3AudioHeader implements AudioHeader
                             try
                             {
                                 //Parses Vbri frame without modifying position of main buffer
-                                mp3VbriFrame = VbriFrame.parseVBRIFrame();
+                                mp3VbriFrame = VbriFrame.parseVBRIFrame(header);
                             }
                             catch (InvalidAudioFrameException ex)
                             {

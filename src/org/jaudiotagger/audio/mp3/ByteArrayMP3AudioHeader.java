@@ -9,6 +9,8 @@ public class ByteArrayMP3AudioHeader extends MP3AudioHeader
 
     public ByteArrayMP3AudioHeader(byte[] fileBytes)
     {
+        //References to Xing Header
+        ByteBuffer header;
 
         // This is substantially faster than updating the filechannels position
         long filePointerCount = 0;
@@ -26,12 +28,12 @@ public class ByteArrayMP3AudioHeader extends MP3AudioHeader
 
                     mp3FrameHeader = MPEGFrameHeader.parseMPEGHeader(bb);
                     syncFound = true;
-                    if (XingFrame.isXingFrame(bb, mp3FrameHeader))
+                    if ((header = XingFrame.isXingFrame(bb, mp3FrameHeader))!=null)
                     {
                         try
                         {
                             // Parses Xing frame without modifying position of main buffer
-                            mp3XingFrame = XingFrame.parseXingFrame();
+                            mp3XingFrame = XingFrame.parseXingFrame(header);
                         }
                         catch (InvalidAudioFrameException ex)
                         {
