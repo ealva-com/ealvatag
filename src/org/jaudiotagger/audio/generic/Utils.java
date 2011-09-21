@@ -420,17 +420,20 @@ public class Utils
             return false;
         }
 
-        //Rename File
+        //Rename File, could fail because being  used or because trying to rename over filesystems
         final boolean result = fromFile.renameTo(toFile);
         if (!result)
         {
             // Might be trying to rename over filesystem, so try copy and delete instead
             if (copy(fromFile, toFile))
             {
+                //If copy works but deletion of original file fails then it is because the file is being used
+                //so we need to delete the file we have just created
                 boolean deleteResult=fromFile.delete();
                 if(!deleteResult)
                 {
                     logger.log(Level.SEVERE,"Unable to delete File:"+fromFile);
+                    toFile.delete();
                     return false;
                 }
                 return true;
