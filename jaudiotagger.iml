@@ -30,17 +30,10 @@
     </content>
     <orderEntry type="jdk" jdkName="1.6" jdkType="JavaSDK" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="module-library" exported="">
-      <library>
-        <CLASSES />
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/../../../Jaikoz/trunk/src/libs/junit.jar!/" />
+          <root url="jar://$MODULE_DIR$/../../../MMDSimple/src/test/libs/junit.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />

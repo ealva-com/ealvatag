@@ -76,7 +76,8 @@ public enum Mp4FieldKey
     LANGUAGE("com.apple.iTunes", "LANGUAGE", TEXT, Tagger.JAIKOZ),
     KEY("com.apple.iTunes", "KEY", TEXT, Tagger.JAIKOZ),
     FBPM("com.apple.iTunes", "fBPM", TEXT, Tagger.JAIKOZ),
-    ACOUSTID_FINGERPRINT("com.apple.iTunes", "AcoustId Fingerprint", TEXT, Tagger.PICARD),
+    ACOUSTID_FINGERPRINT("com.apple.iTunes", "Acoustid Fingerprint", TEXT, Tagger.PICARD),
+    ACOUSTID_FINGERPRINT_OLD("com.apple.iTunes", "AcoustId Fingerprint", TEXT, Tagger.PICARD),
 
     //AFAIK These arent actually used by Audio Only files, but there is nothing to prevent them being used
     CONTENT_TYPE("stik",Mp4TagFieldSubType.BYTE, INTEGER, 1),
