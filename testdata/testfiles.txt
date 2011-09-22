@@ -48,3 +48,5 @@ test95.m4a,no,368,MPE reading discno,disctotal
 test96.m4a,no,370,valid mp4 with corrupted free header preventing finding mdat atom
 test97.mp3,no,028,Audio Version 2 Layer III
 test98.m4a,no,380,Mp4 with problem with tracktotal
+test99.mp3,no,386,Mp3 that lib sees as 128 kbps when in fact it is 192 kbps
+test100.mp4,no,387,Error creating tag in mp4 file

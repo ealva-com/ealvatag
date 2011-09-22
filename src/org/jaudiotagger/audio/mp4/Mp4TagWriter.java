@@ -480,7 +480,7 @@ public class Mp4TagWriter
                //There is not enough padding in the metadata free atom anyway
                //Size meta needs to be increased by (if not writing a free atom)
                //Special Case this could actually be negative (upto -8)if is actually enough space but would
-               //not be able to write free atom properly, it doesnt matter the parent atoms would still
+               //not be able to write free atom properly, it doesn't matter the parent atoms would still
                //need their sizes adjusted.
                else
                {
@@ -510,10 +510,11 @@ public class Mp4TagWriter
                               || ((topLevelFreeSize - Mp4BoxHeader.HEADER_LENGTH < additionalMetaSizeThatWontFitWithinMetaAtom)
                               && (topLevelFreeSize != additionalMetaSizeThatWontFitWithinMetaAtom)))
                        {
-                          //We dont bother using the top level free atom coz not big enough anyway, we need to adjust offsets
+                          //We don't bother using the top level free atom coz not big enough anyway, we need to adjust offsets
                           //by the amount mdat is going to be shifted
                           if (mdatHeader.getFilePos() > moovHeader.getFilePos())
                           {
+                              logger.config("Adjusting Offsets");
                               stco.adjustOffsets(additionalMetaSizeThatWontFitWithinMetaAtom);
                           }
                        }
@@ -596,7 +597,7 @@ public class Mp4TagWriter
 
                    //If we have top level free atom that comes before mdat we might be able to use it but only if
                    //the free atom actually come after the the metadata
-                   if (topLevelFreeAtomComesBeforeMdatAtomAndAfterMetadata&&(topLevelFreePosition>startIlstWithinFile))
+                   if (topLevelFreeAtomComesBeforeMdatAtomAndAfterMetadata&&(topLevelFreePosition>=startIlstWithinFile))
                    {
                        //If the shift is less than the space available in this second free atom data size we should
                        //minimize the free atom accordingly (then we don't have to update stco atom)

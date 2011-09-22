@@ -282,7 +282,7 @@ public class Mp4InfoReader
                 }
             }
         }
-        //Set default channels if couldnt calculate it
+        //Set default channels if couldn't calculate it
         if (info.getChannelNumber() == -1)
         {
             info.setChannelNumber(2);
@@ -294,7 +294,7 @@ public class Mp4InfoReader
             info.setBitrate(128);
         }
 
-        //This is the most likley option if cant find a match
+        //This is the most likely option if cant find a match
         if (info.getEncodingType().equals(""))
         {
             info.setEncodingType(EncoderType.AAC.getDescription());

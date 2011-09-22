@@ -98,9 +98,9 @@ public class Mp4TagCreator extends AbstractTagCreator
                     {
                         processedArtwork = true;
 
-                        //Because each artwork image is held within the tag as a seperate field, but when
+                        //Because each artwork image is held within the tag as a separate field, but when
                         //they are written they are all held under a single covr box we need to do some checks
-                        //and special processing here if we have any artwork image (this code only neccessary
+                        //and special processing here if we have any artwork image (this code only necessary
                         //if we have more than 1 but do it anyway even if only have 1 image)
                         ByteArrayOutputStream covrDataBaos = new ByteArrayOutputStream();
 
