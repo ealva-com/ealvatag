@@ -150,7 +150,7 @@ public class Mp4HdlrBox extends AbstractMp4Box
      *
      * <p>Useful when writing to mp4 that previously didn't contain an mp4 meta atom</p>
      *
-     * <p>Doesnt write the child data but uses it to se the header length, only sets the atoms immediate
+     * <p>Doesnt write the child data but uses it to set the header length, only sets the atoms immediate
      * data</p
      * @return
      */
