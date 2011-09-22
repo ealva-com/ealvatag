@@ -6,6 +6,7 @@ import org.jaudiotagger.logging.ErrorMessage;
 import org.jaudiotagger.tag.*;
 import org.jaudiotagger.tag.images.Artwork;
 import org.jaudiotagger.tag.images.ArtworkFactory;
+import org.jaudiotagger.tag.mp4.Mp4FieldKey;
 import org.jaudiotagger.tag.reference.PictureTypes;
 
 import java.io.UnsupportedEncodingException;
@@ -513,6 +514,22 @@ public final class AsfTag extends AbstractTag
     public String getFirst(final FieldKey genericKey) throws KeyNotFoundException
     {
         return getValue(genericKey, 0);
+    }
+
+    /**
+     * Retrieve the first value that exists for this asfkey
+     *
+     * @param asfKey
+     * @return
+     * @throws org.jaudiotagger.tag.KeyNotFoundException
+     */
+    public String getFirst(AsfFieldKey asfKey) throws KeyNotFoundException
+    {
+        if (asfKey == null)
+        {
+            throw new KeyNotFoundException();
+        }
+        return super.getFirst(asfKey.getFieldName());
     }
 
     /**
