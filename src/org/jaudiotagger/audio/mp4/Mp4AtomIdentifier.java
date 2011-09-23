@@ -48,7 +48,7 @@ public enum Mp4AtomIdentifier
     GRPI("grpi", "OMA DRM Group ID"),
     HDLR("hdlr", "Metadata Handler"),
     HMHD("hmhd", "Hint media header, overall information (hint track only)"),
-    HNTI("hnti", ""),
+    HNTI("hnti", "Hint tracks to aid a streaming server in remuxing the M4A file to an RTP stream."),
     ICNU("icnu", "OMA DRM Icon URI"),
     ID32("ID32", "ID3 version 2 container"),
     IDAT("idat", "Item data"),
