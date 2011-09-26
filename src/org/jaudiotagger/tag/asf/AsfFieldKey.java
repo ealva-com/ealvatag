@@ -113,6 +113,7 @@ public enum AsfFieldKey
     MUSICIP_ID("MusicIP/PUID", false),
     ACOUSTID_FINGERPRINT("Acoustid/Fingerprint", false),
     ACOUSTID_FINGERPRINT_OLD("AcoustId/Fingerprint", false),
+    ACOUSTID_ID("Acoustid/Id", false),
     OCCASION("Occasion", true),
     ORIGINAL_ALBUM("WM/OriginalAlbumTitle", true),
     ORIGINAL_ARTIST("WM/OriginalArtist", true),

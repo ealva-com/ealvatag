@@ -44,12 +44,16 @@ public class Issue345Test extends AbstractTestCase
             tag.setField(tag.createField(FieldKey.DJMIXER,"djmixervalue"));
             tag.setField(tag.createField(FieldKey.PRODUCER,"producervalue"));
             tag.setField(tag.createField(FieldKey.ARRANGER,"arrangervalue"));
+            tag.setField(tag.createField(FieldKey.ACOUSTID_FINGERPRINT,"acousticfingerprint"));
+            assertEquals("acousticfingerprint",af.getTag().getFirst(FieldKey.ACOUSTID_FINGERPRINT));
+
             assertEquals("50",af.getTag().getFirst(FieldKey.RATING));
             assertEquals("mixer",af.getTag().getFirst(FieldKey.MIXER));
             assertEquals("engineervalue",af.getTag().getFirst(FieldKey.ENGINEER));
             assertEquals("djmixervalue",af.getTag().getFirst(FieldKey.DJMIXER));
             assertEquals("producervalue",af.getTag().getFirst(FieldKey.PRODUCER));
             assertEquals("arrangervalue",af.getTag().getFirst(FieldKey.ARRANGER));
+            assertEquals("acousticfingerprint",af.getTag().getFirst(FieldKey.ACOUSTID_FINGERPRINT));
             {
                 TagField tagField = af.getTag().getFirstField(FieldKey.RATING);
                 assertTrue(tagField instanceof ID3v24Frame);
@@ -136,6 +140,8 @@ public class Issue345Test extends AbstractTestCase
             tag.setField(tag.createField(FieldKey.DJMIXER,"djmixervalue"));
             tag.setField(tag.createField(FieldKey.PRODUCER,"producervalue"));
             tag.setField(tag.createField(FieldKey.ARRANGER,"arrangervalue"));
+            tag.setField(tag.createField(FieldKey.ACOUSTID_FINGERPRINT,"acousticfingerprint"));
+            assertEquals("acousticfingerprint",af.getTag().getFirst(FieldKey.ACOUSTID_FINGERPRINT));
 
             assertEquals("50",af.getTag().getFirst(FieldKey.RATING));
             assertEquals("mixer",af.getTag().getFirst(FieldKey.MIXER));
@@ -218,6 +224,8 @@ public class Issue345Test extends AbstractTestCase
             tag.setField(tag.createField(FieldKey.DJMIXER,"djmixervalue"));
             tag.setField(tag.createField(FieldKey.PRODUCER,"producervalue"));
             tag.setField(tag.createField(FieldKey.ARRANGER,"arrangervalue"));
+            tag.setField(tag.createField(FieldKey.ACOUSTID_FINGERPRINT,"acousticfingerprint"));
+            assertEquals("acousticfingerprint",af.getTag().getFirst(FieldKey.ACOUSTID_FINGERPRINT));
 
             assertEquals("50",af.getTag().getFirst(FieldKey.RATING));
             assertEquals("mixer",af.getTag().getFirst(FieldKey.MIXER));
@@ -304,6 +312,8 @@ public class Issue345Test extends AbstractTestCase
             tag.setField(tag.createField(FieldKey.DJMIXER,"djmixervalue"));
             tag.setField(tag.createField(FieldKey.PRODUCER,"producervalue"));
             tag.setField(tag.createField(FieldKey.ARRANGER,"arrangervalue"));
+            tag.setField(tag.createField(FieldKey.ACOUSTID_FINGERPRINT,"acousticfingerprint"));
+            assertEquals("acousticfingerprint",af.getTag().getFirst(FieldKey.ACOUSTID_FINGERPRINT));
 
             assertEquals("50",af.getTag().getFirst(FieldKey.RATING));
             assertEquals("mixer",af.getTag().getFirst(FieldKey.MIXER));
@@ -396,6 +406,8 @@ public class Issue345Test extends AbstractTestCase
             tag.setField(tag.createField(FieldKey.DJMIXER,"djmixervalue"));
             tag.setField(tag.createField(FieldKey.PRODUCER,"producervalue"));
             tag.setField(tag.createField(FieldKey.ARRANGER,"arrangervalue"));
+            tag.setField(tag.createField(FieldKey.ACOUSTID_FINGERPRINT,"acousticfingerprint"));
+            assertEquals("acousticfingerprint",af.getTag().getFirst(FieldKey.ACOUSTID_FINGERPRINT));
 
             assertEquals("50",af.getTag().getFirst(FieldKey.RATING));
             assertEquals("mixer",af.getTag().getFirst(FieldKey.MIXER));
@@ -441,6 +453,8 @@ public class Issue345Test extends AbstractTestCase
             tag.setField(tag.createField(FieldKey.DJMIXER,"djmixervalue"));
             tag.setField(tag.createField(FieldKey.PRODUCER,"producervalue"));
             tag.setField(tag.createField(FieldKey.ARRANGER,"arrangervalue"));
+            tag.setField(tag.createField(FieldKey.ACOUSTID_FINGERPRINT,"acousticfingerprint"));
+            assertEquals("acousticfingerprint",af.getTag().getFirst(FieldKey.ACOUSTID_FINGERPRINT));
 
             assertEquals("50",af.getTag().getFirst(FieldKey.RATING));
             assertEquals("mixer",af.getTag().getFirst(FieldKey.MIXER));
