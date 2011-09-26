@@ -46,6 +46,8 @@ public class Issue345Test extends AbstractTestCase
             tag.setField(tag.createField(FieldKey.ARRANGER,"arrangervalue"));
             tag.setField(tag.createField(FieldKey.ACOUSTID_FINGERPRINT,"acousticfingerprint"));
             assertEquals("acousticfingerprint",af.getTag().getFirst(FieldKey.ACOUSTID_FINGERPRINT));
+            tag.setField(tag.createField(FieldKey.COUNTRY,"France"));
+            assertEquals("France",af.getTag().getFirst(FieldKey.COUNTRY));
 
             assertEquals("50",af.getTag().getFirst(FieldKey.RATING));
             assertEquals("mixer",af.getTag().getFirst(FieldKey.MIXER));
@@ -142,6 +144,8 @@ public class Issue345Test extends AbstractTestCase
             tag.setField(tag.createField(FieldKey.ARRANGER,"arrangervalue"));
             tag.setField(tag.createField(FieldKey.ACOUSTID_FINGERPRINT,"acousticfingerprint"));
             assertEquals("acousticfingerprint",af.getTag().getFirst(FieldKey.ACOUSTID_FINGERPRINT));
+            tag.setField(tag.createField(FieldKey.COUNTRY,"France"));
+            assertEquals("France",af.getTag().getFirst(FieldKey.COUNTRY));
 
             assertEquals("50",af.getTag().getFirst(FieldKey.RATING));
             assertEquals("mixer",af.getTag().getFirst(FieldKey.MIXER));
@@ -226,6 +230,8 @@ public class Issue345Test extends AbstractTestCase
             tag.setField(tag.createField(FieldKey.ARRANGER,"arrangervalue"));
             tag.setField(tag.createField(FieldKey.ACOUSTID_FINGERPRINT,"acousticfingerprint"));
             assertEquals("acousticfingerprint",af.getTag().getFirst(FieldKey.ACOUSTID_FINGERPRINT));
+            tag.setField(tag.createField(FieldKey.COUNTRY,"France"));
+            assertEquals("France",af.getTag().getFirst(FieldKey.COUNTRY));
 
             assertEquals("50",af.getTag().getFirst(FieldKey.RATING));
             assertEquals("mixer",af.getTag().getFirst(FieldKey.MIXER));
@@ -314,6 +320,8 @@ public class Issue345Test extends AbstractTestCase
             tag.setField(tag.createField(FieldKey.ARRANGER,"arrangervalue"));
             tag.setField(tag.createField(FieldKey.ACOUSTID_FINGERPRINT,"acousticfingerprint"));
             assertEquals("acousticfingerprint",af.getTag().getFirst(FieldKey.ACOUSTID_FINGERPRINT));
+            tag.setField(tag.createField(FieldKey.COUNTRY,"France"));
+            assertEquals("France",af.getTag().getFirst(FieldKey.COUNTRY));
 
             assertEquals("50",af.getTag().getFirst(FieldKey.RATING));
             assertEquals("mixer",af.getTag().getFirst(FieldKey.MIXER));
@@ -408,6 +416,8 @@ public class Issue345Test extends AbstractTestCase
             tag.setField(tag.createField(FieldKey.ARRANGER,"arrangervalue"));
             tag.setField(tag.createField(FieldKey.ACOUSTID_FINGERPRINT,"acousticfingerprint"));
             assertEquals("acousticfingerprint",af.getTag().getFirst(FieldKey.ACOUSTID_FINGERPRINT));
+            tag.setField(tag.createField(FieldKey.COUNTRY,"France"));
+            assertEquals("France",af.getTag().getFirst(FieldKey.COUNTRY));
 
             assertEquals("50",af.getTag().getFirst(FieldKey.RATING));
             assertEquals("mixer",af.getTag().getFirst(FieldKey.MIXER));
@@ -455,6 +465,8 @@ public class Issue345Test extends AbstractTestCase
             tag.setField(tag.createField(FieldKey.ARRANGER,"arrangervalue"));
             tag.setField(tag.createField(FieldKey.ACOUSTID_FINGERPRINT,"acousticfingerprint"));
             assertEquals("acousticfingerprint",af.getTag().getFirst(FieldKey.ACOUSTID_FINGERPRINT));
+            tag.setField(tag.createField(FieldKey.COUNTRY,"France"));
+            assertEquals("France",af.getTag().getFirst(FieldKey.COUNTRY));
 
             assertEquals("50",af.getTag().getFirst(FieldKey.RATING));
             assertEquals("mixer",af.getTag().getFirst(FieldKey.MIXER));

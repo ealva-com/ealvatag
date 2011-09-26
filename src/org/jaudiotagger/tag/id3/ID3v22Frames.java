@@ -383,6 +383,7 @@ public class ID3v22Frames extends ID3Frames
         tagFieldToId3.put(FieldKey.ARTISTS, ID3v22FieldKey.ARTISTS);
         tagFieldToId3.put(FieldKey.ACOUSTID_FINGERPRINT, ID3v22FieldKey.ACOUSTID_FINGERPRINT);
         tagFieldToId3.put(FieldKey.ACOUSTID_ID, ID3v22FieldKey.ACOUSTID_ID);
+        tagFieldToId3.put(FieldKey.COUNTRY, ID3v22FieldKey.COUNTRY);
     }
 
     /**

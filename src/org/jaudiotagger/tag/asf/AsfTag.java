@@ -164,6 +164,7 @@ public final class AsfTag extends AbstractTag
         tagFieldToAsfField.put(FieldKey.ARRANGER, AsfFieldKey.ARRANGER);
         tagFieldToAsfField.put(FieldKey.ACOUSTID_FINGERPRINT, AsfFieldKey.ACOUSTID_FINGERPRINT);
         tagFieldToAsfField.put(FieldKey.ACOUSTID_ID, AsfFieldKey.ACOUSTID_ID);
+        tagFieldToAsfField.put(FieldKey.COUNTRY, AsfFieldKey.COUNTRY);
     }
 
     static

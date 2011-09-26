@@ -115,7 +115,9 @@ public enum VorbisCommentFieldKey
     ARRANGER("ARRANGER",EnumSet.of(Tagger.PICARD)),
     ACOUSTID_FINGERPRINT("ACOUSTID_FINGERPRINT",EnumSet.of(Tagger.PICARD)),
     ACOUSTID_ID("ACOUSTID_ID",EnumSet.of(Tagger.PICARD)),
+    COUNTRY("COUNTRY",EnumSet.of(Tagger.PICARD)),
     ;
+
 
     private String fieldName;
     private EnumSet<Tagger> taggers;

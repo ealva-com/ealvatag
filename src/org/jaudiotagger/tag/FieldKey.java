@@ -87,6 +87,7 @@ public enum FieldKey
     URL_WIKIPEDIA_RELEASE_SITE,
     YEAR,
     ACOUSTID_FINGERPRINT,
-    ACOUSTID_ID
+    ACOUSTID_ID,
+    COUNTRY
     ;
 }

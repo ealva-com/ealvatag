@@ -146,6 +146,7 @@ public enum AsfFieldKey
     DJMIXER("WM/DJMixer",false),
     MIXER("WM/Mixer",false),
     ARRANGER("WM/Arranger",false),
+    COUNTRY("WM/Country", false),
 
     // Special field for all unknown field names, which will getFields maximum support
     CUSTOM ("___CUSTOM___", true);
