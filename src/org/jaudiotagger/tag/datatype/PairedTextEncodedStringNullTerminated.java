@@ -106,20 +106,40 @@ public class PairedTextEncodedStringNullTerminated extends AbstractDataType
                     break;
                 }
 
-                //Read Value
-                TextEncodedStringNullTerminated result = new TextEncodedStringNullTerminated(identifier, frameBody);
-                result.readByteArray(arr, offset);
-                size   += result.getSize();
-                offset += result.getSize();
-                if (result.getSize() == 0)
+                try
                 {
+                    //Read Value
+                    TextEncodedStringNullTerminated result = new TextEncodedStringNullTerminated(identifier, frameBody);
+                    result.readByteArray(arr, offset);
+                    size   += result.getSize();
+                    offset += result.getSize();
+                    if (result.getSize() == 0)
+                    {
+                        break;
+                    }
+                    //Add to value
+                    ((ValuePairs) value).add((String) key.getValue(),(String) result.getValue());
+                }
+                catch (InvalidDataTypeException idte)
+                {
+                    //Value may not be null terminated if it is the last value
+                    //Read Value
+                    if(offset>=arr.length)
+                    {
+                        break;
+                    }
+                    TextEncodedStringSizeTerminated result = new TextEncodedStringSizeTerminated(identifier, frameBody);
+                    result.readByteArray(arr, offset);
+                    size   += result.getSize();
+                    offset += result.getSize();
+                    if (result.getSize() == 0)
+                    {
+                        break;
+                    }
+                    //Add to value
+                    ((ValuePairs) value).add((String) key.getValue(),(String) result.getValue());
                     break;
                 }
-
-                //Add to value
-                ((ValuePairs) value).add((String) key.getValue(),(String) result.getValue());
-
-
             }
             catch (InvalidDataTypeException idte)
             {

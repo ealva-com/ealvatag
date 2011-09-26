@@ -106,7 +106,7 @@ public class FrameBodyTIPL extends AbstractID3v2FrameBody implements ID3v24Frame
     }
 
     /**
-     * Set the text, decoded as pairs of involvee - involvment
+     * Set the text, decoded as pairs of involvee - involvement
      *
      * @param text
      */
@@ -134,7 +134,6 @@ public class FrameBodyTIPL extends AbstractID3v2FrameBody implements ID3v24Frame
      */
     public void addPair(String text)
     {
-        PairedTextEncodedStringNullTerminated.ValuePairs value = ((PairedTextEncodedStringNullTerminated) getObject(DataTypes.OBJ_TEXT)).getValue();
         StringTokenizer stz = new StringTokenizer(text, "\0");
         if (stz.countTokens()==2)
         {
