@@ -64,6 +64,10 @@ public class FlacTagReader
             
             //Read the header
             MetadataBlockHeader mbh = MetadataBlockHeader.readHeader(raf);
+            if(mbh==null)
+            {
+                break;
+            }
 
             if(logger.isLoggable(Level.CONFIG))
             {
