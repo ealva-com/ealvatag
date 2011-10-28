@@ -27,7 +27,9 @@ import java.nio.ByteBuffer;
  */
 public class MetadataBlockHeader
 {
-    public static final int HEADER_LENGTH = 4;
+    public static final int BLOCK_TYPE_LENGTH   = 1;
+    public static final int BLOCK_LENGTH        = 3;
+    public static final int HEADER_LENGTH       = BLOCK_TYPE_LENGTH + BLOCK_LENGTH;
 
     private boolean isLastBlock;
     private int dataLength;

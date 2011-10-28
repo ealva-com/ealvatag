@@ -367,4 +367,40 @@ public class FlacWriteTest extends TestCase
         assertEquals(0,tagFields.size());
 
     }
+
+     /**
+     * test read flac file with just streaminfo header
+     */
+    public void testWriteFileThatOnlyHadStreamInfoHeader()
+    {
+        Exception exceptionCaught = null;
+        try
+        {
+            File orig = new File("testdata", "test102.flac");
+            if (!orig.isFile())
+            {
+                System.out.println("Test cannot be run because test file not available");
+                return;
+            }
+            File testFile = AbstractTestCase.copyAudioToTmp("test102.flac", new File("test102.flac"));
+            AudioFile f = AudioFileIO.read(testFile);
+            FlacInfoReader infoReader = new FlacInfoReader();
+            assertEquals(1, infoReader.countMetaBlocks(f.getFile()));
+
+            f.getTag().setField(FieldKey.ARTIST,"fred");
+            f.commit();
+
+            f = AudioFileIO.read(testFile);
+
+            infoReader = new FlacInfoReader();
+            assertEquals(3, infoReader.countMetaBlocks(f.getFile()));
+            assertEquals("fred",f.getTag().getFirst(FieldKey.ARTIST));
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            exceptionCaught = e;
+        }
+        assertNull(exceptionCaught);
+    }
 }

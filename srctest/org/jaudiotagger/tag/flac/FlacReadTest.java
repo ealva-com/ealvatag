@@ -132,4 +132,32 @@ public class FlacReadTest extends TestCase
         }
         assertNull(exceptionCaught);
     }
+
+
+    /**
+     * test read flac file with no header
+     */
+    public void testReadFileWithOnlyStreamInfoHeader()
+    {
+        Exception exceptionCaught = null;
+        try
+        {
+            File orig = new File("testdata", "test102.flac");
+            if (!orig.isFile())
+            {
+                System.out.println("Test cannot be run because test file not available");
+                return;
+            }
+            File testFile = AbstractTestCase.copyAudioToTmp("test102.flac", new File("test102.flac"));
+            AudioFile f = AudioFileIO.read(testFile);
+            FlacInfoReader infoReader = new FlacInfoReader();
+            assertEquals(1, infoReader.countMetaBlocks(f.getFile()));
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            exceptionCaught = e;
+        }
+        assertNull(exceptionCaught);
+    }
 }

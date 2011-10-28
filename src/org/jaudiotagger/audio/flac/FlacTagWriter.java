@@ -170,7 +170,7 @@ public class FlacTagWriter
             //Jump over Id3 (if exists) Flac and StreamInfoBlock
             raf.seek(flacStream.getStartOfFlacInFile() + FlacStreamReader.FLAC_STREAM_IDENTIFIER_LENGTH);
 
-            //Write StreamInfo, we always write this first even if wasnt first in original spec
+            //Write StreamInfo, we always write this first even if wasn't first in original spec
             raf.write(streamInfoBlock.getHeader().getBytesWithoutIsLastBlockFlag());
             raf.write(streamInfoBlock.getData().getBytes());
 
@@ -202,10 +202,32 @@ public class FlacTagWriter
         else
         {
             //Skip to start of Audio
-            //Write FlacStreamReader and StreamInfoMetablock to new file
-            int dataStartSize = flacStream.getStartOfFlacInFile() + FlacStreamReader.FLAC_STREAM_IDENTIFIER_LENGTH + MetadataBlockHeader.HEADER_LENGTH + MetadataBlockDataStreamInfo.STREAM_INFO_DATA_LENGTH;
-            raf.seek(0);
-            rafTemp.getChannel().transferFrom(raf.getChannel(), 0, dataStartSize);
+
+            //If Flac tag contains ID3header or something before start of official Flac header copy it over
+            if(flacStream.getStartOfFlacInFile()>0)
+            {
+                raf.seek(0);
+                rafTemp.getChannel().transferFrom(raf.getChannel(), 0, flacStream.getStartOfFlacInFile());
+                rafTemp.seek(flacStream.getStartOfFlacInFile());
+            }
+            rafTemp.writeBytes(FlacStreamReader.FLAC_STREAM_IDENTIFIER);
+            rafTemp.writeByte(0);  //To ensure never set Last-metadata-block flag even if was before
+
+            int uptoStreamHeaderSize = flacStream.getStartOfFlacInFile()
+                    + FlacStreamReader.FLAC_STREAM_IDENTIFIER_LENGTH
+                    + MetadataBlockHeader.BLOCK_TYPE_LENGTH;
+            rafTemp.seek(uptoStreamHeaderSize);
+            raf.seek(uptoStreamHeaderSize);
+
+            rafTemp.getChannel().transferFrom(
+                    raf.getChannel(),
+                    uptoStreamHeaderSize,
+                    MetadataBlockHeader.BLOCK_LENGTH + MetadataBlockDataStreamInfo.STREAM_INFO_DATA_LENGTH);
+
+            int dataStartSize = flacStream.getStartOfFlacInFile()
+                    + FlacStreamReader.FLAC_STREAM_IDENTIFIER_LENGTH
+                    + MetadataBlockHeader.HEADER_LENGTH
+                    + MetadataBlockDataStreamInfo.STREAM_INFO_DATA_LENGTH;
             rafTemp.seek(dataStartSize);
 
             //Write all the metadatablocks

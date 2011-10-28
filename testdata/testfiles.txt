@@ -51,3 +51,4 @@ test98.m4a,no,380,Mp4 with problem with tracktotal
 test99.mp3,no,386,Mp3 that lib sees as 128 kbps when in fact it is 192 kbps
 test100.mp4,no,387,Error creating tag in mp4 file
 test101.mp3,no,390,Mp3 with TIPL frame with last field not null terminated
+test102.flac,no,395,Flac file with only a StreamInfo block
