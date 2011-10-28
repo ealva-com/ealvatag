@@ -242,7 +242,7 @@ public class TagOptionSingleton
     private boolean padNumbers = false;
 
     /**
-     * There are a couple of problems with the Java implementatation on Google Android, enabling this value
+     * There are a couple of problems with the Java implementation on Google Android, enabling this value
      * switches on Google workarounds
      */
     private boolean isAndroid = false;
@@ -254,14 +254,18 @@ public class TagOptionSingleton
     private boolean isEncodeUTF16BomAsLittleEndian = true;
 
     /**
-     * When this is set and using the generic interface jaudiotagger will make some adjustmensts
-     * when saving field sso they work best with the specified Tagger
-     *
+     * When this is set and using the generic interface jaudiotagger will make some adjustments
+     * when saving field so they work best with the specified Tagger
      */
      //TODO Not Actually Used yet, originally intended for dealing with ratings and genres
     private int playerCompatability=-1;
 
+    /**
+     * max size of data to copy when copying audiodata from one file to another
+     */
     private long writeChunkSize=5000000;
+
+    private boolean isWriteMp4GenresAsText=false;
 
     /**
      * Creates a new TagOptions datatype. All Options are set to their default
@@ -783,6 +787,7 @@ public class TagOptionSingleton
         isAndroid = false;
         isEncodeUTF16BomAsLittleEndian = true;
         writeChunkSize=5000000;
+        isWriteMp4GenresAsText=false;
 
         //default all lyrics3 fields to save. id3v1 fields are individual
         // settings. id3v2 fields are always looked at to save.
@@ -1141,5 +1146,19 @@ public class TagOptionSingleton
     public void setWriteChunkSize(long writeChunkSize)
     {
         this.writeChunkSize = writeChunkSize;
+    }
+
+    /**
+     * If enabled we always use the ©gen atom rather than the gnre atom when writing genres to mp4s
+     * This is known to help some android apps
+     */
+    public boolean isWriteMp4GenresAsText()
+    {
+        return isWriteMp4GenresAsText;
+    }
+
+    public void setWriteMp4GenresAsText(boolean writeMp4GenresAsText)
+    {
+        isWriteMp4GenresAsText = writeMp4GenresAsText;
     }
 }

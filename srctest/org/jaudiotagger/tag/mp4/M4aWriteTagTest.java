@@ -2063,6 +2063,38 @@ public class M4aWriteTagTest extends TestCase
 
 
     /**
+        * Testing to ensure always write custom genre if option enabled
+        */
+       public void testWriteCustomGenresAlways()
+       {
+           Exception exceptionCaught = null;
+           try
+           {
+               File testFile = AbstractTestCase.copyAudioToTmp("test5.m4a", new File("testWriteCustomGenres.m4a"));
+               AudioFile f = AudioFileIO.read(testFile);
+               Mp4Tag tag = (Mp4Tag) f.getTag();
+
+               assertEquals(TEST_FILE5_SIZE, testFile.length());
+
+               //Change value using string
+               TagOptionSingleton.getInstance().setWriteMp4GenresAsText(true);
+               tag.setField(tag.createField(FieldKey.GENRE, "Tango")); //key for classic rock
+               f.commit();
+               f = AudioFileIO.read(testFile);
+               tag = (Mp4Tag) f.getTag();
+               assertEquals("Tango", tag.getFirst(FieldKey.GENRE));
+               assertEquals("Tango", tag.getFirst(Mp4FieldKey.GENRE_CUSTOM));
+               assertEquals("", tag.getFirst(Mp4FieldKey.GENRE));   //coz doesnt exist
+           }
+           catch (Exception e)
+           {
+               e.printStackTrace();
+               exceptionCaught = e;
+           }
+           assertNull(exceptionCaught);
+       }
+
+    /**
      * Test saving to file that contains a mdat atom and then a free atom at the end of file, normally it is the other
      * way round or there is no free atom.
      */

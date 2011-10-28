@@ -141,6 +141,13 @@ public class Mp4Tag extends AbstractTag
         {
             throw new IllegalArgumentException(ErrorMessage.GENERAL_INVALID_NULL_ARGUMENT.getMsg());
         }
+
+        //Always write as text
+        if(TagOptionSingleton.getInstance().isWriteMp4GenresAsText())
+        {
+            return new Mp4TagTextField(GENRE_CUSTOM.getFieldName(), content);
+        }
+
         if (Mp4GenreField.isValidGenre(content))
         {
             return new Mp4GenreField(content);
