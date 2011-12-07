@@ -30,6 +30,7 @@ import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
 import org.jaudiotagger.tag.images.Artwork;
 import org.jaudiotagger.tag.reference.Languages;
 import org.jaudiotagger.tag.reference.PictureTypes;
+import sun.rmi.transport.ObjectTable;
 
 import java.io.*;
 import java.nio.ByteBuffer;
@@ -792,7 +793,18 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
             key = iterator.next();
             if (key.startsWith(identifier))
             {
-                result.add(frameMap.get(key));
+                Object o = frameMap.get(key);
+                if(o instanceof List)
+                {
+                    for(Object next:(List)o)
+                    {
+                        result.add(next);
+                    }
+                }
+                else
+                {
+                    result.add(o);
+                }
             }
         }
         return result.iterator();
