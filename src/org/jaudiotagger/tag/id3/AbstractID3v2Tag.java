@@ -282,7 +282,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
     /**
      * Return whether tag has frame with this identifier
      * <p/>
-     * Warning the match is only done against the identifier so if a tag contains a frame with an unsuported body
+     * Warning the match is only done against the identifier so if a tag contains a frame with an unsupported body
      * but happens to have an identifier that is valid for another version of the tag it will return true
      *
      * @param identifier frameId to lookup
@@ -1689,13 +1689,24 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
     }
 
     /**
+     * Does this tag contain a field with the specified key
+     *
+     * @param key The field id to look for.
+     * @return
+     */
+    public boolean   hasField(FieldKey key)
+    {
+        return getFirstField(key)!=null;
+    }
+
+    /**
      * Does this tag contain a field with the specified id
      *
      * @see org.jaudiotagger.tag.Tag#hasField(java.lang.String)
      */
-    public boolean hasField(String id)
+    public boolean   hasField(String id)
     {
-        return getFields(id).size() != 0;
+        return hasFrame(id);
     }
 
     /**

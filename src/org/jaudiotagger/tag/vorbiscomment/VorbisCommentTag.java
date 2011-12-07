@@ -30,6 +30,7 @@ import static org.jaudiotagger.tag.vorbiscomment.VorbisCommentFieldKey.VENDOR;
 
 import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
 import org.jaudiotagger.tag.images.ArtworkFactory;
+import org.jaudiotagger.tag.mp4.Mp4FieldKey;
 import org.jaudiotagger.tag.vorbiscomment.util.Base64Coder;
 
 import java.io.IOException;
@@ -301,6 +302,27 @@ public class VorbisCommentTag extends AbstractTag
             throw new KeyNotFoundException();
         }
         return super.getFirst(vorbisCommentKey.getFieldName());
+    }
+
+    /**
+     *
+     * @param genericKey
+     * @return
+     */
+    public boolean hasField(FieldKey genericKey)
+    {
+        VorbisCommentFieldKey vorbisFieldKey = tagFieldToOggField.get(genericKey);
+        return getFields(vorbisFieldKey.getFieldName()).size() != 0;
+    }
+
+    /**
+     *
+     * @param vorbisFieldKey
+     * @return
+     */
+    public boolean hasField(VorbisCommentFieldKey vorbisFieldKey)
+    {
+        return getFields(vorbisFieldKey.getFieldName()).size() != 0;
     }
 
     /**

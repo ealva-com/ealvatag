@@ -253,6 +253,11 @@ public abstract class AbstractTag implements Tag
         return getFields(id).size() != 0;
     }
 
+    public boolean hasField(FieldKey fieldKey)
+    {
+        return hasField(fieldKey.name());
+    }
+
     /**
      * Determines whether the given charset encoding may be used for the
      * represented tagging system.

@@ -168,6 +168,26 @@ public class Mp4Tag extends AbstractTag
         return "Mpeg4 " + super.toString();
     }
 
+    /**
+     *
+     * @param genericKey
+     * @return
+     */
+    public boolean hasField(FieldKey genericKey)
+    {
+        Mp4FieldKey mp4FieldKey = tagFieldToMp4Field.get(genericKey);
+        return getFields(mp4FieldKey.getFieldName()).size() != 0;
+    }
+
+    /**
+     *
+     * @param mp4FieldKey
+     * @return
+     */
+    public boolean hasField(Mp4FieldKey mp4FieldKey)
+    {
+        return getFields(mp4FieldKey.getFieldName()).size() != 0;
+    }
 
     /**
      * Maps the generic key to the mp4 key and return the list of values for this field

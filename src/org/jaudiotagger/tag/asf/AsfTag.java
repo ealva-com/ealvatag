@@ -672,4 +672,25 @@ public final class AsfTag extends AbstractTag
     {
         setField(createRatingField(rating));
     }
+
+    /**
+     *
+     * @param genericKey
+     * @return
+     */
+    public boolean hasField(FieldKey genericKey)
+    {
+        AsfFieldKey mp4FieldKey = tagFieldToAsfField.get(genericKey);
+        return getFields(mp4FieldKey.getFieldName()).size() != 0;
+    }
+
+     /**
+     *
+     * @param asfFieldKey
+     * @return
+     */
+    public boolean hasField(AsfFieldKey asfFieldKey)
+    {
+        return getFields(asfFieldKey.getFieldName()).size() != 0;
+    }
 }

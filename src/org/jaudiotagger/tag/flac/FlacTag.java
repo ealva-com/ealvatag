@@ -26,6 +26,11 @@ public class FlacTag implements Tag
     private VorbisCommentTag tag = null;
     private List<MetadataBlockDataPicture> images = new ArrayList<MetadataBlockDataPicture>();
 
+    public FlacTag()
+    {
+        this(VorbisCommentTag.createNewTag(), new ArrayList< MetadataBlockDataPicture >());
+    }
+
     public FlacTag(VorbisCommentTag tag, List<MetadataBlockDataPicture> images)
     {
         this.tag = tag;
@@ -83,17 +88,8 @@ public class FlacTag implements Tag
         return tag.hasCommonFields();
     }
 
-   public boolean hasField(String id)
-    {
-        if (id.equals(FieldKey.COVER_ART.name()))
-        {
-            return images.size() > 0;
-        }
-        else
-        {
-            return tag.hasField(id);
-        }
-    }
+
+
 
     /**
      * Determines whether the tag has no fields specified.<br>
@@ -461,5 +457,43 @@ public class FlacTag implements Tag
         this.deleteField(FieldKey.COVER_ART);
     }
 
+     /**
+     *
+     * @param genericKey
+     * @return
+     */
+    public boolean hasField(FieldKey genericKey)
+    {
+        if (genericKey==FieldKey.COVER_ART)
+        {
+            return images.size() > 0;
+        }
+        else
+        {
+            return tag.hasField(genericKey);
+        }
+    }
+
+    /**
+     *
+     * @param vorbisFieldKey
+     * @return
+     */
+    public boolean hasField(VorbisCommentFieldKey vorbisFieldKey)
+    {
+        return tag.hasField(vorbisFieldKey);
+    }
+
+    public boolean hasField(String id)
+    {
+       if (id.equals(FieldKey.COVER_ART.name()))
+       {
+           return images.size() > 0;
+       }
+       else
+       {
+           return tag.hasField(id);
+       }
+   }
 
 }

@@ -188,6 +188,14 @@ public interface Tag {
     public boolean hasCommonFields();
 
     /**
+     * Determines whether the tag has at least one field with the specified field key.
+     *
+     * @param fieldKey
+     * @return
+     */
+    public boolean hasField(FieldKey fieldKey);
+
+    /**
      * Determines whether the tag has at least one field with the specified
      * &quot;id&quot;.
      *

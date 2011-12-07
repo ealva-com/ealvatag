@@ -594,15 +594,32 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag
         return true;
     }
 
+    public boolean hasField(FieldKey genericKey)
+    {
+        return getFirst(genericKey).length() > 0;
+    }
+
     public boolean hasField(String id)
     {
-        //TODO
-        throw new UnsupportedOperationException("TODO:Not done yet");
+        try
+        {
+            FieldKey key = FieldKey.valueOf(id.toUpperCase());
+            return hasField(key);
+        }
+        catch(java.lang.IllegalArgumentException iae)
+        {
+            return false;
+        }
     }
 
     public boolean isEmpty()
     {
-        return !(getFirst(FieldKey.TITLE).length() > 0 || getFirstArtist().length() > 0 || getFirstAlbum().length() > 0 || getFirst(FieldKey.GENRE).length() > 0 || getFirst(FieldKey.YEAR).length() > 0 || getFirstComment().length() > 0);
+        return !(getFirst(FieldKey.TITLE).length() > 0 ||
+                getFirstArtist().length() > 0 ||
+                getFirstAlbum().length() > 0 ||
+                getFirst(FieldKey.GENRE).length() > 0 ||
+                getFirst(FieldKey.YEAR).length() > 0 ||
+                getFirstComment().length() > 0);
     }
 
 
