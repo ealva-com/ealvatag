@@ -29,6 +29,7 @@ import org.jaudiotagger.logging.ErrorMessage;
 import org.jaudiotagger.tag.*;
 import org.jaudiotagger.tag.images.Artwork;
 import org.jaudiotagger.tag.reference.GenreTypes;
+import org.jaudiotagger.tag.vorbiscomment.VorbisCommentFieldKey;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
@@ -212,6 +213,20 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag
     public void addField(TagField field)
     {
         //TODO
+    }
+
+    /**
+     * Maps the generic key to the ogg key and return the list of values for this field as strings
+     *
+     * @param genericKey
+     * @return
+     * @throws KeyNotFoundException
+     */
+    public List<String> getAll(FieldKey genericKey) throws KeyNotFoundException
+    {
+        List<String> list = new ArrayList<String>();
+        list.add(getFirst(genericKey.name()));
+        return list;
     }
 
     public List<TagField> getFields(String id)

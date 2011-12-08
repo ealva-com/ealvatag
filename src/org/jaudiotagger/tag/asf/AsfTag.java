@@ -8,6 +8,7 @@ import org.jaudiotagger.tag.images.Artwork;
 import org.jaudiotagger.tag.images.ArtworkFactory;
 import org.jaudiotagger.tag.mp4.Mp4FieldKey;
 import org.jaudiotagger.tag.reference.PictureTypes;
+import org.jaudiotagger.tag.vorbiscomment.VorbisCommentFieldKey;
 
 import java.io.UnsupportedEncodingException;
 import java.util.*;
@@ -452,7 +453,6 @@ public final class AsfTag extends AbstractTag
     /**
      * {@inheritDoc}
      */
-    @Override
     public List<TagField> getFields(final FieldKey fieldKey) throws KeyNotFoundException
     {
         if (fieldKey == null)
@@ -460,6 +460,23 @@ public final class AsfTag extends AbstractTag
             throw new KeyNotFoundException();
         }
         return super.getFields(tagFieldToAsfField.get(fieldKey).getFieldName());
+    }
+
+    /**
+     * Maps the generic key to the ogg key and return the list of values for this field as strings
+     *
+     * @param genericKey
+     * @return
+     * @throws KeyNotFoundException
+     */
+    public List<String> getAll(FieldKey genericKey) throws KeyNotFoundException
+    {
+        AsfFieldKey asfFieldKey = tagFieldToAsfField.get(genericKey);
+        if (asfFieldKey == null)
+        {
+            throw new KeyNotFoundException();
+        }
+        return super.getAll(asfFieldKey.getFieldName());
     }
 
     /**

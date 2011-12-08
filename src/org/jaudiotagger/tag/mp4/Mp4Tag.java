@@ -195,7 +195,6 @@ public class Mp4Tag extends AbstractTag
      * @param genericKey
      */
     @SuppressWarnings({"JavaDoc"})
-    @Override
     public List<TagField> getFields(FieldKey genericKey) throws KeyNotFoundException
     {
         if (genericKey == null)
@@ -205,6 +204,22 @@ public class Mp4Tag extends AbstractTag
         return super.getFields(tagFieldToMp4Field.get(genericKey).getFieldName());
     }
 
+     /**
+     * Maps the generic key to the specific key and return the list of values for this field as strings
+     *
+     * @param genericKey
+     * @return
+     * @throws KeyNotFoundException
+     */
+    public List<String> getAll(FieldKey genericKey) throws KeyNotFoundException
+    {
+        Mp4FieldKey fieldKey = tagFieldToMp4Field.get(genericKey);
+        if (fieldKey == null)
+        {
+            throw new KeyNotFoundException();
+        }
+        return super.getAll(fieldKey.getFieldName());
+    }
 
     /**
      * Retrieve the  values that exists for this mp4keyId (this is the internalid actually used)

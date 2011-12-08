@@ -30,6 +30,7 @@ import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
 import org.jaudiotagger.tag.images.Artwork;
 import org.jaudiotagger.tag.reference.Languages;
 import org.jaudiotagger.tag.reference.PictureTypes;
+import org.jaudiotagger.tag.vorbiscomment.VorbisCommentFieldKey;
 import sun.rmi.transport.ObjectTable;
 
 import java.io.*;
@@ -1655,6 +1656,24 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
             }
         }
         MP3File.getStructureFormatter().closeHeadingElement(TYPE_BODY);
+    }
+
+    /**
+     * Maps the generic key to the ogg key and return the list of values for this field as strings
+     *
+     * @param genericKey
+     * @return
+     * @throws KeyNotFoundException
+     */
+    public List<String> getAll(FieldKey genericKey) throws KeyNotFoundException
+    {
+        List<String>   vals   = new ArrayList<String>();
+        List<TagField> fields = getFields(genericKey);
+        for(TagField tagField: fields)
+        {
+            vals.add(tagField.toString());
+        }
+        return vals;
     }
 
     /**

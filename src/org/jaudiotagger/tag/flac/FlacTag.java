@@ -6,6 +6,7 @@ import org.jaudiotagger.tag.*;
 import org.jaudiotagger.tag.images.Artwork;
 import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
 import org.jaudiotagger.tag.images.ArtworkFactory;
+import org.jaudiotagger.tag.mp4.Mp4FieldKey;
 import org.jaudiotagger.tag.reference.PictureTypes;
 import org.jaudiotagger.tag.vorbiscomment.VorbisCommentTag;
 import org.jaudiotagger.tag.vorbiscomment.VorbisCommentFieldKey;
@@ -82,6 +83,24 @@ public class FlacTag implements Tag
         }
     }
 
+     /**
+     * Maps the generic key to the specific key and return the list of values for this field as strings
+     *
+     * @param genericKey
+     * @return
+     * @throws KeyNotFoundException
+     */
+    public List<String> getAll(FieldKey genericKey) throws KeyNotFoundException
+    {
+        if (genericKey==FieldKey.COVER_ART)
+        {
+            throw new UnsupportedOperationException(ErrorMessage.ARTWORK_CANNOT_BE_CREATED_WITH_THIS_METHOD.getMsg());
+        }
+        else
+        {
+            return tag.getAll(genericKey);
+        }
+    }
 
     public boolean hasCommonFields()
     {

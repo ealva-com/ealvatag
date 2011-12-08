@@ -22,6 +22,7 @@ import org.jaudiotagger.logging.ErrorMessage;
 import org.jaudiotagger.tag.*;
 import org.jaudiotagger.tag.images.Artwork;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.EnumSet;
 import java.util.List;
@@ -240,6 +241,26 @@ public abstract class GenericTag extends AbstractTag
         }
     }
 
+    /**
+     * 
+     * @param genericKey The field id.
+     * @return
+     * @throws KeyNotFoundException
+     */
+    public List<TagField> getFields(FieldKey genericKey) throws KeyNotFoundException
+    {
+        List<TagField> list = fields.get(genericKey.name());
+        if (list == null)
+        {
+            return new ArrayList<TagField>();
+        }
+        return list;
+    }
+    
+    public List<String> getAll(FieldKey genericKey) throws KeyNotFoundException
+    {
+        return super.getAll(genericKey.name());
+    }
 
     /**
      * @param genericKey

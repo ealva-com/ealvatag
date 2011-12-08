@@ -97,23 +97,18 @@ public abstract class AbstractTag implements Tag
         return list;
     }
 
-    /**
-     * @param id
-     * @return
-     */
 
-    //Needs to be overridden
-    //TODO remove
-    public List<TagField> getFields(FieldKey id) throws KeyNotFoundException
+
+    public List<String> getAll(String id) throws KeyNotFoundException
     {
-        List<TagField> list = fields.get(id.name());
-        if (list == null)
+        List<String>   fields = new ArrayList<String>();
+        List<TagField> tagFields = getFields(id);
+        for(TagField tagField:tagFields)
         {
-            return new ArrayList<TagField>();
+            fields.add(tagField.toString());
         }
-        return list;
+        return fields;
     }
-
 
     /**
      *

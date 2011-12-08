@@ -127,8 +127,6 @@ public interface Tag {
      */
     public String getFirst(String id);
 
-
-
     /**
      * Retrieve String value of the first tag field that exists for this generic key
      *
@@ -137,6 +135,15 @@ public interface Tag {
      * @throws KeyNotFoundException
      */
     public String getFirst(FieldKey id) throws KeyNotFoundException;
+
+    /**
+     * Retrieve all String values tat exist for this generic key
+     *
+     * @param id
+     * @return
+     * @throws KeyNotFoundException
+     */
+    public List<String> getAll(FieldKey id) throws KeyNotFoundException;
 
     /**
      * Retrieve String value of the nth tag field that exists for this generic key

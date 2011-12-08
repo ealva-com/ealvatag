@@ -251,7 +251,6 @@ public class VorbisCommentTag extends AbstractTag
      *
      * @param genericKey
      */
-    @Override
     public List<TagField> getFields(FieldKey genericKey) throws KeyNotFoundException
     {
         VorbisCommentFieldKey vorbisCommentFieldKey = tagFieldToOggField.get(genericKey);
@@ -260,6 +259,24 @@ public class VorbisCommentTag extends AbstractTag
             throw new KeyNotFoundException();
         }
         return super.getFields(vorbisCommentFieldKey.getFieldName());
+    }
+
+
+    /**
+     * Maps the generic key to the ogg key and return the list of values for this field as strings
+     *
+     * @param genericKey
+     * @return
+     * @throws KeyNotFoundException
+     */
+    public List<String> getAll(FieldKey genericKey) throws KeyNotFoundException
+    {
+        VorbisCommentFieldKey vorbisCommentFieldKey = tagFieldToOggField.get(genericKey);
+        if (vorbisCommentFieldKey == null)
+        {
+            throw new KeyNotFoundException();
+        }
+        return super.getAll(vorbisCommentFieldKey.getFieldName());
     }
 
     /**
