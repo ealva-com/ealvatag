@@ -309,80 +309,30 @@ public class Mp4Tag extends AbstractTag
      */
     public String getValue(FieldKey genericKey, int index) throws KeyNotFoundException
     {
-        if (genericKey == null)
+        List<TagField> fields = getFields(genericKey);
+        if(fields.size()>index)
         {
-            throw new KeyNotFoundException();
-        }
-
-        if(genericKey== FieldKey.GENRE)
-        {
-            List<TagField> genres = getFields(GENRE.getFieldName());
-            if (genres.size() == 0)
+            TagField field = fields.get(index);
+            if(genericKey==FieldKey.TRACK)
             {
-                genres = getFields(GENRE_CUSTOM.getFieldName());
+                return ((Mp4TrackField)field).getTrackNo().toString();
             }
-            if(genres.size()>index)
+            else if(genericKey==FieldKey.DISC_NO)
             {
-                return ((TagTextField)genres.get(index)).getContent();
+                return ((Mp4DiscNoField)field).getDiscNo().toString();
+            }
+            else if(genericKey==FieldKey.TRACK_TOTAL)
+            {
+                return ((Mp4TrackField)field).getTrackTotal().toString();
+            }
+            else if(genericKey==FieldKey.DISC_TOTAL)
+            {
+                return ((Mp4DiscNoField)field).getDiscTotal().toString();
             }
             else
             {
-                return "";
+                return field.toString();
             }
-
-        }
-        else if(genericKey== FieldKey.TRACK)
-        {
-            List<TagField> list = get(tagFieldToMp4Field.get(genericKey));
-            if(list.size()>index)
-            {
-                Mp4TrackField trackField = (Mp4TrackField)list.get(index);
-                if(trackField.getTrackNo()>0)
-                {
-                    return String.valueOf(trackField.getTrackNo());
-                }
-            }
-        }
-        else if(genericKey== FieldKey.TRACK_TOTAL)
-        {
-            List<TagField> list = get(tagFieldToMp4Field.get(genericKey));
-            if(list.size()>index)
-            {
-                Mp4TrackField trackField = (Mp4TrackField)list.get(index);
-                if(trackField.getTrackTotal()>0)
-                {
-                    return String.valueOf(trackField.getTrackTotal());
-                }
-            }
-        }
-        else if(genericKey== FieldKey.DISC_NO)
-        {
-            List<TagField> list = get(tagFieldToMp4Field.get(genericKey));
-            if(list.size()>index)
-            {
-                Mp4DiscNoField discField = (Mp4DiscNoField)list.get(index);
-                if(discField.getDiscNo()>0)
-                {
-                     return String.valueOf(discField.getDiscNo());
-                }
-
-            }
-        }
-        else if(genericKey== FieldKey.DISC_TOTAL)
-        {
-            List<TagField> list = get(tagFieldToMp4Field.get(genericKey));
-            if(list.size()>index)
-            {
-                Mp4DiscNoField discField = (Mp4DiscNoField)list.get(index);
-                if(discField.getDiscTotal()>0)
-                {
-                     return String.valueOf(discField.getDiscTotal());
-                }
-            }
-        }
-        else
-        {
-            return super.getItem(tagFieldToMp4Field.get(genericKey).getFieldName(), index);
         }
         return "";
     }

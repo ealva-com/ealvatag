@@ -6,6 +6,7 @@ import org.jaudiotagger.audio.AudioFileIO;
 import org.jaudiotagger.audio.mp3.MP3File;
 import org.jaudiotagger.tag.FieldKey;
 import org.jaudiotagger.tag.Tag;
+import org.jaudiotagger.tag.TagField;
 import org.jaudiotagger.tag.asf.AsfFieldKey;
 import org.jaudiotagger.tag.asf.AsfTag;
 import org.jaudiotagger.tag.flac.FlacTag;
@@ -17,6 +18,7 @@ import org.jaudiotagger.tag.vorbiscomment.VorbisCommentFieldKey;
 import org.jaudiotagger.tag.vorbiscomment.VorbisCommentTag;
 
 import java.io.File;
+import java.util.List;
 
 /**
  * Test hasField() methods
@@ -31,7 +33,7 @@ public class Issue398Test extends AbstractTestCase
             Tag tag = new ID3v24Tag();
             assertFalse(tag.hasField(FieldKey.ARTIST));
             assertFalse(tag.hasField("TPE1"));
-            assertFalse(((ID3v24Tag)tag).hasFrame("TPE1"));
+            assertFalse(((ID3v24Tag) tag).hasFrame("TPE1"));
             tag.setField(FieldKey.ARTIST, "fred");
             assertTrue(tag.hasField(FieldKey.ARTIST));
             assertTrue(tag.hasField("TPE1"));
@@ -39,14 +41,14 @@ public class Issue398Test extends AbstractTestCase
 
             assertFalse(tag.hasField(FieldKey.TRACK));
             assertFalse(tag.hasField(FieldKey.TRACK_TOTAL));
-            assertEquals("",tag.getFirst(FieldKey.TRACK));
-            assertEquals("",tag.getFirst(FieldKey.TRACK_TOTAL));
+            assertEquals("", tag.getFirst(FieldKey.TRACK));
+            assertEquals("", tag.getFirst(FieldKey.TRACK_TOTAL));
             assertNull(tag.getFirstField(FieldKey.TRACK));
             assertNull(tag.getFirstField(FieldKey.TRACK_TOTAL));
             assertEquals(0,tag.getAll(FieldKey.TRACK).size());
             assertEquals(0,tag.getAll(FieldKey.TRACK_TOTAL).size());
             tag.setField(FieldKey.TRACK,"1");
-            tag.setField(FieldKey.TRACK,"1");
+            tag.setField(FieldKey.TRACK, "1");
             assertNotNull(tag.getFirstField(FieldKey.TRACK));
             assertNull(tag.getFirstField(FieldKey.TRACK_TOTAL));
             assertTrue(tag.hasField(FieldKey.TRACK));
@@ -169,18 +171,18 @@ public class Issue398Test extends AbstractTestCase
 
             assertFalse(tag.hasField(FieldKey.TRACK));
             assertFalse(tag.hasField(FieldKey.TRACK_TOTAL));
-            assertEquals("",tag.getFirst(FieldKey.TRACK));
-            assertEquals("",tag.getFirst(FieldKey.TRACK_TOTAL));
+            assertEquals("", tag.getFirst(FieldKey.TRACK));
+            assertEquals("", tag.getFirst(FieldKey.TRACK_TOTAL));
             assertNull(tag.getFirstField(FieldKey.TRACK));
             assertNull(tag.getFirstField(FieldKey.TRACK_TOTAL));
-            assertEquals(0,tag.getAll(FieldKey.TRACK).size());
+            assertEquals(0, tag.getAll(FieldKey.TRACK).size());
             assertEquals(0,tag.getAll(FieldKey.TRACK_TOTAL).size());
             tag.setField(FieldKey.TRACK,"1");
             assertNotNull(tag.getFirstField(FieldKey.TRACK));
             assertTrue(tag.hasField(FieldKey.TRACK));
             assertFalse(tag.hasField(FieldKey.TRACK_TOTAL));
-            assertEquals("1",tag.getFirst(FieldKey.TRACK));
-            assertEquals("",tag.getFirst(FieldKey.TRACK_TOTAL));
+            assertEquals("1", tag.getFirst(FieldKey.TRACK));
+            assertEquals("", tag.getFirst(FieldKey.TRACK_TOTAL));
             assertNull(tag.getFirstField(FieldKey.TRACK_TOTAL));
             assertEquals(1,tag.getAll(FieldKey.TRACK).size());
             assertEquals(0,tag.getAll(FieldKey.TRACK_TOTAL).size());
@@ -189,6 +191,38 @@ public class Issue398Test extends AbstractTestCase
             assertTrue(tag.hasField(FieldKey.URL_DISCOGS_ARTIST_SITE));
             assertFalse(tag.hasField(FieldKey.URL_DISCOGS_RELEASE_SITE));
 
+
+        }
+        catch(Exception e)
+        {
+            caught=e;
+            e.printStackTrace();
+        }
+        assertNull(caught);
+    }
+
+     public void testMp4getValue() throws Exception
+    {
+        Exception caught = null;
+        try
+        {
+            Tag tag = new Mp4Tag();
+
+            assertFalse(tag.hasField(FieldKey.TRACK));
+            tag.setField(FieldKey.TRACK, "1");
+            tag.setField(FieldKey.TRACK_TOTAL,"15");
+            tag.addField(FieldKey.TRACK, "2");
+            tag.addField(FieldKey.TRACK_TOTAL,"10");
+            tag.addField(FieldKey.TRACK, "3");
+            assertEquals("1", tag.getFirst(FieldKey.TRACK));
+            assertNotNull(tag.getFirstField(FieldKey.TRACK));
+            assertEquals(3, tag.getAll(FieldKey.TRACK).size());
+            assertEquals("1",tag.getValue(FieldKey.TRACK, 0));
+            assertEquals("2", tag.getValue(FieldKey.TRACK, 1));
+            assertEquals(3,tag.getFields(FieldKey.TRACK).size());
+            assertEquals(2,tag.getFields(FieldKey.TRACK_TOTAL).size());
+            assertEquals("15",tag.getValue(FieldKey.TRACK_TOTAL, 0));
+            assertEquals("10",tag.getValue(FieldKey.TRACK_TOTAL, 1));
 
         }
         catch(Exception e)
