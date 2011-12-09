@@ -36,6 +36,24 @@ public class Issue398Test extends AbstractTestCase
             assertTrue(tag.hasField(FieldKey.ARTIST));
             assertTrue(tag.hasField("TPE1"));
             assertTrue(((ID3v24Tag)tag).hasFrame("TPE1"));
+
+            assertFalse(tag.hasField(FieldKey.TRACK));
+            assertFalse(tag.hasField(FieldKey.TRACK_TOTAL));
+            assertEquals("",tag.getFirst(FieldKey.TRACK));
+            assertEquals("",tag.getFirst(FieldKey.TRACK_TOTAL));
+            assertNull(tag.getFirstField(FieldKey.TRACK));
+            assertNull(tag.getFirstField(FieldKey.TRACK_TOTAL));
+            assertEquals(0,tag.getAll(FieldKey.TRACK).size());
+            assertEquals(0,tag.getAll(FieldKey.TRACK_TOTAL).size());
+            tag.setField(FieldKey.TRACK,"1");
+            tag.setField(FieldKey.TRACK,"1");
+            assertNotNull(tag.getFirstField(FieldKey.TRACK));
+            assertNull(tag.getFirstField(FieldKey.TRACK_TOTAL));
+            assertTrue(tag.hasField(FieldKey.TRACK));
+            assertFalse(tag.hasField(FieldKey.TRACK_TOTAL));
+            assertEquals(1,tag.getAll(FieldKey.TRACK).size());
+            assertEquals(0,tag.getAll(FieldKey.TRACK_TOTAL).size());
+            tag.setField(FieldKey.TRACK,"1");
         }
         catch(Exception e)
         {
@@ -58,6 +76,18 @@ public class Issue398Test extends AbstractTestCase
             assertTrue(tag.hasField(FieldKey.ARTIST));
             assertTrue(tag.hasField("TPE1"));
             assertTrue(((ID3v23Tag)tag).hasFrame("TPE1"));
+
+            assertFalse(tag.hasField(FieldKey.TRACK));
+            assertFalse(tag.hasField(FieldKey.TRACK_TOTAL));
+            assertEquals("",tag.getFirst(FieldKey.TRACK));
+            assertEquals("",tag.getFirst(FieldKey.TRACK_TOTAL));
+            assertNull(tag.getFirstField(FieldKey.TRACK));
+            assertNull(tag.getFirstField(FieldKey.TRACK_TOTAL));
+            tag.setField(FieldKey.TRACK,"1");
+            assertNotNull(tag.getFirstField(FieldKey.TRACK));
+            assertNull(tag.getFirstField(FieldKey.TRACK_TOTAL));
+            assertTrue(tag.hasField(FieldKey.TRACK));
+            assertFalse(tag.hasField(FieldKey.TRACK_TOTAL));
         }
         catch(Exception e)
         {
@@ -80,6 +110,18 @@ public class Issue398Test extends AbstractTestCase
             assertTrue(tag.hasField(FieldKey.ARTIST));
             assertTrue(tag.hasField("TP1"));
             assertTrue(((ID3v22Tag)tag).hasFrame("TP1"));
+
+            assertFalse(tag.hasField(FieldKey.TRACK));
+            assertFalse(tag.hasField(FieldKey.TRACK_TOTAL));
+            assertEquals("",tag.getFirst(FieldKey.TRACK));
+            assertEquals("",tag.getFirst(FieldKey.TRACK_TOTAL));
+            assertNull(tag.getFirstField(FieldKey.TRACK));
+            assertNull(tag.getFirstField(FieldKey.TRACK_TOTAL));
+            tag.setField(FieldKey.TRACK,"1");
+            assertNotNull(tag.getFirstField(FieldKey.TRACK));
+            assertNull(tag.getFirstField(FieldKey.TRACK_TOTAL));
+            assertTrue(tag.hasField(FieldKey.TRACK));
+            assertFalse(tag.hasField(FieldKey.TRACK_TOTAL));
         }
         catch(Exception e)
         {
@@ -124,6 +166,30 @@ public class Issue398Test extends AbstractTestCase
             assertTrue(tag.hasField(FieldKey.ARTIST));
             assertTrue(((Mp4Tag) tag).hasField(Mp4FieldKey.ARTIST));
             assertTrue(tag.hasField("©ART"));
+
+            assertFalse(tag.hasField(FieldKey.TRACK));
+            assertFalse(tag.hasField(FieldKey.TRACK_TOTAL));
+            assertEquals("",tag.getFirst(FieldKey.TRACK));
+            assertEquals("",tag.getFirst(FieldKey.TRACK_TOTAL));
+            assertNull(tag.getFirstField(FieldKey.TRACK));
+            assertNull(tag.getFirstField(FieldKey.TRACK_TOTAL));
+            assertEquals(0,tag.getAll(FieldKey.TRACK).size());
+            assertEquals(0,tag.getAll(FieldKey.TRACK_TOTAL).size());
+            tag.setField(FieldKey.TRACK,"1");
+            assertNotNull(tag.getFirstField(FieldKey.TRACK));
+            assertTrue(tag.hasField(FieldKey.TRACK));
+            assertFalse(tag.hasField(FieldKey.TRACK_TOTAL));
+            assertEquals("1",tag.getFirst(FieldKey.TRACK));
+            assertEquals("",tag.getFirst(FieldKey.TRACK_TOTAL));
+            assertNull(tag.getFirstField(FieldKey.TRACK_TOTAL));
+            assertEquals(1,tag.getAll(FieldKey.TRACK).size());
+            assertEquals(0,tag.getAll(FieldKey.TRACK_TOTAL).size());
+
+            tag.setField(FieldKey.URL_DISCOGS_ARTIST_SITE,"fred");
+            assertTrue(tag.hasField(FieldKey.URL_DISCOGS_ARTIST_SITE));
+            assertFalse(tag.hasField(FieldKey.URL_DISCOGS_RELEASE_SITE));
+
+
         }
         catch(Exception e)
         {
@@ -156,6 +222,18 @@ public class Issue398Test extends AbstractTestCase
             assertTrue(tag.hasField("MUSICBRAINZ_ORIGINALALBUMID"));
             assertTrue(((VorbisCommentTag)tag).hasField(VorbisCommentFieldKey.MUSICBRAINZ_ORIGINAL_ALBUMID));
 
+            assertFalse(tag.hasField(FieldKey.TRACK));
+            assertFalse(tag.hasField(FieldKey.TRACK_TOTAL));
+            assertEquals("",tag.getFirst(FieldKey.TRACK));
+            assertEquals("",tag.getFirst(FieldKey.TRACK_TOTAL));
+            assertNull(tag.getFirstField(FieldKey.TRACK));
+            assertNull(tag.getFirstField(FieldKey.TRACK_TOTAL));
+            tag.setField(FieldKey.TRACK,"1");
+            assertNotNull(tag.getFirstField(FieldKey.TRACK));
+            assertNull(tag.getFirstField(FieldKey.TRACK_TOTAL));
+            assertTrue(tag.hasField(FieldKey.TRACK));
+            assertFalse(tag.hasField(FieldKey.TRACK_TOTAL));
+
         }
         catch(Exception e)
         {
@@ -187,6 +265,18 @@ public class Issue398Test extends AbstractTestCase
             assertTrue(tag.hasField(FieldKey.MUSICBRAINZ_ORIGINAL_RELEASE_ID));
             assertTrue(tag.hasField("MUSICBRAINZ_ORIGINALALBUMID"));
             assertTrue(((FlacTag)tag).hasField(VorbisCommentFieldKey.MUSICBRAINZ_ORIGINAL_ALBUMID));
+
+            assertFalse(tag.hasField(FieldKey.TRACK));
+            assertFalse(tag.hasField(FieldKey.TRACK_TOTAL));
+            assertEquals("",tag.getFirst(FieldKey.TRACK));
+            assertEquals("",tag.getFirst(FieldKey.TRACK_TOTAL));
+            assertNull(tag.getFirstField(FieldKey.TRACK));
+            assertNull(tag.getFirstField(FieldKey.TRACK_TOTAL));
+            tag.setField(FieldKey.TRACK,"1");
+            assertNotNull(tag.getFirstField(FieldKey.TRACK));
+            assertNull(tag.getFirstField(FieldKey.TRACK_TOTAL));
+            assertTrue(tag.hasField(FieldKey.TRACK));
+            assertFalse(tag.hasField(FieldKey.TRACK_TOTAL));
         }
         catch(Exception e)
         {
@@ -209,6 +299,18 @@ public class Issue398Test extends AbstractTestCase
             assertTrue(tag.hasField(FieldKey.ARTIST));
             assertTrue(((AsfTag) tag).hasField(AsfFieldKey.AUTHOR));
             assertTrue(tag.hasField("AUTHOR"));
+
+            assertFalse(tag.hasField(FieldKey.TRACK));
+            assertFalse(tag.hasField(FieldKey.TRACK_TOTAL));
+            assertEquals("",tag.getFirst(FieldKey.TRACK));
+            assertEquals("",tag.getFirst(FieldKey.TRACK_TOTAL));
+            assertNull(tag.getFirstField(FieldKey.TRACK));
+            assertNull(tag.getFirstField(FieldKey.TRACK_TOTAL));
+            tag.setField(FieldKey.TRACK,"1");
+            assertNotNull(tag.getFirstField(FieldKey.TRACK));
+            assertNull(tag.getFirstField(FieldKey.TRACK_TOTAL));
+            assertTrue(tag.hasField(FieldKey.TRACK));
+            assertFalse(tag.hasField(FieldKey.TRACK_TOTAL));
         }
         catch(Exception e)
         {

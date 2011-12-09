@@ -175,8 +175,7 @@ public class Mp4Tag extends AbstractTag
      */
     public boolean hasField(FieldKey genericKey)
     {
-        Mp4FieldKey mp4FieldKey = tagFieldToMp4Field.get(genericKey);
-        return getFields(mp4FieldKey.getFieldName()).size() != 0;
+        return getFields(genericKey).size() != 0;
     }
 
     /**
@@ -201,7 +200,70 @@ public class Mp4Tag extends AbstractTag
         {
             throw new KeyNotFoundException();
         }
-        return super.getFields(tagFieldToMp4Field.get(genericKey).getFieldName());
+        Mp4FieldKey mp4FieldKey = tagFieldToMp4Field.get(genericKey);
+        List<TagField> list = getFields(mp4FieldKey.getFieldName());
+        List<TagField> filteredList = new ArrayList<TagField>();
+
+        if(genericKey== FieldKey.GENRE)
+        {
+            if (list.size() == 0)
+            {
+                list = getFields(GENRE_CUSTOM.getFieldName());
+            }
+            return list;
+        }
+        else if(genericKey==FieldKey.TRACK)
+        {
+            for(TagField next:list)
+            {
+                Mp4TrackField trackField = (Mp4TrackField)next;
+                if(trackField.getTrackNo()>0)
+                {
+                    filteredList.add(next);
+                }
+            }
+            return filteredList;
+        }
+        else if(genericKey==FieldKey.TRACK_TOTAL)
+        {
+            for(TagField next:list)
+            {
+                Mp4TrackField trackField = (Mp4TrackField)next;
+                if(trackField.getTrackTotal()>0)
+                {
+                    filteredList.add(next);
+                }
+            }
+            return filteredList;
+        }
+        else if(genericKey==FieldKey.DISC_NO)
+        {
+            for(TagField next:list)
+            {
+                Mp4DiscNoField discNoField = (Mp4DiscNoField)next;
+                if(discNoField.getDiscNo()>0)
+                {
+                    filteredList.add(next);
+                }
+            }
+            return filteredList;
+        }
+        else if(genericKey==FieldKey.DISC_TOTAL)
+        {
+            for(TagField next:list)
+            {
+                Mp4DiscNoField discNoField = (Mp4DiscNoField)next;
+                if(discNoField.getDiscTotal()>0)
+                {
+                    filteredList.add(next);
+                }
+            }
+            return filteredList;
+        }
+        else
+        {
+            return list;
+        }
     }
 
      /**
@@ -213,12 +275,13 @@ public class Mp4Tag extends AbstractTag
      */
     public List<String> getAll(FieldKey genericKey) throws KeyNotFoundException
     {
-        Mp4FieldKey fieldKey = tagFieldToMp4Field.get(genericKey);
-        if (fieldKey == null)
+        List<String>   values = new ArrayList<String>();
+        List<TagField> fields = getFields(genericKey);
+        for(TagField tagfield:fields)
         {
-            throw new KeyNotFoundException();
+            values.add(tagfield.toString());
         }
-        return super.getAll(fieldKey.getFieldName());
+        return values;
     }
 
     /**
@@ -342,11 +405,12 @@ public class Mp4Tag extends AbstractTag
 
     public Mp4TagField getFirstField(FieldKey genericKey) throws KeyNotFoundException
     {
-        if (genericKey == null)
+        List<TagField> fields = getFields(genericKey);
+        if(fields.size() == 0)
         {
-            throw new KeyNotFoundException();
+            return null;
         }
-        return (Mp4TagField)super.getFirstField(tagFieldToMp4Field.get(genericKey).getFieldName());
+        return (Mp4TagField)fields.get(0);
     }
 
     public Mp4TagField getFirstField(Mp4FieldKey mp4Key) throws KeyNotFoundException

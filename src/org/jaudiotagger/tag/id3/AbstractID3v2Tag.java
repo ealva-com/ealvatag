@@ -2501,6 +2501,66 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
             }
             return filteredList;
         }
+        else  if (genericKey == FieldKey.TRACK)
+        {
+            for (TagField tagfield : list)
+            {
+                AbstractTagFrameBody next = ((AbstractID3v2Frame) tagfield).getBody();
+                if (next instanceof FrameBodyTRCK)
+                {
+                    if (((FrameBodyTRCK) next).getTrackNo()!=null)
+                    {
+                        filteredList.add(tagfield);
+                    }
+                }
+            }
+            return filteredList;
+        }
+        else  if (genericKey == FieldKey.TRACK_TOTAL)
+        {
+            for (TagField tagfield : list)
+            {
+                AbstractTagFrameBody next = ((AbstractID3v2Frame) tagfield).getBody();
+                if (next instanceof FrameBodyTRCK)
+                {
+                    if (((FrameBodyTRCK) next).getTrackTotal()!=null)
+                    {
+                        filteredList.add(tagfield);
+                    }
+                }
+            }
+            return filteredList;
+        }
+        else  if (genericKey == FieldKey.DISC_NO)
+        {
+            for (TagField tagfield : list)
+            {
+                AbstractTagFrameBody next = ((AbstractID3v2Frame) tagfield).getBody();
+                if (next instanceof FrameBodyTPOS)
+                {
+                    if (((FrameBodyTPOS) next).getDiscNo()!=null)
+                    {
+                        filteredList.add(tagfield);
+                    }
+                }
+            }
+            return filteredList;
+        }
+        else  if (genericKey == FieldKey.DISC_TOTAL)
+        {
+            for (TagField tagfield : list)
+            {
+                AbstractTagFrameBody next = ((AbstractID3v2Frame) tagfield).getBody();
+                if (next instanceof FrameBodyTPOS)
+                {
+                    if (((FrameBodyTPOS) next).getDiscTotal()!=null)
+                    {
+                        filteredList.add(tagfield);
+                    }
+                }
+            }
+            return filteredList;
+        }
         else
         {
             return list;
