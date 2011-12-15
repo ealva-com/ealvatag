@@ -181,9 +181,7 @@ public class MP3File extends AudioFile
             {
                 fis = new FileInputStream(file);
                 fc = fis.getChannel();
-                //Read into Byte Buffer
-                bb = ByteBuffer.allocate(startByte);
-                fc.read(bb);
+                bb = fc.map(FileChannel.MapMode.READ_ONLY,0,startByte);
             }
             finally
             {
@@ -198,42 +196,54 @@ public class MP3File extends AudioFile
                 }
             }
 
-            bb.rewind();
-
-            if ((loadOptions & LOAD_IDV2TAG) != 0)
+            try
             {
-                logger.config("Attempting to read id3v2tags");
-                try
-                {
-                    this.setID3v2Tag(new ID3v24Tag(bb, file.getName()));
-                }
-                catch (TagNotFoundException ex)
-                {
-                    logger.config("No id3v24 tag found");
-                }
+                bb.rewind();
 
-                try
+                if ((loadOptions & LOAD_IDV2TAG) != 0)
                 {
-                    if (id3v2tag == null)
+                    logger.config("Attempting to read id3v2tags");
+                    try
                     {
-                        this.setID3v2Tag(new ID3v23Tag(bb, file.getName()));
+                        this.setID3v2Tag(new ID3v24Tag(bb, file.getName()));
+                    }
+                    catch (TagNotFoundException ex)
+                    {
+                        logger.config("No id3v24 tag found");
+                    }
+
+                    try
+                    {
+                        if (id3v2tag == null)
+                        {
+                            this.setID3v2Tag(new ID3v23Tag(bb, file.getName()));
+                        }
+                    }
+                    catch (TagNotFoundException ex)
+                    {
+                        logger.config("No id3v23 tag found");
+                    }
+
+                    try
+                    {
+                        if (id3v2tag == null)
+                        {
+                            this.setID3v2Tag(new ID3v22Tag(bb, file.getName()));
+                        }
+                    }
+                    catch (TagNotFoundException ex)
+                    {
+                        logger.config("No id3v22 tag found");
                     }
                 }
-                catch (TagNotFoundException ex)
+            }
+            finally
+            {
+                //Workaround for 4724038 on Windows
+                bb.clear();
+                if (bb != null && bb.isDirect())
                 {
-                    logger.config("No id3v23 tag found");
-                }
-
-                try
-                {
-                    if (id3v2tag == null)
-                    {
-                        this.setID3v2Tag(new ID3v22Tag(bb, file.getName()));
-                    }
-                }
-                catch (TagNotFoundException ex)
-                {
-                    logger.config("No id3v22 tag found");
+                    ((sun.nio.ch.DirectBuffer) bb).cleaner().clean();
                 }
             }
         }
