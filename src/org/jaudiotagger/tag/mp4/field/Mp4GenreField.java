@@ -108,15 +108,21 @@ public class Mp4GenreField extends Mp4TagTextNumberField
         dataSize = header.getDataLength();
         numbers = databox.getNumbers();
 
-        int genreId = numbers.get(0);
-        //Get value, we have to adjust index by one because iTunes labels from one instead of zero
-        content = GenreTypes.getInstanceOf().getValueForId(genreId - 1);
-
-        //Some apps set genre to invalid value, we dont disguise this by setting content to empty string we leave
-        //as null so apps can handle if they wish, but we do display a warning to make them aware.
-        if (content == null)
+        if(numbers.size()>0)
         {
-            logger.warning(ErrorMessage.MP4_GENRE_OUT_OF_RANGE.getMsg(genreId));
+            int genreId = numbers.get(0);
+            //Get value, we have to adjust index by one because iTunes labels from one instead of zero
+            content = GenreTypes.getInstanceOf().getValueForId(genreId - 1);
+            //Some apps set genre to invalid value, we dont disguise this by setting content to empty string we leave
+            //as null so apps can handle if they wish, but we do display a warning to make them aware.
+            if (content == null)
+            {
+                logger.warning(ErrorMessage.MP4_GENRE_OUT_OF_RANGE.getMsg(genreId));
+            }
+        }
+        else
+        {
+            logger.warning(ErrorMessage.MP4_NO_GENREID_FOR_GENRE.getMsg(header.getDataLength()));
         }
     }
 }

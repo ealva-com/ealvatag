@@ -48,6 +48,7 @@ public enum ErrorMessage
     MP4_UNABLE_TO_FIND_NEXT_ATOM_BECAUSE_IDENTIFIER_IS_INVALID("Unable to find next atom because identifier is invalid {0}"),
     MP4_UNABLE_TO_FIND_NEXT_ATOM_BECAUSE_LENGTH_IS_INVALID("Unable to find next atom {0} because length is invalid {1}"),
     GENERAL_INVALID_NULL_ARGUMENT("Argument cannot be null"),
+    MP4_NO_GENREID_FOR_GENRE("No genre id could be found for this genre atom with data length {0}"),
     MP4_GENRE_OUT_OF_RANGE("Genre Id {0} does not map to a valid genre"),
     MP3_PICTURE_TYPE_INVALID("Picture Type is set to invalid value:{0}"),
     MP3_REFERENCE_KEY_INVALID("{0}:No key could be found with the value of:{1}"),
