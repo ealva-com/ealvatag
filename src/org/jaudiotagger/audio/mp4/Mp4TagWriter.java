@@ -128,7 +128,8 @@ public class Mp4TagWriter
      * @param tagsHeader
      * @throws IOException
      */
-    private void writeNeroData(FileChannel fileReadChannel, FileChannel fileWriteChannel, Mp4BoxHeader tagsHeader) throws IOException
+    private void writeNeroData(FileChannel fileReadChannel, FileChannel fileWriteChannel, Mp4BoxHeader tagsHeader)
+            throws IOException, CannotWriteException
     {
         //Write from after ilst upto tags atom
         long writeBetweenIlstAndTags = tagsHeader.getFilePos() - fileReadChannel.position();
@@ -140,7 +141,7 @@ public class Mp4TagWriter
 
         //Write after tags atom
         fileReadChannel.position( tagsHeader.getFilePos()  + tagsHeader.getLength());
-        fileWriteChannel.transferFrom(fileReadChannel, fileWriteChannel.position(), fileReadChannel.size() - fileReadChannel.position());
+        writeDataInChunks(fileReadChannel,fileWriteChannel);
     }
 
     /**
@@ -694,7 +695,7 @@ public class Mp4TagWriter
        }
 
     /**
-     * #385 Write data in chunks, needing if writing large amounts of data on netwoek
+     * #385 Write data in chunks, needed if writing large amounts of data
      *
      * @param fileReadChannel
      * @param fileWriteChannel
@@ -763,7 +764,8 @@ public class Mp4TagWriter
      * @param tagsHeader
      * @throws IOException
      */
-    private void writeDataAfterIlst(FileChannel fileReadChannel, FileChannel fileWriteChannel, Mp4BoxHeader tagsHeader) throws IOException
+    private void writeDataAfterIlst(FileChannel fileReadChannel, FileChannel fileWriteChannel, Mp4BoxHeader tagsHeader)
+            throws IOException, CannotWriteException
     {
         if(tagsHeader!=null)
         {
@@ -773,7 +775,7 @@ public class Mp4TagWriter
         else
         {
             //Now write the rest of the file which won't have changed
-            fileWriteChannel.transferFrom(fileReadChannel, fileWriteChannel.position(), fileReadChannel.size() - fileReadChannel.position());
+            writeDataInChunks(fileReadChannel,fileWriteChannel);
         }
     }
 
