@@ -111,6 +111,8 @@ public enum ErrorMessage
     DO_NOT_KNOW_HOW_TO_CREATE_THIS_ATOM_TYPE("DO not know how to create this atom type {0}"),
     OGG_CONTAINS_ID3TAG("Ogg File contains invalid ID3 Tag, skipping ID3 Tag of length:{0}"),
     FLAC_CONTAINS_ID3TAG("Flac File contains invalid ID3 Tag, skipping ID3 Tag of length:{0}"),
+    ADDITIONAL_MOOV_ATOM_AT_END_OF_MP4("Additional moov atom found at end of file starting at offset {0}"),
+    ATOM_LENGTH_LARGER_THAN_DATA("The atom {0} states its data length to be {1} but there are only {2} bytes remaining in the file");
     ;
 
 

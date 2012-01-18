@@ -144,21 +144,27 @@ public class Mp4AtomTree
                 //Go down moov
                 if (boxHeader.getId().equals(Mp4AtomIdentifier.MOOV.getFieldName()))
                 {
+                    //A second Moov atom, this is illegal but may just be mess at the end of the file so ignore
+                    //and finish
+                    if(moovNode!=null&mdatNode!=null)
+                    {
+                        logger.warning(ErrorMessage.ADDITIONAL_MOOV_ATOM_AT_END_OF_MP4.getMsg(fc.position() - Mp4BoxHeader.HEADER_LENGTH));
+                        break;
+                    }
                     moovNode    = newAtom;
                     moovHeader  = boxHeader;
 
                     long filePosStart = fc.position();
                     moovBuffer = ByteBuffer.allocate(boxHeader.getDataLength());
-                    fc.read(moovBuffer);
-                    moovBuffer.rewind();
+                    int bytesRead = fc.read(moovBuffer);
 
-                    /*Maybe needed but dont have test case yet
-                    if(filePosStart + boxHeader.getDataLength() > fc.size())
+                    //If Moov atom is incomplete we are not going to be able to read this file properly
+                    if(bytesRead < boxHeader.getDataLength())
                     {
-                        throw new CannotReadException("The atom states its datalength to be "+boxHeader.getDataLength()
-                                + "but there are only "+fc.size()+"bytes in the file and already at position "+filePosStart);    
+                        String msg = ErrorMessage.ATOM_LENGTH_LARGER_THAN_DATA.getMsg(boxHeader.getId(), boxHeader.getDataLength(),bytesRead);
+                        throw new CannotReadException(msg);
                     }
-                    */
+                    moovBuffer.rewind();
                     buildChildrenOfNode(moovBuffer, newAtom);
                     fc.position(filePosStart);
                 }
