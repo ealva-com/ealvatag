@@ -11,6 +11,7 @@ test7.wma,yes,245,wma,Png artwork
 test7.mp4,yes,,Mp4 Audio File, but with three trck atoms
 test8.wma,no,268,wma,
 test9.wma,no,268,wma,Contains WM/MCDI field, (non artwork binary)
+test30.m4a,no,,Genre containing out of bounds value (149)
 test35.mp4,no,255,Mp4 with null space at the end of the file
 test37.mp4,no,257,Corrupt Mp4 with extra padding between atoms 
 test38.mp4,yes,,Usual Mp4 with all metadata files populated by Media Monkey 3
@@ -30,6 +31,7 @@ test52.mp3,yes,271,ID3v22 tag with unsychronization flag set
 test53.mp3,yes,271,ID3v22 tag with unsychronization and compressed flag set
 test54.flac:no,274:Flac tag with possibly corrupt Vorbis Comment Tag
 test55.ogg,no,279,Ogg file with setup header on new ogg page instaead of immediatley after Comment header
+test73.m4a,no,,Encoded with FAAC 1.24.1 (Feb  1 2005) UNSTABLE, hex values for genres and day atoms
 test74.mp3,yes,256,NullPointerException
 test76.ogg,yes,286,Ogg File with artwork installed using new method from http://wiki.xiph.org/index.php/VorbisComment#Cover_art
 test77.ogg,yes,286,Ogg File with artwork installed using new method from http://wiki.xiph.org/index.php/VorbisComment#Cover_art

@@ -55,6 +55,12 @@ public abstract class AudioFileWriter
     public static Logger logger = Logger
             .getLogger("org.jaudiotagger.audio.generic");
 
+    //If filename too long try recreating it with length no longer than 50 that should be safe on all operating
+    //systems
+    private static final String FILE_NAME_TOO_LONG  = "File name too long";
+    private static final String FILE_NAME_TOO_LONG2 = "The filename, directory name, or volume label syntax is incorrect";
+    private static final int FILE_NAME_TOO_LONG_SAFE_LIMIT = 50;
+
     /**
      * If not <code>null</code>, this listener is used to notify the listener
      * about modification events.<br>
@@ -68,7 +74,7 @@ public abstract class AudioFileWriter
      * @throws CannotWriteException if anything went wrong
      * @throws org.jaudiotagger.audio.exceptions.CannotReadException
      */
-    public synchronized void delete(AudioFile af) throws CannotReadException, CannotWriteException
+    public void delete(AudioFile af) throws CannotReadException, CannotWriteException
     {
         if (!af.getFile().canWrite())
         {
@@ -211,7 +217,7 @@ public abstract class AudioFileWriter
      * @throws org.jaudiotagger.audio.exceptions.CannotReadException
      * @throws java.io.IOException
      */
-    public synchronized void delete(RandomAccessFile raf, RandomAccessFile tempRaf) throws CannotReadException, CannotWriteException, IOException
+    public void delete(RandomAccessFile raf, RandomAccessFile tempRaf) throws CannotReadException, CannotWriteException, IOException
     {
         raf.seek(0);
         tempRaf.seek(0);
@@ -237,7 +243,7 @@ public abstract class AudioFileWriter
      *
      * @param listener The listener. <code>null</code> allowed to deregister.
      */
-    public synchronized void setAudioFileModificationListener(AudioFileModificationListener listener)
+    public void setAudioFileModificationListener(AudioFileModificationListener listener)
     {
         this.modificationListener = listener;
     }
@@ -300,7 +306,7 @@ public abstract class AudioFileWriter
      */
     // TODO Creates temp file in same folder as the original file, this is safe
     // but would impose a performance overhead if the original file is on a networked drive
-    public synchronized void write(AudioFile af) throws CannotWriteException
+    public void write(AudioFile af) throws CannotWriteException
     {
         logger.config("Started writing tag data for file:" + af.getFile().getName());
 
@@ -328,14 +334,37 @@ public abstract class AudioFileWriter
         // Files/Write Data set to Deny
         catch (IOException ioe)
         {
-            logger
-                    .log(Level.SEVERE, ErrorMessage.GENERAL_WRITE_FAILED_TO_CREATE_TEMPORARY_FILE_IN_FOLDER
-                            .getMsg(af.getFile().getName(), af
-                            .getFile().getParentFile()
-                            .getAbsolutePath()), ioe);
-            throw new CannotWriteException(ErrorMessage.GENERAL_WRITE_FAILED_TO_CREATE_TEMPORARY_FILE_IN_FOLDER
-                    .getMsg(af.getFile().getName(), af.getFile()
-                    .getParentFile().getAbsolutePath()));
+            if(ioe.getMessage().equals(FILE_NAME_TOO_LONG) && (af.getFile().getName().length() > FILE_NAME_TOO_LONG_SAFE_LIMIT) )
+            {
+                try
+                {
+
+                    newFile = File.createTempFile(af.getFile().getName().substring(0,FILE_NAME_TOO_LONG_SAFE_LIMIT).replace('.', '_'), TEMP_FILENAME_SUFFIX, af.getFile().getParentFile());
+
+                }
+                catch (IOException ioe2)
+                {
+                    logger
+                            .log(Level.SEVERE, ErrorMessage.GENERAL_WRITE_FAILED_TO_CREATE_TEMPORARY_FILE_IN_FOLDER
+                                    .getMsg(af.getFile().getName(), af
+                                            .getFile().getParentFile()
+                                            .getAbsolutePath()), ioe2);
+                    throw new CannotWriteException(ErrorMessage.GENERAL_WRITE_FAILED_TO_CREATE_TEMPORARY_FILE_IN_FOLDER
+                            .getMsg(af.getFile().getName(), af.getFile()
+                                    .getParentFile().getAbsolutePath()));
+                }
+            }
+            else
+            {
+                logger
+                        .log(Level.SEVERE, ErrorMessage.GENERAL_WRITE_FAILED_TO_CREATE_TEMPORARY_FILE_IN_FOLDER
+                                .getMsg(af.getFile().getName(), af
+                                .getFile().getParentFile()
+                                .getAbsolutePath()), ioe);
+                throw new CannotWriteException(ErrorMessage.GENERAL_WRITE_FAILED_TO_CREATE_TEMPORARY_FILE_IN_FOLDER
+                        .getMsg(af.getFile().getName(), af.getFile()
+                        .getParentFile().getAbsolutePath()));
+            }
         }
 
         // Open temporary file and actual file for editing
@@ -608,5 +637,4 @@ public abstract class AudioFileWriter
      * @throws org.jaudiotagger.audio.exceptions.CannotReadException
      */
     protected abstract void writeTag(Tag tag, RandomAccessFile raf, RandomAccessFile rafTemp) throws CannotReadException, CannotWriteException, IOException;
-
 }
