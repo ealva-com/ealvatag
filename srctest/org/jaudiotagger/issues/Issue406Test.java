@@ -28,7 +28,7 @@ public class Issue406Test extends AbstractTestCase
                 return;
             }
 
-            File testFile = AbstractTestCase.copyAudioToTmp("test104.m4a");
+            File testFile = AbstractTestCase.copyAudioToTmp("test103.m4a");
             AudioFile af = AudioFileIO.read(testFile);
             assertEquals(af.getTag().getFirst(FieldKey.TITLE),"London Calling");
             assertEquals(af.getTag().getFirst(FieldKey.ARTIST),"The Clash");
