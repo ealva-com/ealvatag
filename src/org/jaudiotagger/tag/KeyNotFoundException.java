@@ -3,7 +3,7 @@ package org.jaudiotagger.tag;
 /**
  * Thrown if the key cannot be found
  * <p/>
- * <p>Shoudl not happen with well written code, hence RuntimeException.
+ * <p>Should not happen with well written code, hence RuntimeException.
  */
 public class KeyNotFoundException extends RuntimeException
 {

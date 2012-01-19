@@ -694,7 +694,12 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag
      */
     public TagField createField(FieldKey genericKey, String value)
     {
-        return new ID3v1TagField(tagFieldToID3v1Field.get(genericKey).name(), value);
+        ID3v1FieldKey idv1FieldKey = tagFieldToID3v1Field.get(genericKey);
+        if(idv1FieldKey==null)
+        {
+            throw new KeyNotFoundException(ErrorMessage.INVALID_FIELD_FOR_ID3V1TAG.getMsg(genericKey.name()));
+        }
+        return new ID3v1TagField(idv1FieldKey .name(), value);
     }
 
     public String getEncoding()
