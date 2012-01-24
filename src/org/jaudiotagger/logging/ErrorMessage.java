@@ -114,6 +114,7 @@ public enum ErrorMessage
     ADDITIONAL_MOOV_ATOM_AT_END_OF_MP4("Additional moov atom found at end of file starting at offset {0}"),
     ATOM_LENGTH_LARGER_THAN_DATA("The atom {0} states its data length to be {1} but there are only {2} bytes remaining in the file"),
     INVALID_FIELD_FOR_ID3V1TAG("Invalid field {0} for ID3v1 tag"),
+    NO_AUDIO_HEADER_FOUND("No audio header found within {0}"),
     ;
 
 

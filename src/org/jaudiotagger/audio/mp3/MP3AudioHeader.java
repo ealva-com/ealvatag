@@ -21,6 +21,7 @@ package org.jaudiotagger.audio.mp3;
 
 import org.jaudiotagger.audio.AudioHeader;
 import org.jaudiotagger.audio.exceptions.InvalidAudioFrameException;
+import org.jaudiotagger.logging.ErrorMessage;
 import org.jaudiotagger.logging.Hex;
 
 import java.io.EOFException;
@@ -135,7 +136,7 @@ public class MP3AudioHeader implements AudioHeader
     {
         if (!seek(seekFile, startByte))
         {
-            throw new InvalidAudioFrameException("No audio header found within" + seekFile.getName());
+            throw new InvalidAudioFrameException(ErrorMessage.NO_AUDIO_HEADER_FOUND.getMsg(seekFile.getName()));
         }
     }
 
