@@ -2423,6 +2423,20 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
                         }
                     }
                 }
+                else if (next instanceof FrameBodyCOMM)
+                {
+                    if (((FrameBodyCOMM) next).getDescription().equals(formatKey.getSubId()))
+                    {
+                        if (list.size() == 1)
+                        {
+                            removeFrame(formatKey.getFrameId());
+                        }
+                        else
+                        {
+                            li.remove();
+                        }
+                    }
+                }
                 else if (next instanceof FrameBodyWXXX)
                 {
                     if (((FrameBodyWXXX) next).getDescription().equals(formatKey.getSubId()))
