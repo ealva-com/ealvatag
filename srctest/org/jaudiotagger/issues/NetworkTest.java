@@ -78,6 +78,7 @@ public class NetworkTest extends AbstractTestCase
         assertNull(caught);
     }
 
+    /*
     public void testDataCopySpeed() throws Exception
     {
         File file = new File("Z:\\Music\\Replay Music Recordings\\Beirut\\The Rip Tide\\Beirut-The Rip Tide-05-Payne's Bay.mp3");
@@ -101,7 +102,7 @@ public class NetworkTest extends AbstractTestCase
         fc.close();
         System.out.println("end:"+new Date());
 
-    }
+    } */
 
 
     /*public void testDataCopyBufferedStream() throws Exception
