@@ -54,7 +54,7 @@ public class WavSimpleTest extends AbstractTestCase
         Exception exceptionCaught = null;
         try
         {
-            File testFile = AbstractTestCase.copyAudioToTmp("test24bit.wav");
+            File testFile = AbstractTestCase.copyAudioToTmp("test105.wav");
             AudioFile f = AudioFileIO.read(testFile);
 
             assertEquals("529", f.getAudioHeader().getBitRate());
