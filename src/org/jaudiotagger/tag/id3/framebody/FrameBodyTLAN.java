@@ -31,7 +31,7 @@ import java.nio.ByteBuffer;
  * </ul>
  * <p/>
  * TODO:Although rare TLAN can actually return multiple language codes, at the moment they are all returned as a single
- * string via getText(), any additional parsrsing has to be done externally.
+ * string via getText(), any additional parsing has to be done externally.
  *
  * @author : Paul Taylor
  * @author : Eric Farng

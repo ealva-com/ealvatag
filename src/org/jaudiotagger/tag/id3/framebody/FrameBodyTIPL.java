@@ -47,8 +47,8 @@ public class FrameBodyTIPL extends AbstractID3v2FrameBody implements ID3v24Frame
 {
     //Standard function names, taken from Picard Mapping
     public static final String ENGINEER = "engineer";
-    public static final String MIXER = "mix";
-    public static final String DJMIXER = "DJ-mix";
+    public static final String MIXER    = "mix";
+    public static final String DJMIXER  = "DJ-mix";
     public static final String PRODUCER = "producer";
     public static final String ARRANGER = "arranger";
 

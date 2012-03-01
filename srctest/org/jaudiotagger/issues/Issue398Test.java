@@ -48,7 +48,7 @@ public class Issue398Test extends AbstractTestCase
             assertEquals(0,tag.getAll(FieldKey.TRACK).size());
             assertEquals(0,tag.getAll(FieldKey.TRACK_TOTAL).size());
             tag.setField(FieldKey.TRACK,"1");
-            tag.setField(FieldKey.TRACK, "1");
+            tag.setField(FieldKey.TRACK,"1");
             assertNotNull(tag.getFirstField(FieldKey.TRACK));
             assertNull(tag.getFirstField(FieldKey.TRACK_TOTAL));
             assertTrue(tag.hasField(FieldKey.TRACK));

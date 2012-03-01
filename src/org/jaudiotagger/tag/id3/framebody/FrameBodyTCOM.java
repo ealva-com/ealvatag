@@ -22,7 +22,10 @@ import java.nio.ByteBuffer;
 
 /**
  * Composer Text information frame.
- * <p>The 'Composer(s)' frame is intended for the name of the composer(s). They are seperated with the "/" character.
+ * <p>The 'Composer(s)' frame is intended for the name of the composer(s).
+ * They are separated with the "/" character in ID3v23.
+ * Null separated as is the norm in ID3v24
+ *
  * <p/>
  * <p>For more details, please refer to the ID3 specifications:
  * <ul>

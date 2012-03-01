@@ -336,18 +336,6 @@ public abstract class AbstractTag implements Tag
         }
     }
 
-    /**
-     * The m parameter is effectively ignored
-     *
-     * @param id
-     * @param n
-     * @param m
-     * @return
-     */
-    public String getSubValue(FieldKey id, int n, int m)
-    {
-        return getValue(id,n);
-    }
 
     /**
      * Set or add encoding

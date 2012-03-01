@@ -21,7 +21,7 @@ import java.nio.channels.FileChannel;
  */
 public class Issue327Test extends AbstractTestCase
 {
-    public void testUTF16BOMMultipleFieldSepertaors() throws Exception
+    public void testUTF16BOMMultipleFieldSeperators() throws Exception
     {
         File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3");
         MP3File f = (MP3File)AudioFileIO.read(testFile);
@@ -65,9 +65,9 @@ public class Issue327Test extends AbstractTestCase
 
         //What does jaudiotagger read the values back as
         f = (MP3File)AudioFileIO.read(testFile);
-        assertEquals("Ϟ\u0000Ϟ",f.getTag().getFirst(FieldKey.ALBUM_ARTIST));
-        assertEquals("*Ϟ*","*"+f.getTag().getSubValue(FieldKey.ALBUM_ARTIST,0,0)+"*");
-        assertEquals("*Ϟ*","*"+f.getTag().getSubValue(FieldKey.ALBUM_ARTIST,0,1)+"*");
-                
+        assertEquals("Ϟ",f.getTag().getFirst(FieldKey.ALBUM_ARTIST));
+        assertEquals("Ϟ",f.getTag().getValue(FieldKey.ALBUM_ARTIST,0));
+        assertEquals("Ϟ",f.getTag().getValue(FieldKey.ALBUM_ARTIST,1));
+
     }
 }

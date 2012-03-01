@@ -224,10 +224,9 @@ public class ID3v24TagTest extends TestCase
         //but the field count includng subvalues takes this into account and shows 2
         assertEquals(2,f.getTag().getFieldCountIncludingSubValues());
         
-        //And if we get the value back we see the whole value (both values)
-        //TODO is this what we want ?
-        assertEquals("artist1\u0000artist2",f.getTag().getFirst(FieldKey.ALBUM_ARTIST_SORT));
-        assertEquals("artist1\u0000artist2",f.getTag().getValue(FieldKey.ALBUM_ARTIST_SORT,0));
+
+        assertEquals("artist1",f.getTag().getValue(FieldKey.ALBUM_ARTIST_SORT,0));
+        assertEquals("artist2",f.getTag().getValue(FieldKey.ALBUM_ARTIST_SORT,1));
         //As can be seen from the longhand method
         ID3v24Frame frame = (ID3v24Frame)f.getTag().getFirstField(FieldKey.ALBUM_ARTIST_SORT);
         assertEquals("artist1\u0000artist2",((AbstractFrameBodyTextInfo)frame.frameBody).getText());
@@ -245,7 +244,8 @@ public class ID3v24TagTest extends TestCase
         f.commit();
         f = AudioFileIO.read(testFile);
         assertEquals(1,f.getTag().getFields(FieldKey.ALBUM_ARTIST_SORT).size());
-        assertEquals("artist1\u0000artist2",f.getTag().getFirst(FieldKey.ALBUM_ARTIST_SORT));
+        assertEquals("artist1",f.getTag().getFirst(FieldKey.ALBUM_ARTIST_SORT));
+        assertEquals("artist2",f.getTag().getValue(FieldKey.ALBUM_ARTIST_SORT,1));
         assertEquals(1,f.getTag().getFieldCount());
         assertEquals(2,f.getTag().getFieldCountIncludingSubValues());
         assertEquals(1,((AbstractID3v2Tag)f.getTag()).getFieldCount());

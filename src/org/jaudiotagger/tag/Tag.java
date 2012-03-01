@@ -137,7 +137,7 @@ public interface Tag {
     public String getFirst(FieldKey id) throws KeyNotFoundException;
 
     /**
-     * Retrieve all String values tat exist for this generic key
+     * Retrieve all String values that exist for this generic key
      *
      * @param id
      * @return
@@ -153,20 +153,6 @@ public interface Tag {
      * @return
      */
     public String getValue(FieldKey id, int n);
-
-    /**
-     * Retrieve String value of the mth field within the nth tag field that exists for this id
-     *
-     * <p>This method id useful for formats that hold multiple values within one field, namely ID3v2 can
-     * hold multiple values within one Text Frame. the #getValue() method will return all values within the
-     * frame but this method lets you retrieve just the individual values.
-     * </p>
-     *
-     * @param id
-     * @param n
-     * @return
-     */
-    public String getSubValue(FieldKey id, int n, int m);
 
     /**
      * Retrieve the first field that exists for this format specific key

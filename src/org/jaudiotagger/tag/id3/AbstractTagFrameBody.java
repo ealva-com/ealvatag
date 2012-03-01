@@ -121,8 +121,8 @@ public abstract class AbstractTagFrameBody extends AbstractTagItem
 
     /**
      *
-     * @return the text value that the user would expect to see for this framebody type, this should be overrridden
-     * for all framebodies
+     * @return the text value that the user would expect to see for this framebody type, this should be overridden
+     * for all frame-bodies
      */
     public String getUserFriendlyValue()
     {

@@ -63,7 +63,7 @@ public class FrameBodyTXXX extends AbstractFrameBodyTextInfo implements ID3v24Fr
     public static final String MUSICBRAINZ_ALBUM_STATUS     = "MusicBrainz Album Status";
     public static final String MUSICBRAINZ_ALBUM_COUNTRY    = "MusicBrainz Album Release Country";
     public static final String MUSICBRAINZ_WORKID           = "MusicBrainz Work Id";
-    public static final String AMAZON_ASIN                  = "ASIN";
+    public static final String AMAZON_ASIN                    = "ASIN";
     public static final String MUSICIP_ID                   = "MusicIP PUID";
     public static final String BARCODE                      = "BARCODE";
     public static final String CATALOG_NO                   = "CATALOGNUMBER";

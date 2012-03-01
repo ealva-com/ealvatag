@@ -275,12 +275,10 @@ public class NewInterfaceTest extends TestCase
         af.getTag().addField(FieldKey.ALBUM,ALBUM_TEST_STRING2);
         af.commit();
         af = AudioFileIO.read(testFile);
-        assertEquals(ALBUM_TEST_STRING + "\u0000" + ALBUM_TEST_STRING2, af.getTag().getFirst(FieldKey.ALBUM));
-        assertEquals(ALBUM_TEST_STRING + "\u0000" + ALBUM_TEST_STRING2, af.getTag().getValue(FieldKey.ALBUM,0));
-        assertEquals(ALBUM_TEST_STRING, af.getTag().getSubValue(FieldKey.ALBUM,0,0));
-        assertEquals(ALBUM_TEST_STRING2, af.getTag().getSubValue(FieldKey.ALBUM,0,1));
-        assertEquals(ALBUM_TEST_STRING + "\u0000" + ALBUM_TEST_STRING2, ((ID3v24Tag) af.getTag()).getFirst(ID3v24FieldKey.ALBUM));
-        assertEquals(ALBUM_TEST_STRING + "\u0000" + ALBUM_TEST_STRING2,((TagTextField)af.getTag().getFirstField(FieldKey.ALBUM)).getContent());
+        assertEquals(ALBUM_TEST_STRING, af.getTag().getFirst(FieldKey.ALBUM));
+        assertEquals(ALBUM_TEST_STRING2,af.getTag().getValue(FieldKey.ALBUM,1));
+        assertEquals(ALBUM_TEST_STRING, ((ID3v24Tag) af.getTag()).getFirst(ID3v24FieldKey.ALBUM));
+        assertEquals("mellow gold\0odelay",((TagTextField)af.getTag().getFirstField(FieldKey.ALBUM)).getContent());
         assertEquals(1, af.getTag().getFields(FieldKey.ALBUM).size());
 
         //And can replace existing value
@@ -605,11 +603,8 @@ public class NewInterfaceTest extends TestCase
         af.getTag().addField(FieldKey.ALBUM,ALBUM_TEST_STRING2);
         af.commit();
         af = AudioFileIO.read(testFile);
-        assertEquals(ALBUM_TEST_STRING + "\u0000" + ALBUM_TEST_STRING2, af.getTag().getFirst(FieldKey.ALBUM));
-        assertEquals(ALBUM_TEST_STRING + "\u0000" + ALBUM_TEST_STRING2, af.getTag().getFirst(FieldKey.ALBUM));
-        assertEquals(ALBUM_TEST_STRING, af.getTag().getSubValue(FieldKey.ALBUM,0,0));
-        assertEquals(ALBUM_TEST_STRING2, af.getTag().getSubValue(FieldKey.ALBUM,0,1));
-        assertEquals(ALBUM_TEST_STRING + "\u0000" + ALBUM_TEST_STRING2, ((ID3v23Tag) af.getTag()).getFirst(ID3v23FieldKey.ALBUM));
+        assertEquals(ALBUM_TEST_STRING, af.getTag().getFirst(FieldKey.ALBUM));
+        assertEquals(ALBUM_TEST_STRING, ((ID3v23Tag) af.getTag()).getFirst(ID3v23FieldKey.ALBUM));
         assertEquals(1, af.getTag().getFields(FieldKey.ALBUM).size());
 
         //But can replace existing value
@@ -854,11 +849,10 @@ public class NewInterfaceTest extends TestCase
         af.getTag().addField(FieldKey.ALBUM,ALBUM_TEST_STRING2);
         af.commit();
         af = AudioFileIO.read(testFile);
-        assertEquals(ALBUM_TEST_STRING + "\u0000" + ALBUM_TEST_STRING2, af.getTag().getFirst(FieldKey.ALBUM));
-        assertEquals(ALBUM_TEST_STRING + "\u0000" + ALBUM_TEST_STRING2, af.getTag().getFirst(FieldKey.ALBUM));
-        assertEquals(ALBUM_TEST_STRING, af.getTag().getSubValue(FieldKey.ALBUM,0,0));
-        assertEquals(ALBUM_TEST_STRING2, af.getTag().getSubValue(FieldKey.ALBUM,0,1));
-        assertEquals(ALBUM_TEST_STRING + "\u0000" + ALBUM_TEST_STRING2, ((ID3v22Tag) af.getTag()).getFirst(ID3v22FieldKey.ALBUM));
+        assertEquals(ALBUM_TEST_STRING, af.getTag().getFirst(FieldKey.ALBUM));
+        assertEquals(ALBUM_TEST_STRING, af.getTag().getValue(FieldKey.ALBUM,0));
+        assertEquals(ALBUM_TEST_STRING2, af.getTag().getValue(FieldKey.ALBUM,1));
+        assertEquals(ALBUM_TEST_STRING, ((ID3v22Tag) af.getTag()).getFirst(ID3v22FieldKey.ALBUM));
         assertEquals(1, af.getTag().getFields(FieldKey.ALBUM).size());
 
         //But can replace existing value

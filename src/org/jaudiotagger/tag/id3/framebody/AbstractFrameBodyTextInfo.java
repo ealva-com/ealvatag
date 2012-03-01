@@ -32,6 +32,7 @@ import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
 
 import java.io.ByteArrayOutputStream;
 import java.nio.ByteBuffer;
+import java.util.List;
 
 /**
  * Abstract representation of a Text Frame
@@ -179,6 +180,11 @@ public abstract class AbstractFrameBodyTextInfo extends AbstractID3v2FrameBody
         return text.getValueAtIndex(index);
     }
 
+    public List<String> getValues()
+    {
+        TextEncodedStringSizeTerminated text = (TextEncodedStringSizeTerminated) getObject(DataTypes.OBJ_TEXT);
+        return text.getValues();
+    }
     /**
      * Add additional value to value
      *

@@ -643,7 +643,7 @@ public abstract class AbstractID3v2Frame extends AbstractTagFrame implements Tag
      */
     public void setContent(String content)
     {
-        throw new UnsupportedOperationException("Not implemeneted please use the generic tag methods for setting content");
+        throw new UnsupportedOperationException("Not implemented please use the generic tag methods for setting content");
     }
 
 }

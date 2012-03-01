@@ -246,19 +246,6 @@ public class FlacTag implements Tag
         }
     }
 
-     /**
-     * The m parameter is effectively ignored
-     *
-     * @param id
-     * @param n
-     * @param m
-     * @return
-     */
-    public String getSubValue(FieldKey id, int n, int m)
-    {
-        return getValue(id,n);
-    }
-
     public String getValue(FieldKey id,int index) throws KeyNotFoundException
     {
         if (id.equals(FieldKey.COVER_ART))
