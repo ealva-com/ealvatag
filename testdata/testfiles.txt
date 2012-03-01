@@ -56,3 +56,4 @@ test101.mp3,no,390,Mp3 with TIPL frame with last field not null terminated
 test102.flac,no,395,Flac file with only a StreamInfo block
 test103.m4a,no,406,iTunes 4 file with invalid second Moov atom	
 test104.m4A,no,,File with no MDAT
+test105.wav,yes,408,24 bit Wav

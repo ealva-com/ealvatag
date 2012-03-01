@@ -41,7 +41,7 @@ public class WavInfoReader
         WavRIFFHeader wh = new WavRIFFHeader(b);
         if (wh.isValid())
         {
-            b = new byte[24];
+            b = new byte[34];
             raf.read(b);
 
             WavFormatHeader wfh = new WavFormatHeader(b);
@@ -52,7 +52,7 @@ public class WavInfoReader
                 info.setPreciseLength(((float) raf.length() - (float) 36) / wfh.getBytesPerSecond());
                 info.setChannelNumber(wfh.getChannelNumber());
                 info.setSamplingRate(wfh.getSamplingRate());
-                info.setEncodingType("WAV-RIFF " + wfh.getBitrate() + " bits");
+                info.setEncodingType("WAV-RIFF " + wfh.getBitsPerSample() + " bits");
                 info.setExtraEncodingInfos("");
                 info.setBitrate(wfh.getBytesPerSecond() * 8 / 1000);
                 info.setVariableBitRate(false);

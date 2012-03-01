@@ -49,6 +49,40 @@ public class WavSimpleTest extends AbstractTestCase
         assertNull(exceptionCaught);
     }
 
+    public void testRead24BitFile()
+    {
+        Exception exceptionCaught = null;
+        try
+        {
+            File testFile = AbstractTestCase.copyAudioToTmp("test24bit.wav");
+            AudioFile f = AudioFileIO.read(testFile);
+
+            assertEquals("529", f.getAudioHeader().getBitRate());
+            assertEquals("WAV-RIFF 24 bits", f.getAudioHeader().getEncodingType());
+            assertEquals("1", f.getAudioHeader().getChannels());
+            assertEquals("22050", f.getAudioHeader().getSampleRate());
+
+
+            assertTrue(f.getTag() instanceof GenericTag);        //TODO Flawed concept should be wavtag
+            WavTag tag = (WavTag) f.getTag();
+
+            //Ease of use methods for common fields
+            assertEquals("", tag.getFirst(FieldKey.ARTIST));
+            assertEquals("", tag.getFirst(FieldKey.ALBUM));
+            assertEquals("", tag.getFirst(FieldKey.TITLE));
+            assertEquals("", tag.getFirst(FieldKey.COMMENT));
+            assertEquals("", tag.getFirst(FieldKey.YEAR));
+            assertEquals("", tag.getFirst(FieldKey.TRACK));
+            assertEquals("", tag.getFirst(FieldKey.GENRE));
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            exceptionCaught = e;
+        }
+        assertNull(exceptionCaught);
+    }
+
     /* Doesnt support writing currently
      public void testWriteFile()
     {
