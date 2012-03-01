@@ -636,29 +636,14 @@ public class ID3v22Tag extends AbstractID3v2Tag
             throw new KeyNotFoundException();
         }
 
-        FrameAndSubId frameAndSubId = new FrameAndSubId(id3v22FieldKey.getFrameId(), id3v22FieldKey.getSubId());
-        if (id3v22FieldKey == ID3v22FieldKey.TRACK)
+        FieldKey genericKey = ID3v22Frames.getInstanceOf().getGenericKeyFromId3(id3v22FieldKey);
+        if(genericKey!=null)
         {
-            AbstractID3v2Frame frame = getFirstField(frameAndSubId.getFrameId());
-            return String.valueOf(((FrameBodyTRCK)frame.getBody()).getTrackNo());
-        }
-        else if (id3v22FieldKey == ID3v22FieldKey.TRACK_TOTAL)
-        {
-            AbstractID3v2Frame frame = getFirstField(frameAndSubId.getFrameId());
-            return String.valueOf(((FrameBodyTRCK)frame.getBody()).getTrackTotal());
-        }
-        else if (id3v22FieldKey == ID3v22FieldKey.DISC_NO)
-        {
-            AbstractID3v2Frame frame = getFirstField(frameAndSubId.getFrameId());
-            return String.valueOf(((FrameBodyTPOS)frame.getBody()).getDiscNo());
-        }
-        else if (id3v22FieldKey == ID3v22FieldKey.DISC_TOTAL)
-        {
-            AbstractID3v2Frame frame = getFirstField(frameAndSubId.getFrameId());
-            return String.valueOf(((FrameBodyTPOS)frame.getBody()).getDiscTotal());
+            return super.getFirst(genericKey);
         }
         else
         {
+            FrameAndSubId frameAndSubId = new FrameAndSubId(id3v22FieldKey.getFrameId(), id3v22FieldKey.getSubId());
             return super.doGetValueAtIndex(frameAndSubId, 0);
         }
     }

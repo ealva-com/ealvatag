@@ -18,6 +18,7 @@ package org.jaudiotagger.tag.id3;
 import org.jaudiotagger.tag.FieldKey;
 
 import java.util.EnumMap;
+import java.util.Map;
 
 /**
  * Defines ID3v22 frames and collections that categorise frames within an ID3v22 tag.
@@ -110,6 +111,12 @@ public class ID3v22Frames extends ID3Frames
      * Maps from Generic key to ID3 key
      */
     protected EnumMap<FieldKey, ID3v22FieldKey> tagFieldToId3 = new EnumMap<FieldKey, ID3v22FieldKey>(FieldKey.class);
+
+    /**
+     * Maps from ID3 key to Generic key
+     */
+    protected EnumMap<ID3v22FieldKey, FieldKey> id3ToTagField = new EnumMap<ID3v22FieldKey,FieldKey>(ID3v22FieldKey.class);
+
 
     public static ID3v22Frames getInstanceOf()
     {
@@ -384,6 +391,11 @@ public class ID3v22Frames extends ID3Frames
         tagFieldToId3.put(FieldKey.ACOUSTID_FINGERPRINT, ID3v22FieldKey.ACOUSTID_FINGERPRINT);
         tagFieldToId3.put(FieldKey.ACOUSTID_ID, ID3v22FieldKey.ACOUSTID_ID);
         tagFieldToId3.put(FieldKey.COUNTRY, ID3v22FieldKey.COUNTRY);
+
+        for(Map.Entry<FieldKey,ID3v22FieldKey> next:tagFieldToId3.entrySet())
+        {
+            id3ToTagField.put(next.getValue(), next.getKey());
+        }
     }
 
     /**
@@ -395,5 +407,13 @@ public class ID3v22Frames extends ID3Frames
         return tagFieldToId3.get(genericKey);
     }
 
-
+    /**
+     * Get generic key for ID3 field key
+     * @param fieldKey
+     * @return
+     */
+    public FieldKey getGenericKeyFromId3(ID3v22FieldKey fieldKey)
+    {
+        return id3ToTagField.get(fieldKey);
+    }
 }

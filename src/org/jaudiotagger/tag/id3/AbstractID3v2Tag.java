@@ -2451,7 +2451,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
                         }
                     }
                 }
-                //A single TIPL frame is used for multiple fields, so we just delete the matching pair rather than
+                //A single TIPL frame is used for multiple fields, so we just delete the matching pairs rather than
                 //deleting the frame itself unless now empty
                 else if (next instanceof FrameBodyTIPL)
                 {
@@ -2470,7 +2470,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
                         removeFrame(formatKey.getFrameId());
                     }
                 }
-                //A single IPLS frame is used for multiple fields, so we just delete the matching pair rather than
+                //A single IPLS frame is used for multiple fields, so we just delete the matching pairs rather than
                 //deleting the frame itself unless now empty 
                 else if (next instanceof FrameBodyIPLS)
                 {
