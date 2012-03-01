@@ -265,16 +265,19 @@ public class ID3v24TagTest extends TestCase
         assertEquals(0,tagFields.size());
         f.getTag().addField(FieldKey.BARCODE,"xxxxxxxxxxxxxx");
         f.getTag().addField(FieldKey.BARCODE,"yyyyyyyyyyyyyy");
-        assertEquals(2,f.getTag().getFields(FieldKey.BARCODE).size());
-        assertEquals(2,f.getTag().getFieldCount());
+        assertEquals(1,f.getTag().getFields(FieldKey.BARCODE).size());
+        assertEquals(1,f.getTag().getFieldCount());
         tagFields = f.getTag().getFields(FieldKey.BARCODE);
-        assertEquals(2,tagFields.size());
+        assertEquals(1,tagFields.size());
+        assertEquals(2,f.getTag().getAll(FieldKey.BARCODE).size());
         f.commit();
         f = AudioFileIO.read(testFile);
-        assertEquals(2,f.getTag().getFields(FieldKey.BARCODE).size());
-        assertEquals(2,f.getTag().getFieldCount());
+        assertEquals(1,f.getTag().getFields(FieldKey.BARCODE).size());
+        assertEquals(1,f.getTag().getFieldCount());
         tagFields = f.getTag().getFields(FieldKey.BARCODE);
-        assertEquals(2,tagFields.size());
+        assertEquals(1,tagFields.size());
+        assertEquals(2,f.getTag().getAll(FieldKey.BARCODE).size());
+
     }
 
     /** TXXX frames are not treated as text frames regarding nul serpretd strings, only allowed one string
@@ -313,18 +316,18 @@ public class ID3v24TagTest extends TestCase
         assertEquals(0,tagFields.size());
         f.getTag().addField(FieldKey.URL_OFFICIAL_RELEASE_SITE,"http://www,test.org");
         f.getTag().addField(FieldKey.URL_OFFICIAL_RELEASE_SITE,"http://www,test.org");
-        assertEquals(2,f.getTag().getFields(FieldKey.URL_OFFICIAL_RELEASE_SITE).size());
-        assertEquals(2,f.getTag().getFieldCount());
-        assertEquals(2,((AbstractID3v2Tag)f.getTag()).getFieldCount());
+        assertEquals(1,f.getTag().getFields(FieldKey.URL_OFFICIAL_RELEASE_SITE).size());
+        assertEquals(1,f.getTag().getFieldCount());
+        assertEquals(1,((AbstractID3v2Tag)f.getTag()).getFieldCount());
         tagFields = f.getTag().getFields(FieldKey.URL_OFFICIAL_RELEASE_SITE);
         //assertEquals(1,tagFields.size());
         f.commit();
         f = AudioFileIO.read(testFile);
-        assertEquals(2,f.getTag().getFields(FieldKey.URL_OFFICIAL_RELEASE_SITE).size());
-        assertEquals(2,f.getTag().getFieldCount());
-        assertEquals(2,((AbstractID3v2Tag)f.getTag()).getFieldCount());
+        assertEquals(1,f.getTag().getFields(FieldKey.URL_OFFICIAL_RELEASE_SITE).size());
+        assertEquals(1,f.getTag().getFieldCount());
+        assertEquals(1,((AbstractID3v2Tag)f.getTag()).getFieldCount());
         tagFields = f.getTag().getFields(FieldKey.URL_OFFICIAL_RELEASE_SITE);
-        assertEquals(2,tagFields.size());
+        assertEquals(1,tagFields.size());
     }
 
      public void testDeleteFields() throws Exception

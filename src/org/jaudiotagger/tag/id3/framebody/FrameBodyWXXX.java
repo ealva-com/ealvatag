@@ -31,6 +31,7 @@ import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
 
 import java.io.ByteArrayOutputStream;
 import java.nio.ByteBuffer;
+import java.util.List;
 
 /**
  * Represents a user defined url
@@ -134,5 +135,61 @@ public class FrameBodyWXXX extends AbstractFrameBodyUrlLink implements ID3v24Fra
         objectList.add(new NumberHashMap(DataTypes.OBJ_TEXT_ENCODING, this, TextEncoding.TEXT_ENCODING_FIELD_SIZE));
         objectList.add(new TextEncodedStringNullTerminated(DataTypes.OBJ_DESCRIPTION, this));
         objectList.add(new StringSizeTerminated(DataTypes.OBJ_URLLINK, this));
+    }
+
+    /**
+     * Retrieve the complete text String but without any trailing nulls
+     *
+     * If multiple values are held these will be returned, needless trailing nulls will not be returned
+     *
+     * @return the text string
+     */
+    public String getUrlLinkWithoutTrailingNulls()
+    {
+        TextEncodedStringSizeTerminated text = (TextEncodedStringSizeTerminated) getObject(DataTypes.OBJ_URLLINK);
+        return text.getValueWithoutTrailingNull();
+    }
+
+    /**
+     * Get first value
+     *
+     * @return value at index 0
+     */
+    public String getFirstUrlLink()
+    {
+        TextEncodedStringSizeTerminated text = (TextEncodedStringSizeTerminated) getObject(DataTypes.OBJ_URLLINK);
+        return text.getValueAtIndex(0);
+    }
+
+    /**
+     * Get text value at index
+     *
+     * When a multiple values are stored within a single text frame this method allows access to any of the
+     * individual values.
+     *
+     * @param index
+     * @return value at index
+     */
+    public String getUrlLinkAtIndex(int index)
+    {
+        TextEncodedStringSizeTerminated text = (TextEncodedStringSizeTerminated) getObject(DataTypes.OBJ_URLLINK);
+        return text.getValueAtIndex(index);
+    }
+
+    public List<String> getUrlLinks()
+    {
+        TextEncodedStringSizeTerminated text = (TextEncodedStringSizeTerminated) getObject(DataTypes.OBJ_URLLINK);
+        return text.getValues();
+    }
+
+    /**
+     * Add additional value to value
+     *
+     * @param value at index
+     */
+    public void addUrlLink(String value)
+    {
+        TextEncodedStringSizeTerminated text = (TextEncodedStringSizeTerminated) getObject(DataTypes.OBJ_URLLINK);
+        text.addValue(value);
     }
 }

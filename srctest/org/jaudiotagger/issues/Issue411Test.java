@@ -187,8 +187,8 @@ public class Issue411Test extends AbstractTestCase
             //No of Barcode Values
             assertEquals(2,af.getTag().getAll(FieldKey.BARCODE).size());
 
-            //Actual No Of Fields used to store barcode, Should be only one, see Bug 412
-            assertEquals(2, af.getTag().getFields(FieldKey.BARCODE).size());
+            //Actual No Of Fields used to store barcode, Should be only one
+            assertEquals(1, af.getTag().getFields(FieldKey.BARCODE).size());
 
 
         }

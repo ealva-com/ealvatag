@@ -25,6 +25,7 @@ import org.jaudiotagger.tag.reference.Languages;
 
 import java.io.ByteArrayOutputStream;
 import java.nio.ByteBuffer;
+import java.util.List;
 
 /**
  * Comments frame.
@@ -263,6 +264,70 @@ public class FrameBodyCOMM extends AbstractID3v2FrameBody implements ID3v24Frame
             this.setTextEncoding(ID3TextEncodingConversion.getUnicodeTextEncoding(getHeader()));
         }
         super.write(tagBuffer);
+    }
+
+    /**
+     * Retrieve the complete text String but without any trailing nulls
+     *
+     * If multiple values are held these will be returned, needless trailing nulls will not be returned
+     *
+     * @return the text string
+     */
+    public String getTextWithoutTrailingNulls()
+    {
+        TextEncodedStringSizeTerminated text = (TextEncodedStringSizeTerminated) getObject(DataTypes.OBJ_TEXT);
+        return text.getValueWithoutTrailingNull();
+    }
+
+    /**
+     * Get first value
+     *
+     * @return value at index 0
+     */
+    public String getFirstTextValue()
+    {
+        TextEncodedStringSizeTerminated text = (TextEncodedStringSizeTerminated) getObject(DataTypes.OBJ_TEXT);
+        return text.getValueAtIndex(0);
+    }
+
+    /**
+     * Get text value at index
+     *
+     * When a multiple values are stored within a single text frame this method allows access to any of the
+     * individual values.
+     *
+     * @param index
+     * @return value at index
+     */
+    public String getValueAtIndex(int index)
+    {
+        TextEncodedStringSizeTerminated text = (TextEncodedStringSizeTerminated) getObject(DataTypes.OBJ_TEXT);
+        return text.getValueAtIndex(index);
+    }
+
+    public List<String> getValues()
+    {
+        TextEncodedStringSizeTerminated text = (TextEncodedStringSizeTerminated) getObject(DataTypes.OBJ_TEXT);
+        return text.getValues();
+    }
+    /**
+     * Add additional value to value
+     *
+     * @param value at index
+     */
+    public void addTextValue(String value)
+    {
+        TextEncodedStringSizeTerminated text = (TextEncodedStringSizeTerminated) getObject(DataTypes.OBJ_TEXT);
+        text.addValue(value);
+    }
+
+    /**
+     * @return number of text values, usually one
+     */
+    public int getNumberOfValues()
+    {
+        TextEncodedStringSizeTerminated text = (TextEncodedStringSizeTerminated) getObject(DataTypes.OBJ_TEXT);
+        return text.getNumberOfValues();
     }
 
 }
