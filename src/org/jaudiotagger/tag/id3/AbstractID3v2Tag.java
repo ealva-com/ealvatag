@@ -604,6 +604,14 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
         }
     }
 
+    /**
+     * Add another frame to the map
+     *
+     * @param list
+     * @param frameMap
+     * @param existingFrame
+     * @param frame
+     */
     private void addNewFrameToMap(List<TagField> list, HashMap frameMap, AbstractID3v2Frame existingFrame, AbstractID3v2Frame frame)
     {
         if (list.size() == 0)
@@ -629,19 +637,36 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
      */
     private void addNewFrameOrAddField(List<TagField> list, HashMap frameMap, AbstractID3v2Frame existingFrame, AbstractID3v2Frame frame)
     {
+        ArrayList<TagField> mergedList = new  ArrayList<TagField>();
+        if(existingFrame!=null)
+        {
+            mergedList.add(existingFrame);
+        }
+        else
+        {
+            mergedList.addAll(list);
+        }
+
         /**
-         * If the frame is a TXXX frame then we add an extra string to the existing frame
-         * if same description otherwise we create a new frame
-         */
+        * If the frame is a TXXX frame then we add an extra string to the existing frame
+        * if same description otherwise we create a new frame
+        */
         if (frame.getBody() instanceof FrameBodyTXXX)
         {
             FrameBodyTXXX frameBody = (FrameBodyTXXX) frame.getBody();
-            FrameBodyTXXX existingFrameBody = (FrameBodyTXXX) existingFrame.getBody();
-            if (frameBody.getDescription().equals(existingFrameBody.getDescription()))
+            boolean match = false;
+            Iterator<TagField> i = mergedList.listIterator();
+            while(i.hasNext())
             {
-                existingFrameBody.addTextValue(frameBody.getText());
+                FrameBodyTXXX existingFrameBody = (FrameBodyTXXX) ((AbstractID3v2Frame)i.next()).getBody();
+                if (frameBody.getDescription().equals(existingFrameBody.getDescription()))
+                {
+                    existingFrameBody.addTextValue(frameBody.getText());
+                    match=true;
+                    break;
+                }
             }
-            else
+            if(!match)
             {
                 addNewFrameToMap(list, frameMap, existingFrame, frame);
             }
@@ -649,12 +674,19 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
         else if (frame.getBody() instanceof FrameBodyWXXX)
         {
             FrameBodyWXXX frameBody = (FrameBodyWXXX) frame.getBody();
-            FrameBodyWXXX existingFrameBody = (FrameBodyWXXX) existingFrame.getBody();
-            if (frameBody.getDescription().equals(existingFrameBody.getDescription()))
+            boolean match = false;
+            Iterator<TagField> i = mergedList.listIterator();
+            while(i.hasNext())
             {
-                existingFrameBody.addUrlLink(frameBody.getUrlLink());
+                FrameBodyWXXX existingFrameBody = (FrameBodyWXXX) ((AbstractID3v2Frame)i.next()).getBody();
+                if (frameBody.getDescription().equals(existingFrameBody.getDescription()))
+                {
+                    existingFrameBody.addUrlLink(frameBody.getUrlLink());
+                    match=true;
+                    break;
+                }
             }
-            else
+            if(!match)
             {
                 addNewFrameToMap(list, frameMap, existingFrame, frame);
             }
@@ -684,6 +716,8 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
     }
 
     /**
+     * Set Field
+     *
      * @param field
      * @throws FieldDataInvalidException
      */
@@ -749,7 +783,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
         {
             frameMap.put(field.getId(), field);
         }
-        //There are already frames of this type
+        //There are already frames of this type, adding another may need to merge
         else if (o instanceof List)
         {
             List<TagField> list = (List<TagField>) o;
@@ -768,8 +802,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
     /**
      * Used for setting multiple frames for a single frame Identifier
      * <p/>
-     * Warning if frame(s) already exists for this identifier thay are overwritten
-     * <p/>
+     * Warning if frame(s) already exists for this identifier they are overwritten
      * TODO needs to ensure do not add an invalid frame for this tag
      *
      * @param identifier

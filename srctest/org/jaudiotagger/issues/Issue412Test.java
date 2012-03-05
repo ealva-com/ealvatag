@@ -145,4 +145,136 @@ public class Issue412Test extends AbstractTestCase
         assertNull(caught);
     }
 
+    public void testTXXXSameDescriptionMultiples() throws Exception
+    {
+        Exception caught = null;
+        try
+        {
+            File orig = new File("testdata", "01.mp3");
+            if (!orig.isFile())
+            {
+                System.err.println("Unable to test file - not available");
+                return;
+            }
+
+            File testFile = AbstractTestCase.copyAudioToTmp("01.mp3");
+            AudioFile af = AudioFileIO.read(testFile);
+            af.getTagOrCreateAndSetDefault().setField(FieldKey.BARCODE, "BARCODE1");
+            assertTrue(af.getTag() instanceof ID3v23Tag);
+            af.commit();
+            af = AudioFileIO.read(testFile);
+            assertEquals("BARCODE1", af.getTag().getFirst(FieldKey.BARCODE));
+            af.getTag().addField(FieldKey.BARCODE,"BARCODE2");
+            af.getTag().addField(FieldKey.CATALOG_NO,"CATNO");
+            af.getTag().addField(FieldKey.ARTISTS,"ARTISTS");
+            af.commit();
+            af = AudioFileIO.read(testFile);
+            assertEquals("BARCODE1",af.getTag().getValue(FieldKey.BARCODE,0));
+            assertEquals("BARCODE1", af.getTag().getFirst(FieldKey.BARCODE));
+            assertEquals("BARCODE2",af.getTag().getValue(FieldKey.BARCODE,1));
+
+            //No of Barcode Values
+            assertEquals(2,af.getTag().getAll(FieldKey.BARCODE).size());
+
+            //Actual No Of Fields used to store barcode, Should be only one
+            assertEquals(1, af.getTag().getFields(FieldKey.BARCODE).size());
+
+
+        }
+        catch(Exception e)
+        {
+            caught=e;
+            e.printStackTrace();
+        }
+        assertNull(caught);
+    }
+
+    public void testWXXXSameDescriptionMultiples() throws Exception
+    {
+        Exception caught = null;
+        try
+        {
+            File orig = new File("testdata", "01.mp3");
+            if (!orig.isFile())
+            {
+                System.err.println("Unable to test file - not available");
+                return;
+            }
+
+            File testFile = AbstractTestCase.copyAudioToTmp("01.mp3");
+            AudioFile af = AudioFileIO.read(testFile);
+            af.getTagOrCreateAndSetDefault().setField(FieldKey.URL_DISCOGS_ARTIST_SITE, "BARCODE1");
+            assertTrue(af.getTag() instanceof ID3v23Tag);
+            af.commit();
+            af = AudioFileIO.read(testFile);
+            assertEquals("BARCODE1", af.getTag().getFirst(FieldKey.URL_DISCOGS_ARTIST_SITE));
+            af.getTag().addField(FieldKey.URL_DISCOGS_ARTIST_SITE,"BARCODE2");
+            af.getTag().addField(FieldKey.URL_WIKIPEDIA_ARTIST_SITE,"CATNO");
+            af.getTag().addField(FieldKey.URL_WIKIPEDIA_RELEASE_SITE,"ARTISTS");
+            af.commit();
+            af = AudioFileIO.read(testFile);
+            assertEquals("BARCODE1",af.getTag().getValue(FieldKey.URL_DISCOGS_ARTIST_SITE,0));
+            assertEquals("BARCODE1", af.getTag().getFirst(FieldKey.URL_DISCOGS_ARTIST_SITE));
+            assertEquals("BARCODE2",af.getTag().getValue(FieldKey.URL_DISCOGS_ARTIST_SITE,1));
+
+            //No of Barcode Values
+            assertEquals(2,af.getTag().getAll(FieldKey.URL_DISCOGS_ARTIST_SITE).size());
+
+            //Actual No Of Fields used to store barcode, Should be only one
+            assertEquals(1, af.getTag().getFields(FieldKey.URL_DISCOGS_ARTIST_SITE).size());
+
+
+        }
+        catch(Exception e)
+        {
+            caught=e;
+            e.printStackTrace();
+        }
+        assertNull(caught);
+    }
+
+
+    public void testTCOMMultiples() throws Exception
+    {
+        Exception caught = null;
+        try
+        {
+            File orig = new File("testdata", "01.mp3");
+            if (!orig.isFile())
+            {
+                System.err.println("Unable to test file - not available");
+                return;
+            }
+
+            File testFile = AbstractTestCase.copyAudioToTmp("01.mp3");
+            AudioFile af = AudioFileIO.read(testFile);
+            af.getTagOrCreateAndSetDefault().setField(FieldKey.COMPOSER, "composer1");
+            assertTrue(af.getTag() instanceof ID3v23Tag);
+            af.commit();
+            af = AudioFileIO.read(testFile);
+            assertEquals("composer1", af.getTag().getFirst(FieldKey.COMPOSER));
+            af.getTag().addField(FieldKey.COMPOSER,"composer2");
+            af.getTag().addField(FieldKey.COMPOSER,"composer3");
+            af.getTag().addField(FieldKey.COMPOSER,"composer4");
+            af.commit();
+            af = AudioFileIO.read(testFile);
+            assertEquals("composer1",af.getTag().getValue(FieldKey.COMPOSER,0));
+            assertEquals("composer1", af.getTag().getFirst(FieldKey.COMPOSER));
+            assertEquals("composer2",af.getTag().getValue(FieldKey.COMPOSER,1));
+
+            //No of Composer Values
+            assertEquals(4,af.getTag().getAll(FieldKey.COMPOSER).size());
+
+            //Actual No Of Fields used to store barcode, Should be only one
+            assertEquals(1, af.getTag().getFields(FieldKey.COMPOSER).size());
+
+
+        }
+        catch(Exception e)
+        {
+            caught=e;
+            e.printStackTrace();
+        }
+        assertNull(caught);
+    }
 }
