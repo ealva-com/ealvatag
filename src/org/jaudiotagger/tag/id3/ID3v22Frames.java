@@ -310,6 +310,7 @@ public class ID3v22Frames extends ID3Frames
         multipleFrames.add(FRAME_ID_V2_COMMENT);
         multipleFrames.add(FRAME_ID_V2_UNSYNC_LYRICS);
         multipleFrames.add(FRAME_ID_V2_GENERAL_ENCAPS_OBJECT);
+        multipleFrames.add(FRAME_ID_V2_URL_ARTIST_WEB);
 
         //Mapping generic key to id3v22 key
         tagFieldToId3.put(FieldKey.ALBUM, ID3v22FieldKey.ALBUM);

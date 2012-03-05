@@ -353,6 +353,7 @@ public class ID3v24Frames extends ID3Frames
         multipleFrames.add(FRAME_ID_UNSYNC_LYRICS);
         multipleFrames.add(FRAME_ID_POPULARIMETER);
         multipleFrames.add(FRAME_ID_GENERAL_ENCAPS_OBJECT);
+        multipleFrames.add(FRAME_ID_URL_ARTIST_WEB);
 
         discardIfFileAlteredFrames.add(FRAME_ID_EVENT_TIMING_CODES);
         discardIfFileAlteredFrames.add(FRAME_ID_MPEG_LOCATION_LOOKUP_TABLE);

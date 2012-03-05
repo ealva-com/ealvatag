@@ -22,7 +22,9 @@ import java.nio.ByteBuffer;
 
 /**
  * Official artist/performer webpage URL link frames.
- * <p>The 'Official artist/performer webpage' frame is a URL pointing at the artists official webpage. There may be more than one "WOAR" frame in a tag if the audio contains more than one performer, but not with the same content.
+ * <p>The 'Official artist/performer webpage' frame is a URL pointing at the artists official webpage.
+ * There may be more than one "WOAR" frame in a tag if the audio contains more than one performer, but not with
+ * the same content.
  * <p/>
  * <p>For more details, please refer to the ID3 specifications:
  * <ul>

@@ -348,6 +348,7 @@ public class ID3v23Frames extends ID3Frames
         multipleFrames.add(FRAME_ID_V3_UNSYNC_LYRICS);
         multipleFrames.add(FRAME_ID_V3_POPULARIMETER);
         multipleFrames.add(FRAME_ID_V3_GENERAL_ENCAPS_OBJECT);
+        multipleFrames.add(FRAME_ID_V3_URL_ARTIST_WEB);
 
         discardIfFileAlteredFrames.add(FRAME_ID_V3_EVENT_TIMING_CODES);
         discardIfFileAlteredFrames.add(FRAME_ID_V3_EQUALISATION);

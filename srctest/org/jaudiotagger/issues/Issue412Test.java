@@ -277,4 +277,6 @@ public class Issue412Test extends AbstractTestCase
         }
         assertNull(caught);
     }
+
+
 }

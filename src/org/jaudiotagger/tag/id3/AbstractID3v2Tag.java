@@ -1574,7 +1574,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
         //If duplicate frame just stores the name of the frame and the number of bytes the frame contains
         else if (map.containsKey(frameId))
         {
-            logger.warning("Ignoring Duplicate Frame" + frameId);
+            logger.warning("Ignoring Duplicate Frame:" + frameId);
             //If we have multiple duplicate frames in a tag separate them with semicolons
             if (this.duplicateFrameId.length() > 0)
             {
