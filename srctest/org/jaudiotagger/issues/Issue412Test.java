@@ -6,7 +6,9 @@ import org.jaudiotagger.audio.AudioFileIO;
 import org.jaudiotagger.tag.FieldKey;
 import org.jaudiotagger.tag.Tag;
 import org.jaudiotagger.tag.TagOptionSingleton;
+import org.jaudiotagger.tag.id3.AbstractID3v2Frame;
 import org.jaudiotagger.tag.id3.ID3v23Tag;
+import org.jaudiotagger.tag.id3.framebody.FrameBodyTPOS;
 
 import java.io.File;
 import java.util.List;
@@ -320,6 +322,44 @@ public class Issue412Test extends AbstractTestCase
         assertNull(caught);
     }
 
+    public void testTrackNoTotalAddCombinations()
+    {
+        Exception caught = null;
+        try
+        {
+            File orig = new File("testdata", "01.mp3");
+            if (!orig.isFile())
+            {
+                System.err.println("Unable to test file - not available");
+                return;
+            }
+
+            File testFile = AbstractTestCase.copyAudioToTmp("01.mp3");
+            AudioFile af = AudioFileIO.read(testFile);
+            af.getTagOrCreateAndSetDefault();
+            af.commit();
+            af = AudioFileIO.read(testFile);
+            Tag tag = af.getTag();
+
+
+            tag.deleteField(FieldKey.TRACK);
+            tag.addField(FieldKey.TRACK, "1");
+            tag.deleteField(FieldKey.TRACK_TOTAL);
+            tag.addField(FieldKey.TRACK_TOTAL, "11");
+            af.commit();
+            af = AudioFileIO.read(testFile);
+            tag = af.getTag();
+            assertEquals("1",tag.getFirst(FieldKey.TRACK));
+            assertEquals("11",tag.getFirst(FieldKey.TRACK_TOTAL));
+        }
+        catch(Exception e)
+        {
+            caught=e;
+            e.printStackTrace();
+        }
+        assertNull(caught);
+    }
+
     public void testDiscNoTotalCombinations()
     {
         Exception caught = null;
@@ -344,6 +384,138 @@ public class Issue412Test extends AbstractTestCase
             tag.setField(FieldKey.DISC_NO, "1");
             tag.deleteField(FieldKey.DISC_TOTAL);
             tag.setField(FieldKey.DISC_TOTAL, "11");
+            af.commit();
+            af = AudioFileIO.read(testFile);
+            tag = af.getTag();
+            assertEquals("1",tag.getFirst(FieldKey.DISC_NO));
+            assertEquals("11",tag.getFirst(FieldKey.DISC_TOTAL));
+        }
+        catch(Exception e)
+        {
+            caught=e;
+            e.printStackTrace();
+        }
+        assertNull(caught);
+    }
+
+    public void testDiscNoTotalAddCombinations()
+    {
+        Exception caught = null;
+        try
+        {
+            File orig = new File("testdata", "01.mp3");
+            if (!orig.isFile())
+            {
+                System.err.println("Unable to test file - not available");
+                return;
+            }
+
+            File testFile = AbstractTestCase.copyAudioToTmp("01.mp3");
+            AudioFile af = AudioFileIO.read(testFile);
+            af.getTagOrCreateAndSetDefault();
+            af.commit();
+            af = AudioFileIO.read(testFile);
+            Tag tag = af.getTag();
+
+
+            tag.deleteField(FieldKey.DISC_NO);
+            tag.addField(FieldKey.DISC_NO, "1");
+            tag.deleteField(FieldKey.DISC_TOTAL);
+            tag.addField(FieldKey.DISC_TOTAL, "11");
+            af.commit();
+            af = AudioFileIO.read(testFile);
+            tag = af.getTag();
+            ID3v23Tag v23tag = (ID3v23Tag)tag;
+            AbstractID3v2Frame frame = (AbstractID3v2Frame)v23tag.getFrame("TPOS");
+            FrameBodyTPOS fbBody = (FrameBodyTPOS)frame.getBody();
+            assertEquals(1,fbBody.getDiscNo().intValue());
+            assertEquals(11,fbBody.getDiscTotal().intValue());
+
+            assertEquals("1",tag.getFirst(FieldKey.DISC_NO));
+            assertEquals("11",tag.getFirst(FieldKey.DISC_TOTAL));
+        }
+        catch(Exception e)
+        {
+            caught=e;
+            e.printStackTrace();
+        }
+        assertNull(caught);
+    }
+
+    public void testDiscNoTotalAddCombinationsWithPadding()
+    {
+        Exception caught = null;
+        try
+        {
+            File orig = new File("testdata", "01.mp3");
+            if (!orig.isFile())
+            {
+                System.err.println("Unable to test file - not available");
+                return;
+            }
+
+            TagOptionSingleton.getInstance().setPadNumbers(true);
+            File testFile = AbstractTestCase.copyAudioToTmp("01.mp3");
+            AudioFile af = AudioFileIO.read(testFile);
+            af.getTagOrCreateAndSetDefault();
+            af.commit();
+            af = AudioFileIO.read(testFile);
+            Tag tag = af.getTag();
+            ID3v23Tag v23tag = (ID3v23Tag)tag;
+
+
+            tag.deleteField(FieldKey.DISC_NO);
+            tag.addField(FieldKey.DISC_NO, "1");
+            tag.deleteField(FieldKey.DISC_TOTAL);
+            tag.addField(FieldKey.DISC_TOTAL, "11");
+            
+            af.commit();
+            af = AudioFileIO.read(testFile);
+            tag = af.getTag();
+             v23tag = (ID3v23Tag)tag;
+            AbstractID3v2Frame frame = (AbstractID3v2Frame)v23tag.getFrame("TPOS");
+            FrameBodyTPOS fbBody = (FrameBodyTPOS)frame.getBody();
+            assertEquals(1,fbBody.getDiscNo().intValue());
+            assertEquals(11,fbBody.getDiscTotal().intValue());
+
+            assertEquals("1",tag.getFirst(FieldKey.DISC_NO));
+            assertEquals("11",tag.getFirst(FieldKey.DISC_TOTAL));
+
+
+        }
+        catch(Exception e)
+        {
+            caught=e;
+            e.printStackTrace();
+        }
+        assertNull(caught);
+    }
+
+    public void testDiscNoTotalAddCombinationsWithPaddingFlac()
+    {
+        Exception caught = null;
+        try
+        {
+            File orig = new File("testdata", "test.flac");
+            if (!orig.isFile())
+            {
+                System.err.println("Unable to test file - not available");
+                return;
+            }
+
+            TagOptionSingleton.getInstance().setPadNumbers(true);
+            File testFile = AbstractTestCase.copyAudioToTmp("test.flac");
+            AudioFile af = AudioFileIO.read(testFile);
+            af.getTagOrCreateAndSetDefault();
+            af.commit();
+            af = AudioFileIO.read(testFile);
+            Tag tag = af.getTag();
+
+
+            tag.deleteField(FieldKey.DISC_NO);
+            tag.addField(FieldKey.DISC_NO, "1");
+            tag.deleteField(FieldKey.DISC_TOTAL);
+            tag.addField(FieldKey.DISC_TOTAL, "11");
             af.commit();
             af = AudioFileIO.read(testFile);
             tag = af.getTag();

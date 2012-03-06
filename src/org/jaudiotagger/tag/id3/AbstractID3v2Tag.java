@@ -709,6 +709,36 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
             FrameBodyTIPL existingFrameBody = (FrameBodyTIPL) existingFrame.getBody();
             existingFrameBody.addPair(frameBody.getText());
         }
+        else if (frame.getBody() instanceof FrameBodyTRCK)
+        {
+            FrameBodyTRCK frameBody = (FrameBodyTRCK) frame.getBody();
+            FrameBodyTRCK existingFrameBody = (FrameBodyTRCK) existingFrame.getBody();
+
+            if (frameBody.getTrackNo() != null && frameBody.getTrackNo() > 0)
+            {
+                existingFrameBody.setTrackNo(frameBody.getTrackNo());
+            }
+
+            if (frameBody.getTrackTotal() != null && frameBody.getTrackTotal() > 0)
+            {
+                existingFrameBody.setTrackTotal(frameBody.getTrackTotal());
+            }
+        }
+        else if (frame.getBody() instanceof FrameBodyTPOS)
+        {
+            FrameBodyTPOS frameBody = (FrameBodyTPOS) frame.getBody();
+            FrameBodyTPOS existingFrameBody = (FrameBodyTPOS) existingFrame.getBody();
+
+            if (frameBody.getDiscNo() != null && frameBody.getDiscNo() > 0)
+            {
+                existingFrameBody.setDiscNo(frameBody.getDiscNo());
+            }
+
+            if (frameBody.getDiscTotal() != null && frameBody.getDiscTotal() > 0)
+            {
+                existingFrameBody.setDiscTotal(frameBody.getDiscTotal());
+            }
+        }
         else
         {
             addNewFrameToMap(list, frameMap, existingFrame, frame);
