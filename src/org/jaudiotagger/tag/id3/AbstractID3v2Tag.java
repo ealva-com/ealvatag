@@ -2413,11 +2413,77 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
      */
     public void deleteField(FieldKey genericKey) throws KeyNotFoundException
     {
+        FrameAndSubId formatKey = getFrameAndSubIdFromGenericKey(genericKey);
         if (genericKey == null)
         {
             throw new KeyNotFoundException();
         }
-        FrameAndSubId formatKey = getFrameAndSubIdFromGenericKey(genericKey);
+
+        if (genericKey == FieldKey.TRACK)
+        {
+            String trackTotal = this.getFirst(FieldKey.TRACK_TOTAL);
+            if(trackTotal.length()==0) 
+            {
+                doDeleteTagField(formatKey);
+                return;
+            }
+            else 
+            {
+                AbstractID3v2Frame frame     = (AbstractID3v2Frame)this.getFrame(formatKey.getFrameId());
+                FrameBodyTRCK      frameBody = (FrameBodyTRCK)frame.getBody();
+                frameBody.setTrackNo(0);
+                return;
+            }
+        }
+        else if (genericKey == FieldKey.TRACK_TOTAL)
+        {
+            String track = this.getFirst(FieldKey.TRACK);
+            if(track.length()==0)
+            {
+                doDeleteTagField(formatKey);
+                return;
+            }
+            else
+            {
+                AbstractID3v2Frame frame     = (AbstractID3v2Frame)this.getFrame(formatKey.getFrameId());
+                FrameBodyTRCK      frameBody = (FrameBodyTRCK)frame.getBody();
+                frameBody.setTrackTotal(0);
+                return;
+            }
+        }
+        else if (genericKey == FieldKey.DISC_NO)
+        {
+            String discTotal = this.getFirst(FieldKey.DISC_TOTAL);
+            if(discTotal.length()==0)
+            {
+                doDeleteTagField(formatKey);
+                return;
+            }
+            else
+            {
+                AbstractID3v2Frame frame     = (AbstractID3v2Frame)this.getFrame(formatKey.getFrameId());
+                FrameBodyTPOS      frameBody = (FrameBodyTPOS)frame.getBody();
+                frameBody.setDiscNo(0);
+                return;
+            }
+        }
+        else if (genericKey == FieldKey.DISC_TOTAL)
+        {
+            String discno = this.getFirst(FieldKey.DISC_NO);
+            if(discno.length()==0)
+            {
+                doDeleteTagField(formatKey);
+                return;
+            }
+            else
+            {
+                AbstractID3v2Frame frame     = (AbstractID3v2Frame)this.getFrame(formatKey.getFrameId());
+                FrameBodyTPOS      frameBody = (FrameBodyTPOS)frame.getBody();
+                frameBody.setDiscTotal(0);
+                return;
+            }
+        }
+
         doDeleteTagField(formatKey);
     }
 
