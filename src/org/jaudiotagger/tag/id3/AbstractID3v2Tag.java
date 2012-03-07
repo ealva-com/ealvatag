@@ -1776,19 +1776,19 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
                 AbstractID3v2Frame frame = (AbstractID3v2Frame) fields.get(0);
                 if (genericKey == FieldKey.TRACK)
                 {
-                    values.add(String.valueOf(((FrameBodyTRCK) frame.getBody()).getTrackNo()));
+                    values.add(((FrameBodyTRCK) frame.getBody()).getTrackNoAsText());
                 }
                 else if (genericKey == FieldKey.TRACK_TOTAL)
                 {
-                    values.add(String.valueOf(((FrameBodyTRCK) frame.getBody()).getTrackTotal()));
+                    values.add(((FrameBodyTRCK) frame.getBody()).getTrackTotalAsText());
                 }
                 else if (genericKey == FieldKey.DISC_NO)
                 {
-                    values.add(String.valueOf(((FrameBodyTPOS) frame.getBody()).getDiscNo()));
+                    values.add(((FrameBodyTPOS) frame.getBody()).getDiscNoAsText());
                 }
                 else if (genericKey == FieldKey.DISC_TOTAL)
                 {
-                    values.add(String.valueOf(((FrameBodyTPOS) frame.getBody()).getDiscTotal()));
+                    values.add(((FrameBodyTPOS) frame.getBody()).getDiscTotalAsText());
                 }
                 else if (genericKey == FieldKey.RATING)
                 {
@@ -2100,19 +2100,19 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
                 AbstractID3v2Frame frame = (AbstractID3v2Frame) fields.get(0);
                 if (genericKey == FieldKey.TRACK)
                 {
-                    return String.valueOf(((FrameBodyTRCK) frame.getBody()).getTrackNo());
+                    return ((FrameBodyTRCK) frame.getBody()).getTrackNoAsText();
                 }
                 else if (genericKey == FieldKey.TRACK_TOTAL)
                 {
-                    return String.valueOf(((FrameBodyTRCK) frame.getBody()).getTrackTotal());
+                    return ((FrameBodyTRCK) frame.getBody()).getTrackTotalAsText();
                 }
                 else if (genericKey == FieldKey.DISC_NO)
                 {
-                    return String.valueOf(((FrameBodyTPOS) frame.getBody()).getDiscNo());
+                    return ((FrameBodyTPOS) frame.getBody()).getDiscNoAsText();
                 }
                 else if (genericKey == FieldKey.DISC_TOTAL)
                 {
-                    return String.valueOf(((FrameBodyTPOS) frame.getBody()).getDiscTotal());
+                    return ((FrameBodyTPOS) frame.getBody()).getDiscTotalAsText();
                 }
             }
             else

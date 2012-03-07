@@ -171,7 +171,7 @@ public class ID3v22TagTest extends TestCase
             assertEquals("Electronica/Dance:", af.getTag().getFirst(FieldKey.GENRE) + ":");
             assertEquals("2003:", af.getTag().getFirst(FieldKey.YEAR) + ":");
             assertEquals("1:", af.getTag().getFirst(FieldKey.TRACK) + ":");
-            assertEquals("11:", af.getTag().getFirst(FieldKey.TRACK_TOTAL) + ":");
+            assertEquals("11:", af.getTag().getFirst(FieldKey.TRACK_TOTAL) + ":");  //The value ends in null
 
             //Read using new Interface getFirst method with String
             assertEquals("Listen to images:", af.getTag().getFirst(ID3v22Frames.FRAME_ID_V2_TITLE) + ":");

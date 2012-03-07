@@ -116,6 +116,11 @@ public class FrameBodyTPOS extends AbstractID3v2FrameBody implements ID3v23Frame
         return ((PartOfSet.PartOfSetValue)getObjectValue(DataTypes.OBJ_TEXT)).getCount();
     }
 
+    public String getDiscNoAsText()
+    {
+        return ((PartOfSet.PartOfSetValue)getObjectValue(DataTypes.OBJ_TEXT)).getCountAsText();
+    }
+
     public void setDiscNo(Integer discNo)
     {
         ((PartOfSet.PartOfSetValue)getObjectValue(DataTypes.OBJ_TEXT)).setCount(discNo);
@@ -124,6 +129,11 @@ public class FrameBodyTPOS extends AbstractID3v2FrameBody implements ID3v23Frame
     public Integer getDiscTotal()
     {
         return ((PartOfSet.PartOfSetValue)getObjectValue(DataTypes.OBJ_TEXT)).getTotal();
+    }
+
+    public String getDiscTotalAsText()
+    {
+        return ((PartOfSet.PartOfSetValue)getObjectValue(DataTypes.OBJ_TEXT)).getTotalAsText();
     }
 
     public void setDiscTotal(Integer discTotal)

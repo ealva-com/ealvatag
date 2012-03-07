@@ -185,4 +185,174 @@ public class FrameBodyTPOSTest extends AbstractTestCase
 
     }
 
+     // specify the value as a string with no padding. getText should still return with padding
+     public void testCreateFrameBodyWithPaddedRawTextCount()
+     {
+         TagOptionSingleton.getInstance().setPadNumbers(false);
+         FrameBodyTPOS  fb = createFrameBodyAndAssertNumericValuesAndRawValueRetained("01/11", 1, 11);
+         assertEquals("01",fb.getDiscNoAsText());
+         assertEquals("11",fb.getDiscTotalAsText());
+
+     }
+     
+     public void testCreateFrameBodyWithUnpaddedRawTextCount()
+     {
+         TagOptionSingleton.getInstance().setPadNumbers(false);
+         FrameBodyTPOS  fb = createFrameBodyAndAssertNumericValuesAndRawValueRetained("1/11", 1, 11);
+         assertEquals("1",fb.getDiscNoAsText());
+         assertEquals("11",fb.getDiscTotalAsText());
+     }
+
+     public void testCreateFrameBodyWithPaddedRawTextTotal()
+     {
+         TagOptionSingleton.getInstance().setPadNumbers(false);
+         FrameBodyTPOS  fb = createFrameBodyAndAssertNumericValuesAndRawValueRetained("1/03", 1, 3);
+         assertEquals("1",fb.getDiscNoAsText());
+         assertEquals("03",fb.getDiscTotalAsText());
+     }
+
+    public void testCreateFrameBodyWithPaddedRawTextTotal2()
+    {
+        TagOptionSingleton.getInstance().setPadNumbers(false);
+        FrameBodyTPOS  fb = createFrameBodyAndAssertNumericValuesAndRawValueRetained("01/03", 1, 3);
+        assertEquals("01",fb.getDiscNoAsText());
+        assertEquals("03",fb.getDiscTotalAsText());
+    }
+
+     public void testCreateFrameBodyWithUnpaddedRawTextTotal()
+     {
+         TagOptionSingleton.getInstance().setPadNumbers(false);
+         FrameBodyTPOS  fb = createFrameBodyAndAssertNumericValuesAndRawValueRetained("1/3", 1, 3);
+         assertEquals("1",fb.getDiscNoAsText());
+         assertEquals("3",fb.getDiscTotalAsText());
+     }
+
+
+	private FrameBodyTPOS createFrameBodyAndAssertNumericValuesAndRawValueRetained(String rawText, int expectedCount, int expectedTotal) {
+		Exception exceptionCaught = null;
+        FrameBodyTPOS fb = null;
+		try
+        {
+             fb = new FrameBodyTPOS(TextEncoding.ISO_8859_1, rawText);
+        }
+        catch (Exception e)
+        {
+             exceptionCaught = e;
+        }
+
+        assertNull(exceptionCaught);
+        assertEquals(ID3v24Frames.FRAME_ID_SET, fb.getIdentifier());
+        assertEquals(TextEncoding.ISO_8859_1, fb.getTextEncoding());
+        assertEquals(expectedCount,fb.getDiscNo().intValue());
+        assertEquals(expectedTotal,fb.getDiscTotal().intValue());
+        assertEquals(rawText, fb.getText());
+        return fb;
+	}
+
+
+    public void testCreateFrameBodyWithPaddedRawTextCountIsPadded()
+    {
+        TagOptionSingleton.getInstance().setPadNumbers(true);
+        Exception exceptionCaught = null;
+        FrameBodyTPOS fb = null;
+        try
+        {
+            fb = new FrameBodyTPOS(TextEncoding.ISO_8859_1, "01/11");
+        }
+        catch (Exception e)
+        {
+            exceptionCaught = e;
+        }
+
+        assertNull(exceptionCaught);
+        assertEquals(ID3v24Frames.FRAME_ID_SET, fb.getIdentifier());
+        assertEquals(TextEncoding.ISO_8859_1, fb.getTextEncoding());
+        assertEquals(1,fb.getDiscNo().intValue());
+        assertEquals(11,fb.getDiscTotal().intValue());
+        assertEquals("01/11", fb.getText());
+        assertEquals("01",fb.getDiscNoAsText());
+        assertEquals("11",fb.getDiscTotalAsText());
+
+    }
+
+    public void testCreateFrameBodyWithUnpaddedRawTextCountIsPadded()
+    {
+        TagOptionSingleton.getInstance().setPadNumbers(true);
+        Exception exceptionCaught = null;
+        FrameBodyTPOS fb = null;
+        try
+        {
+            fb = new FrameBodyTPOS(TextEncoding.ISO_8859_1, "1/11");
+        }
+        catch (Exception e)
+        {
+            exceptionCaught = e;
+        }
+
+        assertNull(exceptionCaught);
+        assertEquals(ID3v24Frames.FRAME_ID_SET, fb.getIdentifier());
+        assertEquals(TextEncoding.ISO_8859_1, fb.getTextEncoding());
+        assertEquals(1,fb.getDiscNo().intValue());
+        assertEquals(11,fb.getDiscTotal().intValue());
+        assertEquals("01/11", fb.getText());
+        assertEquals("01",fb.getDiscNoAsText());
+        assertEquals("11",fb.getDiscTotalAsText());
+
+    }
+
+    public void testCreateFrameBodyWithPaddedRawTextTotalIsPadded()
+    {
+        TagOptionSingleton.getInstance().setPadNumbers(true);
+        Exception exceptionCaught = null;
+        FrameBodyTPOS fb = null;
+        try
+        {
+            fb = new FrameBodyTPOS(TextEncoding.ISO_8859_1, "1/03");
+        }
+        catch (Exception e)
+        {
+            exceptionCaught = e;
+        }
+
+        assertNull(exceptionCaught);
+        assertEquals(ID3v24Frames.FRAME_ID_SET, fb.getIdentifier());
+        assertEquals(TextEncoding.ISO_8859_1, fb.getTextEncoding());
+        assertEquals(1,fb.getDiscNo().intValue());
+        assertEquals(3,fb.getDiscTotal().intValue());
+        assertEquals("01/03", fb.getText());
+        assertEquals("01",fb.getDiscNoAsText());
+        assertEquals("03",fb.getDiscTotalAsText());
+    }
+
+    public void testCreateFrameBodyWithPaddedRawTextTotal2IsPadded()
+    {
+        TagOptionSingleton.getInstance().setPadNumbers(true);
+        createFrameBodyAndAssertNumericValuesAndRawValueRetained("01/03", 1, 3);
+    }
+
+    public void testCreateFrameBodyWithUnpaddedRawTextTotalIsPadded()
+    {
+
+        TagOptionSingleton.getInstance().setPadNumbers(true);
+        Exception exceptionCaught = null;
+        FrameBodyTPOS fb = null;
+        try
+        {
+            fb = new FrameBodyTPOS(TextEncoding.ISO_8859_1, "1/3");
+        }
+        catch (Exception e)
+        {
+            exceptionCaught = e;
+        }
+
+        assertNull(exceptionCaught);
+        assertEquals(ID3v24Frames.FRAME_ID_SET, fb.getIdentifier());
+        assertEquals(TextEncoding.ISO_8859_1, fb.getTextEncoding());
+        assertEquals(1,fb.getDiscNo().intValue());
+        assertEquals(3,fb.getDiscTotal().intValue());
+        assertEquals("01/03", fb.getText());
+        assertEquals("01",fb.getDiscNoAsText());
+        assertEquals("03",fb.getDiscTotalAsText());
+
+    }
 }

@@ -188,4 +188,46 @@ public class FrameBodyTRCKTest extends AbstractTestCase
 
     }
 
+      // specify the value as a string with no padding. getText should still return with padding
+      public void testCreateFrameBodyWithPaddedRawTextCount()
+      {
+     	 createFrameBodyAndAssertNumericValuesAndRawPaddingRetained("01/11", 1, 11);
+      }
+      
+      public void testCreateFrameBodyWithUnpaddedRawTextCount()
+      {
+     	 createFrameBodyAndAssertNumericValuesAndRawPaddingRetained("1/11", 1, 11);
+      }
+
+      public void testCreateFrameBodyWithPaddedRawTextTotal()
+      {
+     	 createFrameBodyAndAssertNumericValuesAndRawPaddingRetained("1/03", 1, 3);
+      }
+      
+      public void testCreateFrameBodyWithUnpaddedRawTextTotal()
+      {
+     	 createFrameBodyAndAssertNumericValuesAndRawPaddingRetained("1/3", 1, 3);
+      }
+
+
+ 	private void createFrameBodyAndAssertNumericValuesAndRawPaddingRetained(String rawText, int expectedCount, int expectedTotal) {
+ 		Exception exceptionCaught = null;
+ 		FrameBodyTRCK fb = null;
+ 		try
+          {
+              fb = new FrameBodyTRCK(TextEncoding.ISO_8859_1, rawText);
+          }
+          catch (Exception e)
+          {
+              exceptionCaught = e;
+          }
+
+          assertNull(exceptionCaught);
+          assertEquals(ID3v24Frames.FRAME_ID_TRACK, fb.getIdentifier());
+          assertEquals(TextEncoding.ISO_8859_1, fb.getTextEncoding());
+          assertEquals(expectedCount,fb.getTrackNo().intValue());
+          assertEquals(expectedTotal,fb.getTrackTotal().intValue());
+          assertEquals(rawText, fb.getText());
+ 	}
+      
 }

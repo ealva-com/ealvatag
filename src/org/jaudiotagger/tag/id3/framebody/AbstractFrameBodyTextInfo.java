@@ -132,7 +132,7 @@ public abstract class AbstractFrameBodyTextInfo extends AbstractID3v2FrameBody
     /**
      * Retrieve the complete text String as it is held internally.
      *
-     * If multiple values are held these wil be returned, needless trailing nulls will also be returned
+     * If multiple values are held these will be returned, needless trailing nulls will also be returned
      *
      * @return the text string
      */

@@ -477,8 +477,9 @@ public class Issue412Test extends AbstractTestCase
             FrameBodyTPOS fbBody = (FrameBodyTPOS)frame.getBody();
             assertEquals(1,fbBody.getDiscNo().intValue());
             assertEquals(11,fbBody.getDiscTotal().intValue());
+            assertEquals("01/11",fbBody.getText());
 
-            assertEquals("1",tag.getFirst(FieldKey.DISC_NO));
+            assertEquals("01",tag.getFirst(FieldKey.DISC_NO));
             assertEquals("11",tag.getFirst(FieldKey.DISC_TOTAL));
 
 

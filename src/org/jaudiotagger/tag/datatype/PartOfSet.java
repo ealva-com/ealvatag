@@ -14,7 +14,7 @@ import java.util.regex.Pattern;
 
 /**
  * Represents the form 01/10 whereby the second part is optional. This is used by frame such as TRCK and TPOS
- *
+ * <p/>
  * Some applications like to prepend the count with a zero to aid sorting, (i.e 02 comes before 10)
  */
 @SuppressWarnings({"EmptyCatchBlock"})
@@ -43,7 +43,7 @@ public class PartOfSet extends AbstractString
 
     public boolean equals(Object obj)
     {
-        if(obj==this)
+        if (obj == this)
         {
             return true;
         }
@@ -59,12 +59,12 @@ public class PartOfSet extends AbstractString
     }
 
     /**
-     * Read a 'n' bytes from buffer into a String where n is the framesize - offset
-     * so thefore cannot use this if there are other objects after it because it has no
+     * Read a 'n' bytes from buffer into a String where n is the frameSize - offset
+     * so therefore cannot use this if there are other objects after it because it has no
      * delimiter.
      * <p/>
      * Must take into account the text encoding defined in the Encoding Object
-     * ID3 Text Frames often allow multiple strings seperated by the null char
+     * ID3 Text Frames often allow multiple strings separated by the null char
      * appropriate for the encoding.
      *
      * @param arr    this is the buffer for the frame
@@ -122,7 +122,7 @@ public class PartOfSet extends AbstractString
                 {
                     if (value.charAt(value.length() - 1) == '\0')
                     {
-                        value = value.substring(0, value.length() - 1);                        
+                        value = value.substring(0, value.length() - 1);
                     }
                 }
             }
@@ -133,15 +133,15 @@ public class PartOfSet extends AbstractString
                 charSetName = TextEncoding.CHARSET_UTF_16_LE_ENCODING_FORMAT;
                 CharsetEncoder encoder = Charset.forName(charSetName).newEncoder();
                 //Note remember LE BOM is ff fe but this is handled by encoder Unicode char is fe ff
-                ByteBuffer bb = encoder.encode(CharBuffer.wrap('\ufeff' +  value));
+                ByteBuffer bb = encoder.encode(CharBuffer.wrap('\ufeff' + value));
                 data = new byte[bb.limit()];
                 bb.get(data, 0, bb.limit());
 
             }
             else
             {
-                 CharsetEncoder encoder = Charset.forName(charSetName).newEncoder();
-                ByteBuffer bb = encoder.encode(CharBuffer.wrap( value));
+                CharsetEncoder encoder = Charset.forName(charSetName).newEncoder();
+                ByteBuffer bb = encoder.encode(CharBuffer.wrap(value));
                 data = new byte[bb.limit()];
                 bb.get(data, 0, bb.limit());
             }
@@ -173,8 +173,7 @@ public class PartOfSet extends AbstractString
 
     /**
      * Holds data
-     *
-      */
+     */
     public static class PartOfSetValue
     {
         private static final Pattern trackNoPatternWithTotalCount;
@@ -182,25 +181,47 @@ public class PartOfSet extends AbstractString
 
         static
         {
-            //Match track/total pattern allowing for extraneous nulls ectera at the end
-            trackNoPatternWithTotalCount  = Pattern.compile("([0-9]+)/([0-9]+)(.*)", Pattern.CASE_INSENSITIVE);
-            trackNoPattern                = Pattern.compile("([0-9]+)(.*)", Pattern.CASE_INSENSITIVE);
+            //Match track/total pattern allowing for extraneous nulls ecetera at the end
+            trackNoPatternWithTotalCount = Pattern.compile("([0-9]+)/([0-9]+)(.*)", Pattern.CASE_INSENSITIVE);
+            trackNoPattern = Pattern.compile("([0-9]+)(.*)", Pattern.CASE_INSENSITIVE);
         }
 
         private static final String SEPARATOR = "/";
         private Integer count;
         private Integer total;
-        private String  extra;   //Any extraneous info such as null chars
+        private String extra;   //Any extraneous info such as null chars
+        private String rawText; // raw text representation used to actually save the data IF !TagOptionSingleton.getInstance().isPadNumbers()
+
         public PartOfSetValue()
         {
-
+            rawText = "";
         }
 
-        /** When constructing from data
+        /**
+         * When constructing from data
          *
          * @param value
          */
         public PartOfSetValue(String value)
+        {
+            this.rawText = value;
+            initFromValue(value);
+        }
+
+        /**
+         * Newly created
+         *
+         * @param count
+         * @param total
+         */
+        public PartOfSetValue(Integer count, Integer total)
+        {
+            this.count = count;
+            this.total = total;
+            resetValueFromCounts();
+        }
+
+        private void initFromValue(String value)
         {
             try
             {
@@ -220,26 +241,19 @@ public class PartOfSet extends AbstractString
                     this.count = Integer.parseInt(m.group(1));
                 }
             }
-            catch(NumberFormatException nfe)
+            catch (NumberFormatException nfe)
             {
                 //#JAUDIOTAGGER-366 Could occur if actually value is a long not an int
                 this.count = 0;
             }
         }
 
-        /**
-         * Newly created
-         *
-         * @param count
-         * @param total
-         */
-        public PartOfSetValue(Integer count,Integer total)
+        private void resetValueFromCounts()
         {
-            this.count = count;
-            this.total = total;
+
+            // return 0 if count is null as this is what the tests assert for when count is empty
+            this.rawText = (count != null ? count.toString() : "0") + (total != null ? SEPARATOR + total.toString() : "") + (extra != null ? extra : "");
         }
-
-
 
         public Integer getCount()
         {
@@ -253,12 +267,14 @@ public class PartOfSet extends AbstractString
 
         public void setCount(Integer count)
         {
-            this.count=count;
+            this.count = count;
+            resetValueFromCounts();
         }
 
         public void setTotal(Integer total)
         {
-            this.total=total;
+            this.total = total;
+            resetValueFromCounts();
 
         }
 
@@ -266,9 +282,10 @@ public class PartOfSet extends AbstractString
         {
             try
             {
-                this.count=Integer.parseInt(count);
+                this.count = Integer.parseInt(count);
+                resetValueFromCounts();
             }
-            catch(NumberFormatException nfe)
+            catch (NumberFormatException nfe)
             {
 
             }
@@ -278,42 +295,57 @@ public class PartOfSet extends AbstractString
         {
             try
             {
-                this.total=Integer.parseInt(total);
+                this.total = Integer.parseInt(total);
+                resetValueFromCounts();
             }
-            catch(NumberFormatException nfe)
+            catch (NumberFormatException nfe)
             {
 
             }
         }
 
-        public String toString()
+        public String getRawValue()
+        {
+            return rawText;
+        }
+
+        public void setRawValue(String value)
+        {
+            this.rawText = value;
+            initFromValue(value);
+        }
+
+        /**
+         * Get Count including padded if padding is enabled, if padding is not enabled take the value upto the
+         * '/' character if it exists or the whole value if it does not exist
+         *
+         * @return
+         */
+        public String getCountAsText()
         {
             //Don't Pad
             StringBuffer sb = new StringBuffer();
-            if(!TagOptionSingleton.getInstance().isPadNumbers())
+            if (!TagOptionSingleton.getInstance().isPadNumbers())
             {
-                if(count!=null)
+                if(rawText.contains(SEPARATOR))
                 {
-                    sb.append(count.intValue());
+                    return rawText.substring(0, rawText.indexOf(SEPARATOR));
                 }
-                else if(total!=null)
+                else
                 {
-                    sb.append('0');
-                }
-                if(total!=null)
-                {
-                    sb.append(SEPARATOR).append(total);
-                }
-                if(extra!=null)
-                {
-                    sb.append(extra);
+                    //We don't want trailing null even in raw mode
+                    if(rawText.endsWith("\0"))
+                    {
+                        return rawText.substring(0,rawText.length() - 1);
+                    }
+                    return rawText;
                 }
             }
             else
             {
-                if(count!=null)
+                if (count != null)
                 {
-                    if(count>0 && count<10)
+                    if (count > 0 && count < 10)
                     {
                         sb.append("0").append(count);
                     }
@@ -322,13 +354,81 @@ public class PartOfSet extends AbstractString
                         sb.append(count.intValue());
                     }
                 }
-                else if(total!=null)
+            }
+            return sb.toString();
+        }
+
+        /**
+         * Get Total padded if padding is enabled, if padding is not enabled take the raw value
+         * after the '/' character
+         * @return
+         */
+        public String getTotalAsText()
+        {
+            //Don't Pad
+            StringBuffer sb = new StringBuffer();
+            if (!TagOptionSingleton.getInstance().isPadNumbers())
+            {
+                if(rawText.contains(SEPARATOR))
+                {
+                    String total = rawText.substring(rawText.indexOf(SEPARATOR)+1);
+                    //We don't want trailing null even in raw mode
+                    if(total.endsWith("\0"))
+                    {
+                        return total.substring(0,total.length() - 1);
+                    }
+                    return total;
+                }
+                else
+                {
+                    return "";
+                }
+            }
+            else
+            {
+                if (total != null)
+                {
+                    if (total > 0 && total < 10)
+                    {
+                        sb.append("0").append(total);
+                    }
+                    else
+                    {
+                        sb.append(total);
+                    }
+                }
+            }
+            return sb.toString();
+        }
+
+        public String toString()
+        {
+            //Don't Pad
+            StringBuffer sb = new StringBuffer();
+            if (!TagOptionSingleton.getInstance().isPadNumbers())
+            {
+                return rawText;
+            }
+            else
+            {
+                if (count != null)
+                {
+                    if (count > 0 && count < 10)
+                    {
+                        sb.append("0").append(count);
+                    }
+                    else
+                    {
+                        sb.append(count.intValue());
+                    }
+                }
+                else if (total != null)
                 {
                     sb.append('0');
                 }
-                if(total!=null)
+                if (total != null)
                 {
-                    if(total>0 && total<10)
+                    if (total > 0 && total < 10)
                     {
                         sb.append(SEPARATOR + "0").append(total);
                     }
@@ -337,7 +437,7 @@ public class PartOfSet extends AbstractString
                         sb.append(SEPARATOR).append(total);
                     }
                 }
-                if(extra!=null)
+                if (extra != null)
                 {
                     sb.append(extra);
                 }
@@ -348,7 +448,7 @@ public class PartOfSet extends AbstractString
 
         public boolean equals(Object obj)
         {
-            if(obj==this)
+            if (obj == this)
             {
                 return true;
             }
@@ -360,17 +460,14 @@ public class PartOfSet extends AbstractString
 
             PartOfSetValue that = (PartOfSetValue) obj;
 
-            return
-                  EqualsUtil.areEqual(getCount(), that.getCount()) &&
-                  EqualsUtil.areEqual(getTotal(), that.getTotal());
+            return EqualsUtil.areEqual(getCount(), that.getCount())
+                    && EqualsUtil.areEqual(getTotal(), that.getTotal());
         }
-
     }
-
 
     public PartOfSetValue getValue()
     {
-        return (PartOfSetValue)value;
+        return (PartOfSetValue) value;
     }
 
     public String toString()

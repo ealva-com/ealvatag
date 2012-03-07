@@ -115,6 +115,11 @@ public class FrameBodyTRCK extends AbstractID3v2FrameBody implements ID3v23Frame
         return value.getCount();
     }
 
+    public String getTrackNoAsText()
+    {
+        return ((PartOfSet.PartOfSetValue)getObjectValue(DataTypes.OBJ_TEXT)).getCountAsText();
+    }
+
     public String getText()
     {
         return getObjectValue(DataTypes.OBJ_TEXT).toString();
@@ -133,6 +138,12 @@ public class FrameBodyTRCK extends AbstractID3v2FrameBody implements ID3v23Frame
     {
         return ((PartOfSet.PartOfSetValue)getObjectValue(DataTypes.OBJ_TEXT)).getTotal();
     }
+
+    public String getTrackTotalAsText()
+    {
+        return ((PartOfSet.PartOfSetValue)getObjectValue(DataTypes.OBJ_TEXT)).getTotalAsText();
+    }
+
 
     public void setTrackTotal(Integer trackTotal)
     {
