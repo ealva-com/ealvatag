@@ -279,7 +279,22 @@ public class Mp4Tag extends AbstractTag
         List<TagField> fields = getFields(genericKey);
         for(TagField tagfield:fields)
         {
-            values.add(tagfield.toString());
+            if(genericKey==FieldKey.TRACK)
+            {
+                values.add(((Mp4TrackField)tagfield).getTrackNo().toString());
+            }
+            else if(genericKey==FieldKey.TRACK_TOTAL)
+            {
+                values.add(((Mp4TrackField)tagfield).getTrackTotal().toString());
+            }
+            else if(genericKey==FieldKey.DISC_NO)
+            {
+                values.add(((Mp4DiscNoField)tagfield).getDiscNo().toString());
+            }
+            else if(genericKey==FieldKey.DISC_TOTAL)
+            {
+                values.add(((Mp4DiscNoField)tagfield).getDiscTotal().toString());
+            }
         }
         return values;
     }
