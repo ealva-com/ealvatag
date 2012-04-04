@@ -295,6 +295,10 @@ public class Mp4Tag extends AbstractTag
             {
                 values.add(((Mp4DiscNoField)tagfield).getDiscTotal().toString());
             }
+            else
+            {
+                values.add(tagfield.toString());
+            }
         }
         return values;
     }
