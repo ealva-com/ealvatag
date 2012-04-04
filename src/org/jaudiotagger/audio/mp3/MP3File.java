@@ -105,7 +105,7 @@ public class MP3File extends AudioFile
     public static final int LOAD_ALL = LOAD_IDV1TAG | LOAD_IDV2TAG | LOAD_LYRICS3;
 
     /**
-     * Creates a new MP3File datatype and parse the tag from the given file
+     * Creates a new MP3File dataType and parse the tag from the given file
      * Object, files must be writable to use this constructor.
      *
      * @param file        MP3 file
@@ -159,7 +159,7 @@ public class MP3File extends AudioFile
     /**
      * Read V2tag if exists
      * <p/>
-     * TODO:shouldnt we be handing TagExceptions:when will they be thrown
+     * TODO:shouldn't we be handing TagExceptions:when will they be thrown
      *
      * @param file
      * @param loadOptions
@@ -168,20 +168,26 @@ public class MP3File extends AudioFile
      */
     private void readV2Tag(File file, int loadOptions) throws IOException, TagException
     {
-        //We know where the Actual Audio starts so load all the file from start to that point into
-        //a buffer then we can read the IDv2 information without needing any more file I/O
+        //We know where the actual Audio starts so load all the file from start to that point into
+        //a buffer then we can read the IDv2 information without needing any more File I/O
         int startByte = (int) ((MP3AudioHeader) audioHeader).getMp3StartByte();
         if (startByte >= AbstractID3v2Tag.TAG_HEADER_LENGTH)
         {
             logger.finer("Attempting to read id3v2tags");
             FileInputStream fis = null;
             FileChannel fc = null;
-            ByteBuffer bb = null;
+            ByteBuffer bb;
             try
             {
                 fis = new FileInputStream(file);
                 fc = fis.getChannel();
                 bb = fc.map(FileChannel.MapMode.READ_ONLY,0,startByte);
+            }
+            //#JAUDIOTAGGER-419:If reading networked file map can fail so just copy bytes instead
+            catch(IOException ioe)
+            {
+                bb =  ByteBuffer.allocate(startByte);
+                fc.read(bb,0);
             }
             finally
             {
