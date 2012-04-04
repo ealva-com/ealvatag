@@ -27,6 +27,17 @@ public class Issue424Test extends AbstractTestCase
         assertEquals("1",tag.getFirst(FieldKey.TRACK));
         assertTrue(tag.hasField(FieldKey.TRACK_TOTAL));
         assertEquals("10", tag.getFirst(FieldKey.TRACK_TOTAL));
+
+        tag.deleteField(FieldKey.DISC_NO);
+        tag.addField(FieldKey.DISC_NO,"2");
+        tag.deleteField(FieldKey.DISC_TOTAL);
+        tag.addField(FieldKey.DISC_TOTAL,"3");
+        assertTrue(tag.hasField(FieldKey.DISC_NO));
+        assertEquals("2",tag.getFirst(FieldKey.DISC_NO));
+        assertTrue(tag.hasField(FieldKey.DISC_TOTAL));
+        assertEquals("3", tag.getFirst(FieldKey.DISC_TOTAL));
+        f.commit();
+
     }
 
     public void testDeleteTrackTotalShouldNotEffectTrackNoMp3() throws Exception

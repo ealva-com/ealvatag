@@ -201,7 +201,11 @@ public class Issue398Test extends AbstractTestCase
         assertNull(caught);
     }
 
-     public void testMp4getValue() throws Exception
+    /** Mp4 should only allow one track field
+     *
+     * @throws Exception
+     */
+    public void testMp4getValue() throws Exception
     {
         Exception caught = null;
         try
@@ -214,16 +218,9 @@ public class Issue398Test extends AbstractTestCase
             tag.addField(FieldKey.TRACK, "2");
             tag.addField(FieldKey.TRACK_TOTAL,"10");
             tag.addField(FieldKey.TRACK, "3");
-            assertEquals("1", tag.getFirst(FieldKey.TRACK));
+            assertEquals("3", tag.getFirst(FieldKey.TRACK));
             assertNotNull(tag.getFirstField(FieldKey.TRACK));
-            assertEquals(3, tag.getAll(FieldKey.TRACK).size());
-            assertEquals("1",tag.getValue(FieldKey.TRACK, 0));
-            assertEquals("2", tag.getValue(FieldKey.TRACK, 1));
-            assertEquals(3,tag.getFields(FieldKey.TRACK).size());
-            assertEquals(2,tag.getFields(FieldKey.TRACK_TOTAL).size());
-            assertEquals("15",tag.getValue(FieldKey.TRACK_TOTAL, 0));
-            assertEquals("10",tag.getValue(FieldKey.TRACK_TOTAL, 1));
-
+            assertEquals(1, tag.getAll(FieldKey.TRACK).size());
         }
         catch(Exception e)
         {

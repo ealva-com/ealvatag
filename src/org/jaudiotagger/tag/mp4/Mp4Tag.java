@@ -511,6 +511,34 @@ public class Mp4Tag extends AbstractTag
     }
 
     /**
+     * Create new field and add it to the tag, with special handling for trackNo, discNo fields as we dont want multiple
+     * fields to be created for these fields
+     *
+     * @param genericKey
+     * @param value
+     * @throws KeyNotFoundException
+     * @throws FieldDataInvalidException
+     */
+    @Override
+    public void addField(FieldKey genericKey, String value) throws KeyNotFoundException, FieldDataInvalidException
+    {
+        if(
+            (genericKey==FieldKey.TRACK)||
+            (genericKey==FieldKey.TRACK_TOTAL)||
+            (genericKey==FieldKey.DISC_NO)||
+            (genericKey==FieldKey.DISC_TOTAL)
+            )
+        {
+            setField(genericKey, value);
+        }
+        else
+        {
+            TagField tagfield = createField(genericKey,value);
+            addField(tagfield);
+        }
+    }
+
+    /**
      * Create Tag Field using generic key
      * <p/>
      * This should use the correct subclass for the key
@@ -535,10 +563,10 @@ public class Mp4Tag extends AbstractTag
 
         //Special handling for these number fields
         if(
-                (genericKey== FieldKey.TRACK)||
-                (genericKey== FieldKey.TRACK_TOTAL)||
-                (genericKey== FieldKey.DISC_NO)||
-                (genericKey== FieldKey.DISC_TOTAL)
+                (genericKey == FieldKey.TRACK)||
+                (genericKey == FieldKey.TRACK_TOTAL)||
+                (genericKey == FieldKey.DISC_NO)||
+                (genericKey == FieldKey.DISC_TOTAL)
             )
         {
             try
@@ -571,7 +599,6 @@ public class Mp4Tag extends AbstractTag
 
         //Default for all other fields
         return createField(tagFieldToMp4Field.get(genericKey), value);
-
     }
 
     /**
