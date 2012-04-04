@@ -40,14 +40,7 @@ public class FlacTagWriter
     // Logger Object
     public static Logger logger = Logger.getLogger("org.jaudiotagger.audio.flac");
 
-    private MetadataBlock       streamInfoBlock;
-    private List<MetadataBlock> metadataBlockPadding = new ArrayList<MetadataBlock>(1);
-    private List<MetadataBlock> metadataBlockApplication = new ArrayList<MetadataBlock>(1);
-    private List<MetadataBlock> metadataBlockSeekTable = new ArrayList<MetadataBlock>(1);
-    private List<MetadataBlock> metadataBlockCueSheet = new ArrayList<MetadataBlock>(1);
-
     private FlacTagCreator tc = new FlacTagCreator();
-    private FlacTagReader reader = new FlacTagReader();
 
     /**
      * Delete Tag from file
@@ -66,6 +59,14 @@ public class FlacTagWriter
         write(emptyTag, raf, tempRaf);
     }
 
+    private static class MetadataBlockInfo {
+	    private MetadataBlock       streamInfoBlock;
+	    private List<MetadataBlock> metadataBlockPadding = new ArrayList<MetadataBlock>(1);
+	    private List<MetadataBlock> metadataBlockApplication = new ArrayList<MetadataBlock>(1);
+	    private List<MetadataBlock> metadataBlockSeekTable = new ArrayList<MetadataBlock>(1);
+	    private List<MetadataBlock> metadataBlockCueSheet = new ArrayList<MetadataBlock>(1);
+    }
+
     /**
      * Write tag to file
      *
@@ -79,14 +80,8 @@ public class FlacTagWriter
     {
         logger.config("Writing tag");
 
-        //Clean up old data
-        streamInfoBlock=null;
-        metadataBlockPadding.clear();
-        metadataBlockApplication.clear();
-        metadataBlockSeekTable.clear();
-        metadataBlockCueSheet.clear();
-
-
+        MetadataBlockInfo blockInfo = new MetadataBlockInfo();
+        
         //Read existing data
         FlacStreamReader flacStream = new FlacStreamReader(raf);
         try
@@ -106,7 +101,7 @@ public class FlacTagWriter
             {
                 case STREAMINFO:
                 {
-                    streamInfoBlock = new MetadataBlock(mbh,new MetadataBlockDataStreamInfo(mbh, raf));
+                	blockInfo.streamInfoBlock = new MetadataBlock(mbh,new MetadataBlockDataStreamInfo(mbh, raf));
                     break;
                 }
 
@@ -118,25 +113,25 @@ public class FlacTagWriter
                     //to determine how much space is already allocated in the file
                     raf.seek(raf.getFilePointer() + mbh.getDataLength());
                     MetadataBlockData mbd = new MetadataBlockDataPadding(mbh.getDataLength());
-                    metadataBlockPadding.add(new MetadataBlock(mbh, mbd));
+                    blockInfo.metadataBlockPadding.add(new MetadataBlock(mbh, mbd));
                     break;
                 }
                 case APPLICATION:
                 {
                     MetadataBlockData mbd = new MetadataBlockDataApplication(mbh, raf);
-                    metadataBlockApplication.add(new MetadataBlock(mbh, mbd));
+                    blockInfo.metadataBlockApplication.add(new MetadataBlock(mbh, mbd));
                     break;
                 }
                 case SEEKTABLE:
                 {
                     MetadataBlockData mbd = new MetadataBlockDataSeekTable(mbh, raf);
-                    metadataBlockSeekTable.add(new MetadataBlock(mbh, mbd));
+                    blockInfo.metadataBlockSeekTable.add(new MetadataBlock(mbh, mbd));
                     break;
                 }
                 case CUESHEET:
                 {
                     MetadataBlockData mbd = new MetadataBlockDataCueSheet(mbh, raf);
-                    metadataBlockCueSheet.add(new MetadataBlock(mbh, mbd));
+                    blockInfo.metadataBlockCueSheet.add(new MetadataBlock(mbh, mbd));
                     break;
                 }
                 default:
@@ -150,13 +145,13 @@ public class FlacTagWriter
         }
 
         //Number of bytes in the existing file available before audio data
-        int availableRoom = computeAvailableRoom();
+        int availableRoom = computeAvailableRoom(blockInfo);
 
         //Minimum Size of the New tag data without padding         
         int newTagSize = tc.convert(tag).limit();
 
         //Number of bytes required for new tagdata and other metadata blocks
-        int neededRoom = newTagSize + computeNeededRoom();
+        int neededRoom = newTagSize + computeNeededRoom(blockInfo);
 
         //Go to start of Flac within file
         raf.seek(flacStream.getStartOfFlacInFile());
@@ -171,25 +166,25 @@ public class FlacTagWriter
             raf.seek(flacStream.getStartOfFlacInFile() + FlacStreamReader.FLAC_STREAM_IDENTIFIER_LENGTH);
 
             //Write StreamInfo, we always write this first even if wasn't first in original spec
-            raf.write(streamInfoBlock.getHeader().getBytesWithoutIsLastBlockFlag());
-            raf.write(streamInfoBlock.getData().getBytes());
+            raf.write(blockInfo.streamInfoBlock.getHeader().getBytesWithoutIsLastBlockFlag());
+            raf.write(blockInfo.streamInfoBlock.getData().getBytes());
 
             //Write Application Blocks
-            for (MetadataBlock aMetadataBlockApplication : metadataBlockApplication)
+            for (MetadataBlock aMetadataBlockApplication : blockInfo.metadataBlockApplication)
             {
                 raf.write(aMetadataBlockApplication.getHeader().getBytesWithoutIsLastBlockFlag());
                 raf.write(aMetadataBlockApplication.getData().getBytes());
             }
 
             //Write Seek Table Blocks
-            for (MetadataBlock aMetadataBlockSeekTable : metadataBlockSeekTable)
+            for (MetadataBlock aMetadataBlockSeekTable : blockInfo.metadataBlockSeekTable)
             {
                 raf.write(aMetadataBlockSeekTable.getHeader().getBytesWithoutIsLastBlockFlag());
                 raf.write(aMetadataBlockSeekTable.getData().getBytes());
             }
 
             //Write Cue sheet Blocks
-            for (MetadataBlock aMetadataBlockCueSheet : metadataBlockCueSheet)
+            for (MetadataBlock aMetadataBlockCueSheet : blockInfo.metadataBlockCueSheet)
             {
                 raf.write(aMetadataBlockCueSheet.getHeader().getBytesWithoutIsLastBlockFlag());
                 raf.write(aMetadataBlockCueSheet.getData().getBytes());
@@ -231,19 +226,19 @@ public class FlacTagWriter
             rafTemp.seek(dataStartSize);
 
             //Write all the metadatablocks
-            for (MetadataBlock aMetadataBlockApplication : metadataBlockApplication)
+            for (MetadataBlock aMetadataBlockApplication : blockInfo.metadataBlockApplication)
             {
                 rafTemp.write(aMetadataBlockApplication.getHeader().getBytesWithoutIsLastBlockFlag());
                 rafTemp.write(aMetadataBlockApplication.getData().getBytes());
             }
 
-            for (MetadataBlock aMetadataBlockSeekTable : metadataBlockSeekTable)
+            for (MetadataBlock aMetadataBlockSeekTable : blockInfo.metadataBlockSeekTable)
             {
                 rafTemp.write(aMetadataBlockSeekTable.getHeader().getBytesWithoutIsLastBlockFlag());
                 rafTemp.write(aMetadataBlockSeekTable.getData().getBytes());
             }
 
-            for (MetadataBlock aMetadataBlockCueSheet : metadataBlockCueSheet)
+            for (MetadataBlock aMetadataBlockCueSheet : blockInfo.metadataBlockCueSheet)
             {
                 rafTemp.write(aMetadataBlockCueSheet.getHeader().getBytesWithoutIsLastBlockFlag());
                 rafTemp.write(aMetadataBlockCueSheet.getData().getBytes());
@@ -276,28 +271,29 @@ public class FlacTagWriter
     }
 
     /**
+     * @param blockInfo 
      * @return space currently available for writing all Flac metadatablocks except for StreamInfo which is fixed size
      */
-    private int computeAvailableRoom()
+    private int computeAvailableRoom(MetadataBlockInfo blockInfo)
     {
         int length = 0;
 
-        for (MetadataBlock aMetadataBlockApplication : metadataBlockApplication)
+        for (MetadataBlock aMetadataBlockApplication : blockInfo.metadataBlockApplication)
         {
             length += aMetadataBlockApplication.getLength();
         }
 
-        for (MetadataBlock aMetadataBlockSeekTable : metadataBlockSeekTable)
+        for (MetadataBlock aMetadataBlockSeekTable : blockInfo.metadataBlockSeekTable)
         {
             length += aMetadataBlockSeekTable.getLength();
         }
 
-        for (MetadataBlock aMetadataBlockCueSheet : metadataBlockCueSheet)
+        for (MetadataBlock aMetadataBlockCueSheet : blockInfo.metadataBlockCueSheet)
         {
             length += aMetadataBlockCueSheet.getLength();
         }
 
-        for (MetadataBlock aMetadataBlockPadding : metadataBlockPadding)
+        for (MetadataBlock aMetadataBlockPadding : blockInfo.metadataBlockPadding)
         {
             length += aMetadataBlockPadding.getLength();
         }
@@ -306,24 +302,25 @@ public class FlacTagWriter
     }
 
     /**
+     * @param blockInfo 
      * @return space required to write the metadata blocks that are part of Flac but are not part of tagdata
      *         in the normal sense.
      */
-    private int computeNeededRoom()
+    private int computeNeededRoom(MetadataBlockInfo blockInfo)
     {
         int length = 0;
 
-        for (MetadataBlock aMetadataBlockApplication : metadataBlockApplication)
+        for (MetadataBlock aMetadataBlockApplication : blockInfo.metadataBlockApplication)
         {
             length += aMetadataBlockApplication.getLength();
         }
 
-        for (MetadataBlock aMetadataBlockSeekTable : metadataBlockSeekTable)
+        for (MetadataBlock aMetadataBlockSeekTable : blockInfo.metadataBlockSeekTable)
         {
             length += aMetadataBlockSeekTable.getLength();
         }
 
-        for (MetadataBlock aMetadataBlockCueSheet : metadataBlockCueSheet)
+        for (MetadataBlock aMetadataBlockCueSheet : blockInfo.metadataBlockCueSheet)
         {
             length += aMetadataBlockCueSheet.getLength();
         }
