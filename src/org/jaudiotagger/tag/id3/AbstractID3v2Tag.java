@@ -2351,7 +2351,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
                 }
                 else if (next instanceof FrameBodyUFID)
                 {
-                    if (Arrays.equals(((FrameBodyUFID) next).getUniqueIdentifier(), formatKey.getSubId().getBytes()))
+                    if (((FrameBodyUFID) next).getOwner().equals(formatKey.getSubId()))
                     {
                         values.add(new String(((FrameBodyUFID) next).getUniqueIdentifier()));
                     }
@@ -2582,7 +2582,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
                 }
                 else if (next instanceof FrameBodyUFID)
                 {
-                    if (Arrays.equals(((FrameBodyUFID) next).getUniqueIdentifier(), formatKey.getSubId().getBytes()))
+                    if (((FrameBodyUFID) next).getOwner().equals(formatKey.getSubId()))
                     {
                         if (list.size() == 1)
                         {
@@ -2673,7 +2673,6 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
         //key that was passed as a parameter
         if (subFieldId != null)
         {
-
             for (TagField tagfield : list)
             {
                 AbstractTagFrameBody next = ((AbstractID3v2Frame) tagfield).getBody();
@@ -2700,7 +2699,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
                 }
                 else if (next instanceof FrameBodyUFID)
                 {
-                    if (Arrays.equals(((FrameBodyUFID) next).getUniqueIdentifier(), formatKey.getSubId().getBytes()))
+                    if (((FrameBodyUFID) next).getOwner().equals(formatKey.getSubId()))
                     {
                         filteredList.add(tagfield);
                     }
