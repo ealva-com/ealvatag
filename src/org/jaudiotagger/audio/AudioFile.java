@@ -247,8 +247,6 @@ public class AudioFile
      *
      * @return
      */
-    //TODO might be better to instantiate classes such as Mp4File,FlacFile ecetera
-    //TODO Generic tag is very misleading because some of these formats cannot actually save the tag
     public Tag createDefaultTag()
     {
         if(SupportedFileFormat.FLAC.getFilesuffix().equals(file.getName().substring(file.getName().lastIndexOf('.'))))
@@ -324,6 +322,11 @@ public class AudioFile
             return tag;
         }
         return tag;
+    }
+
+    public Tag getTagAndConvertOrCreateAndSetDefault()
+    {
+        return getTagOrCreateAndSetDefault();
     }
 
     /**

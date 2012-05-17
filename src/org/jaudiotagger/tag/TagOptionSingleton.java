@@ -31,6 +31,7 @@ import org.jaudiotagger.tag.id3.framebody.ID3v24FrameBody;
 import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
 import org.jaudiotagger.tag.lyrics3.Lyrics3v2Fields;
 import org.jaudiotagger.tag.reference.GenreTypes;
+import org.jaudiotagger.tag.reference.ID3V2Version;
 import org.jaudiotagger.tag.reference.Languages;
 
 import java.util.HashMap;
@@ -267,6 +268,8 @@ public class TagOptionSingleton
 
     private boolean isWriteMp4GenresAsText=false;
 
+    private ID3V2Version id3v2Version = ID3V2Version.ID3_V23;
+
     /**
      * Creates a new TagOptions datatype. All Options are set to their default
      * values
@@ -316,6 +319,22 @@ public class TagOptionSingleton
     public boolean isFilenameTagSave()
     {
         return filenameTagSave;
+    }
+
+    /**
+     * @param id3v2Version
+     */
+    public void setID3V2Version(ID3V2Version  id3v2Version)
+    {
+        this.id3v2Version = id3v2Version;
+    }
+
+    /**
+     * @return
+     */
+    public ID3V2Version getID3V2Version()
+    {
+        return id3v2Version;
     }
 
 

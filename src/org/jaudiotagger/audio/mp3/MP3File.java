@@ -32,6 +32,7 @@ import org.jaudiotagger.tag.TagNotFoundException;
 import org.jaudiotagger.tag.TagOptionSingleton;
 import org.jaudiotagger.tag.id3.*;
 import org.jaudiotagger.tag.lyrics3.AbstractLyrics3;
+import org.jaudiotagger.tag.reference.ID3V2Version;
 
 import java.io.*;
 import java.nio.ByteBuffer;
@@ -951,10 +952,94 @@ public class MP3File extends AudioFile
      * @return
      */
     @Override
-    //TODO Should be able to change the Default
     public Tag createDefaultTag()
     {
-        return new ID3v23Tag();
+        if(TagOptionSingleton.getInstance().getID3V2Version()==ID3V2Version.ID3_V24)
+        {    
+            return new ID3v24Tag();
+        }
+        else if(TagOptionSingleton.getInstance().getID3V2Version()==ID3V2Version.ID3_V23)
+        {
+            return new ID3v23Tag();
+        }
+        else if(TagOptionSingleton.getInstance().getID3V2Version()==ID3V2Version.ID3_V22)
+        {
+            return new ID3v22Tag();
+        }
+        //Default in case not set somehow
+        return new ID3v24Tag();
+    }
+
+    /**
+     * Convert tag from current version to another as specified by id3V2Version
+     *
+     * @return
+     */
+    public Tag convertTag(Tag tag, ID3V2Version id3V2Version)
+    {
+        System.out.println("ConvertTag:"+tag.getClass()+":"+id3V2Version);
+        if(tag instanceof ID3v24Tag)
+        {
+            switch(id3V2Version)
+            {
+                case ID3_V22:
+                    return new ID3v22Tag((ID3v24Tag)tag);
+                case ID3_V23:
+                    return new ID3v23Tag((ID3v24Tag)tag);
+                case ID3_V24:
+                    return tag;
+            }
+        }
+        else if(tag instanceof ID3v23Tag)
+        {
+            switch(id3V2Version)
+            {
+                case ID3_V22:
+                    return new ID3v22Tag((ID3v23Tag)tag);
+                case ID3_V23:
+                    return tag;
+                case ID3_V24:
+                    return new ID3v24Tag((ID3v23Tag)tag);
+            }
+        }
+        else if(tag instanceof ID3v22Tag)
+        {
+            switch(id3V2Version)
+            {
+                case ID3_V22:
+                    return tag;
+                case ID3_V23:
+                    return new ID3v23Tag((ID3v22Tag)tag);
+                case ID3_V24:
+                    return new ID3v24Tag((ID3v22Tag)tag);
+            }
+        }
+        return tag;
+    }
+
+    /**
+     * Get the tag and convert to preferred version or if the file doesn't have one at all
+     * create a default tag of preferred version and set it
+     *
+     * @return
+     */
+    @Override
+    public Tag getTagAndConvertOrCreateAndSetDefault()
+    {
+        System.out.println("GetTagAndConvertOrCreateTag:"+tag.getClass()+":"+TagOptionSingleton.getInstance().getID3V2Version());
+        Tag tag = getTag();
+        if(tag==null)
+        {
+            tag = createDefaultTag();
+            setTag(tag);
+            return tag;
+        }
+        else
+        {
+            tag=convertTag(tag, TagOptionSingleton.getInstance().getID3V2Version());
+            setTag(tag);
+            return tag;
+        }
     }
 }
 
