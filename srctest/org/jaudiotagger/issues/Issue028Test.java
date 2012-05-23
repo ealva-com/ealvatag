@@ -18,6 +18,14 @@ public class Issue028Test extends AbstractTestCase
 {
     public void testReadV2L3Stereo()
     {
+        File orig = new File("testdata", "test97.mp3");
+        if (!orig.isFile())
+        {
+            System.err.println("Unable to test file - not available");
+            return;
+        }
+
+
         Exception exceptionCaught = null;
         File testFile = AbstractTestCase.copyAudioToTmp("test97.mp3");
         MP3AudioHeader mp3AudioHeader = null;

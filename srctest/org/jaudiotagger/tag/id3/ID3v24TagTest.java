@@ -371,6 +371,13 @@ public class ID3v24TagTest extends TestCase
      */
     public void testDeleteTag() throws Exception
     {
+        File orig = new File("testdata", "test70.mp3");
+        if (!orig.isFile())
+        {
+            System.err.println("Unable to test file - not available");
+            return;
+        }
+
         File testFile = AbstractTestCase.copyAudioToTmp("test70.mp3");
         MP3File audioFile = new MP3File(testFile);
 
@@ -391,6 +398,13 @@ public class ID3v24TagTest extends TestCase
 
      public void testWriteTagUsingAudioIOMethod()
     {
+        File orig = new File("testdata", "test70.mp3");
+        if (!orig.isFile())
+        {
+            System.err.println("Unable to test file - not available");
+            return;
+        }
+
         Exception exceptionCaught=null;
         try
         {

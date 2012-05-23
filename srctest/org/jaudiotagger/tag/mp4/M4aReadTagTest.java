@@ -1268,6 +1268,13 @@ public class M4aReadTagTest extends TestCase
 
     public void testNumericGenres() throws Exception
     {
+        File orig = new File("testdata", "test75.m4a");
+        if (!orig.isFile())
+        {
+            System.err.println("Unable to test file - not available");
+            return;
+        }
+
         Exception exceptionCaught = null;
         try
         {
@@ -1288,6 +1295,13 @@ public class M4aReadTagTest extends TestCase
 
     public void testReadFile3() throws Exception
     {
+        File orig = new File("testdata", "test84.m4a");
+        if (!orig.isFile())
+        {
+            System.err.println("Unable to test file - not available");
+            return;
+        }
+
         Exception exceptionCaught = null;
         try
         {
@@ -1321,6 +1335,13 @@ public class M4aReadTagTest extends TestCase
 
     public void testReadFile4() throws Exception
     {
+        File orig = new File("testdata", "test86.m4a");
+        if (!orig.isFile())
+        {
+            System.err.println("Unable to test file - not available");
+            return;
+        }
+
         Exception exceptionCaught = null;
         try
         {

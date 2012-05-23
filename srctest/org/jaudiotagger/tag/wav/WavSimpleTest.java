@@ -51,6 +51,13 @@ public class WavSimpleTest extends AbstractTestCase
 
     public void testRead24BitFile()
     {
+        File orig = new File("testdata", "test105.wav");
+        if (!orig.isFile())
+        {
+            System.err.println("Unable to test file - not available");
+            return;
+        }
+
         Exception exceptionCaught = null;
         try
         {

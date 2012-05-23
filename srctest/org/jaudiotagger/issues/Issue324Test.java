@@ -19,6 +19,14 @@ public class Issue324Test extends AbstractTestCase
 {
     public void testID3v1TagHandling() throws Exception
     {
+
+        File orig = new File("testdata", "test32.mp3");
+        if (!orig.isFile())
+        {
+            System.err.println("Unable to test file - not available");
+            return;
+        }
+
         File testFile = AbstractTestCase.copyAudioToTmp("test32.mp3");
         assertEquals(1853744,testFile.length());
         MP3File f = (MP3File)AudioFileIO.read(testFile);

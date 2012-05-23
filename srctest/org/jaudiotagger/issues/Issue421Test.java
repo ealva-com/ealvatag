@@ -17,6 +17,13 @@ public class Issue421Test extends AbstractTestCase
 {
     public void testTrackField() throws Exception
     {
+        File orig = new File("testdata", "Arizona.m4a");
+        if (!orig.isFile())
+        {
+            System.err.println("Unable to test file - not available");
+            return;
+        }
+
         File testFile = AbstractTestCase.copyAudioToTmp("Arizona.m4a");
         AudioFile f = AudioFileIO.read(testFile);
         Tag tag = f.getTag();
