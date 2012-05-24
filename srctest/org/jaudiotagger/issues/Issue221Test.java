@@ -160,7 +160,8 @@ public class Issue221Test extends AbstractTestCase
             e.printStackTrace();
             exceptionCaught = e;
         }
-        assertTrue(exceptionCaught instanceof IllegalArgumentException);
+        assertNull(exceptionCaught);
+
     }
 
     public void testCreateNullID3v24Frame()

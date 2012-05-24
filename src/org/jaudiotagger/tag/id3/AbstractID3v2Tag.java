@@ -548,12 +548,12 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
 
                 if (newBody.getTrackNo() != null && newBody.getTrackNo() > 0)
                 {
-                    oldBody.setTrackNo(newBody.getTrackNo());
+                    oldBody.setTrackNo(newBody.getTrackNoAsText());
                 }
 
                 if (newBody.getTrackTotal() != null && newBody.getTrackTotal() > 0)
                 {
-                    oldBody.setTrackTotal(newBody.getTrackTotal());
+                    oldBody.setTrackTotal(newBody.getTrackTotalAsText());
                 }
                 return;
             }
@@ -566,13 +566,13 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
                 Integer newDiscNo = newBody.getDiscNo();
                 if ((newDiscNo != null) && (newDiscNo > 0))
                 {
-                    oldBody.setDiscNo(newDiscNo);
+                    oldBody.setDiscNo(newBody.getDiscNoAsText());
                 }
 
                 Integer newDiscTotal = newBody.getDiscTotal();
                 if ((newDiscTotal != null) && (newDiscTotal > 0))
                 {
-                    oldBody.setDiscTotal(newDiscTotal);
+                    oldBody.setDiscTotal(newBody.getDiscTotalAsText());
                 }
                 return;
             }
@@ -716,12 +716,12 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
 
             if (frameBody.getTrackNo() != null && frameBody.getTrackNo() > 0)
             {
-                existingFrameBody.setTrackNo(frameBody.getTrackNo());
+                existingFrameBody.setTrackNo(frameBody.getTrackNoAsText());
             }
 
             if (frameBody.getTrackTotal() != null && frameBody.getTrackTotal() > 0)
             {
-                existingFrameBody.setTrackTotal(frameBody.getTrackTotal());
+                existingFrameBody.setTrackTotal(frameBody.getTrackTotalAsText());
             }
         }
         else if (frame.getBody() instanceof FrameBodyTPOS)
@@ -731,12 +731,12 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
 
             if (frameBody.getDiscNo() != null && frameBody.getDiscNo() > 0)
             {
-                existingFrameBody.setDiscNo(frameBody.getDiscNo());
+                existingFrameBody.setDiscNo(frameBody.getDiscNoAsText());
             }
 
             if (frameBody.getDiscTotal() != null && frameBody.getDiscTotal() > 0)
             {
-                existingFrameBody.setDiscTotal(frameBody.getDiscTotal());
+                existingFrameBody.setDiscTotal(frameBody.getDiscTotalAsText());
             }
         }
         else
@@ -2162,21 +2162,21 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
         {
             AbstractID3v2Frame frame = createFrame(formatKey.getFrameId());
             FrameBodyTRCK framebody = (FrameBodyTRCK) frame.getBody();
-            framebody.setTrackNo(Integer.parseInt(value));
+            framebody.setTrackNo(value);
             return frame;
         }
         else if (genericKey == FieldKey.TRACK_TOTAL)
         {
             AbstractID3v2Frame frame = createFrame(formatKey.getFrameId());
             FrameBodyTRCK framebody = (FrameBodyTRCK) frame.getBody();
-            framebody.setTrackTotal(Integer.parseInt(value));
+            framebody.setTrackTotal(value);
             return frame;
         }
         else if (genericKey == FieldKey.DISC_NO)
         {
             AbstractID3v2Frame frame = createFrame(formatKey.getFrameId());
             FrameBodyTPOS framebody = (FrameBodyTPOS) frame.getBody();
-            framebody.setDiscNo(Integer.parseInt(value));
+            framebody.setDiscNo(value);
             return frame;
         }
         else if (genericKey == FieldKey.DISC_TOTAL)

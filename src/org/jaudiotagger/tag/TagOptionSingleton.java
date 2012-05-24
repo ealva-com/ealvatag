@@ -30,6 +30,7 @@ import org.jaudiotagger.tag.id3.framebody.FrameBodyTIPL;
 import org.jaudiotagger.tag.id3.framebody.ID3v24FrameBody;
 import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
 import org.jaudiotagger.tag.lyrics3.Lyrics3v2Fields;
+import org.jaudiotagger.tag.options.PadNumberOption;
 import org.jaudiotagger.tag.reference.GenreTypes;
 import org.jaudiotagger.tag.reference.ID3V2Version;
 import org.jaudiotagger.tag.reference.Languages;
@@ -239,8 +240,18 @@ public class TagOptionSingleton
 
     /**
      * Frames such as TRCK and TPOS sometimes pad single digit numbers to aid sorting
+     *
+     * Currently only applies to ID3 files
      */
     private boolean padNumbers = false;
+
+    /**
+     * Number of padding zeroes digits 1- 9, numbers larger than nine will be padded accordingly based on the value.
+     * Only has any effect if padNumbers is set to true
+     *
+     * Currently only applies to ID3 files
+     */
+    private PadNumberOption padNumberTotalLength = PadNumberOption.PAD_ONE_ZERO;
 
     /**
      * There are a couple of problems with the Java implementation on Google Android, enabling this value
@@ -1179,5 +1190,18 @@ public class TagOptionSingleton
     public void setWriteMp4GenresAsText(boolean writeMp4GenresAsText)
     {
         isWriteMp4GenresAsText = writeMp4GenresAsText;
+    }
+
+    /**
+     * Total length of number, i.e if set to 2 the value 1 would be stored as 01, if set to 3 would bs stored as 001
+     */
+    public PadNumberOption getPadNumberTotalLength()
+    {
+        return padNumberTotalLength;
+    }
+
+    public void setPadNumberTotalLength(PadNumberOption padNumberTotalLength)
+    {
+        this.padNumberTotalLength = padNumberTotalLength;
     }
 }

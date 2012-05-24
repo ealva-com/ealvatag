@@ -150,6 +150,11 @@ public class FrameBodyTRCK extends AbstractID3v2FrameBody implements ID3v23Frame
          ((PartOfSet.PartOfSetValue)getObjectValue(DataTypes.OBJ_TEXT)).setTotal(trackTotal);
     }
 
+    public void setTrackTotal(String trackTotal)
+    {
+        ((PartOfSet.PartOfSetValue)getObjectValue(DataTypes.OBJ_TEXT)).setTotal(trackTotal);
+    }
+
     public void setText(String text)
     {
         setObjectValue(DataTypes.OBJ_TEXT, new PartOfSet.PartOfSetValue(text));

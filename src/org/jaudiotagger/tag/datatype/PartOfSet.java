@@ -4,6 +4,7 @@ import org.jaudiotagger.tag.InvalidDataTypeException;
 import org.jaudiotagger.tag.TagOptionSingleton;
 import org.jaudiotagger.tag.id3.AbstractTagFrameBody;
 import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
+import org.jaudiotagger.tag.options.PadNumberOption;
 import org.jaudiotagger.utils.EqualsUtil;
 
 import java.nio.ByteBuffer;
@@ -16,6 +17,16 @@ import java.util.regex.Pattern;
  * Represents the form 01/10 whereby the second part is optional. This is used by frame such as TRCK and TPOS
  * <p/>
  * Some applications like to prepend the count with a zero to aid sorting, (i.e 02 comes before 10)
+ *
+ * If TagOptionSingleton.getInstance().isPadNumbers() is enabled then all fields will be written to file padded
+ * depending on the value of agOptionSingleton.getInstance().getPadNumberTotalLength(). Additionally fields returned
+ * from file will be returned as padded even if they are not currently stored as padded in the file.
+ *
+ * If TagOptionSingleton.getInstance().isPadNumbers() is disabled then count and track are written to file as they
+ * are provided, i.e if provided pre-padded they will be stored pre-padded, if not they will not. Values read from
+ * file will be returned as they are currently stored in file.
+ *
+ *
  */
 @SuppressWarnings({"EmptyCatchBlock"})
 public class PartOfSet extends AbstractString
@@ -189,9 +200,11 @@ public class PartOfSet extends AbstractString
         private static final String SEPARATOR = "/";
         private Integer count;
         private Integer total;
-        private String extra;   //Any extraneous info such as null chars
-        private String rawText; // raw text representation used to actually save the data IF !TagOptionSingleton.getInstance().isPadNumbers()
-
+        private String  extra;   //Any extraneous info such as null chars
+        private String  rawText;   // raw text representation used to actually save the data IF !TagOptionSingleton.getInstance().isPadNumbers()
+        private String  rawCount;  //count value as provided
+        private String  rawTotal;  //total value as provided
+        
         public PartOfSetValue()
         {
             rawText = "";
@@ -216,11 +229,19 @@ public class PartOfSet extends AbstractString
          */
         public PartOfSetValue(Integer count, Integer total)
         {
-            this.count = count;
-            this.total = total;
+            this.count      = count;
+            this.rawCount   = count.toString();
+            this.total      = total;
+            this.rawTotal   = total.toString();
             resetValueFromCounts();
         }
 
+        /**
+         * Given a raw value that could contain both a count and total and extra stuff (but needdnt contain
+         * anything tries to parse it)
+         *
+         * @param value
+         */
         private void initFromValue(String value)
         {
             try
@@ -230,7 +251,9 @@ public class PartOfSet extends AbstractString
                 {
                     this.extra = m.group(3);
                     this.count = Integer.parseInt(m.group(1));
+                    this.rawCount=m.group(1);
                     this.total = Integer.parseInt(m.group(2));
+                    this.rawTotal=m.group(2);
                     return;
                 }
 
@@ -239,6 +262,7 @@ public class PartOfSet extends AbstractString
                 {
                     this.extra = m.group(2);
                     this.count = Integer.parseInt(m.group(1));
+                    this.rawCount = m.group(1);
                 }
             }
             catch (NumberFormatException nfe)
@@ -250,10 +274,25 @@ public class PartOfSet extends AbstractString
 
         private void resetValueFromCounts()
         {
-
-            // return 0 if count is null as this is what the tests assert for when count is empty
-            this.rawText = (count != null ? count.toString() : "0") + (total != null ? SEPARATOR + total.toString() : "") + (extra != null ? extra : "");
-        }
+            StringBuffer sb = new StringBuffer();
+            if(rawCount!=null)
+            {
+                sb.append(rawCount);
+            }
+            else
+            {
+                sb.append("0");
+            }
+            if(rawTotal!=null)
+            {
+                sb.append(SEPARATOR + rawTotal);
+            }
+            if(extra!=null)
+            {
+                sb.append(extra);
+            }
+            this.rawText = sb.toString();
+       }
 
         public Integer getCount()
         {
@@ -267,13 +306,15 @@ public class PartOfSet extends AbstractString
 
         public void setCount(Integer count)
         {
-            this.count = count;
+            this.count      = count;
+            this.rawCount   = count.toString();
             resetValueFromCounts();
         }
 
         public void setTotal(Integer total)
         {
-            this.total = total;
+            this.total      = total;
+            this.rawTotal   = total.toString();
             resetValueFromCounts();
 
         }
@@ -283,6 +324,7 @@ public class PartOfSet extends AbstractString
             try
             {
                 this.count = Integer.parseInt(count);
+                this.rawCount = count;
                 resetValueFromCounts();
             }
             catch (NumberFormatException nfe)
@@ -295,7 +337,8 @@ public class PartOfSet extends AbstractString
         {
             try
             {
-                this.total = Integer.parseInt(total);
+                this.total      = Integer.parseInt(total);
+                this.rawTotal   = total;
                 resetValueFromCounts();
             }
             catch (NumberFormatException nfe)
@@ -316,8 +359,7 @@ public class PartOfSet extends AbstractString
         }
 
         /**
-         * Get Count including padded if padding is enabled, if padding is not enabled take the value upto the
-         * '/' character if it exists or the whole value if it does not exist
+         * Get Count including padded if padding is enabled
          *
          * @return
          */
@@ -327,23 +369,27 @@ public class PartOfSet extends AbstractString
             StringBuffer sb = new StringBuffer();
             if (!TagOptionSingleton.getInstance().isPadNumbers())
             {
-                if(rawText.contains(SEPARATOR))
-                {
-                    return rawText.substring(0, rawText.indexOf(SEPARATOR));
-                }
-                else
-                {
-                    //We don't want trailing null even in raw mode
-                    if(rawText.endsWith("\0"))
-                    {
-                        return rawText.substring(0,rawText.length() - 1);
-                    }
-                    return rawText;
-                }
+                return rawCount;
             }
             else
             {
-                if (count != null)
+                padNumber(sb, count, TagOptionSingleton.getInstance().getPadNumberTotalLength());
+            }
+            return sb.toString();
+        }
+
+        /**
+         * Pad number so number is defined as long as length
+         *
+         * @param sb
+         * @param count
+         * @param padNumberLength
+         */
+        private void padNumber(StringBuffer sb, Integer count,PadNumberOption padNumberLength)
+        {
+            if (count != null)
+            {
+                if(padNumberLength==PadNumberOption.PAD_ONE_ZERO)
                 {
                     if (count > 0 && count < 10)
                     {
@@ -354,13 +400,45 @@ public class PartOfSet extends AbstractString
                         sb.append(count.intValue());
                     }
                 }
-            }
-            return sb.toString();
+                else if(padNumberLength==PadNumberOption.PAD_TWO_ZERO)
+                {
+                    if (count > 0 && count < 10)
+                    {
+                        sb.append("00").append(count);
+                    }
+                    else if (count > 9 && count < 100)
+                    {
+                        sb.append("0").append(count);
+                    }
+                    else
+                    {
+                        sb.append(count.intValue());
+                    }
+                }
+                else if(padNumberLength==PadNumberOption.PAD_THREE_ZERO)
+                {
+                    if (count > 0 && count < 10)
+                    {
+                        sb.append("000").append(count);
+                    }
+                    else if (count > 9 && count < 100)
+                    {
+                        sb.append("00").append(count);
+                    }
+                    else if (count > 99 && count < 1000)
+                    {
+                        sb.append("0").append(count);
+                    }
+                    else
+                    {
+                        sb.append(count.intValue());
+                    }
+                }
+            }    
         }
-
         /**
-         * Get Total padded if padding is enabled, if padding is not enabled take the raw value
-         * after the '/' character
+         * Get Total padded
+         *
          * @return
          */
         public String getTotalAsText()
@@ -369,40 +447,19 @@ public class PartOfSet extends AbstractString
             StringBuffer sb = new StringBuffer();
             if (!TagOptionSingleton.getInstance().isPadNumbers())
             {
-                if(rawText.contains(SEPARATOR))
-                {
-                    String total = rawText.substring(rawText.indexOf(SEPARATOR)+1);
-                    //We don't want trailing null even in raw mode
-                    if(total.endsWith("\0"))
-                    {
-                        return total.substring(0,total.length() - 1);
-                    }
-                    return total;
-                }
-                else
-                {
-                    return "";
-                }
+                return rawTotal;
             }
             else
             {
-                if (total != null)
-                {
-                    if (total > 0 && total < 10)
-                    {
-                        sb.append("0").append(total);
-                    }
-                    else
-                    {
-                        sb.append(total);
-                    }
-                }
+                padNumber(sb, total, TagOptionSingleton.getInstance().getPadNumberTotalLength());
+
             }
             return sb.toString();
         }
 
         public String toString()
         {
+
             //Don't Pad
             StringBuffer sb = new StringBuffer();
             if (!TagOptionSingleton.getInstance().isPadNumbers())
@@ -413,29 +470,16 @@ public class PartOfSet extends AbstractString
             {
                 if (count != null)
                 {
-                    if (count > 0 && count < 10)
-                    {
-                        sb.append("0").append(count);
-                    }
-                    else
-                    {
-                        sb.append(count.intValue());
-                    }
+                    padNumber(sb, count, TagOptionSingleton.getInstance().getPadNumberTotalLength());
                 }
                 else if (total != null)
                 {
-                    sb.append('0');
+                    padNumber(sb, 0, TagOptionSingleton.getInstance().getPadNumberTotalLength());
                 }
                 if (total != null)
                 {
-                    if (total > 0 && total < 10)
-                    {
-                        sb.append(SEPARATOR + "0").append(total);
-                    }
-                    else
-                    {
-                        sb.append(SEPARATOR).append(total);
-                    }
+                    sb.append(SEPARATOR);
+                    padNumber(sb, total, TagOptionSingleton.getInstance().getPadNumberTotalLength());
                 }
                 if (extra != null)
                 {
