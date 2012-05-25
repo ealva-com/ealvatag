@@ -2183,7 +2183,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
         {
             AbstractID3v2Frame frame = createFrame(formatKey.getFrameId());
             FrameBodyTPOS framebody = (FrameBodyTPOS) frame.getBody();
-            framebody.setDiscTotal(Integer.parseInt(value));
+            framebody.setDiscTotal(value);
             return frame;
         }
         else
