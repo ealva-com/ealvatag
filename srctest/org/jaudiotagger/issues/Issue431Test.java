@@ -546,4 +546,70 @@ public class Issue431Test extends AbstractTestCase
         tag = f.getTag();
         assertEquals("01", tag.getFirst(FieldKey.DISC_NO));
     }
+
+    public void testSetPrePaddedDiscAndDiscTotal() throws Exception
+    {
+        TagOptionSingleton.getInstance().setPadNumbers(false);
+        File testFile = AbstractTestCase.copyAudioToTmp("testV25.mp3");
+        AudioFile f = AudioFileIO.read(testFile);
+        Tag tag = f.getTagOrCreateAndSetDefault();
+        tag.setField(FieldKey.DISC_NO,"01");
+        tag.setField(FieldKey.DISC_TOTAL,"08");
+        assertEquals("08", tag.getFirst(FieldKey.DISC_TOTAL));
+        f.commit();
+
+        //Frame Header
+        //Check Bytes
+        FileChannel fc = new RandomAccessFile(testFile, "r").getChannel();
+        ByteBuffer buffer = ByteBuffer.allocate(100);
+        fc.read(buffer);
+        fc.close();
+        assertTrue((buffer.get(10) & 0xff) == 'T');
+        assertTrue((buffer.get(11) & 0xff) == 'P');
+        assertTrue((buffer.get(12) & 0xff) == 'O');
+        assertTrue((buffer.get(13) & 0xff) == 'S');
+        assertTrue((buffer.get(20) & 0xff) == 0);
+        assertTrue((buffer.get(21) & 0xff) == '0');
+        assertTrue((buffer.get(22) & 0xff) == '1');
+        assertTrue((buffer.get(23) & 0xff) == '/');
+        assertTrue((buffer.get(24) & 0xff) == '0');
+        assertTrue((buffer.get(25) & 0xff) == '8');
+
+
+        f = AudioFileIO.read(testFile);
+        tag = f.getTag();
+        assertEquals("08", tag.getFirst(FieldKey.DISC_TOTAL));
+    }
+
+    public void testSetPrePaddedDiscTotal() throws Exception
+    {
+        TagOptionSingleton.getInstance().setPadNumbers(false);
+        File testFile = AbstractTestCase.copyAudioToTmp("testV25.mp3");
+        AudioFile f = AudioFileIO.read(testFile);
+        Tag tag = f.getTagOrCreateAndSetDefault();
+        tag.setField(FieldKey.DISC_TOTAL,"08");
+        assertEquals("08", tag.getFirst(FieldKey.DISC_TOTAL));
+        f.commit();
+
+        //Frame Header
+        //Check Bytes
+        FileChannel fc = new RandomAccessFile(testFile, "r").getChannel();
+        ByteBuffer buffer = ByteBuffer.allocate(100);
+        fc.read(buffer);
+        fc.close();
+        assertTrue((buffer.get(10) & 0xff) == 'T');
+        assertTrue((buffer.get(11) & 0xff) == 'P');
+        assertTrue((buffer.get(12) & 0xff) == 'O');
+        assertTrue((buffer.get(13) & 0xff) == 'S');
+        assertTrue((buffer.get(20) & 0xff) == 0);
+        assertTrue((buffer.get(21) & 0xff) == '0');
+        assertTrue((buffer.get(22) & 0xff) == '/');
+        assertTrue((buffer.get(23) & 0xff) == '0');
+        assertTrue((buffer.get(24) & 0xff) == '8');
+
+
+        f = AudioFileIO.read(testFile);
+        tag = f.getTag();
+        assertEquals("08", tag.getFirst(FieldKey.DISC_TOTAL));
+    }
 }
