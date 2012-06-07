@@ -240,7 +240,7 @@ public interface Tag {
 
 
     /**
-     * @return a list of all artwork in this file using the format indepedent Artwork class
+     * @return a list of all artwork in this file using the format independent Artwork class
      */
     public List<Artwork> getArtworkList();
 

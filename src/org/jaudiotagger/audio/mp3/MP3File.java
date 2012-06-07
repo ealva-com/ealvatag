@@ -977,7 +977,6 @@ public class MP3File extends AudioFile
      */
     public Tag convertTag(Tag tag, ID3V2Version id3V2Version)
     {
-        System.out.println("ConvertTag:"+tag.getClass()+":"+id3V2Version);
         if(tag instanceof ID3v24Tag)
         {
             switch(id3V2Version)
@@ -1026,7 +1025,6 @@ public class MP3File extends AudioFile
     @Override
     public Tag getTagAndConvertOrCreateAndSetDefault()
     {
-        System.out.println("GetTagAndConvertOrCreateTag:"+tag.getClass()+":"+TagOptionSingleton.getInstance().getID3V2Version());
         Tag tag = getTag();
         if(tag==null)
         {

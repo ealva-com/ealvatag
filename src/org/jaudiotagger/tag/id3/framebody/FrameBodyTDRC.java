@@ -256,6 +256,17 @@ public class FrameBodyTDRC extends AbstractFrameBodyTextInfo implements ID3v24Fr
     }
 
     /**
+     * When converting v3 TDRA to v4 TDRC frame
+     * @param body
+     */
+    public FrameBodyTDRC(FrameBodyTRDA body)
+    {
+        originalID = ID3v23Frames.FRAME_ID_V3_TRDA;
+        date = body.getText();
+        setObjectValue(DataTypes.OBJ_TEXT_ENCODING, TextEncoding.ISO_8859_1);
+        setObjectValue(DataTypes.OBJ_TEXT, getFormattedText());
+    }
+    /**
      * Creates a new FrameBodyTDRC dataType.
      *
      * Tries to decode the text to find the v24 date mask being used, and store the v3 components of the mask

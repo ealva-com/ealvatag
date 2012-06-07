@@ -63,7 +63,7 @@ public class TagOptionSingleton
 
     /**
      * Map of lyric ID's to Boolean objects if we should or should not save the
-     * specific Kyrics3 field. Defaults to true.
+     * specific lyrics3 field. Defaults to true.
      */
     private HashMap<String, Boolean> lyrics3SaveFieldMap = new HashMap<String, Boolean>();
 
@@ -79,7 +79,7 @@ public class TagOptionSingleton
 
 
     /**
-     * default language for any ID3v2 tags frameswhich require it. This string
+     * default language for any ID3v2 tags frames which require it. This string
      * is in the [ISO-639-2] ISO/FDIS 639-2 definition
      */
     private String language = "eng";
@@ -818,7 +818,8 @@ public class TagOptionSingleton
         isEncodeUTF16BomAsLittleEndian = true;
         writeChunkSize=5000000;
         isWriteMp4GenresAsText=false;
-
+        padNumberTotalLength = PadNumberOption.PAD_ONE_ZERO;
+        id3v2Version = ID3V2Version.ID3_V23;
         //default all lyrics3 fields to save. id3v1 fields are individual
         // settings. id3v2 fields are always looked at to save.
         Iterator<String> iterator = Lyrics3v2Fields.getInstanceOf().getIdToValueMap().keySet().iterator();
