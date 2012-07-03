@@ -134,6 +134,7 @@ public class AsfFileReader extends AudioFileReader {
         info.setSamplingRate((int) header.getAudioStreamChunk()
                 .getSamplingRate());
         info.setVariableBitRate(determineVariableBitrate(header));
+        info.setBitsPerSample(header.getAudioStreamChunk().getBitsPerSample());
         return info;
     }
 

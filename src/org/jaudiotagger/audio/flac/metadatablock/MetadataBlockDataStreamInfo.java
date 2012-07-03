@@ -136,6 +136,11 @@ public class MetadataBlockDataStreamInfo  implements MetadataBlockData
     {
         return "FLAC " + bitsPerSample + " bits";
     }
+    
+    public int getBitsPerSample()
+    {
+    	return bitsPerSample;
+    }
 
     public boolean isValid()
     {

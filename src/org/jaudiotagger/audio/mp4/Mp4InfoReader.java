@@ -147,7 +147,7 @@ public class Mp4InfoReader
         }
         Mp4MdhdBox mdhd = new Mp4MdhdBox(boxHeader, mvhdBuffer.slice());
         info.setSamplingRate(mdhd.getSampleRate());
-
+        
         //Level 4-Searching for "hdlr" within "mdia"
         /*We dont currently need to process this because contains nothing we want
         mvhdBuffer.position(mvhdBuffer.position() + boxHeader.getDataLength());
@@ -277,6 +277,7 @@ public class Mp4InfoReader
                             info.setEncodingType(EncoderType.APPLE_LOSSLESS.getDescription());
                             info.setChannelNumber(alac.getChannels());
                             info.setBitrate(alac.getBitRate()/1000);
+                            info.setBitsPerSample(alac.getSampleSize());
                         }
                     }
                 }
@@ -292,6 +293,12 @@ public class Mp4InfoReader
         if (info.getBitRateAsNumber() == -1)
         {
             info.setBitrate(128);
+        }
+        
+        //Set default bits per sample if couldn't calculate it
+        if (info.getBitsPerSample() == -1)
+        {
+        	info.setBitsPerSample(16);
         }
 
         //This is the most likely option if cant find a match

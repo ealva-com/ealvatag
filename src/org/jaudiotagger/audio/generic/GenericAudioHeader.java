@@ -71,6 +71,13 @@ public class GenericAudioHeader implements AudioHeader
      * @see #content
      */
     public final static String FIELD_SAMPLERATE = "SAMPLING";
+    
+    /**
+     * The key for the audio bits per sample. ({@link Integer})<br>
+     * 
+     * @see #content
+     */
+    public final static String FIELD_BITSPERSAMPLE = "BITSPERSAMPLE";
 
     /**
      * The key for the audio type.({@link String})<br>
@@ -107,6 +114,7 @@ public class GenericAudioHeader implements AudioHeader
         content.put(FIELD_TYPE, "");
         content.put(FIELD_INFOS, "");
         content.put(FIELD_SAMPLERATE, -1);
+        content.put(FIELD_BITSPERSAMPLE, -1);
         content.put(FIELD_LENGTH, (float) -1);
         content.put(FIELD_VBR, true);
     }
@@ -216,6 +224,14 @@ public class GenericAudioHeader implements AudioHeader
     {
         return (Integer) content.get(FIELD_SAMPLERATE);
     }
+    
+    /**
+     * @returns The number of bits per sample
+     */
+    public int getBitsPerSample()
+    {
+    	return (Integer) content.get(FIELD_BITSPERSAMPLE);
+    }
 
     /**
      * This method returns <code>true</code>, if the audio file is encoded
@@ -309,6 +325,16 @@ public class GenericAudioHeader implements AudioHeader
     public void setSamplingRate(int samplingRate)
     {
         content.put(FIELD_SAMPLERATE, samplingRate);
+    }
+    
+    /*
+     * Sets the Bits per Sample <br>
+     * 
+     * @params bitsPerSample Bits Per Sample
+     */
+    public void setBitsPerSample(int bitsPerSample)
+    {
+    	content.put(FIELD_BITSPERSAMPLE, bitsPerSample);
     }
 
     /**

@@ -81,6 +81,7 @@ public class FlacInfoReader
         info.setPreciseLength(mbdsi.getPreciseLength());
         info.setChannelNumber(mbdsi.getChannelNumber());
         info.setSamplingRate(mbdsi.getSamplingRate());
+        info.setBitsPerSample(mbdsi.getBitsPerSample());
         info.setEncodingType(mbdsi.getEncodingType());
         info.setExtraEncodingInfos("");
         info.setBitrate(computeBitrate(mbdsi.getPreciseLength(), raf.length() - raf.getFilePointer()));

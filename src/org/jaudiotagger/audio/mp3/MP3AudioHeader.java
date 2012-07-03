@@ -641,6 +641,15 @@ public class MP3AudioHeader implements AudioHeader
     {
         return mp3FrameHeader.getSamplingRate();
     }
+    
+    /**
+     * @return the number of bits per sample
+     */
+    public int getBitsPerSample()
+    {
+    	//TODO: can it really be different in such an MP3 ? I think not.
+    	return 16;
+    }
 
     /**
      * @return the sampling rate as string

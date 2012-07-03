@@ -52,6 +52,7 @@ public class WavInfoReader
                 info.setPreciseLength(((float) raf.length() - (float) 36) / wfh.getBytesPerSecond());
                 info.setChannelNumber(wfh.getChannelNumber());
                 info.setSamplingRate(wfh.getSamplingRate());
+                info.setBitsPerSample(wfh.getBitsPerSample());
                 info.setEncodingType("WAV-RIFF " + wfh.getBitsPerSample() + " bits");
                 info.setExtraEncodingInfos("");
                 info.setBitrate(wfh.getBytesPerSecond() * 8 / 1000);

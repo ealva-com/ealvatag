@@ -52,5 +52,9 @@ public interface AudioHeader
      * @return track length
      */
     public int getTrackLength();
-
+    
+    /**
+     * @return the number of bits per sample
+     */
+    public int getBitsPerSample();
 }

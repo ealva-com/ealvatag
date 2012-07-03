@@ -117,6 +117,9 @@ public class OggInfoReader
         info.setEncodingType(vorbisIdentificationHeader.getEncodingType());
         info.setExtraEncodingInfos("");
 
+        //According to Wikipedia Vorbis Page, Vorbis only works on 16bits 44khz 
+        info.setBitsPerSample(16);
+
         //TODO this calculation should be done within identification header
         if (vorbisIdentificationHeader.getNominalBitrate() != 0 && vorbisIdentificationHeader.getMaxBitrate() == vorbisIdentificationHeader.getNominalBitrate() && vorbisIdentificationHeader.getMinBitrate() == vorbisIdentificationHeader.getNominalBitrate())
         {
