@@ -56,6 +56,7 @@ public class MetadataBlockDataStreamInfo  implements MetadataBlockData
 
     private int minBlockSize, maxBlockSize, minFrameSize, maxFrameSize, samplingRate, samplingRatePerChannel, bitsPerSample, channelNumber, totalNumberOfSamples;
     private float songLength;
+    private String md5;
     private boolean isValid = true;
 
     private ByteBuffer rawdata;
@@ -82,6 +83,14 @@ public class MetadataBlockDataStreamInfo  implements MetadataBlockData
 
         totalNumberOfSamples = readTotalNumberOfSamples(rawdata.get(13), rawdata.get(14), rawdata.get(15), rawdata.get(16), rawdata.get(17));
 
+        StringBuilder sb = new StringBuilder();
+        for(int i=18;i<34;i++) 
+        { 
+            byte dataByte = rawdata.get(i); 
+            sb.append(String.format("%x",dataByte)); 
+        }
+        md5 = sb.toString();
+        
         songLength = (float) ((double) totalNumberOfSamples / samplingRate);
         logger.config(this.toString());
     }
@@ -99,6 +108,7 @@ public class MetadataBlockDataStreamInfo  implements MetadataBlockData
         return getBytes().length;
     }
 
+    
 
     public String toString()
     {
@@ -140,6 +150,11 @@ public class MetadataBlockDataStreamInfo  implements MetadataBlockData
     public int getBitsPerSample()
     {
     	return bitsPerSample;
+    }
+
+    public String getMD5Signature()
+    {
+        return md5;
     }
 
     public boolean isValid()

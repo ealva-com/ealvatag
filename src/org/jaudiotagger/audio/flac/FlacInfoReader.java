@@ -40,7 +40,7 @@ public class FlacInfoReader
     private static final int NO_OF_BITS_IN_BYTE = 8;
     private static final int KILOBYTES_TO_BYTES_MULTIPLIER = 1000;
 
-    public GenericAudioHeader read(RandomAccessFile raf) throws CannotReadException, IOException
+    public FlacAudioHeader read(RandomAccessFile raf) throws CannotReadException, IOException
     {
         FlacStreamReader flacStream = new FlacStreamReader(raf);
         flacStream.findStream();
@@ -76,7 +76,7 @@ public class FlacInfoReader
             throw new CannotReadException("Unable to find Flac StreamInfo");
         }
 
-        GenericAudioHeader info = new GenericAudioHeader();
+        FlacAudioHeader info = new FlacAudioHeader();
         info.setLength(mbdsi.getSongLength());
         info.setPreciseLength(mbdsi.getPreciseLength());
         info.setChannelNumber(mbdsi.getChannelNumber());
@@ -86,6 +86,7 @@ public class FlacInfoReader
         info.setExtraEncodingInfos("");
         info.setBitrate(computeBitrate(mbdsi.getPreciseLength(), raf.length() - raf.getFilePointer()));
         info.setLossless(true);
+        info.setMd5(mbdsi.getMD5Signature());
         return info;
     }
 
