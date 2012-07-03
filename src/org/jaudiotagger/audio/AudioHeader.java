@@ -57,4 +57,10 @@ public interface AudioHeader
      * @return the number of bits per sample
      */
     public int getBitsPerSample();
+
+    /**
+     *
+     * @return
+     */
+    public boolean isLossless();
 }

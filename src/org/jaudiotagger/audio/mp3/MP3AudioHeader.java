@@ -743,6 +743,11 @@ public class MP3AudioHeader implements AudioHeader
         return mp3FrameHeader.isPadding();
     }
 
+    public boolean isLossless()
+    {
+        return false;
+    }
+
     /**
      * @return encoder
      */
