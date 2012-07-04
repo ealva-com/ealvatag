@@ -119,7 +119,7 @@ public class ID3v23Frames extends ID3Frames
     public static final String FRAME_ID_V3_ALBUM_SORT_ORDER_MUSICBRAINZ = "XSOA";
     public static final String FRAME_ID_V3_ALBUM_ARTIST_SORT_ORDER_ITUNES = "TSO2";
     public static final String FRAME_ID_V3_COMPOSER_SORT_ORDER_ITUNES = "TSOC";
-
+    public static final String FRAME_ID_V3_SET_SUBTITLE = "TSST";
 
     private static ID3v23Frames id3v23Frames;
 
@@ -196,6 +196,7 @@ public class ID3v23Frames extends ID3Frames
         supportedFrames.add(FRAME_ID_V3_REMIXED);
         supportedFrames.add(FRAME_ID_V3_REVERB);
         supportedFrames.add(FRAME_ID_V3_SET);
+        supportedFrames.add(FRAME_ID_V3_SET_SUBTITLE);
         supportedFrames.add(FRAME_ID_V3_SYNC_LYRIC);
         supportedFrames.add(FRAME_ID_V3_SYNC_TEMPO);
         supportedFrames.add(FRAME_ID_V3_TDAT);
@@ -303,6 +304,7 @@ public class ID3v23Frames extends ID3Frames
         idToValue.put(FRAME_ID_V3_REMIXED, "Text: Interpreted, remixed, or otherwise modified by");
         idToValue.put(FRAME_ID_V3_REVERB, "Reverb");
         idToValue.put(FRAME_ID_V3_SET, "Text: Part of a setField");
+        idToValue.put(FRAME_ID_V3_SET_SUBTITLE, "Text: SubTitle");
         idToValue.put(FRAME_ID_V3_SYNC_LYRIC, "Synchronized lyric/text");
         idToValue.put(FRAME_ID_V3_SYNC_TEMPO, "Synced tempo codes");
         idToValue.put(FRAME_ID_V3_TDAT, "Text: Date");
@@ -384,6 +386,7 @@ public class ID3v23Frames extends ID3Frames
         tagFieldToId3.put(FieldKey.CUSTOM4, ID3v23FieldKey.CUSTOM4);
         tagFieldToId3.put(FieldKey.CUSTOM5, ID3v23FieldKey.CUSTOM5);
         tagFieldToId3.put(FieldKey.DISC_NO, ID3v23FieldKey.DISC_NO);
+        tagFieldToId3.put(FieldKey.DISC_SUBTITLE, ID3v23FieldKey.DISC_SUBTITLE);
         tagFieldToId3.put(FieldKey.DISC_TOTAL, ID3v23FieldKey.DISC_NO);
         tagFieldToId3.put(FieldKey.ENCODER, ID3v23FieldKey.ENCODER);
         tagFieldToId3.put(FieldKey.FBPM, ID3v23FieldKey.FBPM);
@@ -419,6 +422,7 @@ public class ID3v23Frames extends ID3Frames
         tagFieldToId3.put(FieldKey.RECORD_LABEL, ID3v23FieldKey.RECORD_LABEL);
         tagFieldToId3.put(FieldKey.REMIXER, ID3v23FieldKey.REMIXER);
         tagFieldToId3.put(FieldKey.SCRIPT, ID3v23FieldKey.SCRIPT);
+        tagFieldToId3.put(FieldKey.SUBTITLE, ID3v23FieldKey.SUBTITLE);
         tagFieldToId3.put(FieldKey.TAGS, ID3v23FieldKey.TAGS);
         tagFieldToId3.put(FieldKey.TEMPO, ID3v23FieldKey.TEMPO);
         tagFieldToId3.put(FieldKey.TITLE, ID3v23FieldKey.TITLE);
@@ -442,7 +446,7 @@ public class ID3v23Frames extends ID3Frames
         tagFieldToId3.put(FieldKey.ACOUSTID_FINGERPRINT, ID3v23FieldKey.ACOUSTID_FINGERPRINT);
         tagFieldToId3.put(FieldKey.ACOUSTID_ID, ID3v23FieldKey.ACOUSTID_ID);
         tagFieldToId3.put(FieldKey.COUNTRY, ID3v23FieldKey.COUNTRY);
-        
+
         for(Map.Entry<FieldKey,ID3v23FieldKey> next:tagFieldToId3.entrySet())
         {
             id3ToTagField.put(next.getValue(), next.getKey());

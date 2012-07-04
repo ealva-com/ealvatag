@@ -385,6 +385,7 @@ public class ID3v24Frames extends ID3Frames
         tagFieldToId3.put(FieldKey.CUSTOM4, ID3v24FieldKey.CUSTOM4);
         tagFieldToId3.put(FieldKey.CUSTOM5, ID3v24FieldKey.CUSTOM5);
         tagFieldToId3.put(FieldKey.DISC_NO, ID3v24FieldKey.DISC_NO);
+        tagFieldToId3.put(FieldKey.DISC_SUBTITLE, ID3v24FieldKey.DISC_SUBTITLE);
         tagFieldToId3.put(FieldKey.DISC_TOTAL, ID3v24FieldKey.DISC_NO);
         tagFieldToId3.put(FieldKey.ENCODER, ID3v24FieldKey.ENCODER);
         tagFieldToId3.put(FieldKey.FBPM, ID3v24FieldKey.FBPM);
@@ -443,6 +444,7 @@ public class ID3v24Frames extends ID3Frames
         tagFieldToId3.put(FieldKey.ACOUSTID_FINGERPRINT, ID3v24FieldKey.ACOUSTID_FINGERPRINT);
         tagFieldToId3.put(FieldKey.ACOUSTID_ID, ID3v24FieldKey.ACOUSTID_ID);
         tagFieldToId3.put(FieldKey.COUNTRY, ID3v24FieldKey.COUNTRY);
+        tagFieldToId3.put(FieldKey.SUBTITLE, ID3v24FieldKey.SUBTITLE);
 
         for(Map.Entry<FieldKey,ID3v24FieldKey> next:tagFieldToId3.entrySet())
         {

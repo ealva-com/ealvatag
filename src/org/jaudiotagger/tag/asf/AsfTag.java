@@ -109,6 +109,7 @@ public final class AsfTag extends AbstractTag
         tagFieldToAsfField.put(FieldKey.CUSTOM4, AsfFieldKey.CUSTOM4);
         tagFieldToAsfField.put(FieldKey.CUSTOM5, AsfFieldKey.CUSTOM5);
         tagFieldToAsfField.put(FieldKey.DISC_NO, AsfFieldKey.DISC_NO);
+        tagFieldToAsfField.put(FieldKey.DISC_SUBTITLE, AsfFieldKey.DISC_SUBTITLE);
         tagFieldToAsfField.put(FieldKey.DISC_TOTAL, AsfFieldKey.DISC_TOTAL);
         tagFieldToAsfField.put(FieldKey.ENCODER, AsfFieldKey.ENCODER);
         tagFieldToAsfField.put(FieldKey.FBPM, AsfFieldKey.FBPM);
@@ -144,6 +145,7 @@ public final class AsfTag extends AbstractTag
         tagFieldToAsfField.put(FieldKey.QUALITY, AsfFieldKey.QUALITY);
         tagFieldToAsfField.put(FieldKey.REMIXER, AsfFieldKey.REMIXER);
         tagFieldToAsfField.put(FieldKey.SCRIPT, AsfFieldKey.SCRIPT);
+        tagFieldToAsfField.put(FieldKey.SUBTITLE, AsfFieldKey.SUBTITLE);
         tagFieldToAsfField.put(FieldKey.TAGS, AsfFieldKey.TAGS);
         tagFieldToAsfField.put(FieldKey.TEMPO, AsfFieldKey.TEMPO);
         tagFieldToAsfField.put(FieldKey.TITLE, AsfFieldKey.TITLE);

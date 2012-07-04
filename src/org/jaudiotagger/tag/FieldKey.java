@@ -10,6 +10,8 @@ package org.jaudiotagger.tag;
  */
 public enum FieldKey
 {
+    ACOUSTID_FINGERPRINT,
+    ACOUSTID_ID,
     ALBUM,
     ALBUM_ARTIST,
     ALBUM_ARTIST_SORT,
@@ -26,6 +28,7 @@ public enum FieldKey
     COMPOSER,
     COMPOSER_SORT,
     CONDUCTOR,
+    COUNTRY,
     COVER_ART,
     CUSTOM1,
     CUSTOM2,
@@ -33,6 +36,7 @@ public enum FieldKey
     CUSTOM4,
     CUSTOM5,
     DISC_NO,
+    DISC_SUBTITLE,
     DISC_TOTAL,
     DJMIXER,
     ENCODER,
@@ -72,6 +76,7 @@ public enum FieldKey
     RECORD_LABEL,
     REMIXER,
     SCRIPT,
+    SUBTITLE,
     TAGS,
     TEMPO,
     TITLE,
@@ -86,8 +91,5 @@ public enum FieldKey
     URL_WIKIPEDIA_ARTIST_SITE,
     URL_WIKIPEDIA_RELEASE_SITE,
     YEAR,
-    ACOUSTID_FINGERPRINT,
-    ACOUSTID_ID,
-    COUNTRY
     ;
 }

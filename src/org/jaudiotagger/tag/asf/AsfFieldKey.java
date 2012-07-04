@@ -82,6 +82,7 @@ public enum AsfFieldKey
     CUSTOM5("CUSTOM5", true),
     DIRECTOR("WM/Director", true),
     DISC_NO("WM/PartOfSet", false),
+    DISC_SUBTITLE("WM/SetSubTitle", false),
     DISC_TOTAL("WM/DiscTotal", false),
     ENCODER("WM/ToolName", false),
     ENCODED_BY("WM/EncodedBy", false),
