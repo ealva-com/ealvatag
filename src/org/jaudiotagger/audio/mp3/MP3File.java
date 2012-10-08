@@ -1017,15 +1017,16 @@ public class MP3File extends AudioFile
     }
 
     /**
-     * Get the tag and convert to preferred version or if the file doesn't have one at all
-     * create a default tag of preferred version and set it
+     * Get the ID3v2 tag and convert to preferred version or if the file doesn't have one at all
+     * create a default tag of preferred version and set it. The file may already contain a ID3v1 tag but because
+     * this is not terribly useful the v1tag is not considered for this problem.
      *
      * @return
      */
     @Override
     public Tag getTagAndConvertOrCreateAndSetDefault()
     {
-        Tag tag = getTag();
+        Tag tag = getID3v2Tag();
         if(tag==null)
         {
             tag = createDefaultTag();
