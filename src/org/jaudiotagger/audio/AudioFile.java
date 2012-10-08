@@ -308,19 +308,14 @@ public class AudioFile
     }
 
      /**
-     * Get the tag or if the file doesn't have one at all, create a default tag  and set it
+     * Get the tag or if the file doesn't have one at all, create a default tag and set it
      *
      * @return
      */
     public Tag getTagOrCreateAndSetDefault()
     {
-        Tag tag = getTag();
-        if(tag==null)
-        {
-            tag = createDefaultTag();
-            setTag(tag);
-            return tag;
-        }
+        Tag tag = getTagOrCreateDefault();
+        setTag(tag);
         return tag;
     }
 
