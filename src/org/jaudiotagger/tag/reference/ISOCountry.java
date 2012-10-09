@@ -58,7 +58,7 @@ public class ISOCountry
     public static enum Country
     {
         AFGHANISTAN(" AF", "Afghanistan"),
-        ALAND_ISLANDS("AX", "\u00e5land Islands"),
+        ALAND_ISLANDS("AX", "Åland Islands"),
         ALBANIA("AL", "Albania"),
         ALGERIA("DZ", "Algeria"),
         AMERICAN_SAMOA("AS", "American Samoa"),
