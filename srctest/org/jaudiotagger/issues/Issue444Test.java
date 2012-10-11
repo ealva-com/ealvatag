@@ -124,4 +124,21 @@ public class Issue444Test extends AbstractTestCase
         assertNotNull(e);
         assertTrue(e instanceof FieldDataInvalidException);
     }
+
+    public void testDuplicates()
+    {
+        Exception e=null;
+        try
+        {
+            File testFile = AbstractTestCase.copyAudioToTmp("test106.mp3");
+            AudioFile af = AudioFileIO.read(testFile);
+
+        }
+        catch(Exception ex)
+        {
+            ex.printStackTrace();
+            e=ex;
+        }
+        assertNull(e);
+    }
 }

@@ -1080,7 +1080,7 @@ public class ID3v23Tag extends AbstractID3v2Tag
                 this.duplicateFrameId += ";";
             }
             this.duplicateFrameId += frameId;
-            this.duplicateBytes += ((AbstractID3v2Frame) frameMap.get(frameId)).getSize();
+            this.duplicateBytes += frame.getSize();
         }
         else if(frameId.equals(ID3v23Frames.FRAME_ID_V3_TYER))
         {
