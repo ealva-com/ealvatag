@@ -83,8 +83,9 @@ public class DeprecatedFrameTest extends AbstractTestCase
 
         mp3File = new MP3File(testFile);
         v23Tag = (ID3v23Tag) mp3File.getID3v2Tag();
-        ID3v23Frame v23frame = (ID3v23Frame) v23Tag.getFrame(ID3v23Frames.FRAME_ID_V3_TDAT);
-        assertTrue(v23frame.getBody() instanceof FrameBodyTDAT);
+        Object v23frame = v23Tag.getFrame(ID3v23Frames.FRAME_ID_V3_TYER+ID3v23Frames.FRAME_ID_V3_TDAT);
+        assertNotNull(v23frame);
+        assertTrue(v23frame instanceof TyerTdatAggregatedFrame);
     }
 
 

@@ -31,10 +31,7 @@ import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 import java.nio.channels.WritableByteChannel;
 import java.nio.charset.Charset;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.LinkedHashMap;
-import java.util.List;
+import java.util.*;
 import java.util.logging.Level;
 
 /**
@@ -991,5 +988,130 @@ public class ID3v23Tag extends AbstractID3v2Tag
     public int getPaddingSize()
     {
         return paddingSize;
+    }
+
+    /**
+     * Overridden to allow special handling for mapping YEAR to TYER and TDAT Frames
+     *
+     * @param genericKey is the generic key
+     * @param value      to store
+     * @return
+     * @throws KeyNotFoundException
+     * @throws FieldDataInvalidException
+     */
+    @Override
+    public TagField createField(FieldKey genericKey, String value) throws KeyNotFoundException, FieldDataInvalidException
+    {
+        if (genericKey == null)
+        {
+            throw new KeyNotFoundException();
+        }
+
+        if (genericKey != FieldKey.YEAR)
+        {
+            return super.createField(genericKey, value);
+        }
+
+        if(value.length()<4)
+        {
+            throw new FieldDataInvalidException();
+        }
+        else if(value.length()==4)
+        {
+            AbstractID3v2Frame tyer = createFrame(ID3v23Frames.FRAME_ID_V3_TYER);
+            ((AbstractFrameBodyTextInfo) tyer.getBody()).setText(value.substring(0, 4));
+            return tyer;
+        }
+        else if(value.length()>4)
+        {
+            AbstractID3v2Frame tyer = createFrame(ID3v23Frames.FRAME_ID_V3_TYER);
+            ((AbstractFrameBodyTextInfo) tyer.getBody()).setText(value.substring(0, 4));
+
+            AbstractID3v2Frame tdat = createFrame(ID3v23Frames.FRAME_ID_V3_TDAT);
+            ((AbstractFrameBodyTextInfo) tdat.getBody()).setText(value.substring(5,7)+value.substring(8,10));
+
+            TyerTdatAggregatedFrame ag = new TyerTdatAggregatedFrame();
+            ag.addFrame(tyer);
+            ag.addFrame(tdat);
+            return ag;
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+    public String getValue(FieldKey genericKey, int index) throws KeyNotFoundException
+    {
+        if (genericKey == null)
+        {
+            throw new KeyNotFoundException();
+        }
+
+        if(genericKey != FieldKey.YEAR)
+        {
+            return super.getValue(genericKey, index);    
+        }
+
+        AggregatedFrame af = (AggregatedFrame)getFrame(TyerTdatAggregatedFrame.ID_TYER_TDAT);
+        if(af!=null)
+        {
+            return af.getContent();
+        }
+        else
+        {
+            return super.getValue(genericKey, index);
+        }
+    }
+
+    protected void loadFrameIntoSpecifiedMap(HashMap map, String frameId, AbstractID3v2Frame frame)
+    {
+        if(!(frameId.equals(ID3v23Frames.FRAME_ID_V3_TYER)) && !(frameId.equals(ID3v23Frames.FRAME_ID_V3_TDAT)))
+        {
+            super.loadFrameIntoSpecifiedMap(map, frameId, frame);
+            return;
+        }
+
+        if (map.containsKey(frameId) || map.containsKey(TyerTdatAggregatedFrame.ID_TYER_TDAT))
+        {
+            //If we have multiple duplicate frames in a tag separate them with semicolons
+            if (this.duplicateFrameId.length() > 0)
+            {
+                this.duplicateFrameId += ";";
+            }
+            this.duplicateFrameId += frameId;
+            this.duplicateBytes += ((AbstractID3v2Frame) frameMap.get(frameId)).getSize();
+        }
+        else if(frameId.equals(ID3v23Frames.FRAME_ID_V3_TYER))
+        {
+            if (map.containsKey(ID3v23Frames.FRAME_ID_V3_TDAT))
+            {
+                TyerTdatAggregatedFrame ag = new TyerTdatAggregatedFrame();
+                ag.addFrame(frame);
+                ag.addFrame((AbstractID3v2Frame)map.get(ID3v23Frames.FRAME_ID_V3_TDAT));
+                map.remove(ID3v23Frames.FRAME_ID_V3_TDAT);
+                map.put(TyerTdatAggregatedFrame.ID_TYER_TDAT, ag);
+            }
+            else
+            {
+                map.put(ID3v23Frames.FRAME_ID_V3_TYER, frame);
+            }
+        }
+        else if(frameId.equals(ID3v23Frames.FRAME_ID_V3_TDAT))
+        {
+            if (map.containsKey(ID3v23Frames.FRAME_ID_V3_TYER))
+            {
+                TyerTdatAggregatedFrame ag = new TyerTdatAggregatedFrame();
+                ag.addFrame((AbstractID3v2Frame)map.get(ID3v23Frames.FRAME_ID_V3_TYER));
+                ag.addFrame(frame);
+                map.remove(ID3v23Frames.FRAME_ID_V3_TYER);
+                map.put(TyerTdatAggregatedFrame.ID_TYER_TDAT, ag);
+            }
+            else
+            {
+                map.put(ID3v23Frames.FRAME_ID_V3_TDAT, frame);
+            }
+        }
+
     }
 }

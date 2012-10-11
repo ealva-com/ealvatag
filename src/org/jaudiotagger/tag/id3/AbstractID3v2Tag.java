@@ -753,32 +753,40 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
      */
     public void setField(TagField field) throws FieldDataInvalidException
     {
-        if (!(field instanceof AbstractID3v2Frame))
+        if ((!(field instanceof AbstractID3v2Frame)) && (!(field instanceof AggregatedFrame)))
         {
-            throw new FieldDataInvalidException("Field " + field + " is not of type AbstractID3v2Frame");
+            throw new FieldDataInvalidException("Field " + field + " is not of type AbstractID3v2Frame nor AggregatedFrame");
         }
 
-        AbstractID3v2Frame newFrame = (AbstractID3v2Frame) field;
+        if(field instanceof AbstractID3v2Frame)
+        {
+            AbstractID3v2Frame newFrame = (AbstractID3v2Frame) field;
 
-        Object obj = frameMap.get(field.getId());
+            Object obj = frameMap.get(field.getId());
 
 
-        //If no frame of this type exist or if multiples are not allowed
-        if (obj == null)
+            //If no frame of this type exist or if multiples are not allowed
+            if (obj == null)
+            {
+                frameMap.put(field.getId(), field);
+            }
+            //frame of this type already exists
+            else if (obj instanceof AbstractID3v2Frame)
+            {
+                List<AbstractID3v2Frame> frames = new ArrayList<AbstractID3v2Frame>();
+                frames.add((AbstractID3v2Frame) obj);
+                mergeDuplicateFrames(newFrame, frames);
+            }
+            //Multiple frames of this type already exist
+            else if (obj instanceof List)
+            {
+                mergeDuplicateFrames(newFrame, (List<AbstractID3v2Frame>) obj);
+            }
+        }
+        else
+        //TODO not handling multiple aggregated frames of same type
         {
             frameMap.put(field.getId(), field);
-        }
-        //frame of this type already exists
-        else if (obj instanceof AbstractID3v2Frame)
-        {
-            List<AbstractID3v2Frame> frames = new ArrayList<AbstractID3v2Frame>();
-            frames.add((AbstractID3v2Frame) obj);
-            mergeDuplicateFrames(newFrame, frames);
-        }
-        //Multiple frames of this type already exist
-        else if (obj instanceof List)
-        {
-            mergeDuplicateFrames(newFrame, (List<AbstractID3v2Frame>) obj);
         }
     }
 
@@ -799,32 +807,39 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
             return;
         }
 
-        if (!(field instanceof AbstractID3v2Frame))
+        if ((!(field instanceof AbstractID3v2Frame)) && (!(field instanceof AggregatedFrame)))
         {
-            throw new FieldDataInvalidException("Field " + field + " is not of type AbstractID3v2Frame");
+            throw new FieldDataInvalidException("Field " + field + " is not of type AbstractID3v2Frame or AggregatedFrame");
         }
 
-        AbstractID3v2Frame frame = (AbstractID3v2Frame) field;
-
-        Object o = frameMap.get(field.getId());
-
-        //No frame of this type
-        if (o == null)
+        if(field instanceof AbstractID3v2Frame)
         {
-            frameMap.put(field.getId(), field);
+            AbstractID3v2Frame frame = (AbstractID3v2Frame) field;
+    
+            Object o = frameMap.get(field.getId());
+    
+            //No frame of this type
+            if (o == null)
+            {
+                frameMap.put(field.getId(), field);
+            }
+            //There are already frames of this type, adding another may need to merge
+            else if (o instanceof List)
+            {
+                List<TagField> list = (List<TagField>) o;
+                addNewFrameOrAddField(list, frameMap, null, frame);
+            }
+            //One frame exists, we are adding another so may need to convert to list
+            else
+            {
+                AbstractID3v2Frame existingFrame = (AbstractID3v2Frame) o;
+                List<TagField> list = new ArrayList<TagField>();
+                addNewFrameOrAddField(list, frameMap, existingFrame, frame);
+            }
         }
-        //There are already frames of this type, adding another may need to merge
-        else if (o instanceof List)
-        {
-            List<TagField> list = (List<TagField>) o;
-            addNewFrameOrAddField(list, frameMap, null, frame);
-        }
-        //One frame exists, we are adding another so may need to convert to list
         else
         {
-            AbstractID3v2Frame existingFrame = (AbstractID3v2Frame) o;
-            List<TagField> list = new ArrayList<TagField>();
-            addNewFrameOrAddField(list, frameMap, existingFrame, frame);
+            frameMap.put(field.getId(), field);    
         }
     }
 
@@ -1574,7 +1589,9 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
      */
     protected void loadFrameIntoSpecifiedMap(HashMap map, String frameId, AbstractID3v2Frame next)
     {
-        if ((ID3v24Frames.getInstanceOf().isMultipleAllowed(frameId)) || (ID3v23Frames.getInstanceOf().isMultipleAllowed(frameId)) || (ID3v22Frames.getInstanceOf().isMultipleAllowed(frameId)))
+        if ((ID3v24Frames.getInstanceOf().isMultipleAllowed(frameId)) ||
+            (ID3v23Frames.getInstanceOf().isMultipleAllowed(frameId)) ||
+            (ID3v22Frames.getInstanceOf().isMultipleAllowed(frameId)))
         {
             //If a frame already exists of this type
             if (map.containsKey(frameId))
@@ -1692,6 +1709,15 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
                 frame = (AbstractID3v2Frame) o;
                 frame.setLoggingFilename(getLoggingFilename());
                 frame.write(bodyBuffer);
+            }
+            else if (o instanceof AggregatedFrame)
+            {
+                AggregatedFrame ag = (AggregatedFrame) o;
+                for(AbstractID3v2Frame next:ag.getFrames())
+                {
+                    next.setLoggingFilename(getLoggingFilename());
+                    next.write(bodyBuffer);
+                }
             }
             else
             {
@@ -2158,6 +2184,9 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
         }
 
         FrameAndSubId formatKey = getFrameAndSubIdFromGenericKey(genericKey);
+
+        //FrameAndSubId does not contain enough info for these fields to be able to work out what to update
+        //that is why we need the extra processing here instead of doCreateTagField()
         if (genericKey == FieldKey.TRACK)
         {
             AbstractID3v2Frame frame = createFrame(formatKey.getFrameId());
@@ -2191,6 +2220,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
             return doCreateTagField(formatKey, value);
         }
     }
+
 
     /**
      * Create Frame for Id3 Key
