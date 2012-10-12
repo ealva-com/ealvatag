@@ -8,13 +8,12 @@ import org.jaudiotagger.tag.FieldDataInvalidException;
 import org.jaudiotagger.tag.FieldKey;
 import org.jaudiotagger.tag.Tag;
 import org.jaudiotagger.tag.TagOptionSingleton;
-import org.jaudiotagger.tag.id3.ID3v1Tag;
-import org.jaudiotagger.tag.id3.ID3v23Tag;
-import org.jaudiotagger.tag.id3.ID3v24Tag;
+import org.jaudiotagger.tag.id3.*;
 import org.jaudiotagger.tag.id3.framebody.FrameBodyTYER;
 import org.jaudiotagger.tag.reference.ID3V2Version;
 
 import java.io.File;
+import java.util.Iterator;
 
 /**
  * ID3v23 Date needs splitting into frames
@@ -58,6 +57,11 @@ public class Issue444Test extends AbstractTestCase
             assertNull(((ID3v23Tag)af.getTag()).getFrame("TDAT"));
             assertNotNull(((ID3v23Tag) af.getTag()).getFrame("TYERTDAT"));
 
+            TyerTdatAggregatedFrame aggframe = (TyerTdatAggregatedFrame)(((ID3v23Tag) af.getTag()).getFrame("TYERTDAT"));
+            Iterator<AbstractID3v2Frame> i = aggframe.getFrames().iterator();
+            assertEquals("2004", i.next().getContent());
+            assertEquals("1210", i.next().getContent());
+            assertEquals("2004-10-12",aggframe.getContent());
             af.commit();
             af = AudioFileIO.read(testFile);
             assertEquals("2004-10-12", af.getTag().getFirst(FieldKey.YEAR));
@@ -65,6 +69,11 @@ public class Issue444Test extends AbstractTestCase
             assertNull(((ID3v23Tag)af.getTag()).getFrame("TYER"));
             assertNull(((ID3v23Tag)af.getTag()).getFrame("TDAT"));
             assertNotNull(((ID3v23Tag) af.getTag()).getFrame("TYERTDAT"));
+            aggframe = (TyerTdatAggregatedFrame)(((ID3v23Tag) af.getTag()).getFrame("TYERTDAT"));
+            i = aggframe.getFrames().iterator();
+            assertEquals("2004", i.next().getContent());
+            assertEquals("1210", i.next().getContent());
+
 
         }
         catch(Exception ex)

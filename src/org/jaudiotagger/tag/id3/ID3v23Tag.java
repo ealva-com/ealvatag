@@ -1028,7 +1028,7 @@ public class ID3v23Tag extends AbstractID3v2Tag
             ((AbstractFrameBodyTextInfo) tyer.getBody()).setText(value.substring(0, 4));
 
             AbstractID3v2Frame tdat = createFrame(ID3v23Frames.FRAME_ID_V3_TDAT);
-            ((AbstractFrameBodyTextInfo) tdat.getBody()).setText(value.substring(5,7)+value.substring(8,10));
+            ((AbstractFrameBodyTextInfo) tdat.getBody()).setText(value.substring(8,10)+value.substring(5,7));
 
             TyerTdatAggregatedFrame ag = new TyerTdatAggregatedFrame();
             ag.addFrame(tyer);

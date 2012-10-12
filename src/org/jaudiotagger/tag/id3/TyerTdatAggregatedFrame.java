@@ -17,9 +17,9 @@ public class TyerTdatAggregatedFrame extends AggregatedFrame
         sb.append(tyer.getContent());
         AbstractID3v2Frame tdat = i.next();
         sb.append("-");
-        sb.append(tdat.getContent().substring(0,2));
-        sb.append("-");
         sb.append(tdat.getContent().substring(2,4));
+        sb.append("-");
+        sb.append(tdat.getContent().substring(0,2));
         return sb.toString();
     }
 
