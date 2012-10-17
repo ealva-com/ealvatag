@@ -24,6 +24,7 @@ import java.io.RandomAccessFile;
 import java.util.logging.Logger;
 import java.util.ArrayList;
 
+import org.jaudiotagger.audio.aiff.AiffTag;
 import org.jaudiotagger.audio.exceptions.CannotWriteException;
 import org.jaudiotagger.audio.exceptions.ReadOnlyFileException;
 import org.jaudiotagger.audio.flac.metadatablock.MetadataBlockDataPicture;
@@ -135,13 +136,18 @@ public class AudioFile
         return file;
     }
 
+    /**
+     *  Assign a tag to this audio file
+     *  
+     *  @param tag   Tag to be assigned
+     */
     public void setTag(Tag tag)
     {
         this.tag = tag;
     }
 
     /**
-     * Return audio header
+     * Return audio header information
      * @return
      */
     public AudioHeader getAudioHeader()
@@ -178,7 +184,7 @@ public class AudioFile
      * Check does file exist
      *
      * @param file
-     * @throws FileNotFoundException
+     * @throws FileNotFoundException  if file not found
      */
     public void checkFileExists(File file)throws FileNotFoundException
     {
@@ -223,9 +229,9 @@ public class AudioFile
     }
 
     /**
-     * Optional debugging method
+     * Optional debugging method. Must override to do anything interesting.
      *
-     * @return
+     * @return  Empty string. 
      */
     public String displayStructureAsXML()
     {
@@ -233,7 +239,7 @@ public class AudioFile
     }
 
     /**
-     * Optional debugging method
+     * Optional debugging method. Must override to do anything interesting.
      *
      * @return
      */
@@ -285,6 +291,10 @@ public class AudioFile
         {
             return new RealTag();
         }
+        else if(SupportedFileFormat.AIF.getFilesuffix().equals(file.getName().substring(file.getName().lastIndexOf('.'))))
+        {
+            return new AiffTag();
+        }
         else
         {
             throw new RuntimeException("Unable to create default tag for this file format");
@@ -327,7 +337,7 @@ public class AudioFile
     /**
      *
      * @param file
-     * @return filename with audioFormat separator stripped of.
+     * @return filename with audioFormat separator stripped off.
      */
     public static String getBaseFilename(File file)
     {

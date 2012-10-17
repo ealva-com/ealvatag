@@ -1,7 +1,8 @@
 package org.jaudiotagger.audio;
 
 /**
- * Files formats currently supported by Library
+ * Files formats currently supported by Library.
+ * Each enum value is associated with a file suffix (extension).
  */
 public enum SupportedFileFormat
 {
@@ -15,15 +16,21 @@ public enum SupportedFileFormat
     WAV("wav"),
     RA("ra"),
     RM("rm"),
-    M4B("m4b");
+    M4B("m4b"),
+    AIF("aif");
 
     private String filesuffix;
 
+    /** Constructor for internal use by this enum.
+     */
     SupportedFileFormat(String filesuffix)
     {
         this.filesuffix = filesuffix;
     }
 
+    /**
+     *  Returns the file suffix (lower case without initial .) associated with the format.
+     */
     public String getFilesuffix()
     {
         return filesuffix;

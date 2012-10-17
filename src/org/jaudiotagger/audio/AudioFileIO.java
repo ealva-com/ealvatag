@@ -18,6 +18,7 @@
  */
 package org.jaudiotagger.audio;
 
+import org.jaudiotagger.audio.aiff.AiffFileReader;
 import org.jaudiotagger.audio.asf.AsfFileReader;
 import org.jaudiotagger.audio.asf.AsfFileWriter;
 import org.jaudiotagger.audio.exceptions.CannotReadException;
@@ -107,7 +108,7 @@ public class AudioFileIO
      * </p>
      *
      * @param f The file where the tag will be deleted
-     * @throws CannotWriteException If the file could not be written/accessed, the extension
+     * @throws org.jaudiotagger.audio.exceptions.CannotWriteException If the file could not be written/accessed, the extension
      *                              wasn't recognized, or other IO error occurred.
      * @throws org.jaudiotagger.audio.exceptions.CannotReadException
      */
@@ -137,7 +138,7 @@ public class AudioFileIO
      *
      * @param f The file to read.
      * @return The AudioFile with the file tag and the file encoding info.
-     * @throws CannotReadException If the file could not be read, the extension wasn't
+     * @throws org.jaudiotagger.audio.exceptions.CannotReadException If the file could not be read, the extension wasn't
      *                             recognized, or an IO error occurred during the read.
      * @throws org.jaudiotagger.tag.TagException
      * @throws org.jaudiotagger.audio.exceptions.ReadOnlyFileException
@@ -201,7 +202,7 @@ public class AudioFileIO
      * </p>
      *
      * @param f The file where the tag will be deleted
-     * @throws CannotWriteException If the file could not be written/accessed, the extension
+     * @throws org.jaudiotagger.audio.exceptions.CannotWriteException If the file could not be written/accessed, the extension
      *                              wasn't recognized, or other IO error occurred.
      * @throws org.jaudiotagger.audio.exceptions.CannotReadException
      */
@@ -234,6 +235,7 @@ public class AudioFileIO
         readers.put(SupportedFileFormat.M4B.getFilesuffix(), new Mp4FileReader());
         readers.put(SupportedFileFormat.WAV.getFilesuffix(), new WavFileReader());
         readers.put(SupportedFileFormat.WMA.getFilesuffix(), new AsfFileReader());
+        readers.put(SupportedFileFormat.AIF.getFilesuffix(), new AiffFileReader());
         final RealFileReader realReader = new RealFileReader();
         readers.put(SupportedFileFormat.RA.getFilesuffix(), realReader);
         readers.put(SupportedFileFormat.RM.getFilesuffix(), realReader);
@@ -264,7 +266,7 @@ public class AudioFileIO
      *
      * @param f The file to read.
      * @return The AudioFile with the file tag and the file encoding info.
-     * @throws CannotReadException If the file could not be read, the extension wasn't
+     * @throws org.jaudiotagger.audio.exceptions.CannotReadException If the file could not be read, the extension wasn't
      *                             recognized, or an IO error occurred during the read.
      * @throws org.jaudiotagger.tag.TagException
      * @throws org.jaudiotagger.audio.exceptions.ReadOnlyFileException
@@ -302,7 +304,7 @@ public class AudioFileIO
         }
     }
     /**
-     * Removes an listener for all file formats.
+     * Removes a listener for all file formats.
      *
      * @param listener listener
      */
