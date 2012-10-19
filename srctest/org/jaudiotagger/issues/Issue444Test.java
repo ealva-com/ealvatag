@@ -82,6 +82,46 @@ public class Issue444Test extends AbstractTestCase
         }
     }
 
+    public void testYearAndMonthWrittenToID3v23NeedsToBeSplitIntoFrames()
+    {
+        try
+        {
+            TagOptionSingleton.getInstance().setID3V2Version(ID3V2Version.ID3_V23);
+            File testFile = AbstractTestCase.copyAudioToTmp("testV1vbrNew0.mp3");
+            AudioFile af = AudioFileIO.read(testFile);
+            af.getTagOrCreateAndSetDefault();
+            af.getTag().setField(FieldKey.YEAR, "2004-10");
+            assertEquals("2004-10-01", af.getTag().getFirst(FieldKey.YEAR));
+            assertNull(((ID3v23Tag)af.getTag()).getFrame("TDRC"));
+            assertNull(((ID3v23Tag) af.getTag()).getFrame("TYER"));
+            assertNull(((ID3v23Tag)af.getTag()).getFrame("TDAT"));
+            assertNotNull(((ID3v23Tag) af.getTag()).getFrame("TYERTDAT"));
+
+            TyerTdatAggregatedFrame aggframe = (TyerTdatAggregatedFrame)(((ID3v23Tag) af.getTag()).getFrame("TYERTDAT"));
+            Iterator<AbstractID3v2Frame> i = aggframe.getFrames().iterator();
+            assertEquals("2004", i.next().getContent());
+            assertEquals("0110", i.next().getContent());
+            assertEquals("2004-10-01",aggframe.getContent());
+            af.commit();
+            af = AudioFileIO.read(testFile);
+            assertEquals("2004-10-01", af.getTag().getFirst(FieldKey.YEAR));
+            assertNull(((ID3v23Tag)af.getTag()).getFrame("TDRC"));
+            assertNull(((ID3v23Tag)af.getTag()).getFrame("TYER"));
+            assertNull(((ID3v23Tag)af.getTag()).getFrame("TDAT"));
+            assertNotNull(((ID3v23Tag) af.getTag()).getFrame("TYERTDAT"));
+            aggframe = (TyerTdatAggregatedFrame)(((ID3v23Tag) af.getTag()).getFrame("TYERTDAT"));
+            i = aggframe.getFrames().iterator();
+            assertEquals("2004", i.next().getContent());
+            assertEquals("0110", i.next().getContent());
+
+
+        }
+        catch(Exception ex)
+        {
+            ex.printStackTrace();
+        }
+    }
+
     public void testYearWrittenToID3v23NeedsToBePutInTyerFrame()
     {
         try

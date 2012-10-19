@@ -1022,18 +1022,43 @@ public class ID3v23Tag extends AbstractID3v2Tag
             ((AbstractFrameBodyTextInfo) tyer.getBody()).setText(value.substring(0, 4));
             return tyer;
         }
-        else if(value.length()>4)
+        else if(value.length()> 4)
         {
             AbstractID3v2Frame tyer = createFrame(ID3v23Frames.FRAME_ID_V3_TYER);
             ((AbstractFrameBodyTextInfo) tyer.getBody()).setText(value.substring(0, 4));
 
-            AbstractID3v2Frame tdat = createFrame(ID3v23Frames.FRAME_ID_V3_TDAT);
-            ((AbstractFrameBodyTextInfo) tdat.getBody()).setText(value.substring(8,10)+value.substring(5,7));
+            if(value.length() >= 10)
+            {
+                //Have a full yyyy-mm-dd value that needs storing in two frames in ID3
+                String month = value.substring(5,7);
+                String day   = value.substring(8,10);
+                AbstractID3v2Frame tdat = createFrame(ID3v23Frames.FRAME_ID_V3_TDAT);
+                ((AbstractFrameBodyTextInfo) tdat.getBody()).setText(day+month);
 
-            TyerTdatAggregatedFrame ag = new TyerTdatAggregatedFrame();
-            ag.addFrame(tyer);
-            ag.addFrame(tdat);
-            return ag;
+                TyerTdatAggregatedFrame ag = new TyerTdatAggregatedFrame();
+                ag.addFrame(tyer);
+                ag.addFrame(tdat);
+                return ag;
+            }
+            else if(value.length() >= 7)
+            {
+                //TDAT frame requires both month and day so if we only have the month we just have to make
+                //the day up
+                String month = value.substring(5,7);
+                String day   = "01";
+                AbstractID3v2Frame tdat = createFrame(ID3v23Frames.FRAME_ID_V3_TDAT);
+                ((AbstractFrameBodyTextInfo) tdat.getBody()).setText(day+month);
+
+                TyerTdatAggregatedFrame ag = new TyerTdatAggregatedFrame();
+                ag.addFrame(tyer);
+                ag.addFrame(tdat);
+                return ag;
+            }
+            else
+            {
+                //We only have year data
+                return tyer;
+            }
         }
         else
         {
