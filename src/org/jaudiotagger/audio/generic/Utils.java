@@ -123,6 +123,8 @@ public class Utils
      *
      * So if storing a number which only requires one byte it will be stored in the last
      * byte.
+     * 
+     * Will fail if end - start >= 8, due to the limitations of the long type.
      */
     public static long getLongBE(ByteBuffer b, int start, int end)
     {
@@ -135,33 +137,86 @@ public class Utils
         return number;
     }
 
+    /*
+     * Computes a number whereby the 1st byte is the least significant and the last
+     * byte is the most significant. This version doesn't take a length,
+     * and it returns an int rather than a long.
+     * 
+     * @param b The byte array. Maximum length for valid results is 4 bytes.
+     * 
+     */
     public static int getIntLE(byte[] b)
     {
         return (int) getLongLE(ByteBuffer.wrap(b), 0, b.length - 1);
     }
 
     /*
-      * same as above, but returns an int instead of a long @param b The byte
-      * array @param start The starting offset in b (b[offset]). The less
-      * significant byte @param end The end index (included) in b (b[end]). The
-      * most significant byte @return a int number represented by the byte
-      * sequence.
+      * Computes a number whereby the 1st byte is the least significant and the last
+      * byte is the most significant. end - start must be no greater than 4.
+      * 
+      * @param b The byte array 
+      * 
+      * @param start The starting offset in b (b[offset]). The less
+      * significant byte 
+      * 
+      * @param end The end index (included) in b (b[end])
+      * 
+      * @return a int number represented by the byte sequence.
       */
     public static int getIntLE(byte[] b, int start, int end)
     {
         return (int) getLongLE(ByteBuffer.wrap(b), start, end);
     }
 
+    /*
+     * Computes a number whereby the 1st byte is the most significant and the last
+     * byte is the least significant.
+     * 
+     * @param b The byte array 
+     * 
+     * @param start The starting offset in b (b[offset]). The less
+     * significant byte 
+     * 
+     * @param end The end index (included) in b (b[end])
+     * 
+     * @return an int number represented by the byte sequence.
+     */
     public static int getIntBE(byte[] b, int start, int end)
     {
         return (int) getLongBE(ByteBuffer.wrap(b), start, end);
     }
 
+    /*
+     * Computes a number whereby the 1st byte is the most significant and the last
+     * byte is the least significant.
+     * 
+     * @param b The ByteBuffer
+     * 
+     * @param start The starting offset in b. The less
+     * significant byte 
+     * 
+     * @param end The end index (included) in b
+     * 
+     * @return an int number represented by the byte sequence.
+     */
     public static int getIntBE(ByteBuffer b, int start, int end)
     {
         return (int) getLongBE(b, start, end);
     }
 
+    /*
+     * Computes a number whereby the 1st byte is the most significant and the last
+     * byte is the least significant.
+     * 
+     * @param b The ByteBuffer
+     * 
+     * @param start The starting offset in b. The less
+     * significant byte 
+     * 
+     * @param end The end index (included) in b
+     * 
+     * @return a short number represented by the byte sequence.
+     */
     public static short getShortBE(ByteBuffer b, int start, int end)
     {
         return (short) getIntBE(b, start, end);
@@ -186,7 +241,7 @@ public class Utils
     /**
      * Convert short to byte representation - Big Endian (as used by mp4)
      *
-     * @param size
+     * @param size  number to convert
      * @return byte represenetation
      */
     public static byte[] getSizeBEInt16(short size)
@@ -201,7 +256,7 @@ public class Utils
     /**
      * Convert int to byte representation - Little Endian (as used by ogg vorbis)
      *
-     * @param size
+     * @param size   number to convert
      * @return byte represenetation
      */
     public static byte[] getSizeLEInt32(int size)
@@ -221,8 +276,8 @@ public class Utils
      * @param offset
      * @param length
      * @param encoding
-     * @return
-     * @throws UnsupportedEncodingException
+     * @return String
+     * @throws RuntimeException
      */
     public static String getString(byte[] b, int offset, int length, String encoding)
     {
@@ -245,7 +300,8 @@ public class Utils
      * @param offset
      * @param length
      * @param encoding
-     * @return
+     * @return String
+     * @throws RuntimeException
      */
     public static String getString(ByteBuffer buffer, int offset, int length, String encoding)
     {
@@ -276,10 +332,13 @@ public class Utils
     }
 
     /**
-     * Overflow checking since java can't handle unsigned numbers.
-     * @param di
+     * Reads a 32-bit integer and returns it as a (signed) int.
+     * Does overflow checking since java can't handle unsigned numbers.
+     * @param di  The input source
+     * 
      * @throws java.io.IOException
-     * @return
+     * 
+     * @return int
      */
     public static int readUint32AsInt(DataInput di) throws IOException
     {
@@ -291,6 +350,8 @@ public class Utils
         return (int) l;
     }
 
+    /** Read a 32-bit big-endian unsigned integer using a DataInput. 
+     */
     public static long readUint32(DataInput di) throws IOException
     {
         final byte[] buf8 = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
@@ -299,6 +360,7 @@ public class Utils
         return l;
     }
 
+    /** Read a 16-bit big-endian unsigned integer */
     public static int readUint16(DataInput di) throws IOException
     {
         final byte[] buf = {0x00, 0x00, 0x00, 0x00};
@@ -307,6 +369,7 @@ public class Utils
         return i;
     }
 
+    /** Read a string of a specified number of ASCII bytes */
     public static String readString(DataInput di, int charsToRead) throws IOException
     {
         final byte[] buf = new byte[charsToRead];
@@ -314,6 +377,7 @@ public class Utils
         return new String(buf);
     }
 
+    /** Read a 64-bit unsigned integer using an nio ByteBuffer */
     public static long readUInt64(ByteBuffer b)
     {
         long result = 0;
@@ -322,6 +386,7 @@ public class Utils
         return result;
     }
 
+    /** Read an unsigned big-endian 32-bit integer using an nio ByteBuffer */
     public static int readUBEInt32(ByteBuffer b)
     {
         int result = 0;
@@ -330,6 +395,8 @@ public class Utils
         return result;
     }
 
+    /** Read an unsigned big-endian 24-bit integer using an
+     *  nio ByteBuffer */
     public static int readUBEInt24(ByteBuffer b)
     {
         int result = 0;
@@ -338,6 +405,8 @@ public class Utils
         return result;
     }
 
+    /** Read an unsigned big-endian 16-bit integer using an
+     *  nio ByteBuffer */
     public static int readUBEInt16(ByteBuffer b)
     {
         int result = 0;
@@ -346,6 +415,8 @@ public class Utils
         return result;
     }
 
+    /** Read an unsigned (endian-neutral) 8-bit integer using an
+     *  nio ByteBuffer */
     public static int readUInt8(ByteBuffer b)
     {
         return read(b);
