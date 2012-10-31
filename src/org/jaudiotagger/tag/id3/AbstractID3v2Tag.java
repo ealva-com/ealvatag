@@ -77,12 +77,12 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
     /**
      * Map of all frames for this tag
      */
-    public HashMap frameMap = null;
+    public HashMap<String, Object> frameMap = null;
 
     /**
      * Map of all encrypted frames, these cannot be unencrypted by jaudiotagger
      */
-    public HashMap encryptedFrameMap = null;
+    public HashMap<String, Object> encryptedFrameMap = null;
 
     /**
      * Holds the ids of invalid duplicate frames
@@ -202,8 +202,8 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
     //TODO Copy Encrypted frames needs implementing
     protected void copyFrames(AbstractID3v2Tag copyObject)
     {
-        frameMap = new LinkedHashMap();
-        encryptedFrameMap = new LinkedHashMap();
+        frameMap = new LinkedHashMap<String, Object>();
+        encryptedFrameMap = new LinkedHashMap<String, Object>();
         //Copy Frames that are a valid 2.4 type
 
         for (Object o1 : copyObject.frameMap.keySet())
@@ -894,7 +894,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
     public Iterator getFrameOfType(String identifier)
     {
         Iterator<String> iterator = frameMap.keySet().iterator();
-        HashSet result = new HashSet();
+        HashSet<Object> result = new HashSet<Object>();
         String key;
         while (iterator.hasNext())
         {
