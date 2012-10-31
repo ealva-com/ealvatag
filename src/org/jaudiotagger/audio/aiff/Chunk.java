@@ -23,9 +23,10 @@ public abstract class Chunk {
      * @param hdr      The header for this chunk
      * @param dstrm    The stream from which the data are being read
      */
-    public Chunk (RandomAccessFile raf)
+    public Chunk (RandomAccessFile raf, ChunkHeader hdr)
     {
         this.raf = raf;
+        bytesLeft = hdr.getSize ();
     }
     
     

@@ -7,13 +7,12 @@ import java.util.Date;
 
 import org.jaudiotagger.audio.generic.Utils;
 import org.jaudiotagger.tag.FieldDataInvalidException;
+import org.jaudiotagger.tag.aiff.AiffTag;
+import org.jaudiotagger.tag.aiff.AiffTagFieldKey;
 
 public class FormatVersionChunk extends Chunk {
-
     
-    private Date chunkTimestamp;
-    
-    private AiffTag aiffTag;
+    private AiffAudioHeader aiffHeader;
     
     /**
      * Constructor.
@@ -25,28 +24,24 @@ public class FormatVersionChunk extends Chunk {
     public FormatVersionChunk (
             ChunkHeader hdr, 
             RandomAccessFile raf,
-            AiffTag tag)
+            AiffAudioHeader aHdr)
     {
-        super (raf);
-        aiffTag = tag;
+        super (raf, hdr);
+        aiffHeader = aHdr;
     }
     
-    /** Reads a chunk and puts a FormatVersion property into
-     *  the RepInfo object. 
+    /** Reads a chunk and extracts information. 
      * 
      *  @return   <code>false</code> if the chunk is structurally
      *            invalid, otherwise <code>true</code>
      */
     public boolean readChunk () throws IOException
     {
-        long timestamp = Utils.readUint32(raf);
+        long rawTimestamp = Utils.readUint32(raf);
         // The timestamp is in seconds since January 1, 1904.
         // We must convert to Java time.
-        String timestampStr = AiffUtil.timestampToDate (timestamp);
-        try {
-            aiffTag.setField(AiffTagFieldKey.TIMESTAMP, timestampStr);
-        }
-        catch (FieldDataInvalidException e) {}
+        Date timestamp = AiffUtil.timestampToDate (rawTimestamp);
+        aiffHeader.setTimestamp(timestamp);
         return true;
     }
 
