@@ -43,6 +43,25 @@ public class UtilsTest  extends TestCase {
         }
     }
 
+    public void testReadInt16 () {
+        try {
+            byte[] maxUnsignedBuf = { (byte) 0XFF, (byte) 0XFF };
+            ByteArrayInputStream ins = new ByteArrayInputStream (maxUnsignedBuf);
+            DataInputStream dis = new DataInputStream (ins);
+            int val = Utils.readInt16(dis);
+            assertEquals (val, -1);
+
+            byte[] smallIntBuf = { (byte) 0X01, (byte) 0X10 };
+            ins = new ByteArrayInputStream (smallIntBuf);
+            dis = new DataInputStream (ins);
+            val = Utils.readInt16(dis);
+            assertEquals (val, 0X0110);
+        }
+        catch (IOException e) {
+            fail("IOException in testReadInt16");  // huh?
+        }
+    }
+
     public void testReadUInt32 () {
         try {
             byte[] maxUnsignedBuf = { (byte) 0XFF, (byte) 0XFF, (byte) 0XFF, (byte) 0XFF };
