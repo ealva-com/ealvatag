@@ -369,6 +369,15 @@ public class Utils
         return i;
     }
 
+    /** Read a 16-bit big-endian signed integer */
+    public static int readInt16(DataInput di) throws IOException
+    {
+        final byte[] buf = {0x00, 0x00};
+        di.readFully(buf, 0, 2);
+        final int i = ByteBuffer.wrap(buf).getShort();
+        return i;
+    }
+
     /** Read a string of a specified number of ASCII bytes */
     public static String readString(DataInput di, int charsToRead) throws IOException
     {
