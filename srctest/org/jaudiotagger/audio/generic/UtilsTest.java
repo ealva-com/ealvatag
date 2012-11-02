@@ -8,7 +8,6 @@ import java.nio.ByteBuffer;
 
 import junit.framework.TestCase;
 
-import org.junit.Test;
 
 public class UtilsTest  extends TestCase {
 
