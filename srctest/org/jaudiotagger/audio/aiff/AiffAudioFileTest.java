@@ -17,6 +17,15 @@ public class AiffAudioFileTest extends TestCase {
 
     public void testReadAiff() {
         Exception exceptionCaught = null;
+
+        File orig = new File("testdata", "M1F1-int8C-AFsp.aif");
+        if (!orig.isFile())
+        {
+            System.err.println("Unable to test file - not available");
+            return;
+        }
+
+
         File testFile = AbstractTestCase.copyAudioToTmp("M1F1-int8C-AFsp.aif");
         AiffAudioHeader aiffAudioHeader = null;
         try {
