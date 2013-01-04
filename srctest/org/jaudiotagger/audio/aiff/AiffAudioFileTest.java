@@ -1,6 +1,5 @@
 package org.jaudiotagger.audio.aiff;
 
-import static org.junit.Assert.*;
 
 import java.io.File;
 import java.io.RandomAccessFile;
@@ -13,13 +12,9 @@ import org.jaudiotagger.audio.AudioFileIO;
 import org.jaudiotagger.audio.AudioHeader;
 import org.jaudiotagger.tag.FieldKey;
 import org.jaudiotagger.tag.Tag;
-import org.jaudiotagger.tag.TagField;
-import org.jaudiotagger.tag.aiff.AiffTag;
-import org.junit.Test;
 
 public class AiffAudioFileTest extends TestCase {
 
-    @Test
     public void testReadAiff() {
         Exception exceptionCaught = null;
         File testFile = AbstractTestCase.copyAudioToTmp("M1F1-int8C-AFsp.aif");
