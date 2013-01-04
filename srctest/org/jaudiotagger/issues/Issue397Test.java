@@ -39,6 +39,32 @@ public class Issue397Test extends AbstractTestCase
         assertEquals(1,tag.getAll(FieldKey.SUBTITLE).size());
     }
 
+    public void testSetSubtitleForMp3v22() throws Exception
+    {
+        File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3");
+        AudioFile f = AudioFileIO.read(testFile);
+        TagOptionSingleton.getInstance().setID3V2Version(ID3V2Version.ID3_V22);
+        Tag tag = f.getTagOrCreateAndSetDefault();
+        tag.setField(FieldKey.DISC_SUBTITLE,"discsubtitle");
+        tag.setField(FieldKey.SUBTITLE,"subtitle");
+        assertTrue(tag.hasField(FieldKey.DISC_SUBTITLE));
+        assertEquals("discsubtitle",tag.getFirst(FieldKey.DISC_SUBTITLE));
+        assertEquals(1,tag.getAll(FieldKey.DISC_SUBTITLE).size());
+        assertTrue(tag.hasField(FieldKey.SUBTITLE));
+        assertEquals("subtitle",tag.getFirst(FieldKey.SUBTITLE));
+        assertEquals(1,tag.getAll(FieldKey.SUBTITLE).size());
+        f.commit();
+        f = AudioFileIO.read(testFile);
+        tag = f.getTag();
+        assertTrue(tag.hasField(FieldKey.DISC_SUBTITLE));
+        assertEquals("discsubtitle",tag.getFirst(FieldKey.DISC_SUBTITLE));
+        assertEquals(1,tag.getAll(FieldKey.DISC_SUBTITLE).size());
+        assertTrue(tag.hasField(FieldKey.SUBTITLE));
+        assertEquals("subtitle",tag.getFirst(FieldKey.SUBTITLE));
+        assertEquals(1,tag.getAll(FieldKey.SUBTITLE).size());
+
+    }
+
     public void testSetSubtitleForMp3v23() throws Exception
     {
         File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3");

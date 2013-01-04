@@ -318,7 +318,7 @@ public class ID3v24Frames extends ID3Frames
         idToValue.put(FRAME_ID_SIGNATURE, "Signature");
         idToValue.put(FRAME_ID_SYNC_LYRIC, "Synchronized lyric/text");
         idToValue.put(FRAME_ID_SYNC_TEMPO, "Synced tempo codes");
-        idToValue.put(FRAME_ID_TAGGING_TIME, "Text: Tagaging time");
+        idToValue.put(FRAME_ID_TAGGING_TIME, "Text: Tagging time");
         idToValue.put(FRAME_ID_TERMS_OF_USE, "Terms of Use");
         idToValue.put(FRAME_ID_TITLE, "Text: title");
         idToValue.put(FRAME_ID_TITLE_REFINEMENT, "Text: Subtitle/Description refinement");

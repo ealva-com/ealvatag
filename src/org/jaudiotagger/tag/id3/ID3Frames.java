@@ -225,6 +225,7 @@ public abstract class ID3Frames extends AbstractStringStringValuePair
         convertv22Tov23.put(ID3v22Frames.FRAME_ID_V2_REMIXED, ID3v23Frames.FRAME_ID_V3_REMIXED);
         convertv22Tov23.put(ID3v22Frames.FRAME_ID_V2_REVERB, ID3v23Frames.FRAME_ID_V3_REVERB);
         convertv22Tov23.put(ID3v22Frames.FRAME_ID_V2_SET, ID3v23Frames.FRAME_ID_V3_SET);
+        convertv22Tov23.put(ID3v22Frames.FRAME_ID_V2_SET_SUBTITLE, ID3v23Frames.FRAME_ID_V3_SET_SUBTITLE);
         convertv22Tov23.put(ID3v22Frames.FRAME_ID_V2_SYNC_LYRIC, ID3v23Frames.FRAME_ID_V3_SYNC_LYRIC);
         convertv22Tov23.put(ID3v22Frames.FRAME_ID_V2_SYNC_TEMPO, ID3v23Frames.FRAME_ID_V3_SYNC_TEMPO);
         convertv22Tov23.put(ID3v22Frames.FRAME_ID_V2_TDAT, ID3v23Frames.FRAME_ID_V3_TDAT);

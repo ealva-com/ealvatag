@@ -74,6 +74,7 @@ public class ID3v22Frames extends ID3Frames
     public static final String FRAME_ID_V2_REMIXED = "TP4";
     public static final String FRAME_ID_V2_REVERB = "REV";
     public static final String FRAME_ID_V2_SET = "TPA";
+    public static final String FRAME_ID_V2_SET_SUBTITLE = "TPS";     //Note this is non-standard
     public static final String FRAME_ID_V2_SYNC_LYRIC = "SLT";
     public static final String FRAME_ID_V2_SYNC_TEMPO = "STC";
     public static final String FRAME_ID_V2_TDAT = "TDA";
@@ -268,6 +269,7 @@ public class ID3v22Frames extends ID3Frames
         idToValue.put(FRAME_ID_V2_REMIXED, "Text: Interpreted, remixed, or otherwise modified by");
         idToValue.put(FRAME_ID_V2_REVERB, "Reverb");
         idToValue.put(FRAME_ID_V2_SET, "Text: Part of a setField");
+        idToValue.put(FRAME_ID_V2_SET_SUBTITLE, "Text: Set subtitle");
         idToValue.put(FRAME_ID_V2_SYNC_LYRIC, "Synchronized lyric/text");
         idToValue.put(FRAME_ID_V2_SYNC_TEMPO, "Synced tempo codes");
         idToValue.put(FRAME_ID_V2_TDAT, "Text: Date");
@@ -334,6 +336,7 @@ public class ID3v22Frames extends ID3Frames
         tagFieldToId3.put(FieldKey.CUSTOM4, ID3v22FieldKey.CUSTOM4);
         tagFieldToId3.put(FieldKey.CUSTOM5, ID3v22FieldKey.CUSTOM5);
         tagFieldToId3.put(FieldKey.DISC_NO, ID3v22FieldKey.DISC_NO);
+        tagFieldToId3.put(FieldKey.DISC_SUBTITLE, ID3v22FieldKey.DISC_SUBTITLE);
         tagFieldToId3.put(FieldKey.DISC_TOTAL, ID3v22FieldKey.DISC_NO);
         tagFieldToId3.put(FieldKey.ENCODER, ID3v22FieldKey.ENCODER);
         tagFieldToId3.put(FieldKey.FBPM, ID3v22FieldKey.FBPM);
@@ -369,6 +372,7 @@ public class ID3v22Frames extends ID3Frames
         tagFieldToId3.put(FieldKey.RECORD_LABEL, ID3v22FieldKey.RECORD_LABEL);
         tagFieldToId3.put(FieldKey.REMIXER, ID3v22FieldKey.REMIXER);
         tagFieldToId3.put(FieldKey.SCRIPT, ID3v22FieldKey.SCRIPT);
+        tagFieldToId3.put(FieldKey.SUBTITLE, ID3v22FieldKey.SUBTITLE);
         tagFieldToId3.put(FieldKey.TAGS, ID3v22FieldKey.TAGS);
         tagFieldToId3.put(FieldKey.TEMPO, ID3v22FieldKey.TEMPO);
         tagFieldToId3.put(FieldKey.TITLE, ID3v22FieldKey.TITLE);
