@@ -1873,11 +1873,24 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
      * Does this tag contain a field with the specified key
      *
      * @param key The field id to look for.
-     * @return
+     * @return true if has field , false if does not or if no mapping for key exists
      */
     public boolean hasField(FieldKey key)
     {
-        return getFirstField(key) != null;
+        if (key == null)
+        {
+            throw new IllegalArgumentException(ErrorMessage.GENERAL_INVALID_NULL_ARGUMENT.getMsg());
+        }
+
+        try
+        {
+            return getFirstField(key) != null;
+        }
+        catch(KeyNotFoundException knfe)
+        {
+            logger.log(Level.SEVERE, knfe.getMessage(),knfe);
+            return false;
+        }
     }
 
     /**
@@ -2686,12 +2699,10 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
      */
     public List<TagField> getFields(FieldKey genericKey) throws KeyNotFoundException
     {
-
         if (genericKey == null)
         {
-            throw new KeyNotFoundException();
+            throw new IllegalArgumentException(ErrorMessage.GENERAL_INVALID_NULL_ARGUMENT.getMsg());
         }
-
         FrameAndSubId formatKey = getFrameAndSubIdFromGenericKey(genericKey);
 
         //Get list of frames that this uses, as we are going to remove entries we don't want take a copy

@@ -1235,10 +1235,14 @@ public class ID3v24Tag extends AbstractID3v2Tag
 
     protected FrameAndSubId getFrameAndSubIdFromGenericKey(FieldKey genericKey)
     {
+        if (genericKey == null)
+        {
+            throw new IllegalArgumentException(ErrorMessage.GENERAL_INVALID_NULL_ARGUMENT.getMsg());
+        }
         ID3v24FieldKey id3v24FieldKey = ID3v24Frames.getInstanceOf().getId3KeyFromGenericKey(genericKey);
         if (id3v24FieldKey == null)
         {
-            throw new KeyNotFoundException("Unable to find key for "+genericKey.name());
+            throw new KeyNotFoundException(genericKey.name());
         }
         return new FrameAndSubId(id3v24FieldKey.getFrameId(), id3v24FieldKey.getSubId());
     }

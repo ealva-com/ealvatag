@@ -694,6 +694,10 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag
      */
     public TagField createField(FieldKey genericKey, String value)
     {
+        if (genericKey == null)
+        {
+            throw new IllegalArgumentException(ErrorMessage.GENERAL_INVALID_NULL_ARGUMENT.getMsg());
+        }
         ID3v1FieldKey idv1FieldKey = tagFieldToID3v1Field.get(genericKey);
         if(idv1FieldKey==null)
         {
