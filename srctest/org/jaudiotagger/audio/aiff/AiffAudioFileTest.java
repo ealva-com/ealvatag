@@ -38,7 +38,7 @@ public class AiffAudioFileTest extends TestCase {
         }
         assertNull(exceptionCaught);
         
-        testFile = AbstractTestCase.copyAudioToTmp("M1F1-int8-AFsp.aif");
+/*        testFile = AbstractTestCase.copyAudioToTmp("M1F1-int8-AFsp.aif");
         try {
             AudioFile f = AudioFileIO.read(testFile);
             AudioHeader ah = f.getAudioHeader();
@@ -74,6 +74,7 @@ public class AiffAudioFileTest extends TestCase {
             exceptionCaught = e;
         }
         assertNull(exceptionCaught);
+  */
     }
 
 }
