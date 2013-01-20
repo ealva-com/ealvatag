@@ -166,6 +166,10 @@ public class  ImageFormats
      */
     public static boolean binaryDataIsBmpFormat(byte[] data)
     {
+        if(data.length<2)
+        {
+            return false;
+        }
         //Read signature
         return (0x42 == (data[0] & 0xff)) && (0x4d == (data[1] & 0xff));
     }
@@ -180,6 +184,10 @@ public class  ImageFormats
      */
     public static boolean binaryDataIsPdfFormat(byte[] data)
     {
+        if(data.length<4)
+        {
+            return false;
+        }
         //Read signature
         return (0x25 == (data[0] & 0xff)) && (0x50 == (data[1] & 0xff)) && (0x44 == (data[2] & 0xff)) && (0x46 == (data[3] & 0xff));
     }
@@ -193,6 +201,10 @@ public class  ImageFormats
      */
     public static boolean binaryDataIsTiffFormat(byte[] data)
     {
+        if(data.length<4)
+        {
+            return false;
+        }
         //Read signature Intel
         return (
                 ((0x49 == (data[0] & 0xff)) && (0x49 == (data[1] & 0xff)) && (0x2a == (data[2] & 0xff)) && (0x00 == (data[3] & 0xff)))
