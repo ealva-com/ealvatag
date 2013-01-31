@@ -772,16 +772,40 @@ public class MP3AudioHeader implements AudioHeader
      */
     public String toString()
     {
-        String s = "fileSize:" + fileSize + " encoder:" + encoder + " startByte:" + Hex.asHex(startByte) + " numberOfFrames:" + numberOfFrames + " numberOfFramesEst:" + numberOfFramesEstimate + " timePerFrame:" + timePerFrame + " bitrate:" + bitrate + " trackLength:" + getTrackLengthAsString();
+        String s = "fileSize:" + fileSize
+                + " encoder:" + encoder
+                + " startByte:" + Hex.asHex(startByte)
+                + " numberOfFrames:" + numberOfFrames
+                + " numberOfFramesEst:" + numberOfFramesEstimate
+                + " timePerFrame:" + timePerFrame
+                + " bitrate:" + bitrate
+                + " trackLength:" + getTrackLengthAsString();
 
         if (this.mp3FrameHeader != null)
         {
             s += mp3FrameHeader.toString();
         }
+        else
+        {
+            s +=" mpegframeheader:false";
+        }
 
         if (this.mp3XingFrame != null)
         {
             s += mp3XingFrame.toString();
+        }
+        else
+        {
+            s +=" mp3XingFrame:false";
+        }
+
+        if (this.mp3VbriFrame != null)
+        {
+            s +=mp3VbriFrame.toString();
+        }
+        else
+        {
+            s +=" mp3VbriFrame:false";
         }
         return s;
     }

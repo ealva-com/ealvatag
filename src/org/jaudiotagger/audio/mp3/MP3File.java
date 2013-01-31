@@ -167,11 +167,10 @@ public class MP3File extends AudioFile
      * @throws IOException
      * @throws TagException
      */
-    private void readV2Tag(File file, int loadOptions) throws IOException, TagException
+    private void readV2Tag(File file, int loadOptions, int startByte) throws IOException, TagException
     {
         //We know where the actual Audio starts so load all the file from start to that point into
         //a buffer then we can read the IDv2 information without needing any more File I/O
-        int startByte = (int) ((MP3AudioHeader) audioHeader).getMp3StartByte();
         if (startByte >= AbstractID3v2Tag.TAG_HEADER_LENGTH)
         {
             logger.finer("Attempting to read id3v2tags");
@@ -295,74 +294,133 @@ public class MP3File extends AudioFile
         */
     }
 
+
+    /**
+     *
+     * @param startByte
+     * @param endByte
+     * @return
+     * @throws Exception
+     *
+     * @return true if all the bytes between in the file between startByte and endByte are null, false
+     * otherwise
+     */
+    private boolean isFilePortionNull(int startByte, int endByte) throws IOException
+    {
+        logger.config("Checking file portion:" + Hex.asHex(startByte) + ":" + Hex.asHex(endByte));
+        FileInputStream fis=null;
+        FileChannel     fc=null;
+        try
+        {
+            fis = new FileInputStream(file);
+            fc = fis.getChannel();
+            fc.position(startByte);
+            ByteBuffer bb = ByteBuffer.allocateDirect(endByte - startByte);
+            fc.read(bb);
+            while(bb.hasRemaining())
+            {
+                if(bb.get()!=0)
+                {
+                    return false;
+                }
+            }
+        }
+        finally
+        {
+            if (fc != null)
+            {
+                fc.close();
+            }
+
+            if (fis != null)
+            {
+                fis.close();
+            }
+        }
+        return true;
+    }
     /**
      * Regets the audio header starting from start of file, and write appropriate logging to indicate
      * potential problem to user.
      *
      * @param startByte
-     * @param currentHeader
+     * @param firstHeaderAfterTag
      * @return
      * @throws IOException
      * @throws InvalidAudioFrameException
      */
-    private MP3AudioHeader checkAudioStart(long startByte, MP3AudioHeader currentHeader) throws IOException, InvalidAudioFrameException
+    private MP3AudioHeader checkAudioStart(long startByte, MP3AudioHeader firstHeaderAfterTag) throws IOException, InvalidAudioFrameException
     {
-        MP3AudioHeader newAudioHeader;
-        MP3AudioHeader nextAudioHeader;
+        MP3AudioHeader headerOne;
+        MP3AudioHeader headerTwo;
 
-        logger.warning(ErrorMessage.MP3_ID3TAG_LENGTH_INCORRECT.getMsg(file.getPath(), Hex.asHex(startByte), Hex.asHex(currentHeader.getMp3StartByte())));
+        logger.warning(ErrorMessage.MP3_ID3TAG_LENGTH_INCORRECT.getMsg(file.getPath(), Hex.asHex(startByte), Hex.asHex(firstHeaderAfterTag.getMp3StartByte())));
 
         //because we cant agree on start location we reread the audioheader from the start of the file, at least
         //this way we cant overwrite the audio although we might overwrite part of the tag if we write this file
         //back later
-        newAudioHeader = new MP3AudioHeader(file, 0);
-        logger.config("Checking from start:" + newAudioHeader);
+        headerOne = new MP3AudioHeader(file, 0);
+        logger.config("Checking from start:" + headerOne);
 
-        if (currentHeader.getMp3StartByte() == newAudioHeader.getMp3StartByte())
+        //Although the id3 tag size appears to be incorrect at least we have found the same location for the start
+        //of audio whether we start searching from start of file or at the end of the alleged of file so no real
+        //problem
+        if (firstHeaderAfterTag.getMp3StartByte() == headerOne.getMp3StartByte())
         {
-            //Although the tag size appears to be incorrect at least we have found the same location for the start
-            //of audio whether we start searching from start of file or at the end of the alleged of file so no real
-            //problem
-            logger.config(ErrorMessage.MP3_START_OF_AUDIO_CONFIRMED.getMsg(file.getPath(), Hex.asHex(newAudioHeader.getMp3StartByte())));
-            return currentHeader;
+            logger.config(ErrorMessage.MP3_START_OF_AUDIO_CONFIRMED.getMsg(file.getPath(),
+                    Hex.asHex(headerOne.getMp3StartByte())));
+            return firstHeaderAfterTag;
         }
         else
         {
+
             //We get a different value if read from start, can't guarantee 100% correct lets do some more checks
-            logger.config((ErrorMessage.MP3_RECALCULATED_POSSIBLE_START_OF_MP3_AUDIO.getMsg(file.getPath(), Hex.asHex(newAudioHeader.getMp3StartByte()))));
+            logger.config((ErrorMessage.MP3_RECALCULATED_POSSIBLE_START_OF_MP3_AUDIO.getMsg(file.getPath(),
+                            Hex.asHex(headerOne.getMp3StartByte()))));
 
-            //Frame counts dont match so eiither currentHeader or newAudioHeader isnt really audio header
-            if (currentHeader.getNumberOfFrames() != newAudioHeader.getNumberOfFrames())
+            //Same frame count so probably both audio headers with newAudioHeader being the first one
+            if (firstHeaderAfterTag.getNumberOfFrames() == headerOne.getNumberOfFrames())
             {
-                //Skip to the next header (header 2, counting from start of file)
-                nextAudioHeader = new MP3AudioHeader(file, newAudioHeader.getMp3StartByte() + newAudioHeader.mp3FrameHeader.getFrameLength());
-                logger.config("Checking next:" + nextAudioHeader);
-
-                //It matches the header we found when doing the original search from after the ID3Tag therefore it
-                //seems that newAudioHeader was a false match and the original header was correct
-                if (nextAudioHeader.getMp3StartByte() == currentHeader.getMp3StartByte())
-                {
-                    logger.warning((ErrorMessage.MP3_START_OF_AUDIO_CONFIRMED.getMsg(file.getPath(), Hex.asHex(currentHeader.getMp3StartByte()))));
-                    return currentHeader;
-                }
-                //it matches the header we just found so lends weight to the fact that the audio does indeed start at new header
-                else if (nextAudioHeader.getNumberOfFrames() == newAudioHeader.getNumberOfFrames())
-                {
-                    logger.warning((ErrorMessage.MP3_RECALCULATED_START_OF_MP3_AUDIO.getMsg(file.getPath(), Hex.asHex(newAudioHeader.getMp3StartByte()))));
-                    return newAudioHeader;
-                }
-                ///Not sure but safer to return earlier audio beause stops jaudiotagger overwriting when writing tag
-                else
-                {
-                    logger.warning((ErrorMessage.MP3_RECALCULATED_START_OF_MP3_AUDIO.getMsg(file.getPath(), Hex.asHex(newAudioHeader.getMp3StartByte()))));
-                    return newAudioHeader;
-                }
+                logger.warning((ErrorMessage.MP3_RECALCULATED_START_OF_MP3_AUDIO.getMsg(file.getPath(),
+                                Hex.asHex(headerOne.getMp3StartByte()))));
+                return headerOne;
             }
-            //Same frame count so probably both audio headers with newAudioHeader being the firt one
+
+            //If the size reported by the tag header is a little short and there is only nulls between the recorded value
+            //and the start of the first audio found then we stick with the original header as more likely that currentHeader
+            //DataInputStream not really a header
+            if(isFilePortionNull((int) startByte,(int) firstHeaderAfterTag.getMp3StartByte()))
+            {
+                return firstHeaderAfterTag;
+            }
+
+            //Skip to the next header (header 2, counting from start of file)
+            headerTwo = new MP3AudioHeader(file, headerOne.getMp3StartByte()
+                    + headerOne.mp3FrameHeader.getFrameLength());
+
+            //It matches the header we found when doing the original search from after the ID3Tag therefore it
+            //seems that newAudioHeader was a false match and the original header was correct
+            if (headerTwo.getMp3StartByte() == firstHeaderAfterTag.getMp3StartByte())
+            {
+                logger.warning((ErrorMessage.MP3_START_OF_AUDIO_CONFIRMED.getMsg(file.getPath(),
+                                Hex.asHex(firstHeaderAfterTag.getMp3StartByte()))));
+                return firstHeaderAfterTag;
+            }
+
+            //It matches the frameCount the header we just found so lends weight to the fact that the audio does indeed start at new header
+            //however it maybe that neither are really headers and just contain the same data being misrepresented as headers.
+            if (headerTwo.getNumberOfFrames() == headerOne.getNumberOfFrames())
+            {
+                logger.warning((ErrorMessage.MP3_RECALCULATED_START_OF_MP3_AUDIO.getMsg(file.getPath(),
+                                Hex.asHex(headerOne.getMp3StartByte()))));
+                return headerOne;
+            }
+            ///Doesnt match the frameCount lets go back to the original header
             else
             {
-                logger.warning((ErrorMessage.MP3_RECALCULATED_START_OF_MP3_AUDIO.getMsg(file.getPath(), Hex.asHex(newAudioHeader.getMp3StartByte()))));
-                return newAudioHeader;
+                logger.warning((ErrorMessage.MP3_RECALCULATED_START_OF_MP3_AUDIO.getMsg(file.getPath(),
+                                Hex.asHex(firstHeaderAfterTag.getMp3StartByte()))));
+                return firstHeaderAfterTag;
             }
         }
     }
@@ -390,24 +448,24 @@ public class MP3File extends AudioFile
             newFile = checkFilePermissions(file, readOnly);
 
             //Read ID3v2 tag size (if tag exists) to allow audioHeader parsing to skip over tag
-            long startByte = AbstractID3v2Tag.getV2TagSizeIfExists(file);
+            long tagSizeReportedByHeader = AbstractID3v2Tag.getV2TagSizeIfExists(file);
+            logger.config("TagHeaderSize:" + Hex.asHex(tagSizeReportedByHeader));
+            audioHeader = new MP3AudioHeader(file, tagSizeReportedByHeader);
 
-            //If exception reading Mpeg then we should give up no point continuing
-            audioHeader = new MP3AudioHeader(file, startByte);
-
-            if (startByte != ((MP3AudioHeader) audioHeader).getMp3StartByte())
+            //If the audio header is not straight after the end of the tag then search from start of file
+            if (tagSizeReportedByHeader != ((MP3AudioHeader) audioHeader).getMp3StartByte())
             {
                 logger.config("First header found after tag:" + audioHeader);
-                audioHeader = checkAudioStart(startByte, (MP3AudioHeader) audioHeader);
+                audioHeader = checkAudioStart(tagSizeReportedByHeader, (MP3AudioHeader) audioHeader);
             }
 
             //Read v1 tags (if any)
             readV1Tag(file, newFile, loadOptions);
 
             //Read v2 tags (if any)
-            readV2Tag(file, loadOptions);
+            readV2Tag(file, loadOptions, (int)((MP3AudioHeader) audioHeader).getMp3StartByte());
 
-            //If we have a v2 tag use that, if we dont but have v1 tag use that
+            //If we have a v2 tag use that, if we do not but have v1 tag use that
             //otherwise use nothing
             //TODO:if have both should we merge
             //rather than just returning specific ID3v22 tag, would it be better to return v24 version ?
@@ -419,9 +477,6 @@ public class MP3File extends AudioFile
             {
                 tag = id3v1tag;
             }
-
-            //Read Lyrics 3
-            //readLyrics3Tag(File file,RandomAccessFile  newFile,int loadOptions)
         }
         finally
         {
@@ -794,7 +849,7 @@ public class MP3File extends AudioFile
      */
     public void save(File fileToSave) throws IOException
     {
-        //Ensure we are dealing with absolute filepqaths not relative ones
+        //Ensure we are dealing with absolute filepaths not relative ones
         File file = fileToSave.getAbsoluteFile();
 
         logger.config("Saving  : " + file.getPath());

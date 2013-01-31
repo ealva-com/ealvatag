@@ -424,7 +424,7 @@ public final class AsfTag extends AbstractTag
         final AsfFieldKey asfFieldKey = tagFieldToAsfField.get(genericKey);
         if (asfFieldKey == null)
         {
-            throw new KeyNotFoundException("No ASF fieldkey for " + genericKey.toString());
+            throw new KeyNotFoundException(genericKey.toString());
         }
         return createField(asfFieldKey, value);
     }
