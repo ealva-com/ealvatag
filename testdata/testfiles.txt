@@ -57,5 +57,7 @@ test102.flac,no,395,Flac file with only a StreamInfo block
 test103.m4a,no,406,iTunes 4 file with invalid second Moov atom	
 test104.m4A,no,,File with no MDAT
 test105.wav,yes,408,24 bit Wav
-test108.mp3,no,converting artist webapage url between id3 versions
+test108.mp3,no,converting artist webpage url between id3 versions
 test109.m4a,no,,File with dodgy covr atom with no actual artwork within it
+test110.mp3,no,452,mp3 with invalid tagheadersize making it harder to find correct audio
+test111.mp3,no,409,mp3 with incorrect sample rate of 48000 for 44100 mp3
