@@ -61,3 +61,4 @@ test108.mp3,no,converting artist webpage url between id3 versions
 test109.m4a,no,,File with dodgy covr atom with no actual artwork within it
 test110.mp3,no,452,mp3 with invalid tagheadersize making it harder to find correct audio
 test111.mp3,no,409,mp3 with incorrect sample rate of 48000 for 44100 mp3
+test112.m4a,no,433,m4a that cannot be written to

@@ -104,7 +104,6 @@ public class Base64Coder
 
     /**
      * Decodes Base64 data.
-     * No blanks or line breaks are allowed within the Base64 encoded data.
      *
      * @param in a character array containing the Base64 encoded data.
      * @return An array containing the decoded data bytes.
@@ -129,6 +128,7 @@ public class Base64Coder
         {
             final int i0 = in[ip++];
             final int i1 = in[ip++];
+            if(i0==13 && i1==10) continue;
             final int i2 = ip < iLen ? in[ip++] : 'A';
             final int i3 = ip < iLen ? in[ip++] : 'A';
             if (i0 > 127 || i1 > 127 || i2 > 127 || i3 > 127)

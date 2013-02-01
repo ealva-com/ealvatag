@@ -3,13 +3,16 @@ package org.jaudiotagger.tag.vorbiscomment;
 import org.jaudiotagger.AbstractTestCase;
 import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.AudioFileIO;
+import org.jaudiotagger.tag.images.Artwork;
 import org.jaudiotagger.tag.vorbiscomment.util.Base64Coder;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.RandomAccessFile;
+import java.util.List;
 
 /**
  */
@@ -181,6 +184,39 @@ public class VorbisImageTest extends AbstractTestCase
         {
             e.printStackTrace();
         }
+    }
+    
+    /**
+     * Test can read file with base64 encoded image which has newlines in it
+     */
+    public void testReadFileWithNewlinesInBase64()
+    {
+        File orig = new File("testdata", "testnewlineimage.small.ogg");
+        if (!orig.isFile())
+        {
+            System.err.println("Unable to test file - not available");
+            return;
+        }
+
+        Exception exceptionCaught = null;
+        try
+        {
+            File testFile = AbstractTestCase.copyAudioToTmp("testnewlineimage.small.ogg");
+            AudioFile f = AudioFileIO.read(testFile);
+            List<Artwork> artwork = ((VorbisCommentTag) f.getTag()).getArtworkList();
+            assertEquals(1, artwork.size());
+            final Artwork next = artwork.iterator().next();
+            final FileOutputStream fos = new FileOutputStream(new File("test.jpg"));
+            for(byte b : next.getBinaryData()) {
+            	fos.write(b);
+            }
+            fos.close();
+        }
+        catch (Exception e)
+        {
+            exceptionCaught = e;
+        }
+        assertNull(exceptionCaught);
     }
 
 }
