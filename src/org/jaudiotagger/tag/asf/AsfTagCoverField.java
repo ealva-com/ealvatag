@@ -4,8 +4,6 @@ import org.jaudiotagger.audio.asf.data.AsfHeader;
 import org.jaudiotagger.audio.asf.data.MetadataDescriptor;
 import org.jaudiotagger.logging.ErrorMessage;
 import org.jaudiotagger.tag.id3.valuepair.ImageFormats;
-import org.jaudiotagger.tag.asf.AbstractAsfTagImageField;
-import org.jaudiotagger.tag.asf.AsfFieldKey;
 
 import java.io.ByteArrayOutputStream;
 import java.io.UnsupportedEncodingException;
@@ -100,6 +98,9 @@ public class AsfTagCoverField extends AbstractAsfTagImageField
     private byte[] createRawContent(final byte[] data, final int pictureType,
             final String description, String mimeType) { // NOPMD by Christian Laireiter on 5/9/09 5:46 PM
         this.description = description;
+        this.imageDataSize = data.length;
+        this.pictureType = pictureType;
+        this.mimeType = mimeType;
 
         // Get Mimetype from data if not already setField
         if (mimeType == null) {
