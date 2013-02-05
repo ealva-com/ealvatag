@@ -34,7 +34,8 @@
   </component>
   <component name="ChangeListManager">
     <list readonly="true" id="a92fb0ee-7f0e-4d95-b2c3-85f2ead52889" name="Default" comment="#58:Formalisation of Error Messages" />
-    <list default="true" id="7dd0104a-9c3d-42a7-b1f9-01df90f49119" name="" comment="#JAUDIOTAGGER-303:Simplified Mp4 special case code, fixed indexing in getValue() for trackno/tracktotal and discno/disctotal">
+    <list default="true" id="7dd0104a-9c3d-42a7-b1f9-01df90f49119" name="" comment=".">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.ignore" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/jaudiotagger.iws" afterPath="$PROJECT_DIR$/jaudiotagger.iws" />
     </list>
     <list id="09913790-2926-477b-ac1a-3a97378f1eb3" name="Rejected commit: Default" comment="#99 Fixed, its  impossible to add support for unencrypting an arbitary encrypted frame, but now when we encounter an encrypted frame its added to a encryptedFrameMap and can be retrieved using getEncryptedFrame(String id). Additionally if a file is open by jaudiotagger and then saved any existing encrypted files are written back to the file, the only difference being that encrypted frames a re added after unencrypted frames.&#10;&#10;Also added support for preserving the grouping identity byte if set (this can be&#10;used to indicate where some frames are linked, prteviously this byte was not preserved on save." />
@@ -42,7 +43,7 @@
     <file path="/AbstractID3v2Tag.java" changelist="7dd0104a-9c3d-42a7-b1f9-01df90f49119" time="1357345200274" ignored="false" />
     <file path="/ID3v22Tag.java" changelist="7dd0104a-9c3d-42a7-b1f9-01df90f49119" time="1357344896034" ignored="false" />
     <file path="$MAVEN_REPOSITORY$/net/jthink/jaudiotagger/2.0.4/jaudiotagger-2.0.4-sources.jar!/org/jaudiotagger/tag/id3/AbstractID3v2Tag.java" changelist="7dd0104a-9c3d-42a7-b1f9-01df90f49119" time="1357376310595" ignored="false" />
-    <file path="/Dummy.txt" changelist="7dd0104a-9c3d-42a7-b1f9-01df90f49119" time="1360073817212" ignored="false" />
+    <file path="/Dummy.txt" changelist="7dd0104a-9c3d-42a7-b1f9-01df90f49119" time="1360074432823" ignored="false" />
     <file path="$PROJECT_DIR$/../../Jaikoz/trunk/src/src/com/jthink/jaikoz/action/MatchSongsFromMusicBrainzAction.java" changelist="7dd0104a-9c3d-42a7-b1f9-01df90f49119" time="1357466447157" ignored="false" />
     <file path="/MatchSongsFromMusicBrainzAction.java" changelist="7dd0104a-9c3d-42a7-b1f9-01df90f49119" time="1357466447157" ignored="false" />
     <file path="$PROJECT_DIR$/../../Jaikoz/trunk/src/src/com/jthink/jaikoz/manipulate/musicbrainzhelper/AdvancedReleaseSearch.java" changelist="7dd0104a-9c3d-42a7-b1f9-01df90f49119" time="1357468690032" ignored="false" />
@@ -204,19 +205,10 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="Issue452Test.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/srctest/org/jaudiotagger/issues/Issue452Test.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="16" column="13" selection-start="429" selection-end="429" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="Issue433Test.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/srctest/org/jaudiotagger/issues/Issue433Test.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="16" column="13" selection-start="413" selection-end="413" vertical-scroll-proportion="0.0">
+            <state line="16" column="13" selection-start="413" selection-end="413" vertical-scroll-proportion="-0.68">
               <folding />
             </state>
           </provider>
@@ -249,16 +241,34 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name=".ignore" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name=".ignore" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/.ignore">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="106" column="0" selection-start="1820" selection-end="1847" vertical-scroll-proportion="0.0">
+            <state line="99" column="17" selection-start="1109" selection-end="1109" vertical-scroll-proportion="0.8588375">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="jaudiotagger.iws" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name=".classpath" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/.classpath">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name=".project" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/.project">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="jaudiotagger.iws" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/jaudiotagger.iws">
           <provider selected="true" editor-type-id="text-editor">
             <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
@@ -285,15 +295,6 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="AudioFileIO.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/audio/AudioFileIO.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="147" column="28" selection-start="5553" selection-end="5553" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
     </leaf>
   </component>
   <component name="FindManager">
@@ -309,7 +310,6 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/srctest/org/jaudiotagger/issues/Issue451Test.java" />
         <option value="$PROJECT_DIR$/src/org/jaudiotagger/tag/mp4/field/Mp4TagCoverField.java" />
         <option value="$PROJECT_DIR$/src/org/jaudiotagger/audio/mp4/Mp4TagReader.java" />
         <option value="$PROJECT_DIR$/src/org/jaudiotagger/tag/mp4/field/Mp4FieldType.java" />
@@ -324,6 +324,7 @@
         <option value="$PROJECT_DIR$/testdata/testfiles.txt" />
         <option value="$PROJECT_DIR$/srctest/org/jaudiotagger/issues/Issue433Test.java" />
         <option value="$PROJECT_DIR$/pom.xml" />
+        <option value="$PROJECT_DIR$/jaudiotagger.iws" />
         <option value="$PROJECT_DIR$/.ignore" />
       </list>
     </option>
@@ -2225,7 +2226,11 @@
       <created>1360073826100</created>
       <updated>1360073826100</updated>
     </task>
-    <option name="localTasksCounter" value="19" />
+    <task id="LOCAL-00019" summary=".">
+      <created>1360074107101</created>
+      <updated>1360074107101</updated>
+    </task>
+    <option name="localTasksCounter" value="20" />
     <servers />
   </component>
   <component name="TodoView" selected-index="0">
@@ -2335,7 +2340,7 @@
     <option name="MAXIMUM_HISTORY_ROWS" value="1000" />
     <option name="FORCE_NON_EMPTY_COMMENT" value="false" />
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="false" />
-    <option name="LAST_COMMIT_MESSAGE" value="attempt to do release" />
+    <option name="LAST_COMMIT_MESSAGE" value="." />
     <option name="MAKE_NEW_CHANGELIST_ACTIVE" value="true" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_FILES_UP_TO_DATE_BEFORE_COMMIT" value="false" />
@@ -2348,7 +2353,6 @@
     <option name="UPDATE_GROUP_BY_CHANGELIST" value="false" />
     <option name="SHOW_FILE_HISTORY_AS_TREE" value="true" />
     <option name="FILE_HISTORY_SPLITTER_PROPORTION" value="0.6585821" />
-    <MESSAGE value="#JAUDIOTAGGER-422:When reading tag by mapping the data to a buffer if an io exception occurs copy the data rather than map it, this problem is can occur for networked files." />
     <MESSAGE value="#JAUDIOTAGGER-423:Fixed getAll() method for mp4s, and added test for mp4s and all other formats." />
     <MESSAGE value="#JAUDIOTAGGER-424:Fixed with Test" />
     <MESSAGE value="#JAUDIOTAGGER-424:Disallow mutiple trkn,disk atoms" />
@@ -2373,6 +2377,7 @@
     <MESSAGE value="#JAUDIOTAGGER-438:Newlines not supported in Base64 data for Vorbis Comments" />
     <MESSAGE value="Try and do final release of 2.0.4" />
     <MESSAGE value="attempt to do release" />
+    <MESSAGE value="." />
   </component>
   <component name="VssConfiguration">
     <option name="CLIENT_PATH" value="" />
@@ -2426,18 +2431,6 @@
     <option name="myLastEditedConfigurable" value="Default" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/srctest/org/jaudiotagger/issues/Issue446Test.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="32" column="47" selection-start="955" selection-end="955" vertical-scroll-proportion="-16.32">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/tag/asf/AsfTagCoverField.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="22" column="70" selection-start="812" selection-end="812" vertical-scroll-proportion="-7.56" />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/srctest/org/jaudiotagger/audio/asf/tag/AsfKeyMappingTest.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="11" column="13" selection-start="241" selection-end="241" vertical-scroll-proportion="-5.44" />
@@ -2494,7 +2487,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/srctest/org/jaudiotagger/issues/Issue433Test.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="16" column="13" selection-start="413" selection-end="413" vertical-scroll-proportion="0.0">
+        <state line="16" column="13" selection-start="413" selection-end="413" vertical-scroll-proportion="-0.68">
           <folding />
         </state>
       </provider>
@@ -2520,16 +2513,30 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/.ignore">
+    <entry file="file://$PROJECT_DIR$/jaudiotagger.iws">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="106" column="0" selection-start="1820" selection-end="1847" vertical-scroll-proportion="0.0">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/jaudiotagger.iws">
+    <entry file="file://$PROJECT_DIR$/.project">
       <provider selected="true" editor-type-id="text-editor">
         <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.classpath">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.ignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="99" column="17" selection-start="1109" selection-end="1109" vertical-scroll-proportion="0.8588375">
           <folding />
         </state>
       </provider>
