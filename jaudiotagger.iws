@@ -35,7 +35,6 @@
   <component name="ChangeListManager">
     <list readonly="true" id="a92fb0ee-7f0e-4d95-b2c3-85f2ead52889" name="Default" comment="#58:Formalisation of Error Messages" />
     <list default="true" id="7dd0104a-9c3d-42a7-b1f9-01df90f49119" name="" comment=".">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.ignore" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/jaudiotagger.iws" afterPath="$PROJECT_DIR$/jaudiotagger.iws" />
     </list>
     <list id="09913790-2926-477b-ac1a-3a97378f1eb3" name="Rejected commit: Default" comment="#99 Fixed, its  impossible to add support for unencrypting an arbitary encrypted frame, but now when we encounter an encrypted frame its added to a encryptedFrameMap and can be retrieved using getEncryptedFrame(String id). Additionally if a file is open by jaudiotagger and then saved any existing encrypted files are written back to the file, the only difference being that encrypted frames a re added after unencrypted frames.&#10;&#10;Also added support for preserving the grouping identity byte if set (this can be&#10;used to indicate where some frames are linked, prteviously this byte was not preserved on save." />
@@ -43,7 +42,7 @@
     <file path="/AbstractID3v2Tag.java" changelist="7dd0104a-9c3d-42a7-b1f9-01df90f49119" time="1357345200274" ignored="false" />
     <file path="/ID3v22Tag.java" changelist="7dd0104a-9c3d-42a7-b1f9-01df90f49119" time="1357344896034" ignored="false" />
     <file path="$MAVEN_REPOSITORY$/net/jthink/jaudiotagger/2.0.4/jaudiotagger-2.0.4-sources.jar!/org/jaudiotagger/tag/id3/AbstractID3v2Tag.java" changelist="7dd0104a-9c3d-42a7-b1f9-01df90f49119" time="1357376310595" ignored="false" />
-    <file path="/Dummy.txt" changelist="7dd0104a-9c3d-42a7-b1f9-01df90f49119" time="1360074432823" ignored="false" />
+    <file path="/Dummy.txt" changelist="7dd0104a-9c3d-42a7-b1f9-01df90f49119" time="1360075190383" ignored="false" />
     <file path="$PROJECT_DIR$/../../Jaikoz/trunk/src/src/com/jthink/jaikoz/action/MatchSongsFromMusicBrainzAction.java" changelist="7dd0104a-9c3d-42a7-b1f9-01df90f49119" time="1357466447157" ignored="false" />
     <file path="/MatchSongsFromMusicBrainzAction.java" changelist="7dd0104a-9c3d-42a7-b1f9-01df90f49119" time="1357466447157" ignored="false" />
     <file path="$PROJECT_DIR$/../../Jaikoz/trunk/src/src/com/jthink/jaikoz/manipulate/musicbrainzhelper/AdvancedReleaseSearch.java" changelist="7dd0104a-9c3d-42a7-b1f9-01df90f49119" time="1357468690032" ignored="false" />
@@ -244,7 +243,7 @@
       <file leaf-file-name=".ignore" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/.ignore">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="99" column="17" selection-start="1109" selection-end="1109" vertical-scroll-proportion="0.8588375">
+            <state line="78" column="34" selection-start="859" selection-end="859" vertical-scroll-proportion="0.1199495">
               <folding />
             </state>
           </provider>
@@ -2230,7 +2229,15 @@
       <created>1360074107101</created>
       <updated>1360074107101</updated>
     </task>
-    <option name="localTasksCounter" value="20" />
+    <task id="LOCAL-00020" summary=".">
+      <created>1360074446100</created>
+      <updated>1360074446100</updated>
+    </task>
+    <task id="LOCAL-00021" summary=".">
+      <created>1360075200100</created>
+      <updated>1360075200100</updated>
+    </task>
+    <option name="localTasksCounter" value="22" />
     <servers />
   </component>
   <component name="TodoView" selected-index="0">
@@ -2255,7 +2262,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1696" height="1026" extended-state="0" />
-    <editor active="false" />
+    <editor active="true" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.12863535" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="JetGradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -2270,7 +2277,7 @@
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.250306" sideWeight="0.7284235" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32925338" sideWeight="0.7652474" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.66442955" order="8" side_tool="true" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.23806609" sideWeight="0.7284235" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.23806609" sideWeight="0.7284235" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.27157652" sideWeight="0.7577381" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="IDEtalk Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
@@ -2536,7 +2543,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/.ignore">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="99" column="17" selection-start="1109" selection-end="1109" vertical-scroll-proportion="0.8588375">
+        <state line="78" column="34" selection-start="859" selection-end="859" vertical-scroll-proportion="0.1199495">
           <folding />
         </state>
       </provider>
