@@ -144,7 +144,6 @@ public class ID3v22Frames extends ID3Frames
         supportedFrames.add(FRAME_ID_V2_CONTENT_GROUP_DESC);
         supportedFrames.add(FRAME_ID_V2_COPYRIGHTINFO);
         supportedFrames.add(FRAME_ID_V2_ENCODEDBY);
-        supportedFrames.add(FRAME_ID_V2_ENCRYPTED_FRAME);
         supportedFrames.add(FRAME_ID_V2_EQUALISATION);
         supportedFrames.add(FRAME_ID_V2_EVENT_TIMING_CODES);
         supportedFrames.add(FRAME_ID_V2_FILE_TYPE);
