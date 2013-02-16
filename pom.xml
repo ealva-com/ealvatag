@@ -40,9 +40,9 @@
    <url>http://java.net/projects/jaudiotagger/</url>
    <inceptionYear>2005</inceptionYear>
    <scm>
-      <connection>scm:svn:http://svn.java.net/svn/jaudiotagger/tags/2.0.4</connection>
-      <developerConnection>scm:svn:https://svn.java.net/svn/jaudiotagger/tags/2.0.4</developerConnection>
-      <url>http://java.net/projects/jaudiotagger/sources/svn/tags/2.0.4</url>
+      <connection>scm:svn:http://svn.java.net/svn/jaudiotagger/trunk</connection>
+      <developerConnection>scm:svn:https://svn.java.net/svn/jaudiotagger/trunk</developerConnection>
+      <url>http://java.net/projects/jaudiotagger/sources/svn/trunk/show</url>
    </scm>
    <issueManagement>
       <url>https://jaudiotagger.dev.java.net/issues</url>
