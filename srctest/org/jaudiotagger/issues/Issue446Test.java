@@ -4,6 +4,8 @@ import org.jaudiotagger.AbstractTestCase;
 import org.jaudiotagger.audio.mp3.MP3File;
 import org.jaudiotagger.tag.FieldKey;
 import org.jaudiotagger.tag.id3.AbstractID3v2Frame;
+import org.jaudiotagger.tag.id3.ID3v23Frame;
+import org.jaudiotagger.tag.id3.ID3v23Tag;
 import org.jaudiotagger.tag.id3.ID3v24Tag;
 import org.jaudiotagger.tag.id3.framebody.FrameBodyTXXX;
 
@@ -51,10 +53,20 @@ public class Issue446Test extends AbstractTestCase
         }
         assertTrue(isMatchedPeak);
         assertTrue(isMatchedGain);
-
-
-
     }
 
+    public void testWriteReplayGain() throws Exception
+    {
+        File testFile = AbstractTestCase.copyAudioToTmp("test110.mp3");
+        MP3File mp3File = new MP3File(testFile);
+        ID3v23Tag v2Tag = (ID3v23Tag)mp3File.getID3v2Tag();
+
+        AbstractID3v2Frame frame = new ID3v23Frame();
+        byte b = 1; //If ISO-8859-1 is used this byte should be $00, if Unicode is used it should be $01.
+        FrameBodyTXXX fb;
+        fb = new FrameBodyTXXX(b, "REPLAYGAIN_TRACK_GAIN", "+67.89 dB");
+        frame.setBody(fb);
+        v2Tag.setFrame(frame);
+    }
 
 }
