@@ -43,8 +43,6 @@
       <connection>scm:svn:http://svn.java.net/svn/jaudiotagger/tags/jaudiotagger-2.0.4</connection>
       <developerConnection>scm:svn:https://svn.java.net/svn/jaudiotagger/tags/jaudiotagger-2.0.4</developerConnection>
       <url>http://java.net/projects/jaudiotagger/sources/svn/tags/jaudiotagger-2.0.4</url>
-      <user>paultaylor</user>
-      <password>cherry1</password>
    </scm>
    <issueManagement>
       <url>https://jaudiotagger.dev.java.net/issues</url>
