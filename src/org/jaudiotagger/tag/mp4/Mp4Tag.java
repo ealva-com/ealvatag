@@ -563,7 +563,7 @@ public class Mp4Tag extends AbstractTag
             throw new KeyNotFoundException();
         }
 
-        //Special handling for these number fields
+        //Special handling for these number fields because multiple generic keys map to a single mp4 field
         if(
                 (genericKey == FieldKey.TRACK)||
                 (genericKey == FieldKey.TRACK_TOTAL)||
@@ -697,14 +697,17 @@ public class Mp4Tag extends AbstractTag
         }
 
         //This is boolean stored as 1, but calling program might setField as 'true' so we handle this
-        //case internally
+        //case internally , any other values it is set to we treat as false
         if(mp4FieldKey==Mp4FieldKey.COMPILATION)
         {
-            if(value.equals("true"))
+            if(value.equalsIgnoreCase("true") || value.equals("1"))
             {
-                value= Mp4TagByteField.TRUE_VALUE;
+                return createCompilationField(true);
             }
-            return new Mp4TagByteField(mp4FieldKey, value, mp4FieldKey.getFieldLength());
+            else
+            {
+                return createCompilationField(false);
+            }
         }
         else if(mp4FieldKey==Mp4FieldKey.GENRE)
         {
@@ -764,4 +767,18 @@ public class Mp4Tag extends AbstractTag
         return artworkList;
     }
 
+    public TagField createCompilationField(boolean origValue) throws KeyNotFoundException, FieldDataInvalidException
+    {
+        String value = "";
+        if(origValue)
+        {
+            value=Mp4TagByteField.TRUE_VALUE;
+            return new Mp4TagByteField(Mp4FieldKey.COMPILATION, value, Mp4FieldKey.COMPILATION.getFieldLength());
+        }
+        else
+        {
+            value=Mp4TagByteField.FALSE_VALUE;
+            return new Mp4TagByteField(Mp4FieldKey.COMPILATION, value, Mp4FieldKey.COMPILATION.getFieldLength());
+        }
+    }
 }

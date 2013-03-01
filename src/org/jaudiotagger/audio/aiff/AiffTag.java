@@ -188,4 +188,9 @@ public class AiffTag extends GenericTag {
             return new AiffTagTextField(genericKey.name(),value);
     }
 
+    public TagField createCompilationField(boolean value) throws KeyNotFoundException, FieldDataInvalidException
+    {
+        return createField(FieldKey.IS_COMPILATION,String.valueOf(value));
+    }
+
 }

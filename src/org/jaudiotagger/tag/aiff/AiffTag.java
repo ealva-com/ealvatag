@@ -236,4 +236,9 @@ public class AiffTag /* extends GenericTag */ implements Tag {
   {
      return id3Tag.hasField(id);
  }
+
+    public TagField createCompilationField(boolean value) throws KeyNotFoundException, FieldDataInvalidException
+    {
+        return createField(FieldKey.IS_COMPILATION,String.valueOf(value));
+    }
 }

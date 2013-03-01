@@ -502,4 +502,8 @@ public class FlacTag implements Tag
        }
    }
 
+    public TagField createCompilationField(boolean value) throws KeyNotFoundException, FieldDataInvalidException
+    {
+        return tag.createCompilationField(value);
+    }
 }

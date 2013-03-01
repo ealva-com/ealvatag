@@ -2927,4 +2927,16 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
 
         return out.toString();
     }
+
+    public TagField createCompilationField(boolean value) throws KeyNotFoundException, FieldDataInvalidException
+    {
+        if(value)
+        {
+            return createField(FieldKey.IS_COMPILATION,"1");
+        }
+        else
+        {
+            return createField(FieldKey.IS_COMPILATION,"0");
+        }
+    }
 }

@@ -320,5 +320,17 @@ public interface Tag {
      */
     public TagField createField(FieldKey genericKey, String value) throws KeyNotFoundException, FieldDataInvalidException;
 
+    /**
+     * Creates isCompilation field
+     *
+     * It is useful to have this method because it handles ensuring that the correct value to represent a boolean
+     * is stored in the underlying field format.
+     *
+     * @param value
+     * @return
+     * @throws KeyNotFoundException
+     * @throws FieldDataInvalidException
+     */
+    public abstract TagField createCompilationField(boolean value) throws KeyNotFoundException, FieldDataInvalidException;
 
 }

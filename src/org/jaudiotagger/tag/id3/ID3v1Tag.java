@@ -1095,4 +1095,9 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag
     {
         throw new UnsupportedOperationException(ErrorMessage.GENERIC_NOT_SUPPORTED.getMsg());
     }
+
+    public TagField createCompilationField(boolean value) throws KeyNotFoundException, FieldDataInvalidException
+    {
+        throw new UnsupportedOperationException(ErrorMessage.GENERIC_NOT_SUPPORTED.getMsg());
+    }
 }

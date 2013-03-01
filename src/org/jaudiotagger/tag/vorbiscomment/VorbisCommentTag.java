@@ -637,5 +637,11 @@ public class VorbisCommentTag extends AbstractTag
         this.deleteField(VorbisCommentFieldKey.COVERART);
         this.deleteField(VorbisCommentFieldKey.COVERARTMIME);
     }
+
+    public TagField createCompilationField(boolean value) throws KeyNotFoundException, FieldDataInvalidException
+    {
+        return createField(FieldKey.IS_COMPILATION,String.valueOf(value));
+    }
+
 }
 

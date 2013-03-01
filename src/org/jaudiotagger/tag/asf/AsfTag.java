@@ -712,4 +712,9 @@ public final class AsfTag extends AbstractTag
     {
         return getFields(asfFieldKey.getFieldName()).size() != 0;
     }
+
+    public TagField createCompilationField(boolean value) throws KeyNotFoundException, FieldDataInvalidException
+    {
+        return createField(FieldKey.IS_COMPILATION,String.valueOf(value));
+    }
 }
