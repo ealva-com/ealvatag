@@ -598,11 +598,67 @@ public class Mp4Tag extends AbstractTag
                 throw new FieldDataInvalidException("Value "+value + " is not a number as required",nfe);
             }
         }
+        else if (genericKey == FieldKey.GENRE)
+        {
+            //Always write as text
+            if(TagOptionSingleton.getInstance().isWriteMp4GenresAsText())
+            {
+                return new Mp4TagTextField(GENRE_CUSTOM.getFieldName(), value);
+            }
+
+            if (Mp4GenreField.isValidGenre(value))
+            {
+                return new Mp4GenreField(value);
+            }
+            else
+            {
+                return new Mp4TagTextField(GENRE_CUSTOM.getFieldName(), value);
+            }
+        }
 
         //Default for all other fields
         return createField(tagFieldToMp4Field.get(genericKey), value);
     }
 
+    /**
+     * Overidden to ensure cannot have both a genre field and a custom genre field
+     *
+     * @param genericKey
+     * @param value
+     * @throws KeyNotFoundException
+     * @throws FieldDataInvalidException
+     */
+    @Override
+    public void setField(FieldKey genericKey, String value) throws KeyNotFoundException, FieldDataInvalidException
+    {
+        TagField tagfield = createField(genericKey,value);
+
+        if(genericKey==FieldKey.GENRE)
+        {
+            if(tagfield.getId().equals(GENRE.getFieldName()))
+            {
+                this.deleteField(Mp4FieldKey.GENRE_CUSTOM);
+            }
+            else if(tagfield.getId().equals(GENRE_CUSTOM.getFieldName()))
+            {
+                this.deleteField(Mp4FieldKey.GENRE);
+            }
+        }
+        setField(tagfield);
+    }
+
+    /**
+     * Set mp4 field
+     * @param fieldKey
+     * @param value
+     * @throws KeyNotFoundException
+     * @throws FieldDataInvalidException
+     */
+    public void setField(Mp4FieldKey fieldKey, String value) throws KeyNotFoundException, FieldDataInvalidException
+    {
+        TagField tagfield = createField(fieldKey,value);
+        setField(tagfield);
+    }
     /**
      * Set field, special handling for track and disc because they hold two fields
      * 
@@ -711,7 +767,18 @@ public class Mp4Tag extends AbstractTag
         }
         else if(mp4FieldKey==Mp4FieldKey.GENRE)
         {
-            return createGenreField(value);
+            if (Mp4GenreField.isValidGenre(value))
+            {
+                return new Mp4GenreField(value);
+            }
+            else
+            {
+                throw new IllegalArgumentException(ErrorMessage.NOT_STANDARD_MP$_GENRE.getMsg());
+            }
+        }
+        else if(mp4FieldKey==Mp4FieldKey.GENRE_CUSTOM)
+        {
+            return new Mp4TagTextField(GENRE_CUSTOM.getFieldName(), value);
         }
         else if(mp4FieldKey.getSubClassFieldType()==Mp4TagFieldSubType.DISC_NO)
         {

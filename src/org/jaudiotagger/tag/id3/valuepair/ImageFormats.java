@@ -28,7 +28,7 @@ import java.util.Map;
 
 /**
  * Represents common image formats support by ID3 and provides a mapping between the format field supported in ID3v22 and the
- * mimetype field supported by ID3v23/ID3v24.
+ * mimetype field supported by ID3v23/ID3v24.                                                                                                                                    coverImage.getImageData()
  *
  *
  * Note only JPG and PNG are mentioned specifically in the ID3 v22 Spec but it only says 'Image Format is preferably
