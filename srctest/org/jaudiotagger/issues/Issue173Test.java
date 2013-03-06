@@ -207,6 +207,14 @@ public class Issue173Test extends AbstractTestCase
             assertEquals("Country",results.get(1));
             body = (FrameBodyTCON)((AbstractID3v2Frame)tag.getFrame("TCON")).getBody();
             assertEquals("1\u00002",body.getText());
+
+            tag.setField(FieldKey.GENRE, "Remix");
+            tag.addField(FieldKey.GENRE, "CR");
+            assertEquals("Remix",tag.getFirst(FieldKey.GENRE));
+            assertEquals("Remix",tag.getValue(FieldKey.GENRE, 0));
+            assertEquals("Cover",tag.getValue(FieldKey.GENRE, 1));
+            body = (FrameBodyTCON)((AbstractID3v2Frame)tag.getFrame("TCON")).getBody();
+            assertEquals("RX\u0000CR",body.getText());
         }
         catch (Exception ex)
         {

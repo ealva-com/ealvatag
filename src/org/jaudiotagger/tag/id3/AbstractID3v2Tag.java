@@ -1834,7 +1834,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
                 List<String> convertedGenres = new ArrayList<String>();
                 for(String next:body.getValues())
                 {
-                    convertedGenres.add(FrameBodyTCON.convertGenreToGeneric(next));
+                    convertedGenres.add(FrameBodyTCON.convertID3v24GenreToGeneric(next));
                 }
                 return convertedGenres;
             }
@@ -2199,7 +2199,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
             {
                 AbstractID3v2Frame frame = (AbstractID3v2Frame) fields.get(0);
                 FrameBodyTCON body = (FrameBodyTCON)frame.getBody();
-                return FrameBodyTCON.convertGenreToGeneric(body.getValues().get(index));
+                return FrameBodyTCON.convertID3v24GenreToGeneric(body.getValues().get(index));
             }
         }
         FrameAndSubId frameAndSubId = getFrameAndSubIdFromGenericKey(genericKey);
