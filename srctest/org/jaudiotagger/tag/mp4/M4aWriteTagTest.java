@@ -1891,7 +1891,7 @@ public class M4aWriteTagTest extends TestCase
             tag.setField(FieldKey.MUSICBRAINZ_RELEASE_TYPE, "7");
             tag.setField(FieldKey.MUSICBRAINZ_RELEASEARTISTID, "8");
             tag.setField(FieldKey.MUSICIP_ID, "9");
-            tag.setField(FieldKey.GENRE, "2"); //key for classic rock
+            tag.setField(FieldKey.GENRE, "1"); //key for classic rock
             tag.setField(FieldKey.ENCODER, "encoder");
             tag.setField(FieldKey.URL_LYRICS_SITE,"http://www.lyrics.fly.com");
             tag.setField(FieldKey.URL_DISCOGS_ARTIST_SITE,"http://www.discogs1.com");
@@ -1999,7 +1999,7 @@ public class M4aWriteTagTest extends TestCase
             assertEquals(TEST_FILE5_SIZE, testFile.length());
 
             //Change value using key
-            tag.setField(tag.createField(FieldKey.GENRE, "2")); //key for classic rock
+            tag.setField(tag.createField(FieldKey.GENRE, "1")); //key for classic rock
             f.commit();
             f = AudioFileIO.read(testFile);
             tag = (Mp4Tag) f.getTag();

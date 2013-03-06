@@ -186,7 +186,7 @@ public class M4aWriteDatatoMultTrackAudioTest extends TestCase
             tag.setField(tag.createField(FieldKey.MUSICBRAINZ_RELEASE_TYPE, "7"));
             tag.setField(tag.createField(FieldKey.MUSICBRAINZ_RELEASEARTISTID, "8"));
             tag.setField(tag.createField(FieldKey.MUSICIP_ID, "9"));
-            tag.setField(tag.createField(FieldKey.GENRE, "2")); //key for classic rock
+            tag.setField(tag.createField(FieldKey.GENRE, "1")); //key for classic rock
             tag.setField(tag.createField(FieldKey.ENCODER, "encoder"));
             //Save changes and reread from disk
             f.commit();
@@ -271,7 +271,7 @@ public class M4aWriteDatatoMultTrackAudioTest extends TestCase
             tag.setField(tag.createField(FieldKey.MUSICBRAINZ_RELEASE_TYPE, "7"));
             tag.setField(tag.createField(FieldKey.MUSICBRAINZ_RELEASEARTISTID, "8"));
             tag.setField(tag.createField(FieldKey.MUSICIP_ID, "9"));
-            tag.setField(tag.createField(FieldKey.GENRE, "2")); //key for classic rock
+            tag.setField(tag.createField(FieldKey.GENRE, "1")); //key for classic rock
             tag.setField(tag.createField(FieldKey.ENCODER, "encoder"));
             //Save changes and reread from disk
             f.commit();
@@ -356,7 +356,7 @@ public class M4aWriteDatatoMultTrackAudioTest extends TestCase
             tag.setField(tag.createField(FieldKey.MUSICBRAINZ_RELEASE_TYPE, "7"));
             tag.setField(tag.createField(FieldKey.MUSICBRAINZ_RELEASEARTISTID, "8"));
             tag.setField(tag.createField(FieldKey.MUSICIP_ID, "9"));
-            tag.setField(tag.createField(FieldKey.GENRE, "2")); //key for classic rock
+            tag.setField(tag.createField(FieldKey.GENRE, "1")); //key for classic rock
             tag.setField(tag.createField(FieldKey.ENCODER, "encoder"));
 
             //Frig adding pretend image which will require exactly the same size as space available in the

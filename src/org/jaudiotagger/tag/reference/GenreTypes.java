@@ -34,7 +34,8 @@ import java.util.Map;
  */
 public class GenreTypes extends AbstractIntStringValuePair
 {
-    private static int MAX_STANDARD_GENRE_ID = 125;
+    private static int MAX_STANDARD_GENRE_ID    = 125;
+    private static int MAX_GENRE_ID             = 147;
 
     /**
      * @return the maximum genreId that is part of the official Standard, genres above this were added by
@@ -43,6 +44,11 @@ public class GenreTypes extends AbstractIntStringValuePair
     public static int getMaxStandardGenreId()
     {
         return MAX_STANDARD_GENRE_ID;
+    }
+
+    public static int getMaxGenreId()
+    {
+        return MAX_GENRE_ID;
     }
 
     private static GenreTypes genreTypes;
@@ -230,4 +236,6 @@ public class GenreTypes extends AbstractIntStringValuePair
     {
         return nameToIdMap.get(name.toLowerCase());
     }
+
+
 }

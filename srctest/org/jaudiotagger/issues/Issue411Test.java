@@ -109,12 +109,12 @@ public class Issue411Test extends AbstractTestCase
             af.getTagOrCreateAndSetDefault().setField(FieldKey.GENRE, "rock");
             af.commit();
             af = AudioFileIO.read(testFile);
-            assertEquals("rock", af.getTag().getFirst(FieldKey.GENRE));
+            assertEquals("Rock", af.getTag().getFirst(FieldKey.GENRE));
             af.getTag().addField(FieldKey.GENRE, "dance");
             af.commit();
             af = AudioFileIO.read(testFile);
-            assertEquals("rock", af.getTag().getFirst(FieldKey.GENRE));
-            assertEquals("dance",af.getTag().getValue(FieldKey.GENRE,1));
+            assertEquals("Rock", af.getTag().getFirst(FieldKey.GENRE));
+            assertEquals("Dance",af.getTag().getValue(FieldKey.GENRE,1));
             assertEquals(1,af.getTag().getFields(FieldKey.GENRE).size());
         }
         catch(Exception e)

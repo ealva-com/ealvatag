@@ -69,10 +69,10 @@ public class Mp4GenreField extends Mp4TagTextNumberField
         try
         {
             short genreVal = Short.parseShort(genreId);
-            if ((genreVal - 1) <= GenreTypes.getMaxStandardGenreId())
+            if (genreVal <= GenreTypes.getMaxStandardGenreId())
             {
                 numbers = new ArrayList<Short>();
-                numbers.add(genreVal);
+                numbers.add(++genreVal);
                 return;
             }
             //Default

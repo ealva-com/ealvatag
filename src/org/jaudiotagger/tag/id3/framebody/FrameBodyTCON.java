@@ -17,6 +17,7 @@ package org.jaudiotagger.tag.id3.framebody;
 
 import org.jaudiotagger.tag.InvalidTagException;
 import org.jaudiotagger.tag.id3.ID3v24Frames;
+import org.jaudiotagger.tag.reference.GenreTypes;
 
 import java.nio.ByteBuffer;
 
@@ -110,5 +111,94 @@ public class FrameBodyTCON extends AbstractFrameBodyTextInfo implements ID3v24Fr
     public String getIdentifier()
     {
         return ID3v24Frames.FRAME_ID_GENRE;
+    }
+
+    /**
+     * Convert value to internal genre value
+     *
+     * @param value
+     * @return
+     */
+    public  static String convertGenericToID3v24Genre(String value)
+    {
+        try
+        {
+            int genreId = Integer.parseInt(value);
+            if(genreId<GenreTypes.getMaxGenreId())
+            {
+                return String.valueOf(genreId);
+            }
+            else
+            {
+                return value;
+            }
+        }
+        catch(NumberFormatException nfe)
+        {
+            Integer genreId= GenreTypes.getInstanceOf().getIdForName(value);
+            if(genreId!=null)
+            {
+                return String.valueOf(genreId);
+            }
+        }
+        return value;
+    }
+
+    /**
+     * Convert value to internal genre value
+     *
+     * @param value
+     * @return
+     */
+    public  static String convertGenericToID3v23Genre(String value)
+    {
+        try
+        {
+            int genreId = Integer.parseInt(value);
+            if(genreId<GenreTypes.getMaxGenreId())
+            {
+                return String.valueOf(genreId);
+            }
+            else
+            {
+                return value;
+            }
+        }
+        catch(NumberFormatException nfe)
+        {
+            Integer genreId= GenreTypes.getInstanceOf().getIdForName(value);
+            if(genreId!=null)
+            {
+                return String.valueOf(genreId);
+            }
+        }
+        return value;
+    }
+
+
+    /**
+     * Convert internal genre value to generic genre
+     *
+     * @param value
+     * @return
+     */
+    public  static String convertGenreToGeneric(String value)
+    {
+        try
+        {
+            int genreId = Integer.parseInt(value);
+            if(genreId<GenreTypes.getMaxStandardGenreId())
+            {
+                return GenreTypes.getInstanceOf().getValueForId(genreId);
+            }
+            else
+            {
+                return value;
+            }
+        }
+        catch(NumberFormatException nfe)
+        {
+           return value;
+        }
     }
 }
