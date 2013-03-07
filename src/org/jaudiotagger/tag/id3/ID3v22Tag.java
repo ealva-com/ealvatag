@@ -638,6 +638,7 @@ public class ID3v22Tag extends AbstractID3v2Tag
             FrameAndSubId formatKey = getFrameAndSubIdFromGenericKey(genericKey);
             AbstractID3v2Frame frame = createFrame(formatKey.getFrameId());
             FrameBodyTCON framebody = (FrameBodyTCON) frame.getBody();
+            framebody.setV23Format();
             framebody.setText(FrameBodyTCON.convertGenericToID3v22Genre(value));
             return frame;
         }
@@ -851,6 +852,15 @@ public class ID3v22Tag extends AbstractID3v2Tag
         {
             return super.getValue(genericKey, index);
         }
+    }
+
+    protected void loadFrameIntoMap(String frameId, AbstractID3v2Frame next)
+    {
+        if (next.getBody() instanceof FrameBodyTCON)
+        {
+            ((FrameBodyTCON)next.getBody()).setV23Format();
+        }
+        super.loadFrameIntoMap(frameId, next);
     }
 
 

@@ -361,6 +361,7 @@ public class TextEncodedStringSizeTerminated extends AbstractString
         return values;
     }
 
+
     /**
      * Add an additional String to the current String value
      *

@@ -16,8 +16,13 @@
 package org.jaudiotagger.tag.id3.framebody;
 
 import org.jaudiotagger.tag.InvalidTagException;
+import org.jaudiotagger.tag.datatype.DataTypes;
+import org.jaudiotagger.tag.datatype.NumberHashMap;
+import org.jaudiotagger.tag.datatype.TCONString;
+import org.jaudiotagger.tag.datatype.TextEncodedStringSizeTerminated;
 import org.jaudiotagger.tag.id3.ID3v24Frames;
 import org.jaudiotagger.tag.id3.valuepair.ID3V2ExtendedGenreTypes;
+import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
 import org.jaudiotagger.tag.reference.GenreTypes;
 
 import java.nio.ByteBuffer;
@@ -297,4 +302,18 @@ public class FrameBodyTCON extends AbstractFrameBodyTextInfo implements ID3v24Fr
     {
         return convertID3v23GenreToGeneric(value);
     }
+
+    public void setV23Format()
+    {
+        TCONString text = (TCONString) getObject(DataTypes.OBJ_TEXT);
+        text.setNullSeperateMultipleValues(false);
+    }
+
+    protected void setupObjectList()
+    {
+        objectList.add(new NumberHashMap(DataTypes.OBJ_TEXT_ENCODING, this, TextEncoding.TEXT_ENCODING_FIELD_SIZE));
+        objectList.add(new TCONString(DataTypes.OBJ_TEXT, this));
+    }
+
+
 }
