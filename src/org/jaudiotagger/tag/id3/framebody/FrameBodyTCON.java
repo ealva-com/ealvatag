@@ -227,7 +227,7 @@ public class FrameBodyTCON extends AbstractFrameBodyTextInfo implements ID3v24Fr
     }
 
     /**
-     * Convert internal genre value to generic genre
+     * Convert internal v24 genre value to generic genre
      *
      * @param value
      * @return
@@ -264,7 +264,7 @@ public class FrameBodyTCON extends AbstractFrameBodyTextInfo implements ID3v24Fr
         return value;
     }
 
-    public static String convertID3v23GenreToGeneric(String value)
+    private static String checkBracketed(String value)
     {
         value=value.replace("(", "");
         value=value.replace(")", "");
@@ -296,6 +296,33 @@ public class FrameBodyTCON extends AbstractFrameBodyTextInfo implements ID3v24Fr
             }
         }
         return value;
+    }
+
+    /**
+     * Convert V23 format to Generic
+     *
+     * i.e.
+     *
+     * (2)         -> Country
+     * (RX)        -> Remix
+     * Shoegaze    -> Shoegaze
+     * (2)Shoegaze -> Country Shoegaze
+     *
+     * Note only handles one field so if the frame stored (2)(3) this would be two separate fields
+     * and would manifest itself as two different calls to this method once for (2) and once for (3)
+     * @param value
+     * @return
+     */
+    public static String convertID3v23GenreToGeneric(String value)
+    {
+        if(value.contains(")") && value.lastIndexOf(')')<value.length()-1)
+        {
+            return checkBracketed(value.substring(0,value.lastIndexOf(')'))) + ' ' + value.substring(value.lastIndexOf(')')+1);
+        }
+        else
+        {
+            return checkBracketed(value);
+        }
     }
 
     public static String convertID3v22GenreToGeneric(String value)

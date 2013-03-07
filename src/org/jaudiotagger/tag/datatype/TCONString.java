@@ -225,7 +225,7 @@ public class TCONString extends TextEncodedStringSizeTerminated
 
     public static List<String> splitV23(String value)
     {
-        String[] valuesarray = value.replaceAll("(\\(\\d+\\)\\w*)", "$1\u0000").split("\u0000");
+        String[] valuesarray = value.replaceAll("(\\(\\d+\\)|\\(RX\\)|\\(CR\\)\\w*)", "$1\u0000").split("\u0000");
         List<String> values = Arrays.asList(valuesarray);
         //Read only list so if empty have to create new list
         if (values.size() == 0)

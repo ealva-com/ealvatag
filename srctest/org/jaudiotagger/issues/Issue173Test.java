@@ -309,6 +309,7 @@ public class Issue173Test extends AbstractTestCase
 
     public void testMp3ID3v23sGenresUsingGenericInterface()
     {
+        Exception e=null;
         try
         {
             TagOptionSingleton.getInstance().setID3V2Version(ID3V2Version.ID3_V23);
@@ -367,18 +368,33 @@ public class Issue173Test extends AbstractTestCase
             tag.addField(FieldKey.GENRE, "CR");
             body = (FrameBodyTCON)((AbstractID3v2Frame)tag.getFrame("TCON")).getBody();
             assertEquals("(RX)(CR)",body.getText());
-//            assertEquals("Remix",tag.getFirst(FieldKey.GENRE));
-//            assertEquals("Remix",tag.getValue(FieldKey.GENRE, 0));
-//            assertEquals("Cover",tag.getValue(FieldKey.GENRE, 1));
+            assertEquals("Remix",tag.getFirst(FieldKey.GENRE));
+            assertEquals("Remix",tag.getValue(FieldKey.GENRE, 0));
+            assertEquals("Cover",tag.getValue(FieldKey.GENRE, 1));
             mp3File.commit();
             mp3File = AudioFileIO.read(testFile);
             tag = (ID3v23Tag) mp3File.getTag();
             body = (FrameBodyTCON)((AbstractID3v2Frame)tag.getFrame("TCON")).getBody();
             assertEquals("(RX)(CR)",body.getText());
+
+            tag.setField(FieldKey.GENRE, "Cover");
+            body = (FrameBodyTCON)((AbstractID3v2Frame)tag.getFrame("TCON")).getBody();
+            assertEquals("(CR)",body.getText());
+            tag.addField(FieldKey.GENRE, "FlapFlap");
+            assertEquals("Cover FlapFlap",tag.getFirst(FieldKey.GENRE));
+            body = (FrameBodyTCON)((AbstractID3v2Frame)tag.getFrame("TCON")).getBody();
+            assertEquals("(CR)FlapFlap",body.getText());
+            tag.setField(FieldKey.GENRE, "Country Shoegaze");
+            assertEquals("Country Shoegaze",tag.getFirst(FieldKey.GENRE));
+            body = (FrameBodyTCON)((AbstractID3v2Frame)tag.getFrame("TCON")).getBody();
+            //TODO cannot handle setting v23 refinements in generic interface, but does that really matter
+            //ID3v24Tag doesnt really have the convcept OutOfMemoryError refinements just multiple values
+            //assertEquals("(CR)Shoegaze",body.getText());
         }
         catch (Exception ex)
         {
-            ex.printStackTrace();
+            e=ex;
         }
+        assertNull(e);
     }
 }
