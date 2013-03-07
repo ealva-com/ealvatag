@@ -1824,21 +1824,6 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
             return values;
         }
 
-        if(genericKey == FieldKey.GENRE)
-        {
-            List<TagField> fields = getFields(genericKey);
-            if (fields != null && fields.size() > 0)
-            {
-                AbstractID3v2Frame frame = (AbstractID3v2Frame) fields.get(0);
-                FrameBodyTCON body = (FrameBodyTCON)frame.getBody();
-                List<String> convertedGenres = new ArrayList<String>();
-                for(String next:body.getValues())
-                {
-                    convertedGenres.add(FrameBodyTCON.convertID3v24GenreToGeneric(next));
-                }
-                return convertedGenres;
-            }
-        }
         return this.doGetValues(getFrameAndSubIdFromGenericKey(genericKey));
     }
 
@@ -2192,16 +2177,6 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
             }
         }
 
-        if(genericKey == FieldKey.GENRE)
-        {
-            List<TagField> fields = getFields(genericKey);
-            if (fields != null && fields.size() > 0)
-            {
-                AbstractID3v2Frame frame = (AbstractID3v2Frame) fields.get(0);
-                FrameBodyTCON body = (FrameBodyTCON)frame.getBody();
-                return FrameBodyTCON.convertID3v24GenreToGeneric(body.getValues().get(index));
-            }
-        }
         FrameAndSubId frameAndSubId = getFrameAndSubIdFromGenericKey(genericKey);
         return doGetValueAtIndex(frameAndSubId, index);
     }
@@ -2255,17 +2230,6 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
             AbstractID3v2Frame frame = createFrame(formatKey.getFrameId());
             FrameBodyTPOS framebody = (FrameBodyTPOS) frame.getBody();
             framebody.setDiscTotal(value);
-            return frame;
-        }
-        else if (genericKey == FieldKey.GENRE)
-        {
-            if (value == null)
-            {
-                throw new IllegalArgumentException(ErrorMessage.GENERAL_INVALID_NULL_ARGUMENT.getMsg());
-            }
-            AbstractID3v2Frame frame = createFrame(formatKey.getFrameId());
-            FrameBodyTCON framebody = (FrameBodyTCON) frame.getBody();
-            framebody.setText(FrameBodyTCON.convertGenericToID3v24Genre(value));
             return frame;
         }
         else

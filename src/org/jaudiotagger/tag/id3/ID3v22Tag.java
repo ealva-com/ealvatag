@@ -622,6 +622,31 @@ public class ID3v22Tag extends AbstractID3v2Tag
         return super.doCreateTagField(new FrameAndSubId(id3Key.getFrameId(), id3Key.getSubId()), value);
     }
 
+    public TagField createField(FieldKey genericKey, String value) throws KeyNotFoundException, FieldDataInvalidException
+    {
+        if (genericKey == null)
+        {
+            throw new KeyNotFoundException();
+        }
+
+        if (genericKey == FieldKey.GENRE)
+        {
+            if (value == null)
+            {
+                throw new IllegalArgumentException(ErrorMessage.GENERAL_INVALID_NULL_ARGUMENT.getMsg());
+            }
+            FrameAndSubId formatKey = getFrameAndSubIdFromGenericKey(genericKey);
+            AbstractID3v2Frame frame = createFrame(formatKey.getFrameId());
+            FrameBodyTCON framebody = (FrameBodyTCON) frame.getBody();
+            framebody.setText(FrameBodyTCON.convertGenericToID3v22Genre(value));
+            return frame;
+        }
+        else
+        {
+            return super.createField(genericKey, value);
+        }
+    }
+
     /**
      * Retrieve the first value that exists for this id3v22key
      *
@@ -771,4 +796,62 @@ public class ID3v22Tag extends AbstractID3v2Tag
         body.setObjectValue(DataTypes.OBJ_DESCRIPTION, "");
         return frame;
     }
+
+    /**
+     * Maps the generic key to the id3 key and return the list of values for this field as strings
+     *
+     * @param genericKey
+     * @return
+     * @throws KeyNotFoundException
+     */
+    public List<String> getAll(FieldKey genericKey) throws KeyNotFoundException
+    {
+        if(genericKey == FieldKey.GENRE)
+        {
+            List<TagField> fields = getFields(genericKey);
+            List<String> convertedGenres = new ArrayList<String>();
+            if (fields != null && fields.size() > 0)
+            {
+                AbstractID3v2Frame frame = (AbstractID3v2Frame) fields.get(0);
+                FrameBodyTCON body = (FrameBodyTCON)frame.getBody();
+
+                for(String next:body.getValues())
+                {
+                    convertedGenres.add(FrameBodyTCON.convertID3v22GenreToGeneric(next));
+                }
+            }
+            return convertedGenres;
+        }
+        else
+        {
+            return super.getAll(genericKey);
+        }
+    }
+
+    @Override
+    public String getValue(FieldKey genericKey, int index) throws KeyNotFoundException
+    {
+        if (genericKey == null)
+        {
+            throw new KeyNotFoundException();
+        }
+
+        if(genericKey == FieldKey.GENRE)
+        {
+            List<TagField> fields = getFields(genericKey);
+            if (fields != null && fields.size() > 0)
+            {
+                AbstractID3v2Frame frame = (AbstractID3v2Frame) fields.get(0);
+                FrameBodyTCON body = (FrameBodyTCON)frame.getBody();
+                return FrameBodyTCON.convertID3v22GenreToGeneric(body.getValues().get(index));
+            }
+            return "";
+        }
+        else
+        {
+            return super.getValue(genericKey, index);
+        }
+    }
+
+
 }

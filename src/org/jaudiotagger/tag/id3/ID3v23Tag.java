@@ -1011,65 +1011,88 @@ public class ID3v23Tag extends AbstractID3v2Tag
             throw new KeyNotFoundException();
         }
 
-        if (genericKey != FieldKey.YEAR)
+        if (genericKey == FieldKey.GENRE)
         {
-            return super.createField(genericKey, value);
-        }
-
-        if(value.length()<4)
-        {
-            throw new FieldDataInvalidException();
-        }
-        else if(value.length()==4)
-        {
-            AbstractID3v2Frame tyer = createFrame(ID3v23Frames.FRAME_ID_V3_TYER);
-            ((AbstractFrameBodyTextInfo) tyer.getBody()).setText(value.substring(0, 4));
-            return tyer;
-        }
-        else if(value.length()> 4)
-        {
-            AbstractID3v2Frame tyer = createFrame(ID3v23Frames.FRAME_ID_V3_TYER);
-            ((AbstractFrameBodyTextInfo) tyer.getBody()).setText(value.substring(0, 4));
-
-            if(value.length() >= 10)
+            if (value == null)
             {
-                //Have a full yyyy-mm-dd value that needs storing in two frames in ID3
-                String month = value.substring(5,7);
-                String day   = value.substring(8,10);
-                AbstractID3v2Frame tdat = createFrame(ID3v23Frames.FRAME_ID_V3_TDAT);
-                ((AbstractFrameBodyTextInfo) tdat.getBody()).setText(day+month);
-
-                TyerTdatAggregatedFrame ag = new TyerTdatAggregatedFrame();
-                ag.addFrame(tyer);
-                ag.addFrame(tdat);
-                return ag;
+                throw new IllegalArgumentException(ErrorMessage.GENERAL_INVALID_NULL_ARGUMENT.getMsg());
             }
-            else if(value.length() >= 7)
-            {
-                //TDAT frame requires both month and day so if we only have the month we just have to make
-                //the day up
-                String month = value.substring(5,7);
-                String day   = "01";
-                AbstractID3v2Frame tdat = createFrame(ID3v23Frames.FRAME_ID_V3_TDAT);
-                ((AbstractFrameBodyTextInfo) tdat.getBody()).setText(day+month);
+            FrameAndSubId formatKey = getFrameAndSubIdFromGenericKey(genericKey);
+            AbstractID3v2Frame frame = createFrame(formatKey.getFrameId());
+            FrameBodyTCON framebody = (FrameBodyTCON) frame.getBody();
+            framebody.setText(FrameBodyTCON.convertGenericToID3v23Genre(value));
+            return frame;
+        }
+        else if (genericKey == FieldKey.YEAR)
+        {
 
-                TyerTdatAggregatedFrame ag = new TyerTdatAggregatedFrame();
-                ag.addFrame(tyer);
-                ag.addFrame(tdat);
-                return ag;
+            if(value.length()<4)
+            {
+                throw new FieldDataInvalidException();
+            }
+            else if(value.length()==4)
+            {
+                AbstractID3v2Frame tyer = createFrame(ID3v23Frames.FRAME_ID_V3_TYER);
+                ((AbstractFrameBodyTextInfo) tyer.getBody()).setText(value.substring(0, 4));
+                return tyer;
+            }
+            else if(value.length()> 4)
+            {
+                AbstractID3v2Frame tyer = createFrame(ID3v23Frames.FRAME_ID_V3_TYER);
+                ((AbstractFrameBodyTextInfo) tyer.getBody()).setText(value.substring(0, 4));
+
+                if(value.length() >= 10)
+                {
+                    //Have a full yyyy-mm-dd value that needs storing in two frames in ID3
+                    String month = value.substring(5,7);
+                    String day   = value.substring(8,10);
+                    AbstractID3v2Frame tdat = createFrame(ID3v23Frames.FRAME_ID_V3_TDAT);
+                    ((AbstractFrameBodyTextInfo) tdat.getBody()).setText(day+month);
+
+                    TyerTdatAggregatedFrame ag = new TyerTdatAggregatedFrame();
+                    ag.addFrame(tyer);
+                    ag.addFrame(tdat);
+                    return ag;
+                }
+                else if(value.length() >= 7)
+                {
+                    //TDAT frame requires both month and day so if we only have the month we just have to make
+                    //the day up
+                    String month = value.substring(5,7);
+                    String day   = "01";
+                    AbstractID3v2Frame tdat = createFrame(ID3v23Frames.FRAME_ID_V3_TDAT);
+                    ((AbstractFrameBodyTextInfo) tdat.getBody()).setText(day+month);
+
+                    TyerTdatAggregatedFrame ag = new TyerTdatAggregatedFrame();
+                    ag.addFrame(tyer);
+                    ag.addFrame(tdat);
+                    return ag;
+                }
+                else
+                {
+                    //We only have year data
+                    return tyer;
+                }
             }
             else
             {
-                //We only have year data
-                return tyer;
+                return null;
             }
         }
         else
         {
-            return null;
+            return super.createField(genericKey, value);
         }
     }
 
+    /**
+     *
+     * @param genericKey
+     * @param index
+     * @return
+     * @throws KeyNotFoundException
+     */
+    @Override
     public String getValue(FieldKey genericKey, int index) throws KeyNotFoundException
     {
         if (genericKey == null)
@@ -1077,15 +1100,28 @@ public class ID3v23Tag extends AbstractID3v2Tag
             throw new KeyNotFoundException();
         }
 
-        if(genericKey != FieldKey.YEAR)
+        if(genericKey == FieldKey.YEAR)
         {
-            return super.getValue(genericKey, index);    
+            AggregatedFrame af = (AggregatedFrame)getFrame(TyerTdatAggregatedFrame.ID_TYER_TDAT);
+            if(af!=null)
+            {
+                return af.getContent();
+            }
+            else
+            {
+                return super.getValue(genericKey, index);
+            }
         }
-
-        AggregatedFrame af = (AggregatedFrame)getFrame(TyerTdatAggregatedFrame.ID_TYER_TDAT);
-        if(af!=null)
+        else if(genericKey == FieldKey.GENRE)
         {
-            return af.getContent();
+            List<TagField> fields = getFields(genericKey);
+            if (fields != null && fields.size() > 0)
+            {
+                AbstractID3v2Frame frame = (AbstractID3v2Frame) fields.get(0);
+                FrameBodyTCON body = (FrameBodyTCON)frame.getBody();
+                return FrameBodyTCON.convertID3v23GenreToGeneric(body.getValues().get(index));
+            }
+            return "";
         }
         else
         {
@@ -1143,4 +1179,37 @@ public class ID3v23Tag extends AbstractID3v2Tag
         }
 
     }
+
+    /**
+     * Maps the generic key to the id3 key and return the list of values for this field as strings
+     *
+     * @param genericKey
+     * @return
+     * @throws KeyNotFoundException
+     */
+    public List<String> getAll(FieldKey genericKey) throws KeyNotFoundException
+    {
+        if(genericKey == FieldKey.GENRE)
+        {
+            List<TagField> fields = getFields(genericKey);
+            List<String> convertedGenres = new ArrayList<String>();
+            if (fields != null && fields.size() > 0)
+            {
+                AbstractID3v2Frame frame = (AbstractID3v2Frame) fields.get(0);
+                FrameBodyTCON body = (FrameBodyTCON)frame.getBody();
+
+                for(String next:body.getValues())
+                {
+                    convertedGenres.add(FrameBodyTCON.convertID3v23GenreToGeneric(next));
+                }
+            }
+            return convertedGenres;
+        }
+        else
+        {
+            return super.getAll(genericKey);
+        }
+    }
+
+
 }

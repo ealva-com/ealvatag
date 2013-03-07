@@ -63,7 +63,7 @@ public class TextEncodedStringSizeTerminated extends AbstractString
 
     /**
      * Read a 'n' bytes from buffer into a String where n is the framesize - offset
-     * so thefore cannot use this if there are other objects after it because it has no
+     * so therefore cannot use this if there are other objects after it because it has no
      * delimiter.
      * <p/>
      * Must take into account the text encoding defined in the Encoding Object

@@ -1258,7 +1258,7 @@ public class NewInterfaceTest extends TestCase
             audioFile = org.jaudiotagger.audio.AudioFileIO.read(testFile);
             newTag = audioFile.getTag();
             //..and read back
-            assertEquals("(17)", newTag.getFirst(FieldKey.GENRE));
+            assertEquals("Rock", newTag.getFirst(FieldKey.GENRE));
 
         }
         catch (Exception e)

@@ -151,6 +151,14 @@ public class FrameBodyTCON extends AbstractFrameBodyTextInfo implements ID3v24Fr
             {
                 value = ID3V2ExtendedGenreTypes.CR.name();
             }
+            else if (value.equalsIgnoreCase(ID3V2ExtendedGenreTypes.RX.name()))
+            {
+                value = ID3V2ExtendedGenreTypes.RX.name();
+            }
+            else if (value.equalsIgnoreCase(ID3V2ExtendedGenreTypes.CR.name()))
+            {
+                value = ID3V2ExtendedGenreTypes.CR.name();
+            }
         }
         return value;
     }
@@ -168,7 +176,7 @@ public class FrameBodyTCON extends AbstractFrameBodyTextInfo implements ID3v24Fr
             int genreId = Integer.parseInt(value);
             if (genreId < GenreTypes.getMaxGenreId())
             {
-                return String.valueOf(genreId);
+                return bracketWrap(String.valueOf(genreId));
             }
             else
             {
@@ -180,14 +188,38 @@ public class FrameBodyTCON extends AbstractFrameBodyTextInfo implements ID3v24Fr
             Integer genreId = GenreTypes.getInstanceOf().getIdForName(value);
             if (genreId != null)
             {
-                return String.valueOf(genreId);
+                return bracketWrap(String.valueOf(genreId));
             }
 
-
+            if (value.equalsIgnoreCase(ID3V2ExtendedGenreTypes.RX.getDescription()))
+            {
+                value = bracketWrap(ID3V2ExtendedGenreTypes.RX.name());
+            }
+            else if (value.equalsIgnoreCase(ID3V2ExtendedGenreTypes.CR.getDescription()))
+            {
+                value = bracketWrap(ID3V2ExtendedGenreTypes.CR.name());
+            }
+            else if (value.equalsIgnoreCase(ID3V2ExtendedGenreTypes.RX.name()))
+            {
+                value = bracketWrap(ID3V2ExtendedGenreTypes.RX.name());
+            }
+            else if (value.equalsIgnoreCase(ID3V2ExtendedGenreTypes.CR.name()))
+            {
+                value = bracketWrap(ID3V2ExtendedGenreTypes.CR.name());
+            }
         }
         return value;
     }
 
+    public static String convertGenericToID3v22Genre(String value)
+    {
+        return convertGenericToID3v23Genre(value);
+    }
+
+    private static String bracketWrap(Object value)
+    {
+        return "(" + value + ')';
+    }
 
     /**
      * Convert internal genre value to generic genre
@@ -225,5 +257,44 @@ public class FrameBodyTCON extends AbstractFrameBodyTextInfo implements ID3v24Fr
             }
         }
         return value;
+    }
+
+    public static String convertID3v23GenreToGeneric(String value)
+    {
+        value=value.replace("(", "");
+        value=value.replace(")", "");
+        try
+        {
+            int genreId = Integer.parseInt(value);
+            if (genreId < GenreTypes.getMaxStandardGenreId())
+            {
+                return GenreTypes.getInstanceOf().getValueForId(genreId);
+            }
+            else
+            {
+                return value;
+            }
+        }
+        catch (NumberFormatException nfe)
+        {
+            if (value.equalsIgnoreCase(ID3V2ExtendedGenreTypes.RX.name()))
+            {
+                value = ID3V2ExtendedGenreTypes.RX.getDescription();
+            }
+            else if (value.equalsIgnoreCase(ID3V2ExtendedGenreTypes.CR.name()))
+            {
+                value = ID3V2ExtendedGenreTypes.CR.getDescription();
+            }
+            else
+            {
+                return value;
+            }
+        }
+        return value;
+    }
+
+    public static String convertID3v22GenreToGeneric(String value)
+    {
+        return convertID3v23GenreToGeneric(value);
     }
 }

@@ -36,14 +36,22 @@
     <list readonly="true" id="a92fb0ee-7f0e-4d95-b2c3-85f2ead52889" name="Default" comment="#58:Formalisation of Error Messages" />
     <list default="true" id="7dd0104a-9c3d-42a7-b1f9-01df90f49119" name="" comment="Added testcases to highlight issue">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata" afterPath="$PROJECT_DIR$/testdata" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/org/jaudiotagger/tag/id3/AbstractID3v2Tag.java" afterPath="$PROJECT_DIR$/src/org/jaudiotagger/tag/id3/AbstractID3v2Tag.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/org/jaudiotagger/tag/id3/framebody/FrameBodyTCON.java" afterPath="$PROJECT_DIR$/src/org/jaudiotagger/tag/id3/framebody/FrameBodyTCON.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/org/jaudiotagger/tag/id3/ID3v22Tag.java" afterPath="$PROJECT_DIR$/src/org/jaudiotagger/tag/id3/ID3v22Tag.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/org/jaudiotagger/tag/id3/ID3v23Tag.java" afterPath="$PROJECT_DIR$/src/org/jaudiotagger/tag/id3/ID3v23Tag.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/org/jaudiotagger/tag/id3/ID3v24Tag.java" afterPath="$PROJECT_DIR$/src/org/jaudiotagger/tag/id3/ID3v24Tag.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/srctest/org/jaudiotagger/issues/Issue173Test.java" afterPath="$PROJECT_DIR$/srctest/org/jaudiotagger/issues/Issue173Test.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/srctest/org/jaudiotagger/tag/id3/NewInterfaceTest.java" afterPath="$PROJECT_DIR$/srctest/org/jaudiotagger/tag/id3/NewInterfaceTest.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/org/jaudiotagger/tag/datatype/TextEncodedStringSizeTerminated.java" afterPath="$PROJECT_DIR$/src/org/jaudiotagger/tag/datatype/TextEncodedStringSizeTerminated.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/jaudiotagger.iws" afterPath="$PROJECT_DIR$/jaudiotagger.iws" />
     </list>
     <list id="09913790-2926-477b-ac1a-3a97378f1eb3" name="Rejected commit: Default" comment="#99 Fixed, its  impossible to add support for unencrypting an arbitary encrypted frame, but now when we encounter an encrypted frame its added to a encryptedFrameMap and can be retrieved using getEncryptedFrame(String id). Additionally if a file is open by jaudiotagger and then saved any existing encrypted files are written back to the file, the only difference being that encrypted frames a re added after unencrypted frames.&#10;&#10;Also added support for preserving the grouping identity byte if set (this can be&#10;used to indicate where some frames are linked, prteviously this byte was not preserved on save." />
     <list id="f5a493c4-902b-478e-92de-46ca88013588" name="Failed commit: Default" comment="Resubmit" />
-    <file path="/AbstractID3v2Tag.java" changelist="7dd0104a-9c3d-42a7-b1f9-01df90f49119" time="1357345200274" ignored="false" />
+    <file path="/AbstractID3v2Tag.java" changelist="7dd0104a-9c3d-42a7-b1f9-01df90f49119" time="1362587528880" ignored="false" />
     <file path="/ID3v22Tag.java" changelist="7dd0104a-9c3d-42a7-b1f9-01df90f49119" time="1357344896034" ignored="false" />
     <file path="$MAVEN_REPOSITORY$/net/jthink/jaudiotagger/2.0.4/jaudiotagger-2.0.4-sources.jar!/org/jaudiotagger/tag/id3/AbstractID3v2Tag.java" changelist="7dd0104a-9c3d-42a7-b1f9-01df90f49119" time="1357376310595" ignored="false" />
-    <file path="/Dummy.txt" changelist="7dd0104a-9c3d-42a7-b1f9-01df90f49119" time="1361033331083" ignored="false" />
+    <file path="/Dummy.txt" changelist="7dd0104a-9c3d-42a7-b1f9-01df90f49119" time="1362651852567" ignored="false" />
     <file path="$PROJECT_DIR$/../../Jaikoz/trunk/src/src/com/jthink/jaikoz/action/MatchSongsFromMusicBrainzAction.java" changelist="7dd0104a-9c3d-42a7-b1f9-01df90f49119" time="1357466447157" ignored="false" />
     <file path="/MatchSongsFromMusicBrainzAction.java" changelist="7dd0104a-9c3d-42a7-b1f9-01df90f49119" time="1357466447157" ignored="false" />
     <file path="$PROJECT_DIR$/../../Jaikoz/trunk/src/src/com/jthink/jaikoz/manipulate/musicbrainzhelper/AdvancedReleaseSearch.java" changelist="7dd0104a-9c3d-42a7-b1f9-01df90f49119" time="1357468690032" ignored="false" />
@@ -58,7 +66,7 @@
     <file path="/PathFormatter.java" changelist="7dd0104a-9c3d-42a7-b1f9-01df90f49119" time="1357475103522" ignored="false" />
     <file path="$PROJECT_DIR$/../../Jaikoz/trunk/src/src/com/jthink/jaikoz/manipulate/autoformat/SubFolderFormatter.java" changelist="7dd0104a-9c3d-42a7-b1f9-01df90f49119" time="1357476499893" ignored="false" />
     <file path="/SubFolderFormatter.java" changelist="7dd0104a-9c3d-42a7-b1f9-01df90f49119" time="1357476202259" ignored="false" />
-    <file path="/fragment.java" changelist="7dd0104a-9c3d-42a7-b1f9-01df90f49119" time="1360910995815" ignored="false" />
+    <file path="/fragment.java" changelist="7dd0104a-9c3d-42a7-b1f9-01df90f49119" time="1362562226774" ignored="false" />
     <file path="$PROJECT_DIR$/../../Jaikoz/trunk/src/src/com/jthink/jaikoz/settings/FileCorrectSettings.java" changelist="7dd0104a-9c3d-42a7-b1f9-01df90f49119" time="1357476778546" ignored="false" />
     <file path="$PROJECT_DIR$/../../Jaikoz/trunk/src/src/com/jthink/jaikoz/manipulate/musicbrainzhelper/MusicbrainzServerSubmitQuery.java" changelist="7dd0104a-9c3d-42a7-b1f9-01df90f49119" time="1357477491898" ignored="false" />
     <file path="/JaikozAction.java" changelist="7dd0104a-9c3d-42a7-b1f9-01df90f49119" time="1357477884027" ignored="false" />
@@ -72,8 +80,8 @@
     <file path="/Mp4TagCoverField.java" changelist="7dd0104a-9c3d-42a7-b1f9-01df90f49119" time="1358714494015" ignored="false" />
     <file path="/testfiles.txt" changelist="7dd0104a-9c3d-42a7-b1f9-01df90f49119" time="1359715823366" ignored="false" />
     <file path="$PROJECT_DIR$/../../../Jaikoz/src/libs/client/jaudiotagger.jar!/org/jaudiotagger/tag/id3/valuepair/ImageFormats.class" changelist="7dd0104a-9c3d-42a7-b1f9-01df90f49119" time="1358715876383" ignored="false" />
-    <file path="$PROJECT_DIR$/../../../SongKong/src/main/java/com/jthink/songkong/db/SongCache.java" changelist="7dd0104a-9c3d-42a7-b1f9-01df90f49119" time="1358764824251" ignored="false" />
-    <file path="/SongCache.java" changelist="7dd0104a-9c3d-42a7-b1f9-01df90f49119" time="1358764818363" ignored="false" />
+    <file path="$PROJECT_DIR$/../../../SongKong/src/main/java/com/jthink/songkong/db/SongCache.java" changelist="7dd0104a-9c3d-42a7-b1f9-01df90f49119" time="1362409294509" ignored="false" />
+    <file path="/SongCache.java" changelist="7dd0104a-9c3d-42a7-b1f9-01df90f49119" time="1362407255074" ignored="false" />
     <file path="$PROJECT_DIR$/../../../SongKong/src/main/java/com/jthink/songkong/fileloader/CountFilesinFolder.java" changelist="7dd0104a-9c3d-42a7-b1f9-01df90f49119" time="1358770559831" ignored="false" />
     <file path="$PROJECT_DIR$/../../../SongKong/src/main/java/com/jthink/songkong/fileloader/SongLoader.java" changelist="7dd0104a-9c3d-42a7-b1f9-01df90f49119" time="1358764314506" ignored="false" />
     <file path="/SongLoader.java" changelist="7dd0104a-9c3d-42a7-b1f9-01df90f49119" time="1358764310658" ignored="false" />
@@ -88,16 +96,16 @@
     <file path="/MP3File.java" changelist="7dd0104a-9c3d-42a7-b1f9-01df90f49119" time="1359649735044" ignored="false" />
     <file path="/MP3AudioHeader.java" changelist="7dd0104a-9c3d-42a7-b1f9-01df90f49119" time="1359649148944" ignored="false" />
     <file path="$PROJECT_DIR$/target/apidocs/org/jaudiotagger/audio/mp3/MP3File.html" changelist="7dd0104a-9c3d-42a7-b1f9-01df90f49119" time="1359650334471" ignored="false" />
-    <file path="/pom.xml" changelist="7dd0104a-9c3d-42a7-b1f9-01df90f49119" time="1360073803455" ignored="false" />
+    <file path="/pom.xml" changelist="7dd0104a-9c3d-42a7-b1f9-01df90f49119" time="1362576917800" ignored="false" />
     <file path="/Issue409Test.java" changelist="7dd0104a-9c3d-42a7-b1f9-01df90f49119" time="1359662388109" ignored="false" />
     <file path="/a.dummy" changelist="7dd0104a-9c3d-42a7-b1f9-01df90f49119" time="1360910643601" ignored="false" />
     <file path="/OggVorbisTagWriter.java" changelist="7dd0104a-9c3d-42a7-b1f9-01df90f49119" time="1359711847029" ignored="false" />
     <file path="/Issue446Test.java" changelist="7dd0104a-9c3d-42a7-b1f9-01df90f49119" time="1360768905969" ignored="false" />
     <file path="/Issue433Test.java" changelist="7dd0104a-9c3d-42a7-b1f9-01df90f49119" time="1359716119506" ignored="false" />
-    <file path="/SongChangesReport.java" changelist="7dd0104a-9c3d-42a7-b1f9-01df90f49119" time="1360789242005" ignored="false" />
-    <file path="$PROJECT_DIR$/../../../SongKong/src/main/java/com/jthink/songkong/analyse/analyser/SongChangesReport.java" changelist="7dd0104a-9c3d-42a7-b1f9-01df90f49119" time="1360789694138" ignored="false" />
-    <file path="/SongSaver.java" changelist="7dd0104a-9c3d-42a7-b1f9-01df90f49119" time="1360769696185" ignored="false" />
-    <file path="$PROJECT_DIR$/../../../SongKong/src/main/java/com/jthink/songkong/analyse/analyser/SongSaver.java" changelist="7dd0104a-9c3d-42a7-b1f9-01df90f49119" time="1360769696185" ignored="false" />
+    <file path="/SongChangesReport.java" changelist="7dd0104a-9c3d-42a7-b1f9-01df90f49119" time="1362411464615" ignored="false" />
+    <file path="$PROJECT_DIR$/../../../SongKong/src/main/java/com/jthink/songkong/analyse/analyser/SongChangesReport.java" changelist="7dd0104a-9c3d-42a7-b1f9-01df90f49119" time="1362411595287" ignored="false" />
+    <file path="/SongSaver.java" changelist="7dd0104a-9c3d-42a7-b1f9-01df90f49119" time="1362411415094" ignored="false" />
+    <file path="$PROJECT_DIR$/../../../SongKong/src/main/java/com/jthink/songkong/analyse/analyser/SongSaver.java" changelist="7dd0104a-9c3d-42a7-b1f9-01df90f49119" time="1362411423067" ignored="false" />
     <file path="/MatchedToDiscogsCache.java" changelist="7dd0104a-9c3d-42a7-b1f9-01df90f49119" time="1360769785274" ignored="false" />
     <file path="$PROJECT_DIR$/../../../SongKong/src/main/java/com/jthink/songkong/db/MatchedToDiscogsCache.java" changelist="7dd0104a-9c3d-42a7-b1f9-01df90f49119" time="1360769787488" ignored="false" />
     <file path="$PROJECT_DIR$/../../../SongKong/src/main/java/com/jthink/songkong/analyse/analyser/Counters.java" changelist="7dd0104a-9c3d-42a7-b1f9-01df90f49119" time="1360772509355" ignored="false" />
@@ -119,6 +127,20 @@
     <file path="/Issue453Test.java" changelist="7dd0104a-9c3d-42a7-b1f9-01df90f49119" time="1360910360674" ignored="false" />
     <file path="$PROJECT_DIR$/../../../SongKongServer/src/main/java/com/jthink/songkong/appserver/SongKongServlet.java" changelist="7dd0104a-9c3d-42a7-b1f9-01df90f49119" time="1361018274399" ignored="false" />
     <file path="/.ignore" changelist="7dd0104a-9c3d-42a7-b1f9-01df90f49119" time="1361033263834" ignored="false" />
+    <file path="$PROJECT_DIR$/../../../SongLayer/src/main/java/com/jthink/songlayer/CoverImage.java" changelist="7dd0104a-9c3d-42a7-b1f9-01df90f49119" time="1362410992971" ignored="false" />
+    <file path="/CoverImage.java" changelist="7dd0104a-9c3d-42a7-b1f9-01df90f49119" time="1362410727842" ignored="false" />
+    <file path="$MAVEN_REPOSITORY$/com/jthink/songlayer/1.2/songlayer-1.2.jar!/com/jthink/songlayer/CoverImage.class" changelist="7dd0104a-9c3d-42a7-b1f9-01df90f49119" time="1362410772454" ignored="false" />
+    <file path="$PROJECT_DIR$/../../../SongKong/src/main/java/com/jthink/songkong/analyse/musicbrainz/MusicBrainzUpdateSong.java" changelist="7dd0104a-9c3d-42a7-b1f9-01df90f49119" time="1362411595287" ignored="false" />
+    <file path="/MusicBrainzUpdateSong.java" changelist="7dd0104a-9c3d-42a7-b1f9-01df90f49119" time="1362411580288" ignored="false" />
+    <file path="/Issue173Test.java" changelist="7dd0104a-9c3d-42a7-b1f9-01df90f49119" time="1362601712175" ignored="false" />
+    <file path="/Mp4Tag.java" changelist="7dd0104a-9c3d-42a7-b1f9-01df90f49119" time="1362576489586" ignored="false" />
+    <file path="/ErrorMessage.java" changelist="7dd0104a-9c3d-42a7-b1f9-01df90f49119" time="1362576743542" ignored="false" />
+    <file path="/GenreTypes.java" changelist="7dd0104a-9c3d-42a7-b1f9-01df90f49119" time="1362579806198" ignored="false" />
+    <file path="/FrameBodyTCON.java" changelist="7dd0104a-9c3d-42a7-b1f9-01df90f49119" time="1362601933950" ignored="false" />
+    <file path="/Mp4GenreField.java" changelist="7dd0104a-9c3d-42a7-b1f9-01df90f49119" time="1362580997860" ignored="false" />
+    <file path="/ID3v24Tag.java" changelist="7dd0104a-9c3d-42a7-b1f9-01df90f49119" time="1362591416433" ignored="false" />
+    <file path="/ID3v23Tag.java" changelist="7dd0104a-9c3d-42a7-b1f9-01df90f49119" time="1362592145398" ignored="false" />
+    <file path="/TextEncodedStringSizeTerminated.java" changelist="7dd0104a-9c3d-42a7-b1f9-01df90f49119" time="1362650802404" ignored="false" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -147,22 +169,7 @@
     <disable_hints />
   </component>
   <component name="DebuggerManager">
-    <line_breakpoints default_suspend_policy="SuspendAll" default_condition_enabled="true">
-      <breakpoint url="file://$PROJECT_DIR$/src/org/jaudiotagger/tag/images/AndroidArtwork.java" line="2" class="AndroidArtwork.java" package="">
-        <option name="ENABLED" value="true" />
-        <option name="LOG_ENABLED" value="false" />
-        <option name="LOG_EXPRESSION_ENABLED" value="false" />
-        <option name="SUSPEND_POLICY" value="SuspendAll" />
-        <option name="SUSPEND" value="true" />
-        <option name="COUNT_FILTER_ENABLED" value="false" />
-        <option name="COUNT_FILTER" value="0" />
-        <option name="CONDITION_ENABLED" value="false" />
-        <option name="CLASS_FILTERS_ENABLED" value="false" />
-        <option name="INSTANCE_FILTERS_ENABLED" value="false" />
-        <option name="CONDITION" value="" />
-        <option name="LOG_MESSAGE" value="" />
-      </breakpoint>
-    </line_breakpoints>
+    <ui_properties default_suspend_policy="SuspendAll" default_condition_enabled="true" />
     <breakpoint_any default_suspend_policy="SuspendAll" default_condition_enabled="true">
       <breakpoint>
         <option name="NOTIFY_CAUGHT" value="true" />
@@ -197,7 +204,22 @@
         <option name="LOG_MESSAGE" value="" />
       </breakpoint>
     </breakpoint_any>
-    <ui_properties default_suspend_policy="SuspendAll" default_condition_enabled="true" />
+    <line_breakpoints default_suspend_policy="SuspendAll" default_condition_enabled="true">
+      <breakpoint url="file://$PROJECT_DIR$/src/org/jaudiotagger/tag/images/AndroidArtwork.java" line="2" class="AndroidArtwork.java" package="">
+        <option name="ENABLED" value="true" />
+        <option name="LOG_ENABLED" value="false" />
+        <option name="LOG_EXPRESSION_ENABLED" value="false" />
+        <option name="SUSPEND_POLICY" value="SuspendAll" />
+        <option name="SUSPEND" value="true" />
+        <option name="COUNT_FILTER_ENABLED" value="false" />
+        <option name="COUNT_FILTER" value="0" />
+        <option name="CONDITION_ENABLED" value="false" />
+        <option name="CLASS_FILTERS_ENABLED" value="false" />
+        <option name="INSTANCE_FILTERS_ENABLED" value="false" />
+        <option name="CONDITION" value="" />
+        <option name="LOG_MESSAGE" value="" />
+      </breakpoint>
+    </line_breakpoints>
     <breakpoint_rules />
     <ui_properties />
   </component>
@@ -230,62 +252,84 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="Issue453Test.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/srctest/org/jaudiotagger/issues/Issue453Test.java">
+      <file leaf-file-name="Issue173Test.java" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/srctest/org/jaudiotagger/issues/Issue173Test.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="12" column="13" selection-start="259" selection-end="259" vertical-scroll-proportion="0.0">
+            <state line="279" column="96" selection-start="12958" selection-end="12958" vertical-scroll-proportion="0.23661485">
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ID3v24Frames.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/tag/id3/ID3v24Frames.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="31" column="13" selection-start="1298" selection-end="1298" vertical-scroll-proportion="1.6">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Issue454Test.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/srctest/org/jaudiotagger/issues/Issue454Test.java">
+      <file leaf-file-name="ID3v22Frames.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/tag/id3/ID3v22Frames.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="30" column="24" selection-start="969" selection-end="969" vertical-scroll-proportion="0.0">
+            <state line="31" column="13" selection-start="1316" selection-end="1316" vertical-scroll-proportion="2.4">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="MP3AudioHeaderTest.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/srctest/org/jaudiotagger/audio/mp3/MP3AudioHeaderTest.java">
+      <file leaf-file-name="AbstractFrameBodyTextInfo.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/tag/id3/framebody/AbstractFrameBodyTextInfo.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="66" column="43" selection-start="2838" selection-end="2838" vertical-scroll-proportion="-29.24">
+            <state line="194" column="30" selection-start="6923" selection-end="6923" vertical-scroll-proportion="-14.88">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Issue446Test.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/srctest/org/jaudiotagger/issues/Issue446Test.java">
+      <file leaf-file-name="TextEncodedStringSizeTerminated.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/tag/datatype/TextEncodedStringSizeTerminated.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="47" column="27" selection-start="1572" selection-end="1572" vertical-scroll-proportion="-25.16">
+            <state line="302" column="51" selection-start="10455" selection-end="10455" vertical-scroll-proportion="-198.56">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name=".ignore" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/.ignore">
+      <file leaf-file-name="ID3v22Tag.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/tag/id3/ID3v22Tag.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="118" column="87" selection-start="1537" selection-end="1537" vertical-scroll-proportion="0.0">
+            <state line="828" column="11" selection-start="27782" selection-end="27782" vertical-scroll-proportion="-8.08">
+              <folding>
+                <element signature="e#27235#27243#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="FrameBodyTCON.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/tag/id3/framebody/FrameBodyTCON.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="68" column="13" selection-start="3116" selection-end="3116" vertical-scroll-proportion="87.8">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="jaudiotagger.iws" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/jaudiotagger.iws">
+      <file leaf-file-name="FrameBodyTBPM.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/tag/id3/framebody/FrameBodyTBPM.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="27" column="58" selection-start="1333" selection-end="1333" vertical-scroll-proportion="0.56736714">
+            <state line="43" column="52" selection-start="1729" selection-end="1729" vertical-scroll-proportion="-13.48">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="jaudiotagger.ipr" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/jaudiotagger.ipr">
+      <file leaf-file-name="NewInterfaceTest.class" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/target/test-classes/org/jaudiotagger/tag/id3/NewInterfaceTest.class">
           <provider selected="true" editor-type-id="text-editor">
             <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
               <folding />
@@ -293,29 +337,16 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="MP3AudioHeader.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/audio/mp3/MP3AudioHeader.java">
+      <file leaf-file-name="ID3v23Tag.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/tag/id3/ID3v23Tag.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="476" column="46" selection-start="19447" selection-end="19447" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="MPEGFrameHeader.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/audio/mp3/MPEGFrameHeader.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="762" column="15" selection-start="23298" selection-end="23298" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Issue383Test.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/srctest/org/jaudiotagger/issues/Issue383Test.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="12" column="13" selection-start="273" selection-end="273" vertical-scroll-proportion="-4.76">
-              <folding />
+            <state line="1130" column="26" selection-start="36597" selection-end="37719" vertical-scroll-proportion="-13.32">
+              <folding>
+                <element signature="e#0#40705#0" expanded="true" />
+                <element signature="imports" expanded="true" />
+                <element signature="e#30272#30281#0" expanded="true" />
+                <element signature="e#40153#40161#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -335,22 +366,22 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/src/org/jaudiotagger/audio/mp3/MP3AudioHeader.java" />
-        <option value="$PROJECT_DIR$/srctest/org/jaudiotagger/issues/Issue409Test.java" />
-        <option value="$PROJECT_DIR$/src/org/jaudiotagger/audio/mp3/MP3File.java" />
-        <option value="$PROJECT_DIR$/src/org/jaudiotagger/audio/ogg/OggVorbisTagWriter.java" />
-        <option value="$PROJECT_DIR$/src/org/jaudiotagger/tag/asf/AsfTagCoverField.java" />
-        <option value="$PROJECT_DIR$/srctest/org/jaudiotagger/tag/vorbiscomment/VorbisImageTest.java" />
-        <option value="$PROJECT_DIR$/testdata/testfiles.txt" />
-        <option value="$PROJECT_DIR$/srctest/org/jaudiotagger/issues/Issue433Test.java" />
+        <option value="$PROJECT_DIR$/src/org/jaudiotagger/tag/mp4/Mp4Tag.java" />
         <option value="$PROJECT_DIR$/pom.xml" />
-        <option value="$PROJECT_DIR$/src/org/jaudiotagger/tag/id3/ID3v22Frames.java" />
-        <option value="$PROJECT_DIR$/jaudiotagger.iws" />
-        <option value="$PROJECT_DIR$/srctest/org/jaudiotagger/issues/Issue446Test.java" />
-        <option value="$PROJECT_DIR$/srctest/org/jaudiotagger/issues/Issue453Test.java" />
-        <option value="$PROJECT_DIR$/srctest/org/jaudiotagger/issues/Issue454Test.java" />
-        <option value="$PROJECT_DIR$/srctest/org/jaudiotagger/audio/mp3/MP3AudioHeaderTest.java" />
-        <option value="$PROJECT_DIR$/.ignore" />
+        <option value="$PROJECT_DIR$/src/org/jaudiotagger/tag/mp4/field/Mp4GenreField.java" />
+        <option value="$PROJECT_DIR$/src/org/jaudiotagger/tag/reference/GenreTypes.java" />
+        <option value="$PROJECT_DIR$/srctest/org/jaudiotagger/issues/Issue411Test.java" />
+        <option value="$PROJECT_DIR$/srctest/org/jaudiotagger/tag/mp4/M4aWriteTagTest.java" />
+        <option value="$PROJECT_DIR$/srctest/org/jaudiotagger/tag/mp4/M4aWriteDataBeforeMoovTagTest.java" />
+        <option value="$PROJECT_DIR$/srctest/org/jaudiotagger/tag/mp4/M4aWriteDatatoMultTrackAudioTest.java" />
+        <option value="$PROJECT_DIR$/src/org/jaudiotagger/tag/id3/AbstractID3v2Tag.java" />
+        <option value="$PROJECT_DIR$/src/org/jaudiotagger/tag/id3/ID3v24Tag.java" />
+        <option value="$PROJECT_DIR$/src/org/jaudiotagger/tag/id3/ID3v23Tag.java" />
+        <option value="$PROJECT_DIR$/srctest/org/jaudiotagger/tag/id3/NewInterfaceTest.java" />
+        <option value="$PROJECT_DIR$/src/org/jaudiotagger/tag/id3/framebody/FrameBodyTCON.java" />
+        <option value="$PROJECT_DIR$/src/org/jaudiotagger/tag/id3/ID3v22Tag.java" />
+        <option value="$PROJECT_DIR$/src/org/jaudiotagger/tag/datatype/TextEncodedStringSizeTerminated.java" />
+        <option value="$PROJECT_DIR$/srctest/org/jaudiotagger/issues/Issue173Test.java" />
       </list>
     </option>
   </component>
@@ -657,6 +688,20 @@
           </PATH>
         </subPane>
       </pane>
+      <pane id="PackagesPane">
+        <subPane>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="jaudiotagger" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="jaudiotagger" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewModuleNode" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+      </pane>
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -685,22 +730,492 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="testdata" />
+              <option name="myItemId" value="target" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
-        </subPane>
-      </pane>
-      <pane id="PackagesPane">
-        <subPane>
           <PATH>
             <PATH_ELEMENT>
               <option name="myItemId" value="jaudiotagger" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewProjectNode" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="jaudiotagger" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewModuleNode" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="target" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="test-classes" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="org" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="jaudiotagger" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="jaudiotagger" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="jaudiotagger" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="target" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="test-classes" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="org" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="jaudiotagger" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="tag" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="jaudiotagger" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="jaudiotagger" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="target" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="test-classes" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="org" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="jaudiotagger" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="tag" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="id3" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="jaudiotagger" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="jaudiotagger" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="srctest" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="jaudiotagger" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="jaudiotagger" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="jaudiotagger" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="srctest" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="jaudiotagger" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="tag" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="jaudiotagger" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="jaudiotagger" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="srctest" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="jaudiotagger" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="tag" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="id3" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="jaudiotagger" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="jaudiotagger" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="srctest" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="jaudiotagger" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="tag" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="id3" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="NewInterfaceTest" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ClassTreeNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="jaudiotagger" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="jaudiotagger" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="srctest" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="jaudiotagger" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="issues" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="jaudiotagger" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="jaudiotagger" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="srctest" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="jaudiotagger" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="issues" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Issue173Test" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ClassTreeNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="jaudiotagger" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="jaudiotagger" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="jaudiotagger" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="jaudiotagger" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="jaudiotagger" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="jaudiotagger" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="tag" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="jaudiotagger" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="jaudiotagger" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="jaudiotagger" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="tag" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="id3" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="jaudiotagger" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="jaudiotagger" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="jaudiotagger" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="tag" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="id3" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="ID3v22Tag" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ClassTreeNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="jaudiotagger" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="jaudiotagger" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="jaudiotagger" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="tag" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="id3" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="framebody" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="jaudiotagger" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="jaudiotagger" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="jaudiotagger" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="tag" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="id3" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="framebody" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="FrameBodyTCON" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ClassTreeNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="jaudiotagger" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="jaudiotagger" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="jaudiotagger" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="tag" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="id3" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="framebody" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="AbstractFrameBodyTextInfo" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ClassTreeNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="jaudiotagger" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="jaudiotagger" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="jaudiotagger" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="tag" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="datatype" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="TextEncodedStringSizeTerminated" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ClassTreeNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="jaudiotagger" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="jaudiotagger" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="jaudiotagger" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="tag" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="datatype" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
         </subPane>
@@ -729,8 +1244,8 @@
     <property name="cvs_file_history_flatWidth4" value="223" />
     <property name="cvs_file_history_flatWidth5" value="39" />
     <property name="cvs_file_history_flatWidth2" value="223" />
-    <property name="cvs_file_history_treeOrder0" value="0" />
     <property name="cvs_file_history_flatWidth3" value="223" />
+    <property name="cvs_file_history_treeOrder0" value="0" />
     <property name="cvs_file_history_flatWidth0" value="223" />
     <property name="GoToClass.includeLibraries" value="false" />
     <property name="cvs_file_history_flatWidth1" value="223" />
@@ -761,28 +1276,28 @@
     <property name="cvs_file_history_treeWidth1" value="223" />
     <property name="cvs_file_history_treeWidth2" value="223" />
     <property name="cvs_file_history_treeWidth3" value="223" />
-    <property name="Repository.Attach.Sources" value="false" />
-    <property name="cvs_file_history_treeWidth4" value="223" />
     <property name="MemberChooser.showClasses" value="true" />
-    <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_flatWidth4" value="449" />
+    <property name="cvs_file_history_treeWidth4" value="223" />
+    <property name="Repository.Attach.Sources" value="false" />
     <property name="cvs_file_history_treeWidth5" value="224" />
-    <property name="cvs_file_history_treeWidth6" value="223" />
+    <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_flatWidth4" value="449" />
     <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_flatWidth5" value="723" />
-    <property name="cvs_file_history_flatOrder4" value="4" />
+    <property name="cvs_file_history_treeWidth6" value="223" />
     <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_treeOrder5" value="5" />
+    <property name="cvs_file_history_flatOrder4" value="4" />
     <property name="cvs_file_history_flatOrder5" value="5" />
-    <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_treeOrder3" value="3" />
     <property name="cvs_file_history_flatOrder2" value="2" />
-    <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_treeOrder4" value="4" />
+    <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_treeOrder3" value="3" />
     <property name="cvs_file_history_flatOrder3" value="3" />
-    <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_treeOrder1" value="1" />
+    <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_treeOrder4" value="4" />
     <property name="cvs_file_history_flatOrder0" value="0" />
-    <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_treeOrder2" value="2" />
+    <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_treeOrder1" value="1" />
     <property name="cvs_file_history_flatOrder1" value="1" />
+    <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_treeOrder2" value="2" />
     <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_treeOrder0" value="0" />
     <property name="cvs_file_history_flatOrder6" value="6" />
-    <property name="dynamic.classpath" value="false" />
     <property name="options.searchVisible" value="true" />
+    <property name="dynamic.classpath" value="false" />
   </component>
   <component name="RecentsManager">
     <key name="CopyClassDialog.RECENTS_KEY">
@@ -804,13 +1319,13 @@
       <recent name="org.jaudiotagger.tag.reference" />
     </key>
   </component>
-  <component name="RunManager" selected="JUnit.Issue383Test">
-    <configuration default="false" name="Issue453Test" type="JUnit" factoryName="JUnit" temporary="true">
+  <component name="RunManager" selected="JUnit.Issue173Test">
+    <configuration default="false" name="Issue173Test" type="JUnit" factoryName="JUnit" temporary="true">
       <module name="jaudiotagger" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
       <option name="ALTERNATIVE_JRE_PATH" />
       <option name="PACKAGE_NAME" value="org.jaudiotagger.issues" />
-      <option name="MAIN_CLASS_NAME" value="org.jaudiotagger.issues.Issue453Test" />
+      <option name="MAIN_CLASS_NAME" value="org.jaudiotagger.issues.Issue173Test" />
       <option name="METHOD_NAME" />
       <option name="TEST_OBJECT" value="class" />
       <option name="VM_PARAMETERS" />
@@ -827,35 +1342,13 @@
       <ConfigurationWrapper RunnerId="Run" />
       <method />
     </configuration>
-    <configuration default="false" name="Issue454Test" type="JUnit" factoryName="JUnit" temporary="true">
+    <configuration default="false" name="Issue173Test.testMp3ID3v23sGenresUsingGenericInterface" type="JUnit" factoryName="JUnit" temporary="true">
       <module name="jaudiotagger" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
       <option name="ALTERNATIVE_JRE_PATH" />
       <option name="PACKAGE_NAME" value="org.jaudiotagger.issues" />
-      <option name="MAIN_CLASS_NAME" value="org.jaudiotagger.issues.Issue454Test" />
-      <option name="METHOD_NAME" />
-      <option name="TEST_OBJECT" value="class" />
-      <option name="VM_PARAMETERS" />
-      <option name="PARAMETERS" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="ENV_VARIABLES" />
-      <option name="PASS_PARENT_ENVS" value="true" />
-      <option name="TEST_SEARCH_SCOPE">
-        <value defaultName="wholeProject" />
-      </option>
-      <envs />
-      <patterns />
-      <RunnerSettings RunnerId="Run" />
-      <ConfigurationWrapper RunnerId="Run" />
-      <method />
-    </configuration>
-    <configuration default="false" name="MP3AudioHeaderTest.testReadV2L2" type="JUnit" factoryName="JUnit" temporary="true">
-      <module name="jaudiotagger" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="PACKAGE_NAME" value="org.jaudiotagger.audio.mp3" />
-      <option name="MAIN_CLASS_NAME" value="org.jaudiotagger.audio.mp3.MP3AudioHeaderTest" />
-      <option name="METHOD_NAME" value="testReadV2L2" />
+      <option name="MAIN_CLASS_NAME" value="org.jaudiotagger.issues.Issue173Test" />
+      <option name="METHOD_NAME" value="testMp3ID3v23sGenresUsingGenericInterface" />
       <option name="TEST_OBJECT" value="method" />
       <option name="VM_PARAMETERS" />
       <option name="PARAMETERS" />
@@ -871,13 +1364,13 @@
       <ConfigurationWrapper RunnerId="Run" />
       <method />
     </configuration>
-    <configuration default="false" name="MP3AudioHeaderTest.testReadV2L3VbrOld" type="JUnit" factoryName="JUnit" temporary="true">
+    <configuration default="false" name="NewInterfaceTest.testNewInterfaceBasicReadandWriteID3v23" type="JUnit" factoryName="JUnit" temporary="true">
       <module name="jaudiotagger" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
       <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="PACKAGE_NAME" value="org.jaudiotagger.audio.mp3" />
-      <option name="MAIN_CLASS_NAME" value="org.jaudiotagger.audio.mp3.MP3AudioHeaderTest" />
-      <option name="METHOD_NAME" value="testReadV2L3VbrOld" />
+      <option name="PACKAGE_NAME" value="org.jaudiotagger.tag.id3" />
+      <option name="MAIN_CLASS_NAME" value="org.jaudiotagger.tag.id3.NewInterfaceTest" />
+      <option name="METHOD_NAME" value="testNewInterfaceBasicReadandWriteID3v23" />
       <option name="TEST_OBJECT" value="method" />
       <option name="VM_PARAMETERS" />
       <option name="PARAMETERS" />
@@ -893,14 +1386,36 @@
       <ConfigurationWrapper RunnerId="Run" />
       <method />
     </configuration>
-    <configuration default="false" name="Issue383Test" type="JUnit" factoryName="JUnit" temporary="true">
+    <configuration default="false" name="Issue444Test" type="JUnit" factoryName="JUnit" temporary="true">
       <module name="jaudiotagger" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
       <option name="ALTERNATIVE_JRE_PATH" />
       <option name="PACKAGE_NAME" value="org.jaudiotagger.issues" />
-      <option name="MAIN_CLASS_NAME" value="org.jaudiotagger.issues.Issue383Test" />
+      <option name="MAIN_CLASS_NAME" value="org.jaudiotagger.issues.Issue444Test" />
       <option name="METHOD_NAME" />
       <option name="TEST_OBJECT" value="class" />
+      <option name="VM_PARAMETERS" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="wholeProject" />
+      </option>
+      <envs />
+      <patterns />
+      <RunnerSettings RunnerId="Run" />
+      <ConfigurationWrapper RunnerId="Run" />
+      <method />
+    </configuration>
+    <configuration default="false" name="Issue173Test.testMp3ID3v22sGenresUsingGenericInterface" type="JUnit" factoryName="JUnit" temporary="true">
+      <module name="jaudiotagger" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PACKAGE_NAME" value="org.jaudiotagger.issues" />
+      <option name="MAIN_CLASS_NAME" value="org.jaudiotagger.issues.Issue173Test" />
+      <option name="METHOD_NAME" value="testMp3ID3v22sGenresUsingGenericInterface" />
+      <option name="TEST_OBJECT" value="method" />
       <option name="VM_PARAMETERS" />
       <option name="PARAMETERS" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
@@ -922,6 +1437,21 @@
       <option name="HOST" value="localhost" />
       <option name="PORT" value="5005" />
       <method />
+    </configuration>
+    <configuration default="true" type="Applet" factoryName="Applet">
+      <module name="" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="HTML_FILE_NAME" />
+      <option name="HTML_USED" value="false" />
+      <option name="WIDTH" value="400" />
+      <option name="HEIGHT" value="300" />
+      <option name="POLICY_FILE" value="C:/Apps/java/JetBrains/JIdea/bin/appletviewer.policy" />
+      <option name="VM_PARAMETERS" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <method>
+        <option name="Make" enabled="false" />
+      </method>
     </configuration>
     <configuration default="true" type="TestNG" factoryName="TestNG">
       <module name="" />
@@ -948,21 +1478,6 @@
       <envs />
       <properties />
       <listeners />
-      <method>
-        <option name="Make" enabled="false" />
-      </method>
-    </configuration>
-    <configuration default="true" type="Applet" factoryName="Applet">
-      <module name="" />
-      <option name="MAIN_CLASS_NAME" />
-      <option name="HTML_FILE_NAME" />
-      <option name="HTML_USED" value="false" />
-      <option name="WIDTH" value="400" />
-      <option name="HEIGHT" value="300" />
-      <option name="POLICY_FILE" value="C:/Apps/java/JetBrains/JIdea/bin/appletviewer.policy" />
-      <option name="VM_PARAMETERS" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
       <method>
         <option name="Make" enabled="false" />
       </method>
@@ -2078,19 +2593,19 @@
       <item index="41" class="java.lang.String" itemvalue="JUnit.Issue423Test.testGetAllMp3" />
       <item index="42" class="java.lang.String" itemvalue="JUnit.Issue383Test.testIssue" />
       <item index="43" class="java.lang.String" itemvalue="JUnit.Issue450Test.testSaveUrl" />
-      <item index="44" class="java.lang.String" itemvalue="JUnit.Issue453Test" />
-      <item index="45" class="java.lang.String" itemvalue="JUnit.Issue454Test" />
-      <item index="46" class="java.lang.String" itemvalue="JUnit.MP3AudioHeaderTest.testReadV2L2" />
-      <item index="47" class="java.lang.String" itemvalue="JUnit.MP3AudioHeaderTest.testReadV2L3VbrOld" />
-      <item index="48" class="java.lang.String" itemvalue="JUnit.Issue383Test" />
+      <item index="44" class="java.lang.String" itemvalue="JUnit.Issue173Test" />
+      <item index="45" class="java.lang.String" itemvalue="JUnit.Issue173Test.testMp3ID3v23sGenresUsingGenericInterface" />
+      <item index="46" class="java.lang.String" itemvalue="JUnit.NewInterfaceTest.testNewInterfaceBasicReadandWriteID3v23" />
+      <item index="47" class="java.lang.String" itemvalue="JUnit.Issue444Test" />
+      <item index="48" class="java.lang.String" itemvalue="JUnit.Issue173Test.testMp3ID3v22sGenresUsingGenericInterface" />
     </list>
     <recent_temporary>
       <list size="5">
-        <item index="0" class="java.lang.String" itemvalue="JUnit.Issue383Test" />
-        <item index="1" class="java.lang.String" itemvalue="JUnit.MP3AudioHeaderTest.testReadV2L3VbrOld" />
-        <item index="2" class="java.lang.String" itemvalue="JUnit.MP3AudioHeaderTest.testReadV2L2" />
-        <item index="3" class="java.lang.String" itemvalue="JUnit.Issue454Test" />
-        <item index="4" class="java.lang.String" itemvalue="JUnit.Issue453Test" />
+        <item index="0" class="java.lang.String" itemvalue="JUnit.Issue173Test" />
+        <item index="1" class="java.lang.String" itemvalue="JUnit.Issue173Test.testMp3ID3v23sGenresUsingGenericInterface" />
+        <item index="2" class="java.lang.String" itemvalue="JUnit.Issue173Test.testMp3ID3v22sGenresUsingGenericInterface" />
+        <item index="3" class="java.lang.String" itemvalue="JUnit.Issue444Test" />
+        <item index="4" class="java.lang.String" itemvalue="JUnit.NewInterfaceTest.testNewInterfaceBasicReadandWriteID3v23" />
       </list>
     </recent_temporary>
   </component>
@@ -2293,7 +2808,19 @@
       <created>1361033340101</created>
       <updated>1361033340101</updated>
     </task>
-    <option name="localTasksCounter" value="26" />
+    <task id="LOCAL-00026" summary="JAUDIOTAGGER-173: Genre returned are not consistent when using generic functions, fixed for mp4s">
+      <created>1362577598130</created>
+      <updated>1362577598130</updated>
+    </task>
+    <task id="LOCAL-00027" summary="JAUDIOTAGGER-173:Fixed mp4 genre to hide the offset differenc eof one between id3 genres and Mp3 genres.&#10;Auto mapping of ids to genres and vice versa for ID3v24">
+      <created>1362588570100</created>
+      <updated>1362588570100</updated>
+    </task>
+    <task id="LOCAL-00028" summary="JAUDIOTAGGER-173:Supprot for RX and CV genres for ID3v24">
+      <created>1362589921100</created>
+      <updated>1362589921100</updated>
+    </task>
+    <option name="localTasksCounter" value="29" />
     <servers />
   </component>
   <component name="TodoView" selected-index="0">
@@ -2323,18 +2850,19 @@
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.12863535" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="JetGradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3958573" sideWeight="0.4904762" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.05398773" sideWeight="0.6565996" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3886926" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.40983605" sideWeight="0.23809524" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="5" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.09781358" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.18527043" sideWeight="0.49761903" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.15995397" sideWeight="0.49761903" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33221477" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.250306" sideWeight="0.7284235" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32925338" sideWeight="0.7652474" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.66442955" order="8" side_tool="true" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.23011015" sideWeight="0.6593786" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3406214" sideWeight="0.7577381" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.2888617" sideWeight="0.7491369" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.25086308" sideWeight="0.7577381" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="IDEtalk Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="IDEtalk" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
@@ -2344,12 +2872,11 @@
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="SVN Properties" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32915717" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.16110472" sideWeight="0.4904762" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Profile" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Web" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="EJB" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="CVS" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32893288" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Module Dependencies" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="CVS" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32893288" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Dependency Viewer" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Duplicates" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.08083141" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -2403,7 +2930,7 @@
     <option name="MAXIMUM_HISTORY_ROWS" value="1000" />
     <option name="FORCE_NON_EMPTY_COMMENT" value="false" />
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="false" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added testcases to highlight issue" />
+    <option name="LAST_COMMIT_MESSAGE" value="JAUDIOTAGGER-173:Fixed except when writing multiple genres to ID3v23 or ID3v22 it is nul seperating the values which it should not be, to solve this requires an awkward redesign such as a different FrameBodyTCON for ID3v23 to ID3v24 which we haven't had to do before so checking this 'working' version first." />
     <option name="MAKE_NEW_CHANGELIST_ACTIVE" value="true" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_FILES_UP_TO_DATE_BEFORE_COMMIT" value="false" />
@@ -2416,10 +2943,6 @@
     <option name="UPDATE_GROUP_BY_CHANGELIST" value="false" />
     <option name="SHOW_FILE_HISTORY_AS_TREE" value="true" />
     <option name="FILE_HISTORY_SPLITTER_PROPORTION" value="0.6585821" />
-    <MESSAGE value="#JAUDIOTAGGER-424:Disallow mutiple trkn,disk atoms" />
-    <MESSAGE value="#JAUDIOTAGGER-420:Demonstarte issue when field exists in v1 tag but not v2 tag" />
-    <MESSAGE value="#JAUDIOTAGGER-426:hasField() for UFID field not working" />
-    <MESSAGE value="#JAUDIOTAGGER-429:CreateDefaultTag() for Mp3s always creates a V24 Tag, should be able to configure it to create a V22 or V23 tag" />
     <MESSAGE value="Added documentation generation back into pom" />
     <MESSAGE value="#JAUDIOTAGGER-435:Conversion from v23 TRDA to v24 TDRC frame&#10;Also added missing default resettings to TagOptionSingleton" />
     <MESSAGE value="#JAUDIOTAGGER-397:Add support for disc subtitle and subtitle" />
@@ -2441,6 +2964,10 @@
     <MESSAGE value="." />
     <MESSAGE value="JAUDIOTAGGER-448:TreeMap problem, possibly related to Java 7" />
     <MESSAGE value="Added testcases to highlight issue" />
+    <MESSAGE value="JAUDIOTAGGER-173: Genre returned are not consistent when using generic functions, fixed for mp4s" />
+    <MESSAGE value="JAUDIOTAGGER-173:Fixed mp4 genre to hide the offset differenc eof one between id3 genres and Mp3 genres.&#10;Auto mapping of ids to genres and vice versa for ID3v24" />
+    <MESSAGE value="JAUDIOTAGGER-173:Supprot for RX and CV genres for ID3v24" />
+    <MESSAGE value="JAUDIOTAGGER-173:Fixed except when writing multiple genres to ID3v23 or ID3v22 it is nul seperating the values which it should not be, to solve this requires an awkward redesign such as a different FrameBodyTCON for ID3v23 to ID3v24 which we haven't had to do before so checking this 'working' version first." />
   </component>
   <component name="VssConfiguration">
     <option name="CLIENT_PATH" value="" />
@@ -2494,111 +3021,127 @@
     <option name="myLastEditedConfigurable" value="Default" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/srctest/org/jaudiotagger/issues/Issue178Test.java">
+    <entry file="file://$PROJECT_DIR$/srctest/org/jaudiotagger/issues/Issue411Test.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="15" column="13" selection-start="398" selection-end="398" vertical-scroll-proportion="0.0">
+        <state line="94" column="18" selection-start="3342" selection-end="3352" vertical-scroll-proportion="0.12">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/tag/id3/framebody/FrameBodyTXXX.java">
+    <entry file="jar://C:/Apps/Code/Java/jdk1.7.0_10/src.zip!/java/lang/String.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="117" column="11" selection-start="5280" selection-end="5280" vertical-scroll-proportion="0.0" />
+        <state line="2160" column="18" selection-start="85241" selection-end="85241" vertical-scroll-proportion="-6.56">
+          <folding>
+            <element signature="e#0#122710#0" expanded="false" />
+            <element signature="imports" expanded="false" />
+          </folding>
+        </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/tag/id3/ID3v23Frame.java">
+    <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/tag/Tag.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="468" column="16" selection-start="19461" selection-end="19461" vertical-scroll-proportion="-10.48" />
+        <state line="59" column="21" selection-start="2085" selection-end="2093" vertical-scroll-proportion="-6.72">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/tag/id3/valuepair/ID3V2ExtendedGenreTypes.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="11" column="4" selection-start="269" selection-end="269" vertical-scroll-proportion="-7.48">
+          <folding />
+        </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/srctest/org/jaudiotagger/issues/Issue444Test.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="20" column="13" selection-start="635" selection-end="635" vertical-scroll-proportion="0.0">
+        <state line="42" column="40" selection-start="1462" selection-end="1463" vertical-scroll-proportion="-19.72">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/srctest/org/jaudiotagger/issues/Issue452Test.java">
+    <entry file="file://$PROJECT_DIR$/srctest/org/jaudiotagger/tag/id3/NewInterfaceTest.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="16" column="13" selection-start="429" selection-end="429" vertical-scroll-proportion="0.0">
+        <state line="1260" column="15" selection-start="59471" selection-end="59471" vertical-scroll-proportion="-8.68">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/audio/mp3/MP3File.java">
+    <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/tag/id3/ID3v23Tag.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="561" column="25" selection-start="19782" selection-end="19796" vertical-scroll-proportion="0.0">
-          <folding />
+        <state line="1130" column="26" selection-start="36597" selection-end="37719" vertical-scroll-proportion="-13.32">
+          <folding>
+            <element signature="e#0#40705#0" expanded="true" />
+            <element signature="imports" expanded="true" />
+            <element signature="e#30272#30281#0" expanded="true" />
+            <element signature="e#40153#40161#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/srctest/org/jaudiotagger/issues/Issue453Test.java">
+    <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/tag/id3/ID3v22Tag.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="12" column="13" selection-start="259" selection-end="259" vertical-scroll-proportion="0.0">
-          <folding />
+        <state line="828" column="11" selection-start="27782" selection-end="27782" vertical-scroll-proportion="-8.08">
+          <folding>
+            <element signature="e#27235#27243#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/srctest/org/jaudiotagger/issues/Issue454Test.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="30" column="24" selection-start="969" selection-end="969" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/audio/mp3/MP3AudioHeader.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="476" column="46" selection-start="19447" selection-end="19447" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/audio/mp3/MPEGFrameHeader.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="762" column="15" selection-start="23298" selection-end="23298" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/srctest/org/jaudiotagger/issues/Issue383Test.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="12" column="13" selection-start="273" selection-end="273" vertical-scroll-proportion="-4.76">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/srctest/org/jaudiotagger/audio/mp3/MP3AudioHeaderTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="66" column="43" selection-start="2838" selection-end="2838" vertical-scroll-proportion="-29.24">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/srctest/org/jaudiotagger/issues/Issue446Test.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="47" column="27" selection-start="1572" selection-end="1572" vertical-scroll-proportion="-25.16">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/.ignore">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="118" column="87" selection-start="1537" selection-end="1537" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/jaudiotagger.ipr">
+    <entry file="file://$PROJECT_DIR$/target/test-classes/org/jaudiotagger/tag/id3/NewInterfaceTest.class">
       <provider selected="true" editor-type-id="text-editor">
         <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/jaudiotagger.iws">
+    <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/tag/id3/ID3v24Frames.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="27" column="58" selection-start="1333" selection-end="1333" vertical-scroll-proportion="0.56736714">
+        <state line="31" column="13" selection-start="1298" selection-end="1298" vertical-scroll-proportion="1.6">
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/tag/id3/ID3v22Frames.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="31" column="13" selection-start="1316" selection-end="1316" vertical-scroll-proportion="2.4">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/tag/id3/framebody/AbstractFrameBodyTextInfo.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="194" column="30" selection-start="6923" selection-end="6923" vertical-scroll-proportion="-14.88">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/tag/datatype/TextEncodedStringSizeTerminated.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="302" column="51" selection-start="10455" selection-end="10455" vertical-scroll-proportion="-198.56">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/tag/id3/framebody/FrameBodyTBPM.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="43" column="52" selection-start="1729" selection-end="1729" vertical-scroll-proportion="-13.48">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/tag/id3/framebody/FrameBodyTCON.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="68" column="13" selection-start="3116" selection-end="3116" vertical-scroll-proportion="87.8">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/srctest/org/jaudiotagger/issues/Issue173Test.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="279" column="96" selection-start="12958" selection-end="12958" vertical-scroll-proportion="0.23661485">
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
