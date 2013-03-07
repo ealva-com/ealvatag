@@ -283,11 +283,11 @@ public class MPEGFrameHeader
 
         samplesPerFrameV2Map.put(LAYER_I, 384);
         samplesPerFrameV2Map.put(LAYER_II, 1152);
-        samplesPerFrameV2Map.put(LAYER_III, 576);
+        samplesPerFrameV2Map.put(LAYER_III, 1152);
 
         samplesPerFrameV25Map.put(LAYER_I, 384);
         samplesPerFrameV25Map.put(LAYER_II, 1152);
-        samplesPerFrameV25Map.put(LAYER_III, 576);
+        samplesPerFrameV25Map.put(LAYER_III, 1152);
 
         samplesPerFrameMap.put(VERSION_1, samplesPerFrameV1Map);
         samplesPerFrameMap.put(VERSION_2, samplesPerFrameV2Map);

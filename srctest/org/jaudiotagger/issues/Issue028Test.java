@@ -40,7 +40,9 @@ public class Issue028Test extends AbstractTestCase
         }
         assertNull(exceptionCaught);
         assertEquals("22050", mp3AudioHeader.getSampleRate());
-        assertEquals("04:03", mp3AudioHeader.getTrackLengthAsString());
+        assertEquals("08:06", mp3AudioHeader.getTrackLengthAsString());
+        //TODO This is incorrect but same as Winamp, the correct value is 4:37 probably
+        //http://java.net/jira/browse/JAUDIOTAGGER-453
         assertFalse(mp3AudioHeader.isVariableBitRate());
         assertEquals(MPEGFrameHeader.mpegVersionMap.get(new Integer(MPEGFrameHeader.VERSION_2)), mp3AudioHeader.getMpegVersion());
         assertEquals(MPEGFrameHeader.mpegLayerMap.get(new Integer(MPEGFrameHeader.LAYER_III)), mp3AudioHeader.getMpegLayer());
