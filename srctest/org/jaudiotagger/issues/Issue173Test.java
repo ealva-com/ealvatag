@@ -23,6 +23,13 @@ public class Issue173Test extends AbstractTestCase
 {
     public void testMp4GenresUsingGenericInterface()
     {
+        File orig = new File("testdata", "01.m4a");
+        if (!orig.isFile())
+        {
+            System.err.println("Unable to test file - not available");
+            return;
+        }
+
         try
         {
             System.out.println(TagOptionSingleton.getInstance().isWriteMp4GenresAsText());
@@ -101,6 +108,13 @@ public class Issue173Test extends AbstractTestCase
 
     public void testMp4GenresUsingMp4Interface()
     {
+        File orig = new File("testdata", "01.m4a");
+        if (!orig.isFile())
+        {
+            System.err.println("Unable to test file - not available");
+            return;
+        }
+
         try
         {
             System.out.println(TagOptionSingleton.getInstance().isWriteMp4GenresAsText());
@@ -130,6 +144,13 @@ public class Issue173Test extends AbstractTestCase
 
     public void testMp4InvalidGenresUsingMp4Interface()
     {
+        File orig = new File("testdata", "01.m4a");
+        if (!orig.isFile())
+        {
+            System.err.println("Unable to test file - not available");
+            return;
+        }
+
         try
         {
             System.out.println(TagOptionSingleton.getInstance().isWriteMp4GenresAsText());
@@ -150,6 +171,13 @@ public class Issue173Test extends AbstractTestCase
 
     public void testMp3ID3v24sGenresUsingGenericInterface()
     {
+        File orig = new File("testdata", "01.mmp3");
+        if (!orig.isFile())
+        {
+            System.err.println("Unable to test file - not available");
+            return;
+        }
+
         try
         {
             TagOptionSingleton.getInstance().setID3V2Version(ID3V2Version.ID3_V24);
@@ -232,6 +260,13 @@ public class Issue173Test extends AbstractTestCase
 
     public void testMp3ID3v22sGenresUsingGenericInterface()
     {
+        File orig = new File("testdata", "01.mmp3");
+        if (!orig.isFile())
+        {
+            System.err.println("Unable to test file - not available");
+            return;
+        }
+
         Exception e=null;
         try
         {
@@ -309,6 +344,13 @@ public class Issue173Test extends AbstractTestCase
 
     public void testMp3ID3v23sGenresUsingGenericInterface()
     {
+        File orig = new File("testdata", "01.mmp3");
+        if (!orig.isFile())
+        {
+            System.err.println("Unable to test file - not available");
+            return;
+        }
+
         Exception e=null;
         try
         {
