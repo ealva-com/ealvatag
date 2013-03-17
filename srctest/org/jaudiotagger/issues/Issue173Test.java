@@ -171,7 +171,7 @@ public class Issue173Test extends AbstractTestCase
 
     public void testMp3ID3v24sGenresUsingGenericInterface()
     {
-        File orig = new File("testdata", "01.mmp3");
+        File orig = new File("testdata", "01.mp3");
         if (!orig.isFile())
         {
             System.err.println("Unable to test file - not available");
@@ -260,7 +260,7 @@ public class Issue173Test extends AbstractTestCase
 
     public void testMp3ID3v22sGenresUsingGenericInterface()
     {
-        File orig = new File("testdata", "01.mmp3");
+        File orig = new File("testdata", "01.mp3");
         if (!orig.isFile())
         {
             System.err.println("Unable to test file - not available");
@@ -344,7 +344,7 @@ public class Issue173Test extends AbstractTestCase
 
     public void testMp3ID3v23sGenresUsingGenericInterface()
     {
-        File orig = new File("testdata", "01.mmp3");
+        File orig = new File("testdata", "01.mp3");
         if (!orig.isFile())
         {
             System.err.println("Unable to test file - not available");
