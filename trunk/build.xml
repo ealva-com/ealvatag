@@ -1,0 +1,311 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project name="jaudiotagger" default="dist" basedir=".">
+  
+  	<!--property file, values in this file are used first -->
+  	<property file="./build.properties"/>
+  	
+  	<!-- Compiler options -->
+	<property name="compiler.debug" value="on"/>
+	<property name="compiler.generate.no.warnings" value="off"/>
+	<property name="compiler.args" value=""/>
+	<property name="compiler.max.memory" value="128m"/>
+	<property name="compiler.verbose" value="true"/>
+	
+	<!-- Ignore these always -->
+	<patternset id="ignored.files">
+	<exclude name="**/CVS/**"/>
+	<exclude name="**/SCCS/**"/>
+	<exclude name="**/RCS/**"/>
+	<exclude name="**/rcs/**"/>
+	<exclude name="**/.DS_Store/**"/>
+	<exclude name="**/.svn/**"/>
+	</patternset>
+	
+	<!-- Any non java files that we need to deploy -->
+	<patternset id="compiler.resources">
+	<include name="**/?*.properties"/>
+	<include name="**/?*.xml"/>
+	<include name="**/?*.html"/>
+	<include name="**/?*.dtd"/>
+	<include name="**/?*.tld"/>
+	<include name="**/?*.gif"/>
+	<include name="**/?*.png"/>
+	<include name="**/?*.jpeg"/>
+	<include name="**/?*.jpg"/>
+	</patternset>
+	
+
+	<!-- Have been using this version of java for compilation,could use to force javac compilation -->
+		
+	<!-- Output dirs -->
+	<property name="output.dir"         value="classes"/>
+	<property name="instrumented.dir"  value="instrumentedclasses"/>
+	<property name="testoutput.dir"     value="testclasses"/>
+	<property name="dist.dir"           value="dist"/>
+	<property name="web.dir"            value="www"/>
+	<property name="userjavadoc.dir"    value="www/javadoc"/>
+	<property name="devjavadoc.dir"     value="www/devjavadoc"/>	
+	<property name="lib.dir"            value="lib"/>
+	
+	<property name="jar.file"    value="${dist.dir}/jaudiotagger.jar"/>
+	<property name="jarsrc.file" value="${dist.dir}/jaudiotaggersrc.jar"/>
+	
+	<property name="junit.file"       value="${lib.dir}/junit.jar"/>
+	<property name="junitreport.dir"  value="junitreport"/>
+	<property name="coveragereport.dir"  value="coveragereport"/>
+	<property name="junitreport.testdata.dir"     value="testdata"/>
+	<property name="junitreport.testdatatmp.dir"  value="testdatatmp"/>
+	
+	<property name="src.dir"         value="src"/>
+	<property name="srctest.dir"     value="srctest"/>
+	
+	<property name="zip.file"                  value="jaudiotagger.zip"/>
+	<property name="release.zipprefix.file"    value="jaudiotagger${build.release}"/>	
+	<property name="release.file"              value="${release.zipprefix.file}.zip"/>
+	
+	<!-- Paths to be included in compilation bootclasspath -->	
+	<path id="bootclasspath">
+	</path>
+	
+	<!-- Additional classpath required in compilation  -->		
+	<path id="classpath">		
+	</path>	
+	
+	<!-- Ignore these in all compilations -->
+	<patternset id="excluded.from.compilation">
+		<patternset refid="ignored.files"/>
+	</patternset>	
+	
+	<!-- src directory relative to base -->
+	<path id="sourcepath">
+		<dirset dir="${basedir}">
+ 			<include name="src"/>			
+		</dirset>
+	</path>
+	
+	<!-- Additional classpath required in compilation  -->		
+	<path id="testclasspath">	
+		<dirset dir="${output.dir}">			
+		</dirset>		
+		<pathelement location="${junit.file}"/>		
+	</path>	
+	
+	<!-- Additional classpath required in compilation  -->		
+	<path id="runtestclasspath">	
+		<dirset dir="${testoutput.dir}">			
+		</dirset>
+		<dirset dir="${output.dir}">			
+		</dirset>			
+	</path>	
+	
+	<!-- src directory relative to base -->
+	<path id="testsourcepath">
+		<dirset dir="${basedir}">
+ 			<include name="srctest"/>			
+		</dirset>
+	</path>
+	
+	<property name="cobertura.dir" value="../cobertura" />
+	<path id="cobertura.classpath">
+	    <fileset dir="${cobertura.dir}">
+	        <include name="*.jar" />	        
+	    </fileset>
+	</path>
+
+<taskdef classpathref="cobertura.classpath" resource="tasks.properties" />
+
+	<!-- Clean -->
+	<target name="clean" description="Cleanup module">
+		<delete dir="${output.dir}"/>
+		<delete dir="${testoutput.dir}"/>
+		<delete dir="${junitreport.testdatatmp.dir}"/>
+		<delete dir="${junitreport.dir}"/>
+	</target>
+	
+	<target name="share" depends="dist" description="Copy the distribution to be used by another project">
+		<echo message="Copying to share dir" />
+		<copy file="${jar.file}" todir="${release.dir}"/>	
+		<copy file="${jarsrc.file}" todir="${release.dir}"/>	 	 
+	</target>
+	
+	<target name="build.release" depends="build.zip" description="Build new official release of the JAudiotagger Project">
+	  <zip destfile="../${release.file}">    
+	       <zipfileset src="../${zip.file}"  prefix="${release.zipprefix.file}"/>  
+	  </zip>		
+	</target>
+	
+	<target name="build.zip" description="Create simple zipfile of the JAudiotagger Project">	  
+		<zip destfile="../${zip.file}">
+    <zipfileset dir="${basedir}" excludes="${junitreport.testdata.dir}/**,releases/**,${output.dir}/**,${testoutput.dir}/**,${junitreport.testdatatmp.dir}/**,${junitreport.dir}/**"/>    
+  </zip>
+	</target>	
+	
+	
+
+
+	  
+	<target name="dist" depends="build.jar,build.jarsrc" description="Create distribution for use in another project"/>
+		
+
+	<target name="build.jar" depends="compile" description="Jar up the compiled production code jaudiotagger">
+		<echo message="Creating jaudiotagger.jar" />
+		<mkdir dir="${dist.dir}"/>
+		<jar jarfile="${jar.file}" update="false" basedir="${output.dir}">
+			<manifest>
+				<attribute name="Version" value="${build.release}" />
+			</manifest>
+		</jar>      	  
+	</target>
+
+	<target name="build.jarsrc" depends="compile" description="Jar up the jaudiotagger source code">
+		<echo message="Creating jaudiotaggersrc.jar" />
+		<jar jarfile="${jarsrc.file}" update="false" basedir="${basedir}/src" includes="org/jaudiotagger/**/*.java">
+			<manifest>
+				<attribute name="Version" value="${build.release}" />
+			</manifest>
+		</jar>
+	</target>
+	
+	<target name="compile" depends="compile.production,compile.tests,run.tests" description="Compile all jaudiotagger code"/>
+
+	<target name="compile.production" description="Compile production classes">
+	  
+		<!-- Recreate destination dir if missing -->
+		<mkdir dir="${output.dir}"/>
+		
+		<!-- Compile the source to be as 1.5-->
+		<javac destdir="${output.dir}"
+			verbose="${compiler.verbose}"
+			debug="${compiler.debug}"
+			nowarn="${compiler.generate.no.warnings}"
+			memoryMaximumSize="${compiler.max.memory}"
+			source="1.5"
+			encoding="UTF-8"
+			fork="true">
+			<compilerarg line="${compiler.args}"/>
+			<bootclasspath refid="bootclasspath"/>
+			<classpath refid="classpath"/>			
+			<src refid="sourcepath"/>
+		</javac>
+	
+		<!-- Copy over any non java resources -->
+		<copy todir="${output.dir}">
+			<fileset dir="${src.dir}">
+			<patternset refid="compiler.resources"/>
+			<type type="file"/>
+			</fileset>
+		</copy>
+		
+		<!--Delete old file -->
+		<delete file="cobertura.ser" />
+		
+		<!--Instrument the classes for code coverage -->
+		<cobertura-instrument todir="${instrumented.dir}">
+	    <ignore regex="org.apache.log4j.*" />
+	    <fileset dir="${output.dir}">
+	        <include name="**/*.class" />	        
+	    </fileset>	    
+    </cobertura-instrument>
+		
+		
+	</target>
+	
+	
+
+ 
+
+	<!-- Junit tests:for when we write some !-->
+	<target name="compile.tests" depends="compile.production" description="Compile test classes" unless="skip.tests">
+	
+	
+		<!-- Recreate destination dir if missing -->
+		<mkdir dir="${testoutput.dir}"/>
+		
+		<!-- Compile the source as 1.5 -->
+		<javac destdir="${testoutput.dir}"
+			verbose="${compiler.verbose}"
+			debug="${compiler.debug}"
+			nowarn="${compiler.generate.no.warnings}"
+			memoryMaximumSize="${compiler.max.memory}"
+			source="1.5"
+			encoding="UTF-8"
+			fork="true">
+			<compilerarg line="${compiler.args}"/>
+			<bootclasspath refid="bootclasspath"/>
+			<classpath refid="testclasspath"/>
+			<src refid="testsourcepath"/>
+		</javac>
+	
+		<!-- Copy over any non java resources -->
+		<copy todir="${testoutput.dir}">
+			<fileset dir="${srctest.dir}">
+			<patternset refid="compiler.resources"/>
+			<type type="file"/>
+			</fileset>
+		</copy>
+	</target>
+	
+	<target name="run.tests" depends="compile.tests" description="Run test cases" unless="skip.tests">
+		<mkdir dir="${junitreport.dir}"/>
+		<mkdir dir="${junitreport.testdatatmp.dir}"/>
+		<!-- forkmode="once" -->
+		<junit fork="yes" printsummary="true" showoutput="true">		
+			<classpath location="${instrumented.dir}" />	
+			<classpath refid="runtestclasspath"/>		
+			<classpath refid="cobertura.classpath" />
+			<batchtest  todir="${junitreport.dir}">
+				<formatter type="xml"/>				
+    				<fileset dir="${testoutput.dir}">
+    					<include name="**/*Test.class"/>      			
+    				</fileset>
+  			</batchtest>
+		</junit>
+		
+		<junitreport todir="${junitreport.dir}">
+  			<fileset dir="${junitreport.dir}">
+    				<include name="TEST-*.xml"/>
+			</fileset>
+  			<report format="frames" todir="${junitreport.dir}"/>
+		</junitreport>
+		
+		<cobertura-report format="html" destdir="${coveragereport.dir}" srcdir="${src.dir}" />
+	</target>
+	
+
+	
+	<!-- Build User Javadoc, public only -->
+	<target name="build.user.javadoc" description="Build Java User API Documentation, only public members are shown">  
+		<javadoc 
+		WindowTitle="Jaudiotagger User API ${build.release}"
+		Public="true"
+		packagenames="org.jaudiotagger.*"
+		maxmemory="128m" 
+		classpath="${classpath}" 		
+		sourcepath="${basedir}/src" 
+		destdir="${userjavadoc.dir}" 
+		use="true" 	 
+		Version="true">
+		<doctitle><![CDATA[<h1>Jaudiotagger User API ${build.release}</h1>]]></doctitle>
+		</javadoc>	
+	</target>
+	
+	<!-- Build complete Javadoc -->
+	<target name="build.dev.javadoc" description="Build Java Dev API Documentation, includes private package and protected members">  
+		<javadoc 
+		WindowTitle="Jaudiotagger Developer API ${build.release}"
+		Private="true"
+		packagenames="org.jaudiotagger.*"
+		maxmemory="128m" 
+		classpath="${classpath}" 		
+		sourcepath="${basedir}/src" 
+		destdir="${devjavadoc.dir}" 
+		use="true" 	 
+		Version="true">
+		<doctitle><![CDATA[<h1>Jaudiotagger Developer API ${build.release}</h1>]]></doctitle>
+		</javadoc>	
+	</target>
+	
+	<!-- Build all Javadoc -->
+	<target name="build.javadoc" depends="build.user.javadoc,build.dev.javadoc" description="Build user and Developer javaDoc">
+	</target>
+</project>
