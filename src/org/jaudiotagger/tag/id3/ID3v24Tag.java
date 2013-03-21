@@ -341,7 +341,7 @@ public class ID3v24Tag extends AbstractID3v2Tag
         {
             if (frame instanceof ID3v24Frame)
             {
-                 copyFrameIntoMap(frame.getIdentifier(),frame);
+                 copyFrameIntoMap(frame.getIdentifier(), frame);
             }
             else
             {
@@ -377,7 +377,6 @@ public class ID3v24Tag extends AbstractID3v2Tag
        @Override
        protected void copyFrameIntoMap(String id, AbstractID3v2Frame newFrame)
        {
-
            if (frameMap.containsKey(newFrame.getIdentifier()))
            {
                Object o = frameMap.get(newFrame.getIdentifier());
@@ -429,7 +428,7 @@ public class ID3v24Tag extends AbstractID3v2Tag
                        }
                        else
                        {
-                           //we just lose this frame, weve already got one with the correct id.
+                           //we just lose this frame, we have already got one with the correct id.
                            //TODO may want to store this somewhere
                            logger.warning("Found duplicate TDRC frame in invalid situation,discarding:" + newFrame.getIdentifier());
                        }

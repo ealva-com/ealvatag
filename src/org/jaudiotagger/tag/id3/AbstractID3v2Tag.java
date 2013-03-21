@@ -215,6 +215,13 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
             {
                 addFrame((AbstractID3v2Frame) o);
             }
+            else if(o instanceof TyerTdatAggregatedFrame )
+            {
+                for(AbstractID3v2Frame next:((TyerTdatAggregatedFrame)o).getFrames())
+                {
+                    addFrame(next);
+                }
+            }
             //MultiFrames
             else if (o instanceof ArrayList)
             {

@@ -160,25 +160,25 @@ public class Issue461Test extends AbstractTestCase
         ID3v23Tag v2Tag = new ID3v23Tag(v24Tag);
         //TODO shoudnt this be 2004-06-30 it is after save
         assertEquals("2004", v2Tag.getFirst(ID3v23FieldKey.YEAR));
-        mp3File.setID3v2Tag(v2Tag);
+        mp3File.setID3v2TagOnly(v2Tag);
         mp3File.save();
 
         mp3File = new MP3File(testFile);
         v2Tag = (ID3v23Tag)mp3File.getID3v2Tag();
         assertEquals("2004-06-30", v2Tag.getFirst(ID3v23FieldKey.YEAR));
-        v24Tag = (ID3v24Tag)mp3File.getID3v2TagAsv24();
-        /*assertEquals("2004-06-30", v24Tag.getFirst(FieldKey.YEAR));
+        //v24Tag = (ID3v24Tag)mp3File.getID3v2TagAsv24();
+        v24Tag = new ID3v24Tag(v2Tag);
+        Iterator<AbstractID3v2Frame>   i = v24Tag.iterator();
 
+        assertEquals("2004-06-30", v24Tag.getFirst(FieldKey.YEAR));
         TyerTdatAggregatedFrame frame = ((TyerTdatAggregatedFrame)v2Tag.getFrame("TYERTDAT"));
         assertNotNull(frame);
-        Set<AbstractID3v2Frame> frames =  frame.getFrames();
-        Iterator<AbstractID3v2Frame>   i = frames.iterator();
+        i = frame.getFrames().iterator();
         FrameBodyTYER      fbTyer    = ((FrameBodyTYER)i.next().getBody());
         assertEquals("2004", fbTyer.getText());
         FrameBodyTDAT      fbTdat    = ((FrameBodyTDAT)i.next().getBody());
         assertNotNull(fbTdat);
         assertEquals("3006", fbTdat.getText());
-        */
     }
 
     public void testV23MonthYearConversionFromV24() throws Exception
