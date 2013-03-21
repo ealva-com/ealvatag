@@ -293,7 +293,7 @@ public class FrameBodyTDRC extends AbstractFrameBodyTextInfo implements ID3v24Fr
         findMatchingMaskAndExtractV3Values();
     }
 
-    private void findMatchingMaskAndExtractV3Values()
+    public void findMatchingMaskAndExtractV3Values()
     {
         //Find the date format of the text
         for (int i = 0; i < formatters.size(); i++)

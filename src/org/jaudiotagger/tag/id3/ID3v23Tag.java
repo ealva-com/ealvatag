@@ -219,6 +219,7 @@ public class ID3v23Tag extends AbstractID3v2Tag
     protected void translateFrame(AbstractID3v2Frame frame)
     {
         FrameBodyTDRC tmpBody = (FrameBodyTDRC) frame.getBody();
+        tmpBody.findMatchingMaskAndExtractV3Values();
         ID3v23Frame newFrame;
         if (!tmpBody.getYear().equals(""))
         {

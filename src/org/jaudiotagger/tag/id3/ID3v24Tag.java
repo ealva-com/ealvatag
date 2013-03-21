@@ -335,7 +335,7 @@ public class ID3v24Tag extends AbstractID3v2Tag
         }
     }
 
-    protected void addFrame(AbstractID3v2Frame frame)
+    public void addFrame(AbstractID3v2Frame frame)
     {
         try
         {
