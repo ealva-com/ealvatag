@@ -223,7 +223,7 @@ public class AudioFile
                 logger.severe("Unable to write:" + file.getPath());
                 throw new ReadOnlyFileException(ErrorMessage.NO_PERMISSIONS_TO_WRITE_TO_FILE.getMsg(file.getPath()));
             }
-            newFile = new RandomAccessFile(file, "rws");
+            newFile = new RandomAccessFile(file, "rw");
         }
         return newFile;
     }

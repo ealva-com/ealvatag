@@ -48,7 +48,7 @@ import java.util.logging.Logger;
 public abstract class AudioFileWriter
 {
     private static final String TEMP_FILENAME_SUFFIX = ".tmp";
-    private static final String WRITE_MODE = "rws";
+    private static final String WRITE_MODE = "rw";
     private static final int MINIMUM_FILESIZE = 150;
 
     // Logger Object
