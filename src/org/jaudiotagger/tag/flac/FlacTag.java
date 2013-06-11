@@ -369,6 +369,10 @@ public class FlacTag implements Tag
 
     public TagField createArtworkField(byte[] imageData, int pictureType, String mimeType, String description, int width, int height, int colourDepth, int indexedColouredCount) throws FieldDataInvalidException
     {
+        if(imageData==null)
+        {
+            throw new FieldDataInvalidException("ImageData cannot be null");
+        }
         return new MetadataBlockDataPicture(imageData, pictureType, mimeType, description, width, height, colourDepth, indexedColouredCount);
     }
 
