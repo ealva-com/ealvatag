@@ -75,42 +75,46 @@ public class FlacTagReader
             }
             
             //Is it one containing some sort of metadata, therefore interested in it?
-            switch (mbh.getBlockType())
+
+            //JAUDIOTAGGER-466:CBlocktype can be null
+            if(mbh.getBlockType()!=null)
             {
-                //We got a vorbiscomment comment block, parse it
-                case VORBIS_COMMENT:
-                    byte[] commentHeaderRawPacket = new byte[mbh.getDataLength()];
-                    raf.read(commentHeaderRawPacket);
-                    tag = vorbisCommentReader.read(commentHeaderRawPacket, false);
-                    break;
+                switch (mbh.getBlockType())
+                {
+                    //We got a vorbiscomment comment block, parse it
+                    case VORBIS_COMMENT:
+                        byte[] commentHeaderRawPacket = new byte[mbh.getDataLength()];
+                        raf.read(commentHeaderRawPacket);
+                        tag = vorbisCommentReader.read(commentHeaderRawPacket, false);
+                        break;
 
-                case PICTURE:
-                    try
-                    {
-                        MetadataBlockDataPicture mbdp = new MetadataBlockDataPicture(mbh, raf);
-                        images.add(mbdp);
-                    }
-                    catch (IOException ioe)
-                    {
-                        logger.warning("Unable to read picture metablock, ignoring:" + ioe.getMessage());
-                    }
-                    catch (InvalidFrameException ive)
-                    {
-                        logger.warning("Unable to read picture metablock, ignoring" + ive.getMessage());
-                    }
+                    case PICTURE:
+                        try
+                        {
+                            MetadataBlockDataPicture mbdp = new MetadataBlockDataPicture(mbh, raf);
+                            images.add(mbdp);
+                        }
+                        catch (IOException ioe)
+                        {
+                            logger.warning("Unable to read picture metablock, ignoring:" + ioe.getMessage());
+                        }
+                        catch (InvalidFrameException ive)
+                        {
+                            logger.warning("Unable to read picture metablock, ignoring" + ive.getMessage());
+                        }
 
-                    break;
+                        break;
 
-                //This is not a metadata block we are interested in so we skip to next block
-                default:
-                    if(logger.isLoggable(Level.CONFIG))
-                    {
-                        logger.config("Ignoring MetadataBlock:"+mbh.getBlockType());
-                    }
-                    raf.seek(raf.getFilePointer() + mbh.getDataLength());
-                    break;
+                    //This is not a metadata block we are interested in so we skip to next block
+                    default:
+                        if(logger.isLoggable(Level.CONFIG))
+                        {
+                            logger.config("Ignoring MetadataBlock:"+mbh.getBlockType());
+                        }
+                        raf.seek(raf.getFilePointer() + mbh.getDataLength());
+                        break;
+                }
             }
-
             isLastBlock = mbh.isLastBlock();
             mbh = null;
         }

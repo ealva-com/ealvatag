@@ -61,6 +61,8 @@ public class FlacInfoReader
                 {
                     throw new CannotReadException("FLAC StreamInfo not valid");
                 }
+                //TODO We have found streaminfo so do we need to continue checking, effects bitrate calc which is correct
+                //break;
             }
             else
             {

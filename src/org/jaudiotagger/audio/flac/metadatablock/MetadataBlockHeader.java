@@ -18,6 +18,9 @@
  */
 package org.jaudiotagger.audio.flac.metadatablock;
 
+import org.jaudiotagger.audio.exceptions.CannotReadException;
+import org.jaudiotagger.logging.ErrorMessage;
+
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
@@ -43,7 +46,7 @@ public class MetadataBlockHeader
      * @return
      * @throws IOException
      */
-    public static MetadataBlockHeader readHeader(RandomAccessFile raf) throws IOException
+    public static MetadataBlockHeader readHeader(RandomAccessFile raf) throws CannotReadException, IOException
     {
         ByteBuffer rawdata = ByteBuffer.allocate(HEADER_LENGTH);
         int bytesRead = raf.getChannel().read(rawdata);
@@ -65,7 +68,7 @@ public class MetadataBlockHeader
      *
      * @param rawdata
      */
-    public MetadataBlockHeader(ByteBuffer rawdata)
+    public MetadataBlockHeader(ByteBuffer rawdata) throws CannotReadException
     {
         isLastBlock = ((rawdata.get(0) & 0x80) >>> 7) == 1;
 
@@ -73,17 +76,19 @@ public class MetadataBlockHeader
         if (type < BlockType.values().length)
         {
             blockType = BlockType.values()[type];
+            dataLength = (u(rawdata.get(1)) << 16) + (u(rawdata.get(2)) << 8) + (u(rawdata.get(3)));
+
+            bytes = new byte[HEADER_LENGTH];
+            for (int i = 0; i < HEADER_LENGTH; i++)
+            {
+                bytes[i] = rawdata.get(i);
+            }
         }
-
-
-        dataLength = (u(rawdata.get(1)) << 16) + (u(rawdata.get(2)) << 8) + (u(rawdata.get(3)));
-
-        bytes = new byte[HEADER_LENGTH];
-        for (int i = 0; i < HEADER_LENGTH; i++)
+        else
         {
-            bytes[i] = rawdata.get(i);
+            throw new CannotReadException(ErrorMessage.FLAC_NO_BLOCKTYPE.getMsg(type));
         }
-        }
+    }
 
     /**
      * Construct a new header in order to write metadatablock to file

@@ -96,52 +96,62 @@ public class FlacTagWriter
         boolean isLastBlock = false;
         while (!isLastBlock)
         {
-            MetadataBlockHeader mbh = MetadataBlockHeader.readHeader(raf);
-            switch (mbh.getBlockType())
+            try
             {
-                case STREAMINFO:
+                MetadataBlockHeader mbh = MetadataBlockHeader.readHeader(raf);
+                if(mbh.getBlockType()!=null)
                 {
-                	blockInfo.streamInfoBlock = new MetadataBlock(mbh,new MetadataBlockDataStreamInfo(mbh, raf));
-                    break;
-                }
+                    switch (mbh.getBlockType())
+                    {
+                        case STREAMINFO:
+                        {
+                            blockInfo.streamInfoBlock = new MetadataBlock(mbh,new MetadataBlockDataStreamInfo(mbh, raf));
+                            break;
+                        }
 
-                case VORBIS_COMMENT:
-                case PADDING:
-                case PICTURE:
-                {
-                    //All these will be replaced by the new metadata so we just treat as padding in order
-                    //to determine how much space is already allocated in the file
-                    raf.seek(raf.getFilePointer() + mbh.getDataLength());
-                    MetadataBlockData mbd = new MetadataBlockDataPadding(mbh.getDataLength());
-                    blockInfo.metadataBlockPadding.add(new MetadataBlock(mbh, mbd));
-                    break;
+                        case VORBIS_COMMENT:
+                        case PADDING:
+                        case PICTURE:
+                        {
+                            //All these will be replaced by the new metadata so we just treat as padding in order
+                            //to determine how much space is already allocated in the file
+                            raf.seek(raf.getFilePointer() + mbh.getDataLength());
+                            MetadataBlockData mbd = new MetadataBlockDataPadding(mbh.getDataLength());
+                            blockInfo.metadataBlockPadding.add(new MetadataBlock(mbh, mbd));
+                            break;
+                        }
+                        case APPLICATION:
+                        {
+                            MetadataBlockData mbd = new MetadataBlockDataApplication(mbh, raf);
+                            blockInfo.metadataBlockApplication.add(new MetadataBlock(mbh, mbd));
+                            break;
+                        }
+                        case SEEKTABLE:
+                        {
+                            MetadataBlockData mbd = new MetadataBlockDataSeekTable(mbh, raf);
+                            blockInfo.metadataBlockSeekTable.add(new MetadataBlock(mbh, mbd));
+                            break;
+                        }
+                        case CUESHEET:
+                        {
+                            MetadataBlockData mbd = new MetadataBlockDataCueSheet(mbh, raf);
+                            blockInfo.metadataBlockCueSheet.add(new MetadataBlock(mbh, mbd));
+                            break;
+                        }
+                        default:
+                        {
+                            //What are the consequences of doing this
+                            raf.seek(raf.getFilePointer() + mbh.getDataLength());
+                            break;
+                        }
+                    }
                 }
-                case APPLICATION:
-                {
-                    MetadataBlockData mbd = new MetadataBlockDataApplication(mbh, raf);
-                    blockInfo.metadataBlockApplication.add(new MetadataBlock(mbh, mbd));
-                    break;
-                }
-                case SEEKTABLE:
-                {
-                    MetadataBlockData mbd = new MetadataBlockDataSeekTable(mbh, raf);
-                    blockInfo.metadataBlockSeekTable.add(new MetadataBlock(mbh, mbd));
-                    break;
-                }
-                case CUESHEET:
-                {
-                    MetadataBlockData mbd = new MetadataBlockDataCueSheet(mbh, raf);
-                    blockInfo.metadataBlockCueSheet.add(new MetadataBlock(mbh, mbd));
-                    break;
-                }
-                default:
-                {
-                    //What are the consequences of doing this
-                    raf.seek(raf.getFilePointer() + mbh.getDataLength());
-                    break;
-                }
+                isLastBlock = mbh.isLastBlock();
             }
-            isLastBlock = mbh.isLastBlock();
+            catch(CannotReadException cre)
+            {
+                throw new CannotWriteException(cre.getMessage());
+            }
         }
 
         //Number of bytes in the existing file available before audio data
