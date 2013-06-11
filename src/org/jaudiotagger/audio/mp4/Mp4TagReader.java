@@ -181,8 +181,13 @@ public class Mp4TagReader
      */
     private void createMp4Field(Mp4Tag tag, Mp4BoxHeader header, ByteBuffer raw) throws UnsupportedEncodingException
     {
+        //Header with no data #JAUDIOTAGGER-463
+         if(header.getDataLength()==0)
+        {
+            //Just Ignore
+        }
         //Reverse Dns Atom
-        if (header.getId().equals(Mp4TagReverseDnsField.IDENTIFIER))
+        else if (header.getId().equals(Mp4TagReverseDnsField.IDENTIFIER))
         {
             //
             try
