@@ -45,7 +45,7 @@ public class MetadataBlockDataPicture implements MetadataBlockData, TagField
     public static final String IMAGE_IS_URL = "-->";
 
     private int pictureType;
-    private String mimeType;
+    private String mimeType ="";
     private String description;
     private int width;
     private int height;
@@ -145,7 +145,10 @@ public class MetadataBlockDataPicture implements MetadataBlockData, TagField
         this.pictureType = pictureType;
 
         //MimeType
-        this.mimeType = mimeType;
+        if(mimeType!=null)
+        {
+            this.mimeType = mimeType;
+        }
 
         //Description
         this.description = description;
