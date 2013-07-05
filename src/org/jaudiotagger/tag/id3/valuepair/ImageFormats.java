@@ -136,9 +136,10 @@ public class  ImageFormats
             return false;
         }
         //Read signature
-        //Can be FF D8 FF E0 or FF D8 FF E1
+        //Can be Can be FF D8 FF DB (samsung) , FF D8 FF E0 (standard) or FF D8 FF E1 or some other formats
+        //see http://www.garykessler.net/library/file_sigs.html
         //FF D8 is SOI Marker, FFE0 or FFE1 is JFIF Marker
-        return (0xff == (data[0] & 0xff)) && (0xd8 == (data[1] & 0xff)) && (0xff == (data[2] & 0xff)) && (0xe0 <= (data[3] & 0xff));
+        return (0xff == (data[0] & 0xff)) && (0xd8 == (data[1] & 0xff)) && (0xff == (data[2] & 0xff)) && (0xdb <= (data[3] & 0xff));
     }
 
     /**
