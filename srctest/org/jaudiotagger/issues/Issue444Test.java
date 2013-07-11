@@ -22,6 +22,7 @@ public class Issue444Test extends AbstractTestCase
 {
     public void testFullDateWrittenToID3v24()
     {
+
         try
         {
             TagOptionSingleton.getInstance().setID3V2Version(ID3V2Version.ID3_V24);
@@ -176,6 +177,13 @@ public class Issue444Test extends AbstractTestCase
 
     public void testDuplicates()
     {
+        File orig = new File("testdata", "test106.m43");
+        if (!orig.isFile())
+        {
+            System.err.println("Unable to test file - not available");
+            return;
+        }
+
         Exception e=null;
         try
         {

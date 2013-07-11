@@ -57,6 +57,13 @@ public class Issue446Test extends AbstractTestCase
 
     public void testWriteReplayGain() throws Exception
     {
+        File orig = new File("testdata", "test110.mp3");
+        if (!orig.isFile())
+        {
+            System.err.println("Unable to test file - not available");
+            return;
+        }
+
         File testFile = AbstractTestCase.copyAudioToTmp("test110.mp3");
         MP3File mp3File = new MP3File(testFile);
         ID3v23Tag v2Tag = (ID3v23Tag)mp3File.getID3v2Tag();
