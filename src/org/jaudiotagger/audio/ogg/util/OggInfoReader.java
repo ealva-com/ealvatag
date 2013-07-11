@@ -146,6 +146,11 @@ public class OggInfoReader
 
     private int computeBitrate(int length, long size)
     {
+        //Protect against audio less than 0.5 seconds that can be rounded to zero causing Arithmetic Exception
+        if(length==0)
+        {
+            length=1;
+        }
         return (int) ((size / 1000) * 8 / length);
     }
 }

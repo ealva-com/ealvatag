@@ -66,3 +66,4 @@ test113.mp3,no,453,mp3 MPEG1 Layer 3 with 32bitrate is inocrrectly calculating l
 test114.mp3,no,454,mp3 MPEG2 Layer 3 with 64bitrate is inocrrectly calculating length to be 2:18, (ITune scorrectly calculates as 4:37 ( double size)
 test115.flac,no,466,flac Flac with invalid blocktype
 test116.m4a,no,463,mp4 with invalid ????
+test117.ogg,no,472,very short ogg file (less than a second)
