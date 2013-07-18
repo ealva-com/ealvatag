@@ -22,18 +22,15 @@ import org.jaudiotagger.audio.generic.AbstractTag;
 import org.jaudiotagger.audio.mp4.atom.Mp4BoxHeader;
 import org.jaudiotagger.logging.ErrorMessage;
 import org.jaudiotagger.tag.*;
-import org.jaudiotagger.tag.id3.AbstractID3v2Frame;
-import org.jaudiotagger.tag.id3.framebody.FrameBodyTPOS;
-import org.jaudiotagger.tag.id3.framebody.FrameBodyTRCK;
 import org.jaudiotagger.tag.images.Artwork;
-import static org.jaudiotagger.tag.mp4.Mp4FieldKey.*;
-
 import org.jaudiotagger.tag.images.ArtworkFactory;
 import org.jaudiotagger.tag.mp4.field.*;
 
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
+
+import static org.jaudiotagger.tag.mp4.Mp4FieldKey.*;
 
 /**
  * A Logical representation of Mp4Tag, i.e the meta information stored in an Mp4 file underneath the
@@ -209,7 +206,15 @@ public class Mp4Tag extends AbstractTag
         List<TagField> list = getFields(mp4FieldKey.getFieldName());
         List<TagField> filteredList = new ArrayList<TagField>();
 
-        if(genericKey== FieldKey.GENRE)
+        if (genericKey==FieldKey.KEY)
+        {
+            if (list.size() == 0)
+            {
+                list = getFields(KEY_OLD.getFieldName());
+            }
+            return list;
+        }
+        else if(genericKey==FieldKey.GENRE)
         {
             if (list.size() == 0)
             {
@@ -409,7 +414,12 @@ public class Mp4Tag extends AbstractTag
         }
 
         String mp4FieldName = tagFieldToMp4Field.get(genericKey).getFieldName();
-        if (genericKey == FieldKey.TRACK)
+        if (genericKey == FieldKey.KEY)
+        {
+            deleteField(Mp4FieldKey.KEY_OLD);
+            deleteField(mp4FieldName);
+        }
+        else if (genericKey == FieldKey.TRACK)
         {
             String trackTotal = this.getFirst(FieldKey.TRACK_TOTAL);
             if(trackTotal.length()==0)

@@ -1,9 +1,10 @@
 package org.jaudiotagger.tag.mp4;
 
 import org.jaudiotagger.tag.mp4.field.Mp4FieldType;
-import static org.jaudiotagger.tag.mp4.field.Mp4FieldType.*;
 import org.jaudiotagger.tag.mp4.field.Mp4TagReverseDnsField;
 import org.jaudiotagger.tag.reference.Tagger;
+
+import static org.jaudiotagger.tag.mp4.field.Mp4FieldType.*;
 
 /**
  * Starting list of known mp4 metadata fields that follow the Parent,Data or ---,issuer,name,data
@@ -57,7 +58,8 @@ public enum Mp4FieldKey
     GROUPING("©grp",Mp4TagFieldSubType.TEXT, TEXT),
     ITUNES_NORM("com.apple.iTunes", "iTunNORM", TEXT),
     ITUNES_SMPB("com.apple.iTunes", "iTunSMPB", TEXT),
-    KEY("com.apple.iTunes", "KEY", TEXT, Tagger.JAIKOZ),
+    KEY_OLD("com.apple.iTunes", "KEY", TEXT, Tagger.JAIKOZ),
+    KEY("com.apple.iTunes", "initialkey", TEXT),
     KEYWORD("keyw",Mp4TagFieldSubType.TEXT, TEXT),
     LANGUAGE("com.apple.iTunes", "LANGUAGE", TEXT, Tagger.JAIKOZ),
     LYRICS("©lyr",Mp4TagFieldSubType.TEXT, TEXT),
