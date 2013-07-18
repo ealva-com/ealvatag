@@ -177,7 +177,7 @@ public class Issue444Test extends AbstractTestCase
 
     public void testDuplicates()
     {
-        File orig = new File("testdata", "test106.m43");
+        File orig = new File("testdata", "test106.mp3");
         if (!orig.isFile())
         {
             System.err.println("Unable to test file - not available");
