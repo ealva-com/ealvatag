@@ -31,6 +31,7 @@ public class MediaPlayerRating extends ID3Rating
                 break;
 
             case 1:
+                newValue=1;
                 break;
 
             case 2:
