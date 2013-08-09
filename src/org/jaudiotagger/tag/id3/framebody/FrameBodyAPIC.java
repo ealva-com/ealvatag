@@ -17,6 +17,7 @@ package org.jaudiotagger.tag.id3.framebody;
 
 import org.jaudiotagger.audio.generic.Utils;
 import org.jaudiotagger.tag.InvalidTagException;
+import org.jaudiotagger.tag.TagOptionSingleton;
 import org.jaudiotagger.tag.datatype.*;
 import org.jaudiotagger.tag.id3.ID3v24Frames;
 import org.jaudiotagger.tag.id3.valuepair.ImageFormats;
@@ -249,9 +250,20 @@ public class FrameBodyAPIC extends AbstractID3v2FrameBody implements ID3v24Frame
      */
     public void write(ByteArrayOutputStream tagBuffer)
     {
-        if (!((AbstractString) getObject(DataTypes.OBJ_DESCRIPTION)).canBeEncoded())
+        if(TagOptionSingleton.getInstance().isAPICDescriptionITunesCompatible())
         {
-            this.setTextEncoding(TextEncoding.UTF_16);
+            this.setTextEncoding(TextEncoding.ISO_8859_1);
+            if (!((AbstractString) getObject(DataTypes.OBJ_DESCRIPTION)).canBeEncoded())
+            {
+                setDescription("");
+            }
+        }
+        else
+        {
+            if (!((AbstractString) getObject(DataTypes.OBJ_DESCRIPTION)).canBeEncoded())
+            {
+                this.setTextEncoding(TextEncoding.UTF_16);
+            }
         }
         super.write(tagBuffer);
     }

@@ -259,6 +259,8 @@ public class TagOptionSingleton
      */
     private boolean isAndroid = false;
 
+    private boolean isAPICDescriptionITunesCompatible = false;
+
     /**
      * When you specify a field should be stored as UTF16 in ID3 this means write with BOM indicating whether
      * written as Little Endian or Big Endian, its defaults to little Endian
@@ -814,6 +816,7 @@ public class TagOptionSingleton
         resetTextEncodingForExistingFrames = false;
         truncateTextWithoutErrors = false;
         padNumbers = false;
+        isAPICDescriptionITunesCompatible=false;
         isAndroid = false;
         isEncodeUTF16BomAsLittleEndian = true;
         writeChunkSize=5000000;
@@ -1204,5 +1207,18 @@ public class TagOptionSingleton
     public void setPadNumberTotalLength(PadNumberOption padNumberTotalLength)
     {
         this.padNumberTotalLength = padNumberTotalLength;
+    }
+
+    /**
+     * Itunes expects APIC description to be encoded as ISO-8859-1 even if text encoding is set to 1 (UTF16)
+     */
+    public boolean isAPICDescriptionITunesCompatible()
+    {
+        return isAPICDescriptionITunesCompatible;
+    }
+
+    public void setAPICDescriptionITunesCompatible(boolean APICDescriptionITunesCompatible)
+    {
+        isAPICDescriptionITunesCompatible = APICDescriptionITunesCompatible;
     }
 }
