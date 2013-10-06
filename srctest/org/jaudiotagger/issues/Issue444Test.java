@@ -163,7 +163,7 @@ public class Issue444Test extends AbstractTestCase
             AudioFile af = AudioFileIO.read(testFile);
             af.getTagOrCreateAndSetDefault();
             af.getTag().setField(FieldKey.YEAR, "20");
-            assertEquals("", af.getTag().getFirst(FieldKey.YEAR));
+            assertEquals("0020", af.getTag().getFirst(FieldKey.YEAR));
             assertNull(((ID3v23Tag)af.getTag()).getFrame("TDRC"));
 
         }
@@ -171,8 +171,7 @@ public class Issue444Test extends AbstractTestCase
         {
             e=ex;    
         }
-        assertNotNull(e);
-        assertTrue(e instanceof FieldDataInvalidException);
+        assertNull(e);
     }
 
     public void testDuplicates()

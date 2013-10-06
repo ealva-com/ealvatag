@@ -1028,14 +1028,28 @@ public class ID3v23Tag extends AbstractID3v2Tag
         else if (genericKey == FieldKey.YEAR)
         {
 
-            if(value.length()<4)
+            if(value.length()==1)
             {
-                throw new FieldDataInvalidException();
+                AbstractID3v2Frame tyer = createFrame(ID3v23Frames.FRAME_ID_V3_TYER);
+                ((AbstractFrameBodyTextInfo) tyer.getBody()).setText("000" + value);
+                return tyer;
+            }
+            else if(value.length()==2)
+            {
+                AbstractID3v2Frame tyer = createFrame(ID3v23Frames.FRAME_ID_V3_TYER);
+                ((AbstractFrameBodyTextInfo) tyer.getBody()).setText("00" + value);
+                return tyer;
+            }
+            else if(value.length()==3)
+            {
+                AbstractID3v2Frame tyer = createFrame(ID3v23Frames.FRAME_ID_V3_TYER);
+                ((AbstractFrameBodyTextInfo) tyer.getBody()).setText("0" + value);
+                return tyer;
             }
             else if(value.length()==4)
             {
                 AbstractID3v2Frame tyer = createFrame(ID3v23Frames.FRAME_ID_V3_TYER);
-                ((AbstractFrameBodyTextInfo) tyer.getBody()).setText(value.substring(0, 4));
+                ((AbstractFrameBodyTextInfo) tyer.getBody()).setText(value);
                 return tyer;
             }
             else if(value.length()> 4)
