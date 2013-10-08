@@ -45,6 +45,7 @@ public class Issue298Test extends AbstractTestCase
             tag.setField(tag.createField(FieldKey.CUSTOM5,"custom5"));
             tag.setField(tag.createField(FieldKey.FBPM,"155.5"));
             tag.setField(tag.createField(FieldKey.MUSICBRAINZ_RELEASE_GROUP_ID,"c1f657ba-8177-3cbb-b84a-f62bc684a94e"));
+            tag.setField(tag.createField(FieldKey.MUSICBRAINZ_RELEASE_TRACK_ID,"c1f657ba-8177-3cbb-b84a-f62bc684a94f"));
             tag.setField(tag.createField(FieldKey.MUSICBRAINZ_WORK_ID,"0410c22a-0b2b-4793-9f18-5f1fab36338e"));
             tag.setField(tag.createField(FieldKey.OCCASION,"Occasion"));
             tag.setField(tag.createField(FieldKey.ORIGINAL_ALBUM,"original_album"));
@@ -63,6 +64,7 @@ public class Issue298Test extends AbstractTestCase
             assertEquals("custom5",af.getTag().getFirst(FieldKey.CUSTOM5));
             assertEquals("155.5",af.getTag().getFirst(FieldKey.FBPM));
             assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94e",af.getTag().getFirst(FieldKey.MUSICBRAINZ_RELEASE_GROUP_ID));
+            assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94f", af.getTag().getFirst(FieldKey.MUSICBRAINZ_RELEASE_TRACK_ID));
             assertEquals("0410c22a-0b2b-4793-9f18-5f1fab36338e",af.getTag().getFirst(FieldKey.MUSICBRAINZ_WORK_ID));
             assertEquals("Occasion",af.getTag().getFirst(FieldKey.OCCASION));
             assertEquals("original_album",af.getTag().getFirst(FieldKey.ORIGINAL_ALBUM));
@@ -90,6 +92,7 @@ public class Issue298Test extends AbstractTestCase
             assertEquals("custom5",af.getTag().getFirst(FieldKey.CUSTOM5));
             assertEquals("155.5",af.getTag().getFirst(FieldKey.FBPM));
             assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94e",af.getTag().getFirst(FieldKey.MUSICBRAINZ_RELEASE_GROUP_ID));
+            assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94f", af.getTag().getFirst(FieldKey.MUSICBRAINZ_RELEASE_TRACK_ID));
             assertEquals("0410c22a-0b2b-4793-9f18-5f1fab36338e",af.getTag().getFirst(FieldKey.MUSICBRAINZ_WORK_ID));
             assertEquals("Occasion",af.getTag().getFirst(FieldKey.OCCASION));
             assertEquals("original_album",af.getTag().getFirst(FieldKey.ORIGINAL_ALBUM));
@@ -174,6 +177,7 @@ public class Issue298Test extends AbstractTestCase
             tag.setField(tag.createField(FieldKey.CUSTOM5,"custom5"));
             tag.setField(tag.createField(FieldKey.FBPM,"155.5"));
             tag.setField(tag.createField(FieldKey.MUSICBRAINZ_RELEASE_GROUP_ID,"c1f657ba-8177-3cbb-b84a-f62bc684a94e"));
+            tag.setField(tag.createField(FieldKey.MUSICBRAINZ_RELEASE_TRACK_ID,"c1f657ba-8177-3cbb-b84a-f62bc684a94f"));
             tag.setField(tag.createField(FieldKey.MUSICBRAINZ_WORK_ID,"0410c22a-0b2b-4793-9f18-5f1fab36338e"));
             tag.setField(tag.createField(FieldKey.OCCASION,"Occasion"));
             tag.setField(tag.createField(FieldKey.ORIGINAL_ALBUM,"original_album"));
@@ -195,6 +199,7 @@ public class Issue298Test extends AbstractTestCase
             assertEquals("custom5",af.getTag().getFirst(FieldKey.CUSTOM5));
             assertEquals("155.5",af.getTag().getFirst(FieldKey.FBPM));
             assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94e",af.getTag().getFirst(FieldKey.MUSICBRAINZ_RELEASE_GROUP_ID));
+            assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94f", af.getTag().getFirst(FieldKey.MUSICBRAINZ_RELEASE_TRACK_ID));
             assertEquals("0410c22a-0b2b-4793-9f18-5f1fab36338e",af.getTag().getFirst(FieldKey.MUSICBRAINZ_WORK_ID));
             assertEquals("Occasion",af.getTag().getFirst(FieldKey.OCCASION));
             assertEquals("original_album",af.getTag().getFirst(FieldKey.ORIGINAL_ALBUM));
@@ -241,6 +246,7 @@ public class Issue298Test extends AbstractTestCase
             tag.setField(tag.createField(FieldKey.CUSTOM5,"custom5"));
             tag.setField(tag.createField(FieldKey.FBPM,"155.5"));
             tag.setField(tag.createField(FieldKey.MUSICBRAINZ_RELEASE_GROUP_ID,"c1f657ba-8177-3cbb-b84a-f62bc684a94e"));
+            tag.setField(tag.createField(FieldKey.MUSICBRAINZ_RELEASE_TRACK_ID,"c1f657ba-8177-3cbb-b84a-f62bc684a94f"));
             tag.setField(tag.createField(FieldKey.MUSICBRAINZ_WORK_ID,"0410c22a-0b2b-4793-9f18-5f1fab36338e"));
             tag.setField(tag.createField(FieldKey.OCCASION,"Occasion"));
             tag.setField(tag.createField(FieldKey.ORIGINAL_ALBUM,"original_album"));
@@ -261,6 +267,7 @@ public class Issue298Test extends AbstractTestCase
             assertEquals("custom5",af.getTag().getFirst(FieldKey.CUSTOM5));
             assertEquals("155.5",af.getTag().getFirst(FieldKey.FBPM));
             assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94e",af.getTag().getFirst(FieldKey.MUSICBRAINZ_RELEASE_GROUP_ID));
+            assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94f", af.getTag().getFirst(FieldKey.MUSICBRAINZ_RELEASE_TRACK_ID));
             assertEquals("0410c22a-0b2b-4793-9f18-5f1fab36338e",af.getTag().getFirst(FieldKey.MUSICBRAINZ_WORK_ID));
             assertEquals("Occasion",af.getTag().getFirst(FieldKey.OCCASION));
             assertEquals("original_album",af.getTag().getFirst(FieldKey.ORIGINAL_ALBUM));
@@ -303,6 +310,7 @@ public class Issue298Test extends AbstractTestCase
             tag.setField(tag.createField(FieldKey.CUSTOM5,"custom5"));
             tag.setField(tag.createField(FieldKey.FBPM,"155.5"));
             tag.setField(tag.createField(FieldKey.MUSICBRAINZ_RELEASE_GROUP_ID,"c1f657ba-8177-3cbb-b84a-f62bc684a94e"));
+            tag.setField(tag.createField(FieldKey.MUSICBRAINZ_RELEASE_TRACK_ID,"c1f657ba-8177-3cbb-b84a-f62bc684a94f"));
             tag.setField(tag.createField(FieldKey.MUSICBRAINZ_WORK_ID,"0410c22a-0b2b-4793-9f18-5f1fab36338e"));
             tag.setField(tag.createField(FieldKey.OCCASION,"Occasion"));
             tag.setField(tag.createField(FieldKey.ORIGINAL_ALBUM,"original_album"));
@@ -323,6 +331,7 @@ public class Issue298Test extends AbstractTestCase
             assertEquals("custom5",af.getTag().getFirst(FieldKey.CUSTOM5));
             assertEquals("155.5",af.getTag().getFirst(FieldKey.FBPM));
             assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94e",af.getTag().getFirst(FieldKey.MUSICBRAINZ_RELEASE_GROUP_ID));
+            assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94f", af.getTag().getFirst(FieldKey.MUSICBRAINZ_RELEASE_TRACK_ID));
             assertEquals("0410c22a-0b2b-4793-9f18-5f1fab36338e",af.getTag().getFirst(FieldKey.MUSICBRAINZ_WORK_ID));
             assertEquals("Occasion",af.getTag().getFirst(FieldKey.OCCASION));
             assertEquals("original_album",af.getTag().getFirst(FieldKey.ORIGINAL_ALBUM));
@@ -365,6 +374,7 @@ public class Issue298Test extends AbstractTestCase
             tag.setField(tag.createField(FieldKey.CUSTOM5,"custom5"));
             tag.setField(tag.createField(FieldKey.FBPM,"155.5"));
             tag.setField(tag.createField(FieldKey.MUSICBRAINZ_RELEASE_GROUP_ID,"c1f657ba-8177-3cbb-b84a-f62bc684a94e"));
+            tag.setField(tag.createField(FieldKey.MUSICBRAINZ_RELEASE_TRACK_ID,"c1f657ba-8177-3cbb-b84a-f62bc684a94f"));
             tag.setField(tag.createField(FieldKey.MUSICBRAINZ_WORK_ID,"0410c22a-0b2b-4793-9f18-5f1fab36338e"));
             tag.setField(tag.createField(FieldKey.OCCASION,"Occasion"));
             tag.setField(tag.createField(FieldKey.ORIGINAL_ALBUM,"original_album"));
@@ -385,6 +395,7 @@ public class Issue298Test extends AbstractTestCase
             assertEquals("custom5",af.getTag().getFirst(FieldKey.CUSTOM5));
             assertEquals("155.5",af.getTag().getFirst(FieldKey.FBPM));
             assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94e",af.getTag().getFirst(FieldKey.MUSICBRAINZ_RELEASE_GROUP_ID));
+            assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94f", af.getTag().getFirst(FieldKey.MUSICBRAINZ_RELEASE_TRACK_ID));
             assertEquals("0410c22a-0b2b-4793-9f18-5f1fab36338e",af.getTag().getFirst(FieldKey.MUSICBRAINZ_WORK_ID));
             assertEquals("Occasion",af.getTag().getFirst(FieldKey.OCCASION));
             assertEquals("original_album",af.getTag().getFirst(FieldKey.ORIGINAL_ALBUM));
@@ -429,6 +440,7 @@ public class Issue298Test extends AbstractTestCase
             tag.setField(tag.createField(FieldKey.CUSTOM5,"custom5"));
             tag.setField(tag.createField(FieldKey.FBPM,"155.5"));
             tag.setField(tag.createField(FieldKey.MUSICBRAINZ_RELEASE_GROUP_ID,"c1f657ba-8177-3cbb-b84a-f62bc684a94e"));
+            tag.setField(tag.createField(FieldKey.MUSICBRAINZ_RELEASE_TRACK_ID,"c1f657ba-8177-3cbb-b84a-f62bc684a94f"));
             tag.setField(tag.createField(FieldKey.MUSICBRAINZ_WORK_ID,"0410c22a-0b2b-4793-9f18-5f1fab36338e"));
             tag.setField(tag.createField(FieldKey.OCCASION,"Occasion"));
             tag.setField(tag.createField(FieldKey.ORIGINAL_ALBUM,"original_album"));
@@ -449,6 +461,7 @@ public class Issue298Test extends AbstractTestCase
             assertEquals("custom5",af.getTag().getFirst(FieldKey.CUSTOM5));
             assertEquals("155.5",af.getTag().getFirst(FieldKey.FBPM));
             assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94e",af.getTag().getFirst(FieldKey.MUSICBRAINZ_RELEASE_GROUP_ID));
+            assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94f", af.getTag().getFirst(FieldKey.MUSICBRAINZ_RELEASE_TRACK_ID));
             assertEquals("0410c22a-0b2b-4793-9f18-5f1fab36338e",af.getTag().getFirst(FieldKey.MUSICBRAINZ_WORK_ID));
             assertEquals("Occasion",af.getTag().getFirst(FieldKey.OCCASION));
             assertEquals("original_album",af.getTag().getFirst(FieldKey.ORIGINAL_ALBUM));
@@ -491,6 +504,8 @@ public class Issue298Test extends AbstractTestCase
             tag.setField(tag.createField(FieldKey.CUSTOM5,"custom5"));
             tag.setField(tag.createField(FieldKey.FBPM,"155.5"));
             tag.setField(tag.createField(FieldKey.MUSICBRAINZ_RELEASE_GROUP_ID,"c1f657ba-8177-3cbb-b84a-f62bc684a94e"));
+
+            tag.setField(tag.createField(FieldKey.MUSICBRAINZ_RELEASE_TRACK_ID,"c1f657ba-8177-3cbb-b84a-f62bc684a94f"));
             tag.setField(tag.createField(FieldKey.MUSICBRAINZ_WORK_ID,"0410c22a-0b2b-4793-9f18-5f1fab36338e"));
             tag.setField(tag.createField(FieldKey.OCCASION,"Occasion"));
             tag.setField(tag.createField(FieldKey.ORIGINAL_ALBUM,"original_album"));
@@ -511,6 +526,7 @@ public class Issue298Test extends AbstractTestCase
             assertEquals("custom5",af.getTag().getFirst(FieldKey.CUSTOM5));
             assertEquals("155.5",af.getTag().getFirst(FieldKey.FBPM));
             assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94e",af.getTag().getFirst(FieldKey.MUSICBRAINZ_RELEASE_GROUP_ID));
+            assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94f", af.getTag().getFirst(FieldKey.MUSICBRAINZ_RELEASE_TRACK_ID));
             assertEquals("0410c22a-0b2b-4793-9f18-5f1fab36338e",af.getTag().getFirst(FieldKey.MUSICBRAINZ_WORK_ID));
             assertEquals("Occasion",af.getTag().getFirst(FieldKey.OCCASION));
             assertEquals("original_album",af.getTag().getFirst(FieldKey.ORIGINAL_ALBUM));
