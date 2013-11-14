@@ -58,10 +58,15 @@ public class DataTypes
      *
      */
     public static final String OBJ_ID3V2_FRAME_DESCRIPTION = "ID3v2FrameDescription";
-    /**
-     *
-     */
+
+    //ETCO Frame
     public static final String OBJ_TYPE_OF_EVENT = "TypeOfEvent";
+    public static final String OBJ_TIMED_EVENT = "TimedEvent";
+    public static final String OBJ_TIMED_EVENT_LIST = "TimedEventList";
+    //SYTC Frame
+    public static final String OBJ_SYNCHRONISED_TEMPO_DATA = "SynchronisedTempoData";
+    public static final String OBJ_SYNCHRONISED_TEMPO = "SynchronisedTempo";
+    public static final String OBJ_SYNCHRONISED_TEMPO_LIST = "SynchronisedTempoList";
     /**
      *
      */

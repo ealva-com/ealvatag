@@ -26,7 +26,9 @@ import org.jaudiotagger.audio.mp3.MP3File;
 import org.jaudiotagger.tag.InvalidDataTypeException;
 import org.jaudiotagger.tag.id3.AbstractTagFrameBody;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.logging.Logger;
 
 /**
@@ -186,6 +188,14 @@ public abstract class AbstractDataType
         else if (copyObject.value instanceof Object[])
         {
             this.value = ((Object[]) copyObject.value).clone();
+        }
+        else if (copyObject.value instanceof ArrayList)
+        {
+            this.value = ((ArrayList) copyObject.value).clone();
+        }
+        else if (copyObject.value instanceof LinkedList)
+        {
+            this.value = ((LinkedList) copyObject.value).clone();
         }
         else
         {
