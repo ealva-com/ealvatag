@@ -121,7 +121,23 @@ public class ID3v22PreferredFrameOrderComparator implements Comparator<String>
     public int compare(String frameId1,String frameId2)
     {
         int frameId1Index= frameIdsInPreferredOrder.indexOf(frameId1);
+        if(frameId1Index==-1)
+        {
+            frameId1Index=Integer.MAX_VALUE;
+        }
         int frameId2Index= frameIdsInPreferredOrder.indexOf(frameId2);
+
+        //Because othwerwise returns -1 whihc would be tags in list went to top of list
+        if(frameId2Index==-1)
+        {
+            frameId2Index=Integer.MAX_VALUE;
+        }
+
+        //To have determinable ordering AND because if returns equal Treese considers as equal
+        if(frameId1Index==frameId2Index)
+        {
+            return frameId1.compareTo(frameId2);
+        }
         return frameId1Index - frameId2Index;
     }
 
