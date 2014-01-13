@@ -16,6 +16,13 @@ public class Issue478Test extends AbstractTestCase
 {
     public void testKeepPodcastTags() throws Exception
     {
+        File orig = new File("testdata", "test115.mp3");
+        if (!orig.isFile())
+        {
+            System.err.println("Unable to test file - not available");
+            return;
+        }
+
         Exception ex=null;
         try
         {
