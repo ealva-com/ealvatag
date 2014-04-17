@@ -217,7 +217,6 @@ public class TCONString extends TextEncodedStringSizeTerminated
      */
     public String getValueAtIndex(int index)
     {
-        System.out.println("GetValueAtIndex");
         //Split String into separate components
         List values = getValues();
         return (String) values.get(index);
