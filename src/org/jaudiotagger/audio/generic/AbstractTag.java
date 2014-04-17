@@ -58,9 +58,6 @@ public abstract class AbstractTag implements Tag
         {
             return;
         }
-
-
-        System.out.println(field.getId()+":"+field);
         List<TagField> list = fields.get(field.getId());
 
         // There was no previous item
