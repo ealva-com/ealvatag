@@ -137,8 +137,15 @@ abstract public class AbstractID3v1Tag extends AbstractID3Tag
         byteBuffer.rewind();
         if (AbstractID3v1Tag.seekForV1OrV11Tag(byteBuffer))
         {
-            logger.config("Deleted ID3v1 tag");
-            file.setLength(file.length() - TAG_LENGTH);
+            try
+            {
+                logger.config("Deleted ID3v1 tag");
+                file.setLength(file.length() - TAG_LENGTH);
+            }
+            catch(IOException ex)
+            {
+                logger.severe("Unable to delete existing ID3v1 Tag:"+ex.getMessage());
+            }
         }
         else
         {
