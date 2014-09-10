@@ -78,8 +78,7 @@ public class ID3Chunk extends Chunk {
     
     /**
      * @param rawdata
-     * @param isFramingBit
-     * @return logical representation of VorbisCommentTag
+     *
      * @throws IOException
      * @throws CannotReadException
      */

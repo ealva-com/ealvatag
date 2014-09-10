@@ -18,16 +18,16 @@ import java.nio.ByteBuffer;
 
 /**
  * Represents reverse dns field, used for custom information
- * <p/>
+ *
  * <p>Originally only used by Itunes for information that was iTunes specific but now used in a wide range of uses,
  * for example Musicbrainz uses it for many of its fields.
- * <p/>
+ *
  * These fields have a more complex setup
  * Box ----  shows this is a reverse dns metadata field
  * Box mean  the issuer in the form of reverse DNS domain (e.g com.apple.iTunes)
  * Box name  descriptor identifying the type of contents
  * Box data  contents
- * <p/>
+ *
  * The raw data passed starts from the mean box
  */
 public class Mp4TagReverseDnsField extends Mp4TagField implements TagTextField

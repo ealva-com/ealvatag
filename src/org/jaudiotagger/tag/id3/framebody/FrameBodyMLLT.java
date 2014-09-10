@@ -21,8 +21,8 @@ import org.jaudiotagger.tag.id3.ID3v24Frames;
 
 /**
  * MPEG location lookup table frame.
- * <p/>
- * <p/>
+ *
+ *
  * To increase performance and accuracy of jumps within a MPEG
  * audio file, frames with timecodes in different locations in the file
  * might be useful. The ID3v2 frame includes references that the
@@ -33,7 +33,7 @@ import org.jaudiotagger.tag.id3.ID3v24Frames;
  * frame, the 3rd reference the 6th frame etc. In a similar way the
  * 'bytes between reference' and 'milliseconds between reference' points
  * out bytes and milliseconds respectively.
- * </p><p>
+ * <p>
  * Each reference consists of two parts; a certain number of bits, as
  * defined in 'bits for bytes deviation', that describes the difference
  * between what is said in 'bytes between reference' and the reality and
@@ -43,20 +43,20 @@ import org.jaudiotagger.tag.id3.ID3v24Frames;
  * in every reference, i.e. 'bits for bytes deviation'+'bits for
  * milliseconds deviation', must be a multiple of four. There may only
  * be one "MLLT" frame in each tag.
- * </p><p><table border=0 width="70%">
+ * <p><table border=0 width="70%">
  * <tr><td colspan=2> &lt;Header for 'Location lookup table', ID: "MLLT"&gt;</td></tr>
  * <tr><td nowrap>MPEG frames between reference</td><td width="80%">$xx xx</td></tr>
  * <tr><td>Bytes between reference</td><td>$xx xx xx</td></tr>
  * <tr><td>Milliseconds between reference</td><td>$xx xx xx</td></tr>
  * <tr><td>Bits for bytes deviation</td><td>$xx</td></tr>
  * <tr><td>Bits for milliseconds dev.</td><td>$xx</td></tr>
- * </table></p><p>
+ * </table><p>
  * Then for every reference the following data is included;
- * </p><p><table border=0 width="70%">
+ * <p><table border=0 width="70%">
  * <tr><td>Deviation in bytes</td><td width="80%">%xxx....</td></tr>
  * <tr><td>Deviation in milliseconds</td><td>%xxx....</td></tr>
- * </table></p>
- * <p/>
+ * </table>
+ *
  * <p>For more details, please refer to the ID3 specifications:
  * <ul>
  * <li><a href="http://www.id3.org/id3v2.3.0.txt">ID3 v2.3.0 Spec</a>

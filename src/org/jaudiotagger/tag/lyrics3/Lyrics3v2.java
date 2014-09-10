@@ -120,7 +120,6 @@ public class Lyrics3v2 extends AbstractLyrics3
     /**
      * Creates a new Lyrics3v2 datatype.
      *
-     * @param file
      * @throws TagNotFoundException
      * @throws IOException
      * @param byteBuffer

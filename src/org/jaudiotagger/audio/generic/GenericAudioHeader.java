@@ -226,7 +226,7 @@ public class GenericAudioHeader implements AudioHeader
     }
     
     /**
-     * @returns The number of bits per sample
+     * @return The number of bits per sample
      */
     public int getBitsPerSample()
     {

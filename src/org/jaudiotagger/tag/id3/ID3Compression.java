@@ -11,9 +11,9 @@ import java.util.zip.Inflater;
 
 /**
  * compresses frame data
- * <p/>
+ *
  * Is currently required for V23Frames and V24Frames
- * <p/>
+ *
  */
 //TODO also need to support compress framedata
 public class ID3Compression

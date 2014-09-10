@@ -23,7 +23,7 @@ import java.nio.ByteBuffer;
 /**
  * Payment URL link frames.
  * <p>The 'Payment' frame is a URL pointing at a webpage that will handle the process of paying for this file.
- * <p/>
+ *
  * <p>For more details, please refer to the ID3 specifications:
  * <ul>
  * <li><a href="http://www.id3.org/id3v2.3.0.txt">ID3 v2.3.0 Spec</a>

@@ -32,7 +32,7 @@ import java.nio.ByteBuffer;
 /**
  * <p>The 'Tagging time' frame contains a timestamp describing then the
  *  audio was tagged. Timestamp format is described in the ID3v2
- *  structure document </p>
+ *  structure document
  */
 public class FrameBodyTDTG extends AbstractFrameBodyTextInfo implements ID3v24FrameBody
 {

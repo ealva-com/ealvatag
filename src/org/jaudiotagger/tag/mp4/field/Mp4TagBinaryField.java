@@ -28,7 +28,7 @@ import java.nio.ByteBuffer;
 
 /**
  * Represents binary data
- * <p/>
+ *
  * <p>Subclassed by cover art field,
  * TODO unaware of any other binary fields at the moment
  */

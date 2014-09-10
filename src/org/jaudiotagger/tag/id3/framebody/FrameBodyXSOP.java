@@ -7,7 +7,7 @@ import java.nio.ByteBuffer;
 
 /**
  * Artist Sort name, this is what MusicBrainz uses in ID3v23 because TSOP not supported.
- * <p/>
+ *
  * However iTunes uses TSOP even in ID3v23, so we have two possible options
  */
 public class FrameBodyXSOP extends AbstractFrameBodyTextInfo implements ID3v23FrameBody

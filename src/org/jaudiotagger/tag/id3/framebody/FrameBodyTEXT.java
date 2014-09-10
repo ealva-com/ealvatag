@@ -23,7 +23,7 @@ import java.nio.ByteBuffer;
 /**
  * Lyricist/Text writer Text information frame.
  * <p>The 'Lyricist(s)/Text writer(s)' frame is intended for the writer(s) of the text or lyrics in the recording. They are seperated with the "/" character.
- * <p/>
+ *
  * <p>For more details, please refer to the ID3 specifications:
  * <ul>
  * <li><a href="http://www.id3.org/id3v2.3.0.txt">ID3 v2.3.0 Spec</a>

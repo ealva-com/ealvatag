@@ -14,7 +14,7 @@ import java.util.logging.Logger;
 
 /**
  * Flac Stream
- * <p/>
+ *
  * Reader files and identifies if this is in fact a flac stream
  */
 public class FlacStreamReader

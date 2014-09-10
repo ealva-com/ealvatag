@@ -107,7 +107,7 @@ public class ID3v22Frame extends AbstractID3v2Frame
 
     /**
      * Creates a new ID3v22 Frame of type identifier.
-     * <p/>
+     *
      * An empty body of the correct type will be automatically created. This constructor should be used when wish to
      * create a new frame from scratch using user values
      * @param identifier
@@ -179,7 +179,7 @@ public class ID3v22Frame extends AbstractID3v2Frame
 
     /**
      * Copy Constructor
-     * <p/>
+     *
      * Creates a new v22 frame based on another v22 frame
      * @param frame
      */
@@ -416,7 +416,6 @@ public class ID3v22Frame extends AbstractID3v2Frame
     /**
      * Write Frame raw data
      *
-     * @throws IOException
      */
     public void write(ByteArrayOutputStream tagBuffer)
     {

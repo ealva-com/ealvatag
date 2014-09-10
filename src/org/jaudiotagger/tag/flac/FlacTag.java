@@ -18,8 +18,8 @@ import java.util.List;
 
 /**
  * Flac uses Vorbis Comment for most of its metadata and a Flac Picture Block for images
- * <p/>
- * <p/>
+ *
+ *
  * This class enscapulates the items into a single tag
  */
 public class FlacTag implements Tag
@@ -112,7 +112,7 @@ public class FlacTag implements Tag
 
     /**
      * Determines whether the tag has no fields specified.<br>
-     * <p/>
+     *
      * <p>If there are no images we return empty if either there is no VorbisTag or if there is a
      * VorbisTag but it is empty
      *
@@ -217,7 +217,7 @@ public class FlacTag implements Tag
 
     /**
      * Create Tag Field using ogg key
-     * <p/>
+     *
      * This method is provided to allow you to create key of any value because VorbisComment allows
      * arbitary keys.
      *

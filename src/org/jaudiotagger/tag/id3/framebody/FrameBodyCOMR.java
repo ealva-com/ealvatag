@@ -26,8 +26,8 @@ import java.nio.ByteBuffer;
 
 /**
  * Commercial frame.
- * <p/>
- * <p/>
+ *
+ *
  * This frame enables several competing offers in the same tag by
  * bundling all needed information. That makes this frame rather complex
  * but it's an easier solution than if one tries to achieve the same
@@ -38,13 +38,13 @@ import java.nio.ByteBuffer;
  * numerical value where "." is used as decimal seperator. In the price
  * string several prices may be concatenated, seperated by a "/"
  * character, but there may only be one currency of each type.
- * </p><p>
+ * <p>
  * The price string is followed by an 8 character date string in the
  * format YYYYMMDD, describing for how long the price is valid. After
  * that is a contact URL, with which the user can contact the seller,
  * followed by a one byte 'received as' field. It describes how the
  * audio is delivered when bought according to the following list:
- * </p><p><table border=0 width="70%">
+ * <p><table border=0 width="70%">
  * <tr><td>$00 </td><td>Other                                      </td></tr>
  * <tr><td>$01 </td><td>Standard CD album with other songs         </td></tr>
  * <tr><td>$02 </td><td>Compressed audio on CD                     </td></tr>
@@ -54,7 +54,7 @@ import java.nio.ByteBuffer;
  * <tr><td>$06 </td><td>As note sheets in a book with other sheets </td></tr>
  * <tr><td>$07 </td><td>Music on other media                       </td></tr>
  * <tr><td>$08 </td><td>Non-musical merchandise                    </td></tr>
- * </table></p><p>
+ * </table><p>
  * Next follows a terminated string with the name of the seller followed
  * by a terminated string with a short description of the product. The
  * last thing is the ability to include a company logotype. The first of
@@ -64,7 +64,7 @@ import java.nio.ByteBuffer;
  * and "image/jpeg" are allowed. This format string is followed by the
  * binary picture data. This two last fields may be omitted if no
  * picture is to attach.
- * </p><p><table border=0 width="70%">
+ * <p><table border=0 width="70%">
  * <tr><td colspan=2> &lt;Header for 'Commercial frame', ID: "COMR"&gt;</td></tr>
  * <tr><td>Text encoding </td><td>$xx                             </td></tr>
  * <tr><td>Price string  </td><td>&lt;text string&gt; $00         </td></tr>
@@ -75,8 +75,8 @@ import java.nio.ByteBuffer;
  * <tr><td>Description   </td><td>&lt;text string according to encoding&gt; $00 (00)</td></tr>
  * <tr><td>Picture MIME type</td><td>&lt;string&gt; $00           </td></tr>
  * <tr><td>Seller logo   </td><td>&lt;binary data&gt;             </td></tr>
- * </table></p>
- * <p/>
+ * </table>
+ *
  * <p>For more details, please refer to the ID3 specifications:
  * <ul>
  * <li><a href="http://www.id3.org/id3v2.3.0.txt">ID3 v2.3.0 Spec</a>

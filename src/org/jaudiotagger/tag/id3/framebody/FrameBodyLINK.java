@@ -26,8 +26,8 @@ import java.nio.ByteBuffer;
 
 /**
  * Linked information frame.
- * <p/>
- * <p/>
+ *
+ *
  * To keep space waste as low as possible this frame may be used to link
  * information from another ID3v2 tag that might reside in another audio
  * file or alone in a binary file. It is recommended that this method is
@@ -42,25 +42,25 @@ import java.nio.ByteBuffer;
  * part of the tag and has the same restrictions as if it was a physical
  * part of the tag (i.e. only one "RVRB" frame allowed, whether it's
  * linked or not).
- * </p><p><table border=0 width="70%">
+ * <p><table border=0 width="70%">
  * <tr><td>&lt;Header for 'Linked information', ID: "LINK"&gt;   </td></tr>
  * <tr><td>Frame identifier      </td><td>$xx xx xx              </td></tr>
  * <tr><td>URL                   </td><td>&lt;text string&gt; $00</td></tr>
  * <tr><td>ID and additional data</td><td>&lt;text string(s)&gt; </td></tr>
- * </table></p>
- * <p/>
+ * </table>
+ *
  * Frames that may be linked and need no additional data are "IPLS",
  * "MCID", "ETCO", "MLLT", "SYTC", "RVAD", "EQUA", "RVRB", "RBUF", the
  * text information frames and the URL link frames.
- * </p><p>
+ * <p>
  * The "TXXX", "APIC", "GEOB" and "AENC" frames may be linked with
  * the content descriptor as additional ID data.
- * </p><p>
+ * <p>
  * The "COMM", "SYLT" and "USLT" frames may be linked with three bytes
  * of language descriptor directly followed by a content descriptor as
  * additional ID data.
- * </p>
- * <p/>
+ *
+ *
  * <p>For more details, please refer to the ID3 specifications:
  * <ul>
  * <li><a href="http://www.id3.org/id3v2.3.0.txt">ID3 v2.3.0 Spec</a>

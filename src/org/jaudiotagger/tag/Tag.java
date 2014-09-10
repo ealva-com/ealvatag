@@ -26,7 +26,7 @@ import java.util.List;
 /**
  * This interface represents the basic data structure for the default
  * audio library functionality.<br>
- * <p/>
+ *
  * Some audio file tagging systems allow to specify multiple values for one type
  * of information. The artist for example. Some songs may be a cooperation of
  * two or more artists. Sometimes a tagging user wants to specify them in the
@@ -36,11 +36,11 @@ import java.util.List;
  * does not support that kind of storing multiple values and will just overwrite the existing value<br>
  * <br>
  * <b>Code Examples:</b><br>
- * <p/>
+ *
  * <pre>
  * <code>
  * AudioFile file = AudioFileIO.read(new File(&quot;C:\\test.mp3&quot;));
- * <p/>
+ *
  * Tag tag = file.getTag();
  * </code>
  * </pre>
@@ -119,7 +119,7 @@ public interface Tag {
 
     /**
      * Retrieve String value of the first value that exists for this format specific key
-     * <p/>
+     *
      * <p>Can be used to retrieve fields with any identifier, useful if the identifier is not within {@link FieldKey}
      *
      * @param id
@@ -156,7 +156,7 @@ public interface Tag {
 
     /**
      * Retrieve the first field that exists for this format specific key
-     * <p/>
+     *
      * <p>Can be used to retrieve fields with any identifier, useful if the identifier is not within {@link FieldKey}
      *
      * @param id audio specific key
@@ -213,7 +213,7 @@ public interface Tag {
 
     /**
      * Return the number of fields
-     * <p/>
+     *
      * <p>Fields with the same identifiers are counted separately
      *
      * i.e two TITLE fields in a Vorbis Comment file would count as two
@@ -271,7 +271,7 @@ public interface Tag {
 
     /**
      * Create artwork field based on the data in artwork and then set it in the tag itself
-     * <p/>
+     *
      *
      * @param artwork
      * @throws FieldDataInvalidException
@@ -280,7 +280,7 @@ public interface Tag {
 
     /**
      * Create artwork field based on the data in artwork and then add it to the tag itself
-     * <p/>
+     *
      *
      * @param artwork
      * @throws FieldDataInvalidException
@@ -289,7 +289,7 @@ public interface Tag {
 
     /**
      * Sets a field in the structure, used internally by the library<br>
-     * <p/>
+     *
      *
      * @param field The field to add.
      * @throws FieldDataInvalidException
@@ -298,7 +298,7 @@ public interface Tag {
 
     /**
      * Adds a field to the structure, used internally by the library<br>
-     * <p/>
+     *
      *
      * @param field The field to add.
      * @throws FieldDataInvalidException
@@ -307,10 +307,10 @@ public interface Tag {
 
     /**
      * Create a new field based on generic key, used internally by the library
-     * <p/>
+     *
      * <p>Only textual data supported at the moment. The genericKey will be mapped
      * to the correct implementation key and return a TagField.
-     * <p/>
+     *
      *
      * @param genericKey is the generic key
      * @param value      to store

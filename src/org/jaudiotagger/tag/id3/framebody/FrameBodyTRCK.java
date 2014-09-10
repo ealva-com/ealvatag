@@ -34,7 +34,7 @@ import java.nio.ByteBuffer;
  *
  * Some applications like to prepend the track number with a zero to aid sorting, (i.e 02 comes before 10)
  *
- * <p/>
+ *
  * <p>For more details, please refer to the ID3 specifications:
  * <ul>
  * <li><a href="http://www.id3.org/id3v2.3.0.txt">ID3 v2.3.0 Spec</a>

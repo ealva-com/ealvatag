@@ -29,7 +29,7 @@ import org.jaudiotagger.tag.datatype.AbstractIntStringValuePair;
  * Text Encoding supported by ID3v24, the id is recognised by ID3
  * whereas the value maps to a java java.nio.charset.Charset, all the
  * charsets defined below are guaranteed on every Java platform.
- * <p/>
+ *
  * Note in ID3 UTF_16 can be implemented as either UTF16BE or UTF16LE with byte ordering
  * marks, in JAudioTagger we always implement it as UTF16LE because only this order
  * is understood in Windows, OSX seem to understand both.

@@ -23,7 +23,7 @@ import java.nio.ByteBuffer;
 /**
  * Software/Hardware and settings used for encoding Text information frame.
  * <p>The 'Software/Hardware and settings used for encoding' frame includes the used audio encoder and its settings when the file was encoded. Hardware refers to hardware encoders, not the computer on which a program was run.
- * <p/>
+ *
  * <p>For more details, please refer to the ID3 specifications:
  * <ul>
  * <li><a href="http://www.id3.org/id3v2.3.0.txt">ID3 v2.3.0 Spec</a>

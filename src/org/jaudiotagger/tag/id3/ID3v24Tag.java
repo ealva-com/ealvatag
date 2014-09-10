@@ -700,8 +700,8 @@ public class ID3v24Tag extends AbstractID3v2Tag
 
     /**
      * Read header flags
-     * <p/>
-     * <p>Log info messages for falgs that have been set and log warnings when bits have been set for unknown flags</p>
+     *
+     * <p>Log info messages for falgs that have been set and log warnings when bits have been set for unknown flags
      *
      * @param byteBuffer
      * @throws TagException
@@ -922,7 +922,7 @@ public class ID3v24Tag extends AbstractID3v2Tag
 
     /**
      * Write the ID3 header to the ByteBuffer.
-     * <p/>
+     *
      * TODO Calculate the CYC Data Check
      * TODO Reintroduce Extended Header
      *
@@ -1137,7 +1137,7 @@ public class ID3v24Tag extends AbstractID3v2Tag
 
     /**
      * Are all frame swithin this tag unsynchronized
-     * <p/>
+     *
      * <p>Because synchronization occurs at the frame level it is not normally desirable to unsynchronize all frames
      * and hence this flag is not normally set.
      *
@@ -1162,7 +1162,7 @@ public class ID3v24Tag extends AbstractID3v2Tag
 
     /**
      * Create Frame for Id3 Key
-     * <p/>
+     *
      * Only textual data supported at the moment, should only be used with frames that
      * support a simple string argument.
      *
@@ -1391,7 +1391,7 @@ public class ID3v24Tag extends AbstractID3v2Tag
 
     /**
      * Retrieve the value that exists for this generic key and this index
-     * <p/>
+     *
      * Have to do some special mapping for certain generic keys because they share frame
      * with another generic key.
      *

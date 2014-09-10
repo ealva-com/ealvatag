@@ -8,7 +8,7 @@ import java.util.Map;
 
 /**
  * Represents the ISO Script
- * <p/>
+ *
  * Contains an enum  of script, their four letter code and description
  * with additional method to allow an enum to be found by its four letter code or its description.
  */

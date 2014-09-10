@@ -15,7 +15,7 @@ import java.util.regex.Pattern;
 
 /**
  * Represents the form 01/10 whereby the second part is optional. This is used by frame such as TRCK and TPOS
- * <p/>
+ *
  * Some applications like to prepend the count with a zero to aid sorting, (i.e 02 comes before 10)
  *
  * If TagOptionSingleton.getInstance().isPadNumbers() is enabled then all fields will be written to file padded
@@ -73,7 +73,7 @@ public class PartOfSet extends AbstractString
      * Read a 'n' bytes from buffer into a String where n is the frameSize - offset
      * so therefore cannot use this if there are other objects after it because it has no
      * delimiter.
-     * <p/>
+     *
      * Must take into account the text encoding defined in the Encoding Object
      * ID3 Text Frames often allow multiple strings separated by the null char
      * appropriate for the encoding.
@@ -114,7 +114,7 @@ public class PartOfSet extends AbstractString
 
     /**
      * Write String into byte array
-     * <p/>
+     *
      * It will remove a trailing null terminator if exists if the option
      * RemoveTrailingTerminatorOnWrite has been set.
      *
@@ -169,7 +169,7 @@ public class PartOfSet extends AbstractString
 
     /**
      * Get the text encoding being used.
-     * <p/>
+     *
      * The text encoding is defined by the frame body that the text field belongs to.
      *
      * @return the text encoding charset

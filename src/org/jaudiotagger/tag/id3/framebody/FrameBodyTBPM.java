@@ -23,7 +23,7 @@ import java.nio.ByteBuffer;
 /**
  * Beats Per Minute Text information frame.
  * <p>The 'BPM' frame contains the number of beats per minute in the mainpart of the audio. The BPM is an integer and represented as a numerical string.
- * <p/>
+ *
  * <p>For more details, please refer to the ID3 specifications:
  * <ul>
  * <li><a href="http://www.id3.org/id3v2.3.0.txt">ID3 v2.3.0 Spec</a>

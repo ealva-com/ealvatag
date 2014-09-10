@@ -38,10 +38,10 @@ import org.jaudiotagger.tag.vorbiscomment.VorbisCommentTag;
 import org.jaudiotagger.tag.flac.FlacTag;
 
 /**
- * <p>This is the main object manipulated by the user representing an audiofile, its properties and its tag.</p>
- * <p>The prefered way to obtain an <code>AudioFile</code> is to use the <code>AudioFileIO.read(File)</code> method.</p>
- * <p>The <code>AudioFile</code> contains every properties associated with the file itself (no meta-data), like the bitrate, the sampling rate, the encoding audioHeaders, etc.</p>
- * <p>To get the meta-data contained in this file you have to get the <code>Tag</code> of this <code>AudioFile</code></p>
+ * <p>This is the main object manipulated by the user representing an audiofile, its properties and its tag.
+ * <p>The prefered way to obtain an <code>AudioFile</code> is to use the <code>AudioFileIO.read(File)</code> method.
+ * <p>The <code>AudioFile</code> contains every properties associated with the file itself (no meta-data), like the bitrate, the sampling rate, the encoding audioHeaders, etc.
+ * <p>To get the meta-data contained in this file you have to get the <code>Tag</code> of this <code>AudioFile</code>
  *
  * @author Raphael Slinckx
  * @version $Id$
@@ -55,6 +55,7 @@ public class AudioFile
     public static Logger logger = Logger.getLogger("org.jaudiotagger.audio");
 
     /**
+     *
      * The physical file that this instance represents.
      */
     protected File file;
@@ -75,8 +76,8 @@ public class AudioFile
     }
 
     /**
-     * <p>These constructors are used by the different readers, users should not use them, but use the <code>AudioFileIO.read(File)</code> method instead !.</p>
-     * <p>Create the AudioFile representing file f, the encoding audio headers and containing the tag</p>
+     * <p>These constructors are used by the different readers, users should not use them, but use the <code>AudioFileIO.read(File)</code> method instead !.
+     * <p>Create the AudioFile representing file f, the encoding audio headers and containing the tag
      *
      * @param f           The file of the audio file
      * @param audioHeader the encoding audioHeaders over this file
@@ -91,8 +92,8 @@ public class AudioFile
 
 
     /**
-     * <p>These constructors are used by the different readers, users should not use them, but use the <code>AudioFileIO.read(File)</code> method instead !.</p>
-     * <p>Create the AudioFile representing file denoted by pathnames, the encoding audio Headers and containing the tag</p>
+     * <p>These constructors are used by the different readers, users should not use them, but use the <code>AudioFileIO.read(File)</code> method instead !.
+     * <p>Create the AudioFile representing file denoted by pathnames, the encoding audio Headers and containing the tag
      *
      * @param s           The pathname of the audio file
      * @param audioHeader the encoding audioHeaders over this file
@@ -106,7 +107,7 @@ public class AudioFile
     }
 
     /**
-     * <p>Write the tag contained in this AudioFile in the actual file on the disk, this is the same as calling the <code>AudioFileIO.write(this)</code> method.</p>
+     * <p>Write the tag contained in this AudioFile in the actual file on the disk, this is the same as calling the <code>AudioFileIO.write(this)</code> method.
      *
      * @throws CannotWriteException If the file could not be written/accessed, the extension wasn't recognized, or other IO error occured.
      * @see AudioFileIO
@@ -169,7 +170,7 @@ public class AudioFile
     }
 
     /**
-     * <p>Returns a multi-line string with the file path, the encoding audioHeader, and the tag contents.</p>
+     * <p>Returns a multi-line string with the file path, the encoding audioHeader, and the tag contents.
      *
      * @return A multi-line string with the file path, the encoding audioHeader, and the tag contents.
      *         TODO Maybe this can be changed ?

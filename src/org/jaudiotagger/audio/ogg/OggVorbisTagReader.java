@@ -38,7 +38,7 @@ import java.util.logging.Logger;
 
 /**
  * Read Vorbis Comment Tag within ogg
- * <p/>
+ *
  * Vorbis is the audiostream within an ogg file, Vorbis uses VorbisComments as its tag
  */
 public class OggVorbisTagReader
@@ -57,7 +57,7 @@ public class OggVorbisTagReader
 
     /**
      * Read the Logical VorbisComment Tag from the file
-     * <p/>
+     *
      * <p>Read the CommenyTag, within an OggVorbis file the VorbisCommentTag is mandatory
      *
      * @param raf
@@ -126,7 +126,7 @@ public class OggVorbisTagReader
 
     /**
      * Is this a Vorbis Comment header, check
-     * <p/>
+     *
      * Note this check only applies to Vorbis Comments embedded within an OggVorbis File which is why within here
      *
      * @param headerData

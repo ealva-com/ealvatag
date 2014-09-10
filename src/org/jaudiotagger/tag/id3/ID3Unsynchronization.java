@@ -10,7 +10,7 @@ import java.util.logging.Level;
 
 /**
  * Performs unsynchronization and synchronization tasks on a buffer.
- * <p/>
+ *
  * Is currently required for V23Tags and V24Frames
  */
 public class ID3Unsynchronization
@@ -46,7 +46,7 @@ public class ID3Unsynchronization
     /**
      * Unsynchronize an array of bytes, this should only be called if the decision has already been made to
      * unsynchronize the byte array
-     * <p/>
+     *
      * In order to prevent a media player from incorrectly interpreting the contents of a tag, all $FF bytes
      * followed by a byte with value >=224 must be followed by a $00 byte (thus, $FF $F0 sequences become $FF $00 $F0).
      * Additionally because unsynchronisation is being applied any existing $FF $00 have to be converted to
@@ -109,7 +109,7 @@ public class ID3Unsynchronization
 
     /**
      * Synchronize an array of bytes, this should only be called if it has been determined the tag is unsynchronised
-     * <p/>
+     *
      * Any patterns of the form $FF $00 should be replaced by $FF
      *
      * @param source a ByteBuffer to be unsynchronized
@@ -152,7 +152,7 @@ public class ID3Unsynchronization
 
     /**
      * Synchronize an array of bytes, this should only be called if it has been determined the tag is unsynchronised
-     * <p/>
+     *
      * Any patterns of the form $FF $00 should be replaced by $FF
      *
      * @param source a ByteBuffer to be unsynchronized
@@ -207,7 +207,7 @@ public class ID3Unsynchronization
 
     /**
      * Synchronize an array of bytes, this should only be called if it has been determined the tag is unsynchronised
-     * <p/>
+     *
      * Any patterns of the form $FF $00 should be replaced by $FF
      *
      * @param source a ByteBuffer to be unsynchronized

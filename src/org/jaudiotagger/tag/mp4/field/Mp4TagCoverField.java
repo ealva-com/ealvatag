@@ -31,7 +31,7 @@ import java.nio.ByteBuffer;
 
 /**
  * Represents Cover Art
- * <p/>
+ *
  * <p>Note:Within this library we have a seperate TagCoverField for every image stored, however this does not map
  * very directly to how they are physically stored within a file, because all are stored under a single covr atom, so
  * a more complex conversion has to be done then for other fields when writing multiple images back to file.
@@ -81,8 +81,8 @@ public class Mp4TagCoverField extends Mp4TagBinaryField
 
     /**
      * Construct new cover art with binarydata provided
-     * <p/>
-     * <p/>
+     *
+     *
      * Identifies the imageType by looking at the data
      *
      * @param data

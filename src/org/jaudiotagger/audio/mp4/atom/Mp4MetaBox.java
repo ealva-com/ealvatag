@@ -39,7 +39,7 @@ public class Mp4MetaBox extends AbstractMp4Box
     /**
      * Create an iTunes style Meta box
      *
-     * <p>Useful when writing to mp4 that previously didn't contain an mp4 meta atom</p>
+     * <p>Useful when writing to mp4 that previously didn't contain an mp4 meta atom
      *
      * @param childrenSize
      * @return

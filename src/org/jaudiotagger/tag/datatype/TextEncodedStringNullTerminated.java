@@ -11,7 +11,7 @@ import java.nio.charset.*;
 
 /**
  * Represents a String whose size is determined by finding of a null character at the end of the String.
- * <p/>
+ *
  * The String itself might be of length zero (i.e just consist of the null character). The String will be encoded based
  * upon the text encoding of the frame that it belongs to.
  */
@@ -52,7 +52,7 @@ public class TextEncodedStringNullTerminated extends AbstractString
 
     /**
      * Read a string from buffer upto null character (if exists)
-     * <p/>
+     *
      * Must take into account the text encoding defined in the Encoding Object
      * ID3 Text Frames often allow multiple strings separated by the null char
      * appropriate for the encoding.

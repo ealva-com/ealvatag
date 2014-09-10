@@ -27,7 +27,7 @@ import java.io.RandomAccessFile;
 
 /**
  * Mp4 File Writer
- * <p/>
+ *
  * <p>This can write files containing either the .mp4 or .m4a suffixes
  */
 public class Mp4FileWriter extends AudioFileWriter

@@ -23,7 +23,7 @@ import java.nio.ByteBuffer;
 /**
  * Official internet radio station homepage URL link frames.
  * <p>The 'Official internet radio station homepage' contains a URL pointing at the homepage of the internet radio station.
- * <p/>
+ *
  * <p>For more details, please refer to the ID3 specifications:
  * <ul>
  * <li><a href="http://www.id3.org/id3v2.3.0.txt">ID3 v2.3.0 Spec</a>

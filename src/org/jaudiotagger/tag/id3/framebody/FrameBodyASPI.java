@@ -32,17 +32,17 @@ import java.nio.ByteBuffer;
  * existence of a TLEN frame, indicating the duration of the file in
  * milliseconds. There may only be one 'audio seek point index' frame in
  * a tag.
- * <p/>
+ *
  * <Header for 'Seek Point Index', ID: "ASPI">
  * Indexed data start (S)         $xx xx xx xx
  * Indexed data length (L)        $xx xx xx xx
  * Number of index points (N)     $xx xx
  * Bits per index point (b)       $xx
- * <p/>
+ *
  * Then for every index point the following data is included;
- * <p/>
+ *
  * Fraction at index (Fi)          $xx (xx)
- * <p/>
+ *
  * 'Indexed data start' is a byte offset from the beginning of the file.
  * 'Indexed data length' is the byte length of the audio data being
  * indexed. 'Number of index points' is the number of index points, as
@@ -52,23 +52,23 @@ import java.nio.ByteBuffer;
  * advantageous for long files. 'Fraction at index' is the numerator of
  * the fraction representing a relative position in the data. The
  * denominator is 2 to the power of b.
- * <p/>
+ *
  * Here are the algorithms to be used in the calculation. The known data
  * must be the offset of the start of the indexed data (S), the offset
  * of the end of the indexed data (E), the number of index points (N),
  * the offset at index i (Oi). We calculate the fraction at index i
  * (Fi).
- * <p/>
+ *
  * Oi is the offset of the frame whose start is soonest after the point
  * for which the time offset is (i/N * duration).
- * <p/>
+ *
  * The frame data should be calculated as follows:
- * <p/>
+ *
  * Fi = Oi/L * 2^b    (rounded down to the nearest integer)
- * <p/>
+ *
  * Offset calculation should be calculated as follows from data in the
  * frame:
- * <p/>
+ *
  * Oi = (Fi/2^b)*L    (rounded up to the nearest integer)
  *
  * @author : Paul Taylor

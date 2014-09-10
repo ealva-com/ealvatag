@@ -26,19 +26,19 @@ import java.nio.ByteBuffer;
 
 /**
  * Terms of use frame.
- * <p/>
- * <p/>
+ *
+ *
  * This frame contains a brief description of the terms of use and
  * ownership of the file. More detailed information concerning the legal
  * terms might be available through the "WCOP" frame. Newlines are
  * allowed in the text. There may only be one "USER" frame in a tag.
- * </p><p><table border=0 width="70%">
+ * <p><table border=0 width="70%">
  * <tr><td colspan=2>&lt;Header for 'Terms of use frame', ID: "USER"&gt;</td></tr>
  * <tr><td>Text encoding  </td><td>$xx</td></tr>
  * <tr><td>Language       </td><td>$xx xx xx</td></tr>
  * <tr><td>The actual text</td><td>&lt;text string according to encoding&gt;</td></tr>
- * </table></p>
- * <p/>
+ * </table>
+ *
  * <p>For more details, please refer to the ID3 specifications:
  * <ul>
  * <li><a href="http://www.id3.org/id3v2.3.0.txt">ID3 v2.3.0 Spec</a>

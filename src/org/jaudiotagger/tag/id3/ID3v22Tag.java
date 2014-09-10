@@ -461,7 +461,7 @@ public class ID3v22Tag extends AbstractID3v2Tag
 
     /**
      * Write the ID3 header to the ByteBuffer.
-     * <p/>
+     *
      *
      * @param padding
      * @param size
@@ -603,7 +603,7 @@ public class ID3v22Tag extends AbstractID3v2Tag
 
     /**
      * Create Frame for Id3 Key
-     * <p/>
+     *
      * Only textual data supported at the moment, should only be used with frames that
      * support a simple string argument.
      *

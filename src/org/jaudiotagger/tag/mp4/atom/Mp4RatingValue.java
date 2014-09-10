@@ -2,9 +2,9 @@ package org.jaudiotagger.tag.mp4.atom;
 
 /**
  * List of valid values for the Rating (rtng) atom
- * <p/>
+ *
  * These are held as a byte field
- * <p/>
+ *
  * TODO:Is this only used in video
  */
 public enum Mp4RatingValue

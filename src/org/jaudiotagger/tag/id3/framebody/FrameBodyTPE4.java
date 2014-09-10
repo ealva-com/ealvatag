@@ -23,7 +23,7 @@ import java.nio.ByteBuffer;
 /**
  * Interpreted, remixed, or otherwise modified by Text information frame.
  * <p>The 'Interpreted, remixed, or otherwise modified by' frame contains more information about the people behind a remix and similar interpretations of another existing piece.
- * <p/>
+ *
  * <p>For more details, please refer to the ID3 specifications:
  * <ul>
  * <li><a href="http://www.id3.org/id3v2.3.0.txt">ID3 v2.3.0 Spec</a>

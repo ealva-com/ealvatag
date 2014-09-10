@@ -7,8 +7,8 @@ import java.util.List;
 
 /**
  * ID3V2 Genre list
- * <p/>
- * <p>Merging of Id3v2 genres and the extended ID3v2 genres</p>
+ *
+ * <p>Merging of Id3v2 genres and the extended ID3v2 genres
  */
 public class V2GenreTypes
 {

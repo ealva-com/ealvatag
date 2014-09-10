@@ -660,7 +660,6 @@ public class ID3v24Frame extends AbstractID3v2Frame
      * Write the frame. Writes the frame header but writing the data is delegated to the
      * frame body.
      *
-     * @throws IOException
      */
     public void write(ByteArrayOutputStream tagBuffer)
     {

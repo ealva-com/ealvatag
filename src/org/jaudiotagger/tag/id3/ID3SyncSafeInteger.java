@@ -4,10 +4,10 @@ import java.nio.ByteBuffer;
 
 /**
  * Peforms encoding/decoding of an syncsafe integer
- * <p/>
+ *
  * <p>Syncsafe integers are used for the size in the tag header of v23 and v24 tags, and in the frame size in
  * the frame header of v24 frames.
- * <p/>
+ *
  * <p>In some parts of the tag it is inconvenient to use the
  * unsychronisation scheme because the size of unsynchronised data is
  * not known in advance, which is particularly problematic with size
@@ -16,9 +16,9 @@ import java.nio.ByteBuffer;
  * integers that keep its highest bit (bit 7) zeroed, making seven bits
  * out of eight available. Thus a 32 bit synchsafe integer can store 28
  * bits of information.
- * <p/>
+ *
  * Example:
- * <p/>
+ *
  * 255 (%11111111) encoded as a 16 bit synchsafe integer is 383
  * (%00000001 01111111).
  */
@@ -47,7 +47,7 @@ public class ID3SyncSafeInteger
 
     /**
      * Read syncsafe value from buffer in format specified in spec and convert to int.
-     * <p/>
+     *
      * The buffers position is moved to just after the location of the syncsafe integer
      *
      * @param buffer syncsafe integer
@@ -62,12 +62,12 @@ public class ID3SyncSafeInteger
 
     /**
      * Is buffer holding a value that is definently not syncsafe
-     * <p/>
+     *
      * We cannot guarantee a buffer is holding a syncsafe integer but there are some checks
      * we can do to show that it definently is not.
-     * <p/>
+     *
      * The buffer is NOT moved after reading.
-     * <p/>
+     *
      * This function is useful for reading ID3v24 frames created in iTunes because iTunes does not use syncsafe
      * integers in  its frames.
      *
@@ -92,7 +92,7 @@ public class ID3SyncSafeInteger
 
     /**
      * Checks if the buffer just contains zeros
-     * <p/>
+     *
      * This can be used to identify when accessing padding of a tag
      *
      * @param buffer

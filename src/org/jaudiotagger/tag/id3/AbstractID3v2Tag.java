@@ -137,7 +137,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
     /**
      * Determines if file contain an id3 tag and if so positions the file pointer just after the end
      * of the tag.
-     * <p/>
+     *
      * This method is used by non mp3s (such as .ogg and .flac) to determine if they contain an id3 tag
      *
      * @param raf
@@ -288,7 +288,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
 
     /**
      * Return whether tag has frame with this identifier
-     * <p/>
+     *
      * Warning the match is only done against the identifier so if a tag contains a frame with an unsupported body
      * but happens to have an identifier that is valid for another version of the tag it will return true
      *
@@ -305,7 +305,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
      * Return whether tag has frame with this identifier and a related body. This is required to protect
      * against circumstances whereby a tag contains a frame with an unsupported body
      * but happens to have an identifier that is valid for another version of the tag which it has been converted to
-     * <p/>
+     *
      * e.g TDRC is an invalid frame in a v23 tag but if somehow a v23tag has been created by another application
      * with a TDRC frame we construct an UnsupportedFrameBody to hold it, then this library constructs a
      * v24 tag, it will contain a frame with id TDRC but it will not have the expected frame body it is not really a
@@ -330,7 +330,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
 
     /**
      * Return whether tag has frame starting with this identifier
-     * <p/>
+     *
      * Warning the match is only done against the identifier so if a tag contains a frame with an unsupported body
      * but happens to have an identifier that is valid for another version of the tag it will return true
      *
@@ -357,10 +357,10 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
     /**
      * For single frames return the frame in this tag with given identifier if it exists, if multiple frames
      * exist with the same identifier it will return a list containing all the frames with this identifier
-     * <p/>
+     *
      * Warning the match is only done against the identifier so if a tag contains a frame with an unsupported body
      * but happens to have an identifier that is valid for another version of the tag it will be returned.
-     * <p/>
+     *
      *
      * @param identifier is an ID3Frame identifier
      * @return matching frame, or list of matching frames
@@ -374,7 +374,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
 
     /**
      * Return any encrypted frames with this identifier
-     * <p/>
+     *
      * <p>For single frames return the frame in this tag with given identifier if it exists, if multiple frames
      * exist with the same identifier it will return a list containing all the frames with this identifier
      *
@@ -388,9 +388,9 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
 
     /**
      * Retrieve the first value that exists for this identifier
-     * <p/>
+     *
      * If the value is a String it returns that, otherwise returns a summary of the fields information
-     * <p/>
+     *
      *
      * @param identifier
      * @return
@@ -452,10 +452,10 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
      * Add a frame to this tag
      *
      * @param frame the frame to add
-     *              <p/>
-     *              <p/>
+     *
+     *
      *              Warning if frame(s) already exists for this identifier that they are overwritten
-     *              <p/>
+     *
      */
     //TODO needs to ensure do not addField an invalid frame for this tag
     //TODO what happens if already contains a list with this ID
@@ -800,7 +800,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
 
     /**
      * Add new field
-     * <p/>
+     *
      * There is a special handling if adding another text field of the same type, in this case the value will
      * be appended to the existing field, separated by the null character.
      *
@@ -853,7 +853,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
 
     /**
      * Used for setting multiple frames for a single frame Identifier
-     * <p/>
+     *
      * Warning if frame(s) already exists for this identifier they are overwritten
      * TODO needs to ensure do not add an invalid frame for this tag
      *
@@ -891,7 +891,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
      * can be more than one which is useful if trying to retrieve
      * similar frames e.g TIT1,TIT2,TIT3 ... and don't know exactly
      * which ones there are.
-     * <p/>
+     *
      * Warning the match is only done against the identifier so if a tag contains a frame with an unsupported body
      * but happens to have an identifier that is valid for another version of the tag it will be returned.
      *
@@ -931,7 +931,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
      *
      * @param file to delete the tag from
      * @throws IOException if problem accessing the file
-     *                     <p/>
+     *
      */
     //TODO should clear all data and preferably recover lost space and go upto end of mp3s 
     public void delete(RandomAccessFile file) throws IOException
@@ -1051,7 +1051,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
 
     /**
      * Get file lock for writing too file
-     * <p/>
+     *
      * TODO:this appears to have little effect on Windows Vista
      *
      * @param fileChannel
@@ -1238,7 +1238,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
     /**
      * Adjust the length of the  padding at the beginning of the MP3 file, this is only called when there is currently
      * not enough space before the start of the audio to write the tag.
-     * <p/>
+     *
      * A new file will be created with enough size to fit the <code>ID3v2</code> tag.
      * The old file will be deleted, and the new file renamed.
      *
@@ -1471,7 +1471,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
 
     /**
      * Replace originalFile with the contents of newFile
-     * <p/>
+     *
      * Both files must exist in the same folder so that there are no problems with filesystem mount points
      *
      * @param newFile
@@ -1679,7 +1679,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
 
     /**
      * Write all the frames to the byteArrayOutputStream
-     * <p/>
+     *
      * <p>Currently Write all frames, defaults to the order in which they were loaded, newly
      * created frames will be at end of tag.
      *
@@ -2118,7 +2118,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
 
     /**
      * Retrieve the value that exists for this generic key and this index
-     * <p/>
+     *
      * Have to do some special mapping for certain generic keys because they share frame
      * with another generic key.
      *
@@ -2190,7 +2190,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
 
     /**
      * Create a new TagField
-     * <p/>
+     *
      * Only textual data supported at the moment. The genericKey will be mapped
      * to the correct implementation key and return a TagField.
      *
@@ -2248,7 +2248,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
 
     /**
      * Create Frame for Id3 Key
-     * <p/>
+     *
      * Only textual data supported at the moment, should only be used with frames that
      * support a simple string argument.
      *
@@ -2341,7 +2341,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
 
     /**
      * Create a list of values for this key
-     * <p/>
+     *
      * This method  does all the complex stuff of splitting multiple values in one frame into separate values.
      *
      * @param formatKey
@@ -2699,7 +2699,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
 
     /**
      * Get field(s) for this generic key
-     * <p/>
+     *
      * This will return the number of underlying frames of this type, for example if you have added two TCOM field
      * values these will be stored within a single frame so only one field will be returned not two. This can be
      * confusing because getValues() would return two values.

@@ -34,8 +34,8 @@ import java.util.logging.Logger;
 
 /**
  * This abstract class is the skeleton for tag writers.
- * <p/>
- * <p/>
+ *
+ *
  * It handles the creation/closing of the randomaccessfile objects and then call
  * the subclass method writeTag or deleteTag. These two method have to be
  * implemented in the subclass.
@@ -250,7 +250,7 @@ public abstract class AudioFileWriter
 
     /**
      * Prechecks before normal write
-     * <p/>
+     *
      * <ul>
      * <li>If the tag is actually empty, remove the tag</li>
      * <li>if the file is not writable, throw exception
@@ -617,13 +617,13 @@ public abstract class AudioFileWriter
      * first points to the file where we want to write the given tag, and the
      * second is an empty temporary file that can be used if e.g. the file has
      * to be bigger than the original.
-     * <p/>
+     *
      * If something has been written in the temporary file, when this method
      * returns, the original file is deleted, and the temporary file is renamed
      * the the original name
-     * <p/>
+     *
      * If nothing has been written to it, it is simply deleted.
-     * <p/>
+     *
      * This method can assume the raf, rafTemp are pointing to the first byte of
      * the file. The subclass must not close these two files when the method
      * returns.

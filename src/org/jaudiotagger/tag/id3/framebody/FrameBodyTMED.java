@@ -30,7 +30,7 @@ import java.nio.ByteBuffer;
  * with a "(" character it should be replaced with "((" in the same way
  * as in the "TCO" frame. Predefined refinements is appended after the
  * media type, e.g. "(CD/A)" or "(VID/PAL/VHS)".</div>
- * </p><p><table border=0 width="70%">
+ * <p><table border=0 width="70%">
  * <tr><td>DIG</td><td rowspan=67>&nbsp;</td><td width="100%">Other digital media</td></tr>
  * <tr valign=top><td align=right>/A<br>&nbsp;</td><td>Analog transfer from media</td></tr>
  * <tr><td>ANA</td><td>Other analog media</td></tr>
@@ -98,8 +98,8 @@ import java.nio.ByteBuffer;
  * <tr><td align=right>/II</td><td>Type II cassette (chrome)</td></tr>
  * <tr><td align=right>/III</td><td>Type III cassette (ferric chrome)</td></tr>
  * <tr><td align=right>/IV<br>&nbsp;</td><td>Type IV cassette (metal)</td></tr>
- * </table></p>
- * <p/>
+ * </table>
+ *
  * <p>For more details, please refer to the ID3 specifications:
  * <ul>
  * <li><a href="http://www.id3.org/id3v2.3.0.txt">ID3 v2.3.0 Spec</a>

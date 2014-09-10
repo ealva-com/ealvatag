@@ -168,7 +168,7 @@ public class VorbisCommentTag extends AbstractTag
 
     /**
      * Set the vendor, known as the encoder  generally
-     * <p/>
+     *
      * We dont want this to be blank, when written to file this field is written to a different location
      * to all other fields but user of library can just reat it as another field
      *
@@ -231,7 +231,7 @@ public class VorbisCommentTag extends AbstractTag
 
     /**
      * Create Tag Field using ogg key
-     * <p/>
+     *
      * This method is provided to allow you to create key of any value because VorbisComment allows
      * arbitary keys.
      *
@@ -400,7 +400,7 @@ public class VorbisCommentTag extends AbstractTag
 
     /**
      * Is this tag empty
-     * <p/>
+     *
      * <p>Overridden because check for size of one because there is always a vendor tag unless just
      * created an empty vorbis tag as part of flac tag in which case size could be zero
      *
@@ -413,7 +413,7 @@ public class VorbisCommentTag extends AbstractTag
 
     /**
      * Add Field
-     * <p/>
+     *
      * <p>Overidden because there can only be one vendor set
      *
      * @param field
@@ -574,13 +574,13 @@ public class VorbisCommentTag extends AbstractTag
      /**
      * Create artwork field using the non-standard COVERART tag
      *
-     * <p/>
+     *
      * Actually create two fields , the data field and the mimetype. Its is not recommended that you use this
      * method anymore.
       *
      * @param data     raw image data
      * @param mimeType mimeType of data
-     *                 <p/>
+     *
      * @return
      */
     @Deprecated

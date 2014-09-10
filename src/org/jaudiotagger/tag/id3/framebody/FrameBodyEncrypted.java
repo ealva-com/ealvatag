@@ -24,8 +24,8 @@ import java.nio.ByteBuffer;
 
 /**
  * Encrypted frame.
- * <p/>
- * <p/>
+ *
+ *
  * Container for an encrypted frame, we cannot decrypt encrypted frame but it may be possible
  * for the calling application to decrypt the frame if they understand how it has been encrypted,
  * information on this will be held within an ENCR frame

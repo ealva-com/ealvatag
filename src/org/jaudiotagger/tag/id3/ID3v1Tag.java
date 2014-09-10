@@ -402,7 +402,7 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag
 
     /**
      * Sets the genreID,
-     * <p/>
+     *
      * <p>ID3v1 only supports genres defined in a predefined list
      * so if unable to find value in list set 255, which seems to be the value
      * winamp uses for undefined.
@@ -447,7 +447,7 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag
 
     /**
      * Get Genre field
-     * <p/>
+     *
      * <p>Only a single genre is available in ID3v1
      *
      * @return
@@ -491,7 +491,7 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag
 
     /**
      * Get title field
-     * <p/>
+     *
      * <p>Only a single title is available in ID3v1
      *
      * @return
@@ -531,7 +531,7 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag
 
     /**
      * Get year field
-     * <p/>
+     *
      * <p>Only a single year is available in ID3v1
      *
      * @return

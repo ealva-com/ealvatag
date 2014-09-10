@@ -17,28 +17,28 @@ import java.util.logging.Logger;
 
 /**
  * Picture Block
- * <p/>
- * <p/>
- * <p>This block is for storing pictures associated with the file, most commonly cover art from CDs.
+ *
+ *
+ * pThis block is for storing pictures associated with the file, most commonly cover art from CDs.
  * There may be more than one PICTURE block in a file. The picture format is similar to the APIC frame in ID3v2.
  * The PICTURE block has a type, MIME type, and UTF-8 description like ID3v2, and supports external linking via URL
  * (though this is discouraged). The differences are that there is no uniqueness constraint on the description field,
  * and the MIME type is mandatory. The FLAC PICTURE block also includes the resolution, color depth, and palette size
  * so that the client can search for a suitable picture without having to scan them all
- * <p/>
+ *
  * Format:
- * <Size in bits> Info
- * <32> The picture type according to the ID3v2 APIC frame: (There may only be one each of picture type 1 and 2 in a file)
- * <32> 	The length of the MIME type string in bytes.
- * <n*8> 	The MIME type string, in printable ASCII characters 0x20-0x7e. The MIME type may also be --> to signify that the data part is a URL of the picture instead of the picture data itself.
- * <32> 	The length of the description string in bytes.
- * <n*8> 	The description of the picture, in UTF-8.
- * <32> 	The width of the picture in pixels.
- * <32> 	The height of the picture in pixels.
- * <32> 	The color depth of the picture in bits-per-pixel.
- * <32> 	For indexed-color pictures (e.g. GIF), the number of colors used, or 0 for non-indexed pictures.
- * <32> 	The length of the picture data in bytes.
- * <n*8> 	The binary picture data.
+ * Size in bits Info
+ * 32 The picture type according to the ID3v2 APIC frame: (There may only be one each of picture type 1 and 2 in a file)
+ * 32 	The length of the MIME type string in bytes.
+ * n*8 	The MIME type string, in printable ASCII characters 0x20-0x7e. The MIME type may also be -- to signify that the data part is a URL of the picture instead of the picture data itself.
+ * 32 	The length of the description string in bytes.
+ * n*8 	The description of the picture, in UTF-8.
+ * 32 	The width of the picture in pixels.
+ * 32 	The height of the picture in pixels.
+ * 32 	The color depth of the picture in bits-per-pixel.
+ * 32 	For indexed-color pictures (e.g. GIF), the number of colors used, or 0 for non-indexed pictures.
+ * 32 	The length of the picture data in bytes.
+ * n*8 	The binary picture data.
  */
 public class MetadataBlockDataPicture implements MetadataBlockData, TagField
 {
@@ -324,7 +324,7 @@ public class MetadataBlockDataPicture implements MetadataBlockData, TagField
 
     /**
      * This method will set the field to represent binary data.<br>
-     * <p/>
+     *
      * Some implementations may support conversions.<br>
      * As of now (Octobre 2005) there is no implementation really using this
      * method to perform useful operations.
@@ -340,7 +340,7 @@ public class MetadataBlockDataPicture implements MetadataBlockData, TagField
 
     /**
      * Identifies a field to be of common use.<br>
-     * <p/>
+     *
      * Some software may differ between common and not common fields. A common
      * one is for sure the title field. A web link may not be of common use for
      * tagging. However some file formats, or future development of users

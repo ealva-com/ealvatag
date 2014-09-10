@@ -7,7 +7,7 @@ import java.nio.ByteBuffer;
 
 /**
  * Title Sort name, this is what MusicBrainz uses in ID3v23 because TSOT not supported.
- * <p/>
+ *
  * However iTunes uses TSOT even in ID3v23, so we have two possible options
  */
 public class FrameBodyXSOT extends AbstractFrameBodyTextInfo implements ID3v23FrameBody

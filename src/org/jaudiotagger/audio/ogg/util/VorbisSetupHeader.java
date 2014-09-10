@@ -6,7 +6,7 @@ import java.util.logging.Logger;
 
 /**
  * Vorbis Setup header
- * <p/>
+ *
  * We dont need to decode a vorbis setup header for metatagging, but we should be able to identify
  * it.
  *

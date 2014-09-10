@@ -36,7 +36,7 @@ import java.util.logging.Logger;
 
 /**
  * Write Vorbis Tag within an ogg
- * <p/>
+ *
  * VorbisComment holds the tag information within an ogg file
  */
 public class OggVorbisTagWriter
@@ -638,7 +638,7 @@ public class OggVorbisTagWriter
      *                   table which is already ended.
      * @return Array of packet sizes. However only the last packet will
      *         differ from 255.
-     *         <p/>
+     *
      */
     //TODO if pass is data of max length (65025 bytes) and have quitStream==true
     //this will return 256 segments which is illegal, should be checked somewhere

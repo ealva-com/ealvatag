@@ -23,7 +23,7 @@ import java.nio.ByteBuffer;
 /**
  * Lead artist(s)/Lead performer(s)/Soloist(s)/Performing group Text information frame.
  * <p>The 'Lead artist(s)/Lead performer(s)/Soloist(s)/Performing group' is used for the main artist(s). They are seperated with the "/" character.
- * <p/>
+ *
  * <p>For more details, please refer to the ID3 specifications:
  * <ul>
  * <li><a href="http://www.id3.org/id3v2.3.0.txt">ID3 v2.3.0 Spec</a>

@@ -36,7 +36,7 @@ import java.util.logging.Logger;
 /**
  * This specifies a series of methods that have to be implemented by all structural subclasses,
  * required to support all copy constructors,iterative methods and so on.
- * <p/>
+ *
  * TODO Not sure if this is really correct, if really needed should probably be an interface
  */
 public abstract class AbstractTagItem

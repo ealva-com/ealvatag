@@ -26,8 +26,8 @@ import java.nio.ByteBuffer;
 
 /**
  * Audio encryption Frame.
- * <p/>
- * <p/>
+ *
+ *
  * This frame indicates if the actual audio stream is encrypted, and by
  * whom. Since standardisation of such encrypion scheme is beyond this
  * document, all "AENC" frames begin with a terminated string with a
@@ -38,7 +38,7 @@ import java.nio.ByteBuffer;
  * specified. If a $00 is found directly after the 'Frame size' and the
  * audiofile indeed is encrypted, the whole file may be considered
  * useless.
- * </p><p>
+ * <p>
  * After the 'Owner identifier', a pointer to an unencrypted part of the
  * audio can be specified. The 'Preview start' and 'Preview length' is
  * described in frames. If no part is unencrypted, these fields should
@@ -46,14 +46,14 @@ import java.nio.ByteBuffer;
  * datablock required for decryption of the audio. There may be more
  * than one "AENC" frames in a tag, but only one with the same 'Owner
  * identifier'.
- * </p><p><table border=0 width="70%">
+ * <p><table border=0 width="70%">
  * <tr><td colspan=2>&lt;Header for 'Audio encryption', ID: "AENC"&gt;</td></tr>
  * <tr><td>Owner identifier  </td><td>&lt;text string&gt; $00    </td></tr>
  * <tr><td>Preview start     </td><td>$xx xx                     </td></tr>
  * <tr><td>Preview length    </td><td>$xx xx                     </td></tr>
  * <tr><td>Encryption info   </td><td>&lt;binary data&gt;        </td></tr>
- * </table></p>
- * <p/>
+ * </table>
+ *
  * <p>For more details, please refer to the ID3 specifications:
  * <ul>
  * <li><a href="http://www.id3.org/id3v2.3.0.txt">ID3 v2.3.0 Spec</a>

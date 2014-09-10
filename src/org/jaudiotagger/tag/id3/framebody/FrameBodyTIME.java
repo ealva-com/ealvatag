@@ -24,7 +24,7 @@ import java.nio.ByteBuffer;
  * Time Text information frame.
  * <p>The 'Time' frame is a numeric string in the HHMM format containing the time for the recording. This field is always four characters long.
  * <p>Deprecated in v2.4.0
- * <p/>
+ *
  * <p>For more details, please refer to the ID3 specifications:
  * <ul>
  * <li><a href="http://www.id3.org/id3v2.3.0.txt">ID3 v2.3.0 Spec</a>

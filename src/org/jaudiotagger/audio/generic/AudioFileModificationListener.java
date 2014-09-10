@@ -26,7 +26,7 @@ import java.io.File;
 /**
  * Classes implementing this interface will be notified on audio file's
  * modifications.<br>
- * <p/>
+ *
  * <p>It will be notified on several occasions:<br>
  * <ul>
  * <li>An audio file is about to be modified

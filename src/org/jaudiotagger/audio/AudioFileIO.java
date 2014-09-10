@@ -49,38 +49,38 @@ import java.util.Map;
 import java.util.logging.Logger;
 
 /**
- * <p/>
+ *
  * The main entry point for the Tag Reading/Writing operations, this class will
  * select the appropriate reader/writer for the given file.
- * </p>
- * <p/>
+ * 
+ *
  * It selects the appropriate reader/writer based on the file extension (case
  * ignored).
- * </p>
- * <p/>
+ * 
+ *
  * Here is an simple example of use:
- * </p>
- * <p/>
+ * 
+ *
  * <code>
- * AudioFile audioFile = AudioFileIO.read(new File("audiofile.mp3")); //Reads the given file.<br/>
- * int bitrate = audioFile.getBitrate(); //Retreives the bitrate of the file.<br/>
- * String artist = audioFile.getTag().getFirst(TagFieldKey.ARTIST); //Retreive the artist name.<br/>
- * audioFile.getTag().setGenre("Progressive Rock"); //Sets the genre to Prog. Rock, note the file on disk is still unmodified.<br/>
+ * AudioFile audioFile = AudioFileIO.read(new File("audiofile.mp3")); //Reads the given file.
+ * int bitrate = audioFile.getBitrate(); //Retreives the bitrate of the file.
+ * String artist = audioFile.getTag().getFirst(TagFieldKey.ARTIST); //Retreive the artist name.
+ * audioFile.getTag().setGenre("Progressive Rock"); //Sets the genre to Prog. Rock, note the file on disk is still unmodified.
  * AudioFileIO.write(audioFile); //Write the modifications in the file on disk.
  * </code>
- * </p>
- * <p/>
+ * 
+ *
  * You can also use the <code>commit()</code> method defined for
  * <code>AudioFile</code>s to achieve the same goal as
  * <code>AudioFileIO.write(File)</code>, like this:
- * </p>
- * <p/>
+ * 
+ *
  * <code>
- * AudioFile audioFile = AudioFileIO.read(new File("audiofile.mp3"));<br/>
- * audioFile.getTag().setGenre("Progressive Rock");<br/>
- * audioFile.commit(); //Write the modifications in the file on disk.<br/>
+ * AudioFile audioFile = AudioFileIO.read(new File("audiofile.mp3"));
+ * audioFile.getTag().setGenre("Progressive Rock");
+ * audioFile.commit(); //Write the modifications in the file on disk.
  * </code>
- * </p>
+ * 
  *
  * @author Raphael Slinckx
  * @version $Id$
@@ -103,9 +103,9 @@ public class AudioFileIO
     private static AudioFileIO defaultInstance;
 
     /**
-     * <p/>
+     *
      * Delete the tag, if any, contained in the given file.
-     * </p>
+     * 
      *
      * @param f The file where the tag will be deleted
      * @throws org.jaudiotagger.audio.exceptions.CannotWriteException If the file could not be written/accessed, the extension
@@ -132,9 +132,9 @@ public class AudioFileIO
     }
 
     /**
-     * <p/>
+     *
      * Read the tag contained in the given file.
-     * </p>
+     * 
      *
      * @param f The file to read.
      * @return The AudioFile with the file tag and the file encoding info.
@@ -152,9 +152,9 @@ public class AudioFileIO
     }
 
     /**
-     * <p/>
+     *
      * Write the tag contained in the audioFile in the actual file on the disk.
-     * </p>
+     * 
      *
      * @param f The AudioFile to be written
      * @throws CannotWriteException If the file could not be written/accessed, the extension
@@ -197,9 +197,9 @@ public class AudioFileIO
     }
 
     /**
-     * <p/>
+     *
      * Delete the tag, if any, contained in the given file.
-     * </p>
+     * 
      *
      * @param f The file where the tag will be deleted
      * @throws org.jaudiotagger.audio.exceptions.CannotWriteException If the file could not be written/accessed, the extension
@@ -260,9 +260,9 @@ public class AudioFileIO
     }
 
     /**
-     * <p/>
+     *
      * Read the tag contained in the given file.
-     * </p>
+     * 
      *
      * @param f The file to read.
      * @return The AudioFile with the file tag and the file encoding info.
@@ -315,9 +315,9 @@ public class AudioFileIO
     }
 
     /**
-     * <p/>
+     *
      * Write the tag contained in the audioFile in the actual file on the disk.
-     * </p>
+     * 
      *
      * @param f The AudioFile to be written
      * @throws CannotWriteException If the file could not be written/accessed, the extension

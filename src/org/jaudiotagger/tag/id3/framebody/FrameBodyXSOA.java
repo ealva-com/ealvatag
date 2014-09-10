@@ -7,7 +7,7 @@ import java.nio.ByteBuffer;
 
 /**
  * Album Sort name, this is what MusicBrainz uses in ID3v23 because TSOA not supported.
- * <p/>
+ *
  * However iTunes uses TSOA even in ID3v23, so we have two possible options
  */
 public class FrameBodyXSOA extends AbstractFrameBodyTextInfo implements ID3v23FrameBody

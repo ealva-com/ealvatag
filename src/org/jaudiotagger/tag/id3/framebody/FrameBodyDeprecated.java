@@ -92,7 +92,7 @@ public class FrameBodyDeprecated extends AbstractID3v2FrameBody implements ID3v2
 
     /**
      * Setup the Object List.
-     * <p/>
+     *
      * This is handled by the wrapped class
      */
     protected void setupObjectList()

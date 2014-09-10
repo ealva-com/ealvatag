@@ -22,7 +22,7 @@ package org.jaudiotagger.audio.exceptions;
 /**
  * This exception is thrown if a
  * {@link org.jaudiotagger.audio.generic.AudioFileModificationListener} wants to
- * prevent the &quote;entagged audio library&quote; from actually finishing its
+ * prevent; from actually finishing its
  * operation.<br>
  * This exception can be used in all methods but
  * {@link org.jaudiotagger.audio.generic.AudioFileModificationListener#fileOperationFinished(java.io.File)}.

@@ -28,7 +28,7 @@ import java.io.RandomAccessFile;
 
 /**
  * Mp4 File Reader
- * <p/>
+ *
  * <p>This can read files containing either the .mp4 or .m4a suffixes
  */
 public class Mp4FileReader extends AudioFileReader

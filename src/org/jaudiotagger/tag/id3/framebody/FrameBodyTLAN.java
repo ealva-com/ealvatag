@@ -24,12 +24,12 @@ import java.nio.ByteBuffer;
 /**
  * Language(s) Text information frame.
  * <p>The 'Language(s)' frame should contain the languages of the text or lyrics spoken or sung in the audio. The language is represented with three characters according to ISO-639-2. If more than one language is used in the text their language codes should follow according to their usage.
- * <p/>
+ *
  * <p>For more details, please refer to the ID3 specifications:
  * <ul>
  * <li><a href="http://www.id3.org/id3v2.3.0.txt">ID3 v2.3.0 Spec</a>
  * </ul>
- * <p/>
+ *
  * TODO:Although rare TLAN can actually return multiple language codes, at the moment they are all returned as a single
  * string via getText(), any additional parsing has to be done externally.
  *

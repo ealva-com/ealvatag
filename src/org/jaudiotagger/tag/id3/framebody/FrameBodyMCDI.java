@@ -24,8 +24,8 @@ import java.nio.ByteBuffer;
 
 /**
  * Music CD identifier frame.
- * <p/>
- * <p/>
+ *
+ *
  * This frame is intended for music that comes from a CD, so that the CD
  * can be identified in databases such as the CDDB. The frame
  * consists of a binary dump of the Table Of Contents, TOC, from the CD,
@@ -36,11 +36,11 @@ import java.nio.ByteBuffer;
  * time. This frame requires a present and valid "TRCK" frame, even if
  * the CD's only got one track. There may only be one "MCDI" frame in
  * each tag.
- * </p><p><table border=0 width="70%">
+ * <p><table border=0 width="70%">
  * <tr><td colspan=2> &lt;Header for 'Music CD identifier', ID: "MCDI"&gt;</td></tr>
  * <tr><td>CD TOC</td><td>&lt;binary data&gt;</td></tr>
- * </table></p>
- * <p/>
+ * </table>
+ *
  * <p>For more details, please refer to the ID3 specifications:
  * <ul>
  * <li><a href="http://www.id3.org/id3v2.3.0.txt">ID3 v2.3.0 Spec</a>

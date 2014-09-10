@@ -31,8 +31,8 @@ import java.util.logging.Logger;
 
 /**
  * Read audio info from file.
- * <p/>
- * <p/>
+ *
+ *
  * The info is held in the mvdh and mdhd fields as shown below
  * <pre>
  * |--- ftyp

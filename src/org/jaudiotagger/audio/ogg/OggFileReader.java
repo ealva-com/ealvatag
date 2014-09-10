@@ -32,7 +32,7 @@ import java.util.logging.Logger;
 
 /**
  * Read Ogg File Tag and Encoding information
- * <p/>
+ *
  * Only implemented for ogg files containing a vorbis stream with vorbis comments
  */
 public class OggFileReader extends AudioFileReader
@@ -61,7 +61,7 @@ public class OggFileReader extends AudioFileReader
 
     /**
      * Return count Ogg Page header, count starts from zero
-     * <p/>
+     *
      * count=0; should return PageHeader that contains Vorbis Identification Header
      * count=1; should return Pageheader that contains VorbisComment and possibly SetupHeader
      * count>=2; should return PageHeader containing remaining VorbisComment,SetupHeader and/or Audio
@@ -86,7 +86,7 @@ public class OggFileReader extends AudioFileReader
 
     /**
      * Summarize all the ogg headers in a file
-     * <p/>
+     *
      * A useful utility function
      *
      * @param oggFile

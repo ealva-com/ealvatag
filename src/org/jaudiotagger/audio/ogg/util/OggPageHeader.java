@@ -35,7 +35,7 @@ import java.nio.ByteBuffer;
 
 /**
  * $Id$
- * <p/>
+ *
  * reference:http://xiph.org/ogg/doc/framing.html
  *
  * @author Raphael Slinckx (KiKiDonK)

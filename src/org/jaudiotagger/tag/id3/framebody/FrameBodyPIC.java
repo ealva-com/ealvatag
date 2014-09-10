@@ -36,7 +36,7 @@ import java.nio.ByteBuffer;
 
 /**
  * ID3v22 Attached Picture
- * <p/>
+ *
  * <p> This frame contains a picture directly related to the audio file.
  * Image format is preferably "PNG" [PNG] or "JPG" [JFIF]. Description
  * is a short description of the picture, represented as a terminated
@@ -45,20 +45,20 @@ import java.nio.ByteBuffer;
  * each in their individual "PIC" frame, but only one with the same
  * ontent descriptor. There may only be one picture with the picture
  * type declared as picture type $01 and $02 respectively. There is a
- * possibility to put only a link to the image file by using the 'image
- * format' "-->" and having a complete URL [URL] instead of picture data.
+ * possibility to put only a link to the image file by using the image
+ * format' "--" and having a complete URL [URL] instead of picture data.
  * The use of linked files should however be used restrictively since
  * there is the risk of separation of files.
- * <p/>
+ *
  * Attached picture   "PIC"
  * Frame size         $xx xx xx
  * Text encoding      $xx
  * Image format       $xx xx xx
  * Picture type       $xx
- * Description        <textstring> $00 (00)
- * Picture data       <binary data>
- * <p/>
- * <p/>
+ * Description        textstring $00 (00)
+ * Picture data       binary data>
+ *
+ *
  * Picture type:  $00  Other
  * $01  32x32 pixels 'file icon' (PNG only)
  * $02  Other file icon

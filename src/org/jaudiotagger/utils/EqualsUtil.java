@@ -3,7 +3,7 @@ package org.jaudiotagger.utils;
 
 /**
  * Collected methods which allow easy implementation of <code>equals</code>.
- * <p/>
+ *
  * Example use case in a class called Car:
  * <pre>
  * public boolean equals(Object aThat){
@@ -18,7 +18,7 @@ package org.jaudiotagger.utils;
  * Arrays.equals(this.fMaintenanceChecks, that.fMaintenanceChecks); //array!
  * }
  * </pre>
- * <p/>
+ *
  * <em>Arrays are not handled by this class</em>.
  * This is because the <code>Arrays.equals</code> methods should be used for
  * array fields.
@@ -63,7 +63,7 @@ public final class EqualsUtil
 
     /**
      * Possibly-null object field.
-     * <p/>
+     *
      * Includes type-safe enumerations and collections, but does not include
      * arrays. See class comment.
      */

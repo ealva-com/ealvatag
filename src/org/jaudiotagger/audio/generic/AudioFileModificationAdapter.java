@@ -24,8 +24,7 @@ import org.jaudiotagger.audio.exceptions.ModifyVetoException;
 import java.io.File;
 
 /**
- * Adapter for
- * {@link org.jaudiotagger.audio.generic.AudioFileModificationListener}.
+ *
  *
  * @author Christian Laireiter
  */

@@ -29,25 +29,25 @@ public interface TreeModelListener extends EventListener {
      * altered their children arrays, but other attributes have
      * changed and may affect presentation. Example: the name of a
      * file has changed, but it is in the same location in the file
-     * system.</p>
+     * system.
      * <p>To indicate the root has changed, childIndices and children
-     * will be null. </p>
+     * will be null.
      * 
      * <p>Use <code>e.getPath()</code> 
      * to get the parent of the changed node(s).
      * <code>e.getChildIndices()</code>
-     * returns the index(es) of the changed node(s).</p>
+     * returns the index(es) of the changed node(s).
      */
     void treeNodesChanged(TreeModelEvent e);
 
     /**
-     * <p>Invoked after nodes have been inserted into the tree.</p>
+     * <p>Invoked after nodes have been inserted into the tree.
      * 
      * <p>Use <code>e.getPath()</code> 
      * to get the parent of the new node(s).
      * <code>e.getChildIndices()</code>
      * returns the index(es) of the new node(s)
-     * in ascending order.</p>
+     * in ascending order.
      */
     void treeNodesInserted(TreeModelEvent e);
 
@@ -55,13 +55,13 @@ public interface TreeModelListener extends EventListener {
      * <p>Invoked after nodes have been removed from the tree.  Note that
      * if a subtree is removed from the tree, this method may only be
      * invoked once for the root of the removed subtree, not once for
-     * each individual set of siblings removed.</p>
+     * each individual set of siblings removed.
      *
      * <p>Use <code>e.getPath()</code> 
      * to get the former parent of the deleted node(s).
      * <code>e.getChildIndices()</code>
      * returns, in ascending order, the index(es) 
-     * the node(s) had before being deleted.</p>
+     * the node(s) had before being deleted.
      */
     void treeNodesRemoved(TreeModelEvent e);
 
@@ -74,7 +74,7 @@ public interface TreeModelListener extends EventListener {
      * <p>Use <code>e.getPath()</code> 
      * to get the path to the node.
      * <code>e.getChildIndices()</code>
-     * returns null.</p>
+     * returns null.
      */
     void treeStructureChanged(TreeModelEvent e);
 

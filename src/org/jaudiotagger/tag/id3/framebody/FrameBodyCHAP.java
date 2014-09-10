@@ -25,13 +25,13 @@ import java.nio.ByteBuffer;
 
 /**
  * Chapter frame.
- * <p/>
- * <p/>
+ *
+ *
  * The purpose of this frame is to describe a single chapter within an
  * audio file. There may be more than one frame of this type in a tag
  * but each must have an Element ID that is unique with respect to any
  * other "CHAP" frame or "CTOC" frame in the tag.
- * </p>
+ *
  * <table border="0" width="70%" align="center">
  * <tr><td nowrap="nowrap">&lt;ID3v2.3 or ID3v2.4 frame header, ID: "CHAP"&gt;</td><td rowspan="7">&nbsp;&nbsp;</td><td>(10 bytes)</td></tr>
  * <tr><td>Element ID</td><td width="70%">&lt;text string&gt; $00</td></tr>
@@ -41,24 +41,24 @@ import java.nio.ByteBuffer;
  * <tr><td>End offset</td><td>$xx xx xx xx</td></tr>
  * <tr><td>&lt;Optional embedded sub-frames&gt;</td></tr>
  * </table>
- * </p><p>
+ * <p>
  * The Element ID uniquely identifies the frame. It is not intended to
  * be human readable and should not be presented to the end user.
- * </p><p>
+ * <p>
  * The Start and End times are a count in milliseconds from the
  * beginning of the file to the start and end of the chapter
  * respectively.
- * </p><p>
+ * <p>
  * The Start offset is a zero-based count of bytes from the beginning
  * of the file to the first byte of the first audio frame in the
  * chapter. If these bytes are all set to 0xFF then the value should be
  * ignored and the start time value should be utilized.
- * </p><p>
+ * <p>
  * The End offset is a zero-based count of bytes from the beginning of
  * the file to the first byte of the audio frame following the end of
  * the chapter. If these bytes are all set to 0xFF then the value should
  * be ignored and the end time value should be utilized.
- * </p><p>
+ * <p>
  * There then follows a sequence of optional frames that are embedded
  * within the "CHAP" frame and which describe the content of the chapter
  * (e.g. a "TIT2" frame representing the chapter name) or provide
@@ -68,8 +68,8 @@ import java.nio.ByteBuffer;
  * "CHAP" frames it can skip them using the size field in the frame
  * header. When it does this it will skip any embedded sub-frames
  * carried within the frame.
- * </p>
- * <p/>
+ *
+ *
  * <p>For more details, please refer to the ID3 Chapter Frame specifications:
  * <ul>
  * <li><a href="http://www.id3.org/id3v2-chapters-1.0.txt">ID3 v2 Chapter Frame Spec</a>

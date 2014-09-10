@@ -136,7 +136,7 @@ public abstract class AbstractID3v2FrameBody extends AbstractTagFrameBody
     /**
      * This reads a frame body from a ByteBuffer into the appropriate FrameBody class and update the position of the
      * buffer to be just after the end of this frameBody
-     * <p/>
+     *
      * The ByteBuffer represents the tag and its position should be at the start of this frameBody. The size as
      * indicated in the header is passed to the frame constructor when reading from file.
      *
@@ -194,7 +194,6 @@ public abstract class AbstractID3v2FrameBody extends AbstractTagFrameBody
      * Write the contents of this datatype to the byte array
      *
      * @param tagBuffer
-     * @throws IOException on any I/O error
      */
     public void write(ByteArrayOutputStream tagBuffer)
 

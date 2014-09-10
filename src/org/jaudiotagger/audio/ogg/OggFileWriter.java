@@ -29,7 +29,7 @@ import java.util.logging.Logger;
 
 /**
  * Write tag data to Ogg File
- * <p/>
+ *
  * Only works for Ogg files containing a vorbis stream
  */
 public class OggFileWriter extends AudioFileWriter

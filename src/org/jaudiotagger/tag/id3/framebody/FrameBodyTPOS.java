@@ -31,7 +31,7 @@ import java.nio.ByteBuffer;
  * This frame is used if the source described in the "TALB" frame is divided into several mediums, e.g. a double CD.
  * The value may be extended with a "/" character and a numeric string containing the total number of parts in the set.
  * e.g. "1/2".
- * <p/>
+ *
  * <p>For more details, please refer to the ID3 specifications:
  * <ul>
  * <li><a href="http://www.id3.org/id3v2.3.0.txt">ID3 v2.3.0 Spec</a>

@@ -446,13 +446,12 @@ public class MetadataDescriptor implements Comparable<MetadataDescriptor>,
      * This method returns the value of the metadata descriptor as a long. <br>
      * Converts the needed amount of byte out of {@link #content}to a number. <br>
      * Only possible if {@link #getType()}equals on of the following: <br>
-     * <li>
      * 
      * @return integer value.
-     * @see #TYPE_BOOLEAN </li> <li>
-     * @see #TYPE_DWORD </li> <li>
-     * @see #TYPE_QWORD </li> <li>
-     * @see #TYPE_WORD </li>
+     * @see #TYPE_BOOLEAN  
+     * @see #TYPE_DWORD  
+     * @see #TYPE_QWORD  
+     * @see #TYPE_WORD 
      */
     public long getNumber() {
         int bytesNeeded;

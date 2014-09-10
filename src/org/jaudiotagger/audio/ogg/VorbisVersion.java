@@ -2,7 +2,7 @@ package org.jaudiotagger.audio.ogg;
 
 /**
  * Vorbis Version
- * <p/>
+ *
  * Ordinal is used to map from internal representation
  */
 public enum VorbisVersion

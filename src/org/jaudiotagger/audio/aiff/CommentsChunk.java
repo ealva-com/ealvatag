@@ -17,7 +17,6 @@ public class CommentsChunk extends Chunk {
      * 
      * @param hdr      The header for this chunk
      * @param raf      The file from which the AIFF data are being read
-     * @param tag      The AiffTag into which information is stored
      */
     public CommentsChunk (
             ChunkHeader hdr, 

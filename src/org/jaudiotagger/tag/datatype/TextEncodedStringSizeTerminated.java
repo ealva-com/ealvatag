@@ -14,11 +14,11 @@ import java.util.List;
 
 /**
  * Represents a String which is not delimited by null character.
- * <p/>
+ *
  * This type of String will usually only be used when it is the last field within a frame, when reading the remainder of
  * the byte array will be read, when writing the frame will be accommodate the required size for the String. The String
  * will be encoded based upon the text encoding of the frame that it belongs to.
- * <p/>
+ *
  * All TextInformation frames support multiple strings, stored as a null separated list, where null is represented by
  * the termination code for the character encoding. This functionality is only officially support in ID3v24.
  *
@@ -65,7 +65,7 @@ public class TextEncodedStringSizeTerminated extends AbstractString
      * Read a 'n' bytes from buffer into a String where n is the framesize - offset
      * so therefore cannot use this if there are other objects after it because it has no
      * delimiter.
-     * <p/>
+     *
      * Must take into account the text encoding defined in the Encoding Object
      * ID3 Text Frames often allow multiple strings seperated by the null char
      * appropriate for the encoding.
@@ -254,7 +254,7 @@ public class TextEncodedStringSizeTerminated extends AbstractString
 
     /**
      * Write String into byte array
-     * <p/>
+     *
      * It will remove a trailing null terminator if exists if the option
      * RemoveTrailingTerminatorOnWrite has been set.
      *
@@ -329,7 +329,7 @@ public class TextEncodedStringSizeTerminated extends AbstractString
 
     /**
      * Get the text encoding being used.
-     * <p/>
+     *
      * The text encoding is defined by the frame body that the text field belongs to.
      *
      * @return the text encoding charset

@@ -11,7 +11,7 @@ import java.nio.ByteBuffer;
 
 /**
  * Represents a single byte as a number
- * <p/>
+ *
  * <p>Usually single byte fields are used as a boolean field, but not always so we dont do this conversion
  */
 public class Mp4TagByteField extends Mp4TagTextField
@@ -30,7 +30,7 @@ public class Mp4TagByteField extends Mp4TagTextField
 
     /**
      * Create new field
-     * <p/>
+     *
      * Assume length of 1 which is correct for most but not all byte fields
      *
      * @param id
@@ -85,7 +85,7 @@ public class Mp4TagByteField extends Mp4TagTextField
 
     /**
      * Return raw data bytes
-     * <p/>
+     *
      * TODO this code should be done better so generalised to any length
      *
      * @return

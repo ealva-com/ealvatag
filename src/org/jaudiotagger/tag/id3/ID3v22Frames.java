@@ -22,7 +22,7 @@ import java.util.Map;
 
 /**
  * Defines ID3v22 frames and collections that categorise frames within an ID3v22 tag.
- * <p/>
+ *
  * You can include frames here that are not officially supported as long as they can be used within an
  * ID3v22Tag
  *

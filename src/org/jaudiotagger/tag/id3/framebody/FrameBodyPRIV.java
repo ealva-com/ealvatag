@@ -25,8 +25,8 @@ import java.nio.ByteBuffer;
 
 /**
  * Private frame.
- * <p/>
- * <p/>
+ *
+ *
  * This frame is used to contain information from a software producer
  * that its program uses and does not fit into the other frames. The
  * frame consists of an 'Owner identifier' string and the binary data.
@@ -37,12 +37,11 @@ import java.nio.ByteBuffer;
  * indicated email address. The tag may contain more than one "PRIV"
  * frame but only with different contents. It is recommended to keep the
  * number of "PRIV" frames as low as possible.
- * </p><p><table border=0 width="70%">
- * <tr><td colspan=2>&lt;Header for 'Private frame', ID: "PRIV"&gt;</td></tr>
- * <tr><td>Owner identifier</td><td width="80%">&lt;text string&gt; $00</td></tr>
- * <tr><td>The private data</td><td>&lt;binary data&gt;</td></tr>
- * </table></p>
- * <p/>
+ *
+ * Header for 'Private frame'
+ * Owner identifier
+ * The private data
+ *
  * <p>For more details, please refer to the ID3 specifications:
  * <ul>
  * <li><a href="http://www.id3.org/id3v2.3.0.txt">ID3 v2.3.0 Spec</a>

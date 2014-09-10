@@ -26,28 +26,27 @@ import java.nio.ByteBuffer;
 
 /**
  * Position synchronisation frame.
- * <p/>
- * <p/>
+ *
+ *
  * This frame delivers information to the listener of how far into the
  * audio stream he picked up; in effect, it states the time offset of
  * the first frame in the stream. The frame layout is:
- * </p><p><center><table border=0 width="70%">
- * <tr><td colspan=2>&lt;Head for 'Position synchronisation', ID: "POSS"&gt;</td></tr>
- * <tr><td>Time stamp format </td><td>$xx          </td></tr>
- * <tr><td>Position          </td><td>$xx (xx ...) </td></tr>
- * </table></center></p>
- * <p/>
+ *
+ * Head for 'Position synchronisation', ID:
+ * Time stamp format $xx
+ * Position          $xx (xx ...)
+ *
  * Where time stamp format is:
- * </p><p>
- * $01 Absolute time, 32 bit sized, using MPEG frames as unit<br>
+ *
+ * $01 Absolute time, 32 bit sized, using MPEG frames as unit
  * $02 Absolute time, 32 bit sized, using milliseconds as unit
- * </p><p>
+ *
  * and position is where in the audio the listener starts to receive,
  * i.e. the beginning of the next frame. If this frame is used in the
  * beginning of a file the value is always 0. There may only be one
  * "POSS" frame in each tag.
- * </p>
- * <p/>
+ *
+ *
  * <p>For more details, please refer to the ID3 specifications:
  * <ul>
  * <li><a href="http://www.id3.org/id3v2.3.0.txt">ID3 v2.3.0 Spec</a>

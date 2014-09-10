@@ -20,7 +20,7 @@ import org.jaudiotagger.tag.id3.ID3Tags;
 
 /**
  * Represents a {@link org.jaudiotagger.tag.id3.framebody.FrameBodySYTC} tempo code.
- * <p/>
+ *
  * The tempo is in BPM described with one or two bytes. If the
  * first byte has the value $FF, one more byte follows, which is added
  * to the first giving a range from 2 - 510 BPM, since $00 and $01 is

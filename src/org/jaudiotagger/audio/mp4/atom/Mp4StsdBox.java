@@ -6,10 +6,10 @@ import java.nio.ByteBuffer;
 
 /**
  * StsdBox ( sample (frame encoding) description box)
- * <p/>
+ *
  * <p>4 bytes version/flags = byte hex version + 24-bit hex flags
  * (current = 0)
- * - > 4 bytes number of descriptions = long unsigned total
+ * 4 bytes number of descriptions = long unsigned total
  * (default = 1)
  * Then if audio contains mp4a,alac or drms box
  */

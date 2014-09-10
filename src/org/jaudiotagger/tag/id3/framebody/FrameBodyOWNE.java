@@ -26,8 +26,8 @@ import java.nio.ByteBuffer;
 
 /**
  * Ownership frame.
- * <p/>
- * <p/>
+ *
+ *
  * The ownership frame might be used as a reminder of a made transaction
  * or, if signed, as proof. Note that the "USER" and "TOWN" frames are
  * good to use in conjunction with this one. The frame begins, after the
@@ -39,14 +39,14 @@ import java.nio.ByteBuffer;
  * character date string (YYYYMMDD) followed by a string with the name
  * of the seller as the last field in the frame. There may only be one
  * "OWNE" frame in a tag.
- * </p><p><table border=0 width="70%">
+ * <p><table border=0 width="70%">
  * <tr><td>&lt;Header for 'Ownership frame', ID: "OWNE"&gt;</td></tr>
  * <tr><td>Text encoding  </td><td>$xx                     </td></tr>
  * <tr><td>Price payed    </td><td>&lt;text string&gt; $00 </td></tr>
  * <tr><td>Date of purch. </td><td>&lt;text string&gt;     </td></tr>
  * <tr><td>Seller</td><td>&lt;text string according to encoding&gt;</td></tr>
- * </table></p>
- * <p/>
+ * </table>
+ *
  * <p>For more details, please refer to the ID3 specifications:
  * <ul>
  * <li><a href="http://www.id3.org/id3v2.3.0.txt">ID3 v2.3.0 Spec</a>

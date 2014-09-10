@@ -39,8 +39,8 @@ import java.util.logging.Logger;
 /**
  * Writes metadata from mp4, the metadata tags are held under the ilst atom as shown below, (note all free atoms are
  * optional).
- * <p/>
- * <p/>
+ *
+ *
  * When writing changes the size of all the atoms upto ilst has to be recalculated, then if the size of
  * the metadata is increased the size of the free atom (below meta) should be reduced accordingly or vice versa.
  * If the size of the metadata has increased by more than the size of the free atom then the size of meta, udta
@@ -51,8 +51,8 @@ import java.util.logging.Logger;
  * Exceptions are that the meta/udta/ilst do not currently exist, in which udta/meta/ilst are created. Note it is valid
  * to have meta/ilst without udta but this is less common so we always try to write files according to the Apple/iTunes
  * specification. *
- * <p/>
- * <p/>
+ *
+ *
  * <pre>
  * |--- ftyp
  * |--- free
@@ -90,7 +90,7 @@ public class Mp4TagWriter
 
     /**
      * Replace the ilst metadata
-     * <p/>
+     *
      * Because it is the same size as the original data nothing else has to be modified
      *
      * @param rawIlstData
@@ -904,8 +904,8 @@ public class Mp4TagWriter
     }
     /**
      * Delete the tag
-     * <p/>
-     * <p/>
+     *
+     *
      * <p>This is achieved by writing an empty ilst atom
      *
      * @param raf

@@ -28,7 +28,7 @@ import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
 
 /**
  * Represents a String whose size is determined by finding of a null character at the end of the String with fixed text encoding.
- * <p/>
+ *
  * The String will be encoded using the default encoding regardless of what encoding may be specified in the framebody
  */
 public class StringNullTerminated extends TextEncodedStringNullTerminated

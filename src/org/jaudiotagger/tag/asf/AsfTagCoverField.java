@@ -12,9 +12,9 @@ import java.util.logging.Logger;
 /**
  * Encapsulates the WM/Pictures provides some convenience methods for decoding
  * the binary data it contains
- * <p/>
+ *
  * The value of a WM/Pictures metadata descriptor is as follows:
- * <p/>
+ *
  * byte0 Picture Type byte1-4 Length of the image data mime type encoded as
  * UTF-16LE null byte null byte description encoded as UTF-16LE (optional) null
  * byte null byte image data

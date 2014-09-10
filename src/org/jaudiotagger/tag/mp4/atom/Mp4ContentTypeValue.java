@@ -3,7 +3,7 @@ package org.jaudiotagger.tag.mp4.atom;
 
 /**
  * List of valid values for the Content Type (Stik) atom
- * <p/>
+ *
  * <p>These are held as a byte field, normally only used for purcahed items, audio files use a stik of one
  */
 public enum Mp4ContentTypeValue

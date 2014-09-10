@@ -9,11 +9,11 @@ import java.util.logging.LogRecord;
 
 /**
  * For Formatting log output
- * <p/>
+ *
  * <p>This is not required by jaudiotagger, but its advantage over the default formatter is that all the format for a log
  * entry is on one line, making it much easier to read. To use this formatter with your code edit loggin.properties
  * within your jre/lib folder and  modify as follows
- * e.g java.util.logging.ConsoleHandler.formatter = org.jaudiotagger.logging.LogFormatter </p>
+ * e.g java.util.logging.ConsoleHandler.formatter = org.jaudiotagger.logging.LogFormatter
  */
 public final class LogFormatter extends Formatter
 {

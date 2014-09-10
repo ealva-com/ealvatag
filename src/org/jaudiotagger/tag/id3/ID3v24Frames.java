@@ -22,7 +22,7 @@ import java.util.Map;
 
 /**
  * Defines ID3v24 frames and collections that categorise frames.
- * <p/>
+ *
  * <p>You can include frames here that are not officially supported as long as they can be used within an
  * ID3v24Tag
  *
@@ -32,7 +32,7 @@ import java.util.Map;
 public class ID3v24Frames extends ID3Frames
 {
     /**
-     * Frame IDs beginning with T are text frames, & with W are url frames
+     * Frame IDs beginning with T are text frames, and with W are url frames
      */
     public static final String FRAME_ID_ACCOMPANIMENT = "TPE2";
     public static final String FRAME_ID_ALBUM = "TALB";

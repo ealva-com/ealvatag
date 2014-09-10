@@ -25,8 +25,8 @@ import java.nio.ByteBuffer;
 
 /**
  * General encapsulated object frame.
- * <p/>
- * <p/>
+ *
+ *
  * In this frame any type of file can be encapsulated. After the header,
  * 'Frame size' and 'Encoding' follows 'MIME type' represented as
  * as a terminated string encoded with ISO-8859-1. The
@@ -35,15 +35,15 @@ import java.nio.ByteBuffer;
  * The last thing in the frame is the actual object. The first two
  * strings may be omitted, leaving only their terminations. There may be more than one "GEOB"
  * frame in each tag, but only one with the same content descriptor.
- * </p><p><table border=0 width="70%">
+ * <p><table border=0 width="70%">
  * <tr><td colspan=2> &lt;Header for 'General encapsulated object', ID: "GEOB"&gt;</td></tr>
  * <tr><td>Text encoding       </td><td>$xx                     </td></tr>
  * <tr><td>MIME type           </td><td>&lt;text string&gt; $00 </td></tr>
  * <tr><td>Filename            </td><td>&lt;text string according to encoding&gt; $00 (00)</td></tr>
  * <tr><td>Content description </td><td><text string according to encoding> $00 (00)</td></tr>
  * <tr><td>Encapsulated object </td><td>&lt;binary data&gt;     </td></tr>
- * </table></p>
- * <p/>
+ * </table>
+ *
  * <p>For more details, please refer to the ID3 specifications:
  * <ul>
  * <li><a href="http://www.id3.org/id3v2.3.0.txt">ID3 v2.3.0 Spec</a>

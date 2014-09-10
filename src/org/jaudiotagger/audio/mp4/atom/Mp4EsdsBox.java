@@ -8,61 +8,61 @@ import java.util.Map;
 
 /**
  * EsdsBox ( stream specific description box), usually holds the Bitrate/No of Channels
- * <p/>
+ *
  * It contains a number of  (possibly optional?)  sections (section 3 - 6) (containing optional filler) with
  * differeent info in each section.
- * <p/>
- * <p/>
- * -> 4 bytes version/flags = 8-bit hex version + 24-bit hex flags
+ *
+ *
+ * - 4 bytes version/flags = 8-bit hex version + 24-bit hex flags
  * (current = 0)
- * <p/>
+ *
  * Section 3
- * -> 1 byte ES descriptor type tag = 8-bit hex value 0x03
- * -> 3 bytes optional extended descriptor type tag string = 3 * 8-bit hex value
+ * - 1 byte ES descriptor type tag = 8-bit hex value 0x03
+ * - 3 bytes optional extended descriptor type tag string = 3 * 8-bit hex value
  * - types are 0x80,0x81,0xFE
- * -> 1 byte descriptor type length = 8-bit unsigned length
- * -> 2 bytes ES ID = 16-bit unsigned value
- * -> 1 byte stream priority = 8-bit unsigned value
+ * - 1 byte descriptor type length = 8-bit unsigned length
+ * - 2 bytes ES ID = 16-bit unsigned value
+ * - 1 byte stream priority = 8-bit unsigned value
  * - Defaults to 16 and ranges from 0 through to 31
- * <p/>
+ *
  * Section 4
- * -> 1 byte decoder config descriptor type tag = 8-bit hex value 0x04
- * -> 3 bytes optional extended descriptor type tag string = 3 * 8-bit hex value
+ * - 1 byte decoder config descriptor type tag = 8-bit hex value 0x04
+ * - 3 bytes optional extended descriptor type tag string = 3 * 8-bit hex value
  * - types are 0x80,0x81,0xFE
- * -> 1 byte descriptor type length = 8-bit unsigned length *
- * -> 1 byte object type ID = 8-bit unsigned value
- * -> 6 bits stream type = 3/4 byte hex value
+ * - 1 byte descriptor type length = 8-bit unsigned length *
+ * - 1 byte object type ID = 8-bit unsigned value
+ * - 6 bits stream type = 3/4 byte hex value
  * - type IDs are object descript. = 1 ; clock ref. = 2
  * - type IDs are scene descript. = 4 ; visual = 4
  * - type IDs are audio = 5 ; MPEG-7 = 6 ; IPMP = 7
  * - type IDs are OCI = 8 ; MPEG Java = 9
  * - type IDs are user private = 32
- * -> 1 bit upstream flag = 1/8 byte hex value
- * -> 1 bit reserved flag = 1/8 byte hex value set to 1
- * -> 3 bytes buffer size = 24-bit unsigned value
- * -> 4 bytes maximum bit rate = 32-bit unsigned value
- * -> 4 bytes average bit rate = 32-bit unsigned value
- * <p/>
+ * - 1 bit upstream flag = 1/8 byte hex value
+ * - 1 bit reserved flag = 1/8 byte hex value set to 1
+ * - 3 bytes buffer size = 24-bit unsigned value
+ * - 4 bytes maximum bit rate = 32-bit unsigned value
+ * - 4 bytes average bit rate = 32-bit unsigned value
+ *
  * Section 5
- * -> 1 byte decoder specific descriptor type tag 8-bit hex value 0x05
- * -> 3 bytes optional extended descriptor type tag string = 3 * 8-bit hex value
+ * - 1 byte decoder specific descriptor type tag 8-bit hex value 0x05
+ * - 3 bytes optional extended descriptor type tag string = 3 * 8-bit hex value
  * - types are 0x80,0x81,0xFE
- * -> 1 byte descriptor type length = 8-bit unsigned length
- * -> 1 byte Audio profile Id
+ * - 1 byte descriptor type length = 8-bit unsigned length
+ * - 1 byte Audio profile Id
  * - 5 bits Profile Id
  * - 3 bits Unknown
- * -> 8 bits other flags
+ * - 8 bits other flags
  * - 3 bits unknown
  * - 2 bits is No of Channels
  * - 3 bits unknown
- * <p/>
+ *
  * Section 6
- * <p/>
- * -> 1 byte SL config descriptor type tag = 8-bit hex value 0x06
- * -> 3 bytes optional extended descriptor type tag string = 3 * 8-bit hex value
+ *
+ * - 1 byte SL config descriptor type tag = 8-bit hex value 0x06
+ * - 3 bytes optional extended descriptor type tag string = 3 * 8-bit hex value
  * - types are 0x80,0x81,0xFE
- * -> 1 byte descriptor type length = 8-bit unsigned length
- * -> 1 byte SL value = 8-bit hex value set to 0x02
+ * - 1 byte descriptor type length = 8-bit unsigned length
+ * - 1 byte SL value = 8-bit hex value set to 0x02
  */
 public class Mp4EsdsBox extends AbstractMp4Box
 {

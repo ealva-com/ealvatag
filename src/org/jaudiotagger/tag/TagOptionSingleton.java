@@ -170,7 +170,7 @@ public class TagOptionSingleton
 
     /**
      * if we should save empty Lyrics3 field or not. Defaults to false.
-     * <p/>
+     *
      * todo I don't think this is implemented yet.
      */
     private boolean lyrics3SaveEmptyField = false;
@@ -750,11 +750,11 @@ public class TagOptionSingleton
      * Sets the default time stamp format for ID3v2 tags which require it.
      * While the value will already exist when reading from a file, this value
      * will be used when a new ID3v2 Frame is created from scratch.
-     * <p/>
-     * <p/>
+     *
+     *
      * $01  Absolute time, 32 bit sized, using MPEG frames as unit<br>
      * $02  Absolute time, 32 bit sized, using milliseconds as unit<br>
-     * </p>
+     *
      *
      * @param tsf the new default time stamp format
      */
@@ -768,11 +768,11 @@ public class TagOptionSingleton
 
     /**
      * Returns the default time stamp format for ID3v2 tags which require it.
-     * <p/>
-     * <p/>
+     *
+     *
      * $01  Absolute time, 32 bit sized, using MPEG frames as unit<br>
      * $02  Absolute time, 32 bit sized, using milliseconds as unit<br>
-     * </p>
+     *
      *
      * @return the default time stamp format
      */

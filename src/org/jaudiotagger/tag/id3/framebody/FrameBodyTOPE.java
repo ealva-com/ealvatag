@@ -25,7 +25,7 @@ import java.nio.ByteBuffer;
  * <p>The 'Original artist(s)/performer(s)' frame is intended for the performer(s) of the original recording, if for
  * example the music in the file should be a cover of a previously released song. The performers are separated with
  * the "/" character.
- * <p/>
+ *
  * <p>For more details, please refer to the ID3 specifications:
  * <ul>
  * <li><a href="http://www.id3.org/id3v2.3.0.txt">ID3 v2.3.0 Spec</a>

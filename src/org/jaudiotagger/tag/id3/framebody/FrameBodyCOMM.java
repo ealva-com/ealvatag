@@ -29,21 +29,21 @@ import java.util.List;
 
 /**
  * Comments frame.
- * <p/>
- * <p/>
+ *
+ *
  * This frame is intended for any kind of full text information that does not fit in any other frame. It consists of a
  * frame header followed by encoding, language and content descriptors and is ended with the actual comment as a
  * text string. Newline characters are allowed in the comment text string. There may be more than one comment frame
  * in each tag, but only one with the same language and* content descriptor.
  * 
- * </p><p><table border=0 width="70%">
+ * <p><table border=0 width="70%">
  * <tr><td colspan=2>&lt;Header for 'Comment', ID: "COMM"&gt;</td></tr>
  * <tr><td>Text encoding   </td><td width="80%">$xx          </td></tr>
  * <tr><td>Language        </td><td>$xx xx xx                </td></tr>
  * <tr><td>Short content descrip.</td><td>&lt;text string according to encoding&gt; $00 (00)</td></tr>
  * <tr><td>The actual text </td><td>&lt;full text string according to encoding&gt;</td></tr>
- * </table></p>
- * <p/>
+ * </table>
+ *
  * <p>For more details, please refer to the ID3 specifications:
  * <ul>
  * <li><a href="http://www.id3.org/id3v2.3.0.txt">ID3 v2.3.0 Spec</a>

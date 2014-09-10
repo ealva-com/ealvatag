@@ -29,10 +29,10 @@ import java.util.logging.Logger;
 
 /**
  * Create the VorbisCommentTag by reading from the raw packet data
- * <p/>
+ *
  * <p>This is in the same format whether encoded with Ogg or Flac
  * except the framing bit is only present when used within Ogg Vorbis
- * <p/>
+ *
  * <pre>
  * From the http://xiph.org/vorbis/doc/Vorbis_I_spec.html#vorbis-spec-comment
  * Read decodes the packet data using the following algorithm:

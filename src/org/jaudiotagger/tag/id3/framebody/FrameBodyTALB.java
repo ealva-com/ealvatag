@@ -23,7 +23,7 @@ import java.nio.ByteBuffer;
 /**
  * Album/Movie/Show title Text information frame.
  * <p>The 'Album/Movie/Show title' frame is intended for the title of the recording(/source of sound) which the audio in the file is taken from.
- * <p/>
+ *
  * <p>For more details, please refer to the ID3 specifications:
  * <ul>
  * <li><a href="http://www.id3.org/id3v2.3.0.txt">ID3 v2.3.0 Spec</a>

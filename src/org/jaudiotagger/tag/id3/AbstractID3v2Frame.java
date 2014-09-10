@@ -378,7 +378,7 @@ public abstract class AbstractID3v2Frame extends AbstractTagFrame implements Tag
      * as TYER in v3 to TDRC in v4. This will only work where appropriate constructors
      * exist in the frame body to be created, for example a FrameBodyTYER requires a constructor
      * consisting of a FrameBodyTDRC.
-     * <p/>
+     *
      * If this method is called and a suitable constructor does not exist then an InvalidFrameException
      * will be thrown
      *

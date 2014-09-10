@@ -22,10 +22,10 @@ import java.nio.ByteBuffer;
 
 /**
  * File type Text information frame.
- * <p/>
+ *
  * <p>The 'File type' frame indicates which type of audio this tag defines.
  * The following type and refinements are defined:
- * </p><p><table border=0 width="70%">
+ * <p><table border=0 width="70%">
  * <tr><td>MPG</td><td rowspan=8>&nbsp;</td><td width="100%">MPEG Audio</td></tr>
  * <tr><td align=right>/1   </td><td>MPEG 1/2 layer I           </td></tr>
  * <tr><td align=right>/2   </td><td>MPEG 1/2 layer II          </td></tr>
@@ -34,13 +34,13 @@ import java.nio.ByteBuffer;
  * <tr><td align=right>/AAC </td><td>Advanced audio compression </td></tr>
  * <tr><td>VQF</td><td>Transform-domain Weighted Interleave Vector Quantization</td></tr>
  * <tr><td>PCM              </td><td>Pulse Code Modulated audio </td></tr>
- * </table></p><p>
+ * </table><p>
  * but other types may be used, not for these types though. This is used
  * in a similar way to the predefined types in the "TMED" frame, but
  * without parentheses. If this frame is not present audio type is
  * assumed to be "MPG".
- * </p>
- * <p/>
+ *
+ *
  * <p>For more details, please refer to the ID3 specifications:
  * <ul>
  * <li><a href="http://www.id3.org/id3v2.3.0.txt">ID3 v2.3.0 Spec</a>

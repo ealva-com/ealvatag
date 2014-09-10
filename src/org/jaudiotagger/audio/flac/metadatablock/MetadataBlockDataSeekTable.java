@@ -24,7 +24,7 @@ import java.io.RandomAccessFile;
 
 /**
  * SeekTable Block
- * <p/>
+ *
  * <p>This is an optional block for storing seek points. It is possible to seek to any given sample in a FLAC stream
  * without a seek table, but the delay can be unpredictable since the bitrate may vary widely within a stream.
  * By adding seek points to a stream, this delay can be significantly reduced. Each seek point takes 18 bytes, so 1%

@@ -34,7 +34,7 @@ import java.nio.ByteBuffer;
 /**
  *  <p>The 'Original release time' frame contains a timestamp describing
  *  when the original recording of the audio was released. Timestamp
- *  format is described in the ID3v2 structure document.</p>
+ *  format is described in the ID3v2 structure document.
 */
 public class FrameBodyTDOR extends AbstractFrameBodyTextInfo implements ID3v24FrameBody
 {

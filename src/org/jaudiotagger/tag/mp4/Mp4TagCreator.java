@@ -36,10 +36,10 @@ import java.util.Iterator;
 
 /**
  * Create raw content of mp4 tag data, concerns itself with atoms upto the ilst atom
- * <p/>
+ *
  * <p>This level is was selected because the ilst atom can be recreated without reference to existing mp4 fields
  * but fields above this level are dependent upon other information that is not held in the tag.
- * <p/>
+ *
  * <pre>
  * |--- ftyp
  * |--- moov

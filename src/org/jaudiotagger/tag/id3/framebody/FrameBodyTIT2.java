@@ -23,7 +23,7 @@ import java.nio.ByteBuffer;
 /**
  * Title/Songname/Content description Text information frame.
  * <p>The 'Title/Songname/Content description' frame is the actual name of the piece (e.g. "Adagio", "Hurricane Donna").
- * <p/>
+ *
  * <p>For more details, please refer to the ID3 specifications:
  * <ul>
  * <li><a href="http://www.id3.org/id3v2.3.0.txt">ID3 v2.3.0 Spec</a>

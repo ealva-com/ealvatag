@@ -26,8 +26,8 @@ import java.nio.ByteBuffer;
 
 /**
  * Encryption method registration frame.
- * <p/>
- * <p/>
+ *
+ *
  * To identify with which method a frame has been encrypted the
  * encryption method must be registered in the tag with this frame. The
  * 'Owner identifier' is a null-terminated string with a URL
@@ -42,13 +42,13 @@ import java.nio.ByteBuffer;
  * same symbol and only one containing the same owner identifier. The
  * method must be used somewhere in the tag. See section 3.3.1, flag j
  * for more information.
- * </p><p><table border=0 width="70%">
+ * <p><table border=0 width="70%">
  * <tr><td colspan=2>&lt;Header for 'Encryption method registration', ID: "ENCR"&gt;</td></tr>
  * <tr><td>Owner identifier</td><td width="80%">&lt;text string&gt; $00</td></tr>
  * <tr><td>Method symbol   </td><td>$xx                           </td></tr>
  * <tr><td>Encryption data </td><td>&lt;binary data&gt;           </td></tr>
- * </table></p>
- * <p/>
+ * </table>
+ *
  * <p>For more details, please refer to the ID3 specifications:
  * <ul>
  * <li><a href="http://www.id3.org/id3v2.3.0.txt">ID3 v2.3.0 Spec</a>

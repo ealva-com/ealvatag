@@ -24,7 +24,7 @@ import java.nio.ByteBuffer;
  * Official audio source webpage URL link frames.
  * <p>The 'Official audio source webpage' frame is a URL pointing at the official webpage for the source of the audio
  * file, e.g. a movie.
- * <p/>
+ *
  * <p>For more details, please refer to the ID3 specifications:
  * <ul>
  * <li><a href="http://www.id3.org/id3v2.3.0.txt">ID3 v2.3.0 Spec</a>

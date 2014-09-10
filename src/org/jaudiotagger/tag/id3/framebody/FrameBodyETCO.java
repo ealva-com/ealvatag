@@ -25,31 +25,31 @@ import java.util.*;
 
 /**
  * Event timing codes frame.
- * <p/>
- * <p/>
+ *
+ *
  * This frame allows synchronisation with key events in a song or sound.
  * The header is:
- * </p><p><table border=0 width="70%">
+ * <p><table border=0 width="70%">
  * <tr><td colspan=2> &lt;Header for 'Event timing codes', ID: "ETCO"&gt;</td></tr>
  * <tr><td>Time stamp format</td><td width="80%">$xx</td></tr>
- * </table></p><p>
+ * </table><p>
  * Where time stamp format is:
- * </p><p>
+ * <p>
  * $01 Absolute time, 32 bit sized, using <a href="#MPEG">MPEG</a> frames as unit<br>
  * $02 Absolute time, 32 bit sized, using milliseconds as unit
- * </p><p>
+ * <p>
  * Absolute time means that every stamp contains the time from the
  * beginning of the file.
- * </p><p>
+ * <p>
  * Followed by a list of key events in the following format:
- * </p><p><table border=0 width="70%">
+ * <p><table border=0 width="70%">
  * <tr><td>Type of event</td><td width="80%">$xx</td></tr>
  * <tr><td>Time stamp</td><td>$xx (xx ...)</td></tr>
- * </table></p><p>
+ * </table><p>
  * The 'Time stamp' is set to zero if directly at the beginning of the
  * sound or after the previous event. All events should be sorted in
  * chronological order. The type of event is as follows:
- * </p><p><table border=0 width="70%">
+ * <p><table border=0 width="70%">
  * <tr><td>$00    </td><td width="80%">padding (has no meaning)</td></tr>
  * <tr><td>$01    </td><td>end of initial silence              </td></tr>
  * <tr><td>$02    </td><td>intro start                         </td></tr>
@@ -78,14 +78,14 @@ import java.util.*;
  * <tr><td>$FE    </td><td>audio file ends                     </td></tr>
  * <tr><td>$FF</td><td>one more byte of events follows (all the following bytes with the value $FF have the same function)</td></tr>
  * </table></center>
- * </p><p>
+ * <p>
  * Terminating the start events such as "intro start" is not required.
  * The 'Not predefined sync's ($E0-EF) are for user events. You might
  * want to synchronise your music to something, like setting of an
  * explosion on-stage, turning on your screensaver etc.
- * </p><p>
- * There may only be one "ETCO" frame in each tag.</p>
- * <p/>
+ * <p>
+ * There may only be one "ETCO" frame in each tag.
+ *
  * <p>For more details, please refer to the ID3 specifications:
  * <ul>
  * <li><a href="http://www.id3.org/id3v2.3.0.txt">ID3 v2.3.0 Spec</a>

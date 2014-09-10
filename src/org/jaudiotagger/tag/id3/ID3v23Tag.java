@@ -333,7 +333,7 @@ public class ID3v23Tag extends AbstractID3v2Tag
     /**
      * Return frame size based upon the sizes of the tags rather than the physical
      * no of bytes between start of ID3Tag and start of Audio Data.
-     * <p/>
+     *
      * TODO this is incorrect, because of subclasses
      *
      * @return size of tag
@@ -390,7 +390,7 @@ public class ID3v23Tag extends AbstractID3v2Tag
     /**
      * Read header flags
      *
-     * <p>Log info messages for flags that have been set and log warnings when bits have been set for unknown flags</p>
+     * <p>Log info messages for flags that have been set and log warnings when bits have been set for unknown flags
      * @param buffer
      * @throws TagException
      */
@@ -549,7 +549,7 @@ public class ID3v23Tag extends AbstractID3v2Tag
 
     /**
      * Read the frames
-     * <p/>
+     *
      * Read from byteBuffer upto size
      *
      * @param byteBuffer
@@ -621,7 +621,7 @@ public class ID3v23Tag extends AbstractID3v2Tag
 
     /**
      * Write the ID3 header to the ByteBuffer.
-     * <p/>
+     *
      * TODO Calculate the CYC Data Check
      * TODO Reintroduce Extended Header
      *
@@ -716,7 +716,7 @@ public class ID3v23Tag extends AbstractID3v2Tag
 
     /**
      * Write tag to file
-     * <p/>
+     *
      * TODO:we currently never write the Extended header , but if we did the size calculation in this
      * method would be slightly incorrect
      *
@@ -813,7 +813,7 @@ public class ID3v23Tag extends AbstractID3v2Tag
 
     /**
      * Create Frame for Id3 Key
-     * <p/>
+     *
      * Only textual data supported at the moment, should only be used with frames that
      * support a simple string argument.
      *

@@ -24,19 +24,19 @@ import java.nio.ByteBuffer;
 
 /**
  * Play counter frame.
- * <p/>
- * <p/>
+ *
+ *
  * This is simply a counter of the number of times a file has been
  * played. The value is increased by one every time the file begins to
  * play. There may only be one "PCNT" frame in each tag. When the
  * counter reaches all one's, one byte is inserted in front of the
  * counter thus making the counter eight bits bigger. The counter must
  * be at least 32-bits long to begin with.
- * </p><p><table border=0 width="70%">
+ * <p><table border=0 width="70%">
  * <tr><td colspan=2> &lt;Header for 'Play counter', ID: "PCNT"&gt;</td></tr>
  * <tr><td>Counter </td><td>$xx xx xx xx (xx ...)</td></tr>
- * </table></p>
- * <p/>
+ * </table>
+ *
  * <p>For more details, please refer to the ID3 specifications:
  * <ul>
  * <li><a href="http://www.id3.org/id3v2.3.0.txt">ID3 v2.3.0 Spec</a>

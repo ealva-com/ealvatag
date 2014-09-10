@@ -39,17 +39,17 @@ import java.util.logging.Logger;
 
 /**
  * Represents the audio header of an MP3 File
- * <p/>
+ *
  * <p>The audio header consists of a number of
  * audio frames. Because we are not trying to play the audio but only extract some information
  * regarding the audio we only need to read the first  audio frames to ensure that we have correctly
  * identified them as audio frames and extracted the metadata we reuire.
- * <p/>
+ *
  * <p>Start of Audio id 0xFF (11111111) and then second byte anded with 0xE0(11100000).
  * For example 2nd byte doesnt have to be 0xE0 is just has to have the top 3 signicant
  * bits set. For example 0xFB (11111011) is a common occurence of the second match. The 2nd byte
  * defines flags to indicate various mp3 values.
- * <p/>
+ *
  * <p>Having found these two values we then read the header which comprises these two bytes plus a further
  * two to ensure this really is a MP3Header, sometimes the first frame is actually a dummy frame with summary information
  * held within about the whole file, typically using a Xing Header or LAme Header. This is most useful when the file
@@ -99,7 +99,7 @@ public class MP3AudioHeader implements AudioHeader
 
     /**
      * Search for the first MP3Header in the file
-     * <p/>
+     *
      * The search starts from the start of the file, it is usually safer to use the alternative constructor that
      * allows you to provide the length of the tag header as a parameter so the tag can be skipped over.
      *
@@ -117,12 +117,12 @@ public class MP3AudioHeader implements AudioHeader
 
     /**
      * Search for the first MP3Header in the file
-     * <p/>
+     *
      * Starts searching from location startByte, this is because there is likely to be an ID3TagHeader
      * before the start of the audio. If this tagHeader contains unsynchronized information there is a
      * possibility that it might be inaccurately identified as the start of the Audio data. Various checks
      * are done in this code to prevent this happening but it cannot be guaranteed.
-     * <p/>
+     *
      * Of course if the startByte provided overstates the length of the tag header, this could mean the
      * start of the MP3AudioHeader is missed, further checks are done within the MP3 class to recognize
      * if this has occurred and take appropriate action.
@@ -142,14 +142,13 @@ public class MP3AudioHeader implements AudioHeader
 
     /**
      * Returns true if the first MP3 frame can be found for the MP3 file
-     * <p/>
+     *
      * This is the first byte of  music data and not the ID3 Tag Frame.     *
      *
      * @param seekFile  MP3 file to seek
      * @param startByte if there is an ID3v2tag we dont want to start reading from the start of the tag
      * @return true if the first MP3 frame can be found
      * @throws IOException on any I/O error
-     * @noinspection NestedTryStatement
      */
     public boolean seek(final File seekFile, long startByte) throws IOException
     {

@@ -9,7 +9,7 @@ import java.nio.ByteBuffer;
 
 /**
  * FreeBox ( padding)
- * <p/>
+ *
  * <p>There are usually two free boxes, one beneath the meta atom and one toplevel atom
  */
 public class Mp4FreeBox extends AbstractMp4Box

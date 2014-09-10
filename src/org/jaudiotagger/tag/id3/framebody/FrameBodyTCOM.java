@@ -26,7 +26,7 @@ import java.nio.ByteBuffer;
  * They are separated with the "/" character in ID3v23.
  * Null separated as is the norm in ID3v24
  *
- * <p/>
+ *
  * <p>For more details, please refer to the ID3 specifications:
  * <ul>
  * <li><a href="http://www.id3.org/id3v2.3.0.txt">ID3 v2.3.0 Spec</a>

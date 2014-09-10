@@ -49,7 +49,7 @@ public abstract class AbstractTag implements Tag
      * Add field
      *
      * @see org.jaudiotagger.tag.Tag#addField(org.jaudiotagger.tag.TagField)
-     *      <p/>
+     *
      *      Changed so add empty fields
      */
     public void addField(TagField field)
@@ -205,7 +205,7 @@ public abstract class AbstractTag implements Tag
 
     /**
      * Return field count
-     * <p/>
+     *
      * TODO:There must be a more efficient way to do this.
      *
      * @return field count
@@ -303,7 +303,7 @@ public abstract class AbstractTag implements Tag
 
     /**
      * Set field
-     * <p/>
+     *
      * Changed:Just because field is empty it doesn't mean it should be deleted. That should be the choice
      * of the developer. (Or does this break things)
      *

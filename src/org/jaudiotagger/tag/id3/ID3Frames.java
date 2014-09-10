@@ -24,7 +24,7 @@ import java.util.TreeSet;
 
 /**
  * Subclasses Defines ID3 frames for their Tag Version
- * <p/>
+ *
  * Here we specify how frames are mapped between different Tag Versions
  *
  * @author Paul Taylor

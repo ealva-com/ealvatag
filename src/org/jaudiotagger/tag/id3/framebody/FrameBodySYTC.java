@@ -25,8 +25,8 @@ import java.util.*;
 
 /**
  * Synchronised tempo codes frame.
- * <p/>
- * <p/>
+ *
+ *
  * For a more accurate description of the tempo of a musical piece this
  * frame might be used. After the header follows one byte describing
  * which time stamp format should be used. Then follows one or more
@@ -37,27 +37,27 @@ import java.util.*;
  * reserved. $00 is used to describe a beat-free time period, which is
  * not the same as a music-free time period. $01 is used to indicate one
  * single beat-stroke followed by a beat-free period.
- * </p><p>
+ * <p>
  * The tempo descriptor is followed by a time stamp. Every time the
  * tempo in the music changes, a tempo descriptor may indicate this for
  * the player. All tempo descriptors should be sorted in chronological
  * order. The first beat-stroke in a time-period is at the same time as
  * the beat description occurs. There may only be one "SYTC" frame in
  * each tag.
- * </p><p><table border=0 width="70%">
+ * <p><table border=0 width="70%">
  * <tr><td colspan=2> &lt;Header for 'Synchronised tempo codes', ID: "SYTC"&gt;</td></tr>
  * <tr><td>Time stamp format</td><td width="80%">$xx</td></tr>
  * <tr><td>Tempo data </td><td>&lt;binary data&gt;</td></tr>
- * </table></p><p>
+ * </table><p>
  * Where time stamp format is:
- * </p><p>
+ * <p>
  * $01 Absolute time, 32 bit sized, using MPEG frames as unit<br>
  * $02 Absolute time, 32 bit sized, using milliseconds as unit
- * </p><p>
+ * <p>
  * Abolute time means that every stamp contains the time from the
  * beginning of the file.
- * </p>
- * <p/>
+ *
+ *
  * <p>For more details, please refer to the ID3 specifications:
  * <ul>
  * <li><a href="http://www.id3.org/id3v2.3.0.txt">ID3 v2.3.0 Spec</a>

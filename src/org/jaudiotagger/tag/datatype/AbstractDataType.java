@@ -93,7 +93,7 @@ public abstract class AbstractDataType
 
     /**
      * This is used by subclasses, to clone the data within the copyObject
-     * <p/>
+     *
      * TODO:It seems to be missing some of the more complex value types.
      * @param copyObject
      */

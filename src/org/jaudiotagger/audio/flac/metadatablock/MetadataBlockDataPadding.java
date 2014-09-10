@@ -20,7 +20,7 @@ package org.jaudiotagger.audio.flac.metadatablock;
 
 /**
  * Padding Block
- * <p/>
+ *
  * <p>This block allows for an arbitrary amount of padding. The contents of a PADDING block have no meaning.
  * This block is useful when it is known that metadata will be edited after encoding; the user can instruct the encoder
  * to reserve a PADDING block of sufficient size so that when metadata is added, it will simply overwrite the padding

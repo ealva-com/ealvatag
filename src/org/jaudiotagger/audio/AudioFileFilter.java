@@ -24,9 +24,9 @@ import java.io.FileFilter;
 import java.io.File;
 
 /**
- * <p>This is a simple FileFilter that will only allow the file supported by this library.</p>
+ * <p>This is a simple FileFilter that will only allow the file supported by this library.
  * <p>It will also accept directories. An additional condition is that file must be readable (read permission) and
- * are not hidden (dot files, or hidden files)</p>
+ * are not hidden (dot files, or hidden files)
  *
  * @author Raphael Slinckx
  * @version $Id$
@@ -51,7 +51,7 @@ public class AudioFileFilter implements FileFilter
 
     /**
      * <p>Check whether the given file meet the required conditions (supported by the library OR directory).
-     * The File must also be readable and not hidden.</p>
+     * The File must also be readable and not hidden.
      *
      * @param    f    The file to test
      * @return a boolean indicating if the file is accepted or not

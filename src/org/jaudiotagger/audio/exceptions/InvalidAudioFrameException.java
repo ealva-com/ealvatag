@@ -1,9 +1,9 @@
 /**
  * @author : Paul Taylor
- * <p/>
+ *
  * Version @version:$Id$
  * Date :${DATE}
- * <p/>
+ *
  * Jaikoz Copyright Copyright (C) 2003 -2005 JThink Ltd
  */
 package org.jaudiotagger.audio.exceptions;

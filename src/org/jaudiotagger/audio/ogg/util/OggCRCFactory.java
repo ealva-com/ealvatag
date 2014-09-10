@@ -23,7 +23,7 @@ import java.util.logging.Logger;
 
 /**
  * OffCRC Calculations
- * <p/>
+ *
  * $Id$
  *
  * @author Raphael Slinckx (KiKiDonK)

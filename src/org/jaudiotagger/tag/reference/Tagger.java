@@ -2,7 +2,7 @@ package org.jaudiotagger.tag.reference;
 
 /**
  * An enumeration of popular tagger applications
- * <p/>
+ *
  * <p>This is not meant to be a definitive list but is first attempt to document a list of taggers in order
  * for us to link nonstandard fields, and link nonstandard tagging to them
  */

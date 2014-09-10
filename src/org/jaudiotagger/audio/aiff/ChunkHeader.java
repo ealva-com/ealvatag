@@ -11,8 +11,6 @@ public class ChunkHeader {
     /**
      *  Constructor.
      * 
-     *  @param  module   The module under which the chunk is being read
-     *  @param  info     The RepInfo object being used by the module
      */
     public ChunkHeader ()
     {

@@ -27,26 +27,26 @@ import java.nio.ByteBuffer;
 
 /**
  * Synchronised lyrics/text frame.
- * <p/>
- * <p/>
+ *
+ *
  * This is another way of incorporating the words, said or sung lyrics,
  * in the audio file as text, this time, however, in sync with the
  * audio. It might also be used to describing events e.g. occurring on a
  * stage or on the screen in sync with the audio. The header includes a
  * content descriptor, represented with as terminated textstring. If no
  * descriptor is entered, 'Content descriptor' is $00 (00) only.
- * </p><p><center><table border=0 width="70%">
+ * <p><center><table border=0 width="70%">
  * <tr><td colspan=2>&lt;Header for 'Synchronised lyrics/text', ID: "SYLT"&gt;</td></tr>
  * <tr><td>Text encoding</td><td width="80%">$xx</td></tr>
  * <tr><td>Language</td><td>$xx xx xx</td></tr>
  * <tr><td>Time stamp format</td><td>$xx</td></tr>
  * <tr><td>Content type</td><td>$xx</td></tr>
  * <tr><td>Content descriptor</td><td>&lt;text string according to encoding&gt; $00 (00)</td></tr>
- * </table></center></p>
+ * </table></center>
  * <p><center><table border=0 width="70%">
  * <tr><td rowspan=2 valign=top>Encoding:</td><td>$00</td><td>ISO-8859-1 character set is used => $00 is sync identifier.</td></tr>
  * <tr><td>$01</td><td>Unicode character set is used => $00 00 is sync identifier.</td></tr>
- * </table></center></p>
+ * </table></center>
  * <p><center><table border=0 width="70%">
  * <tr><td rowspan=7 valign=top>Content type:</td><td>$00</td><td width="80%">is other</td></tr>
  * <tr><td>$01</td><td>is lyrics</td></tr>
@@ -55,55 +55,55 @@ import java.nio.ByteBuffer;
  * <tr><td>$04</td><td>is events (e.g. "Don Quijote enters the stage")</td></tr>
  * <tr><td>$05</td><td>is chord (e.g. "Bb F Fsus")</td></tr>
  * <tr><td>$06</td><td>is trivia/'pop up' information</td></tr>
- * </table></center></p>
- * <p/>
+ * </table></center>
+ *
  * Time stamp format is:
- * </p><p>
+ * <p>
  * $01 Absolute time, 32 bit sized, using MPEG frames as unit<br>
  * $02 Absolute time, 32 bit sized, using milliseconds as unit
- * </p><p>
+ * <p>
  * Abolute time means that every stamp contains the time from the
  * beginning of the file.
- * </p><p>
+ * <p>
  * The text that follows the frame header differs from that of the
  * unsynchronised lyrics/text transcription in one major way. Each
  * syllable (or whatever size of text is considered to be convenient by
  * the encoder) is a null terminated string followed by a time stamp
  * denoting where in the sound file it belongs. Each sync thus has the
  * following structure:
- * </p><p><table border=0 width="70%">
+ * <p><table border=0 width="70%">
  * <tr><td colspan=2>Terminated text to be synced (typically a syllable)</td></tr>
  * <tr><td nowrap>Sync identifier (terminator to above string)</td><td width="80%">$00 (00)</td></tr>
  * <tr><td>Time stamp</td><td>$xx (xx ...)</td></tr>
- * </table></p>
- * <p/>
+ * </table>
+ *
  * The 'time stamp' is set to zero or the whole sync is omitted if
  * located directly at the beginning of the sound. All time stamps
  * should be sorted in chronological order. The sync can be considered
  * as a validator of the subsequent string.
- * </p><p>
+ * <p>
  * Newline ($0A) characters are allowed in all "SYLT" frames and should
  * be used after every entry (name, event etc.) in a frame with the
  * content type $03 - $04.
- * </p><p>
+ * <p>
  * A few considerations regarding whitespace characters: Whitespace
  * separating words should mark the beginning of a new word, thus
  * occurring in front of the first syllable of a new word. This is also
  * valid for new line characters. A syllable followed by a comma should
  * not be broken apart with a sync (both the syllable and the comma
  * should be before the sync).
- * </p><p>
+ * <p>
  * An example: The "USLT" passage
- * </p><p>
+ * <p>
  * "Strangers in the night" $0A "Exchanging glances"
- * </p><p>would be "SYLT" encoded as:
- * </p><p>
+ * <p>would be "SYLT" encoded as:
+ * <p>
  * "Strang" $00 xx xx "ers" $00 xx xx " in" $00 xx xx " the" $00 xx xx
  * " night" $00 xx xx 0A "Ex" $00 xx xx "chang" $00 xx xx "ing" $00 xx
  * xx "glan" $00 xx xx "ces" $00 xx xx
- * </p><p>There may be more than one "SYLT" frame in each tag, but only one
- * with the same language and content descriptor.</p>
- * <p/>
+ * <p>There may be more than one "SYLT" frame in each tag, but only one
+ * with the same language and content descriptor.
+ *
  * <p>For more details, please refer to the ID3 specifications:
  * <ul>
  * <li><a href="http://www.id3.org/id3v2.3.0.txt">ID3 v2.3.0 Spec</a>
@@ -208,7 +208,7 @@ public class FrameBodySYLT extends AbstractID3v2FrameBody implements ID3v24Frame
 
     /**
      * Set lyrics
-     * <p/>
+     *
      * TODO:provide a more user friendly way of adding lyrics
      *
      * @param data
@@ -220,7 +220,7 @@ public class FrameBodySYLT extends AbstractID3v2FrameBody implements ID3v24Frame
 
     /**
      * Get lyrics
-     * <p/>
+     *
      * TODO:better format
      *
      * @return lyrics

@@ -17,7 +17,7 @@ public class ID3TextEncodingConversion
     /**
      * Check the text encoding is valid for this header type and is appropriate for
      * user text encoding options.                                             *
-     * <p/>
+     *
      * This is called before writing any frames that use text encoding
      *
      * @param header       used to identify the ID3tagtype

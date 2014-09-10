@@ -119,7 +119,7 @@ public class StringFixedLength extends AbstractString
 
     /**
      * Write String into byte array
-     * <p/>
+     *
      * The string will be adjusted to ensure the correct number of bytes are written, If the current value is null
      * or to short the written value will have the 'space' character appended to ensure this. We write this instead of
      * the null character because the null character is likely to confuse the parser into misreading the next field.

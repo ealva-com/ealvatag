@@ -25,7 +25,7 @@ import java.nio.ByteBuffer;
  * Content group description Text information frame.
  * <p>The 'Content group description' frame is used if the sound belongs to a larger category of sounds/music.
  * For example, classical music is often sorted in different musical sections (e.g. "Piano Concerto", "Weather - Hurricane").
- * <p/>
+ *
  * <p>For more details, please refer to the ID3 specifications:
  * <ul>
  * <li><a href="http://www.id3.org/id3v2.3.0.txt">ID3 v2.3.0 Spec</a>

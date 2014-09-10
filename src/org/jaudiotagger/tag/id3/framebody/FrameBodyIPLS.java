@@ -30,17 +30,17 @@ import java.util.StringTokenizer;
 
 /**
  * Involved People List ID3v22/v23 Only
- * <p/>
+ *
  * Since there might be a lot of people contributing to an audio file in various ways, such as musicians and technicians,
  * the 'Text information frames' are often insufficient to list everyone involved in a project.
  * The 'Involved people list' is a frame containing the names of those involved, and how they were involved.
  * The body simply contains a terminated string with the involvement directly followed by a terminated string with
  * the involvee followed by a new involvement and so on. There may only be one "IPLS" frame in each tag.
- * <p/>
+ *
  * <Header for 'Involved people list', ID: "IPLS">
  * Text encoding	$xx
  * People list strings	<text strings according to encoding>
- * <p/>
+ *
  * <p>For more details, please refer to the ID3 specifications:
  * <ul>
  * <li><a href="http://www.id3.org/id3v2.3.0.txt">ID3 v2.3.0 Spec</a>

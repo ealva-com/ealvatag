@@ -38,11 +38,11 @@ import java.util.logging.Logger;
 
 /**
  * Reads metadata from mp4,
- * <p/>
- * <p>The metadata tags are usually held under the ilst atom as shown below<p/>
- * <p>Valid Exceptions to the rule:</p>
- * <p>Can be no udta atom with meta rooted immediately under moov instead<p/>
- * <p>Can be no udta/meta atom at all<p/>
+ *
+ * <p>The metadata tags are usually held under the ilst atom as shown below
+ * <p>Valid Exceptions to the rule:
+ * <p>Can be no udta atom with meta rooted immediately under moov instead
+ * <p>Can be no udta/meta atom at all
  *
  * <pre>
  * |--- ftyp
@@ -169,7 +169,7 @@ public class Mp4TagReader
 
     /**
      * Process the field and add to the tag
-     * <p/>
+     *
      * Note:In the case of coverart MP4 holds all the coverart within individual dataitems all within
      * a single covr atom, we will add separate mp4field for each image.
      *

@@ -31,19 +31,19 @@ import java.util.logging.Logger;
 
 /**
  * Everything in MP4s are held in boxes (formally known as atoms), they are held as a hierachial tree within the MP4.
- * <p/>
+ *
  * We are most interested in boxes that are used to hold metadata, but we have to know about some other boxes
  * as well in order to find them.
- * <p/>
+ *
  * All boxes consist of a 4 byte box length (big Endian), and then a 4 byte identifier, this is the header
  * which is model in this class.
- * <p/>
+ *
  * The length includes the length of the box including the identifier and the length itself.
  * Then they may contain data and/or sub boxes, if they contain subboxes they are known as a parent box. Parent boxes
  * shouldn't really contain data, but sometimes they do.
- * <p/>
+ *
  * Parent boxes length includes the length of their immediate sub boxes
- * <p/>
+ *
  * This class is normally used by instantiating with the empty constructor, then use the update method
  * to pass the header data which is used to read the identifier and the the size of the box
  */
@@ -75,7 +75,7 @@ public class Mp4BoxHeader
 
     /**
      * Construct empty header
-     * <p/>
+     *
      * Can be populated later with update method
      */
     public Mp4BoxHeader()
@@ -85,7 +85,7 @@ public class Mp4BoxHeader
 
      /**
      * Construct header to allow manual creation of header for writing to file
-     * <p/>
+     *
       * @param id
       */
     public Mp4BoxHeader(String id)
@@ -112,9 +112,9 @@ public class Mp4BoxHeader
 
     /**
      * Construct header
-     * <p/>
+     *
      * Create header using headerdata, expected to find header at headerdata current position
-     * <p/>
+     *
      * Note after processing adjusts position to immediately after header
      *
      * @param headerData
@@ -126,7 +126,7 @@ public class Mp4BoxHeader
 
     /**
      * Create header using headerdata, expected to find header at headerdata current position
-     * <p/>
+     *
      * Note after processing adjusts position to immediately after header
      *
      * @param headerData
@@ -174,7 +174,7 @@ public class Mp4BoxHeader
 
     /**
      * Set the length.
-     * <p/>
+     *
      * This will modify the databuffer accordingly
      *
      * @param length
@@ -193,7 +193,7 @@ public class Mp4BoxHeader
 
     /**
      * Set the Id.
-     * <p/>
+     *
      * Allows you to manully create a header
      * This will modify the databuffer accordingly
      *
@@ -244,7 +244,7 @@ public class Mp4BoxHeader
 
     /**
      * Seek for box with the specified id starting from the current location of filepointer,
-     * <p/>
+     *
      * Note it wont find the box if it is contained with a level below the current level, nor if we are
      * at a parent atom that also contains data and we havent yet processed the data. It will work
      * if we are at the start of a child box even if it not the required box as long as the box we are
@@ -302,7 +302,7 @@ public class Mp4BoxHeader
 
     /**
      * Seek for box with the specified id starting from the current location of filepointer,
-     * <p/>
+     *
      * Note it won't find the box if it is contained with a level below the current level, nor if we are
      * at a parent atom that also contains data and we havent yet processed the data. It will work
      * if we are at the start of a child box even if it not the required box as long as the box we are

@@ -7,12 +7,12 @@ import java.util.Arrays;
 
 /**
  * Xing Frame
- * <p/>
+ *
  * <p>In some MP3s which variable bit rate the first frame in the file contains a special frame called a Xing Frame,
  * instead of audio data. This is used to store additional information about the file. The most important aspect for
  * this library is details allowing us to determine the bitrate of a Variable Bit Rate VBR file without having
  * to process the whole file.
- * <p/>
+ *
  * Xing VBR Tag data format is 120 bytes long
  * 4 bytes for Header Tag
  * 4 bytes for Header Flags
@@ -20,7 +20,7 @@ import java.util.Arrays;
  * 4 bytes for AUDIO_SIZE
  * 100 bytes for entry (NUMTOCENTRIES)
  * 4 bytes for VBR SCALE. a VBR quality indicator: 0=best 100=worst
- * <p/>
+ *
  * It my then contain a Lame Frame ( a Lame frame is in essence an extended Xing Frame
  */
 public class XingFrame

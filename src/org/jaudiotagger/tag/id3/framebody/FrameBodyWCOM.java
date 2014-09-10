@@ -24,7 +24,7 @@ import java.nio.ByteBuffer;
  * Commercial information URL link frames.
  * <p>The 'Commercial information' frame is a URL pointing at a webpage with information such as where the album can be
  *  bought. There may be more than one "WCOM" frame in a tag, but not with the same content.
- * <p/>
+ *
  * <p>For more details, please refer to the ID3 specifications:
  * <ul>
  * <li><a href="http://www.id3.org/id3v2.3.0.txt">ID3 v2.3.0 Spec</a>

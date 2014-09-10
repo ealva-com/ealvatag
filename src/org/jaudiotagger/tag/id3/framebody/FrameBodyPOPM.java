@@ -26,8 +26,8 @@ import java.nio.ByteBuffer;
 
 /**
  * Popularimeter frame.
- * <p/>
- * <p/>
+ *
+ *
  * The purpose of this frame is to specify how good an audio file is.
  * Many interesting applications could be found to this frame such as a
  * playlist that features better audiofiles more often than others or it
@@ -42,13 +42,7 @@ import java.nio.ByteBuffer;
  * eight bits bigger in the same away as the play counter ("PCNT").
  * There may be more than one "POPM" frame in each tag, but only one
  * with the same email address.
- * </p><p><table border=0 width="70%">
- * <tr><td colspan=2> &lt;Header for 'Popularimeter', ID: "POPM"&gt;</td></tr>
- * <tr><td>Email to user</td><td>&lt;text string&gt; $00</td></tr>
- * <tr><td>Rating       </td><td>$xx                    </td></tr>
- * <tr><td>Counter      </td><td>$xx xx xx xx (xx ...)  </td></tr>
- * </table></p>
- * <p/>
+ *
  * <p>For more details, please refer to the ID3 specifications:
  * <ul>
  * <li><a href="http://www.id3.org/id3v2.3.0.txt">ID3 v2.3.0 Spec</a>
@@ -57,7 +51,7 @@ import java.nio.ByteBuffer;
  * @author : Paul Taylor
  * @author : Eric Farng
  * @version $Id$
- * @todo : Counter should be optional, whereas we always expect it although allow a size of zero
+ * TODO : Counter should be optional, whereas we always expect it although allow a size of zero
  * needs testing.
  */
 public class FrameBodyPOPM extends AbstractID3v2FrameBody implements ID3v24FrameBody, ID3v23FrameBody

@@ -29,10 +29,10 @@ import org.jaudiotagger.tag.id3.ID3Tags;
 
 /**
  * Represents a number which may span a number of bytes when written to file depending what size is to be represented.
- * <p/>
+ *
  * The bitorder in ID3v2 is most significant bit first (MSB). The byteorder in multibyte numbers is most significant
  * byte first (e.g. $12345678 would be encoded $12 34 56 78), also known as big endian and network byte order.
- * <p/>
+ *
  * In ID3Specification would be denoted as $xx xx xx xx (xx ...) , this denotes at least four bytes but may be more.
  * Sometimes may be completely optional (zero bytes)
  */

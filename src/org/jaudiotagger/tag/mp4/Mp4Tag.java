@@ -130,7 +130,7 @@ public class Mp4Tag extends AbstractTag
 
     /**
      * Create genre field
-     * <p/>
+     *
      * <p>If the content can be parsed to one of the known values use the genre field otherwise
      * use the custom field.
      *
@@ -316,7 +316,7 @@ public class Mp4Tag extends AbstractTag
 
     /**
      * Retrieve the  values that exists for this mp4keyId (this is the internalid actually used)
-     * <p/>
+     *
      *
      * @param mp4FieldKey
      * @throws org.jaudiotagger.tag.KeyNotFoundException
@@ -553,7 +553,7 @@ public class Mp4Tag extends AbstractTag
 
     /**
      * Create Tag Field using generic key
-     * <p/>
+     *
      * This should use the correct subclass for the key
      *
      * @param genericKey
@@ -743,7 +743,7 @@ public class Mp4Tag extends AbstractTag
 
     /**
      * Create Tag Field using mp4 key
-     * <p/>
+     *
      * Uses the correct subclass for the key
      *
      * @param mp4FieldKey

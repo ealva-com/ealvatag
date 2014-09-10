@@ -2,7 +2,7 @@ package org.jaudiotagger.audio;
 
 /**
  * Representation of AudioHeader
- * <p/>
+ *
  * <p>Contains info about the Audio Header
  */
 public interface AudioHeader

@@ -24,7 +24,7 @@ import java.nio.ByteBuffer;
 
 /**
  * Relative volume adjustment frame.
- * <p/>
+ *
  * Only partially implemented.
  *
  * @author : Paul Taylor

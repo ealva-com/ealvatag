@@ -19,9 +19,7 @@ public abstract class Chunk {
 
     /**
      *  Constructor.
-     * @param module   The Module under which this was called
      * @param hdr      The header for this chunk
-     * @param dstrm    The stream from which the data are being read
      */
     public Chunk (RandomAccessFile raf, ChunkHeader hdr)
     {
@@ -32,9 +30,7 @@ public abstract class Chunk {
     
     /** Reads a chunk and puts appropriate information into
      *  the RepInfo object. 
-     * 
-     * @param    info  RepInfo object to receive information
-     * 
+     *
      *  @return   <code>false</code> if the chunk is structurally
      *            invalid, otherwise <code>true</code>
      * 

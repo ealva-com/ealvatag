@@ -29,8 +29,8 @@ import java.nio.ByteBuffer;
 
 /**
  * Attached picture frame.
- * <p/>
- * <p/>
+ *
+ *
  * This frame contains a picture directly related to the audio file.
  * Image format is the MIME type and subtype for the image. In
  * the event that the MIME media type name is omitted, "image/" will be
@@ -46,14 +46,14 @@ import java.nio.ByteBuffer;
  * type' "-->" and having a complete URL instead of picture data.
  * The use of linked files should however be used sparingly since there
  * is the risk of separation of files.
- * </p><p><table border=0 width="70%">
+ * <p><table border=0 width="70%">
  * <tr><td colspan=2> &lt;Header for 'Attached picture', ID: "APIC"&gt;</td></tr>
  * <tr><td>Text encoding  </td><td>$xx                            </td></tr>
  * <tr><td>MIME type      </td><td>&lt;text string&gt; $00        </td></tr>
  * <tr><td>Picture type   </td><td>$xx                            </td></tr>
  * <tr><td>Description    </td><td>&lt;text string according to encoding&gt; $00 (00)</td></tr>
  * <tr><td>Picture data   </td><td>&lt;binary data&gt;            </td></tr>
- * </table></p>
+ * </table>
  * <p><table border=0 width="70%">
  * <tr><td rowspan=21 valign=top>Picture type:</td>
  * <td>$00 </td><td>Other                                </td></tr>
@@ -77,8 +77,8 @@ import java.nio.ByteBuffer;
  * <tr><td>$12 </td><td>Illustration                         </td></tr>
  * <tr><td>$13 </td><td>Band/artist logotype                 </td></tr>
  * <tr><td>$14 </td><td>Publisher/Studio logotype            </td></tr>
- * </table></p>
- * <p/>
+ * </table>
+ *
  * <p>For more details, please refer to the ID3 specifications:
  * <ul>
  * <li><a href="http://www.id3.org/id3v2.3.0.txt">ID3 v2.3.0 Spec</a>

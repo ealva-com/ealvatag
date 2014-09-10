@@ -12,7 +12,7 @@ import java.nio.ByteBuffer;
 
 /**
  * Represents raw binary data
- * <p/>
+ *
  * <p>We use this when we find an atom under the ilst atom that we do not recognise , that does not
  * follow standard conventions in order to save the data without modification so it can be safetly
  * written back to file
@@ -58,7 +58,7 @@ public class Mp4TagRawBinaryField extends Mp4TagField
 
     /**
      * Build from data
-     * <p/>
+     *
      * <p>After returning buffers position will be after the end of this atom
      *
      * @param raw

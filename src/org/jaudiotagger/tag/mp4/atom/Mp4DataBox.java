@@ -12,7 +12,7 @@ import java.util.ListIterator;
 
 /**
  * This box is used within both normal metadat boxes and ---- boxes to hold the actual data.
- * <p/>
+ *
  * <p>Format is as follows:
  * :length          (4 bytes)
  * :name 'Data'     (4 bytes)

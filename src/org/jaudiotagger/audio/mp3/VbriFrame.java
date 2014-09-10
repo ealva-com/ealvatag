@@ -7,15 +7,15 @@ import java.util.Arrays;
 
 /**
  * Vrbi Frame
- * <p/>
+ *
  * <p>In MP3s encoded using the franhofer encoder which variable bit rate the first frame in the file contains a
  * special frame called a Vrbi Frame, instead of audio data (Other Vbr encoders use the more common Xing Frame).
  * This is used to store additional information about the file. The most important aspect for
  * this library is details allowing us to determine the bitrate of a Variable Bit Rate VBR file without having
  * to process the whole file.
- * <p/>
+ *
  * From http://www.codeproject.com/KB/audio-video/mpegaudioinfo.aspx#SideInfo
- * <p/>
+ *
  * This header is only used by MPEG audio files encoded with the Fraunhofer Encoder as far as I know. It is different from the XING header. You find it exactly
  * 32 bytes after the end of the first MPEG audio header in the file. (Note that the position is zero-based; position, length and example are each in byte-format.)
  * Position 	Length 	Meaning 	Example
@@ -30,7 +30,7 @@ import java.util.Arrays;
  * 22 				2 	Size per table entry in bytes (max 4) as Big-Endian WORD 	2
  * 24 				2 	Frames per table entry as Big-Endian WORD 	845
  * 26 						TOC entries for seeking as Big-Endian integral. From size per table entry and number of entries, you can calculate the length of this field.
- * <p/>
+ *
  */
 public class VbriFrame
 {

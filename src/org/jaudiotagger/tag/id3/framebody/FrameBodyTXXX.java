@@ -38,13 +38,13 @@ import java.nio.ByteBuffer;
 
 /**
  * User defined text information frame
- * <p/>
+ *
  * This frame is intended for one-string text information concerning the
  * audio file in a similar way to the other "T"-frames. The frame body
  * consists of a description of the string, represented as a terminated
  * string, followed by the actual string. There may be more than one
  * "TXXX" frame in each tag, but only one with the same description.
- * <p/>
+ *
  * <Header for 'User defined text information frame', ID: "TXXX">
  * Text encoding     $xx
  * Description       <text string according to encoding> $00 (00)

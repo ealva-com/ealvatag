@@ -9,7 +9,7 @@ import java.nio.ByteBuffer;
 
 /**
  * Is part of a Compilation (iTunes frame)
- * <p/>
+ *
  * <p>determines whether or not track is part of compilation
  *
  * @author : Paul Taylor
@@ -21,7 +21,7 @@ public class FrameBodyTCMP extends AbstractFrameBodyTextInfo implements ID3v24Fr
 
     /**
      * Creates a new FrameBodyTCMP datatype, with compilation enabled
-     * <p/>
+     *
      * This is the preferred constructor to use because TCMP frames should not exist
      * unless they are set to true
      */

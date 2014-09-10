@@ -56,7 +56,7 @@ public enum ContainerType
     METADATA_OBJECT(GUID.GUID_METADATA, 16, false, true, false, true);
 
     /**
-     * Determines if low has <= index as high, in respect to
+     * Determines if low has index as high, in respect to
      * {@link #getOrdered()}
      * 
      * @param low

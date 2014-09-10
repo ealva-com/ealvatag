@@ -29,7 +29,7 @@ import java.nio.ByteBuffer;
 
 /**
  * Represents a single text field
- * <p/>
+ *
  * <p>Mp4 metadata normally held as follows:
  * <pre>
  * MP4Box Parent contains
@@ -43,7 +43,7 @@ import java.nio.ByteBuffer;
  *          :null field      (4 bytes)
  *          :data
  * </pre>
- * <p/>
+ *
  * <p>Note:This class is initilized with the child data atom only, the parent data has already been processed, this may
  * change as it seems that code should probably be enscapulated into this. Whereas the raw content returned by the
  * getRawContent() contais the byte data for parent and child.

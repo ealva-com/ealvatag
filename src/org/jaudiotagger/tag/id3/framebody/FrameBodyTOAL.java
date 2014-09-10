@@ -24,7 +24,7 @@ import java.nio.ByteBuffer;
  * Original album/movie/show title Text information frame.
  * <p>The 'Original album/movie/show title' frame is intended for the title of the original recording (or source of sound), if for example the music
  * in the file should be a cover of a previously released song.
- * <p/>
+ *
  * <p>For more details, please refer to the ID3 specifications:
  * <ul>
  * <li><a href="http://www.id3.org/id3v2.3.0.txt">ID3 v2.3.0 Spec</a>

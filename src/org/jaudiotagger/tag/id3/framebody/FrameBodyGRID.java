@@ -26,8 +26,8 @@ import java.nio.ByteBuffer;
 
 /**
  * Group identification registration frame.
- * <p/>
- * <p/>
+ *
+ *
  * This frame enables grouping of otherwise unrelated frames. This can
  * be used when some frames are to be signed. To identify which frames
  * belongs to a set of frames a group identifier must be registered in
@@ -43,13 +43,13 @@ import java.nio.ByteBuffer;
  * only one containing the same symbol and only one containing the same
  * owner identifier. The group symbol must be used somewhere in the tag.
  * See section 3.3.1, flag j for more information.
- * </p><p><table border=0 width="70%">
+ * <p><table border=0 width="70%">
  * <tr><td colspan=2>&lt;Header for 'Group ID registration', ID: "GRID"&gt;</td></tr>
  * <tr><td>Owner identifier     </td><td>&lt;text string&gt; $00</td></tr>
  * <tr><td>Group symbol         </td><td width="80%">$xx        </td></tr>
  * <tr><td>Group dependent data </td><td>&lt;binary data&gt;    </td></tr>
- * </table></p>
- * <p/>
+ * </table>
+ *
  * <p>For more details, please refer to the ID3 specifications:
  * <ul>
  * <li><a href="http://www.id3.org/id3v2.3.0.txt">ID3 v2.3.0 Spec</a>

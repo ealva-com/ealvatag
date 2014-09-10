@@ -159,7 +159,7 @@ public class MP3File extends AudioFile
 
     /**
      * Read V2tag if exists
-     * <p/>
+     *
      * TODO:shouldn't we be handing TagExceptions:when will they be thrown
      *
      * @param file
@@ -261,7 +261,7 @@ public class MP3File extends AudioFile
 
     /**
      * Read lyrics3 Tag
-     * <p/>
+     *
      * TODO:not working
      *
      * @param file
@@ -522,7 +522,7 @@ public class MP3File extends AudioFile
 
     /**
      * Extracts the raw ID3v2 tag data into a file.
-     * <p/>
+     *
      * This provides access to the raw data before manipulation, the data is written from the start of the file
      * to the start of the Audio Data. This is primarily useful for manipulating corrupted tags that are not
      * (fully) loaded using the standard methods.
@@ -688,7 +688,7 @@ public class MP3File extends AudioFile
 
     /**
      * Set v2 tag ,don't need to set v24 tag because saving
-     * <p/>
+     *
 
      * @param id3v2tag
      */
@@ -983,7 +983,7 @@ public class MP3File extends AudioFile
 
     /**
      * Set the Tag
-     * <p/>
+     *
      * If the parameter tag is a v1tag then the v1 tag is set if v2tag then the v2tag.
      *
      * @param tag

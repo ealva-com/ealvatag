@@ -19,7 +19,7 @@ import java.util.TreeSet;
 
 /**
  * Defines ID3 Chapter frames and collections that categorise frames.
- * <p/>
+ *
  * <p>For more details, please refer to the ID3 Chapter Frame specifications:
  * <ul>
  * <li><a href="http://www.id3.org/id3v2-chapters-1.0.txt">ID3 v2 Chapter Frame Spec</a>

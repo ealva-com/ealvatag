@@ -12,7 +12,7 @@ import java.util.ArrayList;
 
 /**
  * Represents the Genre field , when user has selected from the set list of genres
- * <p/>
+ *
  * <p>This class allows you to retrieve either the internal genreid, or the display value
  */
 public class Mp4GenreField extends Mp4TagTextNumberField
