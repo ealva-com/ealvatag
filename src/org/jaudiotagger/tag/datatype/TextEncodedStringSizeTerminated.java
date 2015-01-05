@@ -170,6 +170,9 @@ public class TextEncodedStringSizeTerminated extends AbstractString
             throws CharacterCodingException
     {
         CharsetEncoder encoder = Charset.forName(TextEncoding.CHARSET_UTF_16_LE_ENCODING_FORMAT).newEncoder();
+        encoder.onMalformedInput(CodingErrorAction.IGNORE);
+        encoder.onUnmappableCharacter(CodingErrorAction.IGNORE);
+
         ByteBuffer bb = null;
         //Note remember LE BOM is ff fe but this is handled by encoder Unicode char is fe ff
         if(( i + 1)==noOfValues)
@@ -199,6 +202,9 @@ public class TextEncodedStringSizeTerminated extends AbstractString
             throws CharacterCodingException
     {
         CharsetEncoder encoder = Charset.forName(TextEncoding.CHARSET_UTF_16_BE_ENCODING_FORMAT).newEncoder();
+        encoder.onMalformedInput(CodingErrorAction.IGNORE);
+        encoder.onUnmappableCharacter(CodingErrorAction.IGNORE);
+
         ByteBuffer bb = null;
         //Add BOM
         if(( i + 1)==noOfValues)
@@ -264,6 +270,7 @@ public class TextEncodedStringSizeTerminated extends AbstractString
     {
         byte[] data;
         //Try and write to buffer using the CharSet defined by getTextEncodingCharSet()
+        String charSetName   = getTextEncodingCharSet();
         try
         {
             
@@ -271,7 +278,6 @@ public class TextEncodedStringSizeTerminated extends AbstractString
 
             //Special Handling because there is no UTF16 BOM LE charset
             String stringValue   = (String)value;
-            String charSetName   = getTextEncodingCharSet();
             String actualCharSet = null;
             if (charSetName.equals(TextEncoding.CHARSET_UTF_16))
             {
@@ -309,7 +315,10 @@ public class TextEncodedStringSizeTerminated extends AbstractString
                 }
                 else
                 {
-                    outputBuffer.put(writeString( Charset.forName(charSetName).newEncoder(), next, i, values.size()));
+                    CharsetEncoder charsetEncoder = Charset.forName(charSetName).newEncoder();
+                    charsetEncoder.onMalformedInput(CodingErrorAction.IGNORE);
+                    charsetEncoder.onUnmappableCharacter(CodingErrorAction.IGNORE);
+                    outputBuffer.put(writeString( charsetEncoder, next, i, values.size()));
                 }
             }
             outputBuffer.flip();
@@ -318,10 +327,10 @@ public class TextEncodedStringSizeTerminated extends AbstractString
             outputBuffer.get(data, 0, outputBuffer.limit());
             setSize(data.length);
         }
-        //Should never happen so if does throw a RuntimeException
+        //https://bitbucket.org/ijabz/jaudiotagger/issue/1/encoding-metadata-to-utf-16-can-fail-if
         catch (CharacterCodingException ce)
         {
-            logger.severe(ce.getMessage());
+            logger.severe(ce.getMessage()+":"+charSetName+":"+value);
             throw new RuntimeException(ce);
         }
         return data;

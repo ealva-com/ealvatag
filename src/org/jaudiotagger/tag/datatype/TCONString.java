@@ -124,6 +124,9 @@ public class TCONString extends TextEncodedStringSizeTerminated
             throws CharacterCodingException
     {
         CharsetEncoder encoder = Charset.forName(TextEncoding.CHARSET_UTF_16_LE_ENCODING_FORMAT).newEncoder();
+        encoder.onMalformedInput(CodingErrorAction.IGNORE);
+        encoder.onUnmappableCharacter(CodingErrorAction.IGNORE);
+
         ByteBuffer bb = null;
         //Note remember LE BOM is ff fe but this is handled by encoder Unicode char is fe ff
         if(( i + 1)==noOfValues)
@@ -160,6 +163,9 @@ public class TCONString extends TextEncodedStringSizeTerminated
             throws CharacterCodingException
     {
         CharsetEncoder encoder = Charset.forName(TextEncoding.CHARSET_UTF_16_BE_ENCODING_FORMAT).newEncoder();
+        encoder.onMalformedInput(CodingErrorAction.IGNORE);
+        encoder.onUnmappableCharacter(CodingErrorAction.IGNORE);
+
         ByteBuffer bb = null;
         //Add BOM
         if(( i + 1)==noOfValues)

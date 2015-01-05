@@ -143,6 +143,9 @@ public class PartOfSet extends AbstractString
             {
                 charSetName = TextEncoding.CHARSET_UTF_16_LE_ENCODING_FORMAT;
                 CharsetEncoder encoder = Charset.forName(charSetName).newEncoder();
+                encoder.onMalformedInput(CodingErrorAction.IGNORE);
+                encoder.onUnmappableCharacter(CodingErrorAction.IGNORE);
+
                 //Note remember LE BOM is ff fe but this is handled by encoder Unicode char is fe ff
                 ByteBuffer bb = encoder.encode(CharBuffer.wrap('\ufeff' + value));
                 data = new byte[bb.limit()];
@@ -153,6 +156,9 @@ public class PartOfSet extends AbstractString
             {
                 CharsetEncoder encoder = Charset.forName(charSetName).newEncoder();
                 ByteBuffer bb = encoder.encode(CharBuffer.wrap(value));
+                encoder.onMalformedInput(CodingErrorAction.IGNORE);
+                encoder.onUnmappableCharacter(CodingErrorAction.IGNORE);
+
                 data = new byte[bb.limit()];
                 bb.get(data, 0, bb.limit());
             }
