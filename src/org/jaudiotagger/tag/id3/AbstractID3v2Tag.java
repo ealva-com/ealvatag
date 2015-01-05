@@ -1043,11 +1043,10 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
      *
      * @param file
      * @param audioStartByte
-     * @throws IOException TODO should be abstract
+     * @return new audioStartByte - different only if the audio content had to be moved
+     * @throws IOException
      */
-    public void write(File file, long audioStartByte) throws IOException
-    {
-    }
+    public abstract long write(File file, long audioStartByte) throws IOException;
 
     /**
      * Get file lock for writing too file

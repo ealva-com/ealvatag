@@ -30,7 +30,6 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 import java.nio.channels.WritableByteChannel;
-import java.nio.charset.Charset;
 import java.util.*;
 import java.util.logging.Level;
 
@@ -723,7 +722,7 @@ public class ID3v23Tag extends AbstractID3v2Tag
      * @param file The file to write to
      * @throws IOException
      */
-    public void write(File file, long audioStartLocation) throws IOException
+    public long write(File file, long audioStartLocation) throws IOException
     {
         setLoggingFilename(file.getName());
         logger.config("Writing tag to file:"+getLoggingFilename());
@@ -748,6 +747,7 @@ public class ID3v23Tag extends AbstractID3v2Tag
 
         ByteBuffer headerBuffer = writeHeaderToBuffer(padding, bodyByteBuffer.length);
         writeBufferToFile(file, headerBuffer, bodyByteBuffer, padding, sizeIncPadding, audioStartLocation);
+        return sizeIncPadding;
     }
 
     /**

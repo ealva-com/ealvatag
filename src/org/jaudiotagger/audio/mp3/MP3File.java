@@ -875,7 +875,14 @@ public class MP3File extends AudioFile
                 else
                 {
                     logger.config("Writing ID3v2 tag:"+file.getName());
-                    id3v2tag.write(file, ((MP3AudioHeader) this.getAudioHeader()).getMp3StartByte());
+                    final MP3AudioHeader mp3AudioHeader = (MP3AudioHeader) this.getAudioHeader();
+                    final long mp3StartByte = mp3AudioHeader.getMp3StartByte();
+                    final long newMp3StartByte = id3v2tag.write(file, mp3StartByte);
+                    if (mp3StartByte != newMp3StartByte) {
+                        logger.config("New mp3 start byte: " + newMp3StartByte);
+                        mp3AudioHeader.setMp3StartByte(newMp3StartByte);
+                    }
+
                 }
             }
             rfile = new RandomAccessFile(file, "rw");

@@ -1070,7 +1070,7 @@ public class ID3v24Tag extends AbstractID3v2Tag
      * {@inheritDoc}
      */
     @Override
-    public void write(File file, long audioStartLocation) throws IOException
+    public long write(File file, long audioStartLocation) throws IOException
     {
         setLoggingFilename(file.getName());
         logger.config("Writing tag to file:"+getLoggingFilename());
@@ -1086,6 +1086,7 @@ public class ID3v24Tag extends AbstractID3v2Tag
 
         ByteBuffer headerBuffer = writeHeaderToBuffer(padding, bodyByteBuffer.length);
         writeBufferToFile(file, headerBuffer, bodyByteBuffer, padding, sizeIncPadding, audioStartLocation);
+        return sizeIncPadding;
     }
 
     /**
