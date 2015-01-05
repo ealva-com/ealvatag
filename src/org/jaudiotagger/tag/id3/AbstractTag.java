@@ -16,7 +16,7 @@
  *
  *  You should have received a copy of the GNU Lesser General Public License along with this library; if not,
  *  you can get a copy from http://www.opensource.org/licenses/lgpl-license.php or write to the Free Software
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  *
  * Description:This class represents any type of tag in an MP3 file, including ID3 and
  * Lyrics and the file name.
