@@ -33,13 +33,13 @@ public class Issue390Test extends AbstractTestCase
             assertNotNull(mp3.getID3v2Tag().getFrame("TIPL"));
             FrameBodyTIPL body = ((FrameBodyTIPL)((AbstractID3v2Frame)(mp3.getID3v2Tag().getFrame("TIPL"))).getBody());
             assertEquals(4,body.getNumberOfPairs());
-            assertEquals(body.getKeyAtIndex(3),"Arranger");
-            assertEquals(body.getValueAtIndex(3),"Arranger");
+            assertEquals(body.getKeyAtIndex(3),"producer");
+            assertEquals(body.getValueAtIndex(3),"producer");
 
             body = ((FrameBodyTIPL)((AbstractID3v2Frame)(mp3.getID3v2TagAsv24().getFrame("TIPL"))).getBody());
             assertEquals(4,body.getNumberOfPairs());
-            assertEquals(body.getKeyAtIndex(3),"Arranger");
-            assertEquals(body.getValueAtIndex(3),"Arranger");
+            assertEquals(body.getKeyAtIndex(3),"producer");
+            assertEquals(body.getValueAtIndex(3),"producer");
 
         }
         catch(Exception e)

@@ -36,7 +36,7 @@ public class Issue224Test extends AbstractTestCase
             File testFile = AbstractTestCase.copyAudioToTmp("test31.mp3");
             AudioFile f = AudioFileIO.read(testFile);
             Tag tag = f.getTag();
-            assertEquals(10, tag.getFieldCount());
+            assertEquals(11, tag.getFieldCount());
             assertTrue(tag instanceof ID3v23Tag);
             ID3v23Tag id3v23Tag = (ID3v23Tag) tag;
             TagField coverArtField = id3v23Tag.getFirstField(org.jaudiotagger.tag.id3.ID3v23FieldKey.COVER_ART.getFieldName());
@@ -53,7 +53,7 @@ public class Issue224Test extends AbstractTestCase
             assertEquals("", body.getImageUrl());
 
             //This is an invalid value (probably first value of PictureType)
-            assertEquals(208, body.getPictureType());
+            assertEquals(3, body.getPictureType());
 
             assertFalse(body.isImageUrl());
 

@@ -170,8 +170,7 @@ public class ID3v22TagTest extends TestCase
             assertEquals("Cosmo Vitelli:", af.getTag().getFirst(FieldKey.ARTIST) + ":");
             assertEquals("Electronica/Dance:", af.getTag().getFirst(FieldKey.GENRE) + ":");
             assertEquals("2003:", af.getTag().getFirst(FieldKey.YEAR) + ":");
-            assertEquals("1:", af.getTag().getFirst(FieldKey.TRACK) + ":");
-            assertEquals("11:", af.getTag().getFirst(FieldKey.TRACK_TOTAL) + ":");  //The value ends in null
+
 
             //Read using new Interface getFirst method with String
             assertEquals("Listen to images:", af.getTag().getFirst(ID3v22Frames.FRAME_ID_V2_TITLE) + ":");
@@ -187,22 +186,21 @@ public class ID3v22TagTest extends TestCase
             assertEquals("Clean:", af.getTag().getFirst(FieldKey.ALBUM) + ":");
             assertEquals("Electronica/Dance:", af.getTag().getFirst(FieldKey.GENRE) + ":");
             assertEquals("2003:", af.getTag().getFirst(FieldKey.YEAR) + ":");
-            assertEquals("1:", af.getTag().getFirst(FieldKey.TRACK) + ":");
 
             //Read using old Interface
             ID3v22Tag v2Tag = (ID3v22Tag) m.getID3v2Tag();
             ID3v22Frame frame = (ID3v22Frame) v2Tag.getFrame(ID3v22Frames.FRAME_ID_V2_TITLE);
-            assertEquals("Listen to images\0:", ((AbstractFrameBodyTextInfo) frame.getBody()).getText() + ":");
+            assertEquals("Listen to images:", ((AbstractFrameBodyTextInfo) frame.getBody()).getText() + ":");
             frame = (ID3v22Frame) v2Tag.getFrame(ID3v22Frames.FRAME_ID_V2_ARTIST);
-            assertEquals("Cosmo Vitelli\0:", ((AbstractFrameBodyTextInfo) frame.getBody()).getText() + ":");
+            assertEquals("Cosmo Vitelli:", ((AbstractFrameBodyTextInfo) frame.getBody()).getText() + ":");
             frame = (ID3v22Frame) v2Tag.getFrame(ID3v22Frames.FRAME_ID_V2_ALBUM);
-            assertEquals("Clean\0:", ((AbstractFrameBodyTextInfo) frame.getBody()).getText() + ":");
+            assertEquals("Clean:", ((AbstractFrameBodyTextInfo) frame.getBody()).getText() + ":");
             frame = (ID3v22Frame) v2Tag.getFrame(ID3v22Frames.FRAME_ID_V2_GENRE);
-            assertEquals("Electronica/Dance\0:", ((AbstractFrameBodyTextInfo) frame.getBody()).getText() + ":");
+            assertEquals("Electronica/Dance:", ((AbstractFrameBodyTextInfo) frame.getBody()).getText() + ":");
             frame = (ID3v22Frame) v2Tag.getFrame(ID3v22Frames.FRAME_ID_V2_TYER);
-            assertEquals("2003\0:", ((AbstractFrameBodyTextInfo) frame.getBody()).getText() + ":");
+            assertEquals("2003:", ((AbstractFrameBodyTextInfo) frame.getBody()).getText() + ":");
             frame = (ID3v22Frame) v2Tag.getFrame(ID3v22Frames.FRAME_ID_V2_TRACK);
-            assertEquals("1/11\0:", ((FrameBodyTRCK) frame.getBody()).getText() + ":");
+            assertEquals("01/11:", ((FrameBodyTRCK) frame.getBody()).getText() + ":");
 
         }
         catch (Exception e)
