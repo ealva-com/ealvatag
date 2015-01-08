@@ -39,11 +39,6 @@
    </description>
    <url>http://java.net/projects/jaudiotagger/</url>
    <inceptionYear>2005</inceptionYear>
-   <scm>
-      <connection>scm:svn:http://svn.java.net/svn/jaudiotagger~svn/trunk</connection>
-      <developerConnection>scm:svn:https://svn.java.net/svn/jaudiotagger~svn/trunk</developerConnection>
-      <url>http://java.net/projects/jaudiotagger/sources/svn/trunk/show</url>
-   </scm>
    <issueManagement>
       <url>https://jaudiotagger.dev.java.net/issues</url>
    </issueManagement>
@@ -96,19 +91,6 @@
       <plugins>
          <plugin>
             <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-gpg-plugin</artifactId>
-            <executions>
-               <execution>
-                  <id>sign-artifacts</id>
-                  <phase>verify</phase>
-                  <goals>
-                     <goal>sign</goal>
-                  </goals>
-               </execution>   
-            </executions> 
-         </plugin>
-         <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-compiler-plugin</artifactId>
             <configuration>
                <encoding>UTF-8</encoding>
@@ -123,7 +105,6 @@
               <argLine>-Dfile.encoding=UTF-8</argLine>
             </configuration>        
          </plugin>
-
          <plugin>
            <groupId>org.apache.maven.plugins</groupId>
            <artifactId>maven-source-plugin</artifactId>
