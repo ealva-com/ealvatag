@@ -480,6 +480,11 @@ public class Mp4Tag extends AbstractTag
                 return;
             }
         }
+        else if(genericKey == FieldKey.GENRE)
+        {
+            super.deleteField(Mp4FieldKey.GENRE.getFieldName());
+            super.deleteField(Mp4FieldKey.GENRE_CUSTOM.getFieldName());
+        }
         else
         {
             super.deleteField(mp4FieldName);

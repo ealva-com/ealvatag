@@ -2061,7 +2061,114 @@ public class M4aWriteTagTest extends TestCase
         assertNull(exceptionCaught);
     }
 
+    public void testWriteGenres2()
+    {
+        Exception exceptionCaught = null;
+        try
+        {
+            File testFile = AbstractTestCase.copyAudioToTmp("test5.m4a", new File("testWriteGenres.m4a"));
+            AudioFile f = AudioFileIO.read(testFile);
+            Mp4Tag tag = (Mp4Tag) f.getTag();
 
+            assertEquals(TEST_FILE5_SIZE, testFile.length());
+
+            //Change value using string to value that can only be saved using custom
+            tag.setField(tag.createField(FieldKey.GENRE, "Tangoey"));
+            f.commit();
+            f = AudioFileIO.read(testFile);
+            tag = (Mp4Tag) f.getTag();
+            assertEquals("Tangoey", tag.getFirst(FieldKey.GENRE));
+            assertEquals("", tag.getFirst(Mp4FieldKey.GENRE));
+            assertEquals("Tangoey", tag.getFirst(Mp4FieldKey.GENRE_CUSTOM));
+
+            tag.deleteField(FieldKey.GENRE);
+            tag.addField(tag.createField(FieldKey.GENRE, "Slimey"));
+            f.commit();
+            f = AudioFileIO.read(testFile);
+            tag = (Mp4Tag) f.getTag();
+            assertEquals("Slimey", tag.getFirst(FieldKey.GENRE));
+            assertEquals("", tag.getFirst(Mp4FieldKey.GENRE));
+            assertEquals("Slimey", tag.getFirst(Mp4FieldKey.GENRE_CUSTOM));
+
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            exceptionCaught = e;
+        }
+        assertNull(exceptionCaught);
+    }
+
+    /**
+     * https://bitbucket.org/ijabz/jaudiotagger/issue/48/mp4s-can-end-up-with-two-types-of-genre
+     *
+     * Call setField twice, first with genre taht can only be represented by custom and then with
+     * standard genre, this should cause the custom genre to be deleted
+     */
+    public void testWriteGenres3()
+    {
+        Exception exceptionCaught = null;
+        try
+        {
+            File testFile = AbstractTestCase.copyAudioToTmp("test5.m4a", new File("testWriteGenres.m4a"));
+            AudioFile f = AudioFileIO.read(testFile);
+            Mp4Tag tag = (Mp4Tag) f.getTag();
+
+            assertEquals(TEST_FILE5_SIZE, testFile.length());
+
+
+            tag.setField(FieldKey.GENRE, "Tangoey");
+            tag.setField(FieldKey.GENRE, "Rock");
+            f.commit();
+            f = AudioFileIO.read(testFile);
+            tag = (Mp4Tag) f.getTag();
+            assertEquals("Rock", tag.getFirst(FieldKey.GENRE));
+            assertEquals("Rock", tag.getFirst(Mp4FieldKey.GENRE));
+            assertEquals("", tag.getFirst(Mp4FieldKey.GENRE_CUSTOM));
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            exceptionCaught = e;
+        }
+        assertNull(exceptionCaught);
+    }
+
+    /**
+     * https://bitbucket.org/ijabz/jaudiotagger/issue/48/mp4s-can-end-up-with-two-types-of-genre
+     *
+     * Call setField twice, first with standard genre then with genre that can only be represented by custom,
+     * this should cause the standard genre to be deleted
+     */
+    public void testWriteGenres4()
+    {
+        Exception exceptionCaught = null;
+        try
+        {
+            File testFile = AbstractTestCase.copyAudioToTmp("test5.m4a", new File("testWriteGenres.m4a"));
+            AudioFile f = AudioFileIO.read(testFile);
+            Mp4Tag tag = (Mp4Tag) f.getTag();
+
+            assertEquals(TEST_FILE5_SIZE, testFile.length());
+
+
+            tag.setField(FieldKey.GENRE, "Rock");
+            tag.setField(FieldKey.GENRE, "Tangoey");
+
+            f.commit();
+            f = AudioFileIO.read(testFile);
+            tag = (Mp4Tag) f.getTag();
+            assertEquals("Tangoey", tag.getFirst(FieldKey.GENRE));
+            assertEquals("", tag.getFirst(Mp4FieldKey.GENRE));
+            assertEquals("Tangoey", tag.getFirst(Mp4FieldKey.GENRE_CUSTOM));
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            exceptionCaught = e;
+        }
+        assertNull(exceptionCaught);
+    }
     /**
         * Testing to ensure always write custom genre if option enabled
         */
