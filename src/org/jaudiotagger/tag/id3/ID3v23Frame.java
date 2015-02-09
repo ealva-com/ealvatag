@@ -430,13 +430,18 @@ public class ID3v23Frame extends AbstractID3v2Frame
             if (((EncodingFlags) encodingFlags).isCompression())
             {
                 frameBodyBuffer = ID3Compression.uncompress(identifier,getLoggingFilename(),byteBuffer, decompressedFrameSize, realFrameSize);
-                frameBody = readBody(id, frameBodyBuffer, decompressedFrameSize);
+                if(((EncodingFlags) encodingFlags).isEncryption())
+                {
+                    frameBody = readEncryptedBody(id, frameBodyBuffer, decompressedFrameSize);
+                }
+                else
+                {
+                    frameBody = readBody(id, frameBodyBuffer, decompressedFrameSize);
+                }
             }
             else if (((EncodingFlags) encodingFlags).isEncryption())
             {
-                frameBodyBuffer = byteBuffer.slice();
-                frameBodyBuffer.limit(realFrameSize);
-                frameBody = readEncryptedBody(identifier, byteBuffer,frameSize);
+                frameBody = readEncryptedBody(identifier, byteBuffer, frameSize);
             }
             else
             {
