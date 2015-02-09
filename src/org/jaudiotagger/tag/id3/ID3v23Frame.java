@@ -350,8 +350,8 @@ public class ID3v23Frame extends AbstractID3v2Frame
         frameSize = byteBuffer.getInt();
         if (frameSize < 0)
         {
-            logger.warning(getLoggingFilename() + ":Invalid Frame Size:" + identifier);
-            throw new InvalidFrameException(identifier + " is invalid frame");
+            logger.warning(getLoggingFilename() + ":Invalid Frame Size:"+frameSize+":" + identifier);
+            throw new InvalidFrameException(identifier + " is invalid frame:"+frameSize);
         }
         else if (frameSize == 0)
         {
@@ -365,7 +365,7 @@ public class ID3v23Frame extends AbstractID3v2Frame
         else if (frameSize > byteBuffer.remaining())
         {
             logger.warning(getLoggingFilename() + ":Invalid Frame size of " +frameSize +" larger than size of" + byteBuffer.remaining() + " before mp3 audio:" + identifier);
-            throw new InvalidFrameException(identifier + " is invalid frame");
+            throw new InvalidFrameException(identifier + " is invalid frame:"+frameSize +" larger than size of" + byteBuffer.remaining() + " before mp3 audio:" + identifier);
         }
 
         //Read the flag bytes
@@ -398,6 +398,7 @@ public class ID3v23Frame extends AbstractID3v2Frame
         //try to read the frame body data
         int extraHeaderBytesCount = 0;
         int decompressedFrameSize = -1;
+
         if (((EncodingFlags) encodingFlags).isCompression())
         {
             //Read the Decompressed Size
@@ -408,7 +409,7 @@ public class ID3v23Frame extends AbstractID3v2Frame
 
         if (((EncodingFlags) encodingFlags).isEncryption())
         {
-           //Consume the encryption byte
+            //Consume the encryption byte
             extraHeaderBytesCount += FRAME_ENCRYPTION_INDICATOR_SIZE;
             encryptionMethod = byteBuffer.get();
         }
@@ -420,8 +421,27 @@ public class ID3v23Frame extends AbstractID3v2Frame
             groupIdentifier = byteBuffer.get();
         }
 
+        if(((EncodingFlags)encodingFlags).isNonStandardFlags())
+        {
+            //Probably corrupt so treat as a standard frame
+            logger.severe(getLoggingFilename() + ":InvalidEncodingFlags:" + Hex.asHex(((EncodingFlags)encodingFlags).getFlags()));
+        }
+
+        if (((EncodingFlags) encodingFlags).isCompression())
+        {
+            if (decompressedFrameSize > (100 * frameSize))
+            {
+                throw new InvalidFrameException(identifier + " is invalid frame, frame size " + frameSize + " cannot be:" + decompressedFrameSize + " when uncompressed");
+            }
+        }
+
         //Work out the real size of the frameBody data
         int realFrameSize = frameSize - extraHeaderBytesCount;
+
+        if(realFrameSize<=0)
+        {
+            throw new InvalidFrameException(identifier + " is invalid frame, realframeSize is:" + realFrameSize);
+        }
 
         ByteBuffer frameBodyBuffer;
         //Read the body data
