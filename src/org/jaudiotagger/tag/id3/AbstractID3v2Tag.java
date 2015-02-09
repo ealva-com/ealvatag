@@ -2406,7 +2406,10 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
                 {
                     if (((FrameBodyUFID) next).getOwner().equals(formatKey.getSubId()))
                     {
-                        values.add(new String(((FrameBodyUFID) next).getUniqueIdentifier()));
+                        if(((FrameBodyUFID) next).getUniqueIdentifier()!=null)
+                        {
+                            values.add(new String(((FrameBodyUFID) next).getUniqueIdentifier()));
+                        }
                     }
                 }
                 else if (next instanceof FrameBodyIPLS)
@@ -2415,7 +2418,10 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
                     {
                         if (entry.getKey().equals(formatKey.getSubId()))
                         {
-                            values.add(entry.getValue());
+                            if(entry.getValue()!=null)
+                            {
+                                values.add(entry.getValue());
+                            }
                         }
                     }
                 }
@@ -2425,7 +2431,10 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
                     {
                         if (entry.getKey().equals(formatKey.getSubId()))
                         {
-                            values.add(entry.getValue());
+                            if(entry.getValue()!=null)
+                            {
+                                values.add(entry.getValue());
+                            }
                         }
                     }
                 }
