@@ -37,32 +37,20 @@
     Most existing solutions are not java based inhibiting the use of
     java applications with digital files.
    </description>
-   <url>http://java.net/projects/jaudiotagger/</url>
+   <url>https://bitbucket.org/ijabz/jaudiotagger</url>
    <inceptionYear>2005</inceptionYear>
    <issueManagement>
-      <url>https://jaudiotagger.dev.java.net/issues</url>
+      <url>https://bitbucket.org/ijabz/jaudiotagger/issues</url>
    </issueManagement>
    <organization>
-      <name>java.net</name>
-      <url>http://www.java.net/</url>
+      <name>jthink.net</name>
+      <url>http://jthink.net/</url>
    </organization>
-   <mailingLists>
-      <mailingList>
-         <name>Development mailing list</name>
-         <post>dev@jaudiotagger.dev.java.net</post>
-         <archive>https://jaudiotagger.dev.java.net/servlets/SummarizeList?listName=dev</archive>
-      </mailingList>
-      <mailingList>
-         <name>Issues mailing list</name>
-         <post>issues@jaudiotagger.dev.java.net</post>
-         <archive>https://jaudiotagger.dev.java.net/servlets/SummarizeList?listName=issues</archive>
-      </mailingList>
-   </mailingLists>
    <developers>
       <developer>
          <id>paultaylor</id>
          <name>Paul Taylor</name>
-         <email>paultaylor@dev.java.net</email>
+         <email>paultaylor@jthink.net</email>
          <organization>jthink</organization>
          <organizationUrl>http://www.jthink.net/jaudiotagger</organizationUrl>
          <roles>
