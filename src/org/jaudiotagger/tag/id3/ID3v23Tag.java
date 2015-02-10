@@ -1022,7 +1022,15 @@ public class ID3v23Tag extends AbstractID3v2Tag
             AbstractID3v2Frame frame = createFrame(formatKey.getFrameId());
             FrameBodyTCON framebody = (FrameBodyTCON) frame.getBody();
             framebody.setV23Format();
-            framebody.setText(FrameBodyTCON.convertGenericToID3v23Genre(value));
+
+            if(TagOptionSingleton.getInstance().isWriteMp3GenresAsText())
+            {
+                framebody.setText(value);
+            }
+            else
+            {
+                framebody.setText(FrameBodyTCON.convertGenericToID3v23Genre(value));
+            }
             return frame;
         }
         else if (genericKey == FieldKey.YEAR)

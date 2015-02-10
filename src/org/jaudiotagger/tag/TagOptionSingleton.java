@@ -281,6 +281,8 @@ public class TagOptionSingleton
 
     private boolean isWriteMp4GenresAsText=false;
 
+    private boolean isWriteMp3GenresAsText=false;
+
     private ID3V2Version id3v2Version = ID3V2Version.ID3_V23;
 
     /**
@@ -1194,6 +1196,20 @@ public class TagOptionSingleton
     public void setWriteMp4GenresAsText(boolean writeMp4GenresAsText)
     {
         isWriteMp4GenresAsText = writeMp4GenresAsText;
+    }
+
+    /**
+     * If enabled we always use the ©gen atom rather than the gnre atom when writing genres to mp4s
+     * This is known to help some android apps
+     */
+    public boolean isWriteMp3GenresAsText()
+    {
+        return isWriteMp3GenresAsText;
+    }
+
+    public void setWriteMp3GenresAsText(boolean writeMp3GenresAsText)
+    {
+        isWriteMp3GenresAsText = writeMp3GenresAsText;
     }
 
     /**

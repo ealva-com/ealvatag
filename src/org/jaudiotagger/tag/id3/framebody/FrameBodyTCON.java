@@ -130,6 +130,7 @@ public class FrameBodyTCON extends AbstractFrameBodyTextInfo implements ID3v24Fr
     {
         try
         {
+            //If passed id and known value use it
             int genreId = Integer.parseInt(value);
             if (genreId < GenreTypes.getMaxGenreId())
             {
@@ -142,12 +143,14 @@ public class FrameBodyTCON extends AbstractFrameBodyTextInfo implements ID3v24Fr
         }
         catch (NumberFormatException nfe)
         {
+            //If passed String, use matching intregral value if can
             Integer genreId = GenreTypes.getInstanceOf().getIdForName(value);
             if (genreId != null)
             {
                 return String.valueOf(genreId);
             }
 
+            //Covert special string values
             if (value.equalsIgnoreCase(ID3V2ExtendedGenreTypes.RX.getDescription()))
             {
                 value = ID3V2ExtendedGenreTypes.RX.name();
@@ -178,6 +181,7 @@ public class FrameBodyTCON extends AbstractFrameBodyTextInfo implements ID3v24Fr
     {
         try
         {
+            //If passed integer and in list use numeric form else use original value
             int genreId = Integer.parseInt(value);
             if (genreId < GenreTypes.getMaxGenreId())
             {
@@ -190,12 +194,14 @@ public class FrameBodyTCON extends AbstractFrameBodyTextInfo implements ID3v24Fr
         }
         catch (NumberFormatException nfe)
         {
+            //if passed text try and find integral value otherwise use text
             Integer genreId = GenreTypes.getInstanceOf().getIdForName(value);
             if (genreId != null)
             {
                 return bracketWrap(String.valueOf(genreId));
             }
 
+            //But special handling for these text values
             if (value.equalsIgnoreCase(ID3V2ExtendedGenreTypes.RX.getDescription()))
             {
                 value = bracketWrap(ID3V2ExtendedGenreTypes.RX.name());

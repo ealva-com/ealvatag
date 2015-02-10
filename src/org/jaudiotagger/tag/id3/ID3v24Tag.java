@@ -1350,7 +1350,15 @@ public class ID3v24Tag extends AbstractID3v2Tag
             FrameAndSubId formatKey = getFrameAndSubIdFromGenericKey(genericKey);
             AbstractID3v2Frame frame = createFrame(formatKey.getFrameId());
             FrameBodyTCON framebody = (FrameBodyTCON) frame.getBody();
-            framebody.setText(FrameBodyTCON.convertGenericToID3v24Genre(value));
+
+            if(TagOptionSingleton.getInstance().isWriteMp3GenresAsText())
+            {
+                framebody.setText(value);
+            }
+            else
+            {
+                framebody.setText(FrameBodyTCON.convertGenericToID3v24Genre(value));
+            }
             return frame;
         }
         else
