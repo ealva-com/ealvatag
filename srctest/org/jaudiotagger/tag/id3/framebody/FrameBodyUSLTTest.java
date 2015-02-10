@@ -19,7 +19,7 @@ public class FrameBodyUSLTTest extends AbstractTestCase
         FrameBodyUSLT fb = new FrameBodyUSLT(TextEncoding.UTF_16, "eng", "", UTF16_REQUIRED);
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         fb.write(baos);
-        FileOutputStream fos = new FileOutputStream("TEST.TXT");
+        FileOutputStream fos = new FileOutputStream("testdatatmp/TEST.TXT");
         fos.write(baos.toByteArray());
         byte[] frameBody = baos.toByteArray();
         byte[] correctBits = makeByteArray(new int[]{0x01, 'e', 'n', 'g', 0xff, 0xfe, 0x00, 0x00, 0xff, 0xfe, 0x26, 0x20});

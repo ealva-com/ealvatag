@@ -44,6 +44,7 @@ public class Issue282Test extends AbstractTestCase
             af.getTag().setField(ArtworkFactory.createArtworkFromFile(new File("testdata/coverart.jpg")));
 
             af.commit();
+            outputFile.delete();
 
         }
         catch (Exception e)

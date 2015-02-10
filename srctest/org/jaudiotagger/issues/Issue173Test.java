@@ -355,6 +355,7 @@ public class Issue173Test extends AbstractTestCase
         try
         {
             TagOptionSingleton.getInstance().setID3V2Version(ID3V2Version.ID3_V23);
+            TagOptionSingleton.getInstance().setWriteMp3GenresAsText(false);
             AudioFile mp3File = null;
             ID3v23Tag tag = null;
             File testFile = AbstractTestCase.copyAudioToTmp("01.mp3");
