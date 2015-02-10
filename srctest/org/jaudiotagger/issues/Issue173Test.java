@@ -23,6 +23,8 @@ public class Issue173Test extends AbstractTestCase
 {
     public void testMp4GenresUsingGenericInterface()
     {
+        TagOptionSingleton.getInstance().setWriteMp3GenresAsText(false);
+
         File orig = new File("testdata", "01.m4a");
         if (!orig.isFile())
         {
@@ -108,6 +110,8 @@ public class Issue173Test extends AbstractTestCase
 
     public void testMp4GenresUsingMp4Interface()
     {
+        TagOptionSingleton.getInstance().setWriteMp3GenresAsText(false);
+
         File orig = new File("testdata", "01.m4a");
         if (!orig.isFile())
         {
@@ -144,6 +148,8 @@ public class Issue173Test extends AbstractTestCase
 
     public void testMp4InvalidGenresUsingMp4Interface()
     {
+        TagOptionSingleton.getInstance().setWriteMp3GenresAsText(false);
+
         File orig = new File("testdata", "01.m4a");
         if (!orig.isFile())
         {
@@ -181,6 +187,7 @@ public class Issue173Test extends AbstractTestCase
         try
         {
             TagOptionSingleton.getInstance().setID3V2Version(ID3V2Version.ID3_V24);
+            TagOptionSingleton.getInstance().setWriteMp3GenresAsText(false);
             AudioFile mp3File = null;
             ID3v24Tag tag = null;
             File testFile = AbstractTestCase.copyAudioToTmp("01.mp3");
