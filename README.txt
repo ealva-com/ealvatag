@@ -17,7 +17,7 @@ IDE files:
  jaudiotagger.ipr     :JetBrains Intellij Project
 
 License:
- jaudiotagger.LICENSE :license file
+ license.txt :license file
  
  
 Build details:
