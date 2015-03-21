@@ -5,9 +5,11 @@ import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.AudioFileIO;
 import org.jaudiotagger.logging.ErrorMessage;
 import org.jaudiotagger.tag.FieldKey;
-import org.jaudiotagger.tag.TagField;
 import org.jaudiotagger.tag.TagOptionSingleton;
-import org.jaudiotagger.tag.id3.*;
+import org.jaudiotagger.tag.id3.AbstractID3v2Frame;
+import org.jaudiotagger.tag.id3.ID3v22Tag;
+import org.jaudiotagger.tag.id3.ID3v23Tag;
+import org.jaudiotagger.tag.id3.ID3v24Tag;
 import org.jaudiotagger.tag.id3.framebody.FrameBodyTCON;
 import org.jaudiotagger.tag.mp4.Mp4FieldKey;
 import org.jaudiotagger.tag.mp4.Mp4Tag;
@@ -207,6 +209,20 @@ public class Issue173Test extends AbstractTestCase
             body = (FrameBodyTCON)((AbstractID3v2Frame)tag.getFrame("TCON")).getBody();
             assertEquals("1",body.getText());
 
+            //Set Integral value > 125 directly, gets converted
+            tag.setField(FieldKey.GENRE, "127");
+            assertEquals("Drum & Bass",tag.getFirst(FieldKey.GENRE));
+            body = (FrameBodyTCON)((AbstractID3v2Frame)tag.getFrame("TCON")).getBody();
+            // because we explicitly set integer value, use it
+            assertEquals("127",body.getText());
+
+            //Set string representation of Integral value > 125
+            tag.setField(FieldKey.GENRE, "Drum & Bass");
+            assertEquals("Drum & Bass",tag.getFirst(FieldKey.GENRE));
+            body = (FrameBodyTCON)((AbstractID3v2Frame)tag.getFrame("TCON")).getBody();
+            // because we actually set string, write string instead of integer
+            assertEquals("Drum & Bass",body.getText());
+
             //Set Invalid Integral value directly,taken literally
             tag.setField(FieldKey.GENRE, "250");
             assertEquals("250",tag.getFirst(FieldKey.GENRE));
@@ -297,6 +313,20 @@ public class Issue173Test extends AbstractTestCase
             body = (FrameBodyTCON)((AbstractID3v2Frame)tag.getFrame("TCO")).getBody();
             assertEquals("(1)",body.getText());
 
+            //Set Integral value > 125 directly, gets converted
+            tag.setField(FieldKey.GENRE, "127");
+            assertEquals("Drum & Bass",tag.getFirst(FieldKey.GENRE));
+            body = (FrameBodyTCON)((AbstractID3v2Frame)tag.getFrame("TCO")).getBody();
+            // because we explicitly set integer value, use it
+            assertEquals("(127)",body.getText());
+
+            //Set string representation of Integral value > 125
+            tag.setField(FieldKey.GENRE, "Drum & Bass");
+            assertEquals("Drum & Bass",tag.getFirst(FieldKey.GENRE));
+            body = (FrameBodyTCON)((AbstractID3v2Frame)tag.getFrame("TCO")).getBody();
+            // because we actually set string, write string instead of integer
+            assertEquals("Drum & Bass",body.getText());
+
             //Set Invalid Integral value directly,taken literally
             tag.setField(FieldKey.GENRE, "250");
             assertEquals("250",tag.getFirst(FieldKey.GENRE));
@@ -381,6 +411,20 @@ public class Issue173Test extends AbstractTestCase
             assertEquals("Classic Rock",tag.getFirst(FieldKey.GENRE));
             body = (FrameBodyTCON)((AbstractID3v2Frame)tag.getFrame("TCON")).getBody();
             assertEquals("(1)",body.getText());
+
+            //Set Integral value > 125 directly, gets converted
+            tag.setField(FieldKey.GENRE, "127");
+            assertEquals("Drum & Bass",tag.getFirst(FieldKey.GENRE));
+            body = (FrameBodyTCON)((AbstractID3v2Frame)tag.getFrame("TCON")).getBody();
+            // because we explicitly set integer value, use it
+            assertEquals("(127)",body.getText());
+
+            //Set string representation of Integral value > 125
+            tag.setField(FieldKey.GENRE, "Drum & Bass");
+            assertEquals("Drum & Bass",tag.getFirst(FieldKey.GENRE));
+            body = (FrameBodyTCON)((AbstractID3v2Frame)tag.getFrame("TCON")).getBody();
+            // because we actually set string, write string instead of integer
+            assertEquals("Drum & Bass",body.getText());
 
             //Set Invalid Integral value directly,taken literally
             tag.setField(FieldKey.GENRE, "250");
