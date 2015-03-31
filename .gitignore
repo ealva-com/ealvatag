@@ -1,3 +1,5 @@
+/target/
+/testdatatmp/
 .ignore*
 .classpath
 .project
