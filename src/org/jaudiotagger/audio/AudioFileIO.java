@@ -44,7 +44,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.logging.Logger;
 
@@ -235,7 +234,9 @@ public class AudioFileIO
         readers.put(SupportedFileFormat.M4B.getFilesuffix(), new Mp4FileReader());
         readers.put(SupportedFileFormat.WAV.getFilesuffix(), new WavFileReader());
         readers.put(SupportedFileFormat.WMA.getFilesuffix(), new AsfFileReader());
-        readers.put(SupportedFileFormat.AIF.getFilesuffix(), new AiffFileReader());
+        final AiffFileReader aiffFileReader = new AiffFileReader();
+        readers.put(SupportedFileFormat.AIF.getFilesuffix(), aiffFileReader);
+        readers.put(SupportedFileFormat.AIFF.getFilesuffix(), aiffFileReader);
         final RealFileReader realReader = new RealFileReader();
         readers.put(SupportedFileFormat.RA.getFilesuffix(), realReader);
         readers.put(SupportedFileFormat.RM.getFilesuffix(), realReader);
@@ -252,7 +253,6 @@ public class AudioFileIO
         writers.put(SupportedFileFormat.WMA.getFilesuffix(), new AsfFileWriter());
 
         // Register modificationHandler
-        Iterator<AudioFileWriter> it = writers.values().iterator();
         for (AudioFileWriter curr : writers.values())
         {
             curr.setAudioFileModificationListener(this.modificationHandler);
@@ -291,7 +291,7 @@ public class AudioFileIO
     /**
      * Check does file exist
      *
-     * @param file
+     * @param file file
      * @throws java.io.FileNotFoundException
      */
     public void checkFileExists(File file)throws FileNotFoundException
