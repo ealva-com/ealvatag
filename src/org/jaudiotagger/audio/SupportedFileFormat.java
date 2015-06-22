@@ -17,7 +17,8 @@ public enum SupportedFileFormat
     RA("ra"),
     RM("rm"),
     M4B("m4b"),
-    AIF("aif");
+    AIF("aif"),
+    AIFF("aiff");
 
     private String filesuffix;
 

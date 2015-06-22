@@ -35,6 +35,8 @@ import org.jaudiotagger.tag.lyrics3.AbstractLyrics3;
 import org.jaudiotagger.tag.reference.ID3V2Version;
 
 import java.io.*;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.util.logging.Level;
@@ -247,11 +249,29 @@ public class MP3File extends AudioFile
             {
                 //Workaround for 4724038 on Windows
                 bb.clear();
-                if (bb != null && bb.isDirect())
+                if (bb.isDirect() && !TagOptionSingleton.getInstance().isAndroid())
                 {
-                    ((sun.nio.ch.DirectBuffer) bb).cleaner().clean();
-                }
-            }
+                    // Reflection substitute for following code:
+                    //    ((sun.nio.ch.DirectBuffer) bb).cleaner().clean();
+                    // which causes exception on Android - Sun NIO classes are not available
+                    try {
+                        Class<?> clazz = Class.forName("sun.nio.ch.DirectBuffer");
+                        Method cleanerMethod = clazz.getMethod("cleaner");
+                        Object cleaner = cleanerMethod.invoke(bb);  // cleaner = bb.cleaner()
+                        if (cleaner != null) {
+                            Method cleanMethod = cleaner.getClass().getMethod("clean");
+                            cleanMethod.invoke(cleaner);   // cleaner.clean()
+                        }
+                    } catch (ClassNotFoundException e) {
+                        logger.severe("Could not load sun.nio.ch.DirectBuffer.");
+                    } catch (NoSuchMethodException e) {
+                        logger.severe("Could not invoke DirectBuffer method - " + e.getMessage());
+                    } catch (InvocationTargetException e) {
+                        logger.severe("Could not invoke DirectBuffer method - target exception");
+                    } catch (IllegalAccessException e) {
+                        logger.severe("Could not invoke DirectBuffer method - illegal access");
+                    }
+                }            }
         }
         else
         {
