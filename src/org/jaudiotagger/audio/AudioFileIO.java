@@ -21,6 +21,7 @@ package org.jaudiotagger.audio;
 import org.jaudiotagger.audio.aiff.AiffFileReader;
 import org.jaudiotagger.audio.asf.AsfFileReader;
 import org.jaudiotagger.audio.asf.AsfFileWriter;
+import org.jaudiotagger.audio.dsf.DsfAudioFileReader;
 import org.jaudiotagger.audio.exceptions.CannotReadException;
 import org.jaudiotagger.audio.exceptions.CannotWriteException;
 import org.jaudiotagger.audio.exceptions.InvalidAudioFrameException;
@@ -44,6 +45,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.logging.Logger;
 
@@ -234,9 +236,8 @@ public class AudioFileIO
         readers.put(SupportedFileFormat.M4B.getFilesuffix(), new Mp4FileReader());
         readers.put(SupportedFileFormat.WAV.getFilesuffix(), new WavFileReader());
         readers.put(SupportedFileFormat.WMA.getFilesuffix(), new AsfFileReader());
-        final AiffFileReader aiffFileReader = new AiffFileReader();
-        readers.put(SupportedFileFormat.AIF.getFilesuffix(), aiffFileReader);
-        readers.put(SupportedFileFormat.AIFF.getFilesuffix(), aiffFileReader);
+        readers.put(SupportedFileFormat.AIF.getFilesuffix(), new AiffFileReader());
+        readers.put(SupportedFileFormat.DSF.getFilesuffix(), new DsfAudioFileReader());
         final RealFileReader realReader = new RealFileReader();
         readers.put(SupportedFileFormat.RA.getFilesuffix(), realReader);
         readers.put(SupportedFileFormat.RM.getFilesuffix(), realReader);
@@ -253,6 +254,7 @@ public class AudioFileIO
         writers.put(SupportedFileFormat.WMA.getFilesuffix(), new AsfFileWriter());
 
         // Register modificationHandler
+        Iterator<AudioFileWriter> it = writers.values().iterator();
         for (AudioFileWriter curr : writers.values())
         {
             curr.setAudioFileModificationListener(this.modificationHandler);
@@ -291,7 +293,7 @@ public class AudioFileIO
     /**
      * Check does file exist
      *
-     * @param file file
+     * @param file
      * @throws java.io.FileNotFoundException
      */
     public void checkFileExists(File file)throws FileNotFoundException
