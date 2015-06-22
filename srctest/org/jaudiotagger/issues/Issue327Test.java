@@ -23,7 +23,7 @@ public class Issue327Test extends AbstractTestCase
 {
     public void testUTF16BOMMultipleFieldSeperators() throws Exception
     {
-        File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3");
+        File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3",new File("testUTF16BOMMultipleFieldSeperators.mp3"));
         MP3File f = (MP3File)AudioFileIO.read(testFile);
         f.setID3v2Tag(new ID3v23Tag());
         f.getID3v2Tag().addField(FieldKey.MOOD,"For Checking End");

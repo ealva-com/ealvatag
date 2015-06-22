@@ -41,7 +41,7 @@ public class Issue397Test extends AbstractTestCase
 
     public void testSetSubtitleForMp3v22() throws Exception
     {
-        File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3");
+        File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3", new File("testSetSubtitleForMp3v22.mp3"));
         AudioFile f = AudioFileIO.read(testFile);
         TagOptionSingleton.getInstance().setID3V2Version(ID3V2Version.ID3_V22);
         Tag tag = f.getTagOrCreateAndSetDefault();
@@ -67,7 +67,7 @@ public class Issue397Test extends AbstractTestCase
 
     public void testSetSubtitleForMp3v23() throws Exception
     {
-        File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3");
+        File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3", new File("testSetSubtitleForMp3v23.mp3"));
         AudioFile f = AudioFileIO.read(testFile);
         TagOptionSingleton.getInstance().setID3V2Version(ID3V2Version.ID3_V23);
         Tag tag = f.getTagOrCreateAndSetDefault();
@@ -93,7 +93,7 @@ public class Issue397Test extends AbstractTestCase
 
     public void testSetSubtitleForMp3v24() throws Exception
     {
-        File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3");
+        File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3", new File("testSetSubtitleForMp3v24.mp3"));
         AudioFile f = AudioFileIO.read(testFile);
         TagOptionSingleton.getInstance().setID3V2Version(ID3V2Version.ID3_V24);
         Tag tag = f.getTagOrCreateAndSetDefault();
