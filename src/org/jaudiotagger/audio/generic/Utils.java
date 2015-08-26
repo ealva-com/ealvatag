@@ -19,6 +19,7 @@
 package org.jaudiotagger.audio.generic;
 
 import org.jaudiotagger.audio.AudioFile;
+import org.jaudiotagger.utils.FileTypeUtil;
 
 import java.io.*;
 import java.nio.ByteBuffer;
@@ -93,6 +94,18 @@ public class Utils
         return name.substring(i + 1);
     }
 
+    /*
+     * Returns the extension of the given file based on the file signature.
+     * The extension is empty if the file signature is not recognozed
+     * 
+     * @param f The file whose extension is requested
+     * @return The extension of the given file
+     */
+
+	public static String getMagicExtension(File f) throws IOException{
+		String fileType = FileTypeUtil.getMagicFileType(f);
+		return FileTypeUtil.getMagicExt(fileType);
+	}
 
     /*
     * Computes a number whereby the 1st byte is the least signifcant and the last
