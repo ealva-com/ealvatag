@@ -457,8 +457,6 @@ public class AudioFileIO
      */
     public void writeFile(AudioFile f, String targetPath) throws CannotWriteException
     {
-//        String ext = Utils.getExtension(f.getFile());
-    	
     	String ext = f.getExt();
     	String targetFilePath = targetPath + "." + ext;
     	

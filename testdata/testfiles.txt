@@ -68,3 +68,4 @@ test115.flac,no,466,flac Flac with invalid blocktype
 test115.mp3,no,478,mp3 mp3 with podcast tags
 test116.m4a,no,463,mp4 with invalid ????
 test117.ogg,no,472,very short ogg file (less than a second)
+test118.m4a,no,,unable to read mp4
