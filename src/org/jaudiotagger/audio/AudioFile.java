@@ -69,6 +69,11 @@ public class AudioFile
      * The tag
      */
     protected Tag tag;
+    
+    /**
+     * The tag
+     */
+    protected String extension;
 
     public AudioFile()
     {
@@ -135,6 +140,26 @@ public class AudioFile
     public File getFile()
     {
         return file;
+    }
+
+    /**
+     * Set the file extension
+     *
+     * @param extension
+     */
+    public void setExt(String ext)
+    {
+        this.extension = ext;
+    }
+
+    /**
+     * Retrieve the file extension
+     *
+     * @return
+     */
+    public String getExt()
+    {
+        return extension;
     }
 
     /**
