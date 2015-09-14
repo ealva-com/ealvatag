@@ -27,7 +27,7 @@ public class Issue173Test extends AbstractTestCase
     {
         TagOptionSingleton.getInstance().setWriteMp3GenresAsText(false);
 
-        File orig = new File("testdata", "01.m4a");
+        File orig = new File("testdata", "test.m4a");
         if (!orig.isFile())
         {
             System.err.println("Unable to test file - not available");
@@ -39,7 +39,7 @@ public class Issue173Test extends AbstractTestCase
             System.out.println(TagOptionSingleton.getInstance().isWriteMp4GenresAsText());
             AudioFile mp4File = null;
             Mp4Tag tag = null;
-            File testFile = AbstractTestCase.copyAudioToTmp("01.m4a");
+            File testFile = AbstractTestCase.copyAudioToTmp("test.m4a");
             mp4File = AudioFileIO.read(testFile);
             tag = (Mp4Tag) mp4File.getTag();
             //Set valid value
@@ -114,7 +114,7 @@ public class Issue173Test extends AbstractTestCase
     {
         TagOptionSingleton.getInstance().setWriteMp3GenresAsText(false);
 
-        File orig = new File("testdata", "01.m4a");
+        File orig = new File("testdata", "test.m4a");
         if (!orig.isFile())
         {
             System.err.println("Unable to test file - not available");
@@ -126,7 +126,7 @@ public class Issue173Test extends AbstractTestCase
             System.out.println(TagOptionSingleton.getInstance().isWriteMp4GenresAsText());
             AudioFile mp4File = null;
             Mp4Tag tag = null;
-            File testFile = AbstractTestCase.copyAudioToTmp("01.m4a");
+            File testFile = AbstractTestCase.copyAudioToTmp("test.m4a");
             mp4File = AudioFileIO.read(testFile);
             tag = (Mp4Tag) mp4File.getTag();
             //Set valid value
@@ -152,7 +152,7 @@ public class Issue173Test extends AbstractTestCase
     {
         TagOptionSingleton.getInstance().setWriteMp3GenresAsText(false);
 
-        File orig = new File("testdata", "01.m4a");
+        File orig = new File("testdata", "test.m4a");
         if (!orig.isFile())
         {
             System.err.println("Unable to test file - not available");
@@ -164,7 +164,7 @@ public class Issue173Test extends AbstractTestCase
             System.out.println(TagOptionSingleton.getInstance().isWriteMp4GenresAsText());
             AudioFile mp4File = null;
             Mp4Tag tag = null;
-            File testFile = AbstractTestCase.copyAudioToTmp("01.m4a");
+            File testFile = AbstractTestCase.copyAudioToTmp("test.m4a");
             mp4File = AudioFileIO.read(testFile);
             tag = (Mp4Tag) mp4File.getTag();
             //Set valid value
