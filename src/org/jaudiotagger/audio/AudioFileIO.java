@@ -31,6 +31,7 @@ import java.util.Map;
 import java.util.logging.Logger;
 
 import org.jaudiotagger.audio.aiff.AiffFileReader;
+import org.jaudiotagger.audio.aiff.AiffFileWriter;
 import org.jaudiotagger.audio.asf.AsfFileReader;
 import org.jaudiotagger.audio.asf.AsfFileWriter;
 import org.jaudiotagger.audio.dsf.DsfAudioFileReader;
@@ -316,6 +317,7 @@ public class AudioFileIO
         writers.put(SupportedFileFormat.M4B.getFilesuffix(), new Mp4FileWriter());                
         writers.put(SupportedFileFormat.WAV.getFilesuffix(), new WavFileWriter());
         writers.put(SupportedFileFormat.WMA.getFilesuffix(), new AsfFileWriter());
+        writers.put(SupportedFileFormat.AIF.getFilesuffix(), new AiffFileWriter());
 
         // Register modificationHandler
         Iterator<AudioFileWriter> it = writers.values().iterator();

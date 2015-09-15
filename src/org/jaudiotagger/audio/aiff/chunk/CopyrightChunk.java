@@ -1,9 +1,13 @@
-package org.jaudiotagger.audio.aiff;
+package org.jaudiotagger.audio.aiff.chunk;
+
+import org.jaudiotagger.audio.aiff.AiffAudioHeader;
+import org.jaudiotagger.audio.aiff.TextChunk;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
 
-public class CopyrightChunk extends TextChunk {
+public class CopyrightChunk extends TextChunk
+{
 
     private AiffAudioHeader aiffHeader;
     
@@ -15,7 +19,7 @@ public class CopyrightChunk extends TextChunk {
      * @param aHdr      The AiffAudioHeader into which information is stored
      */
     public CopyrightChunk (
-            ChunkHeader hdr, 
+            ChunkHeader hdr,
             RandomAccessFile raf,
             AiffAudioHeader aHdr)
     {
