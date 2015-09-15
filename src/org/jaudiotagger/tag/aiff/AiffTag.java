@@ -4,17 +4,12 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.jaudiotagger.audio.generic.AbstractTag;
-import org.jaudiotagger.audio.generic.GenericTag;
-import org.jaudiotagger.audio.generic.Utils;
 import org.jaudiotagger.tag.FieldDataInvalidException;
 import org.jaudiotagger.tag.FieldKey;
 import org.jaudiotagger.tag.KeyNotFoundException;
 import org.jaudiotagger.tag.Tag;
 import org.jaudiotagger.tag.TagField;
-import org.jaudiotagger.tag.TagTextField;
 import org.jaudiotagger.tag.id3.AbstractID3v2Tag;
-import org.jaudiotagger.tag.id3.ID3v24Tag;
 import org.jaudiotagger.tag.images.Artwork;
 
 /** AiffTag wraps ID3Tag for most of its metadata */
@@ -240,5 +235,18 @@ public class AiffTag /* extends GenericTag */ implements Tag {
     public TagField createCompilationField(boolean value) throws KeyNotFoundException, FieldDataInvalidException
     {
         return createField(FieldKey.IS_COMPILATION,String.valueOf(value));
+    }
+
+    @Override
+    public String toString()
+    {
+        if(id3Tag!=null)
+        {
+            return id3Tag.toString();
+        }
+        else
+        {
+            return "tag:empty";
+        }
     }
 }

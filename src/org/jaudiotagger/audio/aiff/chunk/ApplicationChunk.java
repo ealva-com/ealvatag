@@ -1,10 +1,14 @@
-package org.jaudiotagger.audio.aiff;
+package org.jaudiotagger.audio.aiff.chunk;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
+
+import org.jaudiotagger.audio.aiff.AiffAudioHeader;
+import org.jaudiotagger.audio.aiff.AiffUtil;
 import org.jaudiotagger.audio.generic.Utils;
 
-public class ApplicationChunk extends Chunk {
+public class ApplicationChunk extends Chunk
+{
 
 //  private AiffTag aiffTag;
   private AiffAudioHeader aiffHeader;
@@ -16,7 +20,7 @@ public class ApplicationChunk extends Chunk {
    * @param raf      The file from which the AIFF data are being read
    */
   public ApplicationChunk (
-          ChunkHeader hdr, 
+          ChunkHeader hdr,
           RandomAccessFile raf,
           AiffAudioHeader aHdr)
   {

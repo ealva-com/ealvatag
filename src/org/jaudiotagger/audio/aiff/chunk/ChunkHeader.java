@@ -1,4 +1,6 @@
-package org.jaudiotagger.audio.aiff;
+package org.jaudiotagger.audio.aiff.chunk;
+
+import org.jaudiotagger.audio.aiff.AiffUtil;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
@@ -36,7 +38,7 @@ public class ChunkHeader {
             id.append((char) ch);
         }
         _chunkID = id.toString ();
-        _size = AiffUtil.readUINT32 (raf); 
+        _size = AiffUtil.readUINT32(raf);
         return true;
     }
     

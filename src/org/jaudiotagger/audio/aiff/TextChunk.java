@@ -1,12 +1,16 @@
 package org.jaudiotagger.audio.aiff;
 
+import org.jaudiotagger.audio.aiff.chunk.Chunk;
+import org.jaudiotagger.audio.aiff.chunk.ChunkHeader;
+
 import java.io.IOException;
 import java.io.RandomAccessFile;
 
 /** This class provides common functionality for NameChunk, AuthorChunk,
  *  and CopyrightChunk 
  */
-public abstract class TextChunk extends Chunk {
+public abstract class TextChunk extends Chunk
+{
 
     private AiffAudioHeader aiffHeader;
     
@@ -19,7 +23,7 @@ public abstract class TextChunk extends Chunk {
      * @param raf      The file from which the AIFF data are being read
      */
     public TextChunk (
-            ChunkHeader hdr, 
+            ChunkHeader hdr,
             RandomAccessFile raf)
     {
         super (raf, hdr);

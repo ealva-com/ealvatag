@@ -1,6 +1,5 @@
-package org.jaudiotagger.audio.aiff;
+package org.jaudiotagger.audio.aiff.chunk;
 
-import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 
@@ -13,6 +12,18 @@ import java.io.RandomAccessFile;
  *
  */
 public abstract class Chunk {
+
+    public static final String CHUNK_FORMAT_VERSION = "FVER";
+    public static final String CHUNK_APPLICATION = "APPL";
+    public static final String CHUNK_COMMON = "COMM";
+    public static final String CHUNK_COMMENTS = "COMT";
+    public static final String CHUNK_NAME = "NAME";
+    public static final String CHUNK_AUTHOR = "AUTH";
+    public static final String CHUNK_COPYRIGHT = "(c) ";
+    public static final String CHUNK_ANNOTATION = "ANNO";
+    public static final String CHUNK_TAG = "ID3 ";
+
+
 
     protected long bytesLeft;
     protected RandomAccessFile raf;

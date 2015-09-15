@@ -24,11 +24,11 @@ import java.io.RandomAccessFile;
 import java.util.logging.Logger;
 import java.util.ArrayList;
 
-import org.jaudiotagger.audio.aiff.AiffTag;
 import org.jaudiotagger.audio.exceptions.CannotWriteException;
 import org.jaudiotagger.audio.exceptions.ReadOnlyFileException;
 import org.jaudiotagger.audio.flac.metadatablock.MetadataBlockDataPicture;
 import org.jaudiotagger.logging.ErrorMessage;
+import org.jaudiotagger.tag.aiff.AiffTag;
 import org.jaudiotagger.tag.asf.AsfTag;
 import org.jaudiotagger.audio.wav.WavTag;
 import org.jaudiotagger.audio.real.RealTag;
@@ -145,7 +145,7 @@ public class AudioFile
     /**
      * Set the file extension
      *
-     * @param extension
+     * @param ext
      */
     public void setExt(String ext)
     {

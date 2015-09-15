@@ -18,7 +18,7 @@ public class AiffAudioFileTest extends TestCase {
     public void testReadAiff() {
         Exception exceptionCaught = null;
 
-        File orig = new File("testdata", "M1F1-int8C-AFsp.aif");
+        File orig = new File("testdata", "test119.aif");
         if (!orig.isFile())
         {
             System.err.println("Unable to test file - not available");
@@ -26,55 +26,31 @@ public class AiffAudioFileTest extends TestCase {
         }
 
 
-        File testFile = AbstractTestCase.copyAudioToTmp("M1F1-int8C-AFsp.aif");
-        AiffAudioHeader aiffAudioHeader = null;
+        File testFile = AbstractTestCase.copyAudioToTmp("test119.aif");
         try {
             AudioFile f = AudioFileIO.read(testFile);
             AudioHeader ah = f.getAudioHeader();
             assertTrue (ah instanceof AiffAudioHeader);
+            AiffAudioHeader aah = (AiffAudioHeader)ah;
+            assertEquals("1411",ah.getBitRate());
+            assertEquals(1411,ah.getBitRateAsNumber());
+            assertEquals("2",ah.getChannels());
+            assertEquals("8000",ah.getSampleRate());
+            assertEquals(2,ah.getTrackLength());
+            assertEquals("not compressed", ((AiffAudioHeader) ah).getAudioEncoding());
+            //assertEquals(2.936625,((AiffAudioHeader) ah).getPreciseLength());
+            assertEquals(null, aah.getName());
+            assertEquals(null, aah.getCopyright());
+            assertEquals(null, aah.getAuthor());
+            assertNotNull(aah.getComments());
+
         }
         catch (Exception e) {
             exceptionCaught = e;
         }
         assertNull(exceptionCaught);
         
-/*        testFile = AbstractTestCase.copyAudioToTmp("M1F1-int8-AFsp.aif");
-        try {
-            AudioFile f = AudioFileIO.read(testFile);
-            AudioHeader ah = f.getAudioHeader();
-            assertTrue (ah instanceof AiffAudioHeader);
-            AiffAudioHeader aah = (AiffAudioHeader) ah;
-            List<String> appIdentifiers = aah.getApplicationIdentifiers();
-            String ident = appIdentifiers.get(0);
-            assertTrue(ident.indexOf ("CAPELLA") > 0);
-        }
-        catch (Exception e) {
-            exceptionCaught = e;
-        }
-        assertNull(exceptionCaught);
 
-        testFile = AbstractTestCase.copyAudioToTmp("ExportedFromItunes.aif");
-        try {
-            AudioFile f = AudioFileIO.read(testFile);
-            AudioHeader ah = f.getAudioHeader();
-            assertTrue (ah instanceof AiffAudioHeader);
-            Tag tag = f.getTag();
-            assertNotNull (tag);
-            assertTrue (tag instanceof AiffTag);
-            assertTrue (tag.getFieldCount() == 10);
-            assertEquals ("Gary McGath", tag.getFirst(FieldKey.ARTIST));
-            assertEquals ("None", tag.getFirst(FieldKey.ALBUM));
-            assertTrue (tag.getFirst(FieldKey.TITLE).indexOf ("Short sample") == 0);
-            assertEquals ("This is actually a comment.", tag.getFirst(FieldKey.COMMENT));
-            assertEquals ("2012", tag.getFirst(FieldKey.YEAR));
-            assertEquals ("1", tag.getFirst(FieldKey.TRACK));
-            
-        }
-        catch (Exception e) {
-            exceptionCaught = e;
-        }
-        assertNull(exceptionCaught);
-  */
     }
 
 }

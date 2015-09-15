@@ -1,9 +1,13 @@
-package org.jaudiotagger.audio.aiff;
+package org.jaudiotagger.audio.aiff.chunk;
+
+import org.jaudiotagger.audio.aiff.AiffAudioHeader;
+import org.jaudiotagger.audio.aiff.TextChunk;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
 
-public class AuthorChunk extends TextChunk {
+public class NameChunk extends TextChunk
+{
 
     private AiffAudioHeader aiffHeader;
     
@@ -14,8 +18,8 @@ public class AuthorChunk extends TextChunk {
      * @param raf      The file from which the AIFF data are being read
      * @param aHdr      The AiffAudioHeader into which information is stored
      */
-    public AuthorChunk (
-            ChunkHeader hdr, 
+    public NameChunk (
+            ChunkHeader hdr,
             RandomAccessFile raf,
             AiffAudioHeader aHdr)
     {
@@ -28,7 +32,7 @@ public class AuthorChunk extends TextChunk {
         if (!super.readChunk ()) {
             return false;
         }
-        aiffHeader.setAuthor (chunkText);
+        aiffHeader.setName (chunkText);
         return true;
     }
 }

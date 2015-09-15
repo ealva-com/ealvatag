@@ -1,14 +1,15 @@
-package org.jaudiotagger.audio.aiff;
+package org.jaudiotagger.audio.aiff.chunk;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
+import org.jaudiotagger.audio.aiff.AiffAudioHeader;
+import org.jaudiotagger.audio.aiff.AiffUtil;
 import org.jaudiotagger.audio.generic.Utils;
 
-public class CommentsChunk extends Chunk {
+public class CommentsChunk extends Chunk
+{
 
     private AiffAudioHeader aiffHeader;
     
@@ -19,7 +20,7 @@ public class CommentsChunk extends Chunk {
      * @param raf      The file from which the AIFF data are being read
      */
     public CommentsChunk (
-            ChunkHeader hdr, 
+            ChunkHeader hdr,
             RandomAccessFile raf,
             AiffAudioHeader aHdr)
     {
@@ -38,7 +39,7 @@ public class CommentsChunk extends Chunk {
         // Create a List of comments
         for (int i = 0; i < numComments; i++) {
             long timestamp = Utils.readUint32(raf);
-            Date jTimestamp = AiffUtil.timestampToDate (timestamp);
+            Date jTimestamp = AiffUtil.timestampToDate(timestamp);
             int marker = Utils.readInt16 (raf);
             int count = Utils.readUint16 (raf);
             bytesLeft -= 8;

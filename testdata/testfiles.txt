@@ -69,3 +69,6 @@ test115.mp3,no,478,mp3 mp3 with podcast tags
 test116.m4a,no,463,mp4 with invalid ????
 test117.ogg,no,472,very short ogg file (less than a second)
 test118.m4a,no,,unable to read mp4
+test119.aif,yes,,example aif with no metadata or id3 tag
+test120.aif,yes,,example aif with metadata
+test121.aif,no,,example aif with metadata form itunes

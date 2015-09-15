@@ -96,7 +96,7 @@ public class AiffUtil {
      */
     public static String bytesToPascalString (byte[] data) {
         int len = (int) data[0];
-        return new String(data, 0, len, LATIN1);
+        return new String(data, 1, len, LATIN1);
     }
     
     /** 
