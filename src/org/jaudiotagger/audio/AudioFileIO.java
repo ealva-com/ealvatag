@@ -302,6 +302,8 @@ public class AudioFileIO
         readers.put(SupportedFileFormat.WAV.getFilesuffix(), new WavFileReader());
         readers.put(SupportedFileFormat.WMA.getFilesuffix(), new AsfFileReader());
         readers.put(SupportedFileFormat.AIF.getFilesuffix(), new AiffFileReader());
+        readers.put(SupportedFileFormat.AIFC.getFilesuffix(), new AiffFileReader());
+        readers.put(SupportedFileFormat.AIFF.getFilesuffix(), new AiffFileReader());
         readers.put(SupportedFileFormat.DSF.getFilesuffix(), new DsfAudioFileReader());
         final RealFileReader realReader = new RealFileReader();
         readers.put(SupportedFileFormat.RA.getFilesuffix(), realReader);
@@ -318,6 +320,8 @@ public class AudioFileIO
         writers.put(SupportedFileFormat.WAV.getFilesuffix(), new WavFileWriter());
         writers.put(SupportedFileFormat.WMA.getFilesuffix(), new AsfFileWriter());
         writers.put(SupportedFileFormat.AIF.getFilesuffix(), new AiffFileWriter());
+        writers.put(SupportedFileFormat.AIFC.getFilesuffix(), new AiffFileWriter());
+        writers.put(SupportedFileFormat.AIFF.getFilesuffix(), new AiffFileWriter());
 
         // Register modificationHandler
         Iterator<AudioFileWriter> it = writers.values().iterator();

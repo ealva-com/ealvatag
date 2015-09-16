@@ -373,6 +373,32 @@ public class Utils
         return l;
     }
 
+    public static long readUINTBE32( ByteBuffer bytes) throws IOException {
+
+        long result = 0;
+        result |= bytes.get() & 0xFF;
+        result <<= 8;
+        result |= bytes.get() & 0xFF;
+        result <<= 8;
+        result |= bytes.get() & 0xFF;
+        result <<= 8;
+        result |= bytes.get() & 0xFF;
+        return result;
+    }
+
+    public static long readUINTBE32( byte[] bytes) throws IOException {
+
+        long result = 0;
+        result |= bytes[0] & 0xFF;
+        result <<= 8;
+        result |= bytes[1] & 0xFF;
+        result <<= 8;
+        result |= bytes[2] & 0xFF;
+        result <<= 8;
+        result |= bytes[3] & 0xFF;
+        return result;
+    }
+
     /** Read a 16-bit big-endian unsigned integer */
     public static int readUint16(DataInput di) throws IOException
     {

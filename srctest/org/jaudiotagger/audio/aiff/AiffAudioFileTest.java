@@ -32,8 +32,8 @@ public class AiffAudioFileTest extends TestCase {
             AudioHeader ah = f.getAudioHeader();
             assertTrue (ah instanceof AiffAudioHeader);
             AiffAudioHeader aah = (AiffAudioHeader)ah;
-            assertEquals("1411",ah.getBitRate());
-            assertEquals(1411,ah.getBitRateAsNumber());
+            assertEquals("128000",ah.getBitRate());
+            assertEquals(128000,ah.getBitRateAsNumber());
             assertEquals("2",ah.getChannels());
             assertEquals("8000",ah.getSampleRate());
             assertEquals(2,ah.getTrackLength());
@@ -43,9 +43,10 @@ public class AiffAudioFileTest extends TestCase {
             assertEquals(null, aah.getCopyright());
             assertEquals(null, aah.getAuthor());
             assertNotNull(aah.getComments());
-
+            System.out.println(ah);
         }
         catch (Exception e) {
+            e.printStackTrace();
             exceptionCaught = e;
         }
         assertNull(exceptionCaught);

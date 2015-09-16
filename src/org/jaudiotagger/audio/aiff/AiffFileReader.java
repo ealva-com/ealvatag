@@ -4,6 +4,7 @@ import org.jaudiotagger.audio.aiff.chunk.*;
 import org.jaudiotagger.audio.exceptions.CannotReadException;
 import org.jaudiotagger.audio.generic.AudioFileReader;
 import org.jaudiotagger.audio.generic.GenericAudioHeader;
+import org.jaudiotagger.logging.Hex;
 import org.jaudiotagger.tag.Tag;
 import org.jaudiotagger.tag.aiff.AiffTag;
 import org.jaudiotagger.tag.id3.ID3v22Tag;
@@ -13,109 +14,62 @@ import java.io.RandomAccessFile;
 
 public class AiffFileReader extends AudioFileReader
 {
-
-    /* Fixed value for first 4 bytes */
-    private static final int[] sigByte = {0X46, 0X4F, 0X52, 0X4D};
-
     /* AIFF-specific information which isn't "tag" information */
-    private AiffAudioHeader aiffHeader;
+    private AiffAudioHeader aiffAudioHeader;
 
-    /* "Tag" information */
+    /* ID3 "Tag" information */
     private AiffTag aiffTag;
-    
-    /* InputStream that reads the file sequentially */
-    //    private DataInputStream inStream;
 
     public AiffFileReader()
     {
-        aiffHeader = new AiffAudioHeader();
+        aiffAudioHeader = new AiffAudioHeader();
         aiffTag = new AiffTag();
     }
-
-
-    public AiffFileReader(RandomAccessFile raf)
-    {
-        aiffHeader = new AiffAudioHeader();
-        aiffTag = new AiffTag();
-    }
-
 
     /**
      * Reads the file and fills in the audio header and tag information.
      * Holds the tag information for later and returns the audio header.
+     *
+     * This circuitous is a result of other formats that process audio header
+     * and tag header independently. But with AIFF we just have a series of chunks
+     * so we only want to process file once (maybe better to change how all formats work
+     * for quicker processing @see AudioFileReader.read() method)
      */
     @Override
     protected GenericAudioHeader getEncodingInfo(RandomAccessFile raf) throws CannotReadException, IOException
     {
-        logger.finest("Reading AIFF file ");
-        byte sigBuf[] = new byte[4];
-        raf.read(sigBuf);
-        for (int i = 0; i < 4; i++)
+        logger.info("Reading AIFF file size:" + raf.length() + " (" + Hex.asHex(raf.length())+ ")"  );
+        AiffFileHeader fileHeader = new AiffFileHeader();
+        long bytesRemaining = fileHeader.readHeader(raf, aiffAudioHeader);
+        while (raf.getFilePointer() < raf.length())
         {
-            if (sigBuf[i] != sigByte[i])
+            logger.info("FilePointer:"+raf.getFilePointer());
+            if (!readChunk(raf))
             {
-                logger.finest("AIFF file has incorrect signature");
-                throw new CannotReadException("Not an AIFF file: incorrect signature");
-            }
-        }
-        long bytesRemaining = AiffUtil.readUINT32(raf);
-
-        // Read the file type.
-        if (!readFileType(raf))
-        {
-            throw new CannotReadException("Invalid AIFF file: Incorrect file type info");
-        }
-        bytesRemaining -= 4;
-        while (bytesRemaining > 0)
-        {
-            if (!readChunk(raf, bytesRemaining))
-            {
+                logger.severe("UnableToReadProcessChunk");
                 break;
             }
         }
-        return aiffHeader;
+        return aiffAudioHeader;
     }
 
     @Override
     protected Tag getTag(RandomAccessFile raf) throws CannotReadException, IOException
     {
-        if(aiffTag.getID3Tag()==null)
+        if (aiffTag.getID3Tag() == null)
         {
             //Default still used by Itunes
             aiffTag.setID3Tag(new ID3v22Tag());
         }
-
         return aiffTag;
-
     }
 
-    /*  Reads the file type.   
-     *  Broken out from parse().
-     *  If it is not a valid file type, returns false.
-     */
-    private boolean readFileType(RandomAccessFile raf) throws IOException
-    {
-        String typ = AiffUtil.read4Chars(raf);
-        if ("AIFF".equals(typ))
-        {
-            aiffHeader.setFileType(AiffAudioHeader.FileType.AIFFTYPE);
-            return true;
-        }
-        else if ("AIFC".equals(typ))
-        {
-            aiffHeader.setFileType(AiffAudioHeader.FileType.AIFCTYPE);
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-    }
+
 
     /**
      * Reads an AIFF Chunk.
      */
-    protected boolean readChunk(RandomAccessFile raf, long bytesRemaining) throws IOException
+    protected boolean readChunk(RandomAccessFile raf) throws IOException
     {
         Chunk chunk = null;
         ChunkHeader chunkh = new ChunkHeader();
@@ -124,65 +78,71 @@ public class AiffFileReader extends AudioFileReader
             return false;
         }
         int chunkSize = (int) chunkh.getSize();
-        bytesRemaining -= chunkSize + 8;
 
         String id = chunkh.getID();
-        if (Chunk.CHUNK_FORMAT_VERSION.equals(id))
+        if (ChunkType.FORMAT_VERSION.getCode().equals(id))
         {
-            chunk = new FormatVersionChunk(chunkh, raf, aiffHeader);
+            chunk = new FormatVersionChunk(chunkh, raf, aiffAudioHeader);
         }
-        else if (Chunk.CHUNK_APPLICATION.equals(id))
+        else if (ChunkType.APPLICATION.getCode().equals(id))
         {
-            chunk = new ApplicationChunk(chunkh, raf, aiffHeader);
+            chunk = new ApplicationChunk(chunkh, raf, aiffAudioHeader);
             // Any number of application chunks is ok
         }
-        else if (Chunk.CHUNK_COMMON.equals(id))
+        else if (ChunkType.COMMON.getCode().equals(id))
         {
             // There should be no more than one of these
-            chunk = new CommonChunk(chunkh, raf, aiffHeader);
+            chunk = new CommonChunk(chunkh, raf, aiffAudioHeader);
         }
-        else if (Chunk.CHUNK_COMMENTS.equals(id))
+        else if (ChunkType.COMMENTS.getCode().equals(id))
         {
-            chunk = new CommentsChunk(chunkh, raf, aiffHeader);
+            chunk = new CommentsChunk(chunkh, raf, aiffAudioHeader);
         }
-        else if (Chunk.CHUNK_NAME.equals(id))
+        else if (ChunkType.NAME.getCode().equals(id))
         {
-            chunk = new NameChunk(chunkh, raf, aiffHeader);
+            chunk = new NameChunk(chunkh, raf, aiffAudioHeader);
         }
-        else if (Chunk.CHUNK_AUTHOR.equals(id))
+        else if (ChunkType.AUTHOR.getCode().equals(id))
         {
-            chunk = new AuthorChunk(chunkh, raf, aiffHeader);
+            chunk = new AuthorChunk(chunkh, raf, aiffAudioHeader);
         }
-        else if (Chunk.CHUNK_COPYRIGHT.equals(id))
+        else if (ChunkType.COPYRIGHT.getCode().equals(id))
         {
-            chunk = new CopyrightChunk(chunkh, raf, aiffHeader);
+            chunk = new CopyrightChunk(chunkh, raf, aiffAudioHeader);
         }
-        else if (Chunk.CHUNK_ANNOTATION.equals(id))
+        else if (ChunkType.ANNOTATION.getCode().equals(id))
         {
-            chunk = new AnnotationChunk(chunkh, raf, aiffHeader);
+            chunk = new AnnotationChunk(chunkh, raf, aiffAudioHeader);
         }
-        else if (Chunk.CHUNK_TAG.equals(id))
+        else if (ChunkType.TAG.getCode().equals(id))
         {
             chunk = new ID3Chunk(chunkh, raf, aiffTag);
+        }
+        else
+        {
+            logger.severe("Unrecognised Chunk Found:" + id);
         }
 
         if (chunk != null)
         {
+            logger.info("Reading:"+chunkh.getID());
             if (!chunk.readChunk())
             {
+                logger.info("ChunkReadFail:"+chunkh.getID());
                 return false;
             }
         }
         else
         {
             // Other chunk types are legal, just skip over them
+            logger.info("SkipBytes:"+chunkSize);
             raf.skipBytes(chunkSize);
         }
+        //TODO why would this happen
         if ((chunkSize & 1) != 0)
         {
             // Must come out to an even byte boundary
             raf.skipBytes(1);
-            --bytesRemaining;
         }
         return true;
     }

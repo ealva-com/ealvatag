@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.jaudiotagger.audio.aiff.chunk.ChunkHeader;
+import org.jaudiotagger.logging.Hex;
 import org.jaudiotagger.tag.FieldDataInvalidException;
 import org.jaudiotagger.tag.FieldKey;
 import org.jaudiotagger.tag.KeyNotFoundException;
@@ -13,11 +15,19 @@ import org.jaudiotagger.tag.id3.AbstractID3v2Tag;
 import org.jaudiotagger.tag.images.Artwork;
 
 /** AiffTag wraps ID3Tag for most of its metadata */
-public class AiffTag /* extends GenericTag */ implements Tag {
+public class AiffTag  implements Tag {
+
+    //Start location when read from file
+
+    private Long startLocationInFile = null;
+
+    //End location of this chunk
+    private Long endLocationInFile = null;
+
+
 
     private AbstractID3v2Tag id3Tag;
-    
-    /** No-argument constructor */
+
     public AiffTag() {
     }
     
@@ -242,11 +252,38 @@ public class AiffTag /* extends GenericTag */ implements Tag {
     {
         if(id3Tag!=null)
         {
-            return id3Tag.toString();
+            return  "startOfID3TagAt:"+getStartLocationInFile()+"("+ Hex.asHex(getStartLocationInFile())+ ")\n" +
+                    "endOfID3TagAt  :"+getEndLocationInFile() + "("+ Hex.asHex(getEndLocationInFile()) + ")\n" +
+                    id3Tag.toString();
         }
         else
         {
             return "tag:empty";
         }
+    }
+
+    public Long getStartLocationInFile()
+    {
+        return startLocationInFile;
+    }
+
+    public void setStartLocationInFile(long startLocationInFile)
+    {
+        this.startLocationInFile = startLocationInFile;
+    }
+
+    public Long getEndLocationInFile()
+    {
+        return endLocationInFile;
+    }
+
+    public void setEndLocationInFile(long endLocationInFile)
+    {
+        this.endLocationInFile = endLocationInFile;
+    }
+
+    public long getSizeOfID3Tag()
+    {
+        return (endLocationInFile - startLocationInFile) - ChunkHeader.CHUNK_HEADER_SIZE;
     }
 }

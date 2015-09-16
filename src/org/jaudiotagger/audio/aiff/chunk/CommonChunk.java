@@ -1,15 +1,24 @@
 package org.jaudiotagger.audio.aiff.chunk;
 
 import org.jaudiotagger.audio.aiff.AiffAudioHeader;
+import org.jaudiotagger.audio.aiff.AiffType;
 import org.jaudiotagger.audio.aiff.AiffUtil;
 import org.jaudiotagger.audio.generic.Utils;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
 
+/**
+ The Common Chunk describes fundamental parameters of the waveform data such as sample rate,
+ bit resolution, and how many channels of digital audio are stored in the FORM AIFF.
+ */
 public class CommonChunk extends Chunk
 {
-
+    private static final int NO_CHANNELS_LENGTH      = 2;
+    private static final int NO_SAMPLE_FRAMES_LENGTH = 4;
+    private static final int SAMPLE_SIZE_LENGTH      = 2;
+    private static final int SAMPLE_RATE_LENGTH      = 10;
+    private static final int COMPRESSION_TYPE_LENGTH      = 4;
     private AiffAudioHeader aiffHeader;
 
     /**
@@ -17,12 +26,12 @@ public class CommonChunk extends Chunk
      *
      * @param hdr  The header for this chunk
      * @param raf  The file from which the AIFF data are being read
-     * @param aHdr The AiffTag into which information is stored
+     * @param aiffAudioHeader The AiffAufdioHeader into which information is stored
      */
-    public CommonChunk(ChunkHeader hdr, RandomAccessFile raf, AiffAudioHeader aHdr)
+    public CommonChunk(ChunkHeader hdr, RandomAccessFile raf, AiffAudioHeader aiffAudioHeader)
     {
         super(raf, hdr);
-        aiffHeader = aHdr;
+        aiffHeader = aiffAudioHeader;
     }
 
 
@@ -32,15 +41,16 @@ public class CommonChunk extends Chunk
         int numChannels = Utils.readUint16(raf);
         long numSampleFrames = Utils.readUint32(raf);
         int sampleSize = Utils.readUint16(raf);
-        bytesLeft -= 8;
+        bytesLeft -= NO_CHANNELS_LENGTH + NO_SAMPLE_FRAMES_LENGTH + SAMPLE_SIZE_LENGTH;
 
-        String compressionType = null;
-        String compressionName = null;
+        String compressionType;
+        String compressionName;
 
         double sampleRate = AiffUtil.read80BitDouble(raf);
-        bytesLeft -= 10;
+        bytesLeft -= SAMPLE_RATE_LENGTH;
 
-        if (aiffHeader.getFileType() == AiffAudioHeader.FileType.AIFCTYPE)
+        //Compression format, but not necessarily compressed
+        if (aiffHeader.getFileType() == AiffType.AIFC)
         {
             if (bytesLeft == 0)
             {
@@ -49,44 +59,48 @@ public class CommonChunk extends Chunk
                 return false;
             }
             compressionType = AiffUtil.read4Chars(raf);
-            // According to David Ackerman, the compression type can
-            // change the endianness of the document.
-            if (compressionType.equals( AiffCompressionType.SOWT.getCode()))
+            if (compressionType.equals(AiffCompressionType.SOWT.getCode()))
             {
                 aiffHeader.setEndian(AiffAudioHeader.Endian.LITTLE_ENDIAN);
             }
-            bytesLeft -= 4;
+            bytesLeft -= COMPRESSION_TYPE_LENGTH;
             compressionName = AiffUtil.readPascalString(raf);
-            bytesLeft -= compressionName.length() + 1;
+            //TODO This extra read fixes reading next chunk for ANNO, need more test cases to know
+            //f error lies in file or code
+            raf.read();
+            bytesLeft -= compressionName.length() + 1; //Length of name plus bytecount byte
+
+            // Proper handling of compression type should depend
+            // on whether raw output is set
+            if (compressionType != null)
+            {
+                //Id it a known compression type
+                AiffCompressionType act = AiffCompressionType.getByCode(compressionType);
+                if (act != null)
+                {
+                    compressionName = act.getCompression();
+                    aiffHeader.setLossless(act.isLossless());
+                }
+                else
+                {
+                    // We don't know compression type, so we have to assume lossy compression as we know we are using AIFC format
+                    aiffHeader.setLossless(false);
+                }
+
+                if (compressionName.isEmpty())
+                {
+                    aiffHeader.setAudioEncoding(compressionType);
+                }
+                else
+                {
+                    aiffHeader.setAudioEncoding(compressionName);
+                }
+            }
         }
-
-        // Proper handling of compression type should depend
-        // on whether raw output is set
-        if (compressionType != null)
+        //Must be lossless
+        else
         {
-            AiffCompressionType act = AiffCompressionType.getByCode(compressionType);
-            if (act != null)
-            {
-                compressionName = act.getDescription();
-            }
-            else
-            {
-                // We don't know, so we have to assume lossy
-                aiffHeader.setLossless(false);
-            }
-
-
-            // TODO:The size of the data after compression isn't available
-            // from the Common chunk, so we mark it as "unknown."
-            // With a bit more sophistication, we could combine the
-            // information from here and the Sound Data chunk to get
-            // the effective byte rate
-
-            if (compressionName.isEmpty())
-            {
-                aiffHeader.setAudioEncoding(compressionType);
-            }
-            aiffHeader.setAudioEncoding(compressionName);
+            aiffHeader.setLossless(true);
         }
 
         aiffHeader.setBitsPerSample(sampleSize);
@@ -94,13 +108,21 @@ public class CommonChunk extends Chunk
         aiffHeader.setChannelNumber(numChannels);
         aiffHeader.setLength((int) (numSampleFrames / sampleRate));
         aiffHeader.setPreciseLength((float) (numSampleFrames / sampleRate));
-        aiffHeader.setLossless(true);   // for all known compression types
 
-        //TODO Hardcoded based on http://www.theaudioarchive.com/TAA_Resources_File_Size.htm#File_Calculator
-        //should be sampling rate / sample rate * noofchannels but doesnt quite match up so using this
-        //hardcoded value
-        aiffHeader.setBitrate((int) ((705.60f) * numChannels));
-
+        if(aiffHeader.isLossless())
+        {
+            aiffHeader.setBitrate((int) (sampleRate * sampleSize * numChannels));
+        }
+        else
+        {
+            // TODO:The size of the data after compression isn't available
+            // from the Common chunk
+            // With a bit more sophistication, we could combine the
+            // information from here and the Sound Data chunk to get
+            // the effective byte rate
+            // For now just ignore the issue
+            aiffHeader.setBitrate((int) (sampleRate * sampleSize * numChannels));
+        }
         return true;
 
     }

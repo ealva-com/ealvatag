@@ -18,8 +18,8 @@
  */
 package org.jaudiotagger.audio.aiff;
 
+import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.exceptions.CannotWriteException;
-import org.jaudiotagger.audio.flac.FlacTagWriter;
 import org.jaudiotagger.audio.generic.AudioFileWriter;
 import org.jaudiotagger.tag.Tag;
 
@@ -35,14 +35,14 @@ public class AiffFileWriter extends AudioFileWriter
 
     private AiffTagWriter tw = new AiffTagWriter();
 
-    protected void writeTag(Tag tag, RandomAccessFile raf, RandomAccessFile rafTemp) throws CannotWriteException, IOException
+    protected void writeTag(AudioFile audioFile, Tag tag, RandomAccessFile raf, RandomAccessFile rafTemp) throws CannotWriteException, IOException
     {
-        tw.write(tag, raf, rafTemp);
+        tw.write(audioFile, tag, raf, rafTemp);
     }
 
-    protected void deleteTag(RandomAccessFile raf, RandomAccessFile tempRaf) throws CannotWriteException, IOException
+    protected void deleteTag(Tag tag, RandomAccessFile raf, RandomAccessFile tempRaf) throws CannotWriteException, IOException
     {
-        tw.delete(raf, tempRaf);
+        tw.delete(tag, raf, tempRaf);
     }
 }
 

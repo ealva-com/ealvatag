@@ -43,12 +43,12 @@ public class MP3FileWriter extends AudioFileWriter
         af.commit();
     }
 
-    protected void writeTag(Tag tag, RandomAccessFile raf, RandomAccessFile rafTemp) throws CannotWriteException, IOException
+    protected void writeTag(AudioFile audioFile, Tag tag, RandomAccessFile raf, RandomAccessFile rafTemp) throws CannotWriteException, IOException
     {
         throw new RuntimeException("MP3FileReaderwriteTag should not be called");
     }
 
-    protected void deleteTag(RandomAccessFile raf, RandomAccessFile tempRaf) throws CannotWriteException, IOException
+    protected void deleteTag(Tag tag, RandomAccessFile raf, RandomAccessFile tempRaf) throws CannotWriteException, IOException
     {
         throw new RuntimeException("MP3FileReader.getEncodingInfo should be called");
     }

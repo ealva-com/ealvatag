@@ -53,12 +53,12 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
     protected static final String TYPE_BODY = "body";
 
     //Tag ID as held in file
-    protected static final byte[] TAG_ID = {'I', 'D', '3'};
+    public static final byte[] TAG_ID = {'I', 'D', '3'};
 
     //The tag header is the same for ID3v2 versions
     public static final int TAG_HEADER_LENGTH = 10;
-    protected static final int FIELD_TAGID_LENGTH = 3;
-    protected static final int FIELD_TAG_MAJOR_VERSION_LENGTH = 1;
+    public static final int FIELD_TAGID_LENGTH = 3;
+    public static final int FIELD_TAG_MAJOR_VERSION_LENGTH = 1;
     protected static final int FIELD_TAG_MINOR_VERSION_LENGTH = 1;
     protected static final int FIELD_TAG_FLAG_LENGTH = 1;
     protected static final int FIELD_TAG_SIZE_LENGTH = 4;

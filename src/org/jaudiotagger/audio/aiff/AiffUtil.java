@@ -3,7 +3,9 @@ package org.jaudiotagger.audio.aiff;
 //import java.io.EOFException;
 import java.io.IOException;
 //import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.RandomAccessFile;
+import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -16,28 +18,7 @@ public class AiffUtil {
     
     private final static Charset LATIN1 = Charset.availableCharsets().get("ISO-8859-1");
     
-    /**
-     * Reads 4 bytes from file and interprets them as UINT32.<br>
-     * 
-     * @param raf
-     *            file to read from.
-     * @return UINT32 value
-     * @throws IOException
-     *             on I/O Errors.
-     */
-    public static long readUINT32(RandomAccessFile raf) throws IOException {
-        long result = 0;
-        for (int i = 0; i < 4; i++) {
-            // Warning, always cast to long here. Otherwise it will be
-            // shifted as int, which may produce a negative value, which will
-            // then be extended to long and assign the long variable a negative
-            // value.
-            result <<= 8;
-            result |= (long) raf.read();
-        }
-        return result;
-    }
-    
+
     /**
      *   Reads 4 bytes and concatenates them into a String.
      *   This pattern is used for ID's of various kinds.
@@ -51,7 +32,19 @@ public class AiffUtil {
         }
         return sbuf.toString();
     }
-    
+
+    public static String read4Chars(byte[] bytes) throws IOException
+    {
+        return new String(bytes, Charset.forName("ASCII"));
+    }
+
+    public static String read4Chars(ByteBuffer bytes) throws IOException
+    {
+        byte[] b = new byte[4];
+        bytes.get(b);
+        return new String(b, Charset.forName("ASCII"));
+    }
+
     public static double read80BitDouble (RandomAccessFile raf)
                 throws IOException
     {
@@ -87,7 +80,7 @@ public class AiffUtil {
     
     /** Format a date as text */
     public static String formatDate (Date dat) {
-        return dateFmt.format (dat);
+        return dateFmt.format(dat);
     }
     
     /**
@@ -103,7 +96,7 @@ public class AiffUtil {
      * Read a Pascal string from the file.
      */
     public static String readPascalString(RandomAccessFile raf) throws IOException {
-        int len = raf.read ();
+        int len = raf.read();
         byte[] buf = new byte[len + 1];
         raf.read (buf, 1, len);
         buf[0] = (byte) len;

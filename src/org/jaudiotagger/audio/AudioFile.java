@@ -39,8 +39,8 @@ import org.jaudiotagger.tag.flac.FlacTag;
 
 /**
  * <p>This is the main object manipulated by the user representing an audiofile, its properties and its tag.
- * <p>The prefered way to obtain an <code>AudioFile</code> is to use the <code>AudioFileIO.read(File)</code> method.
- * <p>The <code>AudioFile</code> contains every properties associated with the file itself (no meta-data), like the bitrate, the sampling rate, the encoding audioHeaders, etc.
+ * <p>The preferred way to obtain an <code>AudioFile</code> is to use the <code>AudioFileIO.read(File)</code> method.
+ * <p>The <code>AudioHeader</code> contains every properties associated with the file itself (no meta-data), like the bitrate, the sampling rate, the encoding audioHeaders, etc.
  * <p>To get the meta-data contained in this file you have to get the <code>Tag</code> of this <code>AudioFile</code>
  *
  * @author Raphael Slinckx
@@ -318,6 +318,14 @@ public class AudioFile
             return new RealTag();
         }
         else if(SupportedFileFormat.AIF.getFilesuffix().equals(file.getName().substring(file.getName().lastIndexOf('.'))))
+        {
+            return new AiffTag();
+        }
+        else if(SupportedFileFormat.AIFC.getFilesuffix().equals(file.getName().substring(file.getName().lastIndexOf('.'))))
+        {
+            return new AiffTag();
+        }
+        else if(SupportedFileFormat.AIFF.getFilesuffix().equals(file.getName().substring(file.getName().lastIndexOf('.'))))
         {
             return new AiffTag();
         }
