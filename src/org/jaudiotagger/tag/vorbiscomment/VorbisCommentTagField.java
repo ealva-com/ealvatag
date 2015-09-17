@@ -22,9 +22,11 @@ import org.jaudiotagger.audio.generic.Utils;
 import org.jaudiotagger.audio.ogg.util.VorbisHeader;
 import org.jaudiotagger.tag.TagField;
 import org.jaudiotagger.tag.TagTextField;
-import static org.jaudiotagger.tag.vorbiscomment.VorbisCommentFieldKey.*;
 
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
+
+import static org.jaudiotagger.tag.vorbiscomment.VorbisCommentFieldKey.*;
 
 /**
  * This class represents the name and content of a tag entry in ogg-files.
@@ -194,7 +196,7 @@ public class VorbisCommentTagField implements TagTextField
     public byte[] getRawContent() throws UnsupportedEncodingException
     {
         byte[] size = new byte[VorbisCommentReader.FIELD_COMMENT_LENGTH_LENGTH];
-        byte[] idBytes = Utils.getDefaultBytes(this.id, "ISO-8859-1");
+        byte[] idBytes = Utils.getDefaultBytes(this.id, StandardCharsets.ISO_8859_1);
         byte[] contentBytes = getBytes(this.content, "UTF-8");
         byte[] b = new byte[4 + idBytes.length + 1 + contentBytes.length];
 

@@ -1,14 +1,7 @@
 package org.jaudiotagger.audio.asf.io;
 
 import junit.framework.TestCase;
-import org.jaudiotagger.audio.asf.data.ContainerType;
-
-import org.jaudiotagger.audio.asf.data.MetadataContainer;
-
-import org.jaudiotagger.audio.asf.data.AsfHeader;
-import org.jaudiotagger.audio.asf.data.Chunk;
-import org.jaudiotagger.audio.asf.data.ChunkContainer;
-import org.jaudiotagger.audio.asf.data.GUID;
+import org.jaudiotagger.audio.asf.data.*;
 import org.jaudiotagger.audio.asf.util.Utils;
 
 import java.io.File;

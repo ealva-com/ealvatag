@@ -2,12 +2,15 @@ package org.jaudiotagger.tag.id3;
 
 import org.jaudiotagger.AbstractTestCase;
 import org.jaudiotagger.audio.mp3.MP3File;
-import org.jaudiotagger.tag.id3.framebody.*;
+import org.jaudiotagger.tag.id3.framebody.FrameBodyTMOO;
+import org.jaudiotagger.tag.id3.framebody.FrameBodyTMOOTest;
+import org.jaudiotagger.tag.id3.framebody.FrameBodyTXXX;
+import org.jaudiotagger.tag.id3.framebody.FrameBodyTXXXTest;
 import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
 
 import java.io.File;
-import java.util.Iterator;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 /**

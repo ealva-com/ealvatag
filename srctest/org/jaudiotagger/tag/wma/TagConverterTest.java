@@ -5,8 +5,8 @@ import org.jaudiotagger.audio.asf.data.ContainerType;
 import org.jaudiotagger.audio.asf.data.MetadataContainer;
 import org.jaudiotagger.audio.asf.data.MetadataContainerUtils;
 import org.jaudiotagger.audio.asf.io.AsfHeaderReader;
-import org.jaudiotagger.tag.asf.AsfTag;
 import org.jaudiotagger.audio.asf.util.TagConverter;
+import org.jaudiotagger.tag.asf.AsfTag;
 
 import java.io.IOException;
 

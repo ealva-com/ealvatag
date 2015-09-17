@@ -15,6 +15,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
+import java.nio.charset.StandardCharsets;
 
 /**
  * Represents reverse dns field, used for custom information
@@ -174,14 +175,14 @@ public class Mp4TagReverseDnsField extends Mp4TagField implements TagTextField
             //Create Meanbox data
             byte[] issuerRawData = issuer.getBytes(getEncoding());
             baos.write(Utils.getSizeBEInt32(Mp4BoxHeader.HEADER_LENGTH + Mp4MeanBox.PRE_DATA_LENGTH + issuerRawData.length));
-            baos.write(Utils.getDefaultBytes(Mp4MeanBox.IDENTIFIER, "ISO-8859-1"));
+            baos.write(Utils.getDefaultBytes(Mp4MeanBox.IDENTIFIER, StandardCharsets.ISO_8859_1));
             baos.write(new byte[]{0, 0, 0, 0});
             baos.write(issuerRawData);
 
             //Create Namebox data
             byte[] nameRawData = descriptor.getBytes(getEncoding());
             baos.write(Utils.getSizeBEInt32(Mp4BoxHeader.HEADER_LENGTH + Mp4NameBox.PRE_DATA_LENGTH + nameRawData.length));
-            baos.write(Utils.getDefaultBytes(Mp4NameBox.IDENTIFIER, "ISO-8859-1"));
+            baos.write(Utils.getDefaultBytes(Mp4NameBox.IDENTIFIER, StandardCharsets.ISO_8859_1));
             baos.write(new byte[]{0, 0, 0, 0});
             baos.write(nameRawData);
 
@@ -193,7 +194,7 @@ public class Mp4TagReverseDnsField extends Mp4TagField implements TagTextField
             //Now wrap with reversedns box
             ByteArrayOutputStream outerbaos = new ByteArrayOutputStream();
             outerbaos.write(Utils.getSizeBEInt32(Mp4BoxHeader.HEADER_LENGTH + baos.size()));
-            outerbaos.write(Utils.getDefaultBytes(IDENTIFIER, "ISO-8859-1"));
+            outerbaos.write(Utils.getDefaultBytes(IDENTIFIER, StandardCharsets.ISO_8859_1));
             outerbaos.write(baos.toByteArray());
             return outerbaos.toByteArray();
 
@@ -214,7 +215,7 @@ public class Mp4TagReverseDnsField extends Mp4TagField implements TagTextField
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             byte[] dataRawData = content.getBytes(getEncoding());
             baos.write(Utils.getSizeBEInt32(Mp4BoxHeader.HEADER_LENGTH + Mp4DataBox.PRE_DATA_LENGTH + dataRawData.length));
-            baos.write(Utils.getDefaultBytes(Mp4DataBox.IDENTIFIER, "ISO-8859-1"));
+            baos.write(Utils.getDefaultBytes(Mp4DataBox.IDENTIFIER, StandardCharsets.ISO_8859_1));
             baos.write(new byte[]{0});
             baos.write(new byte[]{0, 0, (byte) getFieldType().getFileClassId()});
             baos.write(new byte[]{0, 0, 0, 0});

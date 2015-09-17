@@ -25,19 +25,18 @@ import org.jaudiotagger.audio.ogg.util.VorbisHeader;
 import org.jaudiotagger.logging.ErrorMessage;
 import org.jaudiotagger.tag.*;
 import org.jaudiotagger.tag.images.Artwork;
-
-import static org.jaudiotagger.tag.vorbiscomment.VorbisCommentFieldKey.VENDOR;
-
-import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
 import org.jaudiotagger.tag.images.ArtworkFactory;
 import org.jaudiotagger.tag.vorbiscomment.util.Base64Coder;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
+
+import static org.jaudiotagger.tag.vorbiscomment.VorbisCommentFieldKey.VENDOR;
 
 /**
  * This is the logical representation of  Vorbis Comment Data
@@ -492,7 +491,7 @@ public class VorbisCommentTag extends AbstractTag
           if(artwork.isLinked())
           {
                return new MetadataBlockDataPicture(
-                      Utils.getDefaultBytes(artwork.getImageUrl(), TextEncoding.CHARSET_ISO_8859_1),
+                      Utils.getDefaultBytes(artwork.getImageUrl(), StandardCharsets.ISO_8859_1),
                       artwork.getPictureType(),
                       MetadataBlockDataPicture.IMAGE_IS_URL,
                       "",

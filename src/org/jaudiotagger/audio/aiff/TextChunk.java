@@ -5,6 +5,7 @@ import org.jaudiotagger.audio.aiff.chunk.ChunkHeader;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.nio.charset.StandardCharsets;
 
 /**
  * This class provides common functionality for NameChunk, AuthorChunk,
@@ -35,7 +36,7 @@ public abstract class TextChunk extends Chunk
 
         byte[] buf = new byte[(int) bytesLeft];
         raf.read(buf);
-        chunkText = new String(buf, "ISO-8859-1");
+        chunkText = new String(buf, StandardCharsets.ISO_8859_1);
         return true;
     }
 

@@ -1,9 +1,7 @@
 package org.jaudiotagger.tag.vorbiscomment;
 
 import org.jaudiotagger.tag.reference.Tagger;
-import org.jaudiotagger.tag.mp4.field.Mp4FieldType;
 
-import java.util.List;
 import java.util.EnumSet;
 
 /**

@@ -1,22 +1,23 @@
 package org.jaudiotagger.audio.aiff;
 
 //import java.io.EOFException;
+
 import java.io.IOException;
-//import java.io.InputStream;
-import java.io.OutputStream;
 import java.io.RandomAccessFile;
-import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+
+//import java.io.InputStream;
 
 public class AiffUtil {
 
     private final static SimpleDateFormat dateFmt =
             new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
     
-    private final static Charset LATIN1 = Charset.availableCharsets().get("ISO-8859-1");
+    private final static Charset LATIN1 = StandardCharsets.ISO_8859_1;
     
 
 

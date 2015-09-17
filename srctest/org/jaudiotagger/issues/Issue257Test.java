@@ -4,10 +4,8 @@ import org.jaudiotagger.AbstractTestCase;
 import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.AudioFileIO;
 import org.jaudiotagger.audio.exceptions.CannotReadException;
-import org.jaudiotagger.audio.mp4.Mp4AtomTree;
 
 import java.io.File;
-import java.io.RandomAccessFile;
 
 /**
  * Test Writing to new urls with common interface

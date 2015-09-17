@@ -3,21 +3,19 @@ package org.jaudiotagger.tag.wma;
 import org.jaudiotagger.AbstractTestCase;
 import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.AudioFileIO;
-import org.jaudiotagger.tag.asf.AsfFieldKey;
-import org.jaudiotagger.tag.asf.AsfTag;
-import org.jaudiotagger.tag.asf.AsfTagCoverField;
-import org.jaudiotagger.tag.asf.AsfTagTextField;
 import org.jaudiotagger.tag.FieldKey;
 import org.jaudiotagger.tag.Tag;
 import org.jaudiotagger.tag.TagField;
 import org.jaudiotagger.tag.TagTextField;
-import org.jaudiotagger.tag.reference.PictureTypes;
+import org.jaudiotagger.tag.asf.AsfFieldKey;
+import org.jaudiotagger.tag.asf.AsfTag;
+import org.jaudiotagger.tag.asf.AsfTagCoverField;
+import org.jaudiotagger.tag.asf.AsfTagTextField;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.RandomAccessFile;
 import java.util.List;
 
 /**

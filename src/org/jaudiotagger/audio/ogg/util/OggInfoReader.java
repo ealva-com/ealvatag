@@ -26,8 +26,8 @@ import org.jaudiotagger.tag.id3.AbstractID3v2Tag;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
-import java.util.logging.Logger;
 import java.util.Arrays;
+import java.util.logging.Logger;
 
 /**
  * Read encoding info, only implemented for vorbis streams

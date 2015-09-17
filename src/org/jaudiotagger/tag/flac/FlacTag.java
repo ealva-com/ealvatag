@@ -2,16 +2,15 @@ package org.jaudiotagger.tag.flac;
 
 import org.jaudiotagger.audio.flac.metadatablock.MetadataBlockDataPicture;
 import org.jaudiotagger.audio.generic.Utils;
+import org.jaudiotagger.logging.ErrorMessage;
 import org.jaudiotagger.tag.*;
 import org.jaudiotagger.tag.images.Artwork;
-import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
 import org.jaudiotagger.tag.images.ArtworkFactory;
-import org.jaudiotagger.tag.mp4.Mp4FieldKey;
 import org.jaudiotagger.tag.reference.PictureTypes;
-import org.jaudiotagger.tag.vorbiscomment.VorbisCommentTag;
 import org.jaudiotagger.tag.vorbiscomment.VorbisCommentFieldKey;
-import org.jaudiotagger.logging.ErrorMessage;
+import org.jaudiotagger.tag.vorbiscomment.VorbisCommentTag;
 
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -385,7 +384,7 @@ public class FlacTag implements Tag
     public TagField createLinkedArtworkField(String url)
     {
         //Add to image list
-        return new MetadataBlockDataPicture(Utils.getDefaultBytes(url, TextEncoding.CHARSET_ISO_8859_1), PictureTypes.DEFAULT_ID, MetadataBlockDataPicture.IMAGE_IS_URL, "", 0, 0, 0, 0);
+        return new MetadataBlockDataPicture(Utils.getDefaultBytes(url, StandardCharsets.ISO_8859_1), PictureTypes.DEFAULT_ID, MetadataBlockDataPicture.IMAGE_IS_URL, "", 0, 0, 0, 0);
     }
 
      /**
@@ -398,7 +397,7 @@ public class FlacTag implements Tag
         if(artwork.isLinked())
         {
              return new MetadataBlockDataPicture(
-                    Utils.getDefaultBytes(artwork.getImageUrl(), TextEncoding.CHARSET_ISO_8859_1),
+                    Utils.getDefaultBytes(artwork.getImageUrl(), StandardCharsets.ISO_8859_1),
                     artwork.getPictureType(),
                     MetadataBlockDataPicture.IMAGE_IS_URL,
                     "",

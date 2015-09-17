@@ -1,12 +1,12 @@
 package org.jaudiotagger.audio.generic;
 
+import junit.framework.TestCase;
+
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.nio.ByteBuffer;
-
-import junit.framework.TestCase;
 
 
 public class UtilsTest  extends TestCase {

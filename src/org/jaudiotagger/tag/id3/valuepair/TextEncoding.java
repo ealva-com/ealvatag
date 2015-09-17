@@ -24,6 +24,8 @@ package org.jaudiotagger.tag.id3.valuepair;
 
 import org.jaudiotagger.tag.datatype.AbstractIntStringValuePair;
 
+import java.nio.charset.StandardCharsets;
+
 
 /**
  * Text Encoding supported by ID3v24, the id is recognised by ID3
@@ -38,10 +40,10 @@ public class TextEncoding extends AbstractIntStringValuePair
 {
 
     //Supported Java charsets
-    public static final String CHARSET_ISO_8859_1 = "ISO-8859-1";
+    public static final String CHARSET_ISO_8859_1 = StandardCharsets.ISO_8859_1.name();
     public static final String CHARSET_UTF_16 = "UTF-16";        //Want to use x-UTF-16LE-BOM but not always available
     public static final String CHARSET_UTF_16BE = "UTF-16BE";
-    public static final String CHARSET_UTF_8 = "UTF-8";
+    public static final String CHARSET_UTF_8 = StandardCharsets.UTF_8.name();
 
     //Need both depending on whether want to use BigEndian or Little Endian
     public static final String CHARSET_UTF_16_LE_ENCODING_FORMAT = "UTF-16LE";

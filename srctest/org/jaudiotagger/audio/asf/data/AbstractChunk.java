@@ -2,8 +2,6 @@ package org.jaudiotagger.audio.asf.data;
 
 import org.jaudiotagger.AbstractTestCase;
 
-import junit.framework.TestCase;
-
 import java.math.BigInteger;
 
 /**
