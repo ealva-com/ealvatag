@@ -24,6 +24,7 @@ import org.jaudiotagger.utils.FileTypeUtil;
 import java.io.*;
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -58,7 +59,7 @@ public class Utils
     /**
      * Returns {@link String#getBytes()}.<br>
      *
-     * @param s The String to call, decode bytes using the specfied charset
+     * @param s The String to call, decode bytes using the specified charset
      * @param charSet
      * @return The bytes.
      */
@@ -73,6 +74,18 @@ public class Utils
             throw new RuntimeException(uee);
         }
 
+    }
+
+    /**
+     * Encode string as bytes using the specified charset
+     *
+     * @param s
+     * @param charSet
+     * @return
+     */
+    public static byte[] getDefaultBytes(String s, Charset charSet)
+    {
+        return s.getBytes(charSet);
     }
 
     /*
@@ -342,7 +355,7 @@ public class Utils
       */
     public static byte[] getUTF8Bytes(String s) throws UnsupportedEncodingException
     {
-        return s.getBytes("UTF-8");
+        return s.getBytes(StandardCharsets.UTF_8);
     }
 
     /**
@@ -633,7 +646,7 @@ public class Utils
      */
     public static String readFourBytesAsChars(byte[] bytes) throws IOException
     {
-        return new String(bytes, Charset.forName("ASCII"));
+        return new String(bytes, StandardCharsets.US_ASCII);
     }
 
     /**
@@ -648,7 +661,7 @@ public class Utils
     {
         byte[] b = new byte[4];
         bytes.get(b);
-        return new String(b, Charset.forName("ASCII"));
+        return new String(b, StandardCharsets.US_ASCII);
     }
 
     /**

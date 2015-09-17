@@ -35,6 +35,7 @@ import org.jaudiotagger.tag.vorbiscomment.util.Base64Coder;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
@@ -492,7 +493,7 @@ public class VorbisCommentTag extends AbstractTag
           if(artwork.isLinked())
           {
                return new MetadataBlockDataPicture(
-                      Utils.getDefaultBytes(artwork.getImageUrl(), TextEncoding.CHARSET_ISO_8859_1),
+                      Utils.getDefaultBytes(artwork.getImageUrl(), StandardCharsets.ISO_8859_1),
                       artwork.getPictureType(),
                       MetadataBlockDataPicture.IMAGE_IS_URL,
                       "",

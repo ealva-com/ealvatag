@@ -22,6 +22,7 @@ import org.jaudiotagger.logging.ErrorMessage;
 import org.jaudiotagger.tag.*;
 import org.jaudiotagger.tag.images.Artwork;
 
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.EnumSet;
@@ -103,7 +104,7 @@ public abstract class GenericTag extends AbstractTag
          */
         public String getEncoding()
         {
-            return "ISO-8859-1";
+            return StandardCharsets.ISO_8859_1.name();
         }
 
         /**

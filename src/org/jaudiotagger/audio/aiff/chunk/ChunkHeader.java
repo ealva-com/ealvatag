@@ -9,6 +9,7 @@ import java.nio.ByteBuffer;
 import java.nio.channels.WritableByteChannel;
 import java.nio.charset.Charset;
 import java.nio.charset.CharsetEncoder;
+import java.nio.charset.StandardCharsets;
 
 /**
  * Each chunk starts with a chunk header consisting of 4 byte id and then a 4 byte size field, thje size field
@@ -63,7 +64,7 @@ public class ChunkHeader
     public ByteBuffer writeHeader()
     {
         ByteBuffer bb = ByteBuffer.allocate(CHUNK_HEADER_SIZE);
-        bb.put(chunkId.getBytes(Charset.forName("ISO8859-1")));
+        bb.put(chunkId.getBytes(StandardCharsets.ISO_8859_1));
         bb.put(Utils.getSizeBEInt32((int) size));
         return bb;
     }

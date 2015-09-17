@@ -7,6 +7,7 @@ import java.io.OutputStream;
 import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -16,7 +17,7 @@ public class AiffUtil {
     private final static SimpleDateFormat dateFmt =
             new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
     
-    private final static Charset LATIN1 = Charset.availableCharsets().get("ISO-8859-1");
+    private final static Charset LATIN1 = StandardCharsets.ISO_8859_1;
     
 
 

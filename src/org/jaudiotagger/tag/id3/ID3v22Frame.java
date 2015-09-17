@@ -430,7 +430,7 @@ public class ID3v22Frame extends AbstractID3v2Frame
 
         //Write Frame Header
         //Write Frame ID must adjust can only be 3 bytes long
-        headerBuffer.put(Utils.getDefaultBytes(getIdentifier(), "ISO-8859-1"), 0, getFrameIdSize());
+        headerBuffer.put(Utils.getDefaultBytes(getIdentifier(), TextEncoding.CHARSET_ISO_8859_1), 0, getFrameIdSize());
         encodeSize(headerBuffer, frameBody.getSize());
 
         //Add header to the Byte Array Output Stream

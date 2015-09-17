@@ -698,7 +698,7 @@ public class ID3v24Frame extends AbstractID3v2Frame
         {
             identifier = identifier + ' ';
         }
-        headerBuffer.put(Utils.getDefaultBytes(getIdentifier(), "ISO-8859-1"), 0, FRAME_ID_SIZE);
+        headerBuffer.put(Utils.getDefaultBytes(getIdentifier(),  TextEncoding.CHARSET_ISO_8859_1), 0, FRAME_ID_SIZE);
 
         //Write Frame Size based on size of body buffer (if it has been unsynced then it size
         //will have increased accordingly
