@@ -23,6 +23,7 @@ import org.jaudiotagger.utils.FileTypeUtil;
 
 import java.io.*;
 import java.nio.ByteBuffer;
+import java.nio.charset.Charset;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -607,4 +608,47 @@ public class Utils
             return false;
         }
     }
+
+    /**
+     *   Reads 4 bytes from file and concatenates them into a String.
+     *   This pattern is used for ID's of various kinds.
+     */
+    public static String readFourBytesAsChars(RandomAccessFile raf) throws IOException
+    {
+        StringBuffer sbuf = new StringBuffer(4);
+        for (int i = 0; i < 4; i++) {
+            char ch = (char) raf.read();
+            sbuf.append(ch);
+        }
+        return sbuf.toString();
+    }
+
+    /**
+     *
+     * Reads 4 bytes and concatenates them into a String.
+     * This pattern is used for ID's of various kinds.
+     * @param bytes
+     * @return
+     * @throws IOException
+     */
+    public static String readFourBytesAsChars(byte[] bytes) throws IOException
+    {
+        return new String(bytes, Charset.forName("ASCII"));
+    }
+
+    /**
+     * Reads 4 bytes and concatenates them into a String.
+     * This pattern is used for ID's of various kinds.
+     *
+     * @param bytes
+     * @return
+     * @throws IOException
+     */
+    public static String readFourBytesAsChars(ByteBuffer bytes) throws IOException
+    {
+        byte[] b = new byte[4];
+        bytes.get(b);
+        return new String(b, Charset.forName("ASCII"));
+    }
+
 }

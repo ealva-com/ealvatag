@@ -58,7 +58,7 @@ public class CommonChunk extends Chunk
                 // a file that misbehaved in this way.
                 return false;
             }
-            compressionType = AiffUtil.read4Chars(raf);
+            compressionType = Utils.readFourBytesAsChars(raf);
             if (compressionType.equals(AiffCompressionType.SOWT.getCode()))
             {
                 aiffHeader.setEndian(AiffAudioHeader.Endian.LITTLE_ENDIAN);

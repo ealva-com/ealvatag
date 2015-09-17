@@ -69,7 +69,7 @@ public class AiffFileHeader
  */
     private boolean readFileType(ByteBuffer bytes, AiffAudioHeader aiffAudioHeader ) throws IOException
     {
-        String type = AiffUtil.read4Chars(bytes);
+        String type = Utils.readFourBytesAsChars(bytes);
         if (AiffType.AIFF.getCode().equals(type))
         {
             aiffAudioHeader.setFileType(AiffType.AIFF);

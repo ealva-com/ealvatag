@@ -19,31 +19,6 @@ public class AiffUtil {
     private final static Charset LATIN1 = Charset.availableCharsets().get("ISO-8859-1");
     
 
-    /**
-     *   Reads 4 bytes and concatenates them into a String.
-     *   This pattern is used for ID's of various kinds.
-     */
-    public static String read4Chars(RandomAccessFile raf) throws IOException 
-    {
-        StringBuffer sbuf = new StringBuffer(4);
-        for (int i = 0; i < 4; i++) {
-            char ch = (char) raf.read();
-            sbuf.append(ch);
-        }
-        return sbuf.toString();
-    }
-
-    public static String read4Chars(byte[] bytes) throws IOException
-    {
-        return new String(bytes, Charset.forName("ASCII"));
-    }
-
-    public static String read4Chars(ByteBuffer bytes) throws IOException
-    {
-        byte[] b = new byte[4];
-        bytes.get(b);
-        return new String(b, Charset.forName("ASCII"));
-    }
 
     public static double read80BitDouble (RandomAccessFile raf)
                 throws IOException
