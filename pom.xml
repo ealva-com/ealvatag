@@ -31,12 +31,12 @@
    <version>2.2.4-SNAPSHOT</version>
    <packaging>jar</packaging>
    <name>jaudiotagger</name>
-   <compression>
+   <description>
     The aim of this project is to provide a world class Java library
     for editing tag information in audio files.
     Most existing solutions are not java based inhibiting the use of
     java applications with digital files.
-   </compression>
+   </description>
    <url>https://bitbucket.org/ijabz/jaudiotagger</url>
    <inceptionYear>2005</inceptionYear>
    <issueManagement>
