@@ -16,7 +16,7 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.jaudiotagger.audio.wav.util;
+package org.jaudiotagger.audio.wav;
 
 import org.jaudiotagger.audio.exceptions.CannotReadException;
 import org.jaudiotagger.audio.generic.GenericAudioHeader;
@@ -24,36 +24,26 @@ import org.jaudiotagger.audio.generic.GenericAudioHeader;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 
+/**
+ *
+ */
 public class WavInfoReader
 {
+    private static final String WAV_RIFF_ENCODING_PREPEND = "WAV-RIFF ";
     public GenericAudioHeader read(RandomAccessFile raf) throws CannotReadException, IOException
     {
-        // Reads wav header----------------------------------------
         GenericAudioHeader info = new GenericAudioHeader();
-
-        if (raf.length() < 12)
+        if(WavRIFFHeader.isValidHeader(raf))
         {
-            throw new CannotReadException("This is not a WAV File (<12 bytes)");
-        }
-        byte[] b = new byte[12];
-        raf.read(b);
-
-        WavRIFFHeader wh = new WavRIFFHeader(b);
-        if (wh.isValid())
-        {
-            b = new byte[34];
-            raf.read(b);
-
-            WavFormatHeader wfh = new WavFormatHeader(b);
+            WavFormatHeader wfh = new WavFormatHeader(raf);
             if (wfh.isValid())
             {
-                // Populates
-                // encodingInfo----------------------------------------------------
+                //TODO if 36 refers to header needs beter calculating
                 info.setPreciseLength(((float) raf.length() - (float) 36) / wfh.getBytesPerSecond());
                 info.setChannelNumber(wfh.getChannelNumber());
                 info.setSamplingRate(wfh.getSamplingRate());
-                info.setBitsPerSample(wfh.getBitsPerSample());
-                info.setEncodingType("WAV-RIFF " + wfh.getBitsPerSample() + " bits");
+                info.setBitsPerSample(wfh.getBitsPerSample() );
+                info.setEncodingType(WAV_RIFF_ENCODING_PREPEND + wfh.getBitsPerSample() + " bits");
                 info.setExtraEncodingInfos("");
                 info.setBitrate(wfh.getBytesPerSecond() * 8 / 1000);
                 info.setVariableBitRate(false);

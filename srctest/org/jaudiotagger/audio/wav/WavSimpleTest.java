@@ -1,13 +1,17 @@
-package org.jaudiotagger.tag.wav;
+package org.jaudiotagger.audio.wav;
 
 import org.jaudiotagger.AbstractTestCase;
 import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.AudioFileIO;
 import org.jaudiotagger.audio.generic.GenericTag;
+import org.jaudiotagger.audio.generic.Utils;
 import org.jaudiotagger.audio.wav.WavTag;
+import org.jaudiotagger.logging.Hex;
 import org.jaudiotagger.tag.FieldKey;
 
 import java.io.File;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 
 /**
  * User: paul
@@ -22,7 +26,7 @@ public class WavSimpleTest extends AbstractTestCase
         {
             File testFile = AbstractTestCase.copyAudioToTmp("test.wav");
             AudioFile f = AudioFileIO.read(testFile);
-
+            System.out.println(f.getAudioHeader());
             assertEquals("176", f.getAudioHeader().getBitRate());
             assertEquals("WAV-RIFF 8 bits", f.getAudioHeader().getEncodingType());
             assertEquals("1", f.getAudioHeader().getChannels());
@@ -63,6 +67,8 @@ public class WavSimpleTest extends AbstractTestCase
         {
             File testFile = AbstractTestCase.copyAudioToTmp("test105.wav");
             AudioFile f = AudioFileIO.read(testFile);
+            System.out.println(f.getAudioHeader());
+
 
             assertEquals("529", f.getAudioHeader().getBitRate());
             assertEquals("WAV-RIFF 24 bits", f.getAudioHeader().getEncodingType());
@@ -137,4 +143,18 @@ public class WavSimpleTest extends AbstractTestCase
         assertNull(exceptionCaught);
     }
     */
+
+    public void testReadingOfShort()
+    {
+        ByteBuffer headerBuffer = ByteBuffer.allocate(2);
+        headerBuffer.order(ByteOrder.LITTLE_ENDIAN);
+        headerBuffer.put((byte) 0xFE);
+        headerBuffer.put((byte)0xFF);
+        headerBuffer.position(0);
+        int format =  headerBuffer.get() & 0xff + (headerBuffer.get() & 0xff) * 256;
+        headerBuffer.position(0);
+        int formatNew = headerBuffer.getShort() & 0xffff;
+        System.out.println("Format:"+format+"("+ Hex.asHex(format)+")"+":FormatNew:"
+                +formatNew+"("+Hex.asHex(formatNew)+")");
+    }
 }

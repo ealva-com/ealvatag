@@ -21,8 +21,6 @@ package org.jaudiotagger.audio.wav;
 import org.jaudiotagger.audio.exceptions.CannotReadException;
 import org.jaudiotagger.audio.generic.AudioFileReader;
 import org.jaudiotagger.audio.generic.GenericAudioHeader;
-import org.jaudiotagger.audio.generic.GenericTag;
-import org.jaudiotagger.audio.wav.util.WavInfoReader;
 import org.jaudiotagger.tag.Tag;
 
 import java.io.IOException;

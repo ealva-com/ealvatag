@@ -16,6 +16,12 @@ public class Hex
         return "0x" + Long.toHexString(value);
     }
 
+    public static String asHex(int value)
+    {
+        return "0x" + Integer.toHexString(value);
+    }
+
+
     /**
      * Display as hex
      *

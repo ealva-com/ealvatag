@@ -644,7 +644,7 @@ public class Utils
      * @return
      * @throws IOException
      */
-    public static String readFourBytesAsChars(ByteBuffer bytes) throws IOException
+    public static String readFourBytesAsChars(ByteBuffer bytes)
     {
         byte[] b = new byte[4];
         bytes.get(b);
