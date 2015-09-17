@@ -34,7 +34,8 @@ import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 import java.util.logging.Logger;
 
-import static org.jaudiotagger.audio.aiff.AiffFileHeader.*;
+import static org.jaudiotagger.audio.aiff.AiffFileHeader.SIGNATURE_LENGTH;
+import static org.jaudiotagger.audio.aiff.AiffFileHeader.SIZE_LENGTH;
 
 
 /**

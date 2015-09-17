@@ -1,17 +1,13 @@
 package org.jaudiotagger.audio.aiff;
 
 
-import java.io.File;
-import java.io.RandomAccessFile;
-import java.util.List;
-
 import junit.framework.TestCase;
 import org.jaudiotagger.AbstractTestCase;
 import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.AudioFileIO;
 import org.jaudiotagger.audio.AudioHeader;
-import org.jaudiotagger.tag.FieldKey;
-import org.jaudiotagger.tag.Tag;
+
+import java.io.File;
 
 public class AiffAudioFileTest extends TestCase {
 

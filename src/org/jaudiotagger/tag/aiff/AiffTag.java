@@ -1,18 +1,13 @@
 package org.jaudiotagger.tag.aiff;
 
+import org.jaudiotagger.audio.aiff.chunk.ChunkHeader;
+import org.jaudiotagger.tag.*;
+import org.jaudiotagger.tag.id3.AbstractID3v2Tag;
+import org.jaudiotagger.tag.images.Artwork;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-
-import org.jaudiotagger.audio.aiff.chunk.ChunkHeader;
-import org.jaudiotagger.logging.Hex;
-import org.jaudiotagger.tag.FieldDataInvalidException;
-import org.jaudiotagger.tag.FieldKey;
-import org.jaudiotagger.tag.KeyNotFoundException;
-import org.jaudiotagger.tag.Tag;
-import org.jaudiotagger.tag.TagField;
-import org.jaudiotagger.tag.id3.AbstractID3v2Tag;
-import org.jaudiotagger.tag.images.Artwork;
 
 /** AiffTag wraps ID3Tag for most of its metadata */
 public class AiffTag  implements Tag {

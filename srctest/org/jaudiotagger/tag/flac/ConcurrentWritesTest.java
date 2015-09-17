@@ -1,5 +1,11 @@
 package org.jaudiotagger.tag.flac;
 
+import junit.framework.TestCase;
+import org.jaudiotagger.AbstractTestCase;
+import org.jaudiotagger.audio.AudioFile;
+import org.jaudiotagger.audio.AudioFileIO;
+import org.jaudiotagger.tag.FieldKey;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -7,12 +13,6 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
-
-import junit.framework.TestCase;
-import org.jaudiotagger.AbstractTestCase;
-import org.jaudiotagger.audio.AudioFile;
-import org.jaudiotagger.audio.AudioFileIO;
-import org.jaudiotagger.tag.FieldKey;
 
 public class ConcurrentWritesTest extends TestCase
 {

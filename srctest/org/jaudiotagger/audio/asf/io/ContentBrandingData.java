@@ -3,12 +3,11 @@
  */
 package org.jaudiotagger.audio.asf.io;
 
-import org.jaudiotagger.audio.asf.util.Utils;
-
 import junit.framework.TestCase;
 import org.jaudiotagger.audio.asf.data.ContentBranding;
 import org.jaudiotagger.audio.asf.data.GUID;
 import org.jaudiotagger.audio.asf.data.MetadataContainerUtils;
+import org.jaudiotagger.audio.asf.util.Utils;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;

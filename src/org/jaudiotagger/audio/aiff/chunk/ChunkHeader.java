@@ -1,14 +1,10 @@
 package org.jaudiotagger.audio.aiff.chunk;
 
-import org.jaudiotagger.audio.aiff.AiffUtil;
 import org.jaudiotagger.audio.generic.Utils;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
-import java.nio.channels.WritableByteChannel;
-import java.nio.charset.Charset;
-import java.nio.charset.CharsetEncoder;
 import java.nio.charset.StandardCharsets;
 
 /**

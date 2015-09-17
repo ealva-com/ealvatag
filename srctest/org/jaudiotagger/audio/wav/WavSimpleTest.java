@@ -4,8 +4,6 @@ import org.jaudiotagger.AbstractTestCase;
 import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.AudioFileIO;
 import org.jaudiotagger.audio.generic.GenericTag;
-import org.jaudiotagger.audio.generic.Utils;
-import org.jaudiotagger.audio.wav.WavTag;
 import org.jaudiotagger.logging.Hex;
 import org.jaudiotagger.tag.FieldKey;
 

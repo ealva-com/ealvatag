@@ -1,7 +1,6 @@
 package org.jaudiotagger.tag.images;
 
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 
 /**

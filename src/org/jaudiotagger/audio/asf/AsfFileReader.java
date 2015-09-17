@@ -24,7 +24,6 @@ import org.jaudiotagger.audio.asf.data.AudioStreamChunk;
 import org.jaudiotagger.audio.asf.data.MetadataContainer;
 import org.jaudiotagger.audio.asf.data.MetadataDescriptor;
 import org.jaudiotagger.audio.asf.io.*;
-import org.jaudiotagger.tag.asf.AsfTag;
 import org.jaudiotagger.audio.asf.util.TagConverter;
 import org.jaudiotagger.audio.asf.util.Utils;
 import org.jaudiotagger.audio.exceptions.CannotReadException;
@@ -34,6 +33,7 @@ import org.jaudiotagger.audio.generic.AudioFileReader;
 import org.jaudiotagger.audio.generic.GenericAudioHeader;
 import org.jaudiotagger.logging.ErrorMessage;
 import org.jaudiotagger.tag.TagException;
+import org.jaudiotagger.tag.asf.AsfTag;
 
 import java.io.*;
 import java.util.ArrayList;

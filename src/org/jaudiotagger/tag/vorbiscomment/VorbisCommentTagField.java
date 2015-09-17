@@ -22,10 +22,11 @@ import org.jaudiotagger.audio.generic.Utils;
 import org.jaudiotagger.audio.ogg.util.VorbisHeader;
 import org.jaudiotagger.tag.TagField;
 import org.jaudiotagger.tag.TagTextField;
-import static org.jaudiotagger.tag.vorbiscomment.VorbisCommentFieldKey.*;
 
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
+
+import static org.jaudiotagger.tag.vorbiscomment.VorbisCommentFieldKey.*;
 
 /**
  * This class represents the name and content of a tag entry in ogg-files.

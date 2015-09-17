@@ -3,13 +3,9 @@ package org.jaudiotagger.tag.id3;
 import org.jaudiotagger.AbstractTestCase;
 import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.AudioFileIO;
-import org.jaudiotagger.audio.mp3.MP3File;
 import org.jaudiotagger.tag.FieldKey;
 import org.jaudiotagger.tag.Tag;
 import org.jaudiotagger.tag.TagField;
-import org.jaudiotagger.tag.id3.framebody.FrameBodyTRCK;
-import org.jaudiotagger.tag.id3.framebody.FrameBodyTRCKTest;
-import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
 
 import java.io.File;
 import java.util.Iterator;

@@ -2,11 +2,12 @@ package org.jaudiotagger.tag.id3;
 
 import org.jaudiotagger.AbstractTestCase;
 import org.jaudiotagger.audio.mp3.MP3File;
-import org.jaudiotagger.tag.id3.framebody.*;
+import org.jaudiotagger.tag.id3.framebody.FrameBodyIPLS;
+import org.jaudiotagger.tag.id3.framebody.FrameBodyTIPL;
+import org.jaudiotagger.tag.id3.framebody.FrameBodyTIPLTest;
 import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
 
 import java.io.File;
-import java.util.Iterator;
 
 /**
  * Test TIPL Frame

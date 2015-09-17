@@ -1,17 +1,16 @@
 package org.jaudiotagger.audio.util;
 
+import junit.framework.TestCase;
+import org.jaudiotagger.audio.asf.data.AsfHeader;
+import org.jaudiotagger.audio.asf.data.GUID;
+import org.jaudiotagger.audio.asf.util.Utils;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.math.BigInteger;
 import java.util.Arrays;
-
-import junit.framework.TestCase;
-
-import org.jaudiotagger.audio.asf.data.AsfHeader;
-import org.jaudiotagger.audio.asf.data.GUID;
-import org.jaudiotagger.audio.asf.util.Utils;
 
 /**
  * Tests the correctness of the methods in {@link Utils}.<br>

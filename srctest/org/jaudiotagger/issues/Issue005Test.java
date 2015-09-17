@@ -4,8 +4,6 @@ import org.jaudiotagger.AbstractTestCase;
 import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.AudioFileIO;
 import org.jaudiotagger.audio.mp3.MP3File;
-import org.jaudiotagger.tag.Tag;
-import org.jaudiotagger.tag.id3.ID3v23Tag;
 
 import java.io.File;
 import java.io.FileNotFoundException;
