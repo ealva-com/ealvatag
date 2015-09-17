@@ -15,6 +15,10 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.ByteOrder;
 
+
+/**
+ * Reads ID3 tags contained in Aiff file.
+ */
 public class AiffFileReader extends AudioFileReader
 {
     /* AIFF-specific information which isn't "tag" information */
@@ -25,8 +29,8 @@ public class AiffFileReader extends AudioFileReader
 
     public AiffFileReader()
     {
-        aiffAudioHeader = new AiffAudioHeader();
-        aiffTag = new AiffTag();
+        this.aiffAudioHeader = new AiffAudioHeader();
+        this.aiffTag = new AiffTag();
     }
 
     /**
@@ -39,11 +43,11 @@ public class AiffFileReader extends AudioFileReader
      * for quicker processing @see AudioFileReader.read() method)
      */
     @Override
-    protected GenericAudioHeader getEncodingInfo(RandomAccessFile raf) throws CannotReadException, IOException
+    protected GenericAudioHeader getEncodingInfo(final RandomAccessFile raf) throws CannotReadException, IOException
     {
-        logger.config("Reading AIFF file size:" + raf.length() + " (" + Hex.asHex(raf.length()) + ")");
-        AiffFileHeader fileHeader = new AiffFileHeader();
-        long bytesRemaining = fileHeader.readHeader(raf, aiffAudioHeader);
+        logger.config("Reading AIFF file size:" + raf.length() + " (" + Hex.asHex(raf.length())+ ")"  );
+        final AiffFileHeader fileHeader = new AiffFileHeader();
+        final long bytesRemaining = fileHeader.readHeader(raf, aiffAudioHeader);
         while (raf.getFilePointer() < raf.length())
         {
             if (!readChunk(raf))
@@ -56,7 +60,7 @@ public class AiffFileReader extends AudioFileReader
     }
 
     @Override
-    protected Tag getTag(RandomAccessFile raf) throws CannotReadException, IOException
+    protected Tag getTag(final RandomAccessFile raf) throws CannotReadException, IOException
     {
         if (aiffTag.getID3Tag() == null)
         {
@@ -66,12 +70,12 @@ public class AiffFileReader extends AudioFileReader
         return aiffTag;
     }
 
-
-
     /**
      * Reads an AIFF Chunk.
+     *
+     * @return {@code false}, if we were not able to read a valid chunk id
      */
-    protected boolean readChunk(RandomAccessFile raf) throws IOException
+    private boolean readChunk(final RandomAccessFile raf) throws IOException
     {
         Chunk chunk = null;
         ChunkHeader chunkh = new ChunkHeader(ByteOrder.BIG_ENDIAN);
@@ -79,52 +83,8 @@ public class AiffFileReader extends AudioFileReader
         {
             return false;
         }
-        int chunkSize = (int) chunkh.getSize();
-
-        String id = chunkh.getID();
-        if (ChunkType.FORMAT_VERSION.getCode().equals(id))
-        {
-            chunk = new FormatVersionChunk(chunkh, raf, aiffAudioHeader);
-        }
-        else if (ChunkType.APPLICATION.getCode().equals(id))
-        {
-            chunk = new ApplicationChunk(chunkh, raf, aiffAudioHeader);
-            // Any number of application chunks is ok
-        }
-        else if (ChunkType.COMMON.getCode().equals(id))
-        {
-            // There should be no more than one of these
-            chunk = new CommonChunk(chunkh, raf, aiffAudioHeader);
-        }
-        else if (ChunkType.COMMENTS.getCode().equals(id))
-        {
-            chunk = new CommentsChunk(chunkh, raf, aiffAudioHeader);
-        }
-        else if (ChunkType.NAME.getCode().equals(id))
-        {
-            chunk = new NameChunk(chunkh, raf, aiffAudioHeader);
-        }
-        else if (ChunkType.AUTHOR.getCode().equals(id))
-        {
-            chunk = new AuthorChunk(chunkh, raf, aiffAudioHeader);
-        }
-        else if (ChunkType.COPYRIGHT.getCode().equals(id))
-        {
-            chunk = new CopyrightChunk(chunkh, raf, aiffAudioHeader);
-        }
-        else if (ChunkType.ANNOTATION.getCode().equals(id))
-        {
-            chunk = new AnnotationChunk(chunkh, raf, aiffAudioHeader);
-        }
-        else if (ChunkType.TAG.getCode().equals(id))
-        {
-            chunk = new ID3Chunk(chunkh, raf, aiffTag);
-        }
-        else if (ChunkType.SOUND.getCode().equals(id))
-        {
-            chunk = new SoundChunk(chunkh, raf, aiffAudioHeader);
-        }
-
+        final int chunkSize = (int) chunkh.getSize();
+        chunk = createChunk(raf, chunkh);
         if (chunk != null)
         {
             logger.config("Reading:"+chunkh.getID());
@@ -137,7 +97,7 @@ public class AiffFileReader extends AudioFileReader
         else
         {
             // Other chunk types are legal, just skip over them
-            logger.info("SkipBytes:"+chunkSize+" for unknown id:"+id);
+            logger.info("SkipBytes:"+chunkSize+" for unknown id:"+ chunkh.getID());
             raf.skipBytes(chunkSize);
         }
         //TODO why would this happen
@@ -147,6 +107,57 @@ public class AiffFileReader extends AudioFileReader
             raf.skipBytes(1);
         }
         return true;
+    }
+
+    /**
+     * Create a chunk. May return {@code null}, if the chunk is not of a valid type.
+     *
+     * @param raf random access file
+     * @param chunkHeader chunk header
+     * @return chunk or {@code null}, if the chunk type is not valid or could not be read
+     */
+    private Chunk createChunk(final RandomAccessFile raf, final ChunkHeader chunkHeader) {
+        final ChunkType chunkType = ChunkType.get(chunkHeader.getID());
+        final Chunk chunk;
+        if (chunkType != null)
+        {
+            switch (chunkType)
+            {
+                case FORMAT_VERSION:
+                    chunk = new FormatVersionChunk(chunkHeader, raf, aiffAudioHeader);
+                    break;
+                case APPLICATION:
+                    chunk = new ApplicationChunk(chunkHeader, raf, aiffAudioHeader);
+                    break;
+                case COMMON:
+                    chunk = new CommonChunk(chunkHeader, raf, aiffAudioHeader);
+                    break;
+                case NAME:
+                    chunk = new NameChunk(chunkHeader, raf, aiffAudioHeader);
+                    break;
+                case AUTHOR:
+                    chunk = new AuthorChunk(chunkHeader, raf, aiffAudioHeader);
+                    break;
+                case COPYRIGHT:
+                    chunk = new CopyrightChunk(chunkHeader, raf, aiffAudioHeader);
+                    break;
+                case ANNOTATION:
+                    chunk = new AnnotationChunk(chunkHeader, raf, aiffAudioHeader);
+                    break;
+                case TAG:
+                    chunk = new ID3Chunk(chunkHeader, raf, aiffTag);
+                    break;
+                case SOUND:
+                    chunk = new SoundChunk(chunkHeader, raf, aiffAudioHeader);
+                    break;
+                default:
+                    chunk = null;
+            }
+        }
+        else {
+            chunk = null;
+        }
+        return chunk;
     }
 
 }

@@ -1,5 +1,8 @@
 package org.jaudiotagger.audio.aiff.chunk;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Chunk types mark each {@link org.jaudiotagger.audio.iff.ChunkHeader}. They are <em>always</em> 4 ASCII chars long.
  *
@@ -18,6 +21,7 @@ public enum ChunkType
     ANNOTATION("ANNO"),
     TAG("ID3 ");
 
+    private static final Map<String, ChunkType> CODE_TYPE_MAP = new HashMap<String, ChunkType>();
     private String code;
 
     /**
@@ -26,6 +30,21 @@ public enum ChunkType
     ChunkType(final String code)
     {
         this.code=code;
+    }
+
+    /**
+     * Get {@link ChunkType} for code (e.g. "SSND").
+     *
+     * @param code chunk id
+     * @return chunk type or {@code null} if not registered
+     */
+    public synchronized static ChunkType get(final String code) {
+        if (CODE_TYPE_MAP.isEmpty()) {
+            for (final ChunkType type : values()) {
+                CODE_TYPE_MAP.put(type.getCode(), type);
+            }
+        }
+        return CODE_TYPE_MAP.get(code);
     }
 
     /**
