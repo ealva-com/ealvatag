@@ -117,6 +117,10 @@ public class AiffFileReader extends AudioFileReader
         {
             chunk = new ID3Chunk(chunkh, raf, aiffTag);
         }
+        else if (ChunkType.SOUND.getCode().equals(id))
+        {
+            chunk = new SoundChunk(chunkh, raf, aiffAudioHeader);
+        }
 
         if (chunk != null)
         {

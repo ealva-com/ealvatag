@@ -7,6 +7,7 @@ public enum ChunkType
 {
     FORMAT_VERSION("FVER"),
     APPLICATION("APPL"),
+    SOUND("SSND"),
     COMMON("COMM"),
     COMMENTS("COMT"),
     NAME("NAME"),
