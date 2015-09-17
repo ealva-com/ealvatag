@@ -133,18 +133,22 @@ public class DsfAudioFileReader extends AudioFileReader
      * <code>null</code>.
      * @throws IOException if cannot read file.
      */
-    private Tag readTag(RandomAccessFile file, long tagOffset) throws IOException
+    private Tag readTag(RandomAccessFile file, long tagOffset) throws CannotReadException,IOException
     {
+        //Move to start of ID3tag and read rest of file into ByteBuffer
+        file.seek(tagOffset);
+        ByteBuffer tagBuffer = ByteBuffer.allocate((int)(file.length() - file.getFilePointer()));
+        file.getChannel().read(tagBuffer);
+        tagBuffer.position(0);
+
+        //Work out ID3 major version
         file.seek(tagOffset);
         file.skipBytes(AbstractID3v2Tag.FIELD_TAGID_LENGTH);
         int majorVersion = file.readByte();
-        file.skipBytes(AbstractID3v2Tag.FIELD_TAG_MINOR_VERSION_LENGTH + AbstractID3v2Tag.FIELD_TAG_FLAG_LENGTH);
-        ByteBuffer tagBuffer = getTagBuffer(file, tagOffset);
 
         try
         {
             logger.log(Level.FINE, "Start creating ID3v2 Tag for version: " + majorVersion);
-
             switch (majorVersion)
             {
                 case ID3v22Tag.MAJOR_VERSION:
@@ -155,35 +159,13 @@ public class DsfAudioFileReader extends AudioFileReader
                     return new ID3v24Tag(tagBuffer, "");
                 default:
                     logger.log(Level.WARNING, "Unknown major ID3v2 version " + majorVersion + ". Returning an empty ID3v2 Tag.");
-                    break;
+                    return new ID3v24Tag();
             }
         }
         catch (TagException e)
         {
-            logger.log(Level.WARNING, "Could not create ID3v2 Tag. Returning an empty one.", e);
+            throw new CannotReadException("Could not create ID3v2 Tag");
         }
-        return new ID3v24Tag();
     }
 
-    /**
-     * Extract the Id3Tag and return as a ByteBuffer
-     *
-     * @param file
-     * @param tagOffset
-     * @return
-     * @throws IOException
-     */
-    private ByteBuffer getTagBuffer(RandomAccessFile file, long tagOffset) throws IOException
-    {
-        byte[] sizeBytes = new byte[AbstractID3v2Tag.FIELD_TAG_SIZE_LENGTH];
-        file.read(sizeBytes);
-        int sizeOfId3Tag = ID3SyncSafeInteger.bufferToValue(sizeBytes);
-        sizeOfId3Tag += AbstractID3v2Tag.TAG_HEADER_LENGTH;
-
-        file.seek(tagOffset);
-        byte[] tagBytes = new byte[sizeOfId3Tag];
-        file.read(tagBytes);
-        ByteBuffer tagBuffer = ByteBuffer.wrap(tagBytes);
-        return tagBuffer;
-    }
 }
