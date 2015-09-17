@@ -19,8 +19,7 @@ public class AiffFileHeader
     public static int TYPE_LENGTH = 4;
     public static int HEADER_LENGTH = SIGNATURE_LENGTH + SIZE_LENGTH + TYPE_LENGTH;
 
-    /* Fixed value for first 4 bytes:FORM*/
-    private static final int[] sigByte = {'F', 'O', 'R', 'M'};
+    public static final String AIFF_SIGNATURE = "FORM";
 
     // Logger Object
     public static Logger logger = Logger.getLogger("org.jaudiotagger.audio.aiff.AudioFileHeader");
@@ -32,7 +31,7 @@ public class AiffFileHeader
 
     public long readHeader(RandomAccessFile raf, AiffAudioHeader aiffAudioHeader) throws IOException, CannotReadException
     {
-        ByteBuffer headerData = ByteBuffer.allocateDirect(HEADER_LENGTH);
+        ByteBuffer headerData = ByteBuffer.allocate(HEADER_LENGTH);
         int bytesRead = raf.getChannel().read(headerData);
         headerData.position(0);
 
@@ -41,26 +40,24 @@ public class AiffFileHeader
             throw new IOException("AIFF:Unable to read required number of databytes read:" + bytesRead + ":required:" + HEADER_LENGTH);
         }
 
-        //Read Signature
-        for (int i = 0; i < SIGNATURE_LENGTH; i++)
+        if(Utils.readFourBytesAsChars(headerData).equals(AIFF_SIGNATURE))
         {
-            if (headerData.get() != sigByte[i])
+            //Read Size
+            long bytesRemaining  = headerData.getInt();
+            logger.severe("Reading AIFF header size:" + bytesRemaining + " (" + Hex.asHex(bytesRemaining)+ ")"  );
+
+            //Read FileType
+            if (!readFileType(headerData, aiffAudioHeader))
             {
-                 throw new CannotReadException("Not an AIFF file: incorrect signature");
+                throw new CannotReadException("Invalid AIFF file: Incorrect file type info");
             }
+            bytesRemaining -= TYPE_LENGTH;
+            return bytesRemaining;
         }
-
-        //Read Size
-        long bytesRemaining  = Utils.readUINTBE32(headerData);
-        logger.config("Reading AIFF header size:" + bytesRemaining + " (" + Hex.asHex(bytesRemaining)+ ")"  );
-
-        //Read FileType
-        if (!readFileType(headerData, aiffAudioHeader))
+        else
         {
-            throw new CannotReadException("Invalid AIFF file: Incorrect file type info");
+            throw new CannotReadException("Not an AIFF file: incorrect signature");
         }
-        bytesRemaining -= TYPE_LENGTH;
-        return bytesRemaining;
     }
 
     /*  Reads the file type.

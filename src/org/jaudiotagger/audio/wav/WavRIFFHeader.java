@@ -25,6 +25,11 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
 
+/**
+ * Processes the Wav Header
+ *
+ * This is simply the first 12 bytes of the file http://www-mmsp.ece.mcgill.ca/Documents/AudioFormats/WAVE/WAVE.html
+ */
 public class WavRIFFHeader
 {
     public static final String RIFF_SIGNATURE = "RIFF";

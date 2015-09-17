@@ -40,6 +40,7 @@ public class WavFormatHeader
 
     private int channels, sampleRate, bytesPerSecond, blockAlign, bitsPerSample, validBitsPerSample, channelMask;
     private WavSubFormat wsf;
+
     public WavFormatHeader(RandomAccessFile raf) throws IOException
     {
         ByteBuffer headerBuffer = ByteBuffer.allocate(STANDARD_DATA_SIZE + EXTENSIBLE_DATA_SIZE_WE_NEED);
