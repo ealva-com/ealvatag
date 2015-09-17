@@ -1,7 +1,9 @@
 package org.jaudiotagger.audio.aiff.chunk;
 
 /**
- * Created by Paul on 16/09/2015.
+ * Chunk types mark each {@link ChunkHeader}. They are <em>always</em> 4 ASCII chars long.
+ *
+ * @see Chunk
  */
 public enum ChunkType
 {
@@ -12,18 +14,25 @@ public enum ChunkType
     COMMENTS("COMT"),
     NAME("NAME"),
     AUTHOR("AUTH"),
-    COPYRIGHT("(c)"),
+    COPYRIGHT("(c) "),
     ANNOTATION("ANNO"),
-    TAG("ID3 "),
-    ;
+    TAG("ID3 ");
 
     private String code;
 
-    ChunkType(String code)
+    /**
+     * @param code 4 char string
+     */
+    ChunkType(final String code)
     {
         this.code=code;
     }
 
+    /**
+     * 4 char type code.
+     *
+     * @return 4 char type code, e.g. "SSND" for the sound chunk.
+     */
     public String getCode()
     {
         return code;
