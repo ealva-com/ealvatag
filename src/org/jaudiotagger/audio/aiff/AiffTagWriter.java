@@ -19,11 +19,11 @@
 package org.jaudiotagger.audio.aiff;
 
 import org.jaudiotagger.audio.AudioFile;
-import org.jaudiotagger.audio.iff.ChunkHeader;
 import org.jaudiotagger.audio.aiff.chunk.ChunkType;
 import org.jaudiotagger.audio.exceptions.CannotWriteException;
 import org.jaudiotagger.audio.generic.TagWriter;
 import org.jaudiotagger.audio.generic.Utils;
+import org.jaudiotagger.audio.iff.ChunkHeader;
 import org.jaudiotagger.tag.Tag;
 import org.jaudiotagger.tag.aiff.AiffTag;
 
@@ -34,11 +34,11 @@ import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.logging.Logger;
-
 import static org.jaudiotagger.audio.iff.IffHeaderChunk.*;
 
+
 /**
- * Write Aiff Tag
+ * Write Aiff Tag.
  */
 public class AiffTagWriter implements TagWriter
 {
@@ -47,15 +47,15 @@ public class AiffTagWriter implements TagWriter
 
 
     /**
-     * Delete Tag from file
+     * Delete given {@link Tag} from file.
      *
-     * @param tag
-     * @param raf
-     * @param tempRaf
+     * @param tag tag, must be instance of {@link AiffTag}
+     * @param raf random access file
+     * @param tempRaf temporary random access file
      * @throws java.io.IOException
      * @throws org.jaudiotagger.audio.exceptions.CannotWriteException
      */
-    public void delete(Tag tag, RandomAccessFile raf, RandomAccessFile tempRaf) throws IOException, CannotWriteException
+    public void delete(final Tag tag, final RandomAccessFile raf, final RandomAccessFile tempRaf) throws IOException, CannotWriteException
     {
         logger.config("Deleting tag from file");
         Throwable t = new Throwable();
@@ -63,21 +63,21 @@ public class AiffTagWriter implements TagWriter
         try
         {
             //Find ID3 tag chunk
-            AiffTag         aiffTag         = (AiffTag) tag;
+            final AiffTag aiffTag = (AiffTag) tag;
             if (aiffTag.getID3Tag() != null && aiffTag.getStartLocationInFile() != null)
             {
                 //TODO is it safe to rely on the location as calculated when initially read
                 //Find existing location of ID3 chunk if any and seek to that location
                 raf.seek(aiffTag.getStartLocationInFile());
-                ChunkHeader ch = new ChunkHeader(ByteOrder.BIG_ENDIAN);
+                final ChunkHeader ch = new ChunkHeader(ByteOrder.BIG_ENDIAN);
                 ch.readHeader(raf);
 
-                if(!ch.getID().equals(ChunkType.TAG.getCode()))
+                if(!ChunkType.TAG.getCode().equals(ch.getID()))
                 {
                     throw new CannotWriteException("Unable to find ID3 chunk at original location has file been modified externally");
                 }
 
-                if(aiffTag.getEndLocationInFile() == raf.length())
+                if (aiffTag.getEndLocationInFile() == raf.length())
                 {
                     logger.config("Setting new length to:" + aiffTag.getStartLocationInFile());
                     raf.setLength(aiffTag.getStartLocationInFile());
@@ -97,23 +97,23 @@ public class AiffTagWriter implements TagWriter
 
 
     /**
-     * Write tag to file
+     * Write {@link Tag} to file.
      *
-     * @param af,
-     * @param tag
-     * @param raf
-     * @param rafTemp
+     * @param af audio file
+     * @param tag tag, must be instance of {@link AiffTag}
+     * @param raf random access file
+     * @param rafTemp temporary random access file
      * @throws org.jaudiotagger.audio.exceptions.CannotWriteException
      * @throws java.io.IOException
      */
-    public void write(AudioFile af, Tag tag, RandomAccessFile raf, RandomAccessFile rafTemp) throws CannotWriteException, IOException
+    public void write(final AudioFile af, final Tag tag, final RandomAccessFile raf, final RandomAccessFile rafTemp) throws CannotWriteException, IOException
     {
         logger.config("Writing tag to file");
         try
         {
-            AiffTag         aiffTag         = (AiffTag) tag;
-            ByteBuffer      bb          = convert(aiffTag);
-            long            newTagSize  = bb.array().length;
+            final AiffTag     aiffTag     = (AiffTag) tag;
+            final ByteBuffer  bb          = convert(aiffTag);
+            final long        newTagSize  = bb.array().length;
 
             //Replacing ID3 tag
             if (aiffTag.getID3Tag() != null && aiffTag.getStartLocationInFile() != null)
@@ -122,7 +122,7 @@ public class AiffTagWriter implements TagWriter
                 //TODO is it safe to rely on the location as calculated when initially read
                 //Find existing location of ID3 chunk if any and seek to that location
                 raf.seek(aiffTag.getStartLocationInFile());
-                ChunkHeader ch = new ChunkHeader(ByteOrder.BIG_ENDIAN);
+                final ChunkHeader ch = new ChunkHeader(ByteOrder.BIG_ENDIAN);
                 ch.readHeader(raf);
 
                 if(!ChunkType.TAG.getCode().equals(ch.getID()))
@@ -182,30 +182,44 @@ public class AiffTagWriter implements TagWriter
         }
     }
 
-    private void writeDataToFile(RandomAccessFile raf,  ByteBuffer bb, long chunkSize)
+    /**
+     * Writes data as a {@link ChunkType#TAG} chunk to the file.
+     *
+     * @param raf random access file
+     * @param bb data to write
+     * @param chunkSize chunk size
+     * @throws IOException
+     */
+    private void writeDataToFile(final RandomAccessFile raf,  final ByteBuffer bb, final long chunkSize)
             throws IOException
     {
-        ChunkHeader ch = new ChunkHeader(ByteOrder.BIG_ENDIAN);
+        final ChunkHeader ch = new ChunkHeader(ByteOrder.BIG_ENDIAN);
         ch.setID(ChunkType.TAG.getCode());
-        ch.setSize(chunkSize);
+        ch.setSize(chunkSize); // is chunk size different from bb.array.length?
         raf.write(ch.writeHeader().array());
         raf.write(bb.array());
     }
 
-    private void writePaddingToFile(RandomAccessFile raf,  int paddingSize)
+    private void writePaddingToFile(final RandomAccessFile raf, final int paddingSize)
             throws IOException
     {
-        ByteBuffer padding = ByteBuffer.allocate(paddingSize);
-        raf.write(padding.array());
+        raf.write(new byte[paddingSize]);
     }
 
-    public ByteBuffer convert(AiffTag tag) throws UnsupportedEncodingException
+    /**
+     * Converts tag to {@link ByteBuffer}.
+     *
+     * @param tag tag
+     * @return byte buffer containing the tag data
+     * @throws UnsupportedEncodingException
+     */
+    public ByteBuffer convert(final AiffTag tag) throws UnsupportedEncodingException
     {
         try
         {
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            final ByteArrayOutputStream baos = new ByteArrayOutputStream();
             tag.getID3Tag().write(baos);
-            ByteBuffer buf = ByteBuffer.wrap(baos.toByteArray());
+            final ByteBuffer buf = ByteBuffer.wrap(baos.toByteArray());
             buf.rewind();
             return buf;
         }

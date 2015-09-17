@@ -20,10 +20,6 @@ public class ChunkHeader
     private String  chunkId;           // Four character Id of the chunk
     private ByteOrder byteOrder;
 
-    public ChunkHeader()
-    {
-
-    }
 
     public ChunkHeader(ByteOrder byteOrder)
     {
