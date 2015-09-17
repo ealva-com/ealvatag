@@ -125,7 +125,7 @@ public class AiffTagWriter implements TagWriter
                 ChunkHeader ch = new ChunkHeader();
                 ch.readHeader(raf);
 
-                if(!ch.getID().equals(ChunkType.TAG.getCode()))
+                if(!ChunkType.TAG.getCode().equals(ch.getID()))
                 {
                     throw new CannotWriteException("Unable to find ID3 chunk at original location has file been modified externally");
                 }
