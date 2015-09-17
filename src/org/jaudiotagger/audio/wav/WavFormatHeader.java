@@ -25,7 +25,9 @@ import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
-
+/**
+ * Reads the fmt header, this contains the information required for constructing Audio header
+ */
 public class WavFormatHeader
 {
 
@@ -36,7 +38,7 @@ public class WavFormatHeader
 
     private boolean isValid = false;
 
-    private int channels, sampleRate, bytesPerSecond, blockAlign, bitsPerSample, validBitsPerSample, channelMask, subFormatCode;
+    private int channels, sampleRate, bytesPerSecond, blockAlign, bitsPerSample, validBitsPerSample, channelMask;
     private WavSubFormat wsf;
     public WavFormatHeader(RandomAccessFile raf) throws IOException
     {
@@ -49,24 +51,24 @@ public class WavFormatHeader
         if(sig.equals(FMT_SIGNATURE))
         {
             headerBuffer.getInt();
-            wsf = WavSubFormat.getByCode( u(headerBuffer.getShort()));
+            wsf = WavSubFormat.getByCode( Utils.u(headerBuffer.getShort()));
             if (wsf!=null)
             {
-                channels        = u(headerBuffer.getShort());
+                channels        = Utils.u(headerBuffer.getShort());
                 sampleRate      = headerBuffer.getInt();
                 bytesPerSecond  = headerBuffer.getInt();
-                blockAlign      = u(headerBuffer.getShort());
-                bitsPerSample   = u(headerBuffer.getShort());
+                blockAlign      = Utils.u(headerBuffer.getShort());
+                bitsPerSample   = Utils.u(headerBuffer.getShort());
                 if (wsf == WavSubFormat.FORMAT_EXTENSIBLE)
                 {
-                    int extensibleSize = u(headerBuffer.getShort());
+                    int extensibleSize = Utils.u(headerBuffer.getShort());
                     if(extensibleSize == EXTENSIBLE_DATA_SIZE)
                     {
-                        validBitsPerSample = u(headerBuffer.getShort());
+                        validBitsPerSample = Utils.u(headerBuffer.getShort());
                         channelMask = headerBuffer.getInt();
 
                         //If Extensible then the actual formatCode is held here
-                        wsf = WavSubFormat.getByCode(u(headerBuffer.getShort()));
+                        wsf = WavSubFormat.getByCode(Utils.u(headerBuffer.getShort()));
                     }
                 }
                 isValid = true;
@@ -116,10 +118,6 @@ public class WavFormatHeader
         return bitsPerSample;
     }
 
-    private int u(int n)
-    {
-        return n & 0xffff;
-    }
 
     public String toString()
     {

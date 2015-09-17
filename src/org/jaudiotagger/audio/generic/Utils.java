@@ -377,26 +377,26 @@ public class Utils
     public static long readUINTBE32( ByteBuffer bytes) throws IOException {
 
         long result = 0;
-        result |= bytes.get() & 0xFF;
+        result |= u(bytes.get());
         result <<= 8;
-        result |= bytes.get() & 0xFF;
+        result |= u(bytes.get());
         result <<= 8;
-        result |= bytes.get() & 0xFF;
+        result |= u(bytes.get());
         result <<= 8;
-        result |= bytes.get() & 0xFF;
+        result |= u(bytes.get());
         return result;
     }
 
     public static long readUINTBE32( byte[] bytes) throws IOException {
 
         long result = 0;
-        result |= bytes[0] & 0xFF;
+        result |= u(bytes[0]);
         result <<= 8;
-        result |= bytes[1] & 0xFF;
+        result |= u(bytes[1]);
         result <<= 8;
-        result |= bytes[2] & 0xFF;
+        result |= u(bytes[2]);
         result <<= 8;
-        result |= bytes[3] & 0xFF;
+        result |= u(bytes[3]);
         return result;
     }
 
@@ -651,4 +651,25 @@ public class Utils
         return new String(b, Charset.forName("ASCII"));
     }
 
+    /**
+     * Used to convert (signed short) to an integer as if signed short was unsigned hence allowing
+     * it to represent values 0 -> 65536 rather than -32786 -> 32786
+     * @param n
+     * @return
+     */
+    public static int u(short n)
+    {
+        return n & 0xffff;
+    }
+
+    /**
+     * Used to convert (signed byte) to an integer as if signed byte was unsigned hence allowing
+     * it to represent values 0 -> 255 rather than -128 -> 127
+     * @param n
+     * @return
+     */
+    public static int u(byte n)
+    {
+        return n & 0xff;
+    }
 }
