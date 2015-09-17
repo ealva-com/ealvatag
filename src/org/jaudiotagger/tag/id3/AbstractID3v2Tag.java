@@ -59,9 +59,9 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
     public static final int TAG_HEADER_LENGTH = 10;
     public static final int FIELD_TAGID_LENGTH = 3;
     public static final int FIELD_TAG_MAJOR_VERSION_LENGTH = 1;
-    protected static final int FIELD_TAG_MINOR_VERSION_LENGTH = 1;
-    protected static final int FIELD_TAG_FLAG_LENGTH = 1;
-    protected static final int FIELD_TAG_SIZE_LENGTH = 4;
+    public static final int FIELD_TAG_MINOR_VERSION_LENGTH = 1;
+    public static final int FIELD_TAG_FLAG_LENGTH = 1;
+    public static final int FIELD_TAG_SIZE_LENGTH = 4;
 
     protected static final int FIELD_TAGID_POS = 0;
     protected static final int FIELD_TAG_MAJOR_VERSION_POS = 3;
@@ -152,7 +152,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
         }
         //So we have a tag
         byte[] tagHeader = new byte[FIELD_TAG_SIZE_LENGTH];
-        raf.seek(raf.getFilePointer() + 6);
+        raf.seek(raf.getFilePointer() + FIELD_TAGID_LENGTH + FIELD_TAG_MAJOR_VERSION_LENGTH + FIELD_TAG_MINOR_VERSION_LENGTH + FIELD_TAG_FLAG_LENGTH);
         raf.read(tagHeader);
         ByteBuffer bb = ByteBuffer.wrap(tagHeader);
 

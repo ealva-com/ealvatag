@@ -10,14 +10,12 @@ import org.jaudiotagger.audio.generic.GenericAudioHeader;
 import org.jaudiotagger.audio.generic.Utils;
 import org.jaudiotagger.tag.Tag;
 import org.jaudiotagger.tag.TagException;
-import org.jaudiotagger.tag.id3.AbstractID3v2Tag;
-import org.jaudiotagger.tag.id3.ID3v22Tag;
-import org.jaudiotagger.tag.id3.ID3v23Tag;
-import org.jaudiotagger.tag.id3.ID3v24Tag;
+import org.jaudiotagger.tag.id3.*;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.util.logging.Level;
 
 /**
@@ -32,34 +30,41 @@ public class DsfAudioFileReader extends AudioFileReader
     private static final String DSD_SIGNATURE = "DSD ";
     private static final String FMT_SIGNATURE = "fmt ";
 
+    public static final int SIGNATURE_LENGTH = 4;
+    public static final int CHUNKSIZE_LENGTH = 8;
+    public static final int FILESIZE_LENGTH = 8;
+    public static final int METADATA_OFFSET_LENGTH = 8;
+    public static final int FMT_CHUNK_SIGNATURE_LENGTH = 4;
+    public static final int FMT_CHUNK_SIZE_LENGTH = 8;
+    public static final int FMT_CHUNK_MIN_DATA_SIZE_ = 40;
+
+
     @Override
     protected GenericAudioHeader getEncodingInfo(RandomAccessFile raf) throws CannotReadException, IOException
     {
         String type = Utils.readFourBytesAsChars(raf);
         if (DSD_SIGNATURE.equals(type))
         {
-            raf.readLong();
-            raf.readLong();
-            raf.readLong();
+            raf.skipBytes(CHUNKSIZE_LENGTH + FILESIZE_LENGTH + METADATA_OFFSET_LENGTH);
             String fmt = Utils.readFourBytesAsChars(raf);
             if (FMT_SIGNATURE.equals(fmt))
             {
                 long size = Long.reverseBytes(raf.readLong());
-                size -= (FMT_SIGNATURE.length() + 8);
-                byte[] audiodataBytes = new byte[(int) size];
-                raf.read(audiodataBytes);
-                return readAudioInfo(ByteBuffer.wrap(audiodataBytes));
+                long sizeExcludingChunkHeader = size - (FMT_CHUNK_SIGNATURE_LENGTH + FMT_CHUNK_SIZE_LENGTH);
+                ByteBuffer audioData = ByteBuffer.allocate((int)sizeExcludingChunkHeader);
+                raf.getChannel().read(audioData);
+                audioData.position(0);
+                return readAudioInfo(audioData);
             }
             else
             {
-                logger.log(Level.WARNING, "Not a valid dsf file. Content does not start with 'fmt '.");
+                throw new CannotReadException("Not a valid dsf file. Content does not start with 'fmt '.");
             }
         }
         else
         {
-            logger.log(Level.WARNING, "Not a valid dsf file. Content does not start with 'DSD '.");
+            throw new CannotReadException("Not a valid dsf file. Content does not start with 'DSD '.");
         }
-        return new GenericAudioHeader();
     }
 
     /**
@@ -72,20 +77,21 @@ public class DsfAudioFileReader extends AudioFileReader
     private GenericAudioHeader readAudioInfo(ByteBuffer audioInfoChunk)
     {
         GenericAudioHeader audioHeader = new GenericAudioHeader();
-        if (audioInfoChunk.limit() < 40)
+        if (audioInfoChunk.limit() < FMT_CHUNK_MIN_DATA_SIZE_)
         {
             logger.log(Level.WARNING, "Not enough bytes supplied for Generic audio header. Returning an empty one.");
             return audioHeader;
         }
 
-        int version = Integer.reverseBytes(audioInfoChunk.getInt());
-        int formatId = Integer.reverseBytes(audioInfoChunk.getInt());
-        int channelType = Integer.reverseBytes(audioInfoChunk.getInt());
-        int channelNumber = Integer.reverseBytes(audioInfoChunk.getInt());
-        int samplingFreqency = Integer.reverseBytes(audioInfoChunk.getInt());
-        int bitsPerSample = Integer.reverseBytes(audioInfoChunk.getInt());
-        long sampleCount = Long.reverseBytes(audioInfoChunk.getLong());
-        int blocksPerSample = Integer.reverseBytes(audioInfoChunk.getInt());
+        audioInfoChunk.order(ByteOrder.LITTLE_ENDIAN);
+        int version = audioInfoChunk.getInt();
+        int formatId =audioInfoChunk.getInt();
+        int channelType =audioInfoChunk.getInt();
+        int channelNumber = audioInfoChunk.getInt();
+        int samplingFreqency = audioInfoChunk.getInt();
+        int bitsPerSample =audioInfoChunk.getInt();
+        long sampleCount = audioInfoChunk.getLong();
+        int blocksPerSample = audioInfoChunk.getInt();
 
         audioHeader.setBitrate(bitsPerSample * samplingFreqency * channelNumber);
         audioHeader.setBitsPerSample(bitsPerSample);
@@ -107,17 +113,14 @@ public class DsfAudioFileReader extends AudioFileReader
         String type = Utils.readFourBytesAsChars(raf);
         if (DSD_SIGNATURE.equals(type))
         {
-            raf.readLong();
-            raf.readLong();
+            raf.skipBytes(CHUNKSIZE_LENGTH + FILESIZE_LENGTH);
             long offset = Long.reverseBytes(raf.readLong());
             return readTag(raf, offset);
         }
         else
         {
-            logger.log(Level.WARNING, "Not a valid dsf file. Content does not start with 'DSD '.");
+            throw new CannotReadException("Not a valid dsf file. Content does not start with 'DSD '.");
         }
-
-        return null;
     }
 
     /**
@@ -133,10 +136,9 @@ public class DsfAudioFileReader extends AudioFileReader
     private Tag readTag(RandomAccessFile file, long tagOffset) throws IOException
     {
         file.seek(tagOffset);
-        file.skipBytes(3);
+        file.skipBytes(AbstractID3v2Tag.FIELD_TAGID_LENGTH);
         int majorVersion = file.readByte();
-        file.skipBytes(2);
-
+        file.skipBytes(AbstractID3v2Tag.FIELD_TAG_MINOR_VERSION_LENGTH + AbstractID3v2Tag.FIELD_TAG_FLAG_LENGTH);
         ByteBuffer tagBuffer = getTagBuffer(file, tagOffset);
 
         try
@@ -163,15 +165,23 @@ public class DsfAudioFileReader extends AudioFileReader
         return new ID3v24Tag();
     }
 
+    /**
+     * Extract the Id3Tag and return as a ByteBuffer
+     *
+     * @param file
+     * @param tagOffset
+     * @return
+     * @throws IOException
+     */
     private ByteBuffer getTagBuffer(RandomAccessFile file, long tagOffset) throws IOException
     {
-        byte[] sizeBytes = new byte[4];
+        byte[] sizeBytes = new byte[AbstractID3v2Tag.FIELD_TAG_SIZE_LENGTH];
         file.read(sizeBytes);
-        int size = ((sizeBytes[0] & 0xff) << 21) + ((sizeBytes[1] & 0xff) << 14) + ((sizeBytes[2] & 0xff) << 7) + ((sizeBytes[3]) & 0xff);
-        size += AbstractID3v2Tag.TAG_HEADER_LENGTH;
+        int sizeOfId3Tag = ID3SyncSafeInteger.bufferToValue(sizeBytes);
+        sizeOfId3Tag += AbstractID3v2Tag.TAG_HEADER_LENGTH;
 
         file.seek(tagOffset);
-        byte[] tagBytes = new byte[size];
+        byte[] tagBytes = new byte[sizeOfId3Tag];
         file.read(tagBytes);
         ByteBuffer tagBuffer = ByteBuffer.wrap(tagBytes);
         return tagBuffer;
