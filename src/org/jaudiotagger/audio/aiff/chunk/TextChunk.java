@@ -1,7 +1,7 @@
-package org.jaudiotagger.audio.aiff;
+package org.jaudiotagger.audio.aiff.chunk;
 
-import org.jaudiotagger.audio.aiff.chunk.Chunk;
-import org.jaudiotagger.audio.aiff.chunk.ChunkHeader;
+import org.jaudiotagger.audio.iff.Chunk;
+import org.jaudiotagger.audio.iff.ChunkHeader;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;

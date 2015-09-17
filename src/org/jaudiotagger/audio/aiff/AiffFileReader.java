@@ -4,6 +4,8 @@ import org.jaudiotagger.audio.aiff.chunk.*;
 import org.jaudiotagger.audio.exceptions.CannotReadException;
 import org.jaudiotagger.audio.generic.AudioFileReader;
 import org.jaudiotagger.audio.generic.GenericAudioHeader;
+import org.jaudiotagger.audio.iff.Chunk;
+import org.jaudiotagger.audio.iff.ChunkHeader;
 import org.jaudiotagger.logging.Hex;
 import org.jaudiotagger.tag.Tag;
 import org.jaudiotagger.tag.aiff.AiffTag;
@@ -11,6 +13,7 @@ import org.jaudiotagger.tag.id3.ID3v22Tag;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.nio.ByteOrder;
 
 public class AiffFileReader extends AudioFileReader
 {
@@ -38,7 +41,7 @@ public class AiffFileReader extends AudioFileReader
     @Override
     protected GenericAudioHeader getEncodingInfo(RandomAccessFile raf) throws CannotReadException, IOException
     {
-        logger.config("Reading AIFF file size:" + raf.length() + " (" + Hex.asHex(raf.length())+ ")"  );
+        logger.config("Reading AIFF file size:" + raf.length() + " (" + Hex.asHex(raf.length()) + ")");
         AiffFileHeader fileHeader = new AiffFileHeader();
         long bytesRemaining = fileHeader.readHeader(raf, aiffAudioHeader);
         while (raf.getFilePointer() < raf.length())
@@ -71,7 +74,7 @@ public class AiffFileReader extends AudioFileReader
     protected boolean readChunk(RandomAccessFile raf) throws IOException
     {
         Chunk chunk = null;
-        ChunkHeader chunkh = new ChunkHeader();
+        ChunkHeader chunkh = new ChunkHeader(ByteOrder.BIG_ENDIAN);
         if (!chunkh.readHeader(raf))
         {
             return false;

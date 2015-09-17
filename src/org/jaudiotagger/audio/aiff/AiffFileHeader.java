@@ -8,17 +8,13 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
 import java.util.logging.Logger;
+import static org.jaudiotagger.audio.iff.IffHeaderChunk.*;
 
 /**
  * Aiff File Header definitions
  */
 public class AiffFileHeader
 {
-    public static int SIGNATURE_LENGTH = 4;
-    public static int SIZE_LENGTH = 4;
-    public static int TYPE_LENGTH = 4;
-    public static int HEADER_LENGTH = SIGNATURE_LENGTH + SIZE_LENGTH + TYPE_LENGTH;
-
     public static final String AIFF_SIGNATURE = "FORM";
 
     // Logger Object

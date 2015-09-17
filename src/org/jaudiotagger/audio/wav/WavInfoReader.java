@@ -20,44 +20,78 @@ package org.jaudiotagger.audio.wav;
 
 import org.jaudiotagger.audio.exceptions.CannotReadException;
 import org.jaudiotagger.audio.generic.GenericAudioHeader;
+import org.jaudiotagger.audio.iff.Chunk;
+import org.jaudiotagger.audio.iff.ChunkHeader;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 
 /**
- *
+ * Read the Wav file chunks, until finds WavFormatChunk and then generates AudioHeader from it
  */
 public class WavInfoReader
 {
-    private static final String WAV_RIFF_ENCODING_PREPEND = "WAV-RIFF ";
-    public GenericAudioHeader read(RandomAccessFile raf) throws CannotReadException, IOException
+   public GenericAudioHeader read(RandomAccessFile raf) throws CannotReadException, IOException
     {
         GenericAudioHeader info = new GenericAudioHeader();
         if(WavRIFFHeader.isValidHeader(raf))
         {
-            WavFormatHeader wfh = new WavFormatHeader(raf);
-            if (wfh.isValid())
+            while (raf.getFilePointer() < raf.length())
             {
-                //TODO if 36 refers to header needs beter calculating
-                info.setPreciseLength(((float) raf.length() - (float) 36) / wfh.getBytesPerSecond());
-                info.setChannelNumber(wfh.getChannelNumber());
-                info.setSamplingRate(wfh.getSamplingRate());
-                info.setBitsPerSample(wfh.getBitsPerSample() );
-                info.setEncodingType(WAV_RIFF_ENCODING_PREPEND + wfh.getBitsPerSample() + " bits");
-                info.setExtraEncodingInfos("");
-                info.setBitrate(wfh.getBytesPerSecond() * 8 / 1000);
-                info.setVariableBitRate(false);
-            }
-            else
-            {
-                throw new CannotReadException("Wav Format Header not valid");
+                if (!readChunk(raf, info))
+                {
+                    break;
+                }
             }
         }
         else
         {
             throw new CannotReadException("Wav RIFF Header not valid");
         }
-
         return info;
+    }
+
+    /**
+     * Reads a Wav Chunk.
+     */
+    protected boolean readChunk(RandomAccessFile raf, GenericAudioHeader info) throws IOException
+    {
+        Chunk chunk;
+        ChunkHeader chunkHeader = new ChunkHeader(ByteOrder.LITTLE_ENDIAN);
+        if (!chunkHeader.readHeader(raf))
+        {
+            return false;
+        }
+
+        //Read chunkdata into bytebuffer, this means raf now pointing to start of next chunk(if any)
+        ByteBuffer chunkData = readChunkDataIntoBuffer(raf,chunkHeader);
+
+        String id = chunkHeader.getID();
+        if (WavChunkType.FORMAT.getCode().equals(id))
+        {
+            chunk = new WavFormatChunk(chunkData, chunkHeader, info);
+            chunk.readChunk();
+        }
+        return true;
+    }
+
+    /**
+     * Read the next chunk into ByteBuffer as specified by ChunkHeader and moves raf file pointer
+     * to start of next chunk/end of file.
+     *
+     * @param raf
+     * @param chunkHeader
+     * @return
+     * @throws IOException
+     */
+    private ByteBuffer readChunkDataIntoBuffer(RandomAccessFile raf, ChunkHeader chunkHeader) throws IOException
+    {
+        ByteBuffer chunkData = ByteBuffer.allocate((int)chunkHeader.getSize());
+        chunkData.order(ByteOrder.LITTLE_ENDIAN);
+        raf.getChannel().read(chunkData);
+        chunkData.position(0);
+        return chunkData;
     }
 }

@@ -4,6 +4,8 @@ import org.jaudiotagger.audio.aiff.AiffAudioHeader;
 import org.jaudiotagger.audio.aiff.AiffType;
 import org.jaudiotagger.audio.aiff.AiffUtil;
 import org.jaudiotagger.audio.generic.Utils;
+import org.jaudiotagger.audio.iff.Chunk;
+import org.jaudiotagger.audio.iff.ChunkHeader;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;

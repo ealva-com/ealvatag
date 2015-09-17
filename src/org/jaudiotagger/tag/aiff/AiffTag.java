@@ -1,6 +1,6 @@
 package org.jaudiotagger.tag.aiff;
 
-import org.jaudiotagger.audio.aiff.chunk.ChunkHeader;
+import org.jaudiotagger.audio.iff.ChunkHeader;
 import org.jaudiotagger.tag.*;
 import org.jaudiotagger.tag.id3.AbstractID3v2Tag;
 import org.jaudiotagger.tag.images.Artwork;

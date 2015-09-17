@@ -1,10 +1,11 @@
-package org.jaudiotagger.audio.aiff.chunk;
+package org.jaudiotagger.audio.iff;
 
 import org.jaudiotagger.audio.generic.Utils;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.nio.charset.StandardCharsets;
 
 /**
@@ -14,12 +15,15 @@ import java.nio.charset.StandardCharsets;
 public class ChunkHeader
 {
     public static final int  CHUNK_HEADER_SIZE = 8;
-    private static final int CHUNK_ID_SIZE = 4;
-    private static final int CHUNK_SIZE_SIZE = 4;
 
     private long    size;              // This does not include the 8 bytes of header itself
-    private String  chunkId;           // 4-character ID of the chunk
+    private String  chunkId;           // Four character Id of the chunk
+    private ByteOrder byteOrder;
 
+    public ChunkHeader(ByteOrder byteOrder)
+    {
+        this.byteOrder=byteOrder;
+    }
     /**
      * Reads the header of a chunk.
      *
@@ -27,28 +31,12 @@ public class ChunkHeader
      */
     public boolean readHeader(final RandomAccessFile raf) throws IOException
     {
-        final StringBuilder id = new StringBuilder(CHUNK_ID_SIZE);
-        for (int i = 0; i < CHUNK_ID_SIZE; i++)
-        {
-            //TODO overcomplex conversion between int and char/bytes
-            final int ch = raf.read();
-            if (ch < 32)
-            {
-                // not a printable valid ASCII char, so we assume it's not a valid chunk
-                String hx = Integer.toHexString(ch);
-                if (hx.length() < 2)
-                {
-                    hx = "0" + hx;
-                }
-                // TODO: hx only makes sense, if we actually use it in an exception or log it.
-                return false;
-            }
-            id.append((char) ch);
-        }
-        this.chunkId = id.toString();
-        final byte[] bytes= new byte[CHUNK_SIZE_SIZE];
-        raf.read(bytes);
-        this.size = Utils.readUINTBE32(bytes);
+        ByteBuffer header = ByteBuffer.allocate(CHUNK_HEADER_SIZE);
+        raf.getChannel().read(header);
+        header.order(byteOrder);
+        header.position(0);
+        this.chunkId  = Utils.readFourBytesAsChars(header);
+        this.size = header.getInt();
 
         return true;
     }
@@ -60,6 +48,7 @@ public class ChunkHeader
      */
     public ByteBuffer writeHeader()
     {
+        //TODO make byteOrder (currently set for AIFF-BE)
         final ByteBuffer bb = ByteBuffer.allocate(CHUNK_HEADER_SIZE);
         bb.put(chunkId.getBytes(StandardCharsets.US_ASCII));
         bb.put(Utils.getSizeBEInt32((int) size));

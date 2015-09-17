@@ -1,7 +1,8 @@
-package org.jaudiotagger.audio.aiff.chunk;
+package org.jaudiotagger.audio.iff;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.nio.ByteBuffer;
 
 
 /**
@@ -11,14 +12,12 @@ import java.io.RandomAccessFile;
  */
 public abstract class Chunk
 {
-
-
-
     protected long bytesLeft;
     protected RandomAccessFile raf;
+    protected ByteBuffer chunkData;
 
     /**
-     * Constructor.
+     * Constructor used by Aiff
      *
      * @param hdr The header for this chunk
      */
@@ -28,6 +27,17 @@ public abstract class Chunk
         bytesLeft = hdr.getSize();
     }
 
+    /**
+     * Constructor used by Wav
+     *
+     * @param chunkData
+     * @param hdr
+     */
+    public Chunk(ByteBuffer chunkData, ChunkHeader hdr)
+    {
+        this.chunkData = chunkData;
+        bytesLeft = hdr.getSize();
+    }
 
     /**
      * Reads a chunk and puts appropriate information into

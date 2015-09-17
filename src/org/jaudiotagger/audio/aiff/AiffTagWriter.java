@@ -19,7 +19,7 @@
 package org.jaudiotagger.audio.aiff;
 
 import org.jaudiotagger.audio.AudioFile;
-import org.jaudiotagger.audio.aiff.chunk.ChunkHeader;
+import org.jaudiotagger.audio.iff.ChunkHeader;
 import org.jaudiotagger.audio.aiff.chunk.ChunkType;
 import org.jaudiotagger.audio.exceptions.CannotWriteException;
 import org.jaudiotagger.audio.generic.TagWriter;
@@ -32,11 +32,10 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.util.logging.Logger;
 
-import static org.jaudiotagger.audio.aiff.AiffFileHeader.SIGNATURE_LENGTH;
-import static org.jaudiotagger.audio.aiff.AiffFileHeader.SIZE_LENGTH;
-
+import static org.jaudiotagger.audio.iff.IffHeaderChunk.*;
 
 /**
  * Write Aiff Tag
@@ -70,7 +69,7 @@ public class AiffTagWriter implements TagWriter
                 //TODO is it safe to rely on the location as calculated when initially read
                 //Find existing location of ID3 chunk if any and seek to that location
                 raf.seek(aiffTag.getStartLocationInFile());
-                ChunkHeader ch = new ChunkHeader();
+                ChunkHeader ch = new ChunkHeader(ByteOrder.BIG_ENDIAN);
                 ch.readHeader(raf);
 
                 if(!ch.getID().equals(ChunkType.TAG.getCode()))
@@ -123,7 +122,7 @@ public class AiffTagWriter implements TagWriter
                 //TODO is it safe to rely on the location as calculated when initially read
                 //Find existing location of ID3 chunk if any and seek to that location
                 raf.seek(aiffTag.getStartLocationInFile());
-                ChunkHeader ch = new ChunkHeader();
+                ChunkHeader ch = new ChunkHeader(ByteOrder.BIG_ENDIAN);
                 ch.readHeader(raf);
 
                 if(!ChunkType.TAG.getCode().equals(ch.getID()))
@@ -186,7 +185,7 @@ public class AiffTagWriter implements TagWriter
     private void writeDataToFile(RandomAccessFile raf,  ByteBuffer bb, long chunkSize)
             throws IOException
     {
-        ChunkHeader ch = new ChunkHeader();
+        ChunkHeader ch = new ChunkHeader(ByteOrder.BIG_ENDIAN);
         ch.setID(ChunkType.TAG.getCode());
         ch.setSize(chunkSize);
         raf.write(ch.writeHeader().array());

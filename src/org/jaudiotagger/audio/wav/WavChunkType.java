@@ -1,29 +1,21 @@
-package org.jaudiotagger.audio.aiff.chunk;
+package org.jaudiotagger.audio.wav;
 
 /**
  * Chunk types mark each {@link org.jaudiotagger.audio.iff.ChunkHeader}. They are <em>always</em> 4 ASCII chars long.
  *
  * @see org.jaudiotagger.audio.iff.Chunk
  */
-public enum ChunkType
+public enum WavChunkType
 {
-    FORMAT_VERSION("FVER"),
-    APPLICATION("APPL"),
-    SOUND("SSND"),
-    COMMON("COMM"),
-    COMMENTS("COMT"),
-    NAME("NAME"),
-    AUTHOR("AUTH"),
-    COPYRIGHT("(c) "),
-    ANNOTATION("ANNO"),
-    TAG("ID3 ");
+    FORMAT("fmt "),
+    ;
 
     private String code;
 
     /**
      * @param code 4 char string
      */
-    ChunkType(final String code)
+    WavChunkType(final String code)
     {
         this.code=code;
     }
