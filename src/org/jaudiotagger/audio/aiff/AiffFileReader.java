@@ -38,12 +38,11 @@ public class AiffFileReader extends AudioFileReader
     @Override
     protected GenericAudioHeader getEncodingInfo(RandomAccessFile raf) throws CannotReadException, IOException
     {
-        logger.info("Reading AIFF file size:" + raf.length() + " (" + Hex.asHex(raf.length())+ ")"  );
+        logger.config("Reading AIFF file size:" + raf.length() + " (" + Hex.asHex(raf.length())+ ")"  );
         AiffFileHeader fileHeader = new AiffFileHeader();
         long bytesRemaining = fileHeader.readHeader(raf, aiffAudioHeader);
         while (raf.getFilePointer() < raf.length())
         {
-            logger.info("FilePointer:"+raf.getFilePointer());
             if (!readChunk(raf))
             {
                 logger.severe("UnableToReadProcessChunk");
@@ -118,24 +117,20 @@ public class AiffFileReader extends AudioFileReader
         {
             chunk = new ID3Chunk(chunkh, raf, aiffTag);
         }
-        else
-        {
-            logger.severe("Unrecognised Chunk Found:" + id);
-        }
 
         if (chunk != null)
         {
-            logger.info("Reading:"+chunkh.getID());
+            logger.config("Reading:"+chunkh.getID());
             if (!chunk.readChunk())
             {
-                logger.info("ChunkReadFail:"+chunkh.getID());
+                logger.severe("ChunkReadFail:"+chunkh.getID());
                 return false;
             }
         }
         else
         {
             // Other chunk types are legal, just skip over them
-            logger.info("SkipBytes:"+chunkSize);
+            logger.info("SkipBytes:"+chunkSize+" for unknown id:"+id);
             raf.skipBytes(chunkSize);
         }
         //TODO why would this happen

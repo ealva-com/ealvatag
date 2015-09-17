@@ -46,14 +46,13 @@ public class AiffFileHeader
         {
             if (headerData.get() != sigByte[i])
             {
-                logger.finest("AIFF file has incorrect signature");
-                throw new CannotReadException("Not an AIFF file: incorrect signature");
+                 throw new CannotReadException("Not an AIFF file: incorrect signature");
             }
         }
 
         //Read Size
         long bytesRemaining  = Utils.readUINTBE32(headerData);
-        logger.info("Reading AIFF header size:" + bytesRemaining + " (" + Hex.asHex(bytesRemaining)+ ")"  );
+        logger.config("Reading AIFF header size:" + bytesRemaining + " (" + Hex.asHex(bytesRemaining)+ ")"  );
 
         //Read FileType
         if (!readFileType(headerData, aiffAudioHeader))

@@ -57,7 +57,7 @@ public class AiffTagWriter implements TagWriter
      */
     public void delete(Tag tag, RandomAccessFile raf, RandomAccessFile tempRaf) throws IOException, CannotWriteException
     {
-        logger.info("Deleting tag from file");
+        logger.config("Deleting tag from file");
         Throwable t = new Throwable();
         t.printStackTrace();
         try
@@ -79,7 +79,7 @@ public class AiffTagWriter implements TagWriter
 
                 if(aiffTag.getEndLocationInFile() == raf.length())
                 {
-                    logger.info("Setting new length to:" + aiffTag.getStartLocationInFile());
+                    logger.config("Setting new length to:" + aiffTag.getStartLocationInFile());
                     raf.setLength(aiffTag.getStartLocationInFile());
 
                     //Rewrite FORM size
@@ -108,7 +108,7 @@ public class AiffTagWriter implements TagWriter
      */
     public void write(AudioFile af, Tag tag, RandomAccessFile raf, RandomAccessFile rafTemp) throws CannotWriteException, IOException
     {
-        logger.info("Writing tag to file");
+        logger.config("Writing tag to file");
         try
         {
             AiffTag         aiffTag         = (AiffTag) tag;

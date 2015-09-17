@@ -252,8 +252,7 @@ public class AiffTag  implements Tag {
     {
         if(id3Tag!=null)
         {
-            return  "startOfID3TagAt:"+getStartLocationInFile()+"("+ Hex.asHex(getStartLocationInFile())+ ")\n" +
-                    "endOfID3TagAt  :"+getEndLocationInFile() + "("+ Hex.asHex(getEndLocationInFile()) + ")\n" +
+            return
                     id3Tag.toString();
         }
         else
