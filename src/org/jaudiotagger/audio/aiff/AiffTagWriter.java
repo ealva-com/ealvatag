@@ -59,27 +59,35 @@ public class AiffTagWriter implements TagWriter
     public void delete(final Tag tag, final RandomAccessFile raf, final RandomAccessFile tempRaf) throws IOException, CannotWriteException
     {
         logger.config("Deleting tag from file");
+        final AiffTag existingTag;
         try
         {
-            //Find ID3 tag chunk
-            final AiffTag aiffTag = (AiffTag) tag;
-            if (aiffTag.getID3Tag() != null && aiffTag.getStartLocationInFile() != null)
+            //Find AiffTag (if any)
+            AiffTagReader im = new AiffTagReader();
+            existingTag = im.read(raf);
+        }
+        catch (CannotReadException ex)
+        {
+            throw new CannotWriteException("Failed to read file");
+        }
+
+        try
+        {
+            if (existingTag.getID3Tag() != null && existingTag.getStartLocationInFile() != null)
             {
-                //TODO is it safe to rely on the location as calculated when initially read
-                //Find existing location of ID3 chunk if any and seek to that location
-                raf.seek(aiffTag.getStartLocationInFile());
+                raf.seek(existingTag.getStartLocationInFile());
                 final ChunkHeader ch = new ChunkHeader(ByteOrder.BIG_ENDIAN);
                 ch.readHeader(raf);
 
                 if(!ChunkType.TAG.getCode().equals(ch.getID()))
                 {
-                    throw new CannotWriteException("Unable to find ID3 chunk at original location has file been modified externally");
+                    throw new CannotWriteException("Unable to find ID3 chunk at expected location");
                 }
 
-                if (aiffTag.getEndLocationInFile() == raf.length())
+                if (existingTag.getEndLocationInFile() == raf.length())
                 {
-                    logger.config("Setting new length to:" + aiffTag.getStartLocationInFile());
-                    raf.setLength(aiffTag.getStartLocationInFile());
+                    logger.config("Setting new length to:" + existingTag.getStartLocationInFile());
+                    raf.setLength(existingTag.getStartLocationInFile());
 
                     //Rewrite FORM size
                     raf.seek(SIGNATURE_LENGTH);
