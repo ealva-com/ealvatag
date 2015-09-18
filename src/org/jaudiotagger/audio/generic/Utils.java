@@ -23,6 +23,7 @@ import org.jaudiotagger.utils.FileTypeUtil;
 
 import java.io.*;
 import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.logging.Level;
@@ -629,33 +630,6 @@ public class Utils
     }
 
     /**
-     *   Reads 4 bytes from file and concatenates them into a String.
-     *   This pattern is used for ID's of various kinds.
-     */
-    public static String readFourBytesAsChars(RandomAccessFile raf) throws IOException
-    {
-        StringBuffer sbuf = new StringBuffer(4);
-        for (int i = 0; i < 4; i++) {
-            char ch = (char) raf.read();
-            sbuf.append(ch);
-        }
-        return sbuf.toString();
-    }
-
-    /**
-     *
-     * Reads 4 bytes and concatenates them into a String.
-     * This pattern is used for ID's of various kinds.
-     * @param bytes
-     * @return
-     * @throws IOException
-     */
-    public static String readFourBytesAsChars(byte[] bytes) throws IOException
-    {
-        return new String(bytes, StandardCharsets.US_ASCII);
-    }
-
-    /**
      * Reads 4 bytes and concatenates them into a String.
      * This pattern is used for ID's of various kinds.
      *
@@ -703,4 +677,39 @@ public class Utils
         return n & 0xff;
     }
 
+    /**
+     * Read data from random file into buffer and position at start of buffer, when
+     * retrieving integral types will decode bytes as Little Endian
+     *
+     * @param file
+     * @param size
+     * @return
+     * @throws IOException
+     */
+    public static ByteBuffer readFileDataIntoBufferLE(RandomAccessFile file, int size) throws IOException
+    {
+        ByteBuffer tagBuffer = ByteBuffer.allocate((int)size);
+        file.getChannel().read(tagBuffer);
+        tagBuffer.position(0);
+        tagBuffer.order(ByteOrder.LITTLE_ENDIAN);
+        return tagBuffer;
+    }
+
+    /**
+     * Read data from random file into buffer and position at start of buffer, when
+     * retrieving integral types wil decode bytes as Big Endian
+     *
+     * @param file
+     * @param size
+     * @return
+     * @throws IOException
+     */
+    public static ByteBuffer readFileDataIntoBufferBE(RandomAccessFile file, int size) throws IOException
+    {
+        ByteBuffer tagBuffer = ByteBuffer.allocate((int)size);
+        file.getChannel().read(tagBuffer);
+        tagBuffer.position(0);
+        tagBuffer.order(ByteOrder.BIG_ENDIAN);
+        return tagBuffer;
+    }
 }

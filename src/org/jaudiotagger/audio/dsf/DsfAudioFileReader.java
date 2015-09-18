@@ -37,26 +37,24 @@ public class DsfAudioFileReader extends AudioFileReader
     public static final int CHUNKSIZE_LENGTH = 8;
     public static final int FILESIZE_LENGTH = 8;
     public static final int METADATA_OFFSET_LENGTH = 8;
-    public static final int FMT_CHUNK_SIGNATURE_LENGTH = 4;
-    public static final int FMT_CHUNK_SIZE_LENGTH = 8;
     public static final int FMT_CHUNK_MIN_DATA_SIZE_ = 40;
 
 
     @Override
     protected GenericAudioHeader getEncodingInfo(RandomAccessFile raf) throws CannotReadException, IOException
     {
-        String type = Utils.readFourBytesAsChars(raf);
+        ByteBuffer headerBuffer = Utils.readFileDataIntoBufferLE(raf, SIGNATURE_LENGTH);
+        String type = Utils.readFourBytesAsChars(headerBuffer);
         if (DSD_SIGNATURE.equals(type))
         {
             raf.skipBytes(CHUNKSIZE_LENGTH + FILESIZE_LENGTH + METADATA_OFFSET_LENGTH);
-            String fmt = Utils.readFourBytesAsChars(raf);
+            headerBuffer = Utils.readFileDataIntoBufferLE(raf, SIGNATURE_LENGTH + CHUNKSIZE_LENGTH);
+            String fmt = Utils.readFourBytesAsChars(headerBuffer);
             if (FMT_SIGNATURE.equals(fmt))
             {
-                long size = Long.reverseBytes(raf.readLong());
-                long sizeExcludingChunkHeader = size - (FMT_CHUNK_SIGNATURE_LENGTH + FMT_CHUNK_SIZE_LENGTH);
-                ByteBuffer audioData = ByteBuffer.allocate((int)sizeExcludingChunkHeader);
-                raf.getChannel().read(audioData);
-                audioData.position(0);
+                long size = headerBuffer.getLong();
+                long sizeExcludingChunkHeader = size - (SIGNATURE_LENGTH + CHUNKSIZE_LENGTH);
+                ByteBuffer audioData = Utils.readFileDataIntoBufferLE(raf, (int)sizeExcludingChunkHeader);
                 return readAudioInfo(audioData);
             }
             else
@@ -111,7 +109,7 @@ public class DsfAudioFileReader extends AudioFileReader
     @Override
     protected Tag getTag(RandomAccessFile raf) throws CannotReadException, IOException
     {
-        String type = Utils.readFourBytesAsChars(raf);
+        String type = Utils.readFourBytesAsChars(Utils.readFileDataIntoBufferLE(raf, SIGNATURE_LENGTH));
         if (DSD_SIGNATURE.equals(type))
         {
             raf.skipBytes(CHUNKSIZE_LENGTH + FILESIZE_LENGTH);
@@ -136,17 +134,12 @@ public class DsfAudioFileReader extends AudioFileReader
      */
     private Tag readTag(RandomAccessFile file, long tagOffset) throws CannotReadException,IOException
     {
-        //Move to start of ID3tag and read rest of file into ByteBuffer
+        //Move to start of ID3Tag and read rest of file into ByteBuffer
         file.seek(tagOffset);
-        ByteBuffer tagBuffer = ByteBuffer.allocate((int)(file.length() - file.getFilePointer()));
-        file.getChannel().read(tagBuffer);
-        tagBuffer.position(0);
+        ByteBuffer tagBuffer = Utils.readFileDataIntoBufferLE(file, (int) (file.length() - file.getFilePointer()));
 
         //Work out ID3 major version
-        file.seek(tagOffset);
-        file.skipBytes(AbstractID3v2Tag.FIELD_TAGID_LENGTH);
-        int majorVersion = file.readByte();
-
+        int majorVersion = tagBuffer.get(AbstractID3v2Tag.FIELD_TAG_MAJOR_VERSION_POS);
         try
         {
             logger.log(Level.FINE, "Start creating ID3v2 Tag for version: " + majorVersion);

@@ -66,7 +66,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
     public static final int FIELD_TAG_SIZE_LENGTH = 4;
 
     protected static final int FIELD_TAGID_POS = 0;
-    protected static final int FIELD_TAG_MAJOR_VERSION_POS = 3;
+    public static final int FIELD_TAG_MAJOR_VERSION_POS = 3;
     protected static final int FIELD_TAG_MINOR_VERSION_POS = 4;
     protected static final int FIELD_TAG_FLAG_POS = 5;
     protected static final int FIELD_TAG_SIZE_POS = 6;
