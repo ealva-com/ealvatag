@@ -27,13 +27,13 @@ public class UtilsTest extends TestCase
         assertEquals(65535,maxConverted);
     }
 
-    /*
+
     public void testIntToUnsignedLongConversion()
     {
         int maxInt = 0xffffffff;
         long  maxNotConverted = maxInt;
         long  maxConverted    = Utils.u(maxInt);
         System.out.println(maxConverted + ":" + maxNotConverted);
-        assertEquals(4294967296l,maxConverted);
-    }*/
+        assertEquals(4294967295l,maxConverted);
+    }
 }

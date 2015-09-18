@@ -678,7 +678,7 @@ public class Utils
      */
     public static long u(int n)
     {
-        return n & 0xffffffff;
+        return n & 0xffffffffl;
     }
 
     /**
