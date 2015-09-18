@@ -44,14 +44,14 @@ public class AiffInfoReader
      */
     private boolean readChunk(final RandomAccessFile raf) throws IOException
     {
-        Chunk chunk;
-        ChunkHeader chunkHeader = new ChunkHeader(ByteOrder.BIG_ENDIAN);
+        final Chunk chunk;
+        final ChunkHeader chunkHeader = new ChunkHeader(ByteOrder.BIG_ENDIAN);
         if (!chunkHeader.readHeader(raf))
         {
             return false;
         }
         final int chunkSize = (int) chunkHeader.getSize();
-        ByteBuffer chunkData = readChunkDataIntoBuffer(raf,chunkHeader);
+        final ByteBuffer chunkData = readChunkDataIntoBuffer(raf,chunkHeader);
         chunk = createChunk(chunkData, chunkHeader);
         if (chunk != null)
         {
@@ -65,7 +65,7 @@ public class AiffInfoReader
         else
         {
             // Other chunk types are legal, just skip over them
-            logger.info("SkipBytes:"+chunkSize+" for unknown id:"+ chunkh.getID());
+            logger.info("SkipBytes:"+chunkSize+" for unknown id:"+ chunkHeader.getID());
             raf.skipBytes(chunkSize);
         }
         //TODO why would this happen
@@ -134,9 +134,9 @@ public class AiffInfoReader
      * @return
      * @throws java.io.IOException
      */
-    private ByteBuffer readChunkDataIntoBuffer(RandomAccessFile raf, ChunkHeader chunkHeader) throws IOException
+    private ByteBuffer readChunkDataIntoBuffer(final RandomAccessFile raf, final ChunkHeader chunkHeader) throws IOException
     {
-        ByteBuffer chunkData = ByteBuffer.allocate((int)chunkHeader.getSize());
+        final ByteBuffer chunkData = ByteBuffer.allocate((int)chunkHeader.getSize());
         chunkData.order(ByteOrder.BIG_ENDIAN);
         raf.getChannel().read(chunkData);
         chunkData.position(0);
