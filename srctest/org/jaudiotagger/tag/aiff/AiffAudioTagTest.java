@@ -34,6 +34,7 @@ public class AiffAudioTagTest extends TestCase {
             AudioHeader ah = f.getAudioHeader();
             assertTrue(ah instanceof AiffAudioHeader);
             Tag tag = f.getTag();
+            System.out.println(tag);
             assertTrue(tag instanceof AiffTag);
             assertTrue(((AiffTag) tag).getID3Tag() instanceof ID3v22Tag);
 
@@ -155,12 +156,14 @@ public class AiffAudioTagTest extends TestCase {
 
             f = AudioFileIO.read(testFile);
             tag = f.getTag();
+            System.out.println(f.getTag());
             assertEquals("Warmplay", tag.getFirst(FieldKey.ARTIST));
             tag.setField(FieldKey.ARTIST, "Warmplayer");
             f.commit();
 
             f = AudioFileIO.read(testFile);
             tag = f.getTag();
+            System.out.println(f.getTag());
             assertEquals("Warmplayer", tag.getFirst(FieldKey.ARTIST));
 
 

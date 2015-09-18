@@ -23,30 +23,26 @@ public class ID3Chunk extends Chunk
     /**
      * Constructor.
      *
-     * @param hdr The header for this chunk
-     * @param raf The file from which the AIFF data are being read
-     * @param tag The AiffTag into which information is stored
+     * @param hdr        The header for this chunk
+     * @param chunkData  The content of this chunk
+     * @param tag        The AiffTag into which information is stored
      */
-    public ID3Chunk(ChunkHeader hdr, RandomAccessFile raf, AiffTag tag)
+    public ID3Chunk(ChunkHeader hdr, ByteBuffer chunkData, AiffTag tag)
     {
-        super(raf, hdr);
+        super(chunkData, hdr);
         aiffTag = tag;
     }
 
     @Override
     public boolean readChunk() throws IOException
     {
-        ByteBuffer headerData = ByteBuffer.allocateDirect(AbstractID3v2Tag.FIELD_TAGID_LENGTH + AbstractID3v2Tag.FIELD_TAG_MAJOR_VERSION_LENGTH);
-        raf.getChannel().read(headerData);
-        headerData.position(0);
-
-        if (!isId3v2Tag(headerData))
+        if (!isId3v2Tag(chunkData))
         {
             logger.severe("Invalid ID3 header for ID3 chunk");
             return false;
         }
 
-        int version = headerData.get();
+        int version = chunkData.get();
         AbstractID3v2Tag id3Tag;
         switch (version)
         {
@@ -65,20 +61,12 @@ public class ID3Chunk extends Chunk
             default:
                 return false;     // bad or unknown version
         }
+
         aiffTag.setID3Tag(id3Tag);
-        raf.seek(raf.getFilePointer() - (AbstractID3v2Tag.FIELD_TAGID_LENGTH + AbstractID3v2Tag.FIELD_TAG_MAJOR_VERSION_LENGTH));
-
-        //Includes the ID3Tag itself and the Aiff ID3 Chunk header, useful for tagwriter
-        aiffTag.setStartLocationInFile(raf.getFilePointer() - ChunkHeader.CHUNK_HEADER_SIZE);
-        aiffTag.setEndLocationInFile(aiffTag.getStartLocationInFile() + ChunkHeader.CHUNK_HEADER_SIZE + bytesLeft);
-
-        byte[] buf = new byte[(int) bytesLeft];
-        raf.read(buf);
-        ByteBuffer bb = ByteBuffer.allocateDirect((int) bytesLeft);
-        bb.put(buf);
+        chunkData.position(0);
         try
         {
-            id3Tag.read(bb);
+            id3Tag.read(chunkData);
         }
         catch (TagException e)
         {

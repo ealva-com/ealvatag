@@ -58,8 +58,6 @@ public class AiffTagWriter implements TagWriter
     public void delete(final Tag tag, final RandomAccessFile raf, final RandomAccessFile tempRaf) throws IOException, CannotWriteException
     {
         logger.config("Deleting tag from file");
-        Throwable t = new Throwable();
-        t.printStackTrace();
         try
         {
             //Find ID3 tag chunk
@@ -94,7 +92,6 @@ public class AiffTagWriter implements TagWriter
         }
         //and delete
     }
-
 
     /**
      * Write {@link Tag} to file.
