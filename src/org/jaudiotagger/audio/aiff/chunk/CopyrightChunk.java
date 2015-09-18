@@ -4,34 +4,35 @@ import org.jaudiotagger.audio.aiff.AiffAudioHeader;
 import org.jaudiotagger.audio.iff.ChunkHeader;
 
 import java.io.IOException;
-import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
 
+/**
+ * <p>
+ * The Copyright Chunk contains a copyright notice for the sound. text contains a date followed
+ * by the copyright owner. The chunk ID '(c) ' serves as the copyright characters '©'. For example,
+ * a Copyright Chunk containing the text "1988 Apple Computer, Inc." means "© 1988 Apple Computer, Inc."
+ * </p>
+ * <p>
+ * The Copyright Chunk is optional. No more than one Copyright Chunk may exist within a FORM AIFF.
+ * </p>
+ */
 public class CopyrightChunk extends TextChunk
 {
 
-    private AiffAudioHeader aiffHeader;
-
     /**
-     *
-     * @param hdr
-     * @param chunkData
-     * @param aHdr
+     * @param chunkHeader  The header for this chunk
+     * @param chunkData  The buffer from which the AIFF data are being read
+     * @param aiffAudioHeader The AiffAudioHeader into which information is stored
      */
-    public CopyrightChunk(ChunkHeader hdr, ByteBuffer chunkData, AiffAudioHeader aHdr)
+    public CopyrightChunk(final ChunkHeader chunkHeader, final ByteBuffer chunkData, final AiffAudioHeader aiffAudioHeader)
     {
-        super(hdr, chunkData);
-        aiffHeader = aHdr;
+        super(chunkHeader, chunkData, aiffAudioHeader);
     }
 
     @Override
     public boolean readChunk() throws IOException
     {
-        if (!super.readChunk())
-        {
-            return false;
-        }
-        aiffHeader.setCopyright(chunkText);
+        aiffAudioHeader.setCopyright(readChunkText());
         return true;
     }
 

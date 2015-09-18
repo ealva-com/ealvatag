@@ -6,12 +6,7 @@ import org.jaudiotagger.audio.exceptions.CannotReadException;
 import org.jaudiotagger.audio.generic.GenericAudioHeader;
 import org.jaudiotagger.audio.iff.Chunk;
 import org.jaudiotagger.audio.iff.ChunkHeader;
-import org.jaudiotagger.audio.wav.WavChunkType;
-import org.jaudiotagger.audio.wav.WavFormatChunk;
-import org.jaudiotagger.audio.wav.WavInfoReader;
-import org.jaudiotagger.audio.wav.WavRIFFHeader;
 import org.jaudiotagger.logging.Hex;
-import org.jaudiotagger.tag.aiff.AiffTag;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
@@ -25,7 +20,6 @@ import java.util.logging.Logger;
 public class AiffInfoReader
 {
     public static Logger logger = Logger.getLogger("org.jaudiotagger.audio.aiff");
-
     private   AiffAudioHeader aiffAudioHeader = new AiffAudioHeader();
     protected GenericAudioHeader read(final RandomAccessFile raf) throws CannotReadException, IOException
     {
@@ -50,14 +44,14 @@ public class AiffInfoReader
      */
     private boolean readChunk(final RandomAccessFile raf) throws IOException
     {
-        Chunk chunk;
-        ChunkHeader chunkHeader = new ChunkHeader(ByteOrder.BIG_ENDIAN);
+        final Chunk chunk;
+        final ChunkHeader chunkHeader = new ChunkHeader(ByteOrder.BIG_ENDIAN);
         if (!chunkHeader.readHeader(raf))
         {
             return false;
         }
         final int chunkSize = (int) chunkHeader.getSize();
-        ByteBuffer chunkData = readChunkDataIntoBuffer(raf,chunkHeader);
+        final ByteBuffer chunkData = readChunkDataIntoBuffer(raf,chunkHeader);
         chunk = createChunk(chunkData, chunkHeader);
         if (chunk != null)
         {
@@ -68,8 +62,13 @@ public class AiffInfoReader
                 return false;
             }
         }
-
-        //If Size is not even then we skip a byte, because chunks have to be aligned
+        else
+        {
+            // Other chunk types are legal, just skip over them
+            logger.info("SkipBytes:"+chunkSize+" for unknown id:"+ chunkHeader.getID());
+            raf.skipBytes(chunkSize);
+        }
+        //TODO why would this happen
         if ((chunkSize & 1) != 0)
         {
             // Must come out to an even byte boundary
@@ -114,6 +113,9 @@ public class AiffInfoReader
                 case ANNOTATION:
                     chunk = new AnnotationChunk(chunkHeader, chunkData, aiffAudioHeader);
                     break;
+                case SOUND:
+                    chunk = new SoundChunk(chunkHeader, chunkData);
+                    break;
                 default:
                     chunk = null;
             }
@@ -132,9 +134,9 @@ public class AiffInfoReader
      * @return
      * @throws java.io.IOException
      */
-    private ByteBuffer readChunkDataIntoBuffer(RandomAccessFile raf, ChunkHeader chunkHeader) throws IOException
+    private ByteBuffer readChunkDataIntoBuffer(final RandomAccessFile raf, final ChunkHeader chunkHeader) throws IOException
     {
-        ByteBuffer chunkData = ByteBuffer.allocate((int)chunkHeader.getSize());
+        final ByteBuffer chunkData = ByteBuffer.allocate((int)chunkHeader.getSize());
         chunkData.order(ByteOrder.BIG_ENDIAN);
         raf.getChannel().read(chunkData);
         chunkData.position(0);

@@ -1,30 +1,25 @@
 package org.jaudiotagger.audio.aiff.chunk;
 
-import org.jaudiotagger.audio.aiff.AiffAudioHeader;
 import org.jaudiotagger.audio.iff.Chunk;
 import org.jaudiotagger.audio.iff.ChunkHeader;
 
 import java.io.IOException;
-import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
 
 /**
- * Sound chunk
- *
- * Doesnt process
+ * Sound chunk.
+ * Doesn't actually read the content, but skips it.
  */
 public class SoundChunk extends Chunk
 {
 
     /**
-     *
-     * @param hdr
-     * @param chunkData
-     * @param aHdr
+     * @param chunkHeader  The header for this chunk
+     * @param chunkData  The file from which the AIFF data are being read
      */
-    public SoundChunk(ChunkHeader hdr, ByteBuffer chunkData, AiffAudioHeader aHdr)
+    public SoundChunk(final ChunkHeader chunkHeader, final ByteBuffer chunkData)
     {
-        super(chunkData, hdr);
+        super(chunkData, chunkHeader);
     }
 
     /**

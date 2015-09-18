@@ -7,7 +7,6 @@ import org.jaudiotagger.audio.iff.Chunk;
 import org.jaudiotagger.audio.iff.ChunkHeader;
 
 import java.io.IOException;
-import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
 
 /**
@@ -17,16 +16,22 @@ import java.nio.ByteBuffer;
  */
 public class ApplicationChunk extends Chunk
 {
-    private String SIGNATURE_PDOS = "pdos";
-    private String SIGNATURE_STOC = "stoc";
+    private static final String SIGNATURE_PDOS = "pdos";
+    private static final String SIGNATURE_STOC = "stoc";
 
     private AiffAudioHeader aiffHeader;
 
-
-    public ApplicationChunk(ChunkHeader hdr, ByteBuffer chunkData, AiffAudioHeader aHdr)
+    /**
+     * Constructor.
+     *
+     * @param chunkHeader The header for this chunk
+     * @param chunkData The file from which the AIFF data are being read
+     * @param aiffAudioHeader audio header
+     */
+    public ApplicationChunk(final ChunkHeader chunkHeader, final ByteBuffer chunkData, final AiffAudioHeader aiffAudioHeader)
     {
-        super(chunkData, hdr);
-        aiffHeader = aHdr;
+        super(chunkData, chunkHeader);
+        this.aiffHeader = aiffAudioHeader;
     }
 
     /**
@@ -38,7 +43,7 @@ public class ApplicationChunk extends Chunk
      */
     public boolean readChunk() throws IOException
     {
-        String applicationSignature = Utils.readFourBytesAsChars(chunkData);
+        final String applicationSignature = Utils.readFourBytesAsChars(chunkData);
         String applicationName = null;
 
         /* If the application signature is 'pdos' or 'stoc',

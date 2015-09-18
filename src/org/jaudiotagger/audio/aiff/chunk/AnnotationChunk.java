@@ -4,34 +4,31 @@ import org.jaudiotagger.audio.aiff.AiffAudioHeader;
 import org.jaudiotagger.audio.iff.ChunkHeader;
 
 import java.io.IOException;
-import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
 
+/**
+ * Contains a comment. Use of this chunk is discouraged within FORM AIFF. The more powerful {@link CommentsChunk}
+ * should be used instead. The Annotation Chunk is optional. Many Annotation Chunks may exist within a FORM AIFF.
+ *
+ * @see CommentsChunk
+ */
 public class AnnotationChunk extends TextChunk
 {
 
-    private AiffAudioHeader aiffHeader;
-
     /**
-     *
-     * @param hdr
-     * @param chunkData
-     * @param aHdr
+     * @param chunkHeader  The header for this chunk
+     * @param chunkData  The buffer from which the AIFF data are being read
+     * @param aiffAudioHeader The AiffAudioHeader into which information is stored
      */
-    public AnnotationChunk(ChunkHeader hdr, ByteBuffer chunkData, AiffAudioHeader aHdr)
+    public AnnotationChunk(final ChunkHeader chunkHeader, final ByteBuffer chunkData, final AiffAudioHeader aiffAudioHeader)
     {
-        super(hdr, chunkData);
-        aiffHeader = aHdr;
+        super(chunkHeader, chunkData, aiffAudioHeader);
     }
 
     @Override
     public boolean readChunk() throws IOException
     {
-        if (!super.readChunk())
-        {
-            return false;
-        }
-        aiffHeader.addAnnotation(chunkText);
+        aiffAudioHeader.addAnnotation(readChunkText());
         return true;
     }
 
