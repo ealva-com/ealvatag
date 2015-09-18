@@ -7,7 +7,6 @@ import org.jaudiotagger.audio.generic.GenericAudioHeader;
 import org.jaudiotagger.audio.iff.Chunk;
 import org.jaudiotagger.audio.iff.ChunkHeader;
 import org.jaudiotagger.logging.Hex;
-import org.jaudiotagger.tag.aiff.AiffTag;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
@@ -99,7 +98,7 @@ public class AiffInfoReader
                     chunk = new CommonChunk(chunkHeader, chunkData, aiffAudioHeader);
                     break;
                 case COMMENTS:
-                    chunk = new CommentsChunk(chunkHeader, raf, aiffAudioHeader);
+                    chunk = new CommentsChunk(chunkHeader, chunkData, aiffAudioHeader);
                     break;
                 case NAME:
                     chunk = new NameChunk(chunkHeader, chunkData, aiffAudioHeader);
