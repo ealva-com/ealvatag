@@ -28,12 +28,14 @@ public class AiffAudioHeader extends GenericAudioHeader
 
     private List<String> applicationIdentifiers;
     private List<String> comments;
+    private List<String> annotations;
 
     public AiffAudioHeader()
     {
-        applicationIdentifiers = new ArrayList<String>();
-        comments = new ArrayList<String>();
-        endian = Endian.BIG_ENDIAN;
+        this.applicationIdentifiers = new ArrayList<String>();
+        this.comments = new ArrayList<String>();
+        this.annotations = new ArrayList<String>();
+        this.endian = Endian.BIG_ENDIAN;
     }
 
     /**
@@ -154,7 +156,7 @@ public class AiffAudioHeader extends GenericAudioHeader
      */
     public List<String> getAnnotations()
     {
-        return applicationIdentifiers;
+        return annotations;
     }
 
     /**
@@ -162,7 +164,7 @@ public class AiffAudioHeader extends GenericAudioHeader
      */
     public void addAnnotation(String a)
     {
-        applicationIdentifiers.add(a);
+        annotations.add(a);
     }
 
     /**
@@ -195,5 +197,38 @@ public class AiffAudioHeader extends GenericAudioHeader
     public void setAudioEncoding(String s)
     {
         audioEncoding = s;
+    }
+
+    public String toString()
+    {
+        StringBuilder sb = new StringBuilder("\n");
+
+        if(comments.size()>0)
+        {
+            sb.append("Comments:\n");
+            for(String next:comments)
+            {
+                sb.append("\t"+next+"\n");
+            }
+        }
+
+        if(applicationIdentifiers.size()>0)
+        {
+            sb.append("ApplicationIds:\n");
+            for(String next:applicationIdentifiers)
+            {
+                sb.append("\t"+next+"\n");
+            }
+        }
+
+        if(annotations.size()>0)
+        {
+            sb.append("Annotations:\n");
+            for(String next:annotations)
+            {
+                sb.append("\t"+next+"\n");
+            }
+        }
+        return super.toString() + sb.toString();
     }
 }

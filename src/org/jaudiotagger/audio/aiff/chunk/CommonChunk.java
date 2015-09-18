@@ -8,12 +8,11 @@ import org.jaudiotagger.audio.iff.Chunk;
 import org.jaudiotagger.audio.iff.ChunkHeader;
 
 import java.io.IOException;
-import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
 
 /**
- * The Common Chunk describes fundamental parameters of the waveform data such as sample rate,
- * bit resolution, and how many channels of digital audio are stored in the FORM AIFF.
+ The Common Chunk describes fundamental parameters of the waveform data such as sample rate,
+ bit resolution, and how many channels of digital audio are stored in the FORM AIFF.
  */
 public class CommonChunk extends Chunk
 {
@@ -21,30 +20,29 @@ public class CommonChunk extends Chunk
     private static final int NO_SAMPLE_FRAMES_LENGTH = 4;
     private static final int SAMPLE_SIZE_LENGTH      = 2;
     private static final int SAMPLE_RATE_LENGTH      = 10;
-    private static final int COMPRESSION_TYPE_LENGTH = 4;
+    private static final int COMPRESSION_TYPE_LENGTH      = 4;
     private AiffAudioHeader aiffHeader;
 
     /**
-     * Constructor.
      *
-     * @param hdr  The header for this chunk
-     * @param chunkData  The buffer from which the AIFF data are being read
-     * @param aiffAudioHeader The AiffAufdioHeader into which information is stored
+     * @param hdr
+     * @param chunkData
+     * @param aiffAudioHeader
      */
-    public CommonChunk(final ChunkHeader hdr, final ByteBuffer chunkData, final AiffAudioHeader aiffAudioHeader)
+    public CommonChunk(ChunkHeader hdr, ByteBuffer chunkData, AiffAudioHeader aiffAudioHeader)
     {
         super(chunkData, hdr);
-        this.aiffHeader = aiffAudioHeader;
+        aiffHeader = aiffAudioHeader;
     }
 
 
     @Override
     public boolean readChunk() throws IOException
     {
-        final int numChannels      = Utils.u(chunkData.getShort());
-        final long numSampleFrames = chunkData.getInt();
-        final int sampleSize       = Utils.u(chunkData.getShort());
-        final double sampleRate    = AiffUtil.read80BitDouble(chunkData);
+        int numChannels      = Utils.u(chunkData.getShort());
+        long numSampleFrames = chunkData.getInt();
+        int sampleSize       = Utils.u(chunkData.getShort());
+        double sampleRate    = AiffUtil.read80BitDouble(chunkData);
 
         //Compression format, but not necessarily compressed
         String compressionType;
@@ -70,32 +68,42 @@ public class CommonChunk extends Chunk
 
             // Proper handling of compression type should depend
             // on whether raw output is set
-            // Id it a known compression type
-            final AiffCompressionType act = AiffCompressionType.getByCode(compressionType);
-            if (act != null)
+            if (compressionType != null)
             {
-                compressionName = act.getCompression();
-                aiffHeader.setLossless(act.isLossless());
-            }
-            else
-            {
-                // We don't know compression type, so we have to assume lossy compression as we know we are using AIFC format
-                aiffHeader.setLossless(false);
-            }
+                //Id it a known compression type
+                AiffCompressionType act = AiffCompressionType.getByCode(compressionType);
+                if (act != null)
+                {
+                    compressionName = act.getCompression();
+                    aiffHeader.setLossless(act.isLossless());
+                    // we assume that the bitrate is not variable, if there is no compression
+                    if (act == AiffCompressionType.NONE) {
+                        aiffHeader.setVariableBitRate(false);
+                    }
+                }
+                else
+                {
+                    // We don't know compression type, so we have to assume lossy compression as we know we are using AIFC format
+                    aiffHeader.setLossless(false);
+                }
 
-            if (compressionName.isEmpty())
-            {
-                aiffHeader.setAudioEncoding(compressionType);
-            }
-            else
-            {
-                aiffHeader.setAudioEncoding(compressionName);
+                if (compressionName.isEmpty())
+                {
+                    aiffHeader.setAudioEncoding(compressionType);
+                }
+                else
+                {
+                    aiffHeader.setAudioEncoding(compressionName);
+                }
             }
         }
         //Must be lossless
         else
         {
             aiffHeader.setLossless(true);
+            aiffHeader.setAudioEncoding(AiffCompressionType.NONE.getCompression());
+            // regular AIFF has no variable bit rate AFAIK
+            aiffHeader.setVariableBitRate(false);
         }
 
         aiffHeader.setBitsPerSample(sampleSize);
