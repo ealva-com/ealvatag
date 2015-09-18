@@ -8,6 +8,8 @@ import org.jaudiotagger.audio.iff.ChunkHeader;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.nio.ByteBuffer;
+import java.nio.charset.StandardCharsets;
 import java.util.Date;
 
 /**
@@ -28,14 +30,14 @@ public class CommentsChunk extends Chunk
     private AiffAudioHeader aiffHeader;
 
     /**
-     * Constructor.
      *
-     * @param hdr The header for this chunk
-     * @param raf The file from which the AIFF data are being read
+     * @param hdr
+     * @param chunkData
+     * @param aHdr
      */
-    public CommentsChunk(ChunkHeader hdr, RandomAccessFile raf, AiffAudioHeader aHdr)
+    public CommentsChunk(ChunkHeader hdr, ByteBuffer chunkData, AiffAudioHeader aHdr)
     {
-        super(raf, hdr);
+        super(chunkData, hdr);
         aiffHeader = aHdr;
     }
 
@@ -47,25 +49,18 @@ public class CommentsChunk extends Chunk
      */
     public boolean readChunk() throws IOException
     {
-        int numComments = Utils.readUint16(raf);
-        bytesLeft -= NUM_COMMENTS_LENGTH;
+        int numComments = Utils.u(chunkData.getShort());
 
         //For each comment
         for (int i = 0; i < numComments; i++)
         {
-            long timestamp  = Utils.readUint32(raf);
+            long timestamp  = Utils.u(chunkData.getInt());
             Date jTimestamp = AiffUtil.timestampToDate(timestamp);
-            int marker      = Utils.readInt16(raf);
-            int count       = Utils.readUint16(raf);
-            bytesLeft       -= TIMESTAMP_LENGTH + MARKERID_LENGTH + COUNT_LENGTH;
-            byte[] buf = new byte[count];
-            raf.read(buf);
-            bytesLeft -= count;
-            String cmt = new String(buf);
-
-            // Append a timestamp to the comment
-            cmt += " " + AiffUtil.formatDate(jTimestamp);
-            aiffHeader.addComment(cmt);
+            int marker      = Utils.u(chunkData.getShort());
+            int count       = Utils.u(chunkData.getShort());
+            String comments = Utils.getString(chunkData, 0, count, StandardCharsets.ISO_8859_1);            // Append a timestamp to the comment
+            comments += " " + AiffUtil.formatDate(jTimestamp);
+            aiffHeader.addComment(comments);
         }
         return true;
     }

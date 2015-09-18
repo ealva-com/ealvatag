@@ -1,9 +1,7 @@
 package org.jaudiotagger.audio.aiff;
 
-//import java.io.EOFException;
 
 import java.io.IOException;
-import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
@@ -11,7 +9,6 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-//import java.io.InputStream;
 
 public class AiffUtil {
 
@@ -19,8 +16,6 @@ public class AiffUtil {
             new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
     
     private final static Charset LATIN1 = StandardCharsets.ISO_8859_1;
-    
-
 
     public static double read80BitDouble (ByteBuffer chunkData)
                 throws IOException
@@ -67,17 +62,6 @@ public class AiffUtil {
     public static String bytesToPascalString (byte[] data) {
         int len = (int) data[0];
         return new String(data, 1, len, LATIN1);
-    }
-    
-    /** 
-     * Read a Pascal string from the file.
-     */
-    public static String readPascalString(RandomAccessFile raf) throws IOException {
-        int len = raf.read();
-        byte[] buf = new byte[len + 1];
-        raf.read (buf, 1, len);
-        buf[0] = (byte) len;
-        return bytesToPascalString(buf);
     }
 
     public static String readPascalString(ByteBuffer bb) throws IOException {

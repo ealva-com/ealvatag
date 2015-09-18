@@ -6,6 +6,7 @@ import org.jaudiotagger.audio.iff.ChunkHeader;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.nio.ByteBuffer;
 
 /**
  * Sound chunk
@@ -15,19 +16,15 @@ import java.io.RandomAccessFile;
 public class SoundChunk extends Chunk
 {
 
-    private AiffAudioHeader aiffHeader;
-
     /**
-     * Constructor.
      *
-     * @param hdr  The header for this chunk
-     * @param raf  The file from which the AIFF data are being read
-     * @param aHdr The AiffTag into which information is stored
+     * @param hdr
+     * @param chunkData
+     * @param aHdr
      */
-    public SoundChunk(ChunkHeader hdr, RandomAccessFile raf, AiffAudioHeader aHdr)
+    public SoundChunk(ChunkHeader hdr, ByteBuffer chunkData, AiffAudioHeader aHdr)
     {
-        super(raf, hdr);
-        aiffHeader = aHdr;
+        super(chunkData, hdr);
     }
 
     /**
@@ -38,7 +35,6 @@ public class SoundChunk extends Chunk
      */
     public boolean readChunk() throws IOException
     {
-        raf.skipBytes((int)bytesLeft);
         return true;
     }
 

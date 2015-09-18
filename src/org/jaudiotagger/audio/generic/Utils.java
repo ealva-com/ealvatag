@@ -346,6 +346,37 @@ public class Utils
         }
     }
 
+    /**
+     * Reads bytes from a ByteBuffer as if they were encoded in the specified CharSet
+     *
+     * @param buffer
+     * @param offset offset from current position
+     * @param length size of data to process
+     * @param encoding
+     * @return
+     */
+    public static String getString(ByteBuffer buffer, int offset, int length, Charset encoding)
+    {
+        byte[] b = new byte[length];
+        buffer.position(buffer.position() + offset);
+        buffer.get(b);
+        return new String(b, 0, length, encoding);
+    }
+
+    /**
+     * Reads bytes from a ByteBuffer as if they were encoded in the specified CharSet
+     *
+     * @param buffer
+     * @param encoding
+     * @return
+     */
+    public static String getString(ByteBuffer buffer, Charset encoding)
+    {
+        byte[] b = new byte[buffer.remaining()];
+        buffer.get(b);
+        return new String(b, 0, b.length, encoding);
+    }
+
     /*
       * Tries to convert a string into an UTF8 array of bytes If the conversion
       * fails, return the string converted with the default encoding.
@@ -387,31 +418,7 @@ public class Utils
         return l;
     }
 
-    public static long readUINTBE32( ByteBuffer bytes) throws IOException {
 
-        long result = 0;
-        result |= u(bytes.get());
-        result <<= 8;
-        result |= u(bytes.get());
-        result <<= 8;
-        result |= u(bytes.get());
-        result <<= 8;
-        result |= u(bytes.get());
-        return result;
-    }
-
-    public static long readUINTBE32( byte[] bytes) throws IOException {
-
-        long result = 0;
-        result |= u(bytes[0]);
-        result <<= 8;
-        result |= u(bytes[1]);
-        result <<= 8;
-        result |= u(bytes[2]);
-        result <<= 8;
-        result |= u(bytes[3]);
-        return result;
-    }
 
     /** Read a 16-bit big-endian unsigned integer */
     public static int readUint16(DataInput di) throws IOException
@@ -439,14 +446,6 @@ public class Utils
         return new String(buf);
     }
 
-    /** Read a 64-bit unsigned integer using an nio ByteBuffer */
-    public static long readUInt64(ByteBuffer b)
-    {
-        long result = 0;
-        result += (readUBEInt32(b) << 32);
-        result += readUBEInt32(b);
-        return result;
-    }
 
     /** Read an unsigned big-endian 32-bit integer using an nio ByteBuffer */
     public static int readUBEInt32(ByteBuffer b)
@@ -457,15 +456,6 @@ public class Utils
         return result;
     }
 
-    /** Read an unsigned big-endian 24-bit integer using an
-     *  nio ByteBuffer */
-    public static int readUBEInt24(ByteBuffer b)
-    {
-        int result = 0;
-        result += readUBEInt16(b) << 16;
-        result += readUInt8(b);
-        return result;
-    }
 
     /** Read an unsigned big-endian 16-bit integer using an
      *  nio ByteBuffer */
@@ -662,6 +652,17 @@ public class Utils
         byte[] b = new byte[4];
         bytes.get(b);
         return new String(b, StandardCharsets.US_ASCII);
+    }
+
+    /**
+     * Used to convert (signed integer) to an long as if signed integer was unsigned hence allowing
+     * it to represent full range of integral values
+     * @param n
+     * @return
+     */
+    public static long u(int n)
+    {
+        return n & 0xffffffff;
     }
 
     /**
