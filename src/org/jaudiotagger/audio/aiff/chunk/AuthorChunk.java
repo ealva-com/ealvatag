@@ -6,32 +6,27 @@ import org.jaudiotagger.audio.iff.ChunkHeader;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 
+/**
+ * Contains one or more author names. An author in this case is the creator of a sampled sound.
+ * The Author Chunk is optional. No more than one Author Chunk may exist within a FORM AIFF.
+ */
 public class AuthorChunk extends TextChunk
 {
 
-    private AiffAudioHeader aiffHeader;
-
     /**
-     * Constructor.
-     *
-     * @param hdr  The header for this chunk
+     * @param chunkHeader  The header for this chunk
      * @param raf  The file from which the AIFF data are being read
-     * @param aHdr The AiffAudioHeader into which information is stored
+     * @param aiffAudioHeader The AiffAudioHeader into which information is stored
      */
-    public AuthorChunk(ChunkHeader hdr, RandomAccessFile raf, AiffAudioHeader aHdr)
+    public AuthorChunk(final ChunkHeader chunkHeader, final RandomAccessFile raf, final AiffAudioHeader aiffAudioHeader)
     {
-        super(hdr, raf);
-        aiffHeader = aHdr;
+        super(chunkHeader, raf, aiffAudioHeader);
     }
 
     @Override
     public boolean readChunk() throws IOException
     {
-        if (!super.readChunk())
-        {
-            return false;
-        }
-        aiffHeader.setAuthor(chunkText);
+        aiffAudioHeader.setAuthor(readChunkText());
         return true;
     }
 }

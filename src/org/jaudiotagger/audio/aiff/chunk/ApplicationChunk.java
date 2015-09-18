@@ -16,21 +16,22 @@ import java.io.RandomAccessFile;
  */
 public class ApplicationChunk extends Chunk
 {
-    private String SIGNATURE_PDOS = "pdos";
-    private String SIGNATURE_STOC = "stoc";
+    private static final String SIGNATURE_PDOS = "pdos";
+    private static final String SIGNATURE_STOC = "stoc";
 
     private AiffAudioHeader aiffHeader;
 
     /**
      * Constructor.
      *
-     * @param hdr The header for this chunk
+     * @param chunkHeader The header for this chunk
      * @param raf The file from which the AIFF data are being read
+     * @param aiffAudioHeader audio header
      */
-    public ApplicationChunk(ChunkHeader hdr, RandomAccessFile raf, AiffAudioHeader aHdr)
+    public ApplicationChunk(final ChunkHeader chunkHeader, final RandomAccessFile raf, final AiffAudioHeader aiffAudioHeader)
     {
-        super(raf, hdr);
-        aiffHeader = aHdr;
+        super(raf, chunkHeader);
+        this.aiffHeader = aiffAudioHeader;
     }
 
     /**
@@ -42,9 +43,9 @@ public class ApplicationChunk extends Chunk
      */
     public boolean readChunk() throws IOException
     {
-        String applicationSignature = Utils.readString(raf, 4);
+        final String applicationSignature = Utils.readString(raf, 4);
         String applicationName = null;
-        byte[] data = new byte[(int) (bytesLeft - 4)];
+        final byte[] data = new byte[(int) (bytesLeft - 4)];
         raf.readFully(data);
 
         /* If the application signature is 'pdos' or 'stoc',

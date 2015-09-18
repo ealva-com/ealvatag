@@ -4,11 +4,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Known compression types that can be used with AIFF, taken from https://en.wikipedia.org/wiki/Audio_Interchange_File_Format
+ * Known compression types that can be used with AIFF, taken from
+ * <a href="https://en.wikipedia.org/wiki/Audio_Interchange_File_Format">https://en.wikipedia.org/wiki/Audio_Interchange_File_Format</a>.
  *
- * Note SOWT is not a compression format but it uses AIFF-C to allow it store music data in Little-Endian order, itr only affects audfio data
- * not the other chunks such as metadata.
- *
+ * Note SOWT is not a compression format but it uses AIFF-C to allow it store music data in Little-Endian order,
+ * it only affects audio data not the other chunks such as metadata.
  */
 public enum AiffCompressionType
 {
@@ -43,13 +43,13 @@ public enum AiffCompressionType
     }
 
 
-    private String code;
-    private String compression;
-    private String dataType;
-    private String provider;
-    private boolean isLossless;
+    private final String code;
+    private final String compression;
+    private final String dataType;
+    private final String provider;
+    private final boolean isLossless;
 
-    AiffCompressionType(String code, String compression, String dataType, String provider, boolean isLossless)
+    AiffCompressionType(final String code, final String compression, final String dataType, final String provider, final boolean isLossless)
     {
         this.code = code;
         this.compression = compression;

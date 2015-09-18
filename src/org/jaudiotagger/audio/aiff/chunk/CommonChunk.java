@@ -11,8 +11,8 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 
 /**
- The Common Chunk describes fundamental parameters of the waveform data such as sample rate,
- bit resolution, and how many channels of digital audio are stored in the FORM AIFF.
+ * The Common Chunk describes fundamental parameters of the waveform data such as sample rate,
+ * bit resolution, and how many channels of digital audio are stored in the FORM AIFF.
  */
 public class CommonChunk extends Chunk
 {
@@ -20,7 +20,7 @@ public class CommonChunk extends Chunk
     private static final int NO_SAMPLE_FRAMES_LENGTH = 4;
     private static final int SAMPLE_SIZE_LENGTH      = 2;
     private static final int SAMPLE_RATE_LENGTH      = 10;
-    private static final int COMPRESSION_TYPE_LENGTH      = 4;
+    private static final int COMPRESSION_TYPE_LENGTH = 4;
     private AiffAudioHeader aiffHeader;
 
     /**
@@ -30,28 +30,25 @@ public class CommonChunk extends Chunk
      * @param raf  The file from which the AIFF data are being read
      * @param aiffAudioHeader The AiffAufdioHeader into which information is stored
      */
-    public CommonChunk(ChunkHeader hdr, RandomAccessFile raf, AiffAudioHeader aiffAudioHeader)
+    public CommonChunk(final ChunkHeader hdr, final RandomAccessFile raf, final AiffAudioHeader aiffAudioHeader)
     {
         super(raf, hdr);
-        aiffHeader = aiffAudioHeader;
+        this.aiffHeader = aiffAudioHeader;
     }
 
 
     @Override
     public boolean readChunk() throws IOException
     {
-        int numChannels = Utils.readUint16(raf);
-        long numSampleFrames = Utils.readUint32(raf);
-        int sampleSize = Utils.readUint16(raf);
+        final int numChannels = Utils.readUint16(raf);
+        final long numSampleFrames = Utils.readUint32(raf);
+        final int sampleSize = Utils.readUint16(raf);
         bytesLeft -= NO_CHANNELS_LENGTH + NO_SAMPLE_FRAMES_LENGTH + SAMPLE_SIZE_LENGTH;
-
-        String compressionType;
-        String compressionName;
 
         double sampleRate = AiffUtil.read80BitDouble(raf);
         bytesLeft -= SAMPLE_RATE_LENGTH;
 
-        //Compression format, but not necessarily compressed
+        // Compression format, but not necessarily compressed
         if (aiffHeader.getFileType() == AiffType.AIFC)
         {
             if (bytesLeft == 0)
@@ -60,43 +57,42 @@ public class CommonChunk extends Chunk
                 // a file that misbehaved in this way.
                 return false;
             }
-            compressionType = Utils.readFourBytesAsChars(raf);
-            if (compressionType.equals(AiffCompressionType.SOWT.getCode()))
+            final String compressionType = Utils.readFourBytesAsChars(raf);
+
+            if (AiffCompressionType.SOWT.getCode().equals(compressionType))
             {
                 aiffHeader.setEndian(AiffAudioHeader.Endian.LITTLE_ENDIAN);
             }
             bytesLeft -= COMPRESSION_TYPE_LENGTH;
-            compressionName = AiffUtil.readPascalString(raf);
-            //TODO This extra read fixes reading next chunk for ANNO, need more test cases to know
-            //f error lies in file or code
+            String compressionName = AiffUtil.readPascalString(raf);
+
+            // TODO This extra read fixes reading next chunk for ANNO, need more test cases to know
+            // f error lies in file or code
             raf.read();
-            bytesLeft -= compressionName.length() + 1; //Length of name plus bytecount byte
+            bytesLeft -= compressionName.length() + 1; // Length of name plus bytecount byte
 
             // Proper handling of compression type should depend
             // on whether raw output is set
-            if (compressionType != null)
+            // Id it a known compression type
+            final AiffCompressionType act = AiffCompressionType.getByCode(compressionType);
+            if (act != null)
             {
-                //Id it a known compression type
-                AiffCompressionType act = AiffCompressionType.getByCode(compressionType);
-                if (act != null)
-                {
-                    compressionName = act.getCompression();
-                    aiffHeader.setLossless(act.isLossless());
-                }
-                else
-                {
-                    // We don't know compression type, so we have to assume lossy compression as we know we are using AIFC format
-                    aiffHeader.setLossless(false);
-                }
+                compressionName = act.getCompression();
+                aiffHeader.setLossless(act.isLossless());
+            }
+            else
+            {
+                // We don't know compression type, so we have to assume lossy compression as we know we are using AIFC format
+                aiffHeader.setLossless(false);
+            }
 
-                if (compressionName.isEmpty())
-                {
-                    aiffHeader.setAudioEncoding(compressionType);
-                }
-                else
-                {
-                    aiffHeader.setAudioEncoding(compressionName);
-                }
+            if (compressionName.isEmpty())
+            {
+                aiffHeader.setAudioEncoding(compressionType);
+            }
+            else
+            {
+                aiffHeader.setAudioEncoding(compressionName);
             }
         }
         //Must be lossless

@@ -10,22 +10,44 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.Date;
 
+/**
+ * <p>
+ *     The Format Version Chunk contains a date field to indicate the format rules for an
+ *     AIFF-C specification. This will enable smoother future upgrades to this specification.
+ * </p>
+ * <p>
+ *     ckID is always 'FVER'.
+ * </p>
+ * <p>
+ *     {@code ckDataSize} is the size of the data portion of the chunk, in bytes. It does not
+ *     include the 8 bytes used by ckID and ckDataSize. For this Chunk, ckDataSize has a value of 4.
+ * </p>
+ * <p>
+ *     {@code timeStamp} indicates when the format version for the AIFF-C file was created.
+ *     Units are the number of seconds since January 1, 1904. (This time convention is the one
+ *     used by the Macintosh. For procedures that manipulate the time stamp, see The Operating
+ *     System Utilities chapter in Inside Macintosh, vol II ). For a routine that will convert
+ *     this to an Apple II GS/OS format time, please see Apple II File Type Note for filetype
+ *     0xD8, aux type 0x0000.
+ * </p>
+ * <p>
+ *     The Format Version Chunk is required. One and only one Format Version Chunk must appear in a FORM AIFC.
+ * </p>
+ */
 public class FormatVersionChunk extends Chunk
 {
-    public static final int TIMESTAMP_LENGTH = 4;
+    private static final int TIMESTAMP_LENGTH = 4;
     private AiffAudioHeader aiffHeader;
 
     /**
-     * Constructor.
-     *
-     * @param hdr  The header for this chunk
+     * @param chunkHeader  The header for this chunk
      * @param raf  The file from which the AIFF data are being read
-     * @param aHdr The AiffTag into which information is stored
+     * @param aiffAudioHeader The AiffTag into which information is stored
      */
-    public FormatVersionChunk(ChunkHeader hdr, RandomAccessFile raf, AiffAudioHeader aHdr)
+    public FormatVersionChunk(final ChunkHeader chunkHeader, final RandomAccessFile raf, final AiffAudioHeader aiffAudioHeader)
     {
-        super(raf, hdr);
-        aiffHeader = aHdr;
+        super(raf, chunkHeader);
+        this.aiffHeader = aiffAudioHeader;
     }
 
     /**
@@ -36,10 +58,10 @@ public class FormatVersionChunk extends Chunk
      */
     public boolean readChunk() throws IOException
     {
-        long rawTimestamp = Utils.readUint32(raf);
+        final long rawTimestamp = Utils.readUint32(raf);
         // The timestamp is in seconds since January 1, 1904.
         // We must convert to Java time.
-        Date timestamp = AiffUtil.timestampToDate(rawTimestamp);
+        final Date timestamp = AiffUtil.timestampToDate(rawTimestamp);
         aiffHeader.setTimestamp(timestamp);
         bytesLeft-=TIMESTAMP_LENGTH;
         return true;

@@ -6,32 +6,27 @@ import org.jaudiotagger.audio.iff.ChunkHeader;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 
+/**
+ * Contains the name of the sampled sound. The Name Chunk is optional.
+ * No more than one Name Chunk may exist within a FORM AIFF.
+ */
 public class NameChunk extends TextChunk
 {
 
-    private AiffAudioHeader aiffHeader;
-
     /**
-     * Constructor.
-     *
-     * @param hdr  The header for this chunk
+     * @param chunkHeader  The header for this chunk
      * @param raf  The file from which the AIFF data are being read
-     * @param aHdr The AiffAudioHeader into which information is stored
+     * @param aiffAudioHeader The AiffAudioHeader into which information is stored
      */
-    public NameChunk(ChunkHeader hdr, RandomAccessFile raf, AiffAudioHeader aHdr)
+    public NameChunk(final ChunkHeader chunkHeader, final RandomAccessFile raf, final AiffAudioHeader aiffAudioHeader)
     {
-        super(hdr, raf);
-        aiffHeader = aHdr;
+        super(chunkHeader, raf, aiffAudioHeader);
     }
 
     @Override
     public boolean readChunk() throws IOException
     {
-        if (!super.readChunk())
-        {
-            return false;
-        }
-        aiffHeader.setName(chunkText);
+        aiffAudioHeader.setName(readChunkText());
         return true;
     }
 }

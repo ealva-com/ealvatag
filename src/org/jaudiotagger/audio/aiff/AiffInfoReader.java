@@ -6,10 +6,6 @@ import org.jaudiotagger.audio.exceptions.CannotReadException;
 import org.jaudiotagger.audio.generic.GenericAudioHeader;
 import org.jaudiotagger.audio.iff.Chunk;
 import org.jaudiotagger.audio.iff.ChunkHeader;
-import org.jaudiotagger.audio.wav.WavChunkType;
-import org.jaudiotagger.audio.wav.WavFormatChunk;
-import org.jaudiotagger.audio.wav.WavInfoReader;
-import org.jaudiotagger.audio.wav.WavRIFFHeader;
 import org.jaudiotagger.logging.Hex;
 import org.jaudiotagger.tag.aiff.AiffTag;
 
@@ -118,7 +114,7 @@ public class AiffInfoReader
                     chunk = new AnnotationChunk(chunkHeader, raf, aiffAudioHeader);
                     break;
                 case SOUND:
-                    chunk = new SoundChunk(chunkHeader, raf, aiffAudioHeader);
+                    chunk = new SoundChunk(chunkHeader, raf);
                     break;
                 default:
                     chunk = null;

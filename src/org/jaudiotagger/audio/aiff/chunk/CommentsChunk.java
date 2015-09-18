@@ -8,35 +8,63 @@ import org.jaudiotagger.audio.iff.ChunkHeader;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.nio.charset.StandardCharsets;
 import java.util.Date;
 
 /**
-typedef struct {
-	  unsigned long   timeStamp;
-	  MarkerID        marker;
-	  unsigned short  count;
-	  char            text[];
-	} Comment;
+ * <p>
+ *     A comment consists of a time stamp, marker id, and a text count followed by text.
+ * </p>
+ * <pre>
+ * typedef struct {
+ *    unsigned long   timeStamp;
+ *    MarkerID        marker;
+ *    unsigned short  count;
+ *    char            text[];
+ * } Comment;
+ * </pre>
+ * <p>
+ *     {@code timeStamp} indicates when the comment was created. Units are the number of seconds
+ *     since January 1, 1904. (This time convention is the one used by the Macintosh. For procedures
+ *     that manipulate the time stamp, see The Operating System Utilities chapter in Inside Macintosh,
+ *     vol II). For a routine that will convert this to an Apple II GS/OS format time, please see
+ *     Apple II File Type Note for filetype 0xD8, aux type 0x0000.
+ * </p>
+ * <p>
+ *     A comment can be linked to a marker. This allows applications to store long descriptions of
+ *     markers as a comment. If the comment is referring to a marker, then marker is the ID of that
+ *     marker. Otherwise, marker is zero, indicating that this comment is not linked to a marker.
+ * </p>
+ * <p>
+ *     {@code count} is the length of the text that makes up the comment. This is a 16 bit quantity,
+ *     allowing much longer comments than would be available with a pstring.
+ * </p>
+ * <p>
+ *     {@code text} contains the comment itself. This text must be padded with a byte at the end to
+ *     insure that it is an even number of bytes in length. This pad byte, if present, is not
+ *     included in count.
+ * </p>
+ *
+ * @see AnnotationChunk
  */
 public class CommentsChunk extends Chunk
 {
-    public static final int NUM_COMMENTS_LENGTH = 2;
-    public static final int TIMESTAMP_LENGTH = 4;
-    public static final int MARKERID_LENGTH = 2;
-    public static final int COUNT_LENGTH = 2;
+    private static final int NUM_COMMENTS_LENGTH = 2;
+    private static final int TIMESTAMP_LENGTH = 4;
+    private static final int MARKERID_LENGTH = 2;
+    private static final int COUNT_LENGTH = 2;
 
     private AiffAudioHeader aiffHeader;
 
     /**
-     * Constructor.
-     *
-     * @param hdr The header for this chunk
+     * @param chunkHeader The header for this chunk
      * @param raf The file from which the AIFF data are being read
+     * @param aiffAudioHeader audio header
      */
-    public CommentsChunk(ChunkHeader hdr, RandomAccessFile raf, AiffAudioHeader aHdr)
+    public CommentsChunk(final ChunkHeader chunkHeader, final RandomAccessFile raf, final AiffAudioHeader aiffAudioHeader)
     {
-        super(raf, hdr);
-        aiffHeader = aHdr;
+        super(raf, chunkHeader);
+        this.aiffHeader = aiffAudioHeader;
     }
 
     /**
@@ -47,25 +75,28 @@ public class CommentsChunk extends Chunk
      */
     public boolean readChunk() throws IOException
     {
-        int numComments = Utils.readUint16(raf);
+        final int numComments = Utils.readUint16(raf);
         bytesLeft -= NUM_COMMENTS_LENGTH;
 
         //For each comment
         for (int i = 0; i < numComments; i++)
         {
-            long timestamp  = Utils.readUint32(raf);
-            Date jTimestamp = AiffUtil.timestampToDate(timestamp);
-            int marker      = Utils.readInt16(raf);
-            int count       = Utils.readUint16(raf);
-            bytesLeft       -= TIMESTAMP_LENGTH + MARKERID_LENGTH + COUNT_LENGTH;
-            byte[] buf = new byte[count];
-            raf.read(buf);
+            final long timestamp  = Utils.readUint32(raf);
+            final Date jTimestamp = AiffUtil.timestampToDate(timestamp);
+            final int marker      = Utils.readInt16(raf);
+            final int count       = Utils.readUint16(raf);
+            bytesLeft -= TIMESTAMP_LENGTH + MARKERID_LENGTH + COUNT_LENGTH;
+            final byte[] textBuffer = new byte[count];
+            raf.read(textBuffer);
             bytesLeft -= count;
-            String cmt = new String(buf);
-
-            // Append a timestamp to the comment
-            cmt += " " + AiffUtil.formatDate(jTimestamp);
-            aiffHeader.addComment(cmt);
+            if (count % 2 != 0) {
+                // if count is odd, text is padded with an extra byte that we need to consume
+                raf.skipBytes(1);
+                bytesLeft--;
+            }
+            // comment plus timestamp
+            final String text = new String(textBuffer, StandardCharsets.ISO_8859_1) + " " + AiffUtil.formatDate(jTimestamp);
+            aiffHeader.addComment(text);
         }
         return true;
     }
