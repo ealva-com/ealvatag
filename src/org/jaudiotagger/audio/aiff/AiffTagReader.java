@@ -19,13 +19,21 @@ import java.util.logging.Logger;
 /**
  * Read the AIff file chunks, until finds Aiff Common chunk and then generates AudioHeader from it
  */
-public class AiffTagReader
+public class AiffTagReader extends AiffChunkReader
 {
     public static Logger logger = Logger.getLogger("org.jaudiotagger.audio.aiff");
 
     private AiffAudioHeader aiffAudioHeader = new AiffAudioHeader();
     private AiffTag aiffTag = new AiffTag();
 
+    /**
+     * Read editable Metadata
+     *
+     * @param raf
+     * @return
+     * @throws CannotReadException
+     * @throws IOException
+     */
     protected AiffTag read(final RandomAccessFile raf) throws CannotReadException, IOException
     {
         final AiffFileHeader fileHeader = new AiffFileHeader();
@@ -61,9 +69,6 @@ public class AiffTagReader
             return false;
         }
 
-
-
-
         ByteBuffer chunkData = readChunkDataIntoBuffer(raf,chunkHeader);
         long endLocationOfChunkInFile = raf.getFilePointer();
         ChunkType chunkType = ChunkType.get(chunkHeader.getID());
@@ -76,32 +81,11 @@ public class AiffTagReader
             return true;
         }
 
-        //If Size is not even then we skip a byte, because chunks have to be aligned
-        if ((chunkHeader.getSize() & 1) != 0)
-        {
-            // Must come out to an even byte boundary
-            raf.skipBytes(1);
-        }
+        ensureOnEqualBoundary(raf, chunkHeader);
         return true;
     }
 
 
 
-    /**
-     * Read the next chunk into ByteBuffer as specified by ChunkHeader and moves raf file pointer
-     * to start of next chunk/end of file.
-     *
-     * @param raf
-     * @param chunkHeader
-     * @return
-     * @throws java.io.IOException
-     */
-    private ByteBuffer readChunkDataIntoBuffer(RandomAccessFile raf, ChunkHeader chunkHeader) throws IOException
-    {
-        ByteBuffer chunkData = ByteBuffer.allocate((int)chunkHeader.getSize());
-        chunkData.order(ByteOrder.LITTLE_ENDIAN);
-        raf.getChannel().read(chunkData);
-        chunkData.position(0);
-        return chunkData;
-    }
+
 }

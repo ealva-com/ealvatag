@@ -17,10 +17,11 @@ import java.util.logging.Logger;
 /**
  * Read the AIff file chunks, until finds Aiff Common chunk and then generates AudioHeader from it
  */
-public class AiffInfoReader
+public class AiffInfoReader extends AiffChunkReader
 {
     public static Logger logger = Logger.getLogger("org.jaudiotagger.audio.aiff");
     private   AiffAudioHeader aiffAudioHeader = new AiffAudioHeader();
+
     protected GenericAudioHeader read(final RandomAccessFile raf) throws CannotReadException, IOException
     {
         logger.config("Reading AIFF file size:" + raf.length() + " (" + Hex.asHex(raf.length())+ ")"  );
@@ -50,7 +51,7 @@ public class AiffInfoReader
         {
             return false;
         }
-        final int chunkSize = (int) chunkHeader.getSize();
+
         final ByteBuffer chunkData = readChunkDataIntoBuffer(raf,chunkHeader);
         chunk = createChunk(chunkData, chunkHeader);
         if (chunk != null)
@@ -62,18 +63,7 @@ public class AiffInfoReader
                 return false;
             }
         }
-        else
-        {
-            // Other chunk types are legal, just skip over them
-            logger.info("SkipBytes:"+chunkSize+" for unknown id:"+ chunkHeader.getID());
-            raf.skipBytes(chunkSize);
-        }
-        //TODO why would this happen
-        if ((chunkSize & 1) != 0)
-        {
-            // Must come out to an even byte boundary
-            raf.skipBytes(1);
-        }
+        ensureOnEqualBoundary(raf, chunkHeader);
         return true;
     }
 
@@ -128,21 +118,5 @@ public class AiffInfoReader
         }
         return chunk;
     }
-    /**
-     * Read the next chunk into ByteBuffer as specified by ChunkHeader and moves raf file pointer
-     * to start of next chunk/end of file.
-     *
-     * @param raf
-     * @param chunkHeader
-     * @return
-     * @throws java.io.IOException
-     */
-    private ByteBuffer readChunkDataIntoBuffer(final RandomAccessFile raf, final ChunkHeader chunkHeader) throws IOException
-    {
-        final ByteBuffer chunkData = ByteBuffer.allocate((int)chunkHeader.getSize());
-        chunkData.order(ByteOrder.BIG_ENDIAN);
-        raf.getChannel().read(chunkData);
-        chunkData.position(0);
-        return chunkData;
-    }
+
 }

@@ -26,9 +26,11 @@ import org.jaudiotagger.tag.Tag;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 
+/**
+ * Reads Audio and Metadata information contained in Wav file.
+ */
 public class WavFileReader extends AudioFileReader
 {
-
     private WavInfoReader ir = new WavInfoReader();
 
     protected GenericAudioHeader getEncodingInfo(RandomAccessFile raf) throws CannotReadException, IOException

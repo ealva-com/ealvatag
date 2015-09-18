@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 
 /**
- * Reads Audio and metadata information contained in Aiff file.
+ * Reads Audio and Metadata information contained in Aiff file.
  */
 public class AiffFileReader extends AudioFileReader
 {
