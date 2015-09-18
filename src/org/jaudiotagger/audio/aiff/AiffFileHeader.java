@@ -8,27 +8,42 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
 import java.util.logging.Logger;
+
+import static org.jaudiotagger.audio.aiff.AiffType.AIFC;
+import static org.jaudiotagger.audio.aiff.AiffType.AIFF;
 import static org.jaudiotagger.audio.iff.IffHeaderChunk.*;
 
 /**
- * Aiff File Header definitions
+ * <p>
+ *     Aiff File Header always consists of
+ * </p>
+ * <ul>
+ *     <li>ckID - always FORM</li>
+ *     <li>chSize - size in 4 bytes</li>
+ *     <li>formType - currently either AIFF or AIFC, see {@link AiffType}</li>
+ *     <li>chunks[] - an array of chunks</li>
+ * </ul>
  */
 public class AiffFileHeader
 {
-    public static final String AIFF_SIGNATURE = "FORM";
+    private static final String FORM = "FORM";
 
     // Logger Object
-    public static Logger logger = Logger.getLogger("org.jaudiotagger.audio.aiff.AudioFileHeader");
+    private static Logger logger = Logger.getLogger("org.jaudiotagger.audio.aiff.AudioFileHeader");
 
-    public AiffFileHeader()
+    /**
+     * Reads the file header and registers the data (file type) with the given header.
+     *
+     * @param raf random access file
+     * @param aiffAudioHeader the {@link org.jaudiotagger.audio.AudioHeader} we set the read data to
+     * @return the number of bytes in the FORM chunk, i.e. the size of the payload
+     * @throws IOException
+     * @throws CannotReadException if the file is not a valid AIFF file
+     */
+    public long readHeader(final RandomAccessFile raf, final AiffAudioHeader aiffAudioHeader) throws IOException, CannotReadException
     {
-
-    }
-
-    public long readHeader(RandomAccessFile raf, AiffAudioHeader aiffAudioHeader) throws IOException, CannotReadException
-    {
-        ByteBuffer headerData = ByteBuffer.allocate(HEADER_LENGTH);
-        int bytesRead = raf.getChannel().read(headerData);
+        final ByteBuffer headerData = ByteBuffer.allocate(HEADER_LENGTH);
+        final int bytesRead = raf.getChannel().read(headerData);
         headerData.position(0);
 
         if (bytesRead < HEADER_LENGTH)
@@ -36,45 +51,41 @@ public class AiffFileHeader
             throw new IOException("AIFF:Unable to read required number of databytes read:" + bytesRead + ":required:" + HEADER_LENGTH);
         }
 
-        if(Utils.readFourBytesAsChars(headerData).equals(AIFF_SIGNATURE))
+        final String signature = Utils.readFourBytesAsChars(headerData);
+        if(FORM.equals(signature))
         {
-            //Read Size
-            long bytesRemaining  = headerData.getInt();
-            logger.severe("Reading AIFF header size:" + bytesRemaining + " (" + Hex.asHex(bytesRemaining)+ ")"  );
+            // read chunk size
+            final long chunkSize  = headerData.getInt();
+            logger.severe("Reading AIFF header size:" + chunkSize + " (" + Hex.asHex(chunkSize)+ ")");
 
-            //Read FileType
-            if (!readFileType(headerData, aiffAudioHeader))
-            {
-                throw new CannotReadException("Invalid AIFF file: Incorrect file type info");
-            }
-            bytesRemaining -= TYPE_LENGTH;
-            return bytesRemaining;
+            readFileType(headerData, aiffAudioHeader);
+            // subtract the file type length from the chunk size to get remaining number of bytes
+            return chunkSize - TYPE_LENGTH;
         }
         else
         {
-            throw new CannotReadException("Not an AIFF file: incorrect signature");
+            throw new CannotReadException("Not an AIFF file: incorrect signature " + signature);
         }
     }
 
-    /*  Reads the file type.
- *  If it is not a valid file type, returns false.
- */
-    private boolean readFileType(ByteBuffer bytes, AiffAudioHeader aiffAudioHeader ) throws IOException
-    {
-        String type = Utils.readFourBytesAsChars(bytes);
-        if (AiffType.AIFF.getCode().equals(type))
+    /**
+     * Reads the file type ({@link AiffType}).
+     *
+     * @throws CannotReadException if the file type is not supported
+     */
+    private void readFileType(final ByteBuffer bytes, final AiffAudioHeader aiffAudioHeader) throws IOException, CannotReadException {
+        final String type = Utils.readFourBytesAsChars(bytes);
+        if (AIFF.getCode().equals(type))
         {
-            aiffAudioHeader.setFileType(AiffType.AIFF);
-            return true;
+            aiffAudioHeader.setFileType(AIFF);
         }
-        else if (AiffType.AIFC.getCode().equals(type))
+        else if (AIFC.getCode().equals(type))
         {
-            aiffAudioHeader.setFileType(AiffType.AIFC);
-            return true;
+            aiffAudioHeader.setFileType(AIFC);
         }
         else
         {
-            return false;
+            throw new CannotReadException("Invalid AIFF file: Incorrect file type info " + type);
         }
     }
 }
