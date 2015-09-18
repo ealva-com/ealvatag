@@ -60,7 +60,7 @@ public class CommonChunk extends Chunk
             {
                 aiffHeader.setEndian(AiffAudioHeader.Endian.LITTLE_ENDIAN);
             }
-            compressionName = AiffUtil.readPascalString(chunkData);
+            compressionName = Utils.readPascalString(chunkData);
 
             //TODO This extra read fixes reading next chunk for ANNO, need more test cases to know
             //f error lies in file or code

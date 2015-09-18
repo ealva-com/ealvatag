@@ -320,6 +320,20 @@ public class Utils
     }
 
     /**
+     * Convert a byte array to a Pascal string. The first byte is the byte count,
+     * followed by that many active characters.
+     *
+     * @param bb
+     * @return
+     * @throws IOException
+     */
+    public static String readPascalString(ByteBuffer bb) throws IOException {
+        int len = Utils.u(bb.get()); //Read as unsigned value
+        byte[] buf = new byte[len];
+        bb.get(buf, 1, len);
+        return new String(buf, 0, len, StandardCharsets.ISO_8859_1);
+    }
+    /**
      * Create String offset from position by offset upto length using encoding, and position of buffer
      * is moved to after position + offset + length
      *
@@ -376,6 +390,8 @@ public class Utils
         buffer.get(b);
         return new String(b, 0, b.length, encoding);
     }
+
+
 
     /*
       * Tries to convert a string into an UTF8 array of bytes If the conversion
@@ -686,4 +702,5 @@ public class Utils
     {
         return n & 0xff;
     }
+
 }

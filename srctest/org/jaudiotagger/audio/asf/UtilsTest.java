@@ -1,4 +1,4 @@
-package org.jaudiotagger.audio.util;
+package org.jaudiotagger.audio.asf;
 
 import junit.framework.TestCase;
 import org.jaudiotagger.audio.asf.data.AsfHeader;
@@ -260,5 +260,6 @@ public class UtilsTest extends TestCase
         Utils.writeUINT64(Long.MAX_VALUE, bos);
         assertTrue(Arrays.equals(MAX_LONG_64, bos.toByteArray()));
     }
+
 
 }

@@ -54,7 +54,7 @@ public class ApplicationChunk extends Chunk
          */
         if (SIGNATURE_STOC.equals(applicationSignature) || SIGNATURE_PDOS.equals(applicationSignature))
         {
-            applicationName = AiffUtil.readPascalString(chunkData);
+            applicationName = Utils.readPascalString(chunkData);
         }
         aiffHeader.addApplicationIdentifier(applicationSignature + ": " + applicationName);
 
