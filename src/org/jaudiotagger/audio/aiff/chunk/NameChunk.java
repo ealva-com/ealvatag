@@ -5,6 +5,7 @@ import org.jaudiotagger.audio.iff.ChunkHeader;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.nio.ByteBuffer;
 
 public class NameChunk extends TextChunk
 {
@@ -12,15 +13,14 @@ public class NameChunk extends TextChunk
     private AiffAudioHeader aiffHeader;
 
     /**
-     * Constructor.
      *
-     * @param hdr  The header for this chunk
-     * @param raf  The file from which the AIFF data are being read
-     * @param aHdr The AiffAudioHeader into which information is stored
+     * @param hdr
+     * @param chunkData
+     * @param aHdr
      */
-    public NameChunk(ChunkHeader hdr, RandomAccessFile raf, AiffAudioHeader aHdr)
+    public NameChunk(ChunkHeader hdr, ByteBuffer chunkData, AiffAudioHeader aHdr)
     {
-        super(hdr, raf);
+        super(hdr, chunkData);
         aiffHeader = aHdr;
     }
 

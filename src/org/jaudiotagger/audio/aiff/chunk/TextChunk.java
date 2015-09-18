@@ -1,10 +1,13 @@
 package org.jaudiotagger.audio.aiff.chunk;
 
+import org.jaudiotagger.audio.generic.Utils;
 import org.jaudiotagger.audio.iff.Chunk;
 import org.jaudiotagger.audio.iff.ChunkHeader;
+import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 
 /**
@@ -16,14 +19,13 @@ public abstract class TextChunk extends Chunk
     protected String chunkText;
 
     /**
-     * Constructor.
      *
-     * @param hdr The header for this chunk
-     * @param raf The file from which the AIFF data are being read
+     * @param hdr
+     * @param chunkData
      */
-    public TextChunk(ChunkHeader hdr, RandomAccessFile raf)
+    public TextChunk(ChunkHeader hdr, ByteBuffer chunkData)
     {
-        super(raf, hdr);
+        super(chunkData, hdr);
     }
 
     /**
@@ -33,10 +35,7 @@ public abstract class TextChunk extends Chunk
     @Override
     public boolean readChunk() throws IOException
     {
-
-        byte[] buf = new byte[(int) bytesLeft];
-        raf.read(buf);
-        chunkText = new String(buf, StandardCharsets.ISO_8859_1);
+        chunkText = Utils.getString(chunkData, 0, chunkData.remaining(), StandardCharsets.ISO_8859_1);
         return true;
     }
 
