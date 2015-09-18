@@ -101,6 +101,9 @@ public class AiffInfoReader
                 case COMMON:
                     chunk = new CommonChunk(chunkHeader, chunkData, aiffAudioHeader);
                     break;
+                case COMMENTS:
+                    chunk = new CommentsChunk(chunkHeader, chunkData, aiffAudioHeader);
+                    break;
                 case NAME:
                     chunk = new NameChunk(chunkHeader, chunkData, aiffAudioHeader);
                     break;
