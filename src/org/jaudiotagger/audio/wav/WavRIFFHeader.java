@@ -42,10 +42,7 @@ public class WavRIFFHeader
         {
             throw new CannotReadException("This is not a WAV File (<12 bytes)");
         }
-
-        ByteBuffer headerBuffer = ByteBuffer.allocate(HEADER_LENGTH);
-        raf.getChannel().read(headerBuffer);
-        headerBuffer.position(0);
+        ByteBuffer headerBuffer = Utils.readFileDataIntoBufferLE(raf, HEADER_LENGTH);
         if(Utils.readFourBytesAsChars(headerBuffer).equals(RIFF_SIGNATURE))
         {
             headerBuffer.getInt();
