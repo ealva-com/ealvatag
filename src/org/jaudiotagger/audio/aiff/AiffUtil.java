@@ -1,16 +1,14 @@
 package org.jaudiotagger.audio.aiff;
 
-//import java.io.EOFException;
 
 import java.io.IOException;
-import java.io.RandomAccessFile;
+import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-//import java.io.InputStream;
 
 public class AiffUtil {
 
@@ -18,14 +16,12 @@ public class AiffUtil {
             new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
     
     private final static Charset LATIN1 = StandardCharsets.ISO_8859_1;
-    
 
-
-    public static double read80BitDouble (RandomAccessFile raf)
+    public static double read80BitDouble (ByteBuffer chunkData)
                 throws IOException
     {
         byte[] buf = new byte[10];
-        raf.readFully(buf);
+        chunkData.get(buf);
         ExtDouble xd = new ExtDouble (buf);
         return xd.toDouble();
     }
@@ -67,14 +63,11 @@ public class AiffUtil {
         int len = (int) data[0];
         return new String(data, 1, len, LATIN1);
     }
-    
-    /** 
-     * Read a Pascal string from the file.
-     */
-    public static String readPascalString(RandomAccessFile raf) throws IOException {
-        int len = raf.read();
+
+    public static String readPascalString(ByteBuffer bb) throws IOException {
+        int len = bb.get();
         byte[] buf = new byte[len + 1];
-        raf.read (buf, 1, len);
+        bb.get(buf, 1, len);
         buf[0] = (byte) len;
         return bytesToPascalString(buf);
     }

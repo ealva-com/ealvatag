@@ -7,7 +7,7 @@ import org.jaudiotagger.audio.iff.Chunk;
 import org.jaudiotagger.audio.iff.ChunkHeader;
 
 import java.io.IOException;
-import java.io.RandomAccessFile;
+import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
 
@@ -49,7 +49,6 @@ import java.util.Date;
  */
 public class CommentsChunk extends Chunk
 {
-    private static final int NUM_COMMENTS_LENGTH = 2;
     private static final int TIMESTAMP_LENGTH = 4;
     private static final int MARKERID_LENGTH = 2;
     private static final int COUNT_LENGTH = 2;
@@ -58,12 +57,12 @@ public class CommentsChunk extends Chunk
 
     /**
      * @param chunkHeader The header for this chunk
-     * @param raf The file from which the AIFF data are being read
+     * @param chunkData The buffer from which the AIFF data are being read
      * @param aiffAudioHeader audio header
      */
-    public CommentsChunk(final ChunkHeader chunkHeader, final RandomAccessFile raf, final AiffAudioHeader aiffAudioHeader)
+    public CommentsChunk(final ChunkHeader chunkHeader, final ByteBuffer chunkData, final AiffAudioHeader aiffAudioHeader)
     {
-        super(raf, chunkHeader);
+        super(chunkData, chunkHeader);
         this.aiffHeader = aiffAudioHeader;
     }
 
@@ -75,27 +74,21 @@ public class CommentsChunk extends Chunk
      */
     public boolean readChunk() throws IOException
     {
-        final int numComments = Utils.readUint16(raf);
-        bytesLeft -= NUM_COMMENTS_LENGTH;
+        final int numComments = Utils.u(chunkData.getShort());
 
         //For each comment
         for (int i = 0; i < numComments; i++)
         {
-            final long timestamp  = Utils.readUint32(raf);
+            final long timestamp  = Utils.u(chunkData.getInt());
             final Date jTimestamp = AiffUtil.timestampToDate(timestamp);
-            final int marker      = Utils.readInt16(raf);
-            final int count       = Utils.readUint16(raf);
-            bytesLeft -= TIMESTAMP_LENGTH + MARKERID_LENGTH + COUNT_LENGTH;
-            final byte[] textBuffer = new byte[count];
-            raf.read(textBuffer);
-            bytesLeft -= count;
+            final int marker      = Utils.u(chunkData.getShort());
+            final int count       = Utils.u(chunkData.getShort());
+            // Append a timestamp to the comment
+            final String text = Utils.getString(chunkData, 0, count, StandardCharsets.ISO_8859_1) + " " + AiffUtil.formatDate(jTimestamp);
             if (count % 2 != 0) {
                 // if count is odd, text is padded with an extra byte that we need to consume
-                raf.skipBytes(1);
-                bytesLeft--;
+                chunkData.get();
             }
-            // comment plus timestamp
-            final String text = new String(textBuffer, StandardCharsets.ISO_8859_1) + " " + AiffUtil.formatDate(jTimestamp);
             aiffHeader.addComment(text);
         }
         return true;

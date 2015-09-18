@@ -7,7 +7,7 @@ import org.jaudiotagger.audio.iff.Chunk;
 import org.jaudiotagger.audio.iff.ChunkHeader;
 
 import java.io.IOException;
-import java.io.RandomAccessFile;
+import java.nio.ByteBuffer;
 import java.util.Date;
 
 /**
@@ -36,17 +36,16 @@ import java.util.Date;
  */
 public class FormatVersionChunk extends Chunk
 {
-    private static final int TIMESTAMP_LENGTH = 4;
     private AiffAudioHeader aiffHeader;
 
     /**
      * @param chunkHeader  The header for this chunk
-     * @param raf  The file from which the AIFF data are being read
+     * @param chunkData  The buffer from which the AIFF data are being read
      * @param aiffAudioHeader The AiffTag into which information is stored
      */
-    public FormatVersionChunk(final ChunkHeader chunkHeader, final RandomAccessFile raf, final AiffAudioHeader aiffAudioHeader)
+    public FormatVersionChunk(final ChunkHeader chunkHeader, final ByteBuffer chunkData, final AiffAudioHeader aiffAudioHeader)
     {
-        super(raf, chunkHeader);
+        super(chunkData, chunkHeader);
         this.aiffHeader = aiffAudioHeader;
     }
 
@@ -58,12 +57,11 @@ public class FormatVersionChunk extends Chunk
      */
     public boolean readChunk() throws IOException
     {
-        final long rawTimestamp = Utils.readUint32(raf);
+        final long rawTimestamp = chunkData.getInt();
         // The timestamp is in seconds since January 1, 1904.
         // We must convert to Java time.
         final Date timestamp = AiffUtil.timestampToDate(rawTimestamp);
         aiffHeader.setTimestamp(timestamp);
-        bytesLeft-=TIMESTAMP_LENGTH;
         return true;
     }
 

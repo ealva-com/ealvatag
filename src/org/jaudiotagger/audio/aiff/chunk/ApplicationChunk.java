@@ -7,7 +7,7 @@ import org.jaudiotagger.audio.iff.Chunk;
 import org.jaudiotagger.audio.iff.ChunkHeader;
 
 import java.io.IOException;
-import java.io.RandomAccessFile;
+import java.nio.ByteBuffer;
 
 /**
  * The Application Chunk can be used for any purposes whatsoever by developers and application authors. For
@@ -25,12 +25,12 @@ public class ApplicationChunk extends Chunk
      * Constructor.
      *
      * @param chunkHeader The header for this chunk
-     * @param raf The file from which the AIFF data are being read
+     * @param chunkData The file from which the AIFF data are being read
      * @param aiffAudioHeader audio header
      */
-    public ApplicationChunk(final ChunkHeader chunkHeader, final RandomAccessFile raf, final AiffAudioHeader aiffAudioHeader)
+    public ApplicationChunk(final ChunkHeader chunkHeader, final ByteBuffer chunkData, final AiffAudioHeader aiffAudioHeader)
     {
-        super(raf, chunkHeader);
+        super(chunkData, chunkHeader);
         this.aiffHeader = aiffAudioHeader;
     }
 
@@ -43,10 +43,8 @@ public class ApplicationChunk extends Chunk
      */
     public boolean readChunk() throws IOException
     {
-        final String applicationSignature = Utils.readString(raf, 4);
+        final String applicationSignature = Utils.readFourBytesAsChars(chunkData);
         String applicationName = null;
-        final byte[] data = new byte[(int) (bytesLeft - 4)];
-        raf.readFully(data);
 
         /* If the application signature is 'pdos' or 'stoc',
          * then the beginning of the data area is a Pascal
@@ -56,7 +54,7 @@ public class ApplicationChunk extends Chunk
          */
         if (SIGNATURE_STOC.equals(applicationSignature) || SIGNATURE_PDOS.equals(applicationSignature))
         {
-            applicationName = AiffUtil.bytesToPascalString(data);
+            applicationName = AiffUtil.readPascalString(chunkData);
         }
         aiffHeader.addApplicationIdentifier(applicationSignature + ": " + applicationName);
 
