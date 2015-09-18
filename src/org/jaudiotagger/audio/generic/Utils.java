@@ -330,7 +330,7 @@ public class Utils
     public static String readPascalString(ByteBuffer bb) throws IOException {
         int len = Utils.u(bb.get()); //Read as unsigned value
         byte[] buf = new byte[len];
-        bb.get(buf, 1, len);
+        bb.get(buf);
         return new String(buf, 0, len, StandardCharsets.ISO_8859_1);
     }
     /**

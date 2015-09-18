@@ -20,6 +20,7 @@ package org.jaudiotagger.audio.aiff;
 
 import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.aiff.chunk.ChunkType;
+import org.jaudiotagger.audio.exceptions.CannotReadException;
 import org.jaudiotagger.audio.exceptions.CannotWriteException;
 import org.jaudiotagger.audio.generic.TagWriter;
 import org.jaudiotagger.audio.generic.Utils;
@@ -106,6 +107,18 @@ public class AiffTagWriter implements TagWriter
     public void write(final AudioFile af, final Tag tag, final RandomAccessFile raf, final RandomAccessFile rafTemp) throws CannotWriteException, IOException
     {
         logger.config("Writing tag to file");
+        final AiffTag     existingTag;
+        try
+        {
+            //Find AiffTag (if any)
+            AiffTagReader im = new AiffTagReader();
+            existingTag = im.read(raf);
+        }
+        catch (CannotReadException ex)
+        {
+            throw new CannotWriteException("Failed to read file");
+        }
+
         try
         {
             final AiffTag     aiffTag     = (AiffTag) tag;
@@ -113,12 +126,12 @@ public class AiffTagWriter implements TagWriter
             final long        newTagSize  = bb.array().length;
 
             //Replacing ID3 tag
-            if (aiffTag.getID3Tag() != null && aiffTag.getStartLocationInFile() != null)
+            if (existingTag.getID3Tag() != null && existingTag.getStartLocationInFile() != null)
             {
 
                 //TODO is it safe to rely on the location as calculated when initially read
                 //Find existing location of ID3 chunk if any and seek to that location
-                raf.seek(aiffTag.getStartLocationInFile());
+                raf.seek(existingTag.getStartLocationInFile());
                 final ChunkHeader ch = new ChunkHeader(ByteOrder.BIG_ENDIAN);
                 ch.readHeader(raf);
 
@@ -130,10 +143,10 @@ public class AiffTagWriter implements TagWriter
                 logger.info("Current Space allocated:" + aiffTag.getSizeOfID3Tag() + ":NewTagRequires:" + newTagSize);
 
                 //Usual case ID3 is last chunk
-                if(aiffTag.getEndLocationInFile() == raf.length())
+                if(existingTag.getEndLocationInFile() == raf.length())
                 {
                     //We have enough existing space in chunk so just keep existing chunk size
-                    if (aiffTag.getSizeOfID3Tag() >= newTagSize)
+                    if (existingTag.getSizeOfID3Tag() >= newTagSize)
                     {
                         writeDataToFile(raf, bb, aiffTag.getSizeOfID3Tag());
 

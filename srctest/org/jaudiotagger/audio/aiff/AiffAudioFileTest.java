@@ -70,6 +70,9 @@ public class AiffAudioFileTest extends TestCase {
             AudioHeader ah = f.getAudioHeader();
             assertTrue(ah instanceof AiffAudioHeader);
             AiffAudioHeader aah = (AiffAudioHeader)ah;
+
+            System.out.println(ah);
+
             assertEquals("1411200",ah.getBitRate());
             assertEquals(1411200,ah.getBitRateAsNumber());
             assertFalse(ah.isVariableBitRate());
@@ -83,7 +86,7 @@ public class AiffAudioFileTest extends TestCase {
             assertNull(aah.getAuthor());
             assertTrue(aah.getComments().isEmpty());
             assertTrue(aah.getAnnotations().isEmpty());
-            System.out.println(ah);
+
         }
         catch (Exception e) {
             e.printStackTrace();
