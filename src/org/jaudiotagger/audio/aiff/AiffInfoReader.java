@@ -15,7 +15,7 @@ import java.nio.ByteOrder;
 import java.util.logging.Logger;
 
 /**
- * Read the AIff file chunks, until finds Aiff Common chunk and then generates AudioHeader from it
+ * Read Aiff chunks, except the ID3 chunk.
  */
 public class AiffInfoReader extends AiffChunkReader
 {
