@@ -5,8 +5,8 @@ package org.jaudiotagger.audio.aiff;
  */
 public enum AiffType
 {
-    AIFF("AIFF"),
-    AIFC("AIFC"), //Orignally Compressed AIFF but also used for Uncompressed in LE rather than BE order
+    AIFF("AIFF"), //Original non-compressed format on Mac pre-intel hardware
+    AIFC("AIFC"), //Originally Compressed AIFF but also used for Uncompressed in LE rather than BE order
     ;
 
     String code;

@@ -2,8 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c6ab1c14-6cd1-42fd-af1f-7ac1a83b7f78" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/org/jaudiotagger/audio/aiff/AiffTagWriter.java" afterPath="$PROJECT_DIR$/src/org/jaudiotagger/audio/aiff/AiffTagWriter.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/testdata/test121.aif" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/srctest/org/jaudiotagger/audio/aiff/AiffAudioFileTest.java" afterPath="$PROJECT_DIR$/srctest/org/jaudiotagger/audio/aiff/AiffAudioFileTest.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/srctest/org/jaudiotagger/tag/aiff/AiffAudioTagTest.java" afterPath="$PROJECT_DIR$/srctest/org/jaudiotagger/tag/aiff/AiffAudioTagTest.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/org/jaudiotagger/audio/aiff/AiffType.java" afterPath="$PROJECT_DIR$/src/org/jaudiotagger/audio/aiff/AiffType.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/jaudiotagger.iws" afterPath="$PROJECT_DIR$/jaudiotagger.iws" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testdata/testfiles.txt" afterPath="$PROJECT_DIR$/testdata/testfiles.txt" />
     </list>
     <ignored path="jaudiotagger.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -31,61 +35,14 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="Utils.java" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/audio/generic/Utils.java">
+      <file leaf-file-name="AiffFileReader.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/audio/aiff/AiffFileReader.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.3592535" vertical-offset="3849" max-vertical-offset="11849">
-              <caret line="258" column="28" selection-start-line="258" selection-start-column="25" selection-end-line="258" selection-end-column="39" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="561">
+              <caret line="16" column="57" selection-start-line="16" selection-start-column="4" selection-end-line="16" selection-end-column="57" />
               <folding>
-                <element signature="e#0#20884#0" expanded="true" />
                 <element signature="imports" expanded="true" />
-                <element signature="e#19110#19111#0" expanded="true" />
-                <element signature="e#19148#19149#0" expanded="true" />
-                <element signature="e#19403#19404#0" expanded="true" />
-                <element signature="e#19436#19437#0" expanded="true" />
-                <element signature="e#19682#19683#0" expanded="true" />
-                <element signature="e#19713#19714#0" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="AiffChunkReader.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/audio/aiff/chunk/AiffChunkReader.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="46" max-vertical-offset="884">
-              <caret line="23" column="4" selection-start-line="23" selection-start-column="4" selection-end-line="23" selection-end-column="4" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="DsfAudioFileReader.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/audio/dsf/DsfAudioFileReader.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-8.649123" vertical-offset="0" max-vertical-offset="2601">
-              <caret line="47" column="19" selection-start-line="47" selection-start-column="19" selection-end-line="47" selection-end-column="19" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="AbstractID3v2Tag.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/tag/id3/AbstractID3v2Tag.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="167" max-vertical-offset="48637">
-              <caret line="68" column="55" selection-start-line="68" selection-start-column="28" selection-end-line="68" selection-end-column="55" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="AiffAudioFileTest.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/srctest/org/jaudiotagger/audio/aiff/AiffAudioFileTest.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="1007" max-vertical-offset="1700">
-              <caret line="87" column="0" selection-start-line="87" selection-start-column="0" selection-end-line="87" selection-end-column="0" />
-              <folding />
             </state>
           </provider>
         </entry>
@@ -95,6 +52,16 @@
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="357">
               <caret line="5" column="12" selection-start-line="5" selection-start-column="12" selection-end-line="5" selection-end-column="12" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="AiffFileWriter.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/audio/aiff/AiffFileWriter.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="476">
+              <caret line="37" column="21" selection-start-line="37" selection-start-column="19" selection-end-line="37" selection-end-column="27" />
               <folding />
             </state>
           </provider>
@@ -110,14 +77,54 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="AiffTagWriter.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/audio/aiff/AiffTagWriter.java">
+      <file leaf-file-name="AiffType.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/audio/aiff/AiffType.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="807" max-vertical-offset="4080">
-              <caret line="93" column="45" selection-start-line="93" selection-start-column="45" selection-end-line="93" selection-end-column="45" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="391">
+              <caret line="7" column="68" selection-start-line="7" selection-start-column="68" selection-end-line="7" selection-end-column="68" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="AiffFileHeader.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/audio/aiff/AiffFileHeader.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1649">
+              <caret line="26" column="13" selection-start-line="26" selection-start-column="13" selection-end-line="26" selection-end-column="13" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="AiffAudioFileTest.java" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/srctest/org/jaudiotagger/audio/aiff/AiffAudioFileTest.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.33174226" vertical-offset="1867" max-vertical-offset="2448">
+              <caret line="124" column="26" selection-start-line="124" selection-start-column="26" selection-end-line="124" selection-end-column="26" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="testfiles.txt" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/testdata/testfiles.txt">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0" vertical-offset="954" max-vertical-offset="1360">
+              <caret line="71" column="63" selection-start-line="71" selection-start-column="63" selection-end-line="71" selection-end-column="63" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="AiffAudioTagTest.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/srctest/org/jaudiotagger/tag/aiff/AiffAudioTagTest.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0" vertical-offset="1326" max-vertical-offset="4301">
+              <caret line="89" column="49" selection-start-line="89" selection-start-column="49" selection-end-line="89" selection-end-column="49" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -126,17 +133,7 @@
         <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/audio/aiff/AiffAudioHeader.java">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="2992">
-              <caret line="156" column="24" selection-start-line="156" selection-start-column="24" selection-end-line="156" selection-end-column="24" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="ByteBuffer.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="jar://C:/Program Files/Java/jdk1.8.0/src.zip!/java/nio/ByteBuffer.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="9342" max-vertical-offset="34765">
-              <caret line="593" column="25" selection-start-line="593" selection-start-column="25" selection-end-line="593" selection-end-column="25" />
+              <caret line="16" column="19" selection-start-line="16" selection-start-column="19" selection-end-line="16" selection-end-column="19" />
               <folding />
             </state>
           </provider>
@@ -155,8 +152,6 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/src/org/jaudiotagger/tag/mp4/Mp4TagCreator.java" />
-        <option value="$PROJECT_DIR$/src/org/jaudiotagger/tag/mp4/field/Mp4TagRawBinaryField.java" />
         <option value="$PROJECT_DIR$/src/org/jaudiotagger/tag/vorbiscomment/VorbisCommentTag.java" />
         <option value="$PROJECT_DIR$/src/org/jaudiotagger/tag/vorbiscomment/VorbisCommentTagField.java" />
         <option value="$PROJECT_DIR$/src/org/jaudiotagger/tag/vorbiscomment/util/Base64Coder.java" />
@@ -171,13 +166,11 @@
         <option value="$PROJECT_DIR$/src/org/jaudiotagger/audio/wav/WavFormatChunk.java" />
         <option value="$PROJECT_DIR$/src/org/jaudiotagger/audio/wav/WavInfoReader.java" />
         <option value="$PROJECT_DIR$/src/org/jaudiotagger/audio/iff/IffHeaderChunk.java" />
-        <option value="$PROJECT_DIR$/src/org/jaudiotagger/audio/wav/WavRIFFHeader.java" />
         <option value="$PROJECT_DIR$/pom.xml" />
         <option value="$PROJECT_DIR$/src/org/jaudiotagger/audio/aiff/chunk/ChunkType.java" />
         <option value="$PROJECT_DIR$/src/org/jaudiotagger/audio/iff/ChunkHeader.java" />
         <option value="$PROJECT_DIR$/src/org/jaudiotagger/audio/aiff/AiffMetadataReader.java" />
         <option value="$PROJECT_DIR$/src/org/jaudiotagger/audio/aiff/chunk/ID3Chunk.java" />
-        <option value="$PROJECT_DIR$/srctest/org/jaudiotagger/tag/aiff/AiffAudioTagTest.java" />
         <option value="$PROJECT_DIR$/src/org/jaudiotagger/audio/aiff/chunk/TextChunk.java" />
         <option value="$PROJECT_DIR$/src/org/jaudiotagger/audio/mp3/LameFrame.java" />
         <option value="$PROJECT_DIR$/src/org/jaudiotagger/audio/mp4/Mp4TagReader.java" />
@@ -200,12 +193,16 @@
         <option value="$PROJECT_DIR$/src/org/jaudiotagger/audio/aiff/AiffUtil.java" />
         <option value="$PROJECT_DIR$/srctest/org/jaudiotagger/audio/util/UtilsTest.java" />
         <option value="$PROJECT_DIR$/srctest/org/jaudiotagger/audio/asf/UtilsTest.java" />
-        <option value="$PROJECT_DIR$/srctest/org/jaudiotagger/audio/aiff/AiffAudioFileTest.java" />
         <option value="$PROJECT_DIR$/srctest/org/jaudiotagger/audio/utils/UtilsTest.java" />
         <option value="$PROJECT_DIR$/src/org/jaudiotagger/tag/id3/AbstractID3v2Tag.java" />
         <option value="$PROJECT_DIR$/src/org/jaudiotagger/audio/generic/Utils.java" />
         <option value="$PROJECT_DIR$/src/org/jaudiotagger/audio/dsf/DsfAudioFileReader.java" />
         <option value="$PROJECT_DIR$/src/org/jaudiotagger/audio/aiff/AiffTagWriter.java" />
+        <option value="$PROJECT_DIR$/src/org/jaudiotagger/audio/wav/WavRIFFHeader.java" />
+        <option value="$PROJECT_DIR$/src/org/jaudiotagger/audio/aiff/AiffType.java" />
+        <option value="$PROJECT_DIR$/srctest/org/jaudiotagger/tag/aiff/AiffAudioTagTest.java" />
+        <option value="$PROJECT_DIR$/testdata/testfiles.txt" />
+        <option value="$PROJECT_DIR$/srctest/org/jaudiotagger/audio/aiff/AiffAudioFileTest.java" />
       </list>
     </option>
   </component>
@@ -456,11 +453,7 @@
               <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="srctest" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="jaudiotagger" />
+              <option name="myItemId" value="testdata" />
               <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -480,70 +473,6 @@
             <PATH_ELEMENT>
               <option name="myItemId" value="jaudiotagger" />
               <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="tag" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="jaudiotagger" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="jaudiotagger" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="srctest" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="jaudiotagger" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="tag" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="dsf" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="DsfAudioFileTest" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ClassTreeNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="jaudiotagger" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="jaudiotagger" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="srctest" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="jaudiotagger" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="tag" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="aiff" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="AiffAudioTagTest" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ClassTreeNode" />
             </PATH_ELEMENT>
           </PATH>
           <PATH>
@@ -664,29 +593,7 @@
       <recent name="org.jaudiotagger.tag.aiff" />
     </key>
   </component>
-  <component name="RunManager" selected="JUnit.AiffAudioTagTest">
-    <configuration default="false" name="DsfAudioFileTest.testReadDsf" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="jaudiotagger" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="PACKAGE_NAME" value="org.jaudiotagger.audio.dsf" />
-      <option name="MAIN_CLASS_NAME" value="org.jaudiotagger.audio.dsf.DsfAudioFileTest" />
-      <option name="METHOD_NAME" value="testReadDsf" />
-      <option name="TEST_OBJECT" value="method" />
-      <option name="VM_PARAMETERS" value="-ea" />
-      <option name="PARAMETERS" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="ENV_VARIABLES" />
-      <option name="PASS_PARENT_ENVS" value="true" />
-      <option name="TEST_SEARCH_SCOPE">
-        <value defaultName="moduleWithDependencies" />
-      </option>
-      <envs />
-      <patterns />
-      <RunnerSettings RunnerId="Run" />
-      <ConfigurationWrapper RunnerId="Run" />
-      <method />
-    </configuration>
+  <component name="RunManager" selected="JUnit.AiffAudioFileTest.testReadAiff3">
     <configuration default="false" name="DsfAudioFileTest.testReadDsfMetadata" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="jaudiotagger" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
@@ -695,28 +602,6 @@
       <option name="MAIN_CLASS_NAME" value="org.jaudiotagger.tag.dsf.DsfAudioFileTest" />
       <option name="METHOD_NAME" value="testReadDsfMetadata" />
       <option name="TEST_OBJECT" value="method" />
-      <option name="VM_PARAMETERS" value="-ea" />
-      <option name="PARAMETERS" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="ENV_VARIABLES" />
-      <option name="PASS_PARENT_ENVS" value="true" />
-      <option name="TEST_SEARCH_SCOPE">
-        <value defaultName="moduleWithDependencies" />
-      </option>
-      <envs />
-      <patterns />
-      <RunnerSettings RunnerId="Run" />
-      <ConfigurationWrapper RunnerId="Run" />
-      <method />
-    </configuration>
-    <configuration default="false" name="DsfAudioFileTest (1)" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="jaudiotagger" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="PACKAGE_NAME" value="org.jaudiotagger.tag.dsf" />
-      <option name="MAIN_CLASS_NAME" value="org.jaudiotagger.tag.dsf.DsfAudioFileTest" />
-      <option name="METHOD_NAME" />
-      <option name="TEST_OBJECT" value="class" />
       <option name="VM_PARAMETERS" value="-ea" />
       <option name="PARAMETERS" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
@@ -761,6 +646,50 @@
       <option name="MAIN_CLASS_NAME" value="org.jaudiotagger.audio.aiff.AiffAudioFileTest" />
       <option name="METHOD_NAME" />
       <option name="TEST_OBJECT" value="class" />
+      <option name="VM_PARAMETERS" value="-ea" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="moduleWithDependencies" />
+      </option>
+      <envs />
+      <patterns />
+      <RunnerSettings RunnerId="Run" />
+      <ConfigurationWrapper RunnerId="Run" />
+      <method />
+    </configuration>
+    <configuration default="false" name="AiffAudioTagTest.testWriteAiff3" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="jaudiotagger" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PACKAGE_NAME" value="org.jaudiotagger.tag.aiff" />
+      <option name="MAIN_CLASS_NAME" value="org.jaudiotagger.tag.aiff.AiffAudioTagTest" />
+      <option name="METHOD_NAME" value="testWriteAiff3" />
+      <option name="TEST_OBJECT" value="method" />
+      <option name="VM_PARAMETERS" value="-ea" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="moduleWithDependencies" />
+      </option>
+      <envs />
+      <patterns />
+      <RunnerSettings RunnerId="Run" />
+      <ConfigurationWrapper RunnerId="Run" />
+      <method />
+    </configuration>
+    <configuration default="false" name="AiffAudioFileTest.testReadAiff3" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="jaudiotagger" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PACKAGE_NAME" value="org.jaudiotagger.audio.aiff" />
+      <option name="MAIN_CLASS_NAME" value="org.jaudiotagger.audio.aiff.AiffAudioFileTest" />
+      <option name="METHOD_NAME" value="testReadAiff3" />
+      <option name="TEST_OBJECT" value="method" />
       <option name="VM_PARAMETERS" value="-ea" />
       <option name="PARAMETERS" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
@@ -957,19 +886,19 @@
     <list size="7">
       <item index="0" class="java.lang.String" itemvalue="JUnit.AiffAudioTagTest.testReadAiff3" />
       <item index="1" class="java.lang.String" itemvalue="JUnit.AiffAudioTagTest" />
-      <item index="2" class="java.lang.String" itemvalue="JUnit.DsfAudioFileTest.testReadDsf" />
-      <item index="3" class="java.lang.String" itemvalue="JUnit.DsfAudioFileTest.testReadDsfMetadata" />
-      <item index="4" class="java.lang.String" itemvalue="JUnit.DsfAudioFileTest (1)" />
-      <item index="5" class="java.lang.String" itemvalue="JUnit.AiffAudioFileTest.testReadAiff2" />
-      <item index="6" class="java.lang.String" itemvalue="JUnit.AiffAudioFileTest" />
+      <item index="2" class="java.lang.String" itemvalue="JUnit.DsfAudioFileTest.testReadDsfMetadata" />
+      <item index="3" class="java.lang.String" itemvalue="JUnit.AiffAudioFileTest.testReadAiff2" />
+      <item index="4" class="java.lang.String" itemvalue="JUnit.AiffAudioFileTest" />
+      <item index="5" class="java.lang.String" itemvalue="JUnit.AiffAudioTagTest.testWriteAiff3" />
+      <item index="6" class="java.lang.String" itemvalue="JUnit.AiffAudioFileTest.testReadAiff3" />
     </list>
     <recent_temporary>
       <list size="5">
-        <item index="0" class="java.lang.String" itemvalue="JUnit.AiffAudioFileTest" />
-        <item index="1" class="java.lang.String" itemvalue="JUnit.AiffAudioFileTest.testReadAiff2" />
-        <item index="2" class="java.lang.String" itemvalue="JUnit.DsfAudioFileTest.testReadDsfMetadata" />
-        <item index="3" class="java.lang.String" itemvalue="JUnit.DsfAudioFileTest (1)" />
-        <item index="4" class="java.lang.String" itemvalue="JUnit.DsfAudioFileTest.testReadDsf" />
+        <item index="0" class="java.lang.String" itemvalue="JUnit.AiffAudioFileTest.testReadAiff3" />
+        <item index="1" class="java.lang.String" itemvalue="JUnit.AiffAudioTagTest.testWriteAiff3" />
+        <item index="2" class="java.lang.String" itemvalue="JUnit.AiffAudioFileTest" />
+        <item index="3" class="java.lang.String" itemvalue="JUnit.AiffAudioFileTest.testReadAiff2" />
+        <item index="4" class="java.lang.String" itemvalue="JUnit.DsfAudioFileTest.testReadDsfMetadata" />
       </list>
     </recent_temporary>
     <configuration name="&lt;template&gt;" type="WebApp" default="true" selected="false">
@@ -1104,7 +1033,15 @@
       <created>1442588426716</created>
       <updated>1442588426716</updated>
     </task>
-    <option name="localTasksCounter" value="29" />
+    <task id="LOCAL-00029" summary="Fix made to AiffTag.delete() to not depdn on previous read to find location of tag before deletion">
+      <created>1442588915065</created>
+      <updated>1442588915065</updated>
+    </task>
+    <task id="LOCAL-00030" summary="Tidyup Wav">
+      <created>1442589139907</created>
+      <updated>1442589139907</updated>
+    </task>
+    <option name="localTasksCounter" value="31" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -1116,7 +1053,7 @@
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="15" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.20046084" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.20046084" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.39976957" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="15" side_tool="true" content_ui="tabs" />
@@ -1126,10 +1063,10 @@
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3294621" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.3997555" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="15" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.2512225" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.14285715" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.45852536" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Documentation" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="FLOATING" visible="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" x="589" y="441" width="501" height="127" />
       <window_info id="Problems" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.328341" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
@@ -1184,8 +1121,6 @@
     <option name="myTodoPanelSettings">
       <TodoPanelSettings />
     </option>
-    <MESSAGE value="https://bitbucket.org/ijabz/jaudiotagger/issues/30/support-for-aiff-format&#10;Added support for writing&#10;Refactored existing AIFF code&#10;Made some general modifications for tagwriting" />
-    <MESSAGE value="Add test and some code tidy up for Dsf Read" />
     <MESSAGE value="Dsf format:More COde tidyup/simplification" />
     <MESSAGE value="Dsf format:Further code simplication" />
     <MESSAGE value="Fixed accidental modiciation of &lt;description&gt; to &lt;compression&gt;" />
@@ -1209,7 +1144,9 @@
     <MESSAGE value="Fixed PascalString method&#10;Fixed AiffTagWriter so not dependent on previous read in order to identify location of existing Tag" />
     <MESSAGE value="Fix signed Int to Unsigned Long method" />
     <MESSAGE value="Reduce File I/O when reading dsf files" />
-    <option name="LAST_COMMIT_MESSAGE" value="Reduce File I/O when reading dsf files" />
+    <MESSAGE value="Fix made to AiffTag.delete() to not depdn on previous read to find location of tag before deletion" />
+    <MESSAGE value="Tidyup Wav" />
+    <option name="LAST_COMMIT_MESSAGE" value="Tidyup Wav" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1229,57 +1166,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/audio/mp4/Mp4TagReader.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="2867" max-vertical-offset="4913">
-          <caret line="209" column="148" selection-start-line="209" selection-start-column="148" selection-end-line="209" selection-end-column="148" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/tag/mp4/atom/Mp4DataBox.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="1796" max-vertical-offset="2482">
-          <caret line="120" column="28" selection-start-line="120" selection-start-column="28" selection-end-line="120" selection-end-column="28" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/tag/mp4/atom/Mp4MeanBox.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="262" max-vertical-offset="816">
-          <caret line="26" column="31" selection-start-line="26" selection-start-column="31" selection-end-line="26" selection-end-column="31" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/audio/mp4/atom/Mp4BoxHeader.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="279" max-vertical-offset="5610">
-          <caret line="49" column="13" selection-start-line="49" selection-start-column="13" selection-end-line="49" selection-end-column="13" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/audio/aiff/chunk/TextChunk.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="39" max-vertical-offset="680">
-          <caret line="25" column="17" selection-start-line="25" selection-start-column="11" selection-end-line="25" selection-end-column="20" />
-          <folding>
-            <element signature="e#943#944#0" expanded="true" />
-            <element signature="e#1036#1037#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/audio/aiff/chunk/CopyrightChunk.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="282" max-vertical-offset="663">
-          <caret line="38" column="0" selection-start-line="38" selection-start-column="0" selection-end-line="38" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/audio/aiff/chunk/NameChunk.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="578">
@@ -1347,22 +1233,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/srctest/org/jaudiotagger/tag/aiff/AiffAudioTagTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="4318">
-          <caret line="214" column="16" selection-start-line="214" selection-start-column="16" selection-end-line="214" selection-end-column="16" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/audio/wav/WavRIFFHeader.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="201" max-vertical-offset="816">
-          <caret line="37" column="0" selection-start-line="37" selection-start-column="0" selection-end-line="37" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/audio/iff/IffHeaderChunk.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="306">
@@ -1387,33 +1257,6 @@
             <element signature="imports" expanded="true" />
             <element signature="e#772#773#0" expanded="true" />
             <element signature="e#812#813#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/audio/wav/WavInfoReader.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1326">
-          <caret line="61" column="38" selection-start-line="61" selection-start-column="38" selection-end-line="61" selection-end-column="38" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/audio/wav/WavFileWriter.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="374">
-          <caret line="28" column="13" selection-start-line="28" selection-start-column="13" selection-end-line="28" selection-end-column="13" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/audio/wav/WavFileReader.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="748">
-          <caret line="17" column="3" selection-start-line="17" selection-start-column="3" selection-end-line="17" selection-end-column="3" />
-          <folding>
-            <element signature="e#0#1611#0" expanded="false" />
-            <element signature="imports" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1465,47 +1308,6 @@
         <state vertical-scroll-proportion="-7.04" vertical-offset="470" max-vertical-offset="1513">
           <caret line="39" column="23" selection-start-line="39" selection-start-column="23" selection-end-line="39" selection-end-column="23" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/audio/aiff/AiffUtil.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="537" max-vertical-offset="1105">
-          <caret line="59" column="0" selection-start-line="59" selection-start-column="0" selection-end-line="59" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#1611#1612#0" expanded="true" />
-            <element signature="e#1653#1654#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/audio/aiff/AiffInfoReader.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="362" max-vertical-offset="1989">
-          <caret line="48" column="49" selection-start-line="48" selection-start-column="49" selection-end-line="48" selection-end-column="49" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/audio/aiff/AiffFileReader.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="561">
-          <caret line="16" column="57" selection-start-line="16" selection-start-column="4" selection-end-line="16" selection-end-column="57" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/audio/aiff/AiffFileWriter.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="27" max-vertical-offset="527">
-          <caret line="37" column="21" selection-start-line="37" selection-start-column="19" selection-end-line="37" selection-end-column="27" />
-          <folding>
-            <element signature="e#1653#1654#0" expanded="false" />
-            <element signature="e#1697#1698#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1607,42 +1409,91 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/audio/generic/Utils.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="11206" max-vertical-offset="11849">
+          <caret line="688" column="45" selection-start-line="688" selection-start-column="29" selection-end-line="688" selection-end-column="53" />
+          <folding>
+            <element signature="e#0#20884#0" expanded="true" />
+            <element signature="imports" expanded="true" />
+            <element signature="e#19110#19111#0" expanded="true" />
+            <element signature="e#19148#19149#0" expanded="true" />
+            <element signature="e#19403#19404#0" expanded="true" />
+            <element signature="e#19436#19437#0" expanded="true" />
+            <element signature="e#19682#19683#0" expanded="true" />
+            <element signature="e#19713#19714#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/audio/dsf/DsfAudioFileReader.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-8.649123" vertical-offset="0" max-vertical-offset="2601">
-          <caret line="47" column="19" selection-start-line="47" selection-start-column="19" selection-end-line="47" selection-end-column="19" />
+        <state vertical-scroll-proportion="-3.4210527" vertical-offset="264" max-vertical-offset="2601">
+          <caret line="45" column="88" selection-start-line="45" selection-start-column="8" selection-end-line="45" selection-end-column="88" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/audio/aiff/AiffAudioHeader.java">
+    <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/audio/wav/WavInfoReader.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="2992">
-          <caret line="156" column="24" selection-start-line="156" selection-start-column="24" selection-end-line="156" selection-end-column="24" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1326">
+          <caret line="61" column="38" selection-start-line="61" selection-start-column="38" selection-end-line="61" selection-end-column="38" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/srctest/org/jaudiotagger/audio/aiff/AiffAudioFileTest.java">
+    <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/audio/wav/WavSubFormat.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="1007" max-vertical-offset="1700">
-          <caret line="87" column="0" selection-start-line="87" selection-start-column="0" selection-end-line="87" selection-end-column="0" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="697">
+          <caret line="8" column="12" selection-start-line="8" selection-start-column="12" selection-end-line="8" selection-end-column="12" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/audio/aiff/AiffTagFieldKey.java">
+    <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/audio/wav/WavFormatChunk.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1445">
+          <caret line="31" column="13" selection-start-line="31" selection-start-column="13" selection-end-line="31" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/audio/wav/WavFileWriter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="374">
+          <caret line="28" column="13" selection-start-line="28" selection-start-column="13" selection-end-line="28" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/audio/wav/WavFileReader.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="357">
-          <caret line="5" column="12" selection-start-line="5" selection-start-column="12" selection-end-line="5" selection-end-column="12" />
+          <caret line="31" column="13" selection-start-line="31" selection-start-column="13" selection-end-line="31" selection-end-column="13" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/audio/aiff/AiffTagReader.java">
+    <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/audio/wav/WavChunkType.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="142" max-vertical-offset="1428">
-          <caret line="36" column="22" selection-start-line="36" selection-start-column="22" selection-end-line="36" selection-end-column="22" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="544">
+          <caret line="7" column="12" selection-start-line="7" selection-start-column="12" selection-end-line="7" selection-end-column="12" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/audio/wav/WavRIFFHeader.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="20" max-vertical-offset="663">
+          <caret line="56" column="1" selection-start-line="56" selection-start-column="1" selection-end-line="56" selection-end-column="1" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/audio/aiff/AiffInfoReader.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="362" max-vertical-offset="1989">
+          <caret line="48" column="49" selection-start-line="48" selection-start-column="49" selection-end-line="48" selection-end-column="49" />
           <folding />
         </state>
       </provider>
@@ -1657,20 +1508,97 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/audio/generic/Utils.java">
+    <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/audio/aiff/AiffUtil.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.3592535" vertical-offset="3849" max-vertical-offset="11849">
-          <caret line="258" column="28" selection-start-line="258" selection-start-column="25" selection-end-line="258" selection-end-column="39" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1054">
+          <caret line="11" column="13" selection-start-line="11" selection-start-column="13" selection-end-line="11" selection-end-column="13" />
           <folding>
-            <element signature="e#0#20884#0" expanded="true" />
             <element signature="imports" expanded="true" />
-            <element signature="e#19110#19111#0" expanded="true" />
-            <element signature="e#19148#19149#0" expanded="true" />
-            <element signature="e#19403#19404#0" expanded="true" />
-            <element signature="e#19436#19437#0" expanded="true" />
-            <element signature="e#19682#19683#0" expanded="true" />
-            <element signature="e#19713#19714#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/audio/aiff/AiffTagReader.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="142" max-vertical-offset="1428">
+          <caret line="36" column="22" selection-start-line="36" selection-start-column="22" selection-end-line="36" selection-end-column="22" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/audio/aiff/AiffTagFieldKey.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="357">
+          <caret line="5" column="12" selection-start-line="5" selection-start-column="12" selection-end-line="5" selection-end-column="12" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/audio/aiff/AiffFileWriter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="476">
+          <caret line="37" column="21" selection-start-line="37" selection-start-column="19" selection-end-line="37" selection-end-column="27" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/audio/aiff/AiffFileReader.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="561">
+          <caret line="16" column="57" selection-start-line="16" selection-start-column="4" selection-end-line="16" selection-end-column="57" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/audio/aiff/AiffFileHeader.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="228" max-vertical-offset="1649">
+          <caret line="26" column="13" selection-start-line="26" selection-start-column="13" selection-end-line="26" selection-end-column="13" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/audio/aiff/AiffAudioHeader.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="2992">
+          <caret line="16" column="19" selection-start-line="16" selection-start-column="19" selection-end-line="16" selection-end-column="19" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/audio/aiff/AiffType.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="391">
+          <caret line="7" column="68" selection-start-line="7" selection-start-column="68" selection-end-line="7" selection-end-column="68" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/srctest/org/jaudiotagger/tag/aiff/AiffAudioTagTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="1326" max-vertical-offset="4301">
+          <caret line="89" column="49" selection-start-line="89" selection-start-column="49" selection-end-line="89" selection-end-column="49" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/testdata/testfiles.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="954" max-vertical-offset="1360">
+          <caret line="71" column="63" selection-start-line="71" selection-start-column="63" selection-end-line="71" selection-end-column="63" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/srctest/org/jaudiotagger/audio/aiff/AiffAudioFileTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.33174226" vertical-offset="1867" max-vertical-offset="2448">
+          <caret line="124" column="26" selection-start-line="124" selection-start-column="26" selection-end-line="124" selection-end-column="26" />
+          <folding />
         </state>
       </provider>
     </entry>

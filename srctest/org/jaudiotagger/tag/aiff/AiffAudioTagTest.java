@@ -107,17 +107,16 @@ public class AiffAudioTagTest extends TestCase {
             assertEquals("2",ah.getChannels());
             System.out.println(ah.getEncodingType());
             assertEquals("44100",ah.getSampleRate());
-            assertEquals(318,ah.getTrackLength());
-            assertEquals(318.62668f,((AiffAudioHeader) ah).getPreciseLength());
+            assertEquals(5,ah.getTrackLength());
+            assertEquals(5.0f,((AiffAudioHeader) ah).getPreciseLength());
 
             System.out.println(tag);
             assertNotNull(tag);
             assertTrue(tag instanceof AiffTag);
-            assertTrue(tag.getFieldCount() == 13);
+            assertTrue(tag.getFieldCount() == 6);
             assertEquals("Coldplay", tag.getFirst(FieldKey.ARTIST));
             assertEquals("A Rush Of Blood To The Head", tag.getFirst(FieldKey.ALBUM));
             assertEquals("Politik", tag.getFirst(FieldKey.TITLE));
-            assertEquals("0", tag.getFirst(FieldKey.COMMENT));
             assertEquals("2002", tag.getFirst(FieldKey.YEAR));
             assertEquals("1", tag.getFirst(FieldKey.TRACK));
             assertEquals("11", tag.getFirst(FieldKey.TRACK_TOTAL));
