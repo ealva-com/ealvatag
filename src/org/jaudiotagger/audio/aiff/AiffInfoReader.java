@@ -89,7 +89,8 @@ public class AiffInfoReader
      * @param chunkHeader chunk header
      * @return chunk or {@code null}, if the chunk type is not valid or could not be read
      */
-    private Chunk createChunk(final RandomAccessFile raf, final ChunkHeader chunkHeader) {
+    private Chunk createChunk(final RandomAccessFile raf, final ChunkHeader chunkHeader)
+    throws IOException {
         final ChunkType chunkType = ChunkType.get(chunkHeader.getID());
         Chunk chunk=null;
         if (chunkType != null)
@@ -103,7 +104,7 @@ public class AiffInfoReader
                     chunk = new ApplicationChunk(chunkHeader, raf, aiffAudioHeader);
                     break;
                 case COMMON:
-                    chunk = new CommonChunk(chunkHeader, raf, aiffAudioHeader);
+                    chunk = new CommonChunk(chunkHeader, readChunkDataIntoBuffer(raf, chunkHeader), aiffAudioHeader);
                     break;
                 case NAME:
                     chunk = new NameChunk(chunkHeader, raf, aiffAudioHeader);
@@ -141,7 +142,7 @@ public class AiffInfoReader
     private ByteBuffer readChunkDataIntoBuffer(RandomAccessFile raf, ChunkHeader chunkHeader) throws IOException
     {
         ByteBuffer chunkData = ByteBuffer.allocate((int)chunkHeader.getSize());
-        chunkData.order(ByteOrder.LITTLE_ENDIAN);
+        chunkData.order(ByteOrder.BIG_ENDIAN);
         raf.getChannel().read(chunkData);
         chunkData.position(0);
         return chunkData;

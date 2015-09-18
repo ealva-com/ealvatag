@@ -9,6 +9,7 @@ import org.jaudiotagger.audio.iff.ChunkHeader;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.nio.ByteBuffer;
 
 /**
  The Common Chunk describes fundamental parameters of the waveform data such as sample rate,
@@ -24,15 +25,14 @@ public class CommonChunk extends Chunk
     private AiffAudioHeader aiffHeader;
 
     /**
-     * Constructor.
      *
-     * @param hdr  The header for this chunk
-     * @param raf  The file from which the AIFF data are being read
-     * @param aiffAudioHeader The AiffAufdioHeader into which information is stored
+     * @param hdr
+     * @param chunkData
+     * @param aiffAudioHeader
      */
-    public CommonChunk(ChunkHeader hdr, RandomAccessFile raf, AiffAudioHeader aiffAudioHeader)
+    public CommonChunk(ChunkHeader hdr, ByteBuffer chunkData, AiffAudioHeader aiffAudioHeader)
     {
-        super(raf, hdr);
+        super(chunkData, hdr);
         aiffHeader = aiffAudioHeader;
     }
 
@@ -40,37 +40,32 @@ public class CommonChunk extends Chunk
     @Override
     public boolean readChunk() throws IOException
     {
-        int numChannels = Utils.readUint16(raf);
-        long numSampleFrames = Utils.readUint32(raf);
-        int sampleSize = Utils.readUint16(raf);
-        bytesLeft -= NO_CHANNELS_LENGTH + NO_SAMPLE_FRAMES_LENGTH + SAMPLE_SIZE_LENGTH;
-
-        String compressionType;
-        String compressionName;
-
-        double sampleRate = AiffUtil.read80BitDouble(raf);
-        bytesLeft -= SAMPLE_RATE_LENGTH;
+        int numChannels      = Utils.u(chunkData.getShort());
+        long numSampleFrames = chunkData.getInt();
+        int sampleSize       = Utils.u(chunkData.getShort());
+        double sampleRate    = AiffUtil.read80BitDouble(chunkData);
 
         //Compression format, but not necessarily compressed
+        String compressionType;
+        String compressionName;
         if (aiffHeader.getFileType() == AiffType.AIFC)
         {
-            if (bytesLeft == 0)
+            // This is a rather special case, but testing did turn up
+            // a file that misbehaved in this way.
+            if (chunkData.remaining()==0)
             {
-                // This is a rather special case, but testing did turn up
-                // a file that misbehaved in this way.
                 return false;
             }
-            compressionType = Utils.readFourBytesAsChars(raf);
+            compressionType = Utils.readFourBytesAsChars(chunkData);
             if (compressionType.equals(AiffCompressionType.SOWT.getCode()))
             {
                 aiffHeader.setEndian(AiffAudioHeader.Endian.LITTLE_ENDIAN);
             }
-            bytesLeft -= COMPRESSION_TYPE_LENGTH;
-            compressionName = AiffUtil.readPascalString(raf);
+            compressionName = AiffUtil.readPascalString(chunkData);
+
             //TODO This extra read fixes reading next chunk for ANNO, need more test cases to know
             //f error lies in file or code
-            raf.read();
-            bytesLeft -= compressionName.length() + 1; //Length of name plus bytecount byte
+            chunkData.get();
 
             // Proper handling of compression type should depend
             // on whether raw output is set

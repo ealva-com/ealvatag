@@ -4,6 +4,7 @@ package org.jaudiotagger.audio.aiff;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
@@ -21,11 +22,11 @@ public class AiffUtil {
     
 
 
-    public static double read80BitDouble (RandomAccessFile raf)
+    public static double read80BitDouble (ByteBuffer chunkData)
                 throws IOException
     {
         byte[] buf = new byte[10];
-        raf.readFully(buf);
+        chunkData.get(buf);
         ExtDouble xd = new ExtDouble (buf);
         return xd.toDouble();
     }
@@ -75,6 +76,14 @@ public class AiffUtil {
         int len = raf.read();
         byte[] buf = new byte[len + 1];
         raf.read (buf, 1, len);
+        buf[0] = (byte) len;
+        return bytesToPascalString(buf);
+    }
+
+    public static String readPascalString(ByteBuffer bb) throws IOException {
+        int len = bb.get();
+        byte[] buf = new byte[len + 1];
+        bb.get(buf, 1, len);
         buf[0] = (byte) len;
         return bytesToPascalString(buf);
     }
