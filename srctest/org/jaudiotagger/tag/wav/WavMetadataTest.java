@@ -4,13 +4,9 @@ import org.jaudiotagger.AbstractTestCase;
 import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.AudioFileIO;
 import org.jaudiotagger.audio.generic.GenericTag;
-import org.jaudiotagger.audio.wav.WavTag;
-import org.jaudiotagger.logging.Hex;
 import org.jaudiotagger.tag.FieldKey;
 
 import java.io.File;
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
 
 /**
  * User: paul
@@ -37,7 +33,7 @@ public class WavMetadataTest extends AbstractTestCase
             assertEquals("22050", f.getAudioHeader().getSampleRate());
 
 
-            assertTrue(f.getTag() instanceof GenericTag);
+            assertTrue(f.getTag() instanceof WavTag);
             WavTag tag = (WavTag) f.getTag();
 
             //Ease of use methods for common fields

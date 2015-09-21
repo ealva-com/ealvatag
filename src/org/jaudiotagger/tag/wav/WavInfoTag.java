@@ -16,7 +16,7 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.jaudiotagger.audio.wav;
+package org.jaudiotagger.tag.wav;
 
 import org.jaudiotagger.audio.generic.GenericTag;
 import org.jaudiotagger.tag.FieldDataInvalidException;
@@ -26,8 +26,21 @@ import org.jaudiotagger.tag.TagField;
 
 import java.util.EnumSet;
 
-public class WavTag extends GenericTag
+/**
+ * Represent wav metadata found in the LISTINFO Chunk
+ *
+ * An LIST INFO chunk was the original way to store metadata but simailr to ID3v1 it suffers from a limited
+ * set of fields, although non-standard extra field cannot be added, notably there is no support for images.
+ *
+ * Any Wavc editors now instead/addtionally add data with an ID3tag
+ */
+public class WavInfoTag extends GenericTag
 {
+    private Long startLocationInFile = null;
+
+    //End location of this chunk
+    private Long endLocationInFile = null;
+
     static
     {
         supportedKeys = EnumSet.of(
@@ -57,5 +70,25 @@ public class WavTag extends GenericTag
     public TagField createCompilationField(boolean value) throws KeyNotFoundException, FieldDataInvalidException
     {
         return createField(FieldKey.IS_COMPILATION,String.valueOf(value));
+    }
+
+    public Long getStartLocationInFile()
+    {
+        return startLocationInFile;
+    }
+
+    public void setStartLocationInFile(long startLocationInFile)
+    {
+        this.startLocationInFile = startLocationInFile;
+    }
+
+    public Long getEndLocationInFile()
+    {
+        return endLocationInFile;
+    }
+
+    public void setEndLocationInFile(long endLocationInFile)
+    {
+        this.endLocationInFile = endLocationInFile;
     }
 }

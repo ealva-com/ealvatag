@@ -33,7 +33,7 @@ public class AiffTagReader extends AiffChunkReader
      * @throws CannotReadException
      * @throws IOException
      */
-    protected AiffTag read(final RandomAccessFile raf) throws CannotReadException, IOException
+    public AiffTag read(final RandomAccessFile raf) throws CannotReadException, IOException
     {
         AiffAudioHeader aiffAudioHeader = new AiffAudioHeader();
         AiffTag aiffTag = new AiffTag();

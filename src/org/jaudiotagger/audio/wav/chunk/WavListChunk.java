@@ -23,6 +23,7 @@ import org.jaudiotagger.audio.iff.Chunk;
 import org.jaudiotagger.audio.iff.ChunkHeader;
 import org.jaudiotagger.audio.wav.WavChunkType;
 import org.jaudiotagger.tag.Tag;
+import org.jaudiotagger.tag.wav.WavTag;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -35,9 +36,9 @@ public class WavListChunk extends Chunk
 
     private boolean isValid = false;
 
-    private Tag tag;
+    private WavTag tag;
 
-    public WavListChunk(ByteBuffer chunkData, ChunkHeader hdr, Tag tag) throws IOException
+    public WavListChunk(ByteBuffer chunkData, ChunkHeader hdr, WavTag tag) throws IOException
     {
         super(chunkData, hdr);
         this.tag=tag;

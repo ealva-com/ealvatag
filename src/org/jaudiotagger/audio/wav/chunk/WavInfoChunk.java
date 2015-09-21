@@ -3,6 +3,8 @@ package org.jaudiotagger.audio.wav.chunk;
 import org.jaudiotagger.audio.generic.Utils;
 import org.jaudiotagger.tag.FieldDataInvalidException;
 import org.jaudiotagger.tag.Tag;
+import org.jaudiotagger.tag.wav.WavInfoTag;
+import org.jaudiotagger.tag.wav.WavTag;
 
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
@@ -16,10 +18,12 @@ public class WavInfoChunk
 {
     public static Logger logger = Logger.getLogger("org.jaudiotagger.audio.wav.WavInfoChunk");
 
-    private Tag tag;
-    public WavInfoChunk(Tag tag)
+    private WavInfoTag wavInfoTag;
+
+    public WavInfoChunk(WavTag tag)
     {
-        this.tag=tag;
+        wavInfoTag = new WavInfoTag();
+        tag.setInfoTag(wavInfoTag);
     }
 
     /**
@@ -35,7 +39,7 @@ public class WavInfoChunk
 
             //TODO how do you identify what is the charset being used
             String value    = Utils.getString(chunkData, 0, size, StandardCharsets.UTF_8);
-            logger.config("Result:" + id + ":" + size + ":" + value+":");
+            logger.config("Result:" + id + ":" + size + ":" + value + ":");
 
             WavInfoIdentifier wii = WavInfoIdentifier.get(id);
             if(wii!=null && wii.getFieldKey()!=null)
@@ -43,7 +47,7 @@ public class WavInfoChunk
                 try
                 {
 
-                    tag.setField(wii.getFieldKey(), value);
+                    wavInfoTag.setField(wii.getFieldKey(), value);
                 }
                 catch(FieldDataInvalidException fdie)
                 {

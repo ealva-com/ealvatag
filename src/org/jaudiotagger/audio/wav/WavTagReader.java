@@ -19,17 +19,15 @@
 package org.jaudiotagger.audio.wav;
 
 import org.jaudiotagger.audio.exceptions.CannotReadException;
-import org.jaudiotagger.audio.generic.GenericAudioHeader;
 import org.jaudiotagger.audio.generic.Utils;
 import org.jaudiotagger.audio.iff.Chunk;
 import org.jaudiotagger.audio.iff.ChunkHeader;
-import org.jaudiotagger.audio.wav.chunk.WavFormatChunk;
 import org.jaudiotagger.audio.wav.chunk.WavListChunk;
 import org.jaudiotagger.tag.Tag;
+import org.jaudiotagger.tag.wav.WavTag;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
-import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
 /**
@@ -45,9 +43,9 @@ public class WavTagReader
      * @throws CannotReadException
      * @throws IOException
      */
-    public Tag read(RandomAccessFile raf) throws CannotReadException, IOException
+    public WavTag read(RandomAccessFile raf) throws CannotReadException, IOException
     {
-        Tag tag = new WavTag();
+        WavTag tag = new WavTag();
         if(WavRIFFHeader.isValidHeader(raf))
         {
             while (raf.getFilePointer() < raf.length())
@@ -73,7 +71,7 @@ public class WavTagReader
      * @return
      * @throws IOException
      */
-    protected boolean readChunk(RandomAccessFile raf, Tag tag) throws IOException
+    protected boolean readChunk(RandomAccessFile raf, WavTag tag) throws IOException
     {
         Chunk chunk;
         ChunkHeader chunkHeader = new ChunkHeader(ByteOrder.LITTLE_ENDIAN);

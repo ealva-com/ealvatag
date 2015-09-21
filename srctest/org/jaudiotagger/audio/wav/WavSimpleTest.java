@@ -6,6 +6,7 @@ import org.jaudiotagger.audio.AudioFileIO;
 import org.jaudiotagger.audio.generic.GenericTag;
 import org.jaudiotagger.logging.Hex;
 import org.jaudiotagger.tag.FieldKey;
+import org.jaudiotagger.tag.wav.WavTag;
 
 import java.io.File;
 import java.nio.ByteBuffer;
@@ -31,7 +32,7 @@ public class WavSimpleTest extends AbstractTestCase
             assertEquals("22050", f.getAudioHeader().getSampleRate());
 
 
-            assertTrue(f.getTag() instanceof GenericTag);        //TODO Flawed concept should be asftag
+            assertTrue(f.getTag() instanceof WavTag);
             WavTag tag = (WavTag) f.getTag();
 
             //Ease of use methods for common fields
@@ -74,7 +75,7 @@ public class WavSimpleTest extends AbstractTestCase
             assertEquals("22050", f.getAudioHeader().getSampleRate());
 
 
-            assertTrue(f.getTag() instanceof GenericTag);        //TODO Flawed concept should be wavtag
+            assertTrue(f.getTag() instanceof WavTag);        //TODO Flawed concept should be wavtag
             WavTag tag = (WavTag) f.getTag();
 
             //Ease of use methods for common fields
