@@ -23,7 +23,7 @@ public abstract class AiffChunkReader
      */
     protected ByteBuffer readChunkDataIntoBuffer(final RandomAccessFile raf, final ChunkHeader chunkHeader) throws IOException
     {
-        final ByteBuffer chunkData = ByteBuffer.allocate((int)chunkHeader.getSize());
+        final ByteBuffer chunkData = ByteBuffer.allocateDirect((int)chunkHeader.getSize());
         chunkData.order(ByteOrder.BIG_ENDIAN);
         raf.getChannel().read(chunkData);
         chunkData.position(0);

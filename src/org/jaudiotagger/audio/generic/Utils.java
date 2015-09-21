@@ -688,7 +688,7 @@ public class Utils
      */
     public static ByteBuffer readFileDataIntoBufferLE(RandomAccessFile file, int size) throws IOException
     {
-        ByteBuffer tagBuffer = ByteBuffer.allocate((int)size);
+        ByteBuffer tagBuffer = ByteBuffer.allocateDirect((int)size);
         file.getChannel().read(tagBuffer);
         tagBuffer.position(0);
         tagBuffer.order(ByteOrder.LITTLE_ENDIAN);
