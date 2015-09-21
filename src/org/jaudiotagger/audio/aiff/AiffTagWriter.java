@@ -114,13 +114,13 @@ public class AiffTagWriter implements TagWriter
      */
     public void write(final AudioFile af, final Tag tag, final RandomAccessFile raf, final RandomAccessFile rafTemp) throws CannotWriteException, IOException
     {
-        logger.config("Writing tag to file");
+        logger.severe("Writing tag to file");
         final AiffTag     existingTag;
         try
         {
             //Find AiffTag (if any)
             AiffTagReader im = new AiffTagReader();
-            existingTag = im.read(raf);
+            existingTag =  im.read(raf);
         }
         catch (CannotReadException ex)
         {
@@ -142,7 +142,7 @@ public class AiffTagWriter implements TagWriter
                 raf.seek(existingTag.getStartLocationInFile());
                 final ChunkHeader ch = new ChunkHeader(ByteOrder.BIG_ENDIAN);
                 ch.readHeader(raf);
-
+                raf.seek(raf.getFilePointer() - ChunkHeader.CHUNK_HEADER_SIZE);
                 if(!ChunkType.TAG.getCode().equals(ch.getID()))
                 {
                     throw new CannotWriteException("Unable to find ID3 chunk at original location has file been modified externally");
@@ -157,7 +157,7 @@ public class AiffTagWriter implements TagWriter
                     if (existingTag.getSizeOfID3Tag() >= newTagSize)
                     {
                         writeDataToFile(raf, bb, aiffTag.getSizeOfID3Tag());
-
+                        logger.severe("datWritten");
                         //To ensure old data from previous tag are erased
                         if (aiffTag.getSizeOfID3Tag() > newTagSize)
                         {

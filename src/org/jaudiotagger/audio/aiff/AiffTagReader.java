@@ -23,8 +23,7 @@ public class AiffTagReader extends AiffChunkReader
 {
     public static Logger logger = Logger.getLogger("org.jaudiotagger.audio.aiff");
 
-    private AiffAudioHeader aiffAudioHeader = new AiffAudioHeader();
-    private AiffTag aiffTag = new AiffTag();
+
 
     /**
      * Read editable Metadata
@@ -36,11 +35,14 @@ public class AiffTagReader extends AiffChunkReader
      */
     protected AiffTag read(final RandomAccessFile raf) throws CannotReadException, IOException
     {
+        AiffAudioHeader aiffAudioHeader = new AiffAudioHeader();
+        AiffTag aiffTag = new AiffTag();
+
         final AiffFileHeader fileHeader = new AiffFileHeader();
         fileHeader.readHeader(raf, aiffAudioHeader);
         while (raf.getFilePointer() < raf.length())
         {
-            if (!readChunk(raf))
+            if (!readChunk(raf, aiffTag))
             {
                 logger.severe("UnableToReadProcessChunk");
                 break;
@@ -60,7 +62,7 @@ public class AiffTagReader extends AiffChunkReader
      *
      * @return {@code false}, if we were not able to read a valid chunk id
      */
-    private boolean readChunk(final RandomAccessFile raf) throws IOException
+    private boolean readChunk(final RandomAccessFile raf, AiffTag aiffTag) throws IOException
     {
         long startLocationOfChunkInFile = raf.getFilePointer();
         ChunkHeader chunkHeader = new ChunkHeader(ByteOrder.BIG_ENDIAN);

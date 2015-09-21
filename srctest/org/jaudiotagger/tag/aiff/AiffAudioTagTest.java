@@ -156,6 +156,7 @@ public class AiffAudioTagTest extends TestCase {
             f = AudioFileIO.read(testFile);
             tag = f.getTag();
             System.out.println(f.getTag());
+
             assertEquals("Warmplay", tag.getFirst(FieldKey.ARTIST));
             tag.setField(FieldKey.ARTIST, "Warmplayer");
             f.commit();
