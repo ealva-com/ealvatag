@@ -18,7 +18,6 @@
  */
 package org.jaudiotagger.audio.wav;
 
-import org.jaudiotagger.audio.aiff.chunk.ChunkType;
 import org.jaudiotagger.audio.exceptions.CannotReadException;
 import org.jaudiotagger.audio.generic.GenericAudioHeader;
 import org.jaudiotagger.audio.generic.Utils;
@@ -26,6 +25,7 @@ import org.jaudiotagger.audio.iff.Chunk;
 import org.jaudiotagger.audio.iff.ChunkHeader;
 import org.jaudiotagger.audio.wav.chunk.WavFormatChunk;
 import org.jaudiotagger.audio.wav.chunk.WavListChunk;
+import org.jaudiotagger.tag.Tag;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
@@ -35,16 +35,17 @@ import java.nio.ByteOrder;
 /**
  * Read the Wav file chunks, until finds WavFormatChunk and then generates AudioHeader from it
  */
-public class WavInfoReader
+public class WavTagReader
 {
-   public GenericAudioHeader read(RandomAccessFile raf) throws CannotReadException, IOException
+   private Tag tag = new WavTag();
+
+   public Tag read(RandomAccessFile raf) throws CannotReadException, IOException
     {
-        GenericAudioHeader info = new GenericAudioHeader();
         if(WavRIFFHeader.isValidHeader(raf))
         {
             while (raf.getFilePointer() < raf.length())
             {
-                if (!readChunk(raf, info))
+                if (!readChunk(raf))
                 {
                     break;
                 }
@@ -54,13 +55,13 @@ public class WavInfoReader
         {
             throw new CannotReadException("Wav RIFF Header not valid");
         }
-        return info;
+        return tag;
     }
 
     /**
-     * Reads a Wav Chunk.
+     * Reads Wavs Chunk that contain tag metadata
      */
-    protected boolean readChunk(RandomAccessFile raf, GenericAudioHeader info) throws IOException
+    protected boolean readChunk(RandomAccessFile raf) throws IOException
     {
         Chunk chunk;
         ChunkHeader chunkHeader = new ChunkHeader(ByteOrder.LITTLE_ENDIAN);
@@ -75,8 +76,8 @@ public class WavInfoReader
         {
             switch (chunkType)
             {
-                case FORMAT:
-                    chunk = new WavFormatChunk(Utils.readFileDataIntoBufferLE(raf, (int)chunkHeader.getSize()), chunkHeader, info);
+                case LIST:
+                    chunk = new WavListChunk(Utils.readFileDataIntoBufferLE(raf, (int)chunkHeader.getSize()), chunkHeader, tag);
                     if (!chunk.readChunk())
                     {
                         return false;
@@ -89,5 +90,4 @@ public class WavInfoReader
         }
         return true;
     }
-
 }

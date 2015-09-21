@@ -16,12 +16,13 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.jaudiotagger.audio.wav;
+package org.jaudiotagger.audio.wav.chunk;
 
 import org.jaudiotagger.audio.generic.GenericAudioHeader;
 import org.jaudiotagger.audio.generic.Utils;
 import org.jaudiotagger.audio.iff.Chunk;
 import org.jaudiotagger.audio.iff.ChunkHeader;
+import org.jaudiotagger.audio.wav.WavSubFormat;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;

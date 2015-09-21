@@ -29,9 +29,7 @@ import java.util.EnumSet;
 import java.util.List;
 
 /**
- * This is a complete example implementation of
- * {@link AbstractTag} and it currenlty used to provide basic support to audio formats with only read tagging
- * ability such as Real or Wav files <br>
+ * This is a complete example implementation of  {@link AbstractTag}
  *
  * @author Raphaël Slinckx
  */

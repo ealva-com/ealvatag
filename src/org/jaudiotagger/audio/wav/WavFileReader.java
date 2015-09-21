@@ -32,14 +32,16 @@ import java.io.RandomAccessFile;
 public class WavFileReader extends AudioFileReader
 {
     private WavInfoReader ir = new WavInfoReader();
+    private WavTagReader  iw = new WavTagReader();
 
     protected GenericAudioHeader getEncodingInfo(RandomAccessFile raf) throws CannotReadException, IOException
     {
         return ir.read(raf);
     }
 
-    protected Tag getTag(RandomAccessFile raf) throws CannotReadException
+    @Override
+    protected Tag getTag(RandomAccessFile raf) throws IOException, CannotReadException
     {           
-        return new WavTag();
+        return iw.read(raf);
     }
 }

@@ -73,3 +73,4 @@ test119.aif,yes,,example aif with no metadata or id3 tag - aifc compressed
 test120.aif,yes,,example aif with metadata - aiff not compressed
 test121.aif,yes,,example aif with metadata from itunes, aiff not-compressed
 test122.asf,yes,,example dsf file
+test123.wav,yes,,example wav file with some metadata in INFO written by Media Monkey
