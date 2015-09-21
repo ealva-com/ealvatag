@@ -71,16 +71,19 @@ public class AiffTagReader extends AiffChunkReader
             return false;
         }
 
-        ByteBuffer chunkData = readChunkDataIntoBuffer(raf,chunkHeader);
-        long endLocationOfChunkInFile = raf.getFilePointer();
         ChunkType chunkType = ChunkType.get(chunkHeader.getID());
         if (chunkType!=null && chunkType==ChunkType.TAG)
         {
+            ByteBuffer chunkData = readChunkDataIntoBuffer(raf,chunkHeader);
             aiffTag.setStartLocationInFile(startLocationOfChunkInFile);
-            aiffTag.setEndLocationInFile(endLocationOfChunkInFile);
+            aiffTag.setEndLocationInFile(raf.getFilePointer());
             Chunk chunk = new ID3Chunk(chunkHeader,chunkData, aiffTag);
             chunk.readChunk();
             return true;
+        }
+        else
+        {
+            raf.skipBytes((int)chunkHeader.getSize());
         }
 
         ensureOnEqualBoundary(raf, chunkHeader);
