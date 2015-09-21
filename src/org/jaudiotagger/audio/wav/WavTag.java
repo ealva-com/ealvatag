@@ -24,8 +24,30 @@ import org.jaudiotagger.tag.FieldKey;
 import org.jaudiotagger.tag.KeyNotFoundException;
 import org.jaudiotagger.tag.TagField;
 
+import java.util.EnumSet;
+
 public class WavTag extends GenericTag
 {
+    static
+    {
+        supportedKeys = EnumSet.of(
+
+                FieldKey.ALBUM,
+                FieldKey.ARTIST,
+                FieldKey.ALBUM_ARTIST,
+                FieldKey.TITLE,
+                FieldKey.TRACK,
+                FieldKey.GENRE,
+                FieldKey.COMMENT,
+                FieldKey.YEAR,
+                FieldKey.RECORD_LABEL,
+                FieldKey.ISRC,
+                FieldKey.COMPOSER,
+                FieldKey.LYRICIST,
+                FieldKey.ENCODER,
+                FieldKey.CONDUCTOR,
+                FieldKey.RATING);
+    }
     public String toString()
     {
         String output = "WAV " + super.toString();

@@ -41,13 +41,22 @@ public class WavMetadataTest extends AbstractTestCase
             WavTag tag = (WavTag) f.getTag();
 
             //Ease of use methods for common fields
-            assertEquals("*artistName\0*", "*"+tag.getFirst(FieldKey.ARTIST)+"*");
-            assertEquals("*albumName\0*", "*"+tag.getFirst(FieldKey.ALBUM)+"*");
-            assertEquals("*test123\0*", "*"+tag.getFirst(FieldKey.TITLE)+"*");
-            assertEquals("", tag.getFirst(FieldKey.COMMENT));
-            assertEquals("", tag.getFirst(FieldKey.YEAR));
-            assertEquals("", tag.getFirst(FieldKey.TRACK));
-            assertEquals("", tag.getFirst(FieldKey.GENRE));
+            assertEquals("artistName\0",tag.getFirst(FieldKey.ARTIST));
+            assertEquals("albumName\0", tag.getFirst(FieldKey.ALBUM));
+            assertEquals("test123\0", tag.getFirst(FieldKey.TITLE));
+            assertEquals("comment\0", tag.getFirst(FieldKey.COMMENT));
+            assertEquals("2002\0", tag.getFirst(FieldKey.YEAR));
+            assertEquals("1\0", tag.getFirst(FieldKey.TRACK));
+            assertEquals("rock\0", tag.getFirst(FieldKey.GENRE));
+            assertEquals("conductor\0", tag.getFirst(FieldKey.CONDUCTOR));
+            assertEquals("lyricist\0", tag.getFirst(FieldKey.LYRICIST));
+            assertEquals("composer\0", tag.getFirst(FieldKey.COMPOSER));
+            assertEquals("albumArtist\0", tag.getFirst(FieldKey.ALBUM_ARTIST));
+            assertEquals("100\0", tag.getFirst(FieldKey.RATING));
+            assertEquals("encoder\0", tag.getFirst(FieldKey.ENCODER));
+            assertEquals("ISRC\0", tag.getFirst(FieldKey.ISRC));
+
+
         }
         catch (Exception e)
         {

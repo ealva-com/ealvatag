@@ -33,13 +33,14 @@ public class WavInfoChunk
             String id       = Utils.readFourBytesAsChars(chunkData);
             int    size     = chunkData.getInt();
             String value    = Utils.getString(chunkData, 0, size, StandardCharsets.UTF_8);
-            logger.config("Result:" + id + ":" + size + ":" + value);
+            System.out.println("Result:" + id + ":" + size + ":" + value+":");
 
             WavInfoIdentifier wii = WavInfoIdentifier.get(id);
             if(wii!=null && wii.getFieldKey()!=null)
             {
                 try
                 {
+
                     tag.setField(wii.getFieldKey(), value);
                 }
                 catch(FieldDataInvalidException fdie)

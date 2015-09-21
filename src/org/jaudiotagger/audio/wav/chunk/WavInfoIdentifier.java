@@ -11,6 +11,7 @@ import java.util.Map;
 public enum WavInfoIdentifier
 {
     ARTIST("IART", FieldKey.ARTIST),
+    ALBUM_ARTIST("iaar", FieldKey.ALBUM_ARTIST), //Dont know why lowercase, maybe MediaMonkey custom field
     TITLE("INAM", FieldKey.TITLE),
     ALBUM("IPRD", FieldKey.ALBUM),
     TRACKNO("ITRK", FieldKey.TRACK),
@@ -18,7 +19,15 @@ public enum WavInfoIdentifier
     GENRE("IGNR", FieldKey.GENRE),
     COMMENTS("ICMT", FieldKey.COMMENT),
     COPYRIGHT("ICOP", null),
-    SOFTWARE("ISFT", null),
+    ENCODER("ISFT", FieldKey.ENCODER),
+    RATING("IRTD", FieldKey.RATING),
+    COMPOSER("IMUS", FieldKey.COMPOSER),
+    CONDUCTOR("ITCH", FieldKey.CONDUCTOR),
+    LYRICIST("IWRI", FieldKey.LYRICIST),
+    ISRC("ISRC", FieldKey.ISRC),
+    LABEL("ICMS", FieldKey.RECORD_LABEL),
+    TRACK_GAIN("ITGL",null),
+    ALBUM_GAIN("IAGL", null)
     ;
 
     private static final Map<String, WavInfoIdentifier> CODE_TYPE_MAP = new HashMap<String, WavInfoIdentifier>();

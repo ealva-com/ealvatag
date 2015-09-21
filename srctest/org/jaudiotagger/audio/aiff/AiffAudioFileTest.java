@@ -132,7 +132,7 @@ public class AiffAudioFileTest extends TestCase {
             assertTrue(aah.getAnnotations().isEmpty());
 
         }
-        catch (Exception e) {
+        catch (Exception e  ) {
             e.printStackTrace();
             exceptionCaught = e;
         }

@@ -35,7 +35,7 @@ import java.util.List;
  */
 public abstract class GenericTag extends AbstractTag
 {
-    private static EnumSet<FieldKey> supportedKeys;
+    protected static EnumSet<FieldKey> supportedKeys;
 
     static
     {
