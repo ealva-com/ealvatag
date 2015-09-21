@@ -37,15 +37,22 @@ import java.nio.ByteOrder;
  */
 public class WavTagReader
 {
-   private Tag tag = new WavTag();
-
-   public Tag read(RandomAccessFile raf) throws CannotReadException, IOException
+    /**
+     * Read file and return tag metadata
+     *
+     * @param raf
+     * @return
+     * @throws CannotReadException
+     * @throws IOException
+     */
+    public Tag read(RandomAccessFile raf) throws CannotReadException, IOException
     {
+        Tag tag = new WavTag();
         if(WavRIFFHeader.isValidHeader(raf))
         {
             while (raf.getFilePointer() < raf.length())
             {
-                if (!readChunk(raf))
+                if (!readChunk(raf, tag))
                 {
                     break;
                 }
@@ -60,8 +67,13 @@ public class WavTagReader
 
     /**
      * Reads Wavs Chunk that contain tag metadata
+     *
+     * @param raf
+     * @param tag
+     * @return
+     * @throws IOException
      */
-    protected boolean readChunk(RandomAccessFile raf) throws IOException
+    protected boolean readChunk(RandomAccessFile raf, Tag tag) throws IOException
     {
         Chunk chunk;
         ChunkHeader chunkHeader = new ChunkHeader(ByteOrder.LITTLE_ENDIAN);

@@ -18,7 +18,6 @@
  */
 package org.jaudiotagger.audio.wav;
 
-import org.jaudiotagger.audio.aiff.chunk.ChunkType;
 import org.jaudiotagger.audio.exceptions.CannotReadException;
 import org.jaudiotagger.audio.generic.GenericAudioHeader;
 import org.jaudiotagger.audio.generic.Utils;

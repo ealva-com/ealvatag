@@ -22,7 +22,6 @@ import org.jaudiotagger.audio.generic.Utils;
 import org.jaudiotagger.audio.iff.Chunk;
 import org.jaudiotagger.audio.iff.ChunkHeader;
 import org.jaudiotagger.audio.wav.WavChunkType;
-import org.jaudiotagger.audio.wav.WavSubFormat;
 import org.jaudiotagger.tag.Tag;
 
 import java.io.IOException;

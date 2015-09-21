@@ -32,8 +32,10 @@ public class WavInfoChunk
         {
             String id       = Utils.readFourBytesAsChars(chunkData);
             int    size     = chunkData.getInt();
+
+            //TODO how do you identify what is the charset being used
             String value    = Utils.getString(chunkData, 0, size, StandardCharsets.UTF_8);
-            System.out.println("Result:" + id + ":" + size + ":" + value+":");
+            logger.config("Result:" + id + ":" + size + ":" + value+":");
 
             WavInfoIdentifier wii = WavInfoIdentifier.get(id);
             if(wii!=null && wii.getFieldKey()!=null)
