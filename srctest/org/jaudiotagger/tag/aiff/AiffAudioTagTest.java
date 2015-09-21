@@ -129,6 +129,51 @@ public class AiffAudioTagTest extends TestCase {
         assertNull(exceptionCaught);
     }
 
+    public void testReadAiff4() {
+        Exception exceptionCaught = null;
+
+        File orig = new File("testdata", "test124.aif");
+        if (!orig.isFile())
+        {
+            System.err.println("Unable to test file - not available");
+            return;
+        }
+
+
+        File testFile = AbstractTestCase.copyAudioToTmp("test124.aif", new File("test124ReadAiffWithoutItunesTag.aif"));
+        try
+        {
+            AudioFile f = AudioFileIO.read(testFile);
+            AudioHeader ah = f.getAudioHeader();
+            assertTrue(ah instanceof AiffAudioHeader);
+            Tag tag = f.getTag();
+            System.out.println(ah);
+            System.out.println(ah.getBitRate());
+            assertEquals("2",ah.getChannels());
+            System.out.println(ah.getEncodingType());
+            assertEquals("44100",ah.getSampleRate());
+            assertEquals(5,ah.getTrackLength());
+            assertEquals(5.0f,((AiffAudioHeader) ah).getPreciseLength());
+
+            System.out.println(tag);
+            assertNotNull(tag);
+            assertTrue(tag instanceof AiffTag);
+            assertTrue(tag.getFieldCount() == 6);
+            assertEquals("Coldplay", tag.getFirst(FieldKey.ARTIST));
+            assertEquals("A Rush Of Blood To The Head", tag.getFirst(FieldKey.ALBUM));
+            assertEquals("Politik", tag.getFirst(FieldKey.TITLE));
+            assertEquals("2002", tag.getFirst(FieldKey.YEAR));
+            assertEquals("1", tag.getFirst(FieldKey.TRACK));
+            assertEquals("11", tag.getFirst(FieldKey.TRACK_TOTAL));
+        }
+        catch(Exception ex)
+        {
+            ex.printStackTrace();
+            exceptionCaught = ex;
+        }
+        assertNull(exceptionCaught);
+    }
+
     public void testWriteAiff3() {
         Exception exceptionCaught = null;
 
@@ -236,17 +281,13 @@ public class AiffAudioTagTest extends TestCase {
             assertFalse(tag.isEmpty());
             assertEquals("Coldplay", tag.getFirst(FieldKey.ARTIST));
             AudioFileIO.delete(f);
-            //TODO files looks okay but test fails as if not deleted
-/*
+
             f = null;
             AudioFile f2 = AudioFileIO.read(testFile);
             Tag tag2 = f2.getTag();
             System.out.println(tag2);
-            assertEquals("Coldplay", tag2.getFirst(FieldKey.ARTIST));
             assertNotNull(tag2);
-            //assertTrue(tag.isEmpty());
-            assertEquals("", tag2.getFirst(FieldKey.ARTIST));
-            */
+            assertTrue(tag2.getFirst(FieldKey.ARTIST).isEmpty());
         }
         catch(Exception ex)
         {
@@ -255,4 +296,46 @@ public class AiffAudioTagTest extends TestCase {
         }
         assertNull(exceptionCaught);
     }
+
+    public void testDeleteAiff4() {
+        Exception exceptionCaught = null;
+
+        File orig = new File("testdata", "test124.aif");
+        if (!orig.isFile())
+        {
+            System.err.println("Unable to test file - not available");
+            return;
+        }
+
+        // test124.aif is special in that the ID3 chunk is right at the beginning, not the end.
+        File testFile = AbstractTestCase.copyAudioToTmp("test124.aif", new File("test124DeleteTag.aif"));
+
+        try
+        {
+            AudioFile f = AudioFileIO.read(testFile);
+            AudioHeader ah = f.getAudioHeader();
+            assertTrue(ah instanceof AiffAudioHeader);
+            Tag tag = f.getTag();
+            System.out.println(tag);
+            assertNotNull(tag);
+            assertNotNull(((AiffTag)tag).getID3Tag());
+            assertFalse(tag.isEmpty());
+            assertEquals("Coldplay", tag.getFirst(FieldKey.ARTIST));
+            AudioFileIO.delete(f);
+
+            f = null;
+            AudioFile f2 = AudioFileIO.read(testFile);
+            Tag tag2 = f2.getTag();
+            System.out.println(tag2);
+            assertNotNull(tag2);
+            assertTrue(tag2.getFirst(FieldKey.ARTIST).isEmpty());
+        }
+        catch(Exception ex)
+        {
+            ex.printStackTrace();
+            exceptionCaught = ex;
+        }
+        assertNull(exceptionCaught);
+    }
+
 }

@@ -34,6 +34,7 @@ import java.io.RandomAccessFile;
 import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import java.nio.channels.FileChannel;
 import java.util.logging.Logger;
 import static org.jaudiotagger.audio.iff.IffHeaderChunk.*;
 
@@ -76,10 +77,10 @@ public class AiffTagWriter implements TagWriter
             if (existingTag.getID3Tag() != null && existingTag.getStartLocationInFile() != null)
             {
                 raf.seek(existingTag.getStartLocationInFile());
-                final ChunkHeader ch = new ChunkHeader(ByteOrder.BIG_ENDIAN);
-                ch.readHeader(raf);
+                final ChunkHeader chunkHeader = new ChunkHeader(ByteOrder.BIG_ENDIAN);
+                chunkHeader.readHeader(raf);
 
-                if(!ChunkType.TAG.getCode().equals(ch.getID()))
+                if(!ChunkType.TAG.getCode().equals(chunkHeader.getID()))
                 {
                     throw new CannotWriteException("Unable to find ID3 chunk at expected location");
                 }
@@ -92,6 +93,41 @@ public class AiffTagWriter implements TagWriter
                     //Rewrite FORM size
                     raf.seek(SIGNATURE_LENGTH);
                     raf.write(Utils.getSizeBEInt32(((int) raf.length()) - SIGNATURE_LENGTH - SIZE_LENGTH));
+                }
+                else
+                {
+                    final int lengthTagChunk = (int)chunkHeader.getSize() + ChunkHeader.CHUNK_HEADER_SIZE;
+                    // position for reading after the id3 tag
+                    raf.seek(existingTag.getStartLocationInFile() + lengthTagChunk);
+                    final FileChannel channel = raf.getChannel();
+
+                    // shift whatever is after the Id3 tag up, and truncate the rest
+                    // [chunk][-id3-][chunk][chunk]
+                    // [chunk] <<--- [chunk][chunk]
+                    // [chunk][chunk][chunk]
+
+                    // the following should work, but DOES not :-(
+                    /*
+                    long read;
+                    for (long position = existingTag.getStartLocationInFile();
+                         (read = channel.transferFrom(channel, position, newLength - position)) < newLength-position;
+                         position += read);
+                    */
+
+                    // so we do it the manual way
+                    final ByteBuffer buffer = ByteBuffer.allocate(64 * 1024);
+                    while (channel.read(buffer) >= 0 || buffer.position() != 0) {
+                        buffer.flip();
+                        final long readPosition = channel.position();
+                        channel.position(readPosition-lengthTagChunk-buffer.limit());
+                        channel.write(buffer);
+                        channel.position(readPosition);
+                        buffer.compact();
+                    }
+                    // truncate the file after the last chunk
+                    final long newLength = raf.length() - lengthTagChunk;
+                    logger.config("Setting new length to:" + newLength);
+                    raf.setLength(newLength);
                 }
             }
         }
