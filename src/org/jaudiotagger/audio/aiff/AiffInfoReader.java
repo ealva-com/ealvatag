@@ -6,6 +6,7 @@ import org.jaudiotagger.audio.exceptions.CannotReadException;
 import org.jaudiotagger.audio.generic.GenericAudioHeader;
 import org.jaudiotagger.audio.iff.Chunk;
 import org.jaudiotagger.audio.iff.ChunkHeader;
+import org.jaudiotagger.audio.iff.IffHeaderChunk;
 import org.jaudiotagger.logging.Hex;
 
 import java.io.IOException;
@@ -67,7 +68,7 @@ public class AiffInfoReader extends AiffChunkReader
         {
             raf.skipBytes((int)chunkHeader.getSize());
         }
-        ensureOnEqualBoundary(raf, chunkHeader);
+        IffHeaderChunk.ensureOnEqualBoundary(raf, chunkHeader);
         return true;
     }
 

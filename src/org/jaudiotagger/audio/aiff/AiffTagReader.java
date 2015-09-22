@@ -6,6 +6,7 @@ import org.jaudiotagger.audio.exceptions.CannotReadException;
 import org.jaudiotagger.audio.generic.GenericAudioHeader;
 import org.jaudiotagger.audio.iff.Chunk;
 import org.jaudiotagger.audio.iff.ChunkHeader;
+import org.jaudiotagger.audio.iff.IffHeaderChunk;
 import org.jaudiotagger.logging.Hex;
 import org.jaudiotagger.tag.aiff.AiffTag;
 import org.jaudiotagger.tag.id3.ID3v22Tag;
@@ -74,7 +75,7 @@ public class AiffTagReader extends AiffChunkReader
         ChunkType chunkType = ChunkType.get(chunkHeader.getID());
         if (chunkType!=null && chunkType==ChunkType.TAG)
         {
-            ByteBuffer chunkData = readChunkDataIntoBuffer(raf,chunkHeader);
+            ByteBuffer chunkData = readChunkDataIntoBuffer(raf, chunkHeader);
             aiffTag.setStartLocationInFile(startLocationOfChunkInFile);
             aiffTag.setEndLocationInFile(raf.getFilePointer());
             Chunk chunk = new ID3Chunk(chunkHeader,chunkData, aiffTag);
@@ -85,7 +86,7 @@ public class AiffTagReader extends AiffChunkReader
             raf.skipBytes((int)chunkHeader.getSize());
 
         }
-        ensureOnEqualBoundary(raf, chunkHeader);
+        IffHeaderChunk.ensureOnEqualBoundary(raf, chunkHeader);
         return true;
     }
 }
