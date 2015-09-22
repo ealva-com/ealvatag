@@ -53,6 +53,11 @@ public class WavInfoChunk
                     fdie.printStackTrace();
                 }
             }
+            //Add unless just padding
+            else if(id!=null && !id.trim().isEmpty())
+            {
+                wavInfoTag.addUnRecognizedField(id, value);
+            }
 
             //Each tuple aligned on even byte boundary
             if ((size & 1) != 0 && chunkData.hasRemaining())

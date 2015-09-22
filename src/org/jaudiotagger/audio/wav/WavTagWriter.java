@@ -340,6 +340,25 @@ public class WavTagWriter implements TagWriter
                     baos.write(0);
                 }
             }
+
+            //Write any existing unrecognized tuples
+            Iterator<TagTextField> ti = wif.getUnrecognisedFields().iterator();
+            while(ti.hasNext())
+            {
+                TagTextField next = (TagTextField)ti.next();
+                baos.write(Utils.getDefaultBytes(next.getId(), StandardCharsets.US_ASCII));
+                logger.config("Writing:" +next.getId() + ":" + next.getContent());
+                byte[] contentConvertedToBytes = Utils.getDefaultBytes(next.getContent(), StandardCharsets.UTF_8);
+                baos.write(Utils.getSizeLEInt32(contentConvertedToBytes.length));
+                baos.write(contentConvertedToBytes);
+
+                //Write extra byte if data length not equal
+                if ((contentConvertedToBytes.length & 1) != 0)
+                {
+                    baos.write(0);
+                }
+            }
+
             final ByteBuffer infoBuffer = ByteBuffer.wrap(baos.toByteArray());
             infoBuffer.rewind();
 

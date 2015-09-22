@@ -20,12 +20,11 @@ package org.jaudiotagger.tag.wav;
 
 import org.jaudiotagger.audio.generic.GenericTag;
 import org.jaudiotagger.audio.iff.ChunkHeader;
-import org.jaudiotagger.tag.FieldDataInvalidException;
-import org.jaudiotagger.tag.FieldKey;
-import org.jaudiotagger.tag.KeyNotFoundException;
-import org.jaudiotagger.tag.TagField;
+import org.jaudiotagger.tag.*;
 
+import java.util.ArrayList;
 import java.util.EnumSet;
+import java.util.List;
 
 /**
  * Represent wav metadata found in the LISTINFO Chunk
@@ -37,6 +36,9 @@ import java.util.EnumSet;
  */
 public class WavInfoTag extends GenericTag
 {
+    //We dont use these fields but we need to read them so they can be written back if user modifies
+    private List<TagTextField> unrecognisedFields = new ArrayList<>();
+
     private Long startLocationInFile = null;
 
     //End location of this chunk
@@ -64,8 +66,16 @@ public class WavInfoTag extends GenericTag
     }
     public String toString()
     {
-        String output = "WAV " + super.toString();
-        return output;
+        StringBuilder  output = new StringBuilder("Wav " + super.toString());
+        if(unrecognisedFields.size()>0)
+        {
+            output.append("\nUnrecognized Tags:\n");
+            for(TagTextField next:unrecognisedFields)
+            {
+                output.append("\t"+next.getId()+":"+next.getContent()+"\n");
+            }
+        }
+        return output.toString();
     }
 
     public TagField createCompilationField(boolean value) throws KeyNotFoundException, FieldDataInvalidException
@@ -96,5 +106,15 @@ public class WavInfoTag extends GenericTag
     public long getSizeOfTag()
     {
         return (endLocationInFile - startLocationInFile) - ChunkHeader.CHUNK_HEADER_SIZE;
+    }
+
+    public void addUnRecognizedField(String code, String contents)
+    {;
+        unrecognisedFields.add(new GenericTagTextField(code, contents));
+    }
+
+    public List<TagTextField> getUnrecognisedFields()
+    {
+        return unrecognisedFields;
     }
 }

@@ -47,7 +47,7 @@ public abstract class GenericTag extends AbstractTag
      *
      * @author Raphaël Slinckx
      */
-    private class GenericTagTextField implements TagTextField
+    protected class GenericTagTextField implements TagTextField
     {
 
         /**
