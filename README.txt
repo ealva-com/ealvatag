@@ -4,7 +4,7 @@ metadata for:
 
 Jaudiotagger reuires Java 1.7 or later
 
-Jaudiotagger welcomes contributors, if you make an improvement or bugf fix we are very likely to merge it back into the master branch with a minimum of fuss.
+Jaudiotagger welcomes contributors, if you make an improvement or bug fix we are very likely to merge it back into the master branch with a minimum of fuss.
 If you can't contribute code but would like to support this project please consider making a donation - donations can be made at
   http://www.jthink.net/jaudiotagger/donate.jsp
 
