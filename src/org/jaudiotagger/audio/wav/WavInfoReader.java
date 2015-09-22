@@ -86,7 +86,27 @@ public class WavInfoReader
                     raf.skipBytes((int)chunkHeader.getSize());
             }
         }
+        ensureOnEqualBoundary(raf, chunkHeader);
         return true;
+    }
+
+    /**
+     * If Size is not even then we skip a byte, because chunks have to be aligned
+     *
+     * @param raf
+     * @param chunkHeader
+     * @throws IOException
+     */
+    protected void ensureOnEqualBoundary(final RandomAccessFile raf,ChunkHeader chunkHeader) throws IOException
+    {
+        if ((chunkHeader.getSize() & 1) != 0)
+        {
+            // Must come out to an even byte boundary unless at end of file
+            if(raf.getFilePointer()<raf.length())
+            {
+                raf.skipBytes(1);
+            }
+        }
     }
 
 }

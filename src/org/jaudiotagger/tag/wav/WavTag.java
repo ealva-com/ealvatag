@@ -20,6 +20,7 @@ package org.jaudiotagger.tag.wav;
 
 import org.jaudiotagger.logging.ErrorMessage;
 import org.jaudiotagger.tag.*;
+import org.jaudiotagger.tag.id3.AbstractID3v2Tag;
 import org.jaudiotagger.tag.images.Artwork;
 
 import java.util.ArrayList;
@@ -35,13 +36,12 @@ import java.util.List;
 public class WavTag implements Tag
 {
     private WavInfoTag infoTag;
-    
+    private AbstractID3v2Tag id3Tag;
    
     public WavInfoTag getInfoTag () 
     {
         return infoTag;
     }
-
   
     public void setInfoTag (WavInfoTag infoTag) {
         this.infoTag = infoTag;
@@ -50,6 +50,21 @@ public class WavTag implements Tag
     public boolean isInfoTag()
     {
         return infoTag!=null;
+    }
+
+    /** Returns the ID3 tag */
+    public AbstractID3v2Tag getID3Tag () {
+        return id3Tag;
+    }
+
+    /** Sets the ID3 tag */
+    public void setID3Tag (AbstractID3v2Tag t) {
+        id3Tag = t;
+    }
+
+    public boolean isID3Tag()
+    {
+        return id3Tag!=null;
     }
 
     public String toString()

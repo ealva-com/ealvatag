@@ -5,6 +5,7 @@ import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.AudioFileIO;
 import org.jaudiotagger.audio.generic.GenericTag;
 import org.jaudiotagger.tag.FieldKey;
+import org.jaudiotagger.tag.id3.AbstractID3v2Tag;
 
 import java.io.File;
 
@@ -19,7 +20,7 @@ public class WavMetadataTest extends AbstractTestCase
     /**
      * Read file with metadata added by MediaMonkey
      */
-    public void testReadFileWithMetadata()
+    public void testReadFileWithListInfoMetadata()
     {
         Exception exceptionCaught = null;
         try
@@ -193,4 +194,67 @@ public class WavMetadataTest extends AbstractTestCase
         }
         assertNull(exceptionCaught);
     }
+
+    /**
+     * Read file with metadata added by MediaMonkey
+     */
+    public void testReadFileWithID3AndListInfoMetadata()
+    {
+        Exception exceptionCaught = null;
+        try
+        {
+            File testFile = AbstractTestCase.copyAudioToTmp("test125.wav");
+            AudioFile f = AudioFileIO.read(testFile);
+            System.out.println(f.getAudioHeader());
+            assertEquals("529", f.getAudioHeader().getBitRate());
+            assertEquals("WAV-RIFF 24 bits", f.getAudioHeader().getEncodingType());
+            assertEquals("1", f.getAudioHeader().getChannels());
+            assertEquals("22050", f.getAudioHeader().getSampleRate());
+
+
+            assertTrue(f.getTag() instanceof WavTag);
+            WavTag tag = (WavTag) f.getTag();
+
+            //Ease of use methods for common fields
+            assertEquals("id3artistName\0",tag.getFirst(FieldKey.ARTIST));
+            assertEquals("id3albumName\0", tag.getFirst(FieldKey.ALBUM));
+            assertEquals("test123\0", tag.getFirst(FieldKey.TITLE));
+            assertEquals("comment\0", tag.getFirst(FieldKey.COMMENT));
+            assertEquals("2002\0", tag.getFirst(FieldKey.YEAR));
+            assertEquals("1\0", tag.getFirst(FieldKey.TRACK));
+            assertEquals("rock\0", tag.getFirst(FieldKey.GENRE));
+
+            assertTrue(tag.isInfoTag());
+            WavInfoTag wit = (WavInfoTag)tag.getInfoTag();
+            assertEquals("id3artistName\0",wit.getFirst(FieldKey.ARTIST));
+            assertEquals("id3albumName\0", wit.getFirst(FieldKey.ALBUM));
+            assertEquals("test123\0", wit.getFirst(FieldKey.TITLE));
+            assertEquals("comment\0", wit.getFirst(FieldKey.COMMENT));
+            assertEquals("2002\0", wit.getFirst(FieldKey.YEAR));
+            assertEquals("1\0", wit.getFirst(FieldKey.TRACK));
+            assertEquals("rock\0", wit.getFirst(FieldKey.GENRE));
+
+            assertTrue(tag.isID3Tag());
+            AbstractID3v2Tag id3tag = (AbstractID3v2Tag)tag.getID3Tag();
+            assertEquals("id3artistName",id3tag.getFirst(FieldKey.ARTIST));
+            assertEquals("id3albumName", id3tag.getFirst(FieldKey.ALBUM));
+            assertEquals("test123", id3tag.getFirst(FieldKey.TITLE));
+            assertEquals("comment", id3tag.getFirst(FieldKey.COMMENT));
+            assertEquals("2002", id3tag.getFirst(FieldKey.YEAR));
+            assertEquals("1", id3tag.getFirst(FieldKey.TRACK));
+            assertEquals("rock", id3tag.getFirst(FieldKey.GENRE));
+
+
+
+
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            exceptionCaught = e;
+        }
+        assertNull(exceptionCaught);
+    }
+
+
 }

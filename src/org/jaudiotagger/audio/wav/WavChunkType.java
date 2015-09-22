@@ -15,6 +15,7 @@ public enum WavChunkType
     DATA("data"),
     LIST("LIST"),
     INFO("INFO"),
+    ID3("id3 "),
 
     ;
 

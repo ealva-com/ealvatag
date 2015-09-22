@@ -22,8 +22,8 @@ import org.jaudiotagger.audio.exceptions.CannotReadException;
 import org.jaudiotagger.audio.generic.Utils;
 import org.jaudiotagger.audio.iff.Chunk;
 import org.jaudiotagger.audio.iff.ChunkHeader;
+import org.jaudiotagger.audio.wav.chunk.WavId3Chunk;
 import org.jaudiotagger.audio.wav.chunk.WavListChunk;
-import org.jaudiotagger.tag.Tag;
 import org.jaudiotagger.tag.wav.WavTag;
 
 import java.io.IOException;
@@ -83,7 +83,7 @@ public class WavTagReader
         }
 
         String id = chunkHeader.getID();
-        logger.config("Next Id is:" + id +":Size:"+chunkHeader.getSize());
+        System.out.println("Next Id is:" + id + ":Size:" + chunkHeader.getSize());
         final WavChunkType chunkType = WavChunkType.get(id);
         if (chunkType != null)
         {
@@ -97,10 +97,37 @@ public class WavTagReader
                     }
                     break;
 
+                case ID3:
+                    chunk = new WavId3Chunk(Utils.readFileDataIntoBufferLE(raf, (int)chunkHeader.getSize()), chunkHeader, tag);
+                    if (!chunk.readChunk())
+                    {
+                        return false;
+                    }
+                    break;
                 default:
                     raf.skipBytes((int)chunkHeader.getSize());
             }
         }
+        ensureOnEqualBoundary(raf, chunkHeader);
         return true;
+    }
+
+    /**
+     * If Size is not even then we skip a byte, because chunks have to be aligned
+     *
+     * @param raf
+     * @param chunkHeader
+     * @throws IOException
+     */
+    protected void ensureOnEqualBoundary(final RandomAccessFile raf,ChunkHeader chunkHeader) throws IOException
+    {
+        if ((chunkHeader.getSize() & 1) != 0)
+        {
+            // Must come out to an even byte boundary unless at end of file
+            if(raf.getFilePointer()<raf.length())
+            {
+                raf.skipBytes(1);
+            }
+        }
     }
 }

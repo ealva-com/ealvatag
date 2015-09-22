@@ -79,18 +79,13 @@ public class AiffTagReader extends AiffChunkReader
             aiffTag.setEndLocationInFile(raf.getFilePointer());
             Chunk chunk = new ID3Chunk(chunkHeader,chunkData, aiffTag);
             chunk.readChunk();
-            return true;
         }
         else
         {
             raf.skipBytes((int)chunkHeader.getSize());
-        }
 
+        }
         ensureOnEqualBoundary(raf, chunkHeader);
         return true;
     }
-
-
-
-
 }
