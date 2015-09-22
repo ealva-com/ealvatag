@@ -24,6 +24,7 @@ import org.jaudiotagger.audio.exceptions.CannotReadException;
 import org.jaudiotagger.audio.exceptions.CannotWriteException;
 import org.jaudiotagger.audio.generic.TagWriter;
 import org.jaudiotagger.audio.generic.Utils;
+import org.jaudiotagger.audio.iff.Chunk;
 import org.jaudiotagger.audio.iff.ChunkHeader;
 import org.jaudiotagger.tag.Tag;
 import org.jaudiotagger.tag.aiff.AiffTag;
@@ -89,46 +90,14 @@ public class AiffTagWriter implements TagWriter
                 {
                     logger.config("Setting new length to:" + existingTag.getStartLocationInFile());
                     raf.setLength(existingTag.getStartLocationInFile());
-
-                    //Rewrite FORM size
-                    raf.seek(SIGNATURE_LENGTH);
-                    raf.write(Utils.getSizeBEInt32(((int) raf.length()) - SIGNATURE_LENGTH - SIZE_LENGTH));
                 }
                 else
                 {
-                    final int lengthTagChunk = (int)chunkHeader.getSize() + ChunkHeader.CHUNK_HEADER_SIZE;
-                    // position for reading after the id3 tag
-                    raf.seek(existingTag.getStartLocationInFile() + lengthTagChunk);
-                    final FileChannel channel = raf.getChannel();
-
-                    // shift whatever is after the Id3 tag up, and truncate the rest
-                    // [chunk][-id3-][chunk][chunk]
-                    // [chunk] <<--- [chunk][chunk]
-                    // [chunk][chunk][chunk]
-
-                    // the following should work, but DOES not :-(
-                    /*
-                    long read;
-                    for (long position = existingTag.getStartLocationInFile();
-                         (read = channel.transferFrom(channel, position, newLength - position)) < newLength-position;
-                         position += read);
-                    */
-
-                    // so we do it the manual way
-                    final ByteBuffer buffer = ByteBuffer.allocate(64 * 1024);
-                    while (channel.read(buffer) >= 0 || buffer.position() != 0) {
-                        buffer.flip();
-                        final long readPosition = channel.position();
-                        channel.position(readPosition-lengthTagChunk-buffer.limit());
-                        channel.write(buffer);
-                        channel.position(readPosition);
-                        buffer.compact();
-                    }
-                    // truncate the file after the last chunk
-                    final long newLength = raf.length() - lengthTagChunk;
-                    logger.config("Setting new length to:" + newLength);
-                    raf.setLength(newLength);
+                    deleteTagChunk(raf, existingTag, chunkHeader);
                 }
+                //Rewrite FORM size
+                raf.seek(SIGNATURE_LENGTH);
+                raf.write(Utils.getSizeBEInt32(((int) raf.length()) - SIGNATURE_LENGTH - SIZE_LENGTH));
             }
         }
         finally
@@ -136,6 +105,48 @@ public class AiffTagWriter implements TagWriter
             raf.close();
         }
         //and delete
+    }
+
+    /**
+     * <p>Deletes the given ID3-{@link Tag}/{@link Chunk} from the file by moving all following chunks up.</p>
+     * <pre>
+     * [chunk][-id3-][chunk][chunk]
+     * [chunk] &lt;&lt;--- [chunk][chunk]
+     * [chunk][chunk][chunk]
+     * </pre>
+     *
+     * @param raf random access file
+     * @param existingTag existing tag
+     * @param tagChunkHeader existing chunk header for the tag
+     * @throws IOException if something goes wrong
+     */
+    private void deleteTagChunk(final RandomAccessFile raf, final AiffTag existingTag, final ChunkHeader tagChunkHeader) throws IOException {
+        final int lengthTagChunk = (int) tagChunkHeader.getSize() + ChunkHeader.CHUNK_HEADER_SIZE;
+        // position for reading after the id3 tag
+        raf.seek(existingTag.getStartLocationInFile() + lengthTagChunk);
+        final FileChannel channel = raf.getChannel();
+        // the following should work, but DOES not :-(
+        /*
+        long read;
+        for (long position = existingTag.getStartLocationInFile();
+             (read = channel.transferFrom(channel, position, newLength - position)) < newLength-position;
+             position += read);
+        */
+
+        // so we do it the manual way
+        final ByteBuffer buffer = ByteBuffer.allocate(64 * 1024);
+        while (channel.read(buffer) >= 0 || buffer.position() != 0) {
+            buffer.flip();
+            final long readPosition = channel.position();
+            channel.position(readPosition-lengthTagChunk-buffer.limit());
+            channel.write(buffer);
+            channel.position(readPosition);
+            buffer.compact();
+        }
+        // truncate the file after the last chunk
+        final long newLength = raf.length() - lengthTagChunk;
+        logger.config("Setting new length to:" + newLength);
+        raf.setLength(newLength);
     }
 
     /**
@@ -176,10 +187,10 @@ public class AiffTagWriter implements TagWriter
                 //TODO is it safe to rely on the location as calculated when initially read
                 //Find existing location of ID3 chunk if any and seek to that location
                 raf.seek(existingTag.getStartLocationInFile());
-                final ChunkHeader ch = new ChunkHeader(ByteOrder.BIG_ENDIAN);
-                ch.readHeader(raf);
+                final ChunkHeader chunkHeader = new ChunkHeader(ByteOrder.BIG_ENDIAN);
+                chunkHeader.readHeader(raf);
                 raf.seek(raf.getFilePointer() - ChunkHeader.CHUNK_HEADER_SIZE);
-                if(!ChunkType.TAG.getCode().equals(ch.getID()))
+                if(!ChunkType.TAG.getCode().equals(chunkHeader.getID()))
                 {
                     throw new CannotWriteException("Unable to find ID3 chunk at original location has file been modified externally");
                 }
@@ -207,10 +218,9 @@ public class AiffTagWriter implements TagWriter
                     }
                 }
                 //Unusual Case where ID3 is not last chunk
-                //For now treat as if no ID3 chunk, existing chunk will be superceded by last chunk
-                //TODO remove earlier ID3 chunk from file will require using temp file
                 else
                 {
+                    deleteTagChunk(raf, existingTag, chunkHeader);
                     //Go to end of file
                     raf.seek(raf.length());
                     writeDataToFile(raf, bb, newTagSize);
@@ -227,8 +237,6 @@ public class AiffTagWriter implements TagWriter
             //Rewrite FORM Header size
             raf.seek(SIGNATURE_LENGTH);
             raf.write(Utils.getSizeBEInt32(((int) raf.length()) - SIGNATURE_LENGTH - SIZE_LENGTH));
-
-
         }
         finally
         {
