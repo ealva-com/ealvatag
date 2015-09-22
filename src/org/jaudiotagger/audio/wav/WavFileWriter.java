@@ -31,13 +31,15 @@ public class WavFileWriter extends AudioFileWriter
 {
     private WavTagWriter tw = new WavTagWriter();
 
+    @Override
     protected void writeTag(AudioFile audioFile, Tag tag, RandomAccessFile raf, RandomAccessFile rafTemp) throws CannotWriteException, IOException
     {
         tw.write(audioFile, tag, raf, rafTemp);
     }
 
+    @Override
     protected void deleteTag(Tag tag, RandomAccessFile raf, RandomAccessFile tempRaf) throws CannotWriteException, IOException
     {
-        //Nothing to do for wav file, no tag are supported
+        tw.delete(tag, raf, tempRaf);
     }
 }

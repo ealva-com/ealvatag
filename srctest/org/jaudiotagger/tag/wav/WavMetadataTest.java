@@ -151,4 +151,46 @@ public class WavMetadataTest extends AbstractTestCase
         }
         assertNull(exceptionCaught);
     }
+
+    /**
+     * Delete file with metadata
+     */
+    public void testDeleteFileMetadata()
+    {
+        Exception exceptionCaught = null;
+        try
+        {
+            File testFile = AbstractTestCase.copyAudioToTmp("test123.wav", new File("test123DeleteMetadata.wav"));
+            AudioFile f = AudioFileIO.read(testFile);
+            System.out.println(f.getAudioHeader());
+            assertEquals("529", f.getAudioHeader().getBitRate());
+            assertEquals("WAV-RIFF 24 bits", f.getAudioHeader().getEncodingType());
+            assertEquals("1", f.getAudioHeader().getChannels());
+            assertEquals("22050", f.getAudioHeader().getSampleRate());
+
+
+            assertTrue(f.getTag() instanceof WavTag);
+            WavTag tag = (WavTag) f.getTag();
+            assertTrue(tag.isInfoTag());
+
+            //Ease of use methods for common fields
+            assertEquals("artistName\0",tag.getFirst(FieldKey.ARTIST));
+
+            AudioFileIO.delete(f);
+
+
+            //Read modified metadata now in file
+            f = AudioFileIO.read(testFile);
+            assertTrue(f.getTag() instanceof WavTag);
+            tag = (WavTag) f.getTag();
+            assertFalse(tag.isInfoTag());
+
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            exceptionCaught = e;
+        }
+        assertNull(exceptionCaught);
+    }
 }

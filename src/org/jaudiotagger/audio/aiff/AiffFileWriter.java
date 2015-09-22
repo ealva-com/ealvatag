@@ -35,11 +35,13 @@ public class AiffFileWriter extends AudioFileWriter
 
     private AiffTagWriter tw = new AiffTagWriter();
 
+    @Override
     protected void writeTag(AudioFile audioFile, Tag tag, RandomAccessFile raf, RandomAccessFile rafTemp) throws CannotWriteException, IOException
     {
         tw.write(audioFile, tag, raf, rafTemp);
     }
 
+    @Override
     protected void deleteTag(Tag tag, RandomAccessFile raf, RandomAccessFile tempRaf) throws CannotWriteException, IOException
     {
         tw.delete(tag, raf, tempRaf);
