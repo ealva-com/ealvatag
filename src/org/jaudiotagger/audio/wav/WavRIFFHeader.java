@@ -45,7 +45,7 @@ public class WavRIFFHeader
         ByteBuffer headerBuffer = Utils.readFileDataIntoBufferLE(raf, HEADER_LENGTH);
         if(Utils.readFourBytesAsChars(headerBuffer).equals(RIFF_SIGNATURE))
         {
-            headerBuffer.getInt();
+            headerBuffer.getInt(); //Size
             if(Utils.readFourBytesAsChars(headerBuffer).equals(WAVE_SIGNATURE))
             {
                 return true;

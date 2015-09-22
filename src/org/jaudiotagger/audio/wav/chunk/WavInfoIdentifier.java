@@ -26,18 +26,18 @@ public enum WavInfoIdentifier
     LYRICIST("IWRI", FieldKey.LYRICIST),
     ISRC("ISRC", FieldKey.ISRC),
     LABEL("ICMS", FieldKey.RECORD_LABEL),
-    TRACK_GAIN("ITGL",null),
-    ALBUM_GAIN("IAGL", null)
-    ;
+    TRACK_GAIN("ITGL", null), //Currently No mapping to a FieldKey for this
+    ALBUM_GAIN("IAGL", null); //Currently No mapping to a FieldKey for this
 
     private static final Map<String, WavInfoIdentifier> CODE_TYPE_MAP = new HashMap<String, WavInfoIdentifier>();
+    private static final Map<FieldKey, WavInfoIdentifier> FIELDKEY_TYPE_MAP = new HashMap<FieldKey, WavInfoIdentifier>();
     private String code;
     private FieldKey fieldKey;
 
     WavInfoIdentifier(String code, FieldKey fieldKey)
     {
-        this.code=code;
-        this.fieldKey=fieldKey;
+        this.code = code;
+        this.fieldKey = fieldKey;
     }
 
     public String getCode()
@@ -57,13 +57,36 @@ public enum WavInfoIdentifier
      * @param code chunk id
      * @return chunk type or {@code null} if not registered
      */
-    public synchronized static WavInfoIdentifier get(final String code) {
-        if (CODE_TYPE_MAP.isEmpty()) {
-            for (final WavInfoIdentifier type : values()) {
+    public synchronized static WavInfoIdentifier getByCode(final String code)
+    {
+        if (CODE_TYPE_MAP.isEmpty())
+        {
+            for (final WavInfoIdentifier type : values())
+            {
                 CODE_TYPE_MAP.put(type.getCode(), type);
             }
         }
         return CODE_TYPE_MAP.get(code);
     }
 
+    /**
+     * Get {@link WavInfoIdentifier} for code (e.g. "SSND").
+     *
+     * @param fieldKey
+     * @return chunk type or {@code null} if not registered
+     */
+    public synchronized static WavInfoIdentifier getByByFieldKey(final FieldKey fieldKey)
+    {
+        if (FIELDKEY_TYPE_MAP.isEmpty())
+        {
+            for (final WavInfoIdentifier type : values())
+            {
+                if (type.getFieldKey() != null)
+                {
+                    FIELDKEY_TYPE_MAP.put(type.getFieldKey(), type);
+                }
+            }
+        }
+        return FIELDKEY_TYPE_MAP.get(fieldKey);
+    }
 }

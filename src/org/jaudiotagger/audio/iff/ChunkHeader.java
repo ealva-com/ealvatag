@@ -16,9 +16,10 @@ public class ChunkHeader
 {
     public static final int  CHUNK_HEADER_SIZE = 8;
 
-    private long    size;              // This does not include the 8 bytes of header itself
-    private String  chunkId;           // Four character Id of the chunk
-    private ByteOrder byteOrder;
+    private long        size;              // This does not include the 8 bytes of header itself
+    private String      chunkId;           // Four character Id of the chunk
+    private ByteOrder   byteOrder;
+    private long        startLocationInFile;
 
 
     public ChunkHeader(ByteOrder byteOrder)
@@ -33,6 +34,7 @@ public class ChunkHeader
     public boolean readHeader(final RandomAccessFile raf) throws IOException
     {
         ByteBuffer header = ByteBuffer.allocate(CHUNK_HEADER_SIZE);
+        startLocationInFile = raf.getFilePointer();
         raf.getChannel().read(header);
         header.order(byteOrder);
         header.position(0);
@@ -49,11 +51,22 @@ public class ChunkHeader
      */
     public ByteBuffer writeHeader()
     {
-        //TODO make byteOrder (currently set for AIFF-BE)
-        final ByteBuffer bb = ByteBuffer.allocate(CHUNK_HEADER_SIZE);
-        bb.put(chunkId.getBytes(StandardCharsets.US_ASCII));
-        bb.put(Utils.getSizeBEInt32((int) size));
-        return bb;
+        //Aiff
+        if (byteOrder == ByteOrder.BIG_ENDIAN)
+        {
+            final ByteBuffer bb = ByteBuffer.allocate(CHUNK_HEADER_SIZE);
+            bb.put(chunkId.getBytes(StandardCharsets.US_ASCII));
+            bb.put(Utils.getSizeBEInt32((int) size));
+            return bb;
+        }
+        //Wav
+        else
+        {
+            final ByteBuffer bb = ByteBuffer.allocate(CHUNK_HEADER_SIZE);
+            bb.put(chunkId.getBytes(StandardCharsets.US_ASCII));
+            bb.put(Utils.getSizeLEInt32((int) size));
+            return bb;
+        }
     }
 
     /**
@@ -95,5 +108,11 @@ public class ChunkHeader
     public void setSize(final long size)
     {
         this.size=size;
+    }
+
+    /** The start of this chunk(header) in the file */
+    public long getStartLocationInFile()
+    {
+        return startLocationInFile;
     }
 }

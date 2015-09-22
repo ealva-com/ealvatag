@@ -70,7 +70,7 @@ public class CommonChunk extends Chunk
             // on whether raw output is set
             if (compressionType != null)
             {
-                //Id it a known compression type
+                //Is it a known compression type
                 AiffCompressionType act = AiffCompressionType.getByCode(compressionType);
                 if (act != null)
                 {

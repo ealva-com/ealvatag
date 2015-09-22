@@ -2,7 +2,6 @@ package org.jaudiotagger.audio.wav.chunk;
 
 import org.jaudiotagger.audio.generic.Utils;
 import org.jaudiotagger.tag.FieldDataInvalidException;
-import org.jaudiotagger.tag.Tag;
 import org.jaudiotagger.tag.wav.WavInfoTag;
 import org.jaudiotagger.tag.wav.WavTag;
 
@@ -11,7 +10,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.logging.Logger;
 
 /**
- * Stores basic only metadata but only seems to exist as part of a LIST chunk, doesn't have its own size field
+ * Stores basic only metadata but only exists as part of a LIST chunk, doesn't have its own size field
  * instead contains a number of name,size, value tuples. So for this reason we dont subclass the Chunk class
  */
 public class WavInfoChunk
@@ -41,7 +40,7 @@ public class WavInfoChunk
             String value    = Utils.getString(chunkData, 0, size, StandardCharsets.UTF_8);
             logger.config("Result:" + id + ":" + size + ":" + value + ":");
 
-            WavInfoIdentifier wii = WavInfoIdentifier.get(id);
+            WavInfoIdentifier wii = WavInfoIdentifier.getByCode(id);
             if(wii!=null && wii.getFieldKey()!=null)
             {
                 try

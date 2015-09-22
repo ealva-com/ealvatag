@@ -29,12 +29,14 @@ import org.jaudiotagger.tag.wav.WavTag;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.ByteOrder;
+import java.util.logging.Logger;
 
 /**
  * Read the Wav file chunks, until finds WavFormatChunk and then generates AudioHeader from it
  */
 public class WavTagReader
 {
+    public static Logger logger = Logger.getLogger("org.jaudiotagger.audio.wav");
     /**
      * Read file and return tag metadata
      *
@@ -81,6 +83,7 @@ public class WavTagReader
         }
 
         String id = chunkHeader.getID();
+        logger.config("Next Id is:" + id);
         final WavChunkType chunkType = WavChunkType.get(id);
         if (chunkType != null)
         {

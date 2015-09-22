@@ -38,9 +38,9 @@ public class WavListChunk extends Chunk
 
     private WavTag tag;
 
-    public WavListChunk(ByteBuffer chunkData, ChunkHeader hdr, WavTag tag) throws IOException
+    public WavListChunk(ByteBuffer chunkData, ChunkHeader chunkHeader, WavTag tag) throws IOException
     {
-        super(chunkData, hdr);
+        super(chunkData, chunkHeader);
         this.tag=tag;
     }
 
@@ -51,6 +51,10 @@ public class WavListChunk extends Chunk
         {
            WavInfoChunk chunk = new WavInfoChunk(tag);
            chunk.readChunks(chunkData);
+           //This is the start of the enclosing LIST element
+           tag.getInfoTag().setStartLocationInFile(chunkHeader.getStartLocationInFile());
+           tag.getInfoTag().setEndLocationInFile(chunkHeader.getStartLocationInFile() + ChunkHeader.CHUNK_HEADER_SIZE + chunkHeader.getSize());
+
         }
         return true;
     }
