@@ -39,10 +39,13 @@ import java.io.RandomAccessFile;
 import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import java.nio.channels.FileChannel;
 import java.nio.charset.StandardCharsets;
 import java.util.Iterator;
 import java.util.logging.Logger;
-import static org.jaudiotagger.audio.iff.IffHeaderChunk.*;
+
+import static org.jaudiotagger.audio.iff.IffHeaderChunk.SIGNATURE_LENGTH;
+import static org.jaudiotagger.audio.iff.IffHeaderChunk.SIZE_LENGTH;
 
 /**
  * Write Wav Tag.
@@ -62,11 +65,11 @@ public class WavTagWriter implements TagWriter
      */
     private WavTag getExistingTag(RandomAccessFile raf) throws IOException, CannotWriteException
     {
-       try
-       {
-           //Find WavTag (if any)
-           WavTagReader im = new WavTagReader();
-           return  im.read(raf);
+        try
+        {
+            //Find WavTag (if any)
+            WavTagReader im = new WavTagReader();
+            return im.read(raf);
         }
         catch (CannotReadException ex)
         {
@@ -82,7 +85,7 @@ public class WavTagWriter implements TagWriter
      * @throws IOException
      * @throws CannotWriteException
      */
-    private void seekToStartOfMetadata(RandomAccessFile raf, WavTag existingTag) throws IOException, CannotWriteException
+    private ChunkHeader seekToStartOfMetadata(RandomAccessFile raf, WavTag existingTag) throws IOException, CannotWriteException
     {
         raf.seek(existingTag.getInfoTag().getStartLocationInFile());
         final ChunkHeader chunkHeader = new ChunkHeader(ByteOrder.BIG_ENDIAN);
@@ -93,14 +96,14 @@ public class WavTagWriter implements TagWriter
         {
             throw new CannotWriteException("Unable to find List chunk at original location has file been modified externally");
         }
-
+        return chunkHeader;
     }
 
     /**
      * Delete given {@link org.jaudiotagger.tag.Tag} from file.
      *
-     * @param tag tag, must be instance of {@link org.jaudiotagger.tag.wav.WavTag}
-     * @param raf random access file
+     * @param tag     tag, must be instance of {@link org.jaudiotagger.tag.wav.WavTag}
+     * @param raf     random access file
      * @param tempRaf temporary random access file
      * @throws java.io.IOException
      * @throws org.jaudiotagger.audio.exceptions.CannotWriteException
@@ -117,17 +120,18 @@ public class WavTagWriter implements TagWriter
             //We have Info Chink we can delete
             if (existingInfoTag != null && existingInfoTag.getStartLocationInFile() != null)
             {
-                seekToStartOfMetadata(raf, existingTag);
+                ChunkHeader chunkHeader = seekToStartOfMetadata(raf, existingTag);
                 //and it is at end of the file
                 if (existingInfoTag.getEndLocationInFile() == raf.length())
                 {
-                    logger.severe("Setting new length to:" + existingInfoTag.getStartLocationInFile());
+                    logger.info("Setting new length to:" + existingInfoTag.getStartLocationInFile());
                     raf.setLength(existingInfoTag.getStartLocationInFile());
                     rewriteRiffHeaderSize(raf);
                 }
                 else
                 {
-                   //TODO
+                    deleteTagChunk(raf, existingTag, chunkHeader);
+                    rewriteRiffHeaderSize(raf);
                 }
             }
         }
@@ -137,13 +141,56 @@ public class WavTagWriter implements TagWriter
         }
     }
 
+    /**
+     * Delete Tag Chunk
+     *
+     * Can be used when chunk is not the last chunk
+     *
+     * @param raf
+     * @param existingTag
+     * @param listChunkHeader
+     * @throws IOException
+     */
+    private void deleteTagChunk(final RandomAccessFile raf, final WavTag existingTag, final ChunkHeader listChunkHeader) throws IOException
+    {
+        final WavInfoTag existingInfoTag = existingTag.getInfoTag();
+        final int lengthTagChunk = (int) listChunkHeader.getSize() + ChunkHeader.CHUNK_HEADER_SIZE;
+
+        // position for reading after the  tag
+        raf.seek(existingInfoTag.getStartLocationInFile() + lengthTagChunk);
+        final FileChannel channel = raf.getChannel();
+
+        // the following should work, but DOES not :-(
+        /*
+        long read;
+        for (long position = existingTag.getStartLocationInFile();
+             (read = channel.transferFrom(channel, position, newLength - position)) < newLength-position;
+             position += read);
+        */
+
+        // so we do it the manual way
+        final ByteBuffer buffer = ByteBuffer.allocate(64 * 1024);
+        while (channel.read(buffer) >= 0 || buffer.position() != 0)
+        {
+            buffer.flip();
+            final long readPosition = channel.position();
+            channel.position(readPosition - lengthTagChunk - buffer.limit());
+            channel.write(buffer);
+            channel.position(readPosition);
+            buffer.compact();
+        }
+        // truncate the file after the last chunk
+        final long newLength = raf.length() - lengthTagChunk;
+        logger.config("Setting new length to:" + newLength);
+        raf.setLength(newLength);
+    }
 
     /**
      * Write {@link org.jaudiotagger.tag.Tag} to file.
      *
-     * @param af audio file
-     * @param tag tag, must be instance of {@link org.jaudiotagger.tag.wav.WavTag}
-     * @param raf random access file
+     * @param af      audio file
+     * @param tag     tag, must be instance of {@link org.jaudiotagger.tag.wav.WavTag}
+     * @param raf     random access file
      * @param rafTemp temporary random access file
      * @throws org.jaudiotagger.audio.exceptions.CannotWriteException
      * @throws java.io.IOException
@@ -236,15 +283,12 @@ public class WavTagWriter implements TagWriter
     }
 
     /**
-
-     *
-     * @param raf random access file
-     * @param bb data to write
+     * @param raf       random access file
+     * @param bb        data to write
      * @param chunkSize chunk size
      * @throws java.io.IOException
      */
-    private void writeDataToFile(final RandomAccessFile raf,  final ByteBuffer bb, final long chunkSize)
-            throws IOException
+    private void writeDataToFile(final RandomAccessFile raf, final ByteBuffer bb, final long chunkSize) throws IOException
     {
         //Now Write LIST header
         final ByteBuffer listBuffer = ByteBuffer.allocate(ChunkHeader.CHUNK_HEADER_SIZE + SIGNATURE_LENGTH);
@@ -257,8 +301,7 @@ public class WavTagWriter implements TagWriter
         raf.getChannel().write(bb);
     }
 
-    private void writePaddingToFile(final RandomAccessFile raf, final int paddingSize)
-            throws IOException
+    private void writePaddingToFile(final RandomAccessFile raf, final int paddingSize) throws IOException
     {
         raf.write(new byte[paddingSize]);
     }
@@ -284,7 +327,7 @@ public class WavTagWriter implements TagWriter
                 TagTextField next = (TagTextField) i.next();
                 WavInfoIdentifier wii = WavInfoIdentifier.getByByFieldKey(FieldKey.valueOf(next.getId()));
                 baos.write(Utils.getDefaultBytes(wii.getCode(), StandardCharsets.US_ASCII));
-                logger.config("Writing:"+wii.getCode() + ":" + next.getContent());
+                logger.config("Writing:" + wii.getCode() + ":" + next.getContent());
 
                 //TODO Is UTF8 allowed format
                 byte[] contentConvertedToBytes = Utils.getDefaultBytes(next.getContent(), StandardCharsets.UTF_8);
@@ -313,7 +356,7 @@ public class WavTagWriter implements TagWriter
             listInfoBuffer.flip();
             return listInfoBuffer;
         }
-        catch(IOException ioe)
+        catch (IOException ioe)
         {
             //Should never happen as not writing to file at this point
             throw new RuntimeException(ioe);
