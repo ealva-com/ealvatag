@@ -83,7 +83,7 @@ public class WavTagReader
         }
 
         String id = chunkHeader.getID();
-        logger.config("Next Id is:" + id);
+        logger.config("Next Id is:" + id +":Size:"+chunkHeader.getSize());
         final WavChunkType chunkType = WavChunkType.get(id);
         if (chunkType != null)
         {

@@ -123,7 +123,7 @@ public class WavTagWriter implements TagWriter
     @Override
     public void write(final AudioFile af, final Tag tag, final RandomAccessFile raf, final RandomAccessFile rafTemp) throws CannotWriteException, IOException
     {
-        logger.severe("Writing tag to file");
+        logger.info("Writing tag to file");
         final WavTag     existingTag;
         try
         {
@@ -150,10 +150,10 @@ public class WavTagWriter implements TagWriter
                 if (existingInfoTag != null && existingInfoTag.getStartLocationInFile() != null)
                 {
                     raf.seek(existingTag.getInfoTag().getStartLocationInFile());
-                    final ChunkHeader ch = new ChunkHeader(ByteOrder.BIG_ENDIAN);
-                    ch.readHeader(raf);
+                    final ChunkHeader chunkHeader = new ChunkHeader(ByteOrder.BIG_ENDIAN);
+                    chunkHeader.readHeader(raf);
                     raf.seek(raf.getFilePointer() - ChunkHeader.CHUNK_HEADER_SIZE);
-                    if (!WavChunkType.LIST.getCode().equals(ch.getID()))
+                    if (!WavChunkType.LIST.getCode().equals(chunkHeader.getID()))
                     {
                         throw new CannotWriteException("Unable to find List chunk at original location has file been modified externally");
                     }
@@ -166,12 +166,12 @@ public class WavTagWriter implements TagWriter
                         //We have enough existing space in chunk so just keep existing chunk size
                         if (existingInfoTag.getSizeOfTag() >= newTagSize)
                         {
-                            writeDataToFile(raf, bb, 0);
+                            writeDataToFile(raf, bb, existingInfoTag.getSizeOfTag());
                             //To ensure old data from previous tag are erased
-                            /*if (wavTag.getSizeOfID3Tag() > newTagSize)
+                            if (existingInfoTag.getSizeOfTag() > newTagSize)
                             {
-                                writePaddingToFile(raf, (int) (wavTag.getSizeOfID3Tag() - newTagSize));
-                            }*/
+                                writePaddingToFile(raf, (int) (existingInfoTag.getSizeOfTag() - newTagSize));
+                            }
                         }
                         //New tag is larger so set chunk size to accommodate it
                         else
@@ -180,8 +180,9 @@ public class WavTagWriter implements TagWriter
                         }
                     }
                     //Unusual Case where LIST is not last chunk
-                    //For now treat as if no LIST chunk, existing chunk will be superceded by last chunk
-                    //TODO remove earlier LIST chunk from file will require using temp file
+                    //For now just write LIST to the end of the file
+                    //TODO shouldnt we write to same place
+                    //TODO what about if have multiple LIST chunks, shoudlnt we removce earlier one
                     else
                     {
                         //Go to end of file
@@ -220,6 +221,14 @@ public class WavTagWriter implements TagWriter
     private void writeDataToFile(final RandomAccessFile raf,  final ByteBuffer bb, final long chunkSize)
             throws IOException
     {
+        //Now Write LIST header
+        final ByteBuffer listBuffer = ByteBuffer.allocate(ChunkHeader.CHUNK_HEADER_SIZE + SIGNATURE_LENGTH);
+        listBuffer.order(ByteOrder.LITTLE_ENDIAN);
+        listBuffer.put(WavChunkType.LIST.getCode().getBytes(StandardCharsets.US_ASCII));
+        listBuffer.putInt((int)chunkSize);
+        listBuffer.flip();
+        raf.getChannel().write(listBuffer);
+        //Now write actual data
         raf.getChannel().write(bb);
     }
 
@@ -250,7 +259,7 @@ public class WavTagWriter implements TagWriter
                 TagTextField next = (TagTextField) i.next();
                 WavInfoIdentifier wii = WavInfoIdentifier.getByByFieldKey(FieldKey.valueOf(next.getId()));
                 baos.write(Utils.getDefaultBytes(wii.getCode(), StandardCharsets.US_ASCII));
-                System.out.println(wii.getCode() + ":" + next.getContent());
+                logger.config("Writing:"+wii.getCode() + ":" + next.getContent());
 
                 //TODO Is UTF8 allowed format
                 byte[] contentConvertedToBytes = Utils.getDefaultBytes(next.getContent(), StandardCharsets.UTF_8);
@@ -266,17 +275,15 @@ public class WavTagWriter implements TagWriter
             final ByteBuffer infoBuffer = ByteBuffer.wrap(baos.toByteArray());
             infoBuffer.rewind();
 
-            //Now Write LIST INFO header
-            final ByteBuffer listBuffer = ByteBuffer.allocate(ChunkHeader.CHUNK_HEADER_SIZE + SIGNATURE_LENGTH);
-            listBuffer.put(WavChunkType.LIST.getCode().getBytes(StandardCharsets.US_ASCII));
-            listBuffer.put(Utils.getSizeLEInt32((int) infoBuffer.limit() + SIGNATURE_LENGTH));
-            listBuffer.put(WavChunkType.INFO.getCode().getBytes(StandardCharsets.US_ASCII));
-            listBuffer.flip();
+            //Now Write INFO header
+            final ByteBuffer infoHeaderBuffer = ByteBuffer.allocate(SIGNATURE_LENGTH);
+            infoHeaderBuffer.put(WavChunkType.INFO.getCode().getBytes(StandardCharsets.US_ASCII));
+            infoHeaderBuffer.flip();
 
 
             //Construct a single ByteBuffer from both
-            ByteBuffer listInfoBuffer = ByteBuffer.allocateDirect(infoBuffer.limit() + listBuffer.limit());
-            listInfoBuffer.put(listBuffer);
+            ByteBuffer listInfoBuffer = ByteBuffer.allocateDirect(infoHeaderBuffer.limit() + infoBuffer.limit());
+            listInfoBuffer.put(infoHeaderBuffer);
             listInfoBuffer.put(infoBuffer);
             listInfoBuffer.flip();
             return listInfoBuffer;

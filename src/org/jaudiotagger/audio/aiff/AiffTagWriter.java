@@ -204,7 +204,6 @@ public class AiffTagWriter implements TagWriter
                     if (existingTag.getSizeOfID3Tag() >= newTagSize)
                     {
                         writeDataToFile(raf, bb, aiffTag.getSizeOfID3Tag());
-                        logger.severe("datWritten");
                         //To ensure old data from previous tag are erased
                         if (aiffTag.getSizeOfID3Tag() > newTagSize)
                         {

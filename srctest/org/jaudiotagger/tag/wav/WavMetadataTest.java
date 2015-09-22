@@ -105,4 +105,50 @@ public class WavMetadataTest extends AbstractTestCase
         }
         assertNull(exceptionCaught);
     }
+
+    /**
+     * Read file with metadata added by MediaMonkey
+     */
+    public void testModifyFileWithMoreMetadata()
+    {
+        Exception exceptionCaught = null;
+        try
+        {
+            File testFile = AbstractTestCase.copyAudioToTmp("test123.wav", new File("test123ModifyMoreMetadata.wav"));
+            AudioFile f = AudioFileIO.read(testFile);
+            System.out.println(f.getAudioHeader());
+            assertEquals("529", f.getAudioHeader().getBitRate());
+            assertEquals("WAV-RIFF 24 bits", f.getAudioHeader().getEncodingType());
+            assertEquals("1", f.getAudioHeader().getChannels());
+            assertEquals("22050", f.getAudioHeader().getSampleRate());
+
+
+            assertTrue(f.getTag() instanceof WavTag);
+            WavTag tag = (WavTag) f.getTag();
+
+            //Ease of use methods for common fields
+            assertEquals("artistName\0",tag.getFirst(FieldKey.ARTIST));
+
+            //Modify Value
+            tag.setField(FieldKey.ARTIST,"qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq");
+            tag.setField(FieldKey.ALBUM_ARTIST,"qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq");
+            f.commit();
+
+            //Read modified metadata now in file
+            f = AudioFileIO.read(testFile);
+            assertTrue(f.getTag() instanceof WavTag);
+            tag = (WavTag) f.getTag();
+            System.out.println(((WavTag)tag).getInfoTag());
+            assertEquals("qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq",tag.getFirst(FieldKey.ARTIST));
+            assertEquals("qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq",tag.getFirst(FieldKey.ALBUM_ARTIST));
+
+
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            exceptionCaught = e;
+        }
+        assertNull(exceptionCaught);
+    }
 }
