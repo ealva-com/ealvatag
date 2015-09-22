@@ -51,22 +51,11 @@ public class ChunkHeader
      */
     public ByteBuffer writeHeader()
     {
-        //Aiff
-        if (byteOrder == ByteOrder.BIG_ENDIAN)
-        {
-            final ByteBuffer bb = ByteBuffer.allocate(CHUNK_HEADER_SIZE);
-            bb.put(chunkId.getBytes(StandardCharsets.US_ASCII));
-            bb.put(Utils.getSizeBEInt32((int) size));
-            return bb;
-        }
-        //Wav
-        else
-        {
-            final ByteBuffer bb = ByteBuffer.allocate(CHUNK_HEADER_SIZE);
-            bb.put(chunkId.getBytes(StandardCharsets.US_ASCII));
-            bb.put(Utils.getSizeLEInt32((int) size));
-            return bb;
-        }
+        final ByteBuffer bb = ByteBuffer.allocate(CHUNK_HEADER_SIZE);
+        bb.order(byteOrder);
+        bb.put(chunkId.getBytes(StandardCharsets.US_ASCII));
+        bb.putInt((int)size);
+        return bb;
     }
 
     /**
