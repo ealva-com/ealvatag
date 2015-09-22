@@ -55,6 +55,7 @@ public class ChunkHeader
         bb.order(byteOrder);
         bb.put(chunkId.getBytes(StandardCharsets.US_ASCII));
         bb.putInt((int)size);
+        bb.flip();
         return bb;
     }
 

@@ -178,7 +178,7 @@ public class AiffTagWriter implements TagWriter
         {
             final AiffTag     aiffTag     = (AiffTag) tag;
             final ByteBuffer  bb          = convert(aiffTag);
-            final long        newTagSize  = bb.array().length;
+            final long        newTagSize  = bb.limit();
 
             //Replacing ID3 tag
             if (existingTag.getID3Tag() != null && existingTag.getStartLocationInFile() != null)
@@ -257,9 +257,9 @@ public class AiffTagWriter implements TagWriter
     {
         final ChunkHeader ch = new ChunkHeader(ByteOrder.BIG_ENDIAN);
         ch.setID(ChunkType.TAG.getCode());
-        ch.setSize(chunkSize); // is chunk size different from bb.array.length?
-        raf.write(ch.writeHeader().array());
-        raf.write(bb.array());
+        ch.setSize(chunkSize);
+        raf.getChannel().write(ch.writeHeader());
+        raf.getChannel().write(bb);
     }
 
     private void writePaddingToFile(final RandomAccessFile raf, final int paddingSize)
