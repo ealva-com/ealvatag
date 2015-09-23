@@ -27,6 +27,7 @@ public class AiffAudioFileTest extends TestCase {
             AudioFile f = AudioFileIO.read(testFile);
             AudioHeader ah = f.getAudioHeader();
             assertTrue(ah instanceof AiffAudioHeader);
+            System.out.println(ah);
             AiffAudioHeader aah = (AiffAudioHeader)ah;
             assertEquals("128000",ah.getBitRate());
             assertEquals(128000, ah.getBitRateAsNumber());
@@ -42,7 +43,7 @@ public class AiffAudioFileTest extends TestCase {
             assertTrue(aah.getComments().isEmpty());
             assertEquals(1, aah.getAnnotations().size());
             //assertEquals("AFspdate: 2003-01-30 03:28:35 UTC\u0000user: kabal@CAPELLA\u0000program: CopyAudio ", aah.getAnnotations().get(0));
-            System.out.println(ah);
+
         }
         catch (Exception e) {
             e.printStackTrace();

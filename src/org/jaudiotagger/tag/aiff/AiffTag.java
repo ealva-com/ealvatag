@@ -12,6 +12,21 @@ import java.util.List;
 /** AiffTag wraps ID3Tag for most of its metadata */
 public class AiffTag  implements Tag {
 
+    private boolean isExistingId3Tag = false;
+
+    /**
+     * @return true if the file that this tag was written from already contains an ID3 chunk
+     */
+    public boolean isExistingId3Tag()
+    {
+        return isExistingId3Tag;
+    }
+
+    public void setExistingId3Tag(boolean isExistingId3Tag)
+    {
+        this.isExistingId3Tag = isExistingId3Tag;
+    }
+
     private AbstractID3v2Tag id3Tag;
 
     public AiffTag() {

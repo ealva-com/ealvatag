@@ -79,6 +79,7 @@ public class AiffTagReader extends AiffChunkReader
             ByteBuffer chunkData = readChunkDataIntoBuffer(raf, chunkHeader);
             Chunk chunk = new ID3Chunk(chunkHeader,chunkData, aiffTag);
             chunk.readChunk();
+            aiffTag.setExistingId3Tag(true);
             aiffTag.getID3Tag().setStartLocationInFile(startLocationOfId3TagInFile);
             aiffTag.getID3Tag().setEndLocationInFile(raf.getFilePointer());
         }

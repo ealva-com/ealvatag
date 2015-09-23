@@ -45,6 +45,7 @@ public class AiffAudioTagTest extends TestCase {
             System.out.println(tag);
             assertTrue(tag instanceof AiffTag);
             assertTrue(((AiffTag) tag).getID3Tag() instanceof ID3v22Tag);
+            assertFalse(((AiffTag) tag).isExistingId3Tag());
 
         }
         catch(Exception ex)
@@ -76,6 +77,7 @@ public class AiffAudioTagTest extends TestCase {
             System.out.println(tag);
             assertNotNull(tag);
             assertTrue(tag instanceof AiffTag);
+            assertTrue(((AiffTag) tag).isExistingId3Tag());
             assertTrue(tag.getFieldCount() == 10);
             assertEquals("Gary McGath", tag.getFirst(FieldKey.ARTIST));
             assertEquals("None", tag.getFirst(FieldKey.ALBUM));
@@ -83,6 +85,7 @@ public class AiffAudioTagTest extends TestCase {
             assertEquals("This is actually a comment.", tag.getFirst(FieldKey.COMMENT));
             assertEquals("2012", tag.getFirst(FieldKey.YEAR));
             assertEquals("1", tag.getFirst(FieldKey.TRACK));
+
         }
         catch(Exception ex)
         {
@@ -120,6 +123,7 @@ public class AiffAudioTagTest extends TestCase {
 
             System.out.println(tag);
             assertNotNull(tag);
+            assertTrue(((AiffTag) tag).isExistingId3Tag());
             assertTrue(tag instanceof AiffTag);
             assertTrue(tag.getFieldCount() == 6);
             assertEquals("Coldplay", tag.getFirst(FieldKey.ARTIST));
@@ -165,6 +169,7 @@ public class AiffAudioTagTest extends TestCase {
 
             System.out.println(tag);
             assertNotNull(tag);
+            assertTrue(((AiffTag) tag).isExistingId3Tag());
             assertTrue(tag instanceof AiffTag);
             assertTrue(tag.getFieldCount() == 6);
             assertEquals("Coldplay", tag.getFirst(FieldKey.ARTIST));
