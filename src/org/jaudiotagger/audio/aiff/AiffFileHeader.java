@@ -9,9 +9,11 @@ import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
 import java.util.logging.Logger;
 
+import static java.nio.ByteOrder.BIG_ENDIAN;
 import static org.jaudiotagger.audio.aiff.AiffType.AIFC;
 import static org.jaudiotagger.audio.aiff.AiffType.AIFF;
-import static org.jaudiotagger.audio.iff.IffHeaderChunk.*;
+import static org.jaudiotagger.audio.iff.IffHeaderChunk.HEADER_LENGTH;
+import static org.jaudiotagger.audio.iff.IffHeaderChunk.TYPE_LENGTH;
 
 /**
  * <p>
@@ -27,8 +29,6 @@ import static org.jaudiotagger.audio.iff.IffHeaderChunk.*;
 public class AiffFileHeader
 {
     private static final String FORM = "FORM";
-
-    // Logger Object
     private static Logger logger = Logger.getLogger("org.jaudiotagger.audio.aiff.AudioFileHeader");
 
     /**
@@ -42,7 +42,8 @@ public class AiffFileHeader
      */
     public long readHeader(final RandomAccessFile raf, final AiffAudioHeader aiffAudioHeader) throws IOException, CannotReadException
     {
-        final ByteBuffer headerData = ByteBuffer.allocate(HEADER_LENGTH);
+        final ByteBuffer headerData = ByteBuffer.allocateDirect(HEADER_LENGTH);
+        headerData.order(BIG_ENDIAN);
         final int bytesRead = raf.getChannel().read(headerData);
         headerData.position(0);
 
