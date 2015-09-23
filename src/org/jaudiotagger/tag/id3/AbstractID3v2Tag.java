@@ -51,6 +51,13 @@ import java.util.logging.Level;
  */
 public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
 {
+    //Start location of this chunk
+    //TODO currently only used by ID3 embedded into Wav/Aiff but shoudl be extended to mp3s
+    private Long startLocationInFile = null;
+
+    //End location of this chunk
+    private Long endLocationInFile = null;
+
     protected static final String TYPE_HEADER = "header";
     protected static final String TYPE_BODY = "body";
 
@@ -2960,4 +2967,25 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
             return createField(FieldKey.IS_COMPILATION,"0");
         }
     }
+
+    public Long getStartLocationInFile()
+    {
+        return startLocationInFile;
+    }
+
+    public void setStartLocationInFile(long startLocationInFile)
+    {
+        this.startLocationInFile = startLocationInFile;
+    }
+
+    public Long getEndLocationInFile()
+    {
+        return endLocationInFile;
+    }
+
+    public void setEndLocationInFile(long endLocationInFile)
+    {
+        this.endLocationInFile = endLocationInFile;
+    }
+
 }

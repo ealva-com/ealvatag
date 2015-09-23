@@ -12,15 +12,6 @@ import java.util.List;
 /** AiffTag wraps ID3Tag for most of its metadata */
 public class AiffTag  implements Tag {
 
-    //Start location when read from file
-
-    private Long startLocationInFile = null;
-
-    //End location of this chunk
-    private Long endLocationInFile = null;
-
-
-
     private AbstractID3v2Tag id3Tag;
 
     public AiffTag() {
@@ -256,28 +247,30 @@ public class AiffTag  implements Tag {
         }
     }
 
-    public Long getStartLocationInFile()
+    /**
+     *
+     * @return size of the vanilla ID3Tag exclusing surrounding chunk
+     */
+    public long getSizeOfID3TagOnly()
     {
-        return startLocationInFile;
+        return (id3Tag.getEndLocationInFile() - id3Tag.getStartLocationInFile());
     }
 
-    public void setStartLocationInFile(long startLocationInFile)
+    /**
+     *
+     * @return size of the ID3 Chunk including header
+     */
+    public long getSizeOfID3TagIncludingChunkHeader()
     {
-        this.startLocationInFile = startLocationInFile;
+        return getSizeOfID3TagOnly() + ChunkHeader.CHUNK_HEADER_SIZE;
     }
 
-    public Long getEndLocationInFile()
+    /**
+     * Offset into file of start ID3Chunk including header
+     * @return
+     */
+    public long getStartLocationInFileOfId3Chunk()
     {
-        return endLocationInFile;
-    }
-
-    public void setEndLocationInFile(long endLocationInFile)
-    {
-        this.endLocationInFile = endLocationInFile;
-    }
-
-    public long getSizeOfID3Tag()
-    {
-        return (endLocationInFile - startLocationInFile) - ChunkHeader.CHUNK_HEADER_SIZE;
+        return id3Tag.getStartLocationInFile() - ChunkHeader.CHUNK_HEADER_SIZE;
     }
 }

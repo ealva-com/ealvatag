@@ -65,21 +65,22 @@ public class AiffTagReader extends AiffChunkReader
      */
     private boolean readChunk(final RandomAccessFile raf, AiffTag aiffTag) throws IOException
     {
-        long startLocationOfChunkInFile = raf.getFilePointer();
+
         ChunkHeader chunkHeader = new ChunkHeader(ByteOrder.BIG_ENDIAN);
         if (!chunkHeader.readHeader(raf))
         {
             return false;
         }
 
+        long startLocationOfId3TagInFile = raf.getFilePointer();
         ChunkType chunkType = ChunkType.get(chunkHeader.getID());
         if (chunkType!=null && chunkType==ChunkType.TAG)
         {
             ByteBuffer chunkData = readChunkDataIntoBuffer(raf, chunkHeader);
-            aiffTag.setStartLocationInFile(startLocationOfChunkInFile);
-            aiffTag.setEndLocationInFile(raf.getFilePointer());
             Chunk chunk = new ID3Chunk(chunkHeader,chunkData, aiffTag);
             chunk.readChunk();
+            aiffTag.getID3Tag().setStartLocationInFile(startLocationOfId3TagInFile);
+            aiffTag.getID3Tag().setEndLocationInFile(raf.getFilePointer());
         }
         else
         {

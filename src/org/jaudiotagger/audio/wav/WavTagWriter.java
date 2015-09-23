@@ -56,14 +56,14 @@ public class WavTagWriter implements TagWriter
     public static Logger logger = Logger.getLogger("org.jaudiotagger.audio.Wav");
 
     /**
-     * Read existing tag
+     * Read existing metadata
      *
      * @param raf
-     * @return tag, returns empty tag wrapper if none actually exist
+     * @return tags within Tag wrapper
      * @throws IOException
      * @throws CannotWriteException
      */
-    private WavTag getExistingTag(RandomAccessFile raf) throws IOException, CannotWriteException
+    private WavTag getExistingMetadata(RandomAccessFile raf) throws IOException, CannotWriteException
     {
         try
         {
@@ -85,7 +85,7 @@ public class WavTagWriter implements TagWriter
      * @throws IOException
      * @throws CannotWriteException
      */
-    private ChunkHeader seekToStartOfMetadata(RandomAccessFile raf, WavTag existingTag) throws IOException, CannotWriteException
+    private ChunkHeader seekToStartOfListInfoMetadata(RandomAccessFile raf, WavTag existingTag) throws IOException, CannotWriteException
     {
         raf.seek(existingTag.getInfoTag().getStartLocationInFile());
         final ChunkHeader chunkHeader = new ChunkHeader(ByteOrder.BIG_ENDIAN);
@@ -110,17 +110,15 @@ public class WavTagWriter implements TagWriter
      */
     public void delete(final Tag tag, final RandomAccessFile raf, final RandomAccessFile tempRaf) throws IOException, CannotWriteException
     {
-        logger.info("Deleting tag from file");
-        final WavTag existingTag = getExistingTag(raf);
+        logger.info("Deleting metadata from file");
+        final WavTag existingTag = getExistingMetadata(raf);
 
         try
         {
-            final WavInfoTag existingInfoTag = existingTag.getInfoTag();
-
-            //We have Info Chunk we can delete
-            if (existingInfoTag != null && existingInfoTag.getStartLocationInFile() != null)
+            if(existingTag.isExistingInfoTag() && existingTag.getInfoTag().getStartLocationInFile() != null)
             {
-                ChunkHeader chunkHeader = seekToStartOfMetadata(raf, existingTag);
+                WavInfoTag existingInfoTag = existingTag.getInfoTag();
+                ChunkHeader chunkHeader = seekToStartOfListInfoMetadata(raf, existingTag);
                 //and it is at end of the file
                 if (existingInfoTag.getEndLocationInFile() == raf.length())
                 {
@@ -199,7 +197,7 @@ public class WavTagWriter implements TagWriter
     public void write(final AudioFile af, final Tag tag, final RandomAccessFile raf, final RandomAccessFile rafTemp) throws CannotWriteException, IOException
     {
         logger.info("Writing tag to file");
-        final WavTag existingTag = getExistingTag(raf);
+        final WavTag existingTag = getExistingMetadata(raf);
 
         try
         {
@@ -215,7 +213,7 @@ public class WavTagWriter implements TagWriter
                 //Replacing Info tag
                 if (existingInfoTag != null && existingInfoTag.getStartLocationInFile() != null)
                 {
-                    seekToStartOfMetadata(raf, existingTag);
+                    seekToStartOfListInfoMetadata(raf, existingTag);
                     logger.info("Current Space allocated:" + (existingTag.getInfoTag().getEndLocationInFile() - existingTag.getInfoTag().getStartLocationInFile()) + ":NewTagRequires:" + newTagSize);
 
                     //Usual case LIST is last chunk

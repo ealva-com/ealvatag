@@ -75,9 +75,9 @@ public class AiffTagWriter implements TagWriter
 
         try
         {
-            if (existingTag.getID3Tag() != null && existingTag.getStartLocationInFile() != null)
+            if (existingTag.getID3Tag() != null && existingTag.getID3Tag().getStartLocationInFile() != null)
             {
-                raf.seek(existingTag.getStartLocationInFile());
+                raf.seek(existingTag.getStartLocationInFileOfId3Chunk());
                 final ChunkHeader chunkHeader = new ChunkHeader(ByteOrder.BIG_ENDIAN);
                 chunkHeader.readHeader(raf);
 
@@ -86,10 +86,10 @@ public class AiffTagWriter implements TagWriter
                     throw new CannotWriteException("Unable to find ID3 chunk at expected location");
                 }
 
-                if (existingTag.getEndLocationInFile() == raf.length())
+                if (existingTag.getID3Tag().getEndLocationInFile() == raf.length())
                 {
-                    logger.config("Setting new length to:" + existingTag.getStartLocationInFile());
-                    raf.setLength(existingTag.getStartLocationInFile());
+                    logger.config("Setting new length to:" + (existingTag.getStartLocationInFileOfId3Chunk()));
+                    raf.setLength(existingTag.getStartLocationInFileOfId3Chunk());
                 }
                 else
                 {
@@ -123,7 +123,7 @@ public class AiffTagWriter implements TagWriter
     private void deleteTagChunk(final RandomAccessFile raf, final AiffTag existingTag, final ChunkHeader tagChunkHeader) throws IOException {
         final int lengthTagChunk = (int) tagChunkHeader.getSize() + ChunkHeader.CHUNK_HEADER_SIZE;
         // position for reading after the id3 tag
-        raf.seek(existingTag.getStartLocationInFile() + lengthTagChunk);
+        raf.seek(existingTag.getStartLocationInFileOfId3Chunk() + lengthTagChunk );
         final FileChannel channel = raf.getChannel();
         // the following should work, but DOES not :-(
         /*
@@ -181,12 +181,9 @@ public class AiffTagWriter implements TagWriter
             final long        newTagSize  = bb.limit();
 
             //Replacing ID3 tag
-            if (existingTag.getID3Tag() != null && existingTag.getStartLocationInFile() != null)
+            if (existingTag.getID3Tag() != null && existingTag.getID3Tag().getStartLocationInFile() != null)
             {
-
-                //TODO is it safe to rely on the location as calculated when initially read
-                //Find existing location of ID3 chunk if any and seek to that location
-                raf.seek(existingTag.getStartLocationInFile());
+                raf.seek(existingTag.getStartLocationInFileOfId3Chunk());
                 final ChunkHeader chunkHeader = new ChunkHeader(ByteOrder.BIG_ENDIAN);
                 chunkHeader.readHeader(raf);
                 raf.seek(raf.getFilePointer() - ChunkHeader.CHUNK_HEADER_SIZE);
@@ -195,19 +192,19 @@ public class AiffTagWriter implements TagWriter
                     throw new CannotWriteException("Unable to find ID3 chunk at original location has file been modified externally");
                 }
 
-                logger.info("Current Space allocated:" + aiffTag.getSizeOfID3Tag() + ":NewTagRequires:" + newTagSize);
+                logger.info("Current Space allocated:" + aiffTag.getSizeOfID3TagOnly() + ":NewTagRequires:" + newTagSize);
 
                 //Usual case ID3 is last chunk
-                if(existingTag.getEndLocationInFile() == raf.length())
+                if(existingTag.getID3Tag().getEndLocationInFile() == raf.length())
                 {
                     //We have enough existing space in chunk so just keep existing chunk size
-                    if (existingTag.getSizeOfID3Tag() >= newTagSize)
+                    if (existingTag.getSizeOfID3TagOnly() >= newTagSize)
                     {
-                        writeDataToFile(raf, bb, aiffTag.getSizeOfID3Tag());
+                        writeDataToFile(raf, bb, aiffTag.getSizeOfID3TagOnly());
                         //To ensure old data from previous tag are erased
-                        if (aiffTag.getSizeOfID3Tag() > newTagSize)
+                        if (aiffTag.getSizeOfID3TagOnly() > newTagSize)
                         {
-                            writePaddingToFile(raf, (int) (aiffTag.getSizeOfID3Tag() - newTagSize));
+                            writePaddingToFile(raf, (int) (aiffTag.getSizeOfID3TagOnly() - newTagSize));
                         }
                     }
                     //New tag is larger so set chunk size to accommodate it
