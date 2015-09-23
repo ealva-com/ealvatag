@@ -84,7 +84,6 @@ public class Mp4StcoBox extends AbstractMp4Box
 
     public void adjustOffsets(int adjustment)
     {
-        System.out.println("******************* Adjust Offsets");
         //Skip the flags
         dataBuffer.rewind();
         dataBuffer.position(dataBuffer.position() + VERSION_FLAG_LENGTH + OTHER_FLAG_LENGTH + NO_OF_OFFSETS_LENGTH);
