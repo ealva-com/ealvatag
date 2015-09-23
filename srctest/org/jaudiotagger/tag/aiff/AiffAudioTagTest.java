@@ -46,6 +46,10 @@ public class AiffAudioTagTest extends TestCase {
             assertTrue(tag instanceof AiffTag);
             assertTrue(((AiffTag) tag).getID3Tag() instanceof ID3v22Tag);
             assertFalse(((AiffTag) tag).isExistingId3Tag());
+            assertEquals(0L,((AiffTag) tag).getSizeOfID3TagIncludingChunkHeader());
+            assertEquals(0L,((AiffTag) tag).getSizeOfID3TagOnly());
+            assertEquals(0L,((AiffTag) tag).getStartLocationInFileOfId3Chunk());
+
 
         }
         catch(Exception ex)
@@ -85,6 +89,10 @@ public class AiffAudioTagTest extends TestCase {
             assertEquals("This is actually a comment.", tag.getFirst(FieldKey.COMMENT));
             assertEquals("2012", tag.getFirst(FieldKey.YEAR));
             assertEquals("1", tag.getFirst(FieldKey.TRACK));
+            assertEquals(2254L,((AiffTag) tag).getSizeOfID3TagIncludingChunkHeader());
+            assertEquals(2246L,((AiffTag) tag).getSizeOfID3TagOnly());
+            assertEquals(148230L,((AiffTag) tag).getStartLocationInFileOfId3Chunk());
+
 
         }
         catch(Exception ex)
@@ -132,6 +140,9 @@ public class AiffAudioTagTest extends TestCase {
             assertEquals("2002", tag.getFirst(FieldKey.YEAR));
             assertEquals("1", tag.getFirst(FieldKey.TRACK));
             assertEquals("11", tag.getFirst(FieldKey.TRACK_TOTAL));
+            assertEquals(10274L,((AiffTag) tag).getSizeOfID3TagIncludingChunkHeader());
+            assertEquals(10266L,((AiffTag) tag).getSizeOfID3TagOnly());
+            assertEquals(882054L,((AiffTag) tag).getStartLocationInFileOfId3Chunk());
         }
         catch(Exception ex)
         {
@@ -178,6 +189,9 @@ public class AiffAudioTagTest extends TestCase {
             assertEquals("2002", tag.getFirst(FieldKey.YEAR));
             assertEquals("1", tag.getFirst(FieldKey.TRACK));
             assertEquals("11", tag.getFirst(FieldKey.TRACK_TOTAL));
+            assertEquals(10274L,((AiffTag) tag).getSizeOfID3TagIncludingChunkHeader());
+            assertEquals(10266L,((AiffTag) tag).getSizeOfID3TagOnly());
+            assertEquals(12L,((AiffTag) tag).getStartLocationInFileOfId3Chunk());
         }
         catch(Exception ex)
         {
@@ -206,6 +220,10 @@ public class AiffAudioTagTest extends TestCase {
             assertTrue(ah instanceof AiffAudioHeader);
             Tag tag = f.getTag();
             assertNotNull(tag);
+            assertEquals(10274L,((AiffTag) tag).getSizeOfID3TagIncludingChunkHeader());
+            assertEquals(10266L,((AiffTag) tag).getSizeOfID3TagOnly());
+            assertEquals(882054L,((AiffTag) tag).getStartLocationInFileOfId3Chunk());
+
             assertEquals("Coldplay", tag.getFirst(FieldKey.ARTIST));
             tag.setField(FieldKey.ARTIST, "Warmplay");
             assertEquals("Warmplay", tag.getFirst(FieldKey.ARTIST));
@@ -213,6 +231,9 @@ public class AiffAudioTagTest extends TestCase {
 
             f = AudioFileIO.read(testFile);
             tag = f.getTag();
+            assertEquals(10274L,((AiffTag) tag).getSizeOfID3TagIncludingChunkHeader());
+            assertEquals(10266L,((AiffTag) tag).getSizeOfID3TagOnly());
+            assertEquals(882054L,((AiffTag) tag).getStartLocationInFileOfId3Chunk());
             System.out.println(f.getTag());
 
             assertEquals("Warmplay", tag.getFirst(FieldKey.ARTIST));
@@ -222,6 +243,9 @@ public class AiffAudioTagTest extends TestCase {
             f = AudioFileIO.read(testFile);
             tag = f.getTag();
             System.out.println(f.getTag());
+            assertEquals(10274L,((AiffTag) tag).getSizeOfID3TagIncludingChunkHeader());
+            assertEquals(10266L,((AiffTag) tag).getSizeOfID3TagOnly());
+            assertEquals(882054L,((AiffTag) tag).getStartLocationInFileOfId3Chunk());
             assertEquals("Warmplayer", tag.getFirst(FieldKey.ARTIST));
 
 
@@ -393,6 +417,9 @@ public class AiffAudioTagTest extends TestCase {
             AudioHeader ah = f.getAudioHeader();
             assertTrue(ah instanceof AiffAudioHeader);
             Tag tag = f.getTag();
+            assertEquals(10274L,((AiffTag) tag).getSizeOfID3TagIncludingChunkHeader());
+            assertEquals(10266L,((AiffTag) tag).getSizeOfID3TagOnly());
+            assertEquals(12L,((AiffTag) tag).getStartLocationInFileOfId3Chunk());
             assertNotNull(tag);
             assertEquals("Coldplay", tag.getFirst(FieldKey.ARTIST));
             tag.setField(FieldKey.ARTIST, "Warmplay");
@@ -411,6 +438,9 @@ public class AiffAudioTagTest extends TestCase {
             tag = f.getTag();
             System.out.println(f.getTag());
             assertEquals("Warmplayer", tag.getFirst(FieldKey.ARTIST));
+            assertEquals(166L,((AiffTag) tag).getSizeOfID3TagIncludingChunkHeader());
+            assertEquals(158L,((AiffTag) tag).getSizeOfID3TagOnly());
+            assertEquals(882054L,((AiffTag) tag).getStartLocationInFileOfId3Chunk());
 
             final List<String> newChunkIds = readChunkIds(testFile);
             assertEquals(ChunkType.COMMON.getCode(), newChunkIds.get(0));

@@ -105,6 +105,10 @@ public class WavInfoTag extends GenericTag
 
     public long getSizeOfTag()
     {
+        if(endLocationInFile==null || startLocationInFile==null)
+        {
+            return 0;
+        }
         return (endLocationInFile - startLocationInFile) - ChunkHeader.CHUNK_HEADER_SIZE;
     }
 

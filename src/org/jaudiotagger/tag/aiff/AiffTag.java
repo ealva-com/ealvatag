@@ -268,6 +268,10 @@ public class AiffTag  implements Tag {
      */
     public long getSizeOfID3TagOnly()
     {
+        if(!isExistingId3Tag())
+        {
+            return 0;
+        }
         return (id3Tag.getEndLocationInFile() - id3Tag.getStartLocationInFile());
     }
 
@@ -277,6 +281,10 @@ public class AiffTag  implements Tag {
      */
     public long getSizeOfID3TagIncludingChunkHeader()
     {
+        if(!isExistingId3Tag())
+        {
+            return 0;
+        }
         return getSizeOfID3TagOnly() + ChunkHeader.CHUNK_HEADER_SIZE;
     }
 
@@ -286,6 +294,10 @@ public class AiffTag  implements Tag {
      */
     public long getStartLocationInFileOfId3Chunk()
     {
+        if(!isExistingId3Tag())
+        {
+            return 0;
+        }
         return id3Tag.getStartLocationInFile() - ChunkHeader.CHUNK_HEADER_SIZE;
     }
 }

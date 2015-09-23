@@ -64,6 +64,9 @@ public class WavId3Chunk extends Chunk
                 return false;     // bad or unknown version
         }
 
+        id3Tag.setStartLocationInFile(chunkHeader.getStartLocationInFile() + ChunkHeader.CHUNK_HEADER_SIZE);
+        id3Tag.setEndLocationInFile(chunkHeader.getStartLocationInFile() + ChunkHeader.CHUNK_HEADER_SIZE + chunkHeader.getSize());
+
         wavTag.setExistingId3Tag(true);
         wavTag.setID3Tag(id3Tag);
         chunkData.position(0);

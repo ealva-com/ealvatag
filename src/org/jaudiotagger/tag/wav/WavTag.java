@@ -18,6 +18,7 @@
  */
 package org.jaudiotagger.tag.wav;
 
+import org.jaudiotagger.audio.iff.ChunkHeader;
 import org.jaudiotagger.logging.ErrorMessage;
 import org.jaudiotagger.tag.*;
 import org.jaudiotagger.tag.id3.AbstractID3v2Tag;
@@ -340,5 +341,44 @@ public class WavTag implements Tag
     public void setExistingInfoTag(boolean isExistingInfoTag)
     {
         this.isExistingInfoTag = isExistingInfoTag;
+    }
+
+    /**
+     *
+     * @return size of the vanilla ID3Tag exclusing surrounding chunk
+     */
+    public long getSizeOfID3TagOnly()
+    {
+        if(!isExistingId3Tag())
+        {
+            return 0;
+        }
+        return (id3Tag.getEndLocationInFile() - id3Tag.getStartLocationInFile());
+    }
+
+    /**
+     *
+     * @return size of the ID3 Chunk including header
+     */
+    public long getSizeOfID3TagIncludingChunkHeader()
+    {
+        if(!isExistingId3Tag())
+        {
+            return 0;
+        }
+        return getSizeOfID3TagOnly() + ChunkHeader.CHUNK_HEADER_SIZE;
+    }
+
+    /**
+     * Offset into file of start ID3Chunk including header
+     * @return
+     */
+    public long getStartLocationInFileOfId3Chunk()
+    {
+        if(!isExistingId3Tag())
+        {
+            return 0;
+        }
+        return id3Tag.getStartLocationInFile() - ChunkHeader.CHUNK_HEADER_SIZE;
     }
 }
