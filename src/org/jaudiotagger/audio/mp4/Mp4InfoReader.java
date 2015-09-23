@@ -27,6 +27,7 @@ import org.jaudiotagger.logging.ErrorMessage;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.util.logging.Logger;
 
 /**
@@ -109,6 +110,7 @@ public class Mp4InfoReader
             throw new CannotReadException(ErrorMessage.MP4_FILE_NOT_AUDIO.getMsg());
         }
         ByteBuffer moovBuffer = ByteBuffer.allocate(moovHeader.getLength() - Mp4BoxHeader.HEADER_LENGTH);
+        moovBuffer.order(ByteOrder.LITTLE_ENDIAN);
         raf.getChannel().read(moovBuffer);
         moovBuffer.rewind();
 

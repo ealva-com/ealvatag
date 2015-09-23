@@ -463,35 +463,6 @@ public class Utils
         return new String(buf);
     }
 
-
-    /** Read an unsigned big-endian 32-bit integer using an nio ByteBuffer */
-    public static int readUBEInt32(ByteBuffer b)
-    {
-        int result = 0;
-        result += readUBEInt16(b) << 16;
-        result += readUBEInt16(b);
-        return result;
-    }
-
-
-    /** Read an unsigned big-endian 16-bit integer using an
-     *  nio ByteBuffer */
-    public static int readUBEInt16(ByteBuffer b)
-    {
-        int result = 0;
-        result += readUInt8(b) << 8;
-        result += readUInt8(b);
-        return result;
-    }
-
-    /** Read an unsigned (endian-neutral) 8-bit integer using an
-     *  nio ByteBuffer */
-    public static int readUInt8(ByteBuffer b)
-    {
-        return read(b);
-    }
-
-
     public static int read(ByteBuffer b)
     {
         int result = (b.get() & 0xFF);

@@ -32,9 +32,7 @@ import java.util.List;
  * Represent wav metadata found in a Wav file
  * <p/>
  * This can come from LIST INFO chunk or ID3 tag, LIST INFO can only contain a subset of what can be held in an ID3v2 tag,
- * compatibility with other software for these metadata tags is not reliable so we provide some options in TagOptionSingleton
- * to allow the data to be interpreted differently.
- * <p/>
+ *
  * The default is that ID3 takes precedence if it exists
  */
 public class WavTag implements Tag
