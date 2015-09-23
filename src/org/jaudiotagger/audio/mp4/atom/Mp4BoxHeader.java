@@ -27,6 +27,7 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.logging.Logger;
@@ -140,11 +141,11 @@ public class Mp4BoxHeader
         headerData.get(b);
         //Keep reference to copy of RawData
         dataBuffer = ByteBuffer.wrap(b);
+        dataBuffer.order(ByteOrder.BIG_ENDIAN);
 
-        //Calculate box size
-        this.length = Utils.getIntBE(b, OFFSET_POS, OFFSET_LENGTH - 1);
-        //Calculate box id
-        this.id = new String(b, IDENTIFIER_POS, IDENTIFIER_LENGTH, StandardCharsets.ISO_8859_1);
+        //Calculate box size and id
+        this.length = dataBuffer.getInt();
+        this.id = Utils.readFourBytesAsChars(dataBuffer);
 
         logger.finest("Mp4BoxHeader id:"+id+":length:"+length);
         if (id.equals("\0\0\0\0"))

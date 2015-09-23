@@ -34,25 +34,6 @@ public class UtilsTest  extends TestCase {
         }
     }
 
-    public void testReadInt16 () {
-        try {
-            byte[] maxUnsignedBuf = { (byte) 0XFF, (byte) 0XFF };
-            ByteArrayInputStream ins = new ByteArrayInputStream (maxUnsignedBuf);
-            DataInputStream dis = new DataInputStream (ins);
-            int val = Utils.readInt16(dis);
-            assertEquals (val, -1);
-
-            byte[] smallIntBuf = { (byte) 0X01, (byte) 0X10 };
-            ins = new ByteArrayInputStream (smallIntBuf);
-            dis = new DataInputStream (ins);
-            val = Utils.readInt16(dis);
-            assertEquals (val, 0X0110);
-        }
-        catch (IOException e) {
-            fail("IOException in testReadInt16");  // huh?
-        }
-    }
-
     public void testReadUInt32 () {
         try {
             byte[] maxUnsignedBuf = { (byte) 0XFF, (byte) 0XFF, (byte) 0XFF, (byte) 0XFF };
@@ -146,17 +127,22 @@ public class UtilsTest  extends TestCase {
     }
 
     public void testGetIntBE () {
-        // For some reason there's no getIntBE (byte[])
-        byte[] bytes = new byte[] {0, (byte) 0X7F, 0X01, 0X11, 0X31, 0};
-        int val = Utils.getIntBE (bytes, 1, 4);
-        assertEquals (0X7F011131, val);
-        
         // But there is one with a ByteBuffer, a start, and an end
         ByteBuffer bb = ByteBuffer.allocate(5);
-        bytes = new byte[] {0, 0X32, (byte) 0X80, 0X70, 0X18};
+        byte[] bytes = new byte[] {0, 0X32, (byte) 0X80, 0X70, 0X18};
         bb.put(bytes);
-        val = Utils.getIntBE(bb, 1, 4);
+        int val = Utils.getIntBE(bb, 1, 4);
         assertEquals (0X32807018, val);
+    }
+
+    public void testGetShortBE()
+    {
+        ByteBuffer bb = ByteBuffer.allocate(8);
+        byte[] bytes = new byte[] {(byte)0xFF, (byte)0XFF};
+        bb.put(bytes);
+        bb.rewind();
+        short val = Utils.getShortBE(bb,1,2);
+        System.out.println(val);
     }
 
 }

@@ -151,24 +151,6 @@ public class Utils
      * Computes a number whereby the 1st byte is the most significant and the last
      * byte is the least significant.
      * 
-     * @param b The byte array 
-     * 
-     * @param start The starting offset in b (b[offset]). The less
-     * significant byte 
-     * 
-     * @param end The end index (included) in b (b[end])
-     * 
-     * @return an int number represented by the byte sequence.
-     */
-    public static int getIntBE(final byte[] b, final int start, final int end)
-    {
-        return (int) getLongBE(ByteBuffer.wrap(b), start, end);
-    }
-
-    /**
-     * Computes a number whereby the 1st byte is the most significant and the last
-     * byte is the least significant.
-     * 
      * @param b The ByteBuffer
      * 
      * @param start The starting offset in b. The less
@@ -294,26 +276,9 @@ public class Utils
     }
 
     /**
-     * Reads a 32-bit integer and returns it as a (signed) int.
-     * Does overflow checking since java can't handle unsigned numbers.
-     * @param di  The input source
-     * 
-     * @throws java.io.IOException
-     * 
-     * @return int
-     */
-    public static int readUint32AsInt(final DataInput di) throws IOException
-    {
-        final long l = readUint32(di);
-        if (l > Integer.MAX_VALUE)
-        {
-            throw new IOException("uint32 value read overflows int");
-        }
-        return (int) l;
-    }
-
-    /**
      * Read a 32-bit big-endian unsigned integer using a DataInput.
+     *
+     * Reads 4 bytes but returns as long
      */
     public static long readUint32(final DataInput di) throws IOException
     {
@@ -324,6 +289,8 @@ public class Utils
 
     /**
      * Read a 16-bit big-endian unsigned integer.
+     *
+     * Reads 2 bytes but returns as an integer
      */
     public static int readUint16(final DataInput di) throws IOException
     {
@@ -332,15 +299,6 @@ public class Utils
         return ByteBuffer.wrap(buf).getInt();
     }
 
-    /**
-     * Read a 16-bit big-endian signed integer.
-     */
-    public static int readInt16(final DataInput di) throws IOException
-    {
-        final byte[] buf = {0x00, 0x00};
-        di.readFully(buf, 0, 2);
-        return (int) ByteBuffer.wrap(buf).getShort();
-    }
 
     /**
      * Read a string of a specified number of ASCII bytes.
@@ -350,11 +308,6 @@ public class Utils
         final byte[] buf = new byte[charsToRead];
         di.readFully(buf);
         return new String(buf, US_ASCII);
-    }
-
-    public static int read(final ByteBuffer b)
-    {
-        return (b.get() & 0xFF);
     }
 
     /**
@@ -500,7 +453,7 @@ public class Utils
     {
         byte[] b = new byte[4];
         bytes.get(b);
-        return new String(b, US_ASCII);
+        return new String(b, ISO_8859_1);
     }
 
     /**

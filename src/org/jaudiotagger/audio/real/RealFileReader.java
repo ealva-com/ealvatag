@@ -32,7 +32,7 @@ public class RealFileReader extends AudioFileReader
             final long maxPacketSize = Utils.readUint32(dis);
             final long avgPacketSize = Utils.readUint32(dis);
             final long packetCnt = Utils.readUint32(dis);
-            final int duration = Utils.readUint32AsInt(dis) / 1000;
+            final int duration = (int)Utils.readUint32(dis) / 1000;
             final long preroll = Utils.readUint32(dis);
             final long indexOffset = Utils.readUint32(dis);
             final long dataOffset = Utils.readUint32(dis);
