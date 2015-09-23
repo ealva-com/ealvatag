@@ -24,6 +24,7 @@ import org.jaudiotagger.tag.*;
 import org.jaudiotagger.tag.id3.AbstractID3v2Tag;
 import org.jaudiotagger.tag.images.Artwork;
 
+import java.nio.charset.Charset;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
@@ -257,7 +258,7 @@ public class WavTag implements Tag
         return getFieldCount();
     }
 
-    public boolean setEncoding(String enc) throws FieldDataInvalidException
+    public boolean setEncoding(final Charset enc) throws FieldDataInvalidException
     {
         return infoTag.setEncoding(enc);
     }

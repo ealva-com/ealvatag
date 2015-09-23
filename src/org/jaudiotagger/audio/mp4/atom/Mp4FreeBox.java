@@ -28,7 +28,7 @@ public class Mp4FreeBox extends AbstractMp4Box
             header = new Mp4BoxHeader();
             ByteArrayOutputStream headerBaos = new ByteArrayOutputStream();
             headerBaos.write(Utils.getSizeBEInt32(Mp4BoxHeader.HEADER_LENGTH + datasize));
-            headerBaos.write(Utils.getDefaultBytes(Mp4AtomIdentifier.FREE.getFieldName(), StandardCharsets.ISO_8859_1));
+            headerBaos.write(Mp4AtomIdentifier.FREE.getFieldName().getBytes(StandardCharsets.ISO_8859_1));
             header.update(ByteBuffer.wrap(headerBaos.toByteArray()));
 
             //Body

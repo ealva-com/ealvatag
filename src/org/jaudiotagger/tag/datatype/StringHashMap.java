@@ -24,9 +24,9 @@
 package org.jaudiotagger.tag.datatype;
 
 import org.jaudiotagger.tag.id3.AbstractTagFrameBody;
-import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
 import org.jaudiotagger.tag.reference.Languages;
 
+import java.nio.charset.StandardCharsets;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.TreeSet;
@@ -223,6 +223,6 @@ public class StringHashMap extends StringFixedLength implements HashMapInterface
      */
     protected String getTextEncodingCharSet()
     {
-        return TextEncoding.CHARSET_ISO_8859_1;
+        return StandardCharsets.ISO_8859_1.name();
     }
 }

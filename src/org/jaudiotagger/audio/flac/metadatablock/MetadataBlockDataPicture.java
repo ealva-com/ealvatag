@@ -4,7 +4,6 @@ import org.jaudiotagger.audio.generic.Utils;
 import org.jaudiotagger.tag.FieldKey;
 import org.jaudiotagger.tag.InvalidFrameException;
 import org.jaudiotagger.tag.TagField;
-import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
 import org.jaudiotagger.tag.reference.PictureTypes;
 
 import java.io.ByteArrayOutputStream;
@@ -257,7 +256,7 @@ public class MetadataBlockDataPicture implements MetadataBlockData, TagField
     {
         if (isImageUrl())
         {
-            return Utils.getString(getImageData(), 0, getImageData().length, TextEncoding.CHARSET_ISO_8859_1);
+            return new String(getImageData(), 0, getImageData().length, StandardCharsets.ISO_8859_1);
         }
         else
         {

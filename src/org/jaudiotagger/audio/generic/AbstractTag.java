@@ -20,6 +20,7 @@ package org.jaudiotagger.audio.generic;
 import org.jaudiotagger.tag.*;
 import org.jaudiotagger.tag.images.Artwork;
 
+import java.nio.charset.Charset;
 import java.util.*;
 
 /**
@@ -52,6 +53,7 @@ public abstract class AbstractTag implements Tag
      *
      *      Changed so add empty fields
      */
+    @Override
     public void addField(TagField field)
     {
         if (field == null)
@@ -84,6 +86,7 @@ public abstract class AbstractTag implements Tag
      *
      * @see org.jaudiotagger.tag.Tag#getFields(java.lang.String)
      */
+    @Override
     public List<TagField> getFields(String id)
     {
         List<TagField> list = fields.get(id);
@@ -127,37 +130,27 @@ public abstract class AbstractTag implements Tag
      * @param genericKey
      * @return
      */
+    @Override
     public String getFirst(FieldKey genericKey) throws KeyNotFoundException
     {
         return getValue(genericKey,0);
     }
 
-    /**
-     *
-     * @param id
-     * @return
-     */
+    @Override
     public String getFirst(String id)
     {
         List<TagField> l = getFields(id);
         return (l.size() != 0) ? l.get(0).toString() : "";
     }
 
-    /**
-     *
-     * @param id audio specific key
-     * @return
-     */
+    @Override
     public TagField getFirstField(String id)
     {
         List<TagField> l = getFields(id);
         return (l.size() != 0) ? l.get(0) : null;
     }
 
-
-    /**
-     * @see org.jaudiotagger.tag.Tag#getFields()
-     */
+    @Override
     public Iterator<TagField> getFields()
     {
         final Iterator<Map.Entry<String, List<TagField>>> it = this.fields.entrySet().iterator();
@@ -177,6 +170,7 @@ public abstract class AbstractTag implements Tag
                 fieldsIt = l.iterator();
             }
 
+            @Override
             public boolean hasNext()
             {
                 if (fieldsIt == null)
@@ -186,6 +180,7 @@ public abstract class AbstractTag implements Tag
                 return it.hasNext() || (fieldsIt != null && fieldsIt.hasNext());
             }
 
+            @Override
             public TagField next()
             {
                 if (!fieldsIt.hasNext())
@@ -196,6 +191,7 @@ public abstract class AbstractTag implements Tag
                 return fieldsIt.next();
             }
 
+            @Override
             public void remove()
             {
                 fieldsIt.remove();
@@ -210,6 +206,7 @@ public abstract class AbstractTag implements Tag
      *
      * @return field count
      */
+    @Override
     public int getFieldCount()
     {
         Iterator it = getFields();
@@ -221,7 +218,8 @@ public abstract class AbstractTag implements Tag
         }
         return count;
     }
-        
+
+    @Override
     public int getFieldCountIncludingSubValues()
     {
         return getFieldCount();
@@ -232,6 +230,7 @@ public abstract class AbstractTag implements Tag
      *
      * @see org.jaudiotagger.tag.Tag#hasCommonFields()
      */
+    @Override
     public boolean hasCommonFields()
     {
         return commonNumber != 0;
@@ -242,11 +241,13 @@ public abstract class AbstractTag implements Tag
      *
      * @see org.jaudiotagger.tag.Tag#hasField(java.lang.String)
      */
+    @Override
     public boolean hasField(String id)
     {
         return getFields(id).size() != 0;
     }
 
+    @Override
     public boolean hasField(FieldKey fieldKey)
     {
         return hasField(fieldKey.name());
@@ -259,13 +260,14 @@ public abstract class AbstractTag implements Tag
      * @param enc charset encoding.
      * @return <code>true</code> if the given encoding can be used.
      */
-    protected abstract boolean isAllowedEncoding(String enc);
+    protected abstract boolean isAllowedEncoding(Charset enc);
 
     /**
      * Is this tag empty
      *
      * @see org.jaudiotagger.tag.Tag#isEmpty()
      */
+    @Override
     public boolean isEmpty()
     {
         return fields.size() == 0;
@@ -279,13 +281,12 @@ public abstract class AbstractTag implements Tag
      * @throws KeyNotFoundException
      * @throws FieldDataInvalidException
      */
+    @Override
     public void setField(FieldKey genericKey, String value) throws KeyNotFoundException, FieldDataInvalidException
     {
         TagField tagfield = createField(genericKey,value);
         setField(tagfield);
     }
-
-    
 
      /**
      * Create new field and add it to the tag
@@ -295,6 +296,7 @@ public abstract class AbstractTag implements Tag
      * @throws KeyNotFoundException
      * @throws FieldDataInvalidException
      */
+     @Override
     public void addField(FieldKey genericKey, String value) throws KeyNotFoundException, FieldDataInvalidException
     {
         TagField tagfield = createField(genericKey,value);
@@ -309,6 +311,7 @@ public abstract class AbstractTag implements Tag
      *
      * @see org.jaudiotagger.tag.Tag#setField(org.jaudiotagger.tag.TagField)
      */
+    @Override
     public void setField(TagField field)
     {
         if (field == null)
@@ -335,13 +338,12 @@ public abstract class AbstractTag implements Tag
         }
     }
 
-
     /**
      * Set or add encoding
      *
      * @see org.jaudiotagger.tag.Tag#setEncoding(java.lang.String)
      */
-    public boolean setEncoding(String enc)
+    public boolean setEncoding(final Charset enc)
     {
         if (!isAllowedEncoding(enc))
         {

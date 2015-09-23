@@ -29,10 +29,7 @@ import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
 
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
-import java.nio.charset.CharacterCodingException;
-import java.nio.charset.Charset;
-import java.nio.charset.CharsetDecoder;
-import java.nio.charset.CharsetEncoder;
+import java.nio.charset.*;
 
 
 /**
@@ -145,20 +142,17 @@ public class StringFixedLength extends AbstractString
 
         try
         {
-            String charSetName = getTextEncodingCharSet();
-            if (charSetName.equals(TextEncoding.CHARSET_UTF_16))
+            final String charSetName = getTextEncodingCharSet();
+            if (TextEncoding.CHARSET_UTF_16.equals(charSetName))
             {
-                charSetName = TextEncoding.CHARSET_UTF_16_LE_ENCODING_FORMAT;
-                CharsetEncoder encoder = Charset.forName(charSetName).newEncoder();
-
+                final CharsetEncoder encoder = StandardCharsets.UTF_16LE.newEncoder();
 
                 //Note remember LE BOM is ff fe but tis is handled by encoder Unicode char is fe ff
                 dataBuffer = encoder.encode(CharBuffer.wrap('\ufeff' + (String) value));
             }
             else
             {
-                CharsetEncoder encoder = Charset.forName(charSetName).newEncoder();
-
+                final CharsetEncoder encoder = Charset.forName(charSetName).newEncoder();
                 dataBuffer = encoder.encode(CharBuffer.wrap((String) value));
             }
         }

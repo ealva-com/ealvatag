@@ -11,14 +11,6 @@ import java.nio.ByteBuffer;
 
 public class UtilsTest  extends TestCase {
 
-    public void testCopy () {
-        byte[] src = new byte[] { 0, 1, 2, 3, 4, 5};
-        byte[] dst = new byte[8];
-        Utils.copy (src, dst, 2);
-        assertTrue (dst[2] == 0 && dst[3] == 1 && dst[4] == 2 &&
-                dst[5] == 3 && dst[6] == 4 && dst[7] == 5);
-    }
-    
     public void testGetExtension () {
         assertEquals ("jpeg", Utils.getExtension (new File("_12XYZ.jpeg")));
     }

@@ -72,8 +72,9 @@ public class TextEncodedStringNullTerminated extends AbstractString
         int size;
 
         //Get the Specified Decoder
-        String charSetName = getTextEncodingCharSet();
-        CharsetDecoder decoder = Charset.forName(charSetName).newDecoder();
+        final String charSetName = getTextEncodingCharSet();
+        final Charset charset = Charset.forName(charSetName);
+        final CharsetDecoder decoder = charset.newDecoder();
 
         //We only want to load up to null terminator, data after this is part of different
         //field and it may not be possible to decode it so do the check before we do
@@ -83,7 +84,7 @@ public class TextEncodedStringNullTerminated extends AbstractString
 
         //Latin-1 and UTF-8 strings are terminated by a single-byte null,
         //while UTF-16 and its variants need two bytes for the null terminator.
-        final boolean nullIsOneByte = (charSetName.equals(TextEncoding.CHARSET_ISO_8859_1) || charSetName.equals(TextEncoding.CHARSET_UTF_8));
+        final boolean nullIsOneByte = StandardCharsets.ISO_8859_1 == charset || StandardCharsets.UTF_8 == charset;
 
         boolean isNullTerminatorFound = false;
         while (buffer.hasRemaining())
@@ -203,43 +204,41 @@ public class TextEncodedStringNullTerminated extends AbstractString
         byte[] data;
         //Write to buffer using the CharSet defined by getTextEncodingCharSet()
         //Add a null terminator which will be encoded based on encoding.
-        String charSetName = getTextEncodingCharSet();
+        final String charSetName = getTextEncodingCharSet();
         try
         {
-            if (charSetName.equals(TextEncoding.CHARSET_UTF_16))
+            if (TextEncoding.CHARSET_UTF_16.equals(charSetName))
             {
                 if(TagOptionSingleton.getInstance().isEncodeUTF16BomAsLittleEndian())
                 {
-                    charSetName = TextEncoding.CHARSET_UTF_16_LE_ENCODING_FORMAT;
-                    CharsetEncoder encoder = Charset.forName(charSetName).newEncoder();
+                    final CharsetEncoder encoder = StandardCharsets.UTF_16LE.newEncoder();
                     encoder.onMalformedInput(CodingErrorAction.IGNORE);
                     encoder.onUnmappableCharacter(CodingErrorAction.IGNORE);
 
                     //Note remember LE BOM is ff fe but this is handled by encoder Unicode char is fe ff
-                    ByteBuffer bb = encoder.encode(CharBuffer.wrap('\ufeff' + (String) value + '\0'));
+                    final ByteBuffer bb = encoder.encode(CharBuffer.wrap('\ufeff' + (String) value + '\0'));
                     data = new byte[bb.limit()];
                     bb.get(data, 0, bb.limit());
                 }
                 else
                 {
-                     charSetName = TextEncoding.CHARSET_UTF_16_BE_ENCODING_FORMAT;
-                     CharsetEncoder encoder = Charset.forName(charSetName).newEncoder();
+                     final CharsetEncoder encoder = StandardCharsets.UTF_16BE.newEncoder();
                      encoder.onMalformedInput(CodingErrorAction.IGNORE);
                      encoder.onUnmappableCharacter(CodingErrorAction.IGNORE);
 
-                    //Note  BE BOM will leave as fe ff
-                     ByteBuffer bb = encoder.encode(CharBuffer.wrap('\ufeff' + (String) value + '\0'));
+                     //Note  BE BOM will leave as fe ff
+                     final ByteBuffer bb = encoder.encode(CharBuffer.wrap('\ufeff' + (String) value + '\0'));
                      data = new byte[bb.limit()];
                      bb.get(data, 0, bb.limit());
                 }
             }
             else
             {
-                CharsetEncoder encoder = Charset.forName(charSetName).newEncoder();
+                final CharsetEncoder encoder = Charset.forName(charSetName).newEncoder();
                 encoder.onMalformedInput(CodingErrorAction.IGNORE);
                 encoder.onUnmappableCharacter(CodingErrorAction.IGNORE);
 
-                ByteBuffer bb = encoder.encode(CharBuffer.wrap((String) value + '\0'));
+                final ByteBuffer bb = encoder.encode(CharBuffer.wrap((String) value + '\0'));
                 data = new byte[bb.limit()];
                 bb.get(data, 0, bb.limit());
             }
