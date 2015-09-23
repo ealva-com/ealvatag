@@ -254,7 +254,7 @@ public class Utils
      * Convert int to byte representation - Big Endian (as used by mp4)
      *
      * @param size
-     * @return byte represenetation
+     * @return byte representation
      */
     public static byte[] getSizeBEInt32(int size)
     {
