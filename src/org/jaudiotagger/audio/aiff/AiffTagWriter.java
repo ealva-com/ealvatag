@@ -26,8 +26,10 @@ import org.jaudiotagger.audio.generic.TagWriter;
 import org.jaudiotagger.audio.generic.Utils;
 import org.jaudiotagger.audio.iff.Chunk;
 import org.jaudiotagger.audio.iff.ChunkHeader;
+import org.jaudiotagger.audio.wav.WavChunkType;
 import org.jaudiotagger.tag.Tag;
 import org.jaudiotagger.tag.aiff.AiffTag;
+import org.jaudiotagger.tag.wav.WavTag;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -48,6 +50,49 @@ public class AiffTagWriter implements TagWriter
     // Logger Object
     public static Logger logger = Logger.getLogger("org.jaudiotagger.audio.aiff");
 
+    /**
+     * Read existing metadata
+     *
+     * @param raf
+     * @return tags within Tag wrapper
+     * @throws IOException
+     * @throws CannotWriteException
+     */
+    private AiffTag getExistingMetadata(RandomAccessFile raf) throws IOException, CannotWriteException
+    {
+        try
+        {
+            //Find AiffTag (if any)
+            AiffTagReader im = new AiffTagReader();
+            return im.read(raf);
+        }
+        catch (CannotReadException ex)
+        {
+            throw new CannotWriteException("Failed to read file");
+        }
+    }
+
+    /**
+     * Seek in file to start of LIST Metadata chunk
+     *
+     * @param raf
+     * @param existingTag
+     * @throws IOException
+     * @throws CannotWriteException
+     */
+    private ChunkHeader seekToStartOfListInfoMetadata(RandomAccessFile raf, AiffTag existingTag) throws IOException, CannotWriteException
+    {
+        raf.seek(existingTag.getStartLocationInFileOfId3Chunk());
+        final ChunkHeader chunkHeader = new ChunkHeader(ByteOrder.BIG_ENDIAN);
+        chunkHeader.readHeader(raf);
+        raf.seek(raf.getFilePointer() - ChunkHeader.CHUNK_HEADER_SIZE);
+
+        if(!ChunkType.TAG.getCode().equals(chunkHeader.getID()))
+        {
+            throw new CannotWriteException("Unable to find ID3 chunk at expected location");
+        }
+        return chunkHeader;
+    }
 
     /**
      * Delete given {@link Tag} from file.
@@ -61,31 +106,12 @@ public class AiffTagWriter implements TagWriter
     public void delete(final Tag tag, final RandomAccessFile raf, final RandomAccessFile tempRaf) throws IOException, CannotWriteException
     {
         logger.config("Deleting tag from file");
-        final AiffTag existingTag;
+        final AiffTag existingTag = getExistingMetadata(raf);
         try
         {
-            //Find AiffTag (if any)
-            AiffTagReader im = new AiffTagReader();
-            existingTag = im.read(raf);
-        }
-        catch (CannotReadException ex)
-        {
-            throw new CannotWriteException("Failed to read file");
-        }
-
-        try
-        {
-            if (existingTag.getID3Tag() != null && existingTag.getID3Tag().getStartLocationInFile() != null)
+            if (existingTag.isExistingId3Tag() && existingTag.getID3Tag().getStartLocationInFile() != null)
             {
-                raf.seek(existingTag.getStartLocationInFileOfId3Chunk());
-                final ChunkHeader chunkHeader = new ChunkHeader(ByteOrder.BIG_ENDIAN);
-                chunkHeader.readHeader(raf);
-
-                if(!ChunkType.TAG.getCode().equals(chunkHeader.getID()))
-                {
-                    throw new CannotWriteException("Unable to find ID3 chunk at expected location");
-                }
-
+                ChunkHeader chunkHeader = seekToStartOfListInfoMetadata(raf, existingTag);
                 if (existingTag.getID3Tag().getEndLocationInFile() == raf.length())
                 {
                     logger.config("Setting new length to:" + (existingTag.getStartLocationInFileOfId3Chunk()));
@@ -162,18 +188,7 @@ public class AiffTagWriter implements TagWriter
     public void write(final AudioFile af, final Tag tag, final RandomAccessFile raf, final RandomAccessFile rafTemp) throws CannotWriteException, IOException
     {
         logger.severe("Writing tag to file");
-        final AiffTag     existingTag;
-        try
-        {
-            //Find AiffTag (if any)
-            AiffTagReader im = new AiffTagReader();
-            existingTag =  im.read(raf);
-        }
-        catch (CannotReadException ex)
-        {
-            throw new CannotWriteException("Failed to read file");
-        }
-
+        final AiffTag existingTag = getExistingMetadata(raf);
         try
         {
             final AiffTag     aiffTag     = (AiffTag) tag;
@@ -181,17 +196,9 @@ public class AiffTagWriter implements TagWriter
             final long        newTagSize  = bb.limit();
 
             //Replacing ID3 tag
-            if (existingTag.getID3Tag() != null && existingTag.getID3Tag().getStartLocationInFile() != null)
+            if (existingTag.isExistingId3Tag() && existingTag.getID3Tag().getStartLocationInFile() != null)
             {
-                raf.seek(existingTag.getStartLocationInFileOfId3Chunk());
-                final ChunkHeader chunkHeader = new ChunkHeader(ByteOrder.BIG_ENDIAN);
-                chunkHeader.readHeader(raf);
-                raf.seek(raf.getFilePointer() - ChunkHeader.CHUNK_HEADER_SIZE);
-                if(!ChunkType.TAG.getCode().equals(chunkHeader.getID()))
-                {
-                    throw new CannotWriteException("Unable to find ID3 chunk at original location has file been modified externally");
-                }
-
+                final ChunkHeader chunkHeader = seekToStartOfListInfoMetadata(raf, existingTag);
                 logger.info("Current Space allocated:" + aiffTag.getSizeOfID3TagOnly() + ":NewTagRequires:" + newTagSize);
 
                 //Usual case ID3 is last chunk
