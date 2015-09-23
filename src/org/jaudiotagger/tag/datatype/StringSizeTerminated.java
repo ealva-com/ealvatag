@@ -28,7 +28,8 @@
 package org.jaudiotagger.tag.datatype;
 
 import org.jaudiotagger.tag.id3.AbstractTagFrameBody;
-import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
+
+import java.nio.charset.StandardCharsets;
 
 /**
  * Represents a String which is not delimited by null character with fixed text encoding.
@@ -63,6 +64,6 @@ public class StringSizeTerminated extends TextEncodedStringSizeTerminated
 
     protected String getTextEncodingCharSet()
     {
-        return TextEncoding.CHARSET_ISO_8859_1;
+        return StandardCharsets.ISO_8859_1.name();
     }
 }

@@ -39,15 +39,7 @@ import java.nio.charset.StandardCharsets;
 public class TextEncoding extends AbstractIntStringValuePair
 {
 
-    //Supported Java charsets
-    public static final String CHARSET_ISO_8859_1 = StandardCharsets.ISO_8859_1.name();
     public static final String CHARSET_UTF_16 = "UTF-16";        //Want to use x-UTF-16LE-BOM but not always available
-    public static final String CHARSET_UTF_16BE = "UTF-16BE";
-    public static final String CHARSET_UTF_8 = StandardCharsets.UTF_8.name();
-
-    //Need both depending on whether want to use BigEndian or Little Endian
-    public static final String CHARSET_UTF_16_LE_ENCODING_FORMAT = "UTF-16LE";
-    public static final String CHARSET_UTF_16_BE_ENCODING_FORMAT = "UTF-16BE";
 
     //Supported ID3 charset ids
     public static final byte ISO_8859_1 = 0;
@@ -72,10 +64,10 @@ public class TextEncoding extends AbstractIntStringValuePair
 
     private TextEncoding()
     {
-        idToValue.put((int) ISO_8859_1, CHARSET_ISO_8859_1);
-        idToValue.put((int) UTF_16, CHARSET_UTF_16);
-        idToValue.put((int) UTF_16BE, CHARSET_UTF_16BE);
-        idToValue.put((int) UTF_8, CHARSET_UTF_8);
+        idToValue.put((int) ISO_8859_1, StandardCharsets.ISO_8859_1.name());
+        idToValue.put((int) UTF_16, TextEncoding.CHARSET_UTF_16);
+        idToValue.put((int) UTF_16BE, StandardCharsets.UTF_16BE.name());
+        idToValue.put((int) UTF_8, StandardCharsets.UTF_8.name());
 
         createMaps();
 

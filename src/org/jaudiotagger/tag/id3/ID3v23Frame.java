@@ -16,7 +16,6 @@
 package org.jaudiotagger.tag.id3;
 
 import org.jaudiotagger.FileConstants;
-import org.jaudiotagger.audio.generic.Utils;
 import org.jaudiotagger.audio.mp3.MP3File;
 import org.jaudiotagger.logging.Hex;
 import org.jaudiotagger.tag.EmptyFrameException;
@@ -33,6 +32,8 @@ import org.jaudiotagger.utils.EqualsUtil;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -505,7 +506,7 @@ public class ID3v23Frame extends AbstractID3v2Frame
         {
             identifier = identifier + ' ';
         }
-        headerBuffer.put(Utils.getDefaultBytes(getIdentifier(),  TextEncoding.CHARSET_ISO_8859_1), 0, FRAME_ID_SIZE);
+        headerBuffer.put(getIdentifier().getBytes(StandardCharsets.ISO_8859_1), 0, FRAME_ID_SIZE);
         //Write Frame Size
         int size = frameBody.getSize();
         logger.fine("Frame Size Is:" + size);
@@ -840,12 +841,12 @@ public class ID3v23Frame extends AbstractID3v2Frame
      /**
      * Sets the charset encoding used by the field.
      *
-     * @param encoding charset.
-     */
-    public void setEncoding(String encoding)
+      * @param encoding charset.
+      */
+    public void setEncoding(Charset encoding)
     {
-        Integer encodingId = TextEncoding.getInstanceOf().getIdForValue(encoding);
-        if(encoding!=null)
+        Integer encodingId = TextEncoding.getInstanceOf().getIdForValue(encoding.name());
+        if(encodingId!=null)
         {
             if(encodingId <2)
             {

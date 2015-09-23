@@ -324,11 +324,11 @@ public class WavTagWriter implements TagWriter
             {
                 TagTextField next = (TagTextField) i.next();
                 WavInfoIdentifier wii = WavInfoIdentifier.getByByFieldKey(FieldKey.valueOf(next.getId()));
-                baos.write(Utils.getDefaultBytes(wii.getCode(), StandardCharsets.US_ASCII));
+                baos.write(wii.getCode().getBytes(StandardCharsets.US_ASCII));
                 logger.config("Writing:" + wii.getCode() + ":" + next.getContent());
 
                 //TODO Is UTF8 allowed format
-                byte[] contentConvertedToBytes = Utils.getDefaultBytes(next.getContent(), StandardCharsets.UTF_8);
+                byte[] contentConvertedToBytes = next.getContent().getBytes(StandardCharsets.UTF_8);
                 baos.write(Utils.getSizeLEInt32(contentConvertedToBytes.length));
                 baos.write(contentConvertedToBytes);
 
@@ -344,9 +344,9 @@ public class WavTagWriter implements TagWriter
             while(ti.hasNext())
             {
                 TagTextField next = (TagTextField)ti.next();
-                baos.write(Utils.getDefaultBytes(next.getId(), StandardCharsets.US_ASCII));
+                baos.write(next.getId().getBytes(StandardCharsets.US_ASCII));
                 logger.config("Writing:" +next.getId() + ":" + next.getContent());
-                byte[] contentConvertedToBytes = Utils.getDefaultBytes(next.getContent(), StandardCharsets.UTF_8);
+                byte[] contentConvertedToBytes = next.getContent().getBytes(StandardCharsets.UTF_8);
                 baos.write(Utils.getSizeLEInt32(contentConvertedToBytes.length));
                 baos.write(contentConvertedToBytes);
 

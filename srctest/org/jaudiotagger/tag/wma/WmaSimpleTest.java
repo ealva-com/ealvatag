@@ -16,6 +16,7 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 /**
@@ -430,22 +431,22 @@ public class WmaSimpleTest extends AbstractTestCase
             TagField tf = tag.getFirstField(AsfFieldKey.ALBUM.getFieldName());
             assertEquals("WM/AlbumTitle", tf.getId());
             assertEquals("ALBUM_value", ((TagTextField) tf).getContent());
-            assertEquals("UTF-16LE", ((TagTextField) tf).getEncoding());
+            assertEquals(StandardCharsets.UTF_16LE, ((TagTextField) tf).getEncoding());
 
             tf = tag.getFirstField(AsfFieldKey.ALBUM_ARTIST.getFieldName());
             assertEquals("WM/AlbumArtist", tf.getId());
             assertEquals("ALBUM_ARTIST_value", ((TagTextField) tf).getContent());
-            assertEquals("UTF-16LE", ((TagTextField) tf).getEncoding());
+            assertEquals(StandardCharsets.UTF_16LE, ((TagTextField) tf).getEncoding());
 
             tf = tag.getFirstField(AsfFieldKey.AMAZON_ID.getFieldName());
             assertEquals("ASIN", tf.getId());
             assertEquals("AMAZON_ID_value", ((TagTextField) tf).getContent());
-            assertEquals("UTF-16LE", ((TagTextField) tf).getEncoding());
+            assertEquals(StandardCharsets.UTF_16LE, ((TagTextField) tf).getEncoding());
 
             tf = tag.getFirstField(AsfFieldKey.TITLE.getFieldName());
             assertEquals("TITLE", tf.getId());
             assertEquals("TITLE_value", ((TagTextField) tf).getContent());
-            assertEquals("UTF-16LE", ((TagTextField) tf).getEncoding());
+            assertEquals(StandardCharsets.UTF_16LE, ((TagTextField) tf).getEncoding());
 
         }
         catch (Exception e)

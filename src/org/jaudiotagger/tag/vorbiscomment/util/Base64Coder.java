@@ -1,7 +1,5 @@
 package org.jaudiotagger.tag.vorbiscomment.util;
 
-import org.jaudiotagger.audio.generic.Utils;
-
 import java.nio.charset.StandardCharsets;
 
 /**
@@ -55,7 +53,7 @@ public class Base64Coder
      */
     public static String encode(final String s)
     {
-        return new String(encode(Utils.getDefaultBytes(s, StandardCharsets.ISO_8859_1)));
+        return new String(encode(s.getBytes(StandardCharsets.ISO_8859_1)));
     }
 
     /**

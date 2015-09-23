@@ -110,7 +110,7 @@ public abstract class Mp4TagField implements TagField
      */
     protected byte[] getIdBytes()
     {
-        return Utils.getDefaultBytes(getId(), StandardCharsets.ISO_8859_1);
+        return getId().getBytes(StandardCharsets.ISO_8859_1);
     }
 
     /**
@@ -151,7 +151,7 @@ public abstract class Mp4TagField implements TagField
             //Wrap in Parent box
             ByteArrayOutputStream outerbaos = new ByteArrayOutputStream();
             outerbaos.write(Utils.getSizeBEInt32(Mp4BoxHeader.HEADER_LENGTH + databox.length));
-            outerbaos.write(Utils.getDefaultBytes(getId(), StandardCharsets.ISO_8859_1));
+            outerbaos.write(getId().getBytes(StandardCharsets.ISO_8859_1));
             outerbaos.write(databox);
             return outerbaos.toByteArray();
         }
@@ -177,7 +177,7 @@ public abstract class Mp4TagField implements TagField
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             byte[] data = getDataBytes();
             baos.write(Utils.getSizeBEInt32(Mp4DataBox.DATA_HEADER_LENGTH + data.length));
-            baos.write(Utils.getDefaultBytes(Mp4DataBox.IDENTIFIER, StandardCharsets.ISO_8859_1));
+            baos.write(Mp4DataBox.IDENTIFIER.getBytes(StandardCharsets.ISO_8859_1));
             baos.write(new byte[]{0});
             baos.write(new byte[]{0, 0, (byte) getFieldType().getFileClassId()});
             baos.write(new byte[]{0, 0, 0, 0});

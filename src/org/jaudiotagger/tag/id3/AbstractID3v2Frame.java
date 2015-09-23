@@ -27,6 +27,7 @@ import java.io.ByteArrayOutputStream;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.nio.ByteBuffer;
+import java.nio.charset.Charset;
 import java.util.logging.Level;
 
 /**
@@ -631,9 +632,11 @@ public abstract class AbstractID3v2Frame extends AbstractTagFrame implements Tag
      *
      * @return Charset encoding.
      */
-    public String getEncoding()
+    public Charset getEncoding()
     {
-        return TextEncoding.getInstanceOf().getValueForId(this.getBody().getTextEncoding());
+        final byte textEncoding = this.getBody().getTextEncoding();
+        final String valueForId = TextEncoding.getInstanceOf().getValueForId(textEncoding);
+        return valueForId == null ? null : Charset.forName(valueForId);
     }
 
     /**

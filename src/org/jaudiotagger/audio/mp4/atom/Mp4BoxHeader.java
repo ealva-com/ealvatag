@@ -27,6 +27,8 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.logging.Logger;
 
 /**
@@ -142,7 +144,7 @@ public class Mp4BoxHeader
         //Calculate box size
         this.length = Utils.getIntBE(b, OFFSET_POS, OFFSET_LENGTH - 1);
         //Calculate box id
-        this.id = Utils.getString(b, IDENTIFIER_POS, IDENTIFIER_LENGTH, "ISO-8859-1");
+        this.id = new String(b, IDENTIFIER_POS, IDENTIFIER_LENGTH, StandardCharsets.ISO_8859_1);
 
         logger.finest("Mp4BoxHeader id:"+id+":length:"+length);
         if (id.equals("\0\0\0\0"))
@@ -236,9 +238,9 @@ public class Mp4BoxHeader
     /**
      * @return UTF_8 (always used by Mp4)
      */
-    public String getEncoding()
+    public Charset getEncoding()
     {
-        return CHARSET_UTF_8;
+        return StandardCharsets.UTF_8;
     }
 
 

@@ -138,24 +138,23 @@ public class PartOfSet extends AbstractString
                 }
             }
 
-            String charSetName = getTextEncodingCharSet();
-            if (charSetName.equals(TextEncoding.CHARSET_UTF_16))
+            final String charSetName = getTextEncodingCharSet();
+            if (TextEncoding.CHARSET_UTF_16.equals(charSetName))
             {
-                charSetName = TextEncoding.CHARSET_UTF_16_LE_ENCODING_FORMAT;
-                CharsetEncoder encoder = Charset.forName(charSetName).newEncoder();
+                final CharsetEncoder encoder = StandardCharsets.UTF_16LE.newEncoder();
                 encoder.onMalformedInput(CodingErrorAction.IGNORE);
                 encoder.onUnmappableCharacter(CodingErrorAction.IGNORE);
 
                 //Note remember LE BOM is ff fe but this is handled by encoder Unicode char is fe ff
-                ByteBuffer bb = encoder.encode(CharBuffer.wrap('\ufeff' + value));
+                final ByteBuffer bb = encoder.encode(CharBuffer.wrap('\ufeff' + value));
                 data = new byte[bb.limit()];
                 bb.get(data, 0, bb.limit());
 
             }
             else
             {
-                CharsetEncoder encoder = Charset.forName(charSetName).newEncoder();
-                ByteBuffer bb = encoder.encode(CharBuffer.wrap(value));
+                final CharsetEncoder encoder = Charset.forName(charSetName).newEncoder();
+                final ByteBuffer bb = encoder.encode(CharBuffer.wrap(value));
                 encoder.onMalformedInput(CodingErrorAction.IGNORE);
                 encoder.onUnmappableCharacter(CodingErrorAction.IGNORE);
 

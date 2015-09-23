@@ -19,13 +19,14 @@
 package org.jaudiotagger.tag.mp4;
 
 import org.jaudiotagger.audio.generic.AbstractTag;
-import org.jaudiotagger.audio.mp4.atom.Mp4BoxHeader;
 import org.jaudiotagger.logging.ErrorMessage;
 import org.jaudiotagger.tag.*;
 import org.jaudiotagger.tag.images.Artwork;
 import org.jaudiotagger.tag.images.ArtworkFactory;
 import org.jaudiotagger.tag.mp4.field.*;
 
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
@@ -161,9 +162,9 @@ public class Mp4Tag extends AbstractTag
         }
     }
 
-    protected boolean isAllowedEncoding(String enc)
+    protected boolean isAllowedEncoding(Charset enc)
     {
-        return enc.equals(Mp4BoxHeader.CHARSET_UTF_8);
+        return StandardCharsets.UTF_8.equals(enc);
     }
 
     public String toString()
