@@ -26,6 +26,7 @@ import org.jaudiotagger.audio.generic.TagWriter;
 import org.jaudiotagger.audio.generic.Utils;
 import org.jaudiotagger.audio.iff.Chunk;
 import org.jaudiotagger.audio.iff.ChunkHeader;
+import org.jaudiotagger.audio.iff.IffHeaderChunk;
 import org.jaudiotagger.tag.Tag;
 import org.jaudiotagger.tag.aiff.AiffTag;
 
@@ -119,9 +120,7 @@ public class AiffTagWriter implements TagWriter
                 {
                     deleteTagChunk(raf, existingTag, chunkHeader);
                 }
-                //Rewrite FORM size
-                raf.seek(SIGNATURE_LENGTH);
-                raf.write(Utils.getSizeBEInt32(((int) raf.length()) - SIGNATURE_LENGTH - SIZE_LENGTH));
+                rewriteRiffHeaderSize(raf);
             }
         }
         finally
@@ -234,15 +233,25 @@ public class AiffTagWriter implements TagWriter
                 raf.seek(raf.length());
                 writeDataToFile(raf, bb, newTagSize);
             }
-
-            //Rewrite FORM Header size
-            raf.seek(SIGNATURE_LENGTH);
-            raf.write(Utils.getSizeBEInt32(((int) raf.length()) - SIGNATURE_LENGTH - SIZE_LENGTH));
+            rewriteRiffHeaderSize(raf);
         }
         finally
         {
             raf.close();
         }
+    }
+
+
+    /**
+     * Rewrite RAF header to reflect new file file
+     *
+     * @param raf
+     * @throws IOException
+     */
+    private void rewriteRiffHeaderSize(RandomAccessFile raf) throws IOException
+    {
+        raf.seek(IffHeaderChunk.SIGNATURE_LENGTH);
+        raf.write(Utils.getSizeBEInt32(((int) raf.length()) - SIGNATURE_LENGTH - SIZE_LENGTH));
     }
 
     /**
