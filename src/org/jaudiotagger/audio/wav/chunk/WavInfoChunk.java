@@ -45,7 +45,6 @@ public class WavInfoChunk
             {
                 try
                 {
-
                     wavInfoTag.setField(wii.getFieldKey(), value);
                 }
                 catch(FieldDataInvalidException fdie)

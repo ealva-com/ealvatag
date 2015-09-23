@@ -117,7 +117,7 @@ public class WavTagWriter implements TagWriter
         {
             final WavInfoTag existingInfoTag = existingTag.getInfoTag();
 
-            //We have Info Chink we can delete
+            //We have Info Chunk we can delete
             if (existingInfoTag != null && existingInfoTag.getStartLocationInFile() != null)
             {
                 ChunkHeader chunkHeader = seekToStartOfMetadata(raf, existingTag);

@@ -25,6 +25,8 @@ import org.jaudiotagger.audio.iff.ChunkHeader;
 import org.jaudiotagger.audio.iff.IffHeaderChunk;
 import org.jaudiotagger.audio.wav.chunk.WavId3Chunk;
 import org.jaudiotagger.audio.wav.chunk.WavListChunk;
+import org.jaudiotagger.tag.id3.ID3v23Tag;
+import org.jaudiotagger.tag.wav.WavInfoTag;
 import org.jaudiotagger.tag.wav.WavTag;
 
 import java.io.IOException;
@@ -63,11 +65,34 @@ public class WavTagReader
         {
             throw new CannotReadException("Wav RIFF Header not valid");
         }
+        createDefaultMetadataTagsIfMissing(tag);
         return tag;
     }
 
     /**
+     * So if the file doesn't contain (both) types of metadata we construct them so data can be
+     * added and written back to file on save
+     *
+     * @param tag
+     */
+    //TODO does this need to be configurable
+    private void createDefaultMetadataTagsIfMissing(WavTag tag)
+    {
+        if(!tag.isExistingId3Tag())
+        {
+            //Default used by Tag & Rename
+            tag.setID3Tag(new ID3v23Tag());
+        }
+        if(!tag.isExistingInfoTag())
+        {
+            tag.setInfoTag(new WavInfoTag());
+        }
+    }
+
+    /**
      * Reads Wavs Chunk that contain tag metadata
+     *
+     * If the same chunk exists more than once in the file we would just use the last occurence
      *
      * @param raf
      * @param tag

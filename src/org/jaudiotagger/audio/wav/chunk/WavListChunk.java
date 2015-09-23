@@ -49,12 +49,12 @@ public class WavListChunk extends Chunk
         String subIdentifier = Utils.readFourBytesAsChars(chunkData);
         if(subIdentifier.equals(WavChunkType.INFO.getCode()))
         {
-           WavInfoChunk chunk = new WavInfoChunk(tag);
-           chunk.readChunks(chunkData);
-           //This is the start of the enclosing LIST element
-           tag.getInfoTag().setStartLocationInFile(chunkHeader.getStartLocationInFile());
-           tag.getInfoTag().setEndLocationInFile(chunkHeader.getStartLocationInFile() + ChunkHeader.CHUNK_HEADER_SIZE + chunkHeader.getSize());
-
+            WavInfoChunk chunk = new WavInfoChunk(tag);
+            chunk.readChunks(chunkData);
+            //This is the start of the enclosing LIST element
+            tag.getInfoTag().setStartLocationInFile(chunkHeader.getStartLocationInFile());
+            tag.getInfoTag().setEndLocationInFile(chunkHeader.getStartLocationInFile() + ChunkHeader.CHUNK_HEADER_SIZE + chunkHeader.getSize());
+            tag.setExistingInfoTag(true);
         }
         return true;
     }

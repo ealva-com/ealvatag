@@ -64,6 +64,7 @@ public class WavId3Chunk extends Chunk
                 return false;     // bad or unknown version
         }
 
+        wavTag.setExistingId3Tag(true);
         wavTag.setID3Tag(id3Tag);
         chunkData.position(0);
         try

@@ -23,48 +23,91 @@ import org.jaudiotagger.tag.*;
 import org.jaudiotagger.tag.id3.AbstractID3v2Tag;
 import org.jaudiotagger.tag.images.Artwork;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
 /**
  * Represent wav metadata found in a Wav file
- *
- * This can come from LIST INFO chunk or ID3 Tag
+ * <p/>
+ * This can come from LIST INFO chunk or ID3 tag, LIST INFO can only contain a subset of what can be held in an ID3v2 tag,
+ * compatibility with other software for these metadata tags is not reliable so we provide some options in TagOptionSingleton
+ * to allow the data to be interpreted differently.
+ * <p/>
+ * The default is that ID3 takes precedence if it exists
  */
 public class WavTag implements Tag
 {
+    private boolean isExistingId3Tag = false;
+    private boolean isExistingInfoTag = false;
+
     private WavInfoTag infoTag;
     private AbstractID3v2Tag id3Tag;
-   
-    public WavInfoTag getInfoTag () 
+
+    /**
+     * @return true if the file that this tag was written from already contains an ID3 chunk
+     */
+    public boolean isExistingId3Tag()
+    {
+        return isExistingId3Tag;
+    }
+
+    /**
+     *
+     * @return true if the file that this tag read from already contains a LISTINFO chunk
+     */
+    public boolean isExistingInfoTag()
+    {
+        return isExistingInfoTag;
+    }
+
+    /**
+     * @return the Info tag
+     */
+    public WavInfoTag getInfoTag()
     {
         return infoTag;
     }
-  
-    public void setInfoTag (WavInfoTag infoTag) {
+
+    public void setInfoTag(WavInfoTag infoTag)
+    {
         this.infoTag = infoTag;
     }
 
+    /**
+     * Does the info tag exist, note it is created by default if one does not exist in file it was read from
+     *
+     * @return
+     */
     public boolean isInfoTag()
     {
-        return infoTag!=null;
+        return infoTag != null;
     }
 
-    /** Returns the ID3 tag */
-    public AbstractID3v2Tag getID3Tag () {
+    /**
+     * Returns the ID3 tag
+     */
+    public AbstractID3v2Tag getID3Tag()
+    {
         return id3Tag;
     }
 
-    /** Sets the ID3 tag */
-    public void setID3Tag (AbstractID3v2Tag t) {
+    /**
+     * Sets the ID3 tag
+     */
+    public void setID3Tag(AbstractID3v2Tag t)
+    {
         id3Tag = t;
     }
 
+    /**
+     * Does an ID3 tag exist, note it is created by default if one does not exist in file it was read from
+     *
+     * @return
+     */
     public boolean isID3Tag()
     {
-        return id3Tag!=null;
+        return id3Tag != null;
     }
 
     public String toString()
@@ -102,7 +145,7 @@ public class WavTag implements Tag
 
     /**
      * Determines whether the tag has no fields specified.<br>
-     *
+     * <p/>
      * <p>If there are no images we return empty if either there is no VorbisTag or if there is a
      * VorbisTag but it is empty
      *
@@ -115,13 +158,13 @@ public class WavTag implements Tag
 
     public void setField(FieldKey genericKey, String value) throws KeyNotFoundException, FieldDataInvalidException
     {
-        TagField tagfield = createField(genericKey,value);
+        TagField tagfield = createField(genericKey, value);
         setField(tagfield);
     }
 
     public void addField(FieldKey genericKey, String value) throws KeyNotFoundException, FieldDataInvalidException
     {
-        TagField tagfield = createField(genericKey,value);
+        TagField tagfield = createField(genericKey, value);
         addField(tagfield);
     }
 
@@ -137,7 +180,7 @@ public class WavTag implements Tag
 
     public TagField createField(FieldKey genericKey, String value) throws KeyNotFoundException, FieldDataInvalidException
     {
-        if(infoTag!=null)
+        if (infoTag != null)
         {
             return infoTag.createField(genericKey, value);
         }
@@ -153,9 +196,9 @@ public class WavTag implements Tag
         return infoTag.getFirst(id);
     }
 
-    public String getValue(FieldKey id,int index) throws KeyNotFoundException
+    public String getValue(FieldKey id, int index) throws KeyNotFoundException
     {
-        if(infoTag==null)
+        if (infoTag == null)
         {
             return "";
         }
@@ -164,7 +207,7 @@ public class WavTag implements Tag
 
     public String getFirst(FieldKey id) throws KeyNotFoundException
     {
-        return getValue(id,0);
+        return getValue(id, 0);
     }
 
     public TagField getFirstField(String id)
@@ -222,11 +265,10 @@ public class WavTag implements Tag
 
     /**
      * Create artwork field. Not currently supported.
-     *
      */
     public TagField createField(Artwork artwork) throws FieldDataInvalidException
     {
-        throw new UnsupportedOperationException ("Not supported");
+        throw new UnsupportedOperationException("Not supported");
     }
 
 
@@ -250,7 +292,6 @@ public class WavTag implements Tag
     }
 
     /**
-     *
      * @param genericKey
      * @return
      */
@@ -260,7 +301,6 @@ public class WavTag implements Tag
     }
 
 
-
     public boolean hasField(String id)
     {
         return infoTag.hasField(id);
@@ -268,7 +308,7 @@ public class WavTag implements Tag
 
     public TagField createCompilationField(boolean value) throws KeyNotFoundException, FieldDataInvalidException
     {
-        return createField(FieldKey.IS_COMPILATION,String.valueOf(value));
+        return createField(FieldKey.IS_COMPILATION, String.valueOf(value));
     }
 
     public List<Artwork> getArtworkList()
@@ -290,5 +330,15 @@ public class WavTag implements Tag
     public void addField(Artwork artwork) throws FieldDataInvalidException
     {
         this.addField(createField(artwork));
+    }
+
+    public void setExistingId3Tag(boolean isExistingId3Tag)
+    {
+        this.isExistingId3Tag = isExistingId3Tag;
+    }
+
+    public void setExistingInfoTag(boolean isExistingInfoTag)
+    {
+        this.isExistingInfoTag = isExistingInfoTag;
     }
 }
