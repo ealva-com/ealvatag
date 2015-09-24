@@ -239,7 +239,7 @@ public class WavTagWriter implements TagWriter
                 //If both tags already exist in file
                 if(existingTag.isExistingInfoTag() && existingTag.isExistingId3Tag())
                 {
-                    FileStructure fs = checkExistingLocations(wavTag, raf);
+                    BothTagsFileStructure fs = checkExistingLocations(wavTag, raf);
                     //We can write both chunks without
                     if(fs.isContiguous && fs.isAtEnd)
                     {
@@ -303,7 +303,7 @@ public class WavTagWriter implements TagWriter
                     writeInfoDataToFile(raf, infoTagBuffer, newInfoTagSize);
                     writeId3Chunk(raf, existingId3Tag, id3TagBuffer );
                 }
-                rewriteRiffHeaderSize(raf);
+
             }
             else if(wso==WavSaveOptions.SAVE_ACTIVE)
             {
@@ -311,21 +311,10 @@ public class WavTagWriter implements TagWriter
                 {
                     final ByteBuffer infoTagBuffer = convertInfoChunk(wavTag);
                     final long newInfoTagSize = infoTagBuffer.limit();
-                    final WavInfoTag existingInfoTag = existingTag.getInfoTag();
 
                     if(existingTag.isExistingInfoTag())
                     {
-                        seekToStartOfListInfoMetadata(raf, existingTag);
-                        if (existingInfoTag.getEndLocationInFile() == raf.length())
-                        {
-                            writeInfoChunk(raf, existingInfoTag, infoTagBuffer);
-                        }
-                        //TODO we need to delete existing tag before writing new one, or write new one inplace
-                        else
-                        {
-                            raf.seek(raf.length());
-                            writeInfoDataToFile(raf, infoTagBuffer, newInfoTagSize);
-                        }
+                        seekAndWriteInfoChunk(raf,existingTag, infoTagBuffer);
                     }
                     else
                     {
@@ -337,21 +326,10 @@ public class WavTagWriter implements TagWriter
                 {
                     final ByteBuffer id3TagBuffer = convertID3Chunk(wavTag);
                     final long newInfoTagSize = id3TagBuffer.limit();
-                    final AbstractID3v2Tag existingId3Tag = existingTag.getID3Tag();
 
                     if(existingTag.isExistingId3Tag())
                     {
-                        seekToStartOfId3Metadata(raf, existingTag);
-                        if (existingId3Tag.getEndLocationInFile() == raf.length())
-                        {
-                            writeId3Chunk(raf, existingId3Tag, id3TagBuffer);
-                        }
-                        //TODO we need to delete existing tag before writing new one, or write new one inplace
-                        else
-                        {
-                            raf.seek(raf.length());
-                            writeID3DataToFile(raf, id3TagBuffer, newInfoTagSize);
-                        }
+                        seekAndWriteId3Chunk(raf, existingTag,id3TagBuffer);
                     }
                     else
                     {
@@ -366,21 +344,10 @@ public class WavTagWriter implements TagWriter
                 {
                     final ByteBuffer infoTagBuffer = convertInfoChunk(wavTag);
                     final long newInfoTagSize = infoTagBuffer.limit();
-                    final WavInfoTag existingInfoTag = existingTag.getInfoTag();
 
                     if(existingTag.isExistingInfoTag() && !existingTag.isExistingId3Tag())
                     {
-                        seekToStartOfListInfoMetadata(raf, existingTag);
-                        if (existingInfoTag.getEndLocationInFile() == raf.length())
-                        {
-                            writeInfoChunk(raf, existingInfoTag, infoTagBuffer);
-                        }
-                        //TODO we need to delete existing tag before writing new one, or write new one inplace
-                        else
-                        {
-                            raf.seek(raf.length());
-                            writeInfoDataToFile(raf, infoTagBuffer, newInfoTagSize);
-                        }
+                        seekAndWriteInfoChunk(raf, existingTag, infoTagBuffer);
                     }
                     else if(!existingTag.isExistingInfoTag() && !existingTag.isExistingId3Tag())
                     {
@@ -396,21 +363,10 @@ public class WavTagWriter implements TagWriter
                 {
                     final ByteBuffer id3TagBuffer = convertID3Chunk(wavTag);
                     final long newInfoTagSize = id3TagBuffer.limit();
-                    final AbstractID3v2Tag existingId3Tag = existingTag.getID3Tag();
 
                     if(existingTag.isExistingId3Tag() && !existingTag.isExistingInfoTag())
                     {
-                        seekToStartOfId3Metadata(raf, existingTag);
-                        if (existingId3Tag.getEndLocationInFile() == raf.length())
-                        {
-                            writeId3Chunk(raf, existingId3Tag, id3TagBuffer);
-                        }
-                        //TODO we need to delete existing tag before writing new one, or write new one inplace
-                        else
-                        {
-                            raf.seek(raf.length());
-                            writeID3DataToFile(raf, id3TagBuffer, newInfoTagSize);
-                        }
+                        seekAndWriteId3Chunk(raf, existingTag, id3TagBuffer);
                     }
                     else if(!existingTag.isExistingId3Tag() && !existingTag.isExistingInfoTag())
                     {
@@ -428,6 +384,7 @@ public class WavTagWriter implements TagWriter
             {
                 throw new RuntimeException("No setting for:WavSaveOptions");
             }
+            rewriteRiffHeaderSize(raf);
         }
         finally
         {
@@ -436,7 +393,7 @@ public class WavTagWriter implements TagWriter
     }
 
     /**
-     * Rewrite RAF header to reflect new file file
+     * Rewrite RAF header to reflect new file size
      *
      * @param raf
      * @throws IOException
@@ -448,7 +405,7 @@ public class WavTagWriter implements TagWriter
     }
 
     /**
-     * Write LISTINFOChunk to current file location
+     * Write LISTINFOChunk of specified size to current file location
      *
      * @param raf       random access file
      * @param bb        data to write
@@ -469,7 +426,7 @@ public class WavTagWriter implements TagWriter
     }
 
     /**
-     * Write ID3Chunk to current file location
+     * Write Id3Chunk of specified size to current file location
      *
      * @param raf       random access file
      * @param bb        data to write
@@ -495,7 +452,7 @@ public class WavTagWriter implements TagWriter
     }
 
     /**
-     * Converts tag to {@link java.nio.ByteBuffer}.
+     * Converts INfO tag to {@link java.nio.ByteBuffer}.
      *
      * @param tag tag
      * @return byte buffer containing the tag data
@@ -594,16 +551,19 @@ public class WavTagWriter implements TagWriter
         }
     }
 
-    class FileStructure
+    /**
+     * Used when writing both tags to work out the best way to do it
+     */
+    class BothTagsFileStructure
     {
         boolean isInfoTagFirst = false;
         boolean isContiguous   = false;
         boolean isAtEnd        = false;
     }
 
-    private FileStructure checkExistingLocations(WavTag wavTag, RandomAccessFile raf) throws IOException
+    private BothTagsFileStructure checkExistingLocations(WavTag wavTag, RandomAccessFile raf) throws IOException
     {
-        FileStructure fs = new FileStructure();
+        BothTagsFileStructure fs = new BothTagsFileStructure();
         if(wavTag.getInfoTag().getStartLocationInFile() < wavTag.getID3Tag().getStartLocationInFile())
         {
             fs.isInfoTagFirst = true;
@@ -630,6 +590,15 @@ public class WavTagWriter implements TagWriter
         return fs;
     }
 
+    /**
+     * Write Info chunk to current location which is last chunk of file
+     *
+     * @param raf
+     * @param existingInfoTag
+     * @param newTagBuffer
+     * @throws CannotWriteException
+     * @throws IOException
+     */
     private void writeInfoChunk(RandomAccessFile raf, final WavInfoTag existingInfoTag, ByteBuffer newTagBuffer)
             throws CannotWriteException, IOException
     {
@@ -651,6 +620,15 @@ public class WavTagWriter implements TagWriter
         }
     }
 
+    /**
+     * Write Id3 chunk to current location which is last chunk of file
+     *
+     * @param raf
+     * @param existingTag
+     * @param newTagBuffer
+     * @throws CannotWriteException
+     * @throws IOException
+     */
     private void writeId3Chunk(RandomAccessFile raf, final AbstractID3Tag existingTag, ByteBuffer newTagBuffer)
             throws CannotWriteException, IOException
     {
@@ -669,6 +647,56 @@ public class WavTagWriter implements TagWriter
         else
         {
             writeID3DataToFile(raf, newTagBuffer, newId3TagSize);
+        }
+    }
+
+    /**
+     * Seek to location of existing Info chunk and replace with new one
+     *
+     * @param raf
+     * @param existingTag
+     * @param newTagBuffer
+     * @throws CannotWriteException
+     * @throws IOException
+     */
+    private void seekAndWriteInfoChunk(RandomAccessFile raf,final WavTag existingTag, ByteBuffer newTagBuffer)
+            throws CannotWriteException, IOException
+    {
+        seekToStartOfListInfoMetadata(raf, existingTag);
+        if (existingTag.getInfoTag().getEndLocationInFile() == raf.length())
+        {
+            writeInfoChunk(raf, existingTag.getInfoTag(), newTagBuffer);
+        }
+        //TODO we need to delete existing tag before writing new one, or write new one inplace
+        else
+        {
+            raf.seek(raf.length());
+            writeInfoDataToFile(raf, newTagBuffer, newTagBuffer.limit());
+        }
+    }
+
+    /**
+     * Seek to location of existing ID3 chunk and replace with new one
+     *
+     * @param raf
+     * @param existingTag
+     * @param newTagBuffer
+     * @throws CannotWriteException
+     * @throws IOException
+     */
+    private void seekAndWriteId3Chunk(RandomAccessFile raf,final WavTag existingTag, ByteBuffer newTagBuffer)
+            throws CannotWriteException, IOException
+    {
+        seekToStartOfId3Metadata(raf, existingTag);
+        if (existingTag.getID3Tag().getEndLocationInFile() == raf.length())
+        {
+            writeId3Chunk(raf, existingTag.getID3Tag(), newTagBuffer);
+        }
+        //TODO we need to delete existing tag before writing new one, or write new one inplace
+        else
+        {
+            raf.seek(raf.length());
+            writeID3DataToFile(raf, newTagBuffer, newTagBuffer.limit());
         }
     }
 }
