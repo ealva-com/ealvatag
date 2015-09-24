@@ -25,6 +25,7 @@ import org.jaudiotagger.audio.iff.ChunkHeader;
 import org.jaudiotagger.audio.iff.IffHeaderChunk;
 import org.jaudiotagger.audio.wav.chunk.WavId3Chunk;
 import org.jaudiotagger.audio.wav.chunk.WavListChunk;
+import org.jaudiotagger.tag.TagOptionSingleton;
 import org.jaudiotagger.tag.id3.ID3v23Tag;
 import org.jaudiotagger.tag.wav.WavInfoTag;
 import org.jaudiotagger.tag.wav.WavTag;
@@ -50,7 +51,7 @@ public class WavTagReader
      */
     public WavTag read(RandomAccessFile raf) throws CannotReadException, IOException
     {
-        WavTag tag = new WavTag();
+        WavTag tag = new WavTag(TagOptionSingleton.getInstance().getWavOptions());
         if(WavRIFFHeader.isValidHeader(raf))
         {
             while (raf.getFilePointer() < raf.length())

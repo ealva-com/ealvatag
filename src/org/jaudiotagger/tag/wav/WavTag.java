@@ -19,6 +19,7 @@
 package org.jaudiotagger.tag.wav;
 
 import org.jaudiotagger.audio.iff.ChunkHeader;
+import org.jaudiotagger.audio.wav.WavOptions;
 import org.jaudiotagger.logging.ErrorMessage;
 import org.jaudiotagger.tag.*;
 import org.jaudiotagger.tag.id3.AbstractID3v2Tag;
@@ -44,6 +45,12 @@ public class WavTag implements Tag
     private WavInfoTag infoTag;
     private AbstractID3v2Tag id3Tag;
 
+    private WavOptions wavOptions;
+
+    public WavTag(WavOptions wavOptions)
+    {
+        this.wavOptions=wavOptions;
+    }
     /**
      * @return true if the file that this tag was written from already contains an ID3 chunk
      */
@@ -116,14 +123,50 @@ public class WavTag implements Tag
         return output;
     }
 
+    private Tag getActiveTag()
+    {
+        switch(wavOptions)
+        {
+            case READ_ID3_ONLY:
+                return id3Tag;
+
+            case READ_INFO_ONLY:
+                return infoTag;
+
+            case READ_ID3_UNLESS_ONLY_INFO:
+                if (isExistingId3Tag() || !isExistingInfoTag())
+                {
+                    return id3Tag;
+                }
+                else
+                {
+                    return infoTag;
+                }
+
+            case READ_INFO_UNLESS_ONLY_ID3:
+                if (isExistingInfoTag() || !isExistingId3Tag())
+                {
+                    return infoTag;
+                }
+                else
+                {
+                    return id3Tag;
+                }
+
+            default:
+                return id3Tag;
+
+        }
+    }
+
     public void addField(TagField field) throws FieldDataInvalidException
     {
-        infoTag.addField(field);
+        getActiveTag().addField(field);
     }
 
     public List<TagField> getFields(String id)
     {
-        return infoTag.getFields(id);
+        return getActiveTag().getFields(id);
     }
 
     /**
@@ -135,12 +178,12 @@ public class WavTag implements Tag
      */
     public List<String> getAll(FieldKey genericKey) throws KeyNotFoundException
     {
-        return infoTag.getAll(genericKey);
+        return getActiveTag().getAll(genericKey);
     }
 
     public boolean hasCommonFields()
     {
-        return infoTag.hasCommonFields();
+        return getActiveTag().hasCommonFields();
     }
 
     /**
@@ -153,7 +196,7 @@ public class WavTag implements Tag
      */
     public boolean isEmpty()
     {
-        return (infoTag == null || infoTag.isEmpty());
+        return (getActiveTag() == null || getActiveTag().isEmpty());
     }
 
     public void setField(FieldKey genericKey, String value) throws KeyNotFoundException, FieldDataInvalidException
@@ -174,35 +217,24 @@ public class WavTag implements Tag
      */
     public void setField(TagField field) throws FieldDataInvalidException
     {
-        infoTag.setField(field);
+        getActiveTag().setField(field);
     }
 
 
     public TagField createField(FieldKey genericKey, String value) throws KeyNotFoundException, FieldDataInvalidException
     {
-        if (infoTag != null)
-        {
-            return infoTag.createField(genericKey, value);
-        }
-        else
-        {
-            throw new UnsupportedOperationException(ErrorMessage.GENERIC_NOT_SUPPORTED.getMsg());
-        }
+        return getActiveTag().createField(genericKey, value);
     }
 
 
     public String getFirst(String id)
     {
-        return infoTag.getFirst(id);
+        return getActiveTag().getFirst(id);
     }
 
     public String getValue(FieldKey id, int index) throws KeyNotFoundException
     {
-        if (infoTag == null)
-        {
-            return "";
-        }
-        return infoTag.getValue(id, index);
+        return getActiveTag().getValue(id, index);
     }
 
     public String getFirst(FieldKey id) throws KeyNotFoundException
@@ -212,7 +244,7 @@ public class WavTag implements Tag
 
     public TagField getFirstField(String id)
     {
-        return infoTag.getFirstField(id);
+        return getActiveTag().getFirstField(id);
     }
 
     public TagField getFirstField(FieldKey genericKey) throws KeyNotFoundException
@@ -224,7 +256,7 @@ public class WavTag implements Tag
 
         else
         {
-            return infoTag.getFirstField(genericKey);
+            return getActiveTag().getFirstField(genericKey);
         }
     }
 
@@ -235,22 +267,22 @@ public class WavTag implements Tag
      */
     public void deleteField(FieldKey fieldKey) throws KeyNotFoundException
     {
-        infoTag.deleteField(fieldKey);
+        getActiveTag().deleteField(fieldKey);
     }
 
     public void deleteField(String id) throws KeyNotFoundException
     {
-        infoTag.deleteField(id);
+        getActiveTag().deleteField(id);
     }
 
     public Iterator<TagField> getFields()
     {
-        return infoTag.getFields();
+        return getActiveTag().getFields();
     }
 
     public int getFieldCount()
     {
-        return infoTag.getFieldCount();
+        return getActiveTag().getFieldCount();
     }
 
     public int getFieldCountIncludingSubValues()
@@ -260,7 +292,7 @@ public class WavTag implements Tag
 
     public boolean setEncoding(final Charset enc) throws FieldDataInvalidException
     {
-        return infoTag.setEncoding(enc);
+        return getActiveTag().setEncoding(enc);
     }
 
     /**
@@ -268,18 +300,17 @@ public class WavTag implements Tag
      */
     public TagField createField(Artwork artwork) throws FieldDataInvalidException
     {
-        throw new UnsupportedOperationException("Not supported");
+        return getActiveTag().createField(artwork);
     }
-
 
     public List<TagField> getFields(FieldKey id) throws KeyNotFoundException
     {
-        return infoTag.getFields(id);
+        return getActiveTag().getFields(id);
     }
 
     public Artwork getFirstArtwork()
     {
-        return null;
+        return getActiveTag().getFirstArtwork();
     }
 
     /**
@@ -289,6 +320,7 @@ public class WavTag implements Tag
      */
     public void deleteArtworkField() throws KeyNotFoundException
     {
+        getActiveTag().deleteArtworkField();
     }
 
     /**
@@ -297,13 +329,13 @@ public class WavTag implements Tag
      */
     public boolean hasField(FieldKey genericKey)
     {
-        return infoTag.hasField(genericKey);
+        return getActiveTag().hasField(genericKey);
     }
 
 
     public boolean hasField(String id)
     {
-        return infoTag.hasField(id);
+        return getActiveTag().hasField(id);
     }
 
     public TagField createCompilationField(boolean value) throws KeyNotFoundException, FieldDataInvalidException
@@ -313,7 +345,7 @@ public class WavTag implements Tag
 
     public List<Artwork> getArtworkList()
     {
-        return Collections.emptyList();
+        return getActiveTag().getArtworkList();
     }
 
     /**

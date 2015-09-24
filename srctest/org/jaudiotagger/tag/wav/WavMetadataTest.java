@@ -4,7 +4,10 @@ import org.jaudiotagger.AbstractTestCase;
 import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.AudioFileIO;
 import org.jaudiotagger.audio.generic.GenericTag;
+import org.jaudiotagger.audio.wav.WavOptions;
 import org.jaudiotagger.tag.FieldKey;
+import org.jaudiotagger.tag.Tag;
+import org.jaudiotagger.tag.TagOptionSingleton;
 import org.jaudiotagger.tag.aiff.AiffTag;
 import org.jaudiotagger.tag.id3.AbstractID3v2Tag;
 import org.jaudiotagger.tag.id3.ID3v22Tag;
@@ -25,6 +28,7 @@ public class WavMetadataTest extends AbstractTestCase
      */
     public void testReadFileWithListInfoMetadata()
     {
+        TagOptionSingleton.getInstance().setWavOptions(WavOptions.READ_INFO_ONLY);
         Exception exceptionCaught = null;
         try
         {
@@ -78,6 +82,7 @@ public class WavMetadataTest extends AbstractTestCase
      */
     public void testModifyFileMetadata()
     {
+        TagOptionSingleton.getInstance().setWavOptions(WavOptions.READ_INFO_ONLY);
         Exception exceptionCaught = null;
         try
         {
@@ -135,6 +140,7 @@ public class WavMetadataTest extends AbstractTestCase
      */
     public void testModifyFileWithMoreMetadata()
     {
+        TagOptionSingleton.getInstance().setWavOptions(WavOptions.READ_INFO_ONLY);
         Exception exceptionCaught = null;
         try
         {
@@ -194,6 +200,7 @@ public class WavMetadataTest extends AbstractTestCase
      */
     public void testDeleteFileInfoMetadata()
     {
+        TagOptionSingleton.getInstance().setWavOptions(WavOptions.READ_INFO_ONLY);
         Exception exceptionCaught = null;
         try
         {
@@ -255,6 +262,7 @@ public class WavMetadataTest extends AbstractTestCase
      */
     public void testReadFileWithID3AndListInfoMetadata()
     {
+        TagOptionSingleton.getInstance().setWavOptions(WavOptions.READ_INFO_ONLY);
         Exception exceptionCaught = null;
         try
         {
@@ -323,6 +331,7 @@ public class WavMetadataTest extends AbstractTestCase
      */
     public void testDeleteFileInfoID3Metadata()
     {
+        TagOptionSingleton.getInstance().setWavOptions(WavOptions.READ_INFO_ONLY);
         Exception exceptionCaught = null;
         try
         {
@@ -357,6 +366,162 @@ public class WavMetadataTest extends AbstractTestCase
             assertFalse(tag.isExistingInfoTag());
             assertTrue(tag.isExistingId3Tag());
 
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            exceptionCaught = e;
+        }
+        assertNull(exceptionCaught);
+    }
+
+    /**
+     * Read file with metadata added by MediaMonkey
+     */
+    public void testWavReadOptionsHasId3AndInfo()
+    {
+
+        Exception exceptionCaught = null;
+        try
+        {
+            {
+                TagOptionSingleton.getInstance().setWavOptions(WavOptions.READ_INFO_ONLY);
+                File testFile = AbstractTestCase.copyAudioToTmp("test125.wav");
+                AudioFile f = AudioFileIO.read(testFile);
+                Tag tag = f.getTag();
+                //Ease of use methods for common fields
+                assertEquals("id3artistName\0", tag.getFirst(FieldKey.ARTIST));
+                assertEquals("id3albumName\0", tag.getFirst(FieldKey.ALBUM));
+                assertEquals("test123\0", tag.getFirst(FieldKey.TITLE));
+                assertEquals("comment\0", tag.getFirst(FieldKey.COMMENT));
+                assertEquals("2002\0", tag.getFirst(FieldKey.YEAR));
+                assertEquals("1\0", tag.getFirst(FieldKey.TRACK));
+                assertEquals("rock\0", tag.getFirst(FieldKey.GENRE));
+            }
+
+            {
+                TagOptionSingleton.getInstance().setWavOptions(WavOptions.READ_ID3_ONLY);
+                File testFile = AbstractTestCase.copyAudioToTmp("test125.wav");
+                AudioFile f = AudioFileIO.read(testFile);
+                Tag tag = f.getTag();
+                //Ease of use methods for common fields
+                assertEquals("id3artistName", tag.getFirst(FieldKey.ARTIST));
+                assertEquals("id3albumName", tag.getFirst(FieldKey.ALBUM));
+                assertEquals("test123", tag.getFirst(FieldKey.TITLE));
+                assertEquals("comment", tag.getFirst(FieldKey.COMMENT));
+                assertEquals("2002", tag.getFirst(FieldKey.YEAR));
+                assertEquals("1", tag.getFirst(FieldKey.TRACK));
+                assertEquals("rock", tag.getFirst(FieldKey.GENRE));
+            }
+
+
+            {
+                TagOptionSingleton.getInstance().setWavOptions(WavOptions.READ_ID3_UNLESS_ONLY_INFO);
+                File testFile = AbstractTestCase.copyAudioToTmp("test125.wav");
+                AudioFile f = AudioFileIO.read(testFile);
+                Tag tag = f.getTag();
+                //Ease of use methods for common fields
+                assertEquals("id3artistName", tag.getFirst(FieldKey.ARTIST));
+                assertEquals("id3albumName", tag.getFirst(FieldKey.ALBUM));
+                assertEquals("test123", tag.getFirst(FieldKey.TITLE));
+                assertEquals("comment", tag.getFirst(FieldKey.COMMENT));
+                assertEquals("2002", tag.getFirst(FieldKey.YEAR));
+                assertEquals("1", tag.getFirst(FieldKey.TRACK));
+                assertEquals("rock", tag.getFirst(FieldKey.GENRE));
+            }
+
+            {
+                TagOptionSingleton.getInstance().setWavOptions(WavOptions.READ_INFO_UNLESS_ONLY_ID3);
+                File testFile = AbstractTestCase.copyAudioToTmp("test125.wav");
+                AudioFile f = AudioFileIO.read(testFile);
+                Tag tag = f.getTag();
+                //Ease of use methods for common fields
+                assertEquals("id3artistName\0", tag.getFirst(FieldKey.ARTIST));
+                assertEquals("id3albumName\0", tag.getFirst(FieldKey.ALBUM));
+                assertEquals("test123\0", tag.getFirst(FieldKey.TITLE));
+                assertEquals("comment\0", tag.getFirst(FieldKey.COMMENT));
+                assertEquals("2002\0", tag.getFirst(FieldKey.YEAR));
+                assertEquals("1\0", tag.getFirst(FieldKey.TRACK));
+                assertEquals("rock\0", tag.getFirst(FieldKey.GENRE));
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            exceptionCaught = e;
+        }
+        assertNull(exceptionCaught);
+    }
+
+    /**
+     * Read file with metadata added by MediaMonkey
+     */
+    public void testWavReadOptionsHasInfoOnly()
+    {
+
+        Exception exceptionCaught = null;
+        try
+        {
+            {
+                TagOptionSingleton.getInstance().setWavOptions(WavOptions.READ_INFO_ONLY);
+                File testFile = AbstractTestCase.copyAudioToTmp("test123.wav");
+                AudioFile f = AudioFileIO.read(testFile);
+                Tag tag = f.getTag();
+                //Ease of use methods for common fields
+                assertEquals("artistName\0", tag.getFirst(FieldKey.ARTIST));
+                assertEquals("albumName\0", tag.getFirst(FieldKey.ALBUM));
+                assertEquals("test123\0", tag.getFirst(FieldKey.TITLE));
+                assertEquals("comment\0", tag.getFirst(FieldKey.COMMENT));
+                assertEquals("2002\0", tag.getFirst(FieldKey.YEAR));
+                assertEquals("1\0", tag.getFirst(FieldKey.TRACK));
+                assertEquals("rock\0", tag.getFirst(FieldKey.GENRE));
+            }
+
+            {
+                TagOptionSingleton.getInstance().setWavOptions(WavOptions.READ_ID3_ONLY);
+                File testFile = AbstractTestCase.copyAudioToTmp("test123.wav");
+                AudioFile f = AudioFileIO.read(testFile);
+                Tag tag = f.getTag();
+                //Ease of use methods for common fields
+                assertEquals("", tag.getFirst(FieldKey.ARTIST));
+                assertEquals("", tag.getFirst(FieldKey.ALBUM));
+                assertEquals("", tag.getFirst(FieldKey.TITLE));
+                assertEquals("", tag.getFirst(FieldKey.COMMENT));
+                assertEquals("", tag.getFirst(FieldKey.YEAR));
+                assertEquals("", tag.getFirst(FieldKey.TRACK));
+                assertEquals("", tag.getFirst(FieldKey.GENRE));
+            }
+
+
+            {
+                TagOptionSingleton.getInstance().setWavOptions(WavOptions.READ_ID3_UNLESS_ONLY_INFO);
+                File testFile = AbstractTestCase.copyAudioToTmp("test123.wav");
+                AudioFile f = AudioFileIO.read(testFile);
+                Tag tag = f.getTag();
+                //Ease of use methods for common fields
+                assertEquals("artistName\0", tag.getFirst(FieldKey.ARTIST));
+                assertEquals("albumName\0", tag.getFirst(FieldKey.ALBUM));
+                assertEquals("test123\0", tag.getFirst(FieldKey.TITLE));
+                assertEquals("comment\0", tag.getFirst(FieldKey.COMMENT));
+                assertEquals("2002\0", tag.getFirst(FieldKey.YEAR));
+                assertEquals("1\0", tag.getFirst(FieldKey.TRACK));
+                assertEquals("rock\0", tag.getFirst(FieldKey.GENRE));
+            }
+
+            {
+                TagOptionSingleton.getInstance().setWavOptions(WavOptions.READ_INFO_UNLESS_ONLY_ID3);
+                File testFile = AbstractTestCase.copyAudioToTmp("test123.wav");
+                AudioFile f = AudioFileIO.read(testFile);
+                Tag tag = f.getTag();
+                //Ease of use methods for common fields
+                assertEquals("artistName\0", tag.getFirst(FieldKey.ARTIST));
+                assertEquals("albumName\0", tag.getFirst(FieldKey.ALBUM));
+                assertEquals("test123\0", tag.getFirst(FieldKey.TITLE));
+                assertEquals("comment\0", tag.getFirst(FieldKey.COMMENT));
+                assertEquals("2002\0", tag.getFirst(FieldKey.YEAR));
+                assertEquals("1\0", tag.getFirst(FieldKey.TRACK));
+                assertEquals("rock\0", tag.getFirst(FieldKey.GENRE));
+            }
         }
         catch (Exception e)
         {
