@@ -1,3 +1,4 @@
+package org.jaudiotagger.audio.mp3;
 /**
  *  @author : Paul Taylor
  *  @author : Eric Farng
@@ -19,7 +20,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  *
  */
-package org.jaudiotagger.audio.mp3;
+
 
 import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.exceptions.CannotWriteException;
@@ -39,6 +40,10 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.logging.Level;
 
 /**
@@ -670,6 +675,109 @@ public class MP3File extends AudioFile
     public ID3v1Tag getID3v1Tag()
     {
         return id3v1tag;
+    }
+    
+    /**
+     * Calculates hash with given algorithm. Buffer size is 32768 byte.
+     * Hash is calculated EXCLUDING meta-data, like id3v1 or id3v2
+     *
+     * @return hash value in byte
+     * @param algorithm options MD5,SHA-1,SHA-256
+     * @throws IOException 
+     * @throws InvalidAudioFrameException 
+     * @throws NoSuchAlgorithmException 
+     */
+    
+    public byte[] getHash(String algorithm) throws NoSuchAlgorithmException, InvalidAudioFrameException, IOException{
+
+			return getHash(algorithm, 32768);
+		
+		
+    }
+    
+    /**
+     * Calculates hash with given buffer size.
+     * Hash is calculated EXCLUDING meta-data, like id3v1 or id3v2
+     *
+     * @return byte[] hash value in byte
+     * @param  int buffer buffersize
+     * @throws IOException 
+     * @throws InvalidAudioFrameException 
+     * @throws NoSuchAlgorithmException 
+     */
+    
+    public byte[] getHash(int buffer) throws NoSuchAlgorithmException, InvalidAudioFrameException, IOException{
+    	
+			return getHash("MD5", buffer);
+		
+		
+    }
+    /**
+     * Calculates hash with algorithm "MD5". Buffer size is 32768 byte.
+     * Hash is calculated EXCLUDING meta-data, like id3v1 or id3v2
+     *
+     * @return byte[] hash value.
+     * @throws IOException 
+     * @throws InvalidAudioFrameException 
+     * @throws NoSuchAlgorithmException 
+     */
+    
+    public byte[] getHash() throws NoSuchAlgorithmException, InvalidAudioFrameException, IOException{
+    	
+			return getHash("MD5", 32768);
+		
+    }
+    
+    /**
+     * Calculates hash with algorithm "MD5", "SHA-1" or SHA-256".
+     * Hash is calculated EXCLUDING meta-data, like id3v1 or id3v2
+     *
+     * @return byte[] hash value in byte
+     * @param String algorithm 
+     * @param int buffersize 
+     * @throws IOException 
+     * @throws InvalidAudioFrameException 
+     * @throws NoSuchAlgorithmException 
+     */
+    
+    public byte[] getHash(String algorithm, int bufferSize) throws InvalidAudioFrameException, IOException, NoSuchAlgorithmException
+    {
+    	File mp3File = getFile();
+    	long startByte = getMP3StartByte(mp3File);
+    	
+    	int id3v1TagSize = 0;
+		if (hasID3v1Tag()){
+		ID3v1Tag id1tag= getID3v1Tag();
+		id3v1TagSize  = id1tag.getSize();
+		}
+		
+		InputStream inStream = Files
+				.newInputStream(Paths.get(mp3File.getAbsolutePath()));
+		
+		byte[] buffer = new byte[bufferSize];
+
+		MessageDigest digest = MessageDigest.getInstance(algorithm);
+
+		inStream.skip(startByte);
+		
+		int read;
+		long totalSize = mp3File.length() - startByte - id3v1TagSize;
+		int pointer  = buffer.length;
+		
+		while (pointer <= totalSize ) {
+			
+			read = inStream.read(buffer);
+			
+			digest.update(buffer, 0, read);
+			pointer += buffer.length;
+			}
+		read = inStream.read(buffer,0,(int)totalSize - pointer + buffer.length);
+		digest.update(buffer, 0, read);
+		
+		byte[] hash = digest.digest();
+
+		
+        return hash;
     }
 
     /**
