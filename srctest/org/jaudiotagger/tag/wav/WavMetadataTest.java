@@ -657,4 +657,122 @@ public class WavMetadataTest extends AbstractTestCase
         assertNull(exceptionCaught);
     }
 
+    /**
+     * Read file with metadata added by MediaMonkey
+     */
+    public void testModifyFileMetadataSaveExistingActiveInfo()
+    {
+        TagOptionSingleton.getInstance().setWavOptions(WavOptions.READ_INFO_ONLY);
+        TagOptionSingleton.getInstance().setWavSaveOptions(WavSaveOptions.SAVE_EXISTING_AND_ACTIVE);
+        Exception exceptionCaught = null;
+        try
+        {
+            File testFile = AbstractTestCase.copyAudioToTmp("test123.wav", new File("test123ModifyMetadataSaveExistingActive.wav"));
+            AudioFile f = AudioFileIO.read(testFile);
+            System.out.println(f.getAudioHeader());
+            assertEquals("529", f.getAudioHeader().getBitRate());
+            assertEquals("WAV-RIFF 24 bits", f.getAudioHeader().getEncodingType());
+            assertEquals("1", f.getAudioHeader().getChannels());
+            assertEquals("22050", f.getAudioHeader().getSampleRate());
+
+
+            assertTrue(f.getTag() instanceof WavTag);
+            WavTag tag = (WavTag) f.getTag();
+
+            assertTrue(tag.isExistingInfoTag());
+
+            assertEquals(926264L, ((WavTag) tag).getInfoTag().getStartLocationInFile().longValue());
+            assertEquals(926560L, ((WavTag) tag).getInfoTag().getEndLocationInFile().longValue());
+            assertEquals(288L, ((WavTag) tag).getInfoTag().getSizeOfTag());
+            assertEquals(0L, ((WavTag) tag).getSizeOfID3TagOnly());
+            assertEquals(0L, ((WavTag) tag).getStartLocationInFileOfId3Chunk());
+            assertEquals(0L, ((WavTag) tag).getSizeOfID3TagIncludingChunkHeader());
+            //Ease of use methods for common fields
+            assertEquals("artistName\0", tag.getFirst(FieldKey.ARTIST));
+
+            //Modify Value
+            tag.setField(FieldKey.ARTIST, "fred");
+            f.commit();
+
+            //Read modified metadata now in file
+            f = AudioFileIO.read(testFile);
+            assertTrue(f.getTag() instanceof WavTag);
+            tag = (WavTag) f.getTag();
+            System.out.println(((WavTag) tag).getInfoTag());
+            assertEquals("fred", tag.getFirst(FieldKey.ARTIST));
+
+            assertEquals(926264L, ((WavTag) tag).getInfoTag().getStartLocationInFile().longValue());
+            assertEquals(926560L, ((WavTag) tag).getInfoTag().getEndLocationInFile().longValue());
+            assertEquals(288L, ((WavTag) tag).getInfoTag().getSizeOfTag());
+            assertEquals(0L, ((WavTag) tag).getSizeOfID3TagOnly());
+            assertEquals(0L, ((WavTag) tag).getStartLocationInFileOfId3Chunk());
+            assertEquals(0L, ((WavTag) tag).getSizeOfID3TagIncludingChunkHeader());
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            exceptionCaught = e;
+        }
+        assertNull(exceptionCaught);
+    }
+
+    /**
+     * Read file with metadata added by MediaMonkey
+     */
+    public void testModifyFileMetadataSaveExistingActiveId3Info()
+    {
+        TagOptionSingleton.getInstance().setWavOptions(WavOptions.READ_ID3_ONLY);
+        TagOptionSingleton.getInstance().setWavSaveOptions(WavSaveOptions.SAVE_EXISTING_AND_ACTIVE);
+        Exception exceptionCaught = null;
+        try
+        {
+            File testFile = AbstractTestCase.copyAudioToTmp("test123.wav", new File("test123ModifyMetadataSaveExistingActiveId3.wav"));
+            AudioFile f = AudioFileIO.read(testFile);
+            System.out.println(f.getAudioHeader());
+            assertEquals("529", f.getAudioHeader().getBitRate());
+            assertEquals("WAV-RIFF 24 bits", f.getAudioHeader().getEncodingType());
+            assertEquals("1", f.getAudioHeader().getChannels());
+            assertEquals("22050", f.getAudioHeader().getSampleRate());
+
+
+            assertTrue(f.getTag() instanceof WavTag);
+            WavTag tag = (WavTag) f.getTag();
+
+            assertTrue(tag.isExistingInfoTag());
+
+            assertEquals(926264L, ((WavTag) tag).getInfoTag().getStartLocationInFile().longValue());
+            assertEquals(926560L, ((WavTag) tag).getInfoTag().getEndLocationInFile().longValue());
+            assertEquals(288L, ((WavTag) tag).getInfoTag().getSizeOfTag());
+            assertEquals(0L, ((WavTag) tag).getSizeOfID3TagOnly());
+            assertEquals(0L, ((WavTag) tag).getStartLocationInFileOfId3Chunk());
+            assertEquals(0L, ((WavTag) tag).getSizeOfID3TagIncludingChunkHeader());
+
+            //Ease of use methods for common fields
+            assertEquals("", tag.getFirst(FieldKey.ARTIST));
+
+            //Modify Value
+            tag.setField(FieldKey.ARTIST, "fred");
+            f.commit();
+
+            //Read modified metadata now in file
+            f = AudioFileIO.read(testFile);
+            assertTrue(f.getTag() instanceof WavTag);
+            tag = (WavTag) f.getTag();
+            System.out.println(((WavTag) tag).getInfoTag());
+            assertEquals("fred", tag.getFirst(FieldKey.ARTIST));
+
+            assertEquals(926264L, ((WavTag) tag).getInfoTag().getStartLocationInFile().longValue());
+            assertEquals(926560L, ((WavTag) tag).getInfoTag().getEndLocationInFile().longValue());
+            assertEquals(288L, ((WavTag) tag).getInfoTag().getSizeOfTag());
+            assertEquals(25L, ((WavTag) tag).getSizeOfID3TagOnly());
+            assertEquals(926560L, ((WavTag) tag).getStartLocationInFileOfId3Chunk());
+            assertEquals(33L, ((WavTag) tag).getSizeOfID3TagIncludingChunkHeader());
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            exceptionCaught = e;
+        }
+        assertNull(exceptionCaught);
+    }
 }
