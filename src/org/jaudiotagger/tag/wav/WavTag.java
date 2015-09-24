@@ -123,7 +123,7 @@ public class WavTag implements Tag
         return output;
     }
 
-    private Tag getActiveTag()
+    public Tag getActiveTag()
     {
         switch(wavOptions)
         {

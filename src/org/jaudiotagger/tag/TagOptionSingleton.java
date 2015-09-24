@@ -25,6 +25,7 @@
 package org.jaudiotagger.tag;
 
 import org.jaudiotagger.audio.wav.WavOptions;
+import org.jaudiotagger.audio.wav.WavSaveOptions;
 import org.jaudiotagger.tag.id3.framebody.AbstractID3v2FrameBody;
 import org.jaudiotagger.tag.id3.framebody.FrameBodyCOMM;
 import org.jaudiotagger.tag.id3.framebody.FrameBodyTIPL;
@@ -54,6 +55,17 @@ public class TagOptionSingleton
         return wavOptions;
     }
 
+    private WavSaveOptions wavSaveOptions = WavSaveOptions.SAVE_BOTH;
+
+    public void setWavSaveOptions(WavSaveOptions wavSaveOptions)
+    {
+        this.wavSaveOptions = wavSaveOptions;
+    }
+
+    public WavSaveOptions getWavSaveOptions()
+    {
+        return wavSaveOptions;
+    }
     /**
      *
      */
@@ -802,6 +814,7 @@ public class TagOptionSingleton
     public void setToDefault()
     {
         wavOptions = WavOptions.READ_ID3_UNLESS_ONLY_INFO;
+        wavSaveOptions = WavSaveOptions.SAVE_BOTH;
         keywordMap = new HashMap<Class<? extends ID3v24FrameBody>, LinkedList<String>>();
         filenameTagSave = false;
         id3v1Save = true;
