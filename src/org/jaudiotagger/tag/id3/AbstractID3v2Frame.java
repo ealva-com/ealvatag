@@ -635,8 +635,7 @@ public abstract class AbstractID3v2Frame extends AbstractTagFrame implements Tag
     public Charset getEncoding()
     {
         final byte textEncoding = this.getBody().getTextEncoding();
-        final String valueForId = TextEncoding.getInstanceOf().getValueForId(textEncoding);
-        return valueForId == null ? null : Charset.forName(valueForId);
+        return TextEncoding.getInstanceOf().getCharsetForId(textEncoding);
     }
 
     /**

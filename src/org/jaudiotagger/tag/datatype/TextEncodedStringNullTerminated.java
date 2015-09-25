@@ -72,8 +72,7 @@ public class TextEncodedStringNullTerminated extends AbstractString
         int size;
 
         //Get the Specified Decoder
-        final String charSetName = getTextEncodingCharSet();
-        final Charset charset = Charset.forName(charSetName);
+        final Charset charset = getTextEncodingCharSet();
         final CharsetDecoder decoder = charset.newDecoder();
 
         //We only want to load up to null terminator, data after this is part of different
@@ -204,10 +203,10 @@ public class TextEncodedStringNullTerminated extends AbstractString
         byte[] data;
         //Write to buffer using the CharSet defined by getTextEncodingCharSet()
         //Add a null terminator which will be encoded based on encoding.
-        final String charSetName = getTextEncodingCharSet();
+        final Charset charset = getTextEncodingCharSet();
         try
         {
-            if (TextEncoding.CHARSET_UTF_16.equals(charSetName))
+            if (StandardCharsets.UTF_16.equals(charset))
             {
                 if(TagOptionSingleton.getInstance().isEncodeUTF16BomAsLittleEndian())
                 {
@@ -234,7 +233,7 @@ public class TextEncodedStringNullTerminated extends AbstractString
             }
             else
             {
-                final CharsetEncoder encoder = Charset.forName(charSetName).newEncoder();
+                final CharsetEncoder encoder = charset.newEncoder();
                 encoder.onMalformedInput(CodingErrorAction.IGNORE);
                 encoder.onUnmappableCharacter(CodingErrorAction.IGNORE);
 
@@ -246,18 +245,18 @@ public class TextEncodedStringNullTerminated extends AbstractString
         //https://bitbucket.org/ijabz/jaudiotagger/issue/1/encoding-metadata-to-utf-16-can-fail-if
         catch (CharacterCodingException ce)
         {
-            logger.severe(ce.getMessage()+":"+charSetName+":"+value);
+            logger.severe(ce.getMessage()+":"+charset.name()+":"+value);
             throw new RuntimeException(ce);
         }
         setSize(data.length);
         return data;
     }
 
-    protected String getTextEncodingCharSet()
+    protected Charset getTextEncodingCharSet()
     {
-        byte textEncoding = this.getBody().getTextEncoding();
-        String charSetName = TextEncoding.getInstanceOf().getValueForId(textEncoding);
-        logger.finest("text encoding:" + textEncoding + " charset:" + charSetName);
-        return charSetName;
+        final byte textEncoding = this.getBody().getTextEncoding();
+        final Charset charset = TextEncoding.getInstanceOf().getCharsetForId(textEncoding);
+        logger.finest("text encoding:" + textEncoding + " charset:" + charset.name());
+        return charset;
     }
 }

@@ -843,9 +843,9 @@ public class ID3v23Frame extends AbstractID3v2Frame
      *
       * @param encoding charset.
       */
-    public void setEncoding(Charset encoding)
+    public void setEncoding(final Charset encoding)
     {
-        Integer encodingId = TextEncoding.getInstanceOf().getIdForValue(encoding.name());
+        Integer encodingId = TextEncoding.getInstanceOf().getIdForCharset(encoding);
         if(encodingId!=null)
         {
             if(encodingId <2)

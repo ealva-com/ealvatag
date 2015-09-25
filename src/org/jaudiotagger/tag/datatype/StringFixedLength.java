@@ -87,8 +87,7 @@ public class StringFixedLength extends AbstractString
         logger.config("Reading from array from offset:" + offset);
         try
         {
-            String charSetName = getTextEncodingCharSet();
-            CharsetDecoder decoder = Charset.forName(charSetName).newDecoder();
+            final CharsetDecoder decoder = getTextEncodingCharSet().newDecoder();
 
             //Decode buffer if runs into problems should through exception which we
             //catch and then set value to empty string.
@@ -142,17 +141,17 @@ public class StringFixedLength extends AbstractString
 
         try
         {
-            final String charSetName = getTextEncodingCharSet();
-            if (TextEncoding.CHARSET_UTF_16.equals(charSetName))
+            final Charset charset = getTextEncodingCharSet();
+            final CharsetEncoder encoder;
+            if (StandardCharsets.UTF_16.equals(charset))
             {
-                final CharsetEncoder encoder = StandardCharsets.UTF_16LE.newEncoder();
-
                 //Note remember LE BOM is ff fe but tis is handled by encoder Unicode char is fe ff
+                encoder = StandardCharsets.UTF_16LE.newEncoder();
                 dataBuffer = encoder.encode(CharBuffer.wrap('\ufeff' + (String) value));
             }
             else
             {
-                final CharsetEncoder encoder = Charset.forName(charSetName).newEncoder();
+                encoder = charset.newEncoder();
                 dataBuffer = encoder.encode(CharBuffer.wrap((String) value));
             }
         }
@@ -216,11 +215,11 @@ public class StringFixedLength extends AbstractString
     /**
      * @return the encoding of the frame body this datatype belongs to
      */
-    protected String getTextEncodingCharSet()
+    protected Charset getTextEncodingCharSet()
     {
-        byte textEncoding = this.getBody().getTextEncoding();
-        String charSetName = TextEncoding.getInstanceOf().getValueForId(textEncoding);
-        logger.finest("text encoding:" + textEncoding + " charset:" + charSetName);
-        return charSetName;
+        final byte textEncoding = this.getBody().getTextEncoding();
+        final Charset charset = TextEncoding.getInstanceOf().getCharsetForId(textEncoding);
+        logger.finest("text encoding:" + textEncoding + " charset:" + charset.name());
+        return charset;
     }
 }
