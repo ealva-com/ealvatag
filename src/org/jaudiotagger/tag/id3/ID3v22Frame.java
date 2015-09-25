@@ -15,7 +15,6 @@
  */
 package org.jaudiotagger.tag.id3;
 
-import org.jaudiotagger.audio.generic.Utils;
 import org.jaudiotagger.audio.mp3.MP3File;
 import org.jaudiotagger.tag.EmptyFrameException;
 import org.jaudiotagger.tag.InvalidDataTypeException;
@@ -512,9 +511,9 @@ public class ID3v22Frame extends AbstractID3v2Frame
      *
       * @param encoding charset.
       */
-    public void setEncoding(Charset encoding)
+    public void setEncoding(final Charset encoding)
     {
-        Integer encodingId = TextEncoding.getInstanceOf().getIdForValue(encoding.name());
+        Integer encodingId = TextEncoding.getInstanceOf().getIdForCharset(encoding);
         if(encodingId!=null)
         {
             if(encodingId <2)

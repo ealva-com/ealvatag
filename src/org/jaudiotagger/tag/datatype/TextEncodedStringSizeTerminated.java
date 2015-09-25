@@ -80,8 +80,7 @@ public class TextEncodedStringSizeTerminated extends AbstractString
         logger.finest("Reading from array from offset:" + offset);
 
         //Get the Specified Decoder
-        final String charSetName = getTextEncodingCharSet();
-        final CharsetDecoder decoder = Charset.forName(charSetName).newDecoder();
+        final CharsetDecoder decoder = getTextEncodingCharSet().newDecoder();
         decoder.reset();
 
         //Decode sliced inBuffer
@@ -109,7 +108,7 @@ public class TextEncodedStringSizeTerminated extends AbstractString
 
         //If using UTF16 with BOM we then search through the text removing any BOMs that could exist
         //for multiple values, BOM could be Big Endian or Little Endian
-        if (TextEncoding.CHARSET_UTF_16.equals(charSetName))
+        if (StandardCharsets.UTF_16.equals(getTextEncodingCharSet()))
         {
             value = outBuffer.toString().replace("\ufeff","").replace("\ufffe","");
         }
@@ -270,7 +269,7 @@ public class TextEncodedStringSizeTerminated extends AbstractString
     {
         byte[] data;
         //Try and write to buffer using the CharSet defined by getTextEncodingCharSet()
-        String charSetName   = getTextEncodingCharSet();
+        final Charset charset = getTextEncodingCharSet();
         try
         {
             
@@ -278,16 +277,16 @@ public class TextEncodedStringSizeTerminated extends AbstractString
 
             //Special Handling because there is no UTF16 BOM LE charset
             String stringValue   = (String)value;
-            String actualCharSet = null;
-            if (TextEncoding.CHARSET_UTF_16.equals(charSetName))
+            Charset actualCharSet = null;
+            if (StandardCharsets.UTF_16.equals(charset))
             {
-                if(TagOptionSingleton.getInstance().isEncodeUTF16BomAsLittleEndian())
+                if (TagOptionSingleton.getInstance().isEncodeUTF16BomAsLittleEndian())
                 {
-                    actualCharSet = StandardCharsets.UTF_16LE.name();
+                    actualCharSet = StandardCharsets.UTF_16LE;
                 }
                 else
                 {
-                    actualCharSet = StandardCharsets.UTF_16BE.name();
+                    actualCharSet = StandardCharsets.UTF_16BE;
                 }
             }
 
@@ -299,26 +298,24 @@ public class TextEncodedStringSizeTerminated extends AbstractString
             checkTrailingNull(values, stringValue);
 
             //For each value
-            for(int i=0;i<values.size();i++)
+            for (int i=0;i<values.size();i++)
             {
                 String next = values.get(i);
-                if(actualCharSet!=null)
+
+                if (StandardCharsets.UTF_16LE.equals(actualCharSet))
                 {
-                    if (actualCharSet.equals(StandardCharsets.UTF_16LE.name()))
-                    {
-                        outputBuffer.put(writeStringUTF16LEBOM( next, i, values.size()));
-                    }
-                    else if (actualCharSet.equals(StandardCharsets.UTF_16BE.name()))
-                    {
-                        outputBuffer.put(writeStringUTF16BEBOM( next, i, values.size()));
-                    }
+                    outputBuffer.put(writeStringUTF16LEBOM( next, i, values.size()));
+                }
+                else if (StandardCharsets.UTF_16BE.equals(actualCharSet))
+                {
+                    outputBuffer.put(writeStringUTF16BEBOM( next, i, values.size()));
                 }
                 else
                 {
-                    CharsetEncoder charsetEncoder = Charset.forName(charSetName).newEncoder();
+                    final CharsetEncoder charsetEncoder = charset.newEncoder();
                     charsetEncoder.onMalformedInput(CodingErrorAction.IGNORE);
                     charsetEncoder.onUnmappableCharacter(CodingErrorAction.IGNORE);
-                    outputBuffer.put(writeString( charsetEncoder, next, i, values.size()));
+                    outputBuffer.put(writeString(charsetEncoder, next, i, values.size()));
                 }
             }
             outputBuffer.flip();
@@ -330,7 +327,7 @@ public class TextEncodedStringSizeTerminated extends AbstractString
         //https://bitbucket.org/ijabz/jaudiotagger/issue/1/encoding-metadata-to-utf-16-can-fail-if
         catch (CharacterCodingException ce)
         {
-            logger.severe(ce.getMessage()+":"+charSetName+":"+value);
+            logger.severe(ce.getMessage()+":"+charset+":"+value);
             throw new RuntimeException(ce);
         }
         return data;
@@ -343,11 +340,11 @@ public class TextEncodedStringSizeTerminated extends AbstractString
      *
      * @return the text encoding charset
      */
-    protected String getTextEncodingCharSet()
+    protected Charset getTextEncodingCharSet()
     {
-        byte textEncoding = this.getBody().getTextEncoding();
-        String charSetName = TextEncoding.getInstanceOf().getValueForId(textEncoding);
-        logger.finest("text encoding:" + textEncoding + " charset:" + charSetName);
+        final byte textEncoding = this.getBody().getTextEncoding();
+        final Charset charSetName = TextEncoding.getInstanceOf().getCharsetForId(textEncoding);
+        logger.finest("text encoding:" + textEncoding + " charset:" + charSetName.name());
         return charSetName;
     }
 

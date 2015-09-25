@@ -107,9 +107,10 @@ public abstract class AbstractString extends AbstractDataType
     {
         //Try and write to buffer using the CharSet defined by the textEncoding field (note if using UTF16 we dont
         //need to worry about LE,BE at this point it makes no difference)
-        byte textEncoding = this.getBody().getTextEncoding();
-        String charSetName = TextEncoding.getInstanceOf().getValueForId(textEncoding);
-        CharsetEncoder encoder = Charset.forName(charSetName).newEncoder();
+        final byte textEncoding = this.getBody().getTextEncoding();
+        final TextEncoding encoding = TextEncoding.getInstanceOf();
+        final Charset charset = encoding.getCharsetForId(textEncoding);
+        CharsetEncoder encoder = charset.newEncoder();
 
         if (encoder.canEncode((String) value))
         {
