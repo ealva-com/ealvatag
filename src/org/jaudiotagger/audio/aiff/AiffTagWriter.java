@@ -160,7 +160,7 @@ public class AiffTagWriter implements TagWriter
     }
 
     /**
-     * The following should work, but DOES not :-(
+     * The following seems to work on Windows but hangs on OSX !
      *
      * @param existingTag
      * @param channel
@@ -171,16 +171,16 @@ public class AiffTagWriter implements TagWriter
             throws IOException
     {
         long read;
-        //Read from just after the ID3Chunk into the channel at where the ID3 chunk started, should only require one transfer
+        //Read from just after the ID3Chunk into the channel at where the ID3 chunk started, should usually only require one transfer
         //but put into loop in case multiple calls are required
         for (long position = existingTag.getStartLocationInFileOfId3Chunk();
              (read = channel.transferFrom(channel, position, newLength - position)) < newLength-position;
-             position += read);//is this problem if loop called more than once do we update position of channel to modify
+             position += read);//is this problem if loop called more than once do we need to update position of channel to modify
         //where write to ?
     }
 
     /**
-     * Use ByteBuffers to copy a 64kb chunk, write the chunk and repeat until the rest of the file after the ID3 tag
+     * Use ByteBuffers to copy a 4mb chunk, write the chunk and repeat until the rest of the file after the ID3 tag
      * is rewritten
      *
      * @param existingTag
@@ -192,7 +192,7 @@ public class AiffTagWriter implements TagWriter
     private void deleteTagChunkUsingSmallByteBufferSegments( final AiffTag existingTag, final FileChannel channel,  final long newLength, final long lengthTagChunk )
             throws IOException
     {
-        final ByteBuffer buffer = ByteBuffer.allocateDirect(64 * 1024);
+        final ByteBuffer buffer = ByteBuffer.allocateDirect(4 * 1024 * 1024);
         while (channel.read(buffer) >= 0 || buffer.position() != 0) {
             buffer.flip();
             final long readPosition = channel.position();
