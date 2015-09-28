@@ -214,6 +214,9 @@ public class WavTagWriter implements TagWriter
      *
      * Can be used when chunk is not the last chunk
      *
+     * Continually copy a 4mb chunk, write the chunk and repeat until the rest of the file after the tag
+     * is rewritten
+     *
      * @param raf
      * @param endOfExistingChunk
      * @param lengthTagChunk
@@ -221,21 +224,11 @@ public class WavTagWriter implements TagWriter
      */
     private void deleteTagChunk(final RandomAccessFile raf, int endOfExistingChunk,  final int lengthTagChunk) throws IOException
     {
-
-        // position for reading after the  tag
+        //Position for reading after the tag
         raf.seek(endOfExistingChunk);
         final FileChannel channel = raf.getChannel();
 
-        // the following should work, but DOES not :-(
-        /*
-        long read;
-        for (long position = existingTag.getStartLocationInFile();
-             (read = channel.transferFrom(channel, position, newLength - position)) < newLength-position;
-             position += read);
-        */
-
-        // so we do it the manual way
-        final ByteBuffer buffer = ByteBuffer.allocate(64 * 1024);
+        final ByteBuffer buffer = ByteBuffer.allocate(4 * 1024 * 1024);
         while (channel.read(buffer) >= 0 || buffer.position() != 0)
         {
             buffer.flip();
@@ -245,7 +238,7 @@ public class WavTagWriter implements TagWriter
             channel.position(readPosition);
             buffer.compact();
         }
-        // truncate the file after the last chunk
+        //Truncate the file after the last chunk
         final long newLength = raf.length() - lengthTagChunk;
         logger.config("Setting new length to:" + newLength);
         raf.setLength(newLength);
