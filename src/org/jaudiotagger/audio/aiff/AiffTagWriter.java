@@ -171,13 +171,16 @@ public class AiffTagWriter implements TagWriter
             throws IOException
     {
         long read;
+        //Read from just after the ID3Chunk into the channel at where the ID3 chunk started, should only require one transfer
+        //but put into loop in case multiple calls are required
         for (long position = existingTag.getStartLocationInFileOfId3Chunk();
              (read = channel.transferFrom(channel, position, newLength - position)) < newLength-position;
-             position += read);
+             position += read);//is this problem if loop called more than once do we update position of channel to modify
+        //where write to ?
     }
 
     /**
-     * Use ByteBuffers to copy a 64kb chunk, wtriute the chunk and repeat untikl the rest of the file after the ID3 tag
+     * Use ByteBuffers to copy a 64kb chunk, write the chunk and repeat until the rest of the file after the ID3 tag
      * is rewritten
      *
      * @param existingTag
