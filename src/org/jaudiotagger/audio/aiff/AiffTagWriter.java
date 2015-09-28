@@ -143,21 +143,53 @@ public class AiffTagWriter implements TagWriter
      * @param tagChunkHeader existing chunk header for the tag
      * @throws IOException if something goes wrong
      */
-    private void deleteTagChunk(final RandomAccessFile raf, final AiffTag existingTag, final ChunkHeader tagChunkHeader) throws IOException {
+    private void deleteTagChunk(final RandomAccessFile raf, final AiffTag existingTag, final ChunkHeader tagChunkHeader) throws IOException
+    {
         final int lengthTagChunk = (int) tagChunkHeader.getSize() + ChunkHeader.CHUNK_HEADER_SIZE;
+        final long newLength = raf.length() - lengthTagChunk;
+
         // position for reading after the id3 tag
         raf.seek(existingTag.getStartLocationInFileOfId3Chunk() + lengthTagChunk );
         final FileChannel channel = raf.getChannel();
-        // the following should work, but DOES not :-(
-        /*
+
+        //deleteTagChunkUsingChannelTransfer( existingTag, channel,  newLength );
+        deleteTagChunkUsingSmallByteBufferSegments( existingTag, channel,  newLength, lengthTagChunk );
+        // truncate the file after the last chunk
+        logger.config("Setting new length to:" + newLength);
+        raf.setLength(newLength);
+    }
+
+    /**
+     * The following should work, but DOES not :-(
+     *
+     * @param existingTag
+     * @param channel
+     * @param newLength
+     * @throws IOException
+     */
+    private void deleteTagChunkUsingChannelTransfer( final AiffTag existingTag, final FileChannel channel,  final long newLength )
+            throws IOException
+    {
         long read;
-        for (long position = existingTag.getStartLocationInFile();
+        for (long position = existingTag.getStartLocationInFileOfId3Chunk();
              (read = channel.transferFrom(channel, position, newLength - position)) < newLength-position;
              position += read);
-        */
+    }
 
-        // so we do it the manual way
-        final ByteBuffer buffer = ByteBuffer.allocate(64 * 1024);
+    /**
+     * Use ByteBuffers to copy a 64kb chunk, wtriute the chunk and repeat untikl the rest of the file after the ID3 tag
+     * is rewritten
+     *
+     * @param existingTag
+     * @param channel
+     * @param newLength
+     * @param lengthTagChunk
+     * @throws IOException
+     */
+    private void deleteTagChunkUsingSmallByteBufferSegments( final AiffTag existingTag, final FileChannel channel,  final long newLength, final long lengthTagChunk )
+            throws IOException
+    {
+        final ByteBuffer buffer = ByteBuffer.allocateDirect(64 * 1024);
         while (channel.read(buffer) >= 0 || buffer.position() != 0) {
             buffer.flip();
             final long readPosition = channel.position();
@@ -166,10 +198,6 @@ public class AiffTagWriter implements TagWriter
             channel.position(readPosition);
             buffer.compact();
         }
-        // truncate the file after the last chunk
-        final long newLength = raf.length() - lengthTagChunk;
-        logger.config("Setting new length to:" + newLength);
-        raf.setLength(newLength);
     }
 
     /**
