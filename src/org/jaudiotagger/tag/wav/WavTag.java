@@ -412,4 +412,13 @@ public class WavTag implements Tag
         }
         return id3Tag.getStartLocationInFile() - ChunkHeader.CHUNK_HEADER_SIZE;
     }
+
+    public long getEndLocationInFileOfId3Chunk()
+    {
+        if(!isExistingId3Tag())
+        {
+            return 0;
+        }
+        return id3Tag.getEndLocationInFile();
+    }
 }

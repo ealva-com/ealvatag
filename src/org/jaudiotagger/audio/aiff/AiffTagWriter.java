@@ -106,28 +106,21 @@ public class AiffTagWriter implements TagWriter
     {
         logger.config("Deleting tag from file");
         final AiffTag existingTag = getExistingMetadata(raf);
-        try
+
+        if (existingTag.isExistingId3Tag() && existingTag.getID3Tag().getStartLocationInFile() != null)
         {
-            if (existingTag.isExistingId3Tag() && existingTag.getID3Tag().getStartLocationInFile() != null)
+            ChunkHeader chunkHeader = seekToStartOfListInfoMetadata(raf, existingTag);
+            if (existingTag.getID3Tag().getEndLocationInFile() == raf.length())
             {
-                ChunkHeader chunkHeader = seekToStartOfListInfoMetadata(raf, existingTag);
-                if (existingTag.getID3Tag().getEndLocationInFile() == raf.length())
-                {
-                    logger.config("Setting new length to:" + (existingTag.getStartLocationInFileOfId3Chunk()));
-                    raf.setLength(existingTag.getStartLocationInFileOfId3Chunk());
-                }
-                else
-                {
-                    deleteTagChunk(raf, existingTag, chunkHeader);
-                }
-                rewriteRiffHeaderSize(raf);
+                logger.config("Setting new length to:" + (existingTag.getStartLocationInFileOfId3Chunk()));
+                raf.setLength(existingTag.getStartLocationInFileOfId3Chunk());
             }
+            else
+            {
+                deleteTagChunk(raf, existingTag, chunkHeader);
+            }
+            rewriteRiffHeaderSize(raf);
         }
-        finally
-        {
-            raf.close();
-        }
-        //and delete
     }
 
     /**

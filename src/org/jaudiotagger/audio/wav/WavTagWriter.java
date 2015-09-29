@@ -108,20 +108,19 @@ public class WavTagWriter implements TagWriter
      */
     private ChunkHeader seekToStartOfId3Metadata(RandomAccessFile raf, WavTag existingTag) throws IOException, CannotWriteException
     {
-        raf.seek(existingTag.getID3Tag().getStartLocationInFile());
+        raf.seek(existingTag.getStartLocationInFileOfId3Chunk());
         final ChunkHeader chunkHeader = new ChunkHeader(ByteOrder.BIG_ENDIAN);
         chunkHeader.readHeader(raf);
         raf.seek(raf.getFilePointer() - ChunkHeader.CHUNK_HEADER_SIZE);
-
         if (!WavChunkType.ID3.getCode().equals(chunkHeader.getID()))
         {
-            throw new CannotWriteException("Unable to find List chunk at original location has file been modified externally");
+            throw new CannotWriteException("Unable to find ID3 chunk at original location has file been modified externally");
         }
         return chunkHeader;
     }
 
     /**
-     * Delete given {@link org.jaudiotagger.tag.Tag} from file.
+     * Delete any existing metadata tags from files
      *
      * @param tag     tag, must be instance of {@link org.jaudiotagger.tag.wav.WavTag}
      * @param raf     random access file
@@ -135,8 +134,74 @@ public class WavTagWriter implements TagWriter
         WavTag existingTag = getExistingMetadata(raf);
         try
         {
+            //have both tags
+            if(existingTag.isExistingId3Tag() && existingTag.isExistingInfoTag())
+            {
+                BothTagsFileStructure fs = checkExistingLocations(existingTag, raf);
+                //We can delete both chunks in one go
+                if(fs.isContiguous)
+                {
+                    //Quick method
+                    if(fs.isAtEnd)
+                    {
+                        if(fs.isInfoTagFirst)
+                        {
+                            logger.info("Setting new length to:" + existingTag.getInfoTag().getStartLocationInFile());
+                            raf.setLength(existingTag.getInfoTag().getStartLocationInFile());
+                        }
+                        else
+                        {
+                            logger.info("Setting new length to:" + existingTag.getStartLocationInFileOfId3Chunk());
+                            raf.setLength(existingTag.getStartLocationInFileOfId3Chunk());
+                        }
+                    }
+                    //Slower
+                    else
+                    {
+                        if(fs.isInfoTagFirst)
+                        {
+                            final int lengthTagChunk = (int)(existingTag.getEndLocationInFileOfId3Chunk() - existingTag.getInfoTag().getStartLocationInFile());
+                            deleteTagChunk(raf, (int)existingTag.getEndLocationInFileOfId3Chunk(), lengthTagChunk);
+                        }
+                        else
+                        {
+                            final int lengthTagChunk = (int)(existingTag.getInfoTag().getEndLocationInFile().intValue()
+                                    - existingTag.getStartLocationInFileOfId3Chunk());
+                            deleteTagChunk(raf, (int)existingTag.getInfoTag().getEndLocationInFile().intValue(), lengthTagChunk);
+                        }
+                    }
+                }
+                //Tricky to delete both because once one is deleted affects the location of the other
+                else
+                {
+                    WavInfoTag existingInfoTag = existingTag.getInfoTag();
+                    ChunkHeader infoChunkHeader = seekToStartOfListInfoMetadata(raf, existingTag);
+
+                    AbstractID3v2Tag existingID3Tag = existingTag.getID3Tag();
+                    ChunkHeader id3ChunkHeader = seekToStartOfId3Metadata(raf, existingTag);
+
+                    //If one of these two at end of file delete first then remove the other as a chunk
+                    if (existingInfoTag.getEndLocationInFile() == raf.length())
+                    {
+                        raf.setLength(existingInfoTag.getStartLocationInFile());
+                        deleteId3TagChunk(raf, existingTag,id3ChunkHeader);
+                    }
+                    else if (existingID3Tag.getEndLocationInFile() == raf.length())
+                    {
+                        raf.setLength(existingTag.getStartLocationInFileOfId3Chunk());
+                        deleteInfoTagChunk(raf, existingTag, infoChunkHeader);
+                    }
+                    else
+                    {
+                        deleteId3TagChunk(raf, existingTag,id3ChunkHeader);
+                        //Reread then delete other tag
+                        existingTag = getExistingMetadata(raf);
+                        deleteInfoTagChunk(raf, existingTag, infoChunkHeader);
+                    }
+                }
+            }
             //Delete Info if exists
-            if(existingTag.isExistingInfoTag())
+            else if(existingTag.isExistingInfoTag())
             {
                 WavInfoTag existingInfoTag = existingTag.getInfoTag();
                 ChunkHeader chunkHeader = seekToStartOfListInfoMetadata(raf, existingTag);
@@ -145,68 +210,65 @@ public class WavTagWriter implements TagWriter
                 {
                     logger.info("Setting new length to:" + existingInfoTag.getStartLocationInFile());
                     raf.setLength(existingInfoTag.getStartLocationInFile());
-                    rewriteRiffHeaderSize(raf);
                 }
                 else
                 {
                     deleteInfoTagChunk(raf, existingTag, chunkHeader);
-                    rewriteRiffHeaderSize(raf);
                 }
             }
-
-            //Reread because things would have moved
-            /*
-            existingTag = getExistingMetadata(raf);
-            if(existingTag.isExistingId3Tag())
+            else if(existingTag.isExistingId3Tag())
             {
                 AbstractID3v2Tag existingID3Tag = existingTag.getID3Tag();
-                ChunkHeader chunkHeader = seekToStartOfListInfoMetadata(raf, existingTag);
+                ChunkHeader chunkHeader = seekToStartOfId3Metadata(raf, existingTag);
                 //and it is at end of the file
                 if (existingID3Tag.getEndLocationInFile() == raf.length())
                 {
                     logger.info("Setting new length to:" + existingTag.getStartLocationInFileOfId3Chunk());
                     raf.setLength(existingTag.getStartLocationInFileOfId3Chunk());
-                    rewriteRiffHeaderSize(raf);
                 }
                 else
                 {
                     deleteId3TagChunk(raf, existingTag, chunkHeader);
-                    rewriteRiffHeaderSize(raf);
                 }
-            }*/
-
+            }
+            else
+            {
+                //Nothing to delete
+            }
         }
         finally
         {
-            raf.close();
+            rewriteRiffHeaderSize(raf);
         }
     }
 
-    /** Delete existing Info Tag
+    /**
+     * Delete existing Info Tag
      *
      * @param raf
      * @param existingTag
-     * @param listChunkHeader
+     * @param chunkHeader
      * @throws IOException
      */
-    private void deleteInfoTagChunk(final RandomAccessFile raf, final WavTag existingTag, final ChunkHeader listChunkHeader) throws IOException
+    private void deleteInfoTagChunk(final RandomAccessFile raf, final WavTag existingTag, final ChunkHeader chunkHeader) throws IOException
     {
         final WavInfoTag existingInfoTag = existingTag.getInfoTag();
-        final int lengthTagChunk = (int) listChunkHeader.getSize() + ChunkHeader.CHUNK_HEADER_SIZE;
+        final int lengthTagChunk = (int) chunkHeader.getSize() + ChunkHeader.CHUNK_HEADER_SIZE;
         deleteTagChunk(raf, existingInfoTag.getEndLocationInFile().intValue(), lengthTagChunk);
     }
 
-    /** Delete existing Id3 Tag
+    /**
+     * Delete existing Id3 Tag
      *
      * @param raf
      * @param existingTag
-     * @param listChunkHeader
+     * @param chunkHeader
      * @throws IOException
      */
-    private void deleteId3TagChunk(final RandomAccessFile raf, final WavTag existingTag, final ChunkHeader listChunkHeader) throws IOException
+    private void deleteId3TagChunk(final RandomAccessFile raf, final WavTag existingTag, final ChunkHeader chunkHeader) throws IOException
     {
-        final int lengthTagChunk = (int) listChunkHeader.getSize() + ChunkHeader.CHUNK_HEADER_SIZE;
-        deleteTagChunk(raf, (int)existingTag.getStartLocationInFileOfId3Chunk(), lengthTagChunk);
+        final int lengthTagChunk = (int) chunkHeader.getSize() + ChunkHeader.CHUNK_HEADER_SIZE;
+        deleteTagChunk(raf, (int)existingTag.getEndLocationInFileOfId3Chunk(), lengthTagChunk);
     }
 
     /**
@@ -465,7 +527,8 @@ public class WavTagWriter implements TagWriter
         if(wavTag.getInfoTag().getStartLocationInFile() < wavTag.getID3Tag().getStartLocationInFile())
         {
             fs.isInfoTagFirst = true;
-            if(wavTag.getInfoTag().getEndLocationInFile()== wavTag.getID3Tag().getStartLocationInFile())
+            //Must allow for odd size chunks
+            if(Math.abs(wavTag.getInfoTag().getEndLocationInFile() - wavTag.getID3Tag().getStartLocationInFile()) <=1)
             {
                 fs.isContiguous = true;
                 if(wavTag.getID3Tag().getEndLocationInFile() == raf.length())
@@ -476,7 +539,8 @@ public class WavTagWriter implements TagWriter
         }
         else
         {
-            if(wavTag.getID3Tag().getEndLocationInFile()== wavTag.getInfoTag().getStartLocationInFile())
+            //Must allow for odd size chunks
+            if(Math.abs(wavTag.getID3Tag().getEndLocationInFile() - wavTag.getInfoTag().getStartLocationInFile()) <=1)
             {
                 fs.isContiguous = true;
                 if(wavTag.getInfoTag().getEndLocationInFile() == raf.length())
@@ -560,14 +624,14 @@ public class WavTagWriter implements TagWriter
     private void seekAndWriteInfoChunk(RandomAccessFile raf,final WavTag existingTag, ByteBuffer newTagBuffer)
             throws CannotWriteException, IOException
     {
-        seekToStartOfListInfoMetadata(raf, existingTag);
+        ChunkHeader infoChunkHeader = seekToStartOfListInfoMetadata(raf, existingTag);
         if (existingTag.getInfoTag().getEndLocationInFile() == raf.length())
         {
             writeInfoChunk(raf, existingTag.getInfoTag(), newTagBuffer);
         }
-        //TODO we need to delete existing tag before writing new one, or write new one inplace
         else
         {
+            deleteInfoTagChunk(raf,existingTag, infoChunkHeader);
             raf.seek(raf.length());
             writeInfoDataToFile(raf, newTagBuffer, newTagBuffer.limit());
         }
@@ -585,14 +649,14 @@ public class WavTagWriter implements TagWriter
     private void seekAndWriteId3Chunk(RandomAccessFile raf,final WavTag existingTag, ByteBuffer newTagBuffer)
             throws CannotWriteException, IOException
     {
-        seekToStartOfId3Metadata(raf, existingTag);
+        ChunkHeader id3ChunkHeader = seekToStartOfId3Metadata(raf, existingTag);
         if (existingTag.getID3Tag().getEndLocationInFile() == raf.length())
         {
             writeId3Chunk(raf, existingTag.getID3Tag(), newTagBuffer);
         }
-        //TODO we need to delete existing tag before writing new one, or write new one inplace
         else
         {
+            deleteInfoTagChunk(raf,existingTag, id3ChunkHeader);
             raf.seek(raf.length());
             writeID3DataToFile(raf, newTagBuffer, newTagBuffer.limit());
         }
@@ -649,15 +713,15 @@ public class WavTagWriter implements TagWriter
         //If only INFO chunk exists
         else if(existingTag.isExistingInfoTag() && !existingTag.isExistingId3Tag())
         {
-            seekToStartOfListInfoMetadata(raf, existingTag);
+            ChunkHeader infoChunkHeader = seekToStartOfListInfoMetadata(raf, existingTag);
             if (existingInfoTag.getEndLocationInFile() == raf.length())
             {
                 writeInfoChunk(raf, existingInfoTag, infoTagBuffer );
                 writeId3Chunk(raf, existingId3Tag, id3TagBuffer );
             }
-            //TODO we need to delete existing tag before writing new one, or write new one inplace
             else
             {
+                deleteInfoTagChunk(raf, existingTag, infoChunkHeader);
                 raf.seek(raf.length());
                 writeInfoDataToFile(raf, infoTagBuffer, newInfoTagSize);
                 writeId3Chunk(raf, existingId3Tag, id3TagBuffer );
@@ -666,15 +730,15 @@ public class WavTagWriter implements TagWriter
         //If only ID3 chunk exists
         else if(!existingTag.isExistingInfoTag() && existingTag.isExistingId3Tag())
         {
-            seekToStartOfId3Metadata(raf, existingTag);
+            ChunkHeader id3ChunkHeader = seekToStartOfId3Metadata(raf, existingTag);
             if (existingId3Tag.getEndLocationInFile() == raf.length())
             {
                 writeId3Chunk(raf, existingId3Tag, id3TagBuffer );
                 writeInfoChunk(raf, existingInfoTag, infoTagBuffer );
             }
-            //TODO we need to delete existing tag before writing new one, or write new one inplace
             else
             {
+                deleteId3TagChunk(raf, existingTag, id3ChunkHeader);
                 raf.seek(raf.length());
                 writeId3Chunk(raf, existingId3Tag, id3TagBuffer );
                 writeInfoDataToFile(raf, infoTagBuffer, newInfoTagSize);
@@ -691,9 +755,7 @@ public class WavTagWriter implements TagWriter
     }
 
     /**
-     * Save Active chunk only
-     *
-     * TODO what should we do if noactive tag already exists in file
+     * Save Active chunk only, if a non-active metadata chunk exists will be removed
      *
      * @param wavTag
      * @param raf
@@ -709,14 +771,33 @@ public class WavTagWriter implements TagWriter
             final ByteBuffer infoTagBuffer = convertInfoChunk(wavTag);
             final long newInfoTagSize = infoTagBuffer.limit();
 
-            if(existingTag.isExistingInfoTag())
+            if(existingTag.isExistingId3Tag())
             {
-                seekAndWriteInfoChunk(raf,existingTag, infoTagBuffer);
+                ChunkHeader id3ChunkHeader = seekToStartOfId3Metadata(raf, existingTag);
+                if (existingTag.getEndLocationInFileOfId3Chunk() == raf.length())
+                {
+                    raf.setLength(existingTag.getStartLocationInFileOfId3Chunk());
+                    raf.seek(raf.length());
+                    writeInfoDataToFile(raf, infoTagBuffer, newInfoTagSize);
+                }
+                else
+                {
+                    deleteId3TagChunk(raf,existingTag, id3ChunkHeader);
+                    raf.seek(raf.length());
+                    writeInfoDataToFile(raf, infoTagBuffer, newInfoTagSize);
+                }
             }
             else
             {
-                raf.seek(raf.length());
-                writeInfoDataToFile(raf, infoTagBuffer, newInfoTagSize);
+                if (existingTag.isExistingInfoTag())
+                {
+                    seekAndWriteInfoChunk(raf, existingTag, infoTagBuffer);
+                }
+                else
+                {
+                    raf.seek(raf.length());
+                    writeInfoDataToFile(raf, infoTagBuffer, newInfoTagSize);
+                }
             }
         }
         else
@@ -724,14 +805,33 @@ public class WavTagWriter implements TagWriter
             final ByteBuffer id3TagBuffer = convertID3Chunk(wavTag);
             final long newInfoTagSize = id3TagBuffer.limit();
 
-            if(existingTag.isExistingId3Tag())
+            if(existingTag.isExistingInfoTag())
             {
-                seekAndWriteId3Chunk(raf, existingTag,id3TagBuffer);
+                ChunkHeader infoChunkHeader = seekToStartOfListInfoMetadata(raf, existingTag);
+                if (existingTag.getInfoTag().getEndLocationInFile() == raf.length())
+                {
+                    raf.setLength(existingTag.getInfoTag().getStartLocationInFile());
+                    raf.seek(raf.length());
+                    writeID3DataToFile(raf, id3TagBuffer, newInfoTagSize);
+                }
+                else
+                {
+                    deleteInfoTagChunk(raf,existingTag, infoChunkHeader);
+                    raf.seek(raf.length());
+                    writeID3DataToFile(raf, id3TagBuffer, newInfoTagSize);
+                }
             }
             else
             {
-                raf.seek(raf.length());
-                writeID3DataToFile(raf, id3TagBuffer, newInfoTagSize);
+                if (existingTag.isExistingId3Tag())
+                {
+                    seekAndWriteId3Chunk(raf, existingTag, id3TagBuffer);
+                }
+                else
+                {
+                    raf.seek(raf.length());
+                    writeID3DataToFile(raf, id3TagBuffer, newInfoTagSize);
+                }
             }
         }
     }
