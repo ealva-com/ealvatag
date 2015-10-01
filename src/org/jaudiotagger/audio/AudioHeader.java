@@ -31,6 +31,15 @@ public interface AudioHeader
 
 
     /**
+     *
+     * @return length of the audio data in bytes, aeactly what this means depends on the audio format
+     *
+     * TODO currently only used by Wav
+     */
+    public long getAudioDataLength();
+
+
+    /**
      * @return the Sampling rate, the number of samples taken per second
      */
     public String getSampleRate();

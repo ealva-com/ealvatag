@@ -830,4 +830,13 @@ public class MP3AudioHeader implements AudioHeader
     {
         return null;
     }
+
+    /**
+     * TODO (Was origjnally added for Wavs)
+     * @return
+     */
+    public long getAudioDataLength()
+    {
+        return 0;
+    }
 }

@@ -30,7 +30,7 @@ public class WavSimpleTest extends AbstractTestCase
             System.out.println(f.getAudioHeader());
             assertEquals("176", f.getAudioHeader().getBitRate());
             assertEquals(22050, f.getAudioHeader().getByteRate().intValue());
-            assertEquals("WAV-RIFF 8 bits", f.getAudioHeader().getEncodingType());
+            assertEquals("WAV PCM 8 bits", f.getAudioHeader().getEncodingType());
             assertEquals("1", f.getAudioHeader().getChannels());
             assertEquals("22050", f.getAudioHeader().getSampleRate());
             assertEquals(8, f.getAudioHeader().getBitsPerSample());
@@ -64,7 +64,7 @@ public class WavSimpleTest extends AbstractTestCase
 
             assertEquals("529", f.getAudioHeader().getBitRate());
             assertEquals(66150, f.getAudioHeader().getByteRate().intValue());
-            assertEquals("WAV-RIFF 24 bits", f.getAudioHeader().getEncodingType());
+            assertEquals("WAV PCM 24 bits", f.getAudioHeader().getEncodingType());
             assertEquals("1", f.getAudioHeader().getChannels());
             assertEquals("22050", f.getAudioHeader().getSampleRate());
             assertEquals(24, f.getAudioHeader().getBitsPerSample());
@@ -94,6 +94,55 @@ public class WavSimpleTest extends AbstractTestCase
                 +formatNew+"("+Hex.asHex(formatNew)+")");
     }
 
+    public void testRead8bitStereoFile()
+    {
+        Exception exceptionCaught = null;
+        try
+        {
+            File testFile = AbstractTestCase.copyAudioToTmp("test127.wav");
+            AudioFile f = AudioFileIO.read(testFile);
+            System.out.println(f.getAudioHeader());
+            assertEquals(46986, f.getAudioHeader().getAudioDataLength());
+            assertEquals("128", f.getAudioHeader().getBitRate());
+            assertEquals(16000, f.getAudioHeader().getByteRate().intValue());
+            assertEquals("WAV A-LAW 8 bits", f.getAudioHeader().getEncodingType());
+            assertEquals("2", f.getAudioHeader().getChannels());
+            assertEquals("8000", f.getAudioHeader().getSampleRate());
+            assertEquals(8, f.getAudioHeader().getBitsPerSample());
+            assertEquals(2, f.getAudioHeader().getTrackLength());
+            assertTrue(f.getTag() instanceof WavTag);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            exceptionCaught = e;
+        }
+        assertNull(exceptionCaught);
+    }
 
-
+    public void testRead8bitStereoFileExtensible()
+    {
+        Exception exceptionCaught = null;
+        try
+        {
+            File testFile = AbstractTestCase.copyAudioToTmp("test128.wav");
+            AudioFile f = AudioFileIO.read(testFile);
+            System.out.println(f.getAudioHeader());
+            assertEquals(46986, f.getAudioHeader().getAudioDataLength());
+            assertEquals("128", f.getAudioHeader().getBitRate());
+            assertEquals(16000, f.getAudioHeader().getByteRate().intValue());
+            assertEquals("WAV A-LAW 8 bits", f.getAudioHeader().getEncodingType());
+            assertEquals("2", f.getAudioHeader().getChannels());
+            assertEquals("8000", f.getAudioHeader().getSampleRate());
+            assertEquals(8, f.getAudioHeader().getBitsPerSample());
+            assertEquals(2, f.getAudioHeader().getTrackLength());
+            assertTrue(f.getTag() instanceof WavTag);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            exceptionCaught = e;
+        }
+        assertNull(exceptionCaught);
+    }
 }

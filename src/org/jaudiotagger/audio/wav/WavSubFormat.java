@@ -8,23 +8,30 @@ import java.util.Map;
  */
 public enum WavSubFormat
 {
-    FORMAT_PCM(1),
-    FORMAT_FLOAT(3),
-    FORMAT_ALAW(6),
-    FORMAT_MULAW(7),
-    FORMAT_EXTENSIBLE(0xFFFE),
+    FORMAT_PCM(1,"WAV PCM"),
+    FORMAT_FLOAT(3, "WAV IEEE_FLOAT"),
+    FORMAT_ALAW(6, "WAV A-LAW"),
+    FORMAT_MULAW(7, "WAV µ-LAW"),
+    FORMAT_EXTENSIBLE(0xFFFE, "EXTENSIBLE"),
     ;
 
     private int code;
+    private String description;
 
-    WavSubFormat(int code)
+    WavSubFormat(int code, String description)
     {
         this.code=code;
+        this.description=description;
     }
 
     public int getCode()
     {
         return code;
+    }
+
+    public String getDescription()
+    {
+        return description;
     }
 
     // Reverse-lookup map for getting a compression type from code

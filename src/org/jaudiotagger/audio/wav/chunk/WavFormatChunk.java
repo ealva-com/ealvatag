@@ -42,7 +42,7 @@ import java.nio.ByteBuffer;
 public class WavFormatChunk extends Chunk
 {
     private static final int   STANDARD_DATA_SIZE = 18;
-    private static final int   EXTENSIBLE_DATA_SIZE = 14;
+    private static final int   EXTENSIBLE_DATA_SIZE = 22;
     private static final int   EXTENSIBLE_DATA_SIZE_WE_NEED = 10;
 
     private static final String WAV_RIFF_ENCODING_PREPEND = "WAV-RIFF ";
@@ -80,16 +80,16 @@ public class WavFormatChunk extends Chunk
                 if(extensibleSize == EXTENSIBLE_DATA_SIZE)
                 {
                     info.setBitsPerSample(Utils.u(chunkData.getShort()));
+                    //We dont use this currently
                     channelMask = chunkData.getInt();
 
                     //If Extensible then the actual formatCode is held here
                     wsf = WavSubFormat.getByCode(Utils.u(chunkData.getShort()));
+                    System.out.println(wsf);
                 }
             }
-            info.setEncodingType(WAV_RIFF_ENCODING_PREPEND + info.getBitsPerSample() + " bits");
+            info.setEncodingType(wsf.getDescription() + " " + info.getBitsPerSample() + " bits");
             isValid = true;
-
-
         }
         return true;
     }
