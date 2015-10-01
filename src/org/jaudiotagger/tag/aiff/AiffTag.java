@@ -216,25 +216,25 @@ public class AiffTag implements Tag
     @Override
     public TagField createField(Artwork artwork) throws FieldDataInvalidException
     {
-        throw new FieldDataInvalidException("Not supported");
+        return id3Tag.createField(artwork);
     }
 
     @Override
     public void setField(Artwork artwork) throws FieldDataInvalidException
     {
-        throw new FieldDataInvalidException("Not supported");
+        id3Tag.setField(artwork);
     }
 
     @Override
     public void addField(Artwork artwork) throws FieldDataInvalidException
     {
-        throw new FieldDataInvalidException("Not supported");
+        id3Tag.addField(artwork);
     }
 
     @Override
     public List<Artwork> getArtworkList()
     {
-        return new ArrayList<Artwork>();
+        return id3Tag.getArtworkList();
     }
 
     @Override
@@ -246,7 +246,7 @@ public class AiffTag implements Tag
     @Override
     public Artwork getFirstArtwork()
     {
-        return null;
+        return id3Tag.getFirstArtwork();
     }
 
     /**
