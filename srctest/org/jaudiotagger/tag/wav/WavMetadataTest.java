@@ -35,7 +35,6 @@ public class WavMetadataTest extends AbstractTestCase
             AudioFile f = AudioFileIO.read(testFile);
             System.out.println(f.getAudioHeader());
             assertEquals("529", f.getAudioHeader().getBitRate());
-            assertEquals("WAV-RIFF 24 bits", f.getAudioHeader().getEncodingType());
             assertEquals("1", f.getAudioHeader().getChannels());
             assertEquals("22050", f.getAudioHeader().getSampleRate());
 
@@ -90,7 +89,6 @@ public class WavMetadataTest extends AbstractTestCase
             AudioFile f = AudioFileIO.read(testFile);
             System.out.println(f.getAudioHeader());
             assertEquals("529", f.getAudioHeader().getBitRate());
-            assertEquals("WAV-RIFF 24 bits", f.getAudioHeader().getEncodingType());
             assertEquals("1", f.getAudioHeader().getChannels());
             assertEquals("22050", f.getAudioHeader().getSampleRate());
 
@@ -149,7 +147,6 @@ public class WavMetadataTest extends AbstractTestCase
             AudioFile f = AudioFileIO.read(testFile);
             System.out.println(f.getAudioHeader());
             assertEquals("529", f.getAudioHeader().getBitRate());
-            assertEquals("WAV-RIFF 24 bits", f.getAudioHeader().getEncodingType());
             assertEquals("1", f.getAudioHeader().getChannels());
             assertEquals("22050", f.getAudioHeader().getSampleRate());
 
@@ -209,7 +206,6 @@ public class WavMetadataTest extends AbstractTestCase
             AudioFile f = AudioFileIO.read(testFile);
             System.out.println(f.getAudioHeader());
             assertEquals("529", f.getAudioHeader().getBitRate());
-            assertEquals("WAV-RIFF 24 bits", f.getAudioHeader().getEncodingType());
             assertEquals("1", f.getAudioHeader().getChannels());
             assertEquals("22050", f.getAudioHeader().getSampleRate());
 
@@ -271,7 +267,6 @@ public class WavMetadataTest extends AbstractTestCase
             AudioFile f = AudioFileIO.read(testFile);
             System.out.println(f.getAudioHeader());
             assertEquals("529", f.getAudioHeader().getBitRate());
-            assertEquals("WAV-RIFF 24 bits", f.getAudioHeader().getEncodingType());
             assertEquals("1", f.getAudioHeader().getChannels());
             assertEquals("22050", f.getAudioHeader().getSampleRate());
 
@@ -334,7 +329,6 @@ public class WavMetadataTest extends AbstractTestCase
             AudioFile f = AudioFileIO.read(testFile);
             System.out.println(f.getAudioHeader());
             assertEquals("529", f.getAudioHeader().getBitRate());
-            assertEquals("WAV-RIFF 24 bits", f.getAudioHeader().getEncodingType());
             assertEquals("1", f.getAudioHeader().getChannels());
             assertEquals("22050", f.getAudioHeader().getSampleRate());
 
@@ -404,7 +398,6 @@ public class WavMetadataTest extends AbstractTestCase
             AudioFile f = AudioFileIO.read(testFile);
             System.out.println(f.getAudioHeader());
             assertEquals("529", f.getAudioHeader().getBitRate());
-            assertEquals("WAV-RIFF 24 bits", f.getAudioHeader().getEncodingType());
             assertEquals("1", f.getAudioHeader().getChannels());
             assertEquals("22050", f.getAudioHeader().getSampleRate());
 
@@ -613,7 +606,6 @@ public class WavMetadataTest extends AbstractTestCase
             AudioFile f = AudioFileIO.read(testFile);
             System.out.println(f.getAudioHeader());
             assertEquals("529", f.getAudioHeader().getBitRate());
-            assertEquals("WAV-RIFF 24 bits", f.getAudioHeader().getEncodingType());
             assertEquals("1", f.getAudioHeader().getChannels());
             assertEquals("22050", f.getAudioHeader().getSampleRate());
 
@@ -672,7 +664,6 @@ public class WavMetadataTest extends AbstractTestCase
             AudioFile f = AudioFileIO.read(testFile);
             System.out.println(f.getAudioHeader());
             assertEquals("529", f.getAudioHeader().getBitRate());
-            assertEquals("WAV-RIFF 24 bits", f.getAudioHeader().getEncodingType());
             assertEquals("1", f.getAudioHeader().getChannels());
             assertEquals("22050", f.getAudioHeader().getSampleRate());
 
@@ -733,7 +724,6 @@ public class WavMetadataTest extends AbstractTestCase
             AudioFile f = AudioFileIO.read(testFile);
             System.out.println(f.getAudioHeader());
             assertEquals("529", f.getAudioHeader().getBitRate());
-            assertEquals("WAV-RIFF 24 bits", f.getAudioHeader().getEncodingType());
             assertEquals("1", f.getAudioHeader().getChannels());
             assertEquals("22050", f.getAudioHeader().getSampleRate());
 
@@ -792,7 +782,6 @@ public class WavMetadataTest extends AbstractTestCase
             AudioFile f = AudioFileIO.read(testFile);
             System.out.println(f.getAudioHeader());
             assertEquals("529", f.getAudioHeader().getBitRate());
-            assertEquals("WAV-RIFF 24 bits", f.getAudioHeader().getEncodingType());
             assertEquals("1", f.getAudioHeader().getChannels());
             assertEquals("22050", f.getAudioHeader().getSampleRate());
 
@@ -852,7 +841,6 @@ public class WavMetadataTest extends AbstractTestCase
             AudioFile f = AudioFileIO.read(testFile);
             System.out.println(f.getAudioHeader());
             assertEquals("529", f.getAudioHeader().getBitRate());
-            assertEquals("WAV-RIFF 24 bits", f.getAudioHeader().getEncodingType());
             assertEquals("1", f.getAudioHeader().getChannels());
             assertEquals("22050", f.getAudioHeader().getSampleRate());
 
@@ -917,7 +905,6 @@ public class WavMetadataTest extends AbstractTestCase
             AudioFile f = AudioFileIO.read(testFile);
             System.out.println(f.getAudioHeader());
             assertEquals("529", f.getAudioHeader().getBitRate());
-            assertEquals("WAV-RIFF 24 bits", f.getAudioHeader().getEncodingType());
             assertEquals("1", f.getAudioHeader().getChannels());
             assertEquals("22050", f.getAudioHeader().getSampleRate());
 
