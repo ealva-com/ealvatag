@@ -3,6 +3,8 @@ package org.jaudiotagger.audio.wav;
 import org.jaudiotagger.AbstractTestCase;
 import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.AudioFileIO;
+import org.jaudiotagger.audio.AudioHeader;
+import org.jaudiotagger.audio.aiff.AiffAudioHeader;
 import org.jaudiotagger.audio.generic.GenericTag;
 import org.jaudiotagger.logging.Hex;
 import org.jaudiotagger.tag.FieldKey;
@@ -18,7 +20,7 @@ import java.nio.ByteOrder;
  */
 public class WavSimpleTest extends AbstractTestCase
 {
-    public void testReadFile()
+    public void testRead8bitMonoFile()
     {
         Exception exceptionCaught = null;
         try
@@ -27,22 +29,13 @@ public class WavSimpleTest extends AbstractTestCase
             AudioFile f = AudioFileIO.read(testFile);
             System.out.println(f.getAudioHeader());
             assertEquals("176", f.getAudioHeader().getBitRate());
+            assertEquals(22050, f.getAudioHeader().getByteRate().intValue());
             assertEquals("WAV-RIFF 8 bits", f.getAudioHeader().getEncodingType());
             assertEquals("1", f.getAudioHeader().getChannels());
             assertEquals("22050", f.getAudioHeader().getSampleRate());
-
-
+            assertEquals(8, f.getAudioHeader().getBitsPerSample());
+            assertEquals(14, f.getAudioHeader().getTrackLength());
             assertTrue(f.getTag() instanceof WavTag);
-            WavTag tag = (WavTag) f.getTag();
-
-            //Ease of use methods for common fields
-            assertEquals("", tag.getFirst(FieldKey.ARTIST));
-            assertEquals("", tag.getFirst(FieldKey.ALBUM));
-            assertEquals("", tag.getFirst(FieldKey.TITLE));
-            assertEquals("", tag.getFirst(FieldKey.COMMENT));
-            assertEquals("", tag.getFirst(FieldKey.YEAR));
-            assertEquals("", tag.getFirst(FieldKey.TRACK));
-            assertEquals("", tag.getFirst(FieldKey.GENRE));
         }
         catch (Exception e)
         {
@@ -52,7 +45,7 @@ public class WavSimpleTest extends AbstractTestCase
         assertNull(exceptionCaught);
     }
 
-    public void testRead24BitFile()
+    public void testRead24BitMonoFile()
     {
         File orig = new File("testdata", "test105.wav");
         if (!orig.isFile())
@@ -70,22 +63,12 @@ public class WavSimpleTest extends AbstractTestCase
 
 
             assertEquals("529", f.getAudioHeader().getBitRate());
+            assertEquals(66150, f.getAudioHeader().getByteRate().intValue());
             assertEquals("WAV-RIFF 24 bits", f.getAudioHeader().getEncodingType());
             assertEquals("1", f.getAudioHeader().getChannels());
             assertEquals("22050", f.getAudioHeader().getSampleRate());
-
-
-            assertTrue(f.getTag() instanceof WavTag);        //TODO Flawed concept should be wavtag
-            WavTag tag = (WavTag) f.getTag();
-
-            //Ease of use methods for common fields
-            assertEquals("", tag.getFirst(FieldKey.ARTIST));
-            assertEquals("", tag.getFirst(FieldKey.ALBUM));
-            assertEquals("", tag.getFirst(FieldKey.TITLE));
-            assertEquals("", tag.getFirst(FieldKey.COMMENT));
-            assertEquals("", tag.getFirst(FieldKey.YEAR));
-            assertEquals("", tag.getFirst(FieldKey.TRACK));
-            assertEquals("", tag.getFirst(FieldKey.GENRE));
+            assertEquals(24, f.getAudioHeader().getBitsPerSample());
+            assertEquals(14, f.getAudioHeader().getTrackLength());
         }
         catch (Exception e)
         {
@@ -95,53 +78,7 @@ public class WavSimpleTest extends AbstractTestCase
         assertNull(exceptionCaught);
     }
 
-    /* Doesnt support writing currently
-     public void testWriteFile()
-    {
-        Exception exceptionCaught = null;
-        try
-        {
-            File testFile = AbstractTestCase.copyAudioToTmp("test.wav",new File("testwrite1.wav"));
-            AudioFile f = AudioFileIO.read(testFile);
 
-            assertEquals("176",f.getAudioHeader().getBitRate());
-            assertEquals("WAV-RIFF 8 bits",f.getAudioHeader().getEncodingType());
-            assertEquals("1",f.getAudioHeader().getChannels());
-            assertEquals("22050",f.getAudioHeader().getSampleRate());
-
-
-            assertTrue(f.getTag() instanceof GenericTag);        //TODO Flawed concept hould be wavtag
-            GenericTag tag = (GenericTag)f.getTag();
-
-            //Write some new values and save
-            tag.setField(FieldKey.ARTIST,("artist2");
-            tag.setField(FieldKey.ALBUM,"album2");
-            tag.setField(FieldKey.TITLE,"tracktitle2");
-            tag.setField(FieldKey.COMMENT,"comments2");
-            tag.setField(FieldKey.YEAR,"1972");
-            tag.setField(FieldKey.GENRE,("genre2");
-            tag.setField(FieldKey.TRACK,"4");
-            f.commit();
-
-            f = AudioFileIO.read(testFile);
-            tag = (GenericTag)f.getTag();
-
-            assertEquals("artist2", tag.getFirst(FieldKey.ARTIST));
-            assertEquals("album2", tag.getFirst(FieldKey.ALBUM));
-            assertEquals("tracktitle2", tag.getFirst(FieldKey.TITLE));
-            assertEquals("comments2", tag.getFirstComment());
-            assertEquals("1972", tag.getFirst(FieldKey.YEAR));
-            assertEquals("4", tag.getFirst(FieldKey.TRACK));
-            assertEquals("genre2", tag.getFirst(FieldKey.GENRE));
-        }
-        catch(Exception e)
-        {
-             e.printStackTrace();
-             exceptionCaught = e;
-        }
-        assertNull(exceptionCaught);
-    }
-    */
 
     public void testReadingOfShort()
     {
@@ -156,6 +93,7 @@ public class WavSimpleTest extends AbstractTestCase
         System.out.println("Format:"+format+"("+ Hex.asHex(format)+")"+":FormatNew:"
                 +formatNew+"("+Hex.asHex(formatNew)+")");
     }
+
 
 
 }

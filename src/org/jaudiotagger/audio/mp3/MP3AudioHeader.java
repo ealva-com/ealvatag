@@ -821,4 +821,13 @@ public class MP3AudioHeader implements AudioHeader
         }
         return s;
     }
+
+    /**
+     * TODO (Was originally added for Wavs)
+     * @return
+     */
+    public Integer getByteRate()
+    {
+        return null;
+    }
 }

@@ -47,7 +47,7 @@ public class WavFormatChunk extends Chunk
 
     private static final String WAV_RIFF_ENCODING_PREPEND = "WAV-RIFF ";
 
-    public  static int BITS_IN_BYTE = 8;
+    public  static int BITS_IN_BYTE_MULTIPLIER = 8;
     private static int KILOBYTE_MULTIPLIER = 1000;
     private boolean isValid = false;
 
@@ -69,7 +69,8 @@ public class WavFormatChunk extends Chunk
         {
             info.setChannelNumber(Utils.u(chunkData.getShort()));
             info.setSamplingRate(chunkData.getInt());
-            info.setBitRate(chunkData.getInt() * BITS_IN_BYTE / KILOBYTE_MULTIPLIER); //AvgBytePerSec  converted to kb/sec
+            info.setByteRate(chunkData.getInt());
+            info.setBitRate( info.getByteRate() * BITS_IN_BYTE_MULTIPLIER / KILOBYTE_MULTIPLIER); //AvgBytePerSec  converted to kb/sec
             info.setVariableBitRate(false);
             blockAlign      = Utils.u(chunkData.getShort());
             info.setBitsPerSample(Utils.u(chunkData.getShort()));

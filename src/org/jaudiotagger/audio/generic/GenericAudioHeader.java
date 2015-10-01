@@ -45,6 +45,7 @@ public class GenericAudioHeader implements AudioHeader
     private Boolean isLossless;
     private Float   trackLength;
     private Long    noOfSamples;
+    private Integer byteRate;
 
 
 
@@ -260,6 +261,17 @@ public class GenericAudioHeader implements AudioHeader
     	this.bitsPerSample = bitsPerSample;
     }
 
+    /*
+    * Sets the ByteRate (per second)
+    *
+    * @params ByteRate
+    */
+    public void setByteRate(int byteRate)
+    {
+        this.byteRate = byteRate;
+    }
+
+
     /**
      * Sets the VBR flag for the represented audio clip.<br>
      *
@@ -295,13 +307,13 @@ public class GenericAudioHeader implements AudioHeader
         {
             out.append("\taudioDataLength:"+audioDataLength+"\n");
         }
+        if(byteRate!=null)
+        {
+            out.append("\tbyteRate:"+byteRate+"\n");
+        }
         if(bitRate!=null)
         {
             out.append("\tbitRate:"+bitRate+"\n");
-        }
-        if(noOfChannels!=null)
-        {
-            out.append("\tnumberOfChannels:"+noOfChannels+"\n");
         }
         if(samplingRate!=null)
         {
@@ -310,6 +322,10 @@ public class GenericAudioHeader implements AudioHeader
         if(bitsPerSample!=null)
         {
             out.append("\tbitsPerSample:"+bitsPerSample+"\n");
+        }
+        if(noOfChannels!=null)
+        {
+            out.append("\tnumberOfChannels:"+noOfChannels+"\n");
         }
         if(noOfSamples!=null)
         {
@@ -342,5 +358,10 @@ public class GenericAudioHeader implements AudioHeader
     public void setAudioDataLength(long audioDataLength)
     {
         this.audioDataLength = audioDataLength;
+    }
+
+    public Integer getByteRate()
+    {
+        return byteRate;
     }
 }

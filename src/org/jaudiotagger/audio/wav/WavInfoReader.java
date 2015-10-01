@@ -60,11 +60,10 @@ public class WavInfoReader
         }
 
         //Do it here because requires data from multiple chunks
-        //TODO this is not correct
+        //TODO this is not correct for Compressed Wavs
         if(info.getAudioDataLength()> 0)
         {
-            info.setPreciseLength(info.getAudioDataLength() * Integer.parseInt(info.getBitRate()) / WavFormatChunk.BITS_IN_BYTE );
-            System.out.println("Set Length to:"+info.getAudioDataLength() * Integer.parseInt(info.getBitRate()) / WavFormatChunk.BITS_IN_BYTE);
+            info.setPreciseLength(info.getAudioDataLength() / info.getByteRate());
         }
         else
         {
