@@ -124,6 +124,10 @@
              </execution>
            </executions>
          </plugin>
+         <plugin>
+            <artifactId>maven-release-plugin</artifactId>
+            <version>2.4</version>
+         </plugin>
       </plugins>
       <sourceDirectory>src</sourceDirectory>
       <testSourceDirectory>srctest</testSourceDirectory>
@@ -175,4 +179,10 @@
       <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
       <java.version>1.7</java.version>
    </properties>   
+   <distributionManagement>
+      <repository>
+         <id>bintray</id>
+         <url>https://api.bintray.com/maven/ijabz/maven/jaudiotagger</url>
+      </repository>
+   </distributionManagement>
 </project>
