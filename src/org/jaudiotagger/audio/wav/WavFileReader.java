@@ -31,6 +31,11 @@ import java.io.RandomAccessFile;
  */
 public class WavFileReader extends AudioFileReader
 {
+    public WavFileReader()
+    {
+
+    }
+
     private WavInfoReader ir = new WavInfoReader();
     private WavTagReader  iw = new WavTagReader();
 

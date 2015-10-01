@@ -38,8 +38,8 @@ public class RealFileReader extends AudioFileReader
             final long dataOffset = Utils.readUint32(dis);
             final int numStreams = Utils.readUint16(dis);
             final int flags = Utils.readUint16(dis);
-            rv.setBitrate((int) avgBitRate);
-            rv.setLength(duration);
+            rv.setBitRate((int) avgBitRate);
+            rv.setPreciseLength(duration);
             rv.setVariableBitRate(maxBitRate != avgBitRate);
         }
         return rv;

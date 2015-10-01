@@ -94,11 +94,10 @@ public class DsfAudioFileReader extends AudioFileReader
         long sampleCount = audioInfoChunk.getLong();
         int blocksPerSample = audioInfoChunk.getInt();
 
-        audioHeader.setBitrate(bitsPerSample * samplingFreqency * channelNumber);
+        audioHeader.setBitRate(bitsPerSample * samplingFreqency * channelNumber);
         audioHeader.setBitsPerSample(bitsPerSample);
         audioHeader.setChannelNumber(channelNumber);
         audioHeader.setSamplingRate(samplingFreqency);
-        audioHeader.setLength((int) (sampleCount / samplingFreqency));
         audioHeader.setPreciseLength((float) sampleCount / samplingFreqency);
         audioHeader.setVariableBitRate(false);
         logger.log(Level.FINE, "Created audio header: " + audioHeader);

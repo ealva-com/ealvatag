@@ -29,7 +29,16 @@ import java.nio.ByteBuffer;
 
 /**
  * Reads the fmt header, this contains the information required for constructing Audio header
- */
+ *
+ * 0 - 1   ushort SubFormatIdentifier;
+ * 2 - 3   ushort NoOfChannels;
+ * 4 - 7   uint   NoOfSamplesPerSec;
+ * 8 - 11  uint   AverageNoBytesPerSec;
+ * 12 - 13 ushort BlockAlign;
+ * 14 - 15 ushort NoofBitsPerSample;
+ * //May be additional fields here, depending upon wFormatTag.
+ * } FormatChunk
+*/
 public class WavFormatChunk extends Chunk
 {
     private static final int   STANDARD_DATA_SIZE = 18;
@@ -38,6 +47,8 @@ public class WavFormatChunk extends Chunk
 
     private static final String WAV_RIFF_ENCODING_PREPEND = "WAV-RIFF ";
 
+    public  static int BITS_IN_BYTE = 8;
+    private static int KILOBYTE_MULTIPLIER = 1000;
     private boolean isValid = false;
 
     private int blockAlign,  channelMask;
@@ -58,10 +69,8 @@ public class WavFormatChunk extends Chunk
         {
             info.setChannelNumber(Utils.u(chunkData.getShort()));
             info.setSamplingRate(chunkData.getInt());
-            info.setBitrate(chunkData.getInt() * 8 / 1000);
+            info.setBitRate(chunkData.getInt() * BITS_IN_BYTE / KILOBYTE_MULTIPLIER); //AvgBytePerSec  converted to kb/sec
             info.setVariableBitRate(false);
-            info.setExtraEncodingInfos("");
-            // info.setPreciseLength(((float) raf.length() - (float) 36) / wfh.getBytesPerSecond());
             blockAlign      = Utils.u(chunkData.getShort());
             info.setBitsPerSample(Utils.u(chunkData.getShort()));
             if (wsf == WavSubFormat.FORMAT_EXTENSIBLE)
@@ -79,16 +88,7 @@ public class WavFormatChunk extends Chunk
             info.setEncodingType(WAV_RIFF_ENCODING_PREPEND + info.getBitsPerSample() + " bits");
             isValid = true;
 
-            /*
-             if (wfh.isValid())
-            {
-                //TODO if 36 refers to header needs beter calculating
-                info.setPreciseLength(((float) raf.length() - (float) 36) / wfh.getBytesPerSecond());
 
-
-            }
-            else
-             */
         }
         return true;
     }

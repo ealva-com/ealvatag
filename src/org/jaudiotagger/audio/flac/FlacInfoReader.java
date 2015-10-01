@@ -78,14 +78,12 @@ public class FlacInfoReader
         }
 
         FlacAudioHeader info = new FlacAudioHeader();
-        info.setLength(mbdsi.getSongLength());
         info.setPreciseLength(mbdsi.getPreciseLength());
         info.setChannelNumber(mbdsi.getChannelNumber());
         info.setSamplingRate(mbdsi.getSamplingRate());
         info.setBitsPerSample(mbdsi.getBitsPerSample());
         info.setEncodingType(mbdsi.getEncodingType());
-        info.setExtraEncodingInfos("");
-        info.setBitrate(computeBitrate(mbdsi.getPreciseLength(), raf.length() - raf.getFilePointer()));
+        info.setBitRate(computeBitrate(mbdsi.getPreciseLength(), raf.length() - raf.getFilePointer()));
         info.setLossless(true);
         info.setMd5(mbdsi.getMD5Signature());
         return info;

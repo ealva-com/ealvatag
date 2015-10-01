@@ -122,7 +122,7 @@ public class AsfFileReader extends AudioFileReader {
             throw new CannotReadException(
                     "Invalid ASF/WMA file. No audio stream contained.");
         }
-        info.setBitrate(header.getAudioStreamChunk().getKbps());
+        info.setBitRate(header.getAudioStreamChunk().getKbps());
         info.setChannelNumber((int) header.getAudioStreamChunk()
                 .getChannelCount());
         info.setEncodingType("ASF (audio): "

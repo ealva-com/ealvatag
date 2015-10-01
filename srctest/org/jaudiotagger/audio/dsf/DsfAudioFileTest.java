@@ -32,7 +32,7 @@ public class DsfAudioFileTest extends TestCase {
             assertEquals("2",ah.getChannels());
             assertEquals("2822400",ah.getSampleRate());
             assertEquals(4,ah.getTrackLength());
-            assertEquals(false,ah.isLossless());
+            assertFalse(ah.isLossless());
 
         }
         catch (Exception e) {

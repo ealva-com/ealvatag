@@ -109,12 +109,11 @@ public class CommonChunk extends Chunk
         aiffHeader.setBitsPerSample(sampleSize);
         aiffHeader.setSamplingRate((int) sampleRate);
         aiffHeader.setChannelNumber(numChannels);
-        aiffHeader.setLength((int) (numSampleFrames / sampleRate));
         aiffHeader.setPreciseLength((float) (numSampleFrames / sampleRate));
 
         if(aiffHeader.isLossless())
         {
-            aiffHeader.setBitrate((int) (sampleRate * sampleSize * numChannels));
+            aiffHeader.setBitRate((int) (sampleRate * sampleSize * numChannels));
         }
         else
         {
@@ -124,7 +123,7 @@ public class CommonChunk extends Chunk
             // information from here and the Sound Data chunk to get
             // the effective byte rate
             // For now just ignore the issue
-            aiffHeader.setBitrate((int) (sampleRate * sampleSize * numChannels));
+            aiffHeader.setBitRate((int) (sampleRate * sampleSize * numChannels));
         }
         return true;
 

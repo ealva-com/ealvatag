@@ -115,7 +115,6 @@ public class OggInfoReader
         info.setChannelNumber(vorbisIdentificationHeader.getChannelNumber());
         info.setSamplingRate(vorbisIdentificationHeader.getSamplingRate());
         info.setEncodingType(vorbisIdentificationHeader.getEncodingType());
-        info.setExtraEncodingInfos("");
 
         //According to Wikipedia Vorbis Page, Vorbis only works on 16bits 44khz 
         info.setBitsPerSample(16);
@@ -124,20 +123,20 @@ public class OggInfoReader
         if (vorbisIdentificationHeader.getNominalBitrate() != 0 && vorbisIdentificationHeader.getMaxBitrate() == vorbisIdentificationHeader.getNominalBitrate() && vorbisIdentificationHeader.getMinBitrate() == vorbisIdentificationHeader.getNominalBitrate())
         {
             //CBR (in kbps)
-            info.setBitrate(vorbisIdentificationHeader.getNominalBitrate() / 1000);
+            info.setBitRate(vorbisIdentificationHeader.getNominalBitrate() / 1000);
             info.setVariableBitRate(false);
         }
         else
         if (vorbisIdentificationHeader.getNominalBitrate() != 0 && vorbisIdentificationHeader.getMaxBitrate() == 0 && vorbisIdentificationHeader.getMinBitrate() == 0)
         {
             //Average vbr (in kpbs)
-            info.setBitrate(vorbisIdentificationHeader.getNominalBitrate() / 1000);
+            info.setBitRate(vorbisIdentificationHeader.getNominalBitrate() / 1000);
             info.setVariableBitRate(true);
         }
         else
         {
             //TODO need to remove comment from raf.getLength()
-            info.setBitrate(computeBitrate(info.getTrackLength(), raf.length()));
+            info.setBitRate(computeBitrate(info.getTrackLength(), raf.length()));
             info.setVariableBitRate(true);
         }
         logger.fine("Finished");

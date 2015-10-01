@@ -25,7 +25,6 @@ import org.jaudiotagger.audio.iff.Chunk;
 import org.jaudiotagger.audio.iff.ChunkHeader;
 import org.jaudiotagger.audio.iff.IffHeaderChunk;
 import org.jaudiotagger.audio.wav.chunk.WavFormatChunk;
-import org.jaudiotagger.audio.wav.chunk.WavListChunk;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
@@ -37,7 +36,12 @@ import java.nio.ByteOrder;
  */
 public class WavInfoReader
 {
-   public GenericAudioHeader read(RandomAccessFile raf) throws CannotReadException, IOException
+    public WavInfoReader()
+    {
+
+    }
+
+    public GenericAudioHeader read(RandomAccessFile raf) throws CannotReadException, IOException
     {
         GenericAudioHeader info = new GenericAudioHeader();
         if(WavRIFFHeader.isValidHeader(raf))
@@ -53,6 +57,18 @@ public class WavInfoReader
         else
         {
             throw new CannotReadException("Wav RIFF Header not valid");
+        }
+
+        //Do it here because requires data from multiple chunks
+        //TODO this is not correct
+        if(info.getAudioDataLength()> 0)
+        {
+            info.setPreciseLength(info.getAudioDataLength() * Integer.parseInt(info.getBitRate()) / WavFormatChunk.BITS_IN_BYTE );
+            System.out.println("Set Length to:"+info.getAudioDataLength() * Integer.parseInt(info.getBitRate()) / WavFormatChunk.BITS_IN_BYTE);
+        }
+        else
+        {
+            throw new CannotReadException("Wav Data Header Missing");
         }
         return info;
     }
@@ -75,8 +91,20 @@ public class WavInfoReader
         {
             switch (chunkType)
             {
+                case FACT:
+                    //TODO we need to read from this to work out trackDuration for compressed WAVs
+                    raf.skipBytes((int)chunkHeader.getSize());
+                    break;
+
+                case DATA:
+                    //We just need this value from header dont actually need to read data itself
+                    info.setAudioDataLength(chunkHeader.getSize());
+                    raf.skipBytes((int)chunkHeader.getSize());
+                    break;
+
                 case FORMAT:
-                    chunk = new WavFormatChunk(Utils.readFileDataIntoBufferLE(raf, (int)chunkHeader.getSize()), chunkHeader, info);
+                    ByteBuffer fmtChunkData = Utils.readFileDataIntoBufferLE(raf, (int)chunkHeader.getSize());
+                    chunk = new WavFormatChunk(fmtChunkData, chunkHeader, info);
                     if (!chunk.readChunk())
                     {
                         return false;
