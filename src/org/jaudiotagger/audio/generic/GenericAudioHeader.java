@@ -43,7 +43,7 @@ public class GenericAudioHeader implements AudioHeader
     private String  encodingType;
     private Boolean isVbr = Boolean.TRUE; //TODO this is a weird default
     private Boolean isLossless;
-    private Float   trackLength;
+    private Double  trackLength;
     private Long    noOfSamples;
     private Integer byteRate;
 
@@ -124,7 +124,7 @@ public class GenericAudioHeader implements AudioHeader
      */
     public int getTrackLength()
     {
-        return (int) Math.round(getPreciseLength());
+        return (int) Math.round(getPreciseTrackLength());
     }
 
     /**
@@ -134,7 +134,7 @@ public class GenericAudioHeader implements AudioHeader
      * @return The duration in seconds.
      * @see #getTrackLength()
      */
-    public float getPreciseLength()
+    public double getPreciseTrackLength()
     {
         return trackLength;
     }
@@ -236,7 +236,7 @@ public class GenericAudioHeader implements AudioHeader
      *
      * @param length The duration of the audio in seconds (single-precision).
      */
-    public void setPreciseLength(float length)
+    public void setPreciseLength(double length)
     {
         this.trackLength = length;
     }

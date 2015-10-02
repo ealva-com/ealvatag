@@ -68,7 +68,13 @@ public interface AudioHeader
      * @return track length in seconds
      */
     public int getTrackLength();
-    
+
+    /**
+     *
+     * @return track length as float
+     */
+    public double getPreciseTrackLength();
+
     /**
      * @return the number of bits in each sample
      */
@@ -79,4 +85,5 @@ public interface AudioHeader
      * @return if the audio codec is lossless or lossy
      */
     public boolean isLossless();
+
 }

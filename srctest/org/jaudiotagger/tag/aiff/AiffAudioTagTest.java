@@ -127,7 +127,7 @@ public class AiffAudioTagTest extends TestCase {
             System.out.println(ah.getEncodingType());
             assertEquals("44100",ah.getSampleRate());
             assertEquals(5,ah.getTrackLength());
-            assertEquals(5.0f,((AiffAudioHeader) ah).getPreciseLength());
+            assertEquals(5.0d,((AiffAudioHeader) ah).getPreciseTrackLength());
 
             System.out.println(tag);
             assertNotNull(tag);
@@ -176,7 +176,7 @@ public class AiffAudioTagTest extends TestCase {
             System.out.println(ah.getEncodingType());
             assertEquals("44100",ah.getSampleRate());
             assertEquals(5,ah.getTrackLength());
-            assertEquals(5.0f,((AiffAudioHeader) ah).getPreciseLength());
+            assertEquals(5.0d,((AiffAudioHeader) ah).getPreciseTrackLength());
 
             System.out.println(tag);
             assertNotNull(tag);

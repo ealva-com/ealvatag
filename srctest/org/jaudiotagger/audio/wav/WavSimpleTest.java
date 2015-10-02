@@ -171,4 +171,58 @@ public class WavSimpleTest extends AbstractTestCase
         }
         assertNull(exceptionCaught);
     }
+
+    public void testReadStereoFloatingPointFile()
+    {
+        Exception exceptionCaught = null;
+        try
+        {
+            File testFile = AbstractTestCase.copyAudioToTmp("test130.wav");
+            AudioFile f = AudioFileIO.read(testFile);
+            System.out.println(f.getAudioHeader());
+            assertEquals(232128, f.getAudioHeader().getAudioDataLength());
+            assertEquals("1411", f.getAudioHeader().getBitRate());
+            assertEquals(176400, f.getAudioHeader().getByteRate().intValue());
+            assertEquals("WAV IEEE_FLOAT 32 bits", f.getAudioHeader().getEncodingType());
+            assertEquals("2", f.getAudioHeader().getChannels());
+            assertEquals("22050", f.getAudioHeader().getSampleRate());
+            assertEquals(32, f.getAudioHeader().getBitsPerSample());
+            assertEquals(0, f.getAudioHeader().getTrackLength());
+            assertEquals(0.32897958159446716d, f.getAudioHeader().getPreciseTrackLength());
+            assertTrue(f.getTag() instanceof WavTag);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            exceptionCaught = e;
+        }
+        assertNull(exceptionCaught);
+    }
+
+    public void testReadQuadChannelFile()
+    {
+        Exception exceptionCaught = null;
+        try
+        {
+            File testFile = AbstractTestCase.copyAudioToTmp("test131.wav");
+            AudioFile f = AudioFileIO.read(testFile);
+            System.out.println(f.getAudioHeader());
+            assertEquals(844056, f.getAudioHeader().getAudioDataLength());
+            assertEquals("1411", f.getAudioHeader().getBitRate());
+            assertEquals(176400, f.getAudioHeader().getByteRate().intValue());
+            assertEquals("WAV PCM 16 bits", f.getAudioHeader().getEncodingType());
+            assertEquals("4", f.getAudioHeader().getChannels());
+            assertEquals("22050", f.getAudioHeader().getSampleRate());
+            assertEquals(16, f.getAudioHeader().getBitsPerSample());
+            assertEquals(5, f.getAudioHeader().getTrackLength());
+            assertEquals(4.784897804260254d, f.getAudioHeader().getPreciseTrackLength());
+            assertTrue(f.getTag() instanceof WavTag);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            exceptionCaught = e;
+        }
+        assertNull(exceptionCaught);
+    }
 }

@@ -80,3 +80,5 @@ test126.wav,yes,,example wav file with metadata in ID3
 test127.wav,yes,,example wav file - stereo
 test128.wav,yes,,example wav file - stereo, extensible
 test129.wav,yes,,example wav file - goldstar compressed
+test130.wav,yes,,example wav file - stereo floating point 32
+test131.wav,yes,,example wav file - quad channel
