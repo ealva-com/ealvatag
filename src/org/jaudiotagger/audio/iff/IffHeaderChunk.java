@@ -2,12 +2,15 @@ package org.jaudiotagger.audio.iff;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.util.logging.Logger;
 
 /**
  * Common to all IFF formats such as Wav and Aiff
  */
 public class IffHeaderChunk
 {
+    public static Logger logger = Logger.getLogger("org.jaudiotagger.audio.iff");
+
     public static int SIGNATURE_LENGTH = 4;
     public static int SIZE_LENGTH = 4;
     public static int TYPE_LENGTH = 4;
@@ -27,6 +30,7 @@ public class IffHeaderChunk
             // Must come out to an even byte boundary unless at end of file
             if(raf.getFilePointer()<raf.length())
             {
+                logger.config("Skipping Byte because on odd boundary");
                 raf.skipBytes(1);
             }
         }

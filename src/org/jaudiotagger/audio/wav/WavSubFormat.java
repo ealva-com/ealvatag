@@ -8,11 +8,12 @@ import java.util.Map;
  */
 public enum WavSubFormat
 {
-    FORMAT_PCM(1,"WAV PCM"),
-    FORMAT_FLOAT(3, "WAV IEEE_FLOAT"),
-    FORMAT_ALAW(6, "WAV A-LAW"),
-    FORMAT_MULAW(7, "WAV µ-LAW"),
+    FORMAT_PCM(0x1,"WAV PCM"),
+    FORMAT_FLOAT(0x3, "WAV IEEE_FLOAT"),
+    FORMAT_ALAW(0x6, "WAV A-LAW"),
+    FORMAT_MULAW(0x7, "WAV µ-LAW"),
     FORMAT_EXTENSIBLE(0xFFFE, "EXTENSIBLE"),
+    FORMAT_GSM_COMPRESSED(0x31, "GSM_COMPRESSED"),
     ;
 
     private int code;

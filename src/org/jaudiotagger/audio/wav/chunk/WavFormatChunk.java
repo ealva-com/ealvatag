@@ -23,6 +23,7 @@ import org.jaudiotagger.audio.generic.Utils;
 import org.jaudiotagger.audio.iff.Chunk;
 import org.jaudiotagger.audio.iff.ChunkHeader;
 import org.jaudiotagger.audio.wav.WavSubFormat;
+import org.jaudiotagger.logging.Hex;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -63,33 +64,42 @@ public class WavFormatChunk extends Chunk
 
     public boolean readChunk() throws IOException
     {
-
-        wsf = WavSubFormat.getByCode( Utils.u(chunkData.getShort()));
-        if (wsf!=null)
+        int subFormatCode = Utils.u(chunkData.getShort());
+        wsf = WavSubFormat.getByCode(subFormatCode);
+        info.setChannelNumber(Utils.u(chunkData.getShort()));
+        info.setSamplingRate(chunkData.getInt());
+        info.setByteRate(chunkData.getInt());
+        info.setBitRate( info.getByteRate() * BITS_IN_BYTE_MULTIPLIER / KILOBYTE_MULTIPLIER); //AvgBytePerSec  converted to kb/sec
+        info.setVariableBitRate(false);
+        blockAlign      = Utils.u(chunkData.getShort());
+        info.setBitsPerSample(Utils.u(chunkData.getShort()));
+        if (wsf!=null && wsf == WavSubFormat.FORMAT_EXTENSIBLE)
         {
-            info.setChannelNumber(Utils.u(chunkData.getShort()));
-            info.setSamplingRate(chunkData.getInt());
-            info.setByteRate(chunkData.getInt());
-            info.setBitRate( info.getByteRate() * BITS_IN_BYTE_MULTIPLIER / KILOBYTE_MULTIPLIER); //AvgBytePerSec  converted to kb/sec
-            info.setVariableBitRate(false);
-            blockAlign      = Utils.u(chunkData.getShort());
-            info.setBitsPerSample(Utils.u(chunkData.getShort()));
-            if (wsf == WavSubFormat.FORMAT_EXTENSIBLE)
+            int extensibleSize = Utils.u(chunkData.getShort());
+            if(extensibleSize == EXTENSIBLE_DATA_SIZE)
             {
-                int extensibleSize = Utils.u(chunkData.getShort());
-                if(extensibleSize == EXTENSIBLE_DATA_SIZE)
-                {
-                    info.setBitsPerSample(Utils.u(chunkData.getShort()));
-                    //We dont use this currently
-                    channelMask = chunkData.getInt();
+                info.setBitsPerSample(Utils.u(chunkData.getShort()));
+                //We dont use this currently
+                channelMask = chunkData.getInt();
 
-                    //If Extensible then the actual formatCode is held here
-                    wsf = WavSubFormat.getByCode(Utils.u(chunkData.getShort()));
-                    System.out.println(wsf);
-                }
+                //If Extensible then the actual formatCode is held here
+                wsf = WavSubFormat.getByCode(Utils.u(chunkData.getShort()));
             }
-            info.setEncodingType(wsf.getDescription() + " " + info.getBitsPerSample() + " bits");
-            isValid = true;
+        }
+        if(wsf!=null)
+        {
+            if(info.getBitsPerSample()>0)
+            {
+                info.setEncodingType(wsf.getDescription() + " " + info.getBitsPerSample() + " bits");
+            }
+            else
+            {
+                info.setEncodingType(wsf.getDescription());
+            }
+        }
+        else
+        {
+            info.setEncodingType("Unknown Sub Format Code:"+ Hex.asHex(subFormatCode));
         }
         return true;
     }

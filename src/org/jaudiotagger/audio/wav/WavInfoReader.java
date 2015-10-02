@@ -24,18 +24,22 @@ import org.jaudiotagger.audio.generic.Utils;
 import org.jaudiotagger.audio.iff.Chunk;
 import org.jaudiotagger.audio.iff.ChunkHeader;
 import org.jaudiotagger.audio.iff.IffHeaderChunk;
+import org.jaudiotagger.audio.wav.chunk.FactFormatChunk;
 import org.jaudiotagger.audio.wav.chunk.WavFormatChunk;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import java.util.logging.Logger;
 
 /**
  * Read the Wav file chunks, until finds WavFormatChunk and then generates AudioHeader from it
  */
 public class WavInfoReader
 {
+    public static Logger logger = Logger.getLogger("org.jaudiotagger.audio.wav");
+
     public WavInfoReader()
     {
 
@@ -58,18 +62,36 @@ public class WavInfoReader
         {
             throw new CannotReadException("Wav RIFF Header not valid");
         }
+        calculateTrackLength(info);
+        return info;
+    }
 
-        //Do it here because requires data from multiple chunks
-        //TODO this is not correct for Compressed Wavs
-        if(info.getAudioDataLength()> 0)
+    /**
+     * Calculate track length, done it here because requires data from multiple chunks
+     *
+     * @param info
+     * @throws CannotReadException
+     */
+    private void calculateTrackLength(GenericAudioHeader info) throws CannotReadException
+    {
+        //If we have fact chunk we cna calculate accurately by taking total of samples (per channel) divided by the number
+        //of samples taken per second (per channel)
+        if(info.getNoOfSamples()!=null)
         {
-            info.setPreciseLength(info.getAudioDataLength() / info.getByteRate());
+            if(info.getSampleRateAsNumber()>0)
+            {
+                info.setPreciseLength((float)info.getNoOfSamples() / info.getSampleRateAsNumber());
+            }
+        }
+        //Otherwise adequate to divide the total number of sampling bytes by the average byte rate
+        else if(info.getAudioDataLength()> 0)
+        {
+            info.setPreciseLength((float)info.getAudioDataLength() / info.getByteRate());
         }
         else
         {
             throw new CannotReadException("Wav Data Header Missing");
         }
-        return info;
     }
 
     /**
@@ -85,34 +107,56 @@ public class WavInfoReader
         }
 
         String id = chunkHeader.getID();
+        logger.info("Reading Chunk:" + id + ":starting at:"+chunkHeader.getStartLocationInFile()
+                +":sizeIncHeader:"+(chunkHeader.getSize() + ChunkHeader.CHUNK_HEADER_SIZE));
         final WavChunkType chunkType = WavChunkType.get(id);
+
+        //Ik known chinkType
         if (chunkType != null)
         {
             switch (chunkType)
             {
                 case FACT:
-                    //TODO we need to read from this to work out trackDuration for compressed WAVs
-                    raf.skipBytes((int)chunkHeader.getSize());
+                {
+                    ByteBuffer fmtChunkData = Utils.readFileDataIntoBufferLE(raf, (int) chunkHeader.getSize());
+                    chunk = new FactFormatChunk(fmtChunkData, chunkHeader, info);
+                    if (!chunk.readChunk())
+                    {
+                        return false;
+                    }
                     break;
+                }
 
                 case DATA:
+                {
                     //We just need this value from header dont actually need to read data itself
                     info.setAudioDataLength(chunkHeader.getSize());
-                    raf.skipBytes((int)chunkHeader.getSize());
+                    raf.skipBytes((int) chunkHeader.getSize());
                     break;
+                }
 
                 case FORMAT:
-                    ByteBuffer fmtChunkData = Utils.readFileDataIntoBufferLE(raf, (int)chunkHeader.getSize());
+                {
+                    ByteBuffer fmtChunkData = Utils.readFileDataIntoBufferLE(raf, (int) chunkHeader.getSize());
                     chunk = new WavFormatChunk(fmtChunkData, chunkHeader, info);
                     if (!chunk.readChunk())
                     {
                         return false;
                     }
                     break;
+                }
 
+                //Dont need to do anything with these just skip
                 default:
+                    logger.config("Skipping chunk bytes:"+chunkHeader.getSize());
                     raf.skipBytes((int)chunkHeader.getSize());
             }
+        }
+        //Unknown chunk type just skip
+        else
+        {
+            logger.config("Skipping chunk bytes:"+chunkHeader.getSize());
+            raf.skipBytes((int)chunkHeader.getSize());
         }
         IffHeaderChunk.ensureOnEqualBoundary(raf, chunkHeader);
         return true;

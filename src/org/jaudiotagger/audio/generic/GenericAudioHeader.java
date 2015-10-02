@@ -119,12 +119,12 @@ public class GenericAudioHeader implements AudioHeader
      * This method returns the duration of the represented audio clip in
      * seconds.<br>
      *
-     * @return The duration in seconds.
+     * @return The duration to the nearest seconds.
      * @see #getPreciseLength()
      */
     public int getTrackLength()
     {
-        return (int) getPreciseLength();
+        return (int) Math.round(getPreciseLength());
     }
 
     /**
@@ -234,7 +234,7 @@ public class GenericAudioHeader implements AudioHeader
     /**
      * This method sets the audio duration of the represented clip.<br>
      *
-     * @param length The duration of the audio clip in seconds (single-precision).
+     * @param length The duration of the audio in seconds (single-precision).
      */
     public void setPreciseLength(float length)
     {
@@ -323,13 +323,13 @@ public class GenericAudioHeader implements AudioHeader
         {
             out.append("\tbitsPerSample:"+bitsPerSample+"\n");
         }
+        if(noOfSamples!=null)
+        {
+            out.append("\ttotalNoSamples:"+noOfSamples+"\n");
+        }
         if(noOfChannels!=null)
         {
             out.append("\tnumberOfChannels:"+noOfChannels+"\n");
-        }
-        if(noOfSamples!=null)
-        {
-            out.append("\tnoOfSamples:"+noOfSamples+"\n");
         }
         if(encodingType!=null)
         {
@@ -363,5 +363,15 @@ public class GenericAudioHeader implements AudioHeader
     public Integer getByteRate()
     {
         return byteRate;
+    }
+
+    public Long getNoOfSamples()
+    {
+        return noOfSamples;
+    }
+
+    public void setNoOfSamples(Long noOfSamples)
+    {
+        this.noOfSamples = noOfSamples;
     }
 }

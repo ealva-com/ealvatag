@@ -78,3 +78,5 @@ test124.aif,yes,,example aif with metadata from itunes, aiff not-compressed
 test125.wav,yes,,example wav file with metadata in ID3 & INFO written by Tag&Rename
 test126.wav,yes,,example wav file with metadata in ID3
 test127.wav,yes,,example wav file - stereo
+test128.wav,yes,,example wav file - stereo, extensible
+test129.wav,yes,,example wav file - goldstar compressed

@@ -10,17 +10,18 @@ import java.util.Map;
  */
 public enum WavChunkType
 {
-    FORMAT("fmt "),
-    FACT("fact"),
-    DATA("data"),
-    LIST("LIST"),
-    INFO("INFO"),
-    ID3("id3 "),
+    FORMAT("fmt ", "Basic Audio Information"),
+    FACT("fact", "Only strictly required for Non-PCM or compressed data"),
+    DATA("data", "Stores the actual audio data"),
+    LIST("LIST", "List chunk, wraps round other chunks"),
+    INFO("INFO", "Original metadata implementation"),
+    ID3("id3 ", "Stores metadata in ID3 chunk"),
 
     ;
 
     private static final Map<String, WavChunkType> CODE_TYPE_MAP = new HashMap<String, WavChunkType>();
     private String code;
+    private String description;
 
     /**
      * Get {@link WavChunkType} for code (e.g. "SSND").
@@ -40,9 +41,10 @@ public enum WavChunkType
     /**
      * @param code 4 char string
      */
-    WavChunkType(final String code)
+    WavChunkType(final String code, String description)
     {
         this.code=code;
+        this.description=description;
     }
 
     /**

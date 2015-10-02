@@ -33,7 +33,7 @@ public class AiffAudioFileTest extends TestCase {
             assertEquals(128000, ah.getBitRateAsNumber());
             assertEquals("2",ah.getChannels());
             assertEquals("8000", ah.getSampleRate());
-            assertEquals(2,ah.getTrackLength());
+            assertEquals(3,ah.getTrackLength());
             assertEquals("not compressed", ((AiffAudioHeader) ah).getAudioEncoding());
             assertFalse(ah.isVariableBitRate());
             //assertEquals(2.936625,((AiffAudioHeader) ah).getPreciseLength());
@@ -79,7 +79,7 @@ public class AiffAudioFileTest extends TestCase {
             assertFalse(ah.isVariableBitRate());
             assertEquals("2",ah.getChannels());
             assertEquals("44100", ah.getSampleRate());
-            assertEquals(0,ah.getTrackLength());
+            assertEquals(1,ah.getTrackLength());
             assertEquals("not compressed", ((AiffAudioHeader) ah).getAudioEncoding());
             //assertEquals(2.936625,((AiffAudioHeader) ah).getPreciseLength());
             assertNull(aah.getName());

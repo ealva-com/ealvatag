@@ -31,7 +31,7 @@ public class DsfAudioFileTest extends TestCase {
             assertEquals(5644800,ah.getBitRateAsNumber());
             assertEquals("2",ah.getChannels());
             assertEquals("2822400",ah.getSampleRate());
-            assertEquals(4,ah.getTrackLength());
+            assertEquals(5,ah.getTrackLength());
             assertFalse(ah.isLossless());
 
         }

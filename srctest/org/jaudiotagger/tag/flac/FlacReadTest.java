@@ -53,7 +53,7 @@ public class FlacReadTest extends TestCase
             assertEquals("FLAC 8 bits", f.getAudioHeader().getEncodingType());
             assertEquals("1", f.getAudioHeader().getChannels());
             assertEquals("16000", f.getAudioHeader().getSampleRate());
-            assertEquals(0, f.getAudioHeader().getTrackLength());
+            assertEquals(1, f.getAudioHeader().getTrackLength());
             assertEquals("47", f.getAudioHeader().getBitRate());       //is this correct value
         }                                           
         catch (Exception e)

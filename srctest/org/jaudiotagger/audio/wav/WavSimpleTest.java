@@ -109,7 +109,33 @@ public class WavSimpleTest extends AbstractTestCase
             assertEquals("2", f.getAudioHeader().getChannels());
             assertEquals("8000", f.getAudioHeader().getSampleRate());
             assertEquals(8, f.getAudioHeader().getBitsPerSample());
-            assertEquals(2, f.getAudioHeader().getTrackLength());
+            assertEquals(3, f.getAudioHeader().getTrackLength());
+            assertTrue(f.getTag() instanceof WavTag);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            exceptionCaught = e;
+        }
+        assertNull(exceptionCaught);
+    }
+
+    public void testGoldstarCompressedStereoFile()
+    {
+        Exception exceptionCaught = null;
+        try
+        {
+            File testFile = AbstractTestCase.copyAudioToTmp("test129.wav");
+            AudioFile f = AudioFileIO.read(testFile);
+            System.out.println(f.getAudioHeader());
+            assertEquals(4875, f.getAudioHeader().getAudioDataLength());
+            assertEquals("13", f.getAudioHeader().getBitRate());
+            assertEquals(1625, f.getAudioHeader().getByteRate().intValue());
+            assertEquals("GSM_COMPRESSED", f.getAudioHeader().getEncodingType());
+            assertEquals("1", f.getAudioHeader().getChannels());
+            assertEquals("8000", f.getAudioHeader().getSampleRate());
+            assertEquals(0, f.getAudioHeader().getBitsPerSample());
+            assertEquals(3, f.getAudioHeader().getTrackLength());
             assertTrue(f.getTag() instanceof WavTag);
         }
         catch (Exception e)
@@ -135,7 +161,7 @@ public class WavSimpleTest extends AbstractTestCase
             assertEquals("2", f.getAudioHeader().getChannels());
             assertEquals("8000", f.getAudioHeader().getSampleRate());
             assertEquals(8, f.getAudioHeader().getBitsPerSample());
-            assertEquals(2, f.getAudioHeader().getTrackLength());
+            assertEquals(3, f.getAudioHeader().getTrackLength());
             assertTrue(f.getTag() instanceof WavTag);
         }
         catch (Exception e)
