@@ -24,7 +24,7 @@ import org.jaudiotagger.audio.generic.Utils;
 import org.jaudiotagger.audio.iff.Chunk;
 import org.jaudiotagger.audio.iff.ChunkHeader;
 import org.jaudiotagger.audio.iff.IffHeaderChunk;
-import org.jaudiotagger.audio.wav.chunk.FactFormatChunk;
+import org.jaudiotagger.audio.wav.chunk.WavFactChunk;
 import org.jaudiotagger.audio.wav.chunk.WavFormatChunk;
 
 import java.io.IOException;
@@ -107,8 +107,7 @@ public class WavInfoReader
         }
 
         String id = chunkHeader.getID();
-        logger.info("Reading Chunk:" + id + ":starting at:"+chunkHeader.getStartLocationInFile()
-                +":sizeIncHeader:"+(chunkHeader.getSize() + ChunkHeader.CHUNK_HEADER_SIZE));
+        logger.info("Reading Chunk:" + id + ":starting at:" + chunkHeader.getStartLocationInFile() + ":sizeIncHeader:" + (chunkHeader.getSize() + ChunkHeader.CHUNK_HEADER_SIZE));
         final WavChunkType chunkType = WavChunkType.get(id);
 
         //Ik known chinkType
@@ -119,7 +118,7 @@ public class WavInfoReader
                 case FACT:
                 {
                     ByteBuffer fmtChunkData = Utils.readFileDataIntoBufferLE(raf, (int) chunkHeader.getSize());
-                    chunk = new FactFormatChunk(fmtChunkData, chunkHeader, info);
+                    chunk = new WavFactChunk(fmtChunkData, chunkHeader, info);
                     if (!chunk.readChunk())
                     {
                         return false;
@@ -148,14 +147,14 @@ public class WavInfoReader
 
                 //Dont need to do anything with these just skip
                 default:
-                    logger.config("Skipping chunk bytes:"+chunkHeader.getSize());
+                    logger.config("Skipping chunk bytes:" + chunkHeader.getSize());
                     raf.skipBytes((int)chunkHeader.getSize());
             }
         }
         //Unknown chunk type just skip
         else
         {
-            logger.config("Skipping chunk bytes:"+chunkHeader.getSize());
+            logger.config("Skipping chunk bytes:" + chunkHeader.getSize());
             raf.skipBytes((int)chunkHeader.getSize());
         }
         IffHeaderChunk.ensureOnEqualBoundary(raf, chunkHeader);

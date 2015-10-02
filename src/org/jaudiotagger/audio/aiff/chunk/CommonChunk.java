@@ -39,10 +39,11 @@ public class CommonChunk extends Chunk
     @Override
     public boolean readChunk() throws IOException
     {
-        int numChannels      = Utils.u(chunkData.getShort());
-        long numSampleFrames = chunkData.getInt();
-        int sampleSize       = Utils.u(chunkData.getShort());
-        double sampleRate    = AiffUtil.read80BitDouble(chunkData);
+
+        int numChannels         = Utils.u(chunkData.getShort());
+        long numSamples         = chunkData.getInt();
+        int bitsPerSample       = Utils.u(chunkData.getShort());
+        double sampleRate       = AiffUtil.read80BitDouble(chunkData);
 
         //Compression format, but not necessarily compressed
         String compressionType;
@@ -106,27 +107,12 @@ public class CommonChunk extends Chunk
             aiffHeader.setVariableBitRate(false);
         }
 
-        aiffHeader.setBitsPerSample(sampleSize);
+        aiffHeader.setBitsPerSample(bitsPerSample);
         aiffHeader.setSamplingRate((int) sampleRate);
         aiffHeader.setChannelNumber(numChannels);
-        aiffHeader.setPreciseLength((float) (numSampleFrames / sampleRate));
-
-        if(aiffHeader.isLossless())
-        {
-            aiffHeader.setBitRate((int) (sampleRate * sampleSize * numChannels));
-        }
-        else
-        {
-            // TODO:The size of the data after compression isn't available
-            // from the Common chunk
-            // With a bit more sophistication, we could combine the
-            // information from here and the Sound Data chunk to get
-            // the effective byte rate
-            // For now just ignore the issue
-            aiffHeader.setBitRate((int) (sampleRate * sampleSize * numChannels));
-        }
+        aiffHeader.setPreciseLength((numSamples / sampleRate));
+        aiffHeader.setNoOfSamples(numSamples);
         return true;
-
     }
 
 }

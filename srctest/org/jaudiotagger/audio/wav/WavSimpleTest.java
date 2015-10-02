@@ -102,7 +102,7 @@ public class WavSimpleTest extends AbstractTestCase
             File testFile = AbstractTestCase.copyAudioToTmp("test127.wav");
             AudioFile f = AudioFileIO.read(testFile);
             System.out.println(f.getAudioHeader());
-            assertEquals(46986, f.getAudioHeader().getAudioDataLength());
+            assertEquals(46986, f.getAudioHeader().getAudioDataLength().longValue());
             assertEquals("128", f.getAudioHeader().getBitRate());
             assertEquals(16000, f.getAudioHeader().getByteRate().intValue());
             assertEquals("WAV A-LAW 8 bits", f.getAudioHeader().getEncodingType());
@@ -128,7 +128,7 @@ public class WavSimpleTest extends AbstractTestCase
             File testFile = AbstractTestCase.copyAudioToTmp("test129.wav");
             AudioFile f = AudioFileIO.read(testFile);
             System.out.println(f.getAudioHeader());
-            assertEquals(4875, f.getAudioHeader().getAudioDataLength());
+            assertEquals(4875, f.getAudioHeader().getAudioDataLength().longValue());
             assertEquals("13", f.getAudioHeader().getBitRate());
             assertEquals(1625, f.getAudioHeader().getByteRate().intValue());
             assertEquals("GSM_COMPRESSED", f.getAudioHeader().getEncodingType());
@@ -154,7 +154,7 @@ public class WavSimpleTest extends AbstractTestCase
             File testFile = AbstractTestCase.copyAudioToTmp("test128.wav");
             AudioFile f = AudioFileIO.read(testFile);
             System.out.println(f.getAudioHeader());
-            assertEquals(46986, f.getAudioHeader().getAudioDataLength());
+            assertEquals(46986, f.getAudioHeader().getAudioDataLength().longValue());
             assertEquals("128", f.getAudioHeader().getBitRate());
             assertEquals(16000, f.getAudioHeader().getByteRate().intValue());
             assertEquals("WAV A-LAW 8 bits", f.getAudioHeader().getEncodingType());
@@ -180,7 +180,7 @@ public class WavSimpleTest extends AbstractTestCase
             File testFile = AbstractTestCase.copyAudioToTmp("test130.wav");
             AudioFile f = AudioFileIO.read(testFile);
             System.out.println(f.getAudioHeader());
-            assertEquals(232128, f.getAudioHeader().getAudioDataLength());
+            assertEquals(232128, f.getAudioHeader().getAudioDataLength().longValue());
             assertEquals("1411", f.getAudioHeader().getBitRate());
             assertEquals(176400, f.getAudioHeader().getByteRate().intValue());
             assertEquals("WAV IEEE_FLOAT 32 bits", f.getAudioHeader().getEncodingType());
@@ -207,7 +207,7 @@ public class WavSimpleTest extends AbstractTestCase
             File testFile = AbstractTestCase.copyAudioToTmp("test131.wav");
             AudioFile f = AudioFileIO.read(testFile);
             System.out.println(f.getAudioHeader());
-            assertEquals(844056, f.getAudioHeader().getAudioDataLength());
+            assertEquals(844056, f.getAudioHeader().getAudioDataLength().longValue());
             assertEquals("1411", f.getAudioHeader().getBitRate());
             assertEquals(176400, f.getAudioHeader().getByteRate().intValue());
             assertEquals("WAV PCM 16 bits", f.getAudioHeader().getEncodingType());

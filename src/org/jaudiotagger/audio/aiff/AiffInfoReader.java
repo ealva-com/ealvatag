@@ -11,7 +11,6 @@ import org.jaudiotagger.logging.Hex;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
-import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.logging.Logger;
 
@@ -37,7 +36,23 @@ public class AiffInfoReader extends AiffChunkReader
                 break;
             }
         }
+        calculateBitRate(aiffAudioHeader);
         return aiffAudioHeader;
+    }
+
+    /**
+     * Calculate bitrate, done it here because requires data from multiple chunks
+     *
+     * @param info
+     * @throws CannotReadException
+     */
+    private void calculateBitRate(GenericAudioHeader info) throws CannotReadException
+    {
+        if(info.getAudioDataLength()!=null)
+        {
+            info.setBitRate(Math.round(info.getAudioDataLength()
+                    * Chunk.BITS_IN_BYTE_MULTIPLIER / (info.getTrackLength() * Chunk.KILOBYTE_MULTIPLIER)));
+        }
     }
 
     /**
@@ -92,27 +107,41 @@ public class AiffInfoReader extends AiffChunkReader
                 case FORMAT_VERSION:
                     chunk = new FormatVersionChunk(chunkHeader, readChunkDataIntoBuffer(raf,chunkHeader), aiffAudioHeader);
                     break;
+
                 case APPLICATION:
                     chunk = new ApplicationChunk(chunkHeader, readChunkDataIntoBuffer(raf,chunkHeader), aiffAudioHeader);
                     break;
+
                 case COMMON:
                     chunk = new CommonChunk(chunkHeader, readChunkDataIntoBuffer(raf,chunkHeader), aiffAudioHeader);
                     break;
+
                 case COMMENTS:
                     chunk = new CommentsChunk(chunkHeader, readChunkDataIntoBuffer(raf,chunkHeader), aiffAudioHeader);
                     break;
+
                 case NAME:
                     chunk = new NameChunk(chunkHeader, readChunkDataIntoBuffer(raf,chunkHeader), aiffAudioHeader);
                     break;
+
                 case AUTHOR:
                     chunk = new AuthorChunk(chunkHeader, readChunkDataIntoBuffer(raf,chunkHeader), aiffAudioHeader);
                     break;
+
                 case COPYRIGHT:
                     chunk = new CopyrightChunk(chunkHeader, readChunkDataIntoBuffer(raf,chunkHeader), aiffAudioHeader);
                     break;
+
                 case ANNOTATION:
                     chunk = new AnnotationChunk(chunkHeader, readChunkDataIntoBuffer(raf,chunkHeader), aiffAudioHeader);
                     break;
+
+                case SOUND:
+                    //Dont need to read chunk itself just need size
+                    aiffAudioHeader.setAudioDataLength(chunkHeader.getSize());
+                    chunk = null;
+                    break;
+
                 default:
                     chunk = null;
             }

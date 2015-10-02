@@ -48,8 +48,7 @@ public class WavFormatChunk extends Chunk
 
     private static final String WAV_RIFF_ENCODING_PREPEND = "WAV-RIFF ";
 
-    public  static int BITS_IN_BYTE_MULTIPLIER = 8;
-    private static int KILOBYTE_MULTIPLIER = 1000;
+
     private boolean isValid = false;
 
     private int blockAlign,  channelMask;

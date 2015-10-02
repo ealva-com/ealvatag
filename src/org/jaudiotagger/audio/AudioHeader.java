@@ -34,9 +34,9 @@ public interface AudioHeader
      *
      * @return length of the audio data in bytes, aeactly what this means depends on the audio format
      *
-     * TODO currently only used by Wav
+     * TODO currently only used by Wav/Aiff
      */
-    public long getAudioDataLength();
+    public Long getAudioDataLength();
 
 
     /**

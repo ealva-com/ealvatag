@@ -29,14 +29,14 @@ public class AiffAudioFileTest extends TestCase {
             assertTrue(ah instanceof AiffAudioHeader);
             System.out.println(ah);
             AiffAudioHeader aah = (AiffAudioHeader)ah;
-            assertEquals("128000",ah.getBitRate());
-            assertEquals(128000, ah.getBitRateAsNumber());
+            assertEquals("125",ah.getBitRate());
+            assertEquals(125, ah.getBitRateAsNumber());
             assertEquals("2",ah.getChannels());
             assertEquals("8000", ah.getSampleRate());
             assertEquals(3,ah.getTrackLength());
             assertEquals("not compressed", ((AiffAudioHeader) ah).getAudioEncoding());
             assertFalse(ah.isVariableBitRate());
-            //assertEquals(2.936625,((AiffAudioHeader) ah).getPreciseLength());
+            assertEquals(2.936625d,((AiffAudioHeader) ah).getPreciseTrackLength());
             assertNull(aah.getName());
             assertNull(aah.getCopyright());
             assertNull(aah.getAuthor());
@@ -74,14 +74,14 @@ public class AiffAudioFileTest extends TestCase {
 
             System.out.println(ah);
 
-            assertEquals("1411200",ah.getBitRate());
-            assertEquals(1411200,ah.getBitRateAsNumber());
+            assertEquals("1185",ah.getBitRate());
+            assertEquals(1185,ah.getBitRateAsNumber());
             assertFalse(ah.isVariableBitRate());
             assertEquals("2",ah.getChannels());
             assertEquals("44100", ah.getSampleRate());
             assertEquals(1,ah.getTrackLength());
             assertEquals("not compressed", ((AiffAudioHeader) ah).getAudioEncoding());
-            //assertEquals(2.936625,((AiffAudioHeader) ah).getPreciseLength());
+            assertEquals(0.84d,((AiffAudioHeader) ah).getPreciseTrackLength());
             assertNull(aah.getName());
             assertNull(aah.getCopyright());
             assertNull(aah.getAuthor());
@@ -118,14 +118,14 @@ public class AiffAudioFileTest extends TestCase {
 
             System.out.println(ah);
 
-            assertEquals("1411200",ah.getBitRate());
-            assertEquals(1411200,ah.getBitRateAsNumber());
+            assertEquals("1411",ah.getBitRate());
+            assertEquals(1411,ah.getBitRateAsNumber());
             assertFalse(ah.isVariableBitRate());
             assertEquals("2",ah.getChannels());
             assertEquals("44100", ah.getSampleRate());
             assertEquals(5,ah.getTrackLength());
             assertEquals("not compressed", ((AiffAudioHeader) ah).getAudioEncoding());
-            //assertEquals(2.936625,((AiffAudioHeader) ah).getPreciseLength());
+            assertEquals(5.0,((AiffAudioHeader) ah).getPreciseTrackLength());
             assertNull(aah.getName());
             assertNull(aah.getCopyright());
             assertNull(aah.getAuthor());

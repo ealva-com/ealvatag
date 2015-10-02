@@ -350,7 +350,7 @@ public class GenericAudioHeader implements AudioHeader
         return out.toString();
     }
 
-    public long getAudioDataLength()
+    public Long getAudioDataLength()
     {
         return audioDataLength;
     }
