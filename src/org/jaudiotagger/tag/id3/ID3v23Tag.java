@@ -1170,6 +1170,15 @@ public class ID3v23Tag extends AbstractID3v2Tag
             return;
         }
 
+        if(frameId.equals(ID3v23Frames.FRAME_ID_V3_TDAT))
+        {
+            if(frame.getContent().length()==0)
+            {
+                //Discard not useful to complicate by trying to map it
+                logger.warning("TDAT is empty so just ignoring");
+                return;
+            }
+        }
         if (map.containsKey(frameId) || map.containsKey(TyerTdatAggregatedFrame.ID_TYER_TDAT))
         {
             //If we have multiple duplicate frames in a tag separate them with semicolons
