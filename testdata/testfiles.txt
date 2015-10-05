@@ -90,5 +90,6 @@ test136.aiff,yes,,example aiff file - odd data chunk
 test137.aiff,yes,,example aiff file - trailing junk chunk
 test138.aiff,yes,,example aiff file with author, copyright and name chunks
 test139.mp3, no,481,mp3 with year but empty tdat field
+test140.mp3, no,484, String encoding issue
 
 

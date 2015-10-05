@@ -61,6 +61,8 @@ public class TextEncodedStringSizeTerminated extends AbstractString
         return obj instanceof TextEncodedStringSizeTerminated && super.equals(obj);
     }
 
+
+
     /**
      * Read a 'n' bytes from buffer into a String where n is the framesize - offset
      * so therefore cannot use this if there are other objects after it because it has no
@@ -79,9 +81,6 @@ public class TextEncodedStringSizeTerminated extends AbstractString
     {
         logger.finest("Reading from array from offset:" + offset);
 
-        //Get the Specified Decoder
-        final CharsetDecoder decoder = getTextEncodingCharSet().newDecoder();
-        decoder.reset();
 
         //Decode sliced inBuffer
         ByteBuffer inBuffer;
@@ -98,6 +97,9 @@ public class TextEncodedStringSizeTerminated extends AbstractString
         }
 
         CharBuffer outBuffer = CharBuffer.allocate(arr.length - offset);
+
+
+        CharsetDecoder decoder = getCorrectDecoder(inBuffer);
         CoderResult coderResult = decoder.decode(inBuffer, outBuffer, true);
         if (coderResult.isError())
         {
@@ -118,7 +120,7 @@ public class TextEncodedStringSizeTerminated extends AbstractString
         }
         //SetSize, important this is correct for finding the next datatype
         setSize(arr.length - offset);
-        logger.config("Read SizeTerminatedString:" + value + " size:" + size);
+        logger.severe("Read SizeTerminatedString:" + value + " size:" + size);
 
     }
 
@@ -333,20 +335,7 @@ public class TextEncodedStringSizeTerminated extends AbstractString
         return data;
     }
 
-    /**
-     * Get the text encoding being used.
-     *
-     * The text encoding is defined by the frame body that the text field belongs to.
-     *
-     * @return the text encoding charset
-     */
-    protected Charset getTextEncodingCharSet()
-    {
-        final byte textEncoding = this.getBody().getTextEncoding();
-        final Charset charSetName = TextEncoding.getInstanceOf().getCharsetForId(textEncoding);
-        logger.finest("text encoding:" + textEncoding + " charset:" + charSetName.name());
-        return charSetName;
-    }
+
 
     /**
      * Split the values separated by null character

@@ -73,7 +73,7 @@ public class TextEncodedStringNullTerminated extends AbstractString
 
         //Get the Specified Decoder
         final Charset charset = getTextEncodingCharSet();
-        final CharsetDecoder decoder = charset.newDecoder();
+
 
         //We only want to load up to null terminator, data after this is part of different
         //field and it may not be possible to decode it so do the check before we do
@@ -178,7 +178,8 @@ public class TextEncodedStringNullTerminated extends AbstractString
             //Decode sliced inBuffer
             ByteBuffer inBuffer = ByteBuffer.wrap(arr, offset, bufferSize).slice();
             CharBuffer outBuffer = CharBuffer.allocate(bufferSize);
-            decoder.reset();
+
+            final CharsetDecoder decoder = getCorrectDecoder(inBuffer);
             CoderResult coderResult = decoder.decode(inBuffer, outBuffer, true);
             if (coderResult.isError())
             {
