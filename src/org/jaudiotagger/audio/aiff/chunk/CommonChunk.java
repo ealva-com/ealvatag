@@ -16,11 +16,6 @@ import java.nio.ByteBuffer;
  */
 public class CommonChunk extends Chunk
 {
-    private static final int NO_CHANNELS_LENGTH      = 2;
-    private static final int NO_SAMPLE_FRAMES_LENGTH = 4;
-    private static final int SAMPLE_SIZE_LENGTH      = 2;
-    private static final int SAMPLE_RATE_LENGTH      = 10;
-    private static final int COMPRESSION_TYPE_LENGTH      = 4;
     private AiffAudioHeader aiffHeader;
 
     /**
@@ -44,7 +39,6 @@ public class CommonChunk extends Chunk
         long numSamples         = chunkData.getInt();
         int bitsPerSample       = Utils.u(chunkData.getShort());
         double sampleRate       = AiffUtil.read80BitDouble(chunkData);
-
         //Compression format, but not necessarily compressed
         String compressionType;
         String compressionName;
@@ -62,11 +56,6 @@ public class CommonChunk extends Chunk
                 aiffHeader.setEndian(AiffAudioHeader.Endian.LITTLE_ENDIAN);
             }
             compressionName = Utils.readPascalString(chunkData);
-
-            //TODO This extra read fixes reading next chunk for ANNO, need more test cases to know
-            //f error lies in file or code
-            chunkData.get();
-
             // Proper handling of compression type should depend
             // on whether raw output is set
             if (compressionType != null)
@@ -111,6 +100,7 @@ public class CommonChunk extends Chunk
         aiffHeader.setSamplingRate((int) sampleRate);
         aiffHeader.setChannelNumber(numChannels);
         aiffHeader.setPreciseLength((numSamples / sampleRate));
+
         aiffHeader.setNoOfSamples(numSamples);
         return true;
     }

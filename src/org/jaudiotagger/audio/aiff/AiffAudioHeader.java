@@ -203,6 +203,21 @@ public class AiffAudioHeader extends GenericAudioHeader
     {
         StringBuilder sb = new StringBuilder("\n");
 
+        if(name!=null && !name.isEmpty())
+        {
+            sb.append("\tName:"+name+"\n");
+        }
+
+        if(author!=null && !author.isEmpty())
+        {
+            sb.append("\tAuthor:"+author+"\n");
+        }
+
+        if(copyright!=null && !copyright.isEmpty())
+        {
+            sb.append("\tCopyright:"+copyright+"\n");
+        }
+
         if(comments.size()>0)
         {
             sb.append("Comments:\n");

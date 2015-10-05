@@ -50,8 +50,8 @@ public class AiffInfoReader extends AiffChunkReader
     {
         if(info.getAudioDataLength()!=null)
         {
-            info.setBitRate(Math.round(info.getAudioDataLength()
-                    * Chunk.BITS_IN_BYTE_MULTIPLIER / (info.getTrackLength() * Chunk.KILOBYTE_MULTIPLIER)));
+            info.setBitRate((int)(Math.round(info.getAudioDataLength()
+                    * Chunk.BITS_IN_BYTE_MULTIPLIER / (info.getPreciseTrackLength() * Chunk.KILOBYTE_MULTIPLIER))));
         }
     }
 
@@ -69,10 +69,10 @@ public class AiffInfoReader extends AiffChunkReader
             return false;
         }
 
+        logger.severe("Reading Chunk:" + chunkHeader.getID() + ":starting at:" + chunkHeader.getStartLocationInFile() + ":sizeIncHeader:" + (chunkHeader.getSize() + ChunkHeader.CHUNK_HEADER_SIZE));
         chunk = createChunk(raf, chunkHeader, aiffAudioHeader);
         if (chunk != null)
         {
-            logger.config("Reading:" + chunkHeader.getID());
             if (!chunk.readChunk())
             {
                 logger.severe("ChunkReadFail:" + chunkHeader.getID());

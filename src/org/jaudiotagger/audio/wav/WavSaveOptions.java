@@ -11,7 +11,7 @@ package org.jaudiotagger.audio.wav;
  * then an ID3 tag will always be written and the info tag will as well if it already exists, if it does not it will not.
  *
  * If SAVE_ACTIVE is selected only that tag will be saved to file. So if WavOptions.READ_ID3_ONLY only this wil be saved
- * to file, any existing INFO chunk will be left unchanged/deleted (TODO decide on this).
+ * to file, any existing INFO chunk will be deleted
  *
  * If SAVE_BOTH is selected an ID3 chunk and an INFO chunk are always written, regardless of whether or not they currently exist.
  * This option should be set using TagOptionSingleton.setWavSaveOptions()

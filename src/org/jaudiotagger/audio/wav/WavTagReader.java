@@ -76,7 +76,6 @@ public class WavTagReader
      *
      * @param tag
      */
-    //TODO does this need to be configurable
     private void createDefaultMetadataTagsIfMissing(WavTag tag)
     {
         if(!tag.isExistingId3Tag())
