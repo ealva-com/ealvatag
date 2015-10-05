@@ -34,6 +34,7 @@ public class AggregatedFrame implements TagTextField
      */
     public String getContent()
     {
+        System.out.println("Getting Contgent");
         StringBuilder sb = new StringBuilder();
         for(AbstractID3v2Frame next:frames)
         {
