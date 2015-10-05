@@ -159,6 +159,11 @@ public class WavTag implements Tag
         }
     }
 
+    public boolean equals(Object obj)
+    {
+        return getActiveTag().equals(obj);
+    }
+
     public void addField(TagField field) throws FieldDataInvalidException
     {
         getActiveTag().addField(field);

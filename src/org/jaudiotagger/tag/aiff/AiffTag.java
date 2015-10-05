@@ -328,4 +328,9 @@ public class AiffTag implements Tag
         }
         return id3Tag.getStartLocationInFile() - ChunkHeader.CHUNK_HEADER_SIZE;
     }
+
+    public boolean equals(Object obj)
+    {
+        return id3Tag.equals(obj);
+    }
 }
