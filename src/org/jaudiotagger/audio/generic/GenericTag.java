@@ -161,6 +161,10 @@ public abstract class GenericTag extends AbstractTag
     {
         if(supportedKeys.contains(genericKey))
         {
+            if (value == null)
+            {
+                throw new IllegalArgumentException(ErrorMessage.GENERAL_INVALID_NULL_ARGUMENT.getMsg());
+            }
             return new GenericTagTextField(genericKey.name(),value);
         }
         else

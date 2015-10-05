@@ -140,7 +140,7 @@ public class VorbisCommentTag extends AbstractTag
      * Only used within Package, hidden because it doesnt set Vendor
      * which should be done when created by end user
      */
-    VorbisCommentTag()
+    public VorbisCommentTag()
     {
 
     }
