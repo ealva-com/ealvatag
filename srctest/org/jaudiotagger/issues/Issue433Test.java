@@ -14,7 +14,7 @@ import java.io.RandomAccessFile;
  */
 public class Issue433Test extends AbstractTestCase
 {
-    public void testWriteMp4() throws Exception
+    public void testWriteMp4LargeIncreaseExistingUdtaWithDatButNotMetaAddDataLarge() throws Exception
     {
         Exception ex=null;
         File orig = new File("testdata", "test112.m4a");
@@ -40,5 +40,30 @@ public class Issue433Test extends AbstractTestCase
         assertEquals("fredwwwwwwwwwwwwwwwwwwwwwwww",af.getTag().getFirst(FieldKey.ALBUM));
     }
 
+    public void testWriteMp4LargeIncreaseExistingUdtaWithDatButNotMetaAddDataSmall() throws Exception
+    {
+        Exception ex=null;
+        File orig = new File("testdata", "test112.m4a");
+        if (!orig.isFile())
+        {
+            System.err.println("Unable to test file - not available");
+            return;
+        }
+
+        File testFile = AbstractTestCase.copyAudioToTmp("test112.m4a",new File("test112WriteSmall.m4a"));
+
+        Mp4AtomTree atomTree = new Mp4AtomTree(new RandomAccessFile(testFile, "r"));
+        atomTree.printAtomTree();
+
+        AudioFile af = AudioFileIO.read(testFile);
+
+        af.getTag().setField(FieldKey.ALBUM,"fred");
+        af.commit();
+
+        atomTree = new Mp4AtomTree(new RandomAccessFile(testFile, "r"));
+        atomTree.printAtomTree();
+        af = AudioFileIO.read(testFile);
+        assertEquals("fred",af.getTag().getFirst(FieldKey.ALBUM));
+    }
 
 }
