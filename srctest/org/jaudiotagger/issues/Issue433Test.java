@@ -31,13 +31,13 @@ public class Issue433Test extends AbstractTestCase
 
         AudioFile af = AudioFileIO.read(testFile);
 
-        af.getTag().setField(FieldKey.ALBUM,"fred");
+        af.getTag().setField(FieldKey.ALBUM,"fredwwwwwwwwwwwwwwwwwwwwwwww");
         af.commit();
 
         atomTree = new Mp4AtomTree(new RandomAccessFile(testFile, "r"));
         atomTree.printAtomTree();
         af = AudioFileIO.read(testFile);
-        assertEquals("fred",af.getTag().getFirst(FieldKey.ALBUM));
+        assertEquals("fredwwwwwwwwwwwwwwwwwwwwwwww",af.getTag().getFirst(FieldKey.ALBUM));
     }
 
 
