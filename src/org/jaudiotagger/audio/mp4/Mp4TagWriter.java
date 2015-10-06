@@ -551,17 +551,7 @@ public class Mp4TagWriter
                             topLevelFreeAtomComesBeforeMdatAtomAndAfterMetadata);
                 }
 
-                writeNewDataWhenWeMoreMetadataThanExisting(fileReadChannel,
-                        fileWriteChannel,
-                        newIlstData,
-                        additionalMetaSizeThatWontFitWithinMetaAtom,
-                        sizeOfExistingTopLevelFreeAtom,
-                        topLevelFreeAtomComesBeforeMdatAtomAndAfterMetadata,
-                        endOfMoov, neroTagsHeader,
-                        sizeOfExistingIlstAtom,
-                        positionOfNewIlstWithinFile,
-                        sizeOfExistingMetaLevelFreeAtom,
-                        positionOfTopLevelFreeAtom);
+                writeNewilstDataANdRestOfFileWhenWeHaveMoreMetadataThanExisting(fileReadChannel, fileWriteChannel, newIlstData, additionalMetaSizeThatWontFitWithinMetaAtom, sizeOfExistingTopLevelFreeAtom, topLevelFreeAtomComesBeforeMdatAtomAndAfterMetadata, endOfMoov, neroTagsHeader, sizeOfExistingIlstAtom, positionOfNewIlstWithinFile, sizeOfExistingMetaLevelFreeAtom, positionOfTopLevelFreeAtom);
             }
         }
         //Close all channels to original file
@@ -1036,52 +1026,41 @@ public class Mp4TagWriter
      * @param topLevelFreeSize
      * @param topLevelFreeAtomComesBeforeMdatAtomAndAfterMetadata
      * @param endOfMoov
-     * @param tagsHeader
-     * @param oldIlstSize
-     * @param startIlstWithinFile
+     * @param neroTagsHeader
+     * @param existingSizeOfIlstData
+     * @param existingPositionofIlstAtomWithinFile
      *
      * @param oldMetaLevelFreeAtomSize
      * @param topLevelFreePosition
      * @throws IOException
      * @throws CannotWriteException
      */
-    private void writeNewDataWhenWeMoreMetadataThanExisting(FileChannel fileReadChannel,
-                                                            FileChannel fileWriteChannel,
-                                                            ByteBuffer newIlstData,
-                                                            int additionalMetaSizeThatWontFitWithinMetaAtom,
-                                                            int topLevelFreeSize,
-                                                            boolean topLevelFreeAtomComesBeforeMdatAtomAndAfterMetadata,
-                                                            long endOfMoov,
-                                                            Mp4BoxHeader tagsHeader,
-                                                            int oldIlstSize,
-                                                            int startIlstWithinFile,
-                                                            int oldMetaLevelFreeAtomSize, int topLevelFreePosition
-
-    ) throws IOException, CannotWriteException
+    private void writeNewilstDataANdRestOfFileWhenWeHaveMoreMetadataThanExisting(FileChannel fileReadChannel, FileChannel fileWriteChannel, ByteBuffer newIlstData, int additionalMetaSizeThatWontFitWithinMetaAtom, int topLevelFreeSize, boolean topLevelFreeAtomComesBeforeMdatAtomAndAfterMetadata, long endOfMoov, Mp4BoxHeader neroTagsHeader, int existingSizeOfIlstData, int existingPositionofIlstAtomWithinFile, int oldMetaLevelFreeAtomSize, int topLevelFreePosition) throws IOException, CannotWriteException
     {
         //Now write ilst data
         fileWriteChannel.write(newIlstData);
 
         //Skip over the read channel old meta level free atom because now used up
-        fileReadChannel.position(startIlstWithinFile + oldIlstSize);
-        fileReadChannel.position(fileReadChannel.position() + oldMetaLevelFreeAtomSize);
+        fileReadChannel.position(existingPositionofIlstAtomWithinFile + existingSizeOfIlstData  + oldMetaLevelFreeAtomSize);
 
-        if (tagsHeader != null)
+        //Write the remainder of any data in the moov buffer thats comes after existing ilst/metadata level free atoms
+        //but we replace any neroTags atoms with free atoms as these cause problems
+        if (neroTagsHeader != null)
         {
             //Write from after ilst upto tags atom
-            long writeBetweenIlstAndTags = tagsHeader.getFilePos() - fileReadChannel.position();
+            long writeBetweenIlstAndTags = neroTagsHeader.getFilePos() - fileReadChannel.position();
             fileWriteChannel.transferFrom(fileReadChannel, fileWriteChannel.position(), writeBetweenIlstAndTags);
             fileWriteChannel.position(fileWriteChannel.position() + writeBetweenIlstAndTags);
-            convertandWriteTagsAtomToFreeAtom(fileWriteChannel, tagsHeader);
+            convertandWriteTagsAtomToFreeAtom(fileWriteChannel, neroTagsHeader);
 
             //Write after tags atom upto end of moov
-            fileReadChannel.position(tagsHeader.getFilePos() + tagsHeader.getLength());
+            fileReadChannel.position(neroTagsHeader.getFilePos() + neroTagsHeader.getLength());
             long extraData = endOfMoov - fileReadChannel.position();
             fileWriteChannel.transferFrom(fileReadChannel, fileWriteChannel.position(), extraData);
         }
         else
         {
-            //Now write the rest of children under moov which wont have changed
+            //Now write the rest of children under moov thats come after ilst which wont have changed
             long extraData = endOfMoov - fileReadChannel.position();
             fileWriteChannel.transferFrom(fileReadChannel, fileWriteChannel.position(), extraData);
             fileWriteChannel.position(fileWriteChannel.position() + extraData);
@@ -1089,7 +1068,7 @@ public class Mp4TagWriter
 
         //If we have top level free atom that comes before mdat we might be able to use it but only if
         //the free atom actually come after the the metadata
-        if (topLevelFreeAtomComesBeforeMdatAtomAndAfterMetadata && (topLevelFreePosition >= startIlstWithinFile))
+        if (topLevelFreeAtomComesBeforeMdatAtomAndAfterMetadata && (topLevelFreePosition >= existingPositionofIlstAtomWithinFile))
         {
             //If the shift is less than the space available in this second free atom data size we should
             //minimize the free atom accordingly (then we don't have to update stco atom)
