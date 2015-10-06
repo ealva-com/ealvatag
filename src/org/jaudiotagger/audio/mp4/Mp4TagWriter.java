@@ -593,7 +593,8 @@ public class Mp4TagWriter
     }
 
     /**
-     * #385 Write data in chunks, needed if writing large amounts of data
+     * Write the remainder of data in read channel to write channel data in @see TagOptionSingleton.getWriteChunkSize()
+     * chunks, needed if writing large amounts of data
      *
      * @param fileReadChannel
      * @param fileWriteChannel
