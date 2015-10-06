@@ -896,16 +896,15 @@ public class Mp4TagWriter
             fileWriteChannel.position(fileWriteChannel.position() + extraData);
         }
 
-        //We were able to write new metadata without needing to move mdat data, one of three scenerios must have occurred
         if (!isMdatDataMoved)
         {
-            writeRestofFileWhenMdatNotMoved(fileReadChannel, fileWriteChannel, topLevelFreeSize, additionalMetaSizeThatWontFitWithinMetaAtom);
+            adjustFreeAtom(fileReadChannel, fileWriteChannel, topLevelFreeSize, additionalMetaSizeThatWontFitWithinMetaAtom);
         }
         else
         {
             logger.config("Writing:Option 9;Top Level Free comes after Mdat or before Metadata or not large enough");
-            writeDataInChunks(fileReadChannel, fileWriteChannel);
         }
+        writeDataInChunks(fileReadChannel, fileWriteChannel);
     }
 
     /**
@@ -1005,16 +1004,15 @@ public class Mp4TagWriter
             fileWriteChannel.position(fileWriteChannel.position() + extraData);
         }
 
-        //We were able to write new metadata without needing to move mdat data, one of three scenerios must have occurred
         if (!isMdatDataMoved)
         {
-            writeRestofFileWhenMdatNotMoved(fileReadChannel, fileWriteChannel, topLevelFreeSize, additionalMetaSizeThatWontFitWithinMetaAtom);
+            adjustFreeAtom(fileReadChannel, fileWriteChannel, topLevelFreeSize, additionalMetaSizeThatWontFitWithinMetaAtom);
         }
         else
         {
             logger.config("Writing:Option 9;Top Level Free comes after Mdat or before Metadata or not large enough");
-            writeDataInChunks(fileReadChannel, fileWriteChannel);
         }
+        writeDataInChunks(fileReadChannel, fileWriteChannel);
     }
 
     /**
@@ -1086,16 +1084,15 @@ public class Mp4TagWriter
             fileWriteChannel.position(fileWriteChannel.position() + extraData);
         }
 
-        //We were able to write new metadata without needing to move mdat data, one of three scenerios must have occurred
         if (!isMdatDataMoved)
         {
-            writeRestofFileWhenMdatNotMoved(fileReadChannel, fileWriteChannel, topLevelFreeSize, additionalMetaSizeThatWontFitWithinMetaAtom);
+            adjustFreeAtom(fileReadChannel, fileWriteChannel, topLevelFreeSize, additionalMetaSizeThatWontFitWithinMetaAtom);
         }
         else
         {
             logger.config("Writing:Option 9;Top Level Free comes after Mdat or before Metadata or not large enough");
-            writeDataInChunks(fileReadChannel, fileWriteChannel);
         }
+        writeDataInChunks(fileReadChannel, fileWriteChannel);
     }
 
     /**
@@ -1123,7 +1120,7 @@ public class Mp4TagWriter
     }
 
     /**
-     * We were able to write new metadata without needing to move mdat data, one of three scenerios must have occurred
+     * We adjust free atom, allowing us to not need to move mdat atom
      *
      * @param fileReadChannel
      * @param fileWriteChannel
@@ -1132,7 +1129,7 @@ public class Mp4TagWriter
      * @throws IOException
      * @throws CannotWriteException
      */
-    private void writeRestofFileWhenMdatNotMoved(FileChannel fileReadChannel, FileChannel fileWriteChannel, int topLevelFreeSize, int additionalMetaSizeThatWontFitWithinMetaAtom)
+    private void adjustFreeAtom(FileChannel fileReadChannel, FileChannel fileWriteChannel, int topLevelFreeSize, int additionalMetaSizeThatWontFitWithinMetaAtom)
             throws IOException, CannotWriteException
     {
         //If the shift is less than the space available in this second free atom data size we just
@@ -1146,9 +1143,6 @@ public class Mp4TagWriter
 
             //Skip over the read channel old free atom
             fileReadChannel.position(fileReadChannel.position() + topLevelFreeSize);
-
-            //Write Mdat
-            writeDataInChunks(fileReadChannel, fileWriteChannel);
         }
         //If the space required is identical to total size of the free space (inc header)
         //we could just remove the header
@@ -1157,9 +1151,6 @@ public class Mp4TagWriter
             logger.config("Writing:Option 7;Larger Size uses top free atom including header");
             //Skip over the read channel old free atom
             fileReadChannel.position(fileReadChannel.position() + topLevelFreeSize);
-
-            //Write Mdat
-            writeDataInChunks(fileReadChannel, fileWriteChannel);
         }
         else
         {
