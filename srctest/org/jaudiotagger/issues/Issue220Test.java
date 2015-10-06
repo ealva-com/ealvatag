@@ -3,9 +3,11 @@ package org.jaudiotagger.issues;
 import org.jaudiotagger.AbstractTestCase;
 import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.AudioFileIO;
+import org.jaudiotagger.audio.mp4.Mp4AtomTree;
 import org.jaudiotagger.tag.FieldKey;
 
 import java.io.File;
+import java.io.RandomAccessFile;
 
 /**
  * Test read m4a without udta/meta atom
@@ -61,6 +63,9 @@ public class Issue220Test extends AbstractTestCase
         {
             testFile = AbstractTestCase.copyAudioToTmp("test41.m4a");
 
+            Mp4AtomTree atomTree = new Mp4AtomTree(new RandomAccessFile(testFile, "r"));
+            atomTree.printAtomTree();
+
             //Read File okay
             AudioFile af = AudioFileIO.read(testFile);
             assertTrue(af.getTag().isEmpty());
@@ -74,6 +79,10 @@ public class Issue220Test extends AbstractTestCase
             af.commit();
 
             //Read file again okay
+
+            atomTree = new Mp4AtomTree(new RandomAccessFile(testFile, "r"));
+            atomTree.printAtomTree();
+
             af = AudioFileIO.read(testFile);
             assertEquals("FREDDYCOUGAR",af.getTag().getFirst(FieldKey.ARTIST));
             assertEquals("album",af.getTag().getFirst(FieldKey.ALBUM));
