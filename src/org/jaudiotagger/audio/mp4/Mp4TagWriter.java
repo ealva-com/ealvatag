@@ -561,80 +561,19 @@ public class Mp4TagWriter
                             topLevelFreeAtomComesBeforeMdatAtomAndAfterMetadata);
                 }
 
-                //Now write ilst data
-                fileWriteChannel.write(rawIlstData);
-
-                //Skip over the read channel old meta level free atom because now used up
-                fileReadChannel.position(startIlstWithinFile + oldIlstSize);
-                fileReadChannel.position(fileReadChannel.position() + oldMetaLevelFreeAtomSize);
-
-                if (tagsHeader != null)
-                {
-                    //Write from after ilst upto tags atom
-                    long writeBetweenIlstAndTags = tagsHeader.getFilePos() - fileReadChannel.position();
-                    fileWriteChannel.transferFrom(fileReadChannel, fileWriteChannel.position(), writeBetweenIlstAndTags);
-                    fileWriteChannel.position(fileWriteChannel.position() + writeBetweenIlstAndTags);
-                    convertandWriteTagsAtomToFreeAtom(fileWriteChannel, tagsHeader);
-
-                    //Write after tags atom upto end of moov
-                    fileReadChannel.position(tagsHeader.getFilePos() + tagsHeader.getLength());
-                    long extraData = endOfMoov - fileReadChannel.position();
-                    fileWriteChannel.transferFrom(fileReadChannel, fileWriteChannel.position(), extraData);
-                }
-                else
-                {
-                    //Now write the rest of children under moov which wont have changed
-                    long extraData = endOfMoov - fileReadChannel.position();
-                    fileWriteChannel.transferFrom(fileReadChannel, fileWriteChannel.position(), extraData);
-                    fileWriteChannel.position(fileWriteChannel.position() + extraData);
-                }
-
-                //If we have top level free atom that comes before mdat we might be able to use it but only if
-                //the free atom actually come after the the metadata
-                if (topLevelFreeAtomComesBeforeMdatAtomAndAfterMetadata && (topLevelFreePosition >= startIlstWithinFile))
-                {
-                    //If the shift is less than the space available in this second free atom data size we should
-                    //minimize the free atom accordingly (then we don't have to update stco atom)
-                    //note could be a double negative as additionalMetaSizeThatWontFitWithinMetaAtom could be -1 to -8 but thats ok stills works
-                    //ok
-                    if (topLevelFreeSize - Mp4BoxHeader.HEADER_LENGTH >= additionalMetaSizeThatWontFitWithinMetaAtom)
-                    {
-                        logger.config("Writing:Option 6;Larger Size can use top free atom");
-                        Mp4FreeBox freeBox = new Mp4FreeBox((topLevelFreeSize - Mp4BoxHeader.HEADER_LENGTH) - additionalMetaSizeThatWontFitWithinMetaAtom);
-                        fileWriteChannel.write(freeBox.getHeader().getHeaderData());
-                        fileWriteChannel.write(freeBox.getData());
-
-                        //Skip over the read channel old free atom
-                        fileReadChannel.position(fileReadChannel.position() + topLevelFreeSize);
-
-                        //Write Mdat
-                        writeDataInChunks(fileReadChannel, fileWriteChannel);
-                    }
-                    //If the space required is identical to total size of the free space (inc header)
-                    //we could just remove the header
-                    else if (topLevelFreeSize == additionalMetaSizeThatWontFitWithinMetaAtom)
-                    {
-                        logger.config("Writing:Option 7;Larger Size uses top free atom including header");
-                        //Skip over the read channel old free atom
-                        fileReadChannel.position(fileReadChannel.position() + topLevelFreeSize);
-
-                        //Write Mdat
-                        writeDataInChunks(fileReadChannel, fileWriteChannel);
-                    }
-                    //Mdat is going to have to move anyway, so keep free atom as is and write it and mdat
-                    //(have already updated stco above)
-                    else
-                    {
-                        logger.config("Writing:Option 8;Larger Size cannot use top free atom");
-                        fileWriteChannel.transferFrom(fileReadChannel, fileWriteChannel.position(), fileReadChannel.size() - fileReadChannel.position());
-                        writeDataInChunks(fileReadChannel, fileWriteChannel);
-                    }
-                }
-                else
-                {
-                    logger.config("Writing:Option 9;Top Level Free comes after Mdat or before Metadata so cant use it");
-                    writeDataInChunks(fileReadChannel, fileWriteChannel);
-                }
+                writeNewMetadata(
+                        fileReadChannel,
+                        fileWriteChannel,
+                        rawIlstData,
+                        additionalMetaSizeThatWontFitWithinMetaAtom,
+                        topLevelFreeSize,
+                        topLevelFreeAtomComesBeforeMdatAtomAndAfterMetadata,
+                        endOfMoov,
+                        tagsHeader,
+                        oldIlstSize,
+                        startIlstWithinFile,
+                        oldMetaLevelFreeAtomSize,
+                        topLevelFreePosition);
             }
         }
         //Close all channels to original file
@@ -1075,4 +1014,95 @@ public class Mp4TagWriter
 
     }
 
+    private void writeNewMetadata(
+                                   FileChannel fileReadChannel,
+                                   FileChannel fileWriteChannel,
+                                   ByteBuffer rawIlstData,
+                                   int additionalMetaSizeThatWontFitWithinMetaAtom,
+                                   int topLevelFreeSize,
+                                   boolean topLevelFreeAtomComesBeforeMdatAtomAndAfterMetadata,
+                                   long endOfMoov,
+                                   Mp4BoxHeader tagsHeader,
+                                   int oldIlstSize,
+                                   int startIlstWithinFile,
+                                   int oldMetaLevelFreeAtomSize,
+                                   int topLevelFreePosition
+
+    ) throws IOException, CannotWriteException
+    {
+        //Now write ilst data
+        fileWriteChannel.write(rawIlstData);
+
+        //Skip over the read channel old meta level free atom because now used up
+        fileReadChannel.position(startIlstWithinFile + oldIlstSize);
+        fileReadChannel.position(fileReadChannel.position() + oldMetaLevelFreeAtomSize);
+
+        if (tagsHeader != null)
+        {
+            //Write from after ilst upto tags atom
+            long writeBetweenIlstAndTags = tagsHeader.getFilePos() - fileReadChannel.position();
+            fileWriteChannel.transferFrom(fileReadChannel, fileWriteChannel.position(), writeBetweenIlstAndTags);
+            fileWriteChannel.position(fileWriteChannel.position() + writeBetweenIlstAndTags);
+            convertandWriteTagsAtomToFreeAtom(fileWriteChannel, tagsHeader);
+
+            //Write after tags atom upto end of moov
+            fileReadChannel.position(tagsHeader.getFilePos() + tagsHeader.getLength());
+            long extraData = endOfMoov - fileReadChannel.position();
+            fileWriteChannel.transferFrom(fileReadChannel, fileWriteChannel.position(), extraData);
+        }
+        else
+        {
+            //Now write the rest of children under moov which wont have changed
+            long extraData = endOfMoov - fileReadChannel.position();
+            fileWriteChannel.transferFrom(fileReadChannel, fileWriteChannel.position(), extraData);
+            fileWriteChannel.position(fileWriteChannel.position() + extraData);
+        }
+
+        //If we have top level free atom that comes before mdat we might be able to use it but only if
+        //the free atom actually come after the the metadata
+        if (topLevelFreeAtomComesBeforeMdatAtomAndAfterMetadata && (topLevelFreePosition >= startIlstWithinFile))
+        {
+            //If the shift is less than the space available in this second free atom data size we should
+            //minimize the free atom accordingly (then we don't have to update stco atom)
+            //note could be a double negative as additionalMetaSizeThatWontFitWithinMetaAtom could be -1 to -8 but thats ok stills works
+            //ok
+            if (topLevelFreeSize - Mp4BoxHeader.HEADER_LENGTH >= additionalMetaSizeThatWontFitWithinMetaAtom)
+            {
+                logger.config("Writing:Option 6;Larger Size can use top free atom");
+                Mp4FreeBox freeBox = new Mp4FreeBox((topLevelFreeSize - Mp4BoxHeader.HEADER_LENGTH) - additionalMetaSizeThatWontFitWithinMetaAtom);
+                fileWriteChannel.write(freeBox.getHeader().getHeaderData());
+                fileWriteChannel.write(freeBox.getData());
+
+                //Skip over the read channel old free atom
+                fileReadChannel.position(fileReadChannel.position() + topLevelFreeSize);
+
+                //Write Mdat
+                writeDataInChunks(fileReadChannel, fileWriteChannel);
+            }
+            //If the space required is identical to total size of the free space (inc header)
+            //we could just remove the header
+            else if (topLevelFreeSize == additionalMetaSizeThatWontFitWithinMetaAtom)
+            {
+                logger.config("Writing:Option 7;Larger Size uses top free atom including header");
+                //Skip over the read channel old free atom
+                fileReadChannel.position(fileReadChannel.position() + topLevelFreeSize);
+
+                //Write Mdat
+                writeDataInChunks(fileReadChannel, fileWriteChannel);
+            }
+            //Mdat is going to have to move anyway, so keep free atom as is and write it and mdat
+            //(have already updated stco above)
+            else
+            {
+                logger.config("Writing:Option 8;Larger Size cannot use top free atom");
+                fileWriteChannel.transferFrom(fileReadChannel, fileWriteChannel.position(), fileReadChannel.size() - fileReadChannel.position());
+                writeDataInChunks(fileReadChannel, fileWriteChannel);
+            }
+        }
+        else
+        {
+            logger.config("Writing:Option 9;Top Level Free comes after Mdat or before Metadata so cant use it");
+            writeDataInChunks(fileReadChannel, fileWriteChannel);
+        }
+    }
 }
