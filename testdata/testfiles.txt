@@ -61,7 +61,7 @@ test108.mp3,no,converting artist webpage url between id3 versions
 test109.m4a,no,,File with dodgy covr atom with no actual artwork within it
 test110.mp3,no,452,mp3 with invalid tagheadersize making it harder to find correct audio
 test111.mp3,no,409,mp3 with incorrect sample rate of 48000 for 44100 mp3
-test112.m4a,no,433,m4a that cannot be written to
+test112.m4a,no,433,m4a with a udta atom with unknown subatoms but no meta atom
 test113.mp3,no,453,mp3 MPEG1 Layer 3 with 32bitrate is inocrrectly calculating length to be 24.11, (ITune scorrectly calculates as 3:54 ( about 6.2 timers greater)
 test114.mp3,no,454,mp3 MPEG2 Layer 3 with 64bitrate is inocrrectly calculating length to be 2:18, (ITune scorrectly calculates as 4:37 ( double size)
 test115.flac,no,466,flac Flac with invalid blocktype
@@ -91,5 +91,6 @@ test137.aiff,yes,,example aiff file - trailing junk chunk
 test138.aiff,yes,,example aiff file with author, copyright and name chunks
 test139.mp3, no,481,mp3 with year but empty tdat field
 test140.mp3, no,484, String encoding issue
+test141.m4a, no,433,with a udta atom with unknown subatoms and meta atom
 
 
