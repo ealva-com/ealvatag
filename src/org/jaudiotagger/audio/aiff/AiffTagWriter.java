@@ -28,6 +28,7 @@ import org.jaudiotagger.audio.iff.Chunk;
 import org.jaudiotagger.audio.iff.ChunkHeader;
 import org.jaudiotagger.audio.iff.IffHeaderChunk;
 import org.jaudiotagger.tag.Tag;
+import org.jaudiotagger.tag.TagOptionSingleton;
 import org.jaudiotagger.tag.aiff.AiffTag;
 
 import java.io.ByteArrayOutputStream;
@@ -185,7 +186,7 @@ public class AiffTagWriter implements TagWriter
     private void deleteTagChunkUsingSmallByteBufferSegments( final AiffTag existingTag, final FileChannel channel,  final long newLength, final long lengthTagChunk )
             throws IOException
     {
-        final ByteBuffer buffer = ByteBuffer.allocateDirect(4 * 1024 * 1024);
+        final ByteBuffer buffer = ByteBuffer.allocateDirect((int)TagOptionSingleton.getInstance().getWriteChunkSize());
         while (channel.read(buffer) >= 0 || buffer.position() != 0) {
             buffer.flip();
             final long readPosition = channel.position();

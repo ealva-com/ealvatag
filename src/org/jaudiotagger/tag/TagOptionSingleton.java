@@ -37,6 +37,7 @@ import org.jaudiotagger.tag.reference.GenreTypes;
 import org.jaudiotagger.tag.reference.ID3V2Version;
 import org.jaudiotagger.tag.reference.Languages;
 
+import java.nio.ByteBuffer;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -300,9 +301,9 @@ public class TagOptionSingleton
     private int playerCompatability=-1;
 
     /**
-     * max size of data to copy when copying audiodata from one file to another
+     * max size of data to copy when copying audiodata from one file to , default to 4mb
      */
-    private long writeChunkSize=5000000;
+    private long writeChunkSize= (4 * 1024 * 1024);
 
     private boolean isWriteMp4GenresAsText=false;
 

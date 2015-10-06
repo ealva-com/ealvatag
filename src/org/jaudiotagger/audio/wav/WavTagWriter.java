@@ -290,7 +290,7 @@ public class WavTagWriter implements TagWriter
         raf.seek(endOfExistingChunk);
         final FileChannel channel = raf.getChannel();
 
-        final ByteBuffer buffer = ByteBuffer.allocate(4 * 1024 * 1024);
+        final ByteBuffer buffer = ByteBuffer.allocate((int)TagOptionSingleton.getInstance().getWriteChunkSize());
         while (channel.read(buffer) >= 0 || buffer.position() != 0)
         {
             buffer.flip();
