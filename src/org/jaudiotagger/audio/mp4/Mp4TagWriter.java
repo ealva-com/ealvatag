@@ -480,7 +480,21 @@ public class Mp4TagWriter
         //no other changes necessary and total file size remains the same
         else if (sizeOfExistingIlstAtom > sizeRequiredByNewIlstAtom)
         {
-            writeOldMetadataLargerThanNewMetadata(fileReadChannel, fileWriteChannel, sizeOfExistingIlstAtom, sizeOfExistingMetaLevelFreeAtom, sizeRequiredByNewIlstAtom, tagsHeader, positionOfNewIlstAtomRelativeToMoovAtom, newIlstData, positionOfNewIlstWithinFile, moovHeader, moovBuffer, mdatHeader, stco, udtaHeader, metaHeader);
+            writeOldMetadataLargerThanNewMetadata(fileReadChannel,
+                    fileWriteChannel,
+                    sizeOfExistingIlstAtom,
+                    sizeOfExistingMetaLevelFreeAtom,
+                    sizeRequiredByNewIlstAtom,
+                    tagsHeader,
+                    positionOfNewIlstAtomRelativeToMoovAtom,
+                    newIlstData,
+                    positionOfNewIlstWithinFile,
+                    moovHeader,
+                    moovBuffer,
+                    mdatHeader,
+                    stco,
+                    udtaHeader, 
+                    metaHeader);
         }
         //Size of metadata has increased, the most complex situation, more atoms affected
         else
@@ -488,7 +502,15 @@ public class Mp4TagWriter
             int additionalSpaceRequiredForMetadata = sizeRequiredByNewIlstAtom - sizeOfExistingIlstAtom;
             if (additionalSpaceRequiredForMetadata <= (sizeOfExistingMetaLevelFreeAtom - Mp4BoxHeader.HEADER_LENGTH))
             {
-                writeNewMetadataLargerButCanUseFreeAtom(fileReadChannel, fileWriteChannel, sizeOfExistingIlstAtom, tagsHeader, sizeOfExistingMetaLevelFreeAtom, positionOfNewIlstWithinFile, newIlstData, additionalSpaceRequiredForMetadata);
+                writeNewMetadataLargerButCanUseFreeAtom(
+                        fileReadChannel,
+                        fileWriteChannel,
+                        sizeOfExistingIlstAtom,
+                        tagsHeader,
+                        sizeOfExistingMetaLevelFreeAtom,
+                        positionOfNewIlstWithinFile,
+                        newIlstData,
+                        additionalSpaceRequiredForMetadata);
             }
             //There is not enough padding in the metadata free atom anyway
             else
