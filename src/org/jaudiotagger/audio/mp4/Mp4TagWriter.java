@@ -520,113 +520,45 @@ public class Mp4TagWriter
 
                 if (udtaHeader == null)
                 {
-                    logger.severe("Writing:Option 5.1;No udta atom");
-
-                    Mp4HdlrBox hdlrBox = Mp4HdlrBox.createiTunesStyleHdlrBox();
-                    Mp4MetaBox metaBox = Mp4MetaBox.createiTunesStyleMetaBox(hdlrBox.getHeader().getLength() + rawIlstData.limit());
-                    udtaHeader = new Mp4BoxHeader(Mp4AtomIdentifier.UDTA.getFieldName());
-                    udtaHeader.setLength(Mp4BoxHeader.HEADER_LENGTH + metaBox.getHeader().getLength());
-
-                    additionalMetaSizeThatWontFitWithinMetaAtom = additionalMetaSizeThatWontFitWithinMetaAtom + (udtaHeader.getLength() - rawIlstData.limit());
-
-                    //Edit stco atom within moov header, if the free atom comes after mdat OR
-                    //(there is not enough space in the top level free atom
-                    //or special case of matching exactly the free atom plus header)
-                    if ((!topLevelFreeAtomComesBeforeMdatAtomAndAfterMetadata) || ((topLevelFreeSize - Mp4BoxHeader.HEADER_LENGTH < additionalMetaSizeThatWontFitWithinMetaAtom) && (topLevelFreeSize != additionalMetaSizeThatWontFitWithinMetaAtom)))
-                    {
-                        //We don't bother using the top level free atom coz not big enough anyway, we need to adjust offsets
-                        //by the amount mdat is going to be shifted
-                        if (mdatHeader.getFilePos() > moovHeader.getFilePos())
-                        {
-                            logger.config("Adjusting Offsets");
-                            stco.adjustOffsets(additionalMetaSizeThatWontFitWithinMetaAtom);
-                        }
-                    }
-
-                    //Edit and rewrite the Moov header
-                    moovHeader.setLength(moovHeader.getLength() + additionalMetaSizeThatWontFitWithinMetaAtom);
-
-                    fileWriteChannel.write(moovHeader.getHeaderData());
-                    moovBuffer.rewind();
-                    moovBuffer.limit(relativeIlstposition);
-                    fileWriteChannel.write(moovBuffer);
-
-                    //Write new atoms required for holding metadata in itunes format
-                    fileWriteChannel.write(udtaHeader.getHeaderData());
-                    fileWriteChannel.write(metaBox.getHeader().getHeaderData());
-                    fileWriteChannel.write(metaBox.getData());
-                    fileWriteChannel.write(hdlrBox.getHeader().getHeaderData());
-                    fileWriteChannel.write(hdlrBox.getData());
+                    writeNoExistingUdtaAtom(fileWriteChannel,
+                                            relativeIlstposition,
+                                            rawIlstData,
+                                            moovHeader,
+                                            moovBuffer,
+                                            mdatHeader,
+                                            stco,
+                                            additionalMetaSizeThatWontFitWithinMetaAtom,
+                                            topLevelFreeSize,
+                                            topLevelFreeAtomComesBeforeMdatAtomAndAfterMetadata);
                 }
                 else if (metaHeader == null)
                 {
-                    //#291:In this case we throwaway editing udta header and create a new one, would be better if we could
-                    //keep the info but rather difficult.
-                    logger.severe("Writing:Option 5.2;No meta atom");
-
-                    int oldUdtaHeaderLength = udtaHeader.getLength();
-                    Mp4HdlrBox hdlrBox = Mp4HdlrBox.createiTunesStyleHdlrBox();
-                    Mp4MetaBox metaBox = Mp4MetaBox.createiTunesStyleMetaBox(hdlrBox.getHeader().getLength() + rawIlstData.limit());
-                    udtaHeader = new Mp4BoxHeader(Mp4AtomIdentifier.UDTA.getFieldName());
-                    udtaHeader.setLength(Mp4BoxHeader.HEADER_LENGTH + metaBox.getHeader().getLength());
-
-                    additionalMetaSizeThatWontFitWithinMetaAtom = additionalMetaSizeThatWontFitWithinMetaAtom + (udtaHeader.getLength() - rawIlstData.limit());
-
-                    //Edit stco atom within moov header, if the free atom comes after mdat OR
-                    //(there is not enough space in the top level free atom
-                    //or special case of matching exactly the free atom plus header)
-                    if ((!topLevelFreeAtomComesBeforeMdatAtomAndAfterMetadata) || ((topLevelFreeSize - Mp4BoxHeader.HEADER_LENGTH < additionalMetaSizeThatWontFitWithinMetaAtom) && (topLevelFreeSize != additionalMetaSizeThatWontFitWithinMetaAtom)))
-                    {
-                        //We don't bother using the top level free atom coz not big enough anyway, we need to adjust offsets
-                        //by the amount mdat is going to be shifted
-                        if (mdatHeader.getFilePos() > moovHeader.getFilePos())
-                        {
-                            logger.config("Adjusting Offsets");
-                            stco.adjustOffsets(additionalMetaSizeThatWontFitWithinMetaAtom);
-                        }
-                    }
-
-                    //Edit and rewrite the Moov header
-                    moovHeader.setLength(moovHeader.getLength() - oldUdtaHeaderLength + additionalMetaSizeThatWontFitWithinMetaAtom);
-
-                    fileWriteChannel.write(moovHeader.getHeaderData());
-                    moovBuffer.rewind();
-                    moovBuffer.limit(relativeIlstposition - oldUdtaHeaderLength);
-                    fileWriteChannel.write(moovBuffer);
-
-                    //Write new atoms required for holding metadata in itunes format
-                    fileWriteChannel.write(udtaHeader.getHeaderData());
-                    fileWriteChannel.write(metaBox.getHeader().getHeaderData());
-                    fileWriteChannel.write(metaBox.getData());
-                    fileWriteChannel.write(hdlrBox.getHeader().getHeaderData());
-                    fileWriteChannel.write(hdlrBox.getData());
+                    writeNoExistingMetaAtom(udtaHeader,
+                            fileWriteChannel,
+                            relativeIlstposition,
+                            rawIlstData,
+                            moovHeader,
+                            moovBuffer,
+                            mdatHeader,
+                            stco,
+                            additionalMetaSizeThatWontFitWithinMetaAtom,
+                            topLevelFreeSize,
+                            topLevelFreeAtomComesBeforeMdatAtomAndAfterMetadata);
                 }
                 else
                 {
-                    logger.severe("Writing:Option 5.3;udta atom exists");
-
-                    //Edit stco atom within moov header, if the free atom comes after mdat OR
-                    //(there is not enough space in the top level free atom
-                    //or special case of matching exactly the free atom plus header)
-                    if ((!topLevelFreeAtomComesBeforeMdatAtomAndAfterMetadata) || ((topLevelFreeSize - Mp4BoxHeader.HEADER_LENGTH < additionalMetaSizeThatWontFitWithinMetaAtom) && (topLevelFreeSize != additionalMetaSizeThatWontFitWithinMetaAtom)))
-                    {
-                        //We don't bother using the top level free atom coz not big enough anyway, we need to adjust offsets
-                        //by the amount mdat is going to be shifted
-                        if (mdatHeader.getFilePos() > moovHeader.getFilePos())
-                        {
-                            stco.adjustOffsets(additionalMetaSizeThatWontFitWithinMetaAtom);
-                        }
-                    }
-
-                    //Edit and rewrite the Moov header
-                    adjustSizeOfMoovHeader(moovHeader, moovBuffer, additionalMetaSizeThatWontFitWithinMetaAtom, udtaHeader, metaHeader);
-
-                    fileWriteChannel.write(moovHeader.getHeaderData());
-
-                    //Now write from this edited buffer up until ilst atom
-                    moovBuffer.rewind();
-                    moovBuffer.limit(relativeIlstposition);
-                    fileWriteChannel.write(moovBuffer);
+                    writeHaveExistingMetadata(udtaHeader,
+                            metaHeader,
+                            fileWriteChannel,
+                            relativeIlstposition,
+                            rawIlstData,
+                            moovHeader,
+                            moovBuffer,
+                            mdatHeader,
+                            stco,
+                            additionalMetaSizeThatWontFitWithinMetaAtom,
+                            topLevelFreeSize,
+                            topLevelFreeAtomComesBeforeMdatAtomAndAfterMetadata);
                 }
 
                 //Now write ilst data
@@ -942,4 +874,205 @@ public class Mp4TagWriter
             throw new IOException(cwe.getMessage());
         }
     }
+
+    /**
+     * Use when we need to write metadata and there is no existing udta atom so we have to create the complete
+     * udta/metadata structure
+     *
+     * @param fileWriteChannel
+     * @param relativeIlstposition
+     * @param rawIlstData
+     * @param moovHeader
+     * @param moovBuffer
+     * @param mdatHeader
+     * @param stco
+     * @param additionalMetaSizeThatWontFitWithinMetaAtom
+     * @param topLevelFreeSize
+     * @param topLevelFreeAtomComesBeforeMdatAtomAndAfterMetadata
+     * @throws IOException
+     * @throws CannotWriteException
+     */
+    private void writeNoExistingUdtaAtom(FileChannel fileWriteChannel,
+                        int relativeIlstposition,
+                        ByteBuffer rawIlstData,
+                        Mp4BoxHeader moovHeader,
+                        ByteBuffer moovBuffer,
+                        Mp4BoxHeader mdatHeader,
+                        Mp4StcoBox stco,
+                        int additionalMetaSizeThatWontFitWithinMetaAtom,
+                        int topLevelFreeSize,
+                        boolean topLevelFreeAtomComesBeforeMdatAtomAndAfterMetadata
+    ) throws IOException, CannotWriteException
+
+    {
+        logger.severe("Writing:Option 5.1;No udta atom");
+
+        Mp4HdlrBox hdlrBox = Mp4HdlrBox.createiTunesStyleHdlrBox();
+        Mp4MetaBox metaBox = Mp4MetaBox.createiTunesStyleMetaBox(hdlrBox.getHeader().getLength() + rawIlstData.limit());
+        Mp4BoxHeader udtaHeader = new Mp4BoxHeader(Mp4AtomIdentifier.UDTA.getFieldName());
+        udtaHeader.setLength(Mp4BoxHeader.HEADER_LENGTH + metaBox.getHeader().getLength());
+
+        additionalMetaSizeThatWontFitWithinMetaAtom = additionalMetaSizeThatWontFitWithinMetaAtom + (udtaHeader.getLength() - rawIlstData.limit());
+
+        //Edit stco atom within moov header, if the free atom comes after mdat OR
+        //(there is not enough space in the top level free atom
+        //or special case of matching exactly the free atom plus header)
+        if ((!topLevelFreeAtomComesBeforeMdatAtomAndAfterMetadata) || ((topLevelFreeSize - Mp4BoxHeader.HEADER_LENGTH < additionalMetaSizeThatWontFitWithinMetaAtom) && (topLevelFreeSize != additionalMetaSizeThatWontFitWithinMetaAtom)))
+        {
+            //We don't bother using the top level free atom coz not big enough anyway, we need to adjust offsets
+            //by the amount mdat is going to be shifted
+            if (mdatHeader.getFilePos() > moovHeader.getFilePos())
+            {
+                logger.config("Adjusting Offsets");
+                stco.adjustOffsets(additionalMetaSizeThatWontFitWithinMetaAtom);
+            }
+        }
+
+        //Edit and rewrite the Moov header
+        moovHeader.setLength(moovHeader.getLength() + additionalMetaSizeThatWontFitWithinMetaAtom);
+
+        fileWriteChannel.write(moovHeader.getHeaderData());
+        moovBuffer.rewind();
+        moovBuffer.limit(relativeIlstposition);
+        fileWriteChannel.write(moovBuffer);
+
+        //Write new atoms required for holding metadata in itunes format
+        fileWriteChannel.write(udtaHeader.getHeaderData());
+        fileWriteChannel.write(metaBox.getHeader().getHeaderData());
+        fileWriteChannel.write(metaBox.getData());
+        fileWriteChannel.write(hdlrBox.getHeader().getHeaderData());
+        fileWriteChannel.write(hdlrBox.getData());
+    }
+
+    /**
+     * Use when we need to write metadata and there is no existing meta atom so we have to create the complete
+     * metadata structure
+     *
+     * @param fileWriteChannel
+     * @param relativeIlstposition
+     * @param rawIlstData
+     * @param moovHeader
+     * @param moovBuffer
+     * @param mdatHeader
+     * @param stco
+     * @param additionalMetaSizeThatWontFitWithinMetaAtom
+     * @param topLevelFreeSize
+     * @param topLevelFreeAtomComesBeforeMdatAtomAndAfterMetadata
+     * @throws IOException
+     * @throws CannotWriteException
+     */
+    private void writeNoExistingMetaAtom(Mp4BoxHeader udtaHeader,
+                                         FileChannel fileWriteChannel,
+                                         int relativeIlstposition,
+                                         ByteBuffer rawIlstData,
+                                         Mp4BoxHeader moovHeader,
+                                         ByteBuffer moovBuffer,
+                                         Mp4BoxHeader mdatHeader,
+                                         Mp4StcoBox stco,
+                                         int additionalMetaSizeThatWontFitWithinMetaAtom,
+                                         int topLevelFreeSize,
+                                         boolean topLevelFreeAtomComesBeforeMdatAtomAndAfterMetadata
+    ) throws IOException, CannotWriteException
+
+    {
+        //#291:In this case we throwaway editing udta header and create a new one, would be better if we could
+        //keep the info but rather difficult.
+        logger.severe("Writing:Option 5.2;No meta atom");
+
+        int oldUdtaHeaderLength = udtaHeader.getLength();
+        Mp4HdlrBox hdlrBox = Mp4HdlrBox.createiTunesStyleHdlrBox();
+        Mp4MetaBox metaBox = Mp4MetaBox.createiTunesStyleMetaBox(hdlrBox.getHeader().getLength() + rawIlstData.limit());
+        udtaHeader = new Mp4BoxHeader(Mp4AtomIdentifier.UDTA.getFieldName());
+        udtaHeader.setLength(Mp4BoxHeader.HEADER_LENGTH + metaBox.getHeader().getLength());
+
+        additionalMetaSizeThatWontFitWithinMetaAtom = additionalMetaSizeThatWontFitWithinMetaAtom + (udtaHeader.getLength() - rawIlstData.limit());
+
+        //Edit stco atom within moov header, if the free atom comes after mdat OR
+        //(there is not enough space in the top level free atom
+        //or special case of matching exactly the free atom plus header)
+        if ((!topLevelFreeAtomComesBeforeMdatAtomAndAfterMetadata) || ((topLevelFreeSize - Mp4BoxHeader.HEADER_LENGTH < additionalMetaSizeThatWontFitWithinMetaAtom) && (topLevelFreeSize != additionalMetaSizeThatWontFitWithinMetaAtom)))
+        {
+            //We don't bother using the top level free atom coz not big enough anyway, we need to adjust offsets
+            //by the amount mdat is going to be shifted
+            if (mdatHeader.getFilePos() > moovHeader.getFilePos())
+            {
+                logger.config("Adjusting Offsets");
+                stco.adjustOffsets(additionalMetaSizeThatWontFitWithinMetaAtom);
+            }
+        }
+
+        //Edit and rewrite the Moov header
+        moovHeader.setLength(moovHeader.getLength() - oldUdtaHeaderLength + additionalMetaSizeThatWontFitWithinMetaAtom);
+
+        fileWriteChannel.write(moovHeader.getHeaderData());
+        moovBuffer.rewind();
+        moovBuffer.limit(relativeIlstposition - oldUdtaHeaderLength);
+        fileWriteChannel.write(moovBuffer);
+
+        //Write new atoms required for holding metadata in itunes format
+        fileWriteChannel.write(udtaHeader.getHeaderData());
+        fileWriteChannel.write(metaBox.getHeader().getHeaderData());
+        fileWriteChannel.write(metaBox.getData());
+        fileWriteChannel.write(hdlrBox.getHeader().getHeaderData());
+        fileWriteChannel.write(hdlrBox.getData());
+    }
+
+    /**
+     * We have existing structure but we need more space
+     *
+     * @param udtaHeader
+     * @param fileWriteChannel
+     * @param relativeIlstposition
+     * @param rawIlstData
+     * @param moovHeader
+     * @param moovBuffer
+     * @param mdatHeader
+     * @param stco
+     * @param additionalMetaSizeThatWontFitWithinMetaAtom
+     * @param topLevelFreeSize
+     * @param topLevelFreeAtomComesBeforeMdatAtomAndAfterMetadata
+     * @throws IOException
+     * @throws CannotWriteException
+     */
+    private void writeHaveExistingMetadata(Mp4BoxHeader udtaHeader,
+                                           Mp4BoxHeader metaHeader,
+                                           FileChannel fileWriteChannel,
+                                         int relativeIlstposition,
+                                         ByteBuffer rawIlstData,
+                                         Mp4BoxHeader moovHeader,
+                                         ByteBuffer moovBuffer,
+                                         Mp4BoxHeader mdatHeader,
+                                         Mp4StcoBox stco,
+                                         int additionalMetaSizeThatWontFitWithinMetaAtom,
+                                         int topLevelFreeSize,
+                                         boolean topLevelFreeAtomComesBeforeMdatAtomAndAfterMetadata
+    ) throws IOException, CannotWriteException
+    {
+        logger.severe("Writing:Option 5.3;udta atom exists");
+
+        //Edit stco atom within moov header, if the free atom comes after mdat OR
+        //(there is not enough space in the top level free atom
+        //or special case of matching exactly the free atom plus header)
+        if ((!topLevelFreeAtomComesBeforeMdatAtomAndAfterMetadata) || ((topLevelFreeSize - Mp4BoxHeader.HEADER_LENGTH < additionalMetaSizeThatWontFitWithinMetaAtom) && (topLevelFreeSize != additionalMetaSizeThatWontFitWithinMetaAtom)))
+        {
+            //We don't bother using the top level free atom coz not big enough anyway, we need to adjust offsets
+            //by the amount mdat is going to be shifted
+            if (mdatHeader.getFilePos() > moovHeader.getFilePos())
+            {
+                stco.adjustOffsets(additionalMetaSizeThatWontFitWithinMetaAtom);
+            }
+        }
+
+        //Edit and rewrite the Moov header
+        adjustSizeOfMoovHeader(moovHeader, moovBuffer, additionalMetaSizeThatWontFitWithinMetaAtom, udtaHeader, metaHeader);
+
+        fileWriteChannel.write(moovHeader.getHeaderData());
+
+        //Now write from this edited buffer up until ilst atom
+        moovBuffer.rewind();
+        moovBuffer.limit(relativeIlstposition);
+        fileWriteChannel.write(moovBuffer);
+
+    }
+
 }
