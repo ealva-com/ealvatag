@@ -322,11 +322,7 @@ public class Mp4TagWriter
     public void write(Tag tag, RandomAccessFile raf, RandomAccessFile rafTemp) throws CannotWriteException, IOException
     {
         logger.config("Started writing tag data");
-
-        //Read Channel for reading from old file
         FileChannel fileReadChannel = raf.getChannel();
-
-        //Write channel for writing to new file
         FileChannel fileWriteChannel = rafTemp.getChannel();
 
         //TODO we shouldn't need all these variables, and some are very badly named - used by new and old methods
@@ -340,12 +336,7 @@ public class Mp4TagWriter
         long endOfMoov = 0;
         //Found top level free atom that comes after moov and before mdat, (also true if no free atom ?)
         boolean topLevelFreeAtomComesBeforeMdatAtomAndAfterMetadata;
-
-        //Found top level free atom that comes between ftyp and moov
-        boolean topLevelFreeAtomComesBeforeMdatAndMetadata;
-
         Mp4BoxHeader topLevelFreeHeader;
-
         Mp4AtomTree atomTree;
 
         //Build AtomTree
@@ -438,8 +429,8 @@ public class Mp4TagWriter
             else
             {
                 //There no udta,ilst or meta header so we set to position where it would be if it existed
-                relativeIlstposition = moovHeader.getLength() - Mp4BoxHeader.HEADER_LENGTH;
                 startIlstWithinFile = (int) (moovHeader.getFilePos() + moovHeader.getLength());
+                relativeIlstposition = moovHeader.getLength() - Mp4BoxHeader.HEADER_LENGTH;
             }
         }
 
@@ -451,7 +442,6 @@ public class Mp4TagWriter
         topLevelFreePosition = 0;
         topLevelFreeSize = 0;
         topLevelFreeAtomComesBeforeMdatAtomAndAfterMetadata = true;
-        topLevelFreeAtomComesBeforeMdatAndMetadata = false;
         for (DefaultMutableTreeNode freeNode : atomTree.getFreeNodes())
         {
             DefaultMutableTreeNode parentNode = (DefaultMutableTreeNode) freeNode.getParent();
@@ -473,7 +463,6 @@ public class Mp4TagWriter
             else if (topLevelFreePosition < moovHeader.getFilePos())
             {
                 topLevelFreeAtomComesBeforeMdatAtomAndAfterMetadata = false;
-                topLevelFreeAtomComesBeforeMdatAndMetadata = true;
             }
         }
         else
@@ -550,9 +539,7 @@ public class Mp4TagWriter
                     writeHaveExistingMetadata(udtaHeader,
                             metaHeader,
                             fileWriteChannel,
-                            relativeIlstposition,
-                            rawIlstData,
-                            moovHeader,
+                            relativeIlstposition, moovHeader,
                             moovBuffer,
                             mdatHeader,
                             stco,
@@ -561,19 +548,7 @@ public class Mp4TagWriter
                             topLevelFreeAtomComesBeforeMdatAtomAndAfterMetadata);
                 }
 
-                writeNewMetadata(
-                        fileReadChannel,
-                        fileWriteChannel,
-                        rawIlstData,
-                        additionalMetaSizeThatWontFitWithinMetaAtom,
-                        topLevelFreeSize,
-                        topLevelFreeAtomComesBeforeMdatAtomAndAfterMetadata,
-                        endOfMoov,
-                        tagsHeader,
-                        oldIlstSize,
-                        startIlstWithinFile,
-                        oldMetaLevelFreeAtomSize,
-                        topLevelFreePosition);
+                writeNewDataWhenWeMoreMetadataThanExisting(fileReadChannel, fileWriteChannel, rawIlstData, additionalMetaSizeThatWontFitWithinMetaAtom, topLevelFreeSize, topLevelFreeAtomComesBeforeMdatAtomAndAfterMetadata, endOfMoov, tagsHeader, oldIlstSize, startIlstWithinFile, oldMetaLevelFreeAtomSize, topLevelFreePosition);
             }
         }
         //Close all channels to original file
@@ -962,7 +937,6 @@ public class Mp4TagWriter
      * @param udtaHeader
      * @param fileWriteChannel
      * @param relativeIlstposition
-     * @param rawIlstData
      * @param moovHeader
      * @param moovBuffer
      * @param mdatHeader
@@ -973,19 +947,7 @@ public class Mp4TagWriter
      * @throws IOException
      * @throws CannotWriteException
      */
-    private void writeHaveExistingMetadata(Mp4BoxHeader udtaHeader,
-                                           Mp4BoxHeader metaHeader,
-                                           FileChannel fileWriteChannel,
-                                         int relativeIlstposition,
-                                         ByteBuffer rawIlstData,
-                                         Mp4BoxHeader moovHeader,
-                                         ByteBuffer moovBuffer,
-                                         Mp4BoxHeader mdatHeader,
-                                         Mp4StcoBox stco,
-                                         int additionalMetaSizeThatWontFitWithinMetaAtom,
-                                         int topLevelFreeSize,
-                                         boolean topLevelFreeAtomComesBeforeMdatAtomAndAfterMetadata
-    ) throws IOException, CannotWriteException
+    private void writeHaveExistingMetadata(Mp4BoxHeader udtaHeader, Mp4BoxHeader metaHeader, FileChannel fileWriteChannel, int relativeIlstposition, Mp4BoxHeader moovHeader, ByteBuffer moovBuffer, Mp4BoxHeader mdatHeader, Mp4StcoBox stco, int additionalMetaSizeThatWontFitWithinMetaAtom, int topLevelFreeSize, boolean topLevelFreeAtomComesBeforeMdatAtomAndAfterMetadata) throws IOException, CannotWriteException
     {
         logger.severe("Writing:Option 5.3;udta atom exists");
 
@@ -1004,7 +966,6 @@ public class Mp4TagWriter
 
         //Edit and rewrite the Moov header
         adjustSizeOfMoovHeader(moovHeader, moovBuffer, additionalMetaSizeThatWontFitWithinMetaAtom, udtaHeader, metaHeader);
-
         fileWriteChannel.write(moovHeader.getHeaderData());
 
         //Now write from this edited buffer up until ilst atom
@@ -1014,19 +975,25 @@ public class Mp4TagWriter
 
     }
 
-    private void writeNewMetadata(
-                                   FileChannel fileReadChannel,
-                                   FileChannel fileWriteChannel,
-                                   ByteBuffer rawIlstData,
-                                   int additionalMetaSizeThatWontFitWithinMetaAtom,
-                                   int topLevelFreeSize,
-                                   boolean topLevelFreeAtomComesBeforeMdatAtomAndAfterMetadata,
-                                   long endOfMoov,
-                                   Mp4BoxHeader tagsHeader,
-                                   int oldIlstSize,
-                                   int startIlstWithinFile,
-                                   int oldMetaLevelFreeAtomSize,
-                                   int topLevelFreePosition
+    /**
+     * If we have more new metadata than previously this is where we actually write the metadata
+     *
+     * @param fileReadChannel
+     * @param fileWriteChannel
+     * @param rawIlstData
+     * @param additionalMetaSizeThatWontFitWithinMetaAtom
+     * @param topLevelFreeSize
+     * @param topLevelFreeAtomComesBeforeMdatAtomAndAfterMetadata
+     * @param endOfMoov
+     * @param tagsHeader
+     * @param oldIlstSize
+     * @param startIlstWithinFile
+     * @param oldMetaLevelFreeAtomSize
+     * @param topLevelFreePosition
+     * @throws IOException
+     * @throws CannotWriteException
+     */
+    private void writeNewDataWhenWeMoreMetadataThanExisting(FileChannel fileReadChannel, FileChannel fileWriteChannel, ByteBuffer rawIlstData, int additionalMetaSizeThatWontFitWithinMetaAtom, int topLevelFreeSize, boolean topLevelFreeAtomComesBeforeMdatAtomAndAfterMetadata, long endOfMoov, Mp4BoxHeader tagsHeader, int oldIlstSize, int startIlstWithinFile, int oldMetaLevelFreeAtomSize, int topLevelFreePosition
 
     ) throws IOException, CannotWriteException
     {
