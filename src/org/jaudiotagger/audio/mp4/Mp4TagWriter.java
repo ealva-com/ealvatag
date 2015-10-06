@@ -522,6 +522,7 @@ public class Mp4TagWriter
                                             stco,
                                             sizeOfExistingTopLevelFreeAtom,
                                             topLevelFreeAtomComesBeforeMdatAtomAndAfterMetadata);
+                    writeNewilstDataAndRestOfFileWhenWeHaveMoreMetadataThanExisting(fileReadChannel, fileWriteChannel, newIlstData, additionalMetaSizeThatWontFitWithinMetaAtom, sizeOfExistingTopLevelFreeAtom, topLevelFreeAtomComesBeforeMdatAtomAndAfterMetadata, endOfMoov, neroTagsHeader, sizeOfExistingIlstAtom, positionOfNewIlstWithinFile, sizeOfExistingMetaLevelFreeAtom, positionOfTopLevelFreeAtom);
                 }
                 else if (metaHeader == null)
                 {
@@ -535,6 +536,9 @@ public class Mp4TagWriter
                             stco,
                             sizeOfExistingTopLevelFreeAtom,
                             topLevelFreeAtomComesBeforeMdatAtomAndAfterMetadata);
+
+                    writeNewilstDataAndRestOfFileWhenWeHaveMoreMetadataThanExisting(fileReadChannel, fileWriteChannel, newIlstData, additionalMetaSizeThatWontFitWithinMetaAtom, sizeOfExistingTopLevelFreeAtom, topLevelFreeAtomComesBeforeMdatAtomAndAfterMetadata, endOfMoov, neroTagsHeader, sizeOfExistingIlstAtom, positionOfNewIlstWithinFile, sizeOfExistingMetaLevelFreeAtom, positionOfTopLevelFreeAtom);
+
                 }
                 else
                 {
@@ -549,9 +553,11 @@ public class Mp4TagWriter
                             additionalMetaSizeThatWontFitWithinMetaAtom,
                             sizeOfExistingTopLevelFreeAtom,
                             topLevelFreeAtomComesBeforeMdatAtomAndAfterMetadata);
+
+                    writeNewilstDataAndRestOfFileWhenWeHaveMoreMetadataThanExisting(fileReadChannel, fileWriteChannel, newIlstData, additionalMetaSizeThatWontFitWithinMetaAtom, sizeOfExistingTopLevelFreeAtom, topLevelFreeAtomComesBeforeMdatAtomAndAfterMetadata, endOfMoov, neroTagsHeader, sizeOfExistingIlstAtom, positionOfNewIlstWithinFile, sizeOfExistingMetaLevelFreeAtom, positionOfTopLevelFreeAtom);
+
                 }
 
-                writeNewilstDataANdRestOfFileWhenWeHaveMoreMetadataThanExisting(fileReadChannel, fileWriteChannel, newIlstData, additionalMetaSizeThatWontFitWithinMetaAtom, sizeOfExistingTopLevelFreeAtom, topLevelFreeAtomComesBeforeMdatAtomAndAfterMetadata, endOfMoov, neroTagsHeader, sizeOfExistingIlstAtom, positionOfNewIlstWithinFile, sizeOfExistingMetaLevelFreeAtom, positionOfTopLevelFreeAtom);
             }
         }
         //Close all channels to original file
@@ -1035,7 +1041,7 @@ public class Mp4TagWriter
      * @throws IOException
      * @throws CannotWriteException
      */
-    private void writeNewilstDataANdRestOfFileWhenWeHaveMoreMetadataThanExisting(FileChannel fileReadChannel, FileChannel fileWriteChannel, ByteBuffer newIlstData, int additionalMetaSizeThatWontFitWithinMetaAtom, int topLevelFreeSize, boolean topLevelFreeAtomComesBeforeMdatAtomAndAfterMetadata, long endOfMoov, Mp4BoxHeader neroTagsHeader, int existingSizeOfIlstData, int existingPositionofIlstAtomWithinFile, int oldMetaLevelFreeAtomSize, int topLevelFreePosition) throws IOException, CannotWriteException
+    private void writeNewilstDataAndRestOfFileWhenWeHaveMoreMetadataThanExisting(FileChannel fileReadChannel, FileChannel fileWriteChannel, ByteBuffer newIlstData, int additionalMetaSizeThatWontFitWithinMetaAtom, int topLevelFreeSize, boolean topLevelFreeAtomComesBeforeMdatAtomAndAfterMetadata, long endOfMoov, Mp4BoxHeader neroTagsHeader, int existingSizeOfIlstData, int existingPositionofIlstAtomWithinFile, int oldMetaLevelFreeAtomSize, int topLevelFreePosition) throws IOException, CannotWriteException
     {
         //Now write ilst data
         fileWriteChannel.write(newIlstData);
