@@ -886,16 +886,7 @@ public class Mp4TagWriter
         //but we replace any neroTags atoms with free atoms as these cause problems
         if (neroTagsHeader != null)
         {
-            //Write from after ilst upto tags atom
-            long writeBetweenIlstAndTags = neroTagsHeader.getFilePos() - fileReadChannel.position();
-            fileWriteChannel.transferFrom(fileReadChannel, fileWriteChannel.position(), writeBetweenIlstAndTags);
-            fileWriteChannel.position(fileWriteChannel.position() + writeBetweenIlstAndTags);
-            convertandWriteTagsAtomToFreeAtom(fileWriteChannel, neroTagsHeader);
-
-            //Write after tags atom upto end of moov
-            fileReadChannel.position(neroTagsHeader.getFilePos() + neroTagsHeader.getLength());
-            long extraData = endOfMoov - fileReadChannel.position();
-            fileWriteChannel.transferFrom(fileReadChannel, fileWriteChannel.position(), extraData);
+            writeFromEndOfIlstToNeroTagsAndMakeNeroFree(endOfMoov, fileReadChannel, fileWriteChannel, neroTagsHeader);
         }
         else
         {
@@ -905,40 +896,10 @@ public class Mp4TagWriter
             fileWriteChannel.position(fileWriteChannel.position() + extraData);
         }
 
-
         //We were able to write new metadata without needing to move mdat data, one of three scenerios must have occurred
         if (!isMdatDataMoved)
         {
-            //If the shift is less than the space available in this second free atom data size we just
-            //shrink the free atom accordingly
-            if (topLevelFreeSize - Mp4BoxHeader.HEADER_LENGTH >= additionalMetaSizeThatWontFitWithinMetaAtom)
-            {
-                logger.config("Writing:Option 6;Larger Size can use top free atom");
-                Mp4FreeBox freeBox = new Mp4FreeBox((topLevelFreeSize - Mp4BoxHeader.HEADER_LENGTH) - additionalMetaSizeThatWontFitWithinMetaAtom);
-                fileWriteChannel.write(freeBox.getHeader().getHeaderData());
-                fileWriteChannel.write(freeBox.getData());
-
-                //Skip over the read channel old free atom
-                fileReadChannel.position(fileReadChannel.position() + topLevelFreeSize);
-
-                //Write Mdat
-                writeDataInChunks(fileReadChannel, fileWriteChannel);
-            }
-            //If the space required is identical to total size of the free space (inc header)
-            //we could just remove the header
-            else if (topLevelFreeSize == additionalMetaSizeThatWontFitWithinMetaAtom)
-            {
-                logger.config("Writing:Option 7;Larger Size uses top free atom including header");
-                //Skip over the read channel old free atom
-                fileReadChannel.position(fileReadChannel.position() + topLevelFreeSize);
-
-                //Write Mdat
-                writeDataInChunks(fileReadChannel, fileWriteChannel);
-            }
-            else
-            {
-                //MDAT comes before MOOV, nothing to do because data has already been written
-            }
+            writeRestofFileWhenMdatNotMoved(fileReadChannel, fileWriteChannel, topLevelFreeSize, additionalMetaSizeThatWontFitWithinMetaAtom);
         }
         else
         {
@@ -1034,16 +995,7 @@ public class Mp4TagWriter
         //but we replace any neroTags atoms with free atoms as these cause problems
         if (neroTagsHeader != null)
         {
-            //Write from after ilst upto tags atom
-            long writeBetweenIlstAndTags = neroTagsHeader.getFilePos() - fileReadChannel.position();
-            fileWriteChannel.transferFrom(fileReadChannel, fileWriteChannel.position(), writeBetweenIlstAndTags);
-            fileWriteChannel.position(fileWriteChannel.position() + writeBetweenIlstAndTags);
-            convertandWriteTagsAtomToFreeAtom(fileWriteChannel, neroTagsHeader);
-
-            //Write after tags atom upto end of moov
-            fileReadChannel.position(neroTagsHeader.getFilePos() + neroTagsHeader.getLength());
-            long extraData = endOfMoov - fileReadChannel.position();
-            fileWriteChannel.transferFrom(fileReadChannel, fileWriteChannel.position(), extraData);
+            writeFromEndOfIlstToNeroTagsAndMakeNeroFree(endOfMoov, fileReadChannel, fileWriteChannel, neroTagsHeader);
         }
         else
         {
@@ -1053,40 +1005,10 @@ public class Mp4TagWriter
             fileWriteChannel.position(fileWriteChannel.position() + extraData);
         }
 
-
         //We were able to write new metadata without needing to move mdat data, one of three scenerios must have occurred
         if (!isMdatDataMoved)
         {
-            //If the shift is less than the space available in this second free atom data size we just
-            //shrink the free atom accordingly
-            if (topLevelFreeSize - Mp4BoxHeader.HEADER_LENGTH >= additionalMetaSizeThatWontFitWithinMetaAtom)
-            {
-                logger.config("Writing:Option 6;Larger Size can use top free atom");
-                Mp4FreeBox freeBox = new Mp4FreeBox((topLevelFreeSize - Mp4BoxHeader.HEADER_LENGTH) - additionalMetaSizeThatWontFitWithinMetaAtom);
-                fileWriteChannel.write(freeBox.getHeader().getHeaderData());
-                fileWriteChannel.write(freeBox.getData());
-
-                //Skip over the read channel old free atom
-                fileReadChannel.position(fileReadChannel.position() + topLevelFreeSize);
-
-                //Write Mdat
-                writeDataInChunks(fileReadChannel, fileWriteChannel);
-            }
-            //If the space required is identical to total size of the free space (inc header)
-            //we could just remove the header
-            else if (topLevelFreeSize == additionalMetaSizeThatWontFitWithinMetaAtom)
-            {
-                logger.config("Writing:Option 7;Larger Size uses top free atom including header");
-                //Skip over the read channel old free atom
-                fileReadChannel.position(fileReadChannel.position() + topLevelFreeSize);
-
-                //Write Mdat
-                writeDataInChunks(fileReadChannel, fileWriteChannel);
-            }
-            else
-            {
-                //MDAT comes before MOOV, nothing to do because data has already been written
-            }
+            writeRestofFileWhenMdatNotMoved(fileReadChannel, fileWriteChannel, topLevelFreeSize, additionalMetaSizeThatWontFitWithinMetaAtom);
         }
         else
         {
@@ -1154,16 +1076,7 @@ public class Mp4TagWriter
         //but we replace any neroTags atoms with free atoms as these cause problems
         if (neroTagsHeader != null)
         {
-            //Write from after ilst upto tags atom
-            long writeBetweenIlstAndTags = neroTagsHeader.getFilePos() - fileReadChannel.position();
-            fileWriteChannel.transferFrom(fileReadChannel, fileWriteChannel.position(), writeBetweenIlstAndTags);
-            fileWriteChannel.position(fileWriteChannel.position() + writeBetweenIlstAndTags);
-            convertandWriteTagsAtomToFreeAtom(fileWriteChannel, neroTagsHeader);
-
-            //Write after tags atom upto end of moov
-            fileReadChannel.position(neroTagsHeader.getFilePos() + neroTagsHeader.getLength());
-            long extraData = endOfMoov - fileReadChannel.position();
-            fileWriteChannel.transferFrom(fileReadChannel, fileWriteChannel.position(), extraData);
+            writeFromEndOfIlstToNeroTagsAndMakeNeroFree(endOfMoov, fileReadChannel, fileWriteChannel, neroTagsHeader);
         }
         else
         {
@@ -1173,40 +1086,10 @@ public class Mp4TagWriter
             fileWriteChannel.position(fileWriteChannel.position() + extraData);
         }
 
-
         //We were able to write new metadata without needing to move mdat data, one of three scenerios must have occurred
         if (!isMdatDataMoved)
         {
-            //If the shift is less than the space available in this second free atom data size we just
-            //shrink the free atom accordingly
-            if (topLevelFreeSize - Mp4BoxHeader.HEADER_LENGTH >= additionalMetaSizeThatWontFitWithinMetaAtom)
-            {
-                logger.config("Writing:Option 6;Larger Size can use top free atom");
-                Mp4FreeBox freeBox = new Mp4FreeBox((topLevelFreeSize - Mp4BoxHeader.HEADER_LENGTH) - additionalMetaSizeThatWontFitWithinMetaAtom);
-                fileWriteChannel.write(freeBox.getHeader().getHeaderData());
-                fileWriteChannel.write(freeBox.getData());
-
-                //Skip over the read channel old free atom
-                fileReadChannel.position(fileReadChannel.position() + topLevelFreeSize);
-
-                //Write Mdat
-                writeDataInChunks(fileReadChannel, fileWriteChannel);
-            }
-            //If the space required is identical to total size of the free space (inc header)
-            //we could just remove the header
-            else if (topLevelFreeSize == additionalMetaSizeThatWontFitWithinMetaAtom)
-            {
-                logger.config("Writing:Option 7;Larger Size uses top free atom including header");
-                //Skip over the read channel old free atom
-                fileReadChannel.position(fileReadChannel.position() + topLevelFreeSize);
-
-                //Write Mdat
-                writeDataInChunks(fileReadChannel, fileWriteChannel);
-            }
-            else
-            {
-                //MDAT comes before MOOV, nothing to do because data has already been written
-            }
+            writeRestofFileWhenMdatNotMoved(fileReadChannel, fileWriteChannel, topLevelFreeSize, additionalMetaSizeThatWontFitWithinMetaAtom);
         }
         else
         {
@@ -1215,6 +1098,74 @@ public class Mp4TagWriter
         }
     }
 
+    /**
+     * If any data between existign ilst atom and tags atom write it to new file, then convert tags atom to a free atom
+     *
+     * @param endOfMoov
+     * @param fileReadChannel
+     * @param fileWriteChannel
+     * @param neroTagsHeader
+     * @throws IOException
+     */
+    private void writeFromEndOfIlstToNeroTagsAndMakeNeroFree(long endOfMoov, FileChannel fileReadChannel, FileChannel fileWriteChannel, Mp4BoxHeader neroTagsHeader)
+            throws IOException
+    {
+        //Write from after ilst upto tags atom
+        long writeBetweenIlstAndTags = neroTagsHeader.getFilePos() - fileReadChannel.position();
+        fileWriteChannel.transferFrom(fileReadChannel, fileWriteChannel.position(), writeBetweenIlstAndTags);
+        fileWriteChannel.position(fileWriteChannel.position() + writeBetweenIlstAndTags);
+        convertandWriteTagsAtomToFreeAtom(fileWriteChannel, neroTagsHeader);
+
+        //Write after tags atom upto end of moov
+        fileReadChannel.position(neroTagsHeader.getFilePos() + neroTagsHeader.getLength());
+        long extraData = endOfMoov - fileReadChannel.position();
+        fileWriteChannel.transferFrom(fileReadChannel, fileWriteChannel.position(), extraData);
+    }
+
+    /**
+     * We were able to write new metadata without needing to move mdat data, one of three scenerios must have occurred
+     *
+     * @param fileReadChannel
+     * @param fileWriteChannel
+     * @param topLevelFreeSize
+     * @param additionalMetaSizeThatWontFitWithinMetaAtom
+     * @throws IOException
+     * @throws CannotWriteException
+     */
+    private void writeRestofFileWhenMdatNotMoved(FileChannel fileReadChannel, FileChannel fileWriteChannel, int topLevelFreeSize, int additionalMetaSizeThatWontFitWithinMetaAtom)
+            throws IOException, CannotWriteException
+    {
+        //If the shift is less than the space available in this second free atom data size we just
+        //shrink the free atom accordingly
+        if (topLevelFreeSize - Mp4BoxHeader.HEADER_LENGTH >= additionalMetaSizeThatWontFitWithinMetaAtom)
+        {
+            logger.config("Writing:Option 6;Larger Size can use top free atom");
+            Mp4FreeBox freeBox = new Mp4FreeBox((topLevelFreeSize - Mp4BoxHeader.HEADER_LENGTH) - additionalMetaSizeThatWontFitWithinMetaAtom);
+            fileWriteChannel.write(freeBox.getHeader().getHeaderData());
+            fileWriteChannel.write(freeBox.getData());
+
+            //Skip over the read channel old free atom
+            fileReadChannel.position(fileReadChannel.position() + topLevelFreeSize);
+
+            //Write Mdat
+            writeDataInChunks(fileReadChannel, fileWriteChannel);
+        }
+        //If the space required is identical to total size of the free space (inc header)
+        //we could just remove the header
+        else if (topLevelFreeSize == additionalMetaSizeThatWontFitWithinMetaAtom)
+        {
+            logger.config("Writing:Option 7;Larger Size uses top free atom including header");
+            //Skip over the read channel old free atom
+            fileReadChannel.position(fileReadChannel.position() + topLevelFreeSize);
+
+            //Write Mdat
+            writeDataInChunks(fileReadChannel, fileWriteChannel);
+        }
+        else
+        {
+            //MDAT comes before MOOV, nothing to do because data has already been written
+        }
+    }
     /**
      * May need to rewrite the stco offsets if the location of mdat (audio) header is going to move
      *
