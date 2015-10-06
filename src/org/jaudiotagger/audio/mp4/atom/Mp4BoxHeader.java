@@ -358,11 +358,20 @@ public class Mp4BoxHeader
     }
 
     /**
-     * @return location in file of the start of file header (i.e where the 4 byte length field starts)
+     * @return location in file of the start of atom  header (i.e where the 4 byte length field starts)
      */
     public long getFilePos()
     {
         return filePos;
+    }
+
+    /**
+     *
+     * @return location in file of the end of atom
+     */
+    public long getFileEndPos()
+    {
+        return filePos + length;
     }
 
     /**

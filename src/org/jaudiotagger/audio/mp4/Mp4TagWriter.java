@@ -106,7 +106,7 @@ public class Mp4TagWriter
         fileWriteChannel.transferFrom(fileReadChannel, 0, ilstHeader.getFilePos());
         fileWriteChannel.position(ilstHeader.getFilePos());
         fileWriteChannel.write(newIlstData);
-        fileReadChannel.position(ilstHeader.getFilePos() + ilstHeader.getLength());
+        fileReadChannel.position(ilstHeader.getFileEndPos());
 
         writeDataAfterIlst(fileReadChannel, fileWriteChannel, tagsHeader);
     }
@@ -133,7 +133,7 @@ public class Mp4TagWriter
         convertandWriteTagsAtomToFreeAtom(fileWriteChannel, tagsHeader);
 
         //Write after tags atom
-        fileReadChannel.position(tagsHeader.getFilePos() + tagsHeader.getLength());
+        fileReadChannel.position(tagsHeader.getFileEndPos());
         writeDataInChunks(fileReadChannel, fileWriteChannel);
     }
 
@@ -271,7 +271,7 @@ public class Mp4TagWriter
 
                 //Now write ilst data
                 fileWriteChannel.write(newIlstData);
-                fileReadChannel.position(ilstHeader.getFilePos() + ilstHeader.getLength());
+                fileReadChannel.position(ilstHeader.getFileEndPos());
                 writeDataAfterIlst(fileReadChannel, fileWriteChannel, neroTagsHeader);
             }
         }
@@ -393,7 +393,7 @@ public class Mp4TagWriter
                     //Place ilst immediately after existing hdlr atom
                     if (hdlrMetaHeader != null)
                     {
-                        positionInExistingFileOfWhereNewIlstAtomShouldBeWritten = (int) hdlrMetaHeader.getFilePos() + hdlrMetaHeader.getLength();
+                        positionInExistingFileOfWhereNewIlstAtomShouldBeWritten = (int) hdlrMetaHeader.getFileEndPos();
                         positionOfNewIlstAtomRelativeToMoovAtom = (int) (positionInExistingFileOfWhereNewIlstAtomShouldBeWritten - (moovHeader.getFilePos() + Mp4BoxHeader.HEADER_LENGTH));
                     }
                     //Place ilst after data fields in meta atom
@@ -409,7 +409,7 @@ public class Mp4TagWriter
             {
                 //There no ilst or meta header so we set to position where it would be if it existed
                 positionOfNewIlstAtomRelativeToMoovAtom = moovHeader.getLength() - Mp4BoxHeader.HEADER_LENGTH;
-                positionInExistingFileOfWhereNewIlstAtomShouldBeWritten = (int) (moovHeader.getFilePos() + moovHeader.getLength());
+                positionInExistingFileOfWhereNewIlstAtomShouldBeWritten = (int) (moovHeader.getFileEndPos());
             }
         }
         //There no udta header so we are going to create a new structure, but we have to be aware that there might be
@@ -419,13 +419,13 @@ public class Mp4TagWriter
             //Create new structure just after the end of the trak atom
             if (metaHeader != null)
             {
-                positionInExistingFileOfWhereNewIlstAtomShouldBeWritten = (int) trakHeader.getFilePos() + trakHeader.getLength();
+                positionInExistingFileOfWhereNewIlstAtomShouldBeWritten = (int) trakHeader.getFileEndPos();
                 positionOfNewIlstAtomRelativeToMoovAtom = (int) (positionInExistingFileOfWhereNewIlstAtomShouldBeWritten - (moovHeader.getFilePos() + Mp4BoxHeader.HEADER_LENGTH));
             }
             else
             {
                 //There no udta,ilst or meta header so we set to position where it would be if it existed
-                positionInExistingFileOfWhereNewIlstAtomShouldBeWritten = (int) (moovHeader.getFilePos() + moovHeader.getLength());
+                positionInExistingFileOfWhereNewIlstAtomShouldBeWritten = (int) (moovHeader.getFileEndPos());
                 positionOfNewIlstAtomRelativeToMoovAtom = moovHeader.getLength() - Mp4BoxHeader.HEADER_LENGTH;
             }
         }
@@ -651,7 +651,7 @@ public class Mp4TagWriter
         fileWriteChannel.transferFrom(fileReadChannel, 0, ilstHeader.getFilePos());
         fileWriteChannel.position(ilstHeader.getFilePos());
         fileWriteChannel.write(newIlstAtomData);
-        fileReadChannel.position(ilstHeader.getFilePos() + ilstHeader.getLength());
+        fileReadChannel.position(ilstHeader.getFileEndPos());
     }
 
     /**
@@ -857,7 +857,7 @@ public class Mp4TagWriter
 
     {
         logger.severe("Writing:Option 5.1;No udta atom");
-        long endOfMoov = moovHeader.getFilePos() + moovHeader.getLength();
+        long endOfMoov = moovHeader.getFileEndPos();
         Mp4HdlrBox hdlrBox = Mp4HdlrBox.createiTunesStyleHdlrBox();
         Mp4MetaBox metaBox = Mp4MetaBox.createiTunesStyleMetaBox(hdlrBox.getHeader().getLength() + newIlstData.limit());
         Mp4BoxHeader udtaHeader = new Mp4BoxHeader(Mp4AtomIdentifier.UDTA.getFieldName());
@@ -944,7 +944,7 @@ public class Mp4TagWriter
         //Create a new udta atom
         logger.severe("Writing:Option 5.2;No meta atom");
 
-        long endOfMoov = moovHeader.getFilePos() + moovHeader.getLength();
+        long endOfMoov = moovHeader.getFileEndPos();
 
         int newIlstDataSize = newIlstData.limit();
         int existingMoovHeaderDataLength = moovHeader.getDataLength();
@@ -1055,7 +1055,7 @@ public class Mp4TagWriter
 
         boolean isMdatDataMoved = adjustStcoIfNoSuitableTopLevelAtom(topLevelFreeSize, topLevelFreeAtomComesBeforeMdatAtomAndAfterMetadata, additionalMetaSizeThatWontFitWithinMetaAtom, stco, moovHeader, mdatHeader);
 
-        long endOfMoov = moovHeader.getFilePos() + moovHeader.getLength();
+        long endOfMoov = moovHeader.getFileEndPos();
 
         //Edit and rewrite the Moov header inc udta and meta headers)
         adjustSizeOfMoovHeader(moovHeader, moovBuffer, additionalMetaSizeThatWontFitWithinMetaAtom, udtaHeader, metaHeader);
@@ -1115,7 +1115,7 @@ public class Mp4TagWriter
         convertandWriteTagsAtomToFreeAtom(fileWriteChannel, neroTagsHeader);
 
         //Write after tags atom upto end of moov
-        fileReadChannel.position(neroTagsHeader.getFilePos() + neroTagsHeader.getLength());
+        fileReadChannel.position(neroTagsHeader.getFileEndPos());
         long extraData = endOfMoov - fileReadChannel.position();
         fileWriteChannel.transferFrom(fileReadChannel, fileWriteChannel.position(), extraData);
     }
