@@ -528,7 +528,6 @@ public class Mp4TagWriter
                     writeNoExistingMetaAtom(
                             udtaHeader,
                             fileWriteChannel,
-                            positionOfNewIlstAtomRelativeToMoovAtom,
                             newIlstData,
                             moovHeader,
                             moovBuffer,
@@ -542,7 +541,8 @@ public class Mp4TagWriter
                     writeHaveExistingMetadata(udtaHeader,
                             metaHeader,
                             fileWriteChannel,
-                            positionOfNewIlstAtomRelativeToMoovAtom, moovHeader,
+                            positionOfNewIlstAtomRelativeToMoovAtom,
+                            moovHeader,
                             moovBuffer,
                             mdatHeader,
                             stco,
@@ -873,7 +873,6 @@ public class Mp4TagWriter
      * metadata structure
      *
      * @param fileWriteChannel
-     * @param positionOfNewIlstAtomRelativeToMoovAtom
      * @param newIlstData
      * @param moovHeader
      * @param moovBuffer
@@ -886,7 +885,6 @@ public class Mp4TagWriter
      */
     private void writeNoExistingMetaAtom(Mp4BoxHeader udtaHeader,
                                          FileChannel fileWriteChannel,
-                                         int positionOfNewIlstAtomRelativeToMoovAtom,
                                          ByteBuffer newIlstData,
                                          Mp4BoxHeader moovHeader,
                                          ByteBuffer moovBuffer,
@@ -900,8 +898,10 @@ public class Mp4TagWriter
         logger.severe("Writing:Option 5.2;No meta atom");
 
         int newIlstDataSize = newIlstData.limit();
+        int existingMoovHeaderDataLength = moovHeader.getDataLength();
 
         //Udta didnt have a meta atom but it may have some other data we want to preserve (I think)
+        int existingUdtaLength     = udtaHeader.getLength();
         int existingUdtaDataLength = udtaHeader.getDataLength();
 
         Mp4HdlrBox hdlrBox = Mp4HdlrBox.createiTunesStyleHdlrBox();
@@ -919,11 +919,11 @@ public class Mp4TagWriter
                 moovHeader,
                 mdatHeader);
 
-        //Edit and rewrite the Moov header upto Udta
+        //Edit and rewrite the Moov header upto start of Udta
         moovHeader.setLength(moovHeader.getLength() + increaseInSizeOfUdtaAtom);
         fileWriteChannel.write(moovHeader.getHeaderData());
         moovBuffer.rewind();
-        moovBuffer.limit(positionOfNewIlstAtomRelativeToMoovAtom - (existingUdtaDataLength + Mp4BoxHeader.HEADER_LENGTH));
+        moovBuffer.limit(existingMoovHeaderDataLength - existingUdtaLength);
         fileWriteChannel.write(moovBuffer);
 
         //Write new atoms required for holding metadata in iTunes format
