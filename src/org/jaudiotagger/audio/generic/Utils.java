@@ -38,6 +38,8 @@ import static java.nio.charset.StandardCharsets.US_ASCII;
  */
 public class Utils
 {
+    public  static int BITS_IN_BYTE_MULTIPLIER = 8;
+    public static int KILOBYTE_MULTIPLIER = 1000;
 
     private static final Logger logger = Logger.getLogger("org.jaudiotagger.audio.generic.utils");
     private static final int MAX_BASE_TEMP_FILENAME_LENGTH = 20;

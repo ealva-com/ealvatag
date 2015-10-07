@@ -98,6 +98,7 @@ public class DsfAudioFileReader extends AudioFileReader
         audioHeader.setBitsPerSample(bitsPerSample);
         audioHeader.setChannelNumber(channelNumber);
         audioHeader.setSamplingRate(samplingFreqency);
+        audioHeader.setNoOfSamples(sampleCount);
         audioHeader.setPreciseLength((float) sampleCount / samplingFreqency);
         audioHeader.setVariableBitRate(false);
         logger.log(Level.FINE, "Created audio header: " + audioHeader);

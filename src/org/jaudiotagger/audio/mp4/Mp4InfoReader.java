@@ -197,8 +197,11 @@ public class Mp4InfoReader
             throw new CannotReadException(ErrorMessage.MP4_FILE_NOT_AUDIO.getMsg());
         }
 
+
+
         //Level 6-Searching for "stsd within "stbl" and process it direct data, dont think these are mandatory so dont throw
         //exception if unable to find
+        int positionBeforeStsdSearch = mvhdBuffer.position();
         boxHeader = Mp4BoxHeader.seekWithinLevel(mvhdBuffer, Mp4AtomIdentifier.STSD.getFieldName());
         if (boxHeader != null)
         {
@@ -285,6 +288,18 @@ public class Mp4InfoReader
                 }
             }
         }
+
+        //Level 6-Searching for "stco within "stbl" to get size of audio data
+        mvhdBuffer.position(positionBeforeStsdSearch);
+        boxHeader = Mp4BoxHeader.seekWithinLevel(mvhdBuffer, Mp4AtomIdentifier.STCO.getFieldName());
+        if (boxHeader != null)
+        {
+            Mp4StcoBox stco = new Mp4StcoBox(boxHeader, mvhdBuffer);
+            info.setAudioDataStartPosition((long)stco.getFirstOffSet());
+            info.setAudioDataEndPosition((long)raf.length());
+            info.setAudioDataLength(raf.length() - stco.getFirstOffSet());
+        }
+
         //Set default channels if couldn't calculate it
         if (info.getChannelNumber() == -1)
         {
@@ -333,7 +348,6 @@ public class Mp4InfoReader
 
         //Build AtomTree to ensure it is valid, this means we can detect any problems early on
         new Mp4AtomTree(raf,false);
-
         return info;
     }
 

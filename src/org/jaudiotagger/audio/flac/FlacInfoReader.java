@@ -22,6 +22,7 @@ import org.jaudiotagger.audio.exceptions.CannotReadException;
 import org.jaudiotagger.audio.flac.metadatablock.BlockType;
 import org.jaudiotagger.audio.flac.metadatablock.MetadataBlockDataStreamInfo;
 import org.jaudiotagger.audio.flac.metadatablock.MetadataBlockHeader;
+import org.jaudiotagger.audio.generic.Utils;
 
 import java.io.File;
 import java.io.IOException;
@@ -36,8 +37,7 @@ public class FlacInfoReader
     // Logger Object
     public static Logger logger = Logger.getLogger("org.jaudiotagger.audio.flac");
 
-    private static final int NO_OF_BITS_IN_BYTE = 8;
-    private static final int KILOBYTES_TO_BYTES_MULTIPLIER = 1000;
+
 
     public FlacAudioHeader read(RandomAccessFile raf) throws CannotReadException, IOException
     {
@@ -85,6 +85,8 @@ public class FlacInfoReader
         info.setLossless(true);
         info.setMd5(mbdsi.getMD5Signature());
         info.setAudioDataLength(raf.length() - streamStart);
+        info.setAudioDataStartPosition(streamStart);
+        info.setAudioDataEndPosition(raf.length());
         info.setBitRate(computeBitrate(info.getAudioDataLength(), mbdsi.getPreciseLength()));
 
         return info;
@@ -92,7 +94,7 @@ public class FlacInfoReader
 
     private int computeBitrate(long size, float length )
     {
-        return (int) ((size / KILOBYTES_TO_BYTES_MULTIPLIER) * NO_OF_BITS_IN_BYTE / length);
+        return (int) ((size / Utils.KILOBYTE_MULTIPLIER) * Utils.BITS_IN_BYTE_MULTIPLIER / length);
     }
 
     /**

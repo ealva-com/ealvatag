@@ -21,6 +21,7 @@ package org.jaudiotagger.audio.ogg.util;
 
 import org.jaudiotagger.audio.exceptions.CannotReadException;
 import org.jaudiotagger.audio.generic.GenericAudioHeader;
+import org.jaudiotagger.audio.generic.Utils;
 import org.jaudiotagger.logging.ErrorMessage;
 import org.jaudiotagger.tag.id3.AbstractID3v2Tag;
 
@@ -139,7 +140,6 @@ public class OggInfoReader
             info.setBitRate(computeBitrate(info.getTrackLength(), raf.length()));
             info.setVariableBitRate(true);
         }
-        logger.fine("Finished");
         return info;
     }
 
@@ -150,7 +150,7 @@ public class OggInfoReader
         {
             length=1;
         }
-        return (int) ((size / 1000) * 8 / length);
+        return (int) ((size / Utils.KILOBYTE_MULTIPLIER) * Utils.BITS_IN_BYTE_MULTIPLIER / length);
     }
 }
 

@@ -130,6 +130,8 @@ public class WavInfoReader
                 {
                     //We just need this value from header dont actually need to read data itself
                     info.setAudioDataLength(chunkHeader.getSize());
+                    info.setAudioDataStartPosition(raf.getFilePointer());
+                    info.setAudioDataEndPosition(raf.getFilePointer() + chunkHeader.getSize());
                     raf.skipBytes((int) chunkHeader.getSize());
                     break;
                 }

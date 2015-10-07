@@ -32,11 +32,29 @@ public interface AudioHeader
 
     /**
      *
-     * @return length of the audio data in bytes, aeactly what this means depends on the audio format
+     * @return length of the audio data in bytes, exactly what this means depends on the audio format
      *
-     * TODO currently only used by Wav/Aiff
+     * TODO currently only used by Wav/Aiff/Flac/Mp4
      */
     public Long getAudioDataLength();
+
+
+    /**
+     *
+     * @return the location in the file where the audio samples start
+     *
+     * TODO currently only used by Wav/Aiff/Flac/Mp4
+     */
+    public Long getAudioDataStartPosition();
+
+
+    /**
+     *
+     * @return the location in the file where the audio samples end
+     *
+     * TODO currently only used by Wav/Aiff/Flac/Mp4
+     */
+    public Long getAudioDataEndPosition();
 
 
     /**
@@ -88,7 +106,8 @@ public interface AudioHeader
 
     /**
      *
-     * @return
+     * @return the total number of samples, this can usually be used in conjunction with the
+     * sample rate to determine the track duration
      */
     public Long getNoOfSamples();
 }

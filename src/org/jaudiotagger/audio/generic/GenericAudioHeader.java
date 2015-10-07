@@ -36,6 +36,8 @@ public class GenericAudioHeader implements AudioHeader
 {
     //Use objects so clearer wherher has been set or not
     private Long    audioDataLength;
+    private Long    audioDataStartPosition;
+    private Long    audioDataEndPosition;
     private Integer bitRate;
     private Integer noOfChannels;
     private Integer samplingRate;
@@ -307,6 +309,14 @@ public class GenericAudioHeader implements AudioHeader
         {
             out.append("\taudioDataLength:"+audioDataLength+"\n");
         }
+        if(audioDataStartPosition!=null)
+        {
+            out.append("\taudioDataStartPosition:"+audioDataStartPosition+"\n");
+        }
+        if(audioDataEndPosition!=null)
+        {
+            out.append("\taudioDataEndPosition:"+audioDataEndPosition+"\n");
+        }
         if(byteRate!=null)
         {
             out.append("\tbyteRate:"+byteRate+"\n");
@@ -373,5 +383,28 @@ public class GenericAudioHeader implements AudioHeader
     public void setNoOfSamples(Long noOfSamples)
     {
         this.noOfSamples = noOfSamples;
+    }
+
+
+    @Override
+    public Long getAudioDataStartPosition()
+    {
+        return audioDataStartPosition;
+    }
+
+    public void setAudioDataStartPosition(Long audioDataStartPosition)
+    {
+        this.audioDataStartPosition = audioDataStartPosition;
+    }
+
+    @Override
+    public Long getAudioDataEndPosition()
+    {
+        return audioDataEndPosition;
+    }
+
+    public void setAudioDataEndPosition(Long audioDataEndPosition)
+    {
+        this.audioDataEndPosition = audioDataEndPosition;
     }
 }

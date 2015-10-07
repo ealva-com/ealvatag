@@ -4,6 +4,7 @@ package org.jaudiotagger.audio.aiff;
 import org.jaudiotagger.audio.aiff.chunk.*;
 import org.jaudiotagger.audio.exceptions.CannotReadException;
 import org.jaudiotagger.audio.generic.GenericAudioHeader;
+import org.jaudiotagger.audio.generic.Utils;
 import org.jaudiotagger.audio.iff.Chunk;
 import org.jaudiotagger.audio.iff.ChunkHeader;
 import org.jaudiotagger.audio.iff.IffHeaderChunk;
@@ -51,7 +52,7 @@ public class AiffInfoReader extends AiffChunkReader
         if(info.getAudioDataLength()!=null)
         {
             info.setBitRate((int)(Math.round(info.getAudioDataLength()
-                    * Chunk.BITS_IN_BYTE_MULTIPLIER / (info.getPreciseTrackLength() * Chunk.KILOBYTE_MULTIPLIER))));
+                    * Utils.BITS_IN_BYTE_MULTIPLIER / (info.getPreciseTrackLength() * Utils.KILOBYTE_MULTIPLIER))));
         }
     }
 
@@ -139,6 +140,9 @@ public class AiffInfoReader extends AiffChunkReader
                 case SOUND:
                     //Dont need to read chunk itself just need size
                     aiffAudioHeader.setAudioDataLength(chunkHeader.getSize());
+                    aiffAudioHeader.setAudioDataStartPosition(raf.getFilePointer());
+                    aiffAudioHeader.setAudioDataEndPosition(raf.getFilePointer() + chunkHeader.getSize());
+
                     chunk = null;
                     break;
 

@@ -360,8 +360,6 @@ public class Mp4TagWriter
 
         //Moov Box header
         Mp4BoxHeader moovHeader = atomTree.getBoxHeader(atomTree.getMoovNode());
-        endOfMoov = moovHeader.getFilePos() + moovHeader.getLength();
-
         Mp4StcoBox stco = atomTree.getStco();
         Mp4BoxHeader ilstHeader = atomTree.getBoxHeader(atomTree.getIlstNode());
         Mp4BoxHeader udtaHeader = atomTree.getBoxHeader(atomTree.getUdtaNode());

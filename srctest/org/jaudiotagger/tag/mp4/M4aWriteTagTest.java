@@ -2398,7 +2398,7 @@ public class M4aWriteTagTest extends TestCase
 
      public void testDeleteFields() throws Exception
     {
-        File testFile = AbstractTestCase.copyAudioToTmp("test.m4a");
+        File testFile = AbstractTestCase.copyAudioToTmp("test.m4a", new File("testDeleteFields.m4a"));
 
         //Delete using generic key
         AudioFile f = AudioFileIO.read(testFile);

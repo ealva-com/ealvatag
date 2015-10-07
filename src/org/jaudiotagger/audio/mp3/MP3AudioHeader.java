@@ -64,6 +64,8 @@ public class MP3AudioHeader implements AudioHeader
     protected XingFrame mp3XingFrame;
     protected VbriFrame mp3VbriFrame;
 
+    private Long    audioDataStartPosition;
+    private Long    audioDataEndPosition;
 
     private long fileSize;
     private long startByte;
@@ -843,5 +845,27 @@ public class MP3AudioHeader implements AudioHeader
     public Long getAudioDataLength()
     {
         return Long.valueOf(0);
+    }
+
+    @Override
+    public Long getAudioDataStartPosition()
+    {
+        return audioDataStartPosition;
+    }
+
+    public void setAudioDataStartPosition(Long audioDataStartPosition)
+    {
+        this.audioDataStartPosition = audioDataStartPosition;
+    }
+
+    @Override
+    public Long getAudioDataEndPosition()
+    {
+        return audioDataEndPosition;
+    }
+
+    public void setAudioDataEndPosition(Long audioDataEndPosition)
+    {
+        this.audioDataEndPosition = audioDataEndPosition;
     }
 }

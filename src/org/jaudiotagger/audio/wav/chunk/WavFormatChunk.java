@@ -68,7 +68,7 @@ public class WavFormatChunk extends Chunk
         info.setChannelNumber(Utils.u(chunkData.getShort()));
         info.setSamplingRate(chunkData.getInt());
         info.setByteRate(chunkData.getInt());
-        info.setBitRate( info.getByteRate() * BITS_IN_BYTE_MULTIPLIER / KILOBYTE_MULTIPLIER); //AvgBytePerSec  converted to kb/sec
+        info.setBitRate( info.getByteRate() * Utils.BITS_IN_BYTE_MULTIPLIER / Utils.KILOBYTE_MULTIPLIER); //AvgBytePerSec  converted to kb/sec
         info.setVariableBitRate(false);
         blockAlign      = Utils.u(chunkData.getShort());
         info.setBitsPerSample(Utils.u(chunkData.getShort()));

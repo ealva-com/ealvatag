@@ -14,8 +14,7 @@ public abstract class Chunk
     protected ByteBuffer chunkData;
     protected ChunkHeader chunkHeader;
 
-    public  static int BITS_IN_BYTE_MULTIPLIER = 8;
-    public static int KILOBYTE_MULTIPLIER = 1000;
+
 
     /**
      * Constructor used by Wav

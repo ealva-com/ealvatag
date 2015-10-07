@@ -9,7 +9,7 @@ import java.nio.ByteOrder;
 /**
  * AlacBox ( Apple Lossless Codec information description box),
  *
- * Normally occurs twice, the first ALAC contaisn the default  values, the second ALAC within contains the real
+ * Normally occurs twice, the first ALAC contains the default  values, the second ALAC within contains the real
  * values for this audio.
  */
 public class Mp4AlacBox extends AbstractMp4Box
