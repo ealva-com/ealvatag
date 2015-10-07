@@ -71,50 +71,22 @@ public class MetadataBlockDataStreamInfo  implements MetadataBlockData
         int bytesRead = raf.getChannel().read(rawdata);
         if (bytesRead < header.getDataLength())
         {
-            throw new IOException("Unable to read required number of databytes read:" + bytesRead + ":required:" + header.getDataLength());
+            throw new IOException("Unable to read required number of bytes, read:" + bytesRead + ":required:" + header.getDataLength());
         }
         rawdata.rewind();
 
-        minBlockSize = Utils.u(rawdata.getShort());
-        maxBlockSize = Utils.u(rawdata.getShort());
-        minFrameSize = readThreeByteInteger(rawdata.get(), rawdata.get(), rawdata.get());
-        maxFrameSize = readThreeByteInteger(rawdata.get(), rawdata.get(), rawdata.get());
-
-        /*
-         TODO this codeextract comes from TagLib would like to tidy up our impl
-         const uint flags = data.toUInt(pos, true);
-         pos += 4;
-         d->sampleRate    = flags >> 12;
-         d->channels      = ((flags >> 9) &  7) + 1;
-         d->bitsPerSample = ((flags >> 4) & 31) + 1;
-         */
-        samplingRate = readSamplingRate(rawdata.get(), rawdata.get(), rawdata.get());
-        noOfChannels = ((u(rawdata.get(12)) & 0x0E) >>> 1) + 1;
+        minBlockSize    = Utils.u(rawdata.getShort());
+        maxBlockSize    = Utils.u(rawdata.getShort());
+        minFrameSize    = readThreeByteInteger(rawdata.get(), rawdata.get(), rawdata.get());
+        maxFrameSize    = readThreeByteInteger(rawdata.get(), rawdata.get(), rawdata.get());
+        samplingRate    = readSamplingRate();
+        noOfChannels    = readNoOfChannels();
+        bitsPerSample   = readBitsPerSample();
+        noOfSamples     = readTotalNumberOfSamples();
+        md5             = readMd5();
+        trackLength     = (float) ((double) noOfSamples / samplingRate);
         samplingRatePerChannel = samplingRate / noOfChannels;
-        bitsPerSample = ((u(rawdata.get(12)) & 0x01) << 4) + ((u(rawdata.get(13)) & 0xF0) >>> 4) + 1;
 
-        // The last 4 bits are the most significant 4 bits for the 36 bit
-        // stream length in samples. (Audio files measured in days)
-        /*
-          TODO this codeextract comes from TagLib would like to tidy up our impl
-        const ulonglong hi = flags & 0xf;
-        const ulonglong lo = data.toUInt(pos, true);
-        pos += 4;
-
-        d->sampleFrames = (hi << 32) | lo;
-
-        if(d->sampleFrames > 0 && d->sampleRate > 0) {
-            const double length = d->sampleFrames * 1000.0 / d->sampleRate;
-            d->length  = static_cast<int>(length + 0.5);
-        }
-
-        if(data.size() >= pos + 16)
-            d->signature = data.mid(pos, 16);
-        }*/
-
-        noOfSamples = readTotalNumberOfSamples(rawdata.get(13), rawdata.get(14), rawdata.get(15), rawdata.get(16), rawdata.get(17));
-        md5 = readMd5();
-        trackLength = (float) ((double) noOfSamples / samplingRate);
     }
 
     private String readMd5()
@@ -198,33 +170,56 @@ public class MetadataBlockDataStreamInfo  implements MetadataBlockData
         return isValid;
     }
 
+    /**
+     * SOme values are stored as 3 byte integrals (instead of the more usual 2 or 4)
+     *
+     * @param b1
+     * @param b2
+     * @param b3
+     * @return
+     */
     private int readThreeByteInteger(byte b1, byte b2, byte b3)
     {
-        int rate = (u(b1) << 16) + (u(b2) << 8) + (u(b3));
+        int rate = (Utils.u(b1) << 16) + (Utils.u(b2) << 8) + (Utils.u(b3));
         return rate;
     }
 
-    //TODO this code seems to be give a sampling rate over 21 bytes instead of 20 bytes but attempt to change
-    //to 21 bytes give wrong value
-    private int readSamplingRate(byte b1, byte b2, byte b3)
+    /**
+     * Sampling rate is stored over 20 bits bytes 10 and 11 and half of bytes 12 so have to mask third one
+     *
+     * @return
+     */
+    private int readSamplingRate()
     {
-        int rate = (u(b1) << 12) + (u(b2) << 4) + ((u(b3) & 0xF0) >>> 4);
+        int rate = (Utils.u(rawdata.get(10)) << 12) + (Utils.u(rawdata.get(11)) << 4) + ((Utils.u(rawdata.get(12)) & 0xF0) >>> 4);
         return rate;
-
     }
 
-    private int readTotalNumberOfSamples(byte b1, byte b2, byte b3, byte b4, byte b5)
+    /**
+    Stored in 5th to 7th bits of byte 12
+     */
+    private int readNoOfChannels()
     {
-        int nb = u(b5);
-        nb += u(b4) << 8;
-        nb += u(b3) << 16;
-        nb += u(b2) << 24;
-        nb += (u(b1) & 0x0F) << 32;
+        return ((Utils.u(rawdata.get(12)) & 0x0E) >>> 1) + 1;
+    }
+
+    /** Stored in last bit of byte 12 and first 4 bits of byte 13 */
+    private int readBitsPerSample()
+    {
+        return ((Utils.u(rawdata.get(12)) & 0x01) << 4) + ((Utils.u(rawdata.get(13)) & 0xF0) >>> 4) + 1;
+    }
+
+    /** Stored in second half of byte 13 plus bytes 14 - 17
+     *
+     * @return
+     */
+    private int readTotalNumberOfSamples()
+    {
+        int nb = Utils.u(rawdata.get(17));
+        nb += Utils.u(rawdata.get(16)) << 8;
+        nb += Utils.u(rawdata.get(15)) << 16;
+        nb += Utils.u(rawdata.get(14)) << 24;
+        nb += (Utils.u(rawdata.get(13)) & 0x0F) << 32;
         return nb;
-    }
-
-    private int u(int i)
-    {
-        return i & 0xFF;
     }
 }
