@@ -149,6 +149,13 @@ public class FlacHeaderTest extends TestCase
 
     public void testReadFile2()
     {
+        File orig = new File("testdata", "test102.flac");
+        if (!orig.isFile())
+        {
+            System.err.println("Unable to test file - not available");
+            return;
+        }
+
         Exception exceptionCaught = null;
         try
         {

@@ -15,6 +15,13 @@ public class Issue483Test extends AbstractTestCase
     public void testCompareMp3Tag() throws Exception
     {
         File orig = new File("testdata", "test113.mp3");
+        if (!orig.isFile())
+        {
+            System.err.println("Unable to test file - not available");
+            return;
+        }
+
+
         AudioFile af1 = AudioFileIO.read(orig);
         AudioFile af2 = AudioFileIO.read(orig);
         assertNotSame(af1,af2);
