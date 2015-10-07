@@ -1,0 +1,18 @@
+Summarise Changes
+
+2.2.5
+#033:Added getAudioStartPos() and getAudioEndPos() methods to AudioHeader interface and implemented for most formats
+#036:Added getNoSamples() to AudioHeader interface
+#040:If ID3 frame marked as UTF-16 but has no BOM we now look to see if first byte contains data or not, if doesn't likely to be BE otherwise LE
+#041:Fix equality checks for tags so based on contents not simple identity check
+#061:Ensure if you try and set a field value to null an IllegalArgumentException will be thrown for all formats
+#049:Mp4 now able to write file with udta atom plus unknown subatoms as well as meta atom
+#077:Added support writing Aiff artwork
+#078:Track length not being calculated in for Wav files
+#079:Aiff Bitrate not calculated correctly
+#481:Fixed handling of an empty FrameBodyTDAT frame preventing reading of valid TYER frame
+
+2.2.4
+Added support for reading/writing Aiff and Wav metadata
+Now requires Java 1.7
+Added support for deploying versions to bintray
