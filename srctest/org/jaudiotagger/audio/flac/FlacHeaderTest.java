@@ -26,11 +26,13 @@ public class FlacHeaderTest extends TestCase
         {
             File testFile = AbstractTestCase.copyAudioToTmp("test.flac");
             AudioFile f = AudioFileIO.read(testFile);
+            System.out.println(f.getAudioHeader());
 
             assertEquals("192", f.getAudioHeader().getBitRate());
             assertEquals("FLAC 16 bits", f.getAudioHeader().getEncodingType());
             assertEquals("2", f.getAudioHeader().getChannels());
             assertEquals("44100", f.getAudioHeader().getSampleRate());
+            assertEquals(5, f.getAudioHeader().getTrackLength());
 
 
             assertTrue(f.getTag() instanceof FlacTag);
@@ -121,11 +123,14 @@ public class FlacHeaderTest extends TestCase
         {
             File testFile = AbstractTestCase.copyAudioToTmp("test2.flac");
             AudioFile f = AudioFileIO.read(testFile);
+            System.out.println(f.getAudioHeader());
+
 
             assertEquals("192", f.getAudioHeader().getBitRate());
             assertEquals("FLAC 16 bits", f.getAudioHeader().getEncodingType());
             assertEquals("2", f.getAudioHeader().getChannels());
             assertEquals("44100", f.getAudioHeader().getSampleRate());
+            assertEquals(5, f.getAudioHeader().getTrackLength());
 
             assertTrue(f.getTag() instanceof FlacTag);
             FlacTag tag = (FlacTag) f.getTag();
@@ -142,4 +147,34 @@ public class FlacHeaderTest extends TestCase
         assertNull(exceptionCaught);
     }
 
+    public void testReadFile2()
+    {
+        Exception exceptionCaught = null;
+        try
+        {
+            File testFile = AbstractTestCase.copyAudioToTmp("test102.flac");
+            AudioFile f = AudioFileIO.read(testFile);
+            System.out.println(f.getAudioHeader());
+
+
+            assertEquals("948", f.getAudioHeader().getBitRate());
+            assertEquals("FLAC 16 bits", f.getAudioHeader().getEncodingType());
+            assertEquals("2", f.getAudioHeader().getChannels());
+            assertEquals("44100", f.getAudioHeader().getSampleRate());
+            assertEquals(10, f.getAudioHeader().getTrackLength());
+
+            assertTrue(f.getTag() instanceof FlacTag);
+            FlacTag tag = (FlacTag) f.getTag();
+            FlacInfoReader infoReader = new FlacInfoReader();
+            assertEquals(2, infoReader.countMetaBlocks(f.getFile()));
+            //No Images
+            assertEquals(0, tag.getImages().size());
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            exceptionCaught = e;
+        }
+        assertNull(exceptionCaught);
+    }
 }

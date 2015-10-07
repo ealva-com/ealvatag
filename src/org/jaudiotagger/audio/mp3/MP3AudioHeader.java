@@ -450,13 +450,18 @@ public class MP3AudioHeader implements AudioHeader
     }
 
     /**
-     * @return The number of frames within the Audio File, calculated as accurrately as possible
+     * @return The number of frames within the Audio File, calculated as accurately as possible
      */
     public long getNumberOfFrames()
     {
         return numberOfFrames;
     }
 
+    @Override
+    public Long getNoOfSamples()
+    {
+        return numberOfFrames;
+    }
     /**
      * @return The number of frames within the Audio File, calculated by dividing the filesize by
      *         the number of frames, this may not be the most accurate method available.

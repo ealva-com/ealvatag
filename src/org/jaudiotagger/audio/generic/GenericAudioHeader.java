@@ -120,7 +120,7 @@ public class GenericAudioHeader implements AudioHeader
      * seconds.<br>
      *
      * @return The duration to the nearest seconds.
-     * @see #getPreciseLength()
+     * @see #getPreciseTrackLength()
      */
     public int getTrackLength()
     {

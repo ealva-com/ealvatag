@@ -86,4 +86,9 @@ public interface AudioHeader
      */
     public boolean isLossless();
 
+    /**
+     *
+     * @return
+     */
+    public Long getNoOfSamples();
 }

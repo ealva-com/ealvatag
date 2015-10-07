@@ -90,7 +90,7 @@ public class FlacStreamReader
     }
 
     /**
-     * Usually flac header is at start of file, but unofficially and ID3 tag is allowed at the start of the file.
+     * Usually flac header is at start of file, but unofficially an ID3 tag is allowed at the start of the file.
      *
      * @return the start of the Flac within file
      */

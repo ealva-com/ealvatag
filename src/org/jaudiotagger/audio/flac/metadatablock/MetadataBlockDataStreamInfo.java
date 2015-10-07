@@ -18,9 +18,12 @@
  */
 package org.jaudiotagger.audio.flac.metadatablock;
 
+import org.jaudiotagger.audio.generic.Utils;
+
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.util.logging.Logger;
 
 /**
@@ -54,8 +57,8 @@ public class MetadataBlockDataStreamInfo  implements MetadataBlockData
     // Logger Object
     public static Logger logger = Logger.getLogger("org.jaudiotagger.audio.flac.MetadataBlockDataStreamInfo");
 
-    private int minBlockSize, maxBlockSize, minFrameSize, maxFrameSize, samplingRate, samplingRatePerChannel, bitsPerSample, channelNumber, totalNumberOfSamples;
-    private float songLength;
+    private int minBlockSize, maxBlockSize, minFrameSize, maxFrameSize, samplingRate, samplingRatePerChannel, bitsPerSample, noOfChannels, noOfSamples;
+    private float trackLength;
     private String md5;
     private boolean isValid = true;
 
@@ -64,6 +67,7 @@ public class MetadataBlockDataStreamInfo  implements MetadataBlockData
     public MetadataBlockDataStreamInfo(MetadataBlockHeader header, RandomAccessFile raf) throws IOException
     {
         rawdata = ByteBuffer.allocate(header.getDataLength());
+        rawdata.order(ByteOrder.BIG_ENDIAN);
         int bytesRead = raf.getChannel().read(rawdata);
         if (bytesRead < header.getDataLength())
         {
@@ -71,28 +75,60 @@ public class MetadataBlockDataStreamInfo  implements MetadataBlockData
         }
         rawdata.rewind();
 
-        minBlockSize = rawdata.getShort();
-        maxBlockSize = rawdata.getShort();
+        minBlockSize = Utils.u(rawdata.getShort());
+        maxBlockSize = Utils.u(rawdata.getShort());
         minFrameSize = readThreeByteInteger(rawdata.get(), rawdata.get(), rawdata.get());
         maxFrameSize = readThreeByteInteger(rawdata.get(), rawdata.get(), rawdata.get());
 
+        /*
+         TODO this codeextract comes from TagLib would like to tidy up our impl
+         const uint flags = data.toUInt(pos, true);
+         pos += 4;
+         d->sampleRate    = flags >> 12;
+         d->channels      = ((flags >> 9) &  7) + 1;
+         d->bitsPerSample = ((flags >> 4) & 31) + 1;
+         */
         samplingRate = readSamplingRate(rawdata.get(), rawdata.get(), rawdata.get());
-        channelNumber = ((u(rawdata.get(12)) & 0x0E) >>> 1) + 1;
-        samplingRatePerChannel = samplingRate / channelNumber;
+        noOfChannels = ((u(rawdata.get(12)) & 0x0E) >>> 1) + 1;
+        samplingRatePerChannel = samplingRate / noOfChannels;
         bitsPerSample = ((u(rawdata.get(12)) & 0x01) << 4) + ((u(rawdata.get(13)) & 0xF0) >>> 4) + 1;
 
-        totalNumberOfSamples = readTotalNumberOfSamples(rawdata.get(13), rawdata.get(14), rawdata.get(15), rawdata.get(16), rawdata.get(17));
+        // The last 4 bits are the most significant 4 bits for the 36 bit
+        // stream length in samples. (Audio files measured in days)
+        /*
+          TODO this codeextract comes from TagLib would like to tidy up our impl
+        const ulonglong hi = flags & 0xf;
+        const ulonglong lo = data.toUInt(pos, true);
+        pos += 4;
 
-        StringBuilder sb = new StringBuilder();
-        for(int i=18;i<34;i++) 
-        { 
-            byte dataByte = rawdata.get(i); 
-            sb.append(String.format("%x",dataByte)); 
+        d->sampleFrames = (hi << 32) | lo;
+
+        if(d->sampleFrames > 0 && d->sampleRate > 0) {
+            const double length = d->sampleFrames * 1000.0 / d->sampleRate;
+            d->length  = static_cast<int>(length + 0.5);
         }
-        md5 = sb.toString();
-        
-        songLength = (float) ((double) totalNumberOfSamples / samplingRate);
-        logger.config(this.toString());
+
+        if(data.size() >= pos + 16)
+            d->signature = data.mid(pos, 16);
+        }*/
+
+        noOfSamples = readTotalNumberOfSamples(rawdata.get(13), rawdata.get(14), rawdata.get(15), rawdata.get(16), rawdata.get(17));
+        md5 = readMd5();
+        trackLength = (float) ((double) noOfSamples / samplingRate);
+    }
+
+    private String readMd5()
+    {
+        StringBuilder sb = new StringBuilder();
+        if(rawdata.limit()>=34)
+        {
+            for (int i = 18; i < 34; i++)
+            {
+                byte dataByte = rawdata.get(i);
+                sb.append(String.format("%x", dataByte));
+            }
+        }
+        return sb.toString();
     }
 
     /**
@@ -113,23 +149,18 @@ public class MetadataBlockDataStreamInfo  implements MetadataBlockData
     public String toString()
     {
 
-        return "MinBlockSize:" + minBlockSize + "MaxBlockSize:" + maxBlockSize + "MinFrameSize:" + minFrameSize + "MaxFrameSize:" + maxFrameSize + "SampleRateTotal:" + samplingRate + "SampleRatePerChannel:" + samplingRatePerChannel + ":Channel number:" + channelNumber + ":Bits per sample: " + bitsPerSample + ":TotalNumberOfSamples: " + totalNumberOfSamples + ":Length: " + songLength;
+        return "MinBlockSize:" + minBlockSize + "MaxBlockSize:" + maxBlockSize + "MinFrameSize:" + minFrameSize + "MaxFrameSize:" + maxFrameSize + "SampleRateTotal:" + samplingRate + "SampleRatePerChannel:" + samplingRatePerChannel + ":Channel number:" + noOfChannels + ":Bits per sample: " + bitsPerSample + ":TotalNumberOfSamples: " + noOfSamples + ":Length: " + trackLength;
 
-    }
-
-    public int getSongLength()
-    {
-        return (int) songLength;
     }
 
     public float getPreciseLength()
     {
-        return songLength;
+        return trackLength;
     }
 
-    public int getChannelNumber()
+    public int getNoOfChannels()
     {
-        return channelNumber;
+        return noOfChannels;
     }
 
     public int getSamplingRate()
@@ -150,6 +181,11 @@ public class MetadataBlockDataStreamInfo  implements MetadataBlockData
     public int getBitsPerSample()
     {
     	return bitsPerSample;
+    }
+
+    public long getNoOfSamples()
+    {
+        return noOfSamples;
     }
 
     public String getMD5Signature()

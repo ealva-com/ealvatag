@@ -116,7 +116,6 @@ public class FlacTagReader
                 }
             }
             isLastBlock = mbh.isLastBlock();
-            mbh = null;
         }
 
         //Note there may not be either a tag or any images, no problem this is valid however to make it easier we

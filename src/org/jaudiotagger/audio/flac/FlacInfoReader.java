@@ -60,17 +60,15 @@ public class FlacInfoReader
                 {
                     throw new CannotReadException("FLAC StreamInfo not valid");
                 }
-                //TODO We have found streaminfo so do we need to continue checking, effects bitrate calc which is correct
-                //break;
             }
             else
             {
                 raf.seek(raf.getFilePointer() + mbh.getDataLength());
             }
-
             isLastBlock = mbh.isLastBlock();
-            mbh = null; //Free memory
         }
+        //Audio continues from this point to end of file (normally - TODO might need to allow for an ID3v1 tag at file end ?)
+        long streamStart = raf.getFilePointer();
 
         if (mbdsi == null)
         {
@@ -78,18 +76,21 @@ public class FlacInfoReader
         }
 
         FlacAudioHeader info = new FlacAudioHeader();
+        info.setNoOfSamples(mbdsi.getNoOfSamples());
         info.setPreciseLength(mbdsi.getPreciseLength());
-        info.setChannelNumber(mbdsi.getChannelNumber());
+        info.setChannelNumber(mbdsi.getNoOfChannels());
         info.setSamplingRate(mbdsi.getSamplingRate());
         info.setBitsPerSample(mbdsi.getBitsPerSample());
         info.setEncodingType(mbdsi.getEncodingType());
-        info.setBitRate(computeBitrate(mbdsi.getPreciseLength(), raf.length() - raf.getFilePointer()));
         info.setLossless(true);
         info.setMd5(mbdsi.getMD5Signature());
+        info.setAudioDataLength(raf.length() - streamStart);
+        info.setBitRate(computeBitrate(info.getAudioDataLength(), mbdsi.getPreciseLength()));
+
         return info;
     }
 
-    private int computeBitrate(float length, long size)
+    private int computeBitrate(long size, float length )
     {
         return (int) ((size / KILOBYTES_TO_BYTES_MULTIPLIER) * NO_OF_BITS_IN_BYTE / length);
     }
@@ -108,7 +109,6 @@ public class FlacInfoReader
         FlacStreamReader flacStream = new FlacStreamReader(raf);
         flacStream.findStream();
 
-
         boolean isLastBlock = false;
 
         int count = 0;
@@ -118,7 +118,6 @@ public class FlacInfoReader
             logger.config("Found block:" + mbh.getBlockType());
             raf.seek(raf.getFilePointer() + mbh.getDataLength());
             isLastBlock = mbh.isLastBlock();
-            mbh = null; //Free memory
             count++;
         }
         raf.close();
