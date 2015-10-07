@@ -365,9 +365,9 @@ public class FlacWriteTest extends TestCase
     }
 
      /**
-     * test read flac file with just streaminfo header
+     * test read flac file with just streaminfo and padding header
      */
-    public void testWriteFileThatOnlyHadStreamInfoHeader()
+    public void testWriteFileThatOnlyHadStreamAndPaddingInfoHeader()
     {
         Exception exceptionCaught = null;
         try
@@ -381,8 +381,7 @@ public class FlacWriteTest extends TestCase
             File testFile = AbstractTestCase.copyAudioToTmp("test102.flac", new File("test102.flac"));
             AudioFile f = AudioFileIO.read(testFile);
             FlacInfoReader infoReader = new FlacInfoReader();
-            assertEquals(1, infoReader.countMetaBlocks(f.getFile()));
-
+            assertEquals(2, infoReader.countMetaBlocks(f.getFile()));
             f.getTag().setField(FieldKey.ARTIST,"fred");
             f.commit();
 
