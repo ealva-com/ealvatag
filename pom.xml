@@ -101,10 +101,10 @@
             <version>2.4</version>
            <executions>
              <execution>
-             <id>attach-sources</id>
-             <goals>
-               <goal>jar</goal>
-             </goals>
+                <id>attach-sources</id>
+                <goals>
+                  <goal>jar</goal>
+                </goals>
              </execution>
            </executions>
          </plugin>
@@ -117,16 +117,21 @@
            </configuration>
            <executions>
              <execution>
-             <id>attach-javadocs</id>
-             <goals>
-               <goal>jar</goal>
-             </goals>
+                <id>attach-javadocs</id>
+                <goals>
+                   <goal>jar</goal>
+                </goals>
              </execution>
            </executions>
          </plugin>
          <plugin>
             <artifactId>maven-release-plugin</artifactId>
-            <version>2.4</version>
+            <version>2.4.1</version>
+            <configuration>
+               <useReleaseProfile>false</useReleaseProfile>
+               <releaseProfiles>release</releaseProfiles>
+               <autoVersionSubmodules>true</autoVersionSubmodules>
+            </configuration>
          </plugin>
       </plugins>
       <sourceDirectory>src</sourceDirectory>
@@ -179,6 +184,12 @@
       <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
       <java.version>1.7</java.version>
    </properties>   
+   <scm>
+      <connection>scm:git:https://bitbucket.org/ijabz/jaudiotagger.git</connection>
+      <developerConnection>scm:git:git@github.com:ijabz/jaudiotagger.git</developerConnection>
+      <url>https://github.com/ijabz/jaudiotagger</url>
+      <tag>HEAD</tag>
+   </scm>
    <distributionManagement>
       <repository>
          <id>bintray</id>
