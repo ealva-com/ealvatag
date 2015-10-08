@@ -92,5 +92,6 @@ test138.aiff,yes,,example aiff file with author, copyright and name chunks
 test139.mp3, no,481,mp3 with year but empty tdat field
 test140.mp3, no,484, String encoding issue
 test141.m4a, no,433,with a udta atom with unknown subatoms and meta atom
+test142.wav, no,81,wav with info near start of file
 
 
