@@ -87,7 +87,7 @@ public class WavTagWriter implements TagWriter
     private ChunkHeader seekToStartOfListInfoMetadata(RandomAccessFile raf, WavTag existingTag) throws IOException, CannotWriteException
     {
         raf.seek(existingTag.getInfoTag().getStartLocationInFile());
-        final ChunkHeader chunkHeader = new ChunkHeader(ByteOrder.BIG_ENDIAN);
+        final ChunkHeader chunkHeader = new ChunkHeader(ByteOrder.LITTLE_ENDIAN);
         chunkHeader.readHeader(raf);
         raf.seek(raf.getFilePointer() - ChunkHeader.CHUNK_HEADER_SIZE);
 
@@ -109,7 +109,7 @@ public class WavTagWriter implements TagWriter
     private ChunkHeader seekToStartOfId3Metadata(RandomAccessFile raf, WavTag existingTag) throws IOException, CannotWriteException
     {
         raf.seek(existingTag.getStartLocationInFileOfId3Chunk());
-        final ChunkHeader chunkHeader = new ChunkHeader(ByteOrder.BIG_ENDIAN);
+        final ChunkHeader chunkHeader = new ChunkHeader(ByteOrder.LITTLE_ENDIAN);
         chunkHeader.readHeader(raf);
         raf.seek(raf.getFilePointer() - ChunkHeader.CHUNK_HEADER_SIZE);
         if (!WavChunkType.ID3.getCode().equals(chunkHeader.getID()))

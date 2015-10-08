@@ -18,6 +18,22 @@ import java.io.File;
  */
 public class Issue081Test extends AbstractTestCase
 {
+    public void testReadFileWithInfoChunkLE() throws Exception {
+
+        File orig = new File("testdata", "test142.wav");
+        if (!orig.isFile())
+        {
+            System.err.println("Unable to test file - not available");
+            return;
+        }
+        File file = AbstractTestCase.copyAudioToTmp("test142.wav", new File("test142SaveInfo.wav"));
+
+        AudioFile audioFile = AudioFileIO.read(file);
+        System.out.println(audioFile.getAudioHeader());
+        WavTag tag = (WavTag) audioFile.getTag();
+        System.out.println(tag.getInfoTag());
+    }
+
     public  void testId3TagFile() throws Exception {
 
         File orig = new File("testdata", "test142.wav");
