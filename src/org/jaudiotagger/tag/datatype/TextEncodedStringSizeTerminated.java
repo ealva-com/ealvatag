@@ -120,7 +120,7 @@ public class TextEncodedStringSizeTerminated extends AbstractString
         }
         //SetSize, important this is correct for finding the next datatype
         setSize(arr.length - offset);
-        logger.severe("Read SizeTerminatedString:" + value + " size:" + size);
+        logger.finest("Read SizeTerminatedString:" + value + " size:" + size);
 
     }
 
