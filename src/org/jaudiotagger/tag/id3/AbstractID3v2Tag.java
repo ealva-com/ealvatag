@@ -1548,7 +1548,6 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
     * Copy frame into map, whilst accounting for multiple frame of same type which can occur even if there were
     * not frames of the same type in the original tag
     */
-
     protected void copyFrameIntoMap(String id, AbstractID3v2Frame newFrame)
     {
 
@@ -1561,6 +1560,10 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
                 list.add((AbstractID3v2Frame) o);
                 list.add(newFrame);
                 frameMap.put(newFrame.getIdentifier(), list);
+            }
+            else if(o instanceof AggregatedFrame)
+            {
+                logger.severe("Duplicated Aggregate Frame, ignoring:"+id);
             }
             else
             {
