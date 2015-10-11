@@ -1565,10 +1565,14 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
             {
                 logger.severe("Duplicated Aggregate Frame, ignoring:"+id);
             }
-            else
+            else if (o instanceof List)
             {
                 List<AbstractID3v2Frame> list = (List) o;
                 list.add(newFrame);
+            }
+            else
+            {
+                logger.severe("Unknown frame class:discarding:" + o.getClass());
             }
         }
         else

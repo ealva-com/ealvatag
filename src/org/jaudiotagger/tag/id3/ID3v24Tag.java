@@ -441,10 +441,18 @@ public class ID3v24Tag extends AbstractID3v2Tag
                        frameMap.put(newFrame.getIdentifier(), list);
                    }
                }
-               else
+               else if(o instanceof AggregatedFrame)
+               {
+                   logger.severe("Ignoring Duplicate Aggregate Frame :discarding:" + o.getClass());
+               }
+               else if (o instanceof List)
                {
                     List<AbstractID3v2Frame> list = (List)o;
                     list.add(newFrame);
+               }
+               else
+               {
+                   logger.severe("Unknown frame class:discarding:" + o.getClass());
                }
            }
            else
