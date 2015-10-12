@@ -133,4 +133,53 @@ public class Issue084Test extends AbstractTestCase
         assertNull(exceptionCaught);
     }
 
+    public void testAutoSyncBeforeReadId3Only()
+    {
+
+        Exception exceptionCaught = null;
+        try
+        {
+            {
+                TagOptionSingleton.getInstance().setWavOptions(WavOptions.READ_INFO_ONLY_AND_SYNC);
+                TagOptionSingleton.getInstance().setWavSaveOptions(WavSaveOptions.SAVE_BOTH);
+                File testFile = AbstractTestCase.copyAudioToTmp("test126.wav", new File("test126SyncedAfterRead.wav"));
+                AudioFile f = AudioFileIO.read(testFile);
+                Tag tag = f.getTag();
+                assertEquals("fred", ((WavTag)tag).getID3Tag().getFirst(FieldKey.ARTIST));
+                assertEquals("fred", ((WavTag)tag).getInfoTag().getFirst(FieldKey.ARTIST));
+                assertEquals("fred", tag.getFirst(FieldKey.ARTIST));
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            exceptionCaught = e;
+        }
+        assertNull(exceptionCaught);
+    }
+
+    public void testAutoSyncBeforeReadInfoOnly()
+    {
+
+        Exception exceptionCaught = null;
+        try
+        {
+            {
+                TagOptionSingleton.getInstance().setWavOptions(WavOptions.READ_ID3_ONLY_AND_SYNC);
+                TagOptionSingleton.getInstance().setWavSaveOptions(WavSaveOptions.SAVE_BOTH);
+                File testFile = AbstractTestCase.copyAudioToTmp("test123.wav", new File("test123AutoSyncedAfterRead.wav"));
+                AudioFile f = AudioFileIO.read(testFile);
+                Tag tag = f.getTag();
+                assertEquals("artistName", ((WavTag)tag).getID3Tag().getFirst(FieldKey.ARTIST));
+                assertEquals("artistName\0", ((WavTag)tag).getInfoTag().getFirst(FieldKey.ARTIST));
+                assertEquals("artistName", tag.getFirst(FieldKey.ARTIST));
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            exceptionCaught = e;
+        }
+        assertNull(exceptionCaught);
+    }
 }

@@ -126,12 +126,15 @@ public class WavTag implements Tag
         switch(wavOptions)
         {
             case READ_ID3_ONLY:
+            case READ_ID3_ONLY_AND_SYNC:
                 return id3Tag;
 
             case READ_INFO_ONLY:
+            case READ_INFO_ONLY_AND_SYNC:
                 return infoTag;
 
             case READ_ID3_UNLESS_ONLY_INFO:
+            case READ_ID3_UNLESS_ONLY_INFO_AND_SYNC:
                 if (isExistingId3Tag() || !isExistingInfoTag())
                 {
                     return id3Tag;
@@ -142,6 +145,7 @@ public class WavTag implements Tag
                 }
 
             case READ_INFO_UNLESS_ONLY_ID3:
+            case READ_INFO_UNLESS_ONLY_ID3_AND_SYNC:
                 if (isExistingInfoTag() || !isExistingId3Tag())
                 {
                     return infoTag;
