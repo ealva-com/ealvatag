@@ -1680,7 +1680,15 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
                 frame = (AbstractID3v2Frame) o;
                 size += frame.getSize();
             }
-            else
+            else if (o instanceof AggregatedFrame)
+            {
+                AggregatedFrame af = (AggregatedFrame)o;
+                for(AbstractID3v2Frame next :af.frames)
+                {
+                    size += next.getSize();
+                }
+            }
+            else if (o instanceof List)
             {
                 ArrayList<AbstractID3v2Frame> multiFrames = (ArrayList<AbstractID3v2Frame>) o;
                 for (ListIterator<AbstractID3v2Frame> li = multiFrames.listIterator(); li.hasNext(); )

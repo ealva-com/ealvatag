@@ -1,5 +1,8 @@
 Summarise Changes
 
+2.2.6
+#085:AbstractID3v2Tag.getSize() not handling aggregateframes
+
 2.2.5
 #033:Added getAudioStartPos() and getAudioEndPos() methods to AudioHeader interface and implemented for most formats
 #036:Added getNoSamples() to AudioHeader interface
