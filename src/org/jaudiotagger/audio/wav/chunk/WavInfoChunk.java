@@ -34,6 +34,11 @@ public class WavInfoChunk
         while(chunkData.hasRemaining())
         {
             String id       = Utils.readFourBytesAsChars(chunkData);
+            //Padding
+            if(id.trim().isEmpty())
+            {
+                return true;
+            }
             int    size     = chunkData.getInt();
 
             //TODO how do you identify what is the charset being used

@@ -339,6 +339,16 @@ public class WavTagWriter implements TagWriter
             {
                 saveActiveExisting(wavTag, raf, existingTag);
             }
+            else if(wso==WavSaveOptions.SAVE_BOTH_AND_SYNC)
+            {
+                wavTag.syncTagBeforeWrite();
+                saveBoth(wavTag, raf, existingTag);
+            }
+            else if(wso==WavSaveOptions.SAVE_EXISTING_AND_ACTIVE_AND_SYNC)
+            {
+                wavTag.syncTagBeforeWrite();
+                saveActiveExisting(wavTag, raf, existingTag);
+            }
             //Invalid Option, should never happen
             else
             {
