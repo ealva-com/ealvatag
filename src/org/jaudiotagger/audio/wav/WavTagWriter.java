@@ -383,6 +383,7 @@ public class WavTagWriter implements TagWriter
         raf.getChannel().write(listBuffer);
         //Now write actual data
         raf.getChannel().write(bb);
+        writeExtraByteIfChunkOddSize(raf, chunkSize);
     }
 
     /**
@@ -404,6 +405,7 @@ public class WavTagWriter implements TagWriter
         raf.getChannel().write(listBuffer);
         //Now write actual data
         raf.getChannel().write(bb);
+        writeExtraByteIfChunkOddSize(raf, chunkSize);
     }
 
     private void writePaddingToFile(final RandomAccessFile raf, final int paddingSize) throws IOException
@@ -574,14 +576,11 @@ public class WavTagWriter implements TagWriter
             {
                 writePaddingToFile(raf, (int) (existingInfoTag.getSizeOfTag() - newInfoTagSize));
             }
-
-            writeExtraByteIfChunkOddSize(raf, existingInfoTag.getSizeOfTag());
         }
         //New tag is larger so set chunk size to accommodate it
         else
         {
             writeInfoDataToFile(raf, newTagBuffer, newInfoTagSize);
-            writeExtraByteIfChunkOddSize(raf, newInfoTagSize);
         }
     }
 
@@ -624,13 +623,11 @@ public class WavTagWriter implements TagWriter
             {
                 writePaddingToFile(raf, (int) (existingTag.getSize() - newId3TagSize));
             }
-            writeExtraByteIfChunkOddSize(raf, existingTag.getSize());
         }
         //New tag is larger so set chunk size to accommodate it
         else
         {
             writeID3DataToFile(raf, newTagBuffer, newId3TagSize);
-            writeExtraByteIfChunkOddSize(raf, newId3TagSize);
         }
 
 
