@@ -426,4 +426,54 @@ public class WavTag implements Tag
         }
         return id3Tag.getEndLocationInFile();
     }
+
+    /**
+     * If we have field in INFO tag but not ID3 tag (perhaps coz doesn't exist add them to ID3 tag)
+     */
+    public void syncToId3FromInfo()
+    {
+
+        try
+        {
+            for(FieldKey fieldKey : WavInfoTag.getSupportedKeys())
+            {
+                if (id3Tag.getFirst(fieldKey).isEmpty())
+                {
+                    if (!infoTag.getFirst(fieldKey).isEmpty())
+                    {
+                        id3Tag.setField(fieldKey, infoTag.getFirst(fieldKey));
+                    }
+                }
+            }
+        }
+        catch(FieldDataInvalidException deie)
+        {
+
+        }
+    }
+
+    /**
+     * If we have field in INFO tag but not ID3 tag (perhaps coz doesn't exist add them to ID3 tag)
+     */
+    public void syncToInfoFromId3()
+    {
+
+        try
+        {
+            for(FieldKey fieldKey : WavInfoTag.getSupportedKeys())
+            {
+                if (infoTag.getFirst(fieldKey).isEmpty())
+                {
+                    if (!id3Tag.getFirst(fieldKey).isEmpty())
+                    {
+                        infoTag.setField(fieldKey, id3Tag.getFirst(fieldKey));
+                    }
+                }
+            }
+        }
+        catch(FieldDataInvalidException deie)
+        {
+
+        }
+    }
 }

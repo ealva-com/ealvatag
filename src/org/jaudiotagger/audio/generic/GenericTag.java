@@ -43,6 +43,13 @@ public abstract class GenericTag extends AbstractTag
     {
         supportedKeys = EnumSet.of(FieldKey.ALBUM,FieldKey.ARTIST,FieldKey.TITLE,FieldKey.TRACK,FieldKey.GENRE,FieldKey.COMMENT,FieldKey.YEAR);
     }
+
+
+    public static  EnumSet<FieldKey>  getSupportedKeys()
+    {
+        return supportedKeys;
+    }
+
     /**
      * Implementations of {@link TagTextField} for use with
      * &quot;ISO-8859-1&quot; strings.

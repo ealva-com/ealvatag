@@ -44,6 +44,7 @@ public class WavInfoTag extends GenericTag
     //End location of this chunk
     private Long endLocationInFile = null;
 
+
     static
     {
         supportedKeys = EnumSet.of(
