@@ -295,6 +295,24 @@ public class AiffTagWriter implements TagWriter
         ch.setSize(chunkSize);
         raf.getChannel().write(ch.writeHeader());
         raf.getChannel().write(bb);
+        writeExtraByteIfChunkOddSize(raf, chunkSize );
+    }
+
+    /**
+     * Chunk must also start on an even byte so if our chinksize is odd we need
+     * to write another byte
+     *
+     * @param raf
+     * @param size
+     * @throws IOException
+     */
+    private void writeExtraByteIfChunkOddSize(RandomAccessFile raf, long size )
+            throws IOException
+    {
+        if ((size & 1) != 0)
+        {
+            writePaddingToFile(raf, 1);
+        }
     }
 
     private void writePaddingToFile(final RandomAccessFile raf, final int paddingSize)
