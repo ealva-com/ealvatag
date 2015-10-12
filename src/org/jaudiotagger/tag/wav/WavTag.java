@@ -20,13 +20,11 @@ package org.jaudiotagger.tag.wav;
 
 import org.jaudiotagger.audio.iff.ChunkHeader;
 import org.jaudiotagger.audio.wav.WavOptions;
-import org.jaudiotagger.logging.ErrorMessage;
 import org.jaudiotagger.tag.*;
 import org.jaudiotagger.tag.id3.AbstractID3v2Tag;
 import org.jaudiotagger.tag.images.Artwork;
 
 import java.nio.charset.Charset;
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -427,10 +425,11 @@ public class WavTag implements Tag
         return id3Tag.getEndLocationInFile();
     }
 
+
     /**
      * If we have field in INFO tag but not ID3 tag (perhaps coz doesn't exist add them to ID3 tag)
      */
-    public void syncToId3FromInfo()
+    public void syncToId3FromInfoIfEmpty()
     {
 
         try
@@ -455,7 +454,7 @@ public class WavTag implements Tag
     /**
      * If we have field in INFO tag but not ID3 tag (perhaps coz doesn't exist add them to ID3 tag)
      */
-    public void syncToInfoFromId3()
+    public void syncToInfoFromId3IfEmpty()
     {
 
         try
@@ -476,4 +475,83 @@ public class WavTag implements Tag
 
         }
     }
+
+    /**
+     * If we have field in INFO tag write to ID3 tag
+     */
+    public void syncToId3FromInfoOverwrite()
+    {
+
+        try
+        {
+            for(FieldKey fieldKey : WavInfoTag.getSupportedKeys())
+            {
+                if (!infoTag.getFirst(fieldKey).isEmpty())
+                {
+                    id3Tag.setField(fieldKey, infoTag.getFirst(fieldKey));
+                }
+            }
+        }
+        catch(FieldDataInvalidException deie)
+        {
+
+        }
+    }
+
+    /**
+     * If we have field in ID3 tag write to INFO tag
+     */
+    public void syncToInfoFromId3Overwrite()
+    {
+
+        try
+        {
+            for(FieldKey fieldKey : WavInfoTag.getSupportedKeys())
+            {
+                if (!id3Tag.getFirst(fieldKey).isEmpty())
+                {
+                    infoTag.setField(fieldKey, id3Tag.getFirst(fieldKey));
+                }
+            }
+        }
+        catch(FieldDataInvalidException deie)
+        {
+
+        }
+    }
+
+    /**
+     * Call after read to ensure your preferred tag can make use of any additional metadata
+     * held in the other tag, only used if the activetag field is empty for the fieldkey
+     */
+    public void syncTagsAfterRead()
+    {
+        if(getActiveTag() instanceof WavInfoTag)
+        {
+            syncToInfoFromId3IfEmpty();
+        }
+        else
+        {
+            syncToId3FromInfoIfEmpty();
+        }
+
+    }
+
+    /**
+     * Call before save if saving both tags ensure any new information is the active tag is added to the other tag
+     * overwriting any existing fields
+     */
+    public void syncTagBeforeWrite()
+    {
+        if(getActiveTag() instanceof WavInfoTag)
+        {
+            syncToId3FromInfoOverwrite();
+        }
+        else
+        {
+            syncToInfoFromId3Overwrite();
+        }
+
+    }
+
 }

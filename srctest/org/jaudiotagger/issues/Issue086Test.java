@@ -32,7 +32,7 @@ public class Issue086Test extends AbstractTestCase
                 AudioFile f = AudioFileIO.read(testFile);
                 Tag tag = f.getTag();
                 tag.setField(FieldKey.ARTIST, "fred");
-                ((WavTag)tag).syncToInfoFromId3();
+                ((WavTag)tag).syncToInfoFromId3IfEmpty();
                 f.commit();
                 f = AudioFileIO.read(testFile);
                 tag = f.getTag();

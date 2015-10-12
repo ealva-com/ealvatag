@@ -44,7 +44,7 @@ import java.util.LinkedList;
 
 public class TagOptionSingleton
 {
-    private WavOptions wavOptions = WavOptions.READ_ID3_UNLESS_ONLY_INFO;
+    private WavOptions wavOptions = WavOptions.READ_ID3_ONLY;
 
     public void setWavOptions(WavOptions wavOptions)
     {
