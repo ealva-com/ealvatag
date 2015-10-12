@@ -574,11 +574,31 @@ public class WavTagWriter implements TagWriter
             {
                 writePaddingToFile(raf, (int) (existingInfoTag.getSizeOfTag() - newInfoTagSize));
             }
+
+            writeExtraByteIfChunkOddSize(raf, existingInfoTag.getSizeOfTag());
         }
         //New tag is larger so set chunk size to accommodate it
         else
         {
             writeInfoDataToFile(raf, newTagBuffer, newInfoTagSize);
+            writeExtraByteIfChunkOddSize(raf, newInfoTagSize);
+        }
+    }
+
+    /**
+     * Chunk must also start on an even byte so if our chinksize is odd we need
+     * to write another byte
+     *
+     * @param raf
+     * @param size
+     * @throws IOException
+     */
+    private void writeExtraByteIfChunkOddSize(RandomAccessFile raf, long size )
+            throws IOException
+    {
+        if ((size & 1) != 0)
+        {
+            writePaddingToFile(raf, 1);
         }
     }
 
@@ -604,12 +624,16 @@ public class WavTagWriter implements TagWriter
             {
                 writePaddingToFile(raf, (int) (existingTag.getSize() - newId3TagSize));
             }
+            writeExtraByteIfChunkOddSize(raf, existingTag.getSize());
         }
         //New tag is larger so set chunk size to accommodate it
         else
         {
             writeID3DataToFile(raf, newTagBuffer, newId3TagSize);
+            writeExtraByteIfChunkOddSize(raf, newId3TagSize);
         }
+
+
     }
 
     /**
@@ -728,7 +752,7 @@ public class WavTagWriter implements TagWriter
             }
         }
         //If only ID3 chunk exists
-        else if(!existingTag.isExistingInfoTag() && existingTag.isExistingId3Tag())
+        else if(existingTag.isExistingId3Tag() && !existingTag.isExistingInfoTag())
         {
             ChunkHeader id3ChunkHeader = seekToStartOfId3Metadata(raf, existingTag);
             if (existingId3Tag.getEndLocationInFile() == raf.length())

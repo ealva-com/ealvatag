@@ -105,4 +105,9 @@ public class ChunkHeader
     {
         return startLocationInFile;
     }
+
+    public String toString()
+    {
+        return getID() +":Size:" + getSize() +"startLocation:"+getStartLocationInFile();
+    }
 }

@@ -39,6 +39,14 @@ public class Issue084Test extends AbstractTestCase
                 ((WavTag)tag).syncToId3FromInfo();
                 assertEquals("artistName", tag.getFirst(FieldKey.ARTIST));
                 assertEquals("albumName", tag.getFirst(FieldKey.ALBUM));
+                f.commit();
+                f = AudioFileIO.read(testFile);
+                tag = f.getTag();
+                assertEquals("artistName\0", ((WavTag)tag).getInfoTag().getFirst(FieldKey.ARTIST));
+                assertTrue(((WavTag)tag).isExistingInfoTag());
+                assertTrue(((WavTag)tag).isExistingId3Tag());
+                assertEquals("artistName", ((WavTag)tag).getID3Tag().getFirst(FieldKey.ARTIST));
+                assertEquals("artistName", tag.getFirst(FieldKey.ARTIST));
             }
         }
         catch (Exception e)
@@ -71,11 +79,11 @@ public class Issue084Test extends AbstractTestCase
                 f = AudioFileIO.read(testFile);
                 tag = f.getTag();
                 assertEquals("fred", ((WavTag)tag).getID3Tag().getFirst(FieldKey.ARTIST));
-/*                 assertTrue(((WavTag)tag).isExistingInfoTag());
+                assertTrue(((WavTag)tag).isExistingInfoTag());
                 assertTrue(((WavTag)tag).isExistingId3Tag());
-                assertEquals("", ((WavTag)tag).getInfoTag().getFirst(FieldKey.ARTIST));
+                assertEquals("fred", ((WavTag)tag).getInfoTag().getFirst(FieldKey.ARTIST));
                 assertEquals("fred", tag.getFirst(FieldKey.ARTIST));
-  */
+
             }
         }
         catch (Exception e)
