@@ -5,6 +5,7 @@ Summarise Changes
 #085:AbstractID3v2Tag.getSize() not handling aggregateframes
 #086:Ensure write extra byte after writing ID3Tag if chunk is not even size
 #087:Write extra byte after writing ID3Chunk in AIff Files if chunksize is odd
+#089:Aiff has unneccessary getAudioHeading() when we already have getEncodingType()
 
 2.2.5
 #033:Added getAudioStartPos() and getAudioEndPos() methods to AudioHeader interface and implemented for most formats
