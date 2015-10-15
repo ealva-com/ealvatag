@@ -74,7 +74,7 @@ public class WavInfoReader
      */
     private void calculateTrackLength(GenericAudioHeader info) throws CannotReadException
     {
-        //If we have fact chunk we cna calculate accurately by taking total of samples (per channel) divided by the number
+        //If we have fact chunk we can calculate accurately by taking total of samples (per channel) divided by the number
         //of samples taken per second (per channel)
         if(info.getNoOfSamples()!=null)
         {
@@ -107,7 +107,7 @@ public class WavInfoReader
         }
 
         String id = chunkHeader.getID();
-        logger.info("Reading Chunk:" + id + ":starting at:" + chunkHeader.getStartLocationInFile() + ":sizeIncHeader:" + (chunkHeader.getSize() + ChunkHeader.CHUNK_HEADER_SIZE));
+        logger.config("Reading Chunk:" + id + ":starting at:" + chunkHeader.getStartLocationInFile() + ":sizeIncHeader:" + (chunkHeader.getSize() + ChunkHeader.CHUNK_HEADER_SIZE));
         final WavChunkType chunkType = WavChunkType.get(id);
 
         //Ik known chinkType

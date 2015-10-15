@@ -183,22 +183,6 @@ public class AiffAudioHeader extends GenericAudioHeader
         comments.add(c);
     }
 
-    /**
-     * Return the audio encoding as a descriptive string
-     */
-    public String getAudioEncoding()
-    {
-        return audioEncoding;
-    }
-
-    /**
-     * Set the audio encoding as a descriptive string
-     */
-    public void setAudioEncoding(String s)
-    {
-        audioEncoding = s;
-    }
-
     public String toString()
     {
         StringBuilder sb = new StringBuilder("\n");

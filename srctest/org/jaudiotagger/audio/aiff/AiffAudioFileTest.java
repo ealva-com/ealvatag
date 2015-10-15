@@ -34,7 +34,7 @@ public class AiffAudioFileTest extends TestCase {
             assertEquals("2",ah.getChannels());
             assertEquals("8000", ah.getSampleRate());
             assertEquals(3,ah.getTrackLength());
-            assertEquals("not compressed", ((AiffAudioHeader) ah).getAudioEncoding());
+            assertEquals("not compressed", ((AiffAudioHeader) ah).getEncodingType());
             assertFalse(ah.isVariableBitRate());
             assertEquals(2.936625d,((AiffAudioHeader) ah).getPreciseTrackLength());
             assertNull(aah.getName());
@@ -80,7 +80,7 @@ public class AiffAudioFileTest extends TestCase {
             assertEquals("2",ah.getChannels());
             assertEquals("44100", ah.getSampleRate());
             assertEquals(1,ah.getTrackLength());
-            assertEquals("not compressed", ((AiffAudioHeader) ah).getAudioEncoding());
+            assertEquals("not compressed", ((AiffAudioHeader) ah).getEncodingType());
             assertEquals(0.84d,((AiffAudioHeader) ah).getPreciseTrackLength());
             assertNull(aah.getName());
             assertNull(aah.getCopyright());
@@ -124,7 +124,7 @@ public class AiffAudioFileTest extends TestCase {
             assertEquals("2",ah.getChannels());
             assertEquals("44100", ah.getSampleRate());
             assertEquals(5,ah.getTrackLength());
-            assertEquals("not compressed", ((AiffAudioHeader) ah).getAudioEncoding());
+            assertEquals("not compressed", ((AiffAudioHeader) ah).getEncodingType());
             assertEquals(5.0,((AiffAudioHeader) ah).getPreciseTrackLength());
             assertNull(aah.getName());
             assertNull(aah.getCopyright());
@@ -165,7 +165,7 @@ public class AiffAudioFileTest extends TestCase {
             assertEquals("2",ah.getChannels());
             assertEquals("8000", ah.getSampleRate());
             assertEquals(3,ah.getTrackLength());
-            assertEquals("Alaw 2:1", ((AiffAudioHeader) ah).getAudioEncoding());
+            assertEquals("Alaw 2:1", ((AiffAudioHeader) ah).getEncodingType());
             assertTrue(ah.isVariableBitRate());
             assertEquals(2.936625d,((AiffAudioHeader) ah).getPreciseTrackLength());
             assertNull(aah.getName());
@@ -208,7 +208,7 @@ public class AiffAudioFileTest extends TestCase {
             assertEquals("2",ah.getChannels());
             assertEquals("8000", ah.getSampleRate());
             assertEquals(3,ah.getTrackLength());
-            assertEquals("µlaw 2:1", ((AiffAudioHeader) ah).getAudioEncoding());
+            assertEquals("µlaw 2:1", ((AiffAudioHeader) ah).getEncodingType());
             assertTrue(ah.isVariableBitRate());
             assertEquals(2.936625d,((AiffAudioHeader) ah).getPreciseTrackLength());
             assertNull(aah.getName());
@@ -251,7 +251,7 @@ public class AiffAudioFileTest extends TestCase {
             assertEquals("2",ah.getChannels());
             assertEquals("8000", ah.getSampleRate());
             assertEquals(3,ah.getTrackLength());
-            assertEquals("PCM 64-bit", ((AiffAudioHeader) ah).getAudioEncoding());
+            assertEquals("PCM 64-bit", ((AiffAudioHeader) ah).getEncodingType());
             assertTrue(ah.isVariableBitRate());
             assertEquals(2.936625d,((AiffAudioHeader) ah).getPreciseTrackLength());
             assertNull(aah.getName());
@@ -292,7 +292,7 @@ public class AiffAudioFileTest extends TestCase {
             assertEquals("1",ah.getChannels());
             assertEquals("8000", ah.getSampleRate());
             assertEquals(0,ah.getTrackLength());
-            assertEquals("CCITT G.711 u-law", ((AiffAudioHeader) ah).getAudioEncoding());
+            assertEquals("CCITT G.711 u-law", ((AiffAudioHeader) ah).getEncodingType());
             assertTrue(ah.isVariableBitRate());
             assertEquals(0.001125,((AiffAudioHeader) ah).getPreciseTrackLength());
             assertNull(aah.getName());
@@ -335,7 +335,7 @@ public class AiffAudioFileTest extends TestCase {
             assertEquals("1",ah.getChannels());
             assertEquals("8000", ah.getSampleRate());
             assertEquals(0,ah.getTrackLength());
-            assertEquals("CCITT G.711 u-law", ((AiffAudioHeader) ah).getAudioEncoding());
+            assertEquals("CCITT G.711 u-law", ((AiffAudioHeader) ah).getEncodingType());
             assertTrue(ah.isVariableBitRate());
             assertEquals(0.001125,((AiffAudioHeader) ah).getPreciseTrackLength());
             assertNull(aah.getName());
@@ -378,7 +378,7 @@ public class AiffAudioFileTest extends TestCase {
             assertEquals("1",ah.getChannels());
             assertEquals("8000", ah.getSampleRate());
             assertEquals(0,ah.getTrackLength());
-            assertEquals("CCITT G.711 u-law", ((AiffAudioHeader) ah).getAudioEncoding());
+            assertEquals("CCITT G.711 u-law", ((AiffAudioHeader) ah).getEncodingType());
             assertTrue(ah.isVariableBitRate());
             assertEquals(0.001125,((AiffAudioHeader) ah).getPreciseTrackLength());
             assertNull(aah.getName());
@@ -421,7 +421,7 @@ public class AiffAudioFileTest extends TestCase {
             assertEquals("1",ah.getChannels());
             assertEquals("8000", ah.getSampleRate());
             assertEquals(0,ah.getTrackLength());
-            assertEquals("CCITT G.728", ((AiffAudioHeader) ah).getAudioEncoding());
+            assertEquals("CCITT G.728", ((AiffAudioHeader) ah).getEncodingType());
             assertTrue(ah.isVariableBitRate());
             assertEquals(0.03675,((AiffAudioHeader) ah).getPreciseTrackLength());
             assertEquals("woodblock",aah.getName());

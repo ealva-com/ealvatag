@@ -70,7 +70,7 @@ public class AiffInfoReader extends AiffChunkReader
             return false;
         }
 
-        logger.info("Reading Chunk:" + chunkHeader.getID() + ":starting at:" + chunkHeader.getStartLocationInFile() + ":sizeIncHeader:" + (chunkHeader.getSize() + ChunkHeader.CHUNK_HEADER_SIZE));
+        logger.config("Reading Chunk:" + chunkHeader.getID() + ":starting at:" + chunkHeader.getStartLocationInFile() + ":sizeIncHeader:" + (chunkHeader.getSize() + ChunkHeader.CHUNK_HEADER_SIZE));
         chunk = createChunk(raf, chunkHeader, aiffAudioHeader);
         if (chunk != null)
         {

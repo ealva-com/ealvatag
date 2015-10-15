@@ -24,7 +24,7 @@ public class CommonChunk extends Chunk
      * @param chunkData
      * @param aiffAudioHeader
      */
-    public CommonChunk(ChunkHeader hdr, ByteBuffer chunkData, AiffAudioHeader aiffAudioHeader)
+    public  CommonChunk(ChunkHeader hdr, ByteBuffer chunkData, AiffAudioHeader aiffAudioHeader)
     {
         super(chunkData, hdr);
         aiffHeader = aiffAudioHeader;
@@ -79,11 +79,11 @@ public class CommonChunk extends Chunk
 
                 if (compressionName.isEmpty())
                 {
-                    aiffHeader.setAudioEncoding(compressionType);
+                    aiffHeader.setEncodingType(compressionType);
                 }
                 else
                 {
-                    aiffHeader.setAudioEncoding(compressionName);
+                    aiffHeader.setEncodingType(compressionName);
                 }
             }
         }
@@ -91,7 +91,7 @@ public class CommonChunk extends Chunk
         else
         {
             aiffHeader.setLossless(true);
-            aiffHeader.setAudioEncoding(AiffCompressionType.NONE.getCompression());
+            aiffHeader.setEncodingType(AiffCompressionType.NONE.getCompression());
             // regular AIFF has no variable bit rate AFAIK
             aiffHeader.setVariableBitRate(false);
         }
@@ -100,7 +100,6 @@ public class CommonChunk extends Chunk
         aiffHeader.setSamplingRate((int) sampleRate);
         aiffHeader.setChannelNumber(numChannels);
         aiffHeader.setPreciseLength((numSamples / sampleRate));
-
         aiffHeader.setNoOfSamples(numSamples);
         return true;
     }
