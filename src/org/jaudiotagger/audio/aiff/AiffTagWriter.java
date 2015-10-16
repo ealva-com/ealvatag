@@ -229,11 +229,11 @@ public class AiffTagWriter implements TagWriter
                     //We have enough existing space in chunk so just keep existing chunk size
                     if (existingTag.getSizeOfID3TagOnly() >= newTagSize)
                     {
-                        writeDataToFile(raf, bb, aiffTag.getSizeOfID3TagOnly());
+                        writeDataToFile(raf, bb, existingTag.getSizeOfID3TagOnly());
                         //To ensure old data from previous tag are erased
-                        if (aiffTag.getSizeOfID3TagOnly() > newTagSize)
+                        if (existingTag.getSizeOfID3TagOnly() > newTagSize)
                         {
-                            writePaddingToFile(raf, (int) (aiffTag.getSizeOfID3TagOnly() - newTagSize));
+                            writePaddingToFile(raf, (int) (existingTag.getSizeOfID3TagOnly() - newTagSize));
                         }
                     }
                     //New tag is larger so set chunk size to accommodate it

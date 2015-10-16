@@ -292,7 +292,7 @@ public class AiffTag implements Tag
     }
 
     /**
-     * @return size of the vanilla ID3Tag exclusing surrounding chunk
+     * @return size of the vanilla ID3Tag excluding surrounding chunk
      */
     public long getSizeOfID3TagOnly()
     {
