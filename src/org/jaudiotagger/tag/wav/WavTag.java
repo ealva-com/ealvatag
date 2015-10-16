@@ -22,6 +22,7 @@ import org.jaudiotagger.audio.iff.ChunkHeader;
 import org.jaudiotagger.audio.wav.WavOptions;
 import org.jaudiotagger.tag.*;
 import org.jaudiotagger.tag.id3.AbstractID3v2Tag;
+import org.jaudiotagger.tag.id3.Id3SupportingTag;
 import org.jaudiotagger.tag.images.Artwork;
 
 import java.nio.charset.Charset;
@@ -35,7 +36,7 @@ import java.util.List;
  *
  * The default is that ID3 takes precedence if it exists
  */
-public class WavTag implements Tag
+public class WavTag implements Tag, Id3SupportingTag
 {
     private boolean isExistingId3Tag = false;
     private boolean isExistingInfoTag = false;

@@ -3,6 +3,7 @@ package org.jaudiotagger.tag.aiff;
 import org.jaudiotagger.audio.iff.ChunkHeader;
 import org.jaudiotagger.tag.*;
 import org.jaudiotagger.tag.id3.AbstractID3v2Tag;
+import org.jaudiotagger.tag.id3.Id3SupportingTag;
 import org.jaudiotagger.tag.images.Artwork;
 
 import java.nio.charset.Charset;
@@ -13,7 +14,7 @@ import java.util.List;
 /**
  * Wraps ID3Tag for most of its metadata.
  */
-public class AiffTag implements Tag
+public class AiffTag implements Tag, Id3SupportingTag
 {
 
     private boolean isExistingId3Tag = false;
