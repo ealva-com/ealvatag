@@ -221,7 +221,7 @@ public class AiffTagWriter implements TagWriter
             if (existingTag.isExistingId3Tag() && existingTag.getID3Tag().getStartLocationInFile() != null)
             {
                 final ChunkHeader chunkHeader = seekToStartOfListInfoMetadata(raf, existingTag);
-                logger.info("Current Space allocated:" + aiffTag.getSizeOfID3TagOnly() + ":NewTagRequires:" + newTagSize);
+                logger.info("Current Space allocated:" + existingTag.getSizeOfID3TagOnly() + ":NewTagRequires:" + newTagSize);
 
                 //Usual case ID3 is last chunk
                 if(existingTag.getID3Tag().getEndLocationInFile() == raf.length())
