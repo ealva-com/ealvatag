@@ -153,8 +153,13 @@ public class AiffTagWriter implements TagWriter
      */
     private void deleteTagChunk(final RandomAccessFile raf, final AiffTag existingTag, final ChunkHeader tagChunkHeader) throws IOException
     {
-        final int lengthTagChunk = (int) tagChunkHeader.getSize() + ChunkHeader.CHUNK_HEADER_SIZE;
+        int lengthTagChunk = (int) tagChunkHeader.getSize() + ChunkHeader.CHUNK_HEADER_SIZE;
+        if ((lengthTagChunk & 1) != 0)
+        {
+            lengthTagChunk++;
+        }
         final long newLength = raf.length() - lengthTagChunk;
+        logger.severe("Size of id3 chunk to delete is:"+newLength);
 
         // position for reading after the id3 tag
         raf.seek(existingTag.getStartLocationInFileOfId3Chunk() + lengthTagChunk );

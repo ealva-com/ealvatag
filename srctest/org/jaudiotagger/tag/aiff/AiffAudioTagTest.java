@@ -706,4 +706,61 @@ public class AiffAudioTagTest extends TestCase {
 
 
     }
+
+    public void testDeleteAiff4Odd() {
+        Exception exceptionCaught = null;
+
+        File orig = new File("testdata", "test124.aif");
+        if (!orig.isFile())
+        {
+            System.err.println("Unable to test file - not available");
+            return;
+        }
+
+        // test124.aif is special in that the ID3 chunk is right at the beginning, not the end.
+        File testFile = AbstractTestCase.copyAudioToTmp("test124.aif", new File("test124DeleteOddTag.aif"));
+
+        try
+        {
+            final List<String> oldChunkIds = readChunkIds(testFile);
+            assertEquals(ChunkType.TAG.getCode(), oldChunkIds.get(0));
+            assertEquals(ChunkType.COMMON.getCode(), oldChunkIds.get(1));
+            assertEquals(ChunkType.SOUND.getCode(), oldChunkIds.get(2));
+            assertTrue(oldChunkIds.size() == 3);
+
+            final int oldSize = readAIFFFormSize(testFile);
+            AudioFile f = AudioFileIO.read(testFile);
+            AudioHeader ah = f.getAudioHeader();
+            assertTrue(ah instanceof AiffAudioHeader);
+            Tag tag = f.getTag();
+            System.out.println(tag);
+            assertNotNull(tag);
+            assertNotNull(((AiffTag)tag).getID3Tag());
+            assertFalse(tag.isEmpty());
+            assertEquals("Coldplay", tag.getFirst(FieldKey.ARTIST));
+            AudioFileIO.delete(f);
+
+            f = null;
+            final int newSize = readAIFFFormSize(testFile);
+            AudioFile f2 = AudioFileIO.read(testFile);
+            Tag tag2 = f2.getTag();
+            System.out.println(tag2);
+            assertNotNull(tag2);
+            assertTrue(tag2.getFirst(FieldKey.ARTIST).isEmpty());
+            assertFalse("FORM chunk size should have changed, but hasn't.", oldSize == newSize);
+
+            final List<String> newChunkIds = readChunkIds(testFile);
+            assertEquals(ChunkType.COMMON.getCode(), newChunkIds.get(0));
+            assertEquals(ChunkType.SOUND.getCode(), newChunkIds.get(1));
+            assertTrue(newChunkIds.size() == 2);
+
+        }
+        catch(Exception ex)
+        {
+            ex.printStackTrace();
+            exceptionCaught = ex;
+        }
+        assertNull(exceptionCaught);
+    }
+
 }
