@@ -10,6 +10,7 @@ Summarise Changes
 #091:WavTagWriter doesn't always work if replace the existing ID3tag rather than modifying
 #092:Useful to have interface for enclosing tags that support ID3
 #094:AiffTagWriter not handling when existing ID3chunk of odd size at end of file
+#096:Aiff DeleteTag not taking into account padding byte when chunk is not last chunk
 
 2.2.5
 #033:Added getAudioStartPos() and getAudioEndPos() methods to AudioHeader interface and implemented for most formats
