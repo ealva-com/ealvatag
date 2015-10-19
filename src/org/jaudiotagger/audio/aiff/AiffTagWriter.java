@@ -27,6 +27,7 @@ import org.jaudiotagger.audio.generic.Utils;
 import org.jaudiotagger.audio.iff.Chunk;
 import org.jaudiotagger.audio.iff.ChunkHeader;
 import org.jaudiotagger.audio.iff.IffHeaderChunk;
+import org.jaudiotagger.logging.Hex;
 import org.jaudiotagger.tag.Tag;
 import org.jaudiotagger.tag.TagOptionSingleton;
 import org.jaudiotagger.tag.aiff.AiffTag;
@@ -80,7 +81,7 @@ public class AiffTagWriter implements TagWriter
      * @throws IOException
      * @throws CannotWriteException
      */
-    private ChunkHeader seekToStartOfListInfoMetadata(RandomAccessFile raf, AiffTag existingTag) throws IOException, CannotWriteException
+    private ChunkHeader seekToStartOfMetadata(RandomAccessFile raf, AiffTag existingTag) throws IOException, CannotWriteException
     {
         raf.seek(existingTag.getStartLocationInFileOfId3Chunk());
         final ChunkHeader chunkHeader = new ChunkHeader(ByteOrder.BIG_ENDIAN);
@@ -94,6 +95,18 @@ public class AiffTagWriter implements TagWriter
         return chunkHeader;
     }
 
+    /**
+     *
+     * @param existingTag
+     * @param raf
+     * @return true if at end of file (all take account padding byte)
+     * @throws IOException
+     */
+    private boolean isAtEndOfFileAllowingForPaddingByte(AiffTag existingTag, RandomAccessFile raf) throws IOException
+    {
+        return ((existingTag.getID3Tag().getEndLocationInFile() == raf.length())||
+                (((existingTag.getID3Tag().getEndLocationInFile() & 1) != 0) && existingTag.getID3Tag().getEndLocationInFile() + 1 == raf.length()));
+    }
     /**
      * Delete given {@link Tag} from file.
      *
@@ -110,14 +123,15 @@ public class AiffTagWriter implements TagWriter
 
         if (existingTag.isExistingId3Tag() && existingTag.getID3Tag().getStartLocationInFile() != null)
         {
-            ChunkHeader chunkHeader = seekToStartOfListInfoMetadata(raf, existingTag);
-            if (existingTag.getID3Tag().getEndLocationInFile() == raf.length())
+            ChunkHeader chunkHeader = seekToStartOfMetadata(raf, existingTag);
+            if(isAtEndOfFileAllowingForPaddingByte(existingTag, raf))
             {
                 logger.config("Setting new length to:" + (existingTag.getStartLocationInFileOfId3Chunk()));
                 raf.setLength(existingTag.getStartLocationInFileOfId3Chunk());
             }
             else
             {
+                logger.config("Deleting tag chunk");
                 deleteTagChunk(raf, existingTag, chunkHeader);
             }
             rewriteRiffHeaderSize(raf);
@@ -146,7 +160,6 @@ public class AiffTagWriter implements TagWriter
         raf.seek(existingTag.getStartLocationInFileOfId3Chunk() + lengthTagChunk );
         final FileChannel channel = raf.getChannel();
 
-        //deleteTagChunkUsingChannelTransfer( existingTag, channel,  newLength );
         deleteTagChunkUsingSmallByteBufferSegments( existingTag, channel,  newLength, lengthTagChunk );
         // truncate the file after the last chunk
         logger.config("Setting new length to:" + newLength);
@@ -209,7 +222,7 @@ public class AiffTagWriter implements TagWriter
      */
     public void write(final AudioFile af, final Tag tag, final RandomAccessFile raf, final RandomAccessFile rafTemp) throws CannotWriteException, IOException
     {
-        logger.severe("Writing tag to file");
+        logger.severe("Writing Aiff tag to file");
         final AiffTag existingTag = getExistingMetadata(raf);
         try
         {
@@ -220,11 +233,11 @@ public class AiffTagWriter implements TagWriter
             //Replacing ID3 tag
             if (existingTag.isExistingId3Tag() && existingTag.getID3Tag().getStartLocationInFile() != null)
             {
-                final ChunkHeader chunkHeader = seekToStartOfListInfoMetadata(raf, existingTag);
+                final ChunkHeader chunkHeader = seekToStartOfMetadata(raf, existingTag);
                 logger.info("Current Space allocated:" + existingTag.getSizeOfID3TagOnly() + ":NewTagRequires:" + newTagSize);
 
-                //Usual case ID3 is last chunk
-                if(existingTag.getID3Tag().getEndLocationInFile() == raf.length())
+                //Usual case ID3 is last chunk, need to account for when extra byte ended to ensure on even boundary
+                if(isAtEndOfFileAllowingForPaddingByte(existingTag, raf))
                 {
                     //We have enough existing space in chunk so just keep existing chunk size
                     if (existingTag.getSizeOfID3TagOnly() >= newTagSize)
@@ -318,7 +331,9 @@ public class AiffTagWriter implements TagWriter
     private void writePaddingToFile(final RandomAccessFile raf, final int paddingSize)
             throws IOException
     {
+        logger.config("Write Padding bytes:"+paddingSize+" at "+ Hex.asHex(raf.getFilePointer()));
         raf.write(new byte[paddingSize]);
+
     }
 
     /**

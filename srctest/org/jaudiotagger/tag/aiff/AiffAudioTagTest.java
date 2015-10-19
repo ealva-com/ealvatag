@@ -10,9 +10,14 @@ import org.jaudiotagger.audio.aiff.AiffAudioHeader;
 import org.jaudiotagger.audio.aiff.chunk.ChunkType;
 import org.jaudiotagger.audio.iff.ChunkHeader;
 import org.jaudiotagger.audio.iff.IffHeaderChunk;
+import org.jaudiotagger.audio.wav.WavOptions;
+import org.jaudiotagger.audio.wav.WavSaveOptions;
 import org.jaudiotagger.tag.FieldKey;
 import org.jaudiotagger.tag.Tag;
+import org.jaudiotagger.tag.TagOptionSingleton;
 import org.jaudiotagger.tag.id3.ID3v22Tag;
+import org.jaudiotagger.tag.id3.ID3v24Tag;
+import org.jaudiotagger.tag.id3.Id3SupportingTag;
 
 import java.io.File;
 import java.io.IOException;
@@ -628,5 +633,77 @@ public class AiffAudioTagTest extends TestCase {
 
     }
 
+    /**
+     * Starts of with Id3chunk which is odd but doesnt have padding byte but at end of file
+     * so can still read, then we write to it padding bit added and when read/write again we
+     * correctly work out ID3chunk is still at end of file.
+     */
+    public void testOddLengthID3ChunkFile() {
+        Exception exceptionCaught = null;
 
+        File orig = new File("testdata", "test144.aif");
+        if (!orig.isFile())
+        {
+            System.err.println("Unable to test file - not available");
+            return;
+        }
+
+        TagOptionSingleton.getInstance().setWavOptions(WavOptions.READ_ID3_ONLY_AND_SYNC);
+        TagOptionSingleton.getInstance().setWavSaveOptions(WavSaveOptions.SAVE_BOTH_AND_SYNC);
+        File testFile = AbstractTestCase.copyAudioToTmp("test144.aif", new File("test144Odd.aif"));
+        try {
+            AudioFile f = AudioFileIO.read(testFile);
+            f.getTag().deleteField(FieldKey.ACOUSTID_ID);
+            f.getTag().deleteField(FieldKey.ACOUSTID_FINGERPRINT);
+            f.commit();
+            f = AudioFileIO.read(testFile);
+            f.getTag().setField(FieldKey.ARTIST, "freddy");
+            f.commit();
+            f = AudioFileIO.read(testFile);
+            System.out.println(f.getTag());
+            assertEquals(f.getTag().getFirst(FieldKey.ARTIST), "freddy");
+
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            exceptionCaught = e;
+        }
+        assertNull(exceptionCaught);
+
+
+    }
+
+    public void testDeleteOddLengthID3ChunkFile() {
+        Exception exceptionCaught = null;
+
+        File orig = new File("testdata", "test144.aif");
+        if (!orig.isFile())
+        {
+            System.err.println("Unable to test file - not available");
+            return;
+        }
+
+        TagOptionSingleton.getInstance().setWavOptions(WavOptions.READ_ID3_ONLY_AND_SYNC);
+        TagOptionSingleton.getInstance().setWavSaveOptions(WavSaveOptions.SAVE_BOTH_AND_SYNC);
+        File testFile = AbstractTestCase.copyAudioToTmp("test144.aif", new File("test144OddDelete.aif"));
+        try {
+            AudioFile f = AudioFileIO.read(testFile);
+            f.getTag().deleteField(FieldKey.ACOUSTID_ID);
+            f.getTag().deleteField(FieldKey.ACOUSTID_FINGERPRINT);
+            f.commit();
+            AudioFileIO.delete(f);
+            f.commit();
+            f = AudioFileIO.read(testFile);
+            System.out.println(f.getTag());
+            //assertEquals(0,((Id3SupportingTag)f.getTag()).getID3Tag().getStartLocationInFile().longValue());
+
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            exceptionCaught = e;
+        }
+        assertNull(exceptionCaught);
+
+
+    }
 }

@@ -93,5 +93,7 @@ test139.mp3, no,481,mp3 with year but empty tdat field
 test140.mp3, no,484, String encoding issue
 test141.m4a, no,433,with a udta atom with unknown subatoms and meta atom
 test142.wav, no,81,wav with info near start of file
+test143.aif, no,93, aif with corrupt ID3chunks
+test144.aif, no,94, aif with odd sized id3chunk (but no padding byte)
 
 

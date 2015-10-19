@@ -3,11 +3,9 @@ package org.jaudiotagger.audio.aiff;
 
 import org.jaudiotagger.audio.aiff.chunk.*;
 import org.jaudiotagger.audio.exceptions.CannotReadException;
-import org.jaudiotagger.audio.generic.GenericAudioHeader;
 import org.jaudiotagger.audio.iff.Chunk;
 import org.jaudiotagger.audio.iff.ChunkHeader;
 import org.jaudiotagger.audio.iff.IffHeaderChunk;
-import org.jaudiotagger.logging.Hex;
 import org.jaudiotagger.tag.aiff.AiffTag;
 import org.jaudiotagger.tag.id3.ID3v22Tag;
 
@@ -65,12 +63,14 @@ public class AiffTagReader extends AiffChunkReader
      */
     private boolean readChunk(final RandomAccessFile raf, AiffTag aiffTag) throws IOException
     {
+        logger.config("Reading Tag Chunk");
 
         ChunkHeader chunkHeader = new ChunkHeader(ByteOrder.BIG_ENDIAN);
         if (!chunkHeader.readHeader(raf))
         {
             return false;
         }
+        logger.config("Reading Chunk:" + chunkHeader.getID() + ":starting at:" + chunkHeader.getStartLocationInFile() + ":sizeIncHeader:" + (chunkHeader.getSize() + ChunkHeader.CHUNK_HEADER_SIZE));
 
         long startLocationOfId3TagInFile = raf.getFilePointer();
         ChunkType chunkType = ChunkType.get(chunkHeader.getID());
@@ -85,7 +85,13 @@ public class AiffTagReader extends AiffChunkReader
         }
         else
         {
-            raf.skipBytes((int)chunkHeader.getSize());
+            logger.config("Skipping Chunk:"+chunkHeader.getID()+":"+chunkHeader.getSize());
+            int noBytesSkipped = raf.skipBytes((int)chunkHeader.getSize());
+            if(noBytesSkipped < chunkHeader.getSize())
+            {
+                logger.config("Only Skipped:" + noBytesSkipped);
+                return false;
+            }
 
         }
         IffHeaderChunk.ensureOnEqualBoundary(raf, chunkHeader);

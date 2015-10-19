@@ -38,6 +38,7 @@ public class ID3Chunk extends Chunk
     @Override
     public boolean readChunk() throws IOException
     {
+        AudioFile.logger.severe("Reading chunk");
         if (!isId3v2Tag(chunkData))
         {
             logger.severe("Invalid ID3 header for ID3 chunk");
@@ -50,15 +51,15 @@ public class ID3Chunk extends Chunk
         {
             case ID3v22Tag.MAJOR_VERSION:
                 id3Tag = new ID3v22Tag();
-                AudioFile.logger.finest("Reading ID3V2.2 tag");
+                AudioFile.logger.severe("Reading ID3V2.2 tag");
                 break;
             case ID3v23Tag.MAJOR_VERSION:
                 id3Tag = new ID3v23Tag();
-                AudioFile.logger.finest("Reading ID3V2.3 tag");
+                AudioFile.logger.severe("Reading ID3V2.3 tag");
                 break;
             case ID3v24Tag.MAJOR_VERSION:
                 id3Tag = new ID3v24Tag();
-                AudioFile.logger.finest("Reading ID3V2.4 tag");
+                AudioFile.logger.severe("Reading ID3V2.4 tag");
                 break;
             default:
                 return false;     // bad or unknown version
