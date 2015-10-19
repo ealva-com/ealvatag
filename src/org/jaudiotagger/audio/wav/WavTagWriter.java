@@ -716,7 +716,7 @@ public class WavTagWriter implements TagWriter
         //If both tags already exist in file
         if(existingTag.isExistingInfoTag() && existingTag.isExistingId3Tag())
         {
-            BothTagsFileStructure fs = checkExistingLocations(wavTag, raf);
+            BothTagsFileStructure fs = checkExistingLocations(existingTag, raf);
             //We can write both chunks without affecting anything else
             if(fs.isContiguous && fs.isAtEnd)
             {
