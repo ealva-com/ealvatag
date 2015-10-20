@@ -20,6 +20,7 @@ package org.jaudiotagger.tag.wav;
 
 import org.jaudiotagger.audio.iff.ChunkHeader;
 import org.jaudiotagger.audio.wav.WavOptions;
+import org.jaudiotagger.logging.Hex;
 import org.jaudiotagger.tag.*;
 import org.jaudiotagger.tag.id3.AbstractID3v2Tag;
 import org.jaudiotagger.tag.id3.Id3SupportingTag;
@@ -116,11 +117,23 @@ public class WavTag implements Tag, Id3SupportingTag
         return id3Tag != null;
     }
 
+    @Override
     public String toString()
     {
-        String output = "WAV " + super.toString();
-        return output;
+        StringBuilder sb = new StringBuilder();
+        if (id3Tag != null)
+        {
+             sb.append("startLocation:"+getStartLocationInFileOfId3Chunk()+"("+ Hex.asHex(getStartLocationInFileOfId3Chunk())+")\n");
+             sb.append("endLocation:"+getEndLocationInFileOfId3Chunk()+"("+ Hex.asHex(getEndLocationInFileOfId3Chunk())+")\n");
+             sb.append(id3Tag.toString());
+        }
+        if (infoTag != null)
+        {
+            sb.append(infoTag.toString());
+        }
+        return sb.toString();
     }
+
 
     public Tag getActiveTag()
     {

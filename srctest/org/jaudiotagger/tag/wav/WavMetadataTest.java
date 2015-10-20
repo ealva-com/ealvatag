@@ -34,6 +34,7 @@ public class WavMetadataTest extends AbstractTestCase
             File testFile = AbstractTestCase.copyAudioToTmp("test123.wav");
             AudioFile f = AudioFileIO.read(testFile);
             System.out.println(f.getAudioHeader());
+            System.out.println(f.getTag());
             assertEquals("529", f.getAudioHeader().getBitRate());
             assertEquals("1", f.getAudioHeader().getChannels());
             assertEquals("22050", f.getAudioHeader().getSampleRate());
@@ -88,6 +89,7 @@ public class WavMetadataTest extends AbstractTestCase
             File testFile = AbstractTestCase.copyAudioToTmp("test123.wav", new File("test123ModifyMetadataSaveBoth.wav"));
             AudioFile f = AudioFileIO.read(testFile);
             System.out.println(f.getAudioHeader());
+            System.out.println(f.getTag());
             assertEquals("529", f.getAudioHeader().getBitRate());
             assertEquals("1", f.getAudioHeader().getChannels());
             assertEquals("22050", f.getAudioHeader().getSampleRate());
@@ -146,6 +148,8 @@ public class WavMetadataTest extends AbstractTestCase
             File testFile = AbstractTestCase.copyAudioToTmp("test123.wav", new File("test123ModifyMoreMetadata.wav"));
             AudioFile f = AudioFileIO.read(testFile);
             System.out.println(f.getAudioHeader());
+            System.out.println(f.getTag());
+
             assertEquals("529", f.getAudioHeader().getBitRate());
             assertEquals("1", f.getAudioHeader().getChannels());
             assertEquals("22050", f.getAudioHeader().getSampleRate());
@@ -328,6 +332,7 @@ public class WavMetadataTest extends AbstractTestCase
             File testFile = AbstractTestCase.copyAudioToTmp("test125.wav");
             AudioFile f = AudioFileIO.read(testFile);
             System.out.println(f.getAudioHeader());
+            System.out.println(f.getTag());
             assertEquals("529", f.getAudioHeader().getBitRate());
             assertEquals("1", f.getAudioHeader().getChannels());
             assertEquals("22050", f.getAudioHeader().getSampleRate());
@@ -947,6 +952,57 @@ public class WavMetadataTest extends AbstractTestCase
             assertEquals(25L, ((WavTag) tag).getSizeOfID3TagOnly());
             assertEquals(926264L, ((WavTag) tag).getStartLocationInFileOfId3Chunk());
             assertEquals(33L, ((WavTag) tag).getSizeOfID3TagIncludingChunkHeader());
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            exceptionCaught = e;
+        }
+        assertNull(exceptionCaught);
+    }
+
+    public void testWriteNumberedOdd()
+    {
+        TagOptionSingleton.getInstance().setWavOptions(WavOptions.READ_ID3_ONLY);
+        TagOptionSingleton.getInstance().setWavSaveOptions(WavSaveOptions.SAVE_ACTIVE);
+        Exception exceptionCaught = null;
+        try
+        {
+            File testFile = AbstractTestCase.copyAudioToTmp("test125.wav", new File("test125ID3OddNumbered.wav"));
+            AudioFile f = AudioFileIO.read(testFile);
+            System.out.println(f.getAudioHeader());
+            System.out.println(f.getTag());
+            assertEquals("529", f.getAudioHeader().getBitRate());
+            assertEquals("1", f.getAudioHeader().getChannels());
+            assertEquals("22050", f.getAudioHeader().getSampleRate());
+
+            assertTrue(f.getTag() instanceof WavTag);
+            WavTag tag = (WavTag) f.getTag();
+
+            assertEquals(926508L, ((WavTag) tag).getInfoTag().getStartLocationInFile().longValue());
+            assertEquals(926662L, ((WavTag) tag).getInfoTag().getEndLocationInFile().longValue());
+            assertEquals(146L, ((WavTag) tag).getInfoTag().getSizeOfTag());
+            assertEquals(235L, ((WavTag) tag).getSizeOfID3TagOnly());
+            assertEquals(926264L, ((WavTag) tag).getStartLocationInFileOfId3Chunk());
+            assertEquals(243L, ((WavTag) tag).getSizeOfID3TagIncludingChunkHeader());
+
+            tag.setField(FieldKey.ARTIST,"a nice long artist names");
+            f.commit();
+            f = AudioFileIO.read(testFile);
+            tag = (WavTag) f.getTag();
+            System.out.println(f.getAudioHeader());
+            System.out.println(f.getTag());
+
+            tag.setField(FieldKey.ARTIST,"a nice long artist s");
+            assertEquals("a nice long artist s", tag.getFirst(FieldKey.ARTIST));
+            f.commit();
+            f = AudioFileIO.read(testFile);
+            tag = (WavTag) f.getTag();
+
+            System.out.println(f.getAudioHeader());
+            System.out.println(f.getTag());
+            assertEquals("a nice long artist s", tag.getFirst(FieldKey.ARTIST));
+
         }
         catch (Exception e)
         {

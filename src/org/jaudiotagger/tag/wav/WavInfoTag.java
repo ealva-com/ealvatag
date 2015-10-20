@@ -67,7 +67,7 @@ public class WavInfoTag extends GenericTag
     }
     public String toString()
     {
-        StringBuilder  output = new StringBuilder("Wav " + super.toString());
+        StringBuilder  output = new StringBuilder("Wav Info Tag" + super.toString());
         if(unrecognisedFields.size()>0)
         {
             output.append("\nUnrecognized Tags:\n");
