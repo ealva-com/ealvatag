@@ -165,21 +165,22 @@ public class AiffTagWriter implements TagWriter
         raf.seek(existingTag.getStartLocationInFileOfId3Chunk() + lengthTagChunk );
         final FileChannel channel = raf.getChannel();
 
-        deleteTagChunkUsingSmallByteBufferSegments( existingTag, channel,  newLength, lengthTagChunk );
+        deleteTagChunkUsingSmallByteBufferSegments(existingTag, channel, newLength, lengthTagChunk);
         // truncate the file after the last chunk
         logger.config("Setting new length to:" + newLength);
         raf.setLength(newLength);
     }
 
     /**
-     * The following seems to work on Windows but hangs on OSX !
+     * The following seems to work on Windows but hangs on OSX!
+     * Bug is filed <a href="https://bugs.openjdk.java.net/browse/JDK-8140241">here</a>.
      *
-     * @param existingTag
-     * @param channel
-     * @param newLength
-     * @throws IOException
+     * @param existingTag existing tag
+     * @param channel channel
+     * @param newLength new length
+     * @throws IOException if something goes wrong
      */
-    private void deleteTagChunkUsingChannelTransfer( final AiffTag existingTag, final FileChannel channel,  final long newLength )
+    private void deleteTagChunkUsingChannelTransfer(final AiffTag existingTag, final FileChannel channel, final long newLength)
             throws IOException
     {
         long read;
@@ -195,13 +196,14 @@ public class AiffTagWriter implements TagWriter
      * Use ByteBuffers to copy a 4mb chunk, write the chunk and repeat until the rest of the file after the ID3 tag
      * is rewritten
      *
-     * @param existingTag
-     * @param channel
-     * @param newLength
-     * @param lengthTagChunk
-     * @throws IOException
+     * @param existingTag existing tag
+     * @param channel channel
+     * @param newLength new length
+     * @param lengthTagChunk length tag chunk
+     * @throws IOException if something goes wrong
      */
-    private void deleteTagChunkUsingSmallByteBufferSegments( final AiffTag existingTag, final FileChannel channel,  final long newLength, final long lengthTagChunk )
+    // TODO: arguments are not used, position is implicit
+    private void deleteTagChunkUsingSmallByteBufferSegments(final AiffTag existingTag, final FileChannel channel, final long newLength, final long lengthTagChunk)
             throws IOException
     {
         final ByteBuffer buffer = ByteBuffer.allocateDirect((int)TagOptionSingleton.getInstance().getWriteChunkSize());
@@ -291,8 +293,7 @@ public class AiffTagWriter implements TagWriter
      * @param raf
      * @throws IOException
      */
-    private void rewriteRiffHeaderSize(RandomAccessFile raf) throws IOException
-    {
+    private void rewriteRiffHeaderSize(RandomAccessFile raf) throws IOException {
         raf.seek(IffHeaderChunk.SIGNATURE_LENGTH);
         raf.write(Utils.getSizeBEInt32(((int) raf.length()) - SIGNATURE_LENGTH - SIZE_LENGTH));
     }
