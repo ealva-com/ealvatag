@@ -20,6 +20,7 @@ package org.jaudiotagger.tag.wav;
 
 import org.jaudiotagger.audio.generic.GenericTag;
 import org.jaudiotagger.audio.iff.ChunkHeader;
+import org.jaudiotagger.logging.Hex;
 import org.jaudiotagger.tag.*;
 
 import java.util.ArrayList;
@@ -67,7 +68,16 @@ public class WavInfoTag extends GenericTag
     }
     public String toString()
     {
-        StringBuilder  output = new StringBuilder("Wav Info Tag" + super.toString());
+        StringBuilder  output = new StringBuilder("Wav Info Tag:\n");
+        if(getStartLocationInFile()!=null)
+        {
+            output.append("\tstartLocation:" + getStartLocationInFile() + "(" + Hex.asHex(getStartLocationInFile()) + ")\n");
+        }
+        if(getEndLocationInFile()!=null)
+        {
+            output.append("\tendLocation:" + getEndLocationInFile() + "(" + Hex.asHex(getEndLocationInFile()) + ")\n");
+        }
+        output.append(super.toString());
         if(unrecognisedFields.size()>0)
         {
             output.append("\nUnrecognized Tags:\n");

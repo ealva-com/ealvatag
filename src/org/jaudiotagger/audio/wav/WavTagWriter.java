@@ -99,7 +99,7 @@ public class WavTagWriter implements TagWriter
     }
 
     /**
-     * Seek in file to start of LIST Metadata chunk
+     * Seek in file to start of Id3 Metadata chunk
      *
      * @param raf
      * @param existingTag
@@ -319,7 +319,7 @@ public class WavTagWriter implements TagWriter
     @Override
     public void write(final AudioFile af, final Tag tag, final RandomAccessFile raf, final RandomAccessFile rafTemp) throws CannotWriteException, IOException
     {
-        logger.info("Writing tag to file");
+        logger.config("Writing tag to file:start");
 
         WavSaveOptions wso = TagOptionSingleton.getInstance().getWavSaveOptions();
         final WavTag existingTag = getExistingMetadata(raf);
@@ -506,12 +506,13 @@ public class WavTagWriter implements TagWriter
      * @return byte buffer containing the tag data
      * @throws UnsupportedEncodingException
      */
-    public ByteBuffer convertID3Chunk(final WavTag tag) throws UnsupportedEncodingException
+    public ByteBuffer convertID3Chunk(final WavTag tag, WavTag existingTag) throws UnsupportedEncodingException
     {
+        logger.config("ChunkSizeIs:"+existingTag.getSizeOfID3TagOnly());
         try
         {
             final ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            tag.getID3Tag().write(baos);
+            tag.getID3Tag().write(baos, (int)existingTag.getSizeOfID3TagOnly());
             final ByteBuffer buf = ByteBuffer.wrap(baos.toByteArray());
             buf.rewind();
             return buf;
@@ -531,6 +532,13 @@ public class WavTagWriter implements TagWriter
         boolean isInfoTagFirst = false;
         boolean isContiguous   = false;
         boolean isAtEnd        = false;
+
+        public String toString()
+        {
+            return "IsInfoTagFirst:"+isInfoTagFirst
+                    +":isContiguous:"+isContiguous
+                    +":isAtEnd:"+isAtEnd;
+        }
     }
 
     private BothTagsFileStructure checkExistingLocations(WavTag wavTag, RandomAccessFile raf) throws IOException
@@ -555,7 +563,7 @@ public class WavTagWriter implements TagWriter
             if(Math.abs(wavTag.getID3Tag().getEndLocationInFile() - wavTag.getInfoTag().getStartLocationInFile()) <=1)
             {
                 fs.isContiguous = true;
-                if(wavTag.getInfoTag().getEndLocationInFile() == raf.length())
+                if(isInfoTagAtEndOfFileAllowingForPaddingByte(wavTag, raf))
                 {
                     fs.isAtEnd = true;
                 }
@@ -624,6 +632,7 @@ public class WavTagWriter implements TagWriter
             throws CannotWriteException, IOException
     {
         long newId3TagSize = newTagBuffer.limit();
+        logger.config("write id3chunk:existingSize:"+existingTag.getSize()+":newSize:"+newId3TagSize);
         //We have enough existing space in chunk so just keep existing chunk size
         if (existingTag.getSize() >= newId3TagSize)
         {
@@ -721,7 +730,7 @@ public class WavTagWriter implements TagWriter
         final long newInfoTagSize = infoTagBuffer.limit();
         final WavInfoTag existingInfoTag = existingTag.getInfoTag();
 
-        final ByteBuffer id3TagBuffer = convertID3Chunk(wavTag);
+        final ByteBuffer id3TagBuffer = convertID3Chunk(wavTag, existingTag);
         final AbstractID3v2Tag existingId3Tag = existingTag.getID3Tag();
 
         //If both tags already exist in file
@@ -837,7 +846,7 @@ public class WavTagWriter implements TagWriter
         }
         else
         {
-            final ByteBuffer id3TagBuffer = convertID3Chunk(wavTag);
+            final ByteBuffer id3TagBuffer = convertID3Chunk(wavTag, existingTag);
             final long newId3TagSize = id3TagBuffer.limit();
 
             if(existingTag.isExistingInfoTag())

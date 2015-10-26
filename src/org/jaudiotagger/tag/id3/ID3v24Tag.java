@@ -1101,15 +1101,24 @@ public class ID3v24Tag extends AbstractID3v2Tag
      * {@inheritDoc}
      */
     @Override
-    public void write(WritableByteChannel channel) throws IOException
+    public void write(WritableByteChannel channel, int currentTagSize) throws IOException
     {
-        logger.config("Writing tag to channel");
+        logger.severe("Writing tag to channel");
 
         byte[] bodyByteBuffer = writeFramesToBuffer().toByteArray();
-        ByteBuffer headerBuffer = writeHeaderToBuffer(0, bodyByteBuffer.length);
+
+
+        int padding = 0;
+        if(currentTagSize > 0)
+        {
+            int sizeIncPadding = calculateTagSize(bodyByteBuffer.length + TAG_HEADER_LENGTH, (int) currentTagSize);
+            padding = sizeIncPadding - (bodyByteBuffer.length + TAG_HEADER_LENGTH);
+        }
+        ByteBuffer headerBuffer = writeHeaderToBuffer(padding, bodyByteBuffer.length);
 
         channel.write(headerBuffer);
         channel.write(ByteBuffer.wrap(bodyByteBuffer));
+        writePadding(channel, padding);
     }
 
     /**

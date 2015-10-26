@@ -51,6 +51,7 @@ public class WavTagReader
      */
     public WavTag read(RandomAccessFile raf) throws CannotReadException, IOException
     {
+        logger.config("Read Tag:start");
         WavTag tag = new WavTag(TagOptionSingleton.getInstance().getWavOptions());
         if(WavRIFFHeader.isValidHeader(raf))
         {
@@ -67,6 +68,7 @@ public class WavTagReader
             throw new CannotReadException("Wav RIFF Header not valid");
         }
         createDefaultMetadataTagsIfMissing(tag);
+        logger.config("Read Tag:end");
         return tag;
     }
 

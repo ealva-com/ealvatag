@@ -123,13 +123,17 @@ public class WavTag implements Tag, Id3SupportingTag
         StringBuilder sb = new StringBuilder();
         if (id3Tag != null)
         {
-             sb.append("startLocation:"+getStartLocationInFileOfId3Chunk()+"("+ Hex.asHex(getStartLocationInFileOfId3Chunk())+")\n");
-             sb.append("endLocation:"+getEndLocationInFileOfId3Chunk()+"("+ Hex.asHex(getEndLocationInFileOfId3Chunk())+")\n");
-             sb.append(id3Tag.toString());
+             sb.append("Wav ID3 Tag:\n");
+             if(isExistingId3Tag())
+             {
+                 sb.append("\tstartLocation:" + getStartLocationInFileOfId3Chunk() + "(" + Hex.asHex(getStartLocationInFileOfId3Chunk()) + ")\n");
+                 sb.append("\tendLocation:" + getEndLocationInFileOfId3Chunk() + "(" + Hex.asHex(getEndLocationInFileOfId3Chunk()) + ")\n");
+             }
+             sb.append(id3Tag.toString()+"\n");
         }
         if (infoTag != null)
         {
-            sb.append(infoTag.toString());
+            sb.append(infoTag.toString()+"\n");
         }
         return sb.toString();
     }

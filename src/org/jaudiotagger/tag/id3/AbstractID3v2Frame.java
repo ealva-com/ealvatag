@@ -352,19 +352,23 @@ public abstract class AbstractID3v2Frame extends AbstractTagFrame implements Tag
     {
         byte[] buffer = new byte[getFrameIdSize()];
 
-        if (byteBuffer.position() + getFrameHeaderSize() >= byteBuffer.limit())
-        {
-            logger.warning(getLoggingFilename() + ":" + "No space to find another frame:");
-            throw new InvalidFrameException(getLoggingFilename() + ":" + "No space to find another frame");
-        }
-
         //Read the Frame Identifier
-        byteBuffer.get(buffer, 0, getFrameIdSize());
+        if(getFrameIdSize()<=byteBuffer.remaining())
+        {
+            byteBuffer.get(buffer, 0, getFrameIdSize());
+        }
 
         if(isPadding(buffer))
         {
             throw new PaddingException(getLoggingFilename() + ":only padding found");
         }
+
+        if ((getFrameHeaderSize() - getFrameIdSize()) > byteBuffer.remaining())
+        {
+            logger.warning(getLoggingFilename() + ":" + "No space to find another frame:");
+            throw new InvalidFrameException(getLoggingFilename() + ":" + "No space to find another frame");
+        }
+
 
         identifier = new String(buffer);
         logger.fine(getLoggingFilename() + ":" + "Identifier is" + identifier);

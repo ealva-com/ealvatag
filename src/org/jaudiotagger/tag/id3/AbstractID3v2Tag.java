@@ -1109,7 +1109,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
      * @param channel
      * @throws IOException TODO should be abstract
      */
-    public void write(WritableByteChannel channel) throws IOException
+    public void write(WritableByteChannel channel, int currentTagSize) throws IOException
     {
     }
 
@@ -1121,7 +1121,33 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
      */
     public void write(OutputStream outputStream) throws IOException
     {
-        write(Channels.newChannel(outputStream));
+        write(Channels.newChannel(outputStream), 0);
+    }
+
+    /**
+     * Write tag to output stream
+     *
+     * @param outputStream
+     * @throws IOException
+     */
+    public void write(OutputStream outputStream, int currentTagSize) throws IOException
+    {
+        write(Channels.newChannel(outputStream), currentTagSize);
+    }
+
+
+    /** Write paddings byte to the channel
+     *
+     * @param channel
+     * @param padding
+     * @throws IOException
+     */
+    protected void writePadding(WritableByteChannel channel, int padding) throws IOException
+    {
+        if(padding>0)
+        {
+            channel.write(ByteBuffer.wrap(new byte[padding]));
+        }
     }
 
     /**
