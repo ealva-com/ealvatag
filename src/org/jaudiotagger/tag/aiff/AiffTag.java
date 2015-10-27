@@ -1,6 +1,7 @@
 package org.jaudiotagger.tag.aiff;
 
 import org.jaudiotagger.audio.iff.ChunkHeader;
+import org.jaudiotagger.logging.Hex;
 import org.jaudiotagger.tag.*;
 import org.jaudiotagger.tag.id3.AbstractID3v2Tag;
 import org.jaudiotagger.tag.id3.Id3SupportingTag;
@@ -282,11 +283,19 @@ public class AiffTag implements Tag, Id3SupportingTag
     @Override
     public String toString()
     {
+        StringBuilder sb = new StringBuilder();
         if (id3Tag != null)
         {
-            return
-                    id3Tag.toString();
-        } else
+            sb.append("Wav ID3 Tag:\n");
+            if(isExistingId3Tag())
+            {
+                sb.append("\tstartLocation:" + getStartLocationInFileOfId3Chunk() + "(" + Hex.asHex(getStartLocationInFileOfId3Chunk()) + ")\n");
+                sb.append("\tendLocation:" + getEndLocationInFileOfId3Chunk() + "(" + Hex.asHex(getEndLocationInFileOfId3Chunk()) + ")\n");
+            }
+            sb.append(id3Tag.toString()+"\n");
+            return sb.toString();
+        }
+        else
         {
             return "tag:empty";
         }
@@ -328,6 +337,15 @@ public class AiffTag implements Tag, Id3SupportingTag
             return 0;
         }
         return id3Tag.getStartLocationInFile() - ChunkHeader.CHUNK_HEADER_SIZE;
+    }
+
+    public long getEndLocationInFileOfId3Chunk()
+    {
+        if(!isExistingId3Tag())
+        {
+            return 0;
+        }
+        return id3Tag.getEndLocationInFile();
     }
 
     public boolean equals(Object obj)

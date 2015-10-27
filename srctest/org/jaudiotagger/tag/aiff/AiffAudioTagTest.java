@@ -520,7 +520,7 @@ public class AiffAudioTagTest extends TestCase {
 
 
     }
-    public void testWriteMetadataAifcWithOddChunk() {
+    public void testWriteMetadataAifcWithUnknonwExtraChunk() {
         Exception exceptionCaught = null;
 
         File orig = new File("testdata", "test136.aif");
@@ -531,12 +531,13 @@ public class AiffAudioTagTest extends TestCase {
         }
 
 
-        File testFile = AbstractTestCase.copyAudioToTmp("test136.aif", new File("test136WriteMetadataWithOddChunk.aif"));
+        File testFile = AbstractTestCase.copyAudioToTmp("test136.aif", new File("test136WriteMetadataWithUnknownExtraChunk.aif"));
         try {
             AudioFile f = AudioFileIO.read(testFile);
             AudioHeader ah = f.getAudioHeader();
             assertTrue(ah instanceof AiffAudioHeader);
             System.out.println(ah);
+            System.out.println(f.getTag());
 
             f.getTagOrCreateAndSetDefault().setField(FieldKey.ALBUM, "album");
             f.commit();
@@ -545,6 +546,7 @@ public class AiffAudioTagTest extends TestCase {
             ah = f.getAudioHeader();
             assertTrue(ah instanceof AiffAudioHeader);
             System.out.println(ah);
+            System.out.println(f.getTag());
             assertEquals("album", f.getTag().getFirst(FieldKey.ALBUM));
         }
         catch (Exception e) {
@@ -759,6 +761,42 @@ public class AiffAudioTagTest extends TestCase {
         {
             ex.printStackTrace();
             exceptionCaught = ex;
+        }
+        assertNull(exceptionCaught);
+    }
+
+    public void testWriteMetadataAifcWithUnknonwExtraChunkID3DatSizeOdd() {
+        Exception exceptionCaught = null;
+
+        File orig = new File("testdata", "test136.aif");
+        if (!orig.isFile())
+        {
+            System.err.println("Unable to test file - not available");
+            return;
+        }
+
+
+        File testFile = AbstractTestCase.copyAudioToTmp("test136.aif", new File("test136WriteMetadataWithUnknownExtraChunkID3DatSizeOdd.aif"));
+        try {
+            AudioFile f = AudioFileIO.read(testFile);
+            AudioHeader ah = f.getAudioHeader();
+            assertTrue(ah instanceof AiffAudioHeader);
+            System.out.println(ah);
+            System.out.println(f.getTag());
+
+            f.getTagOrCreateAndSetDefault().setField(FieldKey.ALBUM, "albums");
+            f.commit();
+
+            f = AudioFileIO.read(testFile);
+            ah = f.getAudioHeader();
+            assertTrue(ah instanceof AiffAudioHeader);
+            System.out.println(ah);
+            System.out.println(f.getTag());
+            assertEquals("albums", f.getTag().getFirst(FieldKey.ALBUM));
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            exceptionCaught = e;
         }
         assertNull(exceptionCaught);
     }

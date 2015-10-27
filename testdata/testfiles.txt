@@ -86,7 +86,7 @@ test132.aiff,yes,,example aiff file - alaw compression
 test133.aiff,yes,,example aiff file - ulaw compression
 test134.aiff,yes,,example aiff file - fl64 compression
 test135.aiff,yes,,example aiff file - ssnd chunk before comm chunk
-test136.aiff,yes,,example aiff file - odd data chunk
+test136.aiff,yes,,example aiff file - odd XxXx data chunk
 test137.aiff,yes,,example aiff file - trailing junk chunk
 test138.aiff,yes,,example aiff file with author, copyright and name chunks
 test139.mp3, no,481,mp3 with year but empty tdat field
