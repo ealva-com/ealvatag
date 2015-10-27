@@ -234,7 +234,7 @@ public class AiffTagWriter implements TagWriter
         try
         {
             final AiffTag     aiffTag     = (AiffTag) tag;
-            final ByteBuffer  bb          = convert(aiffTag);
+            final ByteBuffer  bb          = convert(aiffTag, existingTag);
             final long        newTagSize  = bb.limit();
 
             //Replacing ID3 tag
@@ -346,15 +346,16 @@ public class AiffTagWriter implements TagWriter
      * Converts tag to {@link ByteBuffer}.
      *
      * @param tag tag
+     * @param existingTag
      * @return byte buffer containing the tag data
      * @throws UnsupportedEncodingException
      */
-    public ByteBuffer convert(final AiffTag tag) throws UnsupportedEncodingException
+    public ByteBuffer convert(final AiffTag tag, AiffTag existingTag) throws UnsupportedEncodingException
     {
         try
         {
             final ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            tag.getID3Tag().write(baos);
+            tag.getID3Tag().write(baos, (int)existingTag.getSizeOfID3TagOnly());
             final ByteBuffer buf = ByteBuffer.wrap(baos.toByteArray());
             buf.rewind();
             return buf;

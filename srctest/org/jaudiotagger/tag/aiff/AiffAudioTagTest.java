@@ -443,8 +443,8 @@ public class AiffAudioTagTest extends TestCase {
             tag = f.getTag();
             System.out.println(f.getTag());
             assertEquals("Warmplayer", tag.getFirst(FieldKey.ARTIST));
-            assertEquals(166L,((AiffTag) tag).getSizeOfID3TagIncludingChunkHeader());
-            assertEquals(158L,((AiffTag) tag).getSizeOfID3TagOnly());
+            assertEquals(10274L,((AiffTag) tag).getSizeOfID3TagIncludingChunkHeader());
+            assertEquals(10266L,((AiffTag) tag).getSizeOfID3TagOnly());
             assertEquals(882054L,((AiffTag) tag).getStartLocationInFileOfId3Chunk());
 
             final List<String> newChunkIds = readChunkIds(testFile);
