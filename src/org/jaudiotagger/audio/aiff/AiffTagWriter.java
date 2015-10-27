@@ -305,7 +305,8 @@ public class AiffTagWriter implements TagWriter
 
     /**
      * Chunk must also start on an even byte so if our chunksize is odd we need
-     * to write another byte
+     * to write another byte. But this should never happen as ID3Tag is now amended
+     * to ensure always write padding byte if needed to stop it being odd sized.
      *
      * @param raf
      * @param size
@@ -316,16 +317,8 @@ public class AiffTagWriter implements TagWriter
     {
         if ((size & 1) != 0)
         {
-            writePaddingToFile(raf, 1);
+            raf.write(new byte[1]);
         }
-    }
-
-    private void writePaddingToFile(final RandomAccessFile raf, final int paddingSize)
-            throws IOException
-    {
-        logger.config("Write Padding bytes:"+paddingSize+" at "+ Hex.asHex(raf.getFilePointer()));
-        raf.write(new byte[paddingSize]);
-
     }
 
     /**
@@ -340,8 +333,29 @@ public class AiffTagWriter implements TagWriter
     {
         try
         {
-            final ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            tag.getID3Tag().write(baos, (int)existingTag.getSizeOfID3TagOnly());
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            long existingTagSize = existingTag.getSizeOfID3TagOnly();
+
+            //If existingTag is uneven size lets make it even
+            if( existingTagSize > 0)
+            {
+                if((existingTagSize & 1)!=0)
+                {
+                    existingTagSize++;
+                }
+            }
+
+            //Write Tag to buffer
+            tag.getID3Tag().write(baos, (int)existingTagSize);
+
+            //If the tag is now odd because we needed to increase size and the data made it odd sized
+            //we redo adding a padding byte to make it even
+            if((baos.toByteArray().length & 1)!=0)
+            {
+                int newSize = baos.toByteArray().length + 1;
+                baos = new ByteArrayOutputStream();
+                tag.getID3Tag().write(baos, newSize);
+            }
             final ByteBuffer buf = ByteBuffer.wrap(baos.toByteArray());
             buf.rewind();
             return buf;

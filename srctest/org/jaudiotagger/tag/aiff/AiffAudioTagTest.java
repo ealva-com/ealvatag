@@ -786,13 +786,27 @@ public class AiffAudioTagTest extends TestCase {
 
             f.getTagOrCreateAndSetDefault().setField(FieldKey.ALBUM, "albums");
             f.commit();
-
             f = AudioFileIO.read(testFile);
             ah = f.getAudioHeader();
             assertTrue(ah instanceof AiffAudioHeader);
             System.out.println(ah);
             System.out.println(f.getTag());
             assertEquals("albums", f.getTag().getFirst(FieldKey.ALBUM));
+            assertEquals(122, ((AiffTag)f.getTag()).getStartLocationInFileOfId3Chunk());
+            assertEquals(154, ((AiffTag)f.getTag()).getEndLocationInFileOfId3Chunk());
+
+
+            f.getTagOrCreateAndSetDefault().setField(FieldKey.ALBUM, "albuks");
+            f.commit();
+            f = AudioFileIO.read(testFile);
+            ah = f.getAudioHeader();
+            assertTrue(ah instanceof AiffAudioHeader);
+            System.out.println(ah);
+            System.out.println(f.getTag());
+            assertEquals("albuks", f.getTag().getFirst(FieldKey.ALBUM));
+            assertEquals(122, ((AiffTag)f.getTag()).getStartLocationInFileOfId3Chunk());
+            assertEquals(154, ((AiffTag)f.getTag()).getEndLocationInFileOfId3Chunk());
+
         }
         catch (Exception e) {
             e.printStackTrace();

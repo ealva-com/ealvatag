@@ -13,6 +13,7 @@ Summarise Changes
 #096:Aiff DeleteTag not taking into account padding byte when chunk is not last chunk
 #097:Wav writer needs to consider odd numbered chunk sizes better when writing
 #099:When have ID3 tag in Aiff or Wav padding should be included in ID3header
+#098:Force ID3Tag within Aiff to be written as of size not odd
 
 2.2.5
 #033:Added getAudioStartPos() and getAudioEndPos() methods to AudioHeader interface and implemented for most formats

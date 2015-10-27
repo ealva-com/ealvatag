@@ -1250,19 +1250,20 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
 
     /**
      * This method determines the total tag size taking into account
-     * where the audio file starts, the size of the tagging data and
-     * user options for defining how tags should shrink or grow.
+     * the preferredSize and the min size required for new tag. For mp3
+     * preferred size is the location of the audio, for other formats
+     * preferred size is the size of the existing tag
      *
      * @param tagSize
-     * @param audioStart
+     * @param preferredSize
      * @return
      */
-    protected int calculateTagSize(int tagSize, int audioStart)
+    protected int calculateTagSize(int tagSize, int preferredSize)
     {
         /** We can fit in the tag so no adjustments required */
-        if (tagSize <= audioStart)
+        if (tagSize <= preferredSize)
         {
-            return audioStart;
+            return preferredSize;
         }
         /** There is not enough room as we need to move the audio file we might
          *  as well increase it more than neccessary for future changes
