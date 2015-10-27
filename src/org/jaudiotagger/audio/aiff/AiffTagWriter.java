@@ -243,24 +243,10 @@ public class AiffTagWriter implements TagWriter
                 final ChunkHeader chunkHeader = seekToStartOfMetadata(raf, existingTag);
                 logger.info("Current Space allocated:" + existingTag.getSizeOfID3TagOnly() + ":NewTagRequires:" + newTagSize);
 
-                //Usual case ID3 is last chunk, need to account for when extra byte ended to ensure on even boundary
+                //Usual case ID3 is last chunk
                 if(isAtEndOfFileAllowingForPaddingByte(existingTag, raf))
                 {
-                    //We have enough existing space in chunk so just keep existing chunk size
-                    if (existingTag.getSizeOfID3TagOnly() >= newTagSize)
-                    {
-                        writeDataToFile(raf, bb, existingTag.getSizeOfID3TagOnly());
-                        //To ensure old data from previous tag are erased
-                        if (existingTag.getSizeOfID3TagOnly() > newTagSize)
-                        {
-                            writePaddingToFile(raf, (int) (existingTag.getSizeOfID3TagOnly() - newTagSize));
-                        }
-                    }
-                    //New tag is larger so set chunk size to accommodate it
-                    else
-                    {
-                        writeDataToFile(raf, bb, newTagSize);
-                    }
+                    writeDataToFile(raf, bb, newTagSize);
                 }
                 //Unusual Case where ID3 is not last chunk
                 else
@@ -318,7 +304,7 @@ public class AiffTagWriter implements TagWriter
     }
 
     /**
-     * Chunk must also start on an even byte so if our chinksize is odd we need
+     * Chunk must also start on an even byte so if our chunksize is odd we need
      * to write another byte
      *
      * @param raf
