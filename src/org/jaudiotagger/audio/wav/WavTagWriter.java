@@ -27,7 +27,6 @@ import org.jaudiotagger.audio.iff.ChunkHeader;
 import org.jaudiotagger.audio.iff.IffHeaderChunk;
 import org.jaudiotagger.audio.wav.chunk.WavInfoIdentifier;
 import org.jaudiotagger.tag.*;
-import org.jaudiotagger.tag.id3.AbstractID3Tag;
 import org.jaudiotagger.tag.id3.AbstractID3v2Tag;
 import org.jaudiotagger.tag.wav.WavInfoTag;
 import org.jaudiotagger.tag.wav.WavTag;
@@ -177,7 +176,6 @@ public class WavTagWriter implements TagWriter
                     WavInfoTag existingInfoTag = existingTag.getInfoTag();
                     ChunkHeader infoChunkHeader = seekToStartOfListInfoMetadata(raf, existingTag);
 
-                    AbstractID3v2Tag existingID3Tag = existingTag.getID3Tag();
                     ChunkHeader id3ChunkHeader = seekToStartOfId3Metadata(raf, existingTag);
 
                     //If one of these two at end of file delete first then remove the other as a chunk
@@ -401,21 +399,19 @@ public class WavTagWriter implements TagWriter
      *
      * @param raf       random access file
      * @param bb        data to write
-     * @param chunkSize chunk size
      * @throws java.io.IOException
      */
-    private void writeID3DataToFile(final RandomAccessFile raf, final ByteBuffer bb, final long chunkSize) throws IOException
+    private void writeID3DataToFile(final RandomAccessFile raf, final ByteBuffer bb) throws IOException
     {
         //Now Write LIST header
         final ByteBuffer listBuffer = ByteBuffer.allocate(ChunkHeader.CHUNK_HEADER_SIZE);
         listBuffer.order(ByteOrder.LITTLE_ENDIAN);
         listBuffer.put(WavChunkType.ID3.getCode().getBytes(StandardCharsets.US_ASCII));
-        listBuffer.putInt((int) chunkSize);
+        listBuffer.putInt((int) bb.limit());
         listBuffer.flip();
         raf.getChannel().write(listBuffer);
         //Now write actual data
         raf.getChannel().write(bb);
-        writeExtraByteIfChunkOddSize(raf, chunkSize);
     }
 
     private void writePaddingToFile(final RandomAccessFile raf, final int paddingSize) throws IOException
@@ -462,7 +458,7 @@ public class WavTagWriter implements TagWriter
             Iterator<TagTextField> ti = wif.getUnrecognisedFields().iterator();
             while(ti.hasNext())
             {
-                TagTextField next = (TagTextField)ti.next();
+                TagTextField next = ti.next();
                 baos.write(next.getId().getBytes(StandardCharsets.US_ASCII));
                 logger.config("Writing:" +next.getId() + ":" + next.getContent());
                 byte[] contentConvertedToBytes = next.getContent().getBytes(StandardCharsets.UTF_8);
@@ -508,11 +504,31 @@ public class WavTagWriter implements TagWriter
      */
     public ByteBuffer convertID3Chunk(final WavTag tag, WavTag existingTag) throws UnsupportedEncodingException
     {
-        logger.config("ChunkSizeIs:"+existingTag.getSizeOfID3TagOnly());
         try
         {
-            final ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            tag.getID3Tag().write(baos, (int)existingTag.getSizeOfID3TagOnly());
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            long existingTagSize = existingTag.getSizeOfID3TagOnly();
+
+            //If existingTag is uneven size lets make it even
+            if( existingTagSize > 0)
+            {
+                if((existingTagSize & 1)!=0)
+                {
+                    existingTagSize++;
+                }
+            }
+
+            //Write Tag to buffer
+            tag.getID3Tag().write(baos, (int)existingTagSize);
+
+            //If the tag is now odd because we needed to increase size and the data made it odd sized
+            //we redo adding a padding byte to make it even
+            if((baos.toByteArray().length & 1)!=0)
+            {
+                int newSize = baos.toByteArray().length + 1;
+                baos = new ByteArrayOutputStream();
+                tag.getID3Tag().write(baos, newSize);
+            }
             final ByteBuffer buf = ByteBuffer.wrap(baos.toByteArray());
             buf.rewind();
             return buf;
@@ -620,39 +636,6 @@ public class WavTagWriter implements TagWriter
     }
 
     /**
-     * Write Id3 chunk to current location which is last chunk of file
-     *
-     * @param raf
-     * @param existingTag
-     * @param newTagBuffer
-     * @throws CannotWriteException
-     * @throws IOException
-     */
-    private void writeId3Chunk(RandomAccessFile raf, final AbstractID3Tag existingTag, ByteBuffer newTagBuffer)
-            throws CannotWriteException, IOException
-    {
-        long newId3TagSize = newTagBuffer.limit();
-        logger.config("write id3chunk:existingSize:"+existingTag.getSize()+":newSize:"+newId3TagSize);
-        //We have enough existing space in chunk so just keep existing chunk size
-        if (existingTag.getSize() >= newId3TagSize)
-        {
-            writeID3DataToFile(raf, newTagBuffer, existingTag.getSize());
-            //To ensure old data from previous tag are erased
-            if (existingTag.getSize() > newId3TagSize)
-            {
-                writePaddingToFile(raf, (int) (existingTag.getSize() - newId3TagSize));
-            }
-        }
-        //New tag is larger so set chunk size to accommodate it
-        else
-        {
-            writeID3DataToFile(raf, newTagBuffer, newId3TagSize);
-        }
-
-
-    }
-
-    /**
      * Seek to location of existing Info chunk and replace with new one
      *
      * @param raf
@@ -703,13 +686,13 @@ public class WavTagWriter implements TagWriter
         ChunkHeader id3ChunkHeader = seekToStartOfId3Metadata(raf, existingTag);
         if (isID3TagAtEndOfFileAllowingForPaddingByte(existingTag, raf))
         {
-            writeId3Chunk(raf, existingTag.getID3Tag(), newTagBuffer);
+            writeID3DataToFile(raf, newTagBuffer);
         }
         else
         {
-            deleteInfoTagChunk(raf,existingTag, id3ChunkHeader);
+            deleteId3TagChunk(raf, existingTag, id3ChunkHeader);
             raf.seek(raf.length());
-            writeID3DataToFile(raf, newTagBuffer, newTagBuffer.limit());
+            writeID3DataToFile(raf, newTagBuffer);
         }
     }
 
@@ -729,9 +712,8 @@ public class WavTagWriter implements TagWriter
         final ByteBuffer infoTagBuffer = convertInfoChunk(wavTag);
         final long newInfoTagSize = infoTagBuffer.limit();
         final WavInfoTag existingInfoTag = existingTag.getInfoTag();
-
         final ByteBuffer id3TagBuffer = convertID3Chunk(wavTag, existingTag);
-        final AbstractID3v2Tag existingId3Tag = existingTag.getID3Tag();
+        final long newId3TagSize = id3TagBuffer.limit();
 
         //If both tags already exist in file
         if(existingTag.isExistingInfoTag() && existingTag.isExistingId3Tag())
@@ -744,21 +726,25 @@ public class WavTagWriter implements TagWriter
                 {
                     seekToStartOfListInfoMetadata(raf, existingTag);
                     writeInfoChunk(raf, existingInfoTag, infoTagBuffer );
-                    writeId3Chunk(raf, existingId3Tag, id3TagBuffer );
+                    writeID3DataToFile(raf, id3TagBuffer);
                 }
                 else
                 {
                     seekToStartOfId3Metadata(raf, existingTag);
-                    writeId3Chunk(raf, existingId3Tag, id3TagBuffer );
+                    writeID3DataToFile(raf, id3TagBuffer);
                     writeInfoChunk(raf, existingInfoTag, infoTagBuffer);
                 }
             }
             //Both chunks are together but there is another chunk after them
             else
             {
+                ChunkHeader infoChunkHeader = seekToStartOfListInfoMetadata(raf, existingTag);
+                ChunkHeader id3ChunkHeader = seekToStartOfId3Metadata(raf, existingTag);
+                deleteInfoTagChunk(raf, existingTag, infoChunkHeader);
+                deleteId3TagChunk(raf, existingTag, id3ChunkHeader);
                 raf.seek(raf.length());
                 writeInfoDataToFile(raf, infoTagBuffer, newInfoTagSize);
-                writeId3Chunk(raf, existingId3Tag, id3TagBuffer );
+                writeID3DataToFile(raf, id3TagBuffer);
             }
         }
         //If only INFO chunk exists
@@ -768,14 +754,14 @@ public class WavTagWriter implements TagWriter
             if(isInfoTagAtEndOfFileAllowingForPaddingByte(existingTag, raf))
             {
                 writeInfoChunk(raf, existingInfoTag, infoTagBuffer );
-                writeId3Chunk(raf, existingId3Tag, id3TagBuffer );
+                writeID3DataToFile(raf, id3TagBuffer);
             }
             else
             {
                 deleteInfoTagChunk(raf, existingTag, infoChunkHeader);
                 raf.seek(raf.length());
                 writeInfoDataToFile(raf, infoTagBuffer, newInfoTagSize);
-                writeId3Chunk(raf, existingId3Tag, id3TagBuffer );
+                writeID3DataToFile(raf, id3TagBuffer);
             }
         }
         //If only ID3 chunk exists
@@ -784,14 +770,14 @@ public class WavTagWriter implements TagWriter
             ChunkHeader id3ChunkHeader = seekToStartOfId3Metadata(raf, existingTag);
             if (isID3TagAtEndOfFileAllowingForPaddingByte(existingTag, raf))
             {
-                writeId3Chunk(raf, existingId3Tag, id3TagBuffer );
+                writeID3DataToFile(raf, id3TagBuffer);
                 writeInfoChunk(raf, existingInfoTag, infoTagBuffer );
             }
             else
             {
                 deleteId3TagChunk(raf, existingTag, id3ChunkHeader);
                 raf.seek(raf.length());
-                writeId3Chunk(raf, existingId3Tag, id3TagBuffer );
+                writeID3DataToFile(raf, id3TagBuffer);
                 writeInfoDataToFile(raf, infoTagBuffer, newInfoTagSize);
             }
         }
@@ -801,7 +787,7 @@ public class WavTagWriter implements TagWriter
             //Go to end of file
             raf.seek(raf.length());
             writeInfoDataToFile(raf, infoTagBuffer, newInfoTagSize);
-            writeId3Chunk(raf, existingId3Tag, id3TagBuffer );
+            writeID3DataToFile(raf, id3TagBuffer);
         }
     }
 
@@ -848,7 +834,6 @@ public class WavTagWriter implements TagWriter
         {
             final ByteBuffer id3TagBuffer = convertID3Chunk(wavTag, existingTag);
             final long newId3TagSize = id3TagBuffer.limit();
-
             if(existingTag.isExistingInfoTag())
             {
                 ChunkHeader infoChunkHeader = seekToStartOfListInfoMetadata(raf, existingTag);
@@ -869,7 +854,7 @@ public class WavTagWriter implements TagWriter
             else
             {
                 raf.seek(raf.length());
-                writeID3DataToFile(raf, id3TagBuffer, newId3TagSize);
+                writeID3DataToFile(raf, id3TagBuffer);
             }
         }
     }
@@ -910,4 +895,3 @@ public class WavTagWriter implements TagWriter
         }
     }
 }
-

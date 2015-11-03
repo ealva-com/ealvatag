@@ -820,9 +820,9 @@ public class WavMetadataTest extends AbstractTestCase
             assertEquals(926264L, ((WavTag) tag).getInfoTag().getStartLocationInFile().longValue());
             assertEquals(926560L, ((WavTag) tag).getInfoTag().getEndLocationInFile().longValue());
             assertEquals(288L, ((WavTag) tag).getInfoTag().getSizeOfTag());
-            assertEquals(25L, ((WavTag) tag).getSizeOfID3TagOnly());
+            assertEquals(26L, ((WavTag) tag).getSizeOfID3TagOnly());
             assertEquals(926560L, ((WavTag) tag).getStartLocationInFileOfId3Chunk());
-            assertEquals(33L, ((WavTag) tag).getSizeOfID3TagIncludingChunkHeader());
+            assertEquals(34L, ((WavTag) tag).getSizeOfID3TagIncludingChunkHeader());
         }
         catch (Exception e)
         {
@@ -884,9 +884,9 @@ public class WavMetadataTest extends AbstractTestCase
             assertNull(((WavTag) tag).getInfoTag().getStartLocationInFile());
             assertNull( ((WavTag) tag).getInfoTag().getEndLocationInFile());
             assertEquals(0L, ((WavTag) tag).getInfoTag().getSizeOfTag());
-            assertEquals(25L, ((WavTag) tag).getSizeOfID3TagOnly());
+            assertEquals(26L, ((WavTag) tag).getSizeOfID3TagOnly());
             assertEquals(926264L, ((WavTag) tag).getStartLocationInFileOfId3Chunk());
-            assertEquals(33L, ((WavTag) tag).getSizeOfID3TagIncludingChunkHeader());
+            assertEquals(34L, ((WavTag) tag).getSizeOfID3TagIncludingChunkHeader());
         }
         catch (Exception e)
         {
@@ -949,9 +949,9 @@ public class WavMetadataTest extends AbstractTestCase
             assertNull(((WavTag) tag).getInfoTag().getStartLocationInFile());
             assertNull( ((WavTag) tag).getInfoTag().getEndLocationInFile());
             assertEquals(0L, ((WavTag) tag).getInfoTag().getSizeOfTag());
-            assertEquals(25L, ((WavTag) tag).getSizeOfID3TagOnly());
+            assertEquals(26L, ((WavTag) tag).getSizeOfID3TagOnly());
             assertEquals(926264L, ((WavTag) tag).getStartLocationInFileOfId3Chunk());
-            assertEquals(33L, ((WavTag) tag).getSizeOfID3TagIncludingChunkHeader());
+            assertEquals(34L, ((WavTag) tag).getSizeOfID3TagIncludingChunkHeader());
         }
         catch (Exception e)
         {
@@ -1047,8 +1047,8 @@ public class WavMetadataTest extends AbstractTestCase
             System.out.println(f.getTag());
 
             assertEquals(926264L, ((WavTag) tag).getStartLocationInFileOfId3Chunk());
-            assertEquals(235L, ((WavTag) tag).getSizeOfID3TagOnly());
-            assertEquals(243L, ((WavTag) tag).getSizeOfID3TagIncludingChunkHeader());
+            assertEquals(236L, ((WavTag) tag).getSizeOfID3TagOnly());
+            assertEquals(244L, ((WavTag) tag).getSizeOfID3TagIncludingChunkHeader());
             assertEquals(926508L, ((WavTag) tag).getInfoTag().getStartLocationInFile().longValue());
             assertEquals(926684L, ((WavTag) tag).getInfoTag().getEndLocationInFile().longValue());
             assertEquals(168L, ((WavTag) tag).getInfoTag().getSizeOfTag());
@@ -1062,8 +1062,8 @@ public class WavMetadataTest extends AbstractTestCase
             System.out.println(f.getAudioHeader());
             System.out.println(f.getTag());
             assertEquals(926264L, ((WavTag) tag).getStartLocationInFileOfId3Chunk());
-            assertEquals(235L, ((WavTag) tag).getSizeOfID3TagOnly());
-            assertEquals(243L, ((WavTag) tag).getSizeOfID3TagIncludingChunkHeader());
+            assertEquals(236L, ((WavTag) tag).getSizeOfID3TagOnly());
+            assertEquals(244L, ((WavTag) tag).getSizeOfID3TagIncludingChunkHeader());
             assertEquals(926508L, ((WavTag) tag).getInfoTag().getStartLocationInFile().longValue());
             assertEquals(926684L, ((WavTag) tag).getInfoTag().getEndLocationInFile().longValue());
             assertEquals(168L, ((WavTag) tag).getInfoTag().getSizeOfTag());
