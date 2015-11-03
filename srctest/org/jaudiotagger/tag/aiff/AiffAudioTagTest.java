@@ -694,10 +694,12 @@ public class AiffAudioTagTest extends TestCase {
             f.getTag().deleteField(FieldKey.ACOUSTID_FINGERPRINT);
             f.commit();
             AudioFileIO.delete(f);
-            f.commit();
             f = AudioFileIO.read(testFile);
             System.out.println(f.getTag());
-            //assertEquals(0,((Id3SupportingTag)f.getTag()).getID3Tag().getStartLocationInFile().longValue());
+            assertEquals(0,((AiffTag)f.getTag()).getStartLocationInFileOfId3Chunk());
+            assertEquals(0,((AiffTag)f.getTag()).getSizeOfID3TagIncludingChunkHeader());
+            assertEquals(0,((AiffTag)f.getTag()).getSizeOfID3TagOnly());
+
 
         }
         catch (Exception e) {

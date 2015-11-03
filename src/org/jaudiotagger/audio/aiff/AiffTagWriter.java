@@ -118,7 +118,7 @@ public class AiffTagWriter implements TagWriter
      */
     public void delete(final Tag tag, final RandomAccessFile raf, final RandomAccessFile tempRaf) throws IOException, CannotWriteException
     {
-        logger.config("Deleting tag from file");
+        logger.severe("Deleting tag from file");
         final AiffTag existingTag = getExistingMetadata(raf);
 
         if (existingTag.isExistingId3Tag() && existingTag.getID3Tag().getStartLocationInFile() != null)
@@ -126,16 +126,18 @@ public class AiffTagWriter implements TagWriter
             ChunkHeader chunkHeader = seekToStartOfMetadata(raf, existingTag);
             if(isAtEndOfFileAllowingForPaddingByte(existingTag, raf))
             {
-                logger.config("Setting new length to:" + (existingTag.getStartLocationInFileOfId3Chunk()));
+                logger.severe("Setting new length to:" + (existingTag.getStartLocationInFileOfId3Chunk()));
                 raf.setLength(existingTag.getStartLocationInFileOfId3Chunk());
             }
             else
             {
-                logger.config("Deleting tag chunk");
+                logger.severe("Deleting tag chunk");
                 deleteTagChunk(raf, existingTag, chunkHeader);
             }
             rewriteRiffHeaderSize(raf);
         }
+        logger.severe("Deleted tag from file");
+
     }
 
     /**

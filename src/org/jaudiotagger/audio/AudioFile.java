@@ -18,6 +18,7 @@
  */
 package org.jaudiotagger.audio;
 
+import org.jaudiotagger.audio.exceptions.CannotReadException;
 import org.jaudiotagger.audio.exceptions.CannotWriteException;
 import org.jaudiotagger.audio.exceptions.ReadOnlyFileException;
 import org.jaudiotagger.audio.flac.metadatablock.MetadataBlockDataPicture;
@@ -121,6 +122,17 @@ public class AudioFile
     public void commit() throws CannotWriteException
     {
         AudioFileIO.write(this);
+    }
+
+    /**
+     * <p>Delete any tags that exist in the fie , this is the same as calling the <code>AudioFileIO.delete(this)</code> method.
+     *
+     * @throws CannotWriteException If the file could not be written/accessed, the extension wasn't recognized, or other IO error occured.
+     * @see AudioFileIO
+     */
+    public void delete() throws CannotReadException, CannotWriteException
+    {
+        AudioFileIO.delete(this);
     }
 
     /**
