@@ -308,8 +308,9 @@ public class AiffTagWriter implements TagWriter
 
     /**
      * Chunk must also start on an even byte so if our chunksize is odd we need
-     * to write another byte. But this should never happen as ID3Tag is now amended
-     * to ensure always write padding byte if needed to stop it being odd sized.
+     * to write another byte. This should never happen as ID3Tag is now amended
+     * to ensure always write padding byte if needed to stop it being odd sized
+     * but we keep check in just incase.
      *
      * @param raf
      * @param size
