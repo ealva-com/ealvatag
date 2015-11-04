@@ -15,6 +15,7 @@ Summarise Changes
 #099:When have ID3 tag in Aiff or Wav padding should be included in ID3header
 #098:Force ID3Tag within Aiff to be written as of size not odd
 #101:Force Wav ID3 Tag to be even sized
+#103:Aiff dont rewrite header unless size has changed
 
 2.2.5
 #033:Added getAudioStartPos() and getAudioEndPos() methods to AudioHeader interface and implemented for most formats

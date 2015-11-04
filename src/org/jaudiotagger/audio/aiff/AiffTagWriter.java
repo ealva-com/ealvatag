@@ -232,6 +232,8 @@ public class AiffTagWriter implements TagWriter
     public void write(final AudioFile af, final Tag tag, final RandomAccessFile raf, final RandomAccessFile rafTemp) throws CannotWriteException, IOException
     {
         logger.severe("Writing Aiff tag to file");
+
+        long existingFileLength = raf.length();
         final AiffTag existingTag = getExistingMetadata(raf);
         try
         {
@@ -266,7 +268,11 @@ public class AiffTagWriter implements TagWriter
                 raf.seek(raf.length());
                 writeDataToFile(raf, bb, newTagSize);
             }
-            rewriteRiffHeaderSize(raf);
+
+            if(existingFileLength != raf.length())
+            {
+                rewriteRiffHeaderSize(raf);
+            }
         }
         finally
         {
