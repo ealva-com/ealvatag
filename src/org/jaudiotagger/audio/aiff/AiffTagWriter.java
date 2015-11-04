@@ -27,7 +27,6 @@ import org.jaudiotagger.audio.generic.Utils;
 import org.jaudiotagger.audio.iff.Chunk;
 import org.jaudiotagger.audio.iff.ChunkHeader;
 import org.jaudiotagger.audio.iff.IffHeaderChunk;
-import org.jaudiotagger.logging.Hex;
 import org.jaudiotagger.tag.Tag;
 import org.jaudiotagger.tag.TagOptionSingleton;
 import org.jaudiotagger.tag.aiff.AiffTag;
@@ -232,41 +231,37 @@ public class AiffTagWriter implements TagWriter
     public void write(final AudioFile af, final Tag tag, final RandomAccessFile raf, final RandomAccessFile rafTemp) throws CannotWriteException, IOException
     {
         logger.severe("Writing Aiff tag to file");
-
         long existingFileLength = raf.length();
         final AiffTag existingTag = getExistingMetadata(raf);
         try
         {
             final AiffTag     aiffTag     = (AiffTag) tag;
             final ByteBuffer  bb          = convert(aiffTag, existingTag);
-            final long        newTagSize  = bb.limit();
 
             //Replacing ID3 tag
             if (existingTag.isExistingId3Tag() && existingTag.getID3Tag().getStartLocationInFile() != null)
             {
                 final ChunkHeader chunkHeader = seekToStartOfMetadata(raf, existingTag);
-                logger.info("Current Space allocated:" + existingTag.getSizeOfID3TagOnly() + ":NewTagRequires:" + newTagSize);
+                logger.info("Current Space allocated:" + existingTag.getSizeOfID3TagOnly() + ":NewTagRequires:" + bb.limit());
 
                 //Usual case ID3 is last chunk
                 if(isAtEndOfFileAllowingForPaddingByte(existingTag, raf))
                 {
-                    writeDataToFile(raf, bb, newTagSize);
+                    writeDataToFile(raf, bb);
                 }
                 //Unusual Case where ID3 is not last chunk
                 else
                 {
                     deleteTagChunk(raf, existingTag, chunkHeader);
-                    //Go to end of file
                     raf.seek(raf.length());
-                    writeDataToFile(raf, bb, newTagSize);
+                    writeDataToFile(raf, bb);
                 }
             }
             //New Tag
             else
             {
-                //Go to end of file
                 raf.seek(raf.length());
-                writeDataToFile(raf, bb, newTagSize);
+                writeDataToFile(raf, bb);
             }
 
             if(existingFileLength != raf.length())
@@ -297,18 +292,18 @@ public class AiffTagWriter implements TagWriter
      *
      * @param raf random access file
      * @param bb data to write
-     * @param chunkSize chunk size
      * @throws IOException
      */
-    private void writeDataToFile(final RandomAccessFile raf,  final ByteBuffer bb, final long chunkSize)
+    private void writeDataToFile(final RandomAccessFile raf, final ByteBuffer bb)
             throws IOException
     {
         final ChunkHeader ch = new ChunkHeader(ByteOrder.BIG_ENDIAN);
         ch.setID(ChunkType.TAG.getCode());
-        ch.setSize(chunkSize);
-        raf.getChannel().write(ch.writeHeader());
-        raf.getChannel().write(bb);
-        writeExtraByteIfChunkOddSize(raf, chunkSize );
+        ch.setSize(bb.limit());
+        FileChannel fc = raf.getChannel();
+        fc.write(ch.writeHeader());
+        fc.write(bb);
+        writeExtraByteIfChunkOddSize(raf, bb.limit() );
     }
 
     /**
