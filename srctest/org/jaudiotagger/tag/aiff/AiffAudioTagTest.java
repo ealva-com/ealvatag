@@ -817,4 +817,44 @@ public class AiffAudioTagTest extends TestCase {
         assertNull(exceptionCaught);
     }
 
+    public void testWriteAiff4() {
+
+        TagOptionSingleton.getInstance().setWavOptions(WavOptions.READ_ID3_ONLY_AND_SYNC);
+        TagOptionSingleton.getInstance().setWavSaveOptions(WavSaveOptions.SAVE_BOTH_AND_SYNC);
+
+        Exception exceptionCaught = null;
+
+        File orig = new File("testdata", "test145.aiff");
+        if (!orig.isFile())
+        {
+            System.err.println("Unable to test file - not available");
+            return;
+        }
+
+
+        File testFile = AbstractTestCase.copyAudioToTmp("test145.aiff", new File("test145CorruptedID3.aiff"));
+        try
+        {
+            AudioFile f = AudioFileIO.read(testFile);
+            AudioHeader ah = f.getAudioHeader();
+            assertTrue(ah instanceof AiffAudioHeader);
+            Tag tag = f.getTag();
+            System.out.println(tag);
+            f.getTag().setField(FieldKey.ARTIST,"fred");
+            f.commit();
+            f = AudioFileIO.read(testFile);
+            tag = f.getTag();
+            System.out.println(tag);
+            assertEquals("fred",tag.getFirst(FieldKey.ARTIST));
+
+        }
+        catch(Exception ex)
+        {
+            ex.printStackTrace();
+            exceptionCaught = ex;
+        }
+        assertNull(exceptionCaught);
+    }
+
+
 }
