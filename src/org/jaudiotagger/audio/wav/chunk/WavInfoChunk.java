@@ -1,6 +1,7 @@
 package org.jaudiotagger.audio.wav.chunk;
 
 import org.jaudiotagger.audio.generic.Utils;
+import org.jaudiotagger.audio.iff.IffHeaderChunk;
 import org.jaudiotagger.tag.FieldDataInvalidException;
 import org.jaudiotagger.tag.wav.WavInfoTag;
 import org.jaudiotagger.tag.wav.WavTag;
@@ -31,7 +32,7 @@ public class WavInfoChunk
      */
     public  boolean readChunks(ByteBuffer chunkData)
     {
-        while(chunkData.hasRemaining())
+        while(chunkData.remaining()>= IffHeaderChunk.TYPE_LENGTH)
         {
             String id       = Utils.readFourBytesAsChars(chunkData);
             //Padding
