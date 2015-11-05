@@ -6,6 +6,7 @@ import org.jaudiotagger.audio.exceptions.CannotReadException;
 import org.jaudiotagger.audio.iff.Chunk;
 import org.jaudiotagger.audio.iff.ChunkHeader;
 import org.jaudiotagger.audio.iff.IffHeaderChunk;
+import org.jaudiotagger.logging.Hex;
 import org.jaudiotagger.tag.aiff.AiffTag;
 import org.jaudiotagger.tag.id3.ID3v22Tag;
 
@@ -70,7 +71,8 @@ public class AiffTagReader extends AiffChunkReader
         {
             return false;
         }
-        logger.config("Reading Chunk:" + chunkHeader.getID() + ":starting at:" + chunkHeader.getStartLocationInFile() + ":sizeIncHeader:" + (chunkHeader.getSize() + ChunkHeader.CHUNK_HEADER_SIZE));
+        logger.config("Reading Chunk:" + chunkHeader.getID() + ":starting at:" + chunkHeader.getStartLocationInFile() +"("
+                + Hex.asHex(chunkHeader.getStartLocationInFile()) +")" + ":sizeIncHeader:" + (chunkHeader.getSize() + ChunkHeader.CHUNK_HEADER_SIZE));
 
         long startLocationOfId3TagInFile = raf.getFilePointer();
         ChunkType chunkType = ChunkType.get(chunkHeader.getID());
