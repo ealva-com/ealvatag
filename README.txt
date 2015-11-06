@@ -28,14 +28,23 @@ License:
  
  
 Build details:
-
-Install Maven2
 Run
   mvn install
-to compile, test and install
+to compile, test, build javadocs and install into your local repository
 
-To use in your own project starting with jaudiotagger 2.2.3 as final versions are released they are now available from
-a maven repository on maven.
+Run
+  mvn site
+to generate a website for jaudiotagger including code coverage reports, they will be found in
+  target/site/index.html
+
+Your Test Coverage can be seen at
+  target/site/cobertura/index.html
+
+Periodically we upload latest Code Coverage to:
+   http://www.jthink.net/jaudiotagger/maven/cobertura/index.html
+
+To use in your own project starting with jaudiotagger 2.2.3 as final versions are released they are now available in a
+maven repository on bintray
 
 i.e update yor pom as follows to use 2.2.3
 
