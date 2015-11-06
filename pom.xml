@@ -138,6 +138,17 @@
             <artifactId>coveralls-maven-plugin</artifactId>
             <version>4.0.0</version>
          </plugin>
+         <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>cobertura-maven-plugin</artifactId>
+            <version>2.7</version>
+            <configuration>
+               <formats>
+                  <format>html</format>
+                  <format>xml</format>
+               </formats>
+            </configuration>
+         </plugin>
       </plugins>
       <sourceDirectory>src</sourceDirectory>
       <testSourceDirectory>srctest</testSourceDirectory>
