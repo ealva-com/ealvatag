@@ -1082,6 +1082,13 @@ public class WavMetadataTest extends AbstractTestCase
     /** This file has three bytes of padding data at end of file */
     public void testReadFileWithPaddingAtEndOfListInfoMetadata()
     {
+        File orig = new File("testdata", "test146.wav");
+        if (!orig.isFile())
+        {
+            System.err.println("Unable to test file - not available");
+            return;
+        }
+
         TagOptionSingleton.getInstance().setWavOptions(WavOptions.READ_INFO_ONLY);
         TagOptionSingleton.getInstance().setWavSaveOptions(WavSaveOptions.SAVE_EXISTING_AND_ACTIVE);
         Exception exceptionCaught = null;
