@@ -12,7 +12,7 @@ specific APIs are available, currently supports reading and writing metadata for
 - Mp4
 - Aiff
 - Wav
-- Wma.
+- Wma
 
 ## Requirements
 
@@ -30,7 +30,7 @@ making a donation—donations can be made at
 
 Build is with [Maven](http://maven.apache.org).
 
-- `pom.xml`: Maven build file
+- `pom.xml` : Maven build file
 
 Directory structure as follows:
 
@@ -58,24 +58,24 @@ Run
 
     mvn install
 
-to compile, test, build javadocs and install into your local repository
+to compile, test, build javadocs and install into your local repository.
 
 Run
 
     mvn site
 
-to generate a website for Jaudiotagger including code coverage reports,
-they will be found in `target/site/index.html`
+to generate a website for *Jaudiotagger* including code coverage reports,
+they will be found in `target/site/index.html`.
 
-Your Test Coverage can be seen at `target/site/cobertura/index.html`
+Your test coverage can be seen at `target/site/cobertura/index.html`.
 
 Periodically we upload latest Code Coverage to:
 http://www.jthink.net/jaudiotagger/maven/cobertura/index.html
 
 To use in your own project starting with Jaudiotagger 2.2.3 as final versions are
-released they are now available in a maven repository on bintray
+released they are now available in a maven repository on bintray.
 
-i.e update your pom as follows to use 2.2.3
+I.e update your `pom.xml` as follows to use release 2.2.3:
 
     <repositories>
         <repository>
