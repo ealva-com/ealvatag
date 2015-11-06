@@ -72,7 +72,7 @@ Your test coverage can be seen at `target/site/cobertura/index.html`.
 Periodically we upload latest Code Coverage to:
 http://www.jthink.net/jaudiotagger/maven/cobertura/index.html
 
-Jaudiotagger uses http://drone.io for continous integration, the latest artififacts can be downloaded form
+Jaudiotagger uses http://drone.io for continuous integration, the latest artifacts can be downloaded from
 
 https://drone.io/bitbucket.org/ijabz/jaudiotagger/files
 
