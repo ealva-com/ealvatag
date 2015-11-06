@@ -1078,4 +1078,37 @@ public class WavMetadataTest extends AbstractTestCase
         }
         assertNull(exceptionCaught);
     }
+
+    /** This file has three bytes of padding data at end of file */
+    public void testReadFileWithPaddingAtEndOfListInfoMetadata()
+    {
+        TagOptionSingleton.getInstance().setWavOptions(WavOptions.READ_INFO_ONLY);
+        TagOptionSingleton.getInstance().setWavSaveOptions(WavSaveOptions.SAVE_EXISTING_AND_ACTIVE);
+        Exception exceptionCaught = null;
+        try
+        {
+            File testFile = AbstractTestCase.copyAudioToTmp("test146.wav");
+            AudioFile f = AudioFileIO.read(testFile);
+            System.out.println(f.getAudioHeader());
+            System.out.println(f.getTag());
+            assertEquals("Bo Junior", f.getTag().getFirst(FieldKey.ARTIST));
+            assertEquals("Coffee Pot, Part 2", f.getTag().getFirst(FieldKey.TITLE));
+            assertEquals("Hipshaker", f.getTag().getFirst(FieldKey.ALBUM));
+            f.getTag().setField(FieldKey.ALBUM,"Hippy");
+            f.commit();
+            f = AudioFileIO.read(testFile);
+            System.out.println(f.getAudioHeader());
+            System.out.println(f.getTag());
+            assertEquals("Bo Junior", f.getTag().getFirst(FieldKey.ARTIST));
+            assertEquals("Coffee Pot, Part 2", f.getTag().getFirst(FieldKey.TITLE));
+            assertEquals("Hippy", f.getTag().getFirst(FieldKey.ALBUM));
+
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            exceptionCaught = e;
+        }
+        assertNull(exceptionCaught);
+    }
 }

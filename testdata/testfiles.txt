@@ -95,5 +95,7 @@ test141.m4a, no,433,with a udta atom with unknown subatoms and meta atom
 test142.wav, no,81,wav with info near start of file
 test143.aif, no,93, aif with corrupt ID3chunks
 test144.aif, no,94, aif with odd sized id3chunk (but no padding byte)
+test145.aif, no,,aif with corrupt ID3 tag
+test146.wav, no,, wav with just 3 bytes of padding at end of info tag so not enough to read id
 
 
