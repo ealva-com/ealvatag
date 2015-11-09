@@ -102,7 +102,7 @@ public class Issue411Test extends AbstractTestCase
                 return;
             }
 
-            File testFile = AbstractTestCase.copyAudioToTmp("01.mp3");
+            File testFile = AbstractTestCase.copyAudioToTmp("01.mp3", new File("testissue3.mp3"));
             AudioFile af = AudioFileIO.read(testFile);
             af.getTagOrCreateAndSetDefault().setField(FieldKey.GENRE, "rock");
             af.commit();
