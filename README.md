@@ -17,7 +17,7 @@ specific APIs are available, currently supports reading and writing metadata for
 ## Requirements
 
 *Jaudiotagger* requires Java 1.8 for a full build and install, but the code is Java 1.7 compatible
-(You can run mvn package with sucessfully with Java 1.7)
+(You can run mvn package with successfully with Java 1.7)
 
 ## Contributing
 
