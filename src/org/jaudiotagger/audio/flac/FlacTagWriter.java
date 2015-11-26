@@ -255,7 +255,7 @@ public class FlacTagWriter
             }
 
             //Write tag data use default padding
-            rafTemp.write(tc.convert(tag, FlacTagCreator.DEFAULT_PADDING).array());
+            rafTemp.getChannel().write(tc.convert(tag, FlacTagCreator.DEFAULT_PADDING));
             //Write audio to new file
             raf.seek(dataStartSize + availableRoom);
 

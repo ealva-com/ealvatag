@@ -3,6 +3,7 @@ package org.jaudiotagger.issues;
 import org.jaudiotagger.AbstractTestCase;
 import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.AudioFileIO;
+
 import java.io.File;
 
 /**
@@ -79,7 +80,7 @@ public class Issue437Test extends AbstractTestCase
         Throwable e = null;
         try
         {
-            File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3");
+            File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3", new File("testGetBitsPerSampleMp3.mp3"));
             AudioFile af = AudioFileIO.read(testFile);
             assertEquals(16,af.getAudioHeader().getBitsPerSample());
         }

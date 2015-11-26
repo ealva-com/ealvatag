@@ -34,7 +34,7 @@ public class Issue374Test extends AbstractTestCase
                     return;
                 }
 
-                File testFile = AbstractTestCase.copyAudioToTmp(next.getName());
+                File testFile = AbstractTestCase.copyAudioToTmp(next.getName(), new File(next.getName().substring(0, next.getName().length() -4)+count+".mp3"));
 
 
                 AudioFile af = AudioFileIO.read(testFile);

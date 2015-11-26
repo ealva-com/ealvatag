@@ -18,6 +18,8 @@
  */
 package org.jaudiotagger.audio.wav;
 
+import org.jaudiotagger.audio.AudioFile;
+import org.jaudiotagger.audio.aiff.AiffTagWriter;
 import org.jaudiotagger.audio.exceptions.CannotWriteException;
 import org.jaudiotagger.audio.generic.AudioFileWriter;
 import org.jaudiotagger.tag.Tag;
@@ -27,13 +29,17 @@ import java.io.RandomAccessFile;
 
 public class WavFileWriter extends AudioFileWriter
 {
-    protected void writeTag(Tag tag, RandomAccessFile raf, RandomAccessFile rafTemp) throws CannotWriteException, IOException
+    private WavTagWriter tw = new WavTagWriter();
+
+    @Override
+    protected void writeTag(AudioFile audioFile, Tag tag, RandomAccessFile raf, RandomAccessFile rafTemp) throws CannotWriteException, IOException
     {
-        //Nothing to do for wav file, no tag are supported
+        tw.write(audioFile, tag, raf, rafTemp);
     }
 
-    protected void deleteTag(RandomAccessFile raf, RandomAccessFile tempRaf) throws CannotWriteException, IOException
+    @Override
+    protected void deleteTag(Tag tag, RandomAccessFile raf, RandomAccessFile tempRaf) throws CannotWriteException, IOException
     {
-        //Nothing to do for wav file, no tag are supported
+        tw.delete(tag, raf, tempRaf);
     }
 }

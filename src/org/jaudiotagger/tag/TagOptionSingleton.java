@@ -24,6 +24,8 @@
  */
 package org.jaudiotagger.tag;
 
+import org.jaudiotagger.audio.wav.WavOptions;
+import org.jaudiotagger.audio.wav.WavSaveOptions;
 import org.jaudiotagger.tag.id3.framebody.AbstractID3v2FrameBody;
 import org.jaudiotagger.tag.id3.framebody.FrameBodyCOMM;
 import org.jaudiotagger.tag.id3.framebody.FrameBodyTIPL;
@@ -35,12 +37,36 @@ import org.jaudiotagger.tag.reference.GenreTypes;
 import org.jaudiotagger.tag.reference.ID3V2Version;
 import org.jaudiotagger.tag.reference.Languages;
 
+import java.nio.ByteBuffer;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 
 public class TagOptionSingleton
 {
+    private WavOptions wavOptions = WavOptions.READ_ID3_ONLY;
+
+    public void setWavOptions(WavOptions wavOptions)
+    {
+        this.wavOptions = wavOptions;
+    }
+
+    public WavOptions getWavOptions()
+    {
+        return wavOptions;
+    }
+
+    private WavSaveOptions wavSaveOptions = WavSaveOptions.SAVE_BOTH;
+
+    public void setWavSaveOptions(WavSaveOptions wavSaveOptions)
+    {
+        this.wavSaveOptions = wavSaveOptions;
+    }
+
+    public WavSaveOptions getWavSaveOptions()
+    {
+        return wavSaveOptions;
+    }
     /**
      *
      */
@@ -275,9 +301,9 @@ public class TagOptionSingleton
     private int playerCompatability=-1;
 
     /**
-     * max size of data to copy when copying audiodata from one file to another
+     * max size of data to copy when copying audiodata from one file to , default to 4mb
      */
-    private long writeChunkSize=5000000;
+    private long writeChunkSize= (4 * 1024 * 1024);
 
     private boolean isWriteMp4GenresAsText=false;
 
@@ -788,6 +814,8 @@ public class TagOptionSingleton
      */
     public void setToDefault()
     {
+        wavOptions = WavOptions.READ_ID3_UNLESS_ONLY_INFO;
+        wavSaveOptions = WavSaveOptions.SAVE_BOTH;
         keywordMap = new HashMap<Class<? extends ID3v24FrameBody>, LinkedList<String>>();
         filenameTagSave = false;
         id3v1Save = true;

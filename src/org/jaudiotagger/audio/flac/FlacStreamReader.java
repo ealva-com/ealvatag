@@ -2,14 +2,10 @@ package org.jaudiotagger.audio.flac;
 
 import org.jaudiotagger.audio.exceptions.CannotReadException;
 import org.jaudiotagger.logging.ErrorMessage;
-import org.jaudiotagger.tag.flac.FlacTag;
 import org.jaudiotagger.tag.id3.AbstractID3v2Tag;
-import org.jaudiotagger.tag.id3.ID3v22Tag;
-import org.jaudiotagger.tag.id3.ID3v23Tag;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
-import java.nio.ByteBuffer;
 import java.util.logging.Logger;
 
 /**
@@ -94,7 +90,7 @@ public class FlacStreamReader
     }
 
     /**
-     * Usually flac header is at start of file, but unofficially and ID3 tag is allowed at the start of the file.
+     * Usually flac header is at start of file, but unofficially an ID3 tag is allowed at the start of the file.
      *
      * @return the start of the Flac within file
      */

@@ -24,9 +24,10 @@ import org.jaudiotagger.audio.mp3.MP3File;
 import org.jaudiotagger.logging.ErrorMessage;
 import org.jaudiotagger.logging.FileSystemMessage;
 import org.jaudiotagger.tag.*;
-import org.jaudiotagger.tag.datatype.*;
+import org.jaudiotagger.tag.datatype.DataTypes;
+import org.jaudiotagger.tag.datatype.Pair;
+import org.jaudiotagger.tag.datatype.PairedTextEncodedStringNullTerminated;
 import org.jaudiotagger.tag.id3.framebody.*;
-import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
 import org.jaudiotagger.tag.images.Artwork;
 import org.jaudiotagger.tag.reference.Languages;
 import org.jaudiotagger.tag.reference.PictureTypes;
@@ -37,6 +38,8 @@ import java.nio.channels.Channels;
 import java.nio.channels.FileChannel;
 import java.nio.channels.FileLock;
 import java.nio.channels.WritableByteChannel;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.logging.Level;
 
@@ -49,22 +52,29 @@ import java.util.logging.Level;
  */
 public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
 {
+    //Start location of this chunk
+    //TODO currently only used by ID3 embedded into Wav/Aiff but shoudl be extended to mp3s
+    private Long startLocationInFile = null;
+
+    //End location of this chunk
+    private Long endLocationInFile = null;
+
     protected static final String TYPE_HEADER = "header";
     protected static final String TYPE_BODY = "body";
 
     //Tag ID as held in file
-    protected static final byte[] TAG_ID = {'I', 'D', '3'};
+    public static final byte[] TAG_ID = {'I', 'D', '3'};
 
     //The tag header is the same for ID3v2 versions
     public static final int TAG_HEADER_LENGTH = 10;
-    protected static final int FIELD_TAGID_LENGTH = 3;
-    protected static final int FIELD_TAG_MAJOR_VERSION_LENGTH = 1;
-    protected static final int FIELD_TAG_MINOR_VERSION_LENGTH = 1;
-    protected static final int FIELD_TAG_FLAG_LENGTH = 1;
-    protected static final int FIELD_TAG_SIZE_LENGTH = 4;
+    public static final int FIELD_TAGID_LENGTH = 3;
+    public static final int FIELD_TAG_MAJOR_VERSION_LENGTH = 1;
+    public static final int FIELD_TAG_MINOR_VERSION_LENGTH = 1;
+    public static final int FIELD_TAG_FLAG_LENGTH = 1;
+    public static final int FIELD_TAG_SIZE_LENGTH = 4;
 
     protected static final int FIELD_TAGID_POS = 0;
-    protected static final int FIELD_TAG_MAJOR_VERSION_POS = 3;
+    public static final int FIELD_TAG_MAJOR_VERSION_POS = 3;
     protected static final int FIELD_TAG_MINOR_VERSION_POS = 4;
     protected static final int FIELD_TAG_FLAG_POS = 5;
     protected static final int FIELD_TAG_SIZE_POS = 6;
@@ -152,7 +162,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
         }
         //So we have a tag
         byte[] tagHeader = new byte[FIELD_TAG_SIZE_LENGTH];
-        raf.seek(raf.getFilePointer() + 6);
+        raf.seek(raf.getFilePointer() + FIELD_TAGID_LENGTH + FIELD_TAG_MAJOR_VERSION_LENGTH + FIELD_TAG_MINOR_VERSION_LENGTH + FIELD_TAG_FLAG_LENGTH);
         raf.read(tagHeader);
         ByteBuffer bb = ByteBuffer.wrap(tagHeader);
 
@@ -1099,7 +1109,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
      * @param channel
      * @throws IOException TODO should be abstract
      */
-    public void write(WritableByteChannel channel) throws IOException
+    public void write(WritableByteChannel channel, int currentTagSize) throws IOException
     {
     }
 
@@ -1111,7 +1121,33 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
      */
     public void write(OutputStream outputStream) throws IOException
     {
-        write(Channels.newChannel(outputStream));
+        write(Channels.newChannel(outputStream), 0);
+    }
+
+    /**
+     * Write tag to output stream
+     *
+     * @param outputStream
+     * @throws IOException
+     */
+    public void write(OutputStream outputStream, int currentTagSize) throws IOException
+    {
+        write(Channels.newChannel(outputStream), currentTagSize);
+    }
+
+
+    /** Write paddings byte to the channel
+     *
+     * @param channel
+     * @param padding
+     * @throws IOException
+     */
+    protected void writePadding(WritableByteChannel channel, int padding) throws IOException
+    {
+        if(padding>0)
+        {
+            channel.write(ByteBuffer.wrap(new byte[padding]));
+        }
     }
 
     /**
@@ -1214,19 +1250,20 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
 
     /**
      * This method determines the total tag size taking into account
-     * where the audio file starts, the size of the tagging data and
-     * user options for defining how tags should shrink or grow.
+     * the preferredSize and the min size required for new tag. For mp3
+     * preferred size is the location of the audio, for other formats
+     * preferred size is the size of the existing tag
      *
      * @param tagSize
-     * @param audioStart
+     * @param preferredSize
      * @return
      */
-    protected int calculateTagSize(int tagSize, int audioStart)
+    protected int calculateTagSize(int tagSize, int preferredSize)
     {
         /** We can fit in the tag so no adjustments required */
-        if (tagSize <= audioStart)
+        if (tagSize <= preferredSize)
         {
-            return audioStart;
+            return preferredSize;
         }
         /** There is not enough room as we need to move the audio file we might
          *  as well increase it more than neccessary for future changes
@@ -1538,7 +1575,6 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
     * Copy frame into map, whilst accounting for multiple frame of same type which can occur even if there were
     * not frames of the same type in the original tag
     */
-
     protected void copyFrameIntoMap(String id, AbstractID3v2Frame newFrame)
     {
 
@@ -1552,10 +1588,18 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
                 list.add(newFrame);
                 frameMap.put(newFrame.getIdentifier(), list);
             }
-            else
+            else if(o instanceof AggregatedFrame)
+            {
+                logger.severe("Duplicated Aggregate Frame, ignoring:"+id);
+            }
+            else if (o instanceof List)
             {
                 List<AbstractID3v2Frame> list = (List) o;
                 list.add(newFrame);
+            }
+            else
+            {
+                logger.severe("Unknown frame class:discarding:" + o.getClass());
             }
         }
         else
@@ -1663,7 +1707,15 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
                 frame = (AbstractID3v2Frame) o;
                 size += frame.getSize();
             }
-            else
+            else if (o instanceof AggregatedFrame)
+            {
+                AggregatedFrame af = (AggregatedFrame)o;
+                for(AbstractID3v2Frame next :af.frames)
+                {
+                    size += next.getSize();
+                }
+            }
+            else if (o instanceof List)
             {
                 ArrayList<AbstractID3v2Frame> multiFrames = (ArrayList<AbstractID3v2Frame>) o;
                 for (ListIterator<AbstractID3v2Frame> li = multiFrames.listIterator(); li.hasNext(); )
@@ -2099,7 +2151,8 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
 
     //TODO is this a special field?
 
-    public boolean setEncoding(String enc) throws FieldDataInvalidException
+    @Override
+    public boolean setEncoding(final Charset enc) throws FieldDataInvalidException
     {
         throw new UnsupportedOperationException("Not Implemented Yet");
     }
@@ -2481,7 +2534,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
         if (frame.getBody() instanceof FrameBodyAPIC)
         {
             FrameBodyAPIC body = (FrameBodyAPIC) frame.getBody();
-            body.setObjectValue(DataTypes.OBJ_PICTURE_DATA, Utils.getDefaultBytes(url, TextEncoding.CHARSET_ISO_8859_1));
+            body.setObjectValue(DataTypes.OBJ_PICTURE_DATA, url.getBytes(StandardCharsets.ISO_8859_1));
             body.setObjectValue(DataTypes.OBJ_PICTURE_TYPE, PictureTypes.DEFAULT_ID);
             body.setObjectValue(DataTypes.OBJ_MIME_TYPE, FrameBodyAPIC.IMAGE_IS_URL);
             body.setObjectValue(DataTypes.OBJ_DESCRIPTION, "");
@@ -2489,7 +2542,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
         else if (frame.getBody() instanceof FrameBodyPIC)
         {
             FrameBodyPIC body = (FrameBodyPIC) frame.getBody();
-            body.setObjectValue(DataTypes.OBJ_PICTURE_DATA, Utils.getDefaultBytes(url, TextEncoding.CHARSET_ISO_8859_1));
+            body.setObjectValue(DataTypes.OBJ_PICTURE_DATA, url.getBytes(StandardCharsets.ISO_8859_1));
             body.setObjectValue(DataTypes.OBJ_PICTURE_TYPE, PictureTypes.DEFAULT_ID);
             body.setObjectValue(DataTypes.OBJ_IMAGE_FORMAT, FrameBodyAPIC.IMAGE_IS_URL);
             body.setObjectValue(DataTypes.OBJ_DESCRIPTION, "");
@@ -2958,4 +3011,25 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
             return createField(FieldKey.IS_COMPILATION,"0");
         }
     }
+
+    public Long getStartLocationInFile()
+    {
+        return startLocationInFile;
+    }
+
+    public void setStartLocationInFile(long startLocationInFile)
+    {
+        this.startLocationInFile = startLocationInFile;
+    }
+
+    public Long getEndLocationInFile()
+    {
+        return endLocationInFile;
+    }
+
+    public void setEndLocationInFile(long endLocationInFile)
+    {
+        this.endLocationInFile = endLocationInFile;
+    }
+
 }

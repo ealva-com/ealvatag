@@ -11,9 +11,7 @@ import org.jaudiotagger.tag.id3.ID3v22Tag;
 import org.jaudiotagger.tag.id3.ID3v23Tag;
 import org.jaudiotagger.tag.id3.ID3v24Frame;
 import org.jaudiotagger.tag.id3.ID3v24Tag;
-import org.jaudiotagger.tag.id3.framebody.FrameBodyCOMM;
 import org.jaudiotagger.tag.id3.framebody.FrameBodyPOPM;
-import org.jaudiotagger.tag.reference.Languages;
 
 import java.io.File;
 import java.util.List;
@@ -32,7 +30,7 @@ public class Issue345Test extends AbstractTestCase
         Exception exceptionCaught = null;
         try
         {
-            testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3");
+            testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3",new File("testWriteFieldsToMp3ID3v24.mp3"));
 
             //Read File okay
             AudioFile af = AudioFileIO.read(testFile);
@@ -131,7 +129,7 @@ public class Issue345Test extends AbstractTestCase
         Exception exceptionCaught = null;
         try
         {
-            testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3");
+            testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3",new File("testWriteFieldsToMp3ID3v23.mp3"));
 
             AudioFile af = AudioFileIO.read(testFile);
             af.setTag(new ID3v23Tag());
@@ -216,7 +214,7 @@ public class Issue345Test extends AbstractTestCase
         Exception exceptionCaught = null;
         try
         {
-            testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3");
+            testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3",new File("testWriteFieldsToMp3ID3v22.mp3"));
 
             //Read File okay
             AudioFile af = AudioFileIO.read(testFile);

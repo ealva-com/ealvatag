@@ -30,8 +30,8 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Read Flac Tag
@@ -116,7 +116,6 @@ public class FlacTagReader
                 }
             }
             isLastBlock = mbh.isLastBlock();
-            mbh = null;
         }
 
         //Note there may not be either a tag or any images, no problem this is valid however to make it easier we

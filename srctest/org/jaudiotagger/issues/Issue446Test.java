@@ -2,7 +2,6 @@ package org.jaudiotagger.issues;
 
 import org.jaudiotagger.AbstractTestCase;
 import org.jaudiotagger.audio.mp3.MP3File;
-import org.jaudiotagger.tag.FieldKey;
 import org.jaudiotagger.tag.id3.AbstractID3v2Frame;
 import org.jaudiotagger.tag.id3.ID3v23Frame;
 import org.jaudiotagger.tag.id3.ID3v23Tag;

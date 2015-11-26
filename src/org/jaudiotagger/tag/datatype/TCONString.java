@@ -1,10 +1,7 @@
 package org.jaudiotagger.tag.datatype;
 
 
-import org.jaudiotagger.tag.InvalidDataTypeException;
-import org.jaudiotagger.tag.TagOptionSingleton;
 import org.jaudiotagger.tag.id3.AbstractTagFrameBody;
-import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
 
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
@@ -12,8 +9,6 @@ import java.nio.charset.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * Overrides in order to properly support the ID3v23 implemenation of TCON
@@ -123,7 +118,7 @@ public class TCONString extends TextEncodedStringSizeTerminated
     private ByteBuffer writeStringUTF16LEBOM( String next, int i, int noOfValues)
             throws CharacterCodingException
     {
-        CharsetEncoder encoder = Charset.forName(TextEncoding.CHARSET_UTF_16_LE_ENCODING_FORMAT).newEncoder();
+        CharsetEncoder encoder = Charset.forName(StandardCharsets.UTF_16LE.name()).newEncoder();
         encoder.onMalformedInput(CodingErrorAction.IGNORE);
         encoder.onUnmappableCharacter(CodingErrorAction.IGNORE);
 
@@ -162,7 +157,7 @@ public class TCONString extends TextEncodedStringSizeTerminated
     private ByteBuffer writeStringUTF16BEBOM( String next, int i, int noOfValues)
             throws CharacterCodingException
     {
-        CharsetEncoder encoder = Charset.forName(TextEncoding.CHARSET_UTF_16_BE_ENCODING_FORMAT).newEncoder();
+        CharsetEncoder encoder = Charset.forName(StandardCharsets.UTF_16BE.name()).newEncoder();
         encoder.onMalformedInput(CodingErrorAction.IGNORE);
         encoder.onUnmappableCharacter(CodingErrorAction.IGNORE);
 

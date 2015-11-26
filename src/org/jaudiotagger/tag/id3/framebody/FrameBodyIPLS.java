@@ -25,7 +25,6 @@ import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
 
 import java.io.ByteArrayOutputStream;
 import java.nio.ByteBuffer;
-import java.util.Map;
 import java.util.StringTokenizer;
 
 /**

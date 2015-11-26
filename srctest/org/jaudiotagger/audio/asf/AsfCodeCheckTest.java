@@ -2,9 +2,9 @@ package org.jaudiotagger.audio.asf;
 
 import junit.framework.TestCase;
 import org.jaudiotagger.audio.asf.data.AsfHeader;
+import org.jaudiotagger.tag.FieldKey;
 import org.jaudiotagger.tag.asf.AsfFieldKey;
 import org.jaudiotagger.tag.asf.AsfTag;
-import org.jaudiotagger.tag.FieldKey;
 
 /**
  * This test covers some mistakes that could be made by changing the implementation.<br>

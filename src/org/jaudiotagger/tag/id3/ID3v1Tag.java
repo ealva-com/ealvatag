@@ -23,18 +23,18 @@
  */
 package org.jaudiotagger.tag.id3;
 
-import org.jaudiotagger.audio.generic.Utils;
 import org.jaudiotagger.audio.mp3.MP3File;
 import org.jaudiotagger.logging.ErrorMessage;
 import org.jaudiotagger.tag.*;
 import org.jaudiotagger.tag.images.Artwork;
 import org.jaudiotagger.tag.reference.GenreTypes;
-import org.jaudiotagger.tag.vorbiscomment.VorbisCommentFieldKey;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.regex.Matcher;
 
@@ -680,11 +680,8 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag
         }
     }
 
-    /**
-     * @param encoding
-     * @return
-     */
-    public boolean setEncoding(String encoding)
+    @Override
+    public boolean setEncoding(final Charset encoding)
     {
         return true;
     }
@@ -706,9 +703,9 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag
         return new ID3v1TagField(idv1FieldKey .name(), value);
     }
 
-    public String getEncoding()
+    public Charset getEncoding()
     {
-        return "ISO-8859-1";
+        return StandardCharsets.ISO_8859_1;
     }
 
     public TagField getFirstField(FieldKey genericKey)
@@ -925,19 +922,19 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag
         byte[] dataBuffer = new byte[TAG_LENGTH];
         byteBuffer.position(0);
         byteBuffer.get(dataBuffer, 0, TAG_LENGTH);
-        title = Utils.getString(dataBuffer, FIELD_TITLE_POS, FIELD_TITLE_LENGTH, "ISO-8859-1").trim();
+        title = new String(dataBuffer, FIELD_TITLE_POS, FIELD_TITLE_LENGTH, StandardCharsets.ISO_8859_1).trim();
         Matcher m = AbstractID3v1Tag.endofStringPattern.matcher(title);
         if (m.find())
         {
             title = title.substring(0, m.start());
         }
-        artist = Utils.getString(dataBuffer, FIELD_ARTIST_POS, FIELD_ARTIST_LENGTH, "ISO-8859-1").trim();
+        artist = new String(dataBuffer, FIELD_ARTIST_POS, FIELD_ARTIST_LENGTH, StandardCharsets.ISO_8859_1).trim();
         m = AbstractID3v1Tag.endofStringPattern.matcher(artist);
         if (m.find())
         {
             artist = artist.substring(0, m.start());
         }
-        album = Utils.getString(dataBuffer, FIELD_ALBUM_POS, FIELD_ALBUM_LENGTH, "ISO-8859-1").trim();
+        album = new String(dataBuffer, FIELD_ALBUM_POS, FIELD_ALBUM_LENGTH, StandardCharsets.ISO_8859_1).trim();
         m = AbstractID3v1Tag.endofStringPattern.matcher(album);
         logger.finest(getLoggingFilename() + ":" + "Orig Album is:" + comment + ":");
         if (m.find())
@@ -945,13 +942,13 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag
             album = album.substring(0, m.start());
             logger.finest(getLoggingFilename() + ":" + "Album is:" + album + ":");
         }
-        year = Utils.getString(dataBuffer, FIELD_YEAR_POS, FIELD_YEAR_LENGTH, "ISO-8859-1").trim();
+        year = new String(dataBuffer, FIELD_YEAR_POS, FIELD_YEAR_LENGTH, StandardCharsets.ISO_8859_1).trim();
         m = AbstractID3v1Tag.endofStringPattern.matcher(year);
         if (m.find())
         {
             year = year.substring(0, m.start());
         }
-        comment = Utils.getString(dataBuffer, FIELD_COMMENT_POS, FIELD_COMMENT_LENGTH, "ISO-8859-1").trim();
+        comment = new String(dataBuffer, FIELD_COMMENT_POS, FIELD_COMMENT_LENGTH, StandardCharsets.ISO_8859_1).trim();
         m = AbstractID3v1Tag.endofStringPattern.matcher(comment);
         logger.finest(getLoggingFilename() + ":" + "Orig Comment is:" + comment + ":");
         if (m.find())

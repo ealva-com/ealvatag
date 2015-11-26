@@ -12,10 +12,6 @@ import org.jaudiotagger.tag.TagOptionSingleton;
 import org.jaudiotagger.tag.id3.valuepair.ImageFormats;
 import org.jaudiotagger.tag.reference.PictureTypes;
 
-import javax.imageio.ImageIO;
-import javax.imageio.stream.ImageInputStream;
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.RandomAccessFile;
 import java.util.List;
@@ -369,9 +365,9 @@ public class FlacWriteTest extends TestCase
     }
 
      /**
-     * test read flac file with just streaminfo header
+     * test read flac file with just streaminfo and padding header
      */
-    public void testWriteFileThatOnlyHadStreamInfoHeader()
+    public void testWriteFileThatOnlyHadStreamAndPaddingInfoHeader()
     {
         Exception exceptionCaught = null;
         try
@@ -385,8 +381,7 @@ public class FlacWriteTest extends TestCase
             File testFile = AbstractTestCase.copyAudioToTmp("test102.flac", new File("test102.flac"));
             AudioFile f = AudioFileIO.read(testFile);
             FlacInfoReader infoReader = new FlacInfoReader();
-            assertEquals(1, infoReader.countMetaBlocks(f.getFile()));
-
+            assertEquals(2, infoReader.countMetaBlocks(f.getFile()));
             f.getTag().setField(FieldKey.ARTIST,"fred");
             f.commit();
 

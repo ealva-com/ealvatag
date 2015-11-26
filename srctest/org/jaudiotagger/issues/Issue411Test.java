@@ -5,9 +5,7 @@ import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.AudioFileIO;
 import org.jaudiotagger.tag.FieldKey;
 import org.jaudiotagger.tag.Tag;
-import org.jaudiotagger.tag.TagTextField;
 import org.jaudiotagger.tag.id3.ID3v23Tag;
-import org.jaudiotagger.tag.reference.Languages;
 
 import java.io.File;
 
@@ -104,7 +102,7 @@ public class Issue411Test extends AbstractTestCase
                 return;
             }
 
-            File testFile = AbstractTestCase.copyAudioToTmp("01.mp3");
+            File testFile = AbstractTestCase.copyAudioToTmp("01.mp3", new File("testissue3.mp3"));
             AudioFile af = AudioFileIO.read(testFile);
             af.getTagOrCreateAndSetDefault().setField(FieldKey.GENRE, "rock");
             af.commit();

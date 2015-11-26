@@ -27,6 +27,7 @@ import org.jaudiotagger.logging.ErrorMessage;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.util.logging.Logger;
 
 /**
@@ -109,6 +110,7 @@ public class Mp4InfoReader
             throw new CannotReadException(ErrorMessage.MP4_FILE_NOT_AUDIO.getMsg());
         }
         ByteBuffer moovBuffer = ByteBuffer.allocate(moovHeader.getLength() - Mp4BoxHeader.HEADER_LENGTH);
+        moovBuffer.order(ByteOrder.LITTLE_ENDIAN);
         raf.getChannel().read(moovBuffer);
         moovBuffer.rewind();
 
@@ -121,7 +123,7 @@ public class Mp4InfoReader
         }
         ByteBuffer mvhdBuffer = moovBuffer.slice();
         Mp4MvhdBox mvhd = new Mp4MvhdBox(boxHeader, mvhdBuffer);
-        info.setLength(mvhd.getLength());
+        info.setPreciseLength(mvhd.getLength());
         //Advance position, TODO should we put this in box code ?
         mvhdBuffer.position(mvhdBuffer.position() + boxHeader.getDataLength());
 
@@ -195,8 +197,11 @@ public class Mp4InfoReader
             throw new CannotReadException(ErrorMessage.MP4_FILE_NOT_AUDIO.getMsg());
         }
 
+
+
         //Level 6-Searching for "stsd within "stbl" and process it direct data, dont think these are mandatory so dont throw
         //exception if unable to find
+        int positionBeforeStsdSearch = mvhdBuffer.position();
         boxHeader = Mp4BoxHeader.seekWithinLevel(mvhdBuffer, Mp4AtomIdentifier.STSD.getFieldName());
         if (boxHeader != null)
         {
@@ -218,7 +223,7 @@ public class Mp4InfoReader
                     Mp4EsdsBox esds = new Mp4EsdsBox(boxHeader, mp4aBuffer.slice());
 
                     //Set Bitrate in kbps
-                    info.setBitrate(esds.getAvgBitrate() / 1000);
+                    info.setBitRate(esds.getAvgBitrate() / 1000);
 
                     //Set Number of Channels
                     info.setChannelNumber(esds.getNumberOfChannels());
@@ -246,7 +251,7 @@ public class Mp4InfoReader
                         Mp4EsdsBox esds = new Mp4EsdsBox(boxHeader, mvhdBuffer.slice());
 
                         //Set Bitrate in kbps
-                        info.setBitrate(esds.getAvgBitrate() / 1000);
+                        info.setBitRate(esds.getAvgBitrate() / 1000);
 
                         //Set Number of Channels
                         info.setChannelNumber(esds.getNumberOfChannels());
@@ -276,13 +281,25 @@ public class Mp4InfoReader
                             alac.processData();
                             info.setEncodingType(EncoderType.APPLE_LOSSLESS.getDescription());
                             info.setChannelNumber(alac.getChannels());
-                            info.setBitrate(alac.getBitRate()/1000);
+                            info.setBitRate(alac.getBitRate() / 1000);
                             info.setBitsPerSample(alac.getSampleSize());
                         }
                     }
                 }
             }
         }
+
+        //Level 6-Searching for "stco within "stbl" to get size of audio data
+        mvhdBuffer.position(positionBeforeStsdSearch);
+        boxHeader = Mp4BoxHeader.seekWithinLevel(mvhdBuffer, Mp4AtomIdentifier.STCO.getFieldName());
+        if (boxHeader != null)
+        {
+            Mp4StcoBox stco = new Mp4StcoBox(boxHeader, mvhdBuffer);
+            info.setAudioDataStartPosition((long)stco.getFirstOffSet());
+            info.setAudioDataEndPosition((long)raf.length());
+            info.setAudioDataLength(raf.length() - stco.getFirstOffSet());
+        }
+
         //Set default channels if couldn't calculate it
         if (info.getChannelNumber() == -1)
         {
@@ -292,7 +309,7 @@ public class Mp4InfoReader
         //Set default bitrate if couldnt calculate it
         if (info.getBitRateAsNumber() == -1)
         {
-            info.setBitrate(128);
+            info.setBitRate(128);
         }
         
         //Set default bits per sample if couldn't calculate it
@@ -331,7 +348,6 @@ public class Mp4InfoReader
 
         //Build AtomTree to ensure it is valid, this means we can detect any problems early on
         new Mp4AtomTree(raf,false);
-
         return info;
     }
 

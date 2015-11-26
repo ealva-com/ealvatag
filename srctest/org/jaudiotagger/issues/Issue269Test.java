@@ -9,7 +9,6 @@ import org.jaudiotagger.tag.id3.ID3v23Frame;
 import org.jaudiotagger.tag.id3.ID3v23Frames;
 import org.jaudiotagger.tag.id3.ID3v23Tag;
 import org.jaudiotagger.tag.id3.framebody.FrameBodyTCOP;
-import org.jaudiotagger.tag.id3.framebody.FrameBodyTENC;
 
 import java.io.File;
 

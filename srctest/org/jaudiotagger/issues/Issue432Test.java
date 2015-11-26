@@ -3,7 +3,6 @@ package org.jaudiotagger.issues;
 import org.jaudiotagger.AbstractTestCase;
 import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.AudioFileIO;
-import org.jaudiotagger.audio.generic.GenericAudioHeader;
 
 import java.io.File;
 
@@ -81,7 +80,7 @@ public class Issue432Test extends AbstractTestCase
         Throwable e = null;
         try
         {
-            File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3");
+            File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3", new File("testGetBitsPerSampleMp3-2.mp3"));
             AudioFile af = AudioFileIO.read(testFile);
             assertFalse(af.getAudioHeader().isLossless());
         }

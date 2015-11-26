@@ -3,14 +3,9 @@ package org.jaudiotagger.issues;
 import org.jaudiotagger.AbstractTestCase;
 import org.jaudiotagger.tag.FieldKey;
 import org.jaudiotagger.tag.Tag;
-import org.jaudiotagger.tag.asf.AsfFieldKey;
-import org.jaudiotagger.tag.asf.AsfTag;
-import org.jaudiotagger.tag.flac.FlacTag;
-import org.jaudiotagger.tag.id3.*;
-import org.jaudiotagger.tag.mp4.Mp4FieldKey;
-import org.jaudiotagger.tag.mp4.Mp4Tag;
-import org.jaudiotagger.tag.vorbiscomment.VorbisCommentFieldKey;
-import org.jaudiotagger.tag.vorbiscomment.VorbisCommentTag;
+import org.jaudiotagger.tag.id3.AbstractTag;
+import org.jaudiotagger.tag.id3.ID3v1Tag;
+import org.jaudiotagger.tag.id3.ID3v24Tag;
 
 
 public class Issue394Test extends AbstractTestCase

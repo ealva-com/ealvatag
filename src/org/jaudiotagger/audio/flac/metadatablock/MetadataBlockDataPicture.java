@@ -4,7 +4,6 @@ import org.jaudiotagger.audio.generic.Utils;
 import org.jaudiotagger.tag.FieldKey;
 import org.jaudiotagger.tag.InvalidFrameException;
 import org.jaudiotagger.tag.TagField;
-import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
 import org.jaudiotagger.tag.reference.PictureTypes;
 
 import java.io.ByteArrayOutputStream;
@@ -12,6 +11,7 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
+import java.nio.charset.StandardCharsets;
 import java.util.logging.Logger;
 
 
@@ -67,11 +67,11 @@ public class MetadataBlockDataPicture implements MetadataBlockData, TagField
 
         //MimeType
         int mimeTypeSize = rawdata.getInt();
-        mimeType = getString(rawdata, mimeTypeSize, "ISO-8859-1");
+        mimeType = getString(rawdata, mimeTypeSize, StandardCharsets.ISO_8859_1.name());
 
         //Description
         int descriptionSize = rawdata.getInt();
-        description = getString(rawdata, descriptionSize, "UTF-8");
+        description = getString(rawdata, descriptionSize, StandardCharsets.UTF_8.name());
 
         //Image width
         width = rawdata.getInt();
@@ -178,9 +178,9 @@ public class MetadataBlockDataPicture implements MetadataBlockData, TagField
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             baos.write(Utils.getSizeBEInt32(pictureType));
             baos.write(Utils.getSizeBEInt32(mimeType.length()));
-            baos.write(mimeType.getBytes("ISO-8859-1"));
+            baos.write(mimeType.getBytes(StandardCharsets.ISO_8859_1));
             baos.write(Utils.getSizeBEInt32(description.length()));
-            baos.write(description.getBytes("UTF-8"));
+            baos.write(description.getBytes(StandardCharsets.UTF_8));
             baos.write(Utils.getSizeBEInt32(width));
             baos.write(Utils.getSizeBEInt32(height));
             baos.write(Utils.getSizeBEInt32(colourDepth));
@@ -256,7 +256,7 @@ public class MetadataBlockDataPicture implements MetadataBlockData, TagField
     {
         if (isImageUrl())
         {
-            return Utils.getString(getImageData(), 0, getImageData().length, TextEncoding.CHARSET_ISO_8859_1);
+            return new String(getImageData(), 0, getImageData().length, StandardCharsets.ISO_8859_1);
         }
         else
         {

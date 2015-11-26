@@ -88,8 +88,7 @@ public class PartOfSet extends AbstractString
         logger.finest("Reading from array from offset:" + offset);
 
         //Get the Specified Decoder
-        String charSetName = getTextEncodingCharSet();
-        CharsetDecoder decoder = Charset.forName(charSetName).newDecoder();
+        CharsetDecoder decoder = getTextEncodingCharSet().newDecoder();
 
         //Decode sliced inBuffer
         ByteBuffer inBuffer = ByteBuffer.wrap(arr, offset, arr.length - offset).slice();
@@ -138,30 +137,27 @@ public class PartOfSet extends AbstractString
                 }
             }
 
-            String charSetName = getTextEncodingCharSet();
-            if (charSetName.equals(TextEncoding.CHARSET_UTF_16))
+            final Charset charset = getTextEncodingCharSet();
+            final String valueWithBOM;
+            final CharsetEncoder encoder;
+            if (StandardCharsets.UTF_16.equals(charset))
             {
-                charSetName = TextEncoding.CHARSET_UTF_16_LE_ENCODING_FORMAT;
-                CharsetEncoder encoder = Charset.forName(charSetName).newEncoder();
-                encoder.onMalformedInput(CodingErrorAction.IGNORE);
-                encoder.onUnmappableCharacter(CodingErrorAction.IGNORE);
-
+                encoder = StandardCharsets.UTF_16LE.newEncoder();
                 //Note remember LE BOM is ff fe but this is handled by encoder Unicode char is fe ff
-                ByteBuffer bb = encoder.encode(CharBuffer.wrap('\ufeff' + value));
-                data = new byte[bb.limit()];
-                bb.get(data, 0, bb.limit());
-
+                valueWithBOM = '\ufeff' + value;
             }
             else
             {
-                CharsetEncoder encoder = Charset.forName(charSetName).newEncoder();
-                ByteBuffer bb = encoder.encode(CharBuffer.wrap(value));
-                encoder.onMalformedInput(CodingErrorAction.IGNORE);
-                encoder.onUnmappableCharacter(CodingErrorAction.IGNORE);
-
-                data = new byte[bb.limit()];
-                bb.get(data, 0, bb.limit());
+                encoder = charset.newEncoder();
+                valueWithBOM = value;
             }
+            encoder.onMalformedInput(CodingErrorAction.IGNORE);
+            encoder.onUnmappableCharacter(CodingErrorAction.IGNORE);
+
+            final ByteBuffer bb = encoder.encode(CharBuffer.wrap(valueWithBOM));
+            data = new byte[bb.limit()];
+            bb.get(data, 0, bb.limit());
+
         }
         //Should never happen so if does throw a RuntimeException
         catch (CharacterCodingException ce)
@@ -180,12 +176,12 @@ public class PartOfSet extends AbstractString
      *
      * @return the text encoding charset
      */
-    protected String getTextEncodingCharSet()
+    protected Charset getTextEncodingCharSet()
     {
-        byte textEncoding = this.getBody().getTextEncoding();
-        String charSetName = TextEncoding.getInstanceOf().getValueForId(textEncoding);
-        logger.finest("text encoding:" + textEncoding + " charset:" + charSetName);
-        return charSetName;
+        final byte textEncoding = this.getBody().getTextEncoding();
+        final Charset charset = TextEncoding.getInstanceOf().getCharsetForId(textEncoding);
+        logger.finest("text encoding:" + textEncoding + " charset:" + charset.name());
+        return charset;
     }
 
     /**

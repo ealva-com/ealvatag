@@ -7,14 +7,10 @@ import org.jaudiotagger.tag.FieldKey;
 import org.jaudiotagger.tag.Tag;
 import org.jaudiotagger.tag.TagField;
 import org.jaudiotagger.tag.id3.ID3v22Tag;
-import org.jaudiotagger.tag.id3.ID3v24FieldKey;
 import org.jaudiotagger.tag.id3.ID3v24Frame;
 import org.jaudiotagger.tag.id3.ID3v24Tag;
 import org.jaudiotagger.tag.id3.framebody.FrameBodyCOMM;
-import org.jaudiotagger.tag.id3.framebody.FrameBodyTKEY;
-import org.jaudiotagger.tag.id3.framebody.FrameBodyTLAN;
 import org.jaudiotagger.tag.reference.Languages;
-import org.jaudiotagger.tag.reference.MusicalKey;
 
 import java.io.File;
 

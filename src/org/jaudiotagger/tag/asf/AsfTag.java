@@ -6,11 +6,10 @@ import org.jaudiotagger.logging.ErrorMessage;
 import org.jaudiotagger.tag.*;
 import org.jaudiotagger.tag.images.Artwork;
 import org.jaudiotagger.tag.images.ArtworkFactory;
-import org.jaudiotagger.tag.mp4.Mp4FieldKey;
 import org.jaudiotagger.tag.reference.PictureTypes;
-import org.jaudiotagger.tag.vorbiscomment.VorbisCommentFieldKey;
 
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.Charset;
 import java.util.*;
 
 /**
@@ -611,9 +610,10 @@ public final class AsfTag extends AbstractTag
 
     /**
      * {@inheritDoc}
+     * @param enc
      */
     @Override
-    protected boolean isAllowedEncoding(final String enc)
+    protected boolean isAllowedEncoding(final Charset enc)
     {
         return AsfHeader.ASF_CHARSET.name().equals(enc);
     }

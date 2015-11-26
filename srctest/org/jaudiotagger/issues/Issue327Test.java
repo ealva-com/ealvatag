@@ -4,11 +4,7 @@ import org.jaudiotagger.AbstractTestCase;
 import org.jaudiotagger.audio.AudioFileIO;
 import org.jaudiotagger.audio.mp3.MP3File;
 import org.jaudiotagger.tag.FieldKey;
-import org.jaudiotagger.tag.TagField;
-import org.jaudiotagger.tag.id3.AbstractID3v2Frame;
-import org.jaudiotagger.tag.id3.ID3v11Tag;
 import org.jaudiotagger.tag.id3.ID3v23Tag;
-import org.jaudiotagger.tag.id3.ID3v24Tag;
 
 import java.io.File;
 import java.io.RandomAccessFile;
@@ -23,7 +19,7 @@ public class Issue327Test extends AbstractTestCase
 {
     public void testUTF16BOMMultipleFieldSeperators() throws Exception
     {
-        File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3");
+        File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3",new File("testUTF16BOMMultipleFieldSeperators.mp3"));
         MP3File f = (MP3File)AudioFileIO.read(testFile);
         f.setID3v2Tag(new ID3v23Tag());
         f.getID3v2Tag().addField(FieldKey.MOOD,"For Checking End");

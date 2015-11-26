@@ -18,29 +18,31 @@
  */
 package org.jaudiotagger.audio;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.RandomAccessFile;
-import java.util.logging.Logger;
-import java.util.ArrayList;
-
-import org.jaudiotagger.audio.aiff.AiffTag;
+import org.jaudiotagger.audio.exceptions.CannotReadException;
 import org.jaudiotagger.audio.exceptions.CannotWriteException;
 import org.jaudiotagger.audio.exceptions.ReadOnlyFileException;
 import org.jaudiotagger.audio.flac.metadatablock.MetadataBlockDataPicture;
-import org.jaudiotagger.logging.ErrorMessage;
-import org.jaudiotagger.tag.asf.AsfTag;
-import org.jaudiotagger.audio.wav.WavTag;
 import org.jaudiotagger.audio.real.RealTag;
+import org.jaudiotagger.tag.TagOptionSingleton;
+import org.jaudiotagger.tag.wav.WavTag;
+import org.jaudiotagger.logging.ErrorMessage;
 import org.jaudiotagger.tag.Tag;
+import org.jaudiotagger.tag.aiff.AiffTag;
+import org.jaudiotagger.tag.asf.AsfTag;
+import org.jaudiotagger.tag.flac.FlacTag;
 import org.jaudiotagger.tag.mp4.Mp4Tag;
 import org.jaudiotagger.tag.vorbiscomment.VorbisCommentTag;
-import org.jaudiotagger.tag.flac.FlacTag;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.RandomAccessFile;
+import java.util.ArrayList;
+import java.util.logging.Logger;
 
 /**
  * <p>This is the main object manipulated by the user representing an audiofile, its properties and its tag.
- * <p>The prefered way to obtain an <code>AudioFile</code> is to use the <code>AudioFileIO.read(File)</code> method.
- * <p>The <code>AudioFile</code> contains every properties associated with the file itself (no meta-data), like the bitrate, the sampling rate, the encoding audioHeaders, etc.
+ * <p>The preferred way to obtain an <code>AudioFile</code> is to use the <code>AudioFileIO.read(File)</code> method.
+ * <p>The <code>AudioHeader</code> contains every properties associated with the file itself (no meta-data), like the bitrate, the sampling rate, the encoding audioHeaders, etc.
  * <p>To get the meta-data contained in this file you have to get the <code>Tag</code> of this <code>AudioFile</code>
  *
  * @author Raphael Slinckx
@@ -69,6 +71,11 @@ public class AudioFile
      * The tag
      */
     protected Tag tag;
+    
+    /**
+     * The tag
+     */
+    protected String extension;
 
     public AudioFile()
     {
@@ -118,6 +125,17 @@ public class AudioFile
     }
 
     /**
+     * <p>Delete any tags that exist in the fie , this is the same as calling the <code>AudioFileIO.delete(this)</code> method.
+     *
+     * @throws CannotWriteException If the file could not be written/accessed, the extension wasn't recognized, or other IO error occured.
+     * @see AudioFileIO
+     */
+    public void delete() throws CannotReadException, CannotWriteException
+    {
+        AudioFileIO.delete(this);
+    }
+
+    /**
      * Set the file to store the info in
      *
      * @param file
@@ -135,6 +153,26 @@ public class AudioFile
     public File getFile()
     {
         return file;
+    }
+
+    /**
+     * Set the file extension
+     *
+     * @param ext
+     */
+    public void setExt(String ext)
+    {
+        this.extension = ext;
+    }
+
+    /**
+     * Retrieve the file extension
+     *
+     * @return
+     */
+    public String getExt()
+    {
+        return extension;
     }
 
     /**
@@ -282,7 +320,7 @@ public class AudioFile
         }
         else if(SupportedFileFormat.WAV.getFilesuffix().equals(file.getName().substring(file.getName().lastIndexOf('.'))))
         {
-            return new WavTag();
+            return new WavTag(TagOptionSingleton.getInstance().getWavOptions());
         }
         else if(SupportedFileFormat.RA.getFilesuffix().equals(file.getName().substring(file.getName().lastIndexOf('.'))))
         {
@@ -293,6 +331,14 @@ public class AudioFile
             return new RealTag();
         }
         else if(SupportedFileFormat.AIF.getFilesuffix().equals(file.getName().substring(file.getName().lastIndexOf('.'))))
+        {
+            return new AiffTag();
+        }
+        else if(SupportedFileFormat.AIFC.getFilesuffix().equals(file.getName().substring(file.getName().lastIndexOf('.'))))
+        {
+            return new AiffTag();
+        }
+        else if(SupportedFileFormat.AIFF.getFilesuffix().equals(file.getName().substring(file.getName().lastIndexOf('.'))))
         {
             return new AiffTag();
         }

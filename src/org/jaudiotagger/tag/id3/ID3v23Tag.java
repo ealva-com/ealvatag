@@ -19,9 +19,9 @@ import org.jaudiotagger.FileConstants;
 import org.jaudiotagger.audio.mp3.MP3File;
 import org.jaudiotagger.logging.ErrorMessage;
 import org.jaudiotagger.tag.*;
-import org.jaudiotagger.tag.images.Artwork;
 import org.jaudiotagger.tag.datatype.DataTypes;
 import org.jaudiotagger.tag.id3.framebody.*;
+import org.jaudiotagger.tag.images.Artwork;
 import org.jaudiotagger.tag.images.ArtworkFactory;
 import org.jaudiotagger.tag.reference.PictureTypes;
 
@@ -574,9 +574,11 @@ public class ID3v23Tag extends AbstractID3v2Tag
             try
             {
                 //Read Frame
-                logger.finest(getLoggingFilename() + ":Looking for next frame at:" + byteBuffer.position());
+                int posBeforeRead = byteBuffer.position();
+                logger.config(getLoggingFilename() + ":Looking for next frame at:" + posBeforeRead);
                 next = new ID3v23Frame(byteBuffer, getLoggingFilename());
                 id = next.getIdentifier();
+                logger.config(getLoggingFilename() + ":Found "+ id+ " at frame at:" + posBeforeRead);
                 loadFrameIntoMap(id, next);
             }
             //Found Padding, no more frames
@@ -754,7 +756,7 @@ public class ID3v23Tag extends AbstractID3v2Tag
      * {@inheritDoc}
      */
     @Override
-    public void write(WritableByteChannel channel) throws IOException
+    public void write(WritableByteChannel channel, int currentTagSize) throws IOException
     {
         logger.config(getLoggingFilename() + ":Writing tag to channel");
 
@@ -768,11 +770,21 @@ public class ID3v23Tag extends AbstractID3v2Tag
             bodyByteBuffer = ID3Unsynchronization.unsynchronize(bodyByteBuffer);
             logger.config(getLoggingFilename() + ":bodybytebuffer:sizeafterunsynchronisation:" + bodyByteBuffer.length);
         }
-        ByteBuffer headerBuffer = writeHeaderToBuffer(0, bodyByteBuffer.length);
+
+        int padding = 0;
+        if(currentTagSize > 0)
+        {
+            int sizeIncPadding = calculateTagSize(bodyByteBuffer.length + TAG_HEADER_LENGTH, (int) currentTagSize);
+            padding = sizeIncPadding - (bodyByteBuffer.length + TAG_HEADER_LENGTH);
+            logger.config(getLoggingFilename() + ":Padding:"+padding);
+        }
+        ByteBuffer headerBuffer = writeHeaderToBuffer(padding, bodyByteBuffer.length);
 
         channel.write(headerBuffer);
         channel.write(ByteBuffer.wrap(bodyByteBuffer));
+        writePadding(channel, padding);
     }
+
 
     /**
      * For representing the MP3File in an XML Format
@@ -1170,6 +1182,15 @@ public class ID3v23Tag extends AbstractID3v2Tag
             return;
         }
 
+        if(frameId.equals(ID3v23Frames.FRAME_ID_V3_TDAT))
+        {
+            if(frame.getContent().length()==0)
+            {
+                //Discard not useful to complicate by trying to map it
+                logger.warning("TDAT is empty so just ignoring");
+                return;
+            }
+        }
         if (map.containsKey(frameId) || map.containsKey(TyerTdatAggregatedFrame.ID_TYER_TDAT))
         {
             //If we have multiple duplicate frames in a tag separate them with semicolons

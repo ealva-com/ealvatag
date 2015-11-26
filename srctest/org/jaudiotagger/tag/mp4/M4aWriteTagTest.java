@@ -4,12 +4,11 @@ import junit.framework.TestCase;
 import org.jaudiotagger.AbstractTestCase;
 import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.AudioFileIO;
-import org.jaudiotagger.audio.mp3.MP3File;
+import org.jaudiotagger.audio.mp4.Mp4AtomTree;
 import org.jaudiotagger.tag.FieldKey;
 import org.jaudiotagger.tag.Tag;
 import org.jaudiotagger.tag.TagField;
 import org.jaudiotagger.tag.TagOptionSingleton;
-import org.jaudiotagger.tag.id3.ID3v23Tag;
 import org.jaudiotagger.tag.mp4.atom.Mp4ContentTypeValue;
 import org.jaudiotagger.tag.mp4.atom.Mp4RatingValue;
 import org.jaudiotagger.tag.mp4.field.*;
@@ -1603,12 +1602,16 @@ public class M4aWriteTagTest extends TestCase
     /**
      * * Test to write tag data,no tagdata currently exists in the file
      */
-    public void testWriteFileWhichDoesntHaveAMetadataAtom()
+    public void testWriteFileWhichHasUtdataMetaAndHdlrButNotIlst()
     {
         Exception exceptionCaught = null;
         try
         {
+
             File testFile = AbstractTestCase.copyAudioToTmp("test4.m4a", new File("testWriteNewMetadata.m4a"));
+            Mp4AtomTree atomTree = new Mp4AtomTree(new RandomAccessFile(testFile, "r"));
+            atomTree.printAtomTree();
+
             AudioFile f = AudioFileIO.read(testFile);
             Tag tag = f.getTag();
 
@@ -2395,7 +2398,7 @@ public class M4aWriteTagTest extends TestCase
 
      public void testDeleteFields() throws Exception
     {
-        File testFile = AbstractTestCase.copyAudioToTmp("test.m4a");
+        File testFile = AbstractTestCase.copyAudioToTmp("test.m4a", new File("testDeleteFields.m4a"));
 
         //Delete using generic key
         AudioFile f = AudioFileIO.read(testFile);

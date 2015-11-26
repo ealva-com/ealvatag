@@ -22,15 +22,15 @@ import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.exceptions.CannotReadException;
 import org.jaudiotagger.audio.exceptions.InvalidAudioFrameException;
 import org.jaudiotagger.audio.exceptions.ReadOnlyFileException;
+import org.jaudiotagger.logging.ErrorMessage;
 import org.jaudiotagger.tag.Tag;
 import org.jaudiotagger.tag.TagException;
-import org.jaudiotagger.logging.ErrorMessage;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
-import java.util.logging.Logger;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /*
  * This abstract class is the skeleton for tag readers. It handles the creation/closing of
@@ -47,7 +47,7 @@ public abstract class AudioFileReader
 
     // Logger Object
       public static Logger logger = Logger.getLogger("org.jaudiotagger.audio.generic");
-    private static final int MINIMUM_SIZE_FOR_VALID_AUDIO_FILE = 150;
+    private static final int MINIMUM_SIZE_FOR_VALID_AUDIO_FILE = 100;
 
     /*
     * Returns the encoding info object associated wih the current File.

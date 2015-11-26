@@ -5,9 +5,9 @@ import org.jaudiotagger.audio.AudioFileIO;
 import org.jaudiotagger.audio.asf.data.AsfHeader;
 import org.jaudiotagger.audio.asf.data.ContentDescription;
 import org.jaudiotagger.audio.asf.io.AsfHeaderReader;
+import org.jaudiotagger.audio.asf.util.TagConverter;
 import org.jaudiotagger.tag.asf.AsfFieldKey;
 import org.jaudiotagger.tag.asf.AsfTag;
-import org.jaudiotagger.audio.asf.util.TagConverter;
 
 /**
  * This testcase tests the handling of the content description chunk.

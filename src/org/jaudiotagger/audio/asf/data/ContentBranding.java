@@ -5,6 +5,7 @@ import org.jaudiotagger.audio.asf.util.Utils;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.math.BigInteger;
+import java.nio.charset.StandardCharsets;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -204,9 +205,9 @@ public final class ContentBranding extends MetadataContainer {
         Utils.writeUINT32(imageData.length, out);
         out.write(imageData);
         Utils.writeUINT32(getBannerImageURL().length(), out);
-        out.write(getBannerImageURL().getBytes("ASCII"));
+        out.write(getBannerImageURL().getBytes(StandardCharsets.US_ASCII));
         Utils.writeUINT32(getCopyRightURL().length(), out);
-        out.write(getCopyRightURL().getBytes("ASCII"));
+        out.write(getCopyRightURL().getBytes(StandardCharsets.US_ASCII));
         return chunkSize;
     }
 

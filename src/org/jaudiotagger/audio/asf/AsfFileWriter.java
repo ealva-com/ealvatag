@@ -18,15 +18,16 @@
  */
 package org.jaudiotagger.audio.asf;
 
+import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.asf.data.AsfHeader;
 import org.jaudiotagger.audio.asf.data.ChunkContainer;
 import org.jaudiotagger.audio.asf.data.MetadataContainer;
 import org.jaudiotagger.audio.asf.io.*;
-import org.jaudiotagger.tag.asf.AsfTag;
 import org.jaudiotagger.audio.asf.util.TagConverter;
 import org.jaudiotagger.audio.exceptions.CannotWriteException;
 import org.jaudiotagger.audio.generic.AudioFileWriter;
 import org.jaudiotagger.tag.Tag;
+import org.jaudiotagger.tag.asf.AsfTag;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
@@ -45,10 +46,9 @@ public class AsfFileWriter extends AudioFileWriter {
      * {@inheritDoc}
      */
     @Override
-    protected void deleteTag(final RandomAccessFile raf,
-            final RandomAccessFile tempRaf) throws CannotWriteException,
+    protected void deleteTag(Tag tag, final RandomAccessFile raf, final RandomAccessFile tempRaf) throws CannotWriteException,
             IOException {
-        writeTag(new AsfTag(true), raf, tempRaf);
+        writeTag(null, new AsfTag(true), raf, tempRaf);
     }
 
     private boolean[] searchExistence(final ChunkContainer container,
@@ -67,8 +67,7 @@ public class AsfFileWriter extends AudioFileWriter {
      * {@inheritDoc}
      */
     @Override
-    protected void writeTag(final Tag tag, final RandomAccessFile raf,
-            final RandomAccessFile rafTemp) throws CannotWriteException,
+    protected void writeTag(AudioFile audioFile, final Tag tag, final RandomAccessFile raf, final RandomAccessFile rafTemp) throws CannotWriteException,
             IOException {
         /*
          * Since this implementation should not change the structure of the ASF

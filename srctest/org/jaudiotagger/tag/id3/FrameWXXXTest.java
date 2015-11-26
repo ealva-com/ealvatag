@@ -4,7 +4,6 @@ import org.jaudiotagger.AbstractTestCase;
 import org.jaudiotagger.audio.mp3.MP3File;
 import org.jaudiotagger.tag.id3.framebody.FrameBodyWXXX;
 import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
-import org.jaudiotagger.tag.TagOptionSingleton;
 
 import java.io.File;
 import java.io.UnsupportedEncodingException;

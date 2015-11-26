@@ -49,7 +49,7 @@ public abstract class AudioFileWriter
 {
     private static final String TEMP_FILENAME_SUFFIX = ".tmp";
     private static final String WRITE_MODE = "rw";
-    private static final int MINIMUM_FILESIZE = 150;
+    private static final int MINIMUM_FILESIZE = 100;
 
     // Logger Object
     public static Logger logger = Logger
@@ -113,7 +113,7 @@ public abstract class AudioFileWriter
                 {
                     this.modificationListener.fileWillBeModified(af, true);
                 }
-                deleteTag(raf, rafTemp);
+                deleteTag(af.getTag(), raf, rafTemp);
                 if (this.modificationListener != null)
                 {
                     this.modificationListener.fileModified(af, tempF);
@@ -211,22 +211,25 @@ public abstract class AudioFileWriter
      * Delete the tag (if any) present in the given randomaccessfile, and do not
      * close it at the end.
      *
+     * @param tag
      * @param raf     The source file, already opened in r-write mode
      * @param tempRaf The temporary file opened in r-write mode
      * @throws CannotWriteException if anything went wrong
      * @throws org.jaudiotagger.audio.exceptions.CannotReadException
      * @throws java.io.IOException
      */
-    public void delete(RandomAccessFile raf, RandomAccessFile tempRaf) throws CannotReadException, CannotWriteException, IOException
+    public void delete(Tag tag, RandomAccessFile raf, RandomAccessFile tempRaf) throws CannotReadException, CannotWriteException, IOException
     {
         raf.seek(0);
         tempRaf.seek(0);
-        deleteTag(raf, tempRaf);
+        deleteTag(tag, raf, tempRaf);
     }
 
     /**
      * Same as above, but delete tag in the file.
      *
+     *
+     * @param tag
      * @param raf
      * @param tempRaf
      * @throws IOException          is thrown when the RandomAccessFile operations throw it (you
@@ -234,7 +237,7 @@ public abstract class AudioFileWriter
      * @throws CannotWriteException when an error occured during the deletion of the tag
      * @throws org.jaudiotagger.audio.exceptions.CannotReadException
      */
-    protected abstract void deleteTag(RandomAccessFile raf, RandomAccessFile tempRaf) throws CannotReadException, CannotWriteException, IOException;
+    protected abstract void deleteTag(Tag tag, RandomAccessFile raf, RandomAccessFile tempRaf) throws CannotReadException, CannotWriteException, IOException;
 
     /**
      * This method sets the {@link AudioFileModificationListener}.<br>
@@ -426,7 +429,7 @@ public abstract class AudioFileWriter
                 {
                     this.modificationListener.fileWillBeModified(af, false);
                 }
-                writeTag(af.getTag(), raf, rafTemp);
+                writeTag(af, af.getTag(), raf, rafTemp);
                 if (this.modificationListener != null)
                 {
                     this.modificationListener.fileModified(af, newFile);
@@ -628,6 +631,7 @@ public abstract class AudioFileWriter
      * the file. The subclass must not close these two files when the method
      * returns.
      *
+     * @param audioFile
      * @param tag
      * @param raf
      * @param rafTemp
@@ -636,5 +640,5 @@ public abstract class AudioFileWriter
      * @throws CannotWriteException when an error occured during the generation of the tag
      * @throws org.jaudiotagger.audio.exceptions.CannotReadException
      */
-    protected abstract void writeTag(Tag tag, RandomAccessFile raf, RandomAccessFile rafTemp) throws CannotReadException, CannotWriteException, IOException;
+    protected abstract void writeTag(AudioFile audioFile, Tag tag, RandomAccessFile raf, RandomAccessFile rafTemp) throws CannotReadException, CannotWriteException, IOException;
 }

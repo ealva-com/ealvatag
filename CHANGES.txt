@@ -1,0 +1,35 @@
+Summarise Changes
+
+2.2.6
+#084:Add method to copy metadata from Info tag to ID3 tag within a Wav
+#085:AbstractID3v2Tag.getSize() not handling aggregateframes
+#086:Ensure write extra byte after writing ID3Tag if chunk is not even size
+#087:Write extra byte after writing ID3Chunk in AIff Files if chunksize is odd
+#089:Aiff has unneccessary getAudioHeading() when we already have getEncodingType()
+#090:AiffTagWriter doesn't always work if replace the existing ID3tag rather than modifying
+#091:WavTagWriter doesn't always work if replace the existing ID3tag rather than modifying
+#092:Useful to have interface for enclosing tags that support ID3
+#094:AiffTagWriter not handling when existing ID3chunk of odd size at end of file
+#096:Aiff DeleteTag not taking into account padding byte when chunk is not last chunk
+#097:Wav writer needs to consider odd numbered chunk sizes better when writing
+#099:When have ID3 tag in Aiff or Wav padding should be included in ID3header
+#098:Force ID3Tag within Aiff to be written as of size not odd
+#101:Force Wav ID3 Tag to be even sized
+#103:Aiff dont rewrite header unless size has changed
+
+2.2.5
+#033:Added getAudioStartPos() and getAudioEndPos() methods to AudioHeader interface and implemented for most formats
+#036:Added getNoSamples() to AudioHeader interface
+#040:If ID3 frame marked as UTF-16 but has no BOM we now look to see if first byte contains data or not, if doesn't likely to be BE otherwise LE
+#041:Fix equality checks for tags so based on contents not simple identity check
+#061:Ensure if you try and set a field value to null an IllegalArgumentException will be thrown for all formats
+#049:Mp4 now able to write file with udta atom plus unknown subatoms as well as meta atom
+#077:Added support writing Aiff artwork
+#078:Track length not being calculated in for Wav files
+#079:Aiff Bitrate not calculated correctly
+#481:Fixed handling of an empty FrameBodyTDAT frame preventing reading of valid TYER frame
+
+2.2.4
+Added support for reading/writing Aiff and Wav metadata
+Now requires Java 1.7
+Added support for deploying versions to bintray

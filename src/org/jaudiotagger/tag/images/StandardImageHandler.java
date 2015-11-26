@@ -4,11 +4,9 @@ import org.jaudiotagger.tag.id3.valuepair.ImageFormats;
 
 import javax.imageio.ImageIO;
 import javax.imageio.ImageWriter;
-import javax.imageio.stream.ImageInputStream;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Iterator;

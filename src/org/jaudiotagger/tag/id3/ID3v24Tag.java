@@ -19,9 +19,9 @@ import org.jaudiotagger.FileConstants;
 import org.jaudiotagger.audio.mp3.MP3File;
 import org.jaudiotagger.logging.ErrorMessage;
 import org.jaudiotagger.tag.*;
-import org.jaudiotagger.tag.images.Artwork;
 import org.jaudiotagger.tag.datatype.DataTypes;
 import org.jaudiotagger.tag.id3.framebody.*;
+import org.jaudiotagger.tag.images.Artwork;
 import org.jaudiotagger.tag.images.ArtworkFactory;
 import org.jaudiotagger.tag.lyrics3.AbstractLyrics3;
 import org.jaudiotagger.tag.lyrics3.Lyrics3v2;
@@ -441,10 +441,18 @@ public class ID3v24Tag extends AbstractID3v2Tag
                        frameMap.put(newFrame.getIdentifier(), list);
                    }
                }
-               else
+               else if(o instanceof AggregatedFrame)
+               {
+                   logger.severe("Ignoring Duplicate Aggregate Frame :discarding:" + o.getClass());
+               }
+               else if (o instanceof List)
                {
                     List<AbstractID3v2Frame> list = (List)o;
                     list.add(newFrame);
+               }
+               else
+               {
+                   logger.severe("Unknown frame class:discarding:" + o.getClass());
                }
            }
            else
@@ -1093,15 +1101,24 @@ public class ID3v24Tag extends AbstractID3v2Tag
      * {@inheritDoc}
      */
     @Override
-    public void write(WritableByteChannel channel) throws IOException
+    public void write(WritableByteChannel channel, int currentTagSize) throws IOException
     {
-        logger.config("Writing tag to channel");
+        logger.severe("Writing tag to channel");
 
         byte[] bodyByteBuffer = writeFramesToBuffer().toByteArray();
-        ByteBuffer headerBuffer = writeHeaderToBuffer(0, bodyByteBuffer.length);
+
+
+        int padding = 0;
+        if(currentTagSize > 0)
+        {
+            int sizeIncPadding = calculateTagSize(bodyByteBuffer.length + TAG_HEADER_LENGTH, (int) currentTagSize);
+            padding = sizeIncPadding - (bodyByteBuffer.length + TAG_HEADER_LENGTH);
+        }
+        ByteBuffer headerBuffer = writeHeaderToBuffer(padding, bodyByteBuffer.length);
 
         channel.write(headerBuffer);
         channel.write(ByteBuffer.wrap(bodyByteBuffer));
+        writePadding(channel, padding);
     }
 
     /**

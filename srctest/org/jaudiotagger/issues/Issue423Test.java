@@ -5,7 +5,6 @@ import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.AudioFileIO;
 import org.jaudiotagger.tag.FieldKey;
 import org.jaudiotagger.tag.Tag;
-import org.jaudiotagger.tag.TagField;
 
 import java.io.File;
 
@@ -31,7 +30,7 @@ public class Issue423Test extends AbstractTestCase
 
     public void testGetAllMp3() throws Exception
     {
-        File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3");
+        File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3", new File("testGetAllMp3.mp3"));
         AudioFile f = AudioFileIO.read(testFile);
         Tag tag = f.getTagOrCreateDefault();
         tag.setField(FieldKey.TRACK,"1");

@@ -3,8 +3,6 @@ package org.jaudiotagger.issues;
 import org.jaudiotagger.AbstractTestCase;
 import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.AudioFileIO;
-import org.jaudiotagger.audio.mp3.MP3AudioHeader;
-import org.jaudiotagger.audio.mp3.MP3File;
 import org.jaudiotagger.tag.FieldKey;
 import org.jaudiotagger.tag.TagField;
 
@@ -156,7 +154,7 @@ public class Issue455Test extends AbstractTestCase
     {
 
         AudioFile mp3File = null;
-        File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3");
+        File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3", new File("testMp3IsCompilationTrue.mp3"));
 
         Exception e= null;
         try
@@ -184,7 +182,7 @@ public class Issue455Test extends AbstractTestCase
     public void testMp3IsCompilationTrue2() throws Exception
     {
         AudioFile mp3File = null;
-        File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3");
+        File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3", new File("testMp3IsCompilationTrue2.mp3"));
 
         Exception e= null;
         try
@@ -214,7 +212,7 @@ public class Issue455Test extends AbstractTestCase
     public void testMp3IsCompilationFalse() throws Exception
     {
         AudioFile mp3File = null;
-        File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3");
+        File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3", new File("testMp3IsCompilationFalse.mp3"));
         Exception e= null;
         try
         {

@@ -26,6 +26,8 @@ import org.jaudiotagger.tag.mp4.atom.Mp4DataBox;
 
 import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 
 /**
  * Represents a single text field
@@ -77,6 +79,7 @@ public class Mp4TagTextField extends Mp4TagField implements TagTextField
         this.content = content;
     }
 
+    @Override
     protected void build(ByteBuffer data) throws UnsupportedEncodingException
     {
         //Data actually contains a 'Data' Box so process data using this
@@ -86,6 +89,7 @@ public class Mp4TagTextField extends Mp4TagField implements TagTextField
         content = databox.getContent();
     }
 
+    @Override
     public void copyContent(TagField field)
     {
         if (field instanceof Mp4TagTextField)
@@ -94,47 +98,55 @@ public class Mp4TagTextField extends Mp4TagField implements TagTextField
         }
     }
 
+    @Override
     public String getContent()
     {
         return content;
     }
 
+    @Override
     protected byte[] getDataBytes() throws UnsupportedEncodingException
     {
         return content.getBytes(getEncoding());
     }
 
+    @Override
     public Mp4FieldType getFieldType()
     {
         return Mp4FieldType.TEXT;
     }
 
-    public String getEncoding()
+    @Override
+    public Charset getEncoding()
     {
-        return Mp4BoxHeader.CHARSET_UTF_8;
+        return StandardCharsets.UTF_8;
     }
 
-
+    @Override
     public boolean isBinary()
     {
         return false;
     }
 
+    @Override
     public boolean isEmpty()
     {
         return this.content.trim().equals("");
     }
 
+    @Override
     public void setContent(String s)
     {
         this.content = s;
     }
 
-    public void setEncoding(String s)
+    @Override
+    public void setEncoding(Charset s)
     {
         /* Not allowed */
     }
 
+    @Override
     public String toString()
     {
         return content;

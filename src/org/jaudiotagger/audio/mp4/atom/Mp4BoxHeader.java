@@ -27,6 +27,9 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.logging.Logger;
 
 /**
@@ -138,11 +141,11 @@ public class Mp4BoxHeader
         headerData.get(b);
         //Keep reference to copy of RawData
         dataBuffer = ByteBuffer.wrap(b);
+        dataBuffer.order(ByteOrder.BIG_ENDIAN);
 
-        //Calculate box size
-        this.length = Utils.getIntBE(b, OFFSET_POS, OFFSET_LENGTH - 1);
-        //Calculate box id
-        this.id = Utils.getString(b, IDENTIFIER_POS, IDENTIFIER_LENGTH, "ISO-8859-1");
+        //Calculate box size and id
+        this.length = dataBuffer.getInt();
+        this.id = Utils.readFourBytesAsChars(dataBuffer);
 
         logger.finest("Mp4BoxHeader id:"+id+":length:"+length);
         if (id.equals("\0\0\0\0"))
@@ -236,9 +239,9 @@ public class Mp4BoxHeader
     /**
      * @return UTF_8 (always used by Mp4)
      */
-    public String getEncoding()
+    public Charset getEncoding()
     {
-        return CHARSET_UTF_8;
+        return StandardCharsets.UTF_8;
     }
 
 
@@ -355,11 +358,20 @@ public class Mp4BoxHeader
     }
 
     /**
-     * @return location in file of the start of file header (i.e where the 4 byte length field starts)
+     * @return location in file of the start of atom  header (i.e where the 4 byte length field starts)
      */
     public long getFilePos()
     {
         return filePos;
+    }
+
+    /**
+     *
+     * @return location in file of the end of atom
+     */
+    public long getFileEndPos()
+    {
+        return filePos + length;
     }
 
     /**

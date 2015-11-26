@@ -9,6 +9,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
+import java.nio.charset.StandardCharsets;
 
 /**
  * Represents raw binary data
@@ -111,7 +112,7 @@ public class Mp4TagRawBinaryField extends Mp4TagField
         {
             ByteArrayOutputStream outerbaos = new ByteArrayOutputStream();
             outerbaos.write(Utils.getSizeBEInt32(Mp4BoxHeader.HEADER_LENGTH + dataSize));
-            outerbaos.write(Utils.getDefaultBytes(getId(), "ISO-8859-1"));
+            outerbaos.write(getId().getBytes(StandardCharsets.ISO_8859_1));
             outerbaos.write(dataBytes);
             return outerbaos.toByteArray();
         }

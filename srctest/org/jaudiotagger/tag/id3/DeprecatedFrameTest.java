@@ -3,7 +3,6 @@ package org.jaudiotagger.tag.id3;
 import org.jaudiotagger.AbstractTestCase;
 import org.jaudiotagger.audio.mp3.MP3File;
 import org.jaudiotagger.tag.id3.framebody.FrameBodyDeprecated;
-import org.jaudiotagger.tag.id3.framebody.FrameBodyTDAT;
 import org.jaudiotagger.tag.id3.framebody.FrameBodyTIME;
 import org.jaudiotagger.tag.id3.framebody.FrameBodyTYER;
 
@@ -67,7 +66,7 @@ public class DeprecatedFrameTest extends AbstractTestCase
         assertTrue(v23frame.getBody() instanceof FrameBodyTIME);
     }
 
-    public void testSavingV24DeprecatedTDATTagToV23() throws Exception
+    public void testSavingV24DeprecatedEmptyTDATTagToV23() throws Exception
     {
         File testFile = AbstractTestCase.copyAudioToTmp("Issue122-2.id3", "testV1.mp3");
         MP3File mp3File = new MP3File(testFile);
@@ -83,9 +82,9 @@ public class DeprecatedFrameTest extends AbstractTestCase
 
         mp3File = new MP3File(testFile);
         v23Tag = (ID3v23Tag) mp3File.getID3v2Tag();
-        Object v23frame = v23Tag.getFrame(ID3v23Frames.FRAME_ID_V3_TYER+ID3v23Frames.FRAME_ID_V3_TDAT);
+        Object v23frame = v23Tag.getFrame(ID3v23Frames.FRAME_ID_V3_TYER);
         assertNotNull(v23frame);
-        assertTrue(v23frame instanceof TyerTdatAggregatedFrame);
+        assertTrue(((AbstractID3v2Frame)v23frame).getBody() instanceof FrameBodyTYER);
     }
 
 
