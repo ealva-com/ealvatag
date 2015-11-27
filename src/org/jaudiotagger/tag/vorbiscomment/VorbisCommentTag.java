@@ -130,6 +130,19 @@ public class VorbisCommentTag extends AbstractTag
         tagFieldToOggField.put(FieldKey.ACOUSTID_FINGERPRINT, VorbisCommentFieldKey.ACOUSTID_FINGERPRINT);
         tagFieldToOggField.put(FieldKey.ACOUSTID_ID, VorbisCommentFieldKey.ACOUSTID_ID);
         tagFieldToOggField.put(FieldKey.COUNTRY, VorbisCommentFieldKey.COUNTRY);
+        tagFieldToOggField.put(FieldKey.MOOD_AGGRESSIVE, VorbisCommentFieldKey.MOOD_AGGRESSIVE);
+        tagFieldToOggField.put(FieldKey.MOOD_RELAXED, VorbisCommentFieldKey.MOOD_RELAXED);
+        tagFieldToOggField.put(FieldKey.MOOD_SAD, VorbisCommentFieldKey.MOOD_SAD);
+        tagFieldToOggField.put(FieldKey.MOOD_HAPPY, VorbisCommentFieldKey.MOOD_HAPPY);
+        tagFieldToOggField.put(FieldKey.MOOD_PARTY, VorbisCommentFieldKey.MOOD_PARTY);
+        tagFieldToOggField.put(FieldKey.MOOD_DANCEABILITY, VorbisCommentFieldKey.MOOD_DANCEABILITY);
+        tagFieldToOggField.put(FieldKey.MOOD_VALENCE, VorbisCommentFieldKey.MOOD_VALENCE);
+        tagFieldToOggField.put(FieldKey.MOOD_AROUSAL, VorbisCommentFieldKey.MOOD_AROUSAL);
+        tagFieldToOggField.put(FieldKey.ACOUSTIC, VorbisCommentFieldKey.ACOUSTIC);
+        tagFieldToOggField.put(FieldKey.ELECTRONIC, VorbisCommentFieldKey.ELECTRONIC);
+        tagFieldToOggField.put(FieldKey.INSTRUMENTAL, VorbisCommentFieldKey.INSTRUMENTAL);
+        tagFieldToOggField.put(FieldKey.TIMBRE, VorbisCommentFieldKey.TIMBRE);
+        tagFieldToOggField.put(FieldKey.TONALITY, VorbisCommentFieldKey.TONALITY);
     }
 
     //This is the vendor string that will be written if no other is supplied. Should be the name of the software

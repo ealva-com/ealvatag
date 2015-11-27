@@ -7,6 +7,7 @@ import org.jaudiotagger.tag.*;
 import org.jaudiotagger.tag.images.Artwork;
 import org.jaudiotagger.tag.images.ArtworkFactory;
 import org.jaudiotagger.tag.reference.PictureTypes;
+import org.jaudiotagger.tag.vorbiscomment.VorbisCommentFieldKey;
 
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
@@ -168,6 +169,19 @@ public final class AsfTag extends AbstractTag
         tagFieldToAsfField.put(FieldKey.ACOUSTID_FINGERPRINT, AsfFieldKey.ACOUSTID_FINGERPRINT);
         tagFieldToAsfField.put(FieldKey.ACOUSTID_ID, AsfFieldKey.ACOUSTID_ID);
         tagFieldToAsfField.put(FieldKey.COUNTRY, AsfFieldKey.COUNTRY);
+        tagFieldToAsfField.put(FieldKey.MOOD_AGGRESSIVE, AsfFieldKey.MOOD_AGGRESSIVE);
+        tagFieldToAsfField.put(FieldKey.MOOD_RELAXED, AsfFieldKey.MOOD_RELAXED);
+        tagFieldToAsfField.put(FieldKey.MOOD_SAD, AsfFieldKey.MOOD_SAD);
+        tagFieldToAsfField.put(FieldKey.MOOD_HAPPY, AsfFieldKey.MOOD_HAPPY);
+        tagFieldToAsfField.put(FieldKey.MOOD_PARTY, AsfFieldKey.MOOD_PARTY);
+        tagFieldToAsfField.put(FieldKey.MOOD_DANCEABILITY, AsfFieldKey.MOOD_DANCEABILITY);
+        tagFieldToAsfField.put(FieldKey.MOOD_VALENCE, AsfFieldKey.MOOD_VALENCE);
+        tagFieldToAsfField.put(FieldKey.MOOD_AROUSAL, AsfFieldKey.MOOD_AROUSAL);
+        tagFieldToAsfField.put(FieldKey.ACOUSTIC, AsfFieldKey.ACOUSTIC);
+        tagFieldToAsfField.put(FieldKey.ELECTRONIC, AsfFieldKey.ELECTRONIC);
+        tagFieldToAsfField.put(FieldKey.INSTRUMENTAL, AsfFieldKey.INSTRUMENTAL);
+        tagFieldToAsfField.put(FieldKey.TIMBRE, AsfFieldKey.TIMBRE);
+        tagFieldToAsfField.put(FieldKey.TONALITY, AsfFieldKey.TONALITY);
     }
 
     static

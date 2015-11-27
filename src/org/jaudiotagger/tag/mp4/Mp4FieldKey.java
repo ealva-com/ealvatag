@@ -4,6 +4,8 @@ import org.jaudiotagger.tag.mp4.field.Mp4FieldType;
 import org.jaudiotagger.tag.mp4.field.Mp4TagReverseDnsField;
 import org.jaudiotagger.tag.reference.Tagger;
 
+import java.util.EnumSet;
+
 import static org.jaudiotagger.tag.mp4.field.Mp4FieldType.*;
 
 /**
@@ -169,6 +171,19 @@ public enum Mp4FieldKey
     SCRIPT("com.apple.iTunes", "SCRIPT", TEXT, Tagger.JAIKOZ),
     TAGS("com.apple.iTunes", "TAGS", TEXT, Tagger.JAIKOZ),
     ARTISTS("com.apple.iTunes", "ARTISTS", TEXT, Tagger.JAIKOZ),
+    MOOD_AGGRESSIVE("com.apple.iTunes", "MOOD_AGGRESSIVE", TEXT, Tagger.JAIKOZ),
+    MOOD_RELAXED("com.apple.iTunes", "MOOD_RELAXED", TEXT, Tagger.JAIKOZ),
+    MOOD_SAD("com.apple.iTunes", "MOOD_SAD", TEXT, Tagger.JAIKOZ),
+    MOOD_HAPPY("com.apple.iTunes", "MOOD_HAPPY", TEXT, Tagger.JAIKOZ),
+    MOOD_PARTY("com.apple.iTunes", "MOOD_PARTY", TEXT, Tagger.JAIKOZ),
+    MOOD_DANCEABILITY("com.apple.iTunes", "MOOD_DANCEABILITY", TEXT, Tagger.JAIKOZ),
+    MOOD_VALENCE("com.apple.iTunes", "MOOD_VALENCE", TEXT, Tagger.JAIKOZ),
+    MOOD_AROUSAL("com.apple.iTunes", "MOOD_AROUSAL", TEXT, Tagger.JAIKOZ),
+    ACOUSTIC("com.apple.iTunes", "ACOUSTIC", TEXT, Tagger.JAIKOZ),
+    ELECTRONIC("com.apple.iTunes", "ELECTRONIC", TEXT, Tagger.JAIKOZ),
+    INSTRUMENTAL("com.apple.iTunes", "INSTRUMENTAL", TEXT, Tagger.JAIKOZ),
+    TIMBRE("com.apple.iTunes", "TIMBRE", TEXT, Tagger.JAIKOZ),
+    TONALITY("com.apple.iTunes", "TONALITY", TEXT, Tagger.JAIKOZ),
 
     //Winamp
     WINAMP_PUBLISHER("com.nullsoft.winamp", "publisher", TEXT, Tagger.WINAMP),

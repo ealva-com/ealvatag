@@ -117,7 +117,21 @@ public enum VorbisCommentFieldKey
     ACOUSTID_FINGERPRINT("ACOUSTID_FINGERPRINT",EnumSet.of(Tagger.PICARD)),
     ACOUSTID_ID("ACOUSTID_ID",EnumSet.of(Tagger.PICARD)),
     COUNTRY("COUNTRY",EnumSet.of(Tagger.PICARD)),
-    ;
+
+    MOOD_AGGRESSIVE("MOOD_AGGRESSIVE", EnumSet.of(Tagger.JAIKOZ)),
+    MOOD_RELAXED("MOOD_RELAXED", EnumSet.of(Tagger.JAIKOZ)),
+    MOOD_SAD("MOOD_SAD", EnumSet.of(Tagger.JAIKOZ)),
+    MOOD_HAPPY("MOOD_HAPPY", EnumSet.of(Tagger.JAIKOZ)),
+    MOOD_PARTY("MOOD_PARTY", EnumSet.of(Tagger.JAIKOZ)),
+    MOOD_DANCEABILITY("MOOD_DANCEABILITY", EnumSet.of(Tagger.JAIKOZ)),
+    MOOD_VALENCE("MOOD_VALENCE", EnumSet.of(Tagger.JAIKOZ)),
+    MOOD_AROUSAL("MOOD_AROUSAL", EnumSet.of(Tagger.JAIKOZ)),
+    ACOUSTIC("ACOUSTIC", EnumSet.of(Tagger.JAIKOZ)),
+    ELECTRONIC("ELECTRONIC", EnumSet.of(Tagger.JAIKOZ)),
+    INSTRUMENTAL("INSTRUMENTAL", EnumSet.of(Tagger.JAIKOZ)),
+    TIMBRE("TIMBRE", EnumSet.of(Tagger.JAIKOZ)),
+    TONALITY("TONALITY", EnumSet.of(Tagger.JAIKOZ)),
+;
 
 
     private String fieldName;
