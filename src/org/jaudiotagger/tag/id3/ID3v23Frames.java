@@ -447,6 +447,19 @@ public class ID3v23Frames extends ID3Frames
         tagFieldToId3.put(FieldKey.ACOUSTID_FINGERPRINT, ID3v23FieldKey.ACOUSTID_FINGERPRINT);
         tagFieldToId3.put(FieldKey.ACOUSTID_ID, ID3v23FieldKey.ACOUSTID_ID);
         tagFieldToId3.put(FieldKey.COUNTRY, ID3v23FieldKey.COUNTRY);
+        tagFieldToId3.put(FieldKey.MOOD_AGGRESSIVE, ID3v23FieldKey.MOOD_AGGRESSIVE);
+        tagFieldToId3.put(FieldKey.MOOD_RELAXED, ID3v23FieldKey.MOOD_RELAXED);
+        tagFieldToId3.put(FieldKey.MOOD_HAPPY, ID3v23FieldKey.MOOD_HAPPY);
+        tagFieldToId3.put(FieldKey.MOOD_SAD, ID3v23FieldKey.MOOD_SAD);
+        tagFieldToId3.put(FieldKey.MOOD_PARTY, ID3v23FieldKey.MOOD_PARTY);
+        tagFieldToId3.put(FieldKey.MOOD_DANCEABILITY, ID3v23FieldKey.MOOD_DANCEABILITY);
+        tagFieldToId3.put(FieldKey.MOOD_VALENCE, ID3v23FieldKey.MOOD_VALENCE);
+        tagFieldToId3.put(FieldKey.MOOD_AROUSAL, ID3v23FieldKey.MOOD_AROUSAL);
+        tagFieldToId3.put(FieldKey.ACOUSTIC, ID3v23FieldKey.ACOUSTIC);
+        tagFieldToId3.put(FieldKey.ELECTRONIC, ID3v23FieldKey.ELECTRONIC);
+        tagFieldToId3.put(FieldKey.INSTRUMENTAL, ID3v23FieldKey.INSTRUMENTAL);
+        tagFieldToId3.put(FieldKey.TIMBRE, ID3v23FieldKey.TIMBRE);
+        tagFieldToId3.put(FieldKey.TONALITY, ID3v23FieldKey.TONALITY);
 
         for(Map.Entry<FieldKey,ID3v23FieldKey> next:tagFieldToId3.entrySet())
         {

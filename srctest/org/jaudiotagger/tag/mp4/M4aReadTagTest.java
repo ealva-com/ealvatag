@@ -1367,4 +1367,31 @@ public class M4aReadTagTest extends TestCase
 
     }
 
+    public void testReadAudioBook() throws Exception
+    {
+        File orig = new File("testdata", "test147.m4a");
+        if (!orig.isFile())
+        {
+            System.err.println("Unable to test file - not available");
+            return;
+        }
+
+        new Mp4AtomTree(new RandomAccessFile(orig,"r")).printAtomTree();
+        Exception exceptionCaught = null;
+        try
+        {
+            File testFile = AbstractTestCase.copyAudioToTmp("test147.m4a");
+            AudioFile f = AudioFileIO.read(testFile);
+            Tag tag = f.getTag();
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            exceptionCaught = e;
+        }
+        //assertNull(exceptionCaught);
+
+
+    }
+
 }

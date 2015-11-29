@@ -147,6 +147,19 @@ public enum AsfFieldKey
     MIXER("WM/Mixer",false),
     ARRANGER("WM/Arranger",false),
     COUNTRY("WM/Country", false),
+    MOOD_AGGRESSIVE("WM/MoodAggressive", false),
+    MOOD_RELAXED("WM/MoodRelaxed", false),
+    MOOD_SAD("WM/MoodSad", false),
+    MOOD_HAPPY("WM/MoodHappy", false),
+    MOOD_PARTY("WM/MoodParty", false),
+    MOOD_DANCEABILITY("WM/MoodDanceability", false),
+    MOOD_VALENCE("WM/MoodValence", false),
+    MOOD_AROUSAL("WM/MoodArousal", false),
+    ACOUSTIC("WM/Acoustic", false),
+    ELECTRONIC("WM/Electronic", false),
+    INSTRUMENTAL("WM/Instrumental", false),
+    TIMBRE("WM/Timbre", false),
+    TONALITY("WM/Tonality", false),
 
     // Special field for all unknown field names, which will getFields maximum support
     CUSTOM ("___CUSTOM___", true);

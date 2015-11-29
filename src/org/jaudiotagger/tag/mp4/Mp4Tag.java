@@ -21,6 +21,7 @@ package org.jaudiotagger.tag.mp4;
 import org.jaudiotagger.audio.generic.AbstractTag;
 import org.jaudiotagger.logging.ErrorMessage;
 import org.jaudiotagger.tag.*;
+import org.jaudiotagger.tag.asf.AsfFieldKey;
 import org.jaudiotagger.tag.images.Artwork;
 import org.jaudiotagger.tag.images.ArtworkFactory;
 import org.jaudiotagger.tag.mp4.field.*;
@@ -127,6 +128,19 @@ public class Mp4Tag extends AbstractTag
         tagFieldToMp4Field.put(FieldKey.ACOUSTID_FINGERPRINT, Mp4FieldKey.ACOUSTID_FINGERPRINT);
         tagFieldToMp4Field.put(FieldKey.ACOUSTID_ID, Mp4FieldKey.ACOUSTID_ID);
         tagFieldToMp4Field.put(FieldKey.COUNTRY, Mp4FieldKey.COUNTRY);
+        tagFieldToMp4Field.put(FieldKey.MOOD_AGGRESSIVE, Mp4FieldKey.MOOD_AGGRESSIVE);
+        tagFieldToMp4Field.put(FieldKey.MOOD_RELAXED, Mp4FieldKey.MOOD_RELAXED);
+        tagFieldToMp4Field.put(FieldKey.MOOD_SAD, Mp4FieldKey.MOOD_SAD);
+        tagFieldToMp4Field.put(FieldKey.MOOD_HAPPY, Mp4FieldKey.MOOD_HAPPY);
+        tagFieldToMp4Field.put(FieldKey.MOOD_PARTY, Mp4FieldKey.MOOD_PARTY);
+        tagFieldToMp4Field.put(FieldKey.MOOD_DANCEABILITY, Mp4FieldKey.MOOD_DANCEABILITY);
+        tagFieldToMp4Field.put(FieldKey.MOOD_VALENCE, Mp4FieldKey.MOOD_VALENCE);
+        tagFieldToMp4Field.put(FieldKey.MOOD_AROUSAL, Mp4FieldKey.MOOD_AROUSAL);
+        tagFieldToMp4Field.put(FieldKey.ACOUSTIC, Mp4FieldKey.ACOUSTIC);
+        tagFieldToMp4Field.put(FieldKey.ELECTRONIC, Mp4FieldKey.ELECTRONIC);
+        tagFieldToMp4Field.put(FieldKey.INSTRUMENTAL, Mp4FieldKey.INSTRUMENTAL);
+        tagFieldToMp4Field.put(FieldKey.TIMBRE, Mp4FieldKey.TIMBRE);
+        tagFieldToMp4Field.put(FieldKey.TONALITY, Mp4FieldKey.TONALITY);
     }
 
     /**

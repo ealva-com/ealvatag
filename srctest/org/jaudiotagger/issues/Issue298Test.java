@@ -53,6 +53,20 @@ public class Issue298Test extends AbstractTestCase
             tag.setField(tag.createField(FieldKey.TAGS,"fred"));
             tag.setField(tag.createField(FieldKey.TEMPO,"Mellow"));
             tag.setField(tag.createField(FieldKey.MOOD,"Bad Mood"));
+            tag.setField(tag.createField(FieldKey.MOOD_AGGRESSIVE,"60"));
+            tag.setField(tag.createField(FieldKey.MOOD_RELAXED,"61"));
+            tag.setField(tag.createField(FieldKey.MOOD_SAD,"62"));
+            tag.setField(tag.createField(FieldKey.MOOD_HAPPY,"63"));
+            tag.setField(tag.createField(FieldKey.MOOD_PARTY,"64"));
+            tag.setField(tag.createField(FieldKey.MOOD_DANCEABILITY,"65"));
+            tag.setField(tag.createField(FieldKey.MOOD_VALENCE,"66"));
+            tag.setField(tag.createField(FieldKey.MOOD_AROUSAL,"67"));
+            tag.setField(tag.createField(FieldKey.ACOUSTIC,"68"));
+            tag.setField(tag.createField(FieldKey.ELECTRONIC,"69"));
+            tag.setField(tag.createField(FieldKey.INSTRUMENTAL,"70"));
+            tag.setField(tag.createField(FieldKey.TIMBRE,"71"));
+            tag.setField(tag.createField(FieldKey.TONALITY,"72"));
+            tag.setField(tag.createField(FieldKey.KEY,"Am"));
             assertEquals("custom1",af.getTag().getFirst(FieldKey.CUSTOM1));
             assertEquals("custom2",af.getTag().getFirst(FieldKey.CUSTOM2));
             assertEquals("custom3",af.getTag().getFirst(FieldKey.CUSTOM3));
@@ -72,6 +86,24 @@ public class Issue298Test extends AbstractTestCase
             assertEquals("fred",af.getTag().getFirst(FieldKey.TAGS));
             assertEquals("Mellow",af.getTag().getFirst(FieldKey.TEMPO));
             assertEquals("Bad Mood",af.getTag().getFirst(FieldKey.MOOD));
+            assertEquals("60",af.getTag().getFirst(FieldKey.MOOD_AGGRESSIVE));
+            assertEquals("61",af.getTag().getFirst(FieldKey.MOOD_RELAXED));
+            assertEquals("62",af.getTag().getFirst(FieldKey.MOOD_SAD));
+            assertEquals("63",af.getTag().getFirst(FieldKey.MOOD_HAPPY));
+            assertEquals("64",af.getTag().getFirst(FieldKey.MOOD_PARTY));
+            assertEquals("65",af.getTag().getFirst(FieldKey.MOOD_DANCEABILITY));
+            assertEquals("66",af.getTag().getFirst(FieldKey.MOOD_VALENCE));
+            assertEquals("67",af.getTag().getFirst(FieldKey.MOOD_AROUSAL));
+            assertEquals("68",af.getTag().getFirst(FieldKey.ACOUSTIC));
+            assertEquals("69",af.getTag().getFirst(FieldKey.ELECTRONIC));
+            assertEquals("70",af.getTag().getFirst(FieldKey.INSTRUMENTAL));
+            assertEquals("71",af.getTag().getFirst(FieldKey.TIMBRE));
+            assertEquals("72",af.getTag().getFirst(FieldKey.TONALITY));
+            assertEquals("Am",af.getTag().getFirst(FieldKey.KEY));
+
+
+
+
 
             {
                 TagField tagField = af.getTag().getFirstField(FieldKey.CUSTOM1);
@@ -100,6 +132,21 @@ public class Issue298Test extends AbstractTestCase
             assertEquals("fred",af.getTag().getFirst(FieldKey.TAGS));
             assertEquals("Mellow",af.getTag().getFirst(FieldKey.TEMPO));
             assertEquals("Bad Mood",af.getTag().getFirst(FieldKey.MOOD));
+            assertEquals("60",af.getTag().getFirst(FieldKey.MOOD_AGGRESSIVE));
+            assertEquals("61",af.getTag().getFirst(FieldKey.MOOD_RELAXED));
+            assertEquals("62",af.getTag().getFirst(FieldKey.MOOD_SAD));
+            assertEquals("63",af.getTag().getFirst(FieldKey.MOOD_HAPPY));
+            assertEquals("64",af.getTag().getFirst(FieldKey.MOOD_PARTY));
+            assertEquals("65",af.getTag().getFirst(FieldKey.MOOD_DANCEABILITY));
+            assertEquals("66",af.getTag().getFirst(FieldKey.MOOD_VALENCE));
+            assertEquals("67",af.getTag().getFirst(FieldKey.MOOD_AROUSAL));
+            assertEquals("68",af.getTag().getFirst(FieldKey.ACOUSTIC));
+            assertEquals("69",af.getTag().getFirst(FieldKey.ELECTRONIC));
+            assertEquals("70",af.getTag().getFirst(FieldKey.INSTRUMENTAL));
+            assertEquals("71",af.getTag().getFirst(FieldKey.TIMBRE));
+            assertEquals("72",af.getTag().getFirst(FieldKey.TONALITY));
+            assertEquals("Am",af.getTag().getFirst(FieldKey.KEY));
+
             {
                 TagField tagField = af.getTag().getFirstField(FieldKey.CUSTOM1);
                 assertTrue(tagField instanceof ID3v24Frame);
@@ -185,6 +232,21 @@ public class Issue298Test extends AbstractTestCase
             tag.setField(tag.createField(FieldKey.TAGS,"fred"));
             tag.setField(tag.createField(FieldKey.TEMPO,"Mellow"));
             tag.setField(tag.createField(FieldKey.MOOD,"Bad Mood"));
+            tag.setField(tag.createField(FieldKey.MOOD,"Bad Mood"));
+            tag.setField(tag.createField(FieldKey.MOOD_AGGRESSIVE,"60"));
+            tag.setField(tag.createField(FieldKey.MOOD_RELAXED,"61"));
+            tag.setField(tag.createField(FieldKey.MOOD_SAD,"62"));
+            tag.setField(tag.createField(FieldKey.MOOD_HAPPY,"63"));
+            tag.setField(tag.createField(FieldKey.MOOD_PARTY,"64"));
+            tag.setField(tag.createField(FieldKey.MOOD_DANCEABILITY,"65"));
+            tag.setField(tag.createField(FieldKey.MOOD_VALENCE,"66"));
+            tag.setField(tag.createField(FieldKey.MOOD_AROUSAL,"67"));
+            tag.setField(tag.createField(FieldKey.ACOUSTIC,"68"));
+            tag.setField(tag.createField(FieldKey.ELECTRONIC,"69"));
+            tag.setField(tag.createField(FieldKey.INSTRUMENTAL,"70"));
+            tag.setField(tag.createField(FieldKey.TIMBRE,"71"));
+            tag.setField(tag.createField(FieldKey.TONALITY,"72"));
+            tag.setField(tag.createField(FieldKey.KEY,"Am"));
 
             af.commit();
             af = AudioFileIO.read(testFile);
@@ -207,6 +269,21 @@ public class Issue298Test extends AbstractTestCase
             assertEquals("fred",af.getTag().getFirst(FieldKey.TAGS));
             assertEquals("Mellow",af.getTag().getFirst(FieldKey.TEMPO));
             assertEquals("Bad Mood",af.getTag().getFirst(FieldKey.MOOD));
+            assertEquals("60",af.getTag().getFirst(FieldKey.MOOD_AGGRESSIVE));
+            assertEquals("61",af.getTag().getFirst(FieldKey.MOOD_RELAXED));
+            assertEquals("62",af.getTag().getFirst(FieldKey.MOOD_SAD));
+            assertEquals("63",af.getTag().getFirst(FieldKey.MOOD_HAPPY));
+            assertEquals("64",af.getTag().getFirst(FieldKey.MOOD_PARTY));
+            assertEquals("65",af.getTag().getFirst(FieldKey.MOOD_DANCEABILITY));
+            assertEquals("66",af.getTag().getFirst(FieldKey.MOOD_VALENCE));
+            assertEquals("67",af.getTag().getFirst(FieldKey.MOOD_AROUSAL));
+            assertEquals("68",af.getTag().getFirst(FieldKey.ACOUSTIC));
+            assertEquals("69",af.getTag().getFirst(FieldKey.ELECTRONIC));
+            assertEquals("70",af.getTag().getFirst(FieldKey.INSTRUMENTAL));
+            assertEquals("71",af.getTag().getFirst(FieldKey.TIMBRE));
+            assertEquals("72",af.getTag().getFirst(FieldKey.TONALITY));
+            assertEquals("Am",af.getTag().getFirst(FieldKey.KEY));
+
 
 
 
@@ -254,6 +331,21 @@ public class Issue298Test extends AbstractTestCase
             tag.setField(tag.createField(FieldKey.TAGS,"fred"));
             tag.setField(tag.createField(FieldKey.TEMPO,"Mellow"));
             tag.setField(tag.createField(FieldKey.MOOD,"Bad Mood"));
+            tag.setField(tag.createField(FieldKey.MOOD,"Bad Mood"));
+            tag.setField(tag.createField(FieldKey.MOOD_AGGRESSIVE,"60"));
+            tag.setField(tag.createField(FieldKey.MOOD_RELAXED,"61"));
+            tag.setField(tag.createField(FieldKey.MOOD_SAD,"62"));
+            tag.setField(tag.createField(FieldKey.MOOD_HAPPY,"63"));
+            tag.setField(tag.createField(FieldKey.MOOD_PARTY,"64"));
+            tag.setField(tag.createField(FieldKey.MOOD_DANCEABILITY,"65"));
+            tag.setField(tag.createField(FieldKey.MOOD_VALENCE,"66"));
+            tag.setField(tag.createField(FieldKey.MOOD_AROUSAL,"67"));
+            tag.setField(tag.createField(FieldKey.ACOUSTIC,"68"));
+            tag.setField(tag.createField(FieldKey.ELECTRONIC,"69"));
+            tag.setField(tag.createField(FieldKey.INSTRUMENTAL,"70"));
+            tag.setField(tag.createField(FieldKey.TIMBRE,"71"));
+            tag.setField(tag.createField(FieldKey.TONALITY,"72"));
+            tag.setField(tag.createField(FieldKey.KEY,"Am"));
             af.commit();
             af = AudioFileIO.read(testFile);
             assertEquals("custom1",af.getTag().getFirst(FieldKey.CUSTOM1));
@@ -275,6 +367,21 @@ public class Issue298Test extends AbstractTestCase
             assertEquals("fred",af.getTag().getFirst(FieldKey.TAGS));
             assertEquals("Mellow",af.getTag().getFirst(FieldKey.TEMPO));
             assertEquals("Bad Mood",af.getTag().getFirst(FieldKey.MOOD));
+            assertEquals("60",af.getTag().getFirst(FieldKey.MOOD_AGGRESSIVE));
+            assertEquals("61",af.getTag().getFirst(FieldKey.MOOD_RELAXED));
+            assertEquals("62",af.getTag().getFirst(FieldKey.MOOD_SAD));
+            assertEquals("63",af.getTag().getFirst(FieldKey.MOOD_HAPPY));
+            assertEquals("64",af.getTag().getFirst(FieldKey.MOOD_PARTY));
+            assertEquals("65",af.getTag().getFirst(FieldKey.MOOD_DANCEABILITY));
+            assertEquals("66",af.getTag().getFirst(FieldKey.MOOD_VALENCE));
+            assertEquals("67",af.getTag().getFirst(FieldKey.MOOD_AROUSAL));
+            assertEquals("68",af.getTag().getFirst(FieldKey.ACOUSTIC));
+            assertEquals("69",af.getTag().getFirst(FieldKey.ELECTRONIC));
+            assertEquals("70",af.getTag().getFirst(FieldKey.INSTRUMENTAL));
+            assertEquals("71",af.getTag().getFirst(FieldKey.TIMBRE));
+            assertEquals("72",af.getTag().getFirst(FieldKey.TONALITY));
+            assertEquals("Am",af.getTag().getFirst(FieldKey.KEY));
+
         }
         catch(Exception e)
         {
@@ -318,6 +425,20 @@ public class Issue298Test extends AbstractTestCase
             tag.setField(tag.createField(FieldKey.TAGS,"fred"));
             tag.setField(tag.createField(FieldKey.TEMPO,"Mellow"));
             tag.setField(tag.createField(FieldKey.MOOD,"Bad Mood"));
+            tag.setField(tag.createField(FieldKey.MOOD_AGGRESSIVE,"60"));
+            tag.setField(tag.createField(FieldKey.MOOD_RELAXED,"61"));
+            tag.setField(tag.createField(FieldKey.MOOD_SAD,"62"));
+            tag.setField(tag.createField(FieldKey.MOOD_HAPPY,"63"));
+            tag.setField(tag.createField(FieldKey.MOOD_PARTY,"64"));
+            tag.setField(tag.createField(FieldKey.MOOD_DANCEABILITY,"65"));
+            tag.setField(tag.createField(FieldKey.MOOD_VALENCE,"66"));
+            tag.setField(tag.createField(FieldKey.MOOD_AROUSAL,"67"));
+            tag.setField(tag.createField(FieldKey.ACOUSTIC,"68"));
+            tag.setField(tag.createField(FieldKey.ELECTRONIC,"69"));
+            tag.setField(tag.createField(FieldKey.INSTRUMENTAL,"70"));
+            tag.setField(tag.createField(FieldKey.TIMBRE,"71"));
+            tag.setField(tag.createField(FieldKey.TONALITY,"72"));
+            tag.setField(tag.createField(FieldKey.KEY,"Am"));
             af.commit();
             af = AudioFileIO.read(testFile);
             assertEquals("custom1",af.getTag().getFirst(FieldKey.CUSTOM1));
@@ -339,6 +460,21 @@ public class Issue298Test extends AbstractTestCase
             assertEquals("fred",af.getTag().getFirst(FieldKey.TAGS));
             assertEquals("Mellow",af.getTag().getFirst(FieldKey.TEMPO));
             assertEquals("Bad Mood",af.getTag().getFirst(FieldKey.MOOD));
+            assertEquals("60",af.getTag().getFirst(FieldKey.MOOD_AGGRESSIVE));
+            assertEquals("61",af.getTag().getFirst(FieldKey.MOOD_RELAXED));
+            assertEquals("62",af.getTag().getFirst(FieldKey.MOOD_SAD));
+            assertEquals("63",af.getTag().getFirst(FieldKey.MOOD_HAPPY));
+            assertEquals("64",af.getTag().getFirst(FieldKey.MOOD_PARTY));
+            assertEquals("65",af.getTag().getFirst(FieldKey.MOOD_DANCEABILITY));
+            assertEquals("66",af.getTag().getFirst(FieldKey.MOOD_VALENCE));
+            assertEquals("67",af.getTag().getFirst(FieldKey.MOOD_AROUSAL));
+            assertEquals("68",af.getTag().getFirst(FieldKey.ACOUSTIC));
+            assertEquals("69",af.getTag().getFirst(FieldKey.ELECTRONIC));
+            assertEquals("70",af.getTag().getFirst(FieldKey.INSTRUMENTAL));
+            assertEquals("71",af.getTag().getFirst(FieldKey.TIMBRE));
+            assertEquals("72",af.getTag().getFirst(FieldKey.TONALITY));
+            assertEquals("Am",af.getTag().getFirst(FieldKey.KEY));
+
         }
         catch(Exception e)
         {
@@ -382,7 +518,22 @@ public class Issue298Test extends AbstractTestCase
             tag.setField(tag.createField(FieldKey.TAGS,"fred"));
             tag.setField(tag.createField(FieldKey.TEMPO,"Mellow"));
             tag.setField(tag.createField(FieldKey.MOOD,"Bad Mood"));
+            tag.setField(tag.createField(FieldKey.MOOD_AGGRESSIVE,"60"));
+            tag.setField(tag.createField(FieldKey.MOOD_RELAXED,"61"));
+            tag.setField(tag.createField(FieldKey.MOOD_SAD,"62"));
+            tag.setField(tag.createField(FieldKey.MOOD_HAPPY,"63"));
+            tag.setField(tag.createField(FieldKey.MOOD_PARTY,"64"));
+            tag.setField(tag.createField(FieldKey.MOOD_DANCEABILITY,"65"));
+            tag.setField(tag.createField(FieldKey.MOOD_VALENCE,"66"));
+            tag.setField(tag.createField(FieldKey.MOOD_AROUSAL,"67"));
+            tag.setField(tag.createField(FieldKey.ACOUSTIC,"68"));
+            tag.setField(tag.createField(FieldKey.ELECTRONIC,"69"));
+            tag.setField(tag.createField(FieldKey.INSTRUMENTAL,"70"));
+            tag.setField(tag.createField(FieldKey.TIMBRE,"71"));
+            tag.setField(tag.createField(FieldKey.TONALITY,"72"));
+            tag.setField(tag.createField(FieldKey.KEY,"Am"));
             af.commit();
+
             af = AudioFileIO.read(testFile);
             assertEquals("custom1",af.getTag().getFirst(FieldKey.CUSTOM1));
             assertEquals("custom2",af.getTag().getFirst(FieldKey.CUSTOM2));
@@ -403,6 +554,21 @@ public class Issue298Test extends AbstractTestCase
             assertEquals("fred",af.getTag().getFirst(FieldKey.TAGS));
             assertEquals("Mellow",af.getTag().getFirst(FieldKey.TEMPO));
             assertEquals("Bad Mood",af.getTag().getFirst(FieldKey.MOOD));
+            assertEquals("60",af.getTag().getFirst(FieldKey.MOOD_AGGRESSIVE));
+            assertEquals("61",af.getTag().getFirst(FieldKey.MOOD_RELAXED));
+            assertEquals("62",af.getTag().getFirst(FieldKey.MOOD_SAD));
+            assertEquals("63",af.getTag().getFirst(FieldKey.MOOD_HAPPY));
+            assertEquals("64",af.getTag().getFirst(FieldKey.MOOD_PARTY));
+            assertEquals("65",af.getTag().getFirst(FieldKey.MOOD_DANCEABILITY));
+            assertEquals("66",af.getTag().getFirst(FieldKey.MOOD_VALENCE));
+            assertEquals("67",af.getTag().getFirst(FieldKey.MOOD_AROUSAL));
+            assertEquals("68",af.getTag().getFirst(FieldKey.ACOUSTIC));
+            assertEquals("69",af.getTag().getFirst(FieldKey.ELECTRONIC));
+            assertEquals("70",af.getTag().getFirst(FieldKey.INSTRUMENTAL));
+            assertEquals("71",af.getTag().getFirst(FieldKey.TIMBRE));
+            assertEquals("72",af.getTag().getFirst(FieldKey.TONALITY));
+            assertEquals("Am",af.getTag().getFirst(FieldKey.KEY));
+
         }
         catch(Exception e)
         {
@@ -448,6 +614,20 @@ public class Issue298Test extends AbstractTestCase
             tag.setField(tag.createField(FieldKey.TAGS,"fred"));
             tag.setField(tag.createField(FieldKey.TEMPO,"Mellow"));
             tag.setField(tag.createField(FieldKey.MOOD,"Bad Mood"));
+            tag.setField(tag.createField(FieldKey.MOOD_AGGRESSIVE,"60"));
+            tag.setField(tag.createField(FieldKey.MOOD_RELAXED,"61"));
+            tag.setField(tag.createField(FieldKey.MOOD_SAD,"62"));
+            tag.setField(tag.createField(FieldKey.MOOD_HAPPY,"63"));
+            tag.setField(tag.createField(FieldKey.MOOD_PARTY,"64"));
+            tag.setField(tag.createField(FieldKey.MOOD_DANCEABILITY,"65"));
+            tag.setField(tag.createField(FieldKey.MOOD_VALENCE,"66"));
+            tag.setField(tag.createField(FieldKey.MOOD_AROUSAL,"67"));
+            tag.setField(tag.createField(FieldKey.ACOUSTIC,"68"));
+            tag.setField(tag.createField(FieldKey.ELECTRONIC,"69"));
+            tag.setField(tag.createField(FieldKey.INSTRUMENTAL,"70"));
+            tag.setField(tag.createField(FieldKey.TIMBRE,"71"));
+            tag.setField(tag.createField(FieldKey.TONALITY,"72"));
+            tag.setField(tag.createField(FieldKey.KEY,"Am"));
             af.commit();
             af = AudioFileIO.read(testFile);
             assertEquals("custom1",af.getTag().getFirst(FieldKey.CUSTOM1));
@@ -469,6 +649,21 @@ public class Issue298Test extends AbstractTestCase
             assertEquals("fred",af.getTag().getFirst(FieldKey.TAGS));
             assertEquals("Mellow",af.getTag().getFirst(FieldKey.TEMPO));
             assertEquals("Bad Mood",af.getTag().getFirst(FieldKey.MOOD));
+            assertEquals("60",af.getTag().getFirst(FieldKey.MOOD_AGGRESSIVE));
+            assertEquals("61",af.getTag().getFirst(FieldKey.MOOD_RELAXED));
+            assertEquals("62",af.getTag().getFirst(FieldKey.MOOD_SAD));
+            assertEquals("63",af.getTag().getFirst(FieldKey.MOOD_HAPPY));
+            assertEquals("64",af.getTag().getFirst(FieldKey.MOOD_PARTY));
+            assertEquals("65",af.getTag().getFirst(FieldKey.MOOD_DANCEABILITY));
+            assertEquals("66",af.getTag().getFirst(FieldKey.MOOD_VALENCE));
+            assertEquals("67",af.getTag().getFirst(FieldKey.MOOD_AROUSAL));
+            assertEquals("68",af.getTag().getFirst(FieldKey.ACOUSTIC));
+            assertEquals("69",af.getTag().getFirst(FieldKey.ELECTRONIC));
+            assertEquals("70",af.getTag().getFirst(FieldKey.INSTRUMENTAL));
+            assertEquals("71",af.getTag().getFirst(FieldKey.TIMBRE));
+            assertEquals("72",af.getTag().getFirst(FieldKey.TONALITY));
+            assertEquals("Am",af.getTag().getFirst(FieldKey.KEY));
+
         }
         catch(Exception e)
         {
@@ -513,6 +708,20 @@ public class Issue298Test extends AbstractTestCase
             tag.setField(tag.createField(FieldKey.TAGS,"fred"));
             tag.setField(tag.createField(FieldKey.TEMPO,"Mellow"));
             tag.setField(tag.createField(FieldKey.MOOD,"Bad Mood"));
+            tag.setField(tag.createField(FieldKey.MOOD_AGGRESSIVE,"60"));
+            tag.setField(tag.createField(FieldKey.MOOD_RELAXED,"61"));
+            tag.setField(tag.createField(FieldKey.MOOD_SAD,"62"));
+            tag.setField(tag.createField(FieldKey.MOOD_HAPPY,"63"));
+            tag.setField(tag.createField(FieldKey.MOOD_PARTY,"64"));
+            tag.setField(tag.createField(FieldKey.MOOD_DANCEABILITY,"65"));
+            tag.setField(tag.createField(FieldKey.MOOD_VALENCE,"66"));
+            tag.setField(tag.createField(FieldKey.MOOD_AROUSAL,"67"));
+            tag.setField(tag.createField(FieldKey.ACOUSTIC,"68"));
+            tag.setField(tag.createField(FieldKey.ELECTRONIC,"69"));
+            tag.setField(tag.createField(FieldKey.INSTRUMENTAL,"70"));
+            tag.setField(tag.createField(FieldKey.TIMBRE,"71"));
+            tag.setField(tag.createField(FieldKey.TONALITY,"72"));
+            tag.setField(tag.createField(FieldKey.KEY,"Am"));
             af.commit();
             af = AudioFileIO.read(testFile);
             assertEquals("custom1",af.getTag().getFirst(FieldKey.CUSTOM1));
@@ -534,6 +743,21 @@ public class Issue298Test extends AbstractTestCase
             assertEquals("fred",af.getTag().getFirst(FieldKey.TAGS));
             assertEquals("Mellow",af.getTag().getFirst(FieldKey.TEMPO));
             assertEquals("Bad Mood",af.getTag().getFirst(FieldKey.MOOD));
+            assertEquals("60",af.getTag().getFirst(FieldKey.MOOD_AGGRESSIVE));
+            assertEquals("61",af.getTag().getFirst(FieldKey.MOOD_RELAXED));
+            assertEquals("62",af.getTag().getFirst(FieldKey.MOOD_SAD));
+            assertEquals("63",af.getTag().getFirst(FieldKey.MOOD_HAPPY));
+            assertEquals("64",af.getTag().getFirst(FieldKey.MOOD_PARTY));
+            assertEquals("65",af.getTag().getFirst(FieldKey.MOOD_DANCEABILITY));
+            assertEquals("66",af.getTag().getFirst(FieldKey.MOOD_VALENCE));
+            assertEquals("67",af.getTag().getFirst(FieldKey.MOOD_AROUSAL));
+            assertEquals("68",af.getTag().getFirst(FieldKey.ACOUSTIC));
+            assertEquals("69",af.getTag().getFirst(FieldKey.ELECTRONIC));
+            assertEquals("70",af.getTag().getFirst(FieldKey.INSTRUMENTAL));
+            assertEquals("71",af.getTag().getFirst(FieldKey.TIMBRE));
+            assertEquals("72",af.getTag().getFirst(FieldKey.TONALITY));
+            assertEquals("Am",af.getTag().getFirst(FieldKey.KEY));
+
         }
         catch(Exception e)
         {

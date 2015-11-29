@@ -76,6 +76,19 @@ public class FrameBodyTXXX extends AbstractFrameBodyTextInfo implements ID3v24Fr
     public static final String ACOUSTID_FINGERPRINT         = "Acoustid Fingerprint";
     public static final String ACOUSTID_ID                  = "Acoustid Id";
     public static final String COUNTRY                      = "Country";
+    public static final String MOOD_AGGRESSIVE              = "MoodAggressive";
+    public static final String MOOD_RELAXED                 = "MoodRelaxed";
+    public static final String MOOD_SAD                     = "MoodSad";
+    public static final String MOOD_HAPPY                   = "MoodHappy";
+    public static final String MOOD_PARTY                   = "MoodParty";
+    public static final String MOOD_DANCEABILITY            = "MoodDanceability";
+    public static final String MOOD_VALENCE                 = "MoodValence";
+    public static final String MOOD_AROUSAL                 = "MoodArousal";
+    public static final String ACOUSTIC                     = "Acousic";
+    public static final String ELECTRONIC                   = "Electronic";
+    public static final String INSTRUMENTAL                 = "Instrumental";
+    public static final String TIMBRE                       = "Timbre";
+    public static final String TONALITY                     = "Tonality";
 
     //used by Foobar 20000
     public static final String ALBUM_ARTIST = "ALBUM ARTIST";
