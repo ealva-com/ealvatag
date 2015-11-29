@@ -24,6 +24,7 @@ import org.jaudiotagger.utils.FileTypeUtil;
 import java.io.*;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import java.nio.channels.FileChannel;
 import java.nio.charset.Charset;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -67,7 +68,7 @@ public class Utils
     /**
      * Returns the extension of the given file based on the file signature.
      * The extension is empty if the file signature is not recognized.
-     * 
+     *
      * @param f The file whose extension is requested
      * @return The extension of the given file
      */
@@ -105,7 +106,7 @@ public class Utils
      *
      * So if storing a number which only requires one byte it will be stored in the last
      * byte.
-     * 
+     *
      * Will fail if end - start >= 8, due to the limitations of the long type.
      */
     public static long getLongBE(final ByteBuffer b, final int start, final int end)
@@ -123,7 +124,7 @@ public class Utils
      * Computes a number whereby the 1st byte is the least significant and the last
      * byte is the most significant. This version doesn't take a length,
      * and it returns an int rather than a long.
-     * 
+     *
      * @param b The byte array. Maximum length for valid results is 4 bytes.
      */
     public static int getIntLE(final byte[] b)
@@ -152,14 +153,14 @@ public class Utils
     /**
      * Computes a number whereby the 1st byte is the most significant and the last
      * byte is the least significant.
-     * 
+     *
      * @param b The ByteBuffer
-     * 
+     *
      * @param start The starting offset in b. The less
-     * significant byte 
-     * 
+     * significant byte
+     *
      * @param end The end index (included) in b
-     * 
+     *
      * @return an int number represented by the byte sequence.
      */
     public static int getIntBE(final ByteBuffer b, final int start, final int end)
@@ -170,14 +171,14 @@ public class Utils
     /**
      * Computes a number whereby the 1st byte is the most significant and the last
      * byte is the least significant.
-     * 
+     *
      * @param b The ByteBuffer
-     * 
+     *
      * @param start The starting offset in b. The less
-     * significant byte 
-     * 
+     * significant byte
+     *
      * @param end The end index (included) in b
-     * 
+     *
      * @return a short number represented by the byte sequence.
      */
     public static short getShortBE(final ByteBuffer b, final int start, final int end)
@@ -401,7 +402,9 @@ public class Utils
     }
 
     /**
-     * Copy a File
+     * Copy a File.
+     *
+     * ToDo refactor AbstractTestCase to use this method as it contains an exact duplicate.
      *
      * @param fromFile The existing File
      * @param toFile   The new File
@@ -412,28 +415,7 @@ public class Utils
     {
         try
         {
-            FileInputStream in = new FileInputStream(fromFile);
-            FileOutputStream out = new FileOutputStream(toFile);
-            byte[] buf = new byte[8192];
-
-            int len;
-
-            while ((len = in.read(buf)) > -1)
-            {
-                out.write(buf, 0, len);
-            }
-
-            in.close();
-            out.close();
-
-            // cleanup if files are not the same length
-            if (fromFile.length() != toFile.length())
-            {
-                toFile.delete();
-
-                return false;
-            }
-
+            copyThrowsOnException(fromFile, toFile);
             return true;
         }
         catch (IOException e)
@@ -527,5 +509,31 @@ public class Utils
         tagBuffer.position(0);
         tagBuffer.order(ByteOrder.BIG_ENDIAN);
         return tagBuffer;
+    }
+
+    /**
+     * Copy src file to dst file. FileChannels are used to maximize performance.
+     *
+     * @param source source File
+     * @param destination destination File which will be created or truncated, before copying, if it already exists
+     *
+     * @throws IOException if any error occurS
+     */
+    public static void copyThrowsOnException(final File source, final File destination) throws IOException {
+        // Must be done in a loop as there's no guarantee that a request smaller than request count will complete in one invocation.
+        // Setting the transfer size more than about 1MB is pretty pointless because there is no asymptotic benefit. What you're trying
+        // to achieve with larger transfer sizes is fewer context switches, and every time you double the transfer size you halve the
+        // context switch cost. Pretty soon it vanishes into the noise.
+        try (FileInputStream inStream = new FileInputStream(source); FileOutputStream outStream = new FileOutputStream(destination))
+        {
+            final FileChannel inChannel = inStream.getChannel();
+            final FileChannel outChannel = outStream.getChannel();
+            final long size = inChannel.size();
+            long position = 0;
+            while (position < size)
+            {
+                position += inChannel.transferTo(position, 1024L * 1024L, outChannel);
+            }
+        } //Closeables closed exiting try block in all circumstances
     }
 }
