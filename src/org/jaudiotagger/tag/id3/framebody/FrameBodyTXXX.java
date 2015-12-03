@@ -87,7 +87,7 @@ public class FrameBodyTXXX extends AbstractFrameBodyTextInfo implements ID3v24Fr
     public static final String ACOUSTIC                     = "Acoustic";
     public static final String ELECTRONIC                   = "Electronic";
     public static final String INSTRUMENTAL                 = "Instrumental";
-    public static final String TIMBRE                       = "Timbre";
+    public static final String TIMBRE                       = "TimbreBrightness";
     public static final String TONALITY                     = "Tonality";
 
     //used by Foobar 20000

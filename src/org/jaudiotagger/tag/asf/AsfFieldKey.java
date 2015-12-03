@@ -158,7 +158,7 @@ public enum AsfFieldKey
     ACOUSTIC("WM/Acoustic", false),
     ELECTRONIC("WM/Electronic", false),
     INSTRUMENTAL("WM/Instrumental", false),
-    TIMBRE("WM/Timbre", false),
+    TIMBRE("WM/TimbreBrightness", false),
     TONALITY("WM/Tonality", false),
 
     // Special field for all unknown field names, which will getFields maximum support

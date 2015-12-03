@@ -129,7 +129,7 @@ public enum VorbisCommentFieldKey
     ACOUSTIC("ACOUSTIC", EnumSet.of(Tagger.JAIKOZ)),
     ELECTRONIC("ELECTRONIC", EnumSet.of(Tagger.JAIKOZ)),
     INSTRUMENTAL("INSTRUMENTAL", EnumSet.of(Tagger.JAIKOZ)),
-    TIMBRE("TIMBRE", EnumSet.of(Tagger.JAIKOZ)),
+    TIMBRE("TIMBRE_BRIGHTNESS", EnumSet.of(Tagger.JAIKOZ)),
     TONALITY("TONALITY", EnumSet.of(Tagger.JAIKOZ)),
 ;
 

@@ -182,7 +182,7 @@ public enum Mp4FieldKey
     ACOUSTIC("com.apple.iTunes", "ACOUSTIC", TEXT, Tagger.JAIKOZ),
     ELECTRONIC("com.apple.iTunes", "ELECTRONIC", TEXT, Tagger.JAIKOZ),
     INSTRUMENTAL("com.apple.iTunes", "INSTRUMENTAL", TEXT, Tagger.JAIKOZ),
-    TIMBRE("com.apple.iTunes", "TIMBRE", TEXT, Tagger.JAIKOZ),
+    TIMBRE("com.apple.iTunes", "TIMBRE_BRIGHTNESS", TEXT, Tagger.JAIKOZ),
     TONALITY("com.apple.iTunes", "TONALITY", TEXT, Tagger.JAIKOZ),
 
     //Winamp
