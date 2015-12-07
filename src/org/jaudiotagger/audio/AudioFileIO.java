@@ -45,10 +45,6 @@ import org.jaudiotagger.tag.TagException;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -209,7 +205,7 @@ public class AudioFileIO
      */
     public static void write(AudioFile f) throws CannotWriteException
     {
-        getDefaultAudioFileIO().writeFile(f,"");
+        getDefaultAudioFileIO().writeFile(f,null);
     }
 
     /**
@@ -218,12 +214,15 @@ public class AudioFileIO
     * 
     *
     * @param f The AudioFile to be written
-    * @param targetPath The AudioFile path to which to be written without the extension
+    * @param targetPath The AudioFile path to which to be written without the extension. Cannot be null
     * @throws CannotWriteException If the file could not be written/accessed, the extension
     *                              wasn't recognized, or other IO error occurred.
     */
    public static void writeAs(AudioFile f, String targetPath) throws CannotWriteException
    {
+       if (targetPath == null || targetPath.isEmpty()) {
+           throw new CannotWriteException("Not a valid target path: " + targetPath);
+       }
        getDefaultAudioFileIO().writeFile(f,targetPath);
    }
 
@@ -454,25 +453,25 @@ public class AudioFileIO
      * 
      *
      * @param f The AudioFile to be written
+     * @param targetPath a file path, without an extension, which provides a "save as". If null, then normal "save" function
      * @throws CannotWriteException If the file could not be written/accessed, the extension
      *                              wasn't recognized, or other IO error occurred.
      */
     public void writeFile(AudioFile f, String targetPath) throws CannotWriteException
     {
     	String ext = f.getExt();
-    	String targetFilePath = targetPath + "." + ext;
-    	
-    	if(!targetPath.isEmpty()){
-    		Path source = f.getFile().toPath();
-    	    Path destination = Paths.get(targetFilePath);
-    	 
-    	    try {
-				Files.copy(source, destination, StandardCopyOption.REPLACE_EXISTING);
-				f.setFile(new File(targetFilePath));
-			} catch (IOException e) {
-				throw new CannotWriteException("Error While Copying" + e.getMessage());
-			}
-    	}
+
+        if (targetPath != null && !targetPath.isEmpty())
+        {
+            final File destination = new File(targetPath + "." + ext);
+                try
+                {
+                    Utils.copyThrowsOnException(f.getFile(), destination);
+                    f.setFile(destination);
+                } catch (IOException e) {
+                    throw new CannotWriteException("Error While Copying" + e.getMessage());
+                }
+        }
 
         AudioFileWriter afw = writers.get(ext);
         if (afw == null)
@@ -482,4 +481,5 @@ public class AudioFileIO
 
         afw.write(f);
     }
+
 }
