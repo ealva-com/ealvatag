@@ -16,6 +16,7 @@ Summarise Changes
 #098:Force ID3Tag within Aiff to be written as of size not odd
 #101:Force Wav ID3 Tag to be even sized
 #103:Aiff dont rewrite header unless size has changed
+#112:Mp4TagWriter.writeDataInChunks() always assuming there will be partial chunk to write
 
 2.2.5
 #033:Added getAudioStartPos() and getAudioEndPos() methods to AudioHeader interface and implemented for most formats

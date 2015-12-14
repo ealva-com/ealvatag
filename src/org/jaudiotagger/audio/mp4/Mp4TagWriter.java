@@ -612,10 +612,14 @@ public class Mp4TagWriter
             written += fileWriteChannel.transferFrom(fileReadChannel, fileWriteChannel.position(), chunksize);
             fileWriteChannel.position(fileWriteChannel.position() + chunksize);
         }
-        written += fileWriteChannel.transferFrom(fileReadChannel, fileWriteChannel.position(), mod);
-        if (written != amountToBeWritten)
+
+        if(mod > 0)
         {
-            throw new CannotWriteException("Was meant to write " + amountToBeWritten + " bytes but only written " + written + " bytes");
+            written += fileWriteChannel.transferFrom(fileReadChannel, fileWriteChannel.position(), mod);
+            if (written != amountToBeWritten)
+            {
+                throw new CannotWriteException("Was meant to write " + amountToBeWritten + " bytes but only written " + written + " bytes");
+            }
         }
     }
 
