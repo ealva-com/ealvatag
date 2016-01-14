@@ -18,6 +18,7 @@ Summarise Changes
 #103:Aiff dont rewrite header unless size has changed
 #112:Mp4TagWriter.writeDataInChunks() always assuming there will be partial chunk to write
 #117:OggWriter, if has to rewrite all pages and encounters a ID3v1tag at end of file it is discarded
+#116:Check that APIC frame actually has image data before tryig to get image data length.
 
 2.2.5
 #033:Added getAudioStartPos() and getAudioEndPos() methods to AudioHeader interface and implemented for most formats
