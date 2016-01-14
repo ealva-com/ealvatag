@@ -441,6 +441,20 @@ public class Utils
     }
 
     /**
+     * Reads 3 bytes and concatenates them into a String.
+     * This pattern is used for ID's of various kinds.
+     *
+     * @param bytes
+     * @return
+     */
+    public static String readThreeBytesAsChars(final ByteBuffer bytes)
+    {
+        byte[] b = new byte[3];
+        bytes.get(b);
+        return new String(b, ISO_8859_1);
+    }
+
+    /**
      * Used to convert (signed integer) to an long as if signed integer was unsigned hence allowing
      * it to represent full range of integral values.
      *
