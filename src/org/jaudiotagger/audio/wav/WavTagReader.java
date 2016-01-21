@@ -111,7 +111,7 @@ public class WavTagReader
         }
 
         String id = chunkHeader.getID();
-        logger.config("Next Id is:" + id + ":Size:" + chunkHeader.getSize());
+        logger.severe("Next Id is:" + id + ":FileLocation:"+raf.getFilePointer() + ":Size:" + chunkHeader.getSize());
         final WavChunkType chunkType = WavChunkType.get(id);
         if (chunkType != null)
         {
@@ -124,6 +124,12 @@ public class WavTagReader
                         return false;
                     }
                     break;
+
+                case CORRUPT_LIST:
+                    logger.warning("Found Corrupt LIST Chunk, starting at Odd Location:"+chunkHeader.getID()+":"+chunkHeader.getSize());
+                    tag.setIncorrectlyAlignedTag(true);
+                    raf.seek(raf.getFilePointer() -  (ChunkHeader.CHUNK_HEADER_SIZE - 1));
+                    return true;
 
                 case ID3:
                     chunk = new WavId3Chunk(Utils.readFileDataIntoBufferLE(raf, (int)chunkHeader.getSize()), chunkHeader, tag);

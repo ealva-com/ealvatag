@@ -16,6 +16,7 @@ public enum WavChunkType
     LIST("LIST", "List chunk, wraps round other chunks"),
     INFO("INFO", "Original metadata implementation"),
     ID3("id3 ", "Stores metadata in ID3 chunk"),
+    CORRUPT_LIST("iLIS", "List chunk, wraps round other chunks"),
 
     ;
 

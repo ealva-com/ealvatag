@@ -374,6 +374,7 @@ public class WavTagWriter implements TagWriter
 
     /**
      * Write LISTINFOChunk of specified size to current file location
+     * ensuring it is on even file boundary
      *
      * @param raf       random access file
      * @param bb        data to write
@@ -382,13 +383,18 @@ public class WavTagWriter implements TagWriter
      */
     private void writeInfoDataToFile(final RandomAccessFile raf, final ByteBuffer bb, final long chunkSize) throws IOException
     {
-        //Now Write LIST header
-        final ByteBuffer listBuffer = ByteBuffer.allocate(ChunkHeader.CHUNK_HEADER_SIZE);
-        listBuffer.order(ByteOrder.LITTLE_ENDIAN);
-        listBuffer.put(WavChunkType.LIST.getCode().getBytes(StandardCharsets.US_ASCII));
-        listBuffer.putInt((int) chunkSize);
-        listBuffer.flip();
-        raf.getChannel().write(listBuffer);
+        if(Utils.isOddLength(raf.getFilePointer()))
+        {
+            writePaddingToFile(raf, 1);
+        }
+        //Write LIST header
+        final ByteBuffer listHeaderBuffer = ByteBuffer.allocate(ChunkHeader.CHUNK_HEADER_SIZE);
+        listHeaderBuffer.order(ByteOrder.LITTLE_ENDIAN);
+        listHeaderBuffer.put(WavChunkType.LIST.getCode().getBytes(StandardCharsets.US_ASCII));
+        listHeaderBuffer.putInt((int) chunkSize);
+        listHeaderBuffer.flip();
+        raf.getChannel().write(listHeaderBuffer);
+
         //Now write actual data
         raf.getChannel().write(bb);
         writeExtraByteIfChunkOddSize(raf, chunkSize);
@@ -396,6 +402,7 @@ public class WavTagWriter implements TagWriter
 
     /**
      * Write Id3Chunk of specified size to current file location
+     * ensuring it is on even file boundary
      *
      * @param raf       random access file
      * @param bb        data to write
@@ -403,17 +410,30 @@ public class WavTagWriter implements TagWriter
      */
     private void writeID3DataToFile(final RandomAccessFile raf, final ByteBuffer bb) throws IOException
     {
-        //Now Write LIST header
+        if(Utils.isOddLength(raf.getFilePointer()))
+        {
+            writePaddingToFile(raf, 1);
+        }
+
+        //Write ID3Data header
         final ByteBuffer listBuffer = ByteBuffer.allocate(ChunkHeader.CHUNK_HEADER_SIZE);
         listBuffer.order(ByteOrder.LITTLE_ENDIAN);
         listBuffer.put(WavChunkType.ID3.getCode().getBytes(StandardCharsets.US_ASCII));
-        listBuffer.putInt((int) bb.limit());
+        listBuffer.putInt(bb.limit());
         listBuffer.flip();
         raf.getChannel().write(listBuffer);
+
         //Now write actual data
         raf.getChannel().write(bb);
     }
 
+    /**
+     * Write Padding bytes
+     *
+     * @param raf
+     * @param paddingSize
+     * @throws IOException
+     */
     private void writePaddingToFile(final RandomAccessFile raf, final int paddingSize) throws IOException
     {
         raf.write(new byte[paddingSize]);
@@ -629,7 +649,7 @@ public class WavTagWriter implements TagWriter
     private void writeExtraByteIfChunkOddSize(RandomAccessFile raf, long size )
             throws IOException
     {
-        if ((size & 1) != 0)
+        if (Utils.isOddLength(size))
         {
             writePaddingToFile(raf, 1);
         }
@@ -803,11 +823,13 @@ public class WavTagWriter implements TagWriter
     private void saveActive(WavTag wavTag, RandomAccessFile raf,  final WavTag existingTag )
             throws CannotWriteException, IOException
     {
+        //Info is Active Tag
         if(wavTag.getActiveTag() instanceof WavInfoTag)
         {
             final ByteBuffer infoTagBuffer = convertInfoChunk(wavTag);
             final long newInfoTagSize = infoTagBuffer.limit();
 
+            //We have an ID3 tag which we dont want
             if(existingTag.isExistingId3Tag())
             {
                 ChunkHeader id3ChunkHeader = seekToStartOfId3Metadata(raf, existingTag);
@@ -820,16 +842,20 @@ public class WavTagWriter implements TagWriter
                     deleteId3TagChunk(raf,existingTag, id3ChunkHeader);
                 }
             }
+
+            //We already have such a tag
             if (existingTag.isExistingInfoTag())
             {
                 seekAndWriteInfoChunk(raf, existingTag, infoTagBuffer);
             }
+            //Dont have tag so have to create new
             else
             {
                 raf.seek(raf.length());
                 writeInfoDataToFile(raf, infoTagBuffer, newInfoTagSize);
             }
         }
+        //ID3 is Active Tag
         else
         {
             final ByteBuffer id3TagBuffer = convertID3Chunk(wavTag, existingTag);

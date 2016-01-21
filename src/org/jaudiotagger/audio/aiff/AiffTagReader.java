@@ -71,8 +71,7 @@ public class AiffTagReader extends AiffChunkReader
         {
             return false;
         }
-        logger.config("Reading Chunk:" + chunkHeader.getID() + ":starting at:" + chunkHeader.getStartLocationInFile() +"("
-                + Hex.asHex(chunkHeader.getStartLocationInFile()) +")" + ":sizeIncHeader:" + (chunkHeader.getSize() + ChunkHeader.CHUNK_HEADER_SIZE));
+        logger.severe("Reading Chunk:" + chunkHeader.getID() + ":starting at:" + chunkHeader.getStartLocationInFile() + "(" + Hex.asHex(chunkHeader.getStartLocationInFile()) + ")" + ":sizeIncHeader:" + (chunkHeader.getSize() + ChunkHeader.CHUNK_HEADER_SIZE));
 
         long startLocationOfId3TagInFile = raf.getFilePointer();
         ChunkType chunkType = ChunkType.get(chunkHeader.getID());
@@ -86,12 +85,20 @@ public class AiffTagReader extends AiffChunkReader
             aiffTag.getID3Tag().setEndLocationInFile(raf.getFilePointer());
         }
         //Special handling to recognise ID3Tags written on odd boundary because original preceding chunk odd length but
-        //didnt write padding byte
-        else if(chunkType!=null && chunkType==ChunkType.CORRUPT_TAG)
+        //didn't write padding byte
+        else if(chunkType!=null && chunkType==ChunkType.CORRUPT_TAG_LATE)
         {
-            logger.warning("Found Corrupt ID3 Chunk, starting at Odd Location:"+chunkHeader.getID()+":"+chunkHeader.getSize());
+            logger.warning("Found Corrupt ID3 Chunk, starting at Odd Location:" + chunkHeader.getID() + ":" + chunkHeader.getSize());
             aiffTag.setIncorrectlyAlignedTag(true);
             raf.seek(raf.getFilePointer() -  (ChunkHeader.CHUNK_HEADER_SIZE + 1));
+            return true;
+        }
+        //Other Special handling for ID3Tags
+        else if(chunkType!=null && chunkType==ChunkType.CORRUPT_TAG_EARLY)
+        {
+            logger.warning("Found Corrupt ID3 Chunk, starting at Odd Location:" + chunkHeader.getID() + ":" + chunkHeader.getSize());
+            aiffTag.setIncorrectlyAlignedTag(true);
+            raf.seek(raf.getFilePointer() -  (ChunkHeader.CHUNK_HEADER_SIZE - 1));
             return true;
         }
         else

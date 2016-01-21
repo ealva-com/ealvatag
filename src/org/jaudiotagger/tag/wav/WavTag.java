@@ -39,6 +39,8 @@ import java.util.List;
  */
 public class WavTag implements Tag, Id3SupportingTag
 {
+    private boolean isIncorrectlyAlignedTag = false;
+
     private boolean isExistingId3Tag = false;
     private boolean isExistingInfoTag = false;
 
@@ -576,4 +578,13 @@ public class WavTag implements Tag, Id3SupportingTag
 
     }
 
+    public boolean isIncorrectlyAlignedTag()
+    {
+        return isIncorrectlyAlignedTag;
+    }
+
+    public void setIncorrectlyAlignedTag(boolean isIncorrectlyAlignedTag)
+    {
+        this.isIncorrectlyAlignedTag = isIncorrectlyAlignedTag;
+    }
 }

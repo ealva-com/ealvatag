@@ -352,4 +352,37 @@ public class WavMetadataNewTagsTest extends AbstractTestCase
         }
         assertNull(exceptionCaught);
     }
+
+    /**
+     * Starts of with Id3chunk which is odd but doesnt have padding byte but at end of file
+     * so can still read, then we write to it padding bit added and when read/write again we
+     * correctly work out ID3chunk is still at end of file.
+     */
+    public void testFileDeleteWithInfoAndOddLengthData()
+    {
+        Exception exceptionCaught = null;
+
+        File orig = new File("testdata", "test129.wav");
+        if (!orig.isFile())
+        {
+            System.err.println("Unable to test file - not available");
+            return;
+        }
+
+        TagOptionSingleton.getInstance().setWavOptions(WavOptions.READ_INFO_ONLY);
+        TagOptionSingleton.getInstance().setWavSaveOptions(WavSaveOptions.SAVE_ACTIVE);
+        File testFile = AbstractTestCase.copyAudioToTmp("test129.wav", new File("test128OddData.wav"));
+        try {
+            AudioFile f = AudioFileIO.read(testFile);
+            f.delete();
+
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            exceptionCaught = e;
+        }
+        assertNull(exceptionCaught);
+
+
+    }
 }

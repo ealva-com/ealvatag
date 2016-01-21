@@ -20,7 +20,8 @@ public enum ChunkType
     COPYRIGHT("(c) "),
     ANNOTATION("ANNO"),
     TAG("ID3 "),
-    CORRUPT_TAG("D3 \u0000");
+    CORRUPT_TAG_LATE("D3 \u0000"),
+    CORRUPT_TAG_EARLY("\u0000ID3");
 
     private static final Map<String, ChunkType> CODE_TYPE_MAP = new HashMap<String, ChunkType>();
     private String code;
