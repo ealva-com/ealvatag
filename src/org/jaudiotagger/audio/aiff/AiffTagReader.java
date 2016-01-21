@@ -88,7 +88,8 @@ public class AiffTagReader extends AiffChunkReader
         //didn't write padding byte
         else if(chunkType!=null && chunkType==ChunkType.CORRUPT_TAG_LATE)
         {
-            logger.warning("Found Corrupt ID3 Chunk, starting at Odd Location:" + chunkHeader.getID() + ":" + chunkHeader.getSize());
+            logger.warning("Found Corrupt ID3 Chunk, starting at Odd Location:" + chunkHeader.getID() + ":" + (chunkHeader.getStartLocationInFile() - 1) + "(" + Hex.asHex(chunkHeader.getStartLocationInFile()) + ")"
+                    + ":sizeIncHeader:"+ (chunkHeader.getSize() + ChunkHeader.CHUNK_HEADER_SIZE));
             aiffTag.setIncorrectlyAlignedTag(true);
             raf.seek(raf.getFilePointer() -  (ChunkHeader.CHUNK_HEADER_SIZE + 1));
             return true;
@@ -96,7 +97,8 @@ public class AiffTagReader extends AiffChunkReader
         //Other Special handling for ID3Tags
         else if(chunkType!=null && chunkType==ChunkType.CORRUPT_TAG_EARLY)
         {
-            logger.warning("Found Corrupt ID3 Chunk, starting at Odd Location:" + chunkHeader.getID() + ":" + chunkHeader.getSize());
+            logger.warning("Found Corrupt ID3 Chunk, starting at Odd Location:" + chunkHeader.getID() + ":" + (chunkHeader.getStartLocationInFile() + 1) + "(" + Hex.asHex(chunkHeader.getStartLocationInFile()) + ")"
+                    + ":sizeIncHeader:"+ (chunkHeader.getSize() + ChunkHeader.CHUNK_HEADER_SIZE));
             aiffTag.setIncorrectlyAlignedTag(true);
             raf.seek(raf.getFilePointer() -  (ChunkHeader.CHUNK_HEADER_SIZE - 1));
             return true;
@@ -110,7 +112,6 @@ public class AiffTagReader extends AiffChunkReader
                 logger.config("Only Skipped:" + noBytesSkipped);
                 return false;
             }
-
         }
         IffHeaderChunk.ensureOnEqualBoundary(raf, chunkHeader);
         return true;
