@@ -550,4 +550,18 @@ public class Utils
             }
         } //Closeables closed exiting try block in all circumstances
     }
+
+    /**
+     *
+     * @param length
+     * @return true if length is an odd number
+     */
+    public static boolean isOddLength(long length)
+    {
+        if ((length & 1) != 0)
+        {
+            return true;
+        }
+        return false;
+    }
 }

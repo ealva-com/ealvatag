@@ -98,13 +98,22 @@ public class AiffTagWriter implements TagWriter
      *
      * @param existingTag
      * @param raf
-     * @return true if at end of file (all take account padding byte)
+     * @return true if at end of file (also take into account padding byte)
      * @throws IOException
      */
     private boolean isAtEndOfFileAllowingForPaddingByte(AiffTag existingTag, RandomAccessFile raf) throws IOException
     {
-        return ((existingTag.getID3Tag().getEndLocationInFile() == raf.length())||
-                (((existingTag.getID3Tag().getEndLocationInFile() & 1) != 0) && existingTag.getID3Tag().getEndLocationInFile() + 1 == raf.length()));
+        return (
+                 (
+                   existingTag.getID3Tag().getEndLocationInFile() == raf.length()
+                 )
+                 ||
+                 (
+                   Utils.isOddLength(existingTag.getID3Tag().getEndLocationInFile())
+                     &&
+                   existingTag.getID3Tag().getEndLocationInFile() + 1 == raf.length()
+                 )
+               );
     }
     /**
      * Delete given {@link Tag} from file.
@@ -155,7 +164,7 @@ public class AiffTagWriter implements TagWriter
     private void deleteTagChunk(final RandomAccessFile raf, final AiffTag existingTag, final ChunkHeader tagChunkHeader) throws IOException
     {
         int lengthTagChunk = (int) tagChunkHeader.getSize() + ChunkHeader.CHUNK_HEADER_SIZE;
-        if ((lengthTagChunk & 1) != 0)
+        if(Utils.isOddLength(lengthTagChunk))
         {
             lengthTagChunk++;
         }
@@ -254,6 +263,10 @@ public class AiffTagWriter implements TagWriter
                 {
                     deleteTagChunk(raf, existingTag, chunkHeader);
                     raf.seek(raf.length());
+                    if(Utils.isOddLength(raf.length()))
+                    {
+                        raf.write(new byte[1]);
+                    }
                     writeDataToFile(raf, bb);
                 }
             }
@@ -261,6 +274,10 @@ public class AiffTagWriter implements TagWriter
             else
             {
                 raf.seek(raf.length());
+                if(Utils.isOddLength(raf.length()))
+                {
+                    raf.write(new byte[1]);
+                }
                 writeDataToFile(raf, bb);
             }
 
@@ -277,7 +294,7 @@ public class AiffTagWriter implements TagWriter
 
 
     /**
-     * Rewrite RAF header to reflect new file file
+     * Rewrite RAF header to reflect new file length
      *
      * @param raf
      * @throws IOException
@@ -319,7 +336,7 @@ public class AiffTagWriter implements TagWriter
     private void writeExtraByteIfChunkOddSize(RandomAccessFile raf, long size )
             throws IOException
     {
-        if ((size & 1) != 0)
+        if(Utils.isOddLength(size))
         {
             raf.write(new byte[1]);
         }

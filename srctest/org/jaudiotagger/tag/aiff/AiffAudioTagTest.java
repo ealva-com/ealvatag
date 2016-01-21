@@ -819,8 +819,6 @@ public class AiffAudioTagTest extends TestCase {
 
     public void testWriteAiff4() {
 
-        TagOptionSingleton.getInstance().setWavOptions(WavOptions.READ_ID3_ONLY_AND_SYNC);
-        TagOptionSingleton.getInstance().setWavSaveOptions(WavSaveOptions.SAVE_BOTH_AND_SYNC);
 
         Exception exceptionCaught = null;
 
@@ -856,5 +854,76 @@ public class AiffAudioTagTest extends TestCase {
         assertNull(exceptionCaught);
     }
 
+    public void testWriteAiff5() {
+
+        Exception exceptionCaught = null;
+
+        File orig = new File("testdata", "test151.aif");
+        if (!orig.isFile())
+        {
+            System.err.println("Unable to test file - not available");
+            return;
+        }
+
+
+        File testFile = AbstractTestCase.copyAudioToTmp("test151.aif", new File("test151MissingByte.aiff"));
+        try
+        {
+            AudioFile f = AudioFileIO.read(testFile);
+            AudioHeader ah = f.getAudioHeader();
+            assertTrue(ah instanceof AiffAudioHeader);
+            Tag tag = f.getTag();
+            System.out.println(tag);
+            f.getTag().setField(FieldKey.ARTIST,"fred");
+            f.commit();
+            f = AudioFileIO.read(testFile);
+            tag = f.getTag();
+            System.out.println(tag);
+            assertEquals("fred",tag.getFirst(FieldKey.ARTIST));
+
+        }
+        catch(Exception ex)
+        {
+            ex.printStackTrace();
+            exceptionCaught = ex;
+        }
+        assertNull(exceptionCaught);
+    }
+
+    public void testWriteAiff6() {
+
+        Exception exceptionCaught = null;
+
+        File orig = new File("testdata", "test152.aiff");
+        if (!orig.isFile())
+        {
+            System.err.println("Unable to test file - not available");
+            return;
+        }
+
+
+        File testFile = AbstractTestCase.copyAudioToTmp("test152.aiff", new File("test152MissingByteId3.aiff"));
+        try
+        {
+            AudioFile f = AudioFileIO.read(testFile);
+            AudioHeader ah = f.getAudioHeader();
+            assertTrue(ah instanceof AiffAudioHeader);
+            Tag tag = f.getTag();
+            System.out.println(tag);
+            f.getTag().setField(FieldKey.ARTIST,"fred");
+            f.commit();
+            f = AudioFileIO.read(testFile);
+            tag = f.getTag();
+            System.out.println(tag);
+            assertEquals("fred",tag.getFirst(FieldKey.ARTIST));
+
+        }
+        catch(Exception ex)
+        {
+            ex.printStackTrace();
+            exceptionCaught = ex;
+        }
+        assertNull(exceptionCaught);
+    }
 
 }

@@ -97,5 +97,5 @@ test143.aif, no,93, aif with corrupt ID3chunks
 test144.aif, no,94, aif with odd sized id3chunk (but no padding byte)
 test145.aif, no,,aif with corrupt ID3 tag
 test146.wav, no,, wav with just 3 bytes of padding at end of info tag so not enough to read id
-
-
+test151.aif, yes,119, aiff where last chunk is odd and padding byte is missing
+test152.aiff, yes, 93, aiff with existign id3 chink incorrectly writeen on odd boundary because of error with orig file
