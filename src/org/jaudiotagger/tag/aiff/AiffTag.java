@@ -287,7 +287,7 @@ public class AiffTag implements Tag, Id3SupportingTag
         StringBuilder sb = new StringBuilder();
         if (id3Tag != null)
         {
-            sb.append("Wav ID3 Tag:\n");
+            sb.append("Aiff ID3 Tag:\n");
             if(isExistingId3Tag())
             {
                 if(isIncorrectlyAlignedTag)
