@@ -1,5 +1,7 @@
 package org.jaudiotagger.audio.iff;
 
+import org.jaudiotagger.audio.generic.Utils;
+
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.logging.Logger;
@@ -25,7 +27,7 @@ public class IffHeaderChunk
      */
     public static void ensureOnEqualBoundary(final RandomAccessFile raf,ChunkHeader chunkHeader) throws IOException
     {
-        if ((chunkHeader.getSize() & 1) != 0)
+        if (Utils.isOddLength(chunkHeader.getSize()))
         {
             // Must come out to an even byte boundary unless at end of file
             if(raf.getFilePointer()<raf.length())

@@ -63,7 +63,7 @@ public class AiffInfoReader extends AiffChunkReader
      */
     private boolean readChunk(final RandomAccessFile raf, AiffAudioHeader aiffAudioHeader) throws IOException
     {
-        logger.severe("Reading Info Chunk");
+        logger.config("Reading Info Chunk");
         final Chunk chunk;
         final ChunkHeader chunkHeader = new ChunkHeader(ByteOrder.BIG_ENDIAN);
         if (!chunkHeader.readHeader(raf))
@@ -71,7 +71,7 @@ public class AiffInfoReader extends AiffChunkReader
             return false;
         }
 
-        logger.severe("Reading Chunk:" + chunkHeader.getID() + ":starting at:" + chunkHeader.getStartLocationInFile() + ":sizeIncHeader:" + (chunkHeader.getSize() + ChunkHeader.CHUNK_HEADER_SIZE));
+        logger.config("Reading Next Chunk:" + chunkHeader.getID() + ":starting at:" + chunkHeader.getStartLocationInFile() + ":sizeIncHeader:" + (chunkHeader.getSize() + ChunkHeader.CHUNK_HEADER_SIZE));
         chunk = createChunk(raf, chunkHeader, aiffAudioHeader);
         if (chunk != null)
         {
@@ -86,7 +86,7 @@ public class AiffInfoReader extends AiffChunkReader
             int noBytesSkipped = raf.skipBytes((int)chunkHeader.getSize());
             if(noBytesSkipped < chunkHeader.getSize())
             {
-                logger.severe("Only Skipped:" + noBytesSkipped);
+                logger.warning("Only Skipped:" + noBytesSkipped);
                 return false;
             }
         }

@@ -17,6 +17,7 @@ import java.util.List;
  */
 public class AiffTag implements Tag, Id3SupportingTag
 {
+    private boolean isIncorrectlyAlignedTag = false;
 
     private boolean isExistingId3Tag = false;
 
@@ -289,6 +290,10 @@ public class AiffTag implements Tag, Id3SupportingTag
             sb.append("Wav ID3 Tag:\n");
             if(isExistingId3Tag())
             {
+                if(isIncorrectlyAlignedTag)
+                {
+                    sb.append("\tincorrectly starts as odd byte\n");
+                }
                 sb.append("\tstartLocation:" + getStartLocationInFileOfId3Chunk() + "(" + Hex.asHex(getStartLocationInFileOfId3Chunk()) + ")\n");
                 sb.append("\tendLocation:" + getEndLocationInFileOfId3Chunk() + "(" + Hex.asHex(getEndLocationInFileOfId3Chunk()) + ")\n");
             }
@@ -351,5 +356,15 @@ public class AiffTag implements Tag, Id3SupportingTag
     public boolean equals(Object obj)
     {
         return id3Tag.equals(obj);
+    }
+
+    public boolean isIncorrectlyAlignedTag()
+    {
+        return isIncorrectlyAlignedTag;
+    }
+
+    public void setIncorrectlyAlignedTag(boolean isIncorrectlyAlignedTag)
+    {
+        this.isIncorrectlyAlignedTag = isIncorrectlyAlignedTag;
     }
 }

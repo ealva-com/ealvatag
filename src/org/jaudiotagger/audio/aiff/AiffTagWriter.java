@@ -166,7 +166,10 @@ public class AiffTagWriter implements TagWriter
         int lengthTagChunk = (int) tagChunkHeader.getSize() + ChunkHeader.CHUNK_HEADER_SIZE;
         if(Utils.isOddLength(lengthTagChunk))
         {
-            lengthTagChunk++;
+            if(existingTag.getStartLocationInFileOfId3Chunk() + lengthTagChunk < raf.length())
+            {
+                lengthTagChunk++;
+            }
         }
         final long newLength = raf.length() - lengthTagChunk;
         logger.severe("Size of id3 chunk to delete is:"+newLength);
@@ -250,20 +253,36 @@ public class AiffTagWriter implements TagWriter
             //Replacing ID3 tag
             if (existingTag.isExistingId3Tag() && existingTag.getID3Tag().getStartLocationInFile() != null)
             {
-                final ChunkHeader chunkHeader = seekToStartOfMetadata(raf, existingTag);
-                logger.info("Current Space allocated:" + existingTag.getSizeOfID3TagOnly() + ":NewTagRequires:" + bb.limit());
-
-                //Usual case ID3 is last chunk
-                if(isAtEndOfFileAllowingForPaddingByte(existingTag, raf))
+                //Usual case
+                if(!existingTag.isIncorrectlyAlignedTag())
                 {
-                    writeDataToFile(raf, bb);
+                    final ChunkHeader chunkHeader = seekToStartOfMetadata(raf, existingTag);
+                    logger.info("Current Space allocated:" + existingTag.getSizeOfID3TagOnly() + ":NewTagRequires:" + bb.limit());
+
+                    //Usual case ID3 is last chunk
+                    if (isAtEndOfFileAllowingForPaddingByte(existingTag, raf))
+                    {
+                        writeDataToFile(raf, bb);
+                    }
+                    //Unusual Case where ID3 is not last chunk
+                    else
+                    {
+                        deleteTagChunk(raf, existingTag, chunkHeader);
+                        raf.seek(raf.length());
+                        if (Utils.isOddLength(raf.length()))
+                        {
+                            raf.write(new byte[1]);
+                        }
+                        writeDataToFile(raf, bb);
+                    }
                 }
-                //Unusual Case where ID3 is not last chunk
+                //Existing ID3 tag is incorrectly aligned so lets delete it
                 else
                 {
+                    final ChunkHeader chunkHeader = seekToStartOfMetadata(raf, existingTag);
                     deleteTagChunk(raf, existingTag, chunkHeader);
                     raf.seek(raf.length());
-                    if(Utils.isOddLength(raf.length()))
+                    if (Utils.isOddLength(raf.length()))
                     {
                         raf.write(new byte[1]);
                     }

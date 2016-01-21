@@ -85,6 +85,15 @@ public class AiffTagReader extends AiffChunkReader
             aiffTag.getID3Tag().setStartLocationInFile(startLocationOfId3TagInFile);
             aiffTag.getID3Tag().setEndLocationInFile(raf.getFilePointer());
         }
+        //Special handling to recognise ID3Tags written on odd boundary because original preceding chunk odd length but
+        //didnt write padding byte
+        else if(chunkType!=null && chunkType==ChunkType.CORRUPT_TAG)
+        {
+            logger.warning("Found Corrupt ID3 Chunk, starting at Odd Location:"+chunkHeader.getID()+":"+chunkHeader.getSize());
+            aiffTag.setIncorrectlyAlignedTag(true);
+            raf.seek(raf.getFilePointer() -  (ChunkHeader.CHUNK_HEADER_SIZE + 1));
+            return true;
+        }
         else
         {
             logger.config("Skipping Chunk:"+chunkHeader.getID()+":"+chunkHeader.getSize());
