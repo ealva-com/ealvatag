@@ -22,6 +22,7 @@ import org.jaudiotagger.audio.exceptions.CannotReadException;
 import org.jaudiotagger.audio.generic.Utils;
 import org.jaudiotagger.audio.iff.Chunk;
 import org.jaudiotagger.audio.iff.ChunkHeader;
+import org.jaudiotagger.audio.iff.ChunkSummary;
 import org.jaudiotagger.audio.iff.IffHeaderChunk;
 import org.jaudiotagger.audio.wav.chunk.WavId3Chunk;
 import org.jaudiotagger.audio.wav.chunk.WavListChunk;
@@ -32,6 +33,7 @@ import org.jaudiotagger.tag.wav.WavTag;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.logging.Logger;
 
@@ -118,7 +120,9 @@ public class WavTagReader
             switch (chunkType)
             {
                 case LIST:
+
                     chunk = new WavListChunk(Utils.readFileDataIntoBufferLE(raf, (int)chunkHeader.getSize()), chunkHeader, tag);
+                    tag.addChunkSummary(new ChunkSummary(chunkHeader.getID(), chunkHeader.getStartLocationInFile(), chunkHeader.getSize()));
                     if (!chunk.readChunk())
                     {
                         return false;
@@ -133,12 +137,14 @@ public class WavTagReader
 
                 case ID3:
                     chunk = new WavId3Chunk(Utils.readFileDataIntoBufferLE(raf, (int)chunkHeader.getSize()), chunkHeader, tag);
+                    tag.addChunkSummary(new ChunkSummary(chunkHeader.getID(), chunkHeader.getStartLocationInFile(), chunkHeader.getSize()));
                     if (!chunk.readChunk())
                     {
                         return false;
                     }
                     break;
                 default:
+                    tag.addChunkSummary(new ChunkSummary(chunkHeader.getID(), chunkHeader.getStartLocationInFile(), chunkHeader.getSize()));
                     raf.skipBytes((int)chunkHeader.getSize());
             }
         }

@@ -72,7 +72,7 @@ public class AiffTagReader extends AiffChunkReader
         {
             return false;
         }
-        logger.severe("Reading Chunk:" + chunkHeader.getID() + ":starting at:" + chunkHeader.getStartLocationInFile() + "(" + Hex.asHex(chunkHeader.getStartLocationInFile()) + ")" + ":sizeIncHeader:" + (chunkHeader.getSize() + ChunkHeader.CHUNK_HEADER_SIZE));
+        logger.config("Reading Chunk:" + chunkHeader.getID() + ":starting at:" + chunkHeader.getStartLocationInFile() + "(" + Hex.asHex(chunkHeader.getStartLocationInFile()) + ")" + ":sizeIncHeader:" + (chunkHeader.getSize() + ChunkHeader.CHUNK_HEADER_SIZE));
 
         long startLocationOfId3TagInFile = raf.getFilePointer();
         ChunkType chunkType = ChunkType.get(chunkHeader.getID());
@@ -92,7 +92,8 @@ public class AiffTagReader extends AiffChunkReader
             }
             //else otherwise we discard because the first one found is the one that will be used by other apps
             {
-
+                logger.warning("Ignoring ID3Tag because already have one:" + chunkHeader.getID() + ":" + (chunkHeader.getStartLocationInFile() - 1) + "(" + Hex.asHex(chunkHeader.getStartLocationInFile()) + ")"
+                        + ":sizeIncHeader:"+ (chunkHeader.getSize() + ChunkHeader.CHUNK_HEADER_SIZE));
             }
         }
         //Special handling to recognise ID3Tags written on odd boundary because original preceding chunk odd length but
