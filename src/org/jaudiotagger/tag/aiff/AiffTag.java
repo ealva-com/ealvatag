@@ -1,6 +1,7 @@
 package org.jaudiotagger.tag.aiff;
 
 import org.jaudiotagger.audio.iff.ChunkHeader;
+import org.jaudiotagger.audio.iff.ChunkSummary;
 import org.jaudiotagger.logging.Hex;
 import org.jaudiotagger.tag.*;
 import org.jaudiotagger.tag.id3.AbstractID3v2Tag;
@@ -17,6 +18,13 @@ import java.util.List;
  */
 public class AiffTag implements Tag, Id3SupportingTag
 {
+    private List<ChunkSummary> chunkSummaryList = new ArrayList<ChunkSummary>();
+
+    public void addChunkSummary(ChunkSummary cs)
+    {
+        chunkSummaryList.add(cs);
+    }
+
     private boolean isIncorrectlyAlignedTag = false;
 
     private boolean isExistingId3Tag = false;
@@ -285,6 +293,11 @@ public class AiffTag implements Tag, Id3SupportingTag
     public String toString()
     {
         StringBuilder sb = new StringBuilder();
+
+        for(ChunkSummary cs:chunkSummaryList)
+        {
+            sb.append(cs.toString()+"\n");
+        }
         if (id3Tag != null)
         {
             sb.append("Aiff ID3 Tag:\n");

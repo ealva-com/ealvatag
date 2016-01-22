@@ -5,6 +5,7 @@ import org.jaudiotagger.audio.aiff.chunk.*;
 import org.jaudiotagger.audio.exceptions.CannotReadException;
 import org.jaudiotagger.audio.iff.Chunk;
 import org.jaudiotagger.audio.iff.ChunkHeader;
+import org.jaudiotagger.audio.iff.ChunkSummary;
 import org.jaudiotagger.audio.iff.IffHeaderChunk;
 import org.jaudiotagger.logging.Hex;
 import org.jaudiotagger.tag.aiff.AiffTag;
@@ -78,11 +79,21 @@ public class AiffTagReader extends AiffChunkReader
         if (chunkType!=null && chunkType==ChunkType.TAG)
         {
             ByteBuffer chunkData = readChunkDataIntoBuffer(raf, chunkHeader);
-            Chunk chunk = new ID3Chunk(chunkHeader,chunkData, aiffTag);
-            chunk.readChunk();
-            aiffTag.setExistingId3Tag(true);
-            aiffTag.getID3Tag().setStartLocationInFile(startLocationOfId3TagInFile);
-            aiffTag.getID3Tag().setEndLocationInFile(raf.getFilePointer());
+            aiffTag.addChunkSummary(new ChunkSummary(chunkHeader.getID(), chunkHeader.getStartLocationInFile(), chunkHeader.getSize()));
+
+            //If we havent already for an ID3 Tag
+            if(aiffTag.getID3Tag()==null)
+            {
+                Chunk chunk = new ID3Chunk(chunkHeader,chunkData, aiffTag);
+                chunk.readChunk();
+                aiffTag.setExistingId3Tag(true);
+                aiffTag.getID3Tag().setStartLocationInFile(startLocationOfId3TagInFile);
+                aiffTag.getID3Tag().setEndLocationInFile(raf.getFilePointer());
+            }
+            //else otherwise we discard because the first one found is the one that will be used by other apps
+            {
+
+            }
         }
         //Special handling to recognise ID3Tags written on odd boundary because original preceding chunk odd length but
         //didn't write padding byte
@@ -106,10 +117,11 @@ public class AiffTagReader extends AiffChunkReader
         else
         {
             logger.config("Skipping Chunk:"+chunkHeader.getID()+":"+chunkHeader.getSize());
+            aiffTag.addChunkSummary(new ChunkSummary(chunkHeader.getID(), chunkHeader.getStartLocationInFile(), chunkHeader.getSize()));
             int noBytesSkipped = raf.skipBytes((int)chunkHeader.getSize());
             if(noBytesSkipped < chunkHeader.getSize())
             {
-                logger.config("Only Skipped:" + noBytesSkipped);
+                logger.severe("Only Skipped:" + noBytesSkipped + "for "+chunkHeader.getID());
                 return false;
             }
         }
