@@ -9,6 +9,7 @@ Summarise Changes
 #090:AiffTagWriter doesn't always work if replace the existing ID3tag rather than modifying
 #091:WavTagWriter doesn't always work if replace the existing ID3tag rather than modifying
 #092:Useful to have interface for enclosing tags that support ID3
+#093:Unable to correctly write new ID3chunk if existing corrupt chunk
 #094:AiffTagWriter not handling when existing ID3chunk of odd size at end of file
 #096:Aiff DeleteTag not taking into account padding byte when chunk is not last chunk
 #097:Wav writer needs to consider odd numbered chunk sizes better when writing
@@ -20,6 +21,7 @@ Summarise Changes
 #117:OggWriter, if has to rewrite all pages and encounters a ID3v1tag at end of file it is discarded
 #116:Check that APIC frame actually has image data before trying to get image data length.
 #118:AudioFile.createDefaultTag() is broken, compares e.g. "flac" to ".flac"
+#119:Wav/Aiff Add padding byte if missing in original file when writing metadata
 #121:Output a summary of chunks in AiffTag.toString() and WavTag.toString()
 
 2.2.5

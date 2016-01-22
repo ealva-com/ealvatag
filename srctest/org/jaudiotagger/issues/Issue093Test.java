@@ -124,7 +124,7 @@ public class Issue093Test extends AbstractTestCase
         assertNull(exceptionCaught);
     }
 
-    public void testNaimRipMultipleTagsInfo()
+    public void testNaimRipMultipleFixTagsInfo()
     {
         File orig = new File("testdata", "test152.wav");
         if (!orig.isFile())
@@ -140,6 +140,216 @@ public class Issue093Test extends AbstractTestCase
         try
         {
             File testFile = AbstractTestCase.copyAudioToTmp("test152.wav", new File("test152_info.wav"));
+            AudioFile f = AudioFileIO.read(testFile);
+            System.out.println(f.getAudioHeader());
+            System.out.println(f.getTag());
+            f.getTag().setField(FieldKey.ARTIST,"fred");
+            f.commit();
+            f = AudioFileIO.read(testFile);
+            Tag tag = f.getTag();
+            System.out.println(tag);
+            assertEquals("fred",tag.getFirst(FieldKey.ARTIST));
+
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            exceptionCaught = e;
+        }
+        assertNull(exceptionCaught);
+    }
+
+    public void testNaimRipMultipleFixTagsExistingId3()
+    {
+        File orig = new File("testdata", "test152.wav");
+        if (!orig.isFile())
+        {
+            System.err.println("Unable to test file - not available");
+            return;
+        }
+
+        TagOptionSingleton.getInstance().setWavOptions(WavOptions.READ_ID3_ONLY);
+        TagOptionSingleton.getInstance().setWavSaveOptions(WavSaveOptions.SAVE_EXISTING_AND_ACTIVE);
+
+        Exception exceptionCaught = null;
+        try
+        {
+            File testFile = AbstractTestCase.copyAudioToTmp("test152.wav", new File("test152_existing_id3.wav"));
+            AudioFile f = AudioFileIO.read(testFile);
+            System.out.println(f.getAudioHeader());
+            System.out.println(f.getTag());
+            f.getTag().setField(FieldKey.ARTIST,"fred");
+            f.commit();
+            f = AudioFileIO.read(testFile);
+            Tag tag = f.getTag();
+            System.out.println(tag);
+            assertEquals("fred",tag.getFirst(FieldKey.ARTIST));
+
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            exceptionCaught = e;
+        }
+        assertNull(exceptionCaught);
+    }
+
+    public void testNaimRipMultipleFixTagsExistingInfo()
+    {
+        File orig = new File("testdata", "test152.wav");
+        if (!orig.isFile())
+        {
+            System.err.println("Unable to test file - not available");
+            return;
+        }
+
+        TagOptionSingleton.getInstance().setWavOptions(WavOptions.READ_INFO_ONLY);
+        TagOptionSingleton.getInstance().setWavSaveOptions(WavSaveOptions.SAVE_EXISTING_AND_ACTIVE);
+
+        Exception exceptionCaught = null;
+        try
+        {
+            File testFile = AbstractTestCase.copyAudioToTmp("test152.wav", new File("test152_existing_info.wav"));
+            AudioFile f = AudioFileIO.read(testFile);
+            System.out.println(f.getAudioHeader());
+            System.out.println(f.getTag());
+            f.getTag().setField(FieldKey.ARTIST,"fred");
+            f.commit();
+            f = AudioFileIO.read(testFile);
+            Tag tag = f.getTag();
+            System.out.println(tag);
+            assertEquals("fred",tag.getFirst(FieldKey.ARTIST));
+
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            exceptionCaught = e;
+        }
+        assertNull(exceptionCaught);
+    }
+
+    public void testNaimRipMultipleTagsFixId3Both()
+    {
+        File orig = new File("testdata", "test152.wav");
+        if (!orig.isFile())
+        {
+            System.err.println("Unable to test file - not available");
+            return;
+        }
+
+        TagOptionSingleton.getInstance().setWavOptions(WavOptions.READ_ID3_ONLY);
+        TagOptionSingleton.getInstance().setWavSaveOptions(WavSaveOptions.SAVE_BOTH);
+
+        Exception exceptionCaught = null;
+        try
+        {
+            File testFile = AbstractTestCase.copyAudioToTmp("test152.wav", new File("test152_existing_id3_both.wav"));
+            AudioFile f = AudioFileIO.read(testFile);
+            System.out.println(f.getAudioHeader());
+            System.out.println(f.getTag());
+            f.getTag().setField(FieldKey.ARTIST,"fred");
+            f.commit();
+            f = AudioFileIO.read(testFile);
+            Tag tag = f.getTag();
+            System.out.println(tag);
+            assertEquals("fred",tag.getFirst(FieldKey.ARTIST));
+
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            exceptionCaught = e;
+        }
+        assertNull(exceptionCaught);
+    }
+
+    public void testNaimRipMultipleFixTagsInfoBoth()
+    {
+        File orig = new File("testdata", "test152.wav");
+        if (!orig.isFile())
+        {
+            System.err.println("Unable to test file - not available");
+            return;
+        }
+
+        TagOptionSingleton.getInstance().setWavOptions(WavOptions.READ_INFO_ONLY);
+        TagOptionSingleton.getInstance().setWavSaveOptions(WavSaveOptions.SAVE_BOTH);
+
+        Exception exceptionCaught = null;
+        try
+        {
+            File testFile = AbstractTestCase.copyAudioToTmp("test152.wav", new File("test152_existing_info_both.wav"));
+            AudioFile f = AudioFileIO.read(testFile);
+            System.out.println(f.getAudioHeader());
+            System.out.println(f.getTag());
+            f.getTag().setField(FieldKey.ARTIST,"fred");
+            f.commit();
+            f = AudioFileIO.read(testFile);
+            Tag tag = f.getTag();
+            System.out.println(tag);
+            assertEquals("fred",tag.getFirst(FieldKey.ARTIST));
+
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            exceptionCaught = e;
+        }
+        assertNull(exceptionCaught);
+    }
+
+    public void testNaimRipMultipleTagsFixId3BothSync()
+    {
+        File orig = new File("testdata", "test152.wav");
+        if (!orig.isFile())
+        {
+            System.err.println("Unable to test file - not available");
+            return;
+        }
+
+        TagOptionSingleton.getInstance().setWavOptions(WavOptions.READ_ID3_ONLY);
+        TagOptionSingleton.getInstance().setWavSaveOptions(WavSaveOptions.SAVE_BOTH_AND_SYNC);
+
+        Exception exceptionCaught = null;
+        try
+        {
+            File testFile = AbstractTestCase.copyAudioToTmp("test152.wav", new File("test152_existing_id3_both_sync.wav"));
+            AudioFile f = AudioFileIO.read(testFile);
+            System.out.println(f.getAudioHeader());
+            System.out.println(f.getTag());
+            f.getTag().setField(FieldKey.ARTIST,"fred");
+            f.commit();
+            f = AudioFileIO.read(testFile);
+            Tag tag = f.getTag();
+            System.out.println(tag);
+            assertEquals("fred",tag.getFirst(FieldKey.ARTIST));
+
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            exceptionCaught = e;
+        }
+        assertNull(exceptionCaught);
+    }
+
+    public void testNaimRipMultipleFixTagsInfoBothSync()
+    {
+        File orig = new File("testdata", "test152.wav");
+        if (!orig.isFile())
+        {
+            System.err.println("Unable to test file - not available");
+            return;
+        }
+
+        TagOptionSingleton.getInstance().setWavOptions(WavOptions.READ_INFO_ONLY);
+        TagOptionSingleton.getInstance().setWavSaveOptions(WavSaveOptions.SAVE_BOTH_AND_SYNC);
+
+        Exception exceptionCaught = null;
+        try
+        {
+            File testFile = AbstractTestCase.copyAudioToTmp("test152.wav", new File("test152_existing_info_both_sync.wav"));
             AudioFile f = AudioFileIO.read(testFile);
             System.out.println(f.getAudioHeader());
             System.out.println(f.getTag());
