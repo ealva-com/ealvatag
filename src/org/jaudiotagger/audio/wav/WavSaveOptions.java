@@ -10,13 +10,14 @@ package org.jaudiotagger.audio.wav;
  * even if the active chink is not currently in the file that will be saved as well. So if WavOptions.READ_ID3_ONLY is enabled
  * then an ID3 tag will always be written and the info tag will as well if it already exists, if it does not it will not.
  *
- * If SAVE_ACTIVE is selected only that tag will be saved to file. So if WavOptions.READ_ID3_ONLY only this wil be saved
+ * If SAVE_ACTIVE is selected only that tag will be saved to file. So if WavOptions.READ_ID3_ONLY only this will be saved
  * to file, any existing INFO chunk will be deleted
  *
  * If SAVE_BOTH is selected an ID3 chunk and an INFO chunk are always written, regardless of whether or not they currently exist.
- * This option should be set using TagOptionSingleton.setWavSaveOptions()
  *
  * The _SYNC_ methods write any data added to the active tag to the inactive tag just before writing.
+ *
+ * This option should be set using TagOptionSingleton.setWavSaveOptions()
  */
 public enum WavSaveOptions
 {
