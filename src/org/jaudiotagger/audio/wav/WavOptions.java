@@ -22,7 +22,7 @@ package org.jaudiotagger.audio.wav;
  *
  * The _AND_SYNC versions synchronize the active tag with any additional data that may be available in the nonactive tag
  * after the initial read. For example if the ID3 tag is the active tag but contains no artist tag, but the nonactive
- * Info tag does then the ID3 tag will be initialized with teh same value for the artist field.
+ * Info tag does then the ID3 tag will be initialized with the same value for the artist field.
  */
 public enum WavOptions
 {
