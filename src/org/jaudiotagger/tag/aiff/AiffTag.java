@@ -25,6 +25,11 @@ public class AiffTag implements Tag, Id3SupportingTag
         chunkSummaryList.add(cs);
     }
 
+    public List<ChunkSummary> getChunkSummaryList()
+    {
+        return chunkSummaryList;
+    }
+
     private boolean isIncorrectlyAlignedTag = false;
 
     private boolean isExistingId3Tag = false;

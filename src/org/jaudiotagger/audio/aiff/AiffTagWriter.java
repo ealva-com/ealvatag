@@ -26,6 +26,7 @@ import org.jaudiotagger.audio.generic.TagWriter;
 import org.jaudiotagger.audio.generic.Utils;
 import org.jaudiotagger.audio.iff.Chunk;
 import org.jaudiotagger.audio.iff.ChunkHeader;
+import org.jaudiotagger.audio.iff.ChunkSummary;
 import org.jaudiotagger.audio.iff.IffHeaderChunk;
 import org.jaudiotagger.tag.Tag;
 import org.jaudiotagger.tag.TagOptionSingleton;
@@ -89,7 +90,7 @@ public class AiffTagWriter implements TagWriter
 
         if(!ChunkType.TAG.getCode().equals(chunkHeader.getID()))
         {
-            throw new CannotWriteException("Unable to find ID3 chunk at expected location");
+            throw new CannotWriteException("Unable to find ID3 chunk at expected location:"+existingTag.getStartLocationInFileOfId3Chunk());
         }
         return chunkHeader;
     }
@@ -172,7 +173,7 @@ public class AiffTagWriter implements TagWriter
             }
         }
         final long newLength = raf.length() - lengthTagChunk;
-        logger.severe("Size of id3 chunk to delete is:"+newLength);
+        logger.severe("Size of id3 chunk to delete is:"+lengthTagChunk+":Location:"+existingTag.getStartLocationInFileOfId3Chunk());
 
         // position for reading after the id3 tag
         raf.seek(existingTag.getStartLocationInFileOfId3Chunk() + lengthTagChunk );
@@ -180,8 +181,29 @@ public class AiffTagWriter implements TagWriter
 
         deleteTagChunkUsingSmallByteBufferSegments(existingTag, channel, newLength, lengthTagChunk);
         // truncate the file after the last chunk
-        logger.config("Setting new length to:" + newLength);
+        logger.severe("Setting new length to:" + newLength);
         raf.setLength(newLength);
+    }
+
+    /** If Metadata tags are corrupted and no other tags later in the file then just truncate ID3 tags and start again
+     *
+     * @param raf
+     * @param existingTag
+     * @throws IOException
+     */
+    private void deleteRemainderOfFile(final RandomAccessFile raf, final AiffTag existingTag) throws IOException
+    {
+        ChunkSummary precedingChunk = ChunkSummary.getChunkBeforeStartingMetadataTag(existingTag);
+        if(!Utils.isOddLength(precedingChunk.getEndLocation()))
+        {
+            logger.severe("Truncating corrupted ID3 tags from:" + (existingTag.getStartLocationInFileOfId3Chunk() - 1));
+            raf.setLength(existingTag.getStartLocationInFileOfId3Chunk() - 1);
+        }
+        else
+        {
+            logger.severe("Truncating corrupted ID3 tags from:" + (existingTag.getStartLocationInFileOfId3Chunk()));
+            raf.setLength(existingTag.getStartLocationInFileOfId3Chunk());
+        }
     }
 
     /**
@@ -276,17 +298,21 @@ public class AiffTagWriter implements TagWriter
                         writeDataToFile(raf, bb);
                     }
                 }
-                //Existing ID3 tag is incorrectly aligned so lets delete it
-                else
+                //Existing ID3 tag is incorrectly aligned so if we can lets delete it and any subsequentially added
+                //ID3 tags as we only want one ID3 tag.
+                else if(ChunkSummary.isOnlyMetadataTagsAfterStartingMetadataTag(existingTag))
                 {
-                    final ChunkHeader chunkHeader = seekToStartOfMetadata(raf, existingTag);
-                    deleteTagChunk(raf, existingTag, chunkHeader);
+                    deleteRemainderOfFile(raf, existingTag);
                     raf.seek(raf.length());
                     if (Utils.isOddLength(raf.length()))
                     {
                         raf.write(new byte[1]);
                     }
                     writeDataToFile(raf, bb);
+                }
+                else
+                {
+                    throw new CannotWriteException("Metadata tags are corrupted and not at end of file so cannot be fixed");
                 }
             }
             //New Tag
