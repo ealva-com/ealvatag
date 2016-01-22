@@ -105,7 +105,7 @@ public class AiffInfoReader extends AiffChunkReader
      */
     private Chunk createChunk(RandomAccessFile raf, final ChunkHeader chunkHeader, AiffAudioHeader aiffAudioHeader)
     throws IOException {
-        final ChunkType chunkType = ChunkType.get(chunkHeader.getID());
+        final AiffChunkType chunkType = AiffChunkType.get(chunkHeader.getID());
         Chunk chunk;
         if (chunkType != null)
         {

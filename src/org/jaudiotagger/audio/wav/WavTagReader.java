@@ -26,6 +26,7 @@ import org.jaudiotagger.audio.iff.ChunkSummary;
 import org.jaudiotagger.audio.iff.IffHeaderChunk;
 import org.jaudiotagger.audio.wav.chunk.WavId3Chunk;
 import org.jaudiotagger.audio.wav.chunk.WavListChunk;
+import org.jaudiotagger.logging.Hex;
 import org.jaudiotagger.tag.TagOptionSingleton;
 import org.jaudiotagger.tag.id3.ID3v23Tag;
 import org.jaudiotagger.tag.wav.WavInfoTag;
@@ -33,7 +34,6 @@ import org.jaudiotagger.tag.wav.WavTag;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
-import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.logging.Logger;
 
@@ -113,36 +113,74 @@ public class WavTagReader
         }
 
         String id = chunkHeader.getID();
-        logger.severe("Next Id is:" + id + ":FileLocation:"+raf.getFilePointer() + ":Size:" + chunkHeader.getSize());
+        logger.config("Next Id is:" + id + ":FileLocation:" + raf.getFilePointer() + ":Size:" + chunkHeader.getSize());
         final WavChunkType chunkType = WavChunkType.get(id);
         if (chunkType != null)
         {
             switch (chunkType)
             {
                 case LIST:
-
-                    chunk = new WavListChunk(Utils.readFileDataIntoBufferLE(raf, (int)chunkHeader.getSize()), chunkHeader, tag);
                     tag.addChunkSummary(new ChunkSummary(chunkHeader.getID(), chunkHeader.getStartLocationInFile(), chunkHeader.getSize()));
-                    if (!chunk.readChunk())
+                    if(tag.getInfoTag()==null)
                     {
-                        return false;
+                        chunk = new WavListChunk(Utils.readFileDataIntoBufferLE(raf, (int) chunkHeader.getSize()), chunkHeader, tag);
+                        if (!chunk.readChunk())
+                        {
+                            return false;
+                        }
+                    }
+                    else
+                    {
+                        logger.warning("Ignoring LIST chunk because already have one:" + chunkHeader.getID() + ":" + (chunkHeader.getStartLocationInFile() - 1) + "(" + Hex.asHex(chunkHeader.getStartLocationInFile()) + ")"
+                                + ":sizeIncHeader:"+ (chunkHeader.getSize() + ChunkHeader.CHUNK_HEADER_SIZE));
                     }
                     break;
 
                 case CORRUPT_LIST:
-                    logger.warning("Found Corrupt LIST Chunk, starting at Odd Location:"+chunkHeader.getID()+":"+chunkHeader.getSize());
-                    tag.setIncorrectlyAlignedTag(true);
+                    logger.severe("Found Corrupt LIST Chunk, starting at Odd Location:"+chunkHeader.getID()+":"+chunkHeader.getSize());
+
+                    if(tag.getInfoTag()==null && tag.getID3Tag() == null)
+                    {
+                        tag.setIncorrectlyAlignedTag(true);
+                    }
                     raf.seek(raf.getFilePointer() -  (ChunkHeader.CHUNK_HEADER_SIZE - 1));
                     return true;
 
                 case ID3:
-                    chunk = new WavId3Chunk(Utils.readFileDataIntoBufferLE(raf, (int)chunkHeader.getSize()), chunkHeader, tag);
                     tag.addChunkSummary(new ChunkSummary(chunkHeader.getID(), chunkHeader.getStartLocationInFile(), chunkHeader.getSize()));
-                    if (!chunk.readChunk())
+                    if(tag.getID3Tag()==null)
                     {
-                        return false;
+                        chunk = new WavId3Chunk(Utils.readFileDataIntoBufferLE(raf, (int) chunkHeader.getSize()), chunkHeader, tag);
+                        if (!chunk.readChunk())
+                        {
+                            return false;
+                        }
+                    }
+                    else
+                    {
+                        logger.warning("Ignoring id3 chunk because already have one:" + chunkHeader.getID() + ":" + (chunkHeader.getStartLocationInFile() - 1) + "(" + Hex.asHex(chunkHeader.getStartLocationInFile()) + ")"
+                                + ":sizeIncHeader:"+ (chunkHeader.getSize() + ChunkHeader.CHUNK_HEADER_SIZE));
                     }
                     break;
+
+                case CORRUPT_ID3_EARLY:
+                    logger.severe("Found Corrupt id3 chunk, starting at Odd Location:"+chunkHeader.getID()+":"+chunkHeader.getSize());
+                    if(tag.getInfoTag()==null && tag.getID3Tag() == null)
+                    {
+                        tag.setIncorrectlyAlignedTag(true);
+                    }
+                    raf.seek(raf.getFilePointer() -  (ChunkHeader.CHUNK_HEADER_SIZE - 1));
+                    return true;
+
+                case CORRUPT_ID3_LATE:
+                    logger.severe("Found Corrupt id3 chunk, starting at Odd Location:"+chunkHeader.getID()+":"+chunkHeader.getSize());
+                    if(tag.getInfoTag()==null && tag.getID3Tag() == null)
+                    {
+                        tag.setIncorrectlyAlignedTag(true);
+                    }
+                    raf.seek(raf.getFilePointer() -  (ChunkHeader.CHUNK_HEADER_SIZE - 1));
+                    return true;
+
                 default:
                     tag.addChunkSummary(new ChunkSummary(chunkHeader.getID(), chunkHeader.getStartLocationInFile(), chunkHeader.getSize()));
                     raf.skipBytes((int)chunkHeader.getSize());

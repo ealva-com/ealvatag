@@ -19,7 +19,8 @@
 package org.jaudiotagger.audio.aiff;
 
 import org.jaudiotagger.audio.AudioFile;
-import org.jaudiotagger.audio.aiff.chunk.ChunkType;
+import org.jaudiotagger.audio.aiff.chunk.AiffChunkSummary;
+import org.jaudiotagger.audio.aiff.chunk.AiffChunkType;
 import org.jaudiotagger.audio.exceptions.CannotReadException;
 import org.jaudiotagger.audio.exceptions.CannotWriteException;
 import org.jaudiotagger.audio.generic.TagWriter;
@@ -88,7 +89,7 @@ public class AiffTagWriter implements TagWriter
         chunkHeader.readHeader(raf);
         raf.seek(raf.getFilePointer() - ChunkHeader.CHUNK_HEADER_SIZE);
 
-        if(!ChunkType.TAG.getCode().equals(chunkHeader.getID()))
+        if(!AiffChunkType.TAG.getCode().equals(chunkHeader.getID()))
         {
             throw new CannotWriteException("Unable to find ID3 chunk at expected location:"+existingTag.getStartLocationInFileOfId3Chunk());
         }
@@ -193,7 +194,7 @@ public class AiffTagWriter implements TagWriter
      */
     private void deleteRemainderOfFile(final RandomAccessFile raf, final AiffTag existingTag) throws IOException
     {
-        ChunkSummary precedingChunk = ChunkSummary.getChunkBeforeStartingMetadataTag(existingTag);
+        ChunkSummary precedingChunk = AiffChunkSummary.getChunkBeforeStartingMetadataTag(existingTag);
         if(!Utils.isOddLength(precedingChunk.getEndLocation()))
         {
             logger.severe("Truncating corrupted ID3 tags from:" + (existingTag.getStartLocationInFileOfId3Chunk() - 1));
@@ -300,7 +301,7 @@ public class AiffTagWriter implements TagWriter
                 }
                 //Existing ID3 tag is incorrectly aligned so if we can lets delete it and any subsequentially added
                 //ID3 tags as we only want one ID3 tag.
-                else if(ChunkSummary.isOnlyMetadataTagsAfterStartingMetadataTag(existingTag))
+                else if(AiffChunkSummary.isOnlyMetadataTagsAfterStartingMetadataTag(existingTag))
                 {
                     deleteRemainderOfFile(raf, existingTag);
                     raf.seek(raf.length());
@@ -350,7 +351,7 @@ public class AiffTagWriter implements TagWriter
     }
 
     /**
-     * Writes data as a {@link ChunkType#TAG} chunk to the file.
+     * Writes data as a {@link org.jaudiotagger.audio.aiff.chunk.AiffChunkType#TAG} chunk to the file.
      *
      * @param raf random access file
      * @param bb data to write
@@ -360,7 +361,7 @@ public class AiffTagWriter implements TagWriter
             throws IOException
     {
         final ChunkHeader ch = new ChunkHeader(ByteOrder.BIG_ENDIAN);
-        ch.setID(ChunkType.TAG.getCode());
+        ch.setID(AiffChunkType.TAG.getCode());
         ch.setSize(bb.limit());
         FileChannel fc = raf.getChannel();
         fc.write(ch.writeHeader());

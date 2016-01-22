@@ -75,8 +75,8 @@ public class AiffTagReader extends AiffChunkReader
         logger.config("Reading Chunk:" + chunkHeader.getID() + ":starting at:" + chunkHeader.getStartLocationInFile() + "(" + Hex.asHex(chunkHeader.getStartLocationInFile()) + ")" + ":sizeIncHeader:" + (chunkHeader.getSize() + ChunkHeader.CHUNK_HEADER_SIZE));
 
         long startLocationOfId3TagInFile = raf.getFilePointer();
-        ChunkType chunkType = ChunkType.get(chunkHeader.getID());
-        if (chunkType!=null && chunkType==ChunkType.TAG)
+        AiffChunkType chunkType = AiffChunkType.get(chunkHeader.getID());
+        if (chunkType!=null && chunkType== AiffChunkType.TAG)
         {
             ByteBuffer chunkData = readChunkDataIntoBuffer(raf, chunkHeader);
             aiffTag.addChunkSummary(new ChunkSummary(chunkHeader.getID(), chunkHeader.getStartLocationInFile(), chunkHeader.getSize()));
@@ -92,37 +92,46 @@ public class AiffTagReader extends AiffChunkReader
             }
             //else otherwise we discard because the first one found is the one that will be used by other apps
             {
-                logger.warning("Ignoring ID3Tag because already have one:" + chunkHeader.getID() + ":" + (chunkHeader.getStartLocationInFile() - 1) + "(" + Hex.asHex(chunkHeader.getStartLocationInFile()) + ")"
-                        + ":sizeIncHeader:"+ (chunkHeader.getSize() + ChunkHeader.CHUNK_HEADER_SIZE));
+                logger.warning("Ignoring ID3Tag because already have one:" + chunkHeader.getID() + ":" + (chunkHeader.getStartLocationInFile() - 1) + "(" + Hex.asHex(chunkHeader.getStartLocationInFile()) + ")" + ":sizeIncHeader:" + (chunkHeader.getSize() + ChunkHeader.CHUNK_HEADER_SIZE));
             }
         }
         //Special handling to recognise ID3Tags written on odd boundary because original preceding chunk odd length but
         //didn't write padding byte
-        else if(chunkType!=null && chunkType==ChunkType.CORRUPT_TAG_LATE)
+        else if(chunkType!=null && chunkType== AiffChunkType.CORRUPT_TAG_LATE)
         {
             logger.warning("Found Corrupt ID3 Chunk, starting at Odd Location:" + chunkHeader.getID() + ":" + (chunkHeader.getStartLocationInFile() - 1) + "(" + Hex.asHex(chunkHeader.getStartLocationInFile()) + ")"
                     + ":sizeIncHeader:"+ (chunkHeader.getSize() + ChunkHeader.CHUNK_HEADER_SIZE));
-            aiffTag.setIncorrectlyAlignedTag(true);
-            raf.seek(raf.getFilePointer() -  (ChunkHeader.CHUNK_HEADER_SIZE + 1));
+
+            //We only want to know if first metadata tag is misaligned
+            if(aiffTag.getID3Tag()==null)
+            {
+                aiffTag.setIncorrectlyAlignedTag(true);
+            }
+            raf.seek(raf.getFilePointer() - (ChunkHeader.CHUNK_HEADER_SIZE + 1));
             return true;
         }
         //Other Special handling for ID3Tags
-        else if(chunkType!=null && chunkType==ChunkType.CORRUPT_TAG_EARLY)
+        else if(chunkType!=null && chunkType== AiffChunkType.CORRUPT_TAG_EARLY)
         {
             logger.warning("Found Corrupt ID3 Chunk, starting at Odd Location:" + chunkHeader.getID() + ":" + (chunkHeader.getStartLocationInFile() + 1) + "(" + Hex.asHex(chunkHeader.getStartLocationInFile()) + ")"
                     + ":sizeIncHeader:"+ (chunkHeader.getSize() + ChunkHeader.CHUNK_HEADER_SIZE));
-            aiffTag.setIncorrectlyAlignedTag(true);
+
+            //We only want to know if first metadata tag is misaligned
+            if(aiffTag.getID3Tag()==null)
+            {
+                aiffTag.setIncorrectlyAlignedTag(true);
+            }
             raf.seek(raf.getFilePointer() -  (ChunkHeader.CHUNK_HEADER_SIZE - 1));
             return true;
         }
         else
         {
-            logger.config("Skipping Chunk:"+chunkHeader.getID()+":"+chunkHeader.getSize());
+            logger.config("Skipping Chunk:" + chunkHeader.getID() + ":" + chunkHeader.getSize());
             aiffTag.addChunkSummary(new ChunkSummary(chunkHeader.getID(), chunkHeader.getStartLocationInFile(), chunkHeader.getSize()));
             int noBytesSkipped = raf.skipBytes((int)chunkHeader.getSize());
             if(noBytesSkipped < chunkHeader.getSize())
             {
-                logger.severe("Only Skipped:" + noBytesSkipped + "for "+chunkHeader.getID());
+                logger.severe("Only Skipped:" + noBytesSkipped + "for " + chunkHeader.getID());
                 return false;
             }
         }

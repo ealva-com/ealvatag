@@ -7,7 +7,7 @@ import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.AudioFileIO;
 import org.jaudiotagger.audio.AudioHeader;
 import org.jaudiotagger.audio.aiff.AiffAudioHeader;
-import org.jaudiotagger.audio.aiff.chunk.ChunkType;
+import org.jaudiotagger.audio.aiff.chunk.AiffChunkType;
 import org.jaudiotagger.audio.iff.ChunkHeader;
 import org.jaudiotagger.audio.iff.IffHeaderChunk;
 import org.jaudiotagger.audio.wav.WavOptions;
@@ -16,8 +16,6 @@ import org.jaudiotagger.tag.FieldKey;
 import org.jaudiotagger.tag.Tag;
 import org.jaudiotagger.tag.TagOptionSingleton;
 import org.jaudiotagger.tag.id3.ID3v22Tag;
-import org.jaudiotagger.tag.id3.ID3v24Tag;
-import org.jaudiotagger.tag.id3.Id3SupportingTag;
 
 import java.io.File;
 import java.io.IOException;
@@ -358,9 +356,9 @@ public class AiffAudioTagTest extends TestCase {
         try
         {
             final List<String> oldChunkIds = readChunkIds(testFile);
-            assertEquals(ChunkType.TAG.getCode(), oldChunkIds.get(0));
-            assertEquals(ChunkType.COMMON.getCode(), oldChunkIds.get(1));
-            assertEquals(ChunkType.SOUND.getCode(), oldChunkIds.get(2));
+            assertEquals(AiffChunkType.TAG.getCode(), oldChunkIds.get(0));
+            assertEquals(AiffChunkType.COMMON.getCode(), oldChunkIds.get(1));
+            assertEquals(AiffChunkType.SOUND.getCode(), oldChunkIds.get(2));
             assertTrue(oldChunkIds.size() == 3);
 
             final int oldSize = readAIFFFormSize(testFile);
@@ -385,8 +383,8 @@ public class AiffAudioTagTest extends TestCase {
             assertFalse("FORM chunk size should have changed, but hasn't.", oldSize == newSize);
 
             final List<String> newChunkIds = readChunkIds(testFile);
-            assertEquals(ChunkType.COMMON.getCode(), newChunkIds.get(0));
-            assertEquals(ChunkType.SOUND.getCode(), newChunkIds.get(1));
+            assertEquals(AiffChunkType.COMMON.getCode(), newChunkIds.get(0));
+            assertEquals(AiffChunkType.SOUND.getCode(), newChunkIds.get(1));
             assertTrue(newChunkIds.size() == 2);
 
         }
@@ -413,9 +411,9 @@ public class AiffAudioTagTest extends TestCase {
         try
         {
             final List<String> oldChunkIds = readChunkIds(testFile);
-            assertEquals(ChunkType.TAG.getCode(), oldChunkIds.get(0));
-            assertEquals(ChunkType.COMMON.getCode(), oldChunkIds.get(1));
-            assertEquals(ChunkType.SOUND.getCode(), oldChunkIds.get(2));
+            assertEquals(AiffChunkType.TAG.getCode(), oldChunkIds.get(0));
+            assertEquals(AiffChunkType.COMMON.getCode(), oldChunkIds.get(1));
+            assertEquals(AiffChunkType.SOUND.getCode(), oldChunkIds.get(2));
             assertTrue(oldChunkIds.size() == 3);
 
             AudioFile f = AudioFileIO.read(testFile);
@@ -448,10 +446,10 @@ public class AiffAudioTagTest extends TestCase {
             assertEquals(882054L,((AiffTag) tag).getStartLocationInFileOfId3Chunk());
 
             final List<String> newChunkIds = readChunkIds(testFile);
-            assertEquals(ChunkType.COMMON.getCode(), newChunkIds.get(0));
-            assertEquals(ChunkType.SOUND.getCode(), newChunkIds.get(1));
+            assertEquals(AiffChunkType.COMMON.getCode(), newChunkIds.get(0));
+            assertEquals(AiffChunkType.SOUND.getCode(), newChunkIds.get(1));
             // ID3 TAG should be at end
-            assertEquals(ChunkType.TAG.getCode(), newChunkIds.get(2));
+            assertEquals(AiffChunkType.TAG.getCode(), newChunkIds.get(2));
             assertTrue(newChunkIds.size() == 3);
         }
         catch(Exception ex)
@@ -727,9 +725,9 @@ public class AiffAudioTagTest extends TestCase {
         try
         {
             final List<String> oldChunkIds = readChunkIds(testFile);
-            assertEquals(ChunkType.TAG.getCode(), oldChunkIds.get(0));
-            assertEquals(ChunkType.COMMON.getCode(), oldChunkIds.get(1));
-            assertEquals(ChunkType.SOUND.getCode(), oldChunkIds.get(2));
+            assertEquals(AiffChunkType.TAG.getCode(), oldChunkIds.get(0));
+            assertEquals(AiffChunkType.COMMON.getCode(), oldChunkIds.get(1));
+            assertEquals(AiffChunkType.SOUND.getCode(), oldChunkIds.get(2));
             assertTrue(oldChunkIds.size() == 3);
 
             final int oldSize = readAIFFFormSize(testFile);
@@ -754,8 +752,8 @@ public class AiffAudioTagTest extends TestCase {
             assertFalse("FORM chunk size should have changed, but hasn't.", oldSize == newSize);
 
             final List<String> newChunkIds = readChunkIds(testFile);
-            assertEquals(ChunkType.COMMON.getCode(), newChunkIds.get(0));
-            assertEquals(ChunkType.SOUND.getCode(), newChunkIds.get(1));
+            assertEquals(AiffChunkType.COMMON.getCode(), newChunkIds.get(0));
+            assertEquals(AiffChunkType.SOUND.getCode(), newChunkIds.get(1));
             assertTrue(newChunkIds.size() == 2);
 
         }
