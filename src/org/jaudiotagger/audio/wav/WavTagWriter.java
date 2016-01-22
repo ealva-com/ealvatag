@@ -53,7 +53,7 @@ import static org.jaudiotagger.audio.iff.IffHeaderChunk.SIZE_LENGTH;
 public class WavTagWriter implements TagWriter
 {
     // Logger Object
-    public static Logger logger = Logger.getLogger("org.jaudiotagger.audio.Wav");
+    public static Logger logger = Logger.getLogger("org.jaudiotagger.audio.wav");
 
     /**
      * Read existing metadata
@@ -867,7 +867,7 @@ public class WavTagWriter implements TagWriter
             //tags and start again
             else if(WavChunkSummary.isOnlyMetadataTagsAfterStartingMetadataTag(existingTag))
             {
-                deleteInfoMetadataTagAndRemainderOfFile(raf, existingTag);
+                deleteExistingMetadataTagsToEndOfFile(raf, existingTag);
                 raf.seek(raf.length());
                 writeInfoDataToFile(raf, infoTagBuffer, newInfoTagSize);
             }
@@ -907,7 +907,7 @@ public class WavTagWriter implements TagWriter
             }
             else if(WavChunkSummary.isOnlyMetadataTagsAfterStartingMetadataTag(existingTag))
             {
-                deleteInfoMetadataTagAndRemainderOfFile(raf, existingTag);
+                deleteExistingMetadataTagsToEndOfFile(raf, existingTag);
                 raf.seek(raf.length());
                 writeID3DataToFile(raf, id3TagBuffer);
             }
@@ -954,20 +954,22 @@ public class WavTagWriter implements TagWriter
         }
     }
 
-    /** If Info Metadata tags are corrupted and only metadata tags later in the file then just truncate metadata tags and start again
+    /** If Info/ID3 Metadata tags are corrupted and only metadata tags later in the file then just truncate metadata tags and start again
      *
      * @param raf
      * @param existingTag
      * @throws IOException
      */
-    private void deleteInfoMetadataTagAndRemainderOfFile(final RandomAccessFile raf, final WavTag existingTag) throws IOException
+    private void deleteExistingMetadataTagsToEndOfFile(final RandomAccessFile raf, final WavTag existingTag) throws IOException
     {
-        ChunkSummary precedingChunk = WavChunkSummary.getChunkBeforeStartingInfoMetadataTag(existingTag);
+        ChunkSummary precedingChunk = WavChunkSummary.getChunkBeforeFirstMetadataTag(existingTag);
+        //Preceding chunk ends on odd boundary
         if(!Utils.isOddLength(precedingChunk.getEndLocation()))
         {
             logger.severe("Truncating corrupted metadata tags from:" + (existingTag.getInfoTag().getStartLocationInFile() - 1));
             raf.setLength(existingTag.getInfoTag().getStartLocationInFile() - 1);
         }
+        //Preceding chunk ends on even boundary
         else
         {
             logger.severe("Truncating corrupted metadata tags from:" + (existingTag.getInfoTag().getStartLocationInFile()));
