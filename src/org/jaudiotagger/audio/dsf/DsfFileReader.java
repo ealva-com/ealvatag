@@ -84,25 +84,23 @@ public class DsfFileReader extends AudioFileReader
     {
         if(dsd.getMetadataOffset() > 0)
         {
-            //Move to start of ID3Tag and read rest of file into ByteBuffer
             file.seek(dsd.getMetadataOffset());
-            ByteBuffer tagBuffer = Utils.readFileDataIntoBufferLE(file, (int) (file.length() - file.getFilePointer()));
-            String type = Utils.readThreeBytesAsChars(tagBuffer);
-            if (DsfChunkType.ID3.getCode().equals(type))
+            ID3Chunk id3Chunk = ID3Chunk.readChunk(Utils.readFileDataIntoBufferLE(file, (int) (file.length() - file.getFilePointer())));
+            if(id3Chunk!=null)
             {
-                int version = tagBuffer.get(AbstractID3v2Tag.FIELD_TAG_MAJOR_VERSION_POS);
+                int version = id3Chunk.getDataBuffer().get(AbstractID3v2Tag.FIELD_TAG_MAJOR_VERSION_POS);
                 try
                 {
                     switch (version)
                     {
                         case ID3v22Tag.MAJOR_VERSION:
-                            return new ID3v22Tag(tagBuffer, "");
+                            return new ID3v22Tag(id3Chunk.getDataBuffer(), "");
                         case ID3v23Tag.MAJOR_VERSION:
-                            return new ID3v23Tag(tagBuffer, "");
+                            return new ID3v23Tag(id3Chunk.getDataBuffer(), "");
                         case ID3v24Tag.MAJOR_VERSION:
-                            return new ID3v24Tag(tagBuffer, "");
+                            return new ID3v24Tag(id3Chunk.getDataBuffer(), "");
                         default:
-                            logger.log(Level.WARNING, "Unknown ID3v2 version " + type + ". Returning an empty ID3v2 Tag.");
+                            logger.log(Level.WARNING, "Unknown ID3v2 version " + version + ". Returning an empty ID3v2 Tag.");
                             return new ID3v24Tag();
                     }
                 }
@@ -113,7 +111,7 @@ public class DsfFileReader extends AudioFileReader
             }
             else
             {
-                logger.log(Level.WARNING, "No existing ID3 tag(1)" + type + ". Returning an empty ID3v2 Tag.");
+                logger.log(Level.WARNING, "No existing ID3 tag(1)"  + ". Returning an empty ID3v2 Tag.");
                 return new ID3v24Tag();
             }
         }
