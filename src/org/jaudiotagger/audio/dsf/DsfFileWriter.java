@@ -38,56 +38,45 @@ import java.nio.file.StandardOpenOption;
  */
 public class DsfFileWriter extends AudioFileWriter2
 {
-    protected void writeTag(AudioFile audioFile, Tag tag, File file) throws CannotWriteException, IOException
+    protected void writeTag(Tag tag, Path file) throws CannotWriteException
     {
-
-    }
-
-    /**
-     * Write Metadata tag
-     *
-     * @param audioFile
-     * @param tag
-     * @param file
-     * @param rafTemp
-     * @throws CannotWriteException
-     * @throws IOException
-     */
-    @Override
-    protected void writeTag(AudioFile audioFile, Tag tag, RandomAccessFile file, RandomAccessFile rafTemp) throws CannotWriteException, IOException
-    {
-        DsdChunk dsd = DsdChunk.readChunk(Utils.readFileDataIntoBufferLE(file, DsdChunk.DSD_HEADER_LENGTH));
-        if(dsd!=null)
+        try(FileChannel fc = FileChannel.open(file, StandardOpenOption.WRITE, StandardOpenOption.READ))
         {
-            if(dsd.getMetadataOffset()> 0)
+            DsdChunk dsd = DsdChunk.readChunk(Utils.readFileDataIntoBufferLE(fc, DsdChunk.DSD_HEADER_LENGTH));
+            if (dsd != null)
             {
-                file.seek(dsd.getMetadataOffset());
-                ID3Chunk id3Chunk = ID3Chunk.readChunk(Utils.readFileDataIntoBufferLE(file, (int) (file.length() - file.getFilePointer())));
-                if(id3Chunk!=null)
+                if (dsd.getMetadataOffset() > 0)
                 {
-                    //Remove Existing tag
-                    file.setLength(dsd.getMetadataOffset());
-                    final ByteBuffer bb = convert((AbstractID3v2Tag)tag);
-                    FileChannel fc = file.getChannel();
-                    fc.write(bb);
+                    fc.position(dsd.getMetadataOffset());
+                    ID3Chunk id3Chunk = ID3Chunk.readChunk(Utils.readFileDataIntoBufferLE(fc, (int) (fc.size() - fc.position())));
+                    if (id3Chunk != null)
+                    {
+                        //Remove Existing tag
+                        fc.position(dsd.getMetadataOffset());
+                        final ByteBuffer bb = convert((AbstractID3v2Tag) tag);
+                        fc.write(bb);
+                    }
+                    else
+                    {
+                        throw new CannotWriteException(file + "Could not find existing ID3v2 Tag");
+                    }
                 }
                 else
                 {
-                    throw new CannotWriteException("Could not find existing ID3v2 Tag");
+                    //Write new tag and new offset and size
+                    fc.position(fc.size());
+                    dsd.setMetadataOffset(fc.size());
+                    final ByteBuffer bb = convert((AbstractID3v2Tag) tag);
+                    fc.write(bb);
+                    dsd.setFileLength(fc.size());
+                    fc.position(0);
+                    fc.write(dsd.write());
                 }
             }
-            else
-            {
-                //Write new tag and new offset and size
-                file.seek(file.length());
-                dsd.setMetadataOffset(file.length());
-                final ByteBuffer bb = convert((AbstractID3v2Tag)tag);
-                FileChannel fc = file.getChannel();
-                fc.write(bb);
-                dsd.setFileLength(file.length());
-                file.seek(0);
-                file.getChannel().write(dsd.write());
-            }
+        }
+        catch(IOException ioe)
+        {
+            throw new CannotWriteException(ioe.getMessage());
         }
     }
 
@@ -174,7 +163,7 @@ public class DsfFileWriter extends AudioFileWriter2
         }
         catch(IOException ioe)
         {
-            throw new CannotWriteException(ioe.getMessage());
+            throw new CannotWriteException(file + ":"+ioe.getMessage());
         }
     }
 

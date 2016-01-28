@@ -44,6 +44,39 @@ public abstract class AudioFileWriter2 extends AudioFileWriter
         deleteTag(af.getTag(), file);
     }
 
+    /**
+     * Replace with new tag
+     *
+     * @param af The file we want to process
+     * @throws CannotWriteException
+     */
+    @Override
+    public void write(AudioFile af) throws CannotWriteException
+    {
+        Path file = af.getFile().toPath();
+
+        if (!Files.isWritable(file))
+        {
+            throw new CannotWriteException(ErrorMessage.GENERAL_DELETE_FAILED
+                    .getMsg(file));
+        }
+
+        if (af.getFile().length() <= MINIMUM_FILESIZE)
+        {
+            throw new CannotWriteException(ErrorMessage.GENERAL_DELETE_FAILED
+                    .getMsg(file));
+        }
+        writeTag(af.getTag(), file);
+    }
+
+    /**
+     * Must be implemented by each audio format
+     *
+     * @param tag
+     * @param file
+     * @throws CannotReadException
+     * @throws CannotWriteException
+     */
     protected abstract void deleteTag(Tag tag, Path file) throws CannotReadException, CannotWriteException;
 
 
@@ -52,7 +85,14 @@ public abstract class AudioFileWriter2 extends AudioFileWriter
         throw new UnsupportedOperationException("Old method not used in version 2");
     }
 
-    protected abstract void writeTag(AudioFile audioFile, Tag tag, File file) throws CannotReadException, CannotWriteException, IOException;
+    /**
+     * Must be implemented by each audio format
+     *
+     * @param tag
+     * @param file
+     * @throws CannotWriteException
+     */
+    protected abstract void writeTag(Tag tag, Path file) throws CannotWriteException;
 
     protected   void writeTag(AudioFile audioFile, Tag tag, RandomAccessFile raf, RandomAccessFile rafTemp) throws CannotReadException, CannotWriteException, IOException
     {
