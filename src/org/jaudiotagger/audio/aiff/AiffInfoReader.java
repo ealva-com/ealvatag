@@ -29,15 +29,15 @@ public class AiffInfoReader extends AiffChunkReader
     {
         try(FileChannel fc = FileChannel.open(file))
         {
-            logger.config(file + ":Reading AIFF file size:" + fc.size() + " (" + Hex.asHex(fc.size()) + ")");
+            logger.config(file + " Reading AIFF file size:" + fc.size() + " (" + Hex.asHex(fc.size()) + ")");
             AiffAudioHeader aiffAudioHeader = new AiffAudioHeader();
             final AiffFileHeader fileHeader = new AiffFileHeader();
             fileHeader.readHeader(fc, aiffAudioHeader);
             while (fc.position() < fc.size())
             {
-                if (!readChunk(fc, aiffAudioHeader))
+                if (!readChunk(fc, aiffAudioHeader, file.toString()))
                 {
-                    logger.severe("UnableToReadProcessChunk");
+                    logger.severe(file + " UnableToReadProcessChunk");
                     break;
                 }
             }
@@ -66,9 +66,9 @@ public class AiffInfoReader extends AiffChunkReader
      *
      * @return {@code false}, if we were not able to read a valid chunk id
      */
-    private boolean readChunk(FileChannel fc, AiffAudioHeader aiffAudioHeader) throws IOException
+    private boolean readChunk(FileChannel fc, AiffAudioHeader aiffAudioHeader, String fileName) throws IOException
     {
-        logger.config("Reading Info Chunk");
+        logger.config(fileName + " Reading Info Chunk");
         final Chunk chunk;
         final ChunkHeader chunkHeader = new ChunkHeader(ByteOrder.BIG_ENDIAN);
         if (!chunkHeader.readHeader(fc))
@@ -76,13 +76,13 @@ public class AiffInfoReader extends AiffChunkReader
             return false;
         }
 
-        logger.config("Reading Next Chunk:" + chunkHeader.getID() + ":starting at:" + chunkHeader.getStartLocationInFile() + ":sizeIncHeader:" + (chunkHeader.getSize() + ChunkHeader.CHUNK_HEADER_SIZE));
+        logger.config(fileName + "Reading Next Chunk:" + chunkHeader.getID() + ":starting at:" + chunkHeader.getStartLocationInFile() + ":sizeIncHeader:" + (chunkHeader.getSize() + ChunkHeader.CHUNK_HEADER_SIZE));
         chunk = createChunk(fc, chunkHeader, aiffAudioHeader);
         if (chunk != null)
         {
             if (!chunk.readChunk())
             {
-                logger.severe("ChunkReadFail:" + chunkHeader.getID());
+                logger.severe(fileName + "ChunkReadFail:" + chunkHeader.getID());
                 return false;
             }
         }
@@ -156,7 +156,8 @@ public class AiffInfoReader extends AiffChunkReader
                     chunk = null;
             }
         }
-        else {
+        else
+        {
             chunk = null;
         }
         return chunk;

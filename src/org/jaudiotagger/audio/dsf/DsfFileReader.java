@@ -82,12 +82,12 @@ public class DsfFileReader extends AudioFileReader2
      *
      * @param fc the filechannel from which to read
      * @param dsd  the dsd chunk
-     * @param pathName
+     * @param fileName
      * @return the read tag or an empty tag if something went wrong. Never
      * <code>null</code>.
      * @throws IOException if cannot read file.
      */
-    private Tag readTag(FileChannel fc, DsdChunk dsd, String pathName) throws CannotReadException,IOException
+    private Tag readTag(FileChannel fc, DsdChunk dsd, String fileName) throws CannotReadException,IOException
     {
         if(dsd.getMetadataOffset() > 0)
         {
@@ -107,24 +107,24 @@ public class DsfFileReader extends AudioFileReader2
                         case ID3v24Tag.MAJOR_VERSION:
                             return new ID3v24Tag(id3Chunk.getDataBuffer(), "");
                         default:
-                            logger.log(Level.WARNING,   pathName + " Unknown ID3v2 version " + version + ". Returning an empty ID3v2 Tag.");
+                            logger.log(Level.WARNING,   fileName + " Unknown ID3v2 version " + version + ". Returning an empty ID3v2 Tag.");
                             return null;
                     }
                 }
                 catch (TagException e)
                 {
-                    throw new CannotReadException("Could not read ID3v2 tag:corruption");
+                    throw new CannotReadException(fileName + " Could not read ID3v2 tag:corruption");
                 }
             }
             else
             {
-                logger.log(Level.WARNING, "No existing ID3 tag(1)");
+                logger.log(Level.WARNING, fileName + " No existing ID3 tag(1)");
                 return null;
             }
           }
         else
         {
-            logger.log(Level.WARNING, "No existing ID3 tag(2)");
+            logger.log(Level.WARNING, fileName + " No existing ID3 tag(2)");
             return   null;
         }
     }
