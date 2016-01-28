@@ -4,6 +4,7 @@
  */
 package org.jaudiotagger.audio.dsf;
 
+import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.exceptions.CannotReadException;
 import org.jaudiotagger.audio.generic.AudioFileReader;
 import org.jaudiotagger.audio.generic.GenericAudioHeader;
@@ -54,8 +55,6 @@ public class DsfFileReader extends AudioFileReader
         }
     }
 
-
-
     @Override
     protected Tag getTag(RandomAccessFile raf) throws CannotReadException, IOException
     {
@@ -101,24 +100,24 @@ public class DsfFileReader extends AudioFileReader
                             return new ID3v24Tag(id3Chunk.getDataBuffer(), "");
                         default:
                             logger.log(Level.WARNING, "Unknown ID3v2 version " + version + ". Returning an empty ID3v2 Tag.");
-                            return new ID3v24Tag();
+                            return null;
                     }
                 }
                 catch (TagException e)
                 {
-                    throw new CannotReadException("Could not read ID3v2 tag");
+                    throw new CannotReadException("Could not read ID3v2 tag:corruption");
                 }
             }
             else
             {
-                logger.log(Level.WARNING, "No existing ID3 tag(1)"  + ". Returning an empty ID3v2 Tag.");
-                return new ID3v24Tag();
+                logger.log(Level.WARNING, "No existing ID3 tag(1)");
+                return null;
             }
-        }
+          }
         else
         {
-            logger.log(Level.WARNING, "No existing ID3 tag(2)"  + ". Returning an empty ID3v2 Tag.");
-            return new ID3v24Tag();
+            logger.log(Level.WARNING, "No existing ID3 tag(2)");
+            return   null;
         }
     }
 }

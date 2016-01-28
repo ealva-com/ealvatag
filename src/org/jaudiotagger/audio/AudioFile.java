@@ -18,12 +18,14 @@
  */
 package org.jaudiotagger.audio;
 
+import org.jaudiotagger.audio.dsf.Dsf;
 import org.jaudiotagger.audio.exceptions.CannotReadException;
 import org.jaudiotagger.audio.exceptions.CannotWriteException;
 import org.jaudiotagger.audio.exceptions.ReadOnlyFileException;
 import org.jaudiotagger.audio.flac.metadatablock.MetadataBlockDataPicture;
 import org.jaudiotagger.audio.real.RealTag;
 import org.jaudiotagger.tag.TagOptionSingleton;
+import org.jaudiotagger.tag.id3.ID3v24Tag;
 import org.jaudiotagger.tag.wav.WavTag;
 import org.jaudiotagger.logging.ErrorMessage;
 import org.jaudiotagger.tag.Tag;
@@ -294,7 +296,6 @@ public class AudioFile
      */
     public Tag createDefaultTag()
     {
-        System.out.println(file.getName().substring(file.getName().lastIndexOf('.')));
         if(SupportedFileFormat.FLAC.getFilesuffix().equals(file.getName().substring(file.getName().lastIndexOf('.') + 1)))
         {
             return new FlacTag(VorbisCommentTag.createNewTag(), new ArrayList< MetadataBlockDataPicture >());
@@ -342,6 +343,10 @@ public class AudioFile
         else if(SupportedFileFormat.AIFF.getFilesuffix().equals(file.getName().substring(file.getName().lastIndexOf('.') + 1)))
         {
             return new AiffTag();
+        }
+        else if(SupportedFileFormat.DSF.getFilesuffix().equals(file.getName().substring(file.getName().lastIndexOf('.') + 1)))
+        {
+            return Dsf.createDefaultTag();
         }
         else
         {
