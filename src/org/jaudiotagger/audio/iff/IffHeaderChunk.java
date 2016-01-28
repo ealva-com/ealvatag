@@ -4,6 +4,7 @@ import org.jaudiotagger.audio.generic.Utils;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.nio.channels.FileChannel;
 import java.util.logging.Logger;
 
 /**
@@ -34,6 +35,19 @@ public class IffHeaderChunk
             {
                 logger.config("Skipping Byte because on odd boundary");
                 raf.skipBytes(1);
+            }
+        }
+    }
+
+    public static void ensureOnEqualBoundary(FileChannel fc,ChunkHeader chunkHeader) throws IOException
+    {
+        if (Utils.isOddLength(chunkHeader.getSize()))
+        {
+            // Must come out to an even byte boundary unless at end of file
+            if(fc.position()<fc.size())
+            {
+                logger.config("Skipping Byte because on odd boundary");
+                fc.position(fc.position() + 1);
             }
         }
     }

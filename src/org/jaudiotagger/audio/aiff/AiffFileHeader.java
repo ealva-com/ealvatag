@@ -7,6 +7,7 @@ import org.jaudiotagger.logging.Hex;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
+import java.nio.channels.FileChannel;
 import java.util.logging.Logger;
 
 import static java.nio.ByteOrder.BIG_ENDIAN;
@@ -34,17 +35,17 @@ public class AiffFileHeader
     /**
      * Reads the file header and registers the data (file type) with the given header.
      *
-     * @param raf random access file
+     * @param fc random access file
      * @param aiffAudioHeader the {@link org.jaudiotagger.audio.AudioHeader} we set the read data to
      * @return the number of bytes in the FORM chunk, i.e. the size of the payload
      * @throws IOException
      * @throws CannotReadException if the file is not a valid AIFF file
      */
-    public long readHeader(final RandomAccessFile raf, final AiffAudioHeader aiffAudioHeader) throws IOException, CannotReadException
+    public long readHeader(FileChannel fc, final AiffAudioHeader aiffAudioHeader) throws IOException, CannotReadException
     {
         final ByteBuffer headerData = ByteBuffer.allocateDirect(HEADER_LENGTH);
         headerData.order(BIG_ENDIAN);
-        final int bytesRead = raf.getChannel().read(headerData);
+        final int bytesRead = fc.read(headerData);
         headerData.position(0);
 
         if (bytesRead < HEADER_LENGTH)

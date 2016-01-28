@@ -5,6 +5,7 @@ import org.jaudiotagger.audio.exceptions.CannotReadException;
 import org.jaudiotagger.audio.generic.GenericAudioHeader;
 
 import java.io.*;
+import java.nio.channels.FileChannel;
 import java.nio.charset.StandardCharsets;
 
 /**
@@ -29,8 +30,8 @@ public class AiffInfoReaderTest extends TestCase {
         final File aiff = createAIFF("FORM", "AIFF", pseudoChunks);
 
         final AiffInfoReader aiffInfoReader = new AiffInfoReader();
-        try (final RandomAccessFile raf = new RandomAccessFile(aiff, "r")) {
-            final GenericAudioHeader audioHeader = aiffInfoReader.read(raf);
+        try(FileChannel fc = FileChannel.open(aiff.toPath())) {
+            final GenericAudioHeader audioHeader = aiffInfoReader.read(aiff.toPath());
             assertTrue(audioHeader instanceof AiffAudioHeader);
             final AiffAudioHeader aiffAudioHeader = (AiffAudioHeader) audioHeader;
             assertEquals(author, aiffAudioHeader.getAuthor());
@@ -48,8 +49,8 @@ public class AiffInfoReaderTest extends TestCase {
         final File aiff = createAIFF("FORM", "AIFF", new PseudoChunk("XYZ0", "SOME_STUFF"), new PseudoChunk("AUTH", author));
 
         final AiffInfoReader aiffInfoReader = new AiffInfoReader();
-        try (final RandomAccessFile raf = new RandomAccessFile(aiff, "r")) {
-            final GenericAudioHeader audioHeader = aiffInfoReader.read(raf);
+        try(FileChannel fc = FileChannel.open(aiff.toPath())) {
+            final GenericAudioHeader audioHeader = aiffInfoReader.read(aiff.toPath());
             assertTrue(audioHeader instanceof AiffAudioHeader);
             final AiffAudioHeader aiffAudioHeader = (AiffAudioHeader) audioHeader;
             assertEquals(author, aiffAudioHeader.getAuthor());

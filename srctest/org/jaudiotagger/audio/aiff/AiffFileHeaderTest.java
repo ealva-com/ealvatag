@@ -4,6 +4,7 @@ import junit.framework.TestCase;
 import org.jaudiotagger.audio.exceptions.CannotReadException;
 
 import java.io.*;
+import java.nio.channels.FileChannel;
 import java.nio.charset.StandardCharsets;
 import java.util.Random;
 
@@ -19,10 +20,10 @@ public class AiffFileHeaderTest extends TestCase {
         final int size = 1234;
         final File aiffFile = createAIFF("FORM", "AIFF", size);
 
-        try (final RandomAccessFile raf = new RandomAccessFile(aiffFile, "r")) {
+        try(FileChannel fc = FileChannel.open(aiffFile.toPath())) {
             final AiffFileHeader header = new AiffFileHeader();
             final AiffAudioHeader aiffAudioHeader = new AiffAudioHeader();
-            final long remainingBytes = header.readHeader(raf, aiffAudioHeader);
+            final long remainingBytes = header.readHeader(fc, aiffAudioHeader);
             assertEquals((long)(size - 4), remainingBytes);
             assertEquals(AIFF, aiffAudioHeader.getFileType());
         }
@@ -34,8 +35,8 @@ public class AiffFileHeaderTest extends TestCase {
         final int size = 5762;
         final File aiffFile = createAIFF("FORM", "COOL", size);
 
-        try (final RandomAccessFile raf = new RandomAccessFile(aiffFile, "r")) {
-            new AiffFileHeader().readHeader(raf, new AiffAudioHeader());
+        try(FileChannel fc = FileChannel.open(aiffFile.toPath())) {
+            new AiffFileHeader().readHeader(fc, new AiffAudioHeader());
             fail("Expected " + CannotReadException.class.getSimpleName());
         } catch (CannotReadException e) {
             // expected this
@@ -48,8 +49,8 @@ public class AiffFileHeaderTest extends TestCase {
         final int size = 34242;
         final File aiffFile = createAIFF("FURM", "AIFF", size);
 
-        try (final RandomAccessFile raf = new RandomAccessFile(aiffFile, "r")) {
-            new AiffFileHeader().readHeader(raf, new AiffAudioHeader());
+        try(FileChannel fc = FileChannel.open(aiffFile.toPath())) {
+            new AiffFileHeader().readHeader(fc, new AiffAudioHeader());
             fail("Expected " + CannotReadException.class.getSimpleName());
         } catch (CannotReadException e) {
             // expected this
@@ -63,8 +64,8 @@ public class AiffFileHeaderTest extends TestCase {
         final int size = 34234;
         final File aiffFile = createAIFF("FORMA", "AIFF", size);
 
-        try (final RandomAccessFile raf = new RandomAccessFile(aiffFile, "r")) {
-            new AiffFileHeader().readHeader(raf, new AiffAudioHeader());
+        try(FileChannel fc = FileChannel.open(aiffFile.toPath())) {
+            new AiffFileHeader().readHeader(fc, new AiffAudioHeader());
             fail("Expected " + CannotReadException.class.getSimpleName());
         } catch (CannotReadException e) {
             // expected this
@@ -77,10 +78,10 @@ public class AiffFileHeaderTest extends TestCase {
         final int size = 3452;
         final File aiffFile = createAIFF("FORM", "AIFC", size);
 
-        try (final RandomAccessFile raf = new RandomAccessFile(aiffFile, "r")) {
+        try(FileChannel fc = FileChannel.open(aiffFile.toPath())) {
             final AiffFileHeader header = new AiffFileHeader();
             final AiffAudioHeader aiffAudioHeader = new AiffAudioHeader();
-            final long remainingBytes = header.readHeader(raf, aiffAudioHeader);
+            final long remainingBytes = header.readHeader(fc, aiffAudioHeader);
             assertEquals((long)(size - 4), remainingBytes);
             assertEquals(AIFC, aiffAudioHeader.getFileType());
         }
