@@ -49,7 +49,7 @@ public abstract class AudioFileWriter
 {
     private static final String TEMP_FILENAME_SUFFIX = ".tmp";
     private static final String WRITE_MODE = "rw";
-    private static final int MINIMUM_FILESIZE = 100;
+    protected static final int MINIMUM_FILESIZE = 100;
 
     // Logger Object
     public static Logger logger = Logger

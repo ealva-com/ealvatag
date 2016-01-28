@@ -36,7 +36,7 @@ public enum ErrorMessage
     GENERAL_WRITE_FAILED_BECAUSE_FILE_NOT_FOUND("Cannot make changes to file {0} because the file cannot be found"),
     GENERAL_WRITE_WARNING_UNABLE_TO_DELETE_BACKUP_FILE("Unable to delete the backup file {0}"),        
     GENERAL_WRITE_PROBLEM_CLOSING_FILE_HANDLE("Problem closing file handles for file {0} because {1}"),
-    GENERAL_DELETE_FAILED("Cannot delete file {0}"),
+    GENERAL_DELETE_FAILED("Cannot delete file {0} because not writable"),
     GENERAL_DELETE_FAILED_FILE_LOCKED("Cannot delete file {0} because it is being used by another application"),
     GENERAL_DELETE_FAILED_BECAUSE_FILE_IS_TOO_SMALL("Cannot write to file {0} because too small to be an audio file"),
     MP3_ID3TAG_LENGTH_INCORRECT(" {0}:Checking further because the ID3 Tag ends at {1} but the mp3 audio doesnt start until {2}"),

@@ -21,22 +21,28 @@ package org.jaudiotagger.audio.dsf;
 import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.exceptions.CannotWriteException;
 import org.jaudiotagger.audio.generic.AudioFileWriter;
+import org.jaudiotagger.audio.generic.AudioFileWriter2;
 import org.jaudiotagger.audio.generic.Utils;
 import org.jaudiotagger.tag.Tag;
 import org.jaudiotagger.tag.id3.AbstractID3v2Tag;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.RandomAccessFile;
-import java.io.UnsupportedEncodingException;
+import java.io.*;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
+import java.nio.file.OpenOption;
+import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
 
 /**
  * Write/delete tag info for Dsf file
  */
-public class DsfFileWriter extends AudioFileWriter
+public class DsfFileWriter extends AudioFileWriter2
 {
+    protected void writeTag(AudioFile audioFile, Tag tag, File file) throws CannotWriteException, IOException
+    {
+
+    }
+
     /**
      * Write Metadata tag
      *
@@ -135,34 +141,40 @@ public class DsfFileWriter extends AudioFileWriter
      *
      * @param tag
      * @param file
-     * @param tempRaf
      * @throws CannotWriteException
      * @throws IOException
      */
     @Override
-    protected void deleteTag(Tag tag, RandomAccessFile file, RandomAccessFile tempRaf) throws CannotWriteException, IOException
+    protected void deleteTag(Tag tag, Path file) throws CannotWriteException
     {
-        DsdChunk dsd = DsdChunk.readChunk(Utils.readFileDataIntoBufferLE(file, DsdChunk.DSD_HEADER_LENGTH));
-        if(dsd!=null)
+        try(FileChannel fc = FileChannel.open(file, StandardOpenOption.WRITE, StandardOpenOption.READ))
         {
-            if (dsd.getMetadataOffset() > 0)
+            DsdChunk dsd = DsdChunk.readChunk(Utils.readFileDataIntoBufferLE(fc, DsdChunk.DSD_HEADER_LENGTH));
+            if (dsd != null)
             {
-                file.seek(dsd.getMetadataOffset());
-                ID3Chunk id3Chunk = ID3Chunk.readChunk(Utils.readFileDataIntoBufferLE(file, (int) (file.length() - file.getFilePointer())));
-                if(id3Chunk!=null)
+                if (dsd.getMetadataOffset() > 0)
                 {
-                    file.setLength(dsd.getMetadataOffset());
-                    //set correct value for fileLength and zero offset
-                    dsd.setMetadataOffset(0);
-                    dsd.setFileLength(file.length());
-                    file.seek(0);
-                    file.getChannel().write(dsd.write());
+                    fc.position(dsd.getMetadataOffset());
+                    ID3Chunk id3Chunk = ID3Chunk.readChunk(Utils.readFileDataIntoBufferLE(fc, (int) (fc.size() - fc.position())));
+                    if (id3Chunk != null)
+                    {
+                        fc.truncate(dsd.getMetadataOffset());
+                        //set correct value for fileLength and zero offset
+                        dsd.setMetadataOffset(0);
+                        dsd.setFileLength(fc.size());
+                        fc.position(0);
+                        fc.write(dsd.write());
+                    }
+                }
+                else
+                {
+                    //Do Nothing;
                 }
             }
-            else
-            {
-                //Do Nothing;
-            }
+        }
+        catch(IOException ioe)
+        {
+            throw new CannotWriteException(ioe.getMessage());
         }
     }
 

@@ -15,7 +15,7 @@ import java.nio.file.Path;
 import java.util.logging.Level;
 
 /**
- * Created by Paul on 28/01/2016.
+ * Replacement for AudioFileReader class
  */
 public abstract class AudioFileReader2 extends AudioFileReader
 {
@@ -32,17 +32,17 @@ public abstract class AudioFileReader2 extends AudioFileReader
         Path path = f.toPath();
         if(logger.isLoggable(Level.CONFIG))
         {
-            logger.config(ErrorMessage.GENERAL_READ.getMsg(f.getAbsolutePath()));
+            logger.config(ErrorMessage.GENERAL_READ.getMsg(path));
         }
 
         if (!f.canRead())
         {
-            throw new CannotReadException(ErrorMessage.GENERAL_READ_FAILED_FILE_TOO_SMALL.getMsg(f.getAbsolutePath()));
+            throw new CannotReadException(ErrorMessage.GENERAL_READ_FAILED_FILE_TOO_SMALL.getMsg(path));
         }
 
         if (f.length() <= MINIMUM_SIZE_FOR_VALID_AUDIO_FILE)
         {
-            throw new CannotReadException(ErrorMessage.GENERAL_READ_FAILED_FILE_TOO_SMALL.getMsg(f.getAbsolutePath()));
+            throw new CannotReadException(ErrorMessage.GENERAL_READ_FAILED_FILE_TOO_SMALL.getMsg(path));
         }
 
         GenericAudioHeader info = getEncodingInfo(path);
@@ -50,7 +50,9 @@ public abstract class AudioFileReader2 extends AudioFileReader
         return new AudioFile(f, info, tag);
     }
 
-    /** Needs overriding, will be preferred method instead of RandomAccessFile method
+    /**
+     *
+     * Read Encoding Information
      *
      * @param path
      * @return
@@ -64,6 +66,14 @@ public abstract class AudioFileReader2 extends AudioFileReader
         throw new UnsupportedOperationException("Old method not used in version 2");
     }
 
+    /**
+     * Read tag Information
+     *
+     * @param path
+     * @return
+     * @throws CannotReadException
+     * @throws IOException
+     */
     protected abstract Tag getTag(Path path) throws CannotReadException, IOException;
 
     protected Tag getTag(RandomAccessFile file) throws CannotReadException, IOException
