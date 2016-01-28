@@ -46,8 +46,8 @@ public abstract class AudioFileReader
 {
 
     // Logger Object
-      public static Logger logger = Logger.getLogger("org.jaudiotagger.audio.generic");
-    private static final int MINIMUM_SIZE_FOR_VALID_AUDIO_FILE = 100;
+    public static Logger logger = Logger.getLogger("org.jaudiotagger.audio.generic");
+    protected static final int MINIMUM_SIZE_FOR_VALID_AUDIO_FILE = 100;
 
     /*
     * Returns the encoding info object associated wih the current File.
@@ -60,6 +60,8 @@ public abstract class AudioFileReader
     * @exception CannotReadException when an error occured during the parsing of the encoding infos
     */
     protected abstract GenericAudioHeader getEncodingInfo(RandomAccessFile raf) throws CannotReadException, IOException;
+
+
 
     /*
       * Same as above but returns the Tag contained in the file, or a new one.

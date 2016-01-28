@@ -500,8 +500,20 @@ public class Utils
      */
     public static ByteBuffer readFileDataIntoBufferLE(final RandomAccessFile file, final int size) throws IOException
     {
+        return readFileDataIntoBufferLE(file.getChannel(), size);
+    }
+
+    /**
+     *
+     * @param fc
+     * @param size
+     * @return
+     * @throws IOException
+     */
+    public static ByteBuffer readFileDataIntoBufferLE(FileChannel fc, final int size) throws IOException
+    {
         final ByteBuffer tagBuffer = ByteBuffer.allocateDirect(size);
-        file.getChannel().read(tagBuffer);
+        fc.read(tagBuffer);
         tagBuffer.position(0);
         tagBuffer.order(ByteOrder.LITTLE_ENDIAN);
         return tagBuffer;
