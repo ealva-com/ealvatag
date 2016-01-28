@@ -6,6 +6,7 @@ import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.AudioFileIO;
 import org.jaudiotagger.audio.exceptions.CannotReadException;
 import org.jaudiotagger.audio.flac.FlacInfoReader;
+import org.jaudiotagger.audio.flac.metadatablock.MetadataBlockDataPicture;
 
 import java.io.File;
 
@@ -152,6 +153,33 @@ public class FlacReadTest extends TestCase
             AudioFile f = AudioFileIO.read(testFile);
             FlacInfoReader infoReader = new FlacInfoReader();
             assertEquals(2, infoReader.countMetaBlocks(f.getFile()));
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            exceptionCaught = e;
+        }
+        assertNull(exceptionCaught);
+    }
+
+    /**
+     * test read flac file with no header
+     */
+    public void testReadArtwork()
+    {
+        Exception exceptionCaught = null;
+        try
+        {
+            File orig = new File("testdata", "test154.flac");
+            if (!orig.isFile())
+            {
+                System.out.println("Test cannot be run because test file not available");
+                return;
+            }
+            File testFile = AbstractTestCase.copyAudioToTmp("test154.flac", new File("test154.flac"));
+            AudioFile f = AudioFileIO.read(testFile);
+            MetadataBlockDataPicture mbdp = (((FlacTag) f.getTag()).getImages().get(0));
+            System.out.println(mbdp);
         }
         catch (Exception e)
         {

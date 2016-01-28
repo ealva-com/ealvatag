@@ -8,6 +8,7 @@ import org.jaudiotagger.audio.exceptions.CannotReadException;
 import org.jaudiotagger.audio.generic.AudioFileReader;
 import org.jaudiotagger.audio.generic.GenericAudioHeader;
 import org.jaudiotagger.audio.generic.Utils;
+import org.jaudiotagger.audio.iff.IffHeaderChunk;
 import org.jaudiotagger.tag.Tag;
 import org.jaudiotagger.tag.TagException;
 import org.jaudiotagger.tag.id3.AbstractID3v2Tag;
@@ -20,6 +21,7 @@ import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.logging.Level;
+import static org.jaudiotagger.audio.dsf.DsdChunk.*;
 
 /**
  * Reads the ID3 Tags as specified by <a href=
@@ -28,34 +30,22 @@ import java.util.logging.Level;
  *
  * @author Veselin Markov (veselin_m84 a_t yahoo.com)
  */
-public class DsfAudioFileReader extends AudioFileReader
+public class DsfFileReader extends AudioFileReader
 {
-    private static final String DSD_SIGNATURE = "DSD ";
-    private static final String FMT_SIGNATURE = "fmt ";
-
-    public static final int SIGNATURE_LENGTH = 4;
-    public static final int CHUNKSIZE_LENGTH = 8;
-    public static final int FILESIZE_LENGTH = 8;
-    public static final int METADATA_OFFSET_LENGTH = 8;
-    public static final int FMT_CHUNK_MIN_DATA_SIZE_ = 40;
-
-
     @Override
     protected GenericAudioHeader getEncodingInfo(RandomAccessFile raf) throws CannotReadException, IOException
     {
-        ByteBuffer headerBuffer = Utils.readFileDataIntoBufferLE(raf, SIGNATURE_LENGTH);
-        String type = Utils.readFourBytesAsChars(headerBuffer);
-        if (DSD_SIGNATURE.equals(type))
+        DsdChunk dsd = DsdChunk.readChunk(Utils.readFileDataIntoBufferLE(raf, DsdChunk.DSD_HEADER_LENGTH));
+        if (dsd!=null)
         {
-            raf.skipBytes(CHUNKSIZE_LENGTH + FILESIZE_LENGTH + METADATA_OFFSET_LENGTH);
-            headerBuffer = Utils.readFileDataIntoBufferLE(raf, SIGNATURE_LENGTH + CHUNKSIZE_LENGTH);
-            String fmt = Utils.readFourBytesAsChars(headerBuffer);
-            if (FMT_SIGNATURE.equals(fmt))
+            ByteBuffer fmtChunkBuffer = Utils.readFileDataIntoBufferLE(raf, IffHeaderChunk.SIGNATURE_LENGTH + CHUNKSIZE_LENGTH);
+            String fmt = Utils.readFourBytesAsChars(fmtChunkBuffer);
+            if (DsfChunkType.FORMAT.getCode().equals(fmt))
             {
-                long size = headerBuffer.getLong();
-                long sizeExcludingChunkHeader = size - (SIGNATURE_LENGTH + CHUNKSIZE_LENGTH);
+                long size = fmtChunkBuffer.getLong();
+                long sizeExcludingChunkHeader = size - (IffHeaderChunk.SIGNATURE_LENGTH + CHUNKSIZE_LENGTH);
                 ByteBuffer audioData = Utils.readFileDataIntoBufferLE(raf, (int)sizeExcludingChunkHeader);
-                return readAudioInfo(audioData);
+                return readAudioInfo(dsd, audioData);
             }
             else
             {
@@ -75,7 +65,7 @@ public class DsfAudioFileReader extends AudioFileReader
      * than 40 bytes, the read data otherwise. Never <code>null</code>.
      */
     @SuppressWarnings("unused")
-    private GenericAudioHeader readAudioInfo(ByteBuffer audioInfoChunk)
+    private GenericAudioHeader readAudioInfo(DsdChunk dsd, ByteBuffer audioInfoChunk)
     {
         GenericAudioHeader audioHeader = new GenericAudioHeader();
         if (audioInfoChunk.limit() < FMT_CHUNK_MIN_DATA_SIZE_)
@@ -102,19 +92,16 @@ public class DsfAudioFileReader extends AudioFileReader
         audioHeader.setPreciseLength((float) sampleCount / samplingFreqency);
         audioHeader.setVariableBitRate(false);
         logger.log(Level.FINE, "Created audio header: " + audioHeader);
-
         return audioHeader;
     }
 
     @Override
     protected Tag getTag(RandomAccessFile raf) throws CannotReadException, IOException
     {
-        String type = Utils.readFourBytesAsChars(Utils.readFileDataIntoBufferLE(raf, SIGNATURE_LENGTH));
-        if (DSD_SIGNATURE.equals(type))
+        DsdChunk dsd = DsdChunk.readChunk(Utils.readFileDataIntoBufferLE(raf, DsdChunk.DSD_HEADER_LENGTH));
+        if(dsd!=null)
         {
-            raf.skipBytes(CHUNKSIZE_LENGTH + FILESIZE_LENGTH);
-            long offset = Long.reverseBytes(raf.readLong());
-            return readTag(raf, offset);
+            return readTag(raf, dsd);
         }
         else
         {
@@ -126,40 +113,53 @@ public class DsfAudioFileReader extends AudioFileReader
      * Reads the ID3v2 tag starting at the {@code tagOffset} position in the
      * supplied file.
      *
-     * @param file      the file from which to read
-     * @param tagOffset the offset where it ID3v2 tag begins
+     * @param file the file from which to read
+     * @param dsd  the dsd chunk
      * @return the read tag or an empty tag if something went wrong. Never
      * <code>null</code>.
      * @throws IOException if cannot read file.
      */
-    private Tag readTag(RandomAccessFile file, long tagOffset) throws CannotReadException,IOException
+    private Tag readTag(RandomAccessFile file, DsdChunk dsd) throws CannotReadException,IOException
     {
-        //Move to start of ID3Tag and read rest of file into ByteBuffer
-        file.seek(tagOffset);
-        ByteBuffer tagBuffer = Utils.readFileDataIntoBufferLE(file, (int) (file.length() - file.getFilePointer()));
-
-        //Work out ID3 major version
-        int majorVersion = tagBuffer.get(AbstractID3v2Tag.FIELD_TAG_MAJOR_VERSION_POS);
-        try
+        if(dsd.getMetadataOffset() > 0)
         {
-            logger.log(Level.FINE, "Start creating ID3v2 Tag for version: " + majorVersion);
-            switch (majorVersion)
+            //Move to start of ID3Tag and read rest of file into ByteBuffer
+            file.seek(dsd.getMetadataOffset());
+            ByteBuffer tagBuffer = Utils.readFileDataIntoBufferLE(file, (int) (file.length() - file.getFilePointer()));
+            String type = Utils.readThreeBytesAsChars(tagBuffer);
+            if (DsfChunkType.ID3.getCode().equals(type))
             {
-                case ID3v22Tag.MAJOR_VERSION:
-                    return new ID3v22Tag(tagBuffer, "");
-                case ID3v23Tag.MAJOR_VERSION:
-                    return new ID3v23Tag(tagBuffer, "");
-                case ID3v24Tag.MAJOR_VERSION:
-                    return new ID3v24Tag(tagBuffer, "");
-                default:
-                    logger.log(Level.WARNING, "Unknown major ID3v2 version " + majorVersion + ". Returning an empty ID3v2 Tag.");
-                    return new ID3v24Tag();
+                int version = tagBuffer.get(AbstractID3v2Tag.FIELD_TAG_MAJOR_VERSION_POS);
+                try
+                {
+                    switch (version)
+                    {
+                        case ID3v22Tag.MAJOR_VERSION:
+                            return new ID3v22Tag(tagBuffer, "");
+                        case ID3v23Tag.MAJOR_VERSION:
+                            return new ID3v23Tag(tagBuffer, "");
+                        case ID3v24Tag.MAJOR_VERSION:
+                            return new ID3v24Tag(tagBuffer, "");
+                        default:
+                            logger.log(Level.WARNING, "Unknown ID3v2 version " + type + ". Returning an empty ID3v2 Tag.");
+                            return new ID3v24Tag();
+                    }
+                }
+                catch (TagException e)
+                {
+                    throw new CannotReadException("Could not read ID3v2 tag");
+                }
+            }
+            else
+            {
+                logger.log(Level.WARNING, "No existing ID3 tag(1)" + type + ". Returning an empty ID3v2 Tag.");
+                return new ID3v24Tag();
             }
         }
-        catch (TagException e)
+        else
         {
-            throw new CannotReadException("Could not create ID3v2 Tag");
+            logger.log(Level.WARNING, "No existing ID3 tag(2)"  + ". Returning an empty ID3v2 Tag.");
+            return new ID3v24Tag();
         }
     }
-
 }

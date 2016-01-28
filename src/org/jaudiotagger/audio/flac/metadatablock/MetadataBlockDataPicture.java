@@ -51,6 +51,7 @@ public class MetadataBlockDataPicture implements MetadataBlockData, TagField
     private int height;
     private int colourDepth;
     private int indexedColouredCount;
+    private int lengthOfPictureInBytes;
     private byte[] imageData;
 
     // Logger Object
@@ -85,9 +86,9 @@ public class MetadataBlockDataPicture implements MetadataBlockData, TagField
         //Indexed Colour Count
         indexedColouredCount = rawdata.getInt();
 
+        lengthOfPictureInBytes =  rawdata.getInt();
         //ImageData
-        int rawdataSize = rawdata.getInt();
-        imageData = new byte[rawdataSize];
+        imageData = new byte[lengthOfPictureInBytes];
         rawdata.get(imageData);
 
         logger.config("Read image:" + this.toString());
@@ -266,7 +267,8 @@ public class MetadataBlockDataPicture implements MetadataBlockData, TagField
 
     public String toString()
     {
-        return PictureTypes.getInstanceOf().getValueForId(pictureType) + ":" + mimeType + ":" + description + ":" + "width:" + width + ":height:" + height + ":colourdepth:" + colourDepth + ":indexedColourCount:" + indexedColouredCount + ":image size in bytes:" + imageData.length;
+        return PictureTypes.getInstanceOf().getValueForId(pictureType) + ":" + mimeType + ":" + description + ":" + "width:" + width + ":height:" + height + ":colourdepth:" + colourDepth + ":indexedColourCount:" + indexedColouredCount
+                + ":image size in bytes:" + lengthOfPictureInBytes + "/" + imageData.length;
     }
 
     /**

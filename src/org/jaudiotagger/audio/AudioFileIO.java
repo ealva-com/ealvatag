@@ -22,7 +22,8 @@ import org.jaudiotagger.audio.aiff.AiffFileReader;
 import org.jaudiotagger.audio.aiff.AiffFileWriter;
 import org.jaudiotagger.audio.asf.AsfFileReader;
 import org.jaudiotagger.audio.asf.AsfFileWriter;
-import org.jaudiotagger.audio.dsf.DsfAudioFileReader;
+import org.jaudiotagger.audio.dsf.DsfFileReader;
+import org.jaudiotagger.audio.dsf.DsfFileWriter;
 import org.jaudiotagger.audio.exceptions.CannotReadException;
 import org.jaudiotagger.audio.exceptions.CannotWriteException;
 import org.jaudiotagger.audio.exceptions.InvalidAudioFrameException;
@@ -299,7 +300,7 @@ public class AudioFileIO
         readers.put(SupportedFileFormat.AIF.getFilesuffix(), new AiffFileReader());
         readers.put(SupportedFileFormat.AIFC.getFilesuffix(), new AiffFileReader());
         readers.put(SupportedFileFormat.AIFF.getFilesuffix(), new AiffFileReader());
-        readers.put(SupportedFileFormat.DSF.getFilesuffix(), new DsfAudioFileReader());
+        readers.put(SupportedFileFormat.DSF.getFilesuffix(), new DsfFileReader());
         final RealFileReader realReader = new RealFileReader();
         readers.put(SupportedFileFormat.RA.getFilesuffix(), realReader);
         readers.put(SupportedFileFormat.RM.getFilesuffix(), realReader);
@@ -317,6 +318,7 @@ public class AudioFileIO
         writers.put(SupportedFileFormat.AIF.getFilesuffix(), new AiffFileWriter());
         writers.put(SupportedFileFormat.AIFC.getFilesuffix(), new AiffFileWriter());
         writers.put(SupportedFileFormat.AIFF.getFilesuffix(), new AiffFileWriter());
+        writers.put(SupportedFileFormat.DSF.getFilesuffix(), new DsfFileWriter());
 
         // Register modificationHandler
         Iterator<AudioFileWriter> it = writers.values().iterator();

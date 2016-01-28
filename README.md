@@ -13,6 +13,7 @@ specific APIs are available, currently supports reading and writing metadata for
 - Aiff
 - Wav
 - Wma
+- Dsf
 
 ## Requirements
 

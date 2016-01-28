@@ -1,6 +1,7 @@
 Summarise Changes
 
 2.2.6
+#073:Support for writing DSF files
 #084:Add method to copy metadata from Info tag to ID3 tag within a Wav
 #085:AbstractID3v2Tag.getSize() not handling aggregate frames
 #086:Ensure write extra byte after writing ID3Tag if chunk is not even size
@@ -13,8 +14,8 @@ Summarise Changes
 #094:AiffTagWriter not handling when existing ID3chunk of odd size at end of file
 #096:Aiff DeleteTag not taking into account padding byte when chunk is not last chunk
 #097:Wav writer needs to consider odd numbered chunk sizes better when writing
-#099:When have ID3 tag in Aiff or Wav padding should be included in ID3header
 #098:Force ID3Tag within Aiff to be written as of size not odd
+#099:When have ID3 tag in Aiff or Wav padding should be included in ID3header
 #101:Force Wav ID3 Tag to be even sized
 #103:Aiff dont rewrite header unless size has changed
 #112:Mp4TagWriter.writeDataInChunks() always assuming there will be partial chunk to write
