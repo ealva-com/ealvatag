@@ -19,7 +19,6 @@ import org.jaudiotagger.tag.id3.ID3v24Tag;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
 import java.util.logging.Level;
 import static org.jaudiotagger.audio.dsf.DsdChunk.*;
 
@@ -39,61 +38,23 @@ public class DsfFileReader extends AudioFileReader
         if (dsd!=null)
         {
             ByteBuffer fmtChunkBuffer = Utils.readFileDataIntoBufferLE(raf, IffHeaderChunk.SIGNATURE_LENGTH + CHUNKSIZE_LENGTH);
-            String fmt = Utils.readFourBytesAsChars(fmtChunkBuffer);
-            if (DsfChunkType.FORMAT.getCode().equals(fmt))
+            FmtChunk fmt = FmtChunk.readChunkHeader(fmtChunkBuffer);
+            if (fmt!=null)
             {
-                long size = fmtChunkBuffer.getLong();
-                long sizeExcludingChunkHeader = size - (IffHeaderChunk.SIGNATURE_LENGTH + CHUNKSIZE_LENGTH);
-                ByteBuffer audioData = Utils.readFileDataIntoBufferLE(raf, (int)sizeExcludingChunkHeader);
-                return readAudioInfo(dsd, audioData);
+                return fmt.readChunkData(dsd, raf);
             }
             else
             {
-                throw new CannotReadException("Not a valid dsf file. Content does not start with 'fmt '.");
+                throw new CannotReadException("Not a valid dsf file. Content does not include 'fmt ' chunk");
             }
         }
         else
         {
-            throw new CannotReadException("Not a valid dsf file. Content does not start with 'DSD '.");
+            throw new CannotReadException("Not a valid dsf file. Content does not start with 'DSD '");
         }
     }
 
-    /**
-     * @param audioInfoChunk contains the bytes from "format version" up to "reserved"
-     *                       fields
-     * @return an empty {@link GenericAudioHeader} if audioInfoChunk has less
-     * than 40 bytes, the read data otherwise. Never <code>null</code>.
-     */
-    @SuppressWarnings("unused")
-    private GenericAudioHeader readAudioInfo(DsdChunk dsd, ByteBuffer audioInfoChunk)
-    {
-        GenericAudioHeader audioHeader = new GenericAudioHeader();
-        if (audioInfoChunk.limit() < FMT_CHUNK_MIN_DATA_SIZE_)
-        {
-            logger.log(Level.WARNING, "Not enough bytes supplied for Generic audio header. Returning an empty one.");
-            return audioHeader;
-        }
 
-        audioInfoChunk.order(ByteOrder.LITTLE_ENDIAN);
-        int version = audioInfoChunk.getInt();
-        int formatId =audioInfoChunk.getInt();
-        int channelType =audioInfoChunk.getInt();
-        int channelNumber = audioInfoChunk.getInt();
-        int samplingFreqency = audioInfoChunk.getInt();
-        int bitsPerSample =audioInfoChunk.getInt();
-        long sampleCount = audioInfoChunk.getLong();
-        int blocksPerSample = audioInfoChunk.getInt();
-
-        audioHeader.setBitRate(bitsPerSample * samplingFreqency * channelNumber);
-        audioHeader.setBitsPerSample(bitsPerSample);
-        audioHeader.setChannelNumber(channelNumber);
-        audioHeader.setSamplingRate(samplingFreqency);
-        audioHeader.setNoOfSamples(sampleCount);
-        audioHeader.setPreciseLength((float) sampleCount / samplingFreqency);
-        audioHeader.setVariableBitRate(false);
-        logger.log(Level.FINE, "Created audio header: " + audioHeader);
-        return audioHeader;
-    }
 
     @Override
     protected Tag getTag(RandomAccessFile raf) throws CannotReadException, IOException
