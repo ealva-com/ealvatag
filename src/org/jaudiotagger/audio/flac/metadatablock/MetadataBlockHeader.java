@@ -77,7 +77,6 @@ public class MetadataBlockHeader
         {
             blockType = BlockType.values()[type];
             dataLength = (u(rawdata.get(1)) << 16) + (u(rawdata.get(2)) << 8) + (u(rawdata.get(3)));
-            System.out.println("Type:"+type+":DataLengthIs:"+dataLength);
             bytes = new byte[HEADER_LENGTH];
             for (int i = 0; i < HEADER_LENGTH; i++)
             {
