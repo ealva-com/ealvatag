@@ -23,6 +23,7 @@ package org.jaudiotagger.audio.mp3;
 
 
 import org.jaudiotagger.audio.AudioFile;
+import org.jaudiotagger.audio.exceptions.CannotReadException;
 import org.jaudiotagger.audio.exceptions.CannotWriteException;
 import org.jaudiotagger.audio.exceptions.InvalidAudioFrameException;
 import org.jaudiotagger.audio.exceptions.ReadOnlyFileException;
@@ -95,7 +96,7 @@ public class MP3File extends AudioFile
      * @throws org.jaudiotagger.audio.exceptions.ReadOnlyFileException
      * @throws org.jaudiotagger.audio.exceptions.InvalidAudioFrameException
      */
-    public MP3File(String filename) throws IOException, TagException, ReadOnlyFileException, InvalidAudioFrameException
+    public MP3File(String filename) throws IOException, TagException, ReadOnlyFileException, CannotReadException, InvalidAudioFrameException
     {
         this(new File(filename));
     }
@@ -125,7 +126,7 @@ public class MP3File extends AudioFile
      * @throws org.jaudiotagger.audio.exceptions.ReadOnlyFileException
      * @throws org.jaudiotagger.audio.exceptions.InvalidAudioFrameException
      */
-    public MP3File(File file, int loadOptions) throws IOException, TagException, ReadOnlyFileException, InvalidAudioFrameException
+    public MP3File(File file, int loadOptions) throws IOException, TagException, ReadOnlyFileException, CannotReadException, InvalidAudioFrameException
     {
         this(file, loadOptions, false);
     }
@@ -464,7 +465,7 @@ public class MP3File extends AudioFile
      * @throws org.jaudiotagger.audio.exceptions.ReadOnlyFileException
      * @throws org.jaudiotagger.audio.exceptions.InvalidAudioFrameException
      */
-    public MP3File(File file, int loadOptions, boolean readOnly) throws IOException, TagException, ReadOnlyFileException, InvalidAudioFrameException
+    public MP3File(File file, int loadOptions, boolean readOnly) throws IOException, TagException, ReadOnlyFileException, CannotReadException, InvalidAudioFrameException
     {
         RandomAccessFile newFile = null;
         try
@@ -633,7 +634,7 @@ public class MP3File extends AudioFile
      * @throws org.jaudiotagger.audio.exceptions.ReadOnlyFileException
      * @throws org.jaudiotagger.audio.exceptions.InvalidAudioFrameException
      */
-    public MP3File(File file) throws IOException, TagException, ReadOnlyFileException, InvalidAudioFrameException
+    public MP3File(File file) throws IOException, TagException, ReadOnlyFileException, CannotReadException, InvalidAudioFrameException
     {
         this(file, LOAD_ALL);
     }

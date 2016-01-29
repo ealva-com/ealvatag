@@ -249,7 +249,7 @@ public class AudioFile
      * @throws FileNotFoundException
      * @return
      */
-    protected RandomAccessFile checkFilePermissions(File file, boolean readOnly) throws ReadOnlyFileException, FileNotFoundException
+    protected RandomAccessFile checkFilePermissions(File file, boolean readOnly) throws ReadOnlyFileException, FileNotFoundException, CannotReadException
     {
         Path path = file.toPath();
         RandomAccessFile newFile;
@@ -258,6 +258,13 @@ public class AudioFile
         // Unless opened as readonly the file must be writable
         if (readOnly)
         {
+            //May not even be readable
+            if(!Files.isReadable(path))
+            {
+                logger.severe("Unable to read file:" + path);
+                logger.severe(Permissions.displayPermissions(path));
+                throw new CannotReadException(ErrorMessage.GENERAL_READ_FAILED_DO_NOT_HAVE_PERMISSION_TO_READ_FILE.getMsg(path));
+            }
             newFile = new RandomAccessFile(file, "r");
         }
         else
