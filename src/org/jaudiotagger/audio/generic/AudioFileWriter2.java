@@ -32,13 +32,14 @@ public abstract class AudioFileWriter2 extends AudioFileWriter
 
         if (!Files.isWritable(file))
         {
+            logger.warning(Permissions.displayPermissions(file));
             throw new CannotWriteException(ErrorMessage.GENERAL_DELETE_FAILED
                     .getMsg(file));
         }
 
         if (af.getFile().length() <= MINIMUM_FILESIZE)
         {
-            throw new CannotWriteException(ErrorMessage.GENERAL_DELETE_FAILED
+            throw new CannotWriteException(ErrorMessage.GENERAL_DELETE_FAILED_BECAUSE_FILE_IS_TOO_SMALL
                     .getMsg(file));
         }
         deleteTag(af.getTag(), file);
@@ -57,13 +58,14 @@ public abstract class AudioFileWriter2 extends AudioFileWriter
 
         if (!Files.isWritable(file))
         {
-            throw new CannotWriteException(ErrorMessage.GENERAL_DELETE_FAILED
+            logger.warning(Permissions.displayPermissions(file));
+            throw new CannotWriteException(ErrorMessage.GENERAL_WRITE_FAILED_TO_OPEN_FILE_FOR_EDITING
                     .getMsg(file));
         }
 
         if (af.getFile().length() <= MINIMUM_FILESIZE)
         {
-            throw new CannotWriteException(ErrorMessage.GENERAL_DELETE_FAILED
+            throw new CannotWriteException(ErrorMessage.GENERAL_WRITE_FAILED_BECAUSE_FILE_IS_TOO_SMALL
                     .getMsg(file));
         }
         writeTag(af.getTag(), file);

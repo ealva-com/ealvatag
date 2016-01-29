@@ -11,7 +11,11 @@ import org.jaudiotagger.tag.TagException;
 import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.attribute.AclEntry;
+import java.nio.file.attribute.AclFileAttributeView;
+import java.nio.file.attribute.DosFileAttributes;
 import java.util.logging.Level;
 
 /**
@@ -35,9 +39,10 @@ public abstract class AudioFileReader2 extends AudioFileReader
             logger.config(ErrorMessage.GENERAL_READ.getMsg(path));
         }
 
-        if (!f.canRead())
+        if (!Files.isReadable(path))
         {
-            throw new CannotReadException(ErrorMessage.GENERAL_READ_FAILED_FILE_TOO_SMALL.getMsg(path));
+            logger.warning(Permissions.displayPermissions(path));
+            throw new CannotReadException(ErrorMessage.GENERAL_READ_FAILED_DO_NOT_HAVE_PERMISSION_TO_READ_FILE.getMsg(path));
         }
 
         if (f.length() <= MINIMUM_SIZE_FOR_VALID_AUDIO_FILE)
