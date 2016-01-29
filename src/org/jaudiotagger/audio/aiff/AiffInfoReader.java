@@ -11,7 +11,6 @@ import org.jaudiotagger.audio.iff.IffHeaderChunk;
 import org.jaudiotagger.logging.Hex;
 
 import java.io.IOException;
-import java.io.RandomAccessFile;
 import java.nio.ByteOrder;
 import java.nio.channels.FileChannel;
 import java.nio.file.Path;
@@ -32,7 +31,7 @@ public class AiffInfoReader extends AiffChunkReader
             logger.config(file + " Reading AIFF file size:" + fc.size() + " (" + Hex.asHex(fc.size()) + ")");
             AiffAudioHeader aiffAudioHeader = new AiffAudioHeader();
             final AiffFileHeader fileHeader = new AiffFileHeader();
-            fileHeader.readHeader(fc, aiffAudioHeader);
+            long noOfBytes = fileHeader.readHeader(fc, aiffAudioHeader, file.toString());
             while (fc.position() < fc.size())
             {
                 if (!readChunk(fc, aiffAudioHeader, file.toString()))

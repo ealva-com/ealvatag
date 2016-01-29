@@ -37,11 +37,12 @@ public class AiffFileHeader
      *
      * @param fc random access file
      * @param aiffAudioHeader the {@link org.jaudiotagger.audio.AudioHeader} we set the read data to
+     * @param fileName
      * @return the number of bytes in the FORM chunk, i.e. the size of the payload
      * @throws IOException
      * @throws CannotReadException if the file is not a valid AIFF file
      */
-    public long readHeader(FileChannel fc, final AiffAudioHeader aiffAudioHeader) throws IOException, CannotReadException
+    public long readHeader(FileChannel fc, final AiffAudioHeader aiffAudioHeader, String fileName) throws IOException, CannotReadException
     {
         final ByteBuffer headerData = ByteBuffer.allocateDirect(HEADER_LENGTH);
         headerData.order(BIG_ENDIAN);
@@ -50,7 +51,7 @@ public class AiffFileHeader
 
         if (bytesRead < HEADER_LENGTH)
         {
-            throw new IOException("AIFF:Unable to read required number of databytes read:" + bytesRead + ":required:" + HEADER_LENGTH);
+            throw new IOException(fileName + " AIFF:Unable to read required number of databytes read:" + bytesRead + ":required:" + HEADER_LENGTH);
         }
 
         final String signature = Utils.readFourBytesAsChars(headerData);
@@ -58,7 +59,7 @@ public class AiffFileHeader
         {
             // read chunk size
             final long chunkSize  = headerData.getInt();
-            logger.severe("Reading AIFF header size:" + chunkSize + " (" + Hex.asHex(chunkSize)+ ")");
+            logger.severe(fileName + " Reading AIFF header size:" + chunkSize + " (" + Hex.asHex(chunkSize)+ ")");
 
             readFileType(headerData, aiffAudioHeader);
             // subtract the file type length from the chunk size to get remaining number of bytes
@@ -66,7 +67,7 @@ public class AiffFileHeader
         }
         else
         {
-            throw new CannotReadException("Not an AIFF file: incorrect signature " + signature);
+            throw new CannotReadException(fileName + "Not an AIFF file: incorrect signature " + signature);
         }
     }
 

@@ -23,7 +23,7 @@ public class AiffFileHeaderTest extends TestCase {
         try(FileChannel fc = FileChannel.open(aiffFile.toPath())) {
             final AiffFileHeader header = new AiffFileHeader();
             final AiffAudioHeader aiffAudioHeader = new AiffAudioHeader();
-            final long remainingBytes = header.readHeader(fc, aiffAudioHeader);
+            final long remainingBytes = header.readHeader(fc, aiffAudioHeader, aiffFile.toString() );
             assertEquals((long)(size - 4), remainingBytes);
             assertEquals(AIFF, aiffAudioHeader.getFileType());
         }
@@ -36,7 +36,7 @@ public class AiffFileHeaderTest extends TestCase {
         final File aiffFile = createAIFF("FORM", "COOL", size);
 
         try(FileChannel fc = FileChannel.open(aiffFile.toPath())) {
-            new AiffFileHeader().readHeader(fc, new AiffAudioHeader());
+            new AiffFileHeader().readHeader(fc, new AiffAudioHeader(), aiffFile.toString());
             fail("Expected " + CannotReadException.class.getSimpleName());
         } catch (CannotReadException e) {
             // expected this
@@ -50,7 +50,7 @@ public class AiffFileHeaderTest extends TestCase {
         final File aiffFile = createAIFF("FURM", "AIFF", size);
 
         try(FileChannel fc = FileChannel.open(aiffFile.toPath())) {
-            new AiffFileHeader().readHeader(fc, new AiffAudioHeader());
+            new AiffFileHeader().readHeader(fc, new AiffAudioHeader(), aiffFile.toString());
             fail("Expected " + CannotReadException.class.getSimpleName());
         } catch (CannotReadException e) {
             // expected this
@@ -65,7 +65,7 @@ public class AiffFileHeaderTest extends TestCase {
         final File aiffFile = createAIFF("FORMA", "AIFF", size);
 
         try(FileChannel fc = FileChannel.open(aiffFile.toPath())) {
-            new AiffFileHeader().readHeader(fc, new AiffAudioHeader());
+            new AiffFileHeader().readHeader(fc, new AiffAudioHeader(), aiffFile.toString() );
             fail("Expected " + CannotReadException.class.getSimpleName());
         } catch (CannotReadException e) {
             // expected this
@@ -81,7 +81,7 @@ public class AiffFileHeaderTest extends TestCase {
         try(FileChannel fc = FileChannel.open(aiffFile.toPath())) {
             final AiffFileHeader header = new AiffFileHeader();
             final AiffAudioHeader aiffAudioHeader = new AiffAudioHeader();
-            final long remainingBytes = header.readHeader(fc, aiffAudioHeader);
+            final long remainingBytes = header.readHeader(fc, aiffAudioHeader, aiffFile.toString());
             assertEquals((long)(size - 4), remainingBytes);
             assertEquals(AIFC, aiffAudioHeader.getFileType());
         }

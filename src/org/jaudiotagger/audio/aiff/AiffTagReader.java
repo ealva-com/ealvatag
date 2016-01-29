@@ -12,7 +12,6 @@ import org.jaudiotagger.tag.aiff.AiffTag;
 import org.jaudiotagger.tag.id3.ID3v22Tag;
 
 import java.io.IOException;
-import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.channels.FileChannel;
@@ -44,7 +43,7 @@ public class AiffTagReader extends AiffChunkReader
             AiffTag aiffTag = new AiffTag();
 
             final AiffFileHeader fileHeader = new AiffFileHeader();
-            fileHeader.readHeader(fc, aiffAudioHeader);
+            fileHeader.readHeader(fc, aiffAudioHeader, file.toString());
             while (fc.position() < fc.size())
             {
                 if (!readChunk(fc, aiffTag, file.toString()))

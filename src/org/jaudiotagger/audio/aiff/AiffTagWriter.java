@@ -350,10 +350,12 @@ public class AiffTagWriter
      * @throws IOException
      */
     private void rewriteRiffHeaderSize(FileChannel fc) throws IOException {
+
         fc.position(IffHeaderChunk.SIGNATURE_LENGTH);
-        ByteBuffer bb = ByteBuffer.allocateDirect(4);
+        ByteBuffer bb = ByteBuffer.allocateDirect(IffHeaderChunk.SIZE_LENGTH);
         bb.order(ByteOrder.BIG_ENDIAN);
-        bb.putInt(((int) fc.size()) - SIGNATURE_LENGTH - SIZE_LENGTH);
+        int size = ((int) fc.size()) - SIGNATURE_LENGTH - SIZE_LENGTH;
+        bb.putInt(size);
         bb.flip();
         fc.write(bb);
     }
