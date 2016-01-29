@@ -26,6 +26,7 @@ import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.exceptions.CannotWriteException;
 import org.jaudiotagger.audio.exceptions.InvalidAudioFrameException;
 import org.jaudiotagger.audio.exceptions.ReadOnlyFileException;
+import org.jaudiotagger.audio.generic.Permissions;
 import org.jaudiotagger.logging.*;
 import org.jaudiotagger.tag.Tag;
 import org.jaudiotagger.tag.TagException;
@@ -41,6 +42,7 @@ import java.lang.reflect.Method;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -733,8 +735,6 @@ public class MP3File extends AudioFile
      * Hash is calculated EXCLUDING meta-data, like id3v1 or id3v2
      *
      * @return byte[] hash value in byte
-     * @param String algorithm 
-     * @param int buffersize 
      * @throws IOException 
      * @throws InvalidAudioFrameException 
      * @throws NoSuchAlgorithmException 
@@ -948,14 +948,16 @@ public class MP3File extends AudioFile
      */
     public void precheck(File file) throws IOException
     {
-        if (!file.exists())
+        Path path = file.toPath();
+        if (!Files.exists(path))
         {
             logger.severe(ErrorMessage.GENERAL_WRITE_FAILED_BECAUSE_FILE_NOT_FOUND.getMsg(file.getName()));
             throw new IOException(ErrorMessage.GENERAL_WRITE_FAILED_BECAUSE_FILE_NOT_FOUND.getMsg(file.getName()));
         }
 
-        if (!file.canWrite())
+        if (!Files.isWritable(path))
         {
+            logger.severe(Permissions.displayPermissions(path));
             logger.severe(ErrorMessage.GENERAL_WRITE_FAILED.getMsg(file.getName()));
             throw new IOException(ErrorMessage.GENERAL_WRITE_FAILED.getMsg(file.getName()));
         }

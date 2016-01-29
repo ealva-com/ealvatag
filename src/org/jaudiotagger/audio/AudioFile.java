@@ -23,6 +23,7 @@ import org.jaudiotagger.audio.exceptions.CannotReadException;
 import org.jaudiotagger.audio.exceptions.CannotWriteException;
 import org.jaudiotagger.audio.exceptions.ReadOnlyFileException;
 import org.jaudiotagger.audio.flac.metadatablock.MetadataBlockDataPicture;
+import org.jaudiotagger.audio.generic.Permissions;
 import org.jaudiotagger.audio.real.RealTag;
 import org.jaudiotagger.tag.TagOptionSingleton;
 import org.jaudiotagger.tag.id3.ID3v24Tag;
@@ -38,6 +39,8 @@ import org.jaudiotagger.tag.vorbiscomment.VorbisCommentTag;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.RandomAccessFile;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.logging.Logger;
 
@@ -248,8 +251,8 @@ public class AudioFile
      */
     protected RandomAccessFile checkFilePermissions(File file, boolean readOnly) throws ReadOnlyFileException, FileNotFoundException
     {
+        Path path = file.toPath();
         RandomAccessFile newFile;
-
         checkFileExists(file);
 
         // Unless opened as readonly the file must be writable
@@ -259,10 +262,11 @@ public class AudioFile
         }
         else
         {
-            if (!file.canWrite())
+            if (!Files.isWritable(path))
             {
-                logger.severe("Unable to write:" + file.getPath());
-                throw new ReadOnlyFileException(ErrorMessage.NO_PERMISSIONS_TO_WRITE_TO_FILE.getMsg(file.getPath()));
+                logger.severe("Unable to write:" + path);
+                logger.severe(Permissions.displayPermissions(path));
+                throw new ReadOnlyFileException(ErrorMessage.NO_PERMISSIONS_TO_WRITE_TO_FILE.getMsg(path));
             }
             newFile = new RandomAccessFile(file, "rw");
         }
