@@ -17,13 +17,14 @@ Summarise Changes
 #098:Force ID3Tag within Aiff to be written as of size not odd
 #099:When have ID3 tag in Aiff or Wav padding should be included in ID3header
 #101:Force Wav ID3 Tag to be even sized
-#103:Aiff dont rewrite header unless size has changed
+#103:Aiff do not rewrite header unless size has changed
 #112:Mp4TagWriter.writeDataInChunks() always assuming there will be partial chunk to write
 #117:OggWriter, if has to rewrite all pages and encounters a ID3v1tag at end of file it is discarded
 #116:Check that APIC frame actually has image data before trying to get image data length.
 #118:AudioFile.createDefaultTag() is broken, compares e.g. "flac" to ".flac"
 #119:Wav/Aiff Add padding byte if missing in original file when writing metadata
 #121:Output a summary of chunks in AiffTag.toString() and WavTag.toString()
+#123:Support writing VorbisComment AlbumArtist as as either/both 'ALBUMARTIST' and 'ALBUM ARTIST'
 
 2.2.5
 #033:Added getAudioStartPos() and getAudioEndPos() methods to AudioHeader interface and implemented for most formats
