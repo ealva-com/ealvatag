@@ -215,6 +215,7 @@ public class VorbisCommentTag extends AbstractTag
         {
             throw new KeyNotFoundException();
         }
+
         return createField(tagFieldToOggField.get(genericKey), value);
     }
 
@@ -367,8 +368,38 @@ public class VorbisCommentTag extends AbstractTag
         {
             throw new KeyNotFoundException();
         }
-        VorbisCommentFieldKey vorbisCommentFieldKey = tagFieldToOggField.get(genericKey);
-        deleteField(vorbisCommentFieldKey);
+
+        if(genericKey==FieldKey.ALBUM_ARTIST)
+        {
+            switch(TagOptionSingleton.getInstance().getVorbisAlbumArtistSaveOptions())
+            {
+                case WRITE_ALBUMARTIST:
+                {
+                    VorbisCommentFieldKey vorbisCommentFieldKey = tagFieldToOggField.get(genericKey);
+                    deleteField(vorbisCommentFieldKey);
+                    return;
+                }
+
+                case WRITE_JRIVER_ALBUMARTIST:
+                {
+                    deleteField(VorbisCommentFieldKey.ALBUMARTIST_JRIVER);
+                    return;
+                }
+                case WRITE_BOTH:
+                {
+                    VorbisCommentFieldKey vorbisCommentFieldKey = tagFieldToOggField.get(genericKey);
+                    deleteField(vorbisCommentFieldKey);
+                    deleteField(VorbisCommentFieldKey.ALBUMARTIST_JRIVER);
+                    return;
+                }
+
+            }
+        }
+        else
+        {
+            VorbisCommentFieldKey vorbisCommentFieldKey = tagFieldToOggField.get(genericKey);
+            deleteField(vorbisCommentFieldKey);
+        }
     }
 
     /**
@@ -655,5 +686,88 @@ public class VorbisCommentTag extends AbstractTag
         return createField(FieldKey.IS_COMPILATION,String.valueOf(value));
     }
 
+    @Override
+    public void setField(FieldKey genericKey, String value) throws KeyNotFoundException, FieldDataInvalidException
+    {
+        if(genericKey==FieldKey.ALBUM_ARTIST)
+        {
+            switch(TagOptionSingleton.getInstance().getVorbisAlbumArtistSaveOptions())
+            {
+                case WRITE_ALBUMARTIST:
+                    {
+                        TagField tagfield = createField(genericKey, value);
+                        setField(tagfield);
+                        return;
+                    }
+
+                case WRITE_JRIVER_ALBUMARTIST:
+                    {
+                        TagField tagfield = createField(VorbisCommentFieldKey.ALBUMARTIST_JRIVER, value);
+                        setField(tagfield);
+                        return;
+                    }
+                case WRITE_BOTH:
+                {
+                    TagField tagfield1 = createField(genericKey, value);
+                    setField(tagfield1);
+                    TagField tagfield2 = createField(VorbisCommentFieldKey.ALBUMARTIST_JRIVER, value);
+                    setField(tagfield2);
+                    return;
+                }
+
+            }
+        }
+        else
+        {
+            TagField tagfield = createField(genericKey, value);
+            setField(tagfield);
+        }
+    }
+
+    /**
+     * Create new field and add it to the tag
+     *
+     * @param genericKey
+     * @param value
+     * @throws KeyNotFoundException
+     * @throws FieldDataInvalidException
+     */
+    @Override
+    public void addField(FieldKey genericKey, String value) throws KeyNotFoundException, FieldDataInvalidException
+    {
+        if(genericKey==FieldKey.ALBUM_ARTIST)
+        {
+            switch(TagOptionSingleton.getInstance().getVorbisAlbumArtistSaveOptions())
+            {
+                case WRITE_ALBUMARTIST:
+                {
+                    TagField tagfield = createField(genericKey, value);
+                    addField(tagfield);
+                    return;
+                }
+
+                case WRITE_JRIVER_ALBUMARTIST:
+                {
+                    TagField tagfield = createField(VorbisCommentFieldKey.ALBUMARTIST_JRIVER, value);
+                    addField(tagfield);
+                    return;
+                }
+                case WRITE_BOTH:
+                {
+                    TagField tagfield1 = createField(genericKey, value);
+                    addField(tagfield1);
+                    TagField tagfield2 = createField(VorbisCommentFieldKey.ALBUMARTIST_JRIVER, value);
+                    addField(tagfield2);
+                    return;
+                }
+
+            }
+        }
+        else
+        {
+            TagField tagfield = createField(genericKey, value);
+            addField(tagfield);
+        }
+    }
 }
 

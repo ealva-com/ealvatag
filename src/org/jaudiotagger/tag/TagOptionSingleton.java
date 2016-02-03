@@ -36,8 +36,8 @@ import org.jaudiotagger.tag.options.PadNumberOption;
 import org.jaudiotagger.tag.reference.GenreTypes;
 import org.jaudiotagger.tag.reference.ID3V2Version;
 import org.jaudiotagger.tag.reference.Languages;
+import org.jaudiotagger.tag.vorbiscomment.VorbisAlbumArtistSaveOptions;
 
-import java.nio.ByteBuffer;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -67,6 +67,20 @@ public class TagOptionSingleton
     {
         return wavSaveOptions;
     }
+
+    private VorbisAlbumArtistSaveOptions vorbisAlbumArtistSaveOptions = VorbisAlbumArtistSaveOptions.WRITE_ALBUMARTIST;
+
+    public void setVorbisAlbumArtistSaveOptions(VorbisAlbumArtistSaveOptions vorbisAlbumArtistSaveOptions)
+    {
+        this.vorbisAlbumArtistSaveOptions = vorbisAlbumArtistSaveOptions;
+    }
+
+    public VorbisAlbumArtistSaveOptions getVorbisAlbumArtistSaveOptions()
+    {
+        return vorbisAlbumArtistSaveOptions;
+    }
+
+
     /**
      *
      */
