@@ -36,6 +36,7 @@ import org.jaudiotagger.tag.options.PadNumberOption;
 import org.jaudiotagger.tag.reference.GenreTypes;
 import org.jaudiotagger.tag.reference.ID3V2Version;
 import org.jaudiotagger.tag.reference.Languages;
+import org.jaudiotagger.tag.vorbiscomment.VorbisAlbumArtistReadOptions;
 import org.jaudiotagger.tag.vorbiscomment.VorbisAlbumArtistSaveOptions;
 
 import java.util.HashMap;
@@ -80,6 +81,17 @@ public class TagOptionSingleton
         return vorbisAlbumArtistSaveOptions;
     }
 
+    private VorbisAlbumArtistReadOptions vorbisAlbumArtistReadOptions = VorbisAlbumArtistReadOptions.READ_ALBUMARTIST_THEN_JRIVER;
+
+    public void setVorbisAlbumArtistReadOptions(VorbisAlbumArtistReadOptions vorbisAlbumArtistReadOptions)
+    {
+        this.vorbisAlbumArtistReadOptions = vorbisAlbumArtistReadOptions;
+    }
+
+    public VorbisAlbumArtistReadOptions getVorbisAlbumArtisReadOptions()
+    {
+        return vorbisAlbumArtistReadOptions;
+    }
 
     /**
      *

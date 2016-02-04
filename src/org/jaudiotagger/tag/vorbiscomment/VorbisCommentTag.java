@@ -310,15 +310,6 @@ public class VorbisCommentTag extends AbstractTag
         return super.getFields(vorbisCommentKey.getFieldName());
     }
 
-    public String getValue(FieldKey genericKey,int index) throws KeyNotFoundException
-    {
-        VorbisCommentFieldKey vorbisCommentFieldKey = tagFieldToOggField.get(genericKey);
-        if (vorbisCommentFieldKey == null)
-        {
-            throw new KeyNotFoundException();
-        }
-        return super.getItem(vorbisCommentFieldKey.getFieldName(),index);
-    }
 
     /**
      * Retrieve the first value that exists for this vorbis comment key
@@ -767,6 +758,74 @@ public class VorbisCommentTag extends AbstractTag
         {
             TagField tagfield = createField(genericKey, value);
             addField(tagfield);
+        }
+    }
+
+    public String getValue(FieldKey genericKey,int index) throws KeyNotFoundException
+    {
+        if(genericKey==FieldKey.ALBUM_ARTIST)
+        {
+            switch(TagOptionSingleton.getInstance().getVorbisAlbumArtisReadOptions())
+            {
+                case READ_ALBUMARTIST:
+                {
+                    VorbisCommentFieldKey vorbisCommentFieldKey =  VorbisCommentFieldKey.ALBUMARTIST;
+                    return super.getItem(vorbisCommentFieldKey.getFieldName(), index);
+                }
+
+                case READ_JRIVER_ALBUMARTIST:
+                {
+                    VorbisCommentFieldKey vorbisCommentFieldKey = VorbisCommentFieldKey.ALBUMARTIST_JRIVER;
+                    return super.getItem(vorbisCommentFieldKey.getFieldName(), index);
+                }
+
+                case READ_ALBUMARTIST_THEN_JRIVER:
+                {
+                    VorbisCommentFieldKey vorbisCommentFieldKey =  VorbisCommentFieldKey.ALBUMARTIST;
+                    String value = super.getItem(vorbisCommentFieldKey.getFieldName(), index);
+                    if(value.isEmpty())
+                    {
+                        vorbisCommentFieldKey = VorbisCommentFieldKey.ALBUMARTIST_JRIVER;
+                        return super.getItem(vorbisCommentFieldKey.getFieldName(), index);
+                    }
+                    else
+                    {
+                        return value;
+                    }
+                }
+
+                case READ_JRIVER_THEN_ALBUMARTIST:
+                {
+                    VorbisCommentFieldKey vorbisCommentFieldKey =  VorbisCommentFieldKey.ALBUMARTIST_JRIVER;
+                    String value = super.getItem(vorbisCommentFieldKey.getFieldName(), index);
+                    if(value.isEmpty())
+                    {
+                        vorbisCommentFieldKey = VorbisCommentFieldKey.ALBUMARTIST;
+                        return super.getItem(vorbisCommentFieldKey.getFieldName(), index);
+                    }
+                    else
+                    {
+                        return value;
+                    }
+                }
+
+                default:
+                    VorbisCommentFieldKey vorbisCommentFieldKey = tagFieldToOggField.get(genericKey);
+                    if (vorbisCommentFieldKey == null)
+                    {
+                        throw new KeyNotFoundException();
+                    }
+                    return super.getItem(vorbisCommentFieldKey.getFieldName(), index);
+            }
+        }
+        else
+        {
+            VorbisCommentFieldKey vorbisCommentFieldKey = tagFieldToOggField.get(genericKey);
+            if (vorbisCommentFieldKey == null)
+            {
+                throw new KeyNotFoundException();
+            }
+            return super.getItem(vorbisCommentFieldKey.getFieldName(), index);
         }
     }
 }
