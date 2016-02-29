@@ -760,8 +760,6 @@ public class WavTagWriter implements TagWriter
     {
         //Convert both tags and get existing ones
         final ByteBuffer infoTagBuffer = convertInfoChunk(wavTag);
-        final long newInfoTagSize = infoTagBuffer.limit();
-        final WavInfoTag existingInfoTag = existingTag.getInfoTag();
         final ByteBuffer id3TagBuffer = convertID3Chunk(wavTag, existingTag);
 
         //If both tags already exist in file
@@ -776,14 +774,12 @@ public class WavTagWriter implements TagWriter
                     if (fs.isInfoTagFirst)
                     {
                         seekToStartOfListInfoMetadata(raf, existingTag);
-                        writeInfoChunk(raf, existingInfoTag, infoTagBuffer);
-                        writeID3DataToFile(raf, id3TagBuffer);
+                        writeBothTags(raf, infoTagBuffer, id3TagBuffer);
                     }
                     else
                     {
                         seekToStartOfId3Metadata(raf, existingTag);
-                        writeID3DataToFile(raf, id3TagBuffer);
-                        writeInfoChunk(raf, existingInfoTag, infoTagBuffer);
+                        writeBothTags(raf, infoTagBuffer, id3TagBuffer);
                     }
                 }
                 //Both chunks are together but there is another chunk after them
@@ -818,8 +814,7 @@ public class WavTagWriter implements TagWriter
                 ChunkHeader infoChunkHeader = seekToStartOfListInfoMetadata(raf, existingTag);
                 if (isInfoTagAtEndOfFileAllowingForPaddingByte(existingTag, raf))
                 {
-                    writeInfoChunk(raf, existingInfoTag, infoTagBuffer);
-                    writeID3DataToFile(raf, id3TagBuffer);
+                    writeBothTags(raf, infoTagBuffer, id3TagBuffer);
                 }
                 else
                 {
@@ -849,8 +844,7 @@ public class WavTagWriter implements TagWriter
                 ChunkHeader id3ChunkHeader = seekToStartOfId3Metadata(raf, existingTag);
                 if (isID3TagAtEndOfFileAllowingForPaddingByte(existingTag, raf))
                 {
-                    writeID3DataToFile(raf, id3TagBuffer);
-                    writeInfoChunk(raf, existingInfoTag, infoTagBuffer );
+                    writeBothTags(raf, infoTagBuffer, id3TagBuffer);
                 }
                 else
                 {
@@ -1023,12 +1017,10 @@ public class WavTagWriter implements TagWriter
         {
             if(existingTag.isExistingId3Tag())
             {
-                System.out.println("Save Both1");
                 saveBoth(wavTag, raf, existingTag);
             }
             else
             {
-                System.out.println("Save Active1");
                 saveActive(wavTag, raf,  existingTag );
             }
         }
@@ -1036,12 +1028,10 @@ public class WavTagWriter implements TagWriter
         {
             if(existingTag.isExistingInfoTag())
             {
-                System.out.println("Save Both2");
                 saveBoth(wavTag, raf,  existingTag );
             }
             else
             {
-                System.out.println("Save Active2");
                 saveActive(wavTag, raf,  existingTag );
             }
         }
