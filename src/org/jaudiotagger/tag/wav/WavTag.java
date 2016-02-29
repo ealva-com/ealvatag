@@ -521,11 +521,11 @@ public class WavTag implements Tag, Id3SupportingTag
     }
 
     /**
-     * If we have field in INFO tag write to ID3 tag
+     * If we have field in INFO tag write to ID3 tag, if not we delete form ID3
+     * (but only for tag that we can actually have in INFO tag)
      */
     public void syncToId3FromInfoOverwrite()
     {
-
         try
         {
             for(FieldKey fieldKey : WavInfoTag.getSupportedKeys())
@@ -533,6 +533,10 @@ public class WavTag implements Tag, Id3SupportingTag
                 if (!infoTag.getFirst(fieldKey).isEmpty())
                 {
                     id3Tag.setField(fieldKey, infoTag.getFirst(fieldKey));
+                }
+                else
+                {
+                    id3Tag.deleteField(fieldKey);
                 }
             }
         }
@@ -555,6 +559,10 @@ public class WavTag implements Tag, Id3SupportingTag
                 if (!id3Tag.getFirst(fieldKey).isEmpty())
                 {
                     infoTag.setField(fieldKey, id3Tag.getFirst(fieldKey));
+                }
+                else
+                {
+                    infoTag.deleteField(fieldKey);
                 }
             }
         }

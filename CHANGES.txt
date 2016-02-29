@@ -25,6 +25,7 @@ Summarise Changes
 #119:Wav/Aiff Add padding byte if missing in original file when writing metadata
 #121:Output a summary of chunks in AiffTag.toString() and WavTag.toString()
 #123:Support writing VorbisComment AlbumArtist as as either/both 'ALBUMARTIST' and 'ALBUM ARTIST'
+#125:SyncID3toInfo when writing Wav should remove fields that are in INFO not ID3
 
 2.2.5
 #033:Added getAudioStartPos() and getAudioEndPos() methods to AudioHeader interface and implemented for most formats
