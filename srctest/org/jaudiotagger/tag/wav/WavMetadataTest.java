@@ -1077,8 +1077,8 @@ public class WavMetadataTest extends AbstractTestCase
             assertEquals(236L, ((WavTag) tag).getSizeOfID3TagOnly());
             assertEquals(244L, ((WavTag) tag).getSizeOfID3TagIncludingChunkHeader());
             assertEquals(926508L, ((WavTag) tag).getInfoTag().getStartLocationInFile().longValue());
-            assertEquals(926684L, ((WavTag) tag).getInfoTag().getEndLocationInFile().longValue());
-            assertEquals(168L, ((WavTag) tag).getInfoTag().getSizeOfTag());
+            assertEquals(926692L, ((WavTag) tag).getInfoTag().getEndLocationInFile().longValue());
+            assertEquals(176L, ((WavTag) tag).getInfoTag().getSizeOfTag());
 
             tag.setField(FieldKey.ARTIST,"a nice long artist s");
             assertEquals("a nice long artist s", tag.getFirst(FieldKey.ARTIST));
@@ -1092,8 +1092,8 @@ public class WavMetadataTest extends AbstractTestCase
             assertEquals(236L, ((WavTag) tag).getSizeOfID3TagOnly());
             assertEquals(244L, ((WavTag) tag).getSizeOfID3TagIncludingChunkHeader());
             assertEquals(926508L, ((WavTag) tag).getInfoTag().getStartLocationInFile().longValue());
-            assertEquals(926680L, ((WavTag) tag).getInfoTag().getEndLocationInFile().longValue());
-            assertEquals(164L, ((WavTag) tag).getInfoTag().getSizeOfTag());
+            assertEquals(926688L, ((WavTag) tag).getInfoTag().getEndLocationInFile().longValue());
+            assertEquals(172L, ((WavTag) tag).getInfoTag().getSizeOfTag());
 
             assertEquals("a nice long artist s", tag.getFirst(FieldKey.ARTIST));
 

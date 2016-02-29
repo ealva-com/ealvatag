@@ -204,7 +204,7 @@ public class Issue084Test extends AbstractTestCase
                 f = AudioFileIO.read(testFile);
                 tag = f.getTag();
                 assertEquals("fred", ((WavTag)tag).getID3Tag().getFirst(FieldKey.ARTIST));
-                assertEquals("fred", ((WavTag)tag).getInfoTag().getFirst(FieldKey.ARTIST));
+                assertEquals("fred\0", ((WavTag)tag).getInfoTag().getFirst(FieldKey.ARTIST));
                 assertEquals("fred", tag.getFirst(FieldKey.ARTIST));
 
             }

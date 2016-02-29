@@ -27,6 +27,7 @@ Summarise Changes
 #123:Support writing VorbisComment AlbumArtist as as either/both 'ALBUMARTIST' and 'ALBUM ARTIST'
 #125:SyncID3toInfo when writing Wav should remove fields that are in INFO not ID3
 #127:Allow choice of whether to write INFO or ID3 chunk first when writing both to Wav
+#128:Windows Explorer expects WAV LISTINFO chunk fields to to have trailing null
 
 2.2.5
 #033:Added getAudioStartPos() and getAudioEndPos() methods to AudioHeader interface and implemented for most formats

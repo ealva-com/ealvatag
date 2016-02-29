@@ -532,7 +532,14 @@ public class WavTag implements Tag, Id3SupportingTag
             {
                 if (!infoTag.getFirst(fieldKey).isEmpty())
                 {
-                    id3Tag.setField(fieldKey, infoTag.getFirst(fieldKey));
+                    if(!infoTag.getFirst(fieldKey).endsWith("\0"))
+                    {
+                        id3Tag.setField(fieldKey, infoTag.getFirst(fieldKey));
+                    }
+                    else
+                    {
+                        id3Tag.setField(fieldKey, infoTag.getFirst(fieldKey).substring(0,infoTag.getFirst(fieldKey).length() - 1));
+                    }
                 }
                 else
                 {
@@ -558,7 +565,14 @@ public class WavTag implements Tag, Id3SupportingTag
             {
                 if (!id3Tag.getFirst(fieldKey).isEmpty())
                 {
-                    infoTag.setField(fieldKey, id3Tag.getFirst(fieldKey));
+                    if(id3Tag.getFirst(fieldKey).endsWith("\0"))
+                    {
+                        infoTag.setField(fieldKey, id3Tag.getFirst(fieldKey));
+                    }
+                    else
+                    {
+                        infoTag.setField(fieldKey, id3Tag.getFirst(fieldKey) + "\0");
+                    }
                 }
                 else
                 {
