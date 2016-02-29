@@ -5,6 +5,7 @@ import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.AudioFileIO;
 import org.jaudiotagger.tag.FieldKey;
 import org.jaudiotagger.tag.Tag;
+import org.jaudiotagger.tag.TagOptionSingleton;
 import org.jaudiotagger.tag.id3.ID3v23Tag;
 
 import java.io.File;
@@ -17,6 +18,7 @@ public class Issue411Test extends AbstractTestCase
 {
     public void testIssue() throws Exception
     {
+        TagOptionSingleton.getInstance().setWriteMp3GenresAsText(false);
         Exception caught = null;
         try
         {
@@ -59,6 +61,8 @@ public class Issue411Test extends AbstractTestCase
 
     public void testIssue2() throws Exception
     {
+        TagOptionSingleton.getInstance().setWriteMp3GenresAsText(false);
+
         Exception caught = null;
         try
         {
@@ -92,6 +96,8 @@ public class Issue411Test extends AbstractTestCase
 
     public void testIssue3() throws Exception
     {
+        TagOptionSingleton.getInstance().setWriteMp3GenresAsText(false);
+
         Exception caught = null;
         try
         {
@@ -125,6 +131,8 @@ public class Issue411Test extends AbstractTestCase
 
     public void testIssue4() throws Exception
     {
+        TagOptionSingleton.getInstance().setWriteMp3GenresAsText(false);
+
         Exception caught = null;
         try
         {
@@ -159,6 +167,8 @@ public class Issue411Test extends AbstractTestCase
 
     public void testIssue5() throws Exception
     {
+        TagOptionSingleton.getInstance().setWriteMp3GenresAsText(false);
+
         Exception caught = null;
         try
         {
@@ -201,6 +211,8 @@ public class Issue411Test extends AbstractTestCase
 
     public void testDeletions() throws Exception
     {
+        TagOptionSingleton.getInstance().setWriteMp3GenresAsText(false);
+
         Exception caught = null;
         try
         {
