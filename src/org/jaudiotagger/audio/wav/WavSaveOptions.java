@@ -15,7 +15,8 @@ package org.jaudiotagger.audio.wav;
  *
  * If SAVE_BOTH is selected an ID3 chunk and an INFO chunk are always written, regardless of whether or not they currently exist.
  *
- * The _SYNC_ methods write any data added to the active tag to the inactive tag just before writing.
+ * The _SYNC_ methods write any data added to the active tag to the inactive tag just before writing and also remove data
+ * fields that exists in the inactive tag but not the active tag (Except for fields that the inactive tag supports but the active tag does not)
  *
  * This option should be set using TagOptionSingleton.setWavSaveOptions()
  */

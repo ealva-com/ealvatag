@@ -26,6 +26,7 @@ package org.jaudiotagger.tag;
 
 import org.jaudiotagger.audio.wav.WavOptions;
 import org.jaudiotagger.audio.wav.WavSaveOptions;
+import org.jaudiotagger.audio.wav.WavSaveOrder;
 import org.jaudiotagger.tag.id3.framebody.AbstractID3v2FrameBody;
 import org.jaudiotagger.tag.id3.framebody.FrameBodyCOMM;
 import org.jaudiotagger.tag.id3.framebody.FrameBodyTIPL;
@@ -67,6 +68,18 @@ public class TagOptionSingleton
     public WavSaveOptions getWavSaveOptions()
     {
         return wavSaveOptions;
+    }
+
+    private WavSaveOrder wavSaveOrder = WavSaveOrder.INFO_THEN_ID3;
+
+    public void setWavSaveOrder(WavSaveOrder wavSaveOrder)
+    {
+        this.wavSaveOrder = wavSaveOrder;
+    }
+
+    public WavSaveOrder getWavSaveOrder()
+    {
+        return wavSaveOrder;
     }
 
     private VorbisAlbumArtistSaveOptions vorbisAlbumArtistSaveOptions = VorbisAlbumArtistSaveOptions.WRITE_ALBUMARTIST;
