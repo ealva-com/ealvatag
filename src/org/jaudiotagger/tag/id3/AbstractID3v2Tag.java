@@ -1084,6 +1084,11 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
         {
             return null;
         }
+        //#129 Workaround for https://bugs.openjdk.java.net/browse/JDK-8025619
+        catch(Error error)
+        {
+            return null;
+        }
 
         //Couldnt getFields lock because file is already locked by another application
         if (fileLock == null)
