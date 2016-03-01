@@ -156,7 +156,7 @@ public class WavInfoReader
         //Unknown chunk type just skip
         else
         {
-            logger.config("Skipping chunk bytes:" + chunkHeader.getSize());
+            logger.config("Skipping chunk bytes:" + chunkHeader.getSize() +"for"+chunkHeader.getID());
             raf.skipBytes((int)chunkHeader.getSize());
         }
         IffHeaderChunk.ensureOnEqualBoundary(raf, chunkHeader);
