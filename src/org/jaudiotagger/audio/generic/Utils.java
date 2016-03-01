@@ -490,20 +490,6 @@ public class Utils
     }
 
     /**
-     * Read data from random file into buffer and position at start of buffer, when
-     * retrieving integral types will decode bytes as Little Endian.
-     *
-     * @param file
-     * @param size
-     * @return
-     * @throws IOException
-     */
-    public static ByteBuffer readFileDataIntoBufferLE(final RandomAccessFile file, final int size) throws IOException
-    {
-        return readFileDataIntoBufferLE(file.getChannel(), size);
-    }
-
-    /**
      *
      * @param fc
      * @param size
@@ -516,24 +502,6 @@ public class Utils
         fc.read(tagBuffer);
         tagBuffer.position(0);
         tagBuffer.order(ByteOrder.LITTLE_ENDIAN);
-        return tagBuffer;
-    }
-
-    /**
-     * Read data from random file into buffer and position at start of buffer, when
-     * retrieving integral types wil decode bytes as Big Endian.
-     *
-     * @param file
-     * @param size
-     * @return
-     * @throws IOException
-     */
-    public static ByteBuffer readFileDataIntoBufferBE(final RandomAccessFile file, final int size) throws IOException
-    {
-        final ByteBuffer tagBuffer = ByteBuffer.allocate(size);
-        file.getChannel().read(tagBuffer);
-        tagBuffer.position(0);
-        tagBuffer.order(ByteOrder.BIG_ENDIAN);
         return tagBuffer;
     }
 

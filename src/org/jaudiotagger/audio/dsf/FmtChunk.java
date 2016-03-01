@@ -40,13 +40,6 @@ public class FmtChunk
         chunkSizeLength = dataBuffer.getLong();
     }
 
-    public GenericAudioHeader readChunkData(DsdChunk dsd, RandomAccessFile file) throws IOException
-    {
-        long sizeExcludingChunkHeader = chunkSizeLength - (IffHeaderChunk.SIGNATURE_LENGTH + CHUNKSIZE_LENGTH);
-        ByteBuffer audioData = Utils.readFileDataIntoBufferLE(file, (int)sizeExcludingChunkHeader);
-        return readAudioInfo(dsd, audioData);
-    }
-
     public GenericAudioHeader readChunkData(DsdChunk dsd,FileChannel fc) throws IOException
     {
         long sizeExcludingChunkHeader = chunkSizeLength - (IffHeaderChunk.SIGNATURE_LENGTH + CHUNKSIZE_LENGTH);
