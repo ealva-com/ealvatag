@@ -19,6 +19,7 @@
 package org.jaudiotagger.audio.wav;
 
 import org.jaudiotagger.audio.exceptions.CannotReadException;
+import org.jaudiotagger.audio.generic.GenericAudioHeader;
 import org.jaudiotagger.audio.generic.Utils;
 import org.jaudiotagger.audio.iff.Chunk;
 import org.jaudiotagger.audio.iff.ChunkHeader;
@@ -35,6 +36,8 @@ import org.jaudiotagger.tag.wav.WavTag;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.ByteOrder;
+import java.nio.channels.FileChannel;
+import java.nio.file.Path;
 import java.util.logging.Logger;
 
 /**
@@ -46,31 +49,34 @@ public class WavTagReader
     /**
      * Read file and return tag metadata
      *
-     * @param raf
+     * @param path
      * @return
      * @throws CannotReadException
      * @throws IOException
      */
-    public WavTag read(RandomAccessFile raf) throws CannotReadException, IOException
+    public WavTag read(Path path) throws CannotReadException, IOException
     {
-        logger.config("Read Tag:start");
+        logger.config(path.getFileName() + " Read Tag:start");
         WavTag tag = new WavTag(TagOptionSingleton.getInstance().getWavOptions());
-        if(WavRIFFHeader.isValidHeader(raf))
+        try(FileChannel fc = FileChannel.open(path))
         {
-            while (raf.getFilePointer() < raf.length())
+            if (WavRIFFHeader.isValidHeader(fc))
             {
-                if (!readChunk(raf, tag))
+                while (fc.position() < fc.size())
                 {
-                    break;
+                    if (!readChunk(fc, tag, path.toString()))
+                    {
+                        break;
+                    }
                 }
             }
-        }
-        else
-        {
-            throw new CannotReadException("Wav RIFF Header not valid");
+            else
+            {
+                throw new CannotReadException(path.getFileName()+ " Wav RIFF Header not valid");
+            }
         }
         createDefaultMetadataTagsIfMissing(tag);
-        logger.config("Read Tag:end");
+        logger.config(path.getFileName() + " Read Tag:end");
         return tag;
     }
 
@@ -98,22 +104,21 @@ public class WavTagReader
      *
      * If the same chunk exists more than once in the file we would just use the last occurence
      *
-     * @param raf
      * @param tag
      * @return
      * @throws IOException
      */
-    protected boolean readChunk(RandomAccessFile raf, WavTag tag) throws IOException
+    protected boolean readChunk(FileChannel fc, WavTag tag, String fileName)throws IOException
     {
         Chunk chunk;
         ChunkHeader chunkHeader = new ChunkHeader(ByteOrder.LITTLE_ENDIAN);
-        if (!chunkHeader.readHeader(raf))
+        if (!chunkHeader.readHeader(fc))
         {
             return false;
         }
 
         String id = chunkHeader.getID();
-        logger.config("Next Id is:" + id + ":FileLocation:" + raf.getFilePointer() + ":Size:" + chunkHeader.getSize());
+        logger.config(fileName + " Next Id is:" + id + ":FileLocation:" + fc.position() + ":Size:" + chunkHeader.getSize());
         final WavChunkType chunkType = WavChunkType.get(id);
         if (chunkType != null)
         {
@@ -123,7 +128,7 @@ public class WavTagReader
                     tag.addChunkSummary(new ChunkSummary(chunkHeader.getID(), chunkHeader.getStartLocationInFile(), chunkHeader.getSize()));
                     if(tag.getInfoTag()==null)
                     {
-                        chunk = new WavListChunk(Utils.readFileDataIntoBufferLE(raf, (int) chunkHeader.getSize()), chunkHeader, tag);
+                        chunk = new WavListChunk(Utils.readFileDataIntoBufferLE(fc, (int) chunkHeader.getSize()), chunkHeader, tag);
                         if (!chunk.readChunk())
                         {
                             return false;
@@ -143,14 +148,14 @@ public class WavTagReader
                     {
                         tag.setIncorrectlyAlignedTag(true);
                     }
-                    raf.seek(raf.getFilePointer() -  (ChunkHeader.CHUNK_HEADER_SIZE - 1));
+                    fc.position(fc.position() -  (ChunkHeader.CHUNK_HEADER_SIZE - 1));
                     return true;
 
                 case ID3:
                     tag.addChunkSummary(new ChunkSummary(chunkHeader.getID(), chunkHeader.getStartLocationInFile(), chunkHeader.getSize()));
                     if(tag.getID3Tag()==null)
                     {
-                        chunk = new WavId3Chunk(Utils.readFileDataIntoBufferLE(raf, (int) chunkHeader.getSize()), chunkHeader, tag);
+                        chunk = new WavId3Chunk(Utils.readFileDataIntoBufferLE(fc, (int) chunkHeader.getSize()), chunkHeader, tag);
                         if (!chunk.readChunk())
                         {
                             return false;
@@ -169,7 +174,7 @@ public class WavTagReader
                     {
                         tag.setIncorrectlyAlignedTag(true);
                     }
-                    raf.seek(raf.getFilePointer() -  (ChunkHeader.CHUNK_HEADER_SIZE - 1));
+                    fc.position(fc.position() - (ChunkHeader.CHUNK_HEADER_SIZE - 1));
                     return true;
 
                 case CORRUPT_ID3_LATE:
@@ -178,21 +183,21 @@ public class WavTagReader
                     {
                         tag.setIncorrectlyAlignedTag(true);
                     }
-                    raf.seek(raf.getFilePointer() -  (ChunkHeader.CHUNK_HEADER_SIZE - 1));
+                    fc.position(fc.position() -  (ChunkHeader.CHUNK_HEADER_SIZE - 1));
                     return true;
 
                 default:
                     tag.addChunkSummary(new ChunkSummary(chunkHeader.getID(), chunkHeader.getStartLocationInFile(), chunkHeader.getSize()));
-                    raf.skipBytes((int)chunkHeader.getSize());
+                    fc.position(fc.position() + chunkHeader.getSize());
             }
         }
         //Unknown chunk type just skip
         else
         {
             logger.config("Skipping chunk bytes:" + chunkHeader.getSize() +"for"+chunkHeader.getID());
-            raf.skipBytes((int)chunkHeader.getSize());
+            fc.position(fc.position() + chunkHeader.getSize());
         }
-        IffHeaderChunk.ensureOnEqualBoundary(raf, chunkHeader);
+        IffHeaderChunk.ensureOnEqualBoundary(fc, chunkHeader);
         return true;
     }
 }
