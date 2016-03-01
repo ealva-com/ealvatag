@@ -18,7 +18,6 @@
  */
 package org.jaudiotagger.audio.wav;
 
-import org.jaudiotagger.audio.aiff.AiffAudioHeader;
 import org.jaudiotagger.audio.exceptions.CannotReadException;
 import org.jaudiotagger.audio.generic.GenericAudioHeader;
 import org.jaudiotagger.audio.generic.Utils;
@@ -29,7 +28,6 @@ import org.jaudiotagger.audio.wav.chunk.WavFactChunk;
 import org.jaudiotagger.audio.wav.chunk.WavFormatChunk;
 
 import java.io.IOException;
-import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.channels.FileChannel;
@@ -43,9 +41,11 @@ public class WavInfoReader
 {
     public static Logger logger = Logger.getLogger("org.jaudiotagger.audio.wav");
 
-    public WavInfoReader()
-    {
 
+    private String loggingName;
+    public WavInfoReader(String loggingName)
+    {
+        this.loggingName = loggingName;
     }
 
     public GenericAudioHeader read(Path path) throws CannotReadException, IOException
@@ -57,7 +57,7 @@ public class WavInfoReader
             {
                 while (fc.position() < fc.size())
                 {
-                    if (!readChunk(fc, info, path.toString()))
+                    if (!readChunk(fc, info))
                     {
                         break;
                     }
@@ -65,7 +65,7 @@ public class WavInfoReader
             }
             else
             {
-                throw new CannotReadException("Wav RIFF Header not valid");
+                throw new CannotReadException(loggingName + " Wav RIFF Header not valid");
             }
         }
         calculateTrackLength(info);
@@ -96,14 +96,14 @@ public class WavInfoReader
         }
         else
         {
-            throw new CannotReadException("Wav Data Header Missing");
+            throw new CannotReadException(loggingName + " Wav Data Header Missing");
         }
     }
 
     /**
      * Reads a Wav Chunk.
      */
-    protected boolean readChunk(FileChannel fc, GenericAudioHeader info, String fileName) throws IOException
+    protected boolean readChunk(FileChannel fc, GenericAudioHeader info) throws IOException
     {
         Chunk chunk;
         ChunkHeader chunkHeader = new ChunkHeader(ByteOrder.LITTLE_ENDIAN);
@@ -113,7 +113,7 @@ public class WavInfoReader
         }
 
         String id = chunkHeader.getID();
-        logger.config(fileName+" Reading Chunk:" + id + ":starting at:" + chunkHeader.getStartLocationInFile() + ":sizeIncHeader:" + (chunkHeader.getSize() + ChunkHeader.CHUNK_HEADER_SIZE));
+        logger.config(loggingName+" Reading Chunk:" + id + ":starting at:" + chunkHeader.getStartLocationInFile() + ":sizeIncHeader:" + (chunkHeader.getSize() + ChunkHeader.CHUNK_HEADER_SIZE));
         final WavChunkType chunkType = WavChunkType.get(id);
 
         //Ik known chinkType
@@ -155,14 +155,14 @@ public class WavInfoReader
 
                 //Dont need to do anything with these just skip
                 default:
-                    logger.config(fileName+" Skipping chunk bytes:" + chunkHeader.getSize());
+                    logger.config(loggingName + " Skipping chunk bytes:" + chunkHeader.getSize());
                     fc.position(fc.position() + chunkHeader.getSize());
             }
         }
         //Unknown chunk type just skip
         else
         {
-            logger.config(fileName+" Skipping chunk bytes:" + chunkHeader.getSize() +"for"+chunkHeader.getID());
+            logger.config(loggingName+" Skipping chunk bytes:" + chunkHeader.getSize() +"for"+chunkHeader.getID());
             fc.position(fc.position() + chunkHeader.getSize());
         }
         IffHeaderChunk.ensureOnEqualBoundary(fc, chunkHeader);

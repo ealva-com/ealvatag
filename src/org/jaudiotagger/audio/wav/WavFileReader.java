@@ -40,18 +40,15 @@ public class WavFileReader extends AudioFileReader2
 
     }
 
-    private WavInfoReader ir = new WavInfoReader();
-    private WavTagReader  iw = new WavTagReader();
-
     protected GenericAudioHeader getEncodingInfo(Path path) throws CannotReadException, IOException
     {
-        return ir.read(path);
+        return new WavInfoReader(path.toString()).read(path);
     }
 
     @Override
     protected Tag getTag(Path path) throws IOException, CannotReadException
     {           
-        WavTag tag =  iw.read(path);
+        WavTag tag =  new WavTagReader(path.toString()).read(path);
         switch (TagOptionSingleton.getInstance().getWavOptions())
         {
             case READ_ID3_ONLY_AND_SYNC:

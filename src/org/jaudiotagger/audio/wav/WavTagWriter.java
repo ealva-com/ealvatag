@@ -18,10 +18,8 @@
  */
 package org.jaudiotagger.audio.wav;
 
-import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.exceptions.CannotReadException;
 import org.jaudiotagger.audio.exceptions.CannotWriteException;
-import org.jaudiotagger.audio.generic.TagWriter;
 import org.jaudiotagger.audio.generic.Utils;
 import org.jaudiotagger.audio.iff.ChunkHeader;
 import org.jaudiotagger.audio.iff.ChunkSummary;
@@ -29,14 +27,11 @@ import org.jaudiotagger.audio.iff.IffHeaderChunk;
 import org.jaudiotagger.audio.wav.chunk.WavChunkSummary;
 import org.jaudiotagger.audio.wav.chunk.WavInfoIdentifier;
 import org.jaudiotagger.tag.*;
-import org.jaudiotagger.tag.aiff.AiffTag;
-import org.jaudiotagger.tag.id3.AbstractID3v2Tag;
 import org.jaudiotagger.tag.wav.WavInfoTag;
 import org.jaudiotagger.tag.wav.WavTag;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.RandomAccessFile;
 import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -55,6 +50,13 @@ import static org.jaudiotagger.audio.iff.IffHeaderChunk.SIZE_LENGTH;
  */
 public class WavTagWriter
 {
+    //For logging
+    private String loggingName;
+    public WavTagWriter(String loggingName)
+    {
+        this.loggingName = loggingName;
+    }
+
     // Logger Object
     public static Logger logger = Logger.getLogger("org.jaudiotagger.audio.wav");
 
@@ -71,7 +73,7 @@ public class WavTagWriter
         try
         {
             //Find WavTag (if any)
-            WavTagReader im = new WavTagReader();
+            WavTagReader im = new WavTagReader(loggingName);
             return im.read(path);
         }
         catch (CannotReadException ex)
@@ -97,7 +99,7 @@ public class WavTagWriter
 
         if (!WavChunkType.LIST.getCode().equals(chunkHeader.getID()))
         {
-            throw new CannotWriteException("Unable to find List chunk at original location has file been modified externally");
+            throw new CannotWriteException(loggingName +" Unable to find List chunk at original location has file been modified externally");
         }
         return chunkHeader;
     }
@@ -118,7 +120,7 @@ public class WavTagWriter
         fc.position(fc.position() - ChunkHeader.CHUNK_HEADER_SIZE);
         if (!WavChunkType.ID3.getCode().equals(chunkHeader.getID()))
         {
-            throw new CannotWriteException("Unable to find ID3 chunk at original location has file been modified externally");
+            throw new CannotWriteException(loggingName + " Unable to find ID3 chunk at original location has file been modified externally");
         }
         return chunkHeader;
     }
@@ -133,7 +135,7 @@ public class WavTagWriter
      */
     public void delete (Tag tag, Path file) throws CannotWriteException
     {
-        logger.info("Deleting metadata from file:" + file);
+        logger.info(loggingName + " Deleting metadata from file");
         try(FileChannel fc = FileChannel.open(file, StandardOpenOption.WRITE, StandardOpenOption.READ))
         {
             WavTag existingTag = getExistingMetadata(file);
@@ -150,12 +152,12 @@ public class WavTagWriter
                     {
                         if (fs.isInfoTagFirst)
                         {
-                            logger.info("Setting new length to:" + existingTag.getInfoTag().getStartLocationInFile());
+                            logger.info(loggingName + ":Setting new length to:" + existingTag.getInfoTag().getStartLocationInFile());
                             fc.truncate(existingTag.getInfoTag().getStartLocationInFile());
                         }
                         else
                         {
-                            logger.info("Setting new length to:" + existingTag.getStartLocationInFileOfId3Chunk());
+                            logger.info(loggingName + ":Setting new length to:" + existingTag.getStartLocationInFileOfId3Chunk());
                             fc.truncate(existingTag.getStartLocationInFileOfId3Chunk());
                         }
                     }
@@ -210,7 +212,7 @@ public class WavTagWriter
                 //and it is at end of the file
                 if (existingInfoTag.getEndLocationInFile() == fc.size())
                 {
-                    logger.info("Setting new length to:" + existingInfoTag.getStartLocationInFile());
+                    logger.info(loggingName + ":Setting new length to:" + existingInfoTag.getStartLocationInFile());
                     fc.truncate(existingInfoTag.getStartLocationInFile());
                 }
                 else
@@ -224,7 +226,7 @@ public class WavTagWriter
                 //and it is at end of the file
                 if (isID3TagAtEndOfFileAllowingForPaddingByte(existingTag, fc))
                 {
-                    logger.info("Setting new length to:" + existingTag.getStartLocationInFileOfId3Chunk());
+                    logger.info(loggingName + ":Setting new length to:" + existingTag.getStartLocationInFileOfId3Chunk());
                     fc.truncate(existingTag.getStartLocationInFileOfId3Chunk());
                 }
                 else
@@ -304,7 +306,7 @@ public class WavTagWriter
         }
         //Truncate the file after the last chunk
         final long newLength = fc.size() - lengthTagChunk;
-        logger.config("Setting new length to:" + newLength);
+        logger.config(loggingName + " Setting new length to:" + newLength);
         fc.position(newLength);
     }
 
@@ -316,7 +318,7 @@ public class WavTagWriter
      */
     public void write(final Tag tag, Path file) throws CannotWriteException
     {
-        logger.config("Writing tag to file:start");
+        logger.config(loggingName + " Writing tag to file:start");
 
         WavSaveOptions wso = TagOptionSingleton.getInstance().getWavSaveOptions();
         WavTag existingTag = null;
@@ -358,7 +360,7 @@ public class WavTagWriter
             //Invalid Option, should never happen
             else
             {
-                throw new RuntimeException("No setting for:WavSaveOptions");
+                throw new RuntimeException(loggingName + " No setting for:WavSaveOptions");
             }
             rewriteRiffHeaderSize(fc);
         }
@@ -485,7 +487,7 @@ public class WavTagWriter
                 TagTextField next = (TagTextField) i.next();
                 WavInfoIdentifier wii = WavInfoIdentifier.getByByFieldKey(FieldKey.valueOf(next.getId()));
                 baos.write(wii.getCode().getBytes(StandardCharsets.US_ASCII));
-                logger.config("Writing:" + wii.getCode() + ":" + next.getContent());
+                logger.config(loggingName + " Writing:" + wii.getCode() + ":" + next.getContent());
 
                 //TODO Is UTF8 allowed format
                 byte[] contentConvertedToBytes = next.getContent().getBytes(StandardCharsets.UTF_8);
@@ -505,7 +507,7 @@ public class WavTagWriter
             {
                 TagTextField next = ti.next();
                 baos.write(next.getId().getBytes(StandardCharsets.US_ASCII));
-                logger.config("Writing:" +next.getId() + ":" + next.getContent());
+                logger.config(loggingName + " Writing:" +next.getId() + ":" + next.getContent());
                 byte[] contentConvertedToBytes = next.getContent().getBytes(StandardCharsets.UTF_8);
                 baos.write(Utils.getSizeLEInt32(contentConvertedToBytes.length));
                 baos.write(contentConvertedToBytes);
@@ -813,7 +815,7 @@ public class WavTagWriter
             }
             else
             {
-                throw new CannotWriteException("Metadata tags are corrupted and not at end of file so cannot be fixed");
+                throw new CannotWriteException(loggingName + " Metadata tags are corrupted and not at end of file so cannot be fixed");
             }
         }
         //If only INFO chunk exists
@@ -843,7 +845,7 @@ public class WavTagWriter
             }
             else
             {
-                throw new CannotWriteException("Metadata tags are corrupted and not at end of file so cannot be fixed");
+                throw new CannotWriteException(loggingName + " Metadata tags are corrupted and not at end of file so cannot be fixed");
             }
         }
         //If only ID3 chunk exists
@@ -873,7 +875,7 @@ public class WavTagWriter
             }
             else
             {
-                throw new CannotWriteException("Metadata tags are corrupted and not at end of file so cannot be fixed");
+                throw new CannotWriteException(loggingName + " Metadata tags are corrupted and not at end of file so cannot be fixed");
             }
         }
         //No existing tags so write both to the end
@@ -966,7 +968,7 @@ public class WavTagWriter
             }
             else
             {
-                throw new CannotWriteException("Metadata tags are corrupted and not at end of file so cannot be fixed");
+                throw new CannotWriteException(loggingName + " Metadata tags are corrupted and not at end of file so cannot be fixed");
             }
         }
         //ID3 is Active Tag
@@ -1006,7 +1008,7 @@ public class WavTagWriter
             }
             else
             {
-                throw new CannotWriteException("Metadata tags are corrupted and not at end of file so cannot be fixed");
+                throw new CannotWriteException(loggingName + " Metadata tags are corrupted and not at end of file so cannot be fixed");
             }
         }
     }
@@ -1059,13 +1061,13 @@ public class WavTagWriter
         //Preceding chunk ends on odd boundary
         if(!Utils.isOddLength(precedingChunk.getEndLocation()))
         {
-            logger.severe("Truncating corrupted metadata tags from:" + (existingTag.getInfoTag().getStartLocationInFile() - 1));
+            logger.severe(loggingName + " Truncating corrupted metadata tags from:" + (existingTag.getInfoTag().getStartLocationInFile() - 1));
             fc.truncate(existingTag.getInfoTag().getStartLocationInFile() - 1);
         }
         //Preceding chunk ends on even boundary
         else
         {
-            logger.severe("Truncating corrupted metadata tags from:" + (existingTag.getInfoTag().getStartLocationInFile()));
+            logger.severe(loggingName + " Truncating corrupted metadata tags from:" + (existingTag.getInfoTag().getStartLocationInFile()));
             fc.truncate(existingTag.getInfoTag().getStartLocationInFile());
         }
     }
