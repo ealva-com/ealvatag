@@ -11,7 +11,8 @@ import java.util.Map;
 public enum WavInfoIdentifier
 {
     ARTIST("IART", FieldKey.ARTIST),
-    ALBUM_ARTIST("iaar", FieldKey.ALBUM_ARTIST), //Dont know why lowercase, maybe MediaMonkey custom field
+    //Custom MediaMonkey field, theres appears to be no official AlbumArtist field, nothing ever displayed for this field or IAAR in Windows Explorer
+    ALBUM_ARTIST("iaar", FieldKey.ALBUM_ARTIST),
     TITLE("INAM", FieldKey.TITLE),
     ALBUM("IPRD", FieldKey.ALBUM),
     TRACKNO("ITRK", FieldKey.TRACK),
