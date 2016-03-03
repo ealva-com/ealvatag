@@ -80,11 +80,13 @@ public enum VorbisCommentFieldKey
     MUSICBRAINZ_WORKID("MUSICBRAINZ_WORKID",EnumSet.of(Tagger.PICARD,Tagger.JAIKOZ)),
     MUSICIP_PUID("MUSICIP_PUID",EnumSet.of(Tagger.PICARD,Tagger.JAIKOZ)),
     OCCASION("OCCASION",EnumSet.of(Tagger.MEDIA_MONKEY)),
+    ORCHESTRA("ORCHESTRA",EnumSet.of(Tagger.JAIKOZ)),
     ORGANIZATION("ORGANIZATION",EnumSet.of(Tagger.XIPH)),  //   Name of the organization producing the track (i.e. the 'record label')
     ORIGINAL_ALBUM("ORIGINAL ALBUM",EnumSet.of(Tagger.JAIKOZ,Tagger.MEDIA_MONKEY)),
     ORIGINAL_ARTIST("ORIGINAL ARTIST",EnumSet.of(Tagger.JAIKOZ,Tagger.MEDIA_MONKEY)),
     ORIGINAL_LYRICIST("ORIGINAL LYRICIST",EnumSet.of(Tagger.MEDIA_MONKEY)),
     ORIGINAL_YEAR("ORIGINAL YEAR",EnumSet.of(Tagger.JAIKOZ,Tagger.MEDIA_MONKEY)),
+    PART("PART",EnumSet.of(Tagger.JAIKOZ)),
     PERFORMER("PERFORMER",EnumSet.of(Tagger.XIPH,Tagger.PICARD)),
     PRODUCTNUMBER("PRODUCTNUMBER",EnumSet.of(Tagger.XIPH)),
     QUALITY("QUALITY",EnumSet.of(Tagger.MEDIA_MONKEY)),
@@ -107,6 +109,7 @@ public enum VorbisCommentFieldKey
     URL_OFFICIAL_RELEASE_SITE("URL_OFFICIAL_RELEASE_SITE",EnumSet.of(Tagger.JAIKOZ)),
     URL_WIKIPEDIA_ARTIST_SITE("URL_WIKIPEDIA_ARTIST_SITE",EnumSet.of(Tagger.JAIKOZ)),
     URL_WIKIPEDIA_RELEASE_SITE("URL_WIKIPEDIA_RELEASE_SITE",EnumSet.of(Tagger.JAIKOZ)),
+    WORK("WORK",EnumSet.of(Tagger.JAIKOZ)),
     VENDOR("VENDOR"),
     VERSION("VERSION", EnumSet.of(Tagger.XIPH)),// The version field may be used to differentiate multiple versions of the same track title in a single collection. (e.g. remix info)
 

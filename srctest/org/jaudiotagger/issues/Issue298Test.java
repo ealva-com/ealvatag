@@ -100,6 +100,10 @@ public class Issue298Test extends AbstractTestCase
             assertEquals("71",af.getTag().getFirst(FieldKey.TIMBRE));
             assertEquals("72",af.getTag().getFirst(FieldKey.TONALITY));
             assertEquals("Am",af.getTag().getFirst(FieldKey.KEY));
+            tag.setField(tag.createField(FieldKey.ORCHESTRA,"Orchestra"));
+            tag.setField(tag.createField(FieldKey.PART,"Part"));
+            tag.setField(tag.createField(FieldKey.WORK,"Work"));
+
 
 
 
@@ -146,6 +150,9 @@ public class Issue298Test extends AbstractTestCase
             assertEquals("71",af.getTag().getFirst(FieldKey.TIMBRE));
             assertEquals("72",af.getTag().getFirst(FieldKey.TONALITY));
             assertEquals("Am",af.getTag().getFirst(FieldKey.KEY));
+            assertEquals("Orchestra",af.getTag().getFirst(FieldKey.ORCHESTRA));
+            assertEquals("Part",af.getTag().getFirst(FieldKey.PART));
+            assertEquals("Work",af.getTag().getFirst(FieldKey.WORK));
 
             {
                 TagField tagField = af.getTag().getFirstField(FieldKey.CUSTOM1);
@@ -247,6 +254,10 @@ public class Issue298Test extends AbstractTestCase
             tag.setField(tag.createField(FieldKey.TIMBRE,"71"));
             tag.setField(tag.createField(FieldKey.TONALITY,"72"));
             tag.setField(tag.createField(FieldKey.KEY,"Am"));
+            tag.setField(tag.createField(FieldKey.ORCHESTRA,"Orchestra"));
+            tag.setField(tag.createField(FieldKey.PART,"Part"));
+            tag.setField(tag.createField(FieldKey.WORK,"Work"));
+
 
             af.commit();
             af = AudioFileIO.read(testFile);
@@ -283,6 +294,9 @@ public class Issue298Test extends AbstractTestCase
             assertEquals("71",af.getTag().getFirst(FieldKey.TIMBRE));
             assertEquals("72",af.getTag().getFirst(FieldKey.TONALITY));
             assertEquals("Am",af.getTag().getFirst(FieldKey.KEY));
+            assertEquals("Orchestra",af.getTag().getFirst(FieldKey.ORCHESTRA));
+            assertEquals("Part",af.getTag().getFirst(FieldKey.PART));
+            assertEquals("Work",af.getTag().getFirst(FieldKey.WORK));
 
 
 
@@ -346,6 +360,10 @@ public class Issue298Test extends AbstractTestCase
             tag.setField(tag.createField(FieldKey.TIMBRE,"71"));
             tag.setField(tag.createField(FieldKey.TONALITY,"72"));
             tag.setField(tag.createField(FieldKey.KEY,"Am"));
+            tag.setField(tag.createField(FieldKey.ORCHESTRA,"Orchestra"));
+            tag.setField(tag.createField(FieldKey.PART,"Part"));
+            tag.setField(tag.createField(FieldKey.WORK,"Work"));
+
             af.commit();
             af = AudioFileIO.read(testFile);
             assertEquals("custom1",af.getTag().getFirst(FieldKey.CUSTOM1));
@@ -381,6 +399,9 @@ public class Issue298Test extends AbstractTestCase
             assertEquals("71",af.getTag().getFirst(FieldKey.TIMBRE));
             assertEquals("72",af.getTag().getFirst(FieldKey.TONALITY));
             assertEquals("Am",af.getTag().getFirst(FieldKey.KEY));
+            assertEquals("Orchestra",af.getTag().getFirst(FieldKey.ORCHESTRA));
+            assertEquals("Part",af.getTag().getFirst(FieldKey.PART));
+            assertEquals("Work",af.getTag().getFirst(FieldKey.WORK));
 
         }
         catch(Exception e)
@@ -439,6 +460,10 @@ public class Issue298Test extends AbstractTestCase
             tag.setField(tag.createField(FieldKey.TIMBRE,"71"));
             tag.setField(tag.createField(FieldKey.TONALITY,"72"));
             tag.setField(tag.createField(FieldKey.KEY,"Am"));
+            tag.setField(tag.createField(FieldKey.ORCHESTRA,"Orchestra"));
+            tag.setField(tag.createField(FieldKey.PART,"Part"));
+            tag.setField(tag.createField(FieldKey.WORK,"Work"));
+
             af.commit();
             af = AudioFileIO.read(testFile);
             assertEquals("custom1",af.getTag().getFirst(FieldKey.CUSTOM1));
@@ -474,6 +499,9 @@ public class Issue298Test extends AbstractTestCase
             assertEquals("71",af.getTag().getFirst(FieldKey.TIMBRE));
             assertEquals("72",af.getTag().getFirst(FieldKey.TONALITY));
             assertEquals("Am",af.getTag().getFirst(FieldKey.KEY));
+            assertEquals("Orchestra",af.getTag().getFirst(FieldKey.ORCHESTRA));
+            assertEquals("Part",af.getTag().getFirst(FieldKey.PART));
+            assertEquals("Work",af.getTag().getFirst(FieldKey.WORK));
 
         }
         catch(Exception e)
@@ -532,6 +560,9 @@ public class Issue298Test extends AbstractTestCase
             tag.setField(tag.createField(FieldKey.TIMBRE,"71"));
             tag.setField(tag.createField(FieldKey.TONALITY,"72"));
             tag.setField(tag.createField(FieldKey.KEY,"Am"));
+            tag.setField(tag.createField(FieldKey.ORCHESTRA,"Orchestra"));
+            tag.setField(tag.createField(FieldKey.PART,"Part"));
+            tag.setField(tag.createField(FieldKey.WORK,"Work"));
             af.commit();
 
             af = AudioFileIO.read(testFile);
@@ -568,6 +599,9 @@ public class Issue298Test extends AbstractTestCase
             assertEquals("71",af.getTag().getFirst(FieldKey.TIMBRE));
             assertEquals("72",af.getTag().getFirst(FieldKey.TONALITY));
             assertEquals("Am",af.getTag().getFirst(FieldKey.KEY));
+            assertEquals("Orchestra",af.getTag().getFirst(FieldKey.ORCHESTRA));
+            assertEquals("Part",af.getTag().getFirst(FieldKey.PART));
+            assertEquals("Work",af.getTag().getFirst(FieldKey.WORK));
 
         }
         catch(Exception e)
@@ -628,6 +662,10 @@ public class Issue298Test extends AbstractTestCase
             tag.setField(tag.createField(FieldKey.TIMBRE,"71"));
             tag.setField(tag.createField(FieldKey.TONALITY,"72"));
             tag.setField(tag.createField(FieldKey.KEY,"Am"));
+            tag.setField(tag.createField(FieldKey.ORCHESTRA,"Orchestra"));
+            tag.setField(tag.createField(FieldKey.PART,"Part"));
+            tag.setField(tag.createField(FieldKey.WORK,"Work"));
+
             af.commit();
             af = AudioFileIO.read(testFile);
             assertEquals("custom1",af.getTag().getFirst(FieldKey.CUSTOM1));
@@ -663,6 +701,9 @@ public class Issue298Test extends AbstractTestCase
             assertEquals("71",af.getTag().getFirst(FieldKey.TIMBRE));
             assertEquals("72",af.getTag().getFirst(FieldKey.TONALITY));
             assertEquals("Am",af.getTag().getFirst(FieldKey.KEY));
+            assertEquals("Orchestra",af.getTag().getFirst(FieldKey.ORCHESTRA));
+            assertEquals("Part",af.getTag().getFirst(FieldKey.PART));
+            assertEquals("Work",af.getTag().getFirst(FieldKey.WORK));
 
         }
         catch(Exception e)
@@ -722,6 +763,10 @@ public class Issue298Test extends AbstractTestCase
             tag.setField(tag.createField(FieldKey.TIMBRE,"71"));
             tag.setField(tag.createField(FieldKey.TONALITY,"72"));
             tag.setField(tag.createField(FieldKey.KEY,"Am"));
+            tag.setField(tag.createField(FieldKey.ORCHESTRA,"Orchestra"));
+            tag.setField(tag.createField(FieldKey.PART,"Part"));
+            tag.setField(tag.createField(FieldKey.WORK,"Work"));
+
             af.commit();
             af = AudioFileIO.read(testFile);
             assertEquals("custom1",af.getTag().getFirst(FieldKey.CUSTOM1));
@@ -757,6 +802,9 @@ public class Issue298Test extends AbstractTestCase
             assertEquals("71",af.getTag().getFirst(FieldKey.TIMBRE));
             assertEquals("72",af.getTag().getFirst(FieldKey.TONALITY));
             assertEquals("Am",af.getTag().getFirst(FieldKey.KEY));
+            assertEquals("Orchestra",af.getTag().getFirst(FieldKey.ORCHESTRA));
+            assertEquals("Part",af.getTag().getFirst(FieldKey.PART));
+            assertEquals("Work",af.getTag().getFirst(FieldKey.WORK));
 
         }
         catch(Exception e)
