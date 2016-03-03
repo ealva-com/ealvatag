@@ -506,6 +506,21 @@ public class Utils
     }
 
     /**
+     *
+     * @param fc
+     * @param size
+     * @return
+     * @throws IOException
+     */
+    public static ByteBuffer readFileDataIntoBufferBE(FileChannel fc, final int size) throws IOException
+    {
+        final ByteBuffer tagBuffer = ByteBuffer.allocateDirect(size);
+        fc.read(tagBuffer);
+        tagBuffer.position(0);
+        tagBuffer.order(ByteOrder.BIG_ENDIAN);
+        return tagBuffer;
+    }
+    /**
      * Copy src file to dst file. FileChannels are used to maximize performance.
      *
      * @param source source File

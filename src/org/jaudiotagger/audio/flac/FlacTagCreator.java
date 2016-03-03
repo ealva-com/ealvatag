@@ -63,7 +63,7 @@ public class FlacTagCreator extends AbstractTagCreator
         }
         for (MetadataBlockDataPicture image : flacTag.getImages())
         {
-            tagLength += image.getBytes().length + MetadataBlockHeader.HEADER_LENGTH;
+            tagLength += image.getBytes().limit() + MetadataBlockHeader.HEADER_LENGTH;
         }
 
         logger.config("Convert flac tag:taglength:" + tagLength);

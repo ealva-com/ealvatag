@@ -18,6 +18,8 @@
  */
 package org.jaudiotagger.audio.flac.metadatablock;
 
+import java.nio.ByteBuffer;
+
 /**
  * Padding Block
  *
@@ -36,14 +38,14 @@ public class MetadataBlockDataPadding implements MetadataBlockData
         this.length = length;
     }
 
-    public byte[] getBytes()
+    public ByteBuffer getBytes()
     {
         byte[] data = new byte[length];
         for (int i = 0; i < length; i++)
         {
             data[i] = 0;
         }
-        return data;
+        return ByteBuffer.wrap(data);
     }
 
     public int getLength()

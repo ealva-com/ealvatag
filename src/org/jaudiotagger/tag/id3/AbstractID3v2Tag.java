@@ -144,6 +144,15 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
         return true;
     }
 
+    private static boolean isID3V2Header(FileChannel fc) throws IOException
+    {
+        long start = fc.position();
+        ByteBuffer headerBuffer = Utils.readFileDataIntoBufferBE(fc, FIELD_TAGID_LENGTH);
+        fc.position(start);
+        return Utils.readThreeBytesAsChars(headerBuffer).equals(TAG_ID);
+    }
+
+
     /**
      * Determines if file contain an id3 tag and if so positions the file pointer just after the end
      * of the tag.
@@ -168,6 +177,21 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
 
         int size = ID3SyncSafeInteger.bufferToValue(bb);
         raf.seek(size + TAG_HEADER_LENGTH);
+        return true;
+    }
+
+    public static boolean isId3Tag(FileChannel fc) throws IOException
+    {
+        if (!isID3V2Header(fc))
+        {
+            return false;
+        }
+        //So we have a tag
+        ByteBuffer bb = ByteBuffer.allocateDirect(FIELD_TAG_SIZE_LENGTH);
+        fc.position(fc.position() + FIELD_TAGID_LENGTH + FIELD_TAG_MAJOR_VERSION_LENGTH + FIELD_TAG_MINOR_VERSION_LENGTH + FIELD_TAG_FLAG_LENGTH);
+        fc.read(bb);
+        int size = ID3SyncSafeInteger.bufferToValue(bb);
+        fc.position(size + TAG_HEADER_LENGTH);
         return true;
     }
 

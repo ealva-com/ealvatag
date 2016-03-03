@@ -21,28 +21,34 @@ package org.jaudiotagger.audio.flac;
 import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.exceptions.CannotWriteException;
 import org.jaudiotagger.audio.generic.AudioFileWriter;
+import org.jaudiotagger.audio.generic.AudioFileWriter2;
 import org.jaudiotagger.tag.Tag;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.nio.file.Path;
 
 
 /**
  * Write/delete tag info for Flac file (opensource lossless encoding)
  */
-public class FlacFileWriter extends AudioFileWriter
+public class FlacFileWriter extends AudioFileWriter2
 {
 
     private FlacTagWriter tw = new FlacTagWriter();
 
-    protected void writeTag(AudioFile audioFile, Tag tag, RandomAccessFile raf, RandomAccessFile rafTemp) throws CannotWriteException, IOException
+    @Override
+    protected void writeTag(Tag tag, Path file) throws CannotWriteException
     {
-        tw.write(tag, raf, rafTemp);
+        tw.write(tag, file);
     }
 
-    protected void deleteTag(Tag tag, RandomAccessFile raf, RandomAccessFile tempRaf) throws CannotWriteException, IOException
+    @Override
+    protected void deleteTag(Tag tag, Path file) throws CannotWriteException
     {
-        tw.delete(raf, tempRaf);
+        tw.delete(tag, file);
     }
+
+
 }
 
