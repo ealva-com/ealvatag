@@ -18,26 +18,19 @@
  */
 package org.jaudiotagger.audio.flac;
 
-import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.exceptions.CannotReadException;
 import org.jaudiotagger.audio.exceptions.CannotWriteException;
 import org.jaudiotagger.audio.flac.metadatablock.*;
-import org.jaudiotagger.audio.generic.Utils;
-import org.jaudiotagger.logging.ErrorMessage;
 import org.jaudiotagger.tag.Tag;
-import org.jaudiotagger.tag.TagOptionSingleton;
 import org.jaudiotagger.tag.flac.FlacTag;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 
@@ -48,10 +41,7 @@ public class FlacTagWriter
 {
     // Logger Object
     public static Logger logger = Logger.getLogger("org.jaudiotagger.audio.flac");
-
     private FlacTagCreator tc = new FlacTagCreator();
-
-    private static final String TEMP_FILENAME_SUFFIX = ".tmp";
 
     /**
      *
@@ -85,10 +75,6 @@ public class FlacTagWriter
     public void write(Tag tag, Path file) throws CannotWriteException
     {
         logger.config(file + " Writing tag");
-
-        //Maybe needed if not enough
-        File tmpFile = null;
-
         try(FileChannel fc = FileChannel.open(file, StandardOpenOption.WRITE, StandardOpenOption.READ))
         {
             MetadataBlockInfo blockInfo = new MetadataBlockInfo();
@@ -182,34 +168,10 @@ public class FlacTagWriter
             //adjust padding accordingly need to allow space for padding header if padding required
             if ((availableRoom == neededRoom) || (availableRoom > neededRoom + MetadataBlockHeader.HEADER_LENGTH))
             {
-                logger.config(file + "Room to Rerwrite");
-                //Jump over Id3 (if exists) Flac and StreamInfoBlock
+                logger.config(file + "Room to Rewrite");
+                //Jump over Id3 (if exists) and flac header
                 fc.position(flacStream.getStartOfFlacInFile() + FlacStreamReader.FLAC_STREAM_IDENTIFIER_LENGTH);
-
-                //Write StreamInfo, we always write this first even if wasn't first in original spec
-                fc.write(ByteBuffer.wrap(blockInfo.streamInfoBlock.getHeader().getBytesWithoutIsLastBlockFlag()));
-                fc.write(blockInfo.streamInfoBlock.getData().getBytes());
-
-                //Write Application Blocks
-                for (MetadataBlock aMetadataBlockApplication : blockInfo.metadataBlockApplication)
-                {
-                    fc.write(ByteBuffer.wrap(aMetadataBlockApplication.getHeader().getBytesWithoutIsLastBlockFlag()));
-                    fc.write(aMetadataBlockApplication.getData().getBytes());
-                }
-
-                //Write Seek Table Blocks
-                for (MetadataBlock aMetadataBlockSeekTable : blockInfo.metadataBlockSeekTable)
-                {
-                    fc.write(ByteBuffer.wrap(aMetadataBlockSeekTable.getHeader().getBytesWithoutIsLastBlockFlag()));
-                    fc.write(aMetadataBlockSeekTable.getData().getBytes());
-                }
-
-                //Write Cue sheet Blocks
-                for (MetadataBlock aMetadataBlockCueSheet : blockInfo.metadataBlockCueSheet)
-                {
-                    fc.write(ByteBuffer.wrap(aMetadataBlockCueSheet.getHeader().getBytesWithoutIsLastBlockFlag()));
-                    fc.write(aMetadataBlockCueSheet.getData().getBytes());
-                }
+                writeOtherMetadataBlocks(fc, blockInfo);
 
                 //Write tag (and padding)
                 fc.write(tc.convert(tag, availableRoom - neededRoom));
@@ -217,179 +179,72 @@ public class FlacTagWriter
             //Need to move audio
             else
             {
-                logger.config(file + " No Room to Rerwrite");
-                tmpFile = File.createTempFile(file.toFile().getName().replace('.', '_'), TEMP_FILENAME_SUFFIX, file.getParent().toFile());
-                try(FileChannel fTmp = FileChannel.open(tmpFile.toPath(), StandardOpenOption.WRITE, StandardOpenOption.READ))
-                {
-                    //If Flac tag contains ID3header or something before start of official Flac header copy it over
-                    if (flacStream.getStartOfFlacInFile() > 0)
-                    {
-                        fc.position(0);
-                        fTmp.transferFrom(fc, 0, flacStream.getStartOfFlacInFile());
-                        fTmp.position(flacStream.getStartOfFlacInFile());
-                    }
-                    fTmp.write(ByteBuffer.wrap(FlacStreamReader.FLAC_STREAM_IDENTIFIER.getBytes(StandardCharsets.US_ASCII)));
-                    fTmp.write(ByteBuffer.allocate(1));  //To ensure never set Last-metadata-block flag even if was before
+                logger.config(file + " No Room to Rewrite");
+                //Find end of metadata bloacks (start of Audio)
+                fc.position(flacStream.getStartOfFlacInFile()
+                        + FlacStreamReader.FLAC_STREAM_IDENTIFIER_LENGTH
+                        + MetadataBlockHeader.BLOCK_TYPE_LENGTH
+                        + MetadataBlockDataStreamInfo.STREAM_INFO_DATA_LENGTH
+                        + availableRoom);
 
-                    int uptoStreamHeaderSize = flacStream.getStartOfFlacInFile() + FlacStreamReader.FLAC_STREAM_IDENTIFIER_LENGTH + MetadataBlockHeader.BLOCK_TYPE_LENGTH;
-                    fTmp.position(uptoStreamHeaderSize);
-                    fc.position(uptoStreamHeaderSize);
+                //And copy into Buffer, because direct buffer doesnt use heap, Flacs can be alrge
+                //and this will require some memory but it is alot simpler and faster tahn faffing about
+                //with temporary files
+                ByteBuffer audioData = ByteBuffer.allocateDirect((int)(fc.size() - fc.position()));
+                fc.read(audioData);
+                audioData.flip();
 
-                    fTmp.transferFrom(fc, uptoStreamHeaderSize, MetadataBlockHeader.BLOCK_LENGTH + MetadataBlockDataStreamInfo.STREAM_INFO_DATA_LENGTH);
+                //Jump over Id3 (if exists) Flac Header
+                fc.position(flacStream.getStartOfFlacInFile() + FlacStreamReader.FLAC_STREAM_IDENTIFIER_LENGTH);
+                writeOtherMetadataBlocks(fc, blockInfo);
 
-                    int dataStartSize = flacStream.getStartOfFlacInFile() + FlacStreamReader.FLAC_STREAM_IDENTIFIER_LENGTH + MetadataBlockHeader.HEADER_LENGTH + MetadataBlockDataStreamInfo.STREAM_INFO_DATA_LENGTH;
-                    fTmp.position(dataStartSize);
+                //Write tag (and add some default padding)
+                fc.write(tc.convert(tag,  FlacTagCreator.DEFAULT_PADDING));
 
-                    //Write all the metadatablocks
-                    for (MetadataBlock aMetadataBlockApplication : blockInfo.metadataBlockApplication)
-                    {
-                        fTmp.write(ByteBuffer.wrap(aMetadataBlockApplication.getHeader().getBytesWithoutIsLastBlockFlag()));
-                        fTmp.write(aMetadataBlockApplication.getData().getBytes());
-                    }
-
-                    for (MetadataBlock aMetadataBlockSeekTable : blockInfo.metadataBlockSeekTable)
-                    {
-                        fTmp.write(ByteBuffer.wrap(aMetadataBlockSeekTable.getHeader().getBytesWithoutIsLastBlockFlag()));
-                        fTmp.write(aMetadataBlockSeekTable.getData().getBytes());
-                    }
-
-                    for (MetadataBlock aMetadataBlockCueSheet : blockInfo.metadataBlockCueSheet)
-                    {
-                        fTmp.write(ByteBuffer.wrap(aMetadataBlockCueSheet.getHeader().getBytesWithoutIsLastBlockFlag()));
-                        fTmp.write(aMetadataBlockCueSheet.getData().getBytes());
-                    }
-
-                    //Write tag data use default padding
-                    fTmp.write(tc.convert(tag, FlacTagCreator.DEFAULT_PADDING));
-                    //Write audio to new file
-                    fc.position(dataStartSize + availableRoom);
-
-                    //Issue #385
-                    //Transfer 'size' bytes from raf at its current position to rafTemp at position but do it in batches
-                    //to prevent OutOfMemory exceptions
-                    long amountToBeWritten = fc.size() - fc.position();
-                    long written = 0;
-                    long chunksize = TagOptionSingleton.getInstance().getWriteChunkSize();
-                    long count = amountToBeWritten / chunksize;
-                    long mod = amountToBeWritten % chunksize;
-                    for (int i = 0; i < count; i++)
-                    {
-                        written += fTmp.transferFrom(fc, fTmp.position(), chunksize);
-                        fTmp.position(fTmp.position() + chunksize);
-                    }
-                    written += fTmp.transferFrom(fc, fTmp.position(), mod);
-                    if (written != amountToBeWritten)
-                    {
-                        throw new CannotWriteException("Was meant to write " + amountToBeWritten + " bytes but only written " + written + " bytes");
-                    }
-                }
+                //Write Audio
+                fc.write(audioData);
             }
         }
         catch(IOException ioe)
         {
             throw new CannotWriteException(file + ":" + ioe.getMessage());
         }
-
-        //If we had to create a new file so now replace
-        if (tmpFile != null)
-        {
-            swapTempFileAndOriginalFile(file.toFile(), tmpFile);
-        }
     }
 
     /**
-     * newFile contains the modified flac file and originalFile contains the original file, want to swap them round.
+     * Write all metadata blocks except for the the actual tag metadata
      *
-     * @param originalFile
-     * @param newFile
-     * @throws CannotWriteException
+     * We always write blocks in this order
+     *
+     * @param fc
+     * @param blockInfo
+     * @throws IOException
      */
-    private void swapTempFileAndOriginalFile(File originalFile, File newFile) throws CannotWriteException
+    private void writeOtherMetadataBlocks(FileChannel fc, MetadataBlockInfo blockInfo) throws IOException
     {
-        // Rename Original File
-        // Can fail on Vista if have Special Permission 'Delete' set Deny
-        File originalFileBackup = new File(originalFile.getAbsoluteFile().getParentFile().getPath(),
-                AudioFile.getBaseFilename(originalFile) + ".old");
+        //Write StreamInfo, we always write this first even if wasn't first in original spec
+        fc.write(ByteBuffer.wrap(blockInfo.streamInfoBlock.getHeader().getBytesWithoutIsLastBlockFlag()));
+        fc.write(blockInfo.streamInfoBlock.getData().getBytes());
 
-        //If already exists modify the suffix
-        int count=1;
-        while(originalFileBackup.exists())
+        //Write Application Blocks
+        for (MetadataBlock aMetadataBlockApplication : blockInfo.metadataBlockApplication)
         {
-            originalFileBackup = new File(originalFile.getAbsoluteFile().getParentFile().getPath(), AudioFile.getBaseFilename(originalFile)+ ".old"+count);
-            count++;
+            fc.write(ByteBuffer.wrap(aMetadataBlockApplication.getHeader().getBytesWithoutIsLastBlockFlag()));
+            fc.write(aMetadataBlockApplication.getData().getBytes());
         }
 
-        boolean renameResult = Utils.rename(originalFile,originalFileBackup);
-        if (!renameResult)
+        //Write Seek Table Blocks
+        for (MetadataBlock aMetadataBlockSeekTable : blockInfo.metadataBlockSeekTable)
         {
-            logger
-                    .log(Level.SEVERE, ErrorMessage.GENERAL_WRITE_FAILED_TO_RENAME_ORIGINAL_FILE_TO_BACKUP
-                            .getMsg(originalFile.getAbsolutePath(), originalFileBackup.getName()));
-            //Delete the temp file because write has failed
-            if(newFile!=null)
-            {
-                newFile.delete();
-            }
-            throw new CannotWriteException(ErrorMessage.GENERAL_WRITE_FAILED_TO_RENAME_ORIGINAL_FILE_TO_BACKUP
-                    .getMsg(originalFile.getPath(), originalFileBackup.getName()));
+            fc.write(ByteBuffer.wrap(aMetadataBlockSeekTable.getHeader().getBytesWithoutIsLastBlockFlag()));
+            fc.write(aMetadataBlockSeekTable.getData().getBytes());
         }
 
-        // Rename Temp File to Original File
-        renameResult = Utils.rename(newFile,originalFile);
-        if (!renameResult)
+        //Write Cue sheet Blocks
+        for (MetadataBlock aMetadataBlockCueSheet : blockInfo.metadataBlockCueSheet)
         {
-            // Renamed failed so lets do some checks rename the backup back to the original file
-            // New File doesnt exist
-            if (!newFile.exists())
-            {
-                logger
-                        .warning(ErrorMessage.GENERAL_WRITE_FAILED_NEW_FILE_DOESNT_EXIST
-                                .getMsg(newFile.getAbsolutePath()));
-            }
-
-            // Rename the backup back to the original
-            if (!originalFileBackup.renameTo(originalFile))
-            {
-                // TODO now if this happens we are left with testfile.old
-                // instead of testfile.mp4
-                logger
-                        .warning(ErrorMessage.GENERAL_WRITE_FAILED_TO_RENAME_ORIGINAL_BACKUP_TO_ORIGINAL
-                                .getMsg(originalFileBackup.getAbsolutePath(), originalFile.getName()));
-            }
-
-            logger
-                    .warning(ErrorMessage.GENERAL_WRITE_FAILED_TO_RENAME_TO_ORIGINAL_FILE
-                            .getMsg(originalFile.getAbsolutePath(), newFile.getName()));
-            throw new CannotWriteException(ErrorMessage.GENERAL_WRITE_FAILED_TO_RENAME_TO_ORIGINAL_FILE
-                    .getMsg(originalFile.getAbsolutePath(), newFile
-                            .getName()));
-        }
-        else
-        {
-            // Rename was okay so we can now delete the backup of the
-            // original
-            boolean deleteResult = originalFileBackup.delete();
-            if (!deleteResult)
-            {
-                // Not a disaster but can't delete the backup so make a
-                // warning
-                logger
-                        .warning(ErrorMessage.GENERAL_WRITE_WARNING_UNABLE_TO_DELETE_BACKUP_FILE
-                                .getMsg(originalFileBackup
-                                        .getAbsolutePath()));
-            }
-        }
-
-        // Delete the temporary file if still exists
-        if (newFile.exists())
-        {
-            if (!newFile.delete())
-            {
-                // Non critical failed deletion
-                logger
-                        .warning(ErrorMessage.GENERAL_WRITE_FAILED_TO_DELETE_TEMPORARY_FILE
-                                .getMsg(newFile.getPath()));
-            }
+            fc.write(ByteBuffer.wrap(aMetadataBlockCueSheet.getHeader().getBytesWithoutIsLastBlockFlag()));
+            fc.write(aMetadataBlockCueSheet.getData().getBytes());
         }
     }
 
