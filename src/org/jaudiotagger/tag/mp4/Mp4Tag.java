@@ -120,6 +120,7 @@ public class Mp4Tag extends AbstractTag
         tagFieldToMp4Field.put(FieldKey.ORIGINAL_LYRICIST, Mp4FieldKey.MM_ORIGINAL_LYRICIST);
         tagFieldToMp4Field.put(FieldKey.ORIGINAL_YEAR, Mp4FieldKey.MM_ORIGINAL_YEAR);
         tagFieldToMp4Field.put(FieldKey.PART, Mp4FieldKey.PART);
+        tagFieldToMp4Field.put(FieldKey.PERFORMER, Mp4FieldKey.PERFORMER);
         tagFieldToMp4Field.put(FieldKey.PRODUCER, Mp4FieldKey.PRODUCER);
         tagFieldToMp4Field.put(FieldKey.QUALITY, Mp4FieldKey.MM_QUALITY);
         tagFieldToMp4Field.put(FieldKey.RATING, Mp4FieldKey.SCORE);

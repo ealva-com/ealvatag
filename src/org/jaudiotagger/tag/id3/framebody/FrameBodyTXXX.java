@@ -84,7 +84,8 @@ public class FrameBodyTXXX extends AbstractFrameBodyTextInfo implements ID3v24Fr
     public static final String MUSICBRAINZ_RELEASE_TRACKID  = "MusicBrainz Release Track Id";
     public static final String MUSICBRAINZ_WORKID           = "MusicBrainz Work Id";
     public static final String MUSICIP_ID                   = "MusicIP PUID";
-    public static final String ORCHESTRA                    = "Orchestra";
+    public static final String ORCHESTRA                    = "ORCHESTRA";
+    public static final String PERFORMER                    = "PERFORMER";
     public static final String PART                         = "Part";
     public static final String SCRIPT                       = "Script";
     public static final String TAGS                         = "TAGS";
@@ -95,7 +96,6 @@ public class FrameBodyTXXX extends AbstractFrameBodyTextInfo implements ID3v24Fr
 
     //used by Foobar 20000
     public static final String ALBUM_ARTIST = "ALBUM ARTIST";
-    public static final String PERFORMER = "PERFORMER";
 
     /**
      * Creates a new FrameBodyTXXX datatype.

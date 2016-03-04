@@ -85,6 +85,7 @@ public enum FieldKey
     ORIGINAL_YEAR,
     QUALITY,
     PART,
+    PERFORMER,
     PRODUCER,
     RATING,
     RECORD_LABEL,

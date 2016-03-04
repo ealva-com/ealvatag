@@ -138,6 +138,7 @@ public enum AsfFieldKey
     ORIGINAL_LYRICIST("WM/OriginalLyricist", true),
     ORIGINAL_YEAR("WM/OriginalReleaseYear", true),
     PART("WM/Part", true),
+    PERFORMER("foobar2000/Producer", true),
     PRODUCER("WM/Producer", false),
     QUALITY("Quality", true),
     RECORD_LABEL("WM/Publisher", false),
