@@ -131,11 +131,23 @@ public class WavCleaner
 
     public static void main(final String[] args) throws Exception
     {
-        Path path = Paths.get("TESTFOLDER");
+        Path path = Paths.get("ROORTESTFOLDER");
+        recursiveDelete(path);
+    }
+
+    private static void recursiveDelete(Path path) throws Exception
+    {
         for(File next:path.toFile().listFiles())
         {
-            WavCleaner wc = new WavCleaner(next.toPath());
-            wc.clean();
+            if(next.isFile() && (next.getName().endsWith(".WAV") || next.getName().endsWith(".wav")))
+            {
+                WavCleaner wc = new WavCleaner(next.toPath());
+                wc.clean();
+            }
+            else if (next.isDirectory())
+            {
+                recursiveDelete(next.toPath());
+            }
         }
     }
 }
