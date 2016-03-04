@@ -21,6 +21,7 @@ package org.jaudiotagger.audio.generic;
 import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.exceptions.CannotReadException;
 import org.jaudiotagger.audio.exceptions.InvalidAudioFrameException;
+import org.jaudiotagger.audio.exceptions.NoReadPermissionsException;
 import org.jaudiotagger.audio.exceptions.ReadOnlyFileException;
 import org.jaudiotagger.logging.ErrorMessage;
 import org.jaudiotagger.tag.Tag;
@@ -29,6 +30,7 @@ import org.jaudiotagger.tag.TagException;
 import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.nio.file.Files;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -87,9 +89,10 @@ public abstract class AudioFileReader
             logger.config(ErrorMessage.GENERAL_READ.getMsg(f.getAbsolutePath()));
         }
 
-        if (!f.canRead())
+        if (!Files.isReadable(f.toPath()))
         {
-            throw new CannotReadException(ErrorMessage.GENERAL_READ_FAILED_FILE_TOO_SMALL.getMsg(f.getAbsolutePath()));
+            logger.warning(Permissions.displayPermissions(f.toPath()));
+            throw new NoReadPermissionsException(ErrorMessage.GENERAL_READ_FAILED_DO_NOT_HAVE_PERMISSION_TO_READ_FILE.getMsg(f.toPath()));
         }
 
         if (f.length() <= MINIMUM_SIZE_FOR_VALID_AUDIO_FILE)

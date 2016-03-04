@@ -21,6 +21,7 @@ package org.jaudiotagger.audio;
 import org.jaudiotagger.audio.dsf.Dsf;
 import org.jaudiotagger.audio.exceptions.CannotReadException;
 import org.jaudiotagger.audio.exceptions.CannotWriteException;
+import org.jaudiotagger.audio.exceptions.NoReadPermissionsException;
 import org.jaudiotagger.audio.exceptions.ReadOnlyFileException;
 import org.jaudiotagger.audio.flac.metadatablock.MetadataBlockDataPicture;
 import org.jaudiotagger.audio.generic.Permissions;
@@ -263,7 +264,7 @@ public class AudioFile
             {
                 logger.severe("Unable to read file:" + path);
                 logger.severe(Permissions.displayPermissions(path));
-                throw new CannotReadException(ErrorMessage.GENERAL_READ_FAILED_DO_NOT_HAVE_PERMISSION_TO_READ_FILE.getMsg(path));
+                throw new NoReadPermissionsException(ErrorMessage.GENERAL_READ_FAILED_DO_NOT_HAVE_PERMISSION_TO_READ_FILE.getMsg(path));
             }
             newFile = new RandomAccessFile(file, "r");
         }

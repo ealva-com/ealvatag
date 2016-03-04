@@ -3,6 +3,7 @@ package org.jaudiotagger.audio.generic;
 import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.exceptions.CannotReadException;
 import org.jaudiotagger.audio.exceptions.InvalidAudioFrameException;
+import org.jaudiotagger.audio.exceptions.NoReadPermissionsException;
 import org.jaudiotagger.audio.exceptions.ReadOnlyFileException;
 import org.jaudiotagger.logging.ErrorMessage;
 import org.jaudiotagger.tag.Tag;
@@ -29,6 +30,7 @@ public abstract class AudioFileReader2 extends AudioFileReader
    * empty one is returned. If the encodinginfo is not valid , an exception is thrown.
    *
    * @param f The file to read
+   * @exception NoReadPermissionsException if permissions prevent reading of file
    * @exception CannotReadException If anything went bad during the read of this file
    */
     public AudioFile read(File f) throws CannotReadException, IOException, TagException, ReadOnlyFileException, InvalidAudioFrameException
@@ -42,7 +44,7 @@ public abstract class AudioFileReader2 extends AudioFileReader
         if (!Files.isReadable(path))
         {
             logger.warning(Permissions.displayPermissions(path));
-            throw new CannotReadException(ErrorMessage.GENERAL_READ_FAILED_DO_NOT_HAVE_PERMISSION_TO_READ_FILE.getMsg(path));
+            throw new NoReadPermissionsException(ErrorMessage.GENERAL_READ_FAILED_DO_NOT_HAVE_PERMISSION_TO_READ_FILE.getMsg(path));
         }
 
         if (f.length() <= MINIMUM_SIZE_FOR_VALID_AUDIO_FILE)

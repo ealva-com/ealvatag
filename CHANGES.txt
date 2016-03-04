@@ -31,6 +31,7 @@ Summarise Changes
 #126:WavTagReader takes a very long time reading non ID3/LIST chunks
 #129:IOException get locking file due to Java bug https://bugs.openjdk.java.net/browse/JDK-8025619
 #131:FlacTagWriter should always work without temporary file
+#133:CannotReadException shoud be subclassed when dont have permissions
 
 2.2.5
 #033:Added getAudioStartPos() and getAudioEndPos() methods to AudioHeader interface and implemented for most formats

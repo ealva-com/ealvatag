@@ -119,7 +119,7 @@ public class WavInfoReader
                 + ":sizeIncHeader:" + (chunkHeader.getSize() + ChunkHeader.CHUNK_HEADER_SIZE));
         final WavChunkType chunkType = WavChunkType.get(id);
 
-        //Ik known chinkType
+        //If known chunkType
         if (chunkType != null)
         {
             switch (chunkType)
