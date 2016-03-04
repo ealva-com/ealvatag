@@ -5,11 +5,14 @@ import org.jaudiotagger.audio.iff.Chunk;
 import org.jaudiotagger.audio.iff.ChunkHeader;
 import org.jaudiotagger.audio.iff.IffHeaderChunk;
 import org.jaudiotagger.logging.Hex;
+import org.jaudiotagger.tag.TagOptionSingleton;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.ByteOrder;
 import java.nio.channels.FileChannel;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.logging.Logger;
 
@@ -124,5 +127,15 @@ public class WavCleaner
         }
         IffHeaderChunk.ensureOnEqualBoundary(fc, chunkHeader);
         return 0;
+    }
+
+    public static void main(final String[] args) throws Exception
+    {
+        Path path = Paths.get("TESTFOLDER");
+        for(File next:path.toFile().listFiles())
+        {
+            WavCleaner wc = new WavCleaner(next.toPath());
+            wc.clean();
+        }
     }
 }

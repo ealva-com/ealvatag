@@ -906,7 +906,7 @@ public class WavMetadataTest extends AbstractTestCase
             assertTrue(tag.isExistingId3Tag());
 
             assertNull(((WavTag) tag).getInfoTag().getStartLocationInFile());
-            assertNull( ((WavTag) tag).getInfoTag().getEndLocationInFile());
+            assertNull(((WavTag) tag).getInfoTag().getEndLocationInFile());
             assertEquals(0L, ((WavTag) tag).getInfoTag().getSizeOfTag());
             assertEquals(26L, ((WavTag) tag).getSizeOfID3TagOnly());
             assertEquals(926264L, ((WavTag) tag).getStartLocationInFileOfId3Chunk());
@@ -1382,6 +1382,5 @@ public class WavMetadataTest extends AbstractTestCase
         }
         assertNull(exceptionCaught);
     }
-
 
 }
