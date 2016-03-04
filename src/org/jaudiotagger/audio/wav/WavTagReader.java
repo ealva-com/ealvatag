@@ -19,7 +19,6 @@
 package org.jaudiotagger.audio.wav;
 
 import org.jaudiotagger.audio.exceptions.CannotReadException;
-import org.jaudiotagger.audio.generic.GenericAudioHeader;
 import org.jaudiotagger.audio.generic.Utils;
 import org.jaudiotagger.audio.iff.Chunk;
 import org.jaudiotagger.audio.iff.ChunkHeader;
@@ -34,7 +33,6 @@ import org.jaudiotagger.tag.wav.WavInfoTag;
 import org.jaudiotagger.tag.wav.WavTag;
 
 import java.io.IOException;
-import java.io.RandomAccessFile;
 import java.nio.ByteOrder;
 import java.nio.channels.FileChannel;
 import java.nio.file.Path;
@@ -72,7 +70,7 @@ public class WavTagReader
             {
                 while (fc.position() < fc.size())
                 {
-                    if (!readChunk(fc, tag, path.toString()))
+                    if (!readChunk(fc, tag))
                     {
                         break;
                     }
@@ -116,7 +114,7 @@ public class WavTagReader
      * @return
      * @throws IOException
      */
-    protected boolean readChunk(FileChannel fc, WavTag tag, String fileName)throws IOException
+    protected boolean readChunk(FileChannel fc, WavTag tag)throws IOException, CannotReadException
     {
         Chunk chunk;
         ChunkHeader chunkHeader = new ChunkHeader(ByteOrder.LITTLE_ENDIAN);
@@ -202,6 +200,13 @@ public class WavTagReader
         //Unknown chunk type just skip
         else
         {
+            if(chunkHeader.getSize() < 0)
+            {
+                String msg = loggingName + " Not a valid header, unable to read a sensible size:Header"
+                        + chunkHeader.getID()+"Size:"+chunkHeader.getSize();
+                logger.severe(msg);
+                throw new CannotReadException(msg);
+            }
             logger.config(loggingName + " Skipping chunk bytes:" + chunkHeader.getSize() +"for"+chunkHeader.getID());
             fc.position(fc.position() + chunkHeader.getSize());
         }

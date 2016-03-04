@@ -65,7 +65,7 @@ public class AiffInfoReader extends AiffChunkReader
      *
      * @return {@code false}, if we were not able to read a valid chunk id
      */
-    private boolean readChunk(FileChannel fc, AiffAudioHeader aiffAudioHeader, String fileName) throws IOException
+    private boolean readChunk(FileChannel fc, AiffAudioHeader aiffAudioHeader, String fileName) throws IOException, CannotReadException
     {
         logger.config(fileName + " Reading Info Chunk");
         final Chunk chunk;
@@ -87,6 +87,13 @@ public class AiffInfoReader extends AiffChunkReader
         }
         else
         {
+            if(chunkHeader.getSize() < 0)
+            {
+                String msg = fileName + " Not a valid header, unable to read a sensible size:Header"
+                        + chunkHeader.getID()+"Size:"+chunkHeader.getSize();
+                logger.severe(msg);
+                throw new CannotReadException(msg);
+            }
             fc.position(fc.position() + chunkHeader.getSize());
         }
         IffHeaderChunk.ensureOnEqualBoundary(fc, chunkHeader);

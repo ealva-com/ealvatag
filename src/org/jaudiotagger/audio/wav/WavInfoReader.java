@@ -26,6 +26,7 @@ import org.jaudiotagger.audio.iff.ChunkHeader;
 import org.jaudiotagger.audio.iff.IffHeaderChunk;
 import org.jaudiotagger.audio.wav.chunk.WavFactChunk;
 import org.jaudiotagger.audio.wav.chunk.WavFormatChunk;
+import org.jaudiotagger.logging.Hex;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -103,7 +104,7 @@ public class WavInfoReader
     /**
      * Reads a Wav Chunk.
      */
-    protected boolean readChunk(FileChannel fc, GenericAudioHeader info) throws IOException
+    protected boolean readChunk(FileChannel fc, GenericAudioHeader info) throws IOException, CannotReadException
     {
         Chunk chunk;
         ChunkHeader chunkHeader = new ChunkHeader(ByteOrder.LITTLE_ENDIAN);
@@ -113,7 +114,9 @@ public class WavInfoReader
         }
 
         String id = chunkHeader.getID();
-        logger.config(loggingName+" Reading Chunk:" + id + ":starting at:" + chunkHeader.getStartLocationInFile() + ":sizeIncHeader:" + (chunkHeader.getSize() + ChunkHeader.CHUNK_HEADER_SIZE));
+        logger.config(loggingName + " Reading Chunk:" + id
+                + ":starting at:" + chunkHeader.getStartLocationInFile() + "(" + Hex.asHex(chunkHeader.getStartLocationInFile()) + ")"
+                + ":sizeIncHeader:" + (chunkHeader.getSize() + ChunkHeader.CHUNK_HEADER_SIZE));
         final WavChunkType chunkType = WavChunkType.get(id);
 
         //Ik known chinkType
@@ -162,7 +165,14 @@ public class WavInfoReader
         //Unknown chunk type just skip
         else
         {
-            logger.config(loggingName+" Skipping chunk bytes:" + chunkHeader.getSize() +"for"+chunkHeader.getID());
+            if(chunkHeader.getSize() < 0)
+            {
+                String msg = loggingName + " Not a valid header, unable to read a sensible size:Header"
+                        + chunkHeader.getID()+"Size:"+chunkHeader.getSize();
+                logger.severe(msg);
+                throw new CannotReadException(msg);
+            }
+            logger.severe(loggingName + " Skipping chunk bytes:" + chunkHeader.getSize() + " for" + chunkHeader.getID());
             fc.position(fc.position() + chunkHeader.getSize());
         }
         IffHeaderChunk.ensureOnEqualBoundary(fc, chunkHeader);
