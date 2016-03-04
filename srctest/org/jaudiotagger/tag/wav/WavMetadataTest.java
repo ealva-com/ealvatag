@@ -4,6 +4,7 @@ import org.jaudiotagger.AbstractTestCase;
 import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.AudioFileIO;
 import org.jaudiotagger.audio.exceptions.CannotReadException;
+import org.jaudiotagger.audio.wav.WavCleaner;
 import org.jaudiotagger.audio.wav.WavOptions;
 import org.jaudiotagger.audio.wav.WavSaveOptions;
 import org.jaudiotagger.audio.wav.WavSaveOrder;
@@ -1307,7 +1308,11 @@ public class WavMetadataTest extends AbstractTestCase
         assertNull(exceptionCaught);
     }
 
-    public void testWavWithCorruptDataChunkHeaderSize()
+    /**
+     *  When chunk header has negative size we know something has gone wrong and should throw exception accordingly
+     *
+     */
+    public void testWavWithCorruptDataAfterDataChunkHeaderSize()
     {
         File orig = new File("testdata", "test503.wav");
         if (!orig.isFile())
@@ -1338,4 +1343,45 @@ public class WavMetadataTest extends AbstractTestCase
         }
         assert(exceptionCaught instanceof CannotReadException);
     }
+
+    public void testCleanAndThenWriteWavWithCorruptDataChunkHeaderSize()
+    {
+        File orig = new File("testdata", "test504.wav");
+        if (!orig.isFile())
+        {
+            System.err.println("Unable to test file - not available");
+            return;
+        }
+
+        TagOptionSingleton.getInstance().setWavOptions(WavOptions.READ_ID3_UNLESS_ONLY_INFO);
+        TagOptionSingleton.getInstance().setWavSaveOrder(WavSaveOrder.INFO_THEN_ID3);
+
+        Exception exceptionCaught = null;
+        try
+        {
+            File testFile = AbstractTestCase.copyAudioToTmp("test504.wav", new File("test504clean.wav"));
+            AudioFile f = AudioFileIO.read(testFile);
+            System.out.println(f.getAudioHeader());
+            System.out.println(f.getTag());
+            WavCleaner wc = new WavCleaner(testFile.toPath());
+            wc.clean();
+            f = AudioFileIO.read(testFile);
+            Tag tag = f.getTag();
+            tag.setField(FieldKey.ALBUM,"fred");
+
+            f.commit();
+            f = AudioFileIO.read(testFile);
+            System.out.println(f.getAudioHeader());
+            System.out.println(f.getTag());
+
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            exceptionCaught = e;
+        }
+        assertNull(exceptionCaught);
+    }
+
+
 }
