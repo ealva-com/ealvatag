@@ -13,7 +13,12 @@ public class Hex
      */
     public static String asHex(long value)
     {
-        return "0x" + Long.toHexString(value);
+        String val = Long.toHexString(value);
+        if(val.length()==1)
+        {
+            return "0x0" + val;
+        }
+        return "0x" + val;
     }
 
     public static String asHex(int value)
