@@ -37,4 +37,15 @@ public class Hex
     {
         return "0x" + Integer.toHexString(value);
     }
+
+    /**
+     * Display as integral and hex calue in brackets
+     *
+     * @param value
+     * @return
+     */
+    public static String asDecAndHex(long value)
+    {
+        return value + " (" + Hex.asHex(value)+ ")";
+    }
 }

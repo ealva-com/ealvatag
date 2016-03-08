@@ -312,8 +312,8 @@ public class AiffTag implements Tag, Id3SupportingTag
                 {
                     sb.append("\tincorrectly starts as odd byte\n");
                 }
-                sb.append("\tstartLocation:" + getStartLocationInFileOfId3Chunk() + "(" + Hex.asHex(getStartLocationInFileOfId3Chunk()) + ")\n");
-                sb.append("\tendLocation:" + getEndLocationInFileOfId3Chunk() + "(" + Hex.asHex(getEndLocationInFileOfId3Chunk()) + ")\n");
+                sb.append("\tstartLocation:" + Hex.asDecAndHex(getStartLocationInFileOfId3Chunk()) + "\n");
+                sb.append("\tendLocation:"   + Hex.asDecAndHex(getEndLocationInFileOfId3Chunk()) + "\n");
             }
             sb.append(id3Tag.toString()+"\n");
             return sb.toString();

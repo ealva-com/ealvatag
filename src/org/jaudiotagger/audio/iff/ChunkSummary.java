@@ -22,9 +22,12 @@ public class ChunkSummary
     public String toString()
     {
         long endLocation = fileStartLocation + chunkSize + ChunkHeader.CHUNK_HEADER_SIZE;
-        return chunkId+":StartLocation:"+fileStartLocation + "(" + Hex.asHex(fileStartLocation) + "):SizeIncHeader:"+ chunkSize + ChunkHeader.CHUNK_HEADER_SIZE
-                + ":EndLocation:"+(endLocation)
-                +  "(" + Hex.asHex(endLocation) + ")";
+        return chunkId+":StartLocation:"
+                + Hex.asDecAndHex(fileStartLocation)
+                + ":SizeIncHeader:"
+                + chunkSize + ChunkHeader.CHUNK_HEADER_SIZE
+                + ":EndLocation:"
+                + Hex.asDecAndHex(endLocation);
     }
 
     public long getEndLocation()

@@ -28,7 +28,7 @@ public class AiffInfoReader extends AiffChunkReader
     {
         try(FileChannel fc = FileChannel.open(file))
         {
-            logger.config(file + " Reading AIFF file size:" + fc.size() + " (" + Hex.asHex(fc.size()) + ")");
+            logger.config(file + " Reading AIFF file size:" + Hex.asDecAndHex(fc.size()));
             AiffAudioHeader aiffAudioHeader = new AiffAudioHeader();
             final AiffFileHeader fileHeader = new AiffFileHeader();
             long noOfBytes = fileHeader.readHeader(fc, aiffAudioHeader, file.toString());
