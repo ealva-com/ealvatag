@@ -878,7 +878,7 @@ public class WavTagWriter
                 throw new CannotWriteException(loggingName + " Metadata tags are corrupted and not at end of file so cannot be fixed");
             }
         }
-        //No existing tags so write both to the end
+        //No existing tags so write both to the end (or existing tag but couldnt not be written)
         else
         {
             //Go to end of file

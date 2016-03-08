@@ -1354,18 +1354,28 @@ public class WavMetadataTest extends AbstractTestCase
         }
 
         TagOptionSingleton.getInstance().setWavOptions(WavOptions.READ_ID3_UNLESS_ONLY_INFO);
-        TagOptionSingleton.getInstance().setWavSaveOrder(WavSaveOrder.INFO_THEN_ID3);
+        TagOptionSingleton.getInstance().setWavSaveOrder(WavSaveOrder.ID3_THEN_INFO);
 
         Exception exceptionCaught = null;
+        File testFile = AbstractTestCase.copyAudioToTmp("test504.wav", new File("test504clean.wav"));
         try
         {
-            File testFile = AbstractTestCase.copyAudioToTmp("test504.wav", new File("test504clean.wav"));
+
             AudioFile f = AudioFileIO.read(testFile);
             System.out.println(f.getAudioHeader());
-            System.out.println(f.getTag());
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            exceptionCaught = e;
+        }
+
+        Exception exceptionCaught2 = null;
+        try
+        {
             WavCleaner wc = new WavCleaner(testFile.toPath());
             wc.clean();
-            f = AudioFileIO.read(testFile);
+            AudioFile f = AudioFileIO.read(testFile);
             Tag tag = f.getTag();
             tag.setField(FieldKey.ALBUM,"fred");
 
@@ -1378,9 +1388,9 @@ public class WavMetadataTest extends AbstractTestCase
         catch (Exception e)
         {
             e.printStackTrace();
-            exceptionCaught = e;
+            exceptionCaught2 = e;
         }
-        assertNull(exceptionCaught);
+        assertNull(exceptionCaught2);
     }
 
     public void testWavRead()
@@ -1393,7 +1403,7 @@ public class WavMetadataTest extends AbstractTestCase
         }
 
         TagOptionSingleton.getInstance().setWavOptions(WavOptions.READ_ID3_UNLESS_ONLY_INFO);
-        TagOptionSingleton.getInstance().setWavSaveOrder(WavSaveOrder.INFO_THEN_ID3);
+        TagOptionSingleton.getInstance().setWavSaveOrder(WavSaveOrder.ID3_THEN_INFO);
 
         Exception exceptionCaught = null;
         try
@@ -1412,6 +1422,39 @@ public class WavMetadataTest extends AbstractTestCase
             e.printStackTrace();
             exceptionCaught = e;
         }
-        assert(exceptionCaught instanceof CannotReadException);
+    }
+
+    public void testWavReadNew()
+    {
+        File orig = new File("testdata", "test506.wav");
+        if (!orig.isFile())
+        {
+            System.err.println("Unable to test file - not available");
+            return;
+        }
+
+        TagOptionSingleton.getInstance().setWavOptions(WavOptions.READ_ID3_UNLESS_ONLY_INFO);
+        TagOptionSingleton.getInstance().setWavSaveOrder(WavSaveOrder.INFO_THEN_ID3);
+
+        Exception exceptionCaught = null;
+        try
+        {
+            File testFile = AbstractTestCase.copyAudioToTmp("test506.wav");
+            AudioFile f = AudioFileIO.read(testFile);
+
+            System.out.println(f.getAudioHeader());
+            System.out.println(f.getTag());
+
+            f.getTag().setField(FieldKey.ARTIST, "artist");
+            f.commit();
+            f = AudioFileIO.read(testFile);
+
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            exceptionCaught = e;
+        }
+        assertTrue(exceptionCaught instanceof CannotReadException);
     }
 }

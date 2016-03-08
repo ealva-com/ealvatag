@@ -156,6 +156,11 @@ public class WavInfoReader
                     break;
                 }
 
+                case CORRUPT_LIST:
+                    logger.severe(loggingName + " Found Corrupt LIST Chunk, starting at Odd Location:"+chunkHeader.getID()+":"+chunkHeader.getSize());
+                    fc.position(fc.position() -  (ChunkHeader.CHUNK_HEADER_SIZE - 1));
+                    return true;
+
                 //Dont need to do anything with these just skip
                 default:
                     logger.config(loggingName + " Skipping chunk bytes:" + chunkHeader.getSize());
@@ -172,8 +177,16 @@ public class WavInfoReader
                 logger.severe(msg);
                 throw new CannotReadException(msg);
             }
-            logger.severe(loggingName + " Skipping chunk bytes:" + chunkHeader.getSize() + " for" + chunkHeader.getID());
+            logger.severe(loggingName + " Skipping chunk bytes:" + chunkHeader.getSize() + " for " + chunkHeader.getID());
+
             fc.position(fc.position() + chunkHeader.getSize());
+            if(fc.position()>fc.size())
+            {
+                String msg = loggingName + " Failed to move to invalid position to " + fc.position() + " because file length is only " + fc.size()
+                        + " indicates invalid chunk";
+                logger.severe(msg);
+                throw new CannotReadException(msg);
+            }
         }
         IffHeaderChunk.ensureOnEqualBoundary(fc, chunkHeader);
         return true;
