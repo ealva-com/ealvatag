@@ -130,7 +130,7 @@ public class WavCleaner
 
     public static void main(final String[] args) throws Exception
     {
-        Path path = Paths.get("E:\\MQ\\CyrilSmith&PhyllisSellick~pianoDuet\\PianoDuets");
+        Path path = Paths.get("TESTFOLDER");
         recursiveDelete(path);
     }
 
