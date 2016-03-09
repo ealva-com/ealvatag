@@ -44,7 +44,7 @@ public class FlacInfoReader
 
     public FlacAudioHeader read(Path path) throws CannotReadException, IOException
     {
-        logger.severe("readInfo");
+        logger.config(path + ":start");
         try(FileChannel fc = FileChannel.open(path))
         {
             FlacStreamReader flacStream = new FlacStreamReader(fc);
@@ -65,24 +65,22 @@ public class FlacInfoReader
                     mbdsi = new MetadataBlockDataStreamInfo(mbh, fc);
                     if (!mbdsi.isValid())
                     {
-                        throw new CannotReadException(path + " FLAC StreamInfo not valid");
+                        throw new CannotReadException(path + ":FLAC StreamInfo not valid");
                     }
                 }
                 else
                 {
                     fc.position(fc.position() + mbh.getDataLength());
                 }
-                logger.severe("lastBLock--" + mbh.isLastBlock());
                 isLastBlock = mbh.isLastBlock();
             }
-            logger.severe("-------------ExitedBlock:" + isLastBlock);
 
             //Audio continues from this point to end of file (normally - TODO might need to allow for an ID3v1 tag at file end ?)
             long streamStart = fc.position();
 
             if (mbdsi == null)
             {
-                throw new CannotReadException(path + " Unable to find Flac StreamInfo");
+                throw new CannotReadException(path + ":Unable to find Flac StreamInfo");
             }
 
             FlacAudioHeader info = new FlacAudioHeader();
@@ -128,7 +126,7 @@ public class FlacInfoReader
             while (!isLastBlock)
             {
                 MetadataBlockHeader mbh = MetadataBlockHeader.readHeader(fc);
-                logger.config(f + " Found block:" + mbh.getBlockType());
+                logger.config(f + ":Found block:" + mbh.getBlockType());
                 fc.position(fc.position() + mbh.getDataLength());
                 isLastBlock = mbh.isLastBlock();
                 count++;
