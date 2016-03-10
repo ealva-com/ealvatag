@@ -34,6 +34,7 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
+import java.nio.channels.FileChannel;
 import java.nio.charset.StandardCharsets;
 import java.util.logging.Logger;
 
@@ -84,11 +85,12 @@ public class Mp4TagReader
      */
     public Mp4Tag read(RandomAccessFile raf) throws CannotReadException, IOException
     {
+        FileChannel fc = raf.getChannel();
         Mp4Tag tag = new Mp4Tag();
 
         //Get to the facts everything we are interested in is within the moov box, so just load data from file
         //once so no more file I/O needed
-        Mp4BoxHeader moovHeader = Mp4BoxHeader.seekWithinLevel(raf, Mp4AtomIdentifier.MOOV.getFieldName());
+        Mp4BoxHeader moovHeader = Mp4BoxHeader.seekWithinLevel(fc, Mp4AtomIdentifier.MOOV.getFieldName());
         if (moovHeader == null)
         {
             throw new CannotReadException(ErrorMessage.MP4_FILE_NOT_CONTAINER.getMsg());
