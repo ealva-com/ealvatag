@@ -130,7 +130,7 @@ public class WavCleaner
 
     public static void main(final String[] args) throws Exception
     {
-        Path path = Paths.get("TESTFOLDER");
+        Path path = Paths.get("E:\\MQ\\Schubert, F\\The Last Six Years, vol 4-Imogen Cooper");
         recursiveDelete(path);
     }
 
