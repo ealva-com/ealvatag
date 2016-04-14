@@ -265,8 +265,17 @@ public class DsfAudioFileTest extends TestCase {
         }
 
         TagOptionSingleton.getInstance().setToDefault();
-
-
     }
 
+    /*
+    public void testRemoveTagData() throws Exception
+    {
+        File dir = new File("C:\\Users\\Paul\\Music\\1983 - David Bowie - Let's Dance [SACD DSF][2003]");
+        for(File file:dir.listFiles())
+        {
+            AudioFile af = AudioFileIO.read(file);
+            af.delete();
+        }
+    }
+*/
 }
