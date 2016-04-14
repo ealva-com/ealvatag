@@ -6,12 +6,10 @@ import org.jaudiotagger.logging.ErrorMessage;
 import org.jaudiotagger.tag.id3.AbstractID3v2Tag;
 
 import java.io.IOException;
-import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
+import java.nio.file.Path;
 import java.util.logging.Logger;
-
-import static org.jaudiotagger.audio.iff.IffHeaderChunk.HEADER_LENGTH;
 
 /**
  * Flac Stream
@@ -26,16 +24,18 @@ public class FlacStreamReader
     public static final String FLAC_STREAM_IDENTIFIER = "fLaC";
 
     private FileChannel fc;
+    private String loggingName;
     private int startOfFlacInFile;
 
     /**
      * Create instance for holding stream info
      * @param fc
+     * @param loggingName
      */
-    public FlacStreamReader(FileChannel fc)
+    public FlacStreamReader(FileChannel fc, String loggingName)
     {
         this.fc = fc;
-
+        this.loggingName =loggingName;
     }
 
     /**
@@ -50,7 +50,7 @@ public class FlacStreamReader
         if (fc.size() == 0)
         {
             //Empty File
-            throw new CannotReadException("Error: File empty");
+            throw new CannotReadException("Error: File empty"+ " " + loggingName);
         }
         fc.position(0);
 
@@ -67,7 +67,7 @@ public class FlacStreamReader
             startOfFlacInFile = (int) (fc.position() - FLAC_STREAM_IDENTIFIER_LENGTH);
             return;
         }
-        throw new CannotReadException(ErrorMessage.FLAC_NO_FLAC_HEADER_FOUND.getMsg());
+        throw new CannotReadException(loggingName + ErrorMessage.FLAC_NO_FLAC_HEADER_FOUND.getMsg());
     }
 
     private boolean isId3v2Tag() throws IOException
@@ -75,7 +75,7 @@ public class FlacStreamReader
         fc.position(0);
         if(AbstractID3v2Tag.isId3Tag(fc))
         {
-            logger.warning(ErrorMessage.FLAC_CONTAINS_ID3TAG.getMsg(fc.position()));
+            logger.warning(loggingName + ErrorMessage.FLAC_CONTAINS_ID3TAG.getMsg(fc.position()));
             //FLAC Stream immediately after end of id3 tag
             if (isFlacHeader())
             {

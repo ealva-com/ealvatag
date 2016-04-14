@@ -50,7 +50,7 @@ public class FlacTagReader
     {
         try (FileChannel fc = FileChannel.open(path))
         {
-            FlacStreamReader flacStream = new FlacStreamReader(fc);
+            FlacStreamReader flacStream = new FlacStreamReader(fc, path.toString() + " ");
             flacStream.findStream();
 
             //Hold the metadata
