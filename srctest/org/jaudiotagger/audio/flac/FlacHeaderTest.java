@@ -184,4 +184,74 @@ public class FlacHeaderTest extends TestCase
         }
         assertNull(exceptionCaught);
     }
+
+    public void testReadWithID3Header()
+    {
+        File orig = new File("testdata", "test158.flac");
+        if (!orig.isFile())
+        {
+            System.err.println("Unable to test file - not available");
+            return;
+        }
+
+        Exception exceptionCaught = null;
+        try
+        {
+            File testFile = AbstractTestCase.copyAudioToTmp("test158.flac");
+            AudioFile f = AudioFileIO.read(testFile);
+            System.out.println(f.getAudioHeader());
+
+
+            assertEquals("1004", f.getAudioHeader().getBitRate());
+            assertEquals("FLAC 16 bits", f.getAudioHeader().getEncodingType());
+            assertEquals("2", f.getAudioHeader().getChannels());
+            assertEquals("44100", f.getAudioHeader().getSampleRate());
+            assertEquals(289, f.getAudioHeader().getTrackLength());
+
+            assertTrue(f.getTag() instanceof FlacTag);
+            FlacTag tag = (FlacTag) f.getTag();
+            FlacInfoReader infoReader = new FlacInfoReader();
+            assertEquals(5, infoReader.countMetaBlocks(f.getFile()));
+            //No Images
+            assertEquals(1, tag.getImages().size());
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            exceptionCaught = e;
+        }
+        assertNull(exceptionCaught);
+    }
+
+    public void testReadWriteWithID3Header()
+    {
+        File orig = new File("testdata", "test158.flac");
+        if (!orig.isFile())
+        {
+            System.err.println("Unable to test file - not available");
+            return;
+        }
+
+        Exception exceptionCaught = null;
+        try
+        {
+            File testFile = AbstractTestCase.copyAudioToTmp("test158.flac", new File("test158write.flac"));
+            AudioFile f = AudioFileIO.read(testFile);
+            System.out.println(f);
+
+            FlacTag tag = (FlacTag) f.getTag();
+            tag.setField(FieldKey.ARTIST,"artist");
+            f.commit();
+            System.out.println("Writing audio data");
+            f = AudioFileIO.read(testFile);
+            System.out.println(f);
+
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            exceptionCaught = e;
+        }
+        assertNull(exceptionCaught);
+    }
 }

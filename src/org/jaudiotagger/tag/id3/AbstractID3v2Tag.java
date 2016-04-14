@@ -64,6 +64,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
 
     //Tag ID as held in file
     public static final byte[] TAG_ID = {'I', 'D', '3'};
+    public static final String TAGID = "ID3";
 
     //The tag header is the same for ID3v2 versions
     public static final int TAG_HEADER_LENGTH = 10;
@@ -149,7 +150,8 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
         long start = fc.position();
         ByteBuffer headerBuffer = Utils.readFileDataIntoBufferBE(fc, FIELD_TAGID_LENGTH);
         fc.position(start);
-        return Utils.readThreeBytesAsChars(headerBuffer).equals(TAG_ID);
+        String s = Utils.readThreeBytesAsChars(headerBuffer);
+        return s.equals(TAGID);
     }
 
 
@@ -180,6 +182,13 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
         return true;
     }
 
+    /**
+     * Is ID3 tag
+     *
+     * @param fc
+     * @return
+     * @throws IOException
+     */
     public static boolean isId3Tag(FileChannel fc) throws IOException
     {
         if (!isID3V2Header(fc))
@@ -190,6 +199,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
         ByteBuffer bb = ByteBuffer.allocateDirect(FIELD_TAG_SIZE_LENGTH);
         fc.position(fc.position() + FIELD_TAGID_LENGTH + FIELD_TAG_MAJOR_VERSION_LENGTH + FIELD_TAG_MINOR_VERSION_LENGTH + FIELD_TAG_FLAG_LENGTH);
         fc.read(bb);
+        bb.flip();
         int size = ID3SyncSafeInteger.bufferToValue(bb);
         fc.position(size + TAG_HEADER_LENGTH);
         return true;

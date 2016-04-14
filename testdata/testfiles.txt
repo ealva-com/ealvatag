@@ -100,3 +100,6 @@ test146.wav, no,, wav with just 3 bytes of padding at end of info tag so not eno
 test151.aif, yes,119, aiff where last chunk is odd and padding byte is missing
 test152.aiff, yes, 93, aiff with existing id3 chink incorrectly written on odd boundary because of error with orig file
 test153.wav, yes, 119, wav where last chunk is odd and padding byte is missing
+test156.dsf,no,,dsf file
+test157.dsf,no,,dsf file
+test158.flac,no,137,flac with ID3 header at start
