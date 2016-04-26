@@ -956,7 +956,7 @@ public class MP3File extends AudioFile
             throw new IOException(ErrorMessage.GENERAL_WRITE_FAILED_BECAUSE_FILE_NOT_FOUND.getMsg(file.getName()));
         }
 
-        if (!Files.isWritable(path))
+        if (TagOptionSingleton.getInstance().isCheckIsWritable() && !Files.isWritable(path))
         {
             logger.severe(Permissions.displayPermissions(path));
             logger.severe(ErrorMessage.GENERAL_WRITE_FAILED.getMsg(file.getName()));
