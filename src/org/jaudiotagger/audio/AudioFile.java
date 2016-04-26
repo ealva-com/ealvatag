@@ -270,7 +270,7 @@ public class AudioFile
         }
         else
         {
-            if (!Files.isWritable(path))
+            if (TagOptionSingleton.getInstance().isCheckIsWritable() && !Files.isWritable(path))
             {
                 logger.severe("Unable to write:" + path);
                 logger.severe(Permissions.displayPermissions(path));
