@@ -16,6 +16,8 @@
 package org.jaudiotagger.tag.id3;
 
 import org.jaudiotagger.audio.AudioFile;
+import org.jaudiotagger.audio.exceptions.CannotWriteException;
+import org.jaudiotagger.audio.exceptions.NoWritePermissionsException;
 import org.jaudiotagger.audio.exceptions.UnableToCreateFileException;
 import org.jaudiotagger.audio.exceptions.UnableToModifyFileException;
 import org.jaudiotagger.audio.exceptions.UnableToRenameFileException;
@@ -40,6 +42,7 @@ import java.nio.channels.FileLock;
 import java.nio.channels.WritableByteChannel;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.AccessDeniedException;
 import java.util.*;
 import java.util.logging.Level;
 
@@ -1506,7 +1509,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
         catch (FileNotFoundException fe)
         {
             logger.log(Level.SEVERE, getLoggingFilename() + fe.getMessage(), fe);
-            if (fe.getMessage().equals(FileSystemMessage.ACCESS_IS_DENIED.getMsg()))
+            if (fe.getMessage().equals(FileSystemMessage.ACCESS_IS_DENIED.getMsg()) || fe.getMessage().contains(FileSystemMessage.PERMISSION_DENIED.getMsg()))
             {
                 logger.severe(ErrorMessage.GENERAL_WRITE_FAILED_TO_OPEN_FILE_FOR_EDITING.getMsg(file.getPath()));
                 throw new UnableToModifyFileException(ErrorMessage.GENERAL_WRITE_FAILED_TO_OPEN_FILE_FOR_EDITING.getMsg(file.getPath()));

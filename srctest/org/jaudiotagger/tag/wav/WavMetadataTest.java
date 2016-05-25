@@ -1,6 +1,7 @@
 package org.jaudiotagger.tag.wav;
 
 import org.jaudiotagger.AbstractTestCase;
+import org.jaudiotagger.FilePermissionsTest;
 import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.AudioFileIO;
 import org.jaudiotagger.audio.exceptions.CannotReadException;
@@ -1584,4 +1585,19 @@ public class WavMetadataTest extends AbstractTestCase
         }
         assertTrue(exceptionCaught instanceof CannotReadException);
     }
+
+    public void testWriteWriteProtectedFileWithCheckDisabled() throws Exception {
+    	
+        FilePermissionsTest.runWriteWriteProtectedFileWithCheckDisabled("test123.wav");
+	}
+
+    public void testWriteWriteProtectedFileWithCheckEnabled() throws Exception {
+    	
+    	FilePermissionsTest.runWriteWriteProtectedFileWithCheckEnabled("test123.wav");
+	}
+
+    public void testWriteReadOnlyFileWithCheckDisabled() throws Exception {
+    	
+    	FilePermissionsTest.runWriteReadOnlyFileWithCheckDisabled("test123.wav");
+	}
 }

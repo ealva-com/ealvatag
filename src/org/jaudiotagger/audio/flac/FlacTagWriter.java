@@ -20,6 +20,7 @@ package org.jaudiotagger.audio.flac;
 
 import org.jaudiotagger.audio.exceptions.CannotReadException;
 import org.jaudiotagger.audio.exceptions.CannotWriteException;
+import org.jaudiotagger.audio.exceptions.NoWritePermissionsException;
 import org.jaudiotagger.audio.flac.metadatablock.*;
 import org.jaudiotagger.tag.Tag;
 import org.jaudiotagger.tag.flac.FlacTag;
@@ -27,6 +28,7 @@ import org.jaudiotagger.tag.flac.FlacTag;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
+import java.nio.file.AccessDeniedException;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
@@ -204,6 +206,10 @@ public class FlacTagWriter
                 //Write Audio
                 fc.write(audioData);
             }
+        }
+        catch(AccessDeniedException ade)
+        {
+            throw new NoWritePermissionsException(file + ":" + ade.getMessage());
         }
         catch(IOException ioe)
         {

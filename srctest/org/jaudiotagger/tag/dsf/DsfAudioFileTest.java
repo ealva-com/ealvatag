@@ -3,6 +3,7 @@ package org.jaudiotagger.tag.dsf;
 
 import junit.framework.TestCase;
 import org.jaudiotagger.AbstractTestCase;
+import org.jaudiotagger.FilePermissionsTest;
 import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.AudioFileIO;
 import org.jaudiotagger.tag.FieldKey;
@@ -47,5 +48,22 @@ public class DsfAudioFileTest extends TestCase {
         
 
     }
+    
+    public void testWriteWriteProtectedFileWithCheckDisabled() throws Exception {
+    	
+        FilePermissionsTest.runWriteWriteProtectedFileWithCheckDisabled("test122.dsf");
+	}
+
+    public void testWriteWriteProtectedFileWithCheckEnabled() throws Exception {
+    	
+    	FilePermissionsTest.runWriteWriteProtectedFileWithCheckEnabled("test122.dsf");
+	}
+
+    public void testWriteReadOnlyFileWithCheckDisabled() throws Exception {
+    	
+    	FilePermissionsTest.runWriteReadOnlyFileWithCheckDisabled("test122.dsf");
+	}
+
+
 
 }
