@@ -36,6 +36,7 @@ Summarise Changes
 #137:REGRESSION:Not reading flacs with non standard ID3 header at start
 #147:REGRESSION:When need to resize FLAC to add artwork not correctly identifying audio location
 #148:Do not precheck file permissions
+#135:Made permissions errors loglevel cmnsistent
 
 2.2.5
 #033:Added getAudioStartPos() and getAudioEndPos() methods to AudioHeader interface and implemented for most formats
