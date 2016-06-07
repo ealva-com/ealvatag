@@ -354,7 +354,7 @@ public class TagOptionSingleton
      * Whether Files.isWritable should be used to check if a file can be written. In some
      * cases, isWritable can return false negatives. 
      */
-    private boolean checkIsWritable = true;
+    private boolean checkIsWritable = false;
 
     /**
      * Creates a new TagOptions datatype. All Options are set to their default
