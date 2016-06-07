@@ -34,6 +34,7 @@ Summarise Changes
 #133:CannotReadException should be subclassed when do not have permissions
 #134:Not writing Wav tags correctly if existing tags and new ones require less space than old ones
 #137:REGRESSION:Not reading flacs with non standard ID3 header at start
+#147:REGRESSION:When need to resize FLAC to add artwork not correctly identifying audio location
 
 2.2.5
 #033:Added getAudioStartPos() and getAudioEndPos() methods to AudioHeader interface and implemented for most formats
