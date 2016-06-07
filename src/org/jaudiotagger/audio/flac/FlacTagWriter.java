@@ -20,6 +20,7 @@ package org.jaudiotagger.audio.flac;
 
 import org.jaudiotagger.audio.exceptions.CannotReadException;
 import org.jaudiotagger.audio.exceptions.CannotWriteException;
+import org.jaudiotagger.audio.exceptions.NoWritePermissionsException;
 import org.jaudiotagger.audio.flac.metadatablock.*;
 import org.jaudiotagger.tag.Tag;
 import org.jaudiotagger.tag.flac.FlacTag;
@@ -27,6 +28,7 @@ import org.jaudiotagger.tag.flac.FlacTag;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
+import java.nio.file.AccessDeniedException;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
@@ -186,7 +188,7 @@ public class FlacTagWriter
                         + MetadataBlockHeader.HEADER_LENGTH // this should be the length of the block header for the stream info
                         + MetadataBlockDataStreamInfo.STREAM_INFO_DATA_LENGTH
                         + availableRoom);
-
+                
                 //And copy into Buffer, because direct buffer doesnt use heap, Flacs can be alrge
                 //and this will require some memory but it is alot simpler and faster tahn faffing about
                 //with temporary files
@@ -197,13 +199,17 @@ public class FlacTagWriter
                 //Jump over Id3 (if exists) Flac Header
                 fc.position(flacStream.getStartOfFlacInFile() + FlacStreamReader.FLAC_STREAM_IDENTIFIER_LENGTH);
                 writeOtherMetadataBlocks(fc, blockInfo);
-
+                
                 //Write tag (and add some default padding)
                 fc.write(tc.convert(tag,  FlacTagCreator.DEFAULT_PADDING));
 
                 //Write Audio
                 fc.write(audioData);
             }
+        }
+        catch(AccessDeniedException ade)
+        {
+            throw new NoWritePermissionsException(file + ":" + ade.getMessage());
         }
         catch(IOException ioe)
         {

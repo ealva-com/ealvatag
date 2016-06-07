@@ -27,6 +27,7 @@ import org.jaudiotagger.audio.dsf.DsfFileWriter;
 import org.jaudiotagger.audio.exceptions.CannotReadException;
 import org.jaudiotagger.audio.exceptions.CannotWriteException;
 import org.jaudiotagger.audio.exceptions.InvalidAudioFrameException;
+import org.jaudiotagger.audio.exceptions.NoWritePermissionsException;
 import org.jaudiotagger.audio.exceptions.ReadOnlyFileException;
 import org.jaudiotagger.audio.flac.FlacFileReader;
 import org.jaudiotagger.audio.flac.FlacFileWriter;
@@ -201,6 +202,7 @@ public class AudioFileIO
      * 
      *
      * @param f The AudioFile to be written
+     * @throws NoWritePermissionsException if the file could not be written to due to file permissions
      * @throws CannotWriteException If the file could not be written/accessed, the extension
      *                              wasn't recognized, or other IO error occurred.
      */
@@ -216,6 +218,7 @@ public class AudioFileIO
     *
     * @param f The AudioFile to be written
     * @param targetPath The AudioFile path to which to be written without the extension. Cannot be null
+    * @throws NoWritePermissionsException if the file could not be written to due to file permissions
     * @throws CannotWriteException If the file could not be written/accessed, the extension
     *                              wasn't recognized, or other IO error occurred.
     */
@@ -456,6 +459,7 @@ public class AudioFileIO
      *
      * @param f The AudioFile to be written
      * @param targetPath a file path, without an extension, which provides a "save as". If null, then normal "save" function
+     * @throws NoWritePermissionsException if the file could not be written to due to file permissions
      * @throws CannotWriteException If the file could not be written/accessed, the extension
      *                              wasn't recognized, or other IO error occurred.
      */
