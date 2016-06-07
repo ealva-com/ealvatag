@@ -183,7 +183,7 @@ public class FlacTagWriter
                 //Find end of metadata bloacks (start of Audio)
                 fc.position(flacStream.getStartOfFlacInFile()
                         + FlacStreamReader.FLAC_STREAM_IDENTIFIER_LENGTH
-                        + MetadataBlockHeader.BLOCK_TYPE_LENGTH
+                        + MetadataBlockHeader.HEADER_LENGTH // this should be the length of the block header for the stream info
                         + MetadataBlockDataStreamInfo.STREAM_INFO_DATA_LENGTH
                         + availableRoom);
 
