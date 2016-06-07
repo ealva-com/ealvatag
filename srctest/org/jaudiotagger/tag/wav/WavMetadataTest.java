@@ -1585,6 +1585,21 @@ public class WavMetadataTest extends AbstractTestCase
         assertTrue(exceptionCaught instanceof CannotReadException);
     }
 
+    public void testWriteWriteProtectedFileWithCheckDisabled() throws Exception {
+    	
+        FilePermissionsTest.runWriteWriteProtectedFileWithCheckDisabled("test123.wav");
+	}
+
+    public void testWriteWriteProtectedFileWithCheckEnabled() throws Exception {
+    	
+    	FilePermissionsTest.runWriteWriteProtectedFileWithCheckEnabled("test123.wav");
+	}
+
+    public void testWriteReadOnlyFileWithCheckDisabled() throws Exception {
+    	
+    	FilePermissionsTest.runWriteReadOnlyFileWithCheckDisabled("test123.wav");
+	}
+
     public void testReadJacobPavluk()
     {
         TagOptionSingleton.getInstance().setWavOptions(WavOptions.READ_ID3_UNLESS_ONLY_INFO);

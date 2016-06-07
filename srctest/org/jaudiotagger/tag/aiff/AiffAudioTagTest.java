@@ -3,6 +3,7 @@ package org.jaudiotagger.tag.aiff;
 
 import junit.framework.TestCase;
 import org.jaudiotagger.AbstractTestCase;
+import org.jaudiotagger.FilePermissionsTest;
 import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.AudioFileIO;
 import org.jaudiotagger.audio.AudioHeader;
@@ -814,6 +815,21 @@ public class AiffAudioTagTest extends TestCase {
         }
         assertNull(exceptionCaught);
     }
+
+    public void testWriteWriteProtectedFileWithCheckDisabled() throws Exception {
+    	
+        FilePermissionsTest.runWriteWriteProtectedFileWithCheckDisabled("test121.aif");
+	}
+
+    public void testWriteWriteProtectedFileWithCheckEnabled() throws Exception {
+    	
+    	FilePermissionsTest.runWriteWriteProtectedFileWithCheckEnabled("test121.aif");
+	}
+
+    public void testWriteReadOnlyFileWithCheckDisabled() throws Exception {
+    	
+    	FilePermissionsTest.runWriteReadOnlyFileWithCheckDisabled("test121.aif");
+	}
 
 
 }

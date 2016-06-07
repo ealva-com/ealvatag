@@ -2,17 +2,27 @@ package org.jaudiotagger.tag.flac;
 
 import junit.framework.TestCase;
 import org.jaudiotagger.AbstractTestCase;
+import org.jaudiotagger.FilePermissionsTest;
 import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.AudioFileIO;
+import org.jaudiotagger.audio.exceptions.CannotReadException;
+import org.jaudiotagger.audio.exceptions.CannotWriteException;
+import org.jaudiotagger.audio.exceptions.InvalidAudioFrameException;
+import org.jaudiotagger.audio.exceptions.NoWritePermissionsException;
+import org.jaudiotagger.audio.exceptions.ReadOnlyFileException;
 import org.jaudiotagger.audio.flac.FlacInfoReader;
 import org.jaudiotagger.audio.flac.metadatablock.MetadataBlockDataPicture;
+import org.jaudiotagger.tag.FieldDataInvalidException;
 import org.jaudiotagger.tag.FieldKey;
+import org.jaudiotagger.tag.Tag;
+import org.jaudiotagger.tag.TagException;
 import org.jaudiotagger.tag.TagField;
 import org.jaudiotagger.tag.TagOptionSingleton;
 import org.jaudiotagger.tag.id3.valuepair.ImageFormats;
 import org.jaudiotagger.tag.reference.PictureTypes;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.List;
 
@@ -398,4 +408,21 @@ public class FlacWriteTest extends TestCase
         }
         assertNull(exceptionCaught);
     }
+    
+    public void testWriteWriteProtectedFileWithCheckDisabled() throws Exception {
+    	
+        FilePermissionsTest.runWriteWriteProtectedFileWithCheckDisabled("test2.flac");
+	}
+
+    public void testWriteWriteProtectedFileWithCheckEnabled() throws Exception {
+    	
+    	FilePermissionsTest.runWriteWriteProtectedFileWithCheckEnabled("test2.flac");
+	}
+
+    public void testWriteReadOnlyFileWithCheckDisabled() throws Exception {
+    	
+    	FilePermissionsTest.runWriteReadOnlyFileWithCheckDisabled("test2.flac");
+	}
+
+
 }

@@ -19,6 +19,7 @@ import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 import org.jaudiotagger.AbstractTestCase;
+import org.jaudiotagger.FilePermissionsTest;
 import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.AudioFileIO;
 import org.jaudiotagger.audio.mp3.MP3File;
@@ -470,4 +471,19 @@ public class ID3v23TagTest extends TestCase
         tagFields = f.getTag().getFields(FieldKey.ALBUM_ARTIST_SORT);
         assertEquals(0,tagFields.size());
     }
+     
+    public void testWriteWriteProtectedFileWithCheckDisabled() throws Exception {
+     	
+         FilePermissionsTest.runWriteWriteProtectedFileWithCheckDisabled("testV1Cbr128ID3v2.mp3");
+ 	}
+
+    public void testWriteWriteProtectedFileWithCheckEnabled() throws Exception {
+     	
+     	FilePermissionsTest.runWriteWriteProtectedFileWithCheckEnabled("testV1Cbr128ID3v2.mp3");
+ 	}
+
+    public void testWriteReadOnlyFileWithCheckDisabled() throws Exception {
+     	
+     	FilePermissionsTest.runWriteReadOnlyFileWithCheckDisabled("testV1Cbr128ID3v2.mp3");
+ 	}     
 }
