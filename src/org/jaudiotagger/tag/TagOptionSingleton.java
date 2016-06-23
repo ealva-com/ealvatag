@@ -354,7 +354,7 @@ public class TagOptionSingleton
      * Whether Files.isWritable should be used to check if a file can be written. In some
      * cases, isWritable can return false negatives. 
      */
-    private boolean checkIsWritable = true;
+    private boolean checkIsWritable = false;
 
     /**
      * Creates a new TagOptions datatype. All Options are set to their default
@@ -898,7 +898,7 @@ public class TagOptionSingleton
         isWriteMp4GenresAsText=false;
         padNumberTotalLength = PadNumberOption.PAD_ONE_ZERO;
         id3v2Version = ID3V2Version.ID3_V23;
-        checkIsWritable = true;
+        checkIsWritable = false;
         //default all lyrics3 fields to save. id3v1 fields are individual
         // settings. id3v2 fields are always looked at to save.
         Iterator<String> iterator = Lyrics3v2Fields.getInstanceOf().getIdToValueMap().keySet().iterator();

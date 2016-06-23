@@ -1094,7 +1094,7 @@ public class WavMetadataTest extends AbstractTestCase
             assertTrue(tag.isExistingId3Tag());
 
             assertNull(((WavTag) tag).getInfoTag().getStartLocationInFile());
-            assertNull( ((WavTag) tag).getInfoTag().getEndLocationInFile());
+            assertNull(((WavTag) tag).getInfoTag().getEndLocationInFile());
             assertEquals(0L, ((WavTag) tag).getInfoTag().getSizeOfTag());
             assertEquals(26L, ((WavTag) tag).getSizeOfID3TagOnly());
             assertEquals(926264L, ((WavTag) tag).getStartLocationInFileOfId3Chunk());
@@ -1600,4 +1600,38 @@ public class WavMetadataTest extends AbstractTestCase
     	
     	FilePermissionsTest.runWriteReadOnlyFileWithCheckDisabled("test123.wav");
 	}
+
+    public void testReadJacobPavluk()
+    {
+        File orig = new File("testdata", "GreenLight.wav");
+        if (!orig.isFile())
+        {
+            System.err.println("Unable to test file - not available");
+            return;
+        }
+
+        TagOptionSingleton.getInstance().setWavOptions(WavOptions.READ_ID3_UNLESS_ONLY_INFO);
+        TagOptionSingleton.getInstance().setWavSaveOptions(WavSaveOptions.SAVE_EXISTING_AND_ACTIVE);
+        TagOptionSingleton.getInstance().setWavSaveOrder(WavSaveOrder.INFO_THEN_ID3);
+        Exception exceptionCaught = null;
+        try
+        {
+            File testFile = AbstractTestCase.copyAudioToTmp("GreenLight.wav");
+            AudioFile f = AudioFileIO.read(testFile);
+            System.out.println(f.getAudioHeader());
+            System.out.println(f.getTag());
+            f.getTag().setField(FieldKey.ARTIST,"artist");
+            f.commit();
+            System.out.println("**********************SavedAudioFIle");
+            f = AudioFileIO.read(testFile);
+            System.out.println(f.getAudioHeader());
+            System.out.println(f.getTag());
+        }
+
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            exceptionCaught = e;
+        }
+    }
 }
