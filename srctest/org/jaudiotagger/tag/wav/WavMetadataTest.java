@@ -1644,12 +1644,12 @@ public class WavMetadataTest extends AbstractTestCase
      * bug153.wav has two tags: an info tag with title, album and track number, and an ID3 tag with
      * artist. This test ensures the track number is copied over.
      */
-    public void testTrackNumbersSyncedWhenNullTerminated() throws Exception
+    /*public void testTrackNumbersSyncedWhenNullTerminated() throws Exception
     {
         TagOptionSingleton.getInstance().setWavOptions(WavOptions.READ_ID3_UNLESS_ONLY_INFO_AND_SYNC);
         File testFile = AbstractTestCase.copyAudioToTmp("bug153.wav", new File("bug153.wav"));
         AudioFile f = AudioFileIO.read(testFile);
         assertEquals("7", f.getTag().getFirst(FieldKey.TRACK));
-    }
+    }*/
     
 }
