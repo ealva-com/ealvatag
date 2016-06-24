@@ -31,6 +31,8 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Represent wav metadata found in a Wav file
@@ -41,7 +43,11 @@ import java.util.List;
  */
 public class WavTag implements Tag, Id3SupportingTag
 {
-    private List<ChunkSummary> chunkSummaryList = new ArrayList<ChunkSummary>();
+    private static final Logger logger = Logger.getLogger(WavTag.class.getPackage().getName());
+    
+    private static final String NULL = "\0";
+
+	private List<ChunkSummary> chunkSummaryList = new ArrayList<ChunkSummary>();
 
     public void addChunkSummary(ChunkSummary cs)
     {
@@ -482,20 +488,21 @@ public class WavTag implements Tag, Id3SupportingTag
             {
                 if (id3Tag.getFirst(fieldKey).isEmpty())
                 {
-                    if (!infoTag.getFirst(fieldKey).isEmpty())
+                    String first = infoTag.getFirst(fieldKey);
+					if (!first.isEmpty())
                     {
-                        id3Tag.setField(fieldKey, infoTag.getFirst(fieldKey));
+						id3Tag.setField(fieldKey, stripNullTerminator(first));
                     }
                 }
             }
         }
         catch(FieldDataInvalidException deie)
         {
-
+        	logger.log(Level.INFO, "Couldn't sync to ID3 because the data to sync was invalid", deie);
         }
     }
 
-    /**
+	/**
      * If we have field in INFO tag but not ID3 tag (perhaps coz doesn't exist add them to ID3 tag)
      */
     public void syncToInfoFromId3IfEmpty()
@@ -509,14 +516,14 @@ public class WavTag implements Tag, Id3SupportingTag
                 {
                     if (!id3Tag.getFirst(fieldKey).isEmpty())
                     {
-                        infoTag.setField(fieldKey, id3Tag.getFirst(fieldKey));
+                        infoTag.setField(fieldKey, addNullTerminatorIfNone(id3Tag.getFirst(fieldKey)));
                     }
                 }
             }
         }
         catch(FieldDataInvalidException deie)
         {
-
+        	logger.log(Level.INFO, "Couldn't sync to INFO because the data to sync was invalid", deie);
         }
     }
 
@@ -532,14 +539,7 @@ public class WavTag implements Tag, Id3SupportingTag
             {
                 if (!infoTag.getFirst(fieldKey).isEmpty())
                 {
-                    if(!infoTag.getFirst(fieldKey).endsWith("\0"))
-                    {
-                        id3Tag.setField(fieldKey, infoTag.getFirst(fieldKey));
-                    }
-                    else
-                    {
-                        id3Tag.setField(fieldKey, infoTag.getFirst(fieldKey).substring(0,infoTag.getFirst(fieldKey).length() - 1));
-                    }
+                    id3Tag.setField(fieldKey, stripNullTerminator(infoTag.getFirst(fieldKey)));
                 }
                 else
                 {
@@ -549,7 +549,7 @@ public class WavTag implements Tag, Id3SupportingTag
         }
         catch(FieldDataInvalidException deie)
         {
-
+        	logger.log(Level.INFO, "Couldn't sync to ID3 because the data to sync was invalid", deie);
         }
     }
 
@@ -565,14 +565,7 @@ public class WavTag implements Tag, Id3SupportingTag
             {
                 if (!id3Tag.getFirst(fieldKey).isEmpty())
                 {
-                    if(id3Tag.getFirst(fieldKey).endsWith("\0"))
-                    {
-                        infoTag.setField(fieldKey, id3Tag.getFirst(fieldKey));
-                    }
-                    else
-                    {
-                        infoTag.setField(fieldKey, id3Tag.getFirst(fieldKey) + "\0");
-                    }
+                    infoTag.setField(fieldKey, addNullTerminatorIfNone(id3Tag.getFirst(fieldKey)));
                 }
                 else
                 {
@@ -582,9 +575,17 @@ public class WavTag implements Tag, Id3SupportingTag
         }
         catch(FieldDataInvalidException deie)
         {
-
+        	logger.log(Level.INFO, "Couldn't sync to INFO because the data to sync was invalid", deie);
         }
     }
+
+    private String stripNullTerminator(String value) {
+    	return value.endsWith(NULL) ? value.substring(0,value.length() - 1) : value;
+	}
+
+    private String addNullTerminatorIfNone(String value) {
+    	return value.endsWith(NULL) ? value : value + NULL;
+	}
 
     /**
      * Call after read to ensure your preferred tag can make use of any additional metadata
