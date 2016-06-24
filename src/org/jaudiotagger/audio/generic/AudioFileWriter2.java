@@ -32,7 +32,7 @@ public abstract class AudioFileWriter2 extends AudioFileWriter
 
         if (TagOptionSingleton.getInstance().isCheckIsWritable() && !Files.isWritable(file))
         {
-            logger.warning(Permissions.displayPermissions(file));
+            logger.severe(Permissions.displayPermissions(file));
             throw new CannotWriteException(ErrorMessage.GENERAL_DELETE_FAILED
                     .getMsg(file));
         }
@@ -58,7 +58,9 @@ public abstract class AudioFileWriter2 extends AudioFileWriter
 
         if (TagOptionSingleton.getInstance().isCheckIsWritable() && !Files.isWritable(file))
         {
-            logger.warning(Permissions.displayPermissions(file));
+            logger.severe(Permissions.displayPermissions(file));
+            logger.severe(ErrorMessage.GENERAL_WRITE_FAILED.getMsg(af.getFile()
+                    .getPath()));
             throw new CannotWriteException(ErrorMessage.GENERAL_WRITE_FAILED_TO_OPEN_FILE_FOR_EDITING
                     .getMsg(file));
         }

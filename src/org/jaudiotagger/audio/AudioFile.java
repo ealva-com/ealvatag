@@ -274,7 +274,7 @@ public class AudioFile
         {
             if (TagOptionSingleton.getInstance().isCheckIsWritable() && !Files.isWritable(path))
             {
-                logger.severe("Unable to write:" + path);
+                logger.severe(Permissions.displayPermissions(file.toPath()));
                 logger.severe(Permissions.displayPermissions(path));
                 throw new ReadOnlyFileException(ErrorMessage.NO_PERMISSIONS_TO_WRITE_TO_FILE.getMsg(path));
             }

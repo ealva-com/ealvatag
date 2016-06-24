@@ -16,7 +16,7 @@ import org.jaudiotagger.tag.Tag;
 import org.jaudiotagger.tag.TagException;
 import org.jaudiotagger.tag.TagOptionSingleton;
 
-import static org.junit.Assert.assertTrue;
+import static junit.framework.TestCase.*;
 
 public class FilePermissionsTest {
 
