@@ -5,17 +5,21 @@ import org.jaudiotagger.FilePermissionsTest;
 import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.AudioFileIO;
 import org.jaudiotagger.audio.exceptions.CannotReadException;
+import org.jaudiotagger.audio.exceptions.InvalidAudioFrameException;
+import org.jaudiotagger.audio.exceptions.ReadOnlyFileException;
 import org.jaudiotagger.audio.wav.WavCleaner;
 import org.jaudiotagger.audio.wav.WavOptions;
 import org.jaudiotagger.audio.wav.WavSaveOptions;
 import org.jaudiotagger.audio.wav.WavSaveOrder;
 import org.jaudiotagger.tag.FieldKey;
 import org.jaudiotagger.tag.Tag;
+import org.jaudiotagger.tag.TagException;
 import org.jaudiotagger.tag.TagOptionSingleton;
 import org.jaudiotagger.tag.id3.AbstractID3v2Tag;
 import org.jaudiotagger.tag.id3.ID3v23Tag;
 
 import java.io.File;
+import java.io.IOException;
 
 /**
  * User: paul
@@ -1634,4 +1638,18 @@ public class WavMetadataTest extends AbstractTestCase
             exceptionCaught = e;
         }
     }
+
+    /**
+     * https://bitbucket.org/ijabz/jaudiotagger/issues/153/when-using-wavoptions-sync-null-terminated
+     * bug153.wav has two tags: an info tag with title, album and track number, and an ID3 tag with
+     * artist. This test ensures the track number is copied over.
+     */
+    public void testTrackNumbersSyncedWhenNullTerminated() throws Exception
+    {
+        TagOptionSingleton.getInstance().setWavOptions(WavOptions.READ_ID3_UNLESS_ONLY_INFO_AND_SYNC);
+        File testFile = AbstractTestCase.copyAudioToTmp("bug153.wav", new File("bug153.wav"));
+        AudioFile f = AudioFileIO.read(testFile);
+        assertEquals("7", f.getTag().getFirst(FieldKey.TRACK));
+    }
+    
 }
