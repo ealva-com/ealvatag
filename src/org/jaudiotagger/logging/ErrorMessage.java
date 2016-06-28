@@ -102,6 +102,7 @@ public enum ErrorMessage
     ARTWORK_CANNOT_BE_CREATED_WITH_THIS_METHOD("Cover Art cannot be created using this method"),
     ARTWORK_CANNOT_BE_RETRIEVED_WITH_THIS_METHOD("Cover Art cannot be retrieved using this method"),
     GENERIC_NOT_SUPPORTED("Not implemented for this format"),
+    OPERATION_NOT_SUPPORTED_FOR_FIELD("Not available for this field {0}"),
     ID3_UNABLE_TO_DECOMPRESS_FRAME("Unable to decompress frame {0} in file {1} because {2}"),
     NO_WRITER_FOR_THIS_FORMAT("No Writer associated with this extension:{0}"),
     NO_READER_FOR_THIS_FORMAT("No Reader associated with this extension:{0}"),

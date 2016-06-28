@@ -2,7 +2,7 @@ package org.jaudiotagger.audio.wav;
 
 /**
  * Wav files can store metadata within a LISTINFO chunk, an ID3 chunk, both or neither. When a WavTag is read
- * we read both tags if they exist, and if either don't exists we initilize WavTag with empty instances of
+ * we read both tags if they exist, and if either don't exists we initialize WavTag with empty instances of
  * ID3Tag and/or InfoTag. But only one of the tags is accessible through the common interface and WavOptions
  * define which one this is.
  *
