@@ -22,7 +22,7 @@ import java.util.List;
  * All TextInformation frames support multiple strings, stored as a null separated list, where null is represented by
  * the termination code for the character encoding. This functionality is only officially support in ID3v24.
  *
- * Most applications will ignore any but the first value, but some such as Foobar 2000 will decode them properly
+ * Most applications will ignore any but the first value, but some such as Foobar2000 will decode them properly
  *
  * iTunes write null terminators characters after the String even though it only writes a single value.
  *
@@ -136,7 +136,7 @@ public class TextEncodedStringSizeTerminated extends AbstractString
      * @return
      * @throws CharacterCodingException
      */
-    private ByteBuffer writeString( CharsetEncoder encoder, String next, int i, int noOfValues)
+    protected ByteBuffer writeString( CharsetEncoder encoder, String next, int i, int noOfValues)
             throws CharacterCodingException
     {
 
@@ -153,6 +153,7 @@ public class TextEncodedStringSizeTerminated extends AbstractString
         return bb;
     }
 
+
     /**
      * Write String in UTF-LEBOM format
      *
@@ -167,7 +168,7 @@ public class TextEncodedStringSizeTerminated extends AbstractString
      * @return
      * @throws CharacterCodingException
      */
-    private ByteBuffer writeStringUTF16LEBOM(final String next, final int i, final int noOfValues)
+    protected ByteBuffer writeStringUTF16LEBOM(final String next, final int i, final int noOfValues)
             throws CharacterCodingException
     {
         final CharsetEncoder encoder = StandardCharsets.UTF_16LE.newEncoder();
@@ -199,7 +200,7 @@ public class TextEncodedStringSizeTerminated extends AbstractString
      * @return
      * @throws CharacterCodingException
      */
-    private ByteBuffer writeStringUTF16BEBOM(final String next, final int i, final int noOfValues)
+    protected ByteBuffer writeStringUTF16BEBOM(final String next, final int i, final int noOfValues)
             throws CharacterCodingException
     {
         final CharsetEncoder encoder = StandardCharsets.UTF_16BE.newEncoder();
@@ -221,10 +222,10 @@ public class TextEncodedStringSizeTerminated extends AbstractString
     }
 
     /**
-     * Removing trailing null from end of String, this should be there but some applications continue to write
+     * Removing trailing null from end of String, this should not be there but some applications continue to write
      * this unnecessary null char.
      */
-    private void stripTrailingNull()
+    protected void stripTrailingNull()
     {
         if (TagOptionSingleton.getInstance().isRemoveTrailingTerminatorOnWrite())
         {
@@ -246,7 +247,7 @@ public class TextEncodedStringSizeTerminated extends AbstractString
      * @param values
      * @param stringValue
      */
-    private void checkTrailingNull( List<String> values, String stringValue)
+    protected void checkTrailingNull( List<String> values, String stringValue)
     {
         if(!TagOptionSingleton.getInstance().isRemoveTrailingTerminatorOnWrite())
         {

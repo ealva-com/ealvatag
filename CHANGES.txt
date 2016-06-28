@@ -38,6 +38,7 @@ Summarise Changes
 #148:Do not precheck file permissions
 #135:Made permissions errors loglevel consistent
 #153:When using WavOptions.*SYNC null terminated PartOfSet fields are not copied
+#154:For ID3v23 the TCON frame can end up with multiple values concatenated
 
 2.2.5
 #033:Added getAudioStartPos() and getAudioEndPos() methods to AudioHeader interface and implemented for most formats

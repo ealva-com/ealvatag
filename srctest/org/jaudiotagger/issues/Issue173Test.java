@@ -475,15 +475,15 @@ public class Issue173Test extends AbstractTestCase
             body = (FrameBodyTCON)((AbstractID3v2Frame)tag.getFrame("TCON")).getBody();
             assertEquals("(CR)",body.getText());
             tag.addField(FieldKey.GENRE, "FlapFlap");
-            assertEquals("Cover FlapFlap",tag.getFirst(FieldKey.GENRE));
+            assertEquals("Cover",tag.getFirst(FieldKey.GENRE));
             body = (FrameBodyTCON)((AbstractID3v2Frame)tag.getFrame("TCON")).getBody();
-            assertEquals("(CR)FlapFlap",body.getText());
+            assertEquals("(CR)\u0000FlapFlap",body.getText());
             tag.setField(FieldKey.GENRE, "Country Shoegaze");
             assertEquals("Country Shoegaze",tag.getFirst(FieldKey.GENRE));
             body = (FrameBodyTCON)((AbstractID3v2Frame)tag.getFrame("TCON")).getBody();
             //TODO cannot handle setting v23 refinements in generic interface, but does that really matter
             //ID3v24Tag doesnt really have the convcept OutOfMemoryError refinements just multiple values
-            //assertEquals("(CR)Shoegaze",body.getText());
+            assertEquals("Country Shoegaze",body.getText());
         }
         catch (Exception ex)
         {
