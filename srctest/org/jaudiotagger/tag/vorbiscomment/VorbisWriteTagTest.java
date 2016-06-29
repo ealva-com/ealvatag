@@ -7,6 +7,7 @@ import org.jaudiotagger.audio.ogg.OggFileReader;
 import org.jaudiotagger.audio.ogg.util.OggPageHeader;
 import org.jaudiotagger.tag.FieldKey;
 import org.jaudiotagger.tag.TagField;
+import org.jaudiotagger.tag.TagOptionSingleton;
 import org.jaudiotagger.tag.vorbiscomment.util.Base64Coder;
 
 import javax.imageio.ImageIO;
@@ -49,6 +50,7 @@ public class VorbisWriteTagTest extends AbstractTestCase
      */
     public void testWriteTagToFile()
     {
+        TagOptionSingleton.getInstance().setVorbisAlbumArtistReadOptions(VorbisAlbumArtistReadOptions.READ_ALBUMARTIST);
         Exception exceptionCaught = null;
         try
         {
@@ -777,6 +779,10 @@ public class VorbisWriteTagTest extends AbstractTestCase
 
     public void testWriteMultipleFields() throws Exception
     {
+        TagOptionSingleton.getInstance().setVorbisAlbumArtistReadOptions(VorbisAlbumArtistReadOptions.READ_ALBUMARTIST);
+        TagOptionSingleton.getInstance().setVorbisAlbumArtistSaveOptions(VorbisAlbumArtistSaveOptions.WRITE_ALBUMARTIST);
+
+
         File testFile = AbstractTestCase.copyAudioToTmp("test.ogg", new File("testWriteMultiple.ogg"));
         AudioFile f = AudioFileIO.read(testFile);
         f.getTag().addField(FieldKey.ALBUM_ARTIST,"artist1");

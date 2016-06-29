@@ -1,6 +1,7 @@
 package org.jaudiotagger.tag.aiff;
 
 import org.jaudiotagger.audio.iff.ChunkHeader;
+import org.jaudiotagger.audio.iff.ChunkSummary;
 import org.jaudiotagger.logging.Hex;
 import org.jaudiotagger.tag.*;
 import org.jaudiotagger.tag.id3.AbstractID3v2Tag;
@@ -17,6 +18,19 @@ import java.util.List;
  */
 public class AiffTag implements Tag, Id3SupportingTag
 {
+    private List<ChunkSummary> chunkSummaryList = new ArrayList<ChunkSummary>();
+
+    public void addChunkSummary(ChunkSummary cs)
+    {
+        chunkSummaryList.add(cs);
+    }
+
+    public List<ChunkSummary> getChunkSummaryList()
+    {
+        return chunkSummaryList;
+    }
+
+    private boolean isIncorrectlyAlignedTag = false;
 
     private boolean isExistingId3Tag = false;
 
@@ -284,13 +298,22 @@ public class AiffTag implements Tag, Id3SupportingTag
     public String toString()
     {
         StringBuilder sb = new StringBuilder();
+
+        for(ChunkSummary cs:chunkSummaryList)
+        {
+            sb.append(cs.toString()+"\n");
+        }
         if (id3Tag != null)
         {
-            sb.append("Wav ID3 Tag:\n");
+            sb.append("Aiff ID3 Tag:\n");
             if(isExistingId3Tag())
             {
-                sb.append("\tstartLocation:" + getStartLocationInFileOfId3Chunk() + "(" + Hex.asHex(getStartLocationInFileOfId3Chunk()) + ")\n");
-                sb.append("\tendLocation:" + getEndLocationInFileOfId3Chunk() + "(" + Hex.asHex(getEndLocationInFileOfId3Chunk()) + ")\n");
+                if(isIncorrectlyAlignedTag)
+                {
+                    sb.append("\tincorrectly starts as odd byte\n");
+                }
+                sb.append("\tstartLocation:" + Hex.asDecAndHex(getStartLocationInFileOfId3Chunk()) + "\n");
+                sb.append("\tendLocation:"   + Hex.asDecAndHex(getEndLocationInFileOfId3Chunk()) + "\n");
             }
             sb.append(id3Tag.toString()+"\n");
             return sb.toString();
@@ -351,5 +374,15 @@ public class AiffTag implements Tag, Id3SupportingTag
     public boolean equals(Object obj)
     {
         return id3Tag.equals(obj);
+    }
+
+    public boolean isIncorrectlyAlignedTag()
+    {
+        return isIncorrectlyAlignedTag;
+    }
+
+    public void setIncorrectlyAlignedTag(boolean isIncorrectlyAlignedTag)
+    {
+        this.isIncorrectlyAlignedTag = isIncorrectlyAlignedTag;
     }
 }

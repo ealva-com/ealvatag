@@ -18,12 +18,17 @@
  */
 package org.jaudiotagger.audio;
 
+import org.jaudiotagger.audio.dsf.Dsf;
 import org.jaudiotagger.audio.exceptions.CannotReadException;
 import org.jaudiotagger.audio.exceptions.CannotWriteException;
+import org.jaudiotagger.audio.exceptions.NoReadPermissionsException;
+import org.jaudiotagger.audio.exceptions.NoWritePermissionsException;
 import org.jaudiotagger.audio.exceptions.ReadOnlyFileException;
 import org.jaudiotagger.audio.flac.metadatablock.MetadataBlockDataPicture;
+import org.jaudiotagger.audio.generic.Permissions;
 import org.jaudiotagger.audio.real.RealTag;
 import org.jaudiotagger.tag.TagOptionSingleton;
+import org.jaudiotagger.tag.id3.ID3v24Tag;
 import org.jaudiotagger.tag.wav.WavTag;
 import org.jaudiotagger.logging.ErrorMessage;
 import org.jaudiotagger.tag.Tag;
@@ -36,6 +41,8 @@ import org.jaudiotagger.tag.vorbiscomment.VorbisCommentTag;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.RandomAccessFile;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.logging.Logger;
 
@@ -116,6 +123,7 @@ public class AudioFile
     /**
      * <p>Write the tag contained in this AudioFile in the actual file on the disk, this is the same as calling the <code>AudioFileIO.write(this)</code> method.
      *
+     * @throws NoWritePermissionsException if the file could not be written to due to file permissions
      * @throws CannotWriteException If the file could not be written/accessed, the extension wasn't recognized, or other IO error occured.
      * @see AudioFileIO
      */
@@ -244,23 +252,31 @@ public class AudioFile
      * @throws FileNotFoundException
      * @return
      */
-    protected RandomAccessFile checkFilePermissions(File file, boolean readOnly) throws ReadOnlyFileException, FileNotFoundException
+    protected RandomAccessFile checkFilePermissions(File file, boolean readOnly) throws ReadOnlyFileException, FileNotFoundException, CannotReadException
     {
+        Path path = file.toPath();
         RandomAccessFile newFile;
-
         checkFileExists(file);
 
         // Unless opened as readonly the file must be writable
         if (readOnly)
         {
+            //May not even be readable
+            if(!Files.isReadable(path))
+            {
+                logger.severe("Unable to read file:" + path);
+                logger.severe(Permissions.displayPermissions(path));
+                throw new NoReadPermissionsException(ErrorMessage.GENERAL_READ_FAILED_DO_NOT_HAVE_PERMISSION_TO_READ_FILE.getMsg(path));
+            }
             newFile = new RandomAccessFile(file, "r");
         }
         else
         {
-            if (!file.canWrite())
+            if (TagOptionSingleton.getInstance().isCheckIsWritable() && !Files.isWritable(path))
             {
-                logger.severe("Unable to write:" + file.getPath());
-                throw new ReadOnlyFileException(ErrorMessage.NO_PERMISSIONS_TO_WRITE_TO_FILE.getMsg(file.getPath()));
+                logger.severe(Permissions.displayPermissions(file.toPath()));
+                logger.severe(Permissions.displayPermissions(path));
+                throw new ReadOnlyFileException(ErrorMessage.NO_PERMISSIONS_TO_WRITE_TO_FILE.getMsg(path));
             }
             newFile = new RandomAccessFile(file, "rw");
         }
@@ -294,53 +310,57 @@ public class AudioFile
      */
     public Tag createDefaultTag()
     {
-        if(SupportedFileFormat.FLAC.getFilesuffix().equals(file.getName().substring(file.getName().lastIndexOf('.'))))
+        if(SupportedFileFormat.FLAC.getFilesuffix().equals(file.getName().substring(file.getName().lastIndexOf('.') + 1)))
         {
             return new FlacTag(VorbisCommentTag.createNewTag(), new ArrayList< MetadataBlockDataPicture >());
         }
-        else if(SupportedFileFormat.OGG.getFilesuffix().equals(file.getName().substring(file.getName().lastIndexOf('.'))))
+        else if(SupportedFileFormat.OGG.getFilesuffix().equals(file.getName().substring(file.getName().lastIndexOf('.') + 1)))
         {
             return VorbisCommentTag.createNewTag();
         }
-        else if(SupportedFileFormat.MP4.getFilesuffix().equals(file.getName().substring(file.getName().lastIndexOf('.'))))
+        else if(SupportedFileFormat.MP4.getFilesuffix().equals(file.getName().substring(file.getName().lastIndexOf('.') + 1)))
         {
             return new Mp4Tag();
         }
-        else if(SupportedFileFormat.M4A.getFilesuffix().equals(file.getName().substring(file.getName().lastIndexOf('.'))))
+        else if(SupportedFileFormat.M4A.getFilesuffix().equals(file.getName().substring(file.getName().lastIndexOf('.') + 1)))
         {
             return new Mp4Tag();
         }
-        else if(SupportedFileFormat.M4P.getFilesuffix().equals(file.getName().substring(file.getName().lastIndexOf('.'))))
+        else if(SupportedFileFormat.M4P.getFilesuffix().equals(file.getName().substring(file.getName().lastIndexOf('.') + 1)))
         {
             return new Mp4Tag();
         }
-        else if(SupportedFileFormat.WMA.getFilesuffix().equals(file.getName().substring(file.getName().lastIndexOf('.'))))
+        else if(SupportedFileFormat.WMA.getFilesuffix().equals(file.getName().substring(file.getName().lastIndexOf('.') + 1)))
         {
             return new AsfTag();
         }
-        else if(SupportedFileFormat.WAV.getFilesuffix().equals(file.getName().substring(file.getName().lastIndexOf('.'))))
+        else if(SupportedFileFormat.WAV.getFilesuffix().equals(file.getName().substring(file.getName().lastIndexOf('.') + 1)))
         {
             return new WavTag(TagOptionSingleton.getInstance().getWavOptions());
         }
-        else if(SupportedFileFormat.RA.getFilesuffix().equals(file.getName().substring(file.getName().lastIndexOf('.'))))
+        else if(SupportedFileFormat.RA.getFilesuffix().equals(file.getName().substring(file.getName().lastIndexOf('.') + 1)))
         {
             return new RealTag();
         }
-        else if(SupportedFileFormat.RM.getFilesuffix().equals(file.getName().substring(file.getName().lastIndexOf('.'))))
+        else if(SupportedFileFormat.RM.getFilesuffix().equals(file.getName().substring(file.getName().lastIndexOf('.') + 1)))
         {
             return new RealTag();
         }
-        else if(SupportedFileFormat.AIF.getFilesuffix().equals(file.getName().substring(file.getName().lastIndexOf('.'))))
+        else if(SupportedFileFormat.AIF.getFilesuffix().equals(file.getName().substring(file.getName().lastIndexOf('.') + 1)))
         {
             return new AiffTag();
         }
-        else if(SupportedFileFormat.AIFC.getFilesuffix().equals(file.getName().substring(file.getName().lastIndexOf('.'))))
+        else if(SupportedFileFormat.AIFC.getFilesuffix().equals(file.getName().substring(file.getName().lastIndexOf('.') + 1)))
         {
             return new AiffTag();
         }
-        else if(SupportedFileFormat.AIFF.getFilesuffix().equals(file.getName().substring(file.getName().lastIndexOf('.'))))
+        else if(SupportedFileFormat.AIFF.getFilesuffix().equals(file.getName().substring(file.getName().lastIndexOf('.') + 1)))
         {
             return new AiffTag();
+        }
+        else if(SupportedFileFormat.DSF.getFilesuffix().equals(file.getName().substring(file.getName().lastIndexOf('.') + 1)))
+        {
+            return Dsf.createDefaultTag();
         }
         else
         {

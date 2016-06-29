@@ -152,7 +152,14 @@ public class FrameBodyAPIC extends AbstractID3v2FrameBody implements ID3v24Frame
 
     public String getUserFriendlyValue()
     {
-      return getMimeType()+":"+getDescription()+":"+getImageData().length;
+        if(getImageData()!=null)
+        {
+            return getMimeType() + ":" + getDescription() + ":" + getImageData().length;
+        }
+        else
+        {
+            return getMimeType() + ":" + getDescription() + ":0";
+        }
     }
 
 

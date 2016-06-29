@@ -25,10 +25,13 @@ import org.jaudiotagger.audio.exceptions.ModifyVetoException;
 import org.jaudiotagger.audio.mp3.MP3File;
 import org.jaudiotagger.logging.ErrorMessage;
 import org.jaudiotagger.tag.Tag;
+import org.jaudiotagger.tag.TagOptionSingleton;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -49,7 +52,7 @@ public abstract class AudioFileWriter
 {
     private static final String TEMP_FILENAME_SUFFIX = ".tmp";
     private static final String WRITE_MODE = "rw";
-    private static final int MINIMUM_FILESIZE = 100;
+    protected static final int MINIMUM_FILESIZE = 100;
 
     // Logger Object
     public static Logger logger = Logger
@@ -76,16 +79,18 @@ public abstract class AudioFileWriter
      */
     public void delete(AudioFile af) throws CannotReadException, CannotWriteException
     {
-        if (!af.getFile().canWrite())
+        Path file = af.getFile().toPath();
+        if (TagOptionSingleton.getInstance().isCheckIsWritable() && !Files.isWritable(file))
         {
+            logger.severe(Permissions.displayPermissions(file));
             throw new CannotWriteException(ErrorMessage.GENERAL_DELETE_FAILED
-                    .getMsg(af.getFile().getPath()));
+                    .getMsg(file));
         }
 
         if (af.getFile().length() <= MINIMUM_FILESIZE)
         {
-            throw new CannotWriteException(ErrorMessage.GENERAL_DELETE_FAILED
-                    .getMsg(af.getFile().getPath()));
+            throw new CannotWriteException(ErrorMessage.GENERAL_DELETE_FAILED_BECAUSE_FILE_IS_TOO_SMALL
+                    .getMsg(file));
         }
 
         RandomAccessFile raf = null;
@@ -282,21 +287,22 @@ public abstract class AudioFileWriter
                     .getMsg(af.getFile().getPath()));
         }
 
-        if (!af.getFile().canWrite())
+        Path file = af.getFile().toPath();
+        if (TagOptionSingleton.getInstance().isCheckIsWritable() && !Files.isWritable(file))
         {
+            logger.severe(Permissions.displayPermissions(file));
             logger.severe(ErrorMessage.GENERAL_WRITE_FAILED.getMsg(af.getFile()
                     .getPath()));
-            throw new CannotWriteException(ErrorMessage.GENERAL_WRITE_FAILED
-                    .getMsg(af.getFile().getPath()));
+            throw new CannotWriteException(ErrorMessage.GENERAL_WRITE_FAILED_TO_OPEN_FILE_FOR_EDITING
+                    .getMsg(file));
         }
 
         if (af.getFile().length() <= MINIMUM_FILESIZE)
         {
-            logger
-                    .severe(ErrorMessage.GENERAL_WRITE_FAILED_BECAUSE_FILE_IS_TOO_SMALL
-                            .getMsg(af.getFile().getPath()));
+            logger.severe(ErrorMessage.GENERAL_WRITE_FAILED_BECAUSE_FILE_IS_TOO_SMALL
+                            .getMsg(file));
             throw new CannotWriteException(ErrorMessage.GENERAL_WRITE_FAILED_BECAUSE_FILE_IS_TOO_SMALL
-                    .getMsg(af.getFile().getPath()));
+                    .getMsg(file));
         }
     }
 

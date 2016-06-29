@@ -21,30 +21,34 @@ package org.jaudiotagger.audio.aiff;
 import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.exceptions.CannotWriteException;
 import org.jaudiotagger.audio.generic.AudioFileWriter;
+import org.jaudiotagger.audio.generic.AudioFileWriter2;
 import org.jaudiotagger.tag.Tag;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.nio.file.Path;
 
 
 /**
  * Write/delete tag info for Aiff file (Old Apple format)
  */
-public class AiffFileWriter extends AudioFileWriter
+public class AiffFileWriter extends AudioFileWriter2
 {
 
     private AiffTagWriter tw = new AiffTagWriter();
 
     @Override
-    protected void writeTag(AudioFile audioFile, Tag tag, RandomAccessFile raf, RandomAccessFile rafTemp) throws CannotWriteException, IOException
+    protected void writeTag(Tag tag, Path file) throws CannotWriteException
     {
-        tw.write(audioFile, tag, raf, rafTemp);
+        tw.write(tag, file);
     }
 
     @Override
-    protected void deleteTag(Tag tag, RandomAccessFile raf, RandomAccessFile tempRaf) throws CannotWriteException, IOException
+    protected void deleteTag(Tag tag, Path file) throws CannotWriteException
     {
-        tw.delete(tag, raf, tempRaf);
+        tw.delete(tag, file);
     }
+
+
 }
 

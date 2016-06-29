@@ -111,8 +111,7 @@ public class Issue084Test extends AbstractTestCase
                 assertEquals("", ((WavTag)tag).getInfoTag().getFirst(FieldKey.ARTIST));
                 assertEquals("", tag.getFirst(FieldKey.ARTIST));
                 ((WavTag)tag).syncTagsAfterRead();
-                assertEquals("fred", ((WavTag)tag).getInfoTag().getFirst(FieldKey.ARTIST));
-                assertEquals("fred", tag.getFirst(FieldKey.ARTIST));
+                assertEquals("fred\0", tag.getFirst(FieldKey.ARTIST));
                 tag.setField(FieldKey.ARTIST, "jimmy");
                 assertEquals("fred", ((WavTag) tag).getID3Tag().getFirst(FieldKey.ARTIST));
                 assertEquals("jimmy", ((WavTag) tag).getInfoTag().getFirst(FieldKey.ARTIST));
@@ -146,8 +145,8 @@ public class Issue084Test extends AbstractTestCase
                 AudioFile f = AudioFileIO.read(testFile);
                 Tag tag = f.getTag();
                 assertEquals("fred", ((WavTag) tag).getID3Tag().getFirst(FieldKey.ARTIST));
-                assertEquals("fred", ((WavTag)tag).getInfoTag().getFirst(FieldKey.ARTIST));
-                assertEquals("fred", tag.getFirst(FieldKey.ARTIST));
+                assertEquals("fred\0", ((WavTag)tag).getInfoTag().getFirst(FieldKey.ARTIST));
+                assertEquals("fred\0", tag.getFirst(FieldKey.ARTIST));
             }
         }
         catch (Exception e)
@@ -204,7 +203,7 @@ public class Issue084Test extends AbstractTestCase
                 f = AudioFileIO.read(testFile);
                 tag = f.getTag();
                 assertEquals("fred", ((WavTag)tag).getID3Tag().getFirst(FieldKey.ARTIST));
-                assertEquals("fred", ((WavTag)tag).getInfoTag().getFirst(FieldKey.ARTIST));
+                assertEquals("fred\0", ((WavTag)tag).getInfoTag().getFirst(FieldKey.ARTIST));
                 assertEquals("fred", tag.getFirst(FieldKey.ARTIST));
 
             }
@@ -230,8 +229,8 @@ public class Issue084Test extends AbstractTestCase
                 AudioFile f = AudioFileIO.read(testFile);
                 Tag tag = f.getTag();
                 assertEquals("fred", ((WavTag)tag).getID3Tag().getFirst(FieldKey.ARTIST));
-                assertEquals("fred", ((WavTag)tag).getInfoTag().getFirst(FieldKey.ARTIST));
-                assertEquals("fred", tag.getFirst(FieldKey.ARTIST));
+                assertEquals("fred\0", ((WavTag)tag).getInfoTag().getFirst(FieldKey.ARTIST));
+                assertEquals("fred\0", tag.getFirst(FieldKey.ARTIST));
                 tag.setField(FieldKey.ARTIST, "tim");
                 f.commit();
                 TagOptionSingleton.getInstance().setWavOptions(WavOptions.READ_ID3_ONLY);

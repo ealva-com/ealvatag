@@ -23,9 +23,13 @@ package org.jaudiotagger.audio.mp3;
 
 
 import org.jaudiotagger.audio.AudioFile;
+import org.jaudiotagger.audio.exceptions.CannotReadException;
 import org.jaudiotagger.audio.exceptions.CannotWriteException;
 import org.jaudiotagger.audio.exceptions.InvalidAudioFrameException;
+import org.jaudiotagger.audio.exceptions.NoWritePermissionsException;
 import org.jaudiotagger.audio.exceptions.ReadOnlyFileException;
+import org.jaudiotagger.audio.exceptions.UnableToModifyFileException;
+import org.jaudiotagger.audio.generic.Permissions;
 import org.jaudiotagger.logging.*;
 import org.jaudiotagger.tag.Tag;
 import org.jaudiotagger.tag.TagException;
@@ -41,6 +45,7 @@ import java.lang.reflect.Method;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -93,7 +98,7 @@ public class MP3File extends AudioFile
      * @throws org.jaudiotagger.audio.exceptions.ReadOnlyFileException
      * @throws org.jaudiotagger.audio.exceptions.InvalidAudioFrameException
      */
-    public MP3File(String filename) throws IOException, TagException, ReadOnlyFileException, InvalidAudioFrameException
+    public MP3File(String filename) throws IOException, TagException, ReadOnlyFileException, CannotReadException, InvalidAudioFrameException
     {
         this(new File(filename));
     }
@@ -123,7 +128,7 @@ public class MP3File extends AudioFile
      * @throws org.jaudiotagger.audio.exceptions.ReadOnlyFileException
      * @throws org.jaudiotagger.audio.exceptions.InvalidAudioFrameException
      */
-    public MP3File(File file, int loadOptions) throws IOException, TagException, ReadOnlyFileException, InvalidAudioFrameException
+    public MP3File(File file, int loadOptions) throws IOException, TagException, ReadOnlyFileException, CannotReadException, InvalidAudioFrameException
     {
         this(file, loadOptions, false);
     }
@@ -462,7 +467,7 @@ public class MP3File extends AudioFile
      * @throws org.jaudiotagger.audio.exceptions.ReadOnlyFileException
      * @throws org.jaudiotagger.audio.exceptions.InvalidAudioFrameException
      */
-    public MP3File(File file, int loadOptions, boolean readOnly) throws IOException, TagException, ReadOnlyFileException, InvalidAudioFrameException
+    public MP3File(File file, int loadOptions, boolean readOnly) throws IOException, TagException, ReadOnlyFileException, CannotReadException, InvalidAudioFrameException
     {
         RandomAccessFile newFile = null;
         try
@@ -631,7 +636,7 @@ public class MP3File extends AudioFile
      * @throws org.jaudiotagger.audio.exceptions.ReadOnlyFileException
      * @throws org.jaudiotagger.audio.exceptions.InvalidAudioFrameException
      */
-    public MP3File(File file) throws IOException, TagException, ReadOnlyFileException, InvalidAudioFrameException
+    public MP3File(File file) throws IOException, TagException, ReadOnlyFileException, CannotReadException, InvalidAudioFrameException
     {
         this(file, LOAD_ALL);
     }
@@ -733,8 +738,6 @@ public class MP3File extends AudioFile
      * Hash is calculated EXCLUDING meta-data, like id3v1 or id3v2
      *
      * @return byte[] hash value in byte
-     * @param String algorithm 
-     * @param int buffersize 
      * @throws IOException 
      * @throws InvalidAudioFrameException 
      * @throws NoSuchAlgorithmException 
@@ -922,6 +925,7 @@ public class MP3File extends AudioFile
     /**
      * Overridden for compatibility with merged code
      *
+     * @throws NoWritePermissionsException if the file could not be written to due to file permissions
      * @throws CannotWriteException
      */
     public void commit() throws CannotWriteException
@@ -929,6 +933,10 @@ public class MP3File extends AudioFile
         try
         {
             save();
+        }
+        catch (UnableToModifyFileException umfe)
+        {
+            throw new NoWritePermissionsException(umfe);
         }
         catch (IOException ioe)
         {
@@ -948,14 +956,16 @@ public class MP3File extends AudioFile
      */
     public void precheck(File file) throws IOException
     {
-        if (!file.exists())
+        Path path = file.toPath();
+        if (!Files.exists(path))
         {
             logger.severe(ErrorMessage.GENERAL_WRITE_FAILED_BECAUSE_FILE_NOT_FOUND.getMsg(file.getName()));
             throw new IOException(ErrorMessage.GENERAL_WRITE_FAILED_BECAUSE_FILE_NOT_FOUND.getMsg(file.getName()));
         }
 
-        if (!file.canWrite())
+        if (TagOptionSingleton.getInstance().isCheckIsWritable() && !Files.isWritable(path))
         {
+            logger.severe(Permissions.displayPermissions(path));
             logger.severe(ErrorMessage.GENERAL_WRITE_FAILED.getMsg(file.getName()));
             throw new IOException(ErrorMessage.GENERAL_WRITE_FAILED.getMsg(file.getName()));
         }

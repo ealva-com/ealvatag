@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import java.nio.channels.FileChannel;
 
 /**
  * StcoBox ( media (stream) header), holds offsets into the Audio data
@@ -151,13 +152,14 @@ public class Mp4StcoBox extends AbstractMp4Box
 
     public static Mp4StcoBox getStco(RandomAccessFile raf) throws IOException, CannotReadException
     {
-        Mp4BoxHeader moovHeader = Mp4BoxHeader.seekWithinLevel(raf, Mp4AtomIdentifier.MOOV.getFieldName());
+        FileChannel fc = raf.getChannel();
+        Mp4BoxHeader moovHeader = Mp4BoxHeader.seekWithinLevel(fc, Mp4AtomIdentifier.MOOV.getFieldName());
         if (moovHeader == null)
         {
             throw new CannotReadException("This file does not appear to be an audio file");
         }
         ByteBuffer moovBuffer = ByteBuffer.allocate(moovHeader.getLength() - Mp4BoxHeader.HEADER_LENGTH);
-        raf.getChannel().read(moovBuffer);
+        fc.read(moovBuffer);
         moovBuffer.rewind();
 
         //Level 2-Searching for "mvhd" somewhere within "moov", we make a slice after finding header

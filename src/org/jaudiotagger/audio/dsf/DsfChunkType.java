@@ -1,4 +1,4 @@
-package org.jaudiotagger.audio.aiff.chunk;
+package org.jaudiotagger.audio.dsf;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -8,39 +8,34 @@ import java.util.Map;
  *
  * @see org.jaudiotagger.audio.iff.Chunk
  */
-public enum ChunkType
+public enum DsfChunkType
 {
-    FORMAT_VERSION("FVER"),
-    APPLICATION("APPL"),
-    SOUND("SSND"),
-    COMMON("COMM"),
-    COMMENTS("COMT"),
-    NAME("NAME"),
-    AUTHOR("AUTH"),
-    COPYRIGHT("(c) "),
-    ANNOTATION("ANNO"),
-    TAG("ID3 ");
+    DSD("DSD "),
+    FORMAT("fmt "),
+    DATA("data"),
+    ID3("ID3"),
+    ;
 
-    private static final Map<String, ChunkType> CODE_TYPE_MAP = new HashMap<String, ChunkType>();
+    private static final Map<String, DsfChunkType> CODE_TYPE_MAP = new HashMap<String, DsfChunkType>();
     private String code;
 
     /**
      * @param code 4 char string
      */
-    ChunkType(final String code)
+    DsfChunkType(final String code)
     {
         this.code=code;
     }
 
     /**
-     * Get {@link ChunkType} for code (e.g. "SSND").
+     * Get {@link org.jaudiotagger.audio.dsf.DsfChunkType} for code (e.g. "SSND").
      *
      * @param code chunk id
      * @return chunk type or {@code null} if not registered
      */
-    public synchronized static ChunkType get(final String code) {
+    public synchronized static DsfChunkType get(final String code) {
         if (CODE_TYPE_MAP.isEmpty()) {
-            for (final ChunkType type : values()) {
+            for (final DsfChunkType type : values()) {
                 CODE_TYPE_MAP.put(type.getCode(), type);
             }
         }

@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import java.nio.channels.FileChannel;
 import java.nio.charset.StandardCharsets;
 
 /**
@@ -26,6 +27,24 @@ public class ChunkHeader
     {
         this.byteOrder=byteOrder;
     }
+    /**
+     * Reads the header of a chunk.
+     *
+     * @return {@code true}, if we were able to read a chunk header and believe we found a valid chunk id.
+     */
+    public boolean readHeader(final FileChannel fc) throws IOException
+    {
+        ByteBuffer header = ByteBuffer.allocate(CHUNK_HEADER_SIZE);
+        startLocationInFile = fc.position();
+        fc.read(header);
+        header.order(byteOrder);
+        header.position(0);
+        this.chunkId  = Utils.readFourBytesAsChars(header);
+        this.size = header.getInt();
+
+        return true;
+    }
+
     /**
      * Reads the header of a chunk.
      *

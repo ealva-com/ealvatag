@@ -2,7 +2,7 @@ package org.jaudiotagger.audio.wav;
 
 /**
  * Wav files can store metadata within a LISTINFO chunk, an ID3 chunk, both or neither. When a WavTag is read
- * we read both tags if they exist, and if either don't exists we initilize WavTag with empty instances of
+ * we read both tags if they exist, and if either don't exists we initialize WavTag with empty instances of
  * ID3Tag and/or InfoTag. But only one of the tags is accessible through the common interface and WavOptions
  * define which one this is.
  *
@@ -22,7 +22,7 @@ package org.jaudiotagger.audio.wav;
  *
  * The _AND_SYNC versions synchronize the active tag with any additional data that may be available in the nonactive tag
  * after the initial read. For example if the ID3 tag is the active tag but contains no artist tag, but the nonactive
- * Info tag does then the ID3 tag will be initialized with teh same value for the artist field.
+ * Info tag does then the ID3 tag will be initialized with the same value for the artist field.
  */
 public enum WavOptions
 {

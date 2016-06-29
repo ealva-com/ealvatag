@@ -5,11 +5,9 @@ import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.AudioFileIO;
 import org.jaudiotagger.audio.wav.WavOptions;
 import org.jaudiotagger.audio.wav.WavSaveOptions;
+import org.jaudiotagger.audio.wav.WavSaveOrder;
 import org.jaudiotagger.tag.FieldKey;
-import org.jaudiotagger.tag.Tag;
 import org.jaudiotagger.tag.TagOptionSingleton;
-import org.jaudiotagger.tag.id3.AbstractID3v2Tag;
-import org.jaudiotagger.tag.id3.ID3v23Tag;
 import org.jaudiotagger.tag.id3.ID3v24Tag;
 
 import java.io.File;
@@ -18,7 +16,7 @@ import java.io.File;
  * User: paul
  * Date: 07-Dec-2007
  */
-public class WavMetadataNewTagsTest extends AbstractTestCase
+public class WavMetadataNewTagsId3BeforeInfoTest extends AbstractTestCase
 {
 
 
@@ -31,6 +29,8 @@ public class WavMetadataNewTagsTest extends AbstractTestCase
     {
         TagOptionSingleton.getInstance().setWavOptions(WavOptions.READ_INFO_ONLY);
         TagOptionSingleton.getInstance().setWavSaveOptions(WavSaveOptions.SAVE_BOTH);
+        TagOptionSingleton.getInstance().setWavSaveOrder(WavSaveOrder.ID3_THEN_INFO);
+
         Exception exceptionCaught = null;
         try
         {
@@ -72,11 +72,11 @@ public class WavMetadataNewTagsTest extends AbstractTestCase
             System.out.println(((WavTag) tag).getInfoTag());
             assertEquals("fred", tag.getFirst(FieldKey.ARTIST));
 
-            assertEquals(926264L, ((WavTag) tag).getInfoTag().getStartLocationInFile().longValue());
-            assertEquals(926560L, ((WavTag) tag).getInfoTag().getEndLocationInFile().longValue());
-            assertEquals(288L, ((WavTag) tag).getInfoTag().getSizeOfTag());
+            assertEquals(926282L, ((WavTag) tag).getInfoTag().getStartLocationInFile().longValue());
+            assertEquals(926570L, ((WavTag) tag).getInfoTag().getEndLocationInFile().longValue());
+            assertEquals(280L, ((WavTag) tag).getInfoTag().getSizeOfTag());
             assertEquals(10L, ((WavTag) tag).getSizeOfID3TagOnly()); //Because have SAVE BOTH option but nothign added to ID3 save empty ID3tag
-            assertEquals(926560L, ((WavTag) tag).getStartLocationInFileOfId3Chunk());
+            assertEquals(926264L, ((WavTag) tag).getStartLocationInFileOfId3Chunk());
             assertEquals(18L, ((WavTag) tag).getSizeOfID3TagIncludingChunkHeader());
         }
         catch (Exception e)
@@ -94,6 +94,8 @@ public class WavMetadataNewTagsTest extends AbstractTestCase
     {
         TagOptionSingleton.getInstance().setWavOptions(WavOptions.READ_INFO_ONLY);
         TagOptionSingleton.getInstance().setWavSaveOptions(WavSaveOptions.SAVE_BOTH);
+        TagOptionSingleton.getInstance().setWavSaveOrder(WavSaveOrder.ID3_THEN_INFO);
+
         Exception exceptionCaught = null;
         try
         {
@@ -135,11 +137,11 @@ public class WavMetadataNewTagsTest extends AbstractTestCase
             assertEquals("qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq", tag.getFirst(FieldKey.ARTIST));
             assertEquals("qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq", tag.getFirst(FieldKey.ALBUM_ARTIST));
 
-            assertEquals(926264L, ((WavTag) tag).getInfoTag().getStartLocationInFile().longValue());
-            assertEquals(926700L, ((WavTag) tag).getInfoTag().getEndLocationInFile().longValue());
+            assertEquals(926282L, ((WavTag) tag).getInfoTag().getStartLocationInFile().longValue());
+            assertEquals(926718L, ((WavTag) tag).getInfoTag().getEndLocationInFile().longValue());
             assertEquals(428L, ((WavTag) tag).getInfoTag().getSizeOfTag());
             assertEquals(10L, ((WavTag) tag).getSizeOfID3TagOnly()); //Because have SAVE BOTH option but nothign added to ID3 save empty ID3tag
-            assertEquals(926700L, ((WavTag) tag).getStartLocationInFileOfId3Chunk());
+            assertEquals(926264L, ((WavTag) tag).getStartLocationInFileOfId3Chunk());
             assertEquals(18L, ((WavTag) tag).getSizeOfID3TagIncludingChunkHeader());
 
         }
@@ -160,6 +162,7 @@ public class WavMetadataNewTagsTest extends AbstractTestCase
     {
         TagOptionSingleton.getInstance().setWavOptions(WavOptions.READ_ID3_ONLY);
         TagOptionSingleton.getInstance().setWavSaveOptions(WavSaveOptions.SAVE_EXISTING_AND_ACTIVE);
+        TagOptionSingleton.getInstance().setWavSaveOrder(WavSaveOrder.ID3_THEN_INFO);
         Exception exceptionCaught = null;
         try
         {
@@ -201,11 +204,11 @@ public class WavMetadataNewTagsTest extends AbstractTestCase
             System.out.println(((WavTag) tag).getInfoTag());
             assertEquals("fred", tag.getFirst(FieldKey.ARTIST));
 
-            assertEquals(926264L, ((WavTag) tag).getInfoTag().getStartLocationInFile().longValue());
-            assertEquals(926560L, ((WavTag) tag).getInfoTag().getEndLocationInFile().longValue());
+            assertEquals(926298L, ((WavTag) tag).getInfoTag().getStartLocationInFile().longValue());
+            assertEquals(926594L, ((WavTag) tag).getInfoTag().getEndLocationInFile().longValue());
             assertEquals(288L, ((WavTag) tag).getInfoTag().getSizeOfTag());
-            assertEquals(26L, ((WavTag) tag).getSizeOfID3TagOnly());
-            assertEquals(926560L, ((WavTag) tag).getStartLocationInFileOfId3Chunk());
+            assertEquals(26L, ((WavTag) tag).getSizeOfID3TagOnly()); //Because have SAVE BOTH option but nothing added to ID3 save empty ID3tag
+            assertEquals(926264L, ((WavTag) tag).getStartLocationInFileOfId3Chunk());
             assertEquals(34L, ((WavTag) tag).getSizeOfID3TagIncludingChunkHeader());
         }
         catch (Exception e)
@@ -223,6 +226,8 @@ public class WavMetadataNewTagsTest extends AbstractTestCase
     {
         TagOptionSingleton.getInstance().setWavOptions(WavOptions.READ_ID3_ONLY);
         TagOptionSingleton.getInstance().setWavSaveOptions(WavSaveOptions.SAVE_ACTIVE);
+        TagOptionSingleton.getInstance().setWavSaveOrder(WavSaveOrder.ID3_THEN_INFO);
+
         Exception exceptionCaught = null;
         try
         {
@@ -291,6 +296,8 @@ public class WavMetadataNewTagsTest extends AbstractTestCase
     {
         TagOptionSingleton.getInstance().setWavOptions(WavOptions.READ_ID3_ONLY);
         TagOptionSingleton.getInstance().setWavSaveOptions(WavSaveOptions.SAVE_ACTIVE);
+        TagOptionSingleton.getInstance().setWavSaveOrder(WavSaveOrder.ID3_THEN_INFO);
+
         Exception exceptionCaught = null;
         try
         {
@@ -351,5 +358,40 @@ public class WavMetadataNewTagsTest extends AbstractTestCase
             exceptionCaught = e;
         }
         assertNull(exceptionCaught);
+    }
+
+    /**
+     * Starts of with Id3chunk which is odd but doesnt have padding byte but at end of file
+     * so can still read, then we write to it padding bit added and when read/write again we
+     * correctly work out ID3chunk is still at end of file.
+     */
+    public void testFileDeleteWithInfoAndOddLengthData()
+    {
+        Exception exceptionCaught = null;
+
+        File orig = new File("testdata", "test129.wav");
+        if (!orig.isFile())
+        {
+            System.err.println("Unable to test file - not available");
+            return;
+        }
+
+        TagOptionSingleton.getInstance().setWavOptions(WavOptions.READ_INFO_ONLY);
+        TagOptionSingleton.getInstance().setWavSaveOptions(WavSaveOptions.SAVE_ACTIVE);
+        TagOptionSingleton.getInstance().setWavSaveOrder(WavSaveOrder.ID3_THEN_INFO);
+
+        File testFile = AbstractTestCase.copyAudioToTmp("test129.wav", new File("test128OddData.wav"));
+        try {
+            AudioFile f = AudioFileIO.read(testFile);
+            f.delete();
+
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            exceptionCaught = e;
+        }
+        assertNull(exceptionCaught);
+
+
     }
 }

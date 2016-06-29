@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
+import java.nio.channels.FileChannel;
 import java.nio.charset.StandardCharsets;
 import java.util.logging.Logger;
 
@@ -51,6 +52,7 @@ public class MetadataBlockDataPicture implements MetadataBlockData, TagField
     private int height;
     private int colourDepth;
     private int indexedColouredCount;
+    private int lengthOfPictureInBytes;
     private byte[] imageData;
 
     // Logger Object
@@ -85,9 +87,9 @@ public class MetadataBlockDataPicture implements MetadataBlockData, TagField
         //Indexed Colour Count
         indexedColouredCount = rawdata.getInt();
 
+        lengthOfPictureInBytes =  rawdata.getInt();
         //ImageData
-        int rawdataSize = rawdata.getInt();
-        imageData = new byte[rawdataSize];
+        imageData = new byte[lengthOfPictureInBytes];
         rawdata.get(imageData);
 
         logger.config("Read image:" + this.toString());
@@ -109,15 +111,15 @@ public class MetadataBlockDataPicture implements MetadataBlockData, TagField
      * Construct picture block by reading from file, the header informs us how many bytes we should be reading from
      *
      * @param header
-     * @param raf
+     * @param fc
      * @throws java.io.IOException
      * @throws org.jaudiotagger.tag.InvalidFrameException
      */
     //TODO check for buffer underflows see http://research.eeye.com/html/advisories/published/AD20071115.html
-    public MetadataBlockDataPicture(MetadataBlockHeader header, RandomAccessFile raf) throws IOException, InvalidFrameException
+    public MetadataBlockDataPicture(MetadataBlockHeader header, FileChannel fc ) throws IOException, InvalidFrameException
     {
         ByteBuffer rawdata = ByteBuffer.allocate(header.getDataLength());
-        int bytesRead = raf.getChannel().read(rawdata);
+        int bytesRead = fc.read(rawdata);
         if (bytesRead < header.getDataLength())
         {
             throw new IOException("Unable to read required number of databytes read:" + bytesRead + ":required:" + header.getDataLength());
@@ -171,7 +173,7 @@ public class MetadataBlockDataPicture implements MetadataBlockData, TagField
         return new String(tempbuffer, charset);
     }
 
-    public byte[] getBytes()
+    public ByteBuffer getBytes()
     {
         try
         {
@@ -187,7 +189,7 @@ public class MetadataBlockDataPicture implements MetadataBlockData, TagField
             baos.write(Utils.getSizeBEInt32(indexedColouredCount));
             baos.write(Utils.getSizeBEInt32(imageData.length));
             baos.write(imageData);
-            return baos.toByteArray();
+            return ByteBuffer.wrap(baos.toByteArray());
 
         }
         catch (IOException ioe)
@@ -198,7 +200,7 @@ public class MetadataBlockDataPicture implements MetadataBlockData, TagField
 
     public int getLength()
     {
-        return getBytes().length;
+        return getBytes().limit();
     }
 
     public int getPictureType()
@@ -266,7 +268,8 @@ public class MetadataBlockDataPicture implements MetadataBlockData, TagField
 
     public String toString()
     {
-        return PictureTypes.getInstanceOf().getValueForId(pictureType) + ":" + mimeType + ":" + description + ":" + "width:" + width + ":height:" + height + ":colourdepth:" + colourDepth + ":indexedColourCount:" + indexedColouredCount + ":image size in bytes:" + imageData.length;
+        return PictureTypes.getInstanceOf().getValueForId(pictureType) + ":" + mimeType + ":" + description + ":" + "width:" + width + ":height:" + height + ":colourdepth:" + colourDepth + ":indexedColourCount:" + indexedColouredCount
+                + ":image size in bytes:" + lengthOfPictureInBytes + "/" + imageData.length;
     }
 
     /**
@@ -305,7 +308,7 @@ public class MetadataBlockDataPicture implements MetadataBlockData, TagField
      */
     public byte[] getRawContent() throws UnsupportedEncodingException
     {
-        return getBytes();
+        return getBytes().array();
     }
 
     /**

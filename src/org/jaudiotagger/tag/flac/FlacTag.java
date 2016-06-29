@@ -122,16 +122,88 @@ public class FlacTag implements Tag
         return (tag == null || tag.isEmpty()) && images.size() == 0;
     }
 
+    @Override
     public void setField(FieldKey genericKey, String value) throws KeyNotFoundException, FieldDataInvalidException
     {
-        TagField tagfield = createField(genericKey,value);
-        setField(tagfield);
+        if(genericKey==FieldKey.ALBUM_ARTIST)
+        {
+            switch(TagOptionSingleton.getInstance().getVorbisAlbumArtistSaveOptions())
+            {
+                case WRITE_ALBUMARTIST:
+                {
+                    TagField tagfield = createField(genericKey, value);
+                    setField(tagfield);
+                    return;
+                }
+
+                case WRITE_JRIVER_ALBUMARTIST:
+                {
+                    TagField tagfield = createField(VorbisCommentFieldKey.ALBUMARTIST_JRIVER, value);
+                    setField(tagfield);
+                    return;
+                }
+                case WRITE_BOTH:
+                {
+                    TagField tagfield1 = createField(genericKey, value);
+                    setField(tagfield1);
+                    TagField tagfield2 = createField(VorbisCommentFieldKey.ALBUMARTIST_JRIVER, value);
+                    setField(tagfield2);
+                    return;
+                }
+
+            }
+        }
+        else
+        {
+            TagField tagfield = createField(genericKey, value);
+            setField(tagfield);
+        }
     }
 
+    /**
+     * Create new field and add it to the tag
+     *
+     * @param genericKey
+     * @param value
+     * @throws KeyNotFoundException
+     * @throws FieldDataInvalidException
+     */
+    @Override
     public void addField(FieldKey genericKey, String value) throws KeyNotFoundException, FieldDataInvalidException
     {
-        TagField tagfield = createField(genericKey,value);
-        addField(tagfield);
+        if(genericKey==FieldKey.ALBUM_ARTIST)
+        {
+            switch(TagOptionSingleton.getInstance().getVorbisAlbumArtistSaveOptions())
+            {
+                case WRITE_ALBUMARTIST:
+                {
+                    TagField tagfield = createField(genericKey, value);
+                    addField(tagfield);
+                    return;
+                }
+
+                case WRITE_JRIVER_ALBUMARTIST:
+                {
+                    TagField tagfield = createField(VorbisCommentFieldKey.ALBUMARTIST_JRIVER, value);
+                    addField(tagfield);
+                    return;
+                }
+                case WRITE_BOTH:
+                {
+                    TagField tagfield1 = createField(genericKey, value);
+                    addField(tagfield1);
+                    TagField tagfield2 = createField(VorbisCommentFieldKey.ALBUMARTIST_JRIVER, value);
+                    addField(tagfield2);
+                    return;
+                }
+
+            }
+        }
+        else
+        {
+            TagField tagfield = createField(genericKey, value);
+            addField(tagfield);
+        }
     }
 
     /**
@@ -510,4 +582,10 @@ public class FlacTag implements Tag
     {
         return tag.createCompilationField(value);
     }
+
+    public String toString()
+    {
+        return "FLAC " + getVorbisCommentTag();
+    }
+
 }

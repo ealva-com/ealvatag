@@ -61,6 +61,7 @@ abstract public class AbstractID3v1Tag extends AbstractID3Tag
     protected static Pattern endofStringPattern = Pattern.compile("\\x00");
 
     //Tag ID as held in file
+    public static final String TAG = "TAG";
     protected static final byte[] TAG_ID = {(byte) 'T', (byte) 'A', (byte) 'G'};
 
     //Fields Lengths common to v1 and v1.1 tags

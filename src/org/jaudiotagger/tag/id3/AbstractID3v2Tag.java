@@ -16,6 +16,8 @@
 package org.jaudiotagger.tag.id3;
 
 import org.jaudiotagger.audio.AudioFile;
+import org.jaudiotagger.audio.exceptions.CannotWriteException;
+import org.jaudiotagger.audio.exceptions.NoWritePermissionsException;
 import org.jaudiotagger.audio.exceptions.UnableToCreateFileException;
 import org.jaudiotagger.audio.exceptions.UnableToModifyFileException;
 import org.jaudiotagger.audio.exceptions.UnableToRenameFileException;
@@ -40,6 +42,7 @@ import java.nio.channels.FileLock;
 import java.nio.channels.WritableByteChannel;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.AccessDeniedException;
 import java.util.*;
 import java.util.logging.Level;
 
@@ -64,6 +67,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
 
     //Tag ID as held in file
     public static final byte[] TAG_ID = {'I', 'D', '3'};
+    public static final String TAGID = "ID3";
 
     //The tag header is the same for ID3v2 versions
     public static final int TAG_HEADER_LENGTH = 10;
@@ -144,6 +148,16 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
         return true;
     }
 
+    private static boolean isID3V2Header(FileChannel fc) throws IOException
+    {
+        long start = fc.position();
+        ByteBuffer headerBuffer = Utils.readFileDataIntoBufferBE(fc, FIELD_TAGID_LENGTH);
+        fc.position(start);
+        String s = Utils.readThreeBytesAsChars(headerBuffer);
+        return s.equals(TAGID);
+    }
+
+
     /**
      * Determines if file contain an id3 tag and if so positions the file pointer just after the end
      * of the tag.
@@ -168,6 +182,29 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
 
         int size = ID3SyncSafeInteger.bufferToValue(bb);
         raf.seek(size + TAG_HEADER_LENGTH);
+        return true;
+    }
+
+    /**
+     * Is ID3 tag
+     *
+     * @param fc
+     * @return
+     * @throws IOException
+     */
+    public static boolean isId3Tag(FileChannel fc) throws IOException
+    {
+        if (!isID3V2Header(fc))
+        {
+            return false;
+        }
+        //So we have a tag
+        ByteBuffer bb = ByteBuffer.allocateDirect(FIELD_TAG_SIZE_LENGTH);
+        fc.position(fc.position() + FIELD_TAGID_LENGTH + FIELD_TAG_MAJOR_VERSION_LENGTH + FIELD_TAG_MINOR_VERSION_LENGTH + FIELD_TAG_FLAG_LENGTH);
+        fc.read(bb);
+        bb.flip();
+        int size = ID3SyncSafeInteger.bufferToValue(bb);
+        fc.position(size + TAG_HEADER_LENGTH);
         return true;
     }
 
@@ -1084,6 +1121,11 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
         {
             return null;
         }
+        //#129 Workaround for https://bugs.openjdk.java.net/browse/JDK-8025619
+        catch(Error error)
+        {
+            return null;
+        }
 
         //Couldnt getFields lock because file is already locked by another application
         if (fileLock == null)
@@ -1467,7 +1509,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
         catch (FileNotFoundException fe)
         {
             logger.log(Level.SEVERE, getLoggingFilename() + fe.getMessage(), fe);
-            if (fe.getMessage().equals(FileSystemMessage.ACCESS_IS_DENIED.getMsg()))
+            if (fe.getMessage().contains(FileSystemMessage.ACCESS_IS_DENIED.getMsg()) || fe.getMessage().contains(FileSystemMessage.PERMISSION_DENIED.getMsg()))
             {
                 logger.severe(ErrorMessage.GENERAL_WRITE_FAILED_TO_OPEN_FILE_FOR_EDITING.getMsg(file.getPath()));
                 throw new UnableToModifyFileException(ErrorMessage.GENERAL_WRITE_FAILED_TO_OPEN_FILE_FOR_EDITING.getMsg(file.getPath()));
@@ -2836,6 +2878,10 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
                             filteredList.add(tagfield);
                         }
                     }
+                }
+                else if (next instanceof FrameBodyUnsupported)
+                {
+                    return list;
                 }
                 else
                 {

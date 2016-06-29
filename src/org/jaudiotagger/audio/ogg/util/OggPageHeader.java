@@ -102,6 +102,7 @@ public class OggPageHeader
     private boolean lastPacketIncomplete = false;
 
     private long startByte = 0;
+
     /**
      * Read next PageHeader from Buffer
      *

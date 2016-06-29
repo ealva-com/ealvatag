@@ -441,6 +441,20 @@ public class Utils
     }
 
     /**
+     * Reads 3 bytes and concatenates them into a String.
+     * This pattern is used for ID's of various kinds.
+     *
+     * @param bytes
+     * @return
+     */
+    public static String readThreeBytesAsChars(final ByteBuffer bytes)
+    {
+        byte[] b = new byte[3];
+        bytes.get(b);
+        return new String(b, ISO_8859_1);
+    }
+
+    /**
      * Used to convert (signed integer) to an long as if signed integer was unsigned hence allowing
      * it to represent full range of integral values.
      *
@@ -476,41 +490,36 @@ public class Utils
     }
 
     /**
-     * Read data from random file into buffer and position at start of buffer, when
-     * retrieving integral types will decode bytes as Little Endian.
      *
-     * @param file
+     * @param fc
      * @param size
      * @return
      * @throws IOException
      */
-    public static ByteBuffer readFileDataIntoBufferLE(final RandomAccessFile file, final int size) throws IOException
+    public static ByteBuffer readFileDataIntoBufferLE(FileChannel fc, final int size) throws IOException
     {
         final ByteBuffer tagBuffer = ByteBuffer.allocateDirect(size);
-        file.getChannel().read(tagBuffer);
+        fc.read(tagBuffer);
         tagBuffer.position(0);
         tagBuffer.order(ByteOrder.LITTLE_ENDIAN);
         return tagBuffer;
     }
 
     /**
-     * Read data from random file into buffer and position at start of buffer, when
-     * retrieving integral types wil decode bytes as Big Endian.
      *
-     * @param file
+     * @param fc
      * @param size
      * @return
      * @throws IOException
      */
-    public static ByteBuffer readFileDataIntoBufferBE(final RandomAccessFile file, final int size) throws IOException
+    public static ByteBuffer readFileDataIntoBufferBE(FileChannel fc, final int size) throws IOException
     {
-        final ByteBuffer tagBuffer = ByteBuffer.allocate(size);
-        file.getChannel().read(tagBuffer);
+        final ByteBuffer tagBuffer = ByteBuffer.allocateDirect(size);
+        fc.read(tagBuffer);
         tagBuffer.position(0);
         tagBuffer.order(ByteOrder.BIG_ENDIAN);
         return tagBuffer;
     }
-
     /**
      * Copy src file to dst file. FileChannels are used to maximize performance.
      *
@@ -535,5 +544,19 @@ public class Utils
                 position += inChannel.transferTo(position, 1024L * 1024L, outChannel);
             }
         } //Closeables closed exiting try block in all circumstances
+    }
+
+    /**
+     *
+     * @param length
+     * @return true if length is an odd number
+     */
+    public static boolean isOddLength(long length)
+    {
+        if ((length & 1) != 0)
+        {
+            return true;
+        }
+        return false;
     }
 }

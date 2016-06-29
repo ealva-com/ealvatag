@@ -53,46 +53,49 @@ import java.nio.ByteBuffer;
 public class FrameBodyTXXX extends AbstractFrameBodyTextInfo implements ID3v24FrameBody, ID3v23FrameBody
 {
     //Used by Picard and Jaikoz
-    public static final String MUSICBRAINZ_ARTISTID         = "MusicBrainz Artist Id";
-    public static final String MUSICBRAINZ_ALBUM_ARTISTID   = "MusicBrainz Album Artist Id";
+    public static final String ACOUSTIC                     = "Acoustic";
+    public static final String ACOUSTID_FINGERPRINT         = "Acoustid Fingerprint";
+    public static final String ACOUSTID_ID                  = "Acoustid Id";
+    public static final String AMAZON_ASIN                    = "ASIN";
+    public static final String ARTISTS                      = "ARTISTS";
+    public static final String BARCODE                      = "BARCODE";
+    public static final String CATALOG_NO                   = "CATALOGNUMBER";
+    public static final String COUNTRY                      = "Country";
+    public static final String ELECTRONIC                   = "Electronic";
+    public static final String FBPM                         = "FBPM";
+    public static final String INSTRUMENTAL                 = "Instrumental";
+    public static final String MOOD                         = "MOOD";          //ID3 v23 only
+    public static final String MOOD_AGGRESSIVE              = "MoodAggressive";
+    public static final String MOOD_AROUSAL                 = "MoodArousal";
+    public static final String MOOD_DANCEABILITY            = "MoodDanceability";
+    public static final String MOOD_HAPPY                   = "MoodHappy";
+    public static final String MOOD_PARTY                   = "MoodParty";
+    public static final String MOOD_RELAXED                 = "MoodRelaxed";
+    public static final String MOOD_SAD                     = "MoodSad";
+    public static final String MOOD_VALENCE                 = "MoodValence";
     public static final String MUSICBRAINZ_ALBUMID          = "MusicBrainz Album Id";
+    public static final String MUSICBRAINZ_ALBUM_ARTISTID   = "MusicBrainz Album Artist Id";
+    public static final String MUSICBRAINZ_ALBUM_COUNTRY    = "MusicBrainz Album Release Country";
+    public static final String MUSICBRAINZ_ALBUM_STATUS     = "MusicBrainz Album Status";
+    public static final String MUSICBRAINZ_ALBUM_TYPE       = "MusicBrainz Album Type";
+    public static final String MUSICBRAINZ_DISCID           = "MusicBrainz Disc Id";
     public static final String MUSICBRAINZ_ORIGINAL_ALBUMID = "MusicBrainz Original Album Id";
     public static final String MUSICBRAINZ_RELEASE_GROUPID  = "MusicBrainz Release Group Id";
     public static final String MUSICBRAINZ_RELEASE_TRACKID  = "MusicBrainz Release Track Id";
-    public static final String MUSICBRAINZ_DISCID           = "MusicBrainz Disc Id";
-    public static final String MUSICBRAINZ_ALBUM_TYPE       = "MusicBrainz Album Type";
-    public static final String MUSICBRAINZ_ALBUM_STATUS     = "MusicBrainz Album Status";
-    public static final String MUSICBRAINZ_ALBUM_COUNTRY    = "MusicBrainz Album Release Country";
     public static final String MUSICBRAINZ_WORKID           = "MusicBrainz Work Id";
-    public static final String AMAZON_ASIN                    = "ASIN";
     public static final String MUSICIP_ID                   = "MusicIP PUID";
-    public static final String BARCODE                      = "BARCODE";
-    public static final String CATALOG_NO                   = "CATALOGNUMBER";
-    public static final String MOOD                         = "MOOD";          //ID3 v23 only
-    public static final String TAGS                         = "TAGS";
-    public static final String FBPM                         = "FBPM";
+    public static final String ORCHESTRA                    = "ORCHESTRA";
+    public static final String PERFORMER                    = "PERFORMER";
+    public static final String PART                         = "Part";
     public static final String SCRIPT                       = "Script";
-    public static final String ARTISTS                      = "ARTISTS";
-    public static final String ACOUSTID_FINGERPRINT         = "Acoustid Fingerprint";
-    public static final String ACOUSTID_ID                  = "Acoustid Id";
-    public static final String COUNTRY                      = "Country";
-    public static final String MOOD_AGGRESSIVE              = "MoodAggressive";
-    public static final String MOOD_RELAXED                 = "MoodRelaxed";
-    public static final String MOOD_SAD                     = "MoodSad";
-    public static final String MOOD_HAPPY                   = "MoodHappy";
-    public static final String MOOD_PARTY                   = "MoodParty";
-    public static final String MOOD_DANCEABILITY            = "MoodDanceability";
-    public static final String MOOD_VALENCE                 = "MoodValence";
-    public static final String MOOD_AROUSAL                 = "MoodArousal";
-    public static final String ACOUSTIC                     = "Acousic";
-    public static final String ELECTRONIC                   = "Electronic";
-    public static final String INSTRUMENTAL                 = "Instrumental";
-    public static final String TIMBRE                       = "Timbre";
+    public static final String TAGS                         = "TAGS";
+    public static final String TIMBRE                       = "TimbreBrightness";
     public static final String TONALITY                     = "Tonality";
+    public static final String MUSICBRAINZ_ARTISTID         = "MusicBrainz Artist Id";
+    public static final String WORK                         = "Work";
 
     //used by Foobar 20000
     public static final String ALBUM_ARTIST = "ALBUM ARTIST";
-    public static final String PERFORMER = "PERFORMER";
 
     /**
      * Creates a new FrameBodyTXXX datatype.
