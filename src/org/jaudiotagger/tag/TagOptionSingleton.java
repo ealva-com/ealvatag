@@ -357,6 +357,10 @@ public class TagOptionSingleton
     private boolean checkIsWritable = false;
 
     /**
+     * 
+     */
+    
+    /**
      * Creates a new TagOptions datatype. All Options are set to their default
      * values
      */
@@ -1323,6 +1327,5 @@ public class TagOptionSingleton
 	public void setCheckIsWritable(boolean checkIsWritable) {
 		this.checkIsWritable = checkIsWritable;
 	}
-    
     
 }
