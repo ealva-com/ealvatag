@@ -15,6 +15,13 @@ public class Issue146Test extends AbstractTestCase
 {
     public void testIssue146() throws Exception
     {
+        File orig = new File("testdata", "test158.mp3");
+        if (!orig.isFile())
+        {
+            System.err.println("Unable to test file - not available");
+            return;
+        }
+
         File file = AbstractTestCase.copyAudioToTmp("test158.mp3");
 
         if (file.exists())
