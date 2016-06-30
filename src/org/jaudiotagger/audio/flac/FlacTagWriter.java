@@ -188,7 +188,6 @@ public class FlacTagWriter
             else
             {
                 logger.config(file + " No Room to Rewrite");
-                //insertTagAndShiftViaDirectByteBuffer(tag, fc, blockInfo, flacStream, availableRoom);
                 insertTagAndShiftViaMappedByteBuffer(tag, fc, blockInfo, flacStream, neededRoom, availableRoom);
             }
         }
