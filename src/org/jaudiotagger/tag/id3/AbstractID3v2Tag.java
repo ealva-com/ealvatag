@@ -2879,6 +2879,10 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
                         }
                     }
                 }
+                else if (next instanceof FrameBodyUnsupported)
+                {
+                    return list;
+                }
                 else
                 {
                     throw new RuntimeException("Need to implement getFields(FieldKey genericKey) for:" + next.getClass());
