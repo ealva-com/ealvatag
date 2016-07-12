@@ -146,6 +146,30 @@ public class VorbisCommentTag extends AbstractTag
         tagFieldToOggField.put(FieldKey.URL_WIKIPEDIA_RELEASE_SITE, VorbisCommentFieldKey.URL_WIKIPEDIA_RELEASE_SITE);
         tagFieldToOggField.put(FieldKey.WORK, VorbisCommentFieldKey.WORK);
         tagFieldToOggField.put(FieldKey.YEAR, VorbisCommentFieldKey.DATE);
+        tagFieldToOggField.put(FieldKey.SOLOIST, VorbisCommentFieldKey.SOLOIST);
+        tagFieldToOggField.put(FieldKey.WORK_TYPE, VorbisCommentFieldKey.WORK_TYPE);
+        tagFieldToOggField.put(FieldKey.MUSICBRAINZ_WORK_COMPOSITION_ID, VorbisCommentFieldKey.MUSICBRAINZ_WORK_COMPOSITION_ID);
+        tagFieldToOggField.put(FieldKey.WORK_COMPOSITION, VorbisCommentFieldKey.WORK_COMPOSITION_NAME);
+        tagFieldToOggField.put(FieldKey.WORK_COMPOSITION_TYPE, VorbisCommentFieldKey.WORK_COMPOSITION_TYPE);
+        tagFieldToOggField.put(FieldKey.MUSICBRAINZ_WORK_PARTOF_LEVEL1_ID, VorbisCommentFieldKey.MUSICBRAINZ_WORK_PARTOF_LEVEL1_ID);
+        tagFieldToOggField.put(FieldKey.WORK_PARTOF_LEVEL1, VorbisCommentFieldKey.WORK_PARTOF_LEVEL1_NAME);
+        tagFieldToOggField.put(FieldKey.WORK_PARTOF_LEVEL1_TYPE, VorbisCommentFieldKey.WORK_PARTOF_LEVEL1_TYPE);
+        tagFieldToOggField.put(FieldKey.MUSICBRAINZ_WORK_PARTOF_LEVEL2_ID, VorbisCommentFieldKey.MUSICBRAINZ_WORK_PARTOF_LEVEL2_ID);
+        tagFieldToOggField.put(FieldKey.WORK_PARTOF_LEVEL2, VorbisCommentFieldKey.WORK_PARTOF_LEVEL2_NAME);
+        tagFieldToOggField.put(FieldKey.WORK_PARTOF_LEVEL2_TYPE, VorbisCommentFieldKey.WORK_PARTOF_LEVEL2_TYPE);
+        tagFieldToOggField.put(FieldKey.MUSICBRAINZ_WORK_PARTOF_LEVEL3_ID, VorbisCommentFieldKey.MUSICBRAINZ_WORK_PARTOF_LEVEL3_ID);
+        tagFieldToOggField.put(FieldKey.WORK_PARTOF_LEVEL3, VorbisCommentFieldKey.WORK_PARTOF_LEVEL3_NAME);
+        tagFieldToOggField.put(FieldKey.WORK_PARTOF_LEVEL3_TYPE, VorbisCommentFieldKey.WORK_PARTOF_LEVEL3_TYPE);
+        tagFieldToOggField.put(FieldKey.MUSICBRAINZ_WORK_PARTOF_LEVEL4_ID, VorbisCommentFieldKey.MUSICBRAINZ_WORK_PARTOF_LEVEL4_ID);
+        tagFieldToOggField.put(FieldKey.WORK_PARTOF_LEVEL4, VorbisCommentFieldKey.WORK_PARTOF_LEVEL4_NAME);
+        tagFieldToOggField.put(FieldKey.WORK_PARTOF_LEVEL4_TYPE, VorbisCommentFieldKey.WORK_PARTOF_LEVEL4_TYPE);
+        tagFieldToOggField.put(FieldKey.MUSICBRAINZ_WORK_PARTOF_LEVEL5_ID, VorbisCommentFieldKey.MUSICBRAINZ_WORK_PARTOF_LEVEL5_ID);
+        tagFieldToOggField.put(FieldKey.WORK_PARTOF_LEVEL5, VorbisCommentFieldKey.WORK_PARTOF_LEVEL5_NAME);
+        tagFieldToOggField.put(FieldKey.WORK_PARTOF_LEVEL5_TYPE, VorbisCommentFieldKey.WORK_PARTOF_LEVEL5_TYPE);
+        tagFieldToOggField.put(FieldKey.MUSICBRAINZ_WORK_PARTOF_LEVEL6_ID, VorbisCommentFieldKey.MUSICBRAINZ_WORK_PARTOF_LEVEL6_ID);
+        tagFieldToOggField.put(FieldKey.WORK_PARTOF_LEVEL6, VorbisCommentFieldKey.WORK_PARTOF_LEVEL6_NAME);
+        tagFieldToOggField.put(FieldKey.WORK_PARTOF_LEVEL6_TYPE, VorbisCommentFieldKey.WORK_PARTOF_LEVEL6_TYPE);
+
     }
 
     //This is the vendor string that will be written if no other is supplied. Should be the name of the software

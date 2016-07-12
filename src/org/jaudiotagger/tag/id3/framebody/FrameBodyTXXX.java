@@ -31,9 +31,11 @@ import org.jaudiotagger.tag.datatype.TextEncodedStringSizeTerminated;
 import org.jaudiotagger.tag.id3.ID3TextEncodingConversion;
 import org.jaudiotagger.tag.id3.ID3v24Frames;
 import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
+import org.jaudiotagger.tag.reference.Tagger;
 
 import java.io.ByteArrayOutputStream;
 import java.nio.ByteBuffer;
+import java.util.EnumSet;
 
 
 /**
@@ -93,6 +95,31 @@ public class FrameBodyTXXX extends AbstractFrameBodyTextInfo implements ID3v24Fr
     public static final String TONALITY                     = "Tonality";
     public static final String MUSICBRAINZ_ARTISTID         = "MusicBrainz Artist Id";
     public static final String WORK                         = "Work";
+    public static final String SOLOIST                                  = "SOLOIST";
+    public static final String WORK_TYPE                                = "Work Type";
+    public static final String MUSICBRAINZ_WORK_COMPOSITION_ID          = "MusicBrainz Work Composition Id";
+    public static final String WORK_COMPOSITION                         = "Work Composition";
+    public static final String WORK_COMPOSITION_TYPE                    = "Work Composition Type";
+    public static final String MUSICBRAINZ_WORK_PARTOF_LEVEL1_ID        = "MusicBrainz Work PartOfLevel1Id ";
+    public static final String WORK_PARTOF_LEVEL1                       = "Work PartofLevel1";
+    public static final String WORK_PARTOF_LEVEL1_TYPE                  = "Work PartofLevel1 Type";
+    public static final String MUSICBRAINZ_WORK_PARTOF_LEVEL2_ID        = "MusicBrainz Work PartOfLevel2Id ";
+    public static final String WORK_PARTOF_LEVEL2                       = "Work PartofLevel2";
+    public static final String WORK_PARTOF_LEVEL2_TYPE                  = "Work PartofLevel2 Type";
+    public static final String MUSICBRAINZ_WORK_PARTOF_LEVEL3_ID        = "MusicBrainz Work PartOfLevel3Id ";
+    public static final String WORK_PARTOF_LEVEL3                       = "Work PartofLevel3";
+    public static final String WORK_PARTOF_LEVEL3_TYPE                  = "Work PartofLevel3 Type";
+    public static final String MUSICBRAINZ_WORK_PARTOF_LEVEL4_ID        = "MusicBrainz Work PartOfLevel4Id ";
+    public static final String WORK_PARTOF_LEVEL4                       = "Work PartofLevel4";
+    public static final String WORK_PARTOF_LEVEL4_TYPE                  = "Work PartofLevel4 Type";
+    public static final String MUSICBRAINZ_WORK_PARTOF_LEVEL5_ID        = "MusicBrainz Work PartOfLevel5Id ";
+    public static final String WORK_PARTOF_LEVEL5                       = "Work PartofLevel5";
+    public static final String WORK_PARTOF_LEVEL5_TYPE                  = "Work PartofLevel5 Type";
+    public static final String MUSICBRAINZ_WORK_PARTOF_LEVEL6_ID        = "MusicBrainz Work PartOfLeve61Id ";
+    public static final String WORK_PARTOF_LEVEL6                       = "Work PartofLevel6";
+    public static final String WORK_PARTOF_LEVEL6_TYPE                  = "Work PartofLevel6 Type";
+
+
 
     //used by Foobar 20000
     public static final String ALBUM_ARTIST = "ALBUM ARTIST";
