@@ -169,8 +169,18 @@ public class VorbisCommentTag extends AbstractTag
         tagFieldToOggField.put(FieldKey.MUSICBRAINZ_WORK_PARTOF_LEVEL6_ID, VorbisCommentFieldKey.MUSICBRAINZ_WORK_PARTOF_LEVEL6_ID);
         tagFieldToOggField.put(FieldKey.WORK_PARTOF_LEVEL6, VorbisCommentFieldKey.WORK_PARTOF_LEVEL6_NAME);
         tagFieldToOggField.put(FieldKey.WORK_PARTOF_LEVEL6_TYPE, VorbisCommentFieldKey.WORK_PARTOF_LEVEL6_TYPE);
-
+        tagFieldToOggField.put(FieldKey.PART_NUMBER, VorbisCommentFieldKey.PART_NUMBER);
+        tagFieldToOggField.put(FieldKey.ARTISTS_SORT, VorbisCommentFieldKey.ARTISTS_SORT);
+        tagFieldToOggField.put(FieldKey.CONDUCTOR_SORT, VorbisCommentFieldKey.CONDUCTOR_SORT);
+        tagFieldToOggField.put(FieldKey.SOLOIST_SORT, VorbisCommentFieldKey.SOLOIST_SORT);
+        tagFieldToOggField.put(FieldKey.ORCHESTRA_SORT, VorbisCommentFieldKey.ORCHESTRA_SORT);
+        tagFieldToOggField.put(FieldKey.PERFORMER_SORT, VorbisCommentFieldKey.PERFORMER_SORT);
+        tagFieldToOggField.put(FieldKey.ARRANGER_SORT, VorbisCommentFieldKey.ARRANGER_SORT);
+        tagFieldToOggField.put(FieldKey.OPUS, VorbisCommentFieldKey.OPUS);
+        tagFieldToOggField.put(FieldKey.SINGLE_DISC_TRACK_NO, VorbisCommentFieldKey.SINGLE_DISC_TRACK_NO);
+        tagFieldToOggField.put(FieldKey.PERIOD, VorbisCommentFieldKey.PERIOD);
     }
+
 
     //This is the vendor string that will be written if no other is supplied. Should be the name of the software
     //that actually encoded the file in the first place.

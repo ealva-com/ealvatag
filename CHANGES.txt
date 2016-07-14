@@ -41,6 +41,10 @@ Summarise Changes
 #154:For ID3v23 the TCON frame can end up with multiple values concatenated
 #144:Unable to load file because of problem with FrameBodyUnsupported
 #150:Flac write files OutOfMemoryError: Direct buffer memory
+#156: Support for additional artist sort fields
+#157: Support for contiguous trackno
+#158: Support for Opus field
+#159: Support for Musichi classical fields
 
 2.2.5
 #033:Added getAudioStartPos() and getAudioEndPos() methods to AudioHeader interface and implemented for most formats

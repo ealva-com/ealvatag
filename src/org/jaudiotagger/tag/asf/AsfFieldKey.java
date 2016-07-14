@@ -188,6 +188,16 @@ public enum AsfFieldKey
     MUSICBRAINZ_WORK_PARTOF_LEVEL6_ID("MusicBrainz/Work PartofLevel6Id",true),
     WORK_PARTOF_LEVEL6("WM/Work PartofLevel6",true),
     WORK_PARTOF_LEVEL6_TYPE("WM/Work PartofLevel6Type",true),
+    PART_NUMBER("WM/PartNumber",true),
+    ARTISTS_SORT("WM/ArtistsSort",true),
+    CONDUCTOR_SORT("WM/ConductorSort",true),
+    SOLOIST_SORT("WM/SoloistSort",true),
+    ORCHESTRA_SORT("WM/OrchestraSort",true),
+    PERFORMER_SORT("WM/PerformerSort",true),
+    ARRANGER_SORT("WM/ArrangerSort",true),
+    OPUS("WM/Opus",true),
+    SINGLE_DISC_TRACK_NO("WM/SingleDiscTrackNo",true),
+    PERIOD("WM/Period",true),
 
 
     // Special field for all unknown field names, which will getFields maximum support

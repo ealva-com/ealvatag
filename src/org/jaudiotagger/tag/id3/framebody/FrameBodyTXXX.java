@@ -118,6 +118,16 @@ public class FrameBodyTXXX extends AbstractFrameBodyTextInfo implements ID3v24Fr
     public static final String MUSICBRAINZ_WORK_PARTOF_LEVEL6_ID        = "MusicBrainz Work PartOfLeve61Id ";
     public static final String WORK_PARTOF_LEVEL6                       = "Work PartofLevel6";
     public static final String WORK_PARTOF_LEVEL6_TYPE                  = "Work PartofLevel6 Type";
+    public static final String PART_NUMBER                              = "Part No";
+    public static final String ARTISTS_SORT                             = "Artists Sort";
+    public static final String CONDUCTOR_SORT                           = "Conductor Sort";
+    public static final String SOLOIST_SORT                             = "Soloist Sort";
+    public static final String ORCHESTRA_SORT                           = "Orchestra Sort";
+    public static final String PERFORMER_SORT                           = "Performer Sort";
+    public static final String ARRANGER_SORT                            = "Arranger Sort";
+    public static final String OPUS                                     = "Opus";
+    public static final String SINGLE_DISC_TRACK_NO                     = "Single Disc Track No";
+    public static final String PERIOD                                   = "Period";
 
 
 

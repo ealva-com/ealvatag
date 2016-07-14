@@ -94,6 +94,17 @@ public class Issue298Test extends AbstractTestCase
             tag.setField(tag.createField(FieldKey.WORK_PARTOF_LEVEL5_TYPE,"Level5Type"));
             tag.setField(tag.createField(FieldKey.WORK_PARTOF_LEVEL6,"Level6"));
             tag.setField(tag.createField(FieldKey.WORK_PARTOF_LEVEL6_TYPE,"Level6Type"));
+            tag.setField(tag.createField(FieldKey.PART_NUMBER,"PartNumber"));
+            tag.setField(tag.createField(FieldKey.ARTISTS_SORT,"ArtistsSort"));
+            tag.setField(tag.createField(FieldKey.CONDUCTOR_SORT,"ConductorSort"));
+            tag.setField(tag.createField(FieldKey.SOLOIST_SORT,"SoloistSort"));
+            tag.setField(tag.createField(FieldKey.ORCHESTRA_SORT,"OrchestraSort"));
+            tag.setField(tag.createField(FieldKey.PERFORMER_SORT,"PerformerSort"));
+            tag.setField(tag.createField(FieldKey.ARRANGER_SORT,"ArrangerSort"));
+            tag.setField(tag.createField(FieldKey.OPUS,"Opus"));
+            tag.setField(tag.createField(FieldKey.SINGLE_DISC_TRACK_NO,"SingleDiscTrackNo"));
+            tag.setField(tag.createField(FieldKey.PERIOD,"Period"));
+
 
             assertEquals("custom1",af.getTag().getFirst(FieldKey.CUSTOM1));
             assertEquals("custom2",af.getTag().getFirst(FieldKey.CUSTOM2));
@@ -155,7 +166,17 @@ public class Issue298Test extends AbstractTestCase
             assertEquals("Level4Type",af.getTag().getFirst(FieldKey.WORK_PARTOF_LEVEL4_TYPE));
             assertEquals("Level5Type",af.getTag().getFirst(FieldKey.WORK_PARTOF_LEVEL5_TYPE));
             assertEquals("Level6Type",af.getTag().getFirst(FieldKey.WORK_PARTOF_LEVEL6_TYPE));
-            assertEquals("Work",af.getTag().getFirst(FieldKey.WORK));
+            assertEquals("PartNumber",af.getTag().getFirst(FieldKey.PART_NUMBER));
+            assertEquals("ArtistsSort",af.getTag().getFirst(FieldKey.ARTISTS_SORT));
+            assertEquals("ConductorSort",af.getTag().getFirst(FieldKey.CONDUCTOR_SORT));
+            assertEquals("SoloistSort",af.getTag().getFirst(FieldKey.SOLOIST_SORT));
+            assertEquals("OrchestraSort",af.getTag().getFirst(FieldKey.ORCHESTRA_SORT));
+            assertEquals("PerformerSort",af.getTag().getFirst(FieldKey.PERFORMER_SORT));
+            assertEquals("ArrangerSort",af.getTag().getFirst(FieldKey.ARRANGER_SORT));
+            assertEquals("Opus",af.getTag().getFirst(FieldKey.OPUS));
+            assertEquals("SingleDiscTrackNo",af.getTag().getFirst(FieldKey.SINGLE_DISC_TRACK_NO));
+            assertEquals("Period",af.getTag().getFirst(FieldKey.PERIOD));
+
 
             {
                 TagField tagField = af.getTag().getFirstField(FieldKey.CUSTOM1);
@@ -330,6 +351,17 @@ public class Issue298Test extends AbstractTestCase
             tag.setField(tag.createField(FieldKey.WORK_PARTOF_LEVEL5_TYPE,"Level5Type"));
             tag.setField(tag.createField(FieldKey.WORK_PARTOF_LEVEL6,"Level6"));
             tag.setField(tag.createField(FieldKey.WORK_PARTOF_LEVEL6_TYPE,"Level6Type"));
+            tag.setField(tag.createField(FieldKey.PART_NUMBER,"PartNumber"));
+            tag.setField(tag.createField(FieldKey.ARTISTS_SORT,"ArtistsSort"));
+            tag.setField(tag.createField(FieldKey.CONDUCTOR_SORT,"ConductorSort"));
+            tag.setField(tag.createField(FieldKey.SOLOIST_SORT,"SoloistSort"));
+            tag.setField(tag.createField(FieldKey.ORCHESTRA_SORT,"OrchestraSort"));
+            tag.setField(tag.createField(FieldKey.PERFORMER_SORT,"PerformerSort"));
+            tag.setField(tag.createField(FieldKey.ARRANGER_SORT,"ArrangerSort"));
+            tag.setField(tag.createField(FieldKey.OPUS,"Opus"));
+            tag.setField(tag.createField(FieldKey.SINGLE_DISC_TRACK_NO,"SingleDiscTrackNo"));
+            tag.setField(tag.createField(FieldKey.PERIOD,"Period"));
+
 
 
             af.commit();
@@ -395,6 +427,16 @@ public class Issue298Test extends AbstractTestCase
             assertEquals("Level5Type",af.getTag().getFirst(FieldKey.WORK_PARTOF_LEVEL5_TYPE));
             assertEquals("Level6Type",af.getTag().getFirst(FieldKey.WORK_PARTOF_LEVEL6_TYPE));
             assertEquals("Work",af.getTag().getFirst(FieldKey.WORK));
+            assertEquals("PartNumber",af.getTag().getFirst(FieldKey.PART_NUMBER));
+            assertEquals("ArtistsSort",af.getTag().getFirst(FieldKey.ARTISTS_SORT));
+            assertEquals("ConductorSort",af.getTag().getFirst(FieldKey.CONDUCTOR_SORT));
+            assertEquals("SoloistSort",af.getTag().getFirst(FieldKey.SOLOIST_SORT));
+            assertEquals("OrchestraSort",af.getTag().getFirst(FieldKey.ORCHESTRA_SORT));
+            assertEquals("PerformerSort",af.getTag().getFirst(FieldKey.PERFORMER_SORT));
+            assertEquals("ArrangerSort",af.getTag().getFirst(FieldKey.ARRANGER_SORT));
+            assertEquals("Opus",af.getTag().getFirst(FieldKey.OPUS));
+            assertEquals("SingleDiscTrackNo",af.getTag().getFirst(FieldKey.SINGLE_DISC_TRACK_NO));
+            assertEquals("Period",af.getTag().getFirst(FieldKey.PERIOD));
 
 
 
@@ -484,6 +526,17 @@ public class Issue298Test extends AbstractTestCase
             tag.setField(tag.createField(FieldKey.WORK_PARTOF_LEVEL5_TYPE,"Level5Type"));
             tag.setField(tag.createField(FieldKey.WORK_PARTOF_LEVEL6,"Level6"));
             tag.setField(tag.createField(FieldKey.WORK_PARTOF_LEVEL6_TYPE,"Level6Type"));
+            tag.setField(tag.createField(FieldKey.PART_NUMBER,"PartNumber"));
+            tag.setField(tag.createField(FieldKey.ARTISTS_SORT,"ArtistsSort"));
+            tag.setField(tag.createField(FieldKey.CONDUCTOR_SORT,"ConductorSort"));
+            tag.setField(tag.createField(FieldKey.SOLOIST_SORT,"SoloistSort"));
+            tag.setField(tag.createField(FieldKey.ORCHESTRA_SORT,"OrchestraSort"));
+            tag.setField(tag.createField(FieldKey.PERFORMER_SORT,"PerformerSort"));
+            tag.setField(tag.createField(FieldKey.ARRANGER_SORT,"ArrangerSort"));
+            tag.setField(tag.createField(FieldKey.OPUS,"Opus"));
+            tag.setField(tag.createField(FieldKey.SINGLE_DISC_TRACK_NO,"SingleDiscTrackNo"));
+            tag.setField(tag.createField(FieldKey.PERIOD,"Period"));
+
 
             af.commit();
             af = AudioFileIO.read(testFile);
@@ -548,6 +601,17 @@ public class Issue298Test extends AbstractTestCase
             assertEquals("Level5Type",af.getTag().getFirst(FieldKey.WORK_PARTOF_LEVEL5_TYPE));
             assertEquals("Level6Type",af.getTag().getFirst(FieldKey.WORK_PARTOF_LEVEL6_TYPE));
             assertEquals("Work",af.getTag().getFirst(FieldKey.WORK));
+            assertEquals("PartNumber",af.getTag().getFirst(FieldKey.PART_NUMBER));
+            assertEquals("ArtistsSort",af.getTag().getFirst(FieldKey.ARTISTS_SORT));
+            assertEquals("ConductorSort",af.getTag().getFirst(FieldKey.CONDUCTOR_SORT));
+            assertEquals("SoloistSort",af.getTag().getFirst(FieldKey.SOLOIST_SORT));
+            assertEquals("OrchestraSort",af.getTag().getFirst(FieldKey.ORCHESTRA_SORT));
+            assertEquals("PerformerSort",af.getTag().getFirst(FieldKey.PERFORMER_SORT));
+            assertEquals("ArrangerSort",af.getTag().getFirst(FieldKey.ARRANGER_SORT));
+            assertEquals("Opus",af.getTag().getFirst(FieldKey.OPUS));
+            assertEquals("SingleDiscTrackNo",af.getTag().getFirst(FieldKey.SINGLE_DISC_TRACK_NO));
+            assertEquals("Period",af.getTag().getFirst(FieldKey.PERIOD));
+
         }
         catch(Exception e)
         {
@@ -632,6 +696,17 @@ public class Issue298Test extends AbstractTestCase
             tag.setField(tag.createField(FieldKey.WORK_PARTOF_LEVEL5_TYPE,"Level5Type"));
             tag.setField(tag.createField(FieldKey.WORK_PARTOF_LEVEL6,"Level6"));
             tag.setField(tag.createField(FieldKey.WORK_PARTOF_LEVEL6_TYPE,"Level6Type"));
+            tag.setField(tag.createField(FieldKey.PART_NUMBER,"PartNumber"));
+            tag.setField(tag.createField(FieldKey.ARTISTS_SORT,"ArtistsSort"));
+            tag.setField(tag.createField(FieldKey.CONDUCTOR_SORT,"ConductorSort"));
+            tag.setField(tag.createField(FieldKey.SOLOIST_SORT,"SoloistSort"));
+            tag.setField(tag.createField(FieldKey.ORCHESTRA_SORT,"OrchestraSort"));
+            tag.setField(tag.createField(FieldKey.PERFORMER_SORT,"PerformerSort"));
+            tag.setField(tag.createField(FieldKey.ARRANGER_SORT,"ArrangerSort"));
+            tag.setField(tag.createField(FieldKey.OPUS,"Opus"));
+            tag.setField(tag.createField(FieldKey.SINGLE_DISC_TRACK_NO,"SingleDiscTrackNo"));
+            tag.setField(tag.createField(FieldKey.PERIOD,"Period"));
+
 
             af.commit();
             af = AudioFileIO.read(testFile);
@@ -696,6 +771,17 @@ public class Issue298Test extends AbstractTestCase
             assertEquals("Level5Type",af.getTag().getFirst(FieldKey.WORK_PARTOF_LEVEL5_TYPE));
             assertEquals("Level6Type",af.getTag().getFirst(FieldKey.WORK_PARTOF_LEVEL6_TYPE));
             assertEquals("Work",af.getTag().getFirst(FieldKey.WORK));
+            assertEquals("PartNumber",af.getTag().getFirst(FieldKey.PART_NUMBER));
+            assertEquals("ArtistsSort",af.getTag().getFirst(FieldKey.ARTISTS_SORT));
+            assertEquals("ConductorSort",af.getTag().getFirst(FieldKey.CONDUCTOR_SORT));
+            assertEquals("SoloistSort",af.getTag().getFirst(FieldKey.SOLOIST_SORT));
+            assertEquals("OrchestraSort",af.getTag().getFirst(FieldKey.ORCHESTRA_SORT));
+            assertEquals("PerformerSort",af.getTag().getFirst(FieldKey.PERFORMER_SORT));
+            assertEquals("ArrangerSort",af.getTag().getFirst(FieldKey.ARRANGER_SORT));
+            assertEquals("Opus",af.getTag().getFirst(FieldKey.OPUS));
+            assertEquals("SingleDiscTrackNo",af.getTag().getFirst(FieldKey.SINGLE_DISC_TRACK_NO));
+            assertEquals("Period",af.getTag().getFirst(FieldKey.PERIOD));
+
         }
         catch(Exception e)
         {
@@ -780,6 +866,17 @@ public class Issue298Test extends AbstractTestCase
             tag.setField(tag.createField(FieldKey.WORK_PARTOF_LEVEL5_TYPE,"Level5Type"));
             tag.setField(tag.createField(FieldKey.WORK_PARTOF_LEVEL6,"Level6"));
             tag.setField(tag.createField(FieldKey.WORK_PARTOF_LEVEL6_TYPE,"Level6Type"));
+            tag.setField(tag.createField(FieldKey.PART_NUMBER,"PartNumber"));
+            tag.setField(tag.createField(FieldKey.ARTISTS_SORT,"ArtistsSort"));
+            tag.setField(tag.createField(FieldKey.CONDUCTOR_SORT,"ConductorSort"));
+            tag.setField(tag.createField(FieldKey.SOLOIST_SORT,"SoloistSort"));
+            tag.setField(tag.createField(FieldKey.ORCHESTRA_SORT,"OrchestraSort"));
+            tag.setField(tag.createField(FieldKey.PERFORMER_SORT,"PerformerSort"));
+            tag.setField(tag.createField(FieldKey.ARRANGER_SORT,"ArrangerSort"));
+            tag.setField(tag.createField(FieldKey.OPUS,"Opus"));
+            tag.setField(tag.createField(FieldKey.SINGLE_DISC_TRACK_NO,"SingleDiscTrackNo"));
+            tag.setField(tag.createField(FieldKey.PERIOD,"Period"));
+
 
 
 
@@ -874,6 +971,17 @@ public class Issue298Test extends AbstractTestCase
             assertEquals("Level5Type",af.getTag().getFirst(FieldKey.WORK_PARTOF_LEVEL5_TYPE));
             assertEquals("Level6Type",af.getTag().getFirst(FieldKey.WORK_PARTOF_LEVEL6_TYPE));
             assertEquals("Work",af.getTag().getFirst(FieldKey.WORK));
+            assertEquals("PartNumber",af.getTag().getFirst(FieldKey.PART_NUMBER));
+            assertEquals("ArtistsSort",af.getTag().getFirst(FieldKey.ARTISTS_SORT));
+            assertEquals("ConductorSort",af.getTag().getFirst(FieldKey.CONDUCTOR_SORT));
+            assertEquals("SoloistSort",af.getTag().getFirst(FieldKey.SOLOIST_SORT));
+            assertEquals("OrchestraSort",af.getTag().getFirst(FieldKey.ORCHESTRA_SORT));
+            assertEquals("PerformerSort",af.getTag().getFirst(FieldKey.PERFORMER_SORT));
+            assertEquals("ArrangerSort",af.getTag().getFirst(FieldKey.ARRANGER_SORT));
+            assertEquals("Opus",af.getTag().getFirst(FieldKey.OPUS));
+            assertEquals("SingleDiscTrackNo",af.getTag().getFirst(FieldKey.SINGLE_DISC_TRACK_NO));
+            assertEquals("Period",af.getTag().getFirst(FieldKey.PERIOD));
+
         }
         catch(Exception e)
         {
@@ -960,6 +1068,17 @@ public class Issue298Test extends AbstractTestCase
             tag.setField(tag.createField(FieldKey.WORK_PARTOF_LEVEL5_TYPE,"Level5Type"));
             tag.setField(tag.createField(FieldKey.WORK_PARTOF_LEVEL6,"Level6"));
             tag.setField(tag.createField(FieldKey.WORK_PARTOF_LEVEL6_TYPE,"Level6Type"));
+            tag.setField(tag.createField(FieldKey.PART_NUMBER,"PartNumber"));
+            tag.setField(tag.createField(FieldKey.ARTISTS_SORT,"ArtistsSort"));
+            tag.setField(tag.createField(FieldKey.CONDUCTOR_SORT,"ConductorSort"));
+            tag.setField(tag.createField(FieldKey.SOLOIST_SORT,"SoloistSort"));
+            tag.setField(tag.createField(FieldKey.ORCHESTRA_SORT,"OrchestraSort"));
+            tag.setField(tag.createField(FieldKey.PERFORMER_SORT,"PerformerSort"));
+            tag.setField(tag.createField(FieldKey.ARRANGER_SORT,"ArrangerSort"));
+            tag.setField(tag.createField(FieldKey.OPUS,"Opus"));
+            tag.setField(tag.createField(FieldKey.SINGLE_DISC_TRACK_NO,"SingleDiscTrackNo"));
+            tag.setField(tag.createField(FieldKey.PERIOD,"Period"));
+
 
             af.commit();
             af = AudioFileIO.read(testFile);
@@ -1024,6 +1143,17 @@ public class Issue298Test extends AbstractTestCase
             assertEquals("Level5Type",af.getTag().getFirst(FieldKey.WORK_PARTOF_LEVEL5_TYPE));
             assertEquals("Level6Type",af.getTag().getFirst(FieldKey.WORK_PARTOF_LEVEL6_TYPE));
             assertEquals("Work",af.getTag().getFirst(FieldKey.WORK));
+            assertEquals("PartNumber",af.getTag().getFirst(FieldKey.PART_NUMBER));
+            assertEquals("ArtistsSort",af.getTag().getFirst(FieldKey.ARTISTS_SORT));
+            assertEquals("ConductorSort",af.getTag().getFirst(FieldKey.CONDUCTOR_SORT));
+            assertEquals("SoloistSort",af.getTag().getFirst(FieldKey.SOLOIST_SORT));
+            assertEquals("OrchestraSort",af.getTag().getFirst(FieldKey.ORCHESTRA_SORT));
+            assertEquals("PerformerSort",af.getTag().getFirst(FieldKey.PERFORMER_SORT));
+            assertEquals("ArrangerSort",af.getTag().getFirst(FieldKey.ARRANGER_SORT));
+            assertEquals("Opus",af.getTag().getFirst(FieldKey.OPUS));
+            assertEquals("SingleDiscTrackNo",af.getTag().getFirst(FieldKey.SINGLE_DISC_TRACK_NO));
+            assertEquals("Period",af.getTag().getFirst(FieldKey.PERIOD));
+
         }
         catch(Exception e)
         {
@@ -1109,6 +1239,17 @@ public class Issue298Test extends AbstractTestCase
             tag.setField(tag.createField(FieldKey.WORK_PARTOF_LEVEL5_TYPE,"Level5Type"));
             tag.setField(tag.createField(FieldKey.WORK_PARTOF_LEVEL6,"Level6"));
             tag.setField(tag.createField(FieldKey.WORK_PARTOF_LEVEL6_TYPE,"Level6Type"));
+            tag.setField(tag.createField(FieldKey.PART_NUMBER,"PartNumber"));
+            tag.setField(tag.createField(FieldKey.ARTISTS_SORT,"ArtistsSort"));
+            tag.setField(tag.createField(FieldKey.CONDUCTOR_SORT,"ConductorSort"));
+            tag.setField(tag.createField(FieldKey.SOLOIST_SORT,"SoloistSort"));
+            tag.setField(tag.createField(FieldKey.ORCHESTRA_SORT,"OrchestraSort"));
+            tag.setField(tag.createField(FieldKey.PERFORMER_SORT,"PerformerSort"));
+            tag.setField(tag.createField(FieldKey.ARRANGER_SORT,"ArrangerSort"));
+            tag.setField(tag.createField(FieldKey.OPUS,"Opus"));
+            tag.setField(tag.createField(FieldKey.SINGLE_DISC_TRACK_NO,"SingleDiscTrackNo"));
+            tag.setField(tag.createField(FieldKey.PERIOD,"Period"));
+
             af.commit();
             af = AudioFileIO.read(testFile);
             assertEquals("custom1",af.getTag().getFirst(FieldKey.CUSTOM1));
@@ -1172,6 +1313,17 @@ public class Issue298Test extends AbstractTestCase
             assertEquals("Level5Type",af.getTag().getFirst(FieldKey.WORK_PARTOF_LEVEL5_TYPE));
             assertEquals("Level6Type",af.getTag().getFirst(FieldKey.WORK_PARTOF_LEVEL6_TYPE));
             assertEquals("Work",af.getTag().getFirst(FieldKey.WORK));
+            assertEquals("PartNumber",af.getTag().getFirst(FieldKey.PART_NUMBER));
+            assertEquals("ArtistsSort",af.getTag().getFirst(FieldKey.ARTISTS_SORT));
+            assertEquals("ConductorSort",af.getTag().getFirst(FieldKey.CONDUCTOR_SORT));
+            assertEquals("SoloistSort",af.getTag().getFirst(FieldKey.SOLOIST_SORT));
+            assertEquals("OrchestraSort",af.getTag().getFirst(FieldKey.ORCHESTRA_SORT));
+            assertEquals("PerformerSort",af.getTag().getFirst(FieldKey.PERFORMER_SORT));
+            assertEquals("ArrangerSort",af.getTag().getFirst(FieldKey.ARRANGER_SORT));
+            assertEquals("Opus",af.getTag().getFirst(FieldKey.OPUS));
+            assertEquals("SingleDiscTrackNo",af.getTag().getFirst(FieldKey.SINGLE_DISC_TRACK_NO));
+            assertEquals("Period",af.getTag().getFirst(FieldKey.PERIOD));
+
         }
         catch(Exception e)
         {

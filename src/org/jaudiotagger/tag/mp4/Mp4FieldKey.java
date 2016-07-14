@@ -201,7 +201,16 @@ public enum Mp4FieldKey
     MUSICBRAINZ_WORK_PARTOF_LEVEL6_ID("com.apple.iTunes","MusicBrainz Work PartofLevel6 Id",  TEXT, Tagger.JAIKOZ),
     WORK_PARTOF_LEVEL6("com.apple.iTunes","Work PartofLevel6",  TEXT, Tagger.JAIKOZ),
     WORK_PARTOF_LEVEL6_TYPE("com.apple.iTunes","Work PartofLevel6 Type",  TEXT, Tagger.JAIKOZ),
-
+    PART_NUMBER("com.apple.iTunes","Part Number",  TEXT, Tagger.JAIKOZ),
+    ARTISTS_SORT("com.apple.iTunes","Artists Sort",  TEXT, Tagger.JAIKOZ),
+    CONDUCTOR_SORT("com.apple.iTunes","Conductor Sort",  TEXT, Tagger.JAIKOZ),
+    SOLOIST_SORT("com.apple.iTunes","Soloist Sort",  TEXT, Tagger.JAIKOZ),
+    ORCHESTRA_SORT("com.apple.iTunes","Orchestra Sort",  TEXT, Tagger.JAIKOZ),
+    PERFORMER_SORT("com.apple.iTunes","Performer Sort",  TEXT, Tagger.JAIKOZ),
+    ARRANGER_SORT("com.apple.iTunes","Arranger Sort",  TEXT, Tagger.JAIKOZ),
+    OPUS("com.apple.iTunes","Opus",  TEXT, Tagger.JAIKOZ),
+    SINGLE_DISC_TRACK_NO("com.apple.iTunes","Single Disc Track No",  TEXT, Tagger.JAIKOZ),
+    PERIOD("com.apple.iTunes","Period",  TEXT, Tagger.JAIKOZ),
     ;
     private Tagger tagger;
     private String fieldName;

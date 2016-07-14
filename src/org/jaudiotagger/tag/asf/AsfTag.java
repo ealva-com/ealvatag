@@ -209,6 +209,17 @@ public final class AsfTag extends AbstractTag
         tagFieldToAsfField.put(FieldKey.WORK_PARTOF_LEVEL6, AsfFieldKey.WORK_PARTOF_LEVEL6);
         tagFieldToAsfField.put(FieldKey.WORK_PARTOF_LEVEL6_TYPE, AsfFieldKey.WORK_PARTOF_LEVEL6_TYPE);
 
+        tagFieldToAsfField.put(FieldKey.PART_NUMBER, AsfFieldKey.PART_NUMBER);
+        tagFieldToAsfField.put(FieldKey.ARTISTS_SORT, AsfFieldKey.ARTISTS_SORT);
+        tagFieldToAsfField.put(FieldKey.CONDUCTOR_SORT, AsfFieldKey.CONDUCTOR_SORT);
+        tagFieldToAsfField.put(FieldKey.SOLOIST_SORT, AsfFieldKey.SOLOIST_SORT);
+        tagFieldToAsfField.put(FieldKey.ORCHESTRA_SORT, AsfFieldKey.ORCHESTRA_SORT);
+        tagFieldToAsfField.put(FieldKey.PERFORMER_SORT, AsfFieldKey.PERFORMER_SORT);
+        tagFieldToAsfField.put(FieldKey.ARRANGER_SORT, AsfFieldKey.ARRANGER_SORT);
+        tagFieldToAsfField.put(FieldKey.OPUS, AsfFieldKey.OPUS);
+        tagFieldToAsfField.put(FieldKey.SINGLE_DISC_TRACK_NO, AsfFieldKey.SINGLE_DISC_TRACK_NO);
+        tagFieldToAsfField.put(FieldKey.PERIOD, AsfFieldKey.PERIOD);
+
     }
 
     static

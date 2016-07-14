@@ -487,6 +487,16 @@ public class ID3v23Frames extends ID3Frames
         tagFieldToId3.put(FieldKey.MUSICBRAINZ_WORK_PARTOF_LEVEL6_ID, ID3v23FieldKey.MUSICBRAINZ_WORK_PARTOF_LEVEL6_ID);
         tagFieldToId3.put(FieldKey.WORK_PARTOF_LEVEL6, ID3v23FieldKey.WORK_PARTOF_LEVEL6);
         tagFieldToId3.put(FieldKey.WORK_PARTOF_LEVEL6_TYPE, ID3v23FieldKey.WORK_PARTOF_LEVEL6_TYPE);
+        tagFieldToId3.put(FieldKey.PART_NUMBER, ID3v23FieldKey.PART_NUMBER);
+        tagFieldToId3.put(FieldKey.ARTISTS_SORT, ID3v23FieldKey.ARTISTS_SORT);
+        tagFieldToId3.put(FieldKey.CONDUCTOR_SORT, ID3v23FieldKey.CONDUCTOR_SORT);
+        tagFieldToId3.put(FieldKey.SOLOIST_SORT, ID3v23FieldKey.SOLOIST_SORT);
+        tagFieldToId3.put(FieldKey.ORCHESTRA_SORT, ID3v23FieldKey.ORCHESTRA_SORT);
+        tagFieldToId3.put(FieldKey.PERFORMER_SORT, ID3v23FieldKey.PERFORMER_SORT);
+        tagFieldToId3.put(FieldKey.ARRANGER_SORT, ID3v23FieldKey.ARRANGER_SORT);
+        tagFieldToId3.put(FieldKey.OPUS, ID3v23FieldKey.OPUS);
+        tagFieldToId3.put(FieldKey.SINGLE_DISC_TRACK_NO, ID3v23FieldKey.SINGLE_DISC_TRACK_NO);
+        tagFieldToId3.put(FieldKey.PERIOD, ID3v23FieldKey.PERIOD);
 
         for(Map.Entry<FieldKey,ID3v23FieldKey> next:tagFieldToId3.entrySet())
         {

@@ -21,6 +21,7 @@ package org.jaudiotagger.tag.mp4;
 import org.jaudiotagger.audio.generic.AbstractTag;
 import org.jaudiotagger.logging.ErrorMessage;
 import org.jaudiotagger.tag.*;
+import org.jaudiotagger.tag.asf.AsfFieldKey;
 import org.jaudiotagger.tag.images.Artwork;
 import org.jaudiotagger.tag.images.ArtworkFactory;
 import org.jaudiotagger.tag.mp4.field.*;
@@ -167,6 +168,19 @@ public class Mp4Tag extends AbstractTag
         tagFieldToMp4Field.put(FieldKey.MUSICBRAINZ_WORK_PARTOF_LEVEL6_ID, Mp4FieldKey.MUSICBRAINZ_WORK_PARTOF_LEVEL6_ID);
         tagFieldToMp4Field.put(FieldKey.WORK_PARTOF_LEVEL6, Mp4FieldKey.WORK_PARTOF_LEVEL6);
         tagFieldToMp4Field.put(FieldKey.WORK_PARTOF_LEVEL6_TYPE, Mp4FieldKey.WORK_PARTOF_LEVEL6_TYPE);
+        tagFieldToMp4Field.put(FieldKey.PART_NUMBER, Mp4FieldKey.PART_NUMBER);
+        tagFieldToMp4Field.put(FieldKey.ARTISTS_SORT, Mp4FieldKey.ARTISTS_SORT);
+        tagFieldToMp4Field.put(FieldKey.CONDUCTOR_SORT, Mp4FieldKey.CONDUCTOR_SORT);
+        tagFieldToMp4Field.put(FieldKey.SOLOIST_SORT, Mp4FieldKey.SOLOIST_SORT);
+        tagFieldToMp4Field.put(FieldKey.ORCHESTRA_SORT, Mp4FieldKey.ORCHESTRA_SORT);
+        tagFieldToMp4Field.put(FieldKey.PERFORMER_SORT, Mp4FieldKey.PERFORMER_SORT);
+        tagFieldToMp4Field.put(FieldKey.ARRANGER_SORT, Mp4FieldKey.ARRANGER_SORT);
+        tagFieldToMp4Field.put(FieldKey.OPUS, Mp4FieldKey.OPUS);
+        tagFieldToMp4Field.put(FieldKey.SINGLE_DISC_TRACK_NO, Mp4FieldKey.SINGLE_DISC_TRACK_NO);
+        tagFieldToMp4Field.put(FieldKey.PERIOD, Mp4FieldKey.PERIOD);
+
+
+
     }
 
     /**
