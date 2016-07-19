@@ -45,6 +45,7 @@ Summarise Changes
 #157: Support for contiguous trackno
 #158: Support for Opus field
 #159: Support for Musichi classical fields
+#160: FlacAudioHeader.getMd5() does not process character "0" correctly
 
 2.2.5
 #033:Added getAudioStartPos() and getAudioEndPos() methods to AudioHeader interface and implemented for most formats
