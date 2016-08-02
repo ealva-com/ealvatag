@@ -90,18 +90,23 @@ public class MetadataBlockDataStreamInfo  implements MetadataBlockData
         rawdata.rewind();
     }
 
+    private final static char[] hexArray = "0123456789abcdef".toCharArray();
+
     private String readMd5()
     {
-        StringBuilder sb = new StringBuilder();
+        char[] hexChars = new char[32]; // MD5 is always 32 characters
+
         if(rawdata.limit()>=34)
         {
-            for (int i = 18; i < 34; i++)
+            for (int i = 0; i < 16; i++)
             {
-                byte dataByte = rawdata.get(i);
-                sb.append(String.format("%x", dataByte));
+                int v = rawdata.get(i + 18) & 0xFF; // Offset 18
+                hexChars[i * 2] = hexArray[v >>> 4];
+                hexChars[i * 2 + 1] = hexArray[v & 0x0F];
             }
         }
-        return sb.toString();
+
+        return new String(hexChars);
     }
 
     /**

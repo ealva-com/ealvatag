@@ -7,7 +7,6 @@ import org.jaudiotagger.tag.*;
 import org.jaudiotagger.tag.images.Artwork;
 import org.jaudiotagger.tag.images.ArtworkFactory;
 import org.jaudiotagger.tag.reference.PictureTypes;
-import org.jaudiotagger.tag.vorbiscomment.VorbisCommentFieldKey;
 
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
@@ -186,6 +185,40 @@ public final class AsfTag extends AbstractTag
         tagFieldToAsfField.put(FieldKey.URL_WIKIPEDIA_RELEASE_SITE, AsfFieldKey.URL_WIKIPEDIA_RELEASE_SITE);
         tagFieldToAsfField.put(FieldKey.WORK, AsfFieldKey.WORK);
         tagFieldToAsfField.put(FieldKey.YEAR, AsfFieldKey.YEAR);
+        tagFieldToAsfField.put(FieldKey.SOLOIST, AsfFieldKey.SOLOIST);
+        tagFieldToAsfField.put(FieldKey.WORK_TYPE, AsfFieldKey.WORK_TYPE);
+        tagFieldToAsfField.put(FieldKey.MUSICBRAINZ_WORK_COMPOSITION_ID, AsfFieldKey.MUSICBRAINZ_WORK_COMPOSITION_ID);
+        tagFieldToAsfField.put(FieldKey.WORK_COMPOSITION, AsfFieldKey.WORK_COMPOSITION);
+        tagFieldToAsfField.put(FieldKey.WORK_COMPOSITION_TYPE, AsfFieldKey.WORK_COMPOSITION_TYPE);
+        tagFieldToAsfField.put(FieldKey.MUSICBRAINZ_WORK_PARTOF_LEVEL1_ID, AsfFieldKey.MUSICBRAINZ_WORK_PARTOF_LEVEL1_ID);
+        tagFieldToAsfField.put(FieldKey.WORK_PARTOF_LEVEL1, AsfFieldKey.WORK_PARTOF_LEVEL1);
+        tagFieldToAsfField.put(FieldKey.WORK_PARTOF_LEVEL1_TYPE, AsfFieldKey.WORK_PARTOF_LEVEL1_TYPE);
+        tagFieldToAsfField.put(FieldKey.MUSICBRAINZ_WORK_PARTOF_LEVEL2_ID, AsfFieldKey.MUSICBRAINZ_WORK_PARTOF_LEVEL2_ID);
+        tagFieldToAsfField.put(FieldKey.WORK_PARTOF_LEVEL2, AsfFieldKey.WORK_PARTOF_LEVEL2);
+        tagFieldToAsfField.put(FieldKey.WORK_PARTOF_LEVEL2_TYPE, AsfFieldKey.WORK_PARTOF_LEVEL2_TYPE);
+        tagFieldToAsfField.put(FieldKey.MUSICBRAINZ_WORK_PARTOF_LEVEL3_ID, AsfFieldKey.MUSICBRAINZ_WORK_PARTOF_LEVEL3_ID);
+        tagFieldToAsfField.put(FieldKey.WORK_PARTOF_LEVEL3, AsfFieldKey.WORK_PARTOF_LEVEL3);
+        tagFieldToAsfField.put(FieldKey.WORK_PARTOF_LEVEL3_TYPE, AsfFieldKey.WORK_PARTOF_LEVEL3_TYPE);
+        tagFieldToAsfField.put(FieldKey.MUSICBRAINZ_WORK_PARTOF_LEVEL4_ID, AsfFieldKey.MUSICBRAINZ_WORK_PARTOF_LEVEL4_ID);
+        tagFieldToAsfField.put(FieldKey.WORK_PARTOF_LEVEL4, AsfFieldKey.WORK_PARTOF_LEVEL4);
+        tagFieldToAsfField.put(FieldKey.WORK_PARTOF_LEVEL4_TYPE, AsfFieldKey.WORK_PARTOF_LEVEL4_TYPE);
+        tagFieldToAsfField.put(FieldKey.MUSICBRAINZ_WORK_PARTOF_LEVEL5_ID, AsfFieldKey.MUSICBRAINZ_WORK_PARTOF_LEVEL5_ID);
+        tagFieldToAsfField.put(FieldKey.WORK_PARTOF_LEVEL5, AsfFieldKey.WORK_PARTOF_LEVEL5);
+        tagFieldToAsfField.put(FieldKey.WORK_PARTOF_LEVEL5_TYPE, AsfFieldKey.WORK_PARTOF_LEVEL5_TYPE);
+        tagFieldToAsfField.put(FieldKey.MUSICBRAINZ_WORK_PARTOF_LEVEL6_ID, AsfFieldKey.MUSICBRAINZ_WORK_PARTOF_LEVEL6_ID);
+        tagFieldToAsfField.put(FieldKey.WORK_PARTOF_LEVEL6, AsfFieldKey.WORK_PARTOF_LEVEL6);
+        tagFieldToAsfField.put(FieldKey.WORK_PARTOF_LEVEL6_TYPE, AsfFieldKey.WORK_PARTOF_LEVEL6_TYPE);
+
+        tagFieldToAsfField.put(FieldKey.PART_NUMBER, AsfFieldKey.PART_NUMBER);
+        tagFieldToAsfField.put(FieldKey.ARTISTS_SORT, AsfFieldKey.ARTISTS_SORT);
+        tagFieldToAsfField.put(FieldKey.CONDUCTOR_SORT, AsfFieldKey.CONDUCTOR_SORT);
+        tagFieldToAsfField.put(FieldKey.SOLOIST_SORT, AsfFieldKey.SOLOIST_SORT);
+        tagFieldToAsfField.put(FieldKey.ORCHESTRA_SORT, AsfFieldKey.ORCHESTRA_SORT);
+        tagFieldToAsfField.put(FieldKey.PERFORMER_SORT, AsfFieldKey.PERFORMER_SORT);
+        tagFieldToAsfField.put(FieldKey.ARRANGER_SORT, AsfFieldKey.ARRANGER_SORT);
+        tagFieldToAsfField.put(FieldKey.OPUS, AsfFieldKey.OPUS);
+        tagFieldToAsfField.put(FieldKey.SINGLE_DISC_TRACK_NO, AsfFieldKey.SINGLE_DISC_TRACK_NO);
+        tagFieldToAsfField.put(FieldKey.PERIOD, AsfFieldKey.PERIOD);
 
     }
 

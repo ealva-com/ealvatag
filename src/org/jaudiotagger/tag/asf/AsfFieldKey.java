@@ -3,7 +3,9 @@ package org.jaudiotagger.tag.asf;
 import org.jaudiotagger.audio.asf.data.ContainerType;
 import org.jaudiotagger.audio.asf.data.ContentBranding;
 import org.jaudiotagger.audio.asf.data.ContentDescription;
+import org.jaudiotagger.tag.reference.Tagger;
 
+import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -163,6 +165,39 @@ public enum AsfFieldKey
     USER_RATING("WM/SharedUserRating", true),
     WORK("WM/Work", true),
     YEAR("WM/Year", false),
+    SOLOIST("WM/Soloist", true),
+    WORK_TYPE("WM/Work Type",true),
+    MUSICBRAINZ_WORK_COMPOSITION_ID("MusicBrainz/Work Composition Id",true),
+    WORK_COMPOSITION("WM/Work Composition",true),
+    WORK_COMPOSITION_TYPE("WM/Work Composition Type",true),
+    MUSICBRAINZ_WORK_PARTOF_LEVEL1_ID("MusicBrainz/Work PartofLevel1Id",true),
+    WORK_PARTOF_LEVEL1("WM/Work PartofLevel1",true),
+    WORK_PARTOF_LEVEL1_TYPE("WM/Work PartofLevel1Type",true),
+    MUSICBRAINZ_WORK_PARTOF_LEVEL2_ID("MusicBrainz/Work PartofLevel2Id",true),
+    WORK_PARTOF_LEVEL2("WM/Work PartofLevel2",true),
+    WORK_PARTOF_LEVEL2_TYPE("WM/Work PartofLevel2Type",true),
+    MUSICBRAINZ_WORK_PARTOF_LEVEL3_ID("MusicBrainz/Work PartofLevel3Id",true),
+    WORK_PARTOF_LEVEL3("WM/Work PartofLevel3",true),
+    WORK_PARTOF_LEVEL3_TYPE("WM/Work PartofLevel3Type",true),
+    MUSICBRAINZ_WORK_PARTOF_LEVEL4_ID("MusicBrainz/Work PartofLevel4Id",true),
+    WORK_PARTOF_LEVEL4("WM/Work PartofLevel4",true),
+    WORK_PARTOF_LEVEL4_TYPE("WM/Work PartofLevel4Type",true),
+    MUSICBRAINZ_WORK_PARTOF_LEVEL5_ID("MusicBrainz/Work PartofLevel5Id",true),
+    WORK_PARTOF_LEVEL5("WM/Work PartofLevel5",true),
+    WORK_PARTOF_LEVEL5_TYPE("WM/Work PartofLevel5Type",true),
+    MUSICBRAINZ_WORK_PARTOF_LEVEL6_ID("MusicBrainz/Work PartofLevel6Id",true),
+    WORK_PARTOF_LEVEL6("WM/Work PartofLevel6",true),
+    WORK_PARTOF_LEVEL6_TYPE("WM/Work PartofLevel6Type",true),
+    PART_NUMBER("WM/PartNumber",true),
+    ARTISTS_SORT("WM/ArtistsSort",true),
+    CONDUCTOR_SORT("WM/ConductorSort",true),
+    SOLOIST_SORT("WM/SoloistSort",true),
+    ORCHESTRA_SORT("WM/OrchestraSort",true),
+    PERFORMER_SORT("WM/PerformerSort",true),
+    ARRANGER_SORT("WM/ArrangerSort",true),
+    OPUS("WM/Opus",true),
+    SINGLE_DISC_TRACK_NO("WM/SingleDiscTrackNo",true),
+    PERIOD("WM/Period",true),
 
 
     // Special field for all unknown field names, which will getFields maximum support
