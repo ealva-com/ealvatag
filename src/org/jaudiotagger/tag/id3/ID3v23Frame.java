@@ -462,7 +462,9 @@ public class ID3v23Frame extends AbstractID3v2Frame
             }
             else if (((EncodingFlags) encodingFlags).isEncryption())
             {
-                frameBody = readEncryptedBody(identifier, byteBuffer, frameSize);
+                frameBodyBuffer = byteBuffer.slice();
+                frameBodyBuffer.limit(frameSize);
+                frameBody = readEncryptedBody(identifier, frameBodyBuffer, frameSize);
             }
             else
             {
