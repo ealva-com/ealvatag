@@ -51,6 +51,8 @@ public enum FieldKey
     GROUPING,
     INSTRUMENTAL,
     ISRC,
+    IS_CLASSICAL,
+    IS_SOUNDTRACK,
     IS_COMPILATION,
     KEY,
     LANGUAGE,

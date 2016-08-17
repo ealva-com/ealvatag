@@ -66,6 +66,8 @@ public enum VorbisCommentFieldKey
     GROUPING("GROUPING",EnumSet.of(Tagger.PICARD,Tagger.JAIKOZ)),
     INSTRUMENTAL("INSTRUMENTAL", EnumSet.of(Tagger.JAIKOZ)),
     ISRC("ISRC",EnumSet.of(Tagger.XIPH,Tagger.PICARD,Tagger.JAIKOZ)),
+    IS_CLASSICAL("IS_CLASSICAL",EnumSet.of(Tagger.PICARD,Tagger.JAIKOZ)),
+    IS_SOUNDTRACK("IS_SOUNDTRACK",EnumSet.of(Tagger.PICARD,Tagger.JAIKOZ)),
     KEY("KEY"),
     LABEL("LABEL",EnumSet.of(Tagger.PICARD,Tagger.JAIKOZ)),
     LANGUAGE("LANGUAGE"),

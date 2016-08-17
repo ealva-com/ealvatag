@@ -103,7 +103,8 @@ public class Issue298Test extends AbstractTestCase
             tag.setField(tag.createField(FieldKey.OPUS,"Opus"));
             tag.setField(tag.createField(FieldKey.SINGLE_DISC_TRACK_NO,"SingleDiscTrackNo"));
             tag.setField(tag.createField(FieldKey.PERIOD,"Period"));
-
+            tag.setField(tag.createField(FieldKey.IS_CLASSICAL,"true"));
+            tag.setField(tag.createField(FieldKey.IS_SOUNDTRACK,"true"));
 
             assertEquals("custom1",af.getTag().getFirst(FieldKey.CUSTOM1));
             assertEquals("custom2",af.getTag().getFirst(FieldKey.CUSTOM2));
@@ -174,6 +175,8 @@ public class Issue298Test extends AbstractTestCase
             assertEquals("Opus",af.getTag().getFirst(FieldKey.OPUS));
             assertEquals("SingleDiscTrackNo",af.getTag().getFirst(FieldKey.SINGLE_DISC_TRACK_NO));
             assertEquals("Period",af.getTag().getFirst(FieldKey.PERIOD));
+            assertEquals("true",af.getTag().getFirst(FieldKey.IS_CLASSICAL));
+            assertEquals("true",af.getTag().getFirst(FieldKey.IS_SOUNDTRACK));
 
 
             {
@@ -358,6 +361,8 @@ public class Issue298Test extends AbstractTestCase
             tag.setField(tag.createField(FieldKey.SINGLE_DISC_TRACK_NO,"SingleDiscTrackNo"));
             tag.setField(tag.createField(FieldKey.PERIOD,"Period"));
             tag.setField(tag.createField(FieldKey.PART_TYPE,"Composition Type"));
+            tag.setField(tag.createField(FieldKey.IS_CLASSICAL,"true"));
+            tag.setField(tag.createField(FieldKey.IS_SOUNDTRACK,"true"));
 
 
 
@@ -433,6 +438,8 @@ public class Issue298Test extends AbstractTestCase
             assertEquals("Opus",af.getTag().getFirst(FieldKey.OPUS));
             assertEquals("SingleDiscTrackNo",af.getTag().getFirst(FieldKey.SINGLE_DISC_TRACK_NO));
             assertEquals("Period",af.getTag().getFirst(FieldKey.PERIOD));
+            assertEquals("true",af.getTag().getFirst(FieldKey.IS_CLASSICAL));
+            assertEquals("true",af.getTag().getFirst(FieldKey.IS_SOUNDTRACK));
 
 
 
@@ -531,6 +538,8 @@ public class Issue298Test extends AbstractTestCase
             tag.setField(tag.createField(FieldKey.SINGLE_DISC_TRACK_NO,"SingleDiscTrackNo"));
             tag.setField(tag.createField(FieldKey.PERIOD,"Period"));
             tag.setField(tag.createField(FieldKey.PART_TYPE,"Composition Type"));
+            tag.setField(tag.createField(FieldKey.IS_CLASSICAL,"true"));
+            tag.setField(tag.createField(FieldKey.IS_SOUNDTRACK,"true"));
 
 
             af.commit();
@@ -604,6 +613,8 @@ public class Issue298Test extends AbstractTestCase
             assertEquals("Opus",af.getTag().getFirst(FieldKey.OPUS));
             assertEquals("SingleDiscTrackNo",af.getTag().getFirst(FieldKey.SINGLE_DISC_TRACK_NO));
             assertEquals("Period",af.getTag().getFirst(FieldKey.PERIOD));
+            assertEquals("true",af.getTag().getFirst(FieldKey.IS_CLASSICAL));
+            assertEquals("true",af.getTag().getFirst(FieldKey.IS_SOUNDTRACK));
 
         }
         catch(Exception e)
@@ -698,6 +709,8 @@ public class Issue298Test extends AbstractTestCase
             tag.setField(tag.createField(FieldKey.OPUS,"Opus"));
             tag.setField(tag.createField(FieldKey.SINGLE_DISC_TRACK_NO,"SingleDiscTrackNo"));
             tag.setField(tag.createField(FieldKey.PERIOD,"Period"));
+            tag.setField(tag.createField(FieldKey.IS_CLASSICAL,"true"));
+            tag.setField(tag.createField(FieldKey.IS_SOUNDTRACK,"true"));
 
 
             af.commit();
@@ -771,6 +784,8 @@ public class Issue298Test extends AbstractTestCase
             assertEquals("Opus",af.getTag().getFirst(FieldKey.OPUS));
             assertEquals("SingleDiscTrackNo",af.getTag().getFirst(FieldKey.SINGLE_DISC_TRACK_NO));
             assertEquals("Period",af.getTag().getFirst(FieldKey.PERIOD));
+            assertEquals("true",af.getTag().getFirst(FieldKey.IS_CLASSICAL));
+            assertEquals("true",af.getTag().getFirst(FieldKey.IS_SOUNDTRACK));
 
         }
         catch(Exception e)
@@ -865,6 +880,8 @@ public class Issue298Test extends AbstractTestCase
             tag.setField(tag.createField(FieldKey.SINGLE_DISC_TRACK_NO,"SingleDiscTrackNo"));
             tag.setField(tag.createField(FieldKey.PERIOD,"Period"));
             tag.setField(tag.createField(FieldKey.PART_TYPE,"CompositionType"));
+            tag.setField(tag.createField(FieldKey.IS_CLASSICAL,"true"));
+            tag.setField(tag.createField(FieldKey.IS_SOUNDTRACK,"true"));
 
             af.commit();
 
@@ -961,6 +978,8 @@ public class Issue298Test extends AbstractTestCase
             assertEquals("Opus",af.getTag().getFirst(FieldKey.OPUS));
             assertEquals("SingleDiscTrackNo",af.getTag().getFirst(FieldKey.SINGLE_DISC_TRACK_NO));
             assertEquals("Period",af.getTag().getFirst(FieldKey.PERIOD));
+            assertEquals("true",af.getTag().getFirst(FieldKey.IS_CLASSICAL));
+            assertEquals("true",af.getTag().getFirst(FieldKey.IS_SOUNDTRACK));
 
         }
         catch(Exception e)
@@ -1057,6 +1076,8 @@ public class Issue298Test extends AbstractTestCase
             tag.setField(tag.createField(FieldKey.OPUS,"Opus"));
             tag.setField(tag.createField(FieldKey.SINGLE_DISC_TRACK_NO,"SingleDiscTrackNo"));
             tag.setField(tag.createField(FieldKey.PERIOD,"Period"));
+            tag.setField(tag.createField(FieldKey.IS_CLASSICAL,"true"));
+            tag.setField(tag.createField(FieldKey.IS_SOUNDTRACK,"true"));
 
 
             af.commit();
@@ -1130,6 +1151,8 @@ public class Issue298Test extends AbstractTestCase
             assertEquals("Opus",af.getTag().getFirst(FieldKey.OPUS));
             assertEquals("SingleDiscTrackNo",af.getTag().getFirst(FieldKey.SINGLE_DISC_TRACK_NO));
             assertEquals("Period",af.getTag().getFirst(FieldKey.PERIOD));
+            assertEquals("true",af.getTag().getFirst(FieldKey.IS_CLASSICAL));
+            assertEquals("true",af.getTag().getFirst(FieldKey.IS_SOUNDTRACK));
 
         }
         catch(Exception e)
@@ -1225,6 +1248,8 @@ public class Issue298Test extends AbstractTestCase
             tag.setField(tag.createField(FieldKey.SINGLE_DISC_TRACK_NO,"SingleDiscTrackNo"));
             tag.setField(tag.createField(FieldKey.PERIOD,"Period"));
             tag.setField(tag.createField(FieldKey.PART_TYPE,"Composition Type"));
+            tag.setField(tag.createField(FieldKey.IS_CLASSICAL,"true"));
+            tag.setField(tag.createField(FieldKey.IS_SOUNDTRACK,"true"));
 
             af.commit();
             af = AudioFileIO.read(testFile);
@@ -1298,6 +1323,8 @@ public class Issue298Test extends AbstractTestCase
             assertEquals("Opus",af.getTag().getFirst(FieldKey.OPUS));
             assertEquals("SingleDiscTrackNo",af.getTag().getFirst(FieldKey.SINGLE_DISC_TRACK_NO));
             assertEquals("Period",af.getTag().getFirst(FieldKey.PERIOD));
+            assertEquals("true",af.getTag().getFirst(FieldKey.IS_CLASSICAL));
+            assertEquals("true",af.getTag().getFirst(FieldKey.IS_SOUNDTRACK));
 
         }
         catch(Exception e)

@@ -104,6 +104,8 @@ public enum AsfFieldKey
     ISRC("WM/ISRC", false),
     ISVBR("IsVBR", true),
     IS_COMPILATION("WM/IsCompilation", false),
+    IS_CLASSICAL("WM/IsClassical", false),
+    IS_SOUNDTRACK("WM/IsSoundtrack", false),
     LANGUAGE("WM/Language", true),
     LYRICIST("WM/Writer", true),
     LYRICS("WM/Lyrics", false),

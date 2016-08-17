@@ -404,6 +404,8 @@ public class ID3v23Frames extends ID3Frames
         tagFieldToId3.put(FieldKey.INSTRUMENTAL, ID3v23FieldKey.INSTRUMENTAL);
         tagFieldToId3.put(FieldKey.ISRC, ID3v23FieldKey.ISRC);
         tagFieldToId3.put(FieldKey.IS_COMPILATION, ID3v23FieldKey.IS_COMPILATION);
+        tagFieldToId3.put(FieldKey.IS_CLASSICAL, ID3v23FieldKey.IS_CLASSICAL);
+        tagFieldToId3.put(FieldKey.IS_SOUNDTRACK, ID3v23FieldKey.IS_SOUNDTRACK);
         tagFieldToId3.put(FieldKey.KEY, ID3v23FieldKey.KEY);
         tagFieldToId3.put(FieldKey.LANGUAGE, ID3v23FieldKey.LANGUAGE);
         tagFieldToId3.put(FieldKey.LYRICIST, ID3v23FieldKey.LYRICIST);
