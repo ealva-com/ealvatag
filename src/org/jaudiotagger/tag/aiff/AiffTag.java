@@ -127,7 +127,7 @@ public class AiffTag implements Tag, Id3SupportingTag
     }
 
     @Override
-    public void addField(FieldKey genericKey, String value) throws KeyNotFoundException, FieldDataInvalidException
+    public void addField(FieldKey genericKey, String... value) throws KeyNotFoundException, FieldDataInvalidException
     {
         TagField tagfield = createField(genericKey, value);
         addField(tagfield);

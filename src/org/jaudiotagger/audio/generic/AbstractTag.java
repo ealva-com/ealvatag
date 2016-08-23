@@ -297,7 +297,7 @@ public abstract class AbstractTag implements Tag
      * @throws FieldDataInvalidException
      */
      @Override
-    public void addField(FieldKey genericKey, String value) throws KeyNotFoundException, FieldDataInvalidException
+    public void addField(FieldKey genericKey, String... value) throws KeyNotFoundException, FieldDataInvalidException
     {
         TagField tagfield = createField(genericKey,value);
         addField(tagfield);

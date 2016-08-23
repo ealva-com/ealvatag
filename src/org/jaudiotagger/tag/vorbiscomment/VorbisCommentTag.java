@@ -763,13 +763,18 @@ public class VorbisCommentTag extends AbstractTag
      * Create new field and add it to the tag
      *
      * @param genericKey
-     * @param value
+     * @param values
      * @throws KeyNotFoundException
      * @throws FieldDataInvalidException
      */
     @Override
-    public void addField(FieldKey genericKey, String value) throws KeyNotFoundException, FieldDataInvalidException
+    public void addField(FieldKey genericKey, String... values) throws KeyNotFoundException, FieldDataInvalidException
     {
+        if (values == null || values[0] == null)
+        {
+            throw new IllegalArgumentException(ErrorMessage.GENERAL_INVALID_NULL_ARGUMENT.getMsg());
+        }
+        String value = values[0];
         if(genericKey==FieldKey.ALBUM_ARTIST)
         {
             switch(TagOptionSingleton.getInstance().getVorbisAlbumArtistSaveOptions())

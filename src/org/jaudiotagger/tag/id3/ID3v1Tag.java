@@ -644,7 +644,7 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag
         setField(tagfield);
     }
 
-    public void addField(FieldKey genericKey, String value) throws KeyNotFoundException, FieldDataInvalidException
+    public void addField(FieldKey genericKey, String... value) throws KeyNotFoundException, FieldDataInvalidException
     {
         setField(genericKey,value);
     }

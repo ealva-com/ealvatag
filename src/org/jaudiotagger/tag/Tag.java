@@ -71,7 +71,7 @@ public interface Tag {
      * @throws KeyNotFoundException
      * @throws FieldDataInvalidException
      */
-    void addField(FieldKey genericKey, String value) throws KeyNotFoundException, FieldDataInvalidException;
+    void addField(FieldKey genericKey, String... value) throws KeyNotFoundException, FieldDataInvalidException;
 
     /**
      * Delete any fields with this key
