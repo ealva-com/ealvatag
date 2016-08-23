@@ -42,7 +42,7 @@ import java.util.StringTokenizer;
  * function and every even is an name or a comma delimited list of names.
  *
  */
-public class FrameBodyTIPL extends AbstractID3v2FrameBody implements ID3v24FrameBody
+public class FrameBodyTIPL extends AbstractFrameBodyPairs implements ID3v24FrameBody
 {
     //Standard function names, taken from Picard Mapping
     public static final String ENGINEER = "engineer";
@@ -56,7 +56,7 @@ public class FrameBodyTIPL extends AbstractID3v2FrameBody implements ID3v24Frame
      */
     public FrameBodyTIPL()
     {
-        setObjectValue(DataTypes.OBJ_TEXT_ENCODING, TextEncoding.ISO_8859_1);
+        super();
     }
 
     /**
@@ -67,8 +67,7 @@ public class FrameBodyTIPL extends AbstractID3v2FrameBody implements ID3v24Frame
      */
     public FrameBodyTIPL(byte textEncoding, String text)
     {
-        setObjectValue(DataTypes.OBJ_TEXT_ENCODING, textEncoding);
-        setText(text);
+        super(textEncoding, text);
     }
 
     /**
@@ -104,144 +103,4 @@ public class FrameBodyTIPL extends AbstractID3v2FrameBody implements ID3v24Frame
         return ID3v24Frames.FRAME_ID_INVOLVED_PEOPLE;
     }
 
-    /**
-     * Set the text, decoded as pairs of involvee - involvement
-     *
-     * @param text
-     */
-    public void setText(String text)
-    {
-        PairedTextEncodedStringNullTerminated.ValuePairs value = new PairedTextEncodedStringNullTerminated.ValuePairs();
-        StringTokenizer stz = new StringTokenizer(text, "\0");
-
-        while (stz.hasMoreTokens())
-        {
-            String key =stz.nextToken();
-            if(stz.hasMoreTokens())
-            {
-                value.add(key, stz.nextToken());
-            }
-            
-        }
-        setObjectValue(DataTypes.OBJ_TEXT, value);
-    }
-
-    /**
-     * Parse text as a null separated pairing of name and function
-     *
-     * @param text
-     */
-    public void addPair(String text)
-    {
-        StringTokenizer stz = new StringTokenizer(text, "\0");
-        if (stz.countTokens()==2)
-        {
-            addPair(stz.nextToken(),stz.nextToken());
-        }
-    }
-
-    /**
-     * Add pair
-     *
-     * @param function
-     * @param name
-     */
-    public void addPair(String function,String name)
-    {
-        PairedTextEncodedStringNullTerminated.ValuePairs value = ((PairedTextEncodedStringNullTerminated) getObject(DataTypes.OBJ_TEXT)).getValue();
-        value.add(function, name);
-
-    }
-
-    /**
-     * Remove all Pairs
-     */
-    public void resetPairs()
-    {
-        PairedTextEncodedStringNullTerminated.ValuePairs value = ((PairedTextEncodedStringNullTerminated) getObject(DataTypes.OBJ_TEXT)).getValue();
-        value.getMapping().clear();
-    }
-
-    /**
-     * Because have a text encoding we need to check the data values do not contain characters that cannot be encoded in
-     * current encoding before we write data. If they do change the encoding.
-     */
-    public void write(ByteArrayOutputStream tagBuffer)
-    {
-        if (!((PairedTextEncodedStringNullTerminated) getObject(DataTypes.OBJ_TEXT)).canBeEncoded())
-        {
-            this.setTextEncoding(TextEncoding.UTF_16);
-        }
-        super.write(tagBuffer);
-    }
-
-    /**
-     * Consists of a text encoding , and then a series of null terminated Strings, there should be an even number
-     * of Strings as they are paired as involvement/involvee
-     */
-    protected void setupObjectList()
-    {
-        objectList.add(new NumberHashMap(DataTypes.OBJ_TEXT_ENCODING, this, TextEncoding.TEXT_ENCODING_FIELD_SIZE));
-        objectList.add(new PairedTextEncodedStringNullTerminated(DataTypes.OBJ_TEXT, this));
-    }
-
-    public PairedTextEncodedStringNullTerminated.ValuePairs getPairing()
-    {
-        return (PairedTextEncodedStringNullTerminated.ValuePairs) getObject(DataTypes.OBJ_TEXT).getValue();
-    }
-
-    /**
-     * Get key at index
-     *
-     * @param index
-     * @return value at index
-     */
-    public String getKeyAtIndex(int index)
-    {
-        PairedTextEncodedStringNullTerminated text = (PairedTextEncodedStringNullTerminated) getObject(DataTypes.OBJ_TEXT);
-        return (String) text.getValue().getMapping().get(index).getKey();
-    }
-
-    /**
-     * Get value at index
-     *
-     * @param index
-     * @return value at index
-     */
-    public String getValueAtIndex(int index)
-    {
-        PairedTextEncodedStringNullTerminated text = (PairedTextEncodedStringNullTerminated) getObject(DataTypes.OBJ_TEXT);
-        return (String) text.getValue().getMapping().get(index).getValue();
-    }
-
-    /**
-     * @return number of text pairs
-     */
-    public int getNumberOfPairs()
-    {
-        PairedTextEncodedStringNullTerminated text = (PairedTextEncodedStringNullTerminated) getObject(DataTypes.OBJ_TEXT);
-        return text.getValue().getNumberOfPairs();
-    }
-
-    public String getText()
-    {
-        PairedTextEncodedStringNullTerminated text = (PairedTextEncodedStringNullTerminated) getObject(DataTypes.OBJ_TEXT);
-        StringBuilder sb = new StringBuilder();
-        int count = 1;
-        for (Pair entry : text.getValue().getMapping())
-        {
-            sb.append(entry.getKey() + '\0' + entry.getValue());
-            if (count != getNumberOfPairs())
-            {
-                sb.append('\0');
-            }
-            count++;
-        }
-        return sb.toString();
-    }
-
-    public String getUserFriendlyValue()
-    {
-        return getText();
-    }
 }
