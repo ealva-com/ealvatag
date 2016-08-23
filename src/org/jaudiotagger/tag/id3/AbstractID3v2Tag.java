@@ -513,13 +513,6 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
 
     protected abstract ID3Frames getID3Frames();
 
-    /*
-    public void setField(FieldKey genericKey, String value) throws KeyNotFoundException, FieldDataInvalidException
-    {
-        TagField tagfield = createField(genericKey, value);
-        setField(tagfield);
-    }
-    */
 
     public void setField(FieldKey genericKey, String value) throws KeyNotFoundException, FieldDataInvalidException
     {
@@ -535,7 +528,12 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
 
     public void addField(FieldKey genericKey, String value) throws KeyNotFoundException, FieldDataInvalidException
     {
-        TagField tagfield = createField(genericKey, value);
+        addMultiValueField(genericKey, value);
+    }
+
+    public void addMultiValueField(FieldKey genericKey, String... values) throws KeyNotFoundException, FieldDataInvalidException
+    {
+        TagField tagfield = createMultiValueField(genericKey, values);
         addField(tagfield);
     }
 
