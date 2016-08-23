@@ -247,14 +247,14 @@ public class VorbisCommentTag extends AbstractTag
      * Create Tag Field using generic key
      */
     @Override
-    public TagField createField(FieldKey genericKey, String value) throws KeyNotFoundException,FieldDataInvalidException
+    public TagField createField(FieldKey genericKey, String... values) throws KeyNotFoundException,FieldDataInvalidException
     {
         if (genericKey == null)
         {
             throw new KeyNotFoundException();
         }
 
-        return createField(tagFieldToOggField.get(genericKey), value);
+        return createField(tagFieldToOggField.get(genericKey), values[0]);
     }
 
     /**

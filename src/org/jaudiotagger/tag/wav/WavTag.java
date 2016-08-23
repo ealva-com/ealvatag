@@ -274,7 +274,7 @@ public class WavTag implements Tag, Id3SupportingTag
     }
 
 
-    public TagField createField(FieldKey genericKey, String value) throws KeyNotFoundException, FieldDataInvalidException
+    public TagField createField(FieldKey genericKey, String... value) throws KeyNotFoundException, FieldDataInvalidException
     {
         return getActiveTag().createField(genericKey, value);
     }

@@ -256,7 +256,7 @@ public class FlacTag implements Tag
         }
     }
 
-    public TagField createField(FieldKey genericKey, String value) throws KeyNotFoundException, FieldDataInvalidException
+    public TagField createField(FieldKey genericKey, String... value) throws KeyNotFoundException, FieldDataInvalidException
     {
         if (genericKey.equals(FieldKey.COVER_ART))
         {

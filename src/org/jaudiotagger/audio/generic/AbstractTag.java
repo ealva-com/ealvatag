@@ -393,7 +393,7 @@ public abstract class AbstractTag implements Tag
      * @throws KeyNotFoundException
      * @throws FieldDataInvalidException
      */
-    public abstract TagField createField(FieldKey genericKey, String value) throws KeyNotFoundException, FieldDataInvalidException;
+    public abstract TagField createField(FieldKey genericKey, String... value) throws KeyNotFoundException, FieldDataInvalidException;
 
     /**
      * 

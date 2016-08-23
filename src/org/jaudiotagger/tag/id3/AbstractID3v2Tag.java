@@ -2293,7 +2293,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
         return doGetValueAtIndex(frameAndSubId, index);
     }
 
-    public TagField createField(FieldKey genericKey, String value) throws KeyNotFoundException, FieldDataInvalidException
+    public TagField createField(FieldKey genericKey, String... value) throws KeyNotFoundException, FieldDataInvalidException
     {
         return createMultiValueField(genericKey, value);
     }

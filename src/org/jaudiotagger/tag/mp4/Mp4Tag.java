@@ -617,15 +617,15 @@ public class Mp4Tag extends AbstractTag
      * This should use the correct subclass for the key
      *
      * @param genericKey
-     * @param value
+     * @param values
      * @return
      * @throws KeyNotFoundException
      * @throws FieldDataInvalidException
      */
     @Override
-    public TagField createField(FieldKey genericKey, String value) throws KeyNotFoundException, FieldDataInvalidException
+    public TagField createField(FieldKey genericKey, String... values) throws KeyNotFoundException, FieldDataInvalidException
     {
-        if (value == null)
+        if (values == null)
         {
             throw new IllegalArgumentException(ErrorMessage.GENERAL_INVALID_NULL_ARGUMENT.getMsg());
         }
@@ -633,6 +633,8 @@ public class Mp4Tag extends AbstractTag
         {
             throw new KeyNotFoundException();
         }
+
+        String value = values[0];
 
         //Special handling for these number fields because multiple generic keys map to a single mp4 field
         if(
