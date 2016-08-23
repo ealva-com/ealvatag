@@ -702,7 +702,7 @@ public class Mp4Tag extends AbstractTag
      * @throws FieldDataInvalidException
      */
     @Override
-    public void setField(FieldKey genericKey, String value) throws KeyNotFoundException, FieldDataInvalidException
+    public void setField(FieldKey genericKey, String... value) throws KeyNotFoundException, FieldDataInvalidException
     {
         TagField tagfield = createField(genericKey,value);
 

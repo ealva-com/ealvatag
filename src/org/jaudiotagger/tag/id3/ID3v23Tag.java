@@ -1024,6 +1024,11 @@ public class ID3v23Tag extends AbstractID3v2Tag
             throw new KeyNotFoundException();
         }
 
+        if (values == null || values[0] == null)
+        {
+            throw new IllegalArgumentException(ErrorMessage.GENERAL_INVALID_NULL_ARGUMENT.getMsg());
+        }
+
         String value = values[0];
         if (genericKey == FieldKey.GENRE)
         {

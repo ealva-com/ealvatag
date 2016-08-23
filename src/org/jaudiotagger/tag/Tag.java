@@ -59,7 +59,7 @@ public interface Tag {
      * @throws KeyNotFoundException
      * @throws FieldDataInvalidException
      */
-    void setField(FieldKey genericKey, String value) throws KeyNotFoundException, FieldDataInvalidException;
+    void setField(FieldKey genericKey, String... value) throws KeyNotFoundException, FieldDataInvalidException;
 
     /**
      * Create the field based on the generic key and add it to the tag

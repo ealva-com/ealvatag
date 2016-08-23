@@ -467,7 +467,7 @@ public final class AsfTag extends AbstractTag
     @Override
     public AsfTagTextField createField(final FieldKey genericKey, final String... values) throws KeyNotFoundException, FieldDataInvalidException
     {
-        if (values == null)
+        if (values == null || values[0] == null)
         {
             throw new IllegalArgumentException(ErrorMessage.GENERAL_INVALID_NULL_ARGUMENT.getMsg());
         }

@@ -23,7 +23,7 @@ public class FrameBodyTMCLTest extends AbstractTestCase
         assertNull(f.getTag());
 
         f.setTag(new ID3v24Tag());
-        ((ID3v24Tag)f.getTag()).setMultiValueField(FieldKey.MUSICIAN, "violinist", "Nigel Kennedy");
+        ((ID3v24Tag)f.getTag()).setField(FieldKey.MUSICIAN, "violinist", "Nigel Kennedy");
         ((ID3v24Tag)f.getTag()).addMultiValueField(FieldKey.MUSICIAN, "harpist", "Gloria Divosky");
         assertEquals(1, f.getTag().getFieldCount());
         assertEquals("violinist:Nigel Kennedy", f.getTag().getFirst(FieldKey.MUSICIAN));
@@ -44,7 +44,7 @@ public class FrameBodyTMCLTest extends AbstractTestCase
         assertNull(f.getTag());
 
         f.setTag(new ID3v24Tag());
-        ((ID3v24Tag)f.getTag()).setMultiValueField(FieldKey.MUSICIAN,"violinist","Nigel Kennedy");
+        ((ID3v24Tag)f.getTag()).setField(FieldKey.MUSICIAN,"violinist","Nigel Kennedy");
         ((ID3v24Tag)f.getTag()).addMultiValueField(FieldKey.MUSICIAN,"harpist","Gloria Divosky");
         assertEquals(1,f.getTag().getFieldCount());
         f.commit();
@@ -70,7 +70,7 @@ public class FrameBodyTMCLTest extends AbstractTestCase
         assertNull(f.getTag());
 
         f.setTag(new ID3v23Tag());
-        ((ID3v23Tag)f.getTag()).setMultiValueField(FieldKey.MUSICIAN,"violinist","Nigel Kennedy");
+        ((ID3v23Tag)f.getTag()).setField(FieldKey.MUSICIAN,"violinist","Nigel Kennedy");
         ((ID3v23Tag)f.getTag()).addMultiValueField(FieldKey.MUSICIAN, "harpist", "Gloria Divosky");
         assertEquals(1,f.getTag().getFieldCount());
         assertEquals("violinist:Nigel Kennedy", f.getTag().getValue(FieldKey.MUSICIAN,0));
@@ -89,7 +89,7 @@ public class FrameBodyTMCLTest extends AbstractTestCase
         assertNull(f.getTag());
 
         f.setTag(new ID3v22Tag());
-        ((ID3v22Tag)f.getTag()).setMultiValueField(FieldKey.MUSICIAN,"violinist","Nigel Kennedy");
+        ((ID3v22Tag)f.getTag()).setField(FieldKey.MUSICIAN,"violinist","Nigel Kennedy");
         ((ID3v22Tag)f.getTag()).addMultiValueField(FieldKey.MUSICIAN, "harpist", "Gloria Divosky");
         assertEquals(1,f.getTag().getFieldCount());
         assertEquals("violinist:Nigel Kennedy", f.getTag().getValue(FieldKey.MUSICIAN,0));
