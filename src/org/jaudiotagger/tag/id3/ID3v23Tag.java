@@ -1118,7 +1118,7 @@ public class ID3v23Tag extends AbstractID3v2Tag
         }
         else
         {
-            return super.createMultiValueField(genericKey, value);
+            return super.createMultiValueField(genericKey, values);
         }
     }
 

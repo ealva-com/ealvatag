@@ -2515,7 +2515,14 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
         }
         else if (frame.getBody() instanceof FrameBodyIPLS)
         {
-            ((FrameBodyIPLS)(frame.getBody())).addPair(formatKey.getSubId(), value);
+            if(formatKey.getSubId()!=null)
+            {
+                ((FrameBodyIPLS) (frame.getBody())).addPair(formatKey.getSubId(), value);
+            }
+            else
+            {
+                ((FrameBodyIPLS) (frame.getBody())).addPair(values[0], values[1]);
+            }
         }
         else if (frame.getBody() instanceof FrameBodyTIPL)
         {
