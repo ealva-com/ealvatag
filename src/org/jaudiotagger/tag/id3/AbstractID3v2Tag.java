@@ -519,6 +519,18 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
         setField(tagfield);
     }
 
+    /*
+    public void setField(FieldKey genericKey, String value) throws KeyNotFoundException, FieldDataInvalidException
+    {
+        setMultiValueField(genericKey, value);
+    }
+
+    public void setMultiValueField(FieldKey genericKey, String... values) throws KeyNotFoundException, FieldDataInvalidException
+    {
+        TagField tagfield = createMultiValueField(genericKey, values);
+        setField(tagfield);
+    }
+    */
     public void addField(FieldKey genericKey, String value) throws KeyNotFoundException, FieldDataInvalidException
     {
         TagField tagfield = createField(genericKey, value);
@@ -2282,16 +2294,11 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
         return doGetValueAtIndex(frameAndSubId, index);
     }
 
-    /**
-     * Create a new TagField
-     *
-     * Only textual data supported at the moment. The genericKey will be mapped
-     * to the correct implementation key and return a TagField.
-     *
-     * @param genericKey is the generic key
-     * @param value      to store
-     * @return
-     */
+    /*public TagField createField(FieldKey genericKey, String value) throws KeyNotFoundException, FieldDataInvalidException
+    {
+        return createMultiValueField(genericKey, value);
+    }*/
+
     public TagField createField(FieldKey genericKey, String value) throws KeyNotFoundException, FieldDataInvalidException
     {
         if (genericKey == null)
@@ -2339,19 +2346,63 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
         }
     }
 
-
     /**
-     * Create Frame for Id3 Key
+     * Create a new TagField
      *
-     * Only textual data supported at the moment, should only be used with frames that
-     * support a simple string argument.
+     * Only textual data supported at the moment. The genericKey will be mapped
+     * to the correct implementation key and return a TagField.
      *
-     * @param formatKey
-     * @param value
+     * @param genericKey is the generic key
+     * @param values      to store
      * @return
-     * @throws KeyNotFoundException
-     * @throws FieldDataInvalidException
      */
+    public TagField createMultiValueField(FieldKey genericKey, String... values) throws KeyNotFoundException, FieldDataInvalidException
+    {
+        if (genericKey == null)
+        {
+            throw new KeyNotFoundException();
+        }
+
+        String value = values[0];
+
+        FrameAndSubId formatKey = getFrameAndSubIdFromGenericKey(genericKey);
+
+        //FrameAndSubId does not contain enough info for these fields to be able to work out what to update
+        //that is why we need the extra processing here instead of doCreateTagField()
+        if (genericKey == FieldKey.TRACK)
+        {
+            AbstractID3v2Frame frame = createFrame(formatKey.getFrameId());
+            FrameBodyTRCK framebody = (FrameBodyTRCK) frame.getBody();
+            framebody.setTrackNo(value);
+            return frame;
+        }
+        else if (genericKey == FieldKey.TRACK_TOTAL)
+        {
+            AbstractID3v2Frame frame = createFrame(formatKey.getFrameId());
+            FrameBodyTRCK framebody = (FrameBodyTRCK) frame.getBody();
+            framebody.setTrackTotal(value);
+            return frame;
+        }
+        else if (genericKey == FieldKey.DISC_NO)
+        {
+            AbstractID3v2Frame frame = createFrame(formatKey.getFrameId());
+            FrameBodyTPOS framebody = (FrameBodyTPOS) frame.getBody();
+            framebody.setDiscNo(value);
+            return frame;
+        }
+        else if (genericKey == FieldKey.DISC_TOTAL)
+        {
+            AbstractID3v2Frame frame = createFrame(formatKey.getFrameId());
+            FrameBodyTPOS framebody = (FrameBodyTPOS) frame.getBody();
+            framebody.setDiscTotal(value);
+            return frame;
+        }
+        else
+        {
+            return doCreateTagField(formatKey, values);
+        }
+    }
+
     protected TagField doCreateTagField(FrameAndSubId formatKey, String value) throws KeyNotFoundException, FieldDataInvalidException
     {
         AbstractID3v2Frame frame = createFrame(formatKey.getFrameId());
@@ -2412,15 +2463,107 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
         }
         else if (frame.getBody() instanceof FrameBodyIPLS)
         {
-            PairedTextEncodedStringNullTerminated.ValuePairs pair = new PairedTextEncodedStringNullTerminated.ValuePairs();
-            pair.add(formatKey.getSubId(), value);
-            frame.getBody().setObjectValue(DataTypes.OBJ_TEXT, pair);
+            ((FrameBodyIPLS)(frame.getBody())).addPair(formatKey.getSubId(), value);
         }
         else if (frame.getBody() instanceof FrameBodyTIPL)
         {
-            PairedTextEncodedStringNullTerminated.ValuePairs pair = new PairedTextEncodedStringNullTerminated.ValuePairs();
-            pair.add(formatKey.getSubId(), value);
-            frame.getBody().setObjectValue(DataTypes.OBJ_TEXT, pair);
+            ((FrameBodyTIPL)(frame.getBody())).addPair(formatKey.getSubId(), value);
+        }
+        else if ((frame.getBody() instanceof FrameBodyAPIC) || (frame.getBody() instanceof FrameBodyPIC))
+        {
+            throw new UnsupportedOperationException(ErrorMessage.ARTWORK_CANNOT_BE_CREATED_WITH_THIS_METHOD.getMsg());
+        }
+        else
+        {
+            throw new FieldDataInvalidException("Field with key of:" + formatKey.getFrameId() + ":does not accept cannot parse data:" + value);
+        }
+        return frame;
+    }
+
+
+    /**
+     * Create Frame for Id3 Key
+     *
+     * Only textual data supported at the moment, should only be used with frames that
+     * support a simple string argument.
+     *
+     * @param formatKey
+     * @param values
+     * @return
+     * @throws KeyNotFoundException
+     * @throws FieldDataInvalidException
+     */
+   protected TagField doCreateTagField(FrameAndSubId formatKey, String... values) throws KeyNotFoundException, FieldDataInvalidException
+    {
+        String value = values[0];
+
+        AbstractID3v2Frame frame = createFrame(formatKey.getFrameId());
+        if (frame.getBody() instanceof FrameBodyUFID)
+        {
+            ((FrameBodyUFID) frame.getBody()).setOwner(formatKey.getSubId());
+            try
+            {
+                ((FrameBodyUFID) frame.getBody()).setUniqueIdentifier(value.getBytes("ISO-8859-1"));
+            }
+            catch (UnsupportedEncodingException uee)
+            {
+                //This will never happen because we are using a charset supported on all platforms
+                //but just in case
+                throw new RuntimeException("When encoding UFID charset ISO-8859-1 was deemed unsupported");
+            }
+        }
+        else if (frame.getBody() instanceof FrameBodyTXXX)
+        {
+            ((FrameBodyTXXX) frame.getBody()).setDescription(formatKey.getSubId());
+            ((FrameBodyTXXX) frame.getBody()).setText(value);
+        }
+        else if (frame.getBody() instanceof FrameBodyWXXX)
+        {
+            ((FrameBodyWXXX) frame.getBody()).setDescription(formatKey.getSubId());
+            ((FrameBodyWXXX) frame.getBody()).setUrlLink(value);
+        }
+        else if (frame.getBody() instanceof FrameBodyCOMM)
+        {
+            //Set description if set
+            if (formatKey.getSubId() != null)
+            {
+                ((FrameBodyCOMM) frame.getBody()).setDescription(formatKey.getSubId());
+                //Special Handling for Media Monkey Compatability
+                if (((FrameBodyCOMM) frame.getBody()).isMediaMonkeyFrame())
+                {
+                    ((FrameBodyCOMM) frame.getBody()).setLanguage(Languages.MEDIA_MONKEY_ID);
+                }
+            }
+            ((FrameBodyCOMM) frame.getBody()).setText(value);
+        }
+        else if (frame.getBody() instanceof FrameBodyUSLT)
+        {
+            ((FrameBodyUSLT) frame.getBody()).setDescription("");
+            ((FrameBodyUSLT) frame.getBody()).setLyric(value);
+        }
+        else if (frame.getBody() instanceof FrameBodyWOAR)
+        {
+            ((FrameBodyWOAR) frame.getBody()).setUrlLink(value);
+        }
+        else if (frame.getBody() instanceof AbstractFrameBodyTextInfo)
+        {
+            ((AbstractFrameBodyTextInfo) frame.getBody()).setText(value);
+        }
+        else if (frame.getBody() instanceof FrameBodyPOPM)
+        {
+            ((FrameBodyPOPM) frame.getBody()).parseString(value);
+        }
+        else if (frame.getBody() instanceof FrameBodyIPLS)
+        {
+            ((FrameBodyIPLS)(frame.getBody())).addPair(formatKey.getSubId(), value);
+        }
+        else if (frame.getBody() instanceof FrameBodyTIPL)
+        {
+            ((FrameBodyTIPL)(frame.getBody())).addPair(formatKey.getSubId(), value);
+        }
+        else if (frame.getBody() instanceof FrameBodyTMCL)
+        {
+            ((FrameBodyTMCL)(frame.getBody())).addPair(values[0], values[1]);
         }
         else if ((frame.getBody() instanceof FrameBodyAPIC) || (frame.getBody() instanceof FrameBodyPIC))
         {

@@ -1384,6 +1384,45 @@ public class ID3v24Tag extends AbstractID3v2Tag
         }
     }
 
+    /*
+    public TagField createField(FieldKey genericKey, String value) throws KeyNotFoundException, FieldDataInvalidException
+    {
+        return createMultiValueField(genericKey, value);
+    }
+
+    public TagField createMultiValueField(FieldKey genericKey, String... value) throws KeyNotFoundException, FieldDataInvalidException
+    {
+        if (genericKey == null)
+        {
+            throw new KeyNotFoundException();
+        }
+
+        if (genericKey == FieldKey.GENRE)
+        {
+            if (value == null)
+            {
+                throw new IllegalArgumentException(ErrorMessage.GENERAL_INVALID_NULL_ARGUMENT.getMsg());
+            }
+            FrameAndSubId formatKey = getFrameAndSubIdFromGenericKey(genericKey);
+            AbstractID3v2Frame frame = createFrame(formatKey.getFrameId());
+            FrameBodyTCON framebody = (FrameBodyTCON) frame.getBody();
+
+            if(TagOptionSingleton.getInstance().isWriteMp3GenresAsText())
+            {
+                framebody.setText(value[0]);
+            }
+            else
+            {
+                framebody.setText(FrameBodyTCON.convertGenericToID3v24Genre(value[0]));
+            }
+            return frame;
+        }
+        else
+        {
+            return super.createMultiValueField(genericKey, value);
+        }
+    }
+    */
     /**
      * Maps the generic key to the id3 key and return the list of values for this field as strings
      *

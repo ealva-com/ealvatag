@@ -132,6 +132,13 @@ public class FrameBodyIPLS extends AbstractID3v2FrameBody implements ID3v23Frame
         }
     }
 
+    public void addPair(String function,String name)
+    {
+        PairedTextEncodedStringNullTerminated.ValuePairs value = ((PairedTextEncodedStringNullTerminated) getObject(DataTypes.OBJ_TEXT)).getValue();
+        value.add(function, name);
+
+    }
+
     /**
      * Because have a text encoding we need to check the data values do not contain characters that cannot be encoded in
      * current encoding before we write data. If they do change the encoding.
