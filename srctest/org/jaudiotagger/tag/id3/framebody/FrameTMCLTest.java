@@ -22,12 +22,13 @@ public class FrameTMCLTest extends AbstractTestCase
 
         f.setTag(new ID3v24Tag());
         ((ID3v24Tag)f.getTag()).setMultiValueField(FieldKey.MUSICIAN,"violinist","Nigel Kennedy");
+        ((ID3v24Tag)f.getTag()).addMultiValueField(FieldKey.MUSICIAN,"harpist","Gloria Divosky");
         assertEquals(1,f.getTag().getFieldCount());
         f.commit();
         f = AudioFileIO.read(testFile);
         assertEquals(1,f.getTag().getFields(FieldKey.MUSICIAN).size());
         assertEquals(1,f.getTag().getFieldCount());
-        assertEquals(1, ((AbstractID3v2Tag) f.getTag()).getFieldCount());
+        assertEquals(1, f.getTag().getFieldCount());
     }
 
 }

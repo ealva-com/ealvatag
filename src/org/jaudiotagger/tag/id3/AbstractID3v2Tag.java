@@ -775,6 +775,12 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
             FrameBodyTIPL existingFrameBody = (FrameBodyTIPL) existingFrame.getBody();
             existingFrameBody.addPair(frameBody.getText());
         }
+        else if (frame.getBody() instanceof FrameBodyTMCL)
+        {
+            FrameBodyTMCL frameBody = (FrameBodyTMCL) frame.getBody();
+            FrameBodyTMCL existingFrameBody = (FrameBodyTMCL) existingFrame.getBody();
+            existingFrameBody.addPair(frameBody.getText());
+        }
         else if (frame.getBody() instanceof FrameBodyTRCK)
         {
             FrameBodyTRCK frameBody = (FrameBodyTRCK) frame.getBody();
