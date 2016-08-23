@@ -33,6 +33,13 @@ public class Issue428Test extends AbstractTestCase
 
     public void testGetMD5ForFlac2()
     {
+        File orig = new File("testdata", "test102.flac");
+        if (!orig.isFile())
+        {
+            System.err.println("Unable to test file - not available");
+            return;
+        }
+
         Throwable e = null;
         try
         {
