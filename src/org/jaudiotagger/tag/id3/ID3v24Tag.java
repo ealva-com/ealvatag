@@ -1360,7 +1360,7 @@ public class ID3v24Tag extends AbstractID3v2Tag
      * @throws KeyNotFoundException
      * @throws FieldDataInvalidException
      */
-    public TagField createMultiValueField(FieldKey genericKey, String... value) throws KeyNotFoundException, FieldDataInvalidException
+    public TagField createField(FieldKey genericKey, String... values) throws KeyNotFoundException, FieldDataInvalidException
     {
         if (genericKey == null)
         {
@@ -1369,6 +1369,11 @@ public class ID3v24Tag extends AbstractID3v2Tag
 
         if (genericKey == FieldKey.GENRE)
         {
+            if (values == null)
+            {
+                throw new IllegalArgumentException(ErrorMessage.GENERAL_INVALID_NULL_ARGUMENT.getMsg());
+            }
+            String value = values[0];
             if (value == null)
             {
                 throw new IllegalArgumentException(ErrorMessage.GENERAL_INVALID_NULL_ARGUMENT.getMsg());
@@ -1379,17 +1384,17 @@ public class ID3v24Tag extends AbstractID3v2Tag
 
             if(TagOptionSingleton.getInstance().isWriteMp3GenresAsText())
             {
-                framebody.setText(value[0]);
+                framebody.setText(value);
             }
             else
             {
-                framebody.setText(FrameBodyTCON.convertGenericToID3v24Genre(value[0]));
+                framebody.setText(FrameBodyTCON.convertGenericToID3v24Genre(value));
             }
             return frame;
         }
         else
         {
-            return super.createMultiValueField(genericKey, value);
+            return super.createField(genericKey, values);
         }
     }
     /**

@@ -1017,7 +1017,7 @@ public class ID3v23Tag extends AbstractID3v2Tag
      * @throws FieldDataInvalidException
      */
     @Override
-    public TagField createMultiValueField(FieldKey genericKey, String... values) throws KeyNotFoundException, FieldDataInvalidException
+    public TagField createField(FieldKey genericKey, String... values) throws KeyNotFoundException, FieldDataInvalidException
     {
         if (genericKey == null)
         {
@@ -1118,7 +1118,7 @@ public class ID3v23Tag extends AbstractID3v2Tag
         }
         else
         {
-            return super.createMultiValueField(genericKey, values);
+            return super.createField(genericKey, values);
         }
     }
 

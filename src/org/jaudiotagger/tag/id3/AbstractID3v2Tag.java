@@ -516,7 +516,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
 
     public void setMultiValueField(FieldKey genericKey, String... values) throws KeyNotFoundException, FieldDataInvalidException
     {
-        TagField tagfield = createMultiValueField(genericKey, values);
+        TagField tagfield = createField(genericKey, values);
         setField(tagfield);
     }
 
@@ -527,7 +527,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
 
     public void addMultiValueField(FieldKey genericKey, String... values) throws KeyNotFoundException, FieldDataInvalidException
     {
-        TagField tagfield = createMultiValueField(genericKey, values);
+        TagField tagfield = createField(genericKey, values);
         addField(tagfield);
     }
 
@@ -2293,23 +2293,18 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
         return doGetValueAtIndex(frameAndSubId, index);
     }
 
-    public TagField createField(FieldKey genericKey, String... value) throws KeyNotFoundException, FieldDataInvalidException
-    {
-        return createMultiValueField(genericKey, value);
-    }
-
-
     /**
-     * Create a new TagField
-     * <p/>
-     * Only textual data supported at the moment. The genericKey will be mapped
-     * to the correct implementation key and return a TagField.
+     * Create a new field
+     *
+     * Only MUSICIAN field make use of Varargs values field
      *
      * @param genericKey is the generic key
-     * @param values     to store
+     * @param values
      * @return
+     * @throws KeyNotFoundException
+     * @throws FieldDataInvalidException
      */
-    public TagField createMultiValueField(FieldKey genericKey, String... values) throws KeyNotFoundException, FieldDataInvalidException
+    public TagField createField(FieldKey genericKey, String... values) throws KeyNotFoundException, FieldDataInvalidException
     {
         if (genericKey == null)
         {
@@ -2355,6 +2350,9 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
             return doCreateTagField(formatKey, values);
         }
     }
+
+
+
 
     protected TagField doCreateTagField(FrameAndSubId formatKey, String value) throws KeyNotFoundException, FieldDataInvalidException
     {
