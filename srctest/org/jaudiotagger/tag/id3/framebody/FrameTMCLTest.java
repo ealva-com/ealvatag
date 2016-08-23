@@ -29,6 +29,15 @@ public class FrameTMCLTest extends AbstractTestCase
         assertEquals(1,f.getTag().getFields(FieldKey.MUSICIAN).size());
         assertEquals(1,f.getTag().getFieldCount());
         assertEquals(1, f.getTag().getFieldCount());
+
+        f.getTag().deleteField(FieldKey.MUSICIAN);
+        assertEquals(0,f.getTag().getFieldCount());
+        f.commit();
+        f = AudioFileIO.read(testFile);
+        assertEquals(0,f.getTag().getFields(FieldKey.MUSICIAN).size());
+        assertEquals(0,f.getTag().getFieldCount());
+        assertEquals(0, f.getTag().getFieldCount());
+
     }
 
 }
