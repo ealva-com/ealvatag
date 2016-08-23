@@ -10,7 +10,7 @@ import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
 import java.io.File;
 
 
-public class FrameTMCLTest extends AbstractTestCase
+public class FrameBodyTMCLTest extends AbstractTestCase
 {
     /**
      * Uses TMCL frame
@@ -26,7 +26,10 @@ public class FrameTMCLTest extends AbstractTestCase
         ((ID3v24Tag)f.getTag()).setMultiValueField(FieldKey.MUSICIAN, "violinist", "Nigel Kennedy");
         ((ID3v24Tag)f.getTag()).addMultiValueField(FieldKey.MUSICIAN, "harpist", "Gloria Divosky");
         assertEquals(1, f.getTag().getFieldCount());
-        assertEquals("violinist\u0000Nigel Kennedy\u0000harpist\u0000Gloria Divosky", f.getTag().getFirst(FieldKey.MUSICIAN));
+        assertEquals("violinist:Nigel Kennedy", f.getTag().getFirst(FieldKey.MUSICIAN));
+
+        assertEquals("violinist:Nigel Kennedy", f.getTag().getValue(FieldKey.MUSICIAN,0));
+        assertEquals("harpist:Gloria Divosky", f.getTag().getValue(FieldKey.MUSICIAN,1));
         f.commit();
         f = AudioFileIO.read(testFile);
         assertEquals(1,f.getTag().getFields(FieldKey.MUSICIAN).size());
@@ -70,7 +73,8 @@ public class FrameTMCLTest extends AbstractTestCase
         ((ID3v23Tag)f.getTag()).setMultiValueField(FieldKey.MUSICIAN,"violinist","Nigel Kennedy");
         ((ID3v23Tag)f.getTag()).addMultiValueField(FieldKey.MUSICIAN, "harpist", "Gloria Divosky");
         assertEquals(1,f.getTag().getFieldCount());
-        assertEquals("violinist\u0000Nigel Kennedy\u0000harpist\u0000Gloria Divosky", f.getTag().getFirst(FieldKey.MUSICIAN));
+        assertEquals("violinist:Nigel Kennedy", f.getTag().getValue(FieldKey.MUSICIAN,0));
+        assertEquals("harpist:Gloria Divosky", f.getTag().getValue(FieldKey.MUSICIAN,1));
         f.commit();
         f = AudioFileIO.read(testFile);
         assertEquals(1,f.getTag().getFields(FieldKey.MUSICIAN).size());
@@ -86,9 +90,10 @@ public class FrameTMCLTest extends AbstractTestCase
 
         f.setTag(new ID3v22Tag());
         ((ID3v22Tag)f.getTag()).setMultiValueField(FieldKey.MUSICIAN,"violinist","Nigel Kennedy");
-        ((ID3v22Tag)f.getTag()).addMultiValueField(FieldKey.MUSICIAN,"harpist","Gloria Divosky");
+        ((ID3v22Tag)f.getTag()).addMultiValueField(FieldKey.MUSICIAN, "harpist", "Gloria Divosky");
         assertEquals(1,f.getTag().getFieldCount());
-        assertEquals("violinist\u0000Nigel Kennedy\u0000harpist\u0000Gloria Divosky", f.getTag().getFirst(FieldKey.MUSICIAN));
+        assertEquals("violinist:Nigel Kennedy", f.getTag().getValue(FieldKey.MUSICIAN,0));
+        assertEquals("harpist:Gloria Divosky", f.getTag().getValue(FieldKey.MUSICIAN,1));
         f.commit();
         f = AudioFileIO.read(testFile);
         assertEquals(1,f.getTag().getFields(FieldKey.MUSICIAN).size());
@@ -96,14 +101,4 @@ public class FrameTMCLTest extends AbstractTestCase
         assertEquals(1, f.getTag().getFieldCount());
     }
 
-    public void testArrangerIDv22() throws Exception
-    {
-        File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3", new File("testWriteMusiciansv22.mp3"));
-        AudioFile f = AudioFileIO.read(testFile);
-        assertNull(f.getTag());
-
-        f.setTag(new ID3v22Tag());
-        ((ID3v22Tag)f.getTag()).setMultiValueField(FieldKey.ARRANGER, "arranger");
-        f.commit();
-    }
 }

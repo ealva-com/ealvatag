@@ -1196,7 +1196,7 @@ public class ID3v24Tag extends AbstractID3v2Tag
         {
             throw new KeyNotFoundException();
         }
-        return super.doCreateTagField(new FrameAndSubId(id3Key.getFrameId(), id3Key.getSubId()), value);
+        return super.doCreateTagField(new FrameAndSubId(null, id3Key.getFrameId(), id3Key.getSubId()), value);
     }
 
     /**
@@ -1220,7 +1220,7 @@ public class ID3v24Tag extends AbstractID3v2Tag
         }
         else
         {
-            FrameAndSubId frameAndSubId = new FrameAndSubId(id3v24FieldKey.getFrameId(), id3v24FieldKey.getSubId());
+            FrameAndSubId frameAndSubId = new FrameAndSubId(null, id3v24FieldKey.getFrameId(), id3v24FieldKey.getSubId());
             return super.doGetValueAtIndex(frameAndSubId, 0);
         }
     }
@@ -1238,7 +1238,7 @@ public class ID3v24Tag extends AbstractID3v2Tag
         {
             throw new KeyNotFoundException();
         }
-        super.doDeleteTagField(new FrameAndSubId(id3v24FieldKey.getFrameId(), id3v24FieldKey.getSubId()));
+        super.doDeleteTagField(new FrameAndSubId(null, id3v24FieldKey.getFrameId(), id3v24FieldKey.getSubId()));
     }
 
     /**
@@ -1247,7 +1247,7 @@ public class ID3v24Tag extends AbstractID3v2Tag
      */
     public void deleteField(String id)
     {
-        super.doDeleteTagField(new FrameAndSubId(id,null));
+        super.doDeleteTagField(new FrameAndSubId(null, id,null));
     }
 
     protected FrameAndSubId getFrameAndSubIdFromGenericKey(FieldKey genericKey)
@@ -1261,7 +1261,7 @@ public class ID3v24Tag extends AbstractID3v2Tag
         {
             throw new KeyNotFoundException(genericKey.name());
         }
-        return new FrameAndSubId(id3v24FieldKey.getFrameId(), id3v24FieldKey.getSubId());
+        return new FrameAndSubId(genericKey, id3v24FieldKey.getFrameId(), id3v24FieldKey.getSubId());
     }
 
     protected ID3Frames getID3Frames()
