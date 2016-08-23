@@ -513,24 +513,26 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
 
     protected abstract ID3Frames getID3Frames();
 
+    /*
     public void setField(FieldKey genericKey, String value) throws KeyNotFoundException, FieldDataInvalidException
     {
         TagField tagfield = createField(genericKey, value);
         setField(tagfield);
     }
+    */
 
-    /*
     public void setField(FieldKey genericKey, String value) throws KeyNotFoundException, FieldDataInvalidException
     {
         setMultiValueField(genericKey, value);
     }
+
 
     public void setMultiValueField(FieldKey genericKey, String... values) throws KeyNotFoundException, FieldDataInvalidException
     {
         TagField tagfield = createMultiValueField(genericKey, values);
         setField(tagfield);
     }
-    */
+
     public void addField(FieldKey genericKey, String value) throws KeyNotFoundException, FieldDataInvalidException
     {
         TagField tagfield = createField(genericKey, value);
@@ -2294,57 +2296,11 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
         return doGetValueAtIndex(frameAndSubId, index);
     }
 
-    /*public TagField createField(FieldKey genericKey, String value) throws KeyNotFoundException, FieldDataInvalidException
-    {
-        return createMultiValueField(genericKey, value);
-    }*/
-
     public TagField createField(FieldKey genericKey, String value) throws KeyNotFoundException, FieldDataInvalidException
     {
-        if (genericKey == null)
-        {
-            throw new KeyNotFoundException();
-        }
-
-
-
-        FrameAndSubId formatKey = getFrameAndSubIdFromGenericKey(genericKey);
-
-        //FrameAndSubId does not contain enough info for these fields to be able to work out what to update
-        //that is why we need the extra processing here instead of doCreateTagField()
-        if (genericKey == FieldKey.TRACK)
-        {
-            AbstractID3v2Frame frame = createFrame(formatKey.getFrameId());
-            FrameBodyTRCK framebody = (FrameBodyTRCK) frame.getBody();
-            framebody.setTrackNo(value);
-            return frame;
-        }
-        else if (genericKey == FieldKey.TRACK_TOTAL)
-        {
-            AbstractID3v2Frame frame = createFrame(formatKey.getFrameId());
-            FrameBodyTRCK framebody = (FrameBodyTRCK) frame.getBody();
-            framebody.setTrackTotal(value);
-            return frame;
-        }
-        else if (genericKey == FieldKey.DISC_NO)
-        {
-            AbstractID3v2Frame frame = createFrame(formatKey.getFrameId());
-            FrameBodyTPOS framebody = (FrameBodyTPOS) frame.getBody();
-            framebody.setDiscNo(value);
-            return frame;
-        }
-        else if (genericKey == FieldKey.DISC_TOTAL)
-        {
-            AbstractID3v2Frame frame = createFrame(formatKey.getFrameId());
-            FrameBodyTPOS framebody = (FrameBodyTPOS) frame.getBody();
-            framebody.setDiscTotal(value);
-            return frame;
-        }
-        else
-        {
-            return doCreateTagField(formatKey, value);
-        }
+        return createMultiValueField(genericKey, value);
     }
+
 
     /**
      * Create a new TagField

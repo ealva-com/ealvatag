@@ -1011,19 +1011,20 @@ public class ID3v23Tag extends AbstractID3v2Tag
      * Overridden to allow special handling for mapping YEAR to TYER and TDAT Frames
      *
      * @param genericKey is the generic key
-     * @param value      to store
+     * @param values      to store
      * @return
      * @throws KeyNotFoundException
      * @throws FieldDataInvalidException
      */
     @Override
-    public TagField createField(FieldKey genericKey, String value) throws KeyNotFoundException, FieldDataInvalidException
+    public TagField createMultiValueField(FieldKey genericKey, String... values) throws KeyNotFoundException, FieldDataInvalidException
     {
         if (genericKey == null)
         {
             throw new KeyNotFoundException();
         }
 
+        String value = values[0];
         if (genericKey == FieldKey.GENRE)
         {
             if (value == null)
@@ -1117,7 +1118,7 @@ public class ID3v23Tag extends AbstractID3v2Tag
         }
         else
         {
-            return super.createField(genericKey, value);
+            return super.createMultiValueField(genericKey, value);
         }
     }
 

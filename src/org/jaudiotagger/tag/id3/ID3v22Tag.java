@@ -631,13 +631,14 @@ public class ID3v22Tag extends AbstractID3v2Tag
         return super.doCreateTagField(new FrameAndSubId(id3Key.getFrameId(), id3Key.getSubId()), value);
     }
 
-    public TagField createField(FieldKey genericKey, String value) throws KeyNotFoundException, FieldDataInvalidException
+    public TagField createMultiValueField(FieldKey genericKey, String... values) throws KeyNotFoundException, FieldDataInvalidException
     {
         if (genericKey == null)
         {
             throw new KeyNotFoundException();
         }
 
+        String value = values[0];
         if (genericKey == FieldKey.GENRE)
         {
             if (value == null)
@@ -653,7 +654,7 @@ public class ID3v22Tag extends AbstractID3v2Tag
         }
         else
         {
-            return super.createField(genericKey, value);
+            return super.createMultiValueField(genericKey, value);
         }
     }
 

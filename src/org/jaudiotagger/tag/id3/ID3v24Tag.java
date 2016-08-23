@@ -1351,45 +1351,15 @@ public class ID3v24Tag extends AbstractID3v2Tag
         return frame;
     }
 
-    public TagField createField(FieldKey genericKey, String value) throws KeyNotFoundException, FieldDataInvalidException
-    {
-        if (genericKey == null)
-        {
-            throw new KeyNotFoundException();
-        }
-
-        if (genericKey == FieldKey.GENRE)
-        {
-            if (value == null)
-            {
-                throw new IllegalArgumentException(ErrorMessage.GENERAL_INVALID_NULL_ARGUMENT.getMsg());
-            }
-            FrameAndSubId formatKey = getFrameAndSubIdFromGenericKey(genericKey);
-            AbstractID3v2Frame frame = createFrame(formatKey.getFrameId());
-            FrameBodyTCON framebody = (FrameBodyTCON) frame.getBody();
-
-            if(TagOptionSingleton.getInstance().isWriteMp3GenresAsText())
-            {
-                framebody.setText(value);
-            }
-            else
-            {
-                framebody.setText(FrameBodyTCON.convertGenericToID3v24Genre(value));
-            }
-            return frame;
-        }
-        else
-        {
-            return super.createField(genericKey, value);
-        }
-    }
-
-    /*
-    public TagField createField(FieldKey genericKey, String value) throws KeyNotFoundException, FieldDataInvalidException
-    {
-        return createMultiValueField(genericKey, value);
-    }
-
+    /**
+     * Overridden for special Genre support
+     *
+     * @param genericKey is the generic key
+     * @param value
+     * @return
+     * @throws KeyNotFoundException
+     * @throws FieldDataInvalidException
+     */
     public TagField createMultiValueField(FieldKey genericKey, String... value) throws KeyNotFoundException, FieldDataInvalidException
     {
         if (genericKey == null)
@@ -1422,7 +1392,6 @@ public class ID3v24Tag extends AbstractID3v2Tag
             return super.createMultiValueField(genericKey, value);
         }
     }
-    */
     /**
      * Maps the generic key to the id3 key and return the list of values for this field as strings
      *
