@@ -67,7 +67,8 @@ public class FrameBodyIPLS extends AbstractFrameBodyPairs implements ID3v23Frame
 
     public FrameBodyIPLS(FrameBodyIPLS body)
     {
-        super(body);
+        setObjectValue(DataTypes.OBJ_TEXT_ENCODING, body.getTextEncoding());
+        setObjectValue(DataTypes.OBJ_TEXT, body.getPairing());
     }
 
     /**

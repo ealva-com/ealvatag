@@ -38,15 +38,14 @@ import java.util.StringTokenizer;
 
 
 /**
- * The 'Involved people list' is intended as a mapping between functions like producer and names. Every odd field is a
- * function and every even is an name or a comma delimited list of names.
+ * Used by frames that take a pair of values such as TIPL, IPLS and TMCL
  *
  */
-public class AbstractFrameBodyPairs extends AbstractID3v2FrameBody implements ID3v24FrameBody
+public abstract class AbstractFrameBodyPairs extends AbstractID3v2FrameBody implements ID3v24FrameBody
 {
 
     /**
-     * Creates a new FrameBodyTIPL datatype.
+     * Creates a new AbstractFrameBodyPairs datatype.
      */
     public AbstractFrameBodyPairs()
     {
@@ -54,7 +53,7 @@ public class AbstractFrameBodyPairs extends AbstractID3v2FrameBody implements ID
     }
 
     /**
-     * Creates a new FrameBodyTIPL data type.
+     * Creates a new AbstractFrameBodyPairs data type.
      *
      * @param textEncoding
      * @param text
@@ -66,7 +65,7 @@ public class AbstractFrameBodyPairs extends AbstractID3v2FrameBody implements ID
     }
 
     /**
-     * Creates a new FrameBodyTIPL data type.
+     * Creates a new AbstractFrameBodyPairs data type.
      *
      * @param byteBuffer
      * @param frameSize
@@ -78,25 +77,11 @@ public class AbstractFrameBodyPairs extends AbstractID3v2FrameBody implements ID
     }
 
     /**
-     * Convert from V3 to V4 Frame
-     *
-     * @param body
-     */
-    public AbstractFrameBodyPairs(FrameBodyIPLS body)
-    {
-        setObjectValue(DataTypes.OBJ_TEXT_ENCODING, body.getTextEncoding());
-        setObjectValue(DataTypes.OBJ_TEXT, body.getPairing());
-    }
-
-    /**
      * The ID3v2 frame identifier
      *
      * @return the ID3v2 frame identifier  for this frame type
      */
-    public String getIdentifier()
-    {
-        return ID3v24Frames.FRAME_ID_INVOLVED_PEOPLE;
-    }
+    public abstract String getIdentifier();
 
     /**
      * Set the text, decoded as pairs of involvee - involvement
@@ -121,7 +106,7 @@ public class AbstractFrameBodyPairs extends AbstractID3v2FrameBody implements ID
     }
 
     /**
-     * Parse text as a null separated pairing of name and function
+     * Parse text as a null separated pairing of function and name
      *
      * @param text
      */
