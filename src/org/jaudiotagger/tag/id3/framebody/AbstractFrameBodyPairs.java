@@ -178,7 +178,7 @@ public abstract class AbstractFrameBodyPairs extends AbstractID3v2FrameBody impl
     public String getKeyAtIndex(int index)
     {
         PairedTextEncodedStringNullTerminated text = (PairedTextEncodedStringNullTerminated) getObject(DataTypes.OBJ_TEXT);
-        return (String) text.getValue().getMapping().get(index).getKey();
+        return text.getValue().getMapping().get(index).getKey();
     }
 
     /**
@@ -190,7 +190,7 @@ public abstract class AbstractFrameBodyPairs extends AbstractID3v2FrameBody impl
     public String getValueAtIndex(int index)
     {
         PairedTextEncodedStringNullTerminated text = (PairedTextEncodedStringNullTerminated) getObject(DataTypes.OBJ_TEXT);
-        return (String) text.getValue().getMapping().get(index).getValue();
+        return text.getValue().getMapping().get(index).getValue();
     }
 
     /**
