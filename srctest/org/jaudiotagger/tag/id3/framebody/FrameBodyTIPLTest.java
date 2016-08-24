@@ -139,7 +139,7 @@ public class FrameBodyTIPLTest extends AbstractTestCase
 
         f.setTag(new ID3v24Tag());
         ((ID3v24Tag)f.getTag()).setField(FieldKey.ARRANGER, "Arranger1");
-        ((ID3v24Tag)f.getTag()).addMultiValueField(FieldKey.ARRANGER, "Arranger2");
+        ((ID3v24Tag)f.getTag()).addField(FieldKey.ARRANGER, "Arranger2");
         assertEquals(1, f.getTag().getFieldCount());
         assertEquals("Arranger1", f.getTag().getFirst(FieldKey.ARRANGER));
         assertEquals("Arranger1", f.getTag().getValue(FieldKey.ARRANGER,0));
