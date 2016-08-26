@@ -175,7 +175,7 @@ public class VorbisCommentTag extends AbstractTag
         tagFieldToOggField.put(FieldKey.CONDUCTOR_SORT, VorbisCommentFieldKey.CONDUCTOR_SORT);
         tagFieldToOggField.put(FieldKey.SOLOIST_SORT, VorbisCommentFieldKey.SOLOIST_SORT);
         tagFieldToOggField.put(FieldKey.ORCHESTRA_SORT, VorbisCommentFieldKey.ORCHESTRA_SORT);
-        tagFieldToOggField.put(FieldKey.PERFORMER_SORT, VorbisCommentFieldKey.PERFORMER_SORT);
+        tagFieldToOggField.put(FieldKey.NON_SOLOIST_SORT, VorbisCommentFieldKey.NON_SOLOIST);
         tagFieldToOggField.put(FieldKey.ARRANGER_SORT, VorbisCommentFieldKey.ARRANGER_SORT);
         tagFieldToOggField.put(FieldKey.OPUS, VorbisCommentFieldKey.OPUS);
         tagFieldToOggField.put(FieldKey.SINGLE_DISC_TRACK_NO, VorbisCommentFieldKey.SINGLE_DISC_TRACK_NO);

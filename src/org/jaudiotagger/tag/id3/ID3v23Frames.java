@@ -493,7 +493,7 @@ public class ID3v23Frames extends ID3Frames
         tagFieldToId3.put(FieldKey.CONDUCTOR_SORT, ID3v23FieldKey.CONDUCTOR_SORT);
         tagFieldToId3.put(FieldKey.SOLOIST_SORT, ID3v23FieldKey.SOLOIST_SORT);
         tagFieldToId3.put(FieldKey.ORCHESTRA_SORT, ID3v23FieldKey.ORCHESTRA_SORT);
-        tagFieldToId3.put(FieldKey.PERFORMER_SORT, ID3v23FieldKey.PERFORMER_SORT);
+        tagFieldToId3.put(FieldKey.NON_SOLOIST_SORT, ID3v23FieldKey.NON_SOLOIST_SORT);
         tagFieldToId3.put(FieldKey.ARRANGER_SORT, ID3v23FieldKey.ARRANGER_SORT);
         tagFieldToId3.put(FieldKey.OPUS, ID3v23FieldKey.OPUS);
         tagFieldToId3.put(FieldKey.SINGLE_DISC_TRACK_NO, ID3v23FieldKey.SINGLE_DISC_TRACK_NO);

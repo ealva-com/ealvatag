@@ -207,7 +207,7 @@ public enum Mp4FieldKey
     CONDUCTOR_SORT("com.apple.iTunes","Conductor Sort",  TEXT, Tagger.JAIKOZ),
     SOLOIST_SORT("com.apple.iTunes","Soloist Sort",  TEXT, Tagger.JAIKOZ),
     ORCHESTRA_SORT("com.apple.iTunes","Orchestra Sort",  TEXT, Tagger.JAIKOZ),
-    PERFORMER_SORT("com.apple.iTunes","Performer Sort",  TEXT, Tagger.JAIKOZ),
+    NON_SOLOIST_SORT("com.apple.iTunes","Non Soloist Sort",  TEXT, Tagger.JAIKOZ),
     ARRANGER_SORT("com.apple.iTunes","Arranger Sort",  TEXT, Tagger.JAIKOZ),
     OPUS("com.apple.iTunes","Opus",  TEXT, Tagger.JAIKOZ),
     SINGLE_DISC_TRACK_NO("com.apple.iTunes","Single Disc Track No",  TEXT, Tagger.JAIKOZ),

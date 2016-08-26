@@ -194,7 +194,7 @@ public enum AsfFieldKey
     CONDUCTOR_SORT("WM/ConductorSort",true),
     SOLOIST_SORT("WM/SoloistSort",true),
     ORCHESTRA_SORT("WM/OrchestraSort",true),
-    PERFORMER_SORT("WM/PerformerSort",true),
+    NON_SOLOIST_SORT("WM/PerformerSort",true),
     ARRANGER_SORT("WM/ArrangerSort",true),
     OPUS("WM/Opus",true),
     SINGLE_DISC_TRACK_NO("WM/SingleDiscTrackNo",true),

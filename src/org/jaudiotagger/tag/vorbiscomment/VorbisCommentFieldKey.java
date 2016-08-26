@@ -163,7 +163,7 @@ public enum VorbisCommentFieldKey
     CONDUCTOR_SORT("CONDUCTOR_SORT",EnumSet.of(Tagger.JAIKOZ)),
     SOLOIST_SORT("SOLOIST_SORT",EnumSet.of(Tagger.JAIKOZ)),
     ORCHESTRA_SORT("ORCHESTRA_SORT",EnumSet.of(Tagger.JAIKOZ)),
-    PERFORMER_SORT("PERFROMER_SORT",EnumSet.of(Tagger.JAIKOZ)),
+    NON_SOLOIST("NON_SOLOIST_SORT",EnumSet.of(Tagger.JAIKOZ)),
     ARRANGER_SORT("ARRANGER_SORT",EnumSet.of(Tagger.JAIKOZ)),
     OPUS("OPUS",EnumSet.of(Tagger.JAIKOZ)),
     SINGLE_DISC_TRACK_NO("SINGLE_DISC_TRACK_NO",EnumSet.of(Tagger.JAIKOZ)),
