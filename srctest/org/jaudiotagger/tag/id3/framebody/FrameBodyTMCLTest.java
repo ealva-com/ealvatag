@@ -16,88 +16,88 @@ public class FrameBodyTMCLTest extends AbstractTestCase
      * Uses TMCL frame
      * @throws Exception
      */
-    public void testWriteMusiciansIDv24() throws Exception
+    public void testWritePERFORMERsIDv24() throws Exception
     {
-        File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3", new File("testWriteMusiciansv24.mp3"));
+        File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3", new File("testWritePERFORMERsv24.mp3"));
         AudioFile f = AudioFileIO.read(testFile);
         assertNull(f.getTag());
 
         f.setTag(new ID3v24Tag());
-        f.getTag().setField(FieldKey.MUSICIAN,"violinist","Nigel Kennedy");
-        f.getTag().addField(FieldKey.MUSICIAN,"harpist","Gloria Divosky");
+        f.getTag().setField(FieldKey.PERFORMER,"violinist","Nigel Kennedy");
+        f.getTag().addField(FieldKey.PERFORMER,"harpist","Gloria Divosky");
         assertEquals(1, f.getTag().getFieldCount());
-        assertEquals("violinist:Nigel Kennedy", f.getTag().getFirst(FieldKey.MUSICIAN));
-        assertEquals("violinist:Nigel Kennedy", f.getTag().getValue(FieldKey.MUSICIAN,0));
-        assertEquals("harpist:Gloria Divosky", f.getTag().getValue(FieldKey.MUSICIAN,1));
+        assertEquals("violinist:Nigel Kennedy", f.getTag().getFirst(FieldKey.PERFORMER));
+        assertEquals("violinist:Nigel Kennedy", f.getTag().getValue(FieldKey.PERFORMER,0));
+        assertEquals("harpist:Gloria Divosky", f.getTag().getValue(FieldKey.PERFORMER,1));
         f.commit();
         f = AudioFileIO.read(testFile);
-        assertEquals(1,f.getTag().getFields(FieldKey.MUSICIAN).size());
+        assertEquals(1,f.getTag().getFields(FieldKey.PERFORMER).size());
         assertEquals(1,f.getTag().getFieldCount());
         assertEquals(1, f.getTag().getFieldCount());
     }
 
-    public void testWriteMusiciansAndDeleteIDv24() throws Exception
+    public void testWritePERFORMERsAndDeleteIDv24() throws Exception
     {
-        File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3", new File("testWriteMusiciansAndDeletev24.mp3"));
+        File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3", new File("testWritePERFORMERsAndDeletev24.mp3"));
         AudioFile f = AudioFileIO.read(testFile);
         assertNull(f.getTag());
 
         f.setTag(new ID3v24Tag());
-        f.getTag().setField(FieldKey.MUSICIAN,"violinist","Nigel Kennedy");
-        f.getTag().addField(FieldKey.MUSICIAN,"harpist","Gloria Divosky");
+        f.getTag().setField(FieldKey.PERFORMER,"violinist","Nigel Kennedy");
+        f.getTag().addField(FieldKey.PERFORMER,"harpist","Gloria Divosky");
         assertEquals(1,f.getTag().getFieldCount());
         f.commit();
         f = AudioFileIO.read(testFile);
-        assertEquals(1,f.getTag().getFields(FieldKey.MUSICIAN).size());
+        assertEquals(1,f.getTag().getFields(FieldKey.PERFORMER).size());
         assertEquals(1,f.getTag().getFieldCount());
         assertEquals(1, f.getTag().getFieldCount());
 
-        f.getTag().deleteField(FieldKey.MUSICIAN);
+        f.getTag().deleteField(FieldKey.PERFORMER);
         assertEquals(0,f.getTag().getFieldCount());
         f.commit();
         f = AudioFileIO.read(testFile);
-        assertEquals(0,f.getTag().getFields(FieldKey.MUSICIAN).size());
+        assertEquals(0,f.getTag().getFields(FieldKey.PERFORMER).size());
         assertEquals(0,f.getTag().getFieldCount());
         assertEquals(0, f.getTag().getFieldCount());
 
     }
 
-    public void testWriteMusiciansIDv23() throws Exception
+    public void testWritePERFORMERsIDv23() throws Exception
     {
-        File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3", new File("testWriteMusiciansv23.mp3"));
+        File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3", new File("testWritePERFORMERsv23.mp3"));
         AudioFile f = AudioFileIO.read(testFile);
         assertNull(f.getTag());
 
         f.setTag(new ID3v23Tag());
-        f.getTag().setField(FieldKey.MUSICIAN,"violinist","Nigel Kennedy");
-        f.getTag().addField(FieldKey.MUSICIAN,"harpist","Gloria Divosky");
+        f.getTag().setField(FieldKey.PERFORMER,"violinist","Nigel Kennedy");
+        f.getTag().addField(FieldKey.PERFORMER,"harpist","Gloria Divosky");
         assertEquals(1,f.getTag().getFieldCount());
-        assertEquals("violinist:Nigel Kennedy", f.getTag().getFirst(FieldKey.MUSICIAN));
-        assertEquals("violinist:Nigel Kennedy", f.getTag().getValue(FieldKey.MUSICIAN,0));
-        assertEquals("harpist:Gloria Divosky", f.getTag().getValue(FieldKey.MUSICIAN,1));
+        assertEquals("violinist:Nigel Kennedy", f.getTag().getFirst(FieldKey.PERFORMER));
+        assertEquals("violinist:Nigel Kennedy", f.getTag().getValue(FieldKey.PERFORMER,0));
+        assertEquals("harpist:Gloria Divosky", f.getTag().getValue(FieldKey.PERFORMER,1));
         f.commit();
         f = AudioFileIO.read(testFile);
-        assertEquals(1,f.getTag().getFields(FieldKey.MUSICIAN).size());
+        assertEquals(1,f.getTag().getFields(FieldKey.PERFORMER).size());
         assertEquals(1,f.getTag().getFieldCount());
         assertEquals(1, f.getTag().getFieldCount());
     }
 
-    public void testWriteMusiciansIDv22() throws Exception
+    public void testWritePERFORMERsIDv22() throws Exception
     {
-        File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3", new File("testWriteMusiciansv22.mp3"));
+        File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3", new File("testWritePERFORMERsv22.mp3"));
         AudioFile f = AudioFileIO.read(testFile);
         assertNull(f.getTag());
 
         f.setTag(new ID3v22Tag());
-        f.getTag().setField(FieldKey.MUSICIAN,"violinist","Nigel Kennedy");
-        f.getTag().addField(FieldKey.MUSICIAN,"harpist","Gloria Divosky");
+        f.getTag().setField(FieldKey.PERFORMER,"violinist","Nigel Kennedy");
+        f.getTag().addField(FieldKey.PERFORMER,"harpist","Gloria Divosky");
         assertEquals(1,f.getTag().getFieldCount());
-        assertEquals("violinist:Nigel Kennedy", f.getTag().getFirst(FieldKey.MUSICIAN));
-        assertEquals("violinist:Nigel Kennedy", f.getTag().getValue(FieldKey.MUSICIAN,0));
-        assertEquals("harpist:Gloria Divosky", f.getTag().getValue(FieldKey.MUSICIAN,1));
+        assertEquals("violinist:Nigel Kennedy", f.getTag().getFirst(FieldKey.PERFORMER));
+        assertEquals("violinist:Nigel Kennedy", f.getTag().getValue(FieldKey.PERFORMER,0));
+        assertEquals("harpist:Gloria Divosky", f.getTag().getValue(FieldKey.PERFORMER,1));
         f.commit();
         f = AudioFileIO.read(testFile);
-        assertEquals(1,f.getTag().getFields(FieldKey.MUSICIAN).size());
+        assertEquals(1,f.getTag().getFields(FieldKey.PERFORMER).size());
         assertEquals(1,f.getTag().getFieldCount());
         assertEquals(1, f.getTag().getFieldCount());
     }

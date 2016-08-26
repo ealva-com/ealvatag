@@ -142,7 +142,6 @@ public final class AsfTag extends AbstractTag
         tagFieldToAsfField.put(FieldKey.MOOD_RELAXED, AsfFieldKey.MOOD_RELAXED);
         tagFieldToAsfField.put(FieldKey.MOOD_SAD, AsfFieldKey.MOOD_SAD);
         tagFieldToAsfField.put(FieldKey.MOOD_VALENCE, AsfFieldKey.MOOD_VALENCE);
-        tagFieldToAsfField.put(FieldKey.MUSICIAN, AsfFieldKey.MUSICIAN);
         tagFieldToAsfField.put(FieldKey.MUSICBRAINZ_ARTISTID, AsfFieldKey.MUSICBRAINZ_ARTISTID);
         tagFieldToAsfField.put(FieldKey.MUSICBRAINZ_DISC_ID, AsfFieldKey.MUSICBRAINZ_DISC_ID);
         tagFieldToAsfField.put(FieldKey.MUSICBRAINZ_ORIGINAL_RELEASE_ID, AsfFieldKey.MUSICBRAINZ_ORIGINAL_RELEASEID);

@@ -122,7 +122,6 @@ public enum AsfFieldKey
     MOOD_RELAXED("WM/MoodRelaxed", false),
     MOOD_SAD("WM/MoodSad", false),
     MOOD_VALENCE("WM/MoodValence", false),
-    MUSICIAN("WM/Musician", true),
     MUSICBRAINZ_ARTISTID("MusicBrainz/Artist Id", false),
     MUSICBRAINZ_DISC_ID("MusicBrainz/Disc Id", false),
     MUSICBRAINZ_ORIGINAL_RELEASEID("MusicBrainz/Original Album Id", false),

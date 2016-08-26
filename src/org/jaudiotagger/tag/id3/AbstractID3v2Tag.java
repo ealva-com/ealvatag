@@ -2514,7 +2514,14 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
             }
             else
             {
-                ((FrameBodyIPLS) (frame.getBody())).addPair(values[0], values[1]);
+                if(values.length>=2)
+                {
+                    ((FrameBodyIPLS) (frame.getBody())).addPair(values[0], values[1]);
+                }
+                else
+                {
+                    ((FrameBodyIPLS) (frame.getBody())).addPair(values[0]);
+                }
             }
         }
         else if (frame.getBody() instanceof FrameBodyTIPL)
@@ -2523,7 +2530,14 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
         }
         else if (frame.getBody() instanceof FrameBodyTMCL)
         {
-            ((FrameBodyTMCL) (frame.getBody())).addPair(values[0], values[1]);
+            if(values.length>=2)
+            {
+                ((FrameBodyTMCL) (frame.getBody())).addPair(values[0], values[1]);
+            }
+            else
+            {
+                ((FrameBodyTMCL) (frame.getBody())).addPair(values[0]);
+            }
         }
         else if ((frame.getBody() instanceof FrameBodyAPIC) || (frame.getBody() instanceof FrameBodyPIC))
         {
@@ -2635,7 +2649,8 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
             }
         }
         //Special handling for paired fields with no defined key
-        else if ((formatKey.getGenericKey() == FieldKey.MUSICIAN))
+        //TODO displaying value with/without ':' logic shoud be in framebody class itself
+        else if ((formatKey.getGenericKey() == FieldKey.PERFORMER))
         {
             List<TagField> list = getFields(formatKey.getFrameId());
             ListIterator<TagField> li = list.listIterator();
@@ -2646,9 +2661,16 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
                 {
                     for (Pair entry : ((AbstractFrameBodyPairs) next).getPairing().getMapping())
                     {
-                        if (entry.getValue() != null)
+                        if (!entry.getValue().isEmpty())
                         {
-                            values.add(entry.getKey()+":"+entry.getValue());
+                            if(!entry.getKey().isEmpty())
+                            {
+                                values.add(entry.getKey() + ":" + entry.getValue());
+                            }
+                            else
+                            {
+                                values.add(entry.getValue());
+                            }
                         }
                     }
                 }

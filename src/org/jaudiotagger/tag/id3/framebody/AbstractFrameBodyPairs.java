@@ -117,6 +117,10 @@ public abstract class AbstractFrameBodyPairs extends AbstractID3v2FrameBody impl
         {
             addPair(stz.nextToken(),stz.nextToken());
         }
+        else
+        {
+            addPair("", text);
+        }
     }
 
     /**
