@@ -30,6 +30,7 @@ import org.jaudiotagger.tag.datatype.NumberHashMap;
 import org.jaudiotagger.tag.datatype.Pair;
 import org.jaudiotagger.tag.datatype.PairedTextEncodedStringNullTerminated;
 import org.jaudiotagger.tag.id3.ID3v24Frames;
+import org.jaudiotagger.tag.id3.valuepair.StandardIPLSKey;
 import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
 
 import java.io.ByteArrayOutputStream;
@@ -44,12 +45,12 @@ import java.util.StringTokenizer;
  */
 public class FrameBodyTIPL extends AbstractFrameBodyPairs implements ID3v24FrameBody
 {
-    //Standard function names, taken from Picard Mapping
-    public static final String ENGINEER = "engineer";
-    public static final String MIXER    = "mix";
-    public static final String DJMIXER  = "DJ-mix";
-    public static final String PRODUCER = "producer";
-    public static final String ARRANGER = "arranger";
+    //Standard function names, code now uses StandardIPLSKey but kept for backwards compatability
+    public static final String ENGINEER = StandardIPLSKey.ENGINEER.getKey();
+    public static final String MIXER    = StandardIPLSKey.MIXER.getKey();
+    public static final String DJMIXER  = StandardIPLSKey.DJMIXER.getKey();
+    public static final String PRODUCER = StandardIPLSKey.PRODUCER.getKey();
+    public static final String ARRANGER = StandardIPLSKey.ARRANGER.getKey();
 
     /**
      * Creates a new FrameBodyTIPL datatype.

@@ -376,6 +376,7 @@ public class Issue298Test extends AbstractTestCase
             tag.setField(tag.createField(FieldKey.SOLOIST_SORT,"SoloistSort"));
             tag.setField(tag.createField(FieldKey.NON_SOLOIST,"NonSoloist"));
             tag.setField(tag.createField(FieldKey.NON_SOLOIST_SORT,"NonSoloistSort"));
+            tag.setField(tag.createField(FieldKey.PRODUCER,"Producer"));
 
 
             af.commit();
@@ -455,6 +456,7 @@ public class Issue298Test extends AbstractTestCase
             assertEquals("SoloistSort",af.getTag().getFirst(FieldKey.SOLOIST_SORT));
             assertEquals("NonSoloist",af.getTag().getFirst(FieldKey.NON_SOLOIST));
             assertEquals("NonSoloistSort",af.getTag().getFirst(FieldKey.NON_SOLOIST_SORT));
+            assertEquals("Producer",af.getTag().getFirst(FieldKey.PRODUCER));
 
 
 

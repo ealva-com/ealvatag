@@ -28,6 +28,7 @@ import org.jaudiotagger.tag.datatype.DataTypes;
 import org.jaudiotagger.tag.datatype.Pair;
 import org.jaudiotagger.tag.datatype.PairedTextEncodedStringNullTerminated;
 import org.jaudiotagger.tag.id3.framebody.*;
+import org.jaudiotagger.tag.id3.valuepair.StandardIPLSKey;
 import org.jaudiotagger.tag.images.Artwork;
 import org.jaudiotagger.tag.reference.Languages;
 import org.jaudiotagger.tag.reference.PictureTypes;
@@ -2661,15 +2662,18 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
                 {
                     for (Pair entry : ((AbstractFrameBodyPairs) next).getPairing().getMapping())
                     {
-                        if (!entry.getValue().isEmpty())
+                        if(!StandardIPLSKey.isKey(entry.getKey()))
                         {
-                            if(!entry.getKey().isEmpty())
+                            if (!entry.getValue().isEmpty())
                             {
-                                values.add(entry.getKey() + ":" + entry.getValue());
-                            }
-                            else
-                            {
-                                values.add(entry.getValue());
+                                if (!entry.getKey().isEmpty())
+                                {
+                                    values.add(entry.getKey() + ":" + entry.getValue());
+                                }
+                                else
+                                {
+                                    values.add(entry.getValue());
+                                }
                             }
                         }
                     }
