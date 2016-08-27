@@ -173,6 +173,7 @@ public class Mp4Tag extends AbstractTag
         tagFieldToMp4Field.put(FieldKey.CONDUCTOR_SORT, Mp4FieldKey.CONDUCTOR_SORT);
         tagFieldToMp4Field.put(FieldKey.SOLOIST_SORT, Mp4FieldKey.SOLOIST_SORT);
         tagFieldToMp4Field.put(FieldKey.ORCHESTRA_SORT, Mp4FieldKey.ORCHESTRA_SORT);
+        tagFieldToMp4Field.put(FieldKey.NON_SOLOIST, Mp4FieldKey.NON_SOLOIST);
         tagFieldToMp4Field.put(FieldKey.NON_SOLOIST_SORT, Mp4FieldKey.NON_SOLOIST_SORT);
         tagFieldToMp4Field.put(FieldKey.ARRANGER_SORT, Mp4FieldKey.ARRANGER_SORT);
         tagFieldToMp4Field.put(FieldKey.OPUS, Mp4FieldKey.OPUS);

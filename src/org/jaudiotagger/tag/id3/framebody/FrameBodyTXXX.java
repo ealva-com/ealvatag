@@ -105,12 +105,12 @@ public class FrameBodyTXXX extends AbstractFrameBodyTextInfo implements ID3v24Fr
     public static final String PART                                     = "Part";
     public static final String PART_NUMBER                              = "Part No";
     public static final String PART_TYPE                                = "Part Type";
-    public static final String PERFORMER                                = "PERFORMER";
-    public static final String PERFORMER_SORT                           = "Performer Sort";
+    public static final String NON_SOLOIST                              = "Non Soloist";
+    public static final String NON_SOLOIST_SORT                         = "Non Soloist Sort";
     public static final String PERIOD                                   = "Period";
     public static final String SCRIPT                                   = "Script";
     public static final String SINGLE_DISC_TRACK_NO                     = "Single Disc Track No";
-    public static final String SOLOIST                                  = "SOLOIST";
+    public static final String SOLOIST                                  = "Soloist";
     public static final String SOLOIST_SORT                             = "Soloist Sort";
     public static final String TAGS                                     = "TAGS";
     public static final String TIMBRE                                   = "TimbreBrightness";
