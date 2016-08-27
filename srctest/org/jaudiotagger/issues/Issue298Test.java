@@ -11,6 +11,7 @@ import org.jaudiotagger.tag.id3.ID3v24Frame;
 import org.jaudiotagger.tag.id3.ID3v24Tag;
 import org.jaudiotagger.tag.id3.framebody.FrameBodyCOMM;
 import org.jaudiotagger.tag.reference.Languages;
+import org.jaudiotagger.tag.reference.PerformerHelper;
 
 import java.io.File;
 
@@ -179,10 +180,10 @@ public class Issue298Test extends AbstractTestCase
             assertEquals("Period",af.getTag().getFirst(FieldKey.PERIOD));
             assertEquals("true",af.getTag().getFirst(FieldKey.IS_CLASSICAL));
             assertEquals("true",af.getTag().getFirst(FieldKey.IS_SOUNDTRACK));
-            assertEquals("Soloist",af.getTag().getFirst(FieldKey.SOLOIST));
-            assertEquals("SoloistSort",af.getTag().getFirst(FieldKey.SOLOIST_SORT));
-            assertEquals("NonSoloist",af.getTag().getFirst(FieldKey.NON_SOLOIST));
-            assertEquals("NonSoloistSort",af.getTag().getFirst(FieldKey.NON_SOLOIST_SORT));
+            assertEquals("Soloist", af.getTag().getFirst(FieldKey.SOLOIST));
+            assertEquals("SoloistSort", af.getTag().getFirst(FieldKey.SOLOIST_SORT));
+            assertEquals("NonSoloist", af.getTag().getFirst(FieldKey.NON_SOLOIST));
+            assertEquals("NonSoloistSort", af.getTag().getFirst(FieldKey.NON_SOLOIST_SORT));
 
             {
                 TagField tagField = af.getTag().getFirstField(FieldKey.CUSTOM1);
@@ -380,7 +381,7 @@ public class Issue298Test extends AbstractTestCase
             af.commit();
             af = AudioFileIO.read(testFile);
             assertEquals("custom1",af.getTag().getFirst(FieldKey.CUSTOM1));
-            assertEquals("custom2",af.getTag().getFirst(FieldKey.CUSTOM2));
+            assertEquals("custom2", af.getTag().getFirst(FieldKey.CUSTOM2));
             assertEquals("custom3",af.getTag().getFirst(FieldKey.CUSTOM3));
             assertEquals("custom4",af.getTag().getFirst(FieldKey.CUSTOM4));
             assertEquals("custom5",af.getTag().getFirst(FieldKey.CUSTOM5));
@@ -562,7 +563,7 @@ public class Issue298Test extends AbstractTestCase
             af.commit();
             af = AudioFileIO.read(testFile);
             assertEquals("custom1",af.getTag().getFirst(FieldKey.CUSTOM1));
-            assertEquals("custom2",af.getTag().getFirst(FieldKey.CUSTOM2));
+            assertEquals("custom2", af.getTag().getFirst(FieldKey.CUSTOM2));
             assertEquals("custom3",af.getTag().getFirst(FieldKey.CUSTOM3));
             assertEquals("custom4",af.getTag().getFirst(FieldKey.CUSTOM4));
             assertEquals("custom5",af.getTag().getFirst(FieldKey.CUSTOM5));
@@ -696,7 +697,7 @@ public class Issue298Test extends AbstractTestCase
             tag.setField(tag.createField(FieldKey.ORCHESTRA,"Orchestra"));
             tag.setField(tag.createField(FieldKey.PART,"Part"));
             tag.setField(tag.createField(FieldKey.WORK,"Work"));
-            tag.setField(tag.createField(FieldKey.PERFORMER,"Performer"));
+            tag.setField(tag.createField(FieldKey.PERFORMER, PerformerHelper.formatForNonId3("Nigel Kennedy", "violinist")));
             tag.setField(tag.createField(FieldKey.WORK_TYPE,"WorkType"));
             tag.setField(tag.createField(FieldKey.SOLOIST,"Soloist"));
             tag.setField(tag.createField(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL0_ID,"c1f657ba-8177-3cbb-b84a-f62bc684a94g"));
@@ -739,7 +740,7 @@ public class Issue298Test extends AbstractTestCase
             af.commit();
             af = AudioFileIO.read(testFile);
             assertEquals("custom1",af.getTag().getFirst(FieldKey.CUSTOM1));
-            assertEquals("custom2",af.getTag().getFirst(FieldKey.CUSTOM2));
+            assertEquals("custom2", af.getTag().getFirst(FieldKey.CUSTOM2));
             assertEquals("custom3",af.getTag().getFirst(FieldKey.CUSTOM3));
             assertEquals("custom4",af.getTag().getFirst(FieldKey.CUSTOM4));
             assertEquals("custom5",af.getTag().getFirst(FieldKey.CUSTOM5));
@@ -774,7 +775,7 @@ public class Issue298Test extends AbstractTestCase
             assertEquals("Orchestra",af.getTag().getFirst(FieldKey.ORCHESTRA));
             assertEquals("Part",af.getTag().getFirst(FieldKey.PART));
             assertEquals("Work",af.getTag().getFirst(FieldKey.WORK));
-            assertEquals("Performer",af.getTag().getFirst(FieldKey.PERFORMER));
+            assertEquals("Nigel Kennedy (violinist)",af.getTag().getFirst(FieldKey.PERFORMER));
             assertEquals("WorkType",af.getTag().getFirst(FieldKey.WORK_TYPE));
             assertEquals("Soloist",af.getTag().getFirst(FieldKey.SOLOIST));
             assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94g",af.getTag().getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL0_ID));
@@ -873,7 +874,7 @@ public class Issue298Test extends AbstractTestCase
             tag.setField(tag.createField(FieldKey.ORCHESTRA,"Orchestra"));
             tag.setField(tag.createField(FieldKey.PART,"Part"));
             tag.setField(tag.createField(FieldKey.WORK,"Work"));
-            tag.setField(tag.createField(FieldKey.PERFORMER,"Performer"));
+            tag.setField(tag.createField(FieldKey.PERFORMER, PerformerHelper.formatForNonId3("Nigel Kennedy", "violinist")));
             tag.setField(tag.createField(FieldKey.WORK_TYPE,"WorkType"));
             tag.setField(tag.createField(FieldKey.SOLOIST,"Soloist"));
             tag.setField(tag.createField(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL0_ID,"c1f657ba-8177-3cbb-b84a-f62bc684a94g"));
@@ -950,7 +951,7 @@ public class Issue298Test extends AbstractTestCase
             assertEquals("Am",af.getTag().getFirst(FieldKey.KEY));
             assertEquals("Orchestra",af.getTag().getFirst(FieldKey.ORCHESTRA));
             assertEquals("Part",af.getTag().getFirst(FieldKey.PART));
-            assertEquals("Performer",af.getTag().getFirst(FieldKey.PERFORMER));
+            assertEquals("Nigel Kennedy (violinist)",af.getTag().getFirst(FieldKey.PERFORMER));
 
             assertEquals("WorkType",af.getTag().getFirst(FieldKey.WORK_TYPE));
             assertEquals("Soloist",af.getTag().getFirst(FieldKey.SOLOIST));
@@ -1075,7 +1076,7 @@ public class Issue298Test extends AbstractTestCase
             tag.setField(tag.createField(FieldKey.ORCHESTRA,"Orchestra"));
             tag.setField(tag.createField(FieldKey.PART,"Part"));
             tag.setField(tag.createField(FieldKey.WORK,"Work"));
-            tag.setField(tag.createField(FieldKey.PERFORMER,"Performer"));
+            tag.setField(tag.createField(FieldKey.PERFORMER, PerformerHelper.formatForNonId3("Nigel Kennedy", "violinist")));
             tag.setField(tag.createField(FieldKey.WORK_TYPE,"WorkType"));
             tag.setField(tag.createField(FieldKey.SOLOIST,"Soloist"));
             tag.setField(tag.createField(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL0_ID,"c1f657ba-8177-3cbb-b84a-f62bc684a94g"));
@@ -1118,7 +1119,7 @@ public class Issue298Test extends AbstractTestCase
             af.commit();
             af = AudioFileIO.read(testFile);
             assertEquals("custom1",af.getTag().getFirst(FieldKey.CUSTOM1));
-            assertEquals("custom2",af.getTag().getFirst(FieldKey.CUSTOM2));
+            assertEquals("custom2", af.getTag().getFirst(FieldKey.CUSTOM2));
             assertEquals("custom3",af.getTag().getFirst(FieldKey.CUSTOM3));
             assertEquals("custom4",af.getTag().getFirst(FieldKey.CUSTOM4));
             assertEquals("custom5",af.getTag().getFirst(FieldKey.CUSTOM5));
@@ -1153,7 +1154,7 @@ public class Issue298Test extends AbstractTestCase
             assertEquals("Orchestra",af.getTag().getFirst(FieldKey.ORCHESTRA));
             assertEquals("Part",af.getTag().getFirst(FieldKey.PART));
             assertEquals("Work",af.getTag().getFirst(FieldKey.WORK));
-            assertEquals("Performer",af.getTag().getFirst(FieldKey.PERFORMER));
+            assertEquals("Nigel Kennedy (violinist)",af.getTag().getFirst(FieldKey.PERFORMER));
             assertEquals("WorkType",af.getTag().getFirst(FieldKey.WORK_TYPE));
             assertEquals("Soloist",af.getTag().getFirst(FieldKey.SOLOIST));
             assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94g",af.getTag().getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL0_ID));
@@ -1253,7 +1254,7 @@ public class Issue298Test extends AbstractTestCase
             tag.setField(tag.createField(FieldKey.ORCHESTRA,"Orchestra"));
             tag.setField(tag.createField(FieldKey.PART,"Part"));
             tag.setField(tag.createField(FieldKey.WORK,"Work"));
-            tag.setField(tag.createField(FieldKey.PERFORMER,"Performer"));
+            tag.setField(tag.createField(FieldKey.PERFORMER, PerformerHelper.formatForNonId3("Nigel Kennedy", "violinist")));
             tag.setField(tag.createField(FieldKey.WORK_TYPE,"WorkType"));
             tag.setField(tag.createField(FieldKey.SOLOIST,"Soloist"));
             tag.setField(tag.createField(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL0_ID,"c1f657ba-8177-3cbb-b84a-f62bc684a94g"));
@@ -1296,7 +1297,7 @@ public class Issue298Test extends AbstractTestCase
             af.commit();
             af = AudioFileIO.read(testFile);
             assertEquals("custom1",af.getTag().getFirst(FieldKey.CUSTOM1));
-            assertEquals("custom2",af.getTag().getFirst(FieldKey.CUSTOM2));
+            assertEquals("custom2", af.getTag().getFirst(FieldKey.CUSTOM2));
             assertEquals("custom3",af.getTag().getFirst(FieldKey.CUSTOM3));
             assertEquals("custom4",af.getTag().getFirst(FieldKey.CUSTOM4));
             assertEquals("custom5",af.getTag().getFirst(FieldKey.CUSTOM5));
@@ -1331,7 +1332,7 @@ public class Issue298Test extends AbstractTestCase
             assertEquals("Orchestra",af.getTag().getFirst(FieldKey.ORCHESTRA));
             assertEquals("Part",af.getTag().getFirst(FieldKey.PART));
             assertEquals("Work",af.getTag().getFirst(FieldKey.WORK));
-            assertEquals("Performer",af.getTag().getFirst(FieldKey.PERFORMER));
+            assertEquals("Nigel Kennedy (violinist)",af.getTag().getFirst(FieldKey.PERFORMER));
             assertEquals("WorkType",af.getTag().getFirst(FieldKey.WORK_TYPE));
             assertEquals("Soloist",af.getTag().getFirst(FieldKey.SOLOIST));
             assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94g",af.getTag().getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL0_ID));
