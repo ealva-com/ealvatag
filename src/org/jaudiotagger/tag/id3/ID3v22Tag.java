@@ -628,7 +628,7 @@ public class ID3v22Tag extends AbstractID3v2Tag
         {
             throw new KeyNotFoundException();
         }
-        return super.doCreateTagField(new FrameAndSubId(null, id3Key.getFrameId(), id3Key.getSubId()), value);
+        return doCreateTagField(new FrameAndSubId(null, id3Key.getFrameId(), id3Key.getSubId()), value);
     }
 
     public TagField createField(FieldKey genericKey, String... values) throws KeyNotFoundException, FieldDataInvalidException
