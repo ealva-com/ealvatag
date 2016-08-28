@@ -2569,7 +2569,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
             }
         }
         //Special handling for paired fields with no defined key
-        //TODO displaying value with/without ':' logic shoud be in framebody class itself
+        //TODO displaying value with/without ':' logic should be in framebody class itself
         else if ((formatKey.getGenericKey() == FieldKey.PERFORMER))
         {
             List<TagField> list = getFields(formatKey.getFrameId());
