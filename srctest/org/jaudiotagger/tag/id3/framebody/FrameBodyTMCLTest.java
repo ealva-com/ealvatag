@@ -229,6 +229,7 @@ public class FrameBodyTMCLTest extends AbstractTestCase
         assertEquals(1,f.getTag().getFields(FieldKey.PERFORMER).size());
         assertEquals(1,f.getTag().getFieldCount());
         assertEquals(1, f.getTag().getFieldCount());
+
     }
 
     public void testWriteMultiplePeopleIDv24() throws Exception
@@ -244,11 +245,23 @@ public class FrameBodyTMCLTest extends AbstractTestCase
         assertEquals("steve lilllywhite", f.getTag().getFirst(FieldKey.PRODUCER));
         assertEquals("steve lilllywhite", f.getTag().getValue(FieldKey.PRODUCER,0));
         assertEquals("harpist:Gloria Divosky", f.getTag().getValue(FieldKey.PERFORMER,0));
+
         f.commit();
         f = AudioFileIO.read(testFile);
         assertEquals(1,f.getTag().getFields(FieldKey.PERFORMER).size());
         assertEquals(2,f.getTag().getFieldCount());
         assertEquals(2, f.getTag().getFieldCount());
+
+        f.getTag().deleteField(FieldKey.PERFORMER);
+        assertEquals("steve lilllywhite", f.getTag().getFirst(FieldKey.PRODUCER));
+        assertEquals("steve lilllywhite", f.getTag().getValue(FieldKey.PRODUCER,0));
+
+
+        f.commit();
+        f = AudioFileIO.read(testFile);
+        assertEquals(0,f.getTag().getFields(FieldKey.PERFORMER).size());
+        assertEquals(1,f.getTag().getFieldCount());
+        assertEquals(1, f.getTag().getFieldCount());
     }
 
     public void testWriteMultiplePeopleIDv23() throws Exception
@@ -264,6 +277,51 @@ public class FrameBodyTMCLTest extends AbstractTestCase
         assertEquals("steve lilllywhite", f.getTag().getFirst(FieldKey.PRODUCER));
         assertEquals("steve lilllywhite", f.getTag().getValue(FieldKey.PRODUCER,0));
         assertEquals("harpist:Gloria Divosky", f.getTag().getValue(FieldKey.PERFORMER,0));
+
+
+        f.commit();
+        f = AudioFileIO.read(testFile);
+        assertEquals(1,f.getTag().getFields(FieldKey.PERFORMER).size());
+        assertEquals(1,f.getTag().getFieldCount());
+        assertEquals(1, f.getTag().getFieldCount());
+
+        f.getTag().deleteField(FieldKey.PERFORMER);
+        assertEquals("steve lilllywhite", f.getTag().getFirst(FieldKey.PRODUCER));
+        assertEquals("steve lilllywhite", f.getTag().getValue(FieldKey.PRODUCER,0));
+
+
+        f.commit();
+        f = AudioFileIO.read(testFile);
+        assertEquals(1,f.getTag().getFields(FieldKey.PERFORMER).size());
+        assertEquals(1,f.getTag().getFieldCount());
+        assertEquals(1, f.getTag().getFieldCount());
+    }
+
+    public void testWriteMultiplePeopleIDv22() throws Exception
+    {
+        File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3", new File("testWriteMultiplePeoplev22.mp3"));
+        AudioFile f = AudioFileIO.read(testFile);
+        assertNull(f.getTag());
+
+        f.setTag(new ID3v22Tag());
+        f.getTag().setField(FieldKey.PRODUCER,"steve lilllywhite");
+        f.getTag().addField(FieldKey.PERFORMER,"harpist","Gloria Divosky");
+        assertEquals(1,f.getTag().getFieldCount());
+        assertEquals("steve lilllywhite", f.getTag().getFirst(FieldKey.PRODUCER));
+        assertEquals("steve lilllywhite", f.getTag().getValue(FieldKey.PRODUCER,0));
+        assertEquals("harpist:Gloria Divosky", f.getTag().getValue(FieldKey.PERFORMER,0));
+
+
+        f.commit();
+        f = AudioFileIO.read(testFile);
+        assertEquals(1,f.getTag().getFields(FieldKey.PERFORMER).size());
+        assertEquals(1,f.getTag().getFieldCount());
+        assertEquals(1, f.getTag().getFieldCount());
+
+        f.getTag().deleteField(FieldKey.PERFORMER);
+        assertEquals("steve lilllywhite", f.getTag().getFirst(FieldKey.PRODUCER));
+        assertEquals("steve lilllywhite", f.getTag().getValue(FieldKey.PRODUCER,0));
+
         f.commit();
         f = AudioFileIO.read(testFile);
         assertEquals(1,f.getTag().getFields(FieldKey.PERFORMER).size());

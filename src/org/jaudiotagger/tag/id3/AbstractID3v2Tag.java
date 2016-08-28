@@ -2843,12 +2843,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
      */
     protected void doDeleteTagField(FrameAndSubId formatKey) throws KeyNotFoundException
     {
-        //Simple 1 to 1 mapping
-        if (formatKey.getSubId() == null)
-        {
-            removeFrame(formatKey.getFrameId());
-        }
-        else
+        if (formatKey.getSubId() != null)
         {
             //Get list of frames that this uses
             List<TagField> list = getFields(formatKey.getFrameId());
@@ -2956,6 +2951,38 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
                     throw new RuntimeException("Need to implement getFields(FieldKey genericKey) for:" + next.getClass());
                 }
             }
+        }
+        else if ((formatKey.getGenericKey() == FieldKey.PERFORMER))
+        {
+            List<TagField> list = getFields(formatKey.getFrameId());
+            ListIterator<TagField> li = list.listIterator();
+            while (li.hasNext())
+            {
+                AbstractTagFrameBody next = ((AbstractID3v2Frame) li.next()).getBody();
+                if (next instanceof AbstractFrameBodyPairs)
+                {
+                    PairedTextEncodedStringNullTerminated.ValuePairs pairs = ((AbstractFrameBodyPairs) next).getPairing();
+                    ListIterator<Pair> pairIterator = pairs.getMapping().listIterator();
+                    while (pairIterator.hasNext())
+                    {
+                        Pair nextPair = pairIterator.next();
+                        if(!StandardIPLSKey.isKey(nextPair.getKey()))
+                        {
+                            pairIterator.remove();
+                        }
+                    }
+
+                    if (pairs.getMapping().size() == 0)
+                    {
+                        removeFrame(formatKey.getFrameId());
+                    }
+                }
+            }
+        }
+        //Simple 1 to 1 mapping
+        else if (formatKey.getSubId() == null)
+        {
+            removeFrame(formatKey.getFrameId());
         }
     }
 
