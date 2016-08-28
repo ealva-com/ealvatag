@@ -48,6 +48,7 @@ Summarise Changes
 #160: FlacAudioHeader.getMd5() does not process character "0" correctly
 #161: Incorrectly reading not compressed TENC within ID3v23
 #167:Add proper support for FrameTMCL (Musician Credits)
+#109:Add a field to store tracknodiscno as a contiguous value
 
 2.2.5
 #033:Added getAudioStartPos() and getAudioEndPos() methods to AudioHeader interface and implemented for most formats
