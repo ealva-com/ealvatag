@@ -156,6 +156,7 @@ public enum VorbisCommentFieldKey
     VENDOR("VENDOR"),
     VERSION("VERSION", EnumSet.of(Tagger.XIPH)),// The version field may be used to differentiate multiple versions of the same track title in a single collection. (e.g. remix info)
     WORK("WORK",EnumSet.of(Tagger.JAIKOZ)),
+    WORK_COMPOSITION_NAME("WORK_COMPOSITION_NAME",EnumSet.of(Tagger.JAIKOZ)),
     WORK_PART_LEVEL1_NAME("WORK_PART_LEVEL1",EnumSet.of(Tagger.JAIKOZ)),
     WORK_PART_LEVEL1_TYPE("WORK_PART_LEVEL1_TYPE",EnumSet.of(Tagger.JAIKOZ)),
     WORK_PART_LEVEL2_NAME("WORK_PART_LEVEL2",EnumSet.of(Tagger.JAIKOZ)),

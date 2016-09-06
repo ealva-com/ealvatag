@@ -435,6 +435,7 @@ public class ID3v22Frames extends ID3Frames
         tagFieldToId3.put(FieldKey.URL_WIKIPEDIA_ARTIST_SITE, ID3v22FieldKey.URL_WIKIPEDIA_ARTIST_SITE);
         tagFieldToId3.put(FieldKey.URL_WIKIPEDIA_RELEASE_SITE, ID3v22FieldKey.URL_WIKIPEDIA_RELEASE_SITE);
         tagFieldToId3.put(FieldKey.WORK, ID3v22FieldKey.WORK);
+        tagFieldToId3.put(FieldKey.WORK_COMPOSITION_NAME, ID3v22FieldKey.WORK_COMPOSITION_NAME);
         tagFieldToId3.put(FieldKey.WORK_PART_LEVEL1, ID3v22FieldKey.WORK_PART_LEVEL1);
         tagFieldToId3.put(FieldKey.WORK_PART_LEVEL1_TYPE, ID3v22FieldKey.WORK_PART_LEVEL1_TYPE);
         tagFieldToId3.put(FieldKey.WORK_PART_LEVEL2, ID3v22FieldKey.WORK_PART_LEVEL2);

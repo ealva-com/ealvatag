@@ -187,6 +187,7 @@ public enum AsfFieldKey
     URL_WIKIPEDIA_RELEASE_SITE("WM/WikipediaReleaseUrl", false),
     USER_RATING("WM/SharedUserRating", true),
     WORK("WM/Work", true),
+    WORK_COMPOSITION_NAME("WM/Work Composition Name",true),
     WORK_PART_LEVEL1("WM/Work Part Level1",true),
     WORK_PART_LEVEL1_TYPE("WM/Work Part Level1 Type",true),
     WORK_PART_LEVEL2("WM/Work Part Level2",true),
