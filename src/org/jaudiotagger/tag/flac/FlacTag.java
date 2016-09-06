@@ -169,7 +169,7 @@ public class FlacTag implements Tag
      * Create new field and add it to the tag
      *
      * @param genericKey
-     * @param value
+     * @param values
      * @throws KeyNotFoundException
      * @throws FieldDataInvalidException
      */

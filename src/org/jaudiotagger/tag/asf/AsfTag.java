@@ -166,8 +166,6 @@ public final class AsfTag extends AbstractTag
         tagFieldToAsfField.put(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL5_ID, AsfFieldKey.MUSICBRAINZ_WORK_PART_LEVEL5_ID);
         tagFieldToAsfField.put(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL6_ID, AsfFieldKey.MUSICBRAINZ_WORK_PART_LEVEL6_ID);
         tagFieldToAsfField.put(FieldKey.MUSICIP_ID, AsfFieldKey.MUSICIP_ID);
-        tagFieldToAsfField.put(FieldKey.NON_SOLOIST, AsfFieldKey.NON_SOLOIST);
-        tagFieldToAsfField.put(FieldKey.NON_SOLOIST_SORT, AsfFieldKey.NON_SOLOIST_SORT);
         tagFieldToAsfField.put(FieldKey.OCCASION, AsfFieldKey.OCCASION);
         tagFieldToAsfField.put(FieldKey.OPUS, AsfFieldKey.OPUS);
         tagFieldToAsfField.put(FieldKey.ORCHESTRA, AsfFieldKey.ORCHESTRA);
@@ -180,6 +178,10 @@ public final class AsfTag extends AbstractTag
         tagFieldToAsfField.put(FieldKey.PART_NUMBER, AsfFieldKey.PART_NUMBER);
         tagFieldToAsfField.put(FieldKey.PART_TYPE, AsfFieldKey.PART_TYPE);
         tagFieldToAsfField.put(FieldKey.PERFORMER, AsfFieldKey.PERFORMER);
+        tagFieldToAsfField.put(FieldKey.PERFORMING_ARTIST, AsfFieldKey.PERFORMING_ARTIST);
+        tagFieldToAsfField.put(FieldKey.PERFORMING_ARTIST_SORT, AsfFieldKey.PERFORMING_ARTIST_SORT);
+        tagFieldToAsfField.put(FieldKey.PERFORMING_SOLOIST, AsfFieldKey.PERFORMING_SOLOIST);
+        tagFieldToAsfField.put(FieldKey.PERFORMING_SOLOIST_SORT, AsfFieldKey.PERFORMING_SOLOIST_SORT);
         tagFieldToAsfField.put(FieldKey.PERIOD, AsfFieldKey.PERIOD);
         tagFieldToAsfField.put(FieldKey.PRODUCER, AsfFieldKey.PRODUCER);
         tagFieldToAsfField.put(FieldKey.QUALITY, AsfFieldKey.QUALITY);
@@ -188,8 +190,6 @@ public final class AsfTag extends AbstractTag
         tagFieldToAsfField.put(FieldKey.REMIXER, AsfFieldKey.REMIXER);
         tagFieldToAsfField.put(FieldKey.SCRIPT, AsfFieldKey.SCRIPT);
         tagFieldToAsfField.put(FieldKey.SINGLE_DISC_TRACK_NO, AsfFieldKey.SINGLE_DISC_TRACK_NO);
-        tagFieldToAsfField.put(FieldKey.SOLOIST, AsfFieldKey.SOLOIST);
-        tagFieldToAsfField.put(FieldKey.SOLOIST_SORT, AsfFieldKey.SOLOIST_SORT);
         tagFieldToAsfField.put(FieldKey.SUBTITLE, AsfFieldKey.SUBTITLE);
         tagFieldToAsfField.put(FieldKey.TAGS, AsfFieldKey.TAGS);
         tagFieldToAsfField.put(FieldKey.TEMPO, AsfFieldKey.TEMPO);

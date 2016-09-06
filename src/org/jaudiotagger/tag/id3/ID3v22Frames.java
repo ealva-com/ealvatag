@@ -394,8 +394,6 @@ public class ID3v22Frames extends ID3Frames
         tagFieldToId3.put(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL5_ID, ID3v22FieldKey.MUSICBRAINZ_WORK_PART_LEVEL5_ID);
         tagFieldToId3.put(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL6_ID, ID3v22FieldKey.MUSICBRAINZ_WORK_PART_LEVEL6_ID);
         tagFieldToId3.put(FieldKey.MUSICIP_ID, ID3v22FieldKey.MUSICIP_ID);
-        tagFieldToId3.put(FieldKey.NON_SOLOIST, ID3v22FieldKey.NON_SOLOIST);
-        tagFieldToId3.put(FieldKey.NON_SOLOIST_SORT, ID3v22FieldKey.NON_SOLOIST_SORT);
         tagFieldToId3.put(FieldKey.OCCASION, ID3v22FieldKey.OCCASION);
         tagFieldToId3.put(FieldKey.OPUS, ID3v22FieldKey.OPUS);
         tagFieldToId3.put(FieldKey.ORCHESTRA, ID3v22FieldKey.ORCHESTRA);
@@ -408,6 +406,10 @@ public class ID3v22Frames extends ID3Frames
         tagFieldToId3.put(FieldKey.PART_NUMBER, ID3v22FieldKey.PART_NUMBER);
         tagFieldToId3.put(FieldKey.PART_TYPE, ID3v22FieldKey.PART_TYPE);
         tagFieldToId3.put(FieldKey.PERFORMER, ID3v22FieldKey.PERFORMER);
+        tagFieldToId3.put(FieldKey.PERFORMING_ARTIST, ID3v22FieldKey.PERFORMING_ARTIST);
+        tagFieldToId3.put(FieldKey.PERFORMING_ARTIST_SORT, ID3v22FieldKey.PERFORMING_ARTIST_SORT);
+        tagFieldToId3.put(FieldKey.PERFORMING_SOLOIST, ID3v22FieldKey.PERFORMING_SOLOIST);
+        tagFieldToId3.put(FieldKey.PERFORMING_SOLOIST_SORT, ID3v22FieldKey.PERFORMING_SOLOIST_SORT);
         tagFieldToId3.put(FieldKey.PERIOD, ID3v22FieldKey.PERIOD);
         tagFieldToId3.put(FieldKey.PRODUCER, ID3v22FieldKey.PRODUCER);
         tagFieldToId3.put(FieldKey.QUALITY, ID3v22FieldKey.QUALITY);
@@ -416,8 +418,6 @@ public class ID3v22Frames extends ID3Frames
         tagFieldToId3.put(FieldKey.REMIXER, ID3v22FieldKey.REMIXER);
         tagFieldToId3.put(FieldKey.SCRIPT, ID3v22FieldKey.SCRIPT);
         tagFieldToId3.put(FieldKey.SINGLE_DISC_TRACK_NO, ID3v22FieldKey.SINGLE_DISC_TRACK_NO);
-        tagFieldToId3.put(FieldKey.SOLOIST, ID3v22FieldKey.SOLOIST);
-        tagFieldToId3.put(FieldKey.SOLOIST_SORT, ID3v22FieldKey.SOLOIST_SORT);
         tagFieldToId3.put(FieldKey.SUBTITLE, ID3v22FieldKey.SUBTITLE);
         tagFieldToId3.put(FieldKey.TAGS, ID3v22FieldKey.TAGS);
         tagFieldToId3.put(FieldKey.TEMPO, ID3v22FieldKey.TEMPO);

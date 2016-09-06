@@ -122,6 +122,10 @@ public class Mp4Tag extends AbstractTag
         tagFieldToMp4Field.put(FieldKey.ORIGINAL_YEAR, Mp4FieldKey.MM_ORIGINAL_YEAR);
         tagFieldToMp4Field.put(FieldKey.PART, Mp4FieldKey.PART);
         tagFieldToMp4Field.put(FieldKey.PERFORMER, Mp4FieldKey.PERFORMER);
+        tagFieldToMp4Field.put(FieldKey.PERFORMING_ARTIST, Mp4FieldKey.PERFORMIMG_ARTIST);
+        tagFieldToMp4Field.put(FieldKey.PERFORMING_ARTIST_SORT, Mp4FieldKey.PERFORMING_ARTIST_SORT);
+        tagFieldToMp4Field.put(FieldKey.PERFORMING_SOLOIST, Mp4FieldKey.PERFORMING_SOLOIST);
+        tagFieldToMp4Field.put(FieldKey.PERFORMING_SOLOIST_SORT, Mp4FieldKey.PERFORMING_SOLOIST_SORT);
         tagFieldToMp4Field.put(FieldKey.PRODUCER, Mp4FieldKey.PRODUCER);
         tagFieldToMp4Field.put(FieldKey.QUALITY, Mp4FieldKey.MM_QUALITY);
         tagFieldToMp4Field.put(FieldKey.RATING, Mp4FieldKey.SCORE);
@@ -146,7 +150,6 @@ public class Mp4Tag extends AbstractTag
         tagFieldToMp4Field.put(FieldKey.URL_WIKIPEDIA_RELEASE_SITE, Mp4FieldKey.URL_WIKIPEDIA_RELEASE_SITE);
         tagFieldToMp4Field.put(FieldKey.WORK, Mp4FieldKey.WORK);
         tagFieldToMp4Field.put(FieldKey.YEAR, Mp4FieldKey.DAY);
-        tagFieldToMp4Field.put(FieldKey.SOLOIST, Mp4FieldKey.SOLOIST);
         tagFieldToMp4Field.put(FieldKey.WORK_TYPE, Mp4FieldKey.WORK_TYPE);
         tagFieldToMp4Field.put(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL0_ID, Mp4FieldKey.MUSICBRAINZ_WORK_PART_LEVEL0_ID);
         tagFieldToMp4Field.put(FieldKey.PART_TYPE, Mp4FieldKey.PART_TYPE);
@@ -171,10 +174,8 @@ public class Mp4Tag extends AbstractTag
         tagFieldToMp4Field.put(FieldKey.PART_NUMBER, Mp4FieldKey.PART_NUMBER);
         tagFieldToMp4Field.put(FieldKey.ARTISTS_SORT, Mp4FieldKey.ARTISTS_SORT);
         tagFieldToMp4Field.put(FieldKey.CONDUCTOR_SORT, Mp4FieldKey.CONDUCTOR_SORT);
-        tagFieldToMp4Field.put(FieldKey.SOLOIST_SORT, Mp4FieldKey.SOLOIST_SORT);
         tagFieldToMp4Field.put(FieldKey.ORCHESTRA_SORT, Mp4FieldKey.ORCHESTRA_SORT);
-        tagFieldToMp4Field.put(FieldKey.NON_SOLOIST, Mp4FieldKey.NON_SOLOIST);
-        tagFieldToMp4Field.put(FieldKey.NON_SOLOIST_SORT, Mp4FieldKey.NON_SOLOIST_SORT);
+
         tagFieldToMp4Field.put(FieldKey.ARRANGER_SORT, Mp4FieldKey.ARRANGER_SORT);
         tagFieldToMp4Field.put(FieldKey.OPUS, Mp4FieldKey.OPUS);
         tagFieldToMp4Field.put(FieldKey.SINGLE_DISC_TRACK_NO, Mp4FieldKey.SINGLE_DISC_TRACK_NO);
