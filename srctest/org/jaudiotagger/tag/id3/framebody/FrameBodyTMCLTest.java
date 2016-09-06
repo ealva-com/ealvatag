@@ -27,9 +27,9 @@ public class FrameBodyTMCLTest extends AbstractTestCase
         f.getTag().setField(FieldKey.PERFORMER,"violinist","Nigel Kennedy");
         f.getTag().addField(FieldKey.PERFORMER,"harpist","Gloria Divosky");
         assertEquals(1, f.getTag().getFieldCount());
-        assertEquals("violinist:Nigel Kennedy", f.getTag().getFirst(FieldKey.PERFORMER));
-        assertEquals("violinist:Nigel Kennedy", f.getTag().getValue(FieldKey.PERFORMER,0));
-        assertEquals("harpist:Gloria Divosky", f.getTag().getValue(FieldKey.PERFORMER,1));
+        assertEquals("violinist\0Nigel Kennedy", f.getTag().getFirst(FieldKey.PERFORMER));
+        assertEquals("violinist\0Nigel Kennedy", f.getTag().getValue(FieldKey.PERFORMER,0));
+        assertEquals("harpist\0Gloria Divosky", f.getTag().getValue(FieldKey.PERFORMER,1));
         f.commit();
         f = AudioFileIO.read(testFile);
         assertEquals(1,f.getTag().getFields(FieldKey.PERFORMER).size());
@@ -73,9 +73,9 @@ public class FrameBodyTMCLTest extends AbstractTestCase
         f.getTag().setField(FieldKey.PERFORMER,"violinist","Nigel Kennedy");
         f.getTag().addField(FieldKey.PERFORMER,"harpist","Gloria Divosky");
         assertEquals(1,f.getTag().getFieldCount());
-        assertEquals("violinist:Nigel Kennedy", f.getTag().getFirst(FieldKey.PERFORMER));
-        assertEquals("violinist:Nigel Kennedy", f.getTag().getValue(FieldKey.PERFORMER,0));
-        assertEquals("harpist:Gloria Divosky", f.getTag().getValue(FieldKey.PERFORMER,1));
+        assertEquals("violinist\0Nigel Kennedy", f.getTag().getFirst(FieldKey.PERFORMER));
+        assertEquals("violinist\0Nigel Kennedy", f.getTag().getValue(FieldKey.PERFORMER,0));
+        assertEquals("harpist\0Gloria Divosky", f.getTag().getValue(FieldKey.PERFORMER,1));
         f.commit();
         f = AudioFileIO.read(testFile);
         assertEquals(1,f.getTag().getFields(FieldKey.PERFORMER).size());
@@ -93,9 +93,9 @@ public class FrameBodyTMCLTest extends AbstractTestCase
         f.getTag().setField(FieldKey.PERFORMER,"violinist","Nigel Kennedy");
         f.getTag().addField(FieldKey.PERFORMER,"harpist","Gloria Divosky");
         assertEquals(1,f.getTag().getFieldCount());
-        assertEquals("violinist:Nigel Kennedy", f.getTag().getFirst(FieldKey.PERFORMER));
-        assertEquals("violinist:Nigel Kennedy", f.getTag().getValue(FieldKey.PERFORMER,0));
-        assertEquals("harpist:Gloria Divosky", f.getTag().getValue(FieldKey.PERFORMER,1));
+        assertEquals("violinist\0Nigel Kennedy", f.getTag().getFirst(FieldKey.PERFORMER));
+        assertEquals("violinist\0Nigel Kennedy", f.getTag().getValue(FieldKey.PERFORMER,0));
+        assertEquals("harpist\0Gloria Divosky", f.getTag().getValue(FieldKey.PERFORMER,1));
         f.commit();
         f = AudioFileIO.read(testFile);
         assertEquals(1,f.getTag().getFields(FieldKey.PERFORMER).size());
@@ -117,9 +117,9 @@ public class FrameBodyTMCLTest extends AbstractTestCase
         f.getTag().setField(FieldKey.PERFORMER, "violinist\0Nigel Kennedy");
         f.getTag().addField(FieldKey.PERFORMER, "harpist\0Gloria Divosky");
         assertEquals(1, f.getTag().getFieldCount());
-        assertEquals("violinist:Nigel Kennedy", f.getTag().getFirst(FieldKey.PERFORMER));
-        assertEquals("violinist:Nigel Kennedy", f.getTag().getValue(FieldKey.PERFORMER,0));
-        assertEquals("harpist:Gloria Divosky", f.getTag().getValue(FieldKey.PERFORMER,1));
+        assertEquals("violinist\0Nigel Kennedy", f.getTag().getFirst(FieldKey.PERFORMER));
+        assertEquals("violinist\0Nigel Kennedy", f.getTag().getValue(FieldKey.PERFORMER,0));
+        assertEquals("harpist\0Gloria Divosky", f.getTag().getValue(FieldKey.PERFORMER,1));
         f.commit();
         f = AudioFileIO.read(testFile);
         assertEquals(1,f.getTag().getFields(FieldKey.PERFORMER).size());
@@ -141,9 +141,9 @@ public class FrameBodyTMCLTest extends AbstractTestCase
         f.getTag().setField(FieldKey.PERFORMER, PerformerHelper.formatForId3("Nigel Kennedy","violinist"));
         f.getTag().setField(FieldKey.PERFORMER, PerformerHelper.formatForId3("Gloria Divosky","harpist"));
         assertEquals(1, f.getTag().getFieldCount());
-        assertEquals("violinist:Nigel Kennedy", f.getTag().getFirst(FieldKey.PERFORMER));
-        assertEquals("violinist:Nigel Kennedy", f.getTag().getValue(FieldKey.PERFORMER,0));
-        assertEquals("harpist:Gloria Divosky", f.getTag().getValue(FieldKey.PERFORMER,1));
+        assertEquals("violinist\0Nigel Kennedy", f.getTag().getFirst(FieldKey.PERFORMER));
+        assertEquals("violinist\0Nigel Kennedy", f.getTag().getValue(FieldKey.PERFORMER,0));
+        assertEquals("harpist\0Gloria Divosky", f.getTag().getValue(FieldKey.PERFORMER,1));
         f.commit();
         f = AudioFileIO.read(testFile);
         assertEquals(1,f.getTag().getFields(FieldKey.PERFORMER).size());
@@ -161,9 +161,9 @@ public class FrameBodyTMCLTest extends AbstractTestCase
         f.getTag().setField(FieldKey.PERFORMER, "violinist\0Nigel Kennedy");
         f.getTag().addField(FieldKey.PERFORMER, "harpist\0Gloria Divosky");
         assertEquals(1,f.getTag().getFieldCount());
-        assertEquals("violinist:Nigel Kennedy", f.getTag().getFirst(FieldKey.PERFORMER));
-        assertEquals("violinist:Nigel Kennedy", f.getTag().getValue(FieldKey.PERFORMER,0));
-        assertEquals("harpist:Gloria Divosky", f.getTag().getValue(FieldKey.PERFORMER,1));
+        assertEquals("violinist\0Nigel Kennedy", f.getTag().getFirst(FieldKey.PERFORMER));
+        assertEquals("violinist\0Nigel Kennedy", f.getTag().getValue(FieldKey.PERFORMER,0));
+        assertEquals("harpist\0Gloria Divosky", f.getTag().getValue(FieldKey.PERFORMER,1));
         f.commit();
         f = AudioFileIO.read(testFile);
         assertEquals(1,f.getTag().getFields(FieldKey.PERFORMER).size());
@@ -181,9 +181,9 @@ public class FrameBodyTMCLTest extends AbstractTestCase
         f.getTag().setField(FieldKey.PERFORMER, PerformerHelper.formatForId3("Nigel Kennedy","violinist"));
         f.getTag().setField(FieldKey.PERFORMER, PerformerHelper.formatForId3("Gloria Divosky","harpist"));
         assertEquals(1,f.getTag().getFieldCount());
-        assertEquals("violinist:Nigel Kennedy", f.getTag().getFirst(FieldKey.PERFORMER));
-        assertEquals("violinist:Nigel Kennedy", f.getTag().getValue(FieldKey.PERFORMER,0));
-        assertEquals("harpist:Gloria Divosky", f.getTag().getValue(FieldKey.PERFORMER,1));
+        assertEquals("violinist\0Nigel Kennedy", f.getTag().getFirst(FieldKey.PERFORMER));
+        assertEquals("violinist\0Nigel Kennedy", f.getTag().getValue(FieldKey.PERFORMER,0));
+        assertEquals("harpist\0Gloria Divosky", f.getTag().getValue(FieldKey.PERFORMER,1));
         f.commit();
         f = AudioFileIO.read(testFile);
         assertEquals(1,f.getTag().getFields(FieldKey.PERFORMER).size());
@@ -201,9 +201,9 @@ public class FrameBodyTMCLTest extends AbstractTestCase
         f.getTag().setField(FieldKey.PERFORMER, "violinist\0Nigel Kennedy");
         f.getTag().addField(FieldKey.PERFORMER, "harpist\0Gloria Divosky");
         assertEquals(1,f.getTag().getFieldCount());
-        assertEquals("violinist:Nigel Kennedy", f.getTag().getFirst(FieldKey.PERFORMER));
-        assertEquals("violinist:Nigel Kennedy", f.getTag().getValue(FieldKey.PERFORMER,0));
-        assertEquals("harpist:Gloria Divosky", f.getTag().getValue(FieldKey.PERFORMER,1));
+        assertEquals("violinist\0Nigel Kennedy", f.getTag().getFirst(FieldKey.PERFORMER));
+        assertEquals("violinist\0Nigel Kennedy", f.getTag().getValue(FieldKey.PERFORMER,0));
+        assertEquals("harpist\0Gloria Divosky", f.getTag().getValue(FieldKey.PERFORMER,1));
         f.commit();
         f = AudioFileIO.read(testFile);
         assertEquals(1,f.getTag().getFields(FieldKey.PERFORMER).size());
@@ -221,9 +221,9 @@ public class FrameBodyTMCLTest extends AbstractTestCase
         f.getTag().setField(FieldKey.PERFORMER, PerformerHelper.formatForId3("Nigel Kennedy","violinist"));
         f.getTag().setField(FieldKey.PERFORMER, PerformerHelper.formatForId3("Gloria Divosky","harpist"));
         assertEquals(1,f.getTag().getFieldCount());
-        assertEquals("violinist:Nigel Kennedy", f.getTag().getFirst(FieldKey.PERFORMER));
-        assertEquals("violinist:Nigel Kennedy", f.getTag().getValue(FieldKey.PERFORMER,0));
-        assertEquals("harpist:Gloria Divosky", f.getTag().getValue(FieldKey.PERFORMER,1));
+        assertEquals("violinist\0Nigel Kennedy", f.getTag().getFirst(FieldKey.PERFORMER));
+        assertEquals("violinist\0Nigel Kennedy", f.getTag().getValue(FieldKey.PERFORMER,0));
+        assertEquals("harpist\0Gloria Divosky", f.getTag().getValue(FieldKey.PERFORMER,1));
         f.commit();
         f = AudioFileIO.read(testFile);
         assertEquals(1,f.getTag().getFields(FieldKey.PERFORMER).size());
@@ -244,7 +244,7 @@ public class FrameBodyTMCLTest extends AbstractTestCase
         assertEquals(2,f.getTag().getFieldCount());
         assertEquals("steve lilllywhite", f.getTag().getFirst(FieldKey.PRODUCER));
         assertEquals("steve lilllywhite", f.getTag().getValue(FieldKey.PRODUCER,0));
-        assertEquals("harpist:Gloria Divosky", f.getTag().getValue(FieldKey.PERFORMER,0));
+        assertEquals("harpist\0Gloria Divosky", f.getTag().getValue(FieldKey.PERFORMER,0));
 
         f.commit();
         f = AudioFileIO.read(testFile);
@@ -276,7 +276,7 @@ public class FrameBodyTMCLTest extends AbstractTestCase
         assertEquals(1,f.getTag().getFieldCount());
         assertEquals("steve lilllywhite", f.getTag().getFirst(FieldKey.PRODUCER));
         assertEquals("steve lilllywhite", f.getTag().getValue(FieldKey.PRODUCER,0));
-        assertEquals("harpist:Gloria Divosky", f.getTag().getValue(FieldKey.PERFORMER,0));
+        assertEquals("harpist\0Gloria Divosky", f.getTag().getValue(FieldKey.PERFORMER,0));
 
 
         f.commit();
@@ -309,7 +309,7 @@ public class FrameBodyTMCLTest extends AbstractTestCase
         assertEquals(1,f.getTag().getFieldCount());
         assertEquals("steve lilllywhite", f.getTag().getFirst(FieldKey.PRODUCER));
         assertEquals("steve lilllywhite", f.getTag().getValue(FieldKey.PRODUCER,0));
-        assertEquals("harpist:Gloria Divosky", f.getTag().getValue(FieldKey.PERFORMER,0));
+        assertEquals("harpist\0Gloria Divosky", f.getTag().getValue(FieldKey.PERFORMER,0));
 
 
         f.commit();
