@@ -138,7 +138,7 @@ public enum AsfFieldKey
     MUSICBRAINZ_RELEASE_TYPE("MusicBrainz/Album Type", false),
     MUSICBRAINZ_TRACK_ID("MusicBrainz/Track Id", false),
     MUSICBRAINZ_WORKID("MusicBrainz/Work Id", false),
-    MUSICBRAINZ_WORK_PART_LEVEL0_ID("MusicBrainz/Work Part Level0 Id",true),
+    MUSICBRAINZ_WORK_COMPOSITION_ID("MusicBrainz/Work Composition Id",true),
     MUSICBRAINZ_WORK_PART_LEVEL1_ID("MusicBrainz/Work Part Level1 Id",true),
     MUSICBRAINZ_WORK_PART_LEVEL2_ID("MusicBrainz/Work Part Level2 Id",true),
     MUSICBRAINZ_WORK_PART_LEVEL3_ID("MusicBrainz/Work Part Level3 Id",true),

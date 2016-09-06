@@ -138,7 +138,7 @@ public enum Mp4FieldKey
     MUSICBRAINZ_RELEASE_TRACKID("com.apple.iTunes", "MusicBrainz Release Track Id", TEXT, Tagger.PICARD),
     MUSICBRAINZ_TRACKID("com.apple.iTunes", "MusicBrainz Track Id", TEXT, Tagger.PICARD),
     MUSICBRAINZ_WORKID("com.apple.iTunes", "MusicBrainz Work Id", TEXT, Tagger.PICARD),
-    MUSICBRAINZ_WORK_PART_LEVEL0_ID("com.apple.iTunes","MusicBrainz Work Part Level0 Id",  TEXT, Tagger.JAIKOZ),
+    MUSICBRAINZ_WORK_COMPOSITION_ID("com.apple.iTunes","MusicBrainz Composition Id",  TEXT, Tagger.JAIKOZ),
     MUSICBRAINZ_WORK_PART_LEVEL1_ID("com.apple.iTunes","MusicBrainz Work Part Level1 Id",  TEXT, Tagger.JAIKOZ),
     MUSICBRAINZ_WORK_PART_LEVEL2_ID("com.apple.iTunes","MusicBrainz Work Part Level2 Id",  TEXT, Tagger.JAIKOZ),
     MUSICBRAINZ_WORK_PART_LEVEL3_ID("com.apple.iTunes","MusicBrainz Work Part Level3 Id",  TEXT, Tagger.JAIKOZ),

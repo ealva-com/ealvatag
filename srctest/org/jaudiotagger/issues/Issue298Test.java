@@ -79,7 +79,7 @@ public class Issue298Test extends AbstractTestCase
             tag.setField(tag.createField(FieldKey.PERFORMING_ARTIST,"NonSoloist"));
             tag.setField(tag.createField(FieldKey.PERFORMING_ARTIST_SORT,"NonSoloistSort"));
 
-            tag.setField(tag.createField(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL0_ID,"c1f657ba-8177-3cbb-b84a-f62bc684a94g"));
+            tag.setField(tag.createField(FieldKey.MUSICBRAINZ_WORK_COMPOSITION_ID,"c1f657ba-8177-3cbb-b84a-f62bc684a94g"));
             tag.setField(tag.createField(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL1_ID,"c1f657ba-8177-3cbb-b84a-f62bc684a94g"));
             tag.setField(tag.createField(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL2_ID,"c1f657ba-8177-3cbb-b84a-f62bc684a94h"));
             tag.setField(tag.createField(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL3_ID,"c1f657ba-8177-3cbb-b84a-f62bc684a94i"));
@@ -149,7 +149,7 @@ public class Issue298Test extends AbstractTestCase
             assertEquals("Performer",af.getTag().getFirst(FieldKey.PERFORMER));
             assertEquals("WorkType",af.getTag().getFirst(FieldKey.WORK_TYPE));
             assertEquals("Soloist",af.getTag().getFirst(FieldKey.PERFORMING_SOLOIST));
-            assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94g",af.getTag().getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL0_ID));
+            assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94g",af.getTag().getFirst(FieldKey.MUSICBRAINZ_WORK_COMPOSITION_ID));
             assertEquals("Composition Type",af.getTag().getFirst(FieldKey.PART_TYPE));
             assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94g",af.getTag().getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL1_ID));
             assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94h",af.getTag().getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL2_ID));
@@ -340,7 +340,7 @@ public class Issue298Test extends AbstractTestCase
             tag.setField(tag.createField(FieldKey.PERFORMER,"Performer"));
             tag.setField(tag.createField(FieldKey.WORK_TYPE,"WorkType"));
             tag.setField(tag.createField(FieldKey.PERFORMING_SOLOIST,"Soloist"));
-            tag.setField(tag.createField(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL0_ID,"c1f657ba-8177-3cbb-b84a-f62bc684a94g"));
+            tag.setField(tag.createField(FieldKey.MUSICBRAINZ_WORK_COMPOSITION_ID,"c1f657ba-8177-3cbb-b84a-f62bc684a94g"));
             tag.setField(tag.createField(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL1_ID,"c1f657ba-8177-3cbb-b84a-f62bc684a94g"));
             tag.setField(tag.createField(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL2_ID,"c1f657ba-8177-3cbb-b84a-f62bc684a94h"));
             tag.setField(tag.createField(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL3_ID,"c1f657ba-8177-3cbb-b84a-f62bc684a94i"));
@@ -420,7 +420,7 @@ public class Issue298Test extends AbstractTestCase
             assertEquals("Performer",af.getTag().getFirst(FieldKey.PERFORMER));
             assertEquals("WorkType",af.getTag().getFirst(FieldKey.WORK_TYPE));
             assertEquals("Soloist",af.getTag().getFirst(FieldKey.PERFORMING_SOLOIST));
-            assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94g",af.getTag().getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL0_ID));
+            assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94g",af.getTag().getFirst(FieldKey.MUSICBRAINZ_WORK_COMPOSITION_ID));
             assertEquals("Composition Type",af.getTag().getFirst(FieldKey.PART_TYPE));
             assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94g",af.getTag().getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL1_ID));
             assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94h",af.getTag().getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL2_ID));
@@ -525,7 +525,7 @@ public class Issue298Test extends AbstractTestCase
             tag.setField(tag.createField(FieldKey.PERFORMER,"Performer"));
             tag.setField(tag.createField(FieldKey.WORK_TYPE,"WorkType"));
             tag.setField(tag.createField(FieldKey.PERFORMING_SOLOIST,"Soloist"));
-            tag.setField(tag.createField(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL0_ID,"c1f657ba-8177-3cbb-b84a-f62bc684a94g"));
+            tag.setField(tag.createField(FieldKey.MUSICBRAINZ_WORK_COMPOSITION_ID,"c1f657ba-8177-3cbb-b84a-f62bc684a94g"));
             tag.setField(tag.createField(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL1_ID,"c1f657ba-8177-3cbb-b84a-f62bc684a94g"));
             tag.setField(tag.createField(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL2_ID,"c1f657ba-8177-3cbb-b84a-f62bc684a94h"));
             tag.setField(tag.createField(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL3_ID,"c1f657ba-8177-3cbb-b84a-f62bc684a94i"));
@@ -603,7 +603,7 @@ public class Issue298Test extends AbstractTestCase
             assertEquals("Performer",af.getTag().getFirst(FieldKey.PERFORMER));
             assertEquals("WorkType",af.getTag().getFirst(FieldKey.WORK_TYPE));
             assertEquals("Soloist",af.getTag().getFirst(FieldKey.PERFORMING_SOLOIST));
-            assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94g",af.getTag().getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL0_ID));
+            assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94g",af.getTag().getFirst(FieldKey.MUSICBRAINZ_WORK_COMPOSITION_ID));
             assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94g",af.getTag().getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL1_ID));
             assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94h",af.getTag().getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL2_ID));
             assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94i",af.getTag().getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL3_ID));
@@ -702,7 +702,7 @@ public class Issue298Test extends AbstractTestCase
             tag.setField(tag.createField(FieldKey.PERFORMER, PerformerHelper.formatForNonId3("Nigel Kennedy", "violinist")));
             tag.setField(tag.createField(FieldKey.WORK_TYPE,"WorkType"));
             tag.setField(tag.createField(FieldKey.PERFORMING_SOLOIST,"Soloist"));
-            tag.setField(tag.createField(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL0_ID,"c1f657ba-8177-3cbb-b84a-f62bc684a94g"));
+            tag.setField(tag.createField(FieldKey.MUSICBRAINZ_WORK_COMPOSITION_ID,"c1f657ba-8177-3cbb-b84a-f62bc684a94g"));
             tag.setField(tag.createField(FieldKey.PART_TYPE,"CompositionType"));
             tag.setField(tag.createField(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL1_ID,"c1f657ba-8177-3cbb-b84a-f62bc684a94g"));
             tag.setField(tag.createField(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL2_ID,"c1f657ba-8177-3cbb-b84a-f62bc684a94h"));
@@ -780,7 +780,7 @@ public class Issue298Test extends AbstractTestCase
             assertEquals("Nigel Kennedy (violinist)",af.getTag().getFirst(FieldKey.PERFORMER));
             assertEquals("WorkType",af.getTag().getFirst(FieldKey.WORK_TYPE));
             assertEquals("Soloist",af.getTag().getFirst(FieldKey.PERFORMING_SOLOIST));
-            assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94g",af.getTag().getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL0_ID));
+            assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94g",af.getTag().getFirst(FieldKey.MUSICBRAINZ_WORK_COMPOSITION_ID));
             assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94g",af.getTag().getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL1_ID));
             assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94h",af.getTag().getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL2_ID));
             assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94i",af.getTag().getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL3_ID));
@@ -879,7 +879,7 @@ public class Issue298Test extends AbstractTestCase
             tag.setField(tag.createField(FieldKey.PERFORMER, PerformerHelper.formatForNonId3("Nigel Kennedy", "violinist")));
             tag.setField(tag.createField(FieldKey.WORK_TYPE,"WorkType"));
             tag.setField(tag.createField(FieldKey.PERFORMING_SOLOIST,"Soloist"));
-            tag.setField(tag.createField(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL0_ID,"c1f657ba-8177-3cbb-b84a-f62bc684a94g"));
+            tag.setField(tag.createField(FieldKey.MUSICBRAINZ_WORK_COMPOSITION_ID,"c1f657ba-8177-3cbb-b84a-f62bc684a94g"));
             tag.setField(tag.createField(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL1_ID,"c1f657ba-8177-3cbb-b84a-f62bc684a94g"));
             tag.setField(tag.createField(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL2_ID,"c1f657ba-8177-3cbb-b84a-f62bc684a94h"));
             tag.setField(tag.createField(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL3_ID,"c1f657ba-8177-3cbb-b84a-f62bc684a94i"));
@@ -957,7 +957,7 @@ public class Issue298Test extends AbstractTestCase
 
             assertEquals("WorkType",af.getTag().getFirst(FieldKey.WORK_TYPE));
             assertEquals("Soloist",af.getTag().getFirst(FieldKey.PERFORMING_SOLOIST));
-            assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94g",af.getTag().getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL0_ID));
+            assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94g",af.getTag().getFirst(FieldKey.MUSICBRAINZ_WORK_COMPOSITION_ID));
             assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94g",af.getTag().getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL1_ID));
             assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94h",af.getTag().getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL2_ID));
             assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94i",af.getTag().getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL3_ID));
@@ -979,7 +979,7 @@ public class Issue298Test extends AbstractTestCase
             assertEquals("Work",af.getTag().getFirst(FieldKey.WORK));
             assertEquals("WorkType",af.getTag().getFirst(FieldKey.WORK_TYPE));
             assertEquals("Soloist",af.getTag().getFirst(FieldKey.PERFORMING_SOLOIST));
-            assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94g",af.getTag().getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL0_ID));
+            assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94g",af.getTag().getFirst(FieldKey.MUSICBRAINZ_WORK_COMPOSITION_ID));
             assertEquals("CompositionType",af.getTag().getFirst(FieldKey.PART_TYPE));
             assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94g",af.getTag().getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL1_ID));
             assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94h",af.getTag().getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL2_ID));
@@ -1081,7 +1081,7 @@ public class Issue298Test extends AbstractTestCase
             tag.setField(tag.createField(FieldKey.PERFORMER, PerformerHelper.formatForNonId3("Nigel Kennedy", "violinist")));
             tag.setField(tag.createField(FieldKey.WORK_TYPE,"WorkType"));
             tag.setField(tag.createField(FieldKey.PERFORMING_SOLOIST,"Soloist"));
-            tag.setField(tag.createField(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL0_ID,"c1f657ba-8177-3cbb-b84a-f62bc684a94g"));
+            tag.setField(tag.createField(FieldKey.MUSICBRAINZ_WORK_COMPOSITION_ID,"c1f657ba-8177-3cbb-b84a-f62bc684a94g"));
             tag.setField(tag.createField(FieldKey.PART_TYPE,"CompositionType"));
             tag.setField(tag.createField(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL1_ID,"c1f657ba-8177-3cbb-b84a-f62bc684a94g"));
             tag.setField(tag.createField(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL2_ID,"c1f657ba-8177-3cbb-b84a-f62bc684a94h"));
@@ -1159,7 +1159,7 @@ public class Issue298Test extends AbstractTestCase
             assertEquals("Nigel Kennedy (violinist)",af.getTag().getFirst(FieldKey.PERFORMER));
             assertEquals("WorkType",af.getTag().getFirst(FieldKey.WORK_TYPE));
             assertEquals("Soloist",af.getTag().getFirst(FieldKey.PERFORMING_SOLOIST));
-            assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94g",af.getTag().getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL0_ID));
+            assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94g",af.getTag().getFirst(FieldKey.MUSICBRAINZ_WORK_COMPOSITION_ID));
             assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94g",af.getTag().getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL1_ID));
             assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94h",af.getTag().getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL2_ID));
             assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94i",af.getTag().getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL3_ID));
@@ -1259,7 +1259,7 @@ public class Issue298Test extends AbstractTestCase
             tag.setField(tag.createField(FieldKey.PERFORMER, PerformerHelper.formatForNonId3("Nigel Kennedy", "violinist")));
             tag.setField(tag.createField(FieldKey.WORK_TYPE,"WorkType"));
             tag.setField(tag.createField(FieldKey.PERFORMING_SOLOIST,"Soloist"));
-            tag.setField(tag.createField(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL0_ID,"c1f657ba-8177-3cbb-b84a-f62bc684a94g"));
+            tag.setField(tag.createField(FieldKey.MUSICBRAINZ_WORK_COMPOSITION_ID,"c1f657ba-8177-3cbb-b84a-f62bc684a94g"));
             tag.setField(tag.createField(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL1_ID,"c1f657ba-8177-3cbb-b84a-f62bc684a94g"));
             tag.setField(tag.createField(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL2_ID,"c1f657ba-8177-3cbb-b84a-f62bc684a94h"));
             tag.setField(tag.createField(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL3_ID,"c1f657ba-8177-3cbb-b84a-f62bc684a94i"));
@@ -1337,7 +1337,7 @@ public class Issue298Test extends AbstractTestCase
             assertEquals("Nigel Kennedy (violinist)",af.getTag().getFirst(FieldKey.PERFORMER));
             assertEquals("WorkType",af.getTag().getFirst(FieldKey.WORK_TYPE));
             assertEquals("Soloist",af.getTag().getFirst(FieldKey.PERFORMING_SOLOIST));
-            assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94g",af.getTag().getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL0_ID));
+            assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94g",af.getTag().getFirst(FieldKey.MUSICBRAINZ_WORK_COMPOSITION_ID));
             assertEquals("Composition Type",af.getTag().getFirst(FieldKey.PART_TYPE));
             assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94g",af.getTag().getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL1_ID));
             assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94h",af.getTag().getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL2_ID));

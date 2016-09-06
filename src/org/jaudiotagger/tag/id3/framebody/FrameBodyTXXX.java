@@ -91,7 +91,7 @@ public class FrameBodyTXXX extends AbstractFrameBodyTextInfo implements ID3v24Fr
     public static final String MUSICBRAINZ_RELEASE_GROUPID  = "MusicBrainz Release Group Id";
     public static final String MUSICBRAINZ_RELEASE_TRACKID  = "MusicBrainz Release Track Id";
     public static final String MUSICBRAINZ_WORKID           = "MusicBrainz Work Id";
-    public static final String MUSICBRAINZ_WORK_PART_LEVEL0_ID          = "MusicBrainz Work Part Level0 Id";
+    public static final String MUSICBRAINZ_WORK_COMPOSITION_ID = "MusicBrainz Work Composition Id";
     public static final String MUSICBRAINZ_WORK_PART_LEVEL1_ID          = "MusicBrainz Work Part Level1 Id";
     public static final String MUSICBRAINZ_WORK_PART_LEVEL2_ID          = "MusicBrainz Work Part Level2 Id";
     public static final String MUSICBRAINZ_WORK_PART_LEVEL3_ID          = "MusicBrainz Work Part Level3 Id";

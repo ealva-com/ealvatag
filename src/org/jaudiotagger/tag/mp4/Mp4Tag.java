@@ -151,7 +151,7 @@ public class Mp4Tag extends AbstractTag
         tagFieldToMp4Field.put(FieldKey.WORK, Mp4FieldKey.WORK);
         tagFieldToMp4Field.put(FieldKey.YEAR, Mp4FieldKey.DAY);
         tagFieldToMp4Field.put(FieldKey.WORK_TYPE, Mp4FieldKey.WORK_TYPE);
-        tagFieldToMp4Field.put(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL0_ID, Mp4FieldKey.MUSICBRAINZ_WORK_PART_LEVEL0_ID);
+        tagFieldToMp4Field.put(FieldKey.MUSICBRAINZ_WORK_COMPOSITION_ID, Mp4FieldKey.MUSICBRAINZ_WORK_COMPOSITION_ID);
         tagFieldToMp4Field.put(FieldKey.PART_TYPE, Mp4FieldKey.PART_TYPE);
         tagFieldToMp4Field.put(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL1_ID, Mp4FieldKey.MUSICBRAINZ_WORK_PART_LEVEL1_ID);
         tagFieldToMp4Field.put(FieldKey.WORK_PART_LEVEL1, Mp4FieldKey.WORK_PART_LEVEL1);

@@ -158,7 +158,7 @@ public final class AsfTag extends AbstractTag
         tagFieldToAsfField.put(FieldKey.MUSICBRAINZ_RELEASE_TYPE, AsfFieldKey.MUSICBRAINZ_RELEASE_TYPE);
         tagFieldToAsfField.put(FieldKey.MUSICBRAINZ_TRACK_ID, AsfFieldKey.MUSICBRAINZ_TRACK_ID);
         tagFieldToAsfField.put(FieldKey.MUSICBRAINZ_WORK_ID, AsfFieldKey.MUSICBRAINZ_WORKID);
-        tagFieldToAsfField.put(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL0_ID, AsfFieldKey.MUSICBRAINZ_WORK_PART_LEVEL0_ID);
+        tagFieldToAsfField.put(FieldKey.MUSICBRAINZ_WORK_COMPOSITION_ID, AsfFieldKey.MUSICBRAINZ_WORK_COMPOSITION_ID);
         tagFieldToAsfField.put(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL1_ID, AsfFieldKey.MUSICBRAINZ_WORK_PART_LEVEL1_ID);
         tagFieldToAsfField.put(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL2_ID, AsfFieldKey.MUSICBRAINZ_WORK_PART_LEVEL2_ID);
         tagFieldToAsfField.put(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL3_ID, AsfFieldKey.MUSICBRAINZ_WORK_PART_LEVEL3_ID);
