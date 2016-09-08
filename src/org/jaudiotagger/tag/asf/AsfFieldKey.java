@@ -156,7 +156,7 @@ public enum AsfFieldKey
     ORIGINAL_YEAR("WM/OriginalReleaseYear", true),
     PART("WM/Part", true),
     PART_NUMBER("WM/PartNumber",true),
-    PART_TYPE("WM/Part Type",true),
+    PART_TYPE("WM/PartType",true),
     PERFORMER("WM/Performer", true),
     PERFORMING_ARTIST("WM/PerformingArtist",true),
     PERFORMING_ARTIST_SORT("WM/PerformingArtistSort",true),
