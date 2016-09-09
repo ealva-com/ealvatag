@@ -86,6 +86,7 @@ public class AudioFileWriterTest extends TestCase {
     }
 
     public void testFileIdentity() throws Exception {
+        System.out.println("testFileIdentity");
         try
         {
             if (System.getProperty("os.name").toLowerCase().startsWith("win"))
