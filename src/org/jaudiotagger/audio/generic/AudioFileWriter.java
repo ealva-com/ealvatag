@@ -27,11 +27,13 @@ import org.jaudiotagger.logging.ErrorMessage;
 import org.jaudiotagger.tag.Tag;
 import org.jaudiotagger.tag.TagOptionSingleton;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.RandomAccessFile;
+import java.io.*;
+import java.nio.channels.FileChannel;
+import java.nio.channels.FileLock;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.attribute.BasicFileAttributes;
+import java.nio.file.attribute.FileTime;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -512,95 +514,7 @@ public abstract class AudioFileWriter
         // If the temporary file was used
         if (newFile.length() > 0)
         {
-
-            // Rename Original File
-            // Can fail on Vista if have Special Permission 'Delete' set Deny
-            File originalFileBackup = new File(af.getFile().getAbsoluteFile().getParentFile().getPath(),
-                                               AudioFile.getBaseFilename(af.getFile()) + ".old");
-
-            //If already exists modify the suffix
-            int count=1;
-            while(originalFileBackup.exists())
-            {
-                originalFileBackup = new File(af.getFile().getAbsoluteFile().getParentFile().getPath(), AudioFile.getBaseFilename(af.getFile())+ ".old"+count);
-                count++;
-            }               
-
-            boolean renameResult = Utils.rename(af.getFile(),originalFileBackup);
-            if (!renameResult)
-            {
-                logger
-                        .log(Level.SEVERE, ErrorMessage.GENERAL_WRITE_FAILED_TO_RENAME_ORIGINAL_FILE_TO_BACKUP
-                                .getMsg(af.getFile().getAbsolutePath(), originalFileBackup.getName()));
-                //Delete the temp file because write has failed
-                if(newFile!=null)
-                {
-                    newFile.delete();
-                }
-                throw new CannotWriteException(ErrorMessage.GENERAL_WRITE_FAILED_TO_RENAME_ORIGINAL_FILE_TO_BACKUP
-                        .getMsg(af.getFile().getPath(), originalFileBackup.getName()));
-            }
-
-            // Rename Temp File to Original File
-            renameResult = Utils.rename(newFile,af.getFile());
-            if (!renameResult)
-            {
-                // Renamed failed so lets do some checks rename the backup back to the original file
-                // New File doesnt exist
-                if (!newFile.exists())
-                {
-                    logger
-                            .warning(ErrorMessage.GENERAL_WRITE_FAILED_NEW_FILE_DOESNT_EXIST
-                                    .getMsg(newFile.getAbsolutePath()));
-                }
-
-                // Rename the backup back to the original
-                if (!originalFileBackup.renameTo(af.getFile()))
-                {
-                    // TODO now if this happens we are left with testfile.old
-                    // instead of testfile.mp4
-                    logger
-                            .warning(ErrorMessage.GENERAL_WRITE_FAILED_TO_RENAME_ORIGINAL_BACKUP_TO_ORIGINAL
-                                    .getMsg(originalFileBackup
-                                    .getAbsolutePath(), af.getFile()
-                                    .getName()));
-                }
-
-                logger
-                        .warning(ErrorMessage.GENERAL_WRITE_FAILED_TO_RENAME_TO_ORIGINAL_FILE
-                                .getMsg(af.getFile().getAbsolutePath(), newFile
-                                .getName()));
-                throw new CannotWriteException(ErrorMessage.GENERAL_WRITE_FAILED_TO_RENAME_TO_ORIGINAL_FILE
-                        .getMsg(af.getFile().getAbsolutePath(), newFile
-                        .getName()));
-            }
-            else
-            {
-                // Rename was okay so we can now delete the backup of the
-                // original
-                boolean deleteResult = originalFileBackup.delete();
-                if (!deleteResult)
-                {
-                    // Not a disaster but can't delete the backup so make a
-                    // warning
-                    logger
-                            .warning(ErrorMessage.GENERAL_WRITE_WARNING_UNABLE_TO_DELETE_BACKUP_FILE
-                                    .getMsg(originalFileBackup
-                                    .getAbsolutePath()));
-                }
-            }
-
-            // Delete the temporary file if still exists
-            if (newFile.exists())
-            {
-                if (!newFile.delete())
-                {
-                    // Non critical failed deletion
-                    logger
-                            .warning(ErrorMessage.GENERAL_WRITE_FAILED_TO_DELETE_TEMPORARY_FILE
-                                    .getMsg(newFile.getPath()));
-                }
-            }
+            transferNewFileToOriginalFile(newFile, af.getFile(), TagOptionSingleton.getInstance().isPreserveFileIdentity());
         }
         else
         {
@@ -617,6 +531,262 @@ public abstract class AudioFileWriter
         if (this.modificationListener != null)
         {
             this.modificationListener.fileOperationFinished(result);
+        }
+    }
+
+    /**
+     * <p>
+     *     Transfers the content from {@code newFile} to a file named {@code originalFile}.
+     *     With regards to file identity (inode/<a href="https://msdn.microsoft.com/en-us/library/aa363788(v=vs.85).aspx">fileIndex</a>),
+     *     after execution, {@code originalFile} may be a completely new file or the same file as before execution, depending
+     *     on {@code reuseExistingOriginalFile}.
+     * </p>
+     * <p>
+     *     Reusing the existing file may be slower, if both the temp file and the original file are located
+     *     in the same filesystem, because an actual copy is created instead of just a file rename.
+     *     If both files are on different filesystems, a copy is always needed — regardless of which method is used.
+     * </p>
+     *
+     * @param newFile new file
+     * @param originalFile original file
+     * @param reuseExistingOriginalFile {@code true} or {@code false}
+     * @throws CannotWriteException If the file cannot be written
+     */
+    private void transferNewFileToOriginalFile(final File newFile, final File originalFile, final boolean reuseExistingOriginalFile) throws CannotWriteException {
+        if (reuseExistingOriginalFile) {
+            transferNewFileContentToOriginalFile(newFile, originalFile);
+        } else {
+            transferNewFileToNewOriginalFile(newFile, originalFile);
+        }
+    }
+
+    /**
+     * <p>
+     *     Writes the contents of the given {@code newFile} to the given {@code originalFile},
+     *     overwriting the already existing content in {@code originalFile}.
+     *     This ensures that the file denoted by the abstract pathname {@code originalFile}
+     *     keeps the same Unix inode or Windows
+     *     <a href="https://msdn.microsoft.com/en-us/library/aa363788(v=vs.85).aspx">fileIndex</a>.
+     * </p>
+     * <p>
+     *     If no errors occur, the method follows this approach:
+     * </p>
+     * <ol>
+     *     <li>Rename <code>originalFile</code> to <code>originalFile.old</code></li>
+     *     <li>Rename <code>newFile</code> to <code>originalFile</code> (this implies a file identity change for <code>originalFile</code>)</li>
+     *     <li>Delete <code>originalFile.old</code></li>
+     *     <li>Delete <code>newFile</code></li>
+     * </ol>
+     *
+     * @param newFile File containing the data we want in the {@code originalFile}
+     * @param originalFile Before execution this denotes the original, unmodified file.
+     *                     After execution it denotes the name of the file with the modified content and new inode/fileIndex.
+     * @throws CannotWriteException if the file cannot be written
+     */
+    private void transferNewFileContentToOriginalFile(final File newFile, final File originalFile) throws CannotWriteException {
+        // try to obtain exclusive lock on the file
+        try (final RandomAccessFile raf = new RandomAccessFile(originalFile, "rw")) {
+            final FileChannel outChannel = raf.getChannel();
+            try (final FileLock lock = outChannel.tryLock()) {
+                if (lock != null) {
+                    try (final FileChannel inChannel = new FileInputStream(newFile).getChannel()) {
+                        // copy contents of newFile to originalFile,
+                        // overwriting the old content in that file
+                        final long size = inChannel.size();
+                        long position = 0;
+                        while (position < size) {
+                            position += inChannel.transferTo(position, 1024L * 1024L, outChannel);
+                        }
+                        // truncate raf, in case it used to be longer
+                        raf.setLength(size);
+                    } catch (FileNotFoundException e) {
+                        logger.warning(ErrorMessage.GENERAL_WRITE_FAILED_NEW_FILE_DOESNT_EXIST
+                                .getMsg(newFile.getAbsolutePath()));
+                        throw new CannotWriteException(ErrorMessage.GENERAL_WRITE_FAILED_NEW_FILE_DOESNT_EXIST
+                                .getMsg(newFile.getName()), e);
+                    } catch (IOException e) {
+                        logger.warning(ErrorMessage.GENERAL_WRITE_FAILED_TO_RENAME_TO_ORIGINAL_FILE
+                                .getMsg(originalFile.getAbsolutePath(), newFile.getName()));
+                        throw new CannotWriteException(ErrorMessage.GENERAL_WRITE_FAILED_TO_RENAME_TO_ORIGINAL_FILE
+                                .getMsg(originalFile.getAbsolutePath(), newFile.getName()), e);
+                    }
+                    // file is written, all is good, let's delete newFile, as it's not needed anymore
+                    if (newFile.exists() && !newFile.delete()) {
+                        // non-critical failed deletion
+                        logger.warning(ErrorMessage.GENERAL_WRITE_FAILED_TO_DELETE_TEMPORARY_FILE.getMsg(newFile.getPath()));
+                    }
+                } else {
+                    // we didn't get a lock
+                    logger.warning(ErrorMessage.GENERAL_WRITE_FAILED_FILE_LOCKED.getMsg(originalFile.getPath()));
+                    throw new CannotWriteException(ErrorMessage.GENERAL_WRITE_FAILED_FILE_LOCKED.getMsg(originalFile.getPath()));
+                }
+            } catch (Exception e) {
+                // tryLock failed for some reason
+                logger.warning(ErrorMessage.GENERAL_WRITE_FAILED_FILE_LOCKED.getMsg(originalFile.getPath()));
+                throw new CannotWriteException(ErrorMessage.GENERAL_WRITE_FAILED_FILE_LOCKED.getMsg(originalFile.getPath()), e);
+            }
+        } catch (FileNotFoundException e) {
+            logger.warning(ErrorMessage.GENERAL_WRITE_FAILED_BECAUSE_FILE_NOT_FOUND.getMsg(originalFile.getAbsolutePath()));
+            throw new CannotWriteException(ErrorMessage.GENERAL_WRITE_FAILED_BECAUSE_FILE_NOT_FOUND.getMsg(originalFile.getPath()), e);
+        } catch (Exception e) {
+            logger.warning(ErrorMessage.GENERAL_WRITE_FAILED.getMsg(originalFile.getAbsolutePath()));
+            throw new CannotWriteException(ErrorMessage.GENERAL_WRITE_FAILED.getMsg(originalFile.getPath()), e);
+        }
+    }
+
+    /**
+     * <p>
+     *     Replaces the original file with the new file in a way that changes the file identity.
+     *     In other words, the Unix inode or the Windows
+     *     <a href="https://msdn.microsoft.com/en-us/library/aa363788(v=vs.85).aspx">fileIndex</a>
+     *     of the resulting file with the name {@code originalFile} is not identical to the inode/fileIndex
+     *     of the file named {@code originalFile} before this method was called.
+     * </p>
+     * <p>
+     *     If no errors occur, the method follows this approach:
+     * </p>
+     * <ol>
+     *     <li>Rename <code>originalFile</code> to <code>originalFile.old</code></li>
+     *     <li>Rename <code>newFile</code> to <code>originalFile</code> (this implies a file identity change for <code>originalFile</code>)</li>
+     *     <li>Delete <code>originalFile.old</code></li>
+     *     <li>Delete <code>newFile</code></li>
+     * </ol>
+     *
+     * @param newFile File containing the data we want in the {@code originalFile}
+     * @param originalFile Before execution this denotes the original, unmodified file.
+     *                     After execution it denotes the name of the file with the modified content and new inode/fileIndex.
+     * @throws CannotWriteException if the file cannot be written
+     */
+    private void transferNewFileToNewOriginalFile(final File newFile, final File originalFile) throws CannotWriteException {
+        // get original creation date
+        final FileTime creationTime = getCreationTime(originalFile);
+
+        // Rename Original File
+        // Can fail on Vista if have Special Permission 'Delete' set Deny
+        File originalFileBackup = new File(originalFile.getAbsoluteFile().getParentFile().getPath(),
+                                           AudioFile.getBaseFilename(originalFile) + ".old");
+
+        //If already exists modify the suffix
+        int count=1;
+        while(originalFileBackup.exists())
+        {
+            originalFileBackup = new File(originalFile.getAbsoluteFile().getParentFile().getPath(), AudioFile.getBaseFilename(originalFile)+ ".old"+count);
+            count++;
+        }
+
+        boolean renameResult = Utils.rename(originalFile,originalFileBackup);
+        if (!renameResult)
+        {
+            logger
+                    .log(Level.SEVERE, ErrorMessage.GENERAL_WRITE_FAILED_TO_RENAME_ORIGINAL_FILE_TO_BACKUP
+                            .getMsg(originalFile.getAbsolutePath(), originalFileBackup.getName()));
+            //Delete the temp file because write has failed
+            // TODO: Simplify: newFile is always != null, otherwise we would not have entered this block (-> if (newFile.length() > 0) {})
+            if(newFile!=null)
+            {
+                newFile.delete();
+            }
+            throw new CannotWriteException(ErrorMessage.GENERAL_WRITE_FAILED_TO_RENAME_ORIGINAL_FILE_TO_BACKUP
+                    .getMsg(originalFile.getPath(), originalFileBackup.getName()));
+        }
+
+        // Rename Temp File to Original File
+        renameResult = Utils.rename(newFile, originalFile);
+        if (!renameResult)
+        {
+            // Renamed failed so lets do some checks rename the backup back to the original file
+            // New File doesnt exist
+            if (!newFile.exists())
+            {
+                logger
+                        .warning(ErrorMessage.GENERAL_WRITE_FAILED_NEW_FILE_DOESNT_EXIST
+                                .getMsg(newFile.getAbsolutePath()));
+            }
+
+            // Rename the backup back to the original
+            if (!originalFileBackup.renameTo(originalFile))
+            {
+                // TODO now if this happens we are left with testfile.old
+                // instead of testfile.mp4
+                logger
+                        .warning(ErrorMessage.GENERAL_WRITE_FAILED_TO_RENAME_ORIGINAL_BACKUP_TO_ORIGINAL
+                                .getMsg(originalFileBackup
+                                .getAbsolutePath(), originalFile
+                                .getName()));
+            }
+
+            logger
+                    .warning(ErrorMessage.GENERAL_WRITE_FAILED_TO_RENAME_TO_ORIGINAL_FILE
+                            .getMsg(originalFile.getAbsolutePath(), newFile
+                            .getName()));
+            throw new CannotWriteException(ErrorMessage.GENERAL_WRITE_FAILED_TO_RENAME_TO_ORIGINAL_FILE
+                    .getMsg(originalFile.getAbsolutePath(), newFile
+                    .getName()));
+        }
+        else
+        {
+            // Rename was okay so we can now delete the backup of the
+            // original
+            boolean deleteResult = originalFileBackup.delete();
+            if (!deleteResult)
+            {
+                // Not a disaster but can't delete the backup so make a
+                // warning
+                logger
+                        .warning(ErrorMessage.GENERAL_WRITE_WARNING_UNABLE_TO_DELETE_BACKUP_FILE
+                                .getMsg(originalFileBackup
+                                .getAbsolutePath()));
+            }
+
+            // now also set the creation date to the creation date of the original file
+            if (creationTime != null)
+            {
+                // this may fail silently on OS X, because of a JDK bug
+                setCreationTime(originalFile, creationTime);
+            }
+        }
+
+        // Delete the temporary file if still exists
+        if (newFile.exists())
+        {
+            if (!newFile.delete())
+            {
+                // Non critical failed deletion
+                logger
+                        .warning(ErrorMessage.GENERAL_WRITE_FAILED_TO_DELETE_TEMPORARY_FILE
+                                .getMsg(newFile.getPath()));
+            }
+        }
+    }
+
+    /**
+     * Sets the creation time for a given file.
+     * Fails silently with a log message.
+     *
+     * @param file file
+     * @param creationTime creation time
+     */
+    private void setCreationTime(final File file, final FileTime creationTime) {
+        try {
+            Files.setAttribute(file.toPath(), "creationTime", creationTime);
+        } catch (Exception e) {
+            logger.log(Level.WARNING, ErrorMessage.GENERAL_SET_CREATION_TIME_FAILED.getMsg(file.getAbsolutePath(), e.getMessage()), e);
+        }
+    }
+
+    /**
+     * Get file creation time.
+     *
+     * @param file file
+     * @return time object or {@code null}, if we could not read it for some reason.
+     */
+    private FileTime getCreationTime(final File file) {
+        try {
+            final BasicFileAttributes attributes = Files.readAttributes(file.toPath(), BasicFileAttributes.class);
+            return attributes.creationTime();
+        } catch (Exception e) {
+            logger.log(Level.WARNING, ErrorMessage.GENERAL_GET_CREATION_TIME_FAILED.getMsg(file.getAbsolutePath(), e.getMessage()), e);
+            return null;
         }
     }
 
