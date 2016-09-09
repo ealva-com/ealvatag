@@ -85,18 +85,27 @@ public class AudioFileWriterTest extends TestCase {
         creationTime();
     }
 
-    public void testFileIdentity() throws CannotWriteException, IOException, InterruptedException {
-        if (System.getProperty("os.name").toLowerCase().startsWith("win")) {
-            System.out.println("Skipped testFileIdentity(), because we're on Windows.");
-            return;
+    public void testFileIdentity() throws Exception {
+        try
+        {
+            if (System.getProperty("os.name").toLowerCase().startsWith("win"))
+            {
+                System.out.println("Skipped testFileIdentity(), because we're on Windows.");
+                return;
+            }
+            TagOptionSingleton.getInstance().setPreserveFileIdentity(true);
+            final Path path = audioFile.getFile().toPath();
+            final Long originalInode = (Long) Files.getAttribute(path, "unix:ino");
+            final AudioFileWriter audioFileWriter = new MockAudioFileWriter();
+            audioFileWriter.write(this.audioFile);
+            final Long inode = (Long) Files.getAttribute(path, "unix:ino");
+            assertEquals("Inodes do not match", originalInode, inode);
         }
-        TagOptionSingleton.getInstance().setPreserveFileIdentity(true);
-        final Path path = audioFile.getFile().toPath();
-        final Long originalInode = (Long) Files.getAttribute(path, "unix:ino");
-        final AudioFileWriter audioFileWriter = new MockAudioFileWriter();
-        audioFileWriter.write(this.audioFile);
-        final Long inode = (Long) Files.getAttribute(path, "unix:ino");
-        assertEquals("Inodes do not match", originalInode, inode);
+        catch(Exception ex)
+        {
+            ex.printStackTrace();
+            throw ex;
+        }
     }
 
     private void creationTime() throws IOException, InterruptedException, CannotWriteException {
