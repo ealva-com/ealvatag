@@ -356,7 +356,10 @@ public class TagOptionSingleton
      */
     private boolean checkIsWritable = false;
 
-    private boolean preserveFileIdentity = false;
+    /**
+     * Preserve file identity if possible
+     */
+    private boolean preserveFileIdentity = true;
 
     /**
      * 
