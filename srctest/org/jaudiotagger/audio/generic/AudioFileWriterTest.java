@@ -118,7 +118,7 @@ public class AudioFileWriterTest extends TestCase {
             audioFileWriter.write(this.audioFile);
             final FileTime creationTime = (FileTime)Files.getAttribute(path, "creationTime");
             System.out.println("Creation Time:"+originalCreationTime+":"+creationTime);
-            assertTrue("Creation time not within 10 milliseconds of original time",(creationTime.toMillis() - originalCreationTime.toMillis()) < 10);
+            assertTrue("Creation time not within 3000 milliseconds of original time",(creationTime.toMillis() - originalCreationTime.toMillis()) < 3000);
         } catch (UnsupportedOperationException e) {
             System.out.println("Accessing creationTime is not supported.");
             e.printStackTrace(System.out);
