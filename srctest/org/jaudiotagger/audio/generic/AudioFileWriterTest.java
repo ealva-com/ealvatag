@@ -99,7 +99,6 @@ public class AudioFileWriterTest extends TestCase {
             final AudioFileWriter audioFileWriter = new MockAudioFileWriter();
             audioFileWriter.write(this.audioFile);
             final Long inode = (Long) Files.getAttribute(path, "unix:ino");
-            System.out.println("******** INODES:"+originalInode+":"+inode);
             assertEquals("Inodes do not match", originalInode, inode);
         }
         catch(Exception ex)
@@ -119,7 +118,7 @@ public class AudioFileWriterTest extends TestCase {
             audioFileWriter.write(this.audioFile);
             final FileTime creationTime = (FileTime)Files.getAttribute(path, "creationTime");
             System.out.println("Creation Time:"+originalCreationTime+":"+creationTime);
-            //assertEquals("Creation time does not match", originalCreationTime, creationTime);
+            assertTrue("Creation time not within 10 milliseconds of original time",(creationTime.toMillis() - originalCreationTime.toMillis()) < 10);
         } catch (UnsupportedOperationException e) {
             System.out.println("Accessing creationTime is not supported.");
             e.printStackTrace(System.out);
