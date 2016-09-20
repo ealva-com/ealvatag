@@ -464,7 +464,7 @@ public abstract class AudioFileWriter
         // If the temporary file was used
         if (newFile.length() > 0)
         {
-            transferNewFileToOriginalFile(newFile, af.getFile(), TagOptionSingleton.getInstance().isPreserveFileIdentity());
+             transferNewFileToOriginalFile(newFile, af.getFile(), TagOptionSingleton.getInstance().isPreserveFileIdentity());
         }
         else
         {

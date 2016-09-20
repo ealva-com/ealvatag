@@ -55,6 +55,7 @@ public enum Mp4FieldKey
     CDDB_IDS("com.apple.iTunes", "iTunes_CDDB_IDs", TEXT),
     CDDB_TRACKNUMBER("com.apple.iTunes", "iTunes_CDDB_TrackNumber", TEXT),
     CN_ID("cnID",Mp4TagFieldSubType.UNKNOWN, INTEGER, 4),
+    CHOIR("com.apple.iTunes","Choir",  TEXT, Tagger.JAIKOZ),
     COMMENT("©cmt",Mp4TagFieldSubType.TEXT, TEXT),
     COMPILATION("cpil",Mp4TagFieldSubType.BYTE, INTEGER, 1),
     COMPOSER("©wrt",Mp4TagFieldSubType.TEXT, TEXT),
@@ -169,6 +170,7 @@ public enum Mp4FieldKey
     PRODUCER("com.apple.iTunes", "PRODUCER", TEXT, Tagger.PICARD),
     PURCHASE_DATE("purd",Mp4TagFieldSubType.TEXT, TEXT),
     QUALITY("qual",Mp4TagFieldSubType.TEXT, TEXT, Tagger.MEDIA_MONKEY),
+    RANKING("com.apple.iTunes","Ranking",  TEXT, Tagger.JAIKOZ),
     RATING("rtng",Mp4TagFieldSubType.BYTE, INTEGER,1),   //AFAIK Cant be setField in itunes, but if setField to explicit itunes will show as explicit
     RELEASECOUNTRY("com.apple.iTunes", "MusicBrainz Album Release Country", TEXT, Tagger.PICARD),
     REMIXER("com.apple.iTunes", "REMIXER", TEXT, Tagger.PICARD),

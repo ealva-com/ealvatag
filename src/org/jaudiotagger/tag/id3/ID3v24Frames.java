@@ -381,6 +381,7 @@ public class ID3v24Frames extends ID3Frames
         tagFieldToId3.put(FieldKey.BARCODE, ID3v24FieldKey.BARCODE);
         tagFieldToId3.put(FieldKey.BPM, ID3v24FieldKey.BPM);
         tagFieldToId3.put(FieldKey.CATALOG_NO, ID3v24FieldKey.CATALOG_NO);
+        tagFieldToId3.put(FieldKey.CHOIR, ID3v24FieldKey.CHOIR);
         tagFieldToId3.put(FieldKey.COMMENT, ID3v24FieldKey.COMMENT);
         tagFieldToId3.put(FieldKey.COMPOSER, ID3v24FieldKey.COMPOSER);
         tagFieldToId3.put(FieldKey.COMPOSER_SORT, ID3v24FieldKey.COMPOSER_SORT);
@@ -462,6 +463,7 @@ public class ID3v24Frames extends ID3Frames
         tagFieldToId3.put(FieldKey.PERIOD, ID3v24FieldKey.PERIOD);
         tagFieldToId3.put(FieldKey.PRODUCER, ID3v24FieldKey.PRODUCER);
         tagFieldToId3.put(FieldKey.QUALITY, ID3v24FieldKey.QUALITY);
+        tagFieldToId3.put(FieldKey.RANKING, ID3v24FieldKey.RANKING);
         tagFieldToId3.put(FieldKey.RATING, ID3v24FieldKey.RATING);
         tagFieldToId3.put(FieldKey.RECORD_LABEL, ID3v24FieldKey.RECORD_LABEL);
         tagFieldToId3.put(FieldKey.REMIXER, ID3v24FieldKey.REMIXER);

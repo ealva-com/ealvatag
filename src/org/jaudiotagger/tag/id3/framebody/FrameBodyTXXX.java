@@ -64,6 +64,7 @@ public class FrameBodyTXXX extends AbstractFrameBodyTextInfo implements ID3v24Fr
     public static final String ARTISTS_SORT                 = "Artists Sort";
     public static final String BARCODE                      = "BARCODE";
     public static final String CATALOG_NO                   = "CATALOGNUMBER";
+    public static final String CHOIR                        = "Choir";
     public static final String CONDUCTOR_SORT               = "Conductor Sort";
     public static final String COUNTRY                      = "Country";
     public static final String ELECTRONIC                   = "Electronic";
@@ -110,6 +111,7 @@ public class FrameBodyTXXX extends AbstractFrameBodyTextInfo implements ID3v24Fr
     public static final String PERFORMING_SOLOIST                       = "Performing Soloist";
     public static final String PERFORMING_SOLOIST_SORT                  = "Performing Soloist Sort";
     public static final String PERIOD                                   = "Period";
+    public static final String RANKING                                  = "Ranking";
     public static final String SCRIPT                                   = "Script";
     public static final String SINGLE_DISC_TRACK_NO                     = "Single Disc Track No";
     public static final String TAGS                                     = "TAGS";
