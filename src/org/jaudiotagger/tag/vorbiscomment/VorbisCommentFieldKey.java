@@ -38,6 +38,7 @@ public enum VorbisCommentFieldKey
     BPM("BPM",EnumSet.of(Tagger.PICARD,Tagger.JAIKOZ)),
     CATALOGNUMBER("CATALOGNUMBER",EnumSet.of(Tagger.PICARD,Tagger.JAIKOZ)),
     CHOIR("CHOIR",EnumSet.of(Tagger.JAIKOZ)),
+    CLASSICAL_CATALOG("CLASSICAL_CATALOG",EnumSet.of(Tagger.JAIKOZ)),
     COMMENT("COMMENT",EnumSet.of(Tagger.PICARD)),
     COMPILATION("COMPILATION",EnumSet.of(Tagger.PICARD,Tagger.JAIKOZ)),
     COMPOSER("COMPOSER",EnumSet.of(Tagger.PICARD,Tagger.JAIKOZ)),
@@ -64,7 +65,7 @@ public enum VorbisCommentFieldKey
     ENCODEDBY("ENCODEDBY",EnumSet.of(Tagger.PICARD)),
     ENCODER("ENCODER"),
     ENGINEER("ENGINEER",EnumSet.of(Tagger.PICARD)),
-    ENSEMBLE("ENSEMBLE",EnumSet.of(Tagger.MEDIA_MONKEY)),   //Uses this for ALBUM_ARTIST
+    ENSEMBLE("ENSEMBLE",EnumSet.of(Tagger.MEDIA_MONKEY, Tagger.JAIKOZ)),
     FBPM("FBPM",EnumSet.of(Tagger.BEATUNES)),
     GENRE("GENRE",EnumSet.of(Tagger.XIPH,Tagger.PICARD,Tagger.JAIKOZ)),
     GROUPING("GROUPING",EnumSet.of(Tagger.PICARD,Tagger.JAIKOZ)),

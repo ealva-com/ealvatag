@@ -65,9 +65,11 @@ public class FrameBodyTXXX extends AbstractFrameBodyTextInfo implements ID3v24Fr
     public static final String BARCODE                      = "BARCODE";
     public static final String CATALOG_NO                   = "CATALOGNUMBER";
     public static final String CHOIR                        = "Choir";
+    public static final String CLASSICAL_CATALOG            = "Classical Catalog";
     public static final String CONDUCTOR_SORT               = "Conductor Sort";
     public static final String COUNTRY                      = "Country";
     public static final String ELECTRONIC                   = "Electronic";
+    public static final String ENSEMBLE                     = "Ensemble";
     public static final String FBPM                         = "FBPM";
     public static final String INSTRUMENTAL                 = "Instrumental";
     public static final String IS_CLASSICAL                 = "IsClassical";

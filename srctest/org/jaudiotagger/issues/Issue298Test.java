@@ -112,6 +112,8 @@ public class Issue298Test extends AbstractTestCase
             tag.setField(tag.createField(FieldKey.PERIOD,"Period"));
             tag.setField(tag.createField(FieldKey.IS_CLASSICAL,"true"));
             tag.setField(tag.createField(FieldKey.IS_SOUNDTRACK,"true"));
+            tag.setField(tag.createField(FieldKey.ENSEMBLE,"ensemble"));
+            tag.setField(tag.createField(FieldKey.CLASSICAL_CATALOG,"classicalcatalog"));
 
             assertEquals("custom1",af.getTag().getFirst(FieldKey.CUSTOM1));
             assertEquals("custom2",af.getTag().getFirst(FieldKey.CUSTOM2));
@@ -190,6 +192,8 @@ public class Issue298Test extends AbstractTestCase
             assertEquals("SoloistSort", af.getTag().getFirst(FieldKey.PERFORMING_SOLOIST_SORT));
             assertEquals("NonSoloist", af.getTag().getFirst(FieldKey.PERFORMING_ARTIST));
             assertEquals("NonSoloistSort", af.getTag().getFirst(FieldKey.PERFORMING_ARTIST_SORT));
+            assertEquals("ensemble", af.getTag().getFirst(FieldKey.ENSEMBLE));
+            assertEquals("classicalcatalog", af.getTag().getFirst(FieldKey.CLASSICAL_CATALOG));
 
             {
                 TagField tagField = af.getTag().getFirstField(FieldKey.CUSTOM1);
@@ -387,7 +391,8 @@ public class Issue298Test extends AbstractTestCase
             tag.setField(tag.createField(FieldKey.PERFORMING_ARTIST,"NonSoloist"));
             tag.setField(tag.createField(FieldKey.PERFORMING_ARTIST_SORT,"NonSoloistSort"));
             tag.setField(tag.createField(FieldKey.PRODUCER,"Producer"));
-
+            tag.setField(tag.createField(FieldKey.ENSEMBLE,"ensemble"));
+            tag.setField(tag.createField(FieldKey.CLASSICAL_CATALOG,"classicalcatalog"));
 
             af.commit();
             af = AudioFileIO.read(testFile);
@@ -472,7 +477,8 @@ public class Issue298Test extends AbstractTestCase
             assertEquals("NonSoloist",af.getTag().getFirst(FieldKey.PERFORMING_ARTIST));
             assertEquals("NonSoloistSort",af.getTag().getFirst(FieldKey.PERFORMING_ARTIST_SORT));
             assertEquals("Producer",af.getTag().getFirst(FieldKey.PRODUCER));
-
+            assertEquals("ensemble", af.getTag().getFirst(FieldKey.ENSEMBLE));
+            assertEquals("classicalcatalog", af.getTag().getFirst(FieldKey.CLASSICAL_CATALOG));
 
 
         }
@@ -580,6 +586,8 @@ public class Issue298Test extends AbstractTestCase
             tag.setField(tag.createField(FieldKey.PERFORMING_SOLOIST_SORT,"SoloistSort"));
             tag.setField(tag.createField(FieldKey.PERFORMING_ARTIST,"NonSoloist"));
             tag.setField(tag.createField(FieldKey.PERFORMING_ARTIST_SORT,"NonSoloistSort"));
+            tag.setField(tag.createField(FieldKey.ENSEMBLE,"ensemble"));
+            tag.setField(tag.createField(FieldKey.CLASSICAL_CATALOG,"classicalcatalog"));
 
             af.commit();
             af = AudioFileIO.read(testFile);
@@ -661,6 +669,8 @@ public class Issue298Test extends AbstractTestCase
             assertEquals("SoloistSort",af.getTag().getFirst(FieldKey.PERFORMING_SOLOIST_SORT));
             assertEquals("NonSoloist",af.getTag().getFirst(FieldKey.PERFORMING_ARTIST));
             assertEquals("NonSoloistSort",af.getTag().getFirst(FieldKey.PERFORMING_ARTIST_SORT));
+            assertEquals("ensemble", af.getTag().getFirst(FieldKey.ENSEMBLE));
+            assertEquals("classicalcatalog", af.getTag().getFirst(FieldKey.CLASSICAL_CATALOG));
 
         }
         catch(Exception e)
@@ -765,7 +775,8 @@ public class Issue298Test extends AbstractTestCase
             tag.setField(tag.createField(FieldKey.PERFORMING_SOLOIST_SORT,"SoloistSort"));
             tag.setField(tag.createField(FieldKey.PERFORMING_ARTIST,"NonSoloist"));
             tag.setField(tag.createField(FieldKey.PERFORMING_ARTIST_SORT,"NonSoloistSort"));
-
+            tag.setField(tag.createField(FieldKey.ENSEMBLE,"ensemble"));
+            tag.setField(tag.createField(FieldKey.CLASSICAL_CATALOG,"classicalcatalog"));
             af.commit();
             af = AudioFileIO.read(testFile);
             assertEquals("custom1",af.getTag().getFirst(FieldKey.CUSTOM1));
@@ -846,6 +857,8 @@ public class Issue298Test extends AbstractTestCase
             assertEquals("SoloistSort",af.getTag().getFirst(FieldKey.PERFORMING_SOLOIST_SORT));
             assertEquals("NonSoloist",af.getTag().getFirst(FieldKey.PERFORMING_ARTIST));
             assertEquals("NonSoloistSort",af.getTag().getFirst(FieldKey.PERFORMING_ARTIST_SORT));
+            assertEquals("ensemble", af.getTag().getFirst(FieldKey.ENSEMBLE));
+            assertEquals("classicalcatalog", af.getTag().getFirst(FieldKey.CLASSICAL_CATALOG));
 
         }
         catch(Exception e)
@@ -950,6 +963,8 @@ public class Issue298Test extends AbstractTestCase
             tag.setField(tag.createField(FieldKey.PERFORMING_SOLOIST_SORT,"SoloistSort"));
             tag.setField(tag.createField(FieldKey.PERFORMING_ARTIST,"NonSoloist"));
             tag.setField(tag.createField(FieldKey.PERFORMING_ARTIST_SORT,"NonSoloistSort"));
+            tag.setField(tag.createField(FieldKey.ENSEMBLE,"ensemble"));
+            tag.setField(tag.createField(FieldKey.CLASSICAL_CATALOG,"classicalcatalog"));
             af.commit();
 
             af = AudioFileIO.read(testFile);
@@ -1054,6 +1069,8 @@ public class Issue298Test extends AbstractTestCase
             assertEquals("SoloistSort",af.getTag().getFirst(FieldKey.PERFORMING_SOLOIST_SORT));
             assertEquals("NonSoloist",af.getTag().getFirst(FieldKey.PERFORMING_ARTIST));
             assertEquals("NonSoloistSort",af.getTag().getFirst(FieldKey.PERFORMING_ARTIST_SORT));
+            assertEquals("ensemble", af.getTag().getFirst(FieldKey.ENSEMBLE));
+            assertEquals("classicalcatalog", af.getTag().getFirst(FieldKey.CLASSICAL_CATALOG));
 
         }
         catch(Exception e)
@@ -1160,6 +1177,8 @@ public class Issue298Test extends AbstractTestCase
             tag.setField(tag.createField(FieldKey.PERFORMING_SOLOIST_SORT,"SoloistSort"));
             tag.setField(tag.createField(FieldKey.PERFORMING_ARTIST,"NonSoloist"));
             tag.setField(tag.createField(FieldKey.PERFORMING_ARTIST_SORT,"NonSoloistSort"));
+            tag.setField(tag.createField(FieldKey.ENSEMBLE,"ensemble"));
+            tag.setField(tag.createField(FieldKey.CLASSICAL_CATALOG,"classicalcatalog"));
 
             af.commit();
             af = AudioFileIO.read(testFile);
@@ -1241,6 +1260,8 @@ public class Issue298Test extends AbstractTestCase
             assertEquals("SoloistSort",af.getTag().getFirst(FieldKey.PERFORMING_SOLOIST_SORT));
             assertEquals("NonSoloist",af.getTag().getFirst(FieldKey.PERFORMING_ARTIST));
             assertEquals("NonSoloistSort",af.getTag().getFirst(FieldKey.PERFORMING_ARTIST_SORT));
+            assertEquals("ensemble", af.getTag().getFirst(FieldKey.ENSEMBLE));
+            assertEquals("classicalcatalog", af.getTag().getFirst(FieldKey.CLASSICAL_CATALOG));
 
         }
         catch(Exception e)
@@ -1346,6 +1367,8 @@ public class Issue298Test extends AbstractTestCase
             tag.setField(tag.createField(FieldKey.PERFORMING_SOLOIST_SORT,"SoloistSort"));
             tag.setField(tag.createField(FieldKey.PERFORMING_ARTIST,"NonSoloist"));
             tag.setField(tag.createField(FieldKey.PERFORMING_ARTIST_SORT,"NonSoloistSort"));
+            tag.setField(tag.createField(FieldKey.ENSEMBLE,"ensemble"));
+            tag.setField(tag.createField(FieldKey.CLASSICAL_CATALOG,"classicalcatalog"));
 
             af.commit();
             af = AudioFileIO.read(testFile);
@@ -1428,6 +1451,8 @@ public class Issue298Test extends AbstractTestCase
             assertEquals("SoloistSort",af.getTag().getFirst(FieldKey.PERFORMING_SOLOIST_SORT));
             assertEquals("NonSoloist",af.getTag().getFirst(FieldKey.PERFORMING_ARTIST));
             assertEquals("NonSoloistSort",af.getTag().getFirst(FieldKey.PERFORMING_ARTIST_SORT));
+            assertEquals("ensemble", af.getTag().getFirst(FieldKey.ENSEMBLE));
+            assertEquals("classicalcatalog", af.getTag().getFirst(FieldKey.CLASSICAL_CATALOG));
 
         }
         catch(Exception e)

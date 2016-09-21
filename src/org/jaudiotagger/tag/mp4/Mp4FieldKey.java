@@ -56,6 +56,7 @@ public enum Mp4FieldKey
     CDDB_TRACKNUMBER("com.apple.iTunes", "iTunes_CDDB_TrackNumber", TEXT),
     CN_ID("cnID",Mp4TagFieldSubType.UNKNOWN, INTEGER, 4),
     CHOIR("com.apple.iTunes","Choir",  TEXT, Tagger.JAIKOZ),
+    CLASSICAL_CATALOG("com.apple.iTunes","Classical Catalog",  TEXT, Tagger.JAIKOZ),
     COMMENT("©cmt",Mp4TagFieldSubType.TEXT, TEXT),
     COMPILATION("cpil",Mp4TagFieldSubType.BYTE, INTEGER, 1),
     COMPOSER("©wrt",Mp4TagFieldSubType.TEXT, TEXT),
@@ -79,6 +80,7 @@ public enum Mp4FieldKey
     ELECTRONIC("com.apple.iTunes", "ELECTRONIC", TEXT, Tagger.JAIKOZ),
     ENCODER("©too",Mp4TagFieldSubType.TEXT, TEXT),
     ENGINEER("com.apple.iTunes", "ENGINEER", TEXT, Tagger.PICARD),
+    ENSEMBLE("com.apple.iTunes", "Ensemble", TEXT, Tagger.JAIKOZ),
     EPISODE_GLOBAL_ID("egid",Mp4TagFieldSubType.NUMBER, IMPLICIT),   //TODO Actually seems to store text but is marked as numeric!
     FBPM("com.apple.iTunes", "fBPM", TEXT, Tagger.JAIKOZ),
     GENRE("gnre",Mp4TagFieldSubType.GENRE, IMPLICIT),

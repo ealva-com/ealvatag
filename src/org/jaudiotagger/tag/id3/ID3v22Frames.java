@@ -333,6 +333,7 @@ public class ID3v22Frames extends ID3Frames
         tagFieldToId3.put(FieldKey.BPM, ID3v22FieldKey.BPM);
         tagFieldToId3.put(FieldKey.CATALOG_NO, ID3v22FieldKey.CATALOG_NO);
         tagFieldToId3.put(FieldKey.CHOIR, ID3v22FieldKey.CHOIR);
+        tagFieldToId3.put(FieldKey.CLASSICAL_CATALOG, ID3v22FieldKey.CLASSICAL_CATALOG);
         tagFieldToId3.put(FieldKey.COMMENT, ID3v22FieldKey.COMMENT);
         tagFieldToId3.put(FieldKey.COMPOSER, ID3v22FieldKey.COMPOSER);
         tagFieldToId3.put(FieldKey.COMPOSER_SORT, ID3v22FieldKey.COMPOSER_SORT);
@@ -352,6 +353,7 @@ public class ID3v22Frames extends ID3Frames
         tagFieldToId3.put(FieldKey.ELECTRONIC, ID3v22FieldKey.ELECTRONIC);
         tagFieldToId3.put(FieldKey.ENCODER, ID3v22FieldKey.ENCODER);
         tagFieldToId3.put(FieldKey.ENGINEER, ID3v22FieldKey.ENGINEER);
+        tagFieldToId3.put(FieldKey.ENSEMBLE, ID3v22FieldKey.ENSEMBLE);
         tagFieldToId3.put(FieldKey.FBPM, ID3v22FieldKey.FBPM);
         tagFieldToId3.put(FieldKey.GENRE, ID3v22FieldKey.GENRE);
         tagFieldToId3.put(FieldKey.GROUPING, ID3v22FieldKey.GROUPING);
