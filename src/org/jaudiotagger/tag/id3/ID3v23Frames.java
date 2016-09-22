@@ -383,6 +383,7 @@ public class ID3v23Frames extends ID3Frames
         tagFieldToId3.put(FieldKey.BPM, ID3v23FieldKey.BPM);
         tagFieldToId3.put(FieldKey.CATALOG_NO, ID3v23FieldKey.CATALOG_NO);
         tagFieldToId3.put(FieldKey.CHOIR, ID3v23FieldKey.CHOIR);
+        tagFieldToId3.put(FieldKey.CHOIR_SORT, ID3v23FieldKey.CHOIR_SORT);
         tagFieldToId3.put(FieldKey.CLASSICAL_CATALOG, ID3v23FieldKey.CLASSICAL_CATALOG);
         tagFieldToId3.put(FieldKey.COMMENT, ID3v23FieldKey.COMMENT);
         tagFieldToId3.put(FieldKey.COMPOSER, ID3v23FieldKey.COMPOSER);
@@ -404,6 +405,7 @@ public class ID3v23Frames extends ID3Frames
         tagFieldToId3.put(FieldKey.ENCODER, ID3v23FieldKey.ENCODER);
         tagFieldToId3.put(FieldKey.ENGINEER, ID3v23FieldKey.ENGINEER);
         tagFieldToId3.put(FieldKey.ENSEMBLE, ID3v23FieldKey.ENSEMBLE);
+        tagFieldToId3.put(FieldKey.ENSEMBLE_SORT, ID3v23FieldKey.ENSEMBLE_SORT);
         tagFieldToId3.put(FieldKey.FBPM, ID3v23FieldKey.FBPM);
         tagFieldToId3.put(FieldKey.GENRE, ID3v23FieldKey.GENRE);
         tagFieldToId3.put(FieldKey.GROUPING, ID3v23FieldKey.GROUPING);
@@ -459,10 +461,9 @@ public class ID3v23Frames extends ID3Frames
         tagFieldToId3.put(FieldKey.PART_NUMBER, ID3v23FieldKey.PART_NUMBER);
         tagFieldToId3.put(FieldKey.PART_TYPE, ID3v23FieldKey.PART_TYPE);
         tagFieldToId3.put(FieldKey.PERFORMER, ID3v23FieldKey.PERFORMER);
-        tagFieldToId3.put(FieldKey.PERFORMING_ARTIST, ID3v23FieldKey.PERFORMING_ARTIST);
-        tagFieldToId3.put(FieldKey.PERFORMING_ARTIST_SORT, ID3v23FieldKey.PERFORMING_ARTIST_SORT);
-        tagFieldToId3.put(FieldKey.PERFORMING_SOLOIST, ID3v23FieldKey.PERFORMING_SOLOIST);
-        tagFieldToId3.put(FieldKey.PERFORMING_SOLOIST_SORT, ID3v23FieldKey.PERFORMING_SOLOIST_SORT);
+        tagFieldToId3.put(FieldKey.PERFORMER_NAME, ID3v23FieldKey.PERFORMER_NAME);
+        tagFieldToId3.put(FieldKey.PERFORMER_NAME_SORT, ID3v23FieldKey.PERFORMER_NAME_SORT);
+
         tagFieldToId3.put(FieldKey.PERIOD, ID3v23FieldKey.PERIOD);
         tagFieldToId3.put(FieldKey.PRODUCER, ID3v23FieldKey.PRODUCER);
         tagFieldToId3.put(FieldKey.QUALITY, ID3v23FieldKey.QUALITY);

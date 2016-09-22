@@ -65,11 +65,13 @@ public class FrameBodyTXXX extends AbstractFrameBodyTextInfo implements ID3v24Fr
     public static final String BARCODE                      = "BARCODE";
     public static final String CATALOG_NO                   = "CATALOGNUMBER";
     public static final String CHOIR                        = "Choir";
+    public static final String CHOIR_SORT                   = "Choir Sort";
     public static final String CLASSICAL_CATALOG            = "Classical Catalog";
     public static final String CONDUCTOR_SORT               = "Conductor Sort";
     public static final String COUNTRY                      = "Country";
     public static final String ELECTRONIC                   = "Electronic";
     public static final String ENSEMBLE                     = "Ensemble";
+    public static final String ENSEMBLE_SORT                = "Ensemble Sort";
     public static final String FBPM                         = "FBPM";
     public static final String INSTRUMENTAL                 = "Instrumental";
     public static final String IS_CLASSICAL                 = "IsClassical";
@@ -108,10 +110,8 @@ public class FrameBodyTXXX extends AbstractFrameBodyTextInfo implements ID3v24Fr
     public static final String PART                                     = "Part";
     public static final String PART_NUMBER                              = "Part No";
     public static final String PART_TYPE                                = "Part Type";
-    public static final String PERFORMING_ARTIST                        = "Performing Artist";
-    public static final String PERFORMING_ARTIST_SORT                   = "Performing Artist Sort";
-    public static final String PERFORMING_SOLOIST                       = "Performing Soloist";
-    public static final String PERFORMING_SOLOIST_SORT                  = "Performing Soloist Sort";
+    public static final String PERFORMER_NAME                           = "Performer Name";
+    public static final String PERFORMER_NAME_SORT                      = "Performer Name Sort";
     public static final String PERIOD                                   = "Period";
     public static final String RANKING                                  = "Ranking";
     public static final String SCRIPT                                   = "Script";

@@ -141,10 +141,10 @@ public class VorbisCommentTag extends AbstractTag
         tagFieldToOggField.put(FieldKey.PART_NUMBER, VorbisCommentFieldKey.PART_NUMBER);
         tagFieldToOggField.put(FieldKey.PART_TYPE, VorbisCommentFieldKey.PART_TYPE);
         tagFieldToOggField.put(FieldKey.PERFORMER, VorbisCommentFieldKey.PERFORMER);
-        tagFieldToOggField.put(FieldKey.PERFORMING_ARTIST, VorbisCommentFieldKey.PERFORMIMG_ARTIST);
-        tagFieldToOggField.put(FieldKey.PERFORMING_ARTIST_SORT, VorbisCommentFieldKey.PERFORMING_ARTIST_SORT);
-        tagFieldToOggField.put(FieldKey.PERFORMING_SOLOIST, VorbisCommentFieldKey.PERFORMING_SOLOIST);
-        tagFieldToOggField.put(FieldKey.PERFORMING_SOLOIST_SORT, VorbisCommentFieldKey.PERFORMING_SOLOIST_SORT);
+        tagFieldToOggField.put(FieldKey.PERFORMER_NAME, VorbisCommentFieldKey.PERFORMER_NAME);
+        tagFieldToOggField.put(FieldKey.PERFORMER_NAME_SORT, VorbisCommentFieldKey.PERFORMER_NAME_SORT);
+        tagFieldToOggField.put(FieldKey.CHOIR_SORT, VorbisCommentFieldKey.CHOIR_SORT);
+        tagFieldToOggField.put(FieldKey.ENSEMBLE_SORT, VorbisCommentFieldKey.ENSEMBLE_SORT);
         tagFieldToOggField.put(FieldKey.PERIOD, VorbisCommentFieldKey.PERIOD);
         tagFieldToOggField.put(FieldKey.PRODUCER, VorbisCommentFieldKey.PRODUCER);
         tagFieldToOggField.put(FieldKey.QUALITY, VorbisCommentFieldKey.QUALITY);
