@@ -61,6 +61,7 @@ public class Mp4Tag extends AbstractTag
         tagFieldToMp4Field.put(FieldKey.BPM, Mp4FieldKey.BPM);
         tagFieldToMp4Field.put(FieldKey.CATALOG_NO, Mp4FieldKey.CATALOGNO);
         tagFieldToMp4Field.put(FieldKey.CHOIR, Mp4FieldKey.CHOIR);
+        tagFieldToMp4Field.put(FieldKey.CHOIR_SORT, Mp4FieldKey.CHOIR_SORT);
         tagFieldToMp4Field.put(FieldKey.CLASSICAL_CATALOG, Mp4FieldKey.CLASSICAL_CATALOG);
         tagFieldToMp4Field.put(FieldKey.COMMENT, Mp4FieldKey.COMMENT);
         tagFieldToMp4Field.put(FieldKey.COMPOSER, Mp4FieldKey.COMPOSER);
@@ -81,6 +82,7 @@ public class Mp4Tag extends AbstractTag
         tagFieldToMp4Field.put(FieldKey.ENCODER, Mp4FieldKey.ENCODER);
         tagFieldToMp4Field.put(FieldKey.ENGINEER, Mp4FieldKey.ENGINEER);
         tagFieldToMp4Field.put(FieldKey.ENSEMBLE, Mp4FieldKey.ENSEMBLE);
+        tagFieldToMp4Field.put(FieldKey.ENSEMBLE_SORT, Mp4FieldKey.ENSEMBLE_SORT);
         tagFieldToMp4Field.put(FieldKey.FBPM, Mp4FieldKey.FBPM);
         tagFieldToMp4Field.put(FieldKey.GENRE, Mp4FieldKey.GENRE);
         tagFieldToMp4Field.put(FieldKey.GROUPING, Mp4FieldKey.GROUPING);
@@ -127,8 +129,6 @@ public class Mp4Tag extends AbstractTag
         tagFieldToMp4Field.put(FieldKey.PERFORMER, Mp4FieldKey.PERFORMER);
         tagFieldToMp4Field.put(FieldKey.PERFORMER_NAME, Mp4FieldKey.PERFORMER_NAME);
         tagFieldToMp4Field.put(FieldKey.PERFORMER_NAME_SORT, Mp4FieldKey.PERFORMER_NAME_SORT);
-        tagFieldToMp4Field.put(FieldKey.CHOIR_SORT, Mp4FieldKey.CHOIR_SORT);
-        tagFieldToMp4Field.put(FieldKey.ENSEMBLE_SORT, Mp4FieldKey.ENSEMBLE_SORT);
         tagFieldToMp4Field.put(FieldKey.PRODUCER, Mp4FieldKey.PRODUCER);
         tagFieldToMp4Field.put(FieldKey.QUALITY, Mp4FieldKey.MM_QUALITY);
         tagFieldToMp4Field.put(FieldKey.RANKING, Mp4FieldKey.RANKING);
