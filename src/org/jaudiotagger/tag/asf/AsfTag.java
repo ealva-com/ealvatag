@@ -105,6 +105,7 @@ public final class AsfTag extends AbstractTag
         tagFieldToAsfField.put(FieldKey.BPM, AsfFieldKey.BPM);
         tagFieldToAsfField.put(FieldKey.CATALOG_NO, AsfFieldKey.CATALOG_NO);
         tagFieldToAsfField.put(FieldKey.CHOIR, AsfFieldKey.CHOIR);
+        tagFieldToAsfField.put(FieldKey.CHOIR_SORT, AsfFieldKey.CHOIR_SORT);
         tagFieldToAsfField.put(FieldKey.CLASSICAL_CATALOG, AsfFieldKey.CLASSICAL_CATALOG);
         tagFieldToAsfField.put(FieldKey.COMMENT, AsfFieldKey.DESCRIPTION);
         tagFieldToAsfField.put(FieldKey.COMPOSER, AsfFieldKey.COMPOSER);
@@ -126,6 +127,7 @@ public final class AsfTag extends AbstractTag
         tagFieldToAsfField.put(FieldKey.ENCODER, AsfFieldKey.ENCODER);
         tagFieldToAsfField.put(FieldKey.ENGINEER, AsfFieldKey.ENGINEER);
         tagFieldToAsfField.put(FieldKey.ENSEMBLE, AsfFieldKey.ENSEMBLE);
+        tagFieldToAsfField.put(FieldKey.ENSEMBLE_SORT, AsfFieldKey.ENSEMBLE_SORT);
         tagFieldToAsfField.put(FieldKey.FBPM, AsfFieldKey.FBPM);
         tagFieldToAsfField.put(FieldKey.GENRE, AsfFieldKey.GENRE);
         tagFieldToAsfField.put(FieldKey.GROUPING, AsfFieldKey.GROUPING);
@@ -183,8 +185,6 @@ public final class AsfTag extends AbstractTag
         tagFieldToAsfField.put(FieldKey.PERFORMER, AsfFieldKey.PERFORMER);
         tagFieldToAsfField.put(FieldKey.PERFORMER_NAME, AsfFieldKey.PERFORMER_NAME);
         tagFieldToAsfField.put(FieldKey.PERFORMER_NAME_SORT, AsfFieldKey.PERFORMER_NAME_SORT);
-        tagFieldToAsfField.put(FieldKey.CHOIR_SORT, AsfFieldKey.CHOIR_SORT);
-        tagFieldToAsfField.put(FieldKey.ENSEMBLE_SORT, AsfFieldKey.ENSEMBLE_SORT);
         tagFieldToAsfField.put(FieldKey.PERIOD, AsfFieldKey.PERIOD);
         tagFieldToAsfField.put(FieldKey.PRODUCER, AsfFieldKey.PRODUCER);
         tagFieldToAsfField.put(FieldKey.QUALITY, AsfFieldKey.QUALITY);
