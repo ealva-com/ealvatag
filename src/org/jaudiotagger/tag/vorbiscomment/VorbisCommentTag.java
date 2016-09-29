@@ -64,6 +64,8 @@ public class VorbisCommentTag extends AbstractTag
         tagFieldToOggField.put(FieldKey.BARCODE, VorbisCommentFieldKey.BARCODE);
         tagFieldToOggField.put(FieldKey.BPM, VorbisCommentFieldKey.BPM);
         tagFieldToOggField.put(FieldKey.CATALOG_NO, VorbisCommentFieldKey.CATALOGNUMBER);
+        tagFieldToOggField.put(FieldKey.CHOIR, VorbisCommentFieldKey.CHOIR);
+        tagFieldToOggField.put(FieldKey.CLASSICAL_CATALOG, VorbisCommentFieldKey.CLASSICAL_CATALOG);
         tagFieldToOggField.put(FieldKey.COMMENT, VorbisCommentFieldKey.COMMENT);
         tagFieldToOggField.put(FieldKey.COMPOSER, VorbisCommentFieldKey.COMPOSER);
         tagFieldToOggField.put(FieldKey.COMPOSER_SORT, VorbisCommentFieldKey.COMPOSERSORT);
@@ -83,6 +85,7 @@ public class VorbisCommentTag extends AbstractTag
         tagFieldToOggField.put(FieldKey.ELECTRONIC, VorbisCommentFieldKey.ELECTRONIC);
         tagFieldToOggField.put(FieldKey.ENCODER, VorbisCommentFieldKey.VENDOR);     //Known as vendor in VorbisComment
         tagFieldToOggField.put(FieldKey.ENGINEER, VorbisCommentFieldKey.ENGINEER);
+        tagFieldToOggField.put(FieldKey.ENSEMBLE, VorbisCommentFieldKey.ENSEMBLE);
         tagFieldToOggField.put(FieldKey.FBPM, VorbisCommentFieldKey.FBPM);
         tagFieldToOggField.put(FieldKey.GENRE, VorbisCommentFieldKey.GENRE);
         tagFieldToOggField.put(FieldKey.GROUPING, VorbisCommentFieldKey.GROUPING);
@@ -138,13 +141,14 @@ public class VorbisCommentTag extends AbstractTag
         tagFieldToOggField.put(FieldKey.PART_NUMBER, VorbisCommentFieldKey.PART_NUMBER);
         tagFieldToOggField.put(FieldKey.PART_TYPE, VorbisCommentFieldKey.PART_TYPE);
         tagFieldToOggField.put(FieldKey.PERFORMER, VorbisCommentFieldKey.PERFORMER);
-        tagFieldToOggField.put(FieldKey.PERFORMING_ARTIST, VorbisCommentFieldKey.PERFORMIMG_ARTIST);
-        tagFieldToOggField.put(FieldKey.PERFORMING_ARTIST_SORT, VorbisCommentFieldKey.PERFORMING_ARTIST_SORT);
-        tagFieldToOggField.put(FieldKey.PERFORMING_SOLOIST, VorbisCommentFieldKey.PERFORMING_SOLOIST);
-        tagFieldToOggField.put(FieldKey.PERFORMING_SOLOIST_SORT, VorbisCommentFieldKey.PERFORMING_SOLOIST_SORT);
+        tagFieldToOggField.put(FieldKey.PERFORMER_NAME, VorbisCommentFieldKey.PERFORMER_NAME);
+        tagFieldToOggField.put(FieldKey.PERFORMER_NAME_SORT, VorbisCommentFieldKey.PERFORMER_NAME_SORT);
+        tagFieldToOggField.put(FieldKey.CHOIR_SORT, VorbisCommentFieldKey.CHOIR_SORT);
+        tagFieldToOggField.put(FieldKey.ENSEMBLE_SORT, VorbisCommentFieldKey.ENSEMBLE_SORT);
         tagFieldToOggField.put(FieldKey.PERIOD, VorbisCommentFieldKey.PERIOD);
         tagFieldToOggField.put(FieldKey.PRODUCER, VorbisCommentFieldKey.PRODUCER);
         tagFieldToOggField.put(FieldKey.QUALITY, VorbisCommentFieldKey.QUALITY);
+        tagFieldToOggField.put(FieldKey.RANKING, VorbisCommentFieldKey.RANKING);
         tagFieldToOggField.put(FieldKey.RATING, VorbisCommentFieldKey.RATING);
         tagFieldToOggField.put(FieldKey.RECORD_LABEL, VorbisCommentFieldKey.LABEL);
         tagFieldToOggField.put(FieldKey.REMIXER, VorbisCommentFieldKey.REMIXER);

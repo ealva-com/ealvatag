@@ -357,6 +357,11 @@ public class TagOptionSingleton
     private boolean checkIsWritable = false;
 
     /**
+     * Preserve file identity if possible
+     */
+    private boolean preserveFileIdentity = true;
+
+    /**
      * 
      */
     
@@ -903,6 +908,7 @@ public class TagOptionSingleton
         padNumberTotalLength = PadNumberOption.PAD_ONE_ZERO;
         id3v2Version = ID3V2Version.ID3_V23;
         checkIsWritable = false;
+        preserveFileIdentity = false;
         //default all lyrics3 fields to save. id3v1 fields are individual
         // settings. id3v2 fields are always looked at to save.
         Iterator<String> iterator = Lyrics3v2Fields.getInstanceOf().getIdToValueMap().keySet().iterator();
@@ -1327,5 +1333,31 @@ public class TagOptionSingleton
 	public void setCheckIsWritable(boolean checkIsWritable) {
 		this.checkIsWritable = checkIsWritable;
 	}
-    
+
+    /**
+     * <p>
+     *     If set to {@code true}, when writing, make an attempt to overwrite the existing file in-place
+     *     instead of first moving it out of the way and moving a temp file into its place.
+     * </p>
+     * <p>
+     *     Preserving the file identity has the advantage of preserving the creation time
+     *     as well as the Unix inode or Windows
+     *     <a href="https://msdn.microsoft.com/en-us/library/aa363788(v=vs.85).aspx">fileIndex</a>.
+     * </p>
+     *
+     * @return {@code true} or {@code false}. Default is {@code false}.
+     */
+    public boolean isPreserveFileIdentity() {
+        return preserveFileIdentity;
+    }
+
+    /**
+     * If set to {@code true}, when writing, make an attempt to preserve the file identity.
+     *
+     * @param preserveFileIdentity {@code true} or {@code false}
+     * @see #isPreserveFileIdentity()
+     */
+    public void setPreserveFileIdentity(final boolean preserveFileIdentity) {
+        this.preserveFileIdentity = preserveFileIdentity;
+    }
 }
