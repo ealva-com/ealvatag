@@ -18,6 +18,7 @@ public enum ErrorMessage
     MP4_CHANGES_TO_FILE_FAILED_DATA_CORRUPT("Unable to make changes to Mp4 file, invalid data length has been written"),
     MP4_CHANGES_TO_FILE_FAILED_NO_TAG_DATA("Unable to make changes to Mp4 file, no tag data has been written"),
     MP4_CHANGES_TO_FILE_FAILED_INCORRECT_OFFSETS("Unable to make changes to Mp4 file, incorrect offsets written difference was {0}"),
+    MP4_CHANGES_TO_FILE_FAILED_INCORRECT_NUMBER_OF_TRACKS("Unable to make changes to Mp4 file, incorrect number of tracks: {0} vs {1}"),
     MP4_CHANGES_TO_FILE_FAILED_CANNOT_FIND_AUDIO("Unable to make changes to Mp4 file, unable to determine start of audio"),
     FLAC_NO_FLAC_HEADER_FOUND("Flac Header not found, not a flac file"),
     OGG_VORBIS_NO_VORBIS_HEADER_FOUND("Cannot find vorbis setup parentHeader"),
