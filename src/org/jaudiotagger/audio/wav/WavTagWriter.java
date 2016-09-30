@@ -41,7 +41,10 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.AccessDeniedException;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
+import java.util.List;
 import java.util.logging.Logger;
 
 import static org.jaudiotagger.audio.iff.IffHeaderChunk.SIGNATURE_LENGTH;
@@ -472,6 +475,25 @@ public class WavTagWriter
         fc.write(ByteBuffer.allocateDirect(paddingSize));
     }
 
+    class InfoFieldWriterOrderComparator implements Comparator<TagField>
+    {
+        public int compare(TagField field1,TagField field2)
+        {
+            WavInfoIdentifier code1 = WavInfoIdentifier.getByByFieldKey(FieldKey.valueOf(field1.getId()));
+            WavInfoIdentifier code2 = WavInfoIdentifier.getByByFieldKey(FieldKey.valueOf(field2.getId()));
+            int order1 = Integer.MAX_VALUE;
+            int order2 = Integer.MAX_VALUE;
+            if(code1!=null)
+            {
+                order1 = code1.getPreferredWriteOrder();
+            }
+            if(code2!=null)
+            {
+                order2 = code2.getPreferredWriteOrder();
+            }
+            return order1 - order2;
+        }
+    }
     /**
      * Converts INfO tag to {@link java.nio.ByteBuffer}.
      *
@@ -487,10 +509,11 @@ public class WavTagWriter
             WavInfoTag wif = tag.getInfoTag();
 
             //Write the Info chunks
-            Iterator<TagField> i = wif.getFields();
-            while (i.hasNext())
+            List<TagField> fields = wif.getAll();
+            Collections.sort(fields, new InfoFieldWriterOrderComparator());
+            for(TagField nextField:fields)
             {
-                TagTextField next = (TagTextField) i.next();
+                TagTextField next = (TagTextField) nextField;
                 WavInfoIdentifier wii = WavInfoIdentifier.getByByFieldKey(FieldKey.valueOf(next.getId()));
                 baos.write(wii.getCode().getBytes(StandardCharsets.US_ASCII));
                 logger.config(loggingName + " Writing:" + wii.getCode() + ":" + next.getContent());
@@ -501,9 +524,28 @@ public class WavTagWriter
                 baos.write(contentConvertedToBytes);
 
                 //Write extra byte if data length not equal
-                if ((contentConvertedToBytes.length & 1) != 0)
+                if (Utils.isOddLength(contentConvertedToBytes.length))
                 {
                     baos.write(0);
+                }
+
+                //Add a duplicated record for Twonky
+                if(wii==WavInfoIdentifier.TRACKNO)
+                {
+                    if(TagOptionSingleton.getInstance().isWriteWavForTwonky())
+                    {
+                        baos.write(WavInfoIdentifier.TWONKY_TRACKNO.getCode().getBytes(StandardCharsets.US_ASCII));
+                        logger.config(loggingName + " Writing:" + WavInfoIdentifier.TWONKY_TRACKNO.getCode() + ":" + next.getContent());
+
+                        baos.write(Utils.getSizeLEInt32(contentConvertedToBytes.length));
+                        baos.write(contentConvertedToBytes);
+
+                        //Write extra byte if data length not equal
+                        if (Utils.isOddLength(contentConvertedToBytes.length))
+                        {
+                            baos.write(0);
+                        }
+                    }
                 }
             }
 
@@ -519,7 +561,7 @@ public class WavTagWriter
                 baos.write(contentConvertedToBytes);
 
                 //Write extra byte if data length not equal
-                if ((contentConvertedToBytes.length & 1) != 0)
+                if (Utils.isOddLength(contentConvertedToBytes.length))
                 {
                     baos.write(0);
                 }

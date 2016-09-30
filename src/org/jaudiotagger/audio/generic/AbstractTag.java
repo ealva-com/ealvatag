@@ -150,6 +150,19 @@ public abstract class AbstractTag implements Tag
         return (l.size() != 0) ? l.get(0) : null;
     }
 
+    public List<TagField> getAll()
+    {
+        List<TagField> fieldList = new ArrayList<TagField>();
+        for(List<TagField> listOfFields : fields.values())
+        {
+            for(TagField next:listOfFields)
+            {
+                fieldList.add(next);
+            }
+        }
+        return fieldList;
+    }
+
     @Override
     public Iterator<TagField> getFields()
     {

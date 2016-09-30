@@ -46,6 +46,8 @@ import java.util.LinkedList;
 
 public class TagOptionSingleton
 {
+    private boolean   isWriteWavForTwonky = false;
+
     private WavOptions wavOptions = WavOptions.READ_ID3_ONLY;
 
     public void setWavOptions(WavOptions wavOptions)
@@ -868,6 +870,7 @@ public class TagOptionSingleton
      */
     public void setToDefault()
     {
+        isWriteWavForTwonky = false;
         wavOptions = WavOptions.READ_ID3_UNLESS_ONLY_INFO;
         wavSaveOptions = WavSaveOptions.SAVE_BOTH;
         keywordMap = new HashMap<Class<? extends ID3v24FrameBody>, LinkedList<String>>();
@@ -1359,5 +1362,15 @@ public class TagOptionSingleton
      */
     public void setPreserveFileIdentity(final boolean preserveFileIdentity) {
         this.preserveFileIdentity = preserveFileIdentity;
+    }
+
+    public boolean isWriteWavForTwonky()
+    {
+        return isWriteWavForTwonky;
+    }
+
+    public void setWriteWavForTwonky(boolean isWriteWavForTwonky)
+    {
+        this.isWriteWavForTwonky = isWriteWavForTwonky;
     }
 }

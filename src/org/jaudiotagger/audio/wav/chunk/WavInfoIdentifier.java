@@ -10,35 +10,38 @@ import java.util.Map;
  */
 public enum WavInfoIdentifier
 {
-    ARTIST("IART", FieldKey.ARTIST),
+    ARTIST("IART", FieldKey.ARTIST, 1),
+    ALBUM("IPRD", FieldKey.ALBUM, 2),
+    TITLE("INAM", FieldKey.TITLE, 3),
+    TRACKNO("ITRK", FieldKey.TRACK, 4),
+    YEAR("ICRD", FieldKey.YEAR, 5),
+    GENRE("IGNR", FieldKey.GENRE, 6),
     //Custom MediaMonkey field, theres appears to be no official AlbumArtist field, nothing ever displayed for this field or IAAR in Windows Explorer
-    ALBUM_ARTIST("iaar", FieldKey.ALBUM_ARTIST),
-    TITLE("INAM", FieldKey.TITLE),
-    ALBUM("IPRD", FieldKey.ALBUM),
-    TRACKNO("ITRK", FieldKey.TRACK),
-    YEAR("ICRD", FieldKey.YEAR),
-    GENRE("IGNR", FieldKey.GENRE),
-    COMMENTS("ICMT", FieldKey.COMMENT),
-    COPYRIGHT("ICOP", null),
-    ENCODER("ISFT", FieldKey.ENCODER),
-    RATING("IRTD", FieldKey.RATING),
-    COMPOSER("IMUS", FieldKey.COMPOSER),
-    CONDUCTOR("ITCH", FieldKey.CONDUCTOR),
-    LYRICIST("IWRI", FieldKey.LYRICIST),
-    ISRC("ISRC", FieldKey.ISRC),
-    LABEL("ICMS", FieldKey.RECORD_LABEL),
-    TRACK_GAIN("ITGL", null), //Currently No mapping to a FieldKey for this
-    ALBUM_GAIN("IAGL", null); //Currently No mapping to a FieldKey for this
-
+    ALBUM_ARTIST("iaar", FieldKey.ALBUM_ARTIST, 7),
+    COMMENTS("ICMT", FieldKey.COMMENT, 8),
+    COMPOSER("IMUS", FieldKey.COMPOSER, 9),
+    CONDUCTOR("ITCH", FieldKey.CONDUCTOR, 10),
+    LYRICIST("IWRI", FieldKey.LYRICIST, 11),
+    ENCODER("ISFT", FieldKey.ENCODER, 12),
+    RATING("IRTD", FieldKey.RATING, 13),
+    ISRC("ISRC", FieldKey.ISRC, 14),
+    LABEL("ICMS", FieldKey.RECORD_LABEL, 15),
+    TRACK_GAIN("ITGL", null, 16), //Currently No mapping to a FieldKey for this
+    ALBUM_GAIN("IAGL", null, 17), //Currently No mapping to a FieldKey for this
+    COPYRIGHT("ICOP", null, 18),
+    TWONKY_TRACKNO("itrk", null, 1), //Uses nonstandard field
+    ;
     private static final Map<String, WavInfoIdentifier> CODE_TYPE_MAP = new HashMap<String, WavInfoIdentifier>();
     private static final Map<FieldKey, WavInfoIdentifier> FIELDKEY_TYPE_MAP = new HashMap<FieldKey, WavInfoIdentifier>();
     private String code;
     private FieldKey fieldKey;
+    private int      preferredWriteOrder;
 
-    WavInfoIdentifier(String code, FieldKey fieldKey)
+    WavInfoIdentifier(String code, FieldKey fieldKey, int preferredWriteOrder)
     {
         this.code = code;
         this.fieldKey = fieldKey;
+        this.preferredWriteOrder=preferredWriteOrder;
     }
 
     public String getCode()
@@ -51,6 +54,10 @@ public enum WavInfoIdentifier
         return fieldKey;
     }
 
+    public int getPreferredWriteOrder()
+    {
+        return preferredWriteOrder;
+    }
 
     /**
      * Get {@link WavInfoIdentifier} for code (e.g. "SSND").
