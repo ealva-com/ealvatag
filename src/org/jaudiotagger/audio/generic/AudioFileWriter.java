@@ -545,35 +545,7 @@ public abstract class AudioFileWriter
             {
                 if (lock != null)
                 {
-                    try (final FileChannel inChannel = new FileInputStream(newFile).getChannel())
-                    {
-                        // copy contents of newFile to originalFile,
-                        // overwriting the old content in that file
-                        final long size = inChannel.size();
-                        long position = 0;
-                        while (position < size)
-                        {
-                            position += inChannel.transferTo(position, 1024L * 1024L, outChannel);
-                        }
-                        // truncate raf, in case it used to be longer
-                        raf.setLength(size);
-                    }
-                    catch (FileNotFoundException e)
-                    {
-                        logger.warning(ErrorMessage.GENERAL_WRITE_FAILED_NEW_FILE_DOESNT_EXIST.getMsg(newFile.getAbsolutePath()));
-                        throw new CannotWriteException(ErrorMessage.GENERAL_WRITE_FAILED_NEW_FILE_DOESNT_EXIST.getMsg(newFile.getName()), e);
-                    }
-                    catch (IOException e)
-                    {
-                        logger.warning(ErrorMessage.GENERAL_WRITE_FAILED_TO_RENAME_TO_ORIGINAL_FILE.getMsg(originalFile.getAbsolutePath(), newFile.getName()));
-                        throw new CannotWriteException(ErrorMessage.GENERAL_WRITE_FAILED_TO_RENAME_TO_ORIGINAL_FILE.getMsg(originalFile.getAbsolutePath(), newFile.getName()), e);
-                    }
-                    // file is written, all is good, let's delete newFile, as it's not needed anymore
-                    if (newFile.exists() && !newFile.delete())
-                    {
-                        // non-critical failed deletion
-                        logger.warning(ErrorMessage.GENERAL_WRITE_FAILED_TO_DELETE_TEMPORARY_FILE.getMsg(newFile.getPath()));
-                    }
+                    transferNewFileContentToOriginalFile(newFile, originalFile, raf, outChannel);
                 }
                 else
                 {
@@ -582,9 +554,26 @@ public abstract class AudioFileWriter
                     throw new CannotWriteException(ErrorMessage.GENERAL_WRITE_FAILED_FILE_LOCKED.getMsg(originalFile.getPath()));
                 }
             }
+            catch (IOException e)
+            {
+                logger.warning(ErrorMessage.GENERAL_WRITE_FAILED_FILE_LOCKED.getMsg(originalFile.getPath()));
+                // we didn't get a lock, this may be, because locking is not supported by the OS/JRE
+                // this can happen on OS X with network shares (samba, afp)
+                // for details see https://stackoverflow.com/questions/33220148/samba-share-gradle-java-io-exception
+                // coarse check that works on OS X:
+                if ("Operation not supported".equals(e.getMessage()))
+                {
+                    // transfer without lock
+                    transferNewFileContentToOriginalFile(newFile, originalFile, raf, outChannel);
+                }
+                else
+                {
+                    throw new CannotWriteException(ErrorMessage.GENERAL_WRITE_FAILED_FILE_LOCKED.getMsg(originalFile.getPath()), e);
+                }
+            }
             catch (Exception e)
             {
-                // tryLock failed for some reason
+                // tryLock failed for some reason other than an IOException — we're definitely doomed
                 logger.warning(ErrorMessage.GENERAL_WRITE_FAILED_FILE_LOCKED.getMsg(originalFile.getPath()));
                 throw new CannotWriteException(ErrorMessage.GENERAL_WRITE_FAILED_FILE_LOCKED.getMsg(originalFile.getPath()), e);
             }
@@ -598,6 +587,38 @@ public abstract class AudioFileWriter
         {
             logger.warning(ErrorMessage.GENERAL_WRITE_FAILED.getMsg(originalFile.getAbsolutePath()));
             throw new CannotWriteException(ErrorMessage.GENERAL_WRITE_FAILED.getMsg(originalFile.getPath()), e);
+        }
+    }
+
+    private void transferNewFileContentToOriginalFile(final File newFile, final File originalFile, final RandomAccessFile raf, final FileChannel outChannel) throws CannotWriteException {
+        try (final FileChannel inChannel = new FileInputStream(newFile).getChannel())
+        {
+            // copy contents of newFile to originalFile,
+            // overwriting the old content in that file
+            final long size = inChannel.size();
+            long position = 0;
+            while (position < size)
+            {
+                position += inChannel.transferTo(position, 1024L * 1024L, outChannel);
+            }
+            // truncate raf, in case it used to be longer
+            raf.setLength(size);
+        }
+        catch (FileNotFoundException e)
+        {
+            logger.warning(ErrorMessage.GENERAL_WRITE_FAILED_NEW_FILE_DOESNT_EXIST.getMsg(newFile.getAbsolutePath()));
+            throw new CannotWriteException(ErrorMessage.GENERAL_WRITE_FAILED_NEW_FILE_DOESNT_EXIST.getMsg(newFile.getName()), e);
+        }
+        catch (IOException e)
+        {
+            logger.warning(ErrorMessage.GENERAL_WRITE_FAILED_TO_RENAME_TO_ORIGINAL_FILE.getMsg(originalFile.getAbsolutePath(), newFile.getName()));
+            throw new CannotWriteException(ErrorMessage.GENERAL_WRITE_FAILED_TO_RENAME_TO_ORIGINAL_FILE.getMsg(originalFile.getAbsolutePath(), newFile.getName()), e);
+        }
+        // file is written, all is good, let's delete newFile, as it's not needed anymore
+        if (newFile.exists() && !newFile.delete())
+        {
+            // non-critical failed deletion
+            logger.warning(ErrorMessage.GENERAL_WRITE_FAILED_TO_DELETE_TEMPORARY_FILE.getMsg(newFile.getPath()));
         }
     }
 
