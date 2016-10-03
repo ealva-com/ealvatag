@@ -6,22 +6,26 @@ import org.jaudiotagger.tag.FieldDataInvalidException;
 import org.jaudiotagger.tag.wav.WavInfoTag;
 import org.jaudiotagger.tag.wav.WavTag;
 
+import java.nio.BufferUnderflowException;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
  * Stores basic only metadata but only exists as part of a LIST chunk, doesn't have its own size field
- * instead contains a number of name,size, value tuples. So for this reason we dont subclass the Chunk class
+ * instead contains a number of name,size, value tuples. So for this reason we do not subclass the Chunk class
  */
 public class WavInfoChunk
 {
     public static Logger logger = Logger.getLogger("org.jaudiotagger.audio.wav.WavInfoChunk");
 
     private WavInfoTag wavInfoTag;
+    private String    loggingName;
 
-    public WavInfoChunk(WavTag tag)
+    public WavInfoChunk(WavTag tag, String loggingName)
     {
+        this.loggingName = loggingName;
         wavInfoTag = new WavInfoTag();
         tag.setInfoTag(wavInfoTag);
     }
@@ -42,10 +46,29 @@ public class WavInfoChunk
             }
             int    size     = chunkData.getInt();
 
-            //TODO how do you identify what is the charset being used
-            String value    = Utils.getString(chunkData, 0, size, StandardCharsets.UTF_8);
-            logger.config("Result:" + id + ":" + size + ":" + value + ":");
+            if(
+                    (!Character.isAlphabetic(id.charAt(0)))||
+                    (!Character.isAlphabetic(id.charAt(1)))||
+                    (!Character.isAlphabetic(id.charAt(2)))||
+                    (!Character.isAlphabetic(id.charAt(3)))
+               )
+            {
+                logger.severe(loggingName + "LISTINFO appears corrupt, ignoring:"+id+":"+size);
+                return false;
+            }
 
+            String value =null;
+            try
+            {
+                value = Utils.getString(chunkData, 0, size, StandardCharsets.UTF_8);
+            }
+            catch(BufferUnderflowException bue)
+            {
+                logger.log(Level.SEVERE, loggingName + "LISTINFO appears corrupt, ignoring:"+bue.getMessage(), bue);
+                return false;
+            }
+
+            logger.config(loggingName + "Result:" + id + ":" + size + ":" + value + ":");
             WavInfoIdentifier wii = WavInfoIdentifier.getByCode(id);
             if(wii!=null && wii.getFieldKey()!=null)
             {
@@ -55,7 +78,7 @@ public class WavInfoChunk
                 }
                 catch(FieldDataInvalidException fdie)
                 {
-                    fdie.printStackTrace();
+                    logger.log(Level.SEVERE, loggingName + fdie.getMessage(), fdie);
                 }
             }
             //Add unless just padding
@@ -65,7 +88,7 @@ public class WavInfoChunk
             }
 
             //Each tuple aligned on even byte boundary
-            if ((size & 1) != 0 && chunkData.hasRemaining())
+            if (Utils.isOddLength(size) && chunkData.hasRemaining())
             {
                 chunkData.get();
             }

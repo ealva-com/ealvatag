@@ -134,7 +134,7 @@ public class WavTagReader
                     tag.addChunkSummary(new ChunkSummary(chunkHeader.getID(), chunkHeader.getStartLocationInFile(), chunkHeader.getSize()));
                     if(tag.getInfoTag()==null)
                     {
-                        chunk = new WavListChunk(Utils.readFileDataIntoBufferLE(fc, (int) chunkHeader.getSize()), chunkHeader, tag);
+                        chunk = new WavListChunk(loggingName, Utils.readFileDataIntoBufferLE(fc, (int) chunkHeader.getSize()), chunkHeader, tag);
                         if (!chunk.readChunk())
                         {
                             return false;
