@@ -73,6 +73,7 @@ public class FmtChunk
         long sampleCount = audioInfoChunk.getLong();
         int blocksPerSample = audioInfoChunk.getInt();
 
+        audioHeader.setEncodingType("DSF");
         audioHeader.setBitRate(bitsPerSample * samplingFreqency * channelNumber);
         audioHeader.setBitsPerSample(bitsPerSample);
         audioHeader.setChannelNumber(channelNumber);

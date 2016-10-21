@@ -33,7 +33,7 @@ public class DsfAudioFileTest extends TestCase {
         try {
             AudioFile f = AudioFileIO.read(testFile);
             AudioHeader ah = f.getAudioHeader();
-            System.out.println(ah);
+            assertEquals("DSF", ah.getEncodingType());
             assertEquals("5644800", ah.getBitRate());
             assertEquals(5644800,ah.getBitRateAsNumber());
             assertEquals("2",ah.getChannels());
