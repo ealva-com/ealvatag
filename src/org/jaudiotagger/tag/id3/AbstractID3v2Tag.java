@@ -2551,7 +2551,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
                 }
                 else if (next instanceof FrameBodyTMCL)
                 {
-                    for (Pair entry : ((FrameBodyTIPL) next).getPairing().getMapping())
+                    for (Pair entry : ((FrameBodyTMCL) next).getPairing().getMapping())
                     {
                         if (entry.getKey().equals(formatKey.getSubId()))
                         {
