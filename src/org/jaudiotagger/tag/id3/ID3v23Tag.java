@@ -20,6 +20,8 @@ import org.jaudiotagger.audio.mp3.MP3File;
 import org.jaudiotagger.logging.ErrorMessage;
 import org.jaudiotagger.tag.*;
 import org.jaudiotagger.tag.datatype.DataTypes;
+import org.jaudiotagger.tag.datatype.Pair;
+import org.jaudiotagger.tag.datatype.PairedTextEncodedStringNullTerminated;
 import org.jaudiotagger.tag.id3.framebody.*;
 import org.jaudiotagger.tag.images.Artwork;
 import org.jaudiotagger.tag.images.ArtworkFactory;
@@ -182,6 +184,58 @@ public class ID3v23Tag extends AbstractID3v2Tag
         }
     }
 
+    /**
+     * Extra handling when TMCL and TIPL needs converting back to one IPLS frame
+     * @param id
+     * @param newFrame
+     */
+    @Override
+    protected void copyFrameIntoMap(String id, AbstractID3v2Frame newFrame)
+    {
+
+        if (frameMap.containsKey(newFrame.getIdentifier()))
+        {
+            Object o = frameMap.get(newFrame.getIdentifier());
+            if (o instanceof AbstractID3v2Frame)
+            {
+                //We dont add this new frame we just add the contents to existing frame
+                if(newFrame.getIdentifier().equals(ID3v23Frames.FRAME_ID_V3_INVOLVED_PEOPLE))
+                {
+                    PairedTextEncodedStringNullTerminated.ValuePairs oldVps = ((FrameBodyIPLS)((AbstractID3v2Frame)o).getBody()).getPairing();
+                    PairedTextEncodedStringNullTerminated.ValuePairs newVps = ((FrameBodyIPLS)newFrame.getBody()).getPairing();
+                    for(Pair next:newVps.getMapping())
+                    {
+                        oldVps.add(next);
+                    }
+                }
+                else
+                {
+                    List<AbstractID3v2Frame> list = new ArrayList<AbstractID3v2Frame>();
+                    list.add((AbstractID3v2Frame) o);
+                    list.add(newFrame);
+                    frameMap.put(newFrame.getIdentifier(), list);
+                }
+            }
+            else if (o instanceof AggregatedFrame)
+            {
+                logger.severe("Duplicated Aggregate Frame, ignoring:" + id);
+            }
+            else if (o instanceof List)
+            {
+                List<AbstractID3v2Frame> list = (List) o;
+                list.add(newFrame);
+            }
+            else
+            {
+                logger.severe("Unknown frame class:discarding:" + o.getClass());
+            }
+        }
+        else
+        {
+            frameMap.put(newFrame.getIdentifier(), newFrame);
+        }
+    }
+
     @Override
     public void addFrame(AbstractID3v2Frame frame)
     {
@@ -236,6 +290,23 @@ public class ID3v23Tag extends AbstractID3v2Tag
                 ((FrameBodyTIME) newFrame.getBody()).setHoursOnly(tmpBody.isHoursOnly());
                 frames.add(newFrame);
             }
+        }
+        //If at later stage we have multiple IPLS frames we have to merge
+        else if ((frame.getIdentifier().equals(ID3v24Frames.FRAME_ID_INVOLVED_PEOPLE)) && (frame.getBody() instanceof FrameBodyTIPL))
+        {
+            List<Pair> pairs= ((FrameBodyTIPL)frame.getBody()).getPairing().getMapping();
+            AbstractID3v2Frame ipls = new ID3v23Frame((ID3v24Frame)frame,ID3v23Frames.FRAME_ID_V3_INVOLVED_PEOPLE);
+            FrameBodyIPLS iplsBody  = new FrameBodyIPLS(frame.getBody().getTextEncoding(),pairs);
+            ipls.setBody(iplsBody);
+            frames.add(ipls);
+        }
+        else if ((frame.getIdentifier().equals(ID3v24Frames.FRAME_ID_MUSICIAN_CREDITS)) && (frame.getBody() instanceof FrameBodyTMCL))
+        {
+            List<Pair> pairs= ((FrameBodyTMCL)frame.getBody()).getPairing().getMapping();
+            AbstractID3v2Frame ipls = new ID3v23Frame((ID3v24Frame)frame,ID3v23Frames.FRAME_ID_V3_INVOLVED_PEOPLE);
+            FrameBodyIPLS iplsBody  = new FrameBodyIPLS(frame.getBody().getTextEncoding(),pairs);
+            ipls.setBody(iplsBody);
+            frames.add(ipls);
         }
         else
         {

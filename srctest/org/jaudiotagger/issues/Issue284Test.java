@@ -94,8 +94,8 @@ public class Issue284Test extends AbstractTestCase
             testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3");
             MP3File af = (MP3File)AudioFileIO.read(testFile);
 
-            ID3v23Frame frame = new ID3v23Frame(ID3v23Frames.FRAME_ID_V3_IPLS);
-            FrameBodyUnsupported fb = new FrameBodyUnsupported(ID3v23Frames.FRAME_ID_V3_IPLS);
+            ID3v23Frame frame = new ID3v23Frame(ID3v23Frames.FRAME_ID_V3_INVOLVED_PEOPLE);
+            FrameBodyUnsupported fb = new FrameBodyUnsupported(ID3v23Frames.FRAME_ID_V3_INVOLVED_PEOPLE);
             frame.setBody(fb);
             assertTrue(frame.getBody() instanceof FrameBodyUnsupported);
             ID3v24Frame framev24 = new ID3v24Frame(frame);

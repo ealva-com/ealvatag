@@ -386,7 +386,7 @@ public class ID3v24Tag extends AbstractID3v2Tag
         }
 
         //This frame may need splitting and converting into two frames depending on its content
-        if(frame instanceof ID3v23Frame && frame.getIdentifier().equals(ID3v23Frames.FRAME_ID_V3_IPLS))
+        if(frame instanceof ID3v23Frame && frame.getIdentifier().equals(ID3v23Frames.FRAME_ID_V3_INVOLVED_PEOPLE))
         {
             List<Pair> pairs= ((FrameBodyIPLS)frame.getBody()).getPairing().getMapping();
             List<Pair> pairsTipl = new ArrayList<>();
@@ -426,7 +426,7 @@ public class ID3v24Tag extends AbstractID3v2Tag
 
     /*
        * Copy frame into map, whilst accounting for multiple frames of same type which can occur even if there were
-       * not frames of the dame type in the original tag
+       * not frames of the same type in the original tag
        *
        * The frame already exists this shouldn't normally happen because frames
        * that are allowed to be multiple don't call this method. Frames that

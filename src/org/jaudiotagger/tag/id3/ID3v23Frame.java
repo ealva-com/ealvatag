@@ -118,6 +118,22 @@ public class ID3v23Frame extends AbstractID3v2Frame
     }
 
     /**
+     * Partially construct ID3v24 Frame form an IS3v23Frame
+     *
+     * Used for Special Cases
+     *
+     * @param frame
+     * @param identifier
+     * @throws InvalidFrameException
+     */
+    protected ID3v23Frame(ID3v24Frame frame, String identifier) throws InvalidFrameException
+    {
+        this.identifier=identifier;
+        statusFlags = new StatusFlags((ID3v24Frame.StatusFlags) frame.getStatusFlags());
+        encodingFlags = new EncodingFlags(frame.getEncodingFlags().getFlags());
+    }
+
+    /**
      * Creates a new ID3v23Frame  based on another frame of a different version.
      *
      * @param frame

@@ -26,16 +26,12 @@ package org.jaudiotagger.tag.id3.framebody;
 
 import org.jaudiotagger.tag.InvalidTagException;
 import org.jaudiotagger.tag.datatype.DataTypes;
-import org.jaudiotagger.tag.datatype.NumberHashMap;
 import org.jaudiotagger.tag.datatype.Pair;
 import org.jaudiotagger.tag.datatype.PairedTextEncodedStringNullTerminated;
 import org.jaudiotagger.tag.id3.ID3v23Frames;
-import org.jaudiotagger.tag.id3.ID3v24Frames;
-import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
 
-import java.io.ByteArrayOutputStream;
 import java.nio.ByteBuffer;
-import java.util.StringTokenizer;
+import java.util.List;
 
 
 /**
@@ -95,13 +91,30 @@ public class FrameBodyIPLS extends AbstractFrameBodyPairs implements ID3v23Frame
     }
 
     /**
+     * Construct from a set of pairs
+     *
+     * @param textEncoding
+     * @param pairs
+     */
+    public FrameBodyIPLS(byte textEncoding, List<Pair> pairs)
+    {
+        setObjectValue(DataTypes.OBJ_TEXT_ENCODING, textEncoding);
+        PairedTextEncodedStringNullTerminated.ValuePairs values = new PairedTextEncodedStringNullTerminated.ValuePairs();
+        for(Pair next:pairs)
+        {
+            values.add(next);
+        }
+        setObjectValue(DataTypes.OBJ_TEXT, values);
+    }
+
+    /**
      * The ID3v2 frame identifier
      *
      * @return the ID3v2 frame identifier  for this frame type
      */
     public String getIdentifier()
     {
-        return ID3v23Frames.FRAME_ID_V3_IPLS;
+        return ID3v23Frames.FRAME_ID_V3_INVOLVED_PEOPLE;
     }
 
 }

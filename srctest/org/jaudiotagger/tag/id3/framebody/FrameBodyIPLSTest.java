@@ -32,7 +32,7 @@ public class FrameBodyIPLSTest extends AbstractTestCase
         }
 
         assertNull(exceptionCaught);
-        assertEquals(ID3v23Frames.FRAME_ID_V3_IPLS, fb.getIdentifier());
+        assertEquals(ID3v23Frames.FRAME_ID_V3_INVOLVED_PEOPLE, fb.getIdentifier());
         assertEquals(TextEncoding.ISO_8859_1, fb.getTextEncoding());
         assertEquals("*"+FrameBodyIPLSTest.INVOLVED_PEOPLE+"*", "*"+fb.getText()+"*");
         assertEquals(2,fb.getNumberOfPairs());
@@ -58,7 +58,7 @@ public class FrameBodyIPLSTest extends AbstractTestCase
         }
 
         assertNull(exceptionCaught);
-        assertEquals(ID3v23Frames.FRAME_ID_V3_IPLS, fb.getIdentifier());
+        assertEquals(ID3v23Frames.FRAME_ID_V3_INVOLVED_PEOPLE, fb.getIdentifier());
         assertEquals(TextEncoding.ISO_8859_1, fb.getTextEncoding());
         assertEquals("*"+FrameBodyIPLSTest.INVOLVED_PEOPLE+"*", "*"+fb.getText()+"*");
         assertEquals(2,fb.getNumberOfPairs());
@@ -84,7 +84,7 @@ public class FrameBodyIPLSTest extends AbstractTestCase
         }
 
         assertNull(exceptionCaught);
-        assertEquals(ID3v23Frames.FRAME_ID_V3_IPLS, fb.getIdentifier());
+        assertEquals(ID3v23Frames.FRAME_ID_V3_INVOLVED_PEOPLE, fb.getIdentifier());
         assertEquals(TextEncoding.ISO_8859_1, fb.getTextEncoding());
         assertEquals("*"+fb.getText()+"*","*"+FrameBodyTIPLTest.INVOLVED_PEOPLE+"*");
         assertEquals(1,fb.getNumberOfPairs());

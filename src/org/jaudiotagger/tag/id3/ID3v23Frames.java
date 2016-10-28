@@ -58,7 +58,7 @@ public class ID3v23Frames extends ID3Frames
     public static final String FRAME_ID_V3_GROUP_ID_REG = "GRID";
     public static final String FRAME_ID_V3_HW_SW_SETTINGS = "TSSE";
     public static final String FRAME_ID_V3_INITIAL_KEY = "TKEY";
-    public static final String FRAME_ID_V3_IPLS = "IPLS";
+    public static final String FRAME_ID_V3_INVOLVED_PEOPLE = "IPLS";
     public static final String FRAME_ID_V3_ISRC = "TSRC";
     public static final String FRAME_ID_V3_LANGUAGE = "TLAN";
     public static final String FRAME_ID_V3_LENGTH = "TLEN";
@@ -169,7 +169,7 @@ public class ID3v23Frames extends ID3Frames
         supportedFrames.add(FRAME_ID_V3_GROUP_ID_REG);
         supportedFrames.add(FRAME_ID_V3_HW_SW_SETTINGS);
         supportedFrames.add(FRAME_ID_V3_INITIAL_KEY);
-        supportedFrames.add(FRAME_ID_V3_IPLS);
+        supportedFrames.add(FRAME_ID_V3_INVOLVED_PEOPLE);
         supportedFrames.add(FRAME_ID_V3_ISRC);
         supportedFrames.add(FRAME_ID_V3_LANGUAGE);
         supportedFrames.add(FRAME_ID_V3_LENGTH);
@@ -277,7 +277,7 @@ public class ID3v23Frames extends ID3Frames
         idToValue.put(FRAME_ID_V3_GROUP_ID_REG, "");
         idToValue.put(FRAME_ID_V3_HW_SW_SETTINGS, "Text: Software/hardware and settings used for encoding");
         idToValue.put(FRAME_ID_V3_INITIAL_KEY, "Text: Initial key");
-        idToValue.put(FRAME_ID_V3_IPLS, "Involved people list");
+        idToValue.put(FRAME_ID_V3_INVOLVED_PEOPLE, "Involved people list");
         idToValue.put(FRAME_ID_V3_ISRC, "Text: ISRC (International Standard Recording Code)");
         idToValue.put(FRAME_ID_V3_LANGUAGE, "Text: Language(s)");
         idToValue.put(FRAME_ID_V3_LENGTH, "Text: Length");

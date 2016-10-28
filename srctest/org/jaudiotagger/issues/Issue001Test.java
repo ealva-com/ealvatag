@@ -54,7 +54,7 @@ public class Issue001Test extends AbstractTestCase
             ID3v23Tag tag = new ID3v23Tag();
             FrameBodyIPLS frameBody = new FrameBodyIPLS();
             frameBody.setText("producer\0eno,lanois\0engineer\0"+"\uDFFF");
-            ID3v23Frame frame = new ID3v23Frame(ID3v23Frames.FRAME_ID_V3_IPLS);
+            ID3v23Frame frame = new ID3v23Frame(ID3v23Frames.FRAME_ID_V3_INVOLVED_PEOPLE);
             frame.setBody(frameBody);
             tag.setFrame(frame);
             mp3File.setID3v2Tag(tag);
