@@ -1635,22 +1635,36 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
         }
     }
 
-    /*
-    * Copy frame into map, whilst accounting for multiple frame of same type which can occur even if there were
-    * not frames of the same type in the original tag
-    */
-    protected void copyFrameIntoMap(String id, AbstractID3v2Frame newFrame)
+    /**
+     * If frame already exists default behaviour is to just add another one, but can be overrridden if
+     * special handling required
+     *
+     * @param newFrame
+     * @param existingFrame
+     */
+    protected void processDuplicateFrame(AbstractID3v2Frame newFrame, AbstractID3v2Frame existingFrame)
     {
+        List<AbstractID3v2Frame> list = new ArrayList<AbstractID3v2Frame>();
+        list.add(existingFrame);
+        list.add(newFrame);
+        frameMap.put(newFrame.getIdentifier(), list);
+    }
 
+    /**
+     * Copy frame into map, whilst accounting for multiple frame of same type which can occur even if there were
+     * not frames of the same type in the original tag
+     *
+     * @param id
+     * @param newFrame
+     */
+    protected final void copyFrameIntoMap(String id, AbstractID3v2Frame newFrame)
+    {
         if (frameMap.containsKey(newFrame.getIdentifier()))
         {
             Object o = frameMap.get(newFrame.getIdentifier());
             if (o instanceof AbstractID3v2Frame)
             {
-                List<AbstractID3v2Frame> list = new ArrayList<AbstractID3v2Frame>();
-                list.add((AbstractID3v2Frame) o);
-                list.add(newFrame);
-                frameMap.put(newFrame.getIdentifier(), list);
+                processDuplicateFrame(newFrame, (AbstractID3v2Frame)o);
             }
             else if (o instanceof AggregatedFrame)
             {

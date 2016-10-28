@@ -185,54 +185,30 @@ public class ID3v23Tag extends AbstractID3v2Tag
     }
 
     /**
-     * Extra handling when TMCL and TIPL needs converting back to one IPLS frame
-     * @param id
+     * Override to merge TIPL/TMCL into single IPLS frame
+     *
      * @param newFrame
+     * @param existingFrame
      */
     @Override
-    protected void copyFrameIntoMap(String id, AbstractID3v2Frame newFrame)
+    protected void processDuplicateFrame(AbstractID3v2Frame newFrame, AbstractID3v2Frame existingFrame)
     {
-
-        if (frameMap.containsKey(newFrame.getIdentifier()))
+        //We dont add this new frame we just add the contents to existing frame
+        if(newFrame.getIdentifier().equals(ID3v23Frames.FRAME_ID_V3_INVOLVED_PEOPLE))
         {
-            Object o = frameMap.get(newFrame.getIdentifier());
-            if (o instanceof AbstractID3v2Frame)
+            PairedTextEncodedStringNullTerminated.ValuePairs oldVps = ((FrameBodyIPLS)(existingFrame).getBody()).getPairing();
+            PairedTextEncodedStringNullTerminated.ValuePairs newVps = ((FrameBodyIPLS)newFrame.getBody()).getPairing();
+            for(Pair next:newVps.getMapping())
             {
-                //We dont add this new frame we just add the contents to existing frame
-                if(newFrame.getIdentifier().equals(ID3v23Frames.FRAME_ID_V3_INVOLVED_PEOPLE))
-                {
-                    PairedTextEncodedStringNullTerminated.ValuePairs oldVps = ((FrameBodyIPLS)((AbstractID3v2Frame)o).getBody()).getPairing();
-                    PairedTextEncodedStringNullTerminated.ValuePairs newVps = ((FrameBodyIPLS)newFrame.getBody()).getPairing();
-                    for(Pair next:newVps.getMapping())
-                    {
-                        oldVps.add(next);
-                    }
-                }
-                else
-                {
-                    List<AbstractID3v2Frame> list = new ArrayList<AbstractID3v2Frame>();
-                    list.add((AbstractID3v2Frame) o);
-                    list.add(newFrame);
-                    frameMap.put(newFrame.getIdentifier(), list);
-                }
-            }
-            else if (o instanceof AggregatedFrame)
-            {
-                logger.severe("Duplicated Aggregate Frame, ignoring:" + id);
-            }
-            else if (o instanceof List)
-            {
-                List<AbstractID3v2Frame> list = (List) o;
-                list.add(newFrame);
-            }
-            else
-            {
-                logger.severe("Unknown frame class:discarding:" + o.getClass());
+                oldVps.add(next);
             }
         }
         else
         {
-            frameMap.put(newFrame.getIdentifier(), newFrame);
+            List<AbstractID3v2Frame> list = new ArrayList<AbstractID3v2Frame>();
+            list.add(existingFrame);
+            list.add(newFrame);
+            frameMap.put(newFrame.getIdentifier(), list);
         }
     }
 
