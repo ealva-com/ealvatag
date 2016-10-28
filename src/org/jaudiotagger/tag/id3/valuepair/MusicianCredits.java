@@ -503,7 +503,6 @@ public class MusicianCredits
         musicianCredits.add("nagadou-daiko");
         musicianCredits.add("nagak");
         musicianCredits.add("nai");
-        musicianCredits.add("                name                  ");
         musicianCredits.add("não bạt / chập chõa");
         musicianCredits.add("naobo");
         musicianCredits.add("natural brass instruments");
@@ -813,6 +812,7 @@ public class MusicianCredits
         musicianCredits.add("violotta");
         musicianCredits.add("virginal");
         musicianCredits.add("vocal");
+        musicianCredits.add("vocals");
         musicianCredits.add("vocoder");
         musicianCredits.add("voice synthesizer");
         musicianCredits.add("wagner tuba");
@@ -860,6 +860,13 @@ public class MusicianCredits
 
     public static boolean isKey(String key)
     {
-        return musicianCredits.contains(key.toLowerCase());
+        for(String next:musicianCredits)
+        {
+            if(key.toLowerCase().trim().startsWith(next))
+            {
+                return true;
+            }
+        }
+        return false;
     }
 }
