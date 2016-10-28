@@ -54,6 +54,7 @@ public enum FieldKey
     FBPM,
     GENRE,
     GROUPING,
+    INVOLVED_PERSON,
     INSTRUMENTAL,
     ISRC,
     IS_CLASSICAL,

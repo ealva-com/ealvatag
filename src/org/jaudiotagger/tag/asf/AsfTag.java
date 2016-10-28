@@ -132,6 +132,7 @@ public final class AsfTag extends AbstractTag
         tagFieldToAsfField.put(FieldKey.GENRE, AsfFieldKey.GENRE);
         tagFieldToAsfField.put(FieldKey.GROUPING, AsfFieldKey.GROUPING);
         tagFieldToAsfField.put(FieldKey.INSTRUMENTAL, AsfFieldKey.INSTRUMENTAL);
+        tagFieldToAsfField.put(FieldKey.INVOLVED_PERSON, AsfFieldKey.INVOLVED_PERSON);
         tagFieldToAsfField.put(FieldKey.ISRC, AsfFieldKey.ISRC);
         tagFieldToAsfField.put(FieldKey.IS_CLASSICAL, AsfFieldKey.IS_CLASSICAL);
         tagFieldToAsfField.put(FieldKey.IS_COMPILATION, AsfFieldKey.IS_COMPILATION);

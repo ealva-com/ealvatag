@@ -2569,7 +2569,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
             }
         }
         //Special handling for paired fields with no defined key
-        else if ((formatKey.getGenericKey() == FieldKey.PERFORMER))
+        else if ((formatKey.getGenericKey() == FieldKey.PERFORMER)||(formatKey.getGenericKey() == FieldKey.INVOLVED_PERSON))
         {
             List<TagField> list = getFields(formatKey.getFrameId());
             ListIterator<TagField> li = list.listIterator();
@@ -2870,7 +2870,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
                 }
             }
         }
-        else if ((formatKey.getGenericKey() == FieldKey.PERFORMER))
+        else if ((formatKey.getGenericKey() == FieldKey.PERFORMER) || (formatKey.getGenericKey() == FieldKey.INVOLVED_PERSON))
         {
             List<TagField> list = getFields(formatKey.getFrameId());
             ListIterator<TagField> li = list.listIterator();

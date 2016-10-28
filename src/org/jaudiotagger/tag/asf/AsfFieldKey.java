@@ -108,6 +108,7 @@ public enum AsfFieldKey
     GROUPING("WM/ContentGroupDescription", false),
     INITIAL_KEY("WM/InitialKey", false),
     INSTRUMENTAL("WM/Instrumental", false),
+    INVOLVED_PERSON("WM/InvolvedPerson", true),
     ISRC("WM/ISRC", false),
     ISVBR("IsVBR", true),
     IS_CLASSICAL("WM/IsClassical", false),
