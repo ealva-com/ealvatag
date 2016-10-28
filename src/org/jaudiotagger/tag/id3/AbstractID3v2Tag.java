@@ -249,8 +249,8 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
     {
         frameMap = new LinkedHashMap<String, Object>();
         encryptedFrameMap = new LinkedHashMap<String, Object>();
-        //Copy Frames that are a valid 2.4 type
 
+        //Copy Frames that are a valid 2.4 type
         for (Object o1 : copyObject.frameMap.keySet())
         {
             String id = (String) o1;
@@ -278,6 +278,10 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
         }
     }
 
+    /**
+     * Add the frame converted to the correct version
+     * @param frame
+     */
     protected abstract void addFrame(AbstractID3v2Frame frame);
 
     /**

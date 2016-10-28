@@ -31,7 +31,9 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -109,7 +111,7 @@ public class ID3v24Frame extends AbstractID3v2Frame
     }
 
     /**
-     * Copy Constructor:Creates a new ID3v2_4Frame datatype based on another frame.
+     * Copy Constructor:Creates a new ID3v24 frame datatype based on another frame.
      *
      * @param frame
      */
@@ -182,7 +184,23 @@ public class ID3v24Frame extends AbstractID3v2Frame
     }
 
     /**
-     * Creates a new ID3v2_4Frame datatype based on another frame of different version
+     * Partially construct ID3v24 Frame form an IS3v23Frame
+     *
+     * Used for Special Cases
+     *
+     * @param frame
+     * @param identifier
+     * @throws InvalidFrameException
+     */
+    protected ID3v24Frame(ID3v23Frame frame, String identifier) throws InvalidFrameException
+    {
+        this.identifier=identifier;
+        statusFlags = new StatusFlags((ID3v23Frame.StatusFlags) frame.getStatusFlags());
+        encodingFlags = new EncodingFlags(frame.getEncodingFlags().getFlags());
+    }
+
+    /**
+     * Creates a new ID3v24 frame datatype based on another frame of different version
      * Converts the framebody to the equivalent v24 framebody or to UnsupportedFrameBody if identifier
      * is unknown.
      *
@@ -197,13 +215,12 @@ public class ID3v24Frame extends AbstractID3v2Frame
         {
             throw new UnsupportedOperationException("Copy Constructor not called. Please type cast the argument");
         }
-        //Flags
-        if (frame instanceof ID3v23Frame)
+        else if (frame instanceof ID3v23Frame)
         {
             statusFlags = new StatusFlags((ID3v23Frame.StatusFlags) frame.getStatusFlags());
             encodingFlags = new EncodingFlags(frame.getEncodingFlags().getFlags());
         }
-        else
+        else if (frame instanceof ID3v22Frame)
         {
             statusFlags = new StatusFlags();
             encodingFlags = new EncodingFlags();
@@ -223,6 +240,46 @@ public class ID3v24Frame extends AbstractID3v2Frame
             createV24FrameFromV23Frame(v23Frame);
         }
         this.frameBody.setHeader(this);
+    }
+
+    /**
+     * Convert frame into ID3v24 frame(s)
+     * @param frame
+     * @return
+     * @throws InvalidFrameException
+     */
+    public static List<AbstractID3v2Frame> convertFrames(AbstractID3v2Frame frame) throws InvalidFrameException
+    {
+        List<AbstractID3v2Frame> frames = new ArrayList<>();
+
+        /*
+        frames.add(new ID3v24Frame(frame));
+        return frames;
+        */
+
+        if(frame instanceof ID3v22Frame && frame.getIdentifier().equals(ID3v22Frames.FRAME_ID_V2_IPLS))
+        {
+            frame = new ID3v23Frame(frame);
+        }
+
+        //This frame may need splitting and converting into two frames depending on its content
+        if(frame instanceof ID3v23Frame && frame.getIdentifier().equals(ID3v23Frames.FRAME_ID_V3_IPLS))
+        {
+            AbstractID3v2Frame tipl = new ID3v24Frame((ID3v23Frame)frame,ID3v24Frames.FRAME_ID_INVOLVED_PEOPLE);
+            FrameBodyTIPL tiplBody  = new FrameBodyTIPL((FrameBodyIPLS)frame.getBody());
+            tipl.setBody(tiplBody);
+            /*
+            AbstractID3v2Frame tmcl = new ID3v24Frame((ID3v23Frame)frame,ID3v24Frames.FRAME_ID_MUSICIAN_CREDITS);
+            FrameBodyTIPL tmclBody  = new FrameBodyTMCL((FrameBodyIPLS)frame.getBody());
+            tmclBody.setHeader(tmcl);
+            */
+            frames.add(tipl);
+        }
+        else
+        {
+            frames.add(new ID3v24Frame(frame));
+        }
+        return frames;
     }
 
     /**
@@ -783,7 +840,7 @@ public class ID3v24Frame extends AbstractID3v2Frame
      * Member Class This represents a frame headers Status Flags
      * Make adjustments if necessary based on frame type and specification.
      */
-    class StatusFlags extends AbstractID3v2Frame.StatusFlags
+    public class StatusFlags extends AbstractID3v2Frame.StatusFlags
     {
         public static final String TYPE_TAGALTERPRESERVATION = "typeTagAlterPreservation";
         public static final String TYPE_FILEALTERPRESERVATION = "typeFileAlterPreservation";

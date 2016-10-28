@@ -130,7 +130,12 @@ public class ID3v23Frame extends AbstractID3v2Frame
         {
             throw new UnsupportedOperationException("Copy Constructor not called. Please type cast the argument");
         }
-        if (frame instanceof ID3v24Frame)
+        else if (frame instanceof ID3v22Frame)
+        {
+            statusFlags = new StatusFlags();
+            encodingFlags = new EncodingFlags();
+        }
+        else if (frame instanceof ID3v24Frame)
         {
             statusFlags = new StatusFlags((ID3v24Frame.StatusFlags) frame.getStatusFlags());
             encodingFlags = new EncodingFlags(frame.getEncodingFlags().getFlags());

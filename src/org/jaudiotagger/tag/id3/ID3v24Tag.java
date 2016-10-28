@@ -335,6 +335,15 @@ public class ID3v24Tag extends AbstractID3v2Tag
         }
     }
 
+    /**
+     * Copy the frame
+     *
+     * If the frame is already an ID3v24 frame we can add as is, if not we need to convert
+     * to id3v24 frame(s)
+     *
+     * @param frame
+     */
+    @Override
     public void addFrame(AbstractID3v2Frame frame)
     {
         try
@@ -345,8 +354,11 @@ public class ID3v24Tag extends AbstractID3v2Tag
             }
             else
             {
-                ID3v24Frame newFrame = new ID3v24Frame(frame);
-                copyFrameIntoMap(newFrame.getIdentifier(), newFrame);
+                List<AbstractID3v2Frame> frames = ID3v24Frame.convertFrames(frame);
+                for(AbstractID3v2Frame next:frames)
+                {
+                    copyFrameIntoMap(next.getIdentifier(), next);
+                }
             }
         }
         catch (InvalidFrameException ife)

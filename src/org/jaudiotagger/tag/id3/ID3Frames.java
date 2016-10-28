@@ -161,8 +161,6 @@ public abstract class ID3Frames extends AbstractStringStringValuePair
         forcev23Tov24.put(ID3v23Frames.FRAME_ID_V3_TRDA, ID3v24Frames.FRAME_ID_YEAR);
         forcev23Tov24.put(ID3v23Frames.FRAME_ID_V3_TYER, ID3v24Frames.FRAME_ID_YEAR);
 
-        forcev23Tov24.put(ID3v23Frames.FRAME_ID_V3_TYER, ID3v24Frames.FRAME_ID_YEAR);
-
         //Note Force v24 to v23, TDRC is a 1M relationship handled specially.
         // @TODO EQUALISATION
         forcev24Tov23.put(ID3v24Frames.FRAME_ID_RELATIVE_VOLUME_ADJUSTMENT2, ID3v23Frames.FRAME_ID_V3_RELATIVE_VOLUME_ADJUSTMENT);
