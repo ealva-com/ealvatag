@@ -35,6 +35,7 @@ import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
 
 import java.io.ByteArrayOutputStream;
 import java.nio.ByteBuffer;
+import java.util.List;
 import java.util.StringTokenizer;
 
 
@@ -93,6 +94,25 @@ public class FrameBodyTIPL extends AbstractFrameBodyPairs implements ID3v24Frame
         setObjectValue(DataTypes.OBJ_TEXT_ENCODING, body.getTextEncoding());
         setObjectValue(DataTypes.OBJ_TEXT, body.getPairing());
     }
+
+
+    /**
+     * Construct from a set of pairs
+     *
+     * @param textEncoding
+     * @param pairs
+     */
+    public FrameBodyTIPL(byte textEncoding, List<Pair> pairs)
+    {
+        setObjectValue(DataTypes.OBJ_TEXT_ENCODING, textEncoding);
+        PairedTextEncodedStringNullTerminated.ValuePairs values = new PairedTextEncodedStringNullTerminated.ValuePairs();
+        for(Pair next:pairs)
+        {
+            values.add(next);
+        }
+        setObjectValue(DataTypes.OBJ_TEXT, values);
+    }
+
 
     /**
      * The ID3v2 frame identifier

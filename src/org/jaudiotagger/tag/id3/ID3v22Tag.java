@@ -257,6 +257,7 @@ public class ID3v22Tag extends AbstractID3v2Tag
     }
 
 
+    @Override
     protected void addFrame(AbstractID3v2Frame frame)
     {
         try

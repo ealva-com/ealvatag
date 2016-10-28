@@ -20,7 +20,9 @@ import org.jaudiotagger.audio.mp3.MP3File;
 import org.jaudiotagger.logging.ErrorMessage;
 import org.jaudiotagger.tag.*;
 import org.jaudiotagger.tag.datatype.DataTypes;
+import org.jaudiotagger.tag.datatype.Pair;
 import org.jaudiotagger.tag.id3.framebody.*;
+import org.jaudiotagger.tag.id3.valuepair.StandardIPLSKey;
 import org.jaudiotagger.tag.images.Artwork;
 import org.jaudiotagger.tag.images.ArtworkFactory;
 import org.jaudiotagger.tag.lyrics3.AbstractLyrics3;
@@ -354,7 +356,7 @@ public class ID3v24Tag extends AbstractID3v2Tag
             }
             else
             {
-                List<AbstractID3v2Frame> frames = ID3v24Frame.convertFrames(frame);
+                List<AbstractID3v2Frame> frames = convertFrames(frame);
                 for(AbstractID3v2Frame next:frames)
                 {
                     copyFrameIntoMap(next.getIdentifier(), next);
@@ -365,6 +367,55 @@ public class ID3v24Tag extends AbstractID3v2Tag
         {
             logger.log(Level.SEVERE, "Unable to convert frame:" + frame.getIdentifier());
         }
+    }
+
+    /**
+     * Convert frame into ID3v24 frame(s)
+     * @param frame
+     * @return
+     * @throws InvalidFrameException
+     */
+    protected List<AbstractID3v2Frame> convertFrames(AbstractID3v2Frame frame) throws InvalidFrameException
+    {
+        List<AbstractID3v2Frame> frames = new ArrayList<>();
+        if(frame instanceof ID3v22Frame && frame.getIdentifier().equals(ID3v22Frames.FRAME_ID_V2_IPLS))
+        {
+            frame = new ID3v23Frame(frame);
+        }
+
+        //This frame may need splitting and converting into two frames depending on its content
+        if(frame instanceof ID3v23Frame && frame.getIdentifier().equals(ID3v23Frames.FRAME_ID_V3_IPLS))
+        {
+            List<Pair> pairs= ((FrameBodyIPLS)frame.getBody()).getPairing().getMapping();
+            List<Pair> pairsTipl = new ArrayList<>();
+            List<Pair> pairsTmcl = new ArrayList<>();
+
+            for(Pair next:pairs)
+            {
+                if(StandardIPLSKey.isKey(next.getKey()))
+                {
+                    pairsTipl.add(next);
+                }
+                else
+                {
+                    pairsTmcl.add(next);
+                }
+            }
+            AbstractID3v2Frame tipl = new ID3v24Frame((ID3v23Frame)frame,ID3v24Frames.FRAME_ID_INVOLVED_PEOPLE);
+            FrameBodyTIPL tiplBody  = new FrameBodyTIPL(frame.getBody().getTextEncoding(),pairsTipl);
+            tipl.setBody(tiplBody);
+            frames.add(tipl);
+
+            AbstractID3v2Frame tmcl = new ID3v24Frame((ID3v23Frame)frame,ID3v24Frames.FRAME_ID_MUSICIAN_CREDITS);
+            FrameBodyTMCL tmclBody  = new FrameBodyTMCL(frame.getBody().getTextEncoding(),pairsTmcl);
+            tmcl.setBody(tmclBody);
+            frames.add(tmcl);
+        }
+        else
+        {
+            frames.add(new ID3v24Frame(frame));
+        }
+        return frames;
     }
 
     /*
@@ -1367,7 +1418,7 @@ public class ID3v24Tag extends AbstractID3v2Tag
      * Overridden for special Genre support
      *
      * @param genericKey is the generic key
-     * @param value
+     * @param values
      * @return
      * @throws KeyNotFoundException
      * @throws FieldDataInvalidException

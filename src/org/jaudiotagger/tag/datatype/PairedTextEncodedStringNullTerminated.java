@@ -210,6 +210,10 @@ public class PairedTextEncodedStringNullTerminated extends AbstractDataType
             super();
         }
 
+        public void add(Pair pair)
+        {
+            mapping.add(pair);
+        }
         /**
          * Add String Data type to the value list
          *

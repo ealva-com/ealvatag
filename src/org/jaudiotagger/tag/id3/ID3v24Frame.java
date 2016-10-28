@@ -21,7 +21,10 @@ import org.jaudiotagger.logging.ErrorMessage;
 import org.jaudiotagger.logging.Hex;
 import org.jaudiotagger.tag.*;
 import org.jaudiotagger.tag.datatype.Lyrics3Line;
+import org.jaudiotagger.tag.datatype.Pair;
+import org.jaudiotagger.tag.datatype.PairedTextEncodedStringNullTerminated;
 import org.jaudiotagger.tag.id3.framebody.*;
+import org.jaudiotagger.tag.id3.valuepair.StandardIPLSKey;
 import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
 import org.jaudiotagger.tag.lyrics3.*;
 import org.jaudiotagger.utils.EqualsUtil;
@@ -242,45 +245,7 @@ public class ID3v24Frame extends AbstractID3v2Frame
         this.frameBody.setHeader(this);
     }
 
-    /**
-     * Convert frame into ID3v24 frame(s)
-     * @param frame
-     * @return
-     * @throws InvalidFrameException
-     */
-    public static List<AbstractID3v2Frame> convertFrames(AbstractID3v2Frame frame) throws InvalidFrameException
-    {
-        List<AbstractID3v2Frame> frames = new ArrayList<>();
 
-        /*
-        frames.add(new ID3v24Frame(frame));
-        return frames;
-        */
-
-        if(frame instanceof ID3v22Frame && frame.getIdentifier().equals(ID3v22Frames.FRAME_ID_V2_IPLS))
-        {
-            frame = new ID3v23Frame(frame);
-        }
-
-        //This frame may need splitting and converting into two frames depending on its content
-        if(frame instanceof ID3v23Frame && frame.getIdentifier().equals(ID3v23Frames.FRAME_ID_V3_IPLS))
-        {
-            AbstractID3v2Frame tipl = new ID3v24Frame((ID3v23Frame)frame,ID3v24Frames.FRAME_ID_INVOLVED_PEOPLE);
-            FrameBodyTIPL tiplBody  = new FrameBodyTIPL((FrameBodyIPLS)frame.getBody());
-            tipl.setBody(tiplBody);
-            /*
-            AbstractID3v2Frame tmcl = new ID3v24Frame((ID3v23Frame)frame,ID3v24Frames.FRAME_ID_MUSICIAN_CREDITS);
-            FrameBodyTIPL tmclBody  = new FrameBodyTMCL((FrameBodyIPLS)frame.getBody());
-            tmclBody.setHeader(tmcl);
-            */
-            frames.add(tipl);
-        }
-        else
-        {
-            frames.add(new ID3v24Frame(frame));
-        }
-        return frames;
-    }
 
     /**
      * Creates a new ID3v2_4Frame datatype based on Lyrics3.
