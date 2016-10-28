@@ -49,7 +49,8 @@ Summarise Changes
 #161: Incorrectly reading not compressed TENC within ID3v23
 #167:Add proper support for FrameTMCL (Musician Credits)
 #109:Add a field to store tracknodiscno as a contiguous value
-
+#168:Add generic field INVOLVED_PERSON to map to unmapped entries in TIPL frame
+#167:Conversion of ID3v23 to ID3v24 shoudnt convert all of IPLS frame to TIPL some TMCL
 
 2.2.5
 #033:Added getAudioStartPos() and getAudioEndPos() methods to AudioHeader interface and implemented for most formats
