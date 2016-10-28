@@ -357,7 +357,7 @@ public class ID3v24Tag extends AbstractID3v2Tag
             }
             else
             {
-                List<AbstractID3v2Frame> frames = convertFrames(frame);
+                List<AbstractID3v2Frame> frames = convertFrame(frame);
                 for(AbstractID3v2Frame next:frames)
                 {
                     copyFrameIntoMap(next.getIdentifier(), next);
@@ -376,7 +376,8 @@ public class ID3v24Tag extends AbstractID3v2Tag
      * @return
      * @throws InvalidFrameException
      */
-    protected List<AbstractID3v2Frame> convertFrames(AbstractID3v2Frame frame) throws InvalidFrameException
+    @Override
+    protected List<AbstractID3v2Frame> convertFrame(AbstractID3v2Frame frame) throws InvalidFrameException
     {
         List<AbstractID3v2Frame> frames = new ArrayList<>();
         if(frame instanceof ID3v22Frame && frame.getIdentifier().equals(ID3v22Frames.FRAME_ID_V2_IPLS))

@@ -256,27 +256,52 @@ public class ID3v22Tag extends AbstractID3v2Tag
         return this.unsynchronization == object.unsynchronization && super.equals(obj);
     }
 
+    @Override
+    protected List<AbstractID3v2Frame> convertFrame(AbstractID3v2Frame frame) throws InvalidFrameException
+    {
+        List<AbstractID3v2Frame> frames = new ArrayList<>();
+        if ((frame.getIdentifier().equals(ID3v24Frames.FRAME_ID_YEAR)) && (frame.getBody() instanceof FrameBodyTDRC))
+        {
+            FrameBodyTDRC tmpBody = (FrameBodyTDRC) frame.getBody();
+            ID3v22Frame newFrame;
+            if (tmpBody.getYear().length() != 0)
+            {
+                //Create Year frame (v2.2 id,but uses v2.3 body)
+                newFrame = new ID3v22Frame(ID3v22Frames.FRAME_ID_V2_TYER);
+                ((AbstractFrameBodyTextInfo) newFrame.getBody()).setText(tmpBody.getYear());
+                frames.add(newFrame);
+            }
+            if (tmpBody.getTime().length() != 0)
+            {
+                //Create Time frame (v2.2 id,but uses v2.3 body)
+                newFrame = new ID3v22Frame(ID3v22Frames.FRAME_ID_V2_TIME);
+                ((AbstractFrameBodyTextInfo) newFrame.getBody()).setText(tmpBody.getTime());
+                frames.add(newFrame);
+            }
+        }
+        else
+        {
+            frames.add(new ID3v22Frame(frame));
+        }
+        return frames;
+    }
 
     @Override
-    protected void addFrame(AbstractID3v2Frame frame)
+    public void addFrame(AbstractID3v2Frame frame)
     {
         try
         {
-            //Special case to handle TDRC frame from V24 that needs breaking up into separate frame in V23
-            if ((frame.getIdentifier().equals(ID3v24Frames.FRAME_ID_YEAR)) && (frame.getBody() instanceof FrameBodyTDRC))
+            if (frame instanceof ID3v22Frame)
             {
-                translateFrame(frame);
+                copyFrameIntoMap(frame.getIdentifier(), frame);
             }
-            //Already a v22 Frame
-            else if (frame instanceof ID3v22Frame)
-            {
-                 copyFrameIntoMap(frame.getIdentifier(),frame);
-            }
-            //Conver to a V22Frame
             else
             {
-                ID3v22Frame newFrame = new ID3v22Frame(frame);
-                copyFrameIntoMap(newFrame.getIdentifier(), newFrame);
+                List<AbstractID3v2Frame> frames = convertFrame(frame);
+                for(AbstractID3v2Frame next:frames)
+                {
+                    copyFrameIntoMap(next.getIdentifier(), next);
+                }
             }
         }
         catch (InvalidFrameException ife)
@@ -284,7 +309,6 @@ public class ID3v22Tag extends AbstractID3v2Tag
             logger.log(Level.SEVERE, "Unable to convert frame:" + frame.getIdentifier());
         }
     }
-
 
     /**
      * Read tag Header Flags

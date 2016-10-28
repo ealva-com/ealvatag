@@ -285,6 +285,15 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
     protected abstract void addFrame(AbstractID3v2Frame frame);
 
     /**
+     * Convert the frame to the correct frame(s)
+     *
+     * @param frame
+     * @return
+     * @throws InvalidFrameException
+     */
+    protected abstract List<AbstractID3v2Frame> convertFrame(AbstractID3v2Frame frame) throws InvalidFrameException;
+
+    /**
      * Returns the number of bytes which come from duplicate frames
      *
      * @return the number of bytes which come from duplicate frames

@@ -182,25 +182,22 @@ public class ID3v23Tag extends AbstractID3v2Tag
         }
     }
 
-
-
-    protected void addFrame(AbstractID3v2Frame frame)
+    @Override
+    public void addFrame(AbstractID3v2Frame frame)
     {
         try
         {
-            //Special case to handle TDRC frame from V24 that needs breaking up into separate frame in V23
-            if ((frame.getIdentifier().equals(ID3v24Frames.FRAME_ID_YEAR)) && (frame.getBody() instanceof FrameBodyTDRC))
+            if (frame instanceof ID3v23Frame)
             {
-                translateFrame(frame);
-            }
-            else if (frame instanceof ID3v23Frame)
-            {
-                 copyFrameIntoMap(frame.getIdentifier(),frame);
+                copyFrameIntoMap(frame.getIdentifier(), frame);
             }
             else
             {
-                ID3v23Frame newFrame = new ID3v23Frame(frame);
-                copyFrameIntoMap(newFrame.getIdentifier(), newFrame);
+                List<AbstractID3v2Frame> frames = convertFrame(frame);
+                for(AbstractID3v2Frame next:frames)
+                {
+                    copyFrameIntoMap(next.getIdentifier(), next);
+                }
             }
         }
         catch (InvalidFrameException ife)
@@ -209,40 +206,42 @@ public class ID3v23Tag extends AbstractID3v2Tag
         }
     }
 
-    /**
-     * This is used when we need to translate a single frame into multiple frames,
-     * currently required for v24 TDRC frames.
-     * @param frame
-     */
-    //TODO will overwrite any existing TYER or TIME frame, do we ever want multiples of these
-    protected void translateFrame(AbstractID3v2Frame frame)
+    @Override
+    protected List<AbstractID3v2Frame> convertFrame(AbstractID3v2Frame frame) throws InvalidFrameException
     {
-        FrameBodyTDRC tmpBody = (FrameBodyTDRC) frame.getBody();
-        tmpBody.findMatchingMaskAndExtractV3Values();
-        ID3v23Frame newFrame;
-        if (!tmpBody.getYear().equals(""))
+        List<AbstractID3v2Frame> frames = new ArrayList<>();
+        if ((frame.getIdentifier().equals(ID3v24Frames.FRAME_ID_YEAR)) && (frame.getBody() instanceof FrameBodyTDRC))
         {
-            newFrame = new ID3v23Frame(ID3v23Frames.FRAME_ID_V3_TYER);
-            ((FrameBodyTYER) newFrame.getBody()).setText(tmpBody.getYear());
-            logger.config("Adding Frame:" + newFrame.getIdentifier());
-            frameMap.put(newFrame.getIdentifier(), newFrame);
+            //TODO will overwrite any existing TYER or TIME frame, do we ever want multiples of these
+            FrameBodyTDRC tmpBody = (FrameBodyTDRC) frame.getBody();
+            tmpBody.findMatchingMaskAndExtractV3Values();
+            ID3v23Frame newFrame;
+            if (!tmpBody.getYear().equals(""))
+            {
+                newFrame = new ID3v23Frame(ID3v23Frames.FRAME_ID_V3_TYER);
+                ((FrameBodyTYER) newFrame.getBody()).setText(tmpBody.getYear());
+                frames.add(newFrame);
+            }
+            if (!tmpBody.getDate().equals(""))
+            {
+                newFrame = new ID3v23Frame(ID3v23Frames.FRAME_ID_V3_TDAT);
+                ((FrameBodyTDAT) newFrame.getBody()).setText(tmpBody.getDate());
+                ((FrameBodyTDAT) newFrame.getBody()).setMonthOnly(tmpBody.isMonthOnly());
+                frames.add(newFrame);
+            }
+            if (!tmpBody.getTime().equals(""))
+            {
+                newFrame = new ID3v23Frame(ID3v23Frames.FRAME_ID_V3_TIME);
+                ((FrameBodyTIME) newFrame.getBody()).setText(tmpBody.getTime());
+                ((FrameBodyTIME) newFrame.getBody()).setHoursOnly(tmpBody.isHoursOnly());
+                frames.add(newFrame);
+            }
         }
-        if (!tmpBody.getDate().equals(""))
+        else
         {
-            newFrame = new ID3v23Frame(ID3v23Frames.FRAME_ID_V3_TDAT);
-            ((FrameBodyTDAT) newFrame.getBody()).setText(tmpBody.getDate());
-            ((FrameBodyTDAT) newFrame.getBody()).setMonthOnly(tmpBody.isMonthOnly());
-            logger.config("Adding Frame:" + newFrame.getIdentifier());
-            frameMap.put(newFrame.getIdentifier(), newFrame);
+            frames.add(new ID3v23Frame(frame));
         }
-        if (!tmpBody.getTime().equals(""))
-        {
-            newFrame = new ID3v23Frame(ID3v23Frames.FRAME_ID_V3_TIME);
-            ((FrameBodyTIME) newFrame.getBody()).setText(tmpBody.getTime());
-            ((FrameBodyTIME) newFrame.getBody()).setHoursOnly(tmpBody.isHoursOnly());
-            logger.config("Adding Frame:" + newFrame.getIdentifier());
-            frameMap.put(newFrame.getIdentifier(), newFrame);
-        }
+        return frames;
     }
 
     /**
