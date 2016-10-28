@@ -22,6 +22,7 @@ import org.jaudiotagger.tag.*;
 import org.jaudiotagger.tag.datatype.DataTypes;
 import org.jaudiotagger.tag.datatype.Pair;
 import org.jaudiotagger.tag.id3.framebody.*;
+import org.jaudiotagger.tag.id3.valuepair.MusicianCredits;
 import org.jaudiotagger.tag.id3.valuepair.StandardIPLSKey;
 import org.jaudiotagger.tag.images.Artwork;
 import org.jaudiotagger.tag.images.ArtworkFactory;
@@ -396,9 +397,13 @@ public class ID3v24Tag extends AbstractID3v2Tag
                 {
                     pairsTipl.add(next);
                 }
-                else
+                else if(MusicianCredits.isKey(next.getKey()))
                 {
                     pairsTmcl.add(next);
+                }
+                else
+                {
+                    pairsTipl.add(next);
                 }
             }
             AbstractID3v2Frame tipl = new ID3v24Frame((ID3v23Frame)frame,ID3v24Frames.FRAME_ID_INVOLVED_PEOPLE);
