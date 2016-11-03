@@ -55,8 +55,7 @@ public class AiffTagReader extends AiffChunkReader
 
             if (aiffTag.getID3Tag() == null)
             {
-                //Default still used by iTunes
-                aiffTag.setID3Tag(new ID3v22Tag());
+                aiffTag.setID3Tag(AiffTag.createDefaultTag());
             }
             return aiffTag;
         }

@@ -23,9 +23,9 @@ import org.jaudiotagger.audio.iff.ChunkSummary;
 import org.jaudiotagger.audio.wav.WavOptions;
 import org.jaudiotagger.logging.Hex;
 import org.jaudiotagger.tag.*;
-import org.jaudiotagger.tag.id3.AbstractID3v2Tag;
-import org.jaudiotagger.tag.id3.Id3SupportingTag;
+import org.jaudiotagger.tag.id3.*;
 import org.jaudiotagger.tag.images.Artwork;
+import org.jaudiotagger.tag.reference.ID3V2Version;
 
 import java.nio.charset.Charset;
 import java.util.ArrayList;
@@ -629,5 +629,28 @@ public class WavTag implements Tag, Id3SupportingTag
     public void setIncorrectlyAlignedTag(boolean isIncorrectlyAlignedTag)
     {
         this.isIncorrectlyAlignedTag = isIncorrectlyAlignedTag;
+    }
+
+    /**
+     * Default based on user option
+     *
+     * @return
+     */
+    public static AbstractID3v2Tag createDefaultID3Tag()
+    {
+        if(TagOptionSingleton.getInstance().getID3V2Version()== ID3V2Version.ID3_V24)
+        {
+            return new ID3v24Tag();
+        }
+        else if(TagOptionSingleton.getInstance().getID3V2Version()==ID3V2Version.ID3_V23)
+        {
+            return new ID3v23Tag();
+        }
+        else if(TagOptionSingleton.getInstance().getID3V2Version()==ID3V2Version.ID3_V22)
+        {
+            return new ID3v22Tag();
+        }
+        //Default in case not set somehow
+        return new ID3v23Tag();
     }
 }
