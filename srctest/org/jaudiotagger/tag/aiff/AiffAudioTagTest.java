@@ -831,5 +831,43 @@ public class AiffAudioTagTest extends TestCase {
     	FilePermissionsTest.runWriteReadOnlyFileWithCheckDisabled("test121.aif");
 	}
 
+    public void testDeleteArtworkField() {
+        Exception exceptionCaught = null;
+
+        File orig = new File("testdata", "test157.aif");
+        if (!orig.isFile())
+        {
+            System.err.println("Unable to test file - not available");
+            return;
+        }
+
+
+        File testFile = AbstractTestCase.copyAudioToTmp("test157.aif", new File("testDeleteArtworkField.aif"));
+        try
+        {
+            AudioFile f = AudioFileIO.read(testFile);
+            Tag tag = f.getTag();
+            System.out.println(tag);
+            assertNotNull(tag);
+            assertTrue(tag instanceof AiffTag);
+            assertTrue(((AiffTag) tag).isExistingId3Tag());
+            assertEquals(2, tag.getArtworkList().size());
+            
+            tag.deleteArtworkField();
+            f.commit();
+
+            AudioFile updatedFile = AudioFileIO.read(testFile);
+            Tag updatedTag = updatedFile.getTag();
+
+            assertEquals(0, updatedTag.getArtworkList().size());
+
+        }
+        catch(Exception ex)
+        {
+            ex.printStackTrace();
+            exceptionCaught = ex;
+        }
+        assertNull(exceptionCaught);
+    }
 
 }

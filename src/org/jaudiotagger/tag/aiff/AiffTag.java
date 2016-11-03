@@ -273,6 +273,7 @@ public class AiffTag implements Tag, Id3SupportingTag
     @Override
     public void deleteArtworkField() throws KeyNotFoundException
     {
+    	id3Tag.deleteArtworkField();
     }
 
     @Override
