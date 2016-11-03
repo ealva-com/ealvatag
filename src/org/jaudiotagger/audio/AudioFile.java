@@ -28,7 +28,8 @@ import org.jaudiotagger.audio.flac.metadatablock.MetadataBlockDataPicture;
 import org.jaudiotagger.audio.generic.Permissions;
 import org.jaudiotagger.audio.real.RealTag;
 import org.jaudiotagger.tag.TagOptionSingleton;
-import org.jaudiotagger.tag.id3.ID3v24Tag;
+import org.jaudiotagger.tag.id3.*;
+import org.jaudiotagger.tag.reference.ID3V2Version;
 import org.jaudiotagger.tag.wav.WavTag;
 import org.jaudiotagger.logging.ErrorMessage;
 import org.jaudiotagger.tag.Tag;
@@ -386,6 +387,7 @@ public class AudioFile
 
      /**
      * Get the tag or if the file doesn't have one at all, create a default tag and set it
+     * as the tag of this file
      *
      * @return
      */
@@ -396,9 +398,38 @@ public class AudioFile
         return tag;
     }
 
+    /**
+     * Get the tag and convert to the default tag version or if the file doesn't have one at all, create a default tag
+     * set as tag for this file
+     *
+     * Conversions are currently only necessary/available for formats that support ID3
+     *
+     * @return
+     */
     public Tag getTagAndConvertOrCreateAndSetDefault()
     {
-        return getTagOrCreateAndSetDefault();
+        Tag tag = getTagOrCreateDefault();
+
+        /* TODO Currently only works for Dsf We need additional check here for Wav and Aif because they wrap the ID3 tag so never return
+         * null for getTag() and the wrapper stores the location of the existing tag, would that be broken if tag set to something else
+         */
+        if(tag instanceof AbstractID3v2Tag)
+        {
+            Tag convertedTag = convertID3Tag((AbstractID3v2Tag)tag, TagOptionSingleton.getInstance().getID3V2Version());
+            if(convertedTag!=null)
+            {
+                setTag(convertedTag);
+            }
+            else
+            {
+                setTag(tag);
+            }
+        }
+        else
+        {
+            setTag(tag);
+        }
+        return getTag();
     }
 
     /**
@@ -414,5 +445,51 @@ public class AudioFile
             return file.getName().substring(0,index);
         }
         return file.getName();
+    }
+
+    /**
+     * If using ID3 format convert tag from current version to another as specified by id3V2Version,
+     *
+     * @return null if no conversion necessary
+     */
+    public AbstractID3v2Tag convertID3Tag(AbstractID3v2Tag tag, ID3V2Version id3V2Version)
+    {
+        if(tag instanceof ID3v24Tag)
+        {
+            switch(id3V2Version)
+            {
+                case ID3_V22:
+                    return new ID3v22Tag((ID3v24Tag)tag);
+                case ID3_V23:
+                    return new ID3v23Tag((ID3v24Tag)tag);
+                case ID3_V24:
+                    return null;
+            }
+        }
+        else if(tag instanceof ID3v23Tag)
+        {
+            switch(id3V2Version)
+            {
+                case ID3_V22:
+                    return new ID3v22Tag((ID3v23Tag)tag);
+                case ID3_V23:
+                    return null;
+                case ID3_V24:
+                    return new ID3v24Tag((ID3v23Tag)tag);
+            }
+        }
+        else if(tag instanceof ID3v22Tag)
+        {
+            switch(id3V2Version)
+            {
+                case ID3_V22:
+                    return null;
+                case ID3_V23:
+                    return new ID3v23Tag((ID3v22Tag)tag);
+                case ID3_V24:
+                    return new ID3v24Tag((ID3v22Tag)tag);
+            }
+        }
+        return null;
     }
 }

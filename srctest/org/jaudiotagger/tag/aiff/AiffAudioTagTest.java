@@ -33,6 +33,7 @@ public class AiffAudioTagTest extends TestCase {
     public void testReadAiff1() {
         Exception exceptionCaught = null;
 
+        TagOptionSingleton.getInstance().setID3V2Version(ID3V2Version.ID3_V23);
         File orig = new File("testdata", "test119.aif");
         if (!orig.isFile())
         {

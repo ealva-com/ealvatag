@@ -391,7 +391,7 @@ public class AiffTag implements Tag, Id3SupportingTag
      *
      * @return
      */
-    public static AbstractID3v2Tag createDefaultTag()
+    public static AbstractID3v2Tag createDefaultID3Tag()
     {
         if(TagOptionSingleton.getInstance().getID3V2Version()== ID3V2Version.ID3_V24)
         {
