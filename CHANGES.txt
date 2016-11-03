@@ -41,16 +41,17 @@ Summarise Changes
 #154:For ID3v23 the TCON frame can end up with multiple values concatenated
 #144:Unable to load file because of problem with FrameBodyUnsupported
 #150:Flac write files OutOfMemoryError: Direct buffer memory
-#156: Support for additional artist sort fields
-#157: Support for contiguous trackno
-#158: Support for Opus field
-#159: Support for Musichi classical fields
-#160: FlacAudioHeader.getMd5() does not process character "0" correctly
-#161: Incorrectly reading not compressed TENC within ID3v23
+#156:Support for additional artist sort fields
+#157:Support for contiguous trackno
+#158:Support for Opus field
+#159:Support for Musichi classical fields
+#160:FlacAudioHeader.getMd5() does not process character "0" correctly
+#161:Incorrectly reading not compressed TENC within ID3v23
 #167:Add proper support for FrameTMCL (Musician Credits)
 #109:Add a field to store tracknodiscno as a contiguous value
 #168:Add generic field INVOLVED_PERSON to map to unmapped entries in TIPL frame
 #167:Conversion of ID3v23 to ID3v24 shoudnt convert all of IPLS frame to TIPL some TMCL
+#172:DeleteArtworkField in AiffTag is unimplemented
 
 2.2.5
 #033:Added getAudioStartPos() and getAudioEndPos() methods to AudioHeader interface and implemented for most formats
