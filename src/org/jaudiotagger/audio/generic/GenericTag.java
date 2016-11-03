@@ -176,7 +176,7 @@ public abstract class GenericTag extends AbstractTag
         }
         else
         {
-            throw new UnsupportedOperationException(ErrorMessage.GENERIC_NOT_SUPPORTED.getMsg());
+            throw new UnsupportedOperationException(ErrorMessage.OPERATION_NOT_SUPPORTED_FOR_FIELD.getMsg(genericKey));
         }
     }
 
@@ -195,7 +195,7 @@ public abstract class GenericTag extends AbstractTag
         }
         else
         {
-            throw new UnsupportedOperationException(ErrorMessage.GENERIC_NOT_SUPPORTED.getMsg());
+            throw new UnsupportedOperationException(ErrorMessage.OPERATION_NOT_SUPPORTED_FOR_FIELD.getMsg(genericKey));
         }
     }
 
@@ -225,7 +225,7 @@ public abstract class GenericTag extends AbstractTag
         }
         else
         {
-            throw new UnsupportedOperationException(ErrorMessage.GENERIC_NOT_SUPPORTED.getMsg());
+            throw new UnsupportedOperationException(ErrorMessage.OPERATION_NOT_SUPPORTED_FOR_FIELD.getMsg(genericKey));
         }
     }
 
@@ -238,7 +238,7 @@ public abstract class GenericTag extends AbstractTag
         }
         else
         {
-            throw new UnsupportedOperationException(ErrorMessage.GENERIC_NOT_SUPPORTED.getMsg());
+            throw new UnsupportedOperationException(ErrorMessage.OPERATION_NOT_SUPPORTED_FOR_FIELD.getMsg(genericKey));
         }
     }
 
