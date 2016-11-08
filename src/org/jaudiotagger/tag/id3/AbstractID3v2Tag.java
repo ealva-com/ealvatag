@@ -2626,7 +2626,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
      * @param totalFieldKey
      * @param deleteNumberFieldKey
      */
-    private void deleteNoTotalFrame(FrameAndSubId formatKey, FieldKey numberFieldKey, FieldKey totalFieldKey, boolean deleteNumberFieldKey)
+    private void deleteNumberTotalFrame(FrameAndSubId formatKey, FieldKey numberFieldKey, FieldKey totalFieldKey, boolean deleteNumberFieldKey)
     {
         if (deleteNumberFieldKey)
         {
@@ -2679,22 +2679,22 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
         switch(fieldKey)
         {
             case TRACK:
-                deleteNoTotalFrame(formatKey, FieldKey.TRACK, FieldKey.TRACK_TOTAL, true);
+                deleteNumberTotalFrame(formatKey, FieldKey.TRACK, FieldKey.TRACK_TOTAL, true);
                 break;
             case TRACK_TOTAL:
-                deleteNoTotalFrame(formatKey, FieldKey.TRACK, FieldKey.TRACK_TOTAL, false);
+                deleteNumberTotalFrame(formatKey, FieldKey.TRACK, FieldKey.TRACK_TOTAL, false);
                 break;
             case DISC_NO:
-                deleteNoTotalFrame(formatKey, FieldKey.DISC_NO, FieldKey.DISC_TOTAL, true);
+                deleteNumberTotalFrame(formatKey, FieldKey.DISC_NO, FieldKey.DISC_TOTAL, true);
                 break;
             case DISC_TOTAL:
-                deleteNoTotalFrame(formatKey, FieldKey.DISC_NO, FieldKey.DISC_TOTAL, false);
+                deleteNumberTotalFrame(formatKey, FieldKey.DISC_NO, FieldKey.DISC_TOTAL, false);
                 break;
             case MOVEMENT_NO:
-                deleteNoTotalFrame(formatKey, FieldKey.MOVEMENT_NO, FieldKey.MOVEMENT_TOTAL, true);
+                deleteNumberTotalFrame(formatKey, FieldKey.MOVEMENT_NO, FieldKey.MOVEMENT_TOTAL, true);
                 break;
             case MOVEMENT_TOTAL:
-                deleteNoTotalFrame(formatKey, FieldKey.MOVEMENT_NO, FieldKey.MOVEMENT_TOTAL, false);
+                deleteNumberTotalFrame(formatKey, FieldKey.MOVEMENT_NO, FieldKey.MOVEMENT_TOTAL, false);
                 break;
             default:
                 doDeleteTagField(formatKey);
