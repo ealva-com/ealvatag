@@ -2956,14 +2956,14 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
             }
             return filteredList;
         }
-        else if (genericKey == FieldKey.TRACK)
+        else if ((genericKey == FieldKey.TRACK)||(genericKey == FieldKey.DISC_NO)||(genericKey == FieldKey.MOVEMENT_NO))
         {
             for (TagField tagfield : list)
             {
                 AbstractTagFrameBody next = ((AbstractID3v2Frame) tagfield).getBody();
-                if (next instanceof FrameBodyTRCK)
+                if (next instanceof AbstractFrameBodyNumberTotal)
                 {
-                    if (((FrameBodyTRCK) next).getTrackNo() != null)
+                    if (((AbstractFrameBodyNumberTotal) next).getNumber() != null)
                     {
                         filteredList.add(tagfield);
                     }
@@ -2971,44 +2971,14 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
             }
             return filteredList;
         }
-        else if (genericKey == FieldKey.TRACK_TOTAL)
+        else if ((genericKey == FieldKey.TRACK_TOTAL)||(genericKey == FieldKey.DISC_TOTAL)||(genericKey == FieldKey.MOVEMENT_TOTAL))
         {
             for (TagField tagfield : list)
             {
                 AbstractTagFrameBody next = ((AbstractID3v2Frame) tagfield).getBody();
-                if (next instanceof FrameBodyTRCK)
+                if (next instanceof AbstractFrameBodyNumberTotal)
                 {
-                    if (((FrameBodyTRCK) next).getTrackTotal() != null)
-                    {
-                        filteredList.add(tagfield);
-                    }
-                }
-            }
-            return filteredList;
-        }
-        else if (genericKey == FieldKey.DISC_NO)
-        {
-            for (TagField tagfield : list)
-            {
-                AbstractTagFrameBody next = ((AbstractID3v2Frame) tagfield).getBody();
-                if (next instanceof FrameBodyTPOS)
-                {
-                    if (((FrameBodyTPOS) next).getDiscNo() != null)
-                    {
-                        filteredList.add(tagfield);
-                    }
-                }
-            }
-            return filteredList;
-        }
-        else if (genericKey == FieldKey.DISC_TOTAL)
-        {
-            for (TagField tagfield : list)
-            {
-                AbstractTagFrameBody next = ((AbstractID3v2Frame) tagfield).getBody();
-                if (next instanceof FrameBodyTPOS)
-                {
-                    if (((FrameBodyTPOS) next).getDiscTotal() != null)
+                    if (((AbstractFrameBodyNumberTotal) next).getTotal() != null)
                     {
                         filteredList.add(tagfield);
                     }
