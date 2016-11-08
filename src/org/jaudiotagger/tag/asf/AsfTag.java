@@ -4,6 +4,7 @@ import org.jaudiotagger.audio.asf.data.AsfHeader;
 import org.jaudiotagger.audio.generic.AbstractTag;
 import org.jaudiotagger.logging.ErrorMessage;
 import org.jaudiotagger.tag.*;
+import org.jaudiotagger.tag.id3.ID3v22FieldKey;
 import org.jaudiotagger.tag.images.Artwork;
 import org.jaudiotagger.tag.images.ArtworkFactory;
 import org.jaudiotagger.tag.reference.PictureTypes;
@@ -152,6 +153,9 @@ public final class AsfTag extends AbstractTag
         tagFieldToAsfField.put(FieldKey.MOOD_RELAXED, AsfFieldKey.MOOD_RELAXED);
         tagFieldToAsfField.put(FieldKey.MOOD_SAD, AsfFieldKey.MOOD_SAD);
         tagFieldToAsfField.put(FieldKey.MOOD_VALENCE, AsfFieldKey.MOOD_VALENCE);
+        tagFieldToAsfField.put(FieldKey.MOVEMENT, AsfFieldKey.MOVEMENT);
+        tagFieldToAsfField.put(FieldKey.MOVEMENT_NO, AsfFieldKey.MOVEMENT_NO);
+        tagFieldToAsfField.put(FieldKey.MOVEMENT_TOTAL, AsfFieldKey.MOVEMENT_TOTAL);
         tagFieldToAsfField.put(FieldKey.MUSICBRAINZ_ARTISTID, AsfFieldKey.MUSICBRAINZ_ARTISTID);
         tagFieldToAsfField.put(FieldKey.MUSICBRAINZ_DISC_ID, AsfFieldKey.MUSICBRAINZ_DISC_ID);
         tagFieldToAsfField.put(FieldKey.MUSICBRAINZ_ORIGINAL_RELEASE_ID, AsfFieldKey.MUSICBRAINZ_ORIGINAL_RELEASEID);

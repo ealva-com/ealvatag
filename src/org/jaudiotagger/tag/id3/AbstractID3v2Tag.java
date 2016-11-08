@@ -2700,88 +2700,87 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
 
 
     /**
+     * Some frames are used to store a number/total value, we have to consider both values when requested to delete a
+     * key relating to one of them
+     *
+     * @param formatKey
+     * @param numberFieldKey
+     * @param totalFieldKey
+     * @param deleteNumberFieldKey
+     */
+    private void deleteNoTotalFrame(FrameAndSubId formatKey, FieldKey numberFieldKey, FieldKey totalFieldKey, boolean deleteNumberFieldKey)
+    {
+        if (deleteNumberFieldKey)
+        {
+            String total = this.getFirst(totalFieldKey);
+            if (total.length() == 0)
+            {
+                doDeleteTagField(formatKey);
+                return;
+            }
+            else
+            {
+                AbstractID3v2Frame frame = (AbstractID3v2Frame) this.getFrame(formatKey.getFrameId());
+                AbstractFrameBodyNumberTotal frameBody = (AbstractFrameBodyNumberTotal) frame.getBody();
+                frameBody.setNumber(0);
+                return;
+            }
+        }
+        else
+        {
+            String number = this.getFirst(numberFieldKey);
+            if (number.length() == 0)
+            {
+                doDeleteTagField(formatKey);
+                return;
+            }
+            else
+            {
+                AbstractID3v2Frame frame = (AbstractID3v2Frame) this.getFrame(formatKey.getFrameId());
+                AbstractFrameBodyNumberTotal frameBody = (AbstractFrameBodyNumberTotal) frame.getBody();
+                frameBody.setTotal(0);
+                return;
+            }
+        }
+    }
+    /**
      * Delete fields with this generic key
      *
-     * @param genericKey
+     * If generic key maps to multiple frames then do special processing here rather doDeleteField()
+     *
+     * @param fieldKey
      */
-    public void deleteField(FieldKey genericKey) throws KeyNotFoundException
+    public void deleteField(FieldKey fieldKey) throws KeyNotFoundException
     {
-        FrameAndSubId formatKey = getFrameAndSubIdFromGenericKey(genericKey);
-        if (genericKey == null)
+        FrameAndSubId formatKey = getFrameAndSubIdFromGenericKey(fieldKey);
+        if (fieldKey == null)
         {
             throw new KeyNotFoundException();
         }
 
-        if (genericKey == FieldKey.TRACK)
+        switch(fieldKey)
         {
-            String trackTotal = this.getFirst(FieldKey.TRACK_TOTAL);
-            if (trackTotal.length() == 0)
-            {
+            case TRACK:
+                deleteNoTotalFrame(formatKey, FieldKey.TRACK, FieldKey.TRACK_TOTAL, true);
+                break;
+            case TRACK_TOTAL:
+                deleteNoTotalFrame(formatKey, FieldKey.TRACK, FieldKey.TRACK_TOTAL, false);
+                break;
+            case DISC_NO:
+                deleteNoTotalFrame(formatKey, FieldKey.DISC_NO, FieldKey.DISC_TOTAL, true);
+                break;
+            case DISC_TOTAL:
+                deleteNoTotalFrame(formatKey, FieldKey.DISC_NO, FieldKey.DISC_TOTAL, false);
+                break;
+
+            default:
                 doDeleteTagField(formatKey);
-                return;
-            }
-            else
-            {
-                AbstractID3v2Frame frame = (AbstractID3v2Frame) this.getFrame(formatKey.getFrameId());
-                FrameBodyTRCK frameBody = (FrameBodyTRCK) frame.getBody();
-                frameBody.setTrackNo(0);
-                return;
-            }
-        }
-        else if (genericKey == FieldKey.TRACK_TOTAL)
-        {
-            String track = this.getFirst(FieldKey.TRACK);
-            if (track.length() == 0)
-            {
-                doDeleteTagField(formatKey);
-                return;
-            }
-            else
-            {
-                AbstractID3v2Frame frame = (AbstractID3v2Frame) this.getFrame(formatKey.getFrameId());
-                FrameBodyTRCK frameBody = (FrameBodyTRCK) frame.getBody();
-                frameBody.setTrackTotal(0);
-                return;
-            }
-        }
-        else if (genericKey == FieldKey.DISC_NO)
-        {
-            String discTotal = this.getFirst(FieldKey.DISC_TOTAL);
-            if (discTotal.length() == 0)
-            {
-                doDeleteTagField(formatKey);
-                return;
-            }
-            else
-            {
-                AbstractID3v2Frame frame = (AbstractID3v2Frame) this.getFrame(formatKey.getFrameId());
-                FrameBodyTPOS frameBody = (FrameBodyTPOS) frame.getBody();
-                frameBody.setDiscNo(0);
-                return;
-            }
-        }
-        else if (genericKey == FieldKey.DISC_TOTAL)
-        {
-            String discno = this.getFirst(FieldKey.DISC_NO);
-            if (discno.length() == 0)
-            {
-                doDeleteTagField(formatKey);
-                return;
-            }
-            else
-            {
-                AbstractID3v2Frame frame = (AbstractID3v2Frame) this.getFrame(formatKey.getFrameId());
-                FrameBodyTPOS frameBody = (FrameBodyTPOS) frame.getBody();
-                frameBody.setDiscTotal(0);
-                return;
-            }
         }
 
-        doDeleteTagField(formatKey);
     }
 
     /**
-     * Internal delete method
+     * Internal delete method, for deleting/modifying an individual ID3 frame
      *
      * @param formatKey
      * @throws KeyNotFoundException
@@ -2897,7 +2896,9 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
                 }
             }
         }
-        else if ((formatKey.getGenericKey() == FieldKey.PERFORMER) || (formatKey.getGenericKey() == FieldKey.INVOLVED_PERSON))
+        else if ((formatKey.getGenericKey()!=null) &&
+                 ((formatKey.getGenericKey() == FieldKey.PERFORMER) || (formatKey.getGenericKey() == FieldKey.INVOLVED_PERSON))
+                )
         {
             List<TagField> list = getFields(formatKey.getFrameId());
             ListIterator<TagField> li = list.listIterator();

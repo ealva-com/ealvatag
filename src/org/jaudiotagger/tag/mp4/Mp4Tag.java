@@ -21,6 +21,7 @@ package org.jaudiotagger.tag.mp4;
 import org.jaudiotagger.audio.generic.AbstractTag;
 import org.jaudiotagger.logging.ErrorMessage;
 import org.jaudiotagger.tag.*;
+import org.jaudiotagger.tag.id3.ID3v22FieldKey;
 import org.jaudiotagger.tag.images.Artwork;
 import org.jaudiotagger.tag.images.ArtworkFactory;
 import org.jaudiotagger.tag.mp4.field.*;
@@ -107,6 +108,9 @@ public class Mp4Tag extends AbstractTag
         tagFieldToMp4Field.put(FieldKey.MOOD_RELAXED, Mp4FieldKey.MOOD_RELAXED);
         tagFieldToMp4Field.put(FieldKey.MOOD_SAD, Mp4FieldKey.MOOD_SAD);
         tagFieldToMp4Field.put(FieldKey.MOOD_VALENCE, Mp4FieldKey.MOOD_VALENCE);
+        tagFieldToMp4Field.put(FieldKey.MOVEMENT, Mp4FieldKey.MOVEMENT);
+        tagFieldToMp4Field.put(FieldKey.MOVEMENT_NO, Mp4FieldKey.MOVEMENT_NO);
+        tagFieldToMp4Field.put(FieldKey.MOVEMENT_TOTAL, Mp4FieldKey.MOVEMENT_TOTAL);
         tagFieldToMp4Field.put(FieldKey.MUSICBRAINZ_ARTISTID, Mp4FieldKey.MUSICBRAINZ_ARTISTID);
         tagFieldToMp4Field.put(FieldKey.MUSICBRAINZ_DISC_ID, Mp4FieldKey.MUSICBRAINZ_DISCID);
         tagFieldToMp4Field.put(FieldKey.MUSICBRAINZ_ORIGINAL_RELEASE_ID, Mp4FieldKey.MUSICBRAINZ_ORIGINALALBUMID);

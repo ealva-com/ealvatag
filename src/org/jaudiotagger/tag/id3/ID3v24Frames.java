@@ -68,6 +68,8 @@ public class ID3v24Frames extends ID3Frames
     public static final String FRAME_ID_LYRICIST = "TEXT";
     public static final String FRAME_ID_MEDIA_TYPE = "TMED";
     public static final String FRAME_ID_MOOD = "TMOO";
+    public static final String FRAME_ID_MOVEMENT = "MVIN";
+    public static final String FRAME_ID_MOVEMENT_NO = "MVNM";
     public static final String FRAME_ID_MPEG_LOCATION_LOOKUP_TABLE = "MLLT";
     public static final String FRAME_ID_MUSICIAN_CREDITS = "TMCL";
     public static final String FRAME_ID_MUSIC_CD_ID = "MCDI";
@@ -429,6 +431,9 @@ public class ID3v24Frames extends ID3Frames
         tagFieldToId3.put(FieldKey.MOOD_RELAXED, ID3v24FieldKey.MOOD_RELAXED);
         tagFieldToId3.put(FieldKey.MOOD_SAD, ID3v24FieldKey.MOOD_SAD);
         tagFieldToId3.put(FieldKey.MOOD_VALENCE, ID3v24FieldKey.MOOD_VALENCE);
+        tagFieldToId3.put(FieldKey.MOVEMENT, ID3v24FieldKey.MOVEMENT);
+        tagFieldToId3.put(FieldKey.MOVEMENT_NO, ID3v24FieldKey.MOVEMENT_NO);
+        tagFieldToId3.put(FieldKey.MOVEMENT_TOTAL, ID3v24FieldKey.MOVEMENT_TOTAL);
         tagFieldToId3.put(FieldKey.MUSICBRAINZ_ARTISTID, ID3v24FieldKey.MUSICBRAINZ_ARTISTID);
         tagFieldToId3.put(FieldKey.MUSICBRAINZ_DISC_ID, ID3v24FieldKey.MUSICBRAINZ_DISC_ID);
         tagFieldToId3.put(FieldKey.MUSICBRAINZ_ORIGINAL_RELEASE_ID, ID3v24FieldKey.MUSICBRAINZ_ORIGINAL_RELEASEID);
