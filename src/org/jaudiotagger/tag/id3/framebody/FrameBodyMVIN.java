@@ -26,7 +26,7 @@ import java.nio.ByteBuffer;
  * This is not an official standard frame, but Apple makes its own rules !
  *
  */
-public class FrameBodyMVIN extends AbstractFrameBodyNumberTotal implements ID3v24FrameBody, ID3v23FrameBody
+public class FrameBodyMVIN extends AbstractFrameBodyTextInfo implements ID3v24FrameBody, ID3v23FrameBody
 {
     /**
      * Creates a new FrameBodyTALB datatype.

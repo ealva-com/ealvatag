@@ -31,7 +31,7 @@ import java.nio.ByteBuffer;
  *
  * @author : Paul Taylor
  */
-public class FrameBodyMVNM extends AbstractID3v2FrameBody implements ID3v23FrameBody, ID3v24FrameBody
+public class FrameBodyMVNM extends AbstractFrameBodyNumberTotal implements ID3v23FrameBody, ID3v24FrameBody
 {
 
     /**
@@ -39,8 +39,7 @@ public class FrameBodyMVNM extends AbstractID3v2FrameBody implements ID3v23Frame
      */
     public FrameBodyMVNM()
     {
-        setObjectValue(DataTypes.OBJ_TEXT_ENCODING, TextEncoding.ISO_8859_1);
-        setObjectValue(DataTypes.OBJ_TEXT, new PartOfSet.PartOfSetValue());
+        super();
     }
 
     public FrameBodyMVNM(FrameBodyMVNM body)
@@ -56,21 +55,14 @@ public class FrameBodyMVNM extends AbstractID3v2FrameBody implements ID3v23Frame
      */
     public FrameBodyMVNM(byte textEncoding, String text)
     {
-        setObjectValue(DataTypes.OBJ_TEXT_ENCODING, textEncoding);
-        setObjectValue(DataTypes.OBJ_TEXT, new PartOfSet.PartOfSetValue(text));
+        super(textEncoding, text);
     }
 
-    public FrameBodyMVNM(byte textEncoding, Integer trackNo, Integer trackTotal)
+    public FrameBodyMVNM(byte textEncoding, Integer movementNo, Integer movementTotal)
     {
-        super();
-        setObjectValue(DataTypes.OBJ_TEXT_ENCODING, textEncoding);
-        setObjectValue(DataTypes.OBJ_TEXT, new PartOfSet.PartOfSetValue(trackNo,trackTotal));
+        super(textEncoding, movementNo, movementTotal);
     }
 
-    public String getUserFriendlyValue()
-    {
-        return String.valueOf(getTrackNo());
-    }
 
     /**
      * Creates a new FrameBodyTRCK datatype.
@@ -96,61 +88,5 @@ public class FrameBodyMVNM extends AbstractID3v2FrameBody implements ID3v23Frame
         return ID3v24Frames.FRAME_ID_MOVEMENT_NO;
     }
 
-    public Integer getTrackNo()
-    {
-        PartOfSet.PartOfSetValue value = (PartOfSet.PartOfSetValue)getObjectValue(DataTypes.OBJ_TEXT);
-        return value.getCount();
-    }
 
-    public String getTrackNoAsText()
-    {
-        return ((PartOfSet.PartOfSetValue)getObjectValue(DataTypes.OBJ_TEXT)).getCountAsText();
-    }
-
-    public String getText()
-    {
-        return getObjectValue(DataTypes.OBJ_TEXT).toString();
-    }
-
-    public void setMovementNo(Integer movementNo)
-    {
-        ((PartOfSet.PartOfSetValue)getObjectValue(DataTypes.OBJ_TEXT)).setCount(movementNo);
-    }
-
-    public void setMovementNo(String movementNo)
-    {
-        ((PartOfSet.PartOfSetValue)getObjectValue(DataTypes.OBJ_TEXT)).setCount(movementNo);
-    }
-
-    public Integer getMovementTotal()
-    {
-        return ((PartOfSet.PartOfSetValue)getObjectValue(DataTypes.OBJ_TEXT)).getTotal();
-    }
-
-    public String getMovementTotalAsText()
-    {
-        return ((PartOfSet.PartOfSetValue)getObjectValue(DataTypes.OBJ_TEXT)).getTotalAsText();
-    }
-
-
-    public void setMovementTotal(Integer trackTotal)
-    {
-         ((PartOfSet.PartOfSetValue)getObjectValue(DataTypes.OBJ_TEXT)).setTotal(trackTotal);
-    }
-
-    public void setMovementTotal(String trackTotal)
-    {
-        ((PartOfSet.PartOfSetValue)getObjectValue(DataTypes.OBJ_TEXT)).setTotal(trackTotal);
-    }
-
-    public void setText(String text)
-    {
-        setObjectValue(DataTypes.OBJ_TEXT, new PartOfSet.PartOfSetValue(text));
-    }
-    
-    protected void setupObjectList()
-    {
-        objectList.add(new NumberHashMap(DataTypes.OBJ_TEXT_ENCODING, this, TextEncoding.TEXT_ENCODING_FIELD_SIZE));
-        objectList.add(new PartOfSet(DataTypes.OBJ_TEXT, this));
-    }
 }

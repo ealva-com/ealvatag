@@ -535,6 +535,28 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
     }
 
 
+    /**
+     * All Number/Count frames  are treated the same (TCK, TPOS, MVNM)
+     *
+     * @param newFrame
+     * @param nextFrame
+     */
+    public void mergeNumberTotalFrames(AbstractID3v2Frame newFrame, AbstractID3v2Frame nextFrame)
+    {
+        AbstractFrameBodyNumberTotal newBody = (AbstractFrameBodyNumberTotal) newFrame.getBody();
+        AbstractFrameBodyNumberTotal oldBody = (AbstractFrameBodyNumberTotal) nextFrame.getBody();
+
+        if (newBody.getNumber() != null && newBody.getNumber() > 0)
+        {
+            oldBody.setNumber(newBody.getNumberAsText());
+        }
+
+        if (newBody.getTotal() != null && newBody.getTotal() > 0)
+        {
+            oldBody.setTotal(newBody.getTotalAsText());
+        }
+        return;
+    }
 
     /**
      * Add frame taking into account existing frames of the same type
@@ -604,60 +626,17 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
                     return;
                 }
             }
-            //Just grab any additional info from new TRCK Frame and add to the existing one
-            else if (newFrame.getBody() instanceof FrameBodyTRCK)
+            //e.g TRCK, TPOS, MVNM
+            else if (newFrame.getBody() instanceof AbstractFrameBodyNumberTotal)
             {
-                FrameBodyTRCK newBody = (FrameBodyTRCK) newFrame.getBody();
-                FrameBodyTRCK oldBody = (FrameBodyTRCK) nextFrame.getBody();
-
-                if (newBody.getTrackNo() != null && newBody.getTrackNo() > 0)
-                {
-                    oldBody.setTrackNo(newBody.getTrackNoAsText());
-                }
-
-                if (newBody.getTrackTotal() != null && newBody.getTrackTotal() > 0)
-                {
-                    oldBody.setTrackTotal(newBody.getTrackTotalAsText());
-                }
+                mergeNumberTotalFrames(newFrame,nextFrame);
                 return;
             }
-            //Just grab any additional info from new TPOS Frame and add to the existing one
-            else if (newFrame.getBody() instanceof FrameBodyTPOS)
+            //e.g TIPL IPLS, TMCL
+            else if (newFrame.getBody() instanceof AbstractFrameBodyPairs)
             {
-                FrameBodyTPOS newBody = (FrameBodyTPOS) newFrame.getBody();
-                FrameBodyTPOS oldBody = (FrameBodyTPOS) nextFrame.getBody();
-
-                Integer newDiscNo = newBody.getDiscNo();
-                if ((newDiscNo != null) && (newDiscNo > 0))
-                {
-                    oldBody.setDiscNo(newBody.getDiscNoAsText());
-                }
-
-                Integer newDiscTotal = newBody.getDiscTotal();
-                if ((newDiscTotal != null) && (newDiscTotal > 0))
-                {
-                    oldBody.setDiscTotal(newBody.getDiscTotalAsText());
-                }
-                return;
-            }
-            else if (newFrame.getBody() instanceof FrameBodyIPLS)
-            {
-                FrameBodyIPLS frameBody = (FrameBodyIPLS) newFrame.getBody();
-                FrameBodyIPLS existingFrameBody = (FrameBodyIPLS) nextFrame.getBody();
-                existingFrameBody.addPair(frameBody.getText());
-                return;
-            }
-            else if (newFrame.getBody() instanceof FrameBodyTIPL)
-            {
-                FrameBodyTIPL frameBody = (FrameBodyTIPL) newFrame.getBody();
-                FrameBodyTIPL existingFrameBody = (FrameBodyTIPL) nextFrame.getBody();
-                existingFrameBody.addPair(frameBody.getText());
-                return;
-            }
-            else if (newFrame.getBody() instanceof FrameBodyTMCL)
-            {
-                FrameBodyTMCL frameBody = (FrameBodyTMCL) newFrame.getBody();
-                FrameBodyTMCL existingFrameBody = (FrameBodyTMCL) nextFrame.getBody();
+                AbstractFrameBodyPairs frameBody = (AbstractFrameBodyPairs) newFrame.getBody();
+                AbstractFrameBodyPairs existingFrameBody = (AbstractFrameBodyPairs) nextFrame.getBody();
                 existingFrameBody.addPair(frameBody.getText());
                 return;
             }
@@ -768,52 +747,25 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
             AbstractFrameBodyTextInfo existingFrameBody = (AbstractFrameBodyTextInfo) existingFrame.getBody();
             existingFrameBody.addTextValue(frameBody.getText());
         }
-        else if (frame.getBody() instanceof FrameBodyIPLS)
+        else if (frame.getBody() instanceof AbstractFrameBodyPairs)
         {
-            FrameBodyIPLS frameBody = (FrameBodyIPLS) frame.getBody();
-            FrameBodyIPLS existingFrameBody = (FrameBodyIPLS) existingFrame.getBody();
+            AbstractFrameBodyPairs frameBody = (AbstractFrameBodyPairs) frame.getBody();
+            AbstractFrameBodyPairs existingFrameBody = (AbstractFrameBodyPairs) existingFrame.getBody();
             existingFrameBody.addPair(frameBody.getText());
         }
-        else if (frame.getBody() instanceof FrameBodyTIPL)
+        else if (frame.getBody() instanceof AbstractFrameBodyNumberTotal)
         {
-            FrameBodyTIPL frameBody = (FrameBodyTIPL) frame.getBody();
-            FrameBodyTIPL existingFrameBody = (FrameBodyTIPL) existingFrame.getBody();
-            existingFrameBody.addPair(frameBody.getText());
-        }
-        else if (frame.getBody() instanceof FrameBodyTMCL)
-        {
-            FrameBodyTMCL frameBody = (FrameBodyTMCL) frame.getBody();
-            FrameBodyTMCL existingFrameBody = (FrameBodyTMCL) existingFrame.getBody();
-            existingFrameBody.addPair(frameBody.getText());
-        }
-        else if (frame.getBody() instanceof FrameBodyTRCK)
-        {
-            FrameBodyTRCK frameBody = (FrameBodyTRCK) frame.getBody();
-            FrameBodyTRCK existingFrameBody = (FrameBodyTRCK) existingFrame.getBody();
+            AbstractFrameBodyNumberTotal frameBody = (AbstractFrameBodyNumberTotal) frame.getBody();
+            AbstractFrameBodyNumberTotal existingFrameBody = (AbstractFrameBodyNumberTotal) existingFrame.getBody();
 
-            if (frameBody.getTrackNo() != null && frameBody.getTrackNo() > 0)
+            if (frameBody.getNumber() != null && frameBody.getNumber() > 0)
             {
-                existingFrameBody.setTrackNo(frameBody.getTrackNoAsText());
+                existingFrameBody.setNumber(frameBody.getNumberAsText());
             }
 
-            if (frameBody.getTrackTotal() != null && frameBody.getTrackTotal() > 0)
+            if (frameBody.getTotal() != null && frameBody.getTotal() > 0)
             {
-                existingFrameBody.setTrackTotal(frameBody.getTrackTotalAsText());
-            }
-        }
-        else if (frame.getBody() instanceof FrameBodyTPOS)
-        {
-            FrameBodyTPOS frameBody = (FrameBodyTPOS) frame.getBody();
-            FrameBodyTPOS existingFrameBody = (FrameBodyTPOS) existingFrame.getBody();
-
-            if (frameBody.getDiscNo() != null && frameBody.getDiscNo() > 0)
-            {
-                existingFrameBody.setDiscNo(frameBody.getDiscNoAsText());
-            }
-
-            if (frameBody.getDiscTotal() != null && frameBody.getDiscTotal() > 0)
-            {
-                existingFrameBody.setDiscTotal(frameBody.getDiscTotalAsText());
+                existingFrameBody.setTotal(frameBody.getTotalAsText());
             }
         }
         else
@@ -1924,43 +1876,42 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
     {
         //Special case here because the generic key to frameid/subid mapping is identical for trackno versus tracktotal
         //and discno versus disctotal so we have to handle here, also want to ignore index parameter.
-        if ((genericKey == FieldKey.TRACK) ||
-                (genericKey == FieldKey.TRACK_TOTAL) ||
-                (genericKey == FieldKey.DISC_NO) ||
-                (genericKey == FieldKey.DISC_TOTAL))
+        List<String> values = new ArrayList<String>();
+        List<TagField> fields = getFields(genericKey);
+
+        switch(genericKey)
         {
-            List<String> values = new ArrayList<String>();
-            List<TagField> fields = getFields(genericKey);
-            if (fields != null && fields.size() > 0)
-            {
-                //Should only be one frame so ignore index value, and we ignore multiple values within the frame
-                //it would make no sense if it existed.
-                AbstractID3v2Frame frame = (AbstractID3v2Frame) fields.get(0);
-                if (genericKey == FieldKey.TRACK)
+            case TRACK:
+            case DISC_NO:
+            case MOVEMENT_NO:
+                if (fields != null && fields.size() > 0)
                 {
-                    values.add(((FrameBodyTRCK) frame.getBody()).getTrackNoAsText());
+                    AbstractID3v2Frame frame = (AbstractID3v2Frame) fields.get(0);
+                    values.add(((AbstractFrameBodyNumberTotal) frame.getBody()).getNumberAsText());
                 }
-                else if (genericKey == FieldKey.TRACK_TOTAL)
+                return values;
+
+            case TRACK_TOTAL:
+            case DISC_TOTAL:
+            case MOVEMENT_TOTAL:
+                if (fields != null && fields.size() > 0)
                 {
-                    values.add(((FrameBodyTRCK) frame.getBody()).getTrackTotalAsText());
+                    AbstractID3v2Frame frame = (AbstractID3v2Frame) fields.get(0);
+                    values.add(((AbstractFrameBodyNumberTotal) frame.getBody()).getTotalAsText());
                 }
-                else if (genericKey == FieldKey.DISC_NO)
+                return values;
+
+            case RATING:
+                if (fields != null && fields.size() > 0)
                 {
-                    values.add(((FrameBodyTPOS) frame.getBody()).getDiscNoAsText());
-                }
-                else if (genericKey == FieldKey.DISC_TOTAL)
-                {
-                    values.add(((FrameBodyTPOS) frame.getBody()).getDiscTotalAsText());
-                }
-                else if (genericKey == FieldKey.RATING)
-                {
+                    AbstractID3v2Frame frame = (AbstractID3v2Frame) fields.get(0);
                     values.add(String.valueOf(((FrameBodyPOPM) frame.getBody()).getRating()));
                 }
-            }
-            return values;
-        }
+                return values;
 
-        return this.doGetValues(getFrameAndSubIdFromGenericKey(genericKey));
+            default:
+               return this.doGetValues(getFrameAndSubIdFromGenericKey(genericKey));
+        }
     }
 
     /**
@@ -2498,7 +2449,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
     }
 
     /**
-     * Create a list of values for this key
+     * Create a list of values for this (sub)frame
      * <p/>
      * This method  does all the complex stuff of splitting multiple values in one frame into separate values.
      *
@@ -2596,7 +2547,9 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
             }
         }
         //Special handling for paired fields with no defined key
-        else if ((formatKey.getGenericKey() == FieldKey.PERFORMER)||(formatKey.getGenericKey() == FieldKey.INVOLVED_PERSON))
+        else if ((formatKey.getGenericKey()!=null)&&
+                 ((formatKey.getGenericKey() == FieldKey.PERFORMER)||(formatKey.getGenericKey() == FieldKey.INVOLVED_PERSON))
+                )
         {
             List<TagField> list = getFields(formatKey.getFrameId());
             ListIterator<TagField> li = list.listIterator();
@@ -2772,7 +2725,12 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
             case DISC_TOTAL:
                 deleteNoTotalFrame(formatKey, FieldKey.DISC_NO, FieldKey.DISC_TOTAL, false);
                 break;
-
+            case MOVEMENT_NO:
+                deleteNoTotalFrame(formatKey, FieldKey.MOVEMENT_NO, FieldKey.MOVEMENT_TOTAL, true);
+                break;
+            case MOVEMENT_TOTAL:
+                deleteNoTotalFrame(formatKey, FieldKey.MOVEMENT_NO, FieldKey.MOVEMENT_TOTAL, false);
+                break;
             default:
                 doDeleteTagField(formatKey);
         }
