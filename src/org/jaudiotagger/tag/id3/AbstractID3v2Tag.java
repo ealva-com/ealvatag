@@ -28,6 +28,7 @@ import org.jaudiotagger.tag.datatype.DataTypes;
 import org.jaudiotagger.tag.datatype.Pair;
 import org.jaudiotagger.tag.datatype.PairedTextEncodedStringNullTerminated;
 import org.jaudiotagger.tag.id3.framebody.*;
+import org.jaudiotagger.tag.id3.valuepair.ID3NumberTotalFields;
 import org.jaudiotagger.tag.id3.valuepair.StandardIPLSKey;
 import org.jaudiotagger.tag.images.Artwork;
 import org.jaudiotagger.tag.reference.Languages;
@@ -1879,38 +1880,36 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
         List<String> values = new ArrayList<String>();
         List<TagField> fields = getFields(genericKey);
 
-        switch(genericKey)
+        if (ID3NumberTotalFields.isNumber(genericKey))
         {
-            case TRACK:
-            case DISC_NO:
-            case MOVEMENT_NO:
-                if (fields != null && fields.size() > 0)
-                {
-                    AbstractID3v2Frame frame = (AbstractID3v2Frame) fields.get(0);
-                    values.add(((AbstractFrameBodyNumberTotal) frame.getBody()).getNumberAsText());
-                }
-                return values;
-
-            case TRACK_TOTAL:
-            case DISC_TOTAL:
-            case MOVEMENT_TOTAL:
-                if (fields != null && fields.size() > 0)
-                {
-                    AbstractID3v2Frame frame = (AbstractID3v2Frame) fields.get(0);
-                    values.add(((AbstractFrameBodyNumberTotal) frame.getBody()).getTotalAsText());
-                }
-                return values;
-
-            case RATING:
-                if (fields != null && fields.size() > 0)
-                {
-                    AbstractID3v2Frame frame = (AbstractID3v2Frame) fields.get(0);
-                    values.add(String.valueOf(((FrameBodyPOPM) frame.getBody()).getRating()));
-                }
-                return values;
-
-            default:
-               return this.doGetValues(getFrameAndSubIdFromGenericKey(genericKey));
+            if (fields != null && fields.size() > 0)
+            {
+                AbstractID3v2Frame frame = (AbstractID3v2Frame) fields.get(0);
+                values.add(((AbstractFrameBodyNumberTotal) frame.getBody()).getNumberAsText());
+            }
+            return values;
+        }
+        else if (ID3NumberTotalFields.isTotal(genericKey))
+        {
+            if (fields != null && fields.size() > 0)
+            {
+                AbstractID3v2Frame frame = (AbstractID3v2Frame) fields.get(0);
+                values.add(((AbstractFrameBodyNumberTotal) frame.getBody()).getTotalAsText());
+            }
+            return values;
+        }
+        else if(genericKey == FieldKey.RATING)
+        {
+            if (fields != null && fields.size() > 0)
+            {
+                AbstractID3v2Frame frame = (AbstractID3v2Frame) fields.get(0);
+                values.add(String.valueOf(((FrameBodyPOPM) frame.getBody()).getRating()));
+            }
+            return values;
+        }
+        else
+        {
+            return this.doGetValues(getFrameAndSubIdFromGenericKey(genericKey));
         }
     }
 
@@ -2215,13 +2214,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
 
         //Special case here because the generic key to frameid/subid mapping is identical for trackno versus tracktotal
         //and discno versus disctotal so we have to handle here, also want to ignore index parameter.
-        if ((genericKey == FieldKey.TRACK) ||
-            (genericKey == FieldKey.TRACK_TOTAL) ||
-            (genericKey == FieldKey.DISC_NO) ||
-            (genericKey == FieldKey.DISC_TOTAL)||
-            (genericKey == FieldKey.MOVEMENT_NO) ||
-            (genericKey == FieldKey.MOVEMENT_TOTAL)
-            )
+        if (ID3NumberTotalFields.isNumber(genericKey)||ID3NumberTotalFields.isTotal(genericKey))
         {
             List<TagField> fields = getFields(genericKey);
             if (fields != null && fields.size() > 0)
@@ -2229,17 +2222,13 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
                 //Should only be one frame so ignore index value, and we ignore multiple values within the frame
                 //it would make no sense if it existed.
                 AbstractID3v2Frame frame = (AbstractID3v2Frame) fields.get(0);
-                switch(genericKey)
+                if (ID3NumberTotalFields.isNumber(genericKey))
                 {
-                    case TRACK:
-                    case DISC_NO:
-                    case MOVEMENT_NO:
-                        return ((AbstractFrameBodyNumberTotal) frame.getBody()).getNumberAsText();
-
-                    case TRACK_TOTAL:
-                    case DISC_TOTAL:
-                    case MOVEMENT_TOTAL:
-                        return ((AbstractFrameBodyNumberTotal) frame.getBody()).getTotalAsText();
+                    return ((AbstractFrameBodyNumberTotal) frame.getBody()).getNumberAsText();
+                }
+                else if (ID3NumberTotalFields.isTotal(genericKey))
+                {
+                    return ((AbstractFrameBodyNumberTotal) frame.getBody()).getTotalAsText();
                 }
             }
             else
@@ -2295,22 +2284,14 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
 
         //FrameAndSubId does not contain enough info for these fields to be able to work out what to update
         //that is why we need the extra processing here instead of doCreateTagField()
-        if (
-                (genericKey == FieldKey.TRACK)||
-                (genericKey == FieldKey.DISC_NO)||
-                (genericKey == FieldKey.MOVEMENT_NO)
-            )
-                        {
+        if (ID3NumberTotalFields.isNumber(genericKey))
+        {
             AbstractID3v2Frame frame = createFrame(formatKey.getFrameId());
             AbstractFrameBodyNumberTotal framebody = (AbstractFrameBodyNumberTotal) frame.getBody();
             framebody.setNumber(value);
             return frame;
         }
-        else if (
-                   (genericKey == FieldKey.TRACK_TOTAL)||
-                   (genericKey == FieldKey.DISC_TOTAL)||
-                   (genericKey == FieldKey.MOVEMENT_TOTAL)
-                )
+        else if (ID3NumberTotalFields.isTotal(genericKey))
         {
             AbstractID3v2Frame frame = createFrame(formatKey.getFrameId());
             AbstractFrameBodyNumberTotal framebody = (AbstractFrameBodyNumberTotal) frame.getBody();
@@ -2947,7 +2928,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
             }
             return filteredList;
         }
-        else if ((genericKey == FieldKey.TRACK)||(genericKey == FieldKey.DISC_NO)||(genericKey == FieldKey.MOVEMENT_NO))
+        else if(ID3NumberTotalFields.isNumber(genericKey))
         {
             for (TagField tagfield : list)
             {
@@ -2962,7 +2943,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
             }
             return filteredList;
         }
-        else if ((genericKey == FieldKey.TRACK_TOTAL)||(genericKey == FieldKey.DISC_TOTAL)||(genericKey == FieldKey.MOVEMENT_TOTAL))
+        else if(ID3NumberTotalFields.isTotal(genericKey))
         {
             for (TagField tagfield : list)
             {

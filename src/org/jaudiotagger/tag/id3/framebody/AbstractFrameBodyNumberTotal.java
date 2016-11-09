@@ -46,7 +46,6 @@ import java.nio.ByteBuffer;
  */
 public abstract class AbstractFrameBodyNumberTotal extends AbstractID3v2FrameBody
 {
-
     /**
      * Creates a new FrameBodyTRCK datatype.
      */
