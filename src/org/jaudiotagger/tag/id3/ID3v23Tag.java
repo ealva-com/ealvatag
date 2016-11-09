@@ -610,7 +610,7 @@ public class ID3v23Tag extends AbstractID3v2Tag
 
         //Read the size from the Tag Header
         this.fileReadSize = size;
-        logger.finest(getLoggingFilename() + ":Start of frame body at:" + byteBuffer.position() + ",frames data size is:" + size);
+        logger.severe(getLoggingFilename() + ":Start of frame body at:" + byteBuffer.position() + ",frames data size is:" + size);
 
         // Read the frames until got to up to the size as specified in header or until
         // we hit an invalid frame identifier or padding
@@ -624,7 +624,8 @@ public class ID3v23Tag extends AbstractID3v2Tag
                 logger.config(getLoggingFilename() + ":Looking for next frame at:" + posBeforeRead);
                 next = new ID3v23Frame(byteBuffer, getLoggingFilename());
                 id = next.getIdentifier();
-                logger.config(getLoggingFilename() + ":Found "+ id+ " at frame at:" + posBeforeRead);
+                logger.severe(getLoggingFilename() + ":Found "+ id+ " at frame at:" + posBeforeRead);
+                logger.severe(">>>>>>"+ next.getId() + ":" + next.toString());
                 loadFrameIntoMap(id, next);
             }
             //Found Padding, no more frames

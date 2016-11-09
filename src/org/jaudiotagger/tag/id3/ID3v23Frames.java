@@ -179,6 +179,8 @@ public class ID3v23Frames extends ID3Frames
         supportedFrames.add(FRAME_ID_V3_LYRICIST);
         supportedFrames.add(FRAME_ID_V3_MEDIA_TYPE);
         supportedFrames.add(FRAME_ID_V3_MPEG_LOCATION_LOOKUP_TABLE);
+        supportedFrames.add(FRAME_ID_V3_MOVEMENT);
+        supportedFrames.add(FRAME_ID_V3_MOVEMENT_NO);
         supportedFrames.add(FRAME_ID_V3_MUSIC_CD_ID);
         supportedFrames.add(FRAME_ID_V3_ORIGARTIST);
         supportedFrames.add(FRAME_ID_V3_ORIG_FILENAME);
@@ -286,6 +288,8 @@ public class ID3v23Frames extends ID3Frames
         idToValue.put(FRAME_ID_V3_LINKED_INFO, "Linked information");
         idToValue.put(FRAME_ID_V3_LYRICIST, "Text: Lyricist/text writer");
         idToValue.put(FRAME_ID_V3_MEDIA_TYPE, "Text: Media type");
+        idToValue.put(FRAME_ID_V3_MOVEMENT, "Text: Movement");
+        idToValue.put(FRAME_ID_V3_MOVEMENT_NO, "Text: Movement No");
         idToValue.put(FRAME_ID_V3_MPEG_LOCATION_LOOKUP_TABLE, "MPEG location lookup table");
         idToValue.put(FRAME_ID_V3_MUSIC_CD_ID, "Music CD Identifier");
         idToValue.put(FRAME_ID_V3_ORIGARTIST, "Text: Original artist(s)/performer(s)");
