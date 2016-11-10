@@ -1,15 +1,11 @@
 package org.jaudiotagger.issues;
 
 import org.jaudiotagger.AbstractTestCase;
-import org.jaudiotagger.audio.AudioFile;
-import org.jaudiotagger.audio.AudioFileIO;
 import org.jaudiotagger.tag.FieldKey;
 import org.jaudiotagger.tag.KeyNotFoundException;
 import org.jaudiotagger.tag.Tag;
 import org.jaudiotagger.tag.id3.ID3v11Tag;
 import org.jaudiotagger.tag.id3.ID3v1Tag;
-
-import java.io.File;
 
 /**
  * When try and set discno field in ID3v11tag should throw a better exception informing you that is an invalid field

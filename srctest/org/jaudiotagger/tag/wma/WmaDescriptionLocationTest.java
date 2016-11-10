@@ -5,10 +5,10 @@ import org.jaudiotagger.audio.AudioFileIO;
 import org.jaudiotagger.audio.asf.data.AsfHeader;
 import org.jaudiotagger.audio.asf.data.MetadataContainer;
 import org.jaudiotagger.audio.asf.io.*;
-import org.jaudiotagger.tag.asf.AsfFieldKey;
-import org.jaudiotagger.tag.asf.AsfTag;
 import org.jaudiotagger.audio.asf.util.TagConverter;
 import org.jaudiotagger.tag.FieldKey;
+import org.jaudiotagger.tag.asf.AsfFieldKey;
+import org.jaudiotagger.tag.asf.AsfTag;
 
 import java.io.File;
 import java.io.FileInputStream;

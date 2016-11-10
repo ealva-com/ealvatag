@@ -5,7 +5,6 @@ import org.jaudiotagger.tag.TagOptionSingleton;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URL;
 
 /**
  * Get appropriate Artwork class

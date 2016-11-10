@@ -11,8 +11,6 @@ import org.jaudiotagger.tag.id3.ID3v23Tag;
 import org.jaudiotagger.tag.id3.framebody.FrameBodyTPOS;
 
 import java.io.File;
-import java.util.List;
-import java.util.Map;
 
 /**
  *

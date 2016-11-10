@@ -7,7 +7,6 @@ import org.jaudiotagger.tag.FieldKey;
 import org.jaudiotagger.tag.Tag;
 
 import java.io.File;
-import java.util.List;
 
 /**
  * Test deleting track total field shouldn't delete track field

@@ -27,14 +27,13 @@ import org.jaudiotagger.logging.ErrorMessage;
 import org.jaudiotagger.tag.InvalidTagException;
 import org.jaudiotagger.tag.datatype.DataTypes;
 import org.jaudiotagger.tag.datatype.StringSizeTerminated;
-import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
 
 import java.io.ByteArrayOutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.nio.ByteBuffer;
-import java.nio.charset.Charset;
 import java.nio.charset.CharsetEncoder;
+import java.nio.charset.StandardCharsets;
 
 /**
  * Abstract super class of all URL Frames
@@ -115,7 +114,7 @@ public abstract class AbstractFrameBodyUrlLink extends AbstractID3v2FrameBody
      */
     public void write(ByteArrayOutputStream tagBuffer)
     {
-        CharsetEncoder encoder = Charset.forName(TextEncoding.CHARSET_ISO_8859_1).newEncoder();
+        CharsetEncoder encoder = StandardCharsets.ISO_8859_1.newEncoder();
         String origUrl = getUrlLink();
         if (!encoder.canEncode(origUrl))
         {

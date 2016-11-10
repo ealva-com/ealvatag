@@ -7,9 +7,6 @@ import org.jaudiotagger.tag.FieldKey;
 import org.jaudiotagger.tag.id3.ID3v23Tag;
 
 import java.io.File;
-import java.io.RandomAccessFile;
-import java.nio.channels.FileChannel;
-import java.nio.channels.FileLock;
 
 /**
  * Test writing of new files

@@ -26,17 +26,35 @@ public class M4aWriteDrmTagTest extends TestCase
      */
     public void testShowStco() throws Exception
     {
-        File orig = new File("testdata", "test9.m4p");
-        if (!orig.isFile())
+        System.out.println("Start");
+        try
         {
-            return;
-        }
-        File testFile = AbstractTestCase.copyAudioToTmp("test9.m4p", new File("WriteDrmFile1.m4p"));
+            File orig = new File("testdata", "test8.m4a");
+            if (!orig.isFile())
+            {
+                System.out.println("File Does not Exist");
+                return;
+            }
+            File testFile = AbstractTestCase.copyAudioToTmp("test8.m4a", new File("test8ReadStco"));
 
-        //Stco test
-        RandomAccessFile raf = new RandomAccessFile(testFile, "r");
-        Mp4StcoBox.debugShowStcoInfo(raf);
-        raf.close();
+
+            //Stco ouput
+            RandomAccessFile raf = new RandomAccessFile(testFile, "r");
+            Mp4StcoBox.debugShowStcoInfo(raf);
+            raf.close();
+
+            //and test
+            raf = new RandomAccessFile(testFile, "r");
+            Mp4StcoBox stco = Mp4StcoBox.getStco(raf);
+            assertEquals(496,stco.getNoOfOffSets());
+            assertEquals(56589, stco.getFirstOffSet());
+            raf.close();
+
+        }
+        catch(Exception ex)
+        {
+            ex.printStackTrace();
+        }
     }
 
     /**

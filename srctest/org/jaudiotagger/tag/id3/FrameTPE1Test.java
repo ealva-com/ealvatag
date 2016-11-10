@@ -4,7 +4,6 @@ import org.jaudiotagger.AbstractTestCase;
 import org.jaudiotagger.tag.FieldKey;
 import org.jaudiotagger.tag.Tag;
 import org.jaudiotagger.tag.id3.framebody.FrameBodyTPE1;
-import org.jaudiotagger.tag.id3.framebody.FrameBodyTPE3;
 import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
 
 /**

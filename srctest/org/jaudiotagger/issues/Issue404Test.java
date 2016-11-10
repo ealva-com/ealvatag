@@ -4,10 +4,6 @@ import org.jaudiotagger.AbstractTestCase;
 import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.AudioFileIO;
 import org.jaudiotagger.tag.FieldKey;
-import org.jaudiotagger.tag.Tag;
-import org.jaudiotagger.tag.id3.AbstractTag;
-import org.jaudiotagger.tag.id3.ID3v1Tag;
-import org.jaudiotagger.tag.id3.ID3v24Tag;
 
 import java.io.File;
 

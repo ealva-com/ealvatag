@@ -1,9 +1,9 @@
 package org.jaudiotagger.tag.id3.framebody;
 
 import org.jaudiotagger.AbstractTestCase;
+import org.jaudiotagger.tag.TagOptionSingleton;
 import org.jaudiotagger.tag.id3.ID3v24Frames;
 import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
-import org.jaudiotagger.tag.TagOptionSingleton;
 
 /**
  * Test TRCKFrameBody

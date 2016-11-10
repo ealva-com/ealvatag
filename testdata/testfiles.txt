@@ -1,6 +1,6 @@
 Describes the test data files, only the files that are freely distributable are actually included in the CVS repositisory . The others are held locally until I can create a copyright free equivalent
 that achives the same test.
-filename,included,issue,description
+filename,included,issue,compression
 test1.wma,yes,245,wma,Tagged 
 test2.wma,yes,245,wma,Tagged from Media Monkey
 test3.wma,yes,245,wma,tagged from Picard, header size doesnt match file size
@@ -61,10 +61,46 @@ test108.mp3,no,converting artist webpage url between id3 versions
 test109.m4a,no,,File with dodgy covr atom with no actual artwork within it
 test110.mp3,no,452,mp3 with invalid tagheadersize making it harder to find correct audio
 test111.mp3,no,409,mp3 with incorrect sample rate of 48000 for 44100 mp3
-test112.m4a,no,433,m4a that cannot be written to
+test112.m4a,no,433,m4a with a udta atom with unknown subatoms but no meta atom
 test113.mp3,no,453,mp3 MPEG1 Layer 3 with 32bitrate is inocrrectly calculating length to be 24.11, (ITune scorrectly calculates as 3:54 ( about 6.2 timers greater)
 test114.mp3,no,454,mp3 MPEG2 Layer 3 with 64bitrate is inocrrectly calculating length to be 2:18, (ITune scorrectly calculates as 4:37 ( double size)
 test115.flac,no,466,flac Flac with invalid blocktype
 test115.mp3,no,478,mp3 mp3 with podcast tags
 test116.m4a,no,463,mp4 with invalid ????
 test117.ogg,no,472,very short ogg file (less than a second)
+test118.m4a,no,,unable to read mp4
+test119.aif,yes,,example aif with no metadata or id3 tag - aifc compressed
+test120.aif,yes,,example aif with metadata - aiff not compressed
+test121.aif,yes,,example aif with some INFO metadata from itunes, aiff not-compressed
+test122.asf,yes,,example dsf file
+test123.wav,yes,,example wav file with some metadata in INFO written by Media Monkey
+test124.aif,yes,,example aif with metadata from itunes, aiff not-compressed
+test125.wav,yes,,example wav file with metadata in ID3 & INFO written by Tag&Rename
+test126.wav,yes,,example wav file with metadata in ID3
+test127.wav,yes,,example wav file - stereo
+test128.wav,yes,,example wav file - stereo, extensible
+test129.wav,yes,,example wav file - goldstar compressed
+test130.wav,yes,,example wav file - stereo floating point 32
+test131.wav,yes,,example wav file - quad channel
+test132.aiff,yes,,example aiff file - alaw compression
+test133.aiff,yes,,example aiff file - ulaw compression
+test134.aiff,yes,,example aiff file - fl64 compression
+test135.aiff,yes,,example aiff file - ssnd chunk before comm chunk
+test136.aiff,yes,,example aiff file - odd XxXx data chunk
+test137.aiff,yes,,example aiff file - trailing junk chunk
+test138.aiff,yes,,example aiff file with author, copyright and name chunks
+test139.mp3, no,481,mp3 with year but empty tdat field
+test140.mp3, no,484, String encoding issue
+test141.m4a, no,433,with a udta atom with unknown subatoms and meta atom
+test142.wav, no,81,wav with info near start of file
+test143.aif, no,93, aif with corrupt ID3chunks
+test144.aif, no,94, aif with odd sized id3chunk (but no padding byte)
+test145.aif, no,,aif with corrupt ID3 tag
+test146.wav, no,, wav with just 3 bytes of padding at end of info tag so not enough to read id
+test151.aif, yes,119, aiff where last chunk is odd and padding byte is missing
+test152.aiff, yes, 93, aiff with existing id3 chink incorrectly written on odd boundary because of error with orig file
+test153.wav, yes, 119, wav where last chunk is odd and padding byte is missing
+test156.dsf,no,,dsf file
+test157.dsf,no,,dsf file
+test158.flac,no,137,flac with ID3 header at start
+test159.mp3,no,161,mp3 with encrypted frame

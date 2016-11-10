@@ -4,7 +4,9 @@ import junit.framework.TestCase;
 import org.jaudiotagger.AbstractTestCase;
 import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.AudioFileIO;
+import org.jaudiotagger.audio.exceptions.CannotReadException;
 import org.jaudiotagger.audio.exceptions.CannotReadVideoException;
+import org.jaudiotagger.audio.exceptions.CannotWriteException;
 import org.jaudiotagger.audio.mp4.EncoderType;
 import org.jaudiotagger.audio.mp4.Mp4AtomTree;
 import org.jaudiotagger.audio.mp4.Mp4AudioHeader;
@@ -42,6 +44,9 @@ public class M4aReadTagTest extends TestCase
             File testFile = AbstractTestCase.copyAudioToTmp("test.m4a");
             AudioFile f = AudioFileIO.read(testFile);
             Tag tag = f.getTag();
+
+            Mp4AtomTree tree = new Mp4AtomTree(new RandomAccessFile(testFile,"r"),false);
+            tree.printAtomTree();
 
             System.out.println(f.getAudioHeader());
             System.out.println(tag);
@@ -1358,6 +1363,33 @@ public class M4aReadTagTest extends TestCase
             exceptionCaught = e;
         }
         assertNull(exceptionCaught);
+
+
+    }
+
+    public void testReadAudioBook() throws Exception
+    {
+        File orig = new File("testdata", "test147.m4a");
+        if (!orig.isFile())
+        {
+            System.err.println("Unable to test file - not available");
+            return;
+        }
+
+        new Mp4AtomTree(new RandomAccessFile(orig,"r")).printAtomTree();
+        Exception exceptionCaught = null;
+        try
+        {
+            File testFile = AbstractTestCase.copyAudioToTmp("test147.m4a");
+            AudioFile f = AudioFileIO.read(testFile);
+            Tag tag = f.getTag();
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            exceptionCaught = e;
+        }
+        //assertNull(exceptionCaught);
 
 
     }

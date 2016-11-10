@@ -3,15 +3,9 @@ package org.jaudiotagger.issues;
 import org.jaudiotagger.AbstractTestCase;
 import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.AudioFileIO;
-import org.jaudiotagger.tag.FieldKey;
-import org.jaudiotagger.tag.Tag;
 import org.jaudiotagger.tag.TagOptionSingleton;
 import org.jaudiotagger.tag.id3.*;
 import org.jaudiotagger.tag.id3.framebody.FrameBodyTRDA;
-import org.jaudiotagger.tag.id3.framebody.FrameBodyXSOP;
-import org.jaudiotagger.tag.id3.framebody.FrameBodyXSOPTest;
-import org.jaudiotagger.tag.mp4.Mp4FieldKey;
-import org.jaudiotagger.tag.mp4.Mp4Tag;
 import org.jaudiotagger.tag.reference.ID3V2Version;
 
 import java.io.File;

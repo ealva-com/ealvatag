@@ -1,11 +1,8 @@
 package org.jaudiotagger.issues;
 
 import org.jaudiotagger.AbstractTestCase;
-import org.jaudiotagger.tag.id3.ID3v22Tag;
-import org.jaudiotagger.tag.TagOptionSingleton;
 import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.AudioFileIO;
-import org.jaudiotagger.audio.mp3.MP3File;
 
 import java.io.File;
 

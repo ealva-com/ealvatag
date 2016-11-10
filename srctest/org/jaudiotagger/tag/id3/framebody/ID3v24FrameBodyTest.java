@@ -1,10 +1,10 @@
 package org.jaudiotagger.tag.id3.framebody;
 
+import org.jaudiotagger.tag.id3.ID3v24Frames;
+
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.logging.Logger;
-
-import org.jaudiotagger.tag.id3.ID3v24Frames;
 
 public class ID3v24FrameBodyTest {
 

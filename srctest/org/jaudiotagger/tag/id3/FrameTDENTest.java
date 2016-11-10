@@ -2,7 +2,6 @@ package org.jaudiotagger.tag.id3;
 
 import org.jaudiotagger.AbstractTestCase;
 import org.jaudiotagger.tag.id3.framebody.FrameBodyTDEN;
-import org.jaudiotagger.tag.id3.framebody.FrameBodyTDTG;
 import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
 
 /**

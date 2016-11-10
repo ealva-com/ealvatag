@@ -18,33 +18,20 @@
  */
 package org.jaudiotagger.audio;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.logging.Logger;
-
 import org.jaudiotagger.audio.aiff.AiffFileReader;
+import org.jaudiotagger.audio.aiff.AiffFileWriter;
 import org.jaudiotagger.audio.asf.AsfFileReader;
 import org.jaudiotagger.audio.asf.AsfFileWriter;
-import org.jaudiotagger.audio.dsf.DsfAudioFileReader;
+import org.jaudiotagger.audio.dsf.DsfFileReader;
+import org.jaudiotagger.audio.dsf.DsfFileWriter;
 import org.jaudiotagger.audio.exceptions.CannotReadException;
 import org.jaudiotagger.audio.exceptions.CannotWriteException;
 import org.jaudiotagger.audio.exceptions.InvalidAudioFrameException;
+import org.jaudiotagger.audio.exceptions.NoWritePermissionsException;
 import org.jaudiotagger.audio.exceptions.ReadOnlyFileException;
 import org.jaudiotagger.audio.flac.FlacFileReader;
 import org.jaudiotagger.audio.flac.FlacFileWriter;
-import org.jaudiotagger.audio.generic.AudioFileModificationListener;
-import org.jaudiotagger.audio.generic.AudioFileReader;
-import org.jaudiotagger.audio.generic.AudioFileWriter;
-import org.jaudiotagger.audio.generic.ModificationHandler;
-import org.jaudiotagger.audio.generic.Utils;
+import org.jaudiotagger.audio.generic.*;
 import org.jaudiotagger.audio.mp3.MP3FileReader;
 import org.jaudiotagger.audio.mp3.MP3FileWriter;
 import org.jaudiotagger.audio.mp4.Mp4FileReader;
@@ -56,6 +43,14 @@ import org.jaudiotagger.audio.wav.WavFileReader;
 import org.jaudiotagger.audio.wav.WavFileWriter;
 import org.jaudiotagger.logging.ErrorMessage;
 import org.jaudiotagger.tag.TagException;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.logging.Logger;
 
 /**
  *
@@ -207,12 +202,13 @@ public class AudioFileIO
      * 
      *
      * @param f The AudioFile to be written
+     * @throws NoWritePermissionsException if the file could not be written to due to file permissions
      * @throws CannotWriteException If the file could not be written/accessed, the extension
      *                              wasn't recognized, or other IO error occurred.
      */
     public static void write(AudioFile f) throws CannotWriteException
     {
-        getDefaultAudioFileIO().writeFile(f,"");
+        getDefaultAudioFileIO().writeFile(f,null);
     }
 
     /**
@@ -221,12 +217,16 @@ public class AudioFileIO
     * 
     *
     * @param f The AudioFile to be written
-    * @param targetPath The AudioFile path to which to be written without the extension
+    * @param targetPath The AudioFile path to which to be written without the extension. Cannot be null
+    * @throws NoWritePermissionsException if the file could not be written to due to file permissions
     * @throws CannotWriteException If the file could not be written/accessed, the extension
     *                              wasn't recognized, or other IO error occurred.
     */
    public static void writeAs(AudioFile f, String targetPath) throws CannotWriteException
    {
+       if (targetPath == null || targetPath.isEmpty()) {
+           throw new CannotWriteException("Not a valid target path: " + targetPath);
+       }
        getDefaultAudioFileIO().writeFile(f,targetPath);
    }
 
@@ -301,7 +301,9 @@ public class AudioFileIO
         readers.put(SupportedFileFormat.WAV.getFilesuffix(), new WavFileReader());
         readers.put(SupportedFileFormat.WMA.getFilesuffix(), new AsfFileReader());
         readers.put(SupportedFileFormat.AIF.getFilesuffix(), new AiffFileReader());
-        readers.put(SupportedFileFormat.DSF.getFilesuffix(), new DsfAudioFileReader());
+        readers.put(SupportedFileFormat.AIFC.getFilesuffix(), new AiffFileReader());
+        readers.put(SupportedFileFormat.AIFF.getFilesuffix(), new AiffFileReader());
+        readers.put(SupportedFileFormat.DSF.getFilesuffix(), new DsfFileReader());
         final RealFileReader realReader = new RealFileReader();
         readers.put(SupportedFileFormat.RA.getFilesuffix(), realReader);
         readers.put(SupportedFileFormat.RM.getFilesuffix(), realReader);
@@ -316,6 +318,10 @@ public class AudioFileIO
         writers.put(SupportedFileFormat.M4B.getFilesuffix(), new Mp4FileWriter());                
         writers.put(SupportedFileFormat.WAV.getFilesuffix(), new WavFileWriter());
         writers.put(SupportedFileFormat.WMA.getFilesuffix(), new AsfFileWriter());
+        writers.put(SupportedFileFormat.AIF.getFilesuffix(), new AiffFileWriter());
+        writers.put(SupportedFileFormat.AIFC.getFilesuffix(), new AiffFileWriter());
+        writers.put(SupportedFileFormat.AIFF.getFilesuffix(), new AiffFileWriter());
+        writers.put(SupportedFileFormat.DSF.getFilesuffix(), new DsfFileWriter());
 
         // Register modificationHandler
         Iterator<AudioFileWriter> it = writers.values().iterator();
@@ -452,27 +458,26 @@ public class AudioFileIO
      * 
      *
      * @param f The AudioFile to be written
+     * @param targetPath a file path, without an extension, which provides a "save as". If null, then normal "save" function
+     * @throws NoWritePermissionsException if the file could not be written to due to file permissions
      * @throws CannotWriteException If the file could not be written/accessed, the extension
      *                              wasn't recognized, or other IO error occurred.
      */
     public void writeFile(AudioFile f, String targetPath) throws CannotWriteException
     {
-//        String ext = Utils.getExtension(f.getFile());
-    	
     	String ext = f.getExt();
-    	String targetFilePath = targetPath + "." + ext;
-    	
-    	if(!targetPath.isEmpty()){
-    		Path source = f.getFile().toPath();
-    	    Path destination = Paths.get(targetFilePath);
-    	 
-    	    try {
-				Files.copy(source, destination, StandardCopyOption.REPLACE_EXISTING);
-				f.setFile(new File(targetFilePath));
-			} catch (IOException e) {
-				throw new CannotWriteException("Error While Copying" + e.getMessage());
-			}
-    	}
+
+        if (targetPath != null && !targetPath.isEmpty())
+        {
+            final File destination = new File(targetPath + "." + ext);
+                try
+                {
+                    Utils.copyThrowsOnException(f.getFile(), destination);
+                    f.setFile(destination);
+                } catch (IOException e) {
+                    throw new CannotWriteException("Error While Copying" + e.getMessage());
+                }
+        }
 
         AudioFileWriter afw = writers.get(ext);
         if (afw == null)
@@ -482,4 +487,5 @@ public class AudioFileIO
 
         afw.write(f);
     }
+
 }
