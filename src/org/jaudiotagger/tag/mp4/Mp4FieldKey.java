@@ -133,8 +133,8 @@ public enum Mp4FieldKey
     MOOD_SAD("com.apple.iTunes", "MOOD_SAD", TEXT, Tagger.JAIKOZ),
     MOOD_VALENCE("com.apple.iTunes", "MOOD_VALENCE", TEXT, Tagger.JAIKOZ),
     MOVEMENT("©mvn",Mp4TagFieldSubType.TEXT, TEXT),
-    MOVEMENT_NO("@mvi",Mp4TagFieldSubType.TEXT, TEXT),//Note unlike Trackno/Total uses two different fields
-    MOVEMENT_TOTAL("@mvc",Mp4TagFieldSubType.TEXT, TEXT),
+    MOVEMENT_NO("@mvi",Mp4TagFieldSubType.TEXT, INTEGER),//Note unlike Trackno/Total uses two different fields
+    MOVEMENT_TOTAL("@mvc",Mp4TagFieldSubType.TEXT, INTEGER),
     MUSICBRAINZ_ALBUMARTISTID("com.apple.iTunes", "MusicBrainz Album Artist Id", TEXT, Tagger.PICARD),
     MUSICBRAINZ_ALBUMID("com.apple.iTunes", "MusicBrainz Album Id", TEXT, Tagger.PICARD),
     MUSICBRAINZ_ALBUM_STATUS("com.apple.iTunes", "MusicBrainz Album Status", TEXT, Tagger.PICARD),
