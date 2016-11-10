@@ -700,7 +700,6 @@ public class Mp4Tag extends AbstractTag
                 return new Mp4TagTextField(GENRE_CUSTOM.getFieldName(), value);
             }
         }
-
         //Default for all other fields
         return createField(tagFieldToMp4Field.get(genericKey), value);
     }
