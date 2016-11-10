@@ -21,12 +21,13 @@ import org.jaudiotagger.tag.id3.ID3v24Frames;
 import java.nio.ByteBuffer;
 
 /**
- * Apple defined Movement frame works the same way as regular Text Frames
+ * Apple defined Movement No/Total frame works the same way as the TRCK frame
  *
  * This is not an official standard frame, but Apple makes its own rules !
  *
+ * @author : Paul Taylor
  */
-public class FrameBodyMVIN extends AbstractFrameBodyTextInfo implements ID3v24FrameBody, ID3v23FrameBody
+public class FrameBodyMVIN extends AbstractFrameBodyNumberTotal implements ID3v24FrameBody, ID3v23FrameBody
 {
     /**
      * Creates a new FrameBodyTALB datatype.
@@ -63,6 +64,11 @@ public class FrameBodyMVIN extends AbstractFrameBodyTextInfo implements ID3v24Fr
         super(byteBuffer, frameSize);
     }
 
+    public FrameBodyMVIN(byte textEncoding, Integer movementNo, Integer movementTotal)
+    {
+        super(textEncoding, movementNo, movementTotal);
+    }
+
 
     /**
      * The ID3v2 frame identifier
@@ -71,7 +77,7 @@ public class FrameBodyMVIN extends AbstractFrameBodyTextInfo implements ID3v24Fr
      */
     public String getIdentifier()
     {
-        return ID3v24Frames.FRAME_ID_MOVEMENT;
+        return ID3v24Frames.FRAME_ID_MOVEMENT_NO;
     }
 
 }

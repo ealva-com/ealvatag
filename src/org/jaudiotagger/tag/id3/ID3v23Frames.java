@@ -65,8 +65,8 @@ public class ID3v23Frames extends ID3Frames
     public static final String FRAME_ID_V3_LINKED_INFO = "LINK";
     public static final String FRAME_ID_V3_LYRICIST = "TEXT";
     public static final String FRAME_ID_V3_MEDIA_TYPE = "TMED";
-    public static final String FRAME_ID_V3_MOVEMENT = "MVIN";
-    public static final String FRAME_ID_V3_MOVEMENT_NO = "MVNM";
+    public static final String FRAME_ID_V3_MOVEMENT = "MVNM";
+    public static final String FRAME_ID_V3_MOVEMENT_NO = "MVIN";
     public static final String FRAME_ID_V3_MPEG_LOCATION_LOOKUP_TABLE = "MLLT";
     public static final String FRAME_ID_V3_MUSIC_CD_ID = "MCDI";
     public static final String FRAME_ID_V3_ORIGARTIST = "TOPE";
