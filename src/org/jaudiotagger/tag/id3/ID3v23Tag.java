@@ -625,7 +625,6 @@ public class ID3v23Tag extends AbstractID3v2Tag
                 next = new ID3v23Frame(byteBuffer, getLoggingFilename());
                 id = next.getIdentifier();
                 logger.severe(getLoggingFilename() + ":Found "+ id+ " at frame at:" + posBeforeRead);
-                logger.severe(">>>>>>"+ next.getId() + ":" + next.toString());
                 loadFrameIntoMap(id, next);
             }
             //Found Padding, no more frames
