@@ -121,6 +121,8 @@ public class FrameBodyTXXX extends AbstractFrameBodyTextInfo implements ID3v24Fr
     public static final String SINGLE_DISC_TRACK_NO                     = "Single Disc Track No";
     public static final String TAGS                                     = "TAGS";
     public static final String TIMBRE                                   = "TimbreBrightness";
+    public static final String TITLE_MOVEMENT                           = "TITLE_MOVEMENT";
+    public static final String TITLE_WORK                               = "TITLE_WORK";
     public static final String TONALITY                                 = "Tonality";
     public static final String WORK                                     = "Work";
     public static final String WORK_COMPOSITION                         = "Work Composition";

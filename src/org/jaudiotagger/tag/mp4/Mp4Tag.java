@@ -149,6 +149,8 @@ public class Mp4Tag extends AbstractTag
         tagFieldToMp4Field.put(FieldKey.TEMPO, Mp4FieldKey.TEMPO);
         tagFieldToMp4Field.put(FieldKey.TIMBRE, Mp4FieldKey.TIMBRE);
         tagFieldToMp4Field.put(FieldKey.TITLE, Mp4FieldKey.TITLE);
+        tagFieldToMp4Field.put(FieldKey.TITLE_MOVEMENT, Mp4FieldKey.TITLE_MOVEMENT);
+        tagFieldToMp4Field.put(FieldKey.TITLE_WORK, Mp4FieldKey.TITLE_WORK);
         tagFieldToMp4Field.put(FieldKey.TITLE_SORT, Mp4FieldKey.TITLE_SORT);
         tagFieldToMp4Field.put(FieldKey.TONALITY, Mp4FieldKey.TONALITY);
         tagFieldToMp4Field.put(FieldKey.TRACK, Mp4FieldKey.TRACK);

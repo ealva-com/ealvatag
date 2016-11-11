@@ -130,6 +130,8 @@ public enum FieldKey
     TIMBRE,
     TITLE,
     TITLE_SORT,
+    TITLE_WORK,
+    TITLE_MOVEMENT,
     TONALITY,
     TRACK,
     TRACK_TOTAL,

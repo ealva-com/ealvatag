@@ -440,6 +440,8 @@ public class ID3v22Frames extends ID3Frames
         tagFieldToId3.put(FieldKey.TEMPO, ID3v22FieldKey.TEMPO);
         tagFieldToId3.put(FieldKey.TIMBRE, ID3v22FieldKey.TIMBRE);
         tagFieldToId3.put(FieldKey.TITLE, ID3v22FieldKey.TITLE);
+        tagFieldToId3.put(FieldKey.TITLE_MOVEMENT, ID3v22FieldKey.TITLE_MOVEMENT);
+        tagFieldToId3.put(FieldKey.TITLE_WORK, ID3v22FieldKey.TITLE_WORK);
         tagFieldToId3.put(FieldKey.TITLE_SORT, ID3v22FieldKey.TITLE_SORT);
         tagFieldToId3.put(FieldKey.TONALITY, ID3v22FieldKey.TONALITY);
         tagFieldToId3.put(FieldKey.TRACK, ID3v22FieldKey.TRACK);

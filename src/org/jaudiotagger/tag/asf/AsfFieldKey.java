@@ -184,6 +184,8 @@ public enum AsfFieldKey
     TAGS("WM/Tags", false),
     TEMPO("Tempo", true),
     TIMBRE("WM/TimbreBrightness", false),
+    TITLE_MOVEMENT("WM/TitleMovement", false),
+    TITLE_WORK("WM/TitleWork", false),
     TITLE_SORT("WM/TitleSortOrder", false),
     TONALITY("WM/Tonality", false),
     TRACK("WM/TrackNumber", false),

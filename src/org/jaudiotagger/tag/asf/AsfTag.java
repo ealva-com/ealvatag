@@ -207,6 +207,8 @@ public final class AsfTag extends AbstractTag
         tagFieldToAsfField.put(FieldKey.TEMPO, AsfFieldKey.TEMPO);
         tagFieldToAsfField.put(FieldKey.TIMBRE, AsfFieldKey.TIMBRE);
         tagFieldToAsfField.put(FieldKey.TITLE, AsfFieldKey.TITLE);
+        tagFieldToAsfField.put(FieldKey.TITLE_MOVEMENT, AsfFieldKey.TITLE_MOVEMENT);
+        tagFieldToAsfField.put(FieldKey.TITLE_WORK, AsfFieldKey.TITLE_WORK);
         tagFieldToAsfField.put(FieldKey.TITLE_SORT, AsfFieldKey.TITLE_SORT);
         tagFieldToAsfField.put(FieldKey.TONALITY, AsfFieldKey.TONALITY);
         tagFieldToAsfField.put(FieldKey.TRACK, AsfFieldKey.TRACK);

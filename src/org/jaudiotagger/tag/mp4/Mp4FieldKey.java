@@ -193,6 +193,8 @@ public enum Mp4FieldKey
     TEMPO("empo",Mp4TagFieldSubType.TEXT, TEXT, Tagger.MEDIA_MONKEY),
     TIMBRE("com.apple.iTunes", "TIMBRE_BRIGHTNESS", TEXT, Tagger.JAIKOZ),
     TITLE("©nam",Mp4TagFieldSubType.TEXT, TEXT),
+    TITLE_MOVEMENT("com.apple.iTunes", "TITLE_MOVEMENT", TEXT, Tagger.JAIKOZ),
+    TITLE_WORK("com.apple.iTunes", "TITLE_WORK", TEXT, Tagger.JAIKOZ),
     TITLE_SORT("sonm",Mp4TagFieldSubType.TEXT, TEXT),
     TONALITY("com.apple.iTunes", "TONALITY", TEXT, Tagger.JAIKOZ),
     TOOL("tool",Mp4TagFieldSubType.BYTE, INTEGER, 4),
