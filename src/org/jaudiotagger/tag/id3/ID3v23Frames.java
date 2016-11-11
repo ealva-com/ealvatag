@@ -377,6 +377,8 @@ public class ID3v23Frames extends ID3Frames
         tagFieldToId3.put(FieldKey.ALBUM, ID3v23FieldKey.ALBUM);
         tagFieldToId3.put(FieldKey.ALBUM_ARTIST, ID3v23FieldKey.ALBUM_ARTIST);
         tagFieldToId3.put(FieldKey.ALBUM_ARTIST_SORT, ID3v23FieldKey.ALBUM_ARTIST_SORT);
+        tagFieldToId3.put(FieldKey.ALBUM_ARTISTS, ID3v23FieldKey.ALBUM_ARTISTS);
+        tagFieldToId3.put(FieldKey.ALBUM_ARTISTS_SORT, ID3v23FieldKey.ALBUM_ARTISTS_SORT);
         tagFieldToId3.put(FieldKey.ALBUM_SORT, ID3v23FieldKey.ALBUM_SORT);
         tagFieldToId3.put(FieldKey.AMAZON_ID, ID3v23FieldKey.AMAZON_ID);
         tagFieldToId3.put(FieldKey.ARRANGER, ID3v23FieldKey.ARRANGER);
@@ -391,6 +393,7 @@ public class ID3v23Frames extends ID3Frames
         tagFieldToId3.put(FieldKey.CHOIR, ID3v23FieldKey.CHOIR);
         tagFieldToId3.put(FieldKey.CHOIR_SORT, ID3v23FieldKey.CHOIR_SORT);
         tagFieldToId3.put(FieldKey.CLASSICAL_CATALOG, ID3v23FieldKey.CLASSICAL_CATALOG);
+        tagFieldToId3.put(FieldKey.CLASSICAL_NICKNAME, ID3v23FieldKey.CLASSICAL_NICKNAME);
         tagFieldToId3.put(FieldKey.COMMENT, ID3v23FieldKey.COMMENT);
         tagFieldToId3.put(FieldKey.COMPOSER, ID3v23FieldKey.COMPOSER);
         tagFieldToId3.put(FieldKey.COMPOSER_SORT, ID3v23FieldKey.COMPOSER_SORT);

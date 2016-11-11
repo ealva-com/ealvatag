@@ -94,6 +94,8 @@ public final class AsfTag extends AbstractTag
         tagFieldToAsfField.put(FieldKey.ALBUM, AsfFieldKey.ALBUM);
         tagFieldToAsfField.put(FieldKey.ALBUM_ARTIST, AsfFieldKey.ALBUM_ARTIST);
         tagFieldToAsfField.put(FieldKey.ALBUM_ARTIST_SORT, AsfFieldKey.ALBUM_ARTIST_SORT);
+        tagFieldToAsfField.put(FieldKey.ALBUM_ARTISTS, AsfFieldKey.ALBUM_ARTISTS);
+        tagFieldToAsfField.put(FieldKey.ALBUM_ARTISTS_SORT, AsfFieldKey.ALBUM_ARTISTS_SORT);
         tagFieldToAsfField.put(FieldKey.ALBUM_SORT, AsfFieldKey.ALBUM_SORT);
         tagFieldToAsfField.put(FieldKey.AMAZON_ID, AsfFieldKey.AMAZON_ID);
         tagFieldToAsfField.put(FieldKey.ARRANGER, AsfFieldKey.ARRANGER);
@@ -108,6 +110,7 @@ public final class AsfTag extends AbstractTag
         tagFieldToAsfField.put(FieldKey.CHOIR, AsfFieldKey.CHOIR);
         tagFieldToAsfField.put(FieldKey.CHOIR_SORT, AsfFieldKey.CHOIR_SORT);
         tagFieldToAsfField.put(FieldKey.CLASSICAL_CATALOG, AsfFieldKey.CLASSICAL_CATALOG);
+        tagFieldToAsfField.put(FieldKey.CLASSICAL_NICKNAME, AsfFieldKey.CLASSICAL_NICKNAME);
         tagFieldToAsfField.put(FieldKey.COMMENT, AsfFieldKey.DESCRIPTION);
         tagFieldToAsfField.put(FieldKey.COMPOSER, AsfFieldKey.COMPOSER);
         tagFieldToAsfField.put(FieldKey.COMPOSER_SORT, AsfFieldKey.COMPOSER_SORT);

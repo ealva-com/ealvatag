@@ -61,12 +61,15 @@ public class FrameBodyTXXX extends AbstractFrameBodyTextInfo implements ID3v24Fr
     public static final String AMAZON_ASIN                  = "ASIN";
     public static final String ARRANGER_SORT                = "Arranger Sort";
     public static final String ARTISTS                      = "ARTISTS";
-    public static final String ARTISTS_SORT                 = "Artists Sort";
+    public static final String ARTISTS_SORT                 = "ARTISTS_SORT";
+    public static final String ALBUM_ARTISTS                = "ALBUM_ARTISTS";
+    public static final String ALBUM_ARTISTS_SORT           = "ALBUM_ARTISTS_SORT";
     public static final String BARCODE                      = "BARCODE";
     public static final String CATALOG_NO                   = "CATALOGNUMBER";
     public static final String CHOIR                        = "Choir";
     public static final String CHOIR_SORT                   = "Choir Sort";
     public static final String CLASSICAL_CATALOG            = "Classical Catalog";
+    public static final String CLASSICAL_NICKNAME           = "CLASSICAL_NICKNAME";
     public static final String CONDUCTOR_SORT               = "Conductor Sort";
     public static final String COUNTRY                      = "Country";
     public static final String ELECTRONIC                   = "Electronic";

@@ -52,6 +52,8 @@ public class Mp4Tag extends AbstractTag
         tagFieldToMp4Field.put(FieldKey.ALBUM, Mp4FieldKey.ALBUM);
         tagFieldToMp4Field.put(FieldKey.ALBUM_ARTIST, Mp4FieldKey.ALBUM_ARTIST);
         tagFieldToMp4Field.put(FieldKey.ALBUM_ARTIST_SORT, Mp4FieldKey.ALBUM_ARTIST_SORT);
+        tagFieldToMp4Field.put(FieldKey.ALBUM_ARTISTS, Mp4FieldKey.ALBUM_ARTISTS);
+        tagFieldToMp4Field.put(FieldKey.ALBUM_ARTISTS_SORT, Mp4FieldKey.ALBUM_ARTISTS_SORT);
         tagFieldToMp4Field.put(FieldKey.ALBUM_SORT, Mp4FieldKey.ALBUM_SORT);
         tagFieldToMp4Field.put(FieldKey.AMAZON_ID, Mp4FieldKey.ASIN);
         tagFieldToMp4Field.put(FieldKey.ARRANGER, Mp4FieldKey.ARRANGER);
@@ -64,6 +66,7 @@ public class Mp4Tag extends AbstractTag
         tagFieldToMp4Field.put(FieldKey.CHOIR, Mp4FieldKey.CHOIR);
         tagFieldToMp4Field.put(FieldKey.CHOIR_SORT, Mp4FieldKey.CHOIR_SORT);
         tagFieldToMp4Field.put(FieldKey.CLASSICAL_CATALOG, Mp4FieldKey.CLASSICAL_CATALOG);
+        tagFieldToMp4Field.put(FieldKey.CLASSICAL_NICKNAME, Mp4FieldKey.CLASSICAL_NICKNAME);
         tagFieldToMp4Field.put(FieldKey.COMMENT, Mp4FieldKey.COMMENT);
         tagFieldToMp4Field.put(FieldKey.COMPOSER, Mp4FieldKey.COMPOSER);
         tagFieldToMp4Field.put(FieldKey.COMPOSER_SORT, Mp4FieldKey.COMPOSER_SORT);
