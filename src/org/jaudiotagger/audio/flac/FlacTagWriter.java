@@ -38,6 +38,7 @@ import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import static org.jaudiotagger.utils.PrimitiveUtils.safeLongToInt;
@@ -193,10 +194,12 @@ public class FlacTagWriter
         }
         catch (AccessDeniedException ade)
         {
+            logger.log(Level.SEVERE, ade.getMessage(), ade);
             throw new NoWritePermissionsException(file + ":" + ade.getMessage());
         }
         catch (IOException ioe)
         {
+            logger.log(Level.SEVERE, ioe.getMessage(), ioe);
             throw new CannotWriteException(file + ":" + ioe.getMessage());
         }
     }
