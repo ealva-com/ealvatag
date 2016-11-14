@@ -22,6 +22,7 @@ import org.jaudiotagger.audio.exceptions.CannotReadException;
 import org.jaudiotagger.audio.exceptions.CannotWriteException;
 import org.jaudiotagger.audio.exceptions.NoWritePermissionsException;
 import org.jaudiotagger.audio.flac.metadatablock.*;
+import org.jaudiotagger.logging.Hex;
 import org.jaudiotagger.tag.Tag;
 import org.jaudiotagger.tag.TagOptionSingleton;
 import org.jaudiotagger.tag.flac.FlacTag;
@@ -165,8 +166,12 @@ public class FlacTagWriter
 
             //Minimum Size of the New tag data without padding
             int newTagSize = tc.convert(tag).limit();
+
+            //Other blocks required size
+            int otherBlocksRequiredSize = computeNeededRoom(blockInfo);
+
             //Number of bytes required for new tagdata and other metadata blocks
-            int neededRoom = newTagSize + computeNeededRoom(blockInfo);
+            int neededRoom = newTagSize + otherBlocksRequiredSize;
 
             //Go to start of Flac within file
             fc.position(flacStream.getStartOfFlacInFile());
@@ -180,6 +185,8 @@ public class FlacTagWriter
                 logger.config(file + "Room to Rewrite");
                 //Jump over Id3 (if exists) and flac header
                 fc.position(flacStream.getStartOfFlacInFile() + FlacStreamReader.FLAC_STREAM_IDENTIFIER_LENGTH);
+
+                //Write stream info and other non metadata blocks
                 writeOtherMetadataBlocks(fc, blockInfo);
 
                 //Write tag (and padding)
@@ -188,8 +195,14 @@ public class FlacTagWriter
             //Need to move audio
             else
             {
-                logger.config(file + " No Room to Rewrite");
+                //System.out.println(file + "NewTagSize:"+newTagSize+":AvailableRoom:"+availableRoom);
+                //System.out.println(file + "NewTagSize:"+newTagSize+":AudioPos:"+fc.position());
+                //System.out.println(file + "OtherBlocksReuqiredSize:"+otherBlocksRequiredSize);
+                //System.out.println(file + " No Room to Rewrite:availableRoom:" + availableRoom + ":neededRoom:" + neededRoom);
+                logger.config(file + " No Room to Rewrite:availableRoom:" + availableRoom + ":neededRoom:" + neededRoom);
+                //insertUsingHeapBuffer(tag, fc, blockInfo, flacStream, neededRoom, availableRoom);
                 insertTagAndShift(tag, fc, blockInfo, flacStream, neededRoom, availableRoom);
+                //insertUsingDirectBuffer(tag, fc, blockInfo, flacStream,availableRoom);
             }
         }
         catch (AccessDeniedException ade)
@@ -216,10 +229,11 @@ public class FlacTagWriter
      */
     private void insertUsingDirectBuffer(Tag tag, FileChannel fc, MetadataBlockInfo blockInfo, FlacStreamReader flacStream, int availableRoom) throws IOException, UnsupportedEncodingException
     {
-        //Find end of metadata blocks (start of Audio)
+        //Find end of metadata blocks (start of Audio), i.e start of Flac + 4 bytes for 'fLaC', 4 bytes for streaminfo header and
+        //34 bytes for streaminfo and then size of all the other existing blocks
         fc.position(flacStream.getStartOfFlacInFile()
                 + FlacStreamReader.FLAC_STREAM_IDENTIFIER_LENGTH
-                + MetadataBlockHeader.BLOCK_TYPE_LENGTH
+                + MetadataBlockHeader.HEADER_LENGTH
                 + MetadataBlockDataStreamInfo.STREAM_INFO_DATA_LENGTH
                 + availableRoom);
 
@@ -239,30 +253,74 @@ public class FlacTagWriter
         fc.write(audioData);
     }
 
-    private void insertUsingHeapBuffer(Tag tag, FileChannel fc, MetadataBlockInfo blockInfo, FlacStreamReader flacStream, int availableRoom) throws IOException, UnsupportedEncodingException
+
+    private void insertUsingHeapBuffer(Tag tag, FileChannel fc, MetadataBlockInfo blockInfo, FlacStreamReader flacStream, int neededRoom, int availableRoom) throws IOException, UnsupportedEncodingException
     {
-        //Find end of metadata blocks (start of Audio)
-        fc.position(flacStream.getStartOfFlacInFile()
+        long originalFileSize = fc.size();
+
+        //Find end of metadata blocks (start of Audio), i.e start of Flac + 4 bytes for 'fLaC', 4 bytes for streaminfo header and
+        //34 bytes for streaminfo and then size of all the other existing blocks
+        long audioStart =flacStream.getStartOfFlacInFile()
                 + FlacStreamReader.FLAC_STREAM_IDENTIFIER_LENGTH
-                + MetadataBlockHeader.BLOCK_TYPE_LENGTH
+                + MetadataBlockHeader.HEADER_LENGTH
                 + MetadataBlockDataStreamInfo.STREAM_INFO_DATA_LENGTH
-                + availableRoom);
+                + availableRoom;
 
-        //Make use of heap if no spare system memory
-        ByteBuffer audioData = ByteBuffer.allocate((int)(fc.size() - fc.position()));
-        fc.read(audioData);
-        audioData.flip();
+        System.out.println("AudioStart:"+ Hex.asHex(audioStart));
+        //Extra Space Required for larger metadata block
+        long extraSpaceRequired = neededRoom - availableRoom;
+        System.out.println("ExtraSpaceRequired:"+ extraSpaceRequired);
 
-        //Jump over Id3 (if exists) Flac Header
+        //Read audio part that will be overwritten by new metadata
+        fc.position(audioStart);
+        ByteBuffer audioBuffer = ByteBuffer.allocateDirect((int)extraSpaceRequired);
+        fc.read(audioBuffer);
+        audioBuffer.flip();
+        //Where to read next chunk of data
+        long readPosition = fc.position();
+        System.out.println("ReadInAudioDate:"+audioBuffer.limit());
+
+        //Jump over Id3 (if exists) and Flac Header
         fc.position(flacStream.getStartOfFlacInFile() + FlacStreamReader.FLAC_STREAM_IDENTIFIER_LENGTH);
         writeOtherMetadataBlocks(fc, blockInfo);
+        fc.write(tc.convert(tag, FlacTagCreator.DEFAULT_PADDING));
+        //Where to write next chunk of data
+        long writePosition = fc.position();
+        System.out.println("AfterWritingNonAudioBlocks:"+ Hex.asHex(fc.position()));
 
-        //Write tag (and add some default padding)
-        fc.write(tc.convert(tag,  FlacTagCreator.DEFAULT_PADDING));
+        ByteBuffer nextAudioBuffer = ByteBuffer.allocateDirect((int)TagOptionSingleton.getInstance().getWriteChunkSize());
+        fc.position(readPosition);
 
-        //Write Audio
-        fc.write(audioData);
+        System.out.println("OriginalFileSize:"+Hex.asHex(originalFileSize));
+        int count= 1;
+        while (fc.position() < originalFileSize)
+        {
+            System.out.println("fileSizeIs:"+fc.size());
+            fc.read(nextAudioBuffer);
+            System.out.println(count+":Read From:"+ Hex.asHex(readPosition) + " to "+ Hex.asHex(fc.position()) + " size " + (fc.position() - readPosition));
+            readPosition=fc.position();
+            nextAudioBuffer.flip();
+
+            fc.position(writePosition);
+            fc.write(audioBuffer);
+            System.out.println(count+":WriteTo:"+ Hex.asHex(writePosition) + " upto "+ Hex.asHex(fc.position()) + " size " + (fc.position() - writePosition));
+            audioBuffer.compact();
+            writePosition=fc.position();
+
+            audioBuffer=nextAudioBuffer;
+            /*if(fc.position()>=originalFileSize)
+            {
+                break;
+            }*/
+
+            fc.position(readPosition);
+            count++;
+        }
+        fc.position(writePosition);
+        fc.write(audioBuffer);
+        System.out.println("FinalWriteTo:"+ Hex.asHex(writePosition) + " upto " + Hex.asHex(fc.position())  + " size " + (fc.position() - writePosition));
     }
+
     /**
      * Insert new tag and shift audio to accommodate it
      *
@@ -295,7 +353,7 @@ public class FlacTagWriter
             //#175: Flac Map error on write
             if(mappedFile==null)
             {
-                insertUsingHeapBuffer(tag, fc, blockInfo, flacStream, availableRoom);
+                insertUsingHeapBuffer(tag, fc, blockInfo, flacStream, neededRoom, availableRoom);
             }
             else
             {
@@ -321,7 +379,7 @@ public class FlacTagWriter
      */
     private void insertTagAndShiftViaMappedByteBuffer(Tag tag, MappedByteBuffer mappedFile, FileChannel fc, long targetSizeBeforeAudioData, long totalTargetSize, MetadataBlockInfo blockInfo, FlacStreamReader flacStream, int neededRoom, int availableRoom) throws IOException, UnsupportedEncodingException
     {
-        //Find end of metadata bloacks (start of Audio)
+        //Find end of metadata blacks (start of Audio)
         int currentEndOfFilePosition = safeLongToInt(fc.size());
         /*
          * First shift data to the 'right' of the tag to the end of the file, whose position is currentEndOfTagsPosition
@@ -427,6 +485,7 @@ public class FlacTagWriter
             length += aMetadataBlockCueSheet.getLength();
         }
 
+        //Note when reading metadata has been put into padding as well for purposes of write
         for (MetadataBlock aMetadataBlockPadding : blockInfo.metadataBlockPadding)
         {
             length += aMetadataBlockPadding.getLength();

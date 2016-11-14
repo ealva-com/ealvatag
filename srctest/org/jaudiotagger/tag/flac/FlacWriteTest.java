@@ -46,9 +46,11 @@ public class FlacWriteTest extends TestCase
         try
         {
             //Put artifically low just to test it out
-            TagOptionSingleton.getInstance().setWriteChunkSize(10000);
+            TagOptionSingleton.getInstance().setWriteChunkSize(40000);
             File testFile = AbstractTestCase.copyAudioToTmp("test2.flac", new File("test2write.flac"));
             AudioFile f = AudioFileIO.read(testFile);
+
+            System.out.println("startFileSize:"+f.getFile().length());
 
             assertEquals("192", f.getAudioHeader().getBitRate());
             assertEquals("FLAC 16 bits", f.getAudioHeader().getEncodingType());
@@ -146,8 +148,8 @@ public class FlacWriteTest extends TestCase
             assertEquals("3",tag.getFirst(FieldKey.DISC_TOTAL));
             assertEquals("Sarah Curtis",tag.getFirst("VIOLINIST"));
 
-
-
+            System.out.println("NewFileSize:"+f.getFile().length());
+            assertEquals(144202, f.getFile().length());
         }
         catch (Exception e)
         {
@@ -155,6 +157,10 @@ public class FlacWriteTest extends TestCase
             exceptionCaught = e;
         }
         assertNull(exceptionCaught);
+
+
+
+
     }
 
     /**
