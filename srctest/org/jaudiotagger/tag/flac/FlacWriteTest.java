@@ -46,7 +46,7 @@ public class FlacWriteTest extends TestCase
         try
         {
             //Put artifically low just to test it out
-            TagOptionSingleton.getInstance().setWriteChunkSize(40000);
+            TagOptionSingleton.getInstance().setWriteChunkSize(10000);
             File testFile = AbstractTestCase.copyAudioToTmp("test2.flac", new File("test2write.flac"));
             AudioFile f = AudioFileIO.read(testFile);
 
