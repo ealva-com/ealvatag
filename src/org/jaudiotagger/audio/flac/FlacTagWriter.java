@@ -177,13 +177,13 @@ public class FlacTagWriter
             //Go to start of Flac within file
             fc.position(flacStream.getStartOfFlacInFile());
 
-            logger.config(file + "Writing tag available bytes:" + availableRoom + ":needed bytes:" + neededRoom);
+            logger.config(file + ":Writing tag available bytes:" + availableRoom + ":needed bytes:" + neededRoom);
 
             //There is enough room to fit the tag without moving the audio just need to
             //adjust padding accordingly need to allow space for padding header if padding required
             if ((availableRoom == neededRoom) || (availableRoom > neededRoom + MetadataBlockHeader.HEADER_LENGTH))
             {
-                logger.config(file + "Room to Rewrite");
+                logger.config(file + ":Room to Rewrite");
                 //Jump over Id3 (if exists) and flac header
                 fc.position(flacStream.getStartOfFlacInFile() + FlacStreamReader.FLAC_STREAM_IDENTIFIER_LENGTH);
 
@@ -196,7 +196,7 @@ public class FlacTagWriter
             //Need to move audio
             else
             {
-                logger.config(file + "Audio must be shifted "+ "NewTagSize:" + newTagSize + ":AvailableRoom:" + availableRoom + ":MinimumAdditionalRoomRequired:"+(neededRoom - availableRoom));
+                logger.config(file + ":Audio must be shifted "+ "NewTagSize:" + newTagSize + ":AvailableRoom:" + availableRoom + ":MinimumAdditionalRoomRequired:"+(neededRoom - availableRoom));
                 //As we are having to both anyway may as well put in the default padding
                 insertUsingChunks(file, tag, fc, blockInfo, flacStream, neededRoom + FlacTagCreator.DEFAULT_PADDING, availableRoom);
             }
