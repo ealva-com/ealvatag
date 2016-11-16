@@ -181,7 +181,7 @@ public class VorbisCommentTag extends AbstractTag
         tagFieldToOggField.put(FieldKey.URL_WIKIPEDIA_ARTIST_SITE, VorbisCommentFieldKey.URL_WIKIPEDIA_ARTIST_SITE);
         tagFieldToOggField.put(FieldKey.URL_WIKIPEDIA_RELEASE_SITE, VorbisCommentFieldKey.URL_WIKIPEDIA_RELEASE_SITE);
         tagFieldToOggField.put(FieldKey.WORK, VorbisCommentFieldKey.WORK);
-        tagFieldToOggField.put(FieldKey.WORK_COMPOSITION, VorbisCommentFieldKey.WORK_COMPOSITION);
+        tagFieldToOggField.put(FieldKey.MUSICBRAINZ_WORK_COMPOSITION, VorbisCommentFieldKey.MUSICBRAINZ_WORK_COMPOSITION);
         tagFieldToOggField.put(FieldKey.WORK_PART_LEVEL1, VorbisCommentFieldKey.WORK_PART_LEVEL1);
         tagFieldToOggField.put(FieldKey.WORK_PART_LEVEL1_TYPE, VorbisCommentFieldKey.WORK_PART_LEVEL1_TYPE);
         tagFieldToOggField.put(FieldKey.WORK_PART_LEVEL2, VorbisCommentFieldKey.WORK_PART_LEVEL2);

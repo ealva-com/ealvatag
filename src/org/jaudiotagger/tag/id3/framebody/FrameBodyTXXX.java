@@ -125,7 +125,7 @@ public class FrameBodyTXXX extends AbstractFrameBodyTextInfo implements ID3v24Fr
     public static final String MUSICBRAINZ_WORK                         = "MUSICBRAINZ_WORK";
     public static final String TONALITY                                 = "Tonality";
     public static final String WORK                                     = "WORK";
-    public static final String WORK_COMPOSITION                         = "Work Composition";
+    public static final String MUSICBRAINZ_WORK_COMPOSITION             = "MUSICBRAINZ_WORK_COMPOSITION";
     public static final String WORK_PART_LEVEL1                         = "Work Part Level1";
     public static final String WORK_PART_LEVEL1_TYPE                    = "Work Part Level1 Type";
     public static final String WORK_PART_LEVEL2                         = "Work Part Level2";

@@ -110,6 +110,7 @@ public enum VorbisCommentFieldKey
     MUSICBRAINZ_RELEASETRACKID("MUSICBRAINZ_RELEASETRACKID",EnumSet.of(Tagger.JAIKOZ)),
     MUSICBRAINZ_TRACKID("MUSICBRAINZ_TRACKID",EnumSet.of(Tagger.PICARD,Tagger.JAIKOZ)),
     MUSICBRAINZ_WORKID("MUSICBRAINZ_WORKID",EnumSet.of(Tagger.PICARD,Tagger.JAIKOZ)),
+    MUSICBRAINZ_WORK_COMPOSITION("MUSICBRAINZ_WORK_COMPOSITION",EnumSet.of(Tagger.JAIKOZ)),
     MUSICBRAINZ_WORK_COMPOSITION_ID("MUSICBRAINZ_WORK_COMPOSITION_ID",EnumSet.of(Tagger.JAIKOZ)),
     MUSICBRAINZ_WORK_PART_LEVEL1_ID("MUSICBRAINZ_WORK_PART_LEVEL1_ID",EnumSet.of(Tagger.JAIKOZ)),
     MUSICBRAINZ_WORK_PART_LEVEL2_ID("MUSICBRAINZ_WORK_PART_LEVEL2_ID",EnumSet.of(Tagger.JAIKOZ)),
@@ -168,7 +169,6 @@ public enum VorbisCommentFieldKey
     VENDOR("VENDOR"),
     VERSION("VERSION", EnumSet.of(Tagger.XIPH)),// The version field may be used to differentiate multiple versions of the same track title in a single collection. (e.g. remix info)
     WORK("WORK",EnumSet.of(Tagger.JAIKOZ)),
-    WORK_COMPOSITION("WORK_COMPOSITION",EnumSet.of(Tagger.JAIKOZ)),
     WORK_PART_LEVEL1("WORK_PART_LEVEL1",EnumSet.of(Tagger.JAIKOZ)),
     WORK_PART_LEVEL1_TYPE("WORK_PART_LEVEL1_TYPE",EnumSet.of(Tagger.JAIKOZ)),
     WORK_PART_LEVEL2("WORK_PART_LEVEL2",EnumSet.of(Tagger.JAIKOZ)),
