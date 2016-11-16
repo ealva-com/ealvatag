@@ -23,7 +23,6 @@ import org.jaudiotagger.audio.generic.AbstractTag;
 import org.jaudiotagger.audio.ogg.util.VorbisHeader;
 import org.jaudiotagger.logging.ErrorMessage;
 import org.jaudiotagger.tag.*;
-import org.jaudiotagger.tag.id3.ID3v22FieldKey;
 import org.jaudiotagger.tag.images.Artwork;
 import org.jaudiotagger.tag.images.ArtworkFactory;
 import org.jaudiotagger.tag.vorbiscomment.util.Base64Coder;
@@ -128,6 +127,7 @@ public class VorbisCommentTag extends AbstractTag
         tagFieldToOggField.put(FieldKey.MUSICBRAINZ_RELEASE_TRACK_ID, VorbisCommentFieldKey.MUSICBRAINZ_RELEASETRACKID);
         tagFieldToOggField.put(FieldKey.MUSICBRAINZ_RELEASE_TYPE, VorbisCommentFieldKey.MUSICBRAINZ_ALBUMTYPE);
         tagFieldToOggField.put(FieldKey.MUSICBRAINZ_TRACK_ID, VorbisCommentFieldKey.MUSICBRAINZ_TRACKID);
+        tagFieldToOggField.put(FieldKey.MUSICBRAINZ_WORK, VorbisCommentFieldKey.MUSICBRAINZ_WORK);
         tagFieldToOggField.put(FieldKey.MUSICBRAINZ_WORK_ID, VorbisCommentFieldKey.MUSICBRAINZ_WORKID);
         tagFieldToOggField.put(FieldKey.MUSICBRAINZ_WORK_COMPOSITION_ID, VorbisCommentFieldKey.MUSICBRAINZ_WORK_COMPOSITION_ID);
         tagFieldToOggField.put(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL1_ID, VorbisCommentFieldKey.MUSICBRAINZ_WORK_PART_LEVEL1_ID);
@@ -168,7 +168,7 @@ public class VorbisCommentTag extends AbstractTag
         tagFieldToOggField.put(FieldKey.TIMBRE, VorbisCommentFieldKey.TIMBRE);
         tagFieldToOggField.put(FieldKey.TITLE, VorbisCommentFieldKey.TITLE);
         tagFieldToOggField.put(FieldKey.TITLE_MOVEMENT, VorbisCommentFieldKey.TITLE_MOVEMENT);
-        tagFieldToOggField.put(FieldKey.TITLE_WORK, VorbisCommentFieldKey.TITLE_WORK);
+
         tagFieldToOggField.put(FieldKey.TITLE_SORT, VorbisCommentFieldKey.TITLESORT);
         tagFieldToOggField.put(FieldKey.TONALITY, VorbisCommentFieldKey.TONALITY);
         tagFieldToOggField.put(FieldKey.TRACK, VorbisCommentFieldKey.TRACKNUMBER);

@@ -4,7 +4,6 @@ import org.jaudiotagger.audio.asf.data.AsfHeader;
 import org.jaudiotagger.audio.generic.AbstractTag;
 import org.jaudiotagger.logging.ErrorMessage;
 import org.jaudiotagger.tag.*;
-import org.jaudiotagger.tag.id3.ID3v22FieldKey;
 import org.jaudiotagger.tag.images.Artwork;
 import org.jaudiotagger.tag.images.ArtworkFactory;
 import org.jaudiotagger.tag.reference.PictureTypes;
@@ -170,6 +169,7 @@ public final class AsfTag extends AbstractTag
         tagFieldToAsfField.put(FieldKey.MUSICBRAINZ_RELEASE_TRACK_ID, AsfFieldKey.MUSICBRAINZ_RELEASETRACKID);
         tagFieldToAsfField.put(FieldKey.MUSICBRAINZ_RELEASE_TYPE, AsfFieldKey.MUSICBRAINZ_RELEASE_TYPE);
         tagFieldToAsfField.put(FieldKey.MUSICBRAINZ_TRACK_ID, AsfFieldKey.MUSICBRAINZ_TRACK_ID);
+        tagFieldToAsfField.put(FieldKey.MUSICBRAINZ_WORK, AsfFieldKey.MUSICBRAINZ_WORK);
         tagFieldToAsfField.put(FieldKey.MUSICBRAINZ_WORK_ID, AsfFieldKey.MUSICBRAINZ_WORKID);
         tagFieldToAsfField.put(FieldKey.MUSICBRAINZ_WORK_COMPOSITION_ID, AsfFieldKey.MUSICBRAINZ_WORK_COMPOSITION_ID);
         tagFieldToAsfField.put(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL1_ID, AsfFieldKey.MUSICBRAINZ_WORK_PART_LEVEL1_ID);
@@ -208,7 +208,6 @@ public final class AsfTag extends AbstractTag
         tagFieldToAsfField.put(FieldKey.TIMBRE, AsfFieldKey.TIMBRE);
         tagFieldToAsfField.put(FieldKey.TITLE, AsfFieldKey.TITLE);
         tagFieldToAsfField.put(FieldKey.TITLE_MOVEMENT, AsfFieldKey.TITLE_MOVEMENT);
-        tagFieldToAsfField.put(FieldKey.TITLE_WORK, AsfFieldKey.TITLE_WORK);
         tagFieldToAsfField.put(FieldKey.TITLE_SORT, AsfFieldKey.TITLE_SORT);
         tagFieldToAsfField.put(FieldKey.TONALITY, AsfFieldKey.TONALITY);
         tagFieldToAsfField.put(FieldKey.TRACK, AsfFieldKey.TRACK);

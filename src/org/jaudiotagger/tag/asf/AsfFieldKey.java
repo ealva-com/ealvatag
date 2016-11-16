@@ -185,7 +185,7 @@ public enum AsfFieldKey
     TEMPO("Tempo", true),
     TIMBRE("WM/TimbreBrightness", false),
     TITLE_MOVEMENT("WM/TitleMovement", false),
-    TITLE_WORK("WM/TitleWork", false),
+    MUSICBRAINZ_WORK("WM/MUSICBRAINZ_WORK", false),
     TITLE_SORT("WM/TitleSortOrder", false),
     TONALITY("WM/Tonality", false),
     TRACK("WM/TrackNumber", false),

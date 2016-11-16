@@ -153,7 +153,7 @@ public enum VorbisCommentFieldKey
     TIMBRE("TIMBRE_BRIGHTNESS", EnumSet.of(Tagger.JAIKOZ)),
     TITLE("TITLE", EnumSet.of(Tagger.XIPH,Tagger.PICARD,Tagger.JAIKOZ)),
     TITLE_MOVEMENT("TITLE_MOVEMENT", EnumSet.of(Tagger.JAIKOZ)),
-    TITLE_WORK("TITLE_WORK", EnumSet.of(Tagger.JAIKOZ)),
+    MUSICBRAINZ_WORK("MUSICBRAINZ_WORK", EnumSet.of(Tagger.JAIKOZ)),
     TITLESORT("TITLESORT",EnumSet.of(Tagger.PICARD,Tagger.JAIKOZ)),
     TONALITY("TONALITY", EnumSet.of(Tagger.JAIKOZ)),
     TRACKNUMBER("TRACKNUMBER",EnumSet.of(Tagger.XIPH,Tagger.PICARD,Tagger.JAIKOZ)),
