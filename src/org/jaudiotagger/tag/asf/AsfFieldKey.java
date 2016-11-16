@@ -199,7 +199,7 @@ public enum AsfFieldKey
     URL_WIKIPEDIA_ARTIST_SITE("WM/WikipediaArtistUrl", false),
     URL_WIKIPEDIA_RELEASE_SITE("WM/WikipediaReleaseUrl", false),
     USER_RATING("WM/SharedUserRating", true),
-    WORK("WM/Work", true),
+    WORK("WM/WORK", true),
     WORK_COMPOSITION("WM/Work Composition",true),
     WORK_PART_LEVEL1("WM/Work Part Level1",true),
     WORK_PART_LEVEL1_TYPE("WM/Work Part Level1 Type",true),
