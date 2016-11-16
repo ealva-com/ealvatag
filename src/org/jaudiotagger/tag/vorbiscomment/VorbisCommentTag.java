@@ -129,6 +129,19 @@ public class VorbisCommentTag extends AbstractTag
         tagFieldToOggField.put(FieldKey.MUSICBRAINZ_TRACK_ID, VorbisCommentFieldKey.MUSICBRAINZ_TRACKID);
         tagFieldToOggField.put(FieldKey.MUSICBRAINZ_WORK, VorbisCommentFieldKey.MUSICBRAINZ_WORK);
         tagFieldToOggField.put(FieldKey.MUSICBRAINZ_WORK_ID, VorbisCommentFieldKey.MUSICBRAINZ_WORKID);
+        tagFieldToOggField.put(FieldKey.MUSICBRAINZ_WORK_COMPOSITION, VorbisCommentFieldKey.MUSICBRAINZ_WORK_COMPOSITION);
+        tagFieldToOggField.put(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL1, VorbisCommentFieldKey.MUSICBRAINZ_WORK_PART_LEVEL1);
+        tagFieldToOggField.put(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL1_TYPE, VorbisCommentFieldKey.MUSICBRAINZ_WORK_PART_LEVEL1_TYPE);
+        tagFieldToOggField.put(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL2, VorbisCommentFieldKey.MUSICBRAINZ_WORK_PART_LEVEL2);
+        tagFieldToOggField.put(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL2_TYPE, VorbisCommentFieldKey.MUSICBRAINZ_WORK_PART_LEVEL2_TYPE);
+        tagFieldToOggField.put(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL3, VorbisCommentFieldKey.MUSICBRAINZ_WORK_PART_LEVEL3);
+        tagFieldToOggField.put(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL3_TYPE, VorbisCommentFieldKey.MUSICBRAINZ_WORK_PART_LEVEL3_TYPE);
+        tagFieldToOggField.put(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL4, VorbisCommentFieldKey.MUSICBRAINZ_WORK_PART_LEVEL4);
+        tagFieldToOggField.put(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL4_TYPE, VorbisCommentFieldKey.MUSICBRAINZ_WORK_PART_LEVEL4_TYPE);
+        tagFieldToOggField.put(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL5, VorbisCommentFieldKey.MUSICBRAINZ_WORK_PART_LEVEL5);
+        tagFieldToOggField.put(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL5_TYPE, VorbisCommentFieldKey.MUSICBRAINZ_WORK_PART_LEVEL5_TYPE);
+        tagFieldToOggField.put(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL6, VorbisCommentFieldKey.MUSICBRAINZ_WORK_PART_LEVEL6);
+        tagFieldToOggField.put(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL6_TYPE, VorbisCommentFieldKey.MUSICBRAINZ_WORK_PART_LEVEL6_TYPE);
         tagFieldToOggField.put(FieldKey.MUSICBRAINZ_WORK_COMPOSITION_ID, VorbisCommentFieldKey.MUSICBRAINZ_WORK_COMPOSITION_ID);
         tagFieldToOggField.put(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL1_ID, VorbisCommentFieldKey.MUSICBRAINZ_WORK_PART_LEVEL1_ID);
         tagFieldToOggField.put(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL2_ID, VorbisCommentFieldKey.MUSICBRAINZ_WORK_PART_LEVEL2_ID);
@@ -181,19 +194,7 @@ public class VorbisCommentTag extends AbstractTag
         tagFieldToOggField.put(FieldKey.URL_WIKIPEDIA_ARTIST_SITE, VorbisCommentFieldKey.URL_WIKIPEDIA_ARTIST_SITE);
         tagFieldToOggField.put(FieldKey.URL_WIKIPEDIA_RELEASE_SITE, VorbisCommentFieldKey.URL_WIKIPEDIA_RELEASE_SITE);
         tagFieldToOggField.put(FieldKey.WORK, VorbisCommentFieldKey.WORK);
-        tagFieldToOggField.put(FieldKey.MUSICBRAINZ_WORK_COMPOSITION, VorbisCommentFieldKey.MUSICBRAINZ_WORK_COMPOSITION);
-        tagFieldToOggField.put(FieldKey.WORK_PART_LEVEL1, VorbisCommentFieldKey.WORK_PART_LEVEL1);
-        tagFieldToOggField.put(FieldKey.WORK_PART_LEVEL1_TYPE, VorbisCommentFieldKey.WORK_PART_LEVEL1_TYPE);
-        tagFieldToOggField.put(FieldKey.WORK_PART_LEVEL2, VorbisCommentFieldKey.WORK_PART_LEVEL2);
-        tagFieldToOggField.put(FieldKey.WORK_PART_LEVEL2_TYPE, VorbisCommentFieldKey.WORK_PART_LEVEL2_TYPE);
-        tagFieldToOggField.put(FieldKey.WORK_PART_LEVEL3, VorbisCommentFieldKey.WORK_PART_LEVEL3);
-        tagFieldToOggField.put(FieldKey.WORK_PART_LEVEL3_TYPE, VorbisCommentFieldKey.WORK_PART_LEVEL3_TYPE);
-        tagFieldToOggField.put(FieldKey.WORK_PART_LEVEL4, VorbisCommentFieldKey.WORK_PART_LEVEL4);
-        tagFieldToOggField.put(FieldKey.WORK_PART_LEVEL4_TYPE, VorbisCommentFieldKey.WORK_PART_LEVEL4_TYPE);
-        tagFieldToOggField.put(FieldKey.WORK_PART_LEVEL5, VorbisCommentFieldKey.WORK_PART_LEVEL5);
-        tagFieldToOggField.put(FieldKey.WORK_PART_LEVEL5_TYPE, VorbisCommentFieldKey.WORK_PART_LEVEL5_TYPE);
-        tagFieldToOggField.put(FieldKey.WORK_PART_LEVEL6, VorbisCommentFieldKey.WORK_PART_LEVEL6);
-        tagFieldToOggField.put(FieldKey.WORK_PART_LEVEL6_TYPE, VorbisCommentFieldKey.WORK_PART_LEVEL6_TYPE);
+
         tagFieldToOggField.put(FieldKey.WORK_TYPE, VorbisCommentFieldKey.WORK_TYPE);
         tagFieldToOggField.put(FieldKey.YEAR, VorbisCommentFieldKey.DATE);
     }

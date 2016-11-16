@@ -171,13 +171,27 @@ public final class AsfTag extends AbstractTag
         tagFieldToAsfField.put(FieldKey.MUSICBRAINZ_TRACK_ID, AsfFieldKey.MUSICBRAINZ_TRACK_ID);
         tagFieldToAsfField.put(FieldKey.MUSICBRAINZ_WORK, AsfFieldKey.MUSICBRAINZ_WORK);
         tagFieldToAsfField.put(FieldKey.MUSICBRAINZ_WORK_ID, AsfFieldKey.MUSICBRAINZ_WORKID);
+        tagFieldToAsfField.put(FieldKey.MUSICBRAINZ_WORK_COMPOSITION, AsfFieldKey.MUSICBRAINZ_WORK_COMPOSITION);
         tagFieldToAsfField.put(FieldKey.MUSICBRAINZ_WORK_COMPOSITION_ID, AsfFieldKey.MUSICBRAINZ_WORK_COMPOSITION_ID);
+        tagFieldToAsfField.put(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL1, AsfFieldKey.MUSICBRAINZ_WORK_PART_LEVEL1);
         tagFieldToAsfField.put(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL1_ID, AsfFieldKey.MUSICBRAINZ_WORK_PART_LEVEL1_ID);
+        tagFieldToAsfField.put(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL1_TYPE, AsfFieldKey.MUSICBRAINZ_WORK_PART_LEVEL1_TYPE);
+        tagFieldToAsfField.put(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL2, AsfFieldKey.MUSICBRAINZ_WORK_PART_LEVEL2);
         tagFieldToAsfField.put(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL2_ID, AsfFieldKey.MUSICBRAINZ_WORK_PART_LEVEL2_ID);
+        tagFieldToAsfField.put(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL2_TYPE, AsfFieldKey.MUSICBRAINZ_WORK_PART_LEVEL2_TYPE);
+        tagFieldToAsfField.put(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL3, AsfFieldKey.MUSICBRAINZ_WORK_PART_LEVEL3);
         tagFieldToAsfField.put(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL3_ID, AsfFieldKey.MUSICBRAINZ_WORK_PART_LEVEL3_ID);
+        tagFieldToAsfField.put(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL3_TYPE, AsfFieldKey.MUSICBRAINZ_WORK_PART_LEVEL3_TYPE);
+        tagFieldToAsfField.put(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL4, AsfFieldKey.MUSICBRAINZ_WORK_PART_LEVEL4);
         tagFieldToAsfField.put(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL4_ID, AsfFieldKey.MUSICBRAINZ_WORK_PART_LEVEL4_ID);
+        tagFieldToAsfField.put(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL4_TYPE, AsfFieldKey.MUSICBRAINZ_WORK_PART_LEVEL4_TYPE);
+        tagFieldToAsfField.put(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL5, AsfFieldKey.MUSICBRAINZ_WORK_PART_LEVEL5);
         tagFieldToAsfField.put(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL5_ID, AsfFieldKey.MUSICBRAINZ_WORK_PART_LEVEL5_ID);
+        tagFieldToAsfField.put(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL5_TYPE, AsfFieldKey.MUSICBRAINZ_WORK_PART_LEVEL5_TYPE);
+        tagFieldToAsfField.put(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL6, AsfFieldKey.MUSICBRAINZ_WORK_PART_LEVEL6);
         tagFieldToAsfField.put(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL6_ID, AsfFieldKey.MUSICBRAINZ_WORK_PART_LEVEL6_ID);
+        tagFieldToAsfField.put(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL6_TYPE, AsfFieldKey.MUSICBRAINZ_WORK_PART_LEVEL6_TYPE);
+
         tagFieldToAsfField.put(FieldKey.MUSICIP_ID, AsfFieldKey.MUSICIP_ID);
         tagFieldToAsfField.put(FieldKey.OCCASION, AsfFieldKey.OCCASION);
         tagFieldToAsfField.put(FieldKey.OPUS, AsfFieldKey.OPUS);
@@ -220,22 +234,8 @@ public final class AsfTag extends AbstractTag
         tagFieldToAsfField.put(FieldKey.URL_WIKIPEDIA_ARTIST_SITE, AsfFieldKey.URL_WIKIPEDIA_ARTIST_SITE);
         tagFieldToAsfField.put(FieldKey.URL_WIKIPEDIA_RELEASE_SITE, AsfFieldKey.URL_WIKIPEDIA_RELEASE_SITE);
         tagFieldToAsfField.put(FieldKey.WORK, AsfFieldKey.WORK);
-        tagFieldToAsfField.put(FieldKey.MUSICBRAINZ_WORK_COMPOSITION, AsfFieldKey.MUSICBRAINZ_WORK_COMPOSITION);
-        tagFieldToAsfField.put(FieldKey.WORK_PART_LEVEL1, AsfFieldKey.WORK_PART_LEVEL1);
-        tagFieldToAsfField.put(FieldKey.WORK_PART_LEVEL1_TYPE, AsfFieldKey.WORK_PART_LEVEL1_TYPE);
-        tagFieldToAsfField.put(FieldKey.WORK_PART_LEVEL2, AsfFieldKey.WORK_PART_LEVEL2);
-        tagFieldToAsfField.put(FieldKey.WORK_PART_LEVEL2_TYPE, AsfFieldKey.WORK_PART_LEVEL2_TYPE);
-        tagFieldToAsfField.put(FieldKey.WORK_PART_LEVEL3, AsfFieldKey.WORK_PART_LEVEL3);
-        tagFieldToAsfField.put(FieldKey.WORK_PART_LEVEL3_TYPE, AsfFieldKey.WORK_PART_LEVEL3_TYPE);
-        tagFieldToAsfField.put(FieldKey.WORK_PART_LEVEL4, AsfFieldKey.WORK_PART_LEVEL4);
-        tagFieldToAsfField.put(FieldKey.WORK_PART_LEVEL4_TYPE, AsfFieldKey.WORK_PART_LEVEL4_TYPE);
-        tagFieldToAsfField.put(FieldKey.WORK_PART_LEVEL5, AsfFieldKey.WORK_PART_LEVEL5);
-        tagFieldToAsfField.put(FieldKey.WORK_PART_LEVEL5_TYPE, AsfFieldKey.WORK_PART_LEVEL5_TYPE);
-        tagFieldToAsfField.put(FieldKey.WORK_PART_LEVEL6, AsfFieldKey.WORK_PART_LEVEL6);
-        tagFieldToAsfField.put(FieldKey.WORK_PART_LEVEL6_TYPE, AsfFieldKey.WORK_PART_LEVEL6_TYPE);
         tagFieldToAsfField.put(FieldKey.WORK_TYPE, AsfFieldKey.WORK_TYPE);
         tagFieldToAsfField.put(FieldKey.YEAR, AsfFieldKey.YEAR);
-
     }
 
     static
