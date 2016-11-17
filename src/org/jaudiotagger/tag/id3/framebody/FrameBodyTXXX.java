@@ -55,7 +55,6 @@ import java.util.EnumSet;
 public class FrameBodyTXXX extends AbstractFrameBodyTextInfo implements ID3v24FrameBody, ID3v23FrameBody
 {
     //Used by Picard and Jaikoz
-    public static final String ACOUSTIC                     = "Acoustic";
     public static final String ACOUSTID_FINGERPRINT         = "Acoustid Fingerprint";
     public static final String ACOUSTID_ID                  = "Acoustid Id";
     public static final String AMAZON_ASIN                  = "ASIN";
@@ -72,22 +71,23 @@ public class FrameBodyTXXX extends AbstractFrameBodyTextInfo implements ID3v24Fr
     public static final String CLASSICAL_NICKNAME           = "CLASSICAL_NICKNAME";
     public static final String CONDUCTOR_SORT               = "Conductor Sort";
     public static final String COUNTRY                      = "Country";
-    public static final String ELECTRONIC                   = "Electronic";
     public static final String ENSEMBLE                     = "Ensemble";
     public static final String ENSEMBLE_SORT                = "Ensemble Sort";
     public static final String FBPM                         = "FBPM";
-    public static final String INSTRUMENTAL                 = "Instrumental";
     public static final String IS_CLASSICAL                 = "IsClassical";
     public static final String IS_SOUNDTRACK                = "IsSoundtrack";
     public static final String MOOD                         = "MOOD";          //ID3 v23 only
-    public static final String MOOD_AGGRESSIVE              = "MoodAggressive";
-    public static final String MOOD_AROUSAL                 = "MoodArousal";
-    public static final String MOOD_DANCEABILITY            = "MoodDanceability";
-    public static final String MOOD_HAPPY                   = "MoodHappy";
-    public static final String MOOD_PARTY                   = "MoodParty";
-    public static final String MOOD_RELAXED                 = "MoodRelaxed";
-    public static final String MOOD_SAD                     = "MoodSad";
-    public static final String MOOD_VALENCE                 = "MoodValence";
+    public static final String MOOD_ACOUSTIC                = "MOOD_ACOUSTIC";
+    public static final String MOOD_AGGRESSIVE              = "MOOD_AGGRESSIVE";
+    public static final String MOOD_AROUSAL                 = "MOOD_AROUSAL";
+    public static final String MOOD_DANCEABILITY            = "MOOD_DANCEABILITY";
+    public static final String MOOD_ELECTRONIC              = "MOOD_ELECTRONIC";
+    public static final String MOOD_HAPPY                   = "MOOD_HAPPY";
+    public static final String MOOD_INSTRUMENTAL            = "MOOD_INSTRUMENTAL";
+    public static final String MOOD_PARTY                   = "MOOD_PARTY";
+    public static final String MOOD_RELAXED                 = "MOOD_RELAXED";
+    public static final String MOOD_SAD                     = "MOOD_SAD";
+    public static final String MOOD_VALENCE                 = "MOOD_VALENCE";
     public static final String MUSICBRAINZ_ALBUMID          = "MusicBrainz Album Id";
     public static final String MUSICBRAINZ_ALBUM_ARTISTID   = "MusicBrainz Album Artist Id";
     public static final String MUSICBRAINZ_ALBUM_COUNTRY    = "MusicBrainz Album Release Country";

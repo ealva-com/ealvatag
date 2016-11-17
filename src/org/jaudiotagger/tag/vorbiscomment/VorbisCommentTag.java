@@ -47,7 +47,6 @@ public class VorbisCommentTag extends AbstractTag
 
     static
     {
-        tagFieldToOggField.put(FieldKey.ACOUSTIC, VorbisCommentFieldKey.ACOUSTIC);
         tagFieldToOggField.put(FieldKey.ACOUSTID_FINGERPRINT, VorbisCommentFieldKey.ACOUSTID_FINGERPRINT);
         tagFieldToOggField.put(FieldKey.ACOUSTID_ID, VorbisCommentFieldKey.ACOUSTID_ID);
         tagFieldToOggField.put(FieldKey.ALBUM, VorbisCommentFieldKey.ALBUM);
@@ -85,14 +84,13 @@ public class VorbisCommentTag extends AbstractTag
         tagFieldToOggField.put(FieldKey.DISC_SUBTITLE, VorbisCommentFieldKey.DISCSUBTITLE);
         tagFieldToOggField.put(FieldKey.DISC_TOTAL, VorbisCommentFieldKey.DISCTOTAL);
         tagFieldToOggField.put(FieldKey.DJMIXER, VorbisCommentFieldKey.DJMIXER);
-        tagFieldToOggField.put(FieldKey.ELECTRONIC, VorbisCommentFieldKey.ELECTRONIC);
+        tagFieldToOggField.put(FieldKey.MOOD_ELECTRONIC, VorbisCommentFieldKey.MOOD_ELECTRONIC);
         tagFieldToOggField.put(FieldKey.ENCODER, VorbisCommentFieldKey.VENDOR);     //Known as vendor in VorbisComment
         tagFieldToOggField.put(FieldKey.ENGINEER, VorbisCommentFieldKey.ENGINEER);
         tagFieldToOggField.put(FieldKey.ENSEMBLE, VorbisCommentFieldKey.ENSEMBLE);
         tagFieldToOggField.put(FieldKey.FBPM, VorbisCommentFieldKey.FBPM);
         tagFieldToOggField.put(FieldKey.GENRE, VorbisCommentFieldKey.GENRE);
         tagFieldToOggField.put(FieldKey.GROUPING, VorbisCommentFieldKey.GROUPING);
-        tagFieldToOggField.put(FieldKey.INSTRUMENTAL, VorbisCommentFieldKey.INSTRUMENTAL);
         tagFieldToOggField.put(FieldKey.INVOLVED_PERSON, VorbisCommentFieldKey.INVOLVED_PERSON);
         tagFieldToOggField.put(FieldKey.ISRC, VorbisCommentFieldKey.ISRC);
         tagFieldToOggField.put(FieldKey.IS_CLASSICAL, VorbisCommentFieldKey.IS_CLASSICAL);
@@ -105,10 +103,12 @@ public class VorbisCommentTag extends AbstractTag
         tagFieldToOggField.put(FieldKey.MEDIA, VorbisCommentFieldKey.MEDIA);
         tagFieldToOggField.put(FieldKey.MIXER, VorbisCommentFieldKey.MIXER);
         tagFieldToOggField.put(FieldKey.MOOD, VorbisCommentFieldKey.MOOD);
+        tagFieldToOggField.put(FieldKey.MOOD_ACOUSTIC, VorbisCommentFieldKey.MOOD_ACOUSTIC);
         tagFieldToOggField.put(FieldKey.MOOD_AGGRESSIVE, VorbisCommentFieldKey.MOOD_AGGRESSIVE);
         tagFieldToOggField.put(FieldKey.MOOD_AROUSAL, VorbisCommentFieldKey.MOOD_AROUSAL);
         tagFieldToOggField.put(FieldKey.MOOD_DANCEABILITY, VorbisCommentFieldKey.MOOD_DANCEABILITY);
         tagFieldToOggField.put(FieldKey.MOOD_HAPPY, VorbisCommentFieldKey.MOOD_HAPPY);
+        tagFieldToOggField.put(FieldKey.MOOD_INSTRUMENTAL, VorbisCommentFieldKey.MOOD_INSTRUMENTAL);
         tagFieldToOggField.put(FieldKey.MOOD_PARTY, VorbisCommentFieldKey.MOOD_PARTY);
         tagFieldToOggField.put(FieldKey.MOOD_RELAXED, VorbisCommentFieldKey.MOOD_RELAXED);
         tagFieldToOggField.put(FieldKey.MOOD_SAD, VorbisCommentFieldKey.MOOD_SAD);

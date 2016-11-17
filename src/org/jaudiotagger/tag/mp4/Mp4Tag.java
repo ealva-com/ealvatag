@@ -45,7 +45,6 @@ public class Mp4Tag extends AbstractTag
     //Mapping from generic key to mp4 key
     static
     {
-        tagFieldToMp4Field.put(FieldKey.ACOUSTIC, Mp4FieldKey.ACOUSTIC);
         tagFieldToMp4Field.put(FieldKey.ACOUSTID_FINGERPRINT, Mp4FieldKey.ACOUSTID_FINGERPRINT);
         tagFieldToMp4Field.put(FieldKey.ACOUSTID_ID, Mp4FieldKey.ACOUSTID_ID);
         tagFieldToMp4Field.put(FieldKey.ALBUM, Mp4FieldKey.ALBUM);
@@ -81,7 +80,7 @@ public class Mp4Tag extends AbstractTag
         tagFieldToMp4Field.put(FieldKey.DISC_SUBTITLE, Mp4FieldKey.DISC_SUBTITLE);
         tagFieldToMp4Field.put(FieldKey.DISC_TOTAL, Mp4FieldKey.DISCNUMBER);
         tagFieldToMp4Field.put(FieldKey.DJMIXER, Mp4FieldKey.DJMIXER);
-        tagFieldToMp4Field.put(FieldKey.ELECTRONIC, Mp4FieldKey.ELECTRONIC);
+        tagFieldToMp4Field.put(FieldKey.MOOD_ELECTRONIC, Mp4FieldKey.MOOD_ELECTRONIC);
         tagFieldToMp4Field.put(FieldKey.ENCODER, Mp4FieldKey.ENCODER);
         tagFieldToMp4Field.put(FieldKey.ENGINEER, Mp4FieldKey.ENGINEER);
         tagFieldToMp4Field.put(FieldKey.ENSEMBLE, Mp4FieldKey.ENSEMBLE);
@@ -89,7 +88,6 @@ public class Mp4Tag extends AbstractTag
         tagFieldToMp4Field.put(FieldKey.FBPM, Mp4FieldKey.FBPM);
         tagFieldToMp4Field.put(FieldKey.GENRE, Mp4FieldKey.GENRE);
         tagFieldToMp4Field.put(FieldKey.GROUPING, Mp4FieldKey.GROUPING);
-        tagFieldToMp4Field.put(FieldKey.INSTRUMENTAL, Mp4FieldKey.INSTRUMENTAL);
         tagFieldToMp4Field.put(FieldKey.INVOLVED_PERSON, Mp4FieldKey.INVOLVED_PEOPLE);
         tagFieldToMp4Field.put(FieldKey.ISRC, Mp4FieldKey.ISRC);
         tagFieldToMp4Field.put(FieldKey.IS_COMPILATION, Mp4FieldKey.COMPILATION);
@@ -102,10 +100,12 @@ public class Mp4Tag extends AbstractTag
         tagFieldToMp4Field.put(FieldKey.MEDIA, Mp4FieldKey.MEDIA);
         tagFieldToMp4Field.put(FieldKey.MIXER, Mp4FieldKey.MIXER);
         tagFieldToMp4Field.put(FieldKey.MOOD, Mp4FieldKey.MOOD);
+        tagFieldToMp4Field.put(FieldKey.MOOD_ACOUSTIC, Mp4FieldKey.MOOD_ACOUSTIC);
         tagFieldToMp4Field.put(FieldKey.MOOD_AGGRESSIVE, Mp4FieldKey.MOOD_AGGRESSIVE);
         tagFieldToMp4Field.put(FieldKey.MOOD_AROUSAL, Mp4FieldKey.MOOD_AROUSAL);
         tagFieldToMp4Field.put(FieldKey.MOOD_DANCEABILITY, Mp4FieldKey.MOOD_DANCEABILITY);
         tagFieldToMp4Field.put(FieldKey.MOOD_HAPPY, Mp4FieldKey.MOOD_HAPPY);
+        tagFieldToMp4Field.put(FieldKey.MOOD_INSTRUMENTAL, Mp4FieldKey.MOOD_INSTRUMENTAL);
         tagFieldToMp4Field.put(FieldKey.MOOD_PARTY, Mp4FieldKey.MOOD_PARTY);
         tagFieldToMp4Field.put(FieldKey.MOOD_RELAXED, Mp4FieldKey.MOOD_RELAXED);
         tagFieldToMp4Field.put(FieldKey.MOOD_SAD, Mp4FieldKey.MOOD_SAD);

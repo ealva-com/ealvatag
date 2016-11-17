@@ -370,7 +370,7 @@ public class ID3v24Frames extends ID3Frames
         discardIfFileAlteredFrames.add(FRAME_ID_ENCODEDBY);
         discardIfFileAlteredFrames.add(FRAME_ID_LENGTH);
 
-        tagFieldToId3.put(FieldKey.ACOUSTIC, ID3v24FieldKey.ACOUSTIC);
+
         tagFieldToId3.put(FieldKey.ACOUSTID_FINGERPRINT, ID3v24FieldKey.ACOUSTID_FINGERPRINT);
         tagFieldToId3.put(FieldKey.ACOUSTID_ID, ID3v24FieldKey.ACOUSTID_ID);
         tagFieldToId3.put(FieldKey.ALBUM, ID3v24FieldKey.ALBUM);
@@ -409,7 +409,7 @@ public class ID3v24Frames extends ID3Frames
         tagFieldToId3.put(FieldKey.DISC_SUBTITLE, ID3v24FieldKey.DISC_SUBTITLE);
         tagFieldToId3.put(FieldKey.DISC_TOTAL, ID3v24FieldKey.DISC_NO);
         tagFieldToId3.put(FieldKey.DJMIXER, ID3v24FieldKey.DJMIXER);
-        tagFieldToId3.put(FieldKey.ELECTRONIC, ID3v24FieldKey.ELECTRONIC);
+        tagFieldToId3.put(FieldKey.MOOD_ELECTRONIC, ID3v24FieldKey.MOOD_ELECTRONIC);
         tagFieldToId3.put(FieldKey.ENCODER, ID3v24FieldKey.ENCODER);
         tagFieldToId3.put(FieldKey.ENGINEER, ID3v24FieldKey.ENGINEER);
         tagFieldToId3.put(FieldKey.ENSEMBLE, ID3v24FieldKey.ENSEMBLE);
@@ -417,7 +417,7 @@ public class ID3v24Frames extends ID3Frames
         tagFieldToId3.put(FieldKey.FBPM, ID3v24FieldKey.FBPM);
         tagFieldToId3.put(FieldKey.GENRE, ID3v24FieldKey.GENRE);
         tagFieldToId3.put(FieldKey.GROUPING, ID3v24FieldKey.GROUPING);
-        tagFieldToId3.put(FieldKey.INSTRUMENTAL, ID3v24FieldKey.INSTRUMENTAL);
+        tagFieldToId3.put(FieldKey.MOOD_INSTRUMENTAL, ID3v24FieldKey.MOOD_INSTRUMENTAL);
         tagFieldToId3.put(FieldKey.INVOLVED_PERSON, ID3v24FieldKey.INVOLVED_PERSON);
         tagFieldToId3.put(FieldKey.ISRC, ID3v24FieldKey.ISRC);
         tagFieldToId3.put(FieldKey.IS_CLASSICAL, ID3v24FieldKey.IS_CLASSICAL);
@@ -430,6 +430,7 @@ public class ID3v24Frames extends ID3Frames
         tagFieldToId3.put(FieldKey.MEDIA, ID3v24FieldKey.MEDIA);
         tagFieldToId3.put(FieldKey.MIXER, ID3v24FieldKey.MIXER);
         tagFieldToId3.put(FieldKey.MOOD, ID3v24FieldKey.MOOD);
+        tagFieldToId3.put(FieldKey.MOOD_ACOUSTIC, ID3v24FieldKey.MOOD_ACOUSTIC);
         tagFieldToId3.put(FieldKey.MOOD_AGGRESSIVE, ID3v24FieldKey.MOOD_AGGRESSIVE);
         tagFieldToId3.put(FieldKey.MOOD_AROUSAL, ID3v24FieldKey.MOOD_AROUSAL);
         tagFieldToId3.put(FieldKey.MOOD_DANCEABILITY, ID3v24FieldKey.MOOD_DANCEABILITY);

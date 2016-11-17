@@ -321,7 +321,6 @@ public class ID3v22Frames extends ID3Frames
 
         //Mapping generic key to id3v22 key
 
-        tagFieldToId3.put(FieldKey.ACOUSTIC, ID3v22FieldKey.ACOUSTIC);
         tagFieldToId3.put(FieldKey.ACOUSTID_FINGERPRINT, ID3v22FieldKey.ACOUSTID_FINGERPRINT);
         tagFieldToId3.put(FieldKey.ACOUSTID_ID, ID3v22FieldKey.ACOUSTID_ID);
         tagFieldToId3.put(FieldKey.ALBUM, ID3v22FieldKey.ALBUM);
@@ -360,7 +359,6 @@ public class ID3v22Frames extends ID3Frames
         tagFieldToId3.put(FieldKey.DISC_SUBTITLE, ID3v22FieldKey.DISC_SUBTITLE);
         tagFieldToId3.put(FieldKey.DISC_TOTAL, ID3v22FieldKey.DISC_NO);
         tagFieldToId3.put(FieldKey.DJMIXER, ID3v22FieldKey.DJMIXER);
-        tagFieldToId3.put(FieldKey.ELECTRONIC, ID3v22FieldKey.ELECTRONIC);
         tagFieldToId3.put(FieldKey.ENCODER, ID3v22FieldKey.ENCODER);
         tagFieldToId3.put(FieldKey.ENGINEER, ID3v22FieldKey.ENGINEER);
         tagFieldToId3.put(FieldKey.ENSEMBLE, ID3v22FieldKey.ENSEMBLE);
@@ -368,7 +366,6 @@ public class ID3v22Frames extends ID3Frames
         tagFieldToId3.put(FieldKey.FBPM, ID3v22FieldKey.FBPM);
         tagFieldToId3.put(FieldKey.GENRE, ID3v22FieldKey.GENRE);
         tagFieldToId3.put(FieldKey.GROUPING, ID3v22FieldKey.GROUPING);
-        tagFieldToId3.put(FieldKey.INSTRUMENTAL, ID3v22FieldKey.INSTRUMENTAL);
         tagFieldToId3.put(FieldKey.INVOLVED_PERSON, ID3v22FieldKey.INVOLVED_PERSON);
         tagFieldToId3.put(FieldKey.ISRC, ID3v22FieldKey.ISRC);
         tagFieldToId3.put(FieldKey.IS_CLASSICAL, ID3v22FieldKey.IS_CLASSICAL);
@@ -381,10 +378,13 @@ public class ID3v22Frames extends ID3Frames
         tagFieldToId3.put(FieldKey.MEDIA, ID3v22FieldKey.MEDIA);
         tagFieldToId3.put(FieldKey.MIXER, ID3v22FieldKey.MIXER);
         tagFieldToId3.put(FieldKey.MOOD, ID3v22FieldKey.MOOD);
+        tagFieldToId3.put(FieldKey.MOOD_ACOUSTIC, ID3v22FieldKey.MOOD_ACOUSTIC);
         tagFieldToId3.put(FieldKey.MOOD_AGGRESSIVE, ID3v22FieldKey.MOOD_AGGRESSIVE);
         tagFieldToId3.put(FieldKey.MOOD_AROUSAL, ID3v22FieldKey.MOOD_AROUSAL);
         tagFieldToId3.put(FieldKey.MOOD_DANCEABILITY, ID3v22FieldKey.MOOD_DANCEABILITY);
+        tagFieldToId3.put(FieldKey.MOOD_ELECTRONIC, ID3v22FieldKey.MOOD_ELECTRONIC);
         tagFieldToId3.put(FieldKey.MOOD_HAPPY, ID3v22FieldKey.MOOD_HAPPY);
+        tagFieldToId3.put(FieldKey.MOOD_INSTRUMENTAL, ID3v22FieldKey.MOOD_INSTRUMENTAL);
         tagFieldToId3.put(FieldKey.MOOD_PARTY, ID3v22FieldKey.MOOD_PARTY);
         tagFieldToId3.put(FieldKey.MOOD_RELAXED, ID3v22FieldKey.MOOD_RELAXED);
         tagFieldToId3.put(FieldKey.MOOD_SAD, ID3v22FieldKey.MOOD_SAD);

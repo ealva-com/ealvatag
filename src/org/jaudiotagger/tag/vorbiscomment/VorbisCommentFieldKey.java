@@ -18,7 +18,6 @@ import java.util.EnumSet;
  */
 public enum VorbisCommentFieldKey
 {
-    ACOUSTIC("ACOUSTIC", EnumSet.of(Tagger.JAIKOZ)),
     ACOUSTID_FINGERPRINT("ACOUSTID_FINGERPRINT",EnumSet.of(Tagger.PICARD)),
     ACOUSTID_ID("ACOUSTID_ID",EnumSet.of(Tagger.PICARD)),
     ALBUM("ALBUM", EnumSet.of(Tagger.XIPH,Tagger.PICARD,Tagger.JAIKOZ)),
@@ -64,7 +63,6 @@ public enum VorbisCommentFieldKey
     DISCSUBTITLE("DISCSUBTITLE",EnumSet.of(Tagger.PICARD,Tagger.JAIKOZ)),
     DISCTOTAL("DISCTOTAL",EnumSet.of(Tagger.XIPH,Tagger.PICARD)),
     DJMIXER("DJMIXER",EnumSet.of(Tagger.PICARD)),
-    ELECTRONIC("ELECTRONIC", EnumSet.of(Tagger.JAIKOZ)),
     ENCODEDBY("ENCODEDBY",EnumSet.of(Tagger.PICARD)),
     ENCODER("ENCODER"),
     ENGINEER("ENGINEER",EnumSet.of(Tagger.PICARD)),
@@ -72,7 +70,6 @@ public enum VorbisCommentFieldKey
     FBPM("FBPM",EnumSet.of(Tagger.BEATUNES)),
     GENRE("GENRE",EnumSet.of(Tagger.XIPH,Tagger.PICARD,Tagger.JAIKOZ)),
     GROUPING("GROUPING",EnumSet.of(Tagger.PICARD,Tagger.JAIKOZ)),
-    INSTRUMENTAL("INSTRUMENTAL", EnumSet.of(Tagger.JAIKOZ)),
     INVOLVED_PERSON("INVOLVED_PERSON", EnumSet.of(Tagger.JAIKOZ)),
     ISRC("ISRC",EnumSet.of(Tagger.XIPH,Tagger.PICARD,Tagger.JAIKOZ)),
     IS_CLASSICAL("IS_CLASSICAL",EnumSet.of(Tagger.PICARD,Tagger.JAIKOZ)),
@@ -88,10 +85,13 @@ public enum VorbisCommentFieldKey
     METADATA_BLOCK_PICTURE("METADATA_BLOCK_PICTURE",EnumSet.of(Tagger.XIPH)),
     MIXER("MIXER",EnumSet.of(Tagger.PICARD)),
     MOOD("MOOD",EnumSet.of(Tagger.PICARD,Tagger.JAIKOZ)),
+    MOOD_ACOUSTIC("MOOD_ACOUSTIC", EnumSet.of(Tagger.JAIKOZ)),
     MOOD_AGGRESSIVE("MOOD_AGGRESSIVE", EnumSet.of(Tagger.JAIKOZ)),
     MOOD_AROUSAL("MOOD_AROUSAL", EnumSet.of(Tagger.JAIKOZ)),
     MOOD_DANCEABILITY("MOOD_DANCEABILITY", EnumSet.of(Tagger.JAIKOZ)),
+    MOOD_ELECTRONIC("MOOD_ELECTRONIC", EnumSet.of(Tagger.JAIKOZ)),
     MOOD_HAPPY("MOOD_HAPPY", EnumSet.of(Tagger.JAIKOZ)),
+    MOOD_INSTRUMENTAL("MOOD_INSTRUMENTAL", EnumSet.of(Tagger.JAIKOZ)),
     MOOD_PARTY("MOOD_PARTY", EnumSet.of(Tagger.JAIKOZ)),
     MOOD_RELAXED("MOOD_RELAXED", EnumSet.of(Tagger.JAIKOZ)),
     MOOD_SAD("MOOD_SAD", EnumSet.of(Tagger.JAIKOZ)),

@@ -87,7 +87,7 @@ public final class AsfTag extends AbstractTag
     {
         tagFieldToAsfField = new EnumMap<FieldKey, AsfFieldKey>(FieldKey.class);
 
-        tagFieldToAsfField.put(FieldKey.ACOUSTIC, AsfFieldKey.ACOUSTIC);
+        tagFieldToAsfField.put(FieldKey.MOOD_ACOUSTIC, AsfFieldKey.MOOD_ACOUSTIC);
         tagFieldToAsfField.put(FieldKey.ACOUSTID_FINGERPRINT, AsfFieldKey.ACOUSTID_FINGERPRINT);
         tagFieldToAsfField.put(FieldKey.ACOUSTID_ID, AsfFieldKey.ACOUSTID_ID);
         tagFieldToAsfField.put(FieldKey.ALBUM, AsfFieldKey.ALBUM);
@@ -126,7 +126,7 @@ public final class AsfTag extends AbstractTag
         tagFieldToAsfField.put(FieldKey.DISC_SUBTITLE, AsfFieldKey.DISC_SUBTITLE);
         tagFieldToAsfField.put(FieldKey.DISC_TOTAL, AsfFieldKey.DISC_TOTAL);
         tagFieldToAsfField.put(FieldKey.DJMIXER, AsfFieldKey.DJMIXER);
-        tagFieldToAsfField.put(FieldKey.ELECTRONIC, AsfFieldKey.ELECTRONIC);
+        tagFieldToAsfField.put(FieldKey.MOOD_ELECTRONIC, AsfFieldKey.MOOD_ELECTRONIC);
         tagFieldToAsfField.put(FieldKey.ENCODER, AsfFieldKey.ENCODER);
         tagFieldToAsfField.put(FieldKey.ENGINEER, AsfFieldKey.ENGINEER);
         tagFieldToAsfField.put(FieldKey.ENSEMBLE, AsfFieldKey.ENSEMBLE);
@@ -134,7 +134,6 @@ public final class AsfTag extends AbstractTag
         tagFieldToAsfField.put(FieldKey.FBPM, AsfFieldKey.FBPM);
         tagFieldToAsfField.put(FieldKey.GENRE, AsfFieldKey.GENRE);
         tagFieldToAsfField.put(FieldKey.GROUPING, AsfFieldKey.GROUPING);
-        tagFieldToAsfField.put(FieldKey.INSTRUMENTAL, AsfFieldKey.INSTRUMENTAL);
         tagFieldToAsfField.put(FieldKey.INVOLVED_PERSON, AsfFieldKey.INVOLVED_PERSON);
         tagFieldToAsfField.put(FieldKey.ISRC, AsfFieldKey.ISRC);
         tagFieldToAsfField.put(FieldKey.IS_CLASSICAL, AsfFieldKey.IS_CLASSICAL);
@@ -151,6 +150,7 @@ public final class AsfTag extends AbstractTag
         tagFieldToAsfField.put(FieldKey.MOOD_AROUSAL, AsfFieldKey.MOOD_AROUSAL);
         tagFieldToAsfField.put(FieldKey.MOOD_DANCEABILITY, AsfFieldKey.MOOD_DANCEABILITY);
         tagFieldToAsfField.put(FieldKey.MOOD_HAPPY, AsfFieldKey.MOOD_HAPPY);
+        tagFieldToAsfField.put(FieldKey.MOOD_INSTRUMENTAL, AsfFieldKey.MOOD_INSTRUMENTAL);
         tagFieldToAsfField.put(FieldKey.MOOD_PARTY, AsfFieldKey.MOOD_PARTY);
         tagFieldToAsfField.put(FieldKey.MOOD_RELAXED, AsfFieldKey.MOOD_RELAXED);
         tagFieldToAsfField.put(FieldKey.MOOD_SAD, AsfFieldKey.MOOD_SAD);

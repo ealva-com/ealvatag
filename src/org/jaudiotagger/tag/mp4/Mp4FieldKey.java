@@ -28,7 +28,6 @@ import static org.jaudiotagger.tag.mp4.field.Mp4FieldType.*;
 public enum Mp4FieldKey
 {
 
-    ACOUSTIC("com.apple.iTunes", "ACOUSTIC", TEXT, Tagger.JAIKOZ),
     ACOUSTID_FINGERPRINT("com.apple.iTunes", "Acoustid Fingerprint", TEXT, Tagger.PICARD),
     ACOUSTID_FINGERPRINT_OLD("com.apple.iTunes", "AcoustId Fingerprint", TEXT, Tagger.PICARD),
     ACOUSTID_ID("com.apple.iTunes", "Acoustid Id", TEXT, Tagger.PICARD),
@@ -81,7 +80,6 @@ public enum Mp4FieldKey
     DISCNUMBER("disk",Mp4TagFieldSubType.DISC_NO, IMPLICIT),
     DISC_SUBTITLE("com.apple.iTunes", "DISCSUBTITLE", TEXT, Tagger.PICARD),
     DJMIXER("com.apple.iTunes", "DJMIXER", TEXT, Tagger.PICARD),
-    ELECTRONIC("com.apple.iTunes", "ELECTRONIC", TEXT, Tagger.JAIKOZ),
     ENCODER("©too",Mp4TagFieldSubType.TEXT, TEXT),
     ENGINEER("com.apple.iTunes", "ENGINEER", TEXT, Tagger.PICARD),
     ENSEMBLE("com.apple.iTunes", "Ensemble", TEXT, Tagger.JAIKOZ),
@@ -92,7 +90,6 @@ public enum Mp4FieldKey
     GENRE_CUSTOM("©gen",Mp4TagFieldSubType.TEXT, TEXT),
     GE_ID("geID",Mp4TagFieldSubType.UNKNOWN, INTEGER, 4),
     GROUPING("©grp",Mp4TagFieldSubType.TEXT, TEXT),
-    INSTRUMENTAL("com.apple.iTunes", "INSTRUMENTAL", TEXT, Tagger.JAIKOZ),
     INVOLVED_PEOPLE("peop",Mp4TagFieldSubType.TEXT, TEXT, Tagger.MEDIA_MONKEY),
     ISRC("com.apple.iTunes", "ISRC", TEXT, Tagger.PICARD),
     ISRC_MMBETA("isrc",Mp4TagFieldSubType.TEXT, TEXT, Tagger.MEDIA_MONKEY),
@@ -126,10 +123,13 @@ public enum Mp4FieldKey
     MM_QUALITY("com.apple.iTunes", "QUALITY", TEXT, Tagger.MEDIA_MONKEY),
     MM_TEMPO("com.apple.iTunes", "TEMPO", TEXT, Tagger.MEDIA_MONKEY),
     MOOD("com.apple.iTunes", "MOOD", TEXT, Tagger.PICARD),
+    MOOD_ACOUSTIC("com.apple.iTunes", "MOOD_ACOUSTIC", TEXT, Tagger.JAIKOZ),
     MOOD_AGGRESSIVE("com.apple.iTunes", "MOOD_AGGRESSIVE", TEXT, Tagger.JAIKOZ),
     MOOD_AROUSAL("com.apple.iTunes", "MOOD_AROUSAL", TEXT, Tagger.JAIKOZ),
     MOOD_DANCEABILITY("com.apple.iTunes", "MOOD_DANCEABILITY", TEXT, Tagger.JAIKOZ),
+    MOOD_ELECTRONIC("com.apple.iTunes", "MOOD_ELECTRONIC", TEXT, Tagger.JAIKOZ),
     MOOD_HAPPY("com.apple.iTunes", "MOOD_HAPPY", TEXT, Tagger.JAIKOZ),
+    MOOD_INSTRUMENTAL("com.apple.iTunes", "MOOD_INSTRUMENTAL", TEXT, Tagger.JAIKOZ),
     MOOD_MM3BETA("mood",Mp4TagFieldSubType.TEXT, TEXT, Tagger.MEDIA_MONKEY),
     MOOD_PARTY("com.apple.iTunes", "MOOD_PARTY", TEXT, Tagger.JAIKOZ),
     MOOD_RELAXED("com.apple.iTunes", "MOOD_RELAXED", TEXT, Tagger.JAIKOZ),

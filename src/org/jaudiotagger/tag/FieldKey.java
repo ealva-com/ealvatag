@@ -10,7 +10,6 @@ package org.jaudiotagger.tag;
  */
 public enum FieldKey
 {
-    ACOUSTIC,
     ACOUSTID_FINGERPRINT,
     ACOUSTID_ID,
     ALBUM,
@@ -49,7 +48,6 @@ public enum FieldKey
     DISC_SUBTITLE,
     DISC_TOTAL,
     DJMIXER,
-    ELECTRONIC,
     ENCODER,
     ENGINEER,
     ENSEMBLE,
@@ -58,7 +56,6 @@ public enum FieldKey
     GENRE,
     GROUPING,
     INVOLVED_PERSON,
-    INSTRUMENTAL,
     ISRC,
     IS_CLASSICAL,
     IS_SOUNDTRACK,
@@ -70,10 +67,13 @@ public enum FieldKey
     MEDIA,
     MIXER,
     MOOD,
+    MOOD_ACOUSTIC,
     MOOD_AGGRESSIVE,
     MOOD_AROUSAL,
     MOOD_DANCEABILITY,
+    MOOD_ELECTRONIC,
     MOOD_HAPPY,
+    MOOD_INSTRUMENTAL,
     MOOD_PARTY,
     MOOD_RELAXED,
     MOOD_SAD,
