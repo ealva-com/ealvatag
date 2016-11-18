@@ -15,7 +15,7 @@ specific APIs are available, currently supports reading and writing metadata for
 - Wma
 - Dsf
 
-The main project page is http://www.jthink.net/jaudiotagger/(http://www.jthink.net/jaudiotagger) and you can contact the main developer via paultaylor@jthink.net
+The main project page is http://www.jthink.net/jaudiotagger/(http://www.jthink.net/jaudiotagger) and you can contact the main developer via email:paultaylor@jthink.net
 
 ## Requirements
 
