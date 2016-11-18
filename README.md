@@ -15,6 +15,8 @@ specific APIs are available, currently supports reading and writing metadata for
 - Wma
 - Dsf
 
+The main project page is [http://www.jthink.net/jaudiotagger/] and yuou can contact the main developer via paultaylor@jthink.net
+
 ## Requirements
 
 *Jaudiotagger* requires Java 1.8 for a full build and install, but the code is Java 1.7 compatible
