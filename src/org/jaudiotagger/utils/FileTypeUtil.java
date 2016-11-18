@@ -20,7 +20,10 @@ public class FileTypeUtil {
 	// 0xb1, 0x1a, 0xe1 };
 
 	private static final Integer[] mp3v2Sig = { 0x49, 0x44, 0x33 };
-	private static final Integer[] mp3v1Sig = { 0xFF, 0xFB };
+	private static final Integer[] mp3v1Sig_1 = { 0xFF, 0xF3 };
+	private static final Integer[] mp3v1Sig_2 = { 0xFF, 0xFA };
+	private static final Integer[] mp3v1Sig_3 = { 0xFF, 0xF2 };
+	private static final Integer[] mp3v1Sig_4 = { 0xFF, 0xFB };
 	private static final Integer[] mp4Sig = { 0x00, 0x00, 0x00, null, 0x66, 0x74, 0x79, 0x70 };
 
 	private static Map<String, Integer[]> signatureMap;
@@ -29,12 +32,18 @@ public class FileTypeUtil {
 	static {
 		signatureMap = new HashMap<String, Integer[]>();
 		signatureMap.put("MP3IDv2", mp3v2Sig);
-		signatureMap.put("MP3IDv1", mp3v1Sig);
+		signatureMap.put("MP3IDv1_1", mp3v1Sig_1);
+		signatureMap.put("MP3IDv1_2", mp3v1Sig_2);
+		signatureMap.put("MP3IDv1_3", mp3v1Sig_3);
+		signatureMap.put("MP3IDv1_4", mp3v1Sig_4);
 		signatureMap.put("MP4", mp4Sig);
 		
 		extensionMap = new HashMap<String, String>();
 		extensionMap.put("MP3IDv2", "mp3");
-		extensionMap.put("MP3IDv1", "mp3");
+		extensionMap.put("MP3IDv1_1", "mp3");
+		extensionMap.put("MP3IDv1_2", "mp3");
+		extensionMap.put("MP3IDv1_3", "mp3");
+		extensionMap.put("MP3IDv1_4", "mp3");
 		extensionMap.put("MP4", "m4a");
 		extensionMap.put("UNKNOWN", "");
 	}
