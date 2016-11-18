@@ -68,8 +68,8 @@ public class ID3v24Frames extends ID3Frames
     public static final String FRAME_ID_LYRICIST = "TEXT";
     public static final String FRAME_ID_MEDIA_TYPE = "TMED";
     public static final String FRAME_ID_MOOD = "TMOO";
-    public static final String FRAME_ID_MOVEMENT = "MVIN";
-    public static final String FRAME_ID_MOVEMENT_NO = "MVNM";
+    public static final String FRAME_ID_MOVEMENT = "MVNM";
+    public static final String FRAME_ID_MOVEMENT_NO = "MVIN";
     public static final String FRAME_ID_MPEG_LOCATION_LOOKUP_TABLE = "MLLT";
     public static final String FRAME_ID_MUSICIAN_CREDITS = "TMCL";
     public static final String FRAME_ID_MUSIC_CD_ID = "MCDI";
@@ -370,12 +370,14 @@ public class ID3v24Frames extends ID3Frames
         discardIfFileAlteredFrames.add(FRAME_ID_ENCODEDBY);
         discardIfFileAlteredFrames.add(FRAME_ID_LENGTH);
 
-        tagFieldToId3.put(FieldKey.ACOUSTIC, ID3v24FieldKey.ACOUSTIC);
+
         tagFieldToId3.put(FieldKey.ACOUSTID_FINGERPRINT, ID3v24FieldKey.ACOUSTID_FINGERPRINT);
         tagFieldToId3.put(FieldKey.ACOUSTID_ID, ID3v24FieldKey.ACOUSTID_ID);
         tagFieldToId3.put(FieldKey.ALBUM, ID3v24FieldKey.ALBUM);
         tagFieldToId3.put(FieldKey.ALBUM_ARTIST, ID3v24FieldKey.ALBUM_ARTIST);
         tagFieldToId3.put(FieldKey.ALBUM_ARTIST_SORT, ID3v24FieldKey.ALBUM_ARTIST_SORT);
+        tagFieldToId3.put(FieldKey.ALBUM_ARTISTS, ID3v24FieldKey.ALBUM_ARTISTS);
+        tagFieldToId3.put(FieldKey.ALBUM_ARTISTS_SORT, ID3v24FieldKey.ALBUM_ARTISTS_SORT);
         tagFieldToId3.put(FieldKey.ALBUM_SORT, ID3v24FieldKey.ALBUM_SORT);
         tagFieldToId3.put(FieldKey.AMAZON_ID, ID3v24FieldKey.AMAZON_ID);
         tagFieldToId3.put(FieldKey.ARRANGER, ID3v24FieldKey.ARRANGER);
@@ -390,6 +392,7 @@ public class ID3v24Frames extends ID3Frames
         tagFieldToId3.put(FieldKey.CHOIR, ID3v24FieldKey.CHOIR);
         tagFieldToId3.put(FieldKey.CHOIR_SORT, ID3v24FieldKey.CHOIR_SORT);
         tagFieldToId3.put(FieldKey.CLASSICAL_CATALOG, ID3v24FieldKey.CLASSICAL_CATALOG);
+        tagFieldToId3.put(FieldKey.CLASSICAL_NICKNAME, ID3v24FieldKey.CLASSICAL_NICKNAME);
         tagFieldToId3.put(FieldKey.COMMENT, ID3v24FieldKey.COMMENT);
         tagFieldToId3.put(FieldKey.COMPOSER, ID3v24FieldKey.COMPOSER);
         tagFieldToId3.put(FieldKey.COMPOSER_SORT, ID3v24FieldKey.COMPOSER_SORT);
@@ -406,7 +409,7 @@ public class ID3v24Frames extends ID3Frames
         tagFieldToId3.put(FieldKey.DISC_SUBTITLE, ID3v24FieldKey.DISC_SUBTITLE);
         tagFieldToId3.put(FieldKey.DISC_TOTAL, ID3v24FieldKey.DISC_NO);
         tagFieldToId3.put(FieldKey.DJMIXER, ID3v24FieldKey.DJMIXER);
-        tagFieldToId3.put(FieldKey.ELECTRONIC, ID3v24FieldKey.ELECTRONIC);
+        tagFieldToId3.put(FieldKey.MOOD_ELECTRONIC, ID3v24FieldKey.MOOD_ELECTRONIC);
         tagFieldToId3.put(FieldKey.ENCODER, ID3v24FieldKey.ENCODER);
         tagFieldToId3.put(FieldKey.ENGINEER, ID3v24FieldKey.ENGINEER);
         tagFieldToId3.put(FieldKey.ENSEMBLE, ID3v24FieldKey.ENSEMBLE);
@@ -414,7 +417,7 @@ public class ID3v24Frames extends ID3Frames
         tagFieldToId3.put(FieldKey.FBPM, ID3v24FieldKey.FBPM);
         tagFieldToId3.put(FieldKey.GENRE, ID3v24FieldKey.GENRE);
         tagFieldToId3.put(FieldKey.GROUPING, ID3v24FieldKey.GROUPING);
-        tagFieldToId3.put(FieldKey.INSTRUMENTAL, ID3v24FieldKey.INSTRUMENTAL);
+        tagFieldToId3.put(FieldKey.MOOD_INSTRUMENTAL, ID3v24FieldKey.MOOD_INSTRUMENTAL);
         tagFieldToId3.put(FieldKey.INVOLVED_PERSON, ID3v24FieldKey.INVOLVED_PERSON);
         tagFieldToId3.put(FieldKey.ISRC, ID3v24FieldKey.ISRC);
         tagFieldToId3.put(FieldKey.IS_CLASSICAL, ID3v24FieldKey.IS_CLASSICAL);
@@ -427,6 +430,7 @@ public class ID3v24Frames extends ID3Frames
         tagFieldToId3.put(FieldKey.MEDIA, ID3v24FieldKey.MEDIA);
         tagFieldToId3.put(FieldKey.MIXER, ID3v24FieldKey.MIXER);
         tagFieldToId3.put(FieldKey.MOOD, ID3v24FieldKey.MOOD);
+        tagFieldToId3.put(FieldKey.MOOD_ACOUSTIC, ID3v24FieldKey.MOOD_ACOUSTIC);
         tagFieldToId3.put(FieldKey.MOOD_AGGRESSIVE, ID3v24FieldKey.MOOD_AGGRESSIVE);
         tagFieldToId3.put(FieldKey.MOOD_AROUSAL, ID3v24FieldKey.MOOD_AROUSAL);
         tagFieldToId3.put(FieldKey.MOOD_DANCEABILITY, ID3v24FieldKey.MOOD_DANCEABILITY);
@@ -449,7 +453,9 @@ public class ID3v24Frames extends ID3Frames
         tagFieldToId3.put(FieldKey.MUSICBRAINZ_RELEASE_TRACK_ID, ID3v24FieldKey.MUSICBRAINZ_RELEASE_TRACK_ID);
         tagFieldToId3.put(FieldKey.MUSICBRAINZ_RELEASE_TYPE, ID3v24FieldKey.MUSICBRAINZ_RELEASE_TYPE);
         tagFieldToId3.put(FieldKey.MUSICBRAINZ_TRACK_ID, ID3v24FieldKey.MUSICBRAINZ_TRACK_ID);
+        tagFieldToId3.put(FieldKey.MUSICBRAINZ_WORK, ID3v24FieldKey.MUSICBRAINZ_WORK);
         tagFieldToId3.put(FieldKey.MUSICBRAINZ_WORK_ID, ID3v24FieldKey.MUSICBRAINZ_WORK_ID);
+        tagFieldToId3.put(FieldKey.MUSICBRAINZ_WORK_COMPOSITION, ID3v24FieldKey.WORK_COMPOSITION);
         tagFieldToId3.put(FieldKey.MUSICBRAINZ_WORK_COMPOSITION_ID, ID3v24FieldKey.MUSICBRAINZ_WORK_COMPOSITION_ID);
         tagFieldToId3.put(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL1_ID, ID3v24FieldKey.MUSICBRAINZ_WORK_PART_LEVEL1_ID);
         tagFieldToId3.put(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL2_ID, ID3v24FieldKey.MUSICBRAINZ_WORK_PART_LEVEL2_ID);
@@ -486,6 +492,7 @@ public class ID3v24Frames extends ID3Frames
         tagFieldToId3.put(FieldKey.TEMPO, ID3v24FieldKey.TEMPO);
         tagFieldToId3.put(FieldKey.TIMBRE, ID3v24FieldKey.TIMBRE);
         tagFieldToId3.put(FieldKey.TITLE, ID3v24FieldKey.TITLE);
+        tagFieldToId3.put(FieldKey.TITLE_MOVEMENT, ID3v24FieldKey.TITLE_MOVEMENT);
         tagFieldToId3.put(FieldKey.TITLE_SORT, ID3v24FieldKey.TITLE_SORT);
         tagFieldToId3.put(FieldKey.TONALITY, ID3v24FieldKey.TONALITY);
         tagFieldToId3.put(FieldKey.TRACK, ID3v24FieldKey.TRACK);
@@ -498,19 +505,18 @@ public class ID3v24Frames extends ID3Frames
         tagFieldToId3.put(FieldKey.URL_WIKIPEDIA_ARTIST_SITE, ID3v24FieldKey.URL_WIKIPEDIA_ARTIST_SITE);
         tagFieldToId3.put(FieldKey.URL_WIKIPEDIA_RELEASE_SITE, ID3v24FieldKey.URL_WIKIPEDIA_RELEASE_SITE);
         tagFieldToId3.put(FieldKey.WORK, ID3v24FieldKey.WORK);
-        tagFieldToId3.put(FieldKey.WORK_COMPOSITION, ID3v24FieldKey.WORK_COMPOSITION);
-        tagFieldToId3.put(FieldKey.WORK_PART_LEVEL1, ID3v24FieldKey.WORK_PART_LEVEL1);
-        tagFieldToId3.put(FieldKey.WORK_PART_LEVEL1_TYPE, ID3v24FieldKey.WORK_PART_LEVEL1_TYPE);
-        tagFieldToId3.put(FieldKey.WORK_PART_LEVEL2, ID3v24FieldKey.WORK_PART_LEVEL2);
-        tagFieldToId3.put(FieldKey.WORK_PART_LEVEL2_TYPE, ID3v24FieldKey.WORK_PART_LEVEL2_TYPE);
-        tagFieldToId3.put(FieldKey.WORK_PART_LEVEL3, ID3v24FieldKey.WORK_PART_LEVEL3);
-        tagFieldToId3.put(FieldKey.WORK_PART_LEVEL3_TYPE, ID3v24FieldKey.WORK_PARTOF_LEVEL3_TYPE);
-        tagFieldToId3.put(FieldKey.WORK_PART_LEVEL4, ID3v24FieldKey.WORK_PART_LEVEL4);
-        tagFieldToId3.put(FieldKey.WORK_PART_LEVEL4_TYPE, ID3v24FieldKey.WORK_PART_LEVEL4_TYPE);
-        tagFieldToId3.put(FieldKey.WORK_PART_LEVEL5, ID3v24FieldKey.WORK_PART_LEVEL5);
-        tagFieldToId3.put(FieldKey.WORK_PART_LEVEL5_TYPE, ID3v24FieldKey.WORK_PART_LEVEL5_TYPE);
-        tagFieldToId3.put(FieldKey.WORK_PART_LEVEL6, ID3v24FieldKey.WORK_PART_LEVEL6);
-        tagFieldToId3.put(FieldKey.WORK_PART_LEVEL6_TYPE, ID3v24FieldKey.WORK_PART_LEVEL6_TYPE);
+        tagFieldToId3.put(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL1, ID3v24FieldKey.WORK_PART_LEVEL1);
+        tagFieldToId3.put(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL1_TYPE, ID3v24FieldKey.WORK_PART_LEVEL1_TYPE);
+        tagFieldToId3.put(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL2, ID3v24FieldKey.WORK_PART_LEVEL2);
+        tagFieldToId3.put(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL2_TYPE, ID3v24FieldKey.WORK_PART_LEVEL2_TYPE);
+        tagFieldToId3.put(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL3, ID3v24FieldKey.WORK_PART_LEVEL3);
+        tagFieldToId3.put(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL3_TYPE, ID3v24FieldKey.WORK_PARTOF_LEVEL3_TYPE);
+        tagFieldToId3.put(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL4, ID3v24FieldKey.WORK_PART_LEVEL4);
+        tagFieldToId3.put(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL4_TYPE, ID3v24FieldKey.WORK_PART_LEVEL4_TYPE);
+        tagFieldToId3.put(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL5, ID3v24FieldKey.WORK_PART_LEVEL5);
+        tagFieldToId3.put(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL5_TYPE, ID3v24FieldKey.WORK_PART_LEVEL5_TYPE);
+        tagFieldToId3.put(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL6, ID3v24FieldKey.WORK_PART_LEVEL6);
+        tagFieldToId3.put(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL6_TYPE, ID3v24FieldKey.WORK_PART_LEVEL6_TYPE);
         tagFieldToId3.put(FieldKey.WORK_TYPE, ID3v24FieldKey.WORK_TYPE);
         tagFieldToId3.put(FieldKey.YEAR, ID3v24FieldKey.YEAR);
 

@@ -21,7 +21,6 @@ package org.jaudiotagger.tag.mp4;
 import org.jaudiotagger.audio.generic.AbstractTag;
 import org.jaudiotagger.logging.ErrorMessage;
 import org.jaudiotagger.tag.*;
-import org.jaudiotagger.tag.id3.ID3v22FieldKey;
 import org.jaudiotagger.tag.images.Artwork;
 import org.jaudiotagger.tag.images.ArtworkFactory;
 import org.jaudiotagger.tag.mp4.field.*;
@@ -46,12 +45,13 @@ public class Mp4Tag extends AbstractTag
     //Mapping from generic key to mp4 key
     static
     {
-        tagFieldToMp4Field.put(FieldKey.ACOUSTIC, Mp4FieldKey.ACOUSTIC);
         tagFieldToMp4Field.put(FieldKey.ACOUSTID_FINGERPRINT, Mp4FieldKey.ACOUSTID_FINGERPRINT);
         tagFieldToMp4Field.put(FieldKey.ACOUSTID_ID, Mp4FieldKey.ACOUSTID_ID);
         tagFieldToMp4Field.put(FieldKey.ALBUM, Mp4FieldKey.ALBUM);
         tagFieldToMp4Field.put(FieldKey.ALBUM_ARTIST, Mp4FieldKey.ALBUM_ARTIST);
         tagFieldToMp4Field.put(FieldKey.ALBUM_ARTIST_SORT, Mp4FieldKey.ALBUM_ARTIST_SORT);
+        tagFieldToMp4Field.put(FieldKey.ALBUM_ARTISTS, Mp4FieldKey.ALBUM_ARTISTS);
+        tagFieldToMp4Field.put(FieldKey.ALBUM_ARTISTS_SORT, Mp4FieldKey.ALBUM_ARTISTS_SORT);
         tagFieldToMp4Field.put(FieldKey.ALBUM_SORT, Mp4FieldKey.ALBUM_SORT);
         tagFieldToMp4Field.put(FieldKey.AMAZON_ID, Mp4FieldKey.ASIN);
         tagFieldToMp4Field.put(FieldKey.ARRANGER, Mp4FieldKey.ARRANGER);
@@ -64,6 +64,7 @@ public class Mp4Tag extends AbstractTag
         tagFieldToMp4Field.put(FieldKey.CHOIR, Mp4FieldKey.CHOIR);
         tagFieldToMp4Field.put(FieldKey.CHOIR_SORT, Mp4FieldKey.CHOIR_SORT);
         tagFieldToMp4Field.put(FieldKey.CLASSICAL_CATALOG, Mp4FieldKey.CLASSICAL_CATALOG);
+        tagFieldToMp4Field.put(FieldKey.CLASSICAL_NICKNAME, Mp4FieldKey.CLASSICAL_NICKNAME);
         tagFieldToMp4Field.put(FieldKey.COMMENT, Mp4FieldKey.COMMENT);
         tagFieldToMp4Field.put(FieldKey.COMPOSER, Mp4FieldKey.COMPOSER);
         tagFieldToMp4Field.put(FieldKey.COMPOSER_SORT, Mp4FieldKey.COMPOSER_SORT);
@@ -79,7 +80,7 @@ public class Mp4Tag extends AbstractTag
         tagFieldToMp4Field.put(FieldKey.DISC_SUBTITLE, Mp4FieldKey.DISC_SUBTITLE);
         tagFieldToMp4Field.put(FieldKey.DISC_TOTAL, Mp4FieldKey.DISCNUMBER);
         tagFieldToMp4Field.put(FieldKey.DJMIXER, Mp4FieldKey.DJMIXER);
-        tagFieldToMp4Field.put(FieldKey.ELECTRONIC, Mp4FieldKey.ELECTRONIC);
+        tagFieldToMp4Field.put(FieldKey.MOOD_ELECTRONIC, Mp4FieldKey.MOOD_ELECTRONIC);
         tagFieldToMp4Field.put(FieldKey.ENCODER, Mp4FieldKey.ENCODER);
         tagFieldToMp4Field.put(FieldKey.ENGINEER, Mp4FieldKey.ENGINEER);
         tagFieldToMp4Field.put(FieldKey.ENSEMBLE, Mp4FieldKey.ENSEMBLE);
@@ -87,7 +88,6 @@ public class Mp4Tag extends AbstractTag
         tagFieldToMp4Field.put(FieldKey.FBPM, Mp4FieldKey.FBPM);
         tagFieldToMp4Field.put(FieldKey.GENRE, Mp4FieldKey.GENRE);
         tagFieldToMp4Field.put(FieldKey.GROUPING, Mp4FieldKey.GROUPING);
-        tagFieldToMp4Field.put(FieldKey.INSTRUMENTAL, Mp4FieldKey.INSTRUMENTAL);
         tagFieldToMp4Field.put(FieldKey.INVOLVED_PERSON, Mp4FieldKey.INVOLVED_PEOPLE);
         tagFieldToMp4Field.put(FieldKey.ISRC, Mp4FieldKey.ISRC);
         tagFieldToMp4Field.put(FieldKey.IS_COMPILATION, Mp4FieldKey.COMPILATION);
@@ -100,10 +100,12 @@ public class Mp4Tag extends AbstractTag
         tagFieldToMp4Field.put(FieldKey.MEDIA, Mp4FieldKey.MEDIA);
         tagFieldToMp4Field.put(FieldKey.MIXER, Mp4FieldKey.MIXER);
         tagFieldToMp4Field.put(FieldKey.MOOD, Mp4FieldKey.MOOD);
+        tagFieldToMp4Field.put(FieldKey.MOOD_ACOUSTIC, Mp4FieldKey.MOOD_ACOUSTIC);
         tagFieldToMp4Field.put(FieldKey.MOOD_AGGRESSIVE, Mp4FieldKey.MOOD_AGGRESSIVE);
         tagFieldToMp4Field.put(FieldKey.MOOD_AROUSAL, Mp4FieldKey.MOOD_AROUSAL);
         tagFieldToMp4Field.put(FieldKey.MOOD_DANCEABILITY, Mp4FieldKey.MOOD_DANCEABILITY);
         tagFieldToMp4Field.put(FieldKey.MOOD_HAPPY, Mp4FieldKey.MOOD_HAPPY);
+        tagFieldToMp4Field.put(FieldKey.MOOD_INSTRUMENTAL, Mp4FieldKey.MOOD_INSTRUMENTAL);
         tagFieldToMp4Field.put(FieldKey.MOOD_PARTY, Mp4FieldKey.MOOD_PARTY);
         tagFieldToMp4Field.put(FieldKey.MOOD_RELAXED, Mp4FieldKey.MOOD_RELAXED);
         tagFieldToMp4Field.put(FieldKey.MOOD_SAD, Mp4FieldKey.MOOD_SAD);
@@ -111,6 +113,7 @@ public class Mp4Tag extends AbstractTag
         tagFieldToMp4Field.put(FieldKey.MOVEMENT, Mp4FieldKey.MOVEMENT);
         tagFieldToMp4Field.put(FieldKey.MOVEMENT_NO, Mp4FieldKey.MOVEMENT_NO);
         tagFieldToMp4Field.put(FieldKey.MOVEMENT_TOTAL, Mp4FieldKey.MOVEMENT_TOTAL);
+        tagFieldToMp4Field.put(FieldKey.MUSICBRAINZ_WORK, Mp4FieldKey.MUSICBRAINZ_WORK);
         tagFieldToMp4Field.put(FieldKey.MUSICBRAINZ_ARTISTID, Mp4FieldKey.MUSICBRAINZ_ARTISTID);
         tagFieldToMp4Field.put(FieldKey.MUSICBRAINZ_DISC_ID, Mp4FieldKey.MUSICBRAINZ_DISCID);
         tagFieldToMp4Field.put(FieldKey.MUSICBRAINZ_ORIGINAL_RELEASE_ID, Mp4FieldKey.MUSICBRAINZ_ORIGINALALBUMID);
@@ -146,6 +149,7 @@ public class Mp4Tag extends AbstractTag
         tagFieldToMp4Field.put(FieldKey.TEMPO, Mp4FieldKey.TEMPO);
         tagFieldToMp4Field.put(FieldKey.TIMBRE, Mp4FieldKey.TIMBRE);
         tagFieldToMp4Field.put(FieldKey.TITLE, Mp4FieldKey.TITLE);
+        tagFieldToMp4Field.put(FieldKey.TITLE_MOVEMENT, Mp4FieldKey.TITLE_MOVEMENT);
         tagFieldToMp4Field.put(FieldKey.TITLE_SORT, Mp4FieldKey.TITLE_SORT);
         tagFieldToMp4Field.put(FieldKey.TONALITY, Mp4FieldKey.TONALITY);
         tagFieldToMp4Field.put(FieldKey.TRACK, Mp4FieldKey.TRACK);
@@ -163,24 +167,24 @@ public class Mp4Tag extends AbstractTag
         tagFieldToMp4Field.put(FieldKey.MUSICBRAINZ_WORK_COMPOSITION_ID, Mp4FieldKey.MUSICBRAINZ_WORK_COMPOSITION_ID);
         tagFieldToMp4Field.put(FieldKey.PART_TYPE, Mp4FieldKey.PART_TYPE);
         tagFieldToMp4Field.put(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL1_ID, Mp4FieldKey.MUSICBRAINZ_WORK_PART_LEVEL1_ID);
-        tagFieldToMp4Field.put(FieldKey.WORK_COMPOSITION, Mp4FieldKey.WORK_COMPOSITION);
-        tagFieldToMp4Field.put(FieldKey.WORK_PART_LEVEL1, Mp4FieldKey.WORK_PART_LEVEL1);
-        tagFieldToMp4Field.put(FieldKey.WORK_PART_LEVEL1_TYPE, Mp4FieldKey.WORK_PART_LEVEL1_TYPE);
+        tagFieldToMp4Field.put(FieldKey.MUSICBRAINZ_WORK_COMPOSITION, Mp4FieldKey.MUSICBRAINZ_WORK_COMPOSITION);
+        tagFieldToMp4Field.put(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL1, Mp4FieldKey.MUSICBRAINZ_WORK_PART_LEVEL1);
+        tagFieldToMp4Field.put(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL1_TYPE, Mp4FieldKey.MUSICBRAINZ_WORK_PART_LEVEL1_TYPE);
         tagFieldToMp4Field.put(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL2_ID, Mp4FieldKey.MUSICBRAINZ_WORK_PART_LEVEL2_ID);
-        tagFieldToMp4Field.put(FieldKey.WORK_PART_LEVEL2, Mp4FieldKey.WORK_PART_LEVEL2);
-        tagFieldToMp4Field.put(FieldKey.WORK_PART_LEVEL2_TYPE, Mp4FieldKey.WORK_PART_LEVEL2_TYPE);
+        tagFieldToMp4Field.put(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL2, Mp4FieldKey.MUSICBRAINZ_WORK_PART_LEVEL2);
+        tagFieldToMp4Field.put(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL2_TYPE, Mp4FieldKey.MUSICBRAINZ_WORK_PART_LEVEL2_TYPE);
         tagFieldToMp4Field.put(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL3_ID, Mp4FieldKey.MUSICBRAINZ_WORK_PART_LEVEL3_ID);
-        tagFieldToMp4Field.put(FieldKey.WORK_PART_LEVEL3, Mp4FieldKey.WORK_PART_LEVEL3);
-        tagFieldToMp4Field.put(FieldKey.WORK_PART_LEVEL3_TYPE, Mp4FieldKey.WORK_PART_LEVEL3_TYPE);
+        tagFieldToMp4Field.put(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL3, Mp4FieldKey.MUSICBRAINZ_WORK_PART_LEVEL3);
+        tagFieldToMp4Field.put(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL3_TYPE, Mp4FieldKey.MUSICBRAINZ_WORK_PART_LEVEL3_TYPE);
         tagFieldToMp4Field.put(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL4_ID, Mp4FieldKey.MUSICBRAINZ_WORK_PART_LEVEL4_ID);
-        tagFieldToMp4Field.put(FieldKey.WORK_PART_LEVEL4, Mp4FieldKey.WORK_PART_LEVEL4);
-        tagFieldToMp4Field.put(FieldKey.WORK_PART_LEVEL4_TYPE, Mp4FieldKey.WORK_PART_LEVEL4_TYPE);
+        tagFieldToMp4Field.put(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL4, Mp4FieldKey.MUSICBRAINZ_WORK_PART_LEVEL4);
+        tagFieldToMp4Field.put(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL4_TYPE, Mp4FieldKey.MUSICBRAINZ_WORK_PART_LEVEL4_TYPE);
         tagFieldToMp4Field.put(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL5_ID, Mp4FieldKey.MUSICBRAINZ_WORK_PART_LEVEL5_ID);
-        tagFieldToMp4Field.put(FieldKey.WORK_PART_LEVEL5, Mp4FieldKey.WORK_PART_LEVEL5);
-        tagFieldToMp4Field.put(FieldKey.WORK_PART_LEVEL5_TYPE, Mp4FieldKey.WORK_PART_LEVEL5_TYPE);
+        tagFieldToMp4Field.put(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL5, Mp4FieldKey.MUSICBRAINZ_WORK_PART_LEVEL5);
+        tagFieldToMp4Field.put(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL5_TYPE, Mp4FieldKey.MUSICBRAINZ_WORK_PART_LEVEL5_TYPE);
         tagFieldToMp4Field.put(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL6_ID, Mp4FieldKey.MUSICBRAINZ_WORK_PART_LEVEL6_ID);
-        tagFieldToMp4Field.put(FieldKey.WORK_PART_LEVEL6, Mp4FieldKey.WORK_PART_LEVEL6);
-        tagFieldToMp4Field.put(FieldKey.WORK_PART_LEVEL6_TYPE, Mp4FieldKey.WORK_PART_LEVEL6_TYPE);
+        tagFieldToMp4Field.put(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL6, Mp4FieldKey.MUSICBRAINZ_WORK_PART_LEVEL6);
+        tagFieldToMp4Field.put(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL6_TYPE, Mp4FieldKey.MUSICBRAINZ_WORK_PART_LEVEL6_TYPE);
         tagFieldToMp4Field.put(FieldKey.PART_NUMBER, Mp4FieldKey.PART_NUMBER);
         tagFieldToMp4Field.put(FieldKey.ARTISTS_SORT, Mp4FieldKey.ARTISTS_SORT);
         tagFieldToMp4Field.put(FieldKey.CONDUCTOR_SORT, Mp4FieldKey.CONDUCTOR_SORT);
@@ -700,7 +704,6 @@ public class Mp4Tag extends AbstractTag
                 return new Mp4TagTextField(GENRE_CUSTOM.getFieldName(), value);
             }
         }
-
         //Default for all other fields
         return createField(tagFieldToMp4Field.get(genericKey), value);
     }
