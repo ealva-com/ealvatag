@@ -223,7 +223,7 @@ public enum Mp4FieldKey
     URL_WIKIPEDIA_RELEASE_SITE("com.apple.iTunes", "URL_WIKIPEDIA_RELEASE_SITE", TEXT, Tagger.JAIKOZ),
     WINAMP_PUBLISHER("com.nullsoft.winamp", "publisher", TEXT, Tagger.WINAMP),
     WORK("©wrk",Mp4TagFieldSubType.TEXT, TEXT),
-    WORK_TYPE("com.apple.iTunes","WORK TYPE",  TEXT, Tagger.JAIKOZ),
+    WORK_TYPE("com.apple.iTunes","WORK_TYPE",  TEXT, Tagger.JAIKOZ),
     ;
     private Tagger tagger;
     private String fieldName;
