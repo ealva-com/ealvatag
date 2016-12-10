@@ -23,6 +23,7 @@ import org.jaudiotagger.tag.datatype.DataTypes;
 import org.jaudiotagger.tag.datatype.Pair;
 import org.jaudiotagger.tag.datatype.PairedTextEncodedStringNullTerminated;
 import org.jaudiotagger.tag.id3.framebody.*;
+import org.jaudiotagger.tag.id3.valuepair.ID3NumberTotalFields;
 import org.jaudiotagger.tag.images.Artwork;
 import org.jaudiotagger.tag.images.ArtworkFactory;
 import org.jaudiotagger.tag.reference.PictureTypes;
@@ -942,6 +943,7 @@ public class ID3v23Tag extends AbstractID3v2Tag
 
     protected FrameAndSubId getFrameAndSubIdFromGenericKey(FieldKey genericKey)
     {
+        System.out.println("v23GETFRAMESUBID:"+genericKey);
         if (genericKey == null)
         {
             throw new IllegalArgumentException(ErrorMessage.GENERAL_INVALID_NULL_ARGUMENT.getMsg());
@@ -1099,7 +1101,6 @@ public class ID3v23Tag extends AbstractID3v2Tag
         }
         else if (genericKey == FieldKey.YEAR)
         {
-
             if(value.length()==1)
             {
                 AbstractID3v2Frame tyer = createFrame(ID3v23Frames.FRAME_ID_V3_TYER);
@@ -1137,9 +1138,11 @@ public class ID3v23Tag extends AbstractID3v2Tag
                     AbstractID3v2Frame tdat = createFrame(ID3v23Frames.FRAME_ID_V3_TDAT);
                     ((AbstractFrameBodyTextInfo) tdat.getBody()).setText(day+month);
 
+                    System.out.println("**************** CREATE TYERTDAT"+month+":"+day);
                     TyerTdatAggregatedFrame ag = new TyerTdatAggregatedFrame();
                     ag.addFrame(tyer);
                     ag.addFrame(tdat);
+                    System.out.println("**************** CREATE AG"+ag.getContent());
                     return ag;
                 }
                 else if(value.length() >= 7)
@@ -1190,13 +1193,16 @@ public class ID3v23Tag extends AbstractID3v2Tag
 
         if(genericKey == FieldKey.YEAR)
         {
+            System.out.println("V23GETVALUE");
             AggregatedFrame af = (AggregatedFrame)getFrame(TyerTdatAggregatedFrame.ID_TYER_TDAT);
             if(af!=null)
             {
+                System.out.println("AFCONETENTL:"+af.getContent());
                 return af.getContent();
             }
             else
             {
+                System.out.println("V23SUPERGETVALUEW");
                 return super.getValue(genericKey, index);
             }
         }
@@ -1234,6 +1240,7 @@ public class ID3v23Tag extends AbstractID3v2Tag
             return;
         }
 
+        System.out.println("loadFrameIntoSpecifiedMap:"+frameId);
         if(frameId.equals(ID3v23Frames.FRAME_ID_V3_TDAT))
         {
             if(frame.getContent().length()==0)
@@ -1257,11 +1264,13 @@ public class ID3v23Tag extends AbstractID3v2Tag
         {
             if (map.containsKey(ID3v23Frames.FRAME_ID_V3_TDAT))
             {
+                System.out.println("FOUNDTYERTDATAAGREEGATED1");
                 TyerTdatAggregatedFrame ag = new TyerTdatAggregatedFrame();
                 ag.addFrame(frame);
                 ag.addFrame((AbstractID3v2Frame)map.get(ID3v23Frames.FRAME_ID_V3_TDAT));
                 map.remove(ID3v23Frames.FRAME_ID_V3_TDAT);
                 map.put(TyerTdatAggregatedFrame.ID_TYER_TDAT, ag);
+                System.out.println("AG3:" + ag.getContent());
             }
             else
             {
@@ -1272,11 +1281,13 @@ public class ID3v23Tag extends AbstractID3v2Tag
         {
             if (map.containsKey(ID3v23Frames.FRAME_ID_V3_TYER))
             {
+                System.out.println("FOUNDTYERTDATAAGREEGATED2");
                 TyerTdatAggregatedFrame ag = new TyerTdatAggregatedFrame();
                 ag.addFrame((AbstractID3v2Frame)map.get(ID3v23Frames.FRAME_ID_V3_TYER));
                 ag.addFrame(frame);
                 map.remove(ID3v23Frames.FRAME_ID_V3_TYER);
                 map.put(TyerTdatAggregatedFrame.ID_TYER_TDAT, ag);
+                System.out.println("AG4:"+ag.getContent());
             }
             else
             {
@@ -1287,12 +1298,14 @@ public class ID3v23Tag extends AbstractID3v2Tag
     }
 
     /**
-     * Maps the generic key to the id3 key and return the list of values for this field as strings
+     * Overridden because GENRE can need converting of data to ID3v23 format and
+     * YEAR key is specially processed by getFields() for ID3
      *
      * @param genericKey
      * @return
      * @throws KeyNotFoundException
      */
+    @Override
     public List<String> getAll(FieldKey genericKey) throws KeyNotFoundException
     {
         if(genericKey == FieldKey.GENRE)
@@ -1311,11 +1324,61 @@ public class ID3v23Tag extends AbstractID3v2Tag
             }
             return convertedGenres;
         }
+        else if(genericKey == FieldKey.YEAR)
+        {
+            List<TagField> fields = getFields(genericKey);
+            List<String> results = new ArrayList<String>();
+            if (fields != null && fields.size() > 0)
+            {
+                for(TagField next:fields)
+                {
+                    if(next instanceof TagTextField)
+                    {
+                        results.add(((TagTextField)next).getContent());
+                    }
+                }
+            }
+            return results;
+        }
         else
         {
             return super.getAll(genericKey);
         }
     }
 
+    /**
+     * Overridden because YEAR key can be served by TDAT, TYER or special aggreagted frame
+     *
+     * @param genericKey
+     * @return
+     * @throws KeyNotFoundException
+     */
+    @Override
+    public List<TagField> getFields(FieldKey genericKey) throws KeyNotFoundException
+    {
+        if (genericKey == null)
+        {
+            throw new IllegalArgumentException(ErrorMessage.GENERAL_INVALID_NULL_ARGUMENT.getMsg());
+        }
+
+        if(genericKey == FieldKey.YEAR)
+        {
+            AggregatedFrame af = (AggregatedFrame)getFrame(TyerTdatAggregatedFrame.ID_TYER_TDAT);
+            if(af!=null)
+            {
+                List<TagField> list = new ArrayList<>();
+                list.add(af);
+                return list;
+            }
+            else
+            {
+                return super.getFields(genericKey);
+            }
+        }
+        else
+        {
+            return super.getFields(genericKey);
+        }
+    }
 
 }

@@ -2862,8 +2862,6 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
         List<TagField> filteredList = new ArrayList<TagField>();
         String subFieldId = formatKey.getSubId();
 
-        //... do we need to refine the list further i.e we only want TXXX frames that relate to the particular
-        //key that was passed as a parameter
         if (subFieldId != null)
         {
             for (TagField tagfield : list)
