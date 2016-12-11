@@ -943,7 +943,6 @@ public class ID3v23Tag extends AbstractID3v2Tag
 
     protected FrameAndSubId getFrameAndSubIdFromGenericKey(FieldKey genericKey)
     {
-        System.out.println("v23GETFRAMESUBID:"+genericKey);
         if (genericKey == null)
         {
             throw new IllegalArgumentException(ErrorMessage.GENERAL_INVALID_NULL_ARGUMENT.getMsg());
