@@ -1239,7 +1239,6 @@ public class ID3v23Tag extends AbstractID3v2Tag
             return;
         }
 
-        System.out.println("loadFrameIntoSpecifiedMap:"+frameId);
         if(frameId.equals(ID3v23Frames.FRAME_ID_V3_TDAT))
         {
             if(frame.getContent().length()==0)
@@ -1263,13 +1262,11 @@ public class ID3v23Tag extends AbstractID3v2Tag
         {
             if (map.containsKey(ID3v23Frames.FRAME_ID_V3_TDAT))
             {
-                System.out.println("FOUNDTYERTDATAAGREEGATED1");
                 TyerTdatAggregatedFrame ag = new TyerTdatAggregatedFrame();
                 ag.addFrame(frame);
                 ag.addFrame((AbstractID3v2Frame)map.get(ID3v23Frames.FRAME_ID_V3_TDAT));
                 map.remove(ID3v23Frames.FRAME_ID_V3_TDAT);
                 map.put(TyerTdatAggregatedFrame.ID_TYER_TDAT, ag);
-                System.out.println("AG3:" + ag.getContent());
             }
             else
             {
@@ -1280,13 +1277,11 @@ public class ID3v23Tag extends AbstractID3v2Tag
         {
             if (map.containsKey(ID3v23Frames.FRAME_ID_V3_TYER))
             {
-                System.out.println("FOUNDTYERTDATAAGREEGATED2");
                 TyerTdatAggregatedFrame ag = new TyerTdatAggregatedFrame();
                 ag.addFrame((AbstractID3v2Frame)map.get(ID3v23Frames.FRAME_ID_V3_TYER));
                 ag.addFrame(frame);
                 map.remove(ID3v23Frames.FRAME_ID_V3_TYER);
                 map.put(TyerTdatAggregatedFrame.ID_TYER_TDAT, ag);
-                System.out.println("AG4:"+ag.getContent());
             }
             else
             {
