@@ -1137,11 +1137,9 @@ public class ID3v23Tag extends AbstractID3v2Tag
                     AbstractID3v2Frame tdat = createFrame(ID3v23Frames.FRAME_ID_V3_TDAT);
                     ((AbstractFrameBodyTextInfo) tdat.getBody()).setText(day+month);
 
-                    System.out.println("**************** CREATE TYERTDAT"+month+":"+day);
                     TyerTdatAggregatedFrame ag = new TyerTdatAggregatedFrame();
                     ag.addFrame(tyer);
                     ag.addFrame(tdat);
-                    System.out.println("**************** CREATE AG"+ag.getContent());
                     return ag;
                 }
                 else if(value.length() >= 7)
@@ -1192,16 +1190,13 @@ public class ID3v23Tag extends AbstractID3v2Tag
 
         if(genericKey == FieldKey.YEAR)
         {
-            System.out.println("V23GETVALUE");
             AggregatedFrame af = (AggregatedFrame)getFrame(TyerTdatAggregatedFrame.ID_TYER_TDAT);
             if(af!=null)
             {
-                System.out.println("AFCONETENTL:"+af.getContent());
                 return af.getContent();
             }
             else
             {
-                System.out.println("V23SUPERGETVALUEW");
                 return super.getValue(genericKey, index);
             }
         }

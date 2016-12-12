@@ -144,6 +144,9 @@ public class FrameTDATTest extends AbstractTestCase
         assertEquals(af.getTag().getAll(FieldKey.ARTIST).get(0),"fred");
         assertEquals(af.getTag().getFirst(FieldKey.YEAR),"2003-06-23");
         assertEquals(af.getTag().getAll(FieldKey.YEAR).get(0),"2003-06-23");
+        assertEquals(((MP3File)af).getID3v2TagAsv24().getFirst(FieldKey.YEAR),"2003-06-23");
+        assertEquals(((MP3File)af).getID3v2TagAsv24().getAll(FieldKey.YEAR).get(0),"2003-06-23");
+
     }
 
 
