@@ -62,6 +62,7 @@ public class ID3v24Frames extends ID3Frames
     public static final String FRAME_ID_INITIAL_KEY = "TKEY";
     public static final String FRAME_ID_INVOLVED_PEOPLE = "TIPL";
     public static final String FRAME_ID_ISRC = "TSRC";
+    public static final String FRAME_ID_ITUNES_GROUPING = "GRP1";
     public static final String FRAME_ID_LANGUAGE = "TLAN";
     public static final String FRAME_ID_LENGTH = "TLEN";
     public static final String FRAME_ID_LINKED_INFO = "LINK";
@@ -177,6 +178,7 @@ public class ID3v24Frames extends ID3Frames
         supportedFrames.add(FRAME_ID_INITIAL_KEY);
         supportedFrames.add(FRAME_ID_INVOLVED_PEOPLE);
         supportedFrames.add(FRAME_ID_ISRC);
+        supportedFrames.add(FRAME_ID_ITUNES_GROUPING);
         supportedFrames.add(FRAME_ID_LANGUAGE);
         supportedFrames.add(FRAME_ID_LENGTH);
         supportedFrames.add(FRAME_ID_LINKED_INFO);
@@ -287,6 +289,7 @@ public class ID3v24Frames extends ID3Frames
         idToValue.put(FRAME_ID_INITIAL_KEY, "Text: Initial key");
         idToValue.put(FRAME_ID_INVOLVED_PEOPLE, "Involved people list");
         idToValue.put(FRAME_ID_ISRC, "Text: ISRC (International Standard Recording Code)");
+        idToValue.put(FRAME_ID_ITUNES_GROUPING, "iTunes Grouping");
         idToValue.put(FRAME_ID_LANGUAGE, "Text: Language(s)");
         idToValue.put(FRAME_ID_LENGTH, "Text: Length");
         idToValue.put(FRAME_ID_LINKED_INFO, "Linked information");
@@ -423,6 +426,7 @@ public class ID3v24Frames extends ID3Frames
         tagFieldToId3.put(FieldKey.IS_CLASSICAL, ID3v24FieldKey.IS_CLASSICAL);
         tagFieldToId3.put(FieldKey.IS_COMPILATION, ID3v24FieldKey.IS_COMPILATION);
         tagFieldToId3.put(FieldKey.IS_SOUNDTRACK, ID3v24FieldKey.IS_SOUNDTRACK);
+        tagFieldToId3.put(FieldKey.ITUNES_GROUPING, ID3v24FieldKey.ITUNES_GROUPING);
         tagFieldToId3.put(FieldKey.KEY, ID3v24FieldKey.KEY);
         tagFieldToId3.put(FieldKey.LANGUAGE, ID3v24FieldKey.LANGUAGE);
         tagFieldToId3.put(FieldKey.LYRICIST, ID3v24FieldKey.LYRICIST);

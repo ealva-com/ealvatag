@@ -364,7 +364,7 @@ public class WmaSimpleTest extends AbstractTestCase
                 Tag tag = f.getTag();
                 for (FieldKey key : FieldKey.values())
                 {
-                    if (!(key == FieldKey.COVER_ART))
+                    if (!(key == FieldKey.COVER_ART) && !(key == FieldKey.ITUNES_GROUPING))
                     {
                         tag.setField(tag.createField(key, key.name() + "_value_" + i));
                     }
@@ -377,7 +377,7 @@ public class WmaSimpleTest extends AbstractTestCase
                     /*
                       * Test value retrieval, using multiple access methods.
                       */
-                    if (!(key == FieldKey.COVER_ART))
+                    if (!(key == FieldKey.COVER_ART) && !(key == FieldKey.ITUNES_GROUPING))
                     {
                         String value = key.name() + "_value_" + i;
                         System.out.println("Value is:" + value);
@@ -417,7 +417,7 @@ public class WmaSimpleTest extends AbstractTestCase
             Tag tag = f.getTag();
             for (FieldKey key : FieldKey.values())
             {
-                if (!(key == FieldKey.COVER_ART))
+                if (!(key == FieldKey.COVER_ART) && !(key == FieldKey.ITUNES_GROUPING))
                 {
                     tag.addField(tag.createField(key, key.name() + "_value"));
                 }
