@@ -32,7 +32,7 @@ public class FrameTIPLTest extends AbstractTestCase
 
     public static ID3v23Frame getV23InitialisedFrame()
     {
-        ID3v23Frame frame = new ID3v23Frame(ID3v23Frames.FRAME_ID_V3_IPLS);
+        ID3v23Frame frame = new ID3v23Frame(ID3v23Frames.FRAME_ID_V3_INVOLVED_PEOPLE);
         FrameBodyTIPL fb = FrameBodyTIPLTest.getInitialisedBody();
         frame.setBody(fb);
         return frame;
@@ -70,7 +70,7 @@ public class FrameTIPLTest extends AbstractTestCase
         FrameBodyTIPL fb = null;
         try
         {
-            frame = new ID3v23Frame(ID3v23Frames.FRAME_ID_V3_IPLS);
+            frame = new ID3v23Frame(ID3v23Frames.FRAME_ID_V3_INVOLVED_PEOPLE);
             fb = FrameBodyTIPLTest.getInitialisedBody();
             frame.setBody(fb);
         }
@@ -80,7 +80,7 @@ public class FrameTIPLTest extends AbstractTestCase
         }
 
         assertNull(exceptionCaught);
-        assertEquals(ID3v23Frames.FRAME_ID_V3_IPLS, frame.getIdentifier());
+        assertEquals(ID3v23Frames.FRAME_ID_V3_INVOLVED_PEOPLE, frame.getIdentifier());
         assertEquals(TextEncoding.ISO_8859_1, fb.getTextEncoding());
         assertFalse(ID3v23Frames.getInstanceOf().isExtensionFrames(frame.getIdentifier()));
         assertTrue(ID3v23Frames.getInstanceOf().isSupportedFrames(frame.getIdentifier()));
@@ -166,7 +166,7 @@ public class FrameTIPLTest extends AbstractTestCase
 
         //Reload
         mp3File = new MP3File(testFile);
-        ID3v23Frame frame = (ID3v23Frame) mp3File.getID3v2Tag().getFrame(ID3v23Frames.FRAME_ID_V3_IPLS);
+        ID3v23Frame frame = (ID3v23Frame) mp3File.getID3v2Tag().getFrame(ID3v23Frames.FRAME_ID_V3_INVOLVED_PEOPLE);
         FrameBodyIPLS body = (FrameBodyIPLS) frame.getBody();
         assertEquals(TextEncoding.ISO_8859_1, body.getTextEncoding());
         assertEquals(FrameBodyTIPLTest.INVOLVED_PEOPLE, body.getText());

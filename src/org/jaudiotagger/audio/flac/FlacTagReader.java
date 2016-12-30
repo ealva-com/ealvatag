@@ -21,6 +21,7 @@ package org.jaudiotagger.audio.flac;
 import org.jaudiotagger.audio.exceptions.CannotReadException;
 import org.jaudiotagger.audio.flac.metadatablock.MetadataBlockDataPicture;
 import org.jaudiotagger.audio.flac.metadatablock.MetadataBlockHeader;
+import org.jaudiotagger.logging.Hex;
 import org.jaudiotagger.tag.InvalidFrameException;
 import org.jaudiotagger.tag.flac.FlacTag;
 import org.jaudiotagger.tag.vorbiscomment.VorbisCommentReader;
@@ -121,6 +122,7 @@ public class FlacTagReader
                 }
                 isLastBlock = mbh.isLastBlock();
             }
+            logger.config("Audio should start at:"+ Hex.asHex(fc.position()));
 
             //Note there may not be either a tag or any images, no problem this is valid however to make it easier we
             //just initialize Flac with an empty VorbisTag

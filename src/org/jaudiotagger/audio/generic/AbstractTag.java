@@ -150,6 +150,19 @@ public abstract class AbstractTag implements Tag
         return (l.size() != 0) ? l.get(0) : null;
     }
 
+    public List<TagField> getAll()
+    {
+        List<TagField> fieldList = new ArrayList<TagField>();
+        for(List<TagField> listOfFields : fields.values())
+        {
+            for(TagField next:listOfFields)
+            {
+                fieldList.add(next);
+            }
+        }
+        return fieldList;
+    }
+
     @Override
     public Iterator<TagField> getFields()
     {
@@ -282,7 +295,7 @@ public abstract class AbstractTag implements Tag
      * @throws FieldDataInvalidException
      */
     @Override
-    public void setField(FieldKey genericKey, String value) throws KeyNotFoundException, FieldDataInvalidException
+    public void setField(FieldKey genericKey, String... value) throws KeyNotFoundException, FieldDataInvalidException
     {
         TagField tagfield = createField(genericKey,value);
         setField(tagfield);
@@ -297,7 +310,7 @@ public abstract class AbstractTag implements Tag
      * @throws FieldDataInvalidException
      */
      @Override
-    public void addField(FieldKey genericKey, String value) throws KeyNotFoundException, FieldDataInvalidException
+    public void addField(FieldKey genericKey, String... value) throws KeyNotFoundException, FieldDataInvalidException
     {
         TagField tagfield = createField(genericKey,value);
         addField(tagfield);
@@ -393,7 +406,7 @@ public abstract class AbstractTag implements Tag
      * @throws KeyNotFoundException
      * @throws FieldDataInvalidException
      */
-    public abstract TagField createField(FieldKey genericKey, String value) throws KeyNotFoundException, FieldDataInvalidException;
+    public abstract TagField createField(FieldKey genericKey, String... value) throws KeyNotFoundException, FieldDataInvalidException;
 
     /**
      * 

@@ -59,7 +59,7 @@ public interface Tag {
      * @throws KeyNotFoundException
      * @throws FieldDataInvalidException
      */
-    void setField(FieldKey genericKey, String value) throws KeyNotFoundException, FieldDataInvalidException;
+    void setField(FieldKey genericKey, String... value) throws KeyNotFoundException, FieldDataInvalidException;
 
     /**
      * Create the field based on the generic key and add it to the tag
@@ -71,7 +71,7 @@ public interface Tag {
      * @throws KeyNotFoundException
      * @throws FieldDataInvalidException
      */
-    void addField(FieldKey genericKey, String value) throws KeyNotFoundException, FieldDataInvalidException;
+    void addField(FieldKey genericKey, String... value) throws KeyNotFoundException, FieldDataInvalidException;
 
     /**
      * Delete any fields with this key
@@ -310,6 +310,9 @@ public interface Tag {
      * <p>Only textual data supported at the moment. The genericKey will be mapped
      * to the correct implementation key and return a TagField.
      *
+     * Usually the value field should only be one value, but certain fields may require more than one value
+     * currently the only field to require this is the MUSICIAN field, it should contain instrument and then
+     * performer name
      *
      * @param genericKey is the generic key
      * @param value      to store
@@ -317,7 +320,7 @@ public interface Tag {
      * @throws KeyNotFoundException
      * @throws FieldDataInvalidException
      */
-    TagField createField(FieldKey genericKey, String value) throws KeyNotFoundException, FieldDataInvalidException;
+    TagField createField(FieldKey genericKey, String... value) throws KeyNotFoundException, FieldDataInvalidException;
 
     /**
      * Creates isCompilation field

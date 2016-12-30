@@ -198,6 +198,11 @@ public class PairedTextEncodedStringNullTerminated extends AbstractDataType
         return buffer.toByteArray();
     }
 
+    public String toString()
+    {
+        return value.toString();
+    }
+
     /**
      * This holds the values held by this PairedTextEncodedDataType, always held as pairs of values
      */
@@ -210,6 +215,10 @@ public class PairedTextEncodedStringNullTerminated extends AbstractDataType
             super();
         }
 
+        public void add(Pair pair)
+        {
+            mapping.add(pair);
+        }
         /**
          * Add String Data type to the value list
          *
@@ -250,6 +259,10 @@ public class PairedTextEncodedStringNullTerminated extends AbstractDataType
             for(Pair next:mapping)
             {
                 sb.append(next.getKey()+':'+next.getValue()+',');
+            }
+            if(sb.length()>0)
+            {
+                sb.setLength(sb.length() - 1);
             }
             return sb.toString();
         }

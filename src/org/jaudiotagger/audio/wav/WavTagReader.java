@@ -96,8 +96,7 @@ public class WavTagReader
     {
         if(!tag.isExistingId3Tag())
         {
-            //Default used by Tag & Rename
-            tag.setID3Tag(new ID3v23Tag());
+            tag.setID3Tag(WavTag.createDefaultID3Tag());
         }
         if(!tag.isExistingInfoTag())
         {
@@ -134,7 +133,7 @@ public class WavTagReader
                     tag.addChunkSummary(new ChunkSummary(chunkHeader.getID(), chunkHeader.getStartLocationInFile(), chunkHeader.getSize()));
                     if(tag.getInfoTag()==null)
                     {
-                        chunk = new WavListChunk(Utils.readFileDataIntoBufferLE(fc, (int) chunkHeader.getSize()), chunkHeader, tag);
+                        chunk = new WavListChunk(loggingName, Utils.readFileDataIntoBufferLE(fc, (int) chunkHeader.getSize()), chunkHeader, tag);
                         if (!chunk.readChunk())
                         {
                             return false;

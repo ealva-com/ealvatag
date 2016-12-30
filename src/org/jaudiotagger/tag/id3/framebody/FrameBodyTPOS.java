@@ -41,15 +41,14 @@ import java.nio.ByteBuffer;
  * @author : Eric Farng
  * @version $Id$
  */
-public class FrameBodyTPOS extends AbstractID3v2FrameBody implements ID3v23FrameBody, ID3v24FrameBody
+public class FrameBodyTPOS extends AbstractFrameBodyNumberTotal implements ID3v23FrameBody, ID3v24FrameBody
 {
     /**
      * Creates a new FrameBodyTRCK datatype.
      */
     public FrameBodyTPOS()
     {
-        setObjectValue(DataTypes.OBJ_TEXT_ENCODING, TextEncoding.ISO_8859_1);
-        setObjectValue(DataTypes.OBJ_TEXT, new PartOfSet.PartOfSetValue());
+        super();
     }
 
     public FrameBodyTPOS(FrameBodyTPOS body)
@@ -65,17 +64,13 @@ public class FrameBodyTPOS extends AbstractID3v2FrameBody implements ID3v23Frame
      */
     public FrameBodyTPOS(byte textEncoding, String text)
     {
-        setObjectValue(DataTypes.OBJ_TEXT_ENCODING, textEncoding);
-        setObjectValue(DataTypes.OBJ_TEXT, new PartOfSet.PartOfSetValue(text));
+        super(textEncoding, text);
     }
 
     public FrameBodyTPOS(byte textEncoding, Integer discNo,Integer discTotal)
     {
-        super();
-        setObjectValue(DataTypes.OBJ_TEXT_ENCODING, textEncoding);
-        setObjectValue(DataTypes.OBJ_TEXT, new PartOfSet.PartOfSetValue(discNo,discTotal));
+        super(textEncoding, discNo, discTotal);
     }
-
 
     /**
      * Creates a new FrameBodyTRCK datatype.
@@ -90,7 +85,6 @@ public class FrameBodyTPOS extends AbstractID3v2FrameBody implements ID3v23Frame
         super(byteBuffer, frameSize);
     }
 
-
     /**
      * The ID3v2 frame identifier
      *
@@ -101,65 +95,45 @@ public class FrameBodyTPOS extends AbstractID3v2FrameBody implements ID3v23Frame
         return ID3v24Frames.FRAME_ID_SET;
     }
 
-    public String getUserFriendlyValue()
-    {
-        return String.valueOf(getDiscNo());
-    }
-
-    public String getText()
-    {
-        return getObjectValue(DataTypes.OBJ_TEXT).toString();
-    }
-
     public Integer getDiscNo()
     {
-        return ((PartOfSet.PartOfSetValue)getObjectValue(DataTypes.OBJ_TEXT)).getCount();
+        return getNumber();
     }
 
     public String getDiscNoAsText()
     {
-        return ((PartOfSet.PartOfSetValue)getObjectValue(DataTypes.OBJ_TEXT)).getCountAsText();
+        return getNumberAsText();
     }
 
     public void setDiscNo(Integer discNo)
     {
-        ((PartOfSet.PartOfSetValue)getObjectValue(DataTypes.OBJ_TEXT)).setCount(discNo);
+        setNumber(discNo);
     }
 
     public void setDiscNo(String discNo)
     {
-        ((PartOfSet.PartOfSetValue)getObjectValue(DataTypes.OBJ_TEXT)).setCount(discNo);
+        setNumber(discNo);
     }
 
 
     public Integer getDiscTotal()
     {
-        return ((PartOfSet.PartOfSetValue)getObjectValue(DataTypes.OBJ_TEXT)).getTotal();
+        return getTotal();
     }
 
     public String getDiscTotalAsText()
     {
-        return ((PartOfSet.PartOfSetValue)getObjectValue(DataTypes.OBJ_TEXT)).getTotalAsText();
+        return getTotalAsText();
     }
 
     public void setDiscTotal(Integer discTotal)
     {
-         ((PartOfSet.PartOfSetValue)getObjectValue(DataTypes.OBJ_TEXT)).setTotal(discTotal);
+         setTotal(discTotal);
     }
 
     public void setDiscTotal(String discTotal)
     {
-        ((PartOfSet.PartOfSetValue)getObjectValue(DataTypes.OBJ_TEXT)).setTotal(discTotal);
+         setTotal(discTotal);
     }
 
-    public void setText(String text)
-    {
-        setObjectValue(DataTypes.OBJ_TEXT, new PartOfSet.PartOfSetValue(text));
-    }
-
-    protected void setupObjectList()
-    {
-        objectList.add(new NumberHashMap(DataTypes.OBJ_TEXT_ENCODING, this, TextEncoding.TEXT_ENCODING_FIELD_SIZE));
-        objectList.add(new PartOfSet(DataTypes.OBJ_TEXT, this));
-    }
 }

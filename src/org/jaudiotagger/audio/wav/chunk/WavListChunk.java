@@ -37,26 +37,35 @@ public class WavListChunk extends Chunk
     private boolean isValid = false;
 
     private WavTag tag;
+    private String loggingName;
 
-    public WavListChunk(ByteBuffer chunkData, ChunkHeader chunkHeader, WavTag tag) throws IOException
+    public WavListChunk(String loggingName, ByteBuffer chunkData, ChunkHeader chunkHeader, WavTag tag) throws IOException
     {
         super(chunkData, chunkHeader);
         this.tag=tag;
+        this.loggingName = loggingName;
     }
 
+    /**
+     *
+     * @return true if successfully read chunks
+     *
+     * @throws IOException
+     */
     public boolean readChunk() throws IOException
     {
+        boolean result = false;
         String subIdentifier = Utils.readFourBytesAsChars(chunkData);
         if(subIdentifier.equals(WavChunkType.INFO.getCode()))
         {
-            WavInfoChunk chunk = new WavInfoChunk(tag);
-            chunk.readChunks(chunkData);
+            WavInfoChunk chunk = new WavInfoChunk(tag, loggingName);
+            result = chunk.readChunks(chunkData);
             //This is the start of the enclosing LIST element
             tag.getInfoTag().setStartLocationInFile(chunkHeader.getStartLocationInFile());
             tag.getInfoTag().setEndLocationInFile(chunkHeader.getStartLocationInFile() + ChunkHeader.CHUNK_HEADER_SIZE + chunkHeader.getSize());
             tag.setExistingInfoTag(true);
         }
-        return true;
+        return result;
     }
 
 

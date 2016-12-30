@@ -1,11 +1,19 @@
 package org.jaudiotagger.tag.id3;
 
 import org.jaudiotagger.AbstractTestCase;
+import org.jaudiotagger.audio.AudioFile;
+import org.jaudiotagger.audio.AudioFileIO;
+import org.jaudiotagger.audio.mp3.MP3File;
+import org.jaudiotagger.tag.FieldKey;
+import org.jaudiotagger.tag.TagOptionSingleton;
 import org.jaudiotagger.tag.id3.framebody.FrameBodyTDAT;
 import org.jaudiotagger.tag.id3.framebody.FrameBodyTDRC;
 import org.jaudiotagger.tag.id3.framebody.FrameBodyTIME;
 import org.jaudiotagger.tag.id3.framebody.FrameBodyTYER;
 import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
+import org.jaudiotagger.tag.reference.ID3V2Version;
+
+import java.io.File;
 
 /**
  */
@@ -119,6 +127,26 @@ public class FrameTDATTest extends AbstractTestCase
             ex.printStackTrace();
         }
         assertNull(e);
+    }
+
+    public void testReadingID3AsV24Generic() throws Exception
+    {
+        File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3", new File("id3asv24.mp3"));
+        TagOptionSingleton.getInstance().setID3V2Version(ID3V2Version.ID3_V23);
+        AudioFile af = AudioFileIO.read(testFile);
+        af.getTagAndConvertOrCreateAndSetDefault();
+        af.getTag().setField(FieldKey.ARTIST, "fred");
+        af.getTag().setField(FieldKey.YEAR, "2003-06-23");
+        af.commit();
+        assertEquals(af.getTag().getFirst(FieldKey.YEAR),"2003-06-23");
+        af = AudioFileIO.read(testFile);
+        assertEquals(af.getTag().getFirst(FieldKey.ARTIST),"fred");
+        assertEquals(af.getTag().getAll(FieldKey.ARTIST).get(0),"fred");
+        assertEquals(af.getTag().getFirst(FieldKey.YEAR),"2003-06-23");
+        assertEquals(af.getTag().getAll(FieldKey.YEAR).get(0),"2003-06-23");
+        assertEquals(((MP3File)af).getID3v2TagAsv24().getFirst(FieldKey.YEAR),"2003-06-23");
+        assertEquals(((MP3File)af).getID3v2TagAsv24().getAll(FieldKey.YEAR).get(0),"2003-06-23");
+
     }
 
 

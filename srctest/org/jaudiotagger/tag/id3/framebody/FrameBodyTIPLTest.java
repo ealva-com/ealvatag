@@ -1,8 +1,14 @@
 package org.jaudiotagger.tag.id3.framebody;
 
 import org.jaudiotagger.AbstractTestCase;
+import org.jaudiotagger.audio.AudioFile;
+import org.jaudiotagger.audio.AudioFileIO;
+import org.jaudiotagger.tag.FieldKey;
 import org.jaudiotagger.tag.id3.ID3v24Frames;
+import org.jaudiotagger.tag.id3.ID3v24Tag;
 import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
+
+import java.io.File;
 
 /**
  * Test TIPL
@@ -119,6 +125,31 @@ public class FrameBodyTIPLTest extends AbstractTestCase
         assertEquals("producer",fb.getKeyAtIndex(0));
         assertEquals("eno,lanois",fb.getValueAtIndex(0));
 
+    }
+
+    /**
+     * Uses TMCL frame
+     * @throws Exception
+     */
+    public void testMultiArrangerIDv24() throws Exception
+    {
+        File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3", new File("testWriteArrangerv24.mp3"));
+        AudioFile f = AudioFileIO.read(testFile);
+        assertNull(f.getTag());
+
+        f.setTag(new ID3v24Tag());
+        ((ID3v24Tag)f.getTag()).setField(FieldKey.ARRANGER, "Arranger1");
+        ((ID3v24Tag)f.getTag()).addField(FieldKey.ARRANGER, "Arranger2");
+        assertEquals(1, f.getTag().getFieldCount());
+        assertEquals("Arranger1", f.getTag().getFirst(FieldKey.ARRANGER));
+        assertEquals("Arranger1", f.getTag().getValue(FieldKey.ARRANGER,0));
+        assertEquals("Arranger2", f.getTag().getValue(FieldKey.ARRANGER,1));
+
+        f.commit();
+        f = AudioFileIO.read(testFile);
+        assertEquals(2,f.getTag().getFields(FieldKey.ARRANGER).size());
+        assertEquals(1,f.getTag().getFieldCount());
+        assertEquals(1, f.getTag().getFieldCount());
     }
 
 

@@ -14,7 +14,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * Represents the form 01/10 whereby the second part is optional. This is used by frame such as TRCK and TPOS
+ * Represents the form 01/10 whereby the second part is optional. This is used by frame such as TRCK and TPOS and MVNM
  *
  * Some applications like to prepend the count with a zero to aid sorting, (i.e 02 comes before 10)
  *

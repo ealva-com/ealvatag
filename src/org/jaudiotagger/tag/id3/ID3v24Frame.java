@@ -21,7 +21,10 @@ import org.jaudiotagger.logging.ErrorMessage;
 import org.jaudiotagger.logging.Hex;
 import org.jaudiotagger.tag.*;
 import org.jaudiotagger.tag.datatype.Lyrics3Line;
+import org.jaudiotagger.tag.datatype.Pair;
+import org.jaudiotagger.tag.datatype.PairedTextEncodedStringNullTerminated;
 import org.jaudiotagger.tag.id3.framebody.*;
+import org.jaudiotagger.tag.id3.valuepair.StandardIPLSKey;
 import org.jaudiotagger.tag.id3.valuepair.TextEncoding;
 import org.jaudiotagger.tag.lyrics3.*;
 import org.jaudiotagger.utils.EqualsUtil;
@@ -31,7 +34,9 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -109,7 +114,7 @@ public class ID3v24Frame extends AbstractID3v2Frame
     }
 
     /**
-     * Copy Constructor:Creates a new ID3v2_4Frame datatype based on another frame.
+     * Copy Constructor:Creates a new ID3v24 frame datatype based on another frame.
      *
      * @param frame
      */
@@ -182,7 +187,23 @@ public class ID3v24Frame extends AbstractID3v2Frame
     }
 
     /**
-     * Creates a new ID3v2_4Frame datatype based on another frame of different version
+     * Partially construct ID3v24 Frame form an IS3v23Frame
+     *
+     * Used for Special Cases
+     *
+     * @param frame
+     * @param identifier
+     * @throws InvalidFrameException
+     */
+    protected ID3v24Frame(ID3v23Frame frame, String identifier) throws InvalidFrameException
+    {
+        this.identifier=identifier;
+        statusFlags = new StatusFlags((ID3v23Frame.StatusFlags) frame.getStatusFlags());
+        encodingFlags = new EncodingFlags(frame.getEncodingFlags().getFlags());
+    }
+
+    /**
+     * Creates a new ID3v24 frame datatype based on another frame of different version
      * Converts the framebody to the equivalent v24 framebody or to UnsupportedFrameBody if identifier
      * is unknown.
      *
@@ -197,13 +218,12 @@ public class ID3v24Frame extends AbstractID3v2Frame
         {
             throw new UnsupportedOperationException("Copy Constructor not called. Please type cast the argument");
         }
-        //Flags
-        if (frame instanceof ID3v23Frame)
+        else if (frame instanceof ID3v23Frame)
         {
             statusFlags = new StatusFlags((ID3v23Frame.StatusFlags) frame.getStatusFlags());
             encodingFlags = new EncodingFlags(frame.getEncodingFlags().getFlags());
         }
-        else
+        else if (frame instanceof ID3v22Frame)
         {
             statusFlags = new StatusFlags();
             encodingFlags = new EncodingFlags();
@@ -224,6 +244,8 @@ public class ID3v24Frame extends AbstractID3v2Frame
         }
         this.frameBody.setHeader(this);
     }
+
+
 
     /**
      * Creates a new ID3v2_4Frame datatype based on Lyrics3.
@@ -783,7 +805,7 @@ public class ID3v24Frame extends AbstractID3v2Frame
      * Member Class This represents a frame headers Status Flags
      * Make adjustments if necessary based on frame type and specification.
      */
-    class StatusFlags extends AbstractID3v2Frame.StatusFlags
+    public class StatusFlags extends AbstractID3v2Frame.StatusFlags
     {
         public static final String TYPE_TAGALTERPRESERVATION = "typeTagAlterPreservation";
         public static final String TYPE_FILEALTERPRESERVATION = "typeFileAlterPreservation";

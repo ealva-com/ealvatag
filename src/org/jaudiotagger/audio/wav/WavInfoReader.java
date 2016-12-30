@@ -114,7 +114,7 @@ public class WavInfoReader
         }
 
         String id = chunkHeader.getID();
-        logger.config(loggingName + " Reading Chunk:" + id
+        logger.fine(loggingName + " Reading Chunk:" + id
                 + ":starting at:" + Hex.asDecAndHex(chunkHeader.getStartLocationInFile())
                 + ":sizeIncHeader:" + (chunkHeader.getSize() + ChunkHeader.CHUNK_HEADER_SIZE));
         final WavChunkType chunkType = WavChunkType.get(id);

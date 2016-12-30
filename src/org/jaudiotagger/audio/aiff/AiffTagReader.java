@@ -9,7 +9,6 @@ import org.jaudiotagger.audio.iff.ChunkSummary;
 import org.jaudiotagger.audio.iff.IffHeaderChunk;
 import org.jaudiotagger.logging.Hex;
 import org.jaudiotagger.tag.aiff.AiffTag;
-import org.jaudiotagger.tag.id3.ID3v22Tag;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -55,8 +54,7 @@ public class AiffTagReader extends AiffChunkReader
 
             if (aiffTag.getID3Tag() == null)
             {
-                //Default still used by iTunes
-                aiffTag.setID3Tag(new ID3v22Tag());
+                aiffTag.setID3Tag(AiffTag.createDefaultID3Tag());
             }
             return aiffTag;
         }

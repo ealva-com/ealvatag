@@ -17,6 +17,8 @@ import org.jaudiotagger.tag.FieldKey;
 import org.jaudiotagger.tag.Tag;
 import org.jaudiotagger.tag.TagOptionSingleton;
 import org.jaudiotagger.tag.id3.ID3v22Tag;
+import org.jaudiotagger.tag.id3.ID3v23Tag;
+import org.jaudiotagger.tag.reference.ID3V2Version;
 
 import java.io.File;
 import java.io.IOException;
@@ -31,6 +33,7 @@ public class AiffAudioTagTest extends TestCase {
     public void testReadAiff1() {
         Exception exceptionCaught = null;
 
+        TagOptionSingleton.getInstance().setID3V2Version(ID3V2Version.ID3_V23);
         File orig = new File("testdata", "test119.aif");
         if (!orig.isFile())
         {
@@ -42,6 +45,43 @@ public class AiffAudioTagTest extends TestCase {
         File testFile = AbstractTestCase.copyAudioToTmp("test119.aif", new File("test119ReadAiffWithoutTag.aif"));
         try
         {
+            AudioFile f = AudioFileIO.read(testFile);
+            AudioHeader ah = f.getAudioHeader();
+            assertTrue(ah instanceof AiffAudioHeader);
+            Tag tag = f.getTag();
+            System.out.println(tag);
+            assertTrue(tag instanceof AiffTag);
+            assertTrue(((AiffTag) tag).getID3Tag() instanceof ID3v23Tag);
+            assertFalse(((AiffTag) tag).isExistingId3Tag());
+            assertEquals(0L,((AiffTag) tag).getSizeOfID3TagIncludingChunkHeader());
+            assertEquals(0L,((AiffTag) tag).getSizeOfID3TagOnly());
+            assertEquals(0L,((AiffTag) tag).getStartLocationInFileOfId3Chunk());
+
+
+        }
+        catch(Exception ex)
+        {
+            ex.printStackTrace();
+            exceptionCaught = ex;
+        }
+        assertNull(exceptionCaught);
+    }
+
+    public void testReadAiffChangeDefault() {
+        Exception exceptionCaught = null;
+
+        File orig = new File("testdata", "test119.aif");
+        if (!orig.isFile())
+        {
+            System.err.println("Unable to test file - not available");
+            return;
+        }
+
+
+        File testFile = AbstractTestCase.copyAudioToTmp("test119.aif", new File("test119ReadAiffWithoutTag.aif"));
+        try
+        {
+            TagOptionSingleton.getInstance().setID3V2Version(ID3V2Version.ID3_V22);
             AudioFile f = AudioFileIO.read(testFile);
             AudioHeader ah = f.getAudioHeader();
             assertTrue(ah instanceof AiffAudioHeader);
@@ -766,7 +806,7 @@ public class AiffAudioTagTest extends TestCase {
         assertNull(exceptionCaught);
     }
 
-    public void testWriteMetadataAifcWithUnknonwExtraChunkID3DatSizeOdd() {
+    public void testWriteMetadataAifcWithUnknownExtraChunkID3DatSizeOdd() {
         Exception exceptionCaught = null;
 
         File orig = new File("testdata", "test136.aif");
@@ -779,6 +819,7 @@ public class AiffAudioTagTest extends TestCase {
 
         File testFile = AbstractTestCase.copyAudioToTmp("test136.aif", new File("test136WriteMetadataWithUnknownExtraChunkID3DatSizeOdd.aif"));
         try {
+            TagOptionSingleton.getInstance().setID3V2Version(ID3V2Version.ID3_V22);
             AudioFile f = AudioFileIO.read(testFile);
             AudioHeader ah = f.getAudioHeader();
             assertTrue(ah instanceof AiffAudioHeader);
@@ -831,5 +872,43 @@ public class AiffAudioTagTest extends TestCase {
     	FilePermissionsTest.runWriteReadOnlyFileWithCheckDisabled("test121.aif");
 	}
 
+    public void testDeleteArtworkField() {
+        Exception exceptionCaught = null;
+
+        File orig = new File("testdata", "test157.aif");
+        if (!orig.isFile())
+        {
+            System.err.println("Unable to test file - not available");
+            return;
+        }
+
+
+        File testFile = AbstractTestCase.copyAudioToTmp("test157.aif", new File("testDeleteArtworkField.aif"));
+        try
+        {
+            AudioFile f = AudioFileIO.read(testFile);
+            Tag tag = f.getTag();
+            System.out.println(tag);
+            assertNotNull(tag);
+            assertTrue(tag instanceof AiffTag);
+            assertTrue(((AiffTag) tag).isExistingId3Tag());
+            assertEquals(2, tag.getArtworkList().size());
+            
+            tag.deleteArtworkField();
+            f.commit();
+
+            AudioFile updatedFile = AudioFileIO.read(testFile);
+            Tag updatedTag = updatedFile.getTag();
+
+            assertEquals(0, updatedTag.getArtworkList().size());
+
+        }
+        catch(Exception ex)
+        {
+            ex.printStackTrace();
+            exceptionCaught = ex;
+        }
+        assertNull(exceptionCaught);
+    }
 
 }

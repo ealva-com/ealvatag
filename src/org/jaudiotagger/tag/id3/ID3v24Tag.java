@@ -20,7 +20,11 @@ import org.jaudiotagger.audio.mp3.MP3File;
 import org.jaudiotagger.logging.ErrorMessage;
 import org.jaudiotagger.tag.*;
 import org.jaudiotagger.tag.datatype.DataTypes;
+import org.jaudiotagger.tag.datatype.Pair;
+import org.jaudiotagger.tag.datatype.PairedTextEncodedStringNullTerminated;
 import org.jaudiotagger.tag.id3.framebody.*;
+import org.jaudiotagger.tag.id3.valuepair.MusicianCredits;
+import org.jaudiotagger.tag.id3.valuepair.StandardIPLSKey;
 import org.jaudiotagger.tag.images.Artwork;
 import org.jaudiotagger.tag.images.ArtworkFactory;
 import org.jaudiotagger.tag.lyrics3.AbstractLyrics3;
@@ -335,6 +339,15 @@ public class ID3v24Tag extends AbstractID3v2Tag
         }
     }
 
+    /**
+     * Copy the frame
+     *
+     * If the frame is already an ID3v24 frame we can add as is, if not we need to convert
+     * to id3v24 frame(s)
+     *
+     * @param frame
+     */
+    @Override
     public void addFrame(AbstractID3v2Frame frame)
     {
         try
@@ -345,8 +358,11 @@ public class ID3v24Tag extends AbstractID3v2Tag
             }
             else
             {
-                ID3v24Frame newFrame = new ID3v24Frame(frame);
-                copyFrameIntoMap(newFrame.getIdentifier(), newFrame);
+                List<AbstractID3v2Frame> frames = convertFrame(frame);
+                for(AbstractID3v2Frame next:frames)
+                {
+                    copyFrameIntoMap(next.getIdentifier(), next);
+                }
             }
         }
         catch (InvalidFrameException ife)
@@ -355,111 +371,124 @@ public class ID3v24Tag extends AbstractID3v2Tag
         }
     }
 
-    /*
-       * Copy frame into map, whilst accounting for multiple frames of same type which can occur even if there were
-       * not frames of the dame type in the original tag
-       *
-       * The frame already exists this shouldn't normally happen because frames
-       * that are allowed to be multiple don't call this method. Frames that
-       * aren't allowed to be multiple aren't added to hashMap in first place when
-       * originally added.
-       *
-       * We only want to allow one of the frames going forward but we try and merge
-       * all the information into the one frame. However there is a problem here that
-       * if we then take this, modify it and try to write back the original values
-       * we could lose some information although this info is probably invalid anyway.
-       *
-       * However converting some frames from tag of one version to another may
-       * mean that two different frames both get converted to one frame, this
-       * particularly applies to DateTime fields which were originally two fields
-       * in v2.3 but are one field in v2.4.
-       */
-       @Override
-       protected void copyFrameIntoMap(String id, AbstractID3v2Frame newFrame)
-       {
-           if (frameMap.containsKey(newFrame.getIdentifier()))
-           {
-               Object o = frameMap.get(newFrame.getIdentifier());
-               if(o instanceof AbstractID3v2Frame)
-               {
-                   //Retrieve the frame with the same id we have already loaded into the map
-                   AbstractID3v2Frame firstFrame = (AbstractID3v2Frame) frameMap.get(newFrame.getIdentifier());
+    /**
+     * Convert frame into ID3v24 frame(s)
+     * @param frame
+     * @return
+     * @throws InvalidFrameException
+     */
+    @Override
+    protected List<AbstractID3v2Frame> convertFrame(AbstractID3v2Frame frame) throws InvalidFrameException
+    {
+        List<AbstractID3v2Frame> frames = new ArrayList<>();
+        if(frame instanceof ID3v22Frame && frame.getIdentifier().equals(ID3v22Frames.FRAME_ID_V2_IPLS))
+        {
+            frame = new ID3v23Frame(frame);
+        }
 
+        //This frame may need splitting and converting into two frames depending on its content
+        if(frame instanceof ID3v23Frame && frame.getIdentifier().equals(ID3v23Frames.FRAME_ID_V3_INVOLVED_PEOPLE))
+        {
+            List<Pair> pairs= ((FrameBodyIPLS)frame.getBody()).getPairing().getMapping();
+            List<Pair> pairsTipl = new ArrayList<>();
+            List<Pair> pairsTmcl = new ArrayList<>();
 
-                   //Two different frames both converted to TDRCFrames, now if this is the case one of them
-                   //may have actually have been created as a FrameUnsupportedBody because TDRC is only
-                   //supported in ID3v24, but is often created in v23 tags as well together with the valid TYER
-                   //frame OR it might be that we have two v23 frames that map to TDRC such as TYER,TIME or TDAT
-                   if (newFrame.getBody() instanceof FrameBodyTDRC)
-                   {
-                       if (firstFrame.getBody() instanceof FrameBodyTDRC)
-                       {
-                           logger.finest("Modifying frame in map:" + newFrame.getIdentifier());
-                           FrameBodyTDRC body = (FrameBodyTDRC) firstFrame.getBody();
-                           FrameBodyTDRC newBody = (FrameBodyTDRC) newFrame.getBody();
+            for(Pair next:pairs)
+            {
+                if(StandardIPLSKey.isKey(next.getKey()))
+                {
+                    pairsTipl.add(next);
+                }
+                else if(MusicianCredits.isKey(next.getKey()))
+                {
+                    pairsTmcl.add(next);
+                }
+                else
+                {
+                    pairsTipl.add(next);
+                }
+            }
+            AbstractID3v2Frame tipl = new ID3v24Frame((ID3v23Frame)frame,ID3v24Frames.FRAME_ID_INVOLVED_PEOPLE);
+            FrameBodyTIPL tiplBody  = new FrameBodyTIPL(frame.getBody().getTextEncoding(),pairsTipl);
+            tipl.setBody(tiplBody);
+            frames.add(tipl);
 
-                           //#304:Check for NullPointer, just ignore this frame
-                           if(newBody.getOriginalID()==null)
-                           {
-                               return;
-                           }
-                           //Just add the data to the frame
-                           if (newBody.getOriginalID().equals(ID3v23Frames.FRAME_ID_V3_TYER))
-                           {
-                               body.setYear(newBody.getYear());
-                           }
-                           else if (newBody.getOriginalID().equals(ID3v23Frames.FRAME_ID_V3_TDAT))
-                           {
-                               body.setDate(newBody.getDate());
-                               body.setMonthOnly(newBody.isMonthOnly());
-                           }
-                           else if (newBody.getOriginalID().equals(ID3v23Frames.FRAME_ID_V3_TIME))
-                           {
-                               body.setTime(newBody.getTime());
-                               body.setHoursOnly(newBody.isHoursOnly());
-                           }
-                           body.setObjectValue(DataTypes.OBJ_TEXT,body.getFormattedText());
-                       }
-                       // The first frame was a TDRC frame that was not really allowed, this new frame was probably a
-                       // valid frame such as TYER which has been converted to TDRC, replace the firstframe with this frame
-                       else if (firstFrame.getBody() instanceof FrameBodyUnsupported)
-                       {
-                           frameMap.put(newFrame.getIdentifier(), newFrame);
-                       }
-                       else
-                       {
-                           //we just lose this frame, we have already got one with the correct id.
-                           //TODO may want to store this somewhere
-                           logger.warning("Found duplicate TDRC frame in invalid situation,discarding:" + newFrame.getIdentifier());
-                       }
-                   }
-                   else
-                   {
-                       List<AbstractID3v2Frame> list = new ArrayList<AbstractID3v2Frame>();
-                       list.add(firstFrame);
-                       list.add(newFrame);
-                       frameMap.put(newFrame.getIdentifier(), list);
-                   }
-               }
-               else if(o instanceof AggregatedFrame)
-               {
-                   logger.severe("Ignoring Duplicate Aggregate Frame :discarding:" + o.getClass());
-               }
-               else if (o instanceof List)
-               {
-                    List<AbstractID3v2Frame> list = (List)o;
-                    list.add(newFrame);
-               }
-               else
-               {
-                   logger.severe("Unknown frame class:discarding:" + o.getClass());
-               }
-           }
-           else
-           {
-               frameMap.put(newFrame.getIdentifier(), newFrame);
-           }
-       }
+            AbstractID3v2Frame tmcl = new ID3v24Frame((ID3v23Frame)frame,ID3v24Frames.FRAME_ID_MUSICIAN_CREDITS);
+            FrameBodyTMCL tmclBody  = new FrameBodyTMCL(frame.getBody().getTextEncoding(),pairsTmcl);
+            tmcl.setBody(tmclBody);
+            frames.add(tmcl);
+        }
+        else
+        {
+            frames.add(new ID3v24Frame(frame));
+        }
+        return frames;
+    }
+
+    /**
+     * Two different frames both converted to TDRCFrames, now if this is the case one of them
+     * may have actually have been created as a FrameUnsupportedBody because TDRC is only
+     * supported in ID3v24, but is often created in v23 tags as well together with the valid TYER
+     * frame OR it might be that we have two v23 frames that map to TDRC such as TYER,TIME or TDAT
+     *
+     * @param newFrame
+     * @param existingFrame
+     */
+    @Override
+    protected void processDuplicateFrame(AbstractID3v2Frame newFrame, AbstractID3v2Frame existingFrame)
+    {
+        //We dont add this new frame we just add the contents to existing frame
+        //
+        if (newFrame.getBody() instanceof FrameBodyTDRC)
+        {
+            if (existingFrame.getBody() instanceof FrameBodyTDRC)
+            {
+                FrameBodyTDRC body = (FrameBodyTDRC) existingFrame.getBody();
+                FrameBodyTDRC newBody = (FrameBodyTDRC) newFrame.getBody();
+
+                //#304:Check for NullPointer, just ignore this frame
+                if(newBody.getOriginalID()==null)
+                {
+                    return;
+                }
+                //Just add the data to the frame
+                if (newBody.getOriginalID().equals(ID3v23Frames.FRAME_ID_V3_TYER))
+                {
+                    body.setYear(newBody.getYear());
+                }
+                else if (newBody.getOriginalID().equals(ID3v23Frames.FRAME_ID_V3_TDAT))
+                {
+                    body.setDate(newBody.getDate());
+                    body.setMonthOnly(newBody.isMonthOnly());
+                }
+                else if (newBody.getOriginalID().equals(ID3v23Frames.FRAME_ID_V3_TIME))
+                {
+                    body.setTime(newBody.getTime());
+                    body.setHoursOnly(newBody.isHoursOnly());
+                }
+                body.setObjectValue(DataTypes.OBJ_TEXT,body.getFormattedText());
+            }
+            // The first frame was a TDRC frame that was not really allowed, this new frame was probably a
+            // valid frame such as TYER which has been converted to TDRC, replace the firstframe with this frame
+            else if (existingFrame.getBody() instanceof FrameBodyUnsupported)
+            {
+                frameMap.put(newFrame.getIdentifier(), newFrame);
+            }
+            else
+            {
+                //we just lose this frame, we have already got one with the correct id.
+                logger.warning("Found duplicate TDRC frame in invalid situation,discarding:" + newFrame.getIdentifier());
+            }
+        }
+        else
+        {
+            List<AbstractID3v2Frame> list = new ArrayList<AbstractID3v2Frame>();
+            list.add(existingFrame);
+            list.add(newFrame);
+            frameMap.put(newFrame.getIdentifier(), list);
+        }
+    }
+
 
     /**
      * Copy Constructor, creates a new ID3v2_4 Tag based on another ID3v2_4 Tag
@@ -1196,7 +1225,7 @@ public class ID3v24Tag extends AbstractID3v2Tag
         {
             throw new KeyNotFoundException();
         }
-        return super.doCreateTagField(new FrameAndSubId(id3Key.getFrameId(), id3Key.getSubId()), value);
+        return super.doCreateTagField(new FrameAndSubId(null, id3Key.getFrameId(), id3Key.getSubId()), value);
     }
 
     /**
@@ -1220,7 +1249,7 @@ public class ID3v24Tag extends AbstractID3v2Tag
         }
         else
         {
-            FrameAndSubId frameAndSubId = new FrameAndSubId(id3v24FieldKey.getFrameId(), id3v24FieldKey.getSubId());
+            FrameAndSubId frameAndSubId = new FrameAndSubId(null, id3v24FieldKey.getFrameId(), id3v24FieldKey.getSubId());
             return super.doGetValueAtIndex(frameAndSubId, 0);
         }
     }
@@ -1238,7 +1267,7 @@ public class ID3v24Tag extends AbstractID3v2Tag
         {
             throw new KeyNotFoundException();
         }
-        super.doDeleteTagField(new FrameAndSubId(id3v24FieldKey.getFrameId(), id3v24FieldKey.getSubId()));
+        super.doDeleteTagField(new FrameAndSubId(null, id3v24FieldKey.getFrameId(), id3v24FieldKey.getSubId()));
     }
 
     /**
@@ -1247,7 +1276,7 @@ public class ID3v24Tag extends AbstractID3v2Tag
      */
     public void deleteField(String id)
     {
-        super.doDeleteTagField(new FrameAndSubId(id,null));
+        super.doDeleteTagField(new FrameAndSubId(null, id,null));
     }
 
     protected FrameAndSubId getFrameAndSubIdFromGenericKey(FieldKey genericKey)
@@ -1261,7 +1290,7 @@ public class ID3v24Tag extends AbstractID3v2Tag
         {
             throw new KeyNotFoundException(genericKey.name());
         }
-        return new FrameAndSubId(id3v24FieldKey.getFrameId(), id3v24FieldKey.getSubId());
+        return new FrameAndSubId(genericKey, id3v24FieldKey.getFrameId(), id3v24FieldKey.getSubId());
     }
 
     protected ID3Frames getID3Frames()
@@ -1351,7 +1380,16 @@ public class ID3v24Tag extends AbstractID3v2Tag
         return frame;
     }
 
-    public TagField createField(FieldKey genericKey, String value) throws KeyNotFoundException, FieldDataInvalidException
+    /**
+     * Overridden for special Genre support
+     *
+     * @param genericKey is the generic key
+     * @param values
+     * @return
+     * @throws KeyNotFoundException
+     * @throws FieldDataInvalidException
+     */
+    public TagField createField(FieldKey genericKey, String... values) throws KeyNotFoundException, FieldDataInvalidException
     {
         if (genericKey == null)
         {
@@ -1360,6 +1398,11 @@ public class ID3v24Tag extends AbstractID3v2Tag
 
         if (genericKey == FieldKey.GENRE)
         {
+            if (values == null)
+            {
+                throw new IllegalArgumentException(ErrorMessage.GENERAL_INVALID_NULL_ARGUMENT.getMsg());
+            }
+            String value = values[0];
             if (value == null)
             {
                 throw new IllegalArgumentException(ErrorMessage.GENERAL_INVALID_NULL_ARGUMENT.getMsg());
@@ -1380,10 +1423,9 @@ public class ID3v24Tag extends AbstractID3v2Tag
         }
         else
         {
-            return super.createField(genericKey, value);
+            return super.createField(genericKey, values);
         }
     }
-
     /**
      * Maps the generic key to the id3 key and return the list of values for this field as strings
      *

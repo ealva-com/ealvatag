@@ -257,7 +257,7 @@ public class ID3v22Frame extends AbstractID3v2Frame
             throw new UnsupportedOperationException("Copy Constructor not called. Please type cast the argument");
         }
 
-        // If it is a v24 frame is it possible to convert it into a v23 frame, anmd then convert from that
+        // If it is a v24 frame is it possible to convert it into a v23 frame, and then convert from that
         if (frame instanceof ID3v24Frame)
         {
             ID3v23Frame v23Frame = new ID3v23Frame(frame);

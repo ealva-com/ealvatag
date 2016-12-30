@@ -289,4 +289,109 @@ public class ID3v22TagTest extends TestCase
         assertEquals("Death Metal",file.getTag().getValue(FieldKey.GENRE, 0));
         assertEquals("Pranks",file.getTag().getValue(FieldKey.GENRE, 1));
     }
+
+    public void testWriteMultipleGenresToID3v22TagUsingCreateField() throws Exception
+    {
+        File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3");
+        MP3File file = null;
+        file = new MP3File(testFile);
+        assertNull(file.getID3v1Tag());
+        file.setTag(new ID3v22Tag());
+        assertNotNull(file.getTag());
+        ID3v22Tag v22Tag = (ID3v22Tag)file.getTag();
+        TagField genreField = v22Tag.createField(FieldKey.GENRE,"Genre1");
+        v22Tag.addField(genreField);
+        genreField = v22Tag.createField(FieldKey.GENRE,"Genre2");
+        v22Tag.addField(genreField);
+        file.commit();
+        file = new MP3File(testFile);
+        assertEquals("Genre1",file.getTag().getFirst(FieldKey.GENRE));
+        assertEquals("Genre1",file.getTag().getValue(FieldKey.GENRE, 0));
+        assertEquals("Genre2",file.getTag().getValue(FieldKey.GENRE, 1));
+
+        TagOptionSingleton.getInstance().setWriteMp3GenresAsText(false);
+        file.getTag().deleteField(FieldKey.GENRE);
+        v22Tag = (ID3v22Tag)file.getTag();
+        genreField = v22Tag.createField(FieldKey.GENRE,"Death Metal");
+        v22Tag.addField(genreField);
+        genreField = v22Tag.createField(FieldKey.GENRE,"(23)");
+        v22Tag.addField(genreField);
+        assertEquals("Death Metal",file.getTag().getFirst(FieldKey.GENRE));
+        assertEquals("Death Metal",file.getTag().getValue(FieldKey.GENRE, 0));
+        assertEquals("Pranks",file.getTag().getValue(FieldKey.GENRE, 1));
+        file.commit();
+        file = new MP3File(testFile);
+        assertEquals("Death Metal",file.getTag().getFirst(FieldKey.GENRE));
+        assertEquals("Death Metal",file.getTag().getValue(FieldKey.GENRE, 0));
+        assertEquals("Pranks",file.getTag().getValue(FieldKey.GENRE, 1));
+
+        TagOptionSingleton.getInstance().setWriteMp3GenresAsText(true);
+        file.getTag().deleteField(FieldKey.GENRE);
+        v22Tag = (ID3v22Tag)file.getTag();
+        genreField = v22Tag.createField(FieldKey.GENRE,"Death Metal");
+        v22Tag.addField(genreField);
+        genreField = v22Tag.createField(FieldKey.GENRE,"23");
+        v22Tag.addField(genreField);
+        assertEquals("Death Metal",file.getTag().getFirst(FieldKey.GENRE));
+        assertEquals("Death Metal",file.getTag().getValue(FieldKey.GENRE, 0));
+        assertEquals("Pranks",file.getTag().getValue(FieldKey.GENRE, 1));
+        file.commit();
+        file = new MP3File(testFile);
+        assertEquals("Death Metal",file.getTag().getFirst(FieldKey.GENRE));
+        assertEquals("Death Metal",file.getTag().getValue(FieldKey.GENRE, 0));
+        assertEquals("Pranks",file.getTag().getValue(FieldKey.GENRE, 1));
+    }
+
+    public void testWriteMultipleGenresToID3v22TagUsingV22CreateField() throws Exception
+    {
+        File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3");
+        MP3File file = null;
+        file = new MP3File(testFile);
+        assertNull(file.getID3v1Tag());
+        file.setTag(new ID3v22Tag());
+        assertNotNull(file.getTag());
+        ID3v22Tag v22Tag = (ID3v22Tag)file.getTag();
+        TagField genreField = v22Tag.createField(ID3v22FieldKey.GENRE,"Genre1");
+        v22Tag.addField(genreField);
+        genreField = v22Tag.createField(ID3v22FieldKey.GENRE,"Genre2");
+        v22Tag.addField(genreField);
+        file.commit();
+        file = new MP3File(testFile);
+        assertEquals("Genre1",file.getTag().getFirst(FieldKey.GENRE));
+        assertEquals("Genre1",file.getTag().getValue(FieldKey.GENRE, 0));
+        assertEquals("Genre2",file.getTag().getValue(FieldKey.GENRE, 1));
+
+        TagOptionSingleton.getInstance().setWriteMp3GenresAsText(false);
+        file.getTag().deleteField(FieldKey.GENRE);
+        v22Tag = (ID3v22Tag)file.getTag();
+        genreField = v22Tag.createField(ID3v22FieldKey.GENRE,"Death Metal");
+        v22Tag.addField(genreField);
+        genreField = v22Tag.createField(ID3v22FieldKey.GENRE,"(23)");
+        v22Tag.addField(genreField);
+        assertEquals("Death Metal",file.getTag().getFirst(FieldKey.GENRE));
+        assertEquals("Death Metal",file.getTag().getValue(FieldKey.GENRE, 0));
+        assertEquals("Pranks",file.getTag().getValue(FieldKey.GENRE, 1));
+        file.commit();
+        file = new MP3File(testFile);
+        assertEquals("Death Metal",file.getTag().getFirst(FieldKey.GENRE));
+        assertEquals("Death Metal",file.getTag().getValue(FieldKey.GENRE, 0));
+        assertEquals("Pranks",file.getTag().getValue(FieldKey.GENRE, 1));
+
+        TagOptionSingleton.getInstance().setWriteMp3GenresAsText(true);
+        file.getTag().deleteField(FieldKey.GENRE);
+        v22Tag = (ID3v22Tag)file.getTag();
+        genreField = v22Tag.createField(ID3v22FieldKey.GENRE,"Death Metal");
+        v22Tag.addField(genreField);
+        genreField = v22Tag.createField(ID3v22FieldKey.GENRE,"23");
+        v22Tag.addField(genreField);
+        assertEquals("Death Metal",file.getTag().getFirst(FieldKey.GENRE));
+        assertEquals("Death Metal",file.getTag().getValue(FieldKey.GENRE, 0));
+        assertEquals("Pranks",file.getTag().getValue(FieldKey.GENRE, 1));
+        file.commit();
+        file = new MP3File(testFile);
+        assertEquals("Death Metal",file.getTag().getFirst(FieldKey.GENRE));
+        assertEquals("Death Metal",file.getTag().getValue(FieldKey.GENRE, 0));
+        assertEquals("Pranks",file.getTag().getValue(FieldKey.GENRE, 1));
+    }
+
 }
