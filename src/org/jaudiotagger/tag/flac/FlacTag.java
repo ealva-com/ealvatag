@@ -147,6 +147,22 @@ public class FlacTag implements Tag
                     setField(tagfield);
                     return;
                 }
+
+                case WRITE_ALBUMARTIST_AND_DELETE_JRIVER_ALBUMARTIST:
+                {
+                    TagField tagfield = createField(genericKey, value);
+                    setField(tagfield);
+                    deleteField(VorbisCommentFieldKey.ALBUMARTIST_JRIVER.getFieldName());
+                    return;
+                }
+
+                case WRITE_JRIVER_ALBUMARTIST_AND_DELETE_ALBUMARTIST:
+                {
+                    TagField tagfield = createField(VorbisCommentFieldKey.ALBUMARTIST_JRIVER, value);
+                    setField(tagfield);
+                    deleteField(VorbisCommentFieldKey.ALBUMARTIST.getFieldName());
+                    return;
+                }
                 case WRITE_BOTH:
                 {
                     TagField tagfield1 = createField(genericKey, value);
@@ -189,13 +205,27 @@ public class FlacTag implements Tag
                 {
                     TagField tagfield = createField(genericKey, value);
                     addField(tagfield);
-                    return;
                 }
 
                 case WRITE_JRIVER_ALBUMARTIST:
                 {
                     TagField tagfield = createField(VorbisCommentFieldKey.ALBUMARTIST_JRIVER, value);
                     addField(tagfield);
+                    return;
+                }
+                case WRITE_ALBUMARTIST_AND_DELETE_JRIVER_ALBUMARTIST:
+                {
+                    TagField tagfield = createField(genericKey, value);
+                    addField(tagfield);
+                    deleteField(VorbisCommentFieldKey.ALBUMARTIST_JRIVER.getFieldName());
+                    return;
+                }
+
+                case WRITE_JRIVER_ALBUMARTIST_AND_DELETE_ALBUMARTIST:
+                {
+                    TagField tagfield = createField(VorbisCommentFieldKey.ALBUMARTIST_JRIVER, value);
+                    addField(tagfield);
+                    deleteField(VorbisCommentFieldKey.ALBUMARTIST.getFieldName());
                     return;
                 }
                 case WRITE_BOTH:
