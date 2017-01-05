@@ -54,6 +54,7 @@ Summarise Changes
 #172:DeleteArtworkField in AiffTag is unimplemented
 #175:Flac Map error on write because of memory error trying to get memory mapped space, writing using chunks instead
 #187:If VorbisAlbumArtistSaveOptions set to WRITE_ALBUMARTIST should remove JRIVER on write
+#183:OGG: String index out of range: 7
 
 2.2.5
 #033:Added getAudioStartPos() and getAudioEndPos() methods to AudioHeader interface and implemented for most formats
