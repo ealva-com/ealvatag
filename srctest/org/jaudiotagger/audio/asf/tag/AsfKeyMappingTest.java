@@ -24,7 +24,10 @@ public class AsfKeyMappingTest extends TestCase
         {
             for (FieldKey curr : FieldKey.values())
             {
-                tag.getFields(curr);
+                if(curr != FieldKey.ITUNES_GROUPING)
+                {
+                    tag.getFields(curr);
+                }
             }
         }
         catch(Exception e)

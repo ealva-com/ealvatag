@@ -54,6 +54,7 @@ public class ID3v22Frames extends ID3Frames
     public static final String FRAME_ID_V2_INITIAL_KEY = "TKE";
     public static final String FRAME_ID_V2_IPLS = "IPL";
     public static final String FRAME_ID_V2_ISRC = "TRC";
+    public static final String FRAME_ID_V2_ITUNES_GROUPING = "GP1";
     public static final String FRAME_ID_V2_LANGUAGE = "TLA";
     public static final String FRAME_ID_V2_LENGTH = "TLE";
     public static final String FRAME_ID_V2_LINKED_INFO = "LNK";
@@ -155,6 +156,7 @@ public class ID3v22Frames extends ID3Frames
         supportedFrames.add(FRAME_ID_V2_INITIAL_KEY);
         supportedFrames.add(FRAME_ID_V2_IPLS);
         supportedFrames.add(FRAME_ID_V2_ISRC);
+        supportedFrames.add(FRAME_ID_V2_ITUNES_GROUPING);
         supportedFrames.add(FRAME_ID_V2_LANGUAGE);
         supportedFrames.add(FRAME_ID_V2_LENGTH);
         supportedFrames.add(FRAME_ID_V2_LINKED_INFO);
@@ -252,6 +254,7 @@ public class ID3v22Frames extends ID3Frames
         idToValue.put(FRAME_ID_V2_INITIAL_KEY, "Text: Initial key");
         idToValue.put(FRAME_ID_V2_IPLS, "Involved people list");
         idToValue.put(FRAME_ID_V2_ISRC, "Text: ISRC (International Standard Recording Code)");
+        idToValue.put(FRAME_ID_V2_ITUNES_GROUPING, "iTunes Grouping");
         idToValue.put(FRAME_ID_V2_LANGUAGE, "Text: Language(s)");
         idToValue.put(FRAME_ID_V2_LENGTH, "Text: Length");
         idToValue.put(FRAME_ID_V2_LINKED_INFO, "Linked information");
@@ -371,6 +374,7 @@ public class ID3v22Frames extends ID3Frames
         tagFieldToId3.put(FieldKey.IS_CLASSICAL, ID3v22FieldKey.IS_CLASSICAL);
         tagFieldToId3.put(FieldKey.IS_COMPILATION, ID3v22FieldKey.IS_COMPILATION);
         tagFieldToId3.put(FieldKey.IS_SOUNDTRACK, ID3v22FieldKey.IS_SOUNDTRACK);
+        tagFieldToId3.put(FieldKey.ITUNES_GROUPING, ID3v22FieldKey.ITUNES_GROUPING);
         tagFieldToId3.put(FieldKey.KEY, ID3v22FieldKey.KEY);
         tagFieldToId3.put(FieldKey.LANGUAGE, ID3v22FieldKey.LANGUAGE);
         tagFieldToId3.put(FieldKey.LYRICIST, ID3v22FieldKey.LYRICIST);

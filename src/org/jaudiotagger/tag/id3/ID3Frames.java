@@ -201,6 +201,7 @@ public abstract class ID3Frames extends AbstractStringStringValuePair
         convertv22Tov23.put(ID3v22Frames.FRAME_ID_V2_INITIAL_KEY, ID3v23Frames.FRAME_ID_V3_INITIAL_KEY);
         convertv22Tov23.put(ID3v22Frames.FRAME_ID_V2_IPLS, ID3v23Frames.FRAME_ID_V3_INVOLVED_PEOPLE);
         convertv22Tov23.put(ID3v22Frames.FRAME_ID_V2_ISRC, ID3v23Frames.FRAME_ID_V3_ISRC);
+        convertv22Tov23.put(ID3v22Frames.FRAME_ID_V2_ITUNES_GROUPING, ID3v23Frames.FRAME_ID_V3_ITUNES_GROUPING);
         convertv22Tov23.put(ID3v22Frames.FRAME_ID_V2_LANGUAGE, ID3v23Frames.FRAME_ID_V3_LANGUAGE);
         convertv22Tov23.put(ID3v22Frames.FRAME_ID_V2_LENGTH, ID3v23Frames.FRAME_ID_V3_LENGTH);
         convertv22Tov23.put(ID3v22Frames.FRAME_ID_V2_LINKED_INFO, ID3v23Frames.FRAME_ID_V3_LINKED_INFO);
