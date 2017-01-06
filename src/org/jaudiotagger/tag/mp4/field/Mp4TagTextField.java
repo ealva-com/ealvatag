@@ -46,9 +46,9 @@ import java.nio.charset.StandardCharsets;
  *          :data
  * </pre>
  *
- * <p>Note:This class is initilized with the child data atom only, the parent data has already been processed, this may
+ * <p>Note:This class is initialized with the child data atom only, the parent data has already been processed, this may
  * change as it seems that code should probably be enscapulated into this. Whereas the raw content returned by the
- * getRawContent() contais the byte data for parent and child.
+ * getRawContent() contains the byte data for parent and child.
  */
 public class Mp4TagTextField extends Mp4TagField implements TagTextField
 {

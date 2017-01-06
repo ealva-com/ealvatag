@@ -60,6 +60,7 @@ public enum FieldKey
     IS_CLASSICAL,
     IS_SOUNDTRACK,
     IS_COMPILATION,
+    ITUNES_GROUPING,
     KEY,
     LANGUAGE,
     LYRICIST,

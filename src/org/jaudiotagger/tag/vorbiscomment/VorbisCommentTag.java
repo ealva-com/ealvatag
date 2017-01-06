@@ -418,6 +418,7 @@ public class VorbisCommentTag extends AbstractTag
             switch(TagOptionSingleton.getInstance().getVorbisAlbumArtistSaveOptions())
             {
                 case WRITE_ALBUMARTIST:
+                case WRITE_ALBUMARTIST_AND_DELETE_JRIVER_ALBUMARTIST:
                 {
                     VorbisCommentFieldKey vorbisCommentFieldKey = tagFieldToOggField.get(genericKey);
                     deleteField(vorbisCommentFieldKey);
@@ -425,10 +426,12 @@ public class VorbisCommentTag extends AbstractTag
                 }
 
                 case WRITE_JRIVER_ALBUMARTIST:
+                case WRITE_JRIVER_ALBUMARTIST_AND_DELETE_ALBUMARTIST:
                 {
                     deleteField(VorbisCommentFieldKey.ALBUMARTIST_JRIVER);
                     return;
                 }
+
                 case WRITE_BOTH:
                 {
                     VorbisCommentFieldKey vorbisCommentFieldKey = tagFieldToOggField.get(genericKey);
@@ -744,18 +747,36 @@ public class VorbisCommentTag extends AbstractTag
             switch(TagOptionSingleton.getInstance().getVorbisAlbumArtistSaveOptions())
             {
                 case WRITE_ALBUMARTIST:
-                    {
-                        TagField tagfield = createField(genericKey, value);
-                        setField(tagfield);
-                        return;
-                    }
+                {
+                    TagField tagfield = createField(genericKey, value);
+                    setField(tagfield);
+                    return;
+                }
 
                 case WRITE_JRIVER_ALBUMARTIST:
-                    {
-                        TagField tagfield = createField(VorbisCommentFieldKey.ALBUMARTIST_JRIVER, value);
-                        setField(tagfield);
-                        return;
-                    }
+                {
+                    TagField tagfield = createField(VorbisCommentFieldKey.ALBUMARTIST_JRIVER, value);
+                    setField(tagfield);
+                    return;
+                }
+
+                case WRITE_ALBUMARTIST_AND_DELETE_JRIVER_ALBUMARTIST:
+                {
+                    TagField tagfield = createField(genericKey, value);
+                    setField(tagfield);
+                    deleteField(VorbisCommentFieldKey.ALBUMARTIST_JRIVER.getFieldName());
+                    return;
+                }
+
+                case WRITE_JRIVER_ALBUMARTIST_AND_DELETE_ALBUMARTIST:
+                {
+                    TagField tagfield = createField(VorbisCommentFieldKey.ALBUMARTIST_JRIVER, value);
+                    setField(tagfield);
+                    deleteField(VorbisCommentFieldKey.ALBUMARTIST.getFieldName());
+                    return;
+                }
+
+
                 case WRITE_BOTH:
                 {
                     TagField tagfield1 = createField(genericKey, value);
@@ -800,11 +821,25 @@ public class VorbisCommentTag extends AbstractTag
                     addField(tagfield);
                     return;
                 }
-
                 case WRITE_JRIVER_ALBUMARTIST:
                 {
                     TagField tagfield = createField(VorbisCommentFieldKey.ALBUMARTIST_JRIVER, value);
                     addField(tagfield);
+                    return;
+                }
+                case WRITE_ALBUMARTIST_AND_DELETE_JRIVER_ALBUMARTIST:
+                {
+                    TagField tagfield = createField(genericKey, value);
+                    addField(tagfield);
+                    deleteField(VorbisCommentFieldKey.ALBUMARTIST_JRIVER.getFieldName());
+                    return;
+                }
+
+                case WRITE_JRIVER_ALBUMARTIST_AND_DELETE_ALBUMARTIST:
+                {
+                    TagField tagfield = createField(VorbisCommentFieldKey.ALBUMARTIST_JRIVER, value);
+                    addField(tagfield);
+                    deleteField(VorbisCommentFieldKey.ALBUMARTIST.getFieldName());
                     return;
                 }
                 case WRITE_BOTH:

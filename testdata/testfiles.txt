@@ -104,3 +104,5 @@ test156.dsf,no,,dsf file
 test157.dsf,no,,dsf file
 test158.flac,no,137,flac with ID3 header at start
 test159.mp3,no,161,mp3 with encrypted frame
+test508.ogg, yes,183, flac with  part of ogg header and ogg suffix
+test509.wma, yes,184, corrupt wma file

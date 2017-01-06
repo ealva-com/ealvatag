@@ -271,7 +271,7 @@ public class OggPageHeader
 
     public int getPageLength()
     {
-        logger.fine("This page length: " + pageLength);
+        logger.finer("This page length: " + pageLength);
         return this.pageLength;
     }
 
