@@ -1505,7 +1505,7 @@ public class WavMetadataTest extends AbstractTestCase
         Exception exceptionCaught2 = null;
         try
         {
-            WavCleaner wc = new WavCleaner(testFile.toPath());
+            WavCleaner wc = new WavCleaner(testFile);
             wc.clean();
             AudioFile f = AudioFileIO.read(testFile);
             Tag tag = f.getTag();

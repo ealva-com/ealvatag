@@ -30,8 +30,8 @@ public class AiffInfoReaderTest extends TestCase {
         final File aiff = createAIFF("FORM", "AIFF", pseudoChunks);
 
         final AiffInfoReader aiffInfoReader = new AiffInfoReader();
-        try(FileChannel fc = FileChannel.open(aiff.toPath())) {
-            final GenericAudioHeader audioHeader = aiffInfoReader.read(aiff.toPath());
+        try(FileChannel fc = new RandomAccessFile(aiff, "rw").getChannel()) {
+            final GenericAudioHeader audioHeader = aiffInfoReader.read(fc, aiff.getAbsolutePath());
             assertTrue(audioHeader instanceof AiffAudioHeader);
             final AiffAudioHeader aiffAudioHeader = (AiffAudioHeader) audioHeader;
             assertEquals(author, aiffAudioHeader.getAuthor());
@@ -49,8 +49,8 @@ public class AiffInfoReaderTest extends TestCase {
         final File aiff = createAIFF("FORM", "AIFF", new PseudoChunk("XYZ0", "SOME_STUFF"), new PseudoChunk("AUTH", author));
 
         final AiffInfoReader aiffInfoReader = new AiffInfoReader();
-        try(FileChannel fc = FileChannel.open(aiff.toPath())) {
-            final GenericAudioHeader audioHeader = aiffInfoReader.read(aiff.toPath());
+        try(FileChannel fc = new RandomAccessFile(aiff, "rw").getChannel()) {
+            final GenericAudioHeader audioHeader = aiffInfoReader.read(fc, aiff.getAbsolutePath());
             assertTrue(audioHeader instanceof AiffAudioHeader);
             final AiffAudioHeader aiffAudioHeader = (AiffAudioHeader) audioHeader;
             assertEquals(author, aiffAudioHeader.getAuthor());

@@ -32,7 +32,6 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.channels.FileChannel;
-import java.nio.file.Path;
 import java.util.logging.Logger;
 
 /**
@@ -49,25 +48,22 @@ public class WavInfoReader
         this.loggingName = loggingName;
     }
 
-    public GenericAudioHeader read(Path path) throws CannotReadException, IOException
+    public GenericAudioHeader read(FileChannel fc) throws CannotReadException, IOException
     {
         GenericAudioHeader info = new GenericAudioHeader();
-        try(FileChannel fc = FileChannel.open(path))
+        if(WavRIFFHeader.isValidHeader(fc))
         {
-            if(WavRIFFHeader.isValidHeader(fc))
+            while (fc.position() < fc.size())
             {
-                while (fc.position() < fc.size())
+                if (!readChunk(fc, info))
                 {
-                    if (!readChunk(fc, info))
-                    {
-                        break;
-                    }
+                    break;
                 }
             }
-            else
-            {
-                throw new CannotReadException(loggingName + " Wav RIFF Header not valid");
-            }
+        }
+        else
+        {
+            throw new CannotReadException(loggingName + " Wav RIFF Header not valid");
         }
         calculateTrackLength(info);
         return info;

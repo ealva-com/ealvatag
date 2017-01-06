@@ -10,13 +10,10 @@ import org.jaudiotagger.tag.Tag;
 import org.jaudiotagger.tag.TagException;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.attribute.AclEntry;
-import java.nio.file.attribute.AclFileAttributeView;
-import java.nio.file.attribute.DosFileAttributes;
+import java.nio.channels.FileChannel;
 import java.util.logging.Level;
 
 /**
@@ -35,38 +32,48 @@ public abstract class AudioFileReader2 extends AudioFileReader
    */
     public AudioFile read(File f) throws CannotReadException, IOException, TagException, ReadOnlyFileException, InvalidAudioFrameException
     {
-        Path path = f.toPath();
-        if(logger.isLoggable(Level.CONFIG))
-        {
-            logger.config(ErrorMessage.GENERAL_READ.getMsg(path));
+        if (logger.isLoggable(Level.CONFIG)) {
+            logger.config(ErrorMessage.GENERAL_READ.getMsg(f));
         }
 
-        if (!Files.isReadable(path))
-        {
-            logger.warning(Permissions.displayPermissions(path));
-            throw new NoReadPermissionsException(ErrorMessage.GENERAL_READ_FAILED_DO_NOT_HAVE_PERMISSION_TO_READ_FILE.getMsg(path));
+        // Shouldn't be doing these redundant checks, just try to read
+        if (!f.canRead()) {
+            logger.warning(ErrorMessage.GENERAL_READ_FAILED_DO_NOT_HAVE_PERMISSION_TO_READ_FILE.getMsg(f));
+            throw new NoReadPermissionsException(ErrorMessage.GENERAL_READ_FAILED_DO_NOT_HAVE_PERMISSION_TO_READ_FILE.getMsg(f));
         }
 
         if (f.length() <= MINIMUM_SIZE_FOR_VALID_AUDIO_FILE)
         {
-            throw new CannotReadException(ErrorMessage.GENERAL_READ_FAILED_FILE_TOO_SMALL.getMsg(path));
+            throw new CannotReadException(ErrorMessage.GENERAL_READ_FAILED_FILE_TOO_SMALL.getMsg(f));
         }
 
-        GenericAudioHeader info = getEncodingInfo(path);
-        Tag tag = getTag(path);
-        return new AudioFile(f, info, tag);
+        try (FileChannel channel = new RandomAccessFile(f, "r").getChannel()) {
+            final String absolutePath = f.getAbsolutePath();
+            GenericAudioHeader info = getEncodingInfo(channel, absolutePath);
+            channel.position(0);
+            Tag tag = getTag(channel, absolutePath);
+            return new AudioFile(f, info, tag);
+        } catch (IllegalArgumentException e) {
+            logger.warning(ErrorMessage.GENERAL_READ_FAILED_DO_NOT_HAVE_PERMISSION_TO_READ_FILE.getMsg(f));
+            throw new CannotReadException(ErrorMessage.GENERAL_READ_FAILED_DO_NOT_HAVE_PERMISSION_TO_READ_FILE.getMsg(f));
+        } catch (FileNotFoundException e) {
+            logger.warning("Unable to read file: " + f + " " + e.getMessage());
+            throw e;
+        }
     }
 
     /**
      *
      * Read Encoding Information
      *
-     * @param path
+     * @param channel
+     *
+     * @param fileName
      * @return
      * @throws CannotReadException
      * @throws IOException
      */
-    protected abstract GenericAudioHeader getEncodingInfo(Path path) throws CannotReadException, IOException;
+    protected abstract GenericAudioHeader getEncodingInfo(FileChannel channel, final String fileName) throws CannotReadException, IOException;
 
     protected GenericAudioHeader getEncodingInfo(RandomAccessFile raf) throws CannotReadException, IOException
     {
@@ -76,12 +83,13 @@ public abstract class AudioFileReader2 extends AudioFileReader
     /**
      * Read tag Information
      *
-     * @param path
+     * @param channel
+     * @param fileName
      * @return
      * @throws CannotReadException
      * @throws IOException
      */
-    protected abstract Tag getTag(Path path) throws CannotReadException, IOException;
+    protected abstract Tag getTag(FileChannel channel, final String fileName) throws CannotReadException, IOException;
 
     protected Tag getTag(RandomAccessFile file) throws CannotReadException, IOException
     {

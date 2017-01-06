@@ -55,6 +55,7 @@ public class FilePermissionsTest {
 
 	public static void runWriteReadOnlyFileWithCheckDisabled(String sourceFile) throws Exception {
 		File testFile = createFile(sourceFile);
+		assertTrue("Test file must exist", testFile.exists());
 		try {
 	        testFile.setReadOnly();
 	        boolean threwException = false;

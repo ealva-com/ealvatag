@@ -1,17 +1,17 @@
 /*
- * Entagged Audio Tag library 
+ * Entagged Audio Tag library
  * Copyright (c) 2003-2005 Raphaël Slinckx <raphael@slinckx.net>
- * 
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 2.1 of the License, or (at your option) any later version.
- *  
+ *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
@@ -25,7 +25,6 @@ import org.jaudiotagger.audio.exceptions.NoReadPermissionsException;
 import org.jaudiotagger.audio.exceptions.NoWritePermissionsException;
 import org.jaudiotagger.audio.exceptions.ReadOnlyFileException;
 import org.jaudiotagger.audio.flac.metadatablock.MetadataBlockDataPicture;
-import org.jaudiotagger.audio.generic.Permissions;
 import org.jaudiotagger.audio.real.RealTag;
 import org.jaudiotagger.tag.TagOptionSingleton;
 import org.jaudiotagger.tag.id3.*;
@@ -42,8 +41,6 @@ import org.jaudiotagger.tag.vorbiscomment.VorbisCommentTag;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.RandomAccessFile;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.logging.Logger;
 
@@ -79,7 +76,7 @@ public class AudioFile
      * The tag
      */
     protected Tag tag;
-    
+
     /**
      * The tag
      */
@@ -186,7 +183,7 @@ public class AudioFile
 
     /**
      *  Assign a tag to this audio file
-     *  
+     *
      *  @param tag   Tag to be assigned
      */
     public void setTag(Tag tag)
@@ -255,29 +252,27 @@ public class AudioFile
      */
     protected RandomAccessFile checkFilePermissions(File file, boolean readOnly) throws ReadOnlyFileException, FileNotFoundException, CannotReadException
     {
-        Path path = file.toPath();
         RandomAccessFile newFile;
-        checkFileExists(file);
 
-        // Unless opened as readonly the file must be writable
+        // These exists(), can read, can write checks are sprinkled around the code. Are these necessary? Why not just treat them as
+        // exceptional conditions. They have to be handled anyway.
+        checkFileExists(file);
         if (readOnly)
         {
-            //May not even be readable
-            if(!Files.isReadable(path))
-            {
-                logger.severe("Unable to read file:" + path);
-                logger.severe(Permissions.displayPermissions(path));
-                throw new NoReadPermissionsException(ErrorMessage.GENERAL_READ_FAILED_DO_NOT_HAVE_PERMISSION_TO_READ_FILE.getMsg(path));
+            if (!file.canRead()) {
+                logger.severe("Unable to read file:" + file);
+//                    logger.severe(Permissions.displayPermissions(path));
+                throw new NoReadPermissionsException(ErrorMessage.GENERAL_READ_FAILED_DO_NOT_HAVE_PERMISSION_TO_READ_FILE.getMsg(file));
             }
             newFile = new RandomAccessFile(file, "r");
         }
         else
         {
-            if (TagOptionSingleton.getInstance().isCheckIsWritable() && !Files.isWritable(path))
+            if (TagOptionSingleton.getInstance().isCheckIsWritable() && file.canWrite())
             {
-                logger.severe(Permissions.displayPermissions(file.toPath()));
-                logger.severe(Permissions.displayPermissions(path));
-                throw new ReadOnlyFileException(ErrorMessage.NO_PERMISSIONS_TO_WRITE_TO_FILE.getMsg(path));
+                logger.severe("Unable to write file:" + file);
+//                    logger.severe(Permissions.displayPermissions(path));
+                throw new ReadOnlyFileException(ErrorMessage.NO_PERMISSIONS_TO_WRITE_TO_FILE.getMsg(file));
             }
             newFile = new RandomAccessFile(file, "rw");
         }
@@ -287,7 +282,7 @@ public class AudioFile
     /**
      * Optional debugging method. Must override to do anything interesting.
      *
-     * @return  Empty string. 
+     * @return  Empty string.
      */
     public String displayStructureAsXML()
     {

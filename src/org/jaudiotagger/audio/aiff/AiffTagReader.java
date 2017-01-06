@@ -14,7 +14,6 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.channels.FileChannel;
-import java.nio.file.Path;
 import java.util.logging.Logger;
 
 /**
@@ -29,35 +28,33 @@ public class AiffTagReader extends AiffChunkReader
     /**
      * Read editable Metadata
      *
-     * @param file
+     * @param channel
+     * @param fileName
      * @return
      * @throws CannotReadException
      * @throws IOException
      */
-    public AiffTag read(Path file) throws CannotReadException, IOException
+    public AiffTag read(FileChannel channel, final String fileName) throws CannotReadException, IOException
     {
-        try(FileChannel fc = FileChannel.open(file))
+        AiffAudioHeader aiffAudioHeader = new AiffAudioHeader();
+        AiffTag aiffTag = new AiffTag();
+
+        final AiffFileHeader fileHeader = new AiffFileHeader();
+        fileHeader.readHeader(channel, aiffAudioHeader, channel.toString());
+        while (channel.position() < channel.size())
         {
-            AiffAudioHeader aiffAudioHeader = new AiffAudioHeader();
-            AiffTag aiffTag = new AiffTag();
-
-            final AiffFileHeader fileHeader = new AiffFileHeader();
-            fileHeader.readHeader(fc, aiffAudioHeader, file.toString());
-            while (fc.position() < fc.size())
+            if (!readChunk(channel, aiffTag, channel.toString()))
             {
-                if (!readChunk(fc, aiffTag, file.toString()))
-                {
-                    logger.severe(file + " UnableToReadProcessChunk");
-                    break;
-                }
+                logger.severe(fileName + " UnableToReadProcessChunk");
+                break;
             }
-
-            if (aiffTag.getID3Tag() == null)
-            {
-                aiffTag.setID3Tag(AiffTag.createDefaultID3Tag());
-            }
-            return aiffTag;
         }
+
+        if (aiffTag.getID3Tag() == null)
+        {
+            aiffTag.setID3Tag(AiffTag.createDefaultID3Tag());
+        }
+        return aiffTag;
     }
 
     /**
