@@ -1147,20 +1147,7 @@ public class MP3File extends AudioFile
     @Override
     public Tag createDefaultTag()
     {
-        if(TagOptionSingleton.getInstance().getID3V2Version()==ID3V2Version.ID3_V24)
-        {
-            return new ID3v24Tag();
-        }
-        else if(TagOptionSingleton.getInstance().getID3V2Version()==ID3V2Version.ID3_V23)
-        {
-            return new ID3v23Tag();
-        }
-        else if(TagOptionSingleton.getInstance().getID3V2Version()==ID3V2Version.ID3_V22)
-        {
-            return new ID3v22Tag();
-        }
-        //Default in case not set somehow
-        return new ID3v24Tag();
+        return TagOptionSingleton.createDefaultID3Tag();
     }
 
 
@@ -1192,16 +1179,7 @@ public class MP3File extends AudioFile
     @Override
     public Tag getTagAndConvertOrCreateAndSetDefault()
     {
-        Tag tag          = getTagOrCreateDefault();
-        Tag convertedTag = convertID3Tag((AbstractID3v2Tag)tag, TagOptionSingleton.getInstance().getID3V2Version());
-        if(convertedTag!=null)
-        {
-            setTag(convertedTag);
-        }
-        else
-        {
-            setTag(tag);
-        }
+        setTag(convertID3Tag((AbstractID3v2Tag)getTagOrCreateDefault(), TagOptionSingleton.getInstance().getID3V2Version()));
         return getTag();
     }
 }

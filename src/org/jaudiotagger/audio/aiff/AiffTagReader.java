@@ -8,6 +8,7 @@ import org.jaudiotagger.audio.iff.ChunkHeader;
 import org.jaudiotagger.audio.iff.ChunkSummary;
 import org.jaudiotagger.audio.iff.IffHeaderChunk;
 import org.jaudiotagger.logging.Hex;
+import org.jaudiotagger.tag.TagOptionSingleton;
 import org.jaudiotagger.tag.aiff.AiffTag;
 
 import java.io.IOException;
@@ -52,7 +53,7 @@ public class AiffTagReader extends AiffChunkReader
 
         if (aiffTag.getID3Tag() == null)
         {
-            aiffTag.setID3Tag(AiffTag.createDefaultID3Tag());
+            aiffTag.setID3Tag(TagOptionSingleton.createDefaultID3Tag());
         }
         return aiffTag;
     }

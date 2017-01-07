@@ -25,6 +25,7 @@ import org.jaudiotagger.audio.exceptions.NoReadPermissionsException;
 import org.jaudiotagger.audio.exceptions.NoWritePermissionsException;
 import org.jaudiotagger.audio.exceptions.ReadOnlyFileException;
 import org.jaudiotagger.audio.flac.metadatablock.MetadataBlockDataPicture;
+import org.jaudiotagger.audio.generic.Permissions;
 import org.jaudiotagger.audio.real.RealTag;
 import org.jaudiotagger.tag.TagOptionSingleton;
 import org.jaudiotagger.tag.id3.*;
@@ -41,6 +42,8 @@ import org.jaudiotagger.tag.vorbiscomment.VorbisCommentTag;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.RandomAccessFile;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.logging.Logger;
 
@@ -306,63 +309,13 @@ public class AudioFile
      */
     public Tag createDefaultTag()
     {
-        if(SupportedFileFormat.FLAC.getFilesuffix().equals(file.getName().substring(file.getName().lastIndexOf('.') + 1)))
+        final String fileName = this.file.getName();
+        final int dotIndex = fileName.lastIndexOf('.');
+        if (dotIndex > 0 && dotIndex < fileName.length() - 1)
         {
-            return new FlacTag(VorbisCommentTag.createNewTag(), new ArrayList< MetadataBlockDataPicture >());
+            return SupportedFileFormat.fromExtension(fileName.substring(dotIndex + 1)).createDefaultTag();
         }
-        else if(SupportedFileFormat.OGG.getFilesuffix().equals(file.getName().substring(file.getName().lastIndexOf('.') + 1)))
-        {
-            return VorbisCommentTag.createNewTag();
-        }
-        else if(SupportedFileFormat.MP4.getFilesuffix().equals(file.getName().substring(file.getName().lastIndexOf('.') + 1)))
-        {
-            return new Mp4Tag();
-        }
-        else if(SupportedFileFormat.M4A.getFilesuffix().equals(file.getName().substring(file.getName().lastIndexOf('.') + 1)))
-        {
-            return new Mp4Tag();
-        }
-        else if(SupportedFileFormat.M4P.getFilesuffix().equals(file.getName().substring(file.getName().lastIndexOf('.') + 1)))
-        {
-            return new Mp4Tag();
-        }
-        else if(SupportedFileFormat.WMA.getFilesuffix().equals(file.getName().substring(file.getName().lastIndexOf('.') + 1)))
-        {
-            return new AsfTag();
-        }
-        else if(SupportedFileFormat.WAV.getFilesuffix().equals(file.getName().substring(file.getName().lastIndexOf('.') + 1)))
-        {
-            return new WavTag(TagOptionSingleton.getInstance().getWavOptions());
-        }
-        else if(SupportedFileFormat.RA.getFilesuffix().equals(file.getName().substring(file.getName().lastIndexOf('.') + 1)))
-        {
-            return new RealTag();
-        }
-        else if(SupportedFileFormat.RM.getFilesuffix().equals(file.getName().substring(file.getName().lastIndexOf('.') + 1)))
-        {
-            return new RealTag();
-        }
-        else if(SupportedFileFormat.AIF.getFilesuffix().equals(file.getName().substring(file.getName().lastIndexOf('.') + 1)))
-        {
-            return new AiffTag();
-        }
-        else if(SupportedFileFormat.AIFC.getFilesuffix().equals(file.getName().substring(file.getName().lastIndexOf('.') + 1)))
-        {
-            return new AiffTag();
-        }
-        else if(SupportedFileFormat.AIFF.getFilesuffix().equals(file.getName().substring(file.getName().lastIndexOf('.') + 1)))
-        {
-            return new AiffTag();
-        }
-        else if(SupportedFileFormat.DSF.getFilesuffix().equals(file.getName().substring(file.getName().lastIndexOf('.') + 1)))
-        {
-            return Dsf.createDefaultTag();
-        }
-        else
-        {
-            throw new RuntimeException("Unable to create default tag for this file format");
-        }
-
+        throw new RuntimeException("Unable to create default tag for this file format. No File extension found.");
     }
 
     /**
@@ -403,22 +356,15 @@ public class AudioFile
      */
     public Tag getTagAndConvertOrCreateAndSetDefault()
     {
-        Tag tag = getTagOrCreateDefault();
-
         /* TODO Currently only works for Dsf We need additional check here for Wav and Aif because they wrap the ID3 tag so never return
          * null for getTag() and the wrapper stores the location of the existing tag, would that be broken if tag set to something else
+         * // TODO: 1/7/17 this comment may be outdated
          */
+        Tag tag = getTagOrCreateDefault();
+
         if(tag instanceof AbstractID3v2Tag)
         {
-            Tag convertedTag = convertID3Tag((AbstractID3v2Tag)tag, TagOptionSingleton.getInstance().getID3V2Version());
-            if(convertedTag!=null)
-            {
-                setTag(convertedTag);
-            }
-            else
-            {
-                setTag(tag);
-            }
+            setTag(convertID3Tag((AbstractID3v2Tag)tag, TagOptionSingleton.getInstance().getID3V2Version()));
         }
         else
         {
@@ -445,7 +391,7 @@ public class AudioFile
     /**
      * If using ID3 format convert tag from current version to another as specified by id3V2Version,
      *
-     * @return null if no conversion necessary
+     * @return the converted tag or the original if no conversion necessary
      */
     public AbstractID3v2Tag convertID3Tag(AbstractID3v2Tag tag, ID3V2Version id3V2Version)
     {
@@ -458,7 +404,7 @@ public class AudioFile
                 case ID3_V23:
                     return new ID3v23Tag((ID3v24Tag)tag);
                 case ID3_V24:
-                    return null;
+                    return tag;
             }
         }
         else if(tag instanceof ID3v23Tag)
@@ -468,7 +414,7 @@ public class AudioFile
                 case ID3_V22:
                     return new ID3v22Tag((ID3v23Tag)tag);
                 case ID3_V23:
-                    return null;
+                    return tag;
                 case ID3_V24:
                     return new ID3v24Tag((ID3v23Tag)tag);
             }
@@ -478,7 +424,7 @@ public class AudioFile
             switch(id3V2Version)
             {
                 case ID3_V22:
-                    return null;
+                    return tag;
                 case ID3_V23:
                     return new ID3v23Tag((ID3v22Tag)tag);
                 case ID3_V24:
