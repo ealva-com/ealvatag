@@ -6,42 +6,12 @@
     </artifacts-to-build>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c6ab1c14-6cd1-42fd-af1f-7ac1a83b7f78" name="Default" comment="Make changes so library can be used on Android.&#10;&#10;1. In the AudioFileReader2 hierarchy, remove the usage of java.nio.file.Path, java.nio.file.Files&#10;2. Remove FileTime usage and getting/setting the file creation date. Comment out tests related to this&#10;3. Comment out Permissions">
+    <list default="true" id="c6ab1c14-6cd1-42fd-af1f-7ac1a83b7f78" name="Default" comment="">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/org/jaudiotagger/audio/io/FileOperator.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/jaudiotagger.iml" afterPath="$PROJECT_DIR$/jaudiotagger.iml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/jaudiotagger.ipr" afterPath="$PROJECT_DIR$/jaudiotagger.ipr" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/jaudiotagger.iws" afterPath="$PROJECT_DIR$/jaudiotagger.iws" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/org/jaudiotagger/audio/AudioFile.java" afterPath="$PROJECT_DIR$/src/org/jaudiotagger/audio/AudioFile.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/org/jaudiotagger/audio/aiff/AiffFileReader.java" afterPath="$PROJECT_DIR$/src/org/jaudiotagger/audio/aiff/AiffFileReader.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/org/jaudiotagger/audio/aiff/AiffFileWriter.java" afterPath="$PROJECT_DIR$/src/org/jaudiotagger/audio/aiff/AiffFileWriter.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/org/jaudiotagger/audio/aiff/AiffInfoReader.java" afterPath="$PROJECT_DIR$/src/org/jaudiotagger/audio/aiff/AiffInfoReader.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/org/jaudiotagger/audio/aiff/AiffTagReader.java" afterPath="$PROJECT_DIR$/src/org/jaudiotagger/audio/aiff/AiffTagReader.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/org/jaudiotagger/audio/aiff/AiffTagWriter.java" afterPath="$PROJECT_DIR$/src/org/jaudiotagger/audio/aiff/AiffTagWriter.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/org/jaudiotagger/audio/dsf/DsfFileReader.java" afterPath="$PROJECT_DIR$/src/org/jaudiotagger/audio/dsf/DsfFileReader.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/org/jaudiotagger/audio/dsf/DsfFileWriter.java" afterPath="$PROJECT_DIR$/src/org/jaudiotagger/audio/dsf/DsfFileWriter.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/org/jaudiotagger/audio/flac/FlacFileReader.java" afterPath="$PROJECT_DIR$/src/org/jaudiotagger/audio/flac/FlacFileReader.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/org/jaudiotagger/audio/flac/FlacFileWriter.java" afterPath="$PROJECT_DIR$/src/org/jaudiotagger/audio/flac/FlacFileWriter.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/org/jaudiotagger/audio/flac/FlacInfoReader.java" afterPath="$PROJECT_DIR$/src/org/jaudiotagger/audio/flac/FlacInfoReader.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/org/jaudiotagger/audio/flac/FlacStreamReader.java" afterPath="$PROJECT_DIR$/src/org/jaudiotagger/audio/flac/FlacStreamReader.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/org/jaudiotagger/audio/flac/FlacTagReader.java" afterPath="$PROJECT_DIR$/src/org/jaudiotagger/audio/flac/FlacTagReader.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/org/jaudiotagger/audio/flac/FlacTagWriter.java" afterPath="$PROJECT_DIR$/src/org/jaudiotagger/audio/flac/FlacTagWriter.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/org/jaudiotagger/audio/generic/AudioFileReader.java" afterPath="$PROJECT_DIR$/src/org/jaudiotagger/audio/generic/AudioFileReader.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/org/jaudiotagger/audio/generic/AudioFileReader2.java" afterPath="$PROJECT_DIR$/src/org/jaudiotagger/audio/generic/AudioFileReader2.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/org/jaudiotagger/audio/generic/AudioFileWriter.java" afterPath="$PROJECT_DIR$/src/org/jaudiotagger/audio/generic/AudioFileWriter.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/org/jaudiotagger/audio/generic/AudioFileWriter2.java" afterPath="$PROJECT_DIR$/src/org/jaudiotagger/audio/generic/AudioFileWriter2.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/org/jaudiotagger/audio/generic/Permissions.java" afterPath="$PROJECT_DIR$/src/org/jaudiotagger/audio/generic/Permissions.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/org/jaudiotagger/audio/mp3/MP3File.java" afterPath="$PROJECT_DIR$/src/org/jaudiotagger/audio/mp3/MP3File.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/org/jaudiotagger/audio/wav/WavCleaner.java" afterPath="$PROJECT_DIR$/src/org/jaudiotagger/audio/wav/WavCleaner.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/org/jaudiotagger/audio/wav/WavFileReader.java" afterPath="$PROJECT_DIR$/src/org/jaudiotagger/audio/wav/WavFileReader.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/org/jaudiotagger/audio/wav/WavFileWriter.java" afterPath="$PROJECT_DIR$/src/org/jaudiotagger/audio/wav/WavFileWriter.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/org/jaudiotagger/audio/wav/WavInfoReader.java" afterPath="$PROJECT_DIR$/src/org/jaudiotagger/audio/wav/WavInfoReader.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/org/jaudiotagger/audio/wav/WavTagReader.java" afterPath="$PROJECT_DIR$/src/org/jaudiotagger/audio/wav/WavTagReader.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/org/jaudiotagger/audio/wav/WavTagWriter.java" afterPath="$PROJECT_DIR$/src/org/jaudiotagger/audio/wav/WavTagWriter.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/srctest/org/jaudiotagger/FilePermissionsTest.java" afterPath="$PROJECT_DIR$/srctest/org/jaudiotagger/FilePermissionsTest.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/srctest/org/jaudiotagger/audio/aiff/AiffFileHeaderTest.java" afterPath="$PROJECT_DIR$/srctest/org/jaudiotagger/audio/aiff/AiffFileHeaderTest.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/srctest/org/jaudiotagger/audio/aiff/AiffInfoReaderTest.java" afterPath="$PROJECT_DIR$/srctest/org/jaudiotagger/audio/aiff/AiffInfoReaderTest.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/srctest/org/jaudiotagger/audio/generic/AudioFileWriterTest.java" afterPath="$PROJECT_DIR$/srctest/org/jaudiotagger/audio/generic/AudioFileWriterTest.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/srctest/org/jaudiotagger/tag/wav/WavMetadataTest.java" afterPath="$PROJECT_DIR$/srctest/org/jaudiotagger/tag/wav/WavMetadataTest.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/srctest/org/jaudiotagger/tag/wav/WavMetadataTwonkyTrckTest.java" afterPath="$PROJECT_DIR$/srctest/org/jaudiotagger/tag/wav/WavMetadataTwonkyTrckTest.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/pom.xml" afterPath="$PROJECT_DIR$/pom.xml" />
     </list>
     <ignored path="jaudiotagger.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -68,205 +38,214 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file leaf-file-name="AudioFile.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/audio/AudioFile.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="917">
+              <caret line="319" column="0" lean-forward="false" selection-start-line="319" selection-start-column="0" selection-end-line="319" selection-end-column="0" />
+              <folding>
+                <marker date="1483814735290" expanded="true" signature="12557:12682" ph="/**...*/" />
+                <marker date="1483814735290" expanded="true" signature="12726:12862" ph="{...}" />
+                <marker date="1483814735290" expanded="true" signature="12869:13024" ph="/**...*/" />
+                <marker date="1483814735290" expanded="true" signature="13074:13165" ph="{...}" />
+                <marker date="1483814735290" expanded="true" signature="13171:13449" ph="/**...*/" />
+                <marker date="1483814735290" expanded="true" signature="13509:14288" ph="{...}" />
+                <marker date="1483814735290" expanded="true" signature="14294:14396" ph="/**...*/" />
+                <marker date="1483814735290" expanded="true" signature="14453:14650" ph="{...}" />
+                <marker date="1483814735290" expanded="true" signature="14656:14822" ph="/**...*/" />
+                <marker date="1483814735290" expanded="true" signature="14918:16027" ph="{...}" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="SupportedFileFormat.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/audio/SupportedFileFormat.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-567">
+              <caret line="17" column="13" lean-forward="false" selection-start-line="17" selection-start-column="13" selection-end-line="17" selection-end-column="13" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="AudioFileIO.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/audio/AudioFileIO.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="364">
+              <caret line="305" column="48" lean-forward="false" selection-start-line="305" selection-start-column="48" selection-end-line="305" selection-end-column="48" />
+              <folding>
+                <element signature="e#0#19150#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file leaf-file-name="MP3File.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/audio/mp3/MP3File.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="274">
-              <caret line="1182" column="0" lean-forward="false" selection-start-line="1182" selection-start-column="0" selection-end-line="1182" selection-end-column="0" />
-              <folding>
-                <element signature="imports" expanded="false" />
-                <element signature="e#21586#21587#0" expanded="false" />
-                <element signature="e#21642#21643#0" expanded="false" />
-                <element signature="e#21849#21850#0" expanded="false" />
-                <element signature="e#21890#21891#0" expanded="false" />
-                <element signature="e#22097#22098#0" expanded="false" />
-                <element signature="e#22138#22139#0" expanded="false" />
-                <element signature="e#24065#24066#0" expanded="false" />
-                <element signature="e#24096#24097#0" expanded="false" />
-                <element signature="e#28218#28219#0" expanded="false" />
-                <element signature="e#28249#28250#0" expanded="false" />
-                <element signature="e#28358#28359#0" expanded="false" />
-                <element signature="e#28394#28395#0" expanded="false" />
-                <element signature="e#36317#36318#0" expanded="false" />
-                <element signature="e#36376#36377#0" expanded="false" />
-                <element signature="e#36443#36444#0" expanded="false" />
-                <element signature="e#36508#36509#0" expanded="false" />
-                <element signature="e#36585#36586#0" expanded="false" />
-                <element signature="e#36620#36621#0" expanded="false" />
-                <marker date="1483663133566" expanded="true" signature="29259:29390" ph="/**...*/" />
-                <marker date="1483663133566" expanded="true" signature="29480:29787" ph="{...}" />
-              </folding>
+            <state relative-caret-position="148">
+              <caret line="1149" column="8" lean-forward="false" selection-start-line="1149" selection-start-column="8" selection-end-line="1149" selection-end-column="8" />
+              <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="AiffTagWriter.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/audio/aiff/AiffTagWriter.java">
+      <file leaf-file-name="ByteBuffer.java" pinned="false" current-in-tab="false">
+        <entry file="jar:///usr/lib/jvm/java-8-oracle/src.zip!/java/nio/ByteBuffer.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="518">
-              <caret line="153" column="51" lean-forward="false" selection-start-line="153" selection-start-column="51" selection-end-line="153" selection-end-column="51" />
+            <state relative-caret-position="4266">
+              <caret line="262" column="15" lean-forward="false" selection-start-line="262" selection-start-column="15" selection-end-line="262" selection-end-column="15" />
               <folding>
-                <element signature="e#0#16812#0" expanded="false" />
-                <element signature="imports" expanded="false" />
-                <marker date="1483663133574" expanded="true" signature="2023:2218" ph="/**...*/" />
-                <marker date="1483663133574" expanded="true" signature="4219:4449" ph="/**...*/" />
-                <marker date="1483663133574" expanded="true" signature="4559:5745" ph="{...}" />
-                <marker date="1483663133574" expanded="true" signature="10385:10497" ph="/**...*/" />
-                <marker date="1483663133574" expanded="true" signature="10606:13568" ph="{...}" />
+                <element signature="e#0#55847#0" expanded="false" />
+                <element signature="e#8515#8516#0" expanded="false" />
+                <element signature="e#8584#8585#0" expanded="false" />
+                <element signature="e#9208#9209#0" expanded="false" />
+                <element signature="e#9261#9262#0" expanded="false" />
+                <element signature="e#12369#12370#0" expanded="false" />
+                <element signature="e#12420#12421#0" expanded="false" />
+                <element signature="e#19972#19973#0" expanded="false" />
+                <element signature="e#20018#20019#0" expanded="false" />
+                <element signature="e#25207#25208#0" expanded="false" />
+                <element signature="e#25253#25254#0" expanded="false" />
+                <element signature="e#25815#25816#0" expanded="false" />
+                <element signature="e#25865#25866#0" expanded="false" />
+                <element signature="e#34416#34417#0" expanded="false" />
+                <element signature="e#34497#34498#0" expanded="false" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="AiffFileWriter.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/audio/aiff/AiffFileWriter.java">
+      <file leaf-file-name="Buffer.java" pinned="false" current-in-tab="false">
+        <entry file="jar:///usr/lib/jvm/java-8-oracle/src.zip!/java/nio/Buffer.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="497">
-              <caret line="44" column="13" lean-forward="false" selection-start-line="44" selection-start-column="13" selection-end-line="44" selection-end-column="13" />
+            <state relative-caret-position="2718">
+              <caret line="174" column="22" lean-forward="false" selection-start-line="174" selection-start-column="22" selection-end-line="174" selection-end-column="22" />
               <folding>
-                <element signature="imports" expanded="false" />
+                <element signature="e#0#17958#0" expanded="false" />
+                <element signature="e#7004#7005#0" expanded="false" />
+                <element signature="e#7035#7036#0" expanded="false" />
+                <element signature="e#7176#7177#0" expanded="false" />
+                <element signature="e#7207#7208#0" expanded="false" />
+                <element signature="e#8037#8038#0" expanded="false" />
+                <element signature="e#8065#8066#0" expanded="false" />
+                <element signature="e#12171#12172#0" expanded="false" />
+                <element signature="e#12210#12211#0" expanded="false" />
+                <element signature="e#12489#12490#0" expanded="false" />
+                <element signature="e#12528#12529#0" expanded="false" />
+                <element signature="e#17413#17414#0" expanded="false" />
+                <element signature="e#17487#17488#0" expanded="false" />
+                <element signature="e#17683#17684#0" expanded="false" />
+                <element signature="e#17752#17753#0" expanded="false" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="AiffInfoReader.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/audio/aiff/AiffInfoReader.java">
+      <file leaf-file-name="pom.xml" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/pom.xml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="402">
+              <caret line="77" column="6" lean-forward="false" selection-start-line="77" selection-start-column="6" selection-end-line="77" selection-end-column="6" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="FileOperator.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/audio/io/FileOperator.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="144">
+              <caret line="8" column="2" lean-forward="true" selection-start-line="8" selection-start-column="2" selection-end-line="8" selection-end-column="2" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="AiffAudioHeader.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/audio/aiff/AiffAudioHeader.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="0">
+              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="AiffFileHeader.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/audio/aiff/AiffFileHeader.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="0">
               <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
               <folding>
                 <element signature="imports" expanded="false" />
-                <marker date="1483663133542" expanded="true" signature="1790:1996" ph="{...}" />
-                <marker date="1483663133542" expanded="true" signature="3545:3763" ph="/**...*/" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="AudioFileReader.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/audio/generic/AudioFileReader.java">
+      <file leaf-file-name="DsfAudioFileTest.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/srctest/org/jaudiotagger/audio/dsf/DsfAudioFileTest.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-1242">
-              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-              <folding>
-                <element signature="imports" expanded="false" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="AudioFileReader2.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/audio/generic/AudioFileReader2.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="216">
-              <caret line="32" column="32" lean-forward="false" selection-start-line="32" selection-start-column="32" selection-end-line="32" selection-end-column="32" />
-              <folding>
-                <element signature="imports" expanded="false" />
-                <marker date="1483663133602" expanded="true" signature="2826:3013" ph="/**...*/" />
-                <marker date="1483663133602" expanded="true" signature="3371:3539" ph="/**...*/" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="WavMetadataTwonkyTrckTest.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/srctest/org/jaudiotagger/tag/wav/WavMetadataTwonkyTrckTest.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="158">
-              <caret line="1630" column="42" lean-forward="false" selection-start-line="1630" selection-start-column="42" selection-end-line="1630" selection-end-column="42" />
+            <state relative-caret-position="148">
+              <caret line="263" column="50" lean-forward="false" selection-start-line="263" selection-start-column="50" selection-end-line="263" selection-end-column="50" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="FlacTagWriter.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/audio/flac/FlacTagWriter.java">
+      <file leaf-file-name="AiffTag.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/tag/aiff/AiffTag.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="284">
-              <caret line="224" column="50" lean-forward="false" selection-start-line="224" selection-start-column="50" selection-end-line="224" selection-end-column="50" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="AudioFileWriter.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/audio/generic/AudioFileWriter.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="140">
-              <caret line="749" column="7" lean-forward="false" selection-start-line="749" selection-start-column="7" selection-end-line="749" selection-end-column="7" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="AudioFileWriterTest.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/srctest/org/jaudiotagger/audio/generic/AudioFileWriterTest.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="140">
-              <caret line="112" column="3" lean-forward="false" selection-start-line="112" selection-start-column="3" selection-end-line="112" selection-end-column="3" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Permissions.java" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/audio/generic/Permissions.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="385">
-              <caret line="34" column="83" lean-forward="false" selection-start-line="34" selection-start-column="83" selection-end-line="34" selection-end-column="103" />
+            <state relative-caret-position="716">
+              <caret line="411" column="0" lean-forward="false" selection-start-line="411" selection-start-column="0" selection-end-line="411" selection-end-column="0" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="FilePermissionsTest.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/srctest/org/jaudiotagger/FilePermissionsTest.java">
+      <file leaf-file-name="WavTag.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/tag/wav/WavTag.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="158">
-              <caret line="55" column="23" lean-forward="false" selection-start-line="55" selection-start-column="23" selection-end-line="55" selection-end-column="23" />
+            <state relative-caret-position="148">
+              <caret line="640" column="8" lean-forward="false" selection-start-line="640" selection-start-column="8" selection-end-line="640" selection-end-column="8" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="AudioFileWriter2.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/audio/generic/AudioFileWriter2.java">
+      <file leaf-file-name="Dsf.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/audio/dsf/Dsf.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="176">
-              <caret line="84" column="102" lean-forward="false" selection-start-line="84" selection-start-column="102" selection-end-line="84" selection-end-column="102" />
+            <state relative-caret-position="148">
+              <caret line="16" column="8" lean-forward="false" selection-start-line="16" selection-start-column="8" selection-end-line="16" selection-end-column="8" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="AudioFile.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/audio/AudioFile.java">
+      <file leaf-file-name="TagOptionSingleton.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/tag/TagOptionSingleton.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="282">
-              <caret line="129" column="22" lean-forward="false" selection-start-line="129" selection-start-column="22" selection-end-line="129" selection-end-column="22" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="AsfHeaderUtils.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/srctest/org/jaudiotagger/audio/asf/io/AsfHeaderUtils.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="227">
-              <caret line="92" column="7" lean-forward="true" selection-start-line="92" selection-start-column="7" selection-end-line="92" selection-end-column="7" />
+            <state relative-caret-position="274">
+              <caret line="52" column="35" lean-forward="false" selection-start-line="52" selection-start-column="35" selection-end-line="52" selection-end-column="35" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
     </leaf>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+        <option value="JUnit3 Test Class" />
+      </list>
+    </option>
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
@@ -278,6 +257,9 @@
       <find>Files</find>
       <find>Random</find>
       <find>==Android==</find>
+      <find>HeapByt</find>
+      <find>depend</find>
+      <find>getTag</find>
     </findStrings>
   </component>
   <component name="FindManager">
@@ -311,6 +293,12 @@
         <option value="$PROJECT_DIR$/src/org/jaudiotagger/audio/generic/AudioFileWriter.java" />
         <option value="$PROJECT_DIR$/srctest/org/jaudiotagger/FilePermissionsTest.java" />
         <option value="$PROJECT_DIR$/src/org/jaudiotagger/audio/generic/AudioFileWriter2.java" />
+        <option value="$PROJECT_DIR$/pom.xml" />
+        <option value="$PROJECT_DIR$/src/org/jaudiotagger/audio/io/FileOperator.java" />
+        <option value="$PROJECT_DIR$/srctest/org/jaudiotagger/audio/io/FileOperatorTest.java" />
+        <option value="$PROJECT_DIR$/src/org/jaudiotagger/tag/TagOptionSingleton.java" />
+        <option value="$PROJECT_DIR$/src/org/jaudiotagger/audio/SupportedFileFormat.java" />
+        <option value="$PROJECT_DIR$/src/org/jaudiotagger/audio/AudioFile.java" />
       </list>
     </option>
   </component>
@@ -338,10 +326,10 @@
     </treeState>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="110" />
-    <option name="y" value="82" />
+    <option name="x" value="208" />
+    <option name="y" value="129" />
     <option name="width" value="1568" />
-    <option name="height" value="943" />
+    <option name="height" value="942" />
   </component>
   <component name="ProjectReloadState">
     <option name="STATE" value="0" />
@@ -361,6 +349,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -383,7 +372,183 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="testdatatmp" />
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="org" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="jaudiotagger" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="jaudiotagger" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="jaudiotagger" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="org" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="jaudiotagger" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="utils" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="jaudiotagger" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="jaudiotagger" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="org" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="jaudiotagger" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="tag" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="jaudiotagger" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="jaudiotagger" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="org" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="jaudiotagger" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="audio" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="jaudiotagger" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="jaudiotagger" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="org" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="jaudiotagger" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="audio" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="io" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="jaudiotagger" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="jaudiotagger" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="org" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="jaudiotagger" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="audio" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="exceptions" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="jaudiotagger" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="jaudiotagger" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="org" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="jaudiotagger" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="audio" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="aiff" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -411,9 +576,8 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="Scratches" />
-      <pane id="PackagesPane" />
       <pane id="Scope" />
+      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -424,7 +588,7 @@
     <property name="MemberChooser.showClasses" value="true" />
     <property name="MemberChooser.copyJavadoc" value="false" />
     <property name="FullScreen" value="false" />
-    <property name="project.structure.last.edited" value="Modules" />
+    <property name="project.structure.last.edited" value="Libraries" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
     <property name="recentsLimit" value="5" />
@@ -449,14 +613,15 @@
     <property name="LayoutCode.rearrangeEntries" value="false" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="js.eslint.eslintPackage" value="" />
+    <property name="settings.editor.selected.configurable" value="preferences.sourceCode.Java" />
+    <property name="com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary" value="JUnit3" />
   </component>
   <component name="RecentsManager">
-    <key name="CopyClassDialog.RECENTS_KEY">
-      <recent name="org.jaudiotagger.audio.wav.chunk" />
-      <recent name="org.jaudiotagger.tag.wav" />
-      <recent name="org.jaudiotagger.audio.wav" />
-      <recent name="org.jaudiotagger.audio.aiff" />
-      <recent name="org.jaudiotagger.audio.aiff.chunk" />
+    <key name="CreateTestDialog.RecentsKey">
+      <recent name="org.jaudiotagger.audio.io" />
+    </key>
+    <key name="MoveMembersDialog.RECENTS_KEY">
+      <recent name="org.jaudiotagger.tag.TagOptionSingleton" />
     </key>
     <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
       <recent name="org.jaudiotagger.tag.wav" />
@@ -464,31 +629,18 @@
       <recent name="org.jaudiotagger.audio.wav" />
       <recent name="org.jaudiotagger.tag.aiff" />
     </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="org.jaudiotagger.audio.wav.chunk" />
+      <recent name="org.jaudiotagger.tag.wav" />
+      <recent name="org.jaudiotagger.audio.wav" />
+      <recent name="org.jaudiotagger.audio.aiff" />
+      <recent name="org.jaudiotagger.audio.aiff.chunk" />
+    </key>
+    <key name="CreateTestDialog.Recents.Supers">
+      <recent name="junit.framework.TestCase" />
+    </key>
   </component>
-  <component name="RunManager" selected="JUnit.All in jaudiotagger">
-    <configuration default="false" name="WavMetadataTest.testReadFileWithID3AndListInfoMetadata" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
-      <module name="jaudiotagger" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="PACKAGE_NAME" value="org.jaudiotagger.tag.wav" />
-      <option name="MAIN_CLASS_NAME" value="org.jaudiotagger.tag.wav.WavMetadataTest" />
-      <option name="METHOD_NAME" value="testReadFileWithID3AndListInfoMetadata" />
-      <option name="TEST_OBJECT" value="method" />
-      <option name="VM_PARAMETERS" value="-ea" />
-      <option name="PARAMETERS" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="ENV_VARIABLES" />
-      <option name="PASS_PARENT_ENVS" value="true" />
-      <option name="TEST_SEARCH_SCOPE">
-        <value defaultName="moduleWithDependencies" />
-      </option>
-      <envs />
-      <patterns />
-      <RunnerSettings RunnerId="Run" />
-      <ConfigurationWrapper RunnerId="Run" />
-      <method />
-    </configuration>
+  <component name="RunManager" selected="JUnit.All in jaudiotagger (1)">
     <configuration default="false" name="Issue298Test" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
       <module name="jaudiotagger" />
@@ -570,6 +722,27 @@
       <option name="MAIN_CLASS_NAME" value="org.jaudiotagger.tag.wav.WavMetadataTwonkyTrckTest" />
       <option name="METHOD_NAME" value="testWriteReadOnlyFileWithCheckDisabled" />
       <option name="TEST_OBJECT" value="method" />
+      <option name="VM_PARAMETERS" value="-ea" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="moduleWithDependencies" />
+      </option>
+      <envs />
+      <patterns />
+      <method />
+    </configuration>
+    <configuration default="false" name="All in jaudiotagger (1)" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <module name="jaudiotagger" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PACKAGE_NAME" value="" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="METHOD_NAME" />
+      <option name="TEST_OBJECT" value="package" />
       <option name="VM_PARAMETERS" value="-ea" />
       <option name="PARAMETERS" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
@@ -768,6 +941,12 @@
       <method />
     </configuration>
     <configuration default="true" type="js.build_tools.gulp" factoryName="Gulp.js">
+      <node-interpreter>project</node-interpreter>
+      <node-options />
+      <gulpfile />
+      <tasks />
+      <arguments />
+      <envs />
       <method />
     </configuration>
     <configuration default="true" type="js.build_tools.npm" factoryName="npm">
@@ -832,19 +1011,19 @@
     <list size="7">
       <item index="0" class="java.lang.String" itemvalue="JUnit.AiffAudioTagTest.testReadAiff3" />
       <item index="1" class="java.lang.String" itemvalue="JUnit.AiffAudioTagTest" />
-      <item index="2" class="java.lang.String" itemvalue="JUnit.WavMetadataTest.testReadFileWithID3AndListInfoMetadata" />
-      <item index="3" class="java.lang.String" itemvalue="JUnit.Issue298Test" />
-      <item index="4" class="java.lang.String" itemvalue="JUnit.FrameTDATTest.testReadingID3AsV24Generic" />
-      <item index="5" class="java.lang.String" itemvalue="JUnit.All in jaudiotagger" />
-      <item index="6" class="java.lang.String" itemvalue="JUnit.WavMetadataTwonkyTrckTest.testWriteReadOnlyFileWithCheckDisabled" />
+      <item index="2" class="java.lang.String" itemvalue="JUnit.Issue298Test" />
+      <item index="3" class="java.lang.String" itemvalue="JUnit.FrameTDATTest.testReadingID3AsV24Generic" />
+      <item index="4" class="java.lang.String" itemvalue="JUnit.All in jaudiotagger" />
+      <item index="5" class="java.lang.String" itemvalue="JUnit.WavMetadataTwonkyTrckTest.testWriteReadOnlyFileWithCheckDisabled" />
+      <item index="6" class="java.lang.String" itemvalue="JUnit.All in jaudiotagger (1)" />
     </list>
     <recent_temporary>
       <list size="5">
-        <item index="0" class="java.lang.String" itemvalue="JUnit.All in jaudiotagger" />
-        <item index="1" class="java.lang.String" itemvalue="JUnit.WavMetadataTwonkyTrckTest.testWriteReadOnlyFileWithCheckDisabled" />
-        <item index="2" class="java.lang.String" itemvalue="JUnit.FrameTDATTest.testReadingID3AsV24Generic" />
-        <item index="3" class="java.lang.String" itemvalue="JUnit.Issue298Test" />
-        <item index="4" class="java.lang.String" itemvalue="JUnit.WavMetadataTest.testReadFileWithID3AndListInfoMetadata" />
+        <item index="0" class="java.lang.String" itemvalue="JUnit.All in jaudiotagger (1)" />
+        <item index="1" class="java.lang.String" itemvalue="JUnit.All in jaudiotagger" />
+        <item index="2" class="java.lang.String" itemvalue="JUnit.WavMetadataTwonkyTrckTest.testWriteReadOnlyFileWithCheckDisabled" />
+        <item index="3" class="java.lang.String" itemvalue="JUnit.FrameTDATTest.testReadingID3AsV24Generic" />
+        <item index="4" class="java.lang.String" itemvalue="JUnit.Issue298Test" />
       </list>
     </recent_temporary>
     <configuration default="true" type="AndroidRunConfigurationType" factoryName="Android Application">
@@ -890,14 +1069,11 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1410537432863</updated>
-      <workItem from="1483656155786" duration="11672000" />
-    </task>
-    <task id="LOCAL-00017" summary="Reactored Aiff/Wav code as they are both iff format to share some code&#10;Made Wav code more chunk like&#10;Made Wav code use ByteBuffers better to reduce file i/o &#10;Made wav code  use ByteBuffers in preference to byte arrays">
-      <created>1442522741538</created>
-      <option name="number" value="00017" />
-      <option name="presentableId" value="LOCAL-00017" />
-      <option name="project" value="LOCAL" />
-      <updated>1442522741538</updated>
+      <workItem from="1483656155786" duration="11922000" />
+      <workItem from="1483669891681" duration="702000" />
+      <workItem from="1483714464737" duration="5312000" />
+      <workItem from="1483733600557" duration="1075000" />
+      <workItem from="1483742240052" duration="4163000" />
     </task>
     <task id="LOCAL-00018" summary="Manual merge of https://bitbucket.org/ijabz/jaudiotagger/pull-requests/15/aifffilereader_cleanup/diff by Hendrik Schreiber&#10;AMendements need to ByteOrder because ChunkHeader now used by both Aiff and Wav">
       <created>1442524920388</created>
@@ -1235,7 +1411,14 @@
       <option name="project" value="LOCAL" />
       <updated>1481207028358</updated>
     </task>
-    <option name="localTasksCounter" value="66" />
+    <task id="LOCAL-00066" summary="Make changes so library can be used on Android.&#10;&#10;1. In the AudioFileReader2 hierarchy, remove the usage of java.nio.file.Path, java.nio.file.Files&#10;2. Remove FileTime usage and getting/setting the file creation date. Comment out tests related to this&#10;3. Comment out Permissions because it uses Path and things such as AclFileAttributeView, which aren't supported&#10;&#10;This removes the setting/getting file creation from jaudiotagger and displaying the detailed file permissions information in logging/exceptions when there is a failure.&#10;&#10;With these changes, all jaudiotagger functionality is available on Android, minus the features just mentioned.">
+      <created>1483669140119</created>
+      <option name="number" value="00066" />
+      <option name="presentableId" value="LOCAL-00066" />
+      <option name="project" value="LOCAL" />
+      <updated>1483669140119</updated>
+    </task>
+    <option name="localTasksCounter" value="67" />
     <servers />
   </component>
   <component name="TestHistory">
@@ -1244,6 +1427,12 @@
     </history-entry>
     <history-entry file="All_in_jaudiotagger - 2017.01.05 at 20h 57m 50s.xml">
       <configuration name="All in jaudiotagger" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="All_in_jaudiotagger_(1) - 2017.01.05 at 21h 31m 57s.xml">
+      <configuration name="All in jaudiotagger (1)" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="All_in_jaudiotagger_(1) - 2017.01.06 at 15h 30m 55s.xml">
+      <configuration name="All in jaudiotagger (1)" configurationId="JUnit" />
     </history-entry>
     <history-entry file="WavMetadataTwonkyTrckTest_testWriteReadOnlyFileWithCheckDisabled - 2017.01.05 at 20h 40m 34s.xml">
       <configuration name="WavMetadataTwonkyTrckTest.testWriteReadOnlyFileWithCheckDisabled" configurationId="JUnit" />
@@ -1259,34 +1448,34 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="11672000" />
+    <option name="totallyTimeSpent" value="23174000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="110" y="82" width="1568" height="943" extended-state="0" />
+    <frame x="208" y="129" width="1568" height="942" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
-      <window_info id="Nl-Palette" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.44920442" sideWeight="0.6022032" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Nl-Palette" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.44852942" sideWeight="0.6022032" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
-      <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="11" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3294621" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.29253367" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.40146878" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
-      <window_info id="Properties" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4007353" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.29166666" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Properties" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="14" side_tool="false" content_ui="tabs" />
-      <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.20236531" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.35740513" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2128778" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.35661766" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Theme Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.39976957" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Theme Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.39976957" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -1334,7 +1523,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="When allocating buffer for reading chunks used direct buffer rather than allocating form heap. This prevents using up our vaulable heap and should be quicker, as log as we dont use ByteBuffer.toArray() this is perfectly safe." />
     <MESSAGE value="Make WavTag a wrapper of WavInfoTag as a precursor to being able to read Wav ID3 tag as well as info tag" />
     <MESSAGE value="Basic (and buggy) implementation allowing Wav INFO metadata to be edited and saved." />
     <MESSAGE value="Simplified chunkHeader write code" />
@@ -1359,7 +1547,8 @@
     <MESSAGE value="." />
     <MESSAGE value="Fixed work type" />
     <MESSAGE value="Fixed incorrect mapping for ID3v22,ID3V23 for ALBUM_ARTISTS and ALBUM_ARTISTS_SORT" />
-    <option name="LAST_COMMIT_MESSAGE" value="Fixed incorrect mapping for ID3v22,ID3V23 for ALBUM_ARTISTS and ALBUM_ARTISTS_SORT" />
+    <MESSAGE value="Make changes so library can be used on Android.&#10;&#10;1. In the AudioFileReader2 hierarchy, remove the usage of java.nio.file.Path, java.nio.file.Files&#10;2. Remove FileTime usage and getting/setting the file creation date. Comment out tests related to this&#10;3. Comment out Permissions because it uses Path and things such as AclFileAttributeView, which aren't supported&#10;&#10;This removes the setting/getting file creation from jaudiotagger and displaying the detailed file permissions information in logging/exceptions when there is a failure.&#10;&#10;With these changes, all jaudiotagger functionality is available on Android, minus the features just mentioned." />
+    <option name="LAST_COMMIT_MESSAGE" value="Make changes so library can be used on Android.&#10;&#10;1. In the AudioFileReader2 hierarchy, remove the usage of java.nio.file.Path, java.nio.file.Files&#10;2. Remove FileTime usage and getting/setting the file creation date. Comment out tests related to this&#10;3. Comment out Permissions because it uses Path and things such as AclFileAttributeView, which aren't supported&#10;&#10;This removes the setting/getting file creation from jaudiotagger and displaying the detailed file permissions information in logging/exceptions when there is a failure.&#10;&#10;With these changes, all jaudiotagger functionality is available on Android, minus the features just mentioned." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1392,284 +1581,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/tag/id3/ID3v23FieldKey.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="162" column="6" lean-forward="false" selection-start-line="162" selection-start-column="4" selection-end-line="162" selection-end-column="8" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/tag/id3/ID3v23Frames.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="521" column="56" lean-forward="false" selection-start-line="521" selection-start-column="56" selection-end-line="521" selection-end-column="56" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/tag/id3/ID3v24FieldKey.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="161" column="31" lean-forward="false" selection-start-line="161" selection-start-column="31" selection-end-line="161" selection-end-column="31" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/tag/id3/ID3v24Frames.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="123" column="44" lean-forward="false" selection-start-line="123" selection-start-column="44" selection-end-line="123" selection-end-column="44" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/tag/id3/ID3Frames.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="166" column="44" lean-forward="false" selection-start-line="166" selection-start-column="44" selection-end-line="166" selection-end-column="44" />
-          <folding>
-            <element signature="e#4130#4146#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/tag/id3/ID3Tags.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="253" column="25" lean-forward="false" selection-start-line="253" selection-start-column="25" selection-end-line="253" selection-end-column="25" />
-          <folding>
-            <element signature="e#7938#7939#0" expanded="false" />
-            <element signature="e#8000#8001#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/tag/id3/AbstractID3v2Frame.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="397" column="5" lean-forward="false" selection-start-line="397" selection-start-column="5" selection-end-line="397" selection-end-column="5" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/tag/id3/framebody/FrameBodyTDRC.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="219" column="7" lean-forward="false" selection-start-line="219" selection-start-column="7" selection-end-line="219" selection-end-column="7" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/tag/id3/ID3v24Frame.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="213" column="16" lean-forward="false" selection-start-line="213" selection-start-column="11" selection-end-line="213" selection-end-column="22" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/tag/id3/ID3v22Tag.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="289" column="18" lean-forward="false" selection-start-line="289" selection-start-column="16" selection-end-line="289" selection-end-column="24" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/srctest/org/jaudiotagger/issues/Issue461Test.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="131" column="15" lean-forward="false" selection-start-line="131" selection-start-column="15" selection-end-line="131" selection-end-column="15" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/srctest/org/jaudiotagger/tag/id3/NewInterfaceTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="545" column="0" lean-forward="false" selection-start-line="542" selection-start-column="7" selection-end-line="545" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/tag/id3/AbstractTag.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="144">
-          <caret line="33" column="22" lean-forward="false" selection-start-line="33" selection-start-column="22" selection-end-line="33" selection-end-column="22" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/tag/id3/AbstractID3Tag.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="198">
-          <caret line="34" column="53" lean-forward="false" selection-start-line="34" selection-start-column="53" selection-end-line="34" selection-end-column="53" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/tag/Tag.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3834">
-          <caret line="234" column="0" lean-forward="false" selection-start-line="234" selection-start-column="0" selection-end-line="234" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/tag/id3/valuepair/ID3NumberTotalFields.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="126">
-          <caret line="9" column="13" lean-forward="false" selection-start-line="9" selection-start-column="13" selection-end-line="9" selection-end-column="13" />
-          <folding>
-            <element signature="imports" expanded="false" />
-            <element signature="e#709#710#0" expanded="false" />
-            <element signature="e#762#763#0" expanded="false" />
-            <element signature="e#822#823#0" expanded="false" />
-            <element signature="e#874#875#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/tag/id3/AggregatedFrame.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="90">
-          <caret line="12" column="28" lean-forward="false" selection-start-line="12" selection-start-column="28" selection-end-line="12" selection-end-column="28" />
-          <folding>
-            <element signature="imports" expanded="false" />
-            <element signature="e#589#609#0" expanded="false" />
-            <element signature="e#2150#2151#0" expanded="false" />
-            <element signature="e#2177#2178#0" expanded="false" />
-            <element signature="e#2214#2215#0" expanded="false" />
-            <element signature="e#2242#2243#0" expanded="false" />
-            <element signature="e#2285#2286#0" expanded="false" />
-            <element signature="e#2301#2302#0" expanded="false" />
-            <element signature="e#2337#2338#0" expanded="false" />
-            <element signature="e#2365#2366#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/tag/id3/TyerTdatAggregatedFrame.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="108">
-          <caret line="8" column="3" lean-forward="false" selection-start-line="8" selection-start-column="3" selection-end-line="8" selection-end-column="3" />
-          <folding>
-            <element signature="imports" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/srctest/org/jaudiotagger/tag/id3/FrameTDATTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2124">
-          <caret line="131" column="26" lean-forward="false" selection-start-line="131" selection-start-column="16" selection-end-line="131" selection-end-column="42" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/tag/id3/AbstractID3v2Tag.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="33246">
-          <caret line="1919" column="5" lean-forward="false" selection-start-line="1919" selection-start-column="5" selection-end-line="1919" selection-end-column="5" />
-          <folding>
-            <element signature="e#0#107901#0" expanded="false" />
-            <element signature="imports" expanded="false" />
-            <element signature="e#10154#10155#0" expanded="false" />
-            <element signature="e#10191#10192#0" expanded="false" />
-            <element signature="e#10409#10410#0" expanded="false" />
-            <element signature="e#10448#10449#0" expanded="false" />
-            <element signature="e#10642#10643#0" expanded="false" />
-            <element signature="e#10680#10681#0" expanded="false" />
-            <element signature="e#10832#10833#0" expanded="false" />
-            <element signature="e#10868#10869#0" expanded="false" />
-            <element signature="e#11048#11049#0" expanded="false" />
-            <element signature="e#11083#11084#0" expanded="false" />
-            <element signature="e#11551#11552#0" expanded="false" />
-            <element signature="e#11606#11607#0" expanded="false" />
-            <element signature="e#14896#14897#0" expanded="false" />
-            <element signature="e#14952#14953#0" expanded="false" />
-            <element signature="e#15553#15554#0" expanded="false" />
-            <element signature="e#15614#15615#0" expanded="false" />
-            <element signature="e#16870#16871#0" expanded="false" />
-            <element signature="e#16928#16929#0" expanded="false" />
-            <element signature="e#23025#23035#0" expanded="false" />
-            <element signature="e#27437#27457#0" expanded="false" />
-            <element signature="e#29495#29505#0" expanded="false" />
-            <element signature="e#31391#31399#0" expanded="false" />
-            <element signature="e#33385#33386#0" expanded="false" />
-            <element signature="e#33436#33437#0" expanded="false" />
-            <element signature="e#34675#34683#0" expanded="false" />
-            <element signature="e#55350#55370#0" expanded="false" />
-            <element signature="e#58415#58435#0" expanded="false" />
-            <element signature="e#61940#61948#0" expanded="false" />
-            <element signature="e#65337#65345#0" expanded="false" />
-            <element signature="e#67110#67120#0" expanded="false" />
-            <element signature="e#67576#67577#0" expanded="false" />
-            <element signature="e#67603#67604#0" expanded="false" />
-            <element signature="e#68439#68440#0" expanded="false" />
-            <element signature="e#68474#68475#0" expanded="false" />
-            <element signature="e#68605#68606#0" expanded="false" />
-            <element signature="e#68648#68649#0" expanded="false" />
-            <element signature="e#70431#70441#0" expanded="false" />
-            <element signature="e#72258#72259#0" expanded="false" />
-            <element signature="e#72307#72308#0" expanded="false" />
-            <element signature="e#83732#83740#0" expanded="false" />
-            <element signature="e#101012#101022#0" expanded="false" />
-            <element signature="e#105454#105455#0" expanded="false" />
-            <element signature="e#105495#105496#0" expanded="false" />
-            <element signature="e#105541#105542#0" expanded="false" />
-            <element signature="e#105579#105580#0" expanded="false" />
-            <element signature="e#105623#105624#0" expanded="false" />
-            <element signature="e#105659#105660#0" expanded="false" />
-            <element signature="e#107508#107509#0" expanded="false" />
-            <element signature="e#107550#107551#0" expanded="false" />
-            <element signature="e#107622#107623#0" expanded="false" />
-            <element signature="e#107684#107685#0" expanded="false" />
-            <element signature="e#107730#107731#0" expanded="false" />
-            <element signature="e#107770#107771#0" expanded="false" />
-            <element signature="e#107838#107839#0" expanded="false" />
-            <element signature="e#107896#107897#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/tag/id3/ID3v23Tag.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="342">
-          <caret line="1345" column="84" lean-forward="false" selection-start-line="1345" selection-start-column="84" selection-end-line="1345" selection-end-column="84" />
-          <folding>
-            <element signature="e#0#46681#0" expanded="false" />
-            <element signature="imports" expanded="false" />
-            <element signature="e#3950#3951#0" expanded="false" />
-            <element signature="e#3980#3981#0" expanded="false" />
-            <element signature="e#4071#4072#0" expanded="false" />
-            <element signature="e#4107#4108#0" expanded="false" />
-            <element signature="e#4189#4190#0" expanded="false" />
-            <element signature="e#4220#4221#0" expanded="false" />
-            <element signature="e#4319#4320#0" expanded="false" />
-            <element signature="e#4347#4348#0" expanded="false" />
-            <element signature="e#6007#6027#0" expanded="false" />
-            <element signature="e#11963#11964#0" expanded="false" />
-            <element signature="e#11996#11997#0" expanded="false" />
-            <element signature="e#29558#29559#0" expanded="false" />
-            <element signature="e#29598#29599#0" expanded="false" />
-            <element signature="e#29651#29652#0" expanded="false" />
-            <element signature="e#29693#29694#0" expanded="false" />
-            <element signature="e#31751#31752#0" expanded="false" />
-            <element signature="e#31823#31824#0" expanded="false" />
-            <element signature="e#32442#32443#0" expanded="false" />
-            <element signature="e#32493#32494#0" expanded="false" />
-            <element signature="e#32723#32724#0" expanded="false" />
-            <element signature="e#32797#32798#0" expanded="false" />
-            <element signature="e#33003#33012#0" expanded="false" />
-            <element signature="e#35741#35742#0" expanded="false" />
-            <element signature="e#35775#35776#0" expanded="false" />
-            <element signature="e#44629#44637#0" expanded="false" />
-            <element signature="e#45255#45263#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/audio/wav/WavTagWriter.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="156">
@@ -1682,9 +1593,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="270">
           <caret line="24" column="74" lean-forward="false" selection-start-line="24" selection-start-column="74" selection-end-line="24" selection-end-column="74" />
-          <folding>
-            <element signature="imports" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1692,13 +1600,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="203">
           <caret line="33" column="97" lean-forward="false" selection-start-line="33" selection-start-column="97" selection-end-line="33" selection-end-column="97" />
-          <folding>
-            <element signature="imports" expanded="false" />
-            <element signature="e#2955#2956#0" expanded="false" />
-            <element signature="e#2995#2996#0" expanded="false" />
-            <element signature="e#3030#3031#0" expanded="false" />
-            <element signature="e#3065#3066#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1706,9 +1607,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="270">
           <caret line="21" column="22" lean-forward="false" selection-start-line="21" selection-start-column="22" selection-end-line="21" selection-end-column="22" />
-          <folding>
-            <element signature="imports" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1717,88 +1615,29 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="imports" expanded="false" />
             <marker date="1483663133542" expanded="true" signature="1790:1996" ph="{...}" />
-            <marker date="1483663133542" expanded="true" signature="3545:3763" ph="/**...*/" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/audio/aiff/AiffFileWriter.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="497">
+        <state relative-caret-position="414">
           <caret line="44" column="13" lean-forward="false" selection-start-line="44" selection-start-column="13" selection-end-line="44" selection-end-column="13" />
-          <folding>
-            <element signature="imports" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/audio/aiff/AiffTagWriter.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="518">
+        <state relative-caret-position="2052">
           <caret line="153" column="51" lean-forward="false" selection-start-line="153" selection-start-column="51" selection-end-line="153" selection-end-column="51" />
-          <folding>
-            <element signature="e#0#16812#0" expanded="false" />
-            <element signature="imports" expanded="false" />
-            <marker date="1483663133574" expanded="true" signature="2023:2218" ph="/**...*/" />
-            <marker date="1483663133574" expanded="true" signature="4219:4449" ph="/**...*/" />
-            <marker date="1483663133574" expanded="true" signature="4559:5745" ph="{...}" />
-            <marker date="1483663133574" expanded="true" signature="10385:10497" ph="/**...*/" />
-            <marker date="1483663133574" expanded="true" signature="10606:13568" ph="{...}" />
-          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/audio/generic/AudioFileReader.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1242">
+        <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/audio/generic/AudioFileReader2.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="216">
-          <caret line="32" column="32" lean-forward="false" selection-start-line="32" selection-start-column="32" selection-end-line="32" selection-end-column="32" />
-          <folding>
-            <element signature="imports" expanded="false" />
-            <marker date="1483663133602" expanded="true" signature="2826:3013" ph="/**...*/" />
-            <marker date="1483663133602" expanded="true" signature="3371:3539" ph="/**...*/" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/audio/mp3/MP3File.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="274">
-          <caret line="1182" column="0" lean-forward="false" selection-start-line="1182" selection-start-column="0" selection-end-line="1182" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="false" />
-            <element signature="e#21586#21587#0" expanded="false" />
-            <element signature="e#21642#21643#0" expanded="false" />
-            <element signature="e#21849#21850#0" expanded="false" />
-            <element signature="e#21890#21891#0" expanded="false" />
-            <element signature="e#22097#22098#0" expanded="false" />
-            <element signature="e#22138#22139#0" expanded="false" />
-            <element signature="e#24065#24066#0" expanded="false" />
-            <element signature="e#24096#24097#0" expanded="false" />
-            <element signature="e#28218#28219#0" expanded="false" />
-            <element signature="e#28249#28250#0" expanded="false" />
-            <element signature="e#28358#28359#0" expanded="false" />
-            <element signature="e#28394#28395#0" expanded="false" />
-            <element signature="e#36317#36318#0" expanded="false" />
-            <element signature="e#36376#36377#0" expanded="false" />
-            <element signature="e#36443#36444#0" expanded="false" />
-            <element signature="e#36508#36509#0" expanded="false" />
-            <element signature="e#36585#36586#0" expanded="false" />
-            <element signature="e#36620#36621#0" expanded="false" />
-            <marker date="1483663133566" expanded="true" signature="29259:29390" ph="/**...*/" />
-            <marker date="1483663133566" expanded="true" signature="29480:29787" ph="{...}" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1806,29 +1645,179 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="106">
           <caret line="171" column="44" lean-forward="false" selection-start-line="171" selection-start-column="44" selection-end-line="171" selection-end-column="44" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar:///usr/lib/jvm/java-8-oracle/src.zip!/java/nio/file/FileSystemException.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="234">
+          <caret line="36" column="13" lean-forward="false" selection-start-line="36" selection-start-column="13" selection-end-line="36" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar:///usr/lib/jvm/java-8-oracle/src.zip!/java/nio/file/AccessDeniedException.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="256">
+          <caret line="40" column="16" lean-forward="true" selection-start-line="40" selection-start-column="16" selection-end-line="40" selection-end-column="16" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/audio/flac/FlacTagWriter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3348">
+          <caret line="224" column="50" lean-forward="false" selection-start-line="224" selection-start-column="50" selection-end-line="224" selection-end-column="50" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar:///usr/lib/jvm/java-8-oracle/src.zip!/java/nio/file/attribute/FileTime.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-2880">
+          <caret line="47" column="19" lean-forward="false" selection-start-line="47" selection-start-column="19" selection-end-line="47" selection-end-column="19" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/srctest/org/jaudiotagger/AbstractTestCase.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="158">
+          <caret line="156" column="23" lean-forward="false" selection-start-line="156" selection-start-column="23" selection-end-line="156" selection-end-column="23" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar:///usr/lib/jvm/java-8-oracle/src.zip!/java/io/RandomAccessFile.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1247">
+          <caret line="202" column="11" lean-forward="false" selection-start-line="202" selection-start-column="11" selection-end-line="202" selection-end-column="11" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/audio/exceptions/NoWritePermissionsException.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="108">
+          <caret line="6" column="66" lean-forward="true" selection-start-line="6" selection-start-column="66" selection-end-line="6" selection-end-column="66" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/srctest/org/jaudiotagger/tag/wav/WavMetadataTwonkyTrckTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="29070">
+          <caret line="1630" column="42" lean-forward="false" selection-start-line="1630" selection-start-column="42" selection-end-line="1630" selection-end-column="42" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/srctest/org/jaudiotagger/FilePermissionsTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="702">
+          <caret line="55" column="23" lean-forward="false" selection-start-line="55" selection-start-column="23" selection-end-line="55" selection-end-column="23" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/logging/ErrorMessage.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="167">
+          <caret line="61" column="4" lean-forward="false" selection-start-line="61" selection-start-column="4" selection-end-line="61" selection-end-column="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/audio/generic/AudioFileWriter2.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1296">
+          <caret line="84" column="102" lean-forward="false" selection-start-line="84" selection-start-column="102" selection-end-line="84" selection-end-column="102" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/audio/generic/AudioFileWriter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="12852">
+          <caret line="749" column="7" lean-forward="false" selection-start-line="749" selection-start-column="7" selection-end-line="749" selection-end-column="7" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/srctest/org/jaudiotagger/audio/generic/AudioFileWriterTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1728">
+          <caret line="112" column="3" lean-forward="false" selection-start-line="112" selection-start-column="3" selection-end-line="112" selection-end-column="3" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/audio/generic/Permissions.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="612">
+          <caret line="34" column="83" lean-forward="false" selection-start-line="34" selection-start-column="83" selection-end-line="34" selection-end-column="103" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/srctest/org/jaudiotagger/audio/asf/io/AsfHeaderUtils.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="144">
+          <caret line="18" column="19" lean-forward="false" selection-start-line="18" selection-start-column="19" selection-end-line="18" selection-end-column="33" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/audio/generic/AudioFileReader2.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1098">
+          <caret line="75" column="42" lean-forward="false" selection-start-line="75" selection-start-column="42" selection-end-line="75" selection-end-column="42" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/audio/flac/FlacFileReader.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="288">
+          <caret line="39" column="20" lean-forward="false" selection-start-line="39" selection-start-column="20" selection-end-line="39" selection-end-column="20" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/audio/flac/FlacInfoReader.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="594">
+          <caret line="60" column="44" lean-forward="false" selection-start-line="60" selection-start-column="44" selection-end-line="60" selection-end-column="44" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/audio/flac/metadatablock/MetadataBlockDataStreamInfo.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="774">
+          <caret line="67" column="11" lean-forward="false" selection-start-line="67" selection-start-column="11" selection-end-line="67" selection-end-column="11" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/audio/generic/ModificationHandler.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="198">
+          <caret line="32" column="13" lean-forward="false" selection-start-line="32" selection-start-column="13" selection-end-line="32" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/audio/mp3/MP3FileReader.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="486">
+          <caret line="38" column="35" lean-forward="false" selection-start-line="38" selection-start-column="35" selection-end-line="38" selection-end-column="35" />
           <folding>
             <element signature="imports" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/audio/SupportedFileFormat.java">
+    <entry file="jar:///usr/lib/jvm/java-8-oracle/src.zip!/java/nio/channels/FileChannel.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="108">
-          <caret line="6" column="12" lean-forward="false" selection-start-line="6" selection-start-column="12" selection-end-line="6" selection-end-column="12" />
+        <state relative-caret-position="15804">
+          <caret line="914" column="37" lean-forward="false" selection-start-line="914" selection-start-column="37" selection-end-line="914" selection-end-column="37" />
           <folding>
-            <element signature="e#570#571#0" expanded="false" />
-            <element signature="e#614#615#0" expanded="false" />
-            <element signature="e#762#763#0" expanded="false" />
-            <element signature="e#795#796#0" expanded="false" />
+            <element signature="e#0#50298#0" expanded="false" />
+            <element signature="imports" expanded="false" />
+            <element signature="e#15513#15525#0" expanded="false" />
+            <element signature="e#35249#35250#0" expanded="false" />
+            <element signature="e#35289#35290#0" expanded="false" />
+            <element signature="e#35464#35465#0" expanded="false" />
+            <element signature="e#35499#35500#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/tag/id3/ID3v24Tag.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="223">
-          <caret line="388" column="55" lean-forward="true" selection-start-line="388" selection-start-column="55" selection-end-line="388" selection-end-column="55" />
+        <state relative-caret-position="14796">
+          <caret line="872" column="14" lean-forward="false" selection-start-line="872" selection-start-column="14" selection-end-line="872" selection-end-column="14" />
           <folding>
             <element signature="e#0#50875#0" expanded="false" />
             <element signature="imports" expanded="false" />
@@ -1857,145 +1846,285 @@
         </state>
       </provider>
     </entry>
-    <entry file="jar:///usr/lib/jvm/java-8-oracle/src.zip!/java/nio/file/FileSystemException.java">
+    <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/tag/id3/AbstractID3v2Tag.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="234">
-          <caret line="36" column="13" lean-forward="false" selection-start-line="36" selection-start-column="13" selection-end-line="36" selection-end-column="13" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar:///usr/lib/jvm/java-8-oracle/src.zip!/java/nio/file/AccessDeniedException.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="256">
-          <caret line="40" column="16" lean-forward="true" selection-start-line="40" selection-start-column="16" selection-end-line="40" selection-end-column="16" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/audio/flac/FlacTagWriter.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="284">
-          <caret line="224" column="50" lean-forward="false" selection-start-line="224" selection-start-column="50" selection-end-line="224" selection-end-column="50" />
+        <state relative-caret-position="21312">
+          <caret line="1259" column="24" lean-forward="false" selection-start-line="1259" selection-start-column="24" selection-end-line="1259" selection-end-column="24" />
           <folding>
-            <element signature="imports" expanded="true" />
+            <element signature="e#0#107901#0" expanded="false" />
+            <element signature="imports" expanded="false" />
+            <element signature="e#10154#10155#0" expanded="false" />
+            <element signature="e#10191#10192#0" expanded="false" />
+            <element signature="e#10409#10410#0" expanded="false" />
+            <element signature="e#10448#10449#0" expanded="false" />
+            <element signature="e#10642#10643#0" expanded="false" />
+            <element signature="e#10680#10681#0" expanded="false" />
+            <element signature="e#10832#10833#0" expanded="false" />
+            <element signature="e#10868#10869#0" expanded="false" />
+            <element signature="e#11048#11049#0" expanded="false" />
+            <element signature="e#11083#11084#0" expanded="false" />
+            <element signature="e#11551#11552#0" expanded="false" />
+            <element signature="e#11606#11607#0" expanded="false" />
+            <element signature="e#14437#14438#0" expanded="false" />
+            <element signature="e#14484#14485#0" expanded="false" />
+            <element signature="e#14896#14897#0" expanded="false" />
+            <element signature="e#14952#14953#0" expanded="false" />
+            <element signature="e#15553#15554#0" expanded="false" />
+            <element signature="e#15614#15615#0" expanded="false" />
+            <element signature="e#16870#16871#0" expanded="false" />
+            <element signature="e#16928#16929#0" expanded="false" />
+            <element signature="e#33385#33386#0" expanded="false" />
+            <element signature="e#33436#33437#0" expanded="false" />
+            <element signature="e#67576#67577#0" expanded="false" />
+            <element signature="e#67603#67604#0" expanded="false" />
+            <element signature="e#68439#68440#0" expanded="false" />
+            <element signature="e#68474#68475#0" expanded="false" />
+            <element signature="e#68605#68606#0" expanded="false" />
+            <element signature="e#68648#68649#0" expanded="false" />
+            <element signature="e#72258#72259#0" expanded="false" />
+            <element signature="e#72307#72308#0" expanded="false" />
+            <element signature="e#105454#105455#0" expanded="false" />
+            <element signature="e#105495#105496#0" expanded="false" />
+            <element signature="e#105541#105542#0" expanded="false" />
+            <element signature="e#105579#105580#0" expanded="false" />
+            <element signature="e#105623#105624#0" expanded="false" />
+            <element signature="e#105659#105660#0" expanded="false" />
+            <element signature="e#107508#107509#0" expanded="false" />
+            <element signature="e#107550#107551#0" expanded="false" />
+            <element signature="e#107622#107623#0" expanded="false" />
+            <element signature="e#107684#107685#0" expanded="false" />
+            <element signature="e#107730#107731#0" expanded="false" />
+            <element signature="e#107770#107771#0" expanded="false" />
+            <element signature="e#107838#107839#0" expanded="false" />
+            <element signature="e#107896#107897#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="jar:///usr/lib/jvm/java-8-oracle/src.zip!/java/nio/file/attribute/FileTime.java">
+    <entry file="jar:///usr/lib/jvm/java-8-oracle/src.zip!/java/nio/HeapByteBuffer.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-2880">
-          <caret line="47" column="19" lean-forward="false" selection-start-line="47" selection-start-column="19" selection-end-line="47" selection-end-column="19" />
+        <state relative-caret-position="792">
+          <caret line="69" column="10" lean-forward="false" selection-start-line="69" selection-start-column="10" selection-end-line="69" selection-end-column="10" />
+          <folding>
+            <element signature="e#0#13820#0" expanded="false" />
+            <element signature="e#2360#2361#0" expanded="false" />
+            <element signature="e#2393#2394#0" expanded="false" />
+            <element signature="e#2418#2419#0" expanded="false" />
+            <element signature="e#2463#2464#0" expanded="false" />
+            <element signature="e#2493#2494#0" expanded="false" />
+            <element signature="e#2537#2538#0" expanded="false" />
+            <element signature="e#2907#2908#0" expanded="false" />
+            <element signature="e#2935#2936#0" expanded="false" />
+            <element signature="e#2972#2973#0" expanded="false" />
+            <element signature="e#3000#3001#0" expanded="false" />
+            <element signature="e#4662#4663#0" expanded="false" />
+            <element signature="e#4734#4735#0" expanded="false" />
+            <element signature="e#4875#4876#0" expanded="false" />
+            <element signature="e#4948#4949#0" expanded="false" />
+            <element signature="e#4982#4983#0" expanded="false" />
+            <element signature="e#5056#5057#0" expanded="false" />
+            <element signature="e#6349#6350#0" expanded="false" />
+            <element signature="e#6423#6424#0" expanded="false" />
+            <element signature="e#6459#6460#0" expanded="false" />
+            <element signature="e#6534#6535#0" expanded="false" />
+            <element signature="e#7853#7854#0" expanded="false" />
+            <element signature="e#7925#7926#0" expanded="false" />
+            <element signature="e#7957#7958#0" expanded="false" />
+            <element signature="e#8030#8031#0" expanded="false" />
+            <element signature="e#9288#9289#0" expanded="false" />
+            <element signature="e#9361#9362#0" expanded="false" />
+            <element signature="e#9395#9396#0" expanded="false" />
+            <element signature="e#9469#9470#0" expanded="false" />
+            <element signature="e#10762#10763#0" expanded="false" />
+            <element signature="e#10836#10837#0" expanded="false" />
+            <element signature="e#10872#10873#0" expanded="false" />
+            <element signature="e#10947#10948#0" expanded="false" />
+            <element signature="e#12275#12276#0" expanded="false" />
+            <element signature="e#12350#12351#0" expanded="false" />
+            <element signature="e#12388#12389#0" expanded="false" />
+            <element signature="e#12464#12465#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar:///usr/lib/jvm/java-8-oracle/src.zip!/java/nio/ByteBuffer.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="4266">
+          <caret line="262" column="15" lean-forward="false" selection-start-line="262" selection-start-column="15" selection-end-line="262" selection-end-column="15" />
+          <folding>
+            <element signature="e#0#55847#0" expanded="false" />
+            <element signature="e#8515#8516#0" expanded="false" />
+            <element signature="e#8584#8585#0" expanded="false" />
+            <element signature="e#9208#9209#0" expanded="false" />
+            <element signature="e#9261#9262#0" expanded="false" />
+            <element signature="e#12369#12370#0" expanded="false" />
+            <element signature="e#12420#12421#0" expanded="false" />
+            <element signature="e#19972#19973#0" expanded="false" />
+            <element signature="e#20018#20019#0" expanded="false" />
+            <element signature="e#25207#25208#0" expanded="false" />
+            <element signature="e#25253#25254#0" expanded="false" />
+            <element signature="e#25815#25816#0" expanded="false" />
+            <element signature="e#25865#25866#0" expanded="false" />
+            <element signature="e#34416#34417#0" expanded="false" />
+            <element signature="e#34497#34498#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar:///usr/lib/jvm/java-8-oracle/src.zip!/java/nio/Buffer.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2718">
+          <caret line="174" column="22" lean-forward="false" selection-start-line="174" selection-start-column="22" selection-end-line="174" selection-end-column="22" />
+          <folding>
+            <element signature="e#0#17958#0" expanded="false" />
+            <element signature="e#7004#7005#0" expanded="false" />
+            <element signature="e#7035#7036#0" expanded="false" />
+            <element signature="e#7176#7177#0" expanded="false" />
+            <element signature="e#7207#7208#0" expanded="false" />
+            <element signature="e#8037#8038#0" expanded="false" />
+            <element signature="e#8065#8066#0" expanded="false" />
+            <element signature="e#12171#12172#0" expanded="false" />
+            <element signature="e#12210#12211#0" expanded="false" />
+            <element signature="e#12489#12490#0" expanded="false" />
+            <element signature="e#12528#12529#0" expanded="false" />
+            <element signature="e#17413#17414#0" expanded="false" />
+            <element signature="e#17487#17488#0" expanded="false" />
+            <element signature="e#17683#17684#0" expanded="false" />
+            <element signature="e#17752#17753#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/audio/aiff/AiffAudioHeader.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/srctest/org/jaudiotagger/AbstractTestCase.java">
+    <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/audio/aiff/AiffFileHeader.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="158">
-          <caret line="156" column="23" lean-forward="false" selection-start-line="156" selection-start-column="23" selection-end-line="156" selection-end-column="23" />
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="imports" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/srctest/org/jaudiotagger/audio/io/FileOperatorTest.java" />
+    <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/utils/FileTypeUtil.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="245">
+          <caret line="29" column="39" lean-forward="false" selection-start-line="29" selection-start-column="39" selection-end-line="29" selection-end-column="39" />
+          <folding>
+            <element signature="e#2499#2500#0" expanded="false" />
+            <element signature="e#2539#2540#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/srctest/org/jaudiotagger/audio/dsf/DsfAudioFileTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="148">
+          <caret line="263" column="50" lean-forward="false" selection-start-line="263" selection-start-column="50" selection-end-line="263" selection-end-column="50" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="jar:///usr/lib/jvm/java-8-oracle/src.zip!/java/io/RandomAccessFile.java">
+    <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/tag/wav/WavTag.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1247">
-          <caret line="202" column="11" lean-forward="false" selection-start-line="202" selection-start-column="11" selection-end-line="202" selection-end-column="11" />
+        <state relative-caret-position="148">
+          <caret line="640" column="8" lean-forward="false" selection-start-line="640" selection-start-column="8" selection-end-line="640" selection-end-column="8" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/audio/exceptions/NoWritePermissionsException.java">
+    <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/audio/dsf/Dsf.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="108">
-          <caret line="6" column="66" lean-forward="true" selection-start-line="6" selection-start-column="66" selection-end-line="6" selection-end-column="66" />
+        <state relative-caret-position="148">
+          <caret line="16" column="8" lean-forward="false" selection-start-line="16" selection-start-column="8" selection-end-line="16" selection-end-column="8" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/audio/mp3/MP3File.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="148">
+          <caret line="1149" column="8" lean-forward="false" selection-start-line="1149" selection-start-column="8" selection-end-line="1149" selection-end-column="8" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/audio/AudioFile.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="282">
-          <caret line="129" column="22" lean-forward="false" selection-start-line="129" selection-start-column="22" selection-end-line="129" selection-end-column="22" />
+        <state relative-caret-position="917">
+          <caret line="319" column="0" lean-forward="false" selection-start-line="319" selection-start-column="0" selection-end-line="319" selection-end-column="0" />
+          <folding>
+            <marker date="1483814735290" expanded="true" signature="12557:12682" ph="/**...*/" />
+            <marker date="1483814735290" expanded="true" signature="12726:12862" ph="{...}" />
+            <marker date="1483814735290" expanded="true" signature="12869:13024" ph="/**...*/" />
+            <marker date="1483814735290" expanded="true" signature="13074:13165" ph="{...}" />
+            <marker date="1483814735290" expanded="true" signature="13171:13449" ph="/**...*/" />
+            <marker date="1483814735290" expanded="true" signature="13509:14288" ph="{...}" />
+            <marker date="1483814735290" expanded="true" signature="14294:14396" ph="/**...*/" />
+            <marker date="1483814735290" expanded="true" signature="14453:14650" ph="{...}" />
+            <marker date="1483814735290" expanded="true" signature="14656:14822" ph="/**...*/" />
+            <marker date="1483814735290" expanded="true" signature="14918:16027" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/audio/SupportedFileFormat.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-567">
+          <caret line="17" column="13" lean-forward="false" selection-start-line="17" selection-start-column="13" selection-end-line="17" selection-end-column="13" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/audio/AudioFileIO.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="273">
-          <caret line="210" column="33" lean-forward="false" selection-start-line="210" selection-start-column="33" selection-end-line="210" selection-end-column="33" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/srctest/org/jaudiotagger/tag/wav/WavMetadataTwonkyTrckTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="158">
-          <caret line="1630" column="42" lean-forward="false" selection-start-line="1630" selection-start-column="42" selection-end-line="1630" selection-end-column="42" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/srctest/org/jaudiotagger/FilePermissionsTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="158">
-          <caret line="55" column="23" lean-forward="false" selection-start-line="55" selection-start-column="23" selection-end-line="55" selection-end-column="23" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/logging/ErrorMessage.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="167">
-          <caret line="61" column="4" lean-forward="false" selection-start-line="61" selection-start-column="4" selection-end-line="61" selection-end-column="4" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/audio/generic/AudioFileWriter2.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="176">
-          <caret line="84" column="102" lean-forward="false" selection-start-line="84" selection-start-column="102" selection-end-line="84" selection-end-column="102" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/srctest/org/jaudiotagger/audio/asf/io/AsfHeaderUtils.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="227">
-          <caret line="92" column="7" lean-forward="true" selection-start-line="92" selection-start-column="7" selection-end-line="92" selection-end-column="7" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/audio/generic/AudioFileWriter.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="140">
-          <caret line="749" column="7" lean-forward="false" selection-start-line="749" selection-start-column="7" selection-end-line="749" selection-end-column="7" />
+        <state relative-caret-position="364">
+          <caret line="305" column="48" lean-forward="false" selection-start-line="305" selection-start-column="48" selection-end-line="305" selection-end-column="48" />
           <folding>
-            <element signature="imports" expanded="true" />
+            <element signature="e#0#19150#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/srctest/org/jaudiotagger/audio/generic/AudioFileWriterTest.java">
+    <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/tag/aiff/AiffTag.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="140">
-          <caret line="112" column="3" lean-forward="false" selection-start-line="112" selection-start-column="3" selection-end-line="112" selection-end-column="3" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
+        <state relative-caret-position="716">
+          <caret line="411" column="0" lean-forward="false" selection-start-line="411" selection-start-column="0" selection-end-line="411" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/audio/generic/Permissions.java">
+    <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/tag/TagOptionSingleton.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="385">
-          <caret line="34" column="83" lean-forward="false" selection-start-line="34" selection-start-column="83" selection-end-line="34" selection-end-column="103" />
+        <state relative-caret-position="274">
+          <caret line="52" column="35" lean-forward="false" selection-start-line="52" selection-start-column="35" selection-end-line="52" selection-end-column="35" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pom.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="402">
+          <caret line="77" column="6" lean-forward="false" selection-start-line="77" selection-start-column="6" selection-end-line="77" selection-end-column="6" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/audio/io/FileOperator.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="144">
+          <caret line="8" column="2" lean-forward="true" selection-start-line="8" selection-start-column="2" selection-end-line="8" selection-end-column="2" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
