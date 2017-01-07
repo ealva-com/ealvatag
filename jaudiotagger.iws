@@ -7,11 +7,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c6ab1c14-6cd1-42fd-af1f-7ac1a83b7f78" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/org/jaudiotagger/audio/io/FileOperator.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/jaudiotagger.iml" afterPath="$PROJECT_DIR$/jaudiotagger.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/jaudiotagger.ipr" afterPath="$PROJECT_DIR$/jaudiotagger.ipr" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/jaudiotagger.iws" afterPath="$PROJECT_DIR$/jaudiotagger.iws" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/pom.xml" afterPath="$PROJECT_DIR$/pom.xml" />
     </list>
     <ignored path="jaudiotagger.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -41,20 +37,9 @@
       <file leaf-file-name="AudioFile.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/audio/AudioFile.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="917">
+            <state relative-caret-position="4518">
               <caret line="319" column="0" lean-forward="false" selection-start-line="319" selection-start-column="0" selection-end-line="319" selection-end-column="0" />
-              <folding>
-                <marker date="1483814735290" expanded="true" signature="12557:12682" ph="/**...*/" />
-                <marker date="1483814735290" expanded="true" signature="12726:12862" ph="{...}" />
-                <marker date="1483814735290" expanded="true" signature="12869:13024" ph="/**...*/" />
-                <marker date="1483814735290" expanded="true" signature="13074:13165" ph="{...}" />
-                <marker date="1483814735290" expanded="true" signature="13171:13449" ph="/**...*/" />
-                <marker date="1483814735290" expanded="true" signature="13509:14288" ph="{...}" />
-                <marker date="1483814735290" expanded="true" signature="14294:14396" ph="/**...*/" />
-                <marker date="1483814735290" expanded="true" signature="14453:14650" ph="{...}" />
-                <marker date="1483814735290" expanded="true" signature="14656:14822" ph="/**...*/" />
-                <marker date="1483814735290" expanded="true" signature="14918:16027" ph="{...}" />
-              </folding>
+              <folding />
             </state>
           </provider>
         </entry>
@@ -62,7 +47,7 @@
       <file leaf-file-name="SupportedFileFormat.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/audio/SupportedFileFormat.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-567">
+            <state relative-caret-position="306">
               <caret line="17" column="13" lean-forward="false" selection-start-line="17" selection-start-column="13" selection-end-line="17" selection-end-column="13" />
               <folding />
             </state>
@@ -72,7 +57,7 @@
       <file leaf-file-name="AudioFileIO.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/audio/AudioFileIO.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="364">
+            <state relative-caret-position="4914">
               <caret line="305" column="48" lean-forward="false" selection-start-line="305" selection-start-column="48" selection-end-line="305" selection-end-column="48" />
               <folding>
                 <element signature="e#0#19150#0" expanded="true" />
@@ -84,7 +69,7 @@
       <file leaf-file-name="MP3File.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/audio/mp3/MP3File.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="148">
+            <state relative-caret-position="19764">
               <caret line="1149" column="8" lean-forward="false" selection-start-line="1149" selection-start-column="8" selection-end-line="1149" selection-end-column="8" />
               <folding />
             </state>
@@ -96,23 +81,7 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="4266">
               <caret line="262" column="15" lean-forward="false" selection-start-line="262" selection-start-column="15" selection-end-line="262" selection-end-column="15" />
-              <folding>
-                <element signature="e#0#55847#0" expanded="false" />
-                <element signature="e#8515#8516#0" expanded="false" />
-                <element signature="e#8584#8585#0" expanded="false" />
-                <element signature="e#9208#9209#0" expanded="false" />
-                <element signature="e#9261#9262#0" expanded="false" />
-                <element signature="e#12369#12370#0" expanded="false" />
-                <element signature="e#12420#12421#0" expanded="false" />
-                <element signature="e#19972#19973#0" expanded="false" />
-                <element signature="e#20018#20019#0" expanded="false" />
-                <element signature="e#25207#25208#0" expanded="false" />
-                <element signature="e#25253#25254#0" expanded="false" />
-                <element signature="e#25815#25816#0" expanded="false" />
-                <element signature="e#25865#25866#0" expanded="false" />
-                <element signature="e#34416#34417#0" expanded="false" />
-                <element signature="e#34497#34498#0" expanded="false" />
-              </folding>
+              <folding />
             </state>
           </provider>
         </entry>
@@ -122,23 +91,7 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="2718">
               <caret line="174" column="22" lean-forward="false" selection-start-line="174" selection-start-column="22" selection-end-line="174" selection-end-column="22" />
-              <folding>
-                <element signature="e#0#17958#0" expanded="false" />
-                <element signature="e#7004#7005#0" expanded="false" />
-                <element signature="e#7035#7036#0" expanded="false" />
-                <element signature="e#7176#7177#0" expanded="false" />
-                <element signature="e#7207#7208#0" expanded="false" />
-                <element signature="e#8037#8038#0" expanded="false" />
-                <element signature="e#8065#8066#0" expanded="false" />
-                <element signature="e#12171#12172#0" expanded="false" />
-                <element signature="e#12210#12211#0" expanded="false" />
-                <element signature="e#12489#12490#0" expanded="false" />
-                <element signature="e#12528#12529#0" expanded="false" />
-                <element signature="e#17413#17414#0" expanded="false" />
-                <element signature="e#17487#17488#0" expanded="false" />
-                <element signature="e#17683#17684#0" expanded="false" />
-                <element signature="e#17752#17753#0" expanded="false" />
-              </folding>
+              <folding />
             </state>
           </provider>
         </entry>
@@ -146,7 +99,7 @@
       <file leaf-file-name="pom.xml" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/pom.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="402">
+            <state relative-caret-position="1386">
               <caret line="77" column="6" lean-forward="false" selection-start-line="77" selection-start-column="6" selection-end-line="77" selection-end-column="6" />
               <folding />
             </state>
@@ -156,10 +109,10 @@
       <file leaf-file-name="FileOperator.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/audio/io/FileOperator.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="144">
-              <caret line="8" column="2" lean-forward="true" selection-start-line="8" selection-start-column="2" selection-end-line="8" selection-end-column="2" />
+            <state relative-caret-position="342">
+              <caret line="19" column="19" lean-forward="false" selection-start-line="19" selection-start-column="19" selection-end-line="19" selection-end-column="19" />
               <folding>
-                <element signature="imports" expanded="true" />
+                <element signature="e#0#3829#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -180,9 +133,7 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="0">
               <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-              <folding>
-                <element signature="imports" expanded="false" />
-              </folding>
+              <folding />
             </state>
           </provider>
         </entry>
@@ -190,7 +141,7 @@
       <file leaf-file-name="DsfAudioFileTest.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/srctest/org/jaudiotagger/audio/dsf/DsfAudioFileTest.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="148">
+            <state relative-caret-position="4500">
               <caret line="263" column="50" lean-forward="false" selection-start-line="263" selection-start-column="50" selection-end-line="263" selection-end-column="50" />
               <folding />
             </state>
@@ -200,7 +151,7 @@
       <file leaf-file-name="AiffTag.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/tag/aiff/AiffTag.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="716">
+            <state relative-caret-position="6066">
               <caret line="411" column="0" lean-forward="false" selection-start-line="411" selection-start-column="0" selection-end-line="411" selection-end-column="0" />
               <folding />
             </state>
@@ -210,7 +161,7 @@
       <file leaf-file-name="WavTag.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/tag/wav/WavTag.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="148">
+            <state relative-caret-position="9468">
               <caret line="640" column="8" lean-forward="false" selection-start-line="640" selection-start-column="8" selection-end-line="640" selection-end-column="8" />
               <folding />
             </state>
@@ -220,7 +171,7 @@
       <file leaf-file-name="Dsf.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/audio/dsf/Dsf.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="148">
+            <state relative-caret-position="198">
               <caret line="16" column="8" lean-forward="false" selection-start-line="16" selection-start-column="8" selection-end-line="16" selection-end-column="8" />
               <folding />
             </state>
@@ -230,7 +181,7 @@
       <file leaf-file-name="TagOptionSingleton.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/tag/TagOptionSingleton.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="274">
+            <state relative-caret-position="198">
               <caret line="52" column="35" lean-forward="false" selection-start-line="52" selection-start-column="35" selection-end-line="52" selection-end-column="35" />
               <folding />
             </state>
@@ -349,7 +300,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -577,6 +527,7 @@
         </subPane>
       </pane>
       <pane id="Scope" />
+      <pane id="PackagesPane" />
       <pane id="Scratches" />
     </panes>
   </component>
@@ -1073,14 +1024,8 @@
       <workItem from="1483669891681" duration="702000" />
       <workItem from="1483714464737" duration="5312000" />
       <workItem from="1483733600557" duration="1075000" />
-      <workItem from="1483742240052" duration="4163000" />
-    </task>
-    <task id="LOCAL-00018" summary="Manual merge of https://bitbucket.org/ijabz/jaudiotagger/pull-requests/15/aifffilereader_cleanup/diff by Hendrik Schreiber&#10;AMendements need to ByteOrder because ChunkHeader now used by both Aiff and Wav">
-      <created>1442524920388</created>
-      <option name="number" value="00018" />
-      <option name="presentableId" value="LOCAL-00018" />
-      <option name="project" value="LOCAL" />
-      <updated>1442524920388</updated>
+      <workItem from="1483742240052" duration="4326000" />
+      <workItem from="1483815633942" duration="8000" />
     </task>
     <task id="LOCAL-00019" summary="Manul merge of https://bitbucket.org/ijabz/jaudiotagger/pull-requests/14  by Hendrik Schreiber">
       <created>1442525517503</created>
@@ -1418,7 +1363,14 @@
       <option name="project" value="LOCAL" />
       <updated>1483669140119</updated>
     </task>
-    <option name="localTasksCounter" value="67" />
+    <task id="LOCAL-00067" summary="Begin introducing Okio to better handle buffering of file access. Okio caches buffers to lower GC churn. Big performance boost and necessary in memory constrained environments.">
+      <created>1483814887961</created>
+      <option name="number" value="00067" />
+      <option name="presentableId" value="LOCAL-00067" />
+      <option name="project" value="LOCAL" />
+      <updated>1483814887961</updated>
+    </task>
+    <option name="localTasksCounter" value="68" />
     <servers />
   </component>
   <component name="TestHistory">
@@ -1432,6 +1384,9 @@
       <configuration name="All in jaudiotagger (1)" configurationId="JUnit" />
     </history-entry>
     <history-entry file="All_in_jaudiotagger_(1) - 2017.01.06 at 15h 30m 55s.xml">
+      <configuration name="All in jaudiotagger (1)" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="All_in_jaudiotagger_(1) - 2017.01.07 at 13h 48m 26s.xml">
       <configuration name="All in jaudiotagger (1)" configurationId="JUnit" />
     </history-entry>
     <history-entry file="WavMetadataTwonkyTrckTest_testWriteReadOnlyFileWithCheckDisabled - 2017.01.05 at 20h 40m 34s.xml">
@@ -1448,7 +1403,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="23174000" />
+    <option name="totallyTimeSpent" value="23345000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="208" y="129" width="1568" height="942" extended-state="0" />
@@ -1456,26 +1411,24 @@
     <layout>
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Nl-Palette" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.44852942" sideWeight="0.6022032" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="11" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3294621" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2904412" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4007353" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.29166666" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Properties" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="14" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2128778" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.21550591" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.35661766" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Theme Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.39976957" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -1484,10 +1437,12 @@
       <window_info id="Dependency Viewer" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.44852942" sideWeight="0.6022032" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Documentation" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="FLOATING" visible="true" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" x="589" y="441" width="501" height="127" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="JetGradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32977587" sideWeight="0.85067874" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Problems" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.328341" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.35661766" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1523,7 +1478,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Make WavTag a wrapper of WavInfoTag as a precursor to being able to read Wav ID3 tag as well as info tag" />
     <MESSAGE value="Basic (and buggy) implementation allowing Wav INFO metadata to be edited and saved." />
     <MESSAGE value="Simplified chunkHeader write code" />
     <MESSAGE value="Removed calls to ByteBuffer.array() where easy to do so, as this is old style pre NIO and would fail if ByteBuffer used allocatedDirect()" />
@@ -1548,7 +1502,8 @@
     <MESSAGE value="Fixed work type" />
     <MESSAGE value="Fixed incorrect mapping for ID3v22,ID3V23 for ALBUM_ARTISTS and ALBUM_ARTISTS_SORT" />
     <MESSAGE value="Make changes so library can be used on Android.&#10;&#10;1. In the AudioFileReader2 hierarchy, remove the usage of java.nio.file.Path, java.nio.file.Files&#10;2. Remove FileTime usage and getting/setting the file creation date. Comment out tests related to this&#10;3. Comment out Permissions because it uses Path and things such as AclFileAttributeView, which aren't supported&#10;&#10;This removes the setting/getting file creation from jaudiotagger and displaying the detailed file permissions information in logging/exceptions when there is a failure.&#10;&#10;With these changes, all jaudiotagger functionality is available on Android, minus the features just mentioned." />
-    <option name="LAST_COMMIT_MESSAGE" value="Make changes so library can be used on Android.&#10;&#10;1. In the AudioFileReader2 hierarchy, remove the usage of java.nio.file.Path, java.nio.file.Files&#10;2. Remove FileTime usage and getting/setting the file creation date. Comment out tests related to this&#10;3. Comment out Permissions because it uses Path and things such as AclFileAttributeView, which aren't supported&#10;&#10;This removes the setting/getting file creation from jaudiotagger and displaying the detailed file permissions information in logging/exceptions when there is a failure.&#10;&#10;With these changes, all jaudiotagger functionality is available on Android, minus the features just mentioned." />
+    <MESSAGE value="Begin introducing Okio to better handle buffering of file access. Okio caches buffers to lower GC churn. Big performance boost and necessary in memory constrained environments." />
+    <option name="LAST_COMMIT_MESSAGE" value="Begin introducing Okio to better handle buffering of file access. Okio caches buffers to lower GC churn. Big performance boost and necessary in memory constrained environments." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1792,9 +1747,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="486">
           <caret line="38" column="35" lean-forward="false" selection-start-line="38" selection-start-column="35" selection-end-line="38" selection-end-column="35" />
-          <folding>
-            <element signature="imports" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1818,31 +1770,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="14796">
           <caret line="872" column="14" lean-forward="false" selection-start-line="872" selection-start-column="14" selection-end-line="872" selection-end-column="14" />
-          <folding>
-            <element signature="e#0#50875#0" expanded="false" />
-            <element signature="imports" expanded="false" />
-            <element signature="e#9070#9071#0" expanded="false" />
-            <element signature="e#9100#9101#0" expanded="false" />
-            <element signature="e#9191#9192#0" expanded="false" />
-            <element signature="e#9227#9228#0" expanded="false" />
-            <element signature="e#9309#9310#0" expanded="false" />
-            <element signature="e#9340#9341#0" expanded="false" />
-            <element signature="e#16100#16120#0" expanded="false" />
-            <element signature="e#22812#22813#0" expanded="false" />
-            <element signature="e#22845#22846#0" expanded="false" />
-            <element signature="e#41155#41156#0" expanded="false" />
-            <element signature="e#41195#41196#0" expanded="false" />
-            <element signature="e#41356#41357#0" expanded="false" />
-            <element signature="e#41398#41399#0" expanded="false" />
-            <element signature="e#43456#43457#0" expanded="false" />
-            <element signature="e#43528#43529#0" expanded="false" />
-            <element signature="e#44147#44148#0" expanded="false" />
-            <element signature="e#44198#44199#0" expanded="false" />
-            <element signature="e#44428#44429#0" expanded="false" />
-            <element signature="e#44502#44503#0" expanded="false" />
-            <element signature="e#44671#44680#0" expanded="false" />
-            <element signature="e#49292#49300#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1905,45 +1832,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="792">
           <caret line="69" column="10" lean-forward="false" selection-start-line="69" selection-start-column="10" selection-end-line="69" selection-end-column="10" />
-          <folding>
-            <element signature="e#0#13820#0" expanded="false" />
-            <element signature="e#2360#2361#0" expanded="false" />
-            <element signature="e#2393#2394#0" expanded="false" />
-            <element signature="e#2418#2419#0" expanded="false" />
-            <element signature="e#2463#2464#0" expanded="false" />
-            <element signature="e#2493#2494#0" expanded="false" />
-            <element signature="e#2537#2538#0" expanded="false" />
-            <element signature="e#2907#2908#0" expanded="false" />
-            <element signature="e#2935#2936#0" expanded="false" />
-            <element signature="e#2972#2973#0" expanded="false" />
-            <element signature="e#3000#3001#0" expanded="false" />
-            <element signature="e#4662#4663#0" expanded="false" />
-            <element signature="e#4734#4735#0" expanded="false" />
-            <element signature="e#4875#4876#0" expanded="false" />
-            <element signature="e#4948#4949#0" expanded="false" />
-            <element signature="e#4982#4983#0" expanded="false" />
-            <element signature="e#5056#5057#0" expanded="false" />
-            <element signature="e#6349#6350#0" expanded="false" />
-            <element signature="e#6423#6424#0" expanded="false" />
-            <element signature="e#6459#6460#0" expanded="false" />
-            <element signature="e#6534#6535#0" expanded="false" />
-            <element signature="e#7853#7854#0" expanded="false" />
-            <element signature="e#7925#7926#0" expanded="false" />
-            <element signature="e#7957#7958#0" expanded="false" />
-            <element signature="e#8030#8031#0" expanded="false" />
-            <element signature="e#9288#9289#0" expanded="false" />
-            <element signature="e#9361#9362#0" expanded="false" />
-            <element signature="e#9395#9396#0" expanded="false" />
-            <element signature="e#9469#9470#0" expanded="false" />
-            <element signature="e#10762#10763#0" expanded="false" />
-            <element signature="e#10836#10837#0" expanded="false" />
-            <element signature="e#10872#10873#0" expanded="false" />
-            <element signature="e#10947#10948#0" expanded="false" />
-            <element signature="e#12275#12276#0" expanded="false" />
-            <element signature="e#12350#12351#0" expanded="false" />
-            <element signature="e#12388#12389#0" expanded="false" />
-            <element signature="e#12464#12465#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1951,23 +1839,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="4266">
           <caret line="262" column="15" lean-forward="false" selection-start-line="262" selection-start-column="15" selection-end-line="262" selection-end-column="15" />
-          <folding>
-            <element signature="e#0#55847#0" expanded="false" />
-            <element signature="e#8515#8516#0" expanded="false" />
-            <element signature="e#8584#8585#0" expanded="false" />
-            <element signature="e#9208#9209#0" expanded="false" />
-            <element signature="e#9261#9262#0" expanded="false" />
-            <element signature="e#12369#12370#0" expanded="false" />
-            <element signature="e#12420#12421#0" expanded="false" />
-            <element signature="e#19972#19973#0" expanded="false" />
-            <element signature="e#20018#20019#0" expanded="false" />
-            <element signature="e#25207#25208#0" expanded="false" />
-            <element signature="e#25253#25254#0" expanded="false" />
-            <element signature="e#25815#25816#0" expanded="false" />
-            <element signature="e#25865#25866#0" expanded="false" />
-            <element signature="e#34416#34417#0" expanded="false" />
-            <element signature="e#34497#34498#0" expanded="false" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1975,23 +1847,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="2718">
           <caret line="174" column="22" lean-forward="false" selection-start-line="174" selection-start-column="22" selection-end-line="174" selection-end-column="22" />
-          <folding>
-            <element signature="e#0#17958#0" expanded="false" />
-            <element signature="e#7004#7005#0" expanded="false" />
-            <element signature="e#7035#7036#0" expanded="false" />
-            <element signature="e#7176#7177#0" expanded="false" />
-            <element signature="e#7207#7208#0" expanded="false" />
-            <element signature="e#8037#8038#0" expanded="false" />
-            <element signature="e#8065#8066#0" expanded="false" />
-            <element signature="e#12171#12172#0" expanded="false" />
-            <element signature="e#12210#12211#0" expanded="false" />
-            <element signature="e#12489#12490#0" expanded="false" />
-            <element signature="e#12528#12529#0" expanded="false" />
-            <element signature="e#17413#17414#0" expanded="false" />
-            <element signature="e#17487#17488#0" expanded="false" />
-            <element signature="e#17683#17684#0" expanded="false" />
-            <element signature="e#17752#17753#0" expanded="false" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -2007,9 +1863,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="false" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -2027,7 +1881,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/srctest/org/jaudiotagger/audio/dsf/DsfAudioFileTest.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="148">
+        <state relative-caret-position="4500">
           <caret line="263" column="50" lean-forward="false" selection-start-line="263" selection-start-column="50" selection-end-line="263" selection-end-column="50" />
           <folding />
         </state>
@@ -2035,7 +1889,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/tag/wav/WavTag.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="148">
+        <state relative-caret-position="9468">
           <caret line="640" column="8" lean-forward="false" selection-start-line="640" selection-start-column="8" selection-end-line="640" selection-end-column="8" />
           <folding />
         </state>
@@ -2043,7 +1897,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/audio/dsf/Dsf.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="148">
+        <state relative-caret-position="198">
           <caret line="16" column="8" lean-forward="false" selection-start-line="16" selection-start-column="8" selection-end-line="16" selection-end-column="8" />
           <folding />
         </state>
@@ -2051,7 +1905,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/audio/mp3/MP3File.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="148">
+        <state relative-caret-position="19764">
           <caret line="1149" column="8" lean-forward="false" selection-start-line="1149" selection-start-column="8" selection-end-line="1149" selection-end-column="8" />
           <folding />
         </state>
@@ -2059,26 +1913,15 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/audio/AudioFile.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="917">
+        <state relative-caret-position="4518">
           <caret line="319" column="0" lean-forward="false" selection-start-line="319" selection-start-column="0" selection-end-line="319" selection-end-column="0" />
-          <folding>
-            <marker date="1483814735290" expanded="true" signature="12557:12682" ph="/**...*/" />
-            <marker date="1483814735290" expanded="true" signature="12726:12862" ph="{...}" />
-            <marker date="1483814735290" expanded="true" signature="12869:13024" ph="/**...*/" />
-            <marker date="1483814735290" expanded="true" signature="13074:13165" ph="{...}" />
-            <marker date="1483814735290" expanded="true" signature="13171:13449" ph="/**...*/" />
-            <marker date="1483814735290" expanded="true" signature="13509:14288" ph="{...}" />
-            <marker date="1483814735290" expanded="true" signature="14294:14396" ph="/**...*/" />
-            <marker date="1483814735290" expanded="true" signature="14453:14650" ph="{...}" />
-            <marker date="1483814735290" expanded="true" signature="14656:14822" ph="/**...*/" />
-            <marker date="1483814735290" expanded="true" signature="14918:16027" ph="{...}" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/audio/SupportedFileFormat.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-567">
+        <state relative-caret-position="306">
           <caret line="17" column="13" lean-forward="false" selection-start-line="17" selection-start-column="13" selection-end-line="17" selection-end-column="13" />
           <folding />
         </state>
@@ -2086,7 +1929,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/audio/AudioFileIO.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="364">
+        <state relative-caret-position="4914">
           <caret line="305" column="48" lean-forward="false" selection-start-line="305" selection-start-column="48" selection-end-line="305" selection-end-column="48" />
           <folding>
             <element signature="e#0#19150#0" expanded="true" />
@@ -2096,7 +1939,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/tag/aiff/AiffTag.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="716">
+        <state relative-caret-position="6066">
           <caret line="411" column="0" lean-forward="false" selection-start-line="411" selection-start-column="0" selection-end-line="411" selection-end-column="0" />
           <folding />
         </state>
@@ -2104,7 +1947,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/tag/TagOptionSingleton.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="274">
+        <state relative-caret-position="198">
           <caret line="52" column="35" lean-forward="false" selection-start-line="52" selection-start-column="35" selection-end-line="52" selection-end-column="35" />
           <folding />
         </state>
@@ -2112,7 +1955,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/pom.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="402">
+        <state relative-caret-position="1386">
           <caret line="77" column="6" lean-forward="false" selection-start-line="77" selection-start-column="6" selection-end-line="77" selection-end-column="6" />
           <folding />
         </state>
@@ -2120,10 +1963,10 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/org/jaudiotagger/audio/io/FileOperator.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="144">
-          <caret line="8" column="2" lean-forward="true" selection-start-line="8" selection-start-column="2" selection-end-line="8" selection-end-column="2" />
+        <state relative-caret-position="342">
+          <caret line="19" column="19" lean-forward="false" selection-start-line="19" selection-start-column="19" selection-end-line="19" selection-end-column="19" />
           <folding>
-            <element signature="imports" expanded="true" />
+            <element signature="e#0#3829#0" expanded="true" />
           </folding>
         </state>
       </provider>
