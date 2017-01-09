@@ -1,2 +1,2 @@
 set classpath=%classpath%;.\classes;\dist\jaudiotagger.jar
-java org.jaudiotagger.fix.Fix202 %1
+java com.ealvatag.fix.Fix202 %1

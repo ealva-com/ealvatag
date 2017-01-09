@@ -1,10 +1,8 @@
-# Jaudiotagger
+ealvatag
+========
 
-[![Coverage Status](https://coveralls.io/repos/ijabz/jaudiotagger/badge.svg?branch=master&service=bitbucket)](https://coveralls.io/bitbucket/ijabz/jaudiotagger?branch=master)
-[![Build Status](https://drone.io/bitbucket.org/ijabz/jaudiotagger/status.png)](https://drone.io/bitbucket.org/ijabz/jaudiotagger/latest)
-
-*Jaudiotagger* is a Java API for audio metatagging. Both a common API and format
-specific APIs are available, currently supports reading and writing metadata for:
+*ealvatag* is a Java API for reading and writing tag information of audio 
+files. The follow types are currently supported:
 
 - Mp3
 - Flac
@@ -15,86 +13,46 @@ specific APIs are available, currently supports reading and writing metadata for
 - Wma
 - Dsf
 
-The main project page is http://www.jthink.net/jaudiotagger/ and you can contact the main developer via email:paultaylor@jthink.net
+Until the version of this library reaches 1.0, you should consider the API to 
+be very unstable. Currently there is no downloadable jar. Pull requests 
+welcome.
 
-## Requirements
 
-*Jaudiotagger* requires Java 1.8 for a full build and install, but the code is Java 1.7 compatible
-(You can run mvn package successfully with Java 1.7)
+License
+-------
+    Copyright (c) 2003-2005 Raphaël Slinckx <raphael@slinckx.net>
+    Copyright (C) 2015 Paul Taylor
+    Copyright 2017 Eric A. Snell
 
-## Contributing
+    ealvatag is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Lesser General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
 
-*Jaudiotagger* welcomes contributors, if you make an improvement or bug fix we are
-very likely to merge it back into the master branch with a minimum of fuss.
-If you can't contribute code but would like to support this project please consider
-making a donation—donations can be made at
-[here](http://www.jthink.net/jaudiotagger/donate.jsp).
+    ealvatag is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Lesser General Public License for more details.
 
-## Build
-
-Build is with [Maven](http://maven.apache.org).
-
-- `pom.xml` : Maven build file
-
-Directory structure as follows:
-
-### Under source control
-
-- `src`                  : source code directory
-- `srctest`              : source test code directory
-- `www`                  : java doc directory
-- `testdata`             : test files for use by the junit tests, not all tests are included in the distribution because of copyright
-- `target`               : contains the `jaudiotagger***.jar` built from maven
-
-### IDE files
-
-- `jaudiotagger.iml`     : JetBrains Intellij Module
-- `jaudiotagger.ipr`     : JetBrains Intellij Project
-
-### License
-
-- `license.txt` : license file
+    You should have received a copy of the GNU Lesser General Public License
+    along with ealvatag.  If not, see <http://www.gnu.org/licenses/>.
  
- 
-### Build details
+History
+-------
 
-Run
+This library started as Entagged Audio Tag library which was forked into 
+[Jaudiotagger][1]. Jaudiotagger is still under active development at this time 
+(January 2017)
 
-    mvn install
+Jaudiotagger was forked into this library, ealvatag for 2 primary reasons: to
+upgrade the license to GNU LGPLv3 and to focus on Android compatibility. 
+GNU LGPLv3 is necessary to link to Apache License Version 2.0 libraries. As for
+Android compatibility, the previous library was dependent on java.nio library
+components not available on Android versions in current use. Also, quite a bit
+of refactoring is needed so the library is more [performant][2] on the Android
+platform.
 
-to compile, test, build javadocs and install into your local repository.
 
-Run
 
-    mvn site
-
-to generate a website for *Jaudiotagger* including code coverage reports,
-they will be found in `target/site/index.html`.
-
-Your test coverage can be seen at `target/site/cobertura/index.html`.
-
-Periodically we upload latest Code Coverage to:
-http://www.jthink.net/jaudiotagger/maven/cobertura/index.html
-
-Jaudiotagger uses http://drone.io for continuous integration, the latest artifacts can be downloaded from
-
-https://drone.io/bitbucket.org/ijabz/jaudiotagger/files
-
-To use in your own project starting with Jaudiotagger 2.2.3 as final versions are
-released they are now available in a maven repository on bintray.
-
-I.e update your `pom.xml` as follows to use release 2.2.3:
-
-    <repositories>
-        <repository>
-            <id>jaudiotagger-repository</id>
-            <url>https://dl.bintray.com/ijabz/maven</url>
-        </repository>
-    </repositories>
-    <dependencies>
-        <dependency>
-            <groupId>net.jthink</groupId>
-            <artifactId>jaudiotagger</artifactId>
-            <version>2.2.3</version>
-        </dependency>
-    </dependencies>
+ [1]: https://bitbucket.org/ijabz/jaudiotagger
+ [2]: https://en.wiktionary.org/wiki/performant
