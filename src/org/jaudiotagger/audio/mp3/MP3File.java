@@ -44,9 +44,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.logging.Level;
@@ -681,104 +678,103 @@ public class MP3File extends AudioFile
     {
         return id3v1tag;
     }
-    
+
     /**
      * Calculates hash with given algorithm. Buffer size is 32768 byte.
      * Hash is calculated EXCLUDING meta-data, like id3v1 or id3v2
      *
      * @return hash value in byte
      * @param algorithm options MD5,SHA-1,SHA-256
-     * @throws IOException 
-     * @throws InvalidAudioFrameException 
-     * @throws NoSuchAlgorithmException 
+     * @throws IOException
+     * @throws InvalidAudioFrameException
+     * @throws NoSuchAlgorithmException
      */
-    
+
     public byte[] getHash(String algorithm) throws NoSuchAlgorithmException, InvalidAudioFrameException, IOException{
 
 			return getHash(algorithm, 32768);
-		
-		
+
+
     }
-    
+
     /**
      * Calculates hash with given buffer size.
      * Hash is calculated EXCLUDING meta-data, like id3v1 or id3v2
      * @param  buffer
      * @return byte[] hash value in byte
-     * @throws IOException 
-     * @throws InvalidAudioFrameException 
-     * @throws NoSuchAlgorithmException 
+     * @throws IOException
+     * @throws InvalidAudioFrameException
+     * @throws NoSuchAlgorithmException
      */
-    
+
     public byte[] getHash(int buffer) throws NoSuchAlgorithmException, InvalidAudioFrameException, IOException{
-    	
+
 			return getHash("MD5", buffer);
-		
-		
+
+
     }
     /**
      * Calculates hash with algorithm "MD5". Buffer size is 32768 byte.
      * Hash is calculated EXCLUDING meta-data, like id3v1 or id3v2
      *
      * @return byte[] hash value.
-     * @throws IOException 
-     * @throws InvalidAudioFrameException 
-     * @throws NoSuchAlgorithmException 
+     * @throws IOException
+     * @throws InvalidAudioFrameException
+     * @throws NoSuchAlgorithmException
      */
-    
+
     public byte[] getHash() throws NoSuchAlgorithmException, InvalidAudioFrameException, IOException{
-    	
+
 			return getHash("MD5", 32768);
-		
+
     }
-    
+
     /**
      * Calculates hash with algorithm "MD5", "SHA-1" or SHA-256".
      * Hash is calculated EXCLUDING meta-data, like id3v1 or id3v2
      *
      * @return byte[] hash value in byte
-     * @throws IOException 
-     * @throws InvalidAudioFrameException 
-     * @throws NoSuchAlgorithmException 
+     * @throws IOException
+     * @throws InvalidAudioFrameException
+     * @throws NoSuchAlgorithmException
      */
-    
+
     public byte[] getHash(String algorithm, int bufferSize) throws InvalidAudioFrameException, IOException, NoSuchAlgorithmException
     {
     	File mp3File = getFile();
     	long startByte = getMP3StartByte(mp3File);
-    	
+
     	int id3v1TagSize = 0;
 		if (hasID3v1Tag()){
 		ID3v1Tag id1tag= getID3v1Tag();
 		id3v1TagSize  = id1tag.getSize();
 		}
-		
-		InputStream inStream = Files
-				.newInputStream(Paths.get(mp3File.getAbsolutePath()));
-		
+
+        InputStream inStream = new FileInputStream(mp3File);
+
 		byte[] buffer = new byte[bufferSize];
 
 		MessageDigest digest = MessageDigest.getInstance(algorithm);
 
 		inStream.skip(startByte);
-		
+
 		int read;
 		long totalSize = mp3File.length() - startByte - id3v1TagSize;
 		int pointer  = buffer.length;
-		
+
 		while (pointer <= totalSize ) {
-			
+
 			read = inStream.read(buffer);
-			
+
 			digest.update(buffer, 0, read);
 			pointer += buffer.length;
 			}
 		read = inStream.read(buffer,0,(int)totalSize - pointer + buffer.length);
 		digest.update(buffer, 0, read);
-		
+
 		byte[] hash = digest.digest();
 
-		
+
         return hash;
     }
 
@@ -955,16 +951,14 @@ public class MP3File extends AudioFile
      */
     public void precheck(File file) throws IOException
     {
-        Path path = file.toPath();
-        if (!Files.exists(path))
+        if (!file.exists())
         {
             logger.severe(ErrorMessage.GENERAL_WRITE_FAILED_BECAUSE_FILE_NOT_FOUND.getMsg(file.getName()));
             throw new IOException(ErrorMessage.GENERAL_WRITE_FAILED_BECAUSE_FILE_NOT_FOUND.getMsg(file.getName()));
         }
 
-        if (TagOptionSingleton.getInstance().isCheckIsWritable() && !Files.isWritable(path))
+        if (TagOptionSingleton.getInstance().isCheckIsWritable() && !file.canWrite())
         {
-            logger.severe(Permissions.displayPermissions(path));
             logger.severe(ErrorMessage.GENERAL_WRITE_FAILED.getMsg(file.getName()));
             throw new IOException(ErrorMessage.GENERAL_WRITE_FAILED.getMsg(file.getName()));
         }
@@ -1153,20 +1147,7 @@ public class MP3File extends AudioFile
     @Override
     public Tag createDefaultTag()
     {
-        if(TagOptionSingleton.getInstance().getID3V2Version()==ID3V2Version.ID3_V24)
-        {    
-            return new ID3v24Tag();
-        }
-        else if(TagOptionSingleton.getInstance().getID3V2Version()==ID3V2Version.ID3_V23)
-        {
-            return new ID3v23Tag();
-        }
-        else if(TagOptionSingleton.getInstance().getID3V2Version()==ID3V2Version.ID3_V22)
-        {
-            return new ID3v22Tag();
-        }
-        //Default in case not set somehow
-        return new ID3v24Tag();
+        return TagOptionSingleton.createDefaultID3Tag();
     }
 
 
@@ -1198,16 +1179,7 @@ public class MP3File extends AudioFile
     @Override
     public Tag getTagAndConvertOrCreateAndSetDefault()
     {
-        Tag tag          = getTagOrCreateDefault();
-        Tag convertedTag = convertID3Tag((AbstractID3v2Tag)tag, TagOptionSingleton.getInstance().getID3V2Version());
-        if(convertedTag!=null)
-        {
-            setTag(convertedTag);
-        }
-        else
-        {
-            setTag(tag);
-        }
+        setTag(convertID3Tag((AbstractID3v2Tag)getTagOrCreateDefault(), TagOptionSingleton.getInstance().getID3V2Version()));
         return getTag();
     }
 }

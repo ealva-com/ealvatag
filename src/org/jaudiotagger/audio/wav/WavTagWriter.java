@@ -1,17 +1,17 @@
 /*
  * Entagged Audio Tag library
  * Copyright (c) 2003-2005 Raphaël Slinckx <raphael@slinckx.net>
- * 
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 2.1 of the License, or (at your option) any later version.
- *  
+ *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
@@ -20,7 +20,6 @@ package org.jaudiotagger.audio.wav;
 
 import org.jaudiotagger.audio.exceptions.CannotReadException;
 import org.jaudiotagger.audio.exceptions.CannotWriteException;
-import org.jaudiotagger.audio.exceptions.NoWritePermissionsException;
 import org.jaudiotagger.audio.generic.Utils;
 import org.jaudiotagger.audio.iff.ChunkHeader;
 import org.jaudiotagger.audio.iff.ChunkSummary;
@@ -38,9 +37,6 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.channels.FileChannel;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.AccessDeniedException;
-import java.nio.file.Path;
-import java.nio.file.StandardOpenOption;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
@@ -68,22 +64,22 @@ public class WavTagWriter
     /**
      * Read existing metadata
      *
-     * @param path
+     * @param fc
      * @return tags within Tag wrapper
      * @throws IOException
      * @throws CannotWriteException
      */
-    private WavTag getExistingMetadata(Path path) throws IOException, CannotWriteException
+    private WavTag getExistingMetadata(FileChannel fc) throws IOException, CannotWriteException
     {
         try
         {
             //Find WavTag (if any)
             WavTagReader im = new WavTagReader(loggingName);
-            return im.read(path);
+            return im.read(fc);
         }
         catch (CannotReadException ex)
         {
-            throw new CannotWriteException("Failed to read file "+path);
+            throw new CannotWriteException("Failed to read file "+ loggingName);
         }
     }
 
@@ -134,16 +130,17 @@ public class WavTagWriter
      * Delete any existing metadata tags from files
      *
      * @param tag
-     * @param file
+     * @param fc
      * @throws IOException
      * @throws CannotWriteException
      */
-    public void delete (Tag tag, Path file) throws CannotWriteException
+    public void delete (Tag tag, FileChannel fc) throws CannotWriteException
     {
         logger.info(loggingName + " Deleting metadata from file");
-        try(FileChannel fc = FileChannel.open(file, StandardOpenOption.WRITE, StandardOpenOption.READ))
+        try
         {
-            WavTag existingTag = getExistingMetadata(file);
+            WavTag existingTag = getExistingMetadata(fc);
+            fc.position(0);
 
             //have both tags
             if (existingTag.isExistingId3Tag() && existingTag.isExistingInfoTag())
@@ -204,7 +201,8 @@ public class WavTagWriter
                     {
                         deleteId3TagChunk(fc, existingTag, id3ChunkHeader);
                         //Reread then delete other tag
-                        existingTag = getExistingMetadata(file);
+                        existingTag = getExistingMetadata(fc);
+                        fc.position(0);
                         deleteInfoTagChunk(fc, existingTag, infoChunkHeader);
                     }
                 }
@@ -248,7 +246,7 @@ public class WavTagWriter
         }
         catch(IOException ioe)
         {
-            throw new CannotWriteException(file + ":" + ioe.getMessage());
+            throw new CannotWriteException(loggingName + ":" + ioe.getMessage());
         }
     }
 
@@ -318,10 +316,10 @@ public class WavTagWriter
     /**
      *
      * @param tag
-     * @param file
+     * @param fc
      * @throws CannotWriteException
      */
-    public void write(final Tag tag, Path file) throws CannotWriteException
+    public void write(final Tag tag, FileChannel fc) throws CannotWriteException
     {
         logger.config(loggingName + " Writing tag to file:start");
 
@@ -329,14 +327,15 @@ public class WavTagWriter
         WavTag existingTag = null;
         try
         {
-            existingTag = getExistingMetadata(file);
+            existingTag = getExistingMetadata(fc);
+            fc.position(0);
         }
         catch(IOException ioe)
         {
-            throw new CannotWriteException(file + ":" + ioe.getMessage());
+            throw new CannotWriteException(loggingName + ":" + ioe.getMessage());
         }
 
-        try(FileChannel fc = FileChannel.open(file, StandardOpenOption.WRITE, StandardOpenOption.READ))
+        try
         {
 
             final WavTag wavTag = (WavTag) tag;
@@ -369,13 +368,9 @@ public class WavTagWriter
             }
             rewriteRiffHeaderSize(fc);
         }
-        catch(AccessDeniedException ade)
-        {
-            throw new NoWritePermissionsException(file + ":" + ade.getMessage());
-        }
         catch(IOException ioe)
         {
-            throw new CannotWriteException(file + ":" + ioe.getMessage());
+            throw new CannotWriteException(loggingName + ":" + ioe.getMessage());
         }
     }
 

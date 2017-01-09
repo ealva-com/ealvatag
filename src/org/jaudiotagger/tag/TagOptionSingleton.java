@@ -27,6 +27,10 @@ package org.jaudiotagger.tag;
 import org.jaudiotagger.audio.wav.WavOptions;
 import org.jaudiotagger.audio.wav.WavSaveOptions;
 import org.jaudiotagger.audio.wav.WavSaveOrder;
+import org.jaudiotagger.tag.id3.AbstractID3v2Tag;
+import org.jaudiotagger.tag.id3.ID3v22Tag;
+import org.jaudiotagger.tag.id3.ID3v23Tag;
+import org.jaudiotagger.tag.id3.ID3v24Tag;
 import org.jaudiotagger.tag.id3.framebody.AbstractID3v2FrameBody;
 import org.jaudiotagger.tag.id3.framebody.FrameBodyCOMM;
 import org.jaudiotagger.tag.id3.framebody.FrameBodyTIPL;
@@ -49,6 +53,29 @@ public class TagOptionSingleton
     private boolean   isWriteWavForTwonky = false;
 
     private WavOptions wavOptions = WavOptions.READ_ID3_ONLY;
+
+    /**
+     * Default based on user option
+     *
+     * @return
+     */
+    public static AbstractID3v2Tag createDefaultID3Tag()
+    {
+        if(getInstance().getID3V2Version()== ID3V2Version.ID3_V24)
+        {
+            return new ID3v24Tag();
+        }
+        else if(getInstance().getID3V2Version()==ID3V2Version.ID3_V23)
+        {
+            return new ID3v23Tag();
+        }
+        else if(getInstance().getID3V2Version()==ID3V2Version.ID3_V22)
+        {
+            return new ID3v22Tag();
+        }
+        //Default in case not set somehow
+        return new ID3v23Tag();
+    }
 
     public void setWavOptions(WavOptions wavOptions)
     {
@@ -351,10 +378,10 @@ public class TagOptionSingleton
     private boolean isWriteMp3GenresAsText=false;
 
     private ID3V2Version id3v2Version = ID3V2Version.ID3_V23;
-    
+
     /**
      * Whether Files.isWritable should be used to check if a file can be written. In some
-     * cases, isWritable can return false negatives. 
+     * cases, isWritable can return false negatives.
      */
     private boolean checkIsWritable = false;
 
@@ -364,9 +391,9 @@ public class TagOptionSingleton
     private boolean preserveFileIdentity = true;
 
     /**
-     * 
+     *
      */
-    
+
     /**
      * Creates a new TagOptions datatype. All Options are set to their default
      * values
@@ -1327,7 +1354,7 @@ public class TagOptionSingleton
 
     /**
      * Whether Files.isWritable should be used to check if a file can be written. In some
-     * cases, isWritable can return false negatives. 
+     * cases, isWritable can return false negatives.
      */
 	public boolean isCheckIsWritable() {
 		return checkIsWritable;

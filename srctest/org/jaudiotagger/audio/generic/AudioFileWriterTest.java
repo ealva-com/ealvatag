@@ -15,7 +15,7 @@ import java.io.RandomAccessFile;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.attribute.FileTime;
+//import java.nio.file.attribute.FileTime;  ==Android==
 import java.util.Arrays;
 
 /**
@@ -70,20 +70,22 @@ public class AudioFileWriterTest extends TestCase {
         assertEquals("File size is not correct", originalFileSize + fileSizeDelta, fileSize);
     }
 
-    public void testCreationTime() throws CannotWriteException, IOException, InterruptedException {
-        if (!System.getProperty("os.name").toLowerCase().startsWith("win")) {
+    // ==Android==
+//    public void testCreationTime() throws CannotWriteException, IOException, InterruptedException {
+//        if (!System.getProperty("os.name").toLowerCase().startsWith("win")) {
             // known to fail under OS X, because of a JDK bug
             // other Unix file systems don't necessarily support creationTime at all
-            System.out.println("Skipped testCreationTime(), because we're not on Windows.");
-            return;
-        }
-        creationTime();
-    }
+//            System.out.println("Skipped testCreationTime(), because we're not on Windows.");
+//            return;
+//        }
+//        creationTime();
+//    }
 
-    public void testCreationTimeWithFileIdentityPreserved() throws CannotWriteException, IOException, InterruptedException {
-        TagOptionSingleton.getInstance().setPreserveFileIdentity(true);
-        creationTime();
-    }
+// ==Android==
+//    public void testCreationTimeWithFileIdentityPreserved() throws CannotWriteException, IOException, InterruptedException {
+//        TagOptionSingleton.getInstance().setPreserveFileIdentity(true);
+//        creationTime();
+//    }
 
     public void testFileIdentity() throws Exception {
         try
@@ -108,22 +110,23 @@ public class AudioFileWriterTest extends TestCase {
         }
     }
 
-    private void creationTime() throws IOException, InterruptedException, CannotWriteException {
-        try {
-            final Path path = audioFile.getFile().toPath();
-            final FileTime originalCreationTime = (FileTime) Files.getAttribute(path, "creationTime");
+// ==Android==
+//    private void creationTime() throws IOException, InterruptedException, CannotWriteException {
+//        try {
+//            final Path path = audioFile.getFile().toPath();
+//            final FileTime originalCreationTime = (FileTime) Files.getAttribute(path, "creationTime");
             // make sure we don't have the same time, in case resolution is only one second
-            Thread.sleep(1500);
-            final AudioFileWriter audioFileWriter = new MockAudioFileWriter();
-            audioFileWriter.write(this.audioFile);
-            final FileTime creationTime = (FileTime)Files.getAttribute(path, "creationTime");
-            System.out.println("Creation Time:"+originalCreationTime+":"+creationTime);
-            assertTrue("Creation time not within 3000 milliseconds of original time",(creationTime.toMillis() - originalCreationTime.toMillis()) < 3000);
-        } catch (UnsupportedOperationException e) {
-            System.out.println("Accessing creationTime is not supported.");
-            e.printStackTrace(System.out);
-        }
-    }
+//            Thread.sleep(1500);
+//            final AudioFileWriter audioFileWriter = new MockAudioFileWriter();
+//            audioFileWriter.write(this.audioFile);
+//            final FileTime creationTime = (FileTime)Files.getAttribute(path, "creationTime");
+//            System.out.println("Creation Time:"+originalCreationTime+":"+creationTime);
+//            assertTrue("Creation time not within 3000 milliseconds of original time",(creationTime.toMillis() - originalCreationTime.toMillis()) < 3000);
+//        } catch (UnsupportedOperationException e) {
+//            System.out.println("Accessing creationTime is not supported.");
+//            e.printStackTrace(System.out);
+//        }
+//    }
 
     private static class MockAudioFileWriter extends AudioFileWriter {
 

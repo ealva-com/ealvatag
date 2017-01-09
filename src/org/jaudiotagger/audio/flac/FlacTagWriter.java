@@ -1,17 +1,17 @@
 /*
  * Entagged Audio Tag library
  * Copyright (c) 2003-2005 Raphaël Slinckx <raphael@slinckx.net>
- * 
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 2.1 of the License, or (at your option) any later version.
- *  
+ *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
@@ -20,7 +20,6 @@ package org.jaudiotagger.audio.flac;
 
 import org.jaudiotagger.audio.exceptions.CannotReadException;
 import org.jaudiotagger.audio.exceptions.CannotWriteException;
-import org.jaudiotagger.audio.exceptions.NoWritePermissionsException;
 import org.jaudiotagger.audio.flac.metadatablock.*;
 import org.jaudiotagger.tag.Tag;
 import org.jaudiotagger.tag.TagOptionSingleton;
@@ -33,9 +32,6 @@ import java.nio.ByteBuffer;
 import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.channels.FileChannel.MapMode;
-import java.nio.file.AccessDeniedException;
-import java.nio.file.Path;
-import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Queue;
@@ -57,15 +53,15 @@ public class FlacTagWriter
 
     /**
      * @param tag
-     * @param file
-     * @throws IOException
+     * @param channel
+     * @param fileName
      * @throws CannotWriteException
      */
-    public void delete(Tag tag, Path file) throws CannotWriteException
+    public void delete(Tag tag, FileChannel channel, final String fileName) throws CannotWriteException
     {
-        //This will save the file without any Comment or PictureData blocks  
+        //This will save the file without any Comment or PictureData blocks
         FlacTag emptyTag = new FlacTag(null, new ArrayList<MetadataBlockDataPicture>());
-        write(emptyTag, file);
+        write(emptyTag, channel, fileName);
     }
 
     private static class MetadataBlockInfo
@@ -79,19 +75,19 @@ public class FlacTagWriter
 
     /**
      * @param tag
-     * @param file
+     * @param fc
+     * @param fileName
      * @throws CannotWriteException
-     * @throws IOException
      */
-    public void write(Tag tag, Path file) throws CannotWriteException
+    public void write(Tag tag, FileChannel fc, final String fileName) throws CannotWriteException
     {
-        logger.config(file + " Writing tag");
-        try (FileChannel fc = FileChannel.open(file, StandardOpenOption.WRITE, StandardOpenOption.READ))
+        logger.config(fileName + " Writing tag");
+        try
         {
             MetadataBlockInfo blockInfo = new MetadataBlockInfo();
 
             //Read existing data
-            FlacStreamReader flacStream = new FlacStreamReader(fc, file.toString() + " ");
+            FlacStreamReader flacStream = new FlacStreamReader(fc, fileName + " ");
             try
             {
                 flacStream.findStream();
@@ -177,13 +173,13 @@ public class FlacTagWriter
             //Go to start of Flac within file
             fc.position(flacStream.getStartOfFlacInFile());
 
-            logger.config(file + ":Writing tag available bytes:" + availableRoom + ":needed bytes:" + neededRoom);
+            logger.config(fileName + ":Writing tag available bytes:" + availableRoom + ":needed bytes:" + neededRoom);
 
             //There is enough room to fit the tag without moving the audio just need to
             //adjust padding accordingly need to allow space for padding header if padding required
             if ((availableRoom == neededRoom) || (availableRoom > neededRoom + MetadataBlockHeader.HEADER_LENGTH))
             {
-                logger.config(file + ":Room to Rewrite");
+                logger.config(fileName + " Room to Rewrite");
                 //Jump over Id3 (if exists) and flac header
                 fc.position(flacStream.getStartOfFlacInFile() + FlacStreamReader.FLAC_STREAM_IDENTIFIER_LENGTH);
 
@@ -196,20 +192,15 @@ public class FlacTagWriter
             //Need to move audio
             else
             {
-                logger.config(file + ":Audio must be shifted "+ "NewTagSize:" + newTagSize + ":AvailableRoom:" + availableRoom + ":MinimumAdditionalRoomRequired:"+(neededRoom - availableRoom));
+                logger.config(fileName + ":Audio must be shifted "+ "NewTagSize:" + newTagSize + ":AvailableRoom:" + availableRoom + ":MinimumAdditionalRoomRequired:"+(neededRoom - availableRoom));
                 //As we are having to both anyway may as well put in the default padding
-                insertUsingChunks(file, tag, fc, blockInfo, flacStream, neededRoom + FlacTagCreator.DEFAULT_PADDING, availableRoom);
+                insertUsingChunks(fileName, tag, fc, blockInfo, flacStream, neededRoom + FlacTagCreator.DEFAULT_PADDING, availableRoom);
             }
-        }
-        catch (AccessDeniedException ade)
-        {
-            logger.log(Level.SEVERE, ade.getMessage(), ade);
-            throw new NoWritePermissionsException(file + ":" + ade.getMessage());
         }
         catch (IOException ioe)
         {
             logger.log(Level.SEVERE, ioe.getMessage(), ioe);
-            throw new CannotWriteException(file + ":" + ioe.getMessage());
+            throw new CannotWriteException(fileName + ":" + ioe.getMessage());
         }
     }
 
@@ -228,7 +219,7 @@ public class FlacTagWriter
      * @throws IOException
      * @throws UnsupportedEncodingException
      */
-    private void insertUsingDirectBuffer(Path file, Tag tag, FileChannel fc, MetadataBlockInfo blockInfo, FlacStreamReader flacStream, int availableRoom) throws IOException
+    private void insertUsingDirectBuffer(String fileName, Tag tag, FileChannel fc, MetadataBlockInfo blockInfo, FlacStreamReader flacStream, int availableRoom) throws IOException
     {
         //Find end of metadata blocks (start of Audio), i.e start of Flac + 4 bytes for 'fLaC', 4 bytes for streaminfo header and
         //34 bytes for streaminfo and then size of all the other existing blocks
@@ -271,7 +262,7 @@ public class FlacTagWriter
      * @throws IOException
      * @throws UnsupportedEncodingException
      */
-    private void insertUsingChunks(Path file, Tag tag, FileChannel fc, MetadataBlockInfo blockInfo, FlacStreamReader flacStream, int neededRoom, int availableRoom) throws IOException, UnsupportedEncodingException
+    private void insertUsingChunks(String file, Tag tag, FileChannel fc, MetadataBlockInfo blockInfo, FlacStreamReader flacStream, int neededRoom, int availableRoom) throws IOException, UnsupportedEncodingException
     {
         long originalFileSize = fc.size();
 
@@ -349,7 +340,7 @@ public class FlacTagWriter
      * @throws IOException
      * @throws UnsupportedEncodingException
      */
-    private void insertTagAndShift(Path file, Tag tag, FileChannel fc, MetadataBlockInfo blockInfo, FlacStreamReader flacStream, int neededRoom, int availableRoom) throws IOException, UnsupportedEncodingException
+    private void insertTagAndShift(String fileName, Tag tag, FileChannel fc, MetadataBlockInfo blockInfo, FlacStreamReader flacStream, int neededRoom, int availableRoom) throws IOException, UnsupportedEncodingException
     {
         int headerLength = flacStream.getStartOfFlacInFile() + FlacStreamReader.FLAC_STREAM_IDENTIFIER_LENGTH + MetadataBlockHeader.HEADER_LENGTH // this should be the length of the block header for the stream info
                 + MetadataBlockDataStreamInfo.STREAM_INFO_DATA_LENGTH;
@@ -369,7 +360,7 @@ public class FlacTagWriter
             //#175: Flac Map error on write
             if(mappedFile==null)
             {
-                insertUsingChunks(file, tag, fc, blockInfo, flacStream, neededRoom + FlacTagCreator.DEFAULT_PADDING, availableRoom);
+                insertUsingChunks(fileName, tag, fc, blockInfo, flacStream, neededRoom + FlacTagCreator.DEFAULT_PADDING, availableRoom);
             }
             else
             {

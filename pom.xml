@@ -74,6 +74,11 @@
          <version>3.8.1</version>
          <scope>test</scope>
       </dependency>
+      <dependency>
+          <groupId>com.squareup.okio</groupId>
+          <artifactId>okio</artifactId>
+          <version>1.11.0</version>
+      </dependency>
    </dependencies>
    <build>
       <plugins>
@@ -93,7 +98,7 @@
             <version>2.18.1</version>
             <configuration>
               <argLine>-Dfile.encoding=UTF-8</argLine>
-            </configuration>        
+            </configuration>
          </plugin>
          <plugin>
            <groupId>org.apache.maven.plugins</groupId>
@@ -188,7 +193,7 @@
    <properties>
       <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
       <java.version>1.7</java.version>
-   </properties>   
+   </properties>
    <scm>
       <connection>scm:git:https://bitbucket.org/ijabz/jaudiotagger.git</connection>
       <developerConnection>scm:git:git@github.com:ijabz/jaudiotagger.git</developerConnection>

@@ -1,27 +1,24 @@
 /*
  * Entagged Audio Tag library
  * Copyright (c) 2003-2005 Raphaël Slinckx <raphael@slinckx.net>
- * 
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 2.1 of the License, or (at your option) any later version.
- *  
+ *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 package org.jaudiotagger.audio.dsf;
 
-import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.exceptions.CannotWriteException;
-import org.jaudiotagger.audio.exceptions.NoWritePermissionsException;
-import org.jaudiotagger.audio.generic.AudioFileWriter;
 import org.jaudiotagger.audio.generic.AudioFileWriter2;
 import org.jaudiotagger.audio.generic.Utils;
 import org.jaudiotagger.tag.Tag;
@@ -30,19 +27,15 @@ import org.jaudiotagger.tag.id3.AbstractID3v2Tag;
 import java.io.*;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
-import java.nio.file.AccessDeniedException;
-import java.nio.file.OpenOption;
-import java.nio.file.Path;
-import java.nio.file.StandardOpenOption;
 
 /**
  * Write/delete tag info for Dsf file
  */
 public class DsfFileWriter extends AudioFileWriter2
 {
-    protected void writeTag(Tag tag, Path file) throws CannotWriteException
+    protected void writeTag(Tag tag, FileChannel fc, final String fileName) throws CannotWriteException
     {
-        try(FileChannel fc = FileChannel.open(file, StandardOpenOption.WRITE, StandardOpenOption.READ))
+        try
         {
             DsdChunk dsd = DsdChunk.readChunk(Utils.readFileDataIntoBufferLE(fc, DsdChunk.DSD_HEADER_LENGTH));
             if (dsd != null)
@@ -60,7 +53,7 @@ public class DsfFileWriter extends AudioFileWriter2
                     }
                     else
                     {
-                        throw new CannotWriteException(file + "Could not find existing ID3v2 Tag");
+                        throw new CannotWriteException(fileName + "Could not find existing ID3v2 Tag");
                     }
                 }
                 else
@@ -75,10 +68,6 @@ public class DsfFileWriter extends AudioFileWriter2
                     fc.write(dsd.write());
                 }
             }
-        }
-        catch(AccessDeniedException ade)
-        {
-            throw new NoWritePermissionsException(file + ":" + ade.getMessage());
         }
         catch(IOException ioe)
         {
@@ -135,14 +124,15 @@ public class DsfFileWriter extends AudioFileWriter2
      * Delete Metadata tag
      *
      * @param tag
-     * @param file
+     * @param fc
+     * @param fileName
      * @throws CannotWriteException
      * @throws IOException
      */
     @Override
-    protected void deleteTag(Tag tag, Path file) throws CannotWriteException
+    protected void deleteTag(Tag tag, FileChannel fc, final String fileName) throws CannotWriteException
     {
-        try(FileChannel fc = FileChannel.open(file, StandardOpenOption.WRITE, StandardOpenOption.READ))
+        try
         {
             DsdChunk dsd = DsdChunk.readChunk(Utils.readFileDataIntoBufferLE(fc, DsdChunk.DSD_HEADER_LENGTH));
             if (dsd != null)
@@ -169,7 +159,7 @@ public class DsfFileWriter extends AudioFileWriter2
         }
         catch(IOException ioe)
         {
-            throw new CannotWriteException(file + ":"+ioe.getMessage());
+            throw new CannotWriteException(fileName + ":"+ioe.getMessage());
         }
     }
 

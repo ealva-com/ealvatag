@@ -1,17 +1,17 @@
 /*
  * Entagged Audio Tag library
  * Copyright (c) 2003-2005 Rapha�l Slinckx <raphael@slinckx.net>
- * 
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 2.1 of the License, or (at your option) any later version.
- *  
+ *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
@@ -28,14 +28,12 @@ import org.jaudiotagger.audio.wav.chunk.WavId3Chunk;
 import org.jaudiotagger.audio.wav.chunk.WavListChunk;
 import org.jaudiotagger.logging.Hex;
 import org.jaudiotagger.tag.TagOptionSingleton;
-import org.jaudiotagger.tag.id3.ID3v23Tag;
 import org.jaudiotagger.tag.wav.WavInfoTag;
 import org.jaudiotagger.tag.wav.WavTag;
 
 import java.io.IOException;
 import java.nio.ByteOrder;
 import java.nio.channels.FileChannel;
-import java.nio.file.Path;
 import java.util.logging.Logger;
 
 /**
@@ -55,31 +53,28 @@ public class WavTagReader
     /**
      * Read file and return tag metadata
      *
-     * @param path
+     * @param fc
      * @return
      * @throws CannotReadException
      * @throws IOException
      */
-    public WavTag read(Path path) throws CannotReadException, IOException
+    public WavTag read(FileChannel fc) throws CannotReadException, IOException
     {
         logger.config(loggingName + " Read Tag:start");
         WavTag tag = new WavTag(TagOptionSingleton.getInstance().getWavOptions());
-        try(FileChannel fc = FileChannel.open(path))
+        if (WavRIFFHeader.isValidHeader(fc))
         {
-            if (WavRIFFHeader.isValidHeader(fc))
+            while (fc.position() < fc.size())
             {
-                while (fc.position() < fc.size())
+                if (!readChunk(fc, tag))
                 {
-                    if (!readChunk(fc, tag))
-                    {
-                        break;
-                    }
+                    break;
                 }
             }
-            else
-            {
-                throw new CannotReadException(loggingName+ " Wav RIFF Header not valid");
-            }
+        }
+        else
+        {
+            throw new CannotReadException(loggingName+ " Wav RIFF Header not valid");
         }
         createDefaultMetadataTagsIfMissing(tag);
         logger.config(loggingName + " Read Tag:end");

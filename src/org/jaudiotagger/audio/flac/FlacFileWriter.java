@@ -18,15 +18,11 @@
  */
 package org.jaudiotagger.audio.flac;
 
-import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.exceptions.CannotWriteException;
-import org.jaudiotagger.audio.generic.AudioFileWriter;
 import org.jaudiotagger.audio.generic.AudioFileWriter2;
 import org.jaudiotagger.tag.Tag;
 
-import java.io.IOException;
-import java.io.RandomAccessFile;
-import java.nio.file.Path;
+import java.nio.channels.FileChannel;
 
 
 /**
@@ -38,15 +34,15 @@ public class FlacFileWriter extends AudioFileWriter2
     private FlacTagWriter tw = new FlacTagWriter();
 
     @Override
-    protected void writeTag(Tag tag, Path file) throws CannotWriteException
+    protected void writeTag(Tag tag, FileChannel channel, final String fileName) throws CannotWriteException
     {
-        tw.write(tag, file);
+        tw.write(tag, channel, fileName);
     }
 
     @Override
-    protected void deleteTag(Tag tag, Path file) throws CannotWriteException
+    protected void deleteTag(Tag tag, FileChannel channel, final String fileName) throws CannotWriteException
     {
-        tw.delete(tag, file);
+        tw.delete(tag, channel, fileName);
     }
 
 

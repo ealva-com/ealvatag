@@ -13,7 +13,6 @@ import org.jaudiotagger.logging.Hex;
 import java.io.IOException;
 import java.nio.ByteOrder;
 import java.nio.channels.FileChannel;
-import java.nio.file.Path;
 import java.util.logging.Logger;
 
 /**
@@ -24,25 +23,22 @@ public class AiffInfoReader extends AiffChunkReader
     public static Logger logger = Logger.getLogger("org.jaudiotagger.audio.aiff");
 
 
-    protected GenericAudioHeader read(Path file) throws CannotReadException, IOException
+    protected GenericAudioHeader read(FileChannel fc, final String fileName) throws CannotReadException, IOException
     {
-        try(FileChannel fc = FileChannel.open(file))
+        logger.config(fileName + " Reading AIFF file size:" + Hex.asDecAndHex(fc.size()));
+        AiffAudioHeader aiffAudioHeader = new AiffAudioHeader();
+        final AiffFileHeader fileHeader = new AiffFileHeader();
+        long noOfBytes = fileHeader.readHeader(fc, aiffAudioHeader, fileName);
+        while (fc.position() < fc.size())
         {
-            logger.config(file + " Reading AIFF file size:" + Hex.asDecAndHex(fc.size()));
-            AiffAudioHeader aiffAudioHeader = new AiffAudioHeader();
-            final AiffFileHeader fileHeader = new AiffFileHeader();
-            long noOfBytes = fileHeader.readHeader(fc, aiffAudioHeader, file.toString());
-            while (fc.position() < fc.size())
+            if (!readChunk(fc, aiffAudioHeader, fileName))
             {
-                if (!readChunk(fc, aiffAudioHeader, file.toString()))
-                {
-                    logger.severe(file + " UnableToReadProcessChunk");
-                    break;
-                }
+                logger.severe(fileName + " UnableToReadProcessChunk");
+                break;
             }
-            calculateBitRate(aiffAudioHeader);
-            return aiffAudioHeader;
         }
+        calculateBitRate(aiffAudioHeader);
+        return aiffAudioHeader;
     }
 
     /**

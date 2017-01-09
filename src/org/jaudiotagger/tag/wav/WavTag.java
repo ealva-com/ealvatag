@@ -1,17 +1,17 @@
 /*
  * Entagged Audio Tag library
  * Copyright (c) 2003-2005 Rapha�l Slinckx <raphael@slinckx.net>
- * 
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 2.1 of the License, or (at your option) any later version.
- *  
+ *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
@@ -44,7 +44,7 @@ import java.util.logging.Logger;
 public class WavTag implements Tag, Id3SupportingTag
 {
     private static final Logger logger = Logger.getLogger(WavTag.class.getPackage().getName());
-    
+
     private static final String NULL = "\0";
 
 	private List<ChunkSummary> chunkSummaryList = new ArrayList<ChunkSummary>();
@@ -638,19 +638,6 @@ public class WavTag implements Tag, Id3SupportingTag
      */
     public static AbstractID3v2Tag createDefaultID3Tag()
     {
-        if(TagOptionSingleton.getInstance().getID3V2Version()== ID3V2Version.ID3_V24)
-        {
-            return new ID3v24Tag();
-        }
-        else if(TagOptionSingleton.getInstance().getID3V2Version()==ID3V2Version.ID3_V23)
-        {
-            return new ID3v23Tag();
-        }
-        else if(TagOptionSingleton.getInstance().getID3V2Version()==ID3V2Version.ID3_V22)
-        {
-            return new ID3v22Tag();
-        }
-        //Default in case not set somehow
-        return new ID3v23Tag();
+        return TagOptionSingleton.createDefaultID3Tag();
     }
 }

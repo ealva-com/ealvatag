@@ -1529,7 +1529,7 @@ public class WavMetadataTwonkyTrckTest extends AbstractTestCase
         Exception exceptionCaught2 = null;
         try
         {
-            WavCleaner wc = new WavCleaner(testFile.toPath());
+            WavCleaner wc = new WavCleaner(testFile);
             wc.clean();
             AudioFile f = AudioFileIO.read(testFile);
             Tag tag = f.getTag();
@@ -1617,17 +1617,17 @@ public class WavMetadataTwonkyTrckTest extends AbstractTestCase
     }
 
     public void testWriteWriteProtectedFileWithCheckDisabled() throws Exception {
-    	
+
         FilePermissionsTest.runWriteWriteProtectedFileWithCheckDisabled("test123.wav");
 	}
 
     public void testWriteWriteProtectedFileWithCheckEnabled() throws Exception {
-    	
+
     	FilePermissionsTest.runWriteWriteProtectedFileWithCheckEnabled("test123.wav");
 	}
 
     public void testWriteReadOnlyFileWithCheckDisabled() throws Exception {
-    	
+
     	FilePermissionsTest.runWriteReadOnlyFileWithCheckDisabled("test123.wav");
 	}
 

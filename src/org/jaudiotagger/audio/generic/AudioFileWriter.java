@@ -1,17 +1,17 @@
 /*
  * Entagged Audio Tag library
  * Copyright (c) 2003-2005 Raphaël Slinckx <raphael@slinckx.net>
- * 
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 2.1 of the License, or (at your option) any later version.
- *  
+ *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
@@ -30,10 +30,8 @@ import org.jaudiotagger.tag.TagOptionSingleton;
 import java.io.*;
 import java.nio.channels.FileChannel;
 import java.nio.channels.FileLock;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.attribute.BasicFileAttributes;
-import java.nio.file.attribute.FileTime;
+//import java.nio.file.Files;
+//import java.nio.file.attribute.BasicFileAttributes;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -80,10 +78,10 @@ public abstract class AudioFileWriter
      */
     public void delete(AudioFile af) throws CannotReadException, CannotWriteException
     {
-        Path file = af.getFile().toPath();
-        if (TagOptionSingleton.getInstance().isCheckIsWritable() && !Files.isWritable(file))
+        final File file = af.getFile();
+        if (TagOptionSingleton.getInstance().isCheckIsWritable() && file.canWrite())
         {
-            logger.severe(Permissions.displayPermissions(file));
+            logger.severe("Unable to write file: " + file);
             throw new CannotWriteException(ErrorMessage.GENERAL_DELETE_FAILED.getMsg(file));
         }
 
@@ -268,11 +266,10 @@ public abstract class AudioFileWriter
             throw new CannotWriteException(ErrorMessage.GENERAL_WRITE_FAILED.getMsg(af.getFile().getPath()));
         }
 
-        Path file = af.getFile().toPath();
-        if (TagOptionSingleton.getInstance().isCheckIsWritable() && !Files.isWritable(file))
+        File file = af.getFile();
+        if (TagOptionSingleton.getInstance().isCheckIsWritable() && file.canWrite())
         {
-            logger.severe(Permissions.displayPermissions(file));
-            logger.severe(ErrorMessage.GENERAL_WRITE_FAILED.getMsg(af.getFile().getPath()));
+            logger.severe(ErrorMessage.GENERAL_WRITE_FAILED.getMsg(af.getFile()));
             throw new CannotWriteException(ErrorMessage.GENERAL_WRITE_FAILED_TO_OPEN_FILE_FOR_EDITING.getMsg(file));
         }
 
@@ -647,8 +644,9 @@ public abstract class AudioFileWriter
      */
     private void transferNewFileToNewOriginalFile(final File newFile, final File originalFile) throws CannotWriteException
     {
+        // ==Android==
         // get original creation date
-        final FileTime creationTime = getCreationTime(originalFile);
+//        final FileTime creationTime = getCreationTime(originalFile);
 
         // Rename Original File
         // Can fail on Vista if have Special Permission 'Delete' set Deny
@@ -709,12 +707,13 @@ public abstract class AudioFileWriter
                 logger.warning(ErrorMessage.GENERAL_WRITE_WARNING_UNABLE_TO_DELETE_BACKUP_FILE.getMsg(originalFileBackup.getAbsolutePath()));
             }
 
+            // ==Android==
             // now also set the creation date to the creation date of the original file
-            if (creationTime != null)
-            {
+//            if (creationTime != null)
+//            {
                 // this may fail silently on OS X, because of a JDK bug
-                setCreationTime(originalFile, creationTime);
-            }
+//                setCreationTime(originalFile, creationTime);
+//            }
         }
 
         // Delete the temporary file if still exists
@@ -728,44 +727,46 @@ public abstract class AudioFileWriter
         }
     }
 
-    /**
-     * Sets the creation time for a given file.
-     * Fails silently with a log message.
-     *
-     * @param file         file
-     * @param creationTime creation time
-     */
-    private void setCreationTime(final File file, final FileTime creationTime)
-    {
-        try
-        {
-            Files.setAttribute(file.toPath(), "creationTime", creationTime);
-        }
-        catch (Exception e)
-        {
-            logger.log(Level.WARNING, ErrorMessage.GENERAL_SET_CREATION_TIME_FAILED.getMsg(file.getAbsolutePath(), e.getMessage()), e);
-        }
-    }
+    // ==Android==
+//    /**
+//     * Sets the creation time for a given file.
+//     * Fails silently with a log message.
+//     *
+//     * @param file         file
+//     * @param creationTime creation time
+//     */
+//    private void setCreationTime(final File file, final FileTime creationTime)
+//    {
+//        try
+//        {
+//            Files.setAttribute(file.toPath(), "creationTime", creationTime);
+//        }
+//        catch (Exception e)
+//        {
+//            logger.log(Level.WARNING, ErrorMessage.GENERAL_SET_CREATION_TIME_FAILED.getMsg(file.getAbsolutePath(), e.getMessage()), e);
+//        }
+//    }
 
-    /**
-     * Get file creation time.
-     *
-     * @param file file
-     * @return time object or {@code null}, if we could not read it for some reason.
-     */
-    private FileTime getCreationTime(final File file)
-    {
-        try
-        {
-            final BasicFileAttributes attributes = Files.readAttributes(file.toPath(), BasicFileAttributes.class);
-            return attributes.creationTime();
-        }
-        catch (Exception e)
-        {
-            logger.log(Level.WARNING, ErrorMessage.GENERAL_GET_CREATION_TIME_FAILED.getMsg(file.getAbsolutePath(), e.getMessage()), e);
-            return null;
-        }
-    }
+    // ==Android==
+//    /**
+//     * Get file creation time.
+//     *
+//     * @param file file
+//     * @return time object or {@code null}, if we could not read it for some reason.
+//     */
+//    private FileTime getCreationTime(final File file)
+//    {
+//        try
+//        {
+//            final BasicFileAttributes attributes = Files.readAttributes(file.toPath(), BasicFileAttributes.class);
+//            return attributes.creationTime();
+//        }
+//        catch (Exception e)
+//        {
+//            logger.log(Level.WARNING, ErrorMessage.GENERAL_GET_CREATION_TIME_FAILED.getMsg(file.getAbsolutePath(), e.getMessage()), e);
+//            return null;
+//        }
+//    }
 
     /**
      * This is called when a tag has to be written in a file. Three parameters
