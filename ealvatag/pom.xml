@@ -9,7 +9,7 @@
     <artifactId>ealvatag</artifactId>
     <version>0.0.1-SNAPSHOT</version>
 
-    <!--<artifactId>ealvatag</artifactId>-->
+    <artifactId>ealvatag</artifactId>
     <name>ealvatag</name>
 
     <dependencies>
