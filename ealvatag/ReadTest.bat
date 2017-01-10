@@ -1,2 +1,2 @@
 set classpath=%classpath%;.\classes;\dist\jaudiotagger.jar
-java com.ealvatag.test.TestAudioTagger %1
+java ealvatag.test.TestAudioTagger %1
