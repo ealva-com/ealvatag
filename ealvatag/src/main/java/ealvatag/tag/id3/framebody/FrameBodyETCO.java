@@ -22,6 +22,8 @@ import ealvatag.tag.datatype.EventTimingCodeList;
 import ealvatag.tag.datatype.NumberHashMap;
 import ealvatag.tag.id3.ID3v24Frames;
 import ealvatag.tag.id3.valuepair.EventTimingTimestampTypes;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.nio.ByteBuffer;
 import java.util.*;
@@ -101,6 +103,7 @@ import java.util.*;
  */
 public class FrameBodyETCO extends AbstractID3v2FrameBody implements ID3v24FrameBody, ID3v23FrameBody
 {
+    private static final Logger LOG = LoggerFactory.getLogger(FrameBodyETCO.class);
 
     public static final int MPEG_FRAMES = 1;
     public static final int MILLISECONDS = 2;
@@ -307,7 +310,7 @@ public class FrameBodyETCO extends AbstractID3v2FrameBody implements ID3v24Frame
             final long translatedTimestamp = code.getTimestamp() == 0 ? lastTimestamp : code.getTimestamp();
             if (code.getTimestamp() < lastTimestamp)
             {
-                logger.warning("Event codes are not in chronological order. " + lastTimestamp + " is followed by " + code.getTimestamp() + ".");
+                LOG.warn("Event codes are not in chronological order. " + lastTimestamp + " is followed by " + code.getTimestamp() + ".");
                 // throw exception???
             }
             lastTimestamp = translatedTimestamp;
@@ -335,7 +338,7 @@ public class FrameBodyETCO extends AbstractID3v2FrameBody implements ID3v24Frame
 
     private static Set<Integer> toSet(final int... types)
     {
-        final Set<Integer> typeSet = new HashSet<Integer>();
+        final Set<Integer> typeSet = new HashSet<>();
         for (final int type : types)
         {
             typeSet.add(type);

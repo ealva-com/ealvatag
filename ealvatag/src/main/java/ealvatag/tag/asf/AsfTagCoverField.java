@@ -4,28 +4,27 @@ import ealvatag.audio.asf.data.AsfHeader;
 import ealvatag.audio.asf.data.MetadataDescriptor;
 import ealvatag.logging.ErrorMessage;
 import ealvatag.tag.id3.valuepair.ImageFormats;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.ByteArrayOutputStream;
 import java.io.UnsupportedEncodingException;
-import java.util.logging.Logger;
 
 /**
  * Encapsulates the WM/Pictures provides some convenience methods for decoding
  * the binary data it contains
- *
+ * <p>
  * The value of a WM/Pictures metadata descriptor is as follows:
- *
+ * <p>
  * byte0 Picture Type byte1-4 Length of the image data mime type encoded as
  * UTF-16LE null byte null byte description encoded as UTF-16LE (optional) null
  * byte null byte image data
  */
-public class AsfTagCoverField extends AbstractAsfTagImageField
-{
+public class AsfTagCoverField extends AbstractAsfTagImageField {
     /**
      * Logger Object
      */
-    public final static Logger LOGGER = Logger
-            .getLogger("ealvatag.audio.asf.tag");
+    private final static Logger LOG = LoggerFactory.getLogger(AsfTagCoverField.class);
 
     /**
      * Description
@@ -61,20 +60,19 @@ public class AsfTagCoverField extends AbstractAsfTagImageField
      * @param mimeType
      */
     public AsfTagCoverField(final byte[] imageData, final int pictureType,
-            final String description, final String mimeType) {
+                            final String description, final String mimeType) {
         super(new MetadataDescriptor(AsfFieldKey.COVER_ART.getFieldName(),
-                MetadataDescriptor.TYPE_BINARY));
+                                     MetadataDescriptor.TYPE_BINARY));
         this.getDescriptor()
-                .setBinaryValue(
-                        createRawContent(imageData, pictureType, description,
-                                mimeType));
+            .setBinaryValue(
+                    createRawContent(imageData, pictureType, description,
+                                     mimeType));
     }
 
     /**
      * Creates an instance from a metadata descriptor
      *
-     * @param source
-     *            The metadata descriptor, whose content is published.<br>
+     * @param source The metadata descriptor, whose content is published.<br>
      */
     public AsfTagCoverField(final MetadataDescriptor source) {
         super(source);
@@ -95,8 +93,10 @@ public class AsfTagCoverField extends AbstractAsfTagImageField
         }
     }
 
-    private byte[] createRawContent(final byte[] data, final int pictureType,
-            final String description, String mimeType) { // NOPMD by Christian Laireiter on 5/9/09 5:46 PM
+    private byte[] createRawContent(final byte[] data,
+                                    final int pictureType,
+                                    final String description,
+                                    String mimeType) { // NOPMD by Christian Laireiter on 5/9/09 5:46 PM
         this.description = description;
         this.imageDataSize = data.length;
         this.pictureType = pictureType;
@@ -109,8 +109,7 @@ public class AsfTagCoverField extends AbstractAsfTagImageField
             // code because not 100% sure how to identify
             // formats
             if (mimeType == null) {
-                LOGGER.warning(ErrorMessage.GENERAL_UNIDENITIFED_IMAGE_FORMAT
-                        .getMsg());
+                LOG.warn(ErrorMessage.GENERAL_UNIDENITIFED_IMAGE_FORMAT.getMsg());
                 mimeType = ImageFormats.MIME_TYPE_PNG;
             }
         }
@@ -122,7 +121,7 @@ public class AsfTagCoverField extends AbstractAsfTagImageField
 
         // ImageDataSize
         baos.write(ealvatag.audio.generic.Utils
-                .getSizeLEInt32(data.length), 0, 4);
+                           .getSizeLEInt32(data.length), 0, 4);
 
         // mimetype
         byte[] mimeTypeData;
@@ -131,7 +130,7 @@ public class AsfTagCoverField extends AbstractAsfTagImageField
         } catch (final UnsupportedEncodingException uee) {
             // Should never happen
             throw new RuntimeException("Unable to find encoding:" // NOPMD by Christian Laireiter on 5/9/09 5:45 PM
-                    + AsfHeader.ASF_CHARSET.name());
+                                               + AsfHeader.ASF_CHARSET.name());
         }
         baos.write(mimeTypeData, 0, mimeTypeData.length);
 
@@ -144,11 +143,11 @@ public class AsfTagCoverField extends AbstractAsfTagImageField
             byte[] descriptionData;
             try {
                 descriptionData = description.getBytes(AsfHeader.ASF_CHARSET
-                        .name());
+                                                               .name());
             } catch (final UnsupportedEncodingException uee) {
                 // Should never happen
                 throw new RuntimeException("Unable to find encoding:" // NOPMD by Christian Laireiter on 5/9/09 5:45 PM
-                        + AsfHeader.ASF_CHARSET.name());
+                                                   + AsfHeader.ASF_CHARSET.name());
             }
             baos.write(descriptionData, 0, descriptionData.length);
         }
@@ -198,7 +197,7 @@ public class AsfTagCoverField extends AbstractAsfTagImageField
 
         // ImageDataSize
         this.imageDataSize = ealvatag.audio.generic.Utils.getIntLE(this
-                .getRawContent(), 1, 2);
+                                                                           .getRawContent(), 1, 2);
 
         // Set Count to after picture type,datasize and two byte nulls
         int count = 5;
@@ -210,11 +209,11 @@ public class AsfTagCoverField extends AbstractAsfTagImageField
             if (getRawContent()[count] == 0 && getRawContent()[count + 1] == 0) {
                 if (this.mimeType == null) {
                     this.mimeType = new String(getRawContent(), 5, (count) - 5,
-                            "UTF-16LE");
+                                               "UTF-16LE");
                     endOfMimeType = count + 2;
                 } else if (this.description == null) {
                     this.description = new String(getRawContent(),
-                            endOfMimeType, count - endOfMimeType, "UTF-16LE");
+                                                  endOfMimeType, count - endOfMimeType, "UTF-16LE");
                     this.endOfName = count + 2;
                     break;
                 }

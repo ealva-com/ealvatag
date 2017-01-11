@@ -18,14 +18,14 @@ import ealvatag.tag.id3.AbstractTagFrameBody;
 import ealvatag.tag.id3.valuepair.EventTimingTypes;
 
 /**
- * A single synchronized tempo code. Part of a list of temnpo codes ({@link ealvatag.tag.datatype.SynchronisedTempoCodeList}), that are contained in
+ * A single synchronized tempo code. Part of a list of temnpo codes
+ * ({@link ealvatag.tag.datatype.SynchronisedTempoCodeList}), that are contained in
  * {@link ealvatag.tag.id3.framebody.FrameBodySYTC}
  *
  * @author <a href="mailto:hs@tagtraum.com">Hendrik Schreiber</a>
  * @version $Id:$
  */
-public class SynchronisedTempoCode extends AbstractDataType implements Cloneable
-{
+public class SynchronisedTempoCode extends AbstractDataType implements Cloneable {
 
     private TempoCode tempo = new TempoCode(DataTypes.OBJ_SYNCHRONISED_TEMPO_DATA, null, 1);
     private NumberFixedLength timestamp = new NumberFixedLength(DataTypes.OBJ_DATETIME, null, 4);
@@ -36,13 +36,14 @@ public class SynchronisedTempoCode extends AbstractDataType implements Cloneable
         this.timestamp.setValue(copy.timestamp.getValue());
     }
 
-    public SynchronisedTempoCode(final String identifier, final AbstractTagFrameBody frameBody)
-    {
+    public SynchronisedTempoCode(final String identifier, final AbstractTagFrameBody frameBody) {
         this(identifier, frameBody, 0x00, 0L);
     }
 
-    public SynchronisedTempoCode(final String identifier, final AbstractTagFrameBody frameBody, final int tempo, final long timestamp)
-    {
+    public SynchronisedTempoCode(final String identifier,
+                                 final AbstractTagFrameBody frameBody,
+                                 final int tempo,
+                                 final long timestamp) {
         super(identifier, frameBody);
         setBody(frameBody);
         this.tempo.setValue(tempo);
@@ -50,53 +51,47 @@ public class SynchronisedTempoCode extends AbstractDataType implements Cloneable
     }
 
     @Override
-    public void setBody(final AbstractTagFrameBody frameBody)
-    {
+    public void setBody(final AbstractTagFrameBody frameBody) {
         super.setBody(frameBody);
         this.tempo.setBody(frameBody);
         this.timestamp.setBody(frameBody);
     }
 
-    public long getTimestamp()
-    {
+    public long getTimestamp() {
         return ((Number)timestamp.getValue()).longValue();
     }
 
-    public void setTimestamp(final long timestamp)
-    {
+    public void setTimestamp(final long timestamp) {
         this.timestamp.setValue(timestamp);
     }
 
-    public int getTempo()
-    {
-        return ((Number) tempo.getValue()).intValue();
+    public int getTempo() {
+        return ((Number)tempo.getValue()).intValue();
     }
 
-    public void setTempo(final int tempo)
-    {
-        if (tempo < 0 || tempo > 510) throw new IllegalArgumentException("Tempo must be a positive value less than 511: " + tempo);
+    public void setTempo(final int tempo) {
+        if (tempo < 0 || tempo > 510) {
+            throw new IllegalArgumentException("Tempo must be a positive value less than 511: " + tempo);
+        }
         this.tempo.setValue(tempo);
     }
 
     @Override
-    public int getSize()
-    {
+    public int getSize() {
         return this.tempo.getSize() + this.timestamp.getSize();
     }
 
     @Override
-    public void readByteArray(final byte[] buffer, final int originalOffset) throws InvalidDataTypeException
-    {
+    public void readByteArray(final byte[] buffer, final int originalOffset) throws InvalidDataTypeException {
         int localOffset = originalOffset;
         int size = getSize();
 
-        logger.finest("offset:" + localOffset);
+        LOG.trace("offset:" + localOffset);
 
         //The read has extended further than the defined frame size (ok to extend upto
         //size because the next datatype may be of length 0.)
-        if (originalOffset > buffer.length-size)
-        {
-            logger.warning("Invalid size for FrameBody");
+        if (originalOffset > buffer.length - size) {
+            LOG.warn("Invalid size for FrameBody");
             throw new InvalidDataTypeException("Invalid size for FrameBody");
         }
 
@@ -107,11 +102,10 @@ public class SynchronisedTempoCode extends AbstractDataType implements Cloneable
     }
 
     @Override
-    public byte[] writeByteArray()
-    {
+    public byte[] writeByteArray() {
         final byte[] typeData = this.tempo.writeByteArray();
         final byte[] timeData = this.timestamp.writeByteArray();
-        if (typeData == null || timeData == null) return null;
+        if (typeData == null || timeData == null) { return null; }
 
         final byte[] objectData = new byte[typeData.length + timeData.length];
         System.arraycopy(typeData, 0, objectData, 0, typeData.length);
@@ -120,20 +114,18 @@ public class SynchronisedTempoCode extends AbstractDataType implements Cloneable
     }
 
     @Override
-    public boolean equals(final Object o)
-    {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        if (!super.equals(o)) return false;
+    public boolean equals(final Object o) {
+        if (this == o) { return true; }
+        if (o == null || getClass() != o.getClass()) { return false; }
+        if (!super.equals(o)) { return false; }
 
-        final SynchronisedTempoCode that = (SynchronisedTempoCode) o;
-        if (this.getTempo() != that.getTempo() || this.getTimestamp() != that.getTimestamp()) return false;
+        final SynchronisedTempoCode that = (SynchronisedTempoCode)o;
+        if (this.getTempo() != that.getTempo() || this.getTimestamp() != that.getTimestamp()) { return false; }
         return true;
     }
 
     @Override
-    public int hashCode()
-    {
+    public int hashCode() {
         int result = tempo != null ? tempo.hashCode() : 0;
         result = 31 * result + (timestamp != null ? timestamp.hashCode() : 0);
         return result;
@@ -141,7 +133,8 @@ public class SynchronisedTempoCode extends AbstractDataType implements Cloneable
 
     @Override
     public String toString() {
-        return "" + getTempo() + " (\"" + EventTimingTypes.getInstanceOf().getValueForId(getTempo()) + "\"), " + getTimestamp();
+        return "" + getTempo() + " (\"" + EventTimingTypes.getInstanceOf().getValueForId(getTempo()) + "\"), " +
+                getTimestamp();
     }
 
     @Override

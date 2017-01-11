@@ -1,17 +1,17 @@
 package ealvatag.audio.dsf;
 
 import ealvatag.audio.generic.Utils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.nio.ByteBuffer;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * Created by Paul on 28/01/2016.
  */
 public class ID3Chunk
 {
-    public static Logger logger = Logger.getLogger("ealvatag.audio.generic.ID3Chunk");
+    private static Logger LOG = LoggerFactory.getLogger(ID3Chunk.class);
 
     private ByteBuffer dataBuffer;
     public static ID3Chunk readChunk(ByteBuffer dataBuffer)
@@ -21,7 +21,7 @@ public class ID3Chunk
         {
             return new ID3Chunk(dataBuffer);
         }
-        logger.log(Level.WARNING,"Invalid type:"+type+" where expected ID3 tag");
+        LOG.warn("Invalid type:{} where expected ID3 tag", type);
         return null;
     }
 

@@ -15,6 +15,8 @@ import ealvatag.tag.id3.AbstractID3v2Tag;
 import ealvatag.tag.id3.ID3v22Tag;
 import ealvatag.tag.id3.ID3v23Tag;
 import ealvatag.tag.id3.ID3v24Tag;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -32,6 +34,8 @@ import static ealvatag.audio.dsf.DsdChunk.CHUNKSIZE_LENGTH;
  */
 public class DsfFileReader extends AudioFileReader2
 {
+    private static final Logger LOG = LoggerFactory.getLogger(DsfFileReader.class);
+
     @Override
     protected GenericAudioHeader getEncodingInfo(FileChannel fc, final String fileName) throws CannotReadException, IOException
     {
@@ -100,7 +104,7 @@ public class DsfFileReader extends AudioFileReader2
                         case ID3v24Tag.MAJOR_VERSION:
                             return new ID3v24Tag(id3Chunk.getDataBuffer(), "");
                         default:
-                            logger.log(Level.WARNING,   fileName + " Unknown ID3v2 version " + version + ". Returning an empty ID3v2 Tag.");
+                            LOG.warn(fileName + " Unknown ID3v2 version " + version + ". Returning an empty ID3v2 Tag.");
                             return null;
                     }
                 }
@@ -111,13 +115,13 @@ public class DsfFileReader extends AudioFileReader2
             }
             else
             {
-                logger.log(Level.WARNING, fileName + " No existing ID3 tag(1)");
+                LOG.warn(fileName + " No existing ID3 tag(1)");
                 return null;
             }
           }
         else
         {
-            logger.log(Level.WARNING, fileName + " No existing ID3 tag(2)");
+            LOG.warn(fileName + " No existing ID3 tag(2)");
             return   null;
         }
     }

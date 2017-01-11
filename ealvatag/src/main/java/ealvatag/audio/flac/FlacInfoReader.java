@@ -23,12 +23,13 @@ import ealvatag.audio.flac.metadatablock.BlockType;
 import ealvatag.audio.flac.metadatablock.MetadataBlockDataStreamInfo;
 import ealvatag.audio.flac.metadatablock.MetadataBlockHeader;
 import ealvatag.audio.generic.Utils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.channels.FileChannel;
-import java.util.logging.Logger;
 
 /**
  * Read info from Flac file
@@ -36,13 +37,13 @@ import java.util.logging.Logger;
 public class FlacInfoReader
 {
     // Logger Object
-    public static Logger logger = Logger.getLogger("ealvatag.audio.flac");
+    public static Logger LOG = LoggerFactory.getLogger(FlacInfoReader.class);
 
 
 
     public FlacAudioHeader read(FileChannel fc, final String fileName) throws CannotReadException, IOException
     {
-        logger.config(fileName + ":start");
+        LOG.trace("{}:start", fileName);
         FlacStreamReader flacStream = new FlacStreamReader(fc, fileName + " ");
         flacStream.findStream();
 
@@ -55,7 +56,7 @@ public class FlacInfoReader
         while (!isLastBlock)
         {
             MetadataBlockHeader mbh = MetadataBlockHeader.readHeader(fc);
-            logger.info(fileName + " "  + mbh.toString());
+            LOG.info(fileName + " "  + mbh.toString());
             if (mbh.getBlockType() == BlockType.STREAMINFO)
             {
                 mbdsi = new MetadataBlockDataStreamInfo(mbh, fc);
@@ -121,7 +122,7 @@ public class FlacInfoReader
             while (!isLastBlock)
             {
                 MetadataBlockHeader mbh = MetadataBlockHeader.readHeader(fc);
-                logger.config(f + ":Found block:" + mbh.getBlockType());
+                LOG.trace("{}:Found block:{}", f, mbh.getBlockType());
                 fc.position(fc.position() + mbh.getDataLength());
                 isLastBlock = mbh.isLastBlock();
                 count++;

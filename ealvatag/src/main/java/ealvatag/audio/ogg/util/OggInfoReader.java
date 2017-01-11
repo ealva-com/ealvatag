@@ -24,43 +24,37 @@ import ealvatag.audio.generic.GenericAudioHeader;
 import ealvatag.audio.generic.Utils;
 import ealvatag.logging.ErrorMessage;
 import ealvatag.tag.id3.AbstractID3v2Tag;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.Arrays;
-import java.util.logging.Logger;
 
 /**
  * Read encoding info, only implemented for vorbis streams
  */
-public class OggInfoReader
-{
+public class OggInfoReader {
     // Logger Object
-    public static Logger logger = Logger.getLogger("ealvatag.audio.ogg.atom");
+    private static Logger LOG = LoggerFactory.getLogger(OggInfoReader.class);
 
-    public GenericAudioHeader read(RandomAccessFile raf) throws CannotReadException, IOException
-    {
+    public GenericAudioHeader read(RandomAccessFile raf) throws CannotReadException, IOException {
         long start = raf.getFilePointer();
         GenericAudioHeader info = new GenericAudioHeader();
-        logger.fine("Started");
+        LOG.debug("Started");
         long oldPos;
 
         //Check start of file does it have Ogg pattern
         byte[] b = new byte[OggPageHeader.CAPTURE_PATTERN.length];
         raf.read(b);
-        if (!(Arrays.equals(b, OggPageHeader.CAPTURE_PATTERN)))
-        {
+        if (!(Arrays.equals(b, OggPageHeader.CAPTURE_PATTERN))) {
             raf.seek(0);
-            if(AbstractID3v2Tag.isId3Tag(raf))
-            {
+            if (AbstractID3v2Tag.isId3Tag(raf)) {
                 raf.read(b);
-                if ((Arrays.equals(b, OggPageHeader.CAPTURE_PATTERN)))
-                {
-                    start=raf.getFilePointer();
+                if ((Arrays.equals(b, OggPageHeader.CAPTURE_PATTERN))) {
+                    start = raf.getFilePointer();
                 }
-            }
-            else
-            {
+            } else {
                 throw new CannotReadException(ErrorMessage.OGG_HEADER_CANNOT_BE_FOUND.getMsg(new String(b)));
             }
         }
@@ -71,15 +65,13 @@ public class OggInfoReader
         raf.seek(start);
         double pcmSamplesNumber = -1;
         raf.seek(raf.length() - 2);
-        while (raf.getFilePointer() >= 4)
-        {
-            if (raf.read() == OggPageHeader.CAPTURE_PATTERN[3])
-            {
+        while (raf.getFilePointer() >= 4) {
+            if (raf.read() == OggPageHeader.CAPTURE_PATTERN[3]) {
                 raf.seek(raf.getFilePointer() - OggPageHeader.FIELD_CAPTURE_PATTERN_LENGTH);
                 byte[] ogg = new byte[3];
                 raf.readFully(ogg);
-                if (ogg[0] == OggPageHeader.CAPTURE_PATTERN[0] && ogg[1] == OggPageHeader.CAPTURE_PATTERN[1] && ogg[2] == OggPageHeader.CAPTURE_PATTERN[2])
-                {
+                if (ogg[0] == OggPageHeader.CAPTURE_PATTERN[0] && ogg[1] == OggPageHeader.CAPTURE_PATTERN[1] &&
+                        ogg[2] == OggPageHeader.CAPTURE_PATTERN[2]) {
                     raf.seek(raf.getFilePointer() - 3);
 
                     oldPos = raf.getFilePointer();
@@ -99,8 +91,7 @@ public class OggInfoReader
             raf.seek(raf.getFilePointer() - 2);
         }
 
-        if (pcmSamplesNumber == -1)
-        {
+        if (pcmSamplesNumber == -1) {
             //According to spec a value of -1 indicates no packet finished on this page, this should not occur
             throw new CannotReadException(ErrorMessage.OGG_VORBIS_NO_SETUP_BLOCK.getMsg());
         }
@@ -109,15 +100,14 @@ public class OggInfoReader
         OggPageHeader pageHeader = OggPageHeader.read(raf);
         byte[] vorbisData = new byte[pageHeader.getPageLength()];
 
-        if(vorbisData.length < OggPageHeader.OGG_PAGE_HEADER_FIXED_LENGTH)
-        {
+        if (vorbisData.length < OggPageHeader.OGG_PAGE_HEADER_FIXED_LENGTH) {
             throw new CannotReadException("Invalid Identification header for this Ogg File");
         }
         raf.read(vorbisData);
         VorbisIdentificationHeader vorbisIdentificationHeader = new VorbisIdentificationHeader(vorbisData);
 
         //Map to generic encodingInfo
-        info.setPreciseLength((float) (pcmSamplesNumber / vorbisIdentificationHeader.getSamplingRate()));
+        info.setPreciseLength((float)(pcmSamplesNumber / vorbisIdentificationHeader.getSamplingRate()));
         info.setChannelNumber(vorbisIdentificationHeader.getChannelNumber());
         info.setSamplingRate(vorbisIdentificationHeader.getSamplingRate());
         info.setEncodingType(vorbisIdentificationHeader.getEncodingType());
@@ -126,21 +116,18 @@ public class OggInfoReader
         info.setBitsPerSample(16);
 
         //TODO this calculation should be done within identification header
-        if (vorbisIdentificationHeader.getNominalBitrate() != 0 && vorbisIdentificationHeader.getMaxBitrate() == vorbisIdentificationHeader.getNominalBitrate() && vorbisIdentificationHeader.getMinBitrate() == vorbisIdentificationHeader.getNominalBitrate())
-        {
+        if (vorbisIdentificationHeader.getNominalBitrate() != 0 &&
+                vorbisIdentificationHeader.getMaxBitrate() == vorbisIdentificationHeader.getNominalBitrate() &&
+                vorbisIdentificationHeader.getMinBitrate() == vorbisIdentificationHeader.getNominalBitrate()) {
             //CBR (in kbps)
             info.setBitRate(vorbisIdentificationHeader.getNominalBitrate() / 1000);
             info.setVariableBitRate(false);
-        }
-        else
-        if (vorbisIdentificationHeader.getNominalBitrate() != 0 && vorbisIdentificationHeader.getMaxBitrate() == 0 && vorbisIdentificationHeader.getMinBitrate() == 0)
-        {
+        } else if (vorbisIdentificationHeader.getNominalBitrate() != 0 &&
+                vorbisIdentificationHeader.getMaxBitrate() == 0 && vorbisIdentificationHeader.getMinBitrate() == 0) {
             //Average vbr (in kpbs)
             info.setBitRate(vorbisIdentificationHeader.getNominalBitrate() / 1000);
             info.setVariableBitRate(true);
-        }
-        else
-        {
+        } else {
             //TODO need to remove comment from raf.getLength()
             info.setBitRate(computeBitrate(info.getTrackLength(), raf.length()));
             info.setVariableBitRate(true);
@@ -148,14 +135,12 @@ public class OggInfoReader
         return info;
     }
 
-    private int computeBitrate(int length, long size)
-    {
+    private int computeBitrate(int length, long size) {
         //Protect against audio less than 0.5 seconds that can be rounded to zero causing Arithmetic Exception
-        if(length==0)
-        {
-            length=1;
+        if (length == 0) {
+            length = 1;
         }
-        return (int) ((size / Utils.KILOBYTE_MULTIPLIER) * Utils.BITS_IN_BYTE_MULTIPLIER / length);
+        return (int)((size / Utils.KILOBYTE_MULTIPLIER) * Utils.BITS_IN_BYTE_MULTIPLIER / length);
     }
 }
 

@@ -4,14 +4,16 @@ package ealvatag.audio.generic;
 //import java.nio.file.Files;
 //import java.nio.file.Path;
 //import java.nio.file.attribute.*;
-import java.util.logging.Logger;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Outputs permissions to try and identify why we dont have permissions to read/write file
  */
 public class Permissions
 {
-    public static Logger logger = Logger.getLogger("ealvatag.audio.generic");
+    public static Logger logger = LoggerFactory.getLogger(Permissions.class);
 
     // ==Android==
 //    /**

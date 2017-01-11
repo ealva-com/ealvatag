@@ -25,33 +25,30 @@ import ealvatag.tag.vorbiscomment.VorbisCommentCreator;
 
 import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
-import java.util.logging.Logger;
 
 /**
  * Creates an OggVorbis Comment Tag from a VorbisComment for use within an OggVorbis Container
- *
+ * <p>
  * When a Vorbis Comment is used within OggVorbis it additionally has a vorbis header and a framing
  * bit.
  */
-public class OggVorbisCommentTagCreator
-{
-    // Logger Object
-    public static Logger logger = Logger.getLogger("ealvatag.audio.ogg");
+public class OggVorbisCommentTagCreator {
 
     public static final int FIELD_FRAMING_BIT_LENGTH = 1;
-    public static final byte FRAMING_BIT_VALID_VALUE = (byte) 0x01;
+    public static final byte FRAMING_BIT_VALID_VALUE = (byte)0x01;
     private VorbisCommentCreator creator = new VorbisCommentCreator();
 
     //Creates the ByteBuffer for the ogg tag
-    public ByteBuffer convert(Tag tag) throws UnsupportedEncodingException
-    {
+    public ByteBuffer convert(Tag tag) throws UnsupportedEncodingException {
         ByteBuffer ogg = creator.convert(tag);
-        int tagLength = ogg.capacity() + VorbisHeader.FIELD_PACKET_TYPE_LENGTH + VorbisHeader.FIELD_CAPTURE_PATTERN_LENGTH + OggVorbisCommentTagCreator.FIELD_FRAMING_BIT_LENGTH;
+        int tagLength =
+                ogg.capacity() + VorbisHeader.FIELD_PACKET_TYPE_LENGTH + VorbisHeader.FIELD_CAPTURE_PATTERN_LENGTH +
+                        OggVorbisCommentTagCreator.FIELD_FRAMING_BIT_LENGTH;
 
         ByteBuffer buf = ByteBuffer.allocate(tagLength);
 
         //[packet type=comment0x03]['vorbis']
-        buf.put((byte) VorbisPacketType.COMMENT_HEADER.getType());
+        buf.put((byte)VorbisPacketType.COMMENT_HEADER.getType());
         buf.put(VorbisHeader.CAPTURE_PATTERN_AS_BYTES);
 
         //The actual tag

@@ -1,8 +1,10 @@
 package ealvatag.audio.asf.data;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.Collections;
 import java.util.List;
-import java.util.logging.Logger;
 
 /**
  * This class provides methods for working with {@link MetadataContainer}
@@ -11,21 +13,18 @@ import java.util.logging.Logger;
  * @author Christian Laireiter
  */
 public final class MetadataContainerUtils {
-
-    // Logger Object
-    public static Logger logger = Logger
-            .getLogger("ealvatag.audio.asf");
+    private static Logger LOG = LoggerFactory.getLogger(MetadataContainerUtils.class);
 
     public static boolean equals(List<MetadataDescriptor> l1,
-            List<MetadataDescriptor> l2) {
+                                 List<MetadataDescriptor> l2) {
         boolean result = true;// l1.size() == l2.size();
         Collections.sort(l1, new MetadataDescriptorComparator());
         Collections.sort(l2, new MetadataDescriptorComparator());
         for (int i = 0; result && i < l1.size(); i++) {
             result &= MetadataDescriptorUtils.equals(l1.get(i), l2.get(i));
             if (!result) {
-                logger.warning("Unequal descriptors: " + l1.get(i) + " -> "
-                        + l2.get(i));
+                LOG.warn("Unequal descriptors: " + l1.get(i) + " -> "
+                                 + l2.get(i));
             }
         }
         return result;
@@ -36,14 +35,12 @@ public final class MetadataContainerUtils {
      * {@link MetadataContainer#getPosition()} and
      * {@link MetadataContainer#getChunkLength()} are ignored.
      *
-     * @param c1
-     *            container 1
-     * @param c2
-     *            container 2
+     * @param c1 container 1
+     * @param c2 container 2
      * @return <code>true</code> if data is equal.
      */
     public static boolean equals(final MetadataContainer c1,
-            MetadataContainer c2) {
+                                 MetadataContainer c2) {
         if (c1 == c2) {
             throw new IllegalArgumentException("Made a mistake?");
         }

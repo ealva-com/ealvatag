@@ -26,12 +26,12 @@ import ealvatag.audio.exceptions.ReadOnlyFileException;
 import ealvatag.logging.ErrorMessage;
 import ealvatag.tag.Tag;
 import ealvatag.tag.TagException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /*
  * This abstract class is the skeleton for tag readers. It handles the creation/closing of
@@ -43,11 +43,10 @@ import java.util.logging.Logger;
  *@since	v0.02
  */
 
-public abstract class AudioFileReader
-{
+public abstract class AudioFileReader {
 
     // Logger Object
-    public static Logger logger = Logger.getLogger("ealvatag.audio.generic");
+    private static Logger LOG = LoggerFactory.getLogger(AudioFileReader.class);
     protected static final int MINIMUM_SIZE_FOR_VALID_AUDIO_FILE = 100;
 
     /*
@@ -57,18 +56,19 @@ public abstract class AudioFileReader
     * at any offset in the file.
     *
     * @param raf The RandomAccessFile associtaed with the current file
-    * @exception IOException is thrown when the RandomAccessFile operations throw it (you should never throw them manually)
+    * @exception IOException is thrown when the RandomAccessFile operations throw it (you should never throw them
+    * manually)
     * @exception CannotReadException when an error occured during the parsing of the encoding infos
     */
     protected abstract GenericAudioHeader getEncodingInfo(RandomAccessFile raf) throws CannotReadException, IOException;
-
 
 
     /*
       * Same as above but returns the Tag contained in the file, or a new one.
       *
       * @param raf The RandomAccessFile associted with the current file
-      * @exception IOException is thrown when the RandomAccessFile operations throw it (you should never throw them manually)
+      * @exception IOException is thrown when the RandomAccessFile operations throw it (you should never throw them
+      * manually)
       * @exception CannotReadException when an error occured during the parsing of the tag
       */
     protected abstract Tag getTag(RandomAccessFile raf) throws CannotReadException, IOException;
@@ -81,27 +81,22 @@ public abstract class AudioFileReader
       * @param f The file to read
       * @exception CannotReadException If anything went bad during the read of this file
       */
-    public AudioFile read(File f) throws CannotReadException, IOException, TagException, ReadOnlyFileException, InvalidAudioFrameException
-    {
-        if(logger.isLoggable(Level.CONFIG))
-        {
-            logger.config(ErrorMessage.GENERAL_READ.getMsg(f.getAbsolutePath()));
+    public AudioFile read(File f) throws CannotReadException, IOException, TagException, ReadOnlyFileException,
+                                         InvalidAudioFrameException {
+        LOG.trace(ErrorMessage.GENERAL_READ.getMsg(f.getAbsolutePath()));
+
+        if (!f.canRead()) {
+            LOG.error(ErrorMessage.GENERAL_READ_FAILED_DO_NOT_HAVE_PERMISSION_TO_READ_FILE.getMsg(f.getAbsolutePath()));
+            throw new NoReadPermissionsException(ErrorMessage.GENERAL_READ_FAILED_DO_NOT_HAVE_PERMISSION_TO_READ_FILE
+                                                         .getMsg(f.getAbsolutePath()));
         }
 
-        if (!f.canRead())
-        {
-            logger.warning(ErrorMessage.GENERAL_READ_FAILED_DO_NOT_HAVE_PERMISSION_TO_READ_FILE.getMsg(f.getAbsolutePath()));
-            throw new NoReadPermissionsException(ErrorMessage.GENERAL_READ_FAILED_DO_NOT_HAVE_PERMISSION_TO_READ_FILE.getMsg(f.getAbsolutePath()));
-        }
-
-        if (f.length() <= MINIMUM_SIZE_FOR_VALID_AUDIO_FILE)
-        {
+        if (f.length() <= MINIMUM_SIZE_FOR_VALID_AUDIO_FILE) {
             throw new CannotReadException(ErrorMessage.GENERAL_READ_FAILED_FILE_TOO_SMALL.getMsg(f.getAbsolutePath()));
         }
 
         RandomAccessFile raf = null;
-        try
-        {
+        try {
             raf = new RandomAccessFile(f, "r");
             raf.seek(0);
 
@@ -110,28 +105,19 @@ public abstract class AudioFileReader
             Tag tag = getTag(raf);
             return new AudioFile(f, info, tag);
 
-        }
-        catch (CannotReadException cre)
-        {
+        } catch (CannotReadException cre) {
             throw cre;
-        }
-        catch (Exception e)
-        {
-            logger.log(Level.SEVERE, ErrorMessage.GENERAL_READ.getMsg(f.getAbsolutePath()),e);
-            throw new CannotReadException(f.getAbsolutePath()+":" + e.getMessage(), e);
-        }
-        finally
-        {
-            try
-            {
-                if (raf != null)
-                {
+        } catch (Exception e) {
+            LOG.error(ErrorMessage.GENERAL_READ.getMsg(f.getAbsolutePath()), e);
+            throw new CannotReadException(f.getAbsolutePath() + ":" + e.getMessage(), e);
+        } finally {
+            try {
+                if (raf != null) {
                     raf.close();
                 }
-            }
-            catch (Exception ex)
-            {
-                logger.log(Level.WARNING, ErrorMessage.GENERAL_READ_FAILED_UNABLE_TO_CLOSE_RANDOM_ACCESS_FILE.getMsg(f.getAbsolutePath()));
+            } catch (Exception ex) {
+                LOG.warn(ErrorMessage.GENERAL_READ_FAILED_UNABLE_TO_CLOSE_RANDOM_ACCESS_FILE
+                                 .getMsg(f.getAbsolutePath()));
             }
         }
     }

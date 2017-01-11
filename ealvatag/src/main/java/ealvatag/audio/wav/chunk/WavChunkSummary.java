@@ -3,16 +3,15 @@ package ealvatag.audio.wav.chunk;
 import ealvatag.audio.iff.ChunkSummary;
 import ealvatag.audio.wav.WavChunkType;
 import ealvatag.tag.wav.WavTag;
-
-import java.util.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * AIFF Specific methods for ChunkSummarys
  */
-public class WavChunkSummary
-{
+public class WavChunkSummary {
     // Logger Object
-    public static Logger logger = Logger.getLogger("ealvatag.audio.wav.chunk");
+    public static Logger logger = LoggerFactory.getLogger(WavChunkSummary.class);
 
     /**
      * Get start location in file of first metadata chunk (could be LIST or ID3)
@@ -20,24 +19,18 @@ public class WavChunkSummary
      * @param tag
      * @return
      */
-    public static long getStartLocationOfFirstMetadataChunk(WavTag tag)
-    {
+    public static long getStartLocationOfFirstMetadataChunk(WavTag tag) {
         //Work out the location of the first metadata tag (could be id3 or LIST tag)
         long startLocationOfMetadatTag = -1;
-        if(tag.getInfoTag()!=null)
-        {
+        if (tag.getInfoTag() != null) {
             startLocationOfMetadatTag = tag.getInfoTag().getStartLocationInFile();
 
-            if(tag.getID3Tag()!=null)
-            {
-                if(tag.getStartLocationInFileOfId3Chunk() < startLocationOfMetadatTag)
-                {
+            if (tag.getID3Tag() != null) {
+                if (tag.getStartLocationInFileOfId3Chunk() < startLocationOfMetadatTag) {
                     startLocationOfMetadatTag = tag.getStartLocationInFileOfId3Chunk();
                 }
             }
-        }
-        else if(tag.getID3Tag()!=null)
-        {
+        } else if (tag.getID3Tag() != null) {
             startLocationOfMetadatTag = tag.getStartLocationInFileOfId3Chunk();
         }
         return startLocationOfMetadatTag;
@@ -50,33 +43,25 @@ public class WavChunkSummary
      * @param tag
      * @return
      */
-    public static boolean isOnlyMetadataTagsAfterStartingMetadataTag(WavTag tag)
-    {
+    public static boolean isOnlyMetadataTagsAfterStartingMetadataTag(WavTag tag) {
         long startLocationOfMetadatTag = getStartLocationOfFirstMetadataChunk(tag);
-        if(startLocationOfMetadatTag==-1)
-        {
-            logger.severe("Unable to find any metadata tags !");
+        if (startLocationOfMetadatTag == -1) {
+            logger.error("Unable to find any metadata tags !");
             return false;
         }
 
         boolean firstMetadataTag = false;
-        for(ChunkSummary cs:tag.getChunkSummaryList())
-        {
-            if(firstMetadataTag)
-            {
-                if(
+        for (ChunkSummary cs : tag.getChunkSummaryList()) {
+            if (firstMetadataTag) {
+                if (
                         !cs.getChunkId().equals(WavChunkType.ID3.getCode()) &&
-                        !cs.getChunkId().equals(WavChunkType.LIST.getCode()) &&
-                        !cs.getChunkId().equals(WavChunkType.INFO.getCode())
-                  )
-                {
+                                !cs.getChunkId().equals(WavChunkType.LIST.getCode()) &&
+                                !cs.getChunkId().equals(WavChunkType.INFO.getCode())
+                        ) {
                     return false;
                 }
-            }
-            else
-            {
-                if (cs.getFileStartLocation() == startLocationOfMetadatTag)
-                {
+            } else {
+                if (cs.getFileStartLocation() == startLocationOfMetadatTag) {
                     //Found starting point
                     firstMetadataTag = true;
                 }
@@ -84,8 +69,7 @@ public class WavChunkSummary
         }
 
         //Should always be true but this is to protect against something gone wrong
-        if(firstMetadataTag==true)
-        {
+        if (firstMetadataTag == true) {
             return true;
         }
         return false;
@@ -99,15 +83,12 @@ public class WavChunkSummary
      * @param tag
      * @return
      */
-    public static ChunkSummary getChunkBeforeFirstMetadataTag(WavTag tag)
-    {
+    public static ChunkSummary getChunkBeforeFirstMetadataTag(WavTag tag) {
         long startLocationOfMetadatTag = getStartLocationOfFirstMetadataChunk(tag);
 
-        for(int i=0;i < tag.getChunkSummaryList().size(); i++)
-        {
+        for (int i = 0; i < tag.getChunkSummaryList().size(); i++) {
             ChunkSummary cs = tag.getChunkSummaryList().get(i);
-            if (cs.getFileStartLocation() == startLocationOfMetadatTag)
-            {
+            if (cs.getFileStartLocation() == startLocationOfMetadatTag) {
                 return tag.getChunkSummaryList().get(i - 1);
             }
         }

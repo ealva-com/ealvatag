@@ -8,6 +8,8 @@ import ealvatag.audio.exceptions.ReadOnlyFileException;
 import ealvatag.logging.ErrorMessage;
 import ealvatag.tag.Tag;
 import ealvatag.tag.TagException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -21,6 +23,7 @@ import java.util.logging.Level;
  */
 public abstract class AudioFileReader2 extends AudioFileReader
 {
+    private static final Logger LOG = LoggerFactory.getLogger(AudioFileReader2.class);
     /*
    * Reads the given file, and return an AudioFile object containing the Tag
    * and the encoding infos present in the file. If the file has no tag, an
@@ -32,13 +35,11 @@ public abstract class AudioFileReader2 extends AudioFileReader
    */
     public AudioFile read(File f) throws CannotReadException, IOException, TagException, ReadOnlyFileException, InvalidAudioFrameException
     {
-        if (logger.isLoggable(Level.CONFIG)) {
-            logger.config(ErrorMessage.GENERAL_READ.getMsg(f));
-        }
+            LOG.debug(ErrorMessage.GENERAL_READ.getMsg(f));
 
         // Shouldn't be doing these redundant checks, just try to read
         if (!f.canRead()) {
-            logger.warning(ErrorMessage.GENERAL_READ_FAILED_DO_NOT_HAVE_PERMISSION_TO_READ_FILE.getMsg(f));
+            LOG.warn(ErrorMessage.GENERAL_READ_FAILED_DO_NOT_HAVE_PERMISSION_TO_READ_FILE.getMsg(f));
             throw new NoReadPermissionsException(ErrorMessage.GENERAL_READ_FAILED_DO_NOT_HAVE_PERMISSION_TO_READ_FILE.getMsg(f));
         }
 
@@ -54,10 +55,10 @@ public abstract class AudioFileReader2 extends AudioFileReader
             Tag tag = getTag(channel, absolutePath);
             return new AudioFile(f, info, tag);
         } catch (IllegalArgumentException e) {
-            logger.warning(ErrorMessage.GENERAL_READ_FAILED_DO_NOT_HAVE_PERMISSION_TO_READ_FILE.getMsg(f));
+            LOG.warn(ErrorMessage.GENERAL_READ_FAILED_DO_NOT_HAVE_PERMISSION_TO_READ_FILE.getMsg(f));
             throw new CannotReadException(ErrorMessage.GENERAL_READ_FAILED_DO_NOT_HAVE_PERMISSION_TO_READ_FILE.getMsg(f));
         } catch (FileNotFoundException e) {
-            logger.warning("Unable to read file: " + f + " " + e.getMessage());
+            LOG.warn("Unable to read file: " + f + " " + e.getMessage());
             throw e;
         }
     }

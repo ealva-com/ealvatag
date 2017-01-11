@@ -5,6 +5,8 @@ import ealvatag.audio.iff.Chunk;
 import ealvatag.audio.iff.ChunkHeader;
 import ealvatag.audio.iff.IffHeaderChunk;
 import ealvatag.logging.Hex;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -12,24 +14,21 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.ByteOrder;
 import java.nio.channels.FileChannel;
-import java.util.logging.Logger;
 
 /**
- * Experimental, reads the length of data chiunk and removes all data after that, useful for removing screwed up tags at end of file, but
+ * Experimental, reads the length of data chiunk and removes all data after that, useful for removing screwed up tags
+ * at end of file, but
  * use with care, not very robust.
  */
-public class WavCleaner
-{
-    // Logger Object
-    public static Logger logger = Logger.getLogger("ealvatag.audio.wav");
+public class WavCleaner {
+    private static Logger LOG = LoggerFactory.getLogger(WavCleaner.class);
 
     private File path;
     private String loggingName;
 
-    public WavCleaner(File path)
-    {
-        this.path=path;
-        this.loggingName=path.getAbsolutePath();
+    public WavCleaner(File path) {
+        this.path = path;
+        this.loggingName = path.getAbsolutePath();
     }
 
     /**
@@ -37,8 +36,7 @@ public class WavCleaner
      *
      * @throws Exception
      */
-    public void clean() throws Exception
-    {
+    public void clean() throws Exception {
         System.out.println("EndOfDataChunk:" + Hex.asHex(findEndOfDataChunk()));
 
     }
@@ -49,17 +47,12 @@ public class WavCleaner
      * @return
      * @throws Exception
      */
-    private int findEndOfDataChunk() throws Exception
-    {
-        try(FileChannel fc = new RandomAccessFile(path, "rw").getChannel())
-        {
-            if(WavRIFFHeader.isValidHeader(fc))
-            {
-                while (fc.position() < fc.size())
-                {
+    private int findEndOfDataChunk() throws Exception {
+        try (FileChannel fc = new RandomAccessFile(path, "rw").getChannel()) {
+            if (WavRIFFHeader.isValidHeader(fc)) {
+                while (fc.position() < fc.size()) {
                     int endOfChunk = readChunk(fc);
-                    if(endOfChunk>0)
-                    {
+                    if (endOfChunk > 0) {
                         fc.truncate(fc.position());
                         return endOfChunk;
                     }
@@ -70,35 +63,28 @@ public class WavCleaner
     }
 
     /**
-     *
      * @param fc
      * @return location of end of data chunk when chunk found
-     *
      * @throws IOException
      * @throws CannotReadException
      */
-    private int readChunk(FileChannel fc) throws IOException, CannotReadException
-    {
+    private int readChunk(FileChannel fc) throws IOException, CannotReadException {
         Chunk chunk;
         ChunkHeader chunkHeader = new ChunkHeader(ByteOrder.LITTLE_ENDIAN);
-        if (!chunkHeader.readHeader(fc))
-        {
+        if (!chunkHeader.readHeader(fc)) {
             return 0;
         }
 
         String id = chunkHeader.getID();
-        logger.config(loggingName + " Reading Chunk:" + id
-                + ":starting at:" +Hex.asDecAndHex(chunkHeader.getStartLocationInFile())
-                + ":sizeIncHeader:" + (chunkHeader.getSize() + ChunkHeader.CHUNK_HEADER_SIZE));
+        LOG.debug(loggingName + " Reading Chunk:" + id
+                          + ":starting at:" + Hex.asDecAndHex(chunkHeader.getStartLocationInFile())
+                          + ":sizeIncHeader:" + (chunkHeader.getSize() + ChunkHeader.CHUNK_HEADER_SIZE));
         final WavChunkType chunkType = WavChunkType.get(id);
 
         //If known chunkType
-        if (chunkType != null)
-        {
-            switch (chunkType)
-            {
-                case DATA:
-                {
+        if (chunkType != null) {
+            switch (chunkType) {
+                case DATA: {
 
                     fc.position(fc.position() + chunkHeader.getSize());
                     return (int)fc.position();
@@ -106,47 +92,41 @@ public class WavCleaner
 
                 //Dont need to do anything with these just skip
                 default:
-                    logger.config(loggingName + " Skipping chunk bytes:" + chunkHeader.getSize());
+                    LOG.debug(loggingName + " Skipping chunk bytes:" + chunkHeader.getSize());
                     fc.position(fc.position() + chunkHeader.getSize());
             }
         }
         //Unknown chunk type just skip
-        else
-        {
-            if(chunkHeader.getSize() < 0)
-            {
+        else {
+            if (chunkHeader.getSize() < 0) {
                 String msg = loggingName + " Not a valid header, unable to read a sensible size:Header"
-                        + chunkHeader.getID()+"Size:"+chunkHeader.getSize();
-                logger.severe(msg);
+                        + chunkHeader.getID() + "Size:" + chunkHeader.getSize();
+                LOG.error(msg);
                 throw new CannotReadException(msg);
             }
-            logger.severe(loggingName + " Skipping chunk bytes:" + chunkHeader.getSize() + " for" + chunkHeader.getID());
+            LOG.error(
+                    loggingName + " Skipping chunk bytes:" + chunkHeader.getSize() + " for" + chunkHeader.getID());
             fc.position(fc.position() + chunkHeader.getSize());
         }
         IffHeaderChunk.ensureOnEqualBoundary(fc, chunkHeader);
         return 0;
     }
 
-    public static void main(final String[] args) throws Exception
-    {
+    public static void main(final String[] args) throws Exception {
         recursiveDelete(new File("E:\\MQ\\Schubert"), new File("F\\The Last Six Years, vol 4-Imogen Cooper"));
     }
 
-    private static void recursiveDelete(File... paths) throws Exception
-    {
-        for (File dir : paths)
-        {
+    private static void recursiveDelete(File... paths) throws Exception {
+        for (File dir : paths) {
             for (File next : dir.listFiles(
-                    new FileFilter()
-                    {
-                        @Override public boolean accept(final File file)
-                        {
-                            return file.isDirectory() || (file.getName().endsWith(".wav") || file.getName().endsWith(".WAV"));
+                    new FileFilter() {
+                        @Override
+                        public boolean accept(final File file) {
+                            return file.isDirectory() ||
+                                    (file.getName().endsWith(".wav") || file.getName().endsWith(".WAV"));
                         }
-                    }))
-            {
-                if (next.isDirectory())
-                {
+                    })) {
+                if (next.isDirectory()) {
                     recursiveDelete(next);
                 } else {
                     WavCleaner wc = new WavCleaner(next);

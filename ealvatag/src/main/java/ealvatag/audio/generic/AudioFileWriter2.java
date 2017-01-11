@@ -7,6 +7,8 @@ import ealvatag.audio.exceptions.NoWritePermissionsException;
 import ealvatag.logging.ErrorMessage;
 import ealvatag.tag.Tag;
 import ealvatag.tag.TagOptionSingleton;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -19,6 +21,8 @@ import java.nio.channels.FileChannel;
  */
 public abstract class AudioFileWriter2 extends AudioFileWriter
 {
+    private static final Logger LOG = LoggerFactory.getLogger(AudioFileWriter2.class);
+
     /**
      * Delete the tag (if any) present in the given file
      *
@@ -38,12 +42,12 @@ public abstract class AudioFileWriter2 extends AudioFileWriter
         }
         catch (FileNotFoundException e)
         {
-            logger.warning(ErrorMessage.GENERAL_DELETE_FAILED.getMsg(file));
+            LOG.warn(ErrorMessage.GENERAL_DELETE_FAILED.getMsg(file));
             throw new CannotWriteException(ErrorMessage.GENERAL_DELETE_FAILED.getMsg(file));
         }
         catch (IOException e)
         {
-            logger.warning(ErrorMessage.GENERAL_DELETE_FAILED.getMsg(file, e.getMessage()));
+            LOG.warn(ErrorMessage.GENERAL_DELETE_FAILED.getMsg(file, e.getMessage()));
             throw new CannotWriteException(ErrorMessage.GENERAL_DELETE_FAILED.getMsg(file, e.getMessage()));
         }
     }
@@ -51,7 +55,7 @@ public abstract class AudioFileWriter2 extends AudioFileWriter
     private void checkCanWriteAndSize(final AudioFile af, final File file) throws CannotWriteException {
         if (TagOptionSingleton.getInstance().isCheckIsWritable() && !file.canWrite())
         {
-            logger.severe(ErrorMessage.NO_PERMISSIONS_TO_WRITE_TO_FILE.getMsg(file));
+            LOG.error(ErrorMessage.NO_PERMISSIONS_TO_WRITE_TO_FILE.getMsg(file));
             throw new CannotWriteException(ErrorMessage.GENERAL_DELETE_FAILED
                     .getMsg(file));
         }
@@ -82,16 +86,16 @@ public abstract class AudioFileWriter2 extends AudioFileWriter
         {
             if (file.exists()) {
                 // file exists, permission error
-                logger.warning(ErrorMessage.GENERAL_WRITE_FAILED_TO_OPEN_FILE_FOR_EDITING.getMsg(file));
+                LOG.warn(ErrorMessage.GENERAL_WRITE_FAILED_TO_OPEN_FILE_FOR_EDITING.getMsg(file));
                 throw new NoWritePermissionsException(ErrorMessage.GENERAL_WRITE_FAILED_TO_OPEN_FILE_FOR_EDITING.getMsg(file));
             } else {
-                logger.warning(ErrorMessage.GENERAL_WRITE_FAILED_BECAUSE_FILE_NOT_FOUND.getMsg(file));
+                LOG.warn(ErrorMessage.GENERAL_WRITE_FAILED_BECAUSE_FILE_NOT_FOUND.getMsg(file));
                 throw new CannotWriteException(ErrorMessage.GENERAL_WRITE_FAILED_BECAUSE_FILE_NOT_FOUND.getMsg(file), e);
             }
         }
         catch (IOException e)
         {
-            logger.warning(ErrorMessage.GENERAL_WRITE_FAILED_BECAUSE.getMsg(file, e.getMessage()));
+            LOG.warn(ErrorMessage.GENERAL_WRITE_FAILED_BECAUSE.getMsg(file, e.getMessage()));
             throw new CannotWriteException(e);
         }
     }
