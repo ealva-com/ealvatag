@@ -6,15 +6,15 @@ import ealvatag.logging.Hex;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
-import java.nio.ByteBuffer;
-import java.nio.channels.FileChannel;
-
 import static ealvatag.audio.aiff.AiffType.AIFC;
 import static ealvatag.audio.aiff.AiffType.AIFF;
 import static ealvatag.audio.iff.IffHeaderChunk.HEADER_LENGTH;
 import static ealvatag.audio.iff.IffHeaderChunk.TYPE_LENGTH;
 import static java.nio.ByteOrder.BIG_ENDIAN;
+
+import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.nio.channels.FileChannel;
 
 /**
  * <p>
@@ -36,13 +36,14 @@ public class AiffFileHeader {
      *
      * @param fc              random access file
      * @param aiffAudioHeader the {@link ealvatag.audio.AudioHeader} we set the read data to
-     * @param fileName
+     * @param fileName        the name of the file the FileChannel represents
+     *
      * @return the number of bytes in the FORM chunk, i.e. the size of the payload
-     * @throws IOException
+     *
+     * @throws IOException         thrown if there was an error reading from the channel
      * @throws CannotReadException if the file is not a valid AIFF file
      */
-    public long readHeader(FileChannel fc, final AiffAudioHeader aiffAudioHeader, String fileName)
-            throws IOException, CannotReadException {
+    public long readHeader(FileChannel fc, final AiffAudioHeader aiffAudioHeader, String fileName) throws IOException, CannotReadException {
         final ByteBuffer headerData = ByteBuffer.allocateDirect(HEADER_LENGTH);
         headerData.order(BIG_ENDIAN);
         final int bytesRead = fc.read(headerData);
@@ -58,7 +59,7 @@ public class AiffFileHeader {
         if (FORM.equals(signature)) {
             // read chunk size
             final long chunkSize = headerData.getInt();
-            LOG.error("{} Reading AIFF header size:{}", Hex.asDecAndHex(chunkSize));
+            LOG.error("{} Reading AIFF header size:{}", fileName, Hex.asDecAndHex(chunkSize));
 
             readFileType(headerData, aiffAudioHeader);
             // subtract the file type length from the chunk size to get remaining number of bytes

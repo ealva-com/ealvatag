@@ -30,20 +30,22 @@ public class AiffTagReader extends AiffChunkReader {
     /**
      * Read editable Metadata
      *
-     * @param channel
-     * @param fileName
-     * @return
-     * @throws CannotReadException
-     * @throws IOException
+     * @param channel  the channel from which to read
+     * @param fileName the name of the file the channel represents.
+     *
+     * @return an AiffTag
+     *
+     * @throws CannotReadException thrown if tag cannot be parsed
+     * @throws IOException         thrown if IO error
      */
     public AiffTag read(FileChannel channel, final String fileName) throws CannotReadException, IOException {
         AiffAudioHeader aiffAudioHeader = new AiffAudioHeader();
         AiffTag aiffTag = new AiffTag();
 
         final AiffFileHeader fileHeader = new AiffFileHeader();
-        fileHeader.readHeader(channel, aiffAudioHeader, channel.toString());
+        fileHeader.readHeader(channel, aiffAudioHeader, fileName);
         while (channel.position() < channel.size()) {
-            if (!readChunk(channel, aiffTag, channel.toString())) {
+            if (!readChunk(channel, aiffTag, fileName)) {
                 LOG.error("{} UnableToReadProcessChunk", fileName);
                 break;
             }
