@@ -16,14 +16,7 @@ public class TestFileTypeMagic {
 	public static void testMagic() throws Exception
     {
 
-        File testFileLoc = new File("testdata", "test.m4a");
-        if (!testFileLoc.isFile())
-        {
-            System.err.println("Unable to test file - not available");
-            return;
-        }
-
-        testFileLoc = AbstractTestCase.copyAudioToTmp("test.m4a");
+        File testFileLoc = AbstractTestCase.copyAudioToTmp("test.m4a");
         AudioFile f =  AudioFileIO.readMagic(testFileLoc);
         Tag audioTag = f.getTag();
         System.err.println("audiotag:"+ audioTag.toString());
